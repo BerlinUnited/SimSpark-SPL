@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialserver.h,v 1.4 2003/11/14 14:05:52 fruit Exp $
+   $Id: materialserver.h,v 1.5 2004/03/20 12:46:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,25 +23,18 @@
 #define KEROSIN_MATERIALSERVER_H
 
 #include <zeitgeist/class.h>
-#include <zeitgeist/leaf.h>
+#include <zeitgeist/node.h>
 
 namespace kerosin
 {
-
 class Material;
 
-class MaterialServer : public zeitgeist::Leaf
+class MaterialServer : public zeitgeist::Node
 {
     //
     // types
     //
 private:
-#ifdef HAVE_HASH_MAP
-    typedef std::hash_map<std::string, boost::shared_ptr<Material> > TMaterialCache;
-#else
-    typedef std::map<std::string, boost::shared_ptr<Material> > TMaterialCache;
-#endif
-
     //
     // functions
     //
@@ -49,20 +42,12 @@ public:
     MaterialServer();
     virtual ~MaterialServer();
 
-    //! load (or returned cached) material
+    //! returns a cached material
     boost::shared_ptr<Material> GetMaterial(const std::string &name);
 
-    //! make sure that a material is in memory
-    bool Touch(const std::string &name);
 protected:
     //! sets up the script variables used for loading
     virtual bool ConstructInternal();
-
-    //
-    // members
-    //
-private:
-    TMaterialCache  mMaterialCache;         // registry of cached textures
 };
 
 DECLARE_CLASS(MaterialServer);
