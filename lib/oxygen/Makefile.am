@@ -17,6 +17,14 @@ liboxygen_la_LDFLAGS = \
 	${top_srcdir}/utility/rcssnet/librcssnet3D.la
 endif
 
+AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility @RUBY_CPPFLAGS@
+
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/oxygen
+
+## architecture independent data (scripts) to be installed and distributed
+dist_pkgdata_DATA = oxygen.rb
+
 bin_SCRIPTS = oxygen-config
 
 if BUILD_SPADES_MODULES
@@ -40,14 +48,6 @@ spades_sources =
 spades_headers =
 spades_libs =
 endif
-
-AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
-
-## define include directory local to the pkgincludedir
-libpkgincludedir = $(includedir)/@PACKAGE@/oxygen
-
-## architecture independent data (scripts) to be installed and distributed
-dist_pkgdata_DATA = oxygen.rb
 
 sources = \
 agentaspect/agentaspect.cpp \
