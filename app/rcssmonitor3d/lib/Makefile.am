@@ -4,10 +4,11 @@ AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin/soccer @FREETYPE_CPPFLA
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 librcssmonitor3D_a_SOURCES = \
+	monitorlib.h monitorlib.cpp \
 	communit.h communit.cpp \
 	commserver.h commserver.cpp commserver_c.cpp \
 	tcpsocket.h tcpsocket.cpp \
-	monitorparser.h monitorparser.cpp \
+	monitorparser.h monitorparser.cpp monitorparser_c.cpp\
 	gameparam.h gameparam.cpp \
 	gamestate.h gamestate.cpp
 
