@@ -17,7 +17,8 @@ sceneServer.createScene('/usr/scene');
 
 # setup the SpadesServer
 print "\nCreating SpadesServer\n\n";
-spadesServer = new ('kerosin/SpadesServer', '/sys/server/spades');
+spadesServer = new ('oxygen/SpadesServer', '/sys/server/spades');
+spadesServer.init('oxygen/ParamReader');
 
 # 
 # Scene setup
