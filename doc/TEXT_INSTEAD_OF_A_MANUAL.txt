@@ -9,6 +9,19 @@ Contents
 
 1. System Overview
 2. Soccer Simulation
+2.1.  Soccer Team
+2.2   Environment
+
+2.3   Players
+2.3.1 Create Effector
+2.3.2 Init Effector
+2.3.3 Beam Effector
+2.3.4 Drive Effector
+2.3.5 Kick Effector
+2.3.6. Vision Perceptor
+2.3.7. GameState Perceptor
+2.3.8. AgentState Perceptor
+
 3. Monitor and Trainer Protocol
 4. References
 
@@ -35,7 +48,8 @@ The default monitor is called rcssmonitor3D-lite it is located in the
 that the server automatically creates (use the --logfile <filename>
 option). The automatically generated logfile is called
 'monitor.log'. You'll find it in the 'Logfiles/' directory below the
-directory in which you started the server.
+directory in which you started the server. A set of logfiles from 2004
+RoboCup can be found at [2].
 
 The implemented monitor protocol supports a command set to implement a
 trainer, i.e to automatically recreate test situations on the field
@@ -54,12 +68,18 @@ describe the features of the simulated robots.
 2. Soccer Simulation
 --------------------
 
+2.1 Soccer Team
+---------------
+
 Your soccer team consists of a number of robots with equal
 capabilities. The programs you should write to create a team exchange
 data with the (virtual) low level control system delivered with the
 robots. Both perceptors and effectors of your robots work with
 S-expressions, this is the syntax you know already from the 2D soccer
-simulator, or maybe also from your favourite programming language :). 
+simulator, or maybe also from your favorite programming language :). 
+
+2.2. Environment
+----------------
 
 Some technical data of the environment and of your new robots:
 
@@ -75,10 +95,25 @@ FIFA does not say too much about gravity (probably because they can't
 change it anyway), but in our simulation, gravity is fixed to
 9.81m/s². 
 
+Simulator steps are 0.01 seconds long. Connected monitors receive an
+update every 15th simulator step.
+
+Many of the values contained in this text are subject to change and it
+is likely that this text does not always reflect the current state of
+affairs. You'll find the current set of constants in the setup script
+that the server executes at startup, please see
+./app/simulator/rcssserver3D.rb. After the first run of the server
+this file is copied to a directory under your home directory, called
+~/.rcssserver3d/ and is read back from there on subsequent runs. Any
+experimental changes should happen there.
+
+2.3. Players
+------------
+
 In the current version of the simulator, robots are represented as
 spheres (until we can come up with a more sophisticated representation
 next year). The diameter of all robots is 0.44m, and each robots
-weighs 75kg. 
+weighs 75kg.
 
 Robots possess a kind of omnidrive, which adds some physical force to
 the robot body. By using the omnidrive, it is possible to accelerate
@@ -87,122 +122,186 @@ little. However, the omnidrive does only work if the robot is actually
 touching the soccer field. If you stop accelerating, robots will still
 move for a while, and you also cannot suddenly stop when moving with
 full speed (but you can use it for breaking). The maximum speed and
-the maximum height for jumping up if yet to be discovered. To use the
-omnidrive, you have to use the "driveeffector", which takes a
-cartesian vector (x y z) with a maximum length of 100 units. The
-x-coordinate points towards the opponents team side of the field, z
-points up. With the driveeffector, you set a kind of motor force,
-i.e. if you want to drive full speed for a while, it is sufficient to
-use the driveeffector *once*. The force you set is applied at each
-simulator step until you change it again (btw simulator steps are
-0.01s long). The driveeffector works realiable, there is a small error
-for forces along each axis (each up to 2% of the applied force). The
-error is normally distributed around 0.0.
+the maximum height for jumping up if yet to be discovered. 
 
-Using the omnidrive consumes battery. You get to know of battery states 
-by reading the agentstateperceptor. If the battery is empty, the omnidrive
-will stop working.
+When a player initially connects to the server you have to do two
+thing in order to get started. At first you must create the robot type
+you want to use during the game. Currently we are limited to the robot
+sphere described above. In later versions more sophisticated robot
+models may be available. It is the job of the create effector to
+select and create one robot type at startup. Further the player must
+receive a number and join a team. This is the job of the init effector.
 
-It is also possible to push away other robots. Using this feature to
-push away opponents is discouraged :). 
+2.3.1 Create effector
+---------------------
 
-Example command: (drive 20.0 50.0 0.0)
+When you initially connect to the simulator, your agent does not have
+any physical representation. The only thing your agent has got is a
+"CreatEeffector". The idea of the CreatEeffector is that you can
+request different effectors, perceptors or robot types. Currently,
+there is only one fixed robot type, so the CreateEffector ignores all
+parameters. For now, you should simply do "(create)" at the beginning
+and you will get the default robot type.
 
+Example command: (create)
 
-To move the ball, you have the option of simply using the robots to
-push the ball into a desired direction, or you can use the
-kickeffector to kick the ball.  
+2.3.2. Init Effector
+--------------------
 
-  (Originally, we did not intend to create an artificial
-   kickeffector. However, to make use of the 3rd dimension, this was
-   the easiest way. It is intended to remove this kind of kick
-   effector in future versions (not this years' competition) in favour
-   of a real physical device).
+To set the team name and uniform number, you have to use the
+InitEffector. Prior to initializing, your effectors and perceptors
+will not work properly.  
 
-The kickeffector can accelerate the ball radially away from the robot
-body. The kickeffector takes an angle as first argument (this is the
-latitudal angle (in degrees) for accelerating the ball, a number
-between 0 and 50). The second argument indicates the kicking power and
-this is a number between 0 and 100 (meaning % of the maximum available
-power). The kickeffector adds a force and a torque to the ball (over a
-fixed number of simulation steps, currently 10 (i.e. 1/10s with the 
-current settings).
-To kick the ball, the ball has to be very close to the robot (0.04m). 
+(init (unum <number>) (teamname <string>))
 
-The kickeffector noise has the following parameters:
-- angle error in the x-y plane: very low
-  normally distributed around 0.0 (sigma = 0.02)
-- latitudal angle error: normally distributed around 0.0.
-  this angle error is low (sigma = 0.9) at the end positions 
-  (at 0 and at 50 degrees), towards the middle of the range the angle
-  error is higher (with sigma up to 4.5).
-- kick power error: normally distributed around 0.0, sigma = 0.4
+Example: (init (unum 7) (teamname RoboLog))
 
-You cannot change the kicking angle in the x-y plane, i.e. you have to
-move the robot so that it can kick into the desired direction.
-Right now, the kickeffector is not very strong, because something like an 
-offside rule is missing. It should also not be possible to move other robots by
-kicking the ball against them anymore. (at least not very much :)
-Like the driveeffector, the kickeffector does only work if the robot
-touches the soccer field. 
+2.3.3. Beam Effector
+--------------------
 
-Example command: (kick 20.0 80.0)
+Similar to the kickeffector, the initial plan was not to introduce any
+artificial actions like "beaming" agents from one place to another
+place, similar to the "move" command in 2d soccer server. Still, the
+plan is to develop the soccer simulation so that beaming can disappear
+from the set of effectors. 
 
-
-At startup, you have to do two things: 
-1) create the robot you want to use
-2) initialize the robot with a teamname
-
-1) When you at first connect to the simulator, your agent does not have any 
-physical representation. The only thing your agent has got is a "createeffector". 
-The idea of the createeffector is that you can request different effectors,
-perceptors or robot types. Currently, there is only one fixed robot type, so the
-createefector ignores all parameters. For now, you should simply do "(create)" 
-at the beginning and you will get the default robot type.
-
-2) To set the teamname and uniform number, you have to use the initeffector. 
-Prior to initializing, your effectors and perceptors will not work properly.
-Example: "(init (unum 7) (teamname RoboLog))".  
-
-
-"Beaming" agents: the beameffector
-Similar to the kickeffector, the initial plan was not to introduce any artificial 
-actions like "beaming" agents from one place to another place ("move"
-command in 2d soccer server). Still, the plan is to develop the soccer
-simulation so that beaming can disappear from the set of
-effectors. However the problem was that due to limited time we had to
-do something about moving agents to their half in before kick off
+However the problem was that due to limited time we had to do
+something about moving agents to their half in before kick off
 mode. To remove "beaming", the referee has to be extended to send
 yellow or red cards to players that don't behave properly... with your
 help :) we are going to work on this feature in the near future. Until
-then, beaming of agents is allowed in beforekickoff mode.
+then, beaming of agents is allowed in 'beforekickoff' mode.
 
+The beam effector expects three coordinates, but currently forces the
+third component to be zero, i.e. agents are only allow to move on the
+ground along the horizontal plane.
 
+(beam <x> <y> <z>)
 
-Vision: Your robots possess a special omnicam with some smart image
-proccessing software attached :). Robots have a 360 degrees view. The
-visionperceptor delivers lists of seen objects, where objects are
-either others robots, the ball, or markers on the field (there are
-currently 8 markers on the field: 4 flags and 4 goal posts). With each
-object you get its distance, the angle in the x-y plane (0 degrees
-into direction of the opponent half) and the latitudal angle 
-(0 degrees means horizontally). Contrary to 2D soccer simulation, the 
-vision system does not deliver object velocities. Objects can be
-occluded by other objects (this is not implemented yet). All distances
-and angles are given relative to the camera position (currently at the
-center of the robot sphere).
+Example: (beam  -6.6 0 0)
+
+2.3.4 Drive Effector
+--------------------
+
+To use the omnidrive of the agent, you have to use the so called
+"DriveEffector", which takes a cartesian vector (x y z) with a maximum
+length of 100 units. The x-coordinate points towards the opponents
+team side of the field, z points up. With the DriveEffector, you set a
+kind of motor force, i.e. if you want to drive full speed for a while,
+it is sufficient to use the DriveEffector *once*. The force you set is
+applied at each simulator step until you change it again. The
+DriveEffector works reliable, there is a small error for forces along
+each axis (each up to 2% of the applied force). The error is normally
+distributed around 0.0.
+
+Using the omnidrive consumes battery. You get to know of battery
+states by reading the AgentStatePerceptor. If the battery is empty,
+the omnidrive will stop working. It is also possible to push away
+other robots. Using this feature to push away opponents is discouraged
+:).
+
+(drive <x> <y> <z>)
+
+Example command: (drive 20.0 50.0 0.0)
+
+2.3.5 Kick Effector
+-------------------
+
+To move the ball, you have the option of simply using the robots to
+push the ball into a desired direction, or you can use the
+kickeffector to kick the ball. Originally, we did not intend to create
+an artificial kickeffector. However, to make use of the 3rd dimension,
+this was the easiest way. It is intended to remove this kind of kick
+effector in future versions (not this years' competition) in favor of
+a real physical device.
+
+The kickeffector can accelerate the ball radially away from the robot
+body. The kickeffector takes an angle as first argument. This is the
+latitudal angle (in degrees) for accelerating the ball. It is
+restricted to a number between 0 and 50. The second argument indicates
+the kicking power and this is a number between 0 and 100. It is
+interpreted as the percentile% of the maximum available power. The
+kickeffector adds a force and a torque to the ball. This happens over
+a fixed number of simulation steps. Currently 10 cycles are used. This
+corresponds to 1/10s simulation time. To kick the ball, the ball has
+to be very close to the robot, i.e. it has to be within the so called
+kickable margin of the player. Currently 0.04m are configured.
+
+You cannot change the kicking angle in the horizontal plane. This
+means that you have to move the robot so that it can kick into the
+desired direction. Right now, the kickeffector is not very strong,
+because something like an offside rule is missing. It should also not
+be possible to move other robots by kicking the ball against them
+anymore. (at least not very much :) Like the DriveEffector, the
+kickeffector does only work if the robot touches the soccer field.
+
+The kickeffector noise has the following parameters: 
+
+- The angle error in the x-y plane is quite low and normally
+distributed around 0.0 with sigma = 0.02. The
+
+- The latitudal angle error is normally distributed around 0.0. This
+angle error is low with sigma = 0.9 at both extreme positions, i.e. 0
+and at 50 degrees. Towards the middle of the range the angle error
+gets higher with sigma up to 4.5.
+
+- The kick power error is normally distributed around 0.0 with sigma =
+0.4
+
+(kick <angle> <power>)
+
+Example command: (kick 20.0 80.0)
+
+2.3.6. Vision Perceptor
+-----------------------
+
+Your robots possess a special omnicam with some smart image
+processing software attached :). Robots have a 360 degrees view. The
+VisionPerceptor delivers lists of seen objects, where objects are
+either others robots, the ball, or markers on the field. Currently
+there are 8 markers on the field: one at each corner point of the
+field and one at each goal post.
+
+With each sensed object you get:
+
+- The distance between the player and the object.
+- The angle in the horizontal plane. Zero degree always points to the
+opponent goal.
+- The latitudal angle. Here zero degree means horizontal.
+
+Contrary to 2D soccer simulation, the vision system does not deliver
+object velocities. Objects can be occluded by other objects (this is
+not completely implemented yet). All distances and angles are given
+relative to the camera position. The camera is currently located at
+the center of the robot sphere.
 
 The noise parameters of the vision system are as follows:
-- calibration error: 
-  A small error is added to the camera position. For each axis, the
-  error is uniformly distributed between -0.005m and 0.005m. The error
-  is calculated once and remains constant during the complete match.
-- noise: all errors normally distributed around 0.0
+
+- A small calibration error is added to the camera position. For each
+axis, the error is uniformly distributed between -0.005m and
+0.005m. The error is calculated once and remains constant during the
+complete match.
+
+- Dynamic noise normally distributed around 0.0
   + distance error:  sigma = 0.0965
   + angle error (x-y plane): sigma = 0.1225
   + angle error (latitudal): sigma = 0.1480
 
+
+(Vision 
+	(<Type> 
+	(team <teamname>) 
+	(id <id>) 
+	(pol <distance> <horizontal angle> <latitudal angle>)
+	)
+)
+Possible types are:
+- 'Flag' with <id> one of '1_l', '2_l', '1_r', '2_r'
+- 'Goal' with <id> one of '1_l', '2_l', '2_l', '2_r'
+- 'Player' with <id> being the uniform number of the player
+
 Example Vision output: 
+
 (Vision (Flag (id 1_l) (pol 54.3137 -148.083 -0.152227)) (Flag (id
 2_l) (pol 59.4273 141.046 -0.131907)) (Flag (id 1_r) (pol 61.9718
 -27.4136 -0.123048)) (Flag (id 2_r) (pol 66.4986 34.3644 -0.108964))
@@ -212,13 +311,50 @@ Example Vision output:
 6.2928 45.0858 -0.94987)) (Player (team robolog) (id 1) (pol 7.33643
 37.5782 5.86774)))
 
+2.3.7. GameStatePerceptor
+-------------------------
 
-The GameStatePerceptor tells you about the current status of the game. The first percept
-you get from this perceptor tells you about some of the game variables 
-(like ball weight and field size etc) additionally.
+The GameStatePerceptor tells you about the current status of the
+game. The first percept you get from this perceptor tells you about
+some of the game variables, like ball weight and field size
+additionally.
 
-The AgentStatePerceptor notifies you about internal states of the agent (currently 
-only the battery state).
+(GameState (<Name> <Value>) ...)
+
+Possible <Name>s are:
+
+- 'time' gives the current simulation time (as a float value) passed
+in seconds
+
+- 'playmode' gives the current playmode as a string. Possible
+playmodes are "BeforeKickOff", "KickOff_Left", "KickOff_Right",
+"PlayOn", "KickIn_Left", "KickIn_Right", "corner_kick_left",
+"corner_kick_right", "goal_kick_left", "goal_kick_right",
+"offside_left", "offside_right", "GameOver", "Goal_Left",
+"Goal_Right", "free_kick_left", "free_kick_right", "unknown". For an
+up to day list of all playmodes refer to
+(./plugin/soccer/soccertypes.h)
+
+Example GameState output:
+
+(GameState (time 0) (playmode BeforeKickOff))
+
+2.3.8. AgentState perceptor
+---------------------------
+
+The AgentStatePerecptor tells you about the current state of your
+agent, currently its battery level and temperature.
+
+(AgentState
+	(battery <battery level in percent>)
+	(temp <temperature in degree>)
+)
+
+
+Example AgentState output:
+
+(AgentState (battery 100) (temp 23))
+
 
 3. Monitor and Trainer Protocol
 -------------------------------
@@ -267,7 +403,8 @@ regular field dimensions in meters
 - FreeKickDistance: gives the distance in meters that agents of the
 opposite have to adhere when a player carries out a free kick.
 
-- WaitBeforeKickOff: gives the time in seconds the server waits before automatically starting the game
+- WaitBeforeKickOff: gives the time in seconds the server waits before
+automatically starting the game
 
 - AgentMass: the mass of each agent in kg
 
@@ -310,7 +447,7 @@ simulation state. An example Info expression is given below:
 
 Each subexpression of the info expression is a name value pair that
 contains information about one aspect of the current simulation
-state. Not all subexpressions are repeated. This concers the positions
+state. Not all subexpressions are repeated. This concerns the positions
 of the field flags and the names of the two teams. This information is
 only sent once. Further game state information like the score count,
 and the current game state is only sent if it changed. The meaning of
@@ -392,13 +529,13 @@ commands. Example: ((kickOff)(getAck kicked_off))
 4. References
 -------------
 [1] http://spades-sim.sourceforge.net/
-
+[2] http://www.uni-koblenz.de/~maas/WWW/overview.html
 
 END OF TEXT.
 
 
 If you ever get close to a human
-And human behaviour
+And human behavior
 Be ready to get confused
 There's definitely, definitely, definitely no logic.
 
