@@ -156,6 +156,10 @@ SOURCE=.\class.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\class_m.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\core.cpp
 # End Source File
 # Begin Source File

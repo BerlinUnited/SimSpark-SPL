@@ -35,7 +35,7 @@
 #define IMAGESERVER_H__
 
 #include <il/il.h>
-#include <zeitgeist/leaf.h>
+#include <zeitgeist/class.h>
 
 namespace kerosin
 {
