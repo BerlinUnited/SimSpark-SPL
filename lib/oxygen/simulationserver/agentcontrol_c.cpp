@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentcontrol_c.cpp,v 1.1 2004/04/25 16:46:57 rollmark Exp $
+   $Id: agentcontrol_c.cpp,v 1.2 2004/04/30 12:15:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,5 +24,5 @@ using namespace std;
 
 void CLASS(AgentControl)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/SimControlNode);
+    DEFINE_BASECLASS(oxygen/NetControl);
 }

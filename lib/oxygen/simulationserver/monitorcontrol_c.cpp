@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol_c.cpp,v 1.2 2004/04/30 10:01:22 rollmark Exp $
+   $Id: monitorcontrol_c.cpp,v 1.3 2004/04/30 12:15:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ FUNCTION(MonitorControl, setMonitorInterval)
 
 void CLASS(MonitorControl)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/SimControlNode);
+    DEFINE_BASECLASS(oxygen/NetControl);
     DEFINE_FUNCTION(getMonitorInterval);
     DEFINE_FUNCTION(setMonitorInterval);
 }
