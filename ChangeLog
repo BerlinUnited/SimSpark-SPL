@@ -1,4 +1,46 @@
-2003-11-19  rollmark  <rollmark@gandalf>
+2003-11-23  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	some cleanup and whitespace change
+	implemented calls to the MonitorServer
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	* lib/oxygen/monitorserver/monitorserver.h:
+	* lib/oxygen/monitorserver/monitorsystem.h:
+	implemented the callbacks from SpadesServer in MonitorServer.
+	completed the MonitorSystem interface.
+
+2003-11-20  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/preinit.rb: 
+	fixed some ruby warnings
+
+	* plugin/inputsdl/inputsystemsdl.cpp:
+	changed some diagnostic messages to be more specific
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	fixed some ruby warnings with 1.8.0
+	added missing gpl header
+	whitespace changes
+
+	* lib/kerosin/openglserver/openglserver_c.cpp: 
+	whitespace only
+
+	* lib/kerosin/openglserver/openglserver.cpp:
+	lib/kerosin/openglserver/openglserver.h:
+	added missing gpl header
+	removed Init() declaration from header with no corresponding implementation
+	added more diagnostic output to the openglserver
+
+	* lib/kerosin/inputserver/inputserver.cpp:
+	added missing gpl header and whitespace changes
+
+	* lib/kerosin/kerosin.rb: 
+	worked around annoying ruby 1.8.0 warning
+	"(eval):86: warning: don't put space before argument parentheses"
+
+2003-11-19  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/Makefile.am:
 	* lib/oxygen/oxygen.cpp:
