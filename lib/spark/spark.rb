@@ -10,7 +10,7 @@
 # 
 
 # define the monitor update interval in cylcles
-$monitorInterval = 30;
+$monitorInterval = 10;
 $serverType = 'tcp'
 $serverPort = 3200
 
@@ -47,6 +47,8 @@ def sparkSetupMonitor
        end
   end
 
+  rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
+  rubySceneImporter.setUnlinkOnCompleteScenes(true);
 end
 
 def sparkSetupServer
@@ -220,6 +222,10 @@ gameControlServer = new('oxygen/GameControlServer', $serverPath+'gamecontrol')
 # register the s-expression parser to the GameControlServer
 importBundle "sexpparser"
 gameControlServer.initParser('SexpParser')
+
+# register the SceneEffector to the GameControlServer
+importBundle "sceneeffector"
+gameControlServer.initEffector('SceneEffector')
 
 #
 # setup the SimulationServer
