@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.7.2.2.2.1 2003/12/01 10:30:12 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.7.2.2.2.2 2003/12/01 16:41:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -182,7 +182,7 @@ VALUE getObject(VALUE /*self*/, VALUE path)
   if (leaf.get() != NULL)
     {
       stringstream s;
-      s << "ZeitgeistObject.new (" << (unsigned long) leaf.get() <<")";
+      s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
       return rb_eval_string(s.str().c_str());
     }
   else
