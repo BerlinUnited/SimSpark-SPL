@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor_c.cpp,v 1.5 2004/04/11 11:45:51 fruit Exp $
+   $Id: visionperceptor_c.cpp,v 1.6 2004/06/19 12:52:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,11 +56,27 @@ FUNCTION(VisionPerceptor,addNoise)
         (in.GetSize() != 1) ||
         (! in.GetValue(in.begin(),inAddNoise))
         )
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     obj->AddNoise(inAddNoise);
+    return true;
+}
+
+FUNCTION(VisionPerceptor,useRandomNoise)
+{
+    bool inRandomNoise;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inRandomNoise))
+        )
+    {
+        return false;
+    }
+
+    obj->UseRandomNoise(inRandomNoise);
     return true;
 }
 
@@ -85,5 +101,6 @@ void CLASS(VisionPerceptor)::DefineClass()
     DEFINE_BASECLASS(oxygen/Perceptor);
     DEFINE_FUNCTION(setNoiseParams);
     DEFINE_FUNCTION(addNoise);
+    DEFINE_FUNCTION(useRandomNoise);
     DEFINE_FUNCTION(setSenseMyPos);
 }
