@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.1.2.5 2004/02/08 22:10:03 fruit Exp $
+   $Id: agentstate.h,v 1.1.2.6 2004/02/09 14:24:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ protected:
     /** battery state */
     double mBattery;
 
-    /** battery decay for dashing one second with an unit length dash vector */
+    /** battery decay for driving one second with an unit length drive vector */
     double mBatteryDecay;
 };
 
