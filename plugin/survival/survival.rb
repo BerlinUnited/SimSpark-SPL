@@ -1,7 +1,7 @@
 #
 # Import classes of this simulation description
 #
-importBundle('survival/survival');
+importBundle('survival');
 
 # the constructed scene
 #
