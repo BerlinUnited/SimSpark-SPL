@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform_c.cpp,v 1.8 2004/04/14 18:30:03 rollmark Exp $
+   $Id: transform_c.cpp,v 1.9 2004/04/28 14:41:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,10 +59,38 @@ FUNCTION(Transform,setLocalRotation)
     return true;
 }
 
+FUNCTION(Transform,setLocalTransform)
+{
+    // float InM00, float InM01, float InM02, float InM03,
+    // float InM10, float InM11, float InM12, float InM13,
+    // float InM20, float InM21, float InM22, float InM23,
+    // float InM30, float InM31, float InM32, float InM33
+
+    if (in.GetSize() != 16)
+        {
+            return false;
+        }
+
+    float m[16];
+
+    ParameterList::TVector::const_iterator iter = in.begin();
+    for (int i=0;i<16;++i)
+        {
+            if (! in.GetValue(iter,m[i]))
+                {
+                    return false;
+                }
+            ++iter;
+        }
+
+    obj->SetLocalTransform(Matrix(m));
+    return true;
+}
 
 void CLASS(Transform)::DefineClass()
 {
   DEFINE_BASECLASS(oxygen/BaseNode);
   DEFINE_FUNCTION(setLocalPos);
   DEFINE_FUNCTION(setLocalRotation);
+  DEFINE_FUNCTION(setLocalTransform);
 }
