@@ -6,7 +6,27 @@ config.h
 doc:	
 	cd doc && $(MAKE) all doxygen-doc
 
-release:	update distcheck add_rel commit upload tag 
+branch-major: commit
+	ver=`echo "@VERSION@" | sed /\\\\.[0-9][0-9]*\\\\.[0-9][0-9]*$//`; \
+	tag=`echo "@PACKAGE@-$$ver"`; \
+	echo "Creating major brach: $$tag"; \
+	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; \
+	echo `cvs tag -b $$tag`; \
+	$(AWK) -f @srcdir@/rel.awk -v change=1 @srcdir@/configure.in > configure.tmp;
+	mv configure.tmp @srcdir@/configure.in
+	$(MAKE) $(AM_MAKEFLAGS) commit
+
+branch-minor: commit
+	ver=`echo "@VERSION@" | sed /\\\\.[0-9][0-9]*$//`; \
+	tag=`echo "@PACKAGE@-$$ver" | sed s/\\\\./_/g`; \
+	echo "Creating minor brach: $$tag"; \
+	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; \
+	echo `cvs tag -b $$tag`; \
+	$(AWK) -f @srcdir@/rel.awk -v change=2 @srcdir@/configure.in > configure.tmp;
+	mv configure.tmp @srcdir@/configure.in
+	$(MAKE) $(AM_MAKEFLAGS) commit
+
+release:	update distcheck add_rel commit dist upload tag 
 
 quick-release:	update add_rel commit upload tag commit
 
@@ -29,9 +49,9 @@ add_rel:
 	mv ChangeLog.tmp @srcdir@/ChangeLog
 
 inc_rel:
-	$(AWK) -f @srcdir@/rel.awk @srcdir@/configure.in > configure.tmp;
+	$(AWK) -f @srcdir@/rel.awk -v change=3 @srcdir@/configure.in > configure.tmp;
 	mv configure.tmp @srcdir@/configure.in
-	$(MAKE) commit
+	$(MAKE) $(AM_MAKEFLAGS) commit
 
 upload:	@PACKAGE@-@VERSION@.tar.gz
 	ncftpput -v upload.sourceforge.net /incoming @PACKAGE@-@VERSION@.tar.gz
@@ -41,7 +61,7 @@ upload:	@PACKAGE@-@VERSION@.tar.gz
 update:
 	cvs -z9 update
 
-commit:
+commit: update
 	$(AWK) '/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/ { count++ } { if ( count == 1 ) print $0 }' @srcdir@/ChangeLog > message.tmp
 	cvs -z9 commit -F message.tmp
 

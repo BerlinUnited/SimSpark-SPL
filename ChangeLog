@@ -1,3 +1,8 @@
+2002-12-10	Tom Howard	<tomhoward@users.sf.net>
+
+	* ./Makefile.am
+	Added branching targets
+	
 2002-11-19	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./Makefile.am
