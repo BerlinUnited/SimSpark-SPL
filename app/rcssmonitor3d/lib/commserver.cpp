@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.9 2004/05/10 14:10:45 fruit Exp $
+   $Id: commserver.cpp,v 1.10 2004/05/11 09:23:15 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ using namespace boost;
 using namespace zeitgeist;
 using namespace oxygen;
 
-CommServer::CommServer() : Leaf()
+CommServer::CommServer()
 {
 }
 

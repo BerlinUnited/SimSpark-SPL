@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.6 2004/05/10 14:10:45 fruit Exp $
+   $Id: commserver.h,v 1.7 2004/05/11 09:20:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,30 +22,26 @@
 #ifndef _COMMSERVER_H
 #define _COMMSERVER_H
 
+#include "commserverbase.h"
 #include "communit.h"
 
-#include <zeitgeist/class.h>
-#include <oxygen/gamecontrolserver/baseparser.h>
-
-class CommServer : public zeitgeist::Leaf
+class CommServer : public CommServerBase
 {
-public:
-
 public:
     CommServer();
     virtual ~CommServer() {};
 
-    bool Init(const std::string& parser, const std::string& host, int port);
-    bool ReadMessage();
-    bool ReadMessage(std::string& msg);
-    boost::shared_ptr<oxygen::PredicateList> GetPredicates() const;
+    virtual bool Init(const std::string& parser, const std::string& host, int port);
+    virtual bool ReadMessage();
+    virtual bool ReadMessage(std::string& msg);
+    virtual boost::shared_ptr<oxygen::PredicateList> GetPredicates() const;
 
-    void SendKickOffCmd();
-    void SendTrainerCmd(const std::string& cmd);
-    void SendPauseCmd();
-    void SendRunCmd();
-    void SendDisconnectCmd();
-    void SendToWorldModel(const std::string& msg);
+    virtual void SendKickOffCmd();
+    virtual void SendTrainerCmd(const std::string& cmd);
+    virtual void SendPauseCmd();
+    virtual void SendRunCmd();
+    virtual void SendDisconnectCmd();
+    virtual void SendToWorldModel(const std::string& msg);
 
 protected:
     void Parse(const std::string& message);

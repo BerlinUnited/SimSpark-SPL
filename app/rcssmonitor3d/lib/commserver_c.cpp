@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver_c.cpp,v 1.2 2004/03/12 17:25:45 rollmark Exp $
+   $Id: commserver_c.cpp,v 1.3 2004/05/11 09:25:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,5 +24,5 @@
 void
 CLASS(CommServer)::DefineClass()
 {
-    DEFINE_BASECLASS(zeitgeist/Leaf);
+    DEFINE_BASECLASS(CommServerBase);
 }
