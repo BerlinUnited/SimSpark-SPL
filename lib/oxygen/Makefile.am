@@ -28,6 +28,9 @@ controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
+physicsserver/boxcollider_c.cpp \
+physicsserver/ccylindercollider.cpp \
+physicsserver/ccylindercollider_c.cpp \
 physicsserver/collider.cpp \
 physicsserver/collider_c.cpp \
 physicsserver/odeobject.cpp \
@@ -65,6 +68,8 @@ agentaspect/forceeffector.h \
 agentaspect/perceptor.h \
 controlaspect/controlaspect.h \
 physicsserver/body.h \
+physicsserver/boxcollider.h \
+physicsserver/ccylindercollider.h \
 physicsserver/collider.h \
 physicsserver/odeobject.h \
 physicsserver/physicsserver.h \
