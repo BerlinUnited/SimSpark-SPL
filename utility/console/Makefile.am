@@ -1,6 +1,8 @@
 noinst_LTLIBRARIES = libconsole.la
+VERSION_MACRO = CONSOLE_VERSION=0.2
 
-AM_CPPFLAGS = -I$(top_srcdir)/utility/mathstuff/ \
+AM_CPPFLAGS = -D$(VERSION_MACRO) \
+-I$(top_srcdir)/utility/mathstuff/ \
 -I$(top_srcdir)/utility/forwarder/ \
 -I$(top_srcdir)/utility/classserver 
 # the inputserver needs to be used for an interactive console only
@@ -21,7 +23,11 @@ consolesettings.cc consolesettings.h \
 scanner.cc scanner.h \
 commands/commandserver.cc commands/commandserver.h \
 commands/concommand.cc commands/concommand.h \
+commands/concmdlist.cc commands/concmdlist.h \
+commands/conhelp.cc commands/conhelp.h \
 commands/conquit.cc commands/conquit.h \
+commands/conset.cc commands/conset.h \
+commands/conusage.cc commands/conusage.h \
 commands/signature/commandsignature.cc commands/signature/commandsignature.h \
 commands/signature/commandsignatures.cc commands/signature/commandsignatures.h \
 commands/signature/comsigany.cc commands/signature/comsigany.h \
