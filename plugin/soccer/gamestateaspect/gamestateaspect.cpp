@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.6 2004/04/23 15:22:14 fruit Exp $
+   $Id: gamestateaspect.cpp,v 1.7 2004/05/05 13:57:17 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -136,47 +136,48 @@ GameStateAspect::GetLastModeChange() const
 }
 
 void
-GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
+GameStateAspect::SetTeamName(TTeamIndex idx, const std::string& name)
 {
-    if (
-        (idx != TI_LEFT) &&
-        (idx != TI_RIGHT)
-        )
+    switch (idx)
     {
-        return;
+    case TI_LEFT:
+        mTeamName[0] = name;
+        break;
+    case TI_RIGHT:
+        mTeamName[1] = name;
+        break;
     }
-
-    mTeamName[idx] = name;
+    return;
 }
 
 std::string
 GameStateAspect::GetTeamName(TTeamIndex idx) const
 {
-    if (
-        (idx != TI_LEFT) &&
-        (idx != TI_RIGHT)
-        )
+    switch (idx)
     {
+    case TI_LEFT:
+        return mTeamName[0];
+    case TI_RIGHT:
+        return mTeamName[1];
+    default:
         return "";
     }
-
-    return mTeamName[idx];
 }
 
 TTeamIndex
 GameStateAspect::GetTeamIndex(const std::string& teamName)
 {
-    for (int i=TI_LEFT;i<=TI_RIGHT;++i)
+    for (int i=0; i<=1; ++i)
     {
-        if (mTeamName[i] == "")
+        if (mTeamName[i].empty())
         {
             mTeamName[i] = teamName;
-            return (TTeamIndex)i;
+            return static_cast<TTeamIndex>(i + TI_LEFT);
         }
 
         if (mTeamName[i] == teamName)
         {
-            return (TTeamIndex)i;
+            return static_cast<TTeamIndex>(i + TI_LEFT);
         }
     }
 
@@ -186,15 +187,21 @@ GameStateAspect::GetTeamIndex(const std::string& teamName)
 bool
 GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
 {
-    if (
-        (idx != TI_LEFT) &&
-        (idx != TI_RIGHT)
-        )
+    int i;
+
+    switch (idx)
     {
+    case TI_LEFT:
+        i = 0;
+        break;
+    case TI_RIGHT:
+        i = 1;
+        break;
+    default:
         return false;
     }
 
-    TUnumSet& set = mUnumSet[idx];
+    TUnumSet& set = mUnumSet[i];
 
     if (
         (set.size() >= 11) ||
@@ -205,7 +212,7 @@ GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
     }
 
     set.insert(unum);
-    mMaxUnum[idx] = std::max<int>(unum, mMaxUnum[idx]);
+    mMaxUnum[i] = std::max<int>(unum, mMaxUnum[i]);
 
     return true;
 }
@@ -278,29 +285,30 @@ GameStateAspect::GetGameHalf() const
 void
 GameStateAspect::ScoreTeam(TTeamIndex idx)
 {
-    if (
-        (idx != TI_LEFT) &&
-        (idx != TI_RIGHT)
-        )
+    switch (idx)
     {
-        return;
+    case TI_LEFT:
+        ++mScore[0];
+        break;
+    case TI_RIGHT:
+        ++mScore[1];
+        break;
     }
-
-    ++mScore[idx];
+    return;
 }
 
 int
 GameStateAspect::GetScore(TTeamIndex idx) const
 {
-    if (
-        (idx != TI_LEFT) &&
-        (idx != TI_RIGHT)
-        )
+    switch (idx)
     {
+    case TI_LEFT:
+        return mScore[0];
+    case TI_RIGHT:
+        return mScore[1];
+    default:
         return 0;
     }
-
-    return mScore[idx];
 }
 
 Vector3f
@@ -311,7 +319,7 @@ GameStateAspect::RequestInitPosition(const TTeamIndex ti)
         GetLog()->Debug()
             << "(GameStateAspect) RequestInitPosition called with "
             << "ti=TI_NONE\n";
-        return Vector3f(0,20,0);
+        return Vector3f(0,0,10);
     }
 
     salt::Vector3f& init = (ti ==TI_LEFT) ? mLeftInit : mRightInit;
@@ -353,7 +361,15 @@ GameStateAspect::OnLink()
 int
 GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
 {
-    return mMaxUnum[ti] + 1;
+    switch (ti)
+    {
+    case TI_LEFT:
+        return mMaxUnum[0] + 1;
+    case TI_RIGHT:
+        return mMaxUnum[1] + 1;
+    default:
+        return 0;
+    }
 }
 
 
