@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.9 2004/04/19 16:03:23 rollmark Exp $
+   $Id: staticmesh.h,v 1.10 2004/04/22 17:17:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,16 +22,18 @@
 #ifndef KEROSIN_STATICMESH_H
 #define KEROSIN_STATICMESH_H
 
-#include <kerosin/textureserver/textureserver.h>
 #include <oxygen/sceneserver/basenode.h>
-#include <oxygen/sceneserver/indexbuffer.h>
-#include <boost/shared_array.hpp>
+#include <oxygen/geometryserver/geometryserver.h>
 
 namespace kerosin
 {
 
 class Material;
 
+/** \class StaticMesh is a BaseNode that renders a TriMesh. The mesh
+    is imported using the GeometryServer and all referenced materials
+    are automatically loaded using the MaterialServer.
+ */
 class StaticMesh : public oxygen::BaseNode
 {
     //
@@ -47,15 +49,26 @@ public:
     StaticMesh();
     ~StaticMesh();
 
-    bool Load(const std::string& fileName);
+    /** loads the mesh with the given name and parameters*/
+    bool Load(const std::string& name,
+              const zeitgeist::ParameterList& parameter);
+
+    /** loads the mesh with the given name */
+    bool Load(const std::string& name);
 
     /** empty! this prevents the bounding box from being updated, as
         it cannot change
     */
     virtual void ComputeBoundingBox();
 
-    //! calculates the local bounding box
+    /** calculates the local bounding box */
     void CalcBoundingBox();
+
+    /** returns the scale vector that is used to render the mesh */
+    const salt::Vector3f& GetScale();
+
+    /** sets the scale vector that is used to render the mesh */
+    void SetScale(const salt::Vector3f& scale);
 
 protected:
     virtual void RenderInternal();
@@ -64,19 +77,14 @@ protected:
     // Members
     //
 protected:
-    int mVertexCount;
-    boost::shared_array<float> mPos;
-    boost::shared_array<float> mTexCoords;
-    boost::shared_array<float> mNormal;
-#if 0
-    // tangent space basis vectors
-    boost::shared_array<float> mBasisX;
-    beoost::shared_array<float> mBasisY;
-#endif
-    std::vector<boost::shared_ptr<Material> >  mMaterials;
-    std::vector<int> mFaceCount;
-    std::vector<boost::shared_array<unsigned int> > mFaces;
-    std::vector<unsigned int> mFaceToMaterial;
+    /** vector of scale factors along each axis */
+    salt::Vector3f mScale;
+
+    /** the mesh to render */
+    boost::shared_ptr<oxygen::TriMesh> mMesh;
+
+    /** the materials used to render the mesh */
+    std::vector<boost::shared_ptr<Material> > mMaterials;
 };
 
 DECLARE_CLASS(StaticMesh);
