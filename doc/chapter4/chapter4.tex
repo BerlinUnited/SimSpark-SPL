@@ -1,16 +1,29 @@
 \chapter{Unit Tests}
 
 Unit tests help to ensure that code units work according to their specification.
-They help to increase the code quality in two ways: First they directly 
+They help to increase the code quality in two ways: First they directly
 ensure that code covered by test cases contains fewer bugs. Second they indirectly
 improve the code quality by increasing a developers confidence that changes
 to a piece of code did not introduce bugs. Therefore the barrier for making
 necessary design changes is much lower for code covered by unit tests.
- 
-CppUnit is the C++ port of the famous JUnit framework for unit testing. 
-it simplifies the creation and execution of unit tests for C++ code.
-Test output is in XML or text format for automatic testing and GUI based for
-supervised tests.
+
+CPPUnit is the C++ port of the famous JUnit framework for unit
+testing. It simplifies the creation and execution of unit tests
+for C++ code. Test output is in XML or text format for automatic
+testing and GUI based for supervised tests.
+
+\section{Why should unit tests be used?}
+
+There are different issues why unit tests are a good solution to
+avoid mistakes and save time during the software development.
+
+Often developers think that testing their code would take too much
+time, because they are under pressure. But with that, they go
+wrong. With unit tests many faults and their programm wide effects
+can be avoided or detected early, so that intensive debug sessions
+become no longer necessary. The result could be an enormous saving
+of time.
+
 
 \section{Installation}
 
@@ -30,30 +43,50 @@ For the first steps you only have to download the following files:
 
 \subsection{Linux}
 
-TODO Sebastian:
+A very detailed instruction on howto install CPPUnit on a
+linux/unix machine is located in the two files of the downloaded
+package:
+\begin{itemize}
+\item INSTALL
+\item INSTALL-unix
+\end{itemize}
+
+
+To check if CPPUnit the CPPUnit libraries and include files are
+installed or accessible in your linux/unix machine you can type at
+the prompt
+\begin{center}
+\$ cppunit-config [--version] [-cflags] [--libs] [--prefix]
+[--help]
+\end{center}
+Using the different optional flags you can inquire the system
+about the CPPUnit installed version, the cflags and library path
+you have to use, where CPPUnit was installed and this help.
 
 \subsection{Windows}
 
-Currently, the only supported WIN32 platform is Microsoft Visual C++ version 6.0 or later.
-We tried with MS Visual C++ Standard Edition and it worked.
+Currently, the only supported WIN32 platform is Microsoft Visual
+C++ version 6.0 or later, but as CPPUnit uses ANSI C++, there are
+few ports to other environments like C++Builder. We tried with MS
+Visual C++ Standard Edition and it worked.
 
 The libraries and DLL can all be built from the
 \textit{src/CppUnitLibraries.dsw} workspace which is located in your CPPUnit directory.
 
-For additional information read the 
-\textit{INSTALL-WIN32.TXT} located in the CPPUnit directory. There you also have 
+For additional information read the
+\textit{INSTALL-WIN32.TXT} located in the CPPUnit directory. There you also have
 a list of the different libraries of which you can choose your
 preferred library.
 
 \subsection{Documentation}
-There are two possibilities to access the documentation of the CPPUnit library: 
-The documentation can be integrated in the MSDN library or simply can be read as 
+There are two possibilities to access the documentation of the CPPUnit library:
+The documentation can be integrated in the MSDN library or simply can be read as
 HTML version.
 
-To use the HTML documentaion extract the archive cppunit-docs-1.8.0.tar.gz to 
+To use the HTML documentaion extract the archive cppunit-docs-1.8.0.tar.gz to
 the desired directory and start with the file index.html in any browser you prefer.
 
-If you want to integrate the documentation in the MSDN library you have to 
+If you want to integrate the documentation in the MSDN library you have to
 download \begin{verbatim} CppUnitMsdnDoc-1_8_0.zip \end{verbatim}
 Have a look at \textit{Installing-Doc.txt} and follow the steps described there.
 
@@ -61,11 +94,18 @@ Have a look at \textit{Installing-Doc.txt} and follow the steps described there.
 \section{Creating Unit Tests}
 
 To write your first unit tests follow the instructions in the
-\begin{verbatim} CPPUnit Cookbook \end{verbatim} which you can find on the first page of
-the HTML documentation mentioned above.
+\textbf{CPPUnit Cookbook} which you can find on the first page of
+the HTML documentation mentioned above. The CppUnit Cookbook gives
+you a first idea of what is a "Fixture" , a "Test Case", a "Test
+Suite", the "TestRunner" and the "TestFactoryRegistry".
 
-Another way to learn how to make unit tests is, to look at any existing example 
-of a unit test and try to understand what is done there.
+Another way to learn how to make unit tests is, to look at any
+existing example of a unit test and try to understand what is done
+there. A package of examples can be downloaded from the following
+link:
+\begin{verbatim}
+http://spi.cern.ch/Components/UnitTesting/UserDocumentation/Web/Testing_examples.tar.gz
+\end{verbatim}
 
 To write your first unit tests with MS Visual C++, you have to do the following steps:
 \begin{itemize}
@@ -74,5 +114,67 @@ To write your first unit tests with MS Visual C++, you have to do the following 
 \item add the include directory of your cppunit directory to the search path
 \end{itemize}
 
-TODO Sebastian: example
+\section{Example}
 
+Here is a little example for a general unit test coded in plain C,
+so that you understand the idea how unit tests work.
+
+We are programming a small function which is just adding two
+numbers.
+
+\begin{verbatim}
+int addition(int a, int b) {
+    return (a + b);
+}
+\end{verbatim}
+
+A second module (also a C-function), is our first test case. It
+tests all possible addition cases and compares the result with the
+expected value.
+
+\begin{verbatim}
+BOOL additionTest() {
+    if ( addition(1, 2) != 3 )
+        return (FALSE);
+    if ( addition(0, 0) != 0 )
+        return (FALSE);
+    if ( addition(10, 0) != 10 )
+        return (FALSE);
+    if ( addition(-8, 0) != -8 )
+        return (FALSE);
+    if ( addition(5, -5) != 0 )
+        return (FALSE);
+    if ( addition(-5, 2) != -3 )
+        return (FALSE);
+    if ( addition(-4, -1) != -5 )
+        return (FALSE);
+    return (TRUE);
+}
+\end{verbatim}
+
+A second test case (another C-function) tests the behavior of our
+module with the typical addition properties.
+
+\begin{verbatim}
+
+BOOL additionPropertiesTest() {
+    \textit{// conmutative: a + b = b + a}
+    if ( addition(1, 2) != addition(2, 1) )
+        return (FALSE);
+    \textit{// asociative: a + (b + c) = (a + b) + c}
+    if ( addition(1, addition(2, 3)) != addition(addition(1, 2), 3) )
+        return (FALSE);
+    \textit{// neutral element: a + NEUTRAL = a}
+    if ( addition(10, 0) != 10 )
+        return (FALSE);
+    \textit{// inverse element: a + INVERSE = NEUTRAL}
+    if ( addition(10, -10) != 0 )
+        return (FALSE);
+    return (TRUE);
+}
+\end{verbatim}
+
+We also can write more test cases for checking other scenarios.
+
+For special examples about unit tests with CPPUnit please check
+the link mentioned in the section \textit{Creating Unit Tests}.

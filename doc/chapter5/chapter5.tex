@@ -8,28 +8,48 @@
 \subsection{Purpose}
 
 The Bug Tracking System provides a platform for reporting newly found bugs or to
-browse those reports. A bug report contains a detailed description of the bug, the author of the bug report and the responsible programmer.
+browse those reports. A bug report contains a detailed description of the bug, 
+the author of the bug report and the responsible programmer.
 
 \subsection{Access}
 
-The website of the Bug Tracking System can be found on The Robocup Soccer Simulater website on sourcefourge.net (http://sserver.sourceforge.net/). Follow the links "Tracker" or "Bugs".
+The website of the Bug Tracking System can be found on 
+The Robocup Soccer Simulater website on sourcefourge.net 
+(http://sserver.sourceforge.net/). Follow the links "Tracker" or "Bugs".
 
-\subsubsection{Usage}
+\subsection{Usage}
 
-If you have no account at sourceforge or you are not logged in to the Robocup Soccer Simulator project you only can browse the bug reports.
+If you have no account at sourceforge or you are not logged in 
+to the Robocup Soccer Simulator project
+you only can browse the bug reports.
 
 If you are logged in you have the extra options, "Submit New" and "Reporting".
 Following the link "Submit New" your browser loads a form for reporting a new bug.
 After following the link "Reporting" you are able to generate several reports about
-bugs, feature requests, new user request, patches, support requests and void reports.
+bugs, feature requests, new user request, patches, support requests and void reports.\\
 
-\section{Coding Standarts}
+Important of a bug report is to give a good summary in the "Summary" field of the report.
+This summary is is displayed on the list of all bug reports.
+The most important thing is to give a detailed description of the bug. If you want you can enclose 
+the error messages from the program.
 
-This is the coding style used for the initial parts of the 3D simulator. PLEASE everyone contributing try to use it as well. Even in case you don't like specific parts: changes in the style guide would mean either inconsistencies or cause lot of work for changing the already existing code. 
+\section{Coding Standards}
+
+This is the coding style used for the initial parts of the 3D simulator. 
+PLEASE everyone contributing try to use it as well. 
+Even in case you don't like specific parts: changes in the style guide would mean 
+either inconsistencies or cause lot of work for changing the already existing code. 
 
 \subsection{Tabs}
 
-Never use hard tabs in your source files (have your editor insert spaces instead of tabs). This guideline is especially important. The use of hard tab characters ends up causing problems because not every editor uses the same number of spaces per tab character (in fact, most editors allow you to configure how many spaces there are per tab character). If you open a file with hard tabs already in it, instead of modifying the code so that it is readable in your own editor because your tab stops are different, please remove the tabs. There are several utilities which will do this. See also http://www.jwz.org/doc/tabs-vs-spaces.html.
+Never use hard tabs in your source files (have your editor insert spaces instead of tabs). 
+This guideline is especially important. The use of hard tab characters ends up causing 
+problems because not every editor uses the same number of spaces per tab character 
+(in fact, most editors allow you to configure how many spaces there are per tab character). 
+If you open a file with hard tabs already in it, instead of modifying the code so that 
+it is readable in your own editor because your tab stops are different, 
+please remove the tabs. There are several utilities which will do this. 
+See also http://www.jwz.org/doc/tabs-vs-spaces.html.
 
 \subsection{Indentation}
 
@@ -37,7 +57,9 @@ Only four-space line indentation should be used.
 
 \subsection{Placing Braces}
 
-Opening and closing braces should be on the same level of indentation below the token opening the scope. Opening and closing braces appear on a separate line by themselves.
+Opening and closing braces should be on the same level of
+indentation below the token opening the scope. Opening and closing
+braces appear on a separate line by themselves.
 \\
 
 Example:
@@ -72,6 +94,7 @@ ClassName::function()
 }
 
 \end{verbatim}
+
 \subsection{Naming Conventions}
 
 \begin{verbatim}
@@ -196,7 +219,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: chapter5.tex,v 1.5 2004/01/26 22:05:13 gato_negro Exp $
+$Id: chapter5.tex,v 1.6 2004/01/29 21:46:04 gato_negro Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
