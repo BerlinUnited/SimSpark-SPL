@@ -113,25 +113,24 @@ AC_CONFIG_FILES([Makefile \
 		 lib/kerosin/Makefile \
 		 lib/oxygen/Makefile \
 		 plugin/Makefile \
-		 plugin/filesystemrar/Makefile \
 		 plugin/filesystemstd/Makefile \
 		 plugin/filesystemzip/Makefile \
-		 plugin/inputsdl/Makefile \
-		 plugin/sexpparser/Makefile \
-		 plugin/soundsystembass/Makefile \
-		 plugin/soundsystemfmod/Makefile \
-		 plugin/monitortest/Makefile \
 		 plugin/forceeffector/Makefile \
+		 plugin/inputsdl/Makefile \
+		 plugin/monitortest/Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
+		 plugin/sexpparser/Makefile \
+		 plugin/soundsystemfmod/Makefile \
+		 plugin/spadestest/Makefile \
 		 app/Makefile \
+		 app/agenttest/Makefile \
 		 app/coretest/Makefile \
 		 app/fonttest/Makefile \
 		 app/inputtest/Makefile \
+		 app/rcssmonitor3D/Makefile \
 		 app/scenetest/Makefile \
-		 app/simulator/Makefile \
-		 app/zeitgeisttest/Makefile \
 		 app/spadestest/Makefile \
-		 app/agenttest/Makefile \
+		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
 AC_OUTPUT
