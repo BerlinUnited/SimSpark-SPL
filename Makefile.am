@@ -4,24 +4,28 @@ pkginclude_HEADERS = \
 config.h
 
 doc:	
-	cd doc && $(MAKE) all doxygen-doc
+	cd doc && $(MAKE) $(AM_MAKEFLAGS) all doxygen-doc
 
 branch-major: commit
-	ver=`echo "@VERSION@" | sed /\\\\.[0-9][0-9]*\\\\.[0-9][0-9]*$//`; \
+	ver=`echo "@VERSION@" | sed s/\\\\.[0-9][0-9]*\\\\.[0-9][0-9]*$$//`; \
 	tag=`echo "@PACKAGE@-$$ver"`; \
+	echo ""; \
 	echo "Creating major brach: $$tag"; \
 	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; \
-	echo `cvs tag -b $$tag`; \
+	echo ""; \
+	cvs tag -b "$$tag"; \
 	$(AWK) -f @srcdir@/rel.awk -v change=1 @srcdir@/configure.in > configure.tmp;
 	mv configure.tmp @srcdir@/configure.in
 	$(MAKE) $(AM_MAKEFLAGS) commit
 
 branch-minor: commit
-	ver=`echo "@VERSION@" | sed /\\\\.[0-9][0-9]*$//`; \
+	ver=`echo "@VERSION@" | sed s/\\\\.[0-9][0-9]*$$//`; \
 	tag=`echo "@PACKAGE@-$$ver" | sed s/\\\\./_/g`; \
+	echo ""; \
 	echo "Creating minor brach: $$tag"; \
 	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; \
-	echo `cvs tag -b $$tag`; \
+	echo ""; \
+	cvs tag -b "$$tag"; \
 	$(AWK) -f @srcdir@/rel.awk -v change=2 @srcdir@/configure.in > configure.tmp;
 	mv configure.tmp @srcdir@/configure.in
 	$(MAKE) $(AM_MAKEFLAGS) commit
@@ -35,7 +39,7 @@ tag: do_tag inc_rel
 do_tag:
 	tag=`echo @PACKAGE@-@VERSION@ | sed s/\\\\./_/g`; \
 	echo "tagging release branch with $$tag"; \
-	echo `cvs tag -b $$tag`;	
+	echo `cvs tag $$tag`;	
 
 add_rel:
 	if test "$$USERNAME" = ""; then \
