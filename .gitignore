@@ -17,6 +17,11 @@ app/coretest/Makefile
 app/coretest/Makefile.in
 app/coretest/coretest
 app/coretest/sys
+app/fonttest/.deps
+app/fonttest/.libs
+app/fonttest/Makefile
+app/fonttest/Makefile.in
+app/fonttest/fonttest
 app/inputtest/.deps
 app/inputtest/.libs
 app/inputtest/Makefile
