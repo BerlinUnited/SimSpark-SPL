@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.1.2.1 2004/02/05 09:53:05 fruit Exp $
+   $Id: soccerbase.h,v 1.1.2.2 2004/02/06 10:00:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,43 +22,75 @@
 #ifndef SOCCERBASE_H
 #define SOCCERBASE_H
 
-#include <oxygen/agentaspect/perceptor.h>
-#include <oxygen/sceneserver/sceneserver.h>
-#include <oxygen/sceneserver/transform.h>
-#include <soccer/agentstate/agentstate.h>
+#include <boost/shared_ptr.hpp>
 #include <soccer/soccertypes.h>
 
-class SoccerBase : public zeitgeist::Leaf
+namespace oxygen
+{
+    class BaseNode;
+    class SceneServer;
+    class Scene;
+    class Transform;
+    class Perceptor;
+    class Body;
+}
+
+namespace salt
+{
+    class Vector3f;
+}
+
+class AgentState;
+class Ball;
+
+class SoccerBase
 {
 public:
     SoccerBase() {}
 
     virtual ~SoccerBase() {}
 
+    /** returns a reference to the SceneServer */
     static bool
     GetSceneServer(const oxygen::BaseNode& base,
                    boost::shared_ptr<oxygen::SceneServer>& scene_server);
 
+    /** returns a reference to the closest parent supporting
+        Transform */
     static bool
     GetTransformParent(const oxygen::BaseNode& base,
                        boost::shared_ptr<oxygen::Transform>& transform_parent);
 
+    /** returns a reference to the Body node below the closest
+        transform parent */
+    static bool
+    GetBody(const oxygen::BaseNode& base, boost::shared_ptr<oxygen::Body>& body);
+
+    /** returns a reference to the AgentState node below the closest
+        Transform parent */
     static bool
     GetAgentState(const oxygen::BaseNode& base,
-                  boost::shared_ptr<oxygen::Transform> parent,
                   boost::shared_ptr<AgentState>& agent_state);
 
-    //! return a reference to the active scene from SceneServer
+    /** returns a reference to the active scene from the SceneServer */
     static bool
     GetActiveScene(const oxygen::BaseNode& base,
-                   boost::shared_ptr<oxygen::SceneServer> scene_server,
                    boost::shared_ptr<oxygen::Scene>& active_scene);
 
-    //! flip horizontal coordinates according to the side of the agent
+    /** returns a reference to the Ball node */
+    static bool
+    GetBall(const oxygen::BaseNode& base, boost::shared_ptr<Ball>& ball);
+
+    /** returns a reference to the Body node below the Ball */
+    static bool
+    GetBallBody(const oxygen::BaseNode& base,
+                boost::shared_ptr<oxygen::Body>& body);
+
+    /** returns a reference to the physics aspect of the ball */
+    boost::shared_ptr<oxygen::Body> GetBallBody();
+
+    /** flips horizontal coordinates according to the side of the agent */
     static salt::Vector3f FlipView(const salt::Vector3f& pos, TTeamIndex ti);
-
 };
-
-DECLARE_CLASS(SoccerBase);
 
 #endif
