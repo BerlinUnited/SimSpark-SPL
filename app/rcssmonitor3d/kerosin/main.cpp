@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.1 2004/03/12 09:14:46 rollmark Exp $
+   $Id: main.cpp,v 1.2 2004/03/20 08:45:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,11 +18,15 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <sstream>
 #include <zeitgeist/zeitgeist.h>
 #include <kerosin/kerosin.h>
 #include <oxygen/oxygen.h>
 #include <SDL/SDL.h>
 #include <zeitgeist/fileserver/fileserver.h>
+#include <monitorlib.h>
+#include <commserver.h>
+#include <monitorparser.h>
 
 using namespace boost;
 using namespace kerosin;
@@ -46,6 +50,7 @@ enum ECmds
         CmdRight,
         CmdForward,
         CmdBackward,
+        CmdKickOff
     };
 
 // initialize Zeitgeist (object hierarchy, scripting, files, plugins)
@@ -57,6 +62,15 @@ Oxygen gOx(gZg);
 // initialize Kerosin (input, windowing)
 Kerosin gks(gZg);
 
+// initialize monitor lib
+MonitorLib ml(gZg);
+
+// game state data
+GameState gGameState;
+
+// game parameter data
+GameParam gGameParam;
+
 shared_ptr<LogServer> gLogServer;
 shared_ptr<ScriptServer> gScriptServer;
 shared_ptr<SceneServer> gSceneServer;
@@ -64,6 +78,8 @@ shared_ptr<OpenGLServer> gOpenGLServer;
 shared_ptr<InputServer> gInputServer;
 shared_ptr<FPSController> gFPSController;
 shared_ptr<RenderServer> gRenderServer;
+shared_ptr<CommServer> gCommServer;
+shared_ptr<MonitorParser> gMonitorParser;
 
 // total time passed
 float gTime = 0.0f;
@@ -71,7 +87,17 @@ float gTime = 0.0f;
 // total frames rendered
 int   gNumFrames = 0;
 
-static bool init()
+// monitor port
+int gPort           = DEFAULT_PORT;
+
+// server machine
+string gSoccerServer = DEFAULT_HOST;
+
+// color for player of the different teams
+const float gTeamLColor[4] = {1.0f, 0.2f, 0.2f, 1.0f};
+const float gTeamRColor[4] = {0.2f, 0.2f, 1.0f, 1.0f};
+
+bool init()
 {
     gLogServer = gZg.GetCore()->GetLogServer();
     gScriptServer = gZg.GetCore()->GetScriptServer();
@@ -87,6 +113,7 @@ static bool init()
     gScriptServer->CreateVariable("Command.Backward", CmdBackward);
     gScriptServer->CreateVariable("Command.Up",       CmdUp);
     gScriptServer->CreateVariable("Command.Down",     CmdDown);
+    gScriptServer->CreateVariable("Command.KickOff",  CmdKickOff);
 
     // run initialization scripts
     gScriptServer->Run("rcssmonitor3D-kerosin.rb");
@@ -137,10 +164,31 @@ static bool init()
             gLogServer->Error() << "ERROR: RenderServer not found\n";
             return false;
         }
+
+    // get MonitorLib classes
+
+    gCommServer = shared_dynamic_cast<CommServer>
+        (gZg.GetCore()->Get("/sys/server/comm"));
+
+    if (gCommServer.get() == 0)
+        {
+            gLogServer->Error() << "ERROR: CommServer not found\n";
+            return false;
+      }
+
+  gMonitorParser = shared_dynamic_cast<MonitorParser>
+      (gZg.GetCore()->Get("/sys/server/parser"));
+
+  if (gMonitorParser.get() == 0)
+      {
+          gLogServer->Error() << "ERROR: MonitorParser not found\n";
+          return false;
+      }
+
     return true;
 }
 
-static float processInput()
+float processInput()
 {
     float deltaTime = 0.0f;
 
@@ -189,6 +237,12 @@ static float processInput()
                 case CmdBackward:
                     gFPSController->Backward(input.data.l!=0);
                     break;
+
+                case CmdKickOff:
+                    // kick off
+                    gLogServer->Normal() <<"--- Kick Off\n";
+                    gCommServer->SendKickOffCmd();
+                    break;
                 }
         }
 
@@ -198,7 +252,7 @@ static float processInput()
 /*! Update Processes input, updates windowserver, current score,
   entities, etc..
 */
-static float update()
+float update()
 {
     // process the input events, which have occured
     float deltaTime = processInput();
@@ -209,13 +263,207 @@ static float update()
                 << "(Update) ERROR: deltaTime==0\n";
         }
 
+    // update the scene
     gSceneServer->Update(deltaTime);
 
     return deltaTime;
 }
 
-int main(int /*argc*/, char** /*argv*/)
+void printHelp()
 {
+    cout << "\nusage: rcsserver3D-kerosin [options]\n"
+         << "\noptions:\n"
+         << " --help\t print this message.\n"
+         << " --port\t sets the port number\n"
+         << " --server\t sets the server name\n"
+         << "\n";
+}
+
+bool processInput(int argc, char* argv[])
+{
+  for( int i = 0; i < argc; i++)
+    {
+      if( strcmp( argv[i], "--server" ) == 0 )
+        {
+          if( i+1  < argc)
+            {
+              gSoccerServer = argv[i+1];
+              ++i;
+              cout << "server set to "
+                   << gSoccerServer << "\n";
+            }
+        }
+      else if( strcmp( argv[i], "--port" ) == 0 )
+        {
+          if( i+1 < argc )
+            {
+              gPort = atoi( argv[i+1] );
+              ++i;
+              cout << "port set to " << gPort << "\n";
+            }
+        }
+      else if( strcmp( argv[i], "--help" ) == 0 )
+        {
+          printHelp();
+          return false;
+        }
+    }
+
+  return true;
+}
+
+void printGreeting()
+{
+    cout
+        << "rcssmonitor3D-kerosin version 0.2\n"
+        << "Copyright (C) 2004 Markus Rollmann, \n"
+        << "Universität Koblenz.\n"
+        << "Copyright (C) 2004, "
+        << "The RoboCup Soccer Server Maintenance Group.\n"
+        << "\nType '--help' for further information\n\n";
+}
+
+bool mangleExpr(MonitorParser::Expression& expr, string& name)
+{
+    switch (expr.etype)
+        {
+        default:
+            return false;
+
+        case MonitorParser::ET_BALL:
+            name = "ball";
+            break;
+
+        case MonitorParser::ET_AGENT:
+            {
+                stringstream ss;
+                ss << "agent";
+
+                switch (expr.team)
+                    {
+                    case TI_LEFT:
+                        ss << "L";
+                        break;
+
+                    case TI_RIGHT:
+                        ss << "R";
+                        break;
+
+                    default:
+                    case TI_NONE :
+                        ss << "N";
+                        break;
+                    }
+
+                ss << expr.unum;
+                name = ss.str();
+            }
+        }
+
+    return true;
+}
+
+shared_ptr<Transform> getSphere(MonitorParser::Expression& expr)
+{
+    string name;
+    if (! mangleExpr(expr, name))
+    {
+        return shared_ptr<Transform>();
+    }
+
+    shared_ptr<Scene> scene = gSceneServer->GetActiveScene();
+    if (scene.get() == 0)
+        {
+            gLogServer->Error()
+                << "ERROR: got no active scene from SceneServer\n";
+            return shared_ptr<Transform>();
+        }
+
+    // try to find the transform node
+    shared_ptr<Transform> node = shared_dynamic_cast<Transform>
+        (scene->GetChild(name));
+
+    if (node.get() != 0)
+        {
+            return node;
+        }
+
+    string fktName;
+
+    // create a new visual
+    switch (expr.etype)
+        {
+        default:
+            return shared_ptr<Transform>();
+
+        case MonitorParser::ET_BALL:
+            fktName = "addBall";
+            break;
+
+        case MonitorParser::ET_AGENT:
+            fktName = "addAgent";
+            break;
+        }
+
+    stringstream ss;
+    ss << fktName << "('" << name << "')";
+    gScriptServer->Eval(ss.str());
+
+    return shared_dynamic_cast<Transform>
+        (scene->GetChild(name));
+}
+
+void processUpdates()
+{
+    if (! gCommServer->GetMessage())
+        {
+            return;
+        }
+
+    boost::shared_ptr<oxygen::Predicate::TList> predicates =
+        gCommServer->GetPredicates();
+
+    MonitorParser::TExprList exprList;
+
+    if (
+        (predicates.get() != 0) &&
+        (predicates->size() > 0)
+        )
+        {
+            // parse the received expressions
+            gMonitorParser->ParsePredicates(*predicates,gGameState,
+                                    gGameParam,exprList);
+        }
+
+    for (
+         MonitorParser::TExprList::iterator iter = exprList.begin();
+         iter != exprList.end();
+         ++iter)
+        {
+            MonitorParser::Expression& expr = (*iter);
+
+            shared_ptr<Transform> node = getSphere(expr);
+
+            if (node.get() == 0)
+                {
+                    continue;
+                }
+
+            Vector3f pos(expr.pos[0],expr.pos[2],expr.pos[1]);
+            node->SetLocalPos(pos);
+        }
+}
+
+int main(int argc, char** argv)
+{
+    printGreeting();
+
+    // process command line
+    if (! processInput(argc, argv))
+        {
+            return 1;
+        }
+
     // application specific initialization
     if (init() == false)
         {
@@ -223,9 +471,15 @@ int main(int /*argc*/, char** /*argv*/)
             return 1;
         }
 
+    // setup the CommServer
+    gCommServer->Init("SexpParser",gSoccerServer,gPort);
+
     // the runloop
     while(! gOpenGLServer->WantsToQuit())
         {
+            // read and parser updates from the server
+            processUpdates();
+
             // update the window (pumps event loop, etc..)
             gOpenGLServer->Update();
 
