@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.16 2004/05/07 08:19:41 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.17 2004/05/07 12:08:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -268,7 +268,7 @@ GameControlServer::Parse(int id, const string& str) const
         {
             GetLog()->Warning()
                 << "(GameControlServer::Parse) No effector"
-                << "registered for predicate "
+                << " registered for predicate "
                 << predicate.name << "\n";
             continue;
         }
