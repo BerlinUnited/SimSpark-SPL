@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.1.2.3 2004/01/29 19:53:53 rollmark Exp $
+   $Id: ballstateaspect.cpp,v 1.1.2.4 2004/02/01 15:32:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ BallStateAspect::BallStateAspect() : SoccerControlAspect()
 {
     mBallOnField = false;
     mLastValidBallPos = Vector3f(0,0,0);
+    mGoalState = TI_NONE;
 }
 
 BallStateAspect::~BallStateAspect()
@@ -99,11 +100,51 @@ void BallStateAspect::UpdateLastValidBallPos()
     mLastValidBallPos = mBall->GetWorldTransform().Pos();
 }
 
+void BallStateAspect::UpdateGoalState()
+{
+    if (
+        (mBallOnField) ||
+        (mLeftGoalRecorder.get() == 0) ||
+        (mRightGoalRecorder.get() == 0)
+        )
+        {
+            mGoalState = TI_NONE;
+            return;
+        }
+
+    // check both goal box collider
+    RecorderHandler::TParentList agents;
+    mLeftGoalRecorder->GetParentsSupportingClass("AgentAspect",agents);
+
+    if (agents.size())
+        {
+            mGoalState = TI_LEFT;
+        } else
+            {
+                agents.clear();
+                mRightGoalRecorder->GetParentsSupportingClass("AgentAspect",agents);
+
+                if (agents.size())
+                    {
+                        mGoalState = TI_RIGHT;
+                    }
+            }
+
+    mLeftGoalRecorder->Clear();
+    mRightGoalRecorder->Clear();
+}
+
+TTeamIndex BallStateAspect::GetGoalState()
+{
+    return mGoalState;
+}
+
 void BallStateAspect::Update(float deltaTime)
 {
     UpdateLastCollidingAgent();
     UpdateBallOnField();
     UpdateLastValidBallPos();
+    UpdateGoalState();
 }
 
 void BallStateAspect::OnLink()
@@ -113,6 +154,8 @@ void BallStateAspect::OnLink()
     mFieldRecorder = GetFieldRecorder();
     mBall = GetBall();
     mBallRecorder = GetBallRecorder();
+    mLeftGoalRecorder = GetLeftGoalRecorder();
+    mRightGoalRecorder = GetRightGoalRecorder();
 }
 
 void BallStateAspect::OnUnlink()
@@ -122,6 +165,8 @@ void BallStateAspect::OnUnlink()
     mBallRecorder.reset();
     mFieldRecorder.reset();
     mLastCollidingAgent.reset();
+    mLeftGoalRecorder.reset();
+    mRightGoalRecorder.reset();
 }
 
 bool BallStateAspect::GetBallOnField()
