@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: sexpparser.cpp,v 1.2.2.1 2003/12/23 01:44:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,9 +27,15 @@ using namespace std;
 using namespace boost;
 
 bool
-SexpParser::IsString(const boost::any & operand)
+SexpParser::IsString(const boost::any& operand)
 {
     return boost::any_cast<std::string>(&operand);
+}
+
+bool
+SexpParser::IsParameterList(const boost::any& operand)
+{
+    return boost::any_cast<TParameterList>(&operand);
 }
 
 shared_ptr<SexpParser::TPredicateList>
@@ -126,7 +132,6 @@ SexpParser::ListToString(const TParameterList& lst)
 {
     string s;
     string space;
-    bool round1 = true;
 
     for (TParameterList::const_iterator i = lst.begin(); i != lst.end(); ++i)
     {
@@ -145,19 +150,23 @@ SexpParser::ListToString(const TParameterList& lst)
             ostringstream strm;
             strm << boost::any_cast<float>(*i);
             s += space + strm.str();
-        } else {
+        }
+        else if (IsParameterList(*i))
+        {
             string t = ListToString(boost::any_cast<TParameterList>(*i));
             s += space + '(' + t + ')';
         }
-        if (round1) space = " ";
+        else s += space + "(error data format unknown)";
+
+        space = " ";
     }
-    return s;
+    return space + s;
 }
 
 std::string
 SexpParser::PlistToString(const TPredicate& plist)
 {
-    string s = '(' + plist.name +  " ";
+    string s = '(' + plist.name;
     s += ListToString(plist.parameter);
     return s + ')';
 }
