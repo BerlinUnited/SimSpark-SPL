@@ -35,7 +35,7 @@ using namespace boost;
 using namespace zeitgeist;
 using namespace oxygen;
 
-TrainerCommandParser::TrainerCommandParser() : Leaf()
+TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
 {
     // setup command map
     mCommandMap["agent"] = CT_PLAYER;
@@ -88,6 +88,37 @@ TrainerCommandParser::SendAck(std::string &reply)
     reply = "best";
     mGetAck= false;
     return true;
+}
+
+void
+TrainerCommandParser::OnLink()
+{
+    // we need the SexpParser to generate the predicates
+    // from S-Expressions
+    mSexpParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New("SexpParser"));
+
+    if (mSexpParser.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (TrainerCommnadParser) failed to create SexpParser\n";
+            return;
+        }
+}
+
+void TrainerCommandParser::OnUnlink()
+{
+    mSexpParser.reset();
+}
+
+void TrainerCommandParser::ParseMonitorMessage(const std::string& data)
+{
+    if (mSexpParser.get() == 0)
+    {
+        GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get SexpParser\n";
+        return;
+    }
+
+    shared_ptr<PredicateList> predList = mSexpParser->Parse(data);
+    ParsePredicates(*predList);
 }
 
 void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)

@@ -26,13 +26,14 @@
 #define TRAINERCOMMANDPARSER_H
 
 #include <string>
-#include <zeitgeist/class.h>
+#include <oxygen/monitorserver/monitorcmdparser.h>
 #include <oxygen/gamecontrolserver/predicate.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 #include <salt/vector.h>
 #include <soccer/soccertypes.h>
 #include <soccer/soccerruleaspect/soccerruleaspect.h>
 
-class TrainerCommandParser : public zeitgeist::Leaf
+class TrainerCommandParser : public oxygen::MonitorCmdParser
 {
 public:
 
@@ -57,13 +58,22 @@ public:
 
     virtual ~TrainerCommandParser();
 
+    bool SendAck(std::string &reply);
+
+    /** This function will be called be called from the monitor server
+        implementation to parse any command strings received from the
+        monitor client process
+     */
+    virtual void ParseMonitorMessage(const std::string& data);
+
+    virtual void OnLink();
+
+    virtual void OnUnlink();
+
+protected:
     /** parses the list of predicates; returns true on success
      */
     void ParsePredicates(oxygen::PredicateList& predList);
-
-    bool SendAck(std::string &reply);
-
-protected:
 
     /** parses the given predicate and calls one of the specialized
         parse methods given below depending the predicate name;
@@ -97,6 +107,8 @@ protected:
     boost::shared_ptr<GameStateAspect> mGameState;
     //! cached reference for the soccer rule aspect
     boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
+    //! the parser used to create the PredicateList
+    boost::shared_ptr<oxygen::BaseParser> mSexpParser;
 
     bool mGetAck;
     std::string mAckString;
