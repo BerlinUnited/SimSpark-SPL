@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.10 2004/06/12 08:21:04 jamu Exp $
+   $Id: gamestate.cpp,v 1.11 2005/02/24 17:01:24 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -408,6 +408,15 @@ GameState::ProcessInfo(const Predicate& predicate)
             {
                 pi.mMessage.clear();
             }
+            if (predicate.FindParameter(j, "rot"))
+            {
+			  	//HACK: only 4x4 matrices are accepted
+			  	for(int row = 0; row < 4; row++)
+			   		for(int col = 0; col < 4; col++)
+			   		{
+   	   					predicate.AdvanceValue(j,pi.mRotation.m[row*4+col]);
+              		}
+			}
             if (mSeenPlayers.size() <= players_seen)
                 mSeenPlayers.resize(players_seen + 1, false);
             if (mPlayers.size() <= players_seen)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.h,v 1.7 2004/06/11 14:58:30 fruit Exp $
+   $Id: gamestate.h,v 1.8 2005/02/24 17:01:24 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #define GAMESTATE_H
 
 #include <string>
+#include <salt/matrix.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <soccer/soccertypes.h>
 
@@ -185,6 +186,7 @@ protected:
         TTeamIndex mSide;
         int mUnum;
         std::string mMessage;
+    	salt::Matrix mRotation;
     };
     typedef std::map<std::string, EFlagType> TFlagTypeMap;
     typedef std::map<EFlagType, std::string> TFlagNameMap;
