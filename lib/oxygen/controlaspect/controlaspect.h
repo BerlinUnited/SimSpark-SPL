@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.h,v 1.8 2004/04/23 13:22:04 fruit Exp $
+   $Id: controlaspect.h,v 1.9 2004/06/10 13:59:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,6 +41,15 @@ public:
         seconds
      */
     virtual void Update(float deltaTime) = 0;
+
+    /** Check if the simulation should be stopped.
+        During update, the GameControlServer checks if the simulation should
+        be stopped by calling IsFinished() of all registered control aspects.
+        To return true, derived control aspects have to overwrite this default
+        method which returns always false.
+        \return false
+    */
+    virtual bool IsFinished() const { return false; }
 
     /** queries the SceneServer for the currently active scene node */
     boost::shared_ptr<Scene> GetActiveScene();
