@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.8 2004/05/14 15:48:33 fruit Exp $
+   $Id: kickeffector.cpp,v 1.9 2004/05/14 16:35:37 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,9 @@ using namespace std;
 
 KickEffector::KickEffector()
     : oxygen::Effector(),
-      mKickMargin(0.04),mForceFactor(4.0),mMaxPower(100.0),
+      mKickMargin(0.04),
+      mForceFactor(4.0),mTorqueFactor(0.1),
+      mMaxPower(100.0),
       mMinAngle(0.0),mMaxAngle(50.0), mSteps(10),
       mSigmaForce(0.4), mSigmaTheta(0.02), mSigmaPhiEnd(0.9), mSigmaPhiMid(4.5)
 {
@@ -122,7 +124,9 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     force *= (mForceFactor * kick_power);
 
-    const Vector3f torque(0.0,0.0,0.0);
+    const Vector3f torque(mTorqueFactor*force[1]/salt::g2PI,
+                          mTorqueFactor*force[0]/salt::g2PI,
+                          0.0);
 
     mBall->SetAcceleration(mSteps,force,torque,mAgent);
     return true;
@@ -230,6 +234,12 @@ void
 KickEffector::SetForceFactor(float force_factor)
 {
     mForceFactor = force_factor;
+}
+
+void
+KickEffector::SetTorqueFactor(float torque_factor)
+{
+    mTorqueFactor = torque_factor;
 }
 
 void
