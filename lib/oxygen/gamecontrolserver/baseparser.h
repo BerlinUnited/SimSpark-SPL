@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: baseparser.h,v 1.1.2.1 2003/12/01 16:17:49 fruit Exp $
+   $Id: baseparser.h,v 1.1.2.2 2003/12/02 16:55:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,13 +33,21 @@ namespace oxygen
 class BaseParser : public zeitgeist::Leaf
 {
 public:
-    typedef std::list<boost::any> TPredicateList;
+    typedef std::list<boost::any> TParameterList;
+
+    struct TPredicate
+    {
+        std::string name;
+        TParameterList parameter;
+    };
+
+    typedef std::list<TPredicate> TPredicateList;
 
     virtual TPredicateList Parse(const std::string input) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(BaseParser);
 
-}
+} // namespace oxygen
 
 #endif // OXYGEN_BASEPARSER_H
