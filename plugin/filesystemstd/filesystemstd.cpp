@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemstd.cpp,v 1.4 2004/04/08 07:30:37 rollmark Exp $
+   $Id: filesystemstd.cpp,v 1.5 2004/04/18 16:20:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "filesystemstd.h"
 #include <salt/fileclasses.h>
 
+using namespace boost;
 using namespace salt;
 using namespace std;
 
@@ -37,38 +38,32 @@ FileSystemSTD::~FileSystemSTD()
 
 bool FileSystemSTD::SetPath(const string& inPath)
 {
-        // release memory for old path
-        mPath = inPath;
+    // release memory for old path
+    mPath = inPath;
 
-        return true;
+    return true;
 }
 
 //
 // This function is really simple. It appends inName to mPath and
 // tries to open the combined name as a readonly file.
 //
-salt::RFile* FileSystemSTD::Open(const string& inName)
+shared_ptr<salt::RFile> FileSystemSTD::Open(const string& inName)
 {
-        //Assert(inName != NULL, "No name specified for openening a file");
+    shared_ptr<salt::RFile> file(new StdFile());
+    std::string fileName = mPath + inName;
 
-        salt::RFile*    file            = new StdFile();
-        std::string     fileName        = mPath;
-
-        fileName += inName;     // append inName
-
-        if(file->Open(fileName.c_str()) == false)
+    if(! file->Open(fileName.c_str()))
         {
-                // hmm, couldn't open file
-                delete file;
-                return NULL;
+            file.reset();
         }
 
-        return file;
+    return file;
 }
 
 int FileSystemSTD::ForEachFile(const string& expression, TCallback callback,
                                void* param)
 {
-        // todo
-        return 0;
+    // todo
+    return 0;
 }

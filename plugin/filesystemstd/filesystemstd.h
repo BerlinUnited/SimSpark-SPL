@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemstd.h,v 1.4 2004/04/08 07:30:37 rollmark Exp $
+   $Id: filesystemstd.h,v 1.5 2004/04/18 16:20:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public:
         FileSystemSTD();
         virtual ~FileSystemSTD();
 
-        virtual salt::RFile* Open(const std::string& inName);
+        virtual boost::shared_ptr<salt::RFile> Open(const std::string& inName);
         virtual bool SetPath(const std::string& inPath);
         virtual int ForEachFile(const std::string& expression,
                                 TCallback callback, void* param);
