@@ -26,8 +26,13 @@ utility/classserver/Makefile
 utility/classserver/Makefile.in
 utility/classserver/classserver.lo
 utility/classserver/libclassserver.la
+utility/console/*.lo
+utility/console/*.la
+utility/console/.deps
+utility/console/.libs
 utility/console/Makefile
 utility/console/Makefile.in
+utility/console/example
 utility/console/commands/.deps
 utility/console/commands/.dirstamp
 utility/console/commands/.libs
@@ -37,6 +42,10 @@ utility/console/commands/signature/.deps
 utility/console/commands/signature/.dirstamp
 utility/console/commands/signature/.libs
 utility/console/commands/signature/*.lo
+utility/console/variables/*.lo
+utility/console/variables/.deps
+utility/console/variables/.dirstamp
+utility/console/variables/.libs
 utility/forwarder/.deps
 utility/forwarder/forwarder.lo
 utility/forwarder/libforwarder.la

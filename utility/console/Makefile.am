@@ -1,5 +1,40 @@
-noinst_LIBRARIES = libconsole.a
-libconsole_a_SOURCES = \
+noinst_LTLIBRARIES = libconsole.la
+
+AM_CPPFLAGS = -I$(top_srcdir)/utility/mathstuff/ \
+-I$(top_srcdir)/utility/forwarder/ \
+-I$(top_srcdir)/utility/classserver 
+# the inputserver needs to be used for an interactive console only
+# -I$(top_srcdir)/utility/inputserver
+
+noinst_PROGRAMS = example
+example_SOURCES = example.cc
+example_LDADD   = libconsole.la \
+$(top_srcdir)/utility/forwarder/libforwarder.la \
+$(top_srcdir)/utility/classserver/libclassserver.la -ldl
+
+libconsole_la_SOURCES = \
+console.cc console.h \
+consolealiases.cc consolealiases.h \
+consolebaseview.h \
+consoleparser.cc consoleparser.h \
+consolesettings.cc consolesettings.h \
+scanner.cc scanner.h \
+commands/commandserver.cc commands/commandserver.h \
+commands/concommand.cc commands/concommand.h \
+commands/conquit.cc commands/conquit.h \
+commands/signature/commandsignature.cc commands/signature/commandsignature.h \
+commands/signature/commandsignatures.cc commands/signature/commandsignatures.h \
+commands/signature/comsigany.cc commands/signature/comsigany.h \
+commands/signature/comsigbase.cc commands/signature/comsigbase.h \
+commands/signature/comsigbool.cc commands/signature/comsigbool.h \
+commands/signature/comsigcommand.cc commands/signature/comsigcommand.h \
+commands/signature/comsigelliptic.cc commands/signature/comsigelliptic.h \
+commands/signature/comsigfloat.cc commands/signature/comsigfloat.h \
+commands/signature/comsigint.cc commands/signature/comsigint.h \
+commands/signature/comsiglabel.cc commands/signature/comsiglabel.h \
+commands/signature/comsigstring.cc commands/signature/comsigstring.h \
+commands/signature/comsigvariable.cc commands/signature/comsigvariable.h \
+commands/signature/comsigvector.cc commands/signature/comsigvector.h \
 variables/convar.cc variables/convar.h \
 variables/convarattributes.cc variables/convarattributes.h \
 variables/convarbool.cc variables/convarbool.h \
@@ -23,3 +58,9 @@ variables/convarstring.cc variables/convarstring.h \
 variables/convarundefined.cc variables/convarundefined.h \
 variables/convarvariable.cc variables/convarvariable.h \
 variables/convarvector.cc variables/convarvector.h
+
+# consolebindings.cc consolebindings.h \
+# consolehistory.cc consolehistory.h \
+# consolebinding.cc consolebinding.h \
+# consoleinputline.cc consoleinputline.h \
+# consoleinputlinebindings.cc consoleinputlinebindings.h \

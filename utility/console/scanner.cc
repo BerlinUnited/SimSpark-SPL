@@ -268,10 +268,12 @@ Scanner::skipWhiteSpace(char* pos)
 }
 
 char* 
-Scanner::skipToken(char* pos, char &oldchar)
+Scanner::skipToken(char* pos, char& oldchar)
 {
     bool in_string, first_char, in_escape;
-    char* white_space, *quote, *separator;
+    char* white_space; 
+    char* quote; 
+    char* separator;
     char string_quote;
 
     if ((!M_state.input) || (!pos))
@@ -311,7 +313,8 @@ Scanner::skipToken(char* pos, char &oldchar)
 
                     if ((*quote) != 0)
                     {
-                        in_string = true;        // we've found the beginning of a string
+                        // we've found the beginning of a string
+                        in_string = true;        
                     }
                 }
                 else
@@ -340,8 +343,10 @@ Scanner::skipToken(char* pos, char &oldchar)
 
                     if ((*separator) != 0)
                     {
-                        // if this is the first char, then recognize the seperator
-                        // as a token otherwise a delimiter for the preceding string                        
+                        /* If this is the first char, then recognize the 
+                           seperator as a token otherwise a delimiter for 
+                           the preceding string.
+                        */
                         if (first_char)
                         {
                             pos++;
@@ -439,7 +444,7 @@ Scanner::getNextToken(Token& token)
     if (M_info.separator)
     {
         char* separator;
-        for (separator = M_info.separator; (*separator) != 0; separator++)
+        for (separator = M_info.separator; (*separator) != 0; ++separator)
         {
             if ((*last_input_pos) == (*separator))
                 break;
@@ -475,7 +480,7 @@ Scanner::getNextToken(Token& token)
         char* pos, *quote;
         pos = last_input_pos;
 
-        for (quote = M_info.string_quote; (*quote) != 0; quote++)
+        for (quote = M_info.string_quote; (*quote) != 0; ++quote)
         {
             if ((*pos) == (*quote))
                 break;
@@ -589,7 +594,7 @@ const char*
 Scanner::lookupToken(int id)
 {
     TokenMap::iterator i;
-    for (i = M_tokens.begin(); i != M_tokens.end(); i++)
+    for (i = M_tokens.begin(); i != M_tokens.end(); ++i)
     {
         if ((*i).second.i == id)
             return (*i).first.c_str();

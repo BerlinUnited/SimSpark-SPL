@@ -34,7 +34,7 @@
 #include <string>
 
 /*! \class Scanner
-  $Id: scanner.h,v 1.2 2002/08/21 08:41:48 fruit Exp $
+  $Id: scanner.h,v 1.3 2002/08/21 14:11:17 fruit Exp $
 
     Scanner - a simple tokenizer
 
@@ -47,7 +47,7 @@
     HISTORY:
     The console subsystem was taken from a student project at the AI
     Research Group, Koblenz University. Original development by Marco
-    Koegler <koegler@uni-koblenz.de>, Marcus Rollmann
+    Koegler <koegler@uni-koblenz.de>, Markus Rollmann
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 */

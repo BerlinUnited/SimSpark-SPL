@@ -43,7 +43,7 @@ static const std::string SP_VECTOR_END = ">";
 class Console;
 
 /*! \class ConsoleParser
-  $Id: consoleparser.h,v 1.2 2002/08/21 08:41:48 fruit Exp $
+  $Id: consoleparser.h,v 1.3 2002/08/21 14:11:16 fruit Exp $
 
     ConsoleParser
 
@@ -87,7 +87,7 @@ class Console;
     HISTORY:
     The console subsystem was taken from a student project at the AI
     Research Group, Koblenz University. Original development by Marco
-    Koegler <koegler@uni-koblenz.de>, Marcus Rollmann
+    Koegler <koegler@uni-koblenz.de>, Markus Rollmann
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 */
@@ -179,4 +179,4 @@ protected:
     Scanner::InitInfo M_scanner_info;
 };
 
-#endif                          // _CONSOLEPARSER_H_
+#endif                          // UTILITY_CONSOLEPARSER_H

@@ -40,7 +40,7 @@
 class ConsoleBaseView;
 
 /*! \class Console
-  $Id: console.h,v 1.3 2002/08/21 08:42:19 fruit Exp $
+  $Id: console.h,v 1.4 2002/08/21 14:11:16 fruit Exp $
 
     Console
 
@@ -67,7 +67,7 @@ class ConsoleBaseView;
     HISTORY:
     The console subsystem was taken from a student project at the AI
     Research Group, Koblenz University. Original development by Marco
-    Koegler <koegler@uni-koblenz.de>, Marcus Rollmann
+    Koegler <koegler@uni-koblenz.de>, Markus Rollmann
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 
@@ -90,12 +90,12 @@ public:
        line (ConsoleInputLine). Otherwise the input bindings
        (ConsoleBindings) are evaluated. 
      */
-    void processInput(const BaseInputDevice::Input & input);
+    void processInput(const BaseInputDevice::Input& input);
 #endif
     /*! execute a string as hacked into the console or 
        read from a configuration file
      */
-    bool execute(const std::string & command);
+    bool execute(const std::string& command);
     //! the stream associated with the console
     std::ostream* getStream();
     /*! the variable settings of this console which are 
@@ -122,23 +122,23 @@ public:
        The console will not delete the view, neither on
        unregistration or in the destructor.
      */
-    void registerView(ConsoleBaseView * view);
+    void registerView(ConsoleBaseView* view);
     //! unregister a view; the view will not be deleted 
-    void unregisterView(ConsoleBaseView * view);
+    void unregisterView(ConsoleBaseView* view);
 
 protected:
     //! a container for the views
-    typedef std::list < ConsoleBaseView * >TViews;
+    typedef std::list < ConsoleBaseView* >TViews;
     //! this is a singleton: we don't want no copies
     Console();
-    Console(const Console &);
-    Console & operator = (const Console &);
+    Console(const Console&);
+    Console& operator = (const Console &);
 #if 0
     //! execute the string bound to the id of the input event
-    bool invokeBinding(const BaseInputDevice::Input & input);
+    bool invokeBinding(const BaseInputDevice::Input& input);
 #endif
     //! executes a statement returned by the parser and returns the success
-    bool perform(ConVar::ConVars & conVars);
+    bool perform(ConVar::ConVars& conVars);
 
     //! is the console active?
     bool M_active;
@@ -165,4 +165,4 @@ protected:
     ConsoleParser M_parser;
 };
 
-#endif                          // _CONSOLE_H_
+#endif                          // UTILITY_CONSOLE_H
