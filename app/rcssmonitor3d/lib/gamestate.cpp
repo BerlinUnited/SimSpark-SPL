@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.9 2004/06/12 08:11:52 jamu Exp $
+   $Id: gamestate.cpp,v 1.10 2004/06/12 08:21:04 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -337,10 +337,6 @@ GameState::ProcessInfo(const Predicate& predicate)
     bool sawPlayer = false;
     bool sawFlag = false;
     
-    ResetBall();
-    ResetPlayers();
-//     ResetFlags(); // don't reset flags, as they are only sent once
-
     Predicate::Iterator iter(predicate);
     mAck.clear();
     predicate.GetValue(iter, "ack", mAck);
