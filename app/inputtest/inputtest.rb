@@ -6,6 +6,6 @@ print "start inputtest.rb\n"
 inputServer = new('kerosin/InputServer', '/sys/server/input');
 inputServer.init('InputSystemSDL');
 # load german keyboard layout
-inputServer.importScanCodeMapping('german.scan.rb');
+inputServer.setScanCodeMapping('german.scan.rb');
 
 print "end inputtest.rb\n"
