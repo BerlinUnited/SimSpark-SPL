@@ -29,7 +29,26 @@ AC_PROG_AWK
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([float.h limits.h malloc.h memory.h stdlib.h string.h])
-AC_CHECK_HEADER([boost/version.hpp],,AC_MSG_ERROR([boost library not found]))
+
+# check for OpenGL location and used extensions
+AC_CHECK_HEADER([GL/gl.h],,
+  AC_MSG_ERROR([required OpenGL headers not found. Please specify the location 
+of the OpenGL header directory using the CPPFLAGS environment variable]))
+AC_CHECK_HEADERS([GL/glx.h],
+                 AC_SUBST([GLTARGET], [x]),
+		 AC_CHECK_HEADERS([GL/wglext.h],
+                                  AC_SUBST([GLTARGET], [win32]),
+  				  AC_MSG_ERROR([could not find X nor MS Windows GL extensions]),    
+				  [#include <GL/gl.h>]),
+		 [#include <GL/gl.h>])
+
+GLDIR=`echo "#include <GL/gl.h>" | /lib/cpp -M | awk '{ print $2 }'`
+GLDIR=`dirname "$GLDIR"`
+AC_CHECK_FILE([$GLDIR/glx.h])
+
+AC_CHECK_HEADER([boost/version.hpp],,
+  AC_MSG_ERROR([boost library not found. Please specify the location 
+of the boost header directory using the CPPFLAGS environment variable]))
 AC_CHECK_HEADERS([hash_map],,
 	AC_MSG_WARN([consider installing the stlport library. 'hash_map' will be substituted by a 'map' for now.]))
 
@@ -45,6 +64,10 @@ AC_FUNC_SETVBUF_REVERSED
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr])
 
+# checks for system services
+AC_PATH_X
+
+# create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
