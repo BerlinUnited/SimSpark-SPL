@@ -1,2 +1,1 @@
-SUBDIRS = lib lite
-
+SUBDIRS = lib lite kerosin
