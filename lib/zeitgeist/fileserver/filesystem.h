@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystem.h,v 1.6 2004/04/08 07:14:39 rollmark Exp $
+   $Id: filesystem.h,v 1.7 2004/04/18 16:18:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ public:
 
     /** tries to open the file named inName. Returns an instance of a
         salt::RFile on success, NULL otherwise */
-    virtual salt::RFile* Open(const std::string& inName) = 0;
+    virtual boost::shared_ptr<salt::RFile> Open(const std::string& inName) = 0;
 
     /** sets the path all calls to Open are relative to. For a
         standard file system this call maps directly to a
