@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.21 2004/05/14 16:05:51 fruit Exp $
+   $Id: scriptserver.cpp,v 1.22 2004/12/19 14:09:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -286,6 +286,14 @@ ScriptServer::Eval(const string &command)
 {
     int error;
     RbEvalStringWrap(command,error);
+    return (error == 0);
+}
+
+bool
+ScriptServer::Eval(const std::string &command, GCValue& value)
+{
+    int error;
+    value = RbEvalStringWrap(command,error);
     return (error == 0);
 }
 

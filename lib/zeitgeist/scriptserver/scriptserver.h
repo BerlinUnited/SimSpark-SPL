@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.19 2004/04/23 15:29:07 fruit Exp $
+   $Id: scriptserver.h,v 1.20 2004/12/19 14:09:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -98,6 +98,10 @@ public:
 
     /** evaluates a ruby statement, returns true on success */
     bool Eval(const std::string &command);
+
+    /** evaluates a ruby statement, returns true on success; \param
+        value receives the result value if any */
+    bool Eval(const std::string &command, GCValue& value);
 
     void UpdateCachedAllNodes();
 
