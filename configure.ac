@@ -51,7 +51,7 @@ AC_CHECK_HEADER([boost/version.hpp],,
   AC_MSG_ERROR([boost library not found. Please specify the location 
 of the boost header directory using the CPPFLAGS environment variable]))
 AC_CHECK_HEADERS([hash_map],,
-	AC_MSG_WARN([consider installing the stlport library. 'hash_map' will be substituted by a 'map' for now.]))
+	AC_MSG_WARN(['hash_map' will be substituted by a 'map'. Possible fix: install stlport]))
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -65,8 +65,22 @@ AC_FUNC_SETVBUF_REVERSED
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr])
 
-# checks for system services
+## checks for system services
 AC_PATH_X
+
+# check for freetype2 stuff
+AC_CHECK_PROG([FREETYPE2], [freetype-config], [yes], [no])
+if test $FREETYPE2 = "no"; then
+	AC_MSG_ERROR([need freetype2 devel library to compile])
+fi
+ac_freetype_cppflags=`freetype-config --cflags`
+ac_freetype_libadd=`freetype-config --libtool`
+AC_MSG_CHECKING([freetype include flags])
+AC_MSG_RESULT([$ac_freetype_cppflags])
+AC_SUBST(FREETYPE_CPPFLAGS, [$ac_freetype_cppflags])
+AC_MSG_CHECKING([freetype libtool file])
+AC_MSG_RESULT([$ac_freetype_libadd])
+AC_SUBST(FREETYPE_LIBADD, [$ac_freetype_libadd])
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
@@ -78,6 +92,14 @@ AC_CONFIG_FILES([Makefile \
 		 lib/zeitgeist/Makefile \
 		 lib/kerosin/Makefile \
 		 lib/oxygen/Makefile \
+		 plugin/Makefile \
+		 plugin/filesystemrar/Makefile \
+		 plugin/filesystemstd/Makefile \
+		 plugin/filesystemzip/Makefile \
+		 plugin/inputsdl/Makefile \
+		 plugin/soundsystembass/Makefile \
+		 plugin/soundsystemfmod/Makefile \
+		 plugin/survival/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
 AC_OUTPUT
