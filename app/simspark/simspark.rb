@@ -26,6 +26,10 @@ run "bindings.rb"
 material = new('kerosin/MaterialSolid', $serverPath+'material/matYellow');
 material.setDiffuse(1.0,1.0,0.0,1.0)
 
+material = new('kerosin/MaterialSolid', $serverPath+'material/matOrangeGlow');
+material.setDiffuse(1.0,0.5,0.0,1.0)
+material.setEmission(0.5,0.0,0.0,1.0)
+
 material = new('kerosin/MaterialSolid', $serverPath+'material/matBlue');
 material.setDiffuse(0.0,0.0,1.0,1.0)
 
