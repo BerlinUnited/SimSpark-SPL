@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: object.cpp,v 1.6 2004/03/22 10:39:03 rollmark Exp $
+   $Id: object.cpp,v 1.7 2004/04/08 14:36:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,16 +83,14 @@ void Object::Dump() const
     cout << " - use count = " << mSelf.use_count() << endl;
 }
 
-void Object::Invoke(const std::string &functionName)
+void Object::Invoke(const std::string &functionName, const ParameterList& parameter)
 {
-    ParameterList in;
-
     Class::TCmdProc cmd = mClass->GetCmdProc(functionName);
     if (cmd != NULL)
       {
         if (shared_ptr<Object> self = GetSelf().lock())
           {
-            GCValue out = cmd(self.get(), in);
+            GCValue out = cmd(self.get(), parameter);
           }
       }
 }

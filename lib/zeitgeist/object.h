@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: object.h,v 1.4 2003/11/14 14:05:54 fruit Exp $
+   $Id: object.h,v 1.5 2004/04/08 14:36:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include "core.h"
+#include "parameterlist.h"
 
 namespace zeitgeist
 {
@@ -88,7 +89,7 @@ public:
     virtual void                            Dump() const;
 
     /** function invocation used for scripting */
-    void    Invoke(const std::string &functionName);
+    void Invoke(const std::string &functionName, const ParameterList& parameter);
 
 protected:
     /** called after the object has been created and attached to a
