@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.3 2004/03/22 18:10:56 fruit Exp $
+   $Id: kickeffector.h,v 1.4 2004/05/14 16:37:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,6 +59,12 @@ public:
      */
     void SetForceFactor(float force_factor);
 
+    /** Set the torque factor.
+     *
+     * The kick torque vector is multiplied by this factor.
+     */
+    void SetTorqueFactor(float torque_factor);
+
     /** Set the number of steps the force is applied.
      * \param steps the number of steps to apply force and torque.
      */
@@ -107,6 +113,8 @@ private:
     float mBallRadius;
     /** force factor */
     float mForceFactor;
+    /** force factor */
+    float mTorqueFactor;
     /** the maximum kick power */
     float mMaxPower;
     /** the minimal kick angle */
