@@ -7,7 +7,7 @@ using namespace zeitgeist;
 
 int main()
 {
-	Zeitgeist zg;
+	Zeitgeist zg("." PACKAGE_NAME);
 
 	return 0;
 }

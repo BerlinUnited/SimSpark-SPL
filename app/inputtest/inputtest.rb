@@ -1,18 +1,11 @@
-importBundle "filesystemstd"
-importBundle "inputsdl"
+print "start inputtest.rb\n"
 
-# mount a standard file system
-create "kerosin/FileServer", "/sys/server/file"
-cd "/sys/server/file"
-mount "FileSystemSTD", "data/"
+####
+# Input Server
+#
+inputServer = new ('kerosin/InputServer', '/sys/server/input');
+# inputServer.init ('InputSystemSDL');
+# load german keyboard layout
+inputServer.importScanCodeMapping ('sys/script/german.scan.rb');
 
-cd "/sys/server/log"
-addStream "zeitgeist.log", "eAll"
-addStream ":cout", "eAll"
-
-create "kerosin/InputServer", "/sys/server/input"
-cd "/sys/server/input"
-init "InputSystemSDL"
-createDevice 'Keyboard'
-createDevice 'Mouse'
-
+print "end inputtest.rb\n"

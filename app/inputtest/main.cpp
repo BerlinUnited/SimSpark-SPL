@@ -16,7 +16,7 @@ shared_ptr<CoreContext> gContext;
 
 shared_ptr<LogServer> gLog;
 
-const static int gCmdQuit = 1;
+static const int gCmdQuit = 1;
 
 static void update()
 {
@@ -54,7 +54,7 @@ static void shutdown()
 
 int main(int argc, char **argv)
 {
-        Zeitgeist       zg;
+        Zeitgeist       zg("." PACKAGE_NAME);
 
         // create our global context (object hierarchy position container)
         gContext = zg.CreateContext();
