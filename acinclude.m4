@@ -390,3 +390,22 @@ AC_SUBST([$1])
 $2=`echo $3 | tr : .`
 AC_SUBST([$2])
 ]) # RCSS_LIBRARY_VERSION_INFO
+
+# RCSS_BOOST_REGEX([ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ---------------------------------------------------------
+# Checks for the spades library
+AC_DEFUN([RCSS_BOOST_REGEX],
+[AS_VAR_PUSHDEF([rcss_boost_regex], [rcss_cv_boost_regex])dnl
+AC_CACHE_CHECK(if linking against boost_regex succeeds, rcss_cv_boost_regex,
+               [AC_LANG_PUSH(C++)
+                OLD_LDFLAGS="$LDFLAGS"
+                LDFLAGS="$LDFLAGS -lboost_regex"
+                AC_LINK_IFELSE([int main() { return 0; }],
+                               [AS_VAR_SET(rcss_boost_regex, yes)], 
+                               [AS_VAR_SET(rcss_boost_regex, no)])
+                LDFLAGS="$OLD_LDFLAGS"
+                AC_LANG_POP(C++)
+                ])
+AS_IF([test AS_VAR_GET(rcss_boost_regex) = yes], [$1], [$2])
+AS_VAR_POPDEF([rcss_boost_regex])dnl
+])# RCSS_BOOST_REGEX

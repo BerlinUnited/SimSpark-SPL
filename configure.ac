@@ -93,6 +93,11 @@ AC_CHECK_LIB(socket, socket, [NET_LIBS="-lsocket"])
 AC_CHECK_LIB(nsl, gethostbyname, [NET_LIBS="$NET_LIBS -lnsl"])
 AC_CHECK_LIB(posix4, sched_yield, [NET_LIBS="$NET_LIBS -lposix4"])
 AC_CHECK_LIB(resolv, hstrerror, [NET_LIBS="$NET_LIBS -lresolv"])
+RCSS_BOOST_REGEX([rcss_have_boost_regex=yes],[rcss_have_boost_regex=no])
+if test "$rcss_have_boost_regex" = no; then
+	AC_MSG_WARN([the ZIP filesystem plugin cannot be build])
+fi
+AM_CONDITIONAL(HAVE_BOOST_REGEX, test $rcss_have_boost_regex = yes)
 
 ## checks for system services
 
