@@ -194,6 +194,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/Makefile \
 		 app/simspark/Makefile \
 		 app/monitorspark/Makefile \
+		 app/agentspark/Makefile \
 		 app/spadestest/Makefile \
 		 app/rcssmonitor3d/Makefile \
 		 app/rcssmonitor3d/lib/Makefile \
