@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.5.2.1.2.5 2003/12/10 10:55:00 rollmark Exp $
+   $Id: agentaspect.h,v 1.5.2.1.2.6 2003/12/21 10:06:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,19 +41,29 @@ namespace oxygen
 class AgentAspect : public Transform
 {
 public:
+    AgentAspect() : Transform() {};
+    virtual ~AgentAspect() {};
+
+    /** Initializes the AgentAspect. Called immediately after the
+        AgentAspect is created by the GameControlServer
+     */
+    virtual bool Init();
+
     /** RealizeActions realizes the actions described by \param
         actions using the corresponding effectors
     */
-    bool RealizeActions(boost::shared_ptr<ActionObject::TList> actions);
+    virtual bool RealizeActions(boost::shared_ptr<ActionObject::TList> actions);
 
     /** QuerySensors collects data from all perceptors below this
         AgentAspect
      */
-    boost::shared_ptr<BaseParser::TPredicateList> QueryPerceptors();
+    virtual boost::shared_ptr<BaseParser::TPredicateList> QueryPerceptors();
 
-protected:
-    //! updates the map of Effectors below this AgentAspect
-    void UpdateEffectorMap();
+    /** updates the map of Effectors below this AgentAspect */
+    virtual void UpdateEffectorMap();
+
+    /** looks up the effector corresponding to a predicate */
+    virtual boost::shared_ptr<Effector> GetEffector(const std::string predicate) const;
 
 protected:
     typedef std::map<std::string, boost::shared_ptr<Effector> > TEffectorMap;
@@ -64,7 +74,7 @@ protected:
 private:
 };
 
-DECLARE_ABSTRACTCLASS(AgentAspect);
+DECLARE_CLASS(AgentAspect);
 
 } // namespace oxygen
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.3.4.4 2003/12/10 10:56:57 rollmark Exp $
+   $Id: agentaspect.cpp,v 1.3.4.5 2003/12/21 10:06:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "agentaspect.h"
+#include "createeffector.h"
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
@@ -41,8 +42,8 @@ AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> actions)
       shared_ptr<ActionObject> action = (*iter);
       std::string predicate = action->GetPredicate();
 
-      TEffectorMap::iterator iter = mEffectorMap.find(predicate);
-      if (iter == mEffectorMap.end())
+      shared_ptr<Effector> effector = GetEffector(predicate);
+      if (effector.get() == 0)
         {
           GetLog()->Warning()
             <<  "(AgentAspect) No effector found for predicate "
@@ -50,7 +51,6 @@ AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> actions)
           continue;
         }
 
-      shared_ptr<Effector> effector = (*iter).second;
       bool realized = effector->Realize(action);
 
       if (! realized)
@@ -69,7 +69,7 @@ AgentAspect::QueryPerceptors()
 {
   // build list of perceptors, searching recursively
   TLeafList perceptors;
-  GetChildrenSupportingClass("oxygen/Perceptor",perceptors,true);
+  GetChildrenSupportingClass("Perceptor",perceptors,true);
 
   shared_ptr<BaseParser::TPredicateList>
     predList(new BaseParser::TPredicateList());
@@ -101,12 +101,25 @@ AgentAspect::QueryPerceptors()
   return predList;
 }
 
+shared_ptr<Effector>
+AgentAspect::GetEffector(const std::string predicate) const
+{
+  TEffectorMap::const_iterator iter = mEffectorMap.find(predicate);
+
+  if (iter == mEffectorMap.end())
+    {
+      return shared_ptr<Effector>();
+    }
+
+  return (*iter).second;
+}
+
 void
 AgentAspect::UpdateEffectorMap()
 {
   // build list of effectors, searching recursively
   TLeafList effectors;
-  GetChildrenSupportingClass("oxygen/Effector",effectors,true);
+  GetChildrenSupportingClass("Effector",effectors,true);
 
   // build the effector map
   mEffectorMap.clear();
@@ -127,4 +140,34 @@ AgentAspect::UpdateEffectorMap()
 
       mEffectorMap[effector->GetPredicate()] = effector;
     }
+}
+
+bool AgentAspect::Init()
+{
+  shared_ptr<CreateEffector> create = shared_dynamic_cast<CreateEffector>
+    (GetCore()->New("kerosin/CreateEffector"));
+
+  if (create.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (AgentAspect) Could not construct a CreateEffector\n";
+      return false;
+    }
+
+  create->SetName("_CreateEffector");
+
+  // link it into our hierarchy
+  bool added = AddChildReference(create);
+
+  if (! added)
+    {
+      GetLog()->Error()
+        << "ERROR: (AgentAspect) failed to set up the CreateEffectorn";
+      return false;
+    } else
+      {
+        GetLog()->Debug() << "(AgentAspect) created CreateEffector\n";
+      }
+
+  return added;
 }
