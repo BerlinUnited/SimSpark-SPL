@@ -45,7 +45,6 @@ agentaspect/agentaspect.cpp \
 agentaspect/agentaspect_c.cpp \
 agentaspect/collisionperceptor.cpp \
 agentaspect/collisionperceptor_c.cpp \
-agentaspect/effector.cpp \
 agentaspect/effector_c.cpp \
 agentaspect/forceeffector.cpp \
 agentaspect/forceeffector_c.cpp \
