@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kerosin.h,v 1.11 2004/04/15 18:38:10 rollmark Exp $
+   $Id: kerosin.h,v 1.12 2004/04/23 21:12:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@
 
 #include "soundserver/soundserver.h"
 #include "inputserver/inputserver.h"
+#include "inputserver/inputsystem.h"
+#include "inputserver/inputdevice.h"
 #include "imageserver/imageserver.h"
 #include "fontserver/fontserver.h"
 #include "fontserver/font.h"
