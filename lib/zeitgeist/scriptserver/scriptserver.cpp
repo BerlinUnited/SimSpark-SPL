@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.7.2.2 2003/11/27 12:47:05 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.7.2.2.2.1 2003/12/01 10:30:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -401,6 +401,23 @@ bool ScriptServer::GetVariable(const string &varName, int &value)
       return true;
     }
 }
+
+/** reads the value of a ruby float, returns true on success */
+bool ScriptServer::GetVariable(const std::string &varName, float &value)
+{
+    VALUE val = GetVariable(varName);
+
+    if (NIL_P(val))
+    {
+        return false;
+    }
+    else
+        {
+            value = (float)NUM2DBL(val);
+            return true;
+        }
+}
+
 
 bool ScriptServer::GetVariable(const string &varName, bool &value)
 {

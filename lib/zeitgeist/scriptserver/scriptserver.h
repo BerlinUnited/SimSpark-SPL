@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.10.2.1 2003/11/27 12:47:05 rollmark Exp $
+   $Id: scriptserver.h,v 1.10.2.1.2.1 2003/12/01 10:30:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -128,6 +128,9 @@ public:
 
     /** reads the value of a ruby string, returns true on success */
     bool GetVariable(const std::string &varName, std::string &value);
+
+    /** reads the value of a ruby float, returns true on success */
+    bool GetVariable(const std::string &varName, float &value);
 
     /** returns the context, the ScriptServer operates in */
     boost::shared_ptr<CoreContext> GetContext() const;
