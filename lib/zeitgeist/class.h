@@ -2,7 +2,7 @@
 #define CLASS_H__
 
 /*! \class Class
-	$Id: class.h,v 1.2 2003/04/30 14:21:50 fruit Exp $
+	$Id: class.h,v 1.3 2003/06/03 11:58:26 fruit Exp $
 	
 	Class
 
@@ -33,68 +33,34 @@
 
 */
 
-#include <string>
 #include <list>
+#include <string>
+#include <vector>
+
+#ifdef HAVE_HASH_MAP
 #include <hash_map>
+#else
+#include <map>
+
+namespace std
+{
+    template <class _Key, class _Tp, class _Compare = std::less<_Key>,
+        class _Alloc = std::allocator<std::pair<const _Key, _Tp> > >
+        class hash_map : public std::map<_Key,_Tp, _Compare, _Alloc>
+        {};
+}
+
+#endif
+
 #include <boost/any.hpp>
 #include <salt/defines.h>
 #include <salt/sharedlibrary.h>
+
+#include "class_m.h"
 #include "leaf.h"
 
 namespace zeitgeist
 {
-
-#define CLASS(className)	Class_##className
-
-#define DECLARE_CLASS(className)\
-	class CLASS(className) : public zeitgeist::Class\
-	{\
-	public:\
-		CLASS(className)() : zeitgeist::Class(#className)	{	DefineClass();	}\
-		zeitgeist::Object* CreateInstance() const\
-		{\
-			zeitgeist::Object *instance = new className();\
-			return instance;\
-		}\
-	private:\
-		void DefineClass();\
-	};
-
-#define DECLARE_ABSTRACTCLASS(className)\
-	class CLASS(className) : public zeitgeist::Class\
-	{\
-	public:\
-		CLASS(className)() : zeitgeist::Class(#className)	{	DefineClass();	}\
-	private:\
-		void DefineClass();\
-	};
-
-#define FUNCTION(functionName)\
-	static void functionName(zeitgeist::Object *obj, const zeitgeist::Class::TParameterList &in)
-
-#define DEFINE_FUNCTION(functionName)\
-	mFunctions[#functionName] = functionName;
-
-#define DEFINE_BASECLASS(baseClass)\
-	mBaseClasses.push_back(#baseClass);
-
-//
-// Export stuff
-//
-#define ZEITGEIST_EXPORT_BEGIN()\
-	using namespace boost;\
-	using namespace salt;\
-	using namespace zeitgeist;\
-	extern "C"{\
-	SHARED_LIB_EXPORT void Zeitgeist_RegisterBundle(std::list <shared_ptr<Class> > &classes){
-
-#define ZEITGEIST_EXPORT_EX(className, path)\
-	classes.push_back(shared_ptr<Class>(new CLASS(className)));
-
-#define ZEITGEIST_EXPORT(className) ZEITGEIST_EXPORT_EX(className, "")
-
-#define ZEITGEIST_EXPORT_END()\
-	}}
 
 // forward declarations
 class Core;
@@ -180,6 +146,9 @@ public:
 private:
 	void DefineClass();
 };
+
+// moved to here from leaf.h to avoid cyclic dependencies
+DECLARE_CLASS(Leaf);
 
 } // namespace zeitgeist
 
