@@ -249,6 +249,14 @@ plugin/sexpparser/.deps
 plugin/sexpparser/.libs
 plugin/sexpparser/Makefile
 plugin/sexpparser/Makefile.in
+plugin/soccer/Makefile
+plugin/soccer/Makefile.in
+plugin/soccer/initeffector/*.lo
+plugin/soccer/initeffector/.deps
+plugin/soccer/initeffector/.libs
+plugin/soccer/initeffector/Makefile
+plugin/soccer/initeffector/Makefile.in
+plugin/soccer/initeffector/initeffector.la
 plugin/soundsystembass/.deps
 plugin/soundsystembass/.libs
 plugin/soundsystembass/Makefile
