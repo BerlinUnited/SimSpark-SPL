@@ -1,0 +1,77 @@
+Creating a new application using the framework
+==============================================
+
+Create a new Console Project
+
+Add the SDL_main.cpp file used by other projects in app/
+
+Open the Project Settings and make the following changes:
+
+C/C++ Tab:
+
+	Category 'Code Generation':
+		Runtime-Library(Release):	Multithreaded-DLL
+		Runtime-Library(Debug):		Multithreaded-DLL debug
+	
+	Category 'Precompiled Headers':
+		Disable Precompiled Headers (Release and Debug)
+		
+Linker Tab:
+
+	Add the following libraries:
+	
+	(Release and Debug):	ode.lib SDL.lib freetype211.lib mswin32-ruby16.lib opengl32.lib
+	(Release):				libsalt.lib libkerosin.lib libzeitgeist.lib
+	(Debug):				libsalt_debug.lib libkerosin_debug.lib libzeitgeist_debug.lib 
+
+
+Creating a new plugin
+=====================
+
+Create a new DLL Project
+
+Open the Project Settings and make the following changes:
+
+C/C++ Tab:
+
+	Category 'Code Generation':
+		Runtime-Library(Release):	Multithreaded-DLL
+		Runtime-Library(Debug):		Multithreaded-DLL debug
+	
+	Category 'Precompiled Headers':
+		Disable Precompiled Headers (Release and Debug)
+		
+Linker Tab:
+
+	Add the following libraries (+ other libraries needed for internal reasons):
+	
+	(Release and Debug):	mswin32-ruby16.lib opengl32.lib
+	(Release):				libsalt.lib libkerosin.lib libzeitgeist.lib
+	(Debug):				libsalt_debug.lib libkerosin_debug.lib libzeitgeist_debug.lib 
+	
+	Check 'Create no .LIB'
+	
+Add an 'export.cpp' file, which is used to export the class objects. A minimal export.cpp
+which does not export anything would be:
+	
+	#include <zeitgeist/zeitgeist.h>
+	
+	ZEITGEIST_EXPORT_BEGIN()
+	ZEITGEIST_EXPORT_END()
+
+If the plugin should contain a class called 'Foo', which was declared in the foo.h file, then
+the export.cpp would look like this:
+
+	#include "foo.h"
+	#include <zeitgeist/zeitgeist.h>
+	
+	ZEITGEIST_EXPORT_BEGIN()
+		ZEITGEIST_EXPORT(Foo);
+	ZEITGEIST_EXPORT_END()
+
+More examples of real export.cpp files can be seen in the plugin-Workspace.
+
+
+Minimal Framework Program
+=========================
+

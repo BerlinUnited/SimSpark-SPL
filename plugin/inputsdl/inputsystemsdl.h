@@ -2,7 +2,7 @@
 #define INPUTSYSTEMSDL_H__
 
 /*!	\class InputSystemSDL
-	$Id: inputsystemsdl.h,v 1.1 2003/04/30 11:06:18 fruit Exp $
+	$Id: inputsystemsdl.h,v 1.2 2003/04/30 15:42:58 anoncvs_rssview Exp $
 
 
 	NOTE:
@@ -19,9 +19,12 @@
 #include <deque>
 #include <kerosin/inputserver/inputsystem.h>
 #include <kerosin/inputserver/inputserver.h>
+#include <kerosin/openglserver/openglserver.h>
 #include <SDL/SDL.h>
 
 struct SDL_mutex;
+
+class TimerSDL;
 
 class InputSystemSDL : public kerosin::InputSystem
 {
@@ -33,7 +36,6 @@ public:
 	virtual ~InputSystemSDL();
 
 	virtual bool	Init(kerosin::InputServer *inputServer);
-	virtual void	InitInputCodes();
 	virtual bool	CreateDevice(const std::string &deviceName);
 
 	SDL_mutex*		GetMutex() const;
@@ -44,12 +46,16 @@ public:
 	virtual void AddInput(kerosin::InputServer::Input &input);
 	//! retrieve an input from the queue
 	virtual bool GetInput(kerosin::InputServer::Input &input);
+protected:
+	virtual bool UpdateTimerInput(kerosin::InputServer::Input &input);
 
 	//
 	// members
 	//
 private:
-	SDL_mutex	*mMutex;
+	SDL_mutex					*mMutex;
+
+	boost::shared_ptr<TimerSDL>	mTimer;
 };
 
 DECLARE_CLASS(InputSystemSDL);

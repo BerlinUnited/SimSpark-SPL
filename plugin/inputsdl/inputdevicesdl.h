@@ -2,7 +2,7 @@
 #define INPUTDEVICESDL_H__
 
 /*	\class InputDeviceSDL
-	$Id: inputdevicesdl.h,v 1.1 2003/04/30 11:06:18 fruit Exp $
+	$Id: inputdevicesdl.h,v 1.2 2003/04/30 15:42:58 anoncvs_rssview Exp $
 
 	InputDeviceSDL
 

@@ -2,7 +2,7 @@
 #define FILESYSTEMRAR_H__
 
 /*!	\class FileSystemRAR
-	$Id: filesystemrar.h,v 1.1 2003/04/30 11:06:16 fruit Exp $
+	$Id: filesystemrar.h,v 1.2 2003/04/30 15:42:57 anoncvs_rssview Exp $
 
 	FileSystemRAR
 
@@ -28,9 +28,9 @@
 */
 
 #include <string>
-#include <kerosin/fileserver/filesystem.h>
+#include <zeitgeist/fileserver/filesystem.h>
 
-class FileSystemRAR : public kerosin::FileSystem
+class FileSystemRAR : public zeitgeist::FileSystem
 {
 	//
 	// functions

@@ -2,7 +2,7 @@
 #define FILESYSTEMSTD_H__
 
 /*!	\class FileSystemSTD
-	$Id: filesystemstd.h,v 1.1 2003/04/30 11:06:17 fruit Exp $
+	$Id: filesystemstd.h,v 1.2 2003/04/30 15:42:58 anoncvs_rssview Exp $
 
 	FileSystemSTD - The 'Standard' File System
 
@@ -32,9 +32,9 @@
 */
 
 #include <string>
-#include <kerosin/fileserver/filesystem.h>
+#include <zeitgeist/fileserver/filesystem.h>
 
-class FileSystemSTD : public kerosin::FileSystem
+class FileSystemSTD : public zeitgeist::FileSystem
 {
 	//
 	// Methods

@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="soundsystemfmod" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="survival" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=soundsystemfmod - Win32 Debug
+CFG=survival - Win32 Debug
 !MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
 !MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
-!MESSAGE NMAKE /f "soundsystemfmod.mak".
+!MESSAGE NMAKE /f "survival.mak".
 !MESSAGE 
 !MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
-!MESSAGE NMAKE /f "soundsystemfmod.mak" CFG="soundsystemfmod - Win32 Debug"
+!MESSAGE NMAKE /f "survival.mak" CFG="survival - Win32 Debug"
 !MESSAGE 
 !MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "soundsystemfmod - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "soundsystemfmod - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "survival - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "survival - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -29,7 +29,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "soundsystemfmod - Win32 Release"
+!IF  "$(CFG)" == "survival - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -42,8 +42,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SOUNDSYSTEMFMOD_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /FD /c
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SURVIVAL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SURVIVAL_EXPORTS" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -54,9 +54,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 libsalt.lib libzeitgeist.lib fmodvc.lib mswin32-ruby16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../bin/vc++/soundsystemfmod.dll"
+# ADD LINK32 libzeitgeist.lib libsalt.lib libkerosin.lib freetype211.lib ode.lib mswin32-ruby16.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"../../app/simulator/survival/survival.dll"
 
-!ELSEIF  "$(CFG)" == "soundsystemfmod - Win32 Debug"
+!ELSEIF  "$(CFG)" == "survival - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -69,8 +69,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SOUNDSYSTEMFMOD_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /FD /GZ /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SURVIVAL_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "SURVIVAL_EXPORTS" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -81,53 +81,85 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libsalt_debug.lib libzeitgeist_debug.lib fmodvc.lib mswin32-ruby16.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:no /debug /machine:I386 /out:"../bin/vc++/soundsystemfmod_debug.dll" /pdbtype:sept
+# ADD LINK32 libzeitgeist_debug.lib libsalt_debug.lib libkerosin_debug.lib freetype211.lib ode.lib mswin32-ruby16.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"../../app/simulator/survival/survival.dll" /pdbtype:sept
 
 !ENDIF 
 
 # Begin Target
 
-# Name "soundsystemfmod - Win32 Release"
-# Name "soundsystemfmod - Win32 Debug"
+# Name "survival - Win32 Release"
+# Name "survival - Win32 Debug"
+# Begin Group "assembly script"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\survival.rb
+
+!IF  "$(CFG)" == "survival - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build
+InputPath=.\survival.rb
+
+"..\..\app\simulator\survival\survival.rb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	xcopy survival.rb ..\..\app\simulator\survival\ /Y
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "survival - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\survival.rb
+
+"..\..\app\simulator\survival\survival.rb" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	xcopy survival.rb ..\..\app\simulator\survival\ /Y
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\export.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundeffectfmod.cpp
+SOURCE=.\linesegmentperceptor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundeffectfmod.h
+SOURCE=.\linesegmentperceptor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundmodulefmod.cpp
+SOURCE=.\linesegmentperceptor_c.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundmodulefmod.h
+SOURCE=.\survivalagentaspect.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundstreamfmod.cpp
+SOURCE=.\survivalagentaspect.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundstreamfmod.h
+SOURCE=.\survivalagentaspect_c.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundsystemfmod.cpp
+SOURCE=.\survivalcontrolaspect.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundsystemfmod.h
+SOURCE=.\survivalcontrolaspect.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\soundsystemfmod_c.cpp
+SOURCE=.\survivalcontrolaspect_c.cpp
 # End Source File
 # End Target
 # End Project

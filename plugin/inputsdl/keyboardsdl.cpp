@@ -32,8 +32,7 @@ int KeyboardSDL::EventFilter(const SDL_Event *event)
 		if (event->key.keysym.mod & KMOD_RALT) mInputSystem->GetInputServer()->mModifierState |= InputServer::eRAlt;
 		if (event->key.keysym.sym != 0)
 		{
-			printf("SDL: %d %d\n", event->key.keysym.sym, event->key.keysym.scancode);
-			InputServer::Input input(InputServer::eButton, event->key.keysym.sym);
+			InputServer::Input input(InputServer::eButton, event->key.keysym.scancode);
 			input.data.l = (event->type == SDL_KEYDOWN);
 			mInputSystem->AddInputInternal(input);
 			return 0;

@@ -2,7 +2,7 @@
 #define FILESYSTEMZIP_H__
 
 /*	\class FileSystemZIP
-	$Id: filesystemzip.h,v 1.1 2003/04/30 11:06:17 fruit Exp $
+	$Id: filesystemzip.h,v 1.2 2003/04/30 15:42:58 anoncvs_rssview Exp $
 
 	FileSystemZIP - The ZIP File System
 
@@ -30,7 +30,7 @@
 
 #include <hash_map>
 #include <string>
-#include <kerosin/fileserver/filesystem.h>
+#include <zeitgeist/fileserver/filesystem.h>
 
 //Forward declarations needed
 namespace salt
@@ -39,7 +39,7 @@ class StdFile;
 class RFile;
 }
 
-class FileSystemZIP : public kerosin::FileSystem
+class FileSystemZIP : public zeitgeist::FileSystem
 {
 	//=========================================================================
 	// types

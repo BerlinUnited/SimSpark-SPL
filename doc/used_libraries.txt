@@ -18,6 +18,7 @@ ZLIB 	1.1.4				http://www.gzip.org/zlib/
 unRAR 	3.0		(VC only)	http://www.rarlab.com/
 unACE	2.11 	(VC only)	http://www.winace.com/licence.html
 
+
 Scripting
 ---------
 
@@ -30,7 +31,19 @@ General
 STLport 4.5.3				http://www.stlport.org/
 Boost 1.28.0				http://www.boost.org/
 
+
 Input + OpenGL
 --------------
 
 SDL 1.2						http://www.libsdl.org/
+
+
+Lighting
+--------
+
+Opcode 1.2					http://www.codercorner.com/Opcode.htm
+
+Fonts
+-----
+
+FreeType 2.1.2				http://www.freetype.org/

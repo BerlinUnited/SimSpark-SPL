@@ -12,9 +12,8 @@ int main()
 	shared_ptr<CoreContext> context = zg.CreateContext();
 	Kerosin					kCore(zg);
 	
-	shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->New("zeitgeist/ScriptServer", "/sys/server/script"));
+	shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
  
-	scriptServer->Init();
 	scriptServer->Run("coretest.rb");
 
 	bool done = false;
@@ -22,7 +21,7 @@ int main()
 	{
 		std::string command = "";
 	
-		std::cout << std::endl << scriptServer->GetContext()->GetObject()->GetFullPath() << "> ";
+		//std::cout << std::endl << scriptServer->GetContext()->GetObject()->GetFullPath() << "> ";
 		std::getline(std::cin, command,'\n');
 
 		if (command.compare("exit")==0)

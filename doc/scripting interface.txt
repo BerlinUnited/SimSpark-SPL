@@ -1,0 +1,62 @@
+Possible Object Hierarchy for Zeitgeist
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+/console
+
+This will represent the status of the console.
+
+/console/vars/
+
+Here a directory of variables can be stored.
+
+/console/cmds/
+
+This might represent a list of registered commands.
+
+Commands
+~~~~~~~~
+
+sn - selectNode
+---------------
+
+This command can be used to navigate the object hierarchy.
+
+Examples:	sn /console/vars
+			sn ..
+
+
+What Services Does a Zeitgeist Object Provide?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A Zeitgeist object is able to perform the following services:
+
+- reflect its class object
+- store child objects
+- reflect its name
+- determine its full path in the hierarchy (maybe cache this in an object)
+- determine relative path in the hierarchy
+- serialize itself to a string (be wary of object references)
+- expose a 'script interface' (optional)
+
+I think the script interface part has to be explained more in depth. Every class has a
+collection of (script)functions, which it can invoke on instances it creates. As these
+don't vary by instance it makes sense to place these in the class object. Now, imagine
+we are running in a script and we want to call a function ... say:
+
+sn /graphics/fullscreen
+.set true
+
+
+or
+
+sn /graphics
+fullscreen.set true
+
+This assumes that /graphics/fullscreen is a variable which lives in the hierarchy. Now,
+the '.' tells the command parser that a direct command is invoked. The command has the
+name 'set' and one parameter, a zValue of the type 'bool' with value 'true'. This
+information is built into a zCommand object. The selected object is
+'/graphics/fullscreen'. It reflects its class object and tries to invoke the command
+on the selected object. The class object maintains a list of functions which the class
+supports and is able to redirect the zCommand to the appropriate handler function.
