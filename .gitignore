@@ -336,6 +336,10 @@ plugin/soccer/sexpmonitor/.dirstamp
 plugin/soccer/sexpmonitor/.libs
 plugin/soccer/sexpmonitor/Makefile
 plugin/soccer/sexpmonitor/Makefile.in
+plugin/soccer/soccerbase/.deps
+plugin/soccer/soccerbase/.dirstamp
+plugin/soccer/soccerbase/.libs
+plugin/soccer/soccerbase/*.lo
 plugin/soccer/soccercontrolaspect/*.lo
 plugin/soccer/soccercontrolaspect/.deps
 plugin/soccer/soccercontrolaspect/.dirstamp
