@@ -1,3 +1,31 @@
+2003-05-19  Oliver Obst  <fruit@robolog.org>
+
+	* Makefile.am, configure.ac, lib/Makefile.am, 
+	lib/salt/Makefile.am:
+	- added automake support
+	
+	* lib/salt/vector.h, lib/salt/sharedlibrary.h, 
+	lib/salt/matrix.cpp, lib/salt/gmath.h, lib/salt/frustum.cpp, 
+	lib/salt/fileclasses.h, lib/salt/fileclasses.cpp, 
+	lib/salt/defines.h, lib/salt/bounds.h, lib/salt/bounds.cpp:
+	- added copyright text, and, in .h files, the inclusion of the 
+	config.h file. 
+	- changed standard c headers to c++ headers
+
+	* lib/salt/vc++/sharedlibrary.cpp, lib/salt/gcc/sharedlibrary.cpp,
+	lib/salt/salt.h, lib/salt/rect.h, lib/salt/quadlink.h, 
+	lib/salt/ptrmanager.h, lib/salt/ptr.h, lib/salt/plane.h,
+	lib/salt/plane.cpp, lib/salt/path.h, lib/salt/path.cpp, 
+	lib/salt/matrix.h, lib/salt/frustum.h:
+	- added copyright text and, in .h files, the inclusion of the
+	config.h file. 
+
+	* lib/salt/tvector.h: 
+	- added copyright text 
+	- using config.h file
+	- fixed template method Cross in class TVector3 (at least for 
+	gcc 3.2, it was a bug)
+	
 2003-04-30  Oliver Obst  <fruit@uni-koblenz.de>
 
 	* Moved everything done so far into a separate branch
