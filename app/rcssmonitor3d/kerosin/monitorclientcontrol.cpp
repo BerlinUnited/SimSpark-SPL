@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorclientcontrol.cpp,v 1.1 2004/04/25 17:11:43 rollmark Exp $
+   $Id: monitorclientcontrol.cpp,v 1.1.2.1 2004/05/10 11:42:39 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,13 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "monitorclientcontrol.h"
+#include <commserver.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
+#include <oxygen/sceneserver/scene.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/transform.h>
+#include <oxygen/simulationserver/simulationserver.h>
+#include <sstream>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -31,210 +38,192 @@ void MonitorClientControl::OnLink()
         (GetCore()->Get("/sys/server/comm"));
 
     if (mCommServer.get() == 0)
-        {
-            GetLog()->Error()
-                << "(MonitorClientControl) ERROR: CommServer not found\n";
-        }
-
-    mMonitorParser = shared_dynamic_cast<MonitorParser>
-      (GetCore()->Get("/sys/server/parser"));
-
-    if (mMonitorParser.get() == 0)
-        {
-          GetLog()->Error()
-              << "(MonitorClientControl) ERROR: MonitorParser not found\n";
-          return;
-        }
+    {
+        GetLog()->Error()
+            << "(MonitorClientControl) ERROR: CommServer not found\n";
+    }
 }
 
-bool MonitorClientControl::MangleExpr(MonitorParser::Expression& expr, string& name)
+shared_ptr<Transform>
+MonitorClientControl::GetBall()
 {
-    switch (expr.etype)
-        {
-        default:
-            return false;
+    const std::string name = "ball";
 
-        case MonitorParser::ET_BALL:
-            name = "ball";
-            break;
-
-        case MonitorParser::ET_FLAG:
-            {
-                // flags are differing only in the pos
-                stringstream ss;
-                ss << "flag"
-                   << expr.pos[0]
-                   << expr.pos[1]
-                   << expr.pos[2];
-                name = ss.str();
-                break;
-            }
-
-        case MonitorParser::ET_AGENT:
-            {
-                stringstream ss;
-                ss << "agent";
-
-                switch (expr.team)
-                    {
-                    case TI_LEFT:
-                        ss << "L";
-                        break;
-
-                    case TI_RIGHT:
-                        ss << "R";
-                        break;
-
-                    default:
-                    case TI_NONE :
-                        ss << "N";
-                        break;
-                    }
-
-                ss << expr.unum;
-                name = ss.str();
-            }
-        }
-
-    return true;
-}
-
-shared_ptr<Transform> MonitorClientControl::GetSphere(MonitorParser::Expression& expr)
-{
-    string name;
     shared_ptr<Scene> scene =
         GetSimulationServer()->GetSceneServer()->GetActiveScene();
-    if (
-        (scene.get() == 0) ||
-        (! MangleExpr(expr, name))
-        )
-        {
-            return shared_ptr<Transform>();
-        }
+    if (scene.get() == 0)
+    {
+        return shared_ptr<Transform>();
+    }
 
     // try to find the transform node
     shared_ptr<Transform> node = shared_dynamic_cast<Transform>
         (scene->GetChild(name));
 
     if (node.get() != 0)
-        {
-            return node;
-        }
+    {
+        return node;
+    }
 
-    string fktName;
-
-    // create a new visual
-    switch (expr.etype)
-        {
-        default:
-            return shared_ptr<Transform>();
-
-        case MonitorParser::ET_BALL:
-            fktName = "addBall";
-            break;
-
-        case MonitorParser::ET_AGENT:
-            {
-                stringstream ss;
-                ss << "addAgent";
-
-                switch (expr.team)
-                    {
-                    case TI_NONE:
-                        ss << "N";
-                        break;
-
-                    case TI_LEFT:
-                        ss << "L";
-                        break;
-
-                    case TI_RIGHT:
-                        ss << "R";
-                        break;
-                    }
-
-                fktName = ss.str();
-                break;
-            }
-
-        case MonitorParser::ET_FLAG:
-            fktName = "addFlag";
-            break;
-        }
-
-    stringstream ss;
-    ss << fktName << "('" << name << "')";
-    GetCore()->GetScriptServer()->Eval(ss.str());
-
-    return shared_dynamic_cast<Transform>
-        (scene->GetChild(name));
+    GetCore()->GetScriptServer()->Eval("addBall('" + name + "')");
+    return shared_dynamic_cast<Transform>(scene->GetChild(name));
 }
 
-void MonitorClientControl::StartCycle()
+shared_ptr<Transform>
+MonitorClientControl::GetAgent(TTeamIndex side, int unum)
+{
+    shared_ptr<Scene> scene =
+        GetSimulationServer()->GetSceneServer()->GetActiveScene();
+
+    if (scene.get() == 0)
+    {
+        return shared_ptr<Transform>();
+    }
+
+    std::string name;
+    std::string fktName;
+
+    switch (side)
+    {
+    case TI_LEFT:
+        name = "agentL";
+        fktName = "addAgentL";
+        break;
+    case TI_RIGHT:
+        name = "agentR";
+        fktName = "addAgentR";
+        break;
+    default:
+        name = "agentN";
+        fktName = "addAgentN";
+        break;
+    }
+
+    std::ostringstream ss;
+    ss << unum;
+    name += ss.str();
+
+    // try to find the transform node
+    shared_ptr<Transform> node = shared_dynamic_cast<Transform>
+        (scene->GetChild(name));
+
+    if (node.get() != 0)
+    {
+        return node;
+    }
+
+    GetCore()->GetScriptServer()->Eval(fktName+"('"+ name +"')");
+    return shared_dynamic_cast<Transform>(scene->GetChild(name));
+}
+
+shared_ptr<Transform>
+MonitorClientControl::GetFlag(GameState::EFlagType i)
+{
+    shared_ptr<Scene> scene =
+        GetSimulationServer()->GetSceneServer()->GetActiveScene();
+
+    std::string name = mGameState.GetFlagName(i);
+    if (scene.get() == 0 || name.empty())
+    {
+        return shared_ptr<Transform>();
+    }
+
+    name = "flag" + name;
+
+    // try to find the transform node
+    shared_ptr<Transform> node = shared_dynamic_cast<Transform>
+        (scene->GetChild(name));
+
+    if (node.get() != 0)
+    {
+        return node;
+    }
+
+    GetCore()->GetScriptServer()->Eval("addFlag('" + name + "')");
+
+    return shared_dynamic_cast<Transform>(scene->GetChild(name));
+}
+
+void
+MonitorClientControl::StartCycle()
 {
     if (
         (mCommServer.get() == 0) ||
-        (! mCommServer->GetMessage())
+        (! mCommServer->ReadMessage())
         )
-        {
-            return;
-        }
-
-    static bool initialUpdate = true;
-
+    {
+        return;
+    }
 
     boost::shared_ptr<oxygen::PredicateList> predicates =
         mCommServer->GetPredicates();
 
-    MonitorParser::TExprList exprList;
+    mGameState.ProcessInput(predicates);
 
-    if (
-        (predicates.get() != 0) &&
-        (predicates->GetSize() > 0)
-        )
-        {
-            // parse the received expressions
-            mMonitorParser->ParsePredicates(*predicates,mGameState,
-                                            mGameParam,exprList);
-        }
+    static bool initialUpdate = true;
 
     if (initialUpdate)
-        {
-            // publish the soccer default values to the scripts
-            shared_ptr<ScriptServer> script = GetCore()->GetScriptServer();
-            script->CreateVariable("Soccer.FieldLength", mGameParam.GetFieldLength());
-            script->CreateVariable("Soccer.FieldWidth",  mGameParam.GetFieldWidth());
-            script->CreateVariable("Soccer.FieldHeight", mGameParam.GetFieldHeight());
-            script->CreateVariable("Soccer.BorderSize",  mGameParam.GetBorderSize());
-            script->CreateVariable("Soccer.LineWidth",   mGameParam.GetLineWidth());
-            script->CreateVariable("Soccer.GoalWidth",   mGameParam.GetGoalWidth());
-            script->CreateVariable("Soccer.GoalDepth",   mGameParam.GetGoalDepth());
-            script->CreateVariable("Soccer.GoalHeight",  mGameParam.GetGoalHeight());
-            script->CreateVariable("Soccer.AgentMass",   mGameParam.GetAgentMass());
-            script->CreateVariable("Soccer.AgentRadius",  mGameParam.GetAgentRadius());
-            script->CreateVariable("Soccer.AgentMaxSpeed",  mGameParam.GetAgentMaxSpeed());
-            script->CreateVariable("Soccer.BallRadius",  mGameParam.GetBallRadius());
-            script->CreateVariable("Soccer.BallMass",    mGameParam.GetBallMass());
+    {
+        // publish the soccer default values to the scripts
+        shared_ptr<ScriptServer> script = GetCore()->GetScriptServer();
+        script->CreateVariable("Soccer.FieldLength", mGameState.GetFieldLength());
+        script->CreateVariable("Soccer.FieldWidth",  mGameState.GetFieldWidth());
+        script->CreateVariable("Soccer.FieldHeight", mGameState.GetFieldHeight());
+        script->CreateVariable("Soccer.BorderSize",  mGameState.GetBorderSize());
+        script->CreateVariable("Soccer.LineWidth",   mGameState.GetLineWidth());
+        script->CreateVariable("Soccer.GoalWidth",   mGameState.GetGoalWidth());
+        script->CreateVariable("Soccer.GoalDepth",   mGameState.GetGoalDepth());
+        script->CreateVariable("Soccer.GoalHeight",  mGameState.GetGoalHeight());
+        script->CreateVariable("Soccer.AgentMass",   mGameState.GetAgentMass());
+        script->CreateVariable("Soccer.AgentRadius",  mGameState.GetAgentRadius());
+        script->CreateVariable("Soccer.AgentMaxSpeed",  mGameState.GetAgentMaxSpeed());
+        script->CreateVariable("Soccer.BallRadius",  mGameState.GetBallRadius());
+        script->CreateVariable("Soccer.BallMass",    mGameState.GetBallMass());
 
-            // create the playing field with the acutal dimensions
-            script->Eval("addField()");
-            initialUpdate = false;
+        // create the playing field with the actual dimensions
+        script->Eval("addField()");
+        initialUpdate = false;
+    }
+
+    Vector3f pos;
+    for (int i = static_cast<int>(GameState::eFLAG_1_L);
+         i != static_cast<int>(GameState::eILLEGAL);
+         ++i)
+    {
+        if (mGameState.GetFlag(static_cast<GameState::EFlagType>(i), pos))
+        {
+            shared_ptr<Transform> node = GetFlag(static_cast<GameState::EFlagType>(i));
+
+            if (node.get() != 0)
+            {
+                node->SetLocalPos(pos);
+            }
         }
+    }
 
-    for (
-         MonitorParser::TExprList::iterator iter = exprList.begin();
-         iter != exprList.end();
-         ++iter)
+    int i = 0;
+    int unum;
+    TTeamIndex side;
+    float size;
+    while (mGameState.GetPlayer(i, pos, side, unum, size))
+    {
+        shared_ptr<Transform> node = GetAgent(side, unum);
+
+        if (node.get() != 0)
         {
-            MonitorParser::Expression& expr = (*iter);
-            shared_ptr<Transform> node = GetSphere(expr);
-
-            if (node.get() == 0)
-                {
-                    continue;
-                }
-
-            Vector3f pos(expr.pos[0],expr.pos[1],expr.pos[2]);
             node->SetLocalPos(pos);
         }
+        ++i;
+    }
+
+    if (mGameState.GetBall(pos, size))
+    {
+        shared_ptr<Transform> node = GetBall();
+
+        if (node.get() != 0)
+        {
+            node->SetLocalPos(pos);
+        }
+    }
+
 }
