@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.3.2.2 2004/01/21 15:47:44 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.3.2.3 2004/01/25 11:42:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ using namespace std;
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/monitorserver/monitorserver.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
 #include <spades/SimEngine.hpp>
 #include "spadescreatesenseevent.h"
@@ -65,6 +66,41 @@ SpadesServer::ConstructInternal()
     return true;
 }
 
+void
+SpadesServer::OnLink()
+{
+    mMonitorServer = shared_dynamic_cast<MonitorServer>
+        (GetCore()->Get("/sys/server/monitor"));
+
+    if (mMonitorServer.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (SpadesServer) MonitorServer not found.\n";
+        }
+
+    mGameControlServer = shared_dynamic_cast<GameControlServer>
+        (GetCore()->Get("/sys/server/gamecontrol"));
+
+    if (mGameControlServer.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (SpadesServer) GameControlServer not found.\n";
+        }
+
+    mSceneServer = shared_dynamic_cast<SceneServer>
+        (GetCore()->Get("/sys/server/scene"));
+
+    if (mSceneServer.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (SpadesServer) SceneServer not found.\n";
+        }
+}
+
+void
+SpadesServer::OnUnlink()
+{
+    mMonitorServer.reset();
+    mGameControlServer.reset();
+    mSceneServer.reset();
+}
 
 spades::SimEngine*
 SpadesServer::GetSimEngine()
@@ -81,20 +117,10 @@ SpadesServer::GetTimePerStep() const
     return time_per_step;
 }
 
-boost::shared_ptr<MonitorServer>
-SpadesServer::GetMonitorServer()
-{
-    return shared_static_cast<MonitorServer>
-        (
-         GetCore()->Get("/sys/server/monitor")
-         );
-}
-
 boost::shared_ptr<GameControlServer>
 SpadesServer::GetGameControlServer() const
 {
-    return shared_dynamic_cast<GameControlServer>
-        (GetCore()->Get("/sys/server/gamecontrol"));
+    return mGameControlServer;
 }
 
 void
@@ -194,42 +220,33 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     int steps = time_desired - time_curr;
     if (steps <= 0)
     {
-        GetLog()->Warning() << "WARNING: (SpadesServer) Will not simulate <= 0 steps\n";
+        GetLog()->Warning() << "WARNING: (SpadesServer) will not simulate <= 0 steps\n";
         return time_curr;
     }
 
-    shared_ptr<SceneServer> sceneServer =
-        shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
-
-    if (sceneServer.get() == 0)
-    {
-        GetLog()->Warning() << "WARNING: (SpadesServer) No SceneServer present\n";
-        return time_curr;
-    }
-
-    shared_ptr<GameControlServer> gcs = GetGameControlServer();
-    if (gcs.get() == 0)
-    {
-        GetLog()->Warning() << "WARNING: (SpadesServer) No GameControlServer present\n";
-    }
+    if (
+        (mSceneServer.get() == 0) ||
+        (mGameControlServer.get() == 0)
+        )
+        {
+            GetLog()->Warning() << "WARNING: (SpadesServer) SceneServer and/or GameControlServer missing.\n";
+            return time_curr;
+        }
 
     float timePerStep = GetTimePerStep();
     int i = steps;
 
     while (i > 0)
     {
-        sceneServer->Update(timePerStep);
-        gcs->Update(timePerStep);
+        mSceneServer->Update(timePerStep);
+        mGameControlServer->Update(timePerStep);
         --i;
     }
 
-#if THIS_IS_A_DEMO_ONLY
     //    GetLog()->Debug() << "(SpadesServer) time_curr=" << time_curr
     //                  << " time_desired=" << time_desired << endl;
     //    GetLog()->Debug() << "updated the scene by " << steps - i << " * "
     //                << timePerStep << " seconds.\n";
-
-#endif
 
     // return the simulation time when the loop stopped
     // (the '- i' makes sense if we exit the while loop earlier)
@@ -239,43 +256,34 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
 DataArray
 SpadesServer::getMonitorHeaderInfo()
 {
-    shared_ptr<MonitorServer> monitorServer =
-        GetMonitorServer();
-
-    if (monitorServer != 0)
+    if (mMonitorServer.get() == 0)
         {
-            return DataArray(monitorServer->GetMonitorHeaderInfo());
-        } else
-            {
-                return DataArray();
-            }
+            return DataArray();
+        }
+
+    return DataArray(mMonitorServer->GetMonitorHeaderInfo());
 }
 
 DataArray
 SpadesServer::getMonitorInfo(SimTime /*time*/)
 {
-    shared_ptr<MonitorServer> monitorServer =
-        GetMonitorServer();
-
-    if (monitorServer != 0)
+    if (mMonitorServer.get() == 0)
         {
-            return DataArray(monitorServer->GetMonitorInfo());
-        } else
-            {
-                return DataArray();
-            }
+            return DataArray();
+        }
+
+    return DataArray(mMonitorServer->GetMonitorInfo());
 }
 
 void
 SpadesServer::parseMonitorMessage(const char* data, unsigned datalen)
 {
-    shared_ptr<MonitorServer> monitorServer =
-        GetMonitorServer();
-
-    if (monitorServer != 0)
+    if (mMonitorServer.get() == 0)
         {
-            return monitorServer->ParseMonitorMessage(string(data,datalen));
+            return;
         }
+
+    return mMonitorServer->ParseMonitorMessage(string(data,datalen));
 }
 
 SimTime
@@ -293,21 +301,20 @@ SpadesServer::getMinSenseLatency() const
 ActEvent*
 SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
 {
-    const shared_ptr<GameControlServer> gcs = GetGameControlServer();
-    if (gcs.get() == 0)
+    if (mGameControlServer.get() == 0)
         {
             return 0;
         }
 
     shared_ptr<ActionObject::TList> actionList
-        = gcs->Parse(a,std::string(data,datalen));
+        = mGameControlServer->Parse(a,std::string(data,datalen));
 
     if (actionList.get() == 0)
         {
             return 0;
         }
 
-    float latency = gcs->GetActionLatency(a);
+    float latency = mGameControlServer->GetActionLatency(a);
     SimTime arrival = mSimEngine->getSimulationTime() + static_cast<int>(latency / GetTimePerStep());
 
     return new SpadesActEvent(arrival, a, actionList);
@@ -318,40 +325,40 @@ SpadesServer::pauseModeCallback()
 {
     // the first time pauseModeCallback will be called is immediatly after startup
     // when SPADES is in SM_PausedInitial mode
-    while (!mAgentQueue.empty())
+    while (! mAgentQueue.empty())
     {
         StartAgents(mAgentQueue.front());
         mAgentQueue.pop();
     }
+
     if (mSimulationModeChanged)
     {
         mSimEngine->changeSimulationMode(mNewSimulationMode);
         mSimulationModeChanged = false;
     }
+
     if (mSimEngine->getSimulationMode() == SM_PausedInitial)
-        Unpause();
+        {
+            Unpause();
+        }
 }
 
 bool
 SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*at*/)
 {
-    GetLog()->Debug() <<
+    GetLog()->Normal() <<
         "(SpadesServer) agentConnect " << agent << "\n";
 
     // try to register the agent to the game control server
     shared_ptr<GameControlServer> gcs = GetGameControlServer();
 
     if (
-        (gcs.get() == 0) ||
-        (! gcs->AgentConnect(static_cast<int>(agent)))
+        (mGameControlServer.get() == 0) ||
+        (! mGameControlServer->AgentConnect(static_cast<int>(agent)))
         )
         {
             return false;
         }
-
-    //
-    // Should we also use an InitSenseEvent as the spades sample does ?
-    //
 
     // schedule the first SpadesCreateSenseEvent for the following
     // simulation step
@@ -366,13 +373,12 @@ SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*
 bool
 SpadesServer::agentDisappear(AgentID agent, AgentLostReason /*reason*/)
 {
-    shared_ptr<GameControlServer> gcs = GetGameControlServer();
-    if (gcs.get() == 0)
+    if (mGameControlServer.get() == 0)
         {
             return false;
         }
 
-    return gcs->AgentDisappear(static_cast<int>(agent));
+    return mGameControlServer->AgentDisappear(static_cast<int>(agent));
 }
 
 void
