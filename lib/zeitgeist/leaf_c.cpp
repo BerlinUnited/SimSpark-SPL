@@ -1,3 +1,25 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
+   $Id: leaf_c.cpp,v 1.4 2004/03/22 10:41:22 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
 #include "leaf.h"
 #include "logserver/logserver.h"
 #include <iostream>
@@ -6,36 +28,24 @@ using namespace boost;
 using namespace std;
 using namespace zeitgeist;
 
-OUT_FUNCTION(getName)
+FUNCTION(Leaf,getName)
 {
-  if( in.empty() )
-    {
-      Leaf *leaf = static_cast<Leaf*>(obj);
-      out = rb_str_new2(leaf->GetName().c_str());
-    }
+    return obj->GetName();
 }
 
-OUT_FUNCTION(getFullPath)
+FUNCTION(Leaf,getFullPath)
 {
-  if (in.empty())
-    {
-      Leaf *leaf = static_cast<Leaf*>(obj);
-      out = rb_str_new2(leaf->GetFullPath().c_str());
-    }
+    return obj->GetFullPath();
 }
 
-OUT_FUNCTION(isLeaf)
+FUNCTION(Leaf,isLeaf)
 {
-  if( in.empty() )
-    {
-      Leaf *leaf = static_cast<Leaf*>(obj);
-      out = leaf->IsLeaf() ? Qtrue:Qfalse;
-    }
+    return obj->IsLeaf();
 }
 
 void CLASS(Leaf)::DefineClass()
 {
-  DEFINE_FUNCTION(getFullPath);
-  DEFINE_FUNCTION(getName);
-  DEFINE_FUNCTION(isLeaf);
+    DEFINE_FUNCTION(getFullPath);
+    DEFINE_FUNCTION(getName);
+    DEFINE_FUNCTION(isLeaf);
 }
