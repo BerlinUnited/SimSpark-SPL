@@ -1,3 +1,11 @@
+2004-06-08  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/lib/gamestate.cpp: 
+	- fixed reading the play mode list in the init message
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp: 
+	- sending list of play modes to the monitor in the init message
+
 2004-0508  Jan Murray  <murray@uni-koblenz.de>
 
 	* app/rcssmonitor3d/lite/camera.cpp:
@@ -13,7 +21,6 @@
 	  + handling of arrow keys (glutSpecialFunc)
 	  + primitive single step mode for logplayer
 	  + help message for keybindings
-
 
 2004-06-07  Oliver Obst  <fruit@robolog.org>
 
