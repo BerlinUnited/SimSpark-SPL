@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.5 2003/12/08 14:49:02 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.6 2003/12/09 19:27:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,11 +43,6 @@ public:
      */
     bool InitParser(const std::string& parserName);
 
-    /** creates an effector \param effectorName instance and registers
-        it to the GameControlServer
-     */
-    bool InitEffector(const std::string& effectorName);
-
     /** parses a command string using the registerd parser and uses
         the registered effectors to construct an ActionObject. This
         method must be const as it is also called from
@@ -55,11 +50,6 @@ public:
         modifying the world model.
     */
     boost::shared_ptr<ActionObject::TList> Parse(std::string str) const;
-
-    /** RealizeActions realizes the actions described by \param
-        actions using the corresponding effectors
-    */
-    bool RealizeActions(boost::shared_ptr<ActionObject::TList> actions);
 
     /** notifies the GameControlServer that an agent has connected to
         the simulation. \param id should be a unique identifier for
@@ -79,6 +69,9 @@ public:
         perceptors in seconds
     */
     float GetSenseInterval(int id);
+
+    /** returns the AgentAspect for the given \param id */
+    boost::shared_ptr<AgentAspect> GetAgentAspect(int id);
 
     /** temporary method, do not use */
     std::string TmpGenerate(const BaseParser::TPredicate& pred);
