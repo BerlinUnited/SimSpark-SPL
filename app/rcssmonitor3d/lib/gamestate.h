@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.h,v 1.4 2004/05/17 19:13:52 markelic Exp $
+   $Id: gamestate.h,v 1.5 2004/06/06 10:33:01 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ public:
         \param message
         \return true if nth player said something
     */
-    bool GetPlayerMessage(int index, std::string& message);
+    bool GetPlayerMessage(int index, std::string& message) const;
 
     /*! Checks if an acknowledgement was sent
      */
