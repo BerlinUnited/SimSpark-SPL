@@ -121,6 +121,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/soundsystembass/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/monitortest/Makefile \
+		 plugin/forceeffector/Makefile \
 		 app/Makefile \
 		 app/coretest/Makefile \
 		 app/fonttest/Makefile \
