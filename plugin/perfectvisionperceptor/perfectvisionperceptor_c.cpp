@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor_c.cpp,v 1.4 2004/02/21 15:51:40 fruit Exp $
+   $Id: perfectvisionperceptor_c.cpp,v 1.5 2004/03/22 11:20:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,15 +25,23 @@
 using namespace boost;
 using namespace oxygen;
 
-FUNCTION(setInversion)
+FUNCTION(PerfectVisionPerceptor,setInversion)
 {
-    if (in.size() == 3)
-    {
-        PerfectVisionPerceptor* pp = static_cast<PerfectVisionPerceptor*>(obj);
-        pp->SetInversion(boost::any_cast<bool>(in[0]),
-                         boost::any_cast<bool>(in[1]),
-                         boost::any_cast<bool>(in[2]));
-    }
+    bool inInvertX;
+    bool inInvertY;
+    bool inInvertZ;
+
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in[0],inInvertX)) ||
+        (! in.GetValue(in[1],inInvertY)) ||
+        (! in.GetValue(in[2],inInvertZ))
+        )
+        {
+            return false;
+        }
+
+    obj->SetInversion(inInvertX,inInvertY,inInvertZ);
 }
 
 void

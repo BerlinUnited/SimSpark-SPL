@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector_c.cpp,v 1.3 2004/02/21 15:46:34 fruit Exp $
+   $Id: driveeffector_c.cpp,v 1.4 2004/03/22 11:20:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,40 +24,68 @@
 
 using namespace oxygen;
 
-FUNCTION(setForceFactor)
+FUNCTION(DriveEffector,setForceFactor)
 {
-    if (in.size() == 1)
-    {
-        DriveEffector* de = static_cast<DriveEffector*>(obj);
-        de->SetForceFactor(boost::any_cast<float>(in[0]));
-    }
+    float inForceFactor;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inForceFactor))
+        )
+        {
+            return false;
+        }
+
+    obj->SetForceFactor(inForceFactor);
+    return true;
 }
 
-FUNCTION(setSigma)
+FUNCTION(DriveEffector,setSigma)
 {
-    if (in.size() == 1)
-    {
-        DriveEffector* de = static_cast<DriveEffector*>(obj);
-        de->SetSigma(boost::any_cast<float>(in[0]));
-    }
+    float inSigma;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inSigma))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSigma(inSigma);
+    return true;
 }
 
-FUNCTION(setMaxPower)
+FUNCTION(DriveEffector,setMaxPower)
 {
-    if (in.size() == 1)
-    {
-        DriveEffector* de = static_cast<DriveEffector*>(obj);
-        de->SetMaxPower(boost::any_cast<float>(in[0]));
-    }
+    float inMaxPower;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inMaxPower))
+        )
+        {
+            return false;
+        }
+
+    obj->SetMaxPower(inMaxPower);
+    return true;
 }
 
-FUNCTION(setConsumption)
+FUNCTION(DriveEffector,setConsumption)
 {
-    if (in.size() == 1)
-    {
-        DriveEffector* de = static_cast<DriveEffector*>(obj);
-        de->SetConsumption(boost::any_cast<float>(in[0]));
-    }
+    float inConsumption;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inConsumption))
+        )
+        {
+            return false;
+        }
+
+    obj->SetConsumption(inConsumption);
+    return true;
 }
 
 void

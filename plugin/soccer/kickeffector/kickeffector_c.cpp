@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector_c.cpp,v 1.3 2004/02/21 15:46:35 fruit Exp $
+   $Id: kickeffector_c.cpp,v 1.4 2004/03/22 11:20:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,63 +24,110 @@
 
 using namespace oxygen;
 
-FUNCTION(setKickMargin)
+FUNCTION(KickEffector,setKickMargin)
 {
-    if (in.size() == 1)
-    {
-        KickEffector* ke = static_cast<KickEffector*>(obj);
-        ke->SetKickMargin(boost::any_cast<float>(in[0]));
-    }
+    float inMargin;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inMargin))
+        )
+        {
+            return false;
+        }
+
+    obj->SetKickMargin(inMargin);
+    return true;
 }
 
-FUNCTION(setForceFactor)
+FUNCTION(KickEffector,setForceFactor)
 {
-    if (in.size() == 1)
-    {
-        KickEffector* ke = static_cast<KickEffector*>(obj);
-        ke->SetForceFactor(boost::any_cast<float>(in[0]));
-    }
+    float inForceFactor;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inForceFactor))
+        )
+        {
+            return false;
+        }
+
+    obj->SetForceFactor(inForceFactor);
+    return true;
 }
 
-FUNCTION(setSteps)
+FUNCTION(KickEffector,setSteps)
 {
-    if (in.size() == 2)
-    {
-        KickEffector* ke = static_cast<KickEffector*>(obj);
-        ke->SetSteps(boost::any_cast<int>(in[0]),
-                     boost::any_cast<int>(in[1]));
-    }
+    int inMin;
+    int inMax;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], inMin)) ||
+        (! in.GetValue(in[1], inMax))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSteps(inMin,inMax);
+    return true;
 }
 
-FUNCTION(setNoiseParams)
+FUNCTION(KickEffector,setNoiseParams)
 {
-    if (in.size() == 4)
-    {
-        KickEffector* ke = static_cast<KickEffector*>(obj);
-        ke->SetNoiseParams(boost::any_cast<float>(in[0]),
-                           boost::any_cast<float>(in[1]),
-                           boost::any_cast<float>(in[2]),
-                           boost::any_cast<float>(in[3]));
-    }
+    float inForce;
+    float inTheta;
+    float inPhiEnd;
+    float inPhiMid;
+
+    if (
+        (in.GetSize() != 4) ||
+        (! in.GetValue(in[0], inForce)) ||
+        (! in.GetValue(in[1], inTheta)) ||
+        (! in.GetValue(in[2], inPhiEnd)) ||
+        (! in.GetValue(in[3], inPhiMid))
+        )
+        {
+            return false;
+        }
+
+    obj->SetNoiseParams(inForce,inTheta,inPhiEnd,inPhiMid);
+    return true;
 }
 
-FUNCTION(setMaxPower)
+FUNCTION(KickEffector,setMaxPower)
 {
-    if (in.size() == 1)
-    {
-        KickEffector* ke = static_cast<KickEffector*>(obj);
-        ke->SetMaxPower(boost::any_cast<float>(in[0]));
-    }
+    float inMaxPower;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inMaxPower))
+        )
+        {
+            return false;
+        }
+
+    obj->SetMaxPower(inMaxPower);
+    return true;
 }
 
-FUNCTION(setAngleRange)
+FUNCTION(KickEffector,setAngleRange)
 {
-    if (in.size() == 2)
-    {
-        KickEffector* ke = static_cast<KickEffector*>(obj);
-        ke->SetAngleRange(boost::any_cast<float>(in[0]),
-                          boost::any_cast<float>(in[1]));
-    }
+    float inMin;
+    float inMax;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], inMin)) ||
+        (! in.GetValue(in[1], inMax))
+        )
+        {
+            return false;
+        }
+
+    obj->SetAngleRange(inMin,inMax);
+    return true;
 }
 
 void CLASS(KickEffector)::DefineClass()

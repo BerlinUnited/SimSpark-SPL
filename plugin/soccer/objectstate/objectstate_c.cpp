@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate_c.cpp,v 1.3 2004/02/21 15:46:35 fruit Exp $
+   $Id: objectstate_c.cpp,v 1.4 2004/03/22 11:20:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,23 +24,38 @@
 
 using namespace boost;
 using namespace oxygen;
+using namespace std;
 
-FUNCTION(setPerceptName)
+FUNCTION(ObjectState,setPerceptName)
 {
-    if (in.size() == 1)
-    {
-        ObjectState* os = static_cast<ObjectState*>(obj);
-        os->SetPerceptName(boost::any_cast<char*>(in[0]));
-    }
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inName))
+        )
+        {
+            return false;
+        }
+
+    obj->SetPerceptName(inName);
+    return true;
 }
 
-FUNCTION(setID)
+FUNCTION(ObjectState,setID)
 {
-    if (in.size() == 1)
-    {
-        ObjectState* os = static_cast<ObjectState*>(obj);
-        os->SetID(boost::any_cast<char*>(in[0]));
-    }
+    string inId;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inId))
+        )
+        {
+            return false;
+        }
+
+    obj->SetID(inId);
+    return true;
 }
 
 void

@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor_c.cpp,v 1.3 2004/02/21 15:46:36 fruit Exp $
+   $Id: visionperceptor_c.cpp,v 1.4 2004/03/22 11:20:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,48 +24,79 @@
 
 using namespace boost;
 using namespace oxygen;
+using namespace std;
 
-FUNCTION(setNoiseParams)
+FUNCTION(VisionPerceptor,setNoiseParams)
 {
-    if (in.size() == 4)
-    {
-        VisionPerceptor* vp = static_cast<VisionPerceptor*>(obj);
-        vp->SetNoiseParams(boost::any_cast<float>(in[0]),
-                           boost::any_cast<float>(in[1]),
-                           boost::any_cast<float>(in[2]),
-                           boost::any_cast<float>(in[3]));
-    }
+    float inDist;
+    float inPhi;
+    float inTheta;
+    float inErrorAbs;
+
+    if (
+        (in.GetSize() != 4) ||
+        (! in.GetValue(in[0],inDist)) ||
+        (! in.GetValue(in[1],inPhi)) ||
+        (! in.GetValue(in[2],inTheta)) ||
+        (! in.GetValue(in[3],inErrorAbs))
+        )
+        {
+            return false;
+        }
+
+    obj->SetNoiseParams(inDist,inPhi,inTheta,inErrorAbs);
+    return true;
 }
 
-FUNCTION(addNoise)
+FUNCTION(VisionPerceptor,addNoise)
 {
-    if (in.size() == 1)
-    {
-        VisionPerceptor* vp = static_cast<VisionPerceptor*>(obj);
-        vp->AddNoise(boost::any_cast<bool>(in[0]));
-    }
+    bool inAddNoise;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inAddNoise))
+        )
+        {
+            return false;
+        }
+
+    obj->AddNoise(inAddNoise);
+    return true;
 }
 
-FUNCTION(setPredicateName)
+FUNCTION(VisionPerceptor,setPredicateName)
 {
-    if (in.size() == 1)
-    {
-        VisionPerceptor* vp = static_cast<VisionPerceptor*>(obj);
-        vp->SetPredicateName(boost::any_cast<char*>(in[0]));
-    }
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inName))
+        )
+        {
+            return false;
+        }
+
+    obj->SetPredicateName(inName);
+    return true;
 }
 
-FUNCTION(setSenseMyPos)
+FUNCTION(VisionPerceptor,setSenseMyPos)
 {
-  if (in.size() == 1)
-    {
-        VisionPerceptor* vp = static_cast<VisionPerceptor*>(obj);
-        vp->SetSenseMyPos(boost::any_cast<bool>(in[0]));
-    }
+    bool inSenseMyPos;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inSenseMyPos))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSenseMyPos(inSenseMyPos);
+    return true;
 }
 
-void
-CLASS(VisionPerceptor)::DefineClass()
+void CLASS(VisionPerceptor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Perceptor);
     DEFINE_FUNCTION(setNoiseParams);
