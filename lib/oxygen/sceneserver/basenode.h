@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.9 2004/04/11 17:05:28 rollmark Exp $
+   $Id: basenode.h,v 1.10 2004/04/15 10:37:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -114,6 +114,10 @@ public:
                      boost::shared_ptr<zeitgeist::ParameterList> parameter);
 
 protected:
+    /** returns the corresponding local coordinates to the given world
+        coordinates */
+    salt::Vector3f GetLocalPos(const salt::Vector3f& worldPos);
+
     /** updates internal state before physics calculation */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
 
