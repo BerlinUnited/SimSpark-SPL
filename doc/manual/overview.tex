@@ -1,0 +1,64 @@
+\section{System Overview}
+
+To get started you should be somewhat familiar with the components of
+the system. The soccer simulation consists of three important parts:
+the server, the monitor and the agents.
+
+\subsection{Server}
+
+In order to work with the server you should be familiar with the
+SPADES~\cite{RR03}\cite{SPADES} simulation middleware. Some important
+concepts you should know about: The server is responsible to start an
+agent process, i.e. it does not wait for an agent to connect as the 2D
+simulation does. The SPADES library uses a database that contains
+information how to start different agent types. It is called
+\texttt{agentdb.xml}, located in the \texttt{./app/simulator/}
+directory.
+
+Agents connect via UNIX pipes to a SPADES Commserver. The use a length
+prefixed format to exchange messages. The Commserver in turn
+communicates with the server. In the default setup of the soccer
+server an integrated Commserver is started.
+
+It is to possible start more than one Commserver in order to
+distribute agent processes across different systems. Please see the
+SPADES manual for further details about how to start and configure a
+remote Commserver. In this setup the 3d server has to be configured to
+wait until all Commservers are connected before it unpauses the
+simulation. The relevant settings are found in the server startup
+script \texttt{rcssserver3D.rb}.
+
+These settings are 'Spades.RunIntegratedCommserver' and
+'Spades.CommServersWanted'. The first setting configures if the
+integrated Commserver is started. Its default value is 'true'. The
+second setting gives the number of Commservers the server will wait
+for, before the simulation is initially unpaused. The integrated
+Commserver counts as one, so the default value here is 1.
+
+\subsection{Monitor}
+
+The default monitor is called \texttt{rcssmonitor3D-lite}, located in
+the directory \texttt{./app/rcssmonitor3d/lite}. It is also used to
+replay logfiles that the server automatically creates (use the
+\texttt{--logfile <filename>} option). The automatically generated
+logfile is called 'monitor.log'. You'll find it in the
+\texttt{Logfiles/} directory below the directory in which you started
+the server. A set of logfiles from 2004 RoboCup can be found
+at~\cite{RC04LOGS}.
+
+The implemented monitor protocol supports a command set to implement a
+trainer, i.e to automatically recreate test situations on the field
+and to evaluate an agents behavior. A 'monitor library' is provided to
+help implementing custom monitor and trainer applications, please see
+the \texttt{./app/rcssmonitor3d/lib} directory. The protocol between
+server and monitor is detailed further down in this text file.
+
+A good starting point for your own agent implementations is the
+\texttt{agenttest} program in the \texttt{./app/agenttest/} directory.
+This agent implements a simple kick and run behavior.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "manual"
+%%% TeX-master: t
+%%% End: 
