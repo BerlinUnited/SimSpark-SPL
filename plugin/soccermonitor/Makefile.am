@@ -1,4 +1,6 @@
+if BUILD_KEROSIN
 pkglib_LTLIBRARIES = soccermonitor.la
+endif
 
 soccermonitor_la_SOURCES = export.cpp \
 	soccermonitor.cpp \
