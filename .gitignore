@@ -200,6 +200,10 @@ lib/oxygen/sceneserver/*.lo
 lib/oxygen/sceneserver/.deps
 lib/oxygen/sceneserver/.dirstamp
 lib/oxygen/sceneserver/.libs
+lib/oxygen/simulationserver/*.lo
+lib/oxygen/simulationserver/.deps
+lib/oxygen/simulationserver/.dirstamp
+lib/oxygen/simulationserver/.libs
 lib/oxygen/spadesserver/*.lo
 lib/oxygen/spadesserver/.deps
 lib/oxygen/spadesserver/.dirstamp
