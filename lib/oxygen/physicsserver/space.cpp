@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.4 2003/08/31 21:53:45 fruit Exp $
+   $Id: space.cpp,v 1.4.8.1 2004/01/09 13:19:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,8 +22,9 @@
 #include "space.h"
 #include "world.h"
 #include "body.h"
-#include "../sceneserver/scene.h"
-#include "../agentaspect/collisionperceptor.h"
+#include <oxygen/sceneserver/scene.h>
+#include <oxygen/sceneserver/transform.h>
+#include <oxygen/agentaspect/collisionperceptor.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
@@ -65,64 +66,89 @@ void Space::Collide()
     dSpaceCollide(mODESpace, this, collisionNearCallback);
 }
 
+shared_ptr<Transform> Space::GetTransformParent(Body* body)
+{
+  return shared_static_cast<Transform>
+    (make_shared(body->GetParentSupportingClass("Transform")));
+}
+
+void Space::NotifyCollisionPerceptor(Body* body, Body* collidee)
+{
+  if (
+      (body == 0) ||
+      (collidee == 0)
+      )
+    {
+      return;
+    }
+
+  shared_ptr<Transform> transformParent = GetTransformParent(body);
+
+  if (transformParent.get() == 0)
+    {
+      return;
+    }
+
+  shared_ptr<CollisionPerceptor> colPerceptor =
+    shared_static_cast<CollisionPerceptor>(transformParent->GetChildOfClass("CollisionPerceptor", true));
+
+  if (colPerceptor.get() == 0)
+    {
+      return;
+    }
+
+  colPerceptor->AddCollidee(GetTransformParent(collidee));
+}
+
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
     // exit without doing anything if the two bodies are connected by a joint
-    dBodyID ODEBody1, ODEBody2;
+    if (
+        (dGeomGetClass(obj1) == dPlaneClass) &&
+        (dGeomGetClass(obj2) == dPlaneClass)
+        )
+      {
+        return;
+      }
 
-    if (dGeomGetClass(obj1) == dPlaneClass && dGeomGetClass(obj2) == dPlaneClass) return;
+    dBodyID ODEBody1 = dGeomGetBody(obj1);
+    dBodyID ODEBody2 = dGeomGetBody(obj2);
 
-    ODEBody1 = dGeomGetBody(obj1);
-    ODEBody2 = dGeomGetBody(obj2);
+    if (
+        (ODEBody1) && (ODEBody2) &&
+        (dAreConnected (ODEBody1, ODEBody2))
+        )
+      {
+        return;
+      }
 
-    if (ODEBody1 && ODEBody2 && dAreConnected (ODEBody1, ODEBody2)) return;
-
-    Body *body1 = NULL;
-    if (ODEBody1)
-        body1 = (Body*)dBodyGetData(ODEBody1);
-
-    Body *body2 = NULL;
-    if (ODEBody2)
-        body2 = (Body*)dBodyGetData(ODEBody2);
+    Body *body1 = (ODEBody1) ? static_cast<Body*>(dBodyGetData(ODEBody1)) : 0;
+    Body *body2 = (ODEBody2) ? static_cast<Body*>(dBodyGetData(ODEBody2)) : 0;
 
     dContact contact;
 
-    bool camera = false;
     if (dCollide (obj1, obj2, 0, &contact.geom, sizeof(dContactGeom)))
     {
-        // this ensures that the camera only collides, but
-        // does not affect the simulation
-        if (body1 && make_shared(body1->GetParent())->GetChildOfClass("Camera").get() != 0)
-        {
-            //ODEBody2 = 0;
-            camera = true;
-        } else if (body2 && make_shared(body2->GetParent())->GetChildOfClass("Camera").get() != 0)
-        {
-            //ODEBody1 = 0;
-            camera = true;
-        }
-        if (!camera)
-        {
-            shared_ptr<CollisionPerceptor> colPerceptor;
-            // notify a potential collisionperceptor
-            if (body1)
-            {
-                colPerceptor = shared_static_cast<CollisionPerceptor>(make_shared(body1->GetParent())->GetChildOfClass("CollisionPerceptor", true));
-                if (colPerceptor && body2)
-                {
-                    colPerceptor->GetCollidees().push_back(make_shared(body2->GetParent()));
-                }
-            }
-            // notify a potential collisionperceptor
-            if (body2)
-            {
-                colPerceptor = shared_static_cast<CollisionPerceptor>(make_shared(body2->GetParent())->GetChildOfClass("CollisionPerceptor", true));
-                if (colPerceptor && body1)
-                {
-                    colPerceptor->GetCollidees().push_back(make_shared(body1->GetParent()));
-                }
-            }
+        // notify potential CollisionPerceptors
+        NotifyCollisionPerceptor(body1, body2);
+        NotifyCollisionPerceptor(body2, body1);
 
+        // ensure that a camera only collides whithout affecting the
+        // simulation
+        bool camera =
+          (
+           (
+            (body1) &&
+            (make_shared(body1->GetParent())->GetChildOfClass("Camera").get() != 0)
+            ) ||
+           (
+            (body2) &&
+            (make_shared(body2->GetParent())->GetChildOfClass("Camera").get() != 0)
+            )
+           );
+
+        if (! camera)
+        {
             contact.surface.mode = dContactBounce;
             contact.surface.mu = dInfinity;
             contact.surface.bounce = 0.8f;
@@ -134,8 +160,8 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
             contact.surface.mu = 0;
         }
 
-        dJointID c = dJointCreateContact (mWorld, mODEContactGroup, &contact);
-        dJointAttach (c, ODEBody1, ODEBody2);
+        dJointID joint = dJointCreateContact (mWorld, mODEContactGroup, &contact);
+        dJointAttach (joint, ODEBody1, ODEBody2);
     }
 }
 
