@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.9 2004/04/05 14:18:00 rollmark Exp $
+   $Id: leaf.h,v 1.10 2004/04/11 11:13:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ public:
 
                 if (recursive)
                     {
-                        return FindChildSupportingClass<CLASS>(recursive);
+                        return (*i)->FindChildSupportingClass<CLASS>(recursive);
                     }
             }
 
