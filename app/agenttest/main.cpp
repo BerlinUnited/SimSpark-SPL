@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.7 2004/02/19 19:18:54 rollmark Exp $
+   $Id: main.cpp,v 1.8 2004/03/12 16:32:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ int Init(int argc, char* argv[], Zeitgeist& zg)
   zg.GetCore()->RegisterClassObject(new CLASS(KickNRun), "");
 
   // run init script
-  zg.GetCore()->GetScriptServer()->RunInitScript("agenttest.rb", "../agenttest");
+  zg.GetCore()->GetScriptServer()->RunInitScript("agenttest.rb", "app/agenttest");
 
   // read command line options
   ReadOptions(argc,argv);
