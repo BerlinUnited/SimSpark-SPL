@@ -1,9 +1,11 @@
-SUBDIRS = filesystemrar \
+SUBDIRS = \
 	  filesystemstd \
 	  filesystemzip \
 	  inputsdl \
-	  soundsystembass \
-	  soundsystemfmod \
 	  survival
 
 EXTRA_DIST = plugin.dsw
+
+# filesystemrar 
+# soundsystembass
+# soundsystemfmod 
