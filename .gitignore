@@ -251,9 +251,8 @@ lib/spark/.deps
 lib/spark/.libs
 lib/spark/Makefile
 lib/spark/Makefile.in
-lib/spark/kerosin-config
-lib/spark/libkerosin*.la
-lib/spark/libkerosin*.lo
+lib/spark/*.la
+lib/spark/*.lo
 lib/zeitgeist/*.la
 lib/zeitgeist/*.lo
 lib/zeitgeist/.deps
