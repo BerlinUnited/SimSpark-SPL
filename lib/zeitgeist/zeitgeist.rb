@@ -8,27 +8,35 @@ def method_missing(methId, *args)
 	selectCall str, args
 end
 
-# set up some useful aliases
-alias cd selectObject
-
-# this method allows us to create a new class object, which we can misshandle
-# as a namespace
-def createNamespace (name)
-  eval <<-EOS
-    class #{name}
-    end
-  EOS
-end
-
 # this method allows us to create new instance variables in class objects
 # we use class objects as 'namespaces'
-def createVariable(classObj, variableName, value)
-	eval <<-EOS
-		class << #{classObj}
-			attr_accessor :#{variableName}
+# createVariable can be used in two forms:
+# - 2 parameters: createVariable("myNamespace.myVarName", "myValue");
+# - 3 parameters: createVariable("myNamespace", "myVarName", "myValue");
+def createVariable (namespace, variable, value = nil)
+        # 2 parameters means the "namespace.variable", "value" form
+        if (value == nil)
+	        value = variable;
+	        # parse namespace into a namespace and varName pair
+	        periodIndex = namespace.index('.');
+                if (periodIndex != nil && periodIndex > 0)
+                        variable = namespace[(periodIndex+1)..-1];
+                        namespace = namespace[0..(periodIndex-1)];
+		else
+		        namespace = nil;
 		end
-		#{classObj}.#{variableName} = value
-	EOS
+	end  
+        # here we have 3 parameters: namespace, variable, and value   
+        if (namespace != nil)
+                eval <<-EOS
+                        class #{namespace}
+                        end
+                        class << #{namespace}
+                                attr_accessor :#{variable}
+                        end
+                        #{namespace}.#{variable} = value
+                EOS
+        end
 end
 
 # this is a proxy class for objects created with 'create' via the Zeitgeist
@@ -49,3 +57,7 @@ class ZeitgeistObject
 		@objPointer = objPointer
 	end
 end
+
+# set up some useful aliases
+alias cd selectObject
+
