@@ -306,3 +306,26 @@ AC_DEFUN(RCSS_KEROSIN_IF_ELSE, [
 	fi
 ]) # RCSS_KEROSIN_IF_ELSE
 
+# AC_LIB_SPADES([ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ---------------------------------------------------------
+# Checks for the spades library
+AC_DEFUN([AC_LIB_SPADES],
+[AS_VAR_PUSHDEF([ac_lib_spades], [ac_cv_lib_spades])dnl
+AC_CACHE_CHECK(whether the spades library is available, ac_cv_lib_spades,
+               [AC_LANG_PUSH(C++)
+                OLD_LDFLAGS="$LDFLAGS"
+                LDFLAGS="$LDFLAGS -lspades"
+                AC_LINK_IFELSE([@%:@include <spades/enginemain.hpp>
+                                int main()
+                                {
+                                    spades::SimulationEngineMain( 0, NULL, NULL );
+                                    return 0;
+                                }],
+                                [AS_VAR_SET(ac_lib_spades, yes)], 
+                                [AS_VAR_SET(ac_lib_spades, no)])
+                LDFLAGS="$OLD_LDFLAGS"
+                AC_LANG_POP(C++)
+                ])
+AS_IF([test AS_VAR_GET(ac_lib_spades) = yes], [$1], [$2])
+AS_VAR_POPDEF([ac_lib_spades])dnl
+])# AC_LIB_SPADES
