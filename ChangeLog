@@ -1,3 +1,15 @@
+2004-04-11  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp: 
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	- moved SetPredicateName to base class
+
+	* lib/oxygen/agentaspect/perceptor_c.cpp: 
+	* lib/oxygen/agentaspect/perceptor.cpp:
+	* lib/oxygen/agentaspect/perceptor.h: 
+	- added SetPredicateName method (moved up the class hierarchy from 
+	  VisionPerceptor)
+
 2004-04-10  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/Makefile.am: 

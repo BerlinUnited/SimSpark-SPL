@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.8 2004/04/10 07:12:52 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.9 2004/04/11 11:56:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,9 +31,11 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-VisionPerceptor::VisionPerceptor() : Perceptor(), mSenseMyPos(false),
-                                     mAddNoise(true), mPredicateName("Vision")
+VisionPerceptor::VisionPerceptor() : Perceptor(),
+                                     mSenseMyPos(false),mAddNoise(true)
 {
+    // set predicate name
+    SetPredicateName("Vision");
     // set some default noise values
     SetNoiseParams(0.0965, 0.1225, 0.1480, 0.005);
 }
@@ -63,7 +65,8 @@ VisionPerceptor::OnLink()
     SoccerBase::GetActiveScene(*this,mActiveScene);
 }
 
-void VisionPerceptor::OnUnlink()
+void
+VisionPerceptor::OnUnlink()
 {
     mTransformParent.reset();
     mAgentState.reset();
@@ -189,16 +192,16 @@ VisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     }
 
     if (mSenseMyPos)
-        {
-            Vector3f sensedMyPos = myPos;
-            SoccerBase::FlipView(sensedMyPos, ti);
+    {
+        Vector3f sensedMyPos = myPos;
+        SoccerBase::FlipView(sensedMyPos, ti);
 
-            ParameterList& element = predicate.parameter.AddList();
-            element.AddValue(std::string("mypos"));
-            element.AddValue(sensedMyPos[0]);
-            element.AddValue(sensedMyPos[1]);
-            element.AddValue(sensedMyPos[2]);
-        }
+        ParameterList& element = predicate.parameter.AddList();
+        element.AddValue(std::string("mypos"));
+        element.AddValue(sensedMyPos[0]);
+        element.AddValue(sensedMyPos[1]);
+        element.AddValue(sensedMyPos[2]);
+    }
 
     return true;
 }
@@ -243,9 +246,8 @@ VisionPerceptor::CheckOcclusion(const salt::Vector3f& my_pos,
     }
 }
 
-void VisionPerceptor::SetSenseMyPos(bool sense)
+void
+VisionPerceptor::SetSenseMyPos(bool sense)
 {
     mSenseMyPos = sense;
 }
-
-
