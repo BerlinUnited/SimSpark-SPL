@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematnode.h,v 1.3 2004/04/19 15:44:58 rollmark Exp $
+   $Id: singlematnode.h,v 1.4 2004/04/28 14:45:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ public:
     boost::shared_ptr<Material> GetMaterial();
 };
 
-DECLARE_ABSTRACTCLASS(SingleMatNode);
+DECLARE_CLASS(SingleMatNode);
 
 } //namespace kerosin
 
