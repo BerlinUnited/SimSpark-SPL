@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.3 2004/03/25 22:06:56 jboedeck Exp $
+   $Id: soccerbase.h,v 1.4 2004/04/21 09:03:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,9 +22,9 @@
 #ifndef SOCCERBASE_H
 #define SOCCERBASE_H
 
-#include <boost/shared_ptr.hpp>
 #include <soccer/soccertypes.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
+#include <boost/shared_ptr.hpp>
 
 namespace zeitgeist
 {
@@ -81,7 +81,7 @@ public:
                  boost::shared_ptr<oxygen::Body>& agent_body);
 
     /** returns a reference to the Body node below the given Transform
-        node based on parameters team index and uniform number */                 
+        node based on parameters team index and uniform number */
     static bool
     GetAgentBody(const zeitgeist::Leaf& base, TTeamIndex idx,
                  int unum, boost::shared_ptr<oxygen::Body>& agent_body);
@@ -99,10 +99,15 @@ public:
                   boost::shared_ptr<AgentState>& agentState);
 
     /** returns a reference to the AgentState node below the given Transform
-        node based on parameters team index and uniform number */ 
+        node based on parameters team index and uniform number */
     static bool
     GetAgentState(const zeitgeist::Leaf& base, TTeamIndex idx,
                  int unum, boost::shared_ptr<AgentState>& agent_state);
+
+    static bool
+    GetAgentStates(const zeitgeist::Leaf& base,
+                   std::list<boost::shared_ptr<AgentState> >& agentStates,
+                   TTeamIndex idx = TI_NONE);
 
     /** return a reference to the GameStateAspect node */
     static bool
@@ -130,6 +135,9 @@ public:
 
     /** flips horizontal coordinates according to the side of the agent */
     static salt::Vector3f FlipView(const salt::Vector3f& pos, TTeamIndex ti);
+
+    /** Get the team index of the opponent team */
+    static TTeamIndex OpponentTeam(TTeamIndex ti);
 
     /** returns a reference to a ControlAspect registered to the
         GameControlServer */
