@@ -17,8 +17,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _VECTOR_H_
-#define _VECTOR_H_
+#ifndef _VECTOR3_H_
+#define _VECTOR3_H_
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -28,8 +28,8 @@
 
 #include "mathstuff.h"
 
-/*! Vector - Vector Math Classes
-  $Id: vector.h,v 1.1 2002/08/14 13:05:07 fruit Exp $
+/*! Vector3 - Vector Math Classes
+  $Id: vector3.h,v 1.1 2002/08/14 13:28:31 fruit Exp $
 
     This header implements some useful vector math classes. Functions
     are inlined for efficiency. Operators are overloaded for usability.
@@ -203,7 +203,7 @@ public:
     { TFloat l=length(); TFloat ooL=1.0/l;    
       return Vector2(_v[0]*ooL, _v[1]*ooL); }
     inline bool isNormalized() const
-    { return (squareLenGth() == 1.0f); }
+    { return (squareLength() == 1.0f); }
 
     // operators
     inline bool operator ==(const Vector2& vec)
@@ -249,4 +249,4 @@ inline Vector2 operator *(TFloat s, const Vector2& v)
 inline Vector2 operator /(TFloat d, const Vector2& v)
 { return Vector2(d/v._v[0], d/v._v[1]); }
 
-#endif //_VECTOR_H_
+#endif //_VECTOR3_H_
