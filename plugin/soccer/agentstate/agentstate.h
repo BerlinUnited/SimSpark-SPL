@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.1.2.4 2004/02/07 18:47:27 fruit Exp $
+   $Id: agentstate.h,v 1.1.2.5 2004/02/08 22:10:03 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,11 @@
 
 #include <soccer/objectstate/objectstate.h>
 #include <soccer/soccertypes.h>
+
+namespace oxygen
+{
+    class Body;
+}
 
 class AgentState : public ObjectState
 {
@@ -56,8 +61,15 @@ public:
      * If id is not an integer, the object ID will not be changed.
      *
      * \param id a new ID, an integer represented as std::string.
+     * \param pt the percept type for which the ID is set
      */
-    virtual void SetID(const std::string& id);
+    virtual void SetID(const std::string& id, TPerceptType pt = PT_Default);
+
+    /** Get the battery state */
+    float GetBattery() const;
+
+    /** Get motor force that can be applied (flip vector if necessary) and reduce battery */
+    salt::Vector3f ApplyMotorForce(salt::Vector3f force);
 
 protected:
     /** team index */
@@ -65,6 +77,15 @@ protected:
 
     /** uniform number */
     int mUniformNumber;
+
+    /** motor temperature */
+    float mTemperature;
+
+    /** battery state */
+    double mBattery;
+
+    /** battery decay for dashing one second with an unit length dash vector */
+    double mBatteryDecay;
 };
 
 DECLARE_CLASS(AgentState);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.cpp,v 1.1.2.4 2004/02/07 18:48:38 fruit Exp $
+   $Id: agentstate.cpp,v 1.1.2.5 2004/02/08 22:12:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,14 +20,19 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "agentstate.h"
+#include <soccer/soccerbase/soccerbase.h>
+#include <oxygen/physicsserver/body.h>
 #include <sstream>
 
 using namespace oxygen;
 
-AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE)
+AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
+                           mTemperature(20.0), mBattery(100.0)
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
+    // set battery decay
+    mBatteryDecay = 1.0 / 18000.0;
 }
 
 AgentState::~AgentState()
@@ -53,7 +58,7 @@ AgentState::SetUniformNumber(int number)
     mUniformNumber = number;
     std::ostringstream ss;
     ss << number;
-    mID = ss.str();
+    ObjectState::SetID(ss.str());
 }
 
 int
@@ -63,7 +68,7 @@ AgentState::GetUniformNumber() const
 }
 
 void
-AgentState::SetID(const std::string& id)
+AgentState::SetID(const std::string& id, TPerceptType pt)
 {
     std::istringstream iss(id);
     iss >> mUniformNumber;
@@ -72,5 +77,27 @@ AgentState::SetID(const std::string& id)
         // conversion failed. mUniformNumber is not changed.
         return;
     }
-    mID = id;
+    ObjectState::SetID(id,pt);
 }
+
+float
+AgentState::GetBattery() const
+{
+    return mBattery;
+}
+
+salt::Vector3f
+AgentState::ApplyMotorForce(salt::Vector3f force)
+{
+    if (mBattery > 0.0)
+    {
+        force = SoccerBase::FlipView(force, GetTeamIndex());
+        mBattery -= force.Length() * mBatteryDecay;
+        if (mBattery < 0.0) mBattery = 0.0;
+    } else {
+        force.Zero();
+    }
+    return force;
+}
+
+
