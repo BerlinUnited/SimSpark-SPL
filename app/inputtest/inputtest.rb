@@ -1,5 +1,5 @@
-importBundle "bundle/filesystemstd"
-importBundle "bundle/inputsdl"
+importBundle "filesystemstd"
+importBundle "inputsdl"
 
 # mount a standard file system
 create "kerosin/FileServer", "/sys/server/file"
