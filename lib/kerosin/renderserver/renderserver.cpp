@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.8 2003/11/07 15:05:20 rollmark Exp $
+   $Id: renderserver.cpp,v 1.9 2003/12/02 17:25:19 cringel Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,16 +44,17 @@ RenderServer::~RenderServer()
 void
 RenderServer::GetActiveScene()
 {
-    if (mSceneServer.get() != NULL)
+    shared_ptr<SceneServer> sceneServer = shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+    if (sceneServer.get() != NULL)
     {
-        mActiveScene = mSceneServer->GetActiveScene();
+        mActiveScene = sceneServer->GetActiveScene();
     }
 }
 
 bool
 RenderServer::ConstructInternal()
 {
-    shared_ptr<Scene> mSceneServer = shared_static_cast<Scene>(GetCore()->Get("/sys/server/scene"));
 
     shared_ptr<OpenGLServer> openglServer = shared_static_cast<OpenGLServer>(GetCore()->Get("/sys/server/opengl"));
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.6 2003/11/14 14:05:52 fruit Exp $
+   $Id: renderserver.h,v 1.7 2003/12/02 17:25:19 cringel Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,7 +93,6 @@ private:
     //
 private:
     boost::shared_ptr<oxygen::Scene> mActiveScene;
-    boost::shared_ptr<oxygen::SceneServer> mSceneServer;
     unsigned int mAmbientVP;
 };
 
