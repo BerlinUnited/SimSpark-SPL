@@ -51,6 +51,7 @@ TrainerCommandParser::TrainerCommandParser() : Leaf()
     mPlayModeMap[STR_PM_BeforeKickOff] = PM_BeforeKickOff;
     mPlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
     mPlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
+    mPlayModeMap[STR_PM_KickOff]       = PM_KickOff;
     mPlayModeMap[STR_PM_PlayOn]        = PM_PlayOn;
     mPlayModeMap[STR_PM_KickIn_Left]   = PM_KickIn_Left;
     mPlayModeMap[STR_PM_KickIn_Right]  = PM_KickIn_Right;
@@ -319,14 +320,28 @@ void TrainerCommandParser::ParsePlayModeCommand(const oxygen::Predicate & predic
 
     if (predicate.GetValue(pmParam,mode))
     {
-        if (mPlayModeMap.find(mode) != mPlayModeMap.end())
+        TPlayModeMap::const_iterator playmode = mPlayModeMap.find(mode);
+        if (playmode != mPlayModeMap.end())
         {
             // set new playmode
             shared_ptr<GameStateAspect> gameState;
 
             SoccerBase::GetGameState(*this,gameState);
 
-            gameState->SetPlayMode(mPlayModeMap[mode]);
+            switch (playmode->second)
+            {
+            case PM_KickOff_Left:
+                gameState->KickOff(TI_LEFT);
+                break;
+            case PM_KickOff_Right:
+                gameState->KickOff(TI_RIGHT);
+                break;
+            case PM_KickOff:
+                gameState->KickOff(TI_NONE);
+                break;
+            default:
+                gameState->SetPlayMode(playmode->second);
+            }
         }
         else
         {
