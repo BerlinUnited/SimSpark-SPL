@@ -1,0 +1,143 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+ ; create the torso
+ (node Transform
+       (setName torso)
+       (setLocalPos 0 0 0.5)
+       (importScene rsg/boxspheres/box.rsg 1.3 1 1 5 matRed)
+
+       ; install a perceptor to receive the current simulation time
+       (node TimePerceptor)
+
+       ; install a node holding agent state data
+       (node AgentState
+	     (setName AgentState)
+	     )
+
+       ; install a perceptor to receive info about ball and player positions
+       (node VisionPerceptor
+	     (setSenseMyPos true)
+	     )
+
+       (node Transform
+	     (setLocalPos 0 0.5 0.6)
+	     (node Box
+		   (setMaterial matBlue)
+		   (setExtents 1 0.1 0.2)
+		   )
+	     )
+
+       (node Transform
+	     (setLocalPos 0 0.1 0.6)
+	     (node Box
+		   (setMaterial matBlue)
+		   (setExtents 0.1 0.8 0.2)
+		   )
+	     )
+       )
+
+ ; install the left tire
+ (node Transform
+       (setName leftTire)
+       (setLocalPos -0.6 0.5 0.5)
+       (importScene rsg/boxspheres/sphere.rsg 0.51 2 matWhite)
+       (node Transform
+	     (setLocalRotation 0 0 180)
+
+	     ; install the joint
+	     (node Hinge2Joint
+		   (attach ../../sphereBody ../../../torso/boxBody)
+		   (setAnchor 0 0 0)
+
+		   ; enable the joint motor
+		   (setMaxMotorForce 1 4000)
+
+		   ; install a perceptor to measure the tire movement
+		   (node Hinge2Perceptor
+			 (setName ltp)
+			 )
+
+		   ; install an effector to control the joint motor
+		   (node Hinge2Effector
+			 (setName lte)
+			 )
+		   )
+
+	     ; add some boxes to visualize the tire spin
+	     (node Box
+		   (setExtents 1.1 0.1 0.1)
+		   (setMaterial matBlue)
+		   )
+
+	     (node Box
+		   (setExtents 0.1 1.1 0.1)
+		   (setMaterial matRed)
+		   )
+
+	     (node Box
+		   (setExtents 0.1 0.1 1.1)
+		   (setMaterial matYellow)
+		   )	     
+	     )
+       )
+
+ ; install the right tire
+ (node Transform
+       (setName rightTire)
+       (setLocalPos 0.6 0.5 0.5)
+       (importScene rsg/boxspheres/sphere.rsg 0.51 2 matWhite)
+       (node Transform
+	     (setLocalRotation 0 0 180)
+
+	     ; install the joint
+	     (node Hinge2Joint
+		   (attach ../../sphereBody ../../../torso/boxBody)
+		   (setAnchor 0 0 0)
+
+		   ; enable the joint motor
+		   (setMaxMotorForce 1 4000)
+
+		   ; install a perceptor to measure the tire movement
+		   (node Hinge2Perceptor
+			 (setName rtp)
+			 )
+
+		   ; install an effector to control the joint motor
+		   (node Hinge2Effector
+			 (setName rte)
+			 )
+		   )
+
+	     ; add some boxes to visualize the tire spin
+	     (node Box
+		   (setExtents 1.1 0.1 0.1)
+		   (setMaterial matBlue)
+		   )
+
+	     (node Box
+		   (setExtents 0.1 1.1 0.1)
+		   (setMaterial matRed)
+		   )
+
+	     (node Box
+		   (setExtents 0.1 0.1 1.1)
+		   (setMaterial matYellow)
+		   )
+
+	     )
+       )
+
+ ; install passive back tire
+ (node Transform
+       (setName backTire)
+       (setLocalPos 0 -0.55 0.5)
+       (importScene rsg/boxspheres/sphere.rsg 0.51 2 matGrey)
+	; install the joint
+       (node Hinge2Joint
+	     (attach ../sphereBody ../../torso/boxBody)
+	     (setAnchor 0 0 0)
+	     )
+       ) 
+)
