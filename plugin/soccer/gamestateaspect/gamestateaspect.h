@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.4 2004/05/05 13:54:36 fruit Exp $
+   $Id: gamestateaspect.h,v 1.5 2004/06/11 09:05:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,14 @@ public:
         ControlAspect to perform any necessary checks.
     */
     virtual void Update(float deltaTime);
+
+    /** Used by the SexpMonitor to check if the terminating message should be sent.
+        \return true if the match is over
+    */
+    bool IsFinished() const { return mFinished; }
+
+    /** finish the simulation */
+    void Finish() { mFinished = true; }
 
     /** returns the current play mode */
     TPlayMode GetPlayMode() const;
@@ -121,6 +129,9 @@ protected:
     /** the current time before the match started */
     TTime mLeadTime;
 
+    /** the time in game state Game Over */
+    TTime mFupTime;
+
     /** the current half of the game */
     TGameHalf mGameHalf;
 
@@ -147,6 +158,8 @@ protected:
 
     /** the radius of an agent */
     float mAgentRadius;
+    /** flag if the simulation should be stopped */
+    bool mFinished;
 };
 
 DECLARE_CLASS(GameStateAspect);
