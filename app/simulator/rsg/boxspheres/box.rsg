@@ -18,6 +18,7 @@
        )
 
  (node BoxCollider
+       (setName geometry)
        (setBoxLengths $lenX $lenY $lenZ)
        (node ContactJointHandler
 	     (setContactBounceMode false)
