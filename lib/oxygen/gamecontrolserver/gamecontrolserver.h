@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.6 2003/12/09 19:27:27 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.7 2003/12/09 20:24:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,11 @@ public:
      */
     bool InitParser(const std::string& parserName);
 
+    /** returns the parser currently registered to the
+        GameControlServer
+    */
+    boost::shared_ptr<BaseParser> GetParser();
+
     /** parses a command string using the registerd parser and uses
         the registered effectors to construct an ActionObject. This
         method must be const as it is also called from
@@ -69,6 +74,11 @@ public:
         perceptors in seconds
     */
     float GetSenseInterval(int id);
+
+    /** GetSenseLatency returns latency to simulate it takes to query
+        the sensors of an agent in seconds
+     */
+    float GetSenseLatency(int id);
 
     /** returns the AgentAspect for the given \param id */
     boost::shared_ptr<AgentAspect> GetAgentAspect(int id);
