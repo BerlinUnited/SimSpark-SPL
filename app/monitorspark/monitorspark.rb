@@ -12,7 +12,7 @@ sparkAddFPSCamera(
 		  x = -5, 
 		  y = -40, 
 		  z = 2,
-		  maxSpeed = 15.0,
+		  maxSpeed = 15.0,  
 		  accel = 400.0,
 		  drag = 4,
 		  addCollider = true
@@ -27,6 +27,10 @@ run "bindings.rb"
 #
 material = new('kerosin/MaterialSolid', $serverPath+'material/matYellow');
 material.setDiffuse(1.0,1.0,0.0,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matOrangeGlow');
+material.setDiffuse(1.0,0.5,0.0,1.0)
+material.setEmission(0.5,0.0,0.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matBlue');
 material.setDiffuse(0.0,0.0,1.0,1.0)
