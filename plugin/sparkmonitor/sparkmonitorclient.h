@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.h,v 1.3 2004/05/01 14:24:36 rollmark Exp $
+   $Id: sparkmonitorclient.h,v 1.4 2004/12/22 16:12:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,11 +22,13 @@
 #ifndef SPARK_SPARKMONITORCLIENT_H
 #define SPARK_SPARKMONITORCLIENT_H
 
+#include <sfsexp/sexp.h>
 #include <zeitgeist/class.h>
 #include <oxygen/simulationserver/netclient.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/sceneimporter.h>
+#include <oxygen/gamecontrolserver/predicate.h>
 
 class SparkMonitorClient : public oxygen::NetClient
 {
@@ -47,6 +49,13 @@ public:
 protected:
     /** parses a received message */
     void ParseMessage(const std::string& msg);
+
+    void ParseCustomPredicates(sexp_t* sexp, oxygen::PredicateList& pList);
+
+    /** parses the given s-expression into a ParameterList and
+        transfers it to a registered user monitor
+     */
+    void ParseCustomPredicates(sexp_t* sexp);
 
     virtual void OnLink();
     virtual void OnUnlink();

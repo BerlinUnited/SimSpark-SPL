@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.cpp,v 1.7 2004/05/05 09:10:52 rollmark Exp $
+   $Id: sparkmonitorclient.cpp,v 1.8 2004/12/22 16:12:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "sparkmonitorclient.h"
+#include <oxygen/monitorserver/custommonitor.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <netinet/in.h>
 #include <rcssnet/exception.hpp>
@@ -103,6 +104,75 @@ void SparkMonitorClient::StartCycle()
         }
 }
 
+void SparkMonitorClient::ParseCustomPredicates(sexp_t* sexp, PredicateList& pList)
+{
+    if (
+        (sexp == 0) ||
+        (sexp->ty != SEXP_VALUE)
+        )
+        {
+            return;
+        }
+
+    Predicate& pred = pList.AddPredicate();
+    pred.name = sexp->val;
+
+    sexp = sexp->next;
+    while (sexp != 0)
+        {
+            if (sexp->ty == SEXP_VALUE)
+                {
+                    pred.parameter.AddValue(sexp->val);
+                }
+
+            sexp = sexp->next;
+        }
+}
+
+void SparkMonitorClient::ParseCustomPredicates(sexp_t* sexp)
+{
+    // ( (name param1 param2 ...) (name param1 param2 ...) ... )
+    if (sexp == 0)
+        {
+            return;
+        }
+
+    // get list of registered CustomMonitor objects
+    TLeafList customList;
+    ListChildrenSupportingClass<CustomMonitor>(customList);
+
+    if (customList.empty())
+        {
+            return;
+        }
+
+    // parse predicates
+    PredicateList pList;
+
+    sexp = sexp->list;
+    while (sexp != 0)
+        {
+            if (sexp->ty == SEXP_LIST)
+                {
+                    sexp_t* sPred = sexp->list;
+                    ParseCustomPredicates(sPred,pList);
+                }
+
+            sexp = sexp->next;
+        }
+
+    // pass predicates to all registered CustomMonitor objects
+    for (
+         TLeafList::iterator iter = customList.begin();
+         iter != customList.end();
+         ++iter
+         )
+        {
+            shared_static_cast<CustomMonitor>((*iter))
+                ->ParseCustomPredicates(pList);
+        }
+}
+
 void SparkMonitorClient::ParseMessage(const string& msg)
 {
     if (
@@ -127,5 +197,36 @@ void SparkMonitorClient::ParseMessage(const string& msg)
             mActiveScene->AddChildReference(mManagedScene);
         }
 
-    mSceneImporter->ParseScene(msg, mManagedScene, shared_ptr<ParameterList>());
+    // parse s-expressions; we expect a leading list of custom
+    // predicates followed by the RubySceneGraph expressions
+
+    /** (
+        (predicate parameter ...)
+        (predicate parameter ...)
+        ...
+        )
+        (RubySceneGraph Header)
+        (RubySceneGraph Body)
+        )
+    **/
+
+    char* msgBuf        = const_cast<char*>(msg.c_str());
+    pcont_t* pcont      = init_continuation(msgBuf);
+    sexp_t* sexp_custom = iparse_sexp(msgBuf,msg.size(),pcont);
+
+    if (sexp_custom == 0)
+        {
+            destroy_sexp(sexp_custom);
+            destroy_continuation(pcont);
+            return;
+        }
+
+    ParseCustomPredicates(sexp_custom);
+
+    mSceneImporter->ParseScene(string(pcont->lastPos),
+                               mManagedScene,
+                               shared_ptr<ParameterList>());
+
+    destroy_sexp(sexp_custom);
+    destroy_continuation(pcont);
 }
