@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.1.2.5 2004/02/10 14:55:59 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.1.2.6 2004/02/10 19:49:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,11 +61,14 @@ WorldModel::SetupGameStateMap()
     mPlayModeMap.clear();
 
     mPlayModeMap[STR_PM_BeforeKickOff] = PM_BeforeKickOff;
-    mPlayModeMap[STR_PM_KickOff]       = PM_KickOff;
+    mPlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
+    mPlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
     mPlayModeMap[STR_PM_PlayOn]        = PM_PlayOn;
     mPlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
     mPlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
     mPlayModeMap[STR_PM_FirstHalfOver] = PM_FirstHalfOver;
+    mPlayModeMap[STR_PM_Goal_Left]     = PM_Goal_Left;
+    mPlayModeMap[STR_PM_Goal_Right]    = PM_Goal_Right;
 }
 
 
@@ -192,8 +195,12 @@ WorldModel::ParseVision(const Predicate& predicate)
     GetVision(predicate,"Goal_2_r",VO_GOAL2R);
 
     //
-    // DEBUG get mypos player pos
+    // get our position. The current implementation of the worldmodel
+    // relies on the VisionPerceptor that deliverd our position. In
+    // future releases this should be replaced by a self localization
+    // algorithm using the relative positions of some flags.
     //
+
     // find the PerfectVision data about the object
     Predicate::Iterator iter(predicate);
 
@@ -211,8 +218,6 @@ WorldModel::ParseVision(const Predicate& predicate)
         << "***** ParseVision " << mMyPos[0] << " "
         << mMyPos[1] << " "
         << mMyPos[2] << "\n";
-
-    std::swap<float>(mMyPos[1],mMyPos[2]);
 }
 
 void WorldModel::Parse(const string& message)
@@ -298,7 +303,6 @@ Vector3f WorldModel::GetDriveVec(const WorldModel::VisionSense& vision)
 
 void WorldModel::CalcPlayerPosition()
 {
-    // insert self localization using flags here...
 }
 
 salt::Vector3f WorldModel::GetMyPosition()
