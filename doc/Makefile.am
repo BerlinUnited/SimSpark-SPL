@@ -13,7 +13,6 @@ apidoc: Doxyfile
 	rm -rf $(srcdir)/html/developers
 	mkdir --parents $(srcdir)/html/developers
 	cp *.html html/developers
-	doxygen Doxyfile
 if DOXYGEN
 	doxygen Doxyfile
 else
