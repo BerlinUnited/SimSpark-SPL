@@ -1,3 +1,17 @@
+2004-04-18  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/kerosin/Makefile.am:
+	* app/rcssmonitor3d/lite/Makefile.am: 
+	- using librcssmonitor3D.la instead of .a 
+	- removing librcssnet3D (added implicitly by librcssmonitor3D.la)
+
+	* app/rcssmonitor3d/lib/Makefile.am: 
+	- adding librcssnet3D to librcssmonitor
+
+	* utility/rcssnet/Makefile.am: 
+	- added missing headers 
+	- installing library into a directory local to .../lib/rcssserver3D/
+
 2004-04-16  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/lib/tcpsocket.cpp: 
