@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.3 2004/05/11 10:40:49 fruit Exp $
+   $Id: monitor.h,v 1.4 2004/06/06 11:52:00 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@ private:
     };
 
     enum ECameraMode { eFree, eFollowBall };
+
     typedef std::map<GameState::EFlagType, FlagInfo> TFlagInfoMap;
 
     static const GLfloat sGroundColor[4];
@@ -99,6 +100,8 @@ private:
     void DrawBall(const salt::Vector3f& pos, float size, int pass);
     //! successor of a camera mode
     ECameraMode NextCameraMode(ECameraMode mode) const;
+    //! successor of a kick off mode
+    CommServerBase::EKickOff NextKickOffMode(CommServerBase::EKickOff mode) const;
 
 private:
     // member variables
@@ -123,6 +126,8 @@ private:
     float mCamDelta;
     //! the current camera mode
     ECameraMode mCameraMode;
+    //! the current kick off mode
+    CommServerBase::EKickOff mKickOff;
     //! flag if we want to see uniform numbers
     bool mDrawUnums;
     // connection parameters
@@ -130,6 +135,8 @@ private:
     std::string mServer;
     //! the port number
     int mPort;
+    //! skip factor
+    int mSkip;
 
     //! flag informations for specific flags
     TFlagInfoMap mFlagInfo;
