@@ -1,3 +1,46 @@
+2003-12-08  Oliver Obst  <fruit@robolog.org>
+
+	* app/spadestest/spadestest.rb: 
+	creating a PerfectVisionPerceptor after startup for testing
+
+	* plugin/survival/survivalagentaspect.h: 
+	* plugin/survival/survivalagentaspect.cpp: 
+	* plugin/survival/linesegmentperceptor.h: 
+	* plugin/survival/linesegmentperceptor.cpp: 	
+	fixes due to interface changes in perceptor base class. The fixes only make 
+	these classes compile, but they don't work yet.
+
+	* plugin/sexpparser/sexpparser.cpp: 
+	changed ListToString method to convert also atoms that are integer or float.
+
+	* lib/oxygen/oxygen.h: 	
+	* lib/oxygen/oxygen.cpp: 
+	added PerfectVisionPerceptor to initialization. The PerfectVisionPerceptor 
+	is registered below the oxygen namespace.
+
+	* lib/oxygen/agentaspect/perfectvisionperceptor.h:
+	* lib/oxygen/agentaspect/perfectvisionperceptor.cpp:
+	* lib/oxygen/agentaspect/perfectvisionperceptor_c.cpp:
+	added first version of PerfectVisionPerceptor. A PerfectVisionPerceptor 
+	sees all objects that are transform nodes (or derived of transform
+	nodes) and returns a list of the respective object names and their
+	absolute (cartesian) coordinates
+	(could be changed to relative (polar) coordinates later).
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp: 
+	- flushing buffers after error messages 
+	- fixed copy/paste bugs in InitEffector 
+	- added TmpGenerate method for testing
+
+	* lib/oxygen/agentaspect/collisionperceptor.h: 
+	* lib/oxygen/agentaspect/collisionperceptor.cpp:
+	changes due to Percept interface changes in base class.
+
+	* lib/oxygen/agentaspect/perceptor.h: 
+	changed data type of perceptors to BaseParser::TPredicate. This new 
+	interface fits better to the BaseParser::Generate method, which takes 
+	lists of TPredicates.
+
 2003-12-04  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/agentaspect/forceeffector.cpp,
