@@ -123,6 +123,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/sexpparser/Makefile \
 		 plugin/soccer/Makefile \
 		 plugin/soccer/initeffector/Makefile \
+		 plugin/soccer/createeffector/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 app/Makefile \
 		 app/agenttest/Makefile \
