@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: balljoint.cpp,v 1.2 2004/04/07 13:30:44 rollmark Exp $
+   $Id: balljoint.cpp,v 1.3 2004/04/10 15:40:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,12 +39,14 @@ void BallJoint::OnLink()
             return;
         }
 
-    dJointCreateBall(world, 0);
+    mODEJoint = dJointCreateBall(world, 0);
 }
 
-void BallJoint::SetBallAnchor(salt::Vector3f anchor)
+void BallJoint::SetBallAnchor(const Vector3f& anchor)
 {
-    dJointSetBallAnchor (mODEJoint, anchor[0], anchor[1], anchor[2]);
+    // calculate anchor position in world coordinates
+    Vector3f gAnchor = GetWorldTransform() * anchor;
+    dJointSetBallAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 }
 
 Vector3f BallJoint::GetBallAnchor(EBodyIndex idx)
