@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.1.2.1 2004/01/25 12:14:14 rollmark Exp $
+   $Id: kickeffector.h,v 1.1.2.2 2004/01/26 15:19:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,9 +50,35 @@ public:
     /** remove the reference to the ball body node */
     virtual void OnUnlink();
 
+    /** set the kick margin (the area within objects are kickable) */
+    void SetKickMargin(float margin);
+
+    /** Set the noise parameters.
+     *  If used, the noise values are normally distributed around 0.0.
+     *  Using this method, the sigmas of the distributions can be set.
+     *  Values <= 0 mean that no noise will be added.
+     *
+     * \param sigma_force for noise of the applied force
+     * \param sigma_theta for noise of the angle in the x-y plane
+     * \param sigma_phi for noise of the latitudal angle
+     */
+    void SetNoiseParams(double sigma_force,
+                        double sigma_theta,
+                        double sigma_phi);
+
 protected:
     /** reference to the body nod of the ball */
     boost::shared_ptr<oxygen::Body> mBallBody;
+
+private:
+    /** the margin where objects can be kicked */
+    float mKickMargin;
+    /** sigma for force error */
+    double mSigmaForce;
+    /** sigma for angle error (x-y angle) */
+    double mSigmaTheta;
+    /** sigma for angle error (latitudal angle) */
+    double mSigmaPhi;
 };
 
 DECLARE_CLASS(KickEffector);

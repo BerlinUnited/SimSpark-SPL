@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.1.2.1 2004/01/25 12:14:14 rollmark Exp $
+   $Id: kickeffector.cpp,v 1.1.2.2 2004/01/26 15:19:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,10 @@ using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-KickEffector::KickEffector() : oxygen::Effector()
+KickEffector::KickEffector()
+    : oxygen::Effector(),
+      mKickMargin(0.04),
+      mSigmaForce(-1.0), mSigmaTheta(-1.0), mSigmaPhi(-1.0)
 {
 }
 
@@ -69,18 +72,23 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
       mBallBody->GetWorldTransform().Pos() -
       parent->GetWorldTransform().Pos();
 
-  if (vec.Length() >= 2)
-      {
-          // ball is out of reach, kick
-          // has no effect
-          return true;
-      }
-
-  vec.Normalize();
-  vec *= kickAction->GetPower();
+  if (salt::gAbs(vec[1]) >= 0.3 || vec.Length() >= 0.3 + 0.111 + 0.04)
+  {
+      // ball is out of reach, kick
+      // has no effect
+      return true;
+  }
 
   // kick horizontally, i.e. zero up component
   vec[1] = 0;
+  vec.Normalize();
+  if (kickAction->GetType() == KickAction::KT_STEEP)
+  {
+      vec[1] = salt::gCos(salt::gDegToRad(50.0));
+  }
+
+  vec *= kickAction->GetPower();
+
   mBallBody->AddForce(vec);
 
   return true;
@@ -154,9 +162,22 @@ void KickEffector::OnLink()
       }
 }
 
-void KickEffector::OnUnlink()
+void
+KickEffector::OnUnlink()
 {
     mBallBody.reset();
 }
 
+void
+KickEffector::SetKickMargin(float margin)
+{
+    mKickMargin = margin;
+}
 
+void
+KickEffector::SetNoiseParams(double sigma_force, double sigma_theta, double sigma_phi)
+{
+    mSigmaForce = sigma_force;
+    mSigmaTheta = sigma_theta;
+    mSigmaPhi = sigma_phi;
+}
