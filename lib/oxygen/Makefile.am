@@ -79,7 +79,11 @@ sceneserver/indexbuffer.cpp \
 sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
 sceneserver/camera.cpp \
-sceneserver/camera_c.cpp 
+sceneserver/camera_c.cpp \
+monitorserver/monitorserver.cpp \
+monitorserver/monitorserver_c.cpp \
+monitorserver/monitorsystem.cpp \
+monitorserver/monitorsystem_c.cpp
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
@@ -106,4 +110,6 @@ sceneserver/sceneserver.h \
 sceneserver/indexbuffer.h \
 sceneserver/transform.h \
 sceneserver/camera.h \
+monitorserver/monitorserver.h \
+monitorserver/monitorsystem.h \
 $(spades_headers)
