@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.6 2004/02/12 14:07:22 fruit Exp $
+   $Id: collider.h,v 1.7 2004/03/22 10:57:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,9 +95,10 @@ public:
     /** returns the ID of managed ODE geom */
     dGeomID GetODEGeom();
 
-    /** sets the position of the managed directly. This is only
+    /** sets the position of the managed geom directly. This is only
         necessary if the geom is not connected to a body. If the geom
-        is connected to an ODE body it automatically syncs it's position
+        is connected to an ODE body it automatically syncs it's
+        position
     */
     void SetPosition(salt::Vector3f pos);
 
