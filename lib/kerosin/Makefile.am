@@ -76,6 +76,8 @@ sceneserver/box.cpp \
 sceneserver/box_c.cpp \
 sceneserver/sphere.cpp \
 sceneserver/sphere_c.cpp \
+sceneserver/ccylinder.cpp \
+sceneserver/ccylinder_c.cpp \
 sceneserver/staticmesh.cpp \
 sceneserver/staticmesh_c.cpp \
 soundserver/soundserver.cpp \
@@ -113,6 +115,7 @@ sceneserver/singlematnode.h \
 sceneserver/light.h \
 sceneserver/sphere.h \
 sceneserver/box.h \
+sceneserver/ccylinder.h \
 sceneserver/staticmesh.h \
 soundserver/soundeffect.h \
 soundserver/soundmodule.h \
