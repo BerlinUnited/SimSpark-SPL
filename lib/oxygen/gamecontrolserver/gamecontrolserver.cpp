@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.11 2004/04/23 13:24:22 fruit Exp $
+   $Id: gamecontrolserver.cpp,v 1.12 2004/04/24 11:59:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -124,15 +124,15 @@ GameControlServer::AgentConnect(int id)
         return false;
     }
 
-    GetLog()->Debug()
-        << "(GameControlServer) A new agent connected (id: " << id << ")\n";
+    GetLog()->Normal()
+        << "(GameControlServer) a new agent connected (id: " << id << ")\n";
 
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() == 0)
     {
         GetLog()->Error()
-            << "ERROR: (GameControlServer) Got no active scene from the SceneServer to"
-            << " create the AgentAspect in.\n";
+            << "(GameControlServer) ERROR: Got no active scene from the "
+            << "SceneServer to create the AgentAspect in.\n";
         return false;
     }
 
@@ -290,21 +290,20 @@ GameControlServer::GetAgentAspect(int id)
 void
 GameControlServer::Update(float deltaTime)
 {
-    // build list of ControlAspects, NOT searching recursively
-    TLeafList control;
-    GetChildrenSupportingClass("ControlAspect",control,false);
+  // build list of ControlAspects, NOT searching recursively
+  TLeafList control;
+  ListChildrenSupportingClass<ControlAspect>(control,false);
 
-    // update all ControlAspects found
-    for (
-        TLeafList::iterator iter = control.begin();
-        iter != control.end();
-        ++iter
-        )
-    {
-        shared_ptr<ControlAspect> aspect =
-            shared_static_cast<ControlAspect>(*iter);
+  // update all ControlAspects found
+  for (
+       TLeafList::iterator iter = control.begin();
+       iter != control.end();
+       ++iter
+       )
+      {
+          shared_ptr<ControlAspect> aspect =
+              shared_static_cast<ControlAspect>(*iter);
 
         aspect->Update(deltaTime);
     }
 }
-
