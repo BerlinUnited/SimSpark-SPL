@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.5 2004/04/21 09:41:29 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.6 2004/04/23 15:08:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mKickInPauseTime(1),
     mHalfTime(2.25 * 60),
     mFreeKickDist(9.15),
-    mFreeKickMoveDist(15.15)
+    mFreeKickMoveDist(15.15),
+    mAutomaticKickOff(false),
+    mWaitBeforeKickOff(1.0)
 {
 }
 
@@ -156,6 +158,11 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     MoveBall(pos);
     MoveAwayPlayers(mRightHalf, 1.0, TI_LEFT);
     MoveAwayPlayers(mLeftHalf, 1.0, TI_RIGHT);
+
+    if (mAutomaticKickOff && mGameState->GetModeTime() > mWaitBeforeKickOff)
+    {
+        mGameState->KickOff();
+    }
 }
 
 void
@@ -569,12 +576,6 @@ SoccerRuleAspect::OnUnlink()
 void
 SoccerRuleAspect::UpdateCached()
 {
-    static bool updated = false;
-
-    if (updated) return;
-
-    updated = true;
-
     SoccerBase::GetSoccerVar(*this,"BallRadius",mBallRadius);
     SoccerBase::GetSoccerVar(*this,"RuleGoalPauseTime",mGoalPauseTime);
     SoccerBase::GetSoccerVar(*this,"RuleKickingPauseTime",mKickInPauseTime);
@@ -583,6 +584,8 @@ SoccerRuleAspect::UpdateCached()
     SoccerBase::GetSoccerVar(*this,"FieldWidth",mFieldWidth);
     SoccerBase::GetSoccerVar(*this,"GoalWidth",mGoalWidth);
     SoccerBase::GetSoccerVar(*this,"FreeKickDistance",mFreeKickDist);
+    SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
+    SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
 
     // set up bounding boxes for halfs and goal areas
 
