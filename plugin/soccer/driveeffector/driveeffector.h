@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector.h,v 1.2 2004/02/12 14:07:25 fruit Exp $
+   $Id: driveeffector.h,v 1.3 2004/06/19 11:38:05 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #ifndef DRIVEEFFECTOR_H
 #define DRIVEEFFECTOR_H
 
+#include <salt/random.h>
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/body.h>
 #include <soccer/agentstate/agentstate.h>
@@ -77,6 +78,9 @@ protected:
     /** remove the reference to the agents body node */
     virtual void OnUnlink();
 
+protected:
+    typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;
+
     /** the reference to the parent transform node */
     boost::shared_ptr<oxygen::Transform> mTransformParent;
     /** the reference to the parents body node */
@@ -94,8 +98,8 @@ protected:
         the drive power vector is greater or equal to mMaxDrivePower */
     float mForceFactor;
 
-    /** sigma for the error distribution to calculate the applied force */
-    float mSigma;
+    /** random number generator for the error distribution of the applied force */
+    NormalRngPtr mForceErrorRNG;
 
     /** The maximum length of the drive power vector. */
     float mMaxPower;
