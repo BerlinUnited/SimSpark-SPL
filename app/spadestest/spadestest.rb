@@ -1,8 +1,9 @@
-importBundle "sexpparser"
 importBundle "filesystemstd"
+importBundle "sexpparser"
 importBundle "monitortest"
+importBundle "createeffector"
 
-# the dummy CreateEffector uses these plugins
+# the CreateEffector uses these plugins
 importBundle "perfectvisionperceptor"
 importBundle "forceeffector"
 
@@ -28,6 +29,7 @@ monitorServer.registerMonitorSystem('MonitorTest');
 # setup the GameControlServer
 gameControlServer = new('oxygen/GameControlServer', '/sys/server/gamecontrol');
 gameControlServer.initParser('SexpParser');
+gameControlServer.initEffector('CreateEffector');
 
 # setup the SpadesServer
 spadesServer = new('oxygen/SpadesServer', '/sys/server/spades');
