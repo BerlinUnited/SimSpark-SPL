@@ -1,0 +1,182 @@
+coding - style
+==============
+
+  This is the coding style I'm trying to use for the 3D server. Would be 
+  nice if everybody else also tries to use it; however, I'm not going to
+  start holy wars it :)
+  If you think something should be changed for a good reason, please do
+  so. (Oliver)
+
+Tabs, Indentation and Placing Braces
+------------------------------------
+
+* Tabs 
+
+  Never use hard tabs in your source files (have your editor insert
+  spaces instead of tabs). This guideline is especially important. The
+  use of hard tab characters ends up causing problems because not
+  every editor uses the same number of spaces per tab character (in
+  fact, most editors allow you to configure how many spaces there are
+  per tab character). If you open a file with hard tabs already in it,
+  instead of modifying the code so that it is readable in your own
+  editor because your tab stops are different, please remove the
+  tabs. There are several utilities which will do this.
+
+* Indentation
+
+  Only four-space line indentation should be used. 
+
+* Placing Braces
+
+  Opening and closing braces should be on the same level of
+  indentation below the token opening the scope. Opening and closing
+  braces appear on a separate line by themselves.
+
+  Example: 
+ 
+void 
+ClassName::function()
+{
+    if (x)
+    {
+        while (y)
+        {
+            // ...
+        }
+    }
+    else
+    {
+        switch (z)
+        {
+            case 1:
+            {
+                // ...
+                break;
+            }
+            default:
+            {
+                // ...
+                break;
+            }
+        }
+    }
+}
+
+* Naming Conventions
+
+  Structures:
+  class         ClassName;
+  struct        SStructName;
+  typedef int   TInt;
+
+** Enums
+
+  Enumeration types 'enum' start with a capital 'E', followed by the
+  type name starting with a capital letter.
+
+  Enumeration elements start with 'e', followed by the
+  name of the constant starting with a capital letter.
+
+  Example:
+  enum EEnumName
+  {
+      eEnumElement1,
+      eEnumElement2
+  };
+
+
+** Functions:
+
+   void 
+   ClassName::functionName()
+
+   place the return type on a seperate line 
+
+
+** Variables:
+
+*** Variables with local scope 
+
+   Variables with local scope start with a small letter. New words
+   within the variable name start with a captial letter.
+
+   Example: myVariable
+
+*** Member variables
+
+   Member variables start with a 'm', followed by the variable name,
+   beginning with a capital letter. New words within the variable name
+   start with a captial letter.
+
+   Example: mMemberVariable
+
+
+** Macros 
+
+  Macro names consist of only capital letters. Multi word macros are
+  separated by underscore '_'.
+
+  Example: MY_MACRO
+
+* Comments
+
+  Please use comments suitable for doxygen to get a nice HTML
+  documentation. Comments should be placed above the respective
+  elements
+
+  Example:
+
+/*! This is a comment 
+    for more than one line
+*/
+
+//! This is a comment for exactly one line
+
+** There are some standard comments for parts of the code ('gotchas'): 
+    ':TODO:',':BUG:'. Gotchas are the first part of a comment.
+
+    Example:
+
+//:BUG: There is a bug below someone has to remove
+
+/*:TODO: The stuff below
+  needs some clean up
+*/
+
+* Files
+
+- file names consist of only small letters
+- .h is the suffix for c++ header files, .cc is the suffix for c++ source files
+- max line length is 80 characters
+
+** Header files
+
+class ClassName
+{
+public:
+	// public types
+
+protected:
+	// protected types
+
+private:
+	// private types
+	
+public:
+	// public functions
+
+protected:
+	// protected functions
+
+private:
+	// private functions
+
+public:
+	// public members
+
+protected:
+	// protected members
+
+private:
+	// private members
+};
