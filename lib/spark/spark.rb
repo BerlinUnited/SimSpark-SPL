@@ -78,6 +78,14 @@ def sparkRegisterCustomInput(className)
   new(className, $serverPath+'simulation/InputControl/'+className)
 end
 
+#
+# install a class below the Spark MonitorSystem node that parses
+# commands received from a monitor client
+#
+def sparkRegisterMonitorCmdParser(className)
+  print "(spark.rb) sparkRegisterMonitorCmdParser " + className + "\n"
+  new(className, $serverPath+'monitor/SparkMonitor/'+className)
+end
   
 def sparkSetupServer
   print "(spark.rb) sparkSetupServer\n"
