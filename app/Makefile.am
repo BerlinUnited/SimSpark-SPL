@@ -3,8 +3,8 @@ SUBDIRS = \
 	  coretest \
 	  fonttest \
 	  inputtest \
+	  rcssmonitor3d \
 	  scenetest \
 	  spadestest \
 	  zeitgeisttest 
-	  rcssmonitor3d
 
