@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.h,v 1.5 2004/06/06 10:33:01 fruit Exp $
+   $Id: gamestate.h,v 1.6 2004/06/07 14:29:26 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -170,6 +170,7 @@ protected:
     void ResetFlags();
     void SetupProcessMap();
     void SetupFlagMap();
+    void SetupPlaymodeMap();
     void ProcessInit(const oxygen::Predicate& predicate);
     void ProcessInfo(const oxygen::Predicate& predicate);
 
