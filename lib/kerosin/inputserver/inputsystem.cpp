@@ -1,3 +1,24 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+this file is part of rcssserver3D
+Fri May 9 2003
+Copyright (C) 2002,2003 Koblenz University
+Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
+$Id: inputsystem.cpp,v 1.6 2004/04/23 19:58:00 fruit Exp $
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 2 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #include "inputsystem.h"
 
 using namespace kerosin;
@@ -11,48 +32,53 @@ InputSystem::~InputSystem()
 {
 }
 
-bool InputSystem::Init(kerosin::InputServer *inputServer)
+bool
+InputSystem::Init(kerosin::InputServer *inputServer)
 {
-  mInputServer = inputServer;
+    mInputServer = inputServer;
 
-  if (mInputServer == NULL) return false;
+    if (mInputServer == NULL) return false;
 
-  return true;
+    return true;
 }
 
-void InputSystem::AddInput(InputServer::Input &input)
+void
+InputSystem::AddInput(InputServer::Input &input)
 {
-  AddInputInternal(input);
+    AddInputInternal(input);
 }
 
-bool InputSystem::GetInput(InputServer::Input &input)
+bool
+InputSystem::GetInput(InputServer::Input &input)
 {
-  static bool hasDoneTimer = false;
-  if (mInputQueue.size()>0)
+    static bool hasDoneTimer = false;
+    if (mInputQueue.size()>0)
     {
-      input = mInputQueue.front();
-      mInputQueue.pop_front();
-      return true;
+        input = mInputQueue.front();
+        mInputQueue.pop_front();
+        return true;
     }
 
-  if (!hasDoneTimer)
+    if (!hasDoneTimer)
     {
-      hasDoneTimer = true;
-      return UpdateTimerInput(input);
+        hasDoneTimer = true;
+        return UpdateTimerInput(input);
     }
-  else
+    else
     {
-      hasDoneTimer = false;
-      return false;
+        hasDoneTimer = false;
+        return false;
     }
 }
 
-void InputSystem::AddInputInternal(InputServer::Input &input)
+void
+InputSystem::AddInputInternal(InputServer::Input &input)
 {
-  mInputQueue.push_back(input);
+    mInputQueue.push_back(input);
 }
 
-bool InputSystem::UpdateTimerInput(InputServer::Input &/*input*/)
+bool
+InputSystem::UpdateTimerInput(InputServer::Input &/*input*/)
 {
-  return false;
+    return false;
 }
