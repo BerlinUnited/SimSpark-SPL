@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.5 2004/01/25 13:09:17 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.6 2004/01/26 13:35:29 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
             {
                 "agent",
                 {0.8f, 0.8f, 0.2f, 1.0f},
-                1.0f
+                0.3f
             },
             {
                 "flag",
@@ -129,12 +129,12 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
             {
                 "ball",
                 {1.0f, 1.0f, 1.0f, 1.0f},
-                0.3f
+                0.111f
             },
             {
                 "ballAgent",
                 {1.0f, 0.5f, 0.5f, 1.0f},
-                1.1f
+                0.3f
             }
         };
 
@@ -194,17 +194,22 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
 //------------------------------------------------------------------------
 void display(void)
 {
+// Laenge       mindestens      100 m
+//              hoechstens      110 m
+// Breite       mindestens      64 m
+//              hoechstens      75 m
+
    // soccer field size
-   const float fieldLength = 52.5;
-   const float fieldWidth = 34.0;
-   const float fieldHeight = 10.0;
+   const float fieldLength = 105.0;
+   const float fieldWidth = 68.0;
+   const float fieldHeight = 20.0;
 
    const float borderSize = 4.0;
 
    // goal box size
-   const float goalWidth = 7.0;
+   const float goalWidth = 7.32;
    const float goalDepth = 2.0;
-   const float goalHeight = 1.80;
+   const float goalHeight = 2.44;
 
    const Vector3f szGoal1(-goalDepth,goalHeight,goalWidth);
    const Vector3f szGoal2(goalDepth,goalHeight,goalWidth);
@@ -214,7 +219,7 @@ void display(void)
    const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
    const GLfloat borderColor[4] = {0.0f, 0.0f, 1.0f, 1.0f};
 
-   glClearColor(0.0f,0.0f,0.0f,1.0f);
+   glClearColor(0.1f,0.1f,0.1f,1.0f);
 
    glClear (GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
    glColor3f (1, 1, 1);
@@ -301,7 +306,7 @@ int main(int argc, char* argv[])
   glutCreateWindow("rcssmonitor3D");
 
   //setup the GLserver with camera coordinates
-  salt::Vector3f pos(-8.0, 10.0,4.0);
+  salt::Vector3f pos(0.0, 7.0,24.0);
   salt::Vector3f lookAt(0.0,0.0,0.0);
   salt::Vector3f up(0.0,1.0,0.0);
   gGLServer = GLserver(gWidth, gHeight, pos, lookAt, up, false);
