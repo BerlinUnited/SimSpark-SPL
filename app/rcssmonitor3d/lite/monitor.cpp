@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.3 2004/05/11 10:47:08 fruit Exp $
+   $Id: monitor.cpp,v 1.4 2004/05/14 11:36:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -106,19 +106,22 @@ Monitor::Monitor(std::string rel_path_prefix)
     memcpy(fi.mColor, sTeamColorLeft, sizeof(fi.mColor));
     mFlagInfo[GameState::eFLAG_1_L] = fi;
     mFlagInfo[GameState::eFLAG_2_L] = fi;
+    // goal flags left team
+    fi.mOffset = Vector3f(0,0,0.5);
     mFlagInfo[GameState::eGOAL_1_L] = fi;
     mFlagInfo[GameState::eGOAL_2_L] = fi;
-    // corner flags right team
+    // goal flags right team
     memcpy(fi.mColor, sTeamColorRight, sizeof(fi.mColor));
-    mFlagInfo[GameState::eFLAG_1_R] = fi;
-    mFlagInfo[GameState::eFLAG_2_R] = fi;
     mFlagInfo[GameState::eGOAL_1_R] = fi;
     mFlagInfo[GameState::eGOAL_2_R] = fi;
+    // corner flags right team
+    fi.mOffset = Vector3f(0,0,1.5);
+    mFlagInfo[GameState::eFLAG_1_R] = fi;
+    mFlagInfo[GameState::eFLAG_2_R] = fi;
 }
 
 Monitor::~Monitor()
 {
-    std::cerr << "(Monitor) shutting down\n";
 }
 
 Monitor*
@@ -134,13 +137,15 @@ Monitor::Init(int argc, char* argv[])
     int c = 0;
     EReturnType status = eOK;
     int option_index;
+    bool logplayer = false;
+    bool server = false;
 
     option long_options[] = {
         // name, has_arg, flag, val
         { "help", no_argument, 0, 'h' },
         { "port", required_argument, 0, 'p' },
         { "server", required_argument, 0, 's' },
-        { "logfile", required_argument, 0, 's' },
+        { "logfile", required_argument, 0, 'l' },
         { 0, 0, 0, 0 }
     };
 
@@ -160,19 +165,41 @@ Monitor::Init(int argc, char* argv[])
         case 'p': // --port
             mPort = atoi(optarg);
             break;
-        case 's': // --server (or --logfile)
+        case 's': // --server
             mServer = std::string(optarg);
+            server = true;
+            break;
+        case 'l': // -- logplayer
+            mServer = std::string(optarg);
+            logplayer = true;
             break;
         default:
             status = eErrInit;
         }
     }
 
+    if (logplayer && server)
+    {
+        status = eErrInit;
+        mZeitgeist.GetCore()->GetLogServer()->Error()
+            << "ERROR: cannot play logfiles and connect to simulator at the same time\n";
+    }
+
     mZeitgeist.GetCore()->GetScriptServer()->RunInitScript
         ("rcssmonitor3D-lite.rb", "app/rcssmonitor3d/lite");
 
     if (status == eOK)
+    {
+        shared_ptr<CoreContext> context = mZeitgeist.GetCore()->CreateContext();
+        if (logplayer)
+        {
+            context->New("rcssmonitor3d/LogfileServer", "/sys/server/comm");
+        } else {
+            context->New("rcssmonitor3d/CommServer", "/sys/server/comm");
+        }
+
         status = InitInternal(argc,argv);
+    }
 
     return status;
 }
@@ -193,7 +220,7 @@ Monitor::Usage()
 "       --help          print this message and exit\n"
 "       --port          specify the port number (default is " << DEFAULT_PORT << ")\n"
 "       --server        specify the server host (default is '" << DEFAULT_HOST << "')\n"
-"       --logfile       specify the logfile to read\n"
+"       --logfile       specify the logfile to read (not with --server)\n"
 "\n";
 }
 
