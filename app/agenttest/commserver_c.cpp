@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver_c.cpp,v 1.2 2004/02/12 14:07:21 fruit Exp $
+   $Id: commserver_c.cpp,v 1.3 2004/04/07 13:26:31 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 #include "commserver.h"
 
-void CLASS(CommServer)::DefineClass()
+void
+CLASS(CommServer)::DefineClass()
 {
 }

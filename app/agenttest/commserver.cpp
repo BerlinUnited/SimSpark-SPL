@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.2 2004/02/12 14:07:21 fruit Exp $
+   $Id: commserver.cpp,v 1.3 2004/04/07 13:25:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,62 +38,65 @@ CommServer::~CommServer()
 {
 }
 
-bool CommServer::SelectInput()
+bool
+CommServer::SelectInput()
 {
-  fd_set readfds;
-  FD_ZERO(&readfds);
-  FD_SET(mReadFd,&readfds);
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(mReadFd,&readfds);
 
-  return select(mReadFd+1,&readfds, 0, 0, 0) > 0;
+    return select(mReadFd+1,&readfds, 0, 0, 0) > 0;
 }
 
-void CommServer::PutOutput(const char* out)
+void
+CommServer::PutOutput(const char* out)
 {
-  strcpy(mBuffer + sizeof(long), out);
-  unsigned int len = strlen(out);
-  unsigned int netlen = htonl(len);
-  memcpy(mBuffer,&netlen,sizeof(netlen));
-  write(mWriteFd, mBuffer, len + sizeof(netlen));
+    strcpy(mBuffer + sizeof(long), out);
+    unsigned int len = strlen(out);
+    unsigned int netlen = htonl(len);
+    memcpy(mBuffer,&netlen,sizeof(netlen));
+    write(mWriteFd, mBuffer, len + sizeof(netlen));
 }
 
-bool CommServer::GetInput()
+bool
+CommServer::GetInput()
 {
-  // read the first message segment
-  if (! SelectInput())
+    // read the first message segment
+    if (! SelectInput())
     {
         GetLog()->Debug() << "CommServer::GetInput false\n";
-      return false;
+        return false;
     }
 
-        GetLog()->Debug() << "CommServer::GetInput true\n";
+    GetLog()->Debug() << "CommServer::GetInput true\n";
 
-  unsigned int bytesRead = read(mReadFd, mBuffer, sizeof(mBuffer));
-  if (bytesRead < sizeof(unsigned int))
+    unsigned int bytesRead = read(mReadFd, mBuffer, sizeof(mBuffer));
+    if (bytesRead < sizeof(unsigned int))
     {
-      return false;
+        return false;
     }
 
-  // msg is prefixed with it's total length
-  unsigned int msgLen = ntohl(*(unsigned int*)mBuffer);
+    // msg is prefixed with it's total length
+    unsigned int msgLen = ntohl(*(unsigned int*)mBuffer);
 
-  // read remaining message segments
-  unsigned int msgRead = bytesRead - sizeof(unsigned int);
-  char *offset = mBuffer + bytesRead;
+    // read remaining message segments
+    unsigned int msgRead = bytesRead - sizeof(unsigned int);
+    char *offset = mBuffer + bytesRead;
 
-  while (msgRead < msgLen)
+    while (msgRead < msgLen)
     {
-      if (! SelectInput())
+        if (! SelectInput())
         {
-          return false;
+            return false;
         }
 
-      msgRead += read(mReadFd, offset, sizeof(mBuffer) - msgRead);
-      offset += msgRead;
+        msgRead += read(mReadFd, offset, sizeof(mBuffer) - msgRead);
+        offset += msgRead;
     }
 
-  // zero terminate received data
-  (*offset) = 0;
+    // zero terminate received data
+    (*offset) = 0;
 
-  return true;
+    return true;
 }
 

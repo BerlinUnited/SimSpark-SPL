@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.2 2004/02/12 14:07:21 fruit Exp $
+   $Id: commserver.h,v 1.3 2004/04/07 13:23:50 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,28 +28,28 @@
 
 class CommServer : public zeitgeist::Leaf
 {
- public:
-  CommServer();
-  virtual ~CommServer();
+public:
+    CommServer();
+    virtual ~CommServer();
 
-  bool GetInput();
-  void PutOutput(const char* out);
-  void PutOutput(const std::string& str) { PutOutput(str.c_str()); }
+    bool GetInput();
+    void PutOutput(const char* out);
+    void PutOutput(const std::string& str) { PutOutput(str.c_str()); }
 
-  const char* GetMsg() const { return mBuffer + sizeof(long); }
+    const char* GetMsg() const { return mBuffer + sizeof(long); }
 
- protected:
-  bool SelectInput();
+protected:
+    bool SelectInput();
 
- protected:
-  // the input file descriptor
-  const int mReadFd;
+protected:
+    // the input file descriptor
+    const int mReadFd;
 
-  // the output file descriptor
-  const int mWriteFd;
+    // the output file descriptor
+    const int mWriteFd;
 
-  // the receive buffer
-  char mBuffer[4096];
+    // the receive buffer
+    char mBuffer[4096];
 };
 
 DECLARE_CLASS(CommServer);
