@@ -11,6 +11,13 @@
 /stamp-h1
 app/Makefile
 app/Makefile.in
+app/agentspark/.deps
+app/agentspark/.libs
+app/agentspark/Makefile
+app/agentspark/Makefile.in
+app/agentspark/rcssmonitor3D
+app/agentspark/spadestest
+app/agentspark/sys
 app/agenttest/.deps
 app/agenttest/.libs
 app/agenttest/Makefile
