@@ -122,6 +122,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/monitortest/Makefile \
 		 plugin/forceeffector/Makefile \
+		 plugin/perfectvisionperceptor/Makefile \
 		 app/Makefile \
 		 app/coretest/Makefile \
 		 app/fonttest/Makefile \
