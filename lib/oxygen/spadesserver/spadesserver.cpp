@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.2 2003/12/01 10:32:45 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.3 2003/12/01 16:35:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ using namespace std;
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <spades/SimEngine.hpp>
 
 #if THIS_IS_A_DEMO_ONLY
@@ -149,6 +150,12 @@ SpadesServer::GetMonitorServer()
          );
 }
 
+boost::shared_ptr<GameControlServer>
+SpadesServer::GetGameControlServer()
+{
+    return shared_static_cast<GameControlServer>
+        (GetCore()->Get("/sys/server/gamecontrol"));
+}
 
 DataArray
 SpadesServer::getMonitorHeaderInfo()
@@ -220,7 +227,8 @@ SpadesServer::pauseModeCallback()
 bool
 SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator at)
 {
-    return false;
+    shared_ptr<GameControlServer> gcs = GetGameControlServer();
+    return gcs->AgentConnect(static_cast<int>(agent));
 }
 
 bool
