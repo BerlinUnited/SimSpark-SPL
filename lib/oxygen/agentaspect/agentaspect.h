@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.5.2.1 2003/11/30 16:56:34 fruit Exp $
+   $Id: agentaspect.h,v 1.5.2.1.2.1 2003/12/09 12:53:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 // #include <config.h>
 // #endif
 
-#include <oxygen/sceneserver/basenode.h>
+#include <oxygen/sceneserver/transform.h>
 #include "effector.h"
 #include "perceptor.h"
 
@@ -36,7 +36,7 @@ namespace oxygen
 }
 #endif
 
-class AgentAspect : public BaseNode
+class AgentAspect : public Transform
 {
 public:
     //! this method must be implemented for the agents 'think' behavior
