@@ -1,47 +1,47 @@
 pkglib_LTLIBRARIES = soccer.la
 
 soccer_la_SOURCES = export.cpp \
-createeffector/createeffector.h \
-createeffector/createeffector.cpp \
-createeffector/createeffector_c.cpp \
-initeffector/initeffector.h \
-initeffector/initeffector.cpp \
-initeffector/initeffector_c.cpp \
-dasheffector/dasheffector.h \
-dasheffector/dasheffector.cpp \
-dasheffector/dasheffector_c.cpp \
-kickeffector/kickeffector.h \
-kickeffector/kickeffector.cpp \
-kickeffector/kickeffector_c.cpp \
-soccercontrolaspect/soccercontrolaspect.h \
-soccercontrolaspect/soccercontrolaspect.cpp \
-soccercontrolaspect/soccercontrolaspect_c.cpp \
-gamestateaspect/gamestateaspect.h \
-gamestateaspect/gamestateaspect.cpp \
-gamestateaspect/gamestateaspect_c.cpp \
-soccerruleaspect/soccerruleaspect.h \
-soccerruleaspect/soccerruleaspect.cpp \
-soccerruleaspect/soccerruleaspect_c.cpp \
-soccerbase/soccerbase.h \
-soccerbase/soccerbase.cpp \
-soccerbase/soccerbase_c.cpp \
-agentstate/agentstate.h \
 agentstate/agentstate.cpp \
+agentstate/agentstate.h \
 agentstate/agentstate_c.cpp \
-ballstateaspect/ballstateaspect.h \
+ball/ball.cpp ball/ball.h ball/ball_c.cpp \
 ballstateaspect/ballstateaspect.cpp \
+ballstateaspect/ballstateaspect.h \
 ballstateaspect/ballstateaspect_c.cpp \
-gamestateperceptor/gamestateperceptor.h \
-gamestateperceptor/gamestateperceptor.cpp \
-gamestateperceptor/gamestateperceptor_c.cpp \
-sexpmonitor/sexpmonitor.h \
-sexpmonitor/sexpmonitor.cpp \
-sexpmonitor/sexpmonitor_c.cpp \
+createeffector/createeffector.cpp \
+createeffector/createeffector.h \
+createeffector/createeffector_c.cpp \
+dasheffector/dasheffector.cpp \
+dasheffector/dasheffector.h \
+dasheffector/dasheffector_c.cpp \
 fieldflag/fieldflag.h \
 fieldflag/fieldflag_c.cpp \
-ball/ball.cpp ball/ball_c.cpp ball/ball.h \
-visionperceptor/visionperceptor.h \
+gamestateaspect/gamestateaspect.cpp \
+gamestateaspect/gamestateaspect.h \
+gamestateaspect/gamestateaspect_c.cpp \
+gamestateperceptor/gamestateperceptor.cpp \
+gamestateperceptor/gamestateperceptor.h \
+gamestateperceptor/gamestateperceptor_c.cpp \
+initeffector/initeffector.cpp \
+initeffector/initeffector.h \
+initeffector/initeffector_c.cpp \
+kickeffector/kickeffector.cpp \
+kickeffector/kickeffector.h \
+kickeffector/kickeffector_c.cpp \
+sexpmonitor/sexpmonitor.cpp \
+sexpmonitor/sexpmonitor.h \
+sexpmonitor/sexpmonitor_c.cpp \
+soccerbase/soccerbase.cpp \
+soccerbase/soccerbase.h \
+soccerbase/soccerbase_c.cpp \
+soccercontrolaspect/soccercontrolaspect.cpp \
+soccercontrolaspect/soccercontrolaspect.h \
+soccercontrolaspect/soccercontrolaspect_c.cpp \
+soccerruleaspect/soccerruleaspect.cpp \
+soccerruleaspect/soccerruleaspect.h \
+soccerruleaspect/soccerruleaspect_c.cpp \
 visionperceptor/visionperceptor.cpp \
+visionperceptor/visionperceptor.h \
 visionperceptor/visionperceptor_c.cpp
 
 # -module tells automake we're not building a library but a loadable module
