@@ -269,6 +269,12 @@ plugin/soccer/createeffector/.libs
 plugin/soccer/createeffector/Makefile
 plugin/soccer/createeffector/Makefile.in
 plugin/soccer/createeffector/initeffector.la
+plugin/soccer/fieldflag/*.lo
+plugin/soccer/fieldflag/.deps
+plugin/soccer/fieldflag/.libs
+plugin/soccer/fieldflag/Makefile
+plugin/soccer/fieldflag/Makefile.in
+plugin/soccer/fieldflag/initeffector.la
 plugin/soccer/gamestateaspect/Makefile
 plugin/soccer/gamestateaspect/Makefile.in
 plugin/soccer/initeffector/*.lo
