@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hingejoint_c.cpp,v 1.1 2004/04/12 19:54:15 rollmark Exp $
+   $Id: hingejoint_c.cpp,v 1.2 2004/04/14 18:25:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,8 +42,20 @@ FUNCTION(HingeJoint,setHingeAnchor)
     return true;
 }
 
+FUNCTION(HingeJoint,getHingeAngle)
+{
+    return obj->GetHingeAngle();
+}
+
+FUNCTION(HingeJoint,getHingeAngleRate)
+{
+    return obj->GetHingeAngleRate();
+}
+
 void CLASS(HingeJoint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Joint);
     DEFINE_FUNCTION(setHingeAnchor);
+    DEFINE_FUNCTION(getHingeAngle);
+    DEFINE_FUNCTION(getHingeAngleRate);
 }

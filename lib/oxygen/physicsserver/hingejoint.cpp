@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.cpp,v 1.1 2004/04/12 19:54:15 rollmark Exp $
+   $Id: hingejoint.cpp,v 1.2 2004/04/14 18:25:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,11 +46,11 @@ void HingeJoint::OnLink()
 void HingeJoint::SetHingeAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
-    Vector3f gAnchor = GetWorldTransform() * anchor;
+    Vector3f gAnchor(GetWorldTransform() * anchor);
     dJointSetHingeAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 
-    // TODO: calc up from WorldTransform
-    const Vector3f up(0,0,1);
+    // calculate hinge axis (pos. z, relative to world transform)
+    Vector3f up(GetWorldTransform() * Vector3f(0,0,1));
     dJointSetHingeAxis(mODEJoint, up[0], up[1], up[2]);
 }
 
@@ -76,6 +76,17 @@ Vector3f HingeJoint::GetHingeAnchor(EBodyIndex idx)
             return Vector3f(0,0,0);
         }
 }
+
+float HingeJoint::GetHingeAngle()
+{
+    return dJointGetHingeAngle(mODEJoint);
+}
+
+float HingeJoint::GetHingeAngleRate()
+{
+    return dJointGetHingeAngleRate (mODEJoint);
+}
+
 
 
 
