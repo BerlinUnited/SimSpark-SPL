@@ -1,70 +1,128 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: inputserver_c.cpp,v 1.3 2004/03/22 11:16:09 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #include "inputserver.h"
 
 using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
+using namespace std;
 
-FUNCTION(init)
+FUNCTION(InputServer,init)
 {
-	if (in.size() == 1)
-	{
-		InputServer *is = static_cast<InputServer*>(obj);
-		is->Init(any_cast<char*>(in[0]));
-	}
+    string inInputSysName;
+
+    return (
+            (in.GetSize() == 1) &&
+            (in.GetValue(in.begin(), inInputSysName)) &&
+            (obj->Init(inInputSysName))
+            );
 }
 
-FUNCTION(createDevice)
+FUNCTION(InputServer,createDevice)
 {
-	if (in.size() == 1)
-	{
-		InputServer *is = static_cast<InputServer*>(obj);
-		is->CreateDevice(any_cast<char*>(in[0]));
-	}
+    string inDeviceName;
+
+    return (
+            (in.GetSize() == 1) &&
+            (in.GetValue(in.begin(), inDeviceName)) &&
+            (obj->CreateDevice(inDeviceName))
+            );
 }
 
-FUNCTION(reset)
+FUNCTION(InputServer,reset)
 {
-	if (in.size() == 0)
-	{
-		InputServer *is = static_cast<InputServer*>(obj);
-		is->Reset();
-	}
+    obj->Reset();
+    return true;
 }
 
-FUNCTION(bindCommand)
+FUNCTION(InputServer,bindCommand)
 {
-	if (in.size() == 2)
-	{
-		InputServer *is = static_cast<InputServer*>(obj);
-		is->BindCommand(any_cast<char*>(in[0]), any_cast<int>(in[1]));
-	}
+    string inDesc;
+    int inCmd;
+
+    return(
+           (in.GetSize() == 2) &&
+           (in.GetValue(in[0], inDesc)) &&
+           (in.GetValue(in[1], inCmd)) &&
+           (obj->BindCommand(inDesc,inCmd))
+           );
 }
 
-FUNCTION(importScanCodeMapping)
+FUNCTION(InputServer,importScanCodeMapping)
 {
-	if (in.size() == 1)
-	{
-		InputServer *is = static_cast<InputServer*>(obj);
-		is->ImportScanCodeMapping(any_cast<char*>(in[0]));
-	}
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inName))
+        )
+        {
+            return false;
+        }
+
+    obj->ImportScanCodeMapping(inName);
+    return true;
 }
 
-FUNCTION(addCode)
+FUNCTION(InputServer,addCode)
 {
-	if (in.size() == 5)
-	{
-		InputServer *is = static_cast<InputServer*>(obj);
-		is->AddCode(any_cast<int>(in[0]), any_cast<char*>(in[1]), any_cast<int>(in[2]), any_cast<int>(in[3]), any_cast<int>(in[4]));
-	}
+    int inIc;
+    string inName;
+    int inNoMod;
+    int inShiftMod;
+    int inAltMod;
+
+    if (
+        (in.GetSize() != 5) ||
+        (! in.GetValue(in[0],inIc)) ||
+        (! in.GetValue(in[1],inName)) ||
+        (! in.GetValue(in[2],inNoMod)) ||
+        (! in.GetValue(in[3],inShiftMod)) ||
+        (! in.GetValue(in[4],inAltMod))
+        )
+        {
+            std::cout<<"****** AddCode " << in.GetSize()
+                     <<" " << inIc
+                     << " " << inName
+                     << " " << inNoMod
+                     << " " << inShiftMod
+                     << " " << inAltMod
+                     << "\n";
+
+
+            return  false;
+        }
+
+    obj->AddCode(inIc,inName,inNoMod,inShiftMod,inAltMod);
+    return true;
 }
 
 void CLASS(InputServer)::DefineClass()
 {
-	DEFINE_BASECLASS(zeitgeist/Node);
-	DEFINE_FUNCTION(init);
-	DEFINE_FUNCTION(createDevice);
-	DEFINE_FUNCTION(reset);
-	DEFINE_FUNCTION(bindCommand);
-	DEFINE_FUNCTION(importScanCodeMapping);
-	DEFINE_FUNCTION(addCode);
+    DEFINE_BASECLASS(zeitgeist/Node);
+    DEFINE_FUNCTION(init);
+    DEFINE_FUNCTION(createDevice);
+    DEFINE_FUNCTION(reset);
+    DEFINE_FUNCTION(bindCommand);
+    DEFINE_FUNCTION(importScanCodeMapping);
+    DEFINE_FUNCTION(addCode);
 }

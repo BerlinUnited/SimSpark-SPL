@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere_c.cpp,v 1.5 2004/03/20 15:49:10 rollmark Exp $
+   $Id: sphere_c.cpp,v 1.6 2004/03/22 11:11:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,13 +24,20 @@
 using namespace boost;
 using namespace kerosin;
 
-FUNCTION(setRadius)
+FUNCTION(Sphere,setRadius)
 {
-    if (in.size() == 1)
+    float inRadius;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inRadius))
+        )
         {
-            Sphere* s = static_cast<Sphere*>(obj);
-            s->SetRadius(any_cast<float>(in[0]));
+            return false;
         }
+
+    obj->SetRadius(inRadius);
+    return true;
 }
 
 void CLASS(Sphere)::DefineClass()

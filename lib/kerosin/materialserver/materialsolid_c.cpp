@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid_c.cpp,v 1.1 2004/03/20 12:54:07 rollmark Exp $
+   $Id: materialsolid_c.cpp,v 1.2 2004/03/22 11:16:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,19 +26,21 @@ using namespace kerosin;
 using namespace salt;
 using namespace boost;
 
-FUNCTION(setColor)
+FUNCTION(MaterialSolid,setColor)
 {
-    if (in.size() == 3)
-        {
-            MaterialSolid* m = static_cast<MaterialSolid*>(obj);
-            m->SetColor(Vector3f(
-                                 any_cast<float>(in[0]),
-                                 any_cast<float>(in[1]),
-                                 any_cast<float>(in[2])
-                                 ));
-        }
-}
+    Vector3f color;
 
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), color))
+        )
+        {
+            return false;
+        }
+
+    obj->SetColor(color);
+    return true;
+}
 
 void CLASS(MaterialSolid)::DefineClass()
 {

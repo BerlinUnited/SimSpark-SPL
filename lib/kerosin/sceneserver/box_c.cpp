@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: box_c.cpp,v 1.1 2004/03/20 15:50:09 rollmark Exp $
+   $Id: box_c.cpp,v 1.2 2004/03/22 11:11:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,18 +25,20 @@ using namespace boost;
 using namespace kerosin;
 using namespace salt;
 
-FUNCTION(setExtents)
+FUNCTION(Box,setExtents)
 {
-    if (in.size() == 3)
-        {
-            Box* b = static_cast<Box*>(obj);
+    Vector3f inExtents;
 
-            b->SetExtents(Vector3f(
-                                   any_cast<float>(in[0]),
-                                   any_cast<float>(in[1]),
-                                   any_cast<float>(in[2])
-                                   ));
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in.begin(), inExtents))
+        )
+        {
+            return false;
         }
+
+    obj->SetExtents(inExtents);
+    return true;
 }
 
 void CLASS(Box)::DefineClass()

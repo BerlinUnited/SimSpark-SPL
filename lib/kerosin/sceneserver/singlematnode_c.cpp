@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematnode_c.cpp,v 1.1 2004/03/20 15:47:54 rollmark Exp $
+   $Id: singlematnode_c.cpp,v 1.2 2004/03/22 11:14:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,14 +23,21 @@
 
 using namespace boost;
 using namespace kerosin;
+using namespace std;
 
-FUNCTION(setMaterial)
+FUNCTION(SingleMatNode,setMaterial)
 {
-    if (in.size() == 1)
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inName))
+        )
         {
-            SingleMatNode* m = static_cast<SingleMatNode*>(obj);
-            m->SetMaterial(any_cast<char*>(in[0]));
+            return false;
         }
+
+    return obj->SetMaterial(inName);
 }
 
 void CLASS(SingleMatNode)::DefineClass()
