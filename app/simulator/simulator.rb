@@ -136,20 +136,20 @@ def addField()
 
   #
   # mark the soccer field with 4 field flags
-  addFlag('Flag1',-halfLength, 0.0, halfWidth)
-  addFlag('Flag2', halfLength, 0.0, halfWidth)
-  addFlag('Flag3', halfLength, 0.0,-halfWidth)
-  addFlag('Flag4',-halfLength, 0.0,-halfWidth)
+  addFlag('Flag_1_l',-halfLength, 0.0,-halfWidth)
+  addFlag('Flag_2_l',-halfLength, 0.0, halfWidth)
+  addFlag('Flag_1_r', halfLength, 0.0,-halfWidth)
+  addFlag('Flag_2_r', halfLength, 0.0, halfWidth)
 
   #
   # mark the left goal
-  addFlag('Goal1l',-halfLength,0.0,-halfGoalWidth)
-  addFlag('Goal1r',-halfLength,0.0,+halfGoalWidth)
+  addFlag('Goal_1_l',-halfLength, 0.0,-halfGoalWidth)
+  addFlag('Goal_2_l',-halfLength, 0.0, halfGoalWidth)
 
   #
   # mark the right goal
-  addFlag('Goal2l',halfLength,0.0,-halfGoalWidth)
-  addFlag('Goal2r',halfLength,0.0,+halfGoalWidth)
+  addFlag('Goal_1_r', halfLength, 0.0,-halfGoalWidth)
+  addFlag('Goal_2_r', halfLength, 0.0, halfGoalWidth)
 
   #
   # box collider around the playing field
@@ -203,9 +203,13 @@ end
 # init
 #
 
+# set a random seed (a seed of 0 means: use a random random seed)
+randomServer = get($serverPath+'random')
+randomServer.seed(0)
+
 # the soccer field dimensions in meters
-addSoccerVar('FieldLength', 105.0)
-addSoccerVar('FieldWidth', 68.0)
+addSoccerVar('FieldLength', randomServer.uniformRND(100.0,110.9).floor().to_f())
+addSoccerVar('FieldWidth', randomServer.uniformRND(64.0,75.9).floor().to_f())
 addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
@@ -219,7 +223,7 @@ addSoccerVar('AgentMaxSpeed', 10.0)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.111)
-addSoccerVar('BallMass',0.4)
+addSoccerVar('BallMass',randomServer.uniformRND(0.41,0.45))
 
 #
 # mount a standard file system
@@ -268,10 +272,16 @@ addField()
 
 # set the time of a single simulation step
 Spades.TimePerStep = 0.01
+# set up the number of simsteps per monitor message
+Spades.MonitorInterval = 4
+# set up the integrated comm server
+Spades.RunIntegratedCommserver = true
+# flag if we want to send agent think times
+Spades.SendAgentThinkTimes = false
 
 #
 # put a ball on the soccer field
-addBall(-36.0,0.5,-10.0)
+addBall(0.0,0.0,0.0)
 
 #
 # register game control aspects
