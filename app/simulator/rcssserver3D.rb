@@ -105,6 +105,7 @@ def addAgent(path)
   visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
   # set to true for debugging. will be set to false during competition
   visionPerceptor.setSenseMyPos(false);
+  visionPerceptor.addNoise(true);
 
   new('GameStatePerceptor', path+'GameStatePerceptor')
   new('AgentStatePerceptor', path+'AgentStatePerceptor')
@@ -209,7 +210,10 @@ def addField()
   #
   # box collider around the goals
   halfGoalDepth  = getSoccerVar('GoalDepth')/2.0
+  halfGoalWidth  = getSoccerVar('GoalWidth')/2.0
   halfGoalHeight = getSoccerVar('GoalHeight')/2.0
+  barHeight = 0.10
+  halfBarHeight = barHeight/2.0
 
   # left goal
   goalBoxLPath = $scenePath+'GoalBoxL/';
@@ -226,6 +230,36 @@ def addField()
 		       )
   new('oxygen/RecorderHandler', goalBoxLPath+'recorder')
 
+  # create the goal bar on top of the goal (left goal)
+  barL = new('oxygen/Transform', goalBoxLPath+'bar')
+  barL.setLocalPos(-halfLength-halfGoalDepth, 
+		   0.0,
+		   getSoccerVar('GoalHeight') + halfBarHeight)
+  boxBarL = new('oxygen/BoxCollider', goalBoxLPath+'bar/geometry')
+  boxBarL.setBoxLengths(getSoccerVar('GoalDepth'),
+			getSoccerVar('GoalWidth'),
+			barHeight)
+
+  # create the left goal post (left goal)
+  leftPostL = new('oxygen/Transform', goalBoxLPath+'leftPost')
+  leftPostL.setLocalPos(-halfLength-halfGoalDepth, 
+			-halfGoalWidth-halfBarHeight,
+			halfGoalHeight)
+  boxLeftPostL = new('oxygen/BoxCollider', goalBoxLPath+'leftPost/geometry')
+  boxLeftPostL.setBoxLengths(getSoccerVar('GoalDepth'),
+			     barHeight,
+			     getSoccerVar('GoalHeight') - barHeight)
+
+  # create the right goal post (left goal)
+  rightPostL = new('oxygen/Transform', goalBoxLPath+'rightPost')
+  rightPostL.setLocalPos(-halfLength-halfGoalDepth, 
+			halfGoalWidth+halfBarHeight,
+			halfGoalHeight)
+  boxRightPostL = new('oxygen/BoxCollider', goalBoxLPath+'rightPost/geometry')
+  boxRightPostL.setBoxLengths(getSoccerVar('GoalDepth'),
+			     barHeight,
+			     getSoccerVar('GoalHeight') - barHeight)
+
   # right goal
   goalBoxRPath = $scenePath+'GoalBoxR/';
   goalBoxR = new('oxygen/BoxCollider',goalBoxRPath)
@@ -240,6 +274,36 @@ def addField()
 		       halfGoalHeight
 		       )
   new('oxygen/RecorderHandler', goalBoxRPath+'recorder')
+
+  # create the goal bar on top of the goal (right goal)
+  barR = new('oxygen/Transform', goalBoxRPath+'bar')
+  barR.setLocalPos(halfLength+halfGoalDepth, 
+		   0.0,
+		   getSoccerVar('GoalHeight') + halfBarHeight)
+  boxBarR = new('oxygen/BoxCollider', goalBoxRPath+'bar/geometry')
+  boxBarR.setBoxLengths(getSoccerVar('GoalDepth'),
+			getSoccerVar('GoalWidth'),
+			barHeight)
+
+  # create the left goal post (right goal)
+  leftPostR = new('oxygen/Transform', goalBoxRPath+'leftPost')
+  leftPostR.setLocalPos(halfLength+halfGoalDepth, 
+			-halfGoalWidth-halfBarHeight,
+			halfGoalHeight)
+  boxLeftPostR = new('oxygen/BoxCollider', goalBoxRPath+'leftPost/geometry')
+  boxLeftPostR.setBoxLengths(getSoccerVar('GoalDepth'),
+			     barHeight,
+			     getSoccerVar('GoalHeight') - barHeight)
+
+  # create the right goal post (right goal)
+  rightPostR = new('oxygen/Transform', goalBoxRPath+'rightPost')
+  rightPostR.setLocalPos(halfLength+halfGoalDepth, 
+			 halfGoalWidth+halfBarHeight,
+			 halfGoalHeight)
+  boxRightPostR = new('oxygen/BoxCollider', goalBoxRPath+'rightPost/geometry')
+  boxRightPostR.setBoxLengths(getSoccerVar('GoalDepth'),
+			      barHeight,
+			      getSoccerVar('GoalHeight') - barHeight)
 end
 
 #
