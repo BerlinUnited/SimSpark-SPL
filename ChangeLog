@@ -1,3 +1,23 @@
+2004-04-16  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/lib/tcpsocket.cpp: 
+	* app/rcssmonitor3d/lib/tcpsocket.h: 
+	- moved to utility/rcssnet/
+	
+	* app/rcssmonitor3d/lib/communit.cpp: 
+	* app/rcssmonitor3d/lib/communit.h: 
+	- changed headers from rcssbase to utility/rcssnet
+
+	* app/simspark/Makefile.am: 
+	added librcssnet3D instead of rcssbase/net library
+
+	* utility/rcssnet/:
+	of the libpkgincludedir
+	added rcssnet library
+	- the rcssnet library consists of the rcssbase 9.4.5 net part plus
+	- an implementation of tcpsocket
+	so that users do not need to install rcssbase
+
 2004-04-15    Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/simspark/rsg/boxspheres/box.rsg,

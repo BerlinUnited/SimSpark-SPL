@@ -52,8 +52,10 @@ LIBS=$TMP_LIBS
 
 # Checks for header files.
 AC_HEADER_STDC
+AC_CHECK_HEADERS([poll.h])
+AC_CHECK_HEADERS([arpa/nameser.h])
+AC_CHECK_HEADERS([resolv.h])
 AC_CHECK_HEADERS([float.h limits.h malloc.h memory.h stdlib.h string.h])
-
 
 AC_CHECK_HEADER([boost/version.hpp],,
 	AC_MSG_ERROR([boost library not found. Please specify the location 
@@ -65,6 +67,11 @@ AC_CHECK_HEADERS([hash_map],,
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
+
+AC_CHECK_TYPES([socklen_t], [], [], [
+#include <sys/types.h>
+#include <sys/socket.h>
+])
 
 # Checks for library functions.
 AC_FUNC_ALLOCA
@@ -81,6 +88,12 @@ AC_CONFIG_LIBOBJ_DIR(./utility/libobj/)
 AC_REPLACE_FUNCS([_vsnprintf])
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr strupr])
 
+AC_SUBST(NET_LIBS)
+AC_CHECK_LIB(socket, socket, [NET_LIBS="-lsocket"])
+AC_CHECK_LIB(nsl, gethostbyname, [NET_LIBS="$NET_LIBS -lnsl"])
+AC_CHECK_LIB(posix4, sched_yield, [NET_LIBS="$NET_LIBS -lposix4"])
+AC_CHECK_LIB(resolv, hstrerror, [NET_LIBS="$NET_LIBS -lresolv"])
+
 ## checks for system services
 
 # This test is required here because of the soccer monitor.
@@ -91,7 +104,6 @@ if test "$rcss_build_kerosin" = no; then
 	AC_MSG_ERROR([need GL stuff to build monitor])
 fi
 
-RCSS_CHECK_RCSSBASE
 RCSS_BUILD_KEROSIN
 RCSS_BUILD_SOUNDSYSTEMFMOD
 RCSS_PATH_RUBY
@@ -140,6 +152,7 @@ AC_CONFIG_FILES([Makefile \
 		 utility/glextgen/glextgen.rb \
 		 utility/libobj/Makefile \
 		 utility/sfsexp/Makefile \
+		 utility/rcssnet/Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/salt/salt-config \
