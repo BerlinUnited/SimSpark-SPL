@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.1.2.3.2.1 2003/12/19 23:40:57 fruit Exp $
+   $Id: monitorserver.cpp,v 1.1.2.3.2.2 2003/12/21 19:25:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
 {
     // check if a monitor system of the requested type was already created
     shared_ptr<MonitorSystem> monitorSys =
-        shared_static_cast<MonitorSystem>(GetChildOfClass(monitorSysName));
+        shared_dynamic_cast<MonitorSystem>(GetChildOfClass(monitorSysName));
 
     if (monitorSys.get() != 0)
     {
@@ -48,7 +48,7 @@ MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
     }
 
     // create the monitor system
-    monitorSys = shared_static_cast<MonitorSystem>(GetCore()->New(monitorSysName));
+    monitorSys = shared_dynamic_cast<MonitorSystem>(GetCore()->New(monitorSysName));
 
     if (monitorSys.get() == 0)
     {
@@ -66,6 +66,9 @@ MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
                               << monitorSysName << "' to the hierarchy\n";
             return false;
         }
+
+    GetLog()->Debug() << "(MonitorServer) Registered monitor system '"
+                      << monitorSysName << "'\n";
 
     return true;
 }
