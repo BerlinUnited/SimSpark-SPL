@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.cpp,v 1.6 2004/04/10 08:30:45 rollmark Exp $
+   $Id: class.cpp,v 1.7 2004/04/10 08:55:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,9 +125,9 @@ void Class::SetBundle(const boost::shared_ptr<salt::SharedLibrary> &bundle)
     mBundle = bundle;
 }
 
-Class::TCmdProc Class::GetCmdProc(const std::string &functionName)
+Class::TCmdProc Class::GetCmdProc(const std::string &functionName) const
 {
-    TCommandMap::iterator cmd = mFunctions.find(functionName);
+    TCommandMap::const_iterator cmd = mFunctions.find(functionName);
 
     if (cmd != mFunctions.end())
     {
@@ -139,7 +139,7 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName)
     shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
 
     for (
-         TStringList::iterator baseClass = mBaseClasses.begin();
+         TStringList::const_iterator baseClass = mBaseClasses.begin();
          baseClass != mBaseClasses.end();
          ++baseClass
          )
@@ -170,6 +170,11 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName)
 const Class::TStringList& Class::GetBaseClasses() const
 {
     return mBaseClasses;
+}
+
+bool Class::SupportsCommand(const std::string & name) const
+{
+    return (GetCmdProc(name) != 0);
 }
 
 bool Class::SupportsClass(const std::string &name) const

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.h,v 1.11 2004/04/10 08:30:45 rollmark Exp $
+   $Id: class.h,v 1.12 2004/04/10 08:55:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -180,15 +180,21 @@ public:
     void SetBundle(const boost::shared_ptr<salt::SharedLibrary> &bundle);
 
     /** the command procedure for a function */
-    TCmdProc GetCmdProc(const std::string &functionName);
+    TCmdProc GetCmdProc(const std::string &functionName) const;
 
     /** returns a list of base class names */
     const TStringList& GetBaseClasses() const;
 
-    /** return true if the class supports a given 'interface',
+    /** returns true iff the class supports a given 'interface',
      *  i.e. the base class hierarchy contains the class 'name'
      */
     bool SupportsClass(const std::string &name) const;
+
+    /** returns true iff the class supports a given command, i.e. to
+     *  this class or to one of its base classes the given command
+     *  procedure is registered
+     */
+    bool SupportsCommand(const std::string &name) const;
 
 protected:
     /** adds an instance to the local list of instances */
