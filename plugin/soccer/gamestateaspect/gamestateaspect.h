@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.1.2.3 2004/01/31 15:14:08 rollmark Exp $
+   $Id: gamestateaspect.h,v 1.1.2.4 2004/01/31 17:24:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,12 @@ public:
     /** returns the current game time */
     TTime GetTime() const;
 
+    /** sets the current game half */
+    void SetGameHalf(TGameHalf half);
+
+    /** returns the current game half */
+    TGameHalf GetGameHalf();
+
     /** sets the name of a team */
     void SetTeamName(TTeamIndex idx, std::string name);
 
@@ -60,6 +66,12 @@ public:
         teamname */
     bool GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
                                          std::string teamName, unsigned int unum);
+
+    /** increments the score of a team */
+    void ScoreTeam(TTeamIndex idx);
+
+    /** returns the score of a team */
+    int GetScore(TTeamIndex idx);
 
 protected:
     /** advances the game time */
@@ -82,11 +94,17 @@ protected:
     /** the current game time */
     TTime mTime;
 
+    /** the current half of the game */
+    TGameHalf mGameHalf;
+
     /** the names of the two teams */
     std::string mTeamName[2];
 
     /** the set of uniform number for each team */
     TUnumSet mUnumSet[2];
+
+    /** the scores of two teams */
+    int mScore[2];
 };
 
 DECLARE_CLASS(GameStateAspect);
