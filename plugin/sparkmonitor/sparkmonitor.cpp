@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.2 2004/04/29 15:23:00 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.3 2004/04/30 09:39:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <kerosin/sceneserver/singlematnode.h>
 #include <kerosin/materialserver/material.h>
+#include <oxygen/sceneserver/sceneserver.h>
 #include <sstream>
 
 using namespace kerosin;
@@ -98,6 +99,7 @@ void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)
 
 void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> transform)
 {
+    const float precision = 0.005;
     const Matrix& mat = transform->GetLocalTransform();
 
     if (mFullState)
@@ -108,14 +110,43 @@ void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> tra
                 ss << "(node";
             }
 
-    ss << " (setLocalTransform ";
-
-    for (int i=0;i<16;++i)
+    // include transform data only for fullstate or a modified
+    // transform node
+    bool update = false;
+    if (mFullState)
         {
-            ss << mat.m[i] << " ";
-        }
+            update = true;
+        } else
+            {
+                if (SceneServer::GetTransformMark() == transform->GetChangedMark())
+                {
+                    const salt::Matrix& current = transform->GetLocalTransform();
+                    const salt::Matrix& old = transform->GetOldLocalTransform();
+                    for (int i=0;i<16;++i)
+                        {
+                            const float d = fabs(current.m[i] - old.m[i]);
 
-    ss << ")";
+                            if (d > precision)
+                                {
+                                    update = true;
+                                    break;
+                                }
+                        }
+                }
+            }
+
+
+    if (update)
+        {
+            ss << " (setLocalTransform ";
+
+            for (int i=0;i<16;++i)
+                {
+                    ss << mat.m[i] << " ";
+                }
+
+            ss << ")";
+        }
 }
 
 void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> mesh)
