@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.5.8.1 2004/01/11 11:14:28 rollmark Exp $
+   $Id: collider.h,v 1.5.8.2 2004/01/12 14:34:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,20 +23,22 @@
 #define OXYGEN_COLLIDER_H
 
 #include "odeobject.h"
+#include <string>
 
 namespace oxygen
 {
-
 class Space;
 class World;
 
-/** Collider encapsulates an ODE geometry object ('geom' for short). Geoms are
-    the fundamental objects in the collision system. They represents a single
-    rigid shape (such as a sphere or box), or represent a group of other
-    geoms- this is a special kind of geom called a 'space'. A geom is
-    associated with rigid body objects. This allows the collision engine to
-    get the position and orientation of the geoms from the bodies. A body and
-    a geom together represent all the properties of the simulated object.
+/** \class Collider encapsulates an ODE geometry object- geom for
+    short. Geoms are the fundamental objects in the collision
+    system. They represent a single rigid shape as for example a
+    sphere or a box. A special kind of geom called 'space' can
+    represent a group of other geoms. A placeable geom can be
+    associated with rigid body objects. This allows the collision
+    engine to get the position and orientation of the geoms from the
+    bodies. A body and a geom together represent all the properties of
+    the simulated object.
 */
 class Collider : public ODEObject
 {
@@ -47,37 +49,38 @@ public:
     Collider();
     virtual ~Collider();
 
-    /** notifies the collider that a collision with antother geometry
-       object has occured. It is ususally called from
-       Space::HandleCollide(). For a collision to affect the
-       simulation the collider has to fill in the missing contact
-       surface parameters and create an ODE contact joint between the
-       bodies corresponding to the geoms.
-
-       The default behaviour of OnCollision is to call
-       CreateContactJoint() and OnCollisionInternal(). These two
-       methods can be used in derived classes to implement custom
-       collision behaviour.
+    /** notifies the Collider that a collision with another geometry
+       object has occured. It is called from Space::HandleCollide.
+       For the effects of a collision to be considered in the further
+       simulation the Collider has to construct an ODE contact joint
+       between the bodies associated to the affected geoms. This task
+       among others is delegated to a set of CollisionHandler objects
+       registered to a Collider.
 
        \param collidee is the geom ID of the collision partner
 
-       \param contact is the contact data describing a contact point
-       between the two collision partners
-     */
+       \param holds the contact points between the two affected geoms
+       as returned from ODE dCollide function
+    */
     virtual void OnCollision(dGeomID collidee,dContact& contact);
+
+    /** registers a new collision handler to this collider. If no
+        collision handler is registered until the first call to
+        OnCollision a ContactJointHandler is automatically registered.
+
+        \param handlerName is the class name of the CollisionHandler
+     */
+    bool AddCollisionHandler(const std::string& handlerName);
 
     /** returns the Collider corresponding to the given ODE geom  */
     static Collider* GetCollider(dGeomID id);
 
-    /** sets the surface parameters for the contact joints that this
-        Collider will create
-    */
-    void SetSurfaceParameter(const dSurfaceParameters& surface);
+    /** returns the ID of managed ODE geom */
+    dGeomID GetODEGeom();
 
 protected:
-
-    /** registers the managed geom to the Space of the Scene and our
-        associated ODE body
+    /** registers the managed geom to the Space of the Scene and to
+        the associated ODE body
     */
     virtual void OnLink();
 
@@ -86,39 +89,18 @@ protected:
      */
     virtual void OnUnlink();
 
-    /** CreateContactJoint is called from OnCollision(). It creates a
-        contact joint between the bodies corresponding to this and the
-        collidee's geom using the default surface parameters stored in
-        the mSurfaceParameter member.
-    */
-    virtual void CreateContactJoint(dGeomID collidee,dContact& contact);
-
-    /** OnCollisionInternal is called from OnCollision(). The default
-        implementation searches for a CollisionPerceptor below the
-        closest Transform node on the way up the hierarchy and
-        notifies it that a collision has occured.
-     */
-    virtual void OnCollisionInternal(dGeomID collidee,dContact& contact);
-
     //
     // Members
     //
 protected:
-
-    /** the world this collider is associated with */
-    boost::shared_ptr<World> mWorld;
-
     /** the space this collider is associated with */
     boost::shared_ptr<Space> mSpace;
 
     /** the ode collision geometry */
     dGeomID mODEGeom;
-
-    /** the ODE surface parameters of the created contact joint */
-    dSurfaceParameters mSurfaceParameter;
 };
 
-    DECLARE_CLASS(Collider);
+DECLARE_CLASS(Collider);
 
 } //namespace oxygen
 
