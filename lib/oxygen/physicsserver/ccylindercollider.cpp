@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.cpp,v 1.3 2004/02/12 14:07:22 fruit Exp $
+   $Id: ccylindercollider.cpp,v 1.4 2004/04/15 16:48:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,18 +29,18 @@ CCylinderCollider::CCylinderCollider() : Collider()
 
 void CCylinderCollider::SetParams(float radius, float length)
 {
-  dGeomCCylinderSetParams (mODEGeom, radius, length);
+    dGeomCCylinderSetParams (mODEGeom, radius, length);
 }
 
 bool CCylinderCollider::ConstructInternal()
 {
-  if (! Collider::ConstructInternal())
-    {
-      return false;
-    }
+    if (! Collider::ConstructInternal())
+        {
+            return false;
+        }
 
-  // create a unit capped cylinder
-  mODEGeom = dCreateCCylinder (0, 1.0f, 1.0f);
+    // create a unit capped cylinder
+    mODEGeom = dCreateCCylinder (0, 1.0f, 1.0f);
 
-  return (mODEGeom != 0);
+    return (mODEGeom != 0);
 }
