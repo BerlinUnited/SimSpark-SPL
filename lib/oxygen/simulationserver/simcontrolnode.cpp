@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.cpp,v 1.1 2004/04/25 16:43:51 rollmark Exp $
+   $Id: simcontrolnode.cpp,v 1.2 2004/12/22 15:55:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ using namespace salt;
 using namespace std;
 using namespace boost;
 
-SimControlNode::SimControlNode() : Leaf()
+SimControlNode::SimControlNode() : Node()
 {
 }
 
