@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.2.2.4 2003/12/25 13:18:14 rollmark Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.2.2.5 2003/12/26 13:37:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,18 +66,19 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
         return false;
     }
 
-    // we want positions relative the parent transform node
+    // we want positions relative to the closest parent transform node
     shared_ptr<Transform> parent =
-        shared_dynamic_cast<Transform>(make_shared(GetParent()));
+        shared_dynamic_cast<Transform>(GetParentSupportingClass("Transform"));
 
-    salt::Vector3f myPos;
+    salt::Vector3f myPos(0,0,0);
     if (parent.get() == 0)
     {
         GetLog()->Warning()
             << "WARNING: (PerfectVisionPerceptor) parent node is not derived from TransformNode\n";
-    } else {
-        myPos = parent->GetWorldTransform().Pos();
-    }
+    } else
+        {
+            myPos = parent->GetWorldTransform().Pos();
+        }
 
     TLeafList transformList;
     activeScene->GetChildrenSupportingClass("Transform", transformList, true);
