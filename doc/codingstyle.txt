@@ -1,14 +1,14 @@
+-*- outline -*-
+
 coding - style
 ==============
 
   This is the coding style I'm trying to use for the 3D server. Would be 
   nice if everybody else also tries to use it; however, I'm not going to
-  start holy wars it :)
+  start holy wars on it :)
   If you think something should be changed for a good reason, please do
   so. (Oliver)
 
-Tabs, Indentation and Placing Braces
-------------------------------------
 
 * Tabs 
 
@@ -64,52 +64,53 @@ ClassName::function()
 
 * Naming Conventions
 
-  Structures:
   class         ClassName;
-  struct        SStructName;
-  typedef int   TInt;
+  struct        StructName;
+  typedef int   MyInt;
+  union		UnionName;
 
 ** Enums
 
-  Enumeration types 'enum' start with a capital 'E', followed by the
-  type name starting with a capital letter.
+  Enumeration types 'enum' are starting with a capital letter.
 
-  Enumeration elements start with 'e', followed by the
-  name of the constant starting with a capital letter.
+  Enumeration elements start with 'S_', followed by the
+  name of the constant in all capitals (words separated by '_'). 
 
   Example:
-  enum EEnumName
+  enum EnumName
   {
-      eEnumElement1,
-      eEnumElement2
+      S_ENUM_ELEMENT_1,
+      S_ENUM_ELEMENT_2
   };
-
 
 ** Functions:
 
    void 
    ClassName::functionName()
 
-   place the return type on a seperate line 
-
+   - place the return type on a separate line 
+   - no blanks between function name and parenthesis
 
 ** Variables:
 
 *** Variables with local scope 
 
    Variables with local scope start with a small letter. New words
-   within the variable name start with a captial letter.
+   within the variable are separated by '_'.
 
-   Example: myVariable
+   Example: my_variable
 
 *** Member variables
 
-   Member variables start with a 'm', followed by the variable name,
-   beginning with a capital letter. New words within the variable name
-   start with a captial letter.
+   Member variables start with 'M_', followed by the variable name in small 
+   letters. New words within the variable name are separated by '_'.
 
-   Example: mMemberVariable
+   Example: M_member_variable
 
+   Constant static member variables (and enums) are the same but
+   capitalised.
+
+   Example: S_STATIC_CONST_MEMBER_VARIABLE
 
 ** Macros 
 
@@ -126,30 +127,78 @@ ClassName::function()
 
   Example:
 
-/*! This is a comment 
-    for more than one line
-*/
+  /*! This is a comment 
+      for more than one line
+  */
 
-//! This is a comment for exactly one line
+  //! This is a comment for exactly one line
 
-** There are some standard comments for parts of the code ('gotchas'): 
+** Gotchas
+  
+    There are some standard comments for parts of the code ('gotchas'): 
     ':TODO:',':BUG:'. Gotchas are the first part of a comment.
 
     Example:
 
-//:BUG: There is a bug below someone has to remove
+    //:BUG: There is a bug below someone has to remove
 
-/*:TODO: The stuff below
-  needs some clean up
-*/
+    /*:TODO: The stuff below
+             needs some clean up
+     */
 
 * Files
 
 - file names consist of only small letters
 - .h is the suffix for c++ header files, .cc is the suffix for c++ source files
 - max line length is 80 characters
+- include copyright:
+
+// -*-c++-*-
+
+/***************************************************************************
+                                   filename  
+                                 Description
+                             -------------------
+    begin                : begin date
+    copyright            : (C) year (or years) by The RoboCup Soccer Simulator
+                           Maintenance Group.
+    email                : sserver-admin@lists.sourceforge.net
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU GPL as published by the Free Software  *
+ *   Foundation; either version 2 of the License, or (at your option) any  *
+ *   later version.                                                        *
+ *                                                                         *
+ ***************************************************************************/
 
 ** Header files
+
+Header files are protected by include guards, and the autoconf config.h file
+should be included:
+
+#ifndef MY_HEADER_FILE_H
+#define MY_HEADER_FILE_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+But this usually doesn't take namespaces into account, which means that 
+sometimes header files from different libs can clash, so I've started using
+
+#ifndef NAMESPACE_MY_HEADER_FILE_H
+#define NAMESPACE_MY_HEADER_FILE_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+where namespaces are used (which should be most of the time).
+
+** Class declaration style
 
 class ClassName
 {
@@ -180,3 +229,13 @@ protected:
 private:
 	// private members
 };
+
+* Options for GNU indent to fix broken code
+
+  These are the options for GNU indent to get your code looking
+  pretty OK. Since indent seems to be a little bit non-deterministic, 
+  better don't use it for files that are looking almost perfect :). 
+
+-nbad -bap -sob --dont-star-comments --no-comment-delimiters-on-blank-lines
+-cp33 -d0 -nfc1 -nfca -bl -bli0 -cli4 -cbi0 -ss -npcs -nprs -saf -saw -sai -cs
+-ip0 -di1 -nbc -psl -bls -i4 -nut -ci0 -di1 -lp -l80 -nbbo -hnl
