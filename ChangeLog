@@ -1,3 +1,22 @@
+2004-07-21  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/rcssmonitor3d/lite/monitor.cpp:
+	- changed automatic camera behaviour to center on the ball position
+	projected on the ground; this prevents an overly nervous camera
+	movement when the ball is moving off the ground
+
+	* app/simspark/rsg/agent/soccerplayer.rsg:
+	- configured visionpercpetor to generate data relative to it's own
+	orientation and disabled noise
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp,
+	* plugin/soccer/visionperceptor/visionperceptor.h,
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp:
+	- cleaned up VisionPerceptor implementation
+	- addded experimental support for dynamic axis vision perception;
+	i.e. the perceptor optinally takes it's own orientation into
+	account
+
 2004-06-20  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
