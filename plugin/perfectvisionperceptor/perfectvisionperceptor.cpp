@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.2.2.3 2003/12/24 18:03:24 fruit Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.2.2.4 2003/12/25 13:18:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ PerfectVisionPerceptor::~PerfectVisionPerceptor()
 }
 
 bool
-PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
+PerfectVisionPerceptor::Percept(Predicate& predicate)
 {
     predicate.name = "PerfectVision";
     predicate.parameter.clear();
@@ -88,13 +88,13 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
         shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
         const salt::Vector3f& pos = j->GetWorldTransform().Pos() - myPos;
 
-        BaseParser::TParameterList position;
+        Predicate::TParameterList position;
         position.push_back(std::string("pos"));
         position.push_back(pos[0]);
         position.push_back(pos[1]);
         position.push_back(pos[2]);
 
-        BaseParser::TParameterList element;
+        Predicate::TParameterList element;
 
         element.push_back((*i)->GetName());
         element.push_back(position);

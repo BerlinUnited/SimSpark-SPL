@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector.h,v 1.5 2003/12/21 23:36:36 fruit Exp $
+   $Id: effector.h,v 1.5.2.1 2003/12/25 13:15:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public:
 
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<ActionObject>
-    GetActionObject(const BaseParser::TPredicate& predicate) = 0;
+    GetActionObject(const Predicate& predicate) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(Effector);

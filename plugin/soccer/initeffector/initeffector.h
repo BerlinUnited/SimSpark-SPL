@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.h,v 1.1.2.1 2003/12/24 17:48:35 fruit Exp $
+   $Id: initeffector.h,v 1.1.2.2 2003/12/25 13:19:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public:
 
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
-    GetActionObject(const oxygen::BaseParser::TPredicate& predicate);
+    GetActionObject(const oxygen::Predicate& predicate);
 
 };
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.2.2.2 2003/12/25 12:30:50 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.2.2.3 2003/12/25 13:16:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -208,7 +208,7 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) con
         }
 
     // use the parser to create a TPredicateList
-    shared_ptr<BaseParser::TPredicateList> predicates(mParser->Parse(str));
+    shared_ptr<Predicate::TList> predicates(mParser->Parse(str));
 
     // construct an ActionList using the registered effectors
     shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
@@ -219,12 +219,12 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) con
 
     for
         (
-         BaseParser::TPredicateList::iterator iter = predicates->begin();
+         Predicate::TList::iterator iter = predicates->begin();
          iter != predicates->end();
          ++iter
         )
         {
-            BaseParser::TPredicate& predicate = (*iter);
+            Predicate& predicate = (*iter);
 
             shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
             if (effector.get() == 0)
@@ -258,19 +258,4 @@ shared_ptr<AgentAspect> GameControlServer::GetAgentAspect(int id)
             {
                 return (*iter).second;
             }
-}
-
-
-
-std::string
-GameControlServer::TmpGenerate(const BaseParser::TPredicate& pred)
-{
-    if (mParser != 0)
-    {
-        shared_ptr<BaseParser::TPredicateList>
-            plist(new BaseParser::TPredicateList());
-        plist->push_back(pred);
-        return mParser->Generate(plist);
-    }
-    return string();
 }

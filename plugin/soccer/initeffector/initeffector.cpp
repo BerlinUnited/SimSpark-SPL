@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.1.2.1 2003/12/24 17:48:35 fruit Exp $
+   $Id: initeffector.cpp,v 1.1.2.2 2003/12/25 13:19:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
 }
 
 shared_ptr<ActionObject>
-InitEffector::GetActionObject(const BaseParser::TPredicate& predicate)
+InitEffector::GetActionObject(const Predicate& predicate)
 {
     if (predicate.name != GetPredicate())
     {
@@ -85,13 +85,15 @@ InitEffector::GetActionObject(const BaseParser::TPredicate& predicate)
         return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
     }
 
-    BaseParser::TParameterList::const_iterator i = predicate.parameter.begin();
+    Predicate::TParameterList::const_iterator i = predicate.parameter.begin();
 
     std::string name = any_cast<std::string>(*i);
     std::string number = "0";
     ++i;
     if (i != predicate.parameter.end())
-        number = any_cast<std::string>(*i);
+        {
+            number = any_cast<std::string>(*i);
+        }
 
     int n = std::atoi(number.c_str());
     return shared_ptr<ActionObject>(new InitAction(name,n));

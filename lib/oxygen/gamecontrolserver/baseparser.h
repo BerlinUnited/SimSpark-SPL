@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: baseparser.h,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: baseparser.h,v 1.2.2.1 2003/12/25 13:16:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,10 +22,9 @@
 #ifndef OXYGEN_BASEPARSER_H
 #define OXYGEN_BASEPARSER_H
 
-#include <list>
-#include <boost/any.hpp>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include "predicate.h"
 
 namespace oxygen
 {
@@ -33,18 +32,9 @@ namespace oxygen
 class BaseParser : public zeitgeist::Leaf
 {
 public:
-    typedef std::list<boost::any> TParameterList;
 
-    struct TPredicate
-    {
-        std::string name;
-        TParameterList parameter;
-    };
-
-    typedef std::list<TPredicate> TPredicateList;
-
-    virtual boost::shared_ptr<TPredicateList> Parse(const std::string& input) = 0;
-    virtual std::string Generate(boost::shared_ptr<TPredicateList> input) = 0;
+    virtual boost::shared_ptr<Predicate::TList> Parse(const std::string& input) = 0;
+    virtual std::string Generate(boost::shared_ptr<Predicate::TList> input) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(BaseParser);

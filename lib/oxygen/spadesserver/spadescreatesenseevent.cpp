@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadescreatesenseevent.cpp,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: spadescreatesenseevent.cpp,v 1.2.2.1 2003/12/25 13:16:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -122,7 +122,7 @@ spades::SenseEvent* SpadesCreateSenseEvent::createSense(spades::WorldModel* p)
 
     // get a list of senses from the agent and generate a string
     // describing them
-    shared_ptr<BaseParser::TPredicateList> senseList = agent->QueryPerceptors();
+    shared_ptr<Predicate::TList> senseList = agent->QueryPerceptors();
     std::string senses = parser->Generate(senseList);
 
     // create the sense event

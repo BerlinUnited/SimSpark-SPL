@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.2 2003/12/21 23:36:38 fruit Exp $
+   $Id: forceeffector.cpp,v 1.2.2.1 2003/12/25 13:17:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ bool ForceEffector::Realize(boost::shared_ptr<ActionObject> action)
 }
 
 shared_ptr<ActionObject>
-ForceEffector::GetActionObject(const BaseParser::TPredicate& predicate)
+ForceEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {

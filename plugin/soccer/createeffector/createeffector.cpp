@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.1.2.2 2003/12/25 13:07:00 fruit Exp $
+   $Id: createeffector.cpp,v 1.1.2.3 2003/12/25 13:19:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
 }
 
 shared_ptr<ActionObject>
-CreateEffector::GetActionObject(const BaseParser::TPredicate& predicate)
+CreateEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {
