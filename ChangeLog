@@ -1,3 +1,11 @@
+2004-05-24  Patrick Riley <pfr@cs.cmu.edu>
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	- Fixed a bug in parseAct which was using the engine's simulation
+	time rather than the time in the parseAct function call as the
+	time of the action reception. This fixes a bug reported by 
+	liyang <subwood@ustc.edu>
+	
 2004-05-14  Oliver Obst  <fruit@robolog.org>
 
 	* released rcssserver3D-0.2.2
