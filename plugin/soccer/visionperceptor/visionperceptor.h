@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.1.2.7 2004/02/06 10:15:47 rollmark Exp $
+   $Id: visionperceptor.h,v 1.1.2.8 2004/02/07 18:52:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ protected:
 private:
     struct ObjectData
     {
-        boost::shared_ptr<Leaf> mObj;
+        boost::shared_ptr<ObjectState> mObj;
 
         float mDist; float mTheta, mPhi;
         salt::Vector3f mRelPos;
