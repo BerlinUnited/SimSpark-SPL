@@ -1,0 +1,208 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: soccerbehavior.cpp,v 1.1 2004/05/17 09:18:01 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+#include "soccerbehavior.h"
+#include <iostream.h>
+#include <sstream>
+
+using namespace oxygen;
+using namespace zeitgeist;
+using namespace std;
+using namespace salt;
+using namespace boost;
+
+SoccerBehavior::SoccerBehavior() : mZG("." PACKAGE_NAME), mMyPos(0,0,0)
+{
+}
+
+SoccerBehavior::~SoccerBehavior()
+{
+}
+
+void SoccerBehavior::SetupVisionObjectMap()
+{
+    mVisionObjectMap.clear();
+    mVisionObjectMap["Ball"]    = VO_BALL;
+}
+
+string SoccerBehavior::Init()
+{
+    mZG.GetCore()->ImportBundle("sexpparser");
+    mParser = shared_static_cast<BaseParser>
+        (mZG.GetCore()->New("SexpParser"));
+
+    if (mParser.get() == 0)
+        {
+            cerr << "unable to create SexpParser instance." << endl;
+        }
+
+    SetupVisionObjectMap();
+
+    // use the scene effector to build the agent
+    return "(scene rsg/agent/soccerplayer.rsg)";
+}
+
+void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
+{
+    for (
+         Predicate::Iterator iter(predicate);
+         iter != iter.end();
+         ++iter
+         )
+        {
+            // extract the element as a parameter list
+            Predicate::Iterator paramIter = iter;
+            if (! predicate.DescentList(paramIter))
+                {
+                    continue;
+                }
+
+            // read the object name
+            string name;
+            if (! predicate.GetValue(paramIter,name))
+            {
+                continue;
+            }
+
+            // try read the 'id' section
+            string strId;
+            if (predicate.GetValue(paramIter,"id", strId))
+                {
+                    name += strId;
+                }
+
+            // try to lookup the VisionObject
+            TVisionObjectMap::iterator iter = mVisionObjectMap.find(name);
+            if (iter == mVisionObjectMap.end())
+                {
+                    continue;
+                }
+
+            VisionObject vo = (*iter).second;
+
+            // find  to the 'pol' entry in the object's section
+            Predicate::Iterator polIter = paramIter;
+            if (! predicate.FindParameter(polIter,"pol"))
+                {
+                    continue;
+                }
+
+            // read the position vector
+            VisionSense sense;
+            if (
+                (! predicate.AdvanceValue(polIter,sense.distance)) ||
+                (! predicate.AdvanceValue(polIter,sense.theta)) ||
+                (! predicate.AdvanceValue(polIter,sense.phi))
+                )
+            {
+                continue;
+            }
+
+            // update the vision map
+            mVisionMap[vo] = sense;
+        }
+}
+
+SoccerBehavior::VisionSense SoccerBehavior::GetVisionSense(VisionObject obj)
+{
+    TVisionMap::iterator iter = mVisionMap.find(obj);
+
+    if (iter == mVisionMap.end())
+        {
+            cerr << "unknown VisionObject " << obj << "\n";
+            return VisionSense();
+        }
+
+    return (*iter).second;
+}
+
+Vector3f SoccerBehavior::GetPosition(VisionSense sense)
+{
+    return mMyPos + GetDriveVec(sense) * sense.distance;
+}
+
+Vector3f SoccerBehavior::GetPosition(VisionObject obj)
+{
+    return GetPosition(GetVisionSense(obj));
+}
+
+Vector3f SoccerBehavior::GetDriveVec(const VisionSense& vision)
+{
+    return Vector3f
+        (
+         vision.distance * gCos(gDegToRad(vision.theta)) *
+         gSin(gDegToRad(90.0f - vision.phi)),
+
+         vision.distance * gSin(gDegToRad(vision.theta)) *
+         gSin(gDegToRad(90.0f - vision.phi)),
+
+         vision.distance * gCos(gDegToRad(90.0f - vision.phi))
+         );
+}
+
+void SoccerBehavior::ParseVision(const Predicate& predicate)
+{
+    ParseObjectVision(predicate);
+
+    // find the PerfectVision data about the object
+    Predicate::Iterator iter(predicate);
+
+    // advance to the section about object 'name'
+    if (! predicate.FindParameter(iter,"mypos"))
+        {
+            return;
+        }
+
+    // read my position
+    VisionSense sense;
+
+    predicate.GetValue(iter,mMyPos);
+}
+
+string SoccerBehavior::Think(const std::string& message)
+{
+    shared_ptr<PredicateList> predList =
+        mParser->Parse(message);
+
+    if (predList.get() != 0)
+    {
+        PredicateList& list = *predList;
+
+        for (
+             PredicateList::TList::const_iterator iter = list.begin();
+             iter != list.end();
+             ++iter
+             )
+            {
+                const Predicate& predicate = (*iter);
+
+                // check for the Vision perceptor
+                if (predicate.name == "Vision")
+                    {
+                        ParseVision(predicate);
+                        continue;
+                    }
+            }
+    }
+
+    VisionSense vs = GetVisionSense(VO_BALL);
+    Vector3f ballPos = GetDriveVec(GetVisionSense(VO_BALL));
+
+    return "(lte 150)(rte 200)";
+}
