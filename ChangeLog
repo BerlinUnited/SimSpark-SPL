@@ -1,3 +1,100 @@
+2002-10-16  Oliver Obst  <fruit@robolog.org>
+
+	* ./configure.in
+	Checking for the readline headers and library.
+
+	* ./simulator/basenode.cc
+	* ./simulator/basenode.h
+	Added a virtual method process() that will be executed
+	for each object in the entity tree each simulator step. 
+	Changes because the Parent node is of type DirNode now.
+	Renamed rcss::EntityTree namespace to rcss::entity.
+	
+	* ./simulator/dirnode.cc
+	* ./simulator/dirnode.h
+	Changes because the Parent node is of type DirNode now.
+	Renamed rcss::EntityTree namespace to rcss::entity.
+	
+	* ./simulator/entitytree.cc
+	* ./simulator/entitytree.h
+	Fixed a bug when changing nodes. 
+	Renamed rcss::EntityTree namespace to rcss::entity.
+	
+	* ./simulator/example.cc
+	Added using the readline library if possible.
+	Creating world and a plane on startup. 
+	Still the thread stuff has to be used from rcssbase. 
+	
+	* ./simulator/simulator.cc
+	Calling the process() method of the root node each step. 
+
+	* ./simulator/objects/bodynode.cc
+	* ./simulator/objects/bodynode.h
+	Fixed bug in the constructor.
+	Changes because the Parent node is of type DirNode now.
+	Renamed rcss::EntityTree namespace to rcss::entity.
+	
+	* ./simulator/objects/geometrynode.cc
+	* ./simulator/objects/geometrynode.h
+	Added methods to get and set the body ID.
+	Changes because the Parent node is of type DirNode now.
+	Renamed rcss::EntityTree namespace to rcss::entity.
+	
+	* ./simulator/objects/planenode.cc
+	* ./simulator/objects/planenode.h
+	Changes because the Parent node is of type DirNode now.
+	Renamed rcss::EntityTree namespace to rcss::entity.
+
+	* ./simulator/objects/spherenode.cc
+	* ./simulator/objects/spherenode.h
+	Sphere gets constructed at (0,0,10) now by default (test purposes). 
+	Changes because the Parent node is of type DirNode now.
+	Renamed rcss::EntityTree namespace to rcss::entity.
+
+	* ./simulator/objects/worldnode.cc
+	* ./simulator/objects/worldnode.h
+	The WorldNode is a singleton now and contains a dJointGroup 
+	for collision checking. 
+	Changes because the Parent node is of type DirNode now.
+	Renamed rcss::EntityTree namespace to rcss::entity.
+
+	* ./simulator/nodecreator/dircreator.cc
+	* ./simulator/nodecreator/dircreator.h
+	* ./simulator/nodecreator/nodecommands.cc
+	* ./simulator/nodecreator/nodecommands.h
+	* ./simulator/nodecreator/nodecreator.cc
+	* ./simulator/nodecreator/nodecreator.h
+	* ./simulator/nodecreator/planecreator.cc
+	* ./simulator/nodecreator/planecreator.h
+	* ./simulator/nodecreator/spherecreator.cc
+	* ./simulator/nodecreator/spherecreator.h
+	Renamed rcss::EntityTree namespace to rcss::entity
+
+	* ./simulator/nodecreator/sphereobjectcreator.cc
+	* ./simulator/nodecreator/sphereobjectcreator.h
+	Added a SphereObject creator, that creates spheres consisting 
+	of both a rigid body and a geometry. Currently the SphereObejcts 
+	get created somewhere in the air and fall down to the plane. 
+	Renamed rcss::EntityTree namespace to rcss::entity
+	
+	* ./simulator/nodecreator/worldcreator.cc
+	* ./simulator/nodecreator/worldcreator.h
+	Changes due to making WorldNode a singleton 	
+	Renamed rcss::EntityTree namespace to rcss::entity
+
+	* ./utility/console/commands/conlistnodes.h
+	* ./utility/console/commands/concreate.cc
+	* ./utility/console/commands/conlistnodes.cc
+	* ./utility/console/commands/conlistnodes.h
+	* ./utility/console/commands/conselectnode.cc
+	* ./utility/console/commands/conselectnode.h
+	Renamed rcss::EntityTree namespace to rcss::entity
+
+	* ./utility/console/console.h
+	* ./utility/console/console.cc
+	* ./utility/console/commands/conquit.cc
+	Re-Implemented the console quit command
+
 2002-10-07  Oliver Obst  <fruit@robolog.org>
 
 	* ./configure.in
