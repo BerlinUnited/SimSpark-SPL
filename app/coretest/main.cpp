@@ -15,39 +15,39 @@ using namespace zeitgeist;
 
 int main()
 {
-        Zeitgeist       zg;
+    Zeitgeist zg("." PACKAGE_NAME);
 
-        shared_ptr<CoreContext> context = zg.CreateContext();
+    shared_ptr<CoreContext> context = zg.CreateContext();
 #if HAVE_KEROSIN_H
-        kerosin::Kerosin kKerosin(zg);
+    kerosin::Kerosin kKerosin(zg);
 #endif
-        oxygen::Oxygen kOxygen(zg);
+    oxygen::Oxygen kOxygen(zg);
 
-        shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
+    shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
 
-        scriptServer->Run("sys/script/coretest.rb");
+    scriptServer->Run("sys/script/coretest.rb");
 
-        cout << "CoreTest - A Small Interactive Text-Based Console Sample" << endl << endl;
-        cout << "Enter 'exit' command to quit application" << endl << endl;
-        bool done = false;
-        while (!done)
+    cout << "CoreTest - A Small Interactive Text-Based Console Sample" << endl << endl;
+    cout << "Enter 'exit' command to quit application" << endl << endl;
+    bool done = false;
+    while (!done)
+    {
+        std::string command = "";
+
+        boost::shared_ptr<Leaf> selectedObject = scriptServer->GetContext()->GetObject();
+
+        cout << endl << selectedObject->GetFullPath() << "> ";
+        getline(cin, command,'\n');
+
+        if (command.compare("exit")==0)
         {
-                std::string command = "";
-
-                boost::shared_ptr<Leaf> selectedObject = scriptServer->GetContext()->GetObject();
-
-                cout << endl << selectedObject->GetFullPath() << "> ";
-                getline(cin, command,'\n');
-
-                if (command.compare("exit")==0)
-                {
-                        done = true;
-                }
-                else
-                {
-                        scriptServer->Eval(command.c_str());
-                }
+            done = true;
         }
+        else
+        {
+            scriptServer->Eval(command.c_str());
+        }
+    }
 
-        return 0;
+    return 0;
 }
