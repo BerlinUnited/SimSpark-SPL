@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.cpp,v 1.2 2004/04/15 18:31:24 rollmark Exp $
+   $Id: universaljoint.cpp,v 1.3 2004/04/20 14:22:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,10 +90,10 @@ float UniversalJoint::GetAngle(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return dJointGetUniversalAngle1(mODEJoint);
+            return gRadToDeg(dJointGetUniversalAngle1(mODEJoint));
 
         case AI_SECOND:
-            return dJointGetUniversalAngle2(mODEJoint);
+            return gRadToDeg(dJointGetUniversalAngle2(mODEJoint));
 
         default:
             return 0;
@@ -105,10 +105,10 @@ float UniversalJoint::GetAngleRate(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return dJointGetUniversalAngle1Rate(mODEJoint);
+            return gRadToDeg(dJointGetUniversalAngle1Rate(mODEJoint));
 
         case AI_SECOND:
-            return dJointGetUniversalAngle2Rate(mODEJoint);
+            return gRadToDeg(dJointGetUniversalAngle2Rate(mODEJoint));
 
         default:
             return 0;

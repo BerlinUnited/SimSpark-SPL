@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.h,v 1.2 2004/04/15 18:31:24 rollmark Exp $
+   $Id: universaljoint.h,v 1.3 2004/04/20 14:22:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,21 +32,21 @@ public:
     UniversalJoint();
     virtual ~UniversalJoint();
 
-    /** Set the joint anchor point. The joint will try to keep this
+    /** sets the joint anchor point. The joint will try to keep this
         point on each body together. The input is specified in local
         coordinates.
     */
     void SetAnchor(const salt::Vector3f& anchor);
 
-    /** Returns the joint anchor point in local coordinates on one of
+    /** returns the joint anchor point in local coordinates on one of
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
     salt::Vector3f GetAnchor (EBodyIndex idx);
 
-    /** returns one of the hinge angles, measured between the two
-        bodies, or between the body and the static environment. The
-        angle will be between -pi..pi.
+    /** returns one of the hinge angles in degrees, measured between
+        the two bodies, or between the body and the static
+        environment.
     */
     float GetAngle(EAxisIndex idx);
 
@@ -54,7 +54,7 @@ public:
     float GetAngleRate(EAxisIndex idx);
 
 protected:
-    /** creates a new contact joint */
+    /** creates a new universal joint */
     virtual void OnLink();
 };
 
