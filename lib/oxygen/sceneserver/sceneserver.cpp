@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.4.8.1 2004/01/08 12:32:16 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.4.8.2 2004/01/12 18:56:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,8 +34,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 
-SceneServer::SceneServer() :
-    Leaf()
+SceneServer::SceneServer() : Leaf()
 {
 }
 
@@ -45,88 +44,98 @@ SceneServer::~SceneServer()
 
 boost::shared_ptr<Scene> SceneServer::CreateScene(const std::string &location)
 {
-    shared_ptr<CoreContext> context = GetCore()->CreateContext();
-    shared_ptr<Scene> scene = shared_static_cast<Scene>(context->New("kerosin/Scene", location));
+  shared_ptr<CoreContext> context = GetCore()->CreateContext();
 
-    if (scene.get() != NULL)
+  shared_ptr<Scene> scene = shared_static_cast<Scene>
+    (context->New("kerosin/Scene", location));
+
+  if (scene.get() != 0)
     {
-        mActiveScene = scene;
+      mActiveScene = scene;
     }
 
-    return scene;
+  return scene;
 }
 
 bool SceneServer::SetActiveScene(const std::string &location)
 {
-    shared_ptr<Scene> scene = shared_static_cast<Scene>(GetCore()->Get(location));
+  shared_ptr<Scene> scene =
+    shared_dynamic_cast<Scene>(GetCore()->Get(location));
 
-    if (scene.get() != NULL)
+  if (scene.get() != 0)
     {
-        mActiveScene = scene;
-        return true;
+      mActiveScene = scene;
+      return true;
     }
 
-    return false;
+  return false;
 }
 
-/*!
-  Update the scene graph. I do not make the distinction between 'controllers'
-  and 'scene graph nodes' ... this forces me to perform several update passes
-  through the hierarchy. Nevertheless, the more homogenuous structure is worth
-  it.
+/** Update the scene graph. We do not make the distinction between
+    'controllers' and 'scene graph nodes'. This design forces us to
+    perform several update passes through the hierarchy. Nevertheless,
+    the more homogenuous structure is worth it.
 
-  Example Hierarchy:
+    An example Hierarchy:
 
-  scene
-  |-   transform
-  |-   body
-  |               |-  quakecontroller
-  |
-  |-   camera
+    scene
+    |-   transform
+    |-   body
+    |    |-  quakecontroller
+    |
+    |-   camera
 
-  The following passes are performed:
+    The following passes are performed:
 
-  1st pass:       PrePhysicsUpdate(deltaTime)
-  The first update pass is responsible for updating the internal state of
-  an object. For example, the quakecontroller has received input from
-  the main application in terms of state changes (StrafeLeft, Forward, etc..).
-  As the controller is physics driven, it has to translate these commands
-  to actual forces, which act on the body. This is done during this pass.
+    1st pass: PrePhysicsUpdate(deltaTime) The first update pass is
+    responsible for updating the internal state of an object. For
+    example, the quakecontroller has received input from the main
+    application in terms of state changes like StrafeLeft, or Forward.
+    As the controller is physics driven, it has to translate these
+    commands to actual forces, which act on the body. This is done
+    during this pass.
 
-  [Physics + Collision called]
+    After the first pass pyhsics simulation and collision are
+    calculated using ODE.
 
-  2nd pass:       PostPhysicsUpdate()
-  This pass can be used to affect other nodes. For example, 'body' has
-  undergone physics simulation and collision detection. It has reached its
-  final 'simulated' position, which has to be     passed to the parent (transform).
+    2nd pass: PostPhysicsUpdate()
+    This pass can be used to affect other nodes. For example, 'Body'
+    has undergone physics simulation and collision detection. It has
+    reached its final 'simulated' position, which has to be passed to
+    the parent Transform node.
 
-  3rd pass:       UpdateHierarchy()
-  As the second pass affects the position of objects, we have to recalculate
-  the transformation hierarchy before we can display the scene.
+    3rd pass: UpdateHierarchy()
+    As the second pass affects the position of objects, we have to
+    recalculate the transformation hierarchy before we can display the
+    scene.
 */
-
 void SceneServer::Update(float deltaTime)
 {
-    if (deltaTime > 0.0f && mActiveScene)
+  if (
+      (deltaTime > 0.0f) &&
+      (mActiveScene)
+      )
     {
-        mActiveScene->PrePhysicsUpdate(deltaTime);
+      mActiveScene->PrePhysicsUpdate(deltaTime);
 
-        // determine collisions
-        shared_ptr<Space> space = shared_static_cast<Space>(mActiveScene->GetChildOfClass("Space"));
-        if (space.get() != NULL)
+      // determine collisions
+      shared_ptr<Space> space = shared_static_cast<Space>
+        (mActiveScene->GetChildOfClass("Space"));
+      if (space.get() != 0)
         {
-            space->Collide();
+          space->Collide();
         }
 
-        // do physics
-        shared_ptr<World> world = shared_static_cast<World>(mActiveScene->GetChildOfClass("World"));
-        if (world.get() != NULL)
+      // do physics
+      shared_ptr<World> world = shared_static_cast<World>
+        (mActiveScene->GetChildOfClass("World"));
+      if (world.get() != 0)
         {
-            world->Step(deltaTime);
+          world->Step(deltaTime);
         }
 
-        mActiveScene->PostPhysicsUpdate();
+      mActiveScene->PostPhysicsUpdate();
 
-        mActiveScene->UpdateHierarchy();
+      mActiveScene->UpdateHierarchy();
     }
 }
