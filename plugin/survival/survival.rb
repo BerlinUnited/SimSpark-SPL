@@ -157,7 +157,7 @@ class SurvivalInitializer
     cd (baseAgent)
     physics = new ('kerosin/Body', '_physics');
     physics.setSphere(1.0, radius);
-    physics.setMass(1.0);
+    physics.setMass(0.5);
     physics.setMaxSpeed(maxSpeed);
 
     cd (baseAgent)
@@ -198,7 +198,10 @@ class SurvivalInitializer
 
 
     # add slow knot
-    createAgent(@scene, 'knot', 'model/knot.void', 3.0, 4.0);
+    createAgent(@scene, 'slowknot', 'model/knot.void', 3.0, 4.0);
+
+    # add fast knot
+    createAgent(@scene, 'fastknot', 'model/knot.void', 3.0, 10.0);
 
     # add midspeed
     createAgent(@scene, 'mid', 'model/slow.void', 1.0, 6.0);
@@ -206,10 +209,9 @@ class SurvivalInitializer
     # add turbospeed
     createAgent(@scene, 'turbo', 'model/slow.void', 1.0, 30.0);
 
-
     # add fast
     count = 1.0;
-    3.times do
+    4.times do
       createAgent(@scene, 'fast'+count.to_s, 'model/fast.void', 1.0, 10.0);
       count += 1;
     end

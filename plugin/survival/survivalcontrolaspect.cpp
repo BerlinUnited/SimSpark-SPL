@@ -2,6 +2,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <kerosin/fontserver/fontserver.h>
 #include <kerosin/openglserver/openglserver.h>
+#include <kerosin/physicsserver/body.h>
 
 using namespace boost;
 using namespace kerosin;
@@ -99,11 +100,25 @@ void SurvivalControlAspect::PrePhysicsUpdateInternal(float deltaTime)
 	for (ControlledAgentList::iterator i = mControlledAgents.begin();i != mControlledAgents.end(); ++i)
 	{
 		AgentControlState& state = (*i);
+		state.hasFood = false;
 
 		// decrease the health of the agent
 		state.health -= (mSickRate * deltaTime);
 		if (state.health < 0.0f)
 		{
+			shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(state.agent->GetParent()));
+			shared_ptr<Body> body		= shared_static_cast<Body>(parent->GetChildSupportingClass("Body"));
+
+			if (body.get() != NULL)
+			{
+				Matrix mat = parent->GetWorldTransform();
+
+				// the shock of it's rebirth catapults the agents :)
+				float randX = ((rand() - RAND_MAX/2) / (float)(RAND_MAX/2)) * 200;
+				float randZ = ((rand() - RAND_MAX/2) / (float)(RAND_MAX/2)) * 200;
+				dBodyAddForce(body->GetODEBody(), randX, 500, randZ);
+			}
+
 			state.health = state.healthInit;
 			state.death++;
 		}
@@ -117,19 +132,12 @@ void SurvivalControlAspect::PrePhysicsUpdateInternal(float deltaTime)
 				// the agent touched the food
 				state.hasFood = true;
 				hasFoodCount++;
-
-				GetCore()->GetLogServer()->Normal().Printf("has food = %d\n",hasFoodCount);
-			} else
-			{
-				state.hasFood = false;
 			}
 		}
 	}
 
 	if (hasFoodCount > 0)
 	{
-		GetCore()->GetLogServer()->Normal().Printf("reposition food, %d ",hasFoodCount);
-
 		// if the food was eaten, we reposition it
 		Vector3f newPos;
 		newPos.x()	= 20.0f*(1.0f-2.0f*rand()/(float)RAND_MAX);
