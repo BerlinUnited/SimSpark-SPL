@@ -26,11 +26,6 @@
        )
 
  (node Transform
-       (setLocalPos -4 0 20)
-       (importScene rsg/boxspheres/box.rsg 5 5 5 2 matBlue)
-       )
-
- (node Transform
        (setLocalPos -7 0 15)
        (importScene rsg/boxspheres/box.rsg 2 2 2 2 matRedGlow)
        (node Light
@@ -38,6 +33,17 @@
 	     (setSpecular 0.2 0.2 0.2 1)
 	     (setAmbient 0 0 0 1.0)
 	     )
+       )
+
+; add capped cylinder
+ (node Transform
+       (setLocalPos -4 0 20)
+       (importScene rsg/boxspheres/ccylinder.rsg 1 3 2 matBlue)
+       )
+
+ (node Transform
+       (setLocalPos -6 3 20)
+       (importScene rsg/boxspheres/ccylinder.rsg 1 10 2 matWhite)
        )
 
 ; add two layer of spheres
