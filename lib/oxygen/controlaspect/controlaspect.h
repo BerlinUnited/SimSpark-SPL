@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.h,v 1.7 2004/04/23 13:21:12 fruit Exp $
+   $Id: controlaspect.h,v 1.8 2004/04/23 13:22:04 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,9 +41,6 @@ public:
         seconds
      */
     virtual void Update(float deltaTime) = 0;
-
-    /** called after a given time after startup */
-    virtual void StartUp() {}
 
     /** queries the SceneServer for the currently active scene node */
     boost::shared_ptr<Scene> GetActiveScene();
