@@ -19,18 +19,20 @@
        )
 
  (node Transform 
+       (setLocalRotation 45 0 0)
        (setLocalPos 0 0 20)
        (importScene rsg/jointtest/hingething.rsg)
        )
 
  (node Transform 
+       (setLocalRotation 45 0 0)
        (setLocalPos 10 10 10)
        (importScene rsg/jointtest/sliderthing.rsg)
        )
 
- (node Transform
-       (setLocalPos -10 0 20)
-       (importScene rsg/boxspheres/box.rsg 1 1 3 3 matRed)
+ (node Transform 
+       (setLocalPos -10 -10 10)
+       (setLocalRotation 45 0 0)
+       (importScene rsg/jointtest/universalthing.rsg)
        )
-
  )

@@ -22,11 +22,11 @@
 
  (node HingeJoint
        (attach ../mid/boxBody ../right/boxBody)
-       (setHingeAnchor 3 0 0)
+       (setAnchor 3 0 0)
        )
 
  (node HingeJoint
        (attach ../mid/boxBody ../left/boxBody)
-       (setHingeAnchor -3 0 0)
+       (setAnchor -3 0 0)
        )
  )
