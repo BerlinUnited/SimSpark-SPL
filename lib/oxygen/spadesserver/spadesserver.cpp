@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.8 2003/12/08 14:50:50 fruit Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.9 2003/12/16 14:59:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,6 +76,11 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
     // command line options. It doesn't delete the ParamReader, so we
     // can return a simple pointer
     mParamReader->getOptions(argc, argv);
+
+#if THIS_IS_A_DEMO_ONLY
+    mParamReader->setParam ("run_integrated_commserver", true);
+#endif
+
 
     return mParamReader.get();
 }
@@ -256,6 +261,33 @@ SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen)
 void
 SpadesServer::pauseModeCallback()
 {
+#if THIS_IS_A_DEMO_ONLY
+    // start a 'default' agent
+    if (mSimEngine->getNumCommServers () < 1)
+        {
+            GetLog()->Warning() << "(SpadesServer) No comm server yet, waiting\n" << endl;
+            return;
+        }
+
+    AgentTypeDB::AgentTypeConstIterator
+        at = mSimEngine->getAgentTypeDB()->getAgentType("default");
+
+    if (at == mSimEngine->getAgentTypeDB()->nullIterator())
+        {
+            GetLog()->Error() <<
+                "ERROR: (SpadesServer) could not find 'default' agent\n" << endl;
+            return;
+        }
+
+    AgentID a = mSimEngine->startNewAgent(at);
+    if (a == AGENTID_INVALID)
+        {
+            GetLog()->Error() <<
+                "ERROR: (SpadesServer) could not start 'default' agent\n" << endl;
+            return;
+        }
+#endif
+
     // no time to pause
     mSimEngine->changeSimulationMode(SM_RunNormal);
 }
@@ -263,6 +295,9 @@ SpadesServer::pauseModeCallback()
 bool
 SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*at*/)
 {
+    GetLog()->Debug() <<
+        "(SpadesServer) agentConnect " << agent << "\n";
+
     // try to register the agent to the game control server
     shared_ptr<GameControlServer> gcs = GetGameControlServer();
 
