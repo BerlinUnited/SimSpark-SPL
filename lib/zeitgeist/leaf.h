@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.10 2004/04/11 11:13:32 rollmark Exp $
+   $Id: leaf.h,v 1.11 2004/04/22 14:55:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -226,6 +226,9 @@ public:
 
     /** writes debug data to stdout */
     virtual void Dump() const;
+
+    /** update variables from a script */
+    virtual void UpdateCached() {}
 
     /** constructs the full path of this node by walking up the
         tree. Cosecutive calls return a cached copy of the full
