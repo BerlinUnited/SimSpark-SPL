@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.8 2003/12/09 19:28:59 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.9 2003/12/09 20:25:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,6 +54,13 @@ GameControlServer::InitParser(const std::string& parserName)
     return true;
 }
 
+shared_ptr<BaseParser>
+GameControlServer::GetParser()
+{
+    return mParser;
+}
+
+
 bool
 GameControlServer::AgentConnect(int id)
 {
@@ -95,6 +102,14 @@ float GameControlServer::GetSenseInterval(int /*id*/)
     // the agent.
     return 0.1;
 }
+
+float GameControlServer::GetSenseLatency(int /*id*/)
+{
+    // the real thing should query the AgentAspect corresponding to
+    // the agent
+    return 0.0;
+}
+
 
 shared_ptr<Effector> GameControlServer::GetEffector(std::string predicate) const
 {
