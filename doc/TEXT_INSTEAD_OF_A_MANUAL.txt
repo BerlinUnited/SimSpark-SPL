@@ -93,10 +93,9 @@ The kickeffector noise has the following parameters:
 
 You cannot change the kicking angle in the x-y plane, i.e. you have to
 move the robot so that it can kick into the desired direction.
-The kickeffector is very strong, it is almost posssible to kick the
-ball from one side of the field to the other side. It should not be
-possible to move other robots by kicking the ball against them anymore. 
-(at least not very much :)
+Right now, the kickeffector is not very strong, because something like an 
+offside rule is missing. It should also not be possible to move other robots by
+kicking the ball against them anymore. (at least not very much :)
 Like the driveeffector, the kickeffector does only work if the robot
 touches the soccer field. 
 
