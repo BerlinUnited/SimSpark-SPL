@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystemsdl.cpp,v 1.3.2.1 2003/11/19 19:07:37 rollmark Exp $
+   $Id: inputsystemsdl.cpp,v 1.3.2.2 2003/11/20 20:23:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,12 +78,11 @@ bool InputSystemSDL::Init(InputServer *inputServer)
 {
         if (InputSystem::Init(inputServer) == false) return false;
 
-
         // here we check whether SDL has been initialized prior to adding this
         // input is part of the video subsystem (because of event loops, etc..)
         if (!SDL_WasInit(SDL_INIT_VIDEO))
         {
-                GetLog()->Error() << "ERROR: SDL not initialized!" << std::endl;
+                GetLog()->Error() << "ERROR: (InputSystemSDL) SDL not initialized!" << std::endl;
                 return false;
         }
 
@@ -106,14 +105,14 @@ bool InputSystemSDL::CreateDevice(const std::string &deviceName)
 
         if (device.get() == NULL)
         {
-                GetLog()->Error() << "ERROR: Creating device '" << mangledName << "'" << std::endl;
+                GetLog()->Error() << "ERROR: (InputSystemSDL) Creating device '" << mangledName << "'" << std::endl;
                 return false;
         }
 
         // initialize the device
         if (device->Init(this) == false)
         {
-                GetLog()->Error() << "ERROR: Initializing device '" << mangledName << "'" << std::endl;
+                GetLog()->Error() << "ERROR: (InputSystemSDL) Initializing device '" << mangledName << "'" << std::endl;
                 return false;
         }
 
@@ -128,7 +127,7 @@ bool InputSystemSDL::CreateDevice(const std::string &deviceName)
                 // try to link the device into the inputserver
                 if (AddChildReference(device) == false)
                 {
-                        GetLog()->Error() << "ERROR: Linking device '" << mangledName << "'" << std::endl;
+                        GetLog()->Error() << "ERROR: (InputSystemSDL) Linking device '" << mangledName << "'" << std::endl;
                         SDL_UnlockMutex(mMutex);
                         return false;
                 }
