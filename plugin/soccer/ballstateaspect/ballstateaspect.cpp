@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.1.2.1 2004/01/25 12:01:54 rollmark Exp $
+   $Id: ballstateaspect.cpp,v 1.1.2.2 2004/01/29 10:30:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 */
 #include "ballstateaspect.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/scene.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -28,6 +30,7 @@ using namespace std;
 
 BallStateAspect::BallStateAspect() : ControlAspect()
 {
+    mBallOnField = false;
 }
 
 BallStateAspect::~BallStateAspect()
@@ -39,7 +42,7 @@ shared_ptr<AgentAspect> BallStateAspect::GetLastCollidingAgent()
     return mLastCollidingAgent;
 }
 
-void BallStateAspect::Update(float deltaTime)
+void BallStateAspect::UpdateLastCollidingAgent()
 {
     if (mBallRecorder.get() == 0)
         {
@@ -62,21 +65,77 @@ void BallStateAspect::Update(float deltaTime)
     mBallRecorder->Reset();
 }
 
+void BallStateAspect::UpdateBallOnField()
+{
+    if (mFieldRecorder.get() == 0)
+        {
+            return;
+        }
+
+    // get a list of Ball nodes that collided with the
+    RecorderHandler::TParentList ball;
+    mFieldRecorder->GetParentsSupportingClass("Ball",ball);
+
+    // the ball is on or above the playing field iff the ball collided
+    // with the box collider around the playing field
+    mBallOnField = (ball.size() > 0);
+
+    // empty the recorder buffer
+    mFieldRecorder->Reset();
+}
+
+void BallStateAspect::Update(float deltaTime)
+{
+    UpdateLastCollidingAgent();
+    UpdateBallOnField();
+}
+
 void BallStateAspect::OnLink()
 {
+    shared_ptr<SceneServer> sceneServer =
+        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+    if (sceneServer.get() == 0)
+        {
+            GetLog()->Error() << "(BallStateAscpet) cannot get SceneServer\n";
+            return;
+        }
+
+    shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
+
+    if (activeScene.get() == 0)
+        {
+            GetLog()->Error() << "(BallStateAscpet) SceneServer reported no active scene\n";
+            return;
+        }
+
+    string scenePath = activeScene->GetFullPath();
+
+    // get the field recorder handler
+    mFieldRecorder = shared_dynamic_cast<RecorderHandler>
+        (GetCore()->Get(scenePath + "FieldBox/recorder"));
+
+    if (mFieldRecorder.get() == 0)
+        {
+            GetLog()->Error()
+                << "(BallStateAspect) found no field collision recorder\n";
+        }
+
+    // get the ball recorder handler
     mBallRecorder = shared_dynamic_cast<RecorderHandler>
-        (GetCore()->Get("/usr/scene/Ball/geometry/recorder"));
+        (GetCore()->Get(scenePath + "Ball/geometry/recorder"));
 
     if (mBallRecorder.get() == 0)
         {
             GetLog()->Error()
-                << "(BallStateAspect) found no ball collision recorder" << endl;
+                << "(BallStateAspect) found no ball collision recorder\n";
         }
 }
 
 void BallStateAspect::OnUnlink()
 {
     mBallRecorder.reset();
+    mFieldRecorder.reset();
     mLastCollidingAgent.reset();
 }
 
