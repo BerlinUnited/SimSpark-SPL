@@ -1,13 +1,58 @@
 TEXT_INSTEAD_OF_A_MANUAL.txt
 
 rcssserver3D provides a platform for programming simulated robots
-playing soccer in a physical environment. To get started, you should
-be somewhat familiar with the SPADES simulation middleware, thought it
-is possible to start by experimenting with the 'agenttest' program in
-the ./app/agenttest/ directory.
+playing soccer in a physical environment.
+
+
+Contents
+--------
+
+1. System Overview
+2. Soccer Simulation
+3. Monitor and Trainer Protocol
+4. References
+
+
+1. System Overview
+------------------
+
+To get started you should be somewhat familiar with the components of
+the system. The soccer simulation consists of three important parts:
+the server, the monitor and the agents.
+
+In order to work with the server you should be familiar with the
+SPADES [1] simulation middleware. Some important concepts you should
+know about: The server is responsible to start an agent process,
+i.e. it does not wait for an agent to connect. The SPADES library uses
+a database that contains information how to start different agent
+types. It is called 'agentdb.xml' (see ./app/simulator/
+directory). Agents connect using UNIX pipes to a SPADES ComServer
+using a length prefixed format to exchange messages with the
+server. Please see the SPADES manual for further details.
+
+The default monitor is called rcssmonitor3D-lite it is located in the
+./app/rcssmonitor3d/lite directory. It is also used to replay logfiles
+that the server automatically creates (use the --logfile <filename>
+option). The automatically generated logfile is called
+'monitor.log'. You'll find it in the 'Logfiles/' directory below the
+directory in which you started the server.
+
+The implemented monitor protocol supports a command set to implement a
+trainer, i.e to automatically recreate test situations on the field
+and to evaluate an agents behavior. A 'monitor library' is provided
+to help implementing custom monitor and trainer applications, please
+see the ./app/rcssmonitor3d/lib directory. The protocol between server
+and monitor is detailed further down in this text file.
+
+A good starting point for your own agent implementations is the
+'agenttest' program in the ./app/agenttest/ directory. This agent
+implements a simple kick and run behavior.
 
 Because there is no manual for the simulator, this text tries to
 describe the features of the simulated robots.
+
+2. Soccer Simulation
+--------------------
 
 Your soccer team consists of a number of robots with equal
 capabilities. The programs you should write to create a team exchange
@@ -34,7 +79,6 @@ In the current version of the simulator, robots are represented as
 spheres (until we can come up with a more sophisticated representation
 next year). The diameter of all robots is 0.44m, and each robots
 weighs 75kg. 
-
 
 Robots possess a kind of omnidrive, which adds some physical force to
 the robot body. By using the omnidrive, it is possible to accelerate
@@ -176,8 +220,8 @@ you get from this perceptor tells you about some of the game variables
 The AgentStatePerceptor notifies you about internal states of the agent (currently 
 only the battery state).
 
-Monitor Protocol for the Soccer Simulation
-------------------------------------------
+3. Monitor and Trainer Protocol
+-------------------------------
 
 The default monitor port for the soccer simulation is 12001. The
 server periodically sends you lines of text that contain
@@ -343,6 +387,12 @@ will send the answer as soon as the command is carried out. This is
 used to synchronize a trainer implementation wit the server. The
 getAck expression is appended behind one of the above
 commands. Example: ((kickOff)(getAck kicked_off))
+
+
+4. References
+-------------
+[1] http://spades-sim.sourceforge.net/
+
 
 END OF TEXT.
 
