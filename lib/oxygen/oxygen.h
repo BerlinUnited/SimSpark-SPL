@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.3 2003/11/10 21:31:54 fruit Exp $
+   $Id: oxygen.h,v 1.3.2.1 2003/11/16 16:00:31 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,10 +44,14 @@
 #include "sceneserver/basenode.h"
 #include "sceneserver/camera.h"
 #include "sceneserver/fpscontroller.h"
-// #include "sceneserver/indexbuffer.h"
+#include "sceneserver/indexbuffer.h"
 #include "sceneserver/scene.h"
 #include "sceneserver/sceneserver.h"
 #include "sceneserver/transform.h"
+
+#ifdef HAVE_SPADES_HEADERS
+#include "spadesserver/spadesserver.h"
+#endif
 
 // control aspect
 #include <zeitgeist/zeitgeist.h>
@@ -57,10 +61,6 @@ namespace oxygen
 
 /** This is the main class, which initializes the Oxygen framework. It
      registers all internal classes.
-
- @TODO: kerosin automatically runs the default init script
-        'sys/script/default.rb' if it exists. Is there a script which
-        should be run by Oxygen?
 */
 class Oxygen
 {
