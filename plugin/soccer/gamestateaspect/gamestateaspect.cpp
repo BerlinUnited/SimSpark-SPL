@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.9 2004/02/08 22:25:20 fruit Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.10 2004/02/10 19:33:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,9 @@
 */
 #include "gamestateaspect.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <soccer/soccerbase/soccerbase.h>
 #include <soccer/agentstate/agentstate.h>
+#include <salt/random.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -31,6 +33,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
 {
     mPlayMode = PM_BeforeKickOff;
     mTime = 0;
+    mLastModeChange = 0;
     mGameHalf = GH_FIRST;
     mScore[0] = 0;
     mScore[1] = 0;
@@ -42,7 +45,10 @@ GameStateAspect::~GameStateAspect()
 
 void GameStateAspect::UpdateTime(float deltaTime)
 {
-  if (mPlayMode == PM_PlayOn)
+  if (
+      (mPlayMode != PM_BeforeKickOff) &&
+      (mPlayMode != PM_FirstHalfOver)
+      )
       {
           mTime += deltaTime;
       }
@@ -60,12 +66,39 @@ TPlayMode GameStateAspect::GetPlayMode() const
 
 void GameStateAspect::SetPlayMode(TPlayMode mode)
 {
+    if (mode == mPlayMode)
+        {
+            return;
+        }
+
+
+    GetLog()->Normal() << "(GameStateAspect) playmode changed to "
+                       << SoccerBase::PlayMode2Str(mode) << " at t="
+                       << mTime << "\n";
     mPlayMode = mode;
+    mLastModeChange = mTime;
+}
+
+void GameStateAspect::KickOff()
+{
+    // throw a coin to determine which team kicks off
+    SetPlayMode((salt::UniformRNG<>(0,1)() <= 0.5) ?
+                PM_KickOff_Left : PM_KickOff_Right);
 }
 
 TTime GameStateAspect::GetTime() const
 {
     return mTime;
+}
+
+TTime GameStateAspect::GetModeTime()
+{
+    return mTime - mLastModeChange;
+}
+
+TTime GameStateAspect::GetLastModeChange()
+{
+    return mLastModeChange;
 }
 
 void GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
@@ -81,7 +114,6 @@ void GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
     mTeamName[idx] = name;
 }
 
-/** returns the name of a team */
 std::string GameStateAspect::GetTeamName(TTeamIndex idx)
 {
     if (
