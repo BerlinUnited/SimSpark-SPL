@@ -1,3 +1,173 @@
+2004-01-31  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/rcssmonitor3d/Makefile.am, app/rcssmonitor3d/camera.cpp,
+	app/rcssmonitor3d/camera.h, app/rcssmonitor3d/glserver.cpp,
+	app/rcssmonitor3d/glserver.h, app/rcssmonitor3d/main.cpp:
+	added camera movement up and down; binded on keys '+' and '-'
+	fixed output of 2D texts
+	fixed resizing of the monitor window (adapt to new aspect ratio)
+	parsing of game state data and output in the first line
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	changed SexpMonitor to read game state data (time, goals, playmode...)
+	from the GameStateAspect and transer it to the connected monitor
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.h:
+	added method GetGameStateData, OnLink and OnUnlink
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	implemented new SetGameHalf, GetGameHalf, ScoreTeam and GetScore
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	added method SetGameHalf, GetGameHalf, ScoreTeam and GetScore
+	added members mGameHalf and mScore
+
+	* plugin/soccer/dasheffector/dasheffector.cpp: 
+	some minor cleanup
+
+	* plugin/soccer/soccertypes.h: 
+	added enum TGameHalf
+
+	* plugin/soccer/initeffector/initeffector.cpp:
+	the InitEffector does not set the teamname and uniform number directly
+	in the AgentStateAspect. Instead it requests it from the
+	GameStateAspect.
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	implemented method RequestUniform. It is called from the InitEffector
+	to register a uniform number for a team. The GameStateAspect checks if
+	both teamName and uniform number are valid.
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	added method RequestUniform, InsertUnum and GetTeamIndex
+	added member mTeamName and mUnumSet
+
+	* plugin/soccer/agentstate/agentstate.cpp:
+	remove method SetTeamName; added method SetTeamIndex
+
+	* plugin/soccer/agentstate/agentstate.h:
+	storing team index instead of teamname. removed method SetTeamName,
+	added method SetTeamIndex
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.h:
+	moved typedefs into soccertypes.h
+
+	* plugin/soccer/soccertypes.h:
+	soccertypes.h contains types common to all plugins in the soccer
+	simulation
+
+	* app/agenttest/main.cpp:
+	changed init command to use current pid as unique uniform number
+
+	* app/rcssmonitor3d/main.cpp: some whitespace changes
+	toggling camera mode on and off with 'c'
+
+2004-01-29  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/simulator.rb: 
+	added SoccerRuleAspect
+
+	* lib/oxygen/controlaspect/controlaspect.cpp:
+	implemented GetActiveScene and GetControlAspect. Both methods are
+	utility functions to ease the implementation of derived ControlAspects
+
+	* lib/oxygen/controlaspect/controlaspect.h:
+	added method GetActiveScene and GetControlAspect
+
+	* plugin/soccer/soccercontrolaspect/.cvsignore,
+	plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp,
+	plugin/soccer/soccercontrolaspect/soccercontrolaspect.h,
+	plugin/soccer/soccercontrolaspect/soccercontrolaspect_c.cpp,
+	plugin/soccer/soccerruleaspect/.cvsignore,
+	plugin/soccer/soccerruleaspect/soccerruleaspect.cpp,
+	plugin/soccer/soccerruleaspect/soccerruleaspect.h,
+	plugin/soccer/soccerruleaspect/soccerruleaspect_c.cpp: 
+	- added new
+	class SoccerControlAspect that acts as a baseclass for all
+	ControlAspects in the soccer simulation and collects utility
+	functions and typedefs used throughout the soccer simulation
+
+	- added new class soccerruleaspect that implements the soccer
+	rules. Currently it checks in PM_PlayOn if the ball rolls out of the
+	soccer field and blocks it
+
+	- cleaned up BallStateAspect und GameControlAspect to use common
+	methods from SoccerControlAspect
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	exporting ball radius and ball mass to the soccer monitor
+
+	* app/simulator/simulator.rb:
+	added soccer variables BallMass and BallRadius
+
+	* app/simulator/simulator.rb: 
+	fixed the FieldBox collider setup
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	- moved the update of the last colliding method into a separate method
+	UpdateLastCollidingAgent
+	- implemented implemented UpdateBallOnField to query the FieldBox
+	recorder if the collided with the playing field
+	- implemented method OnLink to cach references to the ball and
+	fieldBox recorder
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h:
+	added method UpdateLastCollidingAgent and UpdateBallOnField
+	added members mBall, mFieldRecorder and mBallOnField
+
+	* lib/oxygen/physicsserver/boxcollider.cpp: 
+	whitespace only
+
+	* lib/oxygen/physicsserver/contactjointhandler.cpp:
+	check if the collidee has also registered a ContactJointHandler. A
+	contact joint is only created if both collider agree to do so,
+	i.e. both have registered a ContactJointHandler.
+
+	* lib/oxygen/physicsserver/contactjointhandler.h:
+	implemented IsSymmetricHandler to indicate that the
+	ContactJointHandler is no symmetric handler
+
+	* lib/oxygen/physicsserver/collisionhandler.cpp:
+	added some error messages
+
+	* lib/oxygen/physicsserver/collisionhandler.h:
+	addded method IsSymmetricHandler
+
+	* lib/oxygen/physicsserver/collider.cpp:
+	- changed OnCollision to accept a shared_ptr to a collider instead of
+	a geomID. The lookup is now done in the Space node
+	- OnCollision checks if the CollisionHandler supports the symmetric
+	case prior to notifying it
+
+	* lib/oxygen/physicsserver/collider.h:
+	added method PrePhysicsUpdateInternal
+
+	* lib/oxygen/physicsserver/space.cpp: - implemented method GetCollider
+	- adapted HandleCollision to pass a shared_ptr to the
+	Collider::OnCollision.
+	- calling OnCollision for both the direct case for two colliding geoms
+	and the symmetric case
+
+	* lib/oxygen/physicsserver/space.h:
+	added method GetCollider that looks up a shared_ptr to the Collider
+	managing a geom
+
+2004-01-27  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/agenttest/main.cpp:
+	added reading of segmented messages to GetInput()
+	logging is disabled by default
+	some minor cleanup
+
+	* app/rcssmonitor3d/glserver.cpp:
+	added missing call to gluDeleteQuadric
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.h: 
+	added method PutFloatParam
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	exporting field geometry and agent parameter to the monitor
+
 2004-01-26  Oliver Obst  <fruit@robolog.org>
 
 	* app/agenttest/main.cpp: - using kick up
@@ -25,6 +195,20 @@
 	  and field size are now fixed to official
 	  sizes.  
 	- made agents much smaller now (diameter 60 cm)
+
+2004-01-26  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	moved duplicate parsing code for variable name into method
+	ParseVarName and cleaned up GetVariable methods
+
+	* lib/zeitgeist/scriptserver/scriptserver.h: 
+	added method ParseVarName
+
+	* app/simulator/simulator.rb:
+	moved all variables describing field geomtetry and agent parameters
+	into the namespace Soccer. From there the SexpMonitor should read them
+	and pass them to the connected monitor.
 
 2004-01-25  Oliver Obst  <fruit@robolog.org>
 
@@ -242,16 +426,6 @@
 	* lib/oxygen/gamecontrolserver/actionobject.h:
 	changed constructor to accept string reference
 
-2004-01-22  fruit  <fruit@vader>
-	* plugin/soccer/Makefile.am,
-	* plugin/soccer/createeffector/createeffector.cpp,
-	* plugin/soccer/export.cpp,
-	* plugin/soccer/visionperceptor/visionperceptor.cpp,
-	* plugin/soccer/visionperceptor/visionperceptor.h,
-	* plugin/soccer/visionperceptor/visionperceptor_c.cpp:
-	added new visionperceptor (with polar coordinates)
-	UNTESTED!
-	
 2004-01-22  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/createeffector/createeffector.cpp: 
@@ -501,8 +675,6 @@
 	* configure.ac:
 	removed Makefiles of InitEffector and CreateEffector as they now are part of
 	the same bundle
-
-	* plugin/soccer/export.cpp: New file.
 
 	* plugin/soccer/Makefile.am,
 	* plugin/soccer/createeffector/Makefile.am,
@@ -1286,9 +1458,6 @@
 
 	* lib/oxygen/oxygen.h: 
 	added include for actionobject
-
-	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
-	lib/oxygen/spadesserver/spadescreatesenseevent.h: New file
 
 	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
 	* lib/oxygen/spadesserver/spadescreatesenseevent.h: 
