@@ -121,13 +121,13 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
 		 plugin/sexpparser/Makefile \
 		 plugin/soundsystemfmod/Makefile \
-		 plugin/spadestest/Makefile \
 		 app/Makefile \
 		 app/agenttest/Makefile \
 		 app/coretest/Makefile \
 		 app/fonttest/Makefile \
 		 app/inputtest/Makefile \
 		 app/scenetest/Makefile \
+		 app/spadestest/Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
