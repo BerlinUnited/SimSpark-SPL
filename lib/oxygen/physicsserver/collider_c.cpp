@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider_c.cpp,v 1.4 2003/11/10 23:11:42 fruit Exp $
+   $Id: collider_c.cpp,v 1.4.8.1 2004/01/25 11:35:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,8 +22,24 @@
 #include "collider.h"
 
 using namespace oxygen;
+using namespace boost;
+using namespace salt;
+
+FUNCTION(setPosition)
+{
+  if (in.size() == 3)
+    {
+      Collider* coll = static_cast<Collider*>(obj);
+      coll->SetPosition(salt::Vector3f(
+                        any_cast<float>(in[0]),
+                        any_cast<float>(in[1]),
+                        any_cast<float>(in[2])
+                        ));
+    }
+}
 
 void CLASS(Collider)::DefineClass()
 {
+        DEFINE_FUNCTION(setPosition);
         DEFINE_BASECLASS(kerosin/ODEObject);
 }
