@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller_c.cpp,v 1.5 2004/02/21 15:30:44 fruit Exp $
+   $Id: fpscontroller_c.cpp,v 1.6 2004/03/20 08:38:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,17 @@
 using namespace boost;
 using namespace oxygen;
 
+FUNCTION(setAcceleration)
+{
+  if (in.size() == 1)
+    {
+      FPSController* fc = static_cast<FPSController*>(obj);
+      fc->SetAcceleration(boost::any_cast<float>(in[0]));
+    }
+}
+
 void CLASS(FPSController)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/BaseNode);
+  DEFINE_BASECLASS(oxygen/BaseNode);
+  DEFINE_FUNCTION(setAcceleration);
 }
