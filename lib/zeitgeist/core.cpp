@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.11 2004/04/08 13:37:39 rollmark Exp $
+   $Id: core.cpp,v 1.12 2004/04/21 07:02:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,22 +43,19 @@ using namespace zeitgeist;
 
 /** Create the fundamental classes needed for the hierarchy to operate
  */
-Core::Core() :
-    mClassClass(new CLASS(Class))
+Core::Core() : mClassClass(new CLASS(Class))
 {
 }
 
 Core::~Core()
 {
-    cout << "~Core()" << endl;
     mRoot.reset();
     mFileServer.reset();
     mLogServer.reset();
     mScriptServer.reset();
     mNodeClass.reset();
-    cout << "~Core() Freeing bundles" << endl;
     mBundles.clear();
-    cout << "~Core() End" << endl;
+    cout << "(Core) End" << endl;
 }
 
 void Core::Construct(const boost::weak_ptr<Core>& self)
@@ -251,7 +248,7 @@ boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr,
 
     if (current.get() == NULL)
         {
-            mLogServer->Error() << "ERROR: Core::Get() - Could not find object '"
+            mLogServer->Error() << "(Core::Get) ERROR: Could not find object '"
                                 << pathStr << "'" << std::endl;
         }
 

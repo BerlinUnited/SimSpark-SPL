@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.16 2004/04/08 14:39:50 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.17 2004/04/21 07:03:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -252,7 +252,7 @@ bool ScriptServer::Run(const string &fileName)
             return false;
         }
 
-    GetLog()->Normal() << "ScriptServer: Running " << fileName << endl;
+    GetLog()->Normal() << "(ScriptServer) Running " << fileName << endl;
 
     return Run(file);
 }
@@ -416,7 +416,7 @@ bool ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &
 {
     // run the init script in the sourceDir
     string sourcePath = sourceDir + "/" + name;
-    GetLog()->Normal() << "ScriptServer: Running " << sourcePath << "... ";
+    GetLog()->Normal() << "(ScriptServer) Running " << sourcePath << "... ";
 
     shared_ptr<salt::StdFile> file(new(salt::StdFile));
     if (
@@ -489,12 +489,12 @@ bool ScriptServer::CreateDotDir(const string& dotDir)
     // dot dir is not existent, try to create it
     if (mkdir(dotDir.c_str(),0777) != 0)
         {
-            GetLog()->Error() << "ERROR: Cannot create directory '"
+            GetLog()->Error() << "(ScriptServer) ERROR: Cannot create directory '"
                               << dotDir << "'\n";
             return false;
         }
 
-    GetLog()->Normal() << "Created Directory '"
+    GetLog()->Normal() << "(ScriptServer) Created Directory '"
                        << dotDir << "'\n";
 
     return true;
@@ -523,7 +523,7 @@ bool ScriptServer::RunInitScript(const string &fileName, const string &relPath,
 
     if (! ok)
         {
-            GetLog()->Error() << "ERROR: Cannot locate init script '"
+            GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate init script '"
                               << fileName << "'\n";
         }
 
