@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.h,v 1.1 2004/04/25 16:56:27 rollmark Exp $
+   $Id: inputcontrol.h,v 1.2 2004/12/06 08:45:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,10 +55,11 @@ public:
             CmdRight    = 7,
             CmdForward  = 8,
             CmdBackward = 9,
-            CmdQuit     = 10,
+            CmdMouseLook = 10,
+            CmdQuit     = 11,
 
             // first user defined input constant
-            CmdUser = 11
+            CmdUser = 12
         };
 
 public:
@@ -132,6 +133,9 @@ protected:
         automatically passed to the SimulationServer.
     */
     bool mAdvanceTime;
+
+    /** true, if mouse look is currently activated */
+    bool mMouseLook;
 };
 
 DECLARE_CLASS(InputControl);
