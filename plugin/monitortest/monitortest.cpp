@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitortest.cpp,v 1.1.2.2 2003/11/24 10:24:57 fruit Exp $
+   $Id: monitortest.cpp,v 1.1.2.2.2.1 2003/12/21 19:30:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,12 +21,17 @@
 */
 #include "monitortest.h"
 
+#include <sstream>
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/scene.h>
+#include <oxygen/sceneserver/transform.h>
 
 using namespace oxygen;
 using namespace std;
+using namespace boost;
 
-MonitorTest::MonitorTest()
+MonitorTest::MonitorTest() : MonitorSystem()
 {
 }
 
@@ -37,6 +42,7 @@ MonitorTest::~MonitorTest()
 bool MonitorTest::ConstructInternal()
 {
   GetLog()->Normal() << "a monitortest was created." << endl;
+  return true;
 }
 
 void
@@ -44,3 +50,45 @@ MonitorTest::ParseMonitorMessage(std::string data)
 {
     GetLog()->Debug() << "MonitorTest received " << data << " from monitor\n";
 }
+
+
+string MonitorTest::GetMonitorInfo()
+{
+    /*    GetLog()->Debug() << "**** (MonitorTest::GetMonitorInfo)\n";
+          return ("(player 0.3 1.4 0.2)");*/
+
+    shared_ptr<SceneServer> sceneServer =
+        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+    if (sceneServer.get() == 0)
+        {
+            GetLog()->Error() << "(MonitorTest) cannot get SceneServer\n";
+            return "";
+        }
+
+    TLeafList transformList;
+    shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
+    activeScene->GetChildrenSupportingClass("AgentAspect", transformList, true);
+
+    stringstream ss;
+
+    for (TLeafList::iterator i = transformList.begin();
+         i != transformList.end(); ++i)
+        {
+            shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
+            const salt::Vector3f& pos = j->GetWorldTransform().Pos();
+
+            ss << "(player " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
+        }
+
+    GetLog()->Debug() << "(MonitorTest) info: " << ss.str() << "\n";
+
+    return ss.str();
+}
+
+string MonitorTest::GetMonitorHeaderInfo()
+{
+    return "";
+}
+
+
