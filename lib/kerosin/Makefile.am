@@ -1,13 +1,15 @@
+if BUILD_KEROSIN
 if DEBUG
 pkglib_LTLIBRARIES = libkerosin_debug.la
 libkerosin_debug_la_SOURCES = $(sources)
 libkerosin_debug_la_CXXFLAGS = -O -g -W -Wall
-libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ 
+libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
 else
 pkglib_LTLIBRARIES = libkerosin.la
 libkerosin_la_SOURCES = $(sources)
 libkerosin_la_CXXFLAGS = -O2
-libkerosin_la_LIBADD = @FREETYPE_LIBADD@ 
+libkerosin_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
+endif
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
@@ -15,7 +17,9 @@ AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
 
+if BUILD_KEROSIN
 BUILT_SOURCES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
+endif
 CLEANFILES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
 nobase_nodist_libpkginclude_HEADERS = openglserver/glextensionreg.h

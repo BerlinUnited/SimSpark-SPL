@@ -2,10 +2,12 @@ if DEBUG
 pkglib_LTLIBRARIES = liboxygen_debug.la
 liboxygen_debug_la_SOURCES = $(sources)
 liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall
+liboxygen_debug_la_LIBADD = -lode
 else
 pkglib_LTLIBRARIES = liboxygen.la
 liboxygen_la_SOURCES = $(sources)
 liboxygen_la_CXXFLAGS = -O2
+liboxygen_la_LIBADD = -lode
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@

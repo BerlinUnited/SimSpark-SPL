@@ -2,10 +2,12 @@ if DEBUG
 pkglib_LTLIBRARIES = libsalt_debug.la
 libsalt_debug_la_SOURCES = $(sources)
 libsalt_debug_la_CXXFLAGS = -O -g -W -Wall
+libsalt_debug_la_LIBADD = ${top_srcdir}/utility/libobj/liblibobject.la
 else
 pkglib_LTLIBRARIES = libsalt.la
 libsalt_la_SOURCES = $(sources)
 libsalt_la_CXXFLAGS = -O2
+libsalt_la_LIBADD = ${top_srcdir}/utility/libobj/liblibobject.la
 endif
 
 ## define include directory local to the pkgincludedir
