@@ -1,3 +1,26 @@
+2003-12-01  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- implemented helper function to get GameControlServer 
+	- agentConnect calls the GameControlServer::AgentConnect method
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	added helper function to get GameControlServer
+
+	* lib/oxygen/oxygen.h: 
+	* lib/oxygen/oxygen.cpp: 	
+	Added GameControlServer to the oxygen initialization
+
+	* lib/oxygen/gamecontrolserver/baseparser.h: 
+	* lib/oxygen/gamecontrolserver/baseparser_c.cpp: 	
+	Added a base parser class BaseParser that the GameControlServer uses
+	to hold a reference to the specific parser used by a simulation. 
+	
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	Added first version of a GameControlServer
+
 2003-12-01  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/spadestest/spadestest.rb:
