@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.5 2004/03/22 18:10:56 fruit Exp $
+   $Id: soccerbase.cpp,v 1.6 2004/03/25 22:06:55 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
     if (agent_body.get() == 0)
     {
         transform->GetLog()->Error()
-            << "Error: (SoccerBase: " << transform->GetName()
+            << "(SoccerBase) ERROR: " << transform->GetName()
             << ") node has no Body child\n";
         return false;
     }
@@ -108,6 +108,24 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
     return true;
 }
 
+bool
+SoccerBase::GetAgentBody(const Leaf& base, TTeamIndex idx,
+                         int unum, shared_ptr<Body> & agent_body)
+{      
+    shared_ptr<AgentState> agentState;
+    shared_ptr<Transform>  parent;
+
+    // get matching AgentState
+    GetAgentState(base, idx, unum, agentState);
+    
+    // get AgentAspect
+    GetTransformParent(*agentState, parent);
+
+    // call GetAgentBody with matching AgentAspect
+    GetAgentBody(parent, agent_body);
+
+    return true;
+}
 
 bool
 SoccerBase::GetAgentState(const Leaf& base,
@@ -120,6 +138,57 @@ SoccerBase::GetAgentState(const Leaf& base,
     }
 
     return SoccerBase::GetAgentState(parent,agent_state);
+}
+
+bool
+SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
+                          int unum, shared_ptr<AgentState>& agentState)
+{
+    // get the active scene
+    shared_ptr<Scene> activeScene;
+
+    if (GetActiveScene(base, activeScene))
+    {
+        Leaf::TLeafList leafList;
+
+        // get a list of all the agent aspects
+        activeScene->GetChildrenOfClass("AgentAspect", leafList);
+
+        if (leafList.size() == 0)
+        {
+            base.GetLog()->Error()
+                << "ERROR: (SoccerBase) active scene doesn't have "
+                << "children of type AgentAspect\n";
+
+            return false;
+        }        
+
+        Leaf::TLeafList::iterator iter = leafList.begin();
+
+        // search through the list to find an agent state
+        // with matching team index and unum
+        for (
+              iter;
+              iter != leafList.end();
+              ++iter
+             )
+        {
+            shared_ptr<Transform> agentAspect =
+             shared_dynamic_cast<Transform>(*iter);
+
+            GetAgentState(agentAspect, agentState);
+
+            if (
+                (agentState->GetTeamIndex() == idx) &&
+                (agentState->GetUniformNumber() == unum)
+               )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    } 
 }
 
 bool
