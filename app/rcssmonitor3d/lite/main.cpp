@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.5 2004/03/10 20:51:17 rollmark Exp $
+   $Id: main.cpp,v 1.6 2004/03/12 08:55:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -659,7 +659,7 @@ int main(int argc, char* argv[])
   gGLServer.InitGL();
 
   //init zeitgeist
-  Zeitgeist zg("." PACKAGE_NAME);
+  Zeitgeist zg("." PACKAGE_NAME, "../../../");
 
   //init oxygen
   oxygen::Oxygen kOxygen(zg);
@@ -669,7 +669,7 @@ int main(int argc, char* argv[])
 
   // run init script
   zg.GetCore()->GetScriptServer()->RunInitScript
-      ("rcssmonitor3D-lite.rb", "../../rcssmonitor3d/lite");
+      ("rcssmonitor3D-lite.rb", "app/rcssmonitor3d/lite");
 
   // print a greeting
   zg.GetCore()->GetLogServer()->Normal()
