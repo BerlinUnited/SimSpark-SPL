@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYGRAPH_WORLDNODE_H
-#define RCSS_ENTITYGRAPH_WORLDNODE_H
+#ifndef RCSS_ENTITY_WORLDNODE_H
+#define RCSS_ENTITY_WORLDNODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,7 +29,7 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0
     }}
@@ -38,20 +38,25 @@ namespace rcss
 class WorldNode : public DirNode
 {
 public:
-    WorldNode(const std::string& name = "<unknown>",
-              BaseNode* parent = 0);
     ~WorldNode();
+
+    //! get the singleton instance of the World node
+    static WorldNode& instance(const std::string& name = "",
+                               DirNode* parent = 0);
+
+    void process();
 
     dWorldID getWorld();
     dSpaceID getSpace();
     
-protected:
-    WorldNode(NodeType node_type, 
-              const std::string& name = "<unknown>",
-              BaseNode* parent = 0);
+private:
+    WorldNode(const std::string& name = "", DirNode* parent = 0);
+
+    static void nearCallback(void *data, dGeomID o1, dGeomID o2);
 
     dWorldID M_world;
     dSpaceID M_space;    
+    dJointGroupID M_contact_group;
 };
 
     } // namespace 
