@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.cpp,v 1.11 2004/04/27 09:58:57 rollmark Exp $
+   $Id: basenode.cpp,v 1.12 2004/05/05 09:03:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -148,6 +148,14 @@ void BaseNode::UpdateHierarchy()
 
 shared_ptr<Scene> BaseNode::GetScene()
 {
+    // is this node the scene node ?
+    shared_ptr<Scene> self = shared_dynamic_cast<Scene>(make_shared(GetSelf()));
+    if (self.get() != 0)
+        {
+            return self;
+        }
+
+    // move up the hierarchy until we find a scene node
     return make_shared(FindParentSupportingClass<Scene>());
 }
 
