@@ -192,6 +192,10 @@ lib/zeitgeist/logserver/.dirstamp
 lib/zeitgeist/logserver/.libs
 lib/zeitgeist/logserver/*.la
 lib/zeitgeist/logserver/*.lo
+lib/zeitgeist/randomserver/*.lo
+lib/zeitgeist/randomserver/.deps
+lib/zeitgeist/randomserver/.dirstamp
+lib/zeitgeist/randomserver/.libs
 lib/zeitgeist/scriptserver/.deps
 lib/zeitgeist/scriptserver/.dirstamp
 lib/zeitgeist/scriptserver/.libs
