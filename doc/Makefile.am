@@ -1,3 +1,5 @@
+SUBDIRS = devel users
+
 all-local:
 if DOXYGEN
 	@echo "***"
