@@ -24,6 +24,7 @@ dist_pkgdata_DATA = zeitgeist.rb
 
 sources = \
 class.cpp \
+class_c.cpp \
 core.cpp \
 corecontext.cpp \
 leaf.cpp \
