@@ -1,3 +1,30 @@
+2003-08-07  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* added /lib/zeitgeist/telnetserver/
+	- added telnetdaemon.cpp, telnetdaemon.h, telnetserver.h,
+	telnetserver.cpp, telnetserver_c.h, telnetsession.h and
+	telnetsession.cpp
+
+	- The above files provide remote access to the simulator via telnet
+	sessions. The files are derived from app/telnetserver/ and are
+	integrated into the class concept of the simulator.
+
+	- To use the telnet server add something like
+	telnet=new('zeitgeist/TelnetServer', '/usr/telnet'); to a ruby init
+	script near you.
+
+	- Known problems: The output of all issued commands still goes to
+	stdout and not over the telnet connection. There are some design
+	issues preventing a quick fix.
+
+	* lib/zeitgeist/class.h 
+	- reinserted class macros from class_m.h
+
+	* lib/zeitgeist/core.cpp /lib/zeitgeist/leaf.h 
+	- fixed some includes
+
+	* lib/zeitgeist/zeitgeist.dsp
+	- inserted the telnet server to the project file
+
 2003-06-28  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* /app/simulator/survival/survival.rb, /app/simulator/survival/survivalcontrolaspect.cpp
 	- added a penalty for an agent that dies; it will be catapulted
@@ -11,7 +38,7 @@
 
 	* /plugin/survival/survival.rb, /plugin/survival/survivalcontrolaspect.cpp
 	* /plugin/survival/survivalcontrolaspect.h	
-	- refactored then init script for the survial demo simulation
+	- refactored the init script for the survial demo simulation
 	- modified the survival control aspect to support an unlimited
 	number of arbitrary named agents. The original version supported
 	exactly two agents with fixed names.
