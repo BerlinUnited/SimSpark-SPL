@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptor.h,v 1.5 2003/12/27 17:53:41 fruit Exp $
+   $Id: perceptor.h,v 1.5.4.1 2004/03/28 15:29:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,13 +31,12 @@ namespace oxygen
 class Perceptor : public oxygen::BaseNode
 {
 public:
-    /*!
-      This is called by agents to trigger the percept event implemented by
-      this perceptor. The perceptor can return data through the predicate
-      which is passed as a parameter.
+    /*!  This is called by agents to trigger the percept event
+      implemented by this perceptor. The perceptor can return data
+      through the PredicateList which is passed as a parameter.
       \return true, if valid data is available and false otherwise.
     */
-    virtual bool Percept(Predicate& predicate) = 0;
+    virtual bool Percept(boost::shared_ptr<PredicateList> predList) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(Perceptor);
