@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.4 2004/02/12 14:07:22 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.5 2004/04/15 21:22:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,18 +39,20 @@ public:
     GameControlServer();
     ~GameControlServer();
 
-    /** creates a parser \param parserName instance and registers it
-        to the GameControlServer
+    /** creates a parser instance and registers it to the GameControlServer
+        \param parserName the name of the parser
      */
     bool InitParser(const std::string& parserName);
 
-    /** sets \param effectorName as the effector class that is
-        initially created with every new AgentAspect instance
+    /** sets effectorName as the effector class that is
+        initially created with every new AgentAspect instance.
+        \param effectorName the init effector of the agent
     */
     void InitEffector(const std::string& effectorName);
 
-    /** creates an instance of \param aspectName and registers it as a
-        ControlAspect to the GameControlServer
+    /** creates an instance of aspectName and registers it as a
+        ControlAspect to the GameControlServer.
+        \param aspectName
     */
     bool InitControlAspect(const std::string& aspectName);
 
@@ -68,16 +70,17 @@ public:
     boost::shared_ptr<ActionObject::TList> Parse(int id, std::string str) const;
 
     /** notifies the GameControlServer that an agent has connected to
-        the simulation. \param id should be a unique identifier for
-        the new agent. It is not assigned by the GameControlServer.
+        the simulation.
+        \param id should be a unique identifier for the new agent.
+               It is not assigned by the GameControlServer.
     */
     bool AgentConnect(int id);
 
     /** notifies the GameControlServer that an agent has disappeared
-        from the simulation. \param id was the unique identifier of
-        the disappeared agent. The GameControlServer uses the
-        AgentAspect corresponding to \param id to clean up after the
-        agent left
+        from the simulation.
+        \param id was the unique identifier of the disappeared agent.
+               The GameControlServer uses the AgentAspect corresponding to
+               id to clean up after the agent left.
     */
     bool AgentDisappear(int id);
 
