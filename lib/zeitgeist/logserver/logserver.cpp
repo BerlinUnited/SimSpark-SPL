@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserver.cpp,v 1.2 2004/03/22 10:40:17 rollmark Exp $
+   $Id: logserver.cpp,v 1.3 2004/06/13 06:35:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,12 +65,17 @@ LogServer& LogServer::Priority(unsigned int prio)
     return *this;
 }
 
-void LogServer::Printf(const char *inFormat, ...)
+void
+LogServer::Printf(const char *inFormat, ...)
 {
-    char copyBuffer[4096];
+    const int size = 4096;
+    char copyBuffer[size];
     va_list args;
     va_start(args, inFormat);
-    vsprintf(copyBuffer, inFormat, args);
+    if (vsnprintf(copyBuffer, size, inFormat, args) == size)
+    {
+        copyBuffer[size-1] = 0;
+    }
     va_end(args);
     (*this) << copyBuffer;
     this->flush();
