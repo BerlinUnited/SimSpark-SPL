@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.1.2.1 2004/01/06 21:47:45 rollmark Exp $
+   $Id: agentstate.h,v 1.1.2.2 2004/01/31 15:12:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define AGENTSTATE_H
 
 #include <oxygen/sceneserver/basenode.h>
+#include <soccer/soccertypes.h>
 
 class AgentState : public oxygen::BaseNode
 {
@@ -34,14 +35,14 @@ public:
     virtual ~AgentState();
 
     /** set the team name */
-    virtual void SetTeamName(std::string name);
+    virtual void SetTeamIndex(TTeamIndex idx);
 
     /** set the uniform number */
     virtual void SetUniformNumber(int number);
 
 protected:
-    /** team name */
-    std::string mTeamName;
+    /** team index */
+    TTeamIndex mTeamIndex;
 
     /** uniform number */
     int mUniformNumber;
