@@ -7,7 +7,7 @@
 # original version from the Swig list (major changes by me /oliver)
 # at http://mailman.cs.uchicago.edu/mailman/listinfo/swig
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_PATH_RUBY, [
+AC_DEFUN([RCSS_PATH_RUBY], [
 
 	# --with-ruby=PATH
 	AC_ARG_WITH(ruby,
@@ -58,7 +58,7 @@ AC_DEFUN(RCSS_PATH_RUBY, [
 
 # RCSS_CHECK_RCSSBASE
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_CHECK_RCSSBASE, [
+AC_DEFUN([RCSS_CHECK_RCSSBASE], [
 	AC_ARG_VAR(RCSSBASE, [location of rcssbase installation])
 	if test $RCSSBASE; then
 	   CPPFLAGS="$CPPFLAGS -I$RCSSBASE/include"
@@ -80,7 +80,7 @@ AC_DEFUN(RCSS_CHECK_RCSSBASE, [
 
 # RCSS_CHECK_ODE
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_CHECK_ODE, [
+AC_DEFUN([RCSS_CHECK_ODE], [
 	AC_ARG_VAR(ODE, [location of ode installation])
 	if test $ODE; then
 	   CPPFLAGS="$CPPFLAGS -I$ODE/include"
@@ -105,7 +105,7 @@ AC_DEFUN(RCSS_CHECK_ODE, [
 # 	       @FREETYPE_LIBADD@
 #
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_PATH_FREETYPE, [
+AC_DEFUN([RCSS_PATH_FREETYPE], [
 	# --with-freetype=PATH
 	AC_ARG_WITH(freetype,
 		AC_HELP_STRING([--with-freetype=PATH],       
@@ -135,7 +135,7 @@ AC_DEFUN(RCSS_PATH_FREETYPE, [
 #	headers and libraries.
 #	Substitutes: @GLDIR@ with the directory where the gl headers can be found
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_CHECK_GL, [
+AC_DEFUN([RCSS_CHECK_GL], [
 	RCSS_KEROSIN_IF_ELSE([
 	# check for OpenGL location and used extensions
     		AC_CHECK_HEADER([GL/gl.h],,
@@ -176,7 +176,7 @@ AC_DEFUN(RCSS_CHECK_GL, [
 #	If DEVIL headers or libraries can not be found, building kerosin will 
 #	be disabled.
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_CHECK_DEVIL, [
+AC_DEFUN([RCSS_CHECK_DEVIL], [
 	AC_ARG_VAR(DEVIL, [location of DevIL installation])
 	if test $DEVIL; then
 		CPPFLAGS="$CPPFLAGS -I$DEVIL/include"
@@ -206,7 +206,7 @@ Please set LDFLAGS appropriately or you can specify the location of the DevIL in
 #	If SDL headers or libraries can not be found, building kerosin will be
 #       disabled.
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_CHECK_SDL, [
+AC_DEFUN([RCSS_CHECK_SDL], [
 	AC_ARG_VAR(SDL, [location of SDL installation])
 	if test $SDL; then
 		CPPFLAGS="$CPPFLAGS -I$SDL/include"
@@ -232,7 +232,7 @@ Please set LDFLAGS appropriately or you can specify the location of the SDL inst
 
 # RCSS_CHECK_SLANG
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_CHECK_SLANG, [
+AC_DEFUN([RCSS_CHECK_SLANG], [
 	RCSS_KEROSIN_IF_ELSE([
                               rcss_tmp="$LDFLAGS"
                               LDFLAGS="$LDFLAGS -lslang"
@@ -248,7 +248,7 @@ Please set LDFLAGS appropriately.]))
 #	and library exists. Up to date, there is no version check for the 
 #	fmod library.
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_BUILD_SOUNDSYSTEMFMOD, [
+AC_DEFUN([RCSS_BUILD_SOUNDSYSTEMFMOD], [
 	AC_CHECK_HEADER(fmod/fmod.h, 
 			[rcss_soundsystemfmod="true"], 
 			[rcss_soundsystemfmod="false" &&
@@ -273,7 +273,7 @@ AC_DEFUN(RCSS_BUILD_SOUNDSYSTEMFMOD, [
 # 	defines preprocessor symbol HAVE_KEROSIN_H if kerosin can be build
 #       set automake conditional BUILD_KEROSIN to true if kerosin can be build
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_BUILD_KEROSIN, [
+AC_DEFUN([RCSS_BUILD_KEROSIN], [
 	AC_REQUIRE([RCSS_BUILD_KEROSIN_INIT])
 	AC_REQUIRE([RCSS_CHECK_GL])
  	AC_REQUIRE([RCSS_PATH_FREETYPE])
@@ -292,7 +292,7 @@ AC_DEFUN(RCSS_BUILD_KEROSIN, [
 # RCSS_BUILD_KEROSIN_INIT
 # 	set rcss_build_kerosin to 'yes'
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_BUILD_KEROSIN_INIT, [
+AC_DEFUN([RCSS_BUILD_KEROSIN_INIT], [
 	# --enable-kerosin
 	AC_ARG_ENABLE(kerosin,
 		AC_HELP_STRING([--enable-kerosin=@<:@yes|no@:>@],       
@@ -309,7 +309,7 @@ AC_DEFUN(RCSS_BUILD_KEROSIN_INIT, [
 # RCSS_BUILD_KEROSIN_ERROR
 # 	print a warning and set rcss_build_kerosin to 'no'
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_BUILD_KEROSIN_ERROR, [
+AC_DEFUN([RCSS_BUILD_KEROSIN_ERROR], [
 	AC_MSG_WARN($1)
 	rcss_build_kerosin=no
 ]) # RCSS_BUILD_KEROSIN_ERROR
@@ -318,7 +318,7 @@ AC_DEFUN(RCSS_BUILD_KEROSIN_ERROR, [
 # 	if rcss_build_kerosin is 'yes', execute the if part (first parameter)
 #	if rcss_build_kerosin is unequal to 'yes', execute the else part (2nd)
 #-----------------------------------------------------------------------------
-AC_DEFUN(RCSS_KEROSIN_IF_ELSE, [
+AC_DEFUN([RCSS_KEROSIN_IF_ELSE], [
 	if test "$rcss_build_kerosin" = yes; then
 		:
 		$1
