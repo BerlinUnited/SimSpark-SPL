@@ -206,6 +206,12 @@ plugin/filesystemzip/Makefile
 plugin/filesystemzip/Makefile.in
 plugin/filesystemzip/*.la
 plugin/filesystemzip/*.lo
+plugin/forceeffector/.deps
+plugin/forceeffector/.libs
+plugin/forceeffector/Makefile
+plugin/forceeffector/Makefile.in
+plugin/forceeffector/*.la
+plugin/forceeffector/*.lo
 plugin/inputsdl/.deps
 plugin/inputsdl/.libs
 plugin/inputsdl/Makefile
