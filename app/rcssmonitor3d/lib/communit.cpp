@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.cpp,v 1.4 2004/05/01 17:13:05 fruit Exp $
+   $Id: communit.cpp,v 1.4.2.1 2004/05/05 14:59:27 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,47 +36,50 @@ CommUnit::CommUnit() :
 
 CommUnit::~CommUnit()
 {
-    CloseConnection ();
+    CloseConnection();
 }
 
-void CommUnit::CloseConnection()
+void
+CommUnit::CloseConnection()
 {
-  mSocket.close();
+    mSocket.close();
 }
 
-bool CommUnit::OpenConnection(std::string host, int port)
+bool
+CommUnit::OpenConnection(const std::string& host, int port)
 {
-  mSocket.open();
+    mSocket.open();
 
-  cout << "(CommUnit) connecting to ";
-  cout << host << ":" << port << endl;
+    cout << "(CommUnit) connecting to ";
+    cout << host << ":" << port << endl;
 
-  Addr local(INADDR_ANY,INADDR_ANY);
-  mSocket.bind(local);
+    Addr local(INADDR_ANY,INADDR_ANY);
+    mSocket.bind(local);
 
-  try
+    try
     {
-      Addr server(port,string(host));
-      mSocket.connect(server);
+        Addr server(port,string(host));
+        mSocket.connect(server);
     }
 
-  catch (ConnectErr error)
+    catch (ConnectErr error)
     {
-      cerr << "(CommUnit) connection failed with: \n\t"
-           << strerror(errno) << endl;
-      return false;
+        cerr << "(CommUnit) connection failed with: \n\t"
+             << strerror(errno) << endl;
+        return false;
     }
 
-  if (mSocket.isConnected())
+    if (mSocket.isConnected())
     {
-      cout << "(CommUnit) connected successfully" << endl;
-      return true;
+        cout << "(CommUnit) connected successfully" << endl;
+        return true;
     }
 
-  return false;
+    return false;
 }
 
-bool CommUnit::SelectInput(bool wait)
+bool
+CommUnit::SelectInput(bool wait)
 {
     int fd = mSocket.getFD();
 
@@ -95,19 +98,21 @@ bool CommUnit::SelectInput(bool wait)
          ) > 0;
 }
 
-string CommUnit::GetMessage ()
+string
+CommUnit::GetMessage()
 {
     if (! SelectInput(false))
-        {
-            return "";
-        }
+    {
+        return "";
+    }
 
     static char line[MAX_MSG_LEN];
     mInStream.getline(line,MAX_MSG_LEN);
     return line;
 }
 
-void CommUnit::PutMessage(const string& message)
+void
+CommUnit::PutMessage(const string& message)
 {
     mSocket.send(message.c_str(),message.size());
 }
