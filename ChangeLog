@@ -1,3 +1,9 @@
+2004-02-09  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/: 
+	- name changes from simulator to rcssserver3D (as in previous release)
+	- added scripts for simple startup of simulator + monitor
+
 2004-02-08  Oliver Obst  <fruit@robolog.org>
 
 	* app/simulator/simulator.rb: 
