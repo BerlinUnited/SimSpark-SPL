@@ -67,6 +67,7 @@ AC_REPLACE_FUNCS([_vsnprintf])
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr strupr])
 
 ## checks for system services
+RCSS_CHECK_RCSSBASE
 RCSS_BUILD_KEROSIN
 RCSS_BUILD_SOUNDSYSTEMFMOD
 RCSS_PATH_RUBY
