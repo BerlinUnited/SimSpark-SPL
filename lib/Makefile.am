@@ -1,3 +1,3 @@
-SUBDIRS = salt 
-#zeitgeist kerosin
+SUBDIRS = salt zeitgeist
+# kerosin
 
