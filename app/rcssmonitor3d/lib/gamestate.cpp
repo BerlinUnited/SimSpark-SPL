@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.7 2004/06/08 13:02:26 fruit Exp $
+   $Id: gamestate.cpp,v 1.8 2004/06/11 14:30:33 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ GameState::GameState() :
     mGoalHeight = DEFAULT_GOAL_HEIGHT;
     mBorderSize = DEFAULT_BORDER_SIZE;
     mLineWidth = DEFAULT_LINE_WIDTH;
+    mFinished = false;
 }
 
 GameState::~GameState()
@@ -235,6 +236,7 @@ GameState::SetupProcessMap()
     // predicate name -> member function
     mProcessMap["Init"] = &GameState::ProcessInit;
     mProcessMap["Info"] = &GameState::ProcessInfo;
+    mProcessMap["Die"] = &GameState::ProcessShutdown;
 }
 
 void
@@ -331,6 +333,10 @@ GameState::ProcessInit(const Predicate& predicate)
 void
 GameState::ProcessInfo(const Predicate& predicate)
 {
+    ResetBall();
+    ResetPlayers();
+    ResetFlags();
+
     Predicate::Iterator iter(predicate);
     mAck.clear();
     predicate.GetValue(iter, "ack", mAck);
@@ -412,6 +418,12 @@ GameState::ProcessInfo(const Predicate& predicate)
             break;
         }
     }
+}
+
+void
+GameState::ProcessShutdown(const Predicate& /* predicate */ )
+{
+    mFinished = true;
 }
 
 float
