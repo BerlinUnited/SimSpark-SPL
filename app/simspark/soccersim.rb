@@ -58,3 +58,7 @@ gameControlServer = get($serverPath+'gamecontrol')
 gameControlServer.initControlAspect('GameStateAspect')
 gameControlServer.initControlAspect('BallStateAspect')
 # gameControlServer.initControlAspect('SoccerRuleAspect')
+
+# init monitorItems to transmit game state information
+monitorServer = get($serverPath+'monitor')
+monitorServer.registerMonitorItem('GameStateItem')
