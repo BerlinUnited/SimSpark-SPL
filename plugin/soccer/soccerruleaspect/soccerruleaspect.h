@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.1.2.5 2004/02/10 19:38:46 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.1.2.6 2004/02/10 20:45:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,9 @@ protected:
     /** reset the reference to the ball and field recorder */
     virtual void OnUnlink();
 
+    /** checks if the time for one game half has passed */
+    void CheckTime();
+
     /** updates the RuleAspect during BeforeKickOff mode */
     void UpdateBeforeKickOff();
 
@@ -79,7 +82,7 @@ protected:
 
     /** moves the ball to pos setting its linear and angular velocity
         to 0 */
-    void SoccerRuleAspect::MoveBall(const salt::Vector3f& pos);
+    void MoveBall(const salt::Vector3f& pos);
 
 protected:
     /** reference to the body node of the Ball */
@@ -99,6 +102,9 @@ protected:
 
     /** the length of the pause after the ball left the field */
     float mKickInPauseTime;
+
+    /** the length of one game half */
+    float mHalfTime;
 
     /** the point above the ground, where the ball left the field */
     salt::Vector3f mLastValidBallPos;
