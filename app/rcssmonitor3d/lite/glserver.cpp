@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.4 2004/04/20 12:40:23 fruit Exp $
+   $Id: glserver.cpp,v 1.5 2004/04/21 18:35:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -185,7 +185,8 @@ void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
 }
 
 void
-GLServer::DrawCircle(const salt::Vector3f& pos, float radius, float start_angle, float end_angle)
+GLServer::DrawCircle(const salt::Vector3f& pos, float radius,
+                     float /*start_angle*/, float /*end_angle*/)
 {
     glPushMatrix();
     glBegin(GL_LINE_LOOP);
@@ -304,13 +305,11 @@ void GLServer::DrawSphere(Vector3f spherePos,float radius, int res)
 void GLServer::DrawShadowOfSphere(Vector3f spherePos,float radius)
 {
     // distance between ground and shadows
-    const float delta = 0.051f;
+    const float delta = 0.001f;
 
     glPushMatrix();
     glColor3f(0.0f, 0.0f, 0.0f);
 
-    // draw the flat sphere just a 'bit'
-    // ontop of the playing gound
     glTranslatef(spherePos[0], spherePos[1],delta);
     glScalef(1.0f, 1.0f, 0.0f);
     glutSolidSphere(radius, 10, 10);
