@@ -12,4 +12,7 @@ new('WorldModel', '/sys/WorldModel')
 # install the 'kick and run' behavior
 new('KickNRun', '/sys/Behavior')
 
+# set up logging
+logServer = get('/sys/server/log')
+logServer.addStream(':cerr', 'eAll')
 
