@@ -37,6 +37,7 @@ app/rcssmonitor3d/.deps
 app/rcssmonitor3d/.libs
 app/rcssmonitor3d/Makefile
 app/rcssmonitor3d/Makefile.in
+app/rcssmonitor3d/rcssmonitor3D
 app/rcssmonitor3d/spadestest
 app/rcssmonitor3d/sys
 app/scenetest/.deps
