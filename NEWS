@@ -1,3 +1,7 @@
+- The monitor protocoll has been changed to produce less redundant data. Specifically,
+  field flags will only be sent once, and information like team names and scores will 
+  be sent only if they change.
+
 [0.2.1]
 This is a bugfix release. It removes some (but not all) bugs found
 in rcssserver3D-0.2.

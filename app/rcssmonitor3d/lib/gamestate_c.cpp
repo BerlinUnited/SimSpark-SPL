@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorparser_c.cpp,v 1.1 2004/03/12 17:23:22 rollmark Exp $
+   $Id: gamestate_c.cpp,v 1.2 2004/05/10 14:10:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "monitorparser.h"
+#include "gamestate.h"
 
 void
-CLASS(MonitorParser)::DefineClass()
+CLASS(GameState)::DefineClass()
 {
     DEFINE_BASECLASS(zeitgeist/Leaf);
 }

@@ -70,6 +70,9 @@ app/rcssmonitor3d/lib/*.lo
 app/rcssmonitor3d/lib/.deps
 app/rcssmonitor3d/lib/.dirstamp
 app/rcssmonitor3d/lib/.libs
+app/rcssmonitor3d/lib/Makefile
+app/rcssmonitor3d/lib/Makefile.in
+app/rcssmonitor3d/lib/librcssmonitor3D.la
 app/rcssmonitor3d/lite/*.lo
 app/rcssmonitor3d/lite/.deps
 app/rcssmonitor3d/lite/.dirstamp

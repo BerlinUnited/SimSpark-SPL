@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorinputcontrol.cpp,v 1.1 2004/04/25 17:14:09 rollmark Exp $
+   $Id: monitorinputcontrol.cpp,v 1.2 2004/05/10 14:10:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "monitorinputcontrol.h"
+#include <zeitgeist/scriptserver/scriptserver.h>
 
 using namespace zeitgeist;
 using namespace boost;

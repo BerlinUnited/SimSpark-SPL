@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.11 2004/04/25 17:16:39 rollmark Exp $
+   $Id: main.cpp,v 1.12 2004/05/10 14:10:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <spark/spark.h>
 #include <sstream>
 #include <monitorlib.h>
+#include <types.h>
 #include <commserver.h>
 #include "monitorinputcontrol.h"
 #include "monitorclientcontrol.h"

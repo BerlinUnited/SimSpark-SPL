@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.5 2004/05/03 11:09:19 markelic Exp $
+   $Id: commserver.h,v 1.6 2004/05/10 14:10:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,27 +22,23 @@
 #ifndef _COMMSERVER_H
 #define _COMMSERVER_H
 
+#include "communit.h"
+
 #include <zeitgeist/class.h>
 #include <oxygen/gamecontrolserver/baseparser.h>
-#include <oxygen/oxygen.h>
-#include "types.h"
-#include "communit.h"
-#include <vector>
 
 class CommServer : public zeitgeist::Leaf
 {
- public:
-  typedef std::vector<salt::Vector3f> TPositions;
+public:
 
- public:
+public:
     CommServer();
     virtual ~CommServer() {};
 
-    bool Init(std::string parser, std::string host, int port);
-    bool GetMessage();
-    bool GetMessage(std::string& msg);
-    const TPositions& GetPositions();
-    boost::shared_ptr<oxygen::PredicateList> GetPredicates();
+    bool Init(const std::string& parser, const std::string& host, int port);
+    bool ReadMessage();
+    bool ReadMessage(std::string& msg);
+    boost::shared_ptr<oxygen::PredicateList> GetPredicates() const;
 
     void SendKickOffCmd();
     void SendTrainerCmd(const std::string& cmd);
@@ -51,18 +47,18 @@ class CommServer : public zeitgeist::Leaf
     void SendDisconnectCmd();
     void SendToWorldModel(const std::string& msg);
 
- protected:
-    void Parse(std::string msg);
+protected:
+    void Parse(const std::string& message);
     void SendMessage(const std::string& message);
 
- protected:
-    // socket wrapper
+protected:
+    //! socket wrapper
     CommUnit mCommUnit;
 
-    // cache for parsed predicates
+    //! cache for parsed predicates
     boost::shared_ptr<oxygen::PredicateList> mPredicates;
 
-    // the parser used for the SExpressions
+    //! the parser used for the SExpressions
     boost::shared_ptr<oxygen::BaseParser> mParser;
 };
 

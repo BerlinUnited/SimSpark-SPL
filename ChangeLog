@@ -1,3 +1,26 @@
+2004-05-10  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb: 
+	removed monitorparser setup
+
+	* app/rcssmonitor3d/kerosin/monitorclientcontrol.cpp:
+	* app/rcssmonitor3d/kerosin/monitorclientcontrol.h: 
+	- removed the use of monitorparser 
+	- replaced GetSphere() method by 3 specialized methods GetBall(), GetAgent(), GetFlag() 
+	- removed MangleExpr method
+	- using the new GameState instead of the MonitorParser
+	
+	* app/rcssmonitor3d/lib/gamestate.h: 
+	* app/rcssmonitor3d/lib/gamestate.cpp: 
+	- added method GetFlagName to get the string representation of a given flag 
+	- added method to get the height of the goals 
+	- added method to get the depth of the goals 
+	- added method to get the mass of an agent 
+	- added method to get the radius of an agent 
+	- added method to get the max speed of an agent 
+	- added method to get the ball radius 
+	- added method to get the ball mass
+	
 2004-05-07  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* configure.ac: 
@@ -112,9 +135,57 @@
 
 2004-05-05  Oliver Obst  <fruit@robolog.org>
 
+	* app/rcssmonitor3d/lite/main.cpp: 
+	new, lean mainloop for the lite monitor
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	* app/rcssmonitor3d/lite/monitor.h: 
+	Added a monitor class that uses the new monitor library
+	
+	* app/rcssmonitor3d/lite/glserver.cpp: 
+	* app/rcssmonitor3d/lite/glserver.h: 
+	- added new DrawText3D method that takes std::string arguments
+
+	* app/rcssmonitor3d/lib/communit.cpp: 
+	* app/rcssmonitor3d/lib/communit.h: 
+	changed OpenConnection() to take const string reference instead of copy
+
+	* app/rcssmonitor3d/lib/gamestate.cpp: 
+	* app/rcssmonitor3d/lib/gamestate.h: 
+	The GameState is a kind of WorldModel for the monitor now. It provides 
+	methods to access most important data you get from the monitor 
+	protocoll via straightforward method calls (no more magic involved to 
+	get simple information)
+
+	* app/rcssmonitor3d/lib/monitorlib.cpp: 
+	the monitorlib registers a commserver and a GameState now (no more MonitorParser)
+
+	* app/rcssmonitor3d/lib/commserver.cpp: 
+	* app/rcssmonitor3d/lib/commserver.h: 
+	Changed the commserver to do return only the predicates read from the simulator.  
+	The GetMessage() methods have been renamed to ReadMessage() and some
+	methods have been changed to take const references instead of
+	string copies.
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp: 
+	* plugin/soccer/sexpmonitor/sexpmonitor.h: 
+	The monitor protocoll has been changed to produce less redundant data. 
+	Specifically, field flags will only be sent once, and information like team
+	names and scores will be sent only if they change.  
+	- removed the GenerateSexp method. Functionality of this method is now in more
+	  specialized methods.  
+	- removed the GetLastBallAgent method. Functionality of this method is now inside 
+	  AddAgentData method 
+	- Information is now added via Add.. methods (AddAgents, AddFlags, AddBall, 
+	   AddGameState).  
+	- flags/variables to remember the last sent state have been added
+	- The monitor protocoll sends an "Init" message each time a new monitor connected.
+          Here we send information like field size etc.
+	- The monitor sends "Info" messages for the current game state each monitor cycle.
+
 	* lib/salt/tvector.h: 
-	changed TVector output operator to print only the vector values 
-	(separated by whitespace)
+ 	  changed TVector output operator to print only the vector values 
+	  (separated by whitespace)
 
 	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
 	* plugin/soccer/gamestateaspect/gamestateaspect.h: 

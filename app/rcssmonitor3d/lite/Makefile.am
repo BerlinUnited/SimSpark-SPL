@@ -21,6 +21,7 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 rcssmonitor3D_lite_SOURCES = \
 	main.cpp \
+	monitor.h monitor.cpp \
 	camera.h camera.cpp \
 	glserver.h glserver.cpp
 

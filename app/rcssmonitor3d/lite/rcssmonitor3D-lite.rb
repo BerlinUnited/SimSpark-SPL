@@ -10,9 +10,3 @@ $serverPath = '/sys/server/'
 # setup the CommServer
 new('rcssmonitor3d/CommServer', $serverPath+'comm')
 
-# setup the MonitorParser
-new('rcssmonitor3d/MonitorParser', $serverPath+'parser')
-
-
-
-
