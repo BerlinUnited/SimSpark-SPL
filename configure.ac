@@ -48,7 +48,7 @@ LIBS=$TMP_LIBS
 AC_HEADER_STDC
 AC_CHECK_HEADERS([poll.h])
 AC_CHECK_HEADERS([arpa/nameser.h])
-AC_CHECK_HEADERS([resolv.h])
+AC_CHECK_HEADERS([resolv.h netdb.h])
 AC_CHECK_HEADERS([float.h limits.h malloc.h memory.h stdlib.h string.h])
 
 AC_CHECK_HEADER([boost/version.hpp],,
