@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector_c.cpp,v 1.1.2.3 2004/02/05 15:41:00 fruit Exp $
+   $Id: kickeffector_c.cpp,v 1.1.2.4 2004/03/22 10:48:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,11 +44,10 @@ FUNCTION(setForceFactor)
 
 FUNCTION(setSteps)
 {
-    if (in.size() == 2)
+    if (in.size() == 1)
     {
         KickEffector* ke = static_cast<KickEffector*>(obj);
-        ke->SetSteps(boost::any_cast<int>(in[0]),
-                     boost::any_cast<int>(in[1]));
+        ke->SetSteps(boost::any_cast<int>(in[0]));
     }
 }
 
