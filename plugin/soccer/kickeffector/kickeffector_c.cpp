@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector_c.cpp,v 1.5 2004/03/22 18:10:56 fruit Exp $
+   $Id: kickeffector_c.cpp,v 1.6 2004/05/14 16:40:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,6 +53,22 @@ FUNCTION(KickEffector,setForceFactor)
         }
 
     obj->SetForceFactor(inForceFactor);
+    return true;
+}
+
+FUNCTION(KickEffector,setTorqueFactor)
+{
+    float inTorqueFactor;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inTorqueFactor))
+        )
+        {
+            return false;
+        }
+
+    obj->SetTorqueFactor(inTorqueFactor);
     return true;
 }
 
@@ -133,6 +149,7 @@ void CLASS(KickEffector)::DefineClass()
     DEFINE_BASECLASS(oxygen/Effector);
     DEFINE_FUNCTION(setKickMargin);
     DEFINE_FUNCTION(setForceFactor);
+    DEFINE_FUNCTION(setTorqueFactor);
     DEFINE_FUNCTION(setSteps);
     DEFINE_FUNCTION(setNoiseParams);
     DEFINE_FUNCTION(setMaxPower);
