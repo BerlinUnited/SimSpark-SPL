@@ -1,3 +1,29 @@
+2004-02-02  Oliver Obst  <fruit@robolog.org>
+
+	* app/agenttest/main.cpp: 
+	- changed the agent to use the Vision perceptor instead of the PerfectVision Perceptor
+
+	* plugin/soccer/dasheffector/dasheffector.h: 	
+	* plugin/soccer/dasheffector/dasheffector.cpp: 
+	- added a reference to the agent state 
+	- using the VisionPerceptor FlipView method to
+	  flip the dash power vector in case of the right team
+
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp: 
+	- exporting method to set noise params 
+	- exporting method to switch on/off noise 
+	- exporting method to set the predicate name
+
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	- added method to change noise parameters 
+	- added method to turn all noise off/on
+	- added method to change predicate name (for debugging) 
+	- made a static FlipView method to switch coordinates for the team on the
+	  other side :) 
+	- removed references to the Random Number Generators
+	  (holding sigma values instead)
+
 2004-02-01  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/visionperceptor/visionperceptor.h: 
