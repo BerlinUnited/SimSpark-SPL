@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptor_c.cpp,v 1.4 2004/02/21 15:30:42 fruit Exp $
+   $Id: perceptor_c.cpp,v 1.5 2004/04/11 11:42:39 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,25 @@
 using namespace boost;
 using namespace oxygen;
 
-void CLASS(Perceptor)::DefineClass()
+FUNCTION(Perceptor,setPredicateName)
+{
+    std::string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inName))
+        )
+        {
+            return false;
+        }
+
+    obj->SetPredicateName(inName);
+    return true;
+}
+
+void
+CLASS(Perceptor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
+    DEFINE_FUNCTION(setPredicateName);
 }

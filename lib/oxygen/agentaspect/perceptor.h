@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptor.h,v 1.6 2004/04/05 14:51:08 rollmark Exp $
+   $Id: perceptor.h,v 1.7 2004/04/11 11:41:20 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,13 @@ public:
       \return true, if valid data is available and false otherwise.
     */
     virtual bool Percept(boost::shared_ptr<PredicateList> predList) = 0;
+
+    //! set / change predicate name (for example for debugging purposes)
+    void SetPredicateName(const std::string& my_name);
+
+protected:
+    //! the predicate name
+    std::string mPredicateName;
 };
 
 DECLARE_ABSTRACTCLASS(Perceptor);
