@@ -64,3 +64,5 @@ w3.setParams(0.0, 0.0, -1.0, -34.0);
 
 w4 = new('kerosin/PlaneCollider', '/usr/scene/w4');
 w4.setParams(0.0, 0.0, 1.0, -34.0);
+
+spadesServer.queueAgents('default', 11);

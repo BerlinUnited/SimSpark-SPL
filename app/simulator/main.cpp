@@ -12,8 +12,12 @@ using namespace zeitgeist;
 int
 main(int argc, const char *const *argv)
 {
+    timeval tv;
+    gettimeofday(&tv, 0);
+    srand(tv.tv_usec);
+
     // print a greeting
-    cout << PACKAGE_STRING << "\n\n"
+    cout << PACKAGE_STRING << "\n"
          << "Copyright (C) 2002, 2003 Koblenz University.\n"
          << "2003, 2004 RoboCup Soccer Server 3D Maintenance Group.\n\n";
 
