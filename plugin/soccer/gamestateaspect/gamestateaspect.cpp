@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.12 2004/02/10 21:43:43 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.13 2004/02/11 09:47:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mGameHalf = GH_FIRST;
     mScore[0] = 0;
     mScore[1] = 0;
+    mMaxUnum[0] = 0;
+    mMaxUnum[1] = 0;
     mLastKickOff = TI_NONE;
     mLeftInit = Vector3f(0,0,0);
     mRightInit = Vector3f(0,0,0);
@@ -184,6 +186,7 @@ bool GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
         }
 
     set.insert(unum);
+    mMaxUnum[idx] = std::max<int>(unum, mMaxUnum[idx]);
 
     return true;
 }
@@ -204,6 +207,11 @@ bool GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
                 << "ERROR: (GameStateAspect::RequestUniform) invalid teamname "
                 << teamName << "\n";
             return false;
+        }
+
+    if (unum == 0)
+        {
+            unum = RequestUniformNumber(idx);
         }
 
     if (! InsertUnum(idx,unum))
@@ -273,6 +281,9 @@ Vector3f GameStateAspect::RequestInitPosition(const TTeamIndex ti)
 {
     if (ti == TI_NONE)
         {
+            GetLog()->Debug()
+                << "(GameStateAspect) RequestInitPosition called with "
+                << "ti=TI_NONE\n";
             return Vector3f(0,0,20);
         }
 
@@ -288,9 +299,6 @@ Vector3f GameStateAspect::RequestInitPosition(const TTeamIndex ti)
 void GameStateAspect::OnLink()
 {
     // setup the initial starting positions for the agents
-    mLeftInit = Vector3f(0,0,0);
-    mRightInit = Vector3f(0,0,0);
-
     float fieldWidth = 64.0;
     SoccerBase::GetSoccerVar(*this,"FieldWidth",fieldWidth);
 
@@ -301,18 +309,24 @@ void GameStateAspect::OnLink()
 
     mLeftInit = Vector3f
         (
-         -fieldLength/2.0 + mAgentRadius*2 ,
-         0.0,
+         -fieldLength/2.0 + mAgentRadius*2,
+         mAgentRadius,
          fieldWidth/2 - mAgentRadius*2
          );
 
     mRightInit = Vector3f
         (
          +fieldLength/2.0 - mAgentRadius*2,
-         0.0,
+         mAgentRadius,
          fieldWidth/2  - mAgentRadius*2
          );
 }
+
+int GameStateAspect::RequestUniformNumber(const TTeamIndex ti)
+{
+    return mMaxUnum[ti] + 1;
+}
+
 
 
 
