@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.14 2004/12/31 14:17:52 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.15 2005/02/24 12:01:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -132,8 +132,21 @@ SexpMonitor::AddAgents(shared_ptr<Scene> activeScene, std::ostringstream& ss) co
             ss << "(s " << state->GetTeamIndex() << ")";
             ss << "(id " << state->GetUniformNumber() << ")";
         }
+
         // pos
         ss << "(pos " << pos << ")";
+
+        // world transform
+        ss << "(rot ";
+
+        const salt::Matrix& trans = aspect->GetWorldTransform();
+        for (int i=0;i<16;++i)
+        {
+            ss << trans.m[i] << " ";
+        }
+
+        ss << ")";
+
         // extra field if the agent was the last colliding with the ball
         shared_ptr<AgentAspect> agent;
         TTime time;
