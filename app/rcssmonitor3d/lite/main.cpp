@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.11 2004/04/05 14:51:54 rollmark Exp $
+   $Id: main.cpp,v 1.12 2004/04/09 20:12:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,14 +24,14 @@
    This is a very simple 3D monitor example which will hopefully be
    useful for the first steps of 3D SoccerServer
 */
-#include <types.h>
+#include <sstream>
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
-#include <sstream>
-#include <soccertypes.h>
+#include <soccer/soccertypes.h>
+#include <commserver.h>
 #include <monitorlib.h>
 #include <monitorparser.h>
-#include <commserver.h>
+#include <types.h>
 #include "glserver.h"
 
 using namespace std;
@@ -121,46 +121,48 @@ const float gTeamRColor[4] = {0.2f, 0.2f, 1.0f, 1.0f};
 //
 // simply prints options to the screen
 //-----------------------------------------------------------------------
-void printHelp()
+void
+printHelp()
 {
-  cout << "\nusage: rcsserver3D [options]" << endl;
-  cout << "\noptions:" << endl;
-  cout << " --help\t print this message." << endl;
-  cout << " --port\t sets the port number" << endl;
-  cout << " --server\t sets the server name" << endl;
-  cout << "\n";
+    cout << "\nusage: rcsserver3D [options]" << endl;
+    cout << "\noptions:" << endl;
+    cout << " --help\t print this message." << endl;
+    cout << " --port\t sets the port number" << endl;
+    cout << " --server\t sets the server name" << endl;
+    cout << "\n";
 }
 
 //--------------------------processInput---------------------------------
 //
 // process input of options
 //-----------------------------------------------------------------------
-void processInput(int argc, char* argv[])
+void
+processInput(int argc, char* argv[])
 {
-  for( int i = 0; i < argc; i++)
+    for( int i = 0; i < argc; i++)
     {
-      if( strcmp( argv[i], "--server" ) == 0 )
+        if( strcmp( argv[i], "--server" ) == 0 )
         {
-          if( i+1  < argc)
+            if( i+1  < argc)
             {
-              gSoccerServer = argv[i+1];
-              ++i;
-              cout << "server set to " << gSoccerServer << "\n";
+                gSoccerServer = argv[i+1];
+                ++i;
+                cout << "server set to " << gSoccerServer << "\n";
             }
         }
-      else if( strcmp( argv[i], "--port" ) == 0 )
+        else if( strcmp( argv[i], "--port" ) == 0 )
         {
-          if( i+1 < argc )
+            if( i+1 < argc )
             {
-              gPort = atoi( argv[i+1] );
-              ++i;
-              cout << "port set to " << gPort << "\n";
+                gPort = atoi( argv[i+1] );
+                ++i;
+                cout << "port set to " << gPort << "\n";
             }
         }
-      else if( strcmp( argv[i], "--help" ) == 0 )
+        else if( strcmp( argv[i], "--help" ) == 0 )
         {
-          printHelp();
-          exit(0);
+            printHelp();
+            exit(0);
         }
     }
 }
@@ -169,45 +171,46 @@ void processInput(int argc, char* argv[])
 //
 // draws a sphere object
 //-------------------------------------------------------------------------------
-void drawObject(const SphereType& type, const MonitorParser::Expression& expr)
+void
+drawObject(const SphereType& type, const MonitorParser::Expression& expr)
 {
     const float* color = type.color;
 
     switch (expr.etype)
+    {
+    case MonitorParser::ET_BALL:
+        // if 'automatic-camera' is on
+        // we set the camera to look at the ball
+        if (gAutoCam)
         {
-        case MonitorParser::ET_BALL:
-            // if 'automatic-camera' is on
-            // we set the camera to look at the ball
-            if (gAutoCam)
-                {
-                    gGLServer.SetLookAtPos(expr.pos);
-                }
+            gGLServer.SetLookAtPos(expr.pos);
+        }
+        break;
+
+    case MonitorParser::ET_AGENT:
+        // team
+        switch (expr.team)
+        {
+        case TI_LEFT:
+            color = gTeamLColor;
             break;
 
-        case MonitorParser::ET_AGENT:
-            // team
-            switch (expr.team)
-                {
-                case TI_LEFT:
-                    color = gTeamLColor;
-                    break;
-
-                case TI_RIGHT:
-                    color = gTeamRColor;
-                    break;
-
-                default:
-                    // keep default color
-                    break;
-                }
-            break;
-
-        case MonitorParser::ET_FLAG:
+        case TI_RIGHT:
+            color = gTeamRColor;
             break;
 
         default:
-            return;
+            // keep default color
+            break;
         }
+        break;
+
+    case MonitorParser::ET_FLAG:
+        break;
+
+    default:
+        return;
+    }
 
     glColor4fv(color);
     gGLServer.DrawSphere(expr.pos, type.size);
@@ -217,19 +220,20 @@ void drawObject(const SphereType& type, const MonitorParser::Expression& expr)
         (gDrawUnums) &&
         (expr.unum > 0)
         )
-        {
-            glColor3f   ( 1.0, 1.0, 1.0  );
-            stringstream ss;
-            ss << expr.unum;
-            gGLServer.DrawText3D(ss.str().c_str(),expr.pos);
-        }
+    {
+        glColor3f   ( 1.0, 1.0, 1.0  );
+        stringstream ss;
+        ss << expr.unum;
+        gGLServer.DrawText3D(ss.str().c_str(),expr.pos);
+    }
 }
 
 //---------------------------DrawStatusText--------------------------------------
 //
 // draws a text, describing the current game state
 //-------------------------------------------------------------------------------
-void drawStatusText()
+void
+drawStatusText()
 {
     stringstream ss;
 
@@ -240,38 +244,38 @@ void drawStatusText()
 
     string mode;
     switch (gGameState.GetPlayMode())
-        {
-        case    PM_BeforeKickOff:
-            mode = STR_PM_BeforeKickOff;
-            break;
-        case    PM_KickOff_Left:
-            mode = STR_PM_KickOff_Left;
-            break;
-        case    PM_KickOff_Right:
-            mode = STR_PM_KickOff_Right;
-            break;
-        case    PM_PlayOn:
-            mode = STR_PM_PlayOn;
-            break;
-        case    PM_KickIn_Left:
-            mode = STR_PM_KickIn_Left;
-            break;
-        case    PM_KickIn_Right:
-            mode = STR_PM_KickIn_Right;
-            break;
-        case PM_GameOver:
-            mode = STR_PM_GameOver;
-            break;
-        case PM_Goal_Left:
-            mode = STR_PM_Goal_Left;
-            break;
-        case PM_Goal_Right:
-            mode = STR_PM_Goal_Left;
-            break;
-        default:
-            mode = STR_PM_Unknown;
-            break;
-            }
+    {
+    case    PM_BeforeKickOff:
+        mode = STR_PM_BeforeKickOff;
+        break;
+    case    PM_KickOff_Left:
+        mode = STR_PM_KickOff_Left;
+        break;
+    case    PM_KickOff_Right:
+        mode = STR_PM_KickOff_Right;
+        break;
+    case    PM_PlayOn:
+        mode = STR_PM_PlayOn;
+        break;
+    case    PM_KickIn_Left:
+        mode = STR_PM_KickIn_Left;
+        break;
+    case    PM_KickIn_Right:
+        mode = STR_PM_KickIn_Right;
+        break;
+    case PM_GameOver:
+        mode = STR_PM_GameOver;
+        break;
+    case PM_Goal_Left:
+        mode = STR_PM_Goal_Left;
+        break;
+    case PM_Goal_Right:
+        mode = STR_PM_Goal_Left;
+        break;
+    default:
+        mode = STR_PM_Unknown;
+        break;
+    }
 
     ss << mode << " ";
     ss << "t=" << gGameState.GetTime();
@@ -284,26 +288,27 @@ void drawStatusText()
 //
 //-------------------------------------------------------------------------------
 
-void drawScene()
+void
+drawScene()
 {
     for (
-         MonitorParser::TExprList::iterator iter = gExprList.begin();
-         iter != gExprList.end();
-         ++iter)
+        MonitorParser::TExprList::iterator iter = gExprList.begin();
+        iter != gExprList.end();
+        ++iter)
+    {
+        MonitorParser::Expression& expr = (*iter);
+
+        TSphereMap::iterator iter = gSphereMap.find(expr.etype);
+
+        if (iter == gSphereMap.end())
         {
-            MonitorParser::Expression& expr = (*iter);
-
-            TSphereMap::iterator iter = gSphereMap.find(expr.etype);
-
-            if (iter == gSphereMap.end())
-                {
-                    // no corresponding sphere description found,
-                    // unknown entry or a gamestate expression
-                    continue;
-                }
-
-            drawObject((*iter).second,expr);
+            // no corresponding sphere description found,
+            // unknown entry or a gamestate expression
+            continue;
         }
+
+        drawObject((*iter).second,expr);
+    }
 }
 
 //---------------------------display--------------------------------------
@@ -311,173 +316,175 @@ void drawScene()
 // OpenGL display function:
 // can be seen as the mainloop of the monitor
 //------------------------------------------------------------------------
-void display(void)
+void
+display(void)
 {
-   const Vector3f szGoal1(
-                          -gGameParam.GetGoalDepth(),
-                          gGameParam.GetGoalWidth(),
-                          gGameParam.GetGoalHeight()
-                          );
-   const Vector3f szGoal2(
-                          gGameParam.GetGoalDepth(),
-                          gGameParam.GetGoalWidth(),
-                          gGameParam.GetGoalHeight()
-                          );
+    const Vector3f szGoal1(
+        -gGameParam.GetGoalDepth(),
+        gGameParam.GetGoalWidth(),
+        gGameParam.GetGoalHeight()
+        );
+    const Vector3f szGoal2(
+        gGameParam.GetGoalDepth(),
+        gGameParam.GetGoalWidth(),
+        gGameParam.GetGoalHeight()
+        );
 
-   // color constants
-   const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
-   const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
-   const GLfloat borderColor[4] = {0.2f, 0.8f, 0.2f, 1.0f};
-   const GLfloat lineColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
+    // color constants
+    const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
+    const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
+    const GLfloat borderColor[4] = {0.2f, 0.8f, 0.2f, 1.0f};
+    const GLfloat lineColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
 
-   glClearColor(0.15f,0.15f,0.3f,1.0f);
-   glClear (GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-   glColor3f (1, 1, 1);
+    glClearColor(0.15f,0.15f,0.3f,1.0f);
+    glClear (GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+    glColor3f (1, 1, 1);
 
-   glLoadIdentity();
-   gGLServer.ApplyCamera();
+    glLoadIdentity();
+    gGLServer.ApplyCamera();
 
-   const float& fl = gGameParam.GetFieldLength();
-   const float& fw = gGameParam.GetFieldWidth();
-   const float& fh = gGameParam.GetFieldHeight();
-   const float& lw = gGameParam.GetLineWidth();
-   const float& bs = gGameParam.GetBorderSize();
-   const float& gw = gGameParam.GetGoalWidth();
+    const float& fl = gGameParam.GetFieldLength();
+    const float& fw = gGameParam.GetFieldWidth();
+    const float& fh = gGameParam.GetFieldHeight();
+    const float& lw = gGameParam.GetLineWidth();
+    const float& bs = gGameParam.GetBorderSize();
+    const float& gw = gGameParam.GetGoalWidth();
 
-   // ground
-   glColor4fv(groundColor);
+    // ground
+    glColor4fv(groundColor);
 
-   // left half
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -fl/2 + lw,
-                                          -fw/2 + lw,
-                                          0
-                                          ),
-                                 fl/2 - lw - lw/2,
-                                 fw - 2*lw
-                                 ,0
-                                 );
+    // left half
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -fl/2 + lw,
+                                      -fw/2 + lw,
+                                      0
+                                      ),
+                                  fl/2 - lw - lw/2,
+                                  fw - 2*lw
+                                  ,0
+        );
 
-   // right half
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          lw/2,
-                                          -fw/2 + lw,
-                                          0
-                                          ),
-                                 fl/2 - lw - lw/2,
-                                 fw - 2*lw
-                                 ,0
-                                 );
+    // right half
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      lw/2,
+                                      -fw/2 + lw,
+                                      0
+                                      ),
+                                  fl/2 - lw - lw/2,
+                                  fw - 2*lw
+                                  ,0
+        );
 
-   //
-   // border
-   //
-   glColor4fv(borderColor);
+    //
+    // border
+    //
+    glColor4fv(borderColor);
 
-   // border at left goal
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -fl/2-bs,
-                                          -fw/2-bs,0
-                                          ),
-                                 bs, fw+2*bs, 0);
+    // border at left goal
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -fl/2-bs,
+                                      -fw/2-bs,0
+                                      ),
+                                  bs, fw+2*bs, 0);
 
-   // border at right goal
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          fl/2,
-                                          -fw/2
-                                          -bs,0
-                                          ),
-                                 bs, fw+2*bs, 0);
+    // border at right goal
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      fl/2,
+                                      -fw/2
+                                      -bs,0
+                                      ),
+                                  bs, fw+2*bs, 0);
 
-   // long top border
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -fl/2,
-                                          -fw/2-bs
-                                          ,0
-                                          ),
-                                 fl, bs, 0);
+    // long top border
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -fl/2,
+                                      -fw/2-bs
+                                      ,0
+                                      ),
+                                  fl, bs, 0);
 
-   // long bottom border
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -fl/2,
-                                          fw/2,
-                                          0
-                                          ),
-                                 fl, bs, 0);
+    // long bottom border
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -fl/2,
+                                      fw/2,
+                                      0
+                                      ),
+                                  fl, bs, 0);
 
-   //
-   // lines
-   //
-   glColor4fv(lineColor);
+    //
+    // lines
+    //
+    glColor4fv(lineColor);
 
-   // left goal
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -fl/2,
-                                          -fw/2,0
-                                          ),
-                                 lw, fw, 0);
+    // left goal
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -fl/2,
+                                      -fw/2,0
+                                      ),
+                                  lw, fw, 0);
 
-   // right goal
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          fl/2 - lw,
-                                          -fw/2,
-                                          0),
-                                 lw, fw, 0);
+    // right goal
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      fl/2 - lw,
+                                      -fw/2,
+                                      0),
+                                  lw, fw, 0);
 
-   // long top border
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -fl/2 + lw,
-                                          -fw/2
-                                          ,0),
-                                 fl - 2*lw, lw, 0);
+    // long top border
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -fl/2 + lw,
+                                      -fw/2
+                                      ,0),
+                                  fl - 2*lw, lw, 0);
 
-   // long bottom border
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -fl/2 + lw,
-                                          fw/2 - lw,
-                                          0),
-                                 fl - 2*lw, lw, 0);
+    // long bottom border
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -fl/2 + lw,
+                                      fw/2 - lw,
+                                      0),
+                                  fl - 2*lw, lw, 0);
 
-   // middle line
-   gGLServer.DrawGroundRectangle(Vector3f(
-                                          -lw/2,
-                                          -fw/2 + lw,
-                                          0),
-                                 lw, fw - 2*lw, 0);
+    // middle line
+    gGLServer.DrawGroundRectangle(Vector3f(
+                                      -lw/2,
+                                      -fw/2 + lw,
+                                      0),
+                                  lw, fw - 2*lw, 0);
 
 
-   // fieldBox
-   gGLServer.DrawWireBox(
-                         Vector3f(-fl/2.0,-fw/2.0,0.0),
-                         Vector3f(fl,fw,fh)
-                         );
+    // fieldBox
+    gGLServer.DrawWireBox(
+        Vector3f(-fl/2.0,-fw/2.0,0.0),
+        Vector3f(fl,fw,fh)
+        );
 
-   // goal
-   glColor4fv(goalColor);
-   gGLServer.DrawWireBox(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
-   gGLServer.DrawGoal(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
+    // goal
+    glColor4fv(goalColor);
+    gGLServer.DrawWireBox(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
+    gGLServer.DrawGoal(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
 
-   // goal
-   glColor4fv(goalColor);
-   gGLServer.DrawWireBox(Vector3f(fl/2,-gw/2.0,0),szGoal2);
-   gGLServer.DrawGoal(Vector3f(fl/2,-gw/2.0,0),szGoal2);
+    // goal
+    glColor4fv(goalColor);
+    gGLServer.DrawWireBox(Vector3f(fl/2,-gw/2.0,0),szGoal2);
+    gGLServer.DrawGoal(Vector3f(fl/2,-gw/2.0,0),szGoal2);
 
-   // draw cached positions
-   drawScene();
-   drawStatusText();
-   glutSwapBuffers();
+    // draw cached positions
+    drawScene();
+    drawStatusText();
+    glutSwapBuffers();
 }
 
 //----------------------------idle----------------------------------------
 //
 // checks for new messages and parses them
 //------------------------------------------------------------------------
-void idle(void)
+void
+idle(void)
 {
     if (! gCommServer->GetMessage())
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     boost::shared_ptr<oxygen::PredicateList> predicates =
         gCommServer->GetPredicates();
@@ -486,11 +493,11 @@ void idle(void)
         (predicates.get() != 0) &&
         (predicates->GetSize() > 0)
         )
-        {
-            // parse the received expressions
-            gParser->ParsePredicates(*predicates,gGameState,
-                                    gGameParam,gExprList);
-        }
+    {
+        // parse the received expressions
+        gParser->ParsePredicates(*predicates,gGameState,
+                                 gGameParam,gExprList);
+    }
 
     glutPostRedisplay();
 }
@@ -500,10 +507,11 @@ void idle(void)
 // when the mouse is first clicked we store the position
 // for further use when adjusting the view angle
 //------------------------------------------------------------------------
-void mouse(int /*button*/, int /*state*/, int x, int y)
+void
+mouse(int /*button*/, int /*state*/, int x, int y)
 {
-  gOldX = x;
-  gOldY = y;
+    gOldX = x;
+    gOldY = y;
 }
 
 //--------------------------mouseMotion------------------------------------
@@ -512,12 +520,12 @@ void mouse(int /*button*/, int /*state*/, int x, int y)
 //-------------------------------------------------------------------------
 void mouseMotion(int x, int y)
 {
-  Vector2f tmp1((float)x, (float)y);
-  Vector2f tmp2((float)gOldX, (float)gOldY);
-  gGLServer.SetViewByMouse(tmp1, tmp2);
-  gOldX = x;
-  gOldY = y;
-  glutPostRedisplay();
+    Vector2f tmp1((float)x, (float)y);
+    Vector2f tmp2((float)gOldX, (float)gOldY);
+    gGLServer.SetViewByMouse(tmp1, tmp2);
+    gOldX = x;
+    gOldY = y;
+    glutPostRedisplay();
 }
 
 //------------------------------keyboad-------------------------------------
@@ -530,7 +538,8 @@ void mouseMotion(int x, int y)
 //     + if 'd' is pressed the camera will strafe right
 //     + if 'c' is pressed the camera will automatically follow the ball
 //--------------------------------------------------------------------------
-void keyboard(unsigned char key, int /*x*/, int /*y*/)
+void
+keyboard(unsigned char key, int /*x*/, int /*y*/)
 {
     salt::Vector3f pos;
     switch (key) {
@@ -610,7 +619,8 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
 // processing of reshape events (the OpenGl window is resized)
 // width, height are the new dimensions of the windw
 //--------------------------------------------------------------------------
-void reshape(int width, int height)
+void
+reshape(int width, int height)
 {
     gGLServer.Reshape(width,height);
 }
@@ -619,7 +629,8 @@ void reshape(int width, int height)
 //
 // sets up the map holding the different sphere descriptions
 //--------------------------------------------------------------------------
-void setupSphereMap()
+void
+setupSphereMap()
 {
     gSphereMap.clear();
 
@@ -643,82 +654,83 @@ void setupSphereMap()
 //--------------------------------main--------------------------------------
 //
 //--------------------------------------------------------------------------
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
-  // init glut
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowSize(gWidth, gHeight);
-  glutCreateWindow("rcssmonitor3D");
-  glutDisplayFunc(display);
-  glutMotionFunc(mouseMotion);
-  glutKeyboardFunc(keyboard);
-  glutMouseFunc(mouse);
-  glutReshapeFunc(reshape);
-  glutIdleFunc(idle);
+    // init glut
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(gWidth, gHeight);
+    glutCreateWindow("rcssmonitor3D");
+    glutDisplayFunc(display);
+    glutMotionFunc(mouseMotion);
+    glutKeyboardFunc(keyboard);
+    glutMouseFunc(mouse);
+    glutReshapeFunc(reshape);
+    glutIdleFunc(idle);
 
-  //setup the GLserver with camera coordinates
-  salt::Vector3f pos(0.0,-24.0, 7.0);
-  salt::Vector3f lookAt(0.0,0.0,0.0);
-  salt::Vector3f up(0.0,0.0,1.0);
-  gGLServer = GLServer(gWidth, gHeight, pos, lookAt, up, false);
-  gGLServer.InitGL();
+    //setup the GLserver with camera coordinates
+    salt::Vector3f pos(0.0,-24.0, 7.0);
+    salt::Vector3f lookAt(0.0,0.0,0.0);
+    salt::Vector3f up(0.0,0.0,1.0);
+    gGLServer = GLServer(gWidth, gHeight, pos, lookAt, up, false);
+    gGLServer.InitGL();
 
-  //init zeitgeist
-  Zeitgeist zg("." PACKAGE_NAME, "../../../");
+    //init zeitgeist
+    Zeitgeist zg("." PACKAGE_NAME, "../../../");
 
-  //init oxygen
-  oxygen::Oxygen kOxygen(zg);
+    //init oxygen
+    oxygen::Oxygen kOxygen(zg);
 
-  // init monitor lib
-  MonitorLib ml(zg);
+    // init monitor lib
+    MonitorLib ml(zg);
 
-  // run init script
-  zg.GetCore()->GetScriptServer()->RunInitScript
-      ("rcssmonitor3D-lite.rb", "app/rcssmonitor3d/lite");
+    // run init script
+    zg.GetCore()->GetScriptServer()->RunInitScript
+        ("rcssmonitor3D-lite.rb", "app/rcssmonitor3d/lite");
 
-  // print a greeting
-  zg.GetCore()->GetLogServer()->Normal()
-    << "rcssmonitor3D version 0.2" << endl
-    << "Copyright (C) 2003, Heni Ben Amor and Markus Rollmann, "
-    << "Universität Koblenz." << endl
-    << "Copyright (C) 2004, "
-    << "The RoboCup Soccer Server Maintenance Group." << endl;
-  zg.GetCore()->GetLogServer()->Normal()
-    << "\nType '--help' for further information" << endl;
+    // print a greeting
+    zg.GetCore()->GetLogServer()->Normal()
+        << "rcssmonitor3D version 0.2" << endl
+        << "Copyright (C) 2003, Heni Ben Amor and Markus Rollmann, "
+        << "Universität Koblenz." << endl
+        << "Copyright (C) 2004, "
+        << "The RoboCup Soccer Server Maintenance Group." << endl;
+    zg.GetCore()->GetLogServer()->Normal()
+        << "\nType '--help' for further information" << endl;
 
-  // process command line
-  processInput(argc, argv);
+    // process command line
+    processInput(argc, argv);
 
-  // setup the sphere types
-  setupSphereMap();
+    // setup the sphere types
+    setupSphereMap();
 
-  // init the commserver
-  gCommServer = shared_dynamic_cast<CommServer>
-      (zg.GetCore()->Get("/sys/server/comm"));
+    // init the commserver
+    gCommServer = shared_dynamic_cast<CommServer>
+        (zg.GetCore()->Get("/sys/server/comm"));
 
-  if (gCommServer.get() == 0)
-      {
-          zg.GetCore()->GetLogServer()->Error()
-              << "ERROR: CommServer not found\n";
-          return 1;
-      }
+    if (gCommServer.get() == 0)
+    {
+        zg.GetCore()->GetLogServer()->Error()
+            << "ERROR: CommServer not found\n";
+        return 1;
+    }
 
-  gCommServer->Init("SexpParser",gSoccerServer,gPort);
+    gCommServer->Init("SexpParser",gSoccerServer,gPort);
 
-  // init the parser
-  gParser = shared_dynamic_cast<MonitorParser>
-      (zg.GetCore()->Get("/sys/server/parser"));
+    // init the parser
+    gParser = shared_dynamic_cast<MonitorParser>
+        (zg.GetCore()->Get("/sys/server/parser"));
 
-  if (gParser.get() == 0)
-      {
-          zg.GetCore()->GetLogServer()->Error()
-              << "ERROR: MonitorParser not found\n";
-          return 1;
-      }
+    if (gParser.get() == 0)
+    {
+        zg.GetCore()->GetLogServer()->Error()
+            << "ERROR: MonitorParser not found\n";
+        return 1;
+    }
 
-  // enter glut main loop
-  glutMainLoop();
+    // enter glut main loop
+    glutMainLoop();
 
-  return 0;
+    return 0;
 }
