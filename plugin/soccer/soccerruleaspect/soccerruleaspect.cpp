@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.1.2.2 2004/02/01 15:36:14 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.1.2.3 2004/02/06 10:14:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/sceneserver/scene.h>
+#include <soccer/soccerbase/soccerbase.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/ballstateaspect/ballstateaspect.h>
 
@@ -149,7 +150,7 @@ void SoccerRuleAspect::OnLink()
     mBallState = shared_dynamic_cast<BallStateAspect>
         (GetControlAspect("BallStateAspect"));
 
-    mBallBody = GetBallBody();
+    SoccerBase::GetBallBody(*this,mBallBody);
 }
 
 void SoccerRuleAspect::OnUnlink()

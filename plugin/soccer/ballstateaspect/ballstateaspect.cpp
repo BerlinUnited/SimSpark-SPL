@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.1.2.4 2004/02/01 15:32:53 rollmark Exp $
+   $Id: ballstateaspect.cpp,v 1.1.2.5 2004/02/06 10:17:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/physicsserver/recorderhandler.h>
+#include <soccer/soccerbase/soccerbase.h>
 #include <soccer/ball/ball.h>
 
 using namespace oxygen;
@@ -152,7 +153,7 @@ void BallStateAspect::OnLink()
     SoccerControlAspect::OnLink();
 
     mFieldRecorder = GetFieldRecorder();
-    mBall = GetBall();
+    SoccerBase::GetBall(*this,mBall);
     mBallRecorder = GetBallRecorder();
     mLeftGoalRecorder = GetLeftGoalRecorder();
     mRightGoalRecorder = GetRightGoalRecorder();
