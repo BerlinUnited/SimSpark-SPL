@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.2.2.4 2003/12/29 12:53:27 fruit Exp $
+   $Id: spadesserver.cpp,v 1.3.2.1 2004/01/08 12:39:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -165,8 +165,8 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
     // start an inprocess commserver
     mParamReader->setParam ("run_integrated_commserver", true);
 
-    // send updates to the monitor every tenth cycle
-    mParamReader->setParam ("monitor_interval",10);
+    // send updates to the monitor every second cycle
+    mParamReader->setParam ("monitor_interval",2);
 
     // don't send think time messages to connected agents
     mParamReader->setParam ("send_agent_think_times",false);
@@ -194,7 +194,7 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     int steps = time_desired - time_curr;
     if (steps <= 0)
     {
-        GetLog()->Warning() << "WARNING: Will not simulate <= 0 steps\n";
+        GetLog()->Warning() << "WARNING: (SpadesServer) Will not simulate <= 0 steps\n";
         return time_curr;
     }
 
@@ -203,8 +203,14 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
 
     if (sceneServer.get() == 0)
     {
-        GetLog()->Warning() << "WARNING: No SceneServer present\n";
+        GetLog()->Warning() << "WARNING: (SpadesServer) No SceneServer present\n";
         return time_curr;
+    }
+
+    shared_ptr<GameControlServer> gcs = GetGameControlServer();
+    if (gcs.get() == 0)
+    {
+        GetLog()->Warning() << "WARNING: (SpadesServer) No GameControlServer present\n";
     }
 
     float timePerStep = GetTimePerStep();
@@ -213,6 +219,7 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     while (i > 0)
     {
         sceneServer->Update(timePerStep);
+        gcs->Update(timePerStep);
         --i;
     }
 
@@ -286,8 +293,7 @@ SpadesServer::getMinSenseLatency() const
 ActEvent*
 SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
 {
-    GetLog()->Normal() << "(SpadesServer) Agent " << a << " sent "
-                       << std::string(data,datalen) << endl;
+    GetLog()->Normal() << "(SpadesServer) Agent " << a << " sent " << data << endl;
 
     const shared_ptr<GameControlServer> gcs = GetGameControlServer();
     if (gcs.get() == 0)
