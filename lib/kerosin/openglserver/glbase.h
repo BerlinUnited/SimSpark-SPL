@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glbase.h,v 1.1 2004/04/12 13:23:48 rollmark Exp $
+   $Id: glbase.h,v 1.2 2004/04/28 14:42:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,8 +61,16 @@ public:
     float& b() { return data.c.b; }
     float& a() { return data.c.a; }
 
+    const float& r() const { return data.c.r; }
+    const float& g() const { return data.c.g; }
+    const float& b() const { return data.c.b; }
+    const float& a() const { return data.c.a; }
+
     float* v() { return data.v; }
+    const float* v() const { return data.v; }
+
     operator float* () { return data.v; }
+    operator const float*() const { return data.v; }
 };
 
 };
