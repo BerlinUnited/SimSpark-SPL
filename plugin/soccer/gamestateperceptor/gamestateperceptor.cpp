@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.1.2.3 2004/02/06 13:46:13 rollmark Exp $
+   $Id: gamestateperceptor.cpp,v 1.1.2.4 2004/02/06 14:50:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,28 +36,6 @@ GameStatePerceptor::GameStatePerceptor() : oxygen::Perceptor()
 
 GameStatePerceptor::~GameStatePerceptor()
 {
-}
-
-string
-GameStatePerceptor::PlayMode2Str(const TPlayMode mode) const
-{
-    switch (mode)
-        {
-        case    PM_BeforeKickOff:
-            return "BeforeKickOff";
-        case    PM_KickOff:
-            return "KickOff";
-        case    PM_PlayOn:
-            return "KickOff";
-        case    PM_KickOff_Left:
-            return "KickOff_Left";
-        case    PM_KickOff_Right:
-            return "KickOff_Right";
-        case    PM_FirstHalfOver:
-            return "FirstHalfOver";
-        default:
-            return "unknown";
-        };
 }
 
 void
@@ -159,7 +137,7 @@ GameStatePerceptor::Percept(Predicate& predicate)
     // playmode
     element.clear();
     element.push_back(string("playmode"));
-    element.push_back(PlayMode2Str(mGameState->GetPlayMode()));
+    element.push_back(SoccerBase::PlayMode2Str(mGameState->GetPlayMode()));
     predicate.parameter.push_back(element);
 
     return true;
