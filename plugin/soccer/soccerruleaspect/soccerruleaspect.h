@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.1.2.1 2004/01/29 19:53:53 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.1.2.2 2004/02/01 15:35:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,6 +55,18 @@ protected:
 
     /** update the RuleAspect during PlayOn mode */
     void UpdatePlayOn();
+
+    /** checks if the ball is not on the playing field and puts it
+        back to its last valid position. returns true if the ball left
+        the field
+    */
+    bool CheckBallLeftField();
+
+    /** checks if the ball is in one of the two goals and scores the
+        appropriate team. returns true if the ball was in one of the
+        goals
+    */
+    bool CheckGoal();
 
 protected:
     /** reference to the body node of the Ball */
