@@ -2,6 +2,10 @@
 # simspark.rb
 #
 
+# sparkSetupServer()
+sparkSetupRendering()
+sparkSetupInput()
+
 # import required plugins
 importBundle 'sexpparser'
 
@@ -12,9 +16,9 @@ sparkAddFPSCamera(
 		  y = -40, 
 		  z = 2,
 		  maxSpeed = 15.0,
-		  accel = 400.0
-		  # drag = 4,
-		  # addCollider = true
+		  accel = 400.0,
+		  drag = 4,
+		  addCollider = true
 		  )
 
 #

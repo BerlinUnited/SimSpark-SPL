@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.2 2004/04/14 18:34:43 rollmark Exp $
+   $Id: main.cpp,v 1.3 2004/04/25 17:08:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,12 +34,6 @@ public:
     SimSpark(const std::string& relPathPrefix) :
         Spark(relPathPrefix)
     {};
-
-    /** process user defined input constants */
-    virtual void ProcessInput(kerosin::InputServer::Input& input);
-
-    /** reads and parses messages from the soccer server */
-    virtual void UpdatePreRenderFrame();
 
     /** called once after Spark finished it's init */
     virtual bool InitApp(int argc, char** argv);
@@ -88,14 +82,9 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
   return true;
 }
 
-void SimSpark::UpdatePreRenderFrame()
-{
-}
-
 bool SimSpark::InitApp(int argc, char** argv)
 {
-    SetSimStep(0.02);
-
+    GetSimulationServer()->SetSimStep(0.02);
     PrintGreeting();
 
     // process command line
@@ -105,20 +94,17 @@ bool SimSpark::InitApp(int argc, char** argv)
         }
 
     // run initialization scripts
-    GetScriptServer()->Run("simspark.rb");
-    GetScriptServer()->Run("bindings.rb");
+     GetScriptServer()->Run("simspark.rb");
+     GetScriptServer()->Run("bindings.rb");
 
-    // tell spark the loaction of our camera
-    if (! SetFPSController("/usr/scene/camera/physics/controller"))
+    // tell the inputControl node the loaction of our camera
+    shared_ptr<InputControl> inputCtr = GetInputControl();
+    if (inputCtr.get() != 0)
         {
-            return false;
+            inputCtr->SetFPSController("/usr/scene/camera/physics/controller");
         }
 
     return true;
-}
-
-void SimSpark::ProcessInput(kerosin::InputServer::Input& /*input*/)
-{
 }
 
 int main(int argc, char** argv)
@@ -131,12 +117,17 @@ int main(int argc, char** argv)
             return 1;
         }
 
-    spark.Run();
+    spark.GetSimulationServer()->Run(argc,argv);
 
-    spark.GetLog()->Normal()
-        << "Average FPS: "
-        << spark.GetFramesRendered()/spark.GetTime()
-        << "\n";
+    shared_ptr<RenderControl> renderCtr = spark.GetRenderControl();
+    if (renderCtr.get() != 0)
+        {
+            spark.GetLog()->Normal()
+                << "Average FPS: "
+                << renderCtr->GetFramesRendered() /
+                   spark.GetSimulationServer()->GetTime()
+                << "\n";
+        }
 
     return 0;
 }
