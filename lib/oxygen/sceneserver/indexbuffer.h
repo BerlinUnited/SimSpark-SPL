@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: indexbuffer.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: indexbuffer.h,v 1.5 2004/04/22 17:12:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,51 +22,57 @@
 #ifndef OXYGEN_INDEXBUFFER_H
 #define OXYGEN_INDEXBUFFER_H
 
+#include <boost/shared_array.hpp>
+
 namespace oxygen
 {
 
-/** IndexBuffer inteded as a cache for indeces pointing into a vertexbuffer to
- * describe a set of triangles. It is used together with the StaticMesh class
+/** IndexBuffer is intended as a cache for indeces pointing into a
+    vertexbuffer to describe a set of triangles. It is used together
+    with the StaticMesh class
  */
 class IndexBuffer
 {
 public:
-    IndexBuffer() : mMaxIndex(0), mNumIndex(0), mIndex(0)   {}
+    IndexBuffer();
     virtual ~IndexBuffer();
 
-    /** caches indices in indexbuffer */
-    void    Cache(unsigned int numIndex, unsigned int *index);
+    /** caches (i.e. copies) an index list for rendering at a later
+        point in time, growing the index cache if necessary.
+
+        \param numIndex number of indices to add to the cache
+        \param index    pointer to index data
+    */
+    void Cache(unsigned int numIndex, unsigned int *index);
 
     /** appends a single index */
-    void    Cache(unsigned int newIndex);
+    void Cache(unsigned int newIndex);
 
     /** empties the index buffer */
-    void    Flush()
-    {       mNumIndex = 0;  }
+    void Flush();
 
     /** returns the number of cached indeces */
-    int GetNumIndex() const
-    {       return mNumIndex;       }
+    int GetNumIndex() const;
 
     /** returns a cached index */
-    unsigned int* GetIndex() const
-    {       return mIndex;          }
+    boost::shared_array<unsigned int> GetIndex() const;
+
+    /** ensures that the index buffer can hold the additional (!)
+        number of elements (creates new storage on demand, copys old
+        data)
+    */
+    void EnsureFit(unsigned int count);
 
 protected:
+    /** the maximum number of indices we can cache with the allocated
+        memory */
+    unsigned int mMaxIndex;
 
-    /** ensures that the index buffer can hold the additional (!) number
-        of elements (creates new storage on demand, copys old data)
-    */
-    void    EnsureFit(unsigned int count);
+    /** the number of indices currently cached */
+    unsigned int mNumIndex;
 
-    /** Maximum number of indices we can cache with the allocated memory */
-    unsigned int    mMaxIndex;
-
-    /** Number of indices currently cached */
-    unsigned int    mNumIndex;
-
-    /** Pointer to the memory, where we cache the indices */
-    unsigned int    *mIndex;
+    /** pointer to the memory, where we cache the indices */
+    boost::shared_array<unsigned int> mIndex;
 };
 
 }

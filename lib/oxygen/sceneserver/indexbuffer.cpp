@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: indexbuffer.cpp,v 1.3 2003/09/09 16:04:20 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: indexbuffer.cpp,v 1.4 2004/04/22 17:12:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,64 +24,76 @@
 #include <string.h>
 
 using namespace oxygen;
+using namespace boost;
+
+IndexBuffer::IndexBuffer()
+    : mMaxIndex(0), mNumIndex(0), mIndex(0)   {}
 
 IndexBuffer::~IndexBuffer()
 {
-        delete[] mIndex;
 }
 
-/*!
-        This routine caches an index list for rendering at a later point in
-        time. It also grows the index cache if necessary.
-
-        \param numIndex number of indices to add to the cache
-        \param index    pointer to index data
-*/
 void IndexBuffer::Cache(unsigned int numIndex, unsigned int *index)
 {
-        EnsureFit(numIndex);
+    EnsureFit(numIndex);
 
-        // append new index data to our cache
-        memcpy(&mIndex[mNumIndex], index, numIndex*sizeof(unsigned int));
-        mNumIndex += numIndex;
+    // append new index data to our cache
+    memcpy(&mIndex[mNumIndex], index, numIndex*sizeof(unsigned int));
+    mNumIndex += numIndex;
 }
 
 void IndexBuffer::Cache(unsigned int newIndex)
 {
-        Cache(1, &newIndex);
+    Cache(1, &newIndex);
 }
 
 void IndexBuffer::EnsureFit(unsigned int count)
 {
-        if(mIndex == NULL)
+    if(mIndex.get() == 0)
         {
-                mIndex          = new unsigned int[count];
-                mMaxIndex       = count;
-                mNumIndex       = 0;
-        }
-        else
-        {
+            mIndex    = shared_array<unsigned int>(new unsigned int[count]);
+            mMaxIndex = count;
+            mNumIndex = 0;
+        } else
+            {
                 // check if there's enough room in our index cache
                 const unsigned int reqSize = mNumIndex+count;
 
                 if(mMaxIndex < reqSize)
                 {
-                        // we don't have enough room ... so make room
-                        unsigned int newSize = mMaxIndex*2;
+                    // we don't have enough room ... so make room
+                    unsigned int newSize = mMaxIndex*2;
 
-                        while(newSize<reqSize)
-                                newSize *= 2;
+                    while(newSize<reqSize)
+                        {
+                            newSize *= 2;
+                        }
 
-                        // allocate new memory
-                        unsigned int *newIndex = new unsigned int[newSize];
+                    // allocate new memory
+                    shared_array<unsigned int> newIndex(new unsigned int[newSize]);
 
-                        // copy old data
-                        memcpy(newIndex, mIndex, mNumIndex*sizeof(unsigned int));
-                        // free old memory
-                        delete[] mIndex;
+                    // copy old data
+                    memcpy(newIndex.get(), mIndex.get(),
+                           mNumIndex*sizeof(unsigned int));
 
-                        mIndex          = newIndex;
-                        mMaxIndex       = newSize;
+                    mIndex          = newIndex;
+                    mMaxIndex       = newSize;
                 }
         }
 }
+
+void IndexBuffer::Flush()
+{
+    mNumIndex = 0;
+}
+
+int IndexBuffer::GetNumIndex() const
+{
+    return mNumIndex;
+}
+
+shared_array<unsigned int> IndexBuffer::GetIndex() const
+{
+    return mIndex;
+}
+
