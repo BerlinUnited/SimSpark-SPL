@@ -1,3 +1,24 @@
+/* -*- mode: c++ -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: space.cpp,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
 #include "space.h"
 #include "world.h"
 #include "body.h"
@@ -22,8 +43,6 @@ mODESpace(0), mODEContactGroup(0), mWorld(0)
 
 Space::~Space()
 {
-        //printf("~Space '%s'\n", GetClass()->GetName().c_str());
-
         if (mODEContactGroup)
         {
                 //dJointGroupEmpty(mODEContactGroup);
@@ -71,7 +90,8 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         bool camera = false;
         if (dCollide (obj1, obj2, 0, &contact.geom, sizeof(dContactGeom)))
         {
-                // this ensures that the camera only collides, but does not affect the simulation
+                // this ensures that the camera only collides, but
+                // does not affect the simulation
                 if (body1 && make_shared(body1->GetParent())->GetChildOfClass("Camera").get() != 0)
                 {
                         //ODEBody2 = 0;
@@ -123,9 +143,9 @@ bool Space::ConstructInternal()
 {
         if (!ODEObject::ConstructInternal()) return false;
 
-        // create the ode space, 0 indicates that this space should not be
-        // inserted into another space, i.e. we always create a toplevel space
-        // object
+        // create the ode space, 0 indicates that this space should
+        // not be inserted into another space, i.e. we always create a
+        // toplevel space object
         mODESpace = dHashSpaceCreate(0);
         if (mODESpace == 0)
             {

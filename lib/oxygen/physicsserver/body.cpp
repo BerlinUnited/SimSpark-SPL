@@ -1,3 +1,25 @@
+/* -*- mode: c++ -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: body.cpp,v 1.3 2003/08/29 22:08:21 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
 #include "body.h"
 #include "world.h"
 #include "../sceneserver/scene.h"
@@ -15,7 +37,6 @@ ODEObject(), mODEBody(0)
 
 Body::~Body()
 {
-        //printf("~Body '%s'\n", GetClass()->GetName().c_str());
         if (mODEBody)
         {
                 dBodyDestroy(mODEBody);
@@ -74,12 +95,14 @@ void Body::OnLink()
                 mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
                 dWorldID world = mWorld->GetODEWorld();
 
-                // if we have a space and an object, add it to the space
+                // if we have a space and an object, add it to the
+                // space
                 if (world)
                         mODEBody = dBodyCreate(world);
         }
 
-        // if we have a body, let it take on the world space position of the parent
+        // if we have a body, let it take on the world space position
+        // of the parent
         if (mODEBody != 0)
         {
                 dBodySetData(mODEBody, this);
