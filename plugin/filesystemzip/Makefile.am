@@ -1,4 +1,6 @@
+if HAVE_BOOST_REGEX
 pkglib_LTLIBRARIES = filesystemzip.la
+endif
 
 filesystemzip_la_SOURCES = export.cpp \
 filesystemzip.cpp filesystemzip.h \
