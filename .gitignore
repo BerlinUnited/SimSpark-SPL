@@ -29,5 +29,7 @@ utility/classserver/libclassserver.la
 utility/console/Makefile
 utility/console/Makefile.in
 utility/forwarder/.deps
+utility/forwarder/.libs
 utility/forwarder/Makefile
 utility/forwarder/Makefile.in
+utility/forwarder/example
