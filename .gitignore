@@ -273,6 +273,10 @@ plugin/soccer/agentstate/.libs
 plugin/soccer/agentstate/Makefile
 plugin/soccer/agentstate/Makefile.in
 plugin/soccer/agentstate/initeffector.la
+plugin/soccer/agentstateperceptor/*.lo
+plugin/soccer/agentstateperceptor/.deps
+plugin/soccer/agentstateperceptor/.dirstamp
+plugin/soccer/agentstateperceptor/.libs
 plugin/soccer/ball/*.la
 plugin/soccer/ball/*.lo
 plugin/soccer/ball/.deps
