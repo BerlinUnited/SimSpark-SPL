@@ -1,3 +1,33 @@
+2003-11-27  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/spadestest/spadestest.rb: 
+	removed call to spadesserver.init
+	created new variable Test.value to test with the ParamReader
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp, lib/zeitgeist/scriptserver/scriptserver.h:
+	added new method ExistsVariable to test if the script server knows a
+	variable, used by the ParamReader
+
+	* lib/oxygen/Makefile.am:
+	added ParamStorer and ParamReader to Makefile.am
+
+	* lib/oxygen/spadesserver/paramreader.cpp:
+	* lib/oxygen/spadesserver/paramstorer.cpp:
+	New file.
+
+	* lib/oxygen/spadesserver/paramreader.cpp:
+	* lib/oxygen/spadesserver/paramreader.h:
+	* lib/oxygen/spadesserver/paramstorer.cpp:
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:
+	intial version of ParamStorer class
+	removed Init() from SpadesServer, creating ParamReader in
+	parseParameters()
+	initial working version of ParamReader. Use "--<rubyVarName>
+	value" to set values in ruby variables on the command
+	line. Strings passed as value must be quoted.
+
 2003-11-23  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/spadesserver/spadesserver.cpp:
