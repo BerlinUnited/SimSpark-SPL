@@ -14,7 +14,7 @@ LDADD = \
 agenttest_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/plugin/soccer -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 agenttest_SOURCES = main.cpp
