@@ -91,6 +91,8 @@ physicsserver/world.cpp \
 physicsserver/world_c.cpp \
 physicsserver/dragcontroller.cpp \
 physicsserver/dragcontroller_c.cpp \
+physicsserver/velocitycontroller.cpp \
+physicsserver/velocitycontroller_c.cpp \
 physicsserver/joint.cpp \
 physicsserver/joint_c.cpp \
 physicsserver/balljoint.cpp \
@@ -139,6 +141,7 @@ physicsserver/space.h \
 physicsserver/spherecollider.h \
 physicsserver/world.h \
 physicsserver/dragcontroller.h \
+physicsserver/velocitycontroller.h \
 physicsserver/joint.h \
 physicsserver/balljoint.h \
 sceneserver/sceneimporter.h \
