@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.6 2004/03/22 11:13:34 rollmark Exp $
+   $Id: staticmesh.cpp,v 1.7 2004/04/08 07:27:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,9 +60,12 @@ bool StaticMesh::Load(const std::string& fileName)
 {
     // open file
     shared_ptr<FileServer> fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-    salt::RFile *file = fileServer->Open(fileName.c_str());
+    shared_ptr<salt::RFile> file = fileServer->Open(fileName.c_str());
 
-    if (!file) return false;
+    if (file.get() == 0)
+        {
+            return false;
+        }
 
     NVMeshMender                                    meshmender;
     NVMeshMender::VAVector                  input, output;

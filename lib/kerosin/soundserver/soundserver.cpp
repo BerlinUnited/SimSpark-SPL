@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundserver.cpp,v 1.4 2004/03/22 11:18:03 rollmark Exp $
+   $Id: soundserver.cpp,v 1.5 2004/04/08 07:28:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const string& inName)
 
         // now, we want to load the file from our fileserver
         shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        scoped_ptr<salt::RFile>         file(fileServer->Open(inName.c_str()));
+        shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
 
         if(file.get() == NULL)
         {
@@ -139,7 +139,7 @@ boost::shared_ptr<SoundStream> SoundServer::LoadStream(const string& inName)
 
         // now, we want to load the file from our fileserver
         shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        scoped_ptr<salt::RFile>         file(fileServer->Open(inName.c_str()));
+        shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
 
         if(file.get() == NULL)
         {
@@ -178,7 +178,7 @@ boost::shared_ptr<SoundModule> SoundServer::LoadModule(const string& inName)
 
         // now, we want to load the file from our fileserver
         shared_ptr<FileServer> fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        scoped_ptr<salt::RFile> file(fileServer->Open(inName.c_str()));
+        shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
 
         if(file.get() == NULL)
         {

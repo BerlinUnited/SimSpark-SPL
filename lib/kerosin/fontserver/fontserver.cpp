@@ -64,9 +64,9 @@ shared_ptr<kerosin::Font> FontServer::FindFont(const string &name,
 bool FontServer::LoadFont(const string &name, unsigned int size,
                           shared_ptr<kerosin::Font> &font)
 {
-  salt::RFile *file = GetFile()->Open(name.c_str());
+  shared_ptr<salt::RFile> file = GetFile()->Open(name.c_str());
 
-  if (file == 0)
+  if (file.get() == 0)
     {
       // try with prefixed fontPath
       string fontPath;
@@ -76,7 +76,7 @@ bool FontServer::LoadFont(const string &name, unsigned int size,
         }
     }
 
-  if (! file)
+  if (file.get() == 0)
     {
       GetLog()->Error() << "(FontServer) ERROR: font file '"
                         << name << "' not found\n";
@@ -86,7 +86,6 @@ bool FontServer::LoadFont(const string &name, unsigned int size,
   unsigned int fileSize = file->Size();
   scoped_array<unsigned char> buffer(new unsigned char[fileSize]);
   file->Read(buffer.get(), fileSize);
-  delete file;
 
   FT_Face face;
   int error = FT_New_Memory_Face(mFreeTypeLib, buffer.get(), fileSize,
