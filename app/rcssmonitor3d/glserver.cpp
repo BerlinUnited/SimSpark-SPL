@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3.2.1 2004/01/21 15:54:51 rollmark Exp $
+   $Id: glserver.cpp,v 1.3.2.2 2004/01/25 13:07:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,7 +93,6 @@ void GLserver::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
     glTranslatef(gridPos[0],gridPos[1], gridPos[2]);
 
     //draw the lines GREEN
-    glColor3ub(0, 255, 0);
     glBegin(GL_LINES);
 
     for(float x = 0; x <= szX; ++x)
@@ -121,8 +120,6 @@ void GLserver::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
 //-----------------------------------------------------------------------
 void GLserver::DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz)
 {
-    glColor3ub(255,0,255);
-
     glPushMatrix();
     glTranslatef(boxPos[0],boxPos[1], boxPos[2]);
 
