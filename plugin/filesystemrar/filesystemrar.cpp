@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemrar.cpp,v 1.2 2003/12/21 23:36:38 fruit Exp $
+   $Id: filesystemrar.cpp,v 1.3 2004/04/08 07:30:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <unrar/unrar.h>
 
 using namespace salt;
+using namespace std;
 
 static int index = 0;
 
@@ -53,7 +54,7 @@ FileSystemRAR::~FileSystemRAR()
 {
 }
 
-bool FileSystemRAR::SetPath(const char* inPath)
+bool FileSystemRAR::SetPath(const string& inPath)
 {
         mArchiveName = inPath;
         FILE *f = fopen(inPath, "rb");
@@ -68,7 +69,7 @@ bool FileSystemRAR::SetPath(const char* inPath)
 // This function is really simple. It appends inName to mPath and
 // tries to open the combined name as a readonly file.
 //
-salt::RFile* FileSystemRAR::Open(const char* inName)
+salt::RFile* FileSystemRAR::Open(const string& inName)
 {
         RAROpenArchiveData      openArchiveData;
 
@@ -120,7 +121,8 @@ salt::RFile* FileSystemRAR::Open(const char* inName)
         return NULL;
 }
 
-int FileSystemRAR::ForEachFile(const char* expression, TCallback callback, void* param)
+int FileSystemRAR::ForEachFile(const string& expression, TCallback callback,
+                               void* param)
 {
         // todo
         return 0;

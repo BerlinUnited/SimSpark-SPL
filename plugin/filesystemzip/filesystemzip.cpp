@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemzip.cpp,v 1.2 2003/11/09 16:45:49 fruit Exp $
+   $Id: filesystemzip.cpp,v 1.3 2004/04/08 07:31:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,11 +48,11 @@ strupr( char* s1 )
 #define ZIP_DEFLATE 8
 
 using namespace salt;
+using namespace std;
 
 FileSystemZIP::FileSystemZIP()
 {
         mHandle         = NULL;
-        mArchiveName= NULL;
 }
 
 FileSystemZIP::~FileSystemZIP()
@@ -60,7 +60,7 @@ FileSystemZIP::~FileSystemZIP()
         Clear();
 }
 
-int FileSystemZIP::ForEachFile(const char* expression, TCallback callback, void* param)
+int FileSystemZIP::ForEachFile(const string& expression, TCallback callback, void* param)
 {
         if (!callback) return 0;
 
@@ -88,7 +88,7 @@ int FileSystemZIP::ForEachFile(const char* expression, TCallback callback, void*
 // This sets the path to the archive this object will be associated with.
 // The behavior is quite simple. First it will try 'inName' then 'inName.zip'
 //
-bool FileSystemZIP::SetPath(const char *inName)
+bool FileSystemZIP::SetPath(const string& inName)
 {
         if(mHandle)
         {
@@ -102,25 +102,20 @@ bool FileSystemZIP::SetPath(const char *inName)
         //Assert(mHandle != NULL, "SetPath: Couldn't instantiate file object");
 
         // try inName directly
-        if(!mHandle->Open(inName))
+        if(!mHandle->Open(inName.c_str()))
         {
                 // ok, let's try it with a '.zip' extension
-                char *tryName = new char[strlen(inName)+4+1];
-                strcpy(tryName, inName);
-                strcat(tryName, ".zip");
-
-                if(!mHandle->Open(tryName))
+                string tryName = inName + ".zip";
+                if(!mHandle->Open(tryName.c_str()))
                 {
                         delete mHandle;
                         mHandle = NULL;
                         return false;
                 }
-                delete []tryName;
         }
 
         //The open operation succeeded, so we can store the name of the archive file
-        mArchiveName = new char[strlen(inName)+1];
-        strcpy(mArchiveName, inName);
+        mArchiveName = inName;
 
         //Read Central Directory End
         TCentralDirectoryEnd    cde;
@@ -177,7 +172,7 @@ bool FileSystemZIP::SetPath(const char *inName)
         return true;
 }
 
-salt::RFile* FileSystemZIP::Open(const char *inName)
+salt::RFile* FileSystemZIP::Open(const string& inName)
 {
         char                    *fileName;
         TArchiveEntry   *cur;
@@ -195,8 +190,8 @@ salt::RFile* FileSystemZIP::Open(const char *inName)
                 return NULL;
 
         // we have an archive, now get a local copy of inName
-        fileName = new char[strlen(inName)+1];
-        strcpy(fileName, inName);
+        fileName = new char[inName.size()+1];
+        strcpy(fileName, inName.c_str());
 
         // Search for file
         TEntryMap::iterator i = mEntryMap.find(std::string(strupr(fileName)));
@@ -280,10 +275,7 @@ salt::RFile* FileSystemZIP::Open(const char *inName)
 
 void FileSystemZIP::Clear()
 {
-        if(mArchiveName)
-        {
-                delete []mArchiveName;
-        }
+        mArchiveName = "";
 
         if(mHandle)
         {

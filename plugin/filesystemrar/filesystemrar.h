@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemrar.h,v 1.3 2003/12/21 23:36:38 fruit Exp $
+   $Id: filesystemrar.h,v 1.4 2004/04/08 07:30:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,14 +40,15 @@
 
         FileSystemRAR
 
-        This class is a wrapper to the unrar.dll capable of handling RAR-compressed
-        archives. Unfortunately, the unrar.dll is only available for Windows
-        platforms :(
+        This class is a wrapper to the unrar.dll capable of handling
+        RAR-compressed archives. Unfortunately, the unrar.dll is only
+        available for Windows platforms :(
 
-        Another issue to note for this is the way this filesystem works. It does not keep
-        the archive open over subsequent Open() calls. Instead it has to reopen the archive
-        again and again. This is a limitation of the API provided by the unrar.dll and very
-        annoying.
+        Another issue to note for this is the way this filesystem
+        works. It does not keep the archive open over subsequent
+        Open() calls. Instead it has to reopen the archive again and
+        again. This is a limitation of the API provided by the
+        unrar.dll and very annoying.
 */
 class FileSystemRAR : public zeitgeist::FileSystem
 {
@@ -58,9 +59,9 @@ public:
         FileSystemRAR();
         virtual ~FileSystemRAR();
 
-        virtual salt::RFile*    Open(const char* inName);
-        virtual bool                    SetPath(const char* inPath);
-        virtual int                             ForEachFile(const char* expression, TCallback callback, void* param);
+        virtual salt::RFile* Open(const std::string& inName);
+        virtual bool SetPath(const std::string& inPath);
+        virtual int ForEachFile(const std::string& expression, TCallback callback, void* param);
 
         //
         // members
