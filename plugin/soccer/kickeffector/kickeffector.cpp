@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.1.2.2 2004/01/26 15:19:52 fruit Exp $
+   $Id: kickeffector.cpp,v 1.1.2.3 2004/02/01 19:00:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,8 +21,10 @@
 */
 #include "kickaction.h"
 #include "kickeffector.h"
+#include <salt/random.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/physicsserver/spherecollider.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -31,8 +33,9 @@ using namespace std;
 
 KickEffector::KickEffector()
     : oxygen::Effector(),
-      mKickMargin(0.04),
-      mSigmaForce(-1.0), mSigmaTheta(-1.0), mSigmaPhi(-1.0)
+      mKickMargin(0.04),mForceFactor(4.0),mMaxPower(100.0),
+      mMinSteps(3),mMaxSteps(75),
+      mSigmaForce(0.4), mSigmaTheta(0.02), mSigmaPhi(0.025)
 {
 }
 
@@ -43,55 +46,95 @@ KickEffector::~KickEffector()
 bool
 KickEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
+    // this should also include the case when there is no ball
+    // (because then there will be no body, neither).
     if (mBallBody.get() == 0)
     {
         return false;
     }
 
- shared_ptr<BaseNode> parent =
-    shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+    shared_ptr<BaseNode> parent =
+        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
 
-  if (parent.get() == 0)
+    if (parent.get() == 0)
     {
-      GetLog()->Error()
-        << "ERROR: (KickEffector) parent node is not derived from BaseNode\n";
-      return false;
+        GetLog()->Error()
+            << "ERROR: (KickEffector) parent node is not derived from BaseNode\n";
+        return false;
     }
 
-  shared_ptr<KickAction> kickAction =
-    shared_dynamic_cast<KickAction>(action);
+    shared_ptr<KickAction> kickAction =
+        shared_dynamic_cast<KickAction>(action);
 
-  if (kickAction.get() == 0)
+    if (kickAction.get() == 0)
     {
-      GetLog()->Error()
-        << "ERROR: (KickEffector) cannot realize an unknown ActionObject\n";
-      return false;
+        GetLog()->Error()
+            << "ERROR: (KickEffector) cannot realize an unknown ActionObject\n";
+        return false;
     }
 
-  Vector3f vec =
-      mBallBody->GetWorldTransform().Pos() -
-      parent->GetWorldTransform().Pos();
+    Vector3f force =
+        mBallBody->GetWorldTransform().Pos() -
+        parent->GetWorldTransform().Pos();
 
-  if (salt::gAbs(vec[1]) >= 0.3 || vec.Length() >= 0.3 + 0.111 + 0.04)
-  {
-      // ball is out of reach, kick
-      // has no effect
-      return true;
-  }
+    // the ball can be kicked if the distance is
+    // less then Ball-Radius + Player-Radius + KickMargin AND
+    // the player is close to the ground
+    if (parent->GetWorldTransform().Pos().y() > mPlayerRadius + 0.01 ||
+        force.Length() > mPlayerRadius + mBallRadius + mKickMargin)
+    {
+        // ball is out of reach, or player is in the air:
+        // kick has no effect
+        return true;
+    }
 
-  // kick horizontally, i.e. zero up component
-  vec[1] = 0;
-  vec.Normalize();
-  if (kickAction->GetType() == KickAction::KT_STEEP)
-  {
-      vec[1] = salt::gCos(salt::gDegToRad(50.0));
-  }
+    // get the kick angle in the horizontal plane
+    double theta = salt::gArcTan2(force[2], force[0]);
+    if (mSigmaTheta > 0.0)
+    {
+        theta += salt::NormalRNG<>(0.0,mSigmaTheta)();
+    }
+    double phi;
+    if (mSigmaPhi > 0.0)
+    {
+        if (kickAction->GetType() == KickAction::KT_HORIZONTAL)
+        {
+            phi = salt::NormalRNG<>(gPI/2,mSigmaPhi)();
+        } else {
+            phi = salt::NormalRNG<>(gPI/4,mSigmaPhi)();
+        }
+    }
 
-  vec *= kickAction->GetPower();
+    // x = r * cos(theta) * sin(90 - phi), with r = 1.0
+    force[0] = salt::gCos(theta) * salt::gSin(phi);
+    // y = r * sin(theta) * sin(90 - phi), with r = 1.0
+    force[2] = salt::gSin(theta) * salt::gSin(phi);
+    // z = r * cos(90 - phi),              with r = 1.0
+    force[1] = salt::gCos(phi);
 
-  mBallBody->AddForce(vec);
+    float kick_power = salt::gMin(salt::gMax(kickAction->GetPower(), 1.0f), mMaxPower);
+    if (mSigmaForce > 0.0)
+    {
+        kick_power += salt::NormalRNG<>(0.0,mSigmaForce)();
+    }
 
-  return true;
+    int steps = mMinSteps + static_cast<int>((mMaxSteps-mMinSteps) * (kick_power / mMaxPower));
+
+    force *= (mForceFactor * kick_power);
+    Vector3f torque(-force[2]/(salt::g2PI * mBallRadius),
+                    0.0,
+                    -force[0]/(salt::g2PI * mBallRadius));
+
+    GetLog()->Debug() << "DEBUG: (KickEffector): " << kick_power << ": "
+                      << force[0] << " " << force[1] << " " << force[2] << " / "
+                      << torque[0] << " " << torque[1] << " " << torque[2] << " / "
+                      << steps << std::endl;
+
+    // if the agent doesn't have a body, we're done (this should never happen)
+    if (mBall.get() == 0) return true;
+
+    mBall->SetAcceleration(steps,force,torque);
+    return true;
 }
 
 shared_ptr<ActionObject>
@@ -149,17 +192,61 @@ KickEffector::GetActionObject(const Predicate& predicate)
   return shared_ptr<ActionObject>();
 }
 
-void KickEffector::OnLink()
+void
+KickEffector::OnLink()
 {
+    mBall = shared_dynamic_cast<Ball>(GetCore()->Get("/usr/scene/Ball"));
+
     mBallBody = shared_dynamic_cast<Body>
         (GetCore()->Get("/usr/scene/Ball/physics"));
 
-  if (mBallBody.get() == 0)
-      {
-          GetLog()->Error()
-              << "ERROR: (KickEffector) Ball body node not found\n";
-          return;
-      }
+    if (mBallBody.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (KickEffector) Ball body node not found\n";
+        return;
+    }
+
+    shared_ptr<BaseNode> parent =
+        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+
+    if (parent.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (KickEffector) parent node is not derived from BaseNode\n";
+        return;
+    }
+
+    shared_ptr<SphereCollider> geom =
+        shared_dynamic_cast<SphereCollider>(parent->GetChild("geometry"));
+    if (geom.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (KickEffector) parent node has no SphereCollider child\n";
+    } else {
+        mPlayerRadius = geom->GetRadius();
+    }
+
+    geom = shared_dynamic_cast<SphereCollider>(mBall->GetChild("geometry"));
+    if (geom.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (KickEffector) ball node has no SphereCollider child\n";
+    } else {
+        mBallRadius = geom->GetRadius();
+    }
+
+    // parent should be a transform, or some other node, which has a
+    // Body-child
+    mBody = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
+
+    if (mBody.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (KickEffector) parent node has no Body child;"
+            << " cannot apply force\n";
+        return;
+    }
 }
 
 void
@@ -180,4 +267,23 @@ KickEffector::SetNoiseParams(double sigma_force, double sigma_theta, double sigm
     mSigmaForce = sigma_force;
     mSigmaTheta = sigma_theta;
     mSigmaPhi = sigma_phi;
+}
+
+void
+KickEffector::SetForceFactor(float force_factor)
+{
+    mForceFactor = force_factor;
+}
+
+void
+KickEffector::SetSteps(int min, int max)
+{
+    mMinSteps = min;
+    mMaxSteps = max;
+}
+
+void
+KickEffector::SetMaxPower(float max_power)
+{
+    mMaxPower = max_power;
 }
