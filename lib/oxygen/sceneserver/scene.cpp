@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: scene.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   $Id: scene.cpp,v 1.4 2004/04/10 12:49:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,5 +37,10 @@ Scene::~Scene()
 
 const salt::Matrix& Scene::GetWorldTransform() const
 {
-        return mIdentityMatrix;
+    return mIdentityMatrix;
 }
+
+void Scene::SetWorldTransform(const salt::Matrix &transform)
+{
+}
+
