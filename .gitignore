@@ -11,6 +11,12 @@
 /stamp-h1
 app/Makefile
 app/Makefile.in
+app/coretest/.deps
+app/coretest/.libs
+app/coretest/Makefile
+app/coretest/Makefile.in
+app/coretest/coretest
+app/coretest/sys
 app/simulator/.deps
 app/simulator/.libs
 app/simulator/Makefile
