@@ -145,9 +145,15 @@ def addField()
 
   #
   # box collider around the playing field
-  fieldBox = new('kerosin/BoxCollider',$scenePath+'fieldBox')
-  fieldBox.setPosition(-halfLength,0.0,-halfWidth)
-  fieldBox.setBoxLengths(halfLength,halfHeight,halfWidth)
+  fieldBoxPath = $scenePath+'FieldBox/'
+  fieldBox = new('kerosin/BoxCollider',fieldBoxPath)
+  fieldBox.setBoxLengths(
+			 getSoccerVar('FieldLength'),
+			 getSoccerVar('FieldHeight'),
+			 getSoccerVar('FieldWidth')
+			 )
+  fieldBox.setPosition(0.0,halfHeight,0.0)
+  new('kerosin/RecorderHandler', fieldBoxPath+'recorder')
 end
 
 #
