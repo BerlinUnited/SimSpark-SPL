@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.1 2004/05/06 08:34:23 rollmark Exp $
+   $Id: main.cpp,v 1.2 2004/05/07 12:23:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,21 @@
 #include <rcssnet/tcpsocket.hpp>
 #include <rcssnet/exception.hpp>
 #include <netinet/in.h>
+#include <behavior.h>
+#include <boost/scoped_ptr.hpp>
+
+#include "carbehavior.h"
+boost::scoped_ptr<Behavior> gBehavior(new CarBehavior());
 
 using namespace rcss::net;
 using namespace std;
+using namespace boost;
 
 TCPSocket gSocket;
 string gHost = "127.0.0.1";
 int gPort = 3100;
+
+
 
 void PrintGreeting()
 {
@@ -111,6 +119,11 @@ bool SelectInput()
 
 void PutMessage(const string& msg)
 {
+    if (msg.empty())
+        {
+            return;
+        }
+
     // prefix the message with it's payload length
     unsigned int len = htonl(msg.size());
     string prefix((const char*)&len,sizeof(unsigned int));
@@ -161,12 +174,12 @@ bool GetMessage(string& msg)
 
 void Run()
 {
-    PutMessage("(init)");
-    string msg;
+    PutMessage(gBehavior->Init());
 
+    string msg;
     while (GetMessage(msg))
         {
-            cout << "received: " << msg << endl;
+            PutMessage(gBehavior->Think(msg));
         }
 }
 
