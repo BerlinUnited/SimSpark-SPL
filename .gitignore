@@ -133,6 +133,9 @@ doc/papers/proposal/simulator3d.aux
 doc/papers/proposal/simulator3d.blg
 doc/papers/proposal/simulator3d.dvi
 doc/papers/proposal/simulator3d.log
+doc/users/Makefile
+doc/users/Makefile.in
+doc/users/auto
 lib/Makefile
 lib/Makefile.in
 lib/kerosin/.deps
