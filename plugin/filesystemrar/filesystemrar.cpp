@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemrar.cpp,v 1.3 2004/04/08 07:30:12 rollmark Exp $
+   $Id: filesystemrar.cpp,v 1.4 2004/04/18 16:20:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,22 +26,23 @@
 
 using namespace salt;
 using namespace std;
+using namespace boost;
 
 static int index = 0;
 
 static int PASCAL RARCallback(UINT msg, LONG UserData, LONG P1, LONG P2)
 {
-        unsigned char *buffer = (unsigned char*)UserData;
+    unsigned char *buffer = (unsigned char*)UserData;
 
-        switch(msg)
+    switch(msg)
         {
-                case UCM_PROCESSDATA:
-                        memcpy(&buffer[index], (const void*)P1, P2);
-                        index += P2;
-                        return 1;
+        case UCM_PROCESSDATA:
+            memcpy(&buffer[index], (const void*)P1, P2);
+            index += P2;
+            return 1;
         }
 
-        return 0;
+    return 0;
 }
 
 // constructor
@@ -56,74 +57,75 @@ FileSystemRAR::~FileSystemRAR()
 
 bool FileSystemRAR::SetPath(const string& inPath)
 {
-        mArchiveName = inPath;
-        FILE *f = fopen(inPath, "rb");
-        bool ret = (f != NULL);
+    mArchiveName = inPath;
+    FILE *f = fopen(inPath, "rb");
+    bool ret = (f != NULL);
 
-        if (f) fclose(f);
+    if (f) fclose(f);
 
-        return ret;
+    return ret;
 }
 
 //
 // This function is really simple. It appends inName to mPath and
 // tries to open the combined name as a readonly file.
 //
-salt::RFile* FileSystemRAR::Open(const string& inName)
+shared_ptr<salt::RFile> FileSystemRAR::Open(const string& inName)
 {
-        RAROpenArchiveData      openArchiveData;
+    RAROpenArchiveData      openArchiveData;
 
-        memset(&openArchiveData, 0, sizeof(RAROpenArchiveData));
-        openArchiveData.ArcName         = (char*)mArchiveName.c_str();
-        openArchiveData.OpenMode        = RAR_OM_EXTRACT;
+    memset(&openArchiveData, 0, sizeof(RAROpenArchiveData));
+    openArchiveData.ArcName         = (char*)mArchiveName.c_str();
+    openArchiveData.OpenMode        = RAR_OM_EXTRACT;
 
-        HANDLE handle = RAROpenArchive(&openArchiveData);
+    HANDLE handle = RAROpenArchive(&openArchiveData);
 
-        if (openArchiveData.OpenResult)
+    if (openArchiveData.OpenResult)
         {
-                RARCloseArchive(handle);
-                // something went wrong
-                return NULL;
+            RARCloseArchive(handle);
+            // something went wrong
+            return shared_ptr<salt::RFile>();
         }
 
-        // set the callback
-        RARSetCallback(handle, NULL, 0);
+    // set the callback
+    RARSetCallback(handle, NULL, 0);
 
-        RARHeaderData headerData;
+    RARHeaderData headerData;
 
-        while (RARReadHeader(handle, &headerData)==0)
+    while (RARReadHeader(handle, &headerData)==0)
         {
-                if (strcmp(headerData.FileName, inName) == 0)
+            if (strcmp(headerData.FileName, inName) == 0)
                 {
-                        // we have a match
-                        unsigned char *buffer = new unsigned char[headerData.UnpSize];
-                        MemFile *file = new MemFile();
-                        file->Open(buffer, headerData.UnpSize);
-                        RARSetCallback(handle, RARCallback, (LONG)buffer);
-                        index = 0;
-                        if (RARProcessFile(handle, RAR_TEST, NULL, NULL) != 0)
+                    // we have a match
+                    unsigned char *buffer = new unsigned char[headerData.UnpSize];
+                    shared_ptr<MemFile> file(new MemFile());
+                    file->Open(buffer, headerData.UnpSize);
+                    RARSetCallback(handle, RARCallback, (LONG)buffer);
+                    index = 0;
+                    if (RARProcessFile(handle, RAR_TEST, NULL, NULL) != 0)
                         {
-                                delete file;
-                                file = NULL;
+                            file.reset();
                         }
-                        RARSetCallback(handle, NULL, 0);
-                        RARCloseArchive(handle);
-                        return file;
+                    RARSetCallback(handle, NULL, 0);
+                    RARCloseArchive(handle);
+
+                    return shared_dynamic_cast<salt::RFile>(file);
                 }
-                else
+            else
                 {
-                        RARProcessFile(handle, RAR_SKIP, NULL, NULL);
+                    RARProcessFile(handle, RAR_SKIP, NULL, NULL);
                 }
         }
 
-        RARSetCallback(handle, NULL, 0);
-        RARCloseArchive(handle);
-        return NULL;
+    RARSetCallback(handle, NULL, 0);
+    RARCloseArchive(handle);
+
+    return shared_ptr<salt::RFile>();
 }
 
 int FileSystemRAR::ForEachFile(const string& expression, TCallback callback,
                                void* param)
 {
-        // todo
-        return 0;
+    // todo
+    return 0;
 }
