@@ -11,6 +11,7 @@ Options:
  [--prefix[=DIR]]
  [--exec-prefix[=DIR]]
  [--version]
+ [--libdir]
  [--libs]
  [--libtool]
  [--cflags]
@@ -56,6 +57,9 @@ while test $# -gt 0 ; do
     ;;
   --libtool)
     echo_libtool=yes
+    ;;
+  --libdir)
+    echo_libdir=yes
     ;;
   *)
     usage 1 1>&2
@@ -103,6 +107,10 @@ if test "$echo_libtool" = "yes" ; then
   convlib="libsalt.la"
  fi
  echo @libdir@/rcssserver3d/$convlib
+fi
+
+if test "$echo_libdir" = "yes" ; then
+ echo @libdir@/rcssserver3d
 fi
 
 # EOF
