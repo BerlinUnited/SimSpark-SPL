@@ -24,7 +24,7 @@
 #include <forwarder.h>
 #include <objects/worldnode.h>
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace rcss::NodeCreator;
 using namespace Utility;
 using namespace std;
@@ -42,12 +42,13 @@ WorldCreator::create(const ConVar::ConVars& parameter)
     string name;
     parameter[0]->getString(name);
     
-    BaseNode* current = EntityTree::EntityTree::instance().getCurrentNode();
+    DirNode* current = 
+        dynamic_cast<DirNode*>(EntityTree::instance().getCurrentNode());
     WorldNode* world = 0;
     
     if (current != 0 && (current->getType() & BaseNode::S_DIRECTORY != 0))
     {
-        world = new WorldNode(name, current);
+        world = &WorldNode::instance(name, current);
     }
     return world;
 }
