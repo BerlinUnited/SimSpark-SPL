@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.5.2.1 2004/01/12 14:55:39 rollmark Exp $
+   $Id: oxygen.h,v 1.5.2.2 2004/01/25 11:54:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@
 #include "physicsserver/world.h"
 #include "physicsserver/collisionhandler.h"
 #include "physicsserver/contactjointhandler.h"
+#include "physicsserver/recorderhandler.h"
 
 #include "sceneserver/basenode.h"
 #include "sceneserver/camera.h"
@@ -73,9 +74,9 @@ namespace oxygen
 class Oxygen
 {
 public:
-    /** initializes the oxygen framework
-        \param zg is a reference to an already initialized zeitgeist framwork
-        in which the internal oxygen libraries get installed
+    /** initializes the oxygen framework \param zg is a reference to
+        an already initialized zeitgeist framework in which the
+        internal oxygen libraries get installed
     */
     Oxygen(zeitgeist::Zeitgeist& zg);
     virtual ~Oxygen() {}
