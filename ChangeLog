@@ -1,4 +1,86 @@
+2004-04-23  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/rcssserver3D.rb: 
+	- removed unneeded perfectvisionperceptor 
+	- added drag controllers to simulate friction / air resistance 
+	- increased acceleration to get more reactive agents 
+	- senseMyPos is off by default now 
+	- increased half time length to 4 minutes 
+	- decreased monitor sense interval 
+	- added variables for 
+	  - free kick distance 
+	  - automatic kick off 
+	  - time to wait before automatic kick off
+	
+	* app/rcssmonitor3d/lib/commserver.cpp: 
+	- sending playmode KickOff instead of KickOff_Left for the kickoff 
+	  command so that a random kick off is performed.
+	
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	* lib/zeitgeist/scriptserver/scriptserver.h: 
+	- added UpdateCachedAllNodes method that calls UpdateCached from all
+ 	  server nodes after ruby files have been read.
+
+	* plugin/soccer/soccertypes.h: 
+	- added an additional play mode KickOff (used to indicate that a 
+	  random kick off (left or right) should be beformed).
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
+	- made the Get.. methods const 
+	- added optional parameter to the KickOff method so that the method can 
+	  do the kick off for a random or for a given team. With the default 
+	  parameter, the kick off is done randomly.  
+	- added mLeadTime member variable. It is used in BeforeKickOff mode to 
+	  count the time already passed. The mode time is BeforeKickOff mode is 
+	  returned according to the lead time. mLeadTime is reset whenever a 
+	  play mode is changed and increased only in BeforeKickOff mode.
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	- added flag for the automatic kick off 
+	- added variable for the time before automatic kick off 
+	- implemented automatic kick off 
+	- removed state from UpdateCached
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp: 
+	- added new play mode KickOff to play mode map 
+	- added special case for setting the play modes to one of the KickOff modes: 
+	  call the game state KickOff method
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	- removed variables related to the (removed) StartUpHook
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp: 
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	- removed StartUpHook
+
+2004-04-22  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/leaf.h: 
+	- added empty virtual method UpdateCached()
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	- added StartUpHook.  This method is called when the simulation is up 
+	  and running.  It is called from the simulation controller 
+	  (aka SpadesServer).  It is used to update all registered
+	  GameControlAspects below.
+
+	* lib/oxygen/controlaspect/controlaspect.h: 
+	- added a StartUpHook that will be called after a specific simulation time
+
 2004-04-21  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/filesystemzip/Makefile.am: 
+	- added automake conditional so that the plugin is build only if 
+	  boost regex is available.
+
+	* configure.ac:
+	* acinclude.m4: 
+	- added RCSS_BOOST_REGEX check
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
