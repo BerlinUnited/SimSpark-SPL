@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.h,v 1.3.8.2 2004/01/15 21:04:26 fruit Exp $
+   $Id: controlaspect.h,v 1.3.8.3 2004/01/20 19:15:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,8 @@ public:
     /** called during the update of the GameControlServer to allow the
         ControlAspect to perform any necessary checks.
 
-        \param deltaTime is the time passed since the last update
+        \param time is the time passed since the last update in
+        seconds
      */
     virtual void Update(float deltaTime) = 0;
 };
