@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.1.2.4 2004/02/06 13:09:27 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.1.2.5 2004/02/08 15:22:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,17 @@ void SoccerRuleAspect::UpdateBeforeKickOff()
     // the playing field
     salt::Vector3f pos(0,mBallRadius,0);
     mBallBody->SetPosition(pos);
+    mBallBody->SetVelocity(Vector3f(0,0,0));
+    mBallBody->SetAngularVelocity(Vector3f(0,0,0));
+}
+
+void SoccerRuleAspect::UpdateKickOff()
+{
+    // after the first agent touches the ball move to PM_PLAYON
+    if (mBallState->GetLastCollidingAgent().get() != 0)
+        {
+            mGameState->SetPlayMode(PM_PlayOn);
+        }
 }
 
 bool SoccerRuleAspect::CheckBallLeftField()
@@ -129,6 +140,10 @@ void SoccerRuleAspect::Update(float deltaTime)
 
         case PM_PlayOn:
             UpdatePlayOn();
+            break;
+
+        case PM_KickOff:
+            UpdateKickOff();
             break;
 
         default:
