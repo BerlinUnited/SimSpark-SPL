@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.h,v 1.1 2004/04/15 10:47:37 rollmark Exp $
+   $Id: universaljoint.h,v 1.2 2004/04/15 18:31:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,15 @@ public:
         anchor point will be the same for both bodies.
     */
     salt::Vector3f GetAnchor (EBodyIndex idx);
+
+    /** returns one of the hinge angles, measured between the two
+        bodies, or between the body and the static environment. The
+        angle will be between -pi..pi.
+    */
+    float GetAngle(EAxisIndex idx);
+
+    /** returns the time derivate of one of the hinge angles */
+    float GetAngleRate(EAxisIndex idx);
 
 protected:
     /** creates a new contact joint */
