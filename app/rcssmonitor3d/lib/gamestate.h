@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.h,v 1.1 2004/03/10 20:44:24 rollmark Exp $
+   $Id: gamestate.h,v 1.2 2004/04/09 19:08:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,11 +28,11 @@
 #define GAMESTATE_H
 
 #include <string>
-#include <soccertypes.h>
+#include <soccer/soccertypes.h>
 
 class GameState
 {
- public:
+public:
     GameState();
     virtual ~GameState();
 
@@ -57,7 +57,7 @@ class GameState
     void SetPlayMode(TPlayMode playMode);
     TPlayMode GetPlayMode();
 
- protected:
+protected:
     std::string mTeamL;
     std::string mTeamR;
     float mTime;
