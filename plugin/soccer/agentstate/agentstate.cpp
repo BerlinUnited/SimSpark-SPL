@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.cpp,v 1.1.2.2 2004/01/31 15:12:46 rollmark Exp $
+   $Id: agentstate.cpp,v 1.1.2.3 2004/02/01 11:01:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,8 +36,20 @@ void AgentState::SetTeamIndex(TTeamIndex idx)
   mTeamIndex = idx;
 }
 
+TTeamIndex AgentState::GetTeamIndex()
+{
+    return mTeamIndex;
+}
+
+
 void AgentState::SetUniformNumber(int number)
 {
   mUniformNumber = number;
 }
+
+int AgentState::GetUniformNumber()
+{
+    return mUniformNumber;
+}
+
 
