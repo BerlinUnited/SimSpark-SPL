@@ -4,6 +4,9 @@ soccer_la_SOURCES = export.cpp \
 agentstate/agentstate.cpp \
 agentstate/agentstate.h \
 agentstate/agentstate_c.cpp \
+agentstateperceptor/agentstateperceptor.cpp \
+agentstateperceptor/agentstateperceptor.h \
+agentstateperceptor/agentstateperceptor_c.cpp \
 ball/ball.cpp ball/ball.h ball/ball_c.cpp \
 ballstateaspect/ballstateaspect.cpp \
 ballstateaspect/ballstateaspect.h \
