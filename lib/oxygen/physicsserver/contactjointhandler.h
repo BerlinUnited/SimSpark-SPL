@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.1.2.1 2004/01/12 14:42:17 rollmark Exp $
+   $Id: contactjointhandler.h,v 1.1.2.2 2004/01/16 11:04:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ class ContactJointHandler : public CollisionHandler
        \param holds the contact points between the two affected geoms
        as returned from the ODE dCollide function
   */
-  virtual void HandleCollision(dGeomID collidee, dContact& contact);
+  virtual void HandleCollision
+  (boost::shared_ptr<Collider> collidee, dContact& contact);
 
   /** sets the surface parameters for the contact joints that the
       CollisionHandler creates
