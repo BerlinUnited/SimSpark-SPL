@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.cpp,v 1.3 2004/03/23 09:27:58 rollmark Exp $
+   $Id: collisionperceptor.cpp,v 1.3.2.1 2004/03/28 15:32:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,15 +26,16 @@ using namespace boost;
 using namespace oxygen;
 
 bool
-CollisionPerceptor::Percept(Predicate& predicate)
+CollisionPerceptor::Percept(shared_ptr<PredicateList> predList)
 {
-    predicate.name = "collision";
-    predicate.parameter.Clear();
-
     if (mCollidees.empty())
     {
-      return false;
+        return false;
     }
+
+    Predicate& predicate = predList->AddPredicate();
+    predicate.name = "collision";
+    predicate.parameter.Clear();
 
      for (
           TLeafList::const_iterator i = GetCollidees().begin();

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.5.4.1 2004/03/27 10:45:39 rollmark Exp $
+   $Id: agentaspect.cpp,v 1.5.4.2 2004/03/28 15:29:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,15 +72,14 @@ AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> actions)
   return true;
 }
 
-shared_ptr<Predicate::TList>
+shared_ptr<PredicateList>
 AgentAspect::QueryPerceptors()
 {
   // build list of perceptors, searching recursively
   TLeafList perceptors;
   ListChildrenSupportingClass<Perceptor>(perceptors,true);
 
-  shared_ptr<Predicate::TList>
-    predList(new Predicate::TList());
+  shared_ptr<PredicateList> predList(new PredicateList());
 
   // query the perceptors for new data
   for (
@@ -89,13 +88,7 @@ AgentAspect::QueryPerceptors()
        ++iter
        )
     {
-      Predicate predicate;
-      bool hasData = shared_static_cast<Perceptor>(*iter)->Percept(predicate);
-
-      if (hasData)
-        {
-          predList->push_back(predicate);
-        }
+      shared_static_cast<Perceptor>(*iter)->Percept(predList);
     }
 
   return predList;
