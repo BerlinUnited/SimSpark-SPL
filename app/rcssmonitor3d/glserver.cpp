@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3.2.7 2004/02/08 15:19:24 rollmark Exp $
+   $Id: glserver.cpp,v 1.3.2.8 2004/02/11 10:08:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -102,6 +102,23 @@ int GLServer::GetTextHeight()
 {
     // currently only GLUT_BITMAP_9_BY_15 is used
     return 15;
+}
+
+void GLServer::DrawText3D(const char* text, salt::Vector3f pos)
+{
+    glDisable (GL_DEPTH_TEST);
+    glDisable (GL_TEXTURE_2D);
+    glDisable (GL_LIGHTING);
+
+    glRasterPos3f(pos[0],pos[1],pos[2]);
+    for (const char* s = text; *s; ++s)
+        {
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *s);
+        }
+
+    glEnable (GL_LIGHTING);
+    glEnable (GL_TEXTURE_2D);
+    glEnable (GL_DEPTH_TEST);
 }
 
 //--------------------------drawText-------------------------------------
