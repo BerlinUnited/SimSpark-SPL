@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.1.2.3 2004/02/06 10:14:50 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.1.2.4 2004/02/06 13:09:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,8 +45,7 @@ void SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // before the game starts the ball should stay in the middle of
     // the playing field
-    salt::Vector3f pos(0,0,0);
-    GetSoccerVar("BallRadius",pos[1]);
+    salt::Vector3f pos(0,mBallRadius,0);
     mBallBody->SetPosition(pos);
 }
 
@@ -59,7 +58,7 @@ bool SoccerRuleAspect::CheckBallLeftField()
 
     // move the ball back on the ground where it left the playing field
     Vector3f lastValid = mBallState->GetLastValidBallPosition();
-    GetSoccerVar("BallRadius",lastValid[1]);
+    lastValid[1] = mBallRadius;
     mBallBody->SetPosition(lastValid);
 
     return true;
@@ -86,7 +85,7 @@ bool SoccerRuleAspect::CheckGoal()
 
     // put the ball back in the middle of the playing field
     salt::Vector3f pos(0,0,0);
-    GetSoccerVar("BallRadius",pos[1]);
+    SoccerBase::GetSoccerVar(*this,"BallRadius",pos[1]);
     mBallBody->SetPosition(pos);
 
     return true;
@@ -151,6 +150,9 @@ void SoccerRuleAspect::OnLink()
         (GetControlAspect("BallStateAspect"));
 
     SoccerBase::GetBallBody(*this,mBallBody);
+
+    mBallRadius = 0.111f;
+    SoccerBase::GetSoccerVar(*this,"BallRadius",mBallRadius);
 }
 
 void SoccerRuleAspect::OnUnlink()
