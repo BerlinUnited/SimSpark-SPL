@@ -14,7 +14,7 @@ cat <<EOF
 <agent_type_external name="foo">
   <inputfd>3</inputfd>
   <outputfd>4</outputfd>
-  <timer>default</timer>
+  <timer>jiffies 2000</timer>
   <working_dir>/tmp</working_dir>
 EOF
 
@@ -27,7 +27,7 @@ cat <<EOF
 <agent_type_external name="bar">
   <inputfd>3</inputfd>
   <outputfd>4</outputfd>
-  <timer>default</timer>
+  <timer>jiffies 2000</timer>
   <working_dir>/tmp</working_dir>
 EOF
 
