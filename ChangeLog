@@ -1,3 +1,8 @@
+2004-06-20  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	- made distance error dependent on the real distance
+
 2004-06-19  Oliver Obst  <fruit@robolog.org>
 
 	* app/agenttest/soccer.cpp: 
