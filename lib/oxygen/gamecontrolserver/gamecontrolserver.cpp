@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.3.2.1 2004/01/08 12:37:13 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.3.2.2 2004/01/25 11:23:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ GameControlServer::InitParser(const std::string& parserName)
     if (mParser.get() == 0)
     {
         GetLog()->Error() << "ERROR: (GameControlServer::InitParser) Unable to create "
-                          << parserName << std::endl;
+                          << parserName << "\n";
         return false;
     }
 
@@ -73,7 +73,7 @@ GameControlServer::InitControlAspect(const string& aspectName)
     if (mParser.get() == 0)
     {
         GetLog()->Error() << "ERROR: (GameControlServer::InitControlAspect) Unable to create "
-                          << aspectName << std::endl;
+                          << aspectName << "\n";
         return false;
     }
 
@@ -149,7 +149,7 @@ GameControlServer::AgentConnect(int id)
         }
 
     stringstream name;
-    name << "_AgentAspect" << id;
+    name << "AgentAspect" << id;
     aspect->SetName(name.str());
 
     scene->AddChildReference(aspect);
@@ -186,29 +186,32 @@ bool GameControlServer::AgentDisappear(int id)
     return true;
 }
 
-float GameControlServer::GetSenseInterval(int /*id*/)
+float
+GameControlServer::GetSenseInterval(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent.
     return 0.1;
 }
 
-float GameControlServer::GetSenseLatency(int /*id*/)
+float
+GameControlServer::GetSenseLatency(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent
     return 0.1;
 }
 
-float GameControlServer::GetActionLatency(int /*id*/)
+float
+GameControlServer::GetActionLatency(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent.
     return 0.1;
 }
 
-
-shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) const
+shared_ptr<ActionObject::TList>
+GameControlServer::Parse(int id, string str) const
 {
     TAgentMap::const_iterator iter = mAgentMap.find(id);
 
@@ -217,14 +220,14 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) con
             GetLog()->Error()
                 << "ERROR: (GameControlServer::Parse) Parse called with unknown agent id "
                 << id << "\n";
-            return shared_ptr<ActionObject::TList>(new ActionObject::TList());
+            return shared_ptr<ActionObject::TList>();
         }
 
     if (mParser.get() == 0)
         {
             GetLog()->Error()
                 << "ERROR: (GameControlServer::Parse) No parser registered.\n";
-            return shared_ptr<ActionObject::TList>(new ActionObject::TList());
+            return shared_ptr<ActionObject::TList>();
         }
 
     // use the parser to create a TPredicateList
@@ -268,16 +271,16 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) con
     return actionList;
 }
 
-shared_ptr<AgentAspect> GameControlServer::GetAgentAspect(int id)
+shared_ptr<AgentAspect>
+GameControlServer::GetAgentAspect(int id)
 {
     TAgentMap::iterator iter = mAgentMap.find(id);
     if (iter == mAgentMap.end())
         {
             return shared_ptr<AgentAspect>();
-        } else
-            {
-                return (*iter).second;
-            }
+        }
+
+    return (*iter).second;
 }
 
 void
