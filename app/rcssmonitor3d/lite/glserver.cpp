@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.6 2004/05/10 14:10:46 fruit Exp $
+   $Id: glserver.cpp,v 1.7 2004/06/07 14:14:08 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -276,23 +276,27 @@ void GLServer::DrawGoal(Vector3f goalPos, Vector3f sz)
     GLUquadricObj *cyl;
     cyl = gluNewQuadric();
 
+    float barSize = 0.1;
+
     glPushMatrix();
     glTranslatef(goalPos[0], goalPos[1], goalPos[2]);
 
+
     // draw goal sides as cylinders
     glPushMatrix();
-    glTranslatef(0,0,sz[2]);
+    glTranslatef(0,0,sz[2] + barSize/2.0);
     glRotatef(-90.0f, 1,0,0);
-    gluCylinder(cyl,0.1,0.1,sz[1],15,15);
+    gluCylinder(cyl,barSize,barSize,sz[1],15,15);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0,sz[1],0);
-    gluCylinder(cyl,0.1,0.1,sz[2],15,15);
+    glTranslatef(0,sz[1] + barSize/2.0, 0);
+    gluCylinder(cyl,barSize,barSize,sz[2],15,15);
     glPopMatrix();
 
     glPushMatrix();
-    gluCylinder(cyl,0.1,0.1,sz[2],15,15);
+    glTranslatef(0, -barSize/2.0, 0);
+    gluCylinder(cyl,barSize,barSize,sz[2],15,15);
     glPopMatrix();
 
     glPopMatrix();
