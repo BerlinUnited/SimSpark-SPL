@@ -41,6 +41,7 @@ TrainerCommandParser::TrainerCommandParser() : Leaf()
     mCommandMap["agent"]    = CT_PLAYER;
     mCommandMap["ball"]     = CT_BALL;
     mCommandMap["playMode"] = CT_PLAYMODE;
+    mCommandMap["getAck"] = CT_ACK;
 
     // setup team index map
     mTeamIndexMap["L"]       = TI_LEFT;
@@ -58,11 +59,22 @@ TrainerCommandParser::TrainerCommandParser() : Leaf()
     mPlayModeMap[STR_PM_Goal_Left]     = PM_Goal_Left;
     mPlayModeMap[STR_PM_Goal_Right]    = PM_Goal_Right;
     mPlayModeMap[STR_PM_GameOver]      = PM_GameOver;
+
+    mGetAck = false;
 }
 
 TrainerCommandParser::~TrainerCommandParser()
 {
 
+}
+
+bool TrainerCommandParser::SendAck(std::string &reply) 
+{
+    if(!mGetAck){return false;}
+
+    reply = "best";
+    mGetAck= false;
+    return true;
 }
 
 void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
@@ -103,6 +115,20 @@ bool TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
     case CT_PLAYMODE:
         ParsePlayModeCommand(predicate);
         break;
+    case CT_ACK:
+    {
+        mGetAck=true;
+        // Predicate::Iterator ackParam(predicate);
+        // ++ackParam;
+                  
+        /* if (! predicate.GetValue(ackParam, mAckString))
+         {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get mAckString\n";
+            return false;
+            }*/
+        
+        break;
+    }
     default:
         return false;
     }
