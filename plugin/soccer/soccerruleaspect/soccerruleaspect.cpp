@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.12 2004/06/11 08:54:03 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.13 2004/06/14 16:07:45 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -580,13 +580,19 @@ SoccerRuleAspect::Update(float deltaTime)
 
     TPlayMode playMode = mGameState->GetPlayMode();
 
+    static bool updated = false;
+
     switch (playMode)
     {
     case PM_BeforeKickOff:
         // At the beginning of the match, we update the member variables
         // with the values from the ruby script (once). At this point in time,
         // the ruby script has definitely been processed.
-        UpdateCachedInternal();
+        if (! updated)
+        {
+            UpdateCachedInternal();
+            updated = true;
+        }
         // Below is the check we do during before kick off mode.
         UpdateBeforeKickOff();
         break;
