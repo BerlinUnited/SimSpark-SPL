@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.5 2004/02/02 18:29:42 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.6 2004/02/05 10:21:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,11 +24,12 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
+#include <soccer/soccerbase/soccerbase.h>
 
 using namespace oxygen;
 using namespace boost;
 
-VisionPerceptor::VisionPerceptor() : oxygen::Perceptor(),
+VisionPerceptor::VisionPerceptor() : Perceptor(),
                                      mAddNoise(true), mPredicateName("Vision")
 {
     // set some default noise values
@@ -52,7 +53,18 @@ VisionPerceptor::SetNoiseParams(float sigma_dist, float sigma_phi,
     mError = salt::Vector3f(rng(),rng(),rng());
 }
 
-bool VisionPerceptor::ConstructInternal()
+void
+VisionPerceptor::OnLink()
+{
+    SoccerBase::GetSceneServer(*this, mSceneServer);
+    if (SoccerBase::GetTransformParent(*this, mTransformParent))
+    {
+        SoccerBase::GetAgentState(*this, mTransformParent, mAgentState);
+    }
+}
+
+bool
+VisionPerceptor::ConstructInternal()
 {
     mRay = shared_static_cast<oxygen::RayCollider>
         (GetCore()->New("kerosin/RayCollider"));
@@ -72,18 +84,12 @@ VisionPerceptor::Percept(Predicate& predicate)
     predicate.name = mPredicateName;
     predicate.parameter.clear();
 
-    shared_ptr<Scene> activeScene;
-    if (!GetActiveScene(activeScene))
+    if (!SoccerBase::GetActiveScene(*this,mSceneServer,mActiveScene))
     {
-        GetLog()->Error() << "ERROR: (VisionPerceptor) no active scene\n";
         return false;
     }
 
-    // we want positions relative to the closest parent transform node
-    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-        (make_shared(GetParentSupportingClass("Transform")));
-
-    if (parent.get() == 0)
+    if (mTransformParent.get() == 0)
     {
         GetLog()->Error()
             << "Error: (VisionPerceptor) "
@@ -91,25 +97,20 @@ VisionPerceptor::Percept(Predicate& predicate)
         return false;
     }
 
-    if (mAgentState.get() == 0)
-    {
-        mAgentState =
-            shared_static_cast<AgentState>(parent->GetChild("AgentState"));
-    }
     TTeamIndex ti = TI_NONE;
     if (mAgentState.get() != 0)
     {
         ti = mAgentState->GetTeamIndex();
     }
-#define DEBUG_SIDE
+#undef DEBUG_SIDE
 #ifdef DEBUG_SIDE
     if (ti == TI_LEFT) predicate.parameter.push_back(std::string("(debug_message left)"));
     else if (ti == TI_RIGHT) predicate.parameter.push_back(std::string("(debug_message right)"));
 #endif
-    salt::Vector3f myPos = parent->GetWorldTransform().Pos();
+    salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
     TLeafList transformList;
-    activeScene->GetChildrenSupportingClass("Transform", transformList, true);
+    mActiveScene->GetChildrenSupportingClass("Transform", transformList, true);
 
     ObjectData od;
     std::list<ObjectData> visibleObjects;
@@ -119,7 +120,7 @@ VisionPerceptor::Percept(Predicate& predicate)
     {
         od.mVisible = true;
         shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
-        od.mRelPos = FlipView(j->GetWorldTransform().Pos() - myPos, ti);
+        od.mRelPos = SoccerBase::FlipView(j->GetWorldTransform().Pos() - myPos, ti);
         if (mAddNoise) od.mRelPos += mError;
 
         od.mDist = od.mRelPos.Length();
@@ -214,48 +215,3 @@ VisionPerceptor::CheckOcclusion(const salt::Vector3f& my_pos,
     }
 }
 
-bool
-VisionPerceptor::GetActiveScene(boost::shared_ptr<oxygen::Scene>& active_scene)
-{
-    if (mSceneServer.get() == 0)
-    {
-        mSceneServer = shared_static_cast<SceneServer>
-            (GetCore()->Get("/sys/server/scene"));
-    }
-
-    if (mSceneServer.get() == 0)
-    {
-        return false;
-    }
-
-    active_scene = mSceneServer->GetActiveScene();
-    if (active_scene.get() == 0)
-    {
-        GetLog()->Error()
-            << "ERROR: (VisionPerceptor) SceneServer reports no active scene\n";
-        return false;
-    }
-    return true;
-}
-
-salt::Vector3f
-VisionPerceptor::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
-{
-    salt::Vector3f newPos;
-    switch (ti) {
-    case TI_NONE:
-        newPos[0] = 0.0;
-        newPos[1] = 0.0;
-        newPos[2] = 0.0;
-        break;
-    case TI_LEFT:
-        newPos[0] = -pos[0];
-        newPos[1] = pos[1];
-        newPos[2] = -pos[2];
-        break;
-    case TI_RIGHT:
-        newPos = pos;
-        break;
-    }
-    return newPos;
-}
