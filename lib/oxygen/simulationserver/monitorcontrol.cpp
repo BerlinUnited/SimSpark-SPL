@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.cpp,v 1.1 2004/04/25 16:48:03 rollmark Exp $
+   $Id: monitorcontrol.cpp,v 1.2 2004/04/28 14:35:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ using namespace std;
 MonitorControl::MonitorControl() : NetControl()
 {
     mLocalAddr.setPort(3200);
+    mMonitorInterval = 30;
 }
 
 MonitorControl::~MonitorControl()
@@ -59,19 +60,33 @@ void MonitorControl::OnUnlink()
 
 void MonitorControl::ClientConnect(shared_ptr<Client> client)
 {
-    if (mMonitorServer.get() == 0)
+    if (
+        (mMonitorServer.get() == 0) ||
+        (mNetMessage.get() == 0)
+        )
         {
             return;
         }
 
-    SendMessage(client->addr,mMonitorServer->GetMonitorHeaderInfo());
+    string header = mMonitorServer->GetMonitorHeaderInfo();
+    mNetMessage->PrepareToSend(header);
+    SendMessage(client->addr,header);
 }
 
 void MonitorControl::EndCycle()
 {
+    NetControl::EndCycle();
+
+    const int cycle = GetSimulationServer()->GetCycle();
+    if (cycle % mMonitorInterval)
+        {
+            return;
+        }
+
     if (
         (mMonitorServer.get() == 0) ||
-        (mNetMessage.get() == 0)
+        (mNetMessage.get() == 0) ||
+        (mClients.size() == 0)
         )
         {
             return;
@@ -93,6 +108,8 @@ void MonitorControl::EndCycle()
 
 void MonitorControl::StartCycle()
 {
+    NetControl::StartCycle();
+
     if (
         (mMonitorServer.get() == 0) ||
         (mNetMessage.get() == 0)
