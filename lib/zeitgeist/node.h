@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.h,v 1.5 2003/11/14 14:05:54 fruit Exp $
+   $Id: node.h,v 1.6 2004/04/22 14:31:01 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@
 
 namespace zeitgeist
 {
+#if 0
+}
+#endif
 /** Node makes up the hierarchy. A Node object can reside within the
     hierarchy and have children
 */
@@ -66,18 +69,18 @@ public:
     virtual boost::shared_ptr<Leaf> GetChildSupportingClass(const std::string &name, bool recursive = false);
 
     /** returns an a list of children. */
-    virtual void                                    GetChildren(const std::string &name, TLeafList &baseList, bool recursive = false);
+    virtual void GetChildren(const std::string &name, TLeafList &baseList, bool recursive = false);
 
     /** constructs a list of all children of type 'name'. */
-    virtual void                                    GetChildrenOfClass(const std::string &name, TLeafList &baseList, bool recursive = false);
+    virtual void GetChildrenOfClass(const std::string &name, TLeafList &baseList, bool recursive = false);
 
     /** constructs a list of all children supporting a class
         'name' i.e. they are an instance of that class or are
         derived from it.  */
-    virtual void                                    GetChildrenSupportingClass(const std::string &name, TLeafList &baseList, bool recursive = false);
+    virtual void GetChildrenSupportingClass(const std::string &name, TLeafList &baseList, bool recursive = false);
 
     /** returns false to indicate that this node isn't a lead */
-    virtual bool                                    IsLeaf() const;
+    virtual bool IsLeaf() const;
 
     /** removes base from the set of children. */
     virtual void RemoveChildReference(const boost::shared_ptr<Leaf> &base);
@@ -86,7 +89,7 @@ public:
     virtual bool AddChildReference(const boost::shared_ptr<Leaf> &base);
 
     /** writes debug data to stdout */
-    virtual void    Dump() const;
+    virtual void Dump() const;
 
     // iterator helpers
     virtual TLeafList::iterator begin();
@@ -102,7 +105,7 @@ private:
     //
 protected:
     // object hierarchy related stuff
-    TLeafList               mChildren;
+    TLeafList mChildren;
 };
 
 DECLARE_CLASS(Node);
