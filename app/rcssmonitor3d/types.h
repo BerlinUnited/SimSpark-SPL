@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: types.h,v 1.3.2.1 2004/01/29 13:20:22 heni Exp $
+   $Id: types.h,v 1.3.2.2 2004/02/11 10:09:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,4 +48,8 @@
 
 // camera mode
 #define DEFAULT_AUTO_CAM 0
+
+// default draw mode
+#define DEFAULT_DRAW_UNUMS true
+
 #endif // _TYPES_H
