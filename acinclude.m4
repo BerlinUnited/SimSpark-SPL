@@ -85,3 +85,28 @@ AC_DEFUN(RCSS_PATH_FREETYPE, [
 	AC_SUBST(FREETYPE_LIBADD, [$rcss_freetype_libadd])
 
 ]) # RCSS_PATH_FREETYPE
+
+# RCSS_CHECK_SOUNDSYSTEMFMOD
+#	defines a conditional BUILD_SOUNDSYSTEMFMOD if the required header
+#	and library exists. Up to date, there is no version check for the 
+#	fmod library.
+#-----------------------------------------------------------------------------
+AC_DEFUN(RCSS_CHECK_SOUNDSYSTEMFMOD, [
+	AC_CHECK_HEADER(fmod/fmod.h, 
+			[rcss_soundsystemfmod="true"], 
+			[rcss_soundsystemfmod="false" &&
+			 AC_MSG_WARN([FMOD Sound module will not be built])])
+	if test $rcss_soundsystemfmod = "true"; then
+		AC_MSG_CHECKING([if linking against libfmod is succeeds])
+		rcss_tmp="$LDFLAGS"
+		LDFLAGS="$LDFLAGS -lfmod"
+ 		AC_LINK_IFELSE([#include <fmod/fmod.h>
+				int main() { return FSOUND_GetVolume(0); }],
+				[rcss_soundsystemfmod="true" && AC_MSG_RESULT([yes])],
+				[rcss_soundsystemfmod="false" && 
+				 AC_MSG_RESULT([no]) &&
+				 AC_MSG_WARN([there should be a link in one of your libdirs from libfmod.so to libfmod-X.YZ.so. If the link exists, try setting the LDFLAGS environment variable appropriately.])])
+		LDFLAGS="$rcss_tmp"
+	fi		
+	AM_CONDITIONAL(BUILD_SOUNDSYSTEMFMOD, test x$rcss_soundsystemfmod = xtrue)
+]) # RCSS_CHECK_SOUNDSYSTEMFMOD
