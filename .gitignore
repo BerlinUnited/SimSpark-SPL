@@ -31,6 +31,9 @@ utility/console/Makefile.in
 utility/console/commands/signature/.deps
 utility/console/commands/signature/.dirstamp
 utility/forwarder/.deps
+utility/forwarder/forwarder.lo
+utility/forwarder/libforwarder.la
+utility/forwarder/forwarderstreambuf.lo
 utility/forwarder/.libs
 utility/forwarder/Makefile
 utility/forwarder/Makefile.in
