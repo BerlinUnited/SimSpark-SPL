@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ball.h,v 1.1.2.1 2004/01/20 19:06:47 rollmark Exp $
+   $Id: ball.h,v 1.1.2.2 2004/01/25 12:35:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,6 @@ class Ball : public oxygen::Transform
  public:
   Ball() : Transform() {};
   virtual ~Ball() {};
-
-  virtual void OnLink();
 };
 
 DECLARE_CLASS(Ball);
