@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1.2.11 2004/02/06 10:07:12 rollmark Exp $
+   $Id: export.cpp,v 1.1.2.12 2004/02/07 18:58:38 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(DashEffector);
         ZEITGEIST_EXPORT(KickEffector);
         ZEITGEIST_EXPORT(InitEffector);
+        ZEITGEIST_EXPORT(ObjectState);
         ZEITGEIST_EXPORT(AgentState);
         ZEITGEIST_EXPORT(SexpMonitor);
         ZEITGEIST_EXPORT(FieldFlag);
