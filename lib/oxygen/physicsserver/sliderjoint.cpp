@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: sliderjoint.cpp,v 1.1 2004/04/14 18:22:55 rollmark Exp $
+   $Id: sliderjoint.cpp,v 1.2 2004/04/15 10:45:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ void SliderJoint::OnLink()
         }
 
     mODEJoint = dJointCreateSlider(world, 0);
-    void dJointSetSliderAxis (dJointID, dReal x, dReal y, dReal z);
 }
 
 void SliderJoint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
@@ -49,16 +48,16 @@ void SliderJoint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
     Joint::Attach(body1,body2);
 
     // relative slider axis points up
-    Vector3f up(GetWorldTransform() * Vector3f(0,0,1));
+    Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
     dJointSetSliderAxis(mODEJoint,up[0],up[1],up[2]);
 }
 
-float SliderJoint::GetSliderPosition()
+float SliderJoint::GetPosition()
 {
     return dJointGetSliderPosition(mODEJoint);
 }
 
-float SliderJoint::GetSliderPositionRate()
+float SliderJoint::GetPositionRate()
 {
     return dJointGetSliderPositionRate(mODEJoint);
 }

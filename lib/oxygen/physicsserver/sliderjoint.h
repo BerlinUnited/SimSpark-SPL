@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: sliderjoint.h,v 1.1 2004/04/14 18:22:55 rollmark Exp $
+   $Id: sliderjoint.h,v 1.2 2004/04/15 10:45:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,10 +37,10 @@ public:
          the attached bodies is examined and that position will be the
          zero position.
     */
-    float GetSliderPosition();
+    float GetPosition();
 
     /** returns the time derivative of the sliders linear position */
-    float GetSliderPositionRate();
+    float GetPositionRate();
 
 protected:
     /** attaches the joint to some new bodies */

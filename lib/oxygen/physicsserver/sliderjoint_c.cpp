@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sliderjoint_c.cpp,v 1.1 2004/04/14 18:22:55 rollmark Exp $
+   $Id: sliderjoint_c.cpp,v 1.2 2004/04/15 10:45:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,19 +25,19 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-FUNCTION(SliderJoint,getSliderPosition)
+FUNCTION(SliderJoint,getPosition)
 {
-    return obj->GetSliderPosition();
+    return obj->GetPosition();
 }
 
-FUNCTION(SliderJoint,getSliderPositionRate)
+FUNCTION(SliderJoint,getPositionRate)
 {
-    return obj->GetSliderPositionRate();
+    return obj->GetPositionRate();
 }
 
 void CLASS(SliderJoint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Joint);
-    DEFINE_FUNCTION(getSliderPosition);
-    DEFINE_FUNCTION(getSliderPositionRate);
+    DEFINE_FUNCTION(getPosition);
+    DEFINE_FUNCTION(getPositionRate);
 }
