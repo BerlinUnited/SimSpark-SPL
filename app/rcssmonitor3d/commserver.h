@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.2.2.1 2003/12/22 15:21:53 rollmark Exp $
+   $Id: commserver.h,v 1.2.2.2 2003/12/23 18:12:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,33 +22,41 @@
 #ifndef _COMMSERVER_H
 #define _COMMSERVER_H
 
-#include <zeitgeist/zeitgeist.h>
+#include <zeitgeist/class.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 #include <oxygen/oxygen.h>
 #include "types.h"
 #include "communit.h"
 #include <vector>
 
-class CommServer
+class CommServer : public zeitgeist::Object
 {
  public:
   typedef std::vector<salt::Vector3f> TPositions;
 
  public:
-  CommServer();
-  virtual ~CommServer() {};
+    CommServer();
+    virtual ~CommServer() {};
 
-  bool Init(std::string host, int port);
-  bool GetMessage();
-  const TPositions& GetPositions();
+    bool Init(std::string parser, std::string host, int port);
+    bool GetMessage();
+    const TPositions& GetPositions();
+    boost::shared_ptr<oxygen::BaseParser::TPredicateList> GetPredicates();
 
  protected:
-    void ParseTuples(const char* msg, const size_t& len);
+    void Parse(std::string msg);
 
  protected:
     // socket wrapper
     CommUnit mCommUnit;
 
-    // vector of parsed out positions
-    TPositions mPositions;
+    // cache for parsed predicates
+    boost::shared_ptr<oxygen::BaseParser::TPredicateList> mPredicates;
+
+    // the parser used for the SExpressions
+    boost::shared_ptr<oxygen::BaseParser> mParser;
 };
-#endif
+
+DECLARE_CLASS(CommServer);
+
+#endif // _COMMSERVER_H

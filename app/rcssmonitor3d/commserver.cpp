@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.2.2.1 2003/12/22 15:21:53 rollmark Exp $
+   $Id: commserver.cpp,v 1.2.2.2 2003/12/23 18:13:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,18 +22,31 @@
 #include "commserver.h"
 
 using namespace std;
+using namespace boost;
+using namespace oxygen;
 
 CommServer::CommServer()
 {
 }
 
-bool CommServer::Init(std::string host, int port)
+bool
+CommServer::Init(std::string parser, std::string host, int port)
 {
-  return mCommUnit.OpenConnection(host,port);
+    mParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New(parser));
+
+    if (mParser.get() == 0)
+        {
+            GetLog()->Error() <<
+                "ERROR: (CommServer) failed to create parser " << parser << endl;
+            return false;
+        }
+
+    return mCommUnit.OpenConnection(host,port);
 }
 
 
-bool CommServer::GetMessage()
+bool
+CommServer::GetMessage()
 {
   static char rawmsg[MAX_MSG_LEN];
 
@@ -45,44 +58,26 @@ bool CommServer::GetMessage()
 
   // zero terminate and parse received data
   rawmsg[l] = 0;
-  ParseTuples(rawmsg, strlen(rawmsg));
+  Parse(rawmsg);
 
   return (true);
 }
 
 
-void CommServer::ParseTuples(const char* msg, const size_t& len)
+void
+CommServer::Parse(std::string msg)
 {
-  // clear all previous vectors
-  mPositions.clear();
-
-  //extract all breakets
-  static char tmp[MAX_MSG_LEN];
-  static char data[MAX_MSG_LEN];
-
-  sscanf(msg, "( %[^)] )", data);
-
-  for(uint i = 0; i < len; i++)
-    {
-      switch(data[i])
+    if (mParser.get() == 0)
         {
-        case 'p' :
-          // player pos
-          salt::Vector3f vec;
-          sscanf(data, "%[a-z] %f %f %f",tmp, &vec[0], &vec[1], &vec[2]);
-
-          cout << " pos x: "<< vec[0]
-               << " pos y:" << vec[1]
-               << " pos z:" << vec[2]
-               << endl;
-
-          mPositions.push_back(vec);
-          break;
+            mPredicates = shared_ptr<BaseParser::TPredicateList>();
+            return;
         }
-    }
+
+    mPredicates = mParser->Parse(msg);
 }
 
-const CommServer::TPositions& CommServer::GetPositions()
+shared_ptr<BaseParser::TPredicateList>
+CommServer::GetPredicates()
 {
-  return mPositions;
+  return mPredicates;
 }
