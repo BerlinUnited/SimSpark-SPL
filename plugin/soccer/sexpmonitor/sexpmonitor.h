@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.1.2.2 2004/01/25 12:58:40 rollmark Exp $
+   $Id: sexpmonitor.h,v 1.1.2.3 2004/01/27 15:20:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -74,6 +74,11 @@ protected:
 
     /** returns the last agent that touched the ball */
     boost::shared_ptr<oxygen::AgentAspect> GetLastBallAgent();
+
+    /** helper method that queries the ScriptServer for the float
+        variable name and generates a S-Expression describing it
+    */
+    std::string SexpMonitor::PutFloatParam(const std::string& name);
 };
 
 DECLARE_CLASS(SexpMonitor);
