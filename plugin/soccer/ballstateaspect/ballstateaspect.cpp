@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.4 2004/03/22 18:10:56 fruit Exp $
+   $Id: ballstateaspect.cpp,v 1.5 2004/03/23 10:40:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -108,18 +108,17 @@ void BallStateAspect::UpdateLastValidBallPos()
 void BallStateAspect::UpdateGoalState()
 {
     // check both goal box collider
-    RecorderHandler::TParentList agents;
-    mLeftGoalRecorder->GetParentsSupportingClass("AgentAspect",agents);
+    RecorderHandler::TParentList ball;
+    mLeftGoalRecorder->GetParentsSupportingClass("Ball",ball);
 
-    if (agents.size())
+    if (! ball.empty())
         {
             mGoalState = TI_LEFT;
         } else
             {
-                agents.clear();
-                mRightGoalRecorder->GetParentsSupportingClass("AgentAspect",agents);
+                mRightGoalRecorder->GetParentsSupportingClass("Ball",ball);
 
-                if (agents.size())
+                if (! ball.empty())
                     {
                         mGoalState = TI_RIGHT;
                     } else
