@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.5 2003/12/04 17:28:27 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.6 2003/12/08 14:40:00 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,9 +45,9 @@ GameControlServer::InitParser(const std::string& parserName)
 
     mParser = shared_dynamic_cast<BaseParser>(GetCore()->New(parserName));
 
-    if (! mParser.get() == 0)
+    if (mParser.get() == 0)
     {
-        GetLog()->Error() << "ERROR: Unable to create " << parserName << "\n";
+        GetLog()->Error() << "ERROR: InitParser: Unable to create " << parserName << std::endl;
         return false;
     }
 
@@ -63,7 +63,7 @@ GameControlServer::InitEffector(const std::string& effectorName)
     shared_ptr<Effector> effector
         = shared_dynamic_cast<Effector>(GetCore()->New(effectorName));
 
-    if (! mParser.get() == 0)
+    if (effector.get() == 0)
     {
         GetLog()->Error() << "ERROR: Unable to create " << effectorName << "\n";
         return false;
@@ -194,3 +194,14 @@ bool GameControlServer::RealizeActions(boost::shared_ptr<ActionObject::TList> /*
 }
 
 
+std::string
+GameControlServer::TmpGenerate(const BaseParser::TPredicate& pred)
+{
+    if (mParser != 0)
+    {
+        BaseParser::TPredicateList plist;
+        plist.push_back(pred);
+        return mParser->Generate(plist);
+    }
+    return string();
+}
