@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.12 2004/04/08 14:24:43 markelic Exp $
+   $Id: main.cpp,v 1.13 2004/06/19 13:10:31 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -174,13 +174,15 @@ Run()
 {
     Log("AgentTest started\n");
 
-    while (true)
+    bool run = true;
+
+    while (run)
     {
         if (! comm->GetInput())
         {
-            break;
+            continue;
         }
-	cout << "Msg von Server an Spieler: " <<comm->GetMsg() <<"\n";
+        // cout << "Msg von Server an Spieler: " <<comm->GetMsg() <<"\n";
         wm->Parse(comm->GetMsg());
 
         switch(comm->GetMsg()[0])
@@ -195,6 +197,11 @@ Run()
 
         case 'S' :
             behave->Think();
+            break;
+
+        case 'X':
+            run = false;
+            Log("agent terminating\n");
             break;
 
         default:
