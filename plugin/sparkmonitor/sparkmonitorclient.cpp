@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.cpp,v 1.3 2004/04/29 15:23:00 rollmark Exp $
+   $Id: sparkmonitorclient.cpp,v 1.4 2004/04/30 12:17:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,36 @@ SparkMonitorClient::~SparkMonitorClient()
 {
 }
 
+void SparkMonitorClient::SetServer(const std::string& host)
+{
+    mHost = host;
+}
+
+const std::string& SparkMonitorClient::GetServer() const
+{
+    return mHost;
+}
+
+void SparkMonitorClient::SetPort(int port)
+{
+    mPort = port;
+}
+
+int SparkMonitorClient::GetPort() const
+{
+    return mPort;
+}
+
+void SparkMonitorClient::SetClientType(NetControl::ESocketType type)
+{
+    mType = type;
+}
+
+NetControl::ESocketType SparkMonitorClient::GetClientType()
+{
+    return mType;
+}
+
 void SparkMonitorClient::OnLink()
 {
     // setup SceneServer reference
@@ -81,6 +111,7 @@ void SparkMonitorClient::InitSimulation()
 
     GetLog()->Normal()
         << "(SparkMonitorClient) connecting to "
+        << ((mType == NetControl::ST_UDP) ? "UDP " : "TCP ")
         << mHost << ":" << mPort << "\n";
 
     try
@@ -140,6 +171,38 @@ void SparkMonitorClient::InitSimulation()
               << "(SpakrMonitorClient) ERROR: cannot create"
               << "a RubySceneImporter instance\n";
       }
+
+  // send the monitor init string
+  string initMsg = "(init)";
+  mNetMessage->PrepareToSend(initMsg);
+  SendMessage(initMsg);
+}
+
+void SparkMonitorClient::SendMessage(const string& msg)
+{
+    if (mSocket.get() == 0)
+        {
+            return;
+        }
+
+    int rval = 0;
+
+    if (mType == NetControl::ST_UDP)
+        {
+            Addr server(mPort,mHost);
+            rval = mSocket->send(msg.data(), msg.size(), server);
+        } else
+            {
+                rval = mSocket->send(msg.data(), msg.size());
+            }
+
+    if (rval < 0)
+        {
+            GetLog()->Error()
+                << "(SparkMonitorClient::SendMessage) ERROR: "
+                << "send returned error '"
+                << strerror(errno) << "' " << endl;
+        }
 }
 
 void SparkMonitorClient::CloseConnection()
@@ -255,15 +318,12 @@ void SparkMonitorClient::ParseMessage(const string& msg)
             return;
         }
 
-    if (mManagedScene.get() != 0)
+    if (mManagedScene.get() == 0)
         {
-            //            mManagedScene->UnlinkChildren();
-        } else
-            {
-                mManagedScene = shared_dynamic_cast<BaseNode>
-                    (GetCore()->New("oxygen/BaseNode"));
-                mActiveScene->AddChildReference(mManagedScene);
-            }
+            mManagedScene = shared_dynamic_cast<BaseNode>
+                (GetCore()->New("oxygen/BaseNode"));
+            mActiveScene->AddChildReference(mManagedScene);
+        }
 
     mSceneImporter->ParseScene(msg, mManagedScene, shared_ptr<ParameterList>());
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.h,v 1.1 2004/04/28 14:52:57 rollmark Exp $
+   $Id: sparkmonitorclient.h,v 1.2 2004/04/30 12:17:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,28 @@ public:
         simulation is stepped */
     virtual void StartCycle();
 
+    /** sets the server to connect to */
+    void SetServer(const std::string& host);
+
+    /** returns the server this client connects to */
+    const std::string& GetServer() const;
+
+    /** sets the port to connect to */
+    void SetPort(int port);
+
+    /** returns the port this client connects to */
+    int GetPort() const;
+
+    /** sets the client socket type */
+    void SetClientType(oxygen::NetControl::ESocketType type);
+
+    /** returns the client socket type */
+    oxygen::NetControl::ESocketType GetClientType();
+
 protected:
+    /** sends a message to the server */
+    void SparkMonitorClient::SendMessage(const std::string& msg);
+
     /** closes connection to the server*/
     void CloseConnection();
 
