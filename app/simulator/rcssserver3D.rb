@@ -312,6 +312,10 @@ end
 # init
 #
 
+# set up logging
+logServer = get($serverPath+'log')
+logServer.addStream(':cerr', 'eError')
+
 # set a random seed (a seed of 0 means: use a random random seed)
 randomServer = get($serverPath+'random')
 randomServer.seed(0)
