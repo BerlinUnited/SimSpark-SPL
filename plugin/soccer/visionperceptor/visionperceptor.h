@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.1.2.8 2004/02/07 18:52:34 fruit Exp $
+   $Id: visionperceptor.h,v 1.1.2.9 2004/02/10 15:15:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,6 +54,9 @@ public:
     void SetNoiseParams(float sigma_dist, float sigma_phi,
                         float sigma_theta, float cal_error_abs);
 
+    //! Turn sensing of agent position on/off
+    void SetSenseMyPos(bool sense);
+
     //! Turn noise off/on.
     void AddNoise(bool use_it)
     { mAddNoise = use_it; }
@@ -94,6 +97,9 @@ private:
 
     //! vision calibration error
     salt::Vector3f mError;
+
+    //! true, if the absolute position of the agent is sensed.
+    bool mSenseMyPos;
 
     //! the predicate name (default is "Vision")
     std::string mPredicateName;
