@@ -1,3 +1,25 @@
+2003-08-28  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/leaf.cpp, lib/zeitgeist/object.cpp: 
+	- got rid of using the obsolete get() method from boost::weak_ptr<> 
+	by using an additional boost::shared_ptr<> similar to the way used 
+	for the Class class.
+
+	* lib/zeitgeist/class.cpp: 
+	- fixed use of boost::weak_ptr<>.get(), which was removed from the
+        weak_ptr interface in recent versions of boost. The problem was
+	fixed by assigning a shared_ptr for the get() operation.	
+	- fixed use of deleting a boost::weak_ptr<> from a std::list. The
+	problem here is that std::list<>.remove() was used, which needs an
+	operator ==. (weak_ptr<> do not provide the == operator anymore). 
+	The problem was fixed by using std::list<>.erase() for each element 
+	that points to the same Object.
+
+	* lib/zeitgeist/class.h: 
+	fixed use of hash_map vs map: class uses a hash_map if found by 
+	configure, otherwise the std::map is used for this. class.h has to 
+	include the config.h file (like all the other classes also should do)
+
 2003-08-26  Oliver Obst  <fruit@uni-koblenz.de>
 
 	* lib/kerosin/renderserver/renderserver.h,
