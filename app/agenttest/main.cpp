@@ -36,6 +36,9 @@ const int readFd = 3;
 // outp file descriptor
 const int writeFd = 4;
 
+// the default team name
+std::string teamName = "Robolog";
+
 // set to 1 to write debug information to stdout
 #define ENABLE_LOGGING 0
 
@@ -128,7 +131,7 @@ void InitAgent()
   Log("sending init command\n");
 
   std::stringstream ss;
-  ss << "A(init (unum " << getpid() << ") (teamname RoboLog))";
+  ss << "A(init (unum " << getpid() << ") (teamname " << teamName << "))";
   PutOutput(ss.str().c_str());
 }
 
@@ -327,11 +330,48 @@ void ProcessThinkTimeMessage()
   PutOutput("D");
 }
 
-int main(int /*argc*/, const char *const */*argv*/)
+
+//-----------------------------------------------------------------------
+void printHelp()
+{
+  cout << "\nusage: agenttest [options]" << endl;
+  cout << "\noptions:" << endl;
+  cout << " --help      print this message." << endl;
+  cout << " --teamname  sets the team name. " << endl;
+  cout << "\n";
+}
+
+void ReadOptions(int argc, char* argv[])
+{
+  for( int i = 0; i < argc; i++)
+    {
+      if( strcmp( argv[i], "--teamname" ) == 0 )
+        {
+          if( i+1  < argc)
+            {
+              teamName = argv[i+1];
+              ++i;
+              Log("setting teamname to ");
+              Log(teamName.c_str());
+              Log("\n");
+            }
+        }
+      else if( strcmp( argv[i], "--help" ) == 0 )
+        {
+          printHelp();
+          exit(0);
+        }
+    }
+}
+
+int main(int argc, char* argv[])
 {
   //init zeitgeist and oxygen
   Zeitgeist zg("." PACKAGE_NAME);
   Oxygen oygen(zg);
+
+  // read command line options
+  ReadOptions(argc,argv);
 
   // init the s-expression parser
   if (! zg.GetCore()->ImportBundle("sexpparser"))
