@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.7 2004/06/07 14:14:08 fruit Exp $
+   $Id: glserver.cpp,v 1.8 2004/06/13 13:27:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ GLServer::DrawText3D(const std::string& text, const Vector3f& pos)
     glDisable (GL_TEXTURE_2D);
 
     glRasterPos3f(pos[0],pos[1],pos[2]);
-    for (int i = 0; i < text.length(); ++i)
+    for (unsigned int i = 0; i < text.length(); ++i)
     {
         glutBitmapCharacter(GLUT_BITMAP_9_BY_15, text[i]);
     }
@@ -271,32 +271,30 @@ void GLServer::DrawWireBox(Vector3f boxPos, Vector3f sz)
 //
 // draws a goal with given dimensions to position 'goalPos'
 //-----------------------------------------------------------------------
-void GLServer::DrawGoal(Vector3f goalPos, Vector3f sz)
+void GLServer::DrawGoal(Vector3f goalPos, Vector3f sz, float barRadius)
 {
     GLUquadricObj *cyl;
     cyl = gluNewQuadric();
 
-    float barSize = 0.1;
-
     glPushMatrix();
-    glTranslatef(goalPos[0], goalPos[1], goalPos[2]);
+    glTranslatef(goalPos[0]-gSign(goalPos[0])*barRadius, goalPos[1], goalPos[2]);
 
 
     // draw goal sides as cylinders
     glPushMatrix();
-    glTranslatef(0,0,sz[2] + barSize/2.0);
+    glTranslatef(0, 0, sz[2] + barRadius);
     glRotatef(-90.0f, 1,0,0);
-    gluCylinder(cyl,barSize,barSize,sz[1],15,15);
+    gluCylinder(cyl,barRadius,barRadius,sz[1],15,15);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0,sz[1] + barSize/2.0, 0);
-    gluCylinder(cyl,barSize,barSize,sz[2],15,15);
+    glTranslatef(0, sz[1] + barRadius, 0);
+    gluCylinder(cyl,barRadius,barRadius,sz[2],15,15);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0, -barSize/2.0, 0);
-    gluCylinder(cyl,barSize,barSize,sz[2],15,15);
+    glTranslatef(0, -barRadius, 0);
+    gluCylinder(cyl,barRadius,barRadius,sz[2],15,15);
     glPopMatrix();
 
     glPopMatrix();
