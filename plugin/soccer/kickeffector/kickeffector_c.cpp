@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector_c.cpp,v 1.1.2.2 2004/02/01 19:04:25 fruit Exp $
+   $Id: kickeffector_c.cpp,v 1.1.2.3 2004/02/05 15:41:00 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,12 +54,13 @@ FUNCTION(setSteps)
 
 FUNCTION(setNoiseParams)
 {
-    if (in.size() == 3)
+    if (in.size() == 4)
     {
         KickEffector* ke = static_cast<KickEffector*>(obj);
         ke->SetNoiseParams(boost::any_cast<float>(in[0]),
                            boost::any_cast<float>(in[1]),
-                           boost::any_cast<float>(in[2]));
+                           boost::any_cast<float>(in[2]),
+                           boost::any_cast<float>(in[3]));
     }
 }
 
@@ -72,6 +73,16 @@ FUNCTION(setMaxPower)
     }
 }
 
+FUNCTION(setAngleRange)
+{
+    if (in.size() == 2)
+    {
+        KickEffector* ke = static_cast<KickEffector*>(obj);
+        ke->SetAngleRange(boost::any_cast<float>(in[0]),
+                          boost::any_cast<float>(in[1]));
+    }
+}
+
 void CLASS(KickEffector)::DefineClass()
 {
     DEFINE_BASECLASS(kerosin/Effector);
@@ -80,4 +91,5 @@ void CLASS(KickEffector)::DefineClass()
     DEFINE_FUNCTION(setSteps);
     DEFINE_FUNCTION(setNoiseParams);
     DEFINE_FUNCTION(setMaxPower);
+    DEFINE_FUNCTION(setAngleRange);
 }
