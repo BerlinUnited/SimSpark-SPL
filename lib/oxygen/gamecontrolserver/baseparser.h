@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: baseparser.h,v 1.1.2.3 2003/12/03 22:42:50 fruit Exp $
+   $Id: baseparser.h,v 1.1.2.4 2003/12/09 13:08:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public:
 
     typedef std::list<TPredicate> TPredicateList;
 
-    virtual TPredicateList Parse(const std::string& input) = 0;
+    virtual boost::shared_ptr<TPredicateList> Parse(const std::string& input) = 0;
     virtual std::string Generate(const TPredicateList& input) = 0;
 };
 
