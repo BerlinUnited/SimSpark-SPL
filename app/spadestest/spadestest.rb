@@ -1,7 +1,6 @@
 importBundle "sexpparser"
 importBundle "filesystemstd"
 importBundle "monitortest"
-importBundle "spadestest"
 
 # the dummy CreateEffector uses these plugins
 importBundle "perfectvisionperceptor"
