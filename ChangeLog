@@ -1,3 +1,28 @@
+2002-08-22  Oliver Obst  <fruit@robolog.org>
+
+	* ./configure.in
+	looking for libdl
+
+	* ./utility/console/example.cc
+	made the example work like a console
+	(with only the 'quit' command working currently :)
+
+	* ./utility/console/Makefile.am
+	library dependencies figured out by autoconf, so removed -ldl from
+	the Makefile.am
+	
+	* ./utility/console/consoleinputlinebinding.cc
+	* ./utility/console/consoleparser.cc
+	* ./utility/console/console.cc
+	flushing smux after error messages
+
+	* ./utility/classserver/classserver.cc
+	* ./utility/forwarder/forwarderstreambuf.h	
+	coding style changes
+	
+	* ./utility/forwarder/forwarderstreambuf.h
+	fixed two typos  
+
 2002-08-21  Oliver Obst  <fruit@robolog.org>
 
 	* ./utility/Makefile.am
