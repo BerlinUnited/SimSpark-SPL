@@ -101,6 +101,8 @@ physicsserver/hingejoint.cpp \
 physicsserver/hingejoint_c.cpp \
 physicsserver/sliderjoint.cpp \
 physicsserver/sliderjoint_c.cpp \
+physicsserver/universaljoint.cpp \
+physicsserver/universaljoint_c.cpp \
 sceneserver/basenode.cpp \
 sceneserver/basenode_c.cpp \
 sceneserver/fpscontroller.cpp \
@@ -151,6 +153,7 @@ physicsserver/joint.h \
 physicsserver/balljoint.h \
 physicsserver/hingejoint.h \
 physicsserver/sliderjoint.h \
+physicsserver/universaljoint.h \
 sceneserver/sceneimporter.h \
 sceneserver/basenode.h \
 sceneserver/fpscontroller.h \
