@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.16 2004/04/12 13:37:47 rollmark Exp $
+$Id: renderserver.cpp,v 1.17 2004/04/23 21:17:40 fruit Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -61,19 +61,22 @@ RenderServer::OnLink()
         (GetCore()->Get("sys/server/opengl"));
 
     if (mOpenGLServer.get() == 0)
+    {
+        GetLog()->Error()
+            << "(RenderServer) ERROR: OpenGLServer not found\n";
+    } else
+    {
+        mAmbientVP = 0;
+#if 0
+        mAmbientVP = mOpenGLServer->LoadARBVertexProgram
+            ("/sys/program/ambient.vp");
+        if (mAmbientVP == 0)
         {
             GetLog()->Error()
-                << "(RenderServer) ERROR: OpenGLServer not found\n";
-        } else
-        {
-            mAmbientVP = mOpenGLServer->LoadARBVertexProgram
-                ("sys/program/ambient.vp");
-            if (mAmbientVP == 0)
-            {
-                GetLog()->Error()
-                    << "(RenderServer) ERROR: Could not load vertex program\n";
-            }
+                << "(RenderServer) ERROR: Could not load vertex program\n";
         }
+#endif
+    }
 }
 
 void
