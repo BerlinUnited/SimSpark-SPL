@@ -1,3 +1,9 @@
+2003-08-21  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* /lib/salt
+	- added comments to the salt library conforming with doxygen.
+	- removed ptr.h, ptrmangager.h and quadlink.h as they were not
+	in use
+
 2003-08-07  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* added /lib/zeitgeist/telnetserver/
 	- added telnetdaemon.cpp, telnetdaemon.h, telnetserver.h,
