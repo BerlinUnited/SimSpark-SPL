@@ -465,6 +465,12 @@ plugin/soundsystemfmod/Makefile
 plugin/soundsystemfmod/Makefile.in
 plugin/soundsystemfmod/*.la
 plugin/soundsystemfmod/*.lo
+plugin/sparkagent/*.la
+plugin/sparkagent/*.lo
+plugin/sparkagent/.deps
+plugin/sparkagent/.libs
+plugin/sparkagent/Makefile
+plugin/sparkagent/Makefile.in
 plugin/sparkmonitor/*.la
 plugin/sparkmonitor/*.lo
 plugin/sparkmonitor/.deps
