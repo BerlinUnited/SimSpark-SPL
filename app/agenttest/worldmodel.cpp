@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.2 2004/02/12 14:07:21 fruit Exp $
+   $Id: worldmodel.cpp,v 1.3 2004/02/25 17:12:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,6 +71,22 @@ WorldModel::SetupGameStateMap()
     mPlayModeMap[STR_PM_GameOver]      = PM_GameOver;
 }
 
+void
+WorldModel::SetupVisionObjectMap()
+{
+    mVisionObjectMap.clear();
+
+    // <ObjectName>+<Id> -> VisionObject
+    mVisionObjectMap["Flag1_l"] = VO_FLAG1L;
+    mVisionObjectMap["Flag1_r"] = VO_FLAG1R;
+    mVisionObjectMap["Flag2_l"] = VO_FLAG2L;
+    mVisionObjectMap["Flag2_r"] = VO_FLAG2R;
+    mVisionObjectMap["Goal1_l"] = VO_GOAL1L;
+    mVisionObjectMap["Goal1_r"] = VO_GOAL1R;
+    mVisionObjectMap["Goal2_l"] = VO_GOAL2L;
+    mVisionObjectMap["Goal2_r"] = VO_GOAL2R;
+    mVisionObjectMap["Ball"]    = VO_BALL;
+}
 
 bool
 WorldModel::ConstructInternal()
@@ -85,6 +101,7 @@ WorldModel::ConstructInternal()
         }
 
     SetupGameStateMap();
+    SetupVisionObjectMap();
 
     return true;
 }
@@ -146,53 +163,84 @@ void WorldModel::ParseGameState(const Predicate& predicate)
     GetGameStateParam(predicate, "team",  mTeamIndex);
 }
 
-bool WorldModel::GetVision(const Predicate& predicate, const string& name,
-                           const VisionObject obj)
+void WorldModel::ParseObjectVision(const Predicate& predicate)
 {
-    // find the PerfectVision data about the object
-    Predicate::Iterator iter(predicate);
-
-    // advance to the section about object 'name'
-    if (! predicate.FindParameter(iter,name))
+    for (
+         Predicate::Iterator iter(predicate);
+         iter != iter.end();
+         ++iter
+         )
         {
-            return false;
+            // try to extract the first element as a parameter list
+            const Predicate::TParameterList* paramList
+                = boost::any_cast<Predicate::TParameterList>(&(*iter));
+
+            if (
+                (paramList == 0) ||
+                (paramList->size() < 2)
+                )
+                {
+                    continue;
+                }
+
+            // try to extract the first parameter a string
+            Predicate::Iterator paramIter(paramList,paramList->begin());
+
+            string name;
+            if (! predicate.GetValue(paramIter,name))
+            {
+                continue;
+            }
+
+            // try to read the 'id' section
+            Predicate::Iterator idIter = paramIter;
+            if (predicate.FindParameter(idIter,"id"))
+                {
+                    string strId;
+                    if (! predicate.GetValue(idIter,strId))
+                        {
+                            continue;
+                        }
+
+                    name += strId;
+                }
+
+            // try to lookup the VisionObject
+            TVisionObjectMap::iterator iter = mVisionObjectMap.find(name);
+            if (iter == mVisionObjectMap.end())
+                {
+                    continue;
+                }
+
+            VisionObject vo = (*iter).second;
+
+            // find  to the 'pol' entry in the object's section
+            Predicate::Iterator polIter = paramIter;
+            if (! predicate.FindParameter(polIter,"pol"))
+                {
+                    continue;
+                }
+
+            // read the position vector
+            VisionSense sense;
+            if (
+                (! predicate.GetValue(polIter,sense.distance)) ||
+                (! predicate.GetValue(polIter,sense.theta)) ||
+                (! predicate.GetValue(polIter,sense.phi))
+                )
+            {
+                continue;
+            }
+
+            // update the vision map
+            mVisionMap[vo] = sense;
         }
-
-    // advance to the 'pos' entry in the object's section
-    if (! predicate.FindParameter(iter,"pol"))
-        {
-            return false;
-        }
-
-    // read the position vector
-    VisionSense sense;
-    if (
-        (! predicate.GetValue(iter,sense.distance)) ||
-        (! predicate.GetValue(iter,sense.theta)) ||
-        (! predicate.GetValue(iter,sense.phi))
-        )
-        {
-            return false;
-        }
-
-    mVisionMap[obj] = sense;
-
-    return true;
 }
 
 void
 WorldModel::ParseVision(const Predicate& predicate)
 {
-    GetVision(predicate,"Ball",VO_BALL);
-    GetVision(predicate,"Flag_1_l",VO_FLAG1L);
-    GetVision(predicate,"Flag_1_r",VO_FLAG1R);
-    GetVision(predicate,"Flag_2_l",VO_FLAG2L);
-    GetVision(predicate,"Flag_2_r",VO_FLAG2R);
-
-    GetVision(predicate,"Goal_1_l",VO_GOAL1L);
-    GetVision(predicate,"Goal_1_r",VO_GOAL1R);
-    GetVision(predicate,"Goal_2_l",VO_GOAL2L);
-    GetVision(predicate,"Goal_2_r",VO_GOAL2R);
+    ParseObjectVision(predicate);
 
     //
     // get our position. The current implementation of the worldmodel
