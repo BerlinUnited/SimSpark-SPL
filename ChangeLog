@@ -1,3 +1,22 @@
+2003-11-09  Oliver Obst  <fruit@robolog.org>
+
+	* configure.ac: 
+	- added workaround for bug in AC_FUNC_MEMCMP macro
+	- added check for _vsnprintf (as used by libIL)
+
+	* app/simulator/Makefile.am: using auxiliary library liblibobj for
+	system functions that may not be present
+
+2003-11-08  Oliver Obst  <fruit@robolog.org>
+
+	* utility/libobj/Makefile.am: 
+	* utility/libobj/.cvsignore:
+	* utility/libobj/_vsnprintf.c:
+	* utility/libobj/libobj.c:
+	* utility/libobj/memcmp.c:
+	added a library that contains needed system functions 
+	that are not provided by the actual system.
+
 2003-09-26  Oliver Obst  <fruit@robolog.org>
 
 	* acinclude.m4: changed ruby check to look at the right places
