@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.h,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: monitorserver.h,v 1.3 2004/04/25 16:36:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ public:
     /** If a monitor sends information to the world model, this
      * function is called to process it.
      */
-    void ParseMonitorMessage(std::string data);
+    void ParseMonitorMessage(const std::string& data);
 
 protected:
     /** returns a shared_ptr to the first registered MonitorSystem */
