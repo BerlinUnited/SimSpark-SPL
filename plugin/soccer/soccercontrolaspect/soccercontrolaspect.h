@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccercontrolaspect.h,v 1.1.2.1 2004/01/29 19:53:53 rollmark Exp $
+   $Id: soccercontrolaspect.h,v 1.1.2.2 2004/01/31 15:10:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define SOCCERCONTROLASPECT_H
 
 #include <oxygen/controlaspect/controlaspect.h>
+#include <soccer/soccertypes.h>
 
 class GameStateAspect;
 class BallStateAspect;
@@ -41,19 +42,6 @@ namespace oxygen
  */
 class SoccerControlAspect : public oxygen::ControlAspect
 {
-public:
-    enum TPlayMode
-        {
-            PM_BeforeKickOff,
-            PM_KickOff,
-            PM_PlayOn,
-            PM_KickOff_Left,
-            PM_KickOff_Right,
-            PM_FirstHalfOver
-        };
-
-    typedef float TTime;
-
 public:
     SoccerControlAspect();
     virtual ~SoccerControlAspect();
