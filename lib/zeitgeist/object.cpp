@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: object.cpp,v 1.7 2004/04/08 14:36:34 rollmark Exp $
+   $Id: object.cpp,v 1.8 2004/04/22 19:24:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "object.h"
 #include "class.h"
 #include "core.h"
+#include "leaf.h"
 #include <iostream>
 #include <boost/version.hpp>
 
@@ -68,6 +69,25 @@ const boost::weak_ptr<Object>& Object::GetSelf() const
 boost::shared_ptr<Core> Object::GetCore() const
 {
     assert(mClass.get() != NULL);
+    boost::shared_ptr<Core> core = mClass->GetCore();
+
+    if (core.get() == 0)
+      {
+          std::cout << "(Object) ERROR: failed to get zeitgeist core ";
+
+          const Leaf* leaf = dynamic_cast<const Leaf*>(this);
+
+          if (leaf != 0)
+              {
+                  std::cout << "for '" << leaf->GetName()
+                            << std::cout << "' installed at '"
+                            << leaf->GetFullPath()
+                            << "'";
+              }
+
+          std::cout << std::endl;
+      }
+
     return mClass->GetCore();
 }
 
