@@ -32,17 +32,18 @@ physicsserver/world.cpp \
 physicsserver/world_c.cpp \
 sceneserver/basenode.cpp \
 sceneserver/basenode_c.cpp \
-sceneserver/camera.cpp \
-sceneserver/camera_c.cpp \
 sceneserver/fpscontroller.cpp \
 sceneserver/fpscontroller_c.cpp \
-sceneserver/indexbuffer.cpp \
 sceneserver/scene.cpp \
 sceneserver/scene_c.cpp \
 sceneserver/sceneserver.cpp \
 sceneserver/sceneserver_c.cpp \
 sceneserver/transform.cpp \
 sceneserver/transform_c.cpp
+
+### sceneserver/camera.cpp 
+### sceneserver/camera_c.cpp 
+### sceneserver/indexbuffer.cpp 
 
 liboxygen_la_CXXFLAGS = -O2
 
@@ -58,14 +59,14 @@ physicsserver/collider.h \
 physicsserver/odeobject.h \
 physicsserver/physicsserver.h \
 physicsserver/planecollider.h \
-physicsserver/posbody.h \
 physicsserver/space.h \
 physicsserver/spherecollider.h \
 physicsserver/world.h \
 sceneserver/basenode.h \
-sceneserver/camera.h \
 sceneserver/fpscontroller.h \
-sceneserver/indexbuffer.h \
 sceneserver/scene.h \
 sceneserver/sceneserver.h \
 sceneserver/transform.h
+
+### sceneserver/camera.h 
+### sceneserver/indexbuffer.h 
