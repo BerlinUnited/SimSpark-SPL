@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.5.8.1 2004/01/11 11:09:56 rollmark Exp $
+   $Id: body.h,v 1.5.8.2 2004/01/12 14:38:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,14 +26,14 @@
 
 namespace oxygen
 {
-
 class World;
 
-/** Body encapsulates an ODE rigid body object. A rigid body has various
-    properties from the point of view of the simulation. Some properties
-    change over time: Position, Linear velocity, Orientation, Angular
-    velocity. Other body properties are usually constant over time: Mass,
-    Center of mass and Inertia matrix (mass distribution matrix)
+/** Body encapsulates an ODE rigid body object. A rigid body has
+    various properties from the point of view of the simulation. Some
+    properties change over time: position, linear velocity,
+    orientation and angular velocity. Other body properties are
+    usually constant over time: Mass, Center of mass and Inertia
+    matrix (mass distribution matrix)
  */
 class Body : public ODEObject
 {
@@ -44,14 +44,15 @@ public:
     Body();
     virtual ~Body();
 
-    /** returns the ID of the ODE body */
+    /** returns the ID of the mangaged ODE body */
     dBodyID GetODEBody() const;
 
-    /** enables this body. Each body can be enabled or disabled. Disabled
-        bodies are effectively `turned off' and are not updated during a
-        simulation step. Disabling bodies is an effective way to save
-        computation time when it is known that the bodies are motionless
-        or otherwise irrelevent to the simulation.
+    /** enables this body. Each body can be enabled or
+        disabled. Disabled bodies are effectively turned off and are
+        not updated during a simulation step. Disabling bodies is an
+        effective way to save computation time when it is known that
+        the bodies are motionless or otherwise irrelevent to the
+        simulation.
     */
     void Enable();
 
@@ -61,26 +62,27 @@ public:
     /** returns true if this body is enabled */
     bool IsEnabled() const;
 
-    /** sets whether the body is influenced by the world's gravity
-        or not. Newly created bodies are always influenced by the
-        world's gravity.
+    /** sets whether the body is influenced by the world's gravity or
+        not. Bodies are constructed to ed influenced by the world's
+        gravity by default.
     */
     void UseGravity(bool f);
 
-    /** returns true, if this body is influenced by the world's gravity */
+    /** returns true, if this body is influenced by the world's
+        gravity */
     bool UsesGravity() const;
 
     /** sets the mass of this body */
     void SetMass(float mass);
 
-    /** sets the mass parameters to represent a sphere of the
-        given radius and density, with the center of mass at
-        (0,0,0) relative to the body.
+    /** sets the mass parameters to represent a sphere of the given
+        radius and density, with the center of mass at (0,0,0)
+        relative to the body.
     */
     void SetSphere(float density, float radius);
 
     /** sets the maximum speed this body is allowed to move at */
-    void SetMaxSpeed(float speed)   {       mMaxSpeed = speed;      }
+    void SetMaxSpeed(float speed);
 
     /** returns the current velocity vector of this body */
     salt::Vector3f GetVelocity() const;
@@ -89,12 +91,12 @@ public:
     static Body* GetBody(dBodyID id);
 
 protected:
-    /** creates the corresponding ODE body and moves it to the
-        position of it's scene-graph parent
+    /** creates the managed ODE body and moves it to the position of
+        it's scene-graph parent
     */
     virtual void OnLink();
 
-    /** destroys the corresponding ODE body */
+    /** destroys the managed ODE body */
     virtual void OnUnlink();
 
 private:
@@ -109,22 +111,22 @@ private:
     //
 protected:
     /** the world this body is contained in */
-    boost::shared_ptr<World>        mWorld;
+    boost::shared_ptr<World> mWorld;
 
     /** the managed ode body */
-    dBodyID                                         mODEBody;
+    dBodyID mODEBody;
 
     /** linear drag (default 0.3) */
-    float                                           mLinearDrag;
+    float mLinearDrag;
 
     /** maximum velocity, this body can attain */
-    float                                           mMaxSpeed;
+    float mMaxSpeed;
 
     /** maximum force which can be applied to this body */
-    float                                           mMaxForce;
+    float mMaxForce;
 };
 
-    DECLARE_CLASS(Body);
+DECLARE_CLASS(Body);
 
 } //namespace oxygen
 
