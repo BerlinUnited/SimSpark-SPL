@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.cpp,v 1.1 2004/05/07 12:16:35 rollmark Exp $
+   $Id: hinge2effector.cpp,v 1.2 2004/05/17 09:13:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ using namespace std;
 
 Hinge2Effector::Hinge2Effector() : Effector()
 {
+    SetName("hinge2");
 }
 
 Hinge2Effector::~Hinge2Effector()

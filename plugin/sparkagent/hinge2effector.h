@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.h,v 1.1 2004/05/07 12:16:35 rollmark Exp $
+   $Id: hinge2effector.h,v 1.2 2004/05/17 09:13:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public:
     virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
 
     /** returns the name of the predicate this effector implements. */
-    virtual std::string GetPredicate() { return "hinge2"; }
+    virtual std::string GetPredicate() { return GetName(); }
 
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
