@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: balljoint_c.cpp,v 1.3 2004/04/10 15:41:24 rollmark Exp $
+   $Id: balljoint_c.cpp,v 1.4 2004/04/15 10:41:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ using namespace oxygen;
 using namespace salt;
 
 
-FUNCTION(BallJoint,setBallAnchor)
+FUNCTION(BallJoint,setAnchor)
 {
     Vector3f inAnchor;
 
@@ -38,12 +38,12 @@ FUNCTION(BallJoint,setBallAnchor)
             return false;
         }
 
-    obj->SetBallAnchor(inAnchor);
+    obj->SetAnchor(inAnchor);
     return true;
 }
 
 void CLASS(BallJoint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Joint);
-    DEFINE_FUNCTION(setBallAnchor);
+    DEFINE_FUNCTION(setAnchor);
 }

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: balljoint.cpp,v 1.3 2004/04/10 15:40:21 rollmark Exp $
+   $Id: balljoint.cpp,v 1.4 2004/04/15 10:41:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,34 +42,38 @@ void BallJoint::OnLink()
     mODEJoint = dJointCreateBall(world, 0);
 }
 
-void BallJoint::SetBallAnchor(const Vector3f& anchor)
+void BallJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor = GetWorldTransform() * anchor;
     dJointSetBallAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 }
 
-Vector3f BallJoint::GetBallAnchor(EBodyIndex idx)
+Vector3f BallJoint::GetAnchor(EBodyIndex idx)
 {
+    Vector3f pos(0,0,0);
+
     switch (idx)
         {
         case BI_FIRST:
             {
                 dReal anchor[3];
                 dJointGetBallAnchor (mODEJoint, anchor);
-                return Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
             }
 
         case BI_SECOND:
             {
                 dReal anchor[3];
                 dJointGetBallAnchor2(mODEJoint, anchor);
-                return Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
             }
 
         default:
-            return Vector3f(0,0,0);
+            break;
         }
+
+    return GetLocalPos(pos);
 }
 
 
