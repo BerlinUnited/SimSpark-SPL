@@ -1,3 +1,51 @@
+2004-02-02  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/filesystemstd/filesystemstd.cpp:
+	- prefixed a RFile instance with salt namespace as ruby defines it's
+	own RFile structure
+
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	- moved ruby include magic to rubywrapper.h
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- adapted thisCall and selectCall to pass a VALUE out to the called
+	cmdProc, returning the result to ruby
+
+	* lib/zeitgeist/fileserver/fileserver.cpp: 
+	- whitespace fixes
+	- using explicit salt:: namespace for all RFile references, as ruby.h
+	also defines an RFile struct
+
+	* lib/zeitgeist/leaf_c.cpp: 
+	- removed function status
+	- adapted isLeaf and getName to return string objects to ruby instead
+	of printing to the console
+	- exporting function getFullPath
+
+	* lib/zeitgeist/object.cpp:
+	- passing out VALUE in Object::invoked to the invoced commandProc
+
+	* lib/zeitgeist/class.h:
+	- added VALUE& out parameter to TCmdProc typedef; this allows
+	functions exported to ruby from c++ to return arbitrary ruby objects
+	- added #define OUT_FUNCTION that exports a function with a return
+	value to ruby
+
+	* lib/zeitgeist/scriptserver/rubywrapper.h:
+	- added ruby.h include wrapper, copied from scriptserver include
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	- using Collider::Intersects to test for a ray collision
+	- moved ray collider setup from OnLink to ConstructInternal
+	- some minor cleanup
+
+	* lib/oxygen/physicsserver/collider.cpp: 
+	- implemented method Intersects
+
+	* lib/oxygen/physicsserver/collider.h:
+	- added method Intersects that checks if the two involved geoms have at
+	least one point in common, i.e. intersect
+
 2004-02-02  Oliver Obst  <fruit@robolog.org>
 
 	* app/agenttest/main.cpp: 
