@@ -6,6 +6,7 @@ SUBDIRS = \
 	  inputtest \
 	  rcssmonitor3d \
           monitorspark \
+          agentspark \
 	  simspark \
 	  scenetest \
 	  simulator \
