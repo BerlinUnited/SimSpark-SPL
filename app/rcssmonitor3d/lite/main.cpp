@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.13 2004/04/20 12:46:17 fruit Exp $
+   $Id: main.cpp,v 1.14 2004/04/21 18:33:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -172,8 +172,10 @@ processInput(int argc, char* argv[])
 // draws a sphere object
 //-------------------------------------------------------------------------------
 void
-drawObject(const SphereType& type, const MonitorParser::Expression& expr)
+drawObject(const SphereType& type, const MonitorParser::Expression& expr, int pass)
 {
+    // pass=0, first pass with depth test disabled
+    // pass=1, second pass with depth test
     const float* color = type.color;
 
     Vector3f pos = expr.pos;
@@ -183,7 +185,10 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
     case MonitorParser::ET_BALL:
         // if 'automatic-camera' is on
         // we set the camera to look at the ball
-        if (gAutoCam)
+        if (
+            (gAutoCam) &&
+            (pass == 0)
+            )
         {
             gGLServer.SetLookAtPos(pos);
         }
@@ -208,7 +213,11 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
         break;
 
     case MonitorParser::ET_FLAG:
-        if (salt::gAbs(pos[1]) == gGameParam.GetGoalWidth() / 2.0) return;
+        if (salt::gAbs(pos[1]) == (gGameParam.GetGoalWidth() / 2.0))
+            {
+                return;
+            }
+
         pos[2] = 1.5;
         break;
 
@@ -216,20 +225,25 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
         return;
     }
 
-    glColor4fv(color);
-    gGLServer.DrawSphere(pos, type.size);
-    gGLServer.DrawShadowOfSphere(pos, type.size);
+    if (pass == 0)
+        {
+            gGLServer.DrawShadowOfSphere(pos, type.size);
+        } else
+            {
+                glColor4fv(color);
+                gGLServer.DrawSphere(pos, type.size);
 
-    if (
-        (gDrawUnums) &&
-        (expr.unum > 0)
-        )
-    {
-        glColor3f   ( 1.0, 1.0, 1.0  );
-        stringstream ss;
-        ss << expr.unum;
-        gGLServer.DrawText3D(ss.str().c_str(),expr.pos);
-    }
+                if (
+                    (gDrawUnums) &&
+                    (expr.unum > 0)
+                    )
+                    {
+                        glColor3f   ( 1.0, 1.0, 1.0  );
+                        stringstream ss;
+                        ss << expr.unum;
+                        gGLServer.DrawText3D(ss.str().c_str(),expr.pos);
+                    }
+            }
 }
 
 //---------------------------DrawStatusText--------------------------------------
@@ -320,7 +334,7 @@ drawStatusText()
 //-------------------------------------------------------------------------------
 
 void
-drawScene()
+drawScene(int pass)
 {
     for (
         MonitorParser::TExprList::iterator iter = gExprList.begin();
@@ -338,7 +352,7 @@ drawScene()
             continue;
         }
 
-        drawObject((*iter).second,expr);
+        drawObject((*iter).second,expr,pass);
     }
 }
 
@@ -480,6 +494,8 @@ display(void)
     gGLServer.DrawWireBox(Vector3f(-fl/2.0,-fw/2.0,0.0),
                           Vector3f(fl,fw,fh));
 
+    // draw shadows of cached positions
+    drawScene(0);
     glEnable(GL_DEPTH_TEST);
 
     // goal
@@ -493,7 +509,7 @@ display(void)
     gGLServer.DrawGoal(Vector3f(fl/2,-gw/2.0,0),szGoal2);
 
     // draw cached positions
-    drawScene();
+    drawScene(1);
 
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
