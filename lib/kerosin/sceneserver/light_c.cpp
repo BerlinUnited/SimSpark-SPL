@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: light_c.cpp,v 1.5 2004/03/22 11:09:04 rollmark Exp $
+   $Id: light_c.cpp,v 1.6 2004/04/12 13:36:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,19 +51,55 @@ FUNCTION(Light,getRadius)
     return obj->GetRadius();
 }
 
-FUNCTION(Light,setDiffuseColor)
+static bool readRGBA(const zeitgeist::ParameterList& in, RGBA& m)
 {
-    Vector3f inColor;
-
     if (
-        (in.GetSize() == 0) ||
-        (! in.GetValue(in.begin(), inColor))
+        (in.GetSize() != 4) ||
+        (! in.GetValue(in[0], m.r())) ||
+        (! in.GetValue(in[1], m.g())) ||
+        (! in.GetValue(in[2], m.b())) ||
+        (! in.GetValue(in[3], m.a()))
         )
         {
             return false;
         }
 
-    obj->SetDiffuseColor(inColor);
+    return true;
+}
+
+FUNCTION(Light,setDiffuse)
+{
+    RGBA m;
+    if (! readRGBA(in,m))
+        {
+            return false;
+        }
+
+    obj->SetDiffuse(m);
+    return true;
+}
+
+FUNCTION(Light,setAmbient)
+{
+    RGBA m;
+    if (! readRGBA(in,m))
+        {
+            return false;
+        }
+
+    obj->SetAmbient(m);
+    return true;
+}
+
+FUNCTION(Light,setSpecular)
+{
+    RGBA m;
+    if (! readRGBA(in,m))
+        {
+            return false;
+        }
+
+    obj->SetSpecular(m);
     return true;
 }
 
@@ -72,5 +108,7 @@ void CLASS(Light)::DefineClass()
     DEFINE_BASECLASS(oxygen/BaseNode);
     DEFINE_FUNCTION(setRadius);
     DEFINE_FUNCTION(getRadius);
-    DEFINE_FUNCTION(setDiffuseColor);
+    DEFINE_FUNCTION(setAmbient);
+    DEFINE_FUNCTION(setDiffuse);
+    DEFINE_FUNCTION(setSpecular);
 }
