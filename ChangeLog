@@ -1,3 +1,15 @@
+2003-08-26  Oliver Obst  <fruit@uni-koblenz.de>
+
+	* lib/kerosin/renderserver/renderserver.h,
+          lib/kerosin/renderserver/renderserver.cpp:
+	added a render server responsible for the actual rendering of a
+	scene. (stuff coming from sceneserver)
+
+	* lib/kerosin/sceneserver/sceneserver.h,
+	  lib/kerosin/sceneserver/sceneserver.cpp:
+	moved OpenGL specific stuff to a new class 'renderserver' so that
+	a pure simulator can be build without using any opengl.
+
 2003-08-22  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* /lib/kerosin
 	- fixed various warnings and errors, when compiling kerosin with gcc 
