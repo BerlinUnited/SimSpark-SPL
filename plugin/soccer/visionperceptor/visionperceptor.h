@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.1.2.2 2004/01/26 15:19:29 fruit Exp $
+   $Id: visionperceptor.h,v 1.1.2.3 2004/02/01 22:17:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <salt/random.h>
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/physicsserver/raycollider.h>
 
 class VisionPerceptor : public oxygen::Perceptor
 {
@@ -35,6 +36,9 @@ public:
 
     //! \return true, if valid data is available and false otherwise.
     bool Percept(oxygen::Predicate& predicate);
+
+    /** setup the member variables */
+    virtual void OnLink();
 
 private:
     struct ObjectData
@@ -55,6 +59,9 @@ private:
         { return mDist < rhs.mDist; }
     };
 
+    void CheckOcclusion(const salt::Vector3f& my_pos,
+                        std::list<ObjectData>& visible_objects) const;
+
     //! a reference to the scene server
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
     //! vision calibration error
@@ -67,6 +74,8 @@ private:
     std::auto_ptr<salt::NormalRNG<> > mPhiErrorRNG;
     //! flag if we should noisify the data
     bool mAddNoise;
+    //! ray collider to check occlusion
+    boost::shared_ptr<oxygen::RayCollider> mRay;
 };
 
 DECLARE_CLASS(VisionPerceptor);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.2 2004/01/26 15:19:29 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.3 2004/02/01 22:18:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 */
 #include "visionperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <oxygen/physicsserver/raycollider.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 
@@ -50,6 +49,27 @@ VisionPerceptor::VisionPerceptor() : oxygen::Perceptor(), mAddNoise(true)
 
 VisionPerceptor::~VisionPerceptor()
 {
+}
+
+void
+VisionPerceptor::OnLink()
+{
+    shared_ptr<BaseNode> parent =
+        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+
+    if (parent.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (VisionPerceptor) parent node is not derived from BaseNode\n";
+        return;
+    }
+//    mRay = shared_static_cast<oxygen::RayCollider>(parent->GetChildOfClass("RayCollider"));
+    mRay = shared_static_cast<oxygen::RayCollider>(GetCore()->New("kerosin/RayCollider"));
+    if (mRay.get() == 0)
+    {
+        GetLog()->Error() << "Error: (VisionPerceptor) parent node has no "
+                          << "RayCollider child; occlusion check disabled\n";
+    }
 }
 
 bool
@@ -125,48 +145,7 @@ VisionPerceptor::Percept(Predicate& predicate)
     }
     if (visibleObjects.empty()) return true;
 
-#if 0
-    // sort objects wrt their distance
-    visibleObjects.sort();
-    // check visibility
-    std::list<ObjectData>::iterator start = visibleObjects.begin();
-    ++start;
-
-    // this is going to be expensive now: to check occlusion of an object,
-    // we have to check all closer objects. For n objects, we have to
-    // check at most n*(n-1)/2 objects.
-    shared_ptr<oxygen::RayCollider> ray =
-        shared_static_cast<oxygen::RayCollider>(GetCore()->New("kerosin/RayCollider"));
-
-
-    for (std::list<ObjectData>::iterator i = start;
-         i != visibleObjects.end(); ++i)
-    {
-        for (std::list<ObjectData>::iterator j = visibleObjects.begin();
-             j != i; ++j)
-        {
-            // cast ray from camera to object (j)
-            ray->SetParams(myPos,j->mRelPos,j->mDist);
-
-            dContactGeom contact;
-
-            shared_ptr<Collider> collider =
-                shared_static_cast<Collider>((*(i->mObj))->GetChild("geometry"));
-
-            if (collider.get() != 0)
-            {
-                if (0 < dCollide(ray->GetODEGeom(),
-                                 collider->GetODEGeom(),
-                                 1, /* ask for at most one collision point */
-                                 &contact, sizeof(contact)))
-                {
-                    j->mVisible = false;
-                    j = i;
-                }
-            }
-        }
-    }
-#endif
+    CheckOcclusion(myPos,visibleObjects);
 
     for (std::list<ObjectData>::iterator i = visibleObjects.begin();
          i != visibleObjects.end(); ++i)
@@ -196,3 +175,51 @@ VisionPerceptor::Percept(Predicate& predicate)
 
     return true;
 }
+
+void
+VisionPerceptor::CheckOcclusion(const salt::Vector3f& my_pos,
+                                std::list<ObjectData>& visible_objects) const
+{
+    return;
+
+    if (mRay.get() == 0) return;
+
+    // sort objects wrt their distance
+    visible_objects.sort();
+    // check visibility
+    std::list<ObjectData>::iterator start = visible_objects.begin();
+    ++start;
+
+    // this is going to be expensive now: to check occlusion of an object,
+    // we have to check all closer objects. For n objects, we have to
+    // check at most n*(n-1)/2 objects.
+    for (std::list<ObjectData>::iterator i = start;
+         i != visible_objects.end(); ++i)
+    {
+        for (std::list<ObjectData>::iterator j = visible_objects.begin();
+             j != i; ++j)
+        {
+            // cast ray from camera to object (j)
+            mRay->SetParams(j->mRelPos,my_pos,j->mDist);
+
+            dContactGeom contact;
+
+            shared_ptr<Collider> collider =
+                shared_static_cast<Collider>((*(i->mObj))->GetChild("geometry"));
+
+            if (collider.get() != 0)
+            {
+                if (0 < dCollide(mRay->GetODEGeom(),
+                                 collider->GetODEGeom(),
+                                 1, /* ask for at most one collision point */
+                                 &contact, sizeof(contact)))
+                {
+                    j->mVisible = false;
+                    j = i;
+                }
+            }
+        }
+    }
+}
+
+
