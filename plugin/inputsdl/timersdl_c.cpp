@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timersdl_c.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: timersdl_c.cpp,v 1.3 2004/04/23 20:54:27 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 */
 #include "timersdl.h"
 
-void CLASS(TimerSDL)::DefineClass()
+void
+CLASS(TimerSDL)::DefineClass()
 {
-        DEFINE_BASECLASS(zeitgeist/Base);
+    DEFINE_BASECLASS(InputDeviceSDL);
 }
