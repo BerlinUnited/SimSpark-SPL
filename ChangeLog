@@ -1,3 +1,44 @@
+2003-12-03  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/gamecontrolserver/baseparser.h: 
+	Added pure virtual Generate method
+
+	* plugin/sexpparser/.cvsignore:
+	* plugin/sexpparser/Makefile.am:
+	* plugin/sexpparser/export.cpp:
+	* plugin/sexpparser/sexpparser.h:
+	* plugin/sexpparser/sexpparser_c.cpp:
+	Added an initial version of a parser module for s-expressions. For our
+	purposes, sexpr have to have an atom at first element of the list. The 
+	sexpr given as string to the Parse method are converted into lists of predicates.
+	Predicates consist of a name (a string) and a list of boost:any elements. 
+	In practice, these elements are either strings or lists containing elements (i.e.
+	strings or lists containing elements (i.e. ... you get it)).
+	This kind of representation is suitable for our effectors.
+	The Generate method of the parser converts lists of elements into an sexpr string.
+	Currently, the user of the Generate method has to take care of properly 
+	double-quoting strings containing whitespace or single quoting strings that 
+	look like s-expressions and so on.
+
+	* utility/sfsexp/Makefile.am:
+	* utility/sfsexp/README:
+	* utility/sfsexp/cstring.c:
+	* utility/sfsexp/cstring.h:
+	* utility/sfsexp/faststack.c:
+	* utility/sfsexp/faststack.h:
+	* utility/sfsexp/io.c:
+	* utility/sfsexp/malloc_util.c:
+	* utility/sfsexp/malloc_util.h:
+	* utility/sfsexp/parser.c:
+	* utility/sfsexp/sexp.c:
+	* utility/sfsexp/sexp.h:
+	* utility/sfsexp/sexp_ops.c:
+	* utility/sfsexp/sexp_ops.h:
+	Added files from the sfsexp library. I've chosen to add the files to the utility
+	directory over requiring the user to install it because there is no "make install"
+	target in the original sfsexp distribution. Also it would be possible to convert
+	the underlying sexp representation into one using proper c++ types. 
+
 2003-12-03  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* lib/oxygen/Makefile.am: 
 	added SpadesActEvent files
