@@ -1,3 +1,30 @@
+2002-08-16  Oliver Obst  <fruit@robolog.org>
+
+	* ./utility/forwarder/example.cc
+	* ./utility/forwarder/Makefile.am
+	Added a very short example file to demonstrate Forwarder usage.
+
+	* ./utility/forwarder/forwarder.h
+	* ./utility/forwarder/forwarder.cc	
+	Added interface methods to remove streams, get and set priority
+	masks in the ForwarderStreamBuf conveniently. 
+	A global object Forwarder object smux has been added (to be used
+	like global ostream objects cout or cerr). smux is global in
+	namespace Utility. 
+	
+	* ./utility/forwarder/forwarderstreambuf.h 
+	* ./utility/forwarder/forwarderstreambuf.cc
+	The destructor was destroying all the streams the class was
+	handling. This behavior has been fixed, so the user is now
+	responsible for this (Streams like cout or cerr must not be
+	destroyed anyway). 
+	The semantics of addStream has been changed so that no stream will
+	be added twice. The priority mask of a stream will be re-set
+	instead. 
+	New methods to remove streams, get and set the priority masks of a
+	stream have been added.
+	Minor changes to be compliant with the coding style.
+
 2002-08-14  Oliver Obst  <fruit@robolog.org>
 
 	* ./utility/mathstuff/vector.h
