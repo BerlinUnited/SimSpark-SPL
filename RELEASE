@@ -3,26 +3,32 @@ Hi all,
 we have just released a new version of rcssserver3D. For this second
 release, we implemented an important part of the soccer specific 
 plugins for a soccer simulation for RoboCup Simulation league. 
-This work is still not finished, but it is already possible to 
-create a team of soccer playing robots that can drive around and
-kick the ball. 
+This work is still not finished, but it is possible to create a team
+of soccer playing robots that can drive around and kick the ball,
+score goals, and things like that.
+
+Just to give an impression (so that you are not disappointed
+afterwards :): with respect to the soccer rules just 
+compare the 3D simulator of this year with the 2D simulator of 1997. 
+(have a look at the final matches logfiles ;-)
 
 All the effectors and perceptors of the simulated robots have some
-parameters which are basically untested. So this second release
-serves two purposes: You need to program a simple team for this
-simulator in order to qualify for participation in RC2004. The
-second purpose of this release is that we would like to get feedback 
-on parameter settings, the bugs you will probably find, or anything
-else you want to say about the simulator. (Please send the emails
-to the soccer simulator mailing list, so we can discuss about 
-features or requests).
+parameters which are basically untested and more or less randomly
+chosen. So this second release serves two purposes: You need to
+program a simple team for this simulator in order to qualify for
+participation in RC2004. The second purpose of this release is that we
+would like to get feedback on parameter settings, the bugs you will
+probably find, or anything else you want to say about the
+simulator. (Please send the emails to the soccer simulator mailing
+list, so we can discuss about new features or requests for changes).
 
 For RoboCup 2004, we are planning to use rcssserver3D-0.3.x, which will 
 not be released before the qualification notification. Until then, we 
 may be releasing bug fixes for this version of rcssserver3D. 
 Changes to come in the 0.3 release are a more complete set of soccer 
 rules; currently there are no plans for big changes in moving the 
-agents or kicking the ball.
+agents or kicking the ball (unless the discussion reveals new
+insights). 
 
 To create new soccer clients, you need to create agents compatible
 with SPADES. You can get extensive documentation together with the
