@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf_c.cpp,v 1.4 2004/03/22 10:41:22 rollmark Exp $
+   $Id: leaf_c.cpp,v 1.5 2004/04/10 15:45:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,22 @@ using namespace boost;
 using namespace std;
 using namespace zeitgeist;
 
+FUNCTION(Leaf,setName)
+{
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inName))
+        )
+        {
+            return false;
+        }
+
+    obj->SetName(inName);
+    return true;
+}
+
 FUNCTION(Leaf,getName)
 {
     return obj->GetName();
@@ -46,6 +62,7 @@ FUNCTION(Leaf,isLeaf)
 void CLASS(Leaf)::DefineClass()
 {
     DEFINE_FUNCTION(getFullPath);
+    DEFINE_FUNCTION(setName);
     DEFINE_FUNCTION(getName);
     DEFINE_FUNCTION(isLeaf);
 }
