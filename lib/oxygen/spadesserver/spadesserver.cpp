@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.15 2004/06/13 06:37:51 fruit Exp $
+   $Id: spadesserver.cpp,v 1.16 2004/06/19 13:30:38 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -410,14 +410,14 @@ SpadesServer::pauseModeCallback()
 
         // todo: query the gcs, prob: currently deltaSense returned
         // for an agentId which is unknown at this point
-        float deltaSense = 0.2;
+        float deltaSense = 0.20;
         float offsetSec = deltaSense / agentCount;
 
         mOffsetCreateSense = (offsetSec / GetTimePerStep());
         mNextInitialCreateSense = mSimEngine->getSimulationTime() + 1;
 
-        GetLog()->Normal() << "(SpadesServer) Starting "
-                           << agentCount << " agents\n"
+        GetLog()->Debug() << "(SpadesServer) Starting "
+                           << agentCount << " agents (delta sense: " << deltaSense<< ")\n"
                            << "with an CreateSenseEvent offset of "
                            << mOffsetCreateSense << " (" << offsetSec << " seconds)\n"
                            << "starting at simTime " << mNextInitialCreateSense << "\n";
