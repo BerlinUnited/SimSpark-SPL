@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.1.2.3 2003/12/25 18:26:30 rollmark Exp $
+   $Id: predicate.h,v 1.1.2.4 2003/12/25 18:32:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <string>
 #include <boost/any.hpp>
 #include <salt/vector.h>
-#include <iostream>
 
 namespace oxygen
 {
