@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.12 2004/06/13 06:39:56 fruit Exp $
+   $Id: monitor.cpp,v 1.13 2004/06/13 13:23:09 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ Monitor::Monitor(std::string rel_path_prefix)
 
     FlagInfo fi;
     fi.mOffset = Vector3f(0,0,0);
-    fi.mRadius = 0.16;
+    fi.mRadius = 0.1;
     memcpy(fi.mColor, sSphereDefaultColor, sizeof(fi.mColor));
 
     // corner flags left team
@@ -768,12 +768,12 @@ Monitor::Display()
     // goal
     glColor4fv(sGoalColor);
     mGLServer.DrawWireBox(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
-    mGLServer.DrawGoal(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
+    mGLServer.DrawGoal(Vector3f(-fl/2,-gw/2.0,0),szGoal1,lw/2.0);
 
     // goal
     glColor4fv(sGoalColor);
     mGLServer.DrawWireBox(Vector3f(fl/2,-gw/2.0,0),szGoal2);
-    mGLServer.DrawGoal(Vector3f(fl/2,-gw/2.0,0),szGoal2);
+    mGLServer.DrawGoal(Vector3f(fl/2,-gw/2.0,0),szGoal2,lw/2.0);
 
     // draw cached positions
     DrawScene(1);
