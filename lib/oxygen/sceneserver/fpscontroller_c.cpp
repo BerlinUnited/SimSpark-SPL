@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: fpscontroller_c.cpp,v 1.7 2004/03/22 11:02:59 rollmark Exp $
+$Id: fpscontroller_c.cpp,v 1.8 2004/04/05 08:47:56 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ FUNCTION(FPSController,getAcceleration)
 
 void CLASS(FPSController)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/BaseNode);
+    DEFINE_BASECLASS(oxygen/BodyController);
     DEFINE_FUNCTION(setAcceleration);
     DEFINE_FUNCTION(getAcceleration);
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fpscontroller.h,v 1.7 2004/03/20 08:38:01 rollmark Exp $
+   $Id: fpscontroller.h,v 1.8 2004/04/05 08:47:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,28 +22,26 @@
 #ifndef OXYGEN_FPSCONTROLLER_H
 #define OXYGEN_FPSCONTROLLER_H
 
-#include "basenode.h"
+#include <oxygen/physicsserver/bodycontroller.h>
 
 namespace oxygen
 {
-class Body;
 
-/** FPSController is a node, that provides first person shooter (FPS)
- * movement, i.e. moving forward, backward, strafing etc. It's
- * intended usage is as a child node of an ODE body. The node
- * maintains a state for each movement. This state can either be
- * activated or deactivated with some accessor functions. As long as a
- * state is activated the node performs the associated action during
- * each time step.
+/** \class FPSController is a BodyController, that provides first
+ * person shooter (FPS) movement, i.e. moving forward, backward,
+ * strafing etc. The node maintains a state for each movement. This
+ * state can either be activated or deactivated with some accessor
+ * functions. As long as a state is activated the node performs the
+ * associated action during each time step.
  */
-class FPSController : public BaseNode
+class FPSController : public BodyController
 {
     //
     // Functions
     //
 public:
     FPSController();
-    ~FPSController();
+    virtual ~FPSController();
 
     /** adds a delta increment to the current horizontal angle */
     void AdjustHAngle(const float delta);
@@ -80,19 +78,10 @@ protected:
      * activated movements */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
 
-    /** set up the parent body reference */
-    virtual void OnLink();
-
-    /** reset the parent body reference */
-    virtual void OnUnlink();
-
     //
     // Members
     //
 protected:
-    /** reference to the parent body node */
-    boost::shared_ptr<Body> mBody;
-
     /** the acceleration of the controller */
     float   mAcceleration;
 

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller.cpp,v 1.7 2004/03/20 08:38:01 rollmark Exp $
+   $Id: fpscontroller.cpp,v 1.8 2004/04/05 08:47:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-FPSController::FPSController() : BaseNode()
+FPSController::FPSController() : BodyController()
 {
     mHAngle   = 0.0f;
     mVAngle   = 0.0f;
@@ -41,22 +41,6 @@ FPSController::FPSController() : BaseNode()
 
 FPSController::~FPSController()
 {
-}
-
-void FPSController::OnLink()
-{
-    mBody = shared_dynamic_cast<Body>(make_shared(GetParent()));
-
-    if (mBody.get() == 0)
-        {
-            GetLog()->Error()
-                << "(FPSController) ERROR: found no parent body.\n";
-        }
-}
-
-void FPSController::OnUnlink()
-{
-    mBody.reset();
 }
 
 void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
@@ -90,20 +74,14 @@ void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
     matrix.RotateX(gDegToRad(-mVAngle));
     mBody->SetRotation(matrix);
 
-    float mass = mBody->GetMass();
-
     if (vec.SquareLength() > 0)
         {
             // accelerate the body
             vec.Normalize();
-            Vector3f force = matrix.Rotate(vec * mass * mAcceleration);
+            Vector3f force = matrix.Rotate
+                (vec * mBody->GetMass() * mAcceleration);
             mBody->AddForce(force);
-        } else
-            {
-                // decelerate the body
-                vec = mBody->GetVelocity() * mAcceleration * mass * -1;
-                mBody->AddForce(vec);
-            }
+        }
 }
 
 void FPSController::AdjustHAngle(const float delta)
