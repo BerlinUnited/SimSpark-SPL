@@ -3,7 +3,6 @@ SUBDIRS = \
 	  filesystemzip \
 	  inputsdl \
 	  sexpparser \
-	  survival \
 	  monitortest	
 
 EXTRA_DIST = plugin.dsw
