@@ -3,7 +3,7 @@
 (RubySceneGraph 0 1)
 (
  (define $Radius (eval Soccer.BallRadius))
- (define $Material matWhite)
+ (define $Material matOrangeGlow)
  (define $Density (eval Soccer.BallDensity))
 
  (node Ball
