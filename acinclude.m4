@@ -248,7 +248,8 @@ AC_DEFUN(RCSS_BUILD_SOUNDSYSTEMFMOD, [
 
 
 # RCSS_BUILD_KEROSIN
-#
+# 	defines preprocessor symbol HAVE_KEROSIN_H if kerosin can be build
+#       set automake conditional BUILD_KEROSIN to true if kerosin can be build
 #-----------------------------------------------------------------------------
 AC_DEFUN(RCSS_BUILD_KEROSIN, [
 	AC_REQUIRE([RCSS_BUILD_KEROSIN_INIT])
@@ -259,7 +260,7 @@ AC_DEFUN(RCSS_BUILD_KEROSIN, [
 	AC_REQUIRE([RCSS_CHECK_SLANG])
     	AC_MSG_CHECKING([if libkerosin will be build])
  	AC_MSG_RESULT([$rcss_build_kerosin])
-	RCSS_KEROSIN_IF_ELSE([],[
+	RCSS_KEROSIN_IF_ELSE([AC_DEFINE(HAVE_KEROSIN_H, 1, [Define to 1 if using the kerosin header])],[
  		AC_MSG_WARN([libkerosin will not be build. There will be no graphical output.])
     		AC_MSG_NOTICE([the list of libraries required for kerosin can be found in the documentation])
  	])

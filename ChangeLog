@@ -1,4 +1,76 @@
+2003-11-13  Oliver Obst  <fruit@robolog.org>
+
+	* app/spadestest/main.cpp: removed dependency to kerosin
+
+	* utility/glextgen/Makefile.am:
+	* app/zeitgeisttest/Makefile.am:
+	* app/coretest/Makefile.am: 
+	* app/inputtest/Makefile.am:
+	* app/scenetest/Makefile.am: 
+	* app/simulator/Makefile.am:
+	* app/spadestest/Makefile.am: 
+	* plugin/inputsdl/Makefile.am:
+	* plugin/soundsystemfmod/Makefile.am:
+	* plugin/survival/Makefile.am:
+	- changed Makefile.am's so that parts dependend on libkerosin can be 
+	  build optionally.
+	- removed dependencies to external libraries as these are covered with
+	  our simulator libraries.
+
+	* configure.ac:
+	- changed the initial file check to use the salt.h header
+	- automake 1.7 or better is required
+	- defining the preprocessor symbol PREFIX dependent on the configure 
+	  prefix value
+	- moved all check for graphic libraries (like GL, SDL, DevIL, ...) 
+	  into separate macros.
+          The basic libraries (libsalt, libzeitgeist, and libkerosin) do not 
+	  need them, so they should not depend on them. 
+	  The macros have gone to acinclude and are only called in configure.ac. 
+	  If the libraries are not available on a particular system or if the 
+	  user configures with --disable-kerosin, libkerosin and the test 
+	  dependend on kerosin will not be build. 
+        - moved the check for ODE into a separate macro. Removed dependency on 
+	  libode for the base libraries libsalt and libzeitgeist. Applications 
+	  need only to link the .la files from our libraries, other dependencies 
+	  will be resolved automatically by libtool. 
+        - added the app/fonttest Makefile
+
+	* acinclude.m4:
+	- RCSS_PATH_RUBY: added -lruby to RUBY_LDFLAGS
+	- RCSS_PATH_FREETYPE: fixed copy/pasty bug; checking only if kerosin 
+	  can/should be build
+	- added RCSS_KEROSIN_IF_ELSE
+	- added RCSS_BUILD_KEROSIN_ERROR
+	- added RCSS_BUILD_KEROSIN_INIT
+	- added RCSS_BUILD_KEROSIN
+	- added RCSS_CHECK_SLANG
+	- added RCSS_CHECK_SDL
+	- added RCSS_CHECK_DEVIL
+	- added RCSS_CHECK_GL
+	- added RCSS_CHECK_ODE
+
+	* lib/Makefile.am:
+	* lib/kerosin/Makefile.am:
+	* lib/oxygen/Makefile.am:
+	* lib/salt/Makefile.am:
+	* lib/salt/gcc/sharedlibrary.cpp:
+	* lib/zeitgeist/Makefile.am:
+	- made compiling libkerosin optional
+	- moved library dependencies into the makefiles, so that users of our libraries
+	  don't need to care about external libraries
+
 2003-11-10  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/Makefile.am:
+	* lib/oxygen/kerosin.cpp:
+	* lib/oxygen/kerosin.h:
+	* lib/oxygen/sceneserver/sphere.cpp:
+	* lib/oxygen/sceneserver/sphere.h:
+	added sphere class
+	
+	* lib/oxygen/oxygen.cpp: 
+	registering all the oxygen class object classes
 
 	* plugin/soundsystemfmod/Makefile.am: 
 	The soundsystemfmod module is built (only) if configure detected the 
