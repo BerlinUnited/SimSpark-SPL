@@ -55,7 +55,6 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
         shared_ptr<CoreContext> context = CreateContext();
 
         // register the internal zeitgeist classes
-        cout << "  Registering class objects...\n";
         RegisterClassObject(mNodeClass, "zeitgeist/");
         RegisterClassObject(mClassClass, "zeitgeist/");
         RegisterClassObject(new CLASS(Leaf), "zeitgeist/");
@@ -70,11 +69,9 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
         mLogServer = shared_static_cast<LogServer>(context->New("zeitgeist/LogServer", "/sys/server/log"));
         mLogServer->AddStream(&cout, LogServer::eAll);
 
-        mLogServer->Normal() << "  Creating FileServer..." << endl;
         mFileServer = shared_static_cast<FileServer>(context->New("zeitgeist/FileServer", "/sys/server/file"));
 
         // create the log server
-        mLogServer->Normal() << "  Creating ScriptServer..." << endl;
         mScriptServer = shared_static_cast<ScriptServer>(context->New("zeitgeist/ScriptServer", "/sys/server/script"));
 }
 

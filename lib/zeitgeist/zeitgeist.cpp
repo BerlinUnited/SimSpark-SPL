@@ -8,7 +8,6 @@ using namespace zeitgeist;
 Zeitgeist::Zeitgeist(string dotName) :
 mCore(new Core())
 {
-        cout << "Starting up Zeitgeist..." << endl;
         mCore->Construct(mCore);
 
         if (mCore->GetScriptServer() != NULL)
