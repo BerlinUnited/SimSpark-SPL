@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.8 2004/04/07 18:46:45 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.9 2004/04/22 11:33:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -96,19 +96,19 @@ GameControlServer::GetActiveScene()
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (GameControlServer) SceneServer not found.\n";
-            return shared_ptr<Scene>();
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameControlServer) SceneServer not found.\n";
+        return shared_ptr<Scene>();
+    }
 
     shared_ptr<Scene> scene = sceneServer->GetActiveScene();
 
     if (scene.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (GameControlServer) SceneServer reports no active scene\n";
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameControlServer) SceneServer reports no active scene\n";
+    }
 
     return scene;
 }
@@ -129,12 +129,12 @@ GameControlServer::AgentConnect(int id)
 
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (GameControlServer) Got no active scene from the SceneServer to"
-                << " create the AgentAspect in.\n";
-            return false;
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameControlServer) Got no active scene from the SceneServer to"
+            << " create the AgentAspect in.\n";
+        return false;
+    }
 
     // create a new AgentAspect for the ID in the scene and add it to
     // our map of AgentAspects
@@ -142,11 +142,11 @@ GameControlServer::AgentConnect(int id)
         (GetCore()->New("oxygen/AgentAspect"));
 
     if (aspect.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (GameControlServer) cannot create new AgentAspect\n";
-            return false;
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameControlServer) cannot create new AgentAspect\n";
+        return false;
+    }
 
     stringstream name;
     name << "AgentAspect" << id;
@@ -163,12 +163,12 @@ bool GameControlServer::AgentDisappear(int id)
     TAgentMap::iterator iter = mAgentMap.find(id);
 
     if (iter == mAgentMap.end())
-        {
-            GetLog()->Error()
-                << "ERROR: (GameControlServer) AgentDisappear called for "
-                << "unknown agent id " << id << "\n";
-            return false;
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameControlServer) AgentDisappear called for "
+            << "unknown agent id " << id << "\n";
+        return false;
+    }
 
     // remove the AgentAspect from the Scene and our map. The
     // AgentAspect does all the necessary cleanup
@@ -220,19 +220,19 @@ GameControlServer::Parse(int id, string str) const
     TAgentMap::const_iterator iter = mAgentMap.find(id);
 
     if (iter == mAgentMap.end())
-        {
-            GetLog()->Error()
-                << "ERROR: (GameControlServer::Parse) Parse called with unknown agent id "
-                << id << "\n";
-            return shared_ptr<ActionObject::TList>();
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameControlServer::Parse) Parse called with unknown agent id "
+            << id << "\n";
+        return shared_ptr<ActionObject::TList>();
+    }
 
     if (mParser.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (GameControlServer::Parse) No parser registered.\n";
-            return shared_ptr<ActionObject::TList>();
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameControlServer::Parse) No parser registered.\n";
+        return shared_ptr<ActionObject::TList>();
+    }
 
     // use the parser to create a PredicateList
     shared_ptr<PredicateList> predicates(mParser->Parse(str));
@@ -246,31 +246,31 @@ GameControlServer::Parse(int id, string str) const
 
     for
         (
-         PredicateList::TList::const_iterator iter = predicates->begin();
-         iter != predicates->end();
-         ++iter
-        )
+            PredicateList::TList::const_iterator iter = predicates->begin();
+            iter != predicates->end();
+            ++iter
+            )
+    {
+        const Predicate& predicate = (*iter);
+
+        shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
+        if (effector.get() == 0)
         {
-            const Predicate& predicate = (*iter);
-
-            shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
-            if (effector.get() == 0)
-                {
-                    GetLog()->Warning()
-                        << "(GameControlServer::Parse) No effector registered for predicate "
-                        << predicate.name << "\n";
-                    continue;
-                }
-
-            shared_ptr<ActionObject> action(effector->GetActionObject(predicate));
-
-            if (action.get() == 0)
-                {
-                    continue;
-                }
-
-            actionList->push_back(action);
+            GetLog()->Warning()
+                << "(GameControlServer::Parse) No effector registered for predicate "
+                << predicate.name << "\n";
+            continue;
         }
+
+        shared_ptr<ActionObject> action(effector->GetActionObject(predicate));
+
+        if (action.get() == 0)
+        {
+            continue;
+        }
+
+        actionList->push_back(action);
+    }
 
     return actionList;
 }
@@ -280,9 +280,9 @@ GameControlServer::GetAgentAspect(int id)
 {
     TAgentMap::iterator iter = mAgentMap.find(id);
     if (iter == mAgentMap.end())
-        {
-            return shared_ptr<AgentAspect>();
-        }
+    {
+        return shared_ptr<AgentAspect>();
+    }
 
     return (*iter).second;
 }
@@ -290,21 +290,21 @@ GameControlServer::GetAgentAspect(int id)
 void
 GameControlServer::Update(float deltaTime)
 {
-  // build list of ControlAspects, NOT searching recursively
-  TLeafList control;
-  GetChildrenSupportingClass("ControlAspect",control,false);
+    // build list of ControlAspects, NOT searching recursively
+    TLeafList control;
+    GetChildrenSupportingClass("ControlAspect",control,false);
 
-  // update all ControlAspects found
-  for (
-       TLeafList::iterator iter = control.begin();
-       iter != control.end();
-       ++iter
-       )
-      {
-          shared_ptr<ControlAspect> aspect =
-              shared_static_cast<ControlAspect>(*iter);
+    // update all ControlAspects found
+    for (
+        TLeafList::iterator iter = control.begin();
+        iter != control.end();
+        ++iter
+        )
+    {
+        shared_ptr<ControlAspect> aspect =
+            shared_static_cast<ControlAspect>(*iter);
 
-          aspect->Update(deltaTime);
-      }
+        aspect->Update(deltaTime);
+    }
 }
 
