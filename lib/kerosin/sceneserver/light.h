@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: light.h,v 1.7 2004/04/12 13:36:40 rollmark Exp $
+   $Id: light.h,v 1.8 2004/04/22 17:57:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 #include <kerosin/openglserver/glbase.h>
 #include "staticmesh.h"
-#include "oxygen/sceneserver/indexbuffer.h"
+#include "oxygen/geometryserver/indexbuffer.h"
 #include "oxygen/sceneserver/basenode.h"
 
 namespace kerosin
