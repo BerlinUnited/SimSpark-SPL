@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.h,v 1.5.2.1 2003/12/25 13:15:13 rollmark Exp $
+   $Id: collisionperceptor.h,v 1.6.2.1 2004/01/09 13:13:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ namespace oxygen
 #endif
 
 /*!
-        The CollisionPerceptor class is used to filter collisions as they occur
-        within the scenegraph.
+        \class CollisionPerceptor is used to store collisions as they
+        occur within the scenegraph.
 */
 class CollisionPerceptor : public Perceptor
 {
@@ -42,7 +42,15 @@ public:
      */
     bool Percept(Predicate& predicate);
 
-    TLeafList& GetCollidees()  { return mCollidees; }
+    /** returns the stored list of collidees */
+    const TLeafList& GetCollidees()  { return mCollidees; }
+
+    /** stores a new collidee */
+    void AddCollidee(boost::shared_ptr<Node> collidee);
+
+protected:
+    /** removes old collidees left over from the previous cycles */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 private:
     TLeafList mCollidees;
