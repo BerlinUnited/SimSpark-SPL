@@ -1,3 +1,49 @@
+2003-12-30  Oliver Obst  <fruit@robolog.org>
+
+	* doc/Makefile.am: 
+	- including HTML files into distribution 
+	- fixed installation of HTML files and Doxygen documentation 
+	- using automake conditional to check if Doxygen is avcailable or not
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp: 
+	set the sense interval to 250ms.
+
+	* configure.ac: 
+	- added check for Doxygen. Creating an automake conditional dependent 
+	  on finding the doxygen binary.  
+	- creating the rcsoccersim3D script in the app/simulator directory 
+	- creating the createagentdb.sh script in the app/simulator directory
+
+	* acinclude.m4: 
+	- compiling libkerosin is now OFF by default.  
+	- changed warning about no libkerosin to normal message (because
+	  until now, libkerosin is not necessary)
+	
+	* app/agenttest/Makefile.am: 
+	- changes so that agenttest binary gets installed
+
+	* app/agenttest/main.cpp: 
+	- setting unique uniform numbers (by using the agent PIDs)
+
+	* app/rcssmonitor3d/main.cpp: 
+	- changes so that the init script is run by RunInitScript (to install it in the 
+	  user directory if necessary) 
+	- renamed the init script to be consistent with naming style of rcssserver3D files
+
+	* app/simulator/:
+	- changes so that a rcssserver3D binary gets installed
+	- created a script rcsoccersim3D that starts up a simulator and a monitor
+	- created a script that installs an agentdb file during make install
+
+2003-12-29  Oliver Obst  <fruit@robolog.org>
+
+	* lib/kerosin/Makefile.am: 
+	- fixed Makefile for the case when kerosin should not be build
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- reduced monitor send interval from 1/2 to 1/10.  
+	- fixed parseAct log message
+
 2003-12-28  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/initeffector/initeffector.cpp: 
