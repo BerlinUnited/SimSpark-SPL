@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller.h,v 1.2 2003/08/31 13:08:42 rollmark Exp $
+   $Id: fpscontroller.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,14 +18,12 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
-
-#ifndef FPSCONTROLLER_H__
-#define FPSCONTROLLER_H__
+#ifndef OXYGEN_FPSCONTROLLER_H
+#define OXYGEN_FPSCONTROLLER_H
 
 #include "basenode.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** FPSController is a node, that provides first person shooter (FPS)
@@ -106,6 +104,6 @@ protected:
 
 DECLARE_CLASS(FPSController);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //FPSCONTROLLER_H__
+#endif //OXYGEN_FPSCONTROLLER_H

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.h,v 1.1 2003/08/31 12:16:49 rollmark Exp $
+   $Id: ccylindercollider.h,v 1.2 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,13 +20,12 @@
 
    CCylinderCollider
 */
-
-#ifndef CCYLINDERCOLLIDER_H__
-#define CCYLINDERCOLLIDER_H__
+#ifndef OXYGEN_CCYLINDERCOLLIDER_H
+#define OXYGEN_CCYLINDERCOLLIDER_H
 
 #include "collider.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** CCylinderCollider encapsulates an ODE capped cylinder geometry object.A
@@ -56,7 +55,7 @@ protected:
 
 DECLARE_CLASS(CCylinderCollider);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //CCYLINDERCOLLIDER_H__
+#endif //OXYGEN_CCYLINDERCOLLIDER_H
 

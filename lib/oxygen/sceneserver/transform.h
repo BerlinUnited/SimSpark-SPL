@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.h,v 1.2 2003/08/31 13:08:43 rollmark Exp $
+   $Id: transform.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,14 +32,12 @@
 
         TOFIX:
 */
-
-
-#ifndef TRANSFORM_H__
-#define TRANSFORM_H__
+#ifndef OXYGEN_TRANSFORM_H
+#define OXYGEN_TRANSFORM_H
 
 #include "basenode.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** Transform is used to do local transforms relative to a parent node. */
@@ -90,5 +88,5 @@ private:
 
 DECLARE_CLASS(Transform);
 
-} //namespace kerosin
-#endif //TRANSFORM_H__
+} //namespace oxygen
+#endif //OXYGEN_TRANSFORM_H

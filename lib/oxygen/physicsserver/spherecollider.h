@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spherecollider.h,v 1.3 2003/08/31 12:16:49 rollmark Exp $
+   $Id: spherecollider.h,v 1.4 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,12 +21,12 @@
    SphereCollider
 */
 
-#ifndef SPHERECOLLIDER_H__
-#define SPHERECOLLIDER_H__
+#ifndef OXYGEN_SPHERECOLLIDER_H
+#define OXYGEN_SPHERECOLLIDER_H
 
 #include "collider.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** SphereCollider encapsulates an ODE sphere geometry object.
@@ -49,6 +49,6 @@ protected:
 
 DECLARE_CLASS(SphereCollider);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //SPHERECOLLIDER_H__
+#endif //OXYGEN_SPHERECOLLIDER_H

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.cpp,v 1.1 2003/08/31 12:16:49 rollmark Exp $
+   $Id: ccylindercollider.cpp,v 1.2 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 
 #include "ccylindercollider.h"
 
-using namespace kerosin;
+using namespace oxygen;
 
 CCylinderCollider::CCylinderCollider() :
 Collider()

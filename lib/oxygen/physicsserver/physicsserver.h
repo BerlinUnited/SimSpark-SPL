@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: physicsserver.h,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: physicsserver.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,28 +20,27 @@
 
    PhysicsServer
 */
-
-#ifndef PHYSICSSERVER_H__
-#define PHYSICSSERVER_H__
+#ifndef OXYGEN_PHYSICSSERVER_H
+#define OXYGEN_PHYSICSSERVER_H
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 
-namespace kerosin
+namespace oxygen
 {
 
 class PhysicsServer : public zeitgeist::Leaf
 {
-	//
-	// Functions
-	//
+    //
+    // Functions
+    //
 public:
-	PhysicsServer();
-	~PhysicsServer();
+    PhysicsServer();
+    ~PhysicsServer();
 };
 
-DECLARE_CLASS(PhysicsServer);
+    DECLARE_CLASS(PhysicsServer);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //PHYSICSSERVER_H__
+#endif //OXYGEN_PHYSICSSERVER_H

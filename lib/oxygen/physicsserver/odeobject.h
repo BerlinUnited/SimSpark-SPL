@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: odeobject.h,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: odeobject.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,14 +20,13 @@
 
    ODEObject
 */
-
-#ifndef ODEOBJECT_H__
-#define ODEOBJECT_H__
+#ifndef OXYGEN_ODEOBJECT_H
+#define OXYGEN_ODEOBJECT_H
 
 #include "../sceneserver/basenode.h"
 #include <ode/ode.h>
 
-namespace kerosin
+namespace oxygen
 {
 
 class PhysicsServer;
@@ -36,22 +35,22 @@ class PhysicsServer;
  */
 class ODEObject : public BaseNode
 {
-	//
-	// Functions
-	//
+    //
+    // Functions
+    //
 protected:
-	virtual bool ConstructInternal();
+    virtual bool ConstructInternal();
 
-	//
-	// Members
-	//
+    //
+    // Members
+    //
 protected:
-	boost::shared_ptr<PhysicsServer>	mPhysicsServer;
+    boost::shared_ptr<PhysicsServer>    mPhysicsServer;
 };
 
-DECLARE_CLASS(ODEObject);
+    DECLARE_CLASS(ODEObject);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //ODEOBJECT_H__
+#endif //OXYGEN_ODEOBJECT_H
 

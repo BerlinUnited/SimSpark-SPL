@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.2 2003/08/29 16:42:05 fruit Exp $
+   $Id: agentaspect.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #include "effector.h"
 #include "perceptor.h"
 
-namespace kerosin
+namespace oxygen
 {
 #if 0
 }
@@ -51,6 +51,6 @@ private:
 
 DECLARE_ABSTRACTCLASS(AgentAspect);
 
-} // namespace kerosin
+} // namespace oxygen
 
 #endif //OXYGEN_AGENTASPECT_H

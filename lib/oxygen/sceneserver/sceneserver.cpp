@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.2 2003/08/29 16:59:59 fruit Exp $
+   $Id: sceneserver.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,14 +25,13 @@
 #include <zeitgeist/corecontext.h>
 #include <salt/vector.h>
 #include <salt/frustum.h>
-#include "camera.h"
 #include "scene.h"
 #include "../physicsserver/world.h"
 #include "../physicsserver/space.h"
 #include "../controlaspect/controlaspect.h"
 
 using namespace boost;
-using namespace kerosin;
+using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 
@@ -48,7 +47,7 @@ SceneServer::~SceneServer()
 boost::shared_ptr<Scene> SceneServer::CreateScene(const std::string &location)
 {
     shared_ptr<CoreContext> context = GetCore()->CreateContext();
-    shared_ptr<Scene> scene = shared_static_cast<Scene>(context->New("kerosin/Scene", location));
+    shared_ptr<Scene> scene = shared_static_cast<Scene>(context->New("oxygen/Scene", location));
 
     if (scene.get() != NULL)
     {

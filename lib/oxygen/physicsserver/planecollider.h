@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: planecollider.h,v 1.3 2003/08/31 12:16:49 rollmark Exp $
+   $Id: planecollider.h,v 1.4 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,13 +20,12 @@
 
    PlaneCollider
 */
-
-#ifndef PLANECOLLIDER_H__
-#define PLANECOLLIDER_H__
+#ifndef OXYGEN_PLANECOLLIDER_H
+#define OXYGEN_PLANECOLLIDER_H
 
 #include "collider.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** PlaneCollider encapsulates an ODE plane geometry object. Planes are
@@ -54,6 +53,6 @@ protected:
 
 DECLARE_CLASS(PlaneCollider);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //PLANECOLLIDER_H__
+#endif //OXYGEN_PLANECOLLIDER_H

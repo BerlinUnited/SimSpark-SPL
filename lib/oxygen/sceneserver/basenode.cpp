@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode.cpp,v 1.3 2003/08/31 13:08:42 rollmark Exp $
+   $Id: basenode.cpp,v 1.4 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,10 +21,9 @@
 
 #include "basenode.h"
 #include "scene.h"
-// #include "../openglserver/openglserver.h"
 
 using namespace boost;
-using namespace kerosin;
+using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 

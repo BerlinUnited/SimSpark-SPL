@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode.h,v 1.2 2003/08/31 13:08:42 rollmark Exp $
+   $Id: basenode.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,15 +30,14 @@
 
         TOFIX:
 */
-
-#ifndef BASENODE_H__
-#define BASENODE_H__
+#ifndef OXYGEN_BASENODE_H
+#define OXYGEN_BASENODE_H
 
 #include <salt/matrix.h>
 #include <salt/bounds.h>
 #include <zeitgeist/node.h>
 
-namespace kerosin
+namespace oxygen
 {
 
 class Scene;
@@ -143,5 +142,5 @@ protected:
 
 DECLARE_CLASS(BaseNode);
 
-} //namespace kerosin
-#endif //BASENODE_H__
+} //namespace oxygen
+#endif //OXYGEN_BASENODE_H

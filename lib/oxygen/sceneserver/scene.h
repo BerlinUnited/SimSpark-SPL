@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: scene.h,v 1.2 2003/08/31 13:08:43 rollmark Exp $
+   $Id: scene.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,13 +31,12 @@
 
         TOFIX:
 */
-
-#ifndef SCENE_H__
-#define SCENE_H__
+#ifndef OXYGEN_SCENE_H
+#define OXYGEN_SCENE_H
 
 #include "basenode.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** Scene is the root node of a simulatable/displayable hierarchy. It is
@@ -55,5 +54,5 @@ public:
 
 DECLARE_CLASS(Scene);
 
-} //namespace kerosin
-#endif //SCENE_H__
+} //namespace oxygen
+#endif //OXYGEN_SCENE_H

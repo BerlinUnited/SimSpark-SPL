@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.h,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: space.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,13 +20,12 @@
 
    Space
 */
-
-#ifndef SPACE_H__
-#define SPACE_H__
+#ifndef OXYGEN_SPACE_H
+#define OXYGEN_SPACE_H
 
 #include "odeobject.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** Space encapsulates an ODE space object. A space is a non-placeable
@@ -36,59 +35,59 @@ namespace kerosin
 */
 class Space : public ODEObject
 {
-        //
-        // Functions
-        //
+    //
+    // Functions
+    //
 public:
-        Space();
-        ~Space();
+    Space();
+    ~Space();
 
-  /** returns the ID of the managed ODE space */
-  dSpaceID        GetODESpace() const;
+    /** returns the ID of the managed ODE space */
+    dSpaceID        GetODESpace() const;
 
-  /** starts ODE's collision culling system. ODE will quickly identify
-	  which pairs of geoms are potentially intersecting. Those pairs
-	  will be passed to the callback function HandleCollide, which in
-	  turn will notify the responsible collider classes.
-   */
-  void Collide();
+    /** starts ODE's collision culling system. ODE will quickly identify
+        which pairs of geoms are potentially intersecting. Those pairs
+        will be passed to the callback function HandleCollide, which in
+        turn will notify the responsible collider classes.
+    */
+    void Collide();
 
-  /** callback to handle a potential collision between two contained
-	  geoms. It will look up and notify the corresponding colliders
-	  for a potential collision. For all determined collisions an ODE
-	  contact joint will be created and inserted into
-	  mODEContactGroup, an ODE group of joints.
-  */
-  virtual void HandleCollide(dGeomID obj1, dGeomID obj2);
+    /** callback to handle a potential collision between two contained
+        geoms. It will look up and notify the corresponding colliders
+        for a potential collision. For all determined collisions an ODE
+        contact joint will be created and inserted into
+        mODEContactGroup, an ODE group of joints.
+    */
+    virtual void HandleCollide(dGeomID obj1, dGeomID obj2);
 
 protected:
-  /** creates ode dynamics space and makes sure that mODESpace is valid */
-  virtual bool ConstructInternal();
+    /** creates ode dynamics space and makes sure that mODESpace is valid */
+    virtual bool ConstructInternal();
 
-  /** looks up the world this space belongs to and sets up mWorld */
-  virtual void OnLink();
+    /** looks up the world this space belongs to and sets up mWorld */
+    virtual void OnLink();
 
-  virtual void OnUnlink();
+    virtual void OnUnlink();
 
 private:
-        virtual void PrePhysicsUpdateInternal(float deltaTime);
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
-        //
-        // Members
-        //
+    //
+    // Members
+    //
 private:
-  /** the managed ODE space */
-  dSpaceID                mODESpace;
+    /** the managed ODE space */
+    dSpaceID                mODESpace;
 
-  /** the ODE group for all created contact joints */
-  dJointGroupID   mODEContactGroup;
-  
-  /** the cached ODE world this space belongs to, updated vias OnLink() */
-  dWorldID                mWorld;
+    /** the ODE group for all created contact joints */
+    dJointGroupID   mODEContactGroup;
+
+    /** the cached ODE world this space belongs to, updated vias OnLink() */
+    dWorldID                mWorld;
 };
 
-DECLARE_CLASS(Space);
+    DECLARE_CLASS(Space);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif // SPACE_H__
+#endif // OXYGEN_SPACE_H

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.h,v 1.3 2003/08/31 12:16:49 rollmark Exp $
+   $Id: collider.h,v 1.4 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
    Collider
 */
-
-
-#ifndef COLLIDER_H__
-#define COLLIDER_H__
+#ifndef OXYGEN_COLLIDER_H
+#define OXYGEN_COLLIDER_H
 
 #include "odeobject.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 class Space;
@@ -79,6 +77,6 @@ protected:
 
 DECLARE_CLASS(Collider);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //COLLIDER_H__
+#endif //OXYGEN_COLLIDER_H

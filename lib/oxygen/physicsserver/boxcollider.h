@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: boxcollider.h,v 1.1 2003/08/31 12:16:49 rollmark Exp $
+   $Id: boxcollider.h,v 1.2 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,13 +20,12 @@
 
    BoxCollider
 */
-
-#ifndef BOXCOLLIDER_H__
-#define BOXCOLLIDER_H__
+#ifndef OXYGEN_BOXCOLLIDER_H
+#define OXYGEN_BOXCOLLIDER_H
 
 #include "collider.h"
 
-namespace kerosin
+namespace oxygen
 {
 
 /** BoxCollider encapsulates an ODE box geometry object.
@@ -49,6 +48,6 @@ protected:
 
 DECLARE_CLASS(BoxCollider);
 
-} //namespace kerosin
+} //namespace oxygen
 
-#endif //BOXCOLLIDER_H__
+#endif //OXYGEN_BOXCOLLIDER_H

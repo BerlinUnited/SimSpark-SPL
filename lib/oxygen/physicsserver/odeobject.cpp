@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: odeobject.cpp,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: odeobject.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,18 +23,18 @@
 #include "physicsserver.h"
 
 using namespace boost;
-using namespace kerosin;
+using namespace oxygen;
 
 bool ODEObject::ConstructInternal()
 {
-	if (BaseNode::ConstructInternal() == false) return false;
-	
-	mPhysicsServer = shared_static_cast<PhysicsServer>(GetCore()->Get("/sys/server/physics"));
+    if (BaseNode::ConstructInternal() == false) return false;
 
-	if (mPhysicsServer.get() == NULL)
-	{
-		return false;
-	}
+    mPhysicsServer = shared_static_cast<PhysicsServer>(GetCore()->Get("/sys/server/physics"));
 
-	return true;
+    if (mPhysicsServer.get() == NULL)
+    {
+        return false;
+    }
+
+    return true;
 }
