@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.7 2004/04/29 15:20:44 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.8 2004/05/05 09:08:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,10 +58,16 @@ RubySceneImporter::RubySceneImporter() : SceneImporter()
     mVersionMajor = 0;
     mVersionMinor = 0;
     mDeltaScene = false;
+    mAutoUnlink = false;
 }
 
 RubySceneImporter::~RubySceneImporter()
 {
+}
+
+void RubySceneImporter::SetUnlinkOnCompleteScenes(bool unlink)
+{
+    mAutoUnlink = unlink;
 }
 
 bool RubySceneImporter::ImportScene(const std::string& fileName,
@@ -122,6 +128,14 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
 
     destroy_sexp(sexp);
     sexp = iparse_sexp(const_cast<char*>(scene),size,pcont);
+
+    if (
+        (! mDeltaScene) &&
+        (mAutoUnlink)
+        )
+        {
+            root->UnlinkChildren();
+        }
 
     bool ok = mDeltaScene ?
         ReadDeltaGraph(sexp,root) :

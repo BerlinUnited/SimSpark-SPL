@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.6 2004/04/29 15:20:44 rollmark Exp $
+   $Id: rubysceneimporter.h,v 1.7 2004/05/05 09:08:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,6 +57,13 @@ public:
                              boost::shared_ptr<oxygen::BaseNode> root,
                              boost::shared_ptr<zeitgeist::ParameterList> parameter);
 
+    /** constrols the behavior of the importer for complete scenes
+        (instead of delta scenes). if 'unlink' is true, the scene
+        below the root node given in ImportScene will automatically be
+        unlinked before the scene is imported
+     */
+    void SetUnlinkOnCompleteScenes(bool unlink);
+
 protected:
     virtual bool ParseScene(const char* scene, int size,
                              boost::shared_ptr<oxygen::BaseNode> root,
@@ -76,6 +83,10 @@ protected:
     ParamEnv& GetParamEnv();
 
 protected:
+    /** true if a scene is automatically unlinked before a new scene
+        is imported */
+    bool mAutoUnlink;
+
     /** true, if a delta scene is applied */
     bool mDeltaScene;
 
