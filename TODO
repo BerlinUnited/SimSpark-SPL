@@ -1,3 +1,35 @@
+===== 03 Feb 04
+
+- Spades Timing (Sense Intervals, Acting)
++ Kicker: solve effet
++ Kicker: latitudal angle 
+- Kick and run team
+- Agents need to get information about team
++ Flag names
+- Game States:
+  before kick off
+  kick in: ball inside field
+  goal_l / goal_right 
+  corner_kick
+  goal_kick_l / r (beam ball in front of goal)  
+  half time (timing?)
++ list of features (comparison to soccer) / description of perceptors/actuators
+/ Battery / Temperature ???
+- change play mode from monitor
+- scripts
+
+Controlaspects:
+
+- below GCS
+- for play_mode, score
+- bundle aus plugin/soccer/...
+- collision handling (notice collisions between objects), 
+  make collisions accessible for control aspects
+- last player to ball
+- Agentstate
+- tcpsocket into rcssbase
+useit.com
+
 ===== Dez 22 2003
 
 Branch: rcssserver3D-0.1
