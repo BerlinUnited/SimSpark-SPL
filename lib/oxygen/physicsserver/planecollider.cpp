@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: planecollider.cpp,v 1.5 2004/02/26 21:14:05 fruit Exp $
+   $Id: planecollider.cpp,v 1.6 2004/04/12 17:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "planecollider.h"
 
 using namespace oxygen;
+using namespace salt;
 
 PlaneCollider::PlaneCollider() : Collider()
 {
@@ -29,15 +30,25 @@ PlaneCollider::PlaneCollider() : Collider()
 
 void PlaneCollider::SetParams(float a, float b, float c, float d)
 {
-  dGeomPlaneSetParams(mODEGeom, a, b, c, d);
+    // The plane's normal vector is (a,b,c), and it must have length 1
+    float l = Vector3f(a,b,c).Length();
+    if (l != 0)
+        {
+            a /= l;
+            b /= l;
+            c /= l;
+            d /= l;
+        }
+
+    dGeomPlaneSetParams(mODEGeom, a, b, c, d);
 }
 
 bool PlaneCollider::ConstructInternal()
 {
     if (! Collider::ConstructInternal())
-      {
-        return false;
-      }
+        {
+            return false;
+        }
 
     // a plane with normal pointing up, going through the origin
     mODEGeom = dCreatePlane(0, 0, 1, 0, 0);
