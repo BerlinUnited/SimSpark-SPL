@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesactevent.cpp,v 1.1.2.2 2003/12/03 17:54:09 rollmark Exp $
+   $Id: spadesactevent.cpp,v 1.1.2.3 2003/12/04 17:25:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,8 +21,12 @@
 */
 #include "spadesactevent.h"
 #include "spadesserver.h"
+#include <zeitgeist/logserver/logserver.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 
 using namespace oxygen;
+using namespace zeitgeist;
+using namespace boost;
 
 void SpadesActEvent::Print (std::ostream & /*o*/) const
 {
@@ -42,6 +46,15 @@ bool SpadesActEvent::realizeEventWorldModel(spades::WorldModel* pWM)
         }
 
   // call the game control server to realize the list of actions
+  shared_ptr<GameControlServer> gcs = spadesServer->GetGameControlServer();
+  if (gcs.get() == 0)
+      {
+          spadesServer->GetLog()->Error()
+              << "(SpadesActEvent) GameControlServer not found.\n";
+          return false;
+      }
+
+  gcs->RealizeActions(mActionList);
 
   return true;
 }
