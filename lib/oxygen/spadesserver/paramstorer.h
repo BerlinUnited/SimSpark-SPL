@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: paramstorer.h,v 1.1.2.1 2003/11/30 17:01:42 rollmark Exp $
+   $Id: paramstorer.h,v 1.1.2.1.2.1 2003/12/02 16:48:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@ namespace oxygen
 {
 
 /** This class implements the spades::ParamReader::ParamStorer
-    interface. It's purpose is enable the user to set ruby variables
-    using the command line.
+    interface. It's purpose is to enable the user to set ruby
+    variables using the command line.
 
     A note about the implementation: ParamStorer uses the ParamReader
     class to do the real parsing. This has the following reason.
@@ -48,7 +48,6 @@ namespace oxygen
     Zeitgeist::object. In order to access the ScriptServer this class
     uses the ParamReader instance.
 */
-
 class ParamStorer : public spades::ParamReader::ParamStorer
 {
 public:
