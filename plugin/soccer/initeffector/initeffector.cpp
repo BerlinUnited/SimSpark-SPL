@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.2.2.1 2003/12/29 17:57:43 rollmark Exp $
+   $Id: initeffector.cpp,v 1.2.2.2 2004/01/06 21:50:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,9 @@
 #include "initaction.h"
 #include "initeffector.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/predicate.h>
+#include <soccer/agentstate/agentstate.h>
 #include <sstream>
 
 using namespace boost;
@@ -49,22 +51,30 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    // we want to change the name of the parent node
-    shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+    // search for the AgentState
+    shared_ptr<AgentAspect> aspect = GetAgentAspect();
 
-    if (parent.get() == 0)
+    if (aspect.get() == 0)
     {
         GetLog()->Error()
-            << "ERROR: (InitEffector) parent node is not derived from BaseNode\n";
+            << "ERROR: (InitEffector) cannot get AgentAspect\n";
         return false;
     }
 
-    // temporary way of setting the unum.
-    std::ostringstream ost;
-    ost << "#" << initAction->GetNumber();
+    shared_ptr<AgentState> state =
+        shared_static_cast<AgentState>(aspect->GetChildOfClass("AgentState",true));
 
-    parent->SetName(initAction->GetName() + ost.str());
+    if (state.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (InitEffector) cannot find AgentAspect\n";
+        return false;
+    }
+
+    // set the team name an uniform number in the AgentState
+    state->SetTeamName(initAction->GetName());
+    state->SetUniformNumber(initAction->GetNumber());
+
     return true;
 }
 
