@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.1.2.5 2003/12/27 13:30:55 fruit Exp $
+   $Id: createeffector.cpp,v 1.2.2.1 2004/01/06 21:54:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,10 +97,6 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
               geometry->SetRadius(1.0);
           }
 
-  //
-  // spadestest.rb must import the plugins for the following to work
-  //
-
   // add forceeffector
   shared_ptr<Effector> effector =
       shared_dynamic_cast<Effector>(GetCore()->New("ForceEffector"));
@@ -138,6 +134,19 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
 
   perceptor->SetName("_PerfectVisionPerceptor");
   aspect->AddChildReference(perceptor);
+
+  // add agent state
+  shared_ptr<BaseNode> state =
+      shared_dynamic_cast<BaseNode>(GetCore()->New("AgentState"));
+
+  if (state.get() == 0)
+      {
+          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the AgentState\n";
+          return false;
+      }
+
+  state->SetName("_AgentState");
+  aspect->AddChildReference(state);
 
   GetLog()->Debug() << "(CreateEffector) created dummy agent" << std::endl;
 
