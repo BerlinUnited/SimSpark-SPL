@@ -1,34 +1,34 @@
-/* -*- mode: c++ -*-
-   
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: logserver.h,v 1.3 2003/08/21 12:53:30 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: logserver.h,v 1.4 2003/11/14 14:05:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-	LogServer
+        LogServer
 
 
-	HISTORY:
-		22.08.2002 MK
-			- initial version - reclaimed from rcssserver3D :)
+        HISTORY:
+                22.08.2002 MK
+                        - initial version - reclaimed from rcssserver3D :)
 
 */
-
-#ifndef LOGSERVER_H__
-#define LOGSERVER_H__
+#ifndef ZEITGEIST_LOGSERVER_H
+#define ZEITGEIST_LOGSERVER_H
 
 #include <iostream>
 #include "../node.h"
@@ -44,14 +44,14 @@ class LogServerStreamBuf;
 */
 class LogServer : public Node , public std::ostream
 {
-	// types
-	//
+    // types
+    //
 public:
-  
-  /** defines different priority levels assigned to a log message. The
-      values are designed as a bitmap and can be combined, to trigger
-      different filters */
-    enum EPriorityLevel 
+
+    /** defines different priority levels assigned to a log message. The
+        values are designed as a bitmap and can be combined, to trigger
+        different filters */
+    enum EPriorityLevel
     {
         eNone    = 0,
         eDebug   = 1,
@@ -85,47 +85,47 @@ public:
     bool RemoveStream(const std::ostream *stream);
 
     /** sets the priority mask of a stream in the list.
-       
-        @param stream   the stream for which we want to set the priority mask
-        @param mask     the new priority mask
-        @return         true if the stream was found
+
+    @param stream   the stream for which we want to set the priority mask
+    @param mask     the new priority mask
+    @return         true if the stream was found
     */
     bool SetPriorityMask(const std::ostream *stream, unsigned int mask);
 
     /** gets priority mask of a stream in the list.
 
-        @param stream   the stream for which we want to set the priority mask
-        @return         the priority mask; 0 if stream was not found
+    @param stream   the stream for which we want to set the priority mask
+    @return         the priority mask; 0 if stream was not found
     */
     unsigned int GetPriorityMask(const std::ostream *stream) const;
 
     /** selects the priority for the messages to be written. It
-	returns a reference to this logserver instance, allowing
-	muiltiple priority changes in one stream expression, 
-	e.g. log << Priority(eNormal) << "normal msg" <<
-	Priority(eDbug) << "debug msg"
+        returns a reference to this logserver instance, allowing
+        muiltiple priority changes in one stream expression,
+        e.g. log << Priority(eNormal) << "normal msg" <<
+        Priority(eDbug) << "debug msg"
     */
     LogServer& Priority(unsigned int prio);
 
     /** selects the debug priority and returns a reference to this
-	logserver */
+        logserver */
     LogServer& Debug()    { return Priority(eDebug); }
 
     /** selects the normal priority and returns a reference to this
-	logserver */
+        logserver */
     LogServer& Normal()   { return Priority(eNormal); }
 
     /** selects the warning priority and returns a reference to this
-	logserver */
+        logserver */
     LogServer& Warning()  { return Priority(eWarning); }
 
     /** selects the error priority and returns a reference to this
-	logserver */
+        logserver */
     LogServer& Error()    { return Priority(eError); }
 
     /** provides an printf-style interface. */
-	void Printf(const char *inFormat, ...);
-	
+    void Printf(const char *inFormat, ...);
+
 private:
     LogServer(const LogServer& obj);
     LogServer& operator=(const LogServer& obj);
@@ -138,4 +138,4 @@ DECLARE_CLASS(LogServer);
 
 } //namespace zeitgeist
 
-#endif //LOGSERVER_H__
+#endif //ZEITGEIST_LOGSERVER_H

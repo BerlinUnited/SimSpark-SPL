@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: salt.h,v 1.7 2003/08/31 21:55:53 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: salt.h,v 1.8 2003/11/14 14:05:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,8 +23,8 @@
 /* this file combines all includes files of the salt library in
  *  one file
  */
-#ifndef SALT_H__
-#define SALT_H__
+#ifndef SALT_SALT_H
+#define SALT_SALT_H
 
 #include "fileclasses.h"
 #include "matrix.h"
@@ -62,4 +63,4 @@
  *   agents in 3D environments.
  */
 
-#endif //SALT_H__
+#endif //SALT_SALT_H

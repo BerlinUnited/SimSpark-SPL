@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: indexbuffer.h,v 1.3 2003/09/09 16:04:20 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: indexbuffer.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,9 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
-#ifndef INDEXBUFFER_H__
-#define INDEXBUFFER_H__
+#ifndef OXYGEN_INDEXBUFFER_H
+#define OXYGEN_INDEXBUFFER_H
 
 namespace oxygen
 {
@@ -31,40 +31,43 @@ namespace oxygen
 class IndexBuffer
 {
 public:
-        IndexBuffer() : mMaxIndex(0), mNumIndex(0), mIndex(0)   {}
-        virtual ~IndexBuffer();
+    IndexBuffer() : mMaxIndex(0), mNumIndex(0), mIndex(0)   {}
+    virtual ~IndexBuffer();
 
-        /** caches indices in indexbuffer */
-        void    Cache(unsigned int numIndex, unsigned int *index);
+    /** caches indices in indexbuffer */
+    void    Cache(unsigned int numIndex, unsigned int *index);
 
-        /** appends a single index */
-        void    Cache(unsigned int newIndex);
+    /** appends a single index */
+    void    Cache(unsigned int newIndex);
 
-        /** empties the index buffer */
-        void    Flush()                         {       mNumIndex = 0;  }
+    /** empties the index buffer */
+    void    Flush()
+    {       mNumIndex = 0;  }
 
-        /** returns the number of cached indeces */
-        int GetNumIndex() const                 {       return mNumIndex;       }
+    /** returns the number of cached indeces */
+    int GetNumIndex() const
+    {       return mNumIndex;       }
 
-        /** returns a cached index */
-        unsigned int* GetIndex() const  {       return mIndex;          }
+    /** returns a cached index */
+    unsigned int* GetIndex() const
+    {       return mIndex;          }
 
 protected:
 
-        /** ensures that the index buffer can hold the additional (!) number
-            of elements (creates new storage on demand, copys old data)
-        */
-        void    EnsureFit(unsigned int count);
+    /** ensures that the index buffer can hold the additional (!) number
+        of elements (creates new storage on demand, copys old data)
+    */
+    void    EnsureFit(unsigned int count);
 
-        /** Maximum number of indices we can cache with the allocated memory */
-        unsigned int    mMaxIndex;
+    /** Maximum number of indices we can cache with the allocated memory */
+    unsigned int    mMaxIndex;
 
-        /** Number of indices currently cached */
-        unsigned int    mNumIndex;
+    /** Number of indices currently cached */
+    unsigned int    mNumIndex;
 
-        /** Pointer to the memory, where we cache the indices */
-        unsigned int    *mIndex;
+    /** Pointer to the memory, where we cache the indices */
+    unsigned int    *mIndex;
 };
 
 }
-#endif //INDEXBUFFER_H__
+#endif //OXYGEN_INDEXBUFFER_H

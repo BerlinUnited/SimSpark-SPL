@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.h,v 1.2 2003/08/31 21:53:45 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: ccylindercollider.h,v 1.3 2003/11/14 14:05:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,8 +18,6 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   CCylinderCollider
 */
 #ifndef OXYGEN_CCYLINDERCOLLIDER_H
 #define OXYGEN_CCYLINDERCOLLIDER_H
@@ -35,22 +34,22 @@ namespace oxygen
  */
 class CCylinderCollider : public Collider
 {
-        //
-        // Functions
-        //
+    //
+    // Functions
+    //
 public:
-        CCylinderCollider();
+    CCylinderCollider();
 
-        /* Sets the parameters of the capped cylinder. The cylinder's length,
-           not counting the caps, is given by length. The cylinder is aligned
-           along the geom's local Z axis. The radius of the caps, and of the
-           cylinder itself, is given by radius.
-         */
-        void SetParams(float radius, float length);
+    /* Sets the parameters of the capped cylinder. The cylinder's length,
+       not counting the caps, is given by length. The cylinder is aligned
+       along the geom's local Z axis. The radius of the caps, and of the
+       cylinder itself, is given by radius.
+    */
+    void SetParams(float radius, float length);
 
 protected:
-        /** constructs a default capped cylinder with an radius of 1 and a length of 1 */
-        virtual bool ConstructInternal();
+    /** constructs a default capped cylinder with an radius of 1 and a length of 1 */
+    virtual bool ConstructInternal();
 };
 
 DECLARE_CLASS(CCylinderCollider);
@@ -58,4 +57,3 @@ DECLARE_CLASS(CCylinderCollider);
 } //namespace oxygen
 
 #endif //OXYGEN_CCYLINDERCOLLIDER_H
-

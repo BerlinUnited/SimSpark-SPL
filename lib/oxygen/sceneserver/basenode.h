@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: basenode.h,v 1.4 2003/09/09 16:04:20 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: basenode.h,v 1.5 2003/11/14 14:05:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,94 +51,94 @@ class Scene;
 
 class BaseNode : public zeitgeist::Node
 {
-        //
-        // Functions
-        //
+    //
+    // Functions
+    //
 public:
-        BaseNode();
-        ~BaseNode();
+    BaseNode();
+    ~BaseNode();
 
-        // transformation related
+    // transformation related
 
-        /** return the local transform of this node (default: returns
-         * identity) */
-        virtual const salt::Matrix&     GetLocalTransform()     const;
+    /** return the local transform of this node (default: returns
+     * identity) */
+    virtual const salt::Matrix&     GetLocalTransform()     const;
 
-        /** returns the world transform of this node (default: returns parents
-         * world transform) */
-        virtual const salt::Matrix&     GetWorldTransform()     const;
+    /** returns the world transform of this node (default: returns parents
+     * world transform) */
+    virtual const salt::Matrix&     GetWorldTransform()     const;
 
-        /** sets the local transform of this node (default: ignored) */
-        virtual void SetLocalTransform(const salt::Matrix &transform);
+    /** sets the local transform of this node (default: ignored) */
+    virtual void SetLocalTransform(const salt::Matrix &transform);
 
-        /** sets the world transform of this node (default: ignored) */
-        virtual void SetWorldTransform(const salt::Matrix &transform);
+    /** sets the world transform of this node (default: ignored) */
+    virtual void SetWorldTransform(const salt::Matrix &transform);
 
-        // bounding box related
+    // bounding box related
 
-        /** computes the local bounding box of the node */
-        virtual void    ComputeBoundingBox();
+    /** computes the local bounding box of the node */
+    virtual void    ComputeBoundingBox();
 
-        /** returns the world bounding box of this node */
-        const salt::AABB3&      GetWorldBoundingBox() const
-            {       return mWorldBoundingBox;               }
+    /** returns the world bounding box of this node */
+    const salt::AABB3&      GetWorldBoundingBox() const
+    {       return mWorldBoundingBox;               }
 
-        // scene graph update passes
+    // scene graph update passes
 
-        /** updates internal state before physics calculation */
-        void PrePhysicsUpdate(float deltaTime);
+    /** updates internal state before physics calculation */
+    void PrePhysicsUpdate(float deltaTime);
 
-        /** updates internal state after physics calculation */
-        void PostPhysicsUpdate();
+    /** updates internal state after physics calculation */
+    void PostPhysicsUpdate();
 
-        /** update hierarchical date (position, bounding volumes, etc..) */
-        void UpdateHierarchy();
+    /** update hierarchical date (position, bounding volumes, etc..) */
+    void UpdateHierarchy();
 
-        // scene graph rendering
-        void Render();
+    // scene graph rendering
+    void Render();
 
-        void RenderAmbient();
+    void RenderAmbient();
 
-        /** moves up the hierarchy, until it finds a scene */
-        boost::shared_ptr<Scene>        GetScene();
+    /** moves up the hierarchy, until it finds a scene */
+    boost::shared_ptr<Scene>        GetScene();
 
-        /** enables debug mode controls */
-        void EnableDebugMode();
+    /** enables debug mode controls */
+    void EnableDebugMode();
 
-        /** disabled debug mode controls */
-        void DisableDebugMode();
+    /** disabled debug mode controls */
+    void DisableDebugMode();
 
-        /** renders the node */
-        virtual void RenderInternal();
+    /** renders the node */
+    virtual void RenderInternal();
 
-        /** renders node */
-        virtual void RenderAmbientInternal();
+    /** renders node */
+    virtual void RenderAmbientInternal();
 
 private:
-        /** updates internal state before physics calculation */
-        virtual void PrePhysicsUpdateInternal(float deltaTime);
+    /** updates internal state before physics calculation */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
-        /** updates internal state after physics calculation */
-        virtual void PostPhysicsUpdateInternal();
+    /** updates internal state after physics calculation */
+    virtual void PostPhysicsUpdateInternal();
 
-        /** updates hierarchical date (position, bounding volumes, etc..) */
-        virtual void UpdateHierarchyInternal();
+    /** updates hierarchical date (position, bounding volumes, etc..) */
+    virtual void UpdateHierarchyInternal();
 
-        //
-        // Members
-        //
+    //
+    // Members
+    //
 protected:
-        /** the identity matrix */
-        static salt::Matrix             mIdentityMatrix;
+    /** the identity matrix */
+    static salt::Matrix             mIdentityMatrix;
 
-        /** debug mode (for additional visualization) */
-        bool                                    mDebugMode;
+    /** debug mode (for additional visualization) */
+    bool                                    mDebugMode;
 
-        /** local bounding box */
-        salt::AABB3                             mLocalBoundingBox;
+    /** local bounding box */
+    salt::AABB3                             mLocalBoundingBox;
 
-        /** world bounding box */
-        salt::AABB3                             mWorldBoundingBox;
+    /** world bounding box */
+    salt::AABB3                             mWorldBoundingBox;
 };
 
 DECLARE_CLASS(BaseNode);

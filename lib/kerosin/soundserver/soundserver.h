@@ -1,7 +1,28 @@
-#ifndef SOUNDSERVER_H__
-#define SOUNDSERVER_H__
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-/*      $Id: soundserver.h,v 1.4 2003/08/28 20:00:37 rollmark Exp $
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: soundserver.h,v 1.5 2003/11/14 14:05:52 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+#ifndef KEROSIN_SOUNDSERVER_H
+#define KEROSIN_SOUNDSERVER_H
+
+/*      $Id: soundserver.h,v 1.5 2003/11/14 14:05:52 fruit Exp $
 
         SoundServer
 
@@ -44,67 +65,67 @@ class SystemWindow;
 
 class SoundServer : public zeitgeist::Leaf
 {
-        //
-        // Types
-        //
+    //
+    // Types
+    //
 public:
-        // sound quality levels
-        enum ESoundQuality
-        {
-                SOUNDQUALITY_BEST               = 48000,                // above CD quality             (slowest)
-                SOUNDQUALITY_GOOD               = 44100,                // CD quality
-                SOUNDQUALITY_AVERAGE    = 22000,                // radio quality
-                SOUNDQUALITY_BAD                = 11000,                // bad quality
-                SOUNDQUALITY_VERYBAD    =  8000                 // very bad quality             (fastest)
-        };
+    // sound quality levels
+    enum ESoundQuality
+    {
+        SOUNDQUALITY_BEST               = 48000,                // above CD quality             (slowest)
+        SOUNDQUALITY_GOOD               = 44100,                // CD quality
+        SOUNDQUALITY_AVERAGE    = 22000,                // radio quality
+        SOUNDQUALITY_BAD                = 11000,                // bad quality
+        SOUNDQUALITY_VERYBAD    =  8000                 // very bad quality             (fastest)
+    };
 private:
 #ifdef HAVE_HASH_MAP
-        typedef std::hash_map<std::string, boost::shared_ptr<SoundObject> >     TSoundHashMap;
+    typedef std::hash_map<std::string, boost::shared_ptr<SoundObject> >     TSoundHashMap;
 #else
-        typedef std::map<std::string, boost::shared_ptr<SoundObject> >  TSoundHashMap;
+    typedef std::map<std::string, boost::shared_ptr<SoundObject> >  TSoundHashMap;
 #endif
 
-        //
-        // Methods
-        //
+    //
+    // Methods
+    //
 public:
-        SoundServer();
-        virtual ~SoundServer();
+    SoundServer();
+    virtual ~SoundServer();
 
-        bool                            Init(const std::string &sndSysName);
+    bool                            Init(const std::string &sndSysName);
 
-        float                           GetCPU();
+    float                           GetCPU();
 
-        boost::shared_ptr<SoundEffect>  LoadEffect(const char *inName);
-        boost::shared_ptr<SoundStream>  LoadStream(const char *inName);
-        boost::shared_ptr<SoundModule>  LoadModule(const char *inName);
+    boost::shared_ptr<SoundEffect>  LoadEffect(const char *inName);
+    boost::shared_ptr<SoundStream>  LoadStream(const char *inName);
+    boost::shared_ptr<SoundModule>  LoadModule(const char *inName);
 
-        //
-        // Members
-        //
+    //
+    // Members
+    //
 private:
-        //! this function resets the cached sounds in the hashmaps
-        void    Reset();
+    //! this function resets the cached sounds in the hashmaps
+    void    Reset();
 
-        //! a helper function which wraps some common loading code (trivial rejects, etc..)
-        bool    LoadSoundObject(const char *inName, const TSoundHashMap& map, boost::shared_ptr<SoundObject> &soundObject) const;
+    //! a helper function which wraps some common loading code (trivial rejects, etc..)
+    bool    LoadSoundObject(const char *inName, const TSoundHashMap& map, boost::shared_ptr<SoundObject> &soundObject) const;
 
-        boost::shared_ptr<SoundSystem>  mSoundSystem;
+    boost::shared_ptr<SoundSystem>  mSoundSystem;
 
-        TSoundHashMap   mEffects;
-        TSoundHashMap   mModules;
-        TSoundHashMap   mStreams;
+    TSoundHashMap   mEffects;
+    TSoundHashMap   mModules;
+    TSoundHashMap   mStreams;
 
 
-        ESoundQuality   mQuality;       // the frequency which will be used     [default=SOUNDQUALITY_BEST]
+    ESoundQuality   mQuality;       // the frequency which will be used     [default=SOUNDQUALITY_BEST]
 
-        // make singleton functionality more secure
-        SoundServer(const SoundServer&);
-        SoundServer& operator=(const SoundServer&);
+    // make singleton functionality more secure
+    SoundServer(const SoundServer&);
+    SoundServer& operator=(const SoundServer&);
 };
 
 DECLARE_CLASS(SoundServer);
 
 } //namespace kerosin
 
-#endif //SOUNDSERVER_H__
+#endif //KEROSIN_SOUNDSERVER_H

@@ -1,33 +1,32 @@
-/* -*- mode: c++ -*-
-   
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: object.h,v 1.3 2003/08/21 12:53:30 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: object.h,v 1.4 2003/11/14 14:05:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-	
+
    Object
-	
-	HISTORY:
-		31.08.2002 MK
-			- initial version
+
+        HISTORY:
+                31.08.2002 MK
+                        - initial version
 */
-
-#ifndef OBJECT_H__
-#define OBJECT_H__
-
+#ifndef ZEITGEIST_OBJECT_H
+#define ZEITGEIST_OBJECT_H
 
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -49,65 +48,65 @@ class ScriptServer;
 
 class Object
 {
-	//
-	// functions
-	//
+    //
+    // functions
+    //
 public:
-  /** constructs an object */
-	Object();
-	virtual ~Object();
+    /** constructs an object */
+    Object();
+    virtual ~Object();
 
-	/** sets up the internal state of the object, used by Class::Create().
-	 * \param self is a pointer to the instance of the object, i.e. a smart this pointer
-	 * \param creator is a pointer to the class object that created this object
-	 */
-	bool Construct(const boost::shared_ptr<Object>& self, const boost::shared_ptr<Class>& creator);
+    /** sets up the internal state of the object, used by Class::Create().
+     * \param self is a pointer to the instance of the object, i.e. a smart this pointer
+     * \param creator is a pointer to the class object that created this object
+     */
+    bool Construct(const boost::shared_ptr<Object>& self, const boost::shared_ptr<Class>& creator);
 
-	// class object
-	/** returns the corresponding class object */
-	boost::shared_ptr<Class>	GetClass() const;
-	
-	/** returns a pointer to the object */
-	boost::weak_ptr<Object>&		GetSelf();
+    // class object
+    /** returns the corresponding class object */
+    boost::shared_ptr<Class>        GetClass() const;
 
-	/** returns a constant pointer to the object */
-	const boost::weak_ptr<Object>&	GetSelf() const;
+    /** returns a pointer to the object */
+    boost::weak_ptr<Object>&                GetSelf();
 
-	/** return a pointer to the core, this object belongs to */
-	boost::shared_ptr<Core>		GetCore() const;
+    /** returns a constant pointer to the object */
+    const boost::weak_ptr<Object>&  GetSelf() const;
 
-	/** helper function to get a reference to the FileServer */
-	const boost::shared_ptr<FileServer>&	GetFile() const;
+    /** return a pointer to the core, this object belongs to */
+    boost::shared_ptr<Core>         GetCore() const;
 
-	/** helper function to get a reference to the LogServer */
-	const boost::shared_ptr<LogServer>&		GetLog() const;
-	
-	/** helper function to get a reference to the ScriptServer */
-	const boost::shared_ptr<ScriptServer>&	GetScript() const;
+    /** helper function to get a reference to the FileServer */
+    const boost::shared_ptr<FileServer>&    GetFile() const;
 
-	/** prints debug output to stdout */
-	virtual void				Dump() const;
+    /** helper function to get a reference to the LogServer */
+    const boost::shared_ptr<LogServer>&             GetLog() const;
 
-	/** function invocation used for scripting */
-	void	Invoke(const std::string &functionName);
-	
+    /** helper function to get a reference to the ScriptServer */
+    const boost::shared_ptr<ScriptServer>&  GetScript() const;
+
+    /** prints debug output to stdout */
+    virtual void                            Dump() const;
+
+    /** function invocation used for scripting */
+    void    Invoke(const std::string &functionName);
+
 protected:
-	/** called after the object has been created and attached to a
-	    core to allow for object dependent internal
-	    construction */
-	virtual bool ConstructInternal();
+    /** called after the object has been created and attached to a
+        core to allow for object dependent internal
+        construction */
+    virtual bool ConstructInternal();
 
-	//
-	// members
-	//
+    //
+    // members
+    //
 private:
-	/** pointer to the class object which created this instance */
-	boost::shared_ptr<Class>		mClass;
+    /** pointer to the class object which created this instance */
+    boost::shared_ptr<Class>                mClass;
 
-	/** pointer to the instance of the object */
-	boost::weak_ptr<Object>			mSelf;
+    /** pointer to the instance of the object */
+    boost::weak_ptr<Object>                 mSelf;
 };
 
 } //namespace zeitgeist;
 
-#endif //OBJECT_H__
+#endif //ZEITGEIST_OBJECT_H

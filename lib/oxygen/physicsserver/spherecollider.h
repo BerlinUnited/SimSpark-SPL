@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: spherecollider.h,v 1.4 2003/08/31 21:53:45 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: spherecollider.h,v 1.5 2003/11/14 14:05:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,10 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   SphereCollider
 */
-
 #ifndef OXYGEN_SPHERECOLLIDER_H
 #define OXYGEN_SPHERECOLLIDER_H
 
@@ -33,11 +31,11 @@ namespace oxygen
  */
 class SphereCollider : public Collider
 {
-        //
-        // Functions
-        //
+    //
+    // Functions
+    //
 public:
-        SphereCollider();
+    SphereCollider();
 
     /** sets the radius of the managed ODE sphere geom */
     void SetRadius(float r);

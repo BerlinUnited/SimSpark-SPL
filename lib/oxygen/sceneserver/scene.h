@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: scene.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: scene.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,11 +46,11 @@ namespace oxygen
 class Scene : public BaseNode
 {
 public:
-        Scene();
-        ~Scene();
+    Scene();
+    ~Scene();
 
-        /** returns the world transform of this node (always identity, terminates upward recursion) */
-        virtual const salt::Matrix&     GetWorldTransform()     const;
+    /** returns the world transform of this node (always identity, terminates upward recursion) */
+    virtual const salt::Matrix&     GetWorldTransform()     const;
 };
 
 DECLARE_CLASS(Scene);

@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.5 2003/09/09 15:33:28 rollmark Exp $
+   $Id: renderserver.h,v 1.6 2003/11/14 14:05:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -14,6 +14,10 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
@@ -59,10 +63,10 @@ public:
     //! display the current active scene
     void Render();
 
-    //! render the scene with fancy lighting 
-    void RenderFancyLighting(const salt::Frustum& frustum, 
+    //! render the scene with fancy lighting
+    void RenderFancyLighting(const salt::Frustum& frustum,
                              boost::shared_ptr<oxygen::Camera>& camera,
-                             TLeafList& myLights, TLeafList& allMeshes, 
+                             TLeafList& myLights, TLeafList& allMeshes,
                              TLeafList& visibleMeshes);
 
 protected:

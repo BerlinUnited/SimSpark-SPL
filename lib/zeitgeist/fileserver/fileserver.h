@@ -1,56 +1,56 @@
-/* -*- mode: c++ -*-
-   
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: fileserver.h,v 1.4 2003/08/21 12:53:30 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: fileserver.h,v 1.5 2003/11/14 14:05:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    FileServer - global interface for file system access
-	
-	HISTORY:
-		12.07.01 - MK
-			- Initial version
-		14.07.01 - MK
-			- ClassServer was added, so the FileServer doesn't manage the
-			  file system factories anymore (only concrete file system instances)
-		11.10.01 - MK
-			- Made singleton functionality more secure
-		20.11.01 - AF
-			- added the priority of the file systems : LIFO
-			- added the information of the file system id and its path to every mounted file system
-			- prevented the odditity to mount a file system more than once
-			- added GetFirstFileSystem and
-			GetNextFileSystem to iterate through the
-			mounted file systems
-		26.01.02 - MR
-			- added ForEachFile
-		27.06.02 - MK
-			- converted this to the Zeitgeist framework
-		09.07.02 - MK
-			- converted this to the Kerosin framework
-		10.10.02 - MK
-			- back to Zeitgeist framework
 
-	TODO:
+        HISTORY:
+                12.07.01 - MK
+                        - Initial version
+                14.07.01 - MK
+                        - ClassServer was added, so the FileServer doesn't manage the
+                          file system factories anymore (only concrete file system instances)
+                11.10.01 - MK
+                        - Made singleton functionality more secure
+                20.11.01 - AF
+                        - added the priority of the file systems : LIFO
+                        - added the information of the file system id and its path to every mounted file system
+                        - prevented the odditity to mount a file system more than once
+                        - added GetFirstFileSystem and
+                        GetNextFileSystem to iterate through the
+                        mounted file systems
+                26.01.02 - MR
+                        - added ForEachFile
+                27.06.02 - MK
+                        - converted this to the Zeitgeist framework
+                09.07.02 - MK
+                        - converted this to the Kerosin framework
+                10.10.02 - MK
+                        - back to Zeitgeist framework
 
-	TOFIX:
+        TODO:
+
+        TOFIX:
 */
-
-#ifndef FILESERVER_H__
-#define FILESERVER_H__
+#ifndef ZEITGEIST_FILESERVER_H
+#define ZEITGEIST_FILESERVER_H
 
 #include <list>
 #include <zeitgeist/node.h>
@@ -80,64 +80,64 @@ namespace zeitgeist
   */
 class FileServer : public Node
 {
-	//
-	// functions
-	//
+    //
+    // functions
+    //
 public:
-  /** constructs the fileserver */
-	FileServer();
-	~FileServer();
+    /** constructs the fileserver */
+    FileServer();
+    ~FileServer();
 
-	/** searchs each registered file system for a file with this
-	    name. Filesystems are searched in the inverse order in
-	    which they are registered to the fileserve, i.e. a
-	    filesystem stack. The first succesful opened file is
-	    returned.
-	*/
-	salt::RFile*	Open(const char *inName);
+    /** searchs each registered file system for a file with this
+        name. Filesystems are searched in the inverse order in
+        which they are registered to the fileserve, i.e. a
+        filesystem stack. The first succesful opened file is
+        returned.
+    */
+    salt::RFile*    Open(const char *inName);
 
-	/** returns true if the file 'inName' exists. */
-	bool	Exist(const char *inName);
+    /** returns true if the file 'inName' exists. */
+    bool Exist(const char *inName);
 
-	/** registers a filesystem to the fileserver. A file system
-	    may be registered only once, on each further try nothing
-	    is done and false returned
+    /** registers a filesystem to the fileserver. A file system
+        may be registered only once, on each further try nothing
+        is done and false returned
 
-	    \param inFileSysName is the class name of the File system
-	    \param inPath is the mount point in the virtual file
-	    system provided by the fileserver
-	 */
-	bool	Mount(const char *inFileSysName, const char* inPath);
+        \param inFileSysName is the class name of the File system
+        \param inPath is the mount point in the virtual file
+        system provided by the fileserver
+    */
+    bool Mount(const char *inFileSysName, const char* inPath);
 
-	/** unmounts a file system at the mount point inPath. if no
-	    file system id is given, for a first try FileSystemSTD is
-	    assumed, then the type is ignored. Returns true on success.
-	 */
-	bool	Unmount(const char* inPath);
+    /** unmounts a file system at the mount point inPath. if no
+        file system id is given, for a first try FileSystemSTD is
+        assumed, then the type is ignored. Returns true on success.
+    */
+    bool Unmount(const char* inPath);
 
-	/** unmounts a file system at the mount point inPath. Returns
-	    true on success.
-	 */
-	bool	Unmount(const char* inClass, const char* inPath);
-	
-	/** iterates through files. 'directory', 'name' and
-	  * 'extension' give directory, name and extension a file must
-	  * match.  directory,name and extension may be NULL, in wich
-	  * case every directory,extension and/or name matches. For
-	  * each match the function callback is called with the name
-	  * of the matched file and the additional user parameter
-	  * 'param'. param is just passed through to the callback and
-	  * has no meaning to the filesystem.
-	  */
-	int ForEachFile(const char* directory, const char* name, const char* extension, FileSystem::TCallback callback, void* param);
+    /** unmounts a file system at the mount point inPath. Returns
+        true on success.
+    */
+    bool Unmount(const char* inClass, const char* inPath);
+
+    /** iterates through files. 'directory', 'name' and
+     * 'extension' give directory, name and extension a file must
+     * match.  directory,name and extension may be NULL, in wich
+     * case every directory,extension and/or name matches. For
+     * each match the function callback is called with the name
+     * of the matched file and the additional user parameter
+     * 'param'. param is just passed through to the callback and
+     * has no meaning to the filesystem.
+     */
+    int ForEachFile(const char* directory, const char* name, const char* extension, FileSystem::TCallback callback, void* param);
 
 private:
-	FileServer(const FileServer&);
-	FileServer& operator=(const FileServer&);
+    FileServer(const FileServer&);
+    FileServer& operator=(const FileServer&);
 };
 
 DECLARE_CLASS(FileServer)
 
 } //namespace zeitgeist
 
-#endif //FILESERVER_H__
+#endif //ZEITGEIST_FILESERVER_H

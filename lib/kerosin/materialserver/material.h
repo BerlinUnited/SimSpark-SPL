@@ -1,5 +1,26 @@
-#ifndef MATERIAL_H__
-#define MATERIAL_H__
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: material.h,v 1.2 2003/11/14 14:05:51 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+#ifndef KEROSIN_MATERIAL_H
+#define KEROSIN_MATERIAL_H
 
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -13,30 +34,31 @@ class MaterialServer;
 
 class Material
 {
-	//
-	// Functions
-	//
+    //
+    // Functions
+    //
 public:
-	Material(const boost::shared_ptr<MaterialServer> &materialServer);
-	virtual ~Material();
+    Material(const boost::shared_ptr<MaterialServer> &materialServer);
+    virtual ~Material();
 
 
-	bool Load(const std::string& matName);
+    bool Load(const std::string& matName);
 
-	void Bind();
+    void Bind();
 
-	void BindAmbient();
+    void BindAmbient();
 
-	//
-	// Members
-	//
+    //
+    // Members
+    //
 private:
-	boost::weak_ptr<MaterialServer>	mMaterialServer;		// material server, which created this object
-	boost::shared_ptr<Texture> mTexDiffuse;
-	boost::shared_ptr<Texture> mTexNormal;
-	boost::shared_ptr<Texture> mTexSpecular;
+    // material server, which created this object
+    boost::weak_ptr<MaterialServer> mMaterialServer;
+    boost::shared_ptr<Texture> mTexDiffuse;
+    boost::shared_ptr<Texture> mTexNormal;
+    boost::shared_ptr<Texture> mTexSpecular;
 };
 
 } //namespace kerosin
 
-#endif //MATERIAL_H__
+#endif //KEROSIN_MATERIAL_H

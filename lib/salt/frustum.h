@@ -1,25 +1,24 @@
-/* -*- mode: c++ -*-
-   
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: frustum.h,v 1.4 2003/09/11 02:31:39 tomhoward Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: frustum.h,v 1.5 2003/11/14 14:05:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Frustum
-  
    NOTE:
 
    HISTORY:
@@ -34,9 +33,8 @@
 
    TOFIX:
 */
-
-#ifndef FRUSTUM_H__
-#define FRUSTUM_H__
+#ifndef SALT_FRUSTUM_H
+#define SALT_FRUSTUM_H
 
 #include "defines.h"
 #include "plane.h"
@@ -54,51 +52,51 @@ class Frustum
 // Members
 public:
     /** plane ids used as an index into mPlanes */
-	enum ePlaneID
-	{
-		PI_NEAR		= 0,
-		PI_LEFT		= 1,
-		PI_RIGHT	= 2,
-		PI_FAR		= 3,
-		PI_BOTTOM	= 4,
-		PI_TOP		= 5
-	};
+    enum ePlaneID
+    {
+        PI_NEAR         = 0,
+        PI_LEFT         = 1,
+        PI_RIGHT        = 2,
+        PI_FAR          = 3,
+        PI_BOTTOM       = 4,
+        PI_TOP          = 5
+    };
 
     /** constants describing the result of an intersection test */
-	enum eFrustumSide
-	{
-		FS_INSIDE  = 0,
-		FS_OUTSIDE = 1,
-		FS_SPLIT   = 2
-	};
+    enum eFrustumSide
+    {
+        FS_INSIDE  = 0,
+        FS_OUTSIDE = 1,
+        FS_SPLIT   = 2
+    };
 
     /** the position from where the frustum is cast */
-	Vector3f	mBasePos; 
-  
+    Vector3f    mBasePos;
+
     /** the 6 plane equations */
-	Plane		mPlanes[6];
+    Plane               mPlanes[6];
 
 // Methods
 public:
     /** a debug helper method, printing the plane normals */
-	void Dump() const;
-  
-    /** constructs a frustum 
-	  * \param worldTransform is the world transform matrix 
-	  * \param fov is the field of view, the angle between the casted planes 
-	  * \param zNear is the distance to the near plane
-	  * \param zFar is the distance to the far plane
-	  * \param aspect is the aspect ratio
-	  */
-	void Set(const Matrix& worldTransform, float fov=60.0f, float zNear=0.1f, float zFar=2000.0f, float aspect=0.75f);
+    void Dump() const;
+
+    /** constructs a frustum
+     * \param worldTransform is the world transform matrix
+     * \param fov is the field of view, the angle between the casted planes
+     * \param zNear is the distance to the near plane
+     * \param zFar is the distance to the far plane
+     * \param aspect is the aspect ratio
+     */
+    void Set(const Matrix& worldTransform, float fov=60.0f, float zNear=0.1f, float zFar=2000.0f, float aspect=0.75f);
 
     /** returns the relation that hold between between the axis
-      * aligned bounding boxx bb and this frustum as an eFrustumSide
-      * value
-	  */
-	eFrustumSide Intersects(const AABB3& bb) const;
+     * aligned bounding boxx bb and this frustum as an eFrustumSide
+     * value
+     */
+    eFrustumSide Intersects(const AABB3& bb) const;
 };
 
 } // namespace salt
 
-#endif //FRUSTUM_H__
+#endif //SALT_FRUSTUM_H

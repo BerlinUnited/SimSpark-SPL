@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: kerosin.h,v 1.6 2003/11/10 21:41:05 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: kerosin.h,v 1.7 2003/11/14 14:05:51 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,9 +26,8 @@
                         - initial version
 
 */
-
-#ifndef KEROSIN_H__
-#define KEROSIN_H__
+#ifndef KEROSIN_KEROSIN_H
+#define KEROSIN_KEROSIN_H
 
 #include "soundserver/soundserver.h"
 #include "inputserver/inputserver.h"
@@ -60,31 +60,31 @@ namespace kerosin
 */
 class Kerosin
 {
-        //
-        // types
-        //
+    //
+    // types
+    //
 public:
 protected:
 private:
 
-        //
-        // functions
-        //
+    //
+    // functions
+    //
 public:
     /** initializes the kerosin framework
         \param zg is a reference to an already initialized zeitgeist framwork
         in which the internal kerosin libraries get installed
     */
-        Kerosin(zeitgeist::Zeitgeist &zg);
-        virtual ~Kerosin() {};
+    Kerosin(zeitgeist::Zeitgeist &zg);
+    virtual ~Kerosin() {};
 protected:
 private:
-        Kerosin(const Kerosin& obj);
-        Kerosin& operator=(const Kerosin& obj);
+    Kerosin(const Kerosin& obj);
+    Kerosin& operator=(const Kerosin& obj);
 
-        //
-        // members
-        //
+    //
+    // members
+    //
 public:
 protected:
 private:
@@ -92,4 +92,4 @@ private:
 
 } //namespace kerosin
 
-#endif //KEROSIN_H__
+#endif //KEROSIN_KEROSIN_H

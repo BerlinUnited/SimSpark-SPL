@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: camera.h,v 1.4 2003/09/09 16:04:20 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: camera.h,v 1.5 2003/11/14 14:05:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,9 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
-#ifndef CAMERA_H__
-#define CAMERA_H__
+#ifndef KEROSIN_CAMERA_H
+#define KEROSIN_CAMERA_H
 
 #include "basenode.h"
 #include <salt/frustum.h>
@@ -34,116 +34,116 @@ namespace oxygen
  */
 class Camera : public BaseNode
 {
-        //
-        // Functions
-        //
+    //
+    // Functions
+    //
 public:
-        Camera();
-        virtual ~Camera();
+    Camera();
+    virtual ~Camera();
 
-        // set properties
+    // set properties
 
-        /** sets viewpoint properties */
-        f_inline void   SetViewport(int x, int y, int width, int height)        
-   	    {       mX = x; mY = y; mWidth = width; mHeight = height;       }
+    /** sets viewpoint properties */
+    f_inline void   SetViewport(int x, int y, int width, int height)
+    {       mX = x; mY = y; mWidth = width; mHeight = height;       }
 
-	f_inline int GetViewportX() { return mX; }
-	f_inline int GetViewportY() { return mY; }
-	f_inline int GetViewportWidth() { return mWidth; }
-	f_inline int GetViewportHeight() { return mHeight; }
+    f_inline int GetViewportX() { return mX; }
+    f_inline int GetViewportY() { return mY; }
+    f_inline int GetViewportWidth() { return mWidth; }
+    f_inline int GetViewportHeight() { return mHeight; }
 
 
-        /** sets the field of view (FOV) */
-        f_inline void   SetFOV(const float fov)         {       mFOV = fov;             }
+    /** sets the field of view (FOV) */
+    f_inline void   SetFOV(const float fov)         {       mFOV = fov;             }
 
-        /** sets the distance of the Z near plane */
-        f_inline void   SetZNear(const float zNear)     {       mZNear = zNear; }
+    /** sets the distance of the Z near plane */
+    f_inline void   SetZNear(const float zNear)     {       mZNear = zNear; }
 
-        /** sets the distance of the Z far plane */
-        f_inline void   SetZFar(const float zFar)       {       mZFar = zFar;   }
+    /** sets the distance of the Z far plane */
+    f_inline void   SetZFar(const float zFar)       {       mZFar = zFar;   }
 
-        /** adjusts the current FOV, i.e. adds a delta increment */
-        f_inline void   AdjustFOV(const float fov)              {       mFOV+=fov;              }
+    /** adjusts the current FOV, i.e. adds a delta increment */
+    f_inline void   AdjustFOV(const float fov)              {       mFOV+=fov;              }
 
-        /** adjusts the distance of the Z near plane, i.e adds a delta increment */
-        f_inline void   AdjustZNear(const float zNear)  {       mZNear+=zNear;  }
+    /** adjusts the distance of the Z near plane, i.e adds a delta increment */
+    f_inline void   AdjustZNear(const float zNear)  {       mZNear+=zNear;  }
 
-        /** adjusts the distance of the Z far plane, i.e adds a delta increment */
-        f_inline void   AdjustZFar(const float zFar)    {       mZFar+=zFar;    }
+    /** adjusts the distance of the Z far plane, i.e adds a delta increment */
+    f_inline void   AdjustZFar(const float zFar)    {       mZFar+=zFar;    }
 
-        /** returns the field of View */
-        f_inline float                                  GetFOV()const                           {       return mFOV;    }
+    /** returns the field of View */
+    f_inline float                                  GetFOV()const                           {       return mFOV;    }
 
-        /** returns the distance of the Z near plane */
-        f_inline float                                  GetZNear()const                         {       return mZNear;  }
+    /** returns the distance of the Z near plane */
+    f_inline float                                  GetZNear()const                         {       return mZNear;  }
 
-        /** returns the distance of the Z far plane */
-        f_inline float                                  GetZFar()const                          {       return mZFar;   }
+    /** returns the distance of the Z far plane */
+    f_inline float                                  GetZFar()const                          {       return mZFar;   }
 
-        /** returns the view transformation matrix */
-        f_inline const salt::Matrix&    GetViewTransform() const        {       return mViewTransform;  }
+    /** returns the view transformation matrix */
+    f_inline const salt::Matrix&    GetViewTransform() const        {       return mViewTransform;  }
 
-        /** returns the projection matrix */
-	f_inline const salt::Matrix&    GetProjectionTransform() const { return mProjectionTransform; }
+    /** returns the projection matrix */
+    f_inline const salt::Matrix&    GetProjectionTransform() const { return mProjectionTransform; }
 
-        /** fills in a frustum object with the correct parameters for this camera */
-        void DescribeFrustum(salt::Frustum& frustum) const;
+    /** fills in a frustum object with the correct parameters for this camera */
+    void DescribeFrustum(salt::Frustum& frustum) const;
 
-        /** sets the view transform to be the inverted WorldTransform and sets
-	    up the projection transform matrix
-	**/
-        void Bind();
+    /** sets the view transform to be the inverted WorldTransform and sets
+        up the projection transform matrix
+    **/
+    void Bind();
 
 
 protected:
 
-        /** gets the right viewport resolution */
-        virtual void OnLink();
+    /** gets the right viewport resolution */
+    virtual void OnLink();
 private:
 
-        /** calculates the view matrix (world->view space transformation) */
-        virtual void UpdateHierarchyInternal();
+    /** calculates the view matrix (world->view space transformation) */
+    virtual void UpdateHierarchyInternal();
 
 
-        //
-        // Members
-        //
+    //
+    // Members
+    //
 protected:
 
-        /** horizontal field of view, default is 60 degrees */
-        float           mFOV;
+    /** horizontal field of view, default is 60 degrees */
+    float           mFOV;
 
-        /** near clipping plane, default is 1 */
-        float           mZNear;
+    /** near clipping plane, default is 1 */
+    float           mZNear;
 
-        /** far clipping plane, default is 2000 */
-        float           mZFar;
+    /** far clipping plane, default is 2000 */
+    float           mZFar;
 
-        /** x-position of upper left viewport corner, default is 0 */
-        int                     mX;
+    /** x-position of upper left viewport corner, default is 0 */
+    int                     mX;
 
-        /** y-position of upper left viewport corner, default is 0 */
-        int                     mY;
+    /** y-position of upper left viewport corner, default is 0 */
+    int                     mY;
 
-        /** width of viewport, default is the engine window width */
-        int                     mWidth;
+    /** width of viewport, default is the engine window width */
+    int                     mWidth;
 
-        /** height of viewport, default is the egine window height */
-        int                     mHeight;
+    /** height of viewport, default is the egine window height */
+    int                     mHeight;
 
 
-        float           mHalfWorldWidth;
-        float           mHalfWorldHeight;
+    float           mHalfWorldWidth;
+    float           mHalfWorldHeight;
 
-        /** the view transformation matrix */
-        salt::Matrix    mViewTransform;
+    /** the view transformation matrix */
+    salt::Matrix    mViewTransform;
 
-        /** the projection matrix */
-        salt::Matrix    mProjectionTransform;
+    /** the projection matrix */
+    salt::Matrix    mProjectionTransform;
 };
 
 DECLARE_CLASS(Camera);
 
 } //namespace kerosin
 
-#endif //CAMERA_H__
+#endif //KEROSIN_CAMERA_H

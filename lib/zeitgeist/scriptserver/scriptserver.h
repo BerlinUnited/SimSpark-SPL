@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: scriptserver.h,v 1.7 2003/11/13 16:14:28 rollmark Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: scriptserver.h,v 1.8 2003/11/14 14:05:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,9 +27,8 @@
                         - initial version
 
 */
-
-#ifndef SCRIPTSERVER_H__
-#define SCRIPTSERVER_H__
+#ifndef ZEITGEIST_SCRIPTSERVER_H
+#define ZEITGEIST_SCRIPTSERVER_H
 
 // Both <ruby.h> and "config.h" define PACKAGE_ constants.
 // To suppress compiler warnings about redefinitions they
@@ -62,26 +62,26 @@
 namespace zeitgeist
 {
 
-  class CoreContext;
+class CoreContext;
 
-  /** The ScriptServer provides scripting facilities to the zeitgeist
-      framework. Up to now is realized using Ruby, though the
-      ScritpServer could easily be extended to support other script
-      languages.
-  */
-  class ScriptServer : public Leaf
-  {
+/** The ScriptServer provides scripting facilities to the zeitgeist
+    framework. Up to now is realized using Ruby, though the
+    ScritpServer could easily be extended to support other script
+    languages.
+*/
+class ScriptServer : public Leaf
+{
     //
     // types
     //
-  public:
-  protected:
-  private:
+public:
+protected:
+private:
 
     //
     // functions
     //
-  public:
+public:
     /** constructs the ScriptServer */
     ScriptServer();
     virtual ~ScriptServer();
@@ -115,14 +115,14 @@ namespace zeitgeist
     /** returns the context, the ScriptServer operates in */
     boost::shared_ptr<CoreContext> GetContext() const;
 
-  protected:
+protected:
     /** initializes the ScriptServer and runs the default startup
         script 'sys/script/zeitgeist.rb', returning true on
         success.
     */
     virtual bool ConstructInternal();
 
-  private:
+private:
     ScriptServer(const ScriptServer& obj);
     ScriptServer& operator=(const ScriptServer& obj);
 
@@ -131,13 +131,13 @@ namespace zeitgeist
     //
     // members
     //
-  public:
-  protected:
-  private:
-  };
+public:
+protected:
+private:
+};
 
-  DECLARE_CLASS(ScriptServer);
+DECLARE_CLASS(ScriptServer);
 
 } //namespace zeitgeist
 
-#endif //SCRIPTSERVER_H__
+#endif //ZEITGEIST_SCRIPTSERVER_H

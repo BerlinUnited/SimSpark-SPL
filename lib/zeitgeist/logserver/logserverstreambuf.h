@@ -1,8 +1,29 @@
-#ifndef LOGSERVERSTREAMBUF_H__
-#define LOGSERVERSTREAMBUF_H__
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: logserverstreambuf.h,v 1.3 2003/11/14 14:05:55 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+#ifndef ZEITGEIST_LOGSERVERSTREAMBUF_H
+#define ZEITGEIST_LOGSERVERSTREAMBUF_H
 
 /*! \class LogServerStreamBuf
-  $Id: logserverstreambuf.h,v 1.2 2003/04/30 14:21:53 fruit Exp $
+  $Id: logserverstreambuf.h,v 1.3 2003/11/14 14:05:55 fruit Exp $
 
   ForwarderStreamBuf
 
@@ -16,15 +37,14 @@
 
   HISTORY:
   The forwarder subsystem was taken from a student project at the AI
-  Research Group, Koblenz University. Original development by 
-  Marco Koegler <koegler@uni-koblenz.de>, 
+  Research Group, Koblenz University. Original development by
+  Marco Koegler <koegler@uni-koblenz.de>,
   Marcus Rollmann <rollmark@uni-koblenz.de>,
-  Alexander Fuchs <alexf@uni-koblenz.de>, 
+  Alexander Fuchs <alexf@uni-koblenz.de>,
   et.al.
-  It was built into the rcssserver3D, and then converted back into this diploma
-  thesis.
+  It was built into the rcssserver3D, and then converted back into the diploma
+  thesis of Marco Koegler, which was the base for rcssserver3D.
 */
-
 #include <functional>
 #include <vector>
 #include <streambuf>
@@ -37,12 +57,12 @@ class LogServerStreamBuf : public std::streambuf
     // types
     //
 protected:
-    typedef std::char_traits<char>	TTraitsType;
-    typedef traits_type::int_type	TIntType;
+    typedef std::char_traits<char>      TTraitsType;
+    typedef traits_type::int_type       TIntType;
 
 private:
-    typedef std::pair<unsigned int, std::ostream*>	TMaskStream;
-    typedef std::vector<TMaskStream>				TMaskStreams;
+    typedef std::pair<unsigned int, std::ostream*> TMaskStream;
+    typedef std::vector<TMaskStream> TMaskStreams;
 
     // functions
     //
@@ -77,7 +97,7 @@ public:
     */
     unsigned int GetPriorityMask(const std::ostream *stream) const;
 
-    /*! Set the current priority level. 
+    /*! Set the current priority level.
 
         All data which is streamed into the forwarder after this point
         will use the current priority level. Before the priority level
@@ -89,13 +109,13 @@ public:
 
 protected:
     // these functions implement the streambuf interface ... handle with care
-    TIntType	overflow(TIntType c);
-    int			sync();
+    TIntType    overflow(TIntType c);
+    int                 sync();
 
 private:
     LogServerStreamBuf(const LogServerStreamBuf &obj);
     LogServerStreamBuf& operator=(const LogServerStreamBuf &obj);
-    
+
     //! multiplex to all registered streams
     void Forward(const char *buffer, unsigned int length);
     //! stream out complete internal buffer
@@ -103,11 +123,11 @@ private:
     //! stream out a single character
     void PutChar(TIntType chr);
 
-    //! A predicate to compare streams in a MaskStream list (or vector). 
+    //! A predicate to compare streams in a MaskStream list (or vector).
     class MaskStreamEQ : public std::unary_function<TMaskStream, bool>
     {
     private:
-        const std::ostream	*stream;
+        const std::ostream      *stream;
     public:
         explicit MaskStreamEQ(const std::ostream *str) : stream(str) {}
         bool operator ()(const TMaskStream &ms)
@@ -125,4 +145,4 @@ private:
 
 } //namespace
 
-#endif // LOGSERVERSTREAMBUF_H
+#endif // ZEITGEIST_LOGSERVERSTREAMBUF_H

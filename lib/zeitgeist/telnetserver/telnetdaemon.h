@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: telnetdaemon.h,v 1.3 2003/09/05 12:22:51 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: telnetdaemon.h,v 1.4 2003/11/14 14:05:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,9 +25,8 @@
                 19.06.2002 MK
                         - initial version
 */
-
-#ifndef TELNETDAEMON_H__
-#define TELNETDAEMON_H__
+#ifndef ZEITGEIST_TELNETDAEMON_H
+#define ZEITGEIST_TELNETDAEMON_H
 
 #ifdef _WIN32
 #include <winsock.h>
@@ -45,73 +45,73 @@ class TelnetServer;
 */
 class TelnetDaemon
 {
-        //
-        // types
-        //
+    //
+    // types
+    //
 public:
 protected:
 private:
-        typedef std::list<TelnetSession*>       TSessionList;
+    typedef std::list<TelnetSession*>       TSessionList;
 
-        //
-        // functions
-        //
+    //
+    // functions
+    //
 public:
-        /** constructs the TelnetDaemon
-            \param server is a reference to the server constructing this daemon
-        */
-        TelnetDaemon(TelnetServer &server);
-        virtual ~TelnetDaemon();
+    /** constructs the TelnetDaemon
+        \param server is a reference to the server constructing this daemon
+    */
+    TelnetDaemon(TelnetServer &server);
+    virtual ~TelnetDaemon();
 
-        /** contains the code run inside the thread for this Daemon,
-            called from the boost thread library */
-        void operator()();
+    /** contains the code run inside the thread for this Daemon,
+        called from the boost thread library */
+    void operator()();
 
-        /** called from the server to shutdown the daemon. This method
-            destroys all session objects */
-        void Terminate();
+    /** called from the server to shutdown the daemon. This method
+        destroys all session objects */
+    void Terminate();
 
-        /** prints the status of the daemon to stdout */
-        void Status();
+    /** prints the status of the daemon to stdout */
+    void Status();
 
-        /** adds a session a object to the list of managed sessions */
-        void Attach(TelnetSession *session);
+    /** adds a session a object to the list of managed sessions */
+    void Attach(TelnetSession *session);
 
-        /** removes a session object from the list of managed sessions */
-        void Detach(TelnetSession *session);
+    /** removes a session object from the list of managed sessions */
+    void Detach(TelnetSession *session);
 
-        /** return a reference to the TelnetServer object, called by
-            the TelnetSession objects */
-        const TelnetServer&     GetServer() const       {       return mServer; }
+    /** return a reference to the TelnetServer object, called by
+        the TelnetSession objects */
+    const TelnetServer&     GetServer() const       {       return mServer; }
 
 protected:
-        /** create the network socket and start the daemon */
-        bool Init(int portNr);
+    /** create the network socket and start the daemon */
+    bool Init(int portNr);
 
 
-        /** accepts a pending connection request, creates a new socket
-            and associates the TelnetSession cc with it*/
-        bool AcceptConnection(TelnetSession& cc);
+    /** accepts a pending connection request, creates a new socket
+        and associates the TelnetSession cc with it*/
+    bool AcceptConnection(TelnetSession& cc);
 
-        //
-        // members
-        //
+    //
+    // members
+    //
 public:
 protected:
 private:
-        /** the listen socket of the server */
-        SOCKET                  mDaemonSocket;
+    /** the listen socket of the server */
+    SOCKET                  mDaemonSocket;
 
-        /** the local adress the daemon is bound to */
-        sockaddr_in             mDaemonAddr;
+    /** the local adress the daemon is bound to */
+    sockaddr_in             mDaemonAddr;
 
-        /** the list of current active sessions */
-        TSessionList    mSessions;
+    /** the list of current active sessions */
+    TSessionList    mSessions;
 
-        /** a reference to the TelnetServer */
-        TelnetServer    &mServer;
+    /** a reference to the TelnetServer */
+    TelnetServer    &mServer;
 };
 
 }
 
-#endif //TELNETDAEMON_H__
+#endif // ZEITGEIST_TELNETDAEMON_H
