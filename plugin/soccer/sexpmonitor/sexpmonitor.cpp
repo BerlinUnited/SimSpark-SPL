@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.6 2004/05/03 10:58:56 markelic Exp $
+   $Id: sexpmonitor.cpp,v 1.7 2004/05/07 17:06:22 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@
 #include <soccer/ballstateaspect/ballstateaspect.h>
 #include <soccer/agentstate/agentstate.h>
 #include <netinet/in.h>
+#include <soccer/sayeffector/sayeffector.h>
 
 using namespace oxygen;
 using namespace std;
@@ -173,6 +174,10 @@ SexpMonitor::GetAgentData(shared_ptr<Scene> activeScene)
 
             shared_ptr<AgentState> state = shared_static_cast<AgentState>
                 (aspect->GetChildOfClass("AgentState"));
+            
+            shared_ptr<SayEffector> sayEff = shared_static_cast<SayEffector>
+                (aspect->GetChildOfClass("SayEffector"));
+                
 
             ss << "(agent ";
 
@@ -200,7 +205,17 @@ SexpMonitor::GetAgentData(shared_ptr<Scene> activeScene)
 
                     ss << "(unum " << state->GetUniformNumber() << ")";
                 }
-
+            if(sayEff==0)
+            {
+                // GetLog()->Error() << "(SexpMonitor) there`s no SayEffector-Object\n";
+            }
+            else
+            {
+                if(sayEff->IfText())
+                {
+                    ss <<"(say " <<sayEff->GetText()<<")";
+                }
+            }
             ss << ")";
         }
 
