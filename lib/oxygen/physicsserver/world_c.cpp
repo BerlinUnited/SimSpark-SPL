@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: world_c.cpp,v 1.6 2004/03/22 11:00:04 rollmark Exp $
+$Id: world_c.cpp,v 1.7 2004/03/22 13:51:25 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,11 +34,9 @@ FUNCTION(World,setGravity)
         (! in.GetValue(in.begin(),inGravity))
         )
         {
-            std::cout << "*** gravity failed\n";
             return false;
         }
 
-    std::cout << "*** gravity " << inGravity[0] << " " << inGravity[1] << " " << inGravity[2] << "\n";
     obj->SetGravity(inGravity);
     return true;
 }
