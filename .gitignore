@@ -17,6 +17,12 @@ app/coretest/Makefile
 app/coretest/Makefile.in
 app/coretest/coretest
 app/coretest/sys
+app/inputtest/.deps
+app/inputtest/.libs
+app/inputtest/Makefile
+app/inputtest/Makefile.in
+app/inputtest/inputtest
+app/inputtest/sys
 app/simulator/.deps
 app/simulator/.libs
 app/simulator/Makefile
