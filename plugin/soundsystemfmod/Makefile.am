@@ -1,4 +1,11 @@
+# Building the soundsystem plugin is optional and dependent on an
+# existing fmod installation
+
+if BUILD_SOUNDSYSTEMFMOD
+
 pkglib_LTLIBRARIES = soundsystemfmod.la
+
+soundsystemfmod_la_LIBADD = -lfmod
 
 soundsystemfmod_la_SOURCES = export.cpp \
 soundeffectfmod.cpp \
@@ -16,3 +23,5 @@ soundsystemfmod_c.cpp
 soundsystemfmod_la_LDFLAGS = -module -version-info 0:0:0
 
 AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
+
+endif
