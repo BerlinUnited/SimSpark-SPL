@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.2 2003/11/17 10:10:53 fruit Exp $
+   $Id: spadesserver.cpp,v 1.1.2.3 2003/11/17 13:17:10 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,18 +77,12 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
     // SimulationEngineMain uses the pointer we have to return to get the
     // command line options. It doesn't delete the ParamReader, so we can
     // return a simple pointer (otherwise our shared_ptr would become invalid)
-    ParamReader* pr = mParamReader.get();
+    mParamReader->getOptions(argc, argv);
 
-    // uncommenting the next line of code gives the following error:
+    spades::EngineParam* ep =
+        shared_dynamic_cast<spades::EngineParam>(mParamReader).get();
 
-    // spadesserver/spadesserver.cpp: In member function `virtual spades::EngineParam*
-    // oxygen::SpadesServer::parseParameters(int, const char* const*)':
-    // spadesserver/spadesserver.cpp:81: error: `spades::EngineParam' is an
-    // inaccessible base of `oxygen::ParamReader'
-
-    // EngineParam* ep = dynamic_cast<EngineParam*>(pr);
-
-    return 0;
+    return ep;
 }
 
 bool
