@@ -1,6 +1,35 @@
 2003-11-09  Oliver Obst  <fruit@robolog.org>
 
 	* configure.ac: 
+	- switched off static libraries and switched on shared libs so that plugins are properly build 
+	- added check for strupr (used by one of the plugins)
+	
+	* plugin/Makefile.am: 
+	* plugin/filesystemrar/Makefile.am: 
+	* plugin/filesystemstd/Makefile.am:
+	* plugin/filesystemzip/Makefile.am:
+	* plugin/filesystemzip/filesystemzip.cpp:
+	* plugin/filesystemzip/filesystemzip.h:
+	* plugin/inputsdl/Makefile.am:
+	* plugin/inputsdl/inputsystemsdl.cpp:
+	* plugin/soundsystembass/Makefile.am:
+	* plugin/soundsystembass/soundsystembass.h:
+	* plugin/soundsystemfmod/Makefile.am:
+	* plugin/soundsystemfmod/soundsystemfmod.h: 
+	* plugin/survival/Makefile.am:
+	Compiling the plugins as modules (files to be dlopened by the 
+	simulator). The modules will be installed below 
+	$(exec_prefix)/lib/rcssserver3D/ .  The package has to be
+	compiled using shared libraries to get this working. To be fully
+	portable, the simulator should not open the .so files directly but
+	rather use the .la files created by libtool to find the proper
+	library (see libtool manual).  
+	However, for linux opening the .so files should be OK.
+	
+	To run the simulator, the LD_LIBRARY_PATH environment variable
+	should contain the directory where the plugins can be found.
+
+	* configure.ac: 
 	- added workaround for bug in AC_FUNC_MEMCMP macro
 	- added check for _vsnprintf (as used by libIL)
 
