@@ -1,0 +1,68 @@
+Hi all,
+
+we have just released an initial version of rcssserver3D. rcssserver3D
+is a physical simulation system. The primary purpose of this
+system is to provide a generic simulator for different kinds of
+simulations. 
+
+With rcssserver3D, we also started working towards a specific soccer
+simulation for RoboCup Simulation league. Even though this work is not
+finished yet, we decided to release a first version of the simulator
+as it is now. Currently, most soccer specific stuff is missing. Things
+like rules, score, and a real soccer field have to be implemented
+next. Differences to the version we have been showing on the
+RoboCup-2003 symposium [1] are that the basic infrastructure for
+these lacking features has already been created, distributing the
+agents is already supported, and the simulator is running on Linux.
+We are already working on a version 0.2 which should be ready in near
+future. 
+
+The basic intention of this release is that teams can start playing
+around with the simulator. Hopefully, until teams have finished their
+first steps, we can come up with some more features towards a (more 
+complete) real soccer simulation. 
+
+Specific features of the simulator are quite different from the
+current (2D) simulator. One of these features is for example the use
+of SPADES as middleware between simulator and agents. SPADES has been
+introduced by Pat Riley on the RoboCup-2002 symposium [2]. To compile
+the simulator, you need to install SPADES on your system. The list of
+additional required libraries for rcssserver3D can be found in the
+(admittedly terse) documentation. The greatest part of the
+documentation consists of the source code itself, i.e. to get started,
+it is very probable that you need to look into the simulator sources.
+
+To create new soccer clients, you need to create agents compatible
+with SPADES. You can get extensive documentation together with the
+SPADES library [3]. We also included a very primitive agent (that
+does nothing).
+
+Last but not least, there is also a very simple monitor to visualize
+agents (agents are spheres for now). You need OpenGL and libglut for
+the monitor.
+
+You can get the package on the Soccer Simulator page on 
+SourceForge [4].
+
+So much for this year :-)
+with best wishes for 2004
+
+Markus Rollmann
+Oliver Obst
+
+
+[1] Marco Kögler and Oliver Obst. Simulation League: The Next Generation.
+    In Daniel Polani, Andrea Bonarini, Brett Browning, and Kazuo
+    Yoshida, editors, RoboCup 2003: Robot Soccer World Cup VII,
+    Lecture Notes in Artificial Intelligence, Springer, Berlin,
+    Heidelberg, New York, 2004.
+
+[2] Patrick Riley. MPADES: Middleware for Parallel Agent Discrete
+    Event Simulation. In Gal A. Kaminka, Pedro U. Lima, and Raul
+    Rojas, editors, RoboCup-2002: Robot Soccer World Cup VI, Lecture
+    Notes in Artificial Intelligence, pp. 162?178, Springer Verlag,
+    Berlin, 2003.
+
+[3] http://sourceforge.net/projects/spades-sim
+
+[4] http://sourceforge.net/projects/sserver/
