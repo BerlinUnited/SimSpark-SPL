@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbehavior.cpp,v 1.3 2004/12/18 14:32:13 rollmark Exp $
+   $Id: soccerbehavior.cpp,v 1.4 2004/12/21 14:58:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,8 +54,12 @@ string SoccerBehavior::Init()
 
     SetupVisionObjectMap();
 
-    // use the scene effector to build the agent
-    return "(scene rsg/agent/soccerplayer.rsg)";
+    // use the scene effector to build the agent and beam to a
+    // position near the center of the playing field
+    return
+        "(scene rsg/agent/soccerplayer.rsg)"
+        "(beam -6 0 0)";
+;
 }
 
 void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
@@ -127,12 +131,14 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
 
 const SoccerBehavior::VisionSense& SoccerBehavior::GetVisionSense(VisionObject obj) const
 {
+    static VisionSense invalidSense;
+
     TVisionMap::const_iterator iter = mVisionMap.find(obj);
 
     if (iter == mVisionMap.end())
         {
             cerr << "unknown VisionObject " << obj << "\n";
-            return VisionSense();
+            return invalidSense;
         }
 
     return (*iter).second;
