@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bounds.h,v 1.7 2004/04/14 12:25:09 fruit Exp $
+   $Id: bounds.h,v 1.8 2004/04/14 12:57:32 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public:
     // constructors
 
     /** constructs an empty bounding box */
-    f_inline AABB3()                                                                                                                        { Init(); }
+    f_inline AABB3() { Init(); }
 
     /** constructs a bounding box encapsulating mn and mx */
     f_inline AABB3(const Vector3f &mn, const Vector3f &mx)
@@ -268,11 +268,15 @@ public:
 
     /** returns true if the sphere contains the sphere s */
     f_inline bool Contains(const BoundingSphere &s) const
-    { return ((center - s.center).SquareLength() < (radiusSq - s.radiusSq)); }
+    { return (radius >= s.radius) &&
+             ((center - s.center).SquareLength() <
+              (radius - s.radius) * (radius - s.radius));
+    }
 
     /** returns true if this sphere and the sphere s intersect */
     f_inline bool Intersects(const BoundingSphere &s) const
-    { return ((center - s.center).SquareLength() < (radiusSq + s.radiusSq)); }
+    { return ((center - s.center).SquareLength() <
+              (radius + s.radius) * (radius + s.radius)); }
 
     // non-inline functions
 
