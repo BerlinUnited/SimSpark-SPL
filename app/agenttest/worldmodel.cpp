@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.7 2004/04/05 14:51:54 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.8 2004/04/08 14:26:26 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -370,7 +370,23 @@ int WorldModel::GetTeamUnum()
 }
 
 
+void WorldModel::SetTeamName(std::string name){
+    mTeamName =   name;
+}
 
+string WorldModel::GetTeamName(){
+    return mTeamName;
+}
+
+void WorldModel:: SetOppTeamName(std::string name)
+{
+    mOppTeamName = name;
+}
+
+string WorldModel::GetOppTeamName()
+{
+       return mOppTeamName;    
+}
 
 
 
