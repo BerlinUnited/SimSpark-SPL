@@ -1,3 +1,11 @@
+2003-08-31  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* lib/oxygen/physicsserver
+	- added copyleft and comments
+	- added support for box and capped cylinder ODE geoms
+
+	* lib/oxygen/sceneserver
+	- added copyleft and coments
+
 2003-08-30  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/Makefile.am: 
