@@ -18,7 +18,7 @@ int main()
   shared_ptr<CoreContext> context = zg.CreateContext();
 
   // init oxygen
-  oxygen::Oxygen                          kOxygen(zg);
+  oxygen::Oxygen kOxygen(zg);
 
   // run the init scripts
   shared_ptr<ScriptServer> scriptServer
@@ -27,8 +27,13 @@ int main()
   scriptServer->Run("spadestest.rb");
 
   // print a greeting
-  cout << "CoreTest - A Small Interactive Text-Based Console Sample" << endl << endl;
+  cout << "SpadesTest - A Small Interactive Text-Based Console Sample" << endl << endl;
   cout << "Enter 'exit' command to quit application" << endl << endl;
+
+#ifdef HAVE_SPADES_HEADERS
+  shared_ptr<oxygen::SpadesServer> spadesServer =
+      shared_static_cast<oxygen::SpadesServer>(context->Get("/sys/server/spades"));
+#endif
 
   // loop until the 'exit' command
   bool done = false;
