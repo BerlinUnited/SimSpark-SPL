@@ -6,10 +6,7 @@ SUBDIRS = \
 	  monitortest \
 	  perfectvisionperceptor \
 	  sexpparser \
-	  soundsystemfmod \
-	  spadestest 
-
-EXTRA_DIST = plugin.dsw
+	  soundsystemfmod
 
 # filesystemrar 
 # soundsystembass
