@@ -1,3 +1,13 @@
+2004-04-14  Oliver Obst  <fruit@robolog.org>
+
+	* app/simspark/Makefile.am: 
+	- simspark needs kerosin to be built. Building this simulator is 
+	  disabled with no kerosin now.
+
+	* lib/salt/bounds.h: 
+	- fixed math bugs in BoundingSphere::Contains(BoundingSphere) and
+	  BoundingSphere::Intersects(BoundingSphere)
+
 2004-04-12  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/Makefile.am: 
