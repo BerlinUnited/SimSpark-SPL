@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.2.2.1 2003/12/22 15:21:53 rollmark Exp $
+   $Id: camera.cpp,v 1.3.2.1 2004/01/27 12:54:06 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,10 +31,8 @@ Camera::Camera(const salt::Vector3f& camPos,
   mLookAtPos = lookAtPos;
   mUpVector  = upVector;
 
-  //be aware of how to choose the initial theta/phi
-  Vector3f tmp = Vector3f(camPos[0],camPos[1],camPos[2]).Normalized(); //camPos.Normalized();
-  mTheta     = gPI - acos( tmp.Dot(Vector3f(0.0, 1.0, 0.0)));
-  mPhi       = 2*gPI - acos(tmp.Dot(Vector3f(-1.0, 0.0, 0.0)));
+  //resets the camera 
+  RefreshCam();
 
   mFixDist = 8.0;
   mMouseSensitivity = 0.01;
@@ -46,22 +44,31 @@ Camera::GetCameraPos()
   return mPosition;
 }
 
+Vector3f
+Camera::GetLookAtPos()
+{
+  return mLookAtPos;
+}
+
 void
 Camera::SetCameraPos(const Vector3f& newCamPos)
 {
   mPosition = newCamPos;
+  RefreshCam();
 }
 
 void
 Camera::SetLookAtPos(const Vector3f& lookAtPos)
 {
   mLookAtPos = lookAtPos;
+  RefreshCam();
 }
 
 void
 Camera::SetUpVector(const Vector3f& upVector)
 {
   mUpVector = upVector;
+  RefreshCam();
 }
 
 void
@@ -70,6 +77,24 @@ Camera::Look()
   gluLookAt( mPosition[0], mPosition[1], mPosition[2],
              mLookAtPos[0], mLookAtPos[1], mLookAtPos[2],
              mUpVector[0], mUpVector[1], mUpVector[2]);
+}
+
+void 
+Camera::RefreshCam()
+{
+  //resets the camera attributes mTheta and mPhi
+  Vector3f tmp = Vector3f(mPosition[0],mPosition[1],mPosition[2]).Normalized();
+  mTheta     = gPI - acos( tmp.Dot(Vector3f(0.0, 1.0, 0.0)));
+  mPhi       = 2*gPI - acos(tmp.Dot(Vector3f(-1.0, 0.0, 0.0)));
+}
+
+void
+Camera::MoveCam(float steps)
+{
+  //move camera 'steps' meters into direction we are facing
+  Vector3f dir = steps*(mLookAtPos - mPosition).Normalized();
+  mPosition += dir;
+  mLookAtPos += dir;
 }
 
 //reset the Camera by taking the difference between the current

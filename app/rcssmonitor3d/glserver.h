@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.3.2.1 2004/01/21 15:54:16 rollmark Exp $
+   $Id: glserver.h,v 1.3.2.2 2004/01/27 12:54:06 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,13 +38,30 @@ class GLserver
   void InitGL();
   void DrawGround(salt::Vector3f gridPos, float szX, float szZ);
   void ApplyCamera();
+  void DrawText(const char* string, salt::Vector2f pos);
+  void DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz);
   void DrawSphere(salt::Vector3f spherePos, float radius);
   void DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz);
 
   //inline functions
   inline void SetViewByMouse(const Vector2f& mousePos, const Vector2f& refPos)
     {
-      mCamera.SetViewByMouse(mousePos, refPos);
+        mCamera.SetViewByMouse(mousePos, refPos);
+    }
+  inline salt::Vector3f GetCameraPos()
+    {
+        return mCamPos;
+    }
+  inline void SetCameraPos(const salt::Vector3f& newPos)
+    {
+        mCamPos = newPos;
+        mCamera.SetCameraPos(newPos);
+    }
+  inline void MoveCam(float steps)
+    {
+        mCamera.MoveCam(steps);
+        mCamPos = mCamera.GetLookAtPos();
+        mLookAt = mCamera.GetCameraPos();
     }
 
 protected:

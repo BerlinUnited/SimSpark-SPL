@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3.2.2 2004/01/25 13:07:05 rollmark Exp $
+   $Id: glserver.cpp,v 1.3.2.3 2004/01/27 12:54:06 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,21 @@ void GLserver::ApplyCamera()
 //----------------------------------------------------------------------
 void GLserver::InitGL (void)
 {
+    //switch z-buffer on
+    glEnable(GL_DEPTH_TEST);
+    
+    //create a viewport
+    glViewport(0,0,mWidth,mHeight);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    
+    //setup camera angle, ratio, near and far clipping plane
+    gluPerspective(45.0f,(GLfloat)mWidth/(GLfloat)mHeight,0.1f,200.0f);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    //setup lightsource
     if(!mWireframe)
         {
             GLfloat position[] = { 0.5, 1.5, 1.0, 0.0 };
@@ -69,20 +84,19 @@ void GLserver::InitGL (void)
 
             glLightfv(GL_LIGHT0, GL_POSITION, position);
         }
-
-    glEnable(GL_DEPTH_TEST);
-
-    glViewport(0,0,mWidth,mHeight);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    gluPerspective(45.0f,(GLfloat)mWidth/(GLfloat)mHeight,0.1f,100.0f);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 }
-
-
+//--------------------------drawText-------------------------------------
+// draws a given text string onto the screen at position pos
+//-----------------------------------------------------------------------
+void GLserver::DrawText(const char* string, salt::Vector2f pos)
+{
+    //FIXME: preeliminary version
+    const char* s;
+    glRasterPos2f(-1+pos[0], 1-pos[1]);
+    for (s = string; *s; s++)
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *s);
+}    
+    
 //--------------------------drawGround-----------------------------------
 //
 // draws a virtual grid ground out of several green lines
@@ -120,6 +134,8 @@ void GLserver::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
 //-----------------------------------------------------------------------
 void GLserver::DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz)
 {
+    glColor3ub(255,0,255);
+
     glPushMatrix();
     glTranslatef(boxPos[0],boxPos[1], boxPos[2]);
 
@@ -159,6 +175,38 @@ void GLserver::DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz)
     glVertex3f(0    ,0,sz[2]);
     glVertex3f(0    ,sz[1],sz[2]);
     glEnd();
+
+    glPopMatrix();
+}
+
+//------------------------drawGoal-------------------------------------
+//
+// draws a goal with given dimensions to position 'goalPos'
+//-----------------------------------------------------------------------
+void GLserver::DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz)
+{
+    GLUquadricObj *cyl;
+    cyl = gluNewQuadric();
+    
+    glPushMatrix();
+    glTranslatef(goalPos[0], goalPos[1], goalPos[2]);
+
+    // draw goal sides as cylinders 
+    glPushMatrix();
+    glTranslatef(0,sz[1],0);
+    gluCylinder(cyl,0.1,0.1,sz[2],15,15);
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(-90.0f, 1,0,0);
+    gluCylinder(cyl,0.1,0.1,sz[1],15,15);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0,0,sz[2]);
+    glRotatef(-90.0f, 1,0,0);
+    gluCylinder(cyl,0.1,0.1,sz[1],15,15);
+    glPopMatrix();
 
     glPopMatrix();
 }

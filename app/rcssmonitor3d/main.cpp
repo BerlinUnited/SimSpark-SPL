@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.6 2004/01/26 13:35:29 fruit Exp $
+   $Id: main.cpp,v 1.3.2.7 2004/01/27 12:54:06 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -227,6 +227,9 @@ void display(void)
    glLoadIdentity();
 
    gGLServer.ApplyCamera();
+   
+   // draw text
+   // gGLServer.DrawText("TEST", salt::Vector2f(0.1,0.1));
 
    // ground
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
@@ -248,10 +251,12 @@ void display(void)
    // goal
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
    gGLServer.DrawWireBox(Vector3f(-fieldLength/2,0,-goalWidth/2.0),szGoal1);
+   gGLServer.DrawGoal(Vector3f(-fieldLength/2,0,-goalWidth/2.0),szGoal1);
 
    // goal
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
    gGLServer.DrawWireBox(Vector3f(fieldLength/2,0,-goalWidth/2.0),szGoal2);
+   gGLServer.DrawGoal(Vector3f(fieldLength/2,0,-goalWidth/2.0),szGoal2);
 
    // check for positions update
    gCommServer->GetMessage();
@@ -296,6 +301,29 @@ void mouseMotion(int x, int y)
   gOldY = y;
 }
 
+//------------------------------keyboad-------------------------------------
+// 
+// processing of keyboard input
+// Button Descr. :
+//     + if 'a' is pressed the camera will zoom in
+//     + if 'A' is pressed the camera will zoom out
+//--------------------------------------------------------------------------
+void keyboard(unsigned char key, int /*x*/, int /*y*/)
+{
+  salt::Vector3f pos;
+  switch (key) {
+  case 'a':
+      //zoom in
+      gGLServer.MoveCam(1.0);
+      break;
+  case 'A':
+      //zoom in
+      gGLServer.MoveCam(-1.0);
+      break;
+  default:
+      break;
+  }
+}
 
 int main(int argc, char* argv[])
 {
@@ -314,6 +342,7 @@ int main(int argc, char* argv[])
 
   glutDisplayFunc(display);
   glutMotionFunc(mouseMotion);
+  glutKeyboardFunc(keyboard);
   glutMouseFunc(mouse);
   glutIdleFunc(idle);
 
