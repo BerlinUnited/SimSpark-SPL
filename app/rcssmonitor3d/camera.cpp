@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.4 2004/02/12 14:07:21 fruit Exp $
+   $Id: camera.cpp,v 1.5 2004/02/26 21:27:20 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,8 +99,8 @@ Camera::MoveCamForward(float steps)
 
 void Camera::MoveCamUp(float steps)
 {
-    mPosition[1] += steps;
-    mLookAtPos[1] += steps;
+    mPosition[2] += steps;
+    mLookAtPos[2] += steps;
 }
 
 void
@@ -132,7 +132,7 @@ Camera::SetViewByMouse(const Vector2f& mousePos,
   else if (mPhi > 2*gPI) mPhi -= 2*gPI;
 
   mLookAtPos[0] = mPosition[0] + mFixDist * sin(mTheta) * cos(mPhi);
-  mLookAtPos[1] = mPosition[1] + mFixDist * cos(mTheta);
-  mLookAtPos[2] = mPosition[2] + mFixDist * sin(mTheta) * sin(mPhi);
+  mLookAtPos[1] = mPosition[1] + mFixDist * sin(mTheta) * sin(mPhi);
+  mLookAtPos[2] = mPosition[2] + mFixDist * cos(mTheta);
 }
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.4 2004/02/12 14:07:21 fruit Exp $
+   $Id: glserver.cpp,v 1.5 2004/02/26 21:27:20 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -149,12 +149,12 @@ void GLServer::DrawText(const char* text, salt::Vector2f pos)
 //
 // draws a virtual grid ground out of several green lines
 //-----------------------------------------------------------------------
-void GLServer::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
+void GLServer::DrawGround(salt::Vector3f gridPos, float szX, float szY)
 {
     // The ground is drawn as a set of quadric faces(strips)
     // faceNum stores the number of faces
     const int faceNum = 10;
-    GLfloat x, z, deltaX, deltaZ;
+    GLfloat x, y, deltaX, deltaY;
 
     glPushMatrix();
     glTranslatef(gridPos[0],gridPos[1], gridPos[2]);
@@ -162,21 +162,21 @@ void GLServer::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
     // store the sizes of our faces
     // and create normal vector
     deltaX = szX/faceNum;
-    deltaZ = szZ/faceNum;
+    deltaY = szY/faceNum;
     glNormal3f(0,1,0);
     for (int i=0; i<faceNum; i++)
         {
-            z = i*deltaZ;
+            y = i*deltaY;
             //draw face as Quadric strip
             glBegin(GL_QUAD_STRIP);
             for (int j=0; j<faceNum; j++)
                 {
                     x = j*deltaX;
-                    glVertex3f(x,0,z);
-                    glVertex3f(x,0,z+deltaZ);
+                    glVertex3f(x,y,0);
+                    glVertex3f(x,y+deltaY,0);
                 }
-            glVertex3f(x+deltaX,0,z);
-            glVertex3f(x+deltaX,0,z+deltaZ);
+            glVertex3f(x+deltaX,y,0);
+            glVertex3f(x+deltaX,y+deltaY,0);
             glEnd();
         }
     glPopMatrix();
@@ -247,19 +247,18 @@ void GLServer::DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz)
 
     // draw goal sides as cylinders
     glPushMatrix();
+    glTranslatef(0,0,sz[2]);
+    glRotatef(-90.0f, 1,0,0);
+    gluCylinder(cyl,0.1,0.1,sz[1],15,15);
+    glPopMatrix();
+
+    glPushMatrix();
     glTranslatef(0,sz[1],0);
     gluCylinder(cyl,0.1,0.1,sz[2],15,15);
     glPopMatrix();
 
     glPushMatrix();
-    glRotatef(-90.0f, 1,0,0);
-    gluCylinder(cyl,0.1,0.1,sz[1],15,15);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0,0,sz[2]);
-    glRotatef(-90.0f, 1,0,0);
-    gluCylinder(cyl,0.1,0.1,sz[1],15,15);
+    gluCylinder(cyl,0.1,0.1,sz[2],15,15);
     glPopMatrix();
 
     glPopMatrix();
@@ -295,8 +294,8 @@ void GLServer::DrawShadowOfSphere(salt::Vector3f spherePos,float radius)
 
     // draw the flat sphere just a 'bit'
     // ontop of the playing gound
-    glTranslatef(spherePos[0], delta, spherePos[2]);
-    glScalef(1.0f, 0.0f, 1.0f);
+    glTranslatef(spherePos[0], spherePos[1],delta);
+    glScalef(1.0f, 1.0f, 0.0f);
     glutSolidSphere(radius, 10, 10);
 
     glEnable(GL_LIGHTING);

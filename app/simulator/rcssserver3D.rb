@@ -50,7 +50,7 @@ end
 def addAgent(aspectPath)
   # move different agents away from each other
   aspect = get(aspectPath)
-  aspect.setLocalPos($agentX,$agentZ,$agentY)
+  aspect.setLocalPos($agentX,$agentY,$agentZ)
   $agentX += 5.0
   $agentY += 0.0
   $agentZ += 0.1
@@ -144,28 +144,28 @@ def addField()
   halfGoalWidth = getSoccerVar('GoalWidth')/2.0
   borderSize = getSoccerVar('BorderSize')/2.0
 
-  addWall('Floor',0.0, 1.0 ,0.0, 0.0) 
+  addWall('Floor',0.0, 0.0, 1.0, 0.0) 
   addWall('W1', 1.0,  0.0,  0.0, -halfLength-borderSize)
   addWall('W2',-1.0,  0.0,  0.0, -halfLength-borderSize)  
-  addWall('W3', 0.0,  0.0,  1.0, -halfWidth-borderSize)  
-  addWall('W4', 0.0,  0.0, -1.0, -halfWidth-borderSize)  
+  addWall('W3', 0.0,  1.0,  0.0, -halfWidth-borderSize)  
+  addWall('W4', 0.0, -1.0,  0.0, -halfWidth-borderSize)  
 
   #
   # mark the soccer field with 4 field flags
-  addFlag('Flag', '1_l',-halfLength, 0.0,-halfWidth)
-  addFlag('Flag', '2_l',-halfLength, 0.0, halfWidth)
-  addFlag('Flag', '1_r', halfLength, 0.0,-halfWidth)
-  addFlag('Flag', '2_r', halfLength, 0.0, halfWidth)
+  addFlag('Flag', '1_l',-halfLength,-halfWidth, 0.0)
+  addFlag('Flag', '2_l',-halfLength, halfWidth, 0.0)
+  addFlag('Flag', '1_r', halfLength,-halfWidth, 0.0)
+  addFlag('Flag', '2_r', halfLength, halfWidth, 0.0)
 
   #
   # mark the left goal
-  addFlag('Goal', '1_l',-halfLength, 0.0,-halfGoalWidth)
-  addFlag('Goal', '2_l',-halfLength, 0.0, halfGoalWidth)
+  addFlag('Goal', '1_l',-halfLength,-halfGoalWidth, 0.0)
+  addFlag('Goal', '2_l',-halfLength, halfGoalWidth, 0.0)
 
   #
   # mark the right goal
-  addFlag('Goal', '1_r', halfLength, 0.0,-halfGoalWidth)
-  addFlag('Goal', '2_r', halfLength, 0.0, halfGoalWidth)
+  addFlag('Goal', '1_r', halfLength,-halfGoalWidth, 0.0)
+  addFlag('Goal', '2_r', halfLength, halfGoalWidth, 0.0)
 
   #
   # box collider around the playing field
@@ -173,10 +173,10 @@ def addField()
   fieldBox = new('oxygen/BoxCollider',fieldBoxPath)
   fieldBox.setBoxLengths(
 			 getSoccerVar('FieldLength'),
-			 getSoccerVar('FieldHeight'),
-			 getSoccerVar('FieldWidth')
+			 getSoccerVar('FieldWidth'),
+			 getSoccerVar('FieldHeight')
 			 )
-  fieldBox.setPosition(0.0,halfHeight,0.0)
+  fieldBox.setPosition(0.0,0.0,halfHeight)
   new('oxygen/RecorderHandler', fieldBoxPath+'recorder')
 
   #
@@ -189,13 +189,13 @@ def addField()
   goalBoxL = new('oxygen/BoxCollider',goalBoxLPath)
   goalBoxL.setBoxLengths(
 			 getSoccerVar('GoalDepth'),
-			 getSoccerVar('GoalHeight'),
-			 getSoccerVar('GoalWidth')
+			 getSoccerVar('GoalWidth'),
+			 getSoccerVar('GoalHeight')
 			 )
   goalBoxL.setPosition(
 		       -halfLength-halfGoalDepth,
-		       halfGoalHeight,
-		       0.0
+		       0.0,
+		       halfGoalHeight
 		       )
   new('oxygen/RecorderHandler', goalBoxLPath+'recorder')
 
@@ -204,13 +204,13 @@ def addField()
   goalBoxR = new('oxygen/BoxCollider',goalBoxRPath)
   goalBoxR.setBoxLengths(
 			 getSoccerVar('GoalDepth'),
-			 getSoccerVar('GoalHeight'),
-			 getSoccerVar('GoalWidth')
+			 getSoccerVar('GoalWidth'),
+			 getSoccerVar('GoalHeight')
 			 )
   goalBoxR.setPosition(
 		       +halfLength+halfGoalDepth,
-		       halfGoalHeight,
-		       0.0
+		       0.0,
+		       halfGoalHeight
 		       )
   new('oxygen/RecorderHandler', goalBoxRPath+'recorder')
 end
@@ -281,7 +281,7 @@ spadesServer = new('oxygen/SpadesServer', $serverPath+'spades')
 #
 # create world and space aspects
 world = new('oxygen/World', $scenePath+'world')
-world.setGravity(0.0, -9.81, 0.0)
+world.setGravity(0.0, 0.0, -9.81)
 new('oxygen/Space', $scenePath+'space')
 
 # construct the playing field
@@ -302,7 +302,7 @@ Spades.SendAgentThinkTimes = false
 
 #
 # put a ball on the soccer field
-addBall(0.0,0.0,0.0)
+addBall(0.0,0.0,10.0)
 
 #
 # register game control aspects
@@ -316,7 +316,7 @@ monitorServer.registerMonitorSystem('SexpMonitor')
 
 #
 # queue agents for startup
-spadesServer.queueAgents('foo', 2)
-spadesServer.queueAgents('bar', 2)
+spadesServer.queueAgents('foo', 11)
+spadesServer.queueAgents('bar', 11)
 
 

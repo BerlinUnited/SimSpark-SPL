@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.6 2004/02/20 17:38:03 rollmark Exp $
+   $Id: main.cpp,v 1.7 2004/02/26 21:27:20 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -580,8 +580,8 @@ void drawScene()
 //------------------------------------------------------------------------
 void display(void)
 {
-   const Vector3f szGoal1(-gGoalDepth,gGoalHeight,gGoalWidth);
-   const Vector3f szGoal2(gGoalDepth,gGoalHeight,gGoalWidth);
+   const Vector3f szGoal1(-gGoalDepth,gGoalWidth,gGoalHeight);
+   const Vector3f szGoal2(gGoalDepth,gGoalWidth,gGoalHeight);
 
    // color constants
    const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
@@ -599,30 +599,30 @@ void display(void)
 
    // ground
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2,0,-gFieldWidth/2),gFieldLength,gFieldWidth);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2,-gFieldWidth/2,0),gFieldLength,gFieldWidth);
 
    // border
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, borderColor);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2-gBorderSize,0,-gFieldWidth/2-gBorderSize), gBorderSize, gFieldWidth+2*gBorderSize);
-   gGLServer.DrawGround(Vector3f(gFieldLength/2,0,-gFieldWidth/2-gBorderSize), gBorderSize, gFieldWidth+2*gBorderSize);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2,0,-gFieldWidth/2-gBorderSize), gFieldLength, gBorderSize);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2,0,gFieldWidth/2), gFieldLength, gBorderSize);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2-gBorderSize,-gFieldWidth/2-gBorderSize,0), gBorderSize, gFieldWidth+2*gBorderSize);
+   gGLServer.DrawGround(Vector3f(gFieldLength/2,-gFieldWidth/2-gBorderSize,0), gBorderSize, gFieldWidth+2*gBorderSize);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2,-gFieldWidth/2-gBorderSize,0), gFieldLength, gBorderSize);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2,gFieldWidth/2,0), gFieldLength, gBorderSize);
 
    // fieldBox
    gGLServer.DrawWireBox(
-                         Vector3f(-gFieldLength/2.0,0.0,-gFieldWidth/2.0),
-                         Vector3f(gFieldLength,gFieldHeight,gFieldWidth)
+                         Vector3f(-gFieldLength/2.0,-gFieldWidth/2.0,0.0),
+                         Vector3f(gFieldLength,gFieldWidth,gFieldHeight)
                          );
 
    // goal
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
-   gGLServer.DrawWireBox(Vector3f(-gFieldLength/2,0,-gGoalWidth/2.0),szGoal1);
-   gGLServer.DrawGoal(Vector3f(-gFieldLength/2,0,-gGoalWidth/2.0),szGoal1);
+   gGLServer.DrawWireBox(Vector3f(-gFieldLength/2,-gGoalWidth/2.0,0),szGoal1);
+   gGLServer.DrawGoal(Vector3f(-gFieldLength/2,-gGoalWidth/2.0,0),szGoal1);
 
    // goal
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
-   gGLServer.DrawWireBox(Vector3f(gFieldLength/2,0,-gGoalWidth/2.0),szGoal2);
-   gGLServer.DrawGoal(Vector3f(gFieldLength/2,0,-gGoalWidth/2.0),szGoal2);
+   gGLServer.DrawWireBox(Vector3f(gFieldLength/2,-gGoalWidth/2.0,0),szGoal2);
+   gGLServer.DrawGoal(Vector3f(gFieldLength/2,-gGoalWidth/2.0,0),szGoal2);
 
    // draw cached positions
    drawScene();
@@ -789,9 +789,9 @@ int main(int argc, char* argv[])
   glutCreateWindow("rcssmonitor3D");
 
   //setup the GLserver with camera coordinates
-  salt::Vector3f pos(0.0, 7.0,24.0);
+  salt::Vector3f pos(0.0,24.0, 7.0);
   salt::Vector3f lookAt(0.0,0.0,0.0);
-  salt::Vector3f up(0.0,1.0,0.0);
+  salt::Vector3f up(0.0,0.0,1.0);
   gGLServer = GLServer(gWidth, gHeight, pos, lookAt, up, false);
   gGLServer.InitGL();
 
