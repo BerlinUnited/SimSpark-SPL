@@ -1,3 +1,104 @@
+2004-04-11  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simspark/rsg/boxspheres/arena.rsg,
+	* app/simspark/rsg/boxspheres/box.rsg,
+	* app/simspark/rsg/boxspheres/layer.rsg,
+	* app/simspark/rsg/boxspheres/row.rsg,
+	* app/simspark/rsg/boxspheres/simspark.rsg,
+	* app/simspark/rsg/boxspheres/sphere.rsg:
+	- added some rubyscene demo file for app/simspark
+
+	* configure.ac: 
+	- added simspark Makefile
+
+	* app/Makefile.am: 
+	- added simspark
+
+	* app/simspark/.cvsignore, app/simspark/Makefile.am,
+	* app/simspark/bindings.rb, app/simspark/main.cpp,
+	* app/simspark/simspark.rb:
+	- added simspark, a monolithic simulator based on the spark lib
+
+	* lib/spark/spark.cpp, lib/spark/spark.h: 
+	- added method SetSimStep
+	- added member mSimStep and mSumDeltaTime
+	- changed spark run to step the world in mSimStep increments if
+	mSimStep is nozero. If more than mSimStep time passed Run() will
+	step the world multiple times. A constant step rate provides a
+	more stable physical integration
+
+	* lib/oxygen/sceneserver/sceneserver.cpp,
+	* lib/oxygen/sceneserver/sceneserver.h:
+	- changed method ImportScene to accept a list of parameters that
+	is passed on to the SceneImporter
+
+	* lib/oxygen/sceneserver/sceneimporter.h:
+	- changed SceneImporter interface to accept a list of parameters
+
+	* lib/oxygen/sceneserver/scene.cpp:
+	- fixed a compiler warning about an unused parameter
+
+	* lib/oxygen/sceneserver/basenode.cpp,
+	* lib/oxygen/sceneserver/basenode.h,
+	* lib/oxygen/sceneserver/basenode_c.cpp:
+	- changed method ImportScene to accept a list of parameters
+
+	* lib/zeitgeist/parameterlist.cpp, lib/zeitgeist/parameterlist.h:
+	- added method Pop_Front() and Pop_Back()
+
+	* app/rcssmonitor3d/kerosin/Makefile.am,
+	* app/rcssmonitor3d/kerosin/main.cpp,
+	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb:
+	- ported rcssmonitor3d/kerosin to libSpark
+
+	* app/inputtest/inputtest.rb: 
+	- fixed setup of scan code mapping
+
+	* app/inputtest/german.scan.rb:
+	- removed german.scan.rb, now part of the kerosin lib
+
+	* app/scenetest/script/german.scan.rb, app/scenetest/script/us.scan.rb:
+	- removed keyboard mapping files, now part of the kerosin lib
+
+	* app/scenetest/data/script/scenetest.rb:
+	- fixed setup of keyboard mapping
+
+	* lib/kerosin/inputserver/us.scan.rb:
+	- added us.scan.rb; keyboard code mapping for an US keyboard
+
+	* app/rcssmonitor3d/kerosin/german.scan.rb:
+	- removed german.scan.rb, now part of the kerosin library
+
+	* lib/kerosin/Makefile.am: 
+	- installing inputserver/german.scan.rb
+
+	* lib/kerosin/inputserver/inputserver_c.cpp,
+	* lib/kerosin/inputserver/inputserver.cpp,
+	* lib/kerosin/inputserver/inputserver.h:
+	- removed method ImportScanCodeMapping
+	- added method SetScanCodeMapping and member mScanCodeScript
+	- after the InputSystem is registered the InputServer
+	automatically calls the set scan code mapping script
+
+	* lib/kerosin/inputserver/german.scan.rb:
+	- added german.scan.rb, scancode translation for a german
+	keyboard; moved here from app/rcssmonitor3D/kerosin, used as a
+	system init script for the InputServer
+
+	* lib/Makefile.am: 
+	- added lib spark
+
+	* configure.ac: 
+	- added lib spark
+
+	* lib/spark/.cvsignore, lib/spark/Makefile.am,
+	* lib/spark/spark.cpp, lib/spark/spark.h, lib/spark/spark.rb:
+	- added libSpark files; a framework for apps using the kerosin
+	library
+
+	* lib/zeitgeist/leaf.h:
+	- fixed recursive call in ListChildrenSupportingClass
+
 2004-04-11  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/visionperceptor/visionperceptor_c.cpp: 
@@ -21,7 +122,8 @@
 	* plugin/soundsystemfmod/soundmodulefmod.h:
 	* plugin/soundsystemfmod/soundeffectfmod.cpp: 
 	* plugin/soundsystemfmod/soundeffectfmod.h: 
-	- changed Load method to take std::string arguments (due to changes in the base class)
+	- changed Load method to take std::string arguments (due to
+	changes in the base class)
 
 	* app/scenetest/md5mesh_c.cpp: 
 	- fixed md5mesh for new ruby interface 
