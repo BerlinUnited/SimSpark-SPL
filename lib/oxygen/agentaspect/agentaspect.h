@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.5.2.1.2.2 2003/12/09 19:31:05 rollmark Exp $
+   $Id: agentaspect.h,v 1.5.2.1.2.3 2003/12/09 20:23:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 #include "effector.h"
 #include "perceptor.h"
 
@@ -44,6 +45,11 @@ public:
         actions using the corresponding effectors
     */
     bool RealizeActions(boost::shared_ptr<ActionObject::TList> actions);
+
+    /** QuerySensors collects data from all perceptors below this
+        AgentAspect
+     */
+    BaseParser::TPredicateList QueryPerceptors();
 
 protected:
 private:
