@@ -27,18 +27,17 @@ int
 main()
 {
     flush(*Console::instance().getStream());
+    Utility::smux.addStream(&cout);
     
     string s;
+    long int i = 0;
+    
     while (true) 
     {    
-        Utility::smux.normal() << "Eingabe: ";
+        Utility::smux.normal() << "console:/ " << i << ") " << flush;
+        ++i;
         getline(std::cin,s);
-        cout << "done\n";
-        if (Console::instance().execute(s))
-            cout << "OK\n";
-        else
-            cout << "Ups\n";
-        flush(*Console::instance().getStream());        
+        Console::instance().execute(s);
     }
 
     return 0;
