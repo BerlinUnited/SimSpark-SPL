@@ -1,3 +1,20 @@
+For later:
+
+- To simulate aerodynamic drag, it would be better to use the square
+  of the velocity, because that's how drag works in reality. The force
+  should also be applied at the object's aerodynamic center rather
+  than at the body location. These may be the same, but (especially if
+  you're using geometry transforms) they may not be. The center of the
+  object's cross section would probably be close to the aerodynamic
+  center, at least for non-engineering purposes. In any case,
+  dBodyAddForceAtRelPos? will allow you to apply the force at a
+  specific point in the body's frame of reference.
+
+- Note that if when simulating rolling friction, you should only apply
+  the damping when the object is actually touching the ground. Check
+  for the existence of a contact joint between the object and the
+  ground, for example.
+
 For 0.3:
 
 - add kick off selection to monitor (left/right/random)
