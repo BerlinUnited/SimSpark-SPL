@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.3.4.1 2003/12/04 17:33:26 rollmark Exp $
+   $Id: forceeffector.cpp,v 1.3.4.2 2003/12/10 10:22:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,6 +34,9 @@ ForceEffector::ForceEffector()
     mMaxForce = 5.0f;
 }
 
+bool ForceEffector::Realize(boost::shared_ptr<ActionObject> /*action*/)
+{
+  /*
 bool ForceEffector::Perform(boost::shared_ptr<BaseNode> &base, float )
 {
     if (!base) return false;
@@ -49,6 +52,9 @@ bool ForceEffector::Perform(boost::shared_ptr<BaseNode> &base, float )
 
     mForce.Set(0,0,0);
     return true;
+  */
+
+  return false;
 }
 
 void ForceEffector::AddForce(const salt::Vector3f& force)
@@ -57,8 +63,8 @@ void ForceEffector::AddForce(const salt::Vector3f& force)
 }
 
 shared_ptr<ActionObject>
- ForceEffector::GetActionObject(const BaseParser::TPredicate& /*predicate*/)
+ForceEffector::GetActionObject(const BaseParser::TPredicate& /*predicate*/)
 {
-  return shared_ptr<ActionObject>(new ActionObject());
+  return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
 }
 
