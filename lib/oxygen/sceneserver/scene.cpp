@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: scene.cpp,v 1.4 2004/04/10 12:49:45 rollmark Exp $
+   $Id: scene.cpp,v 1.5 2004/04/11 17:06:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ const salt::Matrix& Scene::GetWorldTransform() const
     return mIdentityMatrix;
 }
 
-void Scene::SetWorldTransform(const salt::Matrix &transform)
+void Scene::SetWorldTransform(const salt::Matrix &/*transform*/)
 {
 }
 
