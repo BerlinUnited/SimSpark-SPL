@@ -3,7 +3,7 @@
 (RubySceneGraph 0 1)
 (
  ; create the torso
- (node Transform
+ (node AgentAspect
        (setName torso)
        (setLocalPos 0 0 0.5)
        (importScene rsg/boxspheres/box.rsg 1.3 1 1 5 matRed)
@@ -21,6 +21,17 @@
 	     (setSenseMyPos false)
 	     (setStaticSenseAxis false)
 	     (addNoise false)
+	     )
+
+       ; install a kick effector
+       (node KickEffector
+	     (setKickMargin 2)
+	     (setForceFactor 0.7)
+	     (setTorqueFactor 0.1)
+	     (setNoiseParams 0.4 0.02 0.9 4.5)
+	     (setSteps 10)
+	     (setMaxPower 100.0)
+	     (setAngleRange 0.0 50.0)
 	     )
 
        (node Transform
