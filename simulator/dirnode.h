@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYGRAPH_DIRNODE_H
-#define RCSS_ENTITYGRAPH_DIRNODE_H
+#ifndef RCSS_ENTITY_DIRNODE_H
+#define RCSS_ENTITY_DIRNODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -30,7 +30,7 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0 // fix xemacs indent
 }}
@@ -40,10 +40,12 @@ class DirNode : public BaseNode
 {
 public:
     DirNode(const std::string& name = "<unknown>",
-            BaseNode* parent = 0);
+            DirNode* parent = 0);
     ~DirNode();
 
-    std::string getPath() const;
+    void process();
+
+    virtual std::string getPath() const;
 
     void registerChild(BaseNode* child);
     void unregisterChild(BaseNode* child);
@@ -57,7 +59,7 @@ public:
 protected:
     DirNode(NodeType node_type, 
             const std::string& name = "<unknown>",
-            BaseNode* parent = 0);
+            DirNode* parent = 0);
 
     std::list<BaseNode*> M_children;        
         
