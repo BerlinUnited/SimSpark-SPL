@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller.cpp,v 1.6 2004/03/09 12:13:57 rollmark Exp $
+   $Id: fpscontroller.cpp,v 1.7 2004/03/20 08:38:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ FPSController::FPSController() : BaseNode()
     mRight    = false;
     mUp       = false;
     mDown     = false;
+    mAcceleration = 10;
 }
 
 FPSController::~FPSController()
@@ -58,7 +59,7 @@ void FPSController::OnUnlink()
     mBody.reset();
 }
 
-void FPSController::PrePhysicsUpdateInternal(float deltaTime)
+void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     if (mBody.get() == 0)
         {
@@ -66,22 +67,17 @@ void FPSController::PrePhysicsUpdateInternal(float deltaTime)
         }
 
     // determine force direction
-    Vector3f force(0,0,0);
+    Vector3f vec(0.0f,0.0f,0.0f);
 
-    if (mForward)  force.z() -= 1.0f;
-    if (mBackward) force.z() += 1.0f;
-    if (mRight)    force.x() += 1.0f;
-    if (mLeft)     force.x() -= 1.0f;
-    if (mUp)       force.y() += 1.0f;
-    if (mDown)     force.y() -= 1.0f;
-
-    if (force.Length() > 1.0f)
-        {
-            force.Normalize();
-        }
+    if (mForward)  vec.z() -= 1.0f;
+    if (mBackward) vec.z() += 1.0f;
+    if (mRight)    vec.x() += 1.0f;
+    if (mLeft)     vec.x() -= 1.0f;
+    if (mUp)       vec.y() += 1.0f;
+    if (mDown)     vec.y() -= 1.0f;
 
     // constrain angles
-    if(mVAngle>88.0f)
+    if(mVAngle > 88.0f)
         {
             mVAngle = 88.0f;
         } else if(mVAngle<-88.0f)
@@ -94,19 +90,20 @@ void FPSController::PrePhysicsUpdateInternal(float deltaTime)
     matrix.RotateX(gDegToRad(-mVAngle));
     mBody->SetRotation(matrix);
 
-    force *= 20.0f/deltaTime;
-    force = matrix.Rotate(force);
-    mBody->AddForce(force);
-
     float mass = mBody->GetMass();
-    Vector3f vel = mBody->GetVelocity();
 
-    mBody->AddForce(
-                    Vector3f(
-                             -vel[0]*mass/deltaTime,
-                             -vel[1]*mass/deltaTime,
-                             -vel[2]*mass/deltaTime
-                             ));
+    if (vec.SquareLength() > 0)
+        {
+            // accelerate the body
+            vec.Normalize();
+            Vector3f force = matrix.Rotate(vec * mass * mAcceleration);
+            mBody->AddForce(force);
+        } else
+            {
+                // decelerate the body
+                vec = mBody->GetVelocity() * mAcceleration * mass * -1;
+                mBody->AddForce(vec);
+            }
 }
 
 void FPSController::AdjustHAngle(const float delta)
@@ -148,3 +145,14 @@ void FPSController::Down(const bool state)
 {
     mDown = state;
 }
+
+void FPSController::SetAcceleration(const float accel)
+{
+    mAcceleration = accel;
+}
+
+float FPSController::GetAcceleration() const
+{
+    return mAcceleration;
+}
+

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fpscontroller.h,v 1.6 2004/03/09 12:14:33 rollmark Exp $
+   $Id: fpscontroller.h,v 1.7 2004/03/20 08:38:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,6 +69,12 @@ public:
     /** enables or disables down movement */
     void Down(const bool state);
 
+    /** sets the applied acceleration */
+    void SetAcceleration(const float accel);
+
+    /** returns the applied acceleration */
+    float GetAcceleration() const;
+
 protected:
     /** calculates and applies the force needed to perfom the
      * activated movements */
@@ -86,6 +92,9 @@ protected:
 protected:
     /** reference to the parent body node */
     boost::shared_ptr<Body> mBody;
+
+    /** the acceleration of the controller */
+    float   mAcceleration;
 
     /** the current horizontal angle */
     float   mHAngle;
