@@ -2,12 +2,6 @@ if BUILD_KEROSIN
 noinst_PROGRAMS = inputtest
 endif
 
-all-local:
-	mkdir -p ${srcdir}/sys/script/
-	rm -f ${srcdir}/sys/script/*.rb
-	cd ${srcdir}/sys/script/ && \
-	${LN_S} ../../*.rb .
-
 if DEBUG
 LDADD = \
 	${top_srcdir}/lib/kerosin/libkerosin_debug.la \
