@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.1.2.2 2004/01/16 11:04:47 rollmark Exp $
+   $Id: contactjointhandler.h,v 1.1.2.3 2004/01/29 10:20:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,9 +37,10 @@ class ContactJointHandler : public CollisionHandler
   ContactJointHandler();
   virtual ~ContactJointHandler();
 
-  /** creates a contact joint between the bodies corresponding to our
-      Collider and the collidee's geom using the surface parameters
-      stored in the mSurfaceParameter member.
+  /** Check if the collidee also has a ContactJoint handler registered
+      to it. If yes, create a contact joint between the bodies
+      corresponding to our Collider and the collidee's geom using the
+      surface parameters stored in the mSurfaceParameter member.
 
        \param collidee is the geom ID of the colliders collision
        partner
@@ -54,6 +55,11 @@ class ContactJointHandler : public CollisionHandler
       CollisionHandler creates
   */
   virtual void SetSurfaceParameter(const dSurfaceParameters& surface);
+
+  /** the ContactJointHandler is not a symmetric handler. See
+      CollisionHandler::IsSymmetricHandler for an explanation
+  */
+  virtual bool IsSymmetricHandler() { return false; }
 
  protected:
     /** the ODE surface parameters of the created contact joint */
