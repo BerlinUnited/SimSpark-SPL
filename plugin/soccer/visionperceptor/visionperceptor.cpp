@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.1 2004/01/22 06:44:10 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.2 2004/01/26 15:19:29 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,20 +21,31 @@
 */
 #include "visionperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/physicsserver/raycollider.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
-
-#define TEST_ME 0
-
-#if TEST_ME
-#include <iostream>
-#endif
 
 using namespace oxygen;
 using namespace boost;
 
-VisionPerceptor::VisionPerceptor() : oxygen::Perceptor()
+VisionPerceptor::VisionPerceptor() : oxygen::Perceptor(), mAddNoise(true)
 {
+    salt::UniformRNG<> rng(-0.005,0.005);
+    mError = salt::Vector3f(rng(),rng(),rng());
+
+    // we use small sigmas for generating small measurement errors
+    // normally distributed around 0.0.
+    // the sigmas should be set by script vars
+
+    // dist error values approx. between -0.5 and 0.5
+    mDistErrorRNG =
+        std::auto_ptr<salt::NormalRNG<> >(new salt::NormalRNG<>(0.0, 0.0965));
+    // angle error in X-Y plane, approx. between -0.65 and 0.64
+    mThetaErrorRNG =
+        std::auto_ptr<salt::NormalRNG<> >(new salt::NormalRNG<>(0.0, 0.1225));
+    // latitudal angle error, approx. between -0.8 and 0.8
+    mPhiErrorRNG =
+        std::auto_ptr<salt::NormalRNG<> >(new salt::NormalRNG<>(0.0, 0.1480));
 }
 
 VisionPerceptor::~VisionPerceptor()
@@ -75,46 +86,111 @@ VisionPerceptor::Percept(Predicate& predicate)
     {
         GetLog()->Warning()
             << "WARNING: (VisionPerceptor) parent node is not derived from TransformNode\n";
-    } else
-        {
-            myPos = parent->GetWorldTransform().Pos();
-        }
+    } else {
+        myPos = parent->GetWorldTransform().Pos();
+    }
 
     TLeafList transformList;
     activeScene->GetChildrenSupportingClass("Transform", transformList, true);
 
-    float dist;
-    float a1;
-    float a2;
+    ObjectData od;
+    std::list<ObjectData> visibleObjects;
 
     for (TLeafList::iterator i = transformList.begin();
          i != transformList.end(); ++i)
     {
+        od.mVisible = true;
         shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
-        const salt::Vector3f& pos = j->GetWorldTransform().Pos() - myPos;
+        od.mRelPos = j->GetWorldTransform().Pos() - myPos;
+        if (mAddNoise) od.mRelPos += mError;
 
-        dist = salt::gSqrt(pos[0]*pos[0]+pos[1]*pos[1]+pos[2]*pos[2]);
-        if (dist > 0)
+        od.mDist = od.mRelPos.Length();
+
+        if (od.mDist > 0.1)
         {
-            a1 = salt::gRadToDeg(salt::gArcTan2(pos[2],pos[0]));
-            // z - coordinate
-            a2 = salt::gRadToDeg(salt::gArcCos(pos[1]/dist));
-        } else {
-            a1 = a2 = 0.0;
+            od.mObj = i;
+            // theta is the angle in the X-Y (horizontal) plane
+            od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[2], od.mRelPos[0]));
+            // latitude
+            od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[1]/od.mDist));
+            // make some noise
+            if (mAddNoise)
+            {
+                od.mDist += (*mDistErrorRNG)();
+                od.mTheta += (*mThetaErrorRNG)();
+                od.mPhi += (*mPhiErrorRNG)();
+            }
+            visibleObjects.push_back(od);
         }
+    }
+    if (visibleObjects.empty()) return true;
+
+#if 0
+    // sort objects wrt their distance
+    visibleObjects.sort();
+    // check visibility
+    std::list<ObjectData>::iterator start = visibleObjects.begin();
+    ++start;
+
+    // this is going to be expensive now: to check occlusion of an object,
+    // we have to check all closer objects. For n objects, we have to
+    // check at most n*(n-1)/2 objects.
+    shared_ptr<oxygen::RayCollider> ray =
+        shared_static_cast<oxygen::RayCollider>(GetCore()->New("kerosin/RayCollider"));
 
 
+    for (std::list<ObjectData>::iterator i = start;
+         i != visibleObjects.end(); ++i)
+    {
+        for (std::list<ObjectData>::iterator j = visibleObjects.begin();
+             j != i; ++j)
+        {
+            // cast ray from camera to object (j)
+            ray->SetParams(myPos,j->mRelPos,j->mDist);
+
+            dContactGeom contact;
+
+            shared_ptr<Collider> collider =
+                shared_static_cast<Collider>((*(i->mObj))->GetChild("geometry"));
+
+            if (collider.get() != 0)
+            {
+                if (0 < dCollide(ray->GetODEGeom(),
+                                 collider->GetODEGeom(),
+                                 1, /* ask for at most one collision point */
+                                 &contact, sizeof(contact)))
+                {
+                    j->mVisible = false;
+                    j = i;
+                }
+            }
+        }
+    }
+#endif
+
+    for (std::list<ObjectData>::iterator i = visibleObjects.begin();
+         i != visibleObjects.end(); ++i)
+    {
         Predicate::TParameterList position;
-        position.push_back(std::string("pos"));
-        position.push_back(dist);
-        position.push_back(a1);
-        position.push_back(a2);
+#define DEBUG_VISIBILITY_CHECK
+#ifdef DEBUG_VISIBILITY_CHECK
+        if (i->mVisible)
+            position.push_back(std::string("pol"));
+        else
+            position.push_back(std::string("invisible"));
+#else
+        if (! i->mVisible) continue;
+        position.push_back(std::string("pol"));
+#endif
+
+        position.push_back(i->mDist);
+        position.push_back(i->mTheta);
+        position.push_back(i->mPhi);
 
         Predicate::TParameterList element;
 
-        element.push_back((*i)->GetName());
+        element.push_back((*(i->mObj))->GetName());
         element.push_back(position);
-
         predicate.parameter.push_back(element);
     }
 

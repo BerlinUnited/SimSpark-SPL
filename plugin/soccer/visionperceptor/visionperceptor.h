@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.1.2.1 2004/01/22 06:44:10 fruit Exp $
+   $Id: visionperceptor.h,v 1.1.2.2 2004/01/26 15:19:29 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #ifndef VISIONPERCEPTOR_H
 #define VISIONPERCEPTOR_H
 
+#include <memory>
+#include <salt/random.h>
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/sceneserver/sceneserver.h>
 
@@ -35,7 +37,36 @@ public:
     bool Percept(oxygen::Predicate& predicate);
 
 private:
+    struct ObjectData
+    {
+        TLeafList::iterator mObj;
+        float mDist; float mTheta, mPhi;
+        salt::Vector3f mRelPos;
+        bool mVisible;
+
+        ObjectData& operator=(const ObjectData& rhs)
+        { mObj = rhs.mObj; mVisible = rhs.mVisible;
+          mRelPos = rhs.mRelPos;
+          mDist = rhs.mDist; mTheta = rhs.mTheta; mPhi = rhs.mPhi; }
+
+        int operator==(const ObjectData& rhs) const
+        { return mDist == rhs.mDist; }
+        int operator<(const ObjectData& rhs) const
+        { return mDist < rhs.mDist; }
+    };
+
+    //! a reference to the scene server
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
+    //! vision calibration error
+    salt::Vector3f mError;
+    //! random measurement error generator (x-coordinate)
+    std::auto_ptr<salt::NormalRNG<> > mDistErrorRNG;
+    //! random measurement error generator (y-coordinate)
+    std::auto_ptr<salt::NormalRNG<> > mThetaErrorRNG;
+    //! random measurement error generator (z-coordinate)
+    std::auto_ptr<salt::NormalRNG<> > mPhiErrorRNG;
+    //! flag if we should noisify the data
+    bool mAddNoise;
 };
 
 DECLARE_CLASS(VisionPerceptor);
