@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.6 2004/06/06 10:03:32 fruit Exp $
+   $Id: soccerruleaspect.h,v 1.7 2004/06/11 08:51:10 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,6 +91,9 @@ protected:
 
     /** update the RuleAspect during Goal mode */
     void UpdateGoal();
+
+    /** update the RuleAspect when the match is over */
+    void UpdateGameOver();
 
     /** checks if the ball is not on the playing field and puts it
         back to its last valid position. returns true if the ball left
