@@ -1,3 +1,10 @@
+2004-04-06  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/Makefile.am: 
+	headers required for other plugins need to be installed in order to be able 
+	to extend the simulator. The soccertypes.h and soccerbase/soccerbase.h are
+	installed so that they are accessible from outside the project.
+
 2004-04-05  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb:
@@ -70,6 +77,11 @@
 	* lib/oxygen/physicsserver/contactjointhandler_c.cpp:
 	- added get method for a subset of the ode surface parameter
 	structure managed by the ContactJointHandler
+
+2004-03-29  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/lib/Makefile.am: 
+	installing monitor library as static lib
 
 2004-03-28  Oliver Obst  <fruit@robolog.org>
 
