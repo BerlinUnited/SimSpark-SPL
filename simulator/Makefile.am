@@ -23,3 +23,5 @@ $(top_srcdir)/utility/console/libconsole.la \
 $(top_srcdir)/utility/forwarder/libforwarder.la \
 $(top_srcdir)/utility/classserver/libclassserver.la \
 $(top_srcdir)/simulator/nodecreator/libnodecreator.la
+
+MOSTLYCLEANFILES = core.*
