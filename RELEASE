@@ -1,4 +1,37 @@
-Dear all,
+RELEASE News for different forums                        -*- outline -*-
+
+* Overview
+ ** [Soccer Lists]
+ ** [General (SF Project News etc)]
+
+* Content
+
+** [Soccer Lists]
+
+we have just released rcssserver3D-0.3. 
+
+In this release, a few bugs have been fixed and the soccer rules have
+been polished for the competition. In the soccer simulation, the ball
+is dropped when no player goes to the ball; it is also possible to
+drop the ball manually now. The match length has been extended to 2* 5
+minutes. The goals got physical goalposts and a crossbar.
+
+We added a 2D view and some more keys to the 'lite' monitor (in the
+monitor window, press '?' for an overview). Logfiles can be watched in
+single step mode. When the match is over, simulator and monitor are
+automatically terminated now.
+
+For details have a look into the ChangeLog.
+
+You can get the package on the Soccer Simulator page on SourceForge [1].
+
+cheers
+Oliver Obst
+
+[1] http://sourceforge.net/projects/sserver/
+
+
+** [General (SF Project News etc)]
 
 we have just released rcssserver3D-0.3. 
 
@@ -6,20 +39,25 @@ rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
 framework and a scene description language for setting up different
 kinds of simulations. The soccer simulation built on top of this will
-be used for the 3D Simulation League competition on RoboCup 2004 [1].
+be used for the 3D Simulation League competition on RoboCup 2004 
+(see http://www.robocup2004.pt/).
 
 In this release, a few bugs have been fixed and the soccer rules have
 been polished for the competition. In the soccer simulation, the ball
 is dropped when no player goes to the ball; it is also possible to
-drop the ball manually now. The match length has been extended to 2*
-5 minutes.
+drop the ball manually now. The match length has been extended to 2* 5
+minutes. The goals got physical goalposts and a crossbar.
 
-For details have a look into the ChangeLog.
+We added a 2D view and some more keys to the 'lite' monitor (in the
+monitor window, press '?' for an overview). Logfiles can be watched in
+single step mode. When the match is over, simulator and monitor are
+automatically terminated now.
 
-You can get the package on the Soccer Simulator page on SourceForge [2].
+For details have a look into the ChangeLog coming with the package.
+
+You can get the package on the Soccer Simulator page on SourceForge
+at http://sourceforge.net/projects/sserver/
 
 cheers
 Oliver Obst
 
-[1] http://www.robocup2004.pt/
-[2] http://sourceforge.net/projects/sserver/

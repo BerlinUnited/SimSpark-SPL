@@ -1,3 +1,53 @@
+2004-06-13  Oliver Obst  <fruit@robolog.org>
+
+	* released rcssserver3D-0.3
+
+	* app/simulator/rcssserver3D.rb: 
+	- set up error logging to cerr
+
+	* app/simulator/rcssserver3D.rb: 
+	- added new soccer variable LineWidth (for the width of lines of 
+	   the field).  
+	- renamed variables barHeight and halfBarHeight to barDiameter and
+	  barRadius, respectively.  
+	- setting barDiameter to LineWidth 
+	- moving goalpost and crossbar colliders towards the center of the
+	  field (by the amount of LineWidth) 
+	- leaving small space (5cm) between the goalposts and the crossbar to 
+	  avoid creating contact joints during each step.  
+	- leaving small space (barRadius/2) between ground and goal posts to 
+	  avoid creating contact joints during each step.
+	
+	* app/rcssmonitor3d/lite/glserver.h: 
+	* app/rcssmonitor3d/lite/glserver.cpp: 
+	- added optional parameter to DrawGoal() to specify the radius of 
+	  goal posts and bars.  
+	- shifted goals by the bar radius towards the center of the field to
+	  be compliant with the FIFA rules. This was a bug reported by 
+	  Tom Howard <tomhoward@users.sourceforge.net>.
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	- removed setting up the error logging stuff (should be done from 
+	  ruby if necessary)
+	- changed flag radius from .16 to .1 
+	- drawing goals with line width as bar diameter
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- printing debug output to the logserver instead of cerr directly
+
+	* lib/zeitgeist/logserver/logserver.cpp: 
+	- using vsnprintf instead of vsprintf to print to buffers with 
+	  limited size
+
+	* lib/zeitgeist/core.cpp: 
+	- the conditional for adding cout streams to the logserver has been 
+	  changed to INIT_DEBUG.  By default, no logging streams are added 
+	  to the logserver now (adding can be done from ruby scripts like 
+	  zeitgeist.rb)
+	
+	* lib/salt/gcc/sharedlibrary.cpp: 
+	- changed conditional name for debug output from RCSS_DEBUG to INIT_DEBUG.
+
 2004-06-11  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/lite/monitor.cpp: 
@@ -86,7 +136,9 @@
 2004-06-06  Oliver Obst  <fruit@robolog.org>
 
 	* app/simulator/createagentdb.sh.in: 
-	changed timer type for installed agentdb.list from default to jiffies
+	- the script was changed to create the same kind of entry for the 
+	  installed agentdb.list (because the agentdb.list coming with the 
+	  simulator contains jiffies as counter).
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
 	- fixed the side for clearing the players from penalty areas during 

@@ -1,4 +1,4 @@
-rcssserver3D-0.2.2 Installation
+rcssserver3D-0.3 Installation
 ===============================
 (C) 2004 Universitaet Koblenz, Germany.
 
@@ -24,7 +24,7 @@ Required libraries for the default installation
 ===============================================
 
 * spades
-  - working versions: 0.93, older versions may also work
+  - working versions: 1.0, older versions may also work
   - get it at: http://sourceforge.net/projects/spades-sim
   - description: agent middleware, handles timing issues and networking
   - additional info: you need a recent version of expat for spades
