@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.2.2.2 2003/12/23 18:14:27 rollmark Exp $
+   $Id: main.cpp,v 1.2.2.3 2003/12/25 18:29:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ void processInput(int argc, char* argv[])
     }
 }
 
-void drawScene(shared_ptr<BaseParser::TPredicateList> predicates)
+void drawScene(shared_ptr<Predicate::TList> predicates)
 {
     if (predicates.get() == 0)
         {
@@ -116,39 +116,23 @@ void drawScene(shared_ptr<BaseParser::TPredicateList> predicates)
 
     // look for "(player x y z)(player x y z)..."
     for (
-         BaseParser::TPredicateList::const_iterator iter = predicates->begin();
+         Predicate::TList::const_iterator iter = predicates->begin();
          iter != predicates->end();
          ++iter
          )
         {
-            const BaseParser::TPredicate& predicate = (*iter);
+            const Predicate& predicate = (*iter);
 
             if (predicate.name != "player")
                 {
                     continue;
                 }
 
-            salt::Vector3f pos(0,0,0);
-            int i(0);
-            BaseParser::TParameterList::const_iterator param=predicate.parameter.begin();
+            Predicate::TParameterList::const_iterator param
+                = predicate.parameter.begin();
 
-            while (
-                   (param != predicate.parameter.end()) &&
-                   (i<=2)
-                   )
-                {
-                    if ((*param).type() != typeid(string))
-                        {
-                            break;
-                        }
-
-                    pos[i] = atof(any_cast<string>(*param).c_str());
-
-                    ++param;
-                    ++i;
-                }
-
-            if (i != 3)
+            salt::Vector3f pos;
+            if (! predicate.GetValue(param,pos))
                 {
                     continue;
                 }
@@ -188,7 +172,7 @@ void display(void)
    gCommServer->GetMessage();
 
    // draw cached positions
-   shared_ptr<BaseParser::TPredicateList> predicates = gCommServer->GetPredicates();
+   shared_ptr<Predicate::TList> predicates = gCommServer->GetPredicates();
    drawScene(predicates);
 
    glutSwapBuffers();

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.2.2.2 2003/12/23 18:13:25 rollmark Exp $
+   $Id: commserver.cpp,v 1.2.2.3 2003/12/25 18:29:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,14 +69,14 @@ CommServer::Parse(std::string msg)
 {
     if (mParser.get() == 0)
         {
-            mPredicates = shared_ptr<BaseParser::TPredicateList>();
+            mPredicates = shared_ptr<Predicate::TList>();
             return;
         }
 
     mPredicates = mParser->Parse(msg);
 }
 
-shared_ptr<BaseParser::TPredicateList>
+shared_ptr<Predicate::TList>
 CommServer::GetPredicates()
 {
   return mPredicates;
