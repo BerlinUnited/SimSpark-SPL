@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionhandler.h,v 1.1.2.2 2004/01/16 11:04:13 rollmark Exp $
+   $Id: collisionhandler.h,v 1.1.2.3 2004/01/29 10:18:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,39 +45,72 @@ class CollisionHandler : public BaseNode
   //
   // Functions
   //
- public:
-  CollisionHandler() : BaseNode() {};
-  virtual ~CollisionHandler() {};
+public:
+    CollisionHandler() : BaseNode() {};
+    virtual ~CollisionHandler() {};
 
-  /** HandleCollision is called from the Collider to which this
-      CollisionHandler is registered to. Derived classes implement
-      this callback to react in response to a collision.
+    /** HandleCollision is called from the Collider to which this
+        CollisionHandler is registered to. Derived classes implement
+        this callback to react in response to a collision.
 
-       \param collidee is the geom ID of the colliders collision
-       partner
+        \param collidee is the geom ID of the colliders collision
+        partner
 
-       \param holds the contact points between the two affected geoms
-       as returned from the ODE dCollide function
-   */
-  virtual void HandleCollision
-  (boost::shared_ptr<Collider> collidee, dContact& contact) = 0;
+        \param holds the contact points between the two affected geoms
+        as returned from the ODE dCollide function
+    */
+    virtual void HandleCollision
+    (boost::shared_ptr<Collider> collidee, dContact& contact) = 0;
 
- protected:
-  virtual void OnLink();
-  virtual void OnUnlink();
+    /** returns true if a class of CollisionHandlers wants to handle
+        both- a collision and it's symmetric counterpart.
 
-  //
-  // Members
-  //
- protected:
-  /** the collider this CollisionHandler is associated with */
-  boost::shared_ptr<Collider> mCollider;
+        ODE reports us the set of colliding geoms, for example
+        {(a,b),(b,c)} for two collisions between three involved geoms
+        a,b and c. For each collision two symmetric pairs exist, for
+        example (a,b) and (b,a). ODE consideres both equal and only
+        reports one of them.
 
-  /** the world this CollisionHandler is associated with */
-  boost::shared_ptr<World> mWorld;
+        For the first pair (a,b) of the example above the
+        CollisionHandlers of a are notified about the collision with
+        b. In the symmetric case (b,a) the CollisionHandlers of b are
+        notified about the collision with a.
 
-  /** the space this CollisionHandler is associated with */
-  boost::shared_ptr<Space> mSpace;
+        For some CollisionHandler, e.g. the ContactJointHandler this
+        behaviour is fine, as it is required to create exactly one
+        contact joint between the two colliding geoms. This can be
+        done by either one of the two involved
+        CollisionHandlers. Therefore the ContactJointHandler is not a
+        symmetric handler.
+
+        For other CollisionHandlers, e.g. the CollisionRecorder this
+        behaviour does not suffice as both CollisionHandler must be
+        notified if a collision occurs as both involved colliders want
+        to record a collision as it happens. In any case the collision
+        should be reported to both CollisionHandlers. The
+        CollisionRecorder therefore is a symmetric handler.
+
+        The default implementation returns true to indicate a
+        symmetric handler.
+     */
+    virtual bool IsSymmetricHandler() { return true; }
+
+protected:
+    virtual void OnLink();
+    virtual void OnUnlink();
+
+    //
+    // Members
+    //
+protected:
+    /** the collider this CollisionHandler is associated with */
+    boost::shared_ptr<Collider> mCollider;
+
+    /** the world this CollisionHandler is associated with */
+    boost::shared_ptr<World> mWorld;
+
+    /** the space this CollisionHandler is associated with */
+    boost::shared_ptr<Space> mSpace;
 };
 
 DECLARE_ABSTRACTCLASS(CollisionHandler);
