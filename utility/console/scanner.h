@@ -17,15 +17,15 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _SCANNER_H_
-#define _SCANNER_H_
+#ifndef UTILITY_SCANNER_H
+#define UTILITY_SCANNER_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #if defined(WIN32)
-#pragma warning (disable : 4786) // truncation of debug information
+#pragma warning (disable : 4786)        // truncation of debug information
 #endif
 
 #include <stdio.h>
@@ -34,7 +34,7 @@
 #include <string>
 
 /*! \class Scanner
-  $Id: scanner.h,v 1.1 2002/08/14 09:24:52 fruit Exp $
+  $Id: scanner.h,v 1.2 2002/08/21 08:41:48 fruit Exp $
 
     Scanner - a simple tokenizer
 
@@ -51,97 +51,98 @@
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 */
-class Scanner  
+class Scanner
 {
 public:
-    enum ETokenType
+    enum TokenType
     {
-        eTT_INVALID,
-        eTT_INT,        
-        eTT_FLOAT,
-        eTT_STRING,    // unrecognized quoted string
-        eTT_LABEL,     // unrecognized unquoted string
-        eTT_SEPARATOR, // recognized separator
-        eTT_TOKEN      // recognized token
+        S_TT_INVALID,
+        S_TT_INT,
+        S_TT_FLOAT,
+        S_TT_STRING,             // unrecognized quoted string
+        S_TT_LABEL,              // unrecognized unquoted string
+        S_TT_SEPARATOR,          // recognized separator
+        S_TT_TOKEN               // recognized token
     };
 
-    union UTokenId
+    union TokenId
     {
-        void *p;
+        void* p;
         long l;
-        int  i;
+        int i;
     };
 
-    struct SToken
+    struct Token
     {
-        ETokenType    type;
-        union 
-   {
-       int      i;
-            float    f;
-            char     separator;
-            char     *string;
-            char     *label;            
-            UTokenId id;
-        } data;
+        TokenType type;
+        union
+        {
+            int i;
+            float f;
+            char separator;
+            char *string;
+            char *label;
+            TokenId id;
+        }
+        data;
     };
 
-    struct SInitInfo
+    struct InitInfo
     {
-            //! delimiter for a quoted string                [default "\""]
-       char *stringQuote;   
-            //! ignored characters used to seperate tokens   [default " \t\n"] 
-       char *whiteSpace;    
-            //! chars, that seperate tokens                  [default NULL]
-       char *separator;        
-            //! char, that starts an escape sequence         [default '\']
-       char escape;            
-       // Only recognized escape is '\[stringQuote-Char]' 
-       // inside a quoted string. Every other sequence defaults 
-       // to the escaped character (i.e. '\a' to 'a')
+        //! delimiter for a quoted string                [default "\""]
+        char* string_quote;
+        //! ignored characters used to seperate tokens   [default " \t\n"] 
+        char* white_space;
+        //! chars, that seperate tokens                  [default NULL]
+        char* separator;
+        //! char, that starts an escape sequence         [default '\']
+        char escape;
+        // Only recognized escape is '\[string_quote-Char]' 
+        // inside a quoted string. Every other sequence defaults 
+        // to the escaped character (i.e. '\a' to 'a')
     };
-
-protected:    
-    struct SState
-    {
-   char *input;      // start of referenced input
-        int inputLength;  // length of the complete input
-        char *inputPos;   // current processed position
-        char oldChar;     // remembered char replaced by \0
-    };
-
-    typedef std::map<std::string, UTokenId> TTokenMap; 
-    typedef std::list<SState*> TStateList;
-
-    TStateList mStateStack;    // list of pushed states
-    TTokenMap  mTokens;        // map from token to the assigned id
-    SState     mState;         // current state of the scanner
-    SInitInfo  mInfo;          // parameters used to initiliaze the scanner
 
 protected:
-    bool scanNumber(char *pos, SToken &token);
-    
-    char* skipWhiteSpace(char *pos);
-    char* skipToken(char *pos, char &oldchar);
+    struct State
+    {
+        char* input;            // start of referenced input
+        int input_length;        // length of the complete input
+        char* input_pos;         // current processed position
+        char old_char;           // remembered char replaced by \0
+    };
 
-    void applyEscapeSequences(char **start);
+    typedef std::map < std::string, TokenId > TokenMap;
+    typedef std::list < State* > StateList;
+
+    StateList M_state_stack;     // list of pushed states
+    TokenMap M_tokens;          // map from token to the assigned id
+    State M_state;              // current state of the scanner
+    InitInfo M_info;            // parameters used to initiliaze the scanner
+
+protected:
+    bool scanNumber(char* pos, Token& token);
+
+    char* skipWhiteSpace(char* pos);
+    char* skipToken(char* pos, char &oldchar);
+
+    void applyEscapeSequences(char** start);
 
 public:
-    Scanner(SInitInfo *initInfo = NULL);
+    Scanner(InitInfo* initInfo = 0);
     virtual ~Scanner();
-    
-    static void defaultInitInfo(SInitInfo &initInfo);
-    void setInitInfo (const SInitInfo &initInfo);
-    void defineToken(const char *token, long l);
-    void defineToken(const char *token, int i);
-    void defineToken(const char *token, void *p);
-    
+
+    static void defaultInitInfo(InitInfo& init_info);
+    void setInitInfo(const InitInfo& init_info);
+    void defineToken(const char* token, long l);
+    void defineToken(const char* token, int i);
+    void defineToken(const char* token, void* p);
+
     void setInput(const char* input);
     void rewindInput();
 
-    bool getNextToken(SToken &token);
+    bool getNextToken(Token& token);
 
-    static void printToken(SToken &token);
+    static void printToken(Token& token);
 
     void pushState();
     bool popState();
@@ -149,4 +150,4 @@ public:
     const char* Scanner::lookupToken(int id);
 };
 
-#endif // _SCANNER_H_
+#endif                          // UTILITY_SCANNER_H

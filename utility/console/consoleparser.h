@@ -17,8 +17,12 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONSOLEPARSER_H_
-#define _CONSOLEPARSER_H_
+#ifndef UTILITY_CONSOLEPARSER_H
+#define UTILITY_CONSOLEPARSER_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "scanner.h"
 #include "variables/convar.h"
@@ -26,20 +30,20 @@
 //! the statement separators
 
 //! separates two statements
-static const std::string SP_SEPARATOR        = ";"; 
+static const std::string SP_SEPARATOR = ";";
 //! marks the remainder as a comment
-static const std::string SP_COMMENT          = "#"; 
+static const std::string SP_COMMENT = "#";
 //! the beginning of a vector
-static const std::string SP_VECTOR_BEGIN     = "<"; 
+static const std::string SP_VECTOR_BEGIN = "<";
 //! the float separator of a vector
-static const std::string SP_VECTOR_SEP       = ","; 
+static const std::string SP_VECTOR_SEP = ",";
 //! the end of a vector
-static const std::string SP_VECTOR_END       = ">"; 
+static const std::string SP_VECTOR_END = ">";
 
 class Console;
 
 /*! \class ConsoleParser
-  $Id: consoleparser.h,v 1.1 2002/08/14 09:24:52 fruit Exp $
+  $Id: consoleparser.h,v 1.2 2002/08/21 08:41:48 fruit Exp $
 
     ConsoleParser
 
@@ -91,86 +95,88 @@ class ConsoleParser
 {
 public:
     /*! a sequence of parsed statements (a statement is stored as
-      a list of convars)
-    */
-    typedef std::list<ConVar::TConVars> TStatementList;
+       a list of convars)
+     */
+    typedef std::list < ConVar::ConVars > StatementList;
 
     //! initializes the scanner
-    ConsoleParser::ConsoleParser();
-    ConsoleParser::~ConsoleParser();
-    
+    ConsoleParser();
+    ~ConsoleParser();
+
     /*! scans a string and converts it into a statement list the
-        created statement list has to be destroyed with
-        DeleteStatements by the caller on failure the statementlist is
-        empty and has not to be deleted per default empty statements -
-        statements without a token - are removed
-    */
-    std::pair<bool, TStatementList> 
-    scan(const std::string& toScan, bool removeEmptyStatements = true) const;
+       created statement list has to be destroyed with
+       DeleteStatements by the caller on failure the statementlist is
+       empty and has not to be deleted per default empty statements -
+       statements without a token - are removed
+     */
+    std::pair < bool, StatementList >
+    scan(const std::string& to_scan, bool remove_empty_statements = true) const;
     /*! checks the syntax of the statements,
-        assures that every statement does begin with a command,
-        removes empty statements
-    */
-    static bool parse(const TStatementList& statements);
+       assures that every statement does begin with a command,
+       removes empty statements
+     */
+    static bool parse(const StatementList& statements);
     //! deletes a statement list
-    static void deleteStatements(const TStatementList& statements);
-    //! deletes the ConVar*s of the statement
-    static void deleteStatement(ConVar::TConVars statement);
-    
+    static void deleteStatements(const StatementList& statements);
+    //! deletes the ConVars of the statement
+    static void
+    deleteStatement(ConVar::ConVars statement);
+
 protected:
-    ConsoleParser(const ConsoleParser&) {}
-    ConsoleParser& operator =(const ConsoleParser&) {}
-    
+    ConsoleParser(const ConsoleParser &) {}
+    ConsoleParser& operator =(const ConsoleParser &) {}
+
     //! a string list used by some methods
-    typedef std::list<std::string> TStrings;
+    typedef std::list < std::string > TStrings;
 
     //! wrapper for a more convenient call of Scan: the alias list is missing
-    std::pair<bool, ConVar::TConVars> 
+    std::pair < bool, ConVar::ConVars >
     ConsoleParser::doScan(const std::string& input) const;
     /*! Scans the input and converts every token into an appropriate ConVar.
-        The alias list is used to prevent a endless loop in expanding aliases,
-        e.g. alias a "b"; alias b "a" is catched.
-    */
-    std::pair<bool, ConVar::TConVars> 
-    ConsoleParser::scan(const std::string& input, TStrings usedAliases) const;
+       The alias list is used to prevent a endless loop in expanding aliases,
+       e.g. alias a "b"; alias b "a" is catched.
+     */
+    std::pair < bool, ConVar::ConVars >
+    ConsoleParser::scan(const std::string & input, TStrings used_aliases) const;
     /*! These methods reuse the ConVars stored in their parameters,
-        therefore the parameter contents may not be deleted. The token
-        list is splitted into several statements at SP_SEPARATOR.
-    */
-    TStatementList splitStatements(const ConVar::TConVars& tokens) const;
+       therefore the parameter contents may not be deleted. The token
+       list is splitted into several statements at SP_SEPARATOR.
+     */
+    StatementList
+    splitStatements(const ConVar::ConVars& tokens) const;
     //! removes the comments from a list of statements
-    TStatementList 
-    removeComments(const ConsoleParser::TStatementList& statements) const;
+    StatementList
+    removeComments(const ConsoleParser::StatementList& statements) const;
     /*! Removes the comments from a statement,
-        an empty statement may be the result.
-    */
-    ConVar::TConVars removeComment(const ConVar::TConVars& statement) const;
+       an empty statement may be the result.
+     */
+    ConVar::ConVars removeComment(const ConVar::ConVars& statement) const;
     /*! Replaces the tokens representing a vector with a vector token
-        from a list of statements
-    */
-    TStatementList 
-    replaceVectors(const ConsoleParser::TStatementList& statements) const;
+       from a list of statements
+     */
+    StatementList
+    replaceVectors(const ConsoleParser::StatementList& statements) const;
     /*! Replaces the tokens representing a vector with a vector token
-        from a statement.
-    */
-    ConVar::TConVars replaceVector(const ConVar::TConVars& statement) const;
+       from a statement.
+     */
+    ConVar::ConVars replaceVector(const ConVar::ConVars& statement) const;
     /*! Tries to match a token sequence with a vector. If iter points
-        to such a sequence, the sequence is deleted and instead a
-        vector token is returned. Otherwise the token pointed to by the
-        iter is returned unchanged.
-    */
-    ConVar::TConVars 
-    ConsoleParser::matchVector(ConVar::TConVars::const_iterator& iter,
-                ConVar::TConVars::const_iterator iterEnd) const;
+       to such a sequence, the sequence is deleted and instead a
+       vector token is returned. Otherwise the token pointed to by the
+       iter is returned unchanged.
+     */
+    ConVar::ConVars
+    ConsoleParser::matchVector(ConVar::ConVars::const_iterator& iter,
+                               ConVar::ConVars::const_iterator iter_end) const;
     //! removes all empty statements
-    TStatementList 
-    removeEmptyStatements(const ConsoleParser::TStatementList& statements) const;
+    StatementList
+    removeEmptyStatements(const ConsoleParser::StatementList& statements) const;
     //! tests if the ConVar* is of type separator and contains the given value
-    static bool 
-    isItThisSeparator(const ConVar* conVar, const std::string& separator);
+    static bool
+    isItThisSeparator(const ConVar* con_var, const std::string& separator);
 
     //! the used scanner configuration
-    Scanner::InitInfo mScannerInfo;
+    Scanner::InitInfo M_scanner_info;
 };
 
-#endif // _CONSOLEPARSER_H_
+#endif                          // _CONSOLEPARSER_H_

@@ -19,127 +19,143 @@
 */
 #include "scanner.h"
 
-Scanner::Scanner(SInitInfo *initInfo)
+Scanner::Scanner(InitInfo* init_info)
 {
-    mState.input  = NULL;
-    mState.inputPos = NULL;
-    mState.oldChar = 0;
-    mState.inputLength = 0;
+    M_state.input = 0;
+    M_state.input_pos = 0;
+    M_state.old_char = 0;
+    M_state.input_length = 0;
 
-    if (initInfo != NULL)
-        mInfo = *initInfo;
+    if (init_info != 0)
+        M_info = *init_info;
     else
-   defaultInitInfo(mInfo);
+        defaultInitInfo(M_info);
 }
 
 Scanner::~Scanner()
 {
     // destroy current state
-    if (mState.input) delete[] mState.input;
+    if (M_state.input)
+        delete[] M_state.input;
 
     // destroy the state stack
-    TStateList::iterator i;
-    for(i=mStateStack.begin(); i!=mStateStack.end(); ++i) 
+    StateList::iterator i;
+    for (i = M_state_stack.begin(); i != M_state_stack.end(); ++i)
     {
-        if ((*i)->input) delete[] (*i)->input;
-        delete (*i);
+        if ((*i)->input)
+            delete[](*i)->input;
+        delete(*i);
     }
-    
-    mStateStack.clear();
+
+    M_state_stack.clear();
 }
 
-void 
-Scanner::defaultInitInfo(SInitInfo &initInfo)
+void
+Scanner::defaultInitInfo(InitInfo& init_info)
 {
-    initInfo.stringQuote = "\"";
-    initInfo.whiteSpace = " \t\n\r";
-    initInfo.separator = NULL;
-    initInfo.escape = '\\';
+    init_info.string_quote = "\"";
+    init_info.white_space = " \t\n\r";
+    init_info.separator = 0;
+    init_info.escape = '\\';
 }
 
-void 
-Scanner::setInitInfo(const SInitInfo &initInfo)
+void
+Scanner::setInitInfo(const InitInfo& init_info)
 {
-    mInfo = initInfo;
+    M_info = init_info;
 }
 
-void 
-Scanner::defineToken(const char *token, long l)
+void
+Scanner::defineToken(const char* token, long l)
 {
-    UTokenId id;
-    memset(&id,0,sizeof(id));
+    TokenId id;
+    memset(&id, 0, sizeof(id));
 
     id.l = l;
-    mTokens[token] = id;
+    M_tokens[token] = id;
 }
 
-void 
-Scanner::defineToken(const char *token, int i)
+void
+Scanner::defineToken(const char* token, int i)
 {
-    UTokenId id;
-    memset(&id,0,sizeof(id));
+    TokenId id;
+    memset(&id, 0, sizeof(id));
 
     id.i = i;
-    mTokens[token] = id;
+    M_tokens[token] = id;
 }
 
-void 
-Scanner::defineToken(const char *token, void *p)
+void
+Scanner::defineToken(const char* token, void *p)
 {
-    UTokenId id;
-    memset(&id,0,sizeof(id));
+    TokenId id;
+    memset(&id, 0, sizeof(id));
 
     id.p = p;
-    mTokens[token] = id;
+    M_tokens[token] = id;
 }
 
-void 
-Scanner::setInput(const char *input)
+void
+Scanner::setInput(const char* input)
 {
-    if (mState.input) delete[] mState.input;
-    mState.input = NULL;
-    mState.inputLength = 0;
+    if (M_state.input)
+        delete[] M_state.input;
+    M_state.input = 0;
+    M_state.input_length = 0;
 
     if (input)
     {
-        mState.inputLength = strlen(input);
-        
-        if (mState.inputLength) 
-        {
-            mState.input = new char[mState.inputLength+1];
-            strcpy(mState.input, input);
-        } else mState.input = NULL;    
+        M_state.input_length = strlen(input);
 
-        mState.inputPos    = mState.input;
-        mState.oldChar    = 0;
+        if (M_state.input_length)
+        {
+            M_state.input = new char[M_state.input_length + 1];
+            strcpy(M_state.input, input);
+        }
+        else
+            M_state.input = 0;
+
+        M_state.input_pos = M_state.input;
+        M_state.old_char = 0;
     }
 }
 
-void 
+void
 Scanner::rewindInput()
 {
-    mState.inputPos = mState.input;
-    mState.oldChar = 0;
+    M_state.input_pos = M_state.input;
+    M_state.old_char = 0;
 }
 
-bool 
-Scanner::scanNumber(char *pos, SToken &token)
+bool
+Scanner::scanNumber(char* pos, Token& token)
 {
-    if (pos == NULL) return false;
+    if (pos == 0)
+        return false;
 
     // only a '.' is no number
-    if ((*pos == '.') && (*(pos + 1) == 0)) 
+    if ((*pos == '.') && (*(pos + 1) == 0))
     {
         return false;
     }
 
-    enum { eUNKNOWN, eINTEGER, eFLOAT, eERROR, eEXP, eSIGNEDEXP} state;
-    char *startPos;
+    enum
+    {
+        S_UNKNOWN,
+        S_INTEGER,
+        S_FLOAT,
+        S_ERROR,
+        S_EXP,
+        S_SIGNEDEXP
+    }
+    state;
 
-    startPos = pos;
-    state = eUNKNOWN;
+    char* start_pos;
 
-    for (; (state != eERROR) && ((*pos) != 0); ++pos)
+    start_pos = pos;
+    state = S_UNKNOWN;
+
+    for (; (state != S_ERROR) && ((*pos) != 0); ++pos)
     {
         char &ch = *pos;
 
@@ -147,91 +163,104 @@ Scanner::scanNumber(char *pos, SToken &token)
         {
             switch (state)
             {
-       case eUNKNOWN : state = eINTEGER;   break;
-       case eEXP     : state = eSIGNEDEXP; break;
-       default       : state = eERROR;     break;
+                case S_UNKNOWN:
+                    state = S_INTEGER;
+                    break;
+                case S_EXP:
+                    state = S_SIGNEDEXP;
+                    break;
+                default:
+                    state = S_ERROR;
+                    break;
             }
             continue;
         }
-        
+
         if ((ch >= '0') && (ch <= '9'))
         {
-            if (state == eUNKNOWN) state = eINTEGER;
+            if (state == S_UNKNOWN)
+                state = S_INTEGER;
             continue;
         }
 
         if (ch == '.')
         {
-            switch(state)
-            {            
-            case eUNKNOWN :
-            case eINTEGER :
-      state = eFLOAT;
-      break;
-            case eFLOAT :
-      state = eERROR;
-      break;
+            switch (state)
+            {
+                case S_UNKNOWN:
+                case S_INTEGER:
+                    state = S_FLOAT;
+                    break;
+                case S_FLOAT:
+                    state = S_ERROR;
+                    break;
             }
             continue;
         }
 
         if (ch == 'e')
         {
-            if ((state != eINTEGER) &&  (state != eFLOAT)) 
-      state = eERROR;
-            else state = eEXP;
+            if ((state != S_INTEGER) && (state != S_FLOAT))
+                state = S_ERROR;
+            else
+                state = S_EXP;
             continue;
         }
 
-        state = eERROR;
+        state = S_ERROR;
     }
 
     switch (state)
     {
-    case eINTEGER:
-   sscanf(startPos,"%d",&token.data.i);
-   token.type = eTT_INT;
-   return true;
-    case eFLOAT:
-    case eEXP:
-    case eSIGNEDEXP:
-   sscanf(startPos,"%f",&token.data.f);
-   token.type = eTT_FLOAT;
-   return true;
-    default:
-   token.type = eTT_INVALID;
-   return false;
+        case S_INTEGER:
+            sscanf(start_pos, "%d", &token.data.i);
+            token.type = S_TT_INT;
+            return true;
+        case S_FLOAT:
+        case S_EXP:
+        case S_SIGNEDEXP:
+            sscanf(start_pos, "%f", &token.data.f);
+            token.type = S_TT_FLOAT;
+            return true;
+        default:
+            token.type = S_TT_INVALID;
+            return false;
     }
 }
 
 char* 
-Scanner::skipWhiteSpace(char *pos) 
+Scanner::skipWhiteSpace(char* pos)
 {
-    char *whiteSpace,*separator;
+    char* white_space, *separator;
 
-    if ((!mState.input) || (!pos)) return NULL;
+    if ((!M_state.input) || (!pos))
+        return 0;
 
-    for ( ; (*pos) != 0; ++pos)
-    {    
+    for (; (*pos) != 0; ++pos)
+    {
         // hold on seperators
-        if (mInfo.separator)
+        if (M_info.separator)
         {
-            for (separator = mInfo.separator;(*separator)!=0;separator++)
+            for (separator = M_info.separator; (*separator) != 0; ++separator)
             {
-                if ((*pos) == (*separator)) break;
+                if ((*pos) == (*separator))
+                    break;
             }
         }
         // skip whitespace
-        if (mInfo.whiteSpace) 
+        if (M_info.white_space)
         {
-            for (whiteSpace = mInfo.whiteSpace;(*whiteSpace)!=0;whiteSpace++)
+            for (white_space = M_info.white_space; (*white_space) != 0;
+                 white_space++)
             {
-                if ((*pos) == (*whiteSpace)) break;
+                if ((*pos) == (*white_space))
+                    break;
             }
-            if ((*whiteSpace) != 0) continue;
+            if ((*white_space) != 0)
+                continue;
         }
 
-        // non whiteSpace read
+        // non white_space read
         break;
     }
 
@@ -239,53 +268,56 @@ Scanner::skipWhiteSpace(char *pos)
 }
 
 char* 
-Scanner::skipToken(char *pos, char &oldchar)
+Scanner::skipToken(char* pos, char &oldchar)
 {
-    bool inString,firstChar,inEscape;
-    char *whiteSpace,*quote,*separator;
-    char stringQuote;
+    bool in_string, first_char, in_escape;
+    char* white_space, *quote, *separator;
+    char string_quote;
 
-    if ((!mState.input) || (!pos)) return NULL;
+    if ((!M_state.input) || (!pos))
+        return 0;
 
-    firstChar    = true;
-    inString    = false;
-    oldchar        = 0;
-    inEscape    = false;
-    
-    for ( ; (*pos) != 0; firstChar=false,++pos)
+    first_char = true;
+    in_string = false;
+    oldchar = 0;
+    in_escape = false;
+
+    for (; (*pos) != 0; first_char = false, ++pos)
     {
-        if ((*pos) == mInfo.escape) 
-   {
-            inEscape = !inEscape;
+        if ((*pos) == M_info.escape)
+        {
+            in_escape = !in_escape;
             continue;
         }
 
         // ensure that we don't interprete a char immediately 
         // after an escape char
-        if (!inEscape) 
-        {        
+        if (!in_escape)
+        {
             // check for start or end of a string
-            if (mInfo.stringQuote)
+            if (M_info.string_quote)
             {
-                if (!inString) 
-                // check for the start of a string
+                if (!in_string)
+                    // check for the start of a string
                 {
-                    for (quote = mInfo.stringQuote; (*quote) !=0 ; ++quote)
+                    for (quote = M_info.string_quote; (*quote) != 0; ++quote)
                     {
-                        if ((*pos) == (*quote)) 
+                        if ((*pos) == (*quote))
                         {
-                            stringQuote = *quote;
+                            string_quote = *quote;
                             break;
                         }
                     }
 
                     if ((*quote) != 0)
                     {
-                        inString=true; // we've found the beginning of a string
+                        in_string = true;        // we've found the beginning of a string
                     }
-                } else {
+                }
+                else
+                {
                     // check for the end of a string
-                    if ((*pos) == stringQuote) 
+                    if ((*pos) == string_quote)
                     {
                         break;
                     }
@@ -294,248 +326,274 @@ Scanner::skipToken(char *pos, char &oldchar)
 
             // only check for separators or whitespace if we're not 
             // inside a string
-            if (!inString) 
+            if (!in_string)
             {
                 // check for separator
-                if (mInfo.separator)
+                if (M_info.separator)
                 {
-                    for (separator = mInfo.separator;(*separator)!=0;separator++)
+                    for (separator = M_info.separator; (*separator) != 0;
+                         separator++)
                     {
-                        if ((*pos) == (*separator)) break;
+                        if ((*pos) == (*separator))
+                            break;
                     }
 
-                    if ((*separator) != 0) {
+                    if ((*separator) != 0)
+                    {
                         // if this is the first char, then recognize the seperator
                         // as a token otherwise a delimiter for the preceding string                        
-                        if (firstChar) {                            
+                        if (first_char)
+                        {
                             pos++;
                             oldchar = (*pos);
-                        } else oldchar = (*separator);
+                        }
+                        else
+                            oldchar = (*separator);
                         break;
                     }
                 }
 
                 // hold on first whitespace if we're outside a string
-                if (mInfo.whiteSpace)
+                if (M_info.white_space)
                 {
-                    for (whiteSpace = mInfo.whiteSpace;(*whiteSpace)!=0;whiteSpace++)
+                    for (white_space = M_info.white_space; (*white_space) != 0;
+                         white_space++)
                     {
-                        if ((*pos) == (*whiteSpace)) break;
+                        if ((*pos) == (*white_space))
+                            break;
                     }
-                    if ((*whiteSpace) != 0) break;
+                    if ((*white_space) != 0)
+                        break;
                 }
             }
         }
 
         // an escape sequence ends always after the second char
-        inEscape = false;
+        in_escape = false;
     }
-    
+
     if ((*pos) != 0)
     {
-        (*pos)    = 0;        // mark end of token
+        (*pos) = 0;             // mark end of token
         return pos;
-    } 
-    else return NULL;
+    }
+    else
+        return 0;
 }
 
-void 
-Scanner::applyEscapeSequences(char **start)
+void
+Scanner::applyEscapeSequences(char** start)
 {
     // are escape sequences disabled ?
-    if (mInfo.escape == 0) return;
+    if (M_info.escape == 0)
+        return;
 
     // now scan for escape sequences
-    for (char *pos=(*start);(*pos)!=0;pos++)
+    for (char* pos = (*start); (*pos) != 0; pos++)
     {
-        if ((*pos) == mInfo.escape)
+        if ((*pos) == M_info.escape)
         {
             // we recognized an escape sequence
-            memmove((*start) + 1,(*start),pos-(*start));
+            memmove((*start) + 1, (*start), pos - (*start));
             (*start)++;
             pos++;
         }
     }
 }
 
-bool 
-Scanner::getNextToken(SToken &token)
-{        
-    if ((!mState.input) || (!mState.inputPos)) return false;    
+bool
+Scanner::getNextToken(Token& token)
+{
+    if ((!M_state.input) || (!M_state.input_pos))
+        return false;
 
     // if this isn't the first token step over last end-of-token marker
-    if (mState.input != mState.inputPos) 
+    if (M_state.input != M_state.input_pos)
     {
         // restore a separator
-        if (mState.oldChar) (*mState.inputPos) = mState.oldChar;
-            else mState.inputPos++;
+        if (M_state.old_char)
+            (*M_state.input_pos) = M_state.old_char;
+        else
+            M_state.input_pos++;
     }
 
     // check for end of input
-    if ((*mState.inputPos) == 0) return false;
+    if ((*M_state.input_pos) == 0)
+        return false;
 
     // skip Whitespace    
-    mState.inputPos = skipWhiteSpace(mState.inputPos);
+    M_state.input_pos = skipWhiteSpace(M_state.input_pos);
 
     // check end of input
-    if ((*mState.inputPos) == 0) return false;
+    if ((*M_state.input_pos) == 0)
+        return false;
 
-    char *lastInputPos = mState.inputPos;
+    char* last_input_pos = M_state.input_pos;
 
     // advance to next token
-    mState.inputPos = skipToken(mState.inputPos,mState.oldChar);
+    M_state.input_pos = skipToken(M_state.input_pos, M_state.old_char);
 
-    applyEscapeSequences(&lastInputPos);
+    applyEscapeSequences(&last_input_pos);
 
     // first check it against our known separators
-    if (mInfo.separator) 
+    if (M_info.separator)
     {
         char* separator;
-        for (separator=mInfo.separator;(*separator)!=0;separator++) 
+        for (separator = M_info.separator; (*separator) != 0; separator++)
         {
-            if ((*lastInputPos) == (*separator)) break;
+            if ((*last_input_pos) == (*separator))
+                break;
         }
-        if ((*separator)!=0)
+        if ((*separator) != 0)
         {
             // ok, we've found a separator
-            token.type                = eTT_SEPARATOR;
-            token.data.separator    = (*separator);
+            token.type = S_TT_SEPARATOR;
+            token.data.separator = (*separator);
 
             return true;
         }
     }
 
     // now try to interprete it as a number
-    if (scanNumber(lastInputPos,token)) return true;
+    if (scanNumber(last_input_pos, token))
+        return true;
 
     // now check it against our map of known strings    
-    TTokenMap::iterator i = mTokens.find(lastInputPos);
-    if (i != mTokens.end()) 
+    TokenMap::iterator i = M_tokens.find(last_input_pos);
+    if (i != M_tokens.end())
     {
         // ok we got a match
-        token.data.id    = (*i).second;
-        token.type        = eTT_TOKEN;
-        
+        token.data.id = (*i).second;
+        token.type = S_TT_TOKEN;
+
         return true;
     }
 
     // now try to interprete it as a string
-    if (mInfo.stringQuote)
+    if (M_info.string_quote)
     {
-        char *pos,*quote;
-        pos = lastInputPos;
+        char* pos, *quote;
+        pos = last_input_pos;
 
-        for (quote = mInfo.stringQuote;(*quote)!=0;quote++)
+        for (quote = M_info.string_quote; (*quote) != 0; quote++)
         {
-            if ((*pos) == (*quote)) break;
+            if ((*pos) == (*quote))
+                break;
         }
-        if ((*quote) !=0) 
+        if ((*quote) != 0)
         {
             // we've found a string
-            token.type            = eTT_STRING;
+            token.type = S_TT_STRING;
             pos++;
-            token.data.string    = pos;
+            token.data.string = pos;
 
             return true;
         }
     }
 
     // we've found a label
-    token.type            = eTT_LABEL;
-    token.data.label    = lastInputPos;
+    token.type = S_TT_LABEL;
+    token.data.label = last_input_pos;
 
     return true;
 }
 
-void 
-Scanner::printToken(SToken &token)
+void
+Scanner::printToken(Token& token)
 {
     switch (token.type)
     {
-    case eTT_INVALID : 
-   printf("eTT_INVALID\n");
-   break;
-    case eTT_INT :
-   printf("eTT_INT %d\n",token.data.i);
-   break;
-    case eTT_FLOAT :
-   printf("eTT_FLOAT %f\n",token.data.f);
-   break;
-    case eTT_STRING :
-   printf("eTT_STRING ");
-   printf(token.data.string);
-   printf("\n");
-   break;
-    case eTT_LABEL :
-   printf("eTT_LABEL ");
-   printf(token.data.label);
-   printf("\n");
-   break;
-    case eTT_TOKEN :
-   printf("eTT_TOKEN %d\n",token.data.id.i);
-   break;
-    case eTT_SEPARATOR :
-   printf("eTT_SEPARATOR %c\n",token.data.separator);
-   break;
-    default :
-   printf("unknown token type.\n");
-   break;
+        case S_TT_INVALID:
+            printf("S_TT_INVALID\n");
+            break;
+        case S_TT_INT:
+            printf("S_TT_INT %d\n", token.data.i);
+            break;
+        case S_TT_FLOAT:
+            printf("S_TT_FLOAT %f\n", token.data.f);
+            break;
+        case S_TT_STRING:
+            printf("S_TT_STRING ");
+            printf(token.data.string);
+            printf("\n");
+            break;
+        case S_TT_LABEL:
+            printf("S_TT_LABEL ");
+            printf(token.data.label);
+            printf("\n");
+            break;
+        case S_TT_TOKEN:
+            printf("S_TT_TOKEN %d\n", token.data.id.i);
+            break;
+        case S_TT_SEPARATOR:
+            printf("S_TT_SEPARATOR %c\n", token.data.separator);
+            break;
+        default:
+            printf("unknown token type.\n");
+            break;
     }
 }
 
-void 
+void
 Scanner::pushState()
 {
     // create a new scanner state und copy the
     // current state of the scanner
 
-    SState *state = new SState;
+    State *state = new State;
 
-    if (mState.inputLength)
+    if (M_state.input_length)
     {
-        state->input = new char[mState.inputLength+1];
-        memcpy(state->input, mState.input, mState.inputLength+1);
-    } else state->input = NULL;
+        state->input = new char[M_state.input_length + 1];
+        memcpy(state->input, M_state.input, M_state.input_length + 1);
+    }
+    else
+        state->input = 0;
 
-    if (mState.inputPos)
+    if (M_state.input_pos)
     {
-        state->inputPos = state->input + (mState.inputPos - mState.input);
-    } else state->inputPos = NULL;
+        state->input_pos = state->input + (M_state.input_pos - M_state.input);
+    }
+    else
+        state->input_pos = 0;
 
-    state->oldChar        = mState.oldChar;
-    state->inputLength    = mState.inputLength;
+    state->old_char = M_state.old_char;
+    state->input_length = M_state.input_length;
 
     // put the saved state on the stack
-    mStateStack.push_back(state);
+    M_state_stack.push_back(state);
 }
 
-bool 
+bool
 Scanner::popState()
 {
-    if (mStateStack.empty()) return false;
+    if (M_state_stack.empty())
+        return false;
 
     // take a saved scanner state from the stack
     // and make it the current state
-    if (mState.input) delete[] mState.input;    
+    if (M_state.input)
+        delete[]M_state.input;
 
-    SState *state = mStateStack.back();
-    
-    mState = *state;
+    State *state = M_state_stack.back();
+
+    M_state = *state;
 
     delete state;
-    mStateStack.pop_back();
+    M_state_stack.pop_back();
 
     return true;
 }
 
-const char* 
+const char*
 Scanner::lookupToken(int id)
 {
-    TTokenMap::iterator i;
-    for(i=mTokens.begin(); i!=mTokens.end(); i++)
+    TokenMap::iterator i;
+    for (i = M_tokens.begin(); i != M_tokens.end(); i++)
     {
-        if ((*i).second.i == id) return (*i).first.c_str();
+        if ((*i).second.i == id)
+            return (*i).first.c_str();
     }
-    
-    return NULL;
+
+    return 0;
 }
