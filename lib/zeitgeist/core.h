@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.h,v 1.5 2004/02/12 14:07:23 fruit Exp $
+   $Id: core.h,v 1.6 2004/04/08 13:37:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,8 +61,8 @@ public:
     ~Core();
 
     /** Constructs the core, i.e. sets up the root object, registers
-        some class objects for internal zeitgeist classes and
-        creates servers for the basic services
+        some class objects for internal zeitgeist classes and creates
+        servers for the basic services
     */
     void Construct(const boost::weak_ptr<Core>& self);
 
@@ -71,6 +71,9 @@ public:
 
     /** creates an instance of the class 'className' */
     boost::shared_ptr<Object> New(const std::string& className);
+
+    /** returns true iff the given class exists */
+    bool ExistsClass(const std::string& className);
 
     /** registers a class object
      * \param classObject is a reference to instance of the class object
@@ -93,16 +96,16 @@ public:
     bool ImportBundle(const std::string& bundleName);
 
     /** returns a reference to the FileServer */
-    const boost::shared_ptr<FileServer>&    GetFileServer() const;
+    const boost::shared_ptr<FileServer>& GetFileServer() const;
 
     /** returns a reference to the LogServer */
-    const boost::shared_ptr<LogServer>&             GetLogServer() const;
+    const boost::shared_ptr<LogServer>& GetLogServer() const;
 
     /** returns a reference to the ScriptServer */
-    const boost::shared_ptr<ScriptServer>&  GetScriptServer() const;
+    const boost::shared_ptr<ScriptServer>& GetScriptServer() const;
 
     /** returns a reference to the root node */
-    boost::shared_ptr<Leaf> GetRoot() const {       return mRoot;   }
+    boost::shared_ptr<Leaf> GetRoot() const { return mRoot;  }
 
     /** returns a reference to the object denoted by the path expression 'pathStr'. */
     boost::shared_ptr<Leaf> Get(const std::string &pathStr);
@@ -110,18 +113,39 @@ public:
     /** returns a reference to the object denoted by the path
         expression 'pathStr', relative to the node base.
     */
-    boost::shared_ptr<Leaf> Get(const std::string &pathStr, const boost::shared_ptr<Leaf>& base);
+    boost::shared_ptr<Leaf> Get(const std::string &pathStr,
+                                const boost::shared_ptr<Leaf>& base);
 
-    /** returns a reference to a child node of 'parent' with the
-        name 'childName'
+    /** returns true iff the object denoted by the path expression
+        'pathStr', relative to the node base exists
+     */
+    bool Test(const std::string &pathStr,
+              const boost::shared_ptr<Leaf>& base);
+
+    /** returns true iff the object denoted by the path expression
+        'pathStr' exists.
+     */
+    bool Test(const std::string &pathStr);
+
+    /** returns a reference to a child node of 'parent' with the name
+        'childName'
     */
-    boost::shared_ptr<Leaf> GetChild(const boost::shared_ptr<Leaf> &parent, const std::string &childName);
+    boost::shared_ptr<Leaf> GetChild(const boost::shared_ptr<Leaf> &parent,
+                                     const std::string &childName);
 
     /** attaches the class 'newClass' to this core */
     void BindClass(const boost::shared_ptr<Class> &newClass) const;
 
-    /** releases all unused bundles, i.e. bundles the core holds the only reference to */
+    /** releases all unused bundles, i.e. bundles the core holds the
+        only reference to */
     void GarbageCollectBundles();
+
+protected:
+    /** returns a reference to the object denoted by the path
+        expression 'pathStr', relative to the node base.
+    */
+    boost::shared_ptr<Leaf> GetInternal(const std::string &pathStr,
+                                        const boost::shared_ptr<Leaf>& base);
 
     //
     // members

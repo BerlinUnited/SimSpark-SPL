@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.10 2004/04/05 17:03:41 rollmark Exp $
+   $Id: core.cpp,v 1.11 2004/04/08 13:37:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -128,6 +128,12 @@ Core::New(const std::string& className)
     return instance;
 }
 
+bool
+Core::ExistsClass(const std::string& className)
+{
+    return (Test("/classes/"+className));
+}
+
 bool Core::RegisterClassObject(const boost::shared_ptr<Class> &classObject,
                                const std::string &subDir)
 {
@@ -202,6 +208,37 @@ const boost::shared_ptr<ScriptServer>& Core::GetScriptServer() const
     return mScriptServer;
 }
 
+boost::shared_ptr<Leaf> Core::GetInternal(const std::string &pathStr,
+                                          const boost::shared_ptr<Leaf>& leaf)
+{
+    boost::shared_ptr<Leaf> current;
+    Path path(pathStr);
+
+    // check if we have a relative or absolute path
+    if (
+        (path.IsAbsolute()) ||
+        (leaf.get() == NULL)
+        )
+        {
+            current = mRoot;
+        } else
+            {
+                current = leaf;
+            }
+
+    while (
+           (! path.IsEmpty()) &&
+           (current.get()!=NULL)
+           )
+        {
+            //printf("%s\n", path.Front().c_str());
+            current = current->GetChild(path.Front());
+            path.PopFront();
+        }
+
+    return current;
+}
+
 boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr)
 {
     return Get(pathStr, mRoot);
@@ -210,21 +247,7 @@ boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr)
 boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr,
                                   const boost::shared_ptr<Leaf>& leaf)
 {
-    boost::shared_ptr<Leaf> current;
-    Path path(pathStr);
-
-    // check if we have a relative or absolute path
-    if (path.IsAbsolute() || leaf.get() == NULL)
-        current = mRoot;
-    else
-        current = leaf;
-
-    while (!path.IsEmpty() && current.get()!=NULL)
-        {
-            //printf("%s\n", path.Front().c_str());
-            current = current->GetChild(path.Front());
-            path.PopFront();
-        }
+    boost::shared_ptr<Leaf> current = GetInternal(pathStr,leaf);
 
     if (current.get() == NULL)
         {
@@ -234,6 +257,18 @@ boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr,
 
     return current;
 }
+
+bool Core::Test(const std::string &pathStr)
+{
+    return Test(pathStr, mRoot);
+}
+
+bool Core::Test(const std::string &pathStr,
+                const boost::shared_ptr<Leaf>& leaf)
+{
+    return (GetInternal(pathStr,leaf).get() != 0);
+}
+
 
 boost::shared_ptr<Leaf> Core::GetChild(const boost::shared_ptr<Leaf> &parent,
                                        const std::string &childName)
