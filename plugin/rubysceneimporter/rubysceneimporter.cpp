@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.9 2004/05/07 12:09:47 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.10 2004/12/19 14:13:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "rubysceneimporter.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/fileserver/fileserver.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
 #include <boost/scoped_array.hpp>
 
 using namespace zeitgeist;
@@ -33,7 +34,7 @@ using namespace std;
     (RubySceneGraph <version major> <version minor>)
     (
     (template varName1 varName2 ...)
-    (define varName value ...)
+    (define varName value)
     (node <NodeName>
         method param param ...
         method param ...
@@ -308,6 +309,141 @@ shared_ptr<BaseNode> RubySceneImporter::CreateNode(sexp_t* sexp)
     return node;
 }
 
+bool RubySceneImporter::ReplaceVariable(string& param)
+{
+    // replace a template parameter
+    const ParamEnv& env = GetParamEnv();
+
+    param.erase(param.begin(),param.begin()+1);
+    TParameterMap::const_iterator iter = env.parameterMap.find(param);
+
+    if (iter == env.parameterMap.end())
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': unknown parameter '"
+                << param << "'\n";
+            return false;
+        }
+
+    int idx = (*iter).second;
+
+    if (idx >= env.parameter->GetSize())
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': parameter value '"
+                << param << "' not supplied\n";
+            return false;
+        }
+
+    string value;
+    ParameterList::TVector::const_iterator pIter = (*env.parameter)[idx];
+    if (! env.parameter->AdvanceValue(pIter,value))
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': failed to read parameter value '"
+                << param << "'\n";
+            return false;
+        }
+
+    param = value;
+    return true;
+}
+
+bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
+{
+    const boost::shared_ptr<ScriptServer>&  script = GetScript();
+    if (script.get() == 0)
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': cannot get ScriptServer to eval expression\n";
+            return false;
+        }
+
+    if (sexp->ty != SEXP_VALUE)
+        {
+            return false;
+        }
+
+    string pred = sexp->val;
+    if (pred != "eval")
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': unknown expression type '" << pred << "' in parameter list\n";
+            return false;
+        }
+
+    string expr;
+    sexp = sexp->next;
+    while (sexp != 0)
+        {
+            string atom;
+
+            if (sexp->ty == SEXP_VALUE)
+                {
+                    atom = sexp->val;
+                    if (
+                        (atom[0] == '$') &&
+                        (! ReplaceVariable(atom))
+                        )
+                        {
+                            return false;
+                        }
+                } else
+                {
+                    if (! EvalParameter(sexp->list, atom))
+                        {
+                            return false;
+                        }
+                }
+
+            expr = expr + atom;
+            expr = expr + " ";
+
+            sexp = sexp->next;
+        }
+
+    if (expr.empty())
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': empty eval expression in parameter list\n";
+            return false;
+        }
+
+    GCValue gcValue;
+    if (! script->Eval(expr, gcValue))
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': failed to eval expression "
+                << expr << "\n";
+            return false;
+        }
+
+    if (! gcValue.GetString(value))
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': failed to get string result form expresion result\n";
+            return false;
+        }
+
+    return true;
+}
+
 bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
 {
     if (sexp == 0)
@@ -320,69 +456,30 @@ bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
     sexp = sexp->next;
 
     // collect the parameters
-    const ParamEnv& env = GetParamEnv();
     ParameterList parameter;
 
     while (sexp != 0)
         {
-            if (sexp->ty != SEXP_VALUE)
+            string param;
+
+            if (sexp->ty == SEXP_LIST)
                 {
-                    GetLog()->Error()
-                        << "(RubySceneImporter) ERROR: in file '"
-                        << mFileName
-                        << "': parameterlist contains another list\n";
-                    return false;
-                }
-
-            string param = sexp->val;
-
-            if (param.size() == 0)
-                {
-                    continue;
-                }
-
-            if (param[0] == '$')
-                {
-                    // replace a template parameter
-                    param.erase(param.begin(),param.begin()+1);
-                    TParameterMap::const_iterator iter = env.parameterMap.find(param);
-
-                    if (iter == env.parameterMap.end())
+                    if (! EvalParameter(sexp->list,param))
                         {
-                            GetLog()->Error()
-                                << "(RubySceneImporter) ERROR: in file '"
-                                << mFileName
-                                << "': unknown parameter '"
-                                << param << "'\n";
                             return false;
                         }
 
-                    int idx = (*iter).second;
+                } else
+                {
+                    param = sexp->val;
 
-                    if (idx >= env.parameter->GetSize())
+                    if (
+                        (param[0] == '$') &&
+                        (! ReplaceVariable(param))
+                        )
                         {
-                            GetLog()->Error()
-                                << "(RubySceneImporter) ERROR: in file '"
-                                << mFileName
-                                << "': parameter value '"
-                                << param << "' not supplied\n";
                             return false;
                         }
-
-                    string value;
-                    ParameterList::TVector::const_iterator pIter = (*env.parameter)[idx];
-                    if (! env.parameter->AdvanceValue(pIter,value))
-                        {
-                            GetLog()->Error()
-                                << "(RubySceneImporter) ERROR: in file '"
-                                << mFileName
-                                << "': failed to read parameter value '"
-                                << param << "'\n";
-                            return false;
-                        }
-
-                    param = value;
-
                 }
 
             parameter.AddValue(param);
@@ -411,6 +508,76 @@ bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
         }
 
     node->Invoke(method, parameter);
+    return true;
+}
+
+bool RubySceneImporter::ParseDefine(sexp_t* sexp)
+{
+    string varname = sexp->val;
+    sexp = sexp->next;
+
+    if (
+        (varname[0] != '$') ||
+        (varname.size() < 2)
+        )
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '" << mFileName
+                << "': parameter name expected\n";
+            return false;
+        }
+
+    varname.erase(varname.begin(),varname.begin()+1);
+
+    if (sexp == 0)
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '"
+                << mFileName
+                << "': define without value\n";
+            return false;
+        }
+
+    string value;
+    if (sexp->ty == SEXP_LIST)
+        {
+            if (sexp->ty == SEXP_LIST)
+                {
+                    if (! EvalParameter(sexp->list,value))
+                        {
+                            return false;
+                        }
+                }
+        } else
+        {
+            value = sexp->val;
+
+            if (
+                (value[0] == '$') &&
+                (! ReplaceVariable(value))
+                )
+                {
+                    return false;
+                }
+        }
+
+    ParamEnv& env = GetParamEnv();
+    TParameterMap::const_iterator iter =
+        env.parameterMap.find(varname);
+
+    if (iter == env.parameterMap.end())
+        {
+            // create a new variable
+            env.parameter->AddValue(value);
+            env.parameterMap[varname] = (env.parameterMap.size() - 1);
+        } else
+        {
+            // update value of existing variable
+            ParameterList::TVector::iterator valIter =
+                (*env.parameter)[(*iter).second];
+            (*valIter) = value;
+        }
+
     return true;
 }
 
@@ -563,10 +730,14 @@ bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                                 {
                                     sexp = sexp->next;
                                     return ParseTemplate(sexp);
-                                } else
-                                    {
-                                        return ReadMethodCall(sexp, root);
-                                    }
+                                } else if (name == "define")
+                            {
+                                sexp = sexp->next;
+                                return ParseDefine(sexp);
+                            } else
+                            {
+                                return ReadMethodCall(sexp, root);
+                            }
                     }
                     break;
 

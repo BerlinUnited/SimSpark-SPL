@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.7 2004/05/05 09:08:53 rollmark Exp $
+   $Id: rubysceneimporter.h,v 1.8 2004/12/19 14:13:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,8 +75,12 @@ protected:
     bool ReadDeltaGraph(sexp_t* sexp, boost::shared_ptr<oxygen::BaseNode> root);
     boost::shared_ptr<zeitgeist::Object> CreateInstance(const std::string& className);
     bool ReadMethodCall(sexp_t* _sexp, boost::shared_ptr<oxygen::BaseNode> node);
+    bool ReplaceVariable(std::string& param);
+    bool EvalParameter(sexp_t* sexp, std::string& value);
+
     boost::shared_ptr<oxygen::BaseNode> CreateNode(sexp_t* sexp);
     bool ParseTemplate(sexp_t* sexp);
+    bool ParseDefine(sexp_t* sexp);
 
     void PushParameter(boost::shared_ptr<zeitgeist::ParameterList> parameter);
     void PopParameter();
