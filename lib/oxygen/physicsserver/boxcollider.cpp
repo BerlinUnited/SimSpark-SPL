@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: boxcollider.cpp,v 1.1.8.1 2004/01/11 11:59:52 rollmark Exp $
+   $Id: boxcollider.cpp,v 1.1.8.2 2004/01/12 18:38:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,19 +24,16 @@
 
 using namespace oxygen;
 
-BoxCollider::BoxCollider() :
-Collider()
+BoxCollider::BoxCollider() : Collider()
 {
 }
 
 void
 BoxCollider::SetBoxLengths(float x, float y, float z)
 {
-  if (mODEGeom)
-    {
-      dGeomBoxSetLengths (mODEGeom,x,y,z);
-    }
+  dGeomBoxSetLengths(mODEGeom,x,y,z);
 }
+
 
 bool
 BoxCollider::ConstructInternal()

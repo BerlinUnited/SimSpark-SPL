@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: planecollider.cpp,v 1.3.8.1 2004/01/11 11:59:53 rollmark Exp $
+   $Id: planecollider.cpp,v 1.3.8.2 2004/01/12 18:40:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,17 +23,13 @@
 
 using namespace oxygen;
 
-PlaneCollider::PlaneCollider() :
-Collider()
+PlaneCollider::PlaneCollider() : Collider()
 {
 }
 
 void PlaneCollider::SetParams(float a, float b, float c, float d)
 {
-    if (mODEGeom)
-      {
-        dGeomPlaneSetParams(mODEGeom, a, b, c, d);
-      }
+  dGeomPlaneSetParams(mODEGeom, a, b, c, d);
 }
 
 bool PlaneCollider::ConstructInternal()
