@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint_c.cpp,v 1.4 2004/05/01 11:29:58 rollmark Exp $
+   $Id: joint_c.cpp,v 1.5 2004/05/02 11:44:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,9 +31,21 @@ FUNCTION(Joint,attach)
     string inPath1;
     string inPath2;
 
+    if (in.GetSize() > 2)
+        {
+            return false;
+        }
+
     if (
-        (in.GetSize() != 2) ||
-        (! in.GetValue(in[0], inPath1)) ||
+        (in.GetSize() >= 1) &&
+        (! in.GetValue(in[0], inPath1))
+        )
+        {
+            return false;
+        }
+
+    if (
+        (in.GetSize() == 2) &&
         (! in.GetValue(in[1], inPath2))
         )
         {
@@ -369,6 +381,105 @@ FUNCTION(Joint, getSuspensionCFM)
     return obj->GetSuspensionCFM(static_cast<Joint::EAxisIndex>(inAxis));
 }
 
+FUNCTION(Joint, setLinearMotorVelocity)
+{
+    int inAxis;
+    float inVel;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], inAxis)) ||
+        (! in.GetValue(in[1], inVel))
+        )
+        {
+            return false;
+        }
+
+    obj->SetLinearMotorVelocity(static_cast<Joint::EAxisIndex>(inAxis), inVel);
+    return true;
+}
+
+FUNCTION(Joint, getLinearMotorVelocity)
+{
+    int inAxis;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inAxis))
+        )
+        {
+            return false;
+        }
+
+    return obj->GetLinearMotorVelocity(static_cast<Joint::EAxisIndex>(inAxis));
+}
+
+FUNCTION(Joint, getAngularMotorVelocity)
+{
+    int inAxis;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inAxis))
+        )
+        {
+            return false;
+        }
+
+    return obj->GetAngularMotorVelocity(static_cast<Joint::EAxisIndex>(inAxis));
+}
+
+FUNCTION(Joint, setAngularMotorVelocity)
+{
+    int inAxis;
+    float inDeg;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], inAxis)) ||
+        (! in.GetValue(in[1], inDeg))
+        )
+        {
+            return false;
+        }
+
+    obj->SetAngularMotorVelocity(static_cast<Joint::EAxisIndex>(inAxis), inDeg);
+    return true;
+}
+
+FUNCTION(Joint, setMaxMotorForce)
+{
+    int inAxis;
+    float inF;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], inAxis)) ||
+        (! in.GetValue(in[1], inF))
+        )
+        {
+            return false;
+        }
+
+    obj->SetMaxMotorForce(static_cast<Joint::EAxisIndex>(inAxis), inF);
+    return true;
+}
+
+FUNCTION(Joint, getMaxMotorForce)
+{
+    int inAxis;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inAxis))
+        )
+        {
+            return false;
+        }
+
+    return obj->GetMaxMotorForce(static_cast<Joint::EAxisIndex>(inAxis));
+}
+
 void CLASS(Joint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/ODEObject);
@@ -393,5 +504,11 @@ void CLASS(Joint)::DefineClass()
     DEFINE_FUNCTION(setSuspensionERP);
     DEFINE_FUNCTION(getSuspensionCFM);
     DEFINE_FUNCTION(setSuspensionCFM);
+    DEFINE_FUNCTION(setLinearMotorVelocity);
+    DEFINE_FUNCTION(getLinearMotorVelocity);
+    DEFINE_FUNCTION(setAngularMotorVelocity);
+    DEFINE_FUNCTION(getAngularMotorVelocity);
+    DEFINE_FUNCTION(setMaxMotorForce);
+    DEFINE_FUNCTION(getMaxMotorForce);
 }
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.6 2004/05/01 11:29:58 rollmark Exp $
+   $Id: joint.h,v 1.7 2004/05/02 11:44:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -213,6 +213,30 @@ public:
         ode 0.039 this is only implemented on the hinge-2 joint.
     */
     float GetSuspensionCFM(EAxisIndex idx);
+
+    /** sets the linear motor velocity */
+    void SetLinearMotorVelocity(EAxisIndex idx, float vel);
+
+    /** returns the linear motor velocity */
+    float GetLinearMotorVelocity(EAxisIndex idx);
+
+    /** sets the angular motor velocity in degrees */
+    void SetAngularMotorVelocity(EAxisIndex idx, float deg);
+
+    /** returns the angular motor velocity in degrees */
+    float GetAngularMotorVelocity(EAxisIndex idx);
+
+    /** sets the maximum force or torque that the motor will use to
+        achieve the desired velocity. This must always be greater than
+        or equal to zero. Setting this to zero (the default value)
+        turns off the motor
+    */
+    void SetMaxMotorForce(EAxisIndex idx, float f);
+
+    /** returns the maximum force or torque that the motor will use to
+        achieve the desired velocity.
+    */
+    float GetMaxMotorForce(EAxisIndex idx);
 
 protected:
     /** associated the created ODE joint with this node */

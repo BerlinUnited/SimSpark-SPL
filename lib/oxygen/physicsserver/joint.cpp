@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.3 2004/05/01 11:29:58 rollmark Exp $
+   $Id: joint.cpp,v 1.4 2004/05/02 11:44:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -98,6 +98,11 @@ void Joint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
 
 shared_ptr<Body> Joint::GetBody(const std::string& path)
 {
+    if (path.empty())
+        {
+            return shared_ptr<Body>();
+        }
+
     shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
         (make_shared(GetSelf()));
 
@@ -127,14 +132,6 @@ void Joint::Attach(const std::string& path1, const std::string& path2)
 {
     shared_ptr<Body> body1 = GetBody(path1);
     shared_ptr<Body> body2 = GetBody(path2);
-
-    if (
-        (body1.get() == 0) ||
-        (body2.get() == 0)
-        )
-        {
-            return;
-        }
 
     Attach(body1,body2);
 }
@@ -360,5 +357,38 @@ float Joint::GetSuspensionCFM(EAxisIndex idx)
 {
     return GetParameter(dParamSuspensionCFM + (idx * dParamGroup));
 }
+
+void Joint::SetLinearMotorVelocity(EAxisIndex idx, float vel)
+{
+    SetParameter(dParamVel + (idx * dParamGroup), vel);
+}
+
+float Joint::GetLinearMotorVelocity(EAxisIndex idx)
+{
+    return GetParameter(dParamVel + (idx * dParamGroup));
+}
+
+void Joint::SetAngularMotorVelocity(EAxisIndex idx, float deg)
+{
+    SetParameter(dParamVel + (idx * dParamGroup), gDegToRad(deg));
+}
+
+float Joint::GetAngularMotorVelocity(EAxisIndex idx)
+{
+    return gRadToDeg(GetParameter(dParamVel + (idx * dParamGroup)));
+}
+
+void Joint::SetMaxMotorForce(EAxisIndex idx, float f)
+{
+    SetParameter(dParamFMax + (idx * dParamGroup), f);
+}
+
+float Joint::GetMaxMotorForce(EAxisIndex idx)
+{
+    return GetParameter(dParamFMax + (idx * dParamGroup));
+}
+
+
+
 
 
