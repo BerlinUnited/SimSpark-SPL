@@ -26,6 +26,7 @@ core.cpp \
 corecontext.cpp \
 leaf.cpp \
 leaf_c.cpp \
+parameterlist.cpp \
 node.cpp \
 node_c.cpp \
 object.cpp \
@@ -54,6 +55,7 @@ class.h \
 core.h \
 corecontext.h \
 leaf.h \
+parameterlist.h \
 node.h \
 object.h \
 object_c.h \
