@@ -68,7 +68,7 @@ TrainerCommandParser::~TrainerCommandParser()
 
 }
 
-bool TrainerCommandParser::SendAck(std::string &reply) 
+bool TrainerCommandParser::SendAck(std::string &reply)
 {
     if(!mGetAck){return false;}
 
@@ -120,13 +120,13 @@ bool TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         mGetAck=true;
         // Predicate::Iterator ackParam(predicate);
         // ++ackParam;
-                  
+
         /* if (! predicate.GetValue(ackParam, mAckString))
          {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get mAckString\n";
             return false;
             }*/
-        
+
         break;
     }
     default:
