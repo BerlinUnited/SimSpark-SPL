@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fieldflag.h,v 1.1.2.1 2004/01/08 15:42:18 rollmark Exp $
+   $Id: fieldflag.h,v 1.1.2.2 2004/01/25 12:48:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,8 +33,6 @@ class FieldFlag : public oxygen::Transform
  public:
   FieldFlag() : Transform() {};
   virtual ~FieldFlag() {};
-
-  virtual void OnLink();
 };
 
 DECLARE_CLASS(FieldFlag);
