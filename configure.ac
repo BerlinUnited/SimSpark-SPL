@@ -9,6 +9,13 @@ AC_LANG([C++])
 AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 
+# Here are the version numbers of our libraries. They should be updated (only)
+# immediatly before a release of the package. See libtool manual for details.
+RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'1:0:1')
+RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'2:0:1')
+RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'1:1:0')
+RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'0:0:0')
+
 rcss_prefix=\"$prefix\"
 test "$rcss_prefix" = \"NONE\" && rcss_prefix=\"$ac_default_prefix\"
 AC_DEFINE_UNQUOTED(PREFIX, $rcss_prefix, [Define the install prefix. Needed by the libraries to check for ruby scripts.])
@@ -16,10 +23,11 @@ AC_DEFINE_UNQUOTED(PREFIX, $rcss_prefix, [Define the install prefix. Needed by t
 AC_ARG_ENABLE([debug],
      AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
      [case "${enableval}" in
-       yes) udebug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ;;
+       yes) debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ;;
        no)  debug=false ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
      esac],[debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ])
+# AC_ SUBST(debug, [$debug])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
 # Checks for programs.
@@ -133,9 +141,13 @@ AC_CONFIG_FILES([Makefile \
 		 utility/sfsexp/Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
+		 lib/salt/salt-config \
 		 lib/zeitgeist/Makefile \
+		 lib/zeitgeist/zeitgeist-config \
 		 lib/kerosin/Makefile \
+		 lib/kerosin/kerosin-config \
 		 lib/oxygen/Makefile \
+		 lib/oxygen/oxygen-config \
 		 plugin/Makefile \
 		 plugin/filesystemstd/Makefile \
 		 plugin/filesystemzip/Makefile \
@@ -164,6 +176,10 @@ AC_CONFIG_FILES([Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile],
-	        [test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D \
+	        [test -f lib/salt/salt-config && chmod a+x lib/salt/salt-config \
+		 test -f lib/zeitgeist/zeitgeist-config && chmod a+x lib/zeitgeist/zeitgeist-config \
+		 test -f lib/oxygen/oxygen-config && chmod a+x lib/oxygen/oxygen-config \
+		 test -f lib/kerosin/kerosin-config && chmod a+x lib/kerosin/kerosin-config \
+		 test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D \
                  test -f app/simulator/createagentdb.sh && chmod +x app/simulator/createagentdb.sh])
 AC_OUTPUT
