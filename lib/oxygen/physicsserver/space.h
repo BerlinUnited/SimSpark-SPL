@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: space.h,v 1.4.8.1 2004/01/09 13:16:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,11 +26,13 @@
 
 namespace oxygen
 {
+class Transform;
+class Body;
 
 /** Space encapsulates an ODE space object. A space is a non-placeable
-    geometry object ('geom') that can contain other geoms. It is similar to
-    the rigid body concept of the `world', except that it applies to collision
-    instead of dynamics.
+    geometry object ('geom') that can contain other geoms. It is
+    similar to the rigid body concept of the `world', except that it
+    applies to collision instead of dynamics.
 */
 class Space : public ODEObject
 {
@@ -44,17 +46,18 @@ public:
     /** returns the ID of the managed ODE space */
     dSpaceID        GetODESpace() const;
 
-    /** starts ODE's collision culling system. ODE will quickly identify
-        which pairs of geoms are potentially intersecting. Those pairs
-        will be passed to the callback function HandleCollide, which in
-        turn will notify the responsible collider classes.
+    /** starts ODE's collision culling system. ODE will quickly
+        identify which pairs of geoms are potentially
+        intersecting. Those pairs will be passed to the callback
+        function HandleCollide, which in turn will notify the
+        responsible collider classes.
     */
     void Collide();
 
     /** callback to handle a potential collision between two contained
         geoms. It will look up and notify the corresponding colliders
-        for a potential collision. For all determined collisions an ODE
-        contact joint will be created and inserted into
+        for a potential collision. For all determined collisions an
+        ODE contact joint will be created and inserted into
         mODEContactGroup, an ODE group of joints.
     */
     virtual void HandleCollide(dGeomID obj1, dGeomID obj2);
@@ -66,10 +69,27 @@ protected:
     /** looks up the world this space belongs to and sets up mWorld */
     virtual void OnLink();
 
+    /** This rountine is called, before the hierarchy object is
+        removed from the parent. It can be overridden to support
+        custom 'unlink' behavior.
+    */
     virtual void OnUnlink();
 
-private:
+    /** updates internal state before physics calculation */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
+
+private:
+    /** returns a shared_ptr to the first parent of \param body on the
+        way up the hierarchy that is a Transform node
+     */
+    boost::shared_ptr<Transform> Space::GetTransformParent(Body* body);
+
+    /** searches for a CollisionPerceptor registered below the closest
+        TransformNode parent of \param body. If successful it adds the
+        closest Transform node parent of \param collidee to the list
+        of stored collidees in the CollisionPerceptor
+     */
+    void Space::NotifyCollisionPerceptor(Body* body, Body* collidee);
 
     //
     // Members
@@ -81,7 +101,8 @@ private:
     /** the ODE group for all created contact joints */
     dJointGroupID   mODEContactGroup;
 
-    /** the cached ODE world this space belongs to, updated vias OnLink() */
+    /** the cached ODE world this space belongs to, updated vias
+        OnLink() */
     dWorldID                mWorld;
 };
 
