@@ -10,7 +10,7 @@
   performing the actions.
 - Effectors should be below AgentAspect (not below GCS)
 - change spadestest.rb to fit new Agent design (hierarchy)
-
+- delete survival plugins /simulator application until we can come up with a new one 
 
 ===== Dez 2 2003
 
