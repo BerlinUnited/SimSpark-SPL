@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: survivalagentaspect.h,v 1.2.2.1 2003/11/19 19:07:39 rollmark Exp $
+   $Id: survivalagentaspect.h,v 1.2.2.1.2.1 2003/12/08 15:19:16 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #define SURVIVALAGENTASPECT_H__
 
 #include <oxygen/agentaspect/agentaspect.h>
-#include <kerosin/agentaspect/visionperceptor.h>
+#include <oxygen/agentaspect/perfectvisionperceptor.h>
 #include <oxygen/agentaspect/forceeffector.h>
 #include "linesegmentperceptor.h"
 
@@ -56,8 +56,8 @@ private:
         //
 private:
         // perceptors
-        boost::shared_ptr<kerosin::VisionPerceptor>     mVisionPerceptor;
-        boost::shared_ptr<LineSegmentPerceptor>         mLineSegmentPerceptor;
+        boost::shared_ptr<oxygen::PerfectVisionPerceptor> mVisionPerceptor;
+        boost::shared_ptr<LineSegmentPerceptor> mLineSegmentPerceptor;
 
         // effectors
         boost::shared_ptr<oxygen::ForceEffector>       mForceEffector;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: survivalagentaspect.cpp,v 1.2.2.1 2003/11/19 19:07:38 rollmark Exp $
+   $Id: survivalagentaspect.cpp,v 1.2.2.1.2.1 2003/12/08 15:19:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,14 +46,17 @@ void SurvivalAgentAspect::Think(float deltaTime)
 {
         Vector3f force(0,0,0);
 
-        Perceptor::TDictionary dictionary;
+        BaseParser::TPredicate predicate;
 
         // try out vision perceptor
         Vector3f v = GetVelocity();
         v.y() = 0;
-        mVisionPerceptor->SetViewDirection(v);
-        if (mVisionPerceptor->Percept(dictionary))
+        // FIXME: the old visual sensor could change view direction
+        // mVisionPerceptor->SetViewDirection(v);
+        if (mVisionPerceptor->Percept(predicate))
         {
+#warning "Need to reimplement SurvivalAgentAspect::Think()"
+#if 0
                 TLeafList visible = any_cast<TLeafList>(dictionary["visibleObjects"]);
                 TLeafList::iterator i;
                 for (i = visible.begin(); i != visible.end(); ++i)
@@ -68,11 +71,13 @@ void SurvivalAgentAspect::Think(float deltaTime)
                                 mSeekPoint = node->GetWorldTransform().Pos();
                         }
                 }
+#endif
         }
 
         if (!mIsSeeking)
         {
                 Vector3f avoidance(0,0,0);
+#if 0
                 // sense environment using perceptors
                 mLineSegmentPerceptor->SetLineSegment(GetWorldTransform().Pos(), Vector3f(7, 0, 0)+GetWorldTransform().Pos());
                 mLineSegmentPerceptor->Percept(dictionary);
@@ -98,7 +103,7 @@ void SurvivalAgentAspect::Think(float deltaTime)
                 {
                         avoidance+=CalcAvoidanceForce(any_cast<Vector3f>(dictionary["p"]));
                 }
-
+#endif
                 force = 3.0f*avoidance + CalcWanderingForce();
         }
         else
@@ -140,11 +145,14 @@ void SurvivalAgentAspect::OnLink()
         }*/
 
         // request some perceptors
-        mVisionPerceptor                = shared_static_cast<VisionPerceptor>(control->RequestPerceptor(agent, "kerosin/VisionPerceptor"));
-        mLineSegmentPerceptor   = shared_static_cast<LineSegmentPerceptor>(control->RequestPerceptor(agent, "LineSegmentPerceptor"));
+        mVisionPerceptor = shared_static_cast<PerfectVisionPerceptor>
+            (control->RequestPerceptor(agent, "oxygen/PerfectVisionPerceptor"));
+        mLineSegmentPerceptor = shared_static_cast<LineSegmentPerceptor>
+            (control->RequestPerceptor(agent, "LineSegmentPerceptor"));
 }
 
-salt::Vector3f SurvivalAgentAspect::CalcSeekForce(const salt::Vector3f& seek)
+salt::Vector3f
+SurvivalAgentAspect::CalcSeekForce(const salt::Vector3f& seek)
 {
         Vector3f v = GetVelocity();
         Vector3f direction = seek - GetWorldTransform().Pos();
