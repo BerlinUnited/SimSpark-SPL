@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.1.2.3 2004/02/01 18:53:49 fruit Exp $
+   $Id: kickeffector.h,v 1.1.2.4 2004/02/05 15:31:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,9 +28,6 @@
 
 class KickEffector : public oxygen::Effector
 {
-    //
-    // functions
-    //
 public:
     KickEffector();
     virtual ~KickEffector();
@@ -73,18 +70,26 @@ public:
      *
      * \param sigma_force for noise of the applied force
      * \param sigma_theta for noise of the angle in the x-y plane
-     * \param sigma_phi for noise of the latitudal angle
+     * \param sigma_phi_end for noise of the latitudal angle at the end of the range
+     * \param sigma_phi_mid for noise of the latitudal angle in the middle of the angle range
      */
     void SetNoiseParams(double sigma_force,
                         double sigma_theta,
-                        double sigma_phi);
+                        double sigma_phi_end,
+                        double sigma_phi_mid);
 
     /** Set the maximum kick power. */
     void SetMaxPower(float max_power);
 
+    /** Set the latitudal angle range
+     * \param min minimum latitudal kick angle in degrees
+     * \param max maximum latitudal kick angle in degrees
+     *
+     * min has to be smaller than max.
+     */
+    void SetAngleRange(float min, float max);
+
 protected:
-    /** reference to the body node of the agent */
-    boost::shared_ptr<oxygen::Body> mBody;
     /** reference to the body node of the ball */
     boost::shared_ptr<oxygen::Body> mBallBody;
     /** reference to the body node of the ball */
@@ -99,8 +104,12 @@ private:
     float mBallRadius;
     /** force factor */
     float mForceFactor;
-    /** Set the maximum kick power */
+    /** the maximum kick power */
     float mMaxPower;
+    /** the minimal kick angle */
+    float mMinAngle;
+    /** the maximum kick angle */
+    float mMaxAngle;
     /** Minimum number of simulation steps for applying kick force */
     int mMinSteps;
     /** Maximum number of simulation steps for applying kick force */
@@ -109,8 +118,10 @@ private:
     double mSigmaForce;
     /** sigma for angle error (x-y angle) */
     double mSigmaTheta;
-    /** sigma for angle error (latitudal angle) */
-    double mSigmaPhi;
+    /** sigma for angle error at the end of the range (latitudal angle) */
+    double mSigmaPhiEnd;
+    /** sigma for angle error in the middle of the range (latitudal angle) */
+    double mSigmaPhiMid;
 };
 
 DECLARE_CLASS(KickEffector);
