@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.2 2004/05/10 14:10:46 fruit Exp $
+   $Id: monitor.h,v 1.3 2004/05/11 10:40:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "glserver.h"
 #include <monitorlib.h>
 #include <gamestate.h>
-#include <commserver.h>
+#include <commserverbase.h>
 
 class Monitor
 {
@@ -111,7 +111,7 @@ private:
     //! the monitor library
     MonitorLib mMonitorLib;
     //! communication Server
-    boost::shared_ptr<CommServer> mCommServer;
+    boost::shared_ptr<CommServerBase> mCommServer;
 
     //! window width
     int mWidth;
