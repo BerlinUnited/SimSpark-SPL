@@ -2,15 +2,15 @@
 #define CLASS_H__
 
 /*! \class Class
-	$Id: class.h,v 1.1 2003/04/30 11:29:35 fruit Exp $
+	$Id: class.h,v 1.2 2003/04/30 14:21:50 fruit Exp $
 	
 	Class
 
 	This class is quite essential for the Zeitgeist Core. Every class which
 	wants to be managed by Zeitgeist will have to derive a class object
 	from this class and override the factory method. Only decendants from
-	Base are able to use Class properly and the factory method returns
-	a Base pointer.
+	Object are able to use Class properly and the factory method returns
+	a Object pointer.
 
 	A Class object is characterized by several parameters:
 
@@ -39,7 +39,7 @@
 #include <boost/any.hpp>
 #include <salt/defines.h>
 #include <salt/sharedlibrary.h>
-#include "base.h"
+#include "leaf.h"
 
 namespace zeitgeist
 {
@@ -99,7 +99,7 @@ namespace zeitgeist
 // forward declarations
 class Core;
 
-class Class : public Base
+class Class : public Leaf
 {
 	// friends
 	friend class Object;
@@ -111,10 +111,11 @@ class Class : public Base
 public:
 	typedef std::vector<boost::any>		TParameterList;
 	typedef void (*TCmdProc)(Object *obj, const TParameterList &in);
+	typedef std::list<std::string>					TStringList;
+
 private:
 	typedef std::list< boost::weak_ptr<Object> >	TObjectList;
 	typedef std::hash_map<std::string, TCmdProc>	TCommandMap;
-	typedef std::list<std::string>					TStringList;
 
 	//
 	// functions
@@ -128,9 +129,16 @@ public:
 	boost::shared_ptr<Core>				GetCore() const;
 
 	//! set the bundle, this class was loaded from
-	void SetBundle(const boost::shared_ptr<salt::SharedLibrary> &bundle);
+	void			SetBundle(const boost::shared_ptr<salt::SharedLibrary> &bundle);
 
-	TCmdProc	GetCmdProc(const std::string &functionName);
+	//! returns the command procedure
+	TCmdProc		GetCmdProc(const std::string &functionName);
+
+	//! retrieve the list of base class names
+	const TStringList&	GetBaseClasses() const;
+
+	//! check if the class supports a given 'interface' (if the base class hierarchy contains the class)
+	bool			Supports(const std::string &name) const;
 
 protected:
 	//! add an instance to our local list of instances
@@ -141,7 +149,7 @@ protected:
 private:
 	Class(const Class &obj);
 	Class& operator=(const Class &obj);
-	//! pure virtual function which creates Base instances
+	//! pure virtual function which creates instances
 	virtual Object*	CreateInstance() const;
 	//! pure virtual function which initializes the script callbacks and links to parent classes
 	virtual void	DefineClass() = 0;

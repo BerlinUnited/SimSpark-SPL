@@ -2,7 +2,7 @@
 #define SHAREDLIBRARY_H__
 
 /*! \class SharedLibrary
-	$Id: sharedlibrary.h,v 1.1 2003/04/30 11:29:34 fruit Exp $
+	$Id: sharedlibrary.h,v 1.2 2003/04/30 14:21:49 fruit Exp $
 	
 	SharedLibrary
 	:TODO: Class description for SharedLibrary
@@ -34,7 +34,7 @@ private:
 	//
 public:
 	SharedLibrary() : mLibHandle(0) {};
-	~SharedLibrary()	{	printf("~SharedLibrary\n"); Close();	};
+	~SharedLibrary()	{	Close();	};
 
 	bool	Open(const std::string &libName);
 	void*	GetProcAddress(const std::string &procName);

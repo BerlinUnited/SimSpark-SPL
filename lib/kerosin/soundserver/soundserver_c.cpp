@@ -48,7 +48,7 @@ FUNCTION(playEffect)
 
 void CLASS(SoundServer)::DefineClass()
 {
-	DEFINE_BASECLASS(zeitgeist/Base);
+	DEFINE_BASECLASS(zeitgeist/Leaf);
 	DEFINE_FUNCTION(init);
 	DEFINE_FUNCTION(playStream);
 	DEFINE_FUNCTION(playModule);

@@ -2,7 +2,7 @@
 #define INPUTDEVICE_H__
 
 /*	\class InputDevice
-	$Id: inputdevice.h,v 1.1 2003/04/30 11:29:33 fruit Exp $
+	$Id: inputdevice.h,v 1.2 2003/04/30 14:21:26 fruit Exp $
 
 	InputDevice
 
@@ -27,13 +27,13 @@
 	TOFIX:
 */
 
-#include <zeitgeist/base.h>
+#include <zeitgeist/leaf.h>
 #include "inputsystem.h"
 
 namespace kerosin
 {
 
-class InputDevice : public zeitgeist::Base
+class InputDevice : public zeitgeist::Leaf
 {
 	//
 	// functions

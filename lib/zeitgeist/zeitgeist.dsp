@@ -148,18 +148,6 @@ SOURCE=.\fileserver\filesystem_c.cpp
 # End Group
 # Begin Source File
 
-SOURCE=.\base.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\base.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\base_c.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\class.cpp
 # End Source File
 # Begin Source File
@@ -181,6 +169,18 @@ SOURCE=.\corecontext.cpp
 # Begin Source File
 
 SOURCE=.\corecontext.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\leaf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\leaf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\leaf_c.cpp
 # End Source File
 # Begin Source File
 

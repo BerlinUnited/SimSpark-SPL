@@ -2,7 +2,7 @@
 #define TVECTOR_H__
 
 /*! \class TVector
-	$Id: tvector.h,v 1.1 2003/04/30 11:29:34 fruit Exp $
+	$Id: tvector.h,v 1.2 2003/04/30 14:21:49 fruit Exp $
 	
 	TVector
 	
@@ -41,7 +41,10 @@ public:
 
 	// Direct pointer access to the data member ... use with care!!!
 	f_inline const TYPE&	SetData(const DATATYPE *copy);
-	f_inline DATATYPE*			GetData()						{	return mData;	}
+	f_inline DATATYPE*		GetData()						{	return mData;	}
+
+	// Output
+	void					Dump() const;
 
 	f_inline const TYPE&	Fill(const DATATYPE &fill);			// Fill vector with value 'fill'
 	f_inline TYPE&			Zero();							// Zero out this vector
@@ -61,12 +64,12 @@ public:
 	f_inline bool			operator==(const TYPE &v)const;	// VECTORA == VECTORB
 	f_inline bool			operator!=(const TYPE &v)const;	// VECTORA != VECTORB
 
-	f_inline DATATYPE			Dot(const TYPE &v) const;
+	f_inline DATATYPE		Dot(const TYPE &v) const;
 	f_inline const TYPE&	Normalize();
 	f_inline TYPE			Normalized() const;
 
-	f_inline DATATYPE			SquareLength() const;			// Squared length of the vector
-	f_inline DATATYPE			Length() const					{ return gSqrt(SquareLength()); }
+	f_inline DATATYPE		SquareLength() const;			// Squared length of the vector
+	f_inline DATATYPE		Length() const					{ return gSqrt(SquareLength()); }
 
 	//! returns XX significant axis helper function (return between 0 and ELEMENTS)
 	f_inline int			GetLeastSignificantAxis() const;
@@ -173,6 +176,13 @@ public:
 		return *static_cast<TYPE*>(this);
 	}
 
+	const TYPE& Set(const TYPE &v)
+	{
+		El(0) = v.x();
+		El(1) = v.y();
+		El(2) = v.z();
+		return *static_cast<TYPE*>(this);
+	}
 };
 
 // Set operator for any vector. Just with a pointer
@@ -181,6 +191,14 @@ inline const TYPE	&TVector<DATATYPE, ELEMENTS, TYPE>::SetData(const DATATYPE *co
 	for (int i=0; i<ELEMENTS; i++)
 		mData[i] = copy[i];
 	return *static_cast<TYPE*>(this);
+}
+
+// Output
+template <typename DATATYPE, int ELEMENTS, typename TYPE>
+inline void TVector<DATATYPE, ELEMENTS, TYPE>::Dump() const {
+	for (int i=0; i<ELEMENTS; i++)
+		printf("%f ", (float)mData[i]);
+	printf("\n");
 }
 
 // fill vector with value 'fill'

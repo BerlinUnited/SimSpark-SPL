@@ -5,13 +5,7 @@
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
-
-#if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__)
-#define WIN32_LEAN_AND_MEAN 1
-#include <windows.h>
-#endif
-
-#include <GL/gl.h>
+#include <kerosin/openglserver/openglserver.h>
 
 using namespace kerosin;
 using namespace std;
@@ -55,8 +49,10 @@ boost::shared_ptr<Font> FontServer::GetFont(const std::string &name, unsigned in
 
 boost::shared_ptr<Font> FontServer::FindFont(const std::string &name, unsigned int size) const
 {
+	//GetLog()->Normal() << "FontServer: Finding " << name << " " << size << endl;
 	for (TFontList::const_iterator i = mFonts.begin(); i != mFonts.end(); ++i)
 	{
+		//GetLog()->Normal() << "FontServer: Comparing " << (*i)->GetName() << " " << (*i)->GetSize() << endl;
 		if ((*i)->GetName().compare(name) == 0 && (*i)->GetSize() == size)
 		{
 			return (*i);
@@ -112,14 +108,12 @@ bool FontServer::LoadFont(const std::string &name, unsigned int size, boost::sha
 
 	bool ret = font->Init(name, size, face);
 	FT_Done_Face(face);
-	return true;
+	return ret;
 }
 
 void FontServer::Begin()
 {
-	//glActiveTextureARB(GL_TEXTURE0_ARB);
 	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
@@ -133,10 +127,7 @@ void FontServer::Begin()
 
 void FontServer::End()
 {
-	//glActiveTextureARB(GL_TEXTURE0_ARB);
-	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	glEnable(GL_CULL_FACE);
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);

@@ -35,14 +35,14 @@
 #define IMAGESERVER_H__
 
 #include <il/il.h>
-#include <zeitgeist/base.h>
+#include <zeitgeist/leaf.h>
 
 namespace kerosin
 {
 
 class Image;
 
-class ImageServer : public zeitgeist::Base
+class ImageServer : public zeitgeist::Leaf
 {
 public:
 	ImageServer();

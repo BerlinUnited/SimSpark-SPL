@@ -1,6 +1,6 @@
 #include "corecontext.h"
 #include <salt/path.h>
-#include "base.h"
+#include "leaf.h"
 #include "node.h"
 #include "core.h"
 #include <iostream>
@@ -10,7 +10,7 @@ using namespace salt;
 using namespace std;
 using namespace zeitgeist;
 
-CoreContext::CoreContext(const boost::shared_ptr<Core> &core, const boost::shared_ptr<Base> &root) : mCore(core), mObject(root)
+CoreContext::CoreContext(const boost::shared_ptr<Core> &core, const boost::shared_ptr<Leaf> &root) : mCore(core), mObject(root)
 {
 }
 
@@ -21,72 +21,72 @@ CoreContext::~CoreContext()
 
 /*
 	The function assumes that only compatible classes are created this way.
-	Compatible means 'starting at Base' in the hierarchy.
+	Compatible means 'starting at Leaf' in the hierarchy.
 */
-boost::shared_ptr<Base>	CoreContext::New(const std::string& className, const std::string& pathStr)
+boost::shared_ptr<Leaf>	CoreContext::New(const std::string& className, const std::string& pathStr)
 {
 	// first, we try to create the class with the core
 	shared_ptr<Object> instance = mCore->New(className);
 
-	//printf("instance->%p\n", instance);
 	if (instance.get())
 	{
-		// now, we check the type by dynamic casting to base
-		shared_ptr<Base> base = shared_dynamic_cast<Base>(instance);
+		// now, we check the type by dynamic casting to leaf
+		shared_ptr<Leaf> leaf = shared_static_cast<Leaf>(instance);
 
-		if (base.get() != NULL)
+		if (leaf.get() != NULL)
 		{
 			// we have created the instance, now we install it at the location
 			// stored in pathName
-			if (Install(base, pathStr) == true)
+			if (Install(leaf, pathStr) == true)
 			{
-				return base;
+				mObject = leaf;
+				return leaf;
 			}
 		}
 	}
 
 	// return default constructed 'NULL' object
-	return shared_ptr<Base>();
+	return shared_ptr<Leaf>();
 }
 
 bool CoreContext::Delete (const std::string &name)
 {
-	shared_ptr<Base> base = Get(name);
+	shared_ptr<Leaf> leaf = Get(name);
 
-	if (base.get())
+	if (leaf.get())
 	{
-		base->Unlink();
+		leaf->Unlink();
 		return true;
 	}
 	return false;
 }
 
 
-boost::shared_ptr<Base> CoreContext::Select(const std::string &pathStr)
+boost::shared_ptr<Leaf> CoreContext::Select(const std::string &pathStr)
 {
-	shared_ptr<Base> base = Get(pathStr);
+	shared_ptr<Leaf> leaf = Get(pathStr);
 
-	if (base.get()) mObject = base;
+	if (leaf.get()) mObject = leaf;
 	
-	return base;
+	return leaf;
 }
 
-bool CoreContext::Install(const boost::shared_ptr<Base> &base, const std::string &pathStr, bool isNamed)
+bool CoreContext::Install(const boost::shared_ptr<Leaf> &leaf, const std::string &pathStr, bool isNamed)
 {
 	//cout << "CoreContext(" << (void*) this << ") Install '" << pathStr << "'" << endl;
 	Path path(pathStr);
 
 	if(!isNamed)
 	{
-		// we need at least one token to 'name' the base class
+		// we need at least one token to 'name' the leaf class
 		if (path.IsEmpty()) return false;
 
-		base->SetName(path.Back());
+		leaf->SetName(path.Back());
 		path.PopBack();
-		// now, we have named the base object, so we can install it
+		// now, we have named the leaf object, so we can install it
 	}
 
-	shared_ptr<Base> current;
+	shared_ptr<Leaf> current;
 
 	// check if we have a relative or absolute path
 	if (path.IsAbsolute())
@@ -108,17 +108,17 @@ bool CoreContext::Install(const boost::shared_ptr<Base> &base, const std::string
 		path.PopFront();
 	}
 
-	return current->AddChildReference(base);
+	return current->AddChildReference(leaf);
 }
 
-boost::shared_ptr<Base> CoreContext::Get(const std::string& pathStr)
+boost::shared_ptr<Leaf> CoreContext::Get(const std::string& pathStr)
 {
 	return mCore->Get(pathStr, mObject);
 }
 
 void CoreContext::ListObjects() const
 {
-	Base::TBaseList::iterator i;
+	Leaf::TLeafList::iterator i;
 
 	for (i = mObject->begin(); i != mObject->end(); ++i)
 	{

@@ -15,6 +15,6 @@ FUNCTION(open)
 
 void CLASS(FileSystem)::DefineClass()
 {
-	DEFINE_BASECLASS(zeitgeist/Base);
+	DEFINE_BASECLASS(zeitgeist/Leaf);
 	DEFINE_FUNCTION(open);
 }

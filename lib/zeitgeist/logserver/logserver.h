@@ -2,7 +2,7 @@
 #define LOGSERVER_H__
 
 /*! \class LogServer
-	$Id: logserver.h,v 1.1 2003/04/30 11:29:35 fruit Exp $
+	$Id: logserver.h,v 1.2 2003/04/30 14:21:53 fruit Exp $
 	
 	LogServer
 

@@ -2,7 +2,7 @@
 #define LOGSERVERSTREAMBUF_H__
 
 /*! \class LogServerStreamBuf
-  $Id: logserverstreambuf.h,v 1.1 2003/04/30 11:29:35 fruit Exp $
+  $Id: logserverstreambuf.h,v 1.2 2003/04/30 14:21:53 fruit Exp $
 
   ForwarderStreamBuf
 

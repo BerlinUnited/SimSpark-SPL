@@ -1,7 +1,7 @@
 #ifndef IMAGE_H__
 #define IMAGE_H__
 
-/*	$Id: image.h,v 1.1 2003/04/30 11:29:33 fruit Exp $
+/*	$Id: image.h,v 1.2 2003/04/30 14:21:24 fruit Exp $
 
 	Image - A Wrapper for the DevIL Library
 

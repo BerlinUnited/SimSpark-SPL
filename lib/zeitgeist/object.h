@@ -2,7 +2,7 @@
 #define OBJECT_H__
 
 /*! \class Object
-	$Id: object.h,v 1.1 2003/04/30 11:29:35 fruit Exp $
+	$Id: object.h,v 1.2 2003/04/30 14:21:51 fruit Exp $
 	
 	Object
 	
@@ -37,7 +37,7 @@ public:
 	Object();
 	virtual ~Object();
 
-	virtual void Construct(const boost::shared_ptr<Object>& self, const boost::shared_ptr<Class>& creator);
+	bool Construct(const boost::shared_ptr<Object>& self, const boost::shared_ptr<Class>& creator);
 
 	// class object
 	boost::shared_ptr<Class>	GetClass() const;
@@ -56,7 +56,9 @@ public:
 	// function invocation used for scripting
 	void	Invoke(const std::string &functionName);
 	
-private:
+protected:
+	//! overload this to perform stuff after the object has been created and attached to a core
+	virtual bool ConstructInternal();
 
 	//
 	// members

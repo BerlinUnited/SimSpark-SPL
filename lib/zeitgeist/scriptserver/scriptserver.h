@@ -2,7 +2,7 @@
 #define SCRIPTSERVER_H__
 
 /*! \class ScriptServer
-	$Id: scriptserver.h,v 1.1 2003/04/30 11:29:36 fruit Exp $
+	$Id: scriptserver.h,v 1.2 2003/04/30 14:21:53 fruit Exp $
 	
 	ScriptServer
 	:TODO: Class description for ScriptServer
@@ -13,7 +13,7 @@
 
 */
 
-#include "../base.h"
+#include "../leaf.h"
 #define EXTERN extern __declspec(dllimport)
 #include <ruby/ruby.h>
 #undef EXTERN
@@ -23,7 +23,7 @@ namespace zeitgeist
 
 class CoreContext;
 
-class ScriptServer : public Base
+class ScriptServer : public Leaf
 {
 	//
 	// types
@@ -39,7 +39,6 @@ public:
 	ScriptServer();
 	virtual ~ScriptServer();
 
-	void Init();
 	bool Run(const std::string &fileName);
 	bool Eval(const std::string &command);
 	
@@ -52,7 +51,11 @@ public:
 	bool GetVariable(const std::string &varName, std::string &value);
 
 	boost::shared_ptr<CoreContext> GetContext() const;
+
 protected:
+	//! initialization
+	virtual bool ConstructInternal();
+		
 private:
 	ScriptServer(const ScriptServer& obj);
 	ScriptServer& operator=(const ScriptServer& obj);

@@ -19,10 +19,13 @@ Object::~Object()
 	}
 }
 
-void Object::Construct(const boost::shared_ptr<Object>& self, const boost::shared_ptr<Class>& creator)
+bool Object::Construct(const boost::shared_ptr<Object>& self, const boost::shared_ptr<Class>& creator)
 {
 	mSelf	= self;
 	mClass	= creator;
+
+	// give each object a chance to do something
+	return ConstructInternal();
 }
 
 boost::shared_ptr<Class> Object::GetClass() const
@@ -74,4 +77,9 @@ const boost::shared_ptr<LogServer>& Object::GetLog() const
 const boost::shared_ptr<ScriptServer>& Object::GetScript() const
 {
 	return GetCore()->GetScriptServer();
+}
+
+bool Object::ConstructInternal()
+{
+	return true;
 }

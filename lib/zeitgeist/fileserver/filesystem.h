@@ -2,7 +2,7 @@
 #define FILESYSTEM_H__
 
 /*! \class FileSystem
-	$Id: filesystem.h,v 1.1 2003/04/30 11:29:35 fruit Exp $
+	$Id: filesystem.h,v 1.2 2003/04/30 14:21:52 fruit Exp $
 	
 	FileSystem
 
@@ -15,14 +15,14 @@
 
 */
 
-#include <zeitgeist/base.h>
+#include <zeitgeist/leaf.h>
 #include <salt/fileclasses.h>
 
 
 namespace zeitgeist
 {
 
-class FileSystem : public Base
+class FileSystem : public Leaf
 {
 	//
 	// types
@@ -34,7 +34,7 @@ public:
 	// functions
 	//
 public:
-	FileSystem() : Base()	{}
+	FileSystem() : Leaf()	{}
 	virtual ~FileSystem() {}
 	virtual salt::RFile*	Open(const char* inName) = 0;
 	virtual bool	SetPath(const char* inPath) = 0;

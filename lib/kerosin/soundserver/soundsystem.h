@@ -1,4 +1,4 @@
-/*	$Id: soundsystem.h,v 1.1 2003/04/30 11:29:34 fruit Exp $
+/*	$Id: soundsystem.h,v 1.2 2003/04/30 14:21:46 fruit Exp $
 
 	SoundSystem
 
@@ -21,7 +21,7 @@
 #ifndef SOUNDSYSTEM_H__
 #define SOUNDSYSTEM_H__
 
-#include <zeitgeist/base.h>
+#include <zeitgeist/leaf.h>
 
 namespace kerosin
 {
@@ -31,10 +31,10 @@ class SoundStream;
 class SoundModule;
 class SoundServer;
 
-class SoundSystem : public zeitgeist::Base
+class SoundSystem : public zeitgeist::Leaf
 {
 public:
-	SoundSystem() : zeitgeist::Base()	{}
+	SoundSystem() : zeitgeist::Leaf()	{}
 	virtual ~SoundSystem()	{}
 	virtual bool			Init(int inFreq) = 0;
 	virtual void			Shutdown() = 0;

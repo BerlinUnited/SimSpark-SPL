@@ -26,6 +26,9 @@ Font::~Font()
 
 bool Font::Init(const std::string &name, unsigned int size, FT_Face face)
 {
+	mName = name;
+	mSize = size;
+
 	if (mTexID != 0)
 	{
 		glDeleteTextures(1, &mTexID);
@@ -145,7 +148,7 @@ bool Font::Init(const std::string &name, unsigned int size, FT_Face face)
 
 	glBindTexture(GL_TEXTURE_2D, mTexID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA8, 256, requiredHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, imageBuffer.get());
-	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	
 	return (glGetError() == 0);
@@ -162,16 +165,16 @@ bool Font::Bind(int vRows)
 	int xRes;
 	int yRes;
 	
-	if (!mFontServer.GetScript()->GetVariable("Viewport.xRes", xRes)) return false;
-	if (!mFontServer.GetScript()->GetVariable("Viewport.yRes", yRes)) return false;
+	//if (!mFontServer.GetScript()->GetVariable("Viewport.xRes", xRes)) return false;
+	//if (!mFontServer.GetScript()->GetVariable("Viewport.yRes", yRes)) return false;
 
 	if(vRows == -1)
 	{
-		glOrtho(0, xRes, yRes, 0, 1, 1000);
+		glOrtho(0, 1024, 768, 0, 1, 1000);
 	}
 	else
 	{
-		glOrtho(0, xRes*(mRowHeight*vRows/(float)yRes), mRowHeight*vRows, 0, 1, 1000);
+		glOrtho(0, 1024*(mRowHeight*vRows/(float)768), mRowHeight*vRows, 0, 1, 1000);
 	}
 
 	return true;

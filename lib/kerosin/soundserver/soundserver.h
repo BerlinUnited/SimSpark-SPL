@@ -1,7 +1,7 @@
 #ifndef SOUNDSERVER_H__
 #define SOUNDSERVER_H__
 
-/*	$Id: soundserver.h,v 1.1 2003/04/30 11:29:34 fruit Exp $
+/*	$Id: soundserver.h,v 1.2 2003/04/30 14:21:46 fruit Exp $
 
 	SoundServer
 
@@ -29,7 +29,7 @@
 
 #include <list>
 #include <hash_map>
-#include <zeitgeist/base.h>
+#include <zeitgeist/leaf.h>
 
 namespace kerosin
 {
@@ -42,7 +42,7 @@ class SoundStream;
 class SoundModule;
 class SystemWindow;
 
-class SoundServer : public zeitgeist::Base
+class SoundServer : public zeitgeist::Leaf
 {
 	//
 	// Types

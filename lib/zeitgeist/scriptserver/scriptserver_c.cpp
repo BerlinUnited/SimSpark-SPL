@@ -4,5 +4,5 @@ using namespace zeitgeist;
 
 void CLASS(ScriptServer)::DefineClass()
 {
-	DEFINE_BASECLASS(zeitgeist/Base);
+	DEFINE_BASECLASS(zeitgeist/Leaf);
 }

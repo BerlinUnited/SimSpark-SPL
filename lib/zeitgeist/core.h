@@ -15,7 +15,7 @@ namespace zeitgeist
 {
 
 class Class;
-class Base;
+class Leaf;
 class Node;
 class FileServer;
 class LogServer;
@@ -45,11 +45,11 @@ public:
 	const boost::shared_ptr<LogServer>&		GetLogServer() const;
 	const boost::shared_ptr<ScriptServer>&	GetScriptServer() const;
 
-	boost::shared_ptr<Base> GetRoot() const	{	return mRoot;	}
+	boost::shared_ptr<Leaf> GetRoot() const	{	return mRoot;	}
 
-	boost::shared_ptr<Base> Get(const std::string &pathStr);
-	boost::shared_ptr<Base> Get(const std::string &pathStr, const boost::shared_ptr<Base>& base);
-	boost::shared_ptr<Base> GetChild(const boost::shared_ptr<Base> &parent, const std::string &childName);
+	boost::shared_ptr<Leaf> Get(const std::string &pathStr);
+	boost::shared_ptr<Leaf> Get(const std::string &pathStr, const boost::shared_ptr<Leaf>& base);
+	boost::shared_ptr<Leaf> GetChild(const boost::shared_ptr<Leaf> &parent, const std::string &childName);
 
 	void BindClass(const boost::shared_ptr<Class> &newClass) const;
 	void GarbageCollectBundles();
@@ -58,7 +58,7 @@ public:
 	// members
 	//
 private:
-	boost::shared_ptr<Base>			mRoot;
+	boost::shared_ptr<Leaf>			mRoot;
 	boost::shared_ptr<Class>		mNodeClass;
 	boost::shared_ptr<Class>		mClassClass;
 	boost::shared_ptr<FileServer>	mFileServer;

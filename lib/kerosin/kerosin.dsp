@@ -270,9 +270,357 @@ SOURCE=.\textureserver\textureserver.h
 SOURCE=.\textureserver\textureserver_c.cpp
 # End Source File
 # End Group
-# Begin Group "scenegraph"
+# Begin Group "sceneserver"
 
 # PROP Default_Filter ""
+# Begin Group "helper"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\sceneserver\helper\NVMeshMender.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\helper\NVMeshMender.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\helper\nv_math.lib
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\sceneserver\axis.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\axis.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\axis_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\basenode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\basenode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\basenode_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\camera.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\camera.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\camera_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\fpscontroller.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\fpscontroller.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\fpscontroller_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\indexbuffer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\indexbuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\light.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\light.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\light_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\scene.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\scene.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\scene_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\sceneserver.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\sceneserver.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\sceneserver_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\sphere.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\sphere.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\sphere_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\staticmesh.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\staticmesh.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\staticmesh_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\transform.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\transform.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sceneserver\transform_c.cpp
+# End Source File
+# End Group
+# Begin Group "physicsserver"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\physicsserver\body.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\body.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\body_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\collider.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\collider.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\collider_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\odeobject.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\odeobject.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\odeobject_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\physicsserver.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\physicsserver.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\physicsserver_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\planecollider.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\planecollider.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\planecollider_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\space.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\space.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\space_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\spherecollider.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\spherecollider.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\spherecollider_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\world.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\world.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\physicsserver\world_c.cpp
+# End Source File
+# End Group
+# Begin Group "materialserver"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\materialserver\material.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\materialserver\material.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\materialserver\materialserver.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\materialserver\materialserver.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\materialserver\materialserver_c.cpp
+# End Source File
+# End Group
+# Begin Group "agentaspect"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\agentaspect\agentaspect.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\agentaspect.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\agentaspect_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\effector.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\effector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\effector_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\forceeffector.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\forceeffector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\forceeffector_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\perceptor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\perceptor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\perceptor_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\visionperceptor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\visionperceptor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\visionperceptor_c.cpp
+# End Source File
+# End Group
+# Begin Group "controlaspect"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\controlaspect\controlaspect.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controlaspect\controlaspect.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\controlaspect\controlaspect_c.cpp
+# End Source File
 # End Group
 # Begin Source File
 

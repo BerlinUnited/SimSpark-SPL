@@ -2,7 +2,7 @@
 #define QUADLINK_H__
 
 /*! \class QuadLink
-	$Id: quadlink.h,v 1.1 2003/04/30 11:29:34 fruit Exp $
+	$Id: quadlink.h,v 1.2 2003/04/30 14:21:49 fruit Exp $
 	
 	QuadLink
 	:TODO: Class description for QuadLink

@@ -31,6 +31,15 @@ FUNCTION(reset)
 	}
 }
 
+FUNCTION(bindCommand)
+{
+	if (in.size() == 2)
+	{
+		InputServer *is = static_cast<InputServer*>(obj);
+		is->BindCommand(any_cast<char*>(in[0]), any_cast<int>(in[1]));
+	}
+}
+
 FUNCTION(importScanCodeMapping)
 {
 	if (in.size() == 1)
@@ -55,6 +64,7 @@ void CLASS(InputServer)::DefineClass()
 	DEFINE_FUNCTION(init);
 	DEFINE_FUNCTION(createDevice);
 	DEFINE_FUNCTION(reset);
+	DEFINE_FUNCTION(bindCommand);
 	DEFINE_FUNCTION(importScanCodeMapping);
 	DEFINE_FUNCTION(addCode);
 }

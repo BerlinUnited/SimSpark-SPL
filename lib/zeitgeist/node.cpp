@@ -8,7 +8,7 @@ std::ostream& zeitgeist::operator<<(std::ostream& output, const Node& node)
 {
 	output << (int)&node << " '" << node.GetName() << "'" << std::endl;
 
-	//for (Node::TBaseList::const_iterator i=base.mChildren.begin(); i!=base.mChildren.end(); ++i)
+	//for (Node::TLeafList::const_iterator i=leaf.mChildren.begin(); i!=leaf.mChildren.end(); ++i)
 	//{
 	//	output << *(*i);
 	//}
@@ -22,37 +22,130 @@ using namespace std;
 using namespace zeitgeist;
 
 
-Node::Node(const std::string& name) : Base(name)
+Node::Node(const std::string& name) : Leaf(name)
 {
 }
 
 Node::~Node()
 {
-	cout << "~Node() '" << mName << "' " << mChildren.size() <<" -> " << (void*)this << endl;
+	//cout << "~Node() '" << mName << "' " << mChildren.size() <<" -> " << (void*)this << endl;
 }
 
-void Node::Construct(const boost::shared_ptr<Object>& self, const boost::shared_ptr<Class>& creator)
+boost::shared_ptr<Leaf> Node::GetChild(const std::string &name, bool recursive)
 {
-	Base::Construct(self, creator);
-}
+	shared_ptr<Leaf> leaf	= Leaf::GetChild(name, recursive);
 
-boost::shared_ptr<Base> Node::GetChild(const std::string &name, bool recursive)
-{
-	shared_ptr<Base> base	= Base::GetChild(name, recursive);
+	if (leaf.get() != NULL) return leaf;
 
-	if (base.get() != NULL) return base;
-
-	for (TBaseList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
+	for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
 	{
 		// check if we have found a match and return it
 		if ((*i)->GetName().compare(name) == 0)
 			return (*i);
 
 		if (recursive)
-			return (*i)->GetChild(name, recursive);
+		{
+			shared_ptr<Leaf> ret = (*i)->GetChild(name, recursive);
+			if (ret.get() != NULL) return ret;
+		}
 	}
 
-	return boost::shared_ptr<Base>();
+	return boost::shared_ptr<Leaf>();
+}
+
+boost::shared_ptr<Leaf> Node::GetChildOfClass(const std::string &name, bool recursive)
+{
+	for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
+	{
+		// check if we have found a match and add it
+		shared_ptr<Class> theClass = (*i)->GetClass();
+		if (theClass.get() != NULL && theClass->GetName().compare(name) == 0)
+		{
+			return (*i);
+		}
+
+		if (recursive)
+		{
+			shared_ptr<Leaf> ret = (*i)->GetChildOfClass(name, recursive);
+			if (ret.get() != NULL) return ret;
+		}
+	}
+
+	return shared_ptr<Leaf>();
+}
+
+boost::shared_ptr<Leaf> Node::GetChildSupportingClass(const std::string &name, bool recursive)
+{
+	for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
+	{
+		// check if we have found a match and add it
+		shared_ptr<Class> theClass = (*i)->GetClass();
+		if (theClass.get() != NULL && theClass->Supports(name))
+		{
+			return (*i);
+		}
+
+		if (recursive)
+		{
+			shared_ptr<Leaf> ret = (*i)->GetChildOfClass(name, recursive);
+			if (ret.get() != NULL) return ret;
+		}
+	}
+
+	return shared_ptr<Leaf>();
+}
+
+void Node::GetChildren(const std::string &name, TLeafList &baseList, bool recursive)
+{
+	Leaf::GetChildren(name, baseList, recursive);
+
+	for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
+	{
+		// check if we have found a match and add it
+		if ((*i)->GetName().compare(name) == 0)
+		{
+			baseList.push_back(*i);
+		}
+
+		if (recursive)
+			(*i)->GetChildren(name, baseList, recursive);
+	}
+}
+
+void Node::GetChildrenOfClass(const std::string &name, TLeafList &baseList, bool recursive)
+{
+	Leaf::GetChildrenOfClass(name, baseList, recursive);
+
+	for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
+	{
+		// check if we have found a match and add it
+		shared_ptr<Class> theClass = (*i)->GetClass();
+		if (theClass.get() != NULL && theClass->GetName().compare(name) == 0)
+		{
+			baseList.push_back(*i);
+		}
+
+		if (recursive)
+			(*i)->GetChildrenOfClass(name, baseList, recursive);
+	}
+}
+
+void Node::GetChildrenSupportingClass(const std::string &name, TLeafList &baseList, bool recursive)
+{
+	Leaf::GetChildrenOfClass(name, baseList, recursive);
+
+	for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
+	{
+		// check if we have found a match and add it
+		shared_ptr<Class> theClass = (*i)->GetClass();
+		if (theClass.get() != NULL && theClass->Supports(name))
+		{
+			baseList.push_back(*i);
+		}
+
+		if (recursive)
+			(*i)->GetChildrenOfClass(name, baseList, recursive);
+	}
 }
 
 bool Node::IsLeaf() const
@@ -60,26 +153,26 @@ bool Node::IsLeaf() const
 	return false;
 }
 
-void Node::RemoveChildReference(const boost::shared_ptr<Base> &base)
+void Node::RemoveChildReference(const boost::shared_ptr<Leaf> &leaf)
 {
-	mChildren.remove(base);
+	mChildren.remove(leaf);
 }
 
-bool Node::AddChildReference(const boost::shared_ptr<Base> &base)
+bool Node::AddChildReference(const boost::shared_ptr<Leaf> &leaf)
 {
-	mChildren.push_back(base);
+	mChildren.push_back(leaf);
 	//cout << "Node: self " << (void*) GetSelf().get() << endl;
-	base->SetParent(shared_static_cast<Node>(make_shared(GetSelf())));
+	leaf->SetParent(shared_static_cast<Node>(make_shared(GetSelf())));
 
 	return true;
 }
 
 void Node::Dump() const
 {
-	Base::Dump();
+	Leaf::Dump();
 	cout << "Node: numChildren = " << mChildren.size() << endl;
 
-	for (TBaseList::const_iterator i = mChildren.begin(); i!=mChildren.end(); ++i)
+	for (TLeafList::const_iterator i = mChildren.begin(); i!=mChildren.end(); ++i)
 	{
 		(*i)->Dump();
 		cout << endl;
@@ -88,47 +181,22 @@ void Node::Dump() const
 	cout << "End Node" << endl;
 }
 
-Base::TBaseList::iterator Node::begin()
+Leaf::TLeafList::iterator Node::begin()
 {
 	return mChildren.begin();
 }
 
-Base::TBaseList::const_iterator Node::begin() const
+Leaf::TLeafList::const_iterator Node::begin() const
 {
 	return mChildren.begin();
 }
 
-Base::TBaseList::iterator Node::end()
+Leaf::TLeafList::iterator Node::end()
 {
 	return mChildren.end();
 }
 
-Base::TBaseList::const_iterator Node::end() const
+Leaf::TLeafList::const_iterator Node::end() const
 {
 	return mChildren.end();
 }
-
-/*void Node::Status()
-{
-	Base::Status();
-
-	for (Iterator i = GetIterator(); !i.Done(); i.Next())
-	{
-		Base *base = i.Current();
-		cout << base->GetName();
-		if (!base->IsLeaf())
-		{
-			cout << "/";
-		}
-		cout << endl;
-	}
-}*/
-
-/*
-Base::TLink::Iterator	Node::GetIterator()
-{
-	TLink::Iterator i(&mChildLink);
-	return i;
-}
-
-*/

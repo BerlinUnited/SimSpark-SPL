@@ -12,7 +12,7 @@ using namespace boost;
 using namespace std;
 using namespace zeitgeist;
 
-boost::shared_ptr<CoreContext> gContext;
+boost::shared_ptr<CoreContext> gMyPrivateContext;
 
 void getParameterList(VALUE args, Class::TParameterList &params)
 {
@@ -69,12 +69,12 @@ void getParameterList(VALUE args, Class::TParameterList &params)
 
 VALUE selectObject(VALUE self, VALUE path)
 {
-	shared_ptr<Base> base = gContext->Select(STR2CSTR(path));
+	shared_ptr<Leaf> leaf = gMyPrivateContext->Select(STR2CSTR(path));
 
-	if (base.get() != NULL)
+	if (leaf.get() != NULL)
 	{
 		std::stringstream s;
-		s << "ZeitgeistObject.new(" << (unsigned long) base.get() <<")";
+		s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
 		return rb_eval_string(s.str().c_str());
 	}
 	else
@@ -87,15 +87,15 @@ VALUE selectCall(VALUE self, VALUE functionName, VALUE args)
 
 	getParameterList(args, in);
 
-	Class::TCmdProc cmd = gContext->GetObject()->GetClass()->GetCmdProc(STR2CSTR(functionName));
+	Class::TCmdProc cmd = gMyPrivateContext->GetObject()->GetClass()->GetCmdProc(STR2CSTR(functionName));
 
 	if (cmd != NULL)
 	{
-		cmd(static_cast<Object*>(gContext->GetObject().get()), in);
+		cmd(static_cast<Object*>(gMyPrivateContext->GetObject().get()), in);
 	}
 	else
 	{
-		gContext->GetCore()->GetLogServer()->Error() << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << std::endl;
+		gMyPrivateContext->GetCore()->GetLogServer()->Error() << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << std::endl;
 	}
 
 	return Qnil;
@@ -116,7 +116,7 @@ VALUE thisCall(VALUE self, VALUE objPointer, VALUE functionName, VALUE args)
 	}
 	else
 	{
-		gContext->GetCore()->GetLogServer()->Error() << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << std::endl;
+		gMyPrivateContext->GetCore()->GetLogServer()->Error() << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << std::endl;
 	}
 
 	return Qnil;
@@ -124,18 +124,18 @@ VALUE thisCall(VALUE self, VALUE objPointer, VALUE functionName, VALUE args)
 
 VALUE importBundle(VALUE self, VALUE path)
 {
-	gContext->GetCore()->ImportBundle(STR2CSTR(path));
+	gMyPrivateContext->GetCore()->ImportBundle(STR2CSTR(path));
 	return Qnil;
 }
 
 VALUE newObject(VALUE self, VALUE className, VALUE pathStr)
 {
-	shared_ptr<Base> base = gContext->New(STR2CSTR(className), STR2CSTR(pathStr));
+	shared_ptr<Leaf> leaf = gMyPrivateContext->New(STR2CSTR(className), STR2CSTR(pathStr));
 
-	if (base.get() != NULL)
+	if (leaf.get() != NULL)
 	{
 		std::stringstream s;
-		s << "ZeitgeistObject.new(" << (unsigned long) base.get() <<")";
+		s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
 		return rb_eval_string(s.str().c_str());
 	}
 	else
@@ -144,19 +144,19 @@ VALUE newObject(VALUE self, VALUE className, VALUE pathStr)
 
 VALUE deleteObject(VALUE self, VALUE name)
 {
-	gContext->Delete(STR2CSTR(name));
+	gMyPrivateContext->Delete(STR2CSTR(name));
 
 	return Qnil;
 }
 
 VALUE getObject(VALUE self, VALUE path)
 {
-	shared_ptr<Base> base = gContext->Get(STR2CSTR(path));
+	shared_ptr<Leaf> leaf = gMyPrivateContext->Get(STR2CSTR(path));
 
-	if (base.get() != NULL)
+	if (leaf.get() != NULL)
 	{
 		std::stringstream s;
-		s << "ZeitgeistObject.new(" << (unsigned long) base.get() <<")";
+		s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
 		return rb_eval_string(s.str().c_str());
 	}
 	else
@@ -165,28 +165,28 @@ VALUE getObject(VALUE self, VALUE path)
 
 VALUE listObjects(VALUE self)
 {
-	gContext->ListObjects();
+	gMyPrivateContext->ListObjects();
 
 	return Qnil;
 }
 
 VALUE pushd(VALUE self)
 {
-	gContext->Push();
+	gMyPrivateContext->Push();
 
 	return Qnil;
 }
 
 VALUE popd(VALUE self)
 {
-	gContext->Pop();
+	gMyPrivateContext->Pop();
 
 	return Qnil;
 }
 
 VALUE dirs(VALUE self)
 {
-	gContext->Dir();
+	gMyPrivateContext->Dir();
 
 	return Qnil;
 }
@@ -213,15 +213,6 @@ ScriptServer::~ScriptServer()
 {
 }
 
-void ScriptServer::Init()
-{
-	// now follows the init script, which sets up the zeitgeist scripting
-	// environment within ruby.
-	Run("script/zeitgeist.rb");
-	
-	gContext = GetCore()->CreateContext();
-}
-
 bool ScriptServer::Run(const std::string &fileName)
 {
 	/*int error; 
@@ -236,7 +227,11 @@ bool ScriptServer::Run(const std::string &fileName)
 	return true;*/
 	salt::RFile *file = GetFile()->Open(fileName.c_str());
 
-	if (file == NULL) return false;
+	if (file == NULL)
+	{
+		GetLog()->Error().Printf("ERROR: ScriptServer::Run() - Can't locate file '%s'\n", fileName.c_str());
+		return false;
+	}
 
 	boost::scoped_array<char> buffer(new char[file->Size()+1]);
 	file->Read(buffer.get(), file->Size());
@@ -372,5 +367,18 @@ bool ScriptServer::GetVariable(const std::string &varName, std::string &value)
 
 boost::shared_ptr<CoreContext> ScriptServer::GetContext() const
 {
-	return gContext;
+	return gMyPrivateContext;
+}
+
+bool ScriptServer::ConstructInternal()
+{
+	if (Leaf::ConstructInternal() == false) return false;
+
+	// now follows the init script, which sets up the zeitgeist scripting
+	// environment within ruby.
+	if (Run("sys/script/zeitgeist.rb") == false) return false;
+	
+	gMyPrivateContext = GetCore()->CreateContext();
+
+	return true;
 }

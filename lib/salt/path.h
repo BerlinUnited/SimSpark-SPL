@@ -2,7 +2,7 @@
 #define PATH_H__
 
 /*! \class Path
-	$Id: path.h,v 1.1 2003/04/30 11:29:34 fruit Exp $
+	$Id: path.h,v 1.2 2003/04/30 14:21:48 fruit Exp $
 	
 	Path
 

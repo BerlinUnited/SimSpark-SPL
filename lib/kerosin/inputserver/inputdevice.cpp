@@ -5,7 +5,7 @@ using namespace zeitgeist;
 
 
 InputDevice::InputDevice() :
-Base(), mInputSystem(NULL)
+Leaf(), mInputSystem(NULL)
 {
 }
 

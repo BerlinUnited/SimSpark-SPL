@@ -2,7 +2,7 @@
 #define VECTOR_H__
 
 /*! 
-	$Id: vector.h,v 1.1 2003/04/30 11:29:34 fruit Exp $
+	$Id: vector.h,v 1.2 2003/04/30 14:21:49 fruit Exp $
 
 	Here we define/complete the vector definitions of TVector into specific
 	vector types (2d float, 3d float, etc...).
@@ -14,6 +14,8 @@
 */
 
 #include "tvector.h"
+#include <stdlib.h>
+#include <limits.h>
 
 namespace salt
 {
@@ -51,6 +53,15 @@ public:
 		return Vector3f(fac * normal.x()-x(),
 						fac * normal.y()-y(),
 						fac * normal.z()-z());
+	}
+
+	f_inline void RandomUnitVector()
+	{
+		x() = 1.0f - 2.0f*rand()/(float)RAND_MAX;
+		y() = 1.0f - 2.0f*rand()/(float)RAND_MAX;
+		z() = 1.0f - 2.0f*rand()/(float)RAND_MAX;
+		
+		Normalize();
 	}
 };
 

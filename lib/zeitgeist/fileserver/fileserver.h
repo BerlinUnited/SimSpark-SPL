@@ -2,7 +2,7 @@
 #define FILESERVER_H__
 
 /*!	\class FileServer
-	$Id: fileserver.h,v 1.1 2003/04/30 11:29:35 fruit Exp $
+	$Id: fileserver.h,v 1.2 2003/04/30 14:21:52 fruit Exp $
 
 	FileServer - global interface for file system access
 

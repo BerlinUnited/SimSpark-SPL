@@ -2,7 +2,7 @@
 #define INPUTSERVER_H__
 
 /*	\class InputServer
-	$Id: inputserver.h,v 1.1 2003/04/30 11:29:33 fruit Exp $
+	$Id: inputserver.h,v 1.2 2003/04/30 14:21:27 fruit Exp $
 
 	InputServer
 
@@ -71,7 +71,8 @@ public:
 	{
 		eUnknown,	// default value, indicating a not initialized input event
 		eButton,	// all buttons of a keyboard and mouse buttons
-		eAxis		// two mouse axis, the mouse wheel and the time axis
+		eAxis,		// two mouse axis, the mouse wheel and the time axis
+		eUser		// a user specified input event (used by the window server)
 	};
 
 	/*!	this defines the input data structure, encapsulating all
@@ -136,7 +137,7 @@ public:
 	//! this function resets the currently active inputsystem (read: destroys it)
 	void	Reset();
 
-	bool	GetInput(Input &input);
+	bool	GetInput(Input &input, bool raw = false);
 
 	/*!	Bind() allows a user specified command id (cmd) to be bound to an
 		input event described by a string (desc). Examples for desc:
@@ -155,6 +156,8 @@ public:
 	void	AddCode(TInputCode ic, const std::string &name, char noMod, char shiftMod, char altMod);
 	//! convert an inputcode back into a displayable character. Untranslatable codes will return 0
 	bool	TranslateCode(TInputCode code, unsigned long state, char &ch) const;
+	//! invoke a certain input event
+	void	Invoke(int cmd);
 private:
 	bool	ParseBindDescription(Bind &bind, const std::string &desc);
 	int		ParseModifier(const std::string &modifier) const;

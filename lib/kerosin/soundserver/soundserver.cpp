@@ -20,7 +20,7 @@ using namespace std;
 using namespace zeitgeist;
 
 // constructor
-SoundServer::SoundServer() : Base(), mQuality(SOUNDQUALITY_BEST)
+SoundServer::SoundServer() : Leaf(), mQuality(SOUNDQUALITY_BEST)
 {
 }
 

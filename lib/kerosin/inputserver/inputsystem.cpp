@@ -28,6 +28,7 @@ void InputSystem::AddInput(InputServer::Input &input)
 
 bool InputSystem::GetInput(InputServer::Input &input)
 {
+	static bool hasDoneTimer = false;
 	if (mInputQueue.size()>0)
 	{
 		input = mInputQueue.front();
@@ -35,10 +36,24 @@ bool InputSystem::GetInput(InputServer::Input &input)
 		return true;
 	}
 
-	return false;
+	if (!hasDoneTimer)
+	{
+		hasDoneTimer = true;
+		return UpdateTimerInput(input);
+	}
+	else
+	{
+		hasDoneTimer = false;
+		return false;
+	}
 }
 
 void InputSystem::AddInputInternal(InputServer::Input &input)
 {
 	mInputQueue.push_back(input);
+}
+
+bool InputSystem::UpdateTimerInput(InputServer::Input &input)
+{
+	return false;
 }

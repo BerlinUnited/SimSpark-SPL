@@ -1,7 +1,7 @@
 #ifndef FONT_H__
 #define FONT_H__
 
-/*	$Id: font.h,v 1.1 2003/04/30 11:29:32 fruit Exp $
+/*	$Id: font.h,v 1.2 2003/04/30 14:21:22 fruit Exp $
 
 	Font allows the use of a 'texture'-based font. The font is loaded from
 	Fluid Studios Font Files, which can be generated with a small utility from

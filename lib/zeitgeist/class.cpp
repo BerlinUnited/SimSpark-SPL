@@ -1,4 +1,4 @@
-#include "base.h"
+#include "leaf.h"
 #include "core.h"
 #include <iostream>
 
@@ -7,13 +7,13 @@ using namespace std;
 using namespace zeitgeist;
 
 Class::Class(const std::string &name) :
-Base(name)
+Leaf(name)
 {
 }
 
 Class::~Class()
 {
-	cout << "~Class() '" << GetName() << "'\n";
+	//cout << "~Class() '" << GetName() << "'\n";
 	
 	/*if (GetName().compare("ClassClass") == 0)
 	{
@@ -38,8 +38,15 @@ boost::shared_ptr<Object> Class::Create()
 
 	if (obj.get())
 	{
-		obj->Construct(obj, shared_static_cast<Class>(make_shared(GetSelf())));
-		AttachInstance(obj);
+		if (obj->Construct(obj, shared_static_cast<Class>(make_shared(GetSelf()))) == true)
+		{
+			// successfully constructed
+			AttachInstance(obj);
+		}
+		else
+		{
+			obj.reset();
+		}
 	}
 
 	return obj;
@@ -84,7 +91,7 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName)
 		return (*cmd).second;
 	}
 
-	shared_ptr<Base> classDir = GetCore()->Get("/classes");
+	shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
 	// ok, we don't have the requested function, so we'll try the base class
 	// objects
 	for (TStringList::iterator baseClass = mBaseClasses.begin(); baseClass != mBaseClasses.end(); ++baseClass)
@@ -109,7 +116,36 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName)
 	return NULL;	
 }
 
+const Class::TStringList& Class::GetBaseClasses() const
+{
+	return mBaseClasses;
+}
+
+bool Class::Supports(const std::string &name) const
+{
+	if (GetName().compare(name) == 0) return true;
+
+	// check base-classes
+	shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
+
+	for (TStringList::const_iterator i = mBaseClasses.begin(); i != mBaseClasses.end(); ++i)
+	{
+		shared_ptr<Class> theClass = shared_static_cast<Class>(GetCore()->Get(*i, classDir));
+
+		if (theClass)
+		{
+			if (theClass->Supports(name)) return true;
+		}
+		else
+		{
+			cout << "WARNING: Illegal BaseClass '" << (*i) << "' in Class '" << GetName() << "'" << endl;
+		}
+	}
+	
+	return false;
+}
+
 void CLASS(Class)::DefineClass()
 {
-	DEFINE_BASECLASS(zeitgeist/Base);	
+	DEFINE_BASECLASS(zeitgeist/Leaf);	
 }

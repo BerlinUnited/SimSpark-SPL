@@ -2,7 +2,7 @@
 #define INPUTSYSTEM_H__
 
 /*	\class InputSystem
-	$Id: inputsystem.h,v 1.1 2003/04/30 11:29:33 fruit Exp $
+	$Id: inputsystem.h,v 1.2 2003/04/30 14:21:28 fruit Exp $
 
 	InputSystem
 
@@ -59,6 +59,8 @@ public:
 	virtual bool GetInput(InputServer::Input &input);
 
 	InputServer*	GetInputServer()	{	return mInputServer;	}
+protected:
+	virtual bool UpdateTimerInput(InputServer::Input &input);
 
 	//
 	// members

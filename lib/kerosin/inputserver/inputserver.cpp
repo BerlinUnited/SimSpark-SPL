@@ -317,7 +317,7 @@ bool InputServer::CreateDevice(const std::string &deviceName)
 
 void InputServer::Reset()
 {
-	shared_ptr<Base> inputSystem = GetChild("inputsystem");
+	shared_ptr<Leaf> inputSystem = GetChild("inputsystem");
 	if (inputSystem.get() != NULL)
 	{
 		inputSystem->Unlink();
@@ -326,30 +326,37 @@ void InputServer::Reset()
 	mScanCodeMap->Reset();
 }
 
-bool InputServer::GetInput(Input &input)
+bool InputServer::GetInput(Input &input, bool raw)
 {
 	shared_ptr<InputSystem> inputSystem = shared_static_cast<InputSystem>(GetChild("inputsystem"));
 	if (inputSystem.get() != NULL)
 	{
 		if (inputSystem->GetInput(input) == true)
 		{
-			// translate raw input to binding
-			TBindMap::iterator bindList = mBindings.find(input.code);
-			if (bindList != mBindings.end())
+			if (input.type != eUser && raw == false)
 			{
-				// we have an entry for the scan code
-				TBindList::const_iterator bind = (*bindList).second.begin();
-				for (;bind != (*bindList).second.end(); ++bind)
+				// translate raw input to binding
+				TBindMap::iterator bindList = mBindings.find(input.code);
+				if (bindList != mBindings.end())
 				{
-					//printf("Looking at: %d %d %d", (*bind).code, (*bind).cmd, (*bind).modifier);
-					if ((*bind).modifier == mModifierState)
+					// we have an entry for the scan code
+					TBindList::const_iterator bind = (*bindList).second.begin();
+					for (;bind != (*bindList).second.end(); ++bind)
 					{
-						if (input.type == eButton)
+						//printf("Looking at: %d %d %d", (*bind).code, (*bind).cmd, (*bind).modifier);
+						if ((*bind).modifier == mModifierState)
 						{
-							if (((*bind).event == eKeyUpDown) ||
-								((*bind).event == eKeyUp && input.data.l == 0) ||
-								((*bind).event == eKeyDown && input.data.l == 1)
-							   )
+							if (input.type == eButton)
+							{
+								if (((*bind).event == eKeyUpDown) ||
+									((*bind).event == eKeyUp && input.data.l == 0) ||
+									((*bind).event == eKeyDown && input.data.l == 1)
+								   )
+								{
+									input.id = (*bind).cmd;
+									return true;
+								}
+							} else if (input.type == eAxis)
 							{
 								input.id = (*bind).cmd;
 								return true;
@@ -357,6 +364,11 @@ bool InputServer::GetInput(Input &input)
 						}
 					}
 				}
+			}
+			else
+			{
+				// return eUser input
+				return true;
 			}
 		}
 	}
@@ -371,10 +383,10 @@ bool InputServer::BindCommand(const std::string &desc, int cmd)
 	if (ParseBindDescription(bind, desc) == false)
 		return false;
 
-	GetLog()->Normal() << "Binding " << cmd << endl;
-	GetLog()->Normal() << "  code: " << bind.code << endl;
-	GetLog()->Normal() << "  modifier: " << bind.modifier << endl;
-	GetLog()->Normal() << "  event: " << bind.event << endl;
+	//GetLog()->Normal() << "Binding " << cmd << endl;
+	//GetLog()->Normal() << "  code: " << bind.code << endl;
+	//GetLog()->Normal() << "  modifier: " << bind.modifier << endl;
+	//GetLog()->Normal() << "  event: " << bind.event << endl;
 	bind.cmd = cmd;
 
 	mBindings[bind.code].push_front(bind);
@@ -466,4 +478,20 @@ bool InputServer::TranslateCode(TInputCode code, unsigned long state, char &ch) 
 {
 	state = mModifierState;
 	return mScanCodeMap->TranslateCode(code, state, ch);
+}
+
+void InputServer::Invoke(int cmd)
+{
+	Input input;
+
+	input.type = eUser;
+	input.code = -1;
+	input.id   = cmd;
+	input.data.l = 0;
+
+	shared_ptr<InputSystem> inputSystem = shared_static_cast<InputSystem>(GetChild("inputsystem"));
+	if (inputSystem.get() != NULL)
+	{
+		inputSystem->AddInput(input);
+	}
 }

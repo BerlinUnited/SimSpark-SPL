@@ -1,4 +1,5 @@
 #include "glextensionreg.h"
+#include <string.h>
 
 #define GET_PROC_ADDRESS(ptr, function) function = (ptr)GetProcedure( #function ); if (function == NULL) return false;
 
@@ -7,7 +8,7 @@ void* GetProcedure(const char *name)
 #if defined(_WIN32)
     void *t = wglGetProcAddress(name);
 #else
-    void *t = glXGetProcAddressARB((char*)name);
+    void *t = glXGetProcAddressARB((unsigned char*)name);
 #endif //_WIN32
     return t;
 }
@@ -192,6 +193,71 @@ PFNGLWEIGHTUIVARBPROC glWeightuivARB = NULL;
 PFNGLWEIGHTPOINTERARBPROC glWeightPointerARB = NULL;
 PFNGLVERTEXBLENDARBPROC glVertexBlendARB = NULL;
 #endif //GL_ARB_vertex_blend
+
+#ifdef GL_ARB_vertex_program
+PFNGLVERTEXATTRIB1SARBPROC glVertexAttrib1sARB = NULL;
+PFNGLVERTEXATTRIB1FARBPROC glVertexAttrib1fARB = NULL;
+PFNGLVERTEXATTRIB1DARBPROC glVertexAttrib1dARB = NULL;
+PFNGLVERTEXATTRIB2SARBPROC glVertexAttrib2sARB = NULL;
+PFNGLVERTEXATTRIB2FARBPROC glVertexAttrib2fARB = NULL;
+PFNGLVERTEXATTRIB2DARBPROC glVertexAttrib2dARB = NULL;
+PFNGLVERTEXATTRIB3SARBPROC glVertexAttrib3sARB = NULL;
+PFNGLVERTEXATTRIB3FARBPROC glVertexAttrib3fARB = NULL;
+PFNGLVERTEXATTRIB3DARBPROC glVertexAttrib3dARB = NULL;
+PFNGLVERTEXATTRIB4SARBPROC glVertexAttrib4sARB = NULL;
+PFNGLVERTEXATTRIB4FARBPROC glVertexAttrib4fARB = NULL;
+PFNGLVERTEXATTRIB4DARBPROC glVertexAttrib4dARB = NULL;
+PFNGLVERTEXATTRIB4NUBARBPROC glVertexAttrib4NubARB = NULL;
+PFNGLVERTEXATTRIB1SVARBPROC glVertexAttrib1svARB = NULL;
+PFNGLVERTEXATTRIB1FVARBPROC glVertexAttrib1fvARB = NULL;
+PFNGLVERTEXATTRIB1DVARBPROC glVertexAttrib1dvARB = NULL;
+PFNGLVERTEXATTRIB2SVARBPROC glVertexAttrib2svARB = NULL;
+PFNGLVERTEXATTRIB2FVARBPROC glVertexAttrib2fvARB = NULL;
+PFNGLVERTEXATTRIB2DVARBPROC glVertexAttrib2dvARB = NULL;
+PFNGLVERTEXATTRIB3SVARBPROC glVertexAttrib3svARB = NULL;
+PFNGLVERTEXATTRIB3FVARBPROC glVertexAttrib3fvARB = NULL;
+PFNGLVERTEXATTRIB3DVARBPROC glVertexAttrib3dvARB = NULL;
+PFNGLVERTEXATTRIB4BVARBPROC glVertexAttrib4bvARB = NULL;
+PFNGLVERTEXATTRIB4SVARBPROC glVertexAttrib4svARB = NULL;
+PFNGLVERTEXATTRIB4IVARBPROC glVertexAttrib4ivARB = NULL;
+PFNGLVERTEXATTRIB4UBVARBPROC glVertexAttrib4ubvARB = NULL;
+PFNGLVERTEXATTRIB4USVARBPROC glVertexAttrib4usvARB = NULL;
+PFNGLVERTEXATTRIB4UIVARBPROC glVertexAttrib4uivARB = NULL;
+PFNGLVERTEXATTRIB4FVARBPROC glVertexAttrib4fvARB = NULL;
+PFNGLVERTEXATTRIB4DVARBPROC glVertexAttrib4dvARB = NULL;
+PFNGLVERTEXATTRIB4NBVARBPROC glVertexAttrib4NbvARB = NULL;
+PFNGLVERTEXATTRIB4NSVARBPROC glVertexAttrib4NsvARB = NULL;
+PFNGLVERTEXATTRIB4NIVARBPROC glVertexAttrib4NivARB = NULL;
+PFNGLVERTEXATTRIB4NUBVARBPROC glVertexAttrib4NubvARB = NULL;
+PFNGLVERTEXATTRIB4NUSVARBPROC glVertexAttrib4NusvARB = NULL;
+PFNGLVERTEXATTRIB4NUIVARBPROC glVertexAttrib4NuivARB = NULL;
+PFNGLVERTEXATTRIBPOINTERARBPROC glVertexAttribPointerARB = NULL;
+PFNGLENABLEVERTEXATTRIBARRAYARBPROC glEnableVertexAttribArrayARB = NULL;
+PFNGLDISABLEVERTEXATTRIBARRAYARBPROC glDisableVertexAttribArrayARB = NULL;
+PFNGLPROGRAMSTRINGARBPROC glProgramStringARB = NULL;
+PFNGLBINDPROGRAMARBPROC glBindProgramARB = NULL;
+PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB = NULL;
+PFNGLGENPROGRAMSARBPROC glGenProgramsARB = NULL;
+PFNGLPROGRAMENVPARAMETER4FARBPROC glProgramEnvParameter4fARB = NULL;
+PFNGLPROGRAMENVPARAMETER4DARBPROC glProgramEnvParameter4dARB = NULL;
+PFNGLPROGRAMENVPARAMETER4FVARBPROC glProgramEnvParameter4fvARB = NULL;
+PFNGLPROGRAMENVPARAMETER4DVARBPROC glProgramEnvParameter4dvARB = NULL;
+PFNGLPROGRAMLOCALPARAMETER4FARBPROC glProgramLocalParameter4fARB = NULL;
+PFNGLPROGRAMLOCALPARAMETER4DARBPROC glProgramLocalParameter4dARB = NULL;
+PFNGLPROGRAMLOCALPARAMETER4FVARBPROC glProgramLocalParameter4fvARB = NULL;
+PFNGLPROGRAMLOCALPARAMETER4DVARBPROC glProgramLocalParameter4dvARB = NULL;
+PFNGLGETPROGRAMENVPARAMETERFVARBPROC glGetProgramEnvParameterfvARB = NULL;
+PFNGLGETPROGRAMENVPARAMETERDVARBPROC glGetProgramEnvParameterdvARB = NULL;
+PFNGLGETPROGRAMLOCALPARAMETERFVARBPROC glGetProgramLocalParameterfvARB = NULL;
+PFNGLGETPROGRAMLOCALPARAMETERDVARBPROC glGetProgramLocalParameterdvARB = NULL;
+PFNGLGETPROGRAMIVARBPROC glGetProgramivARB = NULL;
+PFNGLGETPROGRAMSTRINGARBPROC glGetProgramStringARB = NULL;
+PFNGLGETVERTEXATTRIBDVARBPROC glGetVertexAttribdvARB = NULL;
+PFNGLGETVERTEXATTRIBFVARBPROC glGetVertexAttribfvARB = NULL;
+PFNGLGETVERTEXATTRIBIVARBPROC glGetVertexAttribivARB = NULL;
+PFNGLGETVERTEXATTRIBPOINTERVARBPROC glGetVertexAttribPointervARB = NULL;
+PFNGLISPROGRAMARBPROC glIsProgramARB = NULL;
+#endif //GL_ARB_vertex_program
 
 #ifdef GL_ARB_window_pos
 PFNGLWINDOWPOS2DARBPROC glWindowPos2dARB = NULL;
@@ -1234,6 +1300,16 @@ static bool Load_GL_ARB_depth_texture(GLExtensionReg *reg)
 	return false;
 }
 
+static bool Load_GL_ARB_fragment_program(GLExtensionReg *reg)
+{
+#ifdef GL_ARB_fragment_program
+	if(reg->QueryGLExtension("GL_ARB_fragment_program") == 0)
+		return false;
+	return true;
+#endif //GL_ARB_fragment_program
+	return false;
+}
+
 static bool Load_GL_ARB_imaging(GLExtensionReg *reg)
 {
 #ifdef GL_ARB_imaging
@@ -1508,6 +1584,78 @@ static bool Load_GL_ARB_vertex_blend(GLExtensionReg *reg)
 	GET_PROC_ADDRESS(PFNGLVERTEXBLENDARBPROC, glVertexBlendARB);
 	return true;
 #endif //GL_ARB_vertex_blend
+	return false;
+}
+
+static bool Load_GL_ARB_vertex_program(GLExtensionReg *reg)
+{
+#ifdef GL_ARB_vertex_program
+	if(reg->QueryGLExtension("GL_ARB_vertex_program") == 0)
+		return false;
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB1SARBPROC, glVertexAttrib1sARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB1FARBPROC, glVertexAttrib1fARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB1DARBPROC, glVertexAttrib1dARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB2SARBPROC, glVertexAttrib2sARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB2FARBPROC, glVertexAttrib2fARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB2DARBPROC, glVertexAttrib2dARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB3SARBPROC, glVertexAttrib3sARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB3FARBPROC, glVertexAttrib3fARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB3DARBPROC, glVertexAttrib3dARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4SARBPROC, glVertexAttrib4sARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4FARBPROC, glVertexAttrib4fARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4DARBPROC, glVertexAttrib4dARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4NUBARBPROC, glVertexAttrib4NubARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB1SVARBPROC, glVertexAttrib1svARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB1FVARBPROC, glVertexAttrib1fvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB1DVARBPROC, glVertexAttrib1dvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB2SVARBPROC, glVertexAttrib2svARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB2FVARBPROC, glVertexAttrib2fvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB2DVARBPROC, glVertexAttrib2dvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB3SVARBPROC, glVertexAttrib3svARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB3FVARBPROC, glVertexAttrib3fvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB3DVARBPROC, glVertexAttrib3dvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4BVARBPROC, glVertexAttrib4bvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4SVARBPROC, glVertexAttrib4svARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4IVARBPROC, glVertexAttrib4ivARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4UBVARBPROC, glVertexAttrib4ubvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4USVARBPROC, glVertexAttrib4usvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4UIVARBPROC, glVertexAttrib4uivARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4FVARBPROC, glVertexAttrib4fvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4DVARBPROC, glVertexAttrib4dvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4NBVARBPROC, glVertexAttrib4NbvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4NSVARBPROC, glVertexAttrib4NsvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4NIVARBPROC, glVertexAttrib4NivARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4NUBVARBPROC, glVertexAttrib4NubvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4NUSVARBPROC, glVertexAttrib4NusvARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIB4NUIVARBPROC, glVertexAttrib4NuivARB);
+	GET_PROC_ADDRESS(PFNGLVERTEXATTRIBPOINTERARBPROC, glVertexAttribPointerARB);
+	GET_PROC_ADDRESS(PFNGLENABLEVERTEXATTRIBARRAYARBPROC, glEnableVertexAttribArrayARB);
+	GET_PROC_ADDRESS(PFNGLDISABLEVERTEXATTRIBARRAYARBPROC, glDisableVertexAttribArrayARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMSTRINGARBPROC, glProgramStringARB);
+	GET_PROC_ADDRESS(PFNGLBINDPROGRAMARBPROC, glBindProgramARB);
+	GET_PROC_ADDRESS(PFNGLDELETEPROGRAMSARBPROC, glDeleteProgramsARB);
+	GET_PROC_ADDRESS(PFNGLGENPROGRAMSARBPROC, glGenProgramsARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMENVPARAMETER4FARBPROC, glProgramEnvParameter4fARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMENVPARAMETER4DARBPROC, glProgramEnvParameter4dARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMENVPARAMETER4FVARBPROC, glProgramEnvParameter4fvARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMENVPARAMETER4DVARBPROC, glProgramEnvParameter4dvARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMLOCALPARAMETER4FARBPROC, glProgramLocalParameter4fARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMLOCALPARAMETER4DARBPROC, glProgramLocalParameter4dARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMLOCALPARAMETER4FVARBPROC, glProgramLocalParameter4fvARB);
+	GET_PROC_ADDRESS(PFNGLPROGRAMLOCALPARAMETER4DVARBPROC, glProgramLocalParameter4dvARB);
+	GET_PROC_ADDRESS(PFNGLGETPROGRAMENVPARAMETERFVARBPROC, glGetProgramEnvParameterfvARB);
+	GET_PROC_ADDRESS(PFNGLGETPROGRAMENVPARAMETERDVARBPROC, glGetProgramEnvParameterdvARB);
+	GET_PROC_ADDRESS(PFNGLGETPROGRAMLOCALPARAMETERFVARBPROC, glGetProgramLocalParameterfvARB);
+	GET_PROC_ADDRESS(PFNGLGETPROGRAMLOCALPARAMETERDVARBPROC, glGetProgramLocalParameterdvARB);
+	GET_PROC_ADDRESS(PFNGLGETPROGRAMIVARBPROC, glGetProgramivARB);
+	GET_PROC_ADDRESS(PFNGLGETPROGRAMSTRINGARBPROC, glGetProgramStringARB);
+	GET_PROC_ADDRESS(PFNGLGETVERTEXATTRIBDVARBPROC, glGetVertexAttribdvARB);
+	GET_PROC_ADDRESS(PFNGLGETVERTEXATTRIBFVARBPROC, glGetVertexAttribfvARB);
+	GET_PROC_ADDRESS(PFNGLGETVERTEXATTRIBIVARBPROC, glGetVertexAttribivARB);
+	GET_PROC_ADDRESS(PFNGLGETVERTEXATTRIBPOINTERVARBPROC, glGetVertexAttribPointervARB);
+	GET_PROC_ADDRESS(PFNGLISPROGRAMARBPROC, glIsProgramARB);
+	return true;
+#endif //GL_ARB_vertex_program
 	return false;
 }
 
@@ -4276,6 +4424,7 @@ void GLExtensionReg::Init(GLExtGenFunctionPointers *funPtr, GLExtGenExtensions *
 	mExtensions.mGL_APPLE_specular_vector = Load_GL_APPLE_specular_vector(this);
 	mExtensions.mGL_APPLE_transform_hint = Load_GL_APPLE_transform_hint(this);
 	mExtensions.mGL_ARB_depth_texture = Load_GL_ARB_depth_texture(this);
+	mExtensions.mGL_ARB_fragment_program = Load_GL_ARB_fragment_program(this);
 	mExtensions.mGL_ARB_imaging = Load_GL_ARB_imaging(this);
 	mExtensions.mGL_ARB_matrix_palette = Load_GL_ARB_matrix_palette(this);
 	mExtensions.mGL_ARB_multisample = Load_GL_ARB_multisample(this);
@@ -4294,6 +4443,7 @@ void GLExtensionReg::Init(GLExtGenFunctionPointers *funPtr, GLExtGenExtensions *
 	mExtensions.mGL_ARB_texture_mirrored_repeat = Load_GL_ARB_texture_mirrored_repeat(this);
 	mExtensions.mGL_ARB_transpose_matrix = Load_GL_ARB_transpose_matrix(this);
 	mExtensions.mGL_ARB_vertex_blend = Load_GL_ARB_vertex_blend(this);
+	mExtensions.mGL_ARB_vertex_program = Load_GL_ARB_vertex_program(this);
 	mExtensions.mGL_ARB_window_pos = Load_GL_ARB_window_pos(this);
 	mExtensions.mGL_ATI_element_array = Load_GL_ATI_element_array(this);
 	mExtensions.mGL_ATI_envmap_bumpmap = Load_GL_ATI_envmap_bumpmap(this);
@@ -4637,6 +4787,71 @@ void GLExtensionReg::Init(GLExtGenFunctionPointers *funPtr, GLExtGenExtensions *
 		funPtr->glWeightPointerARB = glWeightPointerARB;
 		funPtr->glVertexBlendARB = glVertexBlendARB;
 #endif //GL_ARB_vertex_blend
+
+#ifdef GL_ARB_vertex_program
+		funPtr->glVertexAttrib1sARB = glVertexAttrib1sARB;
+		funPtr->glVertexAttrib1fARB = glVertexAttrib1fARB;
+		funPtr->glVertexAttrib1dARB = glVertexAttrib1dARB;
+		funPtr->glVertexAttrib2sARB = glVertexAttrib2sARB;
+		funPtr->glVertexAttrib2fARB = glVertexAttrib2fARB;
+		funPtr->glVertexAttrib2dARB = glVertexAttrib2dARB;
+		funPtr->glVertexAttrib3sARB = glVertexAttrib3sARB;
+		funPtr->glVertexAttrib3fARB = glVertexAttrib3fARB;
+		funPtr->glVertexAttrib3dARB = glVertexAttrib3dARB;
+		funPtr->glVertexAttrib4sARB = glVertexAttrib4sARB;
+		funPtr->glVertexAttrib4fARB = glVertexAttrib4fARB;
+		funPtr->glVertexAttrib4dARB = glVertexAttrib4dARB;
+		funPtr->glVertexAttrib4NubARB = glVertexAttrib4NubARB;
+		funPtr->glVertexAttrib1svARB = glVertexAttrib1svARB;
+		funPtr->glVertexAttrib1fvARB = glVertexAttrib1fvARB;
+		funPtr->glVertexAttrib1dvARB = glVertexAttrib1dvARB;
+		funPtr->glVertexAttrib2svARB = glVertexAttrib2svARB;
+		funPtr->glVertexAttrib2fvARB = glVertexAttrib2fvARB;
+		funPtr->glVertexAttrib2dvARB = glVertexAttrib2dvARB;
+		funPtr->glVertexAttrib3svARB = glVertexAttrib3svARB;
+		funPtr->glVertexAttrib3fvARB = glVertexAttrib3fvARB;
+		funPtr->glVertexAttrib3dvARB = glVertexAttrib3dvARB;
+		funPtr->glVertexAttrib4bvARB = glVertexAttrib4bvARB;
+		funPtr->glVertexAttrib4svARB = glVertexAttrib4svARB;
+		funPtr->glVertexAttrib4ivARB = glVertexAttrib4ivARB;
+		funPtr->glVertexAttrib4ubvARB = glVertexAttrib4ubvARB;
+		funPtr->glVertexAttrib4usvARB = glVertexAttrib4usvARB;
+		funPtr->glVertexAttrib4uivARB = glVertexAttrib4uivARB;
+		funPtr->glVertexAttrib4fvARB = glVertexAttrib4fvARB;
+		funPtr->glVertexAttrib4dvARB = glVertexAttrib4dvARB;
+		funPtr->glVertexAttrib4NbvARB = glVertexAttrib4NbvARB;
+		funPtr->glVertexAttrib4NsvARB = glVertexAttrib4NsvARB;
+		funPtr->glVertexAttrib4NivARB = glVertexAttrib4NivARB;
+		funPtr->glVertexAttrib4NubvARB = glVertexAttrib4NubvARB;
+		funPtr->glVertexAttrib4NusvARB = glVertexAttrib4NusvARB;
+		funPtr->glVertexAttrib4NuivARB = glVertexAttrib4NuivARB;
+		funPtr->glVertexAttribPointerARB = glVertexAttribPointerARB;
+		funPtr->glEnableVertexAttribArrayARB = glEnableVertexAttribArrayARB;
+		funPtr->glDisableVertexAttribArrayARB = glDisableVertexAttribArrayARB;
+		funPtr->glProgramStringARB = glProgramStringARB;
+		funPtr->glBindProgramARB = glBindProgramARB;
+		funPtr->glDeleteProgramsARB = glDeleteProgramsARB;
+		funPtr->glGenProgramsARB = glGenProgramsARB;
+		funPtr->glProgramEnvParameter4fARB = glProgramEnvParameter4fARB;
+		funPtr->glProgramEnvParameter4dARB = glProgramEnvParameter4dARB;
+		funPtr->glProgramEnvParameter4fvARB = glProgramEnvParameter4fvARB;
+		funPtr->glProgramEnvParameter4dvARB = glProgramEnvParameter4dvARB;
+		funPtr->glProgramLocalParameter4fARB = glProgramLocalParameter4fARB;
+		funPtr->glProgramLocalParameter4dARB = glProgramLocalParameter4dARB;
+		funPtr->glProgramLocalParameter4fvARB = glProgramLocalParameter4fvARB;
+		funPtr->glProgramLocalParameter4dvARB = glProgramLocalParameter4dvARB;
+		funPtr->glGetProgramEnvParameterfvARB = glGetProgramEnvParameterfvARB;
+		funPtr->glGetProgramEnvParameterdvARB = glGetProgramEnvParameterdvARB;
+		funPtr->glGetProgramLocalParameterfvARB = glGetProgramLocalParameterfvARB;
+		funPtr->glGetProgramLocalParameterdvARB = glGetProgramLocalParameterdvARB;
+		funPtr->glGetProgramivARB = glGetProgramivARB;
+		funPtr->glGetProgramStringARB = glGetProgramStringARB;
+		funPtr->glGetVertexAttribdvARB = glGetVertexAttribdvARB;
+		funPtr->glGetVertexAttribfvARB = glGetVertexAttribfvARB;
+		funPtr->glGetVertexAttribivARB = glGetVertexAttribivARB;
+		funPtr->glGetVertexAttribPointervARB = glGetVertexAttribPointervARB;
+		funPtr->glIsProgramARB = glIsProgramARB;
+#endif //GL_ARB_vertex_program
 
 #ifdef GL_ARB_window_pos
 		funPtr->glWindowPos2dARB = glWindowPos2dARB;

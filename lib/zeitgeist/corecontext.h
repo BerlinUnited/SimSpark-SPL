@@ -2,7 +2,7 @@
 #define CORECONTEXT_H__
 
 /*! \class CoreContext
-	$Id: corecontext.h,v 1.1 2003/04/30 11:29:35 fruit Exp $
+	$Id: corecontext.h,v 1.2 2003/04/30 14:21:50 fruit Exp $
 	
 	CoreContext
 
@@ -30,7 +30,7 @@ namespace zeitgeist
 {
 
 class Core;
-class Base;
+class Leaf;
 
 class CoreContext
 {
@@ -38,22 +38,22 @@ class CoreContext
 	// types
 	//
 private:
-	typedef std::list< boost::shared_ptr<Base> > TObjectStack;
+	typedef std::list< boost::shared_ptr<Leaf> > TObjectStack;
 
 	//
 	// functions
 	//
 public:
-	CoreContext(const boost::shared_ptr<Core> &core, const boost::shared_ptr<Base> &root);
+	CoreContext(const boost::shared_ptr<Core> &core, const boost::shared_ptr<Leaf> &root);
 	virtual ~CoreContext();
 
-	boost::shared_ptr<Base>	New(const std::string& className, const std::string& pathStr);
+	boost::shared_ptr<Leaf>	New(const std::string& className, const std::string& pathStr);
 	bool					Delete(const std::string& name);
-	boost::shared_ptr<Base>	Select(const std::string& pathStr);
-	bool					Install(const boost::shared_ptr<Base>& base, const std::string& pathStr, bool isNamed = false);
-	boost::shared_ptr<Base>	Get(const std::string& pathStr);
+	boost::shared_ptr<Leaf>	Select(const std::string& pathStr);
+	bool					Install(const boost::shared_ptr<Leaf>& leaf, const std::string& pathStr, bool isNamed = false);
+	boost::shared_ptr<Leaf>	Get(const std::string& pathStr);
 	
-	boost::shared_ptr<Base>	GetObject() const	{	return mObject;	}
+	boost::shared_ptr<Leaf>	GetObject() const	{	return mObject;	}
 	boost::shared_ptr<Core> GetCore() const		{	return mCore;	}
 
 	void					ListObjects() const;
@@ -74,7 +74,7 @@ private:
 	//
 private:
 	boost::shared_ptr<Core>		mCore;			// pointer to the core object, we are browsing
-	boost::shared_ptr<Base>		mObject;		// the currently active object
+	boost::shared_ptr<Leaf>		mObject;		// the currently active object
 	std::string					mPath;			// the current working path
 	TObjectStack				mObjectStack;	// object stack
 };

@@ -16,7 +16,7 @@ FileServer::~FileServer()
 
 RFile* FileServer::Open(const char* inName)
 {
-	for (TBaseList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
+	for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
 	{
 		shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(*i);
 		RFile *file = fileSys->Open(inName);
@@ -96,11 +96,11 @@ bool FileServer::Unmount(const char* inPath)
 		return true;
 	}
 
-	shared_ptr<Base> base = GetChild(inPath);
+	shared_ptr<Leaf> leaf = GetChild(inPath);
 
-	if(base)
+	if(leaf)
 	{
-		base->Unlink();
+		leaf->Unlink();
 		return true;
 	}
 	

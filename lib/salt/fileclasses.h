@@ -21,7 +21,7 @@ public:
 	virtual void	Destroy() = 0;
 	virtual int		Eof() = 0;
 	virtual long	Tell() = 0;
-	virtual int		GetPos(fpos_t *pos) = 0;
+	virtual int		GetPos(long *pos) = 0;
 	virtual int		Seek(long offset, int origin) = 0;
 	virtual void	Rewind() = 0;
 	virtual long	Size() = 0;
@@ -98,7 +98,7 @@ public:
 
 	int		Eof();
 	long	Tell();
-	int		GetPos(fpos_t *pos);
+	int		GetPos(long *pos);
 	int		Seek(long offset, int origin);
 	void	Rewind();
 	long	Size();
@@ -216,7 +216,7 @@ public:
 
 	int		Eof();
 	long	Tell();
-	int		GetPos(fpos_t *pos);
+	int		GetPos(long *pos);
 	int		Seek(long offset, int origin);
 	void	Rewind();
 	long	Size();

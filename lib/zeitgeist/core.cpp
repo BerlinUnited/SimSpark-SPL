@@ -1,5 +1,5 @@
 #include "core.h"
-#include "base.h"
+#include "leaf.h"
 #include "object.h"
 #include "object_c.h"
 #include "node.h"
@@ -70,7 +70,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
 
 	// create the root node
 	cout << "  Creating root node...\n";
-	mRoot = shared_static_cast<Base>(mNodeClass->Create());
+	mRoot = shared_static_cast<Leaf>(mNodeClass->Create());
 	mRoot->SetName("");
 	
 	shared_ptr<CoreContext> context = CreateContext();
@@ -79,7 +79,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
 	cout << "  Registering class objects...\n";
 	RegisterClassObject(mNodeClass, "zeitgeist/");
 	RegisterClassObject(mClassClass, "zeitgeist/");
-	RegisterClassObject(new CLASS(Base), "zeitgeist/");
+	RegisterClassObject(new CLASS(Leaf), "zeitgeist/");
 	RegisterClassObject(new CLASS(FileServer), "zeitgeist/");
 	RegisterClassObject(new CLASS(FileSystem), "zeitgeist/");
 	RegisterClassObject(new CLASS(LogServer), "zeitgeist/");
@@ -95,7 +95,6 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
 	// create the log server
 	mLogServer->Normal() << "  Creating ScriptServer..." << endl;
 	mScriptServer = shared_static_cast<ScriptServer>(context->New("zeitgeist/ScriptServer", "/sys/server/script"));
-	mScriptServer->Init();
 
 	cout << endl;
 }
@@ -127,6 +126,7 @@ bool Core::RegisterClassObject(const boost::shared_ptr<Class> &classObject, cons
 	shared_ptr<CoreContext> context = CreateContext();
 
 	BindClass(classObject);
+
 	return context->Install(classObject, "/classes/" + subDir, true);
 }
 
@@ -141,7 +141,7 @@ bool Core::ImportBundle(const std::string& bundleName)
 
 	if (!bundle->Open(bundleName))
 	{
-		cout << "ERROR: Could not open '" << bundleName << "'" << endl;
+		mLogServer->Error() << "ERROR: Could not open '" << bundleName << "'" << endl;
 		return false;
 	}
 
@@ -152,7 +152,7 @@ bool Core::ImportBundle(const std::string& bundleName)
 
 	if (Zeitgeist_RegisterBundle == NULL)
 	{
-		std::cout << "ERROR: No entry point!" << std::endl;
+		mLogServer->Error() << "ERROR: No entry point!" << std::endl;
 		return false;
 	}
 	
@@ -193,21 +193,21 @@ const boost::shared_ptr<ScriptServer>& Core::GetScriptServer() const
 	return mScriptServer;
 }
 
-boost::shared_ptr<Base> Core::Get(const std::string &pathStr)
+boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr)
 {
 	return Get(pathStr, mRoot);
 }
 
-boost::shared_ptr<Base> Core::Get(const std::string &pathStr, const boost::shared_ptr<Base>& base)
+boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr, const boost::shared_ptr<Leaf>& leaf)
 {
-	boost::shared_ptr<Base> current;
+	boost::shared_ptr<Leaf> current;
 	Path path(pathStr);
 
 	// check if we have a relative or absolute path
-	if (path.IsAbsolute() || base.get() == NULL)
+	if (path.IsAbsolute() || leaf.get() == NULL)
 		current = mRoot;
 	else
-		current = base;
+		current = leaf;
 
 	while (!path.IsEmpty() && current.get()!=NULL)
 	{
@@ -224,24 +224,24 @@ boost::shared_ptr<Base> Core::Get(const std::string &pathStr, const boost::share
 	return current;
 }
 
-boost::shared_ptr<Base> Core::GetChild(const boost::shared_ptr<Base> &parent, const std::string &childName)
+boost::shared_ptr<Leaf> Core::GetChild(const boost::shared_ptr<Leaf> &parent, const std::string &childName)
 {
 	// if we have a leaf, then we can't get a child ... ever!!
-	if (parent->IsLeaf()) return shared_ptr<Base>();
+	if (parent->IsLeaf()) return shared_ptr<Leaf>();
 
 	// ok, no leaf, so let's try to get an existing child
-	boost::shared_ptr<Base> child = parent->GetChild(childName);
+	boost::shared_ptr<Leaf> child = parent->GetChild(childName);
 
 	if (child.get() == NULL)
 	{
 		// if we hit this branch, then no child with the desired name exists,
 		// but we will change this :)
-		child = shared_static_cast<Base>(mNodeClass->Create());
+		child = shared_static_cast<Leaf>(mNodeClass->Create());
 		child->SetName(childName);
 
 		if (parent->AddChildReference(child) == false)
 		{
-			return shared_ptr<Base>();
+			return shared_ptr<Leaf>();
 		}
 	}
 

@@ -11,8 +11,10 @@
 
 #if defined(_WIN32)
 #include <GL/wglext.h>
+#else
+#include <GL/glx.h>
+#include <GL/glxext.h>
 #endif
-
 struct GLExtGenFunctionPointers
 {
 #ifdef GL_3DFX_tbuffer
@@ -139,6 +141,71 @@ struct GLExtGenFunctionPointers
 	PFNGLWEIGHTPOINTERARBPROC glWeightPointerARB;
 	PFNGLVERTEXBLENDARBPROC glVertexBlendARB;
 #endif //GL_ARB_vertex_blend
+
+#ifdef GL_ARB_vertex_program
+	PFNGLVERTEXATTRIB1SARBPROC glVertexAttrib1sARB;
+	PFNGLVERTEXATTRIB1FARBPROC glVertexAttrib1fARB;
+	PFNGLVERTEXATTRIB1DARBPROC glVertexAttrib1dARB;
+	PFNGLVERTEXATTRIB2SARBPROC glVertexAttrib2sARB;
+	PFNGLVERTEXATTRIB2FARBPROC glVertexAttrib2fARB;
+	PFNGLVERTEXATTRIB2DARBPROC glVertexAttrib2dARB;
+	PFNGLVERTEXATTRIB3SARBPROC glVertexAttrib3sARB;
+	PFNGLVERTEXATTRIB3FARBPROC glVertexAttrib3fARB;
+	PFNGLVERTEXATTRIB3DARBPROC glVertexAttrib3dARB;
+	PFNGLVERTEXATTRIB4SARBPROC glVertexAttrib4sARB;
+	PFNGLVERTEXATTRIB4FARBPROC glVertexAttrib4fARB;
+	PFNGLVERTEXATTRIB4DARBPROC glVertexAttrib4dARB;
+	PFNGLVERTEXATTRIB4NUBARBPROC glVertexAttrib4NubARB;
+	PFNGLVERTEXATTRIB1SVARBPROC glVertexAttrib1svARB;
+	PFNGLVERTEXATTRIB1FVARBPROC glVertexAttrib1fvARB;
+	PFNGLVERTEXATTRIB1DVARBPROC glVertexAttrib1dvARB;
+	PFNGLVERTEXATTRIB2SVARBPROC glVertexAttrib2svARB;
+	PFNGLVERTEXATTRIB2FVARBPROC glVertexAttrib2fvARB;
+	PFNGLVERTEXATTRIB2DVARBPROC glVertexAttrib2dvARB;
+	PFNGLVERTEXATTRIB3SVARBPROC glVertexAttrib3svARB;
+	PFNGLVERTEXATTRIB3FVARBPROC glVertexAttrib3fvARB;
+	PFNGLVERTEXATTRIB3DVARBPROC glVertexAttrib3dvARB;
+	PFNGLVERTEXATTRIB4BVARBPROC glVertexAttrib4bvARB;
+	PFNGLVERTEXATTRIB4SVARBPROC glVertexAttrib4svARB;
+	PFNGLVERTEXATTRIB4IVARBPROC glVertexAttrib4ivARB;
+	PFNGLVERTEXATTRIB4UBVARBPROC glVertexAttrib4ubvARB;
+	PFNGLVERTEXATTRIB4USVARBPROC glVertexAttrib4usvARB;
+	PFNGLVERTEXATTRIB4UIVARBPROC glVertexAttrib4uivARB;
+	PFNGLVERTEXATTRIB4FVARBPROC glVertexAttrib4fvARB;
+	PFNGLVERTEXATTRIB4DVARBPROC glVertexAttrib4dvARB;
+	PFNGLVERTEXATTRIB4NBVARBPROC glVertexAttrib4NbvARB;
+	PFNGLVERTEXATTRIB4NSVARBPROC glVertexAttrib4NsvARB;
+	PFNGLVERTEXATTRIB4NIVARBPROC glVertexAttrib4NivARB;
+	PFNGLVERTEXATTRIB4NUBVARBPROC glVertexAttrib4NubvARB;
+	PFNGLVERTEXATTRIB4NUSVARBPROC glVertexAttrib4NusvARB;
+	PFNGLVERTEXATTRIB4NUIVARBPROC glVertexAttrib4NuivARB;
+	PFNGLVERTEXATTRIBPOINTERARBPROC glVertexAttribPointerARB;
+	PFNGLENABLEVERTEXATTRIBARRAYARBPROC glEnableVertexAttribArrayARB;
+	PFNGLDISABLEVERTEXATTRIBARRAYARBPROC glDisableVertexAttribArrayARB;
+	PFNGLPROGRAMSTRINGARBPROC glProgramStringARB;
+	PFNGLBINDPROGRAMARBPROC glBindProgramARB;
+	PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB;
+	PFNGLGENPROGRAMSARBPROC glGenProgramsARB;
+	PFNGLPROGRAMENVPARAMETER4FARBPROC glProgramEnvParameter4fARB;
+	PFNGLPROGRAMENVPARAMETER4DARBPROC glProgramEnvParameter4dARB;
+	PFNGLPROGRAMENVPARAMETER4FVARBPROC glProgramEnvParameter4fvARB;
+	PFNGLPROGRAMENVPARAMETER4DVARBPROC glProgramEnvParameter4dvARB;
+	PFNGLPROGRAMLOCALPARAMETER4FARBPROC glProgramLocalParameter4fARB;
+	PFNGLPROGRAMLOCALPARAMETER4DARBPROC glProgramLocalParameter4dARB;
+	PFNGLPROGRAMLOCALPARAMETER4FVARBPROC glProgramLocalParameter4fvARB;
+	PFNGLPROGRAMLOCALPARAMETER4DVARBPROC glProgramLocalParameter4dvARB;
+	PFNGLGETPROGRAMENVPARAMETERFVARBPROC glGetProgramEnvParameterfvARB;
+	PFNGLGETPROGRAMENVPARAMETERDVARBPROC glGetProgramEnvParameterdvARB;
+	PFNGLGETPROGRAMLOCALPARAMETERFVARBPROC glGetProgramLocalParameterfvARB;
+	PFNGLGETPROGRAMLOCALPARAMETERDVARBPROC glGetProgramLocalParameterdvARB;
+	PFNGLGETPROGRAMIVARBPROC glGetProgramivARB;
+	PFNGLGETPROGRAMSTRINGARBPROC glGetProgramStringARB;
+	PFNGLGETVERTEXATTRIBDVARBPROC glGetVertexAttribdvARB;
+	PFNGLGETVERTEXATTRIBFVARBPROC glGetVertexAttribfvARB;
+	PFNGLGETVERTEXATTRIBIVARBPROC glGetVertexAttribivARB;
+	PFNGLGETVERTEXATTRIBPOINTERVARBPROC glGetVertexAttribPointervARB;
+	PFNGLISPROGRAMARBPROC glIsProgramARB;
+#endif //GL_ARB_vertex_program
 
 #ifdef GL_ARB_window_pos
 	PFNGLWINDOWPOS2DARBPROC glWindowPos2dARB;
@@ -1129,6 +1196,7 @@ struct GLExtGenExtensions
 	bool mGL_APPLE_specular_vector;
 	bool mGL_APPLE_transform_hint;
 	bool mGL_ARB_depth_texture;
+	bool mGL_ARB_fragment_program;
 	bool mGL_ARB_imaging;
 	bool mGL_ARB_matrix_palette;
 	bool mGL_ARB_multisample;
@@ -1147,6 +1215,7 @@ struct GLExtGenExtensions
 	bool mGL_ARB_texture_mirrored_repeat;
 	bool mGL_ARB_transpose_matrix;
 	bool mGL_ARB_vertex_blend;
+	bool mGL_ARB_vertex_program;
 	bool mGL_ARB_window_pos;
 	bool mGL_ATI_element_array;
 	bool mGL_ATI_envmap_bumpmap;
@@ -1374,6 +1443,7 @@ public:
 	bool Has_GL_APPLE_specular_vector() const { return mExtensions.mGL_APPLE_specular_vector; }
 	bool Has_GL_APPLE_transform_hint() const { return mExtensions.mGL_APPLE_transform_hint; }
 	bool Has_GL_ARB_depth_texture() const { return mExtensions.mGL_ARB_depth_texture; }
+	bool Has_GL_ARB_fragment_program() const { return mExtensions.mGL_ARB_fragment_program; }
 	bool Has_GL_ARB_imaging() const { return mExtensions.mGL_ARB_imaging; }
 	bool Has_GL_ARB_matrix_palette() const { return mExtensions.mGL_ARB_matrix_palette; }
 	bool Has_GL_ARB_multisample() const { return mExtensions.mGL_ARB_multisample; }
@@ -1392,6 +1462,7 @@ public:
 	bool Has_GL_ARB_texture_mirrored_repeat() const { return mExtensions.mGL_ARB_texture_mirrored_repeat; }
 	bool Has_GL_ARB_transpose_matrix() const { return mExtensions.mGL_ARB_transpose_matrix; }
 	bool Has_GL_ARB_vertex_blend() const { return mExtensions.mGL_ARB_vertex_blend; }
+	bool Has_GL_ARB_vertex_program() const { return mExtensions.mGL_ARB_vertex_program; }
 	bool Has_GL_ARB_window_pos() const { return mExtensions.mGL_ARB_window_pos; }
 	bool Has_GL_ATI_element_array() const { return mExtensions.mGL_ATI_element_array; }
 	bool Has_GL_ATI_envmap_bumpmap() const { return mExtensions.mGL_ATI_envmap_bumpmap; }
@@ -1737,6 +1808,71 @@ extern PFNGLWEIGHTUIVARBPROC glWeightuivARB;
 extern PFNGLWEIGHTPOINTERARBPROC glWeightPointerARB;
 extern PFNGLVERTEXBLENDARBPROC glVertexBlendARB;
 #endif //GL_ARB_vertex_blend
+
+#ifdef GL_ARB_vertex_program
+extern PFNGLVERTEXATTRIB1SARBPROC glVertexAttrib1sARB;
+extern PFNGLVERTEXATTRIB1FARBPROC glVertexAttrib1fARB;
+extern PFNGLVERTEXATTRIB1DARBPROC glVertexAttrib1dARB;
+extern PFNGLVERTEXATTRIB2SARBPROC glVertexAttrib2sARB;
+extern PFNGLVERTEXATTRIB2FARBPROC glVertexAttrib2fARB;
+extern PFNGLVERTEXATTRIB2DARBPROC glVertexAttrib2dARB;
+extern PFNGLVERTEXATTRIB3SARBPROC glVertexAttrib3sARB;
+extern PFNGLVERTEXATTRIB3FARBPROC glVertexAttrib3fARB;
+extern PFNGLVERTEXATTRIB3DARBPROC glVertexAttrib3dARB;
+extern PFNGLVERTEXATTRIB4SARBPROC glVertexAttrib4sARB;
+extern PFNGLVERTEXATTRIB4FARBPROC glVertexAttrib4fARB;
+extern PFNGLVERTEXATTRIB4DARBPROC glVertexAttrib4dARB;
+extern PFNGLVERTEXATTRIB4NUBARBPROC glVertexAttrib4NubARB;
+extern PFNGLVERTEXATTRIB1SVARBPROC glVertexAttrib1svARB;
+extern PFNGLVERTEXATTRIB1FVARBPROC glVertexAttrib1fvARB;
+extern PFNGLVERTEXATTRIB1DVARBPROC glVertexAttrib1dvARB;
+extern PFNGLVERTEXATTRIB2SVARBPROC glVertexAttrib2svARB;
+extern PFNGLVERTEXATTRIB2FVARBPROC glVertexAttrib2fvARB;
+extern PFNGLVERTEXATTRIB2DVARBPROC glVertexAttrib2dvARB;
+extern PFNGLVERTEXATTRIB3SVARBPROC glVertexAttrib3svARB;
+extern PFNGLVERTEXATTRIB3FVARBPROC glVertexAttrib3fvARB;
+extern PFNGLVERTEXATTRIB3DVARBPROC glVertexAttrib3dvARB;
+extern PFNGLVERTEXATTRIB4BVARBPROC glVertexAttrib4bvARB;
+extern PFNGLVERTEXATTRIB4SVARBPROC glVertexAttrib4svARB;
+extern PFNGLVERTEXATTRIB4IVARBPROC glVertexAttrib4ivARB;
+extern PFNGLVERTEXATTRIB4UBVARBPROC glVertexAttrib4ubvARB;
+extern PFNGLVERTEXATTRIB4USVARBPROC glVertexAttrib4usvARB;
+extern PFNGLVERTEXATTRIB4UIVARBPROC glVertexAttrib4uivARB;
+extern PFNGLVERTEXATTRIB4FVARBPROC glVertexAttrib4fvARB;
+extern PFNGLVERTEXATTRIB4DVARBPROC glVertexAttrib4dvARB;
+extern PFNGLVERTEXATTRIB4NBVARBPROC glVertexAttrib4NbvARB;
+extern PFNGLVERTEXATTRIB4NSVARBPROC glVertexAttrib4NsvARB;
+extern PFNGLVERTEXATTRIB4NIVARBPROC glVertexAttrib4NivARB;
+extern PFNGLVERTEXATTRIB4NUBVARBPROC glVertexAttrib4NubvARB;
+extern PFNGLVERTEXATTRIB4NUSVARBPROC glVertexAttrib4NusvARB;
+extern PFNGLVERTEXATTRIB4NUIVARBPROC glVertexAttrib4NuivARB;
+extern PFNGLVERTEXATTRIBPOINTERARBPROC glVertexAttribPointerARB;
+extern PFNGLENABLEVERTEXATTRIBARRAYARBPROC glEnableVertexAttribArrayARB;
+extern PFNGLDISABLEVERTEXATTRIBARRAYARBPROC glDisableVertexAttribArrayARB;
+extern PFNGLPROGRAMSTRINGARBPROC glProgramStringARB;
+extern PFNGLBINDPROGRAMARBPROC glBindProgramARB;
+extern PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB;
+extern PFNGLGENPROGRAMSARBPROC glGenProgramsARB;
+extern PFNGLPROGRAMENVPARAMETER4FARBPROC glProgramEnvParameter4fARB;
+extern PFNGLPROGRAMENVPARAMETER4DARBPROC glProgramEnvParameter4dARB;
+extern PFNGLPROGRAMENVPARAMETER4FVARBPROC glProgramEnvParameter4fvARB;
+extern PFNGLPROGRAMENVPARAMETER4DVARBPROC glProgramEnvParameter4dvARB;
+extern PFNGLPROGRAMLOCALPARAMETER4FARBPROC glProgramLocalParameter4fARB;
+extern PFNGLPROGRAMLOCALPARAMETER4DARBPROC glProgramLocalParameter4dARB;
+extern PFNGLPROGRAMLOCALPARAMETER4FVARBPROC glProgramLocalParameter4fvARB;
+extern PFNGLPROGRAMLOCALPARAMETER4DVARBPROC glProgramLocalParameter4dvARB;
+extern PFNGLGETPROGRAMENVPARAMETERFVARBPROC glGetProgramEnvParameterfvARB;
+extern PFNGLGETPROGRAMENVPARAMETERDVARBPROC glGetProgramEnvParameterdvARB;
+extern PFNGLGETPROGRAMLOCALPARAMETERFVARBPROC glGetProgramLocalParameterfvARB;
+extern PFNGLGETPROGRAMLOCALPARAMETERDVARBPROC glGetProgramLocalParameterdvARB;
+extern PFNGLGETPROGRAMIVARBPROC glGetProgramivARB;
+extern PFNGLGETPROGRAMSTRINGARBPROC glGetProgramStringARB;
+extern PFNGLGETVERTEXATTRIBDVARBPROC glGetVertexAttribdvARB;
+extern PFNGLGETVERTEXATTRIBFVARBPROC glGetVertexAttribfvARB;
+extern PFNGLGETVERTEXATTRIBIVARBPROC glGetVertexAttribivARB;
+extern PFNGLGETVERTEXATTRIBPOINTERVARBPROC glGetVertexAttribPointervARB;
+extern PFNGLISPROGRAMARBPROC glIsProgramARB;
+#endif //GL_ARB_vertex_program
 
 #ifdef GL_ARB_window_pos
 extern PFNGLWINDOWPOS2DARBPROC glWindowPos2dARB;

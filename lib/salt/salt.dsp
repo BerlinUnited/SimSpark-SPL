@@ -84,6 +84,14 @@ LIB32=link.exe -lib
 # Name "salt - Win32 Debug"
 # Begin Source File
 
+SOURCE=.\bounds.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\bounds.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\defines.h
 # End Source File
 # Begin Source File
@@ -96,7 +104,23 @@ SOURCE=.\fileclasses.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\frustum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\frustum.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\gmath.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\matrix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\matrix.h
 # End Source File
 # Begin Source File
 
@@ -108,7 +132,19 @@ SOURCE=.\path.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\plane.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\plane.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\quadlink.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rect.h
 # End Source File
 # Begin Source File
 
