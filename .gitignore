@@ -33,6 +33,7 @@ app/simulator/.deps
 app/simulator/.libs
 app/simulator/Makefile
 app/simulator/Makefile.in
+app/simulator/simulator
 app/spadestest/.deps
 app/spadestest/.libs
 app/spadestest/Makefile

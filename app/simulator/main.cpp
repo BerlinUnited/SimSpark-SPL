@@ -65,7 +65,7 @@ static bool init()
                 scriptServer->CreateVariable("Command.Lighting",        gCmdLighting);
 
                 // the next script will create all the necessary servers
-                scriptServer->Run("script/init.rb");
+                scriptServer->Run("data/script/init.rb");
 
                 printf("initialized...\n");
                 // loads the simulation
