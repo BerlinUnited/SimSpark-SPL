@@ -1,0 +1,32 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+ 
+ (node Transform
+       (setName top)
+       (setLocalPos 0 0 4)
+       (importScene rsg/boxspheres/sphere.rsg 1 1 matRed)
+       )
+
+ (node Transform
+       (setName mid)
+       (setLocalPos 0 0 2)
+       (importScene rsg/boxspheres/box.rsg 2 1 2 2 matYellow)
+       )
+
+ (node Transform
+       (setName bottom)
+       (setLocalPos 0 0 0)
+       (importScene rsg/boxspheres/sphere.rsg 1 1 matGreen)
+       )
+
+ (node SliderJoint
+       (attach ../top/sphereBody ../mid/boxBody)
+       )
+
+ (node SliderJoint
+       (attach ../bottom/sphereBody ../mid/boxBody)
+       )
+
+)
