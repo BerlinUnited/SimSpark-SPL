@@ -159,6 +159,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/soccer/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/collisionperceptor/Makefile \
+		 plugin/rubysceneimporter/Makefile \
 		 app/Makefile \
 		 app/gendot/Makefile \
 		 app/agenttest/Makefile \
