@@ -172,11 +172,11 @@ void Behave(int /*numSensation*/)
       sprintf(buffer,"******** ballVec %.2f %.2f %.2f, l= %.2f\n",ballVec[0],ballVec[1],ballVec[2],dist);
       Log(buffer);
 
-      if (dist < 2)
+      if (dist < 0.3 + 0.111 + 0.04)
         {
           // kick the ball
           Log("Kicking \n");
-          PutOutput("A(kick down 20000)");
+          PutOutput("A(kick up 20000)");
         } else
           {
             // seek the ball
