@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: physicsserver.h,v 1.4.8.1 2004/01/09 13:43:46 rollmark Exp $
+   $Id: physicsserver.h,v 1.4.8.2 2004/01/11 11:17:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 namespace oxygen
 {
 class Body;
+class Collider;
 
 class PhysicsServer : public zeitgeist::Leaf
 {
@@ -38,13 +39,9 @@ class PhysicsServer : public zeitgeist::Leaf
 public:
     PhysicsServer();
     ~PhysicsServer();
-
-    /** returns the Body node corresponding to the given ODE body
-        \param id */
-    static Body* GetBody(dBodyID id);
 };
 
-    DECLARE_CLASS(PhysicsServer);
+DECLARE_CLASS(PhysicsServer);
 
 } //namespace oxygen
 
