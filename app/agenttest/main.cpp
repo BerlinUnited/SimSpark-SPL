@@ -171,7 +171,7 @@ bool GetObjectPos(const Predicate& predicate, const string& name, Vector3f& pos)
     }
 
   // advance to the 'pos' entry in the object's section
-  if (! predicate.FindParameter(objIter,"pos"))
+  if (! predicate.FindParameter(objIter,"pol"))
     {
       return false;
     }
@@ -203,7 +203,7 @@ void Behave(int /*numSensation*/)
       const Predicate& predicate = (*iter);
 
       // check for the PerfectVision perceptor
-      if (predicate.name != "PerfectVision")
+      if (predicate.name != "Vision")
         {
           Log ("skipped ");
           Log (predicate.name.c_str());
@@ -211,7 +211,7 @@ void Behave(int /*numSensation*/)
           continue;
         }
 
-      Log("PerfectVision\n");
+      Log(std::string(predicate.name + "\n").c_str());
 
       Vector3f ballVec;
       if (! GetObjectPos(predicate, "Ball", ballVec))
@@ -219,7 +219,7 @@ void Behave(int /*numSensation*/)
           return;
         }
 
-      const float dist = ballVec.Length();
+      const float dist = ballVec[0];
 
       static char buffer[512];
       sprintf(buffer,"******** ballVec %.2f %.2f %.2f, l= %.2f\n",ballVec[0],ballVec[1],ballVec[2],dist);
@@ -230,22 +230,23 @@ void Behave(int /*numSensation*/)
           // kick the ball
           Log("Kicking \n");
           PutOutput("A(kick up 100.0)");
-        } else
-          {
-            // seek the ball
-            if (dist > 1)
-              {
-                ballVec *= 5;
-              } else
-                {
-                  ballVec *= 2;
-                }
+        } else {
+            Vector3f dashVec;
+            stringstream s0;
+            s0 << "Dash to: " << ballVec[0] << " " << ballVec[1] << " " << ballVec[2];
+            Log(s0.str().c_str());
+
+            dashVec[0] = 5 * ballVec[0] * gCos(gDegToRad(ballVec[1])) *
+                gSin(gDegToRad(90.0 - ballVec[2]));
+            dashVec[1] = 5 * ballVec[0] * gSin(gDegToRad(ballVec[1])) *
+                gSin(gDegToRad(90.0 - ballVec[2]));
+            dashVec[2] = 5 * ballVec[0] * gCos(gDegToRad(90.0 - ballVec[2]));
 
             stringstream ss;
             ss << "A(dash"
-               << " " << ballVec[0]
-               << " " << ballVec[1]
-               << "  " << ballVec[2]
+               << " " << dashVec[0]
+               << " " << dashVec[1]
+               << "  " << dashVec[2]
                << ")";
 
             PutOutput(ss.str().c_str());
