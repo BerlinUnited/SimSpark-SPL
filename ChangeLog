@@ -1,3 +1,26 @@
+2004-02-26  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/camera.cpp:
+	* app/rcssmonitor3d/commserver_c.cpp:
+	* app/rcssmonitor3d/communit.cpp:
+	* app/rcssmonitor3d/communit.h:
+	* app/rcssmonitor3d/glserver.cpp:
+	* app/rcssmonitor3d/main.cpp:
+	* app/simulator/rcssserver3D.rb:
+	* lib/oxygen/physicsserver/planecollider.cpp:
+	* lib/oxygen/physicsserver/planecollider.h:
+	* lib/oxygen/physicsserver/planecollider_c.cpp:
+	* plugin/forceeffector/forceeffector.cpp:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
+	* plugin/soccer/beameffector/beameffector.cpp: 
+	* plugin/soccer/driveeffector/driveeffector.cpp 
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	* plugin/soccer/kickeffector/kickeffector.cpp:
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	changed the internal x/z/y coordinates to x/y/z
+	
 2004-02-21  Oliver Obst  <fruit@robolog.org>
 
 	* app/simulator/rcssserver3D.rb: 
