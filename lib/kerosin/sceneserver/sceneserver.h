@@ -1,68 +1,84 @@
-#ifndef SCENESERVER_H__
-#define SCENESERVER_H__
+/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
 
-/*	\class SceneServer
-	$Id: sceneserver.h,v 1.2 2003/08/22 22:43:16 rollmark Exp $
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: sceneserver.h,v 1.3 2003/08/26 09:02:58 fruit Exp $
 
-	SceneServer
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
 
-	The scene server manages displayable subtrees within the object
-	hierarchy. Each subtree begins with a Scene node. The scene server
-	knows which scene node is currently active and updates/displays
-	that node (and its corresponding subtree). 
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-	NOTE:
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-	HISTORY:
-		05.11.02 - MK
-			- Initial version
+   SceneServer
 
-	TODO:
+   The scene server manages displayable subtrees within the object
+   hierarchy. Each subtree begins with a Scene node. The scene server
+   knows which scene node is currently active and updates/displays
+   that node (and its corresponding subtree).
 
-	TOFIX:
+   NOTE:
+
+   HISTORY:
+       05.11.02 - MK
+                - Initial version
+
+   TODO:
+
+   TOFIX:
 */
+#ifndef KEROSIN_SCENESERVER_H
+#define KEROSIN_SCENESERVER_H
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 
 namespace kerosin
 {
+#if 0
+}
+#endif
 
 class Scene;
 
 class SceneServer : public zeitgeist::Leaf
 {
-	//
-	// Functions
-	//
+    //
+    // Functions
+    //
 public:
-	SceneServer();
-	~SceneServer();
+    SceneServer();
+    ~SceneServer();
 
-	//! create a new scene hierarchy at a specific location, new hierarchy is also made current
-	boost::shared_ptr<Scene>	CreateScene(const std::string &location);
-	//! set the active scene
-	bool						SetActiveScene(const std::string &location);
+    //! create a new scene hierarchy at a specific location, new hierarchy is also made current
+    boost::shared_ptr<Scene> CreateScene(const std::string &location);
+    //! set the active scene
+    bool SetActiveScene(const std::string &location);
 
-	//! update the state of the current active scene (deltaTime is in seconds)
-	void						Update(float deltaTime);
-	//! display the current active scene
-	void						Render();
+    //! returns a reference to the current active scen
+    boost::shared_ptr<Scene> GetActiveScene() { mActiveScene; }
+
+    //! update the state of the current active scene (deltaTime is in seconds)
+    void Update(float deltaTime);
 
 protected:
-	//! overload this to perform stuff after the object has been created and attached to a core
-	virtual bool ConstructInternal();
-
-	//
-	// Members
-	//
+    //
+    // Members
+    //
 private:
-	boost::shared_ptr<Scene>	mActiveScene;
-
-	unsigned int mAmbientVP;
+    boost::shared_ptr<Scene>        mActiveScene;
 };
 
 DECLARE_CLASS(SceneServer);
 
 } //namespace kerosin
-#endif //SCENESERVER_H__
+#endif //KEROSIN_SCENESERVER_H
