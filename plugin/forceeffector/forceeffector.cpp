@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.2.2.1 2003/12/25 13:17:58 rollmark Exp $
+   $Id: forceeffector.cpp,v 1.3.2.1 2004/01/08 13:22:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -88,14 +88,13 @@ ForceEffector::GetActionObject(const Predicate& predicate)
       return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
     }
 
-  if (predicate.parameter.size() != 1)
-    {
-      GetLog()->Error() << "ERROR: (ForceEffector) predicate has "
-                        << predicate.parameter.size() << " parameters.\n";
+  Predicate::Iterator iter = predicate.begin();
+  Vector3f force;
+  if (! predicate.GetValue(iter, force))
+  {
+      GetLog()->Error() << "ERROR: (ForceEffector) Vector3f parameter expected\n";
       return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
-    }
-
-  Vector3f force = any_cast<Vector3f>(predicate.parameter.front());
+  }
 
   return shared_ptr<ActionObject>(new ForceAction(force));
 }
