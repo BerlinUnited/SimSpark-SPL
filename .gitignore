@@ -28,8 +28,15 @@ utility/classserver/classserver.lo
 utility/classserver/libclassserver.la
 utility/console/Makefile
 utility/console/Makefile.in
+utility/console/commands/.deps
+utility/console/commands/.dirstamp
+utility/console/commands/.libs
+utility/console/commands/*.cpp
+utility/console/commands/*.lo
 utility/console/commands/signature/.deps
 utility/console/commands/signature/.dirstamp
+utility/console/commands/signature/.libs
+utility/console/commands/signature/*.lo
 utility/forwarder/.deps
 utility/forwarder/forwarder.lo
 utility/forwarder/libforwarder.la
