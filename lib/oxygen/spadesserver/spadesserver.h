@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.6 2004/03/22 18:11:07 fruit Exp $
+   $Id: spadesserver.h,v 1.7 2004/03/25 11:51:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,6 +71,13 @@ public:
      * \return true if the variable is set to true, false otherwise.
      */
     bool GetRunIntegratedCommserver() const;
+
+    /** Get the value of the Spades.CommServersWanted variable. On
+        startup SpadesServer will wait until at least
+        'CommServersWanted' CommServers have connected before it
+        initially unpauses the simulation.
+     */
+    int GetCommServersWanted() const;
 
     /** Get the value of the Spades.MonitorInterval variable.
      * \return the number of simulation steps per monitor message.

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.7 2004/03/22 18:11:07 fruit Exp $
+   $Id: spadesserver.cpp,v 1.8 2004/03/25 11:51:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ SpadesServer::ConstructInternal()
     GetScript()->CreateVariable("Spades.TimePerStep", 0.01f);
     GetScript()->CreateVariable("Spades.MonitorInterval", 4);
     GetScript()->CreateVariable("Spades.RunIntegratedCommserver", false);
+    GetScript()->CreateVariable("Spades.CommServersWanted", 1);
     GetScript()->CreateVariable("Spades.SendAgentThinkTimes", false);
 
     return true;
@@ -119,6 +120,15 @@ float
 SpadesServer::GetTimePerStep() const
 {
     return mTimePerStep;
+}
+
+int
+SpadesServer::GetCommServersWanted() const
+{
+    int commServersWanted = 1;
+    GetScript()->GetVariable("Spades.CommServersWanted",commServersWanted);
+
+    return std::max<int>(1,commServersWanted);
 }
 
 bool
@@ -252,7 +262,8 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     int steps = time_desired - time_curr;
     if (steps <= 0)
     {
-        GetLog()->Warning() << "WARNING: (SpadesServer) will not simulate <= 0 steps\n";
+        GetLog()->Warning()
+            << "WARNING: (SpadesServer) will not simulate <= 0 steps\n";
         return time_curr;
     }
 
@@ -261,7 +272,9 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         (mGameControlServer.get() == 0)
         )
         {
-            GetLog()->Warning() << "WARNING: (SpadesServer) SceneServer and/or GameControlServer missing.\n";
+            GetLog()->Warning()
+                << "WARNING: (SpadesServer) SceneServer "
+                << "and/or GameControlServer missing.\n";
             return time_curr;
         }
 
@@ -354,8 +367,26 @@ SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned data
 void
 SpadesServer::pauseModeCallback()
 {
-    // the first time pauseModeCallback will be called is immediatly after startup
-    // when SPADES is in SM_PausedInitial mode
+    // the first time pauseModeCallback will be called is immediatly
+    // after startup when SPADES is in SM_PausedInitial mode
+
+    if (mSimEngine->getSimulationMode() == SM_PausedInitial)
+        {
+            int numConnected = mSimEngine->getNumCommServers();
+            GetLog()->Normal() << "(SpadesServer) waiting for a total of "
+                               << GetCommServersWanted()
+                               << " CommServers, " << numConnected
+                               << " already connected\n";
+
+            if (numConnected >= GetCommServersWanted())
+                {
+                    Unpause();
+                } else
+                    {
+                        return;
+                    }
+        }
+
     while (! mAgentQueue.empty())
     {
         StartAgents(mAgentQueue.front());
@@ -367,11 +398,6 @@ SpadesServer::pauseModeCallback()
         mSimEngine->changeSimulationMode(mNewSimulationMode);
         mSimulationModeChanged = false;
     }
-
-    if (mSimEngine->getSimulationMode() == SM_PausedInitial)
-        {
-            Unpause();
-        }
 }
 
 bool
