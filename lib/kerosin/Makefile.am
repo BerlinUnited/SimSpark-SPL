@@ -99,6 +99,7 @@ sceneserver/helper/nv_math/nv_mathdecl.h \
 sceneserver/light.h \
 sceneserver/sphere.h \
 sceneserver/staticmesh.h \
+sceneserver/transform.h \
 soundserver/soundeffect.h \
 soundserver/soundmodule.h \
 soundserver/soundobject.h \
@@ -109,6 +110,6 @@ textureserver/texture.h \
 textureserver/texture2d.h \
 textureserver/textureserver.h \
 openglserver/openglserver.h \
-renderserver/renderserver.cpp
+renderserver/renderserver.h
 
 #sceneserver/camera.h 
