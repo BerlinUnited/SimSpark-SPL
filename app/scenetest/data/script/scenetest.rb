@@ -39,7 +39,7 @@ new ('kerosin/MaterialServer', '/sys/server/material');
 inputServer = new ('kerosin/InputServer', '/sys/server/input');
 inputServer.init ('InputSystemSDL');
 # load german keyboard layout
-inputServer.importScanCodeMapping ('sys/script/german.scan.rb');
+inputServer.setScanCodeMapping('german.scan.rb');
 
 inputServer.createDevice ('Keyboard');
 inputServer.createDevice ('Mouse');
