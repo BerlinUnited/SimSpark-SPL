@@ -1,6 +1,64 @@
+2002-08-14  Oliver Obst  <fruit@robolog.org>
+
+	* utility/console/Makefile.am
+	* utility/console/console.cc 
+	* utility/console/console.h 
+	* utility/console/variables/convar.h
+        * utility/console/variables/convarattributes.cc 
+	* utility/console/variables/convarattributes.h
+	* utility/console/variables/convarcallback.h 
+	* utility/console/variables/convarstate.cc
+	* utility/console/variables/convarstate.h
+	clean up etc	
+
+	* utility/console/consoleparser.cc 
+	* utility/console/consoleparser.h 
+	* utility/console/scanner.cc 
+	* utility/console/scanner.h
+	* utility/console/variables/convar.cc 
+	* utility/console/convarbool.cc
+	* utility/console/variables/convarbool.h 
+	* utility/console/convarcallbackconsole.cc
+	* utility/console/variables/convarcallbackconsole.h
+	* utility/console/variables/convarcharstring.cc 
+	* utility/console/convarcharstring.h
+	* utility/console/variables/convarcommand.cc 
+	* utility/console/convarcommand.h
+	* utility/console/variables/convarfloat.cc 
+	* utility/console/convarfloat.h
+	* utility/console/variables/convarint.cc 
+	* utility/console/convarint.h
+	* utility/console/variables/convarlabel.cc 
+	* utility/console/convarlabel.h
+	* utility/console/variables/convarrefbool.cc 
+	* utility/console/convarrefbool.h
+	* utility/console/variables/convarrefcharstring.cc
+	* utility/console/variables/convarrefcharstring.h 
+	* utility/console/convarreffloat.cc
+	* utility/console/variables/convarreffloat.h 
+	* utility/console/convarrefint.cc
+	* utility/console/variables/convarrefint.h 
+	* utility/console/convarrefstring.cc
+	* utility/console/variables/convarrefstring.h 
+	* utility/console/convarrefvector.cc
+	* utility/console/variables/convarrefvector.h 
+	* utility/console/convarseparator.cc
+	* utility/console/variables/convarseparator.h 
+	* utility/console/convarserver.cc
+	* utility/console/variables/convarserver.h 
+	* utility/console/convarstring.cc
+	* utility/console/variables/convarstring.h 
+	* utility/console/convarundefined.cc
+	* utility/console/variables/convarundefined.h 
+	* utility/console/convarvariable.cc
+	* utility/console/variables/convarvariable.h 
+	* utility/console/convarvector.cc
+	* utility/console/variables/convarvector.h
+	Added some more files for the variable subsystem
+	(doesn't compile yet)
+
 2002-08-13  Oliver Obst  <fruit@robolog.org>
 
-	
 	* ./configure.in
 	* ./pre-make
 	* ./doc/Makefile.am
