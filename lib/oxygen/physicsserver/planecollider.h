@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: planecollider.h,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: planecollider.h,v 1.3 2003/08/31 12:16:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,18 +29,27 @@
 namespace kerosin
 {
 
+/** PlaneCollider encapsulates an ODE plane geometry object. Planes are
+    non-placeable geoms, i.e.  unlike placeable geoms, planes do not have an
+    assigned position and rotation. This means that the parameters (a,b,c,d)
+    are always in global coordinates. In other words it is assumed that the
+    plane is always part of the static environment and not tied to any movable
+    object.
+*/
 class PlaneCollider : public Collider
 {
-	//
-	// Functions
-	//
+    //
+        // Functions
+        //
 public:
-	PlaneCollider();
+    PlaneCollider();
 
-	void SetParams(float a, float b, float c, float d);
+    /** sets the parameters of the plane equation a*x+b*y+c*z = d */
+    void SetParams(float a, float b, float c, float d);
 
 protected:
-	virtual bool ConstructInternal();
+    /** constructs a default plane with normal pointing up, going through the origin */
+    virtual bool ConstructInternal();
 };
 
 DECLARE_CLASS(PlaneCollider);

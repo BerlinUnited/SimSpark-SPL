@@ -1,0 +1,62 @@
+/* -*- mode: c++ -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: ccylindercollider.h,v 1.1 2003/08/31 12:16:49 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   CCylinderCollider
+*/
+
+#ifndef CCYLINDERCOLLIDER_H__
+#define CCYLINDERCOLLIDER_H__
+
+#include "collider.h"
+
+namespace kerosin
+{
+
+/** CCylinderCollider encapsulates an ODE capped cylinder geometry object.A
+    capped cylinder is like a normal cylinder except it has half-sphere caps
+    at its ends. This feature makes the internal collision detection code
+    particularly fast and accurate.
+ */
+class CCylinderCollider : public Collider
+{
+        //
+        // Functions
+        //
+public:
+        CCylinderCollider();
+
+        /* Sets the parameters of the capped cylinder. The cylinder's length,
+           not counting the caps, is given by length. The cylinder is aligned
+           along the geom's local Z axis. The radius of the caps, and of the
+           cylinder itself, is given by radius.
+         */
+        void SetParams(float radius, float length);
+
+protected:
+        /** constructs a default capped cylinder with an radius of 1 and a length of 1 */
+        virtual bool ConstructInternal();
+};
+
+DECLARE_CLASS(CCylinderCollider);
+
+} //namespace kerosin
+
+#endif //CCYLINDERCOLLIDER_H__
+

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: collider.cpp,v 1.3 2003/08/31 12:16:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,53 +35,51 @@ ODEObject(), mODEGeom(0)
 
 Collider::~Collider()
 {
-	//printf("~Collider '%s'\n", GetClass()->GetName().c_str());
-
-	if (mODEGeom)
-	{
-		dGeomDestroy(mODEGeom);
-		mODEGeom = 0;
-	}
+        if (mODEGeom)
+        {
+                dGeomDestroy(mODEGeom);
+                mODEGeom = 0;
+        }
 }
 
 void Collider::OnLink()
 {
-	ODEObject::OnLink();
+        ODEObject::OnLink();
 
-	shared_ptr<Scene> scene = GetScene();
-	
-	if (scene.get() != NULL)
-	{
-		mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
-		mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
-		dSpaceID space = mSpace->GetODESpace();
+        shared_ptr<Scene> scene = GetScene();
 
-		// if we have a space and an object, add it to the space
-		if (mODEGeom && space && !dSpaceQuery(space, mODEGeom))
-		{
-			dSpaceAdd(space, mODEGeom);
-		}
-		
-		// if there is a Body hanging on our parent, link to it
-		shared_ptr<Body> body = shared_static_cast<Body>(make_shared(GetParent())->GetChildOfClass("Body"));
-		if (body.get() != NULL)
-		{
-			dGeomSetBody (mODEGeom, body->GetODEBody());
-		}
-	}
+        if (scene.get() != NULL)
+        {
+                mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
+                mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
+                dSpaceID space = mSpace->GetODESpace();
+
+                // if we have a space and an object, add it to the space
+                if (mODEGeom && space && !dSpaceQuery(space, mODEGeom))
+                {
+                        dSpaceAdd(space, mODEGeom);
+                }
+
+                // if there is a Body hanging on our parent, link to it
+                shared_ptr<Body> body = shared_static_cast<Body>(make_shared(GetParent())->GetChildOfClass("Body"));
+                if (body.get() != NULL)
+                {
+                        dGeomSetBody (mODEGeom, body->GetODEBody());
+                }
+        }
 }
 
 void Collider::OnUnlink()
 {
-	ODEObject::OnUnlink();
+        ODEObject::OnUnlink();
 
-	dSpaceID space = mSpace->GetODESpace();
+        dSpaceID space = mSpace->GetODESpace();
 
-	// remove collision geometry from space
-	if (mODEGeom && space && dSpaceQuery(space, mODEGeom))
-	{
-		dSpaceRemove(space, mODEGeom);
-	}
+        // remove collision geometry from space
+        if (mODEGeom && space && dSpaceQuery(space, mODEGeom))
+        {
+                dSpaceRemove(space, mODEGeom);
+        }
 
-	mSpace.reset();
+        mSpace.reset();
 }

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.h,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: collider.h,v 1.3 2003/08/31 12:16:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,31 +33,48 @@ namespace kerosin
 class Space;
 class World;
 
-/** Collider is the base class of all colliders.
+/** Collider encapsulates an ODE geometry object ('geom' for short). Geoms are
+    the fundamental objects in the collision system. They represents a single
+    rigid shape (such as a sphere or box), or represent a group of other
+    geoms- this is a special kind of geom called a 'space'. A geom is
+    associated with rigid body objects. This allows the collision engine to
+    get the position and orientation of the geoms from the bodies. A body and
+    a geom together represent all the properties of the simulated object.
 */
+
 class Collider : public ODEObject
 {
-	//
-	// Functions
-	//
+        //
+        // Functions
+        //
 public:
-	Collider();
-	virtual ~Collider();
+        Collider();
+        virtual ~Collider();
 
 protected:
-	virtual void OnLink();
-	virtual void OnUnlink();
 
-	//
-	// Members
-	//
+    /** registers the managed geom to the Space of the Scene and our
+     * associated ODE body */
+    virtual void OnLink();
+
+    /** unregisters the managed geom from the Space of the Scene. The geom is
+     * removed from the body later within the destructor.
+     */
+    virtual void OnUnlink();
+
+        //
+        // Members
+        //
 protected:
-	//! the world this collider is associated with
-	boost::shared_ptr<World>	mWorld;
-	//! the space this collider is associated with
-	boost::shared_ptr<Space>	mSpace;
-	//! the ode collision geometry
-	dGeomID						mODEGeom;	
+
+    /** the world this collider is associated with */
+    boost::shared_ptr<World>    mWorld;
+
+    /** the space this collider is associated with */
+    boost::shared_ptr<Space>    mSpace;
+
+    /** the ode collision geometry */
+    dGeomID                     mODEGeom;
 };
 
 DECLARE_CLASS(Collider);

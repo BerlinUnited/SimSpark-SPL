@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spherecollider.h,v 1.3 2003/08/31 12:16:49 rollmark Exp $
+   $Id: boxcollider.h,v 1.1 2003/08/31 12:16:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,37 +18,37 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   SphereCollider
+   BoxCollider
 */
 
-#ifndef SPHERECOLLIDER_H__
-#define SPHERECOLLIDER_H__
+#ifndef BOXCOLLIDER_H__
+#define BOXCOLLIDER_H__
 
 #include "collider.h"
 
 namespace kerosin
 {
 
-/** SphereCollider encapsulates an ODE sphere geometry object.
+/** BoxCollider encapsulates an ODE box geometry object.
  */
-class SphereCollider : public Collider
+class BoxCollider : public Collider
 {
         //
         // Functions
         //
 public:
-        SphereCollider();
+        BoxCollider();
 
-    /** sets the radius of the managed ODE sphere geom */
-    void SetRadius(float r);
+        /** Sets the side lengths of the box geom */
+        void SetBoxLengths(float x, float y, float z);
 
 protected:
-    /** constructs a default sphere with a radius of 1 */
+    /** constructs a default box with side lengths of 1 */
     virtual bool ConstructInternal();
 };
 
-DECLARE_CLASS(SphereCollider);
+DECLARE_CLASS(BoxCollider);
 
 } //namespace kerosin
 
-#endif //SPHERECOLLIDER_H__
+#endif //BOXCOLLIDER_H__

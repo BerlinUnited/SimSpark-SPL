@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.2 2003/08/29 22:08:21 rollmark Exp $
+   $Id: space.cpp,v 1.3 2003/08/31 12:16:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -178,7 +178,7 @@ void Space::OnUnlink()
         mWorld = 0;
 }
 
-void Space::PrePhysicsUpdateInternal(float deltaTime)
+void Space::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // remove all contact joints
     dJointGroupEmpty (mODEContactGroup);
