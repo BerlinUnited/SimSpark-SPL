@@ -15,6 +15,9 @@ AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/oxygen
 
+## architecture independent data (scripts) to be installed and distributed
+dist_pkgdata_DATA = oxygen.rb
+
 sources = \
 agentaspect/agentaspect.cpp \
 agentaspect/agentaspect_c.cpp \

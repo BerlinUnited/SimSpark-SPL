@@ -17,6 +17,9 @@ AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
 
+## architecture independent data (scripts) to be installed and distributed
+dist_pkgdata_DATA = kerosin.rb
+
 if BUILD_KEROSIN
 BUILT_SOURCES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 endif

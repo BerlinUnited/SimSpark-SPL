@@ -15,6 +15,9 @@ AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/zeitgeist
 
+## architecture independent data (scripts) to be installed and distributed
+dist_pkgdata_DATA = zeitgeist.rb
+
 sources = \
 class.cpp \
 core.cpp \
