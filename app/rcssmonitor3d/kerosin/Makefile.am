@@ -8,8 +8,7 @@ LDADD = -lpthread -lGL -lGLU -lglut \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
         ${top_srcdir}/lib/salt/libsalt_debug.la \
-	${top_srcdir}/app/rcssmonitor3d/lib/librcssmonitor3D.a \
-	${top_srcdir}/utility/rcssnet/librcssnet3D.la
+	${top_srcdir}/app/rcssmonitor3d/lib/librcssmonitor3D.la 
 rcssmonitor3D_kerosin_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = -lpthread -lGL -lGLU -lglut \
@@ -18,8 +17,7 @@ LDADD = -lpthread -lGL -lGLU -lglut \
 	${top_srcdir}/lib/oxygen/liboxygen.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
         ${top_srcdir}/lib/salt/libsalt.la \
-	${top_srcdir}/app/rcssmonitor3d/lib/librcssmonitor3D.a \
-	${top_srcdir}/utility/rcssnet/librcssnet3D.la
+	${top_srcdir}/app/rcssmonitor3d/lib/librcssmonitor3D.la
 rcssmonitor3D_kerosin_CXXFLAGS = -O2
 endif
 
