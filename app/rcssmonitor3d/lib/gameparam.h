@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: gameparam.h,v 1.2 2004/03/20 09:43:34 rollmark Exp $
+$Id: gameparam.h,v 1.3 2004/04/09 20:15:33 fruit Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,43 +33,43 @@ public:
     GameParam();
     virtual ~GameParam();
 
-    const float& GetFieldLength();
+    const float& GetFieldLength() const;
     void SetFieldLength(float f);
 
-    const float& GetFieldWidth();
+    const float& GetFieldWidth() const;
     void SetFieldWidth(float f);
 
-    const float& GetFieldHeight();
+    const float& GetFieldHeight() const;
     void SetFieldHeight(float f);
 
-    const float& GetBorderSize();
+    const float& GetBorderSize() const;
     void SetBorderSize(float f);
 
-    const float& GetLineWidth();
+    const float& GetLineWidth() const;
     void SetLineWidth(float f);
 
-    const float& GetGoalWidth();
+    const float& GetGoalWidth() const;
     void SetGoalWidth(float f);
 
-    const float& GetGoalDepth();
+    const float& GetGoalDepth() const;
     void SetGoalDepth(float f);
 
-    const float& GetGoalHeight();
+    const float& GetGoalHeight() const;
     void SetGoalHeight(float f);
 
-    const float& GetAgentMass();
+    const float& GetAgentMass() const;
     void SetAgentMass(float f);
 
-    const float& GetAgentRadius();
+    const float& GetAgentRadius() const;
     void SetAgentRadius(float f);
 
-    const float& GetAgentMaxSpeed();
+    const float& GetAgentMaxSpeed() const;
     void SetAgentMaxSpeed(float f);
 
-    const float& GetBallRadius();
+    const float& GetBallRadius() const;
     void SetBallRadius(float f);
 
-    const float& GetBallMass();
+    const float& GetBallMass() const;
     void SetBallMass(float f);
 
 protected:
