@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider_c.cpp,v 1.5 2004/02/21 15:30:44 fruit Exp $
+   $Id: ccylindercollider_c.cpp,v 1.6 2004/03/22 10:56:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,13 +24,22 @@
 using namespace boost;
 using namespace oxygen;
 
-FUNCTION(setParams)
+FUNCTION(CCylinderCollider,setParams)
 {
-        if (in.size() == 2)
+    float inRadius;
+    float inLength;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inRadius)) ||
+        (! in.GetValue(in[1],inLength))
+        )
         {
-                CCylinderCollider *cc = static_cast<CCylinderCollider*>(obj);
-                cc->SetParams(any_cast<float>(in[0]),any_cast<float>(in[1]));
+            return false;
         }
+
+    obj->SetParams(inRadius,inLength);
+    return true;
 }
 
 void CLASS(CCylinderCollider)::DefineClass()

@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: boxcollider_c.cpp,v 1.6 2004/02/21 15:30:44 fruit Exp $
+   $Id: boxcollider_c.cpp,v 1.7 2004/03/22 10:54:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,22 +23,26 @@
 
 using namespace boost;
 using namespace oxygen;
+using namespace salt;
 
-FUNCTION(setBoxLengths)
+FUNCTION(BoxCollider,setBoxLengths)
 {
-        if (in.size() == 3)
+    Vector3f inExtents;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inExtents))
+        )
         {
-                BoxCollider *bc = static_cast<BoxCollider*>(obj);
-                bc->SetBoxLengths(
-                                  any_cast<float>(in[0]),
-                                  any_cast<float>(in[1]),
-                                  any_cast<float>(in[2])
-                                  );
+            return false;
         }
+
+    obj->SetBoxLengths(inExtents);
+    return true;
 }
 
 void CLASS(BoxCollider)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/Collider);
-        DEFINE_FUNCTION(setBoxLengths);
+    DEFINE_BASECLASS(oxygen/Collider);
+    DEFINE_FUNCTION(setBoxLengths);
 }

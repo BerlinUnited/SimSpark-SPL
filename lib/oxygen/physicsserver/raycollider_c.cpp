@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: raycollider_c.cpp,v 1.3 2004/02/21 15:30:44 fruit Exp $
+   $Id: raycollider_c.cpp,v 1.4 2004/03/22 10:56:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,25 +23,32 @@
 
 using namespace boost;
 using namespace oxygen;
+using namespace zeitgeist;
+using namespace salt;
 
-FUNCTION(setParams)
+FUNCTION(RayCollider,setParams)
 {
-    if (in.size() == 7)
-    {
-        RayCollider *rc = static_cast<RayCollider*>(obj);
-        rc->SetParams(salt::Vector3f(any_cast<float>(in[0]),
-                                     any_cast<float>(in[1]),
-                                     any_cast<float>(in[2])),
-                      salt::Vector3f(any_cast<float>(in[3]),
-                                     any_cast<float>(in[4]),
-                                     any_cast<float>(in[5])),
-                      any_cast<float>(in[6]));
-    }
+    Vector3f inPos;
+    Vector3f inDir;
+    float inLength;
+
+    ParameterList::TVector::const_iterator iter = in.begin();
+
+    if (
+        (! in.AdvanceValue(iter,inPos)) ||
+        (! in.AdvanceValue(iter,inDir)) ||
+        (! in.AdvanceValue(iter,inLength))
+        )
+        {
+            return false;
+        }
+
+    obj->SetParams(inPos,inDir,inLength);
+    return true;
 }
 
-void
-CLASS(RayCollider)::DefineClass()
+void CLASS(RayCollider)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/Collider);
-        DEFINE_FUNCTION(setParams);
+    DEFINE_BASECLASS(oxygen/Collider);
+    DEFINE_FUNCTION(setParams);
 }

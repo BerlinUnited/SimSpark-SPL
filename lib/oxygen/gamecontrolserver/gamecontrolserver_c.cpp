@@ -1,10 +1,9 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver_c.cpp,v 1.4 2004/02/12 14:07:22 fruit Exp $
+   $Id: gamecontrolserver_c.cpp,v 1.5 2004/03/22 10:49:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,38 +22,50 @@
 #include "gamecontrolserver.h"
 
 using namespace oxygen;
+using namespace std;
 
-FUNCTION(initParser)
+FUNCTION(GameControlServer,initParser)
 {
-  if (in.size() == 1)
-    {
-      GameControlServer* gcs = dynamic_cast<GameControlServer*>(obj);
-      gcs->InitParser(boost::any_cast<char*>(in[0]));
-    }
+    string inParserName;
+
+    return(
+           (in.GetSize() == 1) &&
+           (in.GetValue(in.begin(),inParserName)) &&
+           (obj->InitParser(inParserName))
+           );
 }
 
-FUNCTION(initEffector)
+FUNCTION(GameControlServer,initEffector)
 {
-  if (in.size() == 1)
-    {
-      GameControlServer* gcs = dynamic_cast<GameControlServer*>(obj);
-      gcs->InitEffector(boost::any_cast<char*>(in[0]));
-    }
+    string inEffectorName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inEffectorName))
+        )
+        {
+            return false;
+        }
+
+    obj->InitEffector(inEffectorName);
+    return true;
 }
 
-FUNCTION(initControlAspect)
+FUNCTION(GameControlServer,initControlAspect)
 {
-  if (in.size() == 1)
-    {
-      GameControlServer* gcs = dynamic_cast<GameControlServer*>(obj);
-      gcs->InitControlAspect(boost::any_cast<char*>(in[0]));
-    }
+    string inAspectName;
+
+    return(
+           (in.GetSize() == 1) &&
+           (in.GetValue(in.begin(),inAspectName)) &&
+           (obj->InitControlAspect(inAspectName))
+           );
 }
 
 void CLASS(GameControlServer)::DefineClass()
 {
-  DEFINE_BASECLASS(zeitgeist/Node);
-  DEFINE_FUNCTION(initParser);
-  DEFINE_FUNCTION(initEffector);
-  DEFINE_FUNCTION(initControlAspect);
+    DEFINE_BASECLASS(zeitgeist/Node);
+    DEFINE_FUNCTION(initParser);
+    DEFINE_FUNCTION(initEffector);
+    DEFINE_FUNCTION(initControlAspect);
 }

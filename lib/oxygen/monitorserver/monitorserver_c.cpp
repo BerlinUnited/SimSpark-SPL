@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver_c.cpp,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: monitorserver_c.cpp,v 1.3 2004/03/22 10:50:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,14 +23,17 @@
 #include "monitorserver.h"
 
 using namespace oxygen;
+using namespace std;
 
-FUNCTION(registerMonitorSystem)
+FUNCTION(MonitorServer,registerMonitorSystem)
 {
-    if (in.size() == 1)
-    {
-        MonitorServer* pr = static_cast<MonitorServer*>(obj);
-        pr->RegisterMonitorSystem(boost::any_cast<char*>(in[0]));
-    }
+    string inMonitorSysName;
+
+    return (
+            (in.GetSize() == 1) &&
+            (in.GetValue(in.begin(), inMonitorSysName)) &&
+            (obj->RegisterMonitorSystem(inMonitorSysName))
+            );
 }
 
 void CLASS(MonitorServer)::DefineClass()

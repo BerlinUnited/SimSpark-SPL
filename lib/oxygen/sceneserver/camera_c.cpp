@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera_c.cpp,v 1.4 2004/02/21 15:30:44 fruit Exp $
+   $Id: camera_c.cpp,v 1.5 2004/03/22 11:01:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,47 +25,157 @@ using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
 
-FUNCTION(setViewport)
+FUNCTION(Camera,setViewport)
 {
-        if (in.size() == 4)
+    int inX;
+    int inY;
+    int inWidth;
+    int inHeight;
+
+    if (
+        (in.GetSize() != 4) ||
+        (! in.GetValue(in[0],inX)) ||
+        (! in.GetValue(in[1],inY)) ||
+        (! in.GetValue(in[2],inWidth)) ||
+        (! in.GetValue(in[3],inHeight))
+        )
         {
-                Camera *cam = static_cast<Camera*>(obj);
-                cam->SetViewport(any_cast<int>(in[0]), any_cast<int>(in[1]), any_cast<int>(in[2]), any_cast<int>(in[3]));
+            return false;
         }
+
+    obj->SetViewport(inX,inY,inWidth,inHeight);
+    return true;
 }
 
-FUNCTION(setFOV)
+FUNCTION(Camera,getViewportX)
 {
-        if (in.size() == 1)
-        {
-                Camera *cam = static_cast<Camera*>(obj);
-                cam->SetFOV(any_cast<float>(in[0]));
-        }
+    return obj->GetViewportX();
 }
 
-FUNCTION(setZNear)
+FUNCTION(Camera,getViewportY)
 {
-        if (in.size() == 1)
-        {
-                Camera *cam = static_cast<Camera*>(obj);
-                cam->SetZNear(any_cast<float>(in[0]));
-        }
+    return obj->GetViewportY();
 }
 
-FUNCTION(setZFar)
+FUNCTION(Camera,getViewportWidth)
 {
-        if (in.size() == 1)
+    return obj->GetViewportWidth();
+}
+
+FUNCTION(Camera,getViewportHeight)
+{
+    return obj->GetViewportHeight();
+}
+
+FUNCTION(Camera,setFOV)
+{
+    float inFov;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inFov))
+        )
         {
-                Camera *cam = static_cast<Camera*>(obj);
-                cam->SetZFar(any_cast<float>(in[0]));
+            return false;
         }
+
+    obj->SetFOV(inFov);
+    return true;
+}
+
+FUNCTION(Camera,getFOV)
+{
+    return obj->GetFOV();
+}
+
+FUNCTION(Camera,setZNear)
+{
+    float inZNear;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inZNear))
+        )
+        {
+            return false;
+        }
+
+    obj->SetZNear(inZNear);
+    return true;
+}
+
+FUNCTION(Camera,adjustZNear)
+{
+    float inZNear;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inZNear))
+        )
+        {
+            return false;
+        }
+
+    obj->AdjustZNear(inZNear);
+    return true;
+}
+
+FUNCTION(Camera,getZNear)
+{
+    return obj->GetZNear();
+}
+
+FUNCTION(Camera,setZFar)
+{
+    float inZFar;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inZFar))
+        )
+        {
+            return false;
+        }
+
+    obj->SetZFar(inZFar);
+    return true;
+}
+
+FUNCTION(Camera,adjustZFar)
+{
+    float inZFar;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inZFar))
+        )
+        {
+            return false;
+        }
+
+    obj->AdjustZFar(inZFar);
+    return true;
+}
+
+FUNCTION(Camera,getZFar)
+{
+    return obj->GetZFar();
 }
 
 void CLASS(Camera)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/BaseNode);
-        DEFINE_FUNCTION(setViewport);
-        DEFINE_FUNCTION(setFOV);
-        DEFINE_FUNCTION(setZNear);
-        DEFINE_FUNCTION(setZFar);
+    DEFINE_BASECLASS(oxygen/BaseNode);
+    DEFINE_FUNCTION(setViewport);
+    DEFINE_FUNCTION(getViewportX);
+    DEFINE_FUNCTION(getViewportY);
+    DEFINE_FUNCTION(getViewportWidth);
+    DEFINE_FUNCTION(getViewportHeight);
+    DEFINE_FUNCTION(setFOV);
+    DEFINE_FUNCTION(getFOV);
+    DEFINE_FUNCTION(setZNear);
+    DEFINE_FUNCTION(adjustZNear);
+    DEFINE_FUNCTION(getZNear);
+    DEFINE_FUNCTION(setZFar);
+    DEFINE_FUNCTION(adjustZFar);
+    DEFINE_FUNCTION(getZFar);
 }

@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver_c.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   $Id: sceneserver_c.cpp,v 1.4 2004/03/22 11:02:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,28 +32,43 @@
 using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
+using namespace std;
 
-FUNCTION(createScene)
+FUNCTION(SceneServer,createScene)
 {
-        if (in.size() == 1)
+    string inLocation;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inLocation))
+        )
         {
-                SceneServer *ss = static_cast<SceneServer*>(obj);
-                ss->CreateScene(any_cast<char*>(in[0]));
+            return false;
         }
+
+    obj->CreateScene(inLocation);
+    return true;
 }
 
-FUNCTION(setActiveScene)
+FUNCTION(SceneServer,setActiveScene)
 {
-        if (in.size() == 1)
+    string inLocation;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inLocation))
+        )
         {
-                SceneServer *ss = static_cast<SceneServer*>(obj);
-                ss->SetActiveScene(any_cast<char*>(in[0]));
+            return false;
         }
+
+    obj->SetActiveScene(inLocation);
+    return true;
 }
 
 void CLASS(SceneServer)::DefineClass()
 {
-        DEFINE_BASECLASS(zeitgeist/Leaf);
-        DEFINE_FUNCTION(createScene);
-        DEFINE_FUNCTION(setActiveScene);
+    DEFINE_BASECLASS(zeitgeist/Leaf);
+    DEFINE_FUNCTION(createScene);
+    DEFINE_FUNCTION(setActiveScene);
 }

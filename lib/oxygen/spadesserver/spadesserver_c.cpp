@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver_c.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
+   $Id: spadesserver_c.cpp,v 1.4 2004/03/22 11:04:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,24 +23,24 @@
 #include "spadesserver.h"
 
 using namespace oxygen;
+using namespace std;
 
-FUNCTION(queueAgents)
+FUNCTION(SpadesServer,queueAgents)
 {
-    SpadesServer* ss = static_cast<SpadesServer*>(obj);
-    switch (in.size())
-    {
-    case 0:
-        ss->QueueAgents();
-        break;
-    case 1:
-        ss->QueueAgents(boost::any_cast<char*>(in[0]));
-        break;
-    case 2:
-        ss->QueueAgents(boost::any_cast<char*>(in[0]), boost::any_cast<int>(in[1]));
-        break;
-    default:
-        ;
-    }
+    string inAgentType;
+    int inNum;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inAgentType)) ||
+        (! in.GetValue(in[1],inNum))
+        )
+        {
+            return false;
+        }
+
+    obj->QueueAgents(inAgentType,inNum);
+    return true;
 }
 
 void CLASS(SpadesServer)::DefineClass()

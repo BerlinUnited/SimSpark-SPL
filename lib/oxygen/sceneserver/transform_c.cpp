@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform_c.cpp,v 1.6 2004/02/21 15:30:44 fruit Exp $
+   $Id: transform_c.cpp,v 1.7 2004/03/22 11:02:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,22 +25,26 @@
 using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
+using namespace salt;
 
-FUNCTION(setLocalPos)
+FUNCTION(Transform,setLocalPos)
 {
-  if (in.size() == 3)
-    {
-      Transform *trans = static_cast<Transform*>(obj);
-      trans->SetLocalPos(
-                         any_cast<float>(in[0]),
-                         any_cast<float>(in[1]),
-                         any_cast<float>(in[2])
-                         );
-    }
+    Vector3f inPos;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inPos))
+        )
+        {
+            return false;
+        }
+
+    obj->SetLocalPos(inPos);
+    return true;
 }
 
 void CLASS(Transform)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/BaseNode);
-        DEFINE_FUNCTION(setLocalPos);
+  DEFINE_BASECLASS(oxygen/BaseNode);
+  DEFINE_FUNCTION(setLocalPos);
 }

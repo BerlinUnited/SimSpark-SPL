@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: randomserver_c.cpp,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: randomserver_c.cpp,v 1.3 2004/03/22 10:47:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,47 +22,72 @@
 */
 #include "randomserver.h"
 
-
 using namespace boost;
 using namespace zeitgeist;
 
-FUNCTION(seed)
+FUNCTION(RandomServer,seed)
 {
-    if (in.size() == 1)
-    {
-        RandomServer* rs = static_cast<RandomServer*>(obj);
-        rs->Seed(boost::any_cast<int>(in[0]));
-    }
+    int inSeed;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inSeed))
+        )
+        {
+            return false;
+        }
+
+    obj->Seed(inSeed);
+    return true;
 }
 
-OUT_FUNCTION(uniformRND)
+FUNCTION(RandomServer,uniformRND)
 {
-    if (in.size() == 2)
-    {
-        RandomServer* rs = static_cast<RandomServer*>(obj);
-        out = rb_float_new(rs->GetUniformRandom<float>(boost::any_cast<float>(in[0]),
-                                                       boost::any_cast<float>(in[1])));
-    }
+    float inMin;
+    float inMax;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inMin)) ||
+        (! in.GetValue(in[1],inMax))
+        )
+        {
+            return 0.0f;
+        }
+
+    return obj->GetUniformRandom(inMin,inMax);
 }
 
-OUT_FUNCTION(normalRND)
+FUNCTION(RandomServer,normalRND)
 {
-    if (in.size() == 2)
-    {
-        RandomServer* rs = static_cast<RandomServer*>(obj);
-        out = rb_float_new(rs->GetNormalRandom<float>(boost::any_cast<float>(in[0]),
-                                                      boost::any_cast<float>(in[1])));
-    }
+    float inMean;
+    float inSigma;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inMean)) ||
+        (! in.GetValue(in[1],inSigma))
+        )
+        {
+            return 0.0f;
+        }
+
+    return obj->GetNormalRandom(inMean,inSigma);
 }
 
-OUT_FUNCTION(exponentialRND)
+FUNCTION(RandomServer,exponentialRND)
 {
-    if (in.size() == 1)
-    {
-        RandomServer* rs = static_cast<RandomServer*>(obj);
-        out = rb_float_new(rs->GetExponentialRandom<float>
-                           (boost::any_cast<float>(in[0])));
-    }
+    float inLambda;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inLambda))
+        )
+        {
+            return 0.0f;
+        }
+
+    return obj->GetExponentialRandom(inLambda);
 }
 
 void
