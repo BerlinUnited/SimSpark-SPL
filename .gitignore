@@ -124,7 +124,7 @@ config.aux/mkinstalldirs
 doc/Doxyfile
 doc/Makefile
 doc/Makefile.in
-doc/html
+doc/api
 doc/papers/proposal/auto
 doc/papers/proposal/Makefile
 doc/papers/proposal/Makefile.in

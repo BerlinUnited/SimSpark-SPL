@@ -5,44 +5,28 @@ if DOXYGEN
 	@echo "***"
 endif
 
-install-data-local: $(srcdir)/html/index.html
-	mkdir --parents $(DESTDIR)$(pkgdatadir)/html/developers
-	$(INSTALL_DATA) $(srcdir)/html/*.* $(DESTDIR)$(pkgdatadir)/html/
+install-data-local: $(srcdir)/api/index.html
+	rm -rf $(DESTDIR)$(pkgdatadir)/api/
+	rm -rf $(DESTDIR)$(pkgdatadir)/html/
+	mkdir --parents $(DESTDIR)$(pkgdatadir)/
+	cp -r $(srcdir)/api $(DESTDIR)$(pkgdatadir)/
+	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/api
 
 apidoc: Doxyfile
-	rm -rf $(srcdir)/html/developers
-	mkdir --parents $(srcdir)/html/developers
-	cp *.html html/developers
+	rm -rf $(srcdir)/api/developers
+	mkdir --parents $(srcdir)/api/developers
+	cp $(srcdir)/devel/howtos/*.* $(srcdir)/api/developers/
 if DOXYGEN
 	doxygen Doxyfile
 else
-	touch html/index.html
+	touch $(srcdir)/api/index.html
 endif
 
-$(srcdir)/html/index.html: 
+$(srcdir)/api/index.html: 
 	@$(MAKE) apidoc
 
 maintainer-clean-local:
-	rm -rf html
+	rm -rf api
 	rm -rf *~
 
-EXTRA_DIST = TEXT_INSTEAD_OF_A_MANUAL.txt \
-fileserver.html \
-howto_agent.html \
-howto_class.html \
-howto_control.html \
-howto_effector.html \
-howto_export.html \
-howto_function.html \
-howto_perceptor.html \
-howto_register.html \
-howto_script.html \
-howto_simulation.html \
-howtos.html \
-implementation.html \
-index.html \
-logserver.html \
-menu.html \
-scriptserver.html \
-welcome.html \
-used_libraries.txt
+EXTRA_DIST = TEXT_INSTEAD_OF_A_MANUAL.txt
