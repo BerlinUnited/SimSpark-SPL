@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.5.8.2 2004/01/12 14:38:01 rollmark Exp $
+   $Id: body.h,v 1.5.8.3 2004/01/21 15:45:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ public:
     bool IsEnabled() const;
 
     /** sets whether the body is influenced by the world's gravity or
-        not. Bodies are constructed to ed influenced by the world's
+        not. Bodies are constructed to be influenced by the world's
         gravity by default.
     */
     void UseGravity(bool f);
