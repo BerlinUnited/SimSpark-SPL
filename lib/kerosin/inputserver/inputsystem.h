@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystem.h,v 1.4 2003/11/14 14:05:51 fruit Exp $
+   $Id: inputsystem.h,v 1.5 2004/03/05 18:47:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #define KEROSIN_INPUTSYSTEM_H
 
 /*      \class InputSystem
-        $Id: inputsystem.h,v 1.4 2003/11/14 14:05:51 fruit Exp $
+        $Id: inputsystem.h,v 1.5 2004/03/05 18:47:13 rollmark Exp $
 
         InputSystem
 
@@ -66,20 +66,28 @@ public:
     //! init the subsystem
     virtual bool Init(kerosin::InputServer *inputServer);
 
-    //! creates an instance of a device via zeitgeist object creation. Should use name mangling.
+    /** creates an instance of a device via zeitgeist object
+        creation. Should use name mangling.
+    */
     virtual bool CreateDevice(const std::string &deviceName) = 0;
 
-    /*! Add the input to the queue. Uses AddInputInternal. This was necessary to
-      allow derived classes to wrap this call in a mutex and use the definitely
-      unwrapped addition via AddInputInternal().
+    /** Add the input to the queue. Uses AddInputInternal. This was
+        necessary to allow derived classes to wrap this call in a
+        mutex and use the definitely unwrapped addition via
+        AddInputInternal().
     */
     virtual void AddInput(InputServer::Input &input);
-    //! this is the actual addition of input to the queue. It should only be used by InputDevices!
+
+    /** this is the actual addition of input to the queue. It should
+        only be used by InputDevices!
+     */
     void AddInputInternal(InputServer::Input &input);
+
     //! retrieve an input from the queue
     virtual bool GetInput(InputServer::Input &input);
 
-    InputServer*    GetInputServer()        {       return mInputServer;    }
+    InputServer* GetInputServer()        {       return mInputServer;    }
+
 protected:
     virtual bool UpdateTimerInput(InputServer::Input &input);
 
@@ -87,7 +95,8 @@ protected:
     // members
     //
 protected:
-    InputServer                                             *mInputServer;
+    InputServer* mInputServer;
+
 private:
     std::deque<InputServer::Input>  mInputQueue;
 };
