@@ -1,7 +1,6 @@
 pkglib_LTLIBRARIES = soccer.la
 
 soccer_la_SOURCES = export.cpp \
-soccertypes.h \
 agentstate/agentstate.cpp \
 agentstate/agentstate.h \
 agentstate/agentstate_c.cpp \
@@ -50,7 +49,6 @@ sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor.h \
 sexpmonitor/sexpmonitor_c.cpp \
 soccerbase/soccerbase.cpp \
-soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.cpp \
 soccercontrolaspect/soccercontrolaspect.h \
 soccercontrolaspect/soccercontrolaspect_c.cpp \
@@ -60,6 +58,10 @@ soccerruleaspect/soccerruleaspect_c.cpp \
 visionperceptor/visionperceptor.cpp \
 visionperceptor/visionperceptor.h \
 visionperceptor/visionperceptor_c.cpp
+
+nobase_pkginclude_HEADERS = \
+soccertypes.h \
+soccerbase/soccerbase.h 
 
 # -module tells automake we're not building a library but a loadable module
 # so we don't need the "lib" prefix in the module name
