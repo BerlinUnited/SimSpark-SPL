@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitortest.h,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: monitortest.h,v 1.3 2004/04/26 08:02:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public:
      * function is called to process it.
      * @param data data sent from monitor to monitorsystem via SPADES.
      */
-    void ParseMonitorMessage(std::string data);
+    void ParseMonitorMessage(const std::string& data);
 
     /** This function will be called periodically to get information
      * about the current state of the world.
