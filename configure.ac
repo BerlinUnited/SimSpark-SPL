@@ -12,7 +12,9 @@ AM_ENABLE_STATIC(no)
 AC_ARG_ENABLE(debug,
      AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
      [case "${enableval}" in
-       yes) debug=true ;;
+       yes) debug=true && 
+	    AC_DEFINE(RCSS_DEBUG, 1, 
+                      [Define to 1 if we are building a debug version]) ;;
        no)  debug=false ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
      esac],[debug=true])
@@ -87,6 +89,7 @@ AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr
 AC_PATH_X
 RCSS_PATH_FREETYPE
 RCSS_PATH_RUBY
+RCSS_CHECK_SOUNDSYSTEMFMOD
 
 AC_ARG_VAR(ODE, [location of ode installation])
 if test $ODE; then
