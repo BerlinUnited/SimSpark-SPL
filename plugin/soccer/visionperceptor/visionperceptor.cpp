@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.3 2004/02/01 22:18:36 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.4 2004/02/02 17:12:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,25 +51,18 @@ VisionPerceptor::~VisionPerceptor()
 {
 }
 
-void
-VisionPerceptor::OnLink()
+bool VisionPerceptor::ConstructInternal()
 {
-    shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+    mRay = shared_static_cast<oxygen::RayCollider>
+        (GetCore()->New("kerosin/RayCollider"));
 
-    if (parent.get() == 0)
-    {
-        GetLog()->Error()
-            << "ERROR: (VisionPerceptor) parent node is not derived from BaseNode\n";
-        return;
-    }
-//    mRay = shared_static_cast<oxygen::RayCollider>(parent->GetChildOfClass("RayCollider"));
-    mRay = shared_static_cast<oxygen::RayCollider>(GetCore()->New("kerosin/RayCollider"));
     if (mRay.get() == 0)
     {
-        GetLog()->Error() << "Error: (VisionPerceptor) parent node has no "
-                          << "RayCollider child; occlusion check disabled\n";
+        GetLog()->Error() << "Error: (VisionPerceptor) cannot create Raycollider. "
+                          << "occlusion check disabled\n";
     }
+
+    return true;
 }
 
 bool
@@ -128,7 +121,7 @@ VisionPerceptor::Percept(Predicate& predicate)
 
         if (od.mDist > 0.1)
         {
-            od.mObj = i;
+            od.mObj = (*i);
             // theta is the angle in the X-Y (horizontal) plane
             od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[2], od.mRelPos[0]));
             // latitude
@@ -168,7 +161,7 @@ VisionPerceptor::Percept(Predicate& predicate)
 
         Predicate::TParameterList element;
 
-        element.push_back((*(i->mObj))->GetName());
+        element.push_back(i->mObj->GetName());
         element.push_back(position);
         predicate.parameter.push_back(element);
     }
@@ -204,22 +197,17 @@ VisionPerceptor::CheckOcclusion(const salt::Vector3f& my_pos,
 
             dContactGeom contact;
 
-            shared_ptr<Collider> collider =
-                shared_static_cast<Collider>((*(i->mObj))->GetChild("geometry"));
+            shared_ptr<Collider> collider = shared_static_cast<Collider>
+                (i->mObj->GetChildSupportingClass("Collider"));
 
-            if (collider.get() != 0)
-            {
-                if (0 < dCollide(mRay->GetODEGeom(),
-                                 collider->GetODEGeom(),
-                                 1, /* ask for at most one collision point */
-                                 &contact, sizeof(contact)))
+            if (mRay->Intersects(collider))
                 {
                     j->mVisible = false;
                     j = i;
                 }
-            }
         }
     }
 }
+
 
 
