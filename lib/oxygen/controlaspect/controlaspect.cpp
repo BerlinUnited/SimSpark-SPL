@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.cpp,v 1.3 2004/02/12 14:07:22 fruit Exp $
+   $Id: controlaspect.cpp,v 1.4 2004/04/22 11:27:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,41 +29,43 @@ using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
 
-shared_ptr<Scene> ControlAspect::GetActiveScene()
+shared_ptr<Scene>
+ControlAspect::GetActiveScene()
 {
     shared_ptr<SceneServer> sceneServer =
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
-        {
-            GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
-            return shared_ptr<Scene>();
-        }
+    {
+        GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
+        return shared_ptr<Scene>();
+    }
 
     shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
 
     if (activeScene.get() == 0)
-        {
-            GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
-            return shared_ptr<Scene>();
-        }
+    {
+        GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
+        return shared_ptr<Scene>();
+    }
 
     return activeScene;
 }
 
-shared_ptr<ControlAspect> ControlAspect::GetControlAspect(const string& name)
+shared_ptr<ControlAspect>
+ControlAspect::GetControlAspect(const string& name)
 {
-  static const string gcsPath = "/sys/server/gamecontrol/";
+    static const string gcsPath = "/sys/server/gamecontrol/";
 
-  shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
-    (GetCore()->Get(gcsPath + name));
+    shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
+        (GetCore()->Get(gcsPath + name));
 
-  if (aspect.get() == 0)
+    if (aspect.get() == 0)
     {
-      GetLog()->Error() << "(ControlAspect) found no " << name << "\n";
+        GetLog()->Error() << "(ControlAspect) found no " << name << "\n";
     }
 
-  return aspect;
+    return aspect;
 }
 
 
