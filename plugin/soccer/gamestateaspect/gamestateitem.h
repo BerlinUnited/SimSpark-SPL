@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateitem.h,v 1.1 2004/12/21 19:44:21 rollmark Exp $
+   $Id: gamestateitem.h,v 1.2 2004/12/30 15:23:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,6 +52,11 @@ public:
 
 protected:
     void ResetSentFlags();
+
+    /** helper method that queries the ScriptServer for the float
+        variable name and appends a predicate describing it to pList
+    */
+    void PutFloatParam(const std::string& name, oxygen::PredicateList& pList);
 
 protected:
     boost::shared_ptr<GameStateAspect> mGameState;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateitem.cpp,v 1.1 2004/12/21 19:44:21 rollmark Exp $
+   $Id: gamestateitem.cpp,v 1.2 2004/12/30 15:23:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,9 +46,57 @@ void GameStateItem::ResetSentFlags()
     mSentFlags = false;
 }
 
+void GameStateItem::PutFloatParam(const string& name, PredicateList& pList)
+{
+    float value;
+    if (! SoccerBase::GetSoccerVar(*this,name,value))
+    {
+        return;
+    }
+
+    Predicate& pred = pList.AddPredicate();
+    pred.name = name;
+    pred.parameter.AddValue(value);
+}
+
 void GameStateItem::GetInitialPredicates(PredicateList& pList)
 {
     ResetSentFlags();
+
+    // field geometry parameter
+    PutFloatParam("FieldLength",pList);
+    PutFloatParam("FieldWidth",pList);
+    PutFloatParam("FieldHeight",pList);
+    PutFloatParam("GoalWidth",pList);
+    PutFloatParam("GoalDepth",pList);
+    PutFloatParam("GoalHeight",pList);
+    PutFloatParam("BorderSize",pList);
+    PutFloatParam("FreeKickDistance",pList);
+    PutFloatParam("WaitBeforeKickOff",pList);
+
+    // agent parameter
+    PutFloatParam("AgentMass",pList);
+    PutFloatParam("AgentRadius",pList);
+    PutFloatParam("AgentMaxSpeed",pList);
+
+    // ball parameter
+    PutFloatParam("BallRadius",pList);
+    PutFloatParam("BallMass",pList);
+
+    // soccer rule parameters
+    PutFloatParam("RuleGoalPauseTime",pList);
+    PutFloatParam("RuleKickInPauseTime",pList);
+    PutFloatParam("RuleHalfTime",pList);
+
+    // play modes
+    Predicate& pred = pList.AddPredicate();
+    pred.name = "play_modes";
+
+    for (int i=0; i<PM_NONE; ++i)
+    {
+        pred.parameter.AddValue
+            (SoccerBase::PlayMode2Str(static_cast<TPlayMode>(i)));
+    }
 }
 
 void GameStateItem::GetPredicates(PredicateList& pList)
@@ -95,7 +143,7 @@ void GameStateItem::GetPredicates(PredicateList& pList)
             mLastHalf = half;
             Predicate& halfPred = pList.AddPredicate();
             halfPred.name = "half";
-            halfPred.parameter.AddValue(half);
+            halfPred.parameter.AddValue(static_cast<int>(half));
         }
 
     // scores
@@ -124,7 +172,7 @@ void GameStateItem::GetPredicates(PredicateList& pList)
             mLastPlayMode = play_mode;
             Predicate& modePred = pList.AddPredicate();
             modePred.name = "play_mode";
-            modePred.parameter.AddValue(play_mode);
+            modePred.parameter.AddValue(static_cast<int>(play_mode));
         }
 }
 
