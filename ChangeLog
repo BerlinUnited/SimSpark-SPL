@@ -1,3 +1,9 @@
+2003-11-19  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/monitorserver/monitorserver.h: 
+	* lib/oxygen/monitorserver/monitorserver.cpp: 
+	Initial version of MonitorServer
+
 2003-11-17  Oliver Obst  <fruit@robolog.org>
 
 	* lib/oxygen/spadesserver/spadesserver.cpp: 
