@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.3.2.1 2004/01/25 11:39:07 rollmark Exp $
+   $Id: spadesserver.h,v 1.3.2.2 2004/02/06 21:17:08 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,9 +63,22 @@ public:
     boost::shared_ptr<GameControlServer> GetGameControlServer() const;
 
     /** returns the amount of time in seconds a single simulation step
-        corresponds to
+        corresponds to.
     */
     float GetTimePerStep() const;
+
+    /** Get the value of the Spades.RunIntegratedCommserver variable.
+     * \return true if the variable is set to true, false otherwise.
+     */
+    bool GetRunIntegratedCommserver() const;
+
+    /** Get the value of the Spades.MonitorInterval variable.
+     * \return the number of simulation steps per monitor message.
+     */
+    int GetMonitorInterval() const;
+
+    /** Get the value of the Spades.SendAgentThinkTimes variable. */
+    bool GetSendAgentThinkTimes() const;
 
     /** queue up agents to be started.
         \param agentType agent type to be found in the SPADES agent database.
