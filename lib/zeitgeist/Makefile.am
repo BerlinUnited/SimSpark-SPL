@@ -41,7 +41,6 @@ libzeitgeist_debug_la_CXXFLAGS = -O -g
 
 nobase_pkginclude_HEADERS = \
 class.h \
-class_m.h \
 core.h \
 corecontext.h \
 leaf.h \

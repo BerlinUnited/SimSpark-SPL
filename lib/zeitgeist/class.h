@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: class.h,v 1.5 2003/08/21 12:53:30 rollmark Exp $
+   $Id: class.h,v 1.6 2003/08/22 16:23:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #define CLASS_H__
 
 #include <string>
+#include <vector>
 #include <list>
 #include <hash_map>
 #include <boost/any.hpp>
@@ -231,6 +232,13 @@ public:
 private:
 	void DefineClass();
 };
+
+/** declare the clss object for leaf. Put here to avoid a circular dependency
+    between class inheriting from leaf and leaf needing class to inherit its
+    corresponding class object
+*/
+DECLARE_CLASS(Leaf);
+
 
 } // namespace zeitgeist
 

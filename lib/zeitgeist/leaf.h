@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: leaf.h,v 1.4 2003/08/21 12:53:30 rollmark Exp $
+   $Id: leaf.h,v 1.5 2003/08/22 16:23:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -190,16 +190,10 @@ private:
 	mutable std::string *mCachedFullPath;
 };
 
+/** the class object declaration for Leaf has been moved to class.h to break
+ * circular inclusion between class.h and leaf.h
+ */
+
 } //namespace zeitgeist;
-
-#include "class.h"
-
-namespace zeitgeist
-{
-
-DECLARE_CLASS(Leaf);
-
-}
-
 
 #endif //LEAF_H__
