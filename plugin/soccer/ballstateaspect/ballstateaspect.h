@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.1.2.3 2004/01/29 19:53:53 rollmark Exp $
+   $Id: ballstateaspect.h,v 1.1.2.4 2004/02/01 15:32:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,6 +56,10 @@ public:
         field */
     salt::Vector3f GetLastValidBallPosition();
 
+    /** returns the goal in which the balls position is or TI_NONE
+        otherwise */
+    TTeamIndex GetGoalState();
+
 protected:
     /** set up the reference to the ball and field collider */
     virtual void OnLink();
@@ -73,6 +77,10 @@ protected:
     */
     void UpdateBallOnField();
 
+    /** checks if the ball is in one of the goals and updates the
+        mGoalState member*/
+    void UpdateGoalState();
+
     /** if the ball has a valid position, i.e. is on the field,
         remember it
      */
@@ -88,6 +96,12 @@ protected:
     /** reference to the field collider */
     boost::shared_ptr<oxygen::RecorderHandler> mFieldRecorder;
 
+    /** reference to the left goal recorder */
+    boost::shared_ptr<oxygen::RecorderHandler> mLeftGoalRecorder;
+
+    /** reference to the right goal recorder */
+    boost::shared_ptr<oxygen::RecorderHandler> mRightGoalRecorder;
+
     /** holds a reference to the last agent that collided with the
         ball */
     boost::shared_ptr<oxygen::AgentAspect> mLastCollidingAgent;
@@ -98,6 +112,9 @@ protected:
 
     /** holds the last valid ball position */
     salt::Vector3f mLastValidBallPos;
+
+    /** indicates in which goal the ball is, TI_NONE otherwise */
+    TTeamIndex mGoalState;
 };
 
 DECLARE_CLASS(BallStateAspect);
