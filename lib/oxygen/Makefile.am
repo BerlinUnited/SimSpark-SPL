@@ -3,11 +3,13 @@ pkglib_LTLIBRARIES = liboxygen_debug.la
 liboxygen_debug_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall -Woverloaded-virtual -Wno-deprecated 
 liboxygen_debug_la_LIBADD = -lode ${spades_libs}
+liboxygen_debug_la_LDFLAGS = -version-info 1:0:0
 else
 pkglib_LTLIBRARIES = liboxygen.la
 liboxygen_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_la_CXXFLAGS = -O2 -Wno-deprecated 
 liboxygen_la_LIBADD = -lode $(spades_libs)
+liboxygen_la_LDFLAGS = -version-info 1:0:0
 endif
 
 if BUILD_SPADES_MODULES
