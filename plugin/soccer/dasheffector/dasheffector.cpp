@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector.cpp,v 1.1.2.1 2004/01/25 12:09:24 rollmark Exp $
+   $Id: dasheffector.cpp,v 1.1.2.2 2004/01/31 14:07:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,12 +22,16 @@
 #include "dashaction.h"
 #include "dasheffector.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/physicsserver/spherecollider.h>
+#include <salt/random.h>
+#include <salt/gmath.h>
 
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-DashEffector::DashEffector() : oxygen::Effector()
+DashEffector::DashEffector() : oxygen::Effector(),
+                               mForceFactor(500.0),mSigma(-1.0),mMaxPower(100.0)
 {
 }
 
@@ -39,24 +43,66 @@ bool
 DashEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
     if (mBody.get() == 0)
-        {
-            return false;
-        }
-
-  shared_ptr<DashAction> dashAction =
-    shared_dynamic_cast<DashAction>(action);
-
-  if (dashAction.get() == 0)
     {
-      GetLog()->Error()
-        << "ERROR: (DashEffector) cannot realize an unknown ActionObject\n";
-      return false;
+        return false;
     }
 
-  const Vector3f& force = dashAction->GetForce();
-  mBody->AddForce(force);
+    shared_ptr<BaseNode> parent =
+        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
 
-  return true;
+    if (parent.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (DashEffector) parent node is not derived from BaseNode\n";
+        return false;
+    }
+
+    shared_ptr<DashAction> dashAction = shared_dynamic_cast<DashAction>(action);
+
+    if (dashAction.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (DashEffector) cannot realize an unknown ActionObject\n";
+        return false;
+    }
+
+    Vector3f vec = parent->GetWorldTransform().Pos();
+
+    shared_ptr<SphereCollider> geom =
+        shared_dynamic_cast<SphereCollider>(parent->GetChild("geometry"));
+
+    float max_dist = std::numeric_limits<float>::epsilon();
+    if (geom.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (DashEffector) parent node has "
+                          << "no 'geometry' sphere child\n";
+    } else {
+        max_dist += geom->GetRadius();
+    }
+
+    // we can only dash if we the sphere is on the ground
+    if (vec[1] > max_dist) return true;
+
+    Vector3f force = dashAction->GetForce();
+    // cut down the dash power vector to maximum length
+    if (force.SquareLength() > mMaxPower * mMaxPower)
+    {
+        force.Normalize();
+        force *= mMaxPower;
+    }
+
+    if (mSigma > 0.0)
+    {
+        force[0] = force[0] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
+        force[1] = force[1] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
+        force[2] = force[2] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
+    } else {
+        force = force * mForceFactor / mMaxPower;
+    }
+
+    mBody->AddForce(Vector3f(force[0],force[2],force[1]));
+
+    return true;
 }
 
 shared_ptr<ActionObject>
@@ -111,4 +157,20 @@ void DashEffector::OnUnlink()
     mBody.reset();
 }
 
+void
+DashEffector::SetForceFactor(float force_factor)
+{
+    mForceFactor = salt::gAbs(force_factor);
+}
 
+void
+DashEffector::SetSigma(float sigma)
+{
+    mSigma = sigma;
+}
+
+void
+DashEffector::SetMaxPower(float max_power)
+{
+    mMaxPower = max_power;
+}
