@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.8 2004/05/14 15:50:32 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.9 2004/05/27 15:06:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -175,7 +175,11 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     // after the first agent touches the ball move to PM_PLAYON
     shared_ptr<AgentAspect> agent;
     TTime time;
-    if (mBallState->GetLastCollidingAgent(agent,time))
+    if (! mBallState->GetLastCollidingAgent(agent,time))
+    {
+        return;
+    }
+    if (time > mGameState->GetLastModeChange())
     {
         mGameState->SetPlayMode(PM_PlayOn);
     }
@@ -200,6 +204,7 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
+        GetLog()->Error() << "ERROR: (SoccerRuleAspect) " << "no agent collided yet\n";
         return;
     }
 
@@ -207,6 +212,7 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
     if (time > lastChange)
     {
         mGameState->SetPlayMode(PM_PlayOn);
+        GetLog()->Error() << "ERROR: (SoccerRuleAspect) " << "Set Playmode to playon\n";
     } else
     {
         // move the ball back on the ground where it left the playing
@@ -250,7 +256,7 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
         {
             // we have to handle the case where the team with the goal kick
             // scores a self goal, because the penalty areas contain the goal.
-            if (!CheckBallLeftField())
+//            if (!mBallState->GetBallOnField())
                 mGameState->SetPlayMode(PM_PlayOn);
         }
         return;
@@ -595,10 +601,11 @@ SoccerRuleAspect::UpdateCachedInternal()
                              Vector2f(mFieldLength/2.0 + 10, mFieldWidth/2.0 + 10.0));
     mLeftHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0 - 10.0),
                             Vector2f(-mFieldLength/2.0 - 10, mFieldWidth/2.0 + 10.0));
+
     // the penalty areas are oversized towards the end of the field
     mRightPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - 16.5, -16.5 - mGoalWidth/2.0),
-                                    Vector2f(mFieldLength/2.0 + 10, 16.5 + mGoalWidth/2.0));
+                                    Vector2f(mFieldLength/2.0 , 16.5 + mGoalWidth/2.0));
     mLeftPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - 16.5, -16.5 - mGoalWidth/2.0),
-                                   Vector2f(mFieldLength/2.0 + 10, 16.5 + mGoalWidth/2.0));
+                                   Vector2f(mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
 }
 
