@@ -323,6 +323,12 @@ plugin/rubysceneimporter/.deps
 plugin/rubysceneimporter/.libs
 plugin/rubysceneimporter/Makefile
 plugin/rubysceneimporter/Makefile.in
+plugin/sceneeffector/.deps
+plugin/sceneeffector/.libs
+plugin/sceneeffector/Makefile
+plugin/sceneeffector/Makefile.in
+plugin/sceneeffector/*.la
+plugin/sceneeffector/*.lo
 plugin/sexpparser/*.la
 plugin/sexpparser/*.lo
 plugin/sexpparser/.deps
