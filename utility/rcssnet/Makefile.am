@@ -1,17 +1,26 @@
-noinst_LTLIBRARIES = librcssnet3D.la
+pkglib_LTLIBRARIES = librcssnet3D.la
 
 librcssnet3D_la_SOURCES = \
+addr.cpp  \
+exception.cpp  \
+socket.cpp  \
+tcpsocket.cpp  \
+udpsocket.cpp
+
+libpkginclude_HEADERS = \
 addr.hpp \
-addr.cpp \
 exception.hpp \
-exception.cpp \
+iosocketstream.hpp \
+isocketstream.hpp \
+osocketstream.hpp \
 socket.hpp \
-socket.cpp \
-udpsocket.hpp \
-udpsocket.cpp \
+socketstreambuf.hpp \
 tcpsocket.hpp \
-tcpsocket.cpp 
+udpsocket.hpp 
 
 librcssnet3D_la_LIBADD = @NET_LIBS@
+
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/rcssnet
 
 EXTRA_DIST = README
