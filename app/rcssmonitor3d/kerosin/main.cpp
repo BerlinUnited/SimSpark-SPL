@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.8 2004/04/12 13:49:42 rollmark Exp $
+   $Id: main.cpp,v 1.9 2004/04/12 17:25:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -334,7 +334,7 @@ void MonitorSpark::UpdatePreRenderFrame()
                     continue;
                 }
 
-            Vector3f pos(expr.pos[0],expr.pos[2],expr.pos[1]);
+            Vector3f pos(expr.pos[0],expr.pos[1],expr.pos[2]);
             node->SetLocalPos(pos);
         }
 }

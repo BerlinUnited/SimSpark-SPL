@@ -15,8 +15,8 @@ new('rcssmonitor3d/MonitorParser', $serverPath+'parser')
 sparkAddFPSCamera(
 		  $scenePath+'camera', 
 		  x = 0, 
-		  y = 5, 
-		  z = 40,
+		  y = -40, 
+		  z = 5,
 		  maxSpeed = 15.0,
 		  accel = 40.0,
 		  drag = 4
@@ -70,17 +70,17 @@ def addField()
   fieldThickness = 0.5
 
   transform = new('oxygen/Transform', $scenePath+'field')
-  transform.setLocalPos(0.0,-fieldThickness/2.0,0.0)
+  transform.setLocalPos(0.0,0.0,-fieldThickness/2.0)
 
   field = new('kerosin/Box',$scenePath+'field/visual')
   field.setMaterial('matGround')
 
-  field.setExtents(110.0,0.2,73.0)
+  field.setExtents(110.0,73.0,0.2)
 end  
 
 # add a light
 transform = new('oxygen/Transform', $scenePath+'lightTrans')
-transform.setLocalPos(0, 50, 0)
+transform.setLocalPos(0, 0, 50)
 light = new('kerosin/Light', $scenePath+'lightTrans/light')
 light.setDiffuse(1.0, 1.0, 1.0, 1.0)
 light.setSpecular(0.1, 0.1, 0.1, 1.0)
