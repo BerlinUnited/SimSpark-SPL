@@ -12,10 +12,16 @@ See below (after the list) on how to install some of the libraries.
 
 LIST OF LIBRARIES
 
+
+Agent middleware
+----------------
+SPADES 
+
+
 Sound Playback
 --------------
 
-FMOD 	3.7	optional			http://www.fmod.org/
+FMOD 	3.7 	optional			http://www.fmod.org/
 BASS 	1.6		(VC only)		http://www.un4seen.com/music/
 
 
@@ -30,7 +36,7 @@ unACE	2.11		(VC only)		http://www.winace.com/licence.html
 Scripting
 ---------
 
-Ruby 	1.6.8					http://www.ruby-lang.org/
+Ruby 	1.8.0					http://www.ruby-lang.org/
 
 
 General
