@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.5 2004/05/05 07:55:51 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.6 2004/06/06 10:03:32 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,6 +48,16 @@ public:
     */
     virtual void Update(float deltaTime);
 
+    /** Drop ball at its current position and move all players away
+        by the free kick radius.
+    */
+    void DropBall();
+    /** Drop ball at a given position and move all players away from that
+        position by the free kick radius.
+        \param pos position where the ball should be dropped-
+    */
+    void DropBall(salt::Vector3f pos);
+
 protected:
     /** rereads the current soccer script values */
     virtual void UpdateCachedInternal();
@@ -88,14 +98,13 @@ protected:
     */
     bool CheckBallLeftField();
 
-    /** checks if the ball is in one of the two goals and scores the
-        appropriate team. returns true if the ball was in one of the
-        goals
+    /** Checks if the ball is in one of the two goals and scores the
+        appropriate team.
+        \return true if the ball was in one of the goals.
     */
     bool CheckGoal();
 
-    /** moves the ball to pos setting its linear and angular velocity
-        to 0 */
+    /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
 
     /** Moves an agent to pos setting its linear and angular velocity to 0.
@@ -116,8 +125,8 @@ protected:
         side of the field. If they would leave the playing field, they are moved
         towards the X axis (the line from the left goal to the right goal).
     */
-    void MoveAwayPlayers(const salt::Vector3f& pos, float radius,
-                         float min_dist, TTeamIndex idx);
+    void ClearPlayers(const salt::Vector3f& pos, float radius,
+                      float min_dist, TTeamIndex idx);
     /** Move all the players from a team inside an rectangular area away
         from that area.
         \param box the rectangular area to be checked
@@ -127,7 +136,7 @@ protected:
         If idx is TI_NONE, nothing will happen. Players are moved towards their
         side of the field.
     */
-    void MoveAwayPlayers(const salt::AABB2& box, float min_dist, TTeamIndex idx);
+    void ClearPlayers(const salt::AABB2& box, float min_dist, TTeamIndex idx);
 
 protected:
     /** reference to the body node of the Ball */
@@ -150,6 +159,11 @@ protected:
 
     /** the length of one game half */
     float mHalfTime;
+
+    /** the time we wait before dropping the ball in play modes where only
+        one team can touch the ball
+    */
+    float mDropBallTime;
 
     /** the point above the ground, where the ball left the field */
     salt::Vector3f mLastValidBallPos;
