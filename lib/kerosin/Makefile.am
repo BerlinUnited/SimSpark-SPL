@@ -1,10 +1,22 @@
-pkglib_LTLIBRARIES = libkerosin.la 
+if DEBUG
+pkglib_LTLIBRARIES = libkerosin_debug.la
+libkerosin_debug_la_SOURCES = $(sources)
+libkerosin_debug_la_CXXFLAGS = -O -g -W -Wall
+else
+pkglib_LTLIBRARIES = libkerosin.la
+libkerosin_la_SOURCES = $(sources)
+libkerosin_la_CXXFLAGS = -O2
+endif
+
 AM_CPPFLAGS = -I${top_srcdir}/lib
+
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
 
 BUILT_SOURCES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 CLEANFILES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
-nobase_nodist_pkginclude_HEADERS = openglserver/glextensionreg.h
+nobase_nodist_libpkginclude_HEADERS = openglserver/glextensionreg.h
 
 openglserver/glextensionreg.cpp: ${top_srcdir}/utility/glextgen/glextensionreg.cpp
 	@echo "Copying generated glextension sources"
@@ -16,7 +28,7 @@ openglserver/glextensionreg.h: ${top_srcdir}/utility/glextgen/glextensionreg.h
 ${top_srcdir}/utility/glextgen/glextensionreg.cpp ${top_srcdir}/utility/glextgen/glextensionreg.h:
 	cd ${top_srcdir}/utility/glextgen/ && $(MAKE) $(AM_MAKEFLAGS) all
 
-libkerosin_la_SOURCES = \
+sources = \
 agentaspect/agentaspect.cpp \
 agentaspect/agentaspect_c.cpp \
 agentaspect/effector.cpp \
@@ -92,9 +104,7 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp 
 
-libzeitgeist_la_CXXFLAGS = -O2
-
-nobase_pkginclude_HEADERS = \
+nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
 agentaspect/effector.h \
 agentaspect/forceeffector.h \
