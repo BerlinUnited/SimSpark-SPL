@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.10 2004/04/07 08:33:02 rollmark Exp $
+   $Id: body.h,v 1.11 2004/04/10 07:24:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,12 +84,6 @@ public:
     */
     void SetSphere(float density, float radius);
 
-    /** sets the maximum speed this body is allowed to move at */
-    void SetMaxSpeed(float speed);
-
-    /** returns the maximum speed this body is allowed to move at */
-    float GetMaxSpeed();
-
     /** returns the current linear velocity vector of this body */
     salt::Vector3f GetVelocity() const;
 
@@ -139,9 +133,6 @@ private:
 protected:
     /** the managed ode body */
     dBodyID mODEBody;
-
-    /** maximum velocity, this body can attain */
-    float mMaxSpeed;
 };
 
 DECLARE_CLASS(Body);

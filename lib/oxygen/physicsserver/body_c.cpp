@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.6 2004/03/22 10:52:36 rollmark Exp $
+   $Id: body_c.cpp,v 1.7 2004/04/10 07:24:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,27 +97,6 @@ FUNCTION(Body,setSphere)
     return true;
 }
 
-FUNCTION(Body,setMaxSpeed)
-{
-    float inSpeed;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(),inSpeed))
-        )
-        {
-            return false;
-        }
-
-    obj->SetMaxSpeed(inSpeed);
-    return true;
-}
-
-FUNCTION(Body,getMaxSpeed)
-{
-    return obj->GetMaxSpeed();
-}
-
 FUNCTION(Body,setVelocity)
 {
     Vector3f inVel;
@@ -209,8 +188,6 @@ void CLASS(Body)::DefineClass()
         DEFINE_FUNCTION(setSphere);
         DEFINE_FUNCTION(setMass);
         DEFINE_FUNCTION(getMass);
-        DEFINE_FUNCTION(setMaxSpeed);
-        DEFINE_FUNCTION(getMaxSpeed);
         DEFINE_FUNCTION(setVelocity);
         DEFINE_FUNCTION(setAngularVelocity);
         DEFINE_FUNCTION(addForce);

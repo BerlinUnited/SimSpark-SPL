@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.11 2004/04/07 11:40:45 rollmark Exp $
+   $Id: body.cpp,v 1.12 2004/04/10 07:24:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,6 @@ using namespace std;
 
 Body::Body() : ODEObject(), mODEBody(0)
 {
-    // unrestricted by default
-    mMaxSpeed = 0;
 }
 
 Body::~Body()
@@ -80,16 +78,6 @@ void Body::UseGravity(bool f)
 bool Body::UsesGravity() const
 {
     return (dBodyGetGravityMode(mODEBody) != 0);
-}
-
-void Body::SetMaxSpeed(float speed)
-{
-    mMaxSpeed = speed;
-}
-
-float Body::GetMaxSpeed()
-{
-    return mMaxSpeed;
 }
 
 bool Body::CreateBody()
@@ -225,23 +213,6 @@ void Body::PostPhysicsUpdateInternal()
     mat.m[14] = pos[2];
     mat.m[15] = 1;
     baseNode->SetLocalTransform(mat);
-
-    // enforce maximum speed
-    if (mMaxSpeed == 0)
-        {
-            return;
-        }
-
-    Vector3f vel = GetVelocity();
-    if (vel.Length() < mMaxSpeed)
-        {
-            return;
-        }
-
-    vel.Normalize();
-    vel *= mMaxSpeed;
-
-    SetVelocity(vel);
 }
 
 shared_ptr<Body> Body::GetBody(dBodyID id)
