@@ -1,5 +1,27 @@
 2003-11-10  Oliver Obst  <fruit@robolog.org>
 
+	* plugin/soundsystemfmod/Makefile.am: 
+	The soundsystemfmod module is built (only) if configure detected the 
+	fmod header and library. The fmod library has to be installed as described 
+	in the ./doc/used_libraries.txt file.
+	
+	* plugin/soundsystemfmod/soundeffectfmod.cpp:
+	- interface changed in FSOUND_Sample_Load function for FMOD 3.7
+
+	* plugin/soundsystemfmod/soundmodulefmod.cpp: 
+	- the FMUSIC_LoadSongMemory in FMOD function does not exist
+	  anymore. Instead, we're using FMUSIC_LoadSongEx now.
+	
+	* plugin/soundsystemfmod/soundstreamfmod.cpp: 
+	- changes so that the file compiles with FMOD 3.7. Some of the "Load" functions in
+	  FMOD have been changed, so that this changes was required in order
+	  to be up to date.
+
+	* configure.ac: 
+	added check if the soundsystemfmod plugin should be built
+
+	* acinclude.m4: added a macro for a FMOD check
+
 	* lib/oxygen/.cvsignore: 
 	* lib/oxygen/Makefile.am:
 	* lib/oxygen/oxygen.cpp:
