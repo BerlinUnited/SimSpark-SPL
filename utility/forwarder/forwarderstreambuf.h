@@ -21,7 +21,7 @@
 #define UTILITY_FORWARDERSTREAMBUF_H
 
 /*! \class ForwarderStreamBuf
-  $Id: forwarderstreambuf.h,v 1.2 2002/08/16 15:41:55 fruit Exp $
+  $Id: forwarderstreambuf.h,v 1.3 2002/08/22 10:44:21 fruit Exp $
 
   ForwarderStreamBuf
 
@@ -65,7 +65,7 @@ class ForwarderStreamBuf : public std::streambuf
     //
 protected:
 #if HAVE_STREAMBUF
-    typedef std::char_trait>s<char> TraitsType;
+    typedef std::char_traits<char> TraitsType;
     typedef traits_type::int_type IntType;
 #define FORWARDER_SB_EOF TraitsType::eof()
 #else
@@ -137,7 +137,7 @@ private:
     void putChar(IntType chr);
 
     //! A predicate to compare streams in a MaskStream list (or vector). 
-    class MaskStreamEQ : public unary_function<MaskStream,bool>
+    class MaskStreamEQ : public std::unary_function<MaskStream,bool>
     {
     private:
         const std::ostream* stream;
