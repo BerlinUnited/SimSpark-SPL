@@ -4,9 +4,23 @@
 
 #
 # define constants used to setup spark
+#
+
+# (MonitorControl) constants
+# 
 
 # define the monitor update interval in cylcles
 $monitorInterval = 30;
+$serverType = 'tcp'
+$serverPort = 3200
+
+# (SparkMonitorClient) constants
+# 
+$monitorServer = '127.0.0.1'
+$monitorPort = 3200
+
+# socket type ('tcp' or 'udp')
+$monitorType = 'tcp'
 
 #
 # below is a set of utility functions for the user app
@@ -16,7 +30,23 @@ def sparkSetupMonitor
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-  simulationServer.initControlNode('SparkMonitorClient')
+
+  monitorClient = new('SparkMonitorClient', 
+		      $serverPath+'simulation/SparkMonitorClient')
+  monitorClient.setServer($monitorServer)
+  monitorClient.setPort($monitorPort)
+  
+  if ($monitorType == 'udp')
+    monitorClient.setClientTypeUDP()
+  else if ($monitorType == 'tcp')
+	 monitorClient.setClientTypeTCP()
+       else
+	 print "(spark.rb) unknown monitor socket type "
+	 print $monitorType
+	 print "\n"
+       end
+  end
+
 end
 
 def sparkSetupServer
@@ -26,9 +56,21 @@ def sparkSetupServer
   simulationServer = get($serverPath+'simulation');
   simulationServer.initControlNode('oxygen/AgentControl')  
 
-  monitorControl = new("oxygen/MonitorControl",
+  monitorControl = new('oxygen/MonitorControl',
 		       $serverPath+'simulation/MonitorControl')
   monitorControl.setMonitorInterval($monitorInterval)
+  monitorControl.setServerPort($serverPort)
+
+  if ($serverType == 'udp')
+    monitorControl.setServerTypeUDP()
+  else if ($serverType == 'tcp')
+	 monitorControl.setServerTypeTCP()
+       else
+	 print "(spark.rb) unknown monitor socket type "
+	 print $serverType
+	 print "\n"
+       end
+  end
 end
 
 def sparkSetupRendering
