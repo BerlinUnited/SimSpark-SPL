@@ -1,0 +1,168 @@
+%%
+%% $Id: manual.tex.bak,v 1.1 2003/11/14 20:56:19 gato_negro Exp $
+%%----------------------------------------------------------
+%% Soccer Server (aka RoboCup Soccer Simulator) Manual
+%% Masterfile
+%%
+
+\documentclass[a4paper,11pt]{scrbook}
+\usepackage{styles/bibunits}
+
+\newcommand{\email}[1]{\texttt{$<$#1$>$}}
+\newcommand{\robocup}{RoboCup}
+\newcommand{\page}[1]{\bgroup p.~#1\egroup}
+\newcommand{\pages}[2]{\bgroup pp.~#1-#2\egroup}
+\newcommand{\pagecite}[2]{\bgroup (\cite{#1},~\page{#2})\egroup}
+\newcommand{\citat}[1]{``#1''}
+% #1 is the text, and #2 is the ref
+
+%% shell prompt "->"
+\newcommand{\prompt}[1]{\noindent{\small\texttt{  $-$$>$ #1 } }\\}
+
+\newcommand{\citatwithref}[2]{\citat{#1}~#2}
+\newcommand{\etal}[1]{\bgroup #1~et~al.~\egroup}
+\newcommand{\etalref}[2]{\bgroup \etal{#1}~\cite{#2}\egroup}
+
+% quotes server command
+\newcommand{\qscommand}[1]{\begin{quote}\scommand{#1}\end{quote}}
+
+\newcommand{\cmdpart}[1]{\textbf{#1}}
+\newcommand{\scommand}[1]{\cmdpart{#1\index{#1}}}
+\newcommand{\command}[1]{\scommand{#1}}
+\newcommand{\sparam}[1]{\textbf{\textsl{#1\index{#1}}}}
+\newcommand{\fssparam}[1]{\footnotesize\sparam{#1}}
+\newcommand{\param}[1]{\textsl{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\variable}[1]{{\textsl{#1}\index{#1}}{}}
+\newcommand{\PM}[1]{`\texttt{#1}'}
+\newcommand{\playmode}[1]{\PM{#1}}
+\newcommand{\rb}[2]{\raisebox{#1}[#1]{#2}}
+\newcommand{\Com}[1]{\texttt{#1}}
+\newcommand{\sm}{Soccer Monitor}
+\newcommand{\Ss}{Soccer Server}
+\newcommand{\sose}{soccerserver}
+\newcommand{\worldcup}{world cup}
+\newcommand{\WorldCup}{World Cup}
+\newcommand{\acronym}[1]{#1}
+\newcommand{\ai}{\acronym{AI}}
+\newcommand{\etc}{etc}
+\newcommand{\coordinate}{co-ordinate}
+\newcommand{\stateoftheart}{state-of-the-art}
+\newcommand{\cooperate}{co-operate}
+\newcommand{\cooperative}{co-operative}
+\newcommand{\cooperation}{co-operation}
+\newcommand{\Cooperation}{Co-operation}
+\newcommand{\ScaledFigure}[5]{\begin{figure}
+        \centering
+        \resizebox{#4}{#5}{\includegraphics{#1}}
+        \caption{#2}
+        \figlabel{#3}
+        \end{figure}}
+\newcommand{\eg}{\bgroup e.g.,\egroup}
+\newcommand{\ie}{\bgroup i.e.,\egroup} %to be put in formal!
+\newcommand{\Ie}{\bgroup I.e.,\egroup} %to be put in formal!
+\def\rcs{RoboCup Soccer Simulator}
+\def\RC{RoboCup}
+%\def\Com#1{\mbox{\tt #1}}
+\newcommand{\sectionref}[1]{section~\ref{sec:#1}}
+
+\newcounter{bibcnt} % consecutive publication numbering
+\newcommand{\publ}[3][bibcnt]% for publications
+  {\section{#2}%\renewcommand{\refname}{\vspace*{-4ex}}
+   \begin{bibunit}[#1]
+        \nocite{*}
+        \putbib[#3]
+  \end{bibunit}}
+\newcommand{\subpubl}[3][bibcnt]% for publications
+  {\subsection{#2}%\renewcommand{\refname}{\vspace*{-4ex}}
+   \begin{bibunit}[#1]
+        \nocite{*}
+        \putbib[#3]
+  \end{bibunit}}
+
+\makeatletter
+%% rename the .aux files created by newer versions of bibunits.sty
+\@ifundefined{@bibunitname}{}%
+{\renewcommand{\@bibunitname}{\jobname.\the\@bibunitauxcnt}}
+
+%% new bibliography environment
+\renewenvironment{thebibliography}[1]
+     {\list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\makeatother
+
+\sloppy
+
+\begin{document}
+%% change thefnmark ?
+%%% title pages
+\subject{Programming Guide}
+\title{RoboCup Soccer Server 3D \\
+  {\small for Soccer Server 3D Programming Guide Version 1.0 and later}}
+\author{
+  Christian Bayha,\\
+  Markus Gruendler,\\
+  Viktor Pautz,\\
+  Frank Pfaff,\\
+  Sebastian Scholl
+ }
+%% \date{April 25, 2001\\
+%%  {\footnotesize $7.\alpha$}}
+\publishers{\small %
+  \email{} \\
+  \email{} \\
+  \email{} \\
+  \email{} \\
+  \email{}
+  }
+
+\lowertitleback{Copyright {\textcopyright} 2001 The RoboCup Federation. Permission is
+  granted to copy, distribute and/or modify this document under the
+  terms of the GNU Free Documentation License, Version 1.1 or any
+  later version published by the Free Software Foundation; with no
+  Invariant Sections, with no Front-Cover Texts, and with no
+  Back-Cover Texts. A copy of the license is included in the section
+  entitled ``GNU Free Documentation License''. }
+
+\maketitle%
+\thispagestyle{empty}
+
+\tableofcontents
+
+%%% Introduction
+\input{chapter1/chapter1}
+
+%%% Programming Environment under Linux, Viktor Pautz
+\input{chapter2/chapter2}
+
+%%% Client/Server Protocol, Markus Gründler
+\input{chapter3/chapter3}
+
+%%% CPP Unit Test, Sebastian Scholl
+\input{chapter4/chapter4}
+
+%%% CVS, Bug Tracking and Coding Standard, Frank Pfaff
+\input{chapter5/chapter5}
+
+%%% Documentation with Latex, Christian Bayha
+\input{chapter6/chapter6}
+
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "manual"
+%%% End: 

@@ -1,0 +1,291 @@
+
+\chapter{Documentation with \LaTeX}
+%\label{cha:DocumentationwithLatex} 
+
+
+\section{Why \LaTeX}
+
+\LaTeX\ is a computer program for typesetting documents.  It
+takes a computer file, prepared according to the rules of
+\LaTeX\, and converts it to other file formats's like DVI, PDF and so on.
+The advantages of \LaTeX\ are
+\begin{itemize}
+\item It is platform independent
+\item It is freeware
+\item It can handle great documents with many pictures
+\item There are many features to write down mathematical symbols and formulae
+\item You can print the documents on a very high quality
+\end{itemize}
+
+\LaTeX\ (created by L. B. Lamport) is one of a number of `dialects' of \TeX, all based %%@
+on the
+version of \TeX\ created by D. E. Knuth which is known as Plain \TeX.
+It is particularly suited to the production of long articles and books, because it has
+facilities for the automatic numbering of chapters, sections, theorems, equations etc., 
+and also has facilities for cross-referencing.
+
+The current version of \LaTeX\ is \LaTeX2e, this version was released in
+1992. Since then every half a year there is an update.
+
+
+\section{How to install \LaTeX\ under Linux}
+
+\TeX\ and \LaTeX\ are part of nearly every Linux distribution.
+
+\subsection{Editors under Linux}
+
+\begin{itemize}
+\item NEdit 5.3
+\item Kile
+\item LyX
+\end{itemize}
+
+\textbf{Kile} is a part of most linux distributions, anywhere it is available on http://kile.sourceforge.net.
+Kile provides an editor with syntax highlighting, and many useful features, like creating DVI of PDF documents
+Anymore you can insert many commands by clicking buttons, so you haven't learn all commands.\\
+
+\textbf{LyX} is a WYSIWYG editor for \LaTeX\. You can write document with the view of the output.
+
+
+\section{How to install \LaTeX\ under Windows}
+
+\LaTeX\ is mainly used under Linux, but you can also use it under Windows. But it gives a various count of \LaTeX\ distribution under Windows.
+
+\subsection{How to install \TeX\ under Windows}
+
+MiKTeX is a free distribution of \TeX\ under Windows.
+
+The SetupWizard von MikTeX can be downloaded under 
+http://prdownloads.sourceforge.net/miktex/setup.exe?download
+After starting the setup wizard you have the choose of downloading, or to install \TeX\ application.
+If you only download it, after that you have to install \TeX.
+
+
+\subsection{How to install \LaTeX\ under Windows}
+
+If you have install MiKTeX, \LaTeX\ is already installed.
+
+\subsection{Which Editors are available under Windows}
+
+For editing \LaTeX\ every text editor is possible.
+But there are some special text editors with syntax highlighting and buttons to create DVI and PDF documents.
+
+Some editors under Windows are 
+
+\begin{itemize}
+\item WinTeX 2000, is shareware available under www.tex-tools.de
+\item WinEdt 5.3, is shareware available under www.winedt.com
+\end{itemize}
+
+Both editor are shareware with trialversions for 30 days. The provide syntax highlighting and many more features.
+
+\section{The first document}
+
+The following document produces
+
+\begin{verbatim}
+
+\documentclass{article}
+
+\begin{document}
+
+Hello \LaTeX
+
+\end{document}
+
+\end{verbatim}
+
+Hello \LaTeX\\
+
+
+
+In \LaTeX\ exists many commands, to format the text.
+Commands always consists on three components:
+
+\begin{verbatim}
+\textsl{This will be printed in slanted font.}
+
+The command  : \textsl
+The braces   : { and }
+The argument : The text inside the braces
+\end{verbatim} 
+
+
+
+\begin{verbatim}
+\begin{document}
+\end{document}
+A piece of text delimited by a named \begin-\end pair ist called an environment.
+
+
+Declarations written inside the begin-end pair affect all the text within that environment.
+
+
+The % symbol is the start of a comment.
+
+\end{verbatim}
+
+\section{Important commands}
+
+\subsection{Size of fonts}
+The sizes of fonts used in \LaTeX\ are can be determined
+and changed by means of the control sequences
+\verb/\tiny/,
+\verb/\scriptsize/,
+\verb/\footnotesize/,
+\verb/\small/,
+\verb/\normalsize/,
+\verb/\large/,
+\verb/\Large/,
+\verb/\LARGE/,
+\verb/\huge/ and
+\verb/\HUGE/:
+
+
+{\tiny This text is \texttt{tiny}}.
+
+{\scriptsize This text is \texttt{scriptsize}}.
+
+{\footnotesize This text is \texttt{footnotesize}}.
+
+{\small This text is \texttt{small}}.
+
+{\normalsize This text is \texttt{normalsize}}.
+
+{\large This text is \texttt{large}}.
+
+{\Large This text is \texttt{Large}}.
+
+{\LARGE This text is \texttt{LARGE}}.
+
+{\huge This text is \texttt{huge}}.
+
+{\Huge This text is \texttt{Huge}}.
+
+
+\subsection{The fonts}
+
+The \emph{shape} of a font can be \textup{upright},
+\textit{italic}, \textsl{slanted} or \textsc{small caps}:
+\begin{itemize}
+\item
+\textup{The LaTeX command}
+   \verb/\textup{/\emph{text}\verb/}/
+   \textup{typesets the specified text with an upright shape:
+   this is normally the default shape.}
+\item
+\textit{The LaTeX command}
+   \verb/\textit{/\emph{text}\verb/}/
+   \textit{typesets the specified text with an italic shape.}
+\item
+\textsl{The LaTeX command}
+   \verb/\textsl{/\emph{text}\verb/}/
+   \textsl{typesets the specified text with a slanted shape:
+   slanted text is similar to italic.}
+\item
+\textsc{The LaTeX command}
+   \verb/\textsc{/\emph{text}\verb/}/
+   \textsc{typesets the specified text with a small caps shape
+   in which all letters are capitals (with uppercase letters taller than
+   lowercase letters).}
+\end{itemize}
+
+
+\subsection{Format}
+
+Two slash(\begin{verbatim} \\ \end{verbatim}) at the end of a line produce a new paragraph.
+
+\begin{verbatim}
+\begin{center}
+This Text is centered
+\end{center}
+\end{verbatim}
+
+produce 
+
+\begin{center}
+This Text is centered
+\end{center}
+
+
+\subsection{Producing Mathematical Formulae using \LaTeX}
+
+Latex supports almost every math symbol and every possible formulae.
+
+Some examples for the math symbols
+
+... 
+
+
+For example:
+
+\begin{verbatim}
+\[ ds^2 = dx_1^2 + dx_2^2 + dx_3^2 - c^2 dt^2 \]
+\end{verbatim}
+
+produce 
+
+\[ ds^2 = dx_1^2 + dx_2^2 + dx_3^2 - c^2 dt^2 \]
+
+
+
+
+
+\subsection{Tables}
+
+\begin{tabbing}
+\textsc{NAME} \=col1 \=col2 \=col3 \=col4 \\
+\>col1 \>col2 \>col3 \>col4 \\
+\>col1 \>col2 \>col3 \>col4 \\
+\>col1 \>col2 \>col3 \>col4 \\
+\end{tabbing}
+
+
+\begin{table}[htbp]
+    \begin{tabular}[h]{|l|r|l|r|r|}
+	  \hline
+      \multicolumn{2}{|c|}{\textbf{Basic Parameters}} &
+      \multicolumn{3}{|c|}{\textbf{Parameters for heterogeneous
+        Players}} \\
+      \multicolumn{2}{|c|}{\file{server.conf}} &
+      \multicolumn{3}{|c|}{\file{player.conf}} \\ \hline
+      \textbf{Name} & \textbf{Value} & \textbf{Name} & \textbf{Value} &
+      \textbf{Range} \\ \hline
+      \sparam{minpower} & -100 & & & \\ \hline
+      \sparam{maxpower} & 100 & & & \\ \hline
+      \sparam{stamina\_max} & 4000 &  & & \\ \hline
+      \sparam{stamina\_inc\_max} & 45 &
+      \sparam{stamina\_inc\_max\_delta\_factor} & -100.0 & \\
+      & & \sparam{player\_speed\_max\_delta\_min} & 0.0 &
+      \rb{1.5ex}{25} \\
+      & & \sparam{player\_speed\_max\_delta\_max} & 0.2 &
+      \rb{1.5ex}{---~45}\\\hline
+      \sparam{extra\_stamina}$^a$ & 0.0 &
+      \sparam{extra\_stamina\_delta\_min} & 0.0 & 0.0 \\
+      & & \sparam{extra\_stamina\_delta\_max} & 100.0 & ---~100.0 \\\hline
+      \sparam{dash\_power\_rate} & 0.006 &
+      \sparam{dash\_power\_rate\_delta\_min} & 0.0 & 0.006 \\
+      & & \sparam{dash\_power\_rate\_delta\_max} & 0.002 & ---~0.008
+      \\ \hline
+      \sparam{player\_rand} & 0.1 & & & \\\hline
+      \sparam{wind\_force} & 0.0 & & & \\\hline
+      \sparam{wind\_dir} & 0.0 & & & \\\hline
+      \sparam{wind\_rand} & 0.0 & & & \\\hline
+      \sparam{player\_decay} & 0.4 &
+      \sparam{player\_decay\_delta\_min} & 0.0 & 0.4 \\
+       & & \sparam{player\_decay\_delta\_max} & 0.2 & ---~0.6 \\ \hline
+	\end{tabular}
+
+\end{table}
+
+  
+	  
+
+
+\section{Literatur and books}
+
+At the WWW it gives a lot of tutorials and articals on \TeX and \LaTeX for additional information.
+
+
+
+

@@ -1,0 +1,39 @@
+\begin{theindex}
+
+  \item dash\_power\_rate, 25
+  \item dash\_power\_rate\_delta\_max, 25
+  \item dash\_power\_rate\_delta\_min, 25
+
+  \indexspace
+
+  \item extra\_stamina, 25
+  \item extra\_stamina\_delta\_max, 25
+  \item extra\_stamina\_delta\_min, 25
+
+  \indexspace
+
+  \item maxpower, 25
+  \item minpower, 25
+
+  \indexspace
+
+  \item player\_decay, 25
+  \item player\_decay\_delta\_max, 25
+  \item player\_decay\_delta\_min, 25
+  \item player\_rand, 25
+  \item player\_speed\_max\_delta\_max, 25
+  \item player\_speed\_max\_delta\_min, 25
+
+  \indexspace
+
+  \item stamina\_inc\_max, 25
+  \item stamina\_inc\_max\_delta\_factor, 25
+  \item stamina\_max, 25
+
+  \indexspace
+
+  \item wind\_dir, 25
+  \item wind\_force, 25
+  \item wind\_rand, 25
+
+\end{theindex}

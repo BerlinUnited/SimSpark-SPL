@@ -1,0 +1,344 @@
+This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2003.9.23)  11 NOV 2003 21:36
+**manual.tex
+(./manual.tex
+LaTeX2e <2001/06/01>
+Babel <v3.7h> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/usr/share/texmf/tex/latex/koma-script/scrbook.cls
+Document Class: scrbook 2003/01/31 v2.9n LaTeX2e KOMA document class
+(/usr/share/texmf/tex/latex/koma-script/scrlfile.sty
+Package: scrlfile 2003/01/31 v2.9n LaTeX2e KOMA package
+
+Package scrlfile, 2003/01/31 v2.9n LaTeX2e KOMA package
+                  Copyright (C) Markus Kohm
+
+) (/usr/share/texmf/tex/latex/base/bk11.clo
+File: bk11.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+)
+(/usr/share/texmf/tex/latex/koma-script/typearea.sty
+Package: typearea 2003/01/31 v2.9n LaTeX2e KOMA package
+
+Package typearea, 2003/01/31 v2.9n LaTeX2e KOMA package
+                  Copyright (C) Frank Neukam, 1992-1994
+                  Copyright (C) Markus Kohm, 1994-2002
+
+\ta@bcor=\skip41
+\ta@div=\count79
+\ta@hblk=\skip42
+\ta@vblk=\skip43
+\ta@temp=\skip44
+Package typearea Info: These are the values describing the layout:
+(typearea)             DIV  = 10
+(typearea)             BCOR = 0.0pt
+(typearea)             \paperwidth      = 597.50793pt
+(typearea)              \textwidth      = 418.25555pt
+(typearea)              DIV-departure   = -6/100
+(typearea)              \evensidemargin = 47.2316pt
+(typearea)              \oddsidemargin  = -12.5192pt
+(typearea)             \paperheight     = 845.04694pt
+(typearea)              \textheight     = 595.80026pt
+(typearea)              \topmargin      = -25.16531pt
+(typearea)              \headheight     = 17.0pt
+(typearea)              \headsep        = 20.40001pt
+(typearea)              \topskip        = 11.0pt
+(typearea)              \footskip       = 47.60002pt
+(typearea)              \baselineskip   = 13.6pt
+(typearea)              on input line 625.
+)
+\c@part=\count80
+\c@chapter=\count81
+\c@section=\count82
+\c@subsection=\count83
+\c@subsubsection=\count84
+\c@paragraph=\count85
+\c@subparagraph=\count86
+\c@figure=\count87
+\c@table=\count88
+\abovecaptionskip=\skip45
+\belowcaptionskip=\skip46
+\c@pti@nb@sid@b@x=\box26
+\bibindent=\dimen102
+) (/usr/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2001/08/31 v1.1 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: dvips.def on input line 80.
+
+(/usr/share/texmf/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+) (./styles/bibunits.sty
+\@bibunitaux=\write3
+\@bibunitauxcnt=\count89
+)
+(/usr/share/texmf/tex/latex/psnfss/pifont.sty
+Package: pifont 2002/09/08 PSNFSS-v9.0a Pi font support (SPQR) 
+LaTeX Font Info:    Try loading font information for U+pzd on input line 62.
+
+(/usr/share/texmf/tex/latex/psnfss/upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Try loading font information for U+psy on input line 63.
+
+(/usr/share/texmf/tex/latex/psnfss/upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+))
+(/usr/share/texmf/tex/latex/base/textcomp.sty
+Package: textcomp 2001/06/05 v1.94 Standard LaTeX package
+
+(/usr/share/texmf/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+))
+(/usr/share/texmf/tex/latex/misc/url.sty
+\Urlmuskip=\muskip10
+Package: url 1999/03/28  ver 1.5x  Verb mode for urls, etc.
+)
+(/usr/share/texmf/tex/latex/tools/tabularx.sty
+Package: tabularx 1999/01/07 v2.07 `tabularx' package (DPC)
+
+(/usr/share/texmf/tex/latex/tools/array.sty
+Package: array 1998/05/13 v2.3m Tabular extension package (FMi)
+\col@sep=\dimen105
+\extrarowheight=\dimen106
+\NC@list=\toks15
+\extratabsurround=\skip47
+\backup@length=\skip48
+)
+\TX@col@width=\dimen107
+\TX@old@table=\dimen108
+\TX@old@col=\dimen109
+\TX@target=\dimen110
+\TX@delta=\dimen111
+\TX@cols=\count90
+\TX@ftn=\toks16
+)
+(/usr/share/texmf/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen112
+)
+(/usr/share/texmf/tex/latex/tools/longtable.sty
+Package: longtable 2000/10/22 v4.10 Multi-page Table package (DPC)
+\LTleft=\skip49
+\LTright=\skip50
+\LTpre=\skip51
+\LTpost=\skip52
+\LTchunksize=\count91
+\LTcapwidth=\dimen113
+\LT@head=\box27
+\LT@firsthead=\box28
+\LT@foot=\box29
+\LT@lastfoot=\box30
+\LT@cols=\count92
+\LT@rows=\count93
+\c@LT@tables=\count94
+\c@LT@chunks=\count95
+\LT@p@ftn=\toks17
+)
+Class scrbook Info: longtable captions redefined on input line 17.
+
+(/usr/share/texmf/tex/latex/base/makeidx.sty
+Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
+)
+\c@bibcnt=\count96
+ (./manual.aux)
+\openout1 = `manual.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 118.
+LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 118.
+LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 118.
+LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 118.
+LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 118.
+LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 118.
+LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 118.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 118.
+
+
+(/usr/share/texmf/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <14.4> on input line 150.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 150.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 150.
+ [1
+
+
+] [2
+
+] (./manual.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 3.
+ [3
+
+])
+\tf@toc=\write4
+\openout4 = `manual.toc'.
+
+
+(./chapter1/chapter1.tex [4]
+Chapter 1.
+) (./chapter2/chapter2.tex [5
+
+] [6
+
+]
+Chapter 2.
+) (./chapter3/chapter3.tex [7] [8
+
+]
+Chapter 3.
+) (./chapter4/chapter4.tex [9] [10
+
+]
+Chapter 4.
+[11]) (./chapter5/chapter5.tex [12]
+Chapter 5.
+[13
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 48--52
+
+ []
+
+[14]
+Underfull \hbox (badness 10000) in paragraph at lines 128--130
+
+ []
+
+[15]
+Underfull \hbox (badness 10000) in paragraph at lines 133--137
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--144
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 145--147
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 148--151
+
+ []
+
+[16]
+Overfull \hbox (7.14734pt too wide) in paragraph at lines 225--225
+[]\OT1/cmtt/m/n/10.95 - .h is the suffix for c++ header files, .cpp is the suff
+ix for c++ source[] 
+ []
+
+
+Underfull \vbox (badness 7012) has occurred while \output is active []
+
+ [17]
+Overfull \hbox (18.64471pt too wide) in paragraph at lines 249--249
+[]\OT1/cmtt/m/n/10.95 Header files are protected by include guards, and the aut
+oconf config.h file[] 
+ []
+
+
+Overfull \hbox (12.89603pt too wide) in paragraph at lines 249--249
+[]\OT1/cmtt/m/n/10.95 sometimes header files from different libs can clash, so 
+I've started using[] 
+ []
+
+[18]
+Overfull \hbox (12.89603pt too wide) in paragraph at lines 298--298
+[]\OT1/cmtt/m/n/10.95 -nbad -bap -sob --dont-star-comments --no-comment-delimit
+ers-on-blank-lines[] 
+ []
+
+
+Overfull \hbox (30.14209pt too wide) in paragraph at lines 298--298
+[]\OT1/cmtt/m/n/10.95 -cp33 -d0 -nfc1 -nfca -bl -bli0 -cli4 -cbi0 -ss -npcs -np
+rs -saf -saw -sai -cs[] 
+ []
+
+) (./chapter6/chapter6.tex [19] [20
+
+]
+Chapter 6.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <20.74> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 2.
+
+Underfull \hbox (badness 3942) in paragraph at lines 43--46
+[]\OT1/cmr/bx/n/10.95 Kile \OT1/cmr/m/n/10.95 is a part of most linux dis-tri-b
+u-tions, any-where it is avail-able on
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--46
+
+ []
+
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 58--62
+[]\OT1/cmr/m/n/10.95 The Se-tup-Wiz-ard von Mik-TeX can be down-loaded un-der
+ []
+
+
+Underfull \hbox (badness 6876) in paragraph at lines 58--62
+\OT1/cmr/m/n/10.95 http://prdownloads.sourceforge.net/miktex/setup.exe?download
+ Af-ter start-ing the
+ []
+
+[22]
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
+
+ []
+
+
+Overfull \hbox (41.63947pt too wide) in paragraph at lines 126--126
+[]\OT1/cmtt/m/n/10.95 A piece of text delimited by a named \begin-\end pair ist
+ called an environment.[] 
+ []
+
+
+Overfull \hbox (104.87503pt too wide) in paragraph at lines 126--126
+[]\OT1/cmtt/m/n/10.95 Declarations written inside the begin-end pair affect all
+ the text within that environment.[] 
+ []
+
+[23] [24]) [25] (./manual.aux) ) 
+Here is how much of TeX's memory you used:
+ 1902 strings out of 95847
+ 25210 string characters out of 1195962
+ 80278 words of memory out of 1000001
+ 4797 multiletter control sequences out of 10000+50000
+ 17178 words of font info for 62 fonts, out of 500000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 28i,10n,24p,675b,390s stack positions out of 1500i,500n,5000p,200000b,5000s
+
+Output written on manual.dvi (25 pages, 44404 bytes).
