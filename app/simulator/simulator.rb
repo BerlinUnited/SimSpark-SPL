@@ -63,23 +63,25 @@ def addAgent(aspectPath)
   geometry = new('kerosin/SphereCollider', aspectPath+'geometry')
   geometry.setRadius(getSoccerVar('AgentRadius'))
 
+  # agent state (needs to be set up before perceptors)
+  new('AgentState', aspectPath+'AgentState')
+
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
   dashEffector = new('DashEffector', aspectPath+'DashEffector')
-  dashEffector.setForceFactor(450.0);
+  dashEffector.setForceFactor(500.0);
   dashEffector.setSigma(0.5);
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
   kickEffector.setForceFactor(4.0)
-  kickEffector.setNoiseParams(0.4,0.02,0.025)
+  kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
   kickEffector.setSteps(3,75)
   kickEffector.setMaxPower(100.0)
+  kickEffector.setAngleRange(0.0,50.0)
 
   # perceptor setup
   new('VisionPerceptor', aspectPath+'VisionPerceptor')
   new('GameStatePerceptor', aspectPath+'GameStatePerceptor')
 
-  # agent state
-  new('AgentState', aspectPath+'AgentState')
 end
 
 # add a field flag to (x,y,z)
