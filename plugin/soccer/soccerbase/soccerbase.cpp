@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.1.2.4 2004/02/06 14:49:03 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.1.2.5 2004/02/10 19:37:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,6 +70,23 @@ SoccerBase::GetTransformParent(const Leaf& base,
     return true;
 }
 
+bool
+SoccerBase::GetAgentState(const boost::shared_ptr<Transform> transform,
+                          shared_ptr<AgentState>& agent_state)
+{
+    agent_state =
+        shared_dynamic_cast<AgentState>(transform->GetChild("AgentState"));
+
+    if (agent_state.get() == 0)
+    {
+        transform->GetLog()->Error()
+            << "Error: (SoccerBase: " << transform->GetName()
+            << ") parent node has no AgentState child\n";
+        return false;
+    }
+
+    return true;
+}
 
 bool
 SoccerBase::GetAgentState(const Leaf& base,
@@ -81,18 +98,7 @@ SoccerBase::GetAgentState(const Leaf& base,
         return false;
     }
 
-    agent_state =
-        shared_dynamic_cast<AgentState>(parent->GetChild("AgentState"));
-
-    if (agent_state.get() == 0)
-    {
-        base.GetLog()->Error()
-            << "Error: (SoccerBase: " << base.GetName()
-            << ") parent node has no AgentState child\n";
-        return false;
-    }
-
-    return true;
+    return SoccerBase::GetAgentState(parent,agent_state);
 }
 
 bool
@@ -255,16 +261,25 @@ SoccerBase::PlayMode2Str(const TPlayMode mode)
         {
         case    PM_BeforeKickOff:
             return STR_PM_BeforeKickOff;
-        case    PM_KickOff:
-            return STR_PM_KickOff;
-        case    PM_PlayOn:
-            return STR_PM_PlayOn;
+
         case    PM_KickOff_Left:
             return STR_PM_KickOff_Left;
+
         case    PM_KickOff_Right:
             return STR_PM_KickOff_Right;
+
+        case    PM_PlayOn:
+            return STR_PM_PlayOn;
+
+        case    PM_KickIn_Left:
+            return STR_PM_KickIn_Left;
+
+        case    PM_KickIn_Right:
+            return STR_PM_KickIn_Right;
+
         case    PM_FirstHalfOver:
             return STR_PM_FirstHalfOver;
+
         default:
             return STR_PM_Unknown;
         };
