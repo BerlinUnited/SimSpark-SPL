@@ -22,7 +22,6 @@
    commands contained in them
 
 */
-
 #ifndef TRAINERCOMMANDPARSER_H
 #define TRAINERCOMMANDPARSER_H
 
@@ -31,6 +30,7 @@
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <salt/vector.h>
 #include <soccer/soccertypes.h>
+#include <soccer/soccerruleaspect/soccerruleaspect.h>
 
 class TrainerCommandParser : public zeitgeist::Leaf
 {
@@ -41,6 +41,8 @@ public:
         CT_PLAYER,
         CT_BALL,
         CT_PLAYMODE,
+        CT_DROP_BALL,
+        CT_KICK_OFF,
         CT_ACK
     };
 
@@ -51,7 +53,6 @@ public:
     typedef std::map<std::string, TPlayMode> TPlayModeMap;
 
 public:
-
     TrainerCommandParser();
 
     virtual ~TrainerCommandParser();
@@ -84,17 +85,19 @@ protected:
         predicate
     */
     void ParsePlayModeCommand(const oxygen::Predicate & predicate);
-    
-    
 
 protected:
-
     TCommandMap    mCommandMap;
 
     TTeamIndexMap  mTeamIndexMap;
 
     TPlayModeMap   mPlayModeMap;
-    
+
+    //! cached reference for the gamestate aspect
+    boost::shared_ptr<GameStateAspect> mGameState;
+    //! cached reference for the soccer rule aspect
+    boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
+
     bool mGetAck;
     std::string mAckString;
 };
