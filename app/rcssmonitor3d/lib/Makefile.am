@@ -1,11 +1,12 @@
-pkglib_LIBRARIES = librcssmonitor3D.a
-# librcssmonitor3D_a_LIBADD = @RUBY_LDFLAGS@
+pkglib_LTLIBRARIES = librcssmonitor3D.la
+librcssmonitor3D_la_LIBADD = ${top_srcdir}/utility/rcssnet/librcssnet3D.la
+
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin -I${top_srcdir}/utility @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/rcssmonitor3d
 
-librcssmonitor3D_a_SOURCES = \
+librcssmonitor3D_la_SOURCES = \
 	monitorlib.cpp \
 	communit.cpp \
 	commserver.cpp commserver_c.cpp \
