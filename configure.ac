@@ -121,6 +121,8 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/monitortest/Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
 		 plugin/sexpparser/Makefile \
+		 plugin/soccer/Makefile \
+		 plugin/soccer/initeffector/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 app/Makefile \
 		 app/agenttest/Makefile \
