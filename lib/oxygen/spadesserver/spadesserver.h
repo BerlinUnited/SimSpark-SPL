@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.2 2003/11/17 10:10:53 fruit Exp $
+   $Id: spadesserver.h,v 1.1.2.3 2003/11/17 13:13:26 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,9 @@ class ParamReader;
 
 /*! The SpadesServer serves as interface between the SceneServer and the agents
  */
-class SpadesServer : public zeitgeist::Leaf, spades::WorldModel
+class SpadesServer :
+        public zeitgeist::Leaf,
+        public spades::WorldModel
 {
 public:
     SpadesServer();
@@ -147,7 +149,7 @@ public:
 
 private:
     spades::SimEngine* mSimEngine;
-    boost::shared_ptr<ParamReader> mParamReader;
+    boost::shared_ptr<oxygen::ParamReader> mParamReader;
 };
 
 DECLARE_CLASS(SpadesServer);
