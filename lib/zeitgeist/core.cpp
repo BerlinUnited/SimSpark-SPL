@@ -121,7 +121,7 @@ bool Core::ImportBundle(const std::string& bundleName)
 
         if (!bundle->Open(bundleName))
         {
-                mLogServer->Error() << "ERROR: Could not open '" << bundleName << "'" << endl;
+                mLogServer->Error() << "ERROR: (Core) Could not open '" << bundleName << "'" << endl;
                 return false;
         }
 
@@ -132,7 +132,7 @@ bool Core::ImportBundle(const std::string& bundleName)
 
         if (Zeitgeist_RegisterBundle == NULL)
         {
-                mLogServer->Error() << "ERROR: No entry point!" << std::endl;
+                mLogServer->Error() << "ERROR: (Core) No entry point!" << std::endl;
                 return false;
         }
 
