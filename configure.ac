@@ -160,6 +160,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/collisionperceptor/Makefile \
 		 app/Makefile \
+		 app/gendot/Makefile \
 		 app/agenttest/Makefile \
 		 app/coretest/Makefile \
 		 app/fonttest/Makefile \
