@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.h,v 1.1.2.1 2004/02/03 09:35:32 rollmark Exp $
+   $Id: gamestateperceptor.h,v 1.1.2.2 2004/02/06 13:44:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,12 @@
 #include <soccer/soccertypes.h>
 
 class GameStateAspect;
+class AgentState;
+
+namespace oxygen
+{
+    class Predicate;
+}
 
 class GameStatePerceptor : public oxygen::Perceptor
 {
@@ -46,9 +52,30 @@ protected:
     /** returns a string describing the given playmode */
     std::string PlayMode2Str(const TPlayMode mode) const;
 
+    /** inserts predicate parameters the agent receives once after a
+        successful init command into the predicate. These are it's
+        uniform number and team as well as a subset of the soccer
+        variables
+     */
+    void InsertInitialPercept(oxygen::Predicate& predicate);
+
+    /** inserts a soccer variable and its current value into the
+        predicate
+    */
+    void InsertSoccerParam(oxygen::Predicate& predicate,
+                           const std::string& name);
+
 protected:
     //! a reference to the game state
     boost::shared_ptr<GameStateAspect> mGameState;
+
+    //! a reference to the agentstate
+    boost::shared_ptr<AgentState> mAgentState;
+
+    /** true until Percept() is called the first time after the agent
+        is assigned to a team with a successful init command
+    */
+    bool mFirstPercept;
 };
 
 DECLARE_CLASS(GameStatePerceptor);
