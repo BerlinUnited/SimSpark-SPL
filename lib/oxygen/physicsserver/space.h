@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.4.8.1 2004/01/09 13:16:49 rollmark Exp $
+   $Id: space.h,v 1.4.8.2 2004/01/11 11:21:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,10 @@ public:
     ~Space();
 
     /** returns the ID of the managed ODE space */
-    dSpaceID        GetODESpace() const;
+    dSpaceID GetODESpace() const;
+
+    /** retuns the ID of joint group for all created contact joints */
+    dJointGroupID GetODEJointGroup() const;
 
     /** starts ODE's collision culling system. ODE will quickly
         identify which pairs of geoms are potentially
@@ -77,19 +80,6 @@ protected:
 
     /** updates internal state before physics calculation */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
-
-private:
-    /** returns a shared_ptr to the first parent of \param body on the
-        way up the hierarchy that is a Transform node
-     */
-    boost::shared_ptr<Transform> Space::GetTransformParent(Body* body);
-
-    /** searches for a CollisionPerceptor registered below the closest
-        TransformNode parent of \param body. If successful it adds the
-        closest Transform node parent of \param collidee to the list
-        of stored collidees in the CollisionPerceptor
-     */
-    void Space::NotifyCollisionPerceptor(Body* body, Body* collidee);
 
     //
     // Members
