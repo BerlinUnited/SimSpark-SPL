@@ -19,26 +19,6 @@ using namespace salt;
 using namespace std;
 using namespace zeitgeist;
 
-/*! Whenever we load a bundle, we add it to this list. This is necessary, because
-	we have to keep the connection to each bundle open, until all the class
-	objects belonging to it are completely destructed.
-
-	This workaround is very ugly ... it cost me about 3-4 hours of debugging to
-	get this to work. Somehow, when I destroyed a class belonging to a bundle,
-	it prevented the rest of the hierarchy deletion from working ... ouch. I
-	have no idea, why this happened. Now, when I keep the bundles (DLLs) open
-	for a while longer, then everything is nice and dandy.
-
-	NOTE: I had this first as a member of Core, but I can't control the order
-	in which the members are released and I would have to guarantee that gBundles
-	gets deleted AFTER mRoot. Switching the order the variables are defined would
-	probably take care of that, but sounds quite unportable, so I went with this
-	option (making it global). I have added a 'GarbageCollectBundles' function,
-	which erases 'unique' references.
-
-	WARNING: Just making this global is (apparently) not enough. 
-*/
-
 /*!
 	Create the fundamental classes needed for the hierarchy to operate
 */
