@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.4.2.1 2004/03/27 20:41:14 rollmark Exp $
+   $Id: sexpparser.cpp,v 1.4.2.2 2004/03/28 15:36:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,15 +26,16 @@ using namespace zeitgeist;
 using namespace std;
 using namespace boost;
 
-shared_ptr<Predicate::TList>
+
+shared_ptr<PredicateList>
 SexpParser::Parse(const std::string& input)
 {
     size_t len = input.length();
 
-    shared_ptr<Predicate::TList> pList(new Predicate::TList);
+    shared_ptr<PredicateList> predList(new PredicateList);
     if (len == 0)
     {
-            return pList;
+            return predList;
     }
 
     char* c = const_cast<char*>(input.c_str());
@@ -43,24 +44,17 @@ SexpParser::Parse(const std::string& input)
 
     while (sexp != 0)
     {
-        Predicate predicate;
-        SexpToPredicate(predicate,sexp);
-
-        if (! predicate.name.empty())
-        {
-            pList->push_back(predicate);
-        }
-
+        SexpToPredicate(predList,sexp);
         destroy_sexp(sexp);
         sexp = iparse_sexp(c,input.size(),pcont);
     }
 
     destroy_continuation(pcont);
-    return pList;
+    return predList;
 }
 
-std::string
-SexpParser::Generate(shared_ptr<Predicate::TList> input)
+string
+SexpParser::Generate(boost::shared_ptr<PredicateList> input)
 {
     if (input.get() == 0)
     {
@@ -68,10 +62,10 @@ SexpParser::Generate(shared_ptr<Predicate::TList> input)
     }
 
     stringstream ss;
-    Predicate::TList& list = *input.get();
+    PredicateList& list = *input.get();
 
     for (
-         Predicate::TList::const_iterator i = list.begin();
+         PredicateList::TList::const_iterator i = list.begin();
          i != list.end();
          ++i
          )
@@ -90,9 +84,8 @@ SexpParser::SexpToList(ParameterList& arguments, const sexp_t* const sexp)
         {
             arguments.AddValue(string(s->val));
         } else {
-            ParameterList elem;
+            ParameterList& elem = arguments.AddList();
             SexpToList(elem,s->list);
-            arguments.AddValue(elem);
         }
         s = s->next;
     }
@@ -100,7 +93,7 @@ SexpParser::SexpToList(ParameterList& arguments, const sexp_t* const sexp)
 
 void
 SexpParser::SexpToPredicate
-(Predicate& predicate, const sexp_t* const sexp)
+(shared_ptr<PredicateList>& predList, const sexp_t* const sexp)
 {
     // throw away outer brackets (i.e. we have a list at the top
     // level)
@@ -119,6 +112,7 @@ SexpParser::SexpToPredicate
             return;
         }
 
+    Predicate& predicate = predList->AddPredicate();
     predicate.name = string(s->val);
     SexpToList(predicate.parameter,s->next);
 }

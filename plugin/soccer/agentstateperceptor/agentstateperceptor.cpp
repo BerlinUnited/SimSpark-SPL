@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstateperceptor.cpp,v 1.3.2.1 2004/03/28 13:37:04 rollmark Exp $
+   $Id: agentstateperceptor.cpp,v 1.3.2.2 2004/03/28 15:36:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ AgentStatePerceptor::~AgentStatePerceptor()
 }
 
 bool
-AgentStatePerceptor::Percept(oxygen::Predicate& predicate)
+AgentStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
     if (mAgentState.get() == 0)
     {
@@ -53,6 +53,7 @@ AgentStatePerceptor::Percept(oxygen::Predicate& predicate)
 
     mSenses = mPerceptRate;
 
+    Predicate& predicate = predList->AddPredicate();
     predicate.name = "AgentState";
     predicate.parameter.Clear();
 
