@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: axis.cpp,v 1.3 2004/04/10 11:04:58 rollmark Exp $
+$Id: axis.cpp,v 1.4 2004/04/12 17:19:48 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "axis.h"
 #include "../openglserver/openglserver.h"
+#include <kerosin/openglserver/glbase.h>
 
 using namespace kerosin;
 
@@ -30,21 +31,29 @@ Axis::Axis() : mSize(10.0f)
 
 void Axis::RenderInternal()
 {
+    RGBA colX(1,0,0,1);
+    RGBA colY(0,1,0,1);
+    RGBA colZ(0,0,1,1);
+
     // X
-    glColor3f(1, 0, 0);
+    glColor3fv(colX);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,colX);
     glBegin(GL_LINE_LOOP);
     glVertex3f(0,0,0);
     glVertex3f(mSize,0,0);
     glEnd();
 
     // Y
-    glColor3f(0, 1, 0);
+    glColor3fv(colY);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,colY);
     glBegin(GL_LINE_LOOP);
     glVertex3f(0,0,0);
     glVertex3f(0,mSize,0);
     glEnd();
 
     // Z
+    glColor3fv(colZ);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,colZ);
     glColor3f(0, 0, 1);
     glBegin(GL_LINE_LOOP);
     glVertex3f(0,0,0);
