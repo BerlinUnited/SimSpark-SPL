@@ -97,6 +97,8 @@ physicsserver/joint.cpp \
 physicsserver/joint_c.cpp \
 physicsserver/balljoint.cpp \
 physicsserver/balljoint_c.cpp \
+physicsserver/hingejoint.cpp \
+physicsserver/hingejoint_c.cpp \
 sceneserver/basenode.cpp \
 sceneserver/basenode_c.cpp \
 sceneserver/fpscontroller.cpp \
@@ -145,6 +147,7 @@ physicsserver/dragcontroller.h \
 physicsserver/velocitycontroller.h \
 physicsserver/joint.h \
 physicsserver/balljoint.h \
+physicsserver/hingejoint.h \
 sceneserver/sceneimporter.h \
 sceneserver/basenode.h \
 sceneserver/fpscontroller.h \
