@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.5 2004/06/08 09:22:27 jamu Exp $
+   $Id: glserver.h,v 1.6 2004/06/13 13:24:38 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ public:
     int GetTextHeight() const;
     int GetTextWidth(const char* text) const;
 
-    void DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz);
+    void DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz, float barRadius = 0.06);
     void DrawSphere(salt::Vector3f spherePos, float radius, int res = 10);
     void DrawShadowOfSphere(salt::Vector3f spherePos,float radius);
     void DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz);
