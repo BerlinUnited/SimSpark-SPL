@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.13 2004/07/21 08:53:02 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.14 2004/12/17 20:28:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -284,13 +284,13 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
 
     TTeamIndex  ti          = mAgentState->GetTeamIndex();
 
-    const Vector3f& forward = mTransformParent->GetWorldTransform().Forward();
+    const Vector3f& up = mTransformParent->GetWorldTransform().Up();
 
     // calc the percptors angle in the horizontal plane
-    double fwTheta = salt::gArcTan2(forward[1], forward[0]);
+    double fwTheta = gNormalizeRad(Vector2f(up[0],up[1]).GetAngleRad());
 
     // calc the perceptors angle in the vertical plane
-    double fwPhi = salt::gArcCos(forward[2]/forward.Length());
+    double fwPhi = gNormalizeRad(Vector2f(up[0],up[2]).GetAngleRad());
 
     TObjectList visibleObjects;
     SetupVisibleObjects(visibleObjects);
@@ -313,16 +313,16 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
         }
 
         // theta is the angle in horizontal plane, with fwAngle as 0 degree
-        od.mTheta = salt::gRadToDeg(
-                                    salt::gArcTan2(od.mRelPos[1], od.mRelPos[0]) -
-                                    fwTheta
-                                    );
+        od.mTheta = gRadToDeg(gNormalizeRad(
+                              Vector2f(od.mRelPos[0],od.mRelPos[1]).GetAngleRad() -
+                              fwTheta
+                              ));
 
         // latitude with fwPhi as 0 degreee
-        od.mPhi = 90.0 - salt::gRadToDeg(
-                                         salt::gArcCos(od.mRelPos[2]/od.mDist) -
-                                         fwPhi
-                                         );
+        od.mPhi = gRadToDeg(gNormalizeRad(
+                            Vector2f(od.mRelPos[0],od.mRelPos[2]).GetAngleRad() -
+                            fwPhi
+                            ));
 
         // make some noise
         ApplyNoise(od);
