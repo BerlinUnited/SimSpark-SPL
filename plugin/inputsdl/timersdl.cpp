@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timersdl.cpp,v 1.3 2004/03/09 12:47:01 rollmark Exp $
+   $Id: timersdl.cpp,v 1.4 2004/04/23 20:53:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 using namespace kerosin;
 
-TimerSDL::TimerSDL() : InputDeviceSDL(), mLastTicks(0)
+TimerSDL::TimerSDL() : mLastTicks(0)
 {
 }
 
@@ -32,31 +32,34 @@ TimerSDL::~TimerSDL()
 {
 }
 
-bool TimerSDL::Init(kerosin::InputSystem *inputSystem)
+bool
+TimerSDL::Init(kerosin::InputSystem *inputSystem)
 {
-        if (InputDevice::Init(inputSystem) == false)
-            {
-                return false;
-            }
+    if (InputDevice::Init(inputSystem) == false)
+    {
+        return false;
+    }
 
-        mLastTicks = SDL_GetTicks();
+    mLastTicks = SDL_GetTicks();
 
-        return true;
+    return true;
 }
 
-int TimerSDL::EventFilter(const SDL_Event *event)
+int
+TimerSDL::EventFilter(const SDL_Event* event)
 {
-        return 1;
+    return 1;
 }
 
-void TimerSDL::GetInput(kerosin::InputServer::Input &input)
+void
+TimerSDL::GetInput(kerosin::InputServer::Input& input)
 {
-        input.type      = InputServer::eAxis;
-        input.code      = mInputSystem->GetInputServer()->IC_AXIST;
+    input.type      = InputServer::eAxis;
+    input.code      = mInputSystem->GetInputServer()->IC_AXIST;
 
-        unsigned int ticks = SDL_GetTicks();
+    unsigned int ticks = SDL_GetTicks();
 
-        // FIXME: ticks might wrap
-        input.data.l = ticks - mLastTicks;
-        mLastTicks = ticks;
+    // FIXME: ticks might wrap
+    input.data.l = ticks - mLastTicks;
+    mLastTicks = ticks;
 }
