@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1.2.9 2004/02/03 09:36:46 rollmark Exp $
+   $Id: export.cpp,v 1.1.2.10 2004/02/05 10:19:12 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include "sexpmonitor/sexpmonitor.h"
 #include "fieldflag/fieldflag.h"
 #include "ball/ball.h"
+#include "soccerbase/soccerbase.h"
 #include "visionperceptor/visionperceptor.h"
 #include "gamestateperceptor/gamestateperceptor.h"
 
@@ -49,6 +50,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SexpMonitor);
         ZEITGEIST_EXPORT(FieldFlag);
         ZEITGEIST_EXPORT(Ball);
+        ZEITGEIST_EXPORT(SoccerBase);
         ZEITGEIST_EXPORT(VisionPerceptor);
         ZEITGEIST_EXPORT(GameStatePerceptor);
 ZEITGEIST_EXPORT_END()
