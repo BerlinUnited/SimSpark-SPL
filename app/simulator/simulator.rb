@@ -76,6 +76,7 @@ def addAgent(aspectPath)
 
   # perceptor setup
   new('VisionPerceptor', aspectPath+'VisionPerceptor')
+  new('GameStatePerceptor', aspectPath+'GameStatePerceptor')
 
   # agent state
   new('AgentState', aspectPath+'AgentState')
@@ -284,4 +285,3 @@ monitorServer.registerMonitorSystem('SexpMonitor')
 # queue agents for startup
 spadesServer.queueAgents('foo', 2)
 spadesServer.queueAgents('bar', 2)
-
