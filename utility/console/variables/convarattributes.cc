@@ -124,7 +124,7 @@ ConVarAttributes::isInGroup(EConVarGroup group) const
 
 void
 ConVarAttributes::setCallBack(ConVarCallBack* callBackObject, 
-			      int callBackIndex)
+               int callBackIndex)
 {
     mCallBackObject = callBackObject;
     mCallBackIndex = callBackIndex;

@@ -51,13 +51,13 @@ ConVarState::setBool(const bool value)
 }
 
 bool 
-ConVarState::setInt(const int value)
+ConVarState::setInt(int value)
 {
     return false;
 }
 
 bool 
-ConVarState::setFloat(const float value)
+ConVarState::setFloat(float value)
 {
     return false;
 }

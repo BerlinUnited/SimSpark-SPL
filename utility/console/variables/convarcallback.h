@@ -21,7 +21,7 @@
 #define _CONVARCALLBACK_H_
 
 /*! \class ConVarCallBack
- $Id: convarcallback.h,v 1.1 2002/08/12 17:13:10 fruit Exp $
+ $Id: convarcallback.h,v 1.2 2002/08/14 09:24:53 fruit Exp $
 
     ConVarCallBack - Call Back Functionality for Console Variables
 
@@ -46,12 +46,12 @@
 class ConVarCallBack
 {
 public:
-	virtual ~ConVarCallBack() {};
-	
-	/*! The entry point for all callback functionality.
-	    Something should be done dependend on the index.
-	*/
-	virtual void callBack(int index) = 0;
+   virtual ~ConVarCallBack() {};
+   
+   /*! The entry point for all callback functionality.
+       Something should be done dependend on the index.
+   */
+   virtual void callBack(int index) = 0;
 };
 
 #endif // _CONVARCALLBACK_H_

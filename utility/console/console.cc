@@ -80,7 +80,7 @@ Console::invokeBinding(const BaseInputDevice::Input &input)
 bool 
 Console::execute(const string &input)
 {
-    pair <bool, ConsoleParser::tStatementList> scanResult;
+    pair <bool, ConsoleParser::TStatementList> scanResult;
     
     // try to scan the input
     scanResult = mParser.scan(input);
@@ -100,9 +100,9 @@ Console::execute(const string &input)
     
     // execute every parsed statement
     bool success = true;
-    for (ConsoleParser::tStatementList::iterator iter = scanResult.second.begin(); 
-	 iter != scanResult.second.end(); 
-	 ++iter)
+    for (ConsoleParser::TStatementList::iterator iter = scanResult.second.begin(); 
+    iter != scanResult.second.end(); 
+    ++iter)
     {
         success = success && perform(*iter);
     }
@@ -135,8 +135,8 @@ Console::perform(ConVar::tConVars &conVars)
     if (execResult == ConCommand::CER_INV_SIGNATURE)
     {
         gDispatchNormal("the command %s could not be executed: "
-			"wrong type of arguments.\n", 
-			commandVar->getAttributes().getName().c_str());
+         "wrong type of arguments.\n", 
+         commandVar->getAttributes().getName().c_str());
         gDispatchNormal("%s\n", command->getUsage().c_str());
 
         return false;
@@ -188,9 +188,9 @@ Console::draw() const
     if (isActive())
     {
         // tell every view to draw itself
-        for (tViews::const_iterator iter = mViews.begin(); 
-	     iter != mViews.end(); 
-	     ++iter)
+        for (TViews::const_iterator iter = mViews.begin(); 
+        iter != mViews.end(); 
+        ++iter)
         {
             (*iter)->draw();
         }
@@ -206,8 +206,8 @@ Console::registerView(ConsoleBaseView *view)
 void 
 Console::unregisterView(ConsoleBaseView *view)
 {
-    for (tViews::iterator iter = mViews.begin(); 
-	 iter != mViews.end(); )
+    for (TViews::iterator iter = mViews.begin(); 
+    iter != mViews.end(); )
     {
         if (*iter == view)
         {

@@ -36,7 +36,7 @@
 class ConsoleBaseView;
 
 /*! \class Console
-  $Id: console.h,v 1.1 2002/08/13 13:04:47 fruit Exp $
+  $Id: console.h,v 1.2 2002/08/14 09:24:52 fruit Exp $
 
     Console
 
@@ -122,7 +122,7 @@ public:
 
 protected:
     //! a container for the views
-    typedef std::list<ConsoleBaseView*> tViews;
+    typedef std::list<ConsoleBaseView*> TViews;
     //! this is a singleton: we don't want no copies
     Console();
     Console(const Console&);
@@ -136,7 +136,7 @@ protected:
     //! is the console active?
     bool mActive;
     //! the registered views
-    tViews mViews;
+    TViews mViews;
     /*! The console forwarder.
         Should exist before the mSettings, as the settings will
         reconfigure the forwarders message interests.

@@ -31,7 +31,7 @@ class Vector3;
 class ConVarCallBack;
 
 /*! \class ConVar
-  $Id: convar.h,v 1.1 2002/08/12 17:13:09 fruit Exp $
+  $Id: convar.h,v 1.2 2002/08/14 09:24:53 fruit Exp $
 
     ConVar - Console Variables
 
@@ -61,7 +61,7 @@ class ConVarCallBack;
       ConVar and ConVarServer
     - appropriate set/get methods might have to be added to ConVar and
       ConVarState
-    - ConVar::IsConvertableTo has to be extended
+    - ConVar::isConvertibleTo has to be extended
 
     HISTORY:
     The console/variable subsystem was taken from a student project at
@@ -102,8 +102,8 @@ public:
         //! a ConVar
         eCVT_VARIABLE            = 0x0000000B,        
         /*! A command: the value must be >0, 
-	    see ConsoleBindings for more detailed information.
-	*/
+       see ConsoleBindings for more detailed information.
+   */
         eCVT_COMMAND                = 0x0000000C,        
         //! a bool
         eCVT_BOOL                = 0x0000000D,
@@ -121,13 +121,13 @@ public:
 
 
     //! a container for the types of a ConVar
-    typedef std::list<EConVarType>    tEConVarTypes;
+    typedef std::list<EConVarType> TEConVarTypes;
     //! a container of ConVars
-    typedef std::vector<ConVar*>        tConVars;
+    typedef std::vector<ConVar*> TConVars;
 
     ~ConVar();
     
-    ConVar* Clone() const;
+    ConVar* clone() const;
     
     //! named constructors
     //! if no attributes are given the default attributes are taken (ConVarAttributes::getDefault)
@@ -135,60 +135,60 @@ public:
     //! the reference types (CreateRefxxx) store only a reference to the supplied value,
     //! therefore its deletion remains the responsibility of the caller
     static ConVar* createUndefined(const ConVarAttributes& attributes = 
-				   ConVarAttributes::getDefault());
+               ConVarAttributes::getDefault());
     static ConVar* createBool(bool value, const ConVarAttributes& attributes =
-			      ConVarAttributes::getDefault());
+               ConVarAttributes::getDefault());
     static ConVar* createInt(int value, const ConVarAttributes& attributes = 
-			     ConVarAttributes::getDefault());
+              ConVarAttributes::getDefault());
     static ConVar* createFloat(float value, const ConVarAttributes& attributes =
-			       ConVarAttributes::getDefault());
+                ConVarAttributes::getDefault());
     static ConVar* createString(const std::string& value, 
-				const ConVarAttributes& attributes = 
-				ConVarAttributes::getDefault());
+            const ConVarAttributes& attributes = 
+            ConVarAttributes::getDefault());
     static ConVar* createCharString(const char* value, 
-				    const ConVarAttributes& attributes = 
-				    ConVarAttributes::getDefault());
+                const ConVarAttributes& attributes = 
+                ConVarAttributes::getDefault());
     static ConVar* createVector(float x, float y, float z, 
-				const ConVarAttributes& attributes = 
-				ConVarAttributes::getDefault());
+            const ConVarAttributes& attributes = 
+            ConVarAttributes::getDefault());
     static ConVar* createVector(const Vector3& value, const ConVarAttributes& 
-				attributes = ConVarAttributes::getDefault());
+            attributes = ConVarAttributes::getDefault());
     static ConVar* createCommand(const ConCommand* value, 
-				 const ConVarAttributes& attributes = 
-				 ConVarAttributes::getDefault());
+             const ConVarAttributes& attributes = 
+             ConVarAttributes::getDefault());
     static ConVar* createVariable(ConVar* value, 
-				  const ConVarAttributes& attributes = 
-				  ConVarAttributes::getDefault());
+              const ConVarAttributes& attributes = 
+              ConVarAttributes::getDefault());
     static ConVar* createRefBool(bool* value, 
-				 const ConVarAttributes& attributes = 
-				 ConVarAttributes::getDefault());
+             const ConVarAttributes& attributes = 
+             ConVarAttributes::getDefault());
     static ConVar* createRefInt(int* value, 
-				const ConVarAttributes& attributes = 
-				ConVarAttributes::getDefault());
+            const ConVarAttributes& attributes = 
+            ConVarAttributes::getDefault());
     static ConVar* createRefFloat(float* value, 
-				  const ConVarAttributes& attributes = 
-				  ConVarAttributes::getDefault());
+              const ConVarAttributes& attributes = 
+              ConVarAttributes::getDefault());
     static ConVar* createRefString(std::string* value, 
-				   const ConVarAttributes& attributes = 
-				   ConVarAttributes::getDefault());
+               const ConVarAttributes& attributes = 
+               ConVarAttributes::getDefault());
     /*! The referenced char string must already be defined as it will
         be deleted on its change.
     */
     static ConVar* createRefCharString(char** value, 
-				       const ConVarAttributes& attributes = 
-				       ConVarAttributes::getDefault());
+                   const ConVarAttributes& attributes = 
+                   ConVarAttributes::getDefault());
     static ConVar* createRefVector(Vector3* value, 
-				   const ConVarAttributes& attributes = 
-				   ConVarAttributes::getDefault());
+               const ConVarAttributes& attributes = 
+               ConVarAttributes::getDefault());
     static ConVar* createLabel(const std::string& value, 
-			       const ConVarAttributes& attributes = 
-			       ConVarAttributes::getDefault());
+                const ConVarAttributes& attributes = 
+                ConVarAttributes::getDefault());
     static ConVar* createSeparator(const std::string& value, 
-				   const ConVarAttributes& attributes = 
-				   ConVarAttributes::getDefault());
+               const ConVarAttributes& attributes = 
+               ConVarAttributes::getDefault());
     static ConVar* createSeparator(const char value, 
-				   const ConVarAttributes& attributes = 
-				   conVarAttributes::getDefault());
+               const ConVarAttributes& attributes = 
+               conVarAttributes::getDefault());
     
     //! returns the attributes of the variable
     ConVarAttributes getAttributes() const;
@@ -223,19 +223,19 @@ public:
     bool isSeparator() const;
 
     /*! These methods set the value of the variabel, if
-        - the value is convertable to the variables type
+        - the value is convertible to the variables type
         - or the variables is currently of type undefined.
           In this case it will change its type to the type given in
           the set method, e.g. setInt will replace an undefined
           variable with a variable of type int.
     
-	The setRefXXX methods are only applicable on an undefined
-	variable.  the value will be copied, its garbage collection is
-	the responsibility of the caller
+   The setRefXXX methods are only applicable on an undefined
+   variable.  the value will be copied, its garbage collection is
+   the responsibility of the caller
     */
     bool setBool(const bool value);
-    bool setInt(const int value);
-    bool setFloat(const float value);
+    bool setInt(int value);
+    bool setFloat(float value);
     bool setString(const std::string& value);
     bool setCharString(const char* value);
     bool setVector(const Vector3& value);

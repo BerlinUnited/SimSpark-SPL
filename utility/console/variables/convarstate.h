@@ -26,7 +26,7 @@
 #include "convar.h"
 
 /*! \class ConVarState
- $Id: convarstate.h,v 1.1 2002/08/12 17:13:10 fruit Exp $
+ $Id: convarstate.h,v 1.2 2002/08/14 09:24:53 fruit Exp $
 
     ConVarState
     The base class of the console variable types.  It contains the
@@ -70,8 +70,8 @@ public:
 
     //! a set and get method for each variable type 
     virtual bool setBool(const bool value);
-    virtual bool setInt(const int value);
-    virtual bool setFloat(const float value);
+    virtual bool setInt(int value);
+    virtual bool setFloat(float value);
     virtual bool setString(const std::string& value);
     virtual bool setCharString(const char* value);
     virtual bool setVector(const Vector3& value);

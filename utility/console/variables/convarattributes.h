@@ -26,18 +26,18 @@
 class ConVarCallBack;
 
 /*! \class ConVarAttributes
-  $Id: convarattributes.h,v 1.1 2002/08/12 17:13:09 fruit Exp $
+  $Id: convarattributes.h,v 1.2 2002/08/14 09:24:53 fruit Exp $
 
     ConVarAttributes
 
     Contains the attributes of a console variable (ConVar + ConVarState).
 
         defaults (as returned by getDefault):
-	name            : ""
-	removable       : true;
-	constant        : false;
-	group           : eCVG_USER;
-	mCallBackObject : NULL;
+   name            : ""
+   removable       : true;
+   constant        : false;
+   group           : eCVG_USER;
+   mCallBackObject : NULL;
 
     HISTORY:
     The console/variable subsystem was taken from a student project at
@@ -57,17 +57,17 @@ public:
         eCVG_USER               = 0x00000000,        
         /*! a ConVar which may be bound by ConBind to a key and 
             represents a command
-	*/
+   */
         eCVG_COMMAND            = 0x00000001,
-        //! a console configuration variable from ConsoleSettings
+        //! a console configuration variable from Consolesettings
         eCVG_CON_SET            = 0x00000002,
-        /*! a console configuration variable from ConsoleSettings: 
+        /*! a console configuration variable from Consolesettings: 
             specialized for color
-	*/
+   */
         eCVG_CON_SET_COLOR      = 0x00000004,
-        /*! a constant defined and used by ConsoleSettings: 
-	    specialized for color 
-	*/
+        /*! a constant defined and used by Consolesettings: 
+       specialized for color 
+   */
         eCVG_CONST_COLOR        = 0x00000008,
         //! this makes the enum to be 32-bits
         eCVG_FORCE32BIT         = 0xffffffff    
@@ -83,7 +83,7 @@ public:
     void setName(std::string name);
     //! returns the name of the variable
     std::string getName() const;
-    /*! Sets if the variable is removable.
+    /*! sets if the variable is removable.
         If not a user may not delete it with a console command. 
     */
     void setRemovable(bool removable = true);
@@ -104,7 +104,7 @@ public:
     void removeGroup(EConVarGroup group);
     //! tests the group membership
     bool isInGroup(EConVarGroup group) const;
-    /*! Sets a callback method and index (ConVarCallBack). This method
+    /*! sets a callback method and index (ConVarCallBack). This method
         will be executed by CallBack(). It enables to signal
         immediately the change of a variable to another object
     */
