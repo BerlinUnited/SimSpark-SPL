@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector.cpp,v 1.5 2004/03/23 09:36:01 rollmark Exp $
+   $Id: driveeffector.cpp,v 1.6 2004/06/19 11:42:33 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 */
 #include "driveaction.h"
 #include "driveeffector.h"
-#include <salt/random.h>
 #include <salt/gmath.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/physicsserver/spherecollider.h>
@@ -32,7 +31,7 @@ using namespace oxygen;
 using namespace salt;
 
 DriveEffector::DriveEffector() : oxygen::Effector(),
-                                 mForceFactor(60.0),mSigma(-1.0),
+                                 mForceFactor(60.0),
                                  mMaxPower(100.0), mConsumption(1.0/18000.0)
 {
 }
@@ -77,11 +76,11 @@ DriveEffector::Realize(boost::shared_ptr<ActionObject> action)
         mForce *= mMaxPower;
     }
 
-    if (mSigma > 0.0)
+    if (mForceErrorRNG.get() != 0)
     {
-        mForce[0] = mForce[0] * salt::NormalRNG<>(1.0,mSigma)() * mForceFactor;
-        mForce[1] = mForce[1] * salt::NormalRNG<>(1.0,mSigma)() * mForceFactor;
-        mForce[2] = mForce[2] * salt::NormalRNG<>(1.0,mSigma)() * mForceFactor;
+        mForce[0] = mForce[0] * (*(mForceErrorRNG.get()))() * mForceFactor;
+        mForce[1] = mForce[1] * (*(mForceErrorRNG.get()))() * mForceFactor;
+        mForce[2] = mForce[2] * (*(mForceErrorRNG.get()))() * mForceFactor;
     } else {
         mForce = mForce * mForceFactor;
     }
@@ -132,6 +131,7 @@ DriveEffector::OnLink()
 void
 DriveEffector::OnUnlink()
 {
+    mForceErrorRNG.reset();
     mTransformParent.reset();
     mBody.reset();
 }
@@ -145,7 +145,8 @@ DriveEffector::SetForceFactor(float force_factor)
 void
 DriveEffector::SetSigma(float sigma)
 {
-    mSigma = sigma;
+    NormalRngPtr rng(new salt::NormalRNG<>(1.0,sigma));
+    mForceErrorRNG = rng;
 }
 
 void
