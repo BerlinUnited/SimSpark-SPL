@@ -9,6 +9,13 @@
 /Makefile
 /Makefile.in
 /stamp-h1
+config.aux/config.guess
+config.aux/config.sub
+config.aux/depcomp
+config.aux/install-sh
+config.aux/ltmain.sh
+config.aux/missing
+config.aux/mkinstalldirs
 doc/Doxyfile
 doc/Makefile
 doc/Makefile.in
