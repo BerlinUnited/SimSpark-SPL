@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.1 2004/04/07 11:31:57 rollmark Exp $
+   $Id: joint.h,v 1.2 2004/04/10 14:07:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,6 +48,12 @@ public:
         have no effect on the simulation.
     */
     void Attach(boost::shared_ptr<Body> body1, boost::shared_ptr<Body> body2);
+
+    /** attaches the joint to some new bodies, that are given as path
+        expressions. These path expressions are allowed to be relative
+        to this joint node.
+     */
+    void Attach(const std::string& path1, const std::string& path2);
 
     /** returns one of the bodies that this joint connects, according
         to the given EBodyIndex
@@ -103,6 +109,9 @@ public:
 protected:
     /** associated the created ODE joint with this node */
     virtual void OnLink();
+
+    /** get the node at 'path' and tries a cast to Body */
+    boost::shared_ptr<Body> GetBody(const std::string& path);
 
 protected:
     /** the managed ODE joint */

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.1 2004/04/07 11:31:57 rollmark Exp $
+   $Id: joint.cpp,v 1.2 2004/04/10 14:07:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,6 +94,49 @@ void Joint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
     const dBodyID id2 = (body2.get() == 0) ? 0 : body2->GetODEBody();
 
     dJointAttach(mODEJoint, id1, id2);
+}
+
+shared_ptr<Body> Joint::GetBody(const std::string& path)
+{
+    shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
+        (make_shared(GetSelf()));
+
+    shared_ptr<Leaf> leaf = GetCore()->Get(path,mySelf);
+
+    if (leaf.get() == 0)
+        {
+            GetLog()->Error()
+                << "(Joint) ERROR: cannot find node '"
+                << path << "'\n";
+            return shared_ptr<Body>();
+        }
+
+    shared_ptr<Body> body = shared_dynamic_cast<Body>(leaf);
+
+    if (body.get() == 0)
+        {
+            GetLog()->Error()
+                << "(Joint) ERROR: node '"
+                << path << "' is not a Body node \n";
+        }
+
+    return body;
+}
+
+void Joint::Attach(const std::string& path1, const std::string& path2)
+{
+    shared_ptr<Body> body1 = GetBody(path1);
+    shared_ptr<Body> body2 = GetBody(path2);
+
+    if (
+        (body1.get() == 0) ||
+        (body2.get() == 0)
+        )
+        {
+            return;
+        }
+
+    Attach(body1,body2);
 }
 
 int Joint::GetType()

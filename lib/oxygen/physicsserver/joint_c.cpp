@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint_c.cpp,v 1.1 2004/04/07 11:31:57 rollmark Exp $
+   $Id: joint_c.cpp,v 1.2 2004/04/10 14:07:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,9 +24,30 @@
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
+using namespace std;
+
+FUNCTION(Joint,attach)
+{
+    string inPath1;
+    string inPath2;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in.begin(), inPath1)) ||
+        (! in.GetValue(in.begin(), inPath2))
+        )
+        {
+            return false;
+        }
+
+    obj->Attach(inPath1,inPath2);
+    return true;
+}
+
 
 void CLASS(Joint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_FUNCTION(attach);
 }
 
