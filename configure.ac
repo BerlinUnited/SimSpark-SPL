@@ -44,6 +44,7 @@ AC_CHECK_HEADERS([GL/glx.h],
 
 GLDIR=`echo "#include <GL/gl.h>" | /lib/cpp -M | awk '{ print $2 }'`
 GLDIR=`dirname "$GLDIR"`
+AC_SUBST([GLDIR], [$GLDIR])
 AC_CHECK_FILE([$GLDIR/glx.h])
 
 AC_CHECK_HEADER([boost/version.hpp],,
@@ -69,6 +70,9 @@ AC_PATH_X
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
+		 utility/Makefile \
+		 utility/glextgen/Makefile \
+		 utility/glextgen/glextgen.rb \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/zeitgeist/Makefile \
