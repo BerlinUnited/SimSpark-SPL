@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.3.2.2 2004/02/01 22:14:48 fruit Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.3.2.3 2004/02/06 21:56:13 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ using namespace boost;
 
 PerfectVisionPerceptor::PerfectVisionPerceptor() : oxygen::Perceptor()
 {
+    mInvertX = mInvertY = mInvertZ = false;
 }
 
 PerfectVisionPerceptor::~PerfectVisionPerceptor()
@@ -91,9 +92,9 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
 
         Predicate::TParameterList position;
         position.push_back(std::string("pos"));
-        position.push_back(pos[0]);
-        position.push_back(pos[2]);
-        position.push_back(pos[1]);
+        position.push_back(mInvertX ? -pos[0] : pos[0]);
+        position.push_back(mInvertZ ? -pos[2] : pos[2]);
+        position.push_back(mInvertY ? -pos[1] : pos[1]);
 
         Predicate::TParameterList element;
 
@@ -105,3 +106,12 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
 
     return true;
 }
+
+void
+PerfectVisionPerceptor::SetInversion(bool x, bool y, bool z)
+{
+    mInvertX = x;
+    mInvertY = y;
+    mInvertZ = z;
+}
+
