@@ -9,12 +9,12 @@ AM_ENABLE_SHARED(no)
 AM_ENABLE_STATIC(yes)
 
 AC_ARG_ENABLE(debug,
-     [  --enable-debug    Turn on debugging],
+     AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
      [case "${enableval}" in
        yes) debug=true ;;
        no)  debug=false ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
-     esac],[debug=false])
+     esac],[debug=true])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
 # Checks for programs.
