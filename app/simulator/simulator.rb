@@ -17,12 +17,12 @@ importBundle "soccer"
 #
 
 # the soccer field dimensions in meters
-$fieldLength = 52.5
-$fieldWidth  = 34.0
-$fieldHeight = 10.0
-$goalWidth   = 7.0
+$fieldLength = 105.0
+$fieldWidth  = 68.0
+$fieldHeight = 20.0
+$goalWidth   = 7.32
 $goalDepth   = 2.0
-$goalHeight  = 1.80
+$goalHeight  = 2.44
 $borderSize  = 4.0
 
 # scene and server path
@@ -31,7 +31,7 @@ $serverPath = '/sys/server/'
 
 # agent parameters
 $agentMass     = 75.0
-$agentRadius   = 1.0
+$agentRadius   = 0.3
 $agentMaxSpeed = 10.0
 
 #
@@ -69,6 +69,7 @@ def addAgent(aspectPath)
 
   # perceptor setup
   new('PerfectVisionPerceptor', aspectPath+'PerfectVisionPerceptor')
+  new('VisionPerceptor', aspectPath+'VisionPerceptor')
 
   # agent state
   new('AgentState', aspectPath+'AgentState')
@@ -94,12 +95,12 @@ def addBall(x,y,z)
   ball.setLocalPos(x,y,z)
 
   physics = new('kerosin/Body', path+'physics')
-  physics.setMass(0.3)
+  physics.setMass(0.4)
 
   geomPath = path+'geometry/'
 
   geometry = new('kerosin/SphereCollider', geomPath)
-  geometry.setRadius(0.3)
+  geometry.setRadius(0.111)
 
   new('kerosin/RecorderHandler', geomPath+'recorder')
   new('kerosin/ContactJointHandler', geomPath+'contact')
