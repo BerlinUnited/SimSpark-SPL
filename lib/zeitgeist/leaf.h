@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.8.2.1 2004/03/27 10:26:09 rollmark Exp $
+   $Id: leaf.h,v 1.8.2.2 2004/03/27 11:28:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,13 +93,42 @@ public:
     virtual boost::shared_ptr<Leaf>
     GetChildOfClass(const std::string &name, bool recursive = false);
 
-    /** defines an interface to get a list of children supporting
-        the class 'name' (i.e. nodes of a type equal to or derived
-        from the class 'name'), which can be searched
-        recursively. The class Leaf will always return an empty
-        reference */
+    /** defines an interface to get the fist child supporting the
+        class 'name' (i.e. nodes of a type equal to or derived from
+        the class 'name'), which can be searched recursively. The
+        class Leaf will always return an empty reference */
     virtual boost::shared_ptr<Leaf>
     GetChildSupportingClass(const std::string &name, bool recursive = false);
+
+    /** defines an interface to get the fist child supporting the
+        class 'name' (i.e. nodes of a type equal to or derived from
+        the class 'name'), which can be searched recursively. The
+        class Leaf will always return an empty reference. This
+        implementation of FindChildSupportingClass does not rely on the
+        associated zeitgeist class name but uses the c++ typeid
+        system. */
+    template<class CLASS>
+    boost::shared_ptr<CLASS>
+    FindChildSupportingClass(bool recursive = false)
+    {
+        TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
+        for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
+            {
+                // check if we have found a match and return it
+                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                if (child.get() != 0)
+                    {
+                        return child;
+                    }
+
+                if (recursive)
+                    {
+                        return FindChildSupportingClass<CLASS>(recursive);
+                    }
+            }
+
+        return boost::shared_ptr<CLASS>();
+    }
 
     /** defines an interface to get a list of children. The Leaf
         class will always return an empty list */
