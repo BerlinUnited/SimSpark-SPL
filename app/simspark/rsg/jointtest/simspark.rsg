@@ -25,7 +25,15 @@
        (importScene rsg/boxspheres/staticbox.rsg 15 80 0.2 matGreen)
        )
 
- ; add some bodies connected with joints
+
+ ; add some rotors
+ (importScene rsg/jointtest/rotorlayer.rsg 200 300)
+ (node Transform
+      (setLocalPos 0 -20 15)
+      (importScene rsg/boxspheres/layer.rsg 1 0.01)
+      )
+    
+  ; add some bodies connected with joints
  (node Transform
        (setLocalPos -2 40 32)
        (importScene rsg/jointtest/hinge2thing.rsg)
@@ -62,6 +70,14 @@
        (importScene rsg/jointtest/hingething.rsg)
        )
 
+
+ (node Transform 
+       (setLocalRotation 45 0 0)
+       (setLocalPos 0 0 30)
+       (importScene rsg/jointtest/hingething.rsg)
+       )
+
+
  (node Transform 
        (setLocalRotation 45 0 0)
        (setLocalPos 10 10 10)
@@ -73,5 +89,4 @@
        (setLocalRotation 45 0 0)
        (importScene rsg/jointtest/universalthing.rsg)
        )
- 
  )
