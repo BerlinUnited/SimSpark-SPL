@@ -1,0 +1,20 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+; add lights
+ (node Transform
+       (setLocalPos -10 10 10)
+       (node Light
+	     (setDiffuse 1.0 1.0 1.0 1.0)
+	     (setSpecular 0.1 0.1 0.1 1.0)
+	     (setAmbient 0.5 0.5 0.5 1.0)
+	     )
+       )
+
+; create the arena
+(node Transform
+      (setLocalPos 0 0 -2)
+      (importScene rsg/boxspheres/arena.rsg)
+      )
+)

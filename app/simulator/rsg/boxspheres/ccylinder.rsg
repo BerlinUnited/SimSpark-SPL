@@ -1,0 +1,21 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+ (template $radius $length $density $material)
+
+ (node CCylinder
+       (setParams $radius $length)
+       (setMaterial $material)
+       )
+       
+ (node Body
+       (setCappedCylinder $density $radius $length)
+       )
+	     
+ (node CCylinderCollider
+       (setParams $radius $length)
+       )
+ )
+
+
