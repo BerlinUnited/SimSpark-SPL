@@ -267,8 +267,12 @@ plugin/soccer/agentstate/.libs
 plugin/soccer/agentstate/Makefile
 plugin/soccer/agentstate/Makefile.in
 plugin/soccer/agentstate/initeffector.la
+plugin/soccer/ball/.deps
+plugin/soccer/ball/.libs
 plugin/soccer/ball/Makefile
 plugin/soccer/ball/Makefile.in
+plugin/soccer/ball/*.la
+plugin/soccer/ball/*.lo
 plugin/soccer/ballstateaspect/.deps
 plugin/soccer/ballstateaspect/.libs
 plugin/soccer/ballstateaspect/Makefile
@@ -280,7 +284,8 @@ plugin/soccer/createeffector/.deps
 plugin/soccer/createeffector/.libs
 plugin/soccer/createeffector/Makefile
 plugin/soccer/createeffector/Makefile.in
-plugin/soccer/createeffector/initeffector.la
+plugin/soccer/createeffector/*.la
+plugin/soccer/createeffector/*.lo
 plugin/soccer/dasheffector/.deps
 plugin/soccer/dasheffector/.libs
 plugin/soccer/dasheffector/Makefile
@@ -307,6 +312,12 @@ plugin/soccer/kickeffector/Makefile
 plugin/soccer/kickeffector/Makefile.in
 plugin/soccer/kickeffector/*.la
 plugin/soccer/kickeffector/*.lo
+plugin/soccer/sexpmonitor/.deps
+plugin/soccer/sexpmonitor/.libs
+plugin/soccer/sexpmonitor/Makefile
+plugin/soccer/sexpmonitor/Makefile.in
+plugin/soccer/sexpmonitor/*.la
+plugin/soccer/sexpmonitor/*.lo
 plugin/soundsystembass/.deps
 plugin/soundsystembass/.libs
 plugin/soundsystembass/Makefile
