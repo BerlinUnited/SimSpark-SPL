@@ -46,8 +46,6 @@ agentaspect/agentaspect_c.cpp \
 agentaspect/collisionperceptor.cpp \
 agentaspect/collisionperceptor_c.cpp \
 agentaspect/effector_c.cpp \
-agentaspect/forceeffector.cpp \
-agentaspect/forceeffector_c.cpp \
 agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
 agentaspect/perfectvisionperceptor.cpp \
@@ -100,7 +98,6 @@ nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
 agentaspect/collisionperceptor.h \
 agentaspect/effector.h \
-agentaspect/forceeffector.h \
 agentaspect/perceptor.h \
 agentaspect/perfectvisionperceptor.h \
 controlaspect/controlaspect.h \
