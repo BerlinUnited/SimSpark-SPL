@@ -1,3 +1,10 @@
+2002-09-26  Oliver Obst  <fruit@robolog.org>
+
+	* ./simulator/Makefile.am 
+	* ./simulator/example.cc
+	Added a thread for the console and a thread for
+	the simulation.
+
 2002-09-25  Oliver Obst  <fruit@robolog.org>
 
 	* ./configure.in
