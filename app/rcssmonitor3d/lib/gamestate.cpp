@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.6 2004/06/07 14:32:30 fruit Exp $
+   $Id: gamestate.cpp,v 1.7 2004/06/08 13:02:26 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -308,27 +308,14 @@ GameState::ProcessInit(const Predicate& predicate)
         {
             mPlaymodes[i] = STR_PM_Unknown;
         }
+
+        int n = 0;
         for (Predicate::Iterator i = iter; i != iter.end(); ++i)
         {
-            Predicate::Iterator j = i;
-            predicate.DescentList(j);
-            // read the play mode number
-            int n;
-            if (!predicate.GetValue(j,n))
-            {
-                continue;
-            }
-            ++j;
             // read the play mode name
             std::string name;
-            if (!predicate.GetValue(j,name) || name.length() == 0)
+            if (!predicate.GetValue(i,name) || name.length() == 0)
             {
-                continue;
-            }
-            if (n < 0 || n > 99)
-            {
-                std::cerr << "(GameState) ERROR: play mode number (" << n
-                          << ") should be between 0 and 99\n";
                 continue;
             }
             if (mPlaymodes.size() <= n)
@@ -336,6 +323,7 @@ GameState::ProcessInit(const Predicate& predicate)
                 mPlaymodes.resize(n+1);
             }
             mPlaymodes[n] = name;
+            ++n;
         }
     }
 }
