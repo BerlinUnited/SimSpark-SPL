@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.9 2004/04/05 14:51:09 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.10 2004/04/15 15:52:32 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,25 +69,25 @@ SpadesServer::OnLink()
         (GetCore()->Get("/sys/server/monitor"));
 
     if (mMonitorServer.get() == 0)
-        {
-            GetLog()->Error() << "ERROR: (SpadesServer) MonitorServer not found.\n";
-        }
+    {
+        GetLog()->Error() << "ERROR: (SpadesServer) MonitorServer not found.\n";
+    }
 
     mGameControlServer = shared_dynamic_cast<GameControlServer>
         (GetCore()->Get("/sys/server/gamecontrol"));
 
     if (mGameControlServer.get() == 0)
-        {
-            GetLog()->Error() << "ERROR: (SpadesServer) GameControlServer not found.\n";
-        }
+    {
+        GetLog()->Error() << "ERROR: (SpadesServer) GameControlServer not found.\n";
+    }
 
     mSceneServer = shared_dynamic_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
 
     if (mSceneServer.get() == 0)
-        {
-            GetLog()->Error() << "ERROR: (SpadesServer) SceneServer not found.\n";
-        }
+    {
+        GetLog()->Error() << "ERROR: (SpadesServer) SceneServer not found.\n";
+    }
 
     // cache frequently queried ruby values here
     mTimePerStep = 0.01f;
@@ -263,12 +263,12 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         (mSceneServer.get() == 0) ||
         (mGameControlServer.get() == 0)
         )
-        {
-            GetLog()->Warning()
-                << "WARNING: (SpadesServer) SceneServer "
-                << "and/or GameControlServer missing.\n";
-            return time_curr;
-        }
+    {
+        GetLog()->Warning()
+            << "WARNING: (SpadesServer) SceneServer "
+            << "and/or GameControlServer missing.\n";
+        return time_curr;
+    }
 
     int i = steps;
 
@@ -293,9 +293,9 @@ DataArray
 SpadesServer::getMonitorHeaderInfo()
 {
     if (mMonitorServer.get() == 0)
-        {
-            return DataArray();
-        }
+    {
+        return DataArray();
+    }
 
     return DataArray(mMonitorServer->GetMonitorHeaderInfo());
 }
@@ -304,9 +304,9 @@ DataArray
 SpadesServer::getMonitorInfo(SimTime /*time*/)
 {
     if (mMonitorServer.get() == 0)
-        {
-            return DataArray();
-        }
+    {
+        return DataArray();
+    }
 
     return DataArray(mMonitorServer->GetMonitorInfo());
 }
@@ -315,9 +315,9 @@ void
 SpadesServer::parseMonitorMessage(const char* data, unsigned datalen)
 {
     if (mMonitorServer.get() == 0)
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     return mMonitorServer->ParseMonitorMessage(string(data,datalen));
 }
@@ -338,17 +338,17 @@ ActEvent*
 SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
 {
     if (mGameControlServer.get() == 0)
-        {
-            return 0;
-        }
+    {
+        return 0;
+    }
 
     shared_ptr<ActionObject::TList> actionList
         = mGameControlServer->Parse(a,std::string(data,datalen));
 
     if (actionList.get() == 0)
-        {
-            return 0;
-        }
+    {
+        return 0;
+    }
 
     float latency = mGameControlServer->GetActionLatency(a);
     SimTime arrival = mSimEngine->getSimulationTime() + static_cast<int>(latency / GetTimePerStep());
@@ -363,36 +363,36 @@ SpadesServer::pauseModeCallback()
     // after startup when SPADES is in SM_PausedInitial mode
 
     if (mSimEngine->getSimulationMode() == SM_PausedInitial)
-        {
-            int numConnected = mSimEngine->getNumCommServers();
-            GetLog()->Normal() << "(SpadesServer) waiting for a total of "
-                               << GetCommServersWanted()
-                               << " CommServers, " << numConnected
-                               << " already connected\n";
+    {
+        int numConnected = mSimEngine->getNumCommServers();
+        GetLog()->Normal() << "(SpadesServer) waiting for a total of "
+                           << GetCommServersWanted()
+                           << " CommServers, " << numConnected
+                           << " already connected\n";
 
-            if (numConnected >= GetCommServersWanted())
-                {
-                    Unpause();
-                } else
-                    {
-                        return;
-                    }
+        if (numConnected >= GetCommServersWanted())
+        {
+            Unpause();
+        } else
+        {
+            return;
         }
+    }
 
     if (
         (mGameControlServer.get() != 0) &&
         (! mAgentQueue.empty())
-         )
+        )
     {
         int agentCount = 0;
         for (
-             TAgentQueue::iterator iter = mAgentQueue.begin();
-             iter != mAgentQueue.end();
-             ++iter
-             )
-            {
-                agentCount += (*iter).mNumber;
-            }
+            TAgentQueue::iterator iter = mAgentQueue.begin();
+            iter != mAgentQueue.end();
+            ++iter
+            )
+        {
+            agentCount += (*iter).mNumber;
+        }
 
         // todo: query the gcs, prob: currently deltaSense returned
         // for an agentId which is unknown at this point
@@ -409,10 +409,10 @@ SpadesServer::pauseModeCallback()
                            << "starting at simTime " << mNextInitialCreateSense << "\n";
 
         while (! mAgentQueue.empty())
-            {
-                StartAgents(mAgentQueue.front());
-                mAgentQueue.pop_front();
-            }
+        {
+            StartAgents(mAgentQueue.front());
+            mAgentQueue.pop_front();
+        }
     }
 
     if (mSimulationModeChanged)
@@ -432,12 +432,12 @@ SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*
         (mGameControlServer.get() == 0) ||
         (! mGameControlServer->AgentConnect(static_cast<int>(agent)))
         )
-        {
-            GetLog()->Normal()
-                << "(SpadesServer) ERROR: cannot register agent "
-                << "to the GameControlServer\n";
-            return false;
-        }
+    {
+        GetLog()->Normal()
+            << "(SpadesServer) ERROR: cannot register agent "
+            << "to the GameControlServer\n";
+        return false;
+    }
 
     // schedule the first SpadesCreateSenseEvent
     SimTime time = static_cast<SimTime>(mNextInitialCreateSense);
@@ -461,9 +461,9 @@ bool
 SpadesServer::agentDisappear(AgentID agent, AgentLostReason /*reason*/)
 {
     if (mGameControlServer.get() == 0)
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     return mGameControlServer->AgentDisappear(static_cast<int>(agent));
 }
@@ -475,7 +475,7 @@ SpadesServer::notifyCommserverConnect(ServerID /*s*/)
 
 void
 SpadesServer::notifyCommserverDisconnect(ServerID /*s*/
-)
+    )
 {
 }
 
