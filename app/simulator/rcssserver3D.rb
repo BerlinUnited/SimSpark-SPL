@@ -56,11 +56,11 @@ def addAgent(aspectPath)
   $agentZ += 0.1
 
   # geometry and physics setup
-  physics = new('kerosin/Body', aspectPath+'physics')
+  physics = new('oxygen/Body', aspectPath+'physics')
   physics.setMass(getSoccerVar('AgentMass'))
   physics.setMaxSpeed(getSoccerVar('AgentMaxSpeed'))
 
-  geometry = new('kerosin/SphereCollider', aspectPath+'geometry')
+  geometry = new('oxygen/SphereCollider', aspectPath+'geometry')
   geometry.setRadius(getSoccerVar('AgentRadius'))
 
   # agent state (needs to be set up before perceptors)
@@ -104,7 +104,7 @@ end
 
 # add a plane collider with ax+by+cz=d
 def addWall(name,a,b,c,d)
-  wall = new('kerosin/PlaneCollider', $scenePath+name)
+  wall = new('oxygen/PlaneCollider', $scenePath+name)
   wall.setParams(a,b,c,d)
 end
 
@@ -115,16 +115,16 @@ def addBall(x,y,z)
   ball = new('Ball',path)
   ball.setLocalPos(x,y,z)
 
-  physics = new('kerosin/Body', path+'physics')
+  physics = new('oxygen/Body', path+'physics')
   physics.setMass(getSoccerVar('BallMass'))
 
   geomPath = path+'geometry/'
 
-  geometry = new('kerosin/SphereCollider', geomPath)
+  geometry = new('oxygen/SphereCollider', geomPath)
   geometry.setRadius(getSoccerVar('BallRadius'))
 
-  new('kerosin/RecorderHandler', geomPath+'recorder')
-  new('kerosin/ContactJointHandler', geomPath+'contact')
+  new('oxygen/RecorderHandler', geomPath+'recorder')
+  new('oxygen/ContactJointHandler', geomPath+'contact')
 
   # object state
   state = new('ObjectState', path+'ObjectState')
@@ -170,14 +170,14 @@ def addField()
   #
   # box collider around the playing field
   fieldBoxPath = $scenePath+'FieldBox/'
-  fieldBox = new('kerosin/BoxCollider',fieldBoxPath)
+  fieldBox = new('oxygen/BoxCollider',fieldBoxPath)
   fieldBox.setBoxLengths(
 			 getSoccerVar('FieldLength'),
 			 getSoccerVar('FieldHeight'),
 			 getSoccerVar('FieldWidth')
 			 )
   fieldBox.setPosition(0.0,halfHeight,0.0)
-  new('kerosin/RecorderHandler', fieldBoxPath+'recorder')
+  new('oxygen/RecorderHandler', fieldBoxPath+'recorder')
 
   #
   # box collider around the goals
@@ -186,7 +186,7 @@ def addField()
 
   # left goal
   goalBoxLPath = $scenePath+'GoalBoxL/';
-  goalBoxL = new('kerosin/BoxCollider',goalBoxLPath)
+  goalBoxL = new('oxygen/BoxCollider',goalBoxLPath)
   goalBoxL.setBoxLengths(
 			 getSoccerVar('GoalDepth'),
 			 getSoccerVar('GoalHeight'),
@@ -197,11 +197,11 @@ def addField()
 		       halfGoalHeight,
 		       0.0
 		       )
-  new('kerosin/RecorderHandler', goalBoxLPath+'recorder')
+  new('oxygen/RecorderHandler', goalBoxLPath+'recorder')
 
   # right goal
   goalBoxRPath = $scenePath+'GoalBoxR/';
-  goalBoxR = new('kerosin/BoxCollider',goalBoxRPath)
+  goalBoxR = new('oxygen/BoxCollider',goalBoxRPath)
   goalBoxR.setBoxLengths(
 			 getSoccerVar('GoalDepth'),
 			 getSoccerVar('GoalHeight'),
@@ -212,7 +212,7 @@ def addField()
 		       halfGoalHeight,
 		       0.0
 		       )
-  new('kerosin/RecorderHandler', goalBoxRPath+'recorder')
+  new('oxygen/RecorderHandler', goalBoxRPath+'recorder')
 end
 
 #
@@ -253,11 +253,11 @@ fileServer.mount('FileSystemSTD', 'data/')
 
 #
 # setup the PhysicsServer
-new('kerosin/PhysicsServer', $serverPath+'physics')
+new('oxygen/PhysicsServer', $serverPath+'physics')
 
 #
 # setup the SceneServer
-sceneServer = new('kerosin/SceneServer', $serverPath+'scene')
+sceneServer = new('oxygen/SceneServer', $serverPath+'scene')
 sceneServer.createScene($scenePath)
 
 #
@@ -280,9 +280,9 @@ spadesServer = new('oxygen/SpadesServer', $serverPath+'spades')
 
 #
 # create world and space aspects
-world = new('kerosin/World', $scenePath+'world')
+world = new('oxygen/World', $scenePath+'world')
 world.setGravity(0.0, -9.81, 0.0)
-new('kerosin/Space', $scenePath+'space')
+new('oxygen/Space', $scenePath+'space')
 
 # construct the playing field
 addField()
