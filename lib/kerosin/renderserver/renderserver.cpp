@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.19 2004/04/28 14:44:14 rollmark Exp $
+$Id: renderserver.cpp,v 1.20 2004/12/30 15:53:47 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -262,6 +262,9 @@ RenderServer::Render()
 
     // standard rendering
     RenderScene(mActiveScene);
+
+    // reset GL lights
+    glDisable(GL_LIGHTING);
 
 #if 0
     // test for fancy lighting support - disabled for now
