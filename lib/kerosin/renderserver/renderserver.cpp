@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.15 2004/04/12 08:32:04 rollmark Exp $
+$Id: renderserver.cpp,v 1.16 2004/04/12 13:37:47 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -233,6 +233,32 @@ RenderServer::Render()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
+    TLeafList lights;
+    mActiveScene->ListChildrenSupportingClass<Light>(lights,true);
+
+    if (lights.size() == 0)
+        {
+            // no lights in the scene, disable lighting
+            glDisable(GL_LIGHTING);
+        } else
+            {
+                glEnable(GL_LIGHTING);
+                glShadeModel (GL_SMOOTH);
+
+                // prepare all lights
+                for (
+                     TLeafList::iterator iter = lights.begin();
+                     iter != lights.end();
+                     ++iter
+                     )
+                    {
+                        (shared_static_cast<Light>(*iter))->Prepare();
+                    }
+            }
+
+    // standard rendering
+    RenderScene(mActiveScene);
+
 #if 0
     // test for fancy lighting support - disabled for now
     const bool doFancyLighting = false; /*openglServer->SupportsFancyLighting()*/
@@ -243,13 +269,6 @@ RenderServer::Render()
         }
     else
 #endif
-        {
-            // ambient lighting only
-            glColor3f(1, 1, 1);
-
-            // standard rendering
-            RenderScene(mActiveScene);
-        }
 }
 
 void
