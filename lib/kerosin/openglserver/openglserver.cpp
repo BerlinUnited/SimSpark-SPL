@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.cpp,v 1.14 2004/04/18 16:29:23 rollmark Exp $
+   $Id: openglserver.cpp,v 1.15 2004/12/06 08:41:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -267,9 +267,7 @@ bool OpenGLServer::ConstructInternal()
             return false;
         }
 
-    SDL_ShowCursor(SDL_DISABLE);
     SDL_WarpMouse(xRes/2,yRes/2);
-
     SDL_WM_SetCaption(title.c_str(), NULL);
 
     mExtensionReg->Init();
