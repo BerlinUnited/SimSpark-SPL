@@ -1,3 +1,115 @@
+2004-04-12  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/Makefile.am: 
+	- added hingejoint files
+
+	* lib/oxygen/physicsserver/space.cpp:
+	- removed check if two geoms are joint connected
+
+	* lib/oxygen/physicsserver/balljoint.h:
+	- fixed a comment and include guard
+
+	* lib/oxygen/physicsserver/hingejoint.cpp,
+	* lib/oxygen/physicsserver/hingejoint.h,
+	* lib/oxygen/physicsserver/hingejoint_c.cpp:
+	- added class HingeJoint
+
+	* app/simspark/rsg/jointtest/hingething.rsg,
+	* app/simspark/rsg/jointtest/simspark.rsg:
+	- added a simple hinge joint demo scene
+
+	* lib/oxygen/physicsserver/joint_c.cpp:
+	- fixed a bug in Joint::attach ruby export
+
+	* app/rcssmonitor3d/kerosin/main.cpp,
+	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb:
+	- adapted to changed coordinate system
+
+	* app/simspark/rsg/boxspheres/arena.rsg,
+	* app/simspark/rsg/boxspheres/layer.rsg,
+	* app/simspark/rsg/boxspheres/simspark.rsg:
+	- adapted to changed coordinate system
+	- added four walls
+
+	* app/simspark/simspark.rb: 
+	- changed default camera position
+	- added material matGrey
+
+	* lib/spark/spark.rb: 
+	- changed gravity to drag toward negative Z
+	- moved default camera position away from origin
+
+	* lib/kerosin/sceneserver/axis.cpp:
+	- fixed drawing of axis with enabled lighting
+
+	* lib/oxygen/sceneserver/fpscontroller.cpp:
+	- adapted FPSController to rotated camera
+
+	* lib/oxygen/sceneserver/camera.cpp:
+	- rotate camera 90 degree around X axis, so that positive Z points
+	up and positive Y points forward
+
+	* lib/oxygen/physicsserver/planecollider.cpp:
+	- assert that the plane normal has unit length, as required by the
+	ODE manual
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp,
+	* plugin/rubysceneimporter/rubysceneimporter.h:
+	- implemented a simple template mechanism
+
+	* app/rcssmonitor3d/kerosin/main.cpp,
+	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb:
+	- added a light above the playing field
+	- adpated material definitions
+
+	* app/simspark/rsg/boxspheres/row.rsg,
+	* app/simspark/rsg/boxspheres/simspark.rsg,
+	* app/simspark/simspark.rb:
+	- some changes to test the light system
+
+	* lib/kerosin/renderserver/renderserver.cpp:
+	- renderserver gets a list of lights in the SceneGraph and
+	prepares them prior rendering
+
+	* lib/kerosin/sceneserver/light.h,
+	* lib/kerosin/sceneserver/light_c.cpp,
+	* lib/kerosin/sceneserver/light.cpp:
+	- added member mDiffuseR, mDiffuseG and mDiffuseB along with
+	get/set methods
+	- added method OnLink and OnUnlink; removed ConstructInternal
+	- Light allocates an OpenGL light constant from the OpenGLServer
+	and prepares the manged light
+
+	* lib/kerosin/sceneserver/sphere.cpp,
+	* lib/kerosin/sceneserver/box.cpp:
+	- added normals
+
+	* lib/kerosin/openglserver/openglserver.cpp,
+	* lib/kerosin/openglserver/openglserver.h:
+	- added member mAvailableLights
+	- added method AllocLight and PutLight
+	- OpenGLServer manages the set of available OpenGL light constants
+
+	* lib/kerosin/Makefile.am:
+	- added openglserver/glbase.h to dist_pkgdata_DATA
+
+	* lib/kerosin/materialserver/materialsolid.cpp,
+	* lib/kerosin/materialserver/materialsolid.h,
+	* lib/kerosin/materialserver/materialsolid_c.cpp:
+	- remove method SetColor
+	- added member mAmbient mSpecular mDiffuse and mEmmission along
+	with get/set methods
+	- setting material properties uing glMaterial functions
+
+	* lib/kerosin/openglserver/glbase.h:
+	- added glbase a file that should collect OpenGL utility classes
+
+	* lib/kerosin/renderserver/renderserver.cpp,
+	* lib/kerosin/renderserver/renderserver.h:
+	- removed method ConstructInternal
+	- added method OnLink and OnUnlink
+	- cached references to the SceneServer and the OpenGLServer
+
 2004-04-11  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/simspark/rsg/boxspheres/arena.rsg,
