@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.5.2.1.2.3 2003/12/09 20:23:11 rollmark Exp $
+   $Id: agentaspect.h,v 1.5.2.1.2.4 2003/12/10 10:24:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,6 +52,15 @@ public:
     BaseParser::TPredicateList QueryPerceptors();
 
 protected:
+    //! updates the map of Effectors below this AgentAspect
+    void UpdateEffectorMap();
+
+protected:
+    typedef std::map<std::string, boost::shared_ptr<Effector> > TEffectorMap;
+
+    //! the map of effectors below this AgentAspect
+    TEffectorMap mEffectorMap;
+
 private:
 };
 
