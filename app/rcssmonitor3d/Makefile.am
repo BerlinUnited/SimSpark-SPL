@@ -28,4 +28,4 @@ rcssmonitor3D_SOURCES = \
 	tcpsocket.h tcpsocket.cpp \
 	types.h 
 
-dist_pkgdata_DATA = rcssmonitor3d.rb
+dist_pkgdata_DATA = rcssmonitor3D.rb
