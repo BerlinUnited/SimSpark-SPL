@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.14 2004/03/22 10:36:23 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.15 2004/04/08 07:18:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -240,9 +240,9 @@ ScriptServer::~ScriptServer()
 {
 }
 
-bool ScriptServer::Run(salt::RFile* file)
+bool ScriptServer::Run(shared_ptr<salt::RFile> file)
 {
-    if (file == NULL)
+    if (file.get() == 0)
         {
             return false;
         }
@@ -256,8 +256,8 @@ bool ScriptServer::Run(salt::RFile* file)
 
 bool ScriptServer::Run(const string &fileName)
 {
-    salt::RFile* file = GetFile()->Open(fileName.c_str());
-    if (file == NULL)
+    shared_ptr<salt::RFile> file = GetFile()->Open(fileName.c_str());
+    if (file.get() == 0)
         {
             GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate file '"
                               << fileName << "'\n";
@@ -266,10 +266,7 @@ bool ScriptServer::Run(const string &fileName)
 
     GetLog()->Normal() << "ScriptServer: Running " << fileName << endl;
 
-    bool result = Run(file);
-    delete file;
-
-    return result;
+    return Run(file);
 }
 
 bool ScriptServer::Eval(const string &command)
@@ -433,10 +430,10 @@ bool ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &
     string sourcePath = sourceDir + "/" + name;
     GetLog()->Normal() << "ScriptServer: Running " << sourcePath << "... ";
 
-    salt::StdFile file;
+    shared_ptr<salt::StdFile> file(new(salt::StdFile));
     if (
-        (! file.Open(sourcePath.c_str())) ||
-        (! Run(&file))
+        (! file->Open(sourcePath.c_str())) ||
+        (! Run(file))
         )
         {
             GetLog()->Normal() << "failed" << endl;

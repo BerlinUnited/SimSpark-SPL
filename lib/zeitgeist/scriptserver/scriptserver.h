@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.16 2004/03/22 18:11:08 fruit Exp $
+   $Id: scriptserver.h,v 1.17 2004/04/08 07:18:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ public:
     bool Run(const std::string &fileName);
 
     /** loads and runs a ruby script from an RFile */
-    bool Run(salt::RFile* file);
+    bool Run(boost::shared_ptr<salt::RFile> file);
 
     /** sets the relative path prefix RunInitScript() searches for an
         InitScript. Default is '../../', suitable for all applications
