@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.10 2003/12/21 10:29:45 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.11 2003/12/21 19:26:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,8 +78,8 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
 
 #if THIS_IS_A_DEMO_ONLY
     mParamReader->setParam ("run_integrated_commserver", true);
+    mParamReader->setParam ("monitor_interval",2);
 #endif
-
 
     return mParamReader.get();
 }
@@ -142,8 +142,8 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     }
 
 #if THIS_IS_A_DEMO_ONLY
-    GetLog()->Debug() << "updated the scene by " << steps - i << " * "
-                      << timePerStep << " seconds.\n";
+    //    GetLog()->Debug() << "updated the scene by " << steps - i << " * "
+    //                << timePerStep << " seconds.\n";
 
 #endif
 
