@@ -1,3 +1,20 @@
+2004-0508  Jan Murray  <murray@uni-koblenz.de>
+
+	* app/rcssmonitor3d/lite/camera.cpp:
+	* app/rcssmonitor3d/lite/camera.h:
+	- added method MoveCamStrafeForward
+	
+	* app/rcssmonitor3d/lite/glserver.h:
+	- added method MoveCamStrafeForward
+
+	* app/rcssmonitor3d/lite/monitor.cpp:
+	* app/rcssmonitor3d/lite/monitor.h:
+	- added 
+	  + handling of arrow keys (glutSpecialFunc)
+	  + primitive single step mode for logplayer
+	  + help message for keybindings
+
+
 2004-06-07  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/lib/gamestate.cpp: 
