@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccertypes.h,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: soccertypes.h,v 1.3 2004/04/20 14:48:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,17 +29,25 @@
 #include <string>
 
 enum TPlayMode
-  {
+{
     PM_BeforeKickOff,
     PM_KickOff_Left,
     PM_KickOff_Right,
     PM_PlayOn,
     PM_KickIn_Left,
     PM_KickIn_Right,
+    PM_CORNER_KICK_LEFT,       /*!< corner_kick_l:     corner kick left team   */
+    PM_CORNER_KICK_RIGHT,      /*!< corner_kick_r:     corner kick right team  */
+    PM_GOAL_KICK_LEFT,         /*!< goal_kick_l:       goal kick for left team */
+    PM_GOAL_KICK_RIGHT,        /*!< goal_kick_r:       goal kick for right team*/
+    PM_OFFSIDE_LEFT,           /*!< offside_l:         offside for left team   */
+    PM_OFFSIDE_RIGHT,          /*!< offside_r:         offside for right team  */
     PM_GameOver,
     PM_Goal_Left,
     PM_Goal_Right,
-  };
+    PM_FREE_KICK_LEFT,         /*!< free_kick_l:       free kick for left team */
+    PM_FREE_KICK_RIGHT         /*!< free_kick_r:       free kick for right team*/
+};
 
 /** mapping from TPlayMode to string constants */
 #define STR_PM_BeforeKickOff "BeforeKickOff"
@@ -48,24 +56,32 @@ enum TPlayMode
 #define STR_PM_PlayOn "PlayOn"
 #define STR_PM_KickIn_Left "KickIn_Left"
 #define STR_PM_KickIn_Right "KickIn_Right"
+#define STR_PM_CORNER_KICK_LEFT "corner_kick_left"
+#define STR_PM_CORNER_KICK_RIGHT "corner_kick_right"
+#define STR_PM_GOAL_KICK_LEFT "goal_kick_left"
+#define STR_PM_GOAL_KICK_RIGHT "goal_kick_right"
+#define STR_PM_OFFSIDE_LEFT "offside_left"
+#define STR_PM_OFFSIDE_RIGHT "offside_right"
 #define STR_PM_GameOver "GameOver"
 #define STR_PM_Goal_Left "Goal_Left"
 #define STR_PM_Goal_Right "Goal_Right"
+#define STR_PM_FREE_KICK_LEFT "free_kick_left"
+#define STR_PM_FREE_KICK_RIGHT "free_kick_right"
 #define STR_PM_Unknown "unknown"
 
 enum TTeamIndex
-  {
+{
     TI_NONE = -1,
     TI_LEFT = 0,
     TI_RIGHT = 1
-  };
+};
 
 typedef float TTime;
 
 enum TGameHalf
-    {
+{
         GH_FIRST = 0,
         GH_SECOND = 1
-    };
+};
 
 #endif // SOCCERTYPES_H
