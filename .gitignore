@@ -131,6 +131,9 @@ lib/oxygen/physicsserver/.dirstamp
 lib/oxygen/sceneserver/*.lo
 lib/oxygen/sceneserver/.deps
 lib/oxygen/sceneserver/.dirstamp
+lib/oxygen/spadesserver/.deps
+lib/oxygen/spadesserver/.dirstamp
+lib/oxygen/spadesserver/*.lo
 lib/salt/.deps
 lib/salt/.libs
 lib/salt/Makefile.in
