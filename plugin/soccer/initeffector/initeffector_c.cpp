@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector_c.cpp,v 1.1.2.1 2003/12/24 17:48:35 fruit Exp $
+   $Id: initeffector_c.cpp,v 1.2.2.1 2004/01/08 16:13:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 
 #include "initeffector.h"
 
-using namespace boost;
 using namespace oxygen;
 
 void CLASS(InitEffector)::DefineClass()
