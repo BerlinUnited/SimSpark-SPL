@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.11 2004/06/19 12:49:09 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.12 2004/06/19 23:44:11 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -170,7 +170,7 @@ VisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
             {
                 if (mUseRandomNoise)
                 {
-                    od.mDist += (*(mDistRng.get()))();
+                    od.mDist += (*(mDistRng.get()))() * od.mDist / 100.0;
                     od.mTheta += (*(mThetaRng.get()))();
                     od.mPhi += (*(mPhiRng.get()))();
                 } else {
