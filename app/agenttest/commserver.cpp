@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.5 2004/05/06 07:55:38 rollmark Exp $
+   $Id: commserver.cpp,v 1.6 2004/06/09 12:12:07 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ CommServer::PutOutput(const char* out)
 bool
 CommServer::GetInput()
 {
+    memset(mBuffer,0,sizeof(mBuffer));
     // read the first message segment
     if (! SelectInput())
     {
@@ -71,6 +72,7 @@ CommServer::GetInput()
     GetLog()->Debug() << "CommServer::GetInput true\n";
 
     unsigned int bytesRead = read(mReadFd, mBuffer, sizeof(mBuffer));
+
     if (bytesRead < sizeof(unsigned int))
     {
         return false;
@@ -93,7 +95,6 @@ CommServer::GetInput()
         msgRead += read(mReadFd, offset, sizeof(mBuffer) - msgRead);
         offset += msgRead;
     }
-
     // zero terminate received data
     (*offset) = 0;
 
