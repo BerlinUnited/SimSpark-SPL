@@ -9,15 +9,11 @@ librcssmonitor3D_la_SOURCES = \
 	monitorlib.cpp \
 	communit.cpp \
 	commserver.cpp commserver_c.cpp \
-	monitorparser.cpp monitorparser_c.cpp\
-	gameparam.cpp \
-	gamestate.cpp
+	gamestate.cpp gamestate_c.cpp
 
 libpkginclude_HEADERS = \
 	monitorlib.h \
 	communit.h \
 	commserver.h \
 	types.h \
-	monitorparser.h \
-	gameparam.h \
 	gamestate.h 
