@@ -380,3 +380,13 @@ AC_CACHE_CHECK(whether the spades library is available, ac_cv_lib_spades,
 AS_IF([test AS_VAR_GET(ac_lib_spades) = yes], [$1], [$2])
 AS_VAR_POPDEF([ac_lib_spades])dnl
 ])# AC_LIB_SPADES
+
+# RCSS_LIBRARY_VERSION_INFO
+#	define two variables for the library versions
+# ---------------------------------------------------------
+AC_DEFUN([RCSS_LIBRARY_VERSION_INFO], [
+$1=$3
+AC_SUBST([$1])
+$2=`echo $3 | tr : .`
+AC_SUBST([$2])
+]) # RCSS_LIBRARY_VERSION_INFO
