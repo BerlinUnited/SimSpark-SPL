@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kerosin.h,v 1.8 2004/03/04 13:49:37 rollmark Exp $
+   $Id: kerosin.h,v 1.9 2004/03/20 12:55:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@
 #include "textureserver/texture.h"
 #include "materialserver/materialserver.h"
 #include "materialserver/material.h"
+#include "materialserver/material2dtexture.h"
+#include "materialserver/materialsolid.h"
 
 // scene graph
 #include "sceneserver/axis.h"
