@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.16 2004/06/17 11:14:13 cringel Exp $
+   $Id: monitor.cpp,v 1.17 2004/07/21 09:08:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -400,7 +400,9 @@ Monitor::DrawScene(int pass)
 
         if (mCameraMode == eFollowBall && pass == 0)
         {
-            mGLServer.SetLookAtPos(pos);
+            Vector3f& ballGroundPos = pos;
+            ballGroundPos[2] = 0.0f;
+            mGLServer.SetLookAtPos(ballGroundPos);
         }
     }
 
@@ -676,16 +678,16 @@ Monitor::DrawBall(const salt::Vector3f& pos, float size, int pass)
 void
 Monitor::DrawDebug()
 {
-    // this example method just draws the positive axes on the field 
+    // this example method just draws the positive axes on the field
     glColor4fv(sDebugColorPink);
-    
+
     mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(10,0,0));
     mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,10,0));
     mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,0,10));
     return;
 }
 
-                                                       
+
 void
 Monitor::Display()
 {
@@ -806,7 +808,7 @@ Monitor::Display()
 
     if (mDrawDebug)
         DrawDebug();
-    
+
     DrawStatusText();
 
     // draw 2D Elements
