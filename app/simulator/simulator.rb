@@ -16,23 +16,12 @@ importBundle "soccer"
 # setup gloabal constants
 #
 
-# the soccer field dimensions in meters
-$fieldLength = 105.0
-$fieldWidth  = 68.0
-$fieldHeight = 20.0
-$goalWidth   = 7.32
-$goalDepth   = 2.0
-$goalHeight  = 2.44
-$borderSize  = 4.0
+# soccer namespace
+$soccerNameSpace = "Soccer"
 
 # scene and server path
 $scenePath = '/usr/scene/'
 $serverPath = '/sys/server/'
-
-# agent parameters
-$agentMass     = 75.0
-$agentRadius   = 0.3
-$agentMaxSpeed = 10.0
 
 #
 # declare some helper methods
@@ -46,6 +35,18 @@ $agentX = -12.0
 $agentY = 1.0
 $agentZ = -7.0
 
+# register a variable in the soccer namespace
+def addSoccerVar(name, value)
+   createVariable($soccerNameSpace, name, value)
+end
+
+# helper to get the value of a variable in the soccer namespace
+def getSoccerVar(name)
+  eval <<-EOS 
+    #{$soccerNameSpace}.#{name} 
+  EOS
+end
+
 def addAgent(aspectPath)
   # move different agents away from each other
   aspect = get(aspectPath)
@@ -56,11 +57,11 @@ def addAgent(aspectPath)
 
   # geometry and physics setup
   physics = new('kerosin/Body', aspectPath+'physics')
-  physics.setMass($agentMass)
-  physics.setMaxSpeed($agentMaxSpeed)
+  physics.setMass(getSoccerVar('AgentMass'))
+  physics.setMaxSpeed(getSoccerVar('AgentMaxSpeed'))
 
   geometry = new('kerosin/SphereCollider', aspectPath+'geometry')
-  geometry.setRadius($agentRadius)
+  geometry.setRadius(getSoccerVar('AgentRadius'))
 
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
@@ -113,47 +114,59 @@ def addField()
   #
   # floor and wall collider- infinite planes used as the the hard
   # barrier
+  halfLength = getSoccerVar('FieldLength')/2.0
+  halfWidth = getSoccerVar('FieldWidth')/2.0
+  halfHeight = getSoccerVar('FieldHeight')/2.0
+  halfGoalWidth = getSoccerVar('GoalWidth')/2.0
+  borderSize = getSoccerVar('BorderSize')/2.0
+
   addWall('Floor',0.0, 1.0 ,0.0, 0.0) 
-  addWall('W1', 1.0,  0.0,  0.0, -$fieldLength/2.0 - $borderSize)
-  addWall('W2',-1.0,  0.0,  0.0, -$fieldLength/2.0 - $borderSize)  
-  addWall('W3', 0.0,  0.0,  1.0, -$fieldWidth/2.0  - $borderSize)  
-  addWall('W4', 0.0,  0.0, -1.0, -$fieldWidth/2.0  - $borderSize)  
+  addWall('W1', 1.0,  0.0,  0.0, -halfLength-borderSize)
+  addWall('W2',-1.0,  0.0,  0.0, -halfLength-borderSize)  
+  addWall('W3', 0.0,  0.0,  1.0, -halfWidth-borderSize)  
+  addWall('W4', 0.0,  0.0, -1.0, -halfWidth-borderSize)  
 
   #
   # mark the soccer field with 4 field flags
-  addFlag('Flag1',-$fieldLength/2.0, 0.0, $fieldWidth/2.0)
-  addFlag('Flag2', $fieldLength/2.0, 0.0, $fieldWidth/2.0)
-  addFlag('Flag3', $fieldLength/2.0, 0.0,-$fieldWidth/2.0)
-  addFlag('Flag4',-$fieldLength/2.0, 0.0,-$fieldWidth/2.0)
+  addFlag('Flag1',-halfLength, 0.0, halfWidth)
+  addFlag('Flag2', halfLength, 0.0, halfWidth)
+  addFlag('Flag3', halfLength, 0.0,-halfWidth)
+  addFlag('Flag4',-halfLength, 0.0,-halfWidth)
 
   #
   # mark the left goal
-  addFlag('Goal1l',-$fieldLength/2,0.0,-$goalWidth/2.0)
-  addFlag('Goal1r',-$fieldLength/2,0.0,+$goalWidth/2.0)
+  addFlag('Goal1l',-halfLength,0.0,-halfGoalWidth)
+  addFlag('Goal1r',-halfLength,0.0,+halfGoalWidth)
 
   #
   # mark the right goal
-  addFlag('Goal2l',$fieldLength/2,0.0,-$goalWidth/2.0)
-  addFlag('Goal2r',$fieldLength/2,0.0,+$goalWidth/2.0)
+  addFlag('Goal2l',halfLength,0.0,-halfGoalWidth)
+  addFlag('Goal2r',halfLength,0.0,+halfGoalWidth)
 
   #
   # box collider around the playing field
   fieldBox = new('kerosin/BoxCollider',$scenePath+'fieldBox')
-  fieldBox.setPosition(-$fieldLength/2.0,0.0,-$fieldWidth/2.0)
-  fieldBox.setBoxLengths($fieldLength,$fieldHeight,$fieldWidth)
-
-  # gLeft = new('kerosin/BoxCollider','/usr/scene/goal1')
-  # gLeft.setPosition(-$fieldLength/2,0.0,-goalWidth/2.0)
-  # gLeft.setBoxLengths(goalDepth,goalHeight,goalWidth)
-
-  # gRight = new('kerosin/BoxCollider','/usr/scene/goal1')
-  # gRight.setPosition($fieldLength/2,0.0,-goalWidth/2.0)
-  # gRight.setBoxLengths(goalDepth,goalHeight,goalWidth)
+  fieldBox.setPosition(-halfLength,0.0,-halfWidth)
+  fieldBox.setBoxLengths(halfLength,halfHeight,halfWidth)
 end
 
 #
 # init
 #
+
+# the soccer field dimensions in meters
+addSoccerVar('FieldLength', 105.0)
+addSoccerVar('FieldWidth', 68.0)
+addSoccerVar('FieldHeight', 20.0)
+addSoccerVar('GoalWidth', 7.32)
+addSoccerVar('GoalDepth', 2.0)
+addSoccerVar('GoalHeight', 2.44)
+addSoccerVar('BorderSize', 4.0)
+
+# agent parameters
+addSoccerVar('AgentMass', 75.0)
+addSoccerVar('AgentRadius',  0.3)
+addSoccerVar('AgentMaxSpeed', 10.0)
 
 #
 # mount a standard file system
