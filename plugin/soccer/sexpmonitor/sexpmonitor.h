@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.5 2004/04/26 08:07:45 rollmark Exp $
+   $Id: sexpmonitor.h,v 1.5.2.1 2004/05/05 14:29:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include <plugin/soccer/trainercommandparser/trainercommandparser.h>
 
 class GameStateAspect;
+class BallStateAspect;
 
 namespace oxygen
 {
@@ -37,9 +38,11 @@ namespace oxygen
     class Scene;
 }
 
-/**     \class SexpMonitor is a monitor plugin that generates lisp
-        like-expressions for the rcssmonitor3d
-*/
+/** \class SexpMonitor is a monitor plugin that generates S-Expressions for the rcssmonitor3D
+ *
+ *  Protocoll:
+ *  (Init ...) Sends information about the simulator setup
+ */
 class SexpMonitor : public oxygen::MonitorSystem
 {
 public:
@@ -68,37 +71,33 @@ protected:
         construction */
     virtual bool ConstructInternal();
 
-    /** helper method that constructs a S-Expression list from a list
-        of scene graph nodes. It assumes that every node is derived
-        from oxygen::Transform
-
-        \param type is the name used to describe a node to the monitor
-        (e.g 'agent')
-
-        \param list is the list of nodes
-    */
-    std::string SexpMonitor::GenerateSexp(std::string type, TLeafList& list);
-
-    /** returns the last agent that touched the ball */
-    boost::shared_ptr<oxygen::AgentAspect> GetLastBallAgent();
-
     /** collects data from the GameStateAspect and describing
         constructs S-Expressions  */
-    std::string SexpMonitor::GetGameStateData();
+    void AddGameState(std::ostringstream& ss);
 
-    /** collects data about all agents in the simulation */
-    std::string GetAgentData(boost::shared_ptr<oxygen::Scene> activeScene);
+    /** collects data from agentaspects and constructs a S-Expr description */
+    void AddAgents(boost::shared_ptr<oxygen::Scene> activeScene, std::ostringstream& ss) const;
+
+    /** collects flag data and constructs a S-Expression description */
+    void AddFlags(boost::shared_ptr<oxygen::Scene> activeScene, std::ostringstream& ss);
+
+    /** adds ball data to output string stream */
+    void AddBall(boost::shared_ptr<oxygen::Scene> activeScene, std::ostringstream& ss) const;
 
     /** helper method that queries the ScriptServer for the float
         variable name and generates a S-Expression describing it
     */
-    std::string SexpMonitor::PutFloatParam(const std::string& name);
+    std::string PutFloatParam(const std::string& name);
 
     /** sets the reference to the GameStateAspect */
     virtual void OnLink();
 
     /** resets the reference to the GameStateAspect */
     virtual void OnUnlink();
+
+    virtual void UpdateCached();
+
+    void ResetSentFlags();
 
 protected:
 
@@ -110,9 +109,27 @@ protected:
     boost::shared_ptr<oxygen::BaseParser> mSexpParser;
 
     boost::shared_ptr<TrainerCommandParser> mCommandParser;
+
+    boost::shared_ptr<BallStateAspect> mBallState;
+
+    // flags for sent information
+    //! flag if we already sent the left teamname
+    bool mSentLeftTeamname;
+    //! flag if we already sent the left teamname
+    bool mSentRightTeamname;
+    //! the last half sent out to monitors
+    TGameHalf mLastHalf;
+    //! the last left score sent out to monitors
+    int mLastLeftScore;
+    //! the last right score sent out to monitors
+    int mLastRightScore;
+    //! the last playmode sent out to monitors
+    TPlayMode mLastPlayMode;
+    //! flag if the monitors received field flags information
+    bool mSentFlags;
+
 };
 
 DECLARE_CLASS(SexpMonitor);
 
 #endif // SEXPMONITOR_H__
-
