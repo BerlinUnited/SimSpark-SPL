@@ -89,6 +89,7 @@ void OpenGLServer::SwapBuffers() const
 */
 unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
 {
+#if 0
         // only try to load stuff if the extension is supported
         if (!mExtensionReg->Has_GL_ARB_vertex_program())
         {
@@ -115,7 +116,7 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
         unsigned char *buffer = new unsigned char[file->Size()+1];
         file->Read(buffer, file->Size());
 
-        ::glGenProgramsARB(1, &id);
+        glGenProgramsARB(1, &id);
         glBindProgramARB(target, id);
 
         // try to load the actual program
@@ -142,6 +143,9 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
         mHolder->mPrograms[fileName] = id;
 
         return id;
+#else
+	return 0;
+#endif	
 }
 
 /*!
