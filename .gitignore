@@ -23,6 +23,12 @@ app/inputtest/Makefile
 app/inputtest/Makefile.in
 app/inputtest/inputtest
 app/inputtest/sys
+app/scenetest/.deps
+app/scenetest/.libs
+app/scenetest/Makefile
+app/scenetest/Makefile.in
+app/scenetest/scenetest
+app/scenetest/sys
 app/simulator/.deps
 app/simulator/.libs
 app/simulator/Makefile
