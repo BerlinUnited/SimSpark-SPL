@@ -59,6 +59,8 @@ inputserver/inputsystem_c.cpp \
 inputserver/scancodemap.cpp \
 inputserver/inputcontrol.cpp \
 inputserver/inputcontrol_c.cpp \
+inputserver/inputitem.cpp \
+inputserver/inputitem_c.cpp \
 kerosin.cpp \
 materialserver/material.cpp \
 materialserver/material_c.cpp \
@@ -112,6 +114,7 @@ inputserver/inputserver.h \
 inputserver/inputsystem.h \
 inputserver/scancodemap.h \
 inputserver/inputcontrol.h \
+inputserver/inputitem.h \
 kerosin.h \
 materialserver/material.h \
 materialserver/materialserver.h \
