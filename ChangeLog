@@ -1,3 +1,67 @@
+2004-04-18  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/kerosin/sceneserver/staticmesh.h,
+	* lib/kerosin/sceneserver/staticmesh.cpp:
+	- calculate normals using the NVMeshMender
+
+	* lib/kerosin/materialserver/materialserver.cpp,
+	* lib/kerosin/materialserver/materialserver.h:
+	- removed method ConstructInternal
+
+	* lib/kerosin/materialserver/material2dtexture.cpp,
+	* lib/kerosin/materialserver/material2dtexture.h,
+	* lib/kerosin/materialserver/material2dtexture_c.cpp:
+	- changed BaseClass to MaterialSolid
+	- removed texture setup via ruby variables
+	- added method SetDiffuseTexture, SetNormalTexture and SetSpecularTexture
+
+	* lib/kerosin/materialserver/materialsolid.cpp,
+	* lib/kerosin/materialserver/materialsolid.h:
+	- added method SetupMaterial and moved OpenGL material ther
+
+	* lib/kerosin/openglserver/openglserver.cpp:
+	- disabled a warning about an ununsed OpenGL feature
+
+	* lib/kerosin/textureserver/textureserver.cpp,
+	* lib/kerosin/textureserver/textureserver.h:
+	- cleanup and ws changes
+	- added method OnLink and OnUnlink
+	- caching OpenGLServer and ImageServer references
+
+	* lib/kerosin/sceneserver/staticmesh.cpp,
+	* lib/kerosin/sceneserver/staticmesh.h:
+	- some cleanup and ws changes
+	- using shared_ptrs for mesh storage
+	- removed unused lighting code
+
+	* lib/kerosin/imageserver/imageserver.cpp,
+	* lib/kerosin/imageserver/imageserver.h:
+	- some cleanup and ws changes
+	- printing human readable IL error messages
+
+	* plugin/filesystemzip/Makefile.am,
+	* plugin/filesystemzip/filesystemzip.cpp,
+	* plugin/filesystemzip/filesystemzip.h:
+	- ws changes
+	- linking boost_regex to FileSystemZIP
+	- adapted to changed FileSystem interface
+
+	* plugin/filesystemrar/filesystemrar.cpp,
+	* plugin/filesystemrar/filesystemrar.h:
+	- adapted to changed FileSystem interface
+
+	* plugin/filesystemstd/filesystemstd.cpp,
+	* plugin/filesystemstd/filesystemstd.h:
+	- adapted to changed filesystem interface
+
+	* lib/zeitgeist/fileserver/fileserver.cpp: 
+	- ws changes
+	- adapted to changed FileSystem interface
+	- added some diagnostic output
+
+	* lib/zeitgeist/fileserver/filesystem.h:
+	- changed method open to return a shared_ptr to a salt::RFile
+
 2004-04-18  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/kerosin/Makefile.am:
@@ -32,7 +96,7 @@
 	- an implementation of tcpsocket
 	so that users do not need to install rcssbase
 
-2004-04-15    Markus Rollmann  <rollmark@uni-koblenz.de>
+2004-04-15  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/simspark/rsg/boxspheres/box.rsg,
 	* app/simspark/rsg/boxspheres/sphere.rsg:
