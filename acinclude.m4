@@ -23,15 +23,15 @@ AC_DEFUN(RCSS_PATH_RUBY, [
 	fi
 		
 	# check ruby headers
-	AC_CHECK_HEADER(ruby/ruby.h, 
+	AC_CHECK_HEADER(ruby.h, 
 			[RUBY_CPPFLAGS=''],
 			[unset ac_cv_header_ruby_h
 		         ruby_tmp=$CPPFLAGS
-                         ruby_includedir=`$RUBY -rrbconfig -e "print Config::CONFIG[['includedir']]"`
+                         ruby_includedir=`$RUBY -rrbconfig -e "print Config::CONFIG[['archdir']]"`
                          AC_MSG_NOTICE(trying again in $ruby_includedir)
 		         RUBY_CPPFLAGS="-I$ruby_includedir"
                          CPPFLAGS="$CPPFLAGS $RUBY_CPPFLAGS"
-                         AC_CHECK_HEADER(ruby/ruby.h, [],
+                         AC_CHECK_HEADER(ruby.h, [],
                                          [AC_MSG_ERROR(check your ruby installation)]
                          )
                          CPPFLAGS=$ruby_tmp
