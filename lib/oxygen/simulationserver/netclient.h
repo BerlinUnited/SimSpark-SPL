@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: netclient.h,v 1.1 2004/05/01 14:20:33 rollmark Exp $
+   $Id: netclient.h,v 1.2 2004/12/31 11:25:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,13 +57,13 @@ public:
     /** returns the client socket type */
     oxygen::NetControl::ESocketType GetClientType();
 
-protected:
-    /** tries to connect to the server, returns true on success */
-    bool Connect();
-
     /** prepares the message with the registered NetMessage instance
         and sends it to the server */
     void SendMessage(const std::string& msg);
+
+protected:
+    /** tries to connect to the server, returns true on success */
+    bool Connect();
 
     /** reads all pending message fragments from the server and stores
         them in the mNetBuffer
