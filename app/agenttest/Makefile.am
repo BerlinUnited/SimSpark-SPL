@@ -1,4 +1,4 @@
-noinst_PROGRAMS = agenttest
+bin_PROGRAMS = agenttest
 
 if DEBUG
 LDADD = \
@@ -19,14 +19,9 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 agenttest_SOURCES = \
 	main.cpp \
-	worldmodel.cpp \
-	worldmodel_c.cpp \
-	commserver.cpp \
-	commserver_c.cpp \
-	behavior.cpp \
-	behavior_c.cpp \
-	kicknrun.cpp \
-	kicknrun_c.cpp \
-	soccer.cpp \
-	soccer_c.cpp
+	worldmodel.h worldmodel.cpp worldmodel_c.cpp \
+	commserver.h commserver.cpp commserver_c.cpp \
+	behavior.h behavior.cpp behavior_c.cpp \
+	kicknrun.h kicknrun.cpp kicknrun_c.cpp \
+	soccer.h soccer.cpp soccer_c.cpp
 
