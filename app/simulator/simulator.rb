@@ -85,9 +85,14 @@ def addAgent(aspectPath)
 end
 
 # add a field flag to (x,y,z)
-def addFlag(name,x,y,z)
-  flag = new('FieldFlag',$scenePath+name)
+def addFlag(name,id,x,y,z)
+  fullname = name+'_'+id
+  flag = new('FieldFlag',$scenePath+fullname)
   flag.setLocalPos(x,y,z)
+  # object state
+  state = new('ObjectState', $scenePath+fullname+'/ObjectState')
+  state.setName(name)
+  state.setID(id)
 end
 
 # add a plane collider with ax+by+cz=d
@@ -113,6 +118,10 @@ def addBall(x,y,z)
 
   new('kerosin/RecorderHandler', geomPath+'recorder')
   new('kerosin/ContactJointHandler', geomPath+'contact')
+
+  # object state
+  state = new('ObjectState', path+'ObjectState')
+  state.setName('Ball')
 end
 
 def addField()
@@ -136,20 +145,20 @@ def addField()
 
   #
   # mark the soccer field with 4 field flags
-  addFlag('Flag_1_l',-halfLength, 0.0,-halfWidth)
-  addFlag('Flag_2_l',-halfLength, 0.0, halfWidth)
-  addFlag('Flag_1_r', halfLength, 0.0,-halfWidth)
-  addFlag('Flag_2_r', halfLength, 0.0, halfWidth)
+  addFlag('Flag', '1_l',-halfLength, 0.0,-halfWidth)
+  addFlag('Flag', '2_l',-halfLength, 0.0, halfWidth)
+  addFlag('Flag', '1_r', halfLength, 0.0,-halfWidth)
+  addFlag('Flag', '2_r', halfLength, 0.0, halfWidth)
 
   #
   # mark the left goal
-  addFlag('Goal_1_l',-halfLength, 0.0,-halfGoalWidth)
-  addFlag('Goal_2_l',-halfLength, 0.0, halfGoalWidth)
+  addFlag('Goal', '1_l',-halfLength, 0.0,-halfGoalWidth)
+  addFlag('Goal', '2_l',-halfLength, 0.0, halfGoalWidth)
 
   #
   # mark the right goal
-  addFlag('Goal_1_r', halfLength, 0.0,-halfGoalWidth)
-  addFlag('Goal_2_r', halfLength, 0.0, halfGoalWidth)
+  addFlag('Goal', '1_r', halfLength, 0.0,-halfGoalWidth)
+  addFlag('Goal', '2_r', halfLength, 0.0, halfGoalWidth)
 
   #
   # box collider around the playing field
