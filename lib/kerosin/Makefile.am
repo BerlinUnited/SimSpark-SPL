@@ -1,34 +1,22 @@
 if BUILD_KEROSIN
 if DEBUG
 pkglib_LTLIBRARIES = libkerosin_debug.la
-libkerosin_debug_la_SOURCES = $(sources)
+libkerosin_debug_la_SOURCES = $(sources) 
+nodist_libkerosin_debug_la_SOURCES = openglserver/glextensionreg.cpp
 libkerosin_debug_la_CXXFLAGS = -O -g -W -Wall
 libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
 libkerosin_debug_la_LDFLAGS = -version-info 0:0:0
 else
 pkglib_LTLIBRARIES = libkerosin.la
-libkerosin_la_SOURCES = $(sources)
+libkerosin_la_SOURCES = $(sources) 
+nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
 libkerosin_la_CXXFLAGS = -O2
 libkerosin_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
 libkerosin_la_LDFLAGS = -version-info 0:0:0
 endif
-endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
-
-## define include directory local to the pkgincludedir
-libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
-
-## architecture independent data (scripts) to be installed and distributed
-dist_pkgdata_DATA = kerosin.rb
-
-if BUILD_KEROSIN
-CLEANFILES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
-BUILT_SOURCES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
-nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
+BUILT_SOURCES = openglserver/glextensionreg.h
 nobase_nodist_libpkginclude_HEADERS = openglserver/glextensionreg.h
-
-GLEXTENSIONREG=openglserver/glextensionreg.cpp
 
 openglserver/glextensionreg.cpp: ${top_srcdir}/utility/glextgen/glextensionreg.cpp
 	@echo "Copying generated glextension sources"
@@ -40,6 +28,15 @@ openglserver/glextensionreg.h: ${top_srcdir}/utility/glextgen/glextensionreg.h
 ${top_srcdir}/utility/glextgen/glextensionreg.cpp ${top_srcdir}/utility/glextgen/glextensionreg.h:
 	cd ${top_srcdir}/utility/glextgen/ && $(MAKE) $(AM_MAKEFLAGS) all
 endif
+
+AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
+
+## architecture independent data (scripts) to be installed and distributed
+dist_pkgdata_DATA = kerosin.rb
+
 
 sources = \
 fontserver/font.cpp \
@@ -79,8 +76,7 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
 renderserver/renderserver.cpp \
-renderserver/renderserver_c.cpp \
-$(GLEXTENSIONREG)
+renderserver/renderserver_c.cpp 
 
 nobase_libpkginclude_HEADERS = \
 fontserver/font.h \
@@ -116,4 +112,3 @@ textureserver/textureserver.h \
 openglserver/openglserver.h \
 renderserver/renderserver.h
 
-#sceneserver/camera.h 
