@@ -4,14 +4,17 @@ if DEBUG
 LDADD = ${top_srcdir}/lib/kerosin/libkerosin_debug.la \
 ${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 ${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
--lGL
+${top_srcdir}/lib/salt/libsalt_debug.la \
+/usr/local/lib/libIL.la -lGL -lruby @RUBY_LDADD@
 else
 LDADD = ${top_srcdir}/lib/kerosin/libkerosin.la \
 ${top_srcdir}/lib/oxygen/liboxygen.la \
 ${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
--lGL
+${top_srcdir}/lib/salt/libsalt.la \
+/usr/local/lib/libIL.la -lGL -lruby @RUBY_LDADD@
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_LDFLAGS = @RUBY_LDFLAGS@
 
 simulator_SOURCES = main.cpp
