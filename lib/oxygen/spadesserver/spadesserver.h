@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.6.2.2 2003/12/01 16:30:08 fruit Exp $
+   $Id: spadesserver.h,v 1.1.2.6.2.3 2003/12/02 16:52:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,14 @@ public:
         core to allow for object dependent internal construction */
     virtual bool ConstructInternal();
 
+    /** helper function to locate the game control server */
+    boost::shared_ptr<GameControlServer> GetGameControlServer();
+
+    /** returns the amount of time in seconds a single simulation step
+        corresponds to
+    */
+    float GetTimePerStep();
+
     // SPADES interface methods start here
 
     /** You probably want to inherit some parameters from EngineParam
@@ -66,6 +74,9 @@ public:
      * @return true
      */
     bool initialize(spades::SimEngine* pSE);
+
+    /** returns a pointer to the spades simulation engine */
+    spades::SimEngine* GetSimEngine();
 
     /** @return true */
     bool finalize();
@@ -168,8 +179,6 @@ public:
 protected:
     /** helper function to locate the monitor server */
     boost::shared_ptr<MonitorServer> GetMonitorServer();
-    /** helper function to locate the game control server */
-    boost::shared_ptr<GameControlServer> GetGameControlServer();
 
 private:
     /** the Spades simulation engine */

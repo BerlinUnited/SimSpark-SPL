@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.3 2003/12/01 16:35:58 fruit Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.4 2003/12/02 16:52:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -81,18 +81,31 @@ SpadesServer::initialize(SimEngine* pSE)
     return true;
 }
 
+spades::SimEngine*
+SpadesServer::GetSimEngine()
+{
+    return mSimEngine;
+}
+
+
 bool
 SpadesServer::finalize()
 {
     return true;
 }
 
-SimTime
-SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
+float
+SpadesServer::GetTimePerStep()
 {
     float time_per_step = 0.01f;
     GetScript()->GetVariable("Spades.TimePerStep", time_per_step);
 
+    return time_per_step;
+}
+
+SimTime
+SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
+{
     int steps = time_desired - time_curr;
     if (steps <= 0)
     {
@@ -123,16 +136,18 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         return time_curr;
     }
 
+    float timePerStep = GetTimePerStep();
     int i = steps;
+
     while (i > 0)
     {
-        sceneServer->Update(time_per_step);
+        sceneServer->Update(timePerStep);
         --i;
     }
 
 #if THIS_IS_A_DEMO_ONLY
     GetLog()->Debug() << "updated the scene by " << steps - i << " * "
-                      << time_per_step << " seconds.\n";
+                      << timePerStep << " seconds.\n";
 
 #endif
 
@@ -225,25 +240,37 @@ SpadesServer::pauseModeCallback()
 }
 
 bool
-SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator at)
+SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*at*/)
 {
     shared_ptr<GameControlServer> gcs = GetGameControlServer();
+    if (gcs.get() == NULL)
+        {
+            return false;
+        }
+
     return gcs->AgentConnect(static_cast<int>(agent));
 }
 
 bool
-SpadesServer::agentDisappear(AgentID agent, AgentLostReason reason)
+SpadesServer::agentDisappear(AgentID agent, AgentLostReason /*reason*/)
 {
-    return false;
+    shared_ptr<GameControlServer> gcs = GetGameControlServer();
+    if (gcs.get() == NULL)
+        {
+            return false;
+        }
+
+    return gcs->AgentDisappear(static_cast<int>(agent));
 }
 
 void
-SpadesServer::notifyCommserverConnect(ServerID s)
+SpadesServer::notifyCommserverConnect(ServerID /*s*/)
 {
 }
 
 void
-SpadesServer::notifyCommserverDisconnect(ServerID s)
+SpadesServer::notifyCommserverDisconnect(ServerID /*s*/
+)
 {
 }
 
