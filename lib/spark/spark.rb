@@ -96,8 +96,8 @@ def sparkAddFPSCamera(
     collider.setRadius(colliderRadius)    
 
     handler = new('oxygen/ContactJointHandler', path+'geometry/contact')
-    handler.setContactBounceMode = true
-    handler.setMinBounceVel = 2
+    handler.setContactBounceMode true
+    handler.setMinBounceVel 2
   end
 end
 
