@@ -159,15 +159,14 @@ The noise parameters of the vision system are as follows:
   + angle error (latitudal): sigma = 0.1480
 
 Example Vision output: 
-(Vision (Flag (id 1_l) (pol 60.1403 34.5596 -0.328613)) (Flag (id 2_l) 
-(pol 60.0956 -34.4602 -0.456952)) (Flag (id 1_r) (pol 64.2538 147.935 -0.359082)) 
-(Flag (id 2_r) (pol 64.148 -148.223 -0.421845)) (Goal (id 1_l) 
-(pol 49.8231 4.27208 -0.323971)) (Goal (id 2_l) (pol 49.5938 -4.14056 -0.529796)) 
-(Goal (id 1_r) (pol 54.5179 176.296 -0.523109)) (Goal (id 2_r) 
-(pol 54.6331 -175.957 -0.211688)) (Ball (pol 2.6942 -179.859 -6.07302)) 
-(foo (id 1099) (pol 5.12495 -180.146 0.156113)) (bar (id 1100) 
-(pol 9.98603 -179.868 -0.227677)) (bar (id 1101) 
-(pol 15.0581 -179.983 -0.206302)))
+(Vision (Flag (id 1_l) (pol 54.3137 -148.083 -0.152227)) (Flag (id
+2_l) (pol 59.4273 141.046 -0.131907)) (Flag (id 1_r) (pol 61.9718
+-27.4136 -0.123048)) (Flag (id 2_r) (pol 66.4986 34.3644 -0.108964))
+(Goal (id 1_l) (pol 46.1688 179.18 -0.193898)) (Goal (id 2_l) (pol
+46.8624 170.182 -0.189786)) (Goal (id 1_r) (pol 54.9749 0.874504
+-0.149385)) (Goal (id 2_r) (pol 55.5585 8.45381 -0.146933)) (Ball (pol
+6.2928 45.0858 -0.94987)) (Player (team robolog) (id 1) (pol 7.33643
+37.5782 5.86774)))
 
 
 The GameStatePerceptor tells you about the current status of the game. The first percept
@@ -181,7 +180,9 @@ only the battery state).
 END OF TEXT.
 
 
-Attention all planets of the solar federation
-We have assumed control.
+If you ever get close to a human
+And human behaviour
+Be ready to get confused
+There's definitely, definitely, definitely no logic.
 
-(RUSH, 2112)
+(Bjork, Human Behaviour)
