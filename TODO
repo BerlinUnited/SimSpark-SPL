@@ -1,5 +1,21 @@
 For later:
 
+- Split Spark and Soccer stuff, create new SF project simspark
+  The soccer specific stuff remains at sserver.
+  Do we need to create a new subproject for the plugins in sserver?
+
+- Installer 
+  Create a package containing all of the required libraries for Spark + soccer plugins
+
+- Create Soccer plugins using cars
+  use old plugins where possible (changes in visionperceptor required)
+
+- Unify Spades and selfmade runloop interface
+
+- Sparkmonitor 
+
+- get voidimporter running
+
 - To simulate aerodynamic drag, it would be better to use the square
   of the velocity, because that's how drag works in reality. The force
   should also be applied at the object's aerodynamic center rather
