@@ -1,3 +1,4 @@
+if COND_PDFLATEX
 %.toc: %.tex
 	touch $@
 	pdflatex $<
@@ -15,3 +16,4 @@ all-local:
 	fi
 
 CLEANFILES = manual.log manual.pdf manual.aux manual.toc
+endif

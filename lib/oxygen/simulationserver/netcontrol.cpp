@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.cpp,v 1.4 2004/05/01 17:11:19 fruit Exp $
+   $Id: netcontrol.cpp,v 1.4.4.1 2004/12/20 12:24:11 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -175,7 +175,11 @@ void NetControl::InitSimulation()
       {
           if (mSocketType == ST_TCP)
               {
+#ifdef SOMAXCONN
                   mSocket->listen(SOMAXCONN);
+#else
+                  mSocket->listen(50);
+#endif
               }
       }
 

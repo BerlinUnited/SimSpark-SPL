@@ -29,11 +29,13 @@
 #include <arpa/nameser.h>
 #endif
 
+#ifdef HAVE_NETDB_H
+#include <netdb.h>
+#endif
+
 #ifdef HAVE_RESOLV_H
 #include <resolv.h>
 #endif
-
-#include <netdb.h>
 
 
 
@@ -49,7 +51,11 @@ namespace rcss
         const char*
         HostNotFound::what() const throw()
         {
+#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+	    return "Network error";
+#else
             return hstrerror( m_err );
+#endif
         }
 
         int

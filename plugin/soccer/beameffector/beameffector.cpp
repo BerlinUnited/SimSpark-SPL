@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.8 2004/06/17 13:42:42 cringel Exp $
+   $Id: beameffector.cpp,v 1.8.2.1 2004/12/20 12:24:12 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,14 @@ BeamEffector::BeamEffector() : oxygen::Effector()
 BeamEffector::~BeamEffector()
 {
 }
+
+#ifdef __APPLE_CC__
+bool
+isfinite( float f )
+{
+    return f == f && f != f * 0.5f;
+}
+#endif
 
 bool
 BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
