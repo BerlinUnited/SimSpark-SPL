@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.h,v 1.1 2004/04/28 14:52:57 rollmark Exp $
+   $Id: sparkmonitor.h,v 1.2 2004/04/29 15:23:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <oxygen/sceneserver/transform.h>
 #include <kerosin/sceneserver/staticmesh.h>
 #include <kerosin/sceneserver/light.h>
+#include <oxygen/physicsserver/body.h>
 
 class SparkMonitor : public oxygen::MonitorSystem
 {
@@ -55,13 +56,18 @@ protected:
     virtual void OnLink();
     virtual void OnUnlink();
 
-    void DescribeScene(std::stringstream& ss, boost::shared_ptr<oxygen::BaseNode> node);
+    void DescribeActiveScene(std::stringstream& ss);
+    void DescribeScene(std::stringstream& ss,
+                       boost::shared_ptr<oxygen::BaseNode> node);
 
-    void DescribeNode(std::stringstream& ss, boost::shared_ptr<oxygen::BaseNode> node);
-    void DescribeTransform(std::stringstream& ss, boost::shared_ptr<oxygen::Transform> transform);
-    void DescribeMesh(std::stringstream& ss, boost::shared_ptr<kerosin::StaticMesh> mesh);
-    void DescribeLight(std::stringstream& ss, boost::shared_ptr<kerosin::Light> light);
-
+    void DescribeNode(std::stringstream& ss,
+                      boost::shared_ptr<oxygen::BaseNode> node);
+    void DescribeTransform(std::stringstream& ss,
+                           boost::shared_ptr<oxygen::Transform> transform);
+    void DescribeMesh(std::stringstream& ss,
+                      boost::shared_ptr<kerosin::StaticMesh> mesh);
+    void DescribeLight(std::stringstream& ss,
+                       boost::shared_ptr<kerosin::Light> light);
 
 protected:
     /** cached reference to the SceneServer */
@@ -69,6 +75,9 @@ protected:
 
     /** cached reference to the current active scene */
     boost::shared_ptr<oxygen::Scene> mActiveScene;
+
+    /** true, if the full state is generated */
+    bool mFullState;
 };
 
 DECLARE_CLASS(SparkMonitor);

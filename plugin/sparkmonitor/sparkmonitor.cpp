@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.1 2004/04/28 14:52:57 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.2 2004/04/29 15:23:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ using namespace std;
 
 SparkMonitor::SparkMonitor() : oxygen::MonitorSystem()
 {
+    mFullState = true;
 }
 
 SparkMonitor::~SparkMonitor()
@@ -64,29 +65,18 @@ void SparkMonitor::ParseMonitorMessage(const std::string& data)
 
 string SparkMonitor::GetMonitorInfo()
 {
-    if (mSceneServer.get() == 0)
-        {
-            return "";
-        }
-
-    mActiveScene = mSceneServer->GetActiveScene();
-
     stringstream ss;
-    ss << "(RubySceneGraph 0 1)";
-
-    if (mActiveScene.get() != 0)
-        {
-            DescribeScene(ss,mActiveScene);
-        }
-
-    ss << endl;
-
+    mFullState = false;
+    DescribeActiveScene(ss);
     return ss.str();
 }
 
 string SparkMonitor::GetMonitorHeaderInfo()
 {
-    return "(header)";
+    stringstream ss;
+    mFullState = true;
+    DescribeActiveScene(ss);
+    return ss.str();
 }
 
 void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)
@@ -110,7 +100,15 @@ void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> tra
 {
     const Matrix& mat = transform->GetLocalTransform();
 
-    ss << "(node Transform (setLocalTransform ";
+    if (mFullState)
+        {
+            ss << "(node Transform";
+        } else
+            {
+                ss << "(node";
+            }
+
+    ss << " (setLocalTransform ";
 
     for (int i=0;i<16;++i)
         {
@@ -155,8 +153,6 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
                         }
                 }
         }
-
-    ss << "";
 }
 
 void SparkMonitor::DescribeNode(stringstream& ss, shared_ptr<BaseNode> node)
@@ -171,28 +167,62 @@ void SparkMonitor::DescribeNode(stringstream& ss, shared_ptr<BaseNode> node)
             return;
         }
 
-    // StaticMesh node
-    shared_ptr<StaticMesh> mesh =
-        shared_dynamic_cast<StaticMesh>(node);
-
-    if (mesh.get() != 0)
+    if (mFullState)
         {
-            DescribeMesh(ss,mesh);
+            // StaticMesh node
+            shared_ptr<StaticMesh> mesh =
+                shared_dynamic_cast<StaticMesh>(node);
+
+            if (mesh.get() != 0)
+                {
+                    DescribeMesh(ss,mesh);
+                    return;
+                }
+
+            // Light node
+            shared_ptr<Light> light =
+                shared_dynamic_cast<Light>(node);
+
+            if (light.get() != 0)
+                {
+                    DescribeLight(ss,light);
+                    return;
+                }
+        }
+
+    if (mFullState)
+        {
+            // default to BaseNode
+            ss << "(node BaseNode";
+        } else
+            {
+                ss << "(node";
+            }
+}
+
+void SparkMonitor::DescribeActiveScene(stringstream& ss)
+{
+    if (mSceneServer.get() == 0)
+        {
             return;
         }
 
-    // Light node
-    shared_ptr<Light> light =
-        shared_dynamic_cast<Light>(node);
+    mActiveScene = mSceneServer->GetActiveScene();
 
-    if (light.get() != 0)
+    if (mFullState)
         {
-            DescribeLight(ss,light);
-            return;
+            ss << "(RubySceneGraph 0 1)";
+        } else
+            {
+                ss << "(RubyDeltaScene 0 1)";
+            }
+
+    if (mActiveScene.get() != 0)
+        {
+            DescribeScene(ss,mActiveScene);
         }
 
-    // default to BaseNode
-    ss << "(node BaseNode";
+    ss << endl;
 }
 
 void SparkMonitor::DescribeScene(stringstream& ss, shared_ptr<BaseNode> node)
