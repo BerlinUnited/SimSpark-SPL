@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.cpp,v 1.3 2004/02/12 14:07:22 fruit Exp $
+   $Id: predicate.cpp,v 1.4 2004/03/23 09:26:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,22 +21,26 @@
 */
 #include "predicate.h"
 
+using namespace zeitgeist;
 using namespace oxygen;
+using namespace boost;
 using namespace std;
 
-/** The null elemeent for Predicate::Iterator */
-const Predicate::TParameterList Predicate::nullParamList;
+/** The null element for Predicate::Iterator */
+const zeitgeist::ParameterList Predicate::nullParamList;
 
-/** implementation of class Predicate::Iterator */
+Predicate::Iterator::Iterator(const ParameterList* l,
+                              ParameterList::TVector::const_iterator i)
+    : list(l),iter(i) {};
 
-Predicate::Iterator::Iterator(const TParameterList* l, TParameterList::const_iterator i)
-    : list((TParameterList*)l),iter(i) {};
+Predicate::Iterator::Iterator(const ParameterList* l)
+    : list(l),iter(l->begin()) {}
 
 Predicate::Iterator::Iterator(const Predicate& predicate)
-    : list((TParameterList*)&predicate.parameter), iter(predicate.parameter.begin()) {}
+    : list(&predicate.parameter), iter(predicate.parameter.begin()) {}
 
 Predicate::Iterator::Iterator()
-    : list((TParameterList*)&nullParamList), iter(nullParamList.begin()) {};
+    : list(&nullParamList), iter(nullParamList.begin()) {};
 
 const boost::any& Predicate::Iterator::operator * () const
 {
@@ -77,16 +81,21 @@ bool Predicate::Iterator::operator == (const Iterator& i) const
             );
 }
 
-Predicate::TParameterList::const_iterator Predicate::Iterator::GetIterator() const
+const ParameterList::TVector::const_iterator&
+Predicate::Iterator::GetIterator() const
 {
     return iter;
 }
 
-Predicate::TParameterList* Predicate::Iterator::GetList() const
+ParameterList::TVector::const_iterator& Predicate::Iterator::GetIterator()
+{
+    return iter;
+}
+
+const ParameterList* Predicate::Iterator::GetList() const
 {
     return list;
 }
-
 
 /** implementation of class ParameterName */
 
@@ -95,18 +104,19 @@ ParameterName::operator()(const boost::any& param, const string& pred) const
 {
     try
     {
-        // try to cast the element to a TParameterList
-        const Predicate::TParameterList* lst =
-            boost::any_cast<Predicate::TParameterList>(&param);
+        // try get a ParameterList as an element
+        const ParameterList* lst =
+            boost::any_cast<ParameterList>(&param);
 
-        if ( (lst == 0) || (lst->empty()))
+        if ( (lst == 0) || (lst->IsEmpty()))
             {
                 return false;
             }
 
-        string s = boost::any_cast<string>(lst->front());
+        string s;
+        lst->GetValue(lst->begin(),s);
 
-        return pred == s;
+        return (pred == s);
     }
 
     catch(const boost::bad_any_cast &)
@@ -118,7 +128,7 @@ ParameterName::operator()(const boost::any& param, const string& pred) const
 bool
 Predicate::FindParameter(Iterator& iter, const string& name) const
 {
-    const TParameterList* list = iter.GetList();
+    const ParameterList* list = iter.GetList();
 
     Iterator test
         (
@@ -135,11 +145,11 @@ Predicate::FindParameter(Iterator& iter, const string& name) const
         }
 
     // try to extract the first element as a parameter list
-    const TParameterList* paramList
-        = boost::any_cast<Predicate::TParameterList>(&(*test));
+    const ParameterList* paramList
+        = boost::any_cast<ParameterList>(&(*test));
     if (
         (paramList == 0) ||
-        (paramList->size() < 2)
+        (paramList->GetSize() < 2)
         )
         {
             return false;
@@ -152,3 +162,21 @@ Predicate::FindParameter(Iterator& iter, const string& name) const
 
     return true;
 }
+
+bool Predicate::DescentList(Iterator& iter) const
+{
+    try
+        {
+            const any* v = &(*iter.GetIterator());
+            const ParameterList* l = any_cast<ParameterList>(v);
+            iter = Iterator(l);
+            return true;
+        }
+
+    catch(const std::bad_cast&)
+        {
+            return false;
+        }
+
+}
+
