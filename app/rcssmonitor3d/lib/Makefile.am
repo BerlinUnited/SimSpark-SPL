@@ -6,4 +6,10 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 librcssmonitor3D_a_SOURCES = \
 	communit.h communit.cpp \
 	commserver.h commserver.cpp commserver_c.cpp \
-	tcpsocket.h tcpsocket.cpp
+	tcpsocket.h tcpsocket.cpp \
+	monitorparser.h monitorparser.cpp \
+	gameparam.h gameparam.cpp \
+	gamestate.h gamestate.cpp
+
+
+
