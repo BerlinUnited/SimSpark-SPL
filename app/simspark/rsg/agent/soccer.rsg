@@ -141,17 +141,17 @@
 ;;
 
 (node Ball
-      (setLocalPos 25 0 10)
-
+      (setLocalPos 25 0 30)
+      (setName Ball)
 
       (node Sphere
-	    (setRadius 0.3)
+	    (setRadius 1.0)
 	    (setMaterial matWhite)
 	    )
 
       (node Body
-	    (setName sphereBody)
-	    (setSphere 2 0.3)
+	    (setName physics)
+	    (setSphere 2 1.0)
 	    (node DragController
 		  (setAngularDrag 0.2)
 		  (setLinearDrag 0.4)
@@ -159,7 +159,8 @@
 	    )
        
       (node SphereCollider
-	    (setRadius 0.3)
+	    (setName geometry)
+	    (setRadius 1.0)
 
 	    (node ContactJointHandler
 		  (setContactBounceMode false)
@@ -175,8 +176,8 @@
 		  )
 	    )
 
+
       (node ObjectState
-	    (setName Ball)
 	    (setPerceptName Ball)
 	    )
       )
