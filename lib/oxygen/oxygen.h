@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.9 2004/04/10 07:28:05 rollmark Exp $
+   $Id: oxygen.h,v 1.10 2004/04/10 07:40:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@
 #include "sceneserver/scene.h"
 #include "sceneserver/sceneserver.h"
 #include "sceneserver/transform.h"
+#include "sceneserver/sceneimporter.h"
 
 #ifdef HAVE_SPADES_HEADERS
 #include "spadesserver/spadesserver.h"
