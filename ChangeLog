@@ -1,3 +1,32 @@
+2003-09-09  Markus Rollmann  <rollmark@uni-koblenz.de>
+	- Modified the startup behaviour of the libraries wrt the handling
+	of the ruby scripts that are automatically started.
+
+	To each library now belongs exactly one ruby init script with the
+	name of the library (e.g. zeitgeist.rb). The init scripts are
+	searched at three different locations at startup (in the given
+	order):
+
+		- the local 'dot-directory' of the user,
+		e.g. '$HOME/.rcssserver3d'. The name of this directory is
+		given to the zeitgeist constructor at startup by the
+		application (see /app/spadestest/main.cpp for a demo)
+
+		- the PREFIX directory given to the configure script
+		(--PREFIX=<directory>). Default value is /usr/share.
+
+		- if an init script isn't found in one of the above
+		locations, it is assumed that the libraries along with the
+		init scripts were not installed. Therefore for convenience
+		the init scripts are searched relative to the /app folder
+		in the source tree (e.g. '../../lib/zeitgeist')
+
+		If the local 'dot-directory' wasn't found on startup it
+		will be created and the init scripts copied to it. Then on
+		the next startup they will be run from the dot-directory.
+
+	The above logic is implemented in ScriptServer::RunInitScript()
+
 2003-11-13  Oliver Obst  <fruit@robolog.org>
 
 	* app/spadestest/main.cpp: removed dependency to kerosin
