@@ -1,3 +1,39 @@
+2004-03-27  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* lib/oxygen/sceneserver/sceneserver.cpp,
+	* lib/oxygen/sceneserver/sceneserver.h: 
+	- caching mActiveScene, mActiveSpace and mActiveWorld
+
+	* lib/oxygen/sceneserver/basenode.cpp:
+	- changed PrePhysicsUpdate, PostPhysicsUpdate and UpdateHierarchy
+	to use template ListChildrenSupportingClass - changed GetScene to
+	use FindParentSupportingClass
+
+	* lib/zeitgeist/leaf.h:
+	- added template function FindParentSupportingClass
+
+	* lib/oxygen/physicsserver/contactjointhandler.cpp:
+	- changed HandleCollision to use FindChildSupportingClass template
+
+	* lib/oxygen/physicsserver/collider.cpp:
+	- changed OnCollision() to use ListChildrenSupportingClass
+	template
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	- changed GetMonitorSystem to use template
+	FindChildSupportingClass
+
+	* lib/zeitgeist/leaf.h:
+	- added template function FindChildSupportingClass
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	- changed QueryPerceptors() and UpdateEffectorMap() to use
+	template ListChildrenSupportingClass()
+
+	* lib/zeitgeist/leaf.h:
+	- added template functino ListChildrenSupportingClass that
+	retrieves a list of children based on the c++ typeid instead of
+	the zeitgeist class string
+
 2004-03-25  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* plugin/soccer/sexpmonitor/sexpmonitor.cpp,
