@@ -19,7 +19,6 @@ sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor_c.cpp \
 fieldflag/fieldflag.cpp \
 fieldflag/fieldflag_c.cpp \
-ball/ball.cpp \
 ball/ball_c.cpp \
 visionperceptor/visionperceptor.h \
 visionperceptor/visionperceptor.cpp \
