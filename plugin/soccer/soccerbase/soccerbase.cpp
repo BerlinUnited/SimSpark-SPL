@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.9 2004/05/17 09:11:44 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.10 2004/06/06 09:53:20 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/controlaspect/controlaspect.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
+#include <soccer/soccerruleaspect/soccerruleaspect.h>
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/ball/ball.h>
 
@@ -234,7 +235,6 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
     return false;
 }
 
-
 bool
 SoccerBase::GetGameState(const Leaf& base,
                          shared_ptr<GameStateAspect>& game_state)
@@ -243,12 +243,30 @@ SoccerBase::GetGameState(const Leaf& base,
         (base.GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
 
     if (game_state.get() == 0)
-        {
-            base.GetLog()->Error()
-                << "Error: (SoccerBase: " << base.GetName()
-                << ") found no GameStateAspect\n";
-            return false;
-        }
+    {
+        base.GetLog()->Error()
+            << "Error: (SoccerBase: " << base.GetName()
+            << ") found no GameStateAspect\n";
+        return false;
+    }
+
+    return true;
+}
+
+bool
+SoccerBase::GetSoccerRuleAspect(const Leaf& base,
+                                shared_ptr<SoccerRuleAspect>& soccer_rule_aspect)
+{
+    soccer_rule_aspect = shared_dynamic_cast<SoccerRuleAspect>
+        (base.GetCore()->Get("/sys/server/gamecontrol/SoccerRuleAspect"));
+
+    if (soccer_rule_aspect.get() == 0)
+    {
+        base.GetLog()->Error()
+            << "Error: (SoccerBase: " << base.GetName()
+            << ") found no SoccerRuleAspect\n";
+        return false;
+    }
 
     return true;
 }

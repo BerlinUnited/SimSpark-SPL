@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.4 2004/04/21 09:03:48 fruit Exp $
+   $Id: soccerbase.h,v 1.5 2004/06/06 09:50:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ namespace salt
 
 class AgentState;
 class GameStateAspect;
+class SoccerRuleAspect;
 class Ball;
 
 class SoccerBase
@@ -113,6 +114,11 @@ public:
     static bool
     GetGameState(const zeitgeist::Leaf& base,
                  boost::shared_ptr<GameStateAspect>& game_state);
+
+    /** return a reference to the SoccerRuleAspect node */
+    static bool
+    GetSoccerRuleAspect(const zeitgeist::Leaf& base,
+                        boost::shared_ptr<SoccerRuleAspect>& soccer_rule_aspect);
 
     /** returns a reference to the active scene from the SceneServer */
     static bool
