@@ -1,13 +1,26 @@
+%% LyX 1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[11pt,a4paper,oneside,english]{scrbook}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\makeatletter
+\usepackage{babel}
+\makeatother
+\begin{document}
 
 \chapter{Programming Environment under Linux}
 
 
 \section{Requirements}
 
-Besides the existing tools needed for compiling C++ code a few libraries and
-header files have to be installed on your system.
+Beside the usually tools needed for compiling a few libraries und
+headers must be installed on your system.
 
-Here is a list of packages needed for compilation together with a link for downloading them:
+Here is a little excerpt of needed packages and where you can find
+them:
 
 \begin{itemize}
 \item openGL (www.opengl.org)
@@ -18,18 +31,18 @@ Here is a list of packages needed for compilation together with a link for downl
 \item Ruby (www.ruby-lang.org)
 \item boost (www.boost.org)
 \end{itemize}
-All of the other stuff should come with your linux-distribution.
+Most of the other stuff should come with your linux-distribution.
 
 
-\section{Compile the Project}
+\section{Compile the project}
 
-Make sure to read the installation instructions (TODO Viktor: which? link? I suggest to put here!) 
-for more details.
+Make sure to read the installing instructions for nearer details.
 But in most cases a simple \emph{./configure \&\& make} or \emph{autoconfigure}
 should be enough. If something is missing the configure-script will
 tell you.
 
 
-\section{Most common Problems}
+\section{Test the project}
 
-TODO Viktor: Maybe just link to chapter 5 or directly to the pages in sourceforge
+At present no test environment runs proper.
+\end{document}
