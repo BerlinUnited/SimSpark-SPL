@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.2.2.3 2003/12/25 13:16:02 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.2.2.4 2003/12/30 14:32:26 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -170,7 +170,7 @@ float GameControlServer::GetSenseInterval(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent.
-    return 0.1;
+    return 0.25;
 }
 
 float GameControlServer::GetSenseLatency(int /*id*/)
