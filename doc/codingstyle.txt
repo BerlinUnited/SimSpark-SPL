@@ -166,13 +166,13 @@ ClassName::function()
 - max line length is 80 characters
 - include copyright:
 
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
    
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: codingstyle.txt,v 1.5 2003/08/24 07:57:39 fruit Exp $
+   $Id: codingstyle.txt,v 1.6 2003/11/15 14:28:12 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
