@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.10 2004/06/06 10:12:29 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.11 2004/06/06 16:54:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -280,7 +280,7 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
         return;
     }
     // move away opponent team
-    ClearPlayers(idx == TI_LEFT ? mRightPenaltyArea : mLeftPenaltyArea,
+    ClearPlayers(idx == TI_LEFT ? mLeftPenaltyArea : mRightPenaltyArea,
                  1.0, SoccerBase::OpponentTeam(idx));
 
     // if no player touched the ball for mDropBallTime, we move away
