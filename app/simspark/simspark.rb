@@ -19,10 +19,6 @@ sparkAddFPSCamera(
 		  addCollider = false
 		  )
 
-#
-# collection of callbacks and helper functions
-#
-
 # create custom materials
 material = new('kerosin/MaterialSolid', $serverPath+'material/matYellow');
 material.setDiffuse(1.0,1.0,0.0,1.0)
@@ -47,13 +43,21 @@ material.setAmbient(0.1,0.4,0.1,1.0)
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
 material.setDiffuse(0.1,0.1,0.1,1.0)
 
-# prepare soccer simulation
-importBundle "soccer"
-scene = get($scenePath)
-scene.importScene('rsg/agent/soccer.rsg')
+#
+# uncomment any of the following to run a simulation
+#
 
-# setup the GameControlServer
-gameControlServer = get($serverPath+'gamecontrol')
-gameControlServer.initControlAspect('GameStateAspect')
-gameControlServer.initControlAspect('BallStateAspect')
-gameControlServer.initControlAspect('SoccerRuleAspect')
+# create an arena with a bunch of boxes and spheres
+# scene = get($scenePath)
+# scene.importScene('rsg/boxspheres/simspark.rsg')
+
+# create an arena to test various joint bodies
+# scene = get($scenePath)
+# scene.importScene('rsg/jointtest/simspark.rsg')
+
+# source soccersim.rb to run the soccer simulation
+run "soccersim.rb"
+
+
+
+
