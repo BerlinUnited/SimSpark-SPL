@@ -2,7 +2,7 @@
 #define FILESERVER_H__
 
 /*!	\class FileServer
-	$Id: fileserver.h,v 1.2 2003/04/30 14:21:52 fruit Exp $
+	$Id: fileserver.h,v 1.3 2003/06/03 12:26:43 fruit Exp $
 
 	FileServer - global interface for file system access
 
@@ -51,7 +51,7 @@
 
 
 #include <list>
-#include "../node.h"
+#include <zeitgeist/node.h>
 #include "filesystem.h"
 
 namespace zeitgeist

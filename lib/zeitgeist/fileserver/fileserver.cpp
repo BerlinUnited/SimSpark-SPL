@@ -1,6 +1,6 @@
 #include "fileserver.h"
 #include <salt/fileclasses.h>
-#include "../core.h"
+#include <zeitgeist/core.h>
 
 using namespace boost;
 using namespace salt;

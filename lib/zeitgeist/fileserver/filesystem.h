@@ -2,7 +2,7 @@
 #define FILESYSTEM_H__
 
 /*! \class FileSystem
-	$Id: filesystem.h,v 1.2 2003/04/30 14:21:52 fruit Exp $
+	$Id: filesystem.h,v 1.3 2003/06/03 12:26:43 fruit Exp $
 	
 	FileSystem
 
@@ -14,7 +14,7 @@
 			- initial version
 
 */
-
+#include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 #include <salt/fileclasses.h>
 
