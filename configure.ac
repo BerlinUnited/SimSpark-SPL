@@ -34,7 +34,8 @@ AC_PROG_LIBTOOL
 AC_PROG_AWK
 AC_CHECK_PROG([DOXYGEN], [doxygen], [yes], [no])
 AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes)
-
+AC_CHECK_PROG([HAVE_DOT], [dot], [YES], [NO])
+AC_PATH_PROG([PERL], [perl], [perl])
 # Checks for libraries.
 
 # Checks for header files.
@@ -46,7 +47,7 @@ AC_CHECK_HEADER([boost/version.hpp],,
   AC_MSG_ERROR([boost library not found. Please specify the location 
 of the boost header directory using the CPPFLAGS environment variable]))
 AC_CHECK_HEADERS([hash_map],,
-	AC_MSG_WARN(['hash_map' will be substituted by 'map'. Possible fix: install stlport]))
+	AC_MSG_NOTICE(['hash_map' will be substituted by 'map'. If you need hash_map install stlport]))
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -69,10 +70,20 @@ AC_REPLACE_FUNCS([_vsnprintf])
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr strupr])
 
 ## checks for system services
+
+# This test is required here because of the soccer monitor.
+# It can be dropped as soon as the monitor uses libkerosin.
+rcss_build_kerosin=yes
+RCSS_CHECK_GL
+if test "$rcss_build_kerosin" = no; then
+	AC_MSG_ERROR([need GL stuff to build monitor])
+fi
+
 RCSS_CHECK_RCSSBASE
 RCSS_BUILD_KEROSIN
 RCSS_BUILD_SOUNDSYSTEMFMOD
 RCSS_PATH_RUBY
+RCSS_CHECK_RUBY_VERSION(1,8,0)
 RCSS_CHECK_ODE
 
 AC_ARG_VAR(SPADES, [prefix of SPADES installation])
