@@ -11,6 +11,11 @@
 /stamp-h1
 app/Makefile
 app/Makefile.in
+app/agenttest/.deps
+app/agenttest/.libs
+app/agenttest/Makefile
+app/agenttest/Makefile.in
+app/agenttest/agenttest
 app/coretest/.deps
 app/coretest/.libs
 app/coretest/Makefile
