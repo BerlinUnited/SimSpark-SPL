@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.1.2.5 2004/02/06 14:48:17 rollmark Exp $
+   $Id: soccerbase.h,v 1.1.2.6 2004/02/10 19:36:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,6 +77,12 @@ public:
         Transform parent */
     static bool
     GetAgentState(const zeitgeist::Leaf& base,
+                  boost::shared_ptr<AgentState>& agent_state);
+
+    /** returns a reference to the AgentState node below the given
+        transform node */
+    static bool
+    GetAgentState(const boost::shared_ptr<oxygen::Transform> transform,
                   boost::shared_ptr<AgentState>& agent_state);
 
     /** return a reference to the GameStateAspect node */
