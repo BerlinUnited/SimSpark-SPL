@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.6 2003/11/27 12:45:09 rollmark Exp $
+   $Id: spadesserver.h,v 1.1.2.6.2.1 2003/12/01 10:32:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,6 +45,10 @@ public:
     // Methods starting with small letters are SPADES interface methods.
     // Methods with a initial capital letter are additional methods needed
     // for the zeitgeist framework.
+
+    /** called after the object has been created and attached to a
+        core to allow for object dependent internal construction */
+    virtual bool ConstructInternal();
 
     // SPADES interface methods start here
 

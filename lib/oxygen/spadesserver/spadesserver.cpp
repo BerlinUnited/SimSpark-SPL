@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.1 2003/12/01 08:48:27 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.2 2003/12/01 10:32:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "spadesserver.h"
 
 using namespace boost;
+using namespace zeitgeist;
 using namespace oxygen;
 using namespace spades;
 using namespace std;
@@ -30,6 +31,7 @@ using namespace std;
 
 #include <zeitgeist/corecontext.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <spades/SimEngine.hpp>
 
@@ -45,6 +47,16 @@ SpadesServer::SpadesServer() :
 SpadesServer::~SpadesServer()
 {
 }
+
+bool
+SpadesServer::ConstructInternal()
+{
+    // setup script variables used to customzize the SpadesServer
+    GetScript()->CreateVariable("Spades.TimePerStep", 0.01f);
+
+    return true;
+}
+
 
 // SPADES interface methods
 EngineParam*
@@ -78,8 +90,9 @@ SimTime
 SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
 {
     float time_per_step = 0.01f;
-    int steps = time_desired - time_curr;
+    GetScript()->GetVariable("Spades.TimePerStep", time_per_step);
 
+    int steps = time_desired - time_curr;
     if (steps <= 0)
     {
         GetLog()->Warning() << "WARNING: Will not simulate <= 0 steps\n";
@@ -201,7 +214,7 @@ void
 SpadesServer::pauseModeCallback()
 {
     // no time to pause
-    // mSimEngine->changeSimulationMode(SM_RunNormal);
+    mSimEngine->changeSimulationMode(SM_RunNormal);
 }
 
 bool
