@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.cpp,v 1.7 2004/04/10 08:30:45 rollmark Exp $
+   $Id: node.cpp,v 1.8 2004/04/28 14:24:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -182,19 +182,24 @@ Node::GetChildrenSupportingClass(const std::string& name, TLeafList& baseList, b
 
 bool Node::IsLeaf() const
 {
-        return false;
+    return false;
 }
 
 void Node::RemoveChildReference(const boost::shared_ptr<Leaf> &leaf)
 {
-        mChildren.remove(leaf);
+    mChildren.remove(leaf);
+}
+
+void Node::RemoveChildren()
+{
+    mChildren.clear();
 }
 
 bool Node::AddChildReference(const boost::shared_ptr<Leaf> &leaf)
 {
-        mChildren.push_back(leaf);
-        //cout << "Node: self " << (void*) GetSelf().get() << endl;
-        leaf->SetParent(shared_static_cast<Node>(make_shared(GetSelf())));
+    mChildren.push_back(leaf);
+    //cout << "Node: self " << (void*) GetSelf().get() << endl;
+    leaf->SetParent(shared_static_cast<Node>(make_shared(GetSelf())));
 
         return true;
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.h,v 1.8 2004/04/22 14:56:18 fruit Exp $
+   $Id: node.h,v 1.9 2004/04/28 14:24:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,9 @@ public:
 
     /** removes base from the set of children. */
     virtual void RemoveChildReference(const boost::shared_ptr<Leaf> &base);
+
+    /** empties the set of children */
+    virtual void RemoveChildren();
 
     /** adds base to the set of children and sets the parent of base to be this node */
     virtual bool AddChildReference(const boost::shared_ptr<Leaf> &base);
