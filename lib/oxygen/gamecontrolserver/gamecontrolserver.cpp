@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.2.2.1 2003/12/22 17:59:58 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.2.2.2 2003/12/25 12:30:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,6 +57,12 @@ GameControlServer::InitParser(const std::string& parserName)
     return true;
 }
 
+void
+GameControlServer::InitEffector(const std::string& effectorName)
+{
+   mCreateEffector = effectorName;
+}
+
 shared_ptr<BaseParser>
 GameControlServer::GetParser()
 {
@@ -104,11 +110,14 @@ GameControlServer::AgentConnect(int id)
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() == 0)
         {
+            GetLog()->Error()
+                << "ERROR: (GameControlServer) Got no active scene from the SceneServer to"
+                << " create the AgentAspect in.\n";
             return false;
         }
 
-    // create a new AgentAspect for the new ID in the scene and add it
-    // to our map of AgentAspects
+    // create a new AgentAspect for the ID in the scene and add it to
+    // our map of AgentAspects
     shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
         (GetCore()->New("kerosin/AgentAspect"));
 
@@ -126,7 +135,7 @@ GameControlServer::AgentConnect(int id)
     scene->AddChildReference(aspect);
     mAgentMap[id] = aspect;
 
-    return aspect->Init();
+    return aspect->Init(mCreateEffector);
 }
 
 bool GameControlServer::AgentDisappear(int id)
