@@ -1,6 +1,5 @@
 importBundle "filesystemstd"
 importBundle "sexpparser"
-importBundle "monitortest"
 
 importBundle "perfectvisionperceptor"
 importBundle "forceeffector"
@@ -25,7 +24,7 @@ sceneServer.createScene('/usr/scene');
 
 # setup the MonitorServer and a simple MonitorSystem
 monitorServer = new('oxygen/MonitorServer', '/sys/server/monitor');
-monitorServer.registerMonitorSystem('MonitorTest');
+monitorServer.registerMonitorSystem('SexpMonitor');
 
 # setup the GameControlServer
 gameControlServer = new('oxygen/GameControlServer', '/sys/server/gamecontrol');
@@ -67,4 +66,21 @@ w3.setParams(0.0, 0.0, -1.0, -34.0);
 w4 = new('kerosin/PlaneCollider', '/usr/scene/w4');
 w4.setParams(0.0, 0.0, 1.0, -34.0);
 
-spadesServer.queueAgents('default', 11);
+# mark the soccer field with 4 field flags
+fx = 52.5;
+fz = 34.0;
+fy = 1.0;
+
+flag = new('FieldFlag','/usr/scene/flag1');
+flag.setLocalPos(0.0,fy,fz);
+
+flag = new('FieldFlag','/usr/scene/flag2');
+flag.setLocalPos(fx,fy,fz);
+
+flag = new('FieldFlag','/usr/scene/flag3');
+flag.setLocalPos(fx,fy,0.0);
+
+flag = new('FieldFlag','/usr/scene/flag4');
+flag.setLocalPos(0.0,fy,0.0,0.0);
+
+spadesServer.queueAgents('default', 1);
