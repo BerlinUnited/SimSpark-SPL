@@ -73,6 +73,7 @@ physicsserver/collisionhandler.cpp \
 physicsserver/collisionhandler_c.cpp \
 physicsserver/contactjointhandler.cpp \
 physicsserver/contactjointhandler_c.cpp \
+physicsserver/odeobject.cpp \
 physicsserver/odeobject_c.cpp \
 physicsserver/physicsserver.cpp \
 physicsserver/physicsserver_c.cpp \
@@ -90,6 +91,10 @@ physicsserver/world.cpp \
 physicsserver/world_c.cpp \
 physicsserver/dragcontroller.cpp \
 physicsserver/dragcontroller_c.cpp \
+physicsserver/joint.cpp \
+physicsserver/joint_c.cpp \
+physicsserver/balljoint.cpp \
+physicsserver/balljoint_c.cpp \
 sceneserver/basenode.cpp \
 sceneserver/basenode_c.cpp \
 sceneserver/fpscontroller.cpp \
@@ -134,6 +139,8 @@ physicsserver/space.h \
 physicsserver/spherecollider.h \
 physicsserver/world.h \
 physicsserver/dragcontroller.h \
+physicsserver/joint.h \
+physicsserver/balljoint.h \
 sceneserver/basenode.h \
 sceneserver/fpscontroller.h \
 sceneserver/scene.h \
