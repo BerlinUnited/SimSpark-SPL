@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bounds.h,v 1.8 2004/04/14 12:57:32 fruit Exp $
+   $Id: bounds.h,v 1.9 2004/06/05 11:20:51 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -163,7 +163,7 @@ public:
 
     /** sets minVec and maxVec to describe an empty bounding box */
     f_inline void Init()
-    { minVec.Set(FLT_MAX, FLT_MAX); maxVec.Set(FLT_MIN, FLT_MIN); }
+    { minVec.Set(FLT_MAX, FLT_MAX); maxVec.Set(-FLT_MAX, -FLT_MAX); }
 
     /** encapsulates the Vector v, growing the box if necessary */
     f_inline void Encapsulate(const Vector2f &v)
