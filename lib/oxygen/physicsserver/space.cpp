@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.4.8.3 2004/01/11 11:23:52 rollmark Exp $
+   $Id: space.cpp,v 1.4.8.4 2004/01/11 11:27:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,8 +72,8 @@ void Space::Collide()
 
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
-    // if the two bodies corresponding to the geoms are connected by a
-    // joint
+    // return immediately if the two bodies corresponding to the
+    // geoms are connected by a joint
     dBodyID ODEBody1 = dGeomGetBody(obj1);
     dBodyID ODEBody2 = dGeomGetBody(obj2);
 
