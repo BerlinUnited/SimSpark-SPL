@@ -236,12 +236,6 @@ plugin/soundsystemfmod/Makefile
 plugin/soundsystemfmod/Makefile.in
 plugin/soundsystemfmod/*.la
 plugin/soundsystemfmod/*.lo
-plugin/survival/.deps
-plugin/survival/.libs
-plugin/survival/Makefile
-plugin/survival/Makefile.in
-plugin/survival/*.la
-plugin/survival/*.lo
 utility/Makefile.in
 utility/Makefile
 utility/glextgen/Makefile
