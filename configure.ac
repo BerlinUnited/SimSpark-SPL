@@ -15,6 +15,7 @@ RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'1:0:1')
 RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'2:0:1')
 RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'1:1:0')
 RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'0:0:0')
+RCSS_LIBRARY_VERSION_INFO(spark_version_info,spark_version,'0:0:0')
 
 rcss_prefix=\"$prefix\"
 test "$rcss_prefix" = \"NONE\" && rcss_prefix=\"$ac_default_prefix\"
@@ -148,6 +149,7 @@ AC_CONFIG_FILES([Makefile \
 		 lib/kerosin/kerosin-config \
 		 lib/oxygen/Makefile \
 		 lib/oxygen/oxygen-config \
+		 lib/spark/Makefile \
 		 plugin/Makefile \
 		 plugin/filesystemstd/Makefile \
 		 plugin/filesystemzip/Makefile \
