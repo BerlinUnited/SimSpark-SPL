@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.6 2004/04/05 14:51:54 rollmark Exp $
+   $Id: main.cpp,v 1.7 2004/04/11 11:40:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,303 +18,87 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <spark/spark.h>
 #include <sstream>
-#include <zeitgeist/zeitgeist.h>
-#include <kerosin/kerosin.h>
-#include <oxygen/oxygen.h>
-#include <SDL/SDL.h>
-#include <zeitgeist/fileserver/fileserver.h>
 #include <monitorlib.h>
 #include <commserver.h>
 #include <monitorparser.h>
 
-using namespace boost;
+using namespace spark;
 using namespace kerosin;
 using namespace oxygen;
+using namespace zeitgeist;
 using namespace salt;
 using namespace std;
-using namespace zeitgeist;
+using namespace boost;
 
-//
-// Input constant mappings
-//
-enum ECmds
-    {
-        CmdQuit,
-        CmdTimer,
-        CmdMouseX,
-        CmdMouseY,
-        CmdUp,
-        CmdDown,
-        CmdLeft,
-        CmdRight,
-        CmdForward,
-        CmdBackward,
-        CmdKickOff
-    };
-
-// initialize Zeitgeist (object hierarchy, scripting, files, plugins)
-Zeitgeist gZg("." PACKAGE_NAME, "../../../");
-
-// initialize Oxygen (simulation and physics)
-Oxygen gOx(gZg);
-
-// initialize Kerosin (input, windowing)
-Kerosin gks(gZg);
-
-// initialize monitor lib
-MonitorLib ml(gZg);
-
-// game state data
-GameState gGameState;
-
-// game parameter data
-GameParam gGameParam;
-
-shared_ptr<LogServer> gLogServer;
-shared_ptr<ScriptServer> gScriptServer;
-shared_ptr<SceneServer> gSceneServer;
-shared_ptr<OpenGLServer> gOpenGLServer;
-shared_ptr<InputServer> gInputServer;
-shared_ptr<FPSController> gFPSController;
-shared_ptr<RenderServer> gRenderServer;
-shared_ptr<CommServer> gCommServer;
-shared_ptr<MonitorParser> gMonitorParser;
-
-// total time passed
-float gTime = 0.0f;
-
-// total frames rendered
-int   gNumFrames = 0;
-
-// monitor port
-int gPort           = DEFAULT_PORT;
-
-// server machine
-string gSoccerServer = DEFAULT_HOST;
-
-// color for player of the different teams
-const float gTeamLColor[4] = {1.0f, 0.2f, 0.2f, 1.0f};
-const float gTeamRColor[4] = {0.2f, 0.2f, 1.0f, 1.0f};
-
-bool init()
+class MonitorSpark : public Spark
 {
-    gLogServer = gZg.GetCore()->GetLogServer();
-    gScriptServer = gZg.GetCore()->GetScriptServer();
+public:
+    // user define command constants
+    static const int CmdKickOff = CmdUser+1;
 
-    // publish our commands to the scripts
-    gScriptServer->CreateVariable("Command.Quit",     CmdQuit);
-    gScriptServer->CreateVariable("Command.Timer",    CmdTimer);
-    gScriptServer->CreateVariable("Command.MouseX",   CmdMouseX);
-    gScriptServer->CreateVariable("Command.MouseY",   CmdMouseY);
-    gScriptServer->CreateVariable("Command.Left",     CmdLeft);
-    gScriptServer->CreateVariable("Command.Right",    CmdRight);
-    gScriptServer->CreateVariable("Command.Forward",  CmdForward);
-    gScriptServer->CreateVariable("Command.Backward", CmdBackward);
-    gScriptServer->CreateVariable("Command.Up",       CmdUp);
-    gScriptServer->CreateVariable("Command.Down",     CmdDown);
-    gScriptServer->CreateVariable("Command.KickOff",  CmdKickOff);
+public:
+    MonitorSpark(const std::string& relPathPrefix) :
+        Spark(relPathPrefix),
+        mMl(GetZeitgeist()),
+        mPort(DEFAULT_PORT),
+        mSoccerServer(DEFAULT_HOST)
+    {};
 
-    // run initialization scripts
-    gScriptServer->Run("rcssmonitor3D-kerosin.rb");
-    gScriptServer->Run("german.scan.rb");
-    gScriptServer->Run("bindings.rb");
+    /** process user defined input constants */
+    virtual void ProcessInput(kerosin::InputServer::Input& input);
 
-    gSceneServer = shared_dynamic_cast<SceneServer>
-        (gZg.GetCore()->Get("/sys/server/scene"));
+    /** reads and parses messages from the soccer server */
+    virtual void UpdatePreRenderFrame();
 
-    if (gSceneServer.get() == 0)
-        {
-            gLogServer->Error() << "ERROR: SceneServer not fount\n";
-            return false;
-        }
+    /** called once after Spark finished it's init */
+    virtual bool InitApp(int argc, char** argv);
 
-    gOpenGLServer =  shared_dynamic_cast<OpenGLServer>
-        (gZg.GetCore()->Get("/sys/server/opengl"));
+    /** print command line options */
+    void PrintHelp();
 
-    if (gOpenGLServer.get() == 0)
-        {
-            gLogServer->Error() << "ERROR: OpenGLServer not found\n";
-            return false;
-        }
+    /** print a greeting */
+    void PrintGreeting();
 
-    gInputServer = shared_dynamic_cast<InputServer>
-        (gZg.GetCore()->Get("/sys/server/input"));
+    /** process command line options */
+    bool ProcessCmdLine(int argc, char* argv[]);
 
-    if (gInputServer.get() == 0)
-        {
-            gLogServer->Error() << "ERROR: InputServer not found\n";
-            return false;
-        }
+    /** constructs a unique string used as the node name for the give
+        expression */
+    bool MangleExpr(MonitorParser::Expression& expr, string& name);
 
-    gFPSController = shared_dynamic_cast<FPSController>
-        (gZg.GetCore()->Get("/usr/scene/camera0/physics/controller"));
+    /** mangles the given expression and construcs the corresponding
+        sphere or returns an already existing instance
+    */
+    shared_ptr<Transform> GetSphere(MonitorParser::Expression& expr);
 
-    if (gFPSController.get() == 0)
-        {
-            gLogServer->Error() << "ERROR: FPSController not found\n";
-            return false;
-        }
+public:
+    // the monitor lib
+    MonitorLib mMl;
 
-    gRenderServer = shared_dynamic_cast<RenderServer>
-        (gZg.GetCore()->Get("/sys/server/render"));
+    // game state data
+    GameState mGameState;
 
-    if (gRenderServer.get() == 0)
-        {
-            gLogServer->Error() << "ERROR: RenderServer not found\n";
-            return false;
-        }
+    // game parameter data
+    GameParam mGameParam;
 
-    // get MonitorLib classes
+    // monitor port
+    int mPort;
 
-    gCommServer = shared_dynamic_cast<CommServer>
-        (gZg.GetCore()->Get("/sys/server/comm"));
+    // server machine
+    string mSoccerServer;
 
-    if (gCommServer.get() == 0)
-        {
-            gLogServer->Error() << "ERROR: CommServer not found\n";
-            return false;
-      }
+    // the communication server instance
+    shared_ptr<CommServer> mCommServer;
 
-  gMonitorParser = shared_dynamic_cast<MonitorParser>
-      (gZg.GetCore()->Get("/sys/server/parser"));
+    // the parser instance
+    shared_ptr<MonitorParser> mMonitorParser;
+};
 
-  if (gMonitorParser.get() == 0)
-      {
-          gLogServer->Error() << "ERROR: MonitorParser not found\n";
-          return false;
-      }
-
-    return true;
-}
-
-float processInput()
+void MonitorSpark::PrintGreeting()
 {
-    float deltaTime = 0.0f;
-
-    // Process incoming input
-    InputServer::Input input;
-    while (gInputServer->GetInput(input))
-        {
-            switch (input.id)
-                {
-                case CmdQuit:
-                    gOpenGLServer->Quit();
-                    break;
-
-                case CmdTimer:
-                    deltaTime = (float) input.data.l/1000.0f;
-                    break;
-
-                case CmdMouseX:
-                    gFPSController->AdjustHAngle(0.3f*(float)input.data.l);
-                    break;
-
-                case CmdMouseY:
-                    gFPSController->AdjustVAngle(0.3f*(float)input.data.l);
-                    break;
-
-                case CmdUp:
-                    gFPSController->Up(input.data.l!=0);
-                    break;
-
-                case CmdDown:
-                    gFPSController->Down(input.data.l!=0);
-                    break;
-
-                case CmdLeft:
-                    gFPSController->StrafeLeft(input.data.l!=0);
-                    break;
-
-                case CmdRight:
-                    gFPSController->StrafeRight(input.data.l!=0);
-                    break;
-
-                case CmdForward:
-                    gFPSController->Forward(input.data.l!=0);
-                    break;
-
-                case CmdBackward:
-                    gFPSController->Backward(input.data.l!=0);
-                    break;
-
-                case CmdKickOff:
-                    // kick off
-                    gLogServer->Normal() <<"--- Kick Off\n";
-                    gCommServer->SendKickOffCmd();
-                    break;
-                }
-        }
-
-    return deltaTime;
-}
-
-/*! Update Processes input, updates windowserver, current score,
-  entities, etc..
-*/
-float update()
-{
-    // process the input events, which have occured
-    float deltaTime = processInput();
-
-    if (deltaTime == 0.0f)
-        {
-            gLogServer->Error()
-                << "(Update) ERROR: deltaTime==0\n";
-        }
-
-    // update the scene
-    gSceneServer->Update(deltaTime);
-
-    return deltaTime;
-}
-
-void printHelp()
-{
-    cout << "\nusage: rcsserver3D-kerosin [options]\n"
-         << "\noptions:\n"
-         << " --help\t print this message.\n"
-         << " --port\t sets the port number\n"
-         << " --server\t sets the server name\n"
-         << "\n";
-}
-
-bool processInput(int argc, char* argv[])
-{
-  for( int i = 0; i < argc; i++)
-    {
-      if( strcmp( argv[i], "--server" ) == 0 )
-        {
-          if( i+1  < argc)
-            {
-              gSoccerServer = argv[i+1];
-              ++i;
-              cout << "server set to "
-                   << gSoccerServer << "\n";
-            }
-        }
-      else if( strcmp( argv[i], "--port" ) == 0 )
-        {
-          if( i+1 < argc )
-            {
-              gPort = atoi( argv[i+1] );
-              ++i;
-              cout << "port set to " << gPort << "\n";
-            }
-        }
-      else if( strcmp( argv[i], "--help" ) == 0 )
-        {
-          printHelp();
-          return false;
-        }
-    }
-
-  return true;
-}
-
-void printGreeting()
-{
-    cout
+    GetLog()->Normal()
         << "rcssmonitor3D-kerosin version 0.2\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
         << "Universität Koblenz.\n"
@@ -323,7 +107,53 @@ void printGreeting()
         << "\nType '--help' for further information\n\n";
 }
 
-bool mangleExpr(MonitorParser::Expression& expr, string& name)
+void MonitorSpark::PrintHelp()
+{
+    GetLog()->Normal()
+        << "\nusage: rcsserver3D-kerosin [options]\n"
+         << "\noptions:\n"
+         << " --help\t print this message.\n"
+         << " --port\t sets the port number\n"
+         << " --server\t sets the server name\n"
+         << "\n";
+}
+
+bool MonitorSpark::ProcessCmdLine(int argc, char* argv[])
+{
+  for( int i = 0; i < argc; i++)
+    {
+      if( strcmp( argv[i], "--server" ) == 0 )
+        {
+          if( i+1  < argc)
+            {
+              mSoccerServer = argv[i+1];
+              ++i;
+              GetLog()->Normal()
+                  << "server set to "
+                  << mSoccerServer << "\n";
+            }
+        }
+      else if( strcmp( argv[i], "--port" ) == 0 )
+        {
+          if( i+1 < argc )
+            {
+              mPort = atoi( argv[i+1] );
+              ++i;
+              GetLog()->Normal()
+                  << "port set to " << mPort << "\n";
+            }
+        }
+      else if( strcmp( argv[i], "--help" ) == 0 )
+        {
+          PrintHelp();
+          return false;
+        }
+    }
+
+  return true;
+}
+
+bool MonitorSpark::MangleExpr(MonitorParser::Expression& expr, string& name)
 {
     switch (expr.etype)
         {
@@ -375,19 +205,15 @@ bool mangleExpr(MonitorParser::Expression& expr, string& name)
     return true;
 }
 
-shared_ptr<Transform> getSphere(MonitorParser::Expression& expr)
+shared_ptr<Transform> MonitorSpark::GetSphere(MonitorParser::Expression& expr)
 {
     string name;
-    if (! mangleExpr(expr, name))
-    {
-        return shared_ptr<Transform>();
-    }
-
-    shared_ptr<Scene> scene = gSceneServer->GetActiveScene();
-    if (scene.get() == 0)
+    shared_ptr<Scene> scene = GetActiveScene();
+    if (
+        (scene.get() == 0) ||
+        (! MangleExpr(expr, name))
+        )
         {
-            gLogServer->Error()
-                << "ERROR: got no active scene from SceneServer\n";
             return shared_ptr<Transform>();
         }
 
@@ -443,23 +269,23 @@ shared_ptr<Transform> getSphere(MonitorParser::Expression& expr)
 
     stringstream ss;
     ss << fktName << "('" << name << "')";
-    gScriptServer->Eval(ss.str());
+    GetScriptServer()->Eval(ss.str());
 
     return shared_dynamic_cast<Transform>
         (scene->GetChild(name));
 }
 
-void processUpdates()
+void MonitorSpark::UpdatePreRenderFrame()
 {
     static bool initialUpdate = true;
 
-    if (! gCommServer->GetMessage())
+    if (! mCommServer->GetMessage())
         {
             return;
         }
 
     boost::shared_ptr<oxygen::PredicateList> predicates =
-        gCommServer->GetPredicates();
+        mCommServer->GetPredicates();
 
     MonitorParser::TExprList exprList;
 
@@ -469,31 +295,29 @@ void processUpdates()
         )
         {
             // parse the received expressions
-            gMonitorParser->ParsePredicates(*predicates,gGameState,
-                                    gGameParam,exprList);
+            mMonitorParser->ParsePredicates(*predicates,mGameState,
+                                            mGameParam,exprList);
         }
-
 
     if (initialUpdate)
         {
             // publish the soccer default values to the scripts
-            gScriptServer->CreateVariable("Soccer.FieldLength", gGameParam.GetFieldLength());
-            gScriptServer->CreateVariable("Soccer.FieldWidth",  gGameParam.GetFieldWidth());
-            gScriptServer->CreateVariable("Soccer.FieldHeight", gGameParam.GetFieldHeight());
-            gScriptServer->CreateVariable("Soccer.BorderSize",  gGameParam.GetBorderSize());
-            gScriptServer->CreateVariable("Soccer.LineWidth",   gGameParam.GetLineWidth());
-            gScriptServer->CreateVariable("Soccer.GoalWidth",   gGameParam.GetGoalWidth());
-            gScriptServer->CreateVariable("Soccer.GoalDepth",   gGameParam.GetGoalDepth());
-            gScriptServer->CreateVariable("Soccer.GoalHeight",  gGameParam.GetGoalHeight());
-            gScriptServer->CreateVariable("Soccer.AgentMass",  gGameParam.GetAgentMass());
-            gScriptServer->CreateVariable("Soccer.AgentRadius",  gGameParam.GetAgentRadius());
-            gScriptServer->CreateVariable("Soccer.AgentMaxSpeed",  gGameParam.GetAgentMaxSpeed());
-            gScriptServer->CreateVariable("Soccer.BallRadius", gGameParam.GetBallRadius());
-            gScriptServer->CreateVariable("Soccer.BallMass", gGameParam.GetBallMass());
+            GetScriptServer()->CreateVariable("Soccer.FieldLength", mGameParam.GetFieldLength());
+            GetScriptServer()->CreateVariable("Soccer.FieldWidth",  mGameParam.GetFieldWidth());
+            GetScriptServer()->CreateVariable("Soccer.FieldHeight", mGameParam.GetFieldHeight());
+            GetScriptServer()->CreateVariable("Soccer.BorderSize",  mGameParam.GetBorderSize());
+            GetScriptServer()->CreateVariable("Soccer.LineWidth",   mGameParam.GetLineWidth());
+            GetScriptServer()->CreateVariable("Soccer.GoalWidth",   mGameParam.GetGoalWidth());
+            GetScriptServer()->CreateVariable("Soccer.GoalDepth",   mGameParam.GetGoalDepth());
+            GetScriptServer()->CreateVariable("Soccer.GoalHeight",  mGameParam.GetGoalHeight());
+            GetScriptServer()->CreateVariable("Soccer.AgentMass",   mGameParam.GetAgentMass());
+            GetScriptServer()->CreateVariable("Soccer.AgentRadius",  mGameParam.GetAgentRadius());
+            GetScriptServer()->CreateVariable("Soccer.AgentMaxSpeed",  mGameParam.GetAgentMaxSpeed());
+            GetScriptServer()->CreateVariable("Soccer.BallRadius",  mGameParam.GetBallRadius());
+            GetScriptServer()->CreateVariable("Soccer.BallMass",    mGameParam.GetBallMass());
 
             // create the playing field with the acutal dimensions
-            gScriptServer->Eval("addField()");
-
+            GetScriptServer()->Eval("addField()");
             initialUpdate = false;
         }
 
@@ -503,8 +327,7 @@ void processUpdates()
          ++iter)
         {
             MonitorParser::Expression& expr = (*iter);
-
-            shared_ptr<Transform> node = getSphere(expr);
+            shared_ptr<Transform> node = GetSphere(expr);
 
             if (node.get() == 0)
                 {
@@ -516,54 +339,82 @@ void processUpdates()
         }
 }
 
-int main(int argc, char** argv)
+bool MonitorSpark::InitApp(int argc, char** argv)
 {
-    printGreeting();
+    PrintGreeting();
 
     // process command line
-    if (! processInput(argc, argv))
+    if (! ProcessCmdLine(argc, argv))
         {
-            return 1;
+            return false;
         }
 
-    // application specific initialization
-    if (init() == false)
+    // publish user defined command constants
+    GetScriptServer()->CreateVariable("Command.KickOff", CmdKickOff);
+
+    // run initialization scripts
+    GetScriptServer()->Run("rcssmonitor3D-kerosin.rb");
+    GetScriptServer()->Run("bindings.rb");
+
+    // tell spark the loaction of our camera
+    if (! SetFPSController("/usr/scene/camera/physics/controller"))
         {
-            gLogServer->Error() << "ERROR: Init failed" << endl;
-            return 1;
+            return false;
         }
+
+    // get MonitorLib classes
+    mCommServer = shared_dynamic_cast<CommServer>
+        (GetCore()->Get("/sys/server/comm"));
+
+    if (mCommServer.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: CommServer not found\n";
+            return false;
+      }
 
     // setup the CommServer
-    gCommServer->Init("SexpParser",gSoccerServer,gPort);
+    mCommServer->Init("SexpParser",mSoccerServer,mPort);
 
-    // the runloop
-    while(! gOpenGLServer->WantsToQuit())
+    mMonitorParser = shared_dynamic_cast<MonitorParser>
+      (GetCore()->Get("/sys/server/parser"));
+
+    if (mMonitorParser.get() == 0)
         {
-            // read and parser updates from the server
-            processUpdates();
-
-            // update the window (pumps event loop, etc..)
-            gOpenGLServer->Update();
-
-            // update all the other components
-            float deltaTime = update();
-
-            // render the current frame
-            gRenderServer->Render();
-            gTime += deltaTime;
-            ++gNumFrames;
-
-            gOpenGLServer->SwapBuffers();
+          GetLog()->Error() << "ERROR: MonitorParser not found\n";
+          return false;
         }
 
-    // we have to make sure, the inputServer is shut down before the
-    // opengl server, as the opengl server shuts down SDL ... this will
-    // conflict with the input server
-    gInputServer->Unlink();
-    gInputServer.reset();
+    return true;
+}
 
-    // average FPS
-    gLogServer->Normal() << "Average FPS: " << gNumFrames/gTime << "\n";
+void MonitorSpark::ProcessInput(kerosin::InputServer::Input& input)
+{
+    switch (input.id)
+        {
+        case CmdKickOff:
+            // kick off
+            GetLog()->Normal() <<"--- Kick Off\n";
+            mCommServer->SendKickOffCmd();
+            break;
+        }
+}
+
+int main(int argc, char** argv)
+{
+    // the spark app framework instance
+    MonitorSpark spark("../../../");
+
+    if (! spark.Init(argc, argv))
+        {
+            return 1;
+        }
+
+    spark.Run();
+
+    spark.GetLog()->Normal()
+        << "Average FPS: "
+        << spark.GetFramesRendered()/spark.GetTime()
+        << "\n";
 
     return 0;
 }

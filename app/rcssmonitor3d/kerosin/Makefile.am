@@ -4,6 +4,7 @@ bin_PROGRAMS = rcssmonitor3D-kerosin
 if DEBUG
 LDADD = \
 	-lpthread -lGL -lGLU -lglut -lrcssnet \
+	${top_srcdir}/lib/spark/libspark_debug.la \
 	${top_srcdir}/lib/kerosin/libkerosin_debug.la \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
@@ -13,6 +14,7 @@ rcssmonitor3D_kerosin_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = \
 	-lpthread -lGL -lGLU -lglut -lrcssnet \
+	${top_srcdir}/lib/spark/libspark.la \
 	${top_srcdir}/lib/kerosin/libkerosin.la \
 	${top_srcdir}/lib/oxygen/liboxygen.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \

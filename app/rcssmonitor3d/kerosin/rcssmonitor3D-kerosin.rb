@@ -3,92 +3,24 @@
 #
 
 # import required plugins
-importBundle 'filesystemstd';
-importBundle 'inputsdl';
 importBundle 'sexpparser'
-
-# scene and server path
-$scenePath = '/usr/scene/'
-$serverPath = '/sys/server/'
-
-# setup the PhysicsServer
-new('oxygen/PhysicsServer', $serverPath+'physics')
-
-# setup the SceneServer
-sceneServer = new('oxygen/SceneServer', $serverPath+'scene')
-sceneServer.createScene($scenePath)
-
-# setup the OpenGLServer
-new('kerosin/OpenGLServer', $serverPath+'opengl');
-
-# setup the MaterialServer
-new('kerosin/MaterialServer', $serverPath+'material');
-material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentN');
-material.setColor(0.8,0.8,0.2)
-
-material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentL');
-material.setColor(1.0,0.2,0.2)
-
-material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentR');
-material.setColor(0.2,0.2,1.0)
-
-material = new('kerosin/MaterialSolid', $serverPath+'material/matBall');
-material.setColor(1.0,1.0,1.0)
-
-material = new('kerosin/MaterialSolid', $serverPath+'material/matFlag');
-material.setColor(1.0,0.0,0.0)
-
-material = new('kerosin/MaterialSolid', $serverPath+'material/matGround');
-material.setColor(0.1,0.5,0.1)
-
-# setup the RenderServer
-new('kerosin/RenderServer', $serverPath+'render');
-
-# setup the InputServer
-inputServer = new('kerosin/InputServer', $serverPath+'input')
-inputServer.init('InputSystemSDL')
-inputServer.createDevice('Timer')
-inputServer.createDevice('Keyboard')
-inputServer.createDevice('Mouse')
-
-# setup the FontServer
-new('kerosin/FontServer', $serverPath+'font');
-
-# setup the SceneServer
-sceneServer = new('oxygen/SceneServer', $serverPath+'scene')
-sceneServer.createScene($scenePath)
-
-# create world and space aspects
-world = new('oxygen/World', $scenePath+'world')
-world.setGravity(0.0, 0.0, -9.81)
-new('oxygen/Space', $scenePath+'space')
-
-# add a camera. The camera movement is controlled using an
-# FPSController.
-cameraTransform = new('oxygen/Transform',$scenePath+'camera0')
-cameraTransform.setLocalPos(0.0,10.0,0.0)
-new('oxygen/Camera',$scenePath+'camera0/camera')
-
-# the camera is not affected by gravity but restricted to a maximum
-# speed
-body = new('oxygen/Body',$scenePath+'camera0/physics')
-body.useGravity(false);
-body.setMaxSpeed(15.0)
-
-# add an FPSController to move the camera and set the applied
-# acceleration
-fpsController = new('oxygen/FPSController',$scenePath+'camera0/physics/controller')
-fpsController.setAcceleration(40.0)
-
-# add an DragController to work against the camera acceleration
-dragController = new('oxygen/DragController',$scenePath+'camera0/physics/drag')
-dragController.setLinearDrag(4)
 
 # setup the CommServer
 new('rcssmonitor3d/CommServer', $serverPath+'comm')
 
 # setup the MonitorParser
 new('rcssmonitor3d/MonitorParser', $serverPath+'parser')
+
+# let spark create a default camera
+sparkAddFPSCamera(
+		  $scenePath+'camera', 
+		  x = 0, 
+		  y = 5, 
+		  z = 40,
+		  maxSpeed = 15.0,
+		  accel = 40.0,
+		  drag = 4
+		  )
 
 #
 # collection of callbacks and helper functions
@@ -103,7 +35,7 @@ end
 
 def addSphere(nodeName, radius, material)
   transform = new('oxygen/Transform', $scenePath+nodeName)
-  sphere = new('kerosin/Sphere',$scenePath+nodeName+'/'+'visual')
+  sphere = new('kerosin/Sphere',$scenePath+nodeName+'/visual')
   sphere.setRadius(radius)
   sphere.setMaterial(material)
 end  
@@ -146,9 +78,26 @@ def addField()
   field.setExtents(110.0,0.2,73.0)
 end  
 
-# add an axis
-addVisual('Axis','myAxis',0.0,0.0,0.0)
+# create custom materials
+material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentN');
+material.setColor(0.8,0.8,0.2)
 
+material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentL');
+material.setColor(1.0,0.2,0.2)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentR');
+material.setColor(0.2,0.2,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matBall');
+material.setColor(1.0,1.0,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matFlag');
+material.setColor(1.0,0.0,0.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matGround');
+material.setColor(0.1,0.5,0.1)
+
+addVisual('Axis','myAxis',0.0,0.0,0.0)
 
 
 
