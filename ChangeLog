@@ -1,3 +1,152 @@
+2004-03-22  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/salt/defines.h: 
+	- define gcc's __attribute__ to nothing for MSVC
+
+	* lib/kerosin/inputserver/inputserver_c.cpp:
+	- removed remaing debug code ;)
+
+	* plugin/perfectvisionperceptor/perfectvisionperceptor_c.cpp,
+	* plugin/soccer/driveeffector/driveeffector_c.cpp,
+	* plugin/soccer/kickeffector/kickeffector_c.cpp,
+	* plugin/soccer/objectstate/objectstate_c.cpp,
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp: 
+	* lib/kerosin/materialserver/materialsolid_c.cpp,
+	* lib/kerosin/inputserver/inputserver_c.cpp,
+	* lib/kerosin/fontserver/fontserver_c.cpp,
+	* lib/kerosin/sceneserver/singlematnode_c.cpp,
+	* lib/kerosin/sceneserver/staticmesh_c.cpp:
+	* lib/kerosin/sceneserver/box_c.cpp
+	* lib/kerosin/sceneserver/sphere_c.cpp:
+	* lib/kerosin/sceneserver/light_c.cpp: 
+	* lib/oxygen/spadesserver/spadesserver_c.cpp, 
+	* lib/oxygen/sceneserver/fpscontroller_c.cpp, 
+	* lib/oxygen/sceneserver/sceneserver_c.cpp, 
+	* lib/oxygen/sceneserver/transform_c.cpp:
+	* lib/oxygen/sceneserver/camera_c.cpp, 
+	* lib/oxygen/physicsserver/world_c.cpp:
+	* lib/oxygen/physicsserver/collider_c.cpp:
+	* lib/oxygen/physicsserver/ccylindercollider_c.cpp,
+	* lib/oxygen/physicsserver/planecollider_c.cpp,
+	* lib/oxygen/physicsserver/raycollider_c.cpp,
+	* lib/oxygen/physicsserver/spherecollider_c.cpp,
+	* lib/oxygen/physicsserver/boxcollider_c.cpp:
+	* lib/oxygen/monitorserver/monitorserver_c.cpp, 
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	* lib/zeitgeist/randomserver/randomserver_c.cpp:
+	* lib/zeitgeist/leaf_c.cpp: 
+	- adapted ruby exports to new script syntax
+
+	* lib/kerosin/soundserver/soundeffect.h,
+	* lib/kerosin/soundserver/soundmodule.h,
+	* lib/kerosin/soundserver/soundobject.h,
+ 	* lib/kerosin/soundserver/soundserver.cpp,
+	* lib/kerosin/soundserver/soundserver.h,
+	* lib/kerosin/soundserver/soundserver_c.cpp,
+	* lib/kerosin/soundserver/soundstream.h:
+	- changed interfaces expecting const char* to work with std::string
+	- adapted script interface to new script syntax
+
+	* lib/kerosin/sceneserver/staticmesh.cpp: 
+	- added GPL header
+	- whitespace changes
+
+	* lib/kerosin/sceneserver/singlematnode.cpp,
+	* lib/kerosin/sceneserver/singlematnode.h:
+	- added a comment
+	- changed SetMaterial to return true on success
+
+	* lib/kerosin/sceneserver/light.cpp	
+	* lib/kerosin/sceneserver/light.h:
+	- changed SetDiffuseColor to expect a Vector3f instead of three
+	floats
+
+	* lib/kerosin/kerosin.rb:
+	- enabled double buffering in the default settings
+
+	* lib/oxygen/sceneserver/transform.cpp,
+	* lib/oxygen/sceneserver/transform.h:
+	- remove SetLocalPos variant that expected three floats instead of
+	a Vector3f
+
+	* lib/oxygen/physicsserver/world.cpp, 
+	* lib/oxygen/physicsserver/world.h:
+	- removed SetGravity variant that expected three floats instead of
+	a Vector3f
+
+	* lib/oxygen/physicsserver/collider.h: 
+	- fixed a comment
+
+	* lib/oxygen/physicsserver/boxcollider.cpp, 
+	* lib/oxygen/physicsserver/boxcollider.h:
+	- changed method SetBoxLength to expect a Vector3f instead of
+	three floats
+
+	* lib/oxygen/physicsserver/body_c.cpp: 
+	- adapted to new script syntax
+	- added function isEnabled, setSphere and getMass
+
+	* lib/oxygen/physicsserver/body.cpp, 
+	* lib/oxygen/physicsserver/body.h:
+	- added method GetMaxSpeed
+
+	* lib/zeitgeist/scriptserver/scriptserver_c.cpp: 
+	- added GPL header
+
+	* lib/zeitgeist/object_c.cpp: 
+	- added GPL header
+
+	* lib/zeitgeist/logserver/logserver_c.cpp:
+	- changed to new script syntax
+
+	* lib/zeitgeist/fileserver/filesystem_c.cpp: 
+	- added GPL header
+	- removed function 'open'
+	- added function 'setPath'
+
+	* lib/zeitgeist/fileserver/fileserver_c.cpp:
+	- changed to new script syntax
+
+	* lib/zeitgeist/node_c.cpp: 
+	- added GPL header
+
+	* lib/zeitgeist/logserver/logserver.cpp:
+	- added GPL header and whitespace fixes
+
+	* lib/zeitgeist/object.cpp:
+	- changed method Invoke to work with ParameterList and GCValue
+
+	* lib/zeitgeist/node.cpp: 
+	- added GPL header
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- changed getParameterList function to construct a ParamterList
+	object
+	- changed thisCall and selectCall to work with a ParameterList
+	object and GCValues
+
+	* lib/zeitgeist/scriptserver/gcvalue.cpp,
+	* lib/zeitgeist/scriptserver/gcvalue.h:
+	- added constructor for bool, string, const char*, float and
+	int. Theses constructors create and manage a corresponding ruby
+	object
+
+	* lib/zeitgeist/class.h:
+	- removed macro OUT_FUNCTION for script functions returning a value
+	- removed TParameterList declaration
+	- changed TCmdProc to return a GCValue and use class ParameterList
+	instead of TParameterList. Every script function now always
+	returns a value.
+	- changed macro FUNCTION to adapt to the new TCmdProc signature
+
+	* lib/zeitgeist/Makefile.am: 
+	- added ParameterList files
+
+	* lib/zeitgeist/parameterlist.cpp, 
+	* lib/zeitgeist/parameterlist.h:
+	- added class ParameterList. It manages a list of values of
+	arbitrary type used to hold parameters received from ruby.
+
 2004-03-22  Oliver Obst  <fruit@robolog.org>
 
 	* app/simulator/rcssserver3D.rb: 
