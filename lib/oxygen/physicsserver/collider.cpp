@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.7 2004/04/05 14:51:09 rollmark Exp $
+   $Id: collider.cpp,v 1.8 2004/04/07 07:58:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,174 +35,175 @@ Collider::Collider() : ODEObject(), mODEGeom(0)
 
 Collider::~Collider()
 {
-  if (mODEGeom)
-    {
-      dGeomDestroy(mODEGeom);
-      mODEGeom = 0;
-    }
+    if (mODEGeom)
+        {
+            dGeomDestroy(mODEGeom);
+            mODEGeom = 0;
+        }
 }
 
 void Collider::OnLink()
 {
-  ODEObject::OnLink();
+    ODEObject::OnLink();
 
-  if (mODEGeom == 0)
-    {
-      return;
-    }
+    if (mODEGeom == 0)
+        {
+            return;
+        }
 
-  // if there is a Body below our parent, link to it
-  shared_ptr<Body> body = shared_static_cast<Body>
-    (make_shared(GetParent())->GetChildOfClass("Body"));
+    // if there is a Body below our parent, link to it
+    shared_ptr<Body> body = shared_static_cast<Body>
+        (make_shared(GetParent())->GetChildOfClass("Body"));
 
-  if (body.get() != 0)
-    {
-      dGeomSetBody (mODEGeom, body->GetODEBody());
-    }
+    if (body.get() != 0)
+        {
+            dGeomSetBody (mODEGeom, body->GetODEBody());
+        }
 
-  // if we have a space add the geom to it
-  shared_ptr<Scene> scene = GetScene();
-  if (scene.get() == 0)
-    {
-      return;
-    }
+    // if we have a space add the geom to it
+    shared_ptr<Scene> scene = GetScene();
+    if (scene.get() == 0)
+        {
+            return;
+        }
 
-  mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
-  if (mSpace.get() == 0)
-    {
-      return;
-    }
+    mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
+    if (mSpace.get() == 0)
+        {
+            return;
+        }
 
-  dSpaceID space = mSpace->GetODESpace();
+    dSpaceID space = mSpace->GetODESpace();
 
-  if (
-      (space) &&
-      (! dSpaceQuery(space, mODEGeom))
-      )
-    {
-      dGeomSetData(mODEGeom, this);
-      dSpaceAdd(space, mODEGeom);
-    }
+    if (
+        (space) &&
+        (! dSpaceQuery(space, mODEGeom))
+        )
+        {
+            dGeomSetData(mODEGeom, this);
+            dSpaceAdd(space, mODEGeom);
+        }
 }
 
 void Collider::OnUnlink()
 {
-  ODEObject::OnUnlink();
+    ODEObject::OnUnlink();
 
-  if (
-      (mSpace.get() == 0) ||
-      (mODEGeom == 0)
-      )
-    {
-      return;
-    }
+    if (
+        (mSpace.get() == 0) ||
+        (mODEGeom == 0)
+        )
+        {
+            return;
+        }
 
-  // remove collision geometry from space
-  dSpaceID space = mSpace->GetODESpace();
+    // remove collision geometry from space
+    dSpaceID space = mSpace->GetODESpace();
 
-  if (
-      (space) &&
-      (dSpaceQuery(space, mODEGeom))
-      )
-    {
-      dSpaceRemove(space, mODEGeom);
-    }
+    if (
+        (space) &&
+        (dSpaceQuery(space, mODEGeom))
+        )
+        {
+            dSpaceRemove(space, mODEGeom);
+        }
 
-  mSpace.reset();
+    mSpace.reset();
 }
 
 void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-  if (GetChildSupportingClass("CollisionHandler").get() == 0)
-    {
-      // for convenience we add a ContactJointHandler if no other
-      // handler is registered. This behaviour covers the majority of
-      // all use cases and eases the creation of Colliders.
-      AddCollisionHandler("oxygen/ContactJointHandler");
-    }
+    if (GetChildSupportingClass("CollisionHandler").get() == 0)
+        {
+            // for convenience we add a ContactJointHandler if no
+            // other handler is registered. This behaviour covers the
+            // majority of all use cases and eases the creation of
+            // Colliders.
+            AddCollisionHandler("oxygen/ContactJointHandler");
+        }
 }
 
 dGeomID Collider::GetODEGeom()
 {
-  return mODEGeom;
+    return mODEGeom;
 }
 
 bool Collider::AddCollisionHandler(const std::string& handlerName)
 {
-  GetCore()->New(handlerName);
+    GetCore()->New(handlerName);
 
-  shared_ptr<CollisionHandler> handler =
-    shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
+    shared_ptr<CollisionHandler> handler =
+        shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
 
-  if (handler.get() == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (Collider) Cannot create CollisionHandler "
-        << handlerName << "\n";
-      return false;
-    }
+    if (handler.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (Collider) Cannot create CollisionHandler "
+                << handlerName << "\n";
+            return false;
+        }
 
-  return AddChildReference(handler);
+    return AddChildReference(handler);
 }
 
 void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
                             dContact& contact, ECollisionType type)
 
 {
-  TLeafList handlers;
-  ListChildrenSupportingClass<CollisionHandler>(handlers);
+    TLeafList handlers;
+    ListChildrenSupportingClass<CollisionHandler>(handlers);
 
-   for (
-        TLeafList::iterator iter = handlers.begin();
-        iter != handlers.end();
-        ++iter
-        )
-    {
-      shared_ptr<CollisionHandler> handler =
-        shared_static_cast<CollisionHandler>(*iter);
-
-      if (
-          (type == CT_SYMMETRIC) &&
-          (! handler->IsSymmetricHandler())
-          )
+    for (
+         TLeafList::iterator iter = handlers.begin();
+         iter != handlers.end();
+         ++iter
+         )
         {
-          continue;
-        }
+            shared_ptr<CollisionHandler> handler =
+                shared_static_cast<CollisionHandler>(*iter);
 
-      handler->HandleCollision(collidee, contact);
-    }
+            if (
+                (type == CT_SYMMETRIC) &&
+                (! handler->IsSymmetricHandler())
+                )
+                {
+                    continue;
+                }
+
+            handler->HandleCollision(collidee, contact);
+        }
 }
 
 Collider* Collider::GetCollider(dGeomID id)
 {
-  return id ?
-    static_cast<Collider*>(dGeomGetData(id)) : 0;
+    return id ?
+        static_cast<Collider*>(dGeomGetData(id)) : 0;
 }
 
 void Collider::SetPosition(salt::Vector3f pos)
 {
-  dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
+    dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
 }
 
 bool Collider::Intersects(boost::shared_ptr<Collider> collider)
 {
-  if (
-      (mODEGeom == 0) ||
-      (collider.get() == 0)
-      )
-    {
-      return false;
-    }
+    if (
+        (mODEGeom == 0) ||
+        (collider.get() == 0)
+        )
+        {
+            return false;
+        }
 
-  dContactGeom contact;
+    dContactGeom contact;
 
-  return dCollide
-    (
-     mODEGeom,
-     collider->GetODEGeom(),
-     1, /* ask for at most one collision point */
-     &contact,
-     sizeof(contact)
-    ) > 0;
+    return dCollide
+        (
+         mODEGeom,
+         collider->GetODEGeom(),
+         1, /* ask for at most one collision point */
+         &contact,
+         sizeof(contact)
+         ) > 0;
 }
 
