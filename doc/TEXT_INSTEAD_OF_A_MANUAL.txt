@@ -21,8 +21,11 @@ Some technical data of the environment and of your new robots:
 The playing field is a plane with FIFA standard soccer field
 size (length between 100m and 110m, width between 64m and 75m).
 Goal boxes and the ball are also standard FIFA size:
-goals are 7.32m wide and 2.44m high; the ball has got a diameter of
+goals are 7.32m wide; the ball has got a diameter of
 0.222m and weighs between 0.41kg and 0.45kg. 
+Because our agents are small and cannot jump, goals are only 0.5m 
+high -- the official FIFA height is 2.44m.
+
 FIFA does not say too much about gravity (probably because they can't
 change it anyway), but in our simulation, gravity is fixed to
 9.81m/s². 
@@ -35,22 +38,22 @@ weighs 75kg.
 
 Robots possess a kind of omnidrive, which adds some physical force to
 the robot body. By using the omnidrive, it is possible to accelerate
-into any direction, and it is also possible to jump up. However, the
-omnidrive does only work if the robot is actually touching the soccer
-field. If you stop accelerating, robots will still move for a while,
-and you also cannot suddenly stop when moving with full speed (but you
-can use it for breaking). The maximum speed and the maximum height for
-jumping up if yet to be discovered. To use the omnidrive, you have to
-use the "driveeffector", which takes a cartesian vector (x y z) with a
-maximum length of 100 units. The x-coordinate points towards the
-opponents team side of the field, z points up. With the driveeffector, 
-you set a kind of motor force, i.e. if you want to drive full speed for a 
-while, it is sufficient to use the driveeffector *once*. The force you set
-is applied at each simulator step until you change it again (btw simulator 
-steps are 0.01s long). 
-The driveeffector works realiable, there is a small error for forces along 
-each axis (each up to 2% of the applied force). The error is normally 
-distributed around 0.0.
+into any direction, and it is also possible to jump very
+little. However, the omnidrive does only work if the robot is actually
+touching the soccer field. If you stop accelerating, robots will still
+move for a while, and you also cannot suddenly stop when moving with
+full speed (but you can use it for breaking). The maximum speed and
+the maximum height for jumping up if yet to be discovered. To use the
+omnidrive, you have to use the "driveeffector", which takes a
+cartesian vector (x y z) with a maximum length of 100 units. The
+x-coordinate points towards the opponents team side of the field, z
+points up. With the driveeffector, you set a kind of motor force,
+i.e. if you want to drive full speed for a while, it is sufficient to
+use the driveeffector *once*. The force you set is applied at each
+simulator step until you change it again (btw simulator steps are
+0.01s long). The driveeffector works realiable, there is a small error
+for forces along each axis (each up to 2% of the applied force). The
+error is normally distributed around 0.0.
 
 Using the omnidrive consumes battery. You get to know of battery states 
 by reading the agentstateperceptor. If the battery is empty, the omnidrive
@@ -69,7 +72,7 @@ kickeffector to kick the ball.
   (Originally, we did not intend to create an artificial
    kickeffector. However, to make use of the 3rd dimension, this was
    the easiest way. It is intended to remove this kind of kick
-   effector in future versions (not this years competition) in favour
+   effector in future versions (not this years' competition) in favour
    of a real physical device).
 
 The kickeffector can accelerate the ball radially away from the robot
