@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: materialserver.cpp,v 1.3 2004/03/20 12:47:39 rollmark Exp $
+$Id: materialserver.cpp,v 1.4 2004/04/18 16:35:32 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@ MaterialServer::~MaterialServer()
 
 shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
 {
-    shared_ptr<Material> material = shared_dynamic_cast<Material>(GetChild(name));
+    shared_ptr<Material> material =
+        shared_dynamic_cast<Material>(GetChild(name));
 
     if (material.get() == 0)
         {
@@ -47,15 +48,4 @@ shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
         }
 
     return material;
-}
-
-// set up the script variables used for loading
-bool MaterialServer::ConstructInternal()
-{
-    shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
-    scriptServer->CreateVariable("Material.Diffuse",        "");
-    scriptServer->CreateVariable("Material.Normal",         "");
-    scriptServer->CreateVariable("Material.Specular",       "");
-
-    return true;
 }

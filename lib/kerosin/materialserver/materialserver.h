@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialserver.h,v 1.5 2004/03/20 12:46:57 rollmark Exp $
+   $Id: materialserver.h,v 1.6 2004/04/18 16:35:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,10 +44,6 @@ public:
 
     //! returns a cached material
     boost::shared_ptr<Material> GetMaterial(const std::string &name);
-
-protected:
-    //! sets up the script variables used for loading
-    virtual bool ConstructInternal();
 };
 
 DECLARE_CLASS(MaterialServer);
