@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.5 2004/02/12 14:07:23 fruit Exp $
+   $Id: space.cpp,v 1.6 2004/04/07 08:35:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,31 +70,6 @@ void Space::Collide()
     dSpaceCollide(mODESpace, this, collisionNearCallback);
 }
 
-shared_ptr<Collider> Space::GetCollider(dGeomID obj)
-{
-  // get a shared pointer to the two Collider
-  Collider* colPtr = Collider::GetCollider(obj);
-  if (colPtr == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (Space) no Collider found for dGeomID "
-        << obj << "\n";
-      return shared_ptr<Collider>();
-    }
-
-  shared_ptr<Collider> collider = shared_static_cast<Collider>
-    (make_shared(colPtr->GetSelf()));
-
-  if (collider.get() == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (Space) got no shared_ptr for dGeomID "
-        << obj << "\n";
-    }
-
-  return collider;
-}
-
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
     // return immediately if the two bodies corresponding to the
@@ -124,8 +99,8 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
     }
 
     // get shared pointers to the two corresponding Collider nodes
-    shared_ptr<Collider> collider = GetCollider(obj1);
-    shared_ptr<Collider> collidee = GetCollider(obj2);
+    shared_ptr<Collider> collider = Collider::GetCollider(obj1);
+    shared_ptr<Collider> collidee = Collider::GetCollider(obj2);
 
     if (
         (collider.get() == 0) ||
