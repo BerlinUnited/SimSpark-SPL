@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.8 2004/04/18 16:26:26 rollmark Exp $
+   $Id: staticmesh.cpp,v 1.9 2004/04/18 18:45:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,11 +72,13 @@ void StaticMesh::CalcBoundingBox()
 void StaticMesh::RenderInternal()
 {
     glVertexPointer(3, GL_FLOAT, 0, mPos.get());
-    glEnableClientState ( GL_VERTEX_ARRAY );
+    glEnableClientState (GL_VERTEX_ARRAY );
 
-    glClientActiveTextureARB ( GL_TEXTURE0_ARB );
-    glTexCoordPointer( 3, GL_FLOAT, 0, mTexCoords.get());
-    glEnableClientState ( GL_TEXTURE_COORD_ARRAY );
+    glTexCoordPointer(3, GL_FLOAT, 0, mTexCoords.get());
+    glEnableClientState (GL_TEXTURE_COORD_ARRAY );
+
+    glNormalPointer(GL_FLOAT, 0, mNormal.get());
+    glEnableClientState(GL_NORMAL_ARRAY);
 
     for (unsigned int i=0; i < mMaterials.size(); ++i)
         {
@@ -86,8 +88,8 @@ void StaticMesh::RenderInternal()
         }
 
     glDisableClientState (GL_VERTEX_ARRAY);
-    glClientActiveTextureARB ( GL_TEXTURE0_ARB );
-    glDisableClientState ( GL_TEXTURE_COORD_ARRAY );
+    glDisableClientState (GL_TEXTURE_COORD_ARRAY );
+    glDisableClientState(GL_NORMAL_ARRAY);
 }
 
 bool StaticMesh::Load(const std::string& fileName)
@@ -200,7 +202,8 @@ bool StaticMesh::Load(const std::string& fileName)
     input.push_back(material);
 
     // Read Materials
-    shared_ptr<MaterialServer> materialServer = shared_static_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
+    shared_ptr<MaterialServer> materialServer = 
+        shared_static_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
     while (!file->Eof())
         {
             if (file->Gets(buffer, 1024)>0 && buffer[0] == 'M')
@@ -218,15 +221,17 @@ bool StaticMesh::Load(const std::string& fileName)
     att.Name_ = "position"; output.push_back(att);
     att.Name_ = "tex0";             output.push_back(att);
     att.Name_ = "normal";   output.push_back(att);
+#if 0
     att.Name_ = "tangent";  output.push_back(att);
     att.Name_ = "binormal"; output.push_back(att);
+#endif
     att.Name_ = "indices";  output.push_back(att);
     att.Name_ = "material"; output.push_back(att);
 
-    //loadVoidModel("model/knot.void", input);
-
     // munge
-    meshmender.Munge(input, output, 3.141592654f/3.0f, 0, NVMeshMender::FixTangents, NVMeshMender::DontFixCylindricalTexGen, NVMeshMender::WeightNormalsByFaceSize);
+    meshmender.Munge(input, output, 3.141592654f/3.0f, 0, 
+                     NVMeshMender::FixTangents, NVMeshMender::DontFixCylindricalTexGen, 
+                     NVMeshMender::WeightNormalsByFaceSize);
 
     NVMeshMender::VertexAttribute   outIndices;
     NVMeshMender::VertexAttribute   outMaterial;
@@ -256,6 +261,7 @@ bool StaticMesh::Load(const std::string& fileName)
                         }
                 }
 
+#if 0
             if (output[i].Name_ == "tangent")
                 {
                     int size = output[i].floatVector_.size()/3;
@@ -277,6 +283,18 @@ bool StaticMesh::Load(const std::string& fileName)
                             mBasisY[j] = output[i].floatVector_[j];
                         }
                 }
+#endif
+
+            if (output[i].Name_ == "normal")
+                {
+                    int size = output[i].floatVector_.size()/3;
+                    mNormal = shared_array<float>(new float[size * 3]);
+
+                    for (int j = 0; j < (size * 3); ++j)
+                        {
+                            mNormal[j] = output[i].floatVector_[j];
+                        }
+                }
 
             if (output[i].Name_ == "indices")
                 {
@@ -294,7 +312,6 @@ bool StaticMesh::Load(const std::string& fileName)
 
     for (i = 0; i<meshCount; ++i)
         {
-            //mMaterials[i] = materialServer->GetMaterial("material/door");
             mFaceCount[i] = 0;
         }
 
@@ -328,10 +345,6 @@ bool StaticMesh::Load(const std::string& fileName)
                         }
                 }
         }
-
-    /*
-      PrepareCollision();
-    */
 
     CalcBoundingBox();
     return true;

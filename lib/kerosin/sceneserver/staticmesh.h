@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.7 2004/04/18 16:26:25 rollmark Exp $
+   $Id: staticmesh.h,v 1.8 2004/04/18 18:45:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,11 +65,12 @@ private:
     int mVertexCount;
     boost::shared_array<float> mPos;
     boost::shared_array<float> mTexCoords;
-
+    boost::shared_array<float> mNormal;
+#if 0
     // tangent space basis vectors
     boost::shared_array<float> mBasisX;
-    boost::shared_array<float> mBasisY;
-
+    beoost::shared_array<float> mBasisY;
+#endif
     std::vector<boost::shared_ptr<Material> >  mMaterials;
     std::vector<int> mFaceCount;
     std::vector<boost::shared_array<unsigned int> > mFaces;
