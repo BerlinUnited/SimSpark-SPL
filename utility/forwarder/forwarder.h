@@ -21,23 +21,22 @@
 #define _FORWARDER_H_
 
 /*! \class Forwarder
-  $Id: forwarder.h,v 1.1 2002/08/12 09:52:07 fruit Exp $
+  $Id: forwarder.h,v 1.2 2002/08/13 13:26:19 fruit Exp $
     
-  Forwarder
+    Forwarder
 
-  The Forwarder is a special output stream, which can multiplex streamed
-  data to a list of registered streams. It can be used anywhere, where a 
-  regular std::ostream is used. Most of the functionality is handled in
-  ForwarderStreamBuf, the Forwarder provides just a comfortable user
-  interface.
-
-  HISTORY:
-  The forwarder subsystem was taken from a student project at the AI
-  Research Group, Koblenz University. Original development by 
-  Marco Koegler <koegler@uni-koblenz.de>, 
-  Marcus Rollmann <rollmark@uni-koblenz.de>,
-  Alexander Fuchs <alexf@uni-koblenz.de>, 
-  et.al.
+    The Forwarder is a special output stream, which can multiplex
+    streamed data to a list of registered streams. It can be used
+    anywhere, where a regular std::ostream is used. Most of the
+    functionality is handled in ForwarderStreamBuf, the Forwarder
+    provides just a comfortable user interface.
+    
+    HISTORY:
+    The forwarder subsystem was taken from a student project at the AI
+    Research Group, Koblenz University. Original development by Marco
+    Koegler <koegler@uni-koblenz.de>, Marcus Rollmann
+    <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
+    et.al.
 */
 #ifdef HAVE_CONFIG_H
 #include <config.h>

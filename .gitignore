@@ -12,3 +12,6 @@ utility/classserver/classserver.lo
 utility/classserver/libclassserver.la
 utility/console/Makefile
 utility/console/Makefile.in
+utility/forwarder/.deps
+utility/forwarder/Makefile
+utility/forwarder/Makefile.in
