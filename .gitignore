@@ -255,8 +255,12 @@ plugin/sexpparser/.deps
 plugin/sexpparser/.libs
 plugin/sexpparser/Makefile
 plugin/sexpparser/Makefile.in
+plugin/soccer/.deps
+plugin/soccer/.libs
 plugin/soccer/Makefile
 plugin/soccer/Makefile.in
+plugin/soccer/*.la
+plugin/soccer/*.lo
 plugin/soccer/agentstate/*.lo
 plugin/soccer/agentstate/.deps
 plugin/soccer/agentstate/.libs
@@ -265,6 +269,12 @@ plugin/soccer/agentstate/Makefile.in
 plugin/soccer/agentstate/initeffector.la
 plugin/soccer/ball/Makefile
 plugin/soccer/ball/Makefile.in
+plugin/soccer/ballstateaspect/.deps
+plugin/soccer/ballstateaspect/.libs
+plugin/soccer/ballstateaspect/Makefile
+plugin/soccer/ballstateaspect/Makefile.in
+plugin/soccer/ballstateaspect/*.la
+plugin/soccer/ballstateaspect/*.lo
 plugin/soccer/createeffector/*.lo
 plugin/soccer/createeffector/.deps
 plugin/soccer/createeffector/.libs
