@@ -18,11 +18,13 @@ spadesserver/paramreader.cpp \
 spadesserver/paramreader_c.cpp \
 spadesserver/paramstorer.cpp \
 spadesserver/spadescreatesenseevent.cpp \
+spadesserver/spadesactevent.cpp \
 spades_headers = \
 spadesserver/spadesserver.h \
 spadesserver/paramreader.h \
 spadesserver/paramstorer.h \
 spadesserver/spadescreatesenseevent.h \
+spadesserver/spadesactevent.h \
 spades_libs = -lspades
 else
 spades_sources =
