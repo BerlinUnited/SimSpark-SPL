@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.h,v 1.5 2004/03/23 09:40:30 rollmark Exp $
+   $Id: worldmodel.h,v 1.6 2004/04/07 13:41:11 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,14 +19,13 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #ifndef WORLDMODEL_H
 #define WORLDMODEL_H
 
 #include <string>
 #include <map>
 #include <zeitgeist/leaf.h>
-#include <soccertypes.h>
+#include <soccer/soccertypes.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <oxygen/gamecontrolserver/baseparser.h>
 
@@ -48,17 +47,17 @@ public:
     };
 
     enum VisionObject
-        {
-            VO_BALL   = 0,
-            VO_FLAG1L = 1,
-            VO_FLAG1R = 2,
-            VO_FLAG2L = 3,
-            VO_FLAG2R = 4,
-            VO_GOAL1L = 5,
-            VO_GOAL1R = 6,
-            VO_GOAL2L = 7,
-            VO_GOAL2R = 8,
-        };
+    {
+        VO_BALL   = 0,
+        VO_FLAG1L = 1,
+        VO_FLAG1R = 2,
+        VO_FLAG2L = 3,
+        VO_FLAG2R = 4,
+        VO_GOAL1L = 5,
+        VO_GOAL1R = 6,
+        VO_GOAL2L = 7,
+        VO_GOAL2R = 8,
+    };
 
 public:
     WorldModel();
