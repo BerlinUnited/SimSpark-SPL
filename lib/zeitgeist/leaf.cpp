@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.cpp,v 1.7 2004/04/28 14:24:19 rollmark Exp $
+   $Id: leaf.cpp,v 1.8 2004/04/29 12:24:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ Leaf::Leaf(const std::string &name) : mName(name), mCachedFullPath(NULL)
 
 Leaf::~Leaf()
 {
-    //cout << "~Leaf() " << mName << " -> " << (void*)this << endl;
 }
 
 boost::weak_ptr<Node>& Leaf::GetParent()
@@ -121,10 +120,6 @@ void Leaf::RemoveChildReference(const boost::shared_ptr<Leaf> &/*base*/)
 {
 }
 
-void Leaf::RemoveChildren()
-{
-}
-
 bool Leaf::AddChildReference(const boost::shared_ptr<Leaf> &/*base*/)
 {
     return false;
@@ -132,13 +127,12 @@ bool Leaf::AddChildReference(const boost::shared_ptr<Leaf> &/*base*/)
 
 void Leaf::Unlink()
 {
-    // give us a chance to update our state
-    OnUnlink();
-
     // here we lose our reference to the parent
     SetParent(boost::shared_ptr<Node>());
+}
 
-    ClearCachedData();
+void Leaf::UnlinkChildren()
+{
 }
 
 void Leaf::Dump() const
@@ -203,29 +197,40 @@ Leaf::TLeafList::const_iterator Leaf::end() const
 
 void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
 {
-    if (shared_ptr<Node> oldParent = make_shared(GetParent()))
-    {
-        // we have a parent, so update our state
-        shared_ptr<Leaf> self = shared_static_cast<Leaf>(make_shared(GetSelf()));
-        // here reference count should be > 1 (at least one in the parent, and one in this routine)
-        //cout << "Have parent - use count " << self.use_count() << "\n";
-        assert(self.use_count() > 1);
-        // we remove ourself from the old parent's list of children
-        oldParent->RemoveChildReference(self);
-        //cout << "Have parent2 - use count " << self.use_count() << "\n";
-        // we add ourself to the new parent's list of children
-        if (newParent)
-            newParent->AddChildReference(self);
+    shared_ptr<Node> oldParent = make_shared(GetParent());
+    if (oldParent.get() != 0)
+        {
+            if (newParent.get() == 0)
+                {
+                    // time to clean up
+                    OnUnlink();
+                    ClearCachedData();
+                }
 
-        //cout << "Have parent3 - use count " << self.use_count() << "\n";
-    }
+            // we have a parent, so update our state
+            shared_ptr<Leaf> self
+                = shared_static_cast<Leaf>(make_shared(GetSelf()));
+
+            // here reference count should be > 1 (at least one in the
+            // parent, and one in this routine)
+            assert(self.use_count() > 1);
+
+            // we remove ourself from the old parent's list of children
+            oldParent->RemoveChildReference(self);
+
+            // we add ourself to the new parent's list of children
+            if (newParent.get() != 0)
+            {
+                newParent->AddChildReference(self);
+            }
+        }
 
     mParent = newParent;
-
-    //cout << "set parent " << (void*)GetParent().get() << "\n";
-
-    // we have been linked, so now we can do something :)
-    OnLink();
+    if (! mParent.expired())
+        {
+            // we have been linked, so now we can do something :)
+            OnLink();
+        }
 }
 
 void Leaf::OnLink()
