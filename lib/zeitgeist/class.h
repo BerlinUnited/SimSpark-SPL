@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.h,v 1.9 2004/02/12 14:07:23 fruit Exp $
+   $Id: class.h,v 1.10 2004/03/22 10:31:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #ifndef ZEITGEIST_CLASS_H
 #define ZEITGEIST_CLASS_H
 
-#include <zeitgeist/scriptserver/rubywrapper.h>
+#include <zeitgeist/scriptserver/gcvalue.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -44,10 +44,10 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <boost/any.hpp>
 #include <salt/defines.h>
 #include <salt/sharedlibrary.h>
 #include "leaf.h"
+#include "parameterlist.h"
 
 namespace zeitgeist
 {
@@ -77,23 +77,15 @@ namespace zeitgeist
         void DefineClass();\
     };
 
-    /* Note: FUNCTION and OUT_FUNCTION are identical, except that
-       FUNCTION has the 'out' parameter commented out, for ruby
-       exports not using this parameter. This prevents compiler
-       warnings about unused parameters
-    */
-#define FUNCTION(functionName)\
-    static void functionName(zeitgeist::Object *obj, \
-                              const zeitgeist::Class::TParameterList &in, \
-                              VALUE& /*out*/)
 
-#define OUT_FUNCTION(functionName)\
-    static void functionName(zeitgeist::Object *obj, \
-                              const zeitgeist::Class::TParameterList &in, \
-                              VALUE& out)
+// note the 'unused' attribute suppresses compiler warnings if the
+// 'in' parameter is not accessed in the function implementation
+#define FUNCTION(className,functionName)\
+    static zeitgeist::GCValue functionName(className *obj, \
+         __attribute__((unused)) const zeitgeist::ParameterList &in)
 
 #define DEFINE_FUNCTION(functionName)\
-    mFunctions[#functionName] = functionName;
+    mFunctions[#functionName] = (TCmdProc) &functionName;
 
 #define DEFINE_BASECLASS(baseClass)\
     mBaseClasses.push_back(#baseClass);
@@ -150,21 +142,13 @@ class Class : public Leaf
     // types
     //
 public:
-    /** defines a parameter list as a list of objects of different
-     *  types. This is type safe using the boost:any
-     *  class. TParameterList is used to transfer parameters
-     *  between the C++ part and and the script representation of
-     *  a class (e.g. a ruby class).
-     */
-    typedef std::vector<boost::any> TParameterList;
-
     /** defines a signature for a function used as the c++
         implementation of a member function exported to a script
         language. It receives a pointer to an instance of the
         class from which it is a member function along with a
         list of paramters.
     */
-    typedef void (*TCmdProc)(Object *obj, const TParameterList &in, VALUE& out);
+    typedef GCValue (*TCmdProc)(Object* , const zeitgeist::ParameterList &in);
     typedef std::list<std::string> TStringList;
 
 private:
