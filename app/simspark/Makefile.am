@@ -1,4 +1,6 @@
+if BUILD_KEROSIN
 bin_PROGRAMS = simspark
+endif
 
 if DEBUG
 LDADD = \
