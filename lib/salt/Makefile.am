@@ -1,4 +1,17 @@
-src = \
+if DEBUG
+pkglib_LTLIBRARIES = libsalt_debug.la
+libsalt_debug_la_SOURCES = $(sources)
+libsalt_debug_la_CXXFLAGS = -O -g -W -Wall
+else
+pkglib_LTLIBRARIES = libsalt.la
+libsalt_la_SOURCES = $(sources)
+libsalt_la_CXXFLAGS = -O2
+endif
+
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/salt
+
+sources = \
 bounds.cpp  \
 fileclasses.cpp  \
 frustum.cpp  \
@@ -7,18 +20,7 @@ path.cpp  \
 plane.cpp \
 gcc/sharedlibrary.cpp
 
-
-if DEBUG
-pkglib_LTLIBRARIES = libsalt_debug.la
-libsalt_debug_la_SOURCES = $(src)
-libsalt_debug_la_CXXFLAGS = -O -g
-else
-pkglib_LTLIBRARIES = libsalt.la
-libsalt_la_SOURCES = $(src)
-libsalt_la_CXXFLAGS = -O2
-endif
-
-pkginclude_HEADERS = \
+libpkginclude_HEADERS = \
 bounds.h   \
 fileclasses.h  \
 gmath.h   \
