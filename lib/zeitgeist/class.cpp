@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.cpp,v 1.8 2004/04/22 19:20:42 rollmark Exp $
+   $Id: class.cpp,v 1.9 2004/04/25 16:33:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,11 +34,11 @@ Class::Class(const std::string &name) : Leaf(name)
 
 Class::~Class()
 {
-    //cout << "~Class() '" << GetName() << "'\n";
-
     if (mInstances.size() > 0)
     {
-        cout << "  Leaked " << mInstances.size() << " instances..." << endl;
+        cout << "(Class) Leaked "
+             << mInstances.size() << " instances..." << endl;
+
         for (
              TObjectList::iterator i = mInstances.begin();
              i != mInstances.end(); ++i
@@ -57,7 +57,6 @@ Class::~Class()
 
 boost::shared_ptr<Object> Class::Create()
 {
-    //printf("Class %s: %s\n", GetName().c_str(), name.c_str());
     shared_ptr<Object> obj(CreateInstance());
 
     if (obj.get())
@@ -212,7 +211,7 @@ bool Class::SupportsClass(const std::string &name) const
         }
         else
         {
-            cout << "(CLASS) WARNING: Illegal BaseClass '" << (*i)
+            cout << "(Class) WARNING: Illegal BaseClass '" << (*i)
                  << "' in Class '" << GetName() << "'" << endl;
         }
     }
