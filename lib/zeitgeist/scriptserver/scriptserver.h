@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.11.4.2 2004/02/02 20:34:09 rollmark Exp $
+   $Id: scriptserver.h,v 1.11.4.3 2004/02/20 12:11:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/class.h>
 #include <salt/fileclasses.h>
+#include "gcvalue.h"
 
 namespace zeitgeist
 {
@@ -133,7 +134,7 @@ private:
     ScriptServer(const ScriptServer& obj);
     ScriptServer& operator=(const ScriptServer& obj);
 
-    VALUE GetVariable(const std::string &varName);
+    GCValue GetVariable(const std::string &varName);
 
     /** private helper function */
     bool RunInitScript(const std::string &dir, const std::string &name,
