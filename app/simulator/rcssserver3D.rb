@@ -106,6 +106,13 @@ def addAgent(path)
   # set to true for debugging. will be set to false during competition
   visionPerceptor.setSenseMyPos(false);
   visionPerceptor.addNoise(true);
+  visionPerceptor.useRandomNoise(false);
+
+#   pvisionPerceptor = new('VisionPerceptor', path+'PerfectVisionPerceptor')
+#   # set to true for debugging. will be set to false during competition
+#   pvisionPerceptor.setSenseMyPos(false);
+#   pvisionPerceptor.addNoise(false);
+#   pvisionPerceptor.setPredicateName('PerfectVision')
 
   new('GameStatePerceptor', path+'GameStatePerceptor')
   new('AgentStatePerceptor', path+'AgentStatePerceptor')
