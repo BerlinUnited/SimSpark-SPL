@@ -8,6 +8,7 @@ SUBDIRS = \
 	  collisionperceptor \
 	  sexpparser \
 	  soccer \
+          rubysceneimporter\
 	  soundsystemfmod
 
 # filesystemrar 
