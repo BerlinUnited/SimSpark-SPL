@@ -1,5 +1,12 @@
 2002-08-12  Oliver Obst  <fruit@robolog.org>
 
+	* ./utility/classserver/classserver.h
+	* ./utility/classserver/classserver.cc
+	Added initial revision of the ClassServer subsystem.
+	To load dynamic libraries on demand, the class server
+	should be compiled as a dynamic library (.so on normal
+	systems or .dll on windows).
+	
 	* ./utility/forwarder/forwarder.h
 	* ./utility/forwarder/forwarder.cc
 	Added initial revision of Forwarder output stream
