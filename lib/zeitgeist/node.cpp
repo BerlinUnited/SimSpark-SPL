@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.cpp,v 1.12 2004/05/14 11:53:32 fruit Exp $
+   $Id: node.cpp,v 1.13 2004/05/14 12:33:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -228,8 +228,12 @@ Node::AddChildReference(const boost::shared_ptr<Leaf>& leaf)
 
     if (leaf->GetClass() == 0)
     {
-        cout << "(Node::AddChildReference) ERROR: object has "
-             << "no assigned class object." << endl;
+        if (leaf->GetName() != "ClassClass")
+        {
+            cerr << "(Node::AddChildReference) ERROR: object "
+                 << leaf->GetName()
+                 << " has no assigned class object." << endl;
+        }
         return false;
     }
 
