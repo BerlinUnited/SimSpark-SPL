@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.1.2.6 2004/02/10 20:43:39 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.1.2.7 2004/02/10 21:47:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/controlaspect/controlaspect.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/ball/ball.h>
@@ -71,7 +72,7 @@ SoccerBase::GetTransformParent(const Leaf& base,
 }
 
 bool
-SoccerBase::GetAgentState(const boost::shared_ptr<Transform> transform,
+SoccerBase::GetAgentState(const shared_ptr<Transform> transform,
                           shared_ptr<AgentState>& agent_state)
 {
     agent_state =
@@ -81,12 +82,32 @@ SoccerBase::GetAgentState(const boost::shared_ptr<Transform> transform,
     {
         transform->GetLog()->Error()
             << "Error: (SoccerBase: " << transform->GetName()
-            << ") parent node has no AgentState child\n";
+            << ") node has no AgentState child\n";
         return false;
     }
 
     return true;
 }
+
+bool
+SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
+                          shared_ptr<Body>& agent_body)
+
+{
+    agent_body = shared_dynamic_cast<Body>
+        (transform->GetChildSupportingClass("Body", true));
+
+    if (agent_body.get() == 0)
+    {
+        transform->GetLog()->Error()
+            << "Error: (SoccerBase: " << transform->GetName()
+            << ") node has no Body child\n";
+        return false;
+    }
+
+    return true;
+}
+
 
 bool
 SoccerBase::GetAgentState(const Leaf& base,
@@ -284,4 +305,23 @@ SoccerBase::PlayMode2Str(const TPlayMode mode)
             return STR_PM_Unknown;
         };
 }
+
+shared_ptr<ControlAspect>
+SoccerBase::GetControlAspect(const zeitgeist::Leaf& base,const string& name)
+{
+  static const string gcsPath = "/sys/server/gamecontrol/";
+
+  shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
+    (base.GetCore()->Get(gcsPath + name));
+
+  if (aspect.get() == 0)
+    {
+        base.GetLog()->Error()
+            << "ERROR: (SoccerBase: " << base.GetName()
+            << ") found no ControlAspect " << name << "\n";
+    }
+
+  return aspect;
+}
+
 
