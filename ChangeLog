@@ -1,3 +1,65 @@
+2004-02-01  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	- moved collision check into seperate method (still not working)
+
+	* plugin/soccer/kickeffector/kickeffector_c.cpp: 
+	- exporting methods setKickMargin, setForceFactor, setSteps, setNoiseParams,
+	  setMaxPower to ruby
+
+	* plugin/soccer/kickeffector/kickeffector.h: 
+ 	* plugin/soccer/kickeffector/kickeffector.cpp:
+	- added method to set the force factor 
+	- added method to set the minimum and maximum number of steps to apply forces 
+	- added method to set the max. kick power for the user
+	- setting default parameters, like kick margin, force factor, minimum and 
+	  maximum number of steps etc
+	- changed the Realize method to use the ball acceleration
+	  methods. The ball is accelerated in radial direction away from the agent
+	  (either horizontally or with an latitudal angle of 45 degrees).
+	  The force, torque and time applied to the ball is dependend on the value the 
+	  user provides.  If the error values are positive, noise is added to the 
+	  angles and forces.
+	
+	* lib/oxygen/physicsserver/body.h: 
+	* lib/oxygen/physicsserver/body.cpp: 
+	- added method AddTorque
+
+	* plugin/soccer/Makefile.am: 
+	- added ball.cpp and ball.h
+
+	* plugin/soccer/ball/ball.h: 
+	* plugin/soccer/ball/ball.cpp: 
+	- added a method to accelerate the ball over a number of steps
+
+2004-01-31  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/dasheffector/dasheffector_c.cpp: 
+	- exporting methods to set dash effector parameters: 
+	  setForceFactor, setSigma, and setMaxPower
+	
+	* plugin/soccer/dasheffector/dasheffector.h: 
+	* plugin/soccer/dasheffector/dasheffector.cpp: 
+	- introduced a "force factor". The applied force to the robot is
+	  multiplied with this factor (divided by the maximum force). The
+	  default force factor is 500.0.
+	- The applied dash vector is length restricted now. If the length
+	  of the dash power vector is greater the the allowed maximum
+	  length, the dash vector is reduced to the maximum length. The
+	  default value of the maximum dash vector length is 100.0.
+	- It is possible to use a (normally distributed) error to
+	  calculate the resulting force applied to the robot. When
+	  calculating the resulting force, the dash power is multiplied with
+	  the force factor divided by the maximum dash power. The error is
+	  added to the maximum dash power in this calculation. By default,
+	  error is turned off.
+	- changed the order of the dash power components. For the user,
+	  the 3rd component of the dash power vector is used to let the
+	  robot jump up.
+	- the dash effector takes effect only if the sphere is touching
+	  the ground.
+
 2004-02-01  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
