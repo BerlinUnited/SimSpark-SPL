@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickaction.h,v 1.1.2.1 2004/01/25 12:14:14 rollmark Exp $
+   $Id: kickaction.h,v 1.1.2.2 2004/02/05 15:29:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,30 +28,23 @@
 class KickAction : public oxygen::ActionObject
 {
 public:
-    enum EKickType
-        {
-            KT_HORIZONTAL,
-            KT_STEEP
-        };
-
-public:
-    KickAction(const std::string& predicate, EKickType type, float power)
-        : ActionObject(predicate), mKickType(type),mPower(power) {}
+    KickAction(const std::string& predicate, float phi, float power)
+        : ActionObject(predicate), mKickAngle(phi),mPower(power) {}
 
     virtual ~KickAction() {}
 
     /** returns the stored kick power */
-    const float GetPower() { return mPower; }
+    float GetPower() const { return mPower; }
 
     /** returns the stored kick type */
-    EKickType GetType() { return mKickType; }
+    float GetAngle() { return mKickAngle; }
 
 protected:
     /** the amount of force to be applied to be the ball */
     float mPower;
 
-    /** the kick tyep to be applied to the ball */
-    EKickType mKickType;
+    /** the kick angle to be applied to the ball */
+    float mKickAngle;
 };
 
 #endif // KICKACTION_H
