@@ -4,7 +4,7 @@
                exception.hpp  -  Network associated excpetions
                              -------------------
     begin                : 07-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -32,22 +32,22 @@ namespace rcss
         {
         public:
             HostNotFound( int err ) throw();
-            
+
             const char*
             what() const throw();
-            
+
             int
             err() const throw();
         private:
             int m_err;
         };
-        
+
         class OpenErr
             : public std::exception
         {
         public:
             OpenErr( int err ) throw();
-        
+
             const char*
             what() const throw();
 
@@ -62,7 +62,37 @@ namespace rcss
         {
         public:
             BindErr( int err ) throw();
-        
+
+            const char*
+            what() const throw();
+
+            int
+            err() const throw();
+        private:
+            int m_err;
+        };
+
+        class ListenErr
+            : public std::exception
+        {
+        public:
+            ListenErr( int err ) throw();
+
+            const char*
+            what() const throw();
+
+            int
+            err() const throw();
+        private:
+            int m_err;
+        };
+
+        class AcceptErr
+            : public std::exception
+        {
+        public:
+            AcceptErr( int err ) throw();
+
             const char*
             what() const throw();
 
@@ -77,7 +107,7 @@ namespace rcss
         {
         public:
             GetNameErr( int err ) throw();
-        
+
             const char*
             what() const throw();
 
@@ -92,7 +122,7 @@ namespace rcss
         {
         public:
             ConnectErr( int err ) throw();
-        
+
             const char*
             what() const throw();
 

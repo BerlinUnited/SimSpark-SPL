@@ -4,7 +4,7 @@
                exception.cpp  -  Network associated excpetions
                              -------------------
     begin                : 07-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -49,7 +49,7 @@ namespace rcss
         const char*
         HostNotFound::what() const throw()
         {
-            return hstrerror( m_err ); 
+            return hstrerror( m_err );
         }
 
         int
@@ -79,6 +79,32 @@ namespace rcss
         int
         BindErr::err() const throw()
         { return m_err; }
+
+        ListenErr::ListenErr( int err ) throw()
+            : m_err( err )
+        {}
+
+        const char*
+        ListenErr::what() const throw()
+        { return strerror( m_err ); }
+
+        int
+        ListenErr::err() const throw()
+        { return m_err; }
+
+
+        AcceptErr::AcceptErr( int err ) throw()
+            : m_err( err )
+        {}
+
+        const char*
+        AcceptErr::what() const throw()
+        { return strerror( m_err ); }
+
+        int
+        AcceptErr::err() const throw()
+        { return m_err; }
+
 
         GetNameErr::GetNameErr( int err ) throw()
             : m_err( err )
