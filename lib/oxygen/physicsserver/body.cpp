@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.13 2004/04/10 12:56:30 rollmark Exp $
+   $Id: body.cpp,v 1.14 2004/04/10 14:06:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -145,6 +145,7 @@ void Body::SetSphere(float density, float radius)
     dMass ODEMass;
     dMassSetSphere(&ODEMass, density, radius);
     dMassAdjust(&ODEMass, 1.0f);
+    dBodySetMass(mODEBody, &ODEMass);
 }
 
 Vector3f Body::GetVelocity() const
