@@ -1,11 +1,11 @@
 #ifndef TELNETDAEMON_H__
 #define TELNETDAEMON_H__
 
-/*! \class TelnetDaemon
-	$Id: telnetdaemon.h,v 1.1 2003/04/30 15:59:37 fruit Exp $
+/*! \class TelnetServer
+	$Id: telnetdaemon.h,v 1.2 2003/06/22 17:32:16 rollmark Exp $
 	
 	TelnetServer
-	:TODO: Class description for TelnetDaemon
+	:TODO: Class description for TelnetServer
 
 	HISTORY:
 		19.06.2002 MK
@@ -13,7 +13,7 @@
 
 */
 
-#include <winsock2.h>
+#include <winsock.h>
 #include <list>
 
 class TelnetSession;

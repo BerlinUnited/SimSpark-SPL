@@ -6,6 +6,10 @@
 TelnetServer::TelnetServer(unsigned int port) : mPort(port)
 {
 	mDaemon = NULL;
+
+	char buffer[512];
+	gethostname(buffer, 511);
+	mHostName = buffer;
 }
 
 bool TelnetServer::Start()
@@ -14,11 +18,6 @@ bool TelnetServer::Start()
 	{
 		Shutdown();
 	}
-
-	char buffer[512];
-	gethostname(buffer, 511);
-	mHostName = buffer;
-	
 	// here we start the actual worker thread
 	TelnetDaemon daemon(*this);
 	boost::thread daemonThread(daemon);

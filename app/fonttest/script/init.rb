@@ -14,4 +14,4 @@ else
 end
 
 openglServer = new ('kerosin/OpenGLServer', '/sys/server/opengl');
-openglServer.init();
+

@@ -3,7 +3,12 @@
 
 using namespace boost;
 using namespace kerosin;
+using namespace std;
 using namespace zeitgeist;
+
+#ifdef GetObject
+#undef GetObject
+#endif
 
 int main()
 {
@@ -16,13 +21,17 @@ int main()
  
 	scriptServer->Run("coretest.rb");
 
+	cout << "CoreTest - A Small Interactive Text-Based Console Sample" << endl << endl;
+	cout << "Enter 'exit' command to quit application" << endl << endl;
 	bool done = false;
 	while (!done)
 	{
 		std::string command = "";
 	
-		//std::cout << std::endl << scriptServer->GetContext()->GetObject()->GetFullPath() << "> ";
-		std::getline(std::cin, command,'\n');
+		boost::shared_ptr<Leaf> selectedObject = scriptServer->GetContext()->GetObject();
+		
+		cout << endl << selectedObject->GetFullPath() << "> ";
+		getline(cin, command,'\n');
 
 		if (command.compare("exit")==0)
 		{

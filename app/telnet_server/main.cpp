@@ -1,6 +1,5 @@
 #include <iostream>
-#include <iomanip>
-#include <winsock2.h>
+#include <winsock.h>
 #include "telnetserver.h"
 
 int main()
@@ -8,31 +7,19 @@ int main()
 	// Windows socket initialization
 	WORD    wVersionRequested; 
 	WSADATA wsaData; 
-	wVersionRequested = MAKEWORD(2, 0); 
+	wVersionRequested = MAKEWORD(1, 1); 
 
 	// Find winsock version
 	if ( WSAStartup(wVersionRequested, &wsaData) )
 	{
-		std::cout << "ERROR: Winsock not found" << std::endl;
+		std::cout << "Incorrect winsock version\n" << std::endl;
 		return 1;
 	}
 
-	if ( LOBYTE( wsaData.wVersion ) != 2 ||
-		 HIBYTE( wsaData.wVersion ) != 0 )
-	{
-		std::cout << "ERROR: Incorrect winsock version" << std::endl;
-		WSACleanup( );
-		return 2;
-	}
-	else
-	{
-		std::cout << "Using Winsock v" << std::hex << wsaData.wVersion << std::endl;
-	}
-
 	// now we leave the windows specific world
-	TelnetServer telnetServer;
+	TelnetServer myServer;
 
-	telnetServer.Start();
+	myServer.Start();
 
 	bool done = false;
 	while (!done)
@@ -45,11 +32,11 @@ int main()
 		}
 		if (command.compare("status")==0)
 		{
-			telnetServer.Status();
+			myServer.Status();
 		}
 	}
 
-	telnetServer.Shutdown();
+	myServer.Shutdown();
 	
 	WSACleanup();
 	return 0;

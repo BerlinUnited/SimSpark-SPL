@@ -3,8 +3,6 @@
 #include <SDL/SDL.h>
 #include <zeitgeist/fileserver/fileserver.h>
 
-//#include "md5mesh.h"
-
 using namespace boost;
 using namespace kerosin;
 using namespace salt;
@@ -43,9 +41,6 @@ shared_ptr<Font>	gFont;
 */
 static bool init()
 {
-	// register all the application specific classes
-	//gContext->GetCore()->RegisterClassObject(new CLASS(MD5Mesh), "/");
-
 	// run initialization scripts
 	shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(gContext->Get("/sys/server/script"));
 	scriptServer->Run("script/init.rb");

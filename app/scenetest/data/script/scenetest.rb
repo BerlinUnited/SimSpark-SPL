@@ -39,7 +39,7 @@ new ('kerosin/MaterialServer', '/sys/server/material');
 inputServer = new ('kerosin/InputServer', '/sys/server/input');
 inputServer.init ('InputSystemSDL');
 # load german keyboard layout
-inputServer.importScanCodeMapping ('script/german.scan.rb');
+inputServer.importScanCodeMapping ('sys/script/german.scan.rb');
 
 inputServer.createDevice ('Keyboard');
 inputServer.createDevice ('Mouse');
@@ -78,39 +78,34 @@ cd ('/usr/scene1');
 world = new ('kerosin/World', '_world');
 world.setGravity(0.0, -9.81, 0.0);
 new ('kerosin/Space', '../_space');
-pc = new ('kerosin/PlaneCollider', '../pc');
-pc.setParams(0.0, 1.0 ,0.0, -10.0); 
 
 camera = new ('kerosin/Transform', '../camera0');
-camera.setLocalPos(0.0, 0.0, 0.0);
+camera.setLocalPos(0.0, 0.0, 10.0);
 new ('kerosin/Camera', 'camera');
 light = new ('kerosin/Light', '../_light');
-light.setRadius(20.0);
+light.setRadius(30.0);
 light.setDiffuseColor(1.0, 1.0, 1.0);
 body = new ('kerosin/Body', '../_body');
 body.useGravity(false);
 new ('kerosin/FPSController', 'fps');
-collider = new ('kerosin/SphereCollider', '../../_collider');
-collider.setRadius(3.0);
+#collider = new ('kerosin/SphereCollider', '../../_collider');
+#collider.setRadius(3.0);
 
 # add a sphere
 cd ('/usr/scene1/');
 trans = new ('kerosin/Transform', 'sphere1');
-trans.setLocalPos(0.0, 20.0, 0.0);
+trans.setLocalPos(0.0, 0.0, 0.0);
 sphere = new ('kerosin/StaticMesh', '_vis');
 sphere.load('model/sphere.void');
 #sphere.setRadius(1.0);
-body = new ('kerosin/Body', '../_physics');
-body.setSphere(1.0, 10.0);
-body.setMass(1.0);
-geom = new ('kerosin/SphereCollider', '../_geometry');
-geom.setRadius(10.0);
+#body = new ('kerosin/Body', '../_physics');
+#body.setSphere(1.0, 10.0);
+#body.setMass(1.0);
+#geom = new ('kerosin/SphereCollider', '../_geometry');
+#geom.setRadius(10.0);
 cd ('/usr/scene1/');
-#trans = new ('kerosin/Transform', 'mesh1');
-#trans.setLocalPos(0.0, 0.0, 1.0);
-#mesh = new ('MD5Mesh', 'test');
-#mesh.load('model/imp/idle1.md5mesh');
-#mesh.loadAnimation('model/imp/idle1.md5anim');
+trans = new ('kerosin/Transform', 'mesh1');
+trans.setLocalPos(0.0, 0.0, 1.0);
 #mesh = new ('kerosin/StaticMesh', 'test');
 #mesh.load('model/sphere.void');
 

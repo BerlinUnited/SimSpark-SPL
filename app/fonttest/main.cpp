@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 	shared_ptr<FontServer> fontServer = shared_static_cast<FontServer>(context->Get("/sys/server/font"));
 	if (fontServer.get() == NULL) return 1;
 
-	shared_ptr<Font> font = fontServer->GetFont("font/andalemo.ttf", 9);
+	shared_ptr<Font> font = fontServer->GetFont("font/andalemo.ttf", 12);
 	if (font.get() == NULL) return 1;
 
 	shared_ptr<ImageServer> imageServer = shared_static_cast<ImageServer>(context->New("kerosin/ImageServer", "/sys/server/image"));

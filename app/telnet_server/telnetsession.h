@@ -2,7 +2,7 @@
 #define TELNETSESSION_H__
 
 /*! \class TelnetSession
-	$Id: telnetsession.h,v 1.1 2003/04/30 15:59:37 fruit Exp $
+	$Id: telnetsession.h,v 1.2 2003/06/22 17:32:16 rollmark Exp $
 	
 	TelnetSession
 	:TODO: Class description for ClientConnection
@@ -13,7 +13,7 @@
 
 */
 
-#include <winsock2.h>
+#include <winsock.h>
 #include <string>
 
 class TelnetDaemon;

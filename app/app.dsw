@@ -15,7 +15,43 @@ Package=<4>
 
 ###############################################################################
 
+Project: "fonttest"=.\fonttest\fonttest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "inputtest"=.\inputtest\inputtest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "scenetest"=.\scenetest\scenetest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "simulator"=.\simulator\simulator.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

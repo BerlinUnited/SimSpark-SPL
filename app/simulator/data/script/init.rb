@@ -6,11 +6,11 @@
 
 Application.title = 'Simulator';
 
-#Viewport.xRes = 1024;
-#Viewport.yRes = 768;
+Viewport.xRes = 1024;
+Viewport.yRes = 768;
 #Viewport.xRes = 800;
 #Viewport.yRes = 600;
-#Viewport.fullScreen = true;
+Viewport.fullScreen = false;
 
 ####
 # OpenGL Server

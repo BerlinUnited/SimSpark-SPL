@@ -86,11 +86,6 @@ void TelnetDaemon::Terminate()
 	{
 		closesocket(mDaemonSocket);
 		mDaemonSocket = INVALID_SOCKET;
-		
-		for (TSessionList::iterator i = mSessions.begin(); i != mSessions.end(); ++i)
-		{
-			(*i)->Terminate();
-		}
 	}
 }
 

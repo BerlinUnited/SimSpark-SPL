@@ -11,125 +11,96 @@ using namespace kerosin;
 using namespace std;
 using namespace zeitgeist;
 
+//! the Zeitgeist context we are using
+shared_ptr<CoreContext>	gContext;
+
 shared_ptr<LogServer> gLog;
-bool		gWantsToQuit = false;
 
-void initSDL()
+const static int gCmdQuit = 1;
+
+static void update()
 {
-	if( SDL_Init(SDL_INIT_VIDEO) < 0 )
-	{
-        gLog->Error().Printf("Couldn't initialize SDL: %s\n", SDL_GetError());
-        exit(1);
-    }
-	atexit(SDL_Quit);
+	// retrieve the input server
+	shared_ptr<InputServer> inputServer = shared_static_cast<InputServer>(gContext->Get("/sys/server/input"));
 
-	const SDL_VideoInfo* info = SDL_GetVideoInfo();
-
-	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
-    SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-
-	int flags = SDL_OPENGL;
-	//int flags = SDL_OPENGL| SDL_FULLSCREEN;
+	if (!inputServer) return;
 	
-	SDL_Surface *screen = SDL_SetVideoMode(640, 480, info->vfmt->BitsPerPixel, flags);
-	if ( screen == NULL )
+    // Process incoming input
+	InputServer::Input input;
+	while (inputServer->GetInput(input))
 	{
-		gLog->Error().Printf("Couldn't set 640x480 video mode: %s\n", SDL_GetError());
-		exit(1);
-    }
+		switch (input.id)
+		{
+			case gCmdQuit:
+				{
+					shared_ptr<OpenGLServer> openglServer = shared_static_cast<OpenGLServer>(gContext->Get("/sys/server/opengl"));
+					openglServer->Quit();
+				}
+				break;
+		}
+	}
 }
 
-static void processEvents( void )
+static void shutdown()
 {
-    // Our SDL event placeholder.
-    SDL_Event event;
+	// we have to make sure, the inputServer is shut down before the opengl server,
+	// as the opengl server shuts down SDL ... this will conflict with the input
+	// server
+	shared_ptr<InputServer> inputServer = shared_static_cast<InputServer>(gContext->Get("/sys/server/input"));
 
-    // Grab all the events off the queue.
-    while( SDL_PollEvent( &event ) )
-	{
-        switch( event.type )
-		{
-		case SDL_KEYDOWN:
-			if (event.key.keysym.sym == SDLK_ESCAPE)
-			{
-				SDL_Event *event = new SDL_Event;
-				event->type = SDL_QUIT;
-				SDL_PushEvent(event);				
-			}
-			break;
-        case SDL_QUIT:
-            // Handle quit requests (like Ctrl-c).
-            gWantsToQuit = true;
-            break;
-        }
-    }
+	if (inputServer)
+		inputServer->Unlink();
 }
 
 int main(int argc, char **argv)
 {
 	Zeitgeist	zg;
 
-	shared_ptr<CoreContext> context = zg.CreateContext();
+	// create our global context (object hierarchy position container)
+	gContext = zg.CreateContext();
 	Kerosin					kCore(zg);
 
-	gLog = shared_static_cast<LogServer>(context->Get("/sys/server/log"));
+	gLog = shared_static_cast<LogServer>(gContext->Get("/sys/server/log"));
 
-	initSDL();
-
-	shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->New("zeitgeist/ScriptServer", "/sys/server/script"));
-
-	scriptServer->Init();
-	scriptServer->Run("inputtest.rb");
-
-	shared_ptr<InputServer> inputServer = shared_static_cast<InputServer>(context->Get("/sys/server/input"));
+	shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(gContext->Get("/sys/server/script"));
+	scriptServer->Run("script/init.rb");
+	scriptServer->Run("script/inputtest.rb");
 
 	unsigned int prevTime = SDL_GetTicks();
 	int frames = 0;
+	shared_ptr<InputServer> inputServer = shared_static_cast<InputServer>(gContext->Get("/sys/server/input"));
 
-	inputServer->BindCommand("^", 1);
-	inputServer->BindCommand("ß", 1);
-	inputServer->BindCommand("<", 1);
-	inputServer->BindCommand("a", 1);
-	inputServer->BindCommand("shift abc", 1);
+	inputServer->BindCommand("escape", gCmdQuit);
 
-	while(!gWantsToQuit)
+	// retrieve shared ptr to the OpenGL Server ... this represents the OpenGL
+	// context the application runs in, as well as the window
+	shared_ptr<OpenGLServer> openglServer = shared_static_cast<OpenGLServer>(gContext->Get("/sys/server/opengl"));
+	if (openglServer.get() == NULL)
+	{
+		gContext->GetCore()->GetLogServer()->Error() << "ERROR: Can't locate OpenGLServer ..." << endl;
+		shutdown();
+		return 1;
+	}
+
+	// the runloop
+	while(!openglServer->WantsToQuit())
 	{
 		frames ++;
-        // Process incoming events.
-		InputServer::Input input;
-		while (inputServer->GetInput(input))
-		{
-			//gLog->Normal() << "Input: " << (int)input.type << " '" << (char)input.code << "' '" << ch << "' " << (int)input.data.l << endl;
-			if (input.type == InputServer::eButton && input.data.l)
-			{
-				gLog->Normal().Printf("%d - ", input.code);
-				char ch;
-				if (inputServer->TranslateCode(input.code, 0, ch) && input.data.l)
-					gLog->Normal().Printf("%c\n", ch);
-				else
-					gLog->Normal().Printf("\n");
-			}
-		}
+		// update the window (pumps event loop, etc..)
+		openglServer->Update();
+		// update all the other components
+		update();
 
-        processEvents();
-		glClearColor(0,0,0,0);
-		glClear(GL_COLOR_BUFFER_BIT);
-		SDL_GL_SwapBuffers();
-    }
+		openglServer->SwapBuffers();
+	}
 
-	inputServer->BindCommand("shift +0", 1);
-	inputServer->BindCommand("shift +a", 1);
-	inputServer->BindCommand("+a", 1);
-	inputServer->BindCommand("a", 1);
-	inputServer->BindCommand("shift abc", 1);
 	unsigned int time = SDL_GetTicks() - prevTime;
 
 	gLog->Normal() << "Average FPS: " << 1000.0f*frames / (float)time << endl;
+
+	gLog.reset();
+
+	shutdown();
 
 	return 0;
 }

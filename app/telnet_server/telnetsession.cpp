@@ -53,7 +53,6 @@ void TelnetSession::operator()()
 	mDaemon.Detach(this);
 
 	closesocket(mClientSocket);
-	mClientSocket = INVALID_SOCKET;
 }
 
 bool TelnetSession::Send(const std::string& data)
@@ -151,23 +150,23 @@ bool TelnetSession::WaitForData(std::string &data)
 
 void TelnetSession::Terminate()
 {
-	shutdown(mClientSocket, SD_SEND);
+	shutdown(mClientSocket, 0x01);
 }
 
 void TelnetSession::ProcessCommand(unsigned char command)
 {
 	unsigned char option = 0;
 
-	//std::cout << "Command: " << (unsigned int)command;
+	std::cout << "Command: " << (unsigned int)command;
 	if (command >= 251 && command <= 254)
 	{
 		// these commands need another byte from the client
 		unsigned char buf;
 		recv( mClientSocket, (char*)&buf, 1 , 0);
 		option = buf;
-		//std::cout <<  " - " << (unsigned int)option;
+		std::cout <<  " - " << (unsigned int)option;
 	}
-	//std::cout << std::endl;
+	std::cout << std::endl;
 
 	switch (command)
 	{

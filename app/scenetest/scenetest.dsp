@@ -89,19 +89,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\script\default.rb
-# End Source File
-# Begin Source File
-
 SOURCE=.\script\init.rb
 # End Source File
 # Begin Source File
 
 SOURCE=.\data\script\scenetest.rb
-# End Source File
-# Begin Source File
-
-SOURCE=.\script\zeitgeist.rb
 # End Source File
 # End Group
 # Begin Group "program"
@@ -131,18 +123,6 @@ SOURCE=.\data\program\test.vp
 # Begin Source File
 
 SOURCE=.\main.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\md5mesh.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\md5mesh.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\md5mesh_c.cpp
 # End Source File
 # Begin Source File
 
