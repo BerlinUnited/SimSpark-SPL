@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.cpp,v 1.4 2004/04/11 17:03:53 rollmark Exp $
+   $Id: parameterlist.cpp,v 1.5 2004/05/01 13:44:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "parameterlist.h"
+#include <sstream>
 
 using namespace boost;
 using namespace zeitgeist;
@@ -109,14 +110,44 @@ ParameterList::operator[] (int n) const
 bool
 ParameterList::AdvanceValue(TVector::const_iterator& iter, std::string& value) const
 {
-    char* str;
-    if (GetValueInternal<char*, char*>(iter,str))
+    char* character;
+    if (GetValueInternal<char*, char*>(iter,character))
+        {
+            value = character;
+            return true;
+        }
+
+    string str;
+    if (GetValueInternal<std::string,std::string>(iter,str))
         {
             value = str;
             return true;
         }
 
-    return GetValueInternal<std::string,std::string>(iter,value);
+    // try to generate a string from a float, double or int
+
+    double d;
+    if (
+        (GetValueInternal<float,double>(iter,d)) ||
+        (GetValueInternal<double,double>(iter,d))
+        )
+        {
+            stringstream ss;
+            ss << d;
+            value = ss.str();
+            return true;
+        }
+
+    int i;
+    if (GetValueInternal<int,int>(iter,i))
+        {
+            stringstream ss;
+            ss << i;
+            value = ss.str();
+            return true;
+        }
+
+    return false;
 }
 
 bool
