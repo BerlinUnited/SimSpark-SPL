@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.cpp,v 1.6 2004/03/09 12:22:36 rollmark Exp $
+   $Id: camera.cpp,v 1.7 2004/04/12 17:18:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,7 +92,8 @@ void Camera::DescribeFrustum(Frustum& frustum) const
 
 void Camera::Bind()
 {
-    mViewTransform        = GetWorldTransform();
+    mViewTransform = GetWorldTransform();
+    mViewTransform.RotateX(90);
     mViewTransform.InvertRotationMatrix();
 
     // setup the projection matrix
