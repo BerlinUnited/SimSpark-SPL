@@ -299,10 +299,17 @@ addField()
 
 # set the time of a single simulation step
 Spades.TimePerStep = 0.01
+
 # set up the number of simsteps per monitor message
 Spades.MonitorInterval = 4
-# set up the integrated comm server
+
+# start  the integrated comm server
 Spades.RunIntegratedCommserver = true
+
+# the number of commServers to wait for before the simulation is
+# initially unpaused
+Spades.CommServersWanted = 1
+
 # flag if we want to send agent think times
 Spades.SendAgentThinkTimes = false
 
