@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sharedlibrary.cpp,v 1.5 2004/04/22 16:46:07 rollmark Exp $
+   $Id: sharedlibrary.cpp,v 1.6 2004/06/13 06:30:29 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,45 +21,47 @@
 */
 #include "../sharedlibrary.h"
 #include <dlfcn.h>
-# include <iostream>
+#include <iostream>
 
 using namespace salt;
 
-
-bool SharedLibrary::Open(const std::string &libName)
+bool
+SharedLibrary::Open(const std::string &libName)
 {
-        if (mLibHandle)
-        {
-                Close();
-        }
-#if RCSS_DEBUG
-        std::cerr << "(SharedLibrary) Opening " << libName + ".so\n";
+    if (mLibHandle)
+    {
+        Close();
+    }
+#if INIT_DEBUG
+    std::cerr << "(SharedLibrary) Opening " << libName + ".so\n";
 #endif
-        mLibHandle = ::dlopen((libName + ".so").c_str(), RTLD_LAZY);
+    mLibHandle = ::dlopen((libName + ".so").c_str(), RTLD_LAZY);
 
-        if (mLibHandle == NULL)
-            {
-                std::cerr << "(SharedLibrary) ERROR: dlopen faild for " << libName
-                          << " with: \n\t" << dlerror() << std::endl;
-            }
+    if (mLibHandle == NULL)
+    {
+        std::cerr << "(SharedLibrary) ERROR: dlopen faild for " << libName
+                  << " with: \n\t" << dlerror() << std::endl;
+    }
 
-        return (mLibHandle!=NULL);
+    return (mLibHandle!=NULL);
 }
 
-void* SharedLibrary::GetProcAddress(const std::string &procName)
+void*
+SharedLibrary::GetProcAddress(const std::string &procName)
 {
-        if (mLibHandle)
-        {
-                return ::dlsym(mLibHandle, procName.c_str());
-        }
-        return NULL;
+    if (mLibHandle)
+    {
+        return ::dlsym(mLibHandle, procName.c_str());
+    }
+    return NULL;
 }
 
-void SharedLibrary::Close()
+void
+SharedLibrary::Close()
 {
-        if (mLibHandle)
-        {
-                ::dlclose(mLibHandle);
-                mLibHandle = NULL;
-        }
+    if (mLibHandle)
+    {
+        ::dlclose(mLibHandle);
+        mLibHandle = NULL;
+    }
 }
