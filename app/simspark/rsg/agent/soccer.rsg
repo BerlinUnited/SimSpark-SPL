@@ -162,7 +162,7 @@
 
 ; create left line
  (node Transform
-       (setLocalPos (eval -1 * $FieldHalfLength) 0 -1)
+       (setLocalPos (eval -1 * $FieldHalfLength) 0 $LineBase)
        (node Box
 	     (setExtents $LineHeight $LineWidth $LineHeight)
 	     (setMaterial $LineMaterial)
