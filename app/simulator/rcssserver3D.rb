@@ -212,8 +212,8 @@ def addField()
   halfGoalDepth  = getSoccerVar('GoalDepth')/2.0
   halfGoalWidth  = getSoccerVar('GoalWidth')/2.0
   halfGoalHeight = getSoccerVar('GoalHeight')/2.0
-  barHeight = 0.10
-  halfBarHeight = barHeight/2.0
+  barDiameter = getSoccerVar('LineWidth')
+  barRadius = barDiameter/2.0
 
   # left goal
   goalBoxLPath = $scenePath+'GoalBoxL/';
@@ -232,33 +232,34 @@ def addField()
 
   # create the goal bar on top of the goal (left goal)
   barL = new('oxygen/Transform', goalBoxLPath+'bar')
-  barL.setLocalPos(-halfLength-halfGoalDepth, 
+  barL.setLocalPos(-halfLength-halfGoalDepth+getSoccerVar('LineWidth'), 
 		   0.0,
-		   getSoccerVar('GoalHeight') + halfBarHeight)
+		   getSoccerVar('GoalHeight') + barRadius)
   boxBarL = new('oxygen/BoxCollider', goalBoxLPath+'bar/geometry')
+  # create small space between bar and posts to avoid creating contact joints
   boxBarL.setBoxLengths(getSoccerVar('GoalDepth'),
-			getSoccerVar('GoalWidth'),
-			barHeight)
+			getSoccerVar('GoalWidth') - 0.1,
+			barDiameter)
 
   # create the left goal post (left goal)
   leftPostL = new('oxygen/Transform', goalBoxLPath+'leftPost')
-  leftPostL.setLocalPos(-halfLength-halfGoalDepth, 
-			-halfGoalWidth-halfBarHeight,
-			halfGoalHeight)
+  leftPostL.setLocalPos(-halfLength-halfGoalDepth+getSoccerVar('LineWidth'), 
+			-halfGoalWidth-barRadius,
+			halfGoalHeight+barRadius )
   boxLeftPostL = new('oxygen/BoxCollider', goalBoxLPath+'leftPost/geometry')
   boxLeftPostL.setBoxLengths(getSoccerVar('GoalDepth'),
-			     barHeight,
-			     getSoccerVar('GoalHeight') - barHeight)
+			     barDiameter,
+			     getSoccerVar('GoalHeight'))
 
   # create the right goal post (left goal)
   rightPostL = new('oxygen/Transform', goalBoxLPath+'rightPost')
-  rightPostL.setLocalPos(-halfLength-halfGoalDepth, 
-			halfGoalWidth+halfBarHeight,
-			halfGoalHeight)
+  rightPostL.setLocalPos(-halfLength-halfGoalDepth+getSoccerVar('LineWidth'), 
+			halfGoalWidth+barRadius,
+			halfGoalHeight+barRadius)
   boxRightPostL = new('oxygen/BoxCollider', goalBoxLPath+'rightPost/geometry')
   boxRightPostL.setBoxLengths(getSoccerVar('GoalDepth'),
-			     barHeight,
-			     getSoccerVar('GoalHeight') - barHeight)
+			      barDiameter,
+			      getSoccerVar('GoalHeight'))
 
   # right goal
   goalBoxRPath = $scenePath+'GoalBoxR/';
@@ -277,33 +278,34 @@ def addField()
 
   # create the goal bar on top of the goal (right goal)
   barR = new('oxygen/Transform', goalBoxRPath+'bar')
-  barR.setLocalPos(halfLength+halfGoalDepth, 
+  barR.setLocalPos(halfLength+halfGoalDepth-getSoccerVar('LineWidth'), 
 		   0.0,
-		   getSoccerVar('GoalHeight') + halfBarHeight)
+		   getSoccerVar('GoalHeight') + barRadius)
   boxBarR = new('oxygen/BoxCollider', goalBoxRPath+'bar/geometry')
+  # create small space between bar and posts to avoid creating contact joints
   boxBarR.setBoxLengths(getSoccerVar('GoalDepth'),
-			getSoccerVar('GoalWidth'),
-			barHeight)
+			getSoccerVar('GoalWidth') - 0.1,
+			barDiameter)
 
   # create the left goal post (right goal)
   leftPostR = new('oxygen/Transform', goalBoxRPath+'leftPost')
-  leftPostR.setLocalPos(halfLength+halfGoalDepth, 
-			-halfGoalWidth-halfBarHeight,
-			halfGoalHeight)
+  leftPostR.setLocalPos(halfLength+halfGoalDepth-getSoccerVar('LineWidth'), 
+			-halfGoalWidth-barRadius,
+			halfGoalHeight+barRadius)
   boxLeftPostR = new('oxygen/BoxCollider', goalBoxRPath+'leftPost/geometry')
   boxLeftPostR.setBoxLengths(getSoccerVar('GoalDepth'),
-			     barHeight,
-			     getSoccerVar('GoalHeight') - barHeight)
+			     barDiameter,
+			     getSoccerVar('GoalHeight'))
 
   # create the right goal post (right goal)
   rightPostR = new('oxygen/Transform', goalBoxRPath+'rightPost')
-  rightPostR.setLocalPos(halfLength+halfGoalDepth, 
-			 halfGoalWidth+halfBarHeight,
-			 halfGoalHeight)
+  rightPostR.setLocalPos(halfLength+halfGoalDepth-getSoccerVar('LineWidth'), 
+			 halfGoalWidth+barRadius,
+			 halfGoalHeight+barRadius)
   boxRightPostR = new('oxygen/BoxCollider', goalBoxRPath+'rightPost/geometry')
   boxRightPostR.setBoxLengths(getSoccerVar('GoalDepth'),
-			      barHeight,
-			      getSoccerVar('GoalHeight') - barHeight)
+			      barDiameter,
+			      getSoccerVar('GoalHeight'))
 end
 
 #
@@ -322,6 +324,7 @@ addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
 addSoccerVar('GoalHeight', 0.5) # FIFA: 2.44 
 addSoccerVar('BorderSize', 10.0)
+addSoccerVar('LineWidth', 0.08) # this isn't sent to the monitor yet
 addSoccerVar('FreeKickDistance', 9.15)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
