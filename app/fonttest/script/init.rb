@@ -4,11 +4,11 @@
 blub = 0
 
 if blub == 1
-	importBundle 'bundle/filesystemzip';
+	importBundle 'filesystemzip';
 	fileServer = get ('/sys/server/file');
 	fileServer.mount ('FileSystemZIP', 'data.zip');
 else
-	importBundle 'bundle/filesystemstd';
+	importBundle 'filesystemstd';
 	fileServer = get ('/sys/server/file');
 	fileServer.mount ('FileSystemSTD', 'data/');
 end
