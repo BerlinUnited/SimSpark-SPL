@@ -2,24 +2,28 @@
 
 (RubySceneGraph 0 1)
 (
- (Template $radius $mass $material)
- (Sphere
-  .setRadius $radius
-  .setMaterial $material
-  )
- (Body
-  .setName sphereBody
-  .setMass $mass
-  (DragController
-   .setAngularDrag 0.2
-   .setLinearDrag 0.4
-   )
-  )
- (SphereCollider
-  .setRadius $radius
-  )
- (ContactJointHandler
-  .setContactBounceMode false
-  )
- )
+ (template $radius $density $material)
+
+ (node Sphere
+       (setRadius $radius)
+       (setMaterial $material)
+       )
+
+ (node Body
+       (setName sphereBody)
+       (setSphere $density $radius)
+       (node DragController
+	     (setAngularDrag 0.2)
+	     (setLinearDrag 0.4)
+	     )
 )
+       
+ (node SphereCollider
+       (setRadius $radius)
+
+       (node ContactJointHandler
+	     (setContactBounceMode false)
+	     )
+
+       ) 
+ )

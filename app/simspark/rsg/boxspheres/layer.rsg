@@ -1,25 +1,26 @@
 ; -*- mode: lisp; -*-
 (RubySceneGraph 0 1)
 (
- (Template $radius $mass)
- (Transform
-  .setLocalPos -6 -4 0 
-  .importScene rsg/boxspheres/row.rsg $radius $mass
-  )
- (Transform
-  .setLocalPos -6 -2 0
-  .importScene rsg/boxspheres/row.rsg $radius $mass
-  )
- (Transform
-  .setLocalPos -6 0 0
-  .importScene rsg/boxspheres/row.rsg $radius $mass
-  )
- (Transform
-  .setLocalPos -6 2 0
-  .importScene rsg/boxspheres/row.rsg $radius $mass
-  )
- (Transform
-  .setLocalPos -6 4 0
-  .importScene rsg/boxspheres/row.rsg $radius $mass
-  )
-)
+ (template $radius $density)
+
+ (node Transform
+       (setLocalPos -6 -4 0)
+       (importScene rsg/boxspheres/row.rsg $radius $density)
+       )
+ (node Transform
+       (setLocalPos -6 -2 0)
+       (importScene rsg/boxspheres/row.rsg $radius $density)
+       )
+ (node Transform
+       (setLocalPos -6 0 0)
+       (importScene rsg/boxspheres/row.rsg $radius $density)
+       )
+ (node Transform
+       (setLocalPos -6 2 0)
+       (importScene rsg/boxspheres/row.rsg $radius $density)
+       )
+ (node Transform
+       (setLocalPos -6 4 0)
+       (importScene rsg/boxspheres/row.rsg $radius $density)
+       )
+ )

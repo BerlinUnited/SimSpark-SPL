@@ -2,31 +2,31 @@
 
 (RubySceneGraph 0 1)
 (
-   (Transform
-    .setName mid
-    .setLocalPos 0 0 0
-    .importScene rsg/boxspheres/box.rsg 6 1 2 100 matYellow
-    )
+ (node Transform
+       (setName mid)
+       (setLocalPos 0 0 0)
+       (importScene rsg/boxspheres/box.rsg 8 1 2 2 matYellow)
+       )
 
-   (Transform
-    .setName right
-    .setLocalPos 3.6 0 0
-    .importScene rsg/boxspheres/box.rsg 1 3 5.5 20 matBlue
-    )
+ (node Transform
+       (setName right)
+       (setLocalPos 4.6 0 0)
+       (importScene rsg/boxspheres/box.rsg 1 3 5.5 2 matBlue)
+       )
 
-   (Transform
-    .setName left
-    .setLocalPos -3.6 0 0
-    .importScene rsg/boxspheres/box.rsg 1 2 5 20 matRed
-    )
+ (node Transform
+       (setName left)
+       (setLocalPos -4.6 0 0)
+       (importScene rsg/boxspheres/box.rsg 1 3 5 2 matRed)
+       )
 
-   (HingeJoint
-   .attach ../mid/boxBody ../right/boxBody
-   .setHingeAnchor 3 0 0
-   )
+ (node HingeJoint
+       (attach ../mid/boxBody ../right/boxBody)
+       (setHingeAnchor 3 0 0)
+       )
 
-   (HingeJoint
-   .attach ../mid/boxBody ../left/boxBody
-   .setHingeAnchor -3 0 0
-   )
-)
+ (node HingeJoint
+       (attach ../mid/boxBody ../left/boxBody)
+       (setHingeAnchor -3 0 0)
+       )
+ )

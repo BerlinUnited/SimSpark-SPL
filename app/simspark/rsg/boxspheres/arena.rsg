@@ -3,70 +3,66 @@
 (RubySceneGraph 0 1)
 (
 ; create the base plane
- (Transform
-  .setLocalPos 0 0 -1
-  (Box
-   .setMaterial matGreen
-   .setExtents 100 100 4
-   )
-  (PlaneCollider
-   .setParams 0 0 1.0 0
-   (ContactJointHandler
-    .setContactBounceMode false
-   )
-   )
-  )
+ (node Transform
+       (setLocalPos 0 0 -1)
+       (node Box
+	     (setMaterial matGreen)
+	     (setExtents 100 100 4)
+	     )
+       (node PlaneCollider
+	     (setParams 0 0 1.0 0)
+	     (node ContactJointHandler
+		   (setContactBounceMode false)
+		   )
+	     )
+       )
 
 ; create left side
- (Transform
-  .setLocalPos -50 0 10
-  (Box
-   .setMaterial matWhite
-   .setExtents 1 100 20
-   ) 
-  (PlaneCollider
-   .setParams 1.0 0 0 -49
-   )
-  )
+ (node Transform
+       (setLocalPos -50 0 10)
+       (node Box
+	     (setMaterial matWhite)
+	     (setExtents 1 100 20)
+	     ) 
+       (node PlaneCollider
+	     (setParams 1.0 0 0 -49)
+	     )
+       )
 
 ; create back side
- (Transform
-  .setLocalPos 0 50 10
-  (Box
-   .setMaterial matGrey
-   .setExtents 100 1 20
-   ) 
-  (PlaneCollider
-   .setParams 0 -1.0 0 -49
-   )
-  )
+ (node Transform
+       (setLocalPos 0 50 10)
+       (node Box
+	     (setMaterial matGrey)
+	     (setExtents 100 1 20)
+	     ) 
+       (node PlaneCollider
+	     (setParams 0 -1.0 0 -49)
+	     )
+       )
 
 ; create right side
- (Transform
-  .setLocalPos 50 0 10
-  (Box
-   .setMaterial matWhite
-   .setExtents 1 100 20
-   ) 
-  (PlaneCollider
-   .setParams -1.0 0 0 -49
-   )
-  )
+ (node Transform
+       (setLocalPos 50 0 10)
+       (node Box
+	     (setMaterial matWhite)
+	     (setExtents 1 100 20)
+	     ) 
+       (node PlaneCollider
+	     (setParams -1.0 0 0 -49)
+	     )
+       )
 
 ; create front side
- (Transform
-  .setLocalPos 0 -50 10
-  (Box
-   .setMaterial matGrey
-   .setExtents 100 1 20
-   ) 
-  (PlaneCollider
-   .setParams 0 1.0 0 -49
-   )
-  )
-
-
-
-
+ (node Transform
+       (setLocalPos 0 -50 10)
+       (node Box
+	     (setMaterial matGrey)
+	     (setExtents 100 1 20)
+	     ) 
+       (node PlaneCollider
+	     (setParams 0 1.0 0 -49)
+	     )
+       )
 
 )
