@@ -24,8 +24,9 @@ monitorServer.registerMonitorSystem('MonitorTest');
 # setup the SpadesServer
 print "\nCreating SpadesServer\n";
 spadesServer = new ('oxygen/SpadesServer', '/sys/server/spades');
-spadesServer.init('oxygen/ParamReader');
 
+# create some dummy variables to test with the ParamReader
+createVariable('Test.value', 'test');
 
 # 
 # Scene setup
