@@ -33,6 +33,12 @@ app/simulator/.deps
 app/simulator/.libs
 app/simulator/Makefile
 app/simulator/Makefile.in
+app/spadestest/.deps
+app/spadestest/.libs
+app/spadestest/Makefile
+app/spadestest/Makefile.in
+app/spadestest/spadestest
+app/spadestest/sys
 app/zeitgeisttest/.deps
 app/zeitgeisttest/.libs
 app/zeitgeisttest/Makefile
