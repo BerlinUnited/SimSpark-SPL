@@ -1,3 +1,22 @@
+2003-12-23  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
+	some cleanup
+	moved TParameterList inside loop to avoid repeat clear()
+	added additional check for a non existant scene
+
+	* plugin/sexpparser/sexpparser.h:
+	removed methods IsString and IsParameterList
+
+	* plugin/sexpparser/sexpparser.cpp:
+	removed methods IsString and IsParameterList. ListToString
+	compares now directly based on their type_info
+
+	* lib/oxygen/gamecontrolserver/baseparser.cpp:
+	added declarations to force the generation of RTTI type_info
+	objects. This solves the problem of comparing two types across
+	plugins boundaries.
+
 2003-12-23  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/sexpparser/sexpparser.h: 
