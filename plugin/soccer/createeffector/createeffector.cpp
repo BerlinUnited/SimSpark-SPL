@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.1.2.4 2003/12/26 11:35:16 rollmark Exp $
+   $Id: createeffector.cpp,v 1.1.2.5 2003/12/27 13:30:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -112,6 +112,18 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
       }
 
   effector->SetName("_ForceEffector");
+  aspect->AddChildReference(effector);
+
+  // add init effector
+  effector = shared_dynamic_cast<Effector>(GetCore()->New("InitEffector"));
+
+  if (effector.get() == 0)
+  {
+      GetLog()->Error() << "ERROR: (CreateEffector) cannot create the InitEffector\n";
+      return false;
+  }
+
+  effector->SetName("_InitEffector");
   aspect->AddChildReference(effector);
 
   // add perfect vision perceptor
