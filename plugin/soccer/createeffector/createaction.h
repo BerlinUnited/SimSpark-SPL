@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createaction.h,v 1.2.2.1 2004/01/25 12:38:45 rollmark Exp $
+   $Id: createaction.h,v 1.2.2.2 2004/01/25 12:39:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_CREATEACTION_H
-#define OXYGEN_CREATEACTION_H
+#ifndef CREATEACTION_H
+#define CREATEACTION_H
 
 #include <oxygen/gamecontrolserver/actionobject.h>
 
@@ -37,4 +37,4 @@ public:
 
 }; // namespace oxygen
 
-#endif // OXYGEN_CREATEACTION_H
+#endif // CREATEACTION_H
