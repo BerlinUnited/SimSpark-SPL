@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: corecontext.cpp,v 1.5 2004/04/08 13:07:36 rollmark Exp $
+   $Id: corecontext.cpp,v 1.6 2004/04/08 13:38:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -145,6 +145,11 @@ bool CoreContext::Install(const boost::shared_ptr<Leaf> &leaf, const std::string
 boost::shared_ptr<Leaf> CoreContext::Get(const std::string& pathStr)
 {
     return mCore->Get(pathStr, mObject);
+}
+
+bool CoreContext::Test(const std::string& pathStr)
+{
+    return mCore->Test(pathStr, mObject);
 }
 
 void CoreContext::ListObjects() const

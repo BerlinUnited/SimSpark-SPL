@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: corecontext.h,v 1.4 2003/11/14 14:05:54 fruit Exp $
+   $Id: corecontext.h,v 1.5 2004/04/08 13:38:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,50 +67,58 @@ public:
      * \param 'core' is the core this context belongs to
      * \param 'root' is the root of the core
      */
-    CoreContext(const boost::shared_ptr<Core> &core, const boost::shared_ptr<Leaf> &root);
+    CoreContext(const boost::shared_ptr<Core> &core,
+                const boost::shared_ptr<Leaf> &root);
     virtual ~CoreContext();
 
     /** constructs a new class of type 'className' below the node
      * described by 'pathStr'. The function assumes that only
      * compatible classes are created this way. Compatible means
-     * 'starting at Leaf' in the hierarchy. It returns a
-     * reference to the constructed object.
+     * 'starting at Leaf' in the hierarchy. It returns a reference to
+     * the constructed object.
      */
-    boost::shared_ptr<Leaf> New(const std::string& className, const std::string& pathStr);
-    bool                                    Delete(const std::string& name);
+    boost::shared_ptr<Leaf> New(const std::string& className,
+                                const std::string& pathStr);
+    bool Delete(const std::string& name);
 
-    /** selects the currenlty active object to be the one
-        described the by path expression pathStr. It returns a
-        reference to the selected object*/
+    /** selects the currenlty active object to be the one described
+        the by path expression pathStr. It returns a reference to the
+        selected object*/
     boost::shared_ptr<Leaf> Select(const std::string& pathStr);
 
-    /** inserts the object 'leaf' below the object described by
-        the path expression 'pathStr' into the hierarchy and
-        returns true on success */
-    bool                                    Install(const boost::shared_ptr<Leaf>& leaf, const std::string& pathStr, bool isNamed = false);
+    /** inserts the object 'leaf' below the object described by the
+        path expression 'pathStr' into the hierarchy and returns true
+        on success */
+    bool Install(const boost::shared_ptr<Leaf>& leaf, const std::string& pathStr,
+                 bool isNamed = false);
 
-    /** returns a reference to the object described be the path
+    /** returns a reference to the object described by the path
         expression pathStr */
     boost::shared_ptr<Leaf> Get(const std::string& pathStr);
 
+    /** returns true if the object referenced by the path expression
+        pathStr exists */
+    bool Test(const std::string& pathStr);
+
     /** returns the currently selected object */
-    boost::shared_ptr<Leaf> GetObject() const       {       return mObject; }
+    boost::shared_ptr<Leaf> GetObject() const { return mObject; }
 
     /** returns the core this context belongs to */
-    boost::shared_ptr<Core> GetCore() const         {       return mCore;   }
+    boost::shared_ptr<Core> GetCore() const { return mCore; }
 
-    /** prints the children of the currently selected object to stdout */
-    void                                    ListObjects() const;
+    /** prints the children of the currently selected object to
+        stdout */
+    void ListObjects() const;
 
     /** pushs the current active object on the object stack */
-    void                                    Push();
+    void Push();
 
     /** makes the top of the object stack the current object, no
         change if stack is empty */
-    void                                    Pop();
+    void Pop();
 
     /** prints the objects on the stack to stdout */
-    void                                    Dir() const;
+    void Dir() const;
 
 private:
     CoreContext(const CoreContext& obj);
@@ -121,16 +129,16 @@ private:
     //
 private:
     /** pointer to the core object this context belongs to */
-    boost::shared_ptr<Core>         mCore;
+    boost::shared_ptr<Core> mCore;
 
     /** the current active object */
-    boost::shared_ptr<Leaf>         mObject;
+    boost::shared_ptr<Leaf> mObject;
 
     /** the current working path */
-    std::string                                     mPath;
+    std::string mPath;
 
     /** the object stack */
-    TObjectStack                            mObjectStack;
+    TObjectStack mObjectStack;
 };
 
 } // namespace zeitgeist
