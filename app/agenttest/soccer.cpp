@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: soccer.cpp,v 1.1.2.2 2004/02/08 14:01:46 rollmark Exp $
+$Id: soccer.cpp,v 1.1.2.3 2004/02/09 14:19:54 fruit Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -70,20 +70,20 @@ void Soccer::Kick(const float angle, const float power)
     mComm->PutOutput(ss.str());
 }
 
-void Soccer::Dash(const salt::Vector3f& dashVec)
+void Soccer::Drive(const salt::Vector3f& driveVec)
 {
     GetLog()->Debug()
-        << "dashing ["
-        << dashVec[0] << " "
-        << dashVec[1] << " "
-        << dashVec[2]
+        << "driveing ["
+        << driveVec[0] << " "
+        << driveVec[1] << " "
+        << driveVec[2]
         << "]\n";
 
     stringstream ss;
-    ss << "A(dash"
-       << " " << dashVec[0]
-       << " " << dashVec[1]
-       << "  " << dashVec[2]
+    ss << "A(drive"
+       << " " << driveVec[0]
+       << " " << driveVec[1]
+       << "  " << driveVec[2]
        << ")";
 
     mComm->PutOutput(ss.str());

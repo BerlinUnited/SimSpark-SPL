@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.h,v 1.1.2.3 2004/02/08 17:14:20 rollmark Exp $
+   $Id: worldmodel.h,v 1.1.2.4 2004/02/09 14:19:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -81,10 +81,10 @@ public:
     TPlayMode GetPlayMode();
 
     /** given an object position in polar coordinates and distance,
-        CalcDashVec returns a cartesian normalized vector that can be
-        passed to the dash effector to reach this position.
+        CalcDriveVec returns a cartesian normalized vector that can be
+        passed to the drive effector to reach this position.
     */
-    salt::Vector3f GetDashVec(const WorldModel::VisionSense& vision);
+    salt::Vector3f GetDriveVec(const WorldModel::VisionSense& vision);
 
     /** returns the players calculated position */
     salt::Vector3f GetMyPosition();

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.1.2.3 2004/02/08 17:16:42 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.1.2.4 2004/02/09 14:19:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -276,7 +276,7 @@ WorldModel::VisionSense WorldModel::GetVisionSense(VisionObject obj)
 
 Vector3f WorldModel::GetPosition(VisionSense sense)
 {
-    return mMyPos + GetDashVec(sense) * sense.distance;
+    return mMyPos + GetDriveVec(sense) * sense.distance;
 }
 
 Vector3f WorldModel::GetObjectPosition(VisionObject obj)
@@ -290,7 +290,7 @@ TPlayMode WorldModel::GetPlayMode()
     return mPlayMode;
 }
 
-Vector3f WorldModel::GetDashVec(const WorldModel::VisionSense& vision)
+Vector3f WorldModel::GetDriveVec(const WorldModel::VisionSense& vision)
 {
     return Vector3f
         (
