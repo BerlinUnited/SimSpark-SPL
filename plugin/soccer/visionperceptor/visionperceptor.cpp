@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.10 2004/05/05 14:04:19 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.11 2004/06/19 12:49:09 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "visionperceptor.h"
-#include <salt/random.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
@@ -32,7 +31,9 @@ using namespace boost;
 using namespace salt;
 
 VisionPerceptor::VisionPerceptor() : Perceptor(),
-                                     mSenseMyPos(false),mAddNoise(true)
+                                     mSenseMyPos(false),
+                                     mAddNoise(true),
+                                     mUseRandomNoise(true)
 {
     // set predicate name
     SetPredicateName("Vision");
@@ -42,6 +43,9 @@ VisionPerceptor::VisionPerceptor() : Perceptor(),
 
 VisionPerceptor::~VisionPerceptor()
 {
+    mDistRng.reset();
+    mPhiRng.reset();
+    mThetaRng.reset();
 }
 
 void
@@ -53,8 +57,15 @@ VisionPerceptor::SetNoiseParams(float sigma_dist, float sigma_phi,
     mSigmaTheta = sigma_theta;
     mCalErrorAbs = cal_error_abs;
 
-    salt::UniformRNG<float> rng(-mCalErrorAbs,mCalErrorAbs);
-    mError = salt::Vector3f(rng(),rng(),rng());
+    NormalRngPtr rng1(new salt::NormalRNG<>(0.0,sigma_dist));
+    mDistRng = rng1;
+    NormalRngPtr rng2(new salt::NormalRNG<>(0.0,sigma_phi));
+    mPhiRng = rng2;
+    NormalRngPtr rng3(new salt::NormalRNG<>(0.0,sigma_theta));
+    mThetaRng = rng3;
+
+    salt::UniformRNG<float> rng4(-mCalErrorAbs,mCalErrorAbs);
+    mError = salt::Vector3f(rng4(),rng4(),rng4());
 }
 
 void
@@ -68,9 +79,24 @@ VisionPerceptor::OnLink()
 void
 VisionPerceptor::OnUnlink()
 {
+    mDistRng.reset();
+    mPhiRng.reset();
+    mThetaRng.reset();
     mTransformParent.reset();
     mAgentState.reset();
     mActiveScene.reset();
+}
+
+void
+VisionPerceptor::AddNoise(bool add_noise)
+{
+    mAddNoise = add_noise;
+}
+
+void
+VisionPerceptor::UseRandomNoise(bool random_noise)
+{
+    mUseRandomNoise = random_noise;
 }
 
 bool
@@ -142,9 +168,23 @@ VisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
             // make some noise
             if (mAddNoise)
             {
-                od.mDist += salt::NormalRNG<>(0.0,mSigmaDist)();
-                od.mTheta += salt::NormalRNG<>(0.0,mSigmaTheta)();
-                od.mPhi += salt::NormalRNG<>(0.0,mSigmaPhi)();
+                if (mUseRandomNoise)
+                {
+                    od.mDist += (*(mDistRng.get()))();
+                    od.mTheta += (*(mThetaRng.get()))();
+                    od.mPhi += (*(mPhiRng.get()))();
+                } else {
+                    /* This gives a constant random error throughout the whole
+                     * match. This behavior was not intended and is a bug and
+                     * not an intended feature.
+                     * It was kept in the simulator because I discovered this
+                     * bug only shortly before the competition. *sigh* oliver
+                     */
+                    od.mDist += salt::NormalRNG<>(0.0,mSigmaDist)();
+                    od.mTheta += salt::NormalRNG<>(0.0,mSigmaTheta)();
+                    od.mPhi += salt::NormalRNG<>(0.0,mSigmaPhi)();
+                }
+
             }
             visibleObjects.push_back(od);
         }
