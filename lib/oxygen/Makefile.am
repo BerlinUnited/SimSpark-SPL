@@ -1,13 +1,26 @@
 if DEBUG
 pkglib_LTLIBRARIES = liboxygen_debug.la
-liboxygen_debug_la_SOURCES = $(sources)
-liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall
-liboxygen_debug_la_LIBADD = -lode
+liboxygen_debug_la_SOURCES = $(sources) $(spades_sources)
+liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall -Woverloaded-virtual -Wno-deprecated 
+liboxygen_debug_la_LIBADD = -lode $(spades_libs)
 else
 pkglib_LTLIBRARIES = liboxygen.la
-liboxygen_la_SOURCES = $(sources)
-liboxygen_la_CXXFLAGS = -O2
-liboxygen_la_LIBADD = -lode
+liboxygen_la_SOURCES = $(sources) $(spades_sources)
+liboxygen_la_CXXFLAGS = -O2 -Wno-deprecated 
+liboxygen_la_LIBADD = -lode $(spades_libs)
+endif
+
+if BUILD_SPADES_MODULES
+spades_sources = \
+spadesserver/spadesserver.cpp \
+spadesserver/spadesserver_c.cpp
+spades_headers = \
+spadesserver/spadesserver.h
+spades_libs = -lspades
+else
+spades_sources =
+spades_headers =
+spades_libs =
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
@@ -90,5 +103,5 @@ sceneserver/scene.h \
 sceneserver/sceneserver.h \
 sceneserver/indexbuffer.h \
 sceneserver/transform.h \
-sceneserver/camera.h 
-
+sceneserver/camera.h \
+$(spades_headers)
