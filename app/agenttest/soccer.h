@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: soccer.h,v 1.1.2.5 2004/02/11 09:43:13 rollmark Exp $
+$Id: soccer.h,v 1.1.2.6 2004/02/11 11:21:30 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ protected:
     void CreateAgent();
     void InitAgent();
     void Kick(const float angle, const float power);
+    void Beam(const salt::Vector3f& position);
     void Drive(const salt::Vector3f& driveVec);
 
     const salt::Vector3f& GetDriveVec() { return mDriveVec; }

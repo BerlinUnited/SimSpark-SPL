@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: soccer.cpp,v 1.1.2.5 2004/02/11 09:44:07 rollmark Exp $
+$Id: soccer.cpp,v 1.1.2.6 2004/02/11 11:21:30 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -57,6 +57,25 @@ void Soccer::CreateAgent()
     mComm->PutOutput("A(create)");
 }
 
+void Soccer::Beam(const salt::Vector3f& position)
+{
+    GetLog()->Debug()
+        << "beaming ["
+        << position[0]
+        << " " << position[1]
+        << " " << position[2]
+        << "]\n";
+
+    stringstream ss;
+    ss << "A(beam "
+       << " " << position[0]
+       << " " << position[1]
+       << "  " << position[2]
+       << ")\n";
+
+    mComm->PutOutput(ss.str());
+}
+
 void Soccer::Kick(const float angle, const float power)
 {
     GetLog()->Debug()
@@ -85,6 +104,7 @@ void Soccer::Drive(const salt::Vector3f& driveVec)
             // no explicit change needed
             GetLog()->Debug()
                 << "not changing drive vector\n";
+            return;
         }
 
     stringstream ss;
