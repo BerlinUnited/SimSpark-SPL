@@ -69,8 +69,8 @@ def addAgent(aspectPath)
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
   dashEffector = new('DashEffector', aspectPath+'DashEffector')
-  dashEffector.setForceFactor(500.0);
-  dashEffector.setSigma(0.5);
+  dashEffector.setForceFactor(60.0);
+  dashEffector.setSigma(0.005);
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
   kickEffector.setForceFactor(4.0)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
@@ -81,6 +81,7 @@ def addAgent(aspectPath)
   # perceptor setup
   new('VisionPerceptor', aspectPath+'VisionPerceptor')
   new('GameStatePerceptor', aspectPath+'GameStatePerceptor')
+  new('AgentStatePerceptor', aspectPath+'AgentStatePerceptor')
 
 end
 
@@ -91,7 +92,7 @@ def addFlag(name,id,x,y,z)
   flag.setLocalPos(x,y,z)
   # object state
   state = new('ObjectState', $scenePath+fullname+'/ObjectState')
-  state.setName(name)
+  state.setPerceptName(name)
   state.setID(id)
 end
 
@@ -121,7 +122,7 @@ def addBall(x,y,z)
 
   # object state
   state = new('ObjectState', path+'ObjectState')
-  state.setName('Ball')
+  state.setPerceptName('Ball')
 end
 
 def addField()
