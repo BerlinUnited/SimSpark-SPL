@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.4 2004/02/02 17:12:41 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.5 2004/02/02 18:29:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "visionperceptor.h"
+#include <salt/random.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
@@ -27,28 +28,28 @@
 using namespace oxygen;
 using namespace boost;
 
-VisionPerceptor::VisionPerceptor() : oxygen::Perceptor(), mAddNoise(true)
+VisionPerceptor::VisionPerceptor() : oxygen::Perceptor(),
+                                     mAddNoise(true), mPredicateName("Vision")
 {
-    salt::UniformRNG<> rng(-0.005,0.005);
-    mError = salt::Vector3f(rng(),rng(),rng());
-
-    // we use small sigmas for generating small measurement errors
-    // normally distributed around 0.0.
-    // the sigmas should be set by script vars
-
-    // dist error values approx. between -0.5 and 0.5
-    mDistErrorRNG =
-        std::auto_ptr<salt::NormalRNG<> >(new salt::NormalRNG<>(0.0, 0.0965));
-    // angle error in X-Y plane, approx. between -0.65 and 0.64
-    mThetaErrorRNG =
-        std::auto_ptr<salt::NormalRNG<> >(new salt::NormalRNG<>(0.0, 0.1225));
-    // latitudal angle error, approx. between -0.8 and 0.8
-    mPhiErrorRNG =
-        std::auto_ptr<salt::NormalRNG<> >(new salt::NormalRNG<>(0.0, 0.1480));
+    // set some default noise values
+    SetNoiseParams(0.0965, 0.1225, 0.1480, 0.005);
 }
 
 VisionPerceptor::~VisionPerceptor()
 {
+}
+
+void
+VisionPerceptor::SetNoiseParams(float sigma_dist, float sigma_phi,
+                                float sigma_theta, float cal_error_abs)
+{
+    mSigmaDist = sigma_dist;
+    mSigmaPhi = sigma_phi;
+    mSigmaTheta = sigma_theta;
+    mCalErrorAbs = cal_error_abs;
+
+    salt::UniformRNG<float> rng(-mCalErrorAbs,mCalErrorAbs);
+    mError = salt::Vector3f(rng(),rng(),rng());
 }
 
 bool VisionPerceptor::ConstructInternal()
@@ -68,25 +69,13 @@ bool VisionPerceptor::ConstructInternal()
 bool
 VisionPerceptor::Percept(Predicate& predicate)
 {
-    predicate.name = "Vision";
+    predicate.name = mPredicateName;
     predicate.parameter.clear();
 
-    if (mSceneServer.get() == 0)
+    shared_ptr<Scene> activeScene;
+    if (!GetActiveScene(activeScene))
     {
-        mSceneServer = shared_static_cast<SceneServer>
-            (GetCore()->Get("/sys/server/scene"));
-    }
-
-    if (mSceneServer.get() == 0)
-    {
-        return false;
-    }
-
-    shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
-    if (activeScene.get() == 0)
-    {
-        GetLog()->Error()
-            << "ERROR: (VisionPerceptor) SceneServer reports no active scene\n";
+        GetLog()->Error() << "ERROR: (VisionPerceptor) no active scene\n";
         return false;
     }
 
@@ -94,14 +83,30 @@ VisionPerceptor::Percept(Predicate& predicate)
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
         (make_shared(GetParentSupportingClass("Transform")));
 
-    salt::Vector3f myPos(0,0,0);
     if (parent.get() == 0)
     {
-        GetLog()->Warning()
-            << "WARNING: (VisionPerceptor) parent node is not derived from TransformNode\n";
-    } else {
-        myPos = parent->GetWorldTransform().Pos();
+        GetLog()->Error()
+            << "Error: (VisionPerceptor) "
+            << "parent node is not derived from TransformNode\n";
+        return false;
     }
+
+    if (mAgentState.get() == 0)
+    {
+        mAgentState =
+            shared_static_cast<AgentState>(parent->GetChild("AgentState"));
+    }
+    TTeamIndex ti = TI_NONE;
+    if (mAgentState.get() != 0)
+    {
+        ti = mAgentState->GetTeamIndex();
+    }
+#define DEBUG_SIDE
+#ifdef DEBUG_SIDE
+    if (ti == TI_LEFT) predicate.parameter.push_back(std::string("(debug_message left)"));
+    else if (ti == TI_RIGHT) predicate.parameter.push_back(std::string("(debug_message right)"));
+#endif
+    salt::Vector3f myPos = parent->GetWorldTransform().Pos();
 
     TLeafList transformList;
     activeScene->GetChildrenSupportingClass("Transform", transformList, true);
@@ -114,7 +119,7 @@ VisionPerceptor::Percept(Predicate& predicate)
     {
         od.mVisible = true;
         shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
-        od.mRelPos = j->GetWorldTransform().Pos() - myPos;
+        od.mRelPos = FlipView(j->GetWorldTransform().Pos() - myPos, ti);
         if (mAddNoise) od.mRelPos += mError;
 
         od.mDist = od.mRelPos.Length();
@@ -129,9 +134,9 @@ VisionPerceptor::Percept(Predicate& predicate)
             // make some noise
             if (mAddNoise)
             {
-                od.mDist += (*mDistErrorRNG)();
-                od.mTheta += (*mThetaErrorRNG)();
-                od.mPhi += (*mPhiErrorRNG)();
+                od.mDist += salt::NormalRNG<>(0.0,mSigmaDist)();
+                od.mTheta += salt::NormalRNG<>(0.0,mSigmaTheta)();
+                od.mPhi += salt::NormalRNG<>(0.0,mSigmaPhi)();
             }
             visibleObjects.push_back(od);
         }
@@ -209,5 +214,48 @@ VisionPerceptor::CheckOcclusion(const salt::Vector3f& my_pos,
     }
 }
 
+bool
+VisionPerceptor::GetActiveScene(boost::shared_ptr<oxygen::Scene>& active_scene)
+{
+    if (mSceneServer.get() == 0)
+    {
+        mSceneServer = shared_static_cast<SceneServer>
+            (GetCore()->Get("/sys/server/scene"));
+    }
 
+    if (mSceneServer.get() == 0)
+    {
+        return false;
+    }
 
+    active_scene = mSceneServer->GetActiveScene();
+    if (active_scene.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (VisionPerceptor) SceneServer reports no active scene\n";
+        return false;
+    }
+    return true;
+}
+
+salt::Vector3f
+VisionPerceptor::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
+{
+    salt::Vector3f newPos;
+    switch (ti) {
+    case TI_NONE:
+        newPos[0] = 0.0;
+        newPos[1] = 0.0;
+        newPos[2] = 0.0;
+        break;
+    case TI_LEFT:
+        newPos[0] = -pos[0];
+        newPos[1] = pos[1];
+        newPos[2] = -pos[2];
+        break;
+    case TI_RIGHT:
+        newPos = pos;
+        break;
+    }
+    return newPos;
+}
