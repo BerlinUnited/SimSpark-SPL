@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.11 2004/04/23 13:26:18 fruit Exp $
+   $Id: spadesserver.cpp,v 1.12 2004/04/23 13:31:27 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,8 +41,7 @@ using namespace std;
 SpadesServer::SpadesServer() :
     zeitgeist::Node(), spades::WorldModel(),
     mSimEngine(0), mSimulationModeChanged(false),
-    mOffsetCreateSense(0),mNextInitialCreateSense(0),
-    mStartUpHookTime(10)
+    mOffsetCreateSense(0),mNextInitialCreateSense(0)
 {
 }
 
