@@ -11,7 +11,7 @@ using namespace zeitgeist;
 
 char gCurrentReadLine[1024];
 
-bool ReadLine(const shared_ptr<RFile> &fp)
+bool ReadLine(const shared_ptr<salt::RFile> &fp)
 {
    int pos = 0;
 
@@ -58,7 +58,7 @@ bool MD5Mesh::Load(const std::string &name)
                 return false;
         }
 
-        shared_ptr<RFile> file(fileServer->Open(name.c_str()));
+        shared_ptr<salt::RFile> file(fileServer->Open(name.c_str()));
 
         if (file.get() == NULL)
         {
@@ -267,7 +267,7 @@ bool MD5Mesh::LoadAnimation(const std::string &name)
                 return false;
         }
 
-        shared_ptr<RFile> file(fileServer->Open(name.c_str()));
+        shared_ptr<salt::RFile> file(fileServer->Open(name.c_str()));
 
         if (file.get() == NULL)
         {
