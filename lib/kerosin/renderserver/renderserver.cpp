@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.18 2004/04/27 10:00:46 rollmark Exp $
+$Id: renderserver.cpp,v 1.19 2004/04/28 14:44:14 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -84,6 +84,7 @@ RenderServer::OnUnlink()
 {
     mSceneServer.reset();
     mOpenGLServer.reset();
+    mActiveScene.reset();
 }
 
 bool
