@@ -1,5 +1,4 @@
 #include "survivalcontrolaspect.h"
-#include "survivalagentaspect.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <kerosin/fontserver/fontserver.h>
 #include <kerosin/openglserver/openglserver.h>
@@ -12,11 +11,12 @@ using namespace zeitgeist;
 
 shared_ptr<Effector> SurvivalControlAspect::RequestEffectorInternal(shared_ptr<AgentAspect>& agent, const string& effectorName)
 {
-	// always make sure, we know how to treat an agent class
-	if (agent->GetClass()->Supports("SurvivalAgentAspect"))
+	if (
+			(RegisterAgent(agent)) &&
+			(effectorName.compare("kerosin/ForceEffector") == 0)
+		)
 	{
-		if (effectorName.compare("kerosin/ForceEffector") == 0)
-			return CreateEffector(effectorName);
+		return CreateEffector(effectorName);
 	}
 
 	// no valid agentaspect/effector combination
@@ -25,17 +25,55 @@ shared_ptr<Effector> SurvivalControlAspect::RequestEffectorInternal(shared_ptr<A
 
 boost::shared_ptr<Perceptor> SurvivalControlAspect::RequestPerceptorInternal(boost::shared_ptr<AgentAspect>& agent, const std::string& perceptorName)
 {
-	// always make sure, we know how to treat an agent class
-	if (agent->GetClass()->Supports("SurvivalAgentAspect"))
+	if (
+			(RegisterAgent(agent)) &&
+			(agent->GetClass()->Supports("SurvivalAgentAspect"))
+		)
 	{
 		if (perceptorName.compare("LineSegmentPerceptor") == 0)
+		{
 			return CreatePerceptor(perceptorName);
+		}
+		
 		if (perceptorName.compare("kerosin/VisionPerceptor") == 0)
+		{
 			return CreatePerceptor(perceptorName);
+		}
 	}
 
 	// no valid agentaspect/effector combination
 	return shared_ptr<Perceptor>();
+}
+
+bool SurvivalControlAspect::RegisterAgent(shared_ptr<AgentAspect>& agent)
+{
+	for (ControlledAgentList::iterator i = mControlledAgents.begin();i != mControlledAgents.end(); ++i)
+	{
+		if ((*i).agent == agent)
+		{
+			// we already know this agent
+			return true;
+		}
+	}
+
+	// it's a new agent, make sure, we know how to treat an agent class
+	if (! agent->GetClass()->Supports("SurvivalAgentAspect"))
+	{
+		return false;
+	}
+
+	// it's new and valid, remember it
+	AgentControlState state;
+
+	state.agent			= shared_ptr<SurvivalAgentAspect>(dynamic_cast<SurvivalAgentAspect*>(agent.get()));
+	state.healthInit	= 100;
+	state.health		= state.healthInit;
+	state.death			= 0;
+	state.hasFood		= false;
+
+	mControlledAgents.push_back(state);
+
+	return true;
 }
 
 /*bool SurvivalControlAspect::ConstructInternal()
@@ -47,84 +85,87 @@ boost::shared_ptr<Perceptor> SurvivalControlAspect::RequestPerceptorInternal(boo
 
 void SurvivalControlAspect::PrePhysicsUpdateInternal(float deltaTime)
 {
-	mHealthSlow -= mSickRate*deltaTime;
-	mHealthFast -= mSickRate*deltaTime;
+	shared_ptr<BaseNode> food	= shared_static_cast<BaseNode>(GetCore()->Get("/usr/scene/food"));
+	Vector3f foodPos;
 
-	if (mHealthSlow < 0.0f)
+	if (food.get() != NULL)
 	{
-		mHealthSlow = 100.0f;
-		mDeathSlow++;
+		foodPos = food->GetWorldTransform().Pos();
 	}
 
-	if (mHealthFast < 0.0f)
+	int hasFoodCount = 0;
+
+	// update all registered agents
+	for (ControlledAgentList::iterator i = mControlledAgents.begin();i != mControlledAgents.end(); ++i)
 	{
-		mHealthFast = 100.0f;
-		mDeathFast++;
+		AgentControlState& state = (*i);
+
+		// decrease the health of the agent
+		state.health -= (mSickRate * deltaTime);
+		if (state.health < 0.0f)
+		{
+			state.health = state.healthInit;
+			state.death++;
+		}
+
+		// check if it is close enough to the food
+		if (food.get() != NULL)
+		{
+			Vector3f dist = state.agent->GetWorldTransform().Pos() - foodPos;
+			if (dist.Length() < mFoodMinDist)
+			{
+				// the agent touched the food
+				state.hasFood = true;
+				hasFoodCount++;
+
+				GetCore()->GetLogServer()->Normal().Printf("has food = %d\n",hasFoodCount);
+			} else
+			{
+				state.hasFood = false;
+			}
+		}
 	}
 
-	// check if an agent is close enough to eat the food
-	shared_ptr<BaseNode> slow = shared_static_cast<BaseNode>(GetCore()->Get("/usr/scene/slow"));
-	shared_ptr<BaseNode> fast = shared_static_cast<BaseNode>(GetCore()->Get("/usr/scene/fast"));
-	shared_ptr<BaseNode> food = shared_static_cast<BaseNode>(GetCore()->Get("/usr/scene/food"));
-
-	Vector3f	dist;
-	bool		slowHasIt = false;
-	bool		fastHasIt = false;
-
-	dist = slow->GetWorldTransform().Pos() - food->GetWorldTransform().Pos();
-	if (dist.Length() < 2.0f)
+	if (hasFoodCount > 0)
 	{
-		slowHasIt = true;
-	}
+		GetCore()->GetLogServer()->Normal().Printf("reposition food, %d ",hasFoodCount);
 
-	dist = fast->GetWorldTransform().Pos() - food->GetWorldTransform().Pos();
-	if (dist.Length() < 2.0f)
-	{
-		fastHasIt = true;
-	}
-
-	if (slowHasIt && fastHasIt)
-	{
-		// only give both half the health
-		mHealthSlow += 50.0f;
-		mHealthFast += 50.0f;
-	}
-	else
-	{
-		if (slowHasIt) mHealthSlow = 100.0f;
-		if (fastHasIt) mHealthFast = 100.0f;
-	}
-
-	if (mHealthSlow > 100.0f) mHealthSlow = 100.0f;
-	if (mHealthFast > 100.0f) mHealthFast = 100.0f;
-
-	// if the food was eaten, we reposition it
-	if (slowHasIt || fastHasIt)
-	{
+		// if the food was eaten, we reposition it
 		Vector3f newPos;
-		newPos.x() = 20.0f*(1.0f-2.0f*rand()/(float)RAND_MAX);
-		newPos.y() = 1.0f;
-		newPos.z() = 20.0f*(1.0f-2.0f*rand()/(float)RAND_MAX);
-		Matrix mat = food->GetWorldTransform();
-		mat.Pos() = newPos;
+		newPos.x()	= 20.0f*(1.0f-2.0f*rand()/(float)RAND_MAX);
+		newPos.y()	= 1.0f;
+		newPos.z()	= 20.0f*(1.0f-2.0f*rand()/(float)RAND_MAX);
+
+		Matrix mat	= food->GetWorldTransform();
+		mat.Pos()	= newPos;
 		food->SetLocalTransform(mat);
 
-		// also set both agents to not seeking
-		shared_static_cast<SurvivalAgentAspect>(GetCore()->Get("/usr/scene/slow/_agent"))->SetIsSeeking(false);
-		shared_static_cast<SurvivalAgentAspect>(GetCore()->Get("/usr/scene/fast/_agent"))->SetIsSeeking(false);
+		// distribute the food among the agents
+		const float divFoodValue = mFoodValue / hasFoodCount;
+
+		for (ControlledAgentList::iterator i = mControlledAgents.begin();i != mControlledAgents.end(); ++i)
+		{
+			AgentControlState& state = (*i);
+			
+			if (state.hasFood)
+			{
+				state.hasFood = false;
+				state.health += divFoodValue;
+
+				// set the agent to not seeking as 
+				// the food was repositioned
+				state.agent->SetIsSeeking(false);
+			}
+		}
 	}
 }
 
 void SurvivalControlAspect::OnLink()
 {
 	// init variables
-	mDeathSlow = 0;
-	mDeathFast = 0;
-
-	mHealthSlow = 100;
-	mHealthFast = 100;
-
-	mSickRate = 6;
+	mSickRate		= 6.0f;
+	mFoodMinDist	= 2.0f;
+	mFoodValue		= 100.0f;
 
 	shared_ptr<FontServer> fontServer = shared_static_cast<FontServer>(GetCore()->Get("/sys/server/font"));
 	mFont = fontServer->GetFont("font/andalemo.ttf", 14);
@@ -134,14 +175,28 @@ void SurvivalControlAspect::RenderInternal()
 {
 	shared_ptr<FontServer> fontServer = shared_static_cast<FontServer>(GetCore()->Get("/sys/server/font"));
 
-	if (fontServer.get() != NULL)
+	if (fontServer.get() == NULL)
 	{
-		fontServer->Begin();
-		mFont->Bind();
-		glColor3f(1,0,0);
-		mFont->Printf(0, 0, "Slow: %03.0f (%d)", mHealthSlow, mDeathSlow);
-		mFont->Printf(0, 20, "Fast: %03.0f (%d)", mHealthFast, mDeathFast);
-		glColor3f(1,1,1);
-		fontServer->End();
+		return;
 	}
+
+	fontServer->Begin();
+	mFont->Bind();
+	glColor3f(1,0,0);
+
+	// print all registered agents
+	const float lineHeight = 20;
+	float y = 0;
+
+	for (ControlledAgentList::iterator i = mControlledAgents.begin();i != mControlledAgents.end(); ++i)
+	{
+		const AgentControlState& state = (*i);
+		shared_ptr<Leaf> parent = make_shared(state.agent->GetParent());
+
+		mFont->Printf(0, y, "%8s: %.0f (%d)", parent->GetName().c_str(), state.health, state.death);
+		y+= lineHeight;
+	}
+	
+	glColor3f(1,1,1);	
+	fontServer->End();
 }
