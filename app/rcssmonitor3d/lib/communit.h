@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.h,v 1.2 2004/03/19 15:59:36 rollmark Exp $
+   $Id: communit.h,v 1.3 2004/04/16 15:26:50 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #ifndef _COMMUNIT_H
-#define _COMMUNIt_H
+#define _COMMUNIT_H
 
 #include <string>
-#include "tcpsocket.h"
-#include <rcssbase/net/socketstreambuf.hpp>
+#include <rcssnet/tcpsocket.hpp>
+#include <rcssnet/socketstreambuf.hpp>
 
 class CommUnit
 {
@@ -46,4 +46,4 @@ protected:
     std::istream mInStream;
 };
 
-#endif // _COMMUNIt_H
+#endif // _COMMUNIT_H

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.cpp,v 1.2 2004/03/19 15:59:36 rollmark Exp $
+   $Id: communit.cpp,v 1.3 2004/04/16 15:27:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include "types.h"
 #include <netinet/in.h>
 #include <iostream>
-#include <rcssbase/net/exception.hpp>
+#include <rcssnet/exception.hpp>
 
 using namespace std;
 using namespace rcss::net;
