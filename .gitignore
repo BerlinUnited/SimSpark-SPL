@@ -78,9 +78,6 @@ lib/kerosin/Makefile
 lib/kerosin/Makefile.in
 lib/kerosin/libkerosin*.la
 lib/kerosin/libkerosin*.lo
-lib/kerosin/agentaspect/*.lo
-lib/kerosin/agentaspect/.deps
-lib/kerosin/agentaspect/.dirstamp
 lib/kerosin/fontserver/*.lo
 lib/kerosin/fontserver/.deps
 lib/kerosin/fontserver/.dirstamp
