@@ -1,6 +1,50 @@
+2003-08-30  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/Makefile.am: 
+	- build a release version or a debug version of the library 
+	  dependent on the switch used during configure time 
+	- install the library headers 
+	  below $(includedir)/rcssserver3d/zeitgeist
+
+	* lib/salt/Makefile.am: 
+	- install the library headers below $(includedir)/rcssserver3d/salt
+
+	* lib/oxygen/Makefile.am: 
+	- build a release version or a debug version of the library 
+	  dependent on the switch used during configure time 
+	- install the library headers below $(includedir)/rcssserver3d/oxygen
+
+	* lib/kerosin/Makefile.am: 
+	- build a release version or a debug version of the library 
+	  dependent on the switch used during configure time 
+	- install the library headers below $(includedir)/rcssserver3d/kerosin
+
+	* configure.ac: - enable debug build by default
+
 2003-08-30  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* ./lib/oxygen/physicsserver/
 	- added copyleft and some comments
+
+2003-08-29  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/Makefile.am: 
+	- removed 'camera' from sceneserver in the Makefile.am because it 
+	  needs OpenGL 
+	- removed 'indexbuffer' from sceneserver in the Makefile.am because it 
+	  needs OpenGL 
+	- removed posbody.h from physicsserver because it was empty anyway
+
+	* lib/oxygen/sceneserver/fpscontroller.cpp: changed a float
+	pointer to an ODE dReal pointer to make gcc compile it
+
+	* lib/oxygen/sceneserver/basenode.cpp: 
+	- basenode has been including the openglserver. liboxygen should be 
+	independent of OpenGL, so this has been commented out.  
+	- methods ::Render() and ::RenderAmbient() do some GL stuff. 
+	These parts have been commented out to make everything compile.
+
+	* lib/oxygen/physicsserver/body.cpp: 
+	changed two float pointers to ODE dReal pointers to make gcc compile it
 
 2003-08-28  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* ./lib/kerosin/agentaspect/perceptor_c.cpp
@@ -64,7 +108,6 @@
 	- using config.h
 	- replaced #ifdef HAVE_HASH_MAP by #if HAVE_HASH_MAP	
 
->>>>>>> 1.38
 2003-08-28  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/leaf.cpp, lib/zeitgeist/object.cpp: 

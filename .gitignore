@@ -33,6 +33,9 @@ lib/Makefile.in
 lib/kerosin/.deps
 lib/kerosin/Makefile
 lib/kerosin/Makefile.in
+lib/kerosin/agentaspect/*.lo
+lib/kerosin/agentaspect/.deps
+lib/kerosin/agentaspect/.dirstamp
 lib/kerosin/controlaspect/*.lo
 lib/kerosin/controlaspect/.deps
 lib/kerosin/controlaspect/.dirstamp
