@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.2.2.2 2003/12/26 16:26:53 fruit Exp $
+   $Id: spadesserver.h,v 1.3.2.1 2004/01/25 11:39:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,14 +26,14 @@
 #include <spades/SimEngine.hpp>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
-#include <oxygen/monitorserver/monitorserver.h>
 #include "paramreader.h"
 #include <queue>
 
 namespace oxygen
 {
-
 class GameControlServer;
+class MonitorServer;
+class SceneServer;
 
 /*! The SpadesServer serves as an interface between the SceneServer and the agents
  */
@@ -49,9 +49,15 @@ public:
     // Methods with a initial capital letter are additional methods needed
     // for the zeitgeist framework.
 
-    /** called after the object has been created and attached to a
-        core to allow for object dependent internal construction */
+    /** setup script variables used to customize the SpadesServer
+     */
     virtual bool ConstructInternal();
+
+    /** set up GameControlServer and MonitorServer reference */
+    virtual void OnLink();
+
+    /** reset GameControlServer and MonitorServer reference */
+    virtual void OnUnlink();
 
     /** helper function to locate the game control server */
     boost::shared_ptr<GameControlServer> GetGameControlServer() const;
@@ -203,9 +209,6 @@ protected:
     */
     void StartAgents(const AgentItem& ai);
 
-    /** helper function to locate the monitor server */
-    boost::shared_ptr<MonitorServer> GetMonitorServer();
-
 private:
     /** the Spades simulation engine */
     spades::SimEngine* mSimEngine;
@@ -221,6 +224,15 @@ private:
 
     /** a queue of agents to be started up */
     std::queue<AgentItem> mAgentQueue;
+
+    /** a cached reference to the monitor server */
+    boost::shared_ptr<MonitorServer> mMonitorServer;
+
+    /** a cached reference to the GameControlServer */
+    boost::shared_ptr<GameControlServer> mGameControlServer;
+
+    /** a cached reference to the SceneServer */
+    boost::shared_ptr<SceneServer> mSceneServer;
 };
 
 DECLARE_CLASS(SpadesServer);
