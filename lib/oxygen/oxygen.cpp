@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.cpp,v 1.5.2.2 2004/01/12 16:55:06 rollmark Exp $
+   $Id: oxygen.cpp,v 1.5.2.3 2004/01/25 11:55:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     // collision handler
     zg.GetCore()->RegisterClassObject(new CLASS(CollisionHandler), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(ContactJointHandler), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(RecorderHandler), "kerosin/");
 
     // agentaspect
     zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "kerosin/");
