@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.3 2004/04/30 09:39:41 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.4 2004/05/01 13:47:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 using namespace kerosin;
 using namespace oxygen;
+using namespace zeitgeist;
 using namespace boost;
 using namespace salt;
 using namespace std;
@@ -162,26 +163,35 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
                 ss << "(node StaticMesh";
             }
 
-    const shared_ptr<TriMesh> triMesh = mesh->GetMesh();
-    if (triMesh.get() != 0)
+    ss << " (load " << mesh->GetMeshName();
+
+    const ParameterList& params = mesh->GetMeshParameter();
+    for (
+         ParameterList::TVector::const_iterator iter = params.begin();
+         iter != params.end();
+         ++iter
+         )
         {
-            // mangled CCylinder ??
-            ss << " (load " << triMesh->GetName() << ")";
+            string str;
+            params.GetValue(iter,str);
+            ss << " " << str;
+        }
 
-            const Vector3f& scale = mesh->GetScale();
+    ss << ")";
 
-            ss << " (setScale "
-               << scale[0] << " "
-               << scale[1] << " "
-               << scale[2] << ")";
+    const Vector3f& scale = mesh->GetScale();
 
-            if (singleMat.get() != 0)
+    ss << " (setScale "
+       << scale[0] << " "
+       << scale[1] << " "
+       << scale[2] << ")";
+
+    if (singleMat.get() != 0)
+        {
+            shared_ptr<Material> mat = singleMat->GetMaterial();
+            if (mat.get() != 0)
                 {
-                    shared_ptr<Material> mat = singleMat->GetMaterial();
-                    if (mat.get() != 0)
-                        {
-                            ss << " (setMaterial " << mat->GetName() << ")";
-                        }
+                    ss << " (setMaterial " << mat->GetName() << ")";
                 }
         }
 }
