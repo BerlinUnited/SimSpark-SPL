@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.4 2004/03/09 21:23:28 rollmark Exp $
+   $Id: main.cpp,v 1.5 2004/03/10 20:51:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,13 +24,14 @@
    This is a very simple 3D monitor example which will hopefully be
    useful for the first steps of 3D SoccerServer
 */
-#include "glserver.h"
-#include "commserver.h"
-#include "types.h"
+#include <types.h>
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
 #include <sstream>
 #include <soccertypes.h>
+#include <monitorparser.h>
+#include "glserver.h"
+#include "commserver.h"
 
 using namespace std;
 using namespace boost;
@@ -42,6 +43,9 @@ using namespace oxygen;
 #endif
 
 //--------------------------Globals---------------------------------------
+//
+// simply prints options to the screen
+//-----------------------------------------------------------------------
 
 // open-gl server
 GLServer gGLServer;
@@ -49,8 +53,8 @@ GLServer gGLServer;
 // communication Server
 boost::shared_ptr<CommServer> gCommServer;
 
-// last parsed predicates
-shared_ptr<Predicate::TList> gPredicates;
+// last parsed expressions
+MonitorParser::TExprList gExprList;
 
 // monitor port
 int gPort           = DEFAULT_PORT;
@@ -72,122 +76,41 @@ bool gDrawUnums     = DEFAULT_DRAW_UNUMS;
 const int gWidth    = DEFAULT_WIDTH;
 const int gHeight   = DEFAULT_HEIGHT;
 
-// field Info:
-// soccer field size
-float gFieldLength  = DEFAULT_FIELD_LENGTH;
-float gFieldWidth   = DEFAULT_FIELD_WIDTH;
-float gFieldHeight  = DEFAULT_FIELD_HEIGHT;
-
-float gBorderSize   = DEFAULT_BORDER_SIZE;
-float gLineWidth    = DEFAULT_LINE_WIDTH;
-
-// goal box size
-float gGoalWidth    = DEFAULT_GOAL_WIDTH;
-float gGoalDepth    = DEFAULT_GOAL_DEPTH;
-float gGoalHeight   = DEFAULT_GOAL_HEIGHT;
-
 // camera step size
 const float gCamDelta = 0.5f;
 
 // game state data
-string gTeamL       = "teamL";
-string gTeamR       = "teamR";
-float gTime         = 0.0f;
-int gHalf           = 1;
-int gScoreL         = 0;
-int gScoreR         = 0;
-int gPlayMode       = PM_BeforeKickOff;
+GameState gGameState;
 
-// possible s-expression classes
-enum ObjClass
-    {
-        OC_SPHERE, // a sphere to be drawn
-        OC_TEAML,  // team name left
-        OC_TEAMR,  // team name right
-        OC_HALF,   // half time (1 or 2)
-        OC_TIME,   // game time in seconds
-        OC_SCOREL,   // score of left team
-        OC_SCORER,  // score of right team
-        OC_PLAYMODE,  // playmode
-    };
+// game parameter data
+GameParam gGameParam;
 
-// obect type description
-static const struct ObjType
+// the parser instance
+MonitorParser gParser;
+
+// sphere types description
+struct SphereType
 {
-    string type;
-    ObjClass obj;
     float color[4];
     float size;
-} typeMap[] =
+
+    SphereType(const float* c, float s)
     {
-        // sphere types
-        {
-            "agent",
-            OC_SPHERE,
-            {0.8f, 0.8f, 0.2f, 1.0f},
-            0.22f
-        },
-        {
-            "flag",
-            OC_SPHERE,
-            {1.0f, 0, 0, 1.0f},
-            0.5f
-        },
-        {
-            "ball",
-            OC_SPHERE,
-            {1.0f, 1.0f, 1.0f, 1.0f},
-            0.111f
-        },
-        {
-            "ballAgent",
-            OC_SPHERE,
-            {1.0f, 1.0f, 1.0f, 1.0f},
-            0.22f
-        },
-        {
-            "teamL",
-            OC_TEAML,
-            {1.0f, 1.0f, 1.0f},
-            1.0f
-        },
-        {
-            "teamR",
-            OC_TEAMR,
-            {1.0f, 1.0f, 1.0f},
-            1.0f
-        },
-        {
-            "half",
-            OC_HALF,
-            {1.0f, 1.0f, 1.0f},
-            1.0f
-        },
-        {
-            "time",
-            OC_TIME,
-            {1.0f, 1.0f, 1.0f},
-            1.0f
-        },
-        {
-            "scoreL",
-            OC_SCOREL,
-            {1.0f, 1.0f, 1.0f},
-            1.0f
-        },
-        {
-            "scoreR",
-            OC_SCORER,
-            {1.0f, 1.0f, 1.0f},
-            1.0f
-        },
-        {
-            "playMode",
-            OC_PLAYMODE,
-            {1.0f, 1.0f, 1.0f},
-            1.0f
-        }
-    };
+        size = s;
+        for (int i=0;i<4;++i) color[i] = c[i];
+    }
+
+    SphereType()
+    {
+        for (int i=0;i<4;++i) color[i] = 1.0f;
+        size = 1.0f;
+    }
+
+};
+
+// mapping from a MonitorParser expression type to a sphere description
+typedef std::map<MonitorParser::EExprType, SphereType> TSphereMap;
+TSphereMap gSphereMap;
 
 // color for player of the different teams
 const float gTeamLColor[4] = {1.0f, 0.2f, 0.2f, 1.0f};
@@ -239,248 +162,78 @@ void processInput(int argc, char* argv[])
     }
 }
 
-//----------------------getObjectParam---------------------------------------
-//
-// Reads the parameters for an object with given name from given predicate
-//---------------------------------------------------------------------------
-bool getObjectParam(const Predicate& predicate, const string& name, float& value)
-{
-  // find the PerfectVision data about the object
-  Predicate::Iterator objIter(predicate);
-
-  // advance to the section about object 'name'
-  if (! predicate.FindParameter(objIter,name))
-    {
-      return false;
-    }
-
-  // read the position vector
-  if (! predicate.GetValue(objIter,value))
-    {
-      return false;
-    }
-
-  return true;
-}
-
-//----------------------parseInfoHeader------------------------------------
-//
-// parses the game parameters sent by the server during the init sequence
-//-------------------------------------------------------------------------
-bool parseInfoHeader()
-{
-    // true if we received an init
-    bool recvInit = false;
-
-    // check if we received something
-    if (gPredicates.get() == 0)
-        {
-            return false;
-        }
-
-    // first look for "(init (...))"
-    // then read the inner breakets
-    for (
-         Predicate::TList::const_iterator iter = gPredicates->begin();
-         iter != gPredicates->end();
-         ++iter
-         )
-        {
-            const Predicate& predicate = (*iter);
-
-            // check if it's the init information
-            // if so, remember that we received an init
-            if (predicate.name != "init")
-                {
-                    continue;
-                }
-            else recvInit = true;
-
-            //parse object params
-            getObjectParam(predicate, "FieldLength", gFieldLength);
-            getObjectParam(predicate, "FieldWidth",  gFieldWidth);
-            getObjectParam(predicate, "FieldHeigth", gFieldHeight);
-            getObjectParam(predicate, "GoalWidth",   gGoalWidth);
-            getObjectParam(predicate, "GoalDepth",   gGoalDepth);
-            getObjectParam(predicate, "GoalHeight",  gGoalHeight);
-            getObjectParam(predicate, "BorderSize",  gBorderSize);
-        }
-    // parsing successful
-    return recvInit;
-}
-
-//---------------------------parseGameState--------------------------------------
-//
-//-------------------------------------------------------------------------------
-void parseGameState(const Predicate& predicate, const ObjType& type)
-{
-    Predicate::Iterator param(predicate);
-
-    switch (type.obj)
-        {
-        case OC_TEAML :
-            {
-                std::string teaml;
-                if (predicate.GetValue(param,teaml))
-                    {
-                        gTeamL = teaml;
-                    }
-                break;
-            }
-        case OC_TEAMR :
-            {
-                std::string teamr;
-                if (predicate.GetValue(param,teamr))
-                    {
-                        gTeamR = teamr;
-                    }
-                break;
-            }
-        case OC_HALF :
-            {
-                int half;
-                if (predicate.GetValue(param,half))
-                    {
-                        gHalf = half;
-                    }
-                break;
-            }
-        case OC_TIME :
-            {
-                float time;
-                if (predicate.GetValue(param,time))
-                    {
-                        gTime = time;
-                    }
-                break;
-            }
-        case OC_SCOREL :
-            {
-                int score;
-                if (predicate.GetValue(param,score))
-                    {
-                        gScoreL = score;
-                    }
-                break;
-            }
-        case OC_SCORER :
-            {
-                int score;
-                if (predicate.GetValue(param,score))
-                    {
-                        gScoreR = score;
-                    }
-                break;
-            }
-        case OC_PLAYMODE :
-            {
-                int mode;
-                if (predicate.GetValue(param,mode))
-                    {
-                        gPlayMode = mode;
-                    }
-                break;
-            }
-
-        default:
-            break;
-        }
-}
-
 //---------------------------drawObject------------------------------------------
 //
+// draws a sphere object
 //-------------------------------------------------------------------------------
-void drawObject(const Predicate& predicate, const ObjType& type)
+void drawObject(const SphereType& type, const MonitorParser::Expression& expr)
 {
-    Predicate::Iterator param(predicate);
-    if (! predicate.FindParameter(param, "pos"))
-        {
-            return;
-        }
-
-    salt::Vector3f pos;
-    if (! predicate.GetValue(param,pos))
-        {
-            return;
-        }
-
     const float* color = type.color;
-    int unum = 0;
 
-    if (predicate.name == "ball")
+    switch (expr.etype)
         {
+        case MonitorParser::ET_BALL:
             // if 'automatic-camera' is on
             // we set the camera to look at the ball
             if (gAutoCam)
                 {
-                    gGLServer.SetLookAtPos(pos);
+                    gGLServer.SetLookAtPos(expr.pos);
                 }
-        }
-    else if (predicate.name == "agent")
-        {
+            break;
+
+        case MonitorParser::ET_AGENT:
             // team
-            Predicate::Iterator teamIter(predicate);
-            if (predicate.FindParameter(teamIter, "team"))
-            {
-                string team;
-                if (predicate.GetValue(teamIter,team))
+            switch (expr.team)
                 {
-                    switch (team[0])
-                        {
-                        default:
-                        case 'N' :
-                            // keep default color
-                            break;
+                case TI_LEFT:
+                    color = gTeamLColor;
+                    break;
 
-                        case 'L' :
-                            color = gTeamLColor;
-                            break;
+                case TI_RIGHT:
+                    color = gTeamRColor;
+                    break;
 
-                        case 'R' :
-                            color = gTeamRColor;
-                            break;
-                        }
+                default:
+                    // keep default color
+                    break;
                 }
-            }
+            break;
 
-
-            // uniform number
-            Predicate::Iterator unumIter(predicate);
-            if (predicate.FindParameter(unumIter, "unum"))
-                {
-                    predicate.GetValue(unumIter,unum);
-                }
+        default:
+            return;
         }
 
     glColor4fv(color);
-    gGLServer.DrawSphere(pos, type.size);
-    gGLServer.DrawShadowOfSphere(pos, type.size);
+    gGLServer.DrawSphere(expr.pos, type.size);
+    gGLServer.DrawShadowOfSphere(expr.pos, type.size);
 
     if (
         (gDrawUnums) &&
-        (unum > 0)
+        (expr.unum > 0)
         )
         {
             glColor3f   ( 1.0, 1.0, 1.0  );
             stringstream ss;
-            ss << unum;
-            gGLServer.DrawText3D(ss.str().c_str(),pos);
+            ss << expr.unum;
+            gGLServer.DrawText3D(ss.str().c_str(),expr.pos);
         }
 }
 
 //---------------------------DrawStatusText--------------------------------------
 //
+// draws a text, describing the current game state
 //-------------------------------------------------------------------------------
 void drawStatusText()
 {
     stringstream ss;
 
-    ss << gTeamL << " " << gScoreL << ":"
-       << gScoreR << " " << gTeamR << " ";
-    ss << "(" << ((gHalf == 1) ? "first" : "second") << " half) ";
+    ss << gGameState.GetTeamL() << " " << gGameState.GetScoreL() << ":"
+       << gGameState.GetScoreR() << " " << gGameState.GetTeamR() << " ";
+    ss << "(" << ((gGameState.GetHalf() == 1) ?
+                  "first" : "second") << " half) ";
 
     string mode;
-    switch (gPlayMode)
+    switch (gGameState.GetPlayMode())
         {
         case    PM_BeforeKickOff:
             mode = STR_PM_BeforeKickOff;
@@ -512,65 +265,38 @@ void drawStatusText()
         default:
             mode = STR_PM_Unknown;
             break;
-
             }
+
     ss << mode << " ";
-    ss << "t=" << gTime;
+    ss << "t=" << gGameState.GetTime();
 
     glColor3f   ( 1.0, 1.0, 1.0  );
-    //    gGLServer.DrawText(ss.str().c_str(),Vector2f( -0.99, 0.97));
     gGLServer.DrawTextPix(ss.str().c_str(),Vector2f( 0, gGLServer.GetTextHeight()));
 }
 
-
 //----------------------drawScene----------------------------------------------
 //
-// Draws all object in given predicate onto the screen
-//------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+
 void drawScene()
 {
-    static int typeCount = sizeof(typeMap)/sizeof(ObjType);
-
-    if (gPredicates.get() == 0)
-        {
-            return;
-        }
-
-    // color and size setup
-    typedef GLfloat TColor[4];
-
     for (
-         Predicate::TList::const_iterator iter = gPredicates->begin();
-         iter != gPredicates->end();
-         ++iter
-         )
+         MonitorParser::TExprList::iterator iter = gExprList.begin();
+         iter != gExprList.end();
+         ++iter)
         {
-            const Predicate& predicate = (*iter);
+            MonitorParser::Expression& expr = (*iter);
 
-            int idx;
-            for (idx=0;idx<typeCount;++idx)
+            TSphereMap::iterator iter = gSphereMap.find(expr.etype);
+
+            if (iter == gSphereMap.end())
                 {
-                    const ObjType& type = typeMap[idx];
-
-                    if (type.type == predicate.name)
-                        {
-                            break;
-                        }
-                }
-
-            if (idx == typeCount)
-                {
+                    // no corresponding sphere description found,
+                    // unknown entry or a gamestate expression
                     continue;
                 }
 
-            const ObjType& type = typeMap[idx];
-            if (type.obj == OC_SPHERE)
-                {
-                    drawObject(predicate,type);
-                } else
-                    {
-                        parseGameState(predicate,type);
-                    }
+            drawObject((*iter).second,expr);
         }
 }
 
@@ -581,8 +307,16 @@ void drawScene()
 //------------------------------------------------------------------------
 void display(void)
 {
-   const Vector3f szGoal1(-gGoalDepth,gGoalWidth,gGoalHeight);
-   const Vector3f szGoal2(gGoalDepth,gGoalWidth,gGoalHeight);
+   const Vector3f szGoal1(
+                          -gGameParam.GetGoalDepth(),
+                          gGameParam.GetGoalWidth(),
+                          gGameParam.GetGoalHeight()
+                          );
+   const Vector3f szGoal2(
+                          gGameParam.GetGoalDepth(),
+                          gGameParam.GetGoalWidth(),
+                          gGameParam.GetGoalHeight()
+                          );
 
    // color constants
    const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
@@ -591,34 +325,43 @@ void display(void)
    const GLfloat lineColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
 
    glClearColor(0.15f,0.15f,0.3f,1.0f);
-
    glClear (GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
    glColor3f (1, 1, 1);
 
    glLoadIdentity();
-
    gGLServer.ApplyCamera();
+
+   const float& fl = gGameParam.GetFieldLength();
+   const float& fw = gGameParam.GetFieldWidth();
+   const float& fh = gGameParam.GetFieldHeight();
+   const float& lw = gGameParam.GetLineWidth();
+   const float& bs = gGameParam.GetBorderSize();
+   const float& gw = gGameParam.GetGoalWidth();
 
    // ground
    glColor4fv(groundColor);
 
    // left half
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gFieldLength/2 + gLineWidth,
-                                          -gFieldWidth/2 + gLineWidth
-                                          ,0 ),
-                                 gFieldLength/2 - gLineWidth - gLineWidth/2,
-                                 gFieldWidth - 2*gLineWidth
-                                 ,0);
+                                          -fl/2 + lw,
+                                          -fw/2 + lw,
+                                          0
+                                          ),
+                                 fl/2 - lw - lw/2,
+                                 fw - 2*lw
+                                 ,0
+                                 );
 
    // right half
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          gLineWidth/2,
-                                          -gFieldWidth/2 + gLineWidth
-                                          ,0 ),
-                                 gFieldLength/2 - gLineWidth - gLineWidth/2,
-                                 gFieldWidth - 2*gLineWidth
-                                 ,0);
+                                          lw/2,
+                                          -fw/2 + lw,
+                                          0
+                                          ),
+                                 fl/2 - lw - lw/2,
+                                 fw - 2*lw
+                                 ,0
+                                 );
 
    //
    // border
@@ -627,39 +370,34 @@ void display(void)
 
    // border at left goal
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gFieldLength/2-gBorderSize,
-                                          -gFieldWidth/2-gBorderSize,0
+                                          -fl/2-bs,
+                                          -fw/2-bs,0
                                           ),
-                                 gBorderSize,
-                                 gFieldWidth+2*gBorderSize,
-                                 0);
+                                 bs, fw+2*bs, 0);
 
    // border at right goal
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          gFieldLength/2,
-                                          -gFieldWidth/2
-                                          -gBorderSize,0),
-                                 gBorderSize,
-                                 gFieldWidth+2*gBorderSize,
-                                 0);
+                                          fl/2,
+                                          -fw/2
+                                          -bs,0
+                                          ),
+                                 bs, fw+2*bs, 0);
 
    // long top border
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gFieldLength/2,
-                                          -gFieldWidth/2-gBorderSize
-                                          ,0),
-                                 gFieldLength,
-                                 gBorderSize,
-                                 0);
+                                          -fl/2,
+                                          -fw/2-bs
+                                          ,0
+                                          ),
+                                 fl, bs, 0);
 
    // long bottom border
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gFieldLength/2,
-                                          gFieldWidth/2,
-                                          0),
-                                 gFieldLength,
-                                 gBorderSize,0
-                                 );
+                                          -fl/2,
+                                          fw/2,
+                                          0
+                                          ),
+                                 fl, bs, 0);
 
    //
    // lines
@@ -668,66 +406,55 @@ void display(void)
 
    // left goal
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gFieldLength/2,
-                                          -gFieldWidth/2,0
+                                          -fl/2,
+                                          -fw/2,0
                                           ),
-                                 gLineWidth,
-                                 gFieldWidth,
-                                 0);
+                                 lw, fw, 0);
 
    // right goal
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          gFieldLength/2 - gLineWidth,
-                                          -gFieldWidth/2,
+                                          fl/2 - lw,
+                                          -fw/2,
                                           0),
-                                 gLineWidth,
-                                 gFieldWidth,
-                                 0);
+                                 lw, fw, 0);
 
    // long top border
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gFieldLength/2 + gLineWidth,
-                                          -gFieldWidth/2
+                                          -fl/2 + lw,
+                                          -fw/2
                                           ,0),
-                                 gFieldLength - 2*gLineWidth,
-                                 gLineWidth,
-                                 0);
+                                 fl - 2*lw, lw, 0);
 
    // long bottom border
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gFieldLength/2 + gLineWidth,
-                                          gFieldWidth/2 - gLineWidth,
+                                          -fl/2 + lw,
+                                          fw/2 - lw,
                                           0),
-                                 gFieldLength - 2*gLineWidth,
-                                 gLineWidth,
-                                 0);
+                                 fl - 2*lw, lw, 0);
 
    // middle line
    gGLServer.DrawGroundRectangle(Vector3f(
-                                          -gLineWidth/2,
-                                          -gFieldWidth/2 + gLineWidth,
+                                          -lw/2,
+                                          -fw/2 + lw,
                                           0),
-                                 gLineWidth,
-                                 gFieldWidth - 2*gLineWidth,
-                                 0
-                                 );
+                                 lw, fw - 2*lw, 0);
 
 
    // fieldBox
    gGLServer.DrawWireBox(
-                         Vector3f(-gFieldLength/2.0,-gFieldWidth/2.0,0.0),
-                         Vector3f(gFieldLength,gFieldWidth,gFieldHeight)
+                         Vector3f(-fl/2.0,-fw/2.0,0.0),
+                         Vector3f(fl,fw,fh)
                          );
 
    // goal
    glColor4fv(goalColor);
-   gGLServer.DrawWireBox(Vector3f(-gFieldLength/2,-gGoalWidth/2.0,0),szGoal1);
-   gGLServer.DrawGoal(Vector3f(-gFieldLength/2,-gGoalWidth/2.0,0),szGoal1);
+   gGLServer.DrawWireBox(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
+   gGLServer.DrawGoal(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
 
    // goal
    glColor4fv(goalColor);
-   gGLServer.DrawWireBox(Vector3f(gFieldLength/2,-gGoalWidth/2.0,0),szGoal2);
-   gGLServer.DrawGoal(Vector3f(gFieldLength/2,-gGoalWidth/2.0,0),szGoal2);
+   gGLServer.DrawWireBox(Vector3f(fl/2,-gw/2.0,0),szGoal2);
+   gGLServer.DrawGoal(Vector3f(fl/2,-gw/2.0,0),szGoal2);
 
    // draw cached positions
    drawScene();
@@ -737,30 +464,29 @@ void display(void)
 
 //----------------------------idle----------------------------------------
 //
-// defines what to do when no action is performed
+// checks for new messages and parses them
 //------------------------------------------------------------------------
 void idle(void)
 {
-    // check for positions update
-    if (gCommServer->GetMessage())
+    if (! gCommServer->GetMessage())
         {
-            // get messages sent from server
-            gPredicates = gCommServer->GetPredicates();
-            static bool readInit = true;
-
-            // if we still didn't parse the init string
-            // we do so and set the readInit to 'false'
-            // such that we don't have to parse it twice
-            if (readInit)
-                {
-                    if(parseInfoHeader())
-                        {
-                            readInit = false;
-                        }
-                }
-
-            glutPostRedisplay();
+            return;
         }
+
+    boost::shared_ptr<oxygen::Predicate::TList> predicates =
+        gCommServer->GetPredicates();
+
+    if (
+        (predicates.get() != 0) &&
+        (predicates->size() > 0)
+        )
+        {
+            // parse the received expressions
+            gParser.ParsePredicates(*predicates,gGameState,
+                                    gGameParam,gExprList);
+        }
+
+    glutPostRedisplay();
 }
 
 //--------------------------mouse-----------------------------------------
@@ -875,16 +601,42 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
 
 //------------------------------reshape-------------------------------------
 //
-// processing of reshape events
-//
+// processing of reshape events (the OpenGl window is resized)
 // width, height are the new dimensions of the windw
 //--------------------------------------------------------------------------
-
 void reshape(int width, int height)
 {
     gGLServer.Reshape(width,height);
 }
 
+//------------------------------setupSpherMap-------------------------------
+//
+// sets up the map holding the different sphere descriptions
+//--------------------------------------------------------------------------
+void setupSphereMap()
+{
+    gSphereMap.clear();
+
+    const float agentColor[] = {0.8f, 0.8f, 0.2f, 1.0f};
+    gSphereMap[MonitorParser::ET_AGENT] =
+        SphereType(agentColor, 0.22f);
+
+    const float flagColor[] = {1.0f, 0, 0, 1.0f};
+    gSphereMap[MonitorParser::ET_FLAG] =
+        SphereType(flagColor, 0.5f);
+
+    const float ballColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    gSphereMap[MonitorParser::ET_BALL] =
+        SphereType(ballColor, 0.111f);
+
+    const float ballAgentColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    gSphereMap[MonitorParser::ET_BALLAGENT] =
+        SphereType(ballAgentColor, 0.22f);
+}
+
+//--------------------------------main--------------------------------------
+//
+//--------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
   // init glut
@@ -892,6 +644,12 @@ int main(int argc, char* argv[])
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(gWidth, gHeight);
   glutCreateWindow("rcssmonitor3D");
+  glutDisplayFunc(display);
+  glutMotionFunc(mouseMotion);
+  glutKeyboardFunc(keyboard);
+  glutMouseFunc(mouse);
+  glutReshapeFunc(reshape);
+  glutIdleFunc(idle);
 
   //setup the GLserver with camera coordinates
   salt::Vector3f pos(0.0,24.0, 7.0);
@@ -899,13 +657,6 @@ int main(int argc, char* argv[])
   salt::Vector3f up(0.0,0.0,1.0);
   gGLServer = GLServer(gWidth, gHeight, pos, lookAt, up, false);
   gGLServer.InitGL();
-
-  glutDisplayFunc(display);
-  glutMotionFunc(mouseMotion);
-  glutKeyboardFunc(keyboard);
-  glutMouseFunc(mouse);
-  glutReshapeFunc(reshape);
-  glutIdleFunc(idle);
 
   //init zeitgeist
   Zeitgeist zg("." PACKAGE_NAME);
@@ -927,12 +678,14 @@ int main(int argc, char* argv[])
     << "Universität Koblenz." << endl
     << "Copyright (C) 2004, "
     << "The RoboCup Soccer Server Maintenance Group." << endl;
+  zg.GetCore()->GetLogServer()->Normal()
+    << "\nType '--help' for further information" << endl;
 
   // process command line
   processInput(argc, argv);
 
-  zg.GetCore()->GetLogServer()->Normal()
-    << "\nType '--help' for further information" << endl;
+  // setup the sphere types
+  setupSphereMap();
 
   // init the commserver
   gCommServer = shared_dynamic_cast<CommServer>
@@ -942,7 +695,6 @@ int main(int argc, char* argv[])
       {
           zg.GetCore()->GetLogServer()->Normal()
               << "ERROR: cannot create CommServer." << endl;
-
           return 1;
       }
 
