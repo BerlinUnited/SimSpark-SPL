@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.17 2004/04/23 21:17:40 fruit Exp $
+$Id: renderserver.cpp,v 1.18 2004/04/27 10:00:46 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -277,14 +277,19 @@ RenderServer::Render()
 void
 RenderServer::RenderScene(boost::shared_ptr<BaseNode> node)
 {
-    glPushMatrix();
-    glMultMatrixf(node->GetWorldTransform().m);
+    // test for and render using a RenderNode
+    shared_ptr<RenderNode> renderNode = shared_dynamic_cast<RenderNode>(node);
+    if (renderNode.get() != 0)
+        {
+            glPushMatrix();
+            glMultMatrixf(node->GetWorldTransform().m);
 
-    node->RenderInternal();
+            renderNode->RenderInternal();
 
-    glPopMatrix();
+            glPopMatrix();
+        }
 
-    // perform update on hierarchy
+    // traverse the the hierarchy
     for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
         {
             shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(*i);
