@@ -1,3 +1,20 @@
+2004-03-05  Oliver Obst  <fruit@robolog.org>
+
+	* configure.ac: 
+	- added check for the dot tool 
+	- added check for the perl interpreter 
+	- added configure option '--with-spades'; if simulator should be 
+	  compiled with SPADES, it is an error now if no SPADES is 
+	  installed. To disable SPADES support, the user has to
+	  use --without-spades explicitly.  
+	- checking for GL headers in any case (was checked if building 
+	  kerosin only)
+
+	* acinclude.m4: 
+	- fixed sloppy macro syntax 
+	- added macro to check the ruby version 
+	- added check for libruby to the checkruby macro
+	
 2004-02-26  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/camera.cpp:
