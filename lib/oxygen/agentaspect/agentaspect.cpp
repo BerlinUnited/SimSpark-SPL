@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.4 2003/12/21 23:36:36 fruit Exp $
+   $Id: agentaspect.cpp,v 1.4.2.1 2003/12/25 12:32:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,13 +20,21 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "agentaspect.h"
-#include "createeffector.h"
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
 using namespace std;
+
+AgentAspect::AgentAspect() : Transform()
+{
+  SetName("agentAspect");
+}
+
+AgentAspect::~AgentAspect()
+{
+}
 
 bool
 AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> actions)
@@ -142,15 +150,17 @@ AgentAspect::UpdateEffectorMap()
     }
 }
 
-bool AgentAspect::Init()
+bool AgentAspect::Init(const string& createEffector)
 {
-  shared_ptr<CreateEffector> create = shared_dynamic_cast<CreateEffector>
-    (GetCore()->New("kerosin/CreateEffector"));
+
+  shared_ptr<Effector> create = shared_dynamic_cast<Effector>
+    (GetCore()->New(createEffector));
 
   if (create.get() == 0)
     {
       GetLog()->Error()
-        << "ERROR: (AgentAspect) Could not construct a CreateEffector\n";
+        << "ERROR: (AgentAspect) Could not construct a createEffector '"
+        << createEffector << "'\n";
       return false;
     }
 
@@ -162,11 +172,13 @@ bool AgentAspect::Init()
   if (! added)
     {
       GetLog()->Error()
-        << "ERROR: (AgentAspect) failed to set up the CreateEffectorn";
+        << "ERROR: (AgentAspect) failed to set up the CreateEffector '"
+        << createEffector << "'\n";
       return false;
     } else
       {
-        GetLog()->Debug() << "(AgentAspect) created CreateEffector\n";
+        GetLog()->Debug() << "(AgentAspect) created CreateEffector '"
+        << createEffector << "'\n";
       }
 
   return added;
