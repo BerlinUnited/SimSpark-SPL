@@ -12,7 +12,7 @@ AM_ENABLE_STATIC(no)
 ## Here are the version numbers of our libraries. They should be updated (only)
 ## immediately before a release of the package. See libtool manual for details.
 RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'3:0:3')
-RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'3:0:0')
+RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'3:1:0')
 RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'3:0:1')
 RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'1:0:0')
 RCSS_LIBRARY_VERSION_INFO(spark_version_info,spark_version,'0:0:0')
