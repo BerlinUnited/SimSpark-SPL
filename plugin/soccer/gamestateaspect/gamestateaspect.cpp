@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.13 2004/02/11 09:47:57 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.14 2004/02/11 11:19:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -305,6 +305,7 @@ void GameStateAspect::OnLink()
     float fieldLength = 100.0;
     SoccerBase::GetSoccerVar(*this,"FieldLength",fieldLength);
 
+    mAgentRadius = 0.22;
     SoccerBase::GetSoccerVar(*this,"AgentRadius",mAgentRadius);
 
     mLeftInit = Vector3f
