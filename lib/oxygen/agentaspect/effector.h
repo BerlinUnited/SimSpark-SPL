@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector.h,v 1.4.4.1 2003/12/04 17:33:03 rollmark Exp $
+   $Id: effector.h,v 1.4.4.2 2003/12/10 10:19:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,10 +36,8 @@ class ActionObject;
 class Effector : public BaseNode
 {
 public:
-    /** this routine performs the action of the effector. It acts on
-        \param base
-     */
-    virtual bool Perform(boost::shared_ptr<BaseNode> &base, float deltaTime);
+    /** realizes the action described by the ActionObject */
+    virtual bool Realize(boost::shared_ptr<ActionObject> action) = 0;
 
     /** returns the name of the predicate this effector implements.
      */
