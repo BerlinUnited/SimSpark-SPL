@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.1 2003/12/01 16:14:07 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.2 2003/12/02 16:57:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,10 +39,29 @@ public:
 
     bool Init(const std::string& parserName);
 
+    /** notifies the GameControlServer that an agent has connected to
+        the simulation. \param id should be a unique identifier for
+        the new agent. It is not assigned by the GameControlServer.
+    */
     bool AgentConnect(int id);
 
+    /** notifies the GameControlServer that an agent has disappeared
+        from the simulation. \param id was the unique identifier of
+        the disappeared agent. The GameControlServer uses the
+        AgentAspect corresponding to \param id to clean up after the
+        agent left
+    */
+    bool AgentDisappear(int id);
+
+    /** returns the time between to queries of the agents
+        perceptors in seconds
+    */
+    float GetSenseInterval(int id);
+
 private:
-    std::map<int, boost::shared_ptr<AgentAspect> > mAgentMap;
+    typedef std::map<int, boost::shared_ptr<AgentAspect> > TAgentMap;
+
+    TAgentMap mAgentMap;
     boost::shared_ptr<BaseParser> mParser;
 
 };

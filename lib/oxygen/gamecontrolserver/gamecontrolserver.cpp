@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.2 2003/12/02 10:20:45 fruit Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.3 2003/12/02 16:57:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,12 +57,38 @@ GameControlServer::AgentConnect(int id)
     // for map::insert(Elem), the test here is not required. map::insert does not
     // overwrite existing elements. The test is required to report if the agent
     // was already connected or not.
-    if (mAgentMap.find(id) != mAgentMap.end())
+    if (mAgentMap.find(id) == mAgentMap.end())
     {
-        // insert an agent ID and clear the reference to the AgentAspect
-        mAgentMap.insert(std::make_pair(id, boost::shared_ptr<AgentAspect>()));
-        GetLog()->Debug() << "A new agent connected (id: " << id << ")\n";
-        return true;
+        return false;
     }
-    return false;
+
+    // insert an agent ID with an empty AgentAspect reference
+    mAgentMap[id] = boost::shared_ptr<AgentAspect>();
+
+    GetLog()->Debug() << "(GameControlServer) A new agent connected (id: " << id << ")\n";
+    return true;
+}
+
+bool GameControlServer::AgentDisappear(int id)
+{
+    TAgentMap::iterator iter = mAgentMap.find(id);
+
+    if (iter == mAgentMap.end())
+        {
+            return false;
+        }
+
+    // remove the AgentAspect from the set of children and from our
+    // private map. The AgentAspect does all the necessary cleanup
+    RemoveChildReference((*iter).second);
+    mAgentMap.erase(id);
+
+    return true;
+}
+
+float GameControlServer::GetSenseInterval(int /*id*/)
+{
+    // the real thing should query the AgentAspect corresponding to
+    // the agent.
+    return 0.1;
 }
