@@ -1,3 +1,17 @@
+2003-11-15  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	fixed the script path and removed the STRINGIFY macros as configure properly places
+	quotes around the prefix now.
+
+	* lib/zeitgeist/zeitgeist.rb: 
+	- createVariable was taking 3 parameters: 
+	namespace, variable name, and a value. kerosin.rb expects a 
+	createVariable with 2 parameters, namely
+	namespace.variableName, and a value.  createVariable has been
+	changed now to accept both forms (ruby doesn't allow for a method
+	to have different signatures other than using varargs).
+	
 2003-11-14  Oliver Obst  <fruit@robolog.org>
 
 	* configure.ac: 
