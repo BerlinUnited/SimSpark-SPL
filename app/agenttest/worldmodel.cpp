@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.5 2004/03/23 09:41:02 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.6 2004/03/23 18:27:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -217,9 +217,9 @@ void WorldModel::ParseObjectVision(const Predicate& predicate)
             // read the position vector
             VisionSense sense;
             if (
-                (! predicate.GetValue(polIter,sense.distance)) ||
-                (! predicate.GetValue(polIter,sense.theta)) ||
-                (! predicate.GetValue(polIter,sense.phi))
+                (! predicate.AdvanceValue(polIter,sense.distance)) ||
+                (! predicate.AdvanceValue(polIter,sense.theta)) ||
+                (! predicate.AdvanceValue(polIter,sense.phi))
                 )
             {
                 continue;
@@ -259,8 +259,6 @@ WorldModel::ParseVision(const Predicate& predicate)
 
 void WorldModel::Parse(const string& message)
 {
-    GetLog()->Debug() << "(WorldModel::Parse) " << message << "\n";
-
     shared_ptr<Predicate::TList> predicates =
         mParser->Parse(message);
 
