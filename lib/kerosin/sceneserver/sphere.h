@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere.h,v 1.4 2004/03/20 15:49:10 rollmark Exp $
+   $Id: sphere.h,v 1.5 2004/04/22 17:23:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,10 @@ namespace kerosin
 {
 class Material;
 
+/** \class Sphere is a SingleMatNode that automatically loads and
+     renders a sphere mesh. It exports functions to scale the unit
+     sphere to different sizes.
+*/
 class Sphere : public SingleMatNode
 {
     //
@@ -37,18 +41,14 @@ public:
     Sphere();
     virtual ~Sphere();
 
-    // set/get properties
+    // sets the sphere radius
     float GetRadius() const;
+
+    // returns the sphere radius
     void SetRadius(float radius);
 
 protected:
-    virtual void RenderInternal();
-
-    //
-    // Members
-    //
-protected:
-    float mRadius;
+    virtual void OnLink();
 };
 
 DECLARE_CLASS(Sphere);
