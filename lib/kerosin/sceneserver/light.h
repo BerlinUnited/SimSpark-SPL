@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: light.h,v 1.5 2003/11/14 14:05:52 fruit Exp $
+   $Id: light.h,v 1.6 2004/03/22 11:08:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,26 +42,25 @@ public:
     void SetRadius(float radius);
 
     //! set the diffuse color of the light
-    void SetDiffuseColor(float r, float g, float b);
+    void SetDiffuseColor(const salt::Vector3f& color);
 
     //! Enable render settings of this light
-    virtual void    Prepare();
+    virtual void Prepare();
 
     //! draw lit triangles of mesh
-    void                    RenderLitMesh(boost::shared_ptr<StaticMesh> mesh);
+    void RenderLitMesh(boost::shared_ptr<StaticMesh> mesh);
 
     //! flush the internal cached geometry
-    void                    FlushCache();
+    void FlushCache();
 
     //! update the bounding box
-    void                    ComputeBoundingBox();
+    void ComputeBoundingBox();
 
 private:
-    virtual bool    ConstructInternal();
-
-    virtual void    RenderInternal();
-
-    virtual void    DeterminePotentiallyLitTriangles(boost::shared_ptr<StaticMesh>& mesh, std::vector<unsigned int>& triangles);
+    virtual bool ConstructInternal();
+    virtual void RenderInternal();
+    virtual void DeterminePotentiallyLitTriangles(boost::shared_ptr<StaticMesh>& mesh,
+                                                  std::vector<unsigned int>& triangles);
 
     //
     // Members
@@ -76,18 +75,18 @@ private:
     unsigned int mVP;
 
     //! position used to invalidate the cache
-    salt::Vector3f  mOldPos;
+    salt::Vector3f mOldPos;
     //! mesh transform used to invalidate the cache
-    salt::Matrix    mMeshOldTransform;
+    salt::Matrix mMeshOldTransform;
 
     //! state of the cache
-    bool                    mCacheFlushed;
+    bool mCacheFlushed;
 
     // indices of influenced triangles
-    std::vector<unsigned int>       mTriangles;
+    std::vector<unsigned int> mTriangles;
 
     // per-material cached indices
-    std::vector<oxygen::IndexBuffer>        mCachedIndices;
+    std::vector<oxygen::IndexBuffer> mCachedIndices;
 };
 
 DECLARE_CLASS(Light);
