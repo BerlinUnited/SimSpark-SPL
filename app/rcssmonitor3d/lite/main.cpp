@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.12 2004/04/09 20:12:21 fruit Exp $
+   $Id: main.cpp,v 1.13 2004/04/20 12:46:17 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -176,6 +176,8 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
 {
     const float* color = type.color;
 
+    Vector3f pos = expr.pos;
+
     switch (expr.etype)
     {
     case MonitorParser::ET_BALL:
@@ -183,7 +185,7 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
         // we set the camera to look at the ball
         if (gAutoCam)
         {
-            gGLServer.SetLookAtPos(expr.pos);
+            gGLServer.SetLookAtPos(pos);
         }
         break;
 
@@ -206,6 +208,8 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
         break;
 
     case MonitorParser::ET_FLAG:
+        if (salt::gAbs(pos[1]) == gGameParam.GetGoalWidth() / 2.0) return;
+        pos[2] = 1.5;
         break;
 
     default:
@@ -213,8 +217,8 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
     }
 
     glColor4fv(color);
-    gGLServer.DrawSphere(expr.pos, type.size);
-    gGLServer.DrawShadowOfSphere(expr.pos, type.size);
+    gGLServer.DrawSphere(pos, type.size);
+    gGLServer.DrawShadowOfSphere(pos, type.size);
 
     if (
         (gDrawUnums) &&
@@ -235,33 +239,52 @@ drawObject(const SphereType& type, const MonitorParser::Expression& expr)
 void
 drawStatusText()
 {
-    stringstream ss;
+    stringstream sl, sc, sr;
 
-    ss << gGameState.GetTeamL() << " " << gGameState.GetScoreL() << ":"
-       << gGameState.GetScoreR() << " " << gGameState.GetTeamR() << " ";
-    ss << "(" << ((gGameState.GetHalf() == GH_FIRST) ?
+    sl << gGameState.GetTeamL() << " " << gGameState.GetScoreL();
+    sr << gGameState.GetScoreR() << " " << gGameState.GetTeamR();
+    sc << "(" << ((gGameState.GetHalf() == GH_FIRST) ?
                   "first" : "second") << " half) ";
 
-    string mode;
+    std::string mode;
+
     switch (gGameState.GetPlayMode())
     {
-    case    PM_BeforeKickOff:
+    case PM_BeforeKickOff:
         mode = STR_PM_BeforeKickOff;
         break;
-    case    PM_KickOff_Left:
+    case PM_KickOff_Left:
         mode = STR_PM_KickOff_Left;
         break;
-    case    PM_KickOff_Right:
+    case PM_KickOff_Right:
         mode = STR_PM_KickOff_Right;
         break;
-    case    PM_PlayOn:
+    case PM_PlayOn:
         mode = STR_PM_PlayOn;
         break;
-    case    PM_KickIn_Left:
+    case PM_KickIn_Left:
         mode = STR_PM_KickIn_Left;
         break;
-    case    PM_KickIn_Right:
+    case PM_KickIn_Right:
         mode = STR_PM_KickIn_Right;
+        break;
+    case PM_CORNER_KICK_LEFT:
+        mode = STR_PM_CORNER_KICK_LEFT;
+        break;
+    case PM_CORNER_KICK_RIGHT:
+        mode = STR_PM_CORNER_KICK_RIGHT;
+        break;
+    case PM_GOAL_KICK_LEFT:
+        mode = STR_PM_GOAL_KICK_LEFT;
+        break;
+    case PM_GOAL_KICK_RIGHT:
+        mode = STR_PM_GOAL_KICK_RIGHT;
+        break;
+    case PM_OFFSIDE_LEFT:
+        mode = STR_PM_OFFSIDE_LEFT;
+        break;
+    case PM_OFFSIDE_RIGHT:
+        mode = STR_PM_OFFSIDE_RIGHT;
         break;
     case PM_GameOver:
         mode = STR_PM_GameOver;
@@ -270,18 +293,26 @@ drawStatusText()
         mode = STR_PM_Goal_Left;
         break;
     case PM_Goal_Right:
-        mode = STR_PM_Goal_Left;
+        mode = STR_PM_Goal_Right;
+        break;
+    case PM_FREE_KICK_LEFT:
+        mode = STR_PM_FREE_KICK_LEFT;
+        break;
+    case PM_FREE_KICK_RIGHT:
+        mode = STR_PM_FREE_KICK_RIGHT;
         break;
     default:
         mode = STR_PM_Unknown;
         break;
-    }
+    };
 
-    ss << mode << " ";
-    ss << "t=" << gGameState.GetTime();
+    sc << mode << " ";
+    sc << "t=" << gGameState.GetTime();
 
-    glColor3f   ( 1.0, 1.0, 1.0  );
-    gGLServer.DrawTextPix(ss.str().c_str(),Vector2f( 0, gGLServer.GetTextHeight()));
+    glColor3f(1.0, 1.0, 1.0);
+    gGLServer.DrawTextPix(sl.str().c_str(),Vector2f( 0, gGLServer.GetTextHeight()));
+    gGLServer.DrawTextPix(sc.str().c_str(),Vector2f( 0, gGLServer.GetTextHeight()), GLServer::eCENTER);
+    gGLServer.DrawTextPix(sr.str().c_str(),Vector2f( 0, gGLServer.GetTextHeight()), GLServer::eRIGHT);
 }
 
 //----------------------drawScene----------------------------------------------
@@ -334,7 +365,7 @@ display(void)
     const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
     const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
     const GLfloat borderColor[4] = {0.2f, 0.8f, 0.2f, 1.0f};
-    const GLfloat lineColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
+    const GLfloat lineColor[4]   = {0.6f, 1.0f, 0.6f, 1.0f};
 
     glClearColor(0.15f,0.15f,0.3f,1.0f);
     glClear (GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
@@ -379,36 +410,22 @@ display(void)
     // border
     //
     glColor4fv(borderColor);
+    glDisable (GL_DEPTH_TEST);
 
     // border at left goal
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      -fl/2-bs,
-                                      -fw/2-bs,0
-                                      ),
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2-bs,-fw/2-bs,0),
                                   bs, fw+2*bs, 0);
 
     // border at right goal
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      fl/2,
-                                      -fw/2
-                                      -bs,0
-                                      ),
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2,-fw/2-bs,0),
                                   bs, fw+2*bs, 0);
 
     // long top border
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      -fl/2,
-                                      -fw/2-bs
-                                      ,0
-                                      ),
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2,-fw/2-bs,0),
                                   fl, bs, 0);
 
     // long bottom border
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      -fl/2,
-                                      fw/2,
-                                      0
-                                      ),
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2,fw/2,0),
                                   fl, bs, 0);
 
     //
@@ -417,46 +434,53 @@ display(void)
     glColor4fv(lineColor);
 
     // left goal
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      -fl/2,
-                                      -fw/2,0
-                                      ),
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2,-fw/2,0),
                                   lw, fw, 0);
 
     // right goal
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      fl/2 - lw,
-                                      -fw/2,
-                                      0),
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2 - lw,-fw/2,0),
                                   lw, fw, 0);
 
     // long top border
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      -fl/2 + lw,
-                                      -fw/2
-                                      ,0),
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw,-fw/2,0),
                                   fl - 2*lw, lw, 0);
 
     // long bottom border
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      -fl/2 + lw,
-                                      fw/2 - lw,
-                                      0),
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw,fw/2 - lw,0),
                                   fl - 2*lw, lw, 0);
 
     // middle line
-    gGLServer.DrawGroundRectangle(Vector3f(
-                                      -lw/2,
-                                      -fw/2 + lw,
-                                      0),
+    gGLServer.DrawGroundRectangle(Vector3f(-lw/2,-fw/2 + lw,0),
                                   lw, fw - 2*lw, 0);
 
+    // goal box area right side
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2 - 5.5, -gw/2 - 5.5, 0.05), lw, gw + 11, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2 - 5.5, -gw/2 - 5.5, 0.05), 5.5, lw, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2 - 5.5, gw/2 + 5.5, 0.05), 5.5, lw, 0);
+
+    // goal box area left side
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 5.5, -gw/2 - 5.5, 0.05), lw, gw + 11, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 5.5, -gw/2 - 5.5, 0.05), -5.5, lw, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 5.5, gw/2 + 5.5, 0.05), -5.5, lw, 0);
+
+    // penalty area right side
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2 - 16.5, -gw/2 - 16.5, 0.05), lw, gw + 33, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2 - 16.5, -gw/2 - 16.5, 0.05), 16.5, lw, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(fl/2 - 16.5, gw/2 + 16.5, 0.05), 16.5, lw, 0);
+
+    // penalty area left side
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 16.5, -gw/2 - 16.5, 0.05), lw, gw + 33, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 16.5, -gw/2 - 16.5, 0.05), -16.5, lw, 0);
+    gGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 16.5, gw/2 + 16.5, 0.05), -16.5, lw, 0);
+
+    // center circle
+    gGLServer.DrawCircle(Vector3f(0.0,0.0,0.05), 9.15);
 
     // fieldBox
-    gGLServer.DrawWireBox(
-        Vector3f(-fl/2.0,-fw/2.0,0.0),
-        Vector3f(fl,fw,fh)
-        );
+    gGLServer.DrawWireBox(Vector3f(-fl/2.0,-fw/2.0,0.0),
+                          Vector3f(fl,fw,fh));
+
+    glEnable(GL_DEPTH_TEST);
 
     // goal
     glColor4fv(goalColor);
@@ -470,7 +494,24 @@ display(void)
 
     // draw cached positions
     drawScene();
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glColor4fv(gTeamLColor);
+    gGLServer.DrawSphere(Vector3f(-0.97,0.93,0.0), 0.025, 20);
+    glColor4fv(gTeamRColor);
+    gGLServer.DrawSphere(Vector3f( 0.97,0.93,0.0), 0.025, 20);
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+
     drawStatusText();
+
+
     glutSwapBuffers();
 }
 
@@ -485,6 +526,7 @@ idle(void)
     {
         return;
     }
+
 
     boost::shared_ptr<oxygen::PredicateList> predicates =
         gCommServer->GetPredicates();
@@ -606,7 +648,11 @@ keyboard(unsigned char key, int /*x*/, int /*y*/)
         cout <<"--- Running Simulation" << endl;
         gCommServer->SendRunCmd();
         break;
-
+#if 0
+    case 'v':
+        gCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
+        break;
+#endif
     default:
         return;
     }
@@ -640,13 +686,13 @@ setupSphereMap()
 
     const float flagColor[] = {1.0f, 0, 0, 1.0f};
     gSphereMap[MonitorParser::ET_FLAG] =
-        SphereType(flagColor, 0.5f);
+        SphereType(flagColor, 0.15f);
 
     const float ballColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
     gSphereMap[MonitorParser::ET_BALL] =
         SphereType(ballColor, 0.111f);
 
-    const float ballAgentColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    const float ballAgentColor[] = {0.9f, 0.9f, 0.9f, 1.0f};
     gSphereMap[MonitorParser::ET_BALLAGENT] =
         SphereType(ballAgentColor, 0.22f);
 }
@@ -692,7 +738,7 @@ main(int argc, char* argv[])
     // print a greeting
     zg.GetCore()->GetLogServer()->Normal()
         << "rcssmonitor3D version 0.2" << endl
-        << "Copyright (C) 2003, Heni Ben Amor and Markus Rollmann, "
+        << "Copyright (C) 2003, Heni Ben Amor, Oliver Obst, Christoph Ringelstein, and Markus Rollmann; "
         << "Universität Koblenz." << endl
         << "Copyright (C) 2004, "
         << "The RoboCup Soccer Server Maintenance Group." << endl;
