@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver_c.cpp,v 1.4 2004/12/21 19:39:33 rollmark Exp $
+   $Id: monitoritem.h,v 1.1 2004/12/21 19:39:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,38 +19,35 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef OXYGEN_MONITORITEM_H
+#define OXYGEN_MONITORITEM_H
 
-#include "monitorserver.h"
+#include <zeitgeist/leaf.h>
+#include <oxygen/gamecontrolserver/predicate.h>
 
-using namespace oxygen;
-using namespace std;
-
-FUNCTION(MonitorServer,registerMonitorSystem)
+namespace oxygen
 {
-    string inMonitorSysName;
 
-    return (
-            (in.GetSize() == 1) &&
-            (in.GetValue(in.begin(), inMonitorSysName)) &&
-            (obj->RegisterMonitorSystem(inMonitorSysName))
-            );
-}
-
-FUNCTION(MonitorServer,registerMonitorItem)
+class MonitorItem : public zeitgeist::Leaf
 {
-    string inMonitorItemName;
+public:
+    MonitorItem() : Leaf() {}
+    virtual ~MonitorItem() {}
 
-    return (
-            (in.GetSize() == 1) &&
-            (in.GetValue(in.begin(), inMonitorItemName)) &&
-            (obj->RegisterMonitorItem(inMonitorItemName))
-            );
-}
+    /** This function is called once for every MonitorSystem each time
+     *  a new client connects. It should append predicates to a list
+     *  that is sent using the active monitor
+     */
+    virtual void GetInitialPredicates(PredicateList& pList) = 0;
 
+    /** This function will be called periodically to append predicates
+        to a list that is sent using the active monitor
+     */
+    virtual void GetPredicates(PredicateList& pList) = 0;
+};
 
-void CLASS(MonitorServer)::DefineClass()
-{
-    DEFINE_BASECLASS(zeitgeist/Node);
-    DEFINE_FUNCTION(registerMonitorSystem);
-    DEFINE_FUNCTION(registerMonitorItem);
-}
+DECLARE_ABSTRACTCLASS(MonitorItem);
+
+} // namespace oxygen
+
+#endif // OXYGEN_MONITORITEM_H

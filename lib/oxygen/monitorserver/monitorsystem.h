@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorsystem.h,v 1.3 2004/04/26 08:01:31 rollmark Exp $
+   $Id: monitorsystem.h,v 1.4 2004/12/21 19:39:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <oxygen/gamecontrolserver/predicate.h>
 
 namespace oxygen
 {
@@ -41,15 +42,24 @@ public:
     // constructor to construct a string containing binary data and
     // the const charT* data() member to access binary data.
 
-    /** This function is called once for every MonitorSystem. It
-     *  should return any header/setup information that is needed.
+    /** This function is called once for every MonitorSystem each time
+     *  a new client connects. It should return any header/setup
+     *  information that is needed.
+     *  \param items holds a list of additional name value
+     *  pairs. These predicates are collected from MonitorItem objects
+     *  registered to the MonitorServer. The monitor should transfer
+     *  them to the client if possible.
      */
-    virtual std::string GetMonitorHeaderInfo() = 0;
+    virtual std::string GetMonitorHeaderInfo(const PredicateList& pList) = 0;
 
     /** This function will be called periodically to get information
      * about the current state of the world.
+     * \param items holds a list of additional name value pairs. These
+     * predicates are collected from MonitorItem objects registered to
+     * the MonitorServer. The monitor should transfer them to the
+     * client if possible.
      */
-    virtual std::string GetMonitorInfo() = 0;
+    virtual std::string GetMonitorInfo(const PredicateList& pList) = 0;
 
     /** If a monitor sends information to the world model, this
      * function is called to process it.

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.h,v 1.3 2004/04/25 16:36:35 rollmark Exp $
+   $Id: monitorserver.h,v 1.4 2004/12/21 19:39:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,6 +46,11 @@ public:
      */
     bool RegisterMonitorSystem(const std::string& monitorSysName);
 
+    /** This function creates an instance of class 'monitorItem' and
+        adds it as a child node below this server
+     */
+    bool RegisterMonitorItem(const std::string& monitorItemName);
+
     /** the following set of functions if called by the SpadesServer */
 
     /** This function is called once for every monitor. It should
@@ -68,6 +73,10 @@ public:
 protected:
     /** returns a shared_ptr to the first registered MonitorSystem */
     boost::shared_ptr<MonitorSystem> GetMonitorSystem();
+
+    /** collects a list of predicates from all registered MonitorItems */
+    void CollectItemPredicates(bool initial, PredicateList& pList);
+
 
 private:
 };

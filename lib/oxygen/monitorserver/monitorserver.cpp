@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.4 2004/04/25 16:36:35 rollmark Exp $
+   $Id: monitorserver.cpp,v 1.5 2004/12/21 19:39:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include <zeitgeist/logserver/logserver.h>
 #include "monitorserver.h"
+#include "monitoritem.h"
 
 using namespace oxygen;
 using namespace boost;
@@ -73,6 +74,44 @@ MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
     return true;
 }
 
+bool
+MonitorServer::RegisterMonitorItem(const std::string& monitorItemName)
+{
+    // check if a monitor item of the requested type was already created
+    shared_ptr<MonitorItem> monitorItem =
+        shared_dynamic_cast<MonitorItem>(GetChildOfClass(monitorItemName));
+
+    if (monitorItem.get() != 0)
+    {
+        return true;
+    }
+
+    // create the monitor item
+    monitorItem = shared_dynamic_cast<MonitorItem>(GetCore()->New(monitorItemName));
+
+    if (monitorItem.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (MonitorServer) Cannot create monitor item '"
+                          << monitorItemName << "'" << std::endl;
+        return false;
+    }
+
+    // link the monitor item in the hierarchy
+    monitorItem->SetName(monitorItemName);
+
+    if (! AddChildReference(monitorItem))
+        {
+            GetLog()->Error() << "ERROR: (MonitorServer) Cannot link the monitor item '"
+                              << monitorItemName << "' to the hierarchy\n";
+            return false;
+        }
+
+    GetLog()->Debug() << "(MonitorServer) Registered monitor item '"
+                      << monitorItemName << "'\n";
+
+    return true;
+}
+
 boost::shared_ptr<MonitorSystem> MonitorServer::GetMonitorSystem()
 {
     return shared_static_cast<MonitorSystem>
@@ -81,30 +120,56 @@ boost::shared_ptr<MonitorSystem> MonitorServer::GetMonitorSystem()
          );
 }
 
+void MonitorServer::CollectItemPredicates(bool initial, PredicateList& pList)
+{
+    Leaf::TLeafList itemList;
+    ListChildrenSupportingClass<MonitorItem>(itemList);
+
+    for (
+         Leaf::TLeafList::const_iterator iter = itemList.begin();
+         iter != itemList.end();
+         ++iter
+         )
+        {
+            shared_ptr<MonitorItem> item =
+                shared_static_cast<MonitorItem>(*iter);
+
+            if (initial)
+                {
+                    item->GetInitialPredicates(pList);
+                } else
+                {
+                    item->GetPredicates(pList);
+                }
+        }
+}
+
 string MonitorServer::GetMonitorHeaderInfo()
 {
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
-    if (monitorSystem.get() != 0)
+    if (monitorSystem.get() == 0)
         {
-            return monitorSystem->GetMonitorHeaderInfo();
-        } else
-            {
-                return string();
-            }
+            return string();
+        }
+
+    PredicateList pList;
+    CollectItemPredicates(true,pList);
+    return monitorSystem->GetMonitorHeaderInfo(pList);
 }
 
 string MonitorServer::GetMonitorInfo()
 {
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
-    if (monitorSystem.get() != 0)
+    if (monitorSystem.get() == 0)
         {
-            return monitorSystem->GetMonitorInfo();
-        } else
-            {
-                return string();
-            }
+            return string();
+        }
+
+    PredicateList pList;
+    CollectItemPredicates(false,pList);
+    return monitorSystem->GetMonitorInfo(pList);
 }
 
 void MonitorServer::ParseMonitorMessage(const string& data)
@@ -116,6 +181,4 @@ void MonitorServer::ParseMonitorMessage(const string& data)
             monitorSystem->ParseMonitorMessage(data);
         }
 }
-
-
 
