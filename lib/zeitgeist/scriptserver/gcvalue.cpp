@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gcvalue.cpp,v 1.3 2004/03/04 13:44:37 rollmark Exp $
+   $Id: gcvalue.cpp,v 1.4 2004/03/22 10:34:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "gcvalue.h"
 
 using namespace zeitgeist;
+using namespace std;
 
 GCValue::GCValue()
 {
@@ -38,6 +39,36 @@ GCValue::GCValue(VALUE v)
 {
     mValue = Qnil;
     Set(v);
+}
+
+GCValue::GCValue(bool b)
+{
+    mValue = Qnil;
+    Set(b ? Qtrue:Qfalse);
+}
+
+GCValue::GCValue(const string& str)
+{
+    mValue = Qnil;
+    Set(rb_str_new2(str.c_str()));
+}
+
+GCValue::GCValue(const char* str)
+{
+    mValue = Qnil;
+    Set(rb_str_new2(str));
+}
+
+GCValue::GCValue(float f)
+{
+    mValue = Qnil;
+    Set(rb_float_new(f));
+}
+
+GCValue::GCValue(int i)
+{
+    mValue = Qnil;
+    Set(rb_int_new(i));
 }
 
 GCValue::~GCValue()

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gcvalue.h,v 1.2 2004/02/20 12:21:12 rollmark Exp $
+   $Id: gcvalue.h,v 1.3 2004/03/22 10:34:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,22 @@ public:
     GCValue();
     GCValue(const GCValue& value);
     GCValue(VALUE v);
+
+    /** constructs the corresponding ruby boolean */
+    GCValue(bool b);
+
+    /** constructs a new ruby string object */
+    GCValue(const std::string& str);
+
+    /** constructs a new ruby string object */
+    GCValue(const char* str);
+
+    /** constructs a new ruby float object */
+    GCValue(float f);
+
+    /** constructs a new riby int object */
+    GCValue(int i);
+
     ~GCValue();
 
     void operator = (const GCValue& value);
