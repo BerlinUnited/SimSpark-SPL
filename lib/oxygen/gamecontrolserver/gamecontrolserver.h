@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.2.2.1 2003/12/22 18:01:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,10 +76,15 @@ public:
     */
     float GetSenseInterval(int id);
 
-    /** GetSenseLatency returns latency to simulate it takes to query
-        the sensors of an agent in seconds
+    /** GetSenseLatency returns latency it takes to query the sensors
+        of an agent in seconds
      */
     float GetSenseLatency(int id);
+
+    /** GetActionLatency returns the latency it takes to realize an
+        agent action in seconds
+    */
+    float GetActionLatency(int id);
 
     /** returns the AgentAspect for the given \param id */
     boost::shared_ptr<AgentAspect> GetAgentAspect(int id);
