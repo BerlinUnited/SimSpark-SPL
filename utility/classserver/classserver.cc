@@ -57,43 +57,43 @@ ClassServer& ClassServer::instance()
 ClassServer::ClassServer()
 {
     // we are being created ... so initialize ourself
-    mRegistry.clear();
-    mLibraries.clear();
+    M_registry.clear();
+    M_libraries.clear();
 }
 
 // destructor ... called implicitly at the end of the program
 ClassServer::~ClassServer()
 {
     // release all libraries
-    while (mLibraries.size())
+    while (M_libraries.size())
     {
-        CS_FreeLibrary(mLibraries.back());
-        mLibraries.pop_back();
+        CS_FreeLibrary(M_libraries.back());
+        M_libraries.pop_back();
     }
 
-    mLibraries.clear();
-    mRegistry.clear();
+    M_libraries.clear();
+    M_registry.clear();
 }
 
 // Register a class factory to the <null> group
 bool 
-ClassServer::registerFactory(CS_Factory* inFactory)
+ClassServer::registerFactory(CS_Factory* in_factory)
 {
-    return registerFactory("<null>", inFactory);
+    return registerFactory("<null>", in_factory);
 }
 
 
 // Register a class factory to a group
 bool 
-ClassServer::registerFactory(const char* inGroup, CS_Factory* inFactory)
+ClassServer::registerFactory(const char* in_group, CS_Factory* in_factory)
 {
     // do some error checking
-    if (inFactory == NULL) return false;
+    if (in_factory == NULL) return false;
 
     // register it only, if it doesn't exist
-    if (probe(inGroup, inFactory->getName())==false)
+    if (probe(in_group, in_factory->getName())==false)
     {
-        mRegistry[inGroup][inFactory->getName()] = inFactory;
+        M_registry[in_group][in_factory->getName()] = in_factory;
         return true;
     }
     else
@@ -104,13 +104,13 @@ ClassServer::registerFactory(const char* inGroup, CS_Factory* inFactory)
 // It looks a bit messy because of the platform dependant nature of this
 // procedure.
 bool 
-ClassServer::registerLibrary(const char* inLibName)
+ClassServer::registerLibrary(const char* in_lib_name)
 {
     // catch major errors
-    if (inLibName == NULL) return false;
+    if (in_lib_name == NULL) return false;
 
     // open the shared library
-    void* lib = CS_LoadLibrary(inLibName);
+    void* lib = CS_LoadLibrary(in_lib_name);
 
     if (lib)
     {
@@ -126,7 +126,7 @@ ClassServer::registerLibrary(const char* inLibName)
             CS_RegisterClasses(this);
 
             // add the shared library to a list which is freed at the end
-            mLibraries.push_back(lib);
+            M_libraries.push_back(lib);
 
             return true;
         }
@@ -138,59 +138,59 @@ ClassServer::registerLibrary(const char* inLibName)
     return false;
 }
 
-// This function creates the class 'inName' in the group 'inGroup'
+// This function creates the class 'inName' in the group 'in_group'
 void* 
-ClassServer::create(const char* inGroup, const char* inName)
+ClassServer::create(const char* in_group, const char* in_name)
 {
     // find the group
-    tGroupMap::iterator mapIter = mRegistry.find(inGroup);
+    GroupMap::iterator map_iter = M_registry.find(in_group);
 
     // did we get a valid group?
-    if (mapIter == mRegistry.end())
+    if (map_iter == M_registry.end())
     {
         // guess not ... damn
         return NULL;
     }
 
     // now find the class factory
-    tFactoryMap::iterator facIter = (*mapIter).second.find(inName);
+    FactoryMap::iterator fac_iter = (*map_iter).second.find(in_name);
 
     // check if we found it
-    if (facIter == (*mapIter).second.end())
+    if (fac_iter == (*map_iter).second.end())
     {
         // uh, oh ... something went wrong
         return NULL;
     }
 
     // ok, create our object
-    return (*facIter).second->create();
+    return (*fac_iter).second->create();
 }
 
 
-// This function creates the class specified by inName.
+// This function creates the class specified by in_name.
 // First, the "<null>"-Group is checked, then the others.
 void* 
-ClassServer::create(const char* inName)
+ClassServer::create(const char* in_name)
 {
     //ok, first we'll give the "<null>" group a try
-    void* ret = create("<null>", inName);
+    void* ret = create("<null>", in_name);
 
     // if we got a class ... return it
     if (ret!=NULL) return ret;
 
     // ok, the "<null>" group didn't have it, so we'll try the other groups
-    for (tGroupMap::iterator i=mRegistry.begin(); i!=mRegistry.end(); i++)
+    for (GroupMap::iterator i=M_registry.begin(); i!=M_registry.end(); i++)
     {
         // skip the "<null>" group
         if ((*i).first.c_str()[0]=='<' && (*i).first.compare("<null>")==0) 
             continue;
 
         // group != "<null>"
-        for (tFactoryMap::iterator j=(*i).second.begin(); 
+        for (FactoryMap::iterator j=(*i).second.begin(); 
              j!=(*i).second.end(); 
              j++)
         {
-            if ((*j).first.compare(inName)==0)
+            if ((*j).first.compare(in_name)==0)
             {
                 // we have found a matching classname, so we create the class;
                 return (*j).second->create();
@@ -204,23 +204,23 @@ ClassServer::create(const char* inName)
 
 // This tests if a class is already registered
 bool 
-ClassServer::probe(const char* inGroup, const char* inName)
+ClassServer::probe(const char* in_group, const char* in_name)
 {
     // find the group
-    tGroupMap::iterator mapIter = mRegistry.find(inGroup);
+    GroupMap::iterator map_iter = M_registry.find(in_group);
 
     // does the group exist?
-    if (mapIter == mRegistry.end())
+    if (map_iter == M_registry.end())
     {
         // guess not ... so class can't exist either
         return false;
     }
 
     // now find the class factory
-    tFactoryMap::iterator facIter = (*mapIter).second.find(inName);
+    FactoryMap::iterator fac_iter = (*map_iter).second.find(in_name);
 
     // check if we found it
-    if (facIter == (*mapIter).second.end())
+    if (fac_iter == (*map_iter).second.end())
     {
         // ok .. don't have this class yet
         return false;
@@ -232,59 +232,59 @@ ClassServer::probe(const char* inGroup, const char* inName)
 
 // This tests, if a class is already registered
 bool 
-ClassServer::probe(const char* inName)
+ClassServer::probe(const char* in_name)
 {
-    return probe("<null>", inName);
+    return probe("<null>", in_name);
 }
 
 // this returns a string list of all classes registered to a specific group
 void 
-ClassServer::listAll(tCommandNames& classList, const char* inGroup)
+ClassServer::listNames(CommandNames& class_list, const char* in_group)
 {
     // find the group
-    tGroupMap::iterator mapIter = mRegistry.find(inGroup);
+    GroupMap::iterator map_iter = M_registry.find(in_group);
 
     // does the group exist?
-    if (mapIter == mRegistry.end())
+    if (map_iter == M_registry.end())
     {
         // guess not ... so there are obviously no classes registered
         return;
     }
 
     // now get every class registered to this factory map 
-    tFactoryMap factory = (*mapIter).second;
-    for (tFactoryMap::iterator facIter = factory.begin(); 
-         facIter != factory.end(); 
-         facIter++)
+    FactoryMap factory = (*map_iter).second;
+    for (FactoryMap::iterator fac_iter = factory.begin(); 
+         fac_iter != factory.end(); 
+         fac_iter++)
     {
-        classList.push_back ((*facIter).first);
+        class_list.push_back ((*fac_iter).first);
     }
 }
 
 // This scans a path for shared libraries to register. 
 void 
-ClassServer::scan(const char* inPath)
+ClassServer::scan(const char* in_path)
 {
-    char* searchPattern = NULL;
-    char* correctedPath = NULL;
-    int   len;
+    char* search_pattern = NULL;
+    char* corrected_path = NULL;
+    int len;
 
-    // correct inPath
-    len = strlen(inPath) - 1;
+    // correct in_path
+    len = strlen(in_path) - 1;
 
-    if (len>=0 && (inPath[len]=='/' || inPath[len]=='\\'))
+    if (len>=0 && (in_path[len]=='/' || in_path[len]=='\\'))
     {
-        // inPath has the form 'somepath/plugins/', so just copy it
-        correctedPath = new char[len+2];
-        strcpy(correctedPath, inPath);
+        // in_path has the form 'somepath/plugins/', so just copy it
+        corrected_path = new char[len+2];
+        strcpy(corrected_path, in_path);
     }
     else
     {
-        // inPath has the form 'somepath/plugins', 
+        // in_path has the form 'somepath/plugins', 
         // so just copy it and append the slash
-        correctedPath = new char[len+3];
-        strcpy(correctedPath, inPath);
-        strcat(correctedPath, "/");
+        corrected_path = new char[len+3];
+        strcpy(corrected_path, in_path);
+        strcat(corrected_path, "/");
     }
 
     // here begins the platform specific part.
@@ -293,12 +293,12 @@ ClassServer::scan(const char* inPath)
     int                handle;
 
     // the search pattern has the form 'somepath/plugins/*'
-    searchPattern = new char[strlen(correctedPath)+2];
-    strcpy(searchPattern, correctedPath);
-    strcat(searchPattern, "*");
+    search_pattern = new char[strlen(corrected_path)+2];
+    strcpy(search_pattern, corrected_path);
+    strcat(search_pattern, "*");
     
     // check for a matching file
-    handle = _findfirst(searchPattern, &dta);
+    handle = _findfirst(search_pattern, &dta);
 
     // if there's no matching file, we'll exit
     if (handle == -1)
@@ -307,10 +307,10 @@ ClassServer::scan(const char* inPath)
     // iterate over all directories and files
     do
     {
-        // ok, we have to generate a new path to look in (correctedPath + dta.name)
-        char* newPath = new char[strlen(correctedPath)+strlen(dta.name)+1];
-        strcpy(newPath, correctedPath);
-        strcat(newPath, dta.name);
+        // ok, we have to generate a new path to look in (corrected_path + dta.name)
+        char* new_path = new char[strlen(corrected_path)+strlen(dta.name)+1];
+        strcpy(new_path, corrected_path);
+        strcat(new_path, dta.name);
 
         // do we have a directory?
         if (dta.attrib&_A_SUBDIR)
@@ -318,68 +318,68 @@ ClassServer::scan(const char* inPath)
             // only recurse if we don't have a system directory
             if ((strcmp(dta.name,".") && strcmp(dta.name,"..")))
             {
-                scan(newPath);
+                scan(new_path);
             }
         }
         else
         {
             // we have a file ... register it
-            registerLibrary(newPath);
+            registerLibrary(new_path);
         }
 
-        delete[] newPath;
+        delete[] new_path;
     } while ((_findnext(handle, &dta)) == 0);
 
     _findclose(handle);
-    delete[] searchPattern;
+    delete[] search_pattern;
 
 #else
-    DIR*            dirStream;
-    struct dirent*    dirEntry;
+    DIR* dir_stream;
+    struct dirent* dir_entry;
 
-    dirStream = opendir(correctedPath);
+    dir_stream = opendir(corrected_path);
 
     // if something went wrong, we'll just return silently
-    if (dirStream == NULL)
+    if (dir_stream == NULL)
         return;
 
     // now let's try and iterate over the entries
-    dirEntry = readdir(dirStream);
+    dir_entry = readdir(dir_stream);
 
-    while(dirEntry != NULL)
+    while(dir_entry != NULL)
     {
-        char* newPath = new char[strlen(correctedPath)+
-                                 strlen(dirEntry->d_name)+1];
-        strcpy(newPath, correctedPath);
-        strcat(newPath, dirEntry->d_name);
+        char* new_path = new char[strlen(corrected_path)+
+                                 strlen(dir_entry->d_name)+1];
+        strcpy(new_path, corrected_path);
+        strcat(new_path, dir_entry->d_name);
 
-        struct stat statBuf;
-        if (stat(newPath, &statBuf)==0)
+        struct stat stat_buf;
+        if (stat(new_path, &stat_buf)==0)
         {
-            if (statBuf.st_mode&S_IFDIR)
+            if (stat_buf.st_mode&S_IFDIR)
             {    
                 // only recurse if we don't have a system directory
-                if ((strcmp(dirEntry->d_name,".") && 
-                     strcmp(dirEntry->d_name,"..")))
+                if ((strcmp(dir_entry->d_name,".") && 
+                     strcmp(dir_entry->d_name,"..")))
                 {
-                    scan(newPath);
+                    scan(new_path);
                 }
             }
             else
             {
                 // we have a file ... register it
-                registerLibrary(newPath);
+                registerLibrary(new_path);
             }
         }
-        dirEntry = readdir(dirStream);
-        delete[] newPath;
+        dir_entry = readdir(dir_stream);
+        delete[] new_path;
     }
 
     // close the directory stream
-    closedir(dirStream);
+    closedir(dir_stream);
 #endif
 
-    delete[] correctedPath;
+    delete[] corrected_path;
 }
 
 // Print out a list of all registered classfactories
@@ -387,10 +387,10 @@ void
 ClassServer::dumpStatus() 
 {
     cout << "ClassServer::dumpStatus(" << this << ")\n";
-    for (tGroupMap::iterator i=mRegistry.begin(); i!=mRegistry.end(); i++)
+    for (GroupMap::iterator i=M_registry.begin(); i!=M_registry.end(); i++)
     {
-    cout << "'" << (*i).first << "':\n";
-        for (tFactoryMap::iterator j=(*i).second.begin(); 
+        cout << "'" << (*i).first << "':\n";
+        for (FactoryMap::iterator j=(*i).second.begin(); 
          j!=(*i).second.end(); 
          j++)
         {

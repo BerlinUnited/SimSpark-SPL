@@ -17,11 +17,11 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CLASSSERVER_H_
-#define _CLASSSERVER_H_
+#ifndef UTILITY_CLASSSERVER_H
+#define UTILITY_CLASSSERVER_H
 
 /*! \class ClassServer
-    $Id: classserver.h,v 1.1 2002/08/12 14:28:27 fruit Exp $
+    $Id: classserver.h,v 1.2 2002/08/21 08:47:13 fruit Exp $
 
     ClassServer - Class Creation Interface
 
@@ -33,7 +33,7 @@
     HISTORY: 
     The ClassServer subsystem was taken from a student project at the
     AI Research Group, Koblenz University. Original development by
-    Marco Koegler <koegler@uni-koblenz.de>, Marcus Rollmann
+    Marco Koegler <koegler@uni-koblenz.de>, Markus Rollmann
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 */
@@ -62,11 +62,12 @@
 #include <list>
 
 /*! Macros
-    The following macros make exporting plugins from a shared library really simple.
-    You just have to create a factory for each class to be exported. Then follows
-    a CS_Begin/CS_End block, containing a CS_Register or CS_RegisterToGroup call for
-    each class. These macros basically define an entry point function through which
-    the class server can access the classfactories.
+    The following macros make exporting plugins from a shared library
+    really simple.  You just have to create a factory for each class
+    to be exported. Then follows a CS_Begin/CS_End block, containing a
+    CS_Register or CS_RegisterToGroup call for each class. These
+    macros basically define an entry point function through which the
+    class server can access the classfactories.
 */
 
 //! This macro creates a factory for the class 'CLASSNAME'
@@ -74,9 +75,9 @@
     class CS_Factory##CLASSNAME : public CS_Factory{\
     public:\
         CS_Factory##CLASSNAME(){\
-            char* tmpString = #CLASSNAME;\
-            mName = new char[strlen(tmpString)+1];\
-            strcpy(mName, tmpString);\
+            char* tmp_string = #CLASSNAME;\
+            M_name = new char[strlen(tmp_string)+1];\
+            strcpy(M_name, tmp_string);\
         }\
         virtual void* create()    { return new CLASSNAME();    }\
     };
@@ -91,7 +92,7 @@
 */
 #define CS_Register(CLASSNAME)\
     static CS_Factory##CLASSNAME theFactory##CLASSNAME;\
-    CS_OurClassServer->Register(&theFactory##CLASSNAME);
+    CS_OurClassServer->doRegister(&theFactory##CLASSNAME);
 
 
 /*! This macro registers a class inside a CS_Begin/CS_End Block
@@ -99,7 +100,7 @@
 //
 #define CS_RegisterToGroup(GROUP, CLASSNAME)\
     static CS_Factory##CLASSNAME theFactory##CLASSNAME;\
-    CS_OurClassServer->Register(#GROUP, &theFactory##CLASSNAME);
+    CS_OurClassServer->doRegister(#GROUP, &theFactory##CLASSNAME);
 
 /!* This macro creates the end of a shared library export block. 
     One brace for the function and the other for the extern "C" block
@@ -115,14 +116,14 @@
 */
 #define CS_FunctionRegister(CLASSNAME)\
     static CS_Factory##CLASSNAME theFactory##CLASSNAME;\
-    ClassServer::Instance().Register(&theFactory##CLASSNAME);
+    ClassServer::instance().doRegister(&theFactory##CLASSNAME);
 
 /*! This macro registers a class inside a CS_Begin/CS_End Block 
     to the specified group
 */
 #define CS_FunctionRegisterToGroup(GROUP, CLASSNAME)\
     static CS_Factory##CLASSNAME theFactory##CLASSNAME;\
-    ClassServer::Instance().Register(#GROUP, &theFactory##CLASSNAME);
+    ClassServer::instance().doRegister(#GROUP, &theFactory##CLASSNAME);
 
 //! This macro terminates an export block
 #define CS_FunctionEnd() }
@@ -135,14 +136,14 @@ class CS_Factory
 {
 public:
     // virtual destructor
-    virtual ~CS_Factory()    {    if (mName) delete[]mName;    }
+    virtual ~CS_Factory()    {    if (M_name) delete[] M_name;    }
     // Accessors
-    char* getName()          {    return mName;    }
+    char* getName()          {    return M_name;    }
     // the interface which has to be implemented
     virtual void* create() = 0;    
 protected:
     //! name of the class which is created by this factory
-    char*    mName;        
+    char*    M_name;        
 };
 
 /*! \class ClassServer
@@ -154,35 +155,35 @@ class CLASS_EXPORT ClassServer
 {
 public:
     //! a string list
-    typedef std::list<std::string> tCommandNames;
+    typedef std::list<std::string> CommandNames;
 
     //! singleton implementation
     static ClassServer& instance();
 
     // register functions
     //! Register a class factory to the <null> group
-    bool registerFactory(CS_Factory* inFactory);
+    bool doRegister(CS_Factory* in_factory);
     //! Register a class factory to a group
-    bool registerFactory(const char* inGroup, CS_Factory* inFactory);
+    bool doRegister(const char* in_group, CS_Factory* in_factory);
     //! Register classes contained in a shared library
     bool registerLibrary(const char* library);
     void scan(const char* inPath);
 
-    //! create the class 'inName' in the group 'inGroup'
-    void* create(const char* inGroup, const char* inName);
+    //! create the class 'in_name' in the group 'in_group'
+    void* create(const char* in_group, const char* in_name);
     //! class creation
-    void* create(const char* inName);
+    void* create(const char* in_name);
 
     //! test if a class is registered
-    bool probe(const char* inGroup, const char* inName);
+    bool probe(const char* in_group, const char* in_name);
     //! test if a class is registered
-    bool probe(const char* inName);
+    bool probe(const char* in_name);
 
     //! dump status out to stdout
     void dumpStatus();
 
-    //! list all registered classe
-    void listAll(tCommandNames& classList, const char* inGroup = "<null>");
+    //! list names of registered classes
+    void listNames(CommandNames& class_list, const char* in_group = "<null>");
 
 
     //! destructor should only be called implicitly
@@ -190,19 +191,19 @@ public:
 
 protected:
     // declare a few types, so that we can save some 'typing' (pun intended)
-    typedef std::map<std::string, CS_Factory*>    tFactoryMap;
-    typedef std::map<std::string, tFactoryMap>    tGroupMap;
+    typedef std::map<std::string, CS_Factory*> FactoryMap;
+    typedef std::map<std::string, FactoryMap> GroupMap;
 
     // for singleton
     ClassServer();
 
     //! registry of factories (categorized in groups)
-    tGroupMap mRegistry;    
+    GroupMap M_registry;    
     //! list of loaded shared libraries
-    std::list<void*> mLibraries;   
+    std::list<void*> M_libraries;
 
 private:
     ClassServer(const ClassServer&);
     ClassServer& operator=(const ClassServer&);
 };
-#endif //__CLASSSERVER_H__
+#endif // UTILITY_CLASSSERVER_H
