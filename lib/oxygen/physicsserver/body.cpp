@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.10 2004/04/07 08:33:02 rollmark Exp $
+   $Id: body.cpp,v 1.11 2004/04/07 11:40:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,26 +99,9 @@ bool Body::CreateBody()
             return true;
         }
 
-    shared_ptr<Scene> scene = GetScene();
-    if (scene.get() == 0)
-        {
-            GetLog()->Error() << "(Body) ERROR: found no Scene node\n";
-            return false;
-        }
-
-    shared_ptr<World> worldNode = shared_dynamic_cast<World>
-        (scene->GetChildOfClass("World"));
-    if (worldNode.get() == 0)
-        {
-            GetLog()->Error() << "(Body) ERROR: found no World node\n";
-            return false;
-        }
-
-    dWorldID world = worldNode->GetODEWorld();
+    dWorldID world = GetWorldID();
     if (world == 0)
         {
-            GetLog()->Error()
-                << "(Body) ERROR: World returned empty ODE handle\n";
             return false;
         }
 
