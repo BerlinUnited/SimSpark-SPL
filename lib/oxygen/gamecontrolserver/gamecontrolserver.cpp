@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.4 2003/12/03 18:01:48 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.5 2003/12/04 17:28:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "gamecontrolserver.h"
+#include "baseparser.h"
 #include <oxygen/agentaspect/agentaspect.h>
 #include <zeitgeist/logserver/logserver.h>
 
@@ -37,21 +38,46 @@ GameControlServer::~GameControlServer()
 }
 
 bool
-GameControlServer::Init(const std::string& parserName)
+GameControlServer::InitParser(const std::string& parserName)
 {
-    GetLog()->Debug() << "GameControlServer::Init: creating parser: "
+    GetLog()->Debug() << "(GameControlServer::InitParser) creating parser: "
                       << parserName << "\n";
-    mParser = boost::shared_static_cast<BaseParser>(GetCore()->New(parserName));
 
-    if (!mParser)
+    mParser = shared_dynamic_cast<BaseParser>(GetCore()->New(parserName));
+
+    if (! mParser.get() == 0)
     {
-        // could not create parser
         GetLog()->Error() << "ERROR: Unable to create " << parserName << "\n";
         return false;
     }
-    // should we also initialize the parser? --> add Init() to BaseParser in that case
+
     return true;
 }
+
+bool
+GameControlServer::InitEffector(const std::string& effectorName)
+{
+    GetLog()->Debug() << "(GameControlServer::InitEffector) creating effector: "
+                      << effectorName << "\n";
+
+    shared_ptr<Effector> effector
+        = shared_dynamic_cast<Effector>(GetCore()->New(effectorName));
+
+    if (! mParser.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: Unable to create " << effectorName << "\n";
+        return false;
+    }
+
+    string predicate = effector->GetPredicate();
+    mEffectorMap[predicate] = effector;
+
+    GetLog()->Debug() << "registered " << effectorName
+                      << " for predicate " << predicate << "\n";
+
+   return true;
+}
+
 
 bool
 GameControlServer::AgentConnect(int id)
@@ -95,13 +121,76 @@ float GameControlServer::GetSenseInterval(int /*id*/)
     return 0.1;
 }
 
-shared_ptr<ActionObject::TList> GameControlServer::Parse(string /*str*/) const
+shared_ptr<Effector> GameControlServer::GetEffector(std::string predicate) const
 {
-    // use the parser to create a TPredicateList
+    TEffectorMap::const_iterator iter = mEffectorMap.find(predicate);
 
-    // lookup the effectors and contruct the corresponding list of
-    // ActionObjects
-
-    return shared_ptr<ActionObject::TList>(new ActionObject::TList);
+    if (iter == mEffectorMap.end())
+        {
+            return shared_ptr<Effector>();
+        } else
+            {
+                return (*iter).second;
+            }
 }
+
+shared_ptr<ActionObject::TList> GameControlServer::Parse(string str) const
+{
+    if (mParser.get() == 0)
+        {
+            GetLog()->Error()
+                << "(GameControlServer::Parse) No parser registered.\n";
+            return shared_ptr<ActionObject::TList>(new ActionObject::TList());
+        }
+
+    // use the parser to create a TPredicateList
+    BaseParser::TPredicateList predicates = mParser->Parse(str);
+
+    // construct an ActionList using the registered effectors
+    shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
+
+    for
+        (
+         BaseParser::TPredicateList::iterator iter = predicates.begin();
+         iter != predicates.end();
+         ++iter
+        )
+        {
+            BaseParser::TPredicate& predicate = (*iter);
+
+            shared_ptr<Effector> effector = GetEffector(predicate.name);
+            if (effector.get() == 0)
+                {
+                    GetLog()->Warning()
+                        << "(GameControlServer::Parse) No effector registered for predicate "
+                        << predicate.name << "\n";
+                    continue;
+                }
+
+            shared_ptr<ActionObject> action(effector->GetActionObject(predicate));
+
+            if (action.get() == 0)
+                {
+                    continue;
+                }
+
+            actionList->push_back(action);
+        }
+
+    //
+    // lookup the effectors and contruct the list of ActionObjects
+    //
+
+    return shared_ptr<ActionObject::TList>(new ActionObject::TList());
+}
+
+bool GameControlServer::RealizeActions(boost::shared_ptr<ActionObject::TList> /*actions*/)
+{
+    // traverse the action list, query the registered ControlAspects
+    // if an action is valid and apply it using the corresponding
+    // effector
+
+    return true;
+}
+
 
