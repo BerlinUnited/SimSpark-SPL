@@ -1,3 +1,145 @@
+2004-02-06  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/soccer/kickeffector/kickeffector.cpp:
+	- using SoccerBase::GetBallCollider
+
+	* app/agenttest/Makefile.am:
+	- added plugin/soccer to the list of include direcories
+
+	* app/rcssmonitor3d/main.cpp:
+	- using STR_PM_ constants to translate playmode values into string
+
+	* app/agenttest/main.cpp:
+	- added parsing of GameState data
+
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.cpp:
+	- removed PlayMode2Str, now using SoccerBase::PlayMode2Str
+
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.h:
+	- removed method PlayMode2Str (now part of SoccerBase)
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- implemented PlayMode2Str; return a string corresponding to the
+	given TPlayMode value
+
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	- added method PlayMode2Str
+
+	* plugin/soccer/soccertypes.h:
+	- defining a commons set of string constants for the TPlayMode
+	enum that can be used by an agent implementation or a monitor
+
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.cpp:
+	- the first percept after the agent is successfully assigned to a
+	team contains additional information: unum, team index and a
+	subset of the soccer parameters
+
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.h:
+	- added method InsertInitialPercept and InsertSoccerParam
+	- added member mAgentState and mFirstPercept
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	- using method SoccerBase::GetSoccerVar to read query soccer vars
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- caching ball size in mBallSize
+	- using method SoccerBase::GetSoccerVar
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- added member mBallRadius to cache the size of the ball instead of
+	repeatedly querying ruby
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.h:
+	- remove method GetSoccerVar (now part of SoccerBase)
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	- removed method GetSoccerVar (now part of SoccerBase)
+
+	* plugin/soccer/soccerbase/soccerbase.h:
+	- added templated method GetSoccerVar
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp,
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.cpp:
+	- using method SoccerBase::GetGameState
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- added method GetBallCollider
+	- added method GetGameState
+
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	- added method GetBallCollider
+	- added method GetGameState
+	- changed all methods to accept Leaf references
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	- using SoccerBase::GetBall method
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	- some cleanup
+	- using SoccerBase methods
+	- implemented OnUnlink
+
+	* plugin/soccer/visionperceptor/visionperceptor.h:
+	- moved Onlink to protected section and declared it virtual
+	- added method OnUnlink
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- using SoccerBase::GetBall method
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	- remove method GetBall and GetBallBody
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.h:
+	- remove method GetBall and GetBallBody (now part of SoccerBase)
+
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	- some cleanup
+	- using SoccerBase::GetBallBody
+
+	* plugin/soccer/dasheffector/dasheffector.cpp: 
+	- some cleanup
+	- using SoccerBase::GetBall
+
+	* plugin/soccer/export.cpp: 
+	- removed SoccerBase export
+
+	* plugin/soccer/Makefile.am: 
+	- remove zeitgeist export of SoccerBase
+
+	* plugin/soccer/soccerbase/soccerbase_c.cpp:
+	- removed zeitgeist export of SoccerBase
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- implemented GetBal, GetBallBody
+	- changed GetAgentState to call GetTransformParent internally
+	rather than expecting a reference as a paramete
+
+	* plugin/soccer/soccerbase/soccerbase.h:
+	- replaced includes with forward declarations
+	- don't derive SoccerBase from zeitgeist::leaf
+	- added method GetBody, GetBall and GetBallBody
+
+	* lib/zeitgeist/leaf.cpp, lib/zeitgeist/leaf.h:
+	- declared GetParentSupportingClass const
+
+2004-02-03  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/simulator.rb: 
+	-added GameStatePerceptor to the agent
+
+	* plugin/soccer/export.cpp: 
+	- exporting GameStatePerceptor to zeitgeist
+
+	* plugin/soccer/Makefile.am: 
+	- added gamestateperceptor files
+
+	* plugin/soccer/gamestateperceptor/.cvsignore,
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.cpp,
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.h,
+	* plugin/soccer/gamestateperceptor/gamestateperceptor_c.cpp:
+	- added GameStatePerceptor, collecting current game time and playmode
+	from the GameStateAspect
+
 2004-02-02  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/filesystemstd/filesystemstd.cpp:
