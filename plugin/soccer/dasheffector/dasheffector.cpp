@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector.cpp,v 1.1.2.7 2004/02/08 22:45:11 fruit Exp $
+   $Id: dasheffector.cpp,v 1.1.2.8 2004/02/08 23:02:01 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,9 +43,6 @@ DashEffector::~DashEffector()
 bool
 DashEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
-    GetLog()->Error()
-        << "ERROR: (DashEffector) Realize\n ";
-
     if (mBody.get() == 0)
     {
         return false;
