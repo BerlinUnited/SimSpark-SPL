@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: raycollider.cpp,v 1.1.2.1 2004/01/25 18:07:02 fruit Exp $
+   $Id: raycollider.cpp,v 1.1.2.2 2004/02/02 20:38:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ void
 RayCollider::SetParams(salt::Vector3f pos,
                             salt::Vector3f dir, float length)
 {
-
     dGeomRaySet(mODEGeom, pos[0], pos[1], pos[2], dir[0], dir[1], dir[2]);
     dGeomRaySetLength(mODEGeom, length);
 }
