@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gcvalue.cpp,v 1.4 2004/03/22 10:34:42 rollmark Exp $
+   $Id: gcvalue.cpp,v 1.5 2004/12/19 14:08:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "gcvalue.h"
+#include <sstream>
 
 using namespace zeitgeist;
 using namespace std;
@@ -156,8 +157,35 @@ bool GCValue::GetString(std::string& value)
             return false;
         }
 
-    value = STR2CSTR(mValue);
-    return true;
+    switch(TYPE(mValue))
+        {
+        case T_STRING:
+            {
+                value = STR2CSTR(mValue);
+                return true;
+            }
+
+        case T_FLOAT:
+            {
+                stringstream ss;
+                ss << (float)NUM2DBL(mValue);
+                value = ss.str();
+                return true;
+            }
+
+        case T_FIXNUM:
+            {
+                stringstream ss;
+                ss << NUM2INT(mValue);
+                value = ss.str();
+                return true;
+            }
+
+        default:
+            break;
+        }
+
+    return false;
 }
 
 void GCValue::GC_Unregister()
