@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.2 2004/05/10 14:10:45 fruit Exp $
+   $Id: gamestate.cpp,v 1.3 2004/05/17 19:13:20 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -144,6 +144,14 @@ GameState::GetPlayer(int index,
 }
 
 bool
+GameState::GetAck(std::string &ack)
+{
+    if(mAck.empty()){return false;}
+    ack = mAck;
+    return true;
+}
+
+bool
 GameState::GetPlayerMessage(int index, std::string& message)
 {
     if (index < 0 || index >= mSeenPlayers.size() || !mSeenPlayers[index])
@@ -265,7 +273,8 @@ void
 GameState::ProcessInfo(const Predicate& predicate)
 {
     Predicate::Iterator iter(predicate);
-
+    mAck.clear();
+    predicate.GetValue(iter, "ack", mAck);
     predicate.GetValue(iter, "time", mTime);
     predicate.GetValue(iter, "half", mHalf);
     predicate.GetValue(iter, "score_left", mScoreLeft);
@@ -318,6 +327,7 @@ GameState::ProcessInfo(const Predicate& predicate)
             }
             if (!predicate.GetValue(j, "say", pi.mMessage))
             {
+                std::cout<<"kein say gefunden\n";
                 pi.mMessage.clear();
             }
             if (mSeenPlayers.size() <= players_seen)
