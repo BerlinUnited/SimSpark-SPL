@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.h,v 1.2 2004/04/28 14:33:08 rollmark Exp $
+   $Id: netcontrol.h,v 1.3 2004/04/30 13:07:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include "simcontrolnode.h"
 #include "netbuffer.h"
-#include <utility/rcssnet/socket.hpp>
+#include <rcssnet/socket.hpp>
 #include <boost/shared_array.hpp>
 
 namespace oxygen

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.cpp,v 1.2 2004/04/28 14:33:08 rollmark Exp $
+   $Id: netcontrol.cpp,v 1.3 2004/04/30 13:07:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 #include "netmessage.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <netinet/in.h>
-#include <utility/rcssnet/exception.hpp>
-#include <utility/rcssnet/tcpsocket.hpp>
-#include <utility/rcssnet/udpsocket.hpp>
+#include <rcssnet/exception.hpp>
+#include <rcssnet/tcpsocket.hpp>
+#include <rcssnet/udpsocket.hpp>
 #include <sstream>
 
 using namespace rcss::net;
