@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.10 2004/06/10 18:23:47 rollmark Exp $
+   $Id: monitor.cpp,v 1.11 2004/06/11 15:02:17 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -966,6 +966,12 @@ Monitor::Idle()
     {
         cout << "single step mode...exiting\n";
         return;
+    }
+
+    if (mGameState.IsFinished())
+    {
+        cerr << "simulation finished... monitor exiting\n";
+        exit(0);
     }
 
     if (! mCommServer->ReadMessage())
