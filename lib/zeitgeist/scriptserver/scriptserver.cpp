@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.11 2004/02/20 12:23:37 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.12 2004/03/12 08:50:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -229,6 +229,8 @@ ScriptServer::ScriptServer()
     rb_define_global_function("pushd",        RUBY_METHOD_FUNC(pushd), 0);
     rb_define_global_function("popd",         RUBY_METHOD_FUNC(popd), 0);
     rb_define_global_function("dirs",         RUBY_METHOD_FUNC(dirs), 0);
+
+    mRelPathPrefix = '../../';
 }
 
 ScriptServer::~ScriptServer()
@@ -416,6 +418,11 @@ bool ScriptServer::ConstructInternal()
     return true;
 }
 
+void ScriptServer::SetInitRelPathPrefix(const std::string &relPathPrefix)
+{
+    mRelPathPrefix = relPathPrefix;
+}
+
 bool ScriptServer::RunInitScript(const string &sourceDir, const string &name,
                                  bool copy, const string& destDir)
 {
@@ -512,7 +519,7 @@ bool ScriptServer::RunInitScript(const string &fileName, const string &relPath)
           (validDotDir) && (RunInitScript(dotDir, fileName, false))
           )
          || (RunInitScript(pkgdatadir,  fileName, validDotDir, dotDir))
-         || (RunInitScript(relPath, fileName, validDotDir, dotDir))
+         || (RunInitScript(mRelPathPrefix+relPath, fileName, validDotDir, dotDir))
          );
 
     if (! ok)
