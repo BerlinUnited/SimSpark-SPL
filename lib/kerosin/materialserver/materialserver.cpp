@@ -1,3 +1,24 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+this file is part of rcssserver3D
+Fri May 9 2003
+Copyright (C) 2002,2003 Koblenz University
+Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+$Id: materialserver.cpp,v 1.3 2004/03/20 12:47:39 rollmark Exp $
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 2 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #include "materialserver.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
@@ -7,8 +28,7 @@ using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
 
-MaterialServer::MaterialServer() :
-Leaf()
+MaterialServer::MaterialServer() : Node()
 {
 }
 
@@ -16,52 +36,26 @@ MaterialServer::~MaterialServer()
 {
 }
 
-
-boost::shared_ptr<Material> MaterialServer::GetMaterial(const std::string &name)
+shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
 {
-	TMaterialCache::iterator entry = mMaterialCache.find(name);
+    shared_ptr<Material> material = shared_dynamic_cast<Material>(GetChild(name));
 
-	if (entry != mMaterialCache.end())
-	{
-		// we already have a match
-		return (*entry).second;
-	}
+    if (material.get() == 0)
+        {
+            GetLog()->Error() << "(MaterialServer) ERROR: Unknown material '"
+                              << name << "'\n";
+        }
 
-	shared_ptr<Material> material(new Material(shared_static_cast<MaterialServer>(make_shared(GetSelf()))));
-
-	if (material->Load(name))
-	{
-		// register the texture, so we will find it later
-		mMaterialCache[name] = material;
-	}
-	else
-	{
-		material = shared_ptr<Material>();
-	}
-
-	return material;
-}
-
-bool MaterialServer::Touch(const std::string &name)
-{
-	return (GetMaterial(name).get() != NULL);
+    return material;
 }
 
 // set up the script variables used for loading
 bool MaterialServer::ConstructInternal()
 {
-	shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(GetCore()->Get("/sys/server/script"));
+    shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
+    scriptServer->CreateVariable("Material.Diffuse",        "");
+    scriptServer->CreateVariable("Material.Normal",         "");
+    scriptServer->CreateVariable("Material.Specular",       "");
 
-	if (scriptServer.get() == NULL)
-	{
-		GetLog()->Error() << "ERROR: Could not locate ScriptServer..." << std::endl;
-		GetLog()->Error() << "ERROR: Could not construct MaterialServer..." << std::endl;
-		return false;
-	}
-
-	scriptServer->CreateVariable("Material.Diffuse",	"");
-	scriptServer->CreateVariable("Material.Normal",		"");
-	scriptServer->CreateVariable("Material.Specular",	"");
-
-	return true;
+    return true;
 }
