@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.cpp,v 1.5 2004/04/08 06:58:35 rollmark Exp $
+   $Id: imageserver.cpp,v 1.6 2004/04/08 07:26:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,62 +38,52 @@ shared_ptr<FileServer> gFileServer;
 //------------------------------------------------------------------------------------------------
 ILHANDLE ILAPIENTRY FSOpen(const ILstring inName)
 {
-    return gFileServer->Open(inName);
-    //return fopen(inName, "rb");
+    return (ILHANDLE)(gFileServer->Register(inName));
 }
 
 ILvoid ILAPIENTRY FSClose(ILHANDLE handle)
 {
-    //printf("CLOSE\n");
-    salt::RFile *file = (salt::RFile*)handle;
-    file->Close();
-    delete file;
-    //fclose((FILE*)handle);
+    gFileServer->Close((FileServer::THandle)handle);
 }
 
 ILboolean ILAPIENTRY FSEof(ILHANDLE handle)
 {
-    salt::RFile *file = (salt::RFile*)handle;
+    shared_ptr<salt::RFile> file =
+        gFileServer->Get((FileServer::THandle)handle);
 
-    const ILboolean val= file->Eof();
-    //gFileServer->GetLog()->Debug().Printf("eof: %x\n", val);
-    return val;
+    return file->Eof();
 }
 
 ILint ILAPIENTRY FSGetc(ILHANDLE handle)
 {
-    salt::RFile *file = (salt::RFile*)handle;
+    shared_ptr<salt::RFile> file =
+        gFileServer->Get((FileServer::THandle)handle);
 
-    const int val = file->Getc();
-    //gFileServer->GetLog()->Debug().Printf("getc: %x\n", val);
-    return val;
+    return file->Getc();
 }
 
 ILint ILAPIENTRY FSRead(void *buffer, ILuint size, ILuint count, ILHANDLE handle)
 {
-    salt::RFile *file = (salt::RFile*)handle;
+    shared_ptr<salt::RFile> file =
+        gFileServer->Get((FileServer::THandle)handle);
 
-    const size_t readSize = file->Read(buffer, size, count);
-    //gFileServer->GetLog()->Debug().Printf("read(%d, %d): %d\n", size, count, readSize);
-    return readSize;
+    return file->Read(buffer, size, count);
 }
 
 ILint ILAPIENTRY FSSeek(ILHANDLE handle, ILint offset, ILint origin)
 {
-    salt::RFile *file = (salt::RFile*)handle;
+    shared_ptr<salt::RFile> file =
+        gFileServer->Get((FileServer::THandle)handle);
 
-    const int val = file->Seek(offset, origin);
-    //gFileServer->GetLog()->Debug().Printf("seek: %d\n", val);
-    return val;
+    return file->Seek(offset, origin);
 }
 
 ILint ILAPIENTRY FSTell(ILHANDLE handle)
 {
-    salt::RFile *file = (salt::RFile*)handle;
+    shared_ptr<salt::RFile> file =
+        gFileServer->Get((FileServer::THandle)handle);
 
-    const int val = file->Tell();
-    //gFileServer->GetLog()->Debug().Printf("tell: %d\n", val);
-    return val;
+    return file->Tell();
 }
 
 //------------------------------------------------------------------------------------------------
