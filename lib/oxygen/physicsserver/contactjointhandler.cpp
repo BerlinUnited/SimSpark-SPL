@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.1.2.2 2004/01/16 11:05:23 rollmark Exp $
+   $Id: contactjointhandler.cpp,v 1.1.2.3 2004/01/29 10:23:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 #include "collider.h"
 #include "world.h"
 #include "space.h"
+
+#include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -48,18 +50,28 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& co
       (mWorld.get() == 0) ||
       (mSpace.get() == 0)
       )
-    {
-      return;
-    }
+      {
+          return;
+      }
+
+  // check if the collidee has a ContactJointHandler registered to it
+  shared_ptr<Leaf> handler =
+      collidee->GetChildSupportingClass("ContactJointHandler");
+
+  if (handler.get() == 0)
+      {
+          return;
+      }
 
   dBodyID myBody = dGeomGetBody(mCollider->GetODEGeom());
   dBodyID collideeBody = dGeomGetBody(collidee->GetODEGeom());
 
-  // to create a contact joint it is sufficient that we have at least
-  // one body to attach it to. As collision handlers are called
-  // symmetrically for both collision partners we can require our geom
-  // to have an associated geom.
-  if (myBody == 0)
+  // to create a contact joint it we must have at least one body to
+  // attach it to.
+  if (
+      (myBody == 0) &&
+      (collideeBody == 0)
+      )
     {
       return;
     }
