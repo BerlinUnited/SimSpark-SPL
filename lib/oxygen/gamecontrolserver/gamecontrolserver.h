@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.4 2003/12/04 17:26:51 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.5 2003/12/08 14:49:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,12 +23,12 @@
 #define OXYGEN_GAMECONTROLSERVER_H
 
 #include "actionobject.h"
+#include "baseparser.h"
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 
 namespace oxygen
 {
-class BaseParser;
 class AgentAspect;
 class Effector;
 
@@ -79,6 +79,9 @@ public:
         perceptors in seconds
     */
     float GetSenseInterval(int id);
+
+    /** temporary method, do not use */
+    std::string TmpGenerate(const BaseParser::TPredicate& pred);
 
 protected:
     /** looks up the effector registered to \param predicate */
