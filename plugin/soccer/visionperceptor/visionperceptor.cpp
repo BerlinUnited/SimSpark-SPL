@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.10 2004/02/08 22:49:02 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.11 2004/02/10 15:20:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,8 +28,9 @@
 
 using namespace oxygen;
 using namespace boost;
+using namespace salt;
 
-VisionPerceptor::VisionPerceptor() : Perceptor(),
+VisionPerceptor::VisionPerceptor() : Perceptor(), mSenseMyPos(false),
                                      mAddNoise(true), mPredicateName("Vision")
 {
     // set some default noise values
@@ -181,15 +182,18 @@ VisionPerceptor::Percept(Predicate& predicate)
         predicate.parameter.push_back(element);
     }
 
-#define DEBUG_PLAYER_POS
-#ifdef DEBUG_PLAYER_POS
-    Predicate::TParameterList element;
-    element.push_back(std::string("mypos"));
-    element.push_back(myPos[0]);
-    element.push_back(myPos[1]);
-    element.push_back(myPos[2]);
-    predicate.parameter.push_back(element);
-#endif
+    if (mSenseMyPos)
+        {
+            Vector3f sensedMyPos = myPos;
+            SoccerBase::FlipView(sensedMyPos, ti);
+
+            Predicate::TParameterList element;
+            element.push_back(std::string("mypos"));
+            element.push_back(sensedMyPos[0]);
+            element.push_back(sensedMyPos[1]);
+            element.push_back(sensedMyPos[2]);
+            predicate.parameter.push_back(element);
+        }
 
     return true;
 }
@@ -233,4 +237,10 @@ VisionPerceptor::CheckOcclusion(const salt::Vector3f& my_pos,
         }
     }
 }
+
+void VisionPerceptor::SetSenseMyPos(bool sense)
+{
+    mSenseMyPos = sense;
+}
+
 
