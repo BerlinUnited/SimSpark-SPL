@@ -21,4 +21,4 @@ endif
 AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 
 inputtest_SOURCES = main.cpp
-EXTRA_DIST = inputtest.rb zeitgeist.rb
+EXTRA_DIST = inputtest.rb init.rb
