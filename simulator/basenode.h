@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYGRAPH_BASENODE_H
-#define RCSS_ENTITYGRAPH_BASENODE_H
+#ifndef RCSS_ENTITY_BASENODE_H
+#define RCSS_ENTITY_BASENODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,11 +29,13 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0   // only for indenting
     }}  
 #endif
+
+class DirNode;
 
 class BaseNode
 {
@@ -45,8 +47,11 @@ public:
 	
     BaseNode(NodeType node_type,
              const std::string& name = "<unknown>", 
-	     BaseNode* parent = 0);
+	     DirNode* parent = 0);
     virtual ~BaseNode();
+
+    //! will be called every simulator step 
+    virtual void process() {}
 
     NodeType getType() const;
 
@@ -81,7 +86,7 @@ public:
 protected:
     NodeType M_type;
     std::string M_name;
-    BaseNode* M_parent;
+    DirNode* M_parent;
 };
 
 struct CompareNodeName 

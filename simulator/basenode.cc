@@ -17,22 +17,28 @@
  *                                                                         *
  ***************************************************************************/
 #include "basenode.h"
+#include "dirnode.h"
 
 #include <algorithm>
 #include <iostream>
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace std;
 
 BaseNode::BaseNode(NodeType node_type,
                    const std::string& name, 
-                   BaseNode* parent)
+                   DirNode* parent)
     : M_type(node_type), M_name(name), M_parent(parent)
 {
+    if (M_parent != 0)
+        M_parent->registerChild(this);
 }
 
 BaseNode::~BaseNode()
 {
+    if (M_parent != 0)
+        M_parent->unregisterChild(this);
+    cout << "~BaseNode: " << M_name << endl;
 }
 
 BaseNode::NodeType
