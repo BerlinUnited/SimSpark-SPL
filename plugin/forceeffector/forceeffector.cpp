@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.1.2.1 2003/12/16 15:49:57 rollmark Exp $
+   $Id: forceeffector.cpp,v 1.1.2.2 2003/12/16 16:28:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 */
 
 #include "forceeffector.h"
+#include "forceaction.h"
+#include <zeitgeist/logserver/logserver.h>
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
 
@@ -34,37 +36,63 @@ ForceEffector::ForceEffector()
     mMaxForce = 5.0f;
 }
 
-bool ForceEffector::Realize(boost::shared_ptr<ActionObject> /*action*/)
+bool ForceEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
-  /*
-bool ForceEffector::Perform(boost::shared_ptr<BaseNode> &base, float )
-{
-    if (!base) return false;
+  shared_ptr<ForceAction> forceAction =
+    shared_dynamic_cast<ForceAction>(action);
 
-    // base should be a transform, or some other node, which has a Body-child
-    shared_ptr<Body> body = shared_static_cast<Body>(base->GetChildOfClass("Body"));
+  if (forceAction.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (ForceEffector) cannot realize an unknown ActionObject\n";
+      return false;
+    }
 
-    if (!body) return false;
+  shared_ptr<BaseNode> parent =
+    shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
 
-    if (mForce.Length() > mMaxForce) mForce = mMaxForce/mForce.Length()*mForce;
+  if (parent.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (ForceEffector) parent node is not derived from BaseNode\n";
+      return false;
+    }
 
-    dBodyAddForce(body->GetODEBody(), mForce.x(), mForce.y(), mForce.z());
+  // parent should be a transform, or some other node, which has a Body-child
+  shared_ptr<Body> body = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
 
-    mForce.Set(0,0,0);
-    return true;
-  */
+  if (body.get() == 0)
+    {
+      GetLog()->Warning()
+        << "(ForceEffector) parent node has no Body child; cannot apply force\n";
+      return false;
+    }
 
-  return false;
-}
+  const Vector3f& force = forceAction->GetForce();
+  dBodyAddForce(body->GetODEBody(), force.x(), force.y(), force.z());
 
-void ForceEffector::AddForce(const salt::Vector3f& force)
-{
-    mForce += force;
+  return true;
 }
 
 shared_ptr<ActionObject>
-ForceEffector::GetActionObject(const BaseParser::TPredicate& /*predicate*/)
+ForceEffector::GetActionObject(const BaseParser::TPredicate& predicate)
 {
-  return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+  if (predicate.name != GetPredicate())
+    {
+      GetLog()->Error() << "ERROR: (ForceEffector) invalid predicate"
+                          << predicate.name << "\n";
+      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+    }
+
+  if (predicate.parameter.size() != 1)
+    {
+      GetLog()->Error() << "ERROR: (ForceEffector) predicate has "
+                        << predicate.parameter.size() << " parameters.\n";
+      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+    }
+
+  Vector3f force = any_cast<Vector3f>(predicate.parameter.front());
+
+  return shared_ptr<ActionObject>(new ForceAction(force));
 }
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.h,v 1.1.2.1 2003/12/16 15:49:57 rollmark Exp $
+   $Id: forceeffector.h,v 1.1.2.2 2003/12/16 16:28:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,10 +42,6 @@ public:
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::BaseParser::TPredicate& predicate);
-
-    //! accumulates a force to be applied to a physics aspect
-    void AddForce(const salt::Vector3f& force);
-    void SetMaxForce(float maxForce)    {       mMaxForce = maxForce;   }
 
     //
     // members
