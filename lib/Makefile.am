@@ -1,0 +1,3 @@
+SUBDIRS = salt 
+#zeitgeist kerosin
+

@@ -1,4 +1,4 @@
-SUBDIRS = doc 
+SUBDIRS = lib plugin doc 
 
 pkginclude_HEADERS = \
 config.h
