@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.1.2.2 2004/02/06 10:00:54 rollmark Exp $
+   $Id: soccerbase.h,v 1.1.2.3 2004/02/06 10:55:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,14 +25,19 @@
 #include <boost/shared_ptr.hpp>
 #include <soccer/soccertypes.h>
 
+namespace zeitgeist
+{
+    class Leaf;
+}
+
 namespace oxygen
 {
-    class BaseNode;
     class SceneServer;
     class Scene;
     class Transform;
     class Perceptor;
     class Body;
+    class SphereCollider;
 }
 
 namespace salt
@@ -41,6 +46,7 @@ namespace salt
 }
 
 class AgentState;
+class GameStateAspect;
 class Ball;
 
 class SoccerBase
@@ -52,42 +58,49 @@ public:
 
     /** returns a reference to the SceneServer */
     static bool
-    GetSceneServer(const oxygen::BaseNode& base,
+    GetSceneServer(const zeitgeist::Leaf& base,
                    boost::shared_ptr<oxygen::SceneServer>& scene_server);
 
     /** returns a reference to the closest parent supporting
         Transform */
     static bool
-    GetTransformParent(const oxygen::BaseNode& base,
+    GetTransformParent(const zeitgeist::Leaf& base,
                        boost::shared_ptr<oxygen::Transform>& transform_parent);
 
     /** returns a reference to the Body node below the closest
         transform parent */
     static bool
-    GetBody(const oxygen::BaseNode& base, boost::shared_ptr<oxygen::Body>& body);
+    GetBody(const zeitgeist::Leaf& base, boost::shared_ptr<oxygen::Body>& body);
 
     /** returns a reference to the AgentState node below the closest
         Transform parent */
     static bool
-    GetAgentState(const oxygen::BaseNode& base,
+    GetAgentState(const zeitgeist::Leaf& base,
                   boost::shared_ptr<AgentState>& agent_state);
+
+    /** return a reference to the GameStateAspect node */
+    static bool
+    GetGameState(const zeitgeist::Leaf& base,
+                 boost::shared_ptr<GameStateAspect>& game_state);
 
     /** returns a reference to the active scene from the SceneServer */
     static bool
-    GetActiveScene(const oxygen::BaseNode& base,
+    GetActiveScene(const zeitgeist::Leaf& base,
                    boost::shared_ptr<oxygen::Scene>& active_scene);
 
     /** returns a reference to the Ball node */
     static bool
-    GetBall(const oxygen::BaseNode& base, boost::shared_ptr<Ball>& ball);
+    GetBall(const zeitgeist::Leaf& base, boost::shared_ptr<Ball>& ball);
 
     /** returns a reference to the Body node below the Ball */
     static bool
-    GetBallBody(const oxygen::BaseNode& base,
+    GetBallBody(const zeitgeist::Leaf& base,
                 boost::shared_ptr<oxygen::Body>& body);
 
-    /** returns a reference to the physics aspect of the ball */
-    boost::shared_ptr<oxygen::Body> GetBallBody();
+    /** returns a reference to the Body SphereCollider node below the Ball */
+    static bool
+    GetBallCollider(const zeitgeist::Leaf& base,
+                boost::shared_ptr<oxygen::SphereCollider>& sphere);
 
     /** flips horizontal coordinates according to the side of the agent */
     static salt::Vector3f FlipView(const salt::Vector3f& pos, TTeamIndex ti);
