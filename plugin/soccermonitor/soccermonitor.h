@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccermonitor.h,v 1.1 2004/12/22 16:15:19 rollmark Exp $
+   $Id: soccermonitor.h,v 1.2 2004/12/30 15:56:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define SPARK_SOCCERMONITOR_H
 
 #include <oxygen/monitorserver/custommonitor.h>
+#include <soccer/soccertypes.h>
 #include <map>
 #include <string>
 
@@ -31,8 +32,10 @@ class SoccerMonitor : public oxygen::CustomMonitor
 public:
     enum EPredicate
         {
-            P_TIME,
-            P_PLAYMODE
+            P_PLAYMODES, //! list of play mode strings
+            P_TIME,      //! game time update
+            P_PLAYMODE,  //! play mode update
+            P_HALF       //! game half update
         };
 
     typedef std::map<std::string, EPredicate> TPredicateMap;
@@ -47,8 +50,17 @@ public:
      */
     virtual void ParseCustomPredicates(const oxygen::PredicateList& pList);
 
+    TTime GetTime() const;
+
+    TPlayMode GetPlayMode() const;
+    std::string GetPlayModeString() const;
+
+    TGameHalf GetGameHalf() const;
+    std::string GetGameHalfString() const;
+
 protected:
     void ParsePredicates(const oxygen::PredicateList& pList);
+    void ParsePlayModes(const oxygen::Predicate& pred);
 
 protected:
     void SetupPredicateMap();
@@ -58,6 +70,9 @@ protected:
 
     float mTime;
     int mPlayMode;
+    int mHalf;
+
+    std::vector<std::string> mPlayModes;
 };
 
 DECLARE_CLASS(SoccerMonitor);
