@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.7 2003/12/09 16:40:24 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.8 2003/12/09 19:28:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,31 +53,6 @@ GameControlServer::InitParser(const std::string& parserName)
 
     return true;
 }
-
-bool
-GameControlServer::InitEffector(const std::string& effectorName)
-{
-    GetLog()->Debug() << "(GameControlServer::InitEffector) creating effector: "
-                      << effectorName << "\n";
-
-    shared_ptr<Effector> effector
-        = shared_dynamic_cast<Effector>(GetCore()->New(effectorName));
-
-    if (effector.get() == 0)
-    {
-        GetLog()->Error() << "ERROR: Unable to create " << effectorName << "\n";
-        return false;
-    }
-
-    string predicate = effector->GetPredicate();
-    mEffectorMap[predicate] = effector;
-
-    GetLog()->Debug() << "registered " << effectorName
-                      << " for predicate " << predicate << "\n";
-
-   return true;
-}
-
 
 bool
 GameControlServer::AgentConnect(int id)
@@ -184,14 +159,18 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(string str) const
     return shared_ptr<ActionObject::TList>(new ActionObject::TList());
 }
 
-bool GameControlServer::RealizeActions(boost::shared_ptr<ActionObject::TList> /*actions*/)
+shared_ptr<AgentAspect> GameControlServer::GetAgentAspect(int id)
 {
-    // traverse the action list, query the registered ControlAspects
-    // if an action is valid and apply it using the corresponding
-    // effector
-
-    return true;
+    TAgentMap::iterator iter = mAgentMap.find(id);
+    if (iter == mAgentMap.end())
+        {
+            return shared_ptr<AgentAspect>();
+        } else
+            {
+                return (*iter).second;
+            }
 }
+
 
 
 std::string
