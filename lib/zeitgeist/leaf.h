@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.6.6.1 2003/12/26 11:30:42 rollmark Exp $
+   $Id: leaf.h,v 1.7.2.1 2004/01/09 13:09:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -120,7 +120,7 @@ public:
         up the hierarchy that supports a class 'name', i.e. is an
         instance of that class or is derived from it.
      */
-    virtual boost::shared_ptr<Node>
+    virtual boost::weak_ptr<Node>
     GetParentSupportingClass(const std::string &name);
 
     /** defines an interface to test if this node is a leaf. Only
