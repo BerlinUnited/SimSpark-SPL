@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol_c.cpp,v 1.1 2004/04/25 16:56:27 rollmark Exp $
+   $Id: inputcontrol_c.cpp,v 1.2 2004/12/22 16:02:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,9 +43,28 @@ FUNCTION(InputControl, getAdvanceTime)
     return obj->GetAdvanceTime();
 }
 
+
+FUNCTION(InputControl,setFPSController)
+{
+    string inPath;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inPath))
+        )
+        {
+            return false;
+        }
+
+    obj->SetFPSController(inPath);
+
+    return true;
+}
+
 void CLASS(InputControl)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/SimControlNode);
     DEFINE_FUNCTION(setAdvanceTime);
     DEFINE_FUNCTION(getAdvanceTime);
+    DEFINE_FUNCTION(setFPSController);
 }

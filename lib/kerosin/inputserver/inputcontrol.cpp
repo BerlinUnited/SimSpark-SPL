@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.2 2004/12/06 08:47:11 rollmark Exp $
+   $Id: inputcontrol.cpp,v 1.3 2004/12/22 16:02:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -180,41 +180,65 @@ void InputControl::StartCycle()
                     break;
 
                 case CmdMouseX:
-                    if (mMouseLook)
+                    if (
+                        (mMouseLook) &&
+                        (mFPSController.get() != 0)
+                        )
                         {
                             mFPSController->AdjustHAngle(mHorSens*(float)input.data.l);
                         }
                     break;
 
                 case CmdMouseY:
-                    if (mMouseLook)
+                    if (
+                        (mMouseLook) &&
+                        (mFPSController.get() != 0)
+                        )
                         {
                             mFPSController->AdjustVAngle(mVertSens*(float)input.data.l);
                         }
                     break;
 
                 case CmdUp:
-                    mFPSController->Up(input.data.l!=0);
+                    if (mFPSController.get() != 0)
+                        {
+                            mFPSController->Up(input.data.l!=0);
+                        }
                     break;
 
                 case CmdDown:
-                    mFPSController->Down(input.data.l!=0);
+                    if (mFPSController.get() != 0)
+                        {
+                            mFPSController->Down(input.data.l!=0);
+                        }
                     break;
 
                 case CmdLeft:
-                    mFPSController->StrafeLeft(input.data.l!=0);
+                    if (mFPSController.get() != 0)
+                        {
+                            mFPSController->StrafeLeft(input.data.l!=0);
+                        }
                     break;
 
                 case CmdRight:
-                    mFPSController->StrafeRight(input.data.l!=0);
+                    if (mFPSController.get() != 0)
+                        {
+                            mFPSController->StrafeRight(input.data.l!=0);
+                        }
                     break;
 
                 case CmdForward:
-                    mFPSController->Forward(input.data.l!=0);
+                    if (mFPSController.get() != 0)
+                        {
+                            mFPSController->Forward(input.data.l!=0);
+                        }
                     break;
 
                 case CmdBackward:
-                    mFPSController->Backward(input.data.l!=0);
+                    if (mFPSController.get() != 0)
+                        {
+                            mFPSController->Backward(input.data.l!=0);
+                        }
                     break;
 
                 default:
