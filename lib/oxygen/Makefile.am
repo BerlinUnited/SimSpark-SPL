@@ -1,7 +1,19 @@
+if DEBUG
+pkglib_LTLIBRARIES = liboxygen_debug.la
+liboxygen_debug_la_SOURCES = $(sources)
+liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall
+else
 pkglib_LTLIBRARIES = liboxygen.la
+liboxygen_la_SOURCES = $(sources)
+liboxygen_la_CXXFLAGS = -O2
+endif
+
 AM_CPPFLAGS = -I${top_srcdir}/lib
 
-liboxygen_la_SOURCES = \
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/oxygen
+
+sources = \
 agentaspect/agentaspect.cpp \
 agentaspect/agentaspect_c.cpp \
 agentaspect/collisionperceptor.cpp \
@@ -45,9 +57,9 @@ sceneserver/transform_c.cpp
 ### sceneserver/camera_c.cpp 
 ### sceneserver/indexbuffer.cpp 
 
-liboxygen_la_CXXFLAGS = -O2
+liboxygen_la_CXXFLAGS = -O0 -W -Wall
 
-nobase_pkginclude_HEADERS = \
+nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
 agentaspect/collisionperceptor.h \
 agentaspect/effector.h \
