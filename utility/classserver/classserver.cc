@@ -46,7 +46,8 @@
 #endif
 
 // this returns the instance of our ClassServer
-ClassServer& ClassServer::instance()
+ClassServer& 
+ClassServer::instance()
 {
     static ClassServer theInstance;
 
@@ -307,7 +308,8 @@ ClassServer::scan(const char* in_path)
     // iterate over all directories and files
     do
     {
-        // ok, we have to generate a new path to look in (corrected_path + dta.name)
+        // ok, we have to generate a new path to look in 
+        // (corrected_path + dta.name)
         char* new_path = new char[strlen(corrected_path)+strlen(dta.name)+1];
         strcpy(new_path, corrected_path);
         strcat(new_path, dta.name);
