@@ -72,5 +72,6 @@ AC_CONFIG_FILES([Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/zeitgeist/Makefile \
-		 lib/kerosin/Makefile])
+		 lib/kerosin/Makefile \
+		 doc/Doxyfile])
 AC_OUTPUT
