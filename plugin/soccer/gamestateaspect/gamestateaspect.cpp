@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.11 2004/02/10 20:40:17 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.12 2004/02/10 21:43:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 using namespace oxygen;
 using namespace boost;
 using namespace std;
+using namespace salt;
 
 GameStateAspect::GameStateAspect() : SoccerControlAspect()
 {
@@ -38,6 +39,8 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mScore[0] = 0;
     mScore[1] = 0;
     mLastKickOff = TI_NONE;
+    mLeftInit = Vector3f(0,0,0);
+    mRightInit = Vector3f(0,0,0);
 }
 
 GameStateAspect::~GameStateAspect()
@@ -265,6 +268,52 @@ int GameStateAspect::GetScore(TTeamIndex idx)
 
     return mScore[idx];
 }
+
+Vector3f GameStateAspect::RequestInitPosition(const TTeamIndex ti)
+{
+    if (ti == TI_NONE)
+        {
+            return Vector3f(0,0,20);
+        }
+
+    salt::Vector3f& init = (ti ==TI_LEFT) ?
+        mLeftInit : mRightInit;
+
+    Vector3f pos = init;
+    init[2] -= mAgentRadius * 3;
+
+    return pos;
+}
+
+void GameStateAspect::OnLink()
+{
+    // setup the initial starting positions for the agents
+    mLeftInit = Vector3f(0,0,0);
+    mRightInit = Vector3f(0,0,0);
+
+    float fieldWidth = 64.0;
+    SoccerBase::GetSoccerVar(*this,"FieldWidth",fieldWidth);
+
+    float fieldLength = 100.0;
+    SoccerBase::GetSoccerVar(*this,"FieldLength",fieldLength);
+
+    SoccerBase::GetSoccerVar(*this,"AgentRadius",mAgentRadius);
+
+    mLeftInit = Vector3f
+        (
+         -fieldLength/2.0 + mAgentRadius*2 ,
+         0.0,
+         fieldWidth/2 - mAgentRadius*2
+         );
+
+    mRightInit = Vector3f
+        (
+         +fieldLength/2.0 - mAgentRadius*2,
+         0.0,
+         fieldWidth/2  - mAgentRadius*2
+         );
+}
+
 
 
 
