@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: agentstate.h,v 1.3 2004/03/25 22:10:27 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,8 +68,14 @@ public:
     /** Get the battery state */
     float GetBattery() const;
 
+    /** Set the battery state */
+    void SetBattery(float battery);
+
     /** Get the motor temperature */
     float GetTemperature() const;
+
+    /** Set the temperature */
+    void SetTemperature(float temperature);
 
     /** reduce battery by the given amout.
      *  \param consumption the amount by which the battery is reduced if possible

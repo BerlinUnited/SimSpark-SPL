@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.cpp,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: agentstate.cpp,v 1.3 2004/03/25 22:10:27 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,10 +84,22 @@ AgentState::GetBattery() const
     return mBattery;
 }
 
+void
+AgentState::SetBattery(float battery)
+{
+    mBattery = battery;
+}
+
 float
 AgentState::GetTemperature() const
 {
     return 23.0;
+}
+
+void
+AgentState::SetTemperature(float temperature)
+{
+    mTemperature = temperature;
 }
 
 bool
