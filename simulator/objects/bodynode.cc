@@ -19,14 +19,14 @@
 #include "bodynode.h"
 #include "worldnode.h"
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace std;
 
-BodyNode::BodyNode(WorldNode& world_node, const std::string& name,
-                   BaseNode* parent)
+BodyNode::BodyNode(WorldNode& world_node, const string& name,
+                   DirNode* parent)
     : BaseNode(S_CONTAINER, name, parent)
 {
-    dBodyCreate(world_node.getWorld());
+    M_body_id = dBodyCreate(world_node.getWorld());
 }
 
 BodyNode::~BodyNode()
@@ -38,4 +38,10 @@ dBodyID
 BodyNode::getID()
 {
     return M_body_id;
+}
+
+void
+BodyNode::setMass(const dMass& mass)
+{
+    dBodySetMass(M_body_id, &mass);
 }

@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYGRAPH_BODYNODE_H
-#define RCSS_ENTITYGRAPH_BODYNODE_H
+#ifndef RCSS_ENTITY_BODYNODE_H
+#define RCSS_ENTITY_BODYNODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,12 +29,13 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0
 }}
 #endif
 
+class DirNode;
 class WorldNode;
 
 class BodyNode : public BaseNode
@@ -42,10 +43,12 @@ class BodyNode : public BaseNode
 public:
     BodyNode(WorldNode& world_node, 
              const std::string& name = "<unknown>",
-             BaseNode* parent = 0);
+             DirNode* parent = 0);
     ~BodyNode();
 
     dBodyID getID();
+
+    void setMass(const dMass& mass);
 
 protected:
     dBodyID M_body_id;
