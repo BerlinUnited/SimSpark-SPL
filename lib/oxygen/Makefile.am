@@ -85,7 +85,6 @@ sceneserver/camera.cpp \
 sceneserver/camera_c.cpp \
 monitorserver/monitorserver.cpp \
 monitorserver/monitorserver_c.cpp \
-monitorserver/monitorsystem.cpp \
 monitorserver/monitorsystem_c.cpp
 
 nobase_libpkginclude_HEADERS = \
