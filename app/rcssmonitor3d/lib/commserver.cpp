@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.11 2004/06/06 11:09:02 fruit Exp $
+   $Id: commserver.cpp,v 1.12 2004/10/04 08:03:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ CommServer::GetPredicates() const
 void
 CommServer::SendMessage(const std::string& message)
 {
-    unsigned long len = htonl(message.size());
+    unsigned int len = htonl(message.size());
     std::string s((const char*)&len,sizeof(len));
     s += message;
     mCommUnit.PutMessage(s);
