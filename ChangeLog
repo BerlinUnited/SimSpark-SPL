@@ -1,3 +1,48 @@
+2004-06-11  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	- exiting the monitor if the gamstate indicates a finished simulation
+
+	* app/rcssmonitor3d/lib/gamestate.cpp: 
+	* app/rcssmonitor3d/lib/gamestate.h: 
+	- reset the 'object seen' flags each time an info message is processed 
+	- added IsFinished() method to indicate that the simulation has finished 
+	- implemented "Die" command setting the gamestate to finished by using the
+	  newly added ProcessShutdown() method
+
+	* app/agenttest/commserver.h: 
+	- increased buffer size to be extra safe against buffer overflows.
+	  (this design of the agent commserver could be improved :-)
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
+	- added IsFinished method() to indicate that the simulation is
+	  finished. This method is used by the SexpMonitor.  
+	- added member variable to count the follow-up time of the simulation
+	  (the time spent in PM_GameOver).
+	- fixed the UpdateTime() and GetPlaymodeTime() methods for the follow-up time
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp: 
+	- if the GameState indicates that the simulation is finished, 
+	  send "(Die)" to all connected monitors.  
+	- removed the trailing 0 Byte in strings sent to the monitors
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- added method UpdateGameOver that sets the simulation state to finished
+	  and calls the GameControlServer Quit() method
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	- added method IsFinished() to indicate that a simulation is over 
+	- added method Quit() to set the simulation into 'finished' state
+
+2004-06-09  Oliver Obst  <fruit@robolog.org>
+
+	* app/agenttest/commserver.cpp: 
+	fixed commserver to zero terminate messages. This bug was reported
+	by Alexey Vasilyev <servent@apollo.lv>.
+
 2004-06-08  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/lib/gamestate.cpp: 
