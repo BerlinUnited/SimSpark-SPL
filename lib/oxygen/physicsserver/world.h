@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: world.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: world.h,v 1.4.8.1 2004/01/11 11:19:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,13 +43,13 @@ public:
     ~World();
 
     /** returns the ID of the managed ODE world */
-    dWorldID        GetODEWorld() const;
+    dWorldID GetODEWorld() const;
 
     /** sets the gravity vector of this vorld */
-    void    SetGravity(float x, float y, float z);
+    void SetGravity(float x, float y, float z);
 
     /** sets the gavity vector of this world */
-    void    SetGravity(const salt::Vector3f &v);
+    void SetGravity(const salt::Vector3f &v);
 
     /** sets the Error Reduction Parameter of this world. The ERP
         specifies what proportion of a joint error will be fixed during
@@ -61,11 +61,11 @@ public:
         completely fixed due to various internal approximations. A value
         of ERP=0.1 to 0.8 is recommended (0.2 is the default).
     */
-    void    SetERP(float erp);
+    void SetERP(float erp);
 
     /** returns the Error Reduction Parameter of this World.
      */
-    float   GetERP() const;
+    float GetERP() const;
 
     /** sets the Constraint Force mixing (CFM) value. If CFM is set to
         zero, the constraint will be hard. If CFM is set to a positive
@@ -76,15 +76,15 @@ public:
         that setting CFM to a negative value can have undesirable bad
         effects, such as instability.
     */
-    void    SetCFM(float cfm);
+    void SetCFM(float cfm);
 
     /** returns the Constraint Force mixing (CFM) value. */
-    float   GetCFM() const;
+    float GetCFM() const;
 
     /** steps the world deltatime forward, i.e. performs physics
         simulation for a deltaTime seconds interval.
     */
-    void    Step(float deltaTime);
+    void Step(float deltaTime);
 
 protected:
     /** creates ode dynamics world and makes sure that mODEWorld is valid */
@@ -98,7 +98,7 @@ private:
     dWorldID        mODEWorld;
 };
 
-    DECLARE_CLASS(World);
+DECLARE_CLASS(World);
 
 };
 
