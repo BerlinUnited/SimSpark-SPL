@@ -93,7 +93,7 @@ if test $DEVIL; then
    LDFLAGS="$LDFLAGS -L$DEVIL/lib"
 fi
 
-AC_CHECK_HEADERS([il/il.h],,[
+AC_CHECK_HEADERS([IL/il.h],,[
         AC_MSG_ERROR([The DevIL headers (e.g. il/il.h) cannot be found. Please specify the location of the DevIL installtion, by using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])])
 
 #AC_CHECK_LIB(il,ilInit,,[
