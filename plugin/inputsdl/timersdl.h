@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timersdl.h,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: timersdl.h,v 1.3 2004/03/09 12:47:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@
 
 #include "inputdevicesdl.h"
 
-/**     \class TimerSDL
-        This returns the elapsed time since the last call in milliseconds.
+/**     \class TimerSDL returns the elapsed time since the last call
+        in milliseconds.
 */
 class TimerSDL : public InputDeviceSDL
 {
@@ -56,7 +56,8 @@ public:
 
         //! return an Input
         void GetInput(kerosin::InputServer::Input &input);
-private:
+
+protected:
         unsigned long   mLastTicks;
 };
 
