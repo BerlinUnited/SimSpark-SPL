@@ -1,27 +1,25 @@
-#ifndef FILESERVER_H__
-#define FILESERVER_H__
+/* -*- mode: c++ -*-
+   
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: fileserver.h,v 1.4 2003/08/21 12:53:30 rollmark Exp $
 
-/*!	\class FileServer
-	$Id: fileserver.h,v 1.3 2003/06/03 12:26:43 fruit Exp $
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ 
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-	FileServer - global interface for file system access
-
-	What the FileServer does:
-		- Load files from a FileSystem
-		- Manage different file systems
-
-	The file server is an extremely useful subsystem, since it allows to
-	access various implemented file systems. The regular file system is a
-	standard directory-based implementation. The ZIP file system can load
-	files from within ZIP-files. Before actually being able to open files,
-	the FileServer is initialized with several FileSystems, which are
-	associated with different paths. For each path, you have to pass in a
-	file system. Now, when trying to open a file, each registered file
-	system is asked to open the file ... the last one wins. This allows
-	for some nice effects.
-
-	File systems are associated with id strings ("STD", "ZIP").
-
+   FileServer - global interface for file system access
+	
 	HISTORY:
 		12.07.01 - MK
 			- Initial version
@@ -34,7 +32,9 @@
 			- added the priority of the file systems : LIFO
 			- added the information of the file system id and its path to every mounted file system
 			- prevented the odditity to mount a file system more than once
-			- added GetFirstFileSystem and GetNextFileSystem to iterate through the mounted file systems
+			- added GetFirstFileSystem and
+			GetNextFileSystem to iterate through the
+			mounted file systems
 		26.01.02 - MR
 			- added ForEachFile
 		27.06.02 - MK
@@ -49,6 +49,8 @@
 	TOFIX:
 */
 
+#ifndef FILESERVER_H__
+#define FILESERVER_H__
 
 #include <list>
 #include <zeitgeist/node.h>
@@ -57,31 +59,75 @@
 namespace zeitgeist
 {
 
+/** FileServer - the global interface for file system access
+
+    What the FileServer does:
+    - Manage different file systems
+    - Load files from a FileSystem
+
+    The file server is an extremely useful subsystem, since it allows
+    to access various implemented file systems. The regular file
+    system is a standard directory-based implementation. The ZIP file
+    system can load files from within ZIP-files. Before actually being
+    able to open files, the FileServer is initialized with several
+    FileSystems, which are associated with different paths. For each
+    path, you have to pass in a file system. Now, when trying to open
+    a file, each registered file system is asked to open the
+    file. Filesystems are searched in the inverse order in wich they
+    were registered- think of a filesystem stack. The first succesful
+    opened file wins. This allows for some nice effects. File systems
+    are associated with id strings like 'STD' or 'ZIP'.
+  */
 class FileServer : public Node
 {
 	//
 	// functions
 	//
 public:
+  /** constructs the fileserver */
 	FileServer();
 	~FileServer();
 
-	// each registered file system is search for a file with this name. 
-	// the last mounted are the first searched
+	/** searchs each registered file system for a file with this
+	    name. Filesystems are searched in the inverse order in
+	    which they are registered to the fileserve, i.e. a
+	    filesystem stack. The first succesful opened file is
+	    returned.
+	*/
 	salt::RFile*	Open(const char *inName);
 
-	//! Check if a file exists
+	/** returns true if the file 'inName' exists. */
 	bool	Exist(const char *inName);
 
-	// a file system may be added only once, on each further try nothing is done and false returned
-	bool	Mount(const char* inID, const char* inPath);
+	/** registers a filesystem to the fileserver. A file system
+	    may be registered only once, on each further try nothing
+	    is done and false returned
 
-	// if no file system id is given, for a first try FileSystemSTD is assumed, then the type is ignored
+	    \param inFileSysName is the class name of the File system
+	    \param inPath is the mount point in the virtual file
+	    system provided by the fileserver
+	 */
+	bool	Mount(const char *inFileSysName, const char* inPath);
+
+	/** unmounts a file system at the mount point inPath. if no
+	    file system id is given, for a first try FileSystemSTD is
+	    assumed, then the type is ignored. Returns true on success.
+	 */
 	bool	Unmount(const char* inPath);
+
+	/** unmounts a file system at the mount point inPath. Returns
+	    true on success.
+	 */
 	bool	Unmount(const char* inClass, const char* inPath);
 	
-	/** iterate through files. directory, name and extension give directory, name and extension a file must match.
-	  * directory,name and extension may be NULL, in wich case every directory,extension and/or name matches.
+	/** iterates through files. 'directory', 'name' and
+	  * 'extension' give directory, name and extension a file must
+	  * match.  directory,name and extension may be NULL, in wich
+	  * case every directory,extension and/or name matches. For
+	  * each match the function callback is called with the name
+	  * of the matched file and the additional user parameter
+	  * 'param'. param is just passed through to the callback and
+	  * has no meaning to the filesystem.
 	  */
 	int ForEachFile(const char* directory, const char* name, const char* extension, FileSystem::TCallback callback, void* param);
 

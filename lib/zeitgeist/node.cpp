@@ -112,7 +112,7 @@ void Node::GetChildren(const std::string &name, TLeafList &baseList, bool recurs
 	}
 }
 
-void Node::GetChildrenOfClass(const std::string &name, TLeafList &baseList, bool recursive)
+void Node:::GetChildrenOfClass(const std::string &name, TLeafList &baseList, bool recursive)
 {
 	Leaf::GetChildrenOfClass(name, baseList, recursive);
 

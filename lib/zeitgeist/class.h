@@ -1,37 +1,34 @@
-#ifndef CLASS_H__
-#define CLASS_H__
+/* -*- mode: c++ -*-
+   
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: class.h,v 1.5 2003/08/21 12:53:30 rollmark Exp $
 
-/*! \class Class
-	$Id: class.h,v 1.4 2003/08/07 08:34:03 rollmark Exp $
-	
-	Class
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ 
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-	This class is quite essential for the Zeitgeist Core. Every class which
-	wants to be managed by Zeitgeist will have to derive a class object
-	from this class and override the factory method. Only decendants from
-	Object are able to use Class properly and the factory method returns
-	a Object pointer.
 
-	A Class object is characterized by several parameters:
+   Class
 
-		- the name of the class
-		- the version of the class
-
-	A version is stored as an unsigned 32-bit integer, with each byte
-	representing a version number. So ABCD would be A.B.C.D. That way a
-	simple integer comparison can be used for newer version queries.
-
-	Class objects also are the key to providing Zeitgeist with a plugin
-	interface. The Core is responsible for managing all Class objects it
-	knows. It is possible to export Class objects from a shared library
-	through a unified interface, therefore enabling Class objects to be
-	added at runtime to the Core.
-
-	HISTORY:
+   HISTORY:
 		04.06.2002 MK
 			- initial version
 
 */
+
+#ifndef CLASS_H__
+#define CLASS_H__
 
 #include <string>
 #include <list>
@@ -99,6 +96,27 @@ namespace zeitgeist
 // forward declarations
 class Core;
 
+/** This class is quite essential for the Zeitgeist Core. Every class
+ * which wants to be managed by Zeitgeist will have to derive a class
+ * object from this class and override the factory method. Only
+ * decendants from Object are able to use Class properly and the
+ * factory method returns a Object pointer.
+ *
+ * A Class object is characterized by several parameters:
+ *
+ * - the name of the class
+ * - the version of the class
+ *
+ * A version is stored as an unsigned 32-bit integer, with each byte
+ * representing a version number. So ABCD would be A.B.C.D. That way a
+ * simple integer comparison can be used for newer version queries.
+ * 
+ * Class objects also are the key to providing Zeitgeist with a plugin
+ * interface. The Core is responsible for managing all Class objects it
+ * knows. It is possible to export Class objects from a shared library
+ * through a unified interface, therefore enabling Class objects to be
+ * added at runtime to the Core.
+*/
 class Class : public Leaf
 {
 	// friends
@@ -109,51 +127,79 @@ class Class : public Leaf
 	// types
 	//
 public:
+
+	/** defines a parameter list as a list of objects of different
+	 *  types. This is type safe using the boost:any
+	 *  class. TParameterList is used to transfer parameters
+	 *  between the C++ part and and the script representation of
+	 *  a class (e.g. a ruby class).
+	 */
 	typedef std::vector<boost::any>		TParameterList;
+
+
+	/** defines a signature for a function used as the c++
+	    implementation of a member function exported to a script
+	    language. It receives a pointer to an instance of the
+	    class from which it is a member function along with a
+	    list of paramters.
+	 */
 	typedef void (*TCmdProc)(Object *obj, const TParameterList &in);
 	typedef std::list<std::string>					TStringList;
 
 private:
+	/** defines a list of pointers to object instances */
 	typedef std::list< boost::weak_ptr<Object> >	TObjectList;
+
+	/** defines a mapping from member names to command
+	    procedures */
 	typedef std::hash_map<std::string, TCmdProc>	TCommandMap;
 
 	//
 	// functions
 	//
 public:
+	/** constructs a class object for the class 'name' */
 	Class(const std::string &name);
 	virtual ~Class();
 
+	/** creates a new instance of the represented class */
 	boost::shared_ptr<Object>			Create();
 
+	/** returns a pointer to the core this class is attached to */
 	boost::shared_ptr<Core>				GetCore() const;
 
-	//! set the bundle, this class was loaded from
+	/** sets the bundle, this class was loaded from */
 	void			SetBundle(const boost::shared_ptr<salt::SharedLibrary> &bundle);
 
-	//! returns the command procedure
+	/** the command procedure for a function */
 	TCmdProc		GetCmdProc(const std::string &functionName);
 
-	//! retrieve the list of base class names
+	/** returns a list of base class names */
 	const TStringList&	GetBaseClasses() const;
 
-	//! check if the class supports a given 'interface' (if the base class hierarchy contains the class)
+	/** return true if the class supports a given 'interface',
+	 *  i.e. the base class hierarchy contains the class 'name'
+	 */
 	bool			Supports(const std::string &name) const;
 
 protected:
-	//! add an instance to our local list of instances
+	/** adds an instance to the local list of instances */
 	void	AttachInstance(const boost::weak_ptr<Object> &instance);
-	//! remove an instance from our local list of instances
+
+	/** removes an instance from the local list of instances */
 	void	DetachInstance(const boost::weak_ptr<Object> &instance);
 
 private:
 	Class(const Class &obj);
 	Class& operator=(const Class &obj);
-	//! pure virtual function which creates instances
+
+	/** pure virtual function which creates instances */
 	virtual Object*	CreateInstance() const;
-	//! pure virtual function which initializes the script callbacks and links to parent classes
+
+	/**  pure virtual function which initializes the script callbacks and links to parent classes */
 	virtual void	DefineClass() = 0;
-	//! set the core, which this class belongs to
+
+	/** set the core, which this class belongs to */
 	void AttachTo(const boost::weak_ptr<Core>& core);
 
 	//
@@ -164,15 +210,20 @@ protected:
 	TStringList								mBaseClasses;
 private:
 	boost::weak_ptr<Core>					mCore;
-	/*! a shared pointer to the bundle, this class object came from. So, if all
-		references to the class object are deleted, the shared library will be
-		freed.*/
+
+	/** a shared pointer to the bundle, this class object came
+	 * from. So, if all references to the class object are
+	 * deleted, the shared library will be freed.
+	 */
 	boost::shared_ptr<salt::SharedLibrary>	mBundle;
-	//! list of instances, which were created by this class object
+
+	/** a list of instances, which were created by this class object */
 	TObjectList								mInstances;
 };
 
 
+/** this is the class object beloging to the class
+    'zeitgeist::Class'. */
 class CLASS(Class) : public Class
 {
 public:

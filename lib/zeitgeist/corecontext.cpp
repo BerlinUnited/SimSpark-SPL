@@ -19,10 +19,6 @@ CoreContext::~CoreContext()
 	//cout << "~CoreContext()" << endl;
 }
 
-/*
-	The function assumes that only compatible classes are created this way.
-	Compatible means 'starting at Leaf' in the hierarchy.
-*/
 boost::shared_ptr<Leaf>	CoreContext::New(const std::string& className, const std::string& pathStr)
 {
 	// first, we try to create the class with the core
