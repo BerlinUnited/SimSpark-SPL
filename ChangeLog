@@ -1,3 +1,78 @@
+2003-12-09  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	implemented createSense. This methods collects a list of senses
+	from the AgentAspect and uses the parser registered to the
+	GameControlServer to create a string describing these sense. This
+	string is encapsulated as an spades::DataObject into a
+	spades::SenseEvent and enqued by spades. 
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	added method GetParser
+	added GetSenseLatency stub
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added method GetParser
+	added method GetSenseLatency
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	added QueryPerceptors stub
+
+	* lib/oxygen/agentaspect/agentaspect.h: 
+	added method QueryPerceptors
+
+	* lib/oxygen/agentaspect/agentaspect.cpp: 
+	added method realizeActions
+
+	* lib/oxygen/agentaspect/agentaspect.h: 
+	removed method Think
+	removed method getVelocity
+	removed mehtod prePhysicsUpdateInternal
+	added method RealizedActions (moved here from the gcs)
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	removed method InitEffector
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	removed method InitEffector; effectors should be registered below the
+	AgentAspect
+	removed method RealizeActions
+	added GetAgentAspect
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	removed method InitEffector
+	removed method RealizeActions (now part of AgentAspect)
+	added method GetAgentAspect
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	using the AgentAspect to realize stored ActionObjects
+
+	* plugin/Makefile.am: removed survival directory
+
+	* plugin/survival/survivalagentaspect.h:
+	* plugin/survival/survivalagentaspect_c.cpp:
+	* plugin/survival/survivalcontrolaspect.cpp:
+	* plugin/survival/survivalcontrolaspect.h:
+	* plugin/survival/survivalcontrolaspect_c.cpp:
+	* plugin/survival/.cvsignore: plugin/survival/Makefile.am:
+	* plugin/survival/export.cpp:
+	* plugin/survival/linesegmentperceptor.cpp:
+	* plugin/survival/linesegmentperceptor.h:
+	* plugin/survival/linesegmentperceptor_c.cpp:
+	* plugin/survival/survival.dsp: plugin/survival/survival.rb:
+	* plugin/survival/survivalagentaspect.cpp: 
+	delete survival plugins/simulator application until we can come up with a new one 
+	removed plugins belonging to the survival demo.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	using shared_ptr to work with the TPredicateList
+
+	* plugin/sexpparser/sexpparser.cpp, plugin/sexpparser/sexpparser.h, lib/oxygen/gamecontrolserver/baseparser.h:
+	return the TPredicateList as shared_ptr
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	derived the AgentAspect from Transport
+
 2003-12-08  Oliver Obst  <fruit@robolog.org>
 
 	* app/spadestest/spadestest.rb: 
