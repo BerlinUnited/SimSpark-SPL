@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.4 2004/04/05 14:51:36 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.5 2004/04/26 08:07:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ SexpMonitor::ConstructInternal()
 }
 
 void
-SexpMonitor::ParseMonitorMessage(std::string data)
+SexpMonitor::ParseMonitorMessage(const std::string& data)
 {
     GetLog()->Debug() << "SexpMonitor received " << data << " from monitor\n";
 
