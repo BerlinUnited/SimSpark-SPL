@@ -101,6 +101,7 @@ agentaspect/effector.h \
 agentaspect/perceptor.h \
 agentaspect/createaction.h \
 controlaspect/controlaspect.h \
+gamecontrolserver/predicate.h \
 gamecontrolserver/gamecontrolserver.h \
 gamecontrolserver/baseparser.h \
 gamecontrolserver/actionobject.h \
