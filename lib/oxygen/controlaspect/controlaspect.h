@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.h,v 1.3.8.3 2004/01/20 19:15:16 rollmark Exp $
+   $Id: controlaspect.h,v 1.3.8.4 2004/01/29 19:55:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 namespace oxygen
 {
+class Scene;
 
 class ControlAspect : public BaseNode
 {
@@ -40,6 +41,13 @@ public:
         seconds
      */
     virtual void Update(float deltaTime) = 0;
+
+    /** queries the SceneServer for the currently active scene node */
+    boost::shared_ptr<Scene> GetActiveScene();
+
+    /** returns a reference to a ControlAspect registered to the
+        GameControlServer */
+    boost::shared_ptr<ControlAspect> GetControlAspect(const std::string& name);
 };
 
 DECLARE_ABSTRACTCLASS(ControlAspect);
