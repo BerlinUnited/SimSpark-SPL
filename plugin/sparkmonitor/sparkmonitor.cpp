@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.4 2004/05/01 13:47:32 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.5 2004/05/05 09:09:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -250,16 +250,24 @@ void SparkMonitor::DescribeActiveScene(stringstream& ss)
 
     mActiveScene = mSceneServer->GetActiveScene();
 
-    if (mFullState)
-        {
-            ss << "(RubySceneGraph 0 1)";
-        } else
-            {
-                ss << "(RubyDeltaScene 0 1)";
-            }
-
     if (mActiveScene.get() != 0)
         {
+            if (mActiveScene->GetModified())
+                {
+                    // send a full scene update if nodes have been
+                    // added or removed (on scene import, agent
+                    // connect/disconnect etc.)
+                    mFullState = true;
+                }
+
+            if (mFullState)
+                {
+                    ss << "(RubySceneGraph 0 1)";
+                } else
+                    {
+                        ss << "(RubyDeltaScene 0 1)";
+                    }
+
             DescribeScene(ss,mActiveScene);
         }
 
