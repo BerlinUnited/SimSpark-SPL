@@ -1,3 +1,115 @@
+2004-05-07  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* configure.ac: 
+	- added plugin/sparkagent/Makefile
+
+	* lib/spark/spark.rb: 
+	- import the spark effector and perceptor classes
+
+	* app/agentspark/Makefile.am, app/agentspark/behavior.h,
+	* app/agentspark/carbehavior.cpp, app/agentspark/carbehavior.h,
+	* app/agentspark/main.cpp:
+	- set an agent using the scene effector
+	- moved behavior into a separate class; the current behavior just
+	moves the car back and forth
+
+	* app/simspark/rsg/agent/buggy.rsg,
+	* app/simspark/rsg/agent/simspark.rsg:
+	- added simspark.rsg, that creates a simple empty arena
+	- added buggy.rsg, that sets up a simple buggy, that can be
+	controlled by an agent
+
+	* plugin/Makefile.am: 
+	- added sparkagent
+
+	* plugin/sparkagent/.cvsignore, 
+	* plugin/sparkagent/Makefile.am, 
+	* plugin/sparkagent/export.cpp:
+	- Makefile and zeitgeist export for hinge2effector,
+	hinge2perceptor and timeperceptor
+
+	* plugin/sparkagent/hinge2action.h,
+	* plugin/sparkagent/hinge2effector.cpp,
+	* plugin/sparkagent/hinge2effector.h,
+	* plugin/sparkagent/hinge2effector_c.cpp:
+	- added aclass Hinge2Effector, an effector that controls the motor
+	settings of an Hinge2Joint
+
+	* plugin/sparkagent/hinge2perceptor.cpp,
+	* plugin/sparkagent/hinge2perceptor.h,
+	* plugin/sparkagent/hinge2perceptor_c.cpp:
+	- added class Hinge2Perceptor, a perceptor that reads the axis
+	angle and angle rate from a Hinge2Joint
+
+	* plugin/sparkagent/timeperceptor.cpp,
+	* plugin/sparkagent/timeperceptor.h,
+	* plugin/sparkagent/timeperceptor_c.cpp:
+	- added class TimePerceptor, a Perceptor that reads the current
+	simulation time from the SimulationServer
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	- fixed a bug in the rsg header parsing
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	- fixed a diagnostic message
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	- fixed scene graph cleanup after an agent disconnected
+
+2004-05-06  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/spark/spark.rb:
+	- registering the SceneEffector to the GameControlServer
+
+	* lib/oxygen/sceneserver/sceneserver.cpp:
+	- changed a diagostic message in method ImportScene
+
+	* lib/oxygen/simulationserver/agentcontrol.cpp,
+	* lib/oxygen/simulationserver/agentcontrol.h:
+	- added method StartCycle and EndCycle
+	- forwarding agent commands to the GameControlServer at the
+	beginning of each cycle
+	- forwarding agent senses to the agents at the end of each cycle
+
+	* lib/oxygen/simulationserver/monitorcontrol.cpp:
+	- reset the modified flag of the active scene after updates are
+	sent to the monitors
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp,
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	- changed method Parse to accept a const reference to the string
+	argument to avoid an implicit copy
+
+	* configure.ac: 
+	- added plugin/sceneeffector/Makefile
+
+	* plugin/Makefile.am: 
+	- added sceneeffector
+
+	* plugin/sceneeffector/.cvsignore,
+	* plugin/sceneeffector/Makefile.am, plugin/sceneeffector/export.cpp,
+	* plugin/sceneeffector/sceneaction.h,
+	* plugin/sceneeffector/sceneeffector.cpp,
+	* plugin/sceneeffector/sceneeffector.h,
+	* plugin/sceneeffector/sceneeffector_c.cpp:
+	- added SceneEffector plugin
+	- the SceneEffector is a imports a scene file below the
+	corresponding AgentAspect; similar to the soccer/CreateEffector
+	this is used to build an agent
+
+	* configure.ac: 
+	- added app/agentspark/Makefile
+
+	* app/Makefile.am: 
+	- added agentspark
+
+	* app/agentspark/.cvsignore, app/agentspark/Makefile.am,
+	* app/agentspark/main.cpp:
+	- added a simple agent skeleton for use with app/simspark
+
+	* app/agenttest/commserver.cpp: 
+	- removed a debug msg
+
 2004-05-05  Oliver Obst  <fruit@robolog.org>
 
 	* lib/salt/tvector.h: 
