@@ -286,12 +286,13 @@ plugin/soccer/createeffector/Makefile
 plugin/soccer/createeffector/Makefile.in
 plugin/soccer/createeffector/*.la
 plugin/soccer/createeffector/*.lo
+plugin/soccer/dasheffector/*.la
+plugin/soccer/dasheffector/*.lo
 plugin/soccer/dasheffector/.deps
+plugin/soccer/dasheffector/.dirstamp
 plugin/soccer/dasheffector/.libs
 plugin/soccer/dasheffector/Makefile
 plugin/soccer/dasheffector/Makefile.in
-plugin/soccer/dasheffector/*.la
-plugin/soccer/dasheffector/*.lo
 plugin/soccer/fieldflag/*.lo
 plugin/soccer/fieldflag/.deps
 plugin/soccer/fieldflag/.libs
