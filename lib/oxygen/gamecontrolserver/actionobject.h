@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: actionobject.h,v 1.1.2.1 2003/12/03 17:59:57 rollmark Exp $
+   $Id: actionobject.h,v 1.1.2.2 2003/12/10 10:16:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,8 +37,16 @@ public:
     typedef std::list<boost::shared_ptr<ActionObject> > TList;
 
 public:
-    ActionObject() : Object() {}
+    ActionObject(std::string predicate)
+        : Object(), mPredicate(predicate) {}
     virtual ~ActionObject() {}
+
+    //! returns the described predicate
+    std::string GetPredicate() { return mPredicate; }
+
+protected:
+    //! the predicate a derived ActionObject describes
+    std::string mPredicate;
 };
 
 DECLARE_ABSTRACTCLASS(ActionObject);
