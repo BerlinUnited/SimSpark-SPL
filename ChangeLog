@@ -1,5 +1,8 @@
 2004-06-06  Oliver Obst  <fruit@robolog.org>
 
+	* app/simulator/createagentdb.sh.in: 
+	changed timer type for installed agentdb.list from default to jiffies
+
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
 	- fixed the side for clearing the players from penalty areas during 
 	  goal kicks (reported from the Aria team <robotics@ce.aut.ac.ir>).
