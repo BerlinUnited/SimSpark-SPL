@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: netclient.cpp,v 1.1 2004/05/01 14:20:33 rollmark Exp $
+   $Id: netclient.cpp,v 1.2 2004/12/17 20:24:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -142,6 +142,11 @@ bool NetClient::Connect()
 
 void NetClient::SendMessage(const string& msg)
 {
+    if (mNetMessage.get() == 0)
+        {
+            return;
+        }
+
     string preparedMsg = msg;
     mNetMessage->PrepareToSend(preparedMsg);;
 
