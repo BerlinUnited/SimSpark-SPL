@@ -1,3 +1,38 @@
+2003-12-04  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/agentaspect/forceeffector.cpp,
+	* lib/oxygen/agentaspect/forceeffector.h:
+	added dummy methods to implement the virtual effector interface
+
+	* lib/oxygen/agentaspect/effector.h:
+	added GetPredicate() that returns the name of the predicate an
+	effector is responsible for; As one predicate could be implemented by
+	different classes this call was made explicit and the predicate name was not
+	derived from the class name.
+	added GetActionObject() that constructs an Actionobject, describing a
+	predicate.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	renamed Init to InitParser
+	added InitEffector
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	added InitEffector()
+	added RealizeActions() that realizes a list of ActionObjects with the help
+	of the registered effectors corresponding to the predicates
+	added GetEffector(), a helper function to lookup an effector for a given
+	predicate name
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	renamed Init() to InitParser
+	added InitEffector()
+	added RealizeAction()
+	added GetEffector()
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	added call to GameControlServer::RealizeActions in
+	::realizeEventWorldModel
+
 2003-12-04  Oliver Obst  <fruit@robolog.org>
 
 	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp: 
