@@ -17,7 +17,6 @@ new('oxygen/PhysicsServer', $serverPath+'physics')
 
 #
 # setup the SceneServer
-
 sceneServer = new('oxygen/SceneServer', $serverPath+'scene')
 sceneServer.createScene($scenePath)
 
@@ -26,10 +25,18 @@ importBundle 'rubysceneimporter'
 sceneServer.initSceneImporter("RubySceneImporter");
 
 #
+# setup the GeometryServer
+geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
+importBundle 'voidmeshimporter'
+geometryServer.initMeshImporter("VoidMeshImporter");
+
+#
 # setup the kerosin render framework
 new('kerosin/OpenGLServer', $serverPath+'opengl');
 new('kerosin/MaterialServer', $serverPath+'material');
 new('kerosin/RenderServer', $serverPath+'render');
+new('kerosin/ImageServer', $serverPath+'image');
+new('kerosin/TextureServer', $serverPath+'texture');
 
 #
 # setup the InputServer
