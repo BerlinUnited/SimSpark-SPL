@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorparser.h,v 1.2 2004/03/12 17:24:22 rollmark Exp $
+   $Id: monitorparser.h,v 1.2.2.1 2004/03/28 15:44:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ public:
     /** parses the list of predicates into the given expression list
         and GameState; returns true on success
      */
-    void ParsePredicates(oxygen::Predicate::TList& predList,
+    void ParsePredicates(oxygen::PredicateList& predList,
                          GameState& state, GameParam& param,
                          TExprList& exprList);
 
@@ -91,7 +91,7 @@ protected:
     /** parses the game parameters sent by the server during the init
         sequence
      */
-    bool ParseInfoHeader(oxygen::Predicate::TList& predicates,
+    bool ParseInfoHeader(oxygen::PredicateList& predicates,
                          GameParam& param);
 
     /** reads the parameters for an object with given name from given

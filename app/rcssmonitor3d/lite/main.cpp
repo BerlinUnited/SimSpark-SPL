@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.8 2004/03/12 17:27:05 rollmark Exp $
+   $Id: main.cpp,v 1.8.2.1 2004/03/28 15:43:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -476,12 +476,12 @@ void idle(void)
             return;
         }
 
-    boost::shared_ptr<oxygen::Predicate::TList> predicates =
+    boost::shared_ptr<oxygen::PredicateList> predicates =
         gCommServer->GetPredicates();
 
     if (
         (predicates.get() != 0) &&
-        (predicates->size() > 0)
+        (predicates->GetSize() > 0)
         )
         {
             // parse the received expressions

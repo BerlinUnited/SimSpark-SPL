@@ -61,23 +61,23 @@ TrainerCommandParser::TrainerCommandParser() : Leaf()
 
 TrainerCommandParser::~TrainerCommandParser()
 {
-    
+
 }
 
-void TrainerCommandParser::ParsePredicates(oxygen::Predicate::TList & predList)
+void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
 {
     for (
-         Predicate::TList::const_iterator iter = predList.begin();
+         PredicateList::TList::const_iterator iter = predList.begin();
          iter != predList.end();
          ++iter
          )
     {
         const Predicate & predicate = (*iter);
-                
+
         if (! ParsePredicate(predicate))
         {
             continue;
-        }        
+        }
     }
 }
 
@@ -100,31 +100,31 @@ bool TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         ParseBallCommand(predicate);
         break;
     case CT_PLAYMODE:
-        ParsePlayModeCommand(predicate);       
+        ParsePlayModeCommand(predicate);
         break;
     default:
         return false;
     }
 
-    return true; 
+    return true;
 }
 
 void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicate)
-{   
-    
+{
+
     Predicate::Iterator unumParam(predicate);
     int                 unum;
 
     // extract unum
     if (predicate.FindParameter(unumParam, "unum"))
-    {            
+    {
         if (! predicate.GetValue(unumParam, unum))
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get unum\n";
             return;
         }
-    }      
-        
+    }
+
     string              team;
     TTeamIndex          idx;
     Predicate::Iterator teamParam(predicate);
@@ -136,22 +136,22 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get team name\n";
             return;
-        } 
+        }
 
-        idx = mTeamIndexMap[team];          
-    }        
+        idx = mTeamIndexMap[team];
+    }
 
     Predicate::Iterator posParam(predicate);
-    
+
     if (predicate.FindParameter(posParam, "pos"))
     {
         salt::Vector3f pos;
 
-        // extract position vector        
+        // extract position vector
         if (! predicate.GetValue(posParam, pos))
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent pos\n";
-            return;   
+            return;
         }
 
         shared_ptr<Body> body;
@@ -206,11 +206,11 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         if (! predicate.GetValue(batParam, battery))
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get battery value\n";
-            return;  
+            return;
         }
 
         shared_ptr<AgentState> agentState;
-        
+
         // get agent state
         if (SoccerBase::GetAgentState(*this, idx, unum, agentState))
         {
@@ -220,9 +220,9 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         else
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent state\n";
-            return;    
+            return;
         }
-    }    
+    }
 
     Predicate::Iterator tempParam(predicate);
 
@@ -238,7 +238,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
 
         shared_ptr<AgentState> agentState;
-        
+
         // get agent state
         if (SoccerBase::GetAgentState(*this, idx, unum, agentState))
         {
@@ -250,7 +250,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent state\n";
             return;
         }
-    }    
+    }
 }
 
 void TrainerCommandParser::ParseBallCommand(const oxygen::Predicate & predicate)
@@ -265,7 +265,7 @@ void TrainerCommandParser::ParseBallCommand(const oxygen::Predicate & predicate)
         if (! predicate.GetValue(posParam, pos))
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get ball pos\n";
-            return;   
+            return;
         }
 
         shared_ptr<Body> body;

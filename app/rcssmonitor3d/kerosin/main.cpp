@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.5 2004/03/20 15:53:19 rollmark Exp $
+   $Id: main.cpp,v 1.5.2.1 2004/03/28 15:43:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -458,14 +458,14 @@ void processUpdates()
             return;
         }
 
-    boost::shared_ptr<oxygen::Predicate::TList> predicates =
+    boost::shared_ptr<oxygen::PredicateList> predicates =
         gCommServer->GetPredicates();
 
     MonitorParser::TExprList exprList;
 
     if (
         (predicates.get() != 0) &&
-        (predicates->size() > 0)
+        (predicates->GetSize() > 0)
         )
         {
             // parse the received expressions

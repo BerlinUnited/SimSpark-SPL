@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.3 2004/03/25 22:07:53 jboedeck Exp $
+   $Id: sexpmonitor.h,v 1.3.2.1 2004/03/28 15:38:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ protected:
 protected:
 
     // cache for parsed predicates
-    boost::shared_ptr<oxygen::Predicate::TList> mPredicates;
+    boost::shared_ptr<oxygen::PredicateList> mPredicates;
 
     boost::shared_ptr<GameStateAspect> mGameState;
 
