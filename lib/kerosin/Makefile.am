@@ -57,6 +57,8 @@ inputserver/inputserver_c.cpp \
 inputserver/inputsystem.cpp \
 inputserver/inputsystem_c.cpp \
 inputserver/scancodemap.cpp \
+inputserver/inputcontrol.cpp \
+inputserver/inputcontrol_c.cpp \
 kerosin.cpp \
 materialserver/material.cpp \
 materialserver/material_c.cpp \
@@ -91,7 +93,9 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
 renderserver/renderserver.cpp \
-renderserver/renderserver_c.cpp 
+renderserver/renderserver_c.cpp \
+renderserver/rendercontrol.cpp \
+renderserver/rendercontrol_c.cpp
 
 nobase_libpkginclude_HEADERS = \
 fontserver/font.h \
@@ -103,6 +107,7 @@ inputserver/inputdevice.h \
 inputserver/inputserver.h \
 inputserver/inputsystem.h \
 inputserver/scancodemap.h \
+inputserver/inputcontrol.h \
 kerosin.h \
 materialserver/material.h \
 materialserver/materialserver.h \
@@ -129,5 +134,6 @@ textureserver/texture.h \
 textureserver/texture2d.h \
 textureserver/textureserver.h \
 openglserver/openglserver.h \
-renderserver/renderserver.h
+renderserver/renderserver.h \
+renderserver/rendercontrol.h
 
