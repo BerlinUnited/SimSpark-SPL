@@ -18,7 +18,9 @@
 
        ; install a perceptor to receive info about ball and player positions
        (node VisionPerceptor
-	     (setSenseMyPos true)
+	     (setSenseMyPos false)
+	     (setStaticSenseAxis false)
+	     (addNoise false)
 	     )
 
        (node Transform
