@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: sliderjoint.h,v 1.2 2004/04/15 10:45:21 rollmark Exp $
+   $Id: sliderjoint.h,v 1.3 2004/04/20 14:20:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@ public:
     SliderJoint();
     virtual ~SliderJoint();
 
-    /**  returns the slider linear position, i.e. the slider's
-         `extension'. When the axis is set, the current position of
-         the attached bodies is examined and that position will be the
-         zero position.
+    /** returns the slider linear position, i.e. the slider's
+        `extension'. When the axis is set, the current position of the
+        attached bodies is examined and that position will be the zero
+        position.
     */
     float GetPosition();
 
@@ -47,7 +47,7 @@ protected:
     virtual void Attach(boost::shared_ptr<Body> body1,
                         boost::shared_ptr<Body> body2);
 
-    /** creates a new contact joint */
+    /** creates a new slider joint */
     virtual void OnLink();
 };
 
