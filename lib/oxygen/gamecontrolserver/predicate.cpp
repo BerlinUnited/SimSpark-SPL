@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.cpp,v 1.4.2.1 2004/03/28 12:33:42 rollmark Exp $
+   $Id: predicate.cpp,v 1.4.2.2 2004/03/28 15:26:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -179,4 +179,42 @@ bool Predicate::DescentList(Iterator& iter) const
         }
 
 }
+
+/** implementation of class PredicateList */
+PredicateList::PredicateList()
+{
+}
+
+PredicateList::~PredicateList()
+{
+}
+
+PredicateList::TList::const_iterator PredicateList::begin() const
+{
+    return mList.begin();
+}
+
+PredicateList::TList::const_iterator PredicateList::end() const
+{
+    return mList.end();
+}
+
+Predicate& PredicateList::AddPredicate()
+{
+    mList.push_back(Predicate());
+    return mList.back();
+}
+
+int PredicateList::GetSize() const
+{
+    return mList.size();
+}
+
+void PredicateList::Clear()
+{
+    mList.clear();
+}
+
+
+
 
