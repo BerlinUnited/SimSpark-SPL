@@ -1,3 +1,9 @@
+2003-12-23  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/sexpparser/sexpparser.h: 
+	* plugin/sexpparser/sexpparser.cpp: 
+	added further type check and error message
+
 2003-12-22  Oliver Obst  <fruit@robolog.org>
 
 	* merged rcssserver3D-add-gamecontrol back to main branch	
