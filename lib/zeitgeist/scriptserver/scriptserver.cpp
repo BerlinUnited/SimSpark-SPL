@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.8.4.2 2004/02/02 20:32:49 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.8.4.3 2004/02/18 09:03:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -522,8 +522,8 @@ bool ScriptServer::RunInitScript(const string &fileName, const string &relPath)
         validDotDir = false;
       }
 
-  char* cwd = getcwd(NULL,0);
-  if (cwd == NULL)
+  char cwd[PATH_MAX+1];
+  if (getcwd(cwd,sizeof(cwd)) == NULL)
     {
       GetLog()->Error() << "ERROR: Cannot get current directory" << endl;
       validDotDir = false;
@@ -544,11 +544,9 @@ bool ScriptServer::RunInitScript(const string &fileName, const string &relPath)
           }
     } else
       {
+        // change back to the original directory
         chdir(cwd);
       }
-
-  // destroy the buffer allocated by getcwd()
-  delete cwd;
 
   // some macro magic (not at all)
   string pkgdatadir = PREFIX "/share/" PACKAGE_NAME;
