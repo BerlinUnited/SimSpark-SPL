@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.6 2004/04/28 14:48:25 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.7 2004/04/29 15:20:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ RubySceneImporter::RubySceneImporter() : SceneImporter()
 {
     mVersionMajor = 0;
     mVersionMinor = 0;
+    mDeltaScene = false;
 }
 
 RubySceneImporter::~RubySceneImporter()
@@ -122,7 +123,9 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
     destroy_sexp(sexp);
     sexp = iparse_sexp(const_cast<char*>(scene),size,pcont);
 
-    bool ok = ReadGraph(sexp,root);
+    bool ok = mDeltaScene ?
+        ReadDeltaGraph(sexp,root) :
+        ReadGraph(sexp,root);
 
     destroy_sexp(sexp);
     destroy_continuation(pcont);
@@ -184,10 +187,13 @@ bool RubySceneImporter::ReadHeader(sexp_t* sexp)
 
     string val(sexp->val);
 
-    if (val != "RubySceneGraph")
+    if (val == "RubyDeltaScene")
         {
-            return false;
-        }
+            mDeltaScene = true;
+        }  else if (val != "RubySceneGraph")
+            {
+                return false;
+            }
 
     // try to advance to version number
     sexp = sexp->next;
@@ -390,7 +396,6 @@ bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
         }
 
     node->Invoke(method, parameter);
-
     return true;
 }
 
@@ -446,6 +451,76 @@ bool RubySceneImporter::ParseTemplate(sexp_t* sexp)
     return true;
 }
 
+bool RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
+{
+    TLeafList::const_iterator iter = root->begin();
+
+    while (sexp != 0)
+        {
+            switch (sexp->ty)
+                {
+                case SEXP_VALUE:
+                    {
+                        string name(sexp->val);
+
+                        if (name == "node")
+                            {
+                                while (
+                                       (sexp != 0) &&
+                                       (sexp->ty != SEXP_LIST)
+                                       )
+                                    {
+                                        sexp = sexp->next;
+                                    }
+                                continue;
+                            } else
+                                {
+                                    return ReadMethodCall(sexp, root);
+                                }
+                    }
+                    break;
+
+                case SEXP_LIST:
+                    {
+                        sexp_t* sub = sexp->list;
+                        if (sub != 0)
+                            {
+                                shared_ptr<BaseNode> node;
+
+                                if (
+                                    (sub->ty == SEXP_VALUE) &&
+                                    (string(sub->val) == "node")
+                                    )
+                                    {
+                                        node = shared_dynamic_cast<BaseNode>(*iter);
+                                        if (iter != node->end())
+                                            {
+                                                ++iter;
+                                            }
+                                    } else
+                                        {
+                                            node = root;
+                                        }
+
+                                if (! ReadDeltaGraph(sub, node))
+                                    {
+                                        return false;
+                                    }
+                            }
+                    }
+                    break;
+
+                default:
+                    return false;
+
+                }
+
+            sexp = sexp->next;
+        }
+
+    return true;
+}
+
 bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 {
     while (sexp != 0)
@@ -455,10 +530,12 @@ bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                 case SEXP_VALUE:
                     {
                         string name(sexp->val);
+
                         if (name == "node")
                             {
                                 sexp = sexp->next;
-                                shared_ptr<BaseNode> node = CreateNode(sexp);
+                                shared_ptr<BaseNode> node
+                                    = CreateNode(sexp);
 
                                 if (node.get() == 0)
                                     {
@@ -483,7 +560,6 @@ bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                         {
                             return false;
                         }
-
                     break;
 
                 default:
