@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate.h,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: objectstate.h,v 1.3 2004/04/08 14:31:45 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@ public:
     typedef enum TPerceptType
     {
         PT_Default,
-        PT_TooFar
+        PT_TooFar,
+	PT_Player
     };
 
 public:
@@ -41,6 +42,11 @@ public:
     /** set the object name for perceptors */
     virtual void SetPerceptName(const std::string& name,
                                 TPerceptType pt = PT_Default);
+				
+     /** set the object name for perceptors */
+    virtual void SetPerceptName(const std::string& name,
+                                TPerceptType pt ,
+                                TPerceptType pt );
 
     /** returns the object name for perceptors */
     virtual std::string GetPerceptName(TPerceptType pt = PT_Default) const;
