@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: matrix.h,v 1.6 2004/02/12 14:07:23 fruit Exp $
+   $Id: matrix.h,v 1.7 2004/04/15 10:03:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -141,14 +141,13 @@ public:
     f_inline void               InvertRotationMatrix();
 
     /** multiplies the matrix with inVector */
-    f_inline Vector3f   Transform(const Vector3f & inVector);
+    f_inline Vector3f   Transform(const Vector3f & inVector) const;
 
     /** rotates the matrix by inVector */
-    f_inline Vector3f   Rotate(const Vector3f & inVector);
+    f_inline Vector3f   Rotate(const Vector3f & inVector) const;
 
     /** inverse rotates the matrix by inVector */
-    f_inline Vector3f   InverseRotate(const Vector3f & inVector);
-
+    f_inline Vector3f   InverseRotate(const Vector3f & inVector) const;
     // special lighting matrices
 
     /** sets up an attenuation matrix without rotation */
@@ -386,7 +385,7 @@ f_inline void Matrix::InvertRotationMatrix()
 }
 
 // full matrix application (last row is interpreted as 0 0 0 1)
-f_inline Vector3f Matrix::Transform(const Vector3f & inVector)
+f_inline Vector3f Matrix::Transform(const Vector3f & inVector) const
 {
     float x = inVector.x(), y = inVector.y(), z = inVector.z();
 
@@ -396,7 +395,7 @@ f_inline Vector3f Matrix::Transform(const Vector3f & inVector)
 }
 
 // this only applies the rotation part of the matrix
-f_inline Vector3f Matrix::Rotate(const Vector3f & inVector)
+f_inline Vector3f Matrix::Rotate(const Vector3f & inVector) const
 {
     float x = inVector.x(), y = inVector.y(), z = inVector.z();
     return Vector3f(    x*m[0] + y*m[4] + z*m[8],
@@ -405,7 +404,7 @@ f_inline Vector3f Matrix::Rotate(const Vector3f & inVector)
 }
 
 // this applies the transpose of the rotation part of the matrix (inverse rotation)
-f_inline Vector3f Matrix::InverseRotate(const Vector3f & inVector)
+f_inline Vector3f Matrix::InverseRotate(const Vector3f & inVector) const
 {
     float x = inVector.x(), y = inVector.y(), z = inVector.z();
     return Vector3f(x*m[0] + y*m[1] + z*m[2],
