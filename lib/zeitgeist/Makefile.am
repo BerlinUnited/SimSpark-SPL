@@ -12,9 +12,6 @@ node_c.cpp \
 object.cpp \
 object_c.cpp \
 zeitgeist.cpp \
-fileserver/fileserver.cpp \
-fileserver/fileserver_c.cpp \
-fileserver/filesystem_c.cpp \
 logserver/logserver.cpp \
 logserver/logserver_c.cpp \
 logserver/logserverstreambuf.cpp \
@@ -34,9 +31,6 @@ node_c.cpp \
 object.cpp \
 object_c.cpp \
 zeitgeist.cpp \
-fileserver/fileserver.cpp \
-fileserver/fileserver_c.cpp \
-fileserver/filesystem_c.cpp \
 logserver/logserver.cpp \
 logserver/logserver_c.cpp \
 logserver/logserverstreambuf.cpp \
@@ -55,8 +49,6 @@ node.h \
 object.h \
 object_c.h \
 zeitgeist.h \
-fileserver/fileserver.h \
-fileserver/filesystem.h \
 logserver/logserver.h \
 logserver/logserverstreambuf.h \
 scriptserver/scriptserver.h 
