@@ -57,8 +57,6 @@ sceneserver/transform_c.cpp
 ### sceneserver/camera_c.cpp 
 ### sceneserver/indexbuffer.cpp 
 
-liboxygen_la_CXXFLAGS = -O0 -W -Wall
-
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
 agentaspect/collisionperceptor.h \
