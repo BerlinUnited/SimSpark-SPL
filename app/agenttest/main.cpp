@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.11 2004/04/08 12:06:21 fruit Exp $
+   $Id: main.cpp,v 1.12 2004/04/08 14:24:43 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -163,6 +163,7 @@ Init(int argc, char* argv[], Zeitgeist& zg)
     }
 
     behave->SetTeamName(teamName);
+    wm->SetTeamName(teamName);
     behave->SetTeamUnum(teamUnum);
 
     return 0;
@@ -179,7 +180,7 @@ Run()
         {
             break;
         }
-
+	cout << "Msg von Server an Spieler: " <<comm->GetMsg() <<"\n";
         wm->Parse(comm->GetMsg());
 
         switch(comm->GetMsg()[0])
