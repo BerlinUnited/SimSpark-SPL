@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: world.h,v 1.5 2004/02/12 14:07:23 fruit Exp $
+   $Id: world.h,v 1.6 2004/03/22 10:59:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,10 +47,7 @@ public:
     dWorldID GetODEWorld() const;
 
     /** sets the gravity vector of this vorld */
-    void SetGravity(float x, float y, float z);
-
-    /** sets the gavity vector of this world */
-    void SetGravity(const salt::Vector3f &v);
+    void SetGravity(const salt::Vector3f& gravity);
 
     /** sets the Error Reduction Parameter of this world. The ERP
         specifies what proportion of a joint error will be fixed

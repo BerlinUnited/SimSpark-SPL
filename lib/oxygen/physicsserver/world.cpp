@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: world.cpp,v 1.4 2004/02/12 14:07:23 fruit Exp $
+   $Id: world.cpp,v 1.5 2004/03/22 10:59:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "world.h"
 
 using namespace oxygen;
+using namespace salt;
 
 World::World() : mODEWorld(0)
 {
@@ -42,14 +43,13 @@ dWorldID World::GetODEWorld() const
   return mODEWorld;
 }
 
-void World::SetGravity(float x, float y, float z)
+void World::SetGravity(const Vector3f& gravity)
 {
-  dWorldSetGravity(mODEWorld, x, y, z);
-}
-
-void World::SetGravity(const salt::Vector3f &v)
-{
-  SetGravity(v.x(), v.y(), v.z());
+  dWorldSetGravity(mODEWorld,
+                   gravity.x(),
+                   gravity.y(),
+                   gravity.z()
+                   );
 }
 
 void World::SetERP(float erp)
