@@ -1,3 +1,100 @@
+2003-12-02  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	moved main execution path of AgentConnect method out of
+	conditional statement
+	implemented AgentDisappear method added GetSenseInterval
+
+	* lib/oxygen/gamecontrolserver/baseparser.h:
+	changed TPredicateList definition
+
+	* lib/oxygen/oxygen.h: 
+	added include for actionobject
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	lib/oxygen/spadesserver/spadescreatesenseevent.h: New file
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	* lib/oxygen/spadesserver/spadescreatesenseevent.h: 
+	initial version of SpadesCreateSenseEvent
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	added GetTimePerStep method (also used by SpadesCreateSenseEvent)
+	made GetGameControlServer a public method
+	added GetSimEngine method
+
+	* lib/oxygen/spadesserver/paramstorer.h: 
+	fixed some typos in a comment
+
+	* lib/oxygen/oxygen.cpp: 
+	registered ActionObject to ZeitGeist
+
+	* lib/oxygen/Makefile.am:
+	added SpadesCreateSenseEvent and ActionObject files to Makefile.am
+
+2003-12-02  Oliver Obst  <fruit@robolog.org>
+	* TODO: 
+	New file.
+
+	* app/spadestest/spadestest.rb: 
+	creating game control server
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	using default constructor of shared ptr instead of tmp variable
+
+2003-12-01  Oliver Obst  <fruit@robolog.org>
+
+	* lib/kerosin/Makefile.am:
+	removed visionperceptor from the list of files to be compiled
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	- implemented helper function to get GameControlServer
+	- agentConnect calls the GameControlServer::AgentConnect method
+
+	* lib/oxygen/spadesserver/spadesserver.h:
+	added helper function to get GameControlServer
+
+	* lib/oxygen/oxygen.cpp, lib/oxygen/oxygen.h:
+	Added GameControlServer to the oxygen initialization
+
+	* lib/oxygen/gamecontrolserver/.cvsignore: New file.
+
+	* lib/oxygen/gamecontrolserver/baseparser.h:
+	* lib/oxygen/gamecontrolserver/baseparser_c.cpp:
+	Added a base parser class BaseParser that the GameControlServer
+	uses to hold a reference to the specific parser used by a
+	simulation.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	Added first version of a GameControlServer
+
+2003-12-01  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/spadestest/spadestest.rb:
+	removed dummy variable for test with the ParamReader. Set
+	Spades.TimePerStep on startup.
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	made simulation parameter time_per_step accessible via ruby
+	(Spades.TimePerStep).
+
+	* lib/oxygen/spadesserver/paramreader.cpp: 
+	modified warning messages
+	removed extensive check for the presence of the scriptserver
+
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	added GetVariable method to work with floats
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	some cosmetic changes. moved main path out of conditional
+	statement
+	
 2003-12-01  Oliver Obst  <fruit@robolog.org>
 
 	* lib/oxygen/spadesserver/spadesserver.cpp: 
