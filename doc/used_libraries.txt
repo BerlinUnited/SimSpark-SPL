@@ -15,29 +15,29 @@ LIST OF LIBRARIES
 Sound Playback
 --------------
 
-FMOD 	3.7					http://www.fmod.org/
-BASS 	1.6		(VC only)	http://www.un4seen.com/music/
+FMOD 	3.7	optional			http://www.fmod.org/
+BASS 	1.6		(VC only)		http://www.un4seen.com/music/
 
 
 File System
 -----------
 
-ZLIB 	1.1.4				http://www.gzip.org/zlib/
-unRAR 	3.0		(VC only)	http://www.rarlab.com/
-unACE	2.11 	(VC only)	http://www.winace.com/licence.html
+ZLIB 	1.1.4					http://www.gzip.org/zlib/
+unRAR 	3.0		(VC only)		http://www.rarlab.com/
+unACE	2.11		(VC only)		http://www.winace.com/licence.html
 
 
 Scripting
 ---------
 
-Ruby 	1.6.7				http://www.ruby-lang.org/
+Ruby 	1.6.8					http://www.ruby-lang.org/
 
 
 General
 -------
 
-STLport 4.5.3				http://www.stlport.org/
-Boost 1.28.0				http://www.boost.org/
+STLport 4.5.3	optional, not needed		http://www.stlport.org/
+Boost 1.30.2	older versions should also work	http://www.boost.org/
 
 
 Input + OpenGL
@@ -46,15 +46,17 @@ Input + OpenGL
 SDL 1.2						http://www.libsdl.org/
 
 
-Lighting
---------
-
-Opcode 1.2					http://www.codercorner.com/Opcode.htm
-
 Fonts
 -----
 
-FreeType 2.1.2				http://www.freetype.org/
+FreeType 2.1.2					http://www.freetype.org/
+
+
+Physics
+-------
+ODE 0.039					www.q12.org
+	   opcode is now part of ODE and not
+           needed (yet) 
 
 
 
