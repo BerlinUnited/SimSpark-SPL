@@ -229,18 +229,18 @@ void Behave(int /*numSensation*/)
         {
           // kick the ball
           Log("Kicking \n");
-          PutOutput("A(kick up 100.0)");
+          PutOutput("A(kick 20.0 80.0)");
         } else {
             Vector3f dashVec;
             stringstream s0;
             s0 << "Dash to: " << ballVec[0] << " " << ballVec[1] << " " << ballVec[2];
             Log(s0.str().c_str());
 
-            dashVec[0] = 5 * ballVec[0] * gCos(gDegToRad(ballVec[1])) *
+            dashVec[0] = 15 * ballVec[0] * gCos(gDegToRad(ballVec[1])) *
                 gSin(gDegToRad(90.0 - ballVec[2]));
-            dashVec[1] = 5 * ballVec[0] * gSin(gDegToRad(ballVec[1])) *
+            dashVec[1] = 15 * ballVec[0] * gSin(gDegToRad(ballVec[1])) *
                 gSin(gDegToRad(90.0 - ballVec[2]));
-            dashVec[2] = 5 * ballVec[0] * gCos(gDegToRad(90.0 - ballVec[2]));
+            dashVec[2] = 15 * ballVec[0] * gCos(gDegToRad(90.0 - ballVec[2]));
 
             stringstream ss;
             ss << "A(dash"
