@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesactevent.cpp,v 1.1.2.1 2003/12/03 17:50:18 rollmark Exp $
+   $Id: spadesactevent.cpp,v 1.1.2.2 2003/12/03 17:54:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 using namespace oxygen;
 
-void SpadesActEvent::Print (std::ostream & o) const
+void SpadesActEvent::Print (std::ostream & /*o*/) const
 {
 }
 
