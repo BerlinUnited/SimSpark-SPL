@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: baseparser.h,v 1.3 2003/12/27 17:53:41 fruit Exp $
+   $Id: baseparser.h,v 1.3.4.1 2004/03/28 15:27:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@ class BaseParser : public zeitgeist::Leaf
 {
 public:
     /** parses the \param input string into a list of Predicates */
-    virtual boost::shared_ptr<Predicate::TList> Parse(const std::string& input) = 0;
+    virtual boost::shared_ptr<PredicateList> Parse(const std::string& input) = 0;
 
     /** generates a string representing the given \param input list of
         predicates */
-    virtual std::string Generate(boost::shared_ptr<Predicate::TList> input) = 0;
+    virtual std::string Generate(boost::shared_ptr<PredicateList> input) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(BaseParser);
