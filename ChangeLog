@@ -1,3 +1,67 @@
+2004-02-08  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/simulator.rb: 
+	- set the dashEffector force factor so that the agent runs 100m in 13~14s 
+	- set the dashEffector sigma so that errors are usually below ~2% of the 
+	  applied force 
+	- added AgentStatePerceptor to agents 
+	- using new SetPerceptName ObjectState method
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	changed getting the object name to use the ObjectState method
+	GetPerceptName
+
+	* plugin/soccer/dasheffector/dasheffector.h: 
+	* plugin/soccer/dasheffector/dasheffector.cpp: 
+	- changed the dash perceptor so that a dash command sets a force that is 
+	  applied during each simulation step. To dash forward with max. speed, 
+	  you just have to set the force to maximum size once, and then you
+	  go. To stop (slowly), you have to set the force to 0 again.  
+	- storing the max. agent dist from the plane in a member variable
+	  mMaxDistance. mMaxDistance is set to the agent radius (+ 1mm) 
+	- changed the Realize method to store the force only 
+	- The applied force is calculated different (easier) now: the force 
+	  given by the agent is multiplied with the force factor and
+	  (if noise is used) with a random number close to 1.0
+	- added PrePhysicsUpdateInternal method that adds the applied
+	  force during each step to the agent body. The applied force is
+	  dependend on the simulation step size so that changing the step
+	  size shouldn't have a big effect on the acceleration.  
+	- the default force factor is set to 60.0 now. Using full speed, the
+	  agent does ~100m in about something more than 13s.
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	- using GetPerceptName of the agentState
+
+	* plugin/soccer/objectstate/objectstate_c.cpp: 
+	renamed exported setName to setPerceptName
+
+	* plugin/soccer/objectstate/objectstate.h: 
+	* plugin/soccer/objectstate/objectstate.cpp: 
+	- changed SetName/GetName method to SetPerceptName/GetPerceptName in order
+	  not to overwrite the zeitgeist::Leaf methods SetName/GetName 
+	- extended the Set.. / Get... method to take an optional second
+	  argument indicating the percept type. This way, objects can have
+	  different names depending on Perceptor characteristics, like for
+	  instance the name changes if the objects are far away.  
+	- Names and IDs are stored in maps now.
+	
+	* plugin/soccer/agentstate/agentstate.h: 
+	* plugin/soccer/agentstate/agentstate.cpp: 
+	- changed SetID method so that the stored ID can be different for 
+	  different percept types 
+	- added battery state and GetBattery method 
+	- added method that, given a desired force, computes the force to be applied when
+	  dashing and reduces the battery state 
+	- added temperature variable (yet unused)
+	
+	* plugin/soccer/export.cpp: added agentstateperceptor
+
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.h: 
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
+	* plugin/soccer/agentstateperceptor/agentstateperceptor_c.cpp: 
+	added agentstate perceptor that sends updates about the agent itself
+
 2004-02-07  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/node.cpp: 
