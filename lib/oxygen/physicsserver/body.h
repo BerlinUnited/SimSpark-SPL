@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.5 2003/11/14 14:05:53 fruit Exp $
+   $Id: body.h,v 1.5.8.1 2004/01/11 11:09:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,9 @@ public:
 
     /** returns the current velocity vector of this body */
     salt::Vector3f GetVelocity() const;
+
+    /** returns the Body node corresponding to the given ODE body */
+    static Body* GetBody(dBodyID id);
 
 protected:
     /** creates the corresponding ODE body and moves it to the
