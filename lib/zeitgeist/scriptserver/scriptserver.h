@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: scriptserver.h,v 1.6 2003/11/06 09:34:53 rollmark Exp $
+   $Id: scriptserver.h,v 1.7 2003/11/13 16:14:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,81 +62,81 @@
 namespace zeitgeist
 {
 
-class CoreContext;
+  class CoreContext;
 
-/** The ScriptServer provides scripting facilities to the zeitgeist
-    framework. Up to now is realized using Ruby, though the
-    ScritpServer could easily be extended to support other script
-    languages.
- */
-class ScriptServer : public Leaf
-{
-        //
-        // types
-        //
-public:
-protected:
-private:
+  /** The ScriptServer provides scripting facilities to the zeitgeist
+      framework. Up to now is realized using Ruby, though the
+      ScritpServer could easily be extended to support other script
+      languages.
+  */
+  class ScriptServer : public Leaf
+  {
+    //
+    // types
+    //
+  public:
+  protected:
+  private:
 
-        //
-        // functions
-        //
-public:
-  /** constructs the ScriptServer */
-        ScriptServer();
-        virtual ~ScriptServer();
+    //
+    // functions
+    //
+  public:
+    /** constructs the ScriptServer */
+    ScriptServer();
+    virtual ~ScriptServer();
 
-        /** loads an runs a ruby script, returns true on success */
-        bool Run(const std::string &fileName);
+    /** loads an runs a ruby script, returns true on success */
+    bool Run(const std::string &fileName);
 
-        /** evaluates a ruby statement, returns true on success */
-        bool Eval(const std::string &command);
+    /** evaluates a ruby statement, returns true on success */
+    bool Eval(const std::string &command);
 
-        // script variable functions
+    // script variable functions
 
-        /** creates a ruby integer variable */
-        void CreateVariable(const std::string &varName, int value);
+    /** creates a ruby integer variable */
+    void CreateVariable(const std::string &varName, int value);
 
-        /** creates a ruby float variable */
-        void CreateVariable(const std::string &varName, float value);
+    /** creates a ruby float variable */
+    void CreateVariable(const std::string &varName, float value);
 
-        /** creates a ruby string variable */
-        void CreateVariable(const std::string &varName, const std::string &value);
+    /** creates a ruby string variable */
+    void CreateVariable(const std::string &varName, const std::string &value);
 
-        /** reads the value of a ruby integer, returns true on success */
-        bool GetVariable(const std::string &varName, int &value);
+    /** reads the value of a ruby integer, returns true on success */
+    bool GetVariable(const std::string &varName, int &value);
 
-        /** reads the value of a ruby boolean, returns true on success */
-        bool GetVariable(const std::string &varName, bool &value);
+    /** reads the value of a ruby boolean, returns true on success */
+    bool GetVariable(const std::string &varName, bool &value);
 
-        /** reads the value of a ruby string, returns true on success */
-        bool GetVariable(const std::string &varName, std::string &value);
+    /** reads the value of a ruby string, returns true on success */
+    bool GetVariable(const std::string &varName, std::string &value);
 
-        /** returns the context, the ScriptServer operates in */
-        boost::shared_ptr<CoreContext> GetContext() const;
+    /** returns the context, the ScriptServer operates in */
+    boost::shared_ptr<CoreContext> GetContext() const;
 
-protected:
-        /** initializes the ScriptServer and runs the default startup
-            script 'sys/script/zeitgeist.rb', returning true on
-            success.
-        */
-        virtual bool ConstructInternal();
+  protected:
+    /** initializes the ScriptServer and runs the default startup
+        script 'sys/script/zeitgeist.rb', returning true on
+        success.
+    */
+    virtual bool ConstructInternal();
 
-private:
-        ScriptServer(const ScriptServer& obj);
-        ScriptServer& operator=(const ScriptServer& obj);
+  private:
+    ScriptServer(const ScriptServer& obj);
+    ScriptServer& operator=(const ScriptServer& obj);
 
-        VALUE GetVariable(const std::string &varName);
+    VALUE GetVariable(const std::string &varName);
 
-        //
-        // members
-        //
-public:
-protected:
-private:
-};
+    //
+    // members
+    //
+  public:
+  protected:
+  private:
+  };
 
-DECLARE_CLASS(ScriptServer);
+  DECLARE_CLASS(ScriptServer);
 
 } //namespace zeitgeist
 
