@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.1.2.4 2003/12/25 18:32:49 rollmark Exp $
+   $Id: predicate.h,v 1.1.2.5 2003/12/25 19:05:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,35 +85,46 @@ public:
             }
     }
 
-    /** This is a specialized GetValue helper to read a float value
-        from a TParameterList. It first tries a direct cast to a float
-        value. If this fails it tries to generate a float from a string.
-    */
-    bool
-    GetValue(TParameterList::const_iterator& iter, float& value) const
-    {
-        try
-            {
-                value = boost::any_cast<float>(*iter);
-                ++iter;
-                return true;
-            }
-        catch(const boost::bad_any_cast &)
-            {
-                try
-                    {
-                        std::string str = boost::any_cast<std::string>(*iter);
-                        value = static_cast<float>(atof(str.c_str()));
-                        ++iter;
-                        return true;
-                    }
+    /** Below are GetValue helper functions spezialiced for a single type */
 
-                catch(const boost::bad_any_cast &)
-                    {
-                        return false;
-                    }
-            }
+    /** GetValue helper for float */
+    bool GetValue(TParameterList::const_iterator& iter, float& value) const
+    {
+        return ConvertStringValue(iter, value);
     }
+
+    /** GetValue helper for double */
+    bool GetValue(TParameterList::const_iterator& iter, double& value) const
+    {
+        return ConvertStringValue(iter, value);
+    }
+
+    /** GetValue helper for int */
+    bool GetValue(TParameterList::const_iterator& iter, int& value) const
+    {
+        return ConvertStringValue(iter, value);
+    }
+
+    /** GetValue helper for Vetor3f */
+    bool GetValue(TParameterList::const_iterator& iter, salt::Vector3f& value) const
+    {
+        return GetVectorValue(iter,value);
+    }
+
+    /** GetValue helper for Vector2f */
+    bool GetValue(TParameterList::const_iterator& iter, salt::Vector2f& value) const
+    {
+        return GetVectorValue(iter,value);
+    }
+
+ protected:
+    /** Note: As c++ does not support partially specialized function
+        templates (this concept does only apply to template classes),
+        the compiler would always call the generic GetValue function
+        and not our partially specialized functions. To work around
+        this issue the helper functions below are inlined into the set
+        of fully specialized functions above.
+    */
 
     /** This is a specialized GetValue helper to read any
         salt::TVector from a TParameterList. It first tries to
@@ -130,14 +141,6 @@ public:
         common case of a float vector this enables GetVectorValue to
         handle any mixture of float and string representation within
         the TParameterList.
-
-        As c++ does not support partially specialized function
-        templates (this concept does only apply to template classes),
-        the compiler would always call the generic GetValue function
-        and not our partially specialized TVector function. To work
-        around this issue GetVectorValue is inlined into a set of
-        fully specialized variants for all common TVector
-        instances. These are supplied below.
      */
     template <typename DATATYPE, int ELEMENTS, typename TYPE> f_inline bool
     GetVectorValue(TParameterList::const_iterator& iter,
@@ -187,14 +190,35 @@ public:
             }
     }
 
-    bool GetValue(TParameterList::const_iterator& iter, salt::Vector3f& value) const
+    /** This is a specialized GetValue helper to read a scalar value
+        from a TParameterList. It first tries a direct cast to the
+        desired type. If this fails it tries to generate the type
+        from a string.
+    */
+    template<typename TYPE> f_inline bool
+    ConvertStringValue(TParameterList::const_iterator& iter, TYPE& value) const
     {
-        return GetVectorValue(iter,value);
-    }
+        try
+            {
+                value = boost::any_cast<TYPE>(*iter);
+                ++iter;
+                return true;
+            }
+        catch(const boost::bad_any_cast &)
+            {
+                try
+                    {
+                        std::string str = boost::any_cast<std::string>(*iter);
+                        value = static_cast<TYPE>(atof(str.c_str()));
+                        ++iter;
+                        return true;
+                    }
 
-    bool GetValue(TParameterList::const_iterator& iter, salt::Vector2f& value) const
-    {
-        return GetVectorValue(iter,value);
+                catch(const boost::bad_any_cast &)
+                    {
+                        return false;
+                    }
+            }
     }
 
  public:
