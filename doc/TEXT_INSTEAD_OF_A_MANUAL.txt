@@ -3,11 +3,13 @@ TEXT_INSTEAD_OF_A_MANUAL.txt
 rcssserver3D provides a platform for programming simulated robots
 playing soccer in a physical environment.
 
-
 Contents
 --------
 
 1. System Overview
+1.1. Server
+1.2. Monitor
+
 2. Soccer Simulation
 2.1.  Soccer Team
 2.2   Environment
@@ -33,20 +35,44 @@ To get started you should be somewhat familiar with the components of
 the system. The soccer simulation consists of three important parts:
 the server, the monitor and the agents.
 
-In order to work with the server you should be familiar with the
-SPADES [1] simulation middleware. Some important concepts you should
-know about: The server is responsible to start an agent process,
-i.e. it does not wait for an agent to connect. The SPADES library uses
-a database that contains information how to start different agent
-types. It is called 'agentdb.xml' (see ./app/simulator/
-directory). Agents connect using UNIX pipes to a SPADES ComServer
-using a length prefixed format to exchange messages with the
-server. Please see the SPADES manual for further details.
+1.1. Server
+-----------
 
-The default monitor is called rcssmonitor3D-lite it is located in the
-./app/rcssmonitor3d/lite directory. It is also used to replay logfiles
-that the server automatically creates (use the --logfile <filename>
-option). The automatically generated logfile is called
+In order to work with the server you should be familiar with the
+SPADES[1] simulation middleware. Some important concepts you should
+know about: The server is responsible to start an agent process,
+i.e. it does not wait for an agent to connect as the 2D simulation
+does. The SPADES library uses a database that contains information how
+to start different agent types. It is called 'agentdb.xml', located in
+the ./app/simulator/ directory.
+
+Agents connect via UNIX pipes to a SPADES Commserver. The use a length
+prefixed format to exchange messages. The Commserver in turn
+communicates with the server. In the default setup of the soccer
+server an integrated Commserver is started.
+
+It is to possible start more than one Commserver in order to
+distribute agent processes across different systems. Please see the
+SPADES manual for further details about how to start and configure a
+remote Commserver. In this setup the 3d server has to be configured to
+wait until all Commservers are connected before it unpauses the
+simulation. The relevant settings are found in the server startup
+script rcssserver3D.rb.
+
+These settings are 'Spades.RunIntegratedCommserver' and
+'Spades.CommServersWanted'. The first setting configures if the
+integrated Commserver is started. Its default value is 'true'. The
+second setting gives the number of Commservers the server will wait
+for, before the simulation is initially unpaused. The integrated
+Commserver counts as one, so the default value here is 1.
+
+1.2 Monitor
+-----------
+
+The default monitor is called 'rcssmonitor3D-lite'. It is located in
+the ./app/rcssmonitor3d/lite directory. It is also used to replay
+logfiles that the server automatically creates (use the --logfile
+<filename> option). The automatically generated logfile is called
 'monitor.log'. You'll find it in the 'Logfiles/' directory below the
 directory in which you started the server. A set of logfiles from 2004
 RoboCup can be found at [2].
