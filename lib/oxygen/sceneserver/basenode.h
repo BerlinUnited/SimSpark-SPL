@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.8 2004/04/08 14:42:51 rollmark Exp $
+   $Id: basenode.h,v 1.9 2004/04/11 17:05:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,7 +110,8 @@ public:
     virtual void RenderAmbientInternal();
 
     /** imports a scene from a file below this Node */
-    bool ImportScene(const std::string& fileName);
+    bool ImportScene(const std::string& fileName,
+                     boost::shared_ptr<zeitgeist::ParameterList> parameter);
 
 protected:
     /** updates internal state before physics calculation */

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode_c.cpp,v 1.5 2004/04/08 14:47:05 rollmark Exp $
+   $Id: basenode_c.cpp,v 1.6 2004/04/11 17:05:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,21 +22,30 @@
 #include "basenode.h"
 
 using namespace oxygen;
+using namespace zeitgeist;
+using namespace boost;
 using namespace std;
 
 FUNCTION(BaseNode,importScene)
 {
     string inFileName;
 
+    // importScene <fileName> parameter ...
+
     if (
-        (in.GetSize() != 1) ||
+        (in.GetSize() == 0) ||
         (! in.GetValue(in[0],inFileName))
         )
         {
             return false;
         }
 
-    return obj->ImportScene(inFileName);
+    shared_ptr<ParameterList> parameter(new ParameterList(in));
+
+    // remove filename argument
+    parameter->Pop_Front();
+
+    return obj->ImportScene(inFileName, parameter);
 }
 
 void CLASS(BaseNode)::DefineClass()

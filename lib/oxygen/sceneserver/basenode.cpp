@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.cpp,v 1.8 2004/04/10 12:48:48 rollmark Exp $
+   $Id: basenode.cpp,v 1.9 2004/04/11 17:05:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -186,7 +186,7 @@ const salt::AABB3& BaseNode::GetWorldBoundingBox() const
     return mWorldBoundingBox;
 }
 
-bool BaseNode::ImportScene(const string& fileName)
+bool BaseNode::ImportScene(const string& fileName, shared_ptr<ParameterList> parameter)
 {
     shared_ptr<SceneServer> sceneServer = shared_dynamic_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
@@ -199,7 +199,7 @@ bool BaseNode::ImportScene(const string& fileName)
 
     shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>
         (make_shared(GetSelf()));
-    return sceneServer->ImportScene(fileName,node);
+    return sceneServer->ImportScene(fileName,node,parameter);
 }
 
 
