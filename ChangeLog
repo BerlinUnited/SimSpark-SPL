@@ -1,3 +1,44 @@
+2004-03-28  Oliver Obst  <fruit@robolog.org>
+
+	* acinclude.m4: 
+	added macro to define variables for library version info of our libraries
+
+	* lib/kerosin/Makefile.am: 
+	* lib/oxygen/Makefile.am: 
+	* lib/zeitgeist/Makefile.am: 
+	* lib/salt/Makefile.am:
+	Added the *-config scripts to the Makefile.am's so that they are
+	installed into the 'bin' directory.
+
+	* lib/kerosin/kerosin-config.in:
+	* lib/oxygen/oxygen-config.in:
+	* lib/zeitgeist/zeitgeist-config.in:
+	* lib/salt/salt-config.in: 
+	The *-config scripts can be used by other programs to find out about 
+	the configuration of the installed libraries. They are created by configure from
+	*-config.in and copied and adapted from freetype-config (see freetype2).
+
+	* configure.ac: 
+	- the RCSS_DEBUG macro was only defined if the --enable-debug option 
+	was given explicitly to configure, even though debugging was turned 
+	on by default without this option. Now, the macro is defined in 
+	all cases when debugging is turned on.
+	- added check for dlopen (used in libsalt)
+
+	* lib/salt/Makefile.am: 
+	- added variable containing required libraries to the LIBADD variable.  
+	The reason for this fix was that the dl library was not explicitly 
+	linked to libsalt. This resulted in an incomplete libsalt.la.
+
+	* doc/Makefile.am: 
+	The doxygen api documentation is not created anymore during *each* 
+	make install, because it takes too long to build it. Instead, 
+	existence of the html/index.html file is checked to see if the apidoc 
+	should be build or not.
+
+	* lib/salt/salt.h: 
+	removed #include "quadlink.h"
+
 2004-03-25  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* plugin/soccer/sexpmonitor/sexpmonitor.cpp,
