@@ -1,5 +1,25 @@
 2004-01-26  Oliver Obst  <fruit@robolog.org>
 
+	* app/agenttest/main.cpp: - using kick up
+	- changes due to kick margin changes (and agent size changes)
+
+	* plugin/soccer/kickeffector/kickeffector.cpp, plugin/soccer/kickeffector/kickeffector.h:
+	added some experimental code for kicking the ball "up"
+	(looks funny)
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp,
+	* plugin/soccer/visionperceptor/visionperceptor.h:
+	added some experimental features to the visionperceptor:
+	- noise (calibration noise + measurement errors)
+	- occlluion check (disabled for now, don't now if it works)
+
+	* app/rcssmonitor3d/main.cpp:
+	- adjusted field sizes and other parameters
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	- RemovedChildReference caused core dumps when agents disconnected.
+	  This is commented out now. Instead, we give a debug message.
+
 	* app/simulator/simulator.rb: 
 	- adjusted numbers according to the soccer rules, ie.  ball 
 	  and field size are now fixed to official
@@ -30,6 +50,208 @@
 	- added a random number generator with an exponential distribution 
 	All generators build upon the base engine.
 
+2004-01-25  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/simulator.rb: some cleanup moved construction
+	tasks into separate methods
+	using global ruby variables ($varname) for paramaters visible to
+	all methods
+	implemented addAgent method that is called from the CreateEffector
+
+	* app/agenttest/main.cpp: 
+	some cleanup
+	added additional behaviour: the agent seeks the ball and uses the
+	kick
+	effector when he is near enough
+
+	* app/rcssmonitor3d/main.cpp: added type defintion for 'ballAgent'
+	some cleanup
+	drawing a border around the soccer field; drawing the last agent
+	that touched ball in red color
+
+	* app/rcssmonitor3d/glserver.cpp:
+	removed calls to glColor3ub. material seletion is part of main.cpp
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.h:
+	added method GetLastBallAgent
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	implemented method GetLastBallAgent. this method queries the
+	BallStateAspect for the last agent that touched the ball.
+	GetMonitorInfo returns the last agent touching the ball as
+	'ballAgent'. This servers as a temporary debug aid in the monitor.
+
+	* plugin/soccer/initeffector/initeffector.cpp:
+	don't construct an ActionObject on failure passing predicate name
+	on construction of an InitAction
+
+	* plugin/soccer/initeffector/initaction.h:
+	changed InitAction constructor to explicitly ake the predicate
+	name
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	removed two superfluous ';'
+
+	* plugin/soccer/Makefile.am: 
+	removed fieldflag.cpp
+
+	* plugin/soccer/fieldflag/fieldflag.h: 
+	removed method OnLink
+
+	* plugin/soccer/fieldflag/fieldflag.cpp:
+	fieldflag construction is entirely part of the init script
+
+	* plugin/soccer/Makefile.am: 
+	removed ball.cpp
+
+	* plugin/soccer/createeffector/createeffector.h:
+	fixed include guard naming
+	removed method OnLink, GetAgentMass, GetAgentRadius and
+	GetAgentMaxSpeed
+
+	* plugin/soccer/createeffector/createeffector.cpp:
+	moved construction of agent nodes to the init script. The
+	CreateEffector calls a ruby function addAgent that has to be
+	implemented in the init script
+
+	* plugin/soccer/createeffector/createaction.h:
+	fixed include guard naming
+
+	* plugin/soccer/createeffector/createaction.h:
+	changed CreateAction constructor to explictly take the predicate
+	name
+
+	* plugin/soccer/ball/ball.cpp:
+	removed ball.cpp. Construction of nodes below the Ball node is now
+	part of the init script
+
+	* plugin/soccer/ball/ball.h: removed method OnLink
+
+	* plugin/soccer/export.cpp:
+	exporting DashEffector, KickEffector and BallStateAspect to
+	zeitgeist
+
+	* plugin/soccer/Makefile.am:
+	added KickEffector, DashEffector and BallStateAspect files
+
+	* plugin/forceeffector/forceaction.h:
+	changed ForceAction constructor to accept a string with the name
+	of the predicate. This way the name of the predicate has to be
+	explicitly set in the ForceEffector and occurs only in the
+	ForceEffector, preventing the ActionObject and Effector to be out
+	og sync wrt to the predicate name
+
+	* plugin/forceeffector/forceeffector.cpp:
+	caching mBody reference in OnLink method
+	using AffForce method of Body instead of directly manipulating ODE
+	object
+
+	* plugin/forceeffector/forceeffector.h:
+	added method OnLink and OnUnlink
+	added member mBody
+
+	* plugin/collisionperceptor/perceptorhandler.h:
+	fixed include guard naming
+
+	* plugin/soccer/kickeffector/kickaction.h,
+	* plugin/soccer/kickeffector/kickeffector.cpp,
+	* plugin/soccer/kickeffector/kickeffector.h,
+	* plugin/soccer/kickeffector/kickeffector_c.cpp,
+	* plugin/soccer/kickeffector/.cvsignore:
+	added KickEffector. The KickEffector applies a force to the ball
+	if the agent using this effector is within reach. The effector
+	accepts (but ignores in its current form) a parameter that allows
+	the agent to either kick the ball horizontally or with an angle.
+
+	* plugin/soccer/dasheffector/dasheffector.cpp,
+	* plugin/soccer/dasheffector/dasheffector.h,
+	* plugin/soccer/dasheffector/dasheffector_c.cpp:
+	added DashEffector. Its identical in it's current form to the
+	ForceEffector. Soccer specific changes to the ForceEffector will
+	go to the DashEffector.
+
+	* plugin/soccer/dasheffector/.cvsignore,
+	plugin/soccer/dasheffector/dashaction.h:
+	added DashEffector. Its identical in it's current form to the
+	ForceEffector. Soccer specific changes to the ForceEffector will
+	go to the DashEffector.
+
+	* plugin/soccer/ballstateaspect/ballstateaspect_c.cpp:
+	BallStateAspect export to zeitgeist
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	BallStateAspect implementation
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h:
+	BallStateAspect is a ControlAspect that holds information about
+	the current state of the ball in the simulation.
+
+	* lib/oxygen/oxygen.cpp: 
+	registering RecorderHandler to zeitgeist
+
+	* lib/oxygen/oxygen.h: 
+	added RecorderHandler #include fixed Oxygen comment
+
+	* lib/oxygen/physicsserver/recorderhandler_c.cpp:
+	zeitgeist export for RecorderHandler
+
+	* lib/oxygen/physicsserver/recorderhandler.cpp:
+	RecorderHandler implementation
+
+	* lib/oxygen/physicsserver/recorderhandler.h:
+	RecorderHandler is a CollisionHandler that accumulates collision
+	information of the Collider it belongs to.
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	removed repeated lookups of the SceneServer and GCS out of
+	simToTime method. Both references are now looked up once in OnLink
+	changed various other methods to use the cached references
+
+	* lib/oxygen/spadesserver/spadesserver.h:
+	removed monitorserver include, using a forward declaration now
+	changed ConstructInternal comment
+	added method OnLink and OnUnlink
+	removed method GetMonitorServer
+	added member mMonitorServer, mGameControlServer and mSceneServer
+
+	* lib/oxygen/spadesserver/paramstorer.h:
+	fixed some compile warning about unused parameters
+
+	* lib/oxygen/physicsserver/collider_c.cpp:
+	added ruby SetPosition wrapper
+
+	* lib/oxygen/physicsserver/collider.cpp: implemented method SetPosition
+
+	* lib/oxygen/physicsserver/collider.h:
+	added method SetPosition to place the managed ODE geom directly in the
+	absence of an associated ODE body
+
+	* lib/oxygen/physicsserver/body.cpp:
+	implemented method AddForce and SetPosition
+
+	* lib/oxygen/physicsserver/body.h:
+	added method AddForce and SetPosition
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	changed some error messages to use '\n' instead of endl (avoid
+	flushing)
+	removed trailing underscore in the name of the created AgentAspect
+	nodes
+	some formatting changes
+
+	* lib/oxygen/gamecontrolserver/actionobject.h:
+	changed constructor to accept string reference
+
+2004-01-22  fruit  <fruit@vader>
+	* plugin/soccer/Makefile.am,
+	* plugin/soccer/createeffector/createeffector.cpp,
+	* plugin/soccer/export.cpp,
+	* plugin/soccer/visionperceptor/visionperceptor.cpp,
+	* plugin/soccer/visionperceptor/visionperceptor.h,
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp:
+	added new visionperceptor (with polar coordinates)
+	UNTESTED!
+	
 2004-01-22  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/createeffector/createeffector.cpp: 
