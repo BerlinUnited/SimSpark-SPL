@@ -1,3 +1,21 @@
+2003-12-23  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp: 
+	- including logserver header to make logging compile 
+	- changed message format to be more descriptive and extendible
+
+	* lib/zeitgeist/zeitgeist.cpp: 
+	* lib/zeitgeist/core.cpp: 
+	removed some of the debug output
+
+	* lib/oxygen/Makefile.am: 
+	added baseparser.cpp to be compiled
+
+	* plugin/sexpparser/sexpparser.h: 
+	* plugin/sexpparser/sexpparser.cpp: 	
+	- renamed some of the private method to a more descriptive name 
+	- fixed insertion of spaces
+
 2003-12-23  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
