@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ccylinder.cpp,v 1.2 2004/04/19 15:45:57 rollmark Exp $
+   $Id: ccylinder.cpp,v 1.3 2004/04/22 17:32:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ using namespace kerosin;
 using namespace zeitgeist;
 using namespace salt;
 
-CCylinder::CCylinder() : SingleMatNode(), mRadius(1.0f), mLength(1.0f)
+CCylinder::CCylinder() : SingleMatNode()
 {
 }
 
@@ -38,138 +38,28 @@ CCylinder::~CCylinder()
 
 void CCylinder::SetParams(float radius, float length)
 {
+    ParameterList parameter;
+    parameter.AddValue(radius);
+    parameter.AddValue(length);
+
+    Load("StdCCylinder",parameter);
+
     mRadius = radius;
     mLength = length;
 }
 
-void CCylinder::RenderInternal()
+void CCylinder::GetParams(float& radius, float& length) const
 {
-    shared_ptr<Material> material = GetMaterial();
-    if (material.get() == 0)
-        {
-            return;
-        }
+    radius = mRadius;
+    length = mLength;
+}
 
-    material->Bind();
+float CCylinder::GetRadius()
+{
+    return mRadius;
+}
 
-    //
-    // code adapted from ODE's drawstuff lib
-    //
-
-    // (float l, float r)
-    int i,j;
-    float tmp,nx,ny,nz,start_nx,start_ny,a,ca,sa,l;
-
-    // number of sides to the cylinder (divisible by 4):
-    const int capped_cylinder_quality = 3;
-    const int n = capped_cylinder_quality*4;
-
-    l = mLength * 0.5;
-    a = g2PI / n;
-    sa = gSin(a);
-    ca = gCos(a);
-
-    // draw cylinder body
-
-    // normal vector = (0,ny,nz)
-    ny = 1;
-    nz = 0;
-
-    glBegin (GL_TRIANGLE_STRIP);
-    for (i=0; i<=n; ++i)
-        {
-            glNormal3d (ny,nz,0);
-            glVertex3d (ny*mRadius,nz*mRadius,l);
-            glNormal3d (ny,nz,0);
-            glVertex3d (ny*mRadius,nz*mRadius,-l);
-
-            // rotate ny,nz
-            tmp = ca * ny - sa * nz;
-            nz = sa*ny + ca*nz;
-            ny = tmp;
-        }
-
-    glEnd();
-
-    // draw first cylinder cap
-    start_nx = 0;
-    start_ny = 1;
-
-    for (j=0; j<(n/4); ++j)
-        {
-            // get start_n2 = rotated start_n
-            float start_nx2 =  ca*start_nx + sa*start_ny;
-            float start_ny2 = -sa*start_nx + ca*start_ny;
-
-            // get n=start_n and n2=start_n2
-            nx = start_nx;
-            ny = start_ny;
-            nz = 0;
-            float nx2 = start_nx2;
-            float ny2 = start_ny2;
-            float nz2 = 0;
-
-            glBegin (GL_TRIANGLE_STRIP);
-
-            for (i=0; i<=n; i++)
-                {
-                    glNormal3d (ny2,nz2,nx2);
-                    glVertex3d (ny2*mRadius,nz2*mRadius,l+nx2*mRadius);
-                    glNormal3d (ny,nz,nx);
-                    glVertex3d (ny*mRadius,nz*mRadius,l+nx*mRadius);
-
-                    // rotate n,n2
-                    tmp = ca*ny - sa*nz;
-                    nz = sa*ny + ca*nz;
-                    ny = tmp;
-                    tmp = ca*ny2- sa*nz2;
-                    nz2 = sa*ny2 + ca*nz2;
-                    ny2 = tmp;
-                }
-
-            glEnd();
-            start_nx = start_nx2;
-            start_ny = start_ny2;
-        }
-
-    // draw second cylinder cap
-    start_nx = 0;
-    start_ny = 1;
-
-    for (j=0; j<(n/4); j++)
-        {
-            // get start_n2 = rotated start_n
-            float start_nx2 = ca*start_nx - sa*start_ny;
-            float start_ny2 = sa*start_nx + ca*start_ny;
-
-            // get n=start_n and n2=start_n2
-            nx = start_nx; ny = start_ny; nz = 0;
-            float nx2 = start_nx2;
-            float ny2 = start_ny2;
-            float nz2 = 0;
-
-            glBegin (GL_TRIANGLE_STRIP);
-
-            for (i=0; i<=n; i++)
-                {
-                    glNormal3d (ny,nz,nx);
-                    glVertex3d (ny*mRadius,nz*mRadius,-l+nx*mRadius);
-                    glNormal3d (ny2,nz2,nx2);
-                    glVertex3d (ny2*mRadius,nz2*mRadius,-l+nx2*mRadius);
-                    // rotate n,n2
-                    tmp = ca*ny - sa*nz;
-                    nz = sa*ny + ca*nz;
-                    ny = tmp;
-                    tmp = ca*ny2- sa*nz2;
-                    nz2 = sa*ny2 + ca*nz2;
-                    ny2 = tmp;
-                }
-
-            glEnd();
-
-            start_nx = start_nx2;
-            start_ny = start_ny2;
-        }
-
-    glEnd();
+float CCylinder::GetLength()
+{
+    return mLength;
 }

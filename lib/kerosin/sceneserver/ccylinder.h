@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ccylinder.h,v 1.1 2004/04/15 18:37:30 rollmark Exp $
+   $Id: ccylinder.h,v 1.2 2004/04/22 17:32:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,9 @@ namespace kerosin
 {
 class Material;
 
+/** CCylinder is a SingleMatNode that creates and renders a capped
+    cylinder mesh with the given length and radius
+ */
 class CCylinder : public SingleMatNode
 {
     //
@@ -37,7 +40,7 @@ public:
     CCylinder();
     virtual ~CCylinder();
 
-    /** Sets the parameters of the capped cylinder.
+    /** sets the parameters of the capped cylinder.
 
        \param radius is the radius of the caps, and of the cylinder
        itself
@@ -47,8 +50,14 @@ public:
     */
     void SetParams(float radius, float length);
 
-protected:
-    virtual void RenderInternal();
+    /** returns the parameters of the capped cylinder */
+    void GetParams(float& radius, float& length) const;
+
+    /** returns the radius of the capped cylinder */
+    float GetRadius();
+
+    /** returns the length of the capped cylinder */
+    float GetLength();
 
     //
     // Members

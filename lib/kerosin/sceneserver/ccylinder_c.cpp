@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ccylinder_c.cpp,v 1.1 2004/04/15 18:37:31 rollmark Exp $
+   $Id: ccylinder_c.cpp,v 1.2 2004/04/22 17:32:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,8 +43,20 @@ FUNCTION(CCylinder,setParams)
     return true;
 }
 
+FUNCTION(CCylinder,getRadius)
+{
+    return obj->GetRadius();
+}
+
+FUNCTION(CCylinder,getLength)
+{
+    return obj->GetLength();
+}
+
 void CLASS(CCylinder)::DefineClass()
 {
     DEFINE_BASECLASS(kerosin/SingleMatNode);
     DEFINE_FUNCTION(setParams);
+    DEFINE_FUNCTION(getRadius);
+    DEFINE_FUNCTION(getLength);
 }
