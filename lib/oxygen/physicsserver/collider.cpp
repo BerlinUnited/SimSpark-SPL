@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.4.8.1 2004/01/11 11:16:05 rollmark Exp $
+   $Id: collider.cpp,v 1.4.8.2 2004/01/12 14:36:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,21 +21,16 @@
 #include "collider.h"
 #include "space.h"
 #include "body.h"
-#include "world.h"
+#include "collisionhandler.h"
 #include <oxygen/sceneserver/scene.h>
-#include <oxygen/sceneserver/transform.h>
-#include <oxygen/agentaspect/collisionperceptor.h>
+#include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
 using namespace oxygen;
+using namespace std;
 
 Collider::Collider() : ODEObject(), mODEGeom(0)
 {
-  // set up default contact surface parameters
-  mSurfaceParameter.mode = dContactBounce;
-  mSurfaceParameter.mu = dInfinity;
-  mSurfaceParameter.bounce = 0.8f;
-  mSurfaceParameter.bounce_vel = 2.0f;
 }
 
 Collider::~Collider()
@@ -51,27 +46,42 @@ void Collider::OnLink()
 {
   ODEObject::OnLink();
 
-  shared_ptr<Scene> scene = GetScene();
-
-  if (scene.get() != NULL)
+  if (mODEGeom == 0)
     {
-      mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
-      mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
-      dSpaceID space = mSpace->GetODESpace();
+      return;
+    }
 
-      // if we have a space and an object, add it to the space
-      if (mODEGeom && space && !dSpaceQuery(space, mODEGeom))
-        {
-          dGeomSetData(mODEGeom, this);
-          dSpaceAdd(space, mODEGeom);
-        }
+  // if there is a Body below our parent, link to it
+  shared_ptr<Body> body = shared_static_cast<Body>
+    (make_shared(GetParent())->GetChildOfClass("Body"));
 
-      // if there is a Body hanging on our parent, link to it
-      shared_ptr<Body> body = shared_static_cast<Body>(make_shared(GetParent())->GetChildOfClass("Body"));
-      if (body.get() != NULL)
-        {
-          dGeomSetBody (mODEGeom, body->GetODEBody());
-        }
+  if (body.get() != 0)
+    {
+      dGeomSetBody (mODEGeom, body->GetODEBody());
+    }
+
+  // if we have a space add the geom to it
+  shared_ptr<Scene> scene = GetScene();
+  if (scene.get() == 0)
+    {
+      return;
+    }
+
+  mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
+  if (mSpace.get() == 0)
+    {
+      return;
+    }
+
+  dSpaceID space = mSpace->GetODESpace();
+
+  if (
+      (space) &&
+      (! dSpaceQuery(space, mODEGeom))
+      )
+    {
+      dGeomSetData(mODEGeom, this);
+      dSpaceAdd(space, mODEGeom);
     }
 }
 
@@ -79,10 +89,21 @@ void Collider::OnUnlink()
 {
   ODEObject::OnUnlink();
 
-  dSpaceID space = mSpace->GetODESpace();
+  if (
+      (mSpace.get() == 0) ||
+      (mODEGeom == 0)
+      )
+    {
+      return;
+    }
 
   // remove collision geometry from space
-  if (mODEGeom && space && dSpaceQuery(space, mODEGeom))
+  dSpaceID space = mSpace->GetODESpace();
+
+  if (
+      (space) &&
+      (dSpaceQuery(space, mODEGeom))
+      )
     {
       dSpaceRemove(space, mODEGeom);
     }
@@ -90,86 +111,54 @@ void Collider::OnUnlink()
   mSpace.reset();
 }
 
+dGeomID Collider::GetODEGeom()
+{
+  return mODEGeom;
+}
+
+bool Collider::AddCollisionHandler(const std::string& handlerName)
+{
+  GetCore()->New(handlerName);
+
+  shared_ptr<CollisionHandler> handler =
+    shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
+
+  if (handler.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (Collider) Cannot create CollisionHandler "
+        << handlerName << "\n";
+      return false;
+    }
+
+  return AddChildReference(handler);
+}
+
 void Collider::OnCollision(dGeomID collidee, dContact& contact)
 {
-  CreateContactJoint(collidee, contact);
-  OnCollisionInternal(collidee, contact);
-}
+  TLeafList colHandler;
+  GetChildrenSupportingClass("CollisionHandler",colHandler);
 
-void Collider::SetSurfaceParameter(const dSurfaceParameters& surface)
-{
-  mSurfaceParameter = surface;
-}
-
-
-void Collider::CreateContactJoint(dGeomID collidee,dContact& contact)
-{
-  if (
-      (mODEGeom == 0) ||
-      (mWorld.get() == 0) ||
-      (mSpace.get() == 0)
-      )
+  if (colHandler.size() == 0)
     {
-      return;
+      // for convenience we add a ContactJointHandler if no other
+      // handler is registered. This behaviour covers the majority of
+      // all use cases and eases the creation of Colliders.
+
+      AddCollisionHandler("kerosin/ContactJointHandler");
+      GetChildrenSupportingClass("CollisionHandler",colHandler);
     }
 
-  dBodyID myBody = dGeomGetBody(mODEGeom);
-  dBodyID collideeBody = dGeomGetBody(collidee);
-
-  // to create a contact joint at least one geom has to have a
-  // corresponding body, i.e. it is sufficient that only this collider
-  // has a corresponding body
-  if (myBody == 0)
+  for (
+       TLeafList::iterator iter = colHandler.begin();
+       iter != colHandler.end();
+       ++iter
+       )
     {
-      return;
+      shared_ptr<CollisionHandler> handler =
+        shared_static_cast<CollisionHandler>(*iter);
+      handler->HandleCollision(collidee, contact);
     }
-
-  // fill in the surface parameters
-  contact.surface = mSurfaceParameter;
-
-  // create the contact joint and attach it to the body
-  dJointID joint = dJointCreateContact
-    (mWorld->GetODEWorld(), mSpace->GetODEJointGroup(), &contact);
-  dJointAttach (joint, myBody, collideeBody);
-}
-
-void Collider::OnCollisionInternal(dGeomID collidee,dContact& /*contact*/)
-{
-  // find the first CollisionPerceptor below our closest Transform node
-  shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-    (make_shared(GetParentSupportingClass("Transform")));
-
-  if (transformParent.get() == 0)
-    {
-      return;
-    }
-
-  shared_ptr<CollisionPerceptor> perceptor =
-    shared_static_cast<CollisionPerceptor>
-    (transformParent->GetChildOfClass("CollisionPerceptor", true));
-
-  if (perceptor.get() == 0)
-    {
-      return;
-    }
-
-  // now find the closest Transform node above the collidee
-  Collider* colNode = GetCollider(collidee);
-  if (colNode == 0)
-    {
-      return;
-    }
-
-  shared_ptr<Transform> colTransformParent = shared_static_cast<Transform>
-    (make_shared(colNode->GetParentSupportingClass("Transform")));
-
-  if (colTransformParent.get() == 0)
-    {
-      return;
-    }
-
-  // notify the CollisionPerceptor
-  perceptor->AddCollidee(colTransformParent);
 }
 
 Collider* Collider::GetCollider(dGeomID id)
