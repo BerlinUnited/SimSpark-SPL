@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.7 2004/06/16 13:20:59 jamu Exp $
+   $Id: monitor.h,v 1.8 2005/01/24 12:37:14 anita_maas Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ public:
     void Mouse(int button, int state, int x, int y);
     void Reshape(int width, int height);
     void Idle();
+    void Idle2();
 
 private:
     // typedefs, enums, constants
@@ -119,6 +120,7 @@ private:
     void DrawPlayer(TTeamIndex side, int unum, const salt::Vector3f& pos, float size, int pass);
     void DrawBall(const salt::Vector3f& pos, float size, int pass);
     void DrawDebug();
+    long int DiffTime();
     
     //! successor of a camera mode
     ECameraMode NextCameraMode(ECameraMode mode) const;
@@ -175,6 +177,8 @@ private:
     bool mSingleStep;
     //! flag for advancing
     bool mAdvance;
+    bool mRealTime;
+    long int mDiffTime;
 
 
 };
