@@ -1,6 +1,6 @@
 /* -*-c++-*- ***************************************************************
-                           conquit.h
-    console command to quit the server
+                           conhelp.h
+    console command to get help
                            ------------------------
     begin                : Aug 20 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef UTILITY_CONQUIT_H
-#define UTILITY_CONQUIT_H
+#ifndef UTILITY_CONHELP_H
+#define UTILITY_CONHELP_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -25,12 +25,12 @@
 
 #include "concommand.h"
 
-/*! \class ConQuit
-  $Id: conquit.h,v 1.2 2002/08/23 14:04:13 fruit Exp $
+/*! \class ConHelp
+  $Id: conhelp.h,v 1.1 2002/08/23 14:04:13 fruit Exp $
 
-    ConQuit - Console Command Quit
+    ConHelp - Console Command Help
 
-    Quits the engine.
+    Prints a help information for a command or a variable.
 
     HISTORY:
     The console subsystem was taken from a student project at the AI
@@ -39,15 +39,25 @@
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 */
-class ConQuit : public ConCommand
+class ConHelp : public ConCommand
 {
 public:
-    ConQuit();
+    ConHelp();
+
+    //! returns a list of all commands
+    virtual bool complete(const StringList& parameters,
+                          StringList& arguments) const;
 
 protected:
-    //! quits the game 
+    //! prints help on a command or variable
     virtual ConExecResult executeSignature(int signature,
                                            ConVar::ConVars& parameter) const;
+
+    virtual ConExecResult displayGeneralHelp() const;
+    virtual ConExecResult 
+        displayCommandHelp(const ConVar::ConVars& parameter) const;
+    virtual ConExecResult 
+        displayVariableHelp(const ConVar::ConVars& parameter) const;
 };
 
-#endif                          // UTILITY_CONQUIT_H
+#endif                          // UTILITY_CONHELP_H

@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                           conquit.h
-    console command to quit the server
+                           concmdlist.h
+    Console Command Cmdlist
                            ------------------------
-    begin                : Aug 20 2002  Oliver Obst
+    begin                : Aug 23 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef UTILITY_CONQUIT_H
-#define UTILITY_CONQUIT_H
+#ifndef UTILITY_CONCMDLIST_H
+#define UTILITY_CONCMDLIST_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -25,12 +25,12 @@
 
 #include "concommand.h"
 
-/*! \class ConQuit
-  $Id: conquit.h,v 1.2 2002/08/23 14:04:13 fruit Exp $
+/*! \class ConCmdList
+  $Id: concmdlist.h,v 1.1 2002/08/23 14:04:13 fruit Exp $
 
-    ConQuit - Console Command Quit
+    ConCmdlist - Console Command Cmdlist
 
-    Quits the engine.
+    Display all console commands.
 
     HISTORY:
     The console subsystem was taken from a student project at the AI
@@ -39,15 +39,14 @@
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 */
-class ConQuit : public ConCommand
+class ConCmdlist:public ConCommand
 {
 public:
-    ConQuit();
-
+    ConCmdlist();
+    
 protected:
-    //! quits the game 
+    //! displays all commands
     virtual ConExecResult executeSignature(int signature,
                                            ConVar::ConVars& parameter) const;
 };
-
-#endif                          // UTILITY_CONQUIT_H
+#endif                          // UTILITY_CONCMDLIST_H

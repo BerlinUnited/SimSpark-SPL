@@ -1,8 +1,7 @@
 /* -*-c++-*- ***************************************************************
-                           conquit.h
-    console command to quit the server
+                           concmdlist.cc
                            ------------------------
-    begin                : Aug 20 2002  Oliver Obst
+    begin                : Aug 23 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,38 +15,37 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef UTILITY_CONQUIT_H
-#define UTILITY_CONQUIT_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "concmdlist.h"
+#include "commandserver.h"
+// #include <consolehistory.h>
+#include <console.h>
+#include <forwarder.h>
 
-#include "concommand.h"
+using namespace std;
+using namespace Utility;
 
-/*! \class ConQuit
-  $Id: conquit.h,v 1.2 2002/08/23 14:04:13 fruit Exp $
-
-    ConQuit - Console Command Quit
-
-    Quits the engine.
-
-    HISTORY:
-    The console subsystem was taken from a student project at the AI
-    Research Group, Koblenz University. Original development by Marco
-    Koegler <koegler@uni-koblenz.de>, Markus Rollmann
-    <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
-    et.al.
-*/
-class ConQuit : public ConCommand
+ConCmdlist::ConCmdlist()
 {
-public:
-    ConQuit();
+    M_usage = "  Cmdlist\n";
+    M_help = getUsage() + "\n" + "Lists all console commands\n";
 
-protected:
-    //! quits the game 
-    virtual ConExecResult executeSignature(int signature,
-                                           ConVar::ConVars& parameter) const;
-};
+    // the signatures
+    M_signatures.add((new CommandSignature()));
+}
 
-#endif                          // UTILITY_CONQUIT_H
+ConCommand::ConExecResult 
+ConCmdlist::executeSignature(int signature, ConVar::ConVars& parameter) const
+{
+    CommandServer::ComNames commands = CommandServer::instance().listNames();
+    commands.sort();
+
+    for (CommandServer::ComNames::const_iterator iter = commands.begin();
+         iter != commands.end(); ++iter)
+    {
+        // Console::instance().getHistory().printOutput(*iter);
+        smux.normal() << *iter << "\n";
+    }
+
+    return ConCommand::S_CER_OK;
+}

@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                           conquit.h
-    console command to quit the server
+                           conusage.h
+    console command usage
                            ------------------------
-    begin                : Aug 20 2002  Oliver Obst
+    begin                : Aug 23 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,21 +16,17 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef UTILITY_CONQUIT_H
-#define UTILITY_CONQUIT_H
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#ifndef UTILITY_CONUSAGE_H
+#define UTILITY_CONUSAGE_H
 
 #include "concommand.h"
 
-/*! \class ConQuit
-  $Id: conquit.h,v 1.2 2002/08/23 14:04:13 fruit Exp $
+/*! \class ConUsage
+  $Id: conusage.h,v 1.1 2002/08/23 14:04:13 fruit Exp $
 
-    ConQuit - Console Command Quit
+    ConUsage - Console Command Usage
 
-    Quits the engine.
+    Prints the signature of a console command.
 
     HISTORY:
     The console subsystem was taken from a student project at the AI
@@ -39,15 +35,19 @@
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
 */
-class ConQuit : public ConCommand
+class ConUsage : public ConCommand
 {
 public:
-    ConQuit();
+    ConUsage();
+
+    //! returns a list of all commands
+    virtual bool complete(const StringList& parameters,
+                          StringList& arguments) const;
 
 protected:
-    //! quits the game 
+    //! prints the signature of a console command.
     virtual ConExecResult executeSignature(int signature,
                                            ConVar::ConVars& parameter) const;
 };
 
-#endif                          // UTILITY_CONQUIT_H
+#endif                          // UTILITY_CONUSAGE_H

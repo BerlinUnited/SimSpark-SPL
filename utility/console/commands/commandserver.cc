@@ -15,17 +15,19 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
+
 #include "commandserver.h"
+
+#include "concmdlist.h"
+#include "conhelp.h"
 #include "conquit.h"
+#include "conset.h"
+#include "conusage.h"
 
 #if 0
-#include "conhelp.h"
-#include "conusage.h"
-#include "conset.h"
 #include "conunset.h"
 #include "conalias.h"
 #include "conunalias.h"
-#include "concmdlist.h"
 #include "conexec.h"
 #include "conbind.h"
 #include "conunbind.h"
@@ -60,15 +62,17 @@
 using namespace std;
 
 // create the ClassServer factories
-CS_CreateFactory(ConQuit)
-#if 0
+
+CS_CreateFactory(ConCmdlist)
 CS_CreateFactory(ConHelp)
-CS_CreateFactory(ConUsage)
+CS_CreateFactory(ConQuit)
 CS_CreateFactory(ConSet)
+CS_CreateFactory(ConUsage)
+
+#if 0
 CS_CreateFactory(ConUnset)
 CS_CreateFactory(ConAlias)
 CS_CreateFactory(ConUnalias)
-CS_CreateFactory(ConCmdlist)
 CS_CreateFactory(ConExec)
 CS_CreateFactory(ConBind)
 CS_CreateFactory(ConUnbind)
@@ -99,15 +103,15 @@ CommandServer::CommandServer()
 {
     // Register all commands to the ClassServer
     CS_FunctionBegin()
-        CS_FunctionRegisterToGroup(ConCommand, ConQuit)
-#if 0
+        CS_FunctionRegisterToGroup(ConCommand, ConCmdlist)
         CS_FunctionRegisterToGroup(ConCommand, ConHelp)
-        CS_FunctionRegisterToGroup(ConCommand, ConUsage)
+        CS_FunctionRegisterToGroup(ConCommand, ConQuit)
         CS_FunctionRegisterToGroup(ConCommand, ConSet)
+        CS_FunctionRegisterToGroup(ConCommand, ConUsage)
+#if 0
         CS_FunctionRegisterToGroup(ConCommand, ConUnset)
         CS_FunctionRegisterToGroup(ConCommand, ConAlias)
         CS_FunctionRegisterToGroup(ConCommand, ConUnalias)
-        CS_FunctionRegisterToGroup(ConCommand, ConCmdlist)
         CS_FunctionRegisterToGroup(ConCommand, ConExec)
         CS_FunctionRegisterToGroup(ConCommand, ConBind)
         CS_FunctionRegisterToGroup(ConCommand, ConUnbind)
