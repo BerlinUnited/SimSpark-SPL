@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.h,v 1.3 2004/05/10 14:10:45 fruit Exp $
+   $Id: gamestate.h,v 1.4 2004/05/17 19:13:52 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -105,6 +105,10 @@ public:
         \return true if nth player said something
     */
     bool GetPlayerMessage(int index, std::string& message);
+
+    /*! Checks if an acknowledgement was sent
+     */
+    bool GetAck(std::string &ack);
 
     /*! Get ball info.
         \param pos position of the ball
@@ -212,6 +216,7 @@ protected:
     float mAgentMaxSpeed;
     float mBallRadius;
     float mBallMass;
+    std::string  mAck;
 
 private:
     // typedefs etc.
