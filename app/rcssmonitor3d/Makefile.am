@@ -1,4 +1,4 @@
-noinst_PROGRAMS = rcssmonitor3D
+bin_PROGRAMS = rcssmonitor3D
 
 if DEBUG
 LDADD = \
@@ -21,11 +21,11 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 rcssmonitor3D_SOURCES = \
 	main.cpp \
-	camera.cpp \
-	glserver.cpp \
-	communit.cpp \
-	commserver.cpp \
-	commserver_c.cpp \
-	tcpsocket.cpp
+	camera.h camera.cpp \
+	glserver.h glserver.cpp \
+	communit.h communit.cpp \
+	commserver.h commserver.cpp commserver_c.cpp \
+	tcpsocket.h tcpsocket.cpp \
+	types.h 
 
-EXTRA_DIST = rcssmonitor3d.rb
+dist_pkgdata_DATA = rcssmonitor3d.rb
