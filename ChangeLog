@@ -1,3 +1,8 @@
+2002-11-15      Tom Howard      <tomhoward@users.sf.net>
+
+        * ./Makefile.am
+        tag target now creates branch
+
 2002-10-16  Oliver Obst  <fruit@robolog.org>
 
 	* ./configure.in

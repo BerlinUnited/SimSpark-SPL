@@ -6,7 +6,7 @@ config.h
 doc:	
 	cd doc && $(MAKE) all doxygen-doc
 
-release:	update distcheck add_rel commit upload tag commit
+release:	update distcheck add_rel commit upload tag 
 
 quick-release:	update add_rel commit upload tag commit
 
@@ -31,6 +31,7 @@ add_rel:
 inc_rel:
 	$(AWK) -f @srcdir@/rel.awk @srcdir@/configure.in > configure.tmp;
 	mv configure.tmp @srcdir@/configure.in
+	$(MAKE) commit
 
 upload:	@PACKAGE@-@VERSION@.tar.gz
 	ncftpput -v upload.sourceforge.net /incoming @PACKAGE@-@VERSION@.tar.gz
