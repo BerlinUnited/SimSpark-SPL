@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.14 2004/04/10 08:41:07 rollmark Exp $
+$Id: renderserver.cpp,v 1.15 2004/04/12 08:32:04 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,9 +21,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 #include "renderserver.h"
-#include "../openglserver/openglserver.h"
-#include "../sceneserver/staticmesh.h"
-#include "../sceneserver/light.h"
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/scene.h>
+#include <oxygen/sceneserver/camera.h>
+#include <kerosin/openglserver/openglserver.h>
+#include <kerosin/sceneserver/staticmesh.h>
+#include <kerosin/sceneserver/light.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
@@ -41,28 +44,60 @@ RenderServer::~RenderServer()
 }
 
 void
-RenderServer::GetActiveScene()
+RenderServer::OnLink()
 {
-    shared_ptr<SceneServer> sceneServer =
-        shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+    // setup SceneServer reference
+    mSceneServer = shared_dynamic_cast<SceneServer>
+        (GetCore()->Get("/sys/server/scene"));
 
-    if (sceneServer.get() != 0)
+    if (mSceneServer.get() == 0)
         {
-            mActiveScene = sceneServer->GetActiveScene();
+            GetLog()->Error()
+                << "(RenderServer) ERROR: SceneServer not found\n";
+        }
+
+    // setup OpenGLServer reference
+    mOpenGLServer = shared_dynamic_cast<OpenGLServer>
+        (GetCore()->Get("sys/server/opengl"));
+
+    if (mOpenGLServer.get() == 0)
+        {
+            GetLog()->Error()
+                << "(RenderServer) ERROR: OpenGLServer not found\n";
+        } else
+        {
+            mAmbientVP = mOpenGLServer->LoadARBVertexProgram
+                ("sys/program/ambient.vp");
+            if (mAmbientVP == 0)
+            {
+                GetLog()->Error()
+                    << "(RenderServer) ERROR: Could not load vertex program\n";
+            }
         }
 }
 
-bool
-RenderServer::ConstructInternal()
+void
+RenderServer::OnUnlink()
 {
-    shared_ptr<OpenGLServer> openglServer =
-        shared_static_cast<OpenGLServer>(GetCore()->Get("/sys/server/opengl"));
+    mSceneServer.reset();
+    mOpenGLServer.reset();
+}
 
-    mAmbientVP = openglServer->LoadARBVertexProgram("sys/program/ambient.vp");
-    if (mAmbientVP == 0)
+bool
+RenderServer::GetActiveScene()
+{
+    if (mSceneServer.get() == 0)
         {
-            GetLog()->Error() << "(RenderServer) ERROR: Could not load vertex program..."
-                              << std::endl;
+            mActiveScene.reset();
+        }
+
+    mActiveScene = mSceneServer->GetActiveScene();
+
+    if (mActiveScene.get() == 0)
+        {
+            GetLog()->Error() <<
+                "(RenderServer) ERROR: found no active scene\n";
+            return false;
         }
 
     return true;
@@ -143,11 +178,8 @@ RenderServer::RenderFancyLighting(const salt::Frustum& /*frustum*/,
 void
 RenderServer::Render()
 {
-    GetActiveScene();
-
-    if (mActiveScene.get() == 0)
+    if (! GetActiveScene())
         {
-            GetLog()->Error() << "(RenderServer) ERROR: found no active scene\n";
             return;
         }
 
@@ -159,17 +191,6 @@ RenderServer::Render()
         {
             GetLog()->Error()
                 << "(RenderServer) ERROR: found no camera node in the active scene\n";
-            return;
-        }
-
-    // get opengl server
-    shared_ptr<OpenGLServer> openglServer =
-        shared_static_cast<OpenGLServer>(GetCore()->Get("/sys/server/opengl"));
-
-    if (openglServer.get() == 0)
-        {
-            GetLog()->Error()
-                << "(RenderServer) ERROR: openglServer not found\n";
             return;
         }
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.8 2004/02/12 14:07:22 fruit Exp $
+   $Id: renderserver.h,v 1.9 2004/04/12 08:32:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,15 +41,18 @@
 #include <salt/frustum.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
-#include <oxygen/sceneserver/scene.h>
-#include <oxygen/sceneserver/sceneserver.h>
-#include <oxygen/sceneserver/camera.h>
+
+namespace oxygen
+{
+    class Scene;
+    class SceneServer;
+    class Camera;
+    class BaseNode;
+}
 
 namespace kerosin
 {
-#if 0
-}
-#endif
+    class OpenGLServer;
 
 class RenderServer : public zeitgeist::Leaf
 {
@@ -70,15 +73,15 @@ public:
                              TLeafList& visibleMeshes);
 
 protected:
-    /** overload this to perform stuff after the object has
-        been created and attached to a core
-    */
-    virtual bool ConstructInternal();
-
     /** get the active scene node from the sceneServer */
-    void RenderServer::GetActiveScene();
+    bool RenderServer::GetActiveScene();
 
-private:
+    /** set up SceneServer reference */
+    virtual void OnLink();
+
+    /** reset SceneServer reference */
+    virtual void OnUnlink();
+
     /** render a scene recursively.
         \param node the scene base node
     */
@@ -91,8 +94,16 @@ private:
     //
     // Members
     //
-private:
+protected:
+    /** reference to the current active scene */
     boost::shared_ptr<oxygen::Scene> mActiveScene;
+
+    /** reference to the SceneServer */
+    boost::shared_ptr<oxygen::SceneServer> mSceneServer;
+
+    /** reference to the OpenGLServer */
+    boost::shared_ptr<kerosin::OpenGLServer> mOpenGLServer;
+
     unsigned int mAmbientVP;
 };
 
