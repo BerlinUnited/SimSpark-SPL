@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.13 2004/02/20 17:23:51 rollmark Exp $
+   $Id: scriptserver.h,v 1.14 2004/03/12 08:47:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,6 +67,12 @@ public:
 
     /** loads and runs a ruby script from an RFile */
     bool Run(salt::RFile* file);
+
+    /** sets the relative path prefix RunInitScript() searches for an
+        InitScript. Default is '../../', suitable for all applications
+        started from '/app'
+     */
+    void SetInitRelPathPrefix(const std::string &relPathPrefix);
 
     /** searches in ~/<mDotName>/, PREFIX/share/PACKAGE_NAME/ and
      * <relPath>/ for the script <fileName>.  If found the script is
@@ -149,6 +155,10 @@ private:
      * for script files: ~/<mDotName>
      */
     std::string mDotName;
+
+    /** the prefix RunInitScript() prepends all relativ paths
+     */
+    std::string mRelPathPrefix;
 
   private:
   };
