@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.cpp,v 1.7 2004/04/08 14:42:51 rollmark Exp $
+   $Id: basenode.cpp,v 1.8 2004/04/10 12:48:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,8 +67,17 @@ void BaseNode::SetLocalTransform(const salt::Matrix& /*transform*/)
 {
 }
 
-void BaseNode::SetWorldTransform(const salt::Matrix& /*transform*/)
+void BaseNode::SetWorldTransform(const salt::Matrix& transform)
 {
+    shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>
+        (make_shared(mParent));
+
+    if (parent.get() == 0)
+        {
+            return;
+        }
+
+    parent->SetWorldTransform(transform);
 }
 
 // This routine is responsible for updating the local bounding box of
