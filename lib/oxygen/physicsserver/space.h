@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.4.8.3 2004/01/12 18:13:35 rollmark Exp $
+   $Id: space.h,v 1.4.8.4 2004/01/12 18:52:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,10 +65,7 @@ public:
 
 protected:
     /** creates them managed ODE space and a contact joint group */
-    virtual void OnLink();
-
-    /** destroys the managed ODE space and the contact joint group */
-    virtual void OnUnlink();
+    virtual bool ConstructInternal();
 
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal();

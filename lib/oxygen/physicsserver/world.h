@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: world.h,v 1.4.8.2 2004/01/12 18:27:27 rollmark Exp $
+   $Id: world.h,v 1.4.8.3 2004/01/12 18:52:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,10 +90,7 @@ public:
 
 protected:
     /** creates them managed ODE world */
-    virtual void OnLink();
-
-    /** destroys the managed ODE world */
-    virtual void OnUnlink();
+    virtual bool ConstructInternal();
 
     //
     // Members

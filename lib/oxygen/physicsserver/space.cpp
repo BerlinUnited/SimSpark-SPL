@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.4.8.5 2004/01/12 18:16:57 rollmark Exp $
+   $Id: space.cpp,v 1.4.8.6 2004/01/12 18:52:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,18 @@ Space::Space() : mODESpace(0), mODEContactGroup(0)
 
 Space::~Space()
 {
+  if (mODEContactGroup)
+    {
+      dJointGroupDestroy(mODEContactGroup);
+      mODEContactGroup = 0;
+    }
+
+  // release the ODE space
+  if (mODESpace)
+    {
+      dSpaceDestroy(mODESpace);
+      mODESpace = 0;
+    }
 }
 
 dSpaceID Space::GetODESpace() const
@@ -93,36 +105,20 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
       }
 }
 
-void Space::OnLink()
+bool Space::ConstructInternal()
 {
   // create the ode space, 0 indicates that this space should
   // not be inserted into another space, i.e. we always create a
   // toplevel space object
   mODESpace = dHashSpaceCreate(0);
 
-  if (mODESpace == 0)
-    {
-      return;
-    }
-
   // create a joint group for the contacts
   mODEContactGroup = dJointGroupCreate(0);
-}
 
-void Space::OnUnlink()
-{
-    if (mODEContactGroup)
-      {
-        dJointGroupDestroy(mODEContactGroup);
-        mODEContactGroup = 0;
-      }
-
-    // release the ODE space
-    if (mODESpace)
-      {
-        dSpaceDestroy(mODESpace);
-        mODESpace = 0;
-      }
+  return (
+          (mODESpace != 0) &&
+          (mODEContactGroup != 0)
+          );
 }
 
 void Space::PostPhysicsUpdateInternal()
