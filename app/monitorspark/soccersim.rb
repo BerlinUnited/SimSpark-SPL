@@ -13,3 +13,10 @@ sparkRegisterCustomMonitor 'SoccerMonitor'
 # register the soccer render plugin to draw the game state on the
 # screen
 sparkRegisterCustomRender  'SoccerRender'
+
+# register the soccer input plugin to process soccer specific key
+# presses
+sparkRegisterCustomInput 'SoccerInput'
+
+# bind keys to soccer commands
+run "soccerbindings.rb"
