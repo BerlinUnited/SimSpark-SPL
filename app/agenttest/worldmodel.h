@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.h,v 1.1.2.5 2004/02/10 14:55:59 rollmark Exp $
+   $Id: worldmodel.h,v 1.1.2.6 2004/02/11 11:22:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ public:
     float GetBallRadius() { return mBallRadius; }
 
     float GetMinimalKickDistance();
+    int GetTeamUnum();
 
 protected:
     virtual bool ConstructInternal();
