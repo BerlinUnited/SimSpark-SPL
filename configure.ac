@@ -128,7 +128,6 @@ AC_CONFIG_FILES([Makefile \
 		 app/fonttest/Makefile \
 		 app/inputtest/Makefile \
 		 app/scenetest/Makefile \
-		 app/spadestest/Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
