@@ -3,14 +3,15 @@ Dear all,
 we have just released rcssserver3D-0.2.2. 
 
 It adds both soccer simulation specific features (like better rules 
- and an initial version of a logplayer) and general simulation features 
-(almost all ODE features are supported now, and an initial version of an
-alternative simulation server as a SPADES replacement). This was done because
+ and an initial version of a logplayer) and general simulation features:
+Almost all ODE features are supported now, and we rolled our own version of a
+ new simulation server as an alternative to SPADES. This was done because
 we are aiming at a general simulator useful for different 3D simulations and 
 generic agent/robot models. The soccer simulation is only one instance of a
 simulation realized with our simulator.
 
-For the 0.3 release, some of these new features need some polishing...
+For the 0.3 release, some of these new features and the soccer rules need 
+some polishing...
 We're also still waiting for parameter suggestions and contributors :-)
 Find below a short summary of new features (taken from the NEWS file that can
 also be found in the distribution).

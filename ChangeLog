@@ -1,5 +1,8 @@
 2004-05-14  Oliver Obst  <fruit@robolog.org>
 
+	* app/agentspark/Makefile.am: 
+	- added header files to the list of sources
+
 	* app/rcssmonitor3d/lite/rcssmonitor3D-lite.rb: 
 	removed the CommServer setup (done in monitor.cpp now)
 
