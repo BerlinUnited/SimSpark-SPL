@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: soccer.cpp,v 1.2 2004/02/12 14:07:21 fruit Exp $
+$Id: soccer.cpp,v 1.3 2004/06/19 13:32:22 fruit Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -123,18 +123,24 @@ void Soccer::Think()
         << "received sensation " << mSensationCount << "\n";
 
     switch (mSensationCount)
-        {
-        case 0:
-            CreateAgent();
-            break;
+    {
+    case 0:
+        CreateAgent();
+        break;
 
-        case 1:
-            InitAgent();
-            break;
+    case 1:
+    case 2:
+    case 4:
+    case 5:
+        break;
 
-        default:
-            Behave();
-        }
+    case 3:
+        InitAgent();
+        break;
+
+    default:
+        Behave();
+    }
 
     ++mSensationCount;
 
