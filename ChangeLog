@@ -1,3 +1,18 @@
+
+
+2003-06-28  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* /app/simulator/survival/survival.rb
+	- removed survival.rb from CVS. It is copied during the build
+	process of plugin/survival to its location. It is therefore a
+	generated filed.
+
+	* /plugin/survival/survival.rb, /plugin/survival/survivalcontrolaspect.cpp
+	* /plugin/survival/survivalcontrolaspect.h	
+	- refactored then init script for the survial demo simulation
+	- modified the survival control aspect to support an unlimited
+	number of arbitrary named agents. The original version supported
+	exactly two agents with fixed names.
+
 2003-06-22  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* app/
 	- replaced files in app/ directory with the latest version of the
