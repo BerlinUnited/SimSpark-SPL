@@ -39,6 +39,8 @@ logserver/logserver_c.cpp \
 logserver/logserverstreambuf.cpp \
 randomserver/randomserver.cpp \
 randomserver/randomserver_c.cpp \
+scriptserver/gcvalue.cpp \
+scriptserver/rubywrapper.cpp \
 scriptserver/scriptserver.cpp \
 scriptserver/scriptserver_c.cpp
 
@@ -61,6 +63,7 @@ fileserver/filesystem.h \
 logserver/logserver.h \
 logserver/logserverstreambuf.h \
 randomserver/randomserver.h \
+scriptserver/gcvalue.h \
 scriptserver/scriptserver.h \
 scriptserver/rubywrapper.h 
 
