@@ -4,9 +4,11 @@
 // 'default') exists in the spadestest directory.
 
 #include <unistd.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <netinet/in.h>
+#include <sys/time.h>
 
 using namespace std;
 
@@ -74,6 +76,7 @@ ProcessSensation()
 
 
   static int numSensation = 0;
+  static bool back = false;
 
   switch (numSensation)
     {
@@ -93,14 +96,29 @@ ProcessSensation()
       log("\n");
       log("sending init command\n");
       putOutput("A(init (unum 8) (teamname RoboLog))");
+
+      numSensation +=  (100.0*rand()/(RAND_MAX+1.0));
       break;
 
     default:
       log("received another sensation ");
       log(msg_data);
 
+      if (numSensation % 100 == 0) back = !back;
+
       log("using force effector\n ");
-      putOutput("A(force 50 0 0)");
+      if (back)
+      {
+          if (numSensation % 10 == 0)
+              putOutput("A(force 0 300 0)");
+          else
+              putOutput("A(force -50 -10 -50)");
+      } else {
+          if (numSensation % 10 == 0)
+              putOutput("A(force 0 300 0)");
+          else
+              putOutput("A(force 50 -10 50)");
+      }
     }
 
   log("writing done thinking message\n");
@@ -150,6 +168,10 @@ int
 main(int /*argc*/, const char *const */*argv*/)
 {
   log("AgentTest started\n");
+
+  timeval tv;
+  gettimeofday(&tv, 0);
+  srand(tv.tv_usec);
 
   //
   // perfom any agent init here
