@@ -447,6 +447,12 @@ utility/libobj/Makefile.in
 utility/libobj/Makefile
 utility/libobj/*.la
 utility/libobj/*.lo
+utility/rcssnet/*.lo
+utility/rcssnet/.deps
+utility/rcssnet/.libs
+utility/rcssnet/Makefile
+utility/rcssnet/Makefile.in
+utility/rcssnet/librcssnet3D.la
 utility/sfsexp/.deps
 utility/sfsexp/Makefile
 utility/sfsexp/Makefile.in
