@@ -1,3 +1,23 @@
+2003-12-28  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/initeffector/initeffector.cpp: 
+	- changed initeffector due to changes with FindParameter. InitEffector 
+ 	  now correctly sets both team name and uniform number (currently we use
+	  the node name for both).
+
+	* lib/oxygen/gamecontrolserver/predicate.cpp: 
+	- added ParameterName functional class implementation (for use as STL
+	  predicate) 
+	- added FindParameter implementation
+
+	* lib/oxygen/gamecontrolserver/predicate.h: 
+	- removed GetNthValue
+	- changed FindParameter to find the first element of 
+	  Predicate::parameter that can be casted to a TParameterList, which
+	  (again) contains a first element that can be casted to a
+	  std::string and is equal to the given name.  
+	- moved parts of the implementation into predicate.cpp
+
 2003-12-27  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/createeffector/createeffector.cpp: 
