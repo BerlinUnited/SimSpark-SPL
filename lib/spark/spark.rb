@@ -3,6 +3,12 @@
 #
 
 #
+# define constants used to setup spark
+
+# define the monitor update interval in cylcles
+$monitorInterval = 30;
+
+#
 # below is a set of utility functions for the user app
 #
 def sparkSetupMonitor
@@ -19,7 +25,10 @@ def sparkSetupServer
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
   simulationServer.initControlNode('oxygen/AgentControl')  
-  simulationServer.initControlNode('oxygen/MonitorControl')
+
+  monitorControl = new("oxygen/MonitorControl",
+		       $serverPath+'simulation/MonitorControl')
+  monitorControl.setMonitorInterval($monitorInterval)
 end
 
 def sparkSetupRendering
