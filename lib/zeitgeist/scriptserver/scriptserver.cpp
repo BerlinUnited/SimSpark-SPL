@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.8.4.1 2004/01/26 20:40:06 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.8.4.2 2004/02/02 20:32:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -111,9 +111,11 @@ VALUE selectCall(VALUE /*self*/, VALUE functionName, VALUE args)
   Class::TCmdProc cmd =
     gMyPrivateContext->GetObject()->GetClass()->GetCmdProc(STR2CSTR(functionName));
 
+  VALUE out = Qnil;
+
   if (cmd != NULL)
     {
-      cmd(static_cast<Object*>(gMyPrivateContext->GetObject().get()), in);
+      cmd(static_cast<Object*>(gMyPrivateContext->GetObject().get()), in, out);
     }
   else
     {
@@ -121,7 +123,7 @@ VALUE selectCall(VALUE /*self*/, VALUE functionName, VALUE args)
         << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << endl;
     }
 
-  return Qnil;
+  return out;
 }
 
 VALUE thisCall(VALUE /*self*/, VALUE objPointer, VALUE functionName, VALUE args)
@@ -134,9 +136,11 @@ VALUE thisCall(VALUE /*self*/, VALUE objPointer, VALUE functionName, VALUE args)
   Class::TCmdProc cmd =
     obj->GetClass()->GetCmdProc(STR2CSTR(functionName));
 
+  VALUE out = Qnil;
+
   if (cmd != NULL)
     {
-      cmd(obj, in);
+      cmd(obj, in, out);
     }
   else
     {
@@ -144,7 +148,7 @@ VALUE thisCall(VALUE /*self*/, VALUE objPointer, VALUE functionName, VALUE args)
         << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << endl;
     }
 
-  return Qnil;
+  return out;
 }
 
 VALUE importBundle(VALUE /*self*/, VALUE path)
