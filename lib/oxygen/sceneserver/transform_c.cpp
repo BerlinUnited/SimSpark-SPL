@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform_c.cpp,v 1.4 2003/11/10 23:11:42 fruit Exp $
+   $Id: transform_c.cpp,v 1.4.8.1 2004/01/21 15:46:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,11 +28,15 @@ using namespace zeitgeist;
 
 FUNCTION(setLocalPos)
 {
-        if (in.size() == 3)
-        {
-                Transform *trans = static_cast<Transform*>(obj);
-                trans->SetLocalPos(any_cast<float>(in[0]), any_cast<float>(in[1]), any_cast<float>(in[2]));
-        }
+  if (in.size() == 3)
+    {
+      Transform *trans = static_cast<Transform*>(obj);
+      trans->SetLocalPos(
+                         any_cast<float>(in[0]),
+                         any_cast<float>(in[1]),
+                         any_cast<float>(in[2])
+                         );
+    }
 }
 
 void CLASS(Transform)::DefineClass()
