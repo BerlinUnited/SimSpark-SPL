@@ -25,7 +25,7 @@ int main()
 
     shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
 
-    scriptServer->Run("sys/script/coretest.rb");
+    scriptServer->Run("coretest.rb");
 
     cout << "CoreTest - A Small Interactive Text-Based Console Sample" << endl << endl;
     cout << "Enter 'exit' command to quit application" << endl << endl;
