@@ -1,4 +1,5 @@
 SUBDIRS = \
+	  gendot \
 	  agenttest \
 	  coretest \
 	  fonttest \
