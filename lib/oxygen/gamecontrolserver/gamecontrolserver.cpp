@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.11 2003/12/21 10:21:55 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.12 2003/12/21 14:14:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 #include "gamecontrolserver.h"
 #include "baseparser.h"
 #include <oxygen/agentaspect/agentaspect.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/corecontext.h>
@@ -61,6 +63,29 @@ GameControlServer::GetParser()
     return mParser;
 }
 
+shared_ptr<Scene>
+GameControlServer::GetActiveScene()
+{
+    shared_ptr<SceneServer> sceneServer =
+        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+    if (sceneServer.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (GameControlServer) SceneServer not found.\n";
+            return shared_ptr<Scene>();
+        }
+
+    shared_ptr<Scene> scene = sceneServer->GetActiveScene();
+
+    if (scene.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (GameControlServer) SceneServer reports no active scene\n";
+        }
+
+    return scene;
+}
 
 bool
 GameControlServer::AgentConnect(int id)
@@ -76,12 +101,16 @@ GameControlServer::AgentConnect(int id)
     GetLog()->Debug()
         << "(GameControlServer) A new agent connected (id: " << id << ")\n";
 
-    // create a new AgentAspect for the new ID in the scene
-    stringstream name;
-    name << "/usr/scene/_AgentAspect" << id;
+    shared_ptr<Scene> scene = GetActiveScene();
+    if (scene.get() == 0)
+        {
+            return false;
+        }
 
+    // create a new AgentAspect for the new ID in the scene and add it
+    // to our map of AgentAspects
     shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
-        (GetCore()->GetScriptServer()->GetContext()->New("kerosin/AgentAspect",name.str()));
+        (GetCore()->New("kerosin/AgentAspect"));
 
     if (aspect.get() == 0)
         {
@@ -90,6 +119,11 @@ GameControlServer::AgentConnect(int id)
             return false;
         }
 
+    stringstream name;
+    name << "_AgentAspect" << id;
+    aspect->SetName(name.str());
+
+    scene->AddChildReference(aspect);
     mAgentMap[id] = aspect;
 
     return aspect->Init();
@@ -102,17 +136,23 @@ bool GameControlServer::AgentDisappear(int id)
     if (iter == mAgentMap.end())
         {
             GetLog()->Error()
-                << "ERROR: (GameControlServer) AgentDisappear called for unknown agent id "
-                << id << "\n";
+                << "ERROR: (GameControlServer) AgentDisappear called for "
+                << "unknown agent id " << id << "\n";
             return false;
         }
 
-    // remove the AgentAspect from the set of children and from our
-    // private map. The AgentAspect does all the necessary cleanup
-    RemoveChildReference((*iter).second);
+    // remove the AgentAspect from the Scene and our map. The
+    // AgentAspect does all the necessary cleanup
     mAgentMap.erase(id);
 
-    GetLog()->Debug() << "(GameControlServer) An agent disconnected (id: " << id << ")\n";
+    shared_ptr<Scene> scene = GetActiveScene();
+    if (scene.get() != 0)
+        {
+            RemoveChildReference((*iter).second);
+        }
+
+    GetLog()->Debug() << "(GameControlServer) An agent disconnected (id: "
+                      << id << ")\n";
 
     return true;
 }
