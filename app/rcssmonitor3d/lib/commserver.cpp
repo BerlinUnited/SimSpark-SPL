@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.8 2004/05/02 07:50:30 markelic Exp $
+   $Id: commserver.cpp,v 1.8.2.1 2004/05/05 14:44:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ CommServer::CommServer() : Leaf()
 }
 
 bool
-CommServer::Init(std::string parser, std::string host, int port)
+CommServer::Init(const std::string& parser, const std::string& host, int port)
 {
     mParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New(parser));
 
@@ -47,22 +47,16 @@ CommServer::Init(std::string parser, std::string host, int port)
 }
 
 bool
-CommServer::GetMessage()
+CommServer::ReadMessage()
 {
-    string line = mCommUnit.GetMessage();
-    if (line == "")
-    {
-        return false;
-    }
-
-    Parse(line);
-    return true;
+    string line;
+    return ReadMessage(line);
 }
 
 bool
-CommServer::GetMessage(std::string& msg)
+CommServer::ReadMessage(std::string& msg)
 {
-     msg = mCommUnit.GetMessage();
+    msg = mCommUnit.GetMessage();
     if (msg == "")
     {
         return false;
@@ -73,7 +67,7 @@ CommServer::GetMessage(std::string& msg)
 }
 
 void
-CommServer::Parse(std::string msg)
+CommServer::Parse(const std::string& message)
 {
     if (mParser.get() == 0)
     {
@@ -81,11 +75,11 @@ CommServer::Parse(std::string msg)
         return;
     }
 
-    mPredicates = mParser->Parse(msg);
+    mPredicates = mParser->Parse(message);
 }
 
 shared_ptr<PredicateList>
-CommServer::GetPredicates()
+CommServer::GetPredicates() const
 {
     return mPredicates;
 }
