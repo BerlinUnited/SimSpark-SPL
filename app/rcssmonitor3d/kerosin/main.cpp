@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.2 2004/03/20 08:45:53 rollmark Exp $
+   $Id: main.cpp,v 1.3 2004/03/20 09:45:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -415,6 +415,8 @@ shared_ptr<Transform> getSphere(MonitorParser::Expression& expr)
 
 void processUpdates()
 {
+    static bool initialUpdate = true;
+
     if (! gCommServer->GetMessage())
         {
             return;
@@ -433,6 +435,27 @@ void processUpdates()
             // parse the received expressions
             gMonitorParser->ParsePredicates(*predicates,gGameState,
                                     gGameParam,exprList);
+        }
+
+
+    if (initialUpdate)
+        {
+            // publish the soccer default values to the scripts
+            gScriptServer->CreateVariable("Soccer.FieldLength", gGameParam.GetFieldLength());
+            gScriptServer->CreateVariable("Soccer.FieldWidth",  gGameParam.GetFieldWidth());
+            gScriptServer->CreateVariable("Soccer.FieldHeight", gGameParam.GetFieldHeight());
+            gScriptServer->CreateVariable("Soccer.BorderSize",  gGameParam.GetBorderSize());
+            gScriptServer->CreateVariable("Soccer.LineWidth",   gGameParam.GetLineWidth());
+            gScriptServer->CreateVariable("Soccer.GoalWidth",   gGameParam.GetGoalWidth());
+            gScriptServer->CreateVariable("Soccer.GoalDepth",   gGameParam.GetGoalDepth());
+            gScriptServer->CreateVariable("Soccer.GoalHeight",  gGameParam.GetGoalHeight());
+            gScriptServer->CreateVariable("Soccer.AgentMass",  gGameParam.GetAgentMass());
+            gScriptServer->CreateVariable("Soccer.AgentRadius",  gGameParam.GetAgentRadius());
+            gScriptServer->CreateVariable("Soccer.AgentMaxSpeed",  gGameParam.GetAgentMaxSpeed());
+            gScriptServer->CreateVariable("Soccer.BallRadius", gGameParam.GetBallRadius());
+            gScriptServer->CreateVariable("Soccer.BallMass", gGameParam.GetBallMass());
+
+            initialUpdate = false;
         }
 
     for (
