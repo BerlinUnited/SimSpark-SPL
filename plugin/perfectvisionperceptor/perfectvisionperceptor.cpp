@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.2.2.1 2003/12/23 12:10:27 rollmark Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.2.2.2 2003/12/23 16:28:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,10 +20,11 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "perfectvisionperceptor.h"
+#include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 
-#define TEST_ME 1
+#define TEST_ME 0
 
 #if TEST_ME
 #include <iostream>
@@ -59,28 +60,33 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
 
     shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
     if (activeScene.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (PerfectVisionPerceptor) SceneServer reports no active scene\n";
-            return false;
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (PerfectVisionPerceptor) SceneServer reports no active scene\n";
+        return false;
+    }
 
     TLeafList transformList;
     activeScene->GetChildrenSupportingClass("Transform", transformList, true);
 
     for (TLeafList::iterator i = transformList.begin();
          i != transformList.end(); ++i)
-        {
-            shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
-            const salt::Vector3f& pos = j->GetWorldTransform().Pos();
+    {
+        shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
+        const salt::Vector3f& pos = j->GetWorldTransform().Pos();
 
-            BaseParser::TParameterList element;
-            element.push_back((*i)->GetName());
-            element.push_back(pos[0]);
-            element.push_back(pos[1]);
-            element.push_back(pos[2]);
-            predicate.parameter.push_back(element);
-        }
+        BaseParser::TParameterList position;
+        position.push_back(std::string("pos"));
+        position.push_back(pos[0]);
+        position.push_back(pos[1]);
+        position.push_back(pos[2]);
+
+        BaseParser::TParameterList element;
+        element.push_back((*i)->GetName());
+        element.push_back(position);
+
+        predicate.parameter.push_back(element);
+    }
 
     return true;
 }
