@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.16 2004/04/22 17:55:17 rollmark Exp $
+   $Id: oxygen.h,v 1.17 2004/04/25 16:53:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@
 #include "physicsserver/joint.h"
 #include "physicsserver/balljoint.h"
 #include "physicsserver/hingejoint.h"
+#include "physicsserver/fixedjoint.h"
 #include "physicsserver/sliderjoint.h"
 #include "physicsserver/universaljoint.h"
 #include "physicsserver/hinge2joint.h"
@@ -63,6 +64,13 @@
 #include "sceneserver/sceneserver.h"
 #include "sceneserver/transform.h"
 #include "sceneserver/sceneimporter.h"
+
+#include "simulationserver/simulationserver.h"
+#include "simulationserver/simcontrolnode.h"
+#include "simulationserver/netcontrol.h"
+#include "simulationserver/netmessage.h"
+#include "simulationserver/agentcontrol.h"
+#include "simulationserver/monitorcontrol.h"
 
 #include "geometryserver/geometryserver.h"
 #include "geometryserver/meshimporter.h"

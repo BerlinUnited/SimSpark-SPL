@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.cpp,v 1.18 2004/04/22 17:09:56 rollmark Exp $
+   $Id: oxygen.cpp,v 1.19 2004/04/25 16:53:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,14 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(Transform), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(SceneImporter), "oxygen/");
 
+    // simulation
+    zg.GetCore()->RegisterClassObject(new CLASS(SimulationServer), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(SimControlNode), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(NetControl), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(NetMessage), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(AgentControl), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(MonitorControl), "oxygen/");
+
     // geometry
     zg.GetCore()->RegisterClassObject(new CLASS(GeometryServer), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(MeshImporter), "oxygen/");
@@ -52,6 +60,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(Joint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BallJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(HingeJoint), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(FixedJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(SliderJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(UniversalJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Hinge2Joint), "oxygen/");
