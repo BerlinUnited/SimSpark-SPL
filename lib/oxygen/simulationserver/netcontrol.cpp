@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.cpp,v 1.1 2004/04/25 16:46:03 rollmark Exp $
+   $Id: netcontrol.cpp,v 1.2 2004/04/28 14:33:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ using namespace std;
 NetControl::NetControl() : SimControlNode()
 {
     mBufferSize = 64 * 1024;
-    mBuffer     = shared_array<char>(new char[64 * 1024]);
+    mBuffer     = shared_array<char>(new char[mBufferSize]);
     mSocketType = ST_TCP;
     mLocalAddr  = Addr(INADDR_ANY, INADDR_ANY);
     mClientId   = 1;
@@ -65,35 +65,37 @@ NetControl::ESocketType NetControl::GetServerType()
     return mSocketType;
 }
 
-void NetControl::CreateSocket()
+boost::shared_ptr<Socket> NetControl::CreateSocket(ESocketType type)
 {
+    shared_ptr<Socket> socket;
+
     try
         {
-            mSocket.reset();
-
-            switch (mSocketType)
+            switch (type)
                 {
                 case ST_UDP:
-                    mSocket = shared_ptr<Socket>(new UDPSocket());
+                    socket = shared_ptr<Socket>(new UDPSocket());
                     break;
 
                 case ST_TCP:
-                    mSocket = shared_ptr<Socket>(new TCPSocket());
+                    socket = shared_ptr<Socket>(new TCPSocket());
                     break;
 
                 default:
-                    GetLog()->Error() << "(NetControl) ERROR: unknown socket type "
-                                      << mSocketType << "\n";
-                    return;
+                    cerr << "(NetControl) ERROR: unknown socket type "
+                         << type << "\n";
+                    break;
                 }
         }
 
     catch (OpenErr error)
         {
-            GetLog()->Error() << "(NetControl) failed to create socket with '"
-                              << error.what()
-                              << endl;
+            cerr << "(NetControl) failed to create socket with '"
+                 << error.what()
+                 << endl;
         }
+
+    return socket;
 }
 
 string NetControl::DescribeSocketType()
@@ -131,7 +133,10 @@ void NetControl::InitSimulation()
             return;
         }
 
-    CreateSocket();
+    GetLog()->Normal() << "(NetControl) '" << GetName()
+                       << "' setting up a server on " << DescribeSocketType() << std::endl;
+
+    mSocket = CreateSocket(mSocketType);
 
     if (mSocket.get() == 0)
         {
@@ -183,16 +188,12 @@ void NetControl::InitSimulation()
           return;
       }
 
-  GetLog()->Normal() << "(NetControl) '" << GetName()
-                     << "' listening on " << DescribeSocketType() << std::endl;
-
   // assure that a NetMessage object is registered
   mNetMessage = FindChildSupportingClass<NetMessage>();
 
   if (mNetMessage.get() == 0)
       {
           mNetMessage = shared_ptr<NetMessage>(new NetMessage());
-          AddChildReference(mNetMessage);
       }
 }
 
@@ -200,13 +201,6 @@ void NetControl::DoneSimulation()
 {
     // reset the cached NetMessage reference
     mNetMessage.reset();
-
-    // shutdown the server socket
-    mSocket->close();
-    GetLog()->Normal() << "(NetControl) '" << GetName()
-                       << "' closed server socket "
-                       << DescribeSocketType() << std::endl;
-    mSocket.reset();
 
     // close all client connections
     for (
@@ -217,6 +211,13 @@ void NetControl::DoneSimulation()
         {
             RemoveClient((*iter).second->addr);
         }
+
+    // shutdown the server socket
+    mSocket->close();
+    GetLog()->Normal() << "(NetControl) '" << GetName()
+                       << "' closed server socket "
+                       << DescribeSocketType() << std::endl;
+    mSocket.reset();
 
     mClients.clear();
 }
@@ -295,12 +296,12 @@ void NetControl::SendMessage(shared_ptr<Client> client, const string& msg)
             // udp client
             if (mSocket.get() != 0)
                 {
-                    rval = mSocket->send(msg.c_str(), msg.size(), client->addr);
+                    rval = mSocket->send(msg.data(), msg.size(), client->addr);
                 }
         } else
             {
                 // tcp client
-                rval = socket->send(msg.c_str(), msg.size());
+                rval = socket->send(msg.data(), msg.size());
             }
 
     if (rval < 0)

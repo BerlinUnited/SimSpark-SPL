@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.h,v 1.1 2004/04/25 16:46:03 rollmark Exp $
+   $Id: netcontrol.h,v 1.2 2004/04/28 14:33:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -119,10 +119,11 @@ public:
     void SendMessage(const rcss::net::Addr& addr,
                              const std::string& msg);
 
-protected:
-    /** create the managed socket according to mSocketType */
-    void NetControl::CreateSocket();
+    /** create a socket according to the given ESocketType */
+    static boost::shared_ptr<rcss::net::Socket>
+    NetControl::CreateSocket(ESocketType type);
 
+protected:
     /** returns a human readable description of the socket type and
         port*/
     std::string NetControl::DescribeSocketType();
