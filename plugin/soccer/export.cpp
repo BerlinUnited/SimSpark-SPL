@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1.2.13 2004/02/08 22:05:51 fruit Exp $
+   $Id: export.cpp,v 1.1.2.14 2004/02/09 14:31:19 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include <zeitgeist/zeitgeist.h>
 #include "createeffector/createeffector.h"
-#include "dasheffector/dasheffector.h"
+#include "driveeffector/driveeffector.h"
 #include "kickeffector/kickeffector.h"
 #include "initeffector/initeffector.h"
 #include "soccercontrolaspect/soccercontrolaspect.h"
@@ -43,7 +43,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(BallStateAspect);
         ZEITGEIST_EXPORT(SoccerRuleAspect);
         ZEITGEIST_EXPORT(CreateEffector);
-        ZEITGEIST_EXPORT(DashEffector);
+        ZEITGEIST_EXPORT(DriveEffector);
         ZEITGEIST_EXPORT(KickEffector);
         ZEITGEIST_EXPORT(InitEffector);
         ZEITGEIST_EXPORT(ObjectState);
