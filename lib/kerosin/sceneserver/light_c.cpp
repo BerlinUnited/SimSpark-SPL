@@ -2,6 +2,7 @@
 
 using namespace boost;
 using namespace kerosin;
+using namespace zeitgeist;
 
 FUNCTION(setRadius)
 {

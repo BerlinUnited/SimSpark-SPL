@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.2 2003/08/26 10:57:18 rollmark Exp $
+   $Id: renderserver.cpp,v 1.3 2003/08/28 20:00:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -120,7 +120,7 @@ void RenderServer::Render()
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
-        if (openglServer->SupportsFancyLighting())
+/*      if (openglServer->SupportsFancyLighting())
         {
             glEnable(GL_VERTEX_PROGRAM_ARB);
             glBindProgramARB(GL_VERTEX_PROGRAM_ARB, mAmbientVP);
@@ -177,27 +177,31 @@ void RenderServer::Render()
             glActiveTextureARB(GL_TEXTURE2_ARB);
             glDisable(GL_TEXTURE_2D);
         }
-        else
+        else */
         {
             // ambient lighting only
             glColor3f(1, 1, 1);
             mActiveScene->RenderAmbient();
         }
 
+/*
         if (openglServer->SupportsFancyLighting())
         {
             glEnable(GL_VERTEX_PROGRAM_ARB);
             glBindProgramARB(GL_VERTEX_PROGRAM_ARB, mAmbientVP);
         }
+*/
         // standard rendering
         mActiveScene->Render();
+
+/*
         if (openglServer->SupportsFancyLighting())
         {
             glDisable(GL_VERTEX_PROGRAM_ARB);
         }
+*/
     }
 }
-
 
 
 

@@ -11,33 +11,37 @@ class Material;
 
 class MaterialServer : public zeitgeist::Leaf
 {
-	//
-	// types
-	//
+        //
+        // types
+        //
 private:
-	typedef std::hash_map<std::string, boost::shared_ptr<Material> >	TMaterialCache;
+#ifdef HAVE_HASH_MAP
+        typedef std::hash_map<std::string, boost::shared_ptr<Material> >        TMaterialCache;
+#else
+        typedef std::map<std::string, boost::shared_ptr<Material> >     TMaterialCache;
+#endif
 
-	//
-	// functions
-	//
+        //
+        // functions
+        //
 public:
-	MaterialServer();
-	virtual ~MaterialServer();
+        MaterialServer();
+        virtual ~MaterialServer();
 
-	//! load (or returned cached) material
-	boost::shared_ptr<Material>		GetMaterial(const std::string &name);
+        //! load (or returned cached) material
+        boost::shared_ptr<Material>             GetMaterial(const std::string &name);
 
-	//! make sure that a material is in memory
-	bool							Touch(const std::string &name);
+        //! make sure that a material is in memory
+        bool                                                    Touch(const std::string &name);
 protected:
-	//! sets up the script variables used for loading
-	virtual bool ConstructInternal();
-	
-	//
-	// members
-	//
+        //! sets up the script variables used for loading
+        virtual bool ConstructInternal();
+
+        //
+        // members
+        //
 private:
-	TMaterialCache	mMaterialCache;		// registry of cached textures
+        TMaterialCache  mMaterialCache;         // registry of cached textures
 };
 
 DECLARE_CLASS(MaterialServer);

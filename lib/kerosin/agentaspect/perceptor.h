@@ -3,28 +3,39 @@
 
 #include "../sceneserver/basenode.h"
 
+#ifdef HAVE_HASH_MAP
+#include <hash_map>
+#else
+#include <map>
+#endif
+
 namespace kerosin
 {
 
 class Perceptor : public kerosin::BaseNode
 {
-	//
-	// types
-	//
+        //
+        // types
+        //
 public:
-	typedef std::hash_map<std::string, boost::any> TDictionary;
+#ifdef HAVE_HASH_MAP
+        typedef std::hash_map<std::string, boost::any> TDictionary;
+#else
+        typedef std::map<std::string, boost::any> TDictionary;
+#endif
 
-	//
-	// functions
-	//
+
+        //
+        // functions
+        //
 public:
-	/*!
-		This is called by agents to trigger the percept event implemented by
-		this perceptor. The perceptor can return data through the dictionary,
-		which is passed as a parameter. Returns true, if valid data is
-		available and false otherwise.
-	*/
-	virtual bool Percept(TDictionary &dictionary) = 0;
+        /*!
+                This is called by agents to trigger the percept event implemented by
+                this perceptor. The perceptor can return data through the dictionary,
+                which is passed as a parameter. Returns true, if valid data is
+                available and false otherwise.
+        */
+        virtual bool Percept(TDictionary &dictionary) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(Perceptor);
