@@ -142,6 +142,10 @@ module GLExtGen
 		f.print winGuardOff
 		f.print "};\n\n"
 		
+		if $namespace != nil
+		    f.print "} // end ", $namespace, "\n\n"
+		end
+
 		### write out extern function pointer definitions
 		writeExternFunctionPointers (frontEnd, f, glArray)
         f.print "#line 141 \"utility/glextgen/script/glbackend.rb\"\n"
@@ -151,10 +155,6 @@ module GLExtGen
 		writeExternFunctionPointers (frontEnd, f, wglArray)
         f.print "#line 146 \"utility/glextgen/script/glbackend.rb\"\n"
 		f.print winGuardOff
-
-		if $namespace != nil
-		    f.print "\n} // end ", $namespace, "\n"
-		end
 
 		copyFile (f, "tocopy/header_end.txt")
 	    }

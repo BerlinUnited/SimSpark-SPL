@@ -6,7 +6,7 @@ fileServer.mount ('FileSystemSTD', 'data/');
 
 def testSoundSystem
 	importBundle "soundsystemfmod"
-	importBundle "soundsystembass"
+	#importBundle "soundsystembass"
 	print "SoundServer Test\n"
 	print "Creating SoundServer\n"
 	soundServer = new ('kerosin/SoundServer', '/sys/server/sound');

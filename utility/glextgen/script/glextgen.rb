@@ -92,6 +92,12 @@ frontEnd.scanAll
 	# create back end
 	backEnd = backEndClass.new
 
+        # glExtensionArray.each { |item|
+        # 	item[1].functionList.each { |func|
+ 	#                print "debug output: " + func + "\n"
+        # 	}
+        # }
+
 	# now, we just hand our extension arrays over to the backend
 	#
 	# Note: we are also passing in the frontEnd, because it should contain information
