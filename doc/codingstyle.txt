@@ -104,17 +104,25 @@ ClassName::function()
 
    Example: myVariable
 
+*** Globally defined variables and constants
+
+   Global constants and variables start witg 'g', followed by the
+   variable name starting with a capital letter. New words within the
+   variable name start with capital letters.
+
 *** Member variables
 
-   Member variables start with 'm', followed by the variable name starting 
-   with a capital letter. New words within the variable name start with capital   letters.
+   Member variables start with 'm', followed by the variable name
+   starting with a capital letter. New words within the variable name
+   start with capital letters.
 
    Example: mMemberVariable
 
-   Constant static member variables (and enums) are the same as the 
-   non-static types but capitalized and words are separated by '_'. 
+   Constant static member variables are the same as the
+   non-static types. 
 
-   Example: M_STATIC_CONST_MEMBER_VARIABLE
+   Examples: mStaticConstMemberVariable
+
 
 ** Macros 
 
@@ -162,8 +170,9 @@ ClassName::function()
    
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: codingstyle.txt,v 1.4 2003/08/19 22:59:46 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: codingstyle.txt,v 1.5 2003/08/24 07:57:39 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -239,11 +248,10 @@ private:
 * Options for GNU indent to fix broken code
 
   These are the options for GNU indent to get your code looking
-  pretty OK. Since indent seems to be a little bit non-deterministic, 
+  pretty much OK. Since indent seems to be a little bit non-deterministic, 
   better don't use it for files that are looking almost perfect :). 
 
 -nbad -bap -sob --dont-star-comments --no-comment-delimiters-on-blank-lines
 -cp33 -d0 -nfc1 -nfca -bl -bli0 -cli4 -cbi0 -ss -npcs -nprs -saf -saw -sai -cs
 -ip0 -di1 -nbc -psl -bls -i4 -nut -ci0 -di1 -lp -l80 -nbbo -hnl
 
-  @TODO: double check this list of options
