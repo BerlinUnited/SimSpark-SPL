@@ -1,3 +1,77 @@
+2004-05-05  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/sparkmonitor/sparkmonitorclient.cpp:
+	- use the RubySceneImporter instance created in spark.rb and don't
+	create a new one
+
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+	- automatically send a full state update if the scene has been
+	modified, i.e. nodes have been added or removed
+
+	* plugin/rubysceneimporter/rubysceneimporter.h,
+	* plugin/rubysceneimporter/rubysceneimporter_c.cpp,
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	- added member mAutoUnlink
+	- added method SetUnlinkOnCompleteScenes
+	- modified the importer to unlink the old scene if a new full
+	state is received; it keeps the old scene if a delta is appplied
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	- mark the scene as modified after an agent connected or
+	disconnected
+
+	* lib/oxygen/sceneserver/sceneserver.cpp:
+	- mark the scene as modified if after a scene graph has been
+	imported
+
+	* lib/oxygen/sceneserver/basenode.cpp:
+	- fixed method GetScene to check if itself is already a scene node
+
+	* lib/oxygen/sceneserver/scene.cpp, lib/oxygen/sceneserver/scene.h:
+	- added method SetModified and GetModified
+	- added member mModified
+	- a scene node now carries a flag that marks if the scene graph
+	has been modified, i.e. nodes have been added or removed
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp,
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- renamed UpdateCached to UpdateCachedInternal
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- changed UpdateCachedAllNodes to call UpdateCached() of the
+	RootNode
+
+	* lib/zeitgeist/node.cpp, lib/zeitgeist/node.h:
+	- added method UpdateCached that recursively calls UpdateCached
+	and UpdateCachedInternal of all child nodes
+
+	* lib/zeitgeist/leaf.h: 
+	- added method UpdateCachedInternal
+
+	* app/simspark/rsg/boxspheres/staticbox.rsg:
+	- staticbox.rsg added;was missing in CVS and needed by the demo
+
+2004-05-02  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simspark/rsg/jointtest/rotorlayer.rsg,
+	* app/simspark/rsg/jointtest/rotorthing.rsg,
+	* app/simspark/rsg/jointtest/simspark.rsg:
+	- added some rotors to the demo scene to test the joint motors
+	parameters
+
+	* lib/oxygen/physicsserver/joint.cpp, 
+	* lib/oxygen/physicsserver/joint.h, 
+	* lib/oxygen/physicsserver/joint_c.cpp:
+	- added method SetLinearMotorVelocity, GetLinearMotorVelocity,
+	SetAngularMotorVelocity, GetAngularMotorVelocity, SetMaxMotorForce
+	and GetMaxMotorForce
+	- changed method attach to accept 0 or 1 parameter, to allow a
+	joint to be attach to the static environment
+
+	* lib/kerosin/sceneserver/staticmesh_c.cpp:
+	- changed exported load method to pass parameters on to the
+	StaticMesh
+
 2004-05-01  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/randomserver/randomserver.cpp: 
