@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystemsdl.h,v 1.3 2003/12/21 23:36:38 fruit Exp $
+   $Id: inputsystemsdl.h,v 1.4 2004/04/23 20:10:57 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,15 +21,7 @@
 
    InputSystemSDL
 
-        NOTE:
-
-        HISTORY:
-                21.08.02 - MK
-                        - Initial version
-
-        TODO:
-
-        TOFIX:
+   HISTORY: 21.08.02 - MK - Initial version
 */
 #ifndef INPUTSYSTEMSDL_H__
 #define INPUTSYSTEMSDL_H__
@@ -46,34 +38,35 @@ class TimerSDL;
 
 class InputSystemSDL : public kerosin::InputSystem
 {
-        //
-        // functions
-        //
+    //
+    // functions
+    //
 public:
-        InputSystemSDL();
-        virtual ~InputSystemSDL();
+    InputSystemSDL();
+    virtual ~InputSystemSDL();
 
-        virtual bool    Init(kerosin::InputServer *inputServer);
-        virtual bool    CreateDevice(const std::string &deviceName);
+    virtual bool Init(kerosin::InputServer* inputServer);
+    virtual bool CreateDevice(const std::string& deviceName);
 
-        SDL_mutex*              GetMutex() const;
+    SDL_mutex* GetMutex() const;
 
-        int                             EventFilter(const SDL_Event *event);
+    int EventFilter(const SDL_Event* event);
 
-        //! add the input to the queue
-        virtual void AddInput(kerosin::InputServer::Input &input);
-        //! retrieve an input from the queue
-        virtual bool GetInput(kerosin::InputServer::Input &input);
+    //! add the input to the queue
+    virtual void AddInput(kerosin::InputServer::Input& input);
+    //! retrieve an input from the queue
+    virtual bool GetInput(kerosin::InputServer::Input& input);
+
 protected:
-        virtual bool UpdateTimerInput(kerosin::InputServer::Input &input);
+    virtual bool UpdateTimerInput(kerosin::InputServer::Input& input);
 
-        //
-        // members
-        //
+    //
+    // members
+    //
 private:
-        SDL_mutex                                       *mMutex;
+    SDL_mutex* mMutex;
 
-        boost::shared_ptr<TimerSDL>     mTimer;
+    boost::shared_ptr<TimerSDL> mTimer;
 };
 
 DECLARE_CLASS(InputSystemSDL);
