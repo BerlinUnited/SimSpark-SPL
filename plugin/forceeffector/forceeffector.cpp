@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.3.2.2 2004/01/25 12:22:28 rollmark Exp $
+   $Id: forceeffector.cpp,v 1.3.2.3 2004/02/01 22:12:37 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ bool ForceEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
   const Vector3f& force = forceAction->GetForce();
-  mBody->AddForce(force);
+  mBody->AddForce(Vector3f(force[0],force[2],force[1]));
 
   return true;
 }
