@@ -44,3 +44,8 @@ material.setDiffuse(0.1,0.5,0.1,1.0)
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
 material.setDiffuse(0.1,0.1,0.1,1.0)
 
+# source soccersim.rb to build a soccer monitor
+run "soccersim.rb"
+
+
+
