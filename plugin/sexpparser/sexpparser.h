@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.h,v 1.2.2.1 2003/12/23 01:44:23 fruit Exp $
+   $Id: sexpparser.h,v 1.2.2.2 2003/12/23 12:06:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,9 +39,6 @@ public:
 
     virtual boost::shared_ptr<TPredicateList> Parse(const std::string& input);
     virtual std::string Generate(boost::shared_ptr<TPredicateList> input);
-
-    static bool IsString(const boost::any& operand);
-    static bool IsParameterList(const boost::any& operand);
 
 private:
     TParameterList SexpToList(const sexp_t* const sexp);
