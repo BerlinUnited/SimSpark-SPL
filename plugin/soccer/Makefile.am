@@ -5,6 +5,8 @@ createeffector/createeffector.cpp \
 createeffector/createeffector_c.cpp \
 initeffector/initeffector.cpp \
 initeffector/initeffector_c.cpp \
+gamestateaspect/gamestateaspect.cpp \
+gamestateaspect/gamestateaspect_c.cpp \
 agentstate/agentstate.cpp \
 agentstate/agentstate_c.cpp
 
