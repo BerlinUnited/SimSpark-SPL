@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.10 2004/06/08 12:58:52 fruit Exp $
+   $Id: sexpmonitor.cpp,v 1.11 2004/06/11 08:58:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -238,6 +238,11 @@ SexpMonitor::AddBall(shared_ptr<Scene> activeScene, std::ostringstream& ss) cons
 string
 SexpMonitor::GetMonitorInfo()
 {
+    if (mGameState->IsFinished())
+    {
+        return "(Die)\n";
+    }
+
     shared_ptr<SceneServer> sceneServer =
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
@@ -262,7 +267,7 @@ SexpMonitor::GetMonitorInfo()
     AddFlags(activeScene, expression);
     AddBall(activeScene, expression);
 
-    expression << ")\n\0";
+    expression << ")\n";
 
     return expression.str();
 }
@@ -324,7 +329,7 @@ SexpMonitor::GetMonitorHeaderInfo()
     }
     ss << ")";
 
-    ss << ")\n\0";
+    ss << ")\n";
     return ss.str();
 }
 
