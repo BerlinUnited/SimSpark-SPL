@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.7 2004/01/27 12:54:06 heni Exp $
+   $Id: main.cpp,v 1.3.2.8 2004/01/28 10:59:39 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -184,6 +184,7 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
             const ObjType& type = typeMap[idx];
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, type.color);
             gGLServer.DrawSphere(pos, type.size);
+            gGLServer.DrawShadowOfSphere(pos, type.size);
         }
 }
 
@@ -215,9 +216,9 @@ void display(void)
    const Vector3f szGoal2(goalDepth,goalHeight,goalWidth);
 
    // color constants
-   const GLfloat groundColor[4] = {0.0f, 0.9f, 0.0f, 1.0f};
+   const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
    const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
-   const GLfloat borderColor[4] = {0.0f, 0.0f, 1.0f, 1.0f};
+   const GLfloat borderColor[4] = {0.2f, 0.8f, 0.2f, 1.0f};
 
    glClearColor(0.1f,0.1f,0.1f,1.0f);
 
@@ -227,9 +228,6 @@ void display(void)
    glLoadIdentity();
 
    gGLServer.ApplyCamera();
-   
-   // draw text
-   // gGLServer.DrawText("TEST", salt::Vector2f(0.1,0.1));
 
    // ground
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
@@ -305,20 +303,31 @@ void mouseMotion(int x, int y)
 // 
 // processing of keyboard input
 // Button Descr. :
-//     + if 'a' is pressed the camera will zoom in
-//     + if 'A' is pressed the camera will zoom out
+//     + if 'w' is pressed the camera will move in
+//     + if 's' is pressed the camera will move out
+//     + if 'a' is pressed the camera will strafe left
+//     + if 'd' is pressed the camera will strafe right
 //--------------------------------------------------------------------------
 void keyboard(unsigned char key, int /*x*/, int /*y*/)
 {
+  const float camDelta = 0.5f;
   salt::Vector3f pos;
   switch (key) {
-  case 'a':
-      //zoom in
-      gGLServer.MoveCam(1.0);
+  case 'w':
+      //move cam in
+      gGLServer.MoveCamForward(camDelta);
       break;
-  case 'A':
-      //zoom in
-      gGLServer.MoveCam(-1.0);
+  case 's':
+      //move cam out
+      gGLServer.MoveCamForward(-camDelta);
+      break;
+  case 'a':
+      //strafe cam left
+      gGLServer.MoveCamStrafe(camDelta);
+      break;
+  case 'd':
+      // strafe cam right
+      gGLServer.MoveCamStrafe(-camDelta);
       break;
   default:
       break;
@@ -386,6 +395,11 @@ int main(int argc, char* argv[])
 
   gCommServer->Init("SexpParser",gSoccerServer,gPort);
 
+  // first parse the paremeters 
+  // such as the fieldwidth
+  // shared_ptr<Predicate::TList> predicates = gCommServer->GetPredicates();
+  // createGameParameters(predicates);
+   
   // enter glut main loop
   glutMainLoop();
 

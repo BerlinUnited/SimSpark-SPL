@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3.2.4 2004/01/27 15:44:46 rollmark Exp $
+   $Id: glserver.cpp,v 1.3.2.5 2004/01/28 10:59:38 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -103,28 +103,34 @@ void GLserver::DrawText(const char* string, salt::Vector2f pos)
 //-----------------------------------------------------------------------
 void GLserver::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
 {
+    // The ground is drawn as a set of quadric faces(strips)
+    // faceNum stores the number of faces
+    const int faceNum = 10;
+    GLfloat x, z, deltaX, deltaZ;
+
     glPushMatrix();
     glTranslatef(gridPos[0],gridPos[1], gridPos[2]);
-
-    //draw the lines GREEN
-    glBegin(GL_LINES);
-
-    for(float x = 0; x <= szX; ++x)
+   
+    // store the sizes of our faces
+    // and create normal vector
+    deltaX = szX/faceNum;
+    deltaZ = szZ/faceNum;
+    glNormal3f(0,1,0);
+    for (int i=0; i<faceNum; i++)
         {
-            // Do the vertical lines (along the Z)
-            glVertex3f(x, 0, 0);
-            glVertex3f(x, 0, szZ);
+            z = i*deltaZ;
+            //draw face as Quadric strip
+            glBegin(GL_QUAD_STRIP);
+            for (int j=0; j<faceNum; j++)
+                {
+                    x = j*deltaX;
+                    glVertex3f(x,0,z);
+                    glVertex3f(x,0,z+deltaZ);
+                }
+            glVertex3f(x+deltaX,0,z);
+            glVertex3f(x+deltaX,0,z+deltaZ);
+            glEnd();
         }
-
-    for(float z = 0; z <= szZ; ++z)
-        {
-            // Do the vertical lines (along the Z)
-            glVertex3f(0, 0, z);
-            glVertex3f(szX, 0, z);
-        }
-
-    glEnd();
-
     glPopMatrix();
 }
 
@@ -225,6 +231,28 @@ void GLserver::DrawSphere(salt::Vector3f spherePos,float radius)
     else glutWireSphere(radius, 10, 10);
     glPopMatrix();
 }
+//-----------------------DrawShadowOfSphere------------------------------
+//
+// draws the shadow of a sphere with given radius by scaling its size onto 
+// the ground (no y component) 
+//-----------------------------------------------------------------------
+void GLserver::DrawShadowOfSphere(salt::Vector3f spherePos,float radius)
+{
+    // distance between ground and shadows 
+    const float delta = 0.08f;
 
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    
+    // draw the flat sphere just a 'bit' 
+    // ontop of the playing gound
+    glTranslatef(spherePos[0], delta, spherePos[2]);
+    glScalef(1.0f, 0.0f, 1.0f);
+    glutSolidSphere(radius, 10, 10);
+
+    glEnable(GL_LIGHTING);
+    glPopMatrix();
+}
 
 
