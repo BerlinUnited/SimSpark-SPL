@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.9 2003/11/14 14:45:41 rollmark Exp $
+   $Id: scriptserver.h,v 1.10 2003/11/16 15:41:12 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,10 +93,10 @@ public:
     /** loads and runs a ruby script from an RFile */
     bool Run(salt::RFile* file);
 
-    /** searches in ~/<mDotName>/, PREFIX/ and <relPath>/ for the
-     * script <fileName>.  If found the script is run and copied to
-     * ~/<dotName>/. If this directory is missing it is automatically
-     * created
+    /** searches in ~/<mDotName>/, PREFIX/share/PACKAGE_NAME/ and
+     * <relPath>/ for the script <fileName>.  If found the script is
+     * run and copied to ~/<dotName>/. If this directory is missing it
+     * is automatically created
      */
     bool RunInitScript(const std::string &fileName, const std::string &relPath);
 
