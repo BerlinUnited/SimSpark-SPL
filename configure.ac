@@ -106,6 +106,7 @@ AC_CONFIG_FILES([Makefile \
 		 utility/glextgen/Makefile \
 		 utility/glextgen/glextgen.rb \
 		 utility/libobj/Makefile \
+		 utility/sfsexp/Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/zeitgeist/Makefile \
@@ -116,6 +117,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/filesystemstd/Makefile \
 		 plugin/filesystemzip/Makefile \
 		 plugin/inputsdl/Makefile \
+		 plugin/sexpparser/Makefile \
 		 plugin/soundsystembass/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/survival/Makefile \
