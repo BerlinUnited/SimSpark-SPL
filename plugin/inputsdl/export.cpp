@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.3 2003/12/21 23:36:38 fruit Exp $
+   $Id: export.cpp,v 1.4 2004/04/23 21:02:39 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,14 +21,16 @@
 */
 
 #include "inputsystemsdl.h"
+#include "inputdevicesdl.h"
 #include "keyboardsdl.h"
 #include "mousesdl.h"
 #include "timersdl.h"
 #include <zeitgeist/zeitgeist.h>
 
 ZEITGEIST_EXPORT_BEGIN()
-        ZEITGEIST_EXPORT(InputSystemSDL);
-        ZEITGEIST_EXPORT(KeyboardSDL);
-        ZEITGEIST_EXPORT(MouseSDL);
-        ZEITGEIST_EXPORT(TimerSDL);
+    ZEITGEIST_EXPORT(InputSystemSDL);
+    ZEITGEIST_EXPORT(InputDeviceSDL);
+    ZEITGEIST_EXPORT(KeyboardSDL);
+    ZEITGEIST_EXPORT(MouseSDL);
+    ZEITGEIST_EXPORT(TimerSDL);
 ZEITGEIST_EXPORT_END()
