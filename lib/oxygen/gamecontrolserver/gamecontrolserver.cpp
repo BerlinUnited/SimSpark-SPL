@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.5 2004/02/12 14:07:22 fruit Exp $
+   $Id: gamecontrolserver.cpp,v 1.6 2004/02/21 15:30:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ GameControlServer::AgentConnect(int id)
     // create a new AgentAspect for the ID in the scene and add it to
     // our map of AgentAspects
     shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
-        (GetCore()->New("kerosin/AgentAspect"));
+        (GetCore()->New("oxygen/AgentAspect"));
 
     if (aspect.get() == 0)
         {

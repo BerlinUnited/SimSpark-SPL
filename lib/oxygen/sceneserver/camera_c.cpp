@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera_c.cpp,v 1.3 2003/11/07 15:05:21 rollmark Exp $
+   $Id: camera_c.cpp,v 1.4 2004/02/21 15:30:44 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ FUNCTION(setZFar)
 
 void CLASS(Camera)::DefineClass()
 {
-        DEFINE_BASECLASS(kerosin/BaseNode);
+        DEFINE_BASECLASS(oxygen/BaseNode);
         DEFINE_FUNCTION(setViewport);
         DEFINE_FUNCTION(setFOV);
         DEFINE_FUNCTION(setZNear);

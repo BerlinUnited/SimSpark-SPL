@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider_c.cpp,v 1.5 2004/02/12 14:07:22 fruit Exp $
+   $Id: collider_c.cpp,v 1.6 2004/02/21 15:30:44 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,5 +41,5 @@ FUNCTION(setPosition)
 void CLASS(Collider)::DefineClass()
 {
         DEFINE_FUNCTION(setPosition);
-        DEFINE_BASECLASS(kerosin/ODEObject);
+        DEFINE_BASECLASS(oxygen/ODEObject);
 }

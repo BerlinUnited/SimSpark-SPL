@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.5 2004/02/12 14:07:22 fruit Exp $
+   $Id: collider.cpp,v 1.6 2004/02/21 15:30:44 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
       // for convenience we add a ContactJointHandler if no other
       // handler is registered. This behaviour covers the majority of
       // all use cases and eases the creation of Colliders.
-      AddCollisionHandler("kerosin/ContactJointHandler");
+      AddCollisionHandler("oxygen/ContactJointHandler");
     }
 }
 

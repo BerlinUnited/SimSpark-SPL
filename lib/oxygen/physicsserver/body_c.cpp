@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.4 2003/11/10 23:11:42 fruit Exp $
+   $Id: body_c.cpp,v 1.5 2004/02/21 15:30:44 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ FUNCTION(setSphere)
 
 void CLASS(Body)::DefineClass()
 {
-        DEFINE_BASECLASS(kerosin/ODEObject);
+        DEFINE_BASECLASS(oxygen/ODEObject);
         DEFINE_FUNCTION(enable);
         DEFINE_FUNCTION(disable);
         DEFINE_FUNCTION(useGravity);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.cpp,v 1.6 2004/02/12 14:07:22 fruit Exp $
+   $Id: oxygen.cpp,v 1.7 2004/02/21 15:30:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,37 +27,37 @@ using namespace zeitgeist;
 Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
 {
     // scene graph
-    zg.GetCore()->RegisterClassObject(new CLASS(SceneServer), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(BaseNode), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Camera), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(FPSController), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Scene), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Transform), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(SceneServer), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(BaseNode), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Camera), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(FPSController), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Scene), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Transform), "oxygen/");
 
     // physics
-    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServer), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Body), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Space), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(World), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServer), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Body), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Space), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(World), "oxygen/");
 
     // collider
-    zg.GetCore()->RegisterClassObject(new CLASS(Collider), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(BoxCollider), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(CCylinderCollider), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(PlaneCollider), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(RayCollider), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(SphereCollider), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Collider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(BoxCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(CCylinderCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(PlaneCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(RayCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(SphereCollider), "oxygen/");
 
     // collision handler
-    zg.GetCore()->RegisterClassObject(new CLASS(CollisionHandler), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ContactJointHandler), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(RecorderHandler), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(CollisionHandler), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ContactJointHandler), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(RecorderHandler), "oxygen/");
 
     // agentaspect
-    zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Effector), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Perceptor), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Effector), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Perceptor), "oxygen/");
 
 #ifdef HAVE_SPADES_HEADERS
     // spades
@@ -72,8 +72,8 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     // game control and controlaspects
     zg.GetCore()->RegisterClassObject(new CLASS(BaseParser), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(GameControlServer), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ControlAspect), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ActionObject), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ControlAspect), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ActionObject), "oxygen/");
 
     // run the oxygen init script
     zg.GetCore()->GetRoot()->GetScript()->RunInitScript
