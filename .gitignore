@@ -127,6 +127,10 @@ lib/oxygen/controlaspect/*.lo
 lib/oxygen/controlaspect/.deps
 lib/oxygen/controlaspect/.dirstamp
 lib/oxygen/controlaspect/.libs
+lib/oxygen/gamecontrolserver/.deps
+lib/oxygen/gamecontrolserver/.dirstamp
+lib/oxygen/gamecontrolserver/.libs
+lib/oxygen/gamecontrolserver/*.lo
 lib/oxygen/monitorserver/.deps
 lib/oxygen/monitorserver/.dirstamp
 lib/oxygen/monitorserver/.libs
