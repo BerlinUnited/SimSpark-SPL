@@ -1,3 +1,98 @@
+2004-02-07  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/simulator.rb: 
+	added ObjectAspects to flags and to the ball so that they are visible 
+	for the VisionPerceptor
+
+	* plugin/soccer/export.cpp: added ObjectState
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	- removed some debug messages 
+	- when searching for visible objects, we are looking for ObjectState nodes 
+	  now (instead of looking for transform nodes). Unfortunately, this doesn't 
+	  seem to work yet properly for nodes that are derived from ObjectState, like
+	  currently (only) AgentState.  
+	- instead of using the transform node names as object names, we are using the 
+	  ObjectState GetName() and GetID() methods to create visible object names.
+
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	changed the private ObjectData struct so that it holds references to 
+	ObjectStates instead of references to Leafs.
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	setting the team name in each AgentState
+
+	* plugin/soccer/agentstate/agentstate.h: 
+	* plugin/soccer/agentstate/agentstate.cpp: 
+	* plugin/soccer/agentstate/agentstate_c.cpp: 
+	changes so that AgentState is derived from ObjectState now
+
+	* plugin/soccer/objectstate/objectstate.h: 
+	* plugin/soccer/objectstate/objectstate.cpp: 
+	* plugin/soccer/objectstate/objectstate_c.cpp: 
+	Added ObjectState class. ObjectState is a parent of AgentState and is 
+	used to hold a name and an ID for the visionperceptor (and maybe other
+	perceptors). Objects on the soccer field that should be recognized
+	by the visionperceptor need to have an ObjectState child. The
+	visionperceptor will see all ObjectStates and from there go to the
+	parent nodes.  Name and ID can be set from ruby.
+
+2004-02-06  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.h: 
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp: 
+	* plugin/perfectvisionperceptor/perfectvisionperceptor_c.cpp: 
+	Added a method that can be used to invert each axis. This method is also
+	exported to ruby so that the perceptor can be configured from the
+	init script.
+
+	* app/simulator/simulator.rb: 
+	- changed flag names from Flag1,...,Flag4 to 
+	  Flag_1_l and Flag_2_l for the flags on the "left" side of the field, 
+	  Flag_1_r and Flag_2_r for flags on the "right" side of the field.  
+	- changed goal post names from Goal1l, Goal2r, Goal2l, Goal2r to 
+	  Goal_1_l and Goal_2_l for the goal posts of the left goal and 
+	  Goal_1_r and Goal_2_r for goals posts of the right goal 
+	- initializing the random server from init script 
+	- setting the field length to a random integer value between 100m
+	  and 110m 
+	- setting the field width to a random integer value between 64m and 75m 
+	- setting the ball mass to a random value between 410g and 450g.  
+	- added variable to set the monitor interval 
+	- added flag if the integrated commserver should be started 
+	- added flag if agent think times should be sent
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	Added methods to access variables for configuring spades: 
+	- added method to check if we want to use the integrated commserver 
+	- added method to get the monitor interval 
+	- added method to get the send_agent_think_times flag
+
+	* lib/zeitgeist/randomserver/randomserver_c.cpp: 
+	exporting random number methods to ruby 
+	- exporting uniformRND method 
+	- exporting normalRND method 
+	- exporting exponentialRND method
+	
+	* lib/salt/random.h: 
+	Fixed the exponential distribution base class.
+
+	* lib/kerosin/Makefile.am: 
+	The glextensionreg.* files should only be copied oif kerosin is build. 
+	Trying to copy the files when not building kerosin caused an error when 
+	building from scratch. 
+	
+	* lib/zeitgeist/Makefile.am
+	* lib/zeitgeist/core.h
+	* lib/zeitgeist/core.cpp
+	- added RandomServer to zeitgeist
+
+	* lib/zeitgeist/randomserver/randomserver.h
+	* lib/zeitgeist/randomserver/randomserver.cpp
+	* lib/zeitgeist/randomserver/randomserver_c.cpp
+	- added initial revision of a randomserver (for random numbers)
+
 2004-02-06  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/soccer/kickeffector/kickeffector.cpp:
@@ -122,6 +217,48 @@
 	* lib/zeitgeist/leaf.cpp, lib/zeitgeist/leaf.h:
 	- declared GetParentSupportingClass const
 
+2004-02-05  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/kickeffector/kickeffector_c.cpp: 
+	- exporting setAngleRange method
+
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	- By default, we add small noise to the kick angle at the end of the kicking range
+	  (i.e. if the kick angle is close to the minimum or maximum angle). Larger noise is
+	  added somewhere in between. The noise is normally distributed
+	  around 0.0.  
+	- fixed the direction of applied torque in direction of the first axis.  
+	- removed code that initialzed a variable that was holding a reference to 
+	  the agent body 
+	- added SetAngleRange method
+
+	* plugin/soccer/kickeffector/kickeffector.h: 
+	- added yet another noise parameter 
+	- added parameters for the kick angle range 
+	- removed variable that was holding a reference to the agent body
+
+	* plugin/soccer/kickeffector/kickaction.h: 
+	- changed KickAction to store kick angle instead of kick type
+
+	* plugin/soccer/Makefile.am: 
+	- removed soccertypes.cpp 
+	- added header files 
+	- added SoccerBase files
+	
+	* plugin/soccer/dasheffector/dasheffector.cpp: 
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	- making use of SoccerBase class
+
+	* plugin/soccer/export.cpp: 
+	- registering SoccerBase
+
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	* plugin/soccer/soccerbase/soccerbase.cpp: 
+	* plugin/soccer/soccerbase/soccerbase_c.cpp: 
+	- added SoccerBase class with some static utility functions needed 
+	everywhere in the soccer perceptors and effectors
+	
 2004-02-03  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/simulator/simulator.rb: 
