@@ -8,7 +8,7 @@ libzeitgeist_la_SOURCES = $(sources)
 libzeitgeist_la_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib
+AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/zeitgeist

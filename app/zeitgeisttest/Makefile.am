@@ -12,7 +12,7 @@ LDADD = ${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
 zeitgeisttest_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib 
+AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 zeitgeisttest_SOURCES = main.cpp
