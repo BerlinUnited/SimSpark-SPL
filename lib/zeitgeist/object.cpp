@@ -2,6 +2,7 @@
 #include "class.h"
 #include "core.h"
 #include <iostream>
+#include <boost/version.hpp>
 
 using namespace boost;
 using namespace std;
@@ -51,7 +52,11 @@ boost::shared_ptr<Core> Object::GetCore() const
 
 void Object::Dump() const
 {
-	cout << "Object: " << (void*) this << " " << (void*) mSelf.get() << " - use count = " << mSelf.use_count() << endl;
+	cout << "Object: " << (void*) this 
+#if BOOST_VERSION < 102900
+             << " " << (void*) mSelf.get() 
+#endif
+             << " - use count = " << mSelf.use_count() << endl;
 }
 
 void Object::Invoke(const std::string &functionName)
@@ -59,7 +64,8 @@ void Object::Invoke(const std::string &functionName)
 	Class::TParameterList in;
 
 	Class::TCmdProc cmd = mClass->GetCmdProc(functionName);
-
+        // here (for "get") BOOST 1_28_0 is required. Maybe 
+        // better use weak ptr
 	if (cmd != NULL)
 		cmd(GetSelf().get(), in);
 }
