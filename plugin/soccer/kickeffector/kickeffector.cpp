@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.9 2004/05/14 16:35:37 fruit Exp $
+   $Id: kickeffector.cpp,v 1.10 2004/12/18 14:27:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ using namespace std;
 
 KickEffector::KickEffector()
     : oxygen::Effector(),
-      mKickMargin(0.04),
+      mKickMargin(0.04),mPlayerRadius(0.0),mBallRadius(0.0),
       mForceFactor(4.0),mTorqueFactor(0.1),
       mMaxPower(100.0),
       mMinAngle(0.0),mMaxAngle(50.0), mSteps(10),
