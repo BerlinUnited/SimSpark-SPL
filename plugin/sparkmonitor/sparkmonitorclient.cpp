@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.cpp,v 1.4 2004/04/30 12:17:47 rollmark Exp $
+   $Id: sparkmonitorclient.cpp,v 1.5 2004/05/01 14:24:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,50 +31,12 @@ using namespace salt;
 using namespace boost;
 using namespace std;
 
-SparkMonitorClient::SparkMonitorClient() :
-    SimControlNode()
-
+SparkMonitorClient::SparkMonitorClient() : NetClient()
 {
-    mHost = "127.0.0.1";
-    mPort = 3200;
-    mBufferSize = 64 * 1024;
-    mBuffer = shared_array<char>(new char[mBufferSize]);
-    mType = NetControl::ST_TCP;
-    mNetBuffer = shared_ptr<NetBuffer>(new NetBuffer());
 }
 
 SparkMonitorClient::~SparkMonitorClient()
 {
-}
-
-void SparkMonitorClient::SetServer(const std::string& host)
-{
-    mHost = host;
-}
-
-const std::string& SparkMonitorClient::GetServer() const
-{
-    return mHost;
-}
-
-void SparkMonitorClient::SetPort(int port)
-{
-    mPort = port;
-}
-
-int SparkMonitorClient::GetPort() const
-{
-    return mPort;
-}
-
-void SparkMonitorClient::SetClientType(NetControl::ESocketType type)
-{
-    mType = type;
-}
-
-NetControl::ESocketType SparkMonitorClient::GetClientType()
-{
-    return mType;
 }
 
 void SparkMonitorClient::OnLink()
@@ -102,128 +64,28 @@ void SparkMonitorClient::OnUnlink()
 
 void SparkMonitorClient::InitSimulation()
 {
-    mSocket = NetControl::CreateSocket(mType);
-
-    if (mSocket.get() == 0)
+    if (! Connect())
         {
             return;
         }
 
-    GetLog()->Normal()
-        << "(SparkMonitorClient) connecting to "
-        << ((mType == NetControl::ST_UDP) ? "UDP " : "TCP ")
-        << mHost << ":" << mPort << "\n";
+    // create the SceneImporter
+    mSceneImporter = shared_dynamic_cast<SceneImporter>
+        (GetCore()->New("RubySceneImporter"));
 
-    try
-        {
-            Addr local(INADDR_ANY,INADDR_ANY);
-            mSocket->bind(local);
-        }
-
-    catch (BindErr error)
+    if (mSceneImporter.get() == 0)
         {
             GetLog()->Error()
-                << "(SparkMonitorClient) failed to bind socket with '"
-                << error.what() << "'" << endl;
-
-            mSocket->close();
-            return;
+                << "(SparkMonitorClient) ERROR: cannot create"
+                << "a RubySceneImporter instance\n";
         }
 
-    try
-        {
-            Addr server(mPort,mHost);
-            mSocket->connect(server);
-        }
-
-    catch (ConnectErr error)
-        {
-            GetLog()->Error()
-                << "(SparkMonitorClient) connection failed with: '"
-                << error.what() << "'" << endl;
-            mSocket->close();
-            mSocket.reset();
-            return;
-        }
-
-    mStreamBuf = shared_ptr<SocketStreamBuf>(new SocketStreamBuf(*mSocket));
-    mInStream = shared_ptr<istream>(new istream(mStreamBuf.get()));
-
-    if (mSocket->isConnected())
-        {
-            cout << "(SparkMonitorClient) connected successfully" << endl;
-        }
-
-  // assure that a NetMessage object is registered
-  mNetMessage = FindChildSupportingClass<NetMessage>();
-
-  if (mNetMessage.get() == 0)
-      {
-          mNetMessage = shared_ptr<NetMessage>(new NetMessage());
-      }
-
-  mSceneImporter = shared_dynamic_cast<SceneImporter>
-      (GetCore()->New("RubySceneImporter"));
-
-  if (mSceneImporter.get() == 0)
-      {
-          GetLog()->Error()
-              << "(SpakrMonitorClient) ERROR: cannot create"
-              << "a RubySceneImporter instance\n";
-      }
-
-  // send the monitor init string
-  string initMsg = "(init)";
-  mNetMessage->PrepareToSend(initMsg);
-  SendMessage(initMsg);
-}
-
-void SparkMonitorClient::SendMessage(const string& msg)
-{
-    if (mSocket.get() == 0)
-        {
-            return;
-        }
-
-    int rval = 0;
-
-    if (mType == NetControl::ST_UDP)
-        {
-            Addr server(mPort,mHost);
-            rval = mSocket->send(msg.data(), msg.size(), server);
-        } else
-            {
-                rval = mSocket->send(msg.data(), msg.size());
-            }
-
-    if (rval < 0)
-        {
-            GetLog()->Error()
-                << "(SparkMonitorClient::SendMessage) ERROR: "
-                << "send returned error '"
-                << strerror(errno) << "' " << endl;
-        }
-}
-
-void SparkMonitorClient::CloseConnection()
-{
-    if (mSocket.get() == 0)
-        {
-            return;
-        }
-
-    mInStream.reset();
-    mStreamBuf.reset();
-    mSocket->close();
-    mSocket.reset();
-
-    GetLog()->Normal() << "(SparkMonitorClient) closed connection to "
-                       << mHost << ":" << mPort << "\n";
+    // send the monitor init string
+    SendMessage("(init)");
 }
 
 void SparkMonitorClient::DoneSimulation()
 {
-    mNetMessage.reset();
     mActiveScene.reset();
     mSceneImporter.reset();
     CloseConnection();
@@ -231,73 +93,12 @@ void SparkMonitorClient::DoneSimulation()
 
 void SparkMonitorClient::StartCycle()
 {
-    if (mSocket.get() == 0)
+    ReadFragments();
+
+    string msg;
+    while (mNetMessage->Extract(mNetBuffer, msg))
         {
-            return;
-        }
-
-    bool gotFragments = false;
-
-    for (;;)
-        {
-
-            // test for available data
-            int fd = mSocket->getFD();
-
-            fd_set readfds;
-            FD_ZERO(&readfds);
-            FD_SET(fd,&readfds);
-
-            timeval time;
-            time.tv_sec = 0;
-            time.tv_usec = 0;
-
-            int rval = select(fd+1, &readfds, 0, 0, &time );
-
-            if (rval == 0)
-                {
-                    break;
-                }
-
-            if (rval < 0)
-                {
-                    GetLog()->Error()
-                        << "(SparkMonitorClient) ERROR select on client "
-                        << "socket failed with '"
-                        << strerror(errno) << "'" << endl;
-                    CloseConnection();
-                    return;
-                }
-
-            rval = mSocket->recv(mBuffer.get(),mBufferSize);
-
-            if (rval == 0)
-                {
-                    CloseConnection();
-                    return;
-                }
-
-            if (rval < 0)
-                {
-                    GetLog()->Error()
-                        << "(SparkMonitorClient) ERROR: '" << GetName()
-                        << "' recv returned error '"
-                        << strerror(errno) << "' " << endl;
-                    return;
-                }
-
-            string fragment(mBuffer.get(),rval);
-            mNetBuffer->AddFragment(string(mBuffer.get(),rval));
-            gotFragments = true;
-        }
-
-    if (gotFragments)
-        {
-            string msg;
-            while (mNetMessage->Extract(mNetBuffer, msg))
-                {
-                    ParseMessage(msg);
-                }
+            ParseMessage(msg);
         }
 }
 

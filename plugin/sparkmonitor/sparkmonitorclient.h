@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.h,v 1.2 2004/04/30 12:17:47 rollmark Exp $
+   $Id: sparkmonitorclient.h,v 1.3 2004/05/01 14:24:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,17 +23,12 @@
 #define SPARK_SPARKMONITORCLIENT_H
 
 #include <zeitgeist/class.h>
-#include <oxygen/simulationserver/simcontrolnode.h>
-#include <oxygen/simulationserver/netcontrol.h>
-#include <oxygen/simulationserver/netmessage.h>
-#include <oxygen/simulationserver/netbuffer.h>
+#include <oxygen/simulationserver/netclient.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/sceneimporter.h>
-#include <rcssnet/tcpsocket.hpp>
-#include <rcssnet/socketstreambuf.hpp>
 
-class SparkMonitorClient : public oxygen::SimControlNode
+class SparkMonitorClient : public oxygen::NetClient
 {
 public:
     SparkMonitorClient();
@@ -49,31 +44,7 @@ public:
         simulation is stepped */
     virtual void StartCycle();
 
-    /** sets the server to connect to */
-    void SetServer(const std::string& host);
-
-    /** returns the server this client connects to */
-    const std::string& GetServer() const;
-
-    /** sets the port to connect to */
-    void SetPort(int port);
-
-    /** returns the port this client connects to */
-    int GetPort() const;
-
-    /** sets the client socket type */
-    void SetClientType(oxygen::NetControl::ESocketType type);
-
-    /** returns the client socket type */
-    oxygen::NetControl::ESocketType GetClientType();
-
 protected:
-    /** sends a message to the server */
-    void SparkMonitorClient::SendMessage(const std::string& msg);
-
-    /** closes connection to the server*/
-    void CloseConnection();
-
     /** parses a received message */
     void ParseMessage(const std::string& msg);
 
@@ -81,32 +52,6 @@ protected:
     virtual void OnUnlink();
 
 protected:
-    /** the host name of the server */
-    std::string mHost;
-
-    /** the monitor port to connect to */
-    int mPort;
-
-    /** the socket type to create */
-    oxygen::NetControl::ESocketType mType;
-
-    /** the managed TCP socket */
-    boost::shared_ptr<rcss::net::Socket> mSocket;
-    boost::shared_ptr<rcss::net::SocketStreamBuf> mStreamBuf;
-    boost::shared_ptr<std::istream> mInStream;
-
-    /** the receive buffer */
-    boost::shared_ptr<oxygen::NetBuffer> mNetBuffer;
-
-    /** the registered message protocol */
-    boost::shared_ptr<oxygen::NetMessage> mNetMessage;
-
-    /** the size of the allocated receive buffer */
-    int mBufferSize;
-
-    /** the receive buffer */
-    boost::shared_array<char> mBuffer;
-
     /** cached reference to the SceneServer */
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
 
