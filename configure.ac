@@ -186,6 +186,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
 		 plugin/sexpparser/Makefile \
 		 plugin/soccer/Makefile \
+		 plugin/soccermonitor/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/collisionperceptor/Makefile \
 		 plugin/rubysceneimporter/Makefile \
