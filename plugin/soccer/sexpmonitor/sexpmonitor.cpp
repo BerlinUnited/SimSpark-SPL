@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.6 2004/05/03 10:58:56 markelic Exp $
+   $Id: sexpmonitor.cpp,v 1.6.2.1 2004/05/05 14:33:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,9 +30,11 @@
 #include <soccer/soccertypes.h>
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/soccerbase/soccerbase.h>
+#include <soccer/ball/ball.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/ballstateaspect/ballstateaspect.h>
 #include <soccer/agentstate/agentstate.h>
+#include <soccer/fieldflag/fieldflag.h>
 #include <netinet/in.h>
 
 using namespace oxygen;
@@ -54,14 +56,14 @@ SexpMonitor::ConstructInternal()
 }
 
 void
-SexpMonitor::ParseMonitorMessage(const std::string& data)
+SexpMonitor::ParseMonitorMessage(const string& data)
 {
     GetLog()->Debug() << "SexpMonitor received " << data << " from monitor\n";
 
     if (mGameState.get() == 0)
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     if (mSexpParser.get() == 0)
     {
@@ -83,193 +85,177 @@ SexpMonitor::ParseMonitorMessage(const std::string& data)
     mCommandParser->ParsePredicates(*mPredicates);
 }
 
-std::string SexpMonitor::GenerateSexp(string type, TLeafList& list)
-{
-    stringstream ss;
-
-    for (TLeafList::iterator i = list.begin();i != list.end();++i)
-        {
-            shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
-            const salt::Vector3f& pos = j->GetWorldTransform().Pos();
-
-            ss << "(" << type << " (pos " << pos[0] << " " << pos[1] << " " << pos[2] << "))";
-        }
-
-    return ss.str();
-}
-
-shared_ptr<AgentAspect> SexpMonitor::GetLastBallAgent()
-{
-    // query the ball state aspect for the last Agent
-    shared_ptr<BallStateAspect> ballState = shared_dynamic_cast<BallStateAspect>
-        (GetCore()->Get("/sys/server/gamecontrol/BallStateAspect"));
-
-    if (ballState.get() == 0)
-        {
-            GetLog()->Error() << "(SexpMonitor) found no BallStateAspect" << endl;
-            return shared_ptr<AgentAspect>();
-        }
-
-    shared_ptr<AgentAspect> agent;
-    TTime time;
-    ballState->GetLastCollidingAgent(agent,time);
-    return agent;
-}
-
-string
-SexpMonitor::GetGameStateData()
+void
+SexpMonitor::AddGameState(std::ostringstream& ss)
 {
     if (mGameState.get() == 0)
-        {
-            return "";
-        }
-
-    stringstream ss;
-
-    // team names
-    std::string name = mGameState->GetTeamName(TI_LEFT);
-    if (name != "")
-        {
-            ss << "(teamL " << mGameState->GetTeamName(TI_LEFT) << ")";
-        }
-
-    name = mGameState->GetTeamName(TI_RIGHT);
-    if (name != "")
-        {
-            ss << "(teamR " << mGameState->GetTeamName(TI_RIGHT) << ")";
-        }
-
-    // game half
-    ss << "(half "
-       << ((mGameState->GetGameHalf() == GH_FIRST) ? "1" : "2")
-       << ")";
+    {
+        return;
+    }
 
     // time
     ss << "(time " << mGameState->GetTime() << ")";
 
+    // team names
+    std::string teamname;
+    if (!mSentLeftTeamname)
+    {
+        teamname = mGameState->GetTeamName(TI_LEFT);
+        if (!teamname.empty())
+        {
+            ss << "(team_left " << teamname << ")";
+            mSentLeftTeamname = true;
+        }
+    }
+
+    if (!mSentRightTeamname)
+    {
+        teamname = mGameState->GetTeamName(TI_RIGHT);
+        if (!teamname.empty())
+        {
+            ss << "(team_right " << teamname << ")";
+            mSentRightTeamname = true;
+        }
+    }
+
+    // game half
+    TGameHalf half = mGameState->GetGameHalf();
+    if (half != mLastHalf)
+    {
+        mLastHalf = half;
+        ss << "(half " << half << ")";
+    }
+
     // scores
-    ss << "(scoreL " << mGameState->GetScore(TI_LEFT) << ")";
-    ss << "(scoreR " << mGameState->GetScore(TI_RIGHT) << ")";
+    int left_score = mGameState->GetScore(TI_LEFT);
+    if (left_score != mLastLeftScore)
+    {
+        mLastLeftScore = left_score;
+        ss << "(score_left " << left_score << ")";
+    }
+    int right_score = mGameState->GetScore(TI_RIGHT);
+    if (right_score != mLastRightScore)
+    {
+        mLastRightScore = right_score;
+        ss << "(score_right " << right_score << ")";
+    }
 
     // gamestate
-    ss << "(playMode " << mGameState->GetPlayMode() << ")";
-
-    return ss.str();
+    TPlayMode play_mode = mGameState->GetPlayMode();
+    if (play_mode != mLastPlayMode)
+    {
+        mLastPlayMode = play_mode;
+        ss << "(play_mode " << play_mode << ")";
+    }
 }
 
-string
-SexpMonitor::GetAgentData(shared_ptr<Scene> activeScene)
+void
+SexpMonitor::AddAgents(shared_ptr<Scene> activeScene, std::ostringstream& ss) const
 {
     TLeafList nodes;
-    activeScene->GetChildrenSupportingClass("AgentAspect", nodes, true);
+    activeScene->ListChildrenSupportingClass<AgentAspect>(nodes, true);
 
-    stringstream ss;
+    for (TLeafList::iterator i = nodes.begin(); i != nodes.end(); ++i)
+    {
+        shared_ptr<AgentAspect> aspect = shared_static_cast<AgentAspect>(*i);
+        const salt::Vector3f& pos = aspect->GetWorldTransform().Pos();
 
-    for (TLeafList::iterator i = nodes.begin();i != nodes.end();++i)
+        ss << "(P ";
+
+        shared_ptr<AgentState> state = shared_static_cast<AgentState>
+            (aspect->GetChildOfClass("AgentState"));
+        if (state.get() != 0)
         {
-            shared_ptr<AgentAspect> aspect =
-                shared_static_cast<AgentAspect>(*i);
-            const salt::Vector3f& pos = aspect->GetWorldTransform().Pos();
-
-            shared_ptr<AgentState> state = shared_static_cast<AgentState>
-                (aspect->GetChildOfClass("AgentState"));
-
-            ss << "(agent ";
-
-            // pos
-            ss << "(pos " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
-
-            if (state.get() != 0)
-                {
-                    ss << "(team ";
-
-                    switch (state->GetTeamIndex())
-                        {
-                        case TI_NONE :
-                            ss << "N";
-                            break;
-                        case TI_LEFT :
-                            ss << "L";
-                            break;
-                        case TI_RIGHT :
-                            ss << "R";
-                            break;
-                        }
-
-                    ss << ")";
-
-                    ss << "(unum " << state->GetUniformNumber() << ")";
-                }
-
-            ss << ")";
+            ss << "(s " << state->GetTeamIndex() << ")";
+            ss << "(id " << state->GetUniformNumber() << ")";
+        }
+        // pos
+        ss << "(pos " << pos << ")";
+        // extra field if the agent was the last colliding with the ball
+        shared_ptr<AgentAspect> agent;
+        TTime time;
+        mBallState->GetLastCollidingAgent(agent,time);
+        if (agent == aspect)
+        {
+            ss << "(last)";
         }
 
-    return ss.str();
+        ss << ")";
+    }
+}
+
+void
+SexpMonitor::AddFlags(shared_ptr<Scene> activeScene, std::ostringstream& ss)
+{
+    // the flags don't change, so we need to send them only once
+    if (mSentFlags)
+    {
+        return;
+    }
+    mSentFlags = true;
+
+    TLeafList nodes;
+    activeScene->ListChildrenSupportingClass<FieldFlag>(nodes, true);
+
+    for (TLeafList::iterator i = nodes.begin(); i != nodes.end(); ++i)
+    {
+        shared_ptr<FieldFlag> flag = shared_static_cast<FieldFlag>(*i);
+        const salt::Vector3f& pos = flag->GetWorldTransform().Pos();
+        shared_ptr<ObjectState> state = shared_dynamic_cast<ObjectState>
+            (flag->GetChildOfClass("ObjectState"));
+
+        if (state.get() == 0) continue;
+
+        ss << "(" << state->GetPerceptName()[0] << " ";
+        // id
+        ss << "(id " << state->GetID() << ")";
+        // pos
+        ss << "(pos " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
+
+        ss << ")";
+    }
+}
+
+void
+SexpMonitor::AddBall(shared_ptr<Scene> activeScene, std::ostringstream& ss) const
+{
+    shared_ptr<Ball> ball = shared_static_cast<Ball>(activeScene->GetChild("Ball"));
+    const salt::Vector3f& pos = ball->GetWorldTransform().Pos();
+    ss << "(B ";
+    // pos
+    ss << "(pos " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
+    ss << ")";
 }
 
 string
 SexpMonitor::GetMonitorInfo()
 {
-    // map from generic class types to be recognized to their
-    // expression type
-    static const struct ExpressionType
-    {
-        string className;
-        string typeName;
-    } typeMap[] =
-        {
-            {"FieldFlag","flag"},
-            {"Ball","ball"},
-        };
-
     shared_ptr<SceneServer> sceneServer =
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
-        {
-            GetLog()->Error() << "(SexpMonitor) cannot get SceneServer\n";
-            return "";
-        }
-
+    {
+        GetLog()->Error() << "(SexpMonitor) cannot get SceneServer\n";
+        return "";
+    }
     shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
-    stringstream expression;
+    std::ostringstream expression;
 
+    expression << "(Info ";
 
     string reply;
-    if( mCommandParser->SendAck(reply))
+    if (mCommandParser->SendAck(reply))
     {
-        expression << "(ack "<<reply<<")";
+        expression << "(ack " + reply + ")";
     }
-    
 
-    // AgentAspects
-    expression << GetAgentData(activeScene);
+    AddGameState(expression);
+    AddAgents(activeScene, expression);
+    AddFlags(activeScene, expression);
+    AddBall(activeScene, expression);
 
-    // generic classes
-    int n = sizeof(typeMap) / sizeof(ExpressionType);
-    for (int i=0;i<n;++i)
-        {
-            const ExpressionType& entry = typeMap[i];
+    expression << ")\n\0";
 
-            TLeafList nodes;
-            activeScene->GetChildrenSupportingClass(entry.className, nodes, true);
-            expression << GenerateSexp(entry.typeName, nodes);
-        }
-
-    // get the last agent touching the ball
-    shared_ptr<AgentAspect> lastBallAgent = GetLastBallAgent();
-
-    if (lastBallAgent.get() != 0)
-        {
-            TLeafList node;
-            node.push_back(lastBallAgent);
-            expression << GenerateSexp("ballAgent", node);
-        }
-
-    // collect info from the GameStateAspect
-    expression << GetGameStateData();
-
-    expression << endl;
     return expression.str();
 }
 
@@ -278,9 +264,9 @@ SexpMonitor::PutFloatParam(const string& name)
 {
     float value;
     if (! SoccerBase::GetSoccerVar(*this,name,value))
-        {
-            return "";
-        }
+    {
+        return "";
+    }
 
     stringstream ss;
     ss << "(" << name << " " << value << ")";
@@ -291,8 +277,11 @@ SexpMonitor::PutFloatParam(const string& name)
 string
 SexpMonitor::GetMonitorHeaderInfo()
 {
+    // if a new monitor connected, we have to resend all required data
+    ResetSentFlags();
+
     stringstream ss;
-    ss << "(init ";
+    ss << "(Init ";
 
     // field geometry parameter
     ss << PutFloatParam("FieldLength");
@@ -302,6 +291,8 @@ SexpMonitor::GetMonitorHeaderInfo()
     ss << PutFloatParam("GoalDepth");
     ss << PutFloatParam("GoalHeight");
     ss << PutFloatParam("BorderSize");
+    ss << PutFloatParam("FreeKickDistance");
+    ss << PutFloatParam("WaitBeforeKickOff");
 
     // agent parameter
     ss << PutFloatParam("AgentMass");
@@ -312,7 +303,12 @@ SexpMonitor::GetMonitorHeaderInfo()
     ss << PutFloatParam("BallRadius");
     ss << PutFloatParam("BallMass");
 
-    ss << ")";
+    // soccer rule parameters
+    ss << PutFloatParam("RuleGoalPauseTime");
+    ss << PutFloatParam("RuleFreeKickPauseTime");
+    ss << PutFloatParam("RuleHalfTime");
+
+    ss << ")\n\0";
 
     return ss.str();
 }
@@ -327,8 +323,7 @@ void SexpMonitor::OnLink()
 
     if (mSexpParser.get() == 0)
     {
-        GetLog()->Error() << "ERROR: (SexpMonitor) failed to create SexpParser"
-                          << endl;
+        GetLog()->Error() << "ERROR: (SexpMonitor) failed to create SexpParser\n";
         return;
     }
 
@@ -339,17 +334,43 @@ void SexpMonitor::OnLink()
 
     if (mCommandParser.get() == 0)
     {
-        GetLog()->Error() << "ERROR: (SexpMonitor) failed to create parser TrainerCommandParser"
-                          << endl;
+        GetLog()->Error() << "ERROR: (SexpMonitor) failed to create parser TrainerCommandParser\n";
         return;
+    }
+
+    UpdateCached();
+}
+
+void
+SexpMonitor::UpdateCached()
+{
+    mBallState = shared_dynamic_cast<BallStateAspect>
+        (GetCore()->Get("/sys/server/gamecontrol/BallStateAspect"));
+
+    if (mBallState.get() == 0)
+    {
+        GetLog()->Error() << "(SexpMonitor) found no BallStateAspect\n";
     }
 }
 
-void SexpMonitor::OnUnlink()
+
+void
+SexpMonitor::OnUnlink()
 {
     mGameState.reset();
     mCommandParser.reset();
     mSexpParser.reset();
+    mBallState.reset();
 }
 
-
+void
+SexpMonitor::ResetSentFlags()
+{
+    mSentLeftTeamname = false;
+    mSentRightTeamname = false;
+    mLastHalf = GH_NONE;
+    mLastLeftScore = -1;
+    mLastRightScore = -1;
+    mLastPlayMode = PM_NONE;
+    mSentFlags = false;
+}
