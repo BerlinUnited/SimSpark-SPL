@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.1.2.1 2004/01/08 15:59:33 rollmark Exp $
+   $Id: sexpmonitor.h,v 1.1.2.2 2004/01/25 12:58:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,9 @@
 
 #include <string>
 #include <oxygen/monitorserver/monitorsystem.h>
+
+#include <oxygen/agentaspect/agentaspect.h>
+
 
 /**     \class SexpMonitor is a monitor plugin that generates lisp
         like-expressions for the rcssmonitor3d
@@ -67,8 +70,10 @@ protected:
 
         \param list is the list of nodes
     */
-
     std::string SexpMonitor::GenerateSexp(std::string type, TLeafList& list);
+
+    /** returns the last agent that touched the ball */
+    boost::shared_ptr<oxygen::AgentAspect> GetLastBallAgent();
 };
 
 DECLARE_CLASS(SexpMonitor);
