@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.12 2004/04/24 11:59:51 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.13 2004/04/24 12:34:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -172,17 +172,13 @@ bool GameControlServer::AgentDisappear(int id)
 
     // remove the AgentAspect from the Scene and our map. The
     // AgentAspect does all the necessary cleanup
-    mAgentMap.erase(id);
-
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() != 0)
     {
-        GetLog()->Debug() << "(GameControlServer) should remove child reference now "
-                          << "(disabled to prevent core dumps)\n";
-#if 0
         RemoveChildReference((*iter).second);
-#endif
     }
+
+    mAgentMap.erase(id);
 
     GetLog()->Debug() << "(GameControlServer) An agent disconnected (id: "
                       << id << ")\n";
