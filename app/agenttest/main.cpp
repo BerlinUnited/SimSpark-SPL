@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.14 2004/02/11 09:44:40 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.15 2004/02/19 19:14:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -114,12 +114,8 @@ void ReadOptions(int argc, char* argv[])
     }
 }
 
-int Init(int argc, char* argv[])
+int Init(int argc, char* argv[], Zeitgeist& zg)
 {
-  //init zeitgeist and oxygen
-  Zeitgeist zg("." PACKAGE_NAME);
-  Oxygen oygen(zg);
-
   // register agent classes
   zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "");
   zg.GetCore()->RegisterClassObject(new CLASS(WorldModel), "");
@@ -205,7 +201,11 @@ void Run()
 
 int main(int argc, char* argv[])
 {
-  int ret = Init(argc, argv);
+  //init zeitgeist and oxygen
+  Zeitgeist zg("." PACKAGE_NAME);
+  Oxygen oyxgen(zg);
+
+  int ret = Init(argc, argv, zg);
 
   if (ret > 0)
       {
