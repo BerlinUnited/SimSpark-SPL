@@ -183,6 +183,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/rubysceneimporter/Makefile \
 		 plugin/voidmeshimporter/Makefile \
 		 plugin/sparkmonitor/Makefile \
+		 plugin/sparkagent/Makefile \
 		 app/Makefile \
 		 app/gendot/Makefile \
 		 app/agenttest/Makefile \
