@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector.cpp,v 1.1.2.1 2004/02/09 14:34:41 fruit Exp $
+   $Id: driveeffector.cpp,v 1.1.2.2 2004/02/09 23:29:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,8 @@ using namespace oxygen;
 using namespace salt;
 
 DriveEffector::DriveEffector() : oxygen::Effector(),
-                               mForceFactor(60.0),mSigma(-1.0),mMaxPower(100.0)
+                                 mForceFactor(60.0),mSigma(-1.0),
+                                 mMaxPower(100.0), mConsumption(1.0/18000.0)
 {
 }
 
@@ -169,5 +170,20 @@ DriveEffector::PrePhysicsUpdateInternal(float deltaTime)
     Vector3f vec = mTransformParent->GetWorldTransform().Pos();
     if (vec[1] > mMaxDistance) return;
 
-    mBody->AddForce(mAgentState->ApplyMotorForce(mForce * deltaTime));
+    salt::Vector3f step_force = mForce * deltaTime;
+
+    if (mAgentState->ReduceBattery(step_force.Length() * mConsumption))
+    {
+        step_force = SoccerBase::FlipView(step_force,
+                                          mAgentState->GetTeamIndex());
+        mBody->AddForce(step_force);
+    }
 }
+
+void
+DriveEffector::SetConsumption(float consume_time)
+{
+    mConsumption = 1.0 / consume_time;
+}
+
+

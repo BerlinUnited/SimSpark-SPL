@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.cpp,v 1.1.2.5 2004/02/08 22:12:18 fruit Exp $
+   $Id: agentstate.cpp,v 1.1.2.6 2004/02/09 23:29:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,8 +31,6 @@ AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
-    // set battery decay
-    mBatteryDecay = 1.0 / 18000.0;
 }
 
 AgentState::~AgentState()
@@ -86,18 +84,21 @@ AgentState::GetBattery() const
     return mBattery;
 }
 
-salt::Vector3f
-AgentState::ApplyMotorForce(salt::Vector3f force)
+float
+AgentState::GetTemperature() const
 {
-    if (mBattery > 0.0)
+    return 23.0;
+}
+
+bool
+AgentState::ReduceBattery(double consumption)
+{
+    if (mBattery - consumption >= 0.0)
     {
-        force = SoccerBase::FlipView(force, GetTeamIndex());
-        mBattery -= force.Length() * mBatteryDecay;
-        if (mBattery < 0.0) mBattery = 0.0;
-    } else {
-        force.Zero();
+        mBattery -= consumption;
+        return true;
     }
-    return force;
+    return false;
 }
 
 

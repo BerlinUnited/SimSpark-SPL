@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector.h,v 1.1.2.1 2004/02/09 14:34:41 fruit Exp $
+   $Id: driveeffector.h,v 1.1.2.2 2004/02/09 23:29:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,6 +61,13 @@ public:
     /** Set the maximum length of the drive power vector. */
     void SetMaxPower(float max_power);
 
+    /** Set the battery consumption.
+     *  How long can you be driving full speed with a fully charged battery?
+     *  \param consume_time time (in milliseconds) the battery works
+     *                      driving full speed
+     */
+    void SetConsumption(float consume_time);
+
 protected:
     virtual void PrePhysicsUpdateInternal(float deltaTime);
 
@@ -92,6 +99,9 @@ protected:
 
     /** The maximum length of the drive power vector. */
     float mMaxPower;
+
+    /** The battery consumption for driving one second with full speed */
+    double mConsumption;
 };
 
 DECLARE_CLASS(DriveEffector);

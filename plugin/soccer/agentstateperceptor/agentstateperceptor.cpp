@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstateperceptor.cpp,v 1.1.2.1 2004/02/08 22:03:16 fruit Exp $
+   $Id: agentstateperceptor.cpp,v 1.1.2.2 2004/02/09 23:29:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,6 +53,12 @@ AgentStatePerceptor::Percept(oxygen::Predicate& predicate)
     Predicate::TParameterList element;
     element.push_back(std::string("battery"));
     element.push_back(mAgentState->GetBattery());
+    predicate.parameter.push_back(element);
+
+    // temperature
+    element.clear();
+    element.push_back(std::string("temp"));
+    element.push_back(mAgentState->GetTemperature());
     predicate.parameter.push_back(element);
 
     return true;

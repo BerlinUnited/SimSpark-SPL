@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.1.2.6 2004/02/09 14:24:41 fruit Exp $
+   $Id: agentstate.h,v 1.1.2.7 2004/02/09 23:29:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,8 +68,14 @@ public:
     /** Get the battery state */
     float GetBattery() const;
 
-    /** Get motor force that can be applied (flip vector if necessary) and reduce battery */
-    salt::Vector3f ApplyMotorForce(salt::Vector3f force);
+    /** Get the motor temperature */
+    float GetTemperature() const;
+
+    /** reduce battery by the given amout.
+     *  \param consumption the amount by which the battery is reduced if possible
+     *  \return true if the battery if good enough for the given consumption
+     */
+    bool ReduceBattery(double consumption);
 
 protected:
     /** team index */
@@ -83,9 +89,6 @@ protected:
 
     /** battery state */
     double mBattery;
-
-    /** battery decay for driving one second with an unit length drive vector */
-    double mBatteryDecay;
 };
 
 DECLARE_CLASS(AgentState);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector_c.cpp,v 1.1.2.1 2004/02/09 14:34:41 fruit Exp $
+   $Id: driveeffector_c.cpp,v 1.1.2.2 2004/02/09 23:29:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,15 @@ FUNCTION(setMaxPower)
     }
 }
 
+FUNCTION(setConsumption)
+{
+    if (in.size() == 1)
+    {
+        DriveEffector* de = static_cast<DriveEffector*>(obj);
+        de->SetConsumption(boost::any_cast<float>(in[0]));
+    }
+}
+
 void
 CLASS(DriveEffector)::DefineClass()
 {
@@ -58,4 +67,5 @@ CLASS(DriveEffector)::DefineClass()
     DEFINE_FUNCTION(setForceFactor);
     DEFINE_FUNCTION(setSigma);
     DEFINE_FUNCTION(setMaxPower);
+    DEFINE_FUNCTION(setConsumption);
 }
