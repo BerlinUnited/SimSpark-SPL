@@ -1,3 +1,48 @@
+2004-05-14  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/lite/rcssmonitor3D-lite.rb: 
+	removed the CommServer setup (done in monitor.cpp now)
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	- added a LogServer setup for the different kinds of output
+
+	* app/simulator/rcssserver3D.rb: 
+	- setting up the torque applied from the kickEffector 
+	- removed the angular drag from the ball 
+	- reduced goal height from 2.44 to 0.5 
+	- renamed variable RuleKickingPauseTime to RuleKickInPauseTime
+
+	* app/rcssmonitor3d/lib/Makefile.am: 
+	* utility/rcssnet/Makefile.am: 
+	added library version info set in configure.ac
+
+	* plugin/soccer/kickeffector/kickeffector.h: 
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	- made the torque applied to the ball configurable from ruby
+	  by adding a SetTorqueFactor method
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	- removed the WS in a ruby method call 
+	- made the ScriptServer output print to the debug Logstream
+	  (instead of the normal stream)
+
+	* lib/zeitgeist/object.cpp: 
+	- added special case for Object::GetClass() error message for 
+	  the ClassClass object
+
+	* lib/zeitgeist/core.cpp: 
+	- not adding the DEBUG-Logstream in release builds
+
+	* lib/zeitgeist/node.cpp: 
+	- when using AddChildReference for a leaf with no Class object, 
+	  print the error message only if the leaf is not ClassClass.
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	- display goal flags at z=0.5 instead of z=1.5 
+	- moved the setup of the CommServer plugin from the init script 
+	  into the C++ part, so that for selecting either online monitor 
+	  or logplayer functionality using command line options is enough.
+
 2004-05-11  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/sparkagent/Makefile.am: 
