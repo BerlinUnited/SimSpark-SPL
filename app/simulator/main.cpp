@@ -2,16 +2,15 @@
 #include <oxygen/oxygen.h>
 
 using namespace boost;
-using namespace std;
 using namespace zeitgeist;
 
 int
 main(int argc, const char *const *argv)
 {
     // print a greeting
-    cout << PACKAGE_STRING << "\n"
-         << "Copyright (C) 2002, 2003 Koblenz University.\n"
-         << "2003, 2004 RoboCup Soccer Server 3D Maintenance Group.\n\n";
+    std::cout << PACKAGE_STRING << "\n"
+              << "Copyright (C) 2002, 2003 Koblenz University.\n"
+              << "2003, 2004 RoboCup Soccer Server 3D Maintenance Group.\n\n";
 
     // init zeitgeist
     Zeitgeist zg("." PACKAGE_NAME);
@@ -21,7 +20,7 @@ main(int argc, const char *const *argv)
 
     // run the init scripts
     shared_ptr<ScriptServer> scriptServer = zg.GetCore()->GetScriptServer();
-    scriptServer->Run("simulator.rb");
+    scriptServer->RunInitScript("rcssserver3D.rb", "../simulator");
 
 #ifdef HAVE_SPADES_HEADERS
     shared_ptr<oxygen::SpadesServer> spadesServer =

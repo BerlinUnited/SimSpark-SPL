@@ -32,6 +32,8 @@ AC_PROG_INSTALL
 AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 AC_PROG_AWK
+AC_CHECK_PROG([DOXYGEN], [doxygen], [yes], [no])
+AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes)
 
 # Checks for libraries.
 
@@ -44,7 +46,7 @@ AC_CHECK_HEADER([boost/version.hpp],,
   AC_MSG_ERROR([boost library not found. Please specify the location 
 of the boost header directory using the CPPFLAGS environment variable]))
 AC_CHECK_HEADERS([hash_map],,
-	AC_MSG_WARN(['hash_map' will be substituted by 'map'. Possible fix: install stlport]))
+	AC_MSG_NOTICE(['hash_map' will be substituted by 'map'. If you need hash_map install stlport]))
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -131,10 +133,14 @@ AC_CONFIG_FILES([Makefile \
 		 app/fonttest/Makefile \
 		 app/inputtest/Makefile \
 		 app/scenetest/Makefile \
+		 app/simulator/createagentdb.sh \
+		 app/simulator/rcsoccersim3D \
 		 app/simulator/Makefile \
 		 app/spadestest/Makefile \
 		 app/rcssmonitor3d/Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
-		 doc/Doxyfile])
+		 doc/Doxyfile],
+		 [test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D \
+	          test -f app/simulator/createagentdb.sh && chmod +x app/simulator/createagentdb.sh])
 AC_OUTPUT

@@ -37,8 +37,7 @@ app/rcssmonitor3d/.deps
 app/rcssmonitor3d/.libs
 app/rcssmonitor3d/Makefile
 app/rcssmonitor3d/Makefile.in
-app/rcssmonitor3d/spadestest
-app/rcssmonitor3d/sys
+app/rcssmonitor3d/rcssmonitor3D
 app/scenetest/.deps
 app/scenetest/.libs
 app/scenetest/Makefile
@@ -50,7 +49,9 @@ app/simulator/.libs
 app/simulator/Logfiles
 app/simulator/Makefile
 app/simulator/Makefile.in
-app/simulator/simulator
+app/simulator/createagentdb.sh
+app/simulator/rcsoccersim3D
+app/simulator/rcssserver3D
 app/spadestest/.deps
 app/spadestest/.libs
 app/spadestest/Makefile

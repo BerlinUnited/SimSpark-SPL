@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.3 2003/12/29 18:19:55 rollmark Exp $
+   $Id: predicate.h,v 1.4 2004/01/01 18:24:33 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,10 +27,18 @@
 #include <functional>
 #include <boost/any.hpp>
 #include <salt/vector.h>
+#include <zeitgeist/logserver/logserver.h>
 
 namespace oxygen
 {
-    class ParameterName;
+
+/** A functional class to find a specific parameter for use as STL predicate.
+*/
+class ParameterName : public std::binary_function<boost::any,std::string,bool>
+{
+public:
+    bool operator()(const boost::any& param, const std::string& pred) const;
+};
 
 /** \class Predicate encapsulates a predicate name together with its
     list of parameters.
@@ -92,32 +100,6 @@ public:
                 return false;
             }
     }
-
-    /** Extract a value from a list of parameters.
-
-        This method is similar to the generic GetValue method. The difference
-        is that this method takes a reference to a parameter list as first
-        argument (instead of an iterator to a liust element). The position
-        of the parameter can be given by an integer (counting starts at 0).
-
-        \param plist the parameter list.
-        \param value will be set to the nth value of plist (if types match).
-        \param nth position of the parameter (start at 0).
-        \return true if nth parameter was successfully extracted.
-    */
-    template<typename T> bool
-    GetNthValue(const TParameterList& plist, T& value, int nth=0) const
-    {
-        TParameterList::const_iterator i = plist.begin();
-        while (nth > 0 && i != plist.end())
-        {
-            --nth;
-            ++i;
-        }
-        if (i == plist.end()) return false;
-        return GetValue(i,value);
-    }
-
     /** Below are GetValue helper functions spezialiced for a single type */
 
     /** GetValue helper for float */
@@ -156,42 +138,30 @@ public:
         return GetVectorValue(iter,value);
     }
 
-    /** Find a parameter with a given name and return the nth value of type T.
+    /** Find a parameter with a given name.
 
         For this method, we assume that parameters are represented by lists
         consisting of a name (a string) and a (number of) values. An example
-        for the init predicate with sexp as sample representation (any other
-        representation possible):
-        "(init (teamname RoboLog) (unum 1) (playername Oliver Kahn))"
+        for the predicate init:
+        init.name = "init";
+        init.parameter = [["teamname", "RoboLog"], ["unum", 1]];
 
         The part after init is the list of parameters. To extract the teamname,
-        simply do 'FindParameter("teamname", name, 1)'. To get the players last
-        name, do 'FindParameter("playername", name, 2)'. In this case, "name"
-        should be a string parameter which will be set by this method.
+        do something like
+        FindParameter(iter, "teamname");
+        TParameterList myList = boost::any_cast<TParameterList>(*iter);
+        iter = myList.begin();
+        ++iter;
+        if (iter != myList.end())
+            GetValue(iter, name);
 
-        \param name The name of the parameter as std::string.
-        \param value The value of the parameter. Will be changed only if
-                     parameter can be found.
-        \param nth position of the value to extract. Paramaters can have
-                   arbitrary many values; this method extracts exactly one.
-        \return true if the nth value of parameter name was found. In this
-                     case, value is set accordingly. We return false, if there
-                     is no parameter with the given name, if the value type
-                     does not match, or if the parameter has no nth value.
+        \param iter on success, iter will point to the list element you are
+                    looking for. Will be unchanged otherwise.
+        \param name Name of the parameter to find.
+        \return true if parameter name was found.
     */
-    template<typename T> bool
-    FindParameter(const std::string& name, T& value, int nth=1) const
-    {
-        TParameterList::const_iterator i;
-        i = find_if(parameter.begin(), parameter.end(),
-                    std::bind2nd(ParameterName(), name));
-        if (i == parameter.end()) return false;
-        // At this point we know that the value i is pointing to is
-        // another TParameterList with the first element being a string 'name'.
-        // We are looking for the nth element after the name now. This is the
-        // value we are looking for.
-        return GetNthValue(boost::any_cast<TParameterList>(*i), value, nth);
-    }
+    bool FindParameter(TParameterList::const_iterator& iter,
+                       const std::string& name) const;
 
  protected:
     /** \note As c++ does not support partially specialized function
@@ -300,33 +270,6 @@ public:
  public:
     std::string name;
     TParameterList parameter;
-};
-
-/** A functional class to find a specific parameter for use as STL predicate.
-*/
-class ParameterName : public std::binary_function<boost::any,std::string,bool>
-{
-public:
-    bool operator() (const boost::any& param, const std::string& pred) const
-    {
-        try
-        {
-            const Predicate::TParameterList* lst =
-                boost::any_cast<Predicate::TParameterList>(&param);
-
-            if ( (lst == 0) || (lst->empty()))
-                {
-                    return false;
-                }
-
-            std::string s = boost::any_cast<std::string>(lst->vfront());
-            return pred == s;
-        }
-        catch(const boost::bad_any_cast &)
-        {
-            return false;
-        }
-    }
 };
 
 }  // namespace oxygen

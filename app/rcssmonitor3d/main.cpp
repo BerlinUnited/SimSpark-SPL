@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3 2003/12/27 17:53:40 fruit Exp $
+   $Id: main.cpp,v 1.4 2004/01/01 18:24:33 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
    Main of the rcssmonitor3D application
 
    This is a very simple 3D monitor example which will hopefully be
-   used for the first steps of the 3D SoccerServer
+   useful for the first steps of 3D SoccerServer
 */
 #include "glserver.h"
 #include "commserver.h"
@@ -242,7 +242,7 @@ int main(int argc, char* argv[])
   zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "rcssmonitor3d/");
 
   // run init script
-  zg.GetCore()->GetScriptServer()->Run("rcssmonitor3d.rb");
+  zg.GetCore()->GetScriptServer()->RunInitScript("rcssmonitor3D.rb", "../rcssmonitor3d");
 
   // print a greeting
   zg.GetCore()->GetLogServer()->Normal()

@@ -283,7 +283,7 @@ AC_DEFUN(RCSS_BUILD_KEROSIN, [
     	AC_MSG_CHECKING([if libkerosin will be build])
  	AC_MSG_RESULT([$rcss_build_kerosin])
 	RCSS_KEROSIN_IF_ELSE([AC_DEFINE(HAVE_KEROSIN_H, 1, [Define to 1 if using the kerosin header])],[
- 		AC_MSG_WARN([libkerosin will not be build. There will be no graphical output.])
+ 		AC_MSG_WARN([libkerosin will not be build.])
     		AC_MSG_NOTICE([the list of libraries required for kerosin can be found in the documentation])
  	])
 	AM_CONDITIONAL(BUILD_KEROSIN, test x$rcss_build_kerosin = xyes)
@@ -296,9 +296,9 @@ AC_DEFUN(RCSS_BUILD_KEROSIN_INIT, [
 	# --enable-kerosin
 	AC_ARG_ENABLE(kerosin,
 		AC_HELP_STRING([--enable-kerosin=@<:@yes|no@:>@],       
-	 		       [whether to compile libkerosin (default is yes)]),
+	 		       [whether to compile libkerosin (default is no)]),
 		    [rcss_build_kerosin="$enableval"],
-		    [rcss_build_kerosin=yes]
+		    [rcss_build_kerosin=no]
 	)
 	if test "$rcss_build_kerosin" = yes; then
 		AC_MSG_NOTICE([Checking prerequisites for kerosin (building kerosin is optional)])

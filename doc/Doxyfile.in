@@ -166,7 +166,35 @@ EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = @top_srcdir@
 INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = HAVE_CONFIG_H
+PREDEFINED             = "HAVE_CONFIG_H" 
+# 			 "CLASS(className)=Class_##className" \
+# 			 "DECLARE_CLASS(className)=\
+#     class CLASS(className) : public zeitgeist::Class\
+#     {\
+#     public:\
+#         CLASS(className)() : zeitgeist::Class(#className) { DefineClass(); }\
+#         zeitgeist::Object* CreateInstance() const\
+#         {\
+#             zeitgeist::Object *instance = new className();\
+#             return instance;\
+#         }\
+#     private:\
+#         void DefineClass();\
+#     };" \
+#                          "DECLARE_ABSTRACTCLASS(className)=\
+#     class CLASS(className) : public zeitgeist::Class\
+#     {\
+#     public:\
+#         CLASS(className)() : zeitgeist::Class(#className) { DefineClass();  }\
+#     private:\
+#         void DefineClass();\
+#     };" \
+#                          "FUNCTION(functionName)=\
+#     static void functionName(zeitgeist::Object *obj, const zeitgeist::Class::TParameterList &in)" \
+#                          "DEFINE_FUNCTION(functionName)=\
+#     mFunctions[#functionName] = functionName;" \
+# 			 "DEFINE_BASECLASS(baseClass)=\ 
+#     mBaseClasses.push_back(#baseClass);" 
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = NO
 #---------------------------------------------------------------------------

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <netinet/in.h>
+#include <sys/types.h>
 
 using namespace std;
 
@@ -70,7 +71,8 @@ ProcessSensation()
   // finish with a done thinking message.
 
   static int step = 0;
-
+  char msg[40];
+  msg[39] = '\0';
 
   switch (step) {
   case 0:
@@ -99,11 +101,14 @@ ProcessSensation()
       log("\n");
       // 'A'- action
       // (init (teamname RoboLog) (unum 4711))
-      putOutput("A(init (unum 8) (teamname RoboLog))");
+      sprintf(msg, "A(init (unum %d) (teamname RoboLog))", getpid());
+      putOutput(msg);
       ++step;
       break;
   default:
-      log("received sensation X ");
+      ++step;
+      snprintf(msg, 39, "received sensation %d ", step);
+      log(msg);
       log(msg_data);
       log("\n");
   }

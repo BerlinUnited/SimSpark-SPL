@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
+   $Id: spadesserver.cpp,v 1.4 2004/01/01 18:24:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -165,8 +165,8 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
     // start an inprocess commserver
     mParamReader->setParam ("run_integrated_commserver", true);
 
-    // send updates to the monitor every second cycle
-    mParamReader->setParam ("monitor_interval",2);
+    // send updates to the monitor every tenth cycle
+    mParamReader->setParam ("monitor_interval",10);
 
     // don't send think time messages to connected agents
     mParamReader->setParam ("send_agent_think_times",false);
@@ -286,7 +286,8 @@ SpadesServer::getMinSenseLatency() const
 ActEvent*
 SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
 {
-    GetLog()->Normal() << "(SpadesServer) Agent " << a << " sent " << data << endl;
+    GetLog()->Normal() << "(SpadesServer) Agent " << a << " sent "
+                       << std::string(data,datalen) << endl;
 
     const shared_ptr<GameControlServer> gcs = GetGameControlServer();
     if (gcs.get() == 0)
