@@ -19,17 +19,19 @@
 */
 #include <algorithm>
 
+#include <forwarder.h>
+
 #include "console.h"
 #include "consolebaseview.h"
 
 using namespace std;
+using namespace Utility;
 
 // the console is per default inactive
-Console::Console()
-    : mActive(false), mForwarder(), mSettings(&mForwarder)    
+Console::Console():M_active(false), M_stream(&cout), M_settings(M_stream)
 {
     // add the forwarder to the message multiplexer
-    gMux.AddTarget(&mForwarder);
+    smux.addStream(M_stream);
 }
 
 Console& 
@@ -39,181 +41,184 @@ Console::instance()
     return sInstance;
 }
 
-void 
+void
 Console::setActive(bool active)
 {
-    mActive = active;
+    M_active = active;
 }
 
 bool 
 Console::isActive() const
 {
-    return mActive;
+    return M_active;
 }
-
-void 
-Console::processInput(const BaseInputDevice::Input &input)
+#if 0
+void
+Console::processInput(const BaseInputDevice::Input & input)
 {
     if (isActive())
     {
         // pipe the input through our inputline
-        mHistory.processInput(input);
-    } else {
+        M_history.processInput(input);
+    }
+    else
+    {
         // execute the binding
         invokeBinding(input);
     }
 }
-
+#endif
+#if 0
 bool 
-Console::invokeBinding(const BaseInputDevice::Input &input)
+Console::invokeBinding(const BaseInputDevice::Input& input)
 {
     // if a strings is bound to the input, execute it
     if (mBindings.exists(input.id))
     {
         execute(mBindings.get(input.id));
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
-
+#endif
 bool 
-Console::execute(const string &input)
+Console::execute(const string& input)
 {
-    pair <bool, ConsoleParser::TStatementList> scanResult;
-    
+    pair < bool, ConsoleParser::StatementList > scan_result;
+
     // try to scan the input
-    scanResult = mParser.scan(input);
-    if (!scanResult.first)
+    scan_result = M_parser.scan(input);
+    if (!scan_result.first)
     {
-        gDispatchError("Couldn't execute input: Scan error.\n");
+        smux.error() << "Couldn't execute input: Scan error.\n";
         return false;
     }
 
     // try to parse the input
-    if (!ConsoleParser::parse(scanResult.second))
+    if (!ConsoleParser::parse(scan_result.second))
     {
-        ConsoleParser::deleteStatements(scanResult.second);
-        gDispatchError("Couldn't execute input: Syntax error.\n");
+        ConsoleParser::deleteStatements(scan_result.second);
+        smux.error() << "Couldn't execute input: Syntax error.\n";
         return false;
     }
-    
+
     // execute every parsed statement
     bool success = true;
-    for (ConsoleParser::TStatementList::iterator iter = scanResult.second.begin(); 
-    iter != scanResult.second.end(); 
-    ++iter)
+    for (ConsoleParser::StatementList::iterator iter =
+         scan_result.second.begin(); iter != scan_result.second.end(); ++iter)
     {
         success = success && perform(*iter);
     }
-    
+
     // garbage collection
-    mParser.deleteStatements(scanResult.second);
-        
+    M_parser.deleteStatements(scan_result.second);
+
     return success;
 }
 
 bool 
-Console::perform(ConVar::tConVars &conVars)
+Console::perform(ConVar::ConVars& conVars)
 {
-    ConVar*             commandVar;
-    const ConCommand    *command;
-    ConVar::tConVars    parameters;
+    ConVar* commandVar;
+    const ConCommand* command;
+    ConVar::ConVars parameters;
 
     // separate command and parameters
-    ConVar::tConVars::iterator iter = conVars.begin();
-    
+    ConVar::ConVars::iterator iter = conVars.begin();
+
     commandVar = (*iter);
     commandVar->getCommand(&command);
     ++iter;
-    
+
     copy(iter, conVars.end(), back_inserter(parameters));
 
     // execute the command
-    ConCommand::eConExecResult execResult = command->execute(parameters);
-        
-    if (execResult == ConCommand::CER_INV_SIGNATURE)
+    ConCommand::ConExecResult exec_result = command->execute(parameters);
+
+    if (exec_result == ConCommand::S_CER_INV_SIGNATURE)
     {
-        gDispatchNormal("the command %s could not be executed: "
-         "wrong type of arguments.\n", 
-         commandVar->getAttributes().getName().c_str());
-        gDispatchNormal("%s\n", command->getUsage().c_str());
-
+        smux.normal() << "the command " 
+                      << commandVar->getAttributes().getName() 
+                      << " could not be executed: wrong type of arguments.\n";
+        smux << command->getUsage() << "\n";
         return false;
-    } 
+    }
 
-    return execResult == ConCommand::CER_OK;
+    return exec_result == ConCommand::S_CER_OK;
 }
 
-ConsoleForwarder& 
-Console::getForwarder()
+std::ostream* 
+Console::getStream()
 {
-    return mForwarder;
+    return M_stream;
 }
 
 ConsoleSettings& 
 Console::getSettings()
 {
-    return mSettings;
+    return M_settings;
 }
-
+#if 0
 ConsoleHistory& 
 Console::getHistory()
 {
-    return mHistory;
+    return M_history;
 }
 
 ConsoleBindings& 
 Console::getBindings()
 {
-    return mBindings;
+    return M_bindings;
 }
-
+#endif
 ConsoleAliases& 
 Console::getAliases()
 {
-    return mAliases;
+    return M_aliases;
 }
 
 ConsoleParser& 
 Console::getParser()
 {
-    return mParser;
+    return M_parser;
 }
 
-void 
+void
 Console::draw() const
 {
     // only draw if active
     if (isActive())
     {
         // tell every view to draw itself
-        for (TViews::const_iterator iter = mViews.begin(); 
-        iter != mViews.end(); 
-        ++iter)
+        for (TViews::const_iterator iter = M_views.begin();
+             iter != M_views.end(); ++iter)
         {
             (*iter)->draw();
         }
     }
 }
 
-void 
-Console::registerView(ConsoleBaseView *view)
+void
+Console::registerView(ConsoleBaseView* view)
 {
-    mViews.push_back(view);
+    M_views.push_back(view);
 }
 
-void 
-Console::unregisterView(ConsoleBaseView *view)
+void
+Console::unregisterView(ConsoleBaseView* view)
 {
-    for (TViews::iterator iter = mViews.begin(); 
-    iter != mViews.end(); )
+    for (TViews::iterator iter = M_views.begin(); iter != M_views.end();)
     {
         if (*iter == view)
         {
-            iter = mViews.erase(iter);
+            iter = M_views.erase(iter);
             break;
-        } else {
+        }
+        else
+        {
             ++iter;
         }
     }

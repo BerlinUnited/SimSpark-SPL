@@ -17,14 +17,18 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONSOLE_H_
-#define _CONSOLE_H_
+#ifndef UTILITY_CONSOLE_H
+#define UTILITY_CONSOLE_H
 
-// #include <macros.h> // there's a lot of evil stuff in there
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "consolesettings.h"
+#if 0
 #include "consolehistory.h"
 #include "consolebindings.h"
+#endif
 #include "consolealiases.h"
 #include "consoleparser.h"
 #include "variables/convar.h"
@@ -36,7 +40,7 @@
 class ConsoleBaseView;
 
 /*! \class Console
-  $Id: console.h,v 1.2 2002/08/14 09:24:52 fruit Exp $
+  $Id: console.h,v 1.3 2002/08/21 08:42:19 fruit Exp $
 
     Console
 
@@ -78,82 +82,87 @@ public:
     static Console& instance();
 
     //! sets the consoles activity state
-    void setActive (bool active = true);
+    void setActive(bool active = true);
     //! is the console active?
-    bool isActive () const;
-
+    bool isActive() const;
+#if 0
     /*! If the console is active the input is processed by the input
-        line (ConsoleInputLine). Otherwise the input bindings
-        (ConsoleBindings) are evaluated. 
-    */
-    void processInput (const BaseInputDevice::Input &input);
-
+       line (ConsoleInputLine). Otherwise the input bindings
+       (ConsoleBindings) are evaluated. 
+     */
+    void processInput(const BaseInputDevice::Input & input);
+#endif
     /*! execute a string as hacked into the console or 
-        read from a configuration file
-    */
-    bool execute (const std::string &command);
-    //! the forwarder associated with the console
-    ConsoleForwarder& getForwarder();
+       read from a configuration file
+     */
+    bool execute(const std::string & command);
+    //! the stream associated with the console
+    std::ostream* getStream();
     /*! the variable settings of this console which are 
-        accessible through the console input line
-    */
+       accessible through the console input line
+     */
     ConsoleSettings& getSettings();
+#if 0
     /*! the history contains everything was has been displayed 
-        by the console plus the input line (ConsoleInputLine)
-    */
+       by the console plus the input line (ConsoleInputLine)
+     */
     ConsoleHistory& getHistory();
     //! the input bindings which are valid when the console is inactive
     ConsoleBindings& getBindings();
+#endif
     //! the aliases
     ConsoleAliases& getAliases();
     //! the parser used to analyse the string given to execute
     ConsoleParser& getParser();
     /*! draw the console if active: 
-        this will pass the call to every registered view
-    */
-    void draw () const;
+       this will pass the call to every registered view
+     */
+    void draw() const;
     /*! Register a view to the console.  
-        The console will not delete the view, neither on
-        unregistration or in the destructor.
-    */
-    void registerView(ConsoleBaseView *view); 
+       The console will not delete the view, neither on
+       unregistration or in the destructor.
+     */
+    void registerView(ConsoleBaseView * view);
     //! unregister a view; the view will not be deleted 
-    void unregisterView(ConsoleBaseView *view);
+    void unregisterView(ConsoleBaseView * view);
 
 protected:
     //! a container for the views
-    typedef std::list<ConsoleBaseView*> TViews;
+    typedef std::list < ConsoleBaseView * >TViews;
     //! this is a singleton: we don't want no copies
     Console();
-    Console(const Console&);
-    Console& operator =(const Console&);
-    
+    Console(const Console &);
+    Console & operator = (const Console &);
+#if 0
     //! execute the string bound to the id of the input event
-    bool invokeBinding(const BaseInputDevice::Input &input);
+    bool invokeBinding(const BaseInputDevice::Input & input);
+#endif
     //! executes a statement returned by the parser and returns the success
-    bool perform(ConVar::tConVars &conVars);
+    bool perform(ConVar::ConVars & conVars);
 
     //! is the console active?
-    bool mActive;
+    bool M_active;
     //! the registered views
-    TViews mViews;
-    /*! The console forwarder.
-        Should exist before the mSettings, as the settings will
-        reconfigure the forwarders message interests.
-    */
-    ConsoleForwarder mForwarder;
+    TViews M_views;
+    /*! The console stream.
+       Should exist before the M_settings, as the settings will
+       reconfigure the streams message interests.
+     */
+    std::ostream* M_stream;
     //! the variable settings accessable through the console input line
-    ConsoleSettings mSettings;
+    ConsoleSettings M_settings;
+#if 0
     /*! the history contains everything what has been displayed by the
-        console and the input line (ConsoleInputLine)
-    */
-    ConsoleHistory mHistory;
+       console and the input line (ConsoleInputLine)
+     */
+    ConsoleHistory M_history;
     //! the key bindings
-    ConsoleBindings mBindings;
+    ConsoleBindings M_bindings;
+#endif
     //! the aliases
-    ConsoleAliases mAliases;
+    ConsoleAliases M_aliases;
     //! the parser used to analyse the strings given to execute
-    ConsoleParser mParser;
+    ConsoleParser M_parser;
 };
 
-#endif // _CONSOLE_H_
+#endif                          // _CONSOLE_H_
