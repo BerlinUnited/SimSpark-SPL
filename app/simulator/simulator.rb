@@ -31,6 +31,7 @@ monitorServer.registerMonitorSystem('MonitorTest');
 gameControlServer = new('oxygen/GameControlServer', '/sys/server/gamecontrol');
 gameControlServer.initParser('SexpParser');
 gameControlServer.initEffector('CreateEffector');
+gameControlServer.initControlAspect('GameStateAspect');
 
 # setup the SpadesServer
 spadesServer = new('oxygen/SpadesServer', '/sys/server/spades');
