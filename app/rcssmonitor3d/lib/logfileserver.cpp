@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logfileserver.cpp,v 1.1 2004/05/11 10:26:50 fruit Exp $
+   $Id: logfileserver.cpp,v 1.2 2004/06/06 11:11:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,24 +92,5 @@ LogfileServer::SendRunCmd()
     mPaused = false;
 }
 
-void
-LogfileServer::SendDisconnectCmd()
-{
-}
-
-void
-LogfileServer::SendToWorldModel(const std::string& /* msg */)
-{
-}
-
-void
-LogfileServer::SendTrainerCmd(const std::string& /* cmd */)
-{
-}
-
-void
-LogfileServer::SendKickOffCmd()
-{
-}
 
 
