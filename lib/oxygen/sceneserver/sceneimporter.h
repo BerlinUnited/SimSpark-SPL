@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneimporter.h,v 1.1 2004/04/08 14:50:09 rollmark Exp $
+   $Id: sceneimporter.h,v 1.2 2004/04/10 09:19:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public:
     SceneImporter() : zeitgeist::Leaf() {}
     virtual ~SceneImporter() {};
 
-    virtual bool ImportScene(const boost::shared_ptr<salt::RFile> file,
+    virtual bool ImportScene(const std::string& fileName,
                              boost::shared_ptr<BaseNode> root) = 0;
 };
 
