@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.1.2.3 2004/02/01 11:00:40 rollmark Exp $
+   $Id: agentstate.h,v 1.1.2.4 2004/02/07 18:47:27 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@
 #ifndef AGENTSTATE_H
 #define AGENTSTATE_H
 
-#include <oxygen/sceneserver/basenode.h>
+#include <soccer/objectstate/objectstate.h>
 #include <soccer/soccertypes.h>
 
-class AgentState : public oxygen::BaseNode
+class AgentState : public ObjectState
 {
     //
     // functions
@@ -38,13 +38,26 @@ public:
     void SetTeamIndex(TTeamIndex idx);
 
     /** returns the team index */
-    TTeamIndex GetTeamIndex();
+    TTeamIndex GetTeamIndex() const;
 
-    /** set the uniform number */
+    /** Set the uniform number.
+     *
+     * This sets both the uniform number as well as the object id
+     * (only the representation is different).
+     */
     void SetUniformNumber(int number);
 
-    /** returns the uniform numner */
-    int GetUniformNumber();
+    /** returns the uniform number as integer */
+    int GetUniformNumber() const;
+
+    /** Set the object id for perceptors.
+     *
+     * This method is the same as SetUniformNumber for AgentState.
+     * If id is not an integer, the object ID will not be changed.
+     *
+     * \param id a new ID, an integer represented as std::string.
+     */
+    virtual void SetID(const std::string& id);
 
 protected:
     /** team index */

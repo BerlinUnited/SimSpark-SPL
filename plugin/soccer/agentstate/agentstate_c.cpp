@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate_c.cpp,v 1.1.2.1 2004/01/06 21:47:45 rollmark Exp $
+   $Id: agentstate_c.cpp,v 1.1.2.2 2004/02/07 18:49:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@
 using namespace boost;
 using namespace oxygen;
 
-void CLASS(AgentState)::DefineClass()
+void
+CLASS(AgentState)::DefineClass()
 {
-    DEFINE_BASECLASS(kerosin/BaseNode);
+    DEFINE_BASECLASS(ObjectState);
 }
