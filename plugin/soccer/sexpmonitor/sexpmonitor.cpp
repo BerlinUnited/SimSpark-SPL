@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: sexpmonitor.cpp,v 1.3 2004/03/25 22:07:53 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,8 +49,8 @@ SexpMonitor::~SexpMonitor()
 
 bool
 SexpMonitor::ConstructInternal()
-{
-  return true;
+{       
+    return true;
 }
 
 void
@@ -62,16 +62,25 @@ SexpMonitor::ParseMonitorMessage(std::string data)
         {
             return;
         }
+       
+    if (mSexpParser.get() == 0)
+    {
+        GetLog()->Error() << "(SexpMonitor) ERROR: can't get SexpParser\n";
+        mPredicates = shared_ptr<Predicate::TList>();
+        return;
+    }
 
-    // this is just preliminary parsing; the SexpParser should be used
-    // here
-    if (data == "(kickoff)")
-        {
-            if (mGameState->GetPlayMode() == PM_BeforeKickOff)
-                {
-                    mGameState->KickOff();
-                }
-        }
+    // get the predicates
+    mPredicates = mSexpParser->Parse(data);
+    
+    if (mCommandParser.get() == 0)
+    {
+        GetLog()->Error() << "(SexpMonitor) ERROR: can't get TrainerCommandParser\n";
+        return;
+    }
+    
+    // interpret the commands in the predicates
+    mCommandParser->ParsePredicates(*mPredicates);    
 }
 
 std::string SexpMonitor::GenerateSexp(string type, TLeafList& list)
@@ -303,11 +312,36 @@ SexpMonitor::GetMonitorHeaderInfo()
 void SexpMonitor::OnLink()
 {
     SoccerBase::GetGameState(*this,mGameState);
+
+    // we need the SexpParser to generate the predicates
+    // from S-Expressions
+    mSexpParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New("SexpParser"));
+
+    if (mSexpParser.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (SexpMonitor) failed to create SexpParser"
+                          << endl;
+        return;
+    }
+
+    // we need the TrainerCommandParser to parse the predicates
+    // and interpret the commands
+    mCommandParser = shared_dynamic_cast<TrainerCommandParser>
+      (GetCore()->New("TrainerCommandParser"));
+
+    if (mCommandParser.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (SexpMonitor) failed to create parser TrainerCommandParser"
+                          << endl;
+        return;
+    }
 }
 
 void SexpMonitor::OnUnlink()
 {
     mGameState.reset();
+    mCommandParser.reset();
+    mSexpParser.reset();
 }
 
 

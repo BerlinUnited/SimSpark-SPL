@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: sexpmonitor.h,v 1.3 2004/03/25 22:07:53 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
 
 #include <string>
 #include <oxygen/monitorserver/monitorsystem.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
+#include <plugin/soccer/trainercommandparser/trainercommandparser.h>
 
 class GameStateAspect;
 
@@ -99,7 +101,15 @@ protected:
     virtual void OnUnlink();
 
 protected:
+
+    // cache for parsed predicates
+    boost::shared_ptr<oxygen::Predicate::TList> mPredicates;
+
     boost::shared_ptr<GameStateAspect> mGameState;
+
+    boost::shared_ptr<oxygen::BaseParser> mSexpParser;
+
+    boost::shared_ptr<TrainerCommandParser> mCommandParser;
 };
 
 DECLARE_CLASS(SexpMonitor);
