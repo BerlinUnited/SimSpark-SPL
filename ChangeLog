@@ -1,3 +1,160 @@
+2004-04-25  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/kerosin/materialserver/materialserver.cpp, lib/kerosin/materialserver/materialserver.h:
+	- creating a default material that is used as a fallback for
+	missing material definitions
+
+	* lib/kerosin/kerosin.cpp, lib/kerosin/kerosin.h:
+	- registered InputControl and RenderControl
+
+	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb, 
+	* app/rcssmonitor3d/kerosin/main.cpp:
+	- adapted to changed spark interface
+
+	* app/rcssmonitor3d/kerosin/Makefile.am:
+	- addded MonitorClientControl and MonitorInputControl files
+
+	* app/rcssmonitor3d/kerosin/monitorinputcontrol.cpp, 
+	* app/rcssmonitor3d/kerosin/monitorinputcontrol.h, 
+	* app/rcssmonitor3d/kerosin/monitorinputcontrol_c.cpp:
+	- added class MonitorInputControl, an InputControl node that
+	handles custom soccer monitor input events, like the KickOff
+	command
+
+	* app/rcssmonitor3d/kerosin/monitorclientcontrol.cpp, 
+	* app/rcssmonitor3d/kerosin/monitorclientcontrol.h, 
+	* app/rcssmonitor3d/kerosin/monitorclientcontrol_c.cpp:
+	- added class MonitorClientControl, a SimControlNode that handles
+	the communication with the soccer server using the MonitorLib and
+	updates the scene graph at the begin of each simulation cycle
+
+	* app/simspark/main.cpp, 
+	* app/simspark/simspark.rb, 
+	* app/simspark/Makefile.am:
+	- adapted to changed spark interface
+	- using the SimulationServer
+
+	* lib/spark/spark.rb: 
+	- setting up the SimulationServer
+	- broke spark.rb into several utility functions that allow better
+	customization of the spark lib (e.g. selective setup of rendering
+	and server classes)
+
+	* lib/spark/spark.cpp, lib/spark/spark.h:
+	- removed enum ECmds, now part of InputControl
+	- removed method Run(), runloop now part of the SimulationServer
+	- removed method ProcessInput, UpdateRenderFrame,
+	SetFPSController, SetHorizontalSensitivity,
+	GetHorizontalSensitivity, SetVerticalSensitivity,
+	GetVerticalSensitivity, GetDeltaTime, GetFramesRendered and
+	SetSimStep
+	- removed member mDeltaTime, mTime, mFramesRendered, mHorSens,
+	mVertSens, mSimStep and mSumDeltaTime
+
+	* lib/kerosin/Makefile.am: 
+	- added rendercontrol and inputcontrol files
+
+	* lib/kerosin/renderserver/rendercontrol.cpp,
+	* lib/kerosin/renderserver/rendercontrol.h,
+	* lib/kerosin/renderserver/rendercontrol_c.cpp:
+	- added class RenderControl, a SimControlNode that renders the
+	current scene and pumps the SDL event loop at the end of each
+	simulation cycle
+
+	* lib/kerosin/inputserver/inputcontrol.cpp, 
+	* lib/kerosin/inputserver/inputcontrol.h, 
+	* lib/kerosin/inputserver/inputcontrol_c.cpp:
+	- added class InputControlNode, a SimControlNode that processes
+	any pending input events from the InputServer at the begin of each
+	simulation cycle. It defines and handles a set of default events
+	and can be customized by overriding the ProcessInput callback in
+	derived classes.
+
+	* lib/oxygen/oxygen.cpp, lib/oxygen/oxygen.h:
+	- registered SimulationServer related classes
+
+	* lib/oxygen/Makefile.am: 
+	- added SimulationServer related files
+
+	* lib/oxygen/simulationserver/netmessage.cpp,
+	* lib/oxygen/simulationserver/netmessage.h,
+	* lib/oxygen/simulationserver/netmessage_c.cpp:
+	- added class NetMessage that is responsible for the segmentation
+	of raw received network data into meaningful messages, stripping
+	any meta message information (e.g. msg length prefixes). It
+	further is responsible to prepare a message to be sent over the
+	network, i.e. to add any necessary meta information.
+
+	* lib/oxygen/simulationserver/netbuffer.cpp, 
+	* lib/oxygen/simulationserver/netbuffer.h:
+	- added class NetBuffer that provides a buffer used to hold the
+	raw network stream of data.
+
+	* lib/oxygen/simulationserver/monitorcontrol.cpp,
+	* lib/oxygen/simulationserver/monitorcontrol.h,
+	* lib/oxygen/simulationserver/monitorcontrol_c.cpp:
+	- added class MonitorControl that manages the communication with
+	monitors in cooperation with the MonitorServer.
+
+	* lib/oxygen/simulationserver/agentcontrol.cpp,
+	* lib/oxygen/simulationserver/agentcontrol.h,
+	*lib/oxygen/simulationserver/agentcontrol_c.cpp:
+	- added class AgentControl, a NetControl node that manages the
+	communication with agents in cooperation with the
+	GameControlServer.
+
+	* lib/oxygen/simulationserver/netcontrol.cpp,
+	* lib/oxygen/simulationserver/netcontrol.h,
+	* lib/oxygen/simulationserver/netcontrol_c.cpp:
+	- added class NetControl, a SimControlNode that accepts and
+	manages a set of network client connections via UDP or TCP.
+
+	* lib/oxygen/simulationserver/simcontrolnode.cpp, 
+	* lib/oxygen/simulationserver/simcontrolnode.h, 
+	* lib/oxygen/simulationserver/simcontrolnode_c.cpp:
+	- added class SimControlNode that defines an interface for classes
+	that are registered to the SimulationServer. The interface defines
+	callbacks for the initial startup of the simulation, it's final
+	shutdown and for different phases of each simulation cycle.
+
+	* lib/oxygen/simulationserver/simulationserver.cpp, 
+	* lib/oxygen/simulationserver/simulationserver.h, 
+	* lib/oxygen/simulationserver/simulationserver_c.cpp:
+	- added class SimulationServer that manages the runloop of a
+	simulation
+
+	* lib/oxygen/monitorserver/monitorserver.cpp, 
+	* lib/oxygen/monitorserver/monitorserver.h:
+	- changed ParseMonitorMessage to accept a const reference to a
+	std::string to avoid a copy
+
+	* lib/zeitgeist/class.cpp: 
+	- fixed some warning messages
+
+2004-04-24  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	- fixed a bug in GameControlServer
+	AgentDisappear(). mAgentMap.erase invalidated the map entry that
+	was passed to RemoveChildReference()
+
+	* lib/oxygen/agentaspect/agentaspect.cpp: 
+	- ws only
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+
+	- fixed some error messages - using typeid base
+	ListChildrenSupportingClass in Update()
+
+	* lib/zeitgeist/core.cpp:
+	- fixed a bug in Core::New; passing a pass to a non Class node
+	resulted in a segfault
+
+2004-04-23  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simspark/bindings.rb, app/rcssmonitor3d/kerosin/bindings.rb:
+	- fixed an error message
+
 2004-04-23  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/kerosin/main.cpp: 
