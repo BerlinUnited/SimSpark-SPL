@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: mousesdl_c.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: mousesdl_c.cpp,v 1.3 2004/04/23 20:55:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 */
 #include "mousesdl.h"
 
-void CLASS(MouseSDL)::DefineClass()
+void
+CLASS(MouseSDL)::DefineClass()
 {
-        DEFINE_BASECLASS(zeitgeist/Base);
+    DEFINE_BASECLASS(InputDeviceSDL);
 }
