@@ -23,6 +23,8 @@ initeffector/initeffector.cpp \
 initeffector/initeffector_c.cpp \
 kickeffector/kickeffector.cpp \
 kickeffector/kickeffector_c.cpp \
+sayeffector/sayeffector.cpp \
+sayeffector/sayeffector_c.cpp \
 objectstate/objectstate.cpp \
 objectstate/objectstate_c.cpp \
 trainercommandparser/trainercommandparser.cpp \
@@ -56,6 +58,8 @@ initeffector/initaction.h \
 initeffector/initeffector.h \
 kickeffector/kickaction.h \
 kickeffector/kickeffector.h \
+sayeffector/sayeffector.h \
+sayeffector/sayaction.h \
 objectstate/objectstate.h \
 trainercommandparser/trainercommandparser.h \
 sexpmonitor/sexpmonitor.h \
