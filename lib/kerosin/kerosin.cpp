@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kerosin.cpp,v 1.8 2004/03/04 13:49:37 rollmark Exp $
+   $Id: kerosin.cpp,v 1.9 2004/03/12 08:53:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,6 @@ Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
     zg.GetCore()->GetRoot()->GetScript()->RunInitScript
         (
          "kerosin.rb",
-         "../../lib/kerosin"
+         "lib/kerosin"
          );
 }
