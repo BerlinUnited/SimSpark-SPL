@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.h,v 1.2 2004/04/11 17:12:22 rollmark Exp $
+   $Id: spark.h,v 1.3 2004/04/25 17:04:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,36 +17,25 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef KEROSIN_SPARK_H
-#define KEROSIN_SPARK_H
+#ifndef SPARK_SPARK_H
+#define SPARK_SPARK_H
 
 #include <zeitgeist/zeitgeist.h>
 #include <kerosin/kerosin.h>
 #include <oxygen/oxygen.h>
+#include <kerosin/renderserver/rendercontrol.h>
+#include <kerosin/inputserver/inputcontrol.h>
 
 namespace spark
 {
+
+/** \class Spark is an application framework for apps that use oxygen
+    and kerosin classes. It provides a default setup of and easy
+    access to all relevant classes. Applications that want to use
+    spark should subclass it and override the given callbacks.
+ */
 class Spark
 {
-public:
-    // define common input constants
-    enum ECmds
-        {
-            CmdTimer    = 1,
-            CmdMouseX   = 2,
-            CmdMouseY   = 3,
-            CmdUp       = 4,
-            CmdDown     = 5,
-            CmdLeft     = 6,
-            CmdRight    = 7,
-            CmdForward  = 8,
-            CmdBackward = 9,
-            CmdQuit     = 10,
-
-            // first user defined input constant
-            CmdUser = 11
-        };
-
 public:
     Spark(const std::string& relPathPrefix);
     virtual ~Spark();
@@ -55,55 +44,14 @@ public:
         before any other spark methods */
     bool Init(int argc, char** argv);
 
-    /** starts the Spark runloop, returns after cmdQuit is
-        processed */
-    void Run();
-
     //
     // user callbacks
 
     /** called once after Spark finished it's init */
     virtual bool InitApp(int argc, char** argv);
 
-    /** process user defined input constants */
-    virtual void ProcessInput(kerosin::InputServer::Input& input);
-
-    /** take user defined action after processing all input events and
-        prior rendering the current frame */
-    virtual void UpdatePreRenderFrame();
-
     //
     // set/get methods
-
-    /** sets the location of the FPS Controller to be used */
-    bool SetFPSController(const std::string& path);
-
-    /** sets the FPSController to be used */
-    void SetFPSController(boost::shared_ptr<oxygen::FPSController> controller);
-
-    /** sets the horizontal mouse sensitivity */
-    void SetHorizontalSensitivity(float s);
-
-    /** returns the horizontal mouse sensitivity */
-    float GetHorizontalSensitivity();
-
-    /** sets the horizontal mouse sensitivity */
-    void SetVerticalSensitivity(float s);
-
-    /** returns the vertical mouse sensitivity */
-    float GetVerticalSensitivity();
-
-    /** returns the last measured timestep */
-    float GetDeltaTime();
-
-    /** returns the total time passed */
-    float GetTime();
-
-    /** returns the total number of rendered frames */
-    int GetFramesRendered();
-
-    /** sets the size of a simstep*/
-    void SetSimStep(float time);
 
     /** returns the zeitgeist instance */
     zeitgeist::Zeitgeist& GetZeitgeist();
@@ -121,48 +69,27 @@ public:
     boost::shared_ptr<oxygen::SceneServer> GetSceneServer();
 
     /** returns the current active Scene */
-    boost::shared_ptr<oxygen::Scene> Spark::GetActiveScene();
+    boost::shared_ptr<oxygen::Scene> GetActiveScene();
 
-protected:
-    /** reads input from the InputServer processes common commands and
-        calls ProcessInput to handle user defined commands
-     */
-    void ReadInput();
+    /** returns the SimulationServer */
+    boost::shared_ptr<oxygen::SimulationServer> GetSimulationServer();
+
+    /** returns the input control node */
+    boost::shared_ptr<kerosin::InputControl> GetInputControl();
+
+    /** returns the render control node */
+    boost::shared_ptr<kerosin::RenderControl> GetRenderControl();
 
 protected:
     boost::shared_ptr<zeitgeist::LogServer> mLogServer;
     boost::shared_ptr<zeitgeist::ScriptServer> mScriptServer;
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
     boost::shared_ptr<oxygen::FPSController> mFPSController;
-    boost::shared_ptr<kerosin::OpenGLServer> mOpenGLServer;
-    boost::shared_ptr<kerosin::InputServer> mInputServer;
-    boost::shared_ptr<kerosin::RenderServer> mRenderServer;
+    boost::shared_ptr<oxygen::SimulationServer> mSimulationServer;
 
     zeitgeist::Zeitgeist mZeitgeist;
     oxygen::Oxygen mOxygen;
     kerosin::Kerosin mKerosin;
-
-    //! the last measured timestep
-    float mDeltaTime;
-
-    //! total time passed
-    float mTime;
-
-    //! total frames rendered
-    int mFramesRendered;
-
-    //! horizontal mouse sensitivity
-    float mHorSens;
-
-    //! vertical mouse sensitivity
-    float mVertSens;
-
-    //! the deltaTime of a single simStep, set to nonzero to force a
-    //fixed simstep
-    float mSimStep;
-
-    //! the summed up deltatimes until a simStep is accumulated
-    float mSumDeltaTime;
 };
 
 } // namespace kerosin
