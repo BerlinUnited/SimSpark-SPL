@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundmodule.h,v 1.2 2003/11/14 14:05:52 fruit Exp $
+   $Id: soundmodule.h,v 1.3 2004/03/22 11:18:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ public:
     SoundModule(SoundServer &inServer) : SoundObject(inServer) {}
     virtual ~SoundModule()      {}
 
-    virtual void Load(const char *inName) = 0;
+    virtual void Load(const std::string& inName) = 0;
     virtual void Load(void *inBuffer, int inSize) = 0;
     virtual void Play() = 0;
 };

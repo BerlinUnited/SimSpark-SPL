@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundserver.h,v 1.5 2003/11/14 14:05:52 fruit Exp $
+   $Id: soundserver.h,v 1.6 2004/03/22 11:18:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #ifndef KEROSIN_SOUNDSERVER_H
 #define KEROSIN_SOUNDSERVER_H
 
-/*      $Id: soundserver.h,v 1.5 2003/11/14 14:05:52 fruit Exp $
+/*      $Id: soundserver.h,v 1.6 2004/03/22 11:18:03 rollmark Exp $
 
         SoundServer
 
@@ -96,9 +96,9 @@ public:
 
     float                           GetCPU();
 
-    boost::shared_ptr<SoundEffect>  LoadEffect(const char *inName);
-    boost::shared_ptr<SoundStream>  LoadStream(const char *inName);
-    boost::shared_ptr<SoundModule>  LoadModule(const char *inName);
+    boost::shared_ptr<SoundEffect>  LoadEffect(const std::string& inName);
+    boost::shared_ptr<SoundStream>  LoadStream(const std::string& inName);
+    boost::shared_ptr<SoundModule>  LoadModule(const std::string& inName);
 
     //
     // Members
@@ -108,7 +108,7 @@ private:
     void    Reset();
 
     //! a helper function which wraps some common loading code (trivial rejects, etc..)
-    bool    LoadSoundObject(const char *inName, const TSoundHashMap& map, boost::shared_ptr<SoundObject> &soundObject) const;
+    bool    LoadSoundObject(const std::string& inName, const TSoundHashMap& map, boost::shared_ptr<SoundObject> &soundObject) const;
 
     boost::shared_ptr<SoundSystem>  mSoundSystem;
 

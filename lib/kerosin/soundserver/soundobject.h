@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundobject.h,v 1.2 2003/11/14 14:05:52 fruit Exp $
+   $Id: soundobject.h,v 1.3 2004/03/22 11:18:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ public:
     SoundObject(SoundServer &inServer) : mServer(inServer), mFileName("<null>") {}
     virtual ~SoundObject()      {}
 
-    void SetFileName(const char *inName)
+    void SetFileName(const std::string& inName)
     {       mFileName = inName;     }
 
-    const char* GetFileName() const
-    {       return mFileName.c_str();       }
+    const std::string&  GetFileName() const
+    {       return mFileName;       }
 
 protected:
     // this is a reference to the server the sound belongs to

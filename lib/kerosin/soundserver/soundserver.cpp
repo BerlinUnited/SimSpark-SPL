@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundserver.cpp,v 1.3 2004/02/14 17:32:03 fruit Exp $
+   $Id: soundserver.cpp,v 1.4 2004/03/22 11:18:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ float SoundServer::GetCPU()
         return mSoundSystem->GetCPU();
 }
 
-boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const char* inName)
+boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const string& inName)
 {
         shared_ptr<SoundObject> soundObject;
 
@@ -99,7 +99,7 @@ boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const char* inName)
 
         // now, we want to load the file from our fileserver
         shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        scoped_ptr<salt::RFile>         file(fileServer->Open(inName));
+        scoped_ptr<salt::RFile>         file(fileServer->Open(inName.c_str()));
 
         if(file.get() == NULL)
         {
@@ -120,7 +120,7 @@ boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const char* inName)
         return effect;
 }
 
-boost::shared_ptr<SoundStream> SoundServer::LoadStream(const char* inName)
+boost::shared_ptr<SoundStream> SoundServer::LoadStream(const string& inName)
 {
         GetLog()->Debug() << "SoundServer::LoadStream " << inName << endl;
         shared_ptr<SoundObject> soundObject;
@@ -139,7 +139,7 @@ boost::shared_ptr<SoundStream> SoundServer::LoadStream(const char* inName)
 
         // now, we want to load the file from our fileserver
         shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        scoped_ptr<salt::RFile>         file(fileServer->Open(inName));
+        scoped_ptr<salt::RFile>         file(fileServer->Open(inName.c_str()));
 
         if(file.get() == NULL)
         {
@@ -160,7 +160,7 @@ boost::shared_ptr<SoundStream> SoundServer::LoadStream(const char* inName)
         return stream;
 }
 
-boost::shared_ptr<SoundModule> SoundServer::LoadModule(const char* inName)
+boost::shared_ptr<SoundModule> SoundServer::LoadModule(const string& inName)
 {
         shared_ptr<SoundObject> soundObject;
 
@@ -178,7 +178,7 @@ boost::shared_ptr<SoundModule> SoundServer::LoadModule(const char* inName)
 
         // now, we want to load the file from our fileserver
         shared_ptr<FileServer> fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        scoped_ptr<salt::RFile> file(fileServer->Open(inName));
+        scoped_ptr<salt::RFile> file(fileServer->Open(inName.c_str()));
 
         if(file.get() == NULL)
         {
@@ -212,7 +212,7 @@ void SoundServer::Reset()
         mStreams.clear();
 }
 
-bool SoundServer::LoadSoundObject(const char *inName, const TSoundHashMap& map, boost::shared_ptr<SoundObject> &soundObject) const
+bool SoundServer::LoadSoundObject(const std::string& inName, const TSoundHashMap& map, boost::shared_ptr<SoundObject> &soundObject) const
 {
         // if we have no sound system loaded, then we can't load a sound
         if (mSoundSystem.get() == NULL)
