@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.1 2004/04/25 16:56:27 rollmark Exp $
+   $Id: inputcontrol.cpp,v 1.2 2004/12/06 08:47:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ InputControl::InputControl()
     mHorSens = 0.3;
     mVertSens = 0.3;
     mAdvanceTime = true;
+    mMouseLook = false;
 }
 
 InputControl::~InputControl()
@@ -101,6 +102,7 @@ void InputControl::OnLink()
     scriptServer->CreateVariable("Command.Backward", CmdBackward);
     scriptServer->CreateVariable("Command.Up",       CmdUp);
     scriptServer->CreateVariable("Command.Down",     CmdDown);
+    scriptServer->CreateVariable("Command.Mouselook", CmdMouseLook);
 
     mInputServer = shared_dynamic_cast<InputServer>
         (GetCore()->Get("/sys/server/input"));
@@ -169,16 +171,26 @@ void InputControl::StartCycle()
                     GetSimulationServer()->Quit();
                     break;
 
+                case CmdMouseLook:
+                    mMouseLook = (input.data.l == 1);
+                    break;
+
                 case CmdTimer:
                     mDeltaTime = (float) input.data.l/1000.0f;
                     break;
 
                 case CmdMouseX:
-                    mFPSController->AdjustHAngle(mHorSens*(float)input.data.l);
+                    if (mMouseLook)
+                        {
+                            mFPSController->AdjustHAngle(mHorSens*(float)input.data.l);
+                        }
                     break;
 
                 case CmdMouseY:
-                    mFPSController->AdjustVAngle(mVertSens*(float)input.data.l);
+                    if (mMouseLook)
+                        {
+                            mFPSController->AdjustVAngle(mVertSens*(float)input.data.l);
+                        }
                     break;
 
                 case CmdUp:
