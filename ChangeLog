@@ -1,6 +1,15 @@
 2003-09-11	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./configure.ac
+	* ./lib/kerosin/openglserver/openglserver.cpp
+	* ./lib/kerosin/renderserver/renderserver_c.cpp
+	* ./lib/kerosin/textureserver/textureserver.h
+	* ./utility/glextgen/script/glbackend.rb
+	More hacking to try to get it to compile
+
+2003-09-11	Tom Howard	<tomhoward@users.sf.net>
+
+	* ./configure.ac
 	* ./lib/kerosin/Makefile.am
 	* ./lib/oxygen/agentaspect/collisionperceptor.h
 	* ./lib/oxygen/agentaspect/effector.h

@@ -37,7 +37,7 @@ module GLExtGen
             file.print "#line 37 \"utility/glextgen/script/glbackend.rb\"\n"
 		    file.print "#ifdef ", item[0], "\n"
 		    item[1].functionList.each { |function|
-			file.print "extern ", frontEnd.procize(function), " ", function, ";\n"
+			file.print "extern ", frontEnd.procize(function), " fun_", function, ";\n"
 		    }
 		    file.print "#endif //", item[0], "\n\n"
 		end
@@ -50,7 +50,7 @@ module GLExtGen
             file.print "#line 50 \"utility/glextgen/script/glbackend.rb\"\n"
 		    file.print "#ifdef ", item[0], "\n"
 		    item[1].functionList.each { |function|
-			file.print "	", frontEnd.procize(function), " ", function, ";\n"
+			file.print "	", frontEnd.procize(function), " fun_", function, ";\n"
 		    }
 		    file.print "#endif //", item[0], "\n\n"
 		end
@@ -227,7 +227,7 @@ module GLExtGen
             file.print "#line 226 \"utility/glextgen/script/glbackend.rb\"\n"
 		    file.print "#ifdef ", item[0], "\n"
 		    item[1].functionList.each { |function|
-			file.print "		funPtr->", function, " = ", function, ";\n"
+			file.print "		funPtr->fun_", function, " = ", function, ";\n"
 		    }
 		    file.print "#endif //", item[0], "\n\n"
 		end

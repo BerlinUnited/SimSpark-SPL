@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: textureserver.h,v 1.4 2003/08/29 07:04:58 fruit Exp $
+   $Id: textureserver.h,v 1.5 2003/09/11 06:07:21 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,21 @@
 #define KEROSIN_TEXTURESERVER_H
 
 #ifdef HAVE_CONFIG_H
+#ifdef PACKAGE_BUGREPORT
+#undef PACKAGE_BUGREPORT
+#endif
+#ifdef PACKAGE_NAME
+#undef PACKAGE_NAME
+#endif
+#ifdef PACKAGE_STRING
+#undef PACKAGE_STRING
+#endif
+#ifdef PACKAGE_TARNAME
+#undef PACKAGE_TARNAME
+#endif
+#ifdef PACKAGE_VERSION
+#undef PACKAGE_VERSION
+#endif
 #include <config.h>
 #endif
 

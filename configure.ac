@@ -47,6 +47,8 @@ GLDIR=`dirname "$GLDIR"`
 AC_SUBST([GLDIR], [$GLDIR])
 AC_CHECK_FILE([$GLDIR/glx.h])
 
+AC_CHECK_LIB(gllib,glEnable)
+
 AC_CHECK_HEADER([boost/version.hpp],,
   AC_MSG_ERROR([boost library not found. Please specify the location 
 of the boost header directory using the CPPFLAGS environment variable]))
