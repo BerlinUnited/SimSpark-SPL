@@ -53,6 +53,7 @@ agentaspect/createeffector_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
 gamecontrolserver/actionobject_c.cpp \
+gamecontrolserver/baseparser.cpp \
 gamecontrolserver/baseparser_c.cpp \
 gamecontrolserver/gamecontrolserver.cpp \
 gamecontrolserver/gamecontrolserver_c.cpp \
