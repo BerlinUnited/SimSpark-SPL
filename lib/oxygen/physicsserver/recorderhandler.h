@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: recorderhandler.h,v 1.1.2.1 2004/01/25 11:47:47 rollmark Exp $
+   $Id: recorderhandler.h,v 1.1.2.2 2004/01/29 20:00:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public:
     (boost::shared_ptr<Collider> collidee, dContact& contact);
 
     /** removes all stored collisions from the recorder */
-    void Reset();
+    void Clear();
 
     /** constructs a list of nodes that are parent nodes of the stored
         collidee nodes and are an instance of or are derived from the
