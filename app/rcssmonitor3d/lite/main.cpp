@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.7 2004/03/12 16:49:50 rollmark Exp $
+   $Id: main.cpp,v 1.8 2004/03/12 17:27:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,9 +29,10 @@
 #include <oxygen/oxygen.h>
 #include <sstream>
 #include <soccertypes.h>
+#include <monitorlib.h>
 #include <monitorparser.h>
+#include <commserver.h>
 #include "glserver.h"
-#include "commserver.h"
 
 using namespace std;
 using namespace boost;
@@ -86,7 +87,7 @@ GameState gGameState;
 GameParam gGameParam;
 
 // the parser instance
-MonitorParser gParser;
+shared_ptr<MonitorParser> gParser;
 
 // sphere types description
 struct SphereType
@@ -484,7 +485,7 @@ void idle(void)
         )
         {
             // parse the received expressions
-            gParser.ParsePredicates(*predicates,gGameState,
+            gParser->ParsePredicates(*predicates,gGameState,
                                     gGameParam,gExprList);
         }
 
@@ -666,8 +667,8 @@ int main(int argc, char* argv[])
   //init oxygen
   oxygen::Oxygen kOxygen(zg);
 
-  // register rcsssmonitor3d classes to zeitgeist
-  zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "rcssmonitor3d/");
+  // init monitor lib
+  MonitorLib ml(zg);
 
   // run init script
   zg.GetCore()->GetScriptServer()->RunInitScript
@@ -691,16 +692,27 @@ int main(int argc, char* argv[])
 
   // init the commserver
   gCommServer = shared_dynamic_cast<CommServer>
-      (zg.GetCore()->New("rcssmonitor3d/CommServer"));
+      (zg.GetCore()->Get("/sys/server/comm"));
 
   if (gCommServer.get() == 0)
       {
-          zg.GetCore()->GetLogServer()->Normal()
-              << "ERROR: cannot create CommServer." << endl;
+          zg.GetCore()->GetLogServer()->Error()
+              << "ERROR: CommServer not found\n";
           return 1;
       }
 
   gCommServer->Init("SexpParser",gSoccerServer,gPort);
+
+  // init the parser
+  gParser = shared_dynamic_cast<MonitorParser>
+      (zg.GetCore()->Get("/sys/server/parser"));
+
+  if (gParser.get() == 0)
+      {
+          zg.GetCore()->GetLogServer()->Error()
+              << "ERROR: MonitorParser not found\n";
+          return 1;
+      }
 
   // enter glut main loop
   glutMainLoop();
