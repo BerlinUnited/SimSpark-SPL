@@ -80,7 +80,7 @@ def addAgent(aspectPath)
   driveEffector.setConsumption(120 * 75.0 * 12.0 * 4);
 
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
-  kickEffector.setForceFactor(22.0)
+  kickEffector.setForceFactor(2.2)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
   kickEffector.setSteps(10)
   kickEffector.setMaxPower(100.0)
