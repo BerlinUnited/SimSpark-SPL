@@ -22,19 +22,23 @@ sparkAddFPSCamera(
 
 # create custom materials
 material = new('kerosin/MaterialSolid', $serverPath+'material/matYellow');
-material.setColor(0.8,0.8,0.2)
+material.setDiffuse(1.0,1.0,0.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matBlue');
-material.setColor(0.2,0.2,1.0)
+material.setDiffuse(0.0,0.0,1.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matWhite');
-material.setColor(1.0,1.0,1.0)
+material.setDiffuse(1.0,1.0,1.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matRed');
-material.setColor(1.0,0.0,0.0)
+material.setDiffuse(1.0,0.0,0.0,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matRedGlow');
+material.setDiffuse(1.0,0.0,0.0,1.0)
+marerial.setEmission(0.5,0.0,0.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGreen');
-material.setColor(0.1,0.5,0.1)
+material.setDiffuse(0.1,0.5,0.1,1.0)
 
 
 

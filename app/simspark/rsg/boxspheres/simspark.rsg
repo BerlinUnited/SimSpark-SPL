@@ -2,21 +2,41 @@
 
 (RubySceneGraph 0 1)
 (
+ ; add lights
+ (Transform
+  .setLocalPos -10 50 10
+  (Light
+   .setDiffuse 1.0 1.0 1.0 1.0
+   .setSpecular 0.1 0.1 0.1 1.0
+   .setAmbient 0.5 0.5 0.5 1.0
+   )
+  )
+
 ; create the arena
  (Transform
   .setLocalPos 0 -1 0
   .importScene rsg/boxspheres/arena.rsg 100 100 50 matGreen
   )
 
-; add two boxes
+; add boxes
  (Transform
   .setLocalPos -8 30 0
   .importScene rsg/boxspheres/box.rsg 3 4 5 130 matYellow
   )
 
  (Transform
+  .setLocalPos -4 20 0
+  .importScene rsg/boxspheres/box.rsg 5 5 5 200 matBlue
+  )
+
+ (Transform
   .setLocalPos -7 15 0
-  .importScene rsg/boxspheres/box.rsg 2 2 2 30 matRed
+  .importScene rsg/boxspheres/box.rsg 2 2 2 30 matRedGlow
+  (Light
+   .setDiffuse 0.5 0 0 1
+   .setSpecular 0.2 0.2 0.2 1
+   .setAmbient 0 0 0 1.0
+   )
   )
 
 ; add two layer of spheres
@@ -28,4 +48,4 @@
   .setLocalPos 0 2 0.0
   .importScene rsg/boxspheres/layer.rsg 1 50
   )
- )
+)
