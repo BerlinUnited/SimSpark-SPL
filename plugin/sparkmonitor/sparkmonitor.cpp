@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.6 2004/12/21 19:42:40 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.7 2004/12/22 16:10:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,20 +65,56 @@ void SparkMonitor::ParseMonitorMessage(const std::string& data)
 {
 }
 
-string SparkMonitor::GetMonitorInfo(const PredicateList& /*pList*/)
+string SparkMonitor::GetMonitorInfo(const PredicateList& pList)
 {
     stringstream ss;
     mFullState = false;
+    DescribeCustomPredicates(ss,pList);
     DescribeActiveScene(ss);
     return ss.str();
 }
 
-string SparkMonitor::GetMonitorHeaderInfo(const PredicateList& /*pList*/)
+string SparkMonitor::GetMonitorHeaderInfo(const PredicateList& pList)
 {
     stringstream ss;
     mFullState = true;
+    DescribeCustomPredicates(ss,pList);
     DescribeActiveScene(ss);
     return ss.str();
+}
+
+void SparkMonitor::DescribeCustomPredicates(stringstream& ss,const PredicateList& pList)
+{
+    ss << "(";
+
+    for (
+         PredicateList::TList::const_iterator iter = pList.begin();
+         iter != pList.end();
+         ++iter
+         )
+        {
+            const Predicate& pred = (*iter);
+
+            ss << "(";
+            ss << pred.name;
+
+            const ParameterList& paramList = pred.parameter;
+            ParameterList::TVector::const_iterator pIter = paramList.begin();
+
+            std::string param;
+            while (
+                   (pIter != paramList.end()) &&
+                   (paramList.AdvanceValue(pIter, param))
+                   )
+                {
+                    ss << " ";
+                    ss << param;
+                }
+
+            ss << ")";
+        }
+
+    ss << ")";
 }
 
 void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)

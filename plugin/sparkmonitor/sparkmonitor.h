@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.h,v 1.3 2004/12/21 19:42:40 rollmark Exp $
+   $Id: sparkmonitor.h,v 1.4 2004/12/22 16:10:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@ protected:
     virtual void OnLink();
     virtual void OnUnlink();
 
+    void DescribeCustomPredicates(std::stringstream& ss,const oxygen::PredicateList& pList);
     void DescribeActiveScene(std::stringstream& ss);
     void DescribeScene(std::stringstream& ss,
                        boost::shared_ptr<oxygen::BaseNode> node);
