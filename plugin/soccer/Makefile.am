@@ -33,7 +33,6 @@ sexpmonitor/sexpmonitor.h \
 sexpmonitor/sexpmonitor_c.cpp \
 soccerbase/soccerbase.cpp \
 soccerbase/soccerbase.h \
-soccerbase/soccerbase_c.cpp \
 soccercontrolaspect/soccercontrolaspect.cpp \
 soccercontrolaspect/soccercontrolaspect.h \
 soccercontrolaspect/soccercontrolaspect_c.cpp \
