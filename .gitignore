@@ -201,6 +201,12 @@ lib/zeitgeist/telnetserver/.deps
 lib/zeitgeist/telnetserver/.dirstamp
 plugin/Makefile
 plugin/Makefile.in
+plugin/collisionperceptor/*.la
+plugin/collisionperceptor/*.lo
+plugin/collisionperceptor/.deps
+plugin/collisionperceptor/.libs
+plugin/collisionperceptor/Makefile
+plugin/collisionperceptor/Makefile.in
 plugin/filesystemrar/.deps
 plugin/filesystemrar/.libs
 plugin/filesystemrar/Makefile
