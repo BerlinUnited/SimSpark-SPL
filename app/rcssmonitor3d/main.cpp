@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.3 2004/01/20 19:13:16 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.4 2004/01/21 15:56:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -189,6 +189,19 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
 //------------------------------------------------------------------------
 void display(void)
 {
+   // soccer field size
+   const float fx = 52.5;
+   const float fz = 34.0;
+   const float fy = 0.1;
+
+   // goal box size
+   const float goalWidth = 7.0;
+   const float goalDepth = 2.0;
+   const float goalHeight = 1.80;
+
+   const Vector3f szGoal1(-goalDepth,goalHeight,goalWidth);
+   const Vector3f szGoal2(goalDepth,goalHeight,goalWidth);
+
    // grid constants
    const GLfloat groundColor[4] = {0.0f, 0.9f, 0.0f, 1.0f};
 
@@ -203,7 +216,9 @@ void display(void)
 
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
 
-   gGLServer.DrawGround();
+   gGLServer.DrawGround(Vector3f(-fx/2,fy,-fz/2),fx,fz);
+   gGLServer.DrawWireBox(Vector3f(-fx/2,fy,-goalWidth/2.0),szGoal1);
+   gGLServer.DrawWireBox(Vector3f(fx/2,fy,-goalWidth/2.0),szGoal2);
 
    // check for positions update
    gCommServer->GetMessage();
