@@ -79,6 +79,10 @@ module GLExtGen
 	    print "Generating 'glextensionreg.h'\n"
 	    File.open("glextensionreg.h", "w")	{ |f|
 		copyFile (f, "tocopy/header_begin.txt")
+
+		if $namespace != nil
+		    f.print "\nnamespace ", $namespace, " {\n"
+		end
 		
 		### here we write out a struct with all possible function pointers
 		f.print "struct GLExtGenFunctionPointers\n{\n"
@@ -134,7 +138,11 @@ module GLExtGen
 		f.print winGuardOn
 		writeExternFunctionPointers (frontEnd, f, wglArray)
 		f.print winGuardOff
-		
+
+		if $namespace != nil
+		    f.print "\n} // end ", $namespace, "\n"
+		end
+
 		copyFile (f, "tocopy/header_end.txt")
 	    }
 	end
@@ -211,8 +219,12 @@ module GLExtGen
 	def generateCPPFile (frontEnd, glArray, wglArray, glXArray)
 	    print "Generating 'glextensionreg.cpp'\n"
 	    File.open("glextensionreg.cpp", "w")	{ |f|
+		if $namespace != nil
+		    f.print "using ", $namespace, ";\n\n"
+		end
+
 		copyFile (f, "tocopy/cpp_begin.txt")
-		
+
 		### create global function pointers
 		writeFunctionPointers (frontEnd, f, glArray)
 		f.print winGuardOn
