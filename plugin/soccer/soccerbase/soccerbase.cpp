@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.1.2.2 2004/02/06 10:03:07 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.1.2.3 2004/02/06 10:55:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,18 +21,21 @@
 */
 #include "soccerbase.h"
 #include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/spherecollider.h>
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
+#include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/ball/ball.h>
 
 using namespace boost;
+using namespace zeitgeist;
 using namespace oxygen;
 
 bool
-SoccerBase::GetSceneServer(const BaseNode& base,
+SoccerBase::GetSceneServer(const Leaf& base,
                            shared_ptr<SceneServer>& scene_server)
 {
     scene_server = shared_static_cast<SceneServer>
@@ -50,7 +53,7 @@ SoccerBase::GetSceneServer(const BaseNode& base,
 }
 
 bool
-SoccerBase::GetTransformParent(const BaseNode& base,
+SoccerBase::GetTransformParent(const Leaf& base,
                                shared_ptr<Transform>& transform_parent)
 {
     transform_parent = shared_dynamic_cast<Transform>
@@ -68,7 +71,7 @@ SoccerBase::GetTransformParent(const BaseNode& base,
 
 
 bool
-SoccerBase::GetAgentState(const BaseNode& base,
+SoccerBase::GetAgentState(const Leaf& base,
                           shared_ptr<AgentState>& agent_state)
 {
     shared_ptr<Transform> parent;
@@ -92,7 +95,25 @@ SoccerBase::GetAgentState(const BaseNode& base,
 }
 
 bool
-SoccerBase::GetActiveScene(const BaseNode& base,
+SoccerBase::GetGameState(const Leaf& base,
+                         shared_ptr<GameStateAspect>& game_state)
+{
+    game_state = shared_dynamic_cast<GameStateAspect>
+        (base.GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
+
+    if (game_state.get() == 0)
+        {
+            base.GetLog()->Error()
+                << "Error: (SoccerBase: " << base.GetName()
+                << ") found no GameStateAspect\n";
+            return false;
+        }
+
+    return true;
+}
+
+bool
+SoccerBase::GetActiveScene(const Leaf& base,
                            shared_ptr<Scene>& active_scene)
 {
     shared_ptr<SceneServer> sceneServer;
@@ -113,7 +134,7 @@ SoccerBase::GetActiveScene(const BaseNode& base,
 }
 
 bool
-SoccerBase::GetBody(const BaseNode& base, shared_ptr<Body>& body)
+SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
 {
     shared_ptr<Transform> parent;
     if (! GetTransformParent(base,parent))
@@ -135,7 +156,7 @@ SoccerBase::GetBody(const BaseNode& base, shared_ptr<Body>& body)
 }
 
 bool
-SoccerBase::GetBall(const BaseNode& base, shared_ptr<Ball>& ball)
+SoccerBase::GetBall(const Leaf& base, shared_ptr<Ball>& ball)
 {
     shared_ptr<Scene> scene;
     if (! GetActiveScene(base,scene))
@@ -158,7 +179,7 @@ SoccerBase::GetBall(const BaseNode& base, shared_ptr<Ball>& ball)
 }
 
 bool
-SoccerBase::GetBallBody(const BaseNode& base, shared_ptr<Body>& body)
+SoccerBase::GetBallBody(const Leaf& base, shared_ptr<Body>& body)
 {
     shared_ptr<Scene> scene;
     if (! GetActiveScene(base,scene))
@@ -180,6 +201,29 @@ SoccerBase::GetBallBody(const BaseNode& base, shared_ptr<Body>& body)
    return true;
 }
 
+bool
+SoccerBase::GetBallCollider(const zeitgeist::Leaf& base,
+                boost::shared_ptr<oxygen::SphereCollider>& sphere)
+{
+    shared_ptr<Scene> scene;
+    if (! GetActiveScene(base,scene))
+        {
+            return false;
+        }
+
+   sphere = shared_dynamic_cast<SphereCollider>
+        (base.GetCore()->Get(scene->GetFullPath() + "Ball/geometry"));
+
+   if (sphere.get() == 0)
+       {
+            base.GetLog()->Error()
+                << "ERROR: (SoccerBase: " << base.GetName()
+                << ") Ball got no SphereCollider node\n";
+            return false;
+       }
+
+   return true;
+}
 
 salt::Vector3f
 SoccerBase::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
