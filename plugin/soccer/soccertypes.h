@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccertypes.h,v 1.3 2004/04/20 14:48:42 fruit Exp $
+   $Id: soccertypes.h,v 1.4 2004/04/23 15:25:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ enum TPlayMode
     PM_BeforeKickOff,
     PM_KickOff_Left,
     PM_KickOff_Right,
+    PM_KickOff,                /*!< kick_off:          no real play mode. kick off for a random team */
     PM_PlayOn,
     PM_KickIn_Left,
     PM_KickIn_Right,
@@ -53,6 +54,7 @@ enum TPlayMode
 #define STR_PM_BeforeKickOff "BeforeKickOff"
 #define STR_PM_KickOff_Left "KickOff_Left"
 #define STR_PM_KickOff_Right "KickOff_Right"
+#define STR_PM_KickOff "KickOff"
 #define STR_PM_PlayOn "PlayOn"
 #define STR_PM_KickIn_Left "KickIn_Left"
 #define STR_PM_KickIn_Right "KickIn_Right"
