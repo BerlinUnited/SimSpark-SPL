@@ -96,12 +96,12 @@ def addBall(x,y,z)
   ball.setLocalPos(x,y,z)
 
   physics = new('kerosin/Body', path+'physics')
-  physics.setMass(0.4)
+  physics.setMass(getSoccerVar('BallMass'))
 
   geomPath = path+'geometry/'
 
   geometry = new('kerosin/SphereCollider', geomPath)
-  geometry.setRadius(0.111)
+  geometry.setRadius(getSoccerVar('BallRadius'))
 
   new('kerosin/RecorderHandler', geomPath+'recorder')
   new('kerosin/ContactJointHandler', geomPath+'contact')
@@ -173,6 +173,10 @@ addSoccerVar('BorderSize', 4.0)
 addSoccerVar('AgentMass', 75.0)
 addSoccerVar('AgentRadius',  0.3)
 addSoccerVar('AgentMaxSpeed', 10.0)
+
+# ball parameters
+addSoccerVar('BallRadius', 0.111)
+addSoccerVar('BallMass',0.4)
 
 #
 # mount a standard file system
