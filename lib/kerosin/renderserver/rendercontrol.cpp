@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: rendercontrol.cpp,v 1.2 2004/12/22 16:05:30 rollmark Exp $
+   $Id: rendercontrol.cpp,v 1.3 2004/12/22 16:29:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,10 +70,6 @@ void RenderControl::RenderCustom()
     // get list of registered CustomMonitor objects
     TLeafList customList;
     ListChildrenSupportingClass<CustomRender>(customList);
-
-    std::cerr << GetFullPath() << " " << mChildren.size() << std::endl;
-    std::cerr << "nnn " << GetName() << std::endl;
-    std::cerr << "RenderControl::RenderCustom " << customList.size() << std::endl;
 
     for (
          TLeafList::iterator iter = customList.begin();
