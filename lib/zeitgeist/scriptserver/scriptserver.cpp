@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.18 2004/04/22 14:38:51 fruit Exp $
+   $Id: scriptserver.cpp,v 1.19 2004/04/23 15:30:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -241,6 +241,44 @@ ScriptServer::~ScriptServer()
 {
 }
 
+void
+ScriptServer::UpdateCachedAllNodes()
+{
+    // build list of all nodes, searching recursively
+    TLeafList leaves;
+#if 1
+    if (shared_ptr<Leaf> root = GetParent().lock())
+    {
+        if (root)
+        {
+            std::cerr << "server root " << root->GetName() << "\n";
+            std::cerr << "UpdateCached all ChildNodes\n";
+            shared_ptr<Leaf> blah = make_shared(GetParent());
+            blah->GetChildrenSupportingClass("Leaf",leaves,true);
+        }
+    }
+#else
+//     shared_ptr<Leaf> root = GetCore()->GetRoot();
+//     std::cerr << "my name " << this->GetName() << "\n";
+//     std::cerr << "this " << this << "\n";
+//     root->GetChildrenSupportingClass("Leaf",leaves,true);
+//    shared_ptr<Class> markus = shared_static_cast<Class>(GetCore()->Get("/classes/zeitgeist/ClassClass"));
+//    std::cerr << "classclass name " << markus->GetCore().get() << "\n";
+
+#endif
+
+    // update all Leaves found
+    for (TLeafList::iterator iter = leaves.begin();
+         iter != leaves.end();
+         ++iter
+        )
+    {
+        shared_ptr<Leaf> leaf = shared_static_cast<Leaf>(*iter);
+        std::cerr << "UpdateCached: " << leaf->GetName() << "\n";
+        leaf->UpdateCached();
+    }
+}
+
 bool
 ScriptServer::Run(shared_ptr<salt::RFile> file)
 {
@@ -253,7 +291,9 @@ ScriptServer::Run(shared_ptr<salt::RFile> file)
     file->Read(buffer.get(), file->Size());
     buffer[file->Size()] = 0;
 
-    return Eval (buffer.get());
+    bool ok = Eval (buffer.get());
+    UpdateCachedAllNodes();
+    return ok;
 }
 
 bool
