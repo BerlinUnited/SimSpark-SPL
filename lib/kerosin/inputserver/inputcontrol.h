@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.h,v 1.2 2004/12/06 08:45:51 rollmark Exp $
+   $Id: inputcontrol.h,v 1.3 2004/12/31 11:02:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,11 +30,10 @@ class FPSController;
 
 namespace kerosin
 {
-/** \class InputControl is a SimControlNode that processes any
-    pending input events from the InputServer at the begin of each
-    simulation cycle. It defines and handles a set of default events
-    and can be customized by overriding the ProcessInput callback in
-    derived classes.
+/** \class InputControl is a SimControlNode that processes any pending
+    input events from the InputServer at the begin of each simulation
+    cycle. It defines and handles a set of default events and can be
+    customized by registering InputItems to it.
 
     If set, InputControl disables the automatic time stepping of the
     SimulationServer and steps the simulation using the real time
@@ -72,9 +71,6 @@ public:
     /** sets the FPSController to be used */
     void SetFPSController(boost::shared_ptr<oxygen::FPSController> controller);
 
-    /** override to process user defined input constants */
-    virtual void ProcessInput(kerosin::InputServer::Input& input);
-
     /** sets the horizontal mouse sensitivity */
     void SetHorizontalSensitivity(float s);
 
@@ -108,6 +104,11 @@ public:
     /** processes pending input events at the start of each simulation
         cycle */
     virtual void StartCycle();
+
+    /** This function creates an instance of class 'inputItem' and
+        adds it as a child node below this control node
+     */
+    bool RegisterInputItem(const std::string& inputItem, const std::string& name);
 
 protected:
     virtual void OnLink();

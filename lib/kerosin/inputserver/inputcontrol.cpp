@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.3 2004/12/22 16:02:12 rollmark Exp $
+   $Id: inputcontrol.cpp,v 1.4 2004/12/31 11:02:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "inputcontrol.h"
+#include "inputitem.h"
 #include <oxygen/simulationserver/simulationserver.h>
 #include <oxygen/sceneserver/fpscontroller.h>
 #include <zeitgeist/logserver/logserver.h>
@@ -144,10 +145,6 @@ float InputControl::GetVerticalSensitivity()
     return mVertSens;
 }
 
-void InputControl::ProcessInput(kerosin::InputServer::Input& /*input*/)
-{
-}
-
 void InputControl::InitSimulation()
 {
     if (mAdvanceTime)
@@ -242,8 +239,19 @@ void InputControl::StartCycle()
                     break;
 
                 default:
-                    // process a user defined command
-                    ProcessInput(input);
+                    // pass unknown events on to the registered InputItems
+                    TLeafList items;
+                    ListChildrenSupportingClass<InputItem>(items);
+
+                    for (
+                         TLeafList::iterator iter = items.begin();
+                         iter != items.end();
+                         ++iter
+                         )
+                        {
+                            shared_static_cast<InputItem>(*iter)
+                                ->ProcessInput(input);
+                        }
                     break;
                 }
         }
@@ -270,8 +278,39 @@ bool InputControl::GetAdvanceTime()
     return mAdvanceTime;
 }
 
+bool InputControl::RegisterInputItem(const string& inputItemName, const string& name)
+{
+    // check if a input item of the requested type was already created
+    shared_ptr<InputItem> inputItem =
+        shared_dynamic_cast<InputItem>(GetChildOfClass(inputItemName));
 
+    if (inputItem.get() != 0)
+    {
+        return true;
+    }
 
+    // create the input item
+    inputItem = shared_dynamic_cast<InputItem>(GetCore()->New(inputItemName));
 
+    if (inputItem.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (InputControl) Cannot create input item '"
+                          << inputItemName << "'" << std::endl;
+        return false;
+    }
 
+    // link the input item in the hierarchy
+    inputItem->SetName(name);
 
+    if (! AddChildReference(inputItem))
+        {
+            GetLog()->Error() << "ERROR: (InputControl) Cannot link the input item '"
+                              << inputItemName << "' to the hierarchy\n";
+            return false;
+        }
+
+    GetLog()->Debug() << "(InputControl) Registered input item '"
+                      << inputItemName << "'\n";
+
+    return true;
+}
