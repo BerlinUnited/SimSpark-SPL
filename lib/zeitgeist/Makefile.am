@@ -2,8 +2,6 @@ pkglib_LTLIBRARIES = libzeitgeist.la libzeitgeist_debug.la
 AM_CPPFLAGS = -I${top_srcdir}/lib
 
 libzeitgeist_la_SOURCES = \
-base.cpp \
-base_c.cpp \
 class.cpp \
 core.cpp \
 corecontext.cpp \
@@ -26,8 +24,6 @@ scriptserver/scriptserver_c.cpp
 libzeitgeist_la_CXXFLAGS = -O2
 
 libzeitgeist_debug_la_SOURCES = \
-base.cpp \
-base_c.cpp \
 class.cpp \
 core.cpp \
 corecontext.cpp \
@@ -50,7 +46,6 @@ scriptserver/scriptserver_c.cpp
 libzeitgeist_debug_la_CXXFLAGS = -O -g
 
 nobase_pkginclude_HEADERS = \
-base.h \
 class.h \
 class_m.h \
 core.h \
