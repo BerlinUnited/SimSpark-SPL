@@ -4,7 +4,9 @@ fileclasses.cpp  \
 frustum.cpp  \
 matrix.cpp  \
 path.cpp  \
-plane.cpp
+plane.cpp \
+gcc/sharedlibrary.cpp
+
 
 if DEBUG
 pkglib_LTLIBRARIES = libsalt_debug.la
@@ -21,15 +23,12 @@ bounds.h   \
 fileclasses.h  \
 gmath.h   \
 path.h   \
-ptr.h \
-quadlink.h \
 salt.h \
 tvector.h \
 defines.h \
 frustum.h \
 matrix.h \
 plane.h \
-ptrmanager.h \
 rect.h \
 sharedlibrary.h \
 vector.h
