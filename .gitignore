@@ -33,6 +33,7 @@ app/inputtest/Makefile
 app/inputtest/Makefile.in
 app/inputtest/inputtest
 app/inputtest/sys
+app/fonttest/data/font/VeraMono.ttf
 app/rcssmonitor3d/.deps
 app/rcssmonitor3d/.libs
 app/rcssmonitor3d/Makefile
