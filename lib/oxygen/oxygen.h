@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.17 2004/04/25 16:53:38 rollmark Exp $
+   $Id: oxygen.h,v 1.18 2004/12/31 14:12:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,6 +83,9 @@
 
 #include "monitorserver/monitorserver.h"
 #include "monitorserver/monitorsystem.h"
+#include "monitorserver/custommonitor.h"
+#include "monitorserver/monitoritem.h"
+#include "monitorserver/monitorcmdparser.h"
 
 // control aspect
 #include <zeitgeist/zeitgeist.h>
