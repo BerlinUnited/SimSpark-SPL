@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.2.2.3 2003/12/25 13:16:02 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.3.2.1 2004/01/08 12:37:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
+#include <oxygen/controlaspect/controlaspect.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/corecontext.h>
@@ -61,6 +62,25 @@ void
 GameControlServer::InitEffector(const std::string& effectorName)
 {
    mCreateEffector = effectorName;
+}
+
+bool
+GameControlServer::InitControlAspect(const string& aspectName)
+{
+    shared_ptr<ControlAspect> aspect
+        = shared_dynamic_cast<ControlAspect>(GetCore()->New(aspectName));
+
+    if (mParser.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (GameControlServer::InitControlAspect) Unable to create "
+                          << aspectName << std::endl;
+        return false;
+    }
+
+    aspect->SetName(aspectName);
+    AddChildReference(aspect);
+
+    return true;
 }
 
 shared_ptr<BaseParser>
@@ -259,3 +279,25 @@ shared_ptr<AgentAspect> GameControlServer::GetAgentAspect(int id)
                 return (*iter).second;
             }
 }
+
+void
+GameControlServer::Update(float deltaTime)
+{
+  // build list of ControlAspects, NOT searching recursively
+  TLeafList control;
+  GetChildrenSupportingClass("ControlAspect",control,false);
+
+  // update all ControlAspects found
+  for (
+       TLeafList::iterator iter = control.begin();
+       iter != control.end();
+       ++iter
+       )
+      {
+          shared_ptr<ControlAspect> aspect =
+              shared_static_cast<ControlAspect>(*iter);
+
+          aspect->Update(deltaTime);
+      }
+}
+
