@@ -201,7 +201,7 @@ static void update()
 int main(int argc, char **argv)
 {
         // initialize Zeitgeist (object hierarchy, scripting, files, plugins)
-        Zeitgeist       myZeitgeist;
+        Zeitgeist       myZeitgeist("." PACKAGE_NAME);
         // initialize Kerosin (input, windowing)
         Kerosin         myKerosin(myZeitgeist);
 	// initialize Oxygen
