@@ -8,10 +8,10 @@ using namespace zeitgeist;
 Transform::Transform() :
 BaseNode()
 {
-	mLocalTransform.Identity();
-	mWorldTransform.Identity();
+        mLocalTransform.Identity();
+        mWorldTransform.Identity();
 
-	SetName("transform");
+        SetName("transform");
 }
 
 Transform::~Transform()
@@ -20,47 +20,47 @@ Transform::~Transform()
 
 const salt::Matrix& Transform::GetLocalTransform() const
 {
-	return mLocalTransform;
+        return mLocalTransform;
 }
 
 const salt::Matrix& Transform::GetWorldTransform() const
 {
-	return mWorldTransform;
+        return mWorldTransform;
 }
 
 void Transform::SetLocalTransform(const salt::Matrix &transform)
 {
-	mLocalTransform = transform;
+        mLocalTransform = transform;
 }
 
 void Transform::SetWorldTransform(const salt::Matrix &transform)
 {
-	mWorldTransform = transform;
+        mWorldTransform = transform;
 }
 
 void Transform::SetLocalPos(float x, float y, float z)
 {
-	SetLocalPos(Vector3f(x, y, z));
+        SetLocalPos(Vector3f(x, y, z));
 }
 
 void Transform::SetLocalPos(const salt::Vector3f &pos)
 {
-	mLocalTransform.Pos() = pos;
-	UpdateHierarchyInternal();
+        mLocalTransform.Pos() = pos;
+        UpdateHierarchyInternal();
 }
 
 void Transform::OnLink()
 {
-	UpdateHierarchyInternal();
+        UpdateHierarchyInternal();
 }
 
 void Transform::UpdateHierarchyInternal()
 {
-	shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(mParent));
+        shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(mParent));
 
-	// no parent, return identity
-	if (parent.get() == NULL)
-		mWorldTransform = mLocalTransform;
-	else
-		mWorldTransform = parent->GetWorldTransform() * mLocalTransform;
+        // no parent, return identity
+        if (parent.get() == NULL)
+                mWorldTransform = mLocalTransform;
+        else
+                mWorldTransform = parent->GetWorldTransform() * mLocalTransform;
 }
