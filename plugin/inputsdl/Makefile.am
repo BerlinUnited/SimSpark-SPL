@@ -1,4 +1,6 @@
+if BUILD_KEROSIN
 pkglib_LTLIBRARIES = inputsdl.la
+endif
 
 inputsdl_la_SOURCES = \
 export.cpp \

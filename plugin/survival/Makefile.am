@@ -1,4 +1,6 @@
+if BUILD_KEROSIN
 pkglib_LTLIBRARIES = survival.la
+endif
 
 survival_la_SOURCES = \
 export.cpp \

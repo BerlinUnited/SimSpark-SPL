@@ -5,7 +5,9 @@ rubysources = script/glbackend.rb script/glextension.rb script/glextgen.rb \
 copyfiles =   tocopy/cpp_begin.txt tocopy/cpp_query.txt \
 	      tocopy/header_begin.txt tocopy/header_end.txt
 
+if BUILD_KEROSIN
 all-local: glextensionreg.cpp glextensionreg.h
+endif
 
 clean-local:
 	rm -f glextensionreg.cpp glextensionreg.h

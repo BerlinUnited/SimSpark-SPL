@@ -8,21 +8,15 @@ all-local:
 
 if DEBUG
 LDADD = \
-	${top_srcdir}/lib/kerosin/libkerosin_debug.la \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
-        ${top_srcdir}/lib/salt/libsalt_debug.la \
-	-lIL -lGL -lruby @RUBY_LDADD@ \
-	${top_srcdir}/utility/libobj/liblibobject.la
+        ${top_srcdir}/lib/salt/libsalt_debug.la 
 spadestest_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = \
-	${top_srcdir}/lib/kerosin/libkerosin.la \
 	${top_srcdir}/lib/oxygen/liboxygen.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
-        ${top_srcdir}/lib/salt/libsalt.la \
-	-lIL -lGL -lruby @RUBY_LDADD@ \
-	${top_srcdir}/utility/libobj/liblibobject.la
+        ${top_srcdir}/lib/salt/libsalt.la 
 spadestest_CXXFLAGS = -O2
 endif
 
