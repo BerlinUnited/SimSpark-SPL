@@ -1,3 +1,68 @@
+2003-12-16  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* plugin/forceeffector/forceaction.h:
+	* plugin/forceeffector/forceeffector.cpp:
+	* plugin/forceeffector/forceeffector.h:
+	initial version of ForceAction. This class is derived from ActionObject and
+	stores the force vector, the ForceEffector should apply.
+	implemented ForceEffector::GetActionObject and ForceEffector::Realize.
+	GetActionObject constructs an ForceEffector object and Realize applies the
+	stored force vector.
+
+	* plugin/forceeffector/Makefile.am:
+	added Makefile for ForceEffector and ForceAction
+
+	* plugin/forceeffector/.cvsignore,
+	plugin/forceeffector/export.cpp,
+	plugin/forceeffector/forceeffector.cpp,
+	plugin/forceeffector/forceeffector.h,
+	plugin/forceeffector/forceeffector_c.cpp:
+	added forceeffector files
+
+	* lib/oxygen/agentaspect/forceeffector.cpp,
+	lib/oxygen/agentaspect/forceeffector.h,
+	lib/oxygen/agentaspect/forceeffector_c.cpp:
+	removed forceeffector files
+
+	* plugin/Makefile.am: 
+	added forceeffector/
+
+	* lib/oxygen/oxygen.h: 
+	removed forceeffector include
+
+	* lib/oxygen/oxygen.cpp: 
+	removed registration of the forceeffector
+
+	* lib/oxygen/Makefile.am:
+	removed forceeffector files (moved to plugin/forceeffector)
+
+	* configure.ac: 
+	added plugin/forceeffector/Makefile
+
+	* app/agenttest/main.cpp:
+	app/agenttest is a dummy agent created for testing with the
+	SpadesTest. It reads length prefixed data (see spades manual 6.3)
+	from fd 3 and writes to fd 4. A corresponding agent DB
+	(app/spadestest/agentdb.list, entry 'default') exists in the
+	spadestest directory. Currently it does nothing but sending an
+	'init done' message, i.e. 'I' (see spades manual 6.4) back to
+	spades.
+
+	* app/agenttest/Makefile.am: 
+	added Makefile for app/agenttest
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	The SpadesServer starts one instance of the 'default' agent. This
+	is the app/agenttest dummy agent.
+
+	* app/spadestest/agentdb.list:
+	the spades agent database for app/agenttest
+
+	* app/Makefile.am: 
+	added agenttest
+
+	* configure.ac: 
+	added app/agenttest/Makefile
+
 2003-12-10  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/sexpparser/sexpparser.cpp:
