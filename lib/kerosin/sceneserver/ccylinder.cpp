@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ccylinder.cpp,v 1.1 2004/04/15 18:37:30 rollmark Exp $
+   $Id: ccylinder.cpp,v 1.2 2004/04/19 15:45:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,12 +44,13 @@ void CCylinder::SetParams(float radius, float length)
 
 void CCylinder::RenderInternal()
 {
-    if (mMaterial.get() == 0)
+    shared_ptr<Material> material = GetMaterial();
+    if (material.get() == 0)
         {
             return;
         }
 
-    mMaterial->Bind();
+    material->Bind();
 
     //
     // code adapted from ODE's drawstuff lib

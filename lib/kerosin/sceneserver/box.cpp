@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: box.cpp,v 1.2 2004/04/12 13:31:56 rollmark Exp $
+   $Id: box.cpp,v 1.3 2004/04/19 15:45:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,12 +48,13 @@ const Vector3f& Box::GetExtents()
 
 void Box::RenderInternal()
 {
-    if (mMaterial.get() == 0)
+    shared_ptr<Material> material = GetMaterial();
+    if (material.get() == 0)
         {
             return;
         }
 
-    mMaterial->Bind();
+    material->Bind();
 
     glScalef(
              mExtents.x() * 0.5,
