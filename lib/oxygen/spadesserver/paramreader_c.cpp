@@ -1,10 +1,9 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++ -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver_c.cpp,v 1.1.2.2 2003/11/17 10:10:53 fruit Exp $
+   Copyright (C) 2003 Koblenz University
+   $Id: paramreader_c.cpp,v 1.1.2.1 2003/11/17 10:10:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,22 +18,11 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
-#include "spadesserver.h"
+#include "paramreader.h"
 
 using namespace oxygen;
 
-FUNCTION(init)
+void CLASS(ParamReader)::DefineClass()
 {
-    if (in.size() == 1)
-    {
-        SpadesServer* pr = static_cast<SpadesServer*>(obj);
-        pr->Init(boost::any_cast<char*>(in[0]));
-    }
-}
-
-void CLASS(SpadesServer)::DefineClass()
-{
-    DEFINE_BASECLASS(zeitgeist/Leaf);
-    DEFINE_FUNCTION(init);
+    DEFINE_BASECLASS(zeitgeist/Node);
 }

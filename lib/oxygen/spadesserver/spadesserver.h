@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.1 2003/11/16 16:13:54 fruit Exp $
+   $Id: spadesserver.h,v 1.1.2.2 2003/11/17 10:10:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,8 +29,9 @@
 namespace oxygen
 {
 
-/** The SpadesServer serves as interface between the SceneServer and the agents
- *
+class ParamReader;
+
+/*! The SpadesServer serves as interface between the SceneServer and the agents
  */
 class SpadesServer : public zeitgeist::Leaf, spades::WorldModel
 {
@@ -38,8 +39,26 @@ public:
     SpadesServer();
     ~SpadesServer();
 
-    /* You probably want to inherit some parameters from EngineParam and use that
-       to parse the commandline. See the ParamReader class */
+    // Methods starting with small letters are SPADES interface methods.
+    // Methods with a initial capital letter are additional methods needed
+    // for the zeitgeist framework.
+
+    /*! This method should be called after the SpadesServer is created.
+        It is used to load the parameter reader for a specific simulation.
+        @param paramReaderName name of the parameter reader module
+        @return true if loading the parameter reader succeeded
+
+        @todo the method creates a parameter reader based on the given name and saves
+        a pointer to the parameter reader. It would be better to put the parameter reader
+        somewhere into the hierarchy (maybe below the spadesserver) and get it from there
+        if needed.
+    */
+    bool Init(const std::string& paramReaderName);
+
+    // SPADES interface methods start here
+
+    /* You probably want to inherit some parameters from EngineParam and use
+       that to parse the commandline. See the ParamReader class. */
     spades::EngineParam* parseParameters(int argc, const char* const *argv);
 
     /** Most of the real initialization/finalization work should be done here.
@@ -56,32 +75,36 @@ public:
      *  from this function. The time does *not* have to advance all the way
      *  to the time_desired, and if you put events in the queue, you should not
      *  advance past the time of those events. The simulation time here is an
-     *  integer type, so the SpadesServer has to know how big a simulation step is.
-     *  @param time_cur the current simulation step
+     *  integer type, so the SpadesServer has to know how big a simulation step
+     *  is.
+     *  @param time_curr the current simulation step
      *  @param time_desired the desired simulation step
      *  @return a new simulation time t (time_curr <= t <= time_desired)
      */
-    spades::SimTime simToTime(spades::SimTime time_curr, spades::SimTime time_desired);
+    spades::SimTime
+    simToTime(spades::SimTime time_curr, spades::SimTime time_desired);
 
     /* we used to have a realizeEvent method. Now all of that functionality is
        delegated to the events themselves */
 
     /*  Monitors are programs that can open up a connection to the engine and
-     *  get periodic updates about the state of the world. These next three functions
-     *  support this.
+     *  get periodic updates about the state of the world. These next three
+     *  functions support this.
      */
-    /** This function is called once for every monitor. It should return any header/setup
-     *  information that is needed.
+    /** This function is called once for every monitor. It should return any
+     *  header/setup information that is needed.
      */
     spades::DataArray getMonitorHeaderInfo();
-    /* This function will be called periodically to get information about the current
-       state of the world. The format is completely determined by what the monitors
-       will expect; no processing is done by the simulation engine */
+    /* This function will be called periodically to get information about the
+     * current state of the world. The format is completely determined by what
+     * the monitors will expect; no processing is done by the simulation engine
+     */
     spades::DataArray getMonitorInfo(spades::SimTime time);
-    /* If a monitor sends information to the world model, this function is called to
-       process it. Note that only the data section of the message (not the ID part which
-       indicates that it is a message for the world model and not the simulation engine)
-       is included here. If you need to keep the data, you must copy it */
+    /* If a monitor sends information to the world model, this function is
+     * called to process it. Note that only the data section of the message
+     * (not the ID part which indicates that it is a message for the world
+     * model and not the simulation engine) is included here. If you need to
+     * keep the data, you must copy it */
     void parseMonitorMessage(const char* data, unsigned datalen);
 
     /* There is a latency (in simulation time) between when an action is sent by the
@@ -124,7 +147,7 @@ public:
 
 private:
     spades::SimEngine* mSimEngine;
-
+    boost::shared_ptr<ParamReader> mParamReader;
 };
 
 DECLARE_CLASS(SpadesServer);

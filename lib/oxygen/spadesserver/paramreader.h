@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver_c.cpp,v 1.1.2.2 2003/11/17 10:10:53 fruit Exp $
+   $Id: paramreader.h,v 1.1.2.1 2003/11/17 10:10:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,22 +19,29 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef OXYGEN_PARAMETERREADER_H
+#define OXYGEN_PARAMETERREADER_H
 
-#include "spadesserver.h"
+#include <zeitgeist/class.h>
+#include <zeitgeist/leaf.h>
+#include <spades/EngineParam.hpp>
 
-using namespace oxygen;
-
-FUNCTION(init)
+namespace oxygen
 {
-    if (in.size() == 1)
-    {
-        SpadesServer* pr = static_cast<SpadesServer*>(obj);
-        pr->Init(boost::any_cast<char*>(in[0]));
-    }
-}
 
-void CLASS(SpadesServer)::DefineClass()
+/*!
+ */
+class ParamReader : public zeitgeist::Leaf, spades::EngineParam
 {
-    DEFINE_BASECLASS(zeitgeist/Leaf);
-    DEFINE_FUNCTION(init);
-}
+public:
+    ParamReader() : zeitgeist::Leaf(), spades::EngineParam() {}
+    ~ParamReader() {}
+
+    virtual bool Init() { return true; }
+};
+
+DECLARE_CLASS(ParamReader);
+
+} // namespace oxygen
+
+#endif // OXYGEN_PARAMETERREADER_H

@@ -13,9 +13,11 @@ endif
 if BUILD_SPADES_MODULES
 spades_sources = \
 spadesserver/spadesserver.cpp \
-spadesserver/spadesserver_c.cpp
+spadesserver/spadesserver_c.cpp \
+spadesserver/paramreader_c.cpp
 spades_headers = \
-spadesserver/spadesserver.h
+spadesserver/spadesserver.h \
+spadesserver/paramreader.h
 spades_libs = -lspades
 else
 spades_sources =
