@@ -51,12 +51,40 @@ def sparkSetupMonitor
   rubySceneImporter.setUnlinkOnCompleteScenes(true);
 end
 
+#
+# install a class below the SparkMonitorClient that implementes the
+# simulation specific monitor processing
+# 
+def sparkRegisterCustomMonitor(className)
+  print "(spark.rb) sparkRegisterCustomMonitor " + className + "\n"
+  new(className, $serverPath+'simulation/SparkMonitorClient/'+className)
+end
+
+#
+# install a class below the Spark RenderControl node that implements
+# application specific render logic
+#
+def sparkRegisterCustomRender(className)
+  print "(spark.rb) sparkRegisterCustomRender " + className + "\n"
+  new(className, $serverPath+'simulation/RenderControl/'+className)
+end
+
+#
+# install a class below the Spark InputControl node that implements
+# application specific input processing
+#
+def sparkRegisterCustomInput(className)
+  print "(spark.rb) sparkRegisterCustomInput " + className + "\n"
+  new(className, $serverPath+'simulation/InputControl/'+className)
+end
+
+  
 def sparkSetupServer
   print "(spark.rb) sparkSetupServer\n"
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-  simulationServer.initControlNode('oxygen/AgentControl')  
+  simulationServer.initControlNode('oxygen/AgentControl','AgentControl')  
 
   monitorControl = new('oxygen/MonitorControl',
 		       $serverPath+'simulation/MonitorControl')
@@ -110,7 +138,7 @@ def sparkSetupRendering
   # 
   # register render control node to the simulation server
   simulationServer = get($serverPath+'simulation');
-  simulationServer.initControlNode('kerosin/RenderControl')
+  simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
 end
 
 def sparkSetupInput()
@@ -121,7 +149,7 @@ def sparkSetupInput()
   simulationServer = get($serverPath+'simulation');
 
   # add the input control node
-  simulationServer.initControlNode('kerosin/InputControl')
+  simulationServer.initControlNode('kerosin/InputControl','InputControl')
 end
 
 # add a camera with an FPS Controller to the scene at path
@@ -154,6 +182,8 @@ def sparkAddFPSCamera(
   # acceleration
   fpsController = new('oxygen/FPSController',path+'/physics/controller')
   fpsController.setAcceleration(accel)
+  inputControl = get($serverPath+'simulation/InputControl')
+  inputControl.setFPSController(path+'/physics/controller')
 
   # add an DragController to work against the camera acceleration
   dragController = new('oxygen/DragController',path+'/physics/drag')
