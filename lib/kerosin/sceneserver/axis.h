@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: axis.h,v 1.3 2003/11/14 14:05:52 fruit Exp $
+   $Id: axis.h,v 1.4 2004/04/10 11:04:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,8 +35,18 @@ class Axis : public oxygen::BaseNode
 public:
     Axis();
 
-private:
+    /** returns the size of an axis */
+    float GetSize();
+
+    /** sets the size of an axis */
+    void SetSize(float size);
+
+protected:
     virtual void RenderInternal();
+
+protected:
+    // size of an axis
+    float mSize;
 };
 
 DECLARE_CLASS(Axis);
