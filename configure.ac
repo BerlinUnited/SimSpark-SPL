@@ -34,7 +34,8 @@ AC_PROG_LIBTOOL
 AC_PROG_AWK
 AC_CHECK_PROG([DOXYGEN], [doxygen], [yes], [no])
 AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes)
-
+AC_CHECK_PROG([HAVE_DOT], [dot], [YES], [NO])
+AC_PATH_PROG([PERL], [perl], [perl])
 # Checks for libraries.
 
 # Checks for header files.
@@ -43,7 +44,7 @@ AC_CHECK_HEADERS([float.h limits.h malloc.h memory.h stdlib.h string.h])
 
 
 AC_CHECK_HEADER([boost/version.hpp],,
-  AC_MSG_ERROR([boost library not found. Please specify the location 
+	AC_MSG_ERROR([boost library not found. Please specify the location 
 of the boost header directory using the CPPFLAGS environment variable]))
 AC_CHECK_HEADERS([hash_map],,
 	AC_MSG_NOTICE(['hash_map' will be substituted by 'map'. If you need hash_map install stlport]))
@@ -69,38 +70,55 @@ AC_REPLACE_FUNCS([_vsnprintf])
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr strupr])
 
 ## checks for system services
+
+# This test is required here because of the soccer monitor.
+# It can be dropped as soon as the monitor uses libkerosin.
+rcss_build_kerosin=yes
+RCSS_CHECK_GL
+if test "$rcss_build_kerosin" = no; then
+	AC_MSG_ERROR([need GL stuff to build monitor])
+fi
+
 RCSS_CHECK_RCSSBASE
 RCSS_BUILD_KEROSIN
 RCSS_BUILD_SOUNDSYSTEMFMOD
 RCSS_PATH_RUBY
+RCSS_CHECK_RUBY_VERSION(1,8,0)
 RCSS_CHECK_ODE
 
 AC_ARG_VAR(SPADES, [prefix of SPADES installation])
-if test "$SPADES"; then
-  if test -z "$PATH"; then
-    PATH="$SPADES/bin"
-  else
-    PATH="$PATH:$SPADES/bin"
-  fi
-  if test -z "$LDFLAGS"; then
-    LDFLAGS="-L$SPADES/lib"
-  else
-    LDFLAGS="$LDFLAGS -L$SPADES/lib"
-  fi
-  if test -z "$CPPFLAGS"; then
-    CPPFLAGS="-I$SPADES/include"
-  else
-    CPPFLAGS="$CPPFLAGS -I$SPADES/include"
-  fi
-fi
+AC_ARG_WITH([spades],
+	    [AC_HELP_STRING([--with-spades],
+	 	 	    [whether to support SPADES-SIM (default is yes)])],
+	    [rcss_with_spades=$withval],
+	    [rcss_with_spades=yes])
 
-AC_LIB_SPADES(
-	[rcss_build_spades=yes
-	 AC_DEFINE([HAVE_SPADES_HEADERS], 1, [Define to 1 if you have the SPADES header files])],
-	[rcss_build_spades=no
-         AC_MSG_WARN([the SPADES (http://spades-sim.sourceforge.net) library cannot be found. Please specify the prefix used when installing SPADES with the SPADES enviroment variable.])
-	 AC_MSG_NOTICE([SpadesServer will not be build])]
-	)
+if test "$rcss_with_spades" = yes; then
+	if test "$SPADES"; then
+	  if test -z "$PATH"; then
+	    PATH="$SPADES/bin"
+	  else
+	    PATH="$PATH:$SPADES/bin"
+	  fi
+	  if test -z "$LDFLAGS"; then
+	    LDFLAGS="-L$SPADES/lib"
+	  else
+	    LDFLAGS="$LDFLAGS -L$SPADES/lib"
+	  fi
+	  if test -z "$CPPFLAGS"; then
+	    CPPFLAGS="-I$SPADES/include"
+	  else
+	    CPPFLAGS="$CPPFLAGS -I$SPADES/include"
+	  fi
+	fi
+	AC_LIB_SPADES([rcss_build_spades=yes
+	 	       AC_DEFINE([HAVE_SPADES_HEADERS], 1, 
+			 	 [Define to 1 if you have the SPADES header files])],
+                      [AC_MSG_ERROR([the SPADES library (http://spades-sim.sourceforge.net) cannot be found. Please specify the prefix used when installing SPADES with the SPADES enviroment variable.])])
+else
+	rcss_build_spades=no
+	AC_MSG_NOTICE([SpadesServer will not be build])
+fi
 AM_CONDITIONAL(BUILD_SPADES_MODULES, test $rcss_build_spades = yes)
 
 # create Makefiles and other configuration files
