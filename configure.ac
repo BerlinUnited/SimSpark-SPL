@@ -172,6 +172,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/filesystemstd/Makefile \
 		 plugin/filesystemzip/Makefile \
 		 plugin/forceeffector/Makefile \
+		 plugin/sceneeffector/Makefile \
 		 plugin/inputsdl/Makefile \
 		 plugin/monitortest/Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
