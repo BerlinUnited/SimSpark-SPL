@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.2 2004/04/10 14:07:31 rollmark Exp $
+   $Id: joint.h,v 1.3 2004/04/14 18:26:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ public:
         both bodies to zero puts the joint into "limbo", i.e. it will
         have no effect on the simulation.
     */
-    void Attach(boost::shared_ptr<Body> body1, boost::shared_ptr<Body> body2);
+    virtual void Attach(boost::shared_ptr<Body> body1,
+                        boost::shared_ptr<Body> body2);
 
     /** attaches the joint to some new bodies, that are given as path
         expressions. These path expressions are allowed to be relative
