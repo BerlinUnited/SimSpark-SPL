@@ -446,6 +446,12 @@ plugin/soundsystemfmod/Makefile
 plugin/soundsystemfmod/Makefile.in
 plugin/soundsystemfmod/*.la
 plugin/soundsystemfmod/*.lo
+plugin/sparkmonitor/*.la
+plugin/sparkmonitor/*.lo
+plugin/sparkmonitor/.deps
+plugin/sparkmonitor/.libs
+plugin/sparkmonitor/Makefile
+plugin/sparkmonitor/Makefile.in
 plugin/voidmeshimporter/*.la
 plugin/voidmeshimporter/*.lo
 plugin/voidmeshimporter/.deps
