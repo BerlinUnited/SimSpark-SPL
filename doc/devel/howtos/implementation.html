@@ -20,7 +20,11 @@
       are for example parts of agents: agents can be using different
       actuators or perceptors. Other plugins are responsible for the
       simulator protocol or also for the rules of specific
-      simulations.
+      simulations.<br>
+      Simulations for this simulator can be constructed to a great part
+      by changing text files with no further recompilation. The soccer 
+      simulation makes not yet use of this feature, but changes towards
+      this are already planned.
     </p>
 
     <p>
@@ -43,7 +47,7 @@
     </p>
 
     <p>
-      If you installed rcssserver3D-0.2 or 0.1 before, make sure to clean the 
+      If you installed rcssserver3D-0.2.x or 0.1 before, make sure to clean the 
       <nobr>~/.rcssserver3D/</nobr> directory prior to using the new version. Also better remove the old installed 
       libraries in /usr/local/lib/rcssserver3D manually. Sorry for this inconvenience. 
     </p>
@@ -81,7 +85,7 @@
 	<tr>
 	  <td valign="top"><tt>./app/agenttest/</tt></td>
 	  <td>
-	    A 'hello world' agent (does almost nothing). 
+	    A 'hello world' agent (does nothing very useful, kick and run soccer).
 	  </td>
 	</tr>
 	<tr>
@@ -162,7 +166,6 @@
     <h2>Known Problems:</h2>
 
     <ul>
-      <li>The playmodes are not set correctly yet. We are working on this. :)</li>
       <li>if during linking the compiler complains that it cannot find <tt>-lslang</tt>,
 	set a symbolic link <tt>/usr/lib/libslang.so</tt> linking 
 	to <tt>/usr/lib/libslang.so.1</tt></li>
@@ -189,7 +192,7 @@
     <address><a href="mailto:fruit@users.sourceforge.net">Oliver Obst</a></address>
 <!-- Created: Tue Dec 23 01:00:15 CET 2003 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 22 17:52:38 CET 2004
+Last modified: Wed May 12 19:04:09 CEST 2004
 <!-- hhmts end -->
   </body>
 </html>
