@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.5 2004/01/31 15:15:14 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.6 2004/01/31 17:25:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
 {
     mPlayMode = PM_PlayOn;
     mTime = 0;
+    mGameHalf = GH_FIRST;
+    mScore[0] = 0;
+    mScore[1] = 0;
 }
 
 GameStateAspect::~GameStateAspect()
@@ -170,6 +173,51 @@ bool GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
 
     return true;
 }
+
+void GameStateAspect::SetGameHalf(TGameHalf half)
+{
+    if (
+        (half != GH_FIRST) &&
+        (half != GH_SECOND)
+        )
+        {
+            return;
+        }
+
+    mGameHalf = half;
+}
+
+TGameHalf GameStateAspect::GetGameHalf()
+{
+    return mGameHalf;
+}
+
+void GameStateAspect::ScoreTeam(TTeamIndex idx)
+{
+    if (
+        (idx != TI_LEFT) &&
+        (idx != TI_RIGHT)
+        )
+        {
+            return;
+        }
+
+    ++mScore[idx];
+}
+
+int GameStateAspect::GetScore(TTeamIndex idx)
+{
+    if (
+        (idx != TI_LEFT) &&
+        (idx != TI_RIGHT)
+        )
+        {
+            return 0;
+        }
+
+    return mScore[idx];
+}
+
 
 
 
