@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.cpp,v 1.3 2004/04/30 10:01:22 rollmark Exp $
+   $Id: monitorcontrol.cpp,v 1.4 2004/05/06 09:34:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #include "netmessage.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/monitorserver/monitorserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/scene.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -103,6 +105,19 @@ void MonitorControl::EndCycle()
          )
         {
             SendMessage((*iter).second,info);
+        }
+
+    // reset the modified flag for the active scene
+    shared_ptr<SceneServer> sceneServer =
+        GetSimulationServer()->GetSceneServer();
+
+    if (sceneServer.get() !=0)
+        {
+            shared_ptr<Scene> scene = sceneServer->GetActiveScene();
+            if (scene.get() != 0)
+                {
+                    scene->SetModified(false);
+                }
         }
 }
 
