@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.14 2004/06/16 13:20:59 jamu Exp $
+   $Id: monitor.cpp,v 1.15 2004/06/16 13:36:02 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -1000,8 +1000,6 @@ Monitor::Idle()
 {
     // If we are in singlestep mode and not advancing then return
     if (mLogserver && mSingleStep && !mAdvance)
-    {
-        cout << "single step mode...exiting\n";
         return;
 
     if (mGameState.IsFinished())
