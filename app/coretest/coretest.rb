@@ -1,5 +1,6 @@
 importBundle "filesystemstd"
 importBundle "sexpparser"
+# importBundle "survival"
 
 # mount a standard file system
 fileServer = get('/sys/server/file');
@@ -16,7 +17,8 @@ def testSoundSystem
   soundServer.init('SoundSystemFMOD');
   #soundServer.init('SoundSystemBASS');
   #playModule "BTGATESF.XM"
-  soundServer.playStream('sinch.mp3');
+  #soundServer.playStream('sinch.mp3');
+  soundServer.playStream('monkey.wav');
 end
 
 testSoundSystem
