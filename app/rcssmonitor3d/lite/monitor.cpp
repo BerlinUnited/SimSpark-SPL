@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.2 2004/05/10 14:10:46 fruit Exp $
+   $Id: monitor.cpp,v 1.3 2004/05/11 10:47:08 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -140,6 +140,7 @@ Monitor::Init(int argc, char* argv[])
         { "help", no_argument, 0, 'h' },
         { "port", required_argument, 0, 'p' },
         { "server", required_argument, 0, 's' },
+        { "logfile", required_argument, 0, 's' },
         { 0, 0, 0, 0 }
     };
 
@@ -159,7 +160,7 @@ Monitor::Init(int argc, char* argv[])
         case 'p': // --port
             mPort = atoi(optarg);
             break;
-        case 's': // --server
+        case 's': // --server (or --logfile)
             mServer = std::string(optarg);
             break;
         default:
@@ -192,6 +193,7 @@ Monitor::Usage()
 "       --help          print this message and exit\n"
 "       --port          specify the port number (default is " << DEFAULT_PORT << ")\n"
 "       --server        specify the server host (default is '" << DEFAULT_HOST << "')\n"
+"       --logfile       specify the logfile to read\n"
 "\n";
 }
 
@@ -209,7 +211,7 @@ Monitor::EReturnType
 Monitor::InitInternal(int argc, char* argv[])
 {
     // init the commserver
-    mCommServer = shared_dynamic_cast<CommServer>
+    mCommServer = shared_dynamic_cast<CommServerBase>
         (mZeitgeist.GetCore()->Get("/sys/server/comm"));
 
     if (mCommServer.get() == 0)
