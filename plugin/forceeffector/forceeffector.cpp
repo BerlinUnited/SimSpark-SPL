@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.1.2.2 2003/12/16 16:28:14 rollmark Exp $
+   $Id: forceeffector.cpp,v 1.1.2.3 2003/12/21 10:51:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,10 +30,14 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-ForceEffector::ForceEffector()
+ForceEffector::ForceEffector() : oxygen::Effector()
 {
     mForce.Set(0, 0, 0);
     mMaxForce = 5.0f;
+}
+
+ForceEffector::~ForceEffector()
+{
 }
 
 bool ForceEffector::Realize(boost::shared_ptr<ActionObject> action)
@@ -80,7 +84,7 @@ ForceEffector::GetActionObject(const BaseParser::TPredicate& predicate)
   if (predicate.name != GetPredicate())
     {
       GetLog()->Error() << "ERROR: (ForceEffector) invalid predicate"
-                          << predicate.name << "\n";
+                        << predicate.name << "\n";
       return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
     }
 
