@@ -1,3 +1,32 @@
+2004-02-19  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	- reset mGoalState to TI_NONE if checks for both goal collider
+	fail
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- added missing cases for PM_Goal_Left and in PM_Goal_Right
+
+2004-02-18  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	- added member mTimePerStep
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	- cache the Spades.TimePerStep value in the mTimePerStep intstead
+	of repeatedly querying the ScriptServer
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	- added member mTimePerStep
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	- cache the Spades.TimePerStep value in the mTimePerStep intstead
+	of repeatedly querying the ScriptServer
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- changed ScriptServer::RunInitScript to use a static buffer to
+	obtain the current directory
+
 2004-02-16  Patrick Riley  <pfr@cs.cmu.edu>
 
 	* app/agenttest/main.cpp
