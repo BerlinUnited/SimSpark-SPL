@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector.cpp,v 1.1.2.2 2004/01/31 14:07:24 fruit Exp $
+   $Id: dasheffector.cpp,v 1.1.2.3 2004/01/31 17:22:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,14 +76,19 @@ DashEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         GetLog()->Error() << "ERROR: (DashEffector) parent node has "
                           << "no 'geometry' sphere child\n";
-    } else {
-        max_dist += geom->GetRadius();
-    }
+    } else
+        {
+            max_dist += geom->GetRadius();
+        }
 
-    // we can only dash if we the sphere is on the ground
-    if (vec[1] > max_dist) return true;
+    // we can only dash if the sphere is on the ground
+    if (vec[1] > max_dist)
+        {
+            return true;
+        }
 
     Vector3f force = dashAction->GetForce();
+
     // cut down the dash power vector to maximum length
     if (force.SquareLength() > mMaxPower * mMaxPower)
     {
@@ -96,9 +101,10 @@ DashEffector::Realize(boost::shared_ptr<ActionObject> action)
         force[0] = force[0] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
         force[1] = force[1] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
         force[2] = force[2] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
-    } else {
-        force = force * mForceFactor / mMaxPower;
-    }
+    } else
+        {
+            force = force * mForceFactor / mMaxPower;
+        }
 
     mBody->AddForce(Vector3f(force[0],force[2],force[1]));
 
