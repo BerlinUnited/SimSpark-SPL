@@ -30,6 +30,15 @@ AM_CPPFLAGS = \
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 rcssmonitor3D_kerosin_SOURCES = \
-	main.cpp
+	main.cpp \
+	monitorclientcontrol.cpp \
+	monitorclientcontrol_c.cpp \
+	monitorinputcontrol.cpp \
+	monitorinputcontrol_c.cpp
 
-dist_pkgdata_DATA = rcssmonitor3D-kerosin.rb bindings.rb
+dist_pkgdata_DATA = \
+	rcssmonitor3D-kerosin.rb \
+	bindings.rb \
+	monitorclientcontrol.h \
+	monitorinputcontrol.h
+
