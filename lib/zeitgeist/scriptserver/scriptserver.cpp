@@ -3,10 +3,10 @@
 #include <sstream>
 #include <salt/fileclasses.h>
 #include "scriptserver.h"
-#include "../corecontext.h"
-#include "../core.h"
-#include "../logserver/logserver.h"
-#include "../fileserver/fileserver.h"
+#include <zeitgeist/corecontext.h>
+#include <zeitgeist/core.h>
+#include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/fileserver/fileserver.h>
 
 using namespace boost;
 using namespace std;
