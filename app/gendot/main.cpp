@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.1 2004/04/07 14:17:59 rollmark Exp $
+   $Id: main.cpp,v 1.2 2004/04/07 14:42:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,14 +19,16 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <zeitgeist/zeitgeist.h>
+#ifdef HAVE_KEROSIN_H
 #include <kerosin/kerosin.h>
+#endif
+
+#include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
 #include <iostream>
 #include <fstream>
 
 using namespace boost;
-using namespace kerosin;
 using namespace oxygen;
 using namespace salt;
 using namespace std;
@@ -92,14 +94,17 @@ void printGreeting()
     << "The RoboCup Soccer Server Maintenance Group." << endl;
 }
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
     printGreeting();
     processInput(argc,argv);
 
     Zeitgeist zg("." PACKAGE_NAME);
     oxygen::Oxygen kOxygen(zg);
-    Kerosin kerosin(zg);
+#ifdef HAVE_KEROSIN_H
+    kerosin::Kerosin kerosin(zg);
+#endif
 
     // require any additional classes in the gendot.rb
     zg.GetCore()->GetScriptServer()->Run("gendot.rb");
