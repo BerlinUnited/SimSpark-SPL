@@ -1,0 +1,71 @@
+#include "glextensionreg.h"
+#include <string.h>
+
+#define GET_PROC_ADDRESS(ptr, function) function = (ptr)GetProcedure( #function ); if (function == NULL) return false;
+
+void* GetProcedure(const char *name)
+{
+#if defined(_WIN32)
+    void *t = wglGetProcAddress(name);
+#else
+    void *t = glXGetProcAddressARB((unsigned char*)name);
+#endif //_WIN32
+    return t;
+}
+
+static bool TestExtensionString(const char *name, const char *extensions)
+{
+    /*
+    	It takes a bit of care to be fool-proof about parsing the
+    	OpenGL extensions string. Don't be fooled by sub-strings,
+		etc.
+	*/
+    const char *start = extensions;
+    char *where, *terminator;
+    
+    where = strchr(name, ' ');
+    if (where || *name == '\0')
+        return false;
+        
+    for (;;)
+    {
+        where = strstr((const char *) start, name);
+        if (!where)
+            break;
+        terminator = where + strlen(name);
+        if (where == start || *(where - 1) == ' ')
+            if (*terminator == ' ' || *terminator == '\0')
+                return true;
+        start = terminator;
+    }
+    return false;
+}
+
+// returns true if the extension is available
+bool GLExtensionReg::QueryGLExtension(const char *name)
+{
+    const char *extensions = NULL;
+	/*	extension names should not have spaces.	*/
+    extensions = (const char*)glGetString(GL_EXTENSIONS);
+
+	return TestExtensionString(name, extensions);
+}
+
+#if defined(_WIN32)
+// returns true if the extension is available
+bool GLExtensionReg::QueryWGLExtension(const char *name)
+{
+    const char *extensions = NULL;
+
+    if ((wglGetExtensionsStringARB == NULL) || (mHDC == 0))
+        if (wglGetExtensionsStringEXT == NULL)
+            return false;
+        else
+            extensions = (const char*) wglGetExtensionsStringEXT();
+    else
+        extensions = (const char*) wglGetExtensionsStringARB(mHDC);
+        
+ 	return TestExtensionString(name, extensions);
+}
+#endif //_WIN32
+
