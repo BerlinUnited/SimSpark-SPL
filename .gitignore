@@ -230,6 +230,12 @@ plugin/monitortest/Makefile
 plugin/monitortest/Makefile.in
 plugin/monitortest/*.la
 plugin/monitortest/*.lo
+plugin/perfectvisionperceptor/*.la
+plugin/perfectvisionperceptor/*.lo
+plugin/perfectvisionperceptor/.deps
+plugin/perfectvisionperceptor/.libs
+plugin/perfectvisionperceptor/Makefile
+plugin/perfectvisionperceptor/Makefile.in
 plugin/sexpparser/*.la
 plugin/sexpparser/*.lo
 plugin/sexpparser/.deps
