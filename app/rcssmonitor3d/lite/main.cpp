@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.6 2004/03/12 08:55:28 rollmark Exp $
+   $Id: main.cpp,v 1.7 2004/03/12 16:49:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -144,6 +144,7 @@ void processInput(int argc, char* argv[])
             {
               gSoccerServer = argv[i+1];
               ++i;
+              cout << "server set to " << gSoccerServer << "\n";
             }
         }
       else if( strcmp( argv[i], "--port" ) == 0 )
@@ -152,6 +153,7 @@ void processInput(int argc, char* argv[])
             {
               gPort = atoi( argv[i+1] );
               ++i;
+              cout << "port set to " << gPort << "\n";
             }
         }
       else if( strcmp( argv[i], "--help" ) == 0 )
@@ -229,7 +231,7 @@ void drawStatusText()
 
     ss << gGameState.GetTeamL() << " " << gGameState.GetScoreL() << ":"
        << gGameState.GetScoreR() << " " << gGameState.GetTeamR() << " ";
-    ss << "(" << ((gGameState.GetHalf() == 1) ?
+    ss << "(" << ((gGameState.GetHalf() == GH_FIRST) ?
                   "first" : "second") << " half) ";
 
     string mode;
