@@ -1,3 +1,56 @@
+2003-12-10  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/sexpparser/sexpparser.cpp:
+	adapted to changed baseparser interface
+
+	* plugin/sexpparser/sexpparser.h:
+	adapted to changed BaseParser interface
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	QueryPerceptors traverses all Perceptors below the AgentAspect,
+	collects their data and builds a TPredicateList.
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	QueryPerceptors returns TPredicateList using a shared_ptr
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	adapted to changed BaseParser inteface
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	adapted TmpGenerate to changed BaseParser interface
+
+	* lib/oxygen/gamecontrolserver/baseparser.h:
+	using shared_ptr to pass input to Generate()
+
+	* lib/oxygen/Makefile.am: removed effector.cpp
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	implemented UpdateEffectorMap. This method builds a map from a
+	predicate string to the corresponding Effector below the AgentAspect
+	node.
+	implemented RealizeActions. This method traverses a list of
+	ActionObjects and realizes them using the corresponding effector
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	added helper UpdateEffectorMap to build a map of effectors below an
+	AgentAspect
+
+	* lib/oxygen/agentaspect/forceeffector.cpp:
+	minimal changes to make ForceEffector compile with the new Effector interface
+
+	* lib/oxygen/agentaspect/forceeffector.h:
+	adapted ForceEffector to the new Effector interface
+
+	* lib/oxygen/agentaspect/effector.cpp:
+	removed effector.cpp as Effector is a virtual base class now
+
+	* lib/oxygen/agentaspect/effector.h: removed method Perfom
+	added method Realize. Realize() should realize an ActionObject
+
+	* lib/oxygen/gamecontrolserver/actionobject.h:
+	ActionObject stores the name of the described predicate to allow
+	AgentAspecto to find the correct effector.
+
 2003-12-09  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
