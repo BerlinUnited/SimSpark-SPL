@@ -5,16 +5,18 @@
 inputServer = get('/sys/server/input');
 
 if (inputServer == nil)
-  print "(bindings.rb) ERROR: cannot find the InputServer\n";
+  print "(bindings.rb) no InputServer present\n";
 else
   print "(bindings.rb) setting up bindings\n";
 
   inputServer.bindCommand('axist',      Command.Timer);
   inputServer.bindCommand('axisx',      Command.MouseX);
   inputServer.bindCommand('axisy',      Command.MouseY);
-  inputServer.bindCommand('pagedown',   Command.Down);
-  inputServer.bindCommand('mouse_left', Command.Down);
+  inputServer.bindCommand('mouse_left', Command.Mouselook);
   inputServer.bindCommand('mouse_right',Command.Up);
+  inputServer.bindCommand('pagedown',   Command.Down);
+  inputServer.bindCommand('kp_minus', Command.Down);
+  inputServer.bindCommand('kp_plus',Command.Up);
   inputServer.bindCommand('pageup',     Command.Up);
   inputServer.bindCommand('q',          Command.Quit)
   inputServer.bindCommand('a',          Command.Left)
