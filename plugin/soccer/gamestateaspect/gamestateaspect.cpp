@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.7 2004/05/05 13:57:17 fruit Exp $
+   $Id: gamestateaspect.cpp,v 1.8 2004/06/11 09:06:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mPlayMode = PM_BeforeKickOff;
     mTime = 0;
     mLeadTime = 0;
+    mFupTime = 0;
     mLastModeChange = 0;
     mGameHalf = GH_FIRST;
     mScore[0] = 0;
@@ -44,6 +45,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mLastKickOff = TI_NONE;
     mLeftInit = Vector3f(0,0,0);
     mRightInit = Vector3f(0,0,0);
+    mFinished = false;
 }
 
 GameStateAspect::~GameStateAspect()
@@ -53,17 +55,17 @@ GameStateAspect::~GameStateAspect()
 void
 GameStateAspect::UpdateTime(float deltaTime)
 {
-  if (
-      (mPlayMode != PM_BeforeKickOff) &&
-      (mPlayMode != PM_GameOver)
-      )
-  {
-      mTime += deltaTime;
-  }
-  else if (mPlayMode == PM_BeforeKickOff)
-  {
-      mLeadTime += deltaTime;
-  }
+    switch (mPlayMode)
+    {
+    case PM_BeforeKickOff:
+        mLeadTime += deltaTime;
+        break;
+    case PM_GameOver:
+        mFupTime += deltaTime;
+        break;
+    default:
+        mTime += deltaTime;
+    }
 }
 
 void
@@ -92,6 +94,7 @@ GameStateAspect::SetPlayMode(TPlayMode mode)
     mPlayMode = mode;
     mLastModeChange = mTime;
     mLeadTime = 0.0;
+    mFupTime = 0.0;
 }
 
 void
@@ -125,8 +128,15 @@ GameStateAspect::GetTime() const
 TTime
 GameStateAspect::GetModeTime() const
 {
-    if (mPlayMode == PM_BeforeKickOff) return mLeadTime;
-    return mTime - mLastModeChange;
+    switch (mPlayMode)
+    {
+    case PM_BeforeKickOff:
+        return mLeadTime;
+    case PM_GameOver:
+        return mFupTime;
+    default:
+        return mTime - mLastModeChange;
+    }
 }
 
 TTime
