@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: paramstorer.h,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: paramstorer.h,v 1.2.4.1 2004/01/25 11:36:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,14 +54,15 @@ public:
     ParamStorer(oxygen::ParamReader* paramReader) :
         spades::ParamReader::ParamStorer(), mParamReader(paramReader) {}
 
-    virtual int readArgsFrom(const std::string& key, const char* fileid, const char* path,
-                             std::istream& is, bool have_argument)
+    virtual int readArgsFrom(const std::string& /*key*/, const char* /*fileid*/,
+                             const char* /*path*/, std::istream& /*is*/,
+                             bool /*have_argument*/)
     {
         // we read nothing from any files
         return RR_None;
     }
 
-    virtual void print(std::ostream& o) const
+    virtual void print(std::ostream& /*o*/) const
     {
         // no output
     }
