@@ -1,6 +1,7 @@
 pkglib_LTLIBRARIES = perfectvisionperceptor.la
 
 perfectvisionperceptor_la_SOURCES = export.cpp \
+                                    perfectvisionperceptor.h \
                                     perfectvisionperceptor.cpp \
                                     perfectvisionperceptor_c.cpp
 
