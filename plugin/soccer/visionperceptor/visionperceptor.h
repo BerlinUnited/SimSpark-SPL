@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.4 2004/04/11 11:45:06 fruit Exp $
+   $Id: visionperceptor.h,v 1.5 2004/06/19 12:34:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #ifndef VISIONPERCEPTOR_H
 #define VISIONPERCEPTOR_H
 
+#include <salt/random.h>
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/physicsserver/raycollider.h>
 #include <oxygen/sceneserver/sceneserver.h>
@@ -57,9 +58,15 @@ public:
     //! Turn sensing of agent position on/off
     void SetSenseMyPos(bool sense);
 
-    //! Turn noise off/on.
-    void AddNoise(bool use_it)
-    { mAddNoise = use_it; }
+    /** Turn noise off/on.
+        \param add_noise flag if noise should be used at all.
+    */
+    void AddNoise(bool add_noise);
+
+    /** Turn randomization off/on.
+        \param random_noise flag if the measurement noise is randomized each step.
+    */
+    void UseRandomNoise(bool random_noise);
 
 protected:
     /** constructs the internal ray collider */
@@ -69,6 +76,8 @@ protected:
     virtual void OnUnlink();
 
 private:
+    typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;
+
     struct ObjectData
     {
         boost::shared_ptr<ObjectState> mObj;
@@ -108,9 +117,18 @@ private:
     float mCalErrorAbs;
     //! flag if we should noisify the data
     bool mAddNoise;
+    //! flag if the error should be randomized each step
+    bool mUseRandomNoise;
 
     //! ray collider to check occlusion
     boost::shared_ptr<oxygen::RayCollider> mRay;
+
+    //! random number generator for distance errors
+    NormalRngPtr mDistRng;
+    //! random number generator for angle errors
+    NormalRngPtr mThetaRng;
+    //! random number generator for angle errors
+    NormalRngPtr mPhiRng;
 
     boost::shared_ptr<oxygen::Scene> mActiveScene;
     //! a reference to the next transorm parent
