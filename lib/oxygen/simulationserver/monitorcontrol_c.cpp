@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol_c.cpp,v 1.1 2004/04/25 16:48:03 rollmark Exp $
+   $Id: monitorcontrol_c.cpp,v 1.2 2004/04/30 10:01:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,30 @@
 using namespace oxygen;
 using namespace std;
 
+FUNCTION(MonitorControl, getMonitorInterval)
+{
+    return obj->GetMonitorInterval();
+}
+
+FUNCTION(MonitorControl, setMonitorInterval)
+{
+    int inInterval;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inInterval))
+         )
+    {
+        return false;
+    }
+
+    obj->SetMonitorInterval(inInterval);
+    return true;
+}
+
 void CLASS(MonitorControl)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/SimControlNode);
+    DEFINE_FUNCTION(getMonitorInterval);
+    DEFINE_FUNCTION(setMonitorInterval);
 }

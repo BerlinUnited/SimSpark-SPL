@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.h,v 1.2 2004/04/28 14:35:59 rollmark Exp $
+   $Id: monitorcontrol.h,v 1.3 2004/04/30 10:01:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,6 +46,12 @@ public:
 
     /** called when a new client connects */
     virtual void ClientConnect(boost::shared_ptr<Client> client);
+
+    /** returns the monitor update interval in cycles */
+    int GetMonitorInterval();
+
+    /** sets the monitor update interval in cycles */
+    void SetMonitorInterval(int i);
 
 protected:
     virtual void OnLink();

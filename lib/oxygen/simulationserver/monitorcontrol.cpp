@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.cpp,v 1.2 2004/04/28 14:35:59 rollmark Exp $
+   $Id: monitorcontrol.cpp,v 1.3 2004/04/30 10:01:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -141,4 +141,15 @@ void MonitorControl::StartCycle()
                 }
         }
 }
+
+int MonitorControl::GetMonitorInterval()
+{
+    return mMonitorInterval;
+}
+
+void MonitorControl::SetMonitorInterval(int i)
+{
+    mMonitorInterval = i;
+}
+
 
