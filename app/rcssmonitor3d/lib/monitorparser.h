@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorparser.h,v 1.1 2004/03/10 20:48:16 rollmark Exp $
+   $Id: monitorparser.h,v 1.2 2004/03/12 17:24:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,13 +28,14 @@
 #define MONITORPARSER_H
 
 #include <string>
-#include "gameparam.h"
-#include "gamestate.h"
+#include <zeitgeist/class.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <salt/vector.h>
 #include <soccertypes.h>
+#include "gameparam.h"
+#include "gamestate.h"
 
-class MonitorParser
+class MonitorParser : public zeitgeist::Leaf
 {
 public:
     // possible s-expression types
@@ -123,5 +124,7 @@ protected:
     //! mapping from string to expression type
     TExprMap mExprMap;
 };
+
+DECLARE_CLASS(MonitorParser);
 
 #endif // MONITORPARSER_H
