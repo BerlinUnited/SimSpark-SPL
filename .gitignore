@@ -184,6 +184,10 @@ lib/oxygen/gamecontrolserver/.deps
 lib/oxygen/gamecontrolserver/.dirstamp
 lib/oxygen/gamecontrolserver/.libs
 lib/oxygen/gamecontrolserver/*.lo
+lib/oxygen/geometryserver/*.lo
+lib/oxygen/geometryserver/.deps
+lib/oxygen/geometryserver/.dirstamp
+lib/oxygen/geometryserver/.libs
 lib/oxygen/monitorserver/.deps
 lib/oxygen/monitorserver/.dirstamp
 lib/oxygen/monitorserver/.libs
