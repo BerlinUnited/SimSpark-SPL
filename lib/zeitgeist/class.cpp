@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.cpp,v 1.5 2004/04/10 08:18:19 rollmark Exp $
+   $Id: class.cpp,v 1.6 2004/04/10 08:30:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ const Class::TStringList& Class::GetBaseClasses() const
     return mBaseClasses;
 }
 
-bool Class::Supports(const std::string &name) const
+bool Class::SupportsClass(const std::string &name) const
 {
     if (GetName().compare(name) == 0)
     {
@@ -193,7 +193,7 @@ bool Class::Supports(const std::string &name) const
 
         if (theClass)
         {
-            if (theClass->Supports(name))
+            if (theClass->SupportsClass(name))
             {
                 return true;
             }

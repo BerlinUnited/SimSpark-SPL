@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.11 2004/03/12 09:23:15 rollmark Exp $
+$Id: renderserver.cpp,v 1.12 2004/04/10 08:34:17 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -244,7 +244,7 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node)
   // perform update on hierarchy
   for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
     {
-      if ((*i)->GetClass()->Supports("BaseNode"))
+      if ((*i)->GetClass()->SupportsClass("BaseNode"))
         {
           RenderScene(shared_static_cast<BaseNode>(*i));
         }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.h,v 1.10 2004/03/22 10:31:53 rollmark Exp $
+   $Id: class.h,v 1.11 2004/04/10 08:30:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ public:
     /** return true if the class supports a given 'interface',
      *  i.e. the base class hierarchy contains the class 'name'
      */
-    bool Supports(const std::string &name) const;
+    bool SupportsClass(const std::string &name) const;
 
 protected:
     /** adds an instance to the local list of instances */

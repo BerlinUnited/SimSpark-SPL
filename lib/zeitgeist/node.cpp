@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.cpp,v 1.6 2004/03/22 10:37:41 rollmark Exp $
+   $Id: node.cpp,v 1.7 2004/04/10 08:30:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ Node::GetChildSupportingClass(const std::string &name, bool recursive)
     {
         // check if we have found a match and add it
         shared_ptr<Class> theClass = (*i)->GetClass();
-        if (theClass.get() != NULL && theClass->Supports(name))
+        if (theClass.get() != NULL && theClass->SupportsClass(name))
         {
             return (*i);
         }
@@ -168,13 +168,15 @@ Node::GetChildrenSupportingClass(const std::string& name, TLeafList& baseList, b
     {
         // check if we have found a match and add it
         shared_ptr<Class> theClass = (*i)->GetClass();
-        if (theClass.get() != NULL && theClass->Supports(name))
+        if (theClass.get() != NULL && theClass->SupportsClass(name))
         {
             baseList.push_back(*i);
         }
 
         if (recursive)
+        {
             (*i)->GetChildrenSupportingClass(name, baseList, recursive);
+        }
     }
 }
 
