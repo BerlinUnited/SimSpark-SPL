@@ -1,0 +1,142 @@
+TEXT_INSTEAD_OF_A_MANUAL.txt
+
+rcssserver3D provides a platform for programming simulated robots
+playing soccer in a physical environment. To get started, you should
+be somewhat familiar with the SPADES simulation middleware, thought it
+is possible to start by experimenting with the 'agenttest' program in
+the ./app/agenttest/ directory.
+
+Because there is no manual for the simulator, this text tries to
+describe the features of the simulated robots.
+
+Your soccer team consists of a number of robots with equal
+capabilities. The programs you should write to create a team exchange
+data with the (virtual) low level control system delivered with the
+robots. Both perceptors and effectors of your robots work with
+S-expressions, this is the syntax you know already from the 2D soccer
+simulator, or maybe also from your favourite programming language :). 
+
+Some technical data of the environment and of your new robots:
+
+The playing field is a plane with FIFA standard soccer field
+size. Goal boxes and the ball are also standard FIFA size:
+goals are 7.32m wide and 2.44m high; the ball has got a diameter of
+0.222m and weighs 0.4kg. 
+FIFA does not say too much about gravity (probably because they can't
+change it anyway), but in our simulation, gravity is fixed to
+9.81m/s². 
+
+In the current version of the simulator, robots are represented as
+spheres (until we can come up with a more sophisticated representation
+next year). The diameter of all robots is 0.44m, and each robots
+weighs 75kg. 
+
+
+Robots possess a kind of omnidrive, which adds some physical force to
+the robot body. By using the omnidrive, it is possible to accelerate
+into any direction, and it is also possible to jump up. However, the
+omnidrive does only work if the robot is actually touching the soccer
+field. If you stop accelerating, robots will still move for a while,
+and you also cannot suddenly stop when moving with full speed. The
+maximum speed and the maximum height for jumping up if yet to be
+discovered. To use the omnidrive, you have to use the "dasheffector",
+which takes a cartesian vector (x y z) with a maximum length of 100
+units. The x-coordinate points towards the opponents team side of the
+field, z points up. The dasheffector works realiable, there is a
+small error for forces along each axis. For each axis, noise is
+normally distributed around 0.0.
+It is also possible to push away other robots. Using this feature to
+push away opponents is discouraged :). 
+
+Example command: (dash 20.0 50.0 0.0)
+
+
+To move the ball, you have the option of simply using the robots to
+push the ball into a desired direction, or you can use the
+kickeffector to kick the ball.  
+
+  (Originally, we did not intend to create an artificial
+   kickeffector. However, to make use of the 3rd dimension, this was
+   the easiest way. It is intended to remove this kind of kick
+   effector in future versions (not this years competition) in favour
+   of a real physical device).
+
+The kickeffector can accelerate the ball radially away from the robot
+body. The kickeffector takes an angle as first argument (this is the
+latitudal angle (in degrees) for accelerating the ball, a number
+between 0 and 50). The second argument indicates the kicking power and
+this is a number between 0 and 100 (meaning % of the maximum available
+power). The kickeffector adds a force and a torque to the ball (over a
+number of simulation steps, depending on the kick power).
+To kick the ball, the ball has to be very close to the robot (0.04m). 
+
+The kickeffector noise has the following parameters:
+- angle error in the x-y plane: very low
+  normally distributed around 0.0 (sigma = 0.02)
+- latitudal angle error: normally distributed around 0.0.
+  this angle error is low (sigma = 0.9) at the end positions 
+  (at 0 and at 50 degrees), towards the middle of the range the angle
+  error is higher (with sigma up to 4.5).
+- kick power error: normally distributed around 0.0, sigma = 0.4
+
+You cannot change the kicking angle in the x-y plane, i.e. you have to
+move the robot so that it can kick into the desired direction.
+The kickeffector is very strong, it is almost posssible to kick the
+ball from one side of the field to the other side. It is also possible
+to move other robots by kicking the ball against them, especially if
+they are close. Try to exploit this feature :)
+Like the dasheffector, the kickeffector does only work if the robot
+touches the soccer field. 
+
+Example command: (kick 20.0 80.0)
+
+
+Vision: Your robots possess a special omnicam with some smart image
+proccessing software attached :). Robots have a 360 degrees view. The
+visionperceptor delivers lists of seen objects, where objects are
+either others robots, the ball, or markers on the field (there are
+currently 8 markers on the field: 4 flags and 4 goal posts). 
+With each object you get its distance, the angle in the x-y plane
+and the latitudal angle. Contrary to 2D soccer simulation, the vision
+system does not deliver object velocities. 
+Objects can be occluded by other objects (this is not implemented
+yet). All distances and angles are given relative to the camera
+position (currently at the center of the robot sphere).
+
+The noise parameters of the vision system are as follows:
+- calibration error: 
+  A small error is added to the camera position. For each axis, the
+  error is uniformly distributed between -0.005m and 0.005m. The error
+  is calculated once and remains constant during the complete match.
+- noise: all errors normally distributed around 0.0
+  + distance error:  sigma = 0.0965
+  + angle error (x-y plane): sigma = 0.1225
+  + angle error (latitudal): sigma = 0.1480
+
+Example Vision output: 
+(Vision (Flag1 (pol 60.4264 -34.2719 -0.0357255)) (Flag2 (pol 64.6379
+-148.497 -0.206611)) (Flag3 (pol 64.7042 148.213 -0.194732)) (Flag4
+(pol 60.4241 34.4168 -0.168905)) (Goal1l (pol 50.2566 4.30122
+-0.548845)) (Goal1r (pol 50.1495 -4.38376 -0.285932)) (Goal2l (pol
+54.9372 176.133 -0.0666542)) (Goal2r (pol 55.102 -175.997 -0.279753))
+(Ball (pol 34.9437 16.6809 -0.0461624)) (AgentAspect3 (pol 14.8641
+180.126 1.00389)) (AgentAspect2 (pol 10.125 179.968 1.08724))
+(AgentAspect1 (pol 5.02996 179.999 1.1926))) 
+
+
+
+  
+
+END OF TEXT.
+
+
+you're on your own now
+we won't save you
+your resque-squad
+is too exhausted
+
+and if you complain once more
+you'll meet an army of me
+
+
+(BJOERK, army of me)
