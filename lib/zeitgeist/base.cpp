@@ -1,3 +1,4 @@
+#include "base.h"
 #include "class.h"
 #include "node.h"
 #include <iostream>
@@ -25,7 +26,8 @@ void Base::SetParent(const boost::shared_ptr<Node> &newParent)
 	if (shared_ptr<Node> oldParent = make_shared(GetParent()))
 	{
 		// we have a parent, so update our state
-		shared_ptr<Base> self = shared_static_cast<Base>(make_shared(GetSelf()));
+                // changed "Base" to "Leaf" -- 17.04.03 Oliver
+		shared_ptr<Leaf> self = shared_static_cast<Leaf>(make_shared(GetSelf()));
 		// here reference count should be > 1 (at least one in the parent, and one in this routine)
 		//cout << "Have parent - use count " << self.use_count() << "\n";
 		assert(self.use_count() > 1);
@@ -57,7 +59,8 @@ boost::shared_ptr<Base> Base::GetChild(const std::string &name, bool recursive)
 {
 	if (name.compare("..") == 0)
 	{
-		return make_shared(GetParent());
+            // added shared_dynamic_cast<Base> 17.04.03 Oliver
+		return shared_dynamic_cast<Base>(make_shared(GetParent()));
 	}
 	
 	if (name.compare(".") == 0)
@@ -127,7 +130,8 @@ const std::string& Base::GetFullPath() const
 
 		if (GetParent().get() != NULL)
 		{
-			shared_ptr<Base> blah = make_shared(GetParent());
+                    // added shared_dynamic_cast<Base>() -- 17.04.03 Oliver
+			shared_ptr<Base> blah = shared_dynamic_cast<Base>(make_shared(GetParent()));
 			parentPath = blah->GetFullPath();
 		}
 
