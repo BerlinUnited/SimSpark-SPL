@@ -86,7 +86,7 @@ public:
         bool Intersect(const salt::Vector3f& start, const salt::Vector3f& end, salt::Vector3f& ret) const;
 private:
         virtual void RenderInternal();
-        virtual void RenderAmbientInternal();
+		//   virtual void RenderAmbientInternal();
 
 /*
         //! initializes the collision system (Opcode)

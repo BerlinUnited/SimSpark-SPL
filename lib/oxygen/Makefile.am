@@ -8,7 +8,7 @@ liboxygen_la_SOURCES = $(sources)
 liboxygen_la_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib
+AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/oxygen
@@ -55,11 +55,10 @@ sceneserver/sceneserver.cpp \
 sceneserver/sceneserver_c.cpp \
 sceneserver/indexbuffer.cpp \
 sceneserver/transform.cpp \
-sceneserver/transform_c.cpp
-
-### sceneserver/camera.cpp 
-### sceneserver/camera_c.cpp 
-### sceneserver/indexbuffer.cpp 
+sceneserver/transform_c.cpp \
+sceneserver/camera.cpp \
+sceneserver/camera_c.cpp \
+sceneserver/indexbuffer.cpp
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
@@ -83,7 +82,6 @@ sceneserver/fpscontroller.h \
 sceneserver/scene.h \
 sceneserver/sceneserver.h \
 sceneserver/indexbuffer.h \
-sceneserver/transform.h
-
-### sceneserver/camera.h 
-### sceneserver/indexbuffer.h 
+sceneserver/transform.h \
+sceneserver/camera.h \
+sceneserver/indexbuffer.h 

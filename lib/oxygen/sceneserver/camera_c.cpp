@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera_c.cpp,v 1.2 2003/08/31 13:08:42 rollmark Exp $
+   $Id: camera_c.cpp,v 1.3 2003/11/07 15:05:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "camera.h"
 
 using namespace boost;
-using namespace kerosin;
+using namespace oxygen;
 using namespace zeitgeist;
 
 FUNCTION(setViewport)
