@@ -21,7 +21,7 @@
 #define UTILITY_FORWARDER_H
 
 /*! \class Forwarder
-  $Id: forwarder.h,v 1.3 2002/08/16 15:42:29 fruit Exp $
+  $Id: forwarder.h,v 1.4 2002/08/23 14:09:54 fruit Exp $
     
     Forwarder
 
@@ -113,7 +113,7 @@ private:
 
 };
 
-static Forwarder smux;
+extern Forwarder smux;
 
 } //namespace 
 

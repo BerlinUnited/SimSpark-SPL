@@ -23,7 +23,7 @@
 using namespace std;
 using namespace Utility;
 
-Forwarder smux(1024);
+static Forwarder Utility::smux(1024);
 
 Forwarder::Forwarder(unsigned int size) :
 ostream(new ForwarderStreamBuf(size))
@@ -80,3 +80,4 @@ Forwarder::getStreamBuf()
     ForwarderStreamBuf* streamBuf = dynamic_cast<ForwarderStreamBuf*>(rdbuf());
     return *streamBuf;
 }
+
