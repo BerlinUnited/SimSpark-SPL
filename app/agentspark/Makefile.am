@@ -27,4 +27,7 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 agentspark_SOURCES = main.cpp \
 	behavior.h \
-	carbehavior.cpp carbehavior.h 
+	carbehavior.cpp \
+	carbehavior.h \
+	soccerbehavior.h \
+	soccerbehavior.cpp
