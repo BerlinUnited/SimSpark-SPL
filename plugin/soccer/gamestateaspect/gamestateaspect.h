@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: gamestateaspect.h,v 1.3 2004/04/23 15:17:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,31 +47,31 @@ public:
     /** sets the current play mode */
     void SetPlayMode(TPlayMode mode);
 
-    /** set the current play mode randomly to PM_KickOff_Left or
-        PM_KickOff_Right
+    /** set the current play mode randomly to PM_KickOff_Left or PM_KickOff_Right.
+        \param ti Team which should do the kick off (if TI_NONE, then do a coin toss)
     */
-    void KickOff();
+    void KickOff(TTeamIndex ti = TI_NONE);
 
     /** returns the current game time */
     TTime GetTime() const;
 
     /** returns the time passed since the last playmode change */
-    TTime GetModeTime();
+    TTime GetModeTime() const;
 
     /** returns the time of the last playmode change */
-    TTime GetLastModeChange();
+    TTime GetLastModeChange() const;
 
     /** sets the current game half */
     void SetGameHalf(TGameHalf half);
 
     /** returns the current game half */
-    TGameHalf GetGameHalf();
+    TGameHalf GetGameHalf() const;
 
     /** sets the name of a team */
     void SetTeamName(TTeamIndex idx, std::string name);
 
     /** returns the name of a team */
-    std::string GetTeamName(TTeamIndex idx);
+    std::string GetTeamName(TTeamIndex idx) const;
 
     /** called from the InitEffector to request a uniformn number and
         teamname */
@@ -79,7 +79,7 @@ public:
                         std::string teamName, unsigned int unum);
 
     /** returns the next uniform number not taken for the given team */
-    int RequestUniformNumber(const TTeamIndex ti);
+    int RequestUniformNumber(TTeamIndex ti) const;
 
     /** called from the InitEffector to request an initial position
         for an agent */
@@ -89,7 +89,7 @@ public:
     void ScoreTeam(TTeamIndex idx);
 
     /** returns the score of a team */
-    int GetScore(TTeamIndex idx);
+    int GetScore(TTeamIndex idx) const;
 
 protected:
     /** setup the init positions for the agents */
@@ -117,6 +117,9 @@ protected:
 
     /** the current game time */
     TTime mTime;
+
+    /** the current time before the match started */
+    TTime mLeadTime;
 
     /** the current half of the game */
     TGameHalf mGameHalf;
