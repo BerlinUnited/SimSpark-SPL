@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematnode.h,v 1.2 2004/03/22 11:12:29 rollmark Exp $
+   $Id: singlematnode.h,v 1.3 2004/04/19 15:44:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #ifndef KEROSIN_SINGLEMATNODE_H
 #define KEROSIN_SINGLEMATNODE_H
 
-#include <oxygen/sceneserver/basenode.h>
+#include "staticmesh.h"
 
 namespace kerosin
 {
@@ -31,7 +31,7 @@ class Material;
 /** \class SingleMatNode is a BaseNode that renders itself using a
     single material. It provides methods to manage this material.
  */
-class SingleMatNode : public oxygen::BaseNode
+class SingleMatNode : public StaticMesh
 {
     //
     // Function
@@ -45,12 +45,8 @@ public:
      */
     bool SetMaterial(const std::string& name);
 
-private:
-    //
-    // Members
-    //
-protected:
-    boost::shared_ptr<Material> mMaterial;
+    /** returns the material assigned to this node */
+    boost::shared_ptr<Material> GetMaterial();
 };
 
 DECLARE_ABSTRACTCLASS(SingleMatNode);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematnode.cpp,v 1.2 2004/03/22 11:12:29 rollmark Exp $
+   $Id: singlematnode.cpp,v 1.3 2004/04/19 15:44:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
 
-SingleMatNode::SingleMatNode() : BaseNode()
+SingleMatNode::SingleMatNode() : StaticMesh ()
 {
 }
 
@@ -37,6 +37,9 @@ SingleMatNode::~SingleMatNode()
 
 bool SingleMatNode::SetMaterial(const std::string& name)
 {
+    mMaterials.clear();
+    mFaceToMaterial.clear();
+
     shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
@@ -47,8 +50,26 @@ bool SingleMatNode::SetMaterial(const std::string& name)
             return false;
         }
 
-    mMaterial = materialServer->GetMaterial(name);
+    shared_ptr<Material> material = materialServer->GetMaterial(name);
 
-    return mMaterial.get() != 0;
+    if (material.get() == 0)
+        {
+            return false;
+        }
+
+    mMaterials.push_back(material);
+    mFaceToMaterial.push_back(0);
+
+    return true;
+}
+
+shared_ptr<Material> SingleMatNode::GetMaterial()
+{
+    if (mMaterials.empty())
+        {
+            return shared_ptr<Material>();
+        }
+
+    return mMaterials.front();
 }
 
