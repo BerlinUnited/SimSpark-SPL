@@ -1,3 +1,76 @@
+2004-04-05  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb:
+	- added a DragController below the camera
+	- tuned FPSController and DragController for high acceleration and
+	almost immediate stop
+
+	* lib/oxygen/oxygen.cpp, lib/oxygen/oxygen.h:
+	- registered BodyController and DragController
+
+	* lib/oxygen/Makefile.am: 
+	- add bodycontroller and dragcontroller files
+	- removed odeobject.cpp
+
+	* lib/oxygen/sceneserver/fpscontroller.cpp,
+	* lib/oxygen/sceneserver/fpscontroller.h,
+	* lib/oxygen/sceneserver/fpscontroller_c.cpp:
+	- inherited FPSController from BodyController
+	- removed drag implementation
+
+	* lib/oxygen/physicsserver/odeobject.cpp,
+	* lib/oxygen/physicsserver/odeobject.h:
+	- removed unsused mPhysicsServer member and method
+	ConstructInternal
+	- removed odeobject.cpp
+	- declared ODEObject as an abstract baseclass
+
+	* lib/oxygen/physicsserver/dragcontroller.cpp,
+	* lib/oxygen/physicsserver/dragcontroller.h,
+	* lib/oxygen/physicsserver/dragcontroller_c.cpp:
+	- added class DragController, a BodyController that applies a
+	linear and angular drag the controlled body
+
+	* lib/oxygen/physicsserver/bodycontroller.cpp,
+	* lib/oxygen/physicsserver/bodycontroller.h,
+	* lib/oxygen/physicsserver/bodycontroller_c.cpp:
+	- added class BodyController, a baseclass for nodes that control
+	the motion of an associated body
+
+2004-03-31  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/physicsserver/contactjointhandler_c.cpp,
+	* lib/oxygen/physicsserver/contactjointhandler.cpp,
+	* lib/oxygen/physicsserver/contactjointhandler.h: 
+
+	- added method SetBounceValue
+
+	* lib/oxygen/physicsserver/contactjointhandler.cpp, 
+	* lib/oxygen/physicsserver/contactjointhandler.h:
+	- calculate the resulting surface parameter for the constructed
+	contact joint. The values for softERP, softCFM, mu and bounce
+	paramters are averaged between the collider and the collidee.
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- fixed SoccerBase::FlipView; A position for TI_RIGHT, instead of
+	TI_LEFT must be flipped. The left team looks along the (global)
+	positve X-axis to the opponent goal, so no flipping is needed.
+
+	* app/rcssmonitor3d/lite/main.cpp:
+	- fixed initial camera position, so that global positive X is
+	right side
+
+	* app/rcssmonitor3d/lite/main.cpp: 
+	- fixed flag drawing
+
+2004-03-30  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/physicsserver/contactjointhandler.cpp,
+	* lib/oxygen/physicsserver/contactjointhandler.h,
+	* lib/oxygen/physicsserver/contactjointhandler_c.cpp:
+	- added get method for a subset of the ode surface parameter
+	structure managed by the ContactJointHandler
+
 2004-03-28  Oliver Obst  <fruit@robolog.org>
 
 	* acinclude.m4: 
