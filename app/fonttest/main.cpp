@@ -40,7 +40,7 @@ static void processEvents( void )
 
 int main(int argc, char **argv)
 {
-        Zeitgeist       zg;
+        Zeitgeist       zg("." PACKAGE_NAME);
 
         shared_ptr<CoreContext> context = zg.CreateContext();
         Kerosin                                 kCore(zg);
