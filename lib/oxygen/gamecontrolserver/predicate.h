@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.1.2.8 2003/12/28 16:13:36 fruit Exp $
+   $Id: predicate.h,v 1.2.2.1 2003/12/29 17:53:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,14 +31,6 @@
 
 namespace oxygen
 {
-
-/** A functional class to find a specific parameter for use as STL predicate.
-*/
-class ParameterName : public std::binary_function<boost::any,std::string,bool>
-{
-public:
-    bool operator()(const boost::any& param, const std::string& pred) const;
-};
 
 /** \class Predicate encapsulates a predicate name together with its
     list of parameters.
@@ -69,14 +61,83 @@ class Predicate
     */
     typedef std::list<Predicate> TList;
 
+    /** \class Iterator encapsulates a TParameterList::const_iterator
+        together with a reference to the list the iterator belongs
+        to. It tries to mimic the behaviour of an STL iterator as much
+        as possible.
+
+        This class is necessary because it is not sufficient for the
+        FindParameter method to return a single iterator without the
+        list it belongs to as it is possible for TParameterLists to be
+        nested. A subsequent GetValue method would not be able to test
+        if the end of a TParameterList is reached without knowing the
+        list an iterator belongs to. This functionality is for example
+        needed for the implementation of the GetVectorValue method
+     */
+
+    struct Iterator
+    {
+    public:
+        Iterator(const TParameterList* l, TParameterList::const_iterator i);
+
+        /** constructs an Iterator pointing to the first element of
+            predicate::parameter */
+        Iterator(const Predicate& predicate);
+
+        /** construct an Iterator pointing to
+            Predicate::nullParamList. This empty static parameter list
+            acts as a null element and avoids special cases for
+            list==0 in the Iterator implementation.
+        */
+        Iterator();
+
+        /** aeturns the element this Iterator points to */
+        const boost::any& operator * () const;
+
+        /** advances this Iterator on element if possible */
+        void operator ++ ();
+
+        /** constructs an Iterator pointing to the first element of
+            the associated list */
+        Iterator begin() const;
+
+        /** constructs an Iterator pointing to the end() element of
+            the associated list */
+        Iterator end() const;
+
+        /** \returns true if this Iterator and i are not identical */
+        bool operator != (const Iterator& i) const;
+
+        /** \returns true if this Iterator and i are identical */
+        bool operator == (const Iterator& i) const;
+
+        /** \returns the encapuslated iterator */
+        TParameterList::const_iterator GetIterator() const;
+
+        /** \returns a pointer to the associated list */
+        TParameterList* GetList() const;
+
+    protected:
+        /** the associated list */
+        TParameterList* list;
+
+        /** the encapsulated iterator */
+        TParameterList::const_iterator iter;
+    };
+
 public:
+    Iterator begin() const
+    {
+        return Iterator(&parameter,parameter.begin());
+    }
+
     /** GetValue is a generic templated helper function for consumers
         of TParameterLists.
 
         It tries to cast the parameter at iter to a value of type
         T. If successful it returns true, assigns the casted parameter
         to value and increments the iterator iter. Otherwise false is
-        returned and value and iter are unchanged.  Note the GetValue
+        returned and value and iter are unchanged.  Note that GetValue
         increments iter to transparently allow specialized functions
         for types that are represented by more than one entry in the
         ParameterList. An example is a three dimensional vector
@@ -87,7 +148,7 @@ public:
         \return true if extraction successful, false otherwise
      */
     template<typename T> bool
-    GetValue(TParameterList::const_iterator& iter, T& value) const
+    GetValue(Iterator& iter, T& value) const
     {
         try
             {
@@ -100,40 +161,41 @@ public:
                 return false;
             }
     }
+
     /** Below are GetValue helper functions spezialiced for a single type */
 
     /** GetValue helper for float */
-    bool GetValue(TParameterList::const_iterator& iter, float& value) const
+    bool GetValue(Iterator& iter, float& value) const
     {
         return ConvertStringValue(iter, value);
     }
 
     /** GetValue helper for double */
-    bool GetValue(TParameterList::const_iterator& iter, double& value) const
+    bool GetValue(Iterator& iter, double& value) const
     {
         return ConvertStringValue(iter, value);
     }
 
     /** GetValue helper for int */
-    bool GetValue(TParameterList::const_iterator& iter, int& value) const
+    bool GetValue(Iterator& iter, int& value) const
     {
         return ConvertStringValue(iter, value);
     }
 
     /** GetValue helper for unsigned int */
-    bool GetValue(TParameterList::const_iterator& iter, unsigned int& value) const
+    bool GetValue(Iterator& iter, unsigned int& value) const
     {
         return ConvertStringValue(iter, value);
     }
 
     /** GetValue helper for Vetor3f */
-    bool GetValue(TParameterList::const_iterator& iter, salt::Vector3f& value) const
+    bool GetValue(Iterator& iter, salt::Vector3f& value) const
     {
         return GetVectorValue(iter,value);
     }
 
     /** GetValue helper for Vector2f */
-    bool GetValue(TParameterList::const_iterator& iter, salt::Vector2f& value) const
+    bool GetValue(Iterator& iter, salt::Vector2f& value) const
     {
         return GetVectorValue(iter,value);
     }
@@ -141,27 +203,55 @@ public:
     /** Find a parameter with a given name.
 
         For this method, we assume that parameters are represented by lists
-        consisting of a name (a string) and a (number of) values. An example
+        consisting of a name (a string) and (a number of) values. An example
         for the predicate init:
         init.name = "init";
         init.parameter = [["teamname", "RoboLog"], ["unum", 1]];
 
         The part after init is the list of parameters. To extract the teamname,
         do something like
-        FindParameter(iter, "teamname");
-        TParameterList myList = boost::any_cast<TParameterList>(*iter);
-        iter = myList.begin();
-        ++iter;
-        if (iter != myList.end())
-            GetValue(iter, name);
+        Predicate::iterator iter(parameter);
+        if (FindParameter(iter, "teamname"))
+        {
+          GetValue(iter,name);
+        }
 
-        \param iter on success, iter will point to the list element you are
-                    looking for. Will be unchanged otherwise.
+        \param iter on success, iter will point to the first value of
+        the parameter you are looking for. It will be unchanged
+        otherwise.
         \param name Name of the parameter to find.
         \return true if parameter name was found.
     */
-    bool FindParameter(TParameterList::const_iterator& iter,
-                       const std::string& name) const;
+    bool FindParameter(Iterator& iter, const std::string& name) const;
+
+    /** Find and return the first value of a parameter with a given name.
+
+        This method tries to cover the most common use case of a
+        TParameterList. It assumes that the parameters are a set lists
+        consisting of name value pairs, e.g. for the predicate init
+
+        init.name = "init";
+        init.parameter = [["teamname", "RoboLog"], ["unum", 1]];
+
+        For parameter entries with more than one value per parameter
+        use the generic FindParameter/GetValue functions.
+
+        \param name Name of the parameter to find.
+        \param T reference to the value, that will receive the
+        parameter value on success
+        \return true if parameter name was found.
+     */
+    template<typename T> bool
+    GetValue(const std::string& name, T& value) const
+    {
+        Iterator iter(*this);
+        if (! FindParameter(iter,name))
+            {
+                return false;
+            }
+
+        return GetValue(iter,value);
+    }
 
  protected:
     /** \note As c++ does not support partially specialized function
@@ -189,7 +279,7 @@ public:
         the TParameterList.
      */
     template <typename DATATYPE, int ELEMENTS, typename TYPE> f_inline bool
-    GetVectorValue(TParameterList::const_iterator& iter,
+    GetVectorValue(Iterator& iter,
                    salt::TVector<DATATYPE,ELEMENTS,TYPE>& value) const
     {
         typedef salt::TVector<DATATYPE,ELEMENTS,TYPE> Vector;
@@ -205,13 +295,13 @@ public:
             {
                 // a direct cast faild. try to construct a vector from
                 // three consecutive values
-                TParameterList::const_iterator& test = iter;
+                Iterator test = iter;
                 Vector vec;
                 int i=0;
 
                 while (
                        (i<ELEMENTS) &&
-                       (test != parameter.end())
+                       (test != test.end())
                        )
                     {
                         if (! GetValue(test,vec[i]))
@@ -242,7 +332,7 @@ public:
         from a string.
     */
     template<typename TYPE> f_inline bool
-    ConvertStringValue(TParameterList::const_iterator& iter, TYPE& value) const
+    ConvertStringValue(Iterator& iter, TYPE& value) const
     {
         try
             {
@@ -270,8 +360,19 @@ public:
  public:
     std::string name;
     TParameterList parameter;
+
+protected:
+    static const TParameterList nullParamList;
 };
 
+/** A functional class to find a specific parameter for use as STL
+    predicate.
+*/
+class ParameterName : public std::binary_function<boost::any,std::string,bool>
+{
+public:
+    bool operator()(const boost::any& param, const std::string& pred) const;
+};
 }  // namespace oxygen
 
 #endif // OXYGEN_PREDICATE_H
