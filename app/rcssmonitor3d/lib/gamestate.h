@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.h,v 1.6 2004/06/07 14:29:26 fruit Exp $
+   $Id: gamestate.h,v 1.7 2004/06/11 14:58:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -164,6 +164,9 @@ public:
     //! \return the ball mass
     float GetBallMass() const;
 
+    //! \return true if monitor should finsh
+    bool IsFinished() const { return mFinished; }
+
 protected:
     void ResetBall();
     void ResetPlayers();
@@ -173,6 +176,7 @@ protected:
     void SetupPlaymodeMap();
     void ProcessInit(const oxygen::Predicate& predicate);
     void ProcessInfo(const oxygen::Predicate& predicate);
+    void ProcessShutdown(const oxygen::Predicate& /* predicate */);
 
 protected:
     struct PlayerInfo
@@ -217,7 +221,8 @@ protected:
     float mAgentMaxSpeed;
     float mBallRadius;
     float mBallMass;
-    std::string  mAck;
+    std::string mAck;
+    bool mFinished;
 
 private:
     // typedefs etc.
