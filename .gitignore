@@ -281,6 +281,12 @@ plugin/perfectvisionperceptor/.deps
 plugin/perfectvisionperceptor/.libs
 plugin/perfectvisionperceptor/Makefile
 plugin/perfectvisionperceptor/Makefile.in
+plugin/rubysceneimporter/*.la
+plugin/rubysceneimporter/*.lo
+plugin/rubysceneimporter/.deps
+plugin/rubysceneimporter/.libs
+plugin/rubysceneimporter/Makefile
+plugin/rubysceneimporter/Makefile.in
 plugin/sexpparser/*.la
 plugin/sexpparser/*.lo
 plugin/sexpparser/.deps
