@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver_c.cpp,v 1.1.2.3 2003/12/04 17:29:01 rollmark Exp $
+   $Id: gamecontrolserver_c.cpp,v 1.1.2.4 2003/12/09 19:29:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,19 +33,8 @@ FUNCTION(initParser)
         }
 }
 
-FUNCTION(initEffector)
-{
-        if (in.size() == 1)
-        {
-                GameControlServer* gcs = dynamic_cast<GameControlServer*>(obj);
-                gcs->InitEffector(boost::any_cast<char*>(in[0]));
-        }
-}
-
-
 void CLASS(GameControlServer)::DefineClass()
 {
     DEFINE_BASECLASS(zeitgeist/Node);
     DEFINE_FUNCTION(initParser);
-    DEFINE_FUNCTION(initEffector);
 }
