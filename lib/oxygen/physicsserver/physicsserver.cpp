@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: physicsserver.cpp,v 1.3.8.1 2004/01/09 13:44:17 rollmark Exp $
+   $Id: physicsserver.cpp,v 1.3.8.2 2004/01/11 11:17:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,10 +32,4 @@ PhysicsServer::~PhysicsServer()
 {
     // release memory associated with ode
     dCloseODE();
-}
-
-Body* PhysicsServer::GetBody(dBodyID id)
-{
-  return id ?
-    static_cast<Body*>(dBodyGetData(id)) : 0;
 }
