@@ -1,3 +1,26 @@
+2003-11-17  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	added command line parsing via spades::EngineParam style parameter reader
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	made inheritance from spades::WorldModel public
+
+	* lib/oxygen/spadesserver/paramreader.h: 
+	made inheritance from spades::EngineParam public
+
+	* lib/oxygen/oxygen.cpp:
+	* lib/oxygen/spadesserver/paramreader.h:
+	* lib/oxygen/spadesserver/paramreader_c.cpp:	
+	* lib/oxygen/spadesserver/spadesserver.h:	
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:	
+	added initial version of the parameter reader base class (representing
+	the zeitgeist equivalent of spades::EngineParam)
+
+	* app/spadestest/spadestest.rb: 
+	creating the Parameter Reader on startup
+
 2003-11-16  Oliver Obst  <fruit@robolog.org>
 
 	* configure.ac: 
@@ -27,15 +50,15 @@
 	- including indexbuffer
 
 	* lib/oxygen/Makefile.am: 
-	- added spadesserver subdirectory and files. build spadesserver only if 
+	- added spadesserver subdirectory and files. build spadesserver only if
 	the spades library is available.
 	
 
 2003-11-15  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
-	fixed the script path and removed the STRINGIFY macros as configure properly places
-	quotes around the prefix now.
+	fixed the script path and removed the STRINGIFY macros as configure 
+	properly places quotes around the prefix now.
 
 	* lib/zeitgeist/zeitgeist.rb: 
 	- createVariable was taking 3 parameters: 
@@ -109,14 +132,14 @@
 	  into separate macros.
           The basic libraries (libsalt, libzeitgeist, and libkerosin) do not 
 	  need them, so they should not depend on them. 
-	  The macros have gone to acinclude and are only called in configure.ac. 
+	  The macros have gone to acinclude and are only called in configure.ac.
 	  If the libraries are not available on a particular system or if the 
 	  user configures with --disable-kerosin, libkerosin and the test 
 	  dependend on kerosin will not be build. 
         - moved the check for ODE into a separate macro. Removed dependency on 
 	  libode for the base libraries libsalt and libzeitgeist. Applications 
-	  need only to link the .la files from our libraries, other dependencies 
-	  will be resolved automatically by libtool. 
+	  need only to link the .la files from our libraries, other dependencies
+	  will be resolved automatically by libtool.
         - added the app/fonttest Makefile
 
 	* acinclude.m4:
@@ -168,9 +191,9 @@
 	  anymore. Instead, we're using FMUSIC_LoadSongEx now.
 	
 	* plugin/soundsystemfmod/soundstreamfmod.cpp: 
-	- changes so that the file compiles with FMOD 3.7. Some of the "Load" functions in
-	  FMOD have been changed, so that this changes was required in order
-	  to be up to date.
+	- changes so that the file compiles with FMOD 3.7. Some of the "Load" 
+	  functions in FMOD have been changed, so that this changes was 
+	  required in order to be up to date.
 
 	* configure.ac: 
 	added check if the soundsystemfmod plugin should be built
