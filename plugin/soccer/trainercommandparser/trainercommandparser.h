@@ -40,7 +40,8 @@ public:
     {
         CT_PLAYER,
         CT_BALL,
-        CT_PLAYMODE
+        CT_PLAYMODE,
+        CT_ACK
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
@@ -58,6 +59,8 @@ public:
     /** parses the list of predicates; returns true on success
      */
     void ParsePredicates(oxygen::PredicateList& predList);
+
+    bool SendAck(std::string &reply);
 
 protected:
 
@@ -81,6 +84,8 @@ protected:
         predicate
     */
     void ParsePlayModeCommand(const oxygen::Predicate & predicate);
+    
+    
 
 protected:
 
@@ -89,6 +94,9 @@ protected:
     TTeamIndexMap  mTeamIndexMap;
 
     TPlayModeMap   mPlayModeMap;
+    
+    bool mGetAck;
+    std::string mAckString;
 };
 
 DECLARE_CLASS(TrainerCommandParser);
