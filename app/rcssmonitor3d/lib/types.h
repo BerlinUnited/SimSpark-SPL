@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: types.h,v 1.2 2004/03/09 21:20:25 rollmark Exp $
+   $Id: types.h,v 1.3 2004/03/20 09:42:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,6 +46,15 @@
 #define DEFAULT_GOAL_WIDTH   7.32
 #define DEFAULT_GOAL_DEPTH   2.0
 #define DEFAULT_GOAL_HEIGHT  2.44
+
+// agent params
+#define DEFAULT_AGENT_MASS 75.0
+#define DEFAULT_AGENT_RADIUS 0.22
+#define DEFAULT_AGENT_MAXSPEED 10.0
+
+// ball params
+#define DEFAULT_BALL_RADIUS 0.111
+#define DEFAULT_BALL_MASS 0.41
 
 // camera mode
 #define DEFAULT_AUTO_CAM 0
