@@ -28,6 +28,9 @@ initeffector/initeffector_c.cpp \
 kickeffector/kickeffector.cpp \
 kickeffector/kickeffector.h \
 kickeffector/kickeffector_c.cpp \
+objectstate/objectstate.h \
+objectstate/objectstate.cpp \
+objectstate/objectstate_c.cpp \
 sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor.h \
 sexpmonitor/sexpmonitor_c.cpp \
