@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbehavior.cpp,v 1.1 2004/05/17 09:18:01 rollmark Exp $
+   $Id: soccerbehavior.cpp,v 1.2 2004/12/17 20:33:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -115,6 +115,12 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
             }
 
             // update the vision map
+//             cerr << "+++" << endl;
+//             cerr << "VO " << vo << endl;
+//             cerr << "D " << sense.distance << endl;
+//             cerr << "T " << sense.theta << endl;
+//             cerr << "P " << sense.phi << endl;
+//             cerr << "---" << endl;
             mVisionMap[vo] = sense;
         }
 }
@@ -175,6 +181,24 @@ void SoccerBehavior::ParseVision(const Predicate& predicate)
     predicate.GetValue(iter,mMyPos);
 }
 
+string SoccerBehavior::TurnLeft() const
+{
+//     std::cerr << "turn left" << std::endl;
+    return "(lte -100)(rte 100)";
+}
+
+string SoccerBehavior::TurnRight() const
+{
+//     std::cerr << "turn right" << std::endl;
+    return "(lte 100)(rte +100)";
+}
+
+string SoccerBehavior::Forward() const
+{
+//     std::cerr << "forward" << std::endl;
+    return "(lte 100)(rte 100)";
+}
+
 string SoccerBehavior::Think(const std::string& message)
 {
     shared_ptr<PredicateList> predList =
@@ -202,7 +226,23 @@ string SoccerBehavior::Think(const std::string& message)
     }
 
     VisionSense vs = GetVisionSense(VO_BALL);
-    Vector3f ballPos = GetDriveVec(GetVisionSense(VO_BALL));
 
-    return "(lte 150)(rte 200)";
+    float d = gAbs(vs.theta);
+
+    if (d > 90)
+        {
+            return TurnLeft();
+        } else if (d < 5)
+        {
+            return Forward();
+        } else
+        {
+            if (vs.theta <  0)
+                {
+                    return TurnRight();
+                } else
+                {
+                    return TurnLeft();
+                }
+        }
 }
