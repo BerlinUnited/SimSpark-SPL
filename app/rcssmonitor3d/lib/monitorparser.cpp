@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorparser.cpp,v 1.2 2004/03/12 17:24:22 rollmark Exp $
+   $Id: monitorparser.cpp,v 1.3 2004/03/20 09:44:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,8 +78,10 @@ bool MonitorParser::ParseInfoHeader(Predicate::TList& predicates, GameParam& par
             if (predicate.name != "init")
                 {
                     continue;
-                }
-            else recvInit = true;
+                } else
+                    {
+                        recvInit = true;
+                    }
 
             //parse object params
             float value;
@@ -117,6 +119,31 @@ bool MonitorParser::ParseInfoHeader(Predicate::TList& predicates, GameParam& par
             if (GetObjectParam(predicate, "BorderSize",  value))
                 {
                     param.SetBorderSize(value);
+                }
+
+            if (GetObjectParam(predicate, "AgentMass",  value))
+                {
+                    param.SetAgentMass(value);
+                }
+
+            if (GetObjectParam(predicate, "AgentRadius",  value))
+                {
+                    param.SetAgentRadius(value);
+                }
+
+            if (GetObjectParam(predicate, "AgentMaxSpeed",  value))
+                {
+                    param.SetAgentMaxSpeed(value);
+                }
+
+            if (GetObjectParam(predicate, "BallRadius",  value))
+                {
+                    param.SetBallRadius(value);
+                }
+
+            if (GetObjectParam(predicate, "BallMass",  value))
+                {
+                    param.SetBallMass(value);
                 }
         }
 
