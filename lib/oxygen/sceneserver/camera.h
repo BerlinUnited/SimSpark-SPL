@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.h,v 1.3 2003/09/08 08:58:53 rollmark Exp $
+   $Id: camera.h,v 1.4 2003/09/09 16:04:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include "basenode.h"
 #include <salt/frustum.h>
 
-namespace kerosin
+namespace oxygen
 {
 
 /** Camera encapsualtes all data needed to describe the viewpoint from which a

@@ -1,3 +1,15 @@
+2003-09-09  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* lib/kerosin/
+	* lib/kerosin/sceneserver/
+	* lib/kerosin/renderserver/
+	* lib/oxygen/sceneserver/
+	- removed duplicate camera class from CVS and Makefile.am
+	- the renderserver now uses the oxygen camera
+	- removed render method from indexbuffer
+	- removed duplicate kerosin indexbuffer
+	- the staticmesh now uses the doxygen indexbuffer
+	- some compile fixes
+
 2003-09-08  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* lib/kerosin/renderserver/
 	* lib/kerosin/sceneserver/

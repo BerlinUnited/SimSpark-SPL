@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode.h,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   $Id: basenode.h,v 1.4 2003/09/09 16:04:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -107,6 +107,12 @@ public:
         /** disabled debug mode controls */
         void DisableDebugMode();
 
+        /** renders the node */
+        virtual void RenderInternal();
+
+        /** renders node */
+        virtual void RenderAmbientInternal();
+
 private:
         /** updates internal state before physics calculation */
         virtual void PrePhysicsUpdateInternal(float deltaTime);
@@ -116,12 +122,6 @@ private:
 
         /** updates hierarchical date (position, bounding volumes, etc..) */
         virtual void UpdateHierarchyInternal();
-
-        /** renders the node */
-        virtual void RenderInternal();
-
-        /** renders node */
-        virtual void RenderAmbientInternal();
 
         //
         // Members

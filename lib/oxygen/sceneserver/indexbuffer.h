@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: indexbuffer.h,v 1.2 2003/08/31 13:08:42 rollmark Exp $
+   $Id: indexbuffer.h,v 1.3 2003/09/09 16:04:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,8 @@
 #ifndef INDEXBUFFER_H__
 #define INDEXBUFFER_H__
 
-#include "../openglserver/openglserver.h"
+namespace oxygen
+{
 
 /** IndexBuffer inteded as a cache for indeces pointing into a vertexbuffer to
  * describe a set of triangles. It is used together with the StaticMesh class
@@ -41,9 +42,6 @@ public:
 
         /** empties the index buffer */
         void    Flush()                         {       mNumIndex = 0;  }
-
-        /** renders indices in the indexbuffer with the current GL state */
-        void    Render();
 
         /** returns the number of cached indeces */
         int GetNumIndex() const                 {       return mNumIndex;       }
@@ -67,4 +65,6 @@ protected:
         /** Pointer to the memory, where we cache the indices */
         unsigned int    *mIndex;
 };
+
+}
 #endif //INDEXBUFFER_H__

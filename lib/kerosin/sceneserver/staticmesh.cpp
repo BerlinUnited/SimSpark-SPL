@@ -12,6 +12,7 @@ using namespace kerosin;
 using namespace salt;
 using namespace std;
 using namespace zeitgeist;
+using namespace oxygen;
 // using namespace Opcode;
 
 StaticMesh::StaticMesh()

@@ -1,9 +1,9 @@
 #ifndef STATICMESH_H__
 #define STATICMESH_H__
 
-#include <oxygen/sceneserver/basenode.h>
 #include "../textureserver/textureserver.h"
-#include "indexbuffer.h"
+#include <oxygen/sceneserver/basenode.h>
+#include <oxygen/sceneserver/indexbuffer.h>
 
 // define the symbol BOOL to prevent opcode.h to typedef BOOL
 // #define BOOL BOOL
@@ -51,7 +51,7 @@ public:
         {
                 unsigned int a, b, c;
         };
-        typedef std::vector<IndexBuffer>        TIndexBuffers;
+        typedef std::vector<oxygen::IndexBuffer>        TIndexBuffers;
 
         //
         // Function

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: indexbuffer.cpp,v 1.2 2003/08/31 13:08:42 rollmark Exp $
+   $Id: indexbuffer.cpp,v 1.3 2003/09/09 16:04:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,9 @@
 */
 
 #include "indexbuffer.h"
-#include <stdio.h>
+#include <string.h>
+
+using namespace oxygen;
 
 IndexBuffer::~IndexBuffer()
 {
@@ -46,12 +48,6 @@ void IndexBuffer::Cache(unsigned int numIndex, unsigned int *index)
 void IndexBuffer::Cache(unsigned int newIndex)
 {
         Cache(1, &newIndex);
-}
-
-void IndexBuffer::Render()
-{
-        if(mNumIndex>=0)
-                glDrawElements(GL_TRIANGLES, mNumIndex, GL_UNSIGNED_INT, mIndex);
 }
 
 void IndexBuffer::EnsureFit(unsigned int count)
