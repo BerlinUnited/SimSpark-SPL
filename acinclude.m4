@@ -298,30 +298,28 @@ AC_DEFUN([RCSS_BUILD_SOUNDSYSTEMFMOD], [
 ]) # RCSS_BUILD_SOUNDSYSTEMFMOD
 
 
-# RCSS_BUILD_KEROSIN
+# RCSS_BUILD_KEROSIN_INTERNAL
 # 	defines preprocessor symbol HAVE_KEROSIN_H if kerosin can be build
 #       set automake conditional BUILD_KEROSIN to true if kerosin can be build
 #-----------------------------------------------------------------------------
-AC_DEFUN([RCSS_BUILD_KEROSIN], [
-	AC_REQUIRE([RCSS_BUILD_KEROSIN_INIT])
-	AC_REQUIRE([RCSS_CHECK_GL])
- 	AC_REQUIRE([RCSS_PATH_FREETYPE])
-	AC_REQUIRE([RCSS_CHECK_SDL])
-	AC_REQUIRE([RCSS_CHECK_DEVIL])
-	AC_REQUIRE([RCSS_CHECK_SLANG])
+AC_DEFUN([RCSS_BUILD_KEROSIN_INTERNAL], [
+	RCSS_CHECK_GL
+ 	RCSS_PATH_FREETYPE
+	RCSS_CHECK_SDL
+	RCSS_CHECK_DEVIL
+	RCSS_CHECK_SLANG
     	AC_MSG_CHECKING([if libkerosin will be build])
  	AC_MSG_RESULT([$rcss_build_kerosin])
 	RCSS_KEROSIN_IF_ELSE([AC_DEFINE(HAVE_KEROSIN_H, 1, [Define to 1 if using the kerosin header])],[
- 		AC_MSG_NOTICE([libkerosin will not be build. That does not matter now.])
-    		AC_MSG_NOTICE([the list of libraries required for kerosin can be found in the documentation])
+ 		AC_MSG_ERROR([libkerosin cannot be build without all required libraries.])
+    		AC_MSG_ERROR([the list of libraries required for kerosin can be found in the documentation])
  	])
-	AM_CONDITIONAL(BUILD_KEROSIN, test x$rcss_build_kerosin = xyes)
-]) # RCSS_BUILD_KEROSIN
+]) # RCSS_BUILD_KEROSIN_INTERNAL
 
-# RCSS_BUILD_KEROSIN_INIT
+# RCSS_BUILD_KEROSIN
 # 	set rcss_build_kerosin to 'yes'
 #-----------------------------------------------------------------------------
-AC_DEFUN([RCSS_BUILD_KEROSIN_INIT], [
+AC_DEFUN([RCSS_BUILD_KEROSIN], [
 	# --enable-kerosin
 	AC_ARG_ENABLE(kerosin,
 		AC_HELP_STRING([--enable-kerosin=@<:@yes|no@:>@],       
@@ -330,10 +328,16 @@ AC_DEFUN([RCSS_BUILD_KEROSIN_INIT], [
 		    [rcss_build_kerosin=no]
 	)
 	if test "$rcss_build_kerosin" = yes; then
-		AC_MSG_NOTICE([Checking prerequisites for kerosin (building kerosin is optional)])
+		AC_MSG_NOTICE([Checking prerequisites for kerosin...])
 		AC_PATH_X
+		RCSS_BUILD_KEROSIN_INTERNAL
 	fi
-]) # RCSS_BUILD_KEROSIN_INIT
+	AM_CONDITIONAL(BUILD_KEROSIN, test x$rcss_build_kerosin = xyes)
+	if test "$rcss_build_kerosin" = no; then
+		AC_MSG_NOTICE([libkerosin will not be build...]) 
+		AC_MSG_NOTICE([...you can enable it using the --enable-kerosin flag])
+	fi
+]) # RCSS_BUILD_KEROSIN
 
 # RCSS_BUILD_KEROSIN_ERROR
 # 	print a warning and set rcss_build_kerosin to 'no'
