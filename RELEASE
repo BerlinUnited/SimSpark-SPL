@@ -9,9 +9,10 @@ The work on the soccer rules (or on the referee, so to say) is still
 not completely finished, but the very basic things are running.
 
 Just to give an impression -- so that you are not disappointed
-afterwards :): with respect to the soccer rules just 
-compare the 3D simulator of this year with the 2D simulator of 1997. 
-(maybe have a look at the final matches logfiles ;-)
+afterwards :) : with respect to the soccer rules just 
+compare the 3D simulator you can expect this year with the 2D 
+simulator of 1997. (maybe have a look at the final matches 
+logfiles ;-) - but this is just a beginning.
 
 All the effectors and perceptors of the simulated robots have some
 parameters which are basically untested and more or less randomly
