@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.1.2.3 2003/12/09 13:51:55 rollmark Exp $
+   $Id: sexpparser.cpp,v 1.1.2.4 2003/12/10 10:58:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,12 +66,12 @@ SexpParser::Parse(const std::string& input)
 }
 
 std::string
-SexpParser::Generate(const TPredicateList& input)
+SexpParser::Generate(shared_ptr<TPredicateList> input)
 {
     string s;
-    TPredicateList::const_iterator i = input.begin();
+    TPredicateList::const_iterator i = input->begin();
 
-    while (i != input.end())
+    while (i != input->end())
     {
         s += '(' + i->name +  " ";
         s += ListToString(i->parameter) + ')';
