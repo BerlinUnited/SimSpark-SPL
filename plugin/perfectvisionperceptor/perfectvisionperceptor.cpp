@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.5 2004/02/26 21:15:47 fruit Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.6 2004/03/23 09:29:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 using namespace oxygen;
 using namespace boost;
+using namespace zeitgeist;
 
 PerfectVisionPerceptor::PerfectVisionPerceptor() : oxygen::Perceptor()
 {
@@ -46,7 +47,7 @@ bool
 PerfectVisionPerceptor::Percept(Predicate& predicate)
 {
     predicate.name = "PerfectVision";
-    predicate.parameter.clear();
+    predicate.parameter.Clear();
 
     if (mSceneServer.get() == 0)
     {
@@ -90,18 +91,17 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
         shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
         const salt::Vector3f& pos = j->GetWorldTransform().Pos() - myPos;
 
-        Predicate::TParameterList position;
-        position.push_back(std::string("pos"));
-        position.push_back(mInvertX ? -pos[0] : pos[0]);
-        position.push_back(mInvertY ? -pos[1] : pos[1]);
-        position.push_back(mInvertZ ? -pos[2] : pos[2]);
+        ParameterList position;
+        position.AddValue(std::string("pos"));
+        position.AddValue(mInvertX ? -pos[0] : pos[0]);
+        position.AddValue(mInvertY ? -pos[1] : pos[1]);
+        position.AddValue(mInvertZ ? -pos[2] : pos[2]);
 
-        Predicate::TParameterList element;
+        ParameterList element;
+        element.AddValue((*i)->GetName());
+        element.AddValue(position);
 
-        element.push_back((*i)->GetName());
-        element.push_back(position);
-
-        predicate.parameter.push_back(element);
+        predicate.parameter.AddValue(element);
     }
 
     return true;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.cpp,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: collisionperceptor.cpp,v 1.3 2004/03/23 09:27:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ bool
 CollisionPerceptor::Percept(Predicate& predicate)
 {
     predicate.name = "collision";
-    predicate.parameter.clear();
+    predicate.parameter.Clear();
 
     if (mCollidees.empty())
     {
@@ -42,7 +42,7 @@ CollisionPerceptor::Percept(Predicate& predicate)
           ++i
           )
        {
-         predicate.parameter.push_back(*i);
+         predicate.parameter.AddValue(*i);
        }
 
     return true;

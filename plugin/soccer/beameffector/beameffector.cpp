@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.5 2004/03/22 18:10:56 fruit Exp $
+   $Id: beameffector.cpp,v 1.6 2004/03/23 09:34:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -102,9 +102,8 @@ BeamEffector::GetActionObject(const Predicate& predicate)
       return shared_ptr<ActionObject>();
     }
 
-  Predicate::Iterator iter = predicate.begin();
   Vector3f pos;
-  if (! predicate.GetValue(iter, pos))
+  if (! predicate.GetValue(predicate.begin(), pos))
   {
       GetLog()->Error()
           << "ERROR: (BeamEffector) Vector3f parameter expected\n";

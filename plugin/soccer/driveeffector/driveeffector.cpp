@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector.cpp,v 1.4 2004/03/22 18:10:56 fruit Exp $
+   $Id: driveeffector.cpp,v 1.5 2004/03/23 09:36:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -98,9 +98,8 @@ DriveEffector::GetActionObject(const Predicate& predicate)
       return shared_ptr<ActionObject>();
     }
 
-  Predicate::Iterator iter = predicate.begin();
   Vector3f force;
-  if (! predicate.GetValue(iter, force))
+  if (! predicate.GetValue(predicate.begin(), force))
   {
       GetLog()->Error()
           << "ERROR: (DriveEffector) Vector3f parameter expected\n";
