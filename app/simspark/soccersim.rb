@@ -62,3 +62,7 @@ gameControlServer.initControlAspect('BallStateAspect')
 # init monitorItems to transmit game state information
 monitorServer = get($serverPath+'monitor')
 monitorServer.registerMonitorItem('GameStateItem')
+
+# install the TrainerCommandParser to parse commands received from a
+# monitor client
+sparkRegisterMonitorCmdParser 'TrainerCommandParser'
