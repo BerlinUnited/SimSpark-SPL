@@ -3,6 +3,7 @@ AC_INIT([rcssserver3d], 0.1, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([plugin/inputsdl/keyboardsdl_c.cpp])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
+
 AM_INIT_AUTOMAKE([gnu subdir-objects])
 AC_LANG([C++])
 AM_ENABLE_SHARED(no)
@@ -20,11 +21,13 @@ AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_PROG_AWK
 
 # Checks for libraries.
+AC_CHECK_LIB(slang, SLang_init_all,,break)
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -66,9 +69,17 @@ AC_TYPE_SIZE_T
 
 # Checks for library functions.
 AC_FUNC_ALLOCA
+# the FUNC_MEMCMP macro has a bug when used with c++
+# (see http://mail.gnu.org/archive/html/autoconf-patches/2003-05/msg00042.html)
+# the workaround is to switch back to C for the test
+AC_LANG([C])
 AC_FUNC_MEMCMP
+AC_LANG([C++])
+
 AC_FUNC_SETVBUF_REVERSED
 AC_FUNC_VPRINTF
+AC_CONFIG_LIBOBJ_DIR(./utility/libobj/)
+AC_REPLACE_FUNCS([_vsnprintf])
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr])
 
 ## checks for system services
@@ -113,12 +124,12 @@ AC_CHECK_HEADERS([IL/il.h],,[
 #AC_CHECK_LIB(IL,ilInit,,[
 #        AC_MSG_ERROR([The DevIL library (libIL.la) cannot be found. Please specify the location of the DevIL installtion, by using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])])
 
-
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
 		 utility/Makefile \
 		 utility/glextgen/Makefile \
 		 utility/glextgen/glextgen.rb \
+		 utility/libobj/Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/zeitgeist/Makefile \
