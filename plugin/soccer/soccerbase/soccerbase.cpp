@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.10 2004/06/06 09:53:20 fruit Exp $
+   $Id: soccerbase.cpp,v 1.11 2004/12/18 14:25:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -330,7 +330,7 @@ SoccerBase::GetBall(const Leaf& base, shared_ptr<Ball>& ball)
         {
             base.GetLog()->Error()
                 << "ERROR: (SoccerBase: " << base.GetName()
-                << " found no ball node\n";
+                << ") found no ball node\n";
             return false;
         }
 
@@ -353,7 +353,7 @@ SoccerBase::GetBallBody(const Leaf& base, shared_ptr<Body>& body)
        {
             base.GetLog()->Error()
                 << "ERROR: (SoccerBase: " << base.GetName()
-                << " found no ball body node\n";
+                << ") found no ball body node\n";
             return false;
        }
 
