@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3 2004/03/09 20:25:11 rollmark Exp $
+   $Id: main.cpp,v 1.4 2004/03/09 21:23:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,6 +79,7 @@ float gFieldWidth   = DEFAULT_FIELD_WIDTH;
 float gFieldHeight  = DEFAULT_FIELD_HEIGHT;
 
 float gBorderSize   = DEFAULT_BORDER_SIZE;
+float gLineWidth    = DEFAULT_LINE_WIDTH;
 
 // goal box size
 float gGoalWidth    = DEFAULT_GOAL_WIDTH;
@@ -587,6 +588,7 @@ void display(void)
    const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
    const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
    const GLfloat borderColor[4] = {0.2f, 0.8f, 0.2f, 1.0f};
+   const GLfloat lineColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
 
    glClearColor(0.15f,0.15f,0.3f,1.0f);
 
@@ -599,14 +601,117 @@ void display(void)
 
    // ground
    glColor4fv(groundColor);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2,-gFieldWidth/2,0),gFieldLength,gFieldWidth);
 
+   // left half
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gFieldLength/2 + gLineWidth,
+                                          -gFieldWidth/2 + gLineWidth
+                                          ,0 ),
+                                 gFieldLength/2 - gLineWidth - gLineWidth/2,
+                                 gFieldWidth - 2*gLineWidth
+                                 ,0);
+
+   // right half
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          gLineWidth/2,
+                                          -gFieldWidth/2 + gLineWidth
+                                          ,0 ),
+                                 gFieldLength/2 - gLineWidth - gLineWidth/2,
+                                 gFieldWidth - 2*gLineWidth
+                                 ,0);
+
+   //
    // border
+   //
    glColor4fv(borderColor);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2-gBorderSize,-gFieldWidth/2-gBorderSize,0), gBorderSize, gFieldWidth+2*gBorderSize);
-   gGLServer.DrawGround(Vector3f(gFieldLength/2,-gFieldWidth/2-gBorderSize,0), gBorderSize, gFieldWidth+2*gBorderSize);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2,-gFieldWidth/2-gBorderSize,0), gFieldLength, gBorderSize);
-   gGLServer.DrawGround(Vector3f(-gFieldLength/2,gFieldWidth/2,0), gFieldLength, gBorderSize);
+
+   // border at left goal
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gFieldLength/2-gBorderSize,
+                                          -gFieldWidth/2-gBorderSize,0
+                                          ),
+                                 gBorderSize,
+                                 gFieldWidth+2*gBorderSize,
+                                 0);
+
+   // border at right goal
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          gFieldLength/2,
+                                          -gFieldWidth/2
+                                          -gBorderSize,0),
+                                 gBorderSize,
+                                 gFieldWidth+2*gBorderSize,
+                                 0);
+
+   // long top border
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gFieldLength/2,
+                                          -gFieldWidth/2-gBorderSize
+                                          ,0),
+                                 gFieldLength,
+                                 gBorderSize,
+                                 0);
+
+   // long bottom border
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gFieldLength/2,
+                                          gFieldWidth/2,
+                                          0),
+                                 gFieldLength,
+                                 gBorderSize,0
+                                 );
+
+   //
+   // lines
+   //
+   glColor4fv(lineColor);
+
+   // left goal
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gFieldLength/2,
+                                          -gFieldWidth/2,0
+                                          ),
+                                 gLineWidth,
+                                 gFieldWidth,
+                                 0);
+
+   // right goal
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          gFieldLength/2 - gLineWidth,
+                                          -gFieldWidth/2,
+                                          0),
+                                 gLineWidth,
+                                 gFieldWidth,
+                                 0);
+
+   // long top border
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gFieldLength/2 + gLineWidth,
+                                          -gFieldWidth/2
+                                          ,0),
+                                 gFieldLength - 2*gLineWidth,
+                                 gLineWidth,
+                                 0);
+
+   // long bottom border
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gFieldLength/2 + gLineWidth,
+                                          gFieldWidth/2 - gLineWidth,
+                                          0),
+                                 gFieldLength - 2*gLineWidth,
+                                 gLineWidth,
+                                 0);
+
+   // middle line
+   gGLServer.DrawGroundRectangle(Vector3f(
+                                          -gLineWidth/2,
+                                          -gFieldWidth/2 + gLineWidth,
+                                          0),
+                                 gLineWidth,
+                                 gFieldWidth - 2*gLineWidth,
+                                 0
+                                 );
+
 
    // fieldBox
    gGLServer.DrawWireBox(
