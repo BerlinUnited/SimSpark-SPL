@@ -11,6 +11,7 @@ SUBDIRS = \
           rubysceneimporter\
           voidmeshimporter\
           sparkmonitor\
+          sparkagent\
           sceneeffector\
 	  soundsystemfmod
 
