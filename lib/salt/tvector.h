@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tvector.h,v 1.6 2003/11/14 14:05:54 fruit Exp $
+   $Id: tvector.h,v 1.7 2004/05/01 16:26:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ namespace salt
 {
 
 /**  TVector is a template class for vector implementations. It
-  *  abstracts away the number of elements and their type.
-  */
+ *  abstracts away the number of elements and their type.
+ */
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
 class TVector
 {
@@ -58,103 +58,103 @@ public:
     // accessors
 
     /** returns a reference to a row of the vector */
-    f_inline DATATYPE&                  operator[](int row)                             {       return El(row); }
+    f_inline DATATYPE& operator[](int row)
+    { return El(row); }
 
     /** returns a constant reference to a row of a vector */
-    f_inline const DATATYPE&    operator[](int row) const               {       return El(row); }
+    f_inline const DATATYPE& operator[](int row) const
+    { return El(row); }
 
     /** returns a reference to a row of a vector */
-    f_inline DATATYPE&                  Get(int row)                                    {       return El(row); }
+    f_inline DATATYPE& Get(int row) { return El(row); }
 
     /** returns a constant reference to a row of a vector */
-    f_inline const DATATYPE&    Get(int row) const                              {       return El(row); }
+    f_inline const DATATYPE& Get(int row) const { return El(row); }
 
     // Direct pointer access to the data member ... use with care!!!
 
     /** copies another vector 'copy' */
-    f_inline const TYPE&        SetData(const DATATYPE *copy);
+    f_inline const TYPE& SetData(const DATATYPE *copy);
 
     /** return a pointer to the encapsulated vector */
-    f_inline DATATYPE*          GetData()                                               {       return mData;   }
+    f_inline DATATYPE* GetData()
+    { return mData; }
 
     // Output
 
     /** prints the contents of vector to stdout */
-    void                                        Dump() const;
+    void Dump() const;
 
     /** fills all components of the vector with value 'fill' */
-    f_inline const TYPE&        Fill(const DATATYPE &fill);
+    f_inline const TYPE& Fill(const DATATYPE& fill);
 
     /** sets all components of the vector to 0 */
-    f_inline TYPE&                      Zero();
+    f_inline TYPE& Zero();
 
     // operators
 
     /** calculates this VECTOR + VECTOR */
-    f_inline const TYPE         operator+(const TYPE &v) const;
+    f_inline const TYPE operator+(const TYPE &v) const;
 
     /** calculates VECTOR - VECTOR*/
-    f_inline const TYPE         operator-(const TYPE &v) const;
+    f_inline const TYPE operator-(const TYPE &v) const;
 
     /** calculates VECTOR * VECTOR */
-    f_inline const TYPE         operator*(const DATATYPE &v) const;
+    f_inline const TYPE operator*(const DATATYPE &v) const;
 
     /** calculates VECTOR / SCALAR */
-    f_inline const TYPE         operator/(const DATATYPE &v) const;
-
+    f_inline const TYPE operator/(const DATATYPE &v) const;
 
     /** add another vector */
-    f_inline TYPE&                      operator+=(const TYPE &v);
-
+    f_inline TYPE& operator+=(const TYPE &v);
 
     /** substracts another vector */
-    f_inline TYPE&                      operator-=(const TYPE &v);
-
+    f_inline TYPE& operator-=(const TYPE &v);
 
     /** multiplies another vector */
-    f_inline TYPE&                      operator*=(const DATATYPE &v);
+    f_inline TYPE& operator*=(const DATATYPE &v);
 
     /** divides another vector */
-    f_inline TYPE&                      operator/=(const DATATYPE &v);
+    f_inline TYPE& operator/=(const DATATYPE &v);
 
     /** returns the negate of this vector */
-    f_inline TYPE                       operator-() const;
+    f_inline TYPE operator-() const;
 
     /** returns true if this vector and v are equal */
-    f_inline bool                       operator==(const TYPE &v)const;
+    f_inline bool operator==(const TYPE& v)const;
 
     /** returns true if this vector and v are not equal */
-    f_inline bool                       operator!=(const TYPE &v)const;
+    f_inline bool operator!=(const TYPE& v)const;
 
     /** returns the dot product from this vector and v */
-    f_inline DATATYPE           Dot(const TYPE &v) const;
+    f_inline DATATYPE Dot(const TYPE& v) const;
 
     /** normalizes the vector */
-    f_inline const TYPE&        Normalize();
+    f_inline const TYPE& Normalize();
 
     /** calculates the normalized vector, not modifying the vector */
-    f_inline TYPE                       Normalized() const;
+    f_inline TYPE Normalized() const;
 
     /** calculates the squared length of the vector */
-    f_inline DATATYPE           SquareLength() const;
+    f_inline DATATYPE SquareLength() const;
 
     /** calculates the length of the vector */
-    f_inline DATATYPE           Length() const                                  { return gSqrt(SquareLength()); }
+    f_inline DATATYPE Length() const
+    { return gSqrt(SquareLength()); }
 
     /** returns the index of least significant axis */
-    f_inline int                        GetLeastSignificantAxis() const;
+    f_inline int GetLeastSignificantAxis() const;
 
     /** returns the index of the most significant axis */
-    f_inline int                        GetMostSignificantAxis() const;
-
+    f_inline int GetMostSignificantAxis() const;
 
     /** lineary interpolates between this vector and to with an delta increment */
-    f_inline TYPE                       LinearInterpolate(const TYPE &to, float delta) const;
+    f_inline TYPE LinearInterpolate(const TYPE& to, float delta) const;
 
     /** lineary interpolates between this vector and to with an delta
      * increment, returning a normalized vector
      */
-    f_inline TYPE                       NormalizedLinearInterpolate(const TYPE &to, float delta) const
+    f_inline TYPE NormalizedLinearInterpolate(const TYPE& to, float delta) const
     {
         return LinearInterpolate(to, delta).Normalize();
     }
@@ -168,11 +168,11 @@ protected:
     }
 
     // Element accessor
-    const DATATYPE&     El(int index) const
+    const DATATYPE& El(int index) const
     {
         return mData[index];
     }
-    DATATYPE&           El(int index)
+    DATATYPE& El(int index)
     {
         return mData[index];
     }
@@ -181,7 +181,7 @@ protected:
     // members
     //
 private:
-    DATATYPE    mData[ELEMENTS];
+    DATATYPE mData[ELEMENTS];
 };
 
 /** TVector2 is a two dimensional version of TVector */
@@ -189,31 +189,33 @@ template <typename DATATYPE, class TYPE>
 class TVector2 : public TVector<DATATYPE, 2, TYPE>
 {
 public:
-
     /** constructs an undefined TVector2 */
     TVector2() : TVector<DATATYPE, 2, TYPE>() {};
 
     /** constructs a TVector2 from x and y */
-    TVector2(DATATYPE x, DATATYPE y) : TVector<DATATYPE, 2, TYPE>() { Set(x, y); }
-
+    TVector2(DATATYPE x, DATATYPE y) : TVector<DATATYPE, 2, TYPE>()
+    { Set(x, y); }
 
     // Element Access operators
 
     /** returns a reference to the first component */
-    f_inline DATATYPE&                  x()                                     { return El(0); }
+    f_inline DATATYPE& x()
+    { return El(0); }
 
     /** returns a constant reference to the first component */
-    f_inline const DATATYPE&    x() const                       { return El(0); }
+    f_inline const DATATYPE& x() const
+    { return El(0); }
 
     /** returns a reference to the second component */
-    f_inline DATATYPE&                  y()                                     { return El(1); }
+    f_inline DATATYPE& y()
+    { return El(1); }
 
     /** returns a constant reference to the second component */
-    f_inline const DATATYPE&    y() const                       { return El(1); }
-
+    f_inline const DATATYPE& y() const
+    { return El(1); }
 
     /** sets up the vector from x and y */
-    f_inline const TYPE& Set(const DATATYPE &x, const DATATYPE &y)
+    f_inline const TYPE& Set(const DATATYPE& x, const DATATYPE& y)
     {
         El(0) = x;
         El(1) = y;
@@ -231,31 +233,38 @@ public:
     TVector3() : TVector<DATATYPE, 3, TYPE>() {};
 
     /** constructs a TVector3 from x,y and z */
-    TVector3(const DATATYPE &x, const DATATYPE &y, const DATATYPE &z) : TVector<DATATYPE, 3, TYPE>() { Set(x, y, z); }
+    TVector3(const DATATYPE& x, const DATATYPE& y, const DATATYPE& z)
+        : TVector<DATATYPE, 3, TYPE>()
+    { Set(x, y, z); }
 
     // Element Access operators
 
     /** returns a reference to the first component */
-    f_inline DATATYPE&                  x()                                     { return El(0); }
+    f_inline DATATYPE& x()
+    { return El(0); }
 
     /** returns a constant reference to the first component */
-    f_inline const DATATYPE&    x() const                       { return El(0); }
+    f_inline const DATATYPE& x() const
+    { return El(0); }
 
     /** returns a reference to the second component */
-    f_inline DATATYPE&                  y()                                     { return El(1); }
+    f_inline DATATYPE& y()
+    { return El(1); }
 
     /** returns a constant reference to the second component */
-    f_inline const DATATYPE&    y() const                       { return El(1); }
+    f_inline const DATATYPE& y() const
+    { return El(1); }
 
     /** returns a reference to the third component */
-    f_inline DATATYPE&                  z()                                     { return El(2); }
+    f_inline DATATYPE& z()
+    { return El(2); }
 
     /** returns a constant reference to the third component */
-    f_inline const DATATYPE&    z() const                       { return El(2); }
-
+    f_inline const DATATYPE& z() const
+    { return El(2); }
 
     /** calculates the cross product, returning a new TVector3 */
-    const TYPE Cross(const TVector<DATATYPE, 3, TYPE> &v) const
+    const TYPE Cross(const TVector<DATATYPE, 3, TYPE>& v) const
     {
         // Create a new one
         TYPE r;
@@ -270,7 +279,7 @@ public:
     //
 
     /** sets up the vector from x,y and z */
-    const TYPE& Set(const DATATYPE &x, const DATATYPE &y, const DATATYPE &z)
+    const TYPE& Set(const DATATYPE& x, const DATATYPE& y, const DATATYPE& z)
     {
         El(0) = x;
         El(1) = y;
@@ -280,7 +289,7 @@ public:
 
 
     /** sets up the vector from another TVector3 v */
-    const TYPE& Set(const TYPE &v)
+    const TYPE& Set(const TYPE& v)
     {
         El(0) = v.x();
         El(1) = v.y();
@@ -291,7 +300,8 @@ public:
 
 // Set operator for any vector. Just with a pointer
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-inline const TYPE       &TVector<DATATYPE, ELEMENTS, TYPE>::SetData(const DATATYPE *copy) {
+inline const TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::SetData(const DATATYPE *copy)
+{
     for (int i=0; i<ELEMENTS; i++)
         mData[i] = copy[i];
     return *static_cast<TYPE*>(this);
@@ -299,7 +309,8 @@ inline const TYPE       &TVector<DATATYPE, ELEMENTS, TYPE>::SetData(const DATATY
 
 // Output
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-inline void TVector<DATATYPE, ELEMENTS, TYPE>::Dump() const {
+inline void TVector<DATATYPE, ELEMENTS, TYPE>::Dump() const
+{
     for (int i=0; i<ELEMENTS; i++)
         printf("%f ", (float)mData[i]);
     printf("\n");
@@ -307,7 +318,7 @@ inline void TVector<DATATYPE, ELEMENTS, TYPE>::Dump() const {
 
 // fill vector with value 'fill'
 template <typename DATATYPE, int ELEMENTS, class TYPE>
-f_inline const TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::Fill(const DATATYPE& fill)
+f_inline const TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::Fill(const DATATYPE& fill)
 {
     for (int c=0; c < ELEMENTS; c++)
         mData[c] = fill;
@@ -316,7 +327,7 @@ f_inline const TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::Fill(const DATATYPE& fil
 
 // fill vector with zeros
 template <typename DATATYPE, int ELEMENTS, class TYPE>
-f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::Zero()
+f_inline TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::Zero()
 {
     for (int c=0; c < ELEMENTS; c++)
         mData[c] = DATATYPE(0);
@@ -325,7 +336,7 @@ f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::Zero()
 
 // DATATYPE * vector
 template <typename DATATYPE, int ELEMENTS, class TYPE>
-f_inline const TYPE operator*(const DATATYPE &f, const TVector<DATATYPE, ELEMENTS, TYPE> &vec)
+f_inline const TYPE operator*(const DATATYPE& f, const TVector<DATATYPE, ELEMENTS, TYPE>& vec)
 {
     return vec * f;
 }
@@ -333,7 +344,7 @@ f_inline const TYPE operator*(const DATATYPE &f, const TVector<DATATYPE, ELEMENT
 // vector addition
 // this + v return new Vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator+(const TYPE &v) const
+f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator+(const TYPE& v) const
 {
     TYPE r;
     for (int c=0; c < ELEMENTS; c++)
@@ -344,7 +355,7 @@ f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator+(const TYPE &v) 
 // vector subtraction
 // this - v return new Vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator-(const TYPE &v) const
+f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator-(const TYPE& v) const
 {
     TYPE r;
     for (int c=0; c < ELEMENTS; c++)
@@ -355,7 +366,7 @@ f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator-(const TYPE &v) 
 // scale
 // this * DATATYPE return new Vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator*(const DATATYPE &v) const
+f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator*(const DATATYPE& v) const
 {
     TYPE r;
     for (int c=0; c < ELEMENTS; c++)
@@ -366,7 +377,7 @@ f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator*(const DATATYPE 
 // division
 // this / DATATYPE return new Vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator/(const DATATYPE &v) const
+f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator/(const DATATYPE& v) const
 {
     TYPE r;
     for (int c=0; c < ELEMENTS; c++)
@@ -376,7 +387,7 @@ f_inline const TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator/(const DATATYPE 
 
 // this += v returns reference to first vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::operator+=(const TYPE &v)
+f_inline TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::operator+=(const TYPE& v)
 {
     for (int c=0; c<ELEMENTS; c++)
         mData[c] += v[c];
@@ -385,7 +396,7 @@ f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::operator+=(const TYPE &v)
 
 // this -= v returns reference to first vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::operator-=(const TYPE &v)
+f_inline TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::operator-=(const TYPE& v)
 {
     for (int c=0; c<ELEMENTS; c++)
         mData[c] -= v[c];
@@ -394,7 +405,7 @@ f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::operator-=(const TYPE &v)
 
 // this *= DATATYPE returns reference to first vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::operator*=(const DATATYPE &v)
+f_inline TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::operator*=(const DATATYPE& v)
 {
     for (int c=0; c<ELEMENTS; c++)
         mData[c] *= v;
@@ -403,7 +414,7 @@ f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::operator*=(const DATATYPE &v)
 
 // this /= DATATYPE returns reference to first vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::operator/=(const DATATYPE &v)
+f_inline TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::operator/=(const DATATYPE& v)
 {
     for (int c=0; c<ELEMENTS; c++)
         mData[c] *= v;
@@ -422,21 +433,21 @@ f_inline TYPE TVector<DATATYPE, ELEMENTS, TYPE>::operator-() const
 
 // equality
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline bool TVector<DATATYPE, ELEMENTS, TYPE>::operator==(const TYPE &v) const
+f_inline bool TVector<DATATYPE, ELEMENTS, TYPE>::operator==(const TYPE& v) const
 {
-    return (0==memcmp(this, &v, sizeof(*this)));
+    return (0==memcmp(this,& v, sizeof(*this)));
 }
 
 // inequality
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline bool TVector<DATATYPE, ELEMENTS, TYPE>::operator!=(const TYPE &v) const
+f_inline bool TVector<DATATYPE, ELEMENTS, TYPE>::operator!=(const TYPE& v) const
 {
-    return (0!=memcmp(this, &v, sizeof(*this)));
+    return (0!=memcmp(this,& v, sizeof(*this)));
 }
 
 // generic dot product
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline DATATYPE TVector<DATATYPE, ELEMENTS, TYPE>::Dot(const TYPE &v) const
+f_inline DATATYPE TVector<DATATYPE, ELEMENTS, TYPE>::Dot(const TYPE& v) const
 {
     DATATYPE r = mData[0] * v[0];
     for (int c=1; c < ELEMENTS; c++)
@@ -446,7 +457,7 @@ f_inline DATATYPE TVector<DATATYPE, ELEMENTS, TYPE>::Dot(const TYPE &v) const
 
 // Normalize vector
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline const TYPE &TVector<DATATYPE, ELEMENTS, TYPE>::Normalize()
+f_inline const TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::Normalize()
 {
     DATATYPE length             = Length();
     DATATYPE lengthInv  = DATATYPE(DATATYPE(1) / length);
@@ -478,7 +489,7 @@ f_inline DATATYPE TVector<DATATYPE, ELEMENTS, TYPE>::SquareLength() const
 
 // Linear Interpolate. Interpolated from one vector to the other
 template <typename DATATYPE, int ELEMENTS, typename TYPE>
-f_inline TYPE TVector<DATATYPE, ELEMENTS, TYPE>::LinearInterpolate(const TYPE &to, float t) const
+f_inline TYPE TVector<DATATYPE, ELEMENTS, TYPE>::LinearInterpolate(const TYPE& to, float t) const
 {
     float it = 1.0f - t;
     TYPE r;
