@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate.cpp,v 1.1.2.1 2004/02/07 18:43:37 fruit Exp $
+   $Id: objectstate.cpp,v 1.1.2.2 2004/02/08 22:19:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,28 +33,36 @@ ObjectState::~ObjectState()
 }
 
 void
-ObjectState::SetName(const std::string& name)
+ObjectState::SetPerceptName(const std::string& name, TPerceptType pt)
 {
-    mName = name;
+    mPerceptNames[pt] = name;
 }
 
 
 std::string
-ObjectState::GetName() const
+ObjectState::GetPerceptName(TPerceptType pt) const
 {
-    return mName;
+    TPerceptStringMap::const_iterator i = mPerceptNames.find(pt);
+    if (i == mPerceptNames.end())
+        return std::string();
+
+    return i->second;
 }
 
 void
-ObjectState::SetID(const std::string& id)
+ObjectState::SetID(const std::string& id, TPerceptType pt)
 {
-    mID = id;
+    mIDs[pt] = id;
 }
 
 std::string
-ObjectState::GetID() const
+ObjectState::GetID(TPerceptType pt) const
 {
-    return mID;
+    TPerceptStringMap::const_iterator i = mIDs.find(pt);
+    if (i == mIDs.end())
+        return std::string();
+
+    return i->second;
 }
 
 boost::shared_ptr<oxygen::Transform>

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate.h,v 1.1.2.1 2004/02/07 18:44:29 fruit Exp $
+   $Id: objectstate.h,v 1.1.2.2 2004/02/08 22:18:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,33 +28,43 @@
 class ObjectState : public oxygen::BaseNode
 {
 public:
+    typedef enum TPerceptType
+    {
+        PT_Default,
+        PT_TooFar
+    };
+
+public:
     ObjectState();
     virtual ~ObjectState();
 
     /** set the object name for perceptors */
-    virtual void SetName(const std::string& name);
+    virtual void SetPerceptName(const std::string& name,
+                                TPerceptType pt = PT_Default);
 
-    /** returns the object name */
-    virtual std::string GetName() const;
+    /** returns the object name for perceptors */
+    virtual std::string GetPerceptName(TPerceptType pt = PT_Default) const;
 
     /** set the object id for perceptors */
-    virtual void SetID(const std::string& id);
+    virtual void SetID(const std::string& id, TPerceptType pt = PT_Default);
 
     /** returns the object id */
-    virtual std::string GetID() const;
+    virtual std::string GetID(TPerceptType pt = PT_Default) const;
 
     boost::shared_ptr<oxygen::Transform> GetTransformParent() const;
 
 protected:
+    typedef std::map<TPerceptType, std::string> TPerceptStringMap;
+
     virtual void OnLink();
 
     virtual void OnUnlink();
 
-    /** object name */
-    std::string mName;
+    /** object names */
+    TPerceptStringMap mPerceptNames;
 
-    /** object id */
-    std::string mID;
+    /** object ids */
+    TPerceptStringMap mIDs;
 
     /** reference to the parent transform node*/
     boost::shared_ptr<oxygen::Transform> mTransformParent;
