@@ -1,3 +1,24 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: sphere.cpp,v 1.3 2003/11/10 21:41:05 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #include "sphere.h"
 #include "../openglserver/openglserver.h"
 
@@ -78,31 +99,31 @@ using namespace kerosin;
 
 Sphere::Sphere()
 {
-	mRadius = 1.0f;
+        mRadius = 1.0f;
 }
 
 float Sphere::GetRadius() const
 {
-	return mRadius;
+        return mRadius;
 }
 
 void Sphere::SetRadius(float radius)
 {
-	mRadius = radius;
+        mRadius = radius;
 }
 
 void Sphere::RenderInternal()
 {
-	glColor3f(1, 0, 0);
-	glScalef(mRadius, mRadius, mRadius);
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_LIGHTING);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	glEnableClientState(GL_VERTEX_ARRAY);          // enabling vertex arrays      
-	glVertexPointer(3,GL_FLOAT, 0, gSphereVertices);
-	glDrawElements(GL_TRIANGLES,224*3,GL_UNSIGNED_SHORT, gSphereFaces);
-	glDisableClientState(GL_VERTEX_ARRAY);          // enabling vertex arrays      
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glColor3f(1, 0, 0);
+        glScalef(mRadius, mRadius, mRadius);
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_LIGHTING);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+        glEnableClientState(GL_VERTEX_ARRAY);          // enabling vertex arrays
+        glVertexPointer(3,GL_FLOAT, 0, gSphereVertices);
+        glDrawElements(GL_TRIANGLES,224*3,GL_UNSIGNED_SHORT, gSphereFaces);
+        glDisableClientState(GL_VERTEX_ARRAY);          // enabling vertex arrays
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

@@ -1,35 +1,56 @@
-#ifndef SPHERE_H__
-#define SPHERE_H__
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-#include "basenode.h"
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: sphere.h,v 1.2 2003/11/10 21:41:05 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+#ifndef KEROSIN_SPHERE_H
+#define KEROSIN_SPHERE_H
+
+#include <oxygen/sceneserver/basenode.h>
 
 namespace kerosin
 {
 
-class Sphere : public BaseNode
+class Sphere : public oxygen::BaseNode
 {
-	//
-	// Function
-	//
+    //
+    // Function
+    //
 public:
-	Sphere();
+    Sphere();
 
-	// set/get properties
-	float GetRadius() const;
-	void SetRadius(float radius);
+    // set/get properties
+    float GetRadius() const;
+    void SetRadius(float radius);
 
 private:
-	virtual void RenderInternal();
+    virtual void RenderInternal();
 
-	//
-	// Members
-	//
+    //
+    // Members
+    //
 private:
-	float	mRadius;
+    float   mRadius;
 };
 
 DECLARE_CLASS(Sphere);
 
 } //namespace kerosin
 
-#endif //SPHERE_H__
+#endif //KEROSIN_SPHERE_H

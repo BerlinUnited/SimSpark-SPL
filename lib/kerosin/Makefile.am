@@ -55,6 +55,8 @@ sceneserver/helper/NVMeshMender.cpp \
 sceneserver/helper/nv_algebra.cpp \
 sceneserver/light.cpp \
 sceneserver/light_c.cpp \
+sceneserver/sphere.cpp \
+sceneserver/sphere_c.cpp \
 sceneserver/staticmesh.cpp \
 sceneserver/staticmesh_c.cpp \
 soundserver/soundserver.cpp \
@@ -91,6 +93,7 @@ sceneserver/helper/nv_math/nv_algebra.h \
 sceneserver/helper/nv_math/nv_math.h \
 sceneserver/helper/nv_math/nv_mathdecl.h \
 sceneserver/light.h \
+sceneserver/sphere.h \
 sceneserver/staticmesh.h \
 soundserver/soundeffect.h \
 soundserver/soundmodule.h \
