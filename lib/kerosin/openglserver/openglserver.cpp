@@ -4,11 +4,45 @@
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/logserver/logserver.h>
 
+#ifdef HAVE_CONFIG_H
+# ifdef PACKAGE_BUGREPORT
+#  undef PACKAGE_BUGREPORT
+# endif
+# ifdef PACKAGE_NAME
+#  undef PACKAGE_NAME
+# endif
+# ifdef PACKAGE_STRING
+#  undef PACKAGE_STRING
+# endif
+# ifdef PACKAGE_TARNAME
+#  undef PACKAGE_TARNAME
+# endif
+# ifdef PACKAGE_VERSION
+#  undef PACKAGE_VERSION
+# endif
+#include "config.h"
+#endif
+
+namespace kerosin
+{
+    class MapHolder
+    {
+    public:
+    //! this structure will be used to map program names to OpenGL IDs
+#if HAVE_HASH_MAP
+        typedef std::hash_map<std::string, unsigned int> TProgramCache;
+#else
+        typedef std::map<std::string, unsigned int> TProgramCache;
+#endif
+        TProgramCache mPrograms;
+    };
+}
+
 using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
 
-OpenGLServer::OpenGLServer() : Leaf(), mExtensionReg(new GLExtensionReg()), mWantsToQuit(false)
+OpenGLServer::OpenGLServer() : Leaf(), mExtensionReg(new GLExtensionReg()), mWantsToQuit(false), mHolder( new MapHolder() )
 {
 }
 
@@ -62,9 +96,9 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
 	}
 
 	// before actually loading, try the cache
-	TProgramCache::iterator entry = mPrograms.find(fileName);
+	MapHolder::TProgramCache::iterator entry = mHolder->mPrograms.find(fileName);
 
-	if (entry != mPrograms.end())
+	if (entry != mHolder->mPrograms.end())
 	{
 		// we already have a match
 		return (*entry).second;
@@ -105,7 +139,7 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
 	}
 
 	// enter program into the cache
-	mPrograms[fileName] = id;
+	mHolder->mPrograms[fileName] = id;
 
 	return id;
 }
@@ -131,15 +165,16 @@ unsigned int OpenGLServer::LoadARBVertexProgram(const char* fileName)
 
 	returns 0 on fail, non-zero on success
 */
-unsigned int OpenGLServer::LoadARBFragmentProgram(const char* fileName)
+unsigned int OpenGLServer::LoadARBFragmentProgram(const char* /*fileName*/)
 {
 	// only try to load stuff if the extension is supported
-	if (!mExtensionReg->Has_GL_ARB_fragment_program())
-	{
-		return 0;
-	}
+// 	if (!mExtensionReg->Has_GL_ARB_fragment_program())
+// 	{
+// 		return 0;
+// 	}
 
-	return LoadARBProgram(GL_FRAGMENT_PROGRAM_ARB, fileName);
+// 	return LoadARBProgram(GL_FRAGMENT_PROGRAM_ARB, fileName);
+    return 0;
 }
 
 /*!
@@ -202,11 +237,11 @@ bool OpenGLServer::ConstructInternal()
 
 	// check if fancy lighting is supported
 	mSupportsFancyLighting = true;
-	if (!mExtensionReg->Has_GL_ARB_vertex_program() || !mExtensionReg->Has_GL_ARB_fragment_program())
-	{
+// 	if (!mExtensionReg->Has_GL_ARB_vertex_program() || !mExtensionReg->Has_GL_ARB_fragment_program())
+// 	{
 		GetLog()->Normal() << "WARNING: GL_ARB_vertex_program not supported ... disabling fancy lighting" << std::endl;
 		mSupportsFancyLighting = false;
-	}
+// 	}
 
 	glClear(GL_COLOR_BUFFER_BIT);
 

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fileclasses.cpp,v 1.4 2003/08/21 08:56:49 rollmark Exp $
+   $Id: fileclasses.cpp,v 1.5 2003/09/10 00:30:10 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 
 namespace salt
 {
-static long fsize(FILE *f)
+/*static long fsize(FILE *f)
 {
 	long savepos, end;
 	
@@ -34,7 +34,7 @@ static long fsize(FILE *f)
 	fseek(f, savepos, SEEK_SET);
 	
 	return end;
-}
+}*/
 }
 
 using namespace salt;
@@ -296,7 +296,7 @@ long StdFile::Size()
 return size;
 }
 
-int StdFile::GetPos(long* pos)
+int StdFile::GetPos(long*/* pos*/)
 {
   return ftell((FILE*)mHandle);
 }

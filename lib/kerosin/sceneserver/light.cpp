@@ -57,7 +57,7 @@ void Light::Prepare()
 */
 }
 
-void Light::RenderLitMesh(boost::shared_ptr<StaticMesh> mesh)
+void Light::RenderLitMesh(boost::shared_ptr<StaticMesh> /*mesh*/)
 {
 /*
           if (mCacheFlushed || (GetWorldTransform().Pos()-mOldPos).SquareLength() > 0.1 ||
@@ -129,7 +129,7 @@ void Light::RenderInternal()
 {
 }
 
-void Light::DeterminePotentiallyLitTriangles(boost::shared_ptr<StaticMesh>& mesh, std::vector<unsigned int>& triangles)
+void Light::DeterminePotentiallyLitTriangles(boost::shared_ptr<StaticMesh>& /*mesh*/, std::vector<unsigned int>& /*triangles*/)
 {
 /*
         Opcode::SphereCache cache;

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: path.h,v 1.4 2003/08/21 08:56:49 rollmark Exp $
+   $Id: path.h,v 1.5 2003/09/10 00:30:10 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,22 @@
 #define PATH_H__
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# ifdef PACKAGE_BUGREPORT
+#  undef PACKAGE_BUGREPORT
+# endif
+# ifdef PACKAGE_NAME
+#  undef PACKAGE_NAME
+# endif
+# ifdef PACKAGE_STRING
+#  undef PACKAGE_STRING
+# endif
+# ifdef PACKAGE_TARNAME
+#  undef PACKAGE_TARNAME
+# endif
+# ifdef PACKAGE_VERSION
+#  undef PACKAGE_VERSION
+# endif
+#include "config.h"
 #endif
 
 #include <string>

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fileclasses.h,v 1.4 2003/08/21 08:56:49 rollmark Exp $
+   $Id: fileclasses.h,v 1.5 2003/09/10 00:30:10 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@
 #ifndef FILECLASSES_H__
 #define FILECLASSES_H__
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+// #ifdef HAVE_CONFIG_H
+// #include <config.h>
+// #endif
 
 #include <cstdio>
 #include <cstdlib>

@@ -1,9 +1,9 @@
 #ifndef LIGHT_H__
 #define LIGHT_H__
 
-#include <oxygen/sceneserver/basenode.h>
+#include "oxygen/sceneserver/basenode.h"
 #include "staticmesh.h"
-#include "indexbuffer.h"
+#include "oxygen/sceneserver/indexbuffer.h"
 
 namespace kerosin
 {
@@ -66,7 +66,7 @@ private:
         std::vector<unsigned int>       mTriangles;
 
         // per-material cached indices
-        std::vector<IndexBuffer>        mCachedIndices;
+        std::vector<oxygen::IndexBuffer>        mCachedIndices;
 };
 
 DECLARE_CLASS(Light);

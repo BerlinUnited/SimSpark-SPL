@@ -123,7 +123,7 @@ bool FileServer::Unmount(const char* inFileSysName, const char* inPath)
 	return false;
 }
 
-int FileServer::ForEachFile(const char* directory, const char* name, const char* extension, FileSystem::TCallback callback, void* param)
+int FileServer::ForEachFile(const char* /*directory*/, const char* /*name*/, const char* /*extension*/, FileSystem::TCallback /*callback*/, void* /*param*/)
 {
 	int count = 0;
 	/*for (TDescriptionList::iterator iter = mFileSystems.begin (); iter != mFileSystems.end (); ++iter)
