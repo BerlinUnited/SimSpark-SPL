@@ -1,4 +1,0 @@
-Material.Diffuse	= "texture/wood_d.png";
-Material.Normal		= "texture/wood_local.png";
-Material.Specular	= "texture/wood_s.png";
-
