@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.6.2.1 2003/12/01 10:32:45 rollmark Exp $
+   $Id: spadesserver.h,v 1.1.2.6.2.2 2003/12/01 16:30:08 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 namespace oxygen
 {
 
+class GameControlServer;
 
 /*! The SpadesServer serves as an interface between the SceneServer and the agents
  */
@@ -167,6 +168,8 @@ public:
 protected:
     /** helper function to locate the monitor server */
     boost::shared_ptr<MonitorServer> GetMonitorServer();
+    /** helper function to locate the game control server */
+    boost::shared_ptr<GameControlServer> GetGameControlServer();
 
 private:
     /** the Spades simulation engine */
