@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.8 2004/03/25 11:51:46 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.8.2.1 2004/03/27 17:20:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,8 @@ using namespace std;
 
 SpadesServer::SpadesServer() :
     zeitgeist::Node(), spades::WorldModel(),
-    mSimEngine(0), mSimulationModeChanged(false)
+    mSimEngine(0), mSimulationModeChanged(false),
+    mOffsetCreateSense(0),mNextInitialCreateSense(0)
 {
 }
 
@@ -214,7 +215,7 @@ SpadesServer::Unpause()
 void
 SpadesServer::QueueAgents(const std::string& agentType, int num)
 {
-    mAgentQueue.push(AgentItem(agentType, num));
+    mAgentQueue.push_back(AgentItem(agentType, num));
 }
 
 // ----------------------------------------------------------------------
@@ -387,10 +388,40 @@ SpadesServer::pauseModeCallback()
                     }
         }
 
-    while (! mAgentQueue.empty())
+    if (
+        (mGameControlServer.get() != 0) &&
+        (! mAgentQueue.empty())
+         )
     {
-        StartAgents(mAgentQueue.front());
-        mAgentQueue.pop();
+        int agentCount = 0;
+        for (
+             TAgentQueue::iterator iter = mAgentQueue.begin();
+             iter != mAgentQueue.end();
+             ++iter
+             )
+            {
+                agentCount += (*iter).mNumber;
+            }
+
+        // todo: query the gcs, prob: currently deltaSense returned
+        // for an agentId which is unknown at this point
+        float deltaSense = 0.2;
+        float offsetSec = deltaSense / agentCount;
+
+        mOffsetCreateSense = (offsetSec / GetTimePerStep());
+        mNextInitialCreateSense = mSimEngine->getSimulationTime() + 1;
+
+        GetLog()->Normal() << "(SpadesServer) Starting "
+                           << agentCount << " agents\n"
+                           << "with an CreateSenseEvent offset of "
+                           << mOffsetCreateSense << " (" << offsetSec << " seconds)\n"
+                           << "starting at simTime " << mNextInitialCreateSense << "\n";
+
+        while (! mAgentQueue.empty())
+            {
+                StartAgents(mAgentQueue.front());
+                mAgentQueue.pop_front();
+            }
     }
 
     if (mSimulationModeChanged)
@@ -403,9 +434,6 @@ SpadesServer::pauseModeCallback()
 bool
 SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*at*/)
 {
-    GetLog()->Normal() <<
-        "(SpadesServer) agentConnect " << agent << "\n";
-
     // try to register the agent to the game control server
     shared_ptr<GameControlServer> gcs = GetGameControlServer();
 
@@ -414,14 +442,25 @@ SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*
         (! mGameControlServer->AgentConnect(static_cast<int>(agent)))
         )
         {
+            GetLog()->Normal()
+                << "(SpadesServer) ERROR: cannot register agent "
+                << "to the GameControlServer\n";
             return false;
         }
 
-    // schedule the first SpadesCreateSenseEvent for the following
-    // simulation step
+    // schedule the first SpadesCreateSenseEvent
+    SimTime time = static_cast<SimTime>(mNextInitialCreateSense);
     SpadesCreateSenseEvent* event = new SpadesCreateSenseEvent
-        (mSimEngine->getSimulationTime() + 1, agent);
+        (time,agent);
 
+    SimTime now = mSimEngine->getSimulationTime();
+    GetLog()->Normal()
+        << "(SpadesServer) agentConnect (id " << agent
+        << ") at simlation time " << now << ".\n"
+        << "Initial CreateSenseEvent scheduled at "
+        << time << "\n";
+
+    mNextInitialCreateSense += mOffsetCreateSense;
     mSimEngine->enqueueEvent(event);
 
     return true;
