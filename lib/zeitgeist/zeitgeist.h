@@ -3,7 +3,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: zeitgeist.h,v 1.4 2003/11/14 14:45:40 rollmark Exp $
+   $Id: zeitgeist.h,v 1.5 2004/03/12 08:24:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,37 +29,37 @@
 
 namespace zeitgeist
 {
-  /**
-     This is the main class, which initializes the Zeitgeist framework, manages
-     the core and the main core context. It is the basic interface to the client
-     code.
-  */
-  class Zeitgeist
-    {
-      //
-      // functions
-      //
-    public:
-      /** constructs the main core and starts the zeitgeist framework. dotName
-       * gives the name of the directory in the user's home directory, where
-       * the default init scripts are searched.
-       */
-      Zeitgeist(std::string dotName);
-      ~Zeitgeist();
+/** This is the main class, which initializes the Zeitgeist framework,
+    manages the core and the main core context. It is the basic
+    interface to the client code.
+*/
+class Zeitgeist
+{
+    //
+    // functions
+    //
+public:
+    /** constructs the main core and starts the zeitgeist
+        framework. dotName gives the name of the directory in the
+        user's home directory, where the default init scripts are
+        searched.
+    */
+    Zeitgeist(std::string dotName);
+    ~Zeitgeist();
 
-      /** creates a new corecontext */
-      boost::shared_ptr<CoreContext>      CreateContext();
+    /** creates a new corecontext */
+    boost::shared_ptr<CoreContext> CreateContext();
 
-      /** returns a pointer to the main core */
-      boost::shared_ptr<Core>&            GetCore();
+    /** returns a pointer to the main core */
+    boost::shared_ptr<Core>&  GetCore();
 
-      //
-      // members
-      //
-    private:
-      /** the main core */
-      boost::shared_ptr<Core>     mCore;
-    };
+    //
+    // members
+    //
+private:
+    /** the main core */
+    boost::shared_ptr<Core> mCore;
+};
 
 } //namespace zeitgeist
 
