@@ -334,6 +334,10 @@ plugin/soccer/kickeffector/.dirstamp
 plugin/soccer/kickeffector/.libs
 plugin/soccer/kickeffector/Makefile
 plugin/soccer/kickeffector/Makefile.in
+plugin/soccer/objectstate/*.lo
+plugin/soccer/objectstate/.deps
+plugin/soccer/objectstate/.dirstamp
+plugin/soccer/objectstate/.libs
 plugin/soccer/sexpmonitor/*.la
 plugin/soccer/sexpmonitor/*.lo
 plugin/soccer/sexpmonitor/.deps
