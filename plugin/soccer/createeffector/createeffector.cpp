@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.2.2.2 2004/01/08 16:07:25 rollmark Exp $
+   $Id: createeffector.cpp,v 1.2.2.3 2004/01/15 21:00:07 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,45 @@
 
 using namespace oxygen;
 using namespace boost;
+
+CreateEffector::CreateEffector() : Effector()
+{
+}
+
+void
+CreateEffector::OnLink()
+{
+    GetScript()->CreateVariable("Agent.Mass", 75.0f);
+    GetScript()->CreateVariable("Agent.Radius", 1.0f);
+    GetScript()->CreateVariable("Agent.MaxSpeed", 10.0f);
+}
+
+float
+CreateEffector::GetAgentMass() const
+{
+    float agentMass = 75.0;
+    GetScript()->GetVariable("Agent.Mass", agentMass);
+
+    return agentMass;
+}
+
+float
+CreateEffector::GetAgentRadius() const
+{
+    float agentRadius = 1.0;
+    GetScript()->GetVariable("Agent.Radius", agentRadius);
+
+    return agentRadius;
+}
+
+float
+CreateEffector::GetAgentMaxSpeed() const
+{
+    float agentMaxSpeed = 10.0;
+    GetScript()->GetVariable("Agent.MaxSpeed", agentMaxSpeed);
+
+    return agentMaxSpeed;
+}
 
 bool CreateEffector::Realize(shared_ptr<ActionObject> action)
 {
@@ -65,7 +104,6 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
   aspect->SetLocalPos(x, y, z);
   x+=10;
   y+=50;
-  z+=10;
 
   // construct the nodes below the AgentAspect
 
@@ -86,15 +124,21 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
           return false;
       } else
           {
+              GetLog()->Warning()
+              << "(CreateEffector) creating sphere physics\n";
               physics->SetName("_physics");
               aspect->AddChildReference(physics);
-              physics->SetSphere(1.0, 1.0);
-              physics->SetMass(1.0);
-              physics->SetMaxSpeed(3.0);
+              // should be OK to use 1.0 as density here, because
+              // both SetSphere and SetMass do an ODE::dMassAdjust
+              physics->SetSphere(1.0, GetAgentRadius());
+              physics->SetMass(GetAgentMass());
+              physics->SetMaxSpeed(GetAgentMaxSpeed());
 
               geometry->SetName("_geometry");
               aspect->AddChildReference(geometry);
-              geometry->SetRadius(1.0);
+              geometry->SetRadius(GetAgentRadius());
+              GetLog()->Warning()
+              << "(CreateEffector) creating sphere physics done\n";
           }
 
   // add forceeffector
