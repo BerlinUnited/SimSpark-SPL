@@ -181,6 +181,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/collisionperceptor/Makefile \
 		 plugin/rubysceneimporter/Makefile \
 		 plugin/voidmeshimporter/Makefile \
+		 plugin/sparkmonitor/Makefile \
 		 app/Makefile \
 		 app/gendot/Makefile \
 		 app/agenttest/Makefile \
