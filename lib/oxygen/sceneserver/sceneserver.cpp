@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.11 2004/04/10 09:20:27 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.12 2004/04/11 17:08:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -179,7 +179,8 @@ void SceneServer::Update(float deltaTime)
     mActiveScene->UpdateHierarchy();
 }
 
-bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root)
+bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
+                              shared_ptr<ParameterList> parameter)
 {
     if (! GetFile()->Exist(fileName))
         {
@@ -207,7 +208,7 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root)
             shared_ptr<SceneImporter> importer =
                 shared_static_cast<SceneImporter>(*iter);
 
-            if (importer->ImportScene(fileName,root))
+            if (importer->ImportScene(fileName,root,parameter))
                 {
                     GetLog()->Normal()
                         << "(SceneServer) imported scene file '"

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.h,v 1.6 2004/04/08 14:49:00 rollmark Exp $
+   $Id: sceneserver.h,v 1.7 2004/04/11 17:08:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,7 +76,8 @@ public:
 
     /** imports a scene from a file below the given BaseNode */
     bool ImportScene(const std::string& fileName,
-                     boost::shared_ptr<BaseNode> root);
+                     boost::shared_ptr<BaseNode> root,
+                     boost::shared_ptr<zeitgeist::ParameterList> parameter);
 
     /** creates an instance of \param importerName and registers it as a
         SceneImporter to the SceneServer
