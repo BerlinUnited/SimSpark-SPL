@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.6 2004/04/20 07:29:22 fruit Exp $
+   $Id: commserver.cpp,v 1.7 2004/04/23 15:36:06 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ CommServer::SendTrainerCmd(const std::string& cmd)
 void
 CommServer::SendKickOffCmd()
 {
-    SendToWorldModel("(playMode KickOff_Left)");
+    SendToWorldModel("(playMode KickOff)");
 }
 
 
