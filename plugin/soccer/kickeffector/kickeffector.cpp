@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.1.2.6 2004/02/06 12:52:05 fruit Exp $
+   $Id: kickeffector.cpp,v 1.1.2.7 2004/02/06 15:11:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -206,8 +206,7 @@ KickEffector::OnLink()
             mPlayerRadius = geom->GetRadius();
         }
 
-    geom = shared_dynamic_cast<SphereCollider>(mBall->GetChild("geometry"));
-    if (geom.get() == 0)
+    if (! SoccerBase::GetBallCollider(*this,geom))
     {
         GetLog()->Error()
             << "ERROR: (KickEffector) ball node has no SphereCollider child\n";
