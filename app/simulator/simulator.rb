@@ -154,6 +154,41 @@ def addField()
 			 )
   fieldBox.setPosition(0.0,halfHeight,0.0)
   new('kerosin/RecorderHandler', fieldBoxPath+'recorder')
+
+  #
+  # box collider around the goals
+  halfGoalDepth  = getSoccerVar('GoalDepth')/2.0
+  halfGoalHeight = getSoccerVar('GoalHeight')/2.0
+
+  # left goal
+  goalBoxLPath = $scenePath+'GoalBoxL/';
+  goalBoxL = new('kerosin/BoxCollider',goalBoxLPath)
+  goalBoxL.setBoxLengths(
+			 getSoccerVar('GoalDepth'),
+			 getSoccerVar('GoalHeight'),
+			 getSoccerVar('GoalWidth')
+			 )
+  goalBoxL.setPosition(
+		       -halfLength-halfGoalDepth,
+		       halfGoalHeight,
+		       0.0
+		       )
+  new('kerosin/RecorderHandler', goalBoxLPath+'recorder')
+
+  # right goal
+  goalBoxRPath = $scenePath+'GoalBoxR/';
+  goalBoxR = new('kerosin/BoxCollider',goalBoxRPath)
+  goalBoxR.setBoxLengths(
+			 getSoccerVar('GoalDepth'),
+			 getSoccerVar('GoalHeight'),
+			 getSoccerVar('GoalWidth')
+			 )
+  goalBoxR.setPosition(
+		       +halfLength+halfGoalDepth,
+		       halfGoalHeight,
+		       0.0
+		       )
+  new('kerosin/RecorderHandler', goalBoxRPath+'recorder')
 end
 
 #
@@ -244,3 +279,4 @@ monitorServer.registerMonitorSystem('SexpMonitor')
 # queue agents for startup
 spadesServer.queueAgents('foo', 2)
 spadesServer.queueAgents('bar', 2)
+
