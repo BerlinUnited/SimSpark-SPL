@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.6 2004/03/25 22:06:55 jboedeck Exp $
+   $Id: soccerbase.cpp,v 1.7 2004/03/31 08:57:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -111,13 +111,13 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
 bool
 SoccerBase::GetAgentBody(const Leaf& base, TTeamIndex idx,
                          int unum, shared_ptr<Body> & agent_body)
-{      
+{
     shared_ptr<AgentState> agentState;
     shared_ptr<Transform>  parent;
 
     // get matching AgentState
     GetAgentState(base, idx, unum, agentState);
-    
+
     // get AgentAspect
     GetTransformParent(*agentState, parent);
 
@@ -161,7 +161,7 @@ SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
                 << "children of type AgentAspect\n";
 
             return false;
-        }        
+        }
 
         Leaf::TLeafList::iterator iter = leafList.begin();
 
@@ -188,7 +188,7 @@ SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
         }
 
         return false;
-    } 
+    }
 }
 
 bool
@@ -332,12 +332,12 @@ SoccerBase::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
         newPos[1] = 0.0;
         newPos[2] = 0.0;
         break;
-    case TI_LEFT:
+    case TI_RIGHT:
         newPos[0] = -pos[0];
         newPos[1] = -pos[1];
         newPos[2] = pos[2];
         break;
-    case TI_RIGHT:
+    case TI_LEFT:
         newPos = pos;
         break;
     }
