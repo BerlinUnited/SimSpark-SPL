@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: balljoint_c.cpp,v 1.1 2004/04/07 11:36:12 rollmark Exp $
+   $Id: balljoint_c.cpp,v 1.2 2004/04/08 07:21:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,5 @@ using namespace salt;
 
 void CLASS(BallJoint)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_BASECLASS(oxygen/Joint);
 }
-
