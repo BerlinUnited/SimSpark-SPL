@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d], 0.1, [sserver-admin@lists.sf.net])
+AC_INIT([rcssserver3d], 0.2, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([lib/salt/salt.h])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
@@ -32,6 +32,8 @@ AC_PROG_INSTALL
 AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 AC_PROG_AWK
+AC_CHECK_PROG([DOXYGEN], [doxygen], [yes], [no])
+AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes)
 
 # Checks for libraries.
 
@@ -131,9 +133,13 @@ AC_CONFIG_FILES([Makefile \
 		 app/inputtest/Makefile \
 		 app/scenetest/Makefile \
 		 app/simulator/Makefile \
+                 app/simulator/createagentdb.sh \
+                 app/simulator/rcsoccersim3D \
 		 app/spadestest/Makefile \
 		 app/rcssmonitor3d/Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
-		 doc/Doxyfile])
+		 doc/Doxyfile],
+	        [test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D \
+                 test -f app/simulator/createagentdb.sh && chmod +x app/simulator/createagentdb.sh])
 AC_OUTPUT
