@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.1.2.4 2004/02/08 15:22:55 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.1.2.5 2004/02/10 19:38:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,8 +56,14 @@ protected:
     /** updates the RuleAspect during KickOff mode */
     void UpdateKickOff();
 
+    /** updates the RuleAspect during KickIn mode */
+    void UpdateKickIn();
+
     /** update the RuleAspect during PlayOn mode */
     void UpdatePlayOn();
+
+    /** update the RuleAspect during Goal mode */
+    void UpdateGoal();
 
     /** checks if the ball is not on the playing field and puts it
         back to its last valid position. returns true if the ball left
@@ -71,6 +77,10 @@ protected:
     */
     bool CheckGoal();
 
+    /** moves the ball to pos setting its linear and angular velocity
+        to 0 */
+    void SoccerRuleAspect::MoveBall(const salt::Vector3f& pos);
+
 protected:
     /** reference to the body node of the Ball */
     boost::shared_ptr<oxygen::Body> mBallBody;
@@ -83,6 +93,15 @@ protected:
 
     /** the radius of the Ball */
     float mBallRadius;
+
+    /** the length of the pause after a goal */
+    float mGoalPauseTime;
+
+    /** the length of the pause after the ball left the field */
+    float mKickInPauseTime;
+
+    /** the point above the ground, where the ball left the field */
+    salt::Vector3f mLastValidBallPos;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);
