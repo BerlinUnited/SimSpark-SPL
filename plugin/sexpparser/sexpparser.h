@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.h,v 1.2.2.2 2003/12/23 12:06:05 rollmark Exp $
+   $Id: sexpparser.h,v 1.2.2.3 2003/12/23 16:04:50 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,9 +42,9 @@ public:
 
 private:
     TParameterList SexpToList(const sexp_t* const sexp);
-    TPredicate SexpToPlist(const sexp_t* const sexp);
+    TPredicate SexpToPredicate(const sexp_t* const sexp);
     std::string ListToString(const TParameterList& lst);
-    std::string PlistToString(const TPredicate& plist);
+    std::string PredicateToString(const TPredicate& predicate);
 
 };
 
