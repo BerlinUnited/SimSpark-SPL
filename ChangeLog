@@ -1,3 +1,64 @@
+2004-03-10  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/rcssmonitor3d/lite/main.cpp:
+	- moved everything concerned with parsing into
+	app/rcssmonitor3d/lib
+
+	* app/rcssmonitor3d/lib/Makefile.am:
+	- added monitorparser, gameparam and gamestate files
+
+	* app/rcssmonitor3d/lib/monitorparser.cpp, app/rcssmonitor3d/lib/monitorparser.h:
+	- added MonitorParser. As the name suggests this class is
+	responsible to parse all received s-expressions from the
+	server. It is refactored from the original rcssmonitor3d parsing
+	implementation.
+
+	* app/rcssmonitor3d/lib/gameparam.cpp, 
+	* app/rcssmonitor3d/lib/gameparam.h, 
+	* app/rcssmonitor3d/lib/gamestate.cpp, 
+	* app/rcssmonitor3d/lib/gamestate.h:
+	- added gameparam, holding the current game state
+	- added gameparam, holding the parsed soccer paramers received
+	with the 'init' expression
+
+	* app/rcssmonitor3d/Makefile.am:
+	- removed dist_pkgdata_DATA for rcssmonitor3d.rb. The Makefile.am
+	local to the 'lite' monitor has the appropriate entry.
+
+2004-03-09  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/rcssmonitor3d/lite/main.cpp:
+	- drawing a very basic set of lines on the playing field: 4 border
+	lines and the middle line
+
+	* app/rcssmonitor3d/lite/glserver.cpp, 
+	* app/rcssmonitor3d/lite/glserver.h:
+	- renamed method DrawGroundRectangle to DrawGround; added parameter
+	angle and height; changed implementation accordingly
+
+	* app/rcssmonitor3d/lib/types.h: 
+	- added DEFAULT_LINE_WIDTH
+
+	* app/rcssmonitor3d/lite/main.cpp:
+	- changes to OpenGL color setup due to change to flat shading
+
+	* app/rcssmonitor3d/lite/glserver.cpp:
+	- disabled all OpenGL lighting and changed to flat shading. All
+	objects are now draw equally bright independent of the camera
+	angle.
+
+	* app/rcssmonitor3d/lite/camera.cpp:
+	- fixed inverted horizintal mouse movement
+
+	* app/rcssmonitor3d/rcssmonitor3D.rb:
+	- removed rcssmonitor3d.rb
+
+	* app/rcssmonitor3d/lite/main.cpp: 
+	- fixed call to RunInitScript
+
+	* app/rcssmonitor3d/lite/rcssmonitor3D-lite.rb:
+	- added rcssmonitor3d-lite
+
 2004-03-09  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/kickeffector/kickeffector.cpp: 
@@ -15,7 +76,6 @@
 
 	* plugin/inputsdl/timersdl.cpp, plugin/inputsdl/timersdl.h:
 	- cleaned up timerSDL implementation
-
 
 	* lib/kerosin/sceneserver/light_c.cpp, 
 	* lib/kerosin/sceneserver/sphere_c.cpp, 
@@ -65,7 +125,6 @@
 	* lib/kerosin/inputserver/inputsystem.h:
 	- some formatting cleanup
 
-		-----------------
 2004-03-05  Oliver Obst  <fruit@robolog.org>
 
 	* configure.ac: 
