@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.cpp,v 1.1.2.1 2003/12/28 16:16:32 fruit Exp $
+   $Id: predicate.cpp,v 1.1.2.2 2003/12/29 18:28:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,10 +28,15 @@ ParameterName::operator()(const boost::any& param, const std::string& pred) cons
 {
     try
     {
-        Predicate::TParameterList lst =
-            boost::any_cast<Predicate::TParameterList>(param);
-        if (lst.empty()) return false;
-        std::string s = boost::any_cast<std::string>(lst.front());
+        const Predicate::TParameterList* lst =
+            boost::any_cast<Predicate::TParameterList>(&param);
+
+        if ( (lst == 0) || (lst->empty()))
+            {
+                return false;
+            }
+
+        std::string s = boost::any_cast<std::string>(lst->front());
         return pred == s;
     }
     catch(const boost::bad_any_cast &)
