@@ -31,9 +31,9 @@ $serverPath = '/sys/server/'
 # the full path of the AgentAspect
 
 # the start positions of the agents
-$agentX = -12.0
-$agentY = 1.0
-$agentZ = -7.0
+$agentX = -8.0
+$agentY = 0.0
+$agentZ = 0.5
 
 # register a variable in the soccer namespace
 def addSoccerVar(name, value)
@@ -50,10 +50,10 @@ end
 def addAgent(aspectPath)
   # move different agents away from each other
   aspect = get(aspectPath)
-  aspect.setLocalPos($agentX,$agentY,$agentZ)
+  aspect.setLocalPos($agentX,$agentZ,$agentY)
   $agentX += 2.5
-  $agentY += 1.0
-  $agentZ += 3.0
+  $agentY += 3.0
+  $agentZ += 1.0
 
   # geometry and physics setup
   physics = new('kerosin/Body', aspectPath+'physics')
@@ -65,8 +65,14 @@ def addAgent(aspectPath)
 
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
-  new('DashEffector', aspectPath+'DashEffector')
-  new('KickEffector', aspectPath+'KickEffector')
+  dashEffector = new('DashEffector', aspectPath+'DashEffector')
+  dashEffector.setForceFactor(450.0);
+  dashEffector.setSigma(0.5);
+  kickEffector = new('KickEffector', aspectPath+'KickEffector')
+  kickEffector.setForceFactor(4.0)
+  kickEffector.setNoiseParams(0.4,0.02,0.025)
+  kickEffector.setSteps(3,75)
+  kickEffector.setMaxPower(100.0)
 
   # perceptor setup
   new('PerfectVisionPerceptor', aspectPath+'PerfectVisionPerceptor')
@@ -198,7 +204,7 @@ end
 # the soccer field dimensions in meters
 addSoccerVar('FieldLength', 105.0)
 addSoccerVar('FieldWidth', 68.0)
-addSoccerVar('FieldHeight', 20.0)
+addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
 addSoccerVar('GoalHeight', 2.44)
@@ -206,7 +212,7 @@ addSoccerVar('BorderSize', 4.0)
 
 # agent parameters
 addSoccerVar('AgentMass', 75.0)
-addSoccerVar('AgentRadius',  0.3)
+addSoccerVar('AgentRadius',  0.22)
 addSoccerVar('AgentMaxSpeed', 10.0)
 
 # ball parameters
@@ -263,7 +269,7 @@ Spades.TimePerStep = 0.01
 
 #
 # put a ball on the soccer field
-addBall(0.0,1.0,0.0)
+addBall(-36.0,0.5,-10.0)
 
 #
 # register game control aspects
