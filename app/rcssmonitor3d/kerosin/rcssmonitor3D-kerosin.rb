@@ -80,6 +80,10 @@ body.setMaxSpeed(15.0)
 fpsController = new('oxygen/FPSController',$scenePath+'camera0/physics/controller')
 fpsController.setAcceleration(40.0)
 
+# add an DragController to work against the camera acceleration
+dragController = new('oxygen/DragController',$scenePath+'camera0/physics/drag')
+dragController.setLinearDrag(4)
+
 # setup the CommServer
 new('rcssmonitor3d/CommServer', $serverPath+'comm')
 
