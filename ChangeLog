@@ -1,3 +1,59 @@
+2004-02-01  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	moved rule checks in UpdatePlayOn into separate methods CheckGoal
+	and CheckBallLeftField
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	added method CheckBallLeftField and CheckGoal
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	implemented GetLeftGoalRecorder and GetRightGoalRecorder
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.h:
+	added method GetLeftGoalRecorder and GetRightGoalRecorder
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	added UpdateGoalState that checks if the ball is in one of the goals
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h:
+	added method GetGoalState and UpdateGoalState
+	added member mLeftGoalRecorder, mRightGoalRecorder and mGoalState
+
+	* app/simulator/simulator.rb: 
+	added box colliders around the goals
+
+	* app/rcssmonitor3d/main.cpp:
+	added support for team index parsing; using three different colors for
+	agents belonging to no, left or right team
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	method GetAgentData collects team index and unum from the AgentState
+	aspec for each agent
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.h: 
+	added method GetAgentData
+
+	* plugin/soccer/agentstate/agentstate.cpp:
+	implemented GetUniformNumber and GetTeamIndex
+
+	* plugin/soccer/agentstate/agentstate.h:
+	added method GetUniformNumber and GetTeamIndex
+
+	* app/simulator/simulator.rb: 
+	queuing two agents from each team
+
+	* app/simulator/agentdb.list: 
+	defining two agent types 'foo' and 'bar'
+
+	* app/agenttest/main.cpp:
+	added support to set the teamname the agent uses with the init
+	command via a command line parameter
+
+	* app/simulator/simulator.rb:
+	registering the SexpMonitor after the GameStateAspect as it caches
+	a reference to it
+
 2004-01-31  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/rcssmonitor3d/Makefile.am, app/rcssmonitor3d/camera.cpp,
