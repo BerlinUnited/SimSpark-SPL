@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputserver.h,v 1.8 2004/04/11 11:22:56 rollmark Exp $
+   $Id: inputserver.h,v 1.9 2004/12/31 11:03:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,6 +101,7 @@ public:
     */
     struct Input
     {
+    public:
         //! this indicates the input data type
         EType           type;
 
@@ -124,9 +125,16 @@ public:
             float  f;
         } data;
 
+    public:
         //! this initializes values indicating an invalid input event
         Input(EType t = eUnknown, TInputCode c=0, int i=-1)
             : type(t),code(c),id(i) {}
+
+        //! returns true if the input represents a key press event
+        bool KeyPress() const { return (data.l == 1); }
+
+        //! returns true if the input represents a key release event
+        bool KeyRelease() const { return (data.l == 0); }
     };
 
     /** this enumerates different filters that describing which button
