@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netmessage.cpp,v 1.1 2004/04/25 16:51:16 rollmark Exp $
+   $Id: netmessage.cpp,v 1.2 2004/04/28 14:30:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ void NetMessage::PrepareToSend(std::string& msg)
 {
     // prefix the message with it's payload length
     unsigned int len = htonl(msg.size());
-    std::string prefix((const char*)&len,sizeof(len));
+    string prefix((const char*)&len,sizeof(unsigned int));
     msg = prefix + msg;
 }
 
@@ -53,7 +53,7 @@ bool NetMessage::Extract(shared_ptr<NetBuffer> buffer, std::string& msg)
             return false;
         }
 
-    unsigned int msgLen = ntohl(*(unsigned int*)data.c_str());
+    unsigned int msgLen = ntohl((*(unsigned int*)data.data()));
 
     if (data.size() < (msgLen + preSz))
         {
