@@ -47,7 +47,13 @@ material.setAmbient(0.1,0.4,0.1,1.0)
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
 material.setDiffuse(0.1,0.1,0.1,1.0)
 
-# load a scene file
+# prepare soccer simulation
 importBundle "soccer"
 scene = get($scenePath)
 scene.importScene('rsg/agent/soccer.rsg')
+
+# setup the GameControlServer
+gameControlServer = get($serverPath+'gamecontrol')
+gameControlServer.initControlAspect('GameStateAspect')
+gameControlServer.initControlAspect('BallStateAspect')
+gameControlServer.initControlAspect('SoccerRuleAspect')
