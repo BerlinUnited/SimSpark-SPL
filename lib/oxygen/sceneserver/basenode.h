@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.5.6.2 2003/12/25 19:52:55 fruit Exp $
+   $Id: basenode.h,v 1.6.2.1 2004/01/12 19:09:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,11 +77,10 @@ public:
     // bounding box related
 
     /** computes the local bounding box of the node */
-    virtual void    ComputeBoundingBox();
+    virtual void ComputeBoundingBox();
 
     /** returns the world bounding box of this node */
-    const salt::AABB3&      GetWorldBoundingBox() const
-    {       return mWorldBoundingBox;               }
+    const salt::AABB3& GetWorldBoundingBox() const;
 
     // scene graph update passes
 
@@ -91,16 +90,12 @@ public:
     /** updates internal state after physics calculation */
     void PostPhysicsUpdate();
 
-    /** update hierarchical date (position, bounding volumes, etc..) */
+    /** update hierarchical data (position, bounding volumes,
+        etc..) */
     void UpdateHierarchy();
 
-    // scene graph rendering
-    void Render();
-
-    void RenderAmbient();
-
     /** moves up the hierarchy, until it finds a scene */
-    boost::shared_ptr<Scene>        GetScene();
+    boost::shared_ptr<Scene> GetScene();
 
     /** enables debug mode controls */
     void EnableDebugMode();
