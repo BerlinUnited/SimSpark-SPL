@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.h,v 1.3 2004/04/20 14:22:10 rollmark Exp $
+   $Id: universaljoint.h,v 1.4 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,6 +56,12 @@ public:
 protected:
     /** creates a new universal joint */
     virtual void OnLink();
+
+    /** sets a joint parameter value */
+    virtual void SetParameter(int parameter, float value);
+
+    /** returns a joint parameter value */
+    virtual float GetParameter(int parameter);
 };
 
 DECLARE_CLASS(UniversalJoint);

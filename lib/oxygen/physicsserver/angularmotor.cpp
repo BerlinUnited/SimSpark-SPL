@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: angularmotor.cpp,v 1.1 2004/04/20 14:11:30 rollmark Exp $
+   $Id: angularmotor.cpp,v 1.2 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -105,5 +105,16 @@ float AngularMotor::GetAxisAngleRate(EAxisIndex idx)
 {
     return gRadToDeg(dJointGetAMotorAngleRate(mODEJoint,idx));
 }
+
+void AngularMotor::SetParameter(int parameter, float value)
+{
+    dJointSetAMotorParam(mODEJoint, parameter, value);
+}
+
+float AngularMotor::GetParameter(int parameter)
+{
+    return dJointGetAMotorParam(mODEJoint, parameter);
+}
+
 
 

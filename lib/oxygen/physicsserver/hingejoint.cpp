@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.cpp,v 1.4 2004/04/20 14:18:01 rollmark Exp $
+   $Id: hingejoint.cpp,v 1.5 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,6 +90,18 @@ float HingeJoint::GetAngleRate()
 {
     return gRadToDeg(dJointGetHingeAngleRate(mODEJoint));
 }
+
+void HingeJoint::SetParameter(int parameter, float value)
+{
+    dJointSetHingeParam(mODEJoint, parameter, value);
+}
+
+float HingeJoint::GetParameter(int parameter)
+{
+    return dJointGetHingeParam(mODEJoint, parameter);
+}
+
+
 
 
 

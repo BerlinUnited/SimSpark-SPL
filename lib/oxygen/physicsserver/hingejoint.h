@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.h,v 1.4 2004/04/20 14:18:01 rollmark Exp $
+   $Id: hingejoint.h,v 1.5 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ public:
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
-    salt::Vector3f GetAnchor (EBodyIndex idx);
+    salt::Vector3f GetAnchor(EBodyIndex idx);
 
     /** returns the hinge angle in degrees, measured between the two
         bodies, or between the body and the static environment.
@@ -55,6 +55,12 @@ public:
 protected:
     /** creates a new hingejoint joint */
     virtual void OnLink();
+
+    /** sets a joint parameter value */
+    virtual void SetParameter(int parameter, float value);
+
+    /** returns a joint parameter value */
+    virtual float GetParameter(int parameter);
 };
 
 DECLARE_CLASS(HingeJoint);

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.18 2004/04/15 21:21:45 fruit Exp $
+   $Id: body.cpp,v 1.19 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -140,6 +140,16 @@ Body::GetMass() const
     dMass m;
     dBodyGetMass(mODEBody, &m);
     return m.mass;
+}
+
+void Body::GetMassParameters(dMass& mass) const
+{
+    dBodyGetMass(mODEBody, &mass);
+}
+
+void Body::SetMassParameters(const dMass& mass)
+{
+    dBodySetMass(mODEBody, &mass);
 }
 
 void Body::SetSphere(float density, float radius)

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.8 2004/04/14 18:28:25 rollmark Exp $
+   $Id: body_c.cpp,v 1.9 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 using namespace boost;
 using namespace oxygen;
+using namespace zeitgeist;
 using namespace salt;
 
 FUNCTION(Body,enable)
@@ -55,6 +56,51 @@ FUNCTION(Body,useGravity)
         }
 
     obj->UseGravity(inB);
+    return true;
+}
+
+FUNCTION(Body,setMassParameters)
+{
+    float inMass; // total mass of the rigid body
+    Vector3f inCenter; // mass center in body frame
+
+    // 3x3 inerta tensor in body frame
+    // [ I11(0) I12(1) I13(2) ]
+    // [ I12(3) I22(4) I23(5) ]
+    // [ I13(6) I23(7) I33(8) ]
+    // float inI[9];
+
+    if (
+        (in.GetSize() < 11)
+        )
+        {
+            return false;
+        }
+
+    ParameterList::TVector::const_iterator iter = in.begin();
+    if  (
+         (! in.AdvanceValue(iter,inMass)) ||
+         (! in.AdvanceValue(iter,inCenter))
+         )
+        {
+            return false;
+        }
+
+    dMass mass;
+    mass.mass = inMass;
+    mass.c[0] = inCenter[0];
+    mass.c[1] = inCenter[1];
+    mass.c[2] = inCenter[2];
+
+    for (int i=0;i<9;++i)
+        {
+            if (! in.AdvanceValue(iter,mass.I[i]))
+                {
+                    return false;
+                }
+        }
+
+    obj->SetMassParameters(mass);
     return true;
 }
 
@@ -335,4 +381,5 @@ void CLASS(Body)::DefineClass()
         DEFINE_FUNCTION(addForce);
         DEFINE_FUNCTION(addTorque);
         DEFINE_FUNCTION(setPosition);
+        DEFINE_FUNCTION(setMassParameters);
 }

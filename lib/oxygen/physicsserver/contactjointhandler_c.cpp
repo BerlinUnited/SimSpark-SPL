@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler_c.cpp,v 1.6 2004/04/15 19:55:08 rollmark Exp $
+   $Id: contactjointhandler_c.cpp,v 1.7 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ FUNCTION(ContactJointHandler,setContactBounceMode)
 
 FUNCTION(ContactJointHandler,setMinBounceVel)
 {
-    float inVel;
+    double inVel;
     if (
         (in.GetSize() != 1) ||
         (! in.GetValue(in[0],inVel))
@@ -55,7 +55,7 @@ FUNCTION(ContactJointHandler,setMinBounceVel)
 
 FUNCTION(ContactJointHandler,setContactBounceValue)
 {
-    float inValue;
+    double inValue;
     if (
         (in.GetSize() != 1) ||
         (! in.GetValue(in[0],inValue))
@@ -85,7 +85,7 @@ FUNCTION(ContactJointHandler,setContactSoftERPMode)
 
 FUNCTION(ContactJointHandler,setContactSoftERP)
 {
-    float inERP;
+    double inERP;
     if (
         (in.GetSize() != 1) ||
         (! in.GetValue(in[0],inERP))
@@ -115,7 +115,7 @@ FUNCTION(ContactJointHandler,setContactSoftCFMMode)
 
 FUNCTION(ContactJointHandler,setContactSoftCFM)
 {
-    float inCFM;
+    double inCFM;
     if (
         (in.GetSize() != 1) ||
         (! in.GetValue(in[0],inCFM))
@@ -145,7 +145,7 @@ FUNCTION(ContactJointHandler,setContactSlipMode)
 
 FUNCTION(ContactJointHandler,setContactSlip)
 {
-    float inSlip;
+    double inSlip;
     if (
         (in.GetSize() != 1) ||
         (! in.GetValue(in[0],inSlip))
@@ -160,7 +160,7 @@ FUNCTION(ContactJointHandler,setContactSlip)
 
 FUNCTION(ContactJointHandler,setContactMu)
 {
-    float inMu;
+    double inMu;
     if (
         (in.GetSize() != 1) ||
         (! in.GetValue(in[0],inMu))

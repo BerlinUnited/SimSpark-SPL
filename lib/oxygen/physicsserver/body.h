@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.13 2004/04/15 21:21:03 fruit Exp $
+   $Id: body.h,v 1.14 2004/05/01 11:30:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,9 +75,14 @@ public:
     /** sets the mass of this body */
     void SetMass(float mass);
 
+    /** set the ODE mass parameters of this body */
+    void SetMassParameters(const dMass& mass);
+
     /** returns the mass of this body */
     float GetMass() const;
 
+    /** returns the ODE mass parameters of this body */
+    void GetMassParameters(dMass& mass) const;
 
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)
