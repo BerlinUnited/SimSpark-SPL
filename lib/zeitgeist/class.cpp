@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.cpp,v 1.7 2004/04/10 08:55:46 rollmark Exp $
+   $Id: class.cpp,v 1.8 2004/04/22 19:20:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,6 +79,13 @@ boost::shared_ptr<Object> Class::Create()
 
 boost::shared_ptr<Core> Class::GetCore() const
 {
+    if (mCore.expired())
+        {
+            std::cerr << "(Class) ERROR: failed to get zeitgeist Core for class '"
+                      << GetName() << "'" << std::endl;
+
+        }
+
     return make_shared(mCore);
 }
 
