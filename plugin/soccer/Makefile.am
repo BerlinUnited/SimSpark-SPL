@@ -8,7 +8,11 @@ initeffector/initeffector_c.cpp \
 gamestateaspect/gamestateaspect.cpp \
 gamestateaspect/gamestateaspect_c.cpp \
 agentstate/agentstate.cpp \
-agentstate/agentstate_c.cpp
+agentstate/agentstate_c.cpp \
+sexpmonitor/sexpmonitor.cpp \
+sexpmonitor/sexpmonitor_c.cpp \
+fieldflag/fieldflag.cpp \
+fieldflag/fieldflag_c.cpp
 
 # -module tells automake we're not building a library but a loadable module
 # so we don't need the "lib" prefix in the module name
