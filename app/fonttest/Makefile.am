@@ -2,12 +2,6 @@ if BUILD_KEROSIN
 noinst_PROGRAMS = fonttest
 endif
 
-all-local:
-	mkdir -p ${srcdir}/sys/
-	rm -f ${srcdir}/sys/script
-	cd ${srcdir}/sys/ && \
-	${LN_S} ../script .
-
 if DEBUG
 LDADD = \
 	${top_srcdir}/lib/kerosin/libkerosin_debug.la \
