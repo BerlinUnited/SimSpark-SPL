@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.cpp,v 1.3 2004/04/15 10:43:34 rollmark Exp $
+   $Id: hingejoint.cpp,v 1.4 2004/04/20 14:18:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,12 +83,12 @@ Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
 
 float HingeJoint::GetAngle()
 {
-    return dJointGetHingeAngle(mODEJoint);
+    return gRadToDeg(dJointGetHingeAngle(mODEJoint));
 }
 
 float HingeJoint::GetAngleRate()
 {
-    return dJointGetHingeAngleRate (mODEJoint);
+    return gRadToDeg(dJointGetHingeAngleRate(mODEJoint));
 }
 
 

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hinge2joint.cpp,v 1.1 2004/04/15 18:29:38 rollmark Exp $
+   $Id: hinge2joint.cpp,v 1.2 2004/04/20 14:21:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ float Hinge2Joint::GetAngle(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return dJointGetHinge2Angle1(mODEJoint);
+            return gRadToDeg(dJointGetHinge2Angle1(mODEJoint));
 
         case AI_SECOND:
             // dJointGetHinge2Angle2 is undeclared in ODE 0.039
@@ -107,10 +107,10 @@ float Hinge2Joint::GetAngleRate(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return dJointGetHinge2Angle1Rate(mODEJoint);
+            return gRadToDeg(dJointGetHinge2Angle1Rate(mODEJoint));
 
         case AI_SECOND:
-            return dJointGetHinge2Angle2Rate(mODEJoint);
+            return gRadToDeg(dJointGetHinge2Angle2Rate(mODEJoint));
 
         default:
             return 0;
