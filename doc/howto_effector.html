@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>How to implement an Effector</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="highlight.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<p><font size="6"><i><b>How to implement an Effector</b></i></font></p>
+<p><font size="4">In this HowTo we will focus on creating an effector. An Effector 
+  allows an agent to somehow modify/interact with the virtual world. Implementing 
+  an Effector is similar to <a href="howto_perceptor.html">implementing a Perceptor</a>. 
+  All effectors derive from a common base class, kerosin::Effector, and must implement 
+  the Perform() function. It's signature looks like this:</font></p>
+<pre><span class="key">virtual </span><span class="typ">bool </span>Perform(boost::shared_ptr&lt;BaseNode&gt; &amp;base, <span class="typ">float </span>deltaTime);<span class="dir"></span>
+</pre>
+<p><font size="4">The first parameter of this call is the node, which the effector 
+  should act upon and the second parameter is the amount of time, which is to 
+  be simulated (in miliseconds). The function returns true, if the operation was 
+  successful and false if not. That's all there really is to it. A small question 
+  yet remains: How can one pass parameters to an Effector? This is usually done 
+  by other external functions. Let's look at the ForceEffector (lib/kerosin/agentaspect/forceeffector.h/cpp). 
+  It applies an accumulated force vector to a Body object in its Perform() function. 
+  The amount of force to apply is accumulated via the AddForce()-function. This 
+  modifies the internal state of the ForceEffector instance. Its Perform() function 
+  looks like this:</font></p>
+<pre><span class="typ">bool </span>ForceEffector::Perform(boost::shared_ptr&lt;BaseNode&gt; &amp;base, <span class="typ">float </span>deltaTime)
+{
+  <span class="key">if </span>(!base) <span class="key">return false</span>;
+
+  <span class="com">// base should be a transform, or some other node, which has a Body-child
+</span>  shared_ptr&lt;Body&gt; body = shared_static_cast&lt;Body&gt;(base-&gt;GetChildOfClass(<span class="str">&quot;Body&quot;</span>));
+
+  <span class="key">if </span>(!body) <span class="key">return false</span>;
+
+  <span class="key">if </span>(mForce.Length() &gt; mMaxForce) mForce = mMaxForce/mForce.Length()*mForce;
+
+  dBodyAddForce(body-&gt;GetODEBody(), mForce.x(), mForce.y(), mForce.z());
+
+  mForce.Set(<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>);
+  <span class="key">return true</span>;
+}
+
+<span class="typ">void </span>ForceEffector::AddForce(<span class="typ">const </span>salt::Vector3f&amp; force)
+{
+  mForce += force;
+}
+</pre>
+<p><font size="4">First, it checks if base is valid. Then it retrieves the Body 
+  object belonging to the base object and then applies the accumulated force via 
+  an ODE function.</font></p>
+</body>
+</html>
+

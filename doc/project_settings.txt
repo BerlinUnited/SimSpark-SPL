@@ -71,7 +71,3 @@ the export.cpp would look like this:
 
 More examples of real export.cpp files can be seen in the plugin-Workspace.
 
-
-Minimal Framework Program
-=========================
-
