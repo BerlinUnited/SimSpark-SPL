@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: kickeffector.h,v 1.3 2004/03/22 18:10:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,9 +22,11 @@
 #ifndef KICKEFFECTOR_H
 #define KICKEFFECTOR_H
 
+#include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/body.h>
 #include <soccer/ball/ball.h>
+#include <soccer/ballstateaspect/ballstateaspect.h>
 
 class KickEffector : public oxygen::Effector
 {
@@ -58,10 +60,9 @@ public:
     void SetForceFactor(float force_factor);
 
     /** Set the number of steps the force is applied.
-     * \param min the minimum number of steps.
-     * \param max the maximum number of steps
+     * \param steps the number of steps to apply force and torque.
      */
-    void SetSteps(int min, int max);
+    void SetSteps(int steps);
 
     /** Set the noise parameters.
      *  If used, the noise values are normally distributed around 0.0.
@@ -94,6 +95,8 @@ protected:
     boost::shared_ptr<oxygen::Body> mBallBody;
     /** reference to the body node of the ball */
     boost::shared_ptr<Ball> mBall;
+    /** reference to the agent aspect */
+    boost::shared_ptr<oxygen::AgentAspect> mAgent;
 
 private:
     /** the margin where objects can be kicked */
@@ -110,10 +113,8 @@ private:
     float mMinAngle;
     /** the maximum kick angle */
     float mMaxAngle;
-    /** Minimum number of simulation steps for applying kick force */
-    int mMinSteps;
-    /** Maximum number of simulation steps for applying kick force */
-    int mMaxSteps;
+    /** number of simulation steps for applying kick force */
+    int mSteps;
     /** sigma for force error */
     double mSigmaForce;
     /** sigma for angle error (x-y angle) */

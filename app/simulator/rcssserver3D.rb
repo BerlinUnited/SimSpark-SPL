@@ -69,14 +69,20 @@ def addAgent(aspectPath)
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
 
+  # driveeffector setup
   driveEffector = new('DriveEffector', aspectPath+'DriveEffector')
-  driveEffector.setForceFactor(60.0);
+  # the driveeffector is good for acceleration up to 12m/s² of a 75kg robot 
+  # (if there was no friction. but there is. :)
+  driveEffector.setForceFactor(75.0 * 12.0 / 100.0);
   driveEffector.setSigma(0.005);
+  # drive consumption. (higher value means lower consumption) 
+  # untested if this is enough or too much 
+  driveEffector.setConsumption(120 * 75.0 * 12.0 * 4);
 
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
-  kickEffector.setForceFactor(4.0)
+  kickEffector.setForceFactor(22.0)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
-  kickEffector.setSteps(3,75)
+  kickEffector.setSteps(10)
   kickEffector.setMaxPower(100.0)
   kickEffector.setAngleRange(0.0,50.0)
 
@@ -230,7 +236,7 @@ addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
 addSoccerVar('GoalHeight', 2.44)
-addSoccerVar('BorderSize', 4.0)
+addSoccerVar('BorderSize', 10.0)
 
 # agent parameters
 addSoccerVar('AgentMass', 75.0)

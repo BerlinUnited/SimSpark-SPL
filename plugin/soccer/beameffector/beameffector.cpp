@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.4 2004/02/26 21:08:58 fruit Exp $
+   $Id: beameffector.cpp,v 1.5 2004/03/22 18:10:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,36 +60,34 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     // the beam effector only has an effect in PM_BeforeKickOff
     if (mGameState->GetPlayMode() == PM_BeforeKickOff)
-        {
-            // swap external and internal z-coordinates; after the
-            // swap pos is still relative to the team
-            Vector3f pos = beamAction->GetPosition();
+    {
+        Vector3f pos = beamAction->GetPosition();
 
-            // an agent can only beam within it's own field half
-            float minX = -mFieldLength/2 + mAgentRadius;
-            pos[0] = std::max<float>(pos[0],minX);
-            pos[0] = std::min<float>(pos[0],0.0f);
+        // an agent can only beam within it's own field half
+        float minX = -mFieldLength/2 + mAgentRadius;
+        pos[0] = std::max<float>(pos[0],minX);
+        pos[0] = std::min<float>(pos[0],0.0f);
 
-            float minY = -mFieldWidth/2 + mAgentRadius;
-            float maxY = mFieldWidth/2 - mAgentRadius;
-            pos[1] = std::max<float>(minY,pos[1]);
-            pos[1] = std::min<float>(maxY,pos[1]);
+        float minY = -mFieldWidth/2 + mAgentRadius;
+        float maxY = mFieldWidth/2 - mAgentRadius;
+        pos[1] = std::max<float>(minY,pos[1]);
+        pos[1] = std::min<float>(maxY,pos[1]);
 
-            pos[2] = mAgentRadius;
+        pos[2] = mAgentRadius;
 
-            // swap x and y coordinates accordingly for the current
-            // team; after the flip pos is global and not independent
-            // on the team
-            pos = SoccerBase::FlipView
-                (
-                 pos,
-                 mAgentState->GetTeamIndex()
-                 );
+        // swap x and y coordinates accordingly for the current
+        // team; after the flip pos is global and not independent
+        // on the team
+        pos = SoccerBase::FlipView
+            (
+                pos,
+                mAgentState->GetTeamIndex()
+                );
 
-            mBody->SetPosition(pos);
-            mBody->SetVelocity(Vector3f(0,0,0));
-            mBody->SetAngularVelocity(Vector3f(0,0,0));
-        }
+        mBody->SetPosition(pos);
+        mBody->SetVelocity(Vector3f(0,0,0));
+        mBody->SetAngularVelocity(Vector3f(0,0,0));
+    }
 
     return true;
 }

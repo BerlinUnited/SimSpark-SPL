@@ -78,7 +78,8 @@ latitudal angle (in degrees) for accelerating the ball, a number
 between 0 and 50). The second argument indicates the kicking power and
 this is a number between 0 and 100 (meaning % of the maximum available
 power). The kickeffector adds a force and a torque to the ball (over a
-number of simulation steps, depending on the kick power).
+fixed number of simulation steps, currently 10 (i.e. 1/10s with the 
+current settings).
 To kick the ball, the ball has to be very close to the robot (0.04m). 
 
 The kickeffector noise has the following parameters:
@@ -93,9 +94,9 @@ The kickeffector noise has the following parameters:
 You cannot change the kicking angle in the x-y plane, i.e. you have to
 move the robot so that it can kick into the desired direction.
 The kickeffector is very strong, it is almost posssible to kick the
-ball from one side of the field to the other side. It is also possible
-to move other robots by kicking the ball against them, especially if
-they are close. Try to exploit this feature :)
+ball from one side of the field to the other side. It should not be
+possible to move other robots by kicking the ball against them anymore. 
+(at least not very much :)
 Like the dasheffector, the kickeffector does only work if the robot
 touches the soccer field. 
 
@@ -178,13 +179,7 @@ only the battery state).
 END OF TEXT.
 
 
-you're on your own now
-we won't save you
-your resque-squad
-is too exhausted
+Attention all planets of the solar federation
+We have assumed control.
 
-and if you complain once more
-you'll meet an army of me
-
-
-(BJOERK, army of me)
+(RUSH, 2112)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ball.h,v 1.2 2004/02/12 14:07:25 fruit Exp $
+   $Id: ball.h,v 1.3 2004/03/22 18:10:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,13 @@
 #include <oxygen/physicsserver/body.h>
 #include <salt/vector.h>
 
+class BallStateAspect;
+
+namespace oxygen
+{
+    class AgentAspect;
+}
+
 /** \class Ball represents the ball on the soccer field ;) */
 class Ball : public oxygen::Transform
 {
@@ -35,16 +42,18 @@ public:
 
     /** Set the acceleration of the ball.
      *
-     * This method can be used to accelerate the ball "slowly", i.e. over a number
-     * of simulation steps. The ball acceleration will be increased over the number
-     * of steps from a fraction of the requested force / torque up to the maximum.
+     * This method can be used to accelerate the ball over a number
+     * of simulation steps. The ball acceleration will be applied over the number
+     * of steps using a constant force and torque.
      *
      * \param steps number of steps the acceleration should be applied.
      * \param force the maximum force to add to the ball
      * \param torque the maximum torque to add to the ball
+     * \param agent the agent kicking the ball
      */
     void SetAcceleration(int steps, const salt::Vector3f& force,
-                         const salt::Vector3f& torque = salt::Vector3f(0.0,0.0,0.0));
+                         const salt::Vector3f& torque,
+                         boost::shared_ptr<oxygen::AgentAspect> agent);
 
     /** This method is used to add forces and torques to the ball before each simulation
      *  step, if necessary.
@@ -53,12 +62,12 @@ public:
 
 private:
     int mForceTTL;
-    double mGamma;
-    double mInc;
 
     salt::Vector3f mForce;
     salt::Vector3f mTorque;
     boost::shared_ptr<oxygen::Body> mBody;
+    boost::shared_ptr<oxygen::AgentAspect> mKickedLast;
+    boost::shared_ptr<BallStateAspect> mBallStateAspect;
 };
 
 DECLARE_CLASS(Ball);

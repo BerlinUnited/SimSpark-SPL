@@ -1,3 +1,22 @@
+[0.2.1]
+This is a bugfix release. It removes some (but not all) bugs found
+in rcssserver3D-0.2.
+
+- Configuration was made a little stricter and more complete so that
+  it should be easier to install the whole thing.
+- The missing agenttest.rb file is included into the distribution
+- The Makefile.am's have been fixed for those not building the libkerosin part.
+- A fix for the recent SPADES versions has been added.
+- A major bug with the weight of objects in the simulation has been removed.
+  The dynamics of the drive of the robots and of the kicker have been adapted.
+  (This bug was found after a report from Nuno Lau on the sserver list).
+- The artificial slowdown of bodies has been removed. 
+- The default timer of the sample agents (agenttest) is now jiffies.
+
+A few features have been added to the zeitgeist library. This is mostly stuff 
+dealing with the ruby interface.
+
+
 [0.2]
 This release adds already big parts of the soccer specific parts to the 
 simulator. All soccer specific things are realized as plugins to the 

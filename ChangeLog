@@ -1,3 +1,49 @@
+2004-03-22  Oliver Obst  <fruit@robolog.org>
+
+	* released rcssserver3D-0.2.1
+
+	* app/simulator/rcssserver3D.rb: 
+	- changed parameters due to kickeffector changes
+
+	* app/simulator/agentdb.list: changed default timer to jiffies
+
+	* plugin/soccer/kickeffector/kickeffector.h: 
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	* plugin/soccer/kickeffector/kickeffector_c.cpp: 
+	- changed the KickEffector so that applies force and torque over a 
+	  fixed number of steps. The SetSteps method could be simplified 
+	  because of that.
+	- The KickEffector parent node needs to be (derived from) an
+	  AgentAspect.  When applying the acceleration, a reference to the
+	  AgentAspect is passed to the ball to update the last collidee.
+	
+	* plugin/soccer/ball/ball.h: 
+	* plugin/soccer/ball/ball.cpp: 
+	- Simplified the kicker. A constant force and torque is applied now 
+	  over a fixed number of simulation steps. This was possible because 
+	  Agents and the ball get the correct mass. The agents do not "jump" 
+	  up anymore when kicking the ball.  
+	- If the agent kicks the ball, it is set as last colliding agent in 
+	  the BallStateAspect.
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h: 
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp: 
+	- added public method UpdateLastCollidingAgent(agent) to set the last 
+	  colliding agent. This method is used by the kickeffector to set the 
+	  agent kicking the ball as last collidee.
+
+2004-03-19  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/rcssserver3D.rb: 
+	- fixed the driveeffector forcefactor for the new update
+
+	* plugin/soccer/driveeffector/driveeffector.cpp: 
+	- removed the deltaTime dependecy from the physics update
+
+	* lib/oxygen/physicsserver/body.cpp: 
+	Body::SetMass didn't set the mass. This bug caused all bodies 
+	to have the same weight (of 1).
+
 2004-03-12  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/kerosin/renderserver/renderserver.cpp:
@@ -371,76 +417,26 @@
 
 	* app/agenttest/Makefile.am: added agenttest.rb to distribution
 
-2004-01-05	pfr	<sserver-admin@lists.sf.net>
 
-	* ./lib/oxygen/spadesserver/spadescreatesenseevent.cpp
-	- Added an include needed for the current CVS version of SPADES
-	
-2003-12-30  Oliver Obst  <fruit@robolog.org>
+2004-02-16  Patrick Riley  <pfr@cs.cmu.edu>
 
-	* doc/Makefile.am: 
-	- including HTML files into distribution 
-	- fixed installation of HTML files and Doxygen documentation 
-	- using automake conditional to check if Doxygen is avcailable or not
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp
+	added #include <spades/SenseEvent.hpp>
+	(needed for spades >= 0.91)
 
-	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp: 
-	set the sense interval to 250ms.
-
-	* configure.ac: 
-	- added check for Doxygen. Creating an automake conditional dependent 
-	  on finding the doxygen binary.  
-	- creating the rcsoccersim3D script in the app/simulator directory 
-	- creating the createagentdb.sh script in the app/simulator directory
-
-	* acinclude.m4: 
-	- compiling libkerosin is now OFF by default.  
-	- changed warning about no libkerosin to normal message (because
-	  until now, libkerosin is not necessary)
-	
-	* app/agenttest/Makefile.am: 
-	- changes so that agenttest binary gets installed
-
-	* app/agenttest/main.cpp: 
-	- setting unique uniform numbers (by using the agent PIDs)
-
-	* app/rcssmonitor3d/main.cpp: 
-	- changes so that the init script is run by RunInitScript (to install it in the 
-	  user directory if necessary) 
-	- renamed the init script to be consistent with naming style of rcssserver3D files
-
-	* app/simulator/:
-	- changes so that a rcssserver3D binary gets installed
-	- created a script rcsoccersim3D that starts up a simulator and a monitor
-	- created a script that installs an agentdb file during make install
-
-2003-12-29  Oliver Obst  <fruit@robolog.org>
+2004-02-14  Oliver Obst  <fruit@robolog.org>
 
 	* lib/kerosin/Makefile.am: 
-	- fixed Makefile for the case when kerosin should not be build
+	fixed Makefile.am for making a proper distribution wit no generated sources. 
+	Needed also to fix rules for making without kerosin.
 
-	* lib/oxygen/spadesserver/spadesserver.cpp: 
-	- reduced monitor send interval from 1/2 to 1/10.  
-	- fixed parseAct log message
+	* lib/kerosin/soundserver/soundserver.cpp: 
+	* lib/kerosin/imageserver/imageserver.cpp: 
+	* app/scenetest/md5mesh.cpp: 
+	- replaced RFile by salt::RFile to solve ambiguities between salt and ruby
 
-2003-12-28  Oliver Obst  <fruit@robolog.org>
+	* app/agenttest/Makefile.am: added agenttest.rb to distribution
 
-	* plugin/soccer/initeffector/initeffector.cpp: 
-	- changed initeffector due to changes with FindParameter. InitEffector 
- 	  now correctly sets both team name and uniform number (currently we use
-	  the node name for both).
-
-	* lib/oxygen/gamecontrolserver/predicate.cpp: 
-	- added ParameterName functional class implementation (for use as STL
-	  predicate) 
-	- added FindParameter implementation
-
-	* lib/oxygen/gamecontrolserver/predicate.h: 
-	- removed GetNthValue
-	- changed FindParameter to find the first element of 
-	  Predicate::parameter that can be casted to a TParameterList, which
-	  (again) contains a first element that can be casted to a
-	  std::string and is equal to the given name.  
-	- moved parts of the implementation into predicate.cpp
 
 2004-02-11  Oliver Obst  <fruit@robolog.org>
 
@@ -1118,33 +1114,6 @@
 	* plugin/soccer/ball/ball.cpp: 
 	- added a method to accelerate the ball over a number of steps
 
-2004-01-31  Oliver Obst  <fruit@robolog.org>
-
-	* plugin/soccer/dasheffector/dasheffector_c.cpp: 
-	- exporting methods to set dash effector parameters: 
-	  setForceFactor, setSigma, and setMaxPower
-	
-	* plugin/soccer/dasheffector/dasheffector.h: 
-	* plugin/soccer/dasheffector/dasheffector.cpp: 
-	- introduced a "force factor". The applied force to the robot is
-	  multiplied with this factor (divided by the maximum force). The
-	  default force factor is 500.0.
-	- The applied dash vector is length restricted now. If the length
-	  of the dash power vector is greater the the allowed maximum
-	  length, the dash vector is reduced to the maximum length. The
-	  default value of the maximum dash vector length is 100.0.
-	- It is possible to use a (normally distributed) error to
-	  calculate the resulting force applied to the robot. When
-	  calculating the resulting force, the dash power is multiplied with
-	  the force factor divided by the maximum dash power. The error is
-	  added to the maximum dash power in this calculation. By default,
-	  error is turned off.
-	- changed the order of the dash power components. For the user,
-	  the 3rd component of the dash power vector is used to let the
-	  robot jump up.
-	- the dash effector takes effect only if the sphere is touching
-	  the ground.
-
 2004-02-01  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
@@ -1200,6 +1169,33 @@
 	* app/simulator/simulator.rb:
 	registering the SexpMonitor after the GameStateAspect as it caches
 	a reference to it
+
+2004-01-31  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/dasheffector/dasheffector_c.cpp: 
+	- exporting methods to set dash effector parameters: 
+	  setForceFactor, setSigma, and setMaxPower
+	
+	* plugin/soccer/dasheffector/dasheffector.h: 
+	* plugin/soccer/dasheffector/dasheffector.cpp: 
+	- introduced a "force factor". The applied force to the robot is
+	  multiplied with this factor (divided by the maximum force). The
+	  default force factor is 500.0.
+	- The applied dash vector is length restricted now. If the length
+	  of the dash power vector is greater the the allowed maximum
+	  length, the dash vector is reduced to the maximum length. The
+	  default value of the maximum dash vector length is 100.0.
+	- It is possible to use a (normally distributed) error to
+	  calculate the resulting force applied to the robot. When
+	  calculating the resulting force, the dash power is multiplied with
+	  the force factor divided by the maximum dash power. The error is
+	  added to the maximum dash power in this calculation. By default,
+	  error is turned off.
+	- changed the order of the dash power components. For the user,
+	  the 3rd component of the dash power vector is used to let the
+	  robot jump up.
+	- the dash effector takes effect only if the sphere is touching
+	  the ground.
 
 2004-01-31  Markus Rollmann  <rollmark@uni-koblenz.de>
 
@@ -1886,6 +1882,57 @@
 	* plugin/soccer/initeffector/export.cpp:
 	moved soccer specific plugins into one bundle
 
+2004-01-05	pfr	<sserver-admin@lists.sf.net>
+
+	* ./lib/oxygen/spadesserver/spadescreatesenseevent.cpp
+	- Added an include needed for the current CVS version of SPADES
+	
+2003-12-30  Oliver Obst  <fruit@robolog.org>
+
+	* doc/Makefile.am: 
+	- including HTML files into distribution 
+	- fixed installation of HTML files and Doxygen documentation 
+	- using automake conditional to check if Doxygen is avcailable or not
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp: 
+	set the sense interval to 250ms.
+
+	* configure.ac: 
+	- added check for Doxygen. Creating an automake conditional dependent 
+	  on finding the doxygen binary.  
+	- creating the rcsoccersim3D script in the app/simulator directory 
+	- creating the createagentdb.sh script in the app/simulator directory
+
+	* acinclude.m4: 
+	- compiling libkerosin is now OFF by default.  
+	- changed warning about no libkerosin to normal message (because
+	  until now, libkerosin is not necessary)
+	
+	* app/agenttest/Makefile.am: 
+	- changes so that agenttest binary gets installed
+
+	* app/agenttest/main.cpp: 
+	- setting unique uniform numbers (by using the agent PIDs)
+
+	* app/rcssmonitor3d/main.cpp: 
+	- changes so that the init script is run by RunInitScript (to install it in the 
+	  user directory if necessary) 
+	- renamed the init script to be consistent with naming style of rcssserver3D files
+
+	* app/simulator/:
+	- changes so that a rcssserver3D binary gets installed
+	- created a script rcsoccersim3D that starts up a simulator and a monitor
+	- created a script that installs an agentdb file during make install
+
+2003-12-29  Oliver Obst  <fruit@robolog.org>
+
+	* lib/kerosin/Makefile.am: 
+	- fixed Makefile for the case when kerosin should not be build
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- reduced monitor send interval from 1/2 to 1/10.  
+	- fixed parseAct log message
+
 2003-12-29  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/gamecontrolserver/predicate.cpp:
@@ -1911,6 +1958,26 @@
 
 	* lib/oxygen/Makefile.am: 
 	added gamecontrolserver/predicate.cpp
+
+2003-12-28  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/initeffector/initeffector.cpp: 
+	- changed initeffector due to changes with FindParameter. InitEffector 
+ 	  now correctly sets both team name and uniform number (currently we use
+	  the node name for both).
+
+	* lib/oxygen/gamecontrolserver/predicate.cpp: 
+	- added ParameterName functional class implementation (for use as STL
+	  predicate) 
+	- added FindParameter implementation
+
+	* lib/oxygen/gamecontrolserver/predicate.h: 
+	- removed GetNthValue
+	- changed FindParameter to find the first element of 
+	  Predicate::parameter that can be casted to a TParameterList, which
+	  (again) contains a first element that can be casted to a
+	  std::string and is equal to the given name.  
+	- moved parts of the implementation into predicate.cpp
 
 2003-12-27  Markus Rollmann  <rollmark@uni-koblenz.de>
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector_c.cpp,v 1.4 2004/03/22 11:20:59 rollmark Exp $
+   $Id: kickeffector_c.cpp,v 1.5 2004/03/22 18:10:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,19 +58,17 @@ FUNCTION(KickEffector,setForceFactor)
 
 FUNCTION(KickEffector,setSteps)
 {
-    int inMin;
-    int inMax;
+    int steps;
 
     if (
-        (in.GetSize() != 2) ||
-        (! in.GetValue(in[0], inMin)) ||
-        (! in.GetValue(in[1], inMax))
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], steps))
         )
         {
             return false;
         }
 
-    obj->SetSteps(inMin,inMax);
+    obj->SetSteps(steps);
     return true;
 }
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.3 2004/02/25 17:12:25 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.4 2004/03/22 18:12:00 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

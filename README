@@ -1,40 +1,39 @@
-rcssserver3D-0.2 README
+rcssserver3D-0.2.1 README
 
 General Information
 
-rcssserver3D is a physical simulation system. The primary purpose of
-this system is to provide a *generic* simulator for different kinds of
+rcssserver3D is a physical simulation system. The primary purpose of this
+system is to provide a *generic* simulator for different kinds of
 simulations. In these simulations, agents can participate as external
 processes. To create specific simulations, important parts of the
 simulator are build as plugins that can be replaced for different
-simulations. The plugins can be exchanged at runtime. Things designed
-as plugins are for example parts of agents: agents can be using
-different actuators or perceptors. Other plugins are responsible for
-the simulator protocol or also for the rules of specific simulations.
+simulations. The plugins can be exchanged at runtime. Things designed as
+plugins are for example parts of agents: agents can be using different
+actuators or perceptors. Other plugins are responsible for the simulator
+protocol or also for the rules of specific simulations.
 
-The simulation system was created with a specific simulation in mind,
-that is a 3D physical soccer simulation for RoboCup Simulation league.
-To this end, this distribution contains a set of plugins for RoboCup
-Soccer Simulation League. The soccer simulator can be found in the ./
-app/simulator/ subdirectory. The basic simulator concept was presented
-on the 2003 RoboCup Symposium in Padova [1].
+The simulation system was created with a specific simulation in mind, that
+is a 3D physical soccer simulation for RoboCup Simulation league. To this
+end, this distribution contains a set of plugins for RoboCup Soccer
+Simulation League. The soccer simulator can be found in the ./app/
+simulator/ subdirectory. The basic simulator concept was presented on the
+2003 RoboCup Symposium in Padova [1].
 
-For scientific simulations, it is useful to be able to keep track of
-the time used by different agents for thinking. A special plugin makes
-it possible to use the simulator together with SPADES, a middleware
-system for agent based simulations. SPADES was presented on the 2002
-RoboCup Symposium in Fukuoka [2] (SPADES itself is not part of this
-package).
+For scientific simulations, it is useful to be able to keep track of the
+time used by different agents for thinking. A special plugin makes it
+possible to use the simulator together with SPADES, a middleware system
+for agent based simulations. SPADES was presented on the 2002 RoboCup
+Symposium in Fukuoka [2] (SPADES itself is not part of this package).
 
-If you installed rcssserver3D-0.1 before, make sure to clean the 
+If you installed rcssserver3D-0.2 or 0.1 before, make sure to clean the 
 ~/.rcssserver3D/ directory prior to using the new version. Also better
 remove the old installed libraries in /usr/local/lib/rcssserver3D
 manually. Sorry for this inconvenience.
 
 Package Overview
 
-The different parts of this package are organized in different
-directories as follows:
+The different parts of this package are organized in different directories
+as follows:
 
 ./app/            Different applications. These applications are mostly
                   tests of different subsystems of the simulator.      
@@ -86,9 +85,10 @@ directories as follows:
                                                                        
 Known Problems:
 
-  * if during linking the compiler complains that it cannot find
-    -lslang, set a symbolic link /usr/lib/libslang.so linking to /usr/
-    lib/libslang.so.1
+  * The playmodes are not set correctly yet. We are working on this. :)
+  * if during linking the compiler complains that it cannot find -lslang,
+    set a symbolic link /usr/lib/libslang.so linking to /usr/lib/
+    libslang.so.1
 
 Literature:
 
@@ -104,7 +104,7 @@ Literature:
     Notes in Artificial Intelligence, pp. 162-178, Springer Verlag,
     Berlin, 2003.
 
------------------------------------------------------------------------
+--------------------------------------------------------------------------
 
 Oliver Obst
-Last modified: Mon Feb 9 16:34:06 CET 2004
+Last modified: Mon Mar 22 16:24:39 CET 2004

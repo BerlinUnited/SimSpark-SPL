@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.3 2004/02/19 17:33:07 rollmark Exp $
+   $Id: ballstateaspect.cpp,v 1.4 2004/03/22 18:10:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,6 +72,13 @@ void BallStateAspect::UpdateLastCollidingAgent()
 
     // empty the recorder buffer
     mBallRecorder->Clear();
+}
+
+void
+BallStateAspect::UpdateLastCollidingAgent(boost::shared_ptr<AgentAspect> agent)
+{
+    mLastCollidingAgent = agent;
+    mLastAgentCollisionTime = mGameState->GetTime();
 }
 
 void BallStateAspect::UpdateBallOnField()
@@ -184,5 +191,4 @@ salt::Vector3f BallStateAspect::GetLastValidBallPosition()
 {
     return mLastValidBallPos;
 }
-
 
