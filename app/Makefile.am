@@ -4,4 +4,5 @@ SUBDIRS = coretest \
 	  scenetest \
 	  simulator \
 	  spadestest \
+	  agenttest \
 	  zeitgeisttest 
