@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.cpp,v 1.4 2004/03/22 11:02:32 rollmark Exp $
+   $Id: transform.cpp,v 1.5 2004/04/10 12:50:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,7 +57,16 @@ void Transform::SetLocalTransform(const salt::Matrix &transform)
 
 void Transform::SetWorldTransform(const salt::Matrix &transform)
 {
-        mWorldTransform = transform;
+    shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>
+        (make_shared(mParent));
+
+    if (parent.get() == 0)
+      {
+        return;
+      }
+
+    mLocalTransform = transform;
+    parent->SetWorldTransform(mIdentityMatrix);
 }
 
 void Transform::SetLocalPos(const salt::Vector3f &pos)
@@ -75,9 +84,13 @@ void Transform::UpdateHierarchyInternal()
 {
         shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(mParent));
 
-        // no parent, return identity
+        // no parent, return local transform
         if (parent.get() == NULL)
+          {
                 mWorldTransform = mLocalTransform;
+          }
         else
+          {
                 mWorldTransform = parent->GetWorldTransform() * mLocalTransform;
+          }
 }
