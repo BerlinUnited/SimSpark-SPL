@@ -35,7 +35,7 @@ createVariable('System.FontPath', 'data/fonts');
 createVariable('Viewport.XRes', 640);           # width
 createVariable('Viewport.YRes', 480);	        # height
 createVariable('Viewport.FullScreen',   false);	# run in fullscreen?
-createVariable('Viewport.DoubleBuffer', false); # use double buffering?
+createVariable('Viewport.DoubleBuffer', true);  # use double buffering?
 
 # Set up bits per pixel
 createVariable('Viewport.RedBits',   5); # red bits
