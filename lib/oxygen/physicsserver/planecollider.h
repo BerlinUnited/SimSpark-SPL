@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: planecollider.h,v 1.7 2004/02/26 21:14:06 fruit Exp $
+   $Id: planecollider.h,v 1.8 2004/04/15 14:20:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,16 @@ public:
 
     /** set the parameters of the plane given a position and a normal vector */
     void SetParams(const salt::Vector3f& pos, salt::Vector3f normal);
+
+    /** this is a stub method that does not nothing, as a plane is a non
+        placeable geom.
+    */
+    virtual void SetPosition(const salt::Vector3f& pos);
+
+    /** this is a stub method that does nothing, as a plane is a non
+        placeable geom
+     */
+    virtual void SetRotation(const salt::Matrix& rot);
 
 protected:
     /** constructs a default plane with normal pointing up, going
