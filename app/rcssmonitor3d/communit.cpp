@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.cpp,v 1.2.2.1 2003/12/22 15:21:53 rollmark Exp $
+   $Id: communit.cpp,v 1.2.2.2 2003/12/27 11:17:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "communit.h"
+#include "types.h"
 #include <netinet/in.h>
 #include <iostream>
 #include <rcssbase/net/exception.hpp>
@@ -27,7 +28,7 @@
 using namespace std;
 using namespace rcss::net;
 
-CommUnit::CommUnit()
+CommUnit::CommUnit() : mStreamBuf(mSocket),mStream(&mStreamBuf)
 {
 }
 
@@ -73,29 +74,10 @@ bool CommUnit::OpenConnection(std::string host, int port)
   return false;
 }
 
-
-bool
-CommUnit::SendMessage(const std::string& msg)
+string CommUnit::GetMessage ()
 {
-    return SendMessage(msg.c_str());
-}
+    static char line[MAX_MSG_LEN];
+    mStream.getline(line,MAX_MSG_LEN);
 
-bool
-CommUnit::SendMessage(const char* buf)
-{
-  int l = strlen(buf);
-  return (mSocket.send(buf, l) == l);
-}
-
-int CommUnit::GetMessage (char* buf, int size)
-{
-  int l = mSocket.recv(0,buf,size,0);
-
-  if (l < 0)
-    {
-      // non blocking socket, no data available
-      l = 0;
-    }
-
-  return l;
+    return line;
 }
