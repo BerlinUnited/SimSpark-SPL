@@ -1,3 +1,35 @@
+2004-01-26  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/simulator.rb: 
+	- adjusted numbers according to the soccer rules, ie.  ball 
+	  and field size are now fixed to official
+	  sizes.  
+	- made agents much smaller now (diameter 60 cm)
+
+2004-01-25  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/oxygen.h: 
+	* lib/oxygen/oxygen.cpp: 
+	* lib/oxygen/Makefile.am:
+	- added raycollider to oxygen library 
+	- added ccylindercollider to oxygen library
+
+	* lib/oxygen/physicsserver/raycollider.h: 
+	* lib/oxygen/physicsserver/raycollider.cpp: 
+	* lib/oxygen/physicsserver/raycollider_c.cpp: 
+	added an ODE RayCollider wrapper
+
+	* lib/oxygen/physicsserver/spherecollider.h: 
+	* lib/oxygen/physicsserver/spherecollider.cpp: 
+	added method to get the radius of the sphere
+
+	* lib/salt/random.h: 
+	- added a base engine for producing random numbers (based on boost) 
+	- added a random number generator with an uniform distribution 
+	- added a random number generator with a normal distribution 
+	- added a random number generator with an exponential distribution 
+	All generators build upon the base engine.
+
 2004-01-22  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/createeffector/createeffector.cpp: 
