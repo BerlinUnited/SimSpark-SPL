@@ -1,3 +1,36 @@
+2003-11-16  Oliver Obst  <fruit@robolog.org>
+
+	* configure.ac: 
+	checking for SPADES library. SPADES can be used
+	optional right now.
+
+	* acinclude.m4: added AC_LIB_SPADES from rcss3d
+
+	* app/spadestest/main.cpp: 
+	accessing the SpadesServer from main.cpp
+
+	* app/spadestest/spadestest.rb: 
+	- create the SpadesServer 
+	- added a second sphere
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:
+	added initial revision of SpadesServer (it doesn't do
+	anything yet)
+
+	* lib/oxygen/oxygen.cpp: 
+	register spadesserver during initialization
+
+	* lib/oxygen/oxygen.h: 
+	- including spadesserver 
+	- including indexbuffer
+
+	* lib/oxygen/Makefile.am: 
+	- added spadesserver subdirectory and files. build spadesserver only if 
+	the spades library is available.
+	
+
 2003-11-15  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
