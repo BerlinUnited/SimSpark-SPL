@@ -4,7 +4,7 @@
                           addr.hpp  - A network address class
                              -------------------
     begin                : 07-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -32,7 +32,7 @@ namespace rcss
     namespace net
     {
         class AddrImpl;
-        
+
         class Addr
         {
         public:
@@ -42,35 +42,38 @@ namespace rcss
 
             static const HostType BROADCAST;
             static const HostType ANY;
-            
+
             Addr();
             Addr( const AddrType& addr );
             Addr( PortType port );
             Addr( PortType port, HostType host );
             Addr( PortType port, const std::string& host );
-            
+
             const AddrType&
             getAddr() const;
-            
+
             PortType
             getPort() const;
-            
+
+            void
+            setPort(PortType port);
+
             HostType
             getHost() const;
-            
+
             std::string
             getHostStr() const;
+
+            bool operator == ( const Addr& addr ) const;
+            bool operator < (const Addr& addr ) const;
+
         private:
             boost::shared_ptr< AddrImpl > m_impl;
         };
-        
-        bool 
-        operator==( const Addr& a,
-                    const Addr& b );
-        
+
         std::ostream&
         operator<<( std::ostream& o, const Addr& addr );
-        
+
     }
 }
 

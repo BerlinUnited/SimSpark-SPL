@@ -4,7 +4,7 @@
                           addr.cpp  - A network address class
                              -------------------
     begin                : 07-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -62,14 +62,14 @@ namespace rcss
             AddrImpl( Addr::PortType port, const std::string& host )
                 : m_host_name( host )
             {
-                struct hostent* host_ent 
+                struct hostent* host_ent
                     = (struct hostent*)gethostbyname( host.c_str() );
                 if( host_ent == NULL )
                     throw HostNotFound( h_errno );
-               
+
                 memset( (char *)&m_addr, 0, sizeof( m_addr ) ) ;
                 m_addr.sin_family = AF_INET ;
-                m_addr.sin_addr.s_addr 
+                m_addr.sin_addr.s_addr
                     = ((struct in_addr *)host_ent->h_addr_list[0])->s_addr;
                 m_addr.sin_port = htons( port );
             }
@@ -81,7 +81,11 @@ namespace rcss
             Addr::PortType
             getPort() const
             { return ntohs( m_addr.sin_port );  }
-            
+
+            void
+            setPort(Addr::PortType port)
+            { m_addr.sin_port = htons(port);  }
+
             Addr::HostType
             getHost() const
             { return htonl( m_addr.sin_addr.s_addr ); }
@@ -128,6 +132,10 @@ namespace rcss
         Addr::getPort() const
         { return m_impl->getPort(); }
 
+        void
+        Addr::setPort(PortType port)
+        { m_impl->setPort(port); }
+
         Addr::HostType
         Addr::getHost() const
         { return m_impl->getHost(); }
@@ -136,13 +144,26 @@ namespace rcss
         Addr::getHostStr() const
         { return m_impl->getHostStr(); }
 
-        bool 
-        operator==( const Addr& a,
-                    const Addr& b )
+        bool
+        Addr::operator==( const Addr& addr ) const
         {
-            return ( a.getAddr().sin_port == b.getAddr().sin_port
-                     && ( a.getAddr().sin_addr.s_addr 
-                          == b.getAddr().sin_addr.s_addr ) );
+            return ( addr.getAddr().sin_port == getAddr().sin_port
+                     && ( addr.getAddr().sin_addr.s_addr
+                          == getAddr().sin_addr.s_addr ) );
+        }
+
+        bool
+        Addr::operator < ( const Addr& addr ) const
+        {
+          const Addr::HostType host_a = getHost();
+          const Addr::HostType host_b = addr.getHost();
+
+          if (host_a != host_b)
+          {
+            return host_a < host_b;
+          }
+
+          return getPort() < addr.getPort();
         }
 
         std::ostream&
