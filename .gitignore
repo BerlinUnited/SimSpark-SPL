@@ -294,6 +294,11 @@ plugin/soccer/ballstateaspect/.dirstamp
 plugin/soccer/ballstateaspect/.libs
 plugin/soccer/ballstateaspect/Makefile
 plugin/soccer/ballstateaspect/Makefile.in
+plugin/soccer/beameffector/*.la
+plugin/soccer/beameffector/*.lo
+plugin/soccer/beameffector/.deps
+plugin/soccer/beameffector/.dirstamp
+plugin/soccer/beameffector/.libs
 plugin/soccer/createeffector/*.la
 plugin/soccer/createeffector/*.lo
 plugin/soccer/createeffector/.deps
