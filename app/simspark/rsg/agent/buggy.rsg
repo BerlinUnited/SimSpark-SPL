@@ -1,0 +1,106 @@
+; -*- mode: lisp; -*-
+
+;
+; this file constructs a simple buggy, the connected agent controlls
+; one joint motor
+;
+
+
+(RubySceneGraph 0 1)
+(
+ ; install a perceptor to receive the current simulation time
+ (node TimePerceptor)
+
+ ; create the char chassis
+ (node Transform
+       (setName chassis)
+       (setLocalPos 0 0 0.5)
+       (importScene rsg/boxspheres/box.rsg 1 3 0.8 10 matRed)
+
+       (node Transform
+	     (setLocalPos 0 1.3 0.55)
+	     (node Box
+		   (setMaterial matBlue)
+		   (setExtents 1 0.1 0.3)
+		   )
+	     )
+       )
+
+ ; install the left back tire, this tire is used to accelerate
+ (node Transform
+       (setName leftBack)
+       (setLocalPos -0.5 -1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (node Transform
+	     (setLocalRotation 0 180 0)
+
+	     ; install the joint
+	     (node Hinge2Joint
+		   (attach ../../sphereBody ../../../chassis/boxBody)
+		   (setAnchor 0 0 0)
+
+		   ; enable the joint motor
+		   (setMaxMotorForce 1 4000)
+
+		   ; install a perceptor to measure the tire movement
+		   (node Hinge2Perceptor
+			 (setName lb)
+			 )
+
+		   ; install an effector to control the joint motor
+		   (node Hinge2Effector)
+		   )
+
+	     ; add some boxes to visualize the tire spin
+	     (node Box
+		   (setExtents 1 0.1 0.1)
+		   (setMaterial matBlue)
+		   )
+
+	     (node Box
+		   (setExtents 0.1 1 0.1)
+		   (setMaterial matRed)
+		   )
+
+	     (node Box
+		   (setExtents 0.1 0.1 1)
+		   (setMaterial matYellow)
+		   )	     
+	     )
+       )
+
+ ; install remaining passive wheels
+
+ (node Transform
+       (setName leftFront)
+       (setLocalPos -0.5 +1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (node Hinge2Joint
+	     (attach ../sphereBody ../../chassis/boxBody)
+	     (setAnchor 0 0 0)
+	     )
+       )
+
+ (node Transform
+       (setName rightBack)
+       (setLocalPos 0.5 -1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (node Transform
+	     (setLocalRotation 0 180 0)
+	     (node Hinge2Joint
+		   (attach ../../sphereBody ../../../chassis/boxBody)
+		   (setAnchor 0 0 0)
+		   )
+	     )
+       )
+
+ (node Transform
+       (setName rightFront)
+       (setLocalPos 0.5 +1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (node Hinge2Joint
+	     (attach ../sphereBody ../../chassis/boxBody)
+	     (setAnchor 0 0 0)
+	     )
+       ) 
+)
