@@ -19,12 +19,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef RCSS3D_SENSOR_SENSOR_H
-#define RCSS3D_SENSOR_SENSOR_H
+#ifndef RCSS_SENSOR_SENSOR_H
+#define RCSS_SENSOR_SENSOR_H
 
-namespace RCSS3D
+namespace rcss
 {
-    namespace Sensor
+    namespace sensor
     {
         class Sensor
         {
