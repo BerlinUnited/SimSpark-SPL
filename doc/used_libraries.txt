@@ -1,13 +1,21 @@
 Used Libraries
 ==============
 
+Contents:
+- LIST OF USED LIBRARIES
+- HOW TO INSTALL REQUIRED LIBRARIES
+
 This file describes what libraries (and which version) are currently used
 within the project and where they can be obtained.
+See below (after the list) on how to install some of the libraries.
+
+
+LIST OF LIBRARIES
 
 Sound Playback
 --------------
 
-FMOD 	3.6					http://www.fmod.org/
+FMOD 	3.7					http://www.fmod.org/
 BASS 	1.6		(VC only)	http://www.un4seen.com/music/
 
 
@@ -47,3 +55,17 @@ Fonts
 -----
 
 FreeType 2.1.2				http://www.freetype.org/
+
+
+
+HOW TO INSTALL REQUIRED LIBRARIES
+
+FMOD
+	- Unpack the .tar.gz file. 
+	- Move the header files from the ./api/inc/ directory in the package 
+          into a "fmod/" directory in your "include" tree, e.g.
+          /usr/local/include/fmod/
+        - Move the library (the libfmod-X.YZ.so file) from the ./api/ directory of 
+	  the package into a library tree, e.g. /usr/local/lib/. 
+        - Create a symbolic link from /usr/local/lib/libfmod.so (or whatever directory 
+          you've chosen) to the fmod library.
