@@ -1,6 +1,7 @@
 pkglib_LTLIBRARIES = soccer.la
 
 soccer_la_SOURCES = export.cpp \
+soccertypes.h \
 agentstate/agentstate.cpp \
 agentstate/agentstate.h \
 agentstate/agentstate_c.cpp \
@@ -11,12 +12,14 @@ ball/ball.cpp ball/ball.h ball/ball_c.cpp \
 ballstateaspect/ballstateaspect.cpp \
 ballstateaspect/ballstateaspect.h \
 ballstateaspect/ballstateaspect_c.cpp \
+createeffector/createaction.h \
 createeffector/createeffector.cpp \
 createeffector/createeffector.h \
 createeffector/createeffector_c.cpp \
-dasheffector/dasheffector.cpp \
-dasheffector/dasheffector.h \
-dasheffector/dasheffector_c.cpp \
+driveeffector/driveaction.h \
+driveeffector/driveeffector.cpp \
+driveeffector/driveeffector.h \
+driveeffector/driveeffector_c.cpp \
 fieldflag/fieldflag.h \
 fieldflag/fieldflag_c.cpp \
 gamestateaspect/gamestateaspect.cpp \
@@ -25,9 +28,11 @@ gamestateaspect/gamestateaspect_c.cpp \
 gamestateperceptor/gamestateperceptor.cpp \
 gamestateperceptor/gamestateperceptor.h \
 gamestateperceptor/gamestateperceptor_c.cpp \
+initeffector/initaction.h \
 initeffector/initeffector.cpp \
 initeffector/initeffector.h \
 initeffector/initeffector_c.cpp \
+kickeffector/kickaction.h \
 kickeffector/kickeffector.cpp \
 kickeffector/kickeffector.h \
 kickeffector/kickeffector_c.cpp \
