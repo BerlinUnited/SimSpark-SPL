@@ -1,4 +1,62 @@
 
-\chapter{Client/Server Protocol}
+\chapter{Working with CVS}
 
+\section{About CVS}
+CVS (Concurrent Versions System) is a tool used by many software developers to manage 
+changes within their source code tree. CVS provides the means to store not only the current 
+version of a piece of source code, but a record of all changes (and who made those changes) 
+that have occurred to that source code. Use of CVS is particularly common on projects with 
+multiple developers, since CVS ensures changes made by one developer are not accidentally 
+removed when another developer posts their changes to the source tree.
+
+Information about accessing this CVS repository may be found in our document titled, 
+"Basic Introduction to CVS and SourceForge.net (SF.net) Project CVS Services".
+
+In order to access a CVS repository, you must install a special piece of software called a 
+CVS client; CVS clients are available for most any operating system. 
+Information about CVS client software may be found in our document titled, 
+"Basic Introduction to CVS and SourceForge.net (SF.net) Project CVS Services".
+
+\section{Access to CVS}
+
+\subsection{Anonymous CVS Access}
+This project's SourceForge.net CVS repository can be checked out through anonymous (pserver) 
+CVS with the following instruction set. The module you wish to check out must be specified as 
+the modulename. When prompted for a password for anonymous, simply press the Enter key. 
+To determine the names of the modules created by this project, you may examine their CVS 
+repository via the provided web-based CVS repository viewer.
+
+\begin{verbatim}
+cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/sserver login
+cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/sserver co modulename
+\end{verbatim}
+
+Information about accessing this CVS repository may be found in our document titled, 
+"Basic Introduction to CVS and SourceForge.net (SF.net) Project CVS Services".
+
+Updates from within the module's directory do not need the -d parameter.
+
+NOTE: UNIX file and directory names are case sensitive. 
+The path to the project CVSROOT must be specified using lowercase characters (i.e. /cvsroot/sserver)
+
+
+\subsection{Developer CVS Access via SSH}
+
+Only project developers can access the CVS tree via this method. 
+A SSH client must be installed on your client machine. Substitute modulename 
+and developername with the proper values. Enter your site password when prompted.
+
+A significant amount of information about project CVS services may be found in our 
+"Introduction to Project CVS Services". Developers new to CVS should read our 
+"Basic Introduction to CVS and SourceForge.net (SF.net) Project CVS Services".
+
+Developers may also make use of shared SSH keys for authentication.
+
+\begin{verbatim}
+export CVS_RSH=ssh
+cvs -z3 -d:ext:developername@cvs.sourceforge.net:/cvsroot/sserver co modulename
+\end{verbatim}
+
+NOTE: UNIX file and directory names are case sensitive. 
+The path to the project CVSROOT must be specified using lowercase characters (i.e. /cvsroot/sserver)
 
