@@ -4,7 +4,7 @@
                           updsocket.hpp  -  A simple upd socket class
                              -------------------
     begin                : 08-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -36,9 +36,8 @@ namespace rcss
             UDPSocket( const Addr& addr );
             UDPSocket( const Addr& addr, const Addr& dest );
 
-        private:
-            void
-            doOpen( int& fd );
+        protected:
+            virtual void doOpen( int& fd );
         };
     }
 }
