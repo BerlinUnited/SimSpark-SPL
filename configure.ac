@@ -9,6 +9,8 @@ AC_LANG([C++])
 AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 
+AC_DEFINE(PREFIX, /usr/local/share, [Define the install prefix])
+
 AC_ARG_ENABLE(debug,
      AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
      [case "${enableval}" in
@@ -153,6 +155,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/scenetest/Makefile \
 		 app/simulator/Makefile \
 		 app/zeitgeisttest/Makefile \
+		 app/spadestest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
 AC_OUTPUT
