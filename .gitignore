@@ -125,6 +125,12 @@ doc/Doxyfile
 doc/Makefile
 doc/Makefile.in
 doc/api
+doc/devel/Makefile
+doc/devel/Makefile.in
+doc/devel/auto
+doc/devel/manual.aux
+doc/devel/manual.log
+doc/devel/manual.pdf
 doc/papers/proposal/auto
 doc/papers/proposal/Makefile
 doc/papers/proposal/Makefile.in
