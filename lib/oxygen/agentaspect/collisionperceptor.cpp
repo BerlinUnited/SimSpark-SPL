@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.cpp,v 1.2 2003/08/31 21:53:45 fruit Exp $
+   $Id: collisionperceptor.cpp,v 1.2.4.1 2003/12/08 14:34:46 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,14 +26,20 @@ using namespace boost;
 using namespace oxygen;
 
 bool
-CollisionPerceptor::Percept(TDictionary &dictionary)
+CollisionPerceptor::Percept(BaseParser::TPredicate& predicate)
 {
+    predicate.name = "Collision";
+    predicate.parameter.clear();
+
     if (!mCollidees.empty())
     {
-        dictionary["collidees"] = mCollidees;
-        mCollidees.clear();
+        for (TLeafList::const_iterator i = GetCollidees().begin();
+             i != GetCollidees().end(); ++i)
+        {
+            predicate.parameter.push_back(*i);
+        }
+        GetCollidees().clear();
+        return true;
     }
-
-    return (!mCollidees.empty());
+    return false;
 }
-

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: collisionperceptor.h,v 1.4.4.1 2003/12/08 14:32:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,17 +36,13 @@ namespace oxygen
 */
 class CollisionPerceptor : public Perceptor
 {
-    //
-    // functions
-    //
 public:
-    /*
-      Returns:
-      "collidees" as a TLeafList
-    */
-    virtual bool Percept(TDictionary &dictionary);
+    /** \param predicate set "collidees" as a TLeafList as arguments of predicate
+        \return true if data is available
+     */
+    bool Percept(BaseParser::TPredicate& predicate);
 
-    TLeafList& GetCollidees() {     return mCollidees;      }
+    TLeafList& GetCollidees()  { return mCollidees; }
 
 private:
     TLeafList mCollidees;
