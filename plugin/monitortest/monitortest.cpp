@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitortest.cpp,v 1.5 2004/04/26 08:02:06 rollmark Exp $
+   $Id: monitortest.cpp,v 1.6 2004/12/21 19:42:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ MonitorTest::ParseMonitorMessage(const std::string& data)
 }
 
 
-string MonitorTest::GetMonitorInfo()
+string MonitorTest::GetMonitorInfo(const PredicateList& /*pList*/)
 {
     /*    GetLog()->Debug() << "**** (MonitorTest::GetMonitorInfo)\n";
           return ("(agent 0.3 1.4 0.2)");*/
@@ -87,7 +87,7 @@ string MonitorTest::GetMonitorInfo()
     return ss.str();
 }
 
-string MonitorTest::GetMonitorHeaderInfo()
+string MonitorTest::GetMonitorHeaderInfo(const PredicateList& /*pList*/)
 {
     return "";
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.5 2004/05/05 09:09:52 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.6 2004/12/21 19:42:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ void SparkMonitor::ParseMonitorMessage(const std::string& data)
 {
 }
 
-string SparkMonitor::GetMonitorInfo()
+string SparkMonitor::GetMonitorInfo(const PredicateList& /*pList*/)
 {
     stringstream ss;
     mFullState = false;
@@ -73,7 +73,7 @@ string SparkMonitor::GetMonitorInfo()
     return ss.str();
 }
 
-string SparkMonitor::GetMonitorHeaderInfo()
+string SparkMonitor::GetMonitorHeaderInfo(const PredicateList& /*pList*/)
 {
     stringstream ss;
     mFullState = true;

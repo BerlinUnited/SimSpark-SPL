@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.h,v 1.2 2004/04/29 15:23:00 rollmark Exp $
+   $Id: sparkmonitor.h,v 1.3 2004/12/21 19:42:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,13 +44,22 @@ public:
 
     /** This function will be called periodically to get information
      * about the current state of the world.
+     * \param items holds a list of additional name value pairs. These
+     * predicates are collected from MonitorItem objects registered to
+     * the MonitorServer. The monitor should transfer them to the
+     * client if possible.
      */
-    virtual std::string GetMonitorInfo();
+    virtual std::string GetMonitorInfo(const oxygen::PredicateList& pList);
 
-    /** This function is called once for every MonitorSystem. It
-     *  should return any header/setup information that is needed.
+    /** This function is called once for every MonitorSystem each time
+     *  a new client connects. It should return any header/setup
+     *  information that is needed.
+     *  \param items holds a list of additional name value
+     *  pairs. These predicates are collected from MonitorItem objects
+     *  registered to the MonitorServer. The monitor should transfer
+     *  them to the client if possible.
      */
-    virtual std::string GetMonitorHeaderInfo();
+    virtual std::string GetMonitorHeaderInfo(const oxygen::PredicateList& pList);
 
 protected:
     virtual void OnLink();
