@@ -1,3 +1,157 @@
+2004-04-15    Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simspark/rsg/boxspheres/box.rsg,
+	* app/simspark/rsg/boxspheres/sphere.rsg:
+	- reduced friction, allowed some sliding
+
+	* app/simspark/rsg/jointtest/hinge2thing.rsg,
+	* app/simspark/rsg/jointtest/simspark.rsg:
+	- added Hinge2Joint demo
+
+	* app/simspark/rsg/boxspheres/simspark.rsg:
+	- added two capped cylinders to the demo scene
+
+	* app/simspark/rsg/boxspheres/ccylinder.rsg,
+	* app/simspark/rsg/boxspheres/staticccylinder.rsg:
+	- added scene graph templates for capped cylinder
+
+	* lib/kerosin/Makefile.am: 
+	- added ccylinder files
+
+	* lib/kerosin/kerosin.cpp, lib/kerosin/kerosin.h:
+	- registered CCylinder
+
+	* lib/kerosin/sceneserver/ccylinder_c.cpp,
+	* lib/kerosin/sceneserver/ccylinder.cpp,
+	* lib/kerosin/sceneserver/ccylinder.h:
+	- added class CCylinder
+
+	* lib/oxygen/Makefile.am: 
+	- added hinge2joint files
+
+	* lib/oxygen/oxygen.cpp, lib/oxygen/oxygen.h: 
+	- registered Hinge2joint
+
+	* lib/oxygen/physicsserver/ccylindercollider.cpp,
+	* lib/oxygen/physicsserver/ccylindercollider.h,
+	* lib/oxygen/physicsserver/ccylindercollider_c.cpp:
+	- added method SetRadius, SetLength, GetParams, GetRadius, GetLength
+	and GetPointDepth
+
+	* lib/oxygen/physicsserver/planecollider.cpp,
+	* lib/oxygen/physicsserver/planecollider.h,
+	* lib/oxygen/physicsserver/planecollider_c.cpp:
+	- added method GetPointDepth
+
+	* lib/oxygen/physicsserver/spherecollider.cpp,
+	lib/oxygen/physicsserver/spherecollider.h,
+	lib/oxygen/physicsserver/spherecollider_c.cpp:
+	- add method GetPointDepth
+
+	* lib/oxygen/physicsserver/boxcollider.cpp,
+	* lib/oxygen/physicsserver/boxcollider.h,
+	* lib/oxygen/physicsserver/boxcollider_c.cpp:
+	- added method GetBoxLengths, GetBoxLength and GetPointDepth
+
+	* lib/oxygen/physicsserver/universaljoint.cpp,
+	* lib/oxygen/physicsserver/universaljoint.h,
+	* lib/oxygen/physicsserver/universaljoint_c.cpp:
+	- added method GetAngle and GetAngleRate
+
+	* lib/oxygen/physicsserver/joint.h: 
+	- added enum EAxisIndex
+
+	* lib/oxygen/physicsserver/hinge2joint.cpp,
+	* lib/oxygen/physicsserver/hinge2joint.h,
+	* lib/oxygen/physicsserver/hinge2joint_c.cpp:
+	- added class Hinge2Joint
+
+	* lib/oxygen/physicsserver/contactjointhandler.cpp:
+	- placed check for bodies that are attached to the geoms before
+	the more expensive check for a ContactJointHandler. In the common
+	case of a collision between a body with the static environment
+	this provides a perfomance gain.
+
+	* lib/oxygen/physicsserver/planecollider.cpp,
+	* lib/oxygen/physicsserver/planecollider.h:
+	- implemented SetPosition and SetRoation as empty stubs. Calling
+	dBodySetRotation and dBodySetPosition on non placeable geoms
+	(space and plane) results in an ODE runtime error.
+
+	* lib/oxygen/physicsserver/collider.cpp,
+	* lib/oxygen/physicsserver/collider.h:
+	- changed method SetPosition to take a const reference to Vector3f
+	- changed SetPosition to interprete the pos vector as relative to
+	the parent's WorldTransform
+	- added method SetRotation to set the relative orientation of the
+	manged geom
+	- a collider that is not connected to an ODE body automatically
+	takes the position and orientation of it's parent node
+
+	* lib/oxygen/physicsserver/body.cpp:
+	- using method ConvertRotationMatrix in SetRotation()
+
+	* lib/oxygen/physicsserver/odeobject.cpp,
+	* lib/oxygen/physicsserver/odeobject.h:
+	- added method ConvertRotationMatrix that converts the rotation
+	part of a salt::Matrix to an ODE dMatrix3
+
+	* app/simspark/rsg/jointtest/universalthing.rsg:
+	- added universalthing.rsg: a simple scene using a universal joint
+
+	* app/simspark/rsg/jointtest/hingething.rsg,
+	* app/simspark/rsg/jointtest/simspark.rsg:
+	- changed due to changed joint method names
+	- imorted universalthing.rsg into the scene
+
+	* lib/oxygen/Makefile.am: 
+	- added UniversalJoint files
+
+	* lib/oxygen/oxygen.cpp, lib/oxygen/oxygen.h:
+	- registered UniversalJoint
+
+	* lib/oxygen/physicsserver/universaljoint.cpp,
+	* lib/oxygen/physicsserver/universaljoint.h,
+	* lib/oxygen/physicsserver/universaljoint_c.cpp:
+	- added class UniversalJoint
+
+	* lib/oxygen/physicsserver/sliderjoint.cpp,
+	* lib/oxygen/physicsserver/sliderjoint.h,
+	* lib/oxygen/physicsserver/sliderjoint_c.cpp:
+	- changed method name GetSliderPosition to GetPosition and
+	GetSliderPositionRate to GetPositionRate
+	- fixed calculation of slider up axis
+
+	* lib/oxygen/physicsserver/hingejoint.cpp,
+	* lib/oxygen/physicsserver/hingejoint.h,
+	* lib/oxygen/physicsserver/hingejoint_c.cpp:
+	- changed method name SetHingeAnchor to SetAnchor, GetHingeAngle
+	to GetAngle and GetHingeAngleRate to GetAngleRate
+	- fixed calculation of up vector
+
+	* lib/oxygen/physicsserver/balljoint.cpp,
+	* lib/oxygen/physicsserver/balljoint.h,
+	* lib/oxygen/physicsserver/balljoint_c.cpp:
+	- renamed method SetBallAnchor to SetAnchor and GetBallAnchor to
+	GetAnchor
+	- changed GetAnchor to return the anchor position in local
+	coordinates
+
+	* lib/oxygen/sceneserver/transform.cpp:
+	- fixed Transform::SetLocalRotation: matrix rotation function
+	expect radial angles
+	- save and restore the local translation so that the resulting
+	local matrix is invariant to the sequence of setLocalPos and
+	setLocalRotation
+
+	* lib/oxygen/sceneserver/basenode.cpp,
+	* lib/oxygen/sceneserver/basenode.h:
+	- added method GetLocalPos, that returns the corresponding local
+	coordinates to the given world coordinates
+
+	* lib/salt/matrix.h: 
+	- made Transform, Rotate and InverseRotate const
+
 2004-04-14  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/spark/spark.rb: 
