@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.8 2003/12/21 10:15:06 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.9 2003/12/21 14:13:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ namespace oxygen
 {
 class AgentAspect;
 class Effector;
+class Scene;
 
 class GameControlServer : public zeitgeist::Node
 {
@@ -85,6 +86,12 @@ public:
 
     /** temporary method, do not use */
     std::string TmpGenerate(const BaseParser::TPredicate& pred);
+
+protected:
+    /** helper method that queries the SceneServer for the currently
+        active Scene
+     */
+    boost::shared_ptr<Scene> GetActiveScene();
 
 protected:
     typedef std::map<int, boost::shared_ptr<AgentAspect> > TAgentMap;
