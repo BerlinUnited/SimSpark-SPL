@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.h,v 1.2 2004/03/23 09:20:53 rollmark Exp $
+   $Id: parameterlist.h,v 1.3 2004/04/05 14:18:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,6 +49,13 @@ public:
 
     /** inserts a value at the end of the managed sequence */
     void AddValue(const boost::any& value);
+
+    /** inserts an empty ParameterList as a new value at the end of
+        the managed sequence and returns a reference to the new
+        list. Using AddList instead of AddValue avoids copying a list
+        on insertion.
+     */
+    ParameterList& AddList();
 
     /** returns the number of values contained in the managed
         sequence */

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstateperceptor.h,v 1.2 2004/02/12 14:07:25 fruit Exp $
+   $Id: agentstateperceptor.h,v 1.3 2004/04/05 14:51:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public:
     virtual ~AgentStatePerceptor();
 
     //! \return true, if valid data is available and false otherwise.
-    virtual bool Percept(oxygen::Predicate& predicate);
+    virtual bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
 protected:
     /** sets up the reference to the AgentState */

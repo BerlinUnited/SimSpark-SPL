@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.6 2004/03/23 09:26:17 rollmark Exp $
+   $Id: predicate.h,v 1.7 2004/04/05 14:51:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@
 
 namespace oxygen
 {
-
 /** \class Predicate encapsulates a predicate name together with its
     list of parameters.
 
@@ -50,11 +49,6 @@ namespace oxygen
 class Predicate
 {
  public:
-    /** This declares a list of predicates. It is used as the output
-        format of the BaseParser interface.
-    */
-    typedef std::list<Predicate> TList;
-
     /** \class Iterator encapsulates a
         ParameterList::TVectr::const_iterator together with a
         reference to the ParameterList the iterator belongs to. It
@@ -248,6 +242,36 @@ class ParameterName : public std::binary_function<boost::any,std::string,bool>
 public:
     bool operator()(const boost::any& param, const std::string& pred) const;
 };
+
+class PredicateList
+{
+public:
+    typedef std::list<Predicate> TList;
+public:
+    PredicateList();
+    virtual ~PredicateList();
+
+    /** returns an iterator pointing at the first contained Predicate
+     */
+    TList::const_iterator begin() const;
+
+    /** returns an iterator pointing at the last contained
+        Predicate */
+    TList::const_iterator end() const;
+
+    /** returns the number of values contained in the managed
+        sequence */
+    int GetSize() const;
+
+    /** removes all contained Predicates */
+    void Clear();
+
+    Predicate& AddPredicate();
+
+protected:
+    TList mList;
+};
+
 }  // namespace oxygen
 
 #endif // OXYGEN_PREDICATE_H

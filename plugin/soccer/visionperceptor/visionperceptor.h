@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.2 2004/02/12 14:07:27 fruit Exp $
+   $Id: visionperceptor.h,v 1.3 2004/04/05 14:51:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public:
     virtual ~VisionPerceptor();
 
     //! \return true, if valid data is available and false otherwise.
-    bool Percept(oxygen::Predicate& predicate);
+    bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
     /** Set the noise parameters of the vision perceptor.
      *

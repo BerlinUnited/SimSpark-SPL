@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorparser.cpp,v 1.4 2004/03/23 09:44:04 rollmark Exp $
+   $Id: monitorparser.cpp,v 1.5 2004/04/05 14:51:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ void MonitorParser::SetupExprMap()
     mExprMap["playMode"]  = ET_PLAYMODE;
 }
 
-bool MonitorParser::ParseInfoHeader(Predicate::TList& predicates, GameParam& param)
+bool MonitorParser::ParseInfoHeader(PredicateList& predicates, GameParam& param)
 {
     // true if we received an init
     bool recvInit = false;
@@ -66,7 +66,7 @@ bool MonitorParser::ParseInfoHeader(Predicate::TList& predicates, GameParam& par
     // first look for "(init (...))"
     // then read the inner breakets
     for (
-         Predicate::TList::const_iterator iter = predicates.begin();
+         PredicateList::TList::const_iterator iter = predicates.begin();
          iter != predicates.end();
          ++iter
          )
@@ -343,7 +343,7 @@ bool MonitorParser::ParsePredicate(const oxygen::Predicate& predicate, GameState
     return true;
 }
 
-void MonitorParser::ParsePredicates(oxygen::Predicate::TList& predList,
+void MonitorParser::ParsePredicates(oxygen::PredicateList& predList,
                                     GameState& state, GameParam& param,
                                     TExprList& exprList)
 {
@@ -360,7 +360,7 @@ void MonitorParser::ParsePredicates(oxygen::Predicate::TList& predList,
         }
 
     for (
-         Predicate::TList::const_iterator iter = predList.begin();
+         PredicateList::TList::const_iterator iter = predList.begin();
          iter != predList.end();
          ++iter
          )

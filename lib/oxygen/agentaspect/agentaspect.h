@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.7 2003/12/27 17:53:41 fruit Exp $
+   $Id: agentaspect.h,v 1.8 2004/04/05 14:51:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public:
     /** QuerySensors collects data from all perceptors below this
         AgentAspect
      */
-    virtual boost::shared_ptr<Predicate::TList> QueryPerceptors();
+    virtual boost::shared_ptr<PredicateList> QueryPerceptors();
 
     /** updates the map of Effectors below this AgentAspect */
     virtual void UpdateEffectorMap();

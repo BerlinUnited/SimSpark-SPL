@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.3 2004/03/25 22:11:46 jboedeck Exp $
+   $Id: commserver.h,v 1.4 2004/04/05 14:51:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ class CommServer : public zeitgeist::Leaf
     bool Init(std::string parser, std::string host, int port);
     bool GetMessage();
     const TPositions& GetPositions();
-    boost::shared_ptr<oxygen::Predicate::TList> GetPredicates();
+    boost::shared_ptr<oxygen::PredicateList> GetPredicates();
 
     void SendKickOffCmd();
     void SendTrainerCmd(const std::string& cmd);
@@ -59,7 +59,7 @@ class CommServer : public zeitgeist::Leaf
     CommUnit mCommUnit;
 
     // cache for parsed predicates
-    boost::shared_ptr<oxygen::Predicate::TList> mPredicates;
+    boost::shared_ptr<oxygen::PredicateList> mPredicates;
 
     // the parser used for the SExpressions
     boost::shared_ptr<oxygen::BaseParser> mParser;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.h,v 1.4 2004/03/23 09:31:58 rollmark Exp $
+   $Id: sexpparser.h,v 1.5 2004/04/05 14:51:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #ifndef OXYGEN_SEXPPARSER_H
 #define OXYGEN_SEXPPARSER_H
 
+#include <sstream>
 #include <sfsexp/sexp.h>
 #include <oxygen/gamecontrolserver/baseparser.h>
 #include <zeitgeist/class.h>
@@ -37,14 +38,21 @@ public:
     {
     }
 
-    virtual boost::shared_ptr<oxygen::Predicate::TList> Parse(const std::string& input);
-    virtual std::string Generate(boost::shared_ptr<oxygen::Predicate::TList> input);
+    virtual boost::shared_ptr<oxygen::PredicateList> Parse(const std::string& input);
+    virtual std::string Generate(boost::shared_ptr<oxygen::PredicateList> input);
 
 private:
-    zeitgeist::ParameterList SexpToList(const sexp_t* const sexp);
-    oxygen::Predicate SexpToPredicate(const sexp_t* const sexp);
-    std::string ListToString(const zeitgeist::ParameterList& lst);
-    std::string PredicateToString(const oxygen::Predicate& predicate);
+    void SexpToList(zeitgeist::ParameterList& arguments,
+                    const sexp_t* const sexp);
+
+    void SexpToPredicate(boost::shared_ptr<oxygen::PredicateList>& predicate,
+                         const sexp_t* const sexp);
+
+    void ListToString(std::stringstream& ss,
+                      const zeitgeist::ParameterList& lst);
+
+    void PredicateToString(std::stringstream& ss,
+                           const oxygen::Predicate& predicate);
 };
 
 DECLARE_CLASS(SexpParser);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.4 2004/03/23 09:31:58 rollmark Exp $
+   $Id: sexpparser.cpp,v 1.5 2004/04/05 14:51:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,106 +20,106 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "sexpparser.h"
-#include <sstream>
 
 using namespace oxygen;
 using namespace zeitgeist;
 using namespace std;
 using namespace boost;
 
-shared_ptr<Predicate::TList>
+
+shared_ptr<PredicateList>
 SexpParser::Parse(const std::string& input)
 {
     size_t len = input.length();
 
-    shared_ptr<Predicate::TList> pList(new Predicate::TList);
-    if (len == 0) return pList;
+    shared_ptr<PredicateList> predList(new PredicateList);
+    if (len == 0)
+    {
+            return predList;
+    }
 
-    char* c = new char[len+1];
-    input.copy(c,len);
-    c[len] = '\0';
-
+    char* c = const_cast<char*>(input.c_str());
     pcont_t* pcont = init_continuation(c);
-    sexp_t* sexp = iparse_sexp(c,len,pcont);
-
-    Predicate predicate;
+    sexp_t* sexp = iparse_sexp(c,input.size(),pcont);
 
     while (sexp != 0)
     {
-        predicate = SexpToPredicate(sexp);
-        if (!predicate.name.empty())
-        {
-            pList->push_back(predicate);
-        }
+        SexpToPredicate(predList,sexp);
         destroy_sexp(sexp);
-        sexp = iparse_sexp(c,len,pcont);
+        sexp = iparse_sexp(c,input.size(),pcont);
     }
+
     destroy_continuation(pcont);
-    delete [] c;
-
-    return pList;
+    return predList;
 }
 
-std::string
-SexpParser::Generate(shared_ptr<Predicate::TList> input)
+string
+SexpParser::Generate(boost::shared_ptr<PredicateList> input)
 {
-    string s;
-    Predicate::TList::const_iterator i = input->begin();
-
-    while (i != input->end())
+    if (input.get() == 0)
     {
-        s += PredicateToString(*i);
-        ++i;
+            return "";
     }
 
-    return s;
+    stringstream ss;
+    PredicateList& list = *input.get();
+
+    for (
+         PredicateList::TList::const_iterator i = list.begin();
+         i != list.end();
+         ++i
+         )
+        PredicateToString(ss,*i);
+
+    return ss.str();
 }
 
-ParameterList
-SexpParser::SexpToList(const sexp_t* const sexp)
+void
+SexpParser::SexpToList(ParameterList& arguments, const sexp_t* const sexp)
 {
     sexp_t* s = const_cast<sexp_t*>(sexp);
-
-    ParameterList arguments;
-
     while (s != 0)
     {
         if (s->ty == SEXP_VALUE)
         {
-            string elem(s->val);
-            arguments.AddValue(elem);
+            arguments.AddValue(string(s->val));
         } else {
-            ParameterList elem = SexpToList(s->list);
-            arguments.AddValue(elem);
+            ParameterList& elem = arguments.AddList();
+            SexpToList(elem,s->list);
         }
         s = s->next;
     }
-    return arguments;
 }
 
-Predicate
-SexpParser::SexpToPredicate(const sexp_t* const sexp)
+void
+SexpParser::SexpToPredicate
+(shared_ptr<PredicateList>& predList, const sexp_t* const sexp)
 {
-    Predicate predicate;
-
-    // throw away outer brackets (i.e. we have a list at the top level)
-    if (sexp->ty == SEXP_LIST)
+    // throw away outer brackets (i.e. we have a list at the top
+    // level)
+    if (sexp->ty != SEXP_LIST)
     {
-        sexp_t* s = const_cast<sexp_t*>(sexp->list);
-
-        if (s != 0 && s->ty == SEXP_VALUE)
-        {
-            predicate.name = string(s->val);
-            predicate.parameter = SexpToList(s->next);
-        }
+        return;
     }
-    return predicate;
+
+    sexp_t* s = const_cast<sexp_t*>(sexp->list);
+
+    if (
+        (s == 0) ||
+        (s->ty != SEXP_VALUE)
+        )
+        {
+            return;
+        }
+
+    Predicate& predicate = predList->AddPredicate();
+    predicate.name = string(s->val);
+    SexpToList(predicate.parameter,s->next);
 }
 
-std::string
-SexpParser::ListToString(const ParameterList& lst)
+void
+SexpParser::ListToString(stringstream& ss, const ParameterList& lst)
 {
-    string s;
     string space;
 
     for (
@@ -130,38 +130,44 @@ SexpParser::ListToString(const ParameterList& lst)
     {
         if (i->type() == typeid(string))
         {
-            s += space + boost::any_cast<string>(*i);
-        }
-        else if (i->type() == typeid(int))
-        {
-            ostringstream strm;
-            strm << boost::any_cast<int>(*i);
-            s += space + strm.str();
+            ss << space;
+            ss << boost::any_cast<string>(*i);
         }
         else if (i->type() == typeid(float))
         {
-            ostringstream strm;
-            strm << boost::any_cast<float>(*i);
-            s += space + strm.str();
+            ss << space;
+            ss << boost::any_cast<float>(*i);
+        }
+        else if (i->type() == typeid(int))
+        {
+            ss << space;
+            ss <<boost::any_cast<int>(*i);
         }
         else if (i->type() == typeid(ParameterList))
         {
             const any* v = &(*i);
             const ParameterList* lst = any_cast<ParameterList>(v);
-            string t = ListToString(*lst);
-            s += space + '(' + t + ')';
+            ss << space;
+            ss << '(';
+            ListToString(ss,*lst);
+            ss << ')';
         }
-        else s += space + "(error data format unknown)";
+        else
+        {
+            ss << space;
+            ss << "(error data format unknown)";
+        }
 
         space = " ";
     }
-    return s;
 }
 
-std::string
-SexpParser::PredicateToString(const Predicate& plist)
+void
+SexpParser::PredicateToString(stringstream& ss, const Predicate& plist)
 {
-    string s = '(' + plist.name + ' ';
-    s += ListToString(plist.parameter);
-    return s + ')';
+    ss << '(';
+    ss << plist.name;
+    ss << ' ';
+    ListToString(ss,plist.parameter);
+    ss << ')';
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.8 2004/02/12 14:07:23 fruit Exp $
+   $Id: leaf.h,v 1.9 2004/04/05 14:18:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,13 +93,42 @@ public:
     virtual boost::shared_ptr<Leaf>
     GetChildOfClass(const std::string &name, bool recursive = false);
 
-    /** defines an interface to get a list of children supporting
-        the class 'name' (i.e. nodes of a type equal to or derived
-        from the class 'name'), which can be searched
-        recursively. The class Leaf will always return an empty
-        reference */
+    /** defines an interface to get the fist child supporting the
+        class 'name' (i.e. nodes of a type equal to or derived from
+        the class 'name'), which can be searched recursively. The
+        class Leaf will always return an empty reference */
     virtual boost::shared_ptr<Leaf>
     GetChildSupportingClass(const std::string &name, bool recursive = false);
+
+    /** defines an interface to get the fist child supporting the
+        class 'name' (i.e. nodes of a type equal to or derived from
+        the class 'name'), which can be searched recursively. The
+        class Leaf will always return an empty reference. This
+        implementation of FindChildSupportingClass does not rely on the
+        associated zeitgeist class name but uses the c++ typeid
+        system. */
+    template<class CLASS>
+    boost::shared_ptr<CLASS>
+    FindChildSupportingClass(bool recursive = false)
+    {
+        TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
+        for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
+            {
+                // check if we have found a match and return it
+                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                if (child.get() != 0)
+                    {
+                        return child;
+                    }
+
+                if (recursive)
+                    {
+                        return FindChildSupportingClass<CLASS>(recursive);
+                    }
+            }
+
+        return boost::shared_ptr<CLASS>();
+    }
 
     /** defines an interface to get a list of children. The Leaf
         class will always return an empty list */
@@ -116,12 +145,69 @@ public:
         always return an empty list */
     virtual void GetChildrenSupportingClass(const std::string &name, TLeafList &baseList, bool recursive = false);
 
+    /** constructs a list of all children supporting a class 'name'
+        i.e. they are an instance of that class or are derived from
+        it. This implementation of GetChildrenSupportingClass does not
+        rely on the associated zeitgeist class name but uses the c++
+        typeid system.
+    */
+    template<class CLASS>
+    void ListChildrenSupportingClass(TLeafList& list, bool recursive = false)
+    {
+        TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
+        for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
+            {
+                // check if we have found a match and add it
+                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                if (child.get() != 0)
+                    {
+                        list.push_back(child);
+                    }
+
+                if (recursive)
+                    {
+                        (*i)->ListChildrenSupportingClass<CLASS>(list,recursive);
+                    }
+            }
+    }
+
     /** defines an interface to get the first parent node on the way
         up the hierarchy that supports a class 'name', i.e. is an
         instance of that class or is derived from it.
      */
     virtual boost::weak_ptr<Node>
     GetParentSupportingClass(const std::string &name) const;
+
+    /** defines an interface to get the first parent node on the way
+        up the hierarchy that supports a class 'name', i.e. is an
+        instance of that class or is derived from it. This
+        implementation of GetParentSupportingClass does not rely on
+        the associated zeitgeist class name but uses the c++ typeid
+        system.
+     */
+    template<class CLASS>
+    boost::weak_ptr<CLASS>
+    FindParentSupportingClass() const
+    {
+        boost::shared_ptr<Node> node
+            = boost::shared_static_cast<Node>(make_shared(GetParent()));
+
+        while (node.get() != 0)
+            {
+                boost::shared_ptr<CLASS> test =
+                    boost::shared_dynamic_cast<CLASS>(node);
+
+                if (test.get() != 0)
+                    {
+                        return test;
+                    }
+
+                node = boost::make_shared(node->GetParent());
+            }
+
+        return boost::shared_ptr<CLASS>();
+    }
+
 
     /** defines an interface to test if this node is a leaf. Only
         the TLeaf class will return true */

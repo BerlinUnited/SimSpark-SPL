@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.7 2004/03/25 11:51:46 rollmark Exp $
+   $Id: spadesserver.h,v 1.8 2004/04/05 14:51:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -222,6 +222,7 @@ protected:
         std::string mAgentType;
         int mNumber;
     };
+    typedef std::list<AgentItem> TAgentQueue;
 
     /** Start up a number of agents of a given type.
         \param ai contains the agent type from the agent database and the
@@ -243,7 +244,17 @@ private:
     spades::SimulationMode mNewSimulationMode;
 
     /** a queue of agents to be started up */
-    std::queue<AgentItem> mAgentQueue;
+    TAgentQueue mAgentQueue;
+
+    /** the simTime offset in the scheduled times for the agents
+        CreateSenseEvent
+    */
+    float mOffsetCreateSense;
+
+    /** the initial CreateSenseEvent simTime scheduled for the next
+        connecing agent
+     */
+    float mNextInitialCreateSense;
 
     /** a cached reference to the monitor server */
     boost::shared_ptr<MonitorServer> mMonitorServer;

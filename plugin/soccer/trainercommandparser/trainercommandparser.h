@@ -40,27 +40,27 @@ public:
     {
         CT_PLAYER,
         CT_BALL,
-        CT_PLAYMODE  
+        CT_PLAYMODE
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
     typedef std::map<std::string, TTeamIndex> TTeamIndexMap;
-    
+
     // mapping from string to TPlayMode
     typedef std::map<std::string, TPlayMode> TPlayModeMap;
 
 public:
 
     TrainerCommandParser();
-    
+
     virtual ~TrainerCommandParser();
 
     /** parses the list of predicates; returns true on success
      */
-    void ParsePredicates(oxygen::Predicate::TList & predList);
+    void ParsePredicates(oxygen::PredicateList& predList);
 
 protected:
-    
+
     /** parses the given predicate and calls one of the specialized
         parse methods given below depending the predicate name;
         returns true if successful
@@ -72,7 +72,7 @@ protected:
     */
     void ParsePlayerCommand(const oxygen::Predicate & predicate);
 
-    /** parses and executes the ball command contained in the given 
+    /** parses and executes the ball command contained in the given
         predicate
     */
     void ParseBallCommand(const oxygen::Predicate & predicate);
@@ -88,7 +88,7 @@ protected:
 
     TTeamIndexMap  mTeamIndexMap;
 
-    TPlayModeMap   mPlayModeMap;          
+    TPlayModeMap   mPlayModeMap;
 };
 
 DECLARE_CLASS(TrainerCommandParser);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.cpp,v 1.4 2004/03/23 09:26:17 rollmark Exp $
+   $Id: predicate.cpp,v 1.5 2004/04/05 14:51:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -105,8 +105,8 @@ ParameterName::operator()(const boost::any& param, const string& pred) const
     try
     {
         // try get a ParameterList as an element
-        const ParameterList* lst =
-            boost::any_cast<ParameterList>(&param);
+        const any* v = &param;
+        const ParameterList* lst = any_cast<ParameterList>(v);
 
         if ( (lst == 0) || (lst->IsEmpty()))
             {
@@ -179,4 +179,42 @@ bool Predicate::DescentList(Iterator& iter) const
         }
 
 }
+
+/** implementation of class PredicateList */
+PredicateList::PredicateList()
+{
+}
+
+PredicateList::~PredicateList()
+{
+}
+
+PredicateList::TList::const_iterator PredicateList::begin() const
+{
+    return mList.begin();
+}
+
+PredicateList::TList::const_iterator PredicateList::end() const
+{
+    return mList.end();
+}
+
+Predicate& PredicateList::AddPredicate()
+{
+    mList.push_back(Predicate());
+    return mList.back();
+}
+
+int PredicateList::GetSize() const
+{
+    return mList.size();
+}
+
+void PredicateList::Clear()
+{
+    mList.clear();
+}
+
+
+
 

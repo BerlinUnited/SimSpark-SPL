@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.5 2004/03/31 11:14:28 rollmark Exp $
+   $Id: contactjointhandler.cpp,v 1.6 2004/04/05 14:51:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,11 +31,11 @@ using namespace boost;
 
 ContactJointHandler::ContactJointHandler() : CollisionHandler()
 {
-  // set up default contact surface parameters
-  mSurfaceParameter.mode = dContactBounce;
-  mSurfaceParameter.mu = dInfinity;
-  mSurfaceParameter.bounce = 0.8f;
-  mSurfaceParameter.bounce_vel = 2.0f;
+    // set up default contact surface parameters
+    mSurfaceParameter.mode = dContactBounce;
+    mSurfaceParameter.mu = dInfinity;
+    mSurfaceParameter.bounce = 0.8f;
+    mSurfaceParameter.bounce_vel = 2.0f;
 }
 
 ContactJointHandler::~ContactJointHandler()
@@ -70,170 +70,169 @@ void
 ContactJointHandler::CalcSurfaceParam(dSurfaceParameters& surface,
                                       const dSurfaceParameters& collideeParam)
 {
-  // init surface
-  surface.mode = 0;
+    // init surface
+    surface.mode = 0;
 
-  // calculate average mu; mu can be dInfinity, so first multiply with
-  // 0.5 and the sum up to avoid a range error
-  surface.mu = mSurfaceParameter.mu*0.5f + collideeParam.mu*0.5f;
+    // calculate average mu; mu can be dInfinity, so first multiply with
+    // 0.5 and the sum up to avoid a range error
+    surface.mu = mSurfaceParameter.mu*0.5f + collideeParam.mu*0.5f;
 
-  // soft cfm
-  const int nCfm =
-      ((mSurfaceParameter.mode & dContactSoftCFM) ? 1:0) +
-      ((collideeParam.mode & dContactSoftCFM) ? 2:0);
+    // soft cfm
+    const int nCfm =
+        ((mSurfaceParameter.mode & dContactSoftCFM) ? 1:0) +
+        ((collideeParam.mode & dContactSoftCFM) ? 2:0);
 
-  if (nCfm>0)
-      {
-          surface.soft_cfm = MixValues
-              (mSurfaceParameter.soft_cfm, collideeParam.soft_cfm, nCfm);
-          surface.mode |= dContactSoftCFM;
-      }
+    if (nCfm>0)
+        {
+            surface.soft_cfm = MixValues
+                (mSurfaceParameter.soft_cfm, collideeParam.soft_cfm, nCfm);
+            surface.mode |= dContactSoftCFM;
+        }
 
-  // soft_erp
-  const int nErp =
-      ((mSurfaceParameter.mode & dContactSoftERP) ? 1:0) +
-      ((collideeParam.mode & dContactSoftERP) ? 2:0);
+    // soft_erp
+    const int nErp =
+        ((mSurfaceParameter.mode & dContactSoftERP) ? 1:0) +
+        ((collideeParam.mode & dContactSoftERP) ? 2:0);
 
-  if (nErp>0)
-      {
-          surface.soft_erp = MixValues
-              (mSurfaceParameter.soft_erp, collideeParam.soft_erp, nErp);
-          surface.mode |= dContactSoftERP;
-      }
+    if (nErp>0)
+        {
+            surface.soft_erp = MixValues
+                (mSurfaceParameter.soft_erp, collideeParam.soft_erp, nErp);
+            surface.mode |= dContactSoftERP;
+        }
 
-  // bounce
-  const int nBounce =
-      ((mSurfaceParameter.mode & dContactBounce) ? 1:0) +
-      ((collideeParam.mode & dContactBounce) ? 2:0);
+    // bounce
+    const int nBounce =
+        ((mSurfaceParameter.mode & dContactBounce) ? 1:0) +
+        ((collideeParam.mode & dContactBounce) ? 2:0);
 
-  if (nBounce>0)
-      {
-          surface.bounce = MixValues
-              (mSurfaceParameter.bounce, collideeParam.bounce, nBounce);
+    if (nBounce>0)
+        {
+            surface.bounce = MixValues
+                (mSurfaceParameter.bounce, collideeParam.bounce, nBounce);
 
-          surface.bounce_vel = MixValues
-              (mSurfaceParameter.bounce_vel, collideeParam.bounce_vel, nBounce);
+            surface.bounce_vel = MixValues
+                (mSurfaceParameter.bounce_vel, collideeParam.bounce_vel, nBounce);
 
-          surface.mode |= dContactBounce;
-      }
+            surface.mode |= dContactBounce;
+        }
 }
 
 void
 ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& contact)
 {
-  if (
-      (mCollider.get() == 0) ||
-      (mWorld.get() == 0) ||
-      (mSpace.get() == 0)
-      )
-      {
-          return;
-      }
+    if (
+        (mCollider.get() == 0) ||
+        (mWorld.get() == 0) ||
+        (mSpace.get() == 0)
+        )
+        {
+            return;
+        }
 
-  // check if the collidee has a ContactJointHandler registered to it
-  shared_ptr<ContactJointHandler> handler =
-      shared_static_cast<ContactJointHandler>
-      (collidee->GetChildSupportingClass("ContactJointHandler"));
+    // check if the collidee has a ContactJointHandler registered to it
+    shared_ptr<ContactJointHandler> handler =
+        collidee->FindChildSupportingClass<ContactJointHandler>();
 
-  if (handler.get() == 0)
-      {
-          return;
-      }
+    if (handler.get() == 0)
+        {
+            return;
+        }
 
-  // to create a contact joint it we must have at least one body to
-  // attach it to.
-  dBodyID myBody = dGeomGetBody(mCollider->GetODEGeom());
-  dBodyID collideeBody = dGeomGetBody(collidee->GetODEGeom());
+    // to create a contact joint it we must have at least one body to
+    // attach it to.
+    dBodyID myBody = dGeomGetBody(mCollider->GetODEGeom());
+    dBodyID collideeBody = dGeomGetBody(collidee->GetODEGeom());
 
-  if (
-      (myBody == 0) &&
-      (collideeBody == 0)
-      )
-    {
-      return;
-    }
+    if (
+        (myBody == 0) &&
+        (collideeBody == 0)
+        )
+        {
+            return;
+        }
 
-  // calculate the resulting surface parameters
-  CalcSurfaceParam(contact.surface,handler->mSurfaceParameter);
+    // calculate the resulting surface parameters
+    CalcSurfaceParam(contact.surface,handler->mSurfaceParameter);
 
-  // create the contact joint and attach it to the body
-  dJointID joint = dJointCreateContact
-    (mWorld->GetODEWorld(), mSpace->GetODEJointGroup(), &contact);
+    // create the contact joint and attach it to the body
+    dJointID joint = dJointCreateContact
+        (mWorld->GetODEWorld(), mSpace->GetODEJointGroup(), &contact);
 
-  dJointAttach (joint, myBody, collideeBody);
- }
+    dJointAttach (joint, myBody, collideeBody);
+}
 
 void
 ContactJointHandler::SetSurfaceParameter(const dSurfaceParameters& surface)
 {
-  mSurfaceParameter = surface;
+    mSurfaceParameter = surface;
 }
 
 void
 ContactJointHandler::SetContactMode(int mode, bool set)
 {
-  if (set)
-  {
-    mSurfaceParameter.mode |= mode;
-  } else
-  {
-    mSurfaceParameter.mode &= ~mode;
-  }
+    if (set)
+        {
+            mSurfaceParameter.mode |= mode;
+        } else
+            {
+                mSurfaceParameter.mode &= ~mode;
+            }
 }
 
 void
 ContactJointHandler::SetContactBounceMode(bool set)
 {
-  SetContactMode(dContactBounce,set);
+    SetContactMode(dContactBounce,set);
 }
 
 void
 ContactJointHandler::SetMinBounceVel(float vel)
 {
-  mSurfaceParameter.bounce_vel = std::max<float>(0.0f,vel);
+    mSurfaceParameter.bounce_vel = std::max<float>(0.0f,vel);
 }
 
 void
 ContactJointHandler::SetBounceValue(float bounce)
 {
-  mSurfaceParameter.bounce = std::max<float>(0.0f,bounce);
+    mSurfaceParameter.bounce = std::max<float>(0.0f,bounce);
 }
 
 void
 ContactJointHandler::SetContactSoftERPMode(bool set)
 {
-  SetContactMode(dContactSoftERP,set);
+    SetContactMode(dContactSoftERP,set);
 }
 
 void
 ContactJointHandler::SetContactSoftERP(float erp)
 {
-  salt::gClamp(erp,0.0f,1.0f);
-  mSurfaceParameter.soft_erp = erp;
+    salt::gClamp(erp,0.0f,1.0f);
+    mSurfaceParameter.soft_erp = erp;
 }
 
 void
 ContactJointHandler::SetContactSoftCFMMode(bool set)
 {
-  SetContactMode(dContactSoftCFM,set);
+    SetContactMode(dContactSoftCFM,set);
 }
 
 void
 ContactJointHandler::SetContactSoftCFM(float cfm)
 {
-  mSurfaceParameter.soft_cfm = std::max<float>(0.0f,cfm);
+    mSurfaceParameter.soft_cfm = std::max<float>(0.0f,cfm);
 }
 
 void ContactJointHandler::SetContactSlipMode (bool set)
 {
-  SetContactMode(dContactSlip1,set);
-  SetContactMode(dContactSlip2,set);
+    SetContactMode(dContactSlip1,set);
+    SetContactMode(dContactSlip2,set);
 }
 
 void ContactJointHandler::SetContactSlip(float slip)
 {
-  mSurfaceParameter.slip1 = slip;
-  mSurfaceParameter.slip2 = slip;
+    mSurfaceParameter.slip1 = slip;
+    mSurfaceParameter.slip2 = slip;
 }
 
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.6 2004/03/23 18:27:08 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.7 2004/04/05 14:51:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -259,12 +259,19 @@ WorldModel::ParseVision(const Predicate& predicate)
 
 void WorldModel::Parse(const string& message)
 {
-    shared_ptr<Predicate::TList> predicates =
+    shared_ptr<PredicateList> predList =
         mParser->Parse(message);
 
+    if (predList.get() == 0)
+    {
+            return;
+    }
+
+    PredicateList& list = *predList;
+
     for (
-         Predicate::TList::const_iterator iter = predicates->begin();
-         iter != predicates->end();
+         PredicateList::TList::const_iterator iter = list.begin();
+         iter != list.end();
          ++iter
          )
         {

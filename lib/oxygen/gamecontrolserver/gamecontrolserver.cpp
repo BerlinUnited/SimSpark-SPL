@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.6 2004/02/21 15:30:43 fruit Exp $
+   $Id: gamecontrolserver.cpp,v 1.7 2004/04/05 14:51:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -234,8 +234,8 @@ GameControlServer::Parse(int id, string str) const
             return shared_ptr<ActionObject::TList>();
         }
 
-    // use the parser to create a TPredicateList
-    shared_ptr<Predicate::TList> predicates(mParser->Parse(str));
+    // use the parser to create a PredicateList
+    shared_ptr<PredicateList> predicates(mParser->Parse(str));
 
     // construct an ActionList using the registered effectors
     shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
@@ -246,12 +246,12 @@ GameControlServer::Parse(int id, string str) const
 
     for
         (
-         Predicate::TList::iterator iter = predicates->begin();
+         PredicateList::TList::const_iterator iter = predicates->begin();
          iter != predicates->end();
          ++iter
         )
         {
-            Predicate& predicate = (*iter);
+            const Predicate& predicate = (*iter);
 
             shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
             if (effector.get() == 0)

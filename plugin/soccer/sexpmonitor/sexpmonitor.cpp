@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.3 2004/03/25 22:07:53 jboedeck Exp $
+   $Id: sexpmonitor.cpp,v 1.4 2004/04/05 14:51:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ SexpMonitor::~SexpMonitor()
 
 bool
 SexpMonitor::ConstructInternal()
-{       
+{
     return true;
 }
 
@@ -62,25 +62,25 @@ SexpMonitor::ParseMonitorMessage(std::string data)
         {
             return;
         }
-       
+
     if (mSexpParser.get() == 0)
     {
         GetLog()->Error() << "(SexpMonitor) ERROR: can't get SexpParser\n";
-        mPredicates = shared_ptr<Predicate::TList>();
+        mPredicates = shared_ptr<PredicateList>();
         return;
     }
 
     // get the predicates
     mPredicates = mSexpParser->Parse(data);
-    
+
     if (mCommandParser.get() == 0)
     {
         GetLog()->Error() << "(SexpMonitor) ERROR: can't get TrainerCommandParser\n";
         return;
     }
-    
+
     // interpret the commands in the predicates
-    mCommandParser->ParsePredicates(*mPredicates);    
+    mCommandParser->ParsePredicates(*mPredicates);
 }
 
 std::string SexpMonitor::GenerateSexp(string type, TLeafList& list)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.6 2004/03/23 09:29:50 rollmark Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.7 2004/04/05 14:51:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,11 +44,8 @@ PerfectVisionPerceptor::~PerfectVisionPerceptor()
 }
 
 bool
-PerfectVisionPerceptor::Percept(Predicate& predicate)
+PerfectVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
-    predicate.name = "PerfectVision";
-    predicate.parameter.Clear();
-
     if (mSceneServer.get() == 0)
     {
         mSceneServer = shared_static_cast<SceneServer>
@@ -68,22 +65,27 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
         return false;
     }
 
+    Predicate& predicate = predList->AddPredicate();
+    predicate.name = "PerfectVision";
+    predicate.parameter.Clear();
+
     // we want positions relative to the closest parent transform node
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-        (make_shared(GetParentSupportingClass("Transform")));
+        (make_shared(FindParentSupportingClass<Transform>()));
 
     salt::Vector3f myPos(0,0,0);
     if (parent.get() == 0)
     {
         GetLog()->Warning()
-            << "WARNING: (PerfectVisionPerceptor) parent node is not derived from TransformNode\n";
+            << "WARNING: (PerfectVisionPerceptor) parent node is "
+            << "not derived from TransformNode\n";
     } else
         {
             myPos = parent->GetWorldTransform().Pos();
         }
 
     TLeafList transformList;
-    activeScene->GetChildrenSupportingClass("Transform", transformList, true);
+    activeScene->ListChildrenSupportingClass<Transform>(transformList, true);
 
     for (TLeafList::iterator i = transformList.begin();
          i != transformList.end(); ++i)
@@ -91,17 +93,14 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
         shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
         const salt::Vector3f& pos = j->GetWorldTransform().Pos() - myPos;
 
-        ParameterList position;
-        position.AddValue(std::string("pos"));
-        position.AddValue(mInvertX ? -pos[0] : pos[0]);
-        position.AddValue(mInvertY ? -pos[1] : pos[1]);
-        position.AddValue(mInvertZ ? -pos[2] : pos[2]);
-
-        ParameterList element;
+        ParameterList& element = predicate.parameter.AddList();
         element.AddValue((*i)->GetName());
-        element.AddValue(position);
 
-        predicate.parameter.AddValue(element);
+        ParameterList& posElement = element.AddList();
+        posElement.AddValue(std::string("pos"));
+        posElement.AddValue(mInvertX ? -pos[0] : pos[0]);
+        posElement.AddValue(mInvertY ? -pos[1] : pos[1]);
+        posElement.AddValue(mInvertZ ? -pos[2] : pos[2]);
     }
 
     return true;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: sceneserver.h,v 1.5 2004/04/05 14:51:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,8 @@ namespace oxygen
 #endif
 
 class Scene;
+class Space;
+class World;
 
 /** The scene server manages displayable subtrees within the object
    hierarchy. Each subtree begins with a Scene node. The scene server knows
@@ -75,10 +77,25 @@ protected:
     //
     // Members
     //
-private:
 
+    /** gets missing references */
+    void UpdateCache();
+
+    /** resets all cached references */
+    void ResetCache();
+
+    /** resets all cached references */
+    virtual void OnUnlink();
+
+private:
     /** the current active scene */
-    boost::shared_ptr<Scene>        mActiveScene;
+    boost::shared_ptr<Scene> mActiveScene;
+
+    /** cached reference to the Space node below the active scene */
+    boost::shared_ptr<Space> mActiveSpace;
+
+    /** cached reference to the World node below the active scene */
+    boost::shared_ptr<World> mActiveWorld;
 };
 
 DECLARE_CLASS(SceneServer);
