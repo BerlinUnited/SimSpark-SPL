@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.7 2004/06/06 09:55:41 fruit Exp $
+   $Id: sexpmonitor.h,v 1.8 2004/12/21 19:46:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,23 +57,28 @@ public:
 
     /** This function will be called periodically to get information
      * about the current state of the world.
+     * \param items holds a list of additional name value pairs. These
+     * predicates are collected from MonitorItem objects registered to
+     * the MonitorServer. The monitor should transfer them to the
+     * client if possible.
      */
-    virtual std::string GetMonitorInfo();
+    virtual std::string GetMonitorInfo(const oxygen::PredicateList& pList);
 
-    /** This function is called once for every MonitorSystem. It
-     *  should return any header/setup information that is needed.
+    /** This function is called once for every MonitorSystem each time
+     *  a new client connects. It should return any header/setup
+     *  information that is needed.
+     *  \param items holds a list of additional name value
+     *  pairs. These predicates are collected from MonitorItem objects
+     *  registered to the MonitorServer. The monitor should transfer
+     *  them to the client if possible.
      */
-    virtual std::string GetMonitorHeaderInfo();
+    virtual std::string GetMonitorHeaderInfo(const oxygen::PredicateList& pList);
 
 protected:
     /** called after the object has been created and attached to a
         core to allow for object dependent internal
         construction */
     virtual bool ConstructInternal();
-
-    /** collects data from the GameStateAspect and describing
-        constructs S-Expressions  */
-    void AddGameState(std::ostringstream& ss);
 
     /** collects data from agentaspects and constructs a S-Expr description */
     void AddAgents(boost::shared_ptr<oxygen::Scene> activeScene, std::ostringstream& ss) const;
@@ -99,6 +104,11 @@ protected:
 
     void ResetSentFlags();
 
+    /** constructs a S-Expression from the predicate list received
+        from the MonitorServer
+    */
+    void AddPredicates(std::ostringstream& ss, const oxygen::PredicateList& pList);
+
 protected:
     // cache for parsed predicates
     boost::shared_ptr<oxygen::PredicateList> mPredicates;
@@ -112,18 +122,6 @@ protected:
     boost::shared_ptr<BallStateAspect> mBallState;
 
     // flags for sent information
-    //! flag if we already sent the left teamname
-    bool mSentLeftTeamname;
-    //! flag if we already sent the left teamname
-    bool mSentRightTeamname;
-    //! the last half sent out to monitors
-    TGameHalf mLastHalf;
-    //! the last left score sent out to monitors
-    int mLastLeftScore;
-    //! the last right score sent out to monitors
-    int mLastRightScore;
-    //! the last playmode sent out to monitors
-    TPlayMode mLastPlayMode;
     //! flag if the monitors received field flags information
     bool mSentFlags;
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.11 2004/06/11 08:58:47 fruit Exp $
+   $Id: sexpmonitor.cpp,v 1.12 2004/12/21 19:46:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@
 #include <soccer/sayeffector/sayeffector.h>
 
 using namespace oxygen;
+using namespace zeitgeist;
 using namespace std;
 using namespace boost;
 
@@ -87,67 +88,34 @@ SexpMonitor::ParseMonitorMessage(const string& data)
 }
 
 void
-SexpMonitor::AddGameState(std::ostringstream& ss)
+SexpMonitor::AddPredicates(std::ostringstream& ss, const PredicateList& pList)
 {
-    if (mGameState.get() == 0)
-    {
-        return;
-    }
-
-    // time
-    ss << "(time " << mGameState->GetTime() << ")";
-
-    // team names
-    std::string teamname;
-    if (!mSentLeftTeamname)
-    {
-        teamname = mGameState->GetTeamName(TI_LEFT);
-        if (!teamname.empty())
+    for (
+         PredicateList::TList::const_iterator iter = pList.begin();
+         iter != pList.end();
+         ++iter
+         )
         {
-            ss << "(team_left " << teamname << ")";
-            mSentLeftTeamname = true;
+            const Predicate& pred = (*iter);
+
+            ss << "(";
+            ss << pred.name;
+
+            const ParameterList& paramList = pred.parameter;
+            ParameterList::TVector::const_iterator pIter = paramList.begin();
+
+            std::string param;
+            while (
+                   (pIter != paramList.end()) &&
+                   (paramList.AdvanceValue(pIter, param))
+                   )
+                {
+                    ss << " ";
+                    ss << param;
+                }
+
+            ss << ")";
         }
-    }
-
-    if (!mSentRightTeamname)
-    {
-        teamname = mGameState->GetTeamName(TI_RIGHT);
-        if (!teamname.empty())
-        {
-            ss << "(team_right " << teamname << ")";
-            mSentRightTeamname = true;
-        }
-    }
-
-    // game half
-    TGameHalf half = mGameState->GetGameHalf();
-    if (half != mLastHalf)
-    {
-        mLastHalf = half;
-        ss << "(half " << half << ")";
-    }
-
-    // scores
-    int left_score = mGameState->GetScore(TI_LEFT);
-    if (left_score != mLastLeftScore)
-    {
-        mLastLeftScore = left_score;
-        ss << "(score_left " << left_score << ")";
-    }
-    int right_score = mGameState->GetScore(TI_RIGHT);
-    if (right_score != mLastRightScore)
-    {
-        mLastRightScore = right_score;
-        ss << "(score_right " << right_score << ")";
-    }
-
-    // gamestate
-    TPlayMode play_mode = mGameState->GetPlayMode();
-    if (play_mode != mLastPlayMode)
-    {
-        mLastPlayMode = play_mode;
-        ss << "(play_mode " << play_mode << ")";
-    }
 }
 
 void
@@ -236,7 +204,7 @@ SexpMonitor::AddBall(shared_ptr<Scene> activeScene, std::ostringstream& ss) cons
 }
 
 string
-SexpMonitor::GetMonitorInfo()
+SexpMonitor::GetMonitorInfo(const oxygen::PredicateList& pList)
 {
     if (mGameState->IsFinished())
     {
@@ -252,7 +220,7 @@ SexpMonitor::GetMonitorInfo()
         return "";
     }
     shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
-    std::ostringstream expression;
+    ostringstream expression;
 
     expression << "(Info ";
 
@@ -262,7 +230,7 @@ SexpMonitor::GetMonitorInfo()
         expression << "(ack " + reply + ")";
     }
 
-    AddGameState(expression);
+    AddPredicates(expression, pList);
     AddAgents(activeScene, expression);
     AddFlags(activeScene, expression);
     AddBall(activeScene, expression);
@@ -288,12 +256,12 @@ SexpMonitor::PutFloatParam(const string& name)
 }
 
 string
-SexpMonitor::GetMonitorHeaderInfo()
+SexpMonitor::GetMonitorHeaderInfo(const oxygen::PredicateList& pList)
 {
     // if a new monitor connected, we have to resend all required data
     ResetSentFlags();
 
-    stringstream ss;
+    ostringstream ss;
     ss << "(Init ";
 
     // field geometry parameter
@@ -329,7 +297,9 @@ SexpMonitor::GetMonitorHeaderInfo()
     }
     ss << ")";
 
+    AddPredicates(ss, pList);
     ss << ")\n";
+
     return ss.str();
 }
 
@@ -387,11 +357,5 @@ SexpMonitor::OnUnlink()
 void
 SexpMonitor::ResetSentFlags()
 {
-    mSentLeftTeamname = false;
-    mSentRightTeamname = false;
-    mLastHalf = GH_NONE;
-    mLastLeftScore = -1;
-    mLastRightScore = -1;
-    mLastPlayMode = PM_NONE;
     mSentFlags = false;
 }
