@@ -27,6 +27,7 @@ bounds.h   \
 fileclasses.h  \
 gmath.h   \
 path.h   \
+random.h \
 salt.h \
 tvector.h \
 defines.h \
