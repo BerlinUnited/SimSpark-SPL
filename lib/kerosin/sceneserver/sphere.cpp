@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere.cpp,v 1.4 2004/03/20 12:57:56 rollmark Exp $
+   $Id: sphere.cpp,v 1.5 2004/03/20 15:49:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,9 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "sphere.h"
-#include <zeitgeist/logserver/logserver.h>
 #include <kerosin/openglserver/openglserver.h>
-#include <kerosin/materialserver/materialserver.h>
 #include <kerosin/materialserver/material.h>
 
 using namespace boost;
@@ -102,9 +100,12 @@ static unsigned short gSphereFaces[224*3] =
         113,106,105, 113,107,106, 113,108,107, 113,109,108, 113,110,109, 113,111,110, 113,112,111, 113,97,112
     };
 
-Sphere::Sphere()
+Sphere::Sphere() : SingleMatNode(), mRadius(1.0f)
 {
-    mRadius = 1.0f;
+}
+
+Sphere::~Sphere()
+{
 }
 
 float Sphere::GetRadius() const
@@ -115,20 +116,6 @@ float Sphere::GetRadius() const
 void Sphere::SetRadius(float radius)
 {
     mRadius = radius;
-}
-
-void Sphere::SetMaterial(const std::string& name)
-{
-    shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
-        (GetCore()->Get("/sys/server/material"));
-
-    if (materialServer.get() == 0)
-        {
-            GetLog()->Error() << "(Sphere) ERROR: Cannot find MaterialServer\n";
-            return;
-        }
-
-    mMaterial = materialServer->GetMaterial(name);
 }
 
 void Sphere::RenderInternal()

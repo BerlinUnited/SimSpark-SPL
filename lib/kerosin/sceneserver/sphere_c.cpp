@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere_c.cpp,v 1.4 2004/03/20 12:57:56 rollmark Exp $
+   $Id: sphere_c.cpp,v 1.5 2004/03/20 15:49:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,18 +33,8 @@ FUNCTION(setRadius)
         }
 }
 
-FUNCTION(setMaterial)
-{
-    if (in.size() == 1)
-        {
-            Sphere* s = static_cast<Sphere*>(obj);
-            s->SetMaterial(any_cast<char*>(in[0]));
-        }
-}
-
 void CLASS(Sphere)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/BaseNode);
+    DEFINE_BASECLASS(kerosin/SingleMatNode);
     DEFINE_FUNCTION(setRadius);
-    DEFINE_FUNCTION(setMaterial);
 }

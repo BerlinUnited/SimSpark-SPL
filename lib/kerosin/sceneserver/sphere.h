@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere.h,v 1.3 2004/03/20 12:57:56 rollmark Exp $
+   $Id: sphere.h,v 1.4 2004/03/20 15:49:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,35 +22,33 @@
 #ifndef KEROSIN_SPHERE_H
 #define KEROSIN_SPHERE_H
 
-#include <oxygen/sceneserver/basenode.h>
+#include "singlematnode.h"
 
 namespace kerosin
 {
 class Material;
 
-class Sphere : public oxygen::BaseNode
+class Sphere : public SingleMatNode
 {
     //
     // Function
     //
 public:
     Sphere();
+    virtual ~Sphere();
 
     // set/get properties
     float GetRadius() const;
     void SetRadius(float radius);
 
-    void SetMaterial(const std::string& name);
-
-private:
+protected:
     virtual void RenderInternal();
 
     //
     // Members
     //
-private:
-    float   mRadius;
-    boost::shared_ptr<Material> mMaterial;
+protected:
+    float mRadius;
 };
 
 DECLARE_CLASS(Sphere);
