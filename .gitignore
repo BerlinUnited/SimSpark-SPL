@@ -473,6 +473,12 @@ plugin/soccer/visionperceptor/.dirstamp
 plugin/soccer/visionperceptor/.libs
 plugin/soccer/visionperceptor/Makefile
 plugin/soccer/visionperceptor/Makefile.in
+plugin/soccermonitor/.deps
+plugin/soccermonitor/.libs
+plugin/soccermonitor/Makefile
+plugin/soccermonitor/Makefile.in
+plugin/soccermonitor/*.la
+plugin/soccermonitor/*.lo
 plugin/soundsystembass/.deps
 plugin/soundsystembass/.libs
 plugin/soundsystembass/Makefile
