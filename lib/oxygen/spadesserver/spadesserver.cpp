@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.3.2.4 2004/02/06 21:19:40 fruit Exp $
+   $Id: spadesserver.cpp,v 1.3.2.5 2004/02/18 09:39:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,6 +95,10 @@ SpadesServer::OnLink()
         {
             GetLog()->Error() << "ERROR: (SpadesServer) SceneServer not found.\n";
         }
+
+    // cache frequently queried ruby values here
+    mTimePerStep = 0.01f;
+    GetScript()->GetVariable("Spades.TimePerStep", mTimePerStep);
 }
 
 void
@@ -114,10 +118,7 @@ SpadesServer::GetSimEngine()
 float
 SpadesServer::GetTimePerStep() const
 {
-    float time_per_step = 0.01f;
-    GetScript()->GetVariable("Spades.TimePerStep", time_per_step);
-
-    return time_per_step;
+    return mTimePerStep;
 }
 
 bool
@@ -264,13 +265,12 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
             return time_curr;
         }
 
-    float timePerStep = GetTimePerStep();
     int i = steps;
 
     while (i > 0)
     {
-        mSceneServer->Update(timePerStep);
-        mGameControlServer->Update(timePerStep);
+        mSceneServer->Update(mTimePerStep);
+        mGameControlServer->Update(mTimePerStep);
         --i;
     }
 
