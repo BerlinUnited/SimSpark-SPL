@@ -1,0 +1,4 @@
+Material.Diffuse	= "texture/floortile_d.png";
+Material.Normal		= "texture/floortile_local.png";
+Material.Specular	= "texture/floortile_s.png";
+
