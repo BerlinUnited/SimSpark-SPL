@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1.2.7 2004/01/25 12:28:54 rollmark Exp $
+   $Id: export.cpp,v 1.1.2.8 2004/01/29 19:53:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,8 +25,10 @@
 #include "dasheffector/dasheffector.h"
 #include "kickeffector/kickeffector.h"
 #include "initeffector/initeffector.h"
+#include "soccercontrolaspect/soccercontrolaspect.h"
 #include "gamestateaspect/gamestateaspect.h"
 #include "ballstateaspect/ballstateaspect.h"
+#include "soccerruleaspect/soccerruleaspect.h"
 #include "agentstate/agentstate.h"
 #include "sexpmonitor/sexpmonitor.h"
 #include "fieldflag/fieldflag.h"
@@ -34,8 +36,10 @@
 #include "visionperceptor/visionperceptor.h"
 
 ZEITGEIST_EXPORT_BEGIN()
+        ZEITGEIST_EXPORT(SoccerControlAspect);
         ZEITGEIST_EXPORT(GameStateAspect);
         ZEITGEIST_EXPORT(BallStateAspect);
+        ZEITGEIST_EXPORT(SoccerRuleAspect);
         ZEITGEIST_EXPORT(CreateEffector);
         ZEITGEIST_EXPORT(DashEffector);
         ZEITGEIST_EXPORT(KickEffector);

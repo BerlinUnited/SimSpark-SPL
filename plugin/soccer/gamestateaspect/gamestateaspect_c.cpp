@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect_c.cpp,v 1.1.2.1 2004/01/08 12:43:36 rollmark Exp $
+   $Id: gamestateaspect_c.cpp,v 1.1.2.2 2004/01/29 19:53:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,5 +26,5 @@ using namespace oxygen;
 
 void CLASS(GameStateAspect)::DefineClass()
 {
-    DEFINE_BASECLASS(kerosin/ControlAspect);
+    DEFINE_BASECLASS(SoccerControlAspect);
 }

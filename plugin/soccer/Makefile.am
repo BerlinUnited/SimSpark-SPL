@@ -9,8 +9,12 @@ dasheffector/dasheffector.cpp \
 dasheffector/dasheffector_c.cpp \
 kickeffector/kickeffector.cpp \
 kickeffector/kickeffector_c.cpp \
+soccercontrolaspect/soccercontrolaspect.cpp \
+soccercontrolaspect/soccercontrolaspect_c.cpp \
 gamestateaspect/gamestateaspect.cpp \
 gamestateaspect/gamestateaspect_c.cpp \
+soccerruleaspect/soccerruleaspect.cpp \
+soccerruleaspect/soccerruleaspect_c.cpp \
 agentstate/agentstate.cpp \
 agentstate/agentstate_c.cpp \
 ballstateaspect/ballstateaspect.cpp \

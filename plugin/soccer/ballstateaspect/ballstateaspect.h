@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.1.2.2 2004/01/29 10:28:05 rollmark Exp $
+   $Id: ballstateaspect.h,v 1.1.2.3 2004/01/29 19:53:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,15 +22,20 @@
 #ifndef BALLLSTATEASPECT_H
 #define BALLLSTATEASPECT_H
 
-#include <oxygen/controlaspect/controlaspect.h>
-#include <oxygen/agentaspect/agentaspect.h>
-#include <oxygen/physicsserver/recorderhandler.h>
+#include <soccer/soccercontrolaspect/soccercontrolaspect.h>
 
 /** BallStateAspect is a ControlAspect that holds information about
     the current state of the ball in the simulation.
  */
+class Ball;
 
-class BallStateAspect : public oxygen::ControlAspect
+namespace oxygen
+{
+    class RecorderHandler;
+    class AgentAspect;
+}
+
+class BallStateAspect : public SoccerControlAspect
 {
 public:
     BallStateAspect();
@@ -41,16 +46,23 @@ public:
     */
     virtual void Update(float deltaTime);
 
-    /** set up the reference to the Ball collision recorder */
-    virtual void OnLink();
-
-    /** reset the reference to the Ball collision recorder */
-    virtual void OnUnlink();
-
     /** returns the last agent that collided with the ball */
     boost::shared_ptr<oxygen::AgentAspect> GetLastCollidingAgent();
 
+    /** returns true if the ball over the playing field */
+    bool GetBallOnField();
+
+    /** returns the last valid position of the ball over the playing
+        field */
+    salt::Vector3f GetLastValidBallPosition();
+
 protected:
+    /** set up the reference to the ball and field collider */
+    virtual void OnLink();
+
+    /** reset the reference to the ball and field recorder */
+    virtual void OnUnlink();
+
     /** updates the reference to the last agent that collided with the
         ball
     */
@@ -61,10 +73,14 @@ protected:
     */
     void UpdateBallOnField();
 
+    /** if the ball has a valid position, i.e. is on the field,
+        remember it
+     */
+    void UpdateLastValidBallPos();
 
 protected:
     /** reference to the Ball node */
-    //    boost::shared_ptr<Ball> mBall;
+    boost::shared_ptr<Ball> mBall;
 
     /** reference to the Ball collision recorder */
     boost::shared_ptr<oxygen::RecorderHandler> mBallRecorder;
@@ -79,6 +95,9 @@ protected:
     /** true if the ball on the soccer field, i.e. not on the border
         surrounding the soccer field */
     bool mBallOnField;
+
+    /** holds the last valid ball position */
+    salt::Vector3f mLastValidBallPos;
 };
 
 DECLARE_CLASS(BallStateAspect);

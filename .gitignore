@@ -318,6 +318,10 @@ plugin/soccer/sexpmonitor/Makefile
 plugin/soccer/sexpmonitor/Makefile.in
 plugin/soccer/sexpmonitor/*.la
 plugin/soccer/sexpmonitor/*.lo
+plugin/soccer/soccercontrolaspect/Makefile
+plugin/soccer/soccercontrolaspect/Makefile.in
+plugin/soccer/soccerruleaspect/Makefile
+plugin/soccer/soccerruleaspect/Makefile.in
 plugin/soundsystembass/.deps
 plugin/soundsystembass/.libs
 plugin/soundsystembass/Makefile

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.3 2004/01/25 12:51:47 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.4 2004/01/29 19:53:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 
-GameStateAspect::GameStateAspect() : ControlAspect()
+GameStateAspect::GameStateAspect() : SoccerControlAspect()
 {
-    mPlayMode = PM_BeforeKickOff;
+    mPlayMode = PM_PlayOn;
     mTime = 0;
 }
 
@@ -58,4 +58,3 @@ GameStateAspect::TTime GameStateAspect::GetTime() const
 {
     return mTime;
 }
-

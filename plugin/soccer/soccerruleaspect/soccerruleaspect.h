@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.1.2.2 2004/01/29 19:53:53 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.1.2.1 2004/01/29 19:53:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,39 +19,55 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef GAMESTATEASPECT_H
-#define GAMESTATEASPECT_H
+#ifndef SOCCERRULEASPECT_H
+#define SOCCERRULEASPECT_H
 
 #include <soccer/soccercontrolaspect/soccercontrolaspect.h>
 
-class GameStateAspect : public SoccerControlAspect
+class GameStateAspect;
+class BallStateAspect;
+
+namespace oxygen
+{
+    class Body;
+}
+
+class SoccerRuleAspect : public SoccerControlAspect
 {
 public:
-    GameStateAspect();
-    virtual ~GameStateAspect();
+    SoccerRuleAspect();
+    virtual ~SoccerRuleAspect();
 
     /** called during the update of the GameControlServer to allow the
         ControlAspect to perform any necessary checks.
     */
     virtual void Update(float deltaTime);
 
-    /** returns the current play mode */
-    TPlayMode GetPlayMode() const;
+protected:
+   /** set up the reference to the ball and field collider */
+    virtual void OnLink();
 
-    /** sets the current play mode */
-    void SetPlayMode(TPlayMode mode);
+    /** reset the reference to the ball and field recorder */
+    virtual void OnUnlink();
 
-    /** returns the current game time */
-    TTime GetTime() const;
+    /** updates the RuleAspect during BeforeKickOff mode */
+    void UpdateBeforeKickOff();
+
+    /** update the RuleAspect during PlayOn mode */
+    void UpdatePlayOn();
 
 protected:
-    /** the current play mode */
-    TPlayMode mPlayMode;
+    /** reference to the body node of the Ball */
+    boost::shared_ptr<oxygen::Body> mBallBody;
 
-    /** the current game time */
-    TTime mTime;
+    /** reference to the GameStateAspect */
+    boost::shared_ptr<GameStateAspect> mGameState;
+
+    /** reference to the BallStateAspect */
+    boost::shared_ptr<BallStateAspect> mBallState;
 };
 
-DECLARE_CLASS(GameStateAspect);
+DECLARE_CLASS(SoccerRuleAspect);
 
-#endif // GAMESTATEASPECT_H
+
+#endif // SOCCERRULEASPECT_H
