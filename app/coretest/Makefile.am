@@ -11,7 +11,6 @@ my_ldadd=
 endif
 
 
-
 if DEBUG
 LDADD = ${my_ldadd} \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
@@ -29,5 +28,5 @@ endif
 AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 
 coretest_SOURCES = main.cpp 
-
+EXTRA_DIST = data/monkey.wav
 
