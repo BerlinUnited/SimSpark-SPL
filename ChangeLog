@@ -2,6 +2,9 @@
 	* /lib/salt/
 	- removed ptr.h ptrmanager.h and quadlink.h from Makefile.am
 	- added gcc/sharedlibrary.cpp to Makefile.am
+	- moved class object declaration for class Leaf from leaf.h to
+	class.h to break circular inclusion between leaf.h and class.h
+	- removed class_m.h from the repository and Makefile.am
 	
 2003-08-21  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* /lib/salt /lib/zeitgeist
