@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.1.2.6 2004/02/10 19:45:21 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.1.2.7 2004/02/10 20:46:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -183,6 +183,29 @@ void SoccerRuleAspect::UpdateGoal()
                             );
 }
 
+void SoccerRuleAspect::CheckTime()
+{
+    TTime now = mGameState->GetTime();
+    TGameHalf half = mGameState->GetGameHalf();
+
+    if (
+        (half == GH_FIRST) &&
+        (now >= mHalfTime)
+        )
+        {
+            // the first gmae half is over
+            mGameState->SetPlayMode(PM_BeforeKickOff);
+            mGameState->SetGameHalf(GH_SECOND);
+        } else if (
+                   (half == GH_SECOND) &&
+                   (now >= 2 * mHalfTime)
+                   )
+            {
+                // the game is over
+                mGameState->SetPlayMode(PM_GameOver);
+            }
+}
+
 void SoccerRuleAspect::Update(float deltaTime)
 {
     if (
@@ -193,6 +216,8 @@ void SoccerRuleAspect::Update(float deltaTime)
         {
             return;
         }
+
+    CheckTime();
 
     TPlayMode playMode = mGameState->GetPlayMode();
 
@@ -219,6 +244,9 @@ void SoccerRuleAspect::Update(float deltaTime)
         case PM_Goal_Left:
         case PM_Goal_Right:
             UpdateGoal();
+            break;
+
+        case PM_GameOver:
             break;
 
         default:
@@ -249,6 +277,9 @@ void SoccerRuleAspect::OnLink()
 
     mKickInPauseTime = 1;
     SoccerBase::GetSoccerVar(*this,"RuleKickingPauseTime",mKickInPauseTime);
+
+    mHalfTime = 2.25 * 60;
+    SoccerBase::GetSoccerVar(*this,"RuleHalfTime",mHalfTime);
 }
 
 void SoccerRuleAspect::OnUnlink()
