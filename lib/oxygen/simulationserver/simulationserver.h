@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.1 2004/04/25 16:39:59 rollmark Exp $
+   $Id: simulationserver.h,v 1.2 2004/04/28 14:27:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -115,6 +115,9 @@ public:
     /** returns thr cached SceneServer reference */
     boost::shared_ptr<SceneServer> GetSceneServer();
 
+    /** returns the current simulation cycle */
+    int GetCycle();
+
 protected:
     virtual void OnLink();
     virtual void OnUnlink();
@@ -158,6 +161,9 @@ protected:
         mSimStep every cycle (this is the default), otherwise a
         SimControlNode is responsible to advance the ime */
     bool mAutoTime;
+
+    /** the current simulation cycle */
+    int mCycle;
 
     /** a cached reference to the monitor server */
     boost::shared_ptr<MonitorServer> mMonitorServer;

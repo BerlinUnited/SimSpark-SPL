@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.1 2004/04/25 16:39:59 rollmark Exp $
+   $Id: simulationserver.cpp,v 1.2 2004/04/28 14:27:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ SimulationServer::SimulationServer() : Node()
     mSimTime      = 0.0f;
     mSimStep      = 0.2f;
     mAutoTime     = true;
+    mCycle        = 0;
     mSumDeltaTime = 0;
     mArgC = 0;
     mArgV = 0;
@@ -141,6 +142,11 @@ void SimulationServer::SetAutoTimeMode(bool set)
 bool SimulationServer::GetAutoTimeMode()
 {
     return mAutoTime;
+}
+
+int SimulationServer::GetCycle()
+{
+    return mCycle;
 }
 
 bool SimulationServer::InitControlNode(const string& controlName)
@@ -275,6 +281,8 @@ void SimulationServer::Run(int argc, char** argv)
 
     while (! mExit)
         {
+            ++mCycle;
+
             ControlEvent(CE_StartCycle);
             ControlEvent(CE_SenseAgent);
             ControlEvent(CE_ActAgent);
