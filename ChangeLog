@@ -1,3 +1,16 @@
+2004-02-14  Oliver Obst  <fruit@robolog.org>
+
+	* lib/kerosin/Makefile.am: 
+	fixed Makefile.am for making a proper distribution wit no generated sources. 
+	Needed also to fix rules for making without kerosin.
+
+	* lib/kerosin/soundserver/soundserver.cpp: 
+	* lib/kerosin/imageserver/imageserver.cpp: 
+	* app/scenetest/md5mesh.cpp: 
+	- replaced RFile by salt::RFile to solve ambiguities between salt and ruby
+
+	* app/agenttest/Makefile.am: added agenttest.rb to distribution
+
 2004-01-05	pfr	<sserver-admin@lists.sf.net>
 
 	* ./lib/oxygen/spadesserver/spadescreatesenseevent.cpp
