@@ -6,34 +6,36 @@ using namespace boost;
 using namespace std;
 using namespace zeitgeist;
 
-FUNCTION(getName)
+OUT_FUNCTION(getName)
 {
-    if( in.empty() )
+  if( in.empty() )
     {
-        Leaf *leaf = static_cast<Leaf*>(obj);
-
-        leaf->GetLog()->Normal() << leaf->GetName() << endl;
+      Leaf *leaf = static_cast<Leaf*>(obj);
+      out = rb_str_new2(leaf->GetName().c_str());
     }
 }
 
-/*FUNCTION(status)
+OUT_FUNCTION(getFullPath)
 {
-	leaf->Status();
-}*/
-
-FUNCTION(isLeaf)
-{
-    if( in.empty() )
+  if (in.empty())
     {
-        Leaf *leaf = static_cast<Leaf*>(obj);
+      Leaf *leaf = static_cast<Leaf*>(obj);
+      out = rb_str_new2(leaf->GetFullPath().c_str());
+    }
+}
 
-        cout << leaf->IsLeaf() << endl;
+OUT_FUNCTION(isLeaf)
+{
+  if( in.empty() )
+    {
+      Leaf *leaf = static_cast<Leaf*>(obj);
+      out = leaf->IsLeaf() ? Qtrue:Qfalse;
     }
 }
 
 void CLASS(Leaf)::DefineClass()
 {
-	DEFINE_FUNCTION(getName);
-//	DEFINE_FUNCTION(status);
-	DEFINE_FUNCTION(isLeaf);
+  DEFINE_FUNCTION(getFullPath);
+  DEFINE_FUNCTION(getName);
+  DEFINE_FUNCTION(isLeaf);
 }
