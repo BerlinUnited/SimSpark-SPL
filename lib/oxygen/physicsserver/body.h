@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.11 2004/04/10 07:24:52 rollmark Exp $
+   $Id: body.h,v 1.12 2004/04/14 18:28:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,11 +78,64 @@ public:
     /** returns the mass of this body */
     float GetMass();
 
+
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)
         relative to the body.
     */
     void SetSphere(float density, float radius);
+
+    /** sets the mass parameters to represent a sphere of the given
+        radius and total mass, with the center of mass at (0,0,0)
+        relative to the body.
+    */
+    void SetSphereTotal(float total_mass, float radius);
+
+    /** Set the mass parameters to represent a box of the given
+        dimensions and density, with the center of mass at (0,0,0)
+        relative to the body.
+    */
+    void SetBox(float density, const salt::Vector3f& size);
+
+    /** Set the mass parameters to represent a box of the given
+        dimensions and total mass, with the center of mass at (0,0,0)
+        relative to the body.
+    */
+    void SetBoxTotal(float total_mass, const salt::Vector3f& size);
+
+    /** Set the mass parameters to represent a flat-ended cylinder of
+        the given parameters and density, with the center of mass at
+        (0,0,0) relative to the body. The radius of the cylinder is
+        radius. The length of the cylinder is length. The cylinder's
+        long axis is oriented along the body's z axis.
+     */
+    void SetCylinder (float density, float radius, float length);
+
+    /** Set the mass parameters to represent a flat-ended cylinder of
+        the given parameters and total mass, with the center of mass
+        at (0,0,0) relative to the body. The radius of the cylinder is
+        radius. The length of the cylinder is length. The cylinder's
+        long axis is oriented along the body's z axis.
+     */
+    void SetCylinderTotal(float total_mass, float radius, float length);
+
+    /* Set the mass parameters to represent a capped cylinder of the
+       given parameters and density, with the center of mass at
+       (0,0,0) relative to the body. The radius of the cylinder (and
+       the spherical cap) is radius. The length of the cylinder (not
+       counting the spherical cap) is length. The cylinder's long axis
+       is oriented along the body's z axis.
+    */
+    void SetCappedCylinder (float density, float radius, float length);
+
+    /* Set the mass parameters to represent a capped cylinder of the
+       given parameters and total mass, with the center of mass at
+       (0,0,0) relative to the body. The radius of the cylinder (and
+       the spherical cap) is radius. The length of the cylinder (not
+       counting the spherical cap) is length. The cylinder's long axis
+       is oriented along the body's z axis.
+    */
+    void SetCappedCylinderTotal(float total_mass, float radius, float length);
 
     /** returns the current linear velocity vector of this body */
     salt::Vector3f GetVelocity() const;

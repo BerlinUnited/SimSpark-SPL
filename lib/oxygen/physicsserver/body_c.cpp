@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.7 2004/04/10 07:24:52 rollmark Exp $
+   $Id: body_c.cpp,v 1.8 2004/04/14 18:28:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,6 +97,141 @@ FUNCTION(Body,setSphere)
     return true;
 }
 
+FUNCTION(Body,setSphereTotal)
+{
+    float inMassTotal;
+    float inRadius;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inRadius))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSphereTotal(inMassTotal,inRadius);
+    return true;
+}
+
+FUNCTION(Body,setBox)
+{
+    float inDensity;
+    Vector3f inSize;
+
+    if (
+        (in.GetSize() <= 1) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inSize))
+        )
+        {
+            return false;
+        }
+
+    obj->SetBox(inDensity,inSize);
+    return true;
+}
+
+FUNCTION(Body,setBoxTotal)
+{
+    float inMassTotal;
+    Vector3f inSize;
+
+    if (
+        (in.GetSize() <= 1) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inSize))
+        )
+        {
+            return false;
+        }
+
+    obj->SetBoxTotal(inMassTotal,inSize);
+    return true;
+}
+
+FUNCTION(Body,setCylinder)
+{
+    float inDensity;
+    float inRadius;
+    float inLength;
+
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    obj->SetCylinder(inDensity,inRadius,inLength);
+    return true;
+}
+
+FUNCTION(Body,setCylinderTotal)
+{
+    float inMassTotal;
+    float inRadius;
+    float inLength;
+
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    obj->SetCylinderTotal(inMassTotal,inRadius,inLength);
+    return true;
+}
+
+FUNCTION(Body,setCappedCylinder)
+{
+    float inDensity;
+    float inRadius;
+    float inLength;
+
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    obj->SetCappedCylinder(inDensity,inRadius,inLength);
+    return true;
+}
+
+FUNCTION(Body,setCappedCylinderTotal)
+{
+    float inMassTotal;
+    float inRadius;
+    float inLength;
+
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    obj->SetCappedCylinderTotal(inMassTotal,inRadius,inLength);
+    return true;
+}
+
+
 FUNCTION(Body,setVelocity)
 {
     Vector3f inVel;
@@ -186,6 +321,13 @@ void CLASS(Body)::DefineClass()
         DEFINE_FUNCTION(isEnabled);
         DEFINE_FUNCTION(useGravity);
         DEFINE_FUNCTION(setSphere);
+        DEFINE_FUNCTION(setSphereTotal);
+        DEFINE_FUNCTION(setBox);
+        DEFINE_FUNCTION(setBoxTotal);
+        DEFINE_FUNCTION(setCylinder);
+        DEFINE_FUNCTION(setCylinderTotal);
+        DEFINE_FUNCTION(setCappedCylinder);
+        DEFINE_FUNCTION(setCappedCylinderTotal);
         DEFINE_FUNCTION(setMass);
         DEFINE_FUNCTION(getMass);
         DEFINE_FUNCTION(setVelocity);

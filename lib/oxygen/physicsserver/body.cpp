@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.15 2004/04/10 15:38:57 rollmark Exp $
+   $Id: body.cpp,v 1.16 2004/04/14 18:28:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -121,7 +121,8 @@ void Body::OnLink()
         (make_shared(GetParent()));
 
     const Matrix& mat = baseNode->GetWorldTransform();
-    dBodySetPosition(mODEBody, mat.Pos().x(), mat.Pos().y(), mat.Pos().z());
+    SetRotation(mat);
+    SetPosition(mat.Pos());
 }
 
 void
@@ -144,7 +145,72 @@ void Body::SetSphere(float density, float radius)
 {
     dMass ODEMass;
     dMassSetSphere(&ODEMass, density, radius);
-    dMassAdjust(&ODEMass, 1.0f);
+    dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::SetSphereTotal(float total_mass, float radius)
+{
+    dMass ODEMass;
+    dMassSetSphereTotal(&ODEMass, total_mass, radius);
+    dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::SetBox(float density, const Vector3f& size)
+{
+    dMass ODEMass;
+    dMassSetBox(&ODEMass, density, size[0], size[1], size[2]);
+    dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::SetBoxTotal(float total_mass, const salt::Vector3f& size)
+{
+    dMass ODEMass;
+    dMassSetBoxTotal(&ODEMass, total_mass, size[0], size[1], size[2]);
+    dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::SetCylinder (float density, float radius, float length)
+{
+    dMass ODEMass;
+
+    // direction: (1=x, 2=y, 3=z)
+    int direction = 3;
+
+    dMassSetCylinder (&ODEMass, density, direction, radius, length);
+    dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::SetCylinderTotal(float total_mass, float radius, float length)
+{
+    dMass ODEMass;
+
+    // direction: (1=x, 2=y, 3=z)
+    int direction = 3;
+
+    dMassSetCylinderTotal(&ODEMass, total_mass, direction, radius, length);
+    dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::SetCappedCylinder (float density, float radius, float length)
+{
+    dMass ODEMass;
+
+    // direction: (1=x, 2=y, 3=z)
+    int direction = 3;
+
+    dMassSetCappedCylinder (&ODEMass, density, direction, radius, length);
+    dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::SetCappedCylinderTotal(float total_mass, float radius, float length)
+{
+    dMass ODEMass;
+
+    // direction: (1=x, 2=y, 3=z)
+    int direction = 3;
+
+    dMassSetCappedCylinderTotal(&ODEMass, total_mass,
+                                direction, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
@@ -162,16 +228,19 @@ void Body::SetVelocity(const Vector3f& vel)
 void Body::SetRotation(const Matrix& rot)
 {
     dMatrix3 ODEMatrix;
-    dRSetIdentity(ODEMatrix);
-    ODEMatrix[0]  = rot.m[0];
-    ODEMatrix[4]  = rot.m[1];
-    ODEMatrix[8]  = rot.m[2];
-    ODEMatrix[1]  = rot.m[4];
-    ODEMatrix[5]  = rot.m[5];
-    ODEMatrix[9]  = rot.m[6];
-    ODEMatrix[2]  = rot.m[8];
-    ODEMatrix[6]  = rot.m[9];
+    ODEMatrix[0] = rot.m[0];
+    ODEMatrix[1] = rot.m[4];
+    ODEMatrix[2] = rot.m[8];
+    ODEMatrix[3] = 0;
+    ODEMatrix[4] = rot.m[1];
+    ODEMatrix[5] = rot.m[5];
+    ODEMatrix[6] = rot.m[9];
+    ODEMatrix[7] = 0;
+    ODEMatrix[8] = rot.m[2];
+    ODEMatrix[9] = rot.m[6];
     ODEMatrix[10] = rot.m[10];
+    ODEMatrix[11] = 0;
+
     dBodySetRotation(mODEBody, ODEMatrix);
 }
 
