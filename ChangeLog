@@ -1,3 +1,65 @@
+2004-03-09  Markus Rollmann  <rollmark@uni-koblenz.de>
+	
+	* plugin/inputsdl/inputsystemsdl.cpp:
+	- cleaned up InputSystemSDL implementation and added additional
+	diagnostic messages
+
+	* plugin/inputsdl/mousesdl.cpp: 
+	- cleaned up MouseSDL implementation
+
+	* plugin/inputsdl/timersdl.cpp, plugin/inputsdl/timersdl.h:
+	- cleaned up timerSDL implementation
+
+
+	* lib/kerosin/sceneserver/light_c.cpp, 
+	* lib/kerosin/sceneserver/sphere_c.cpp, 
+	* lib/kerosin/sceneserver/staticmesh_c.cpp:
+	- corrected baseclass definitions
+
+	* lib/kerosin/sceneserver/axis_c.cpp: 
+	- corrected baseclass definition
+
+	* lib/oxygen/sceneserver/camera.cpp: 
+	- indentation fixes
+
+	* lib/oxygen/sceneserver/sceneserver.cpp: 
+	- some minor cleanup
+
+	* lib/oxygen/sceneserver/fpscontroller.h:
+	- added method OnLink and OnUnlink
+
+	* lib/oxygen/sceneserver/fpscontroller.cpp:
+	- cleaned up fpscontroller implementation
+	- added additional diagnostic messages
+	- using Body methods instead of directly calling ODE functions
+
+	* lib/oxygen/physicsserver/body.cpp, 
+	* lib/oxygen/physicsserver/body.h:
+	- added method GetMass
+	- added method SetRotation
+	- added additional diagnostic messages
+
+2004-03-05  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/inputsdl/keyboardsdl.cpp, 
+	* plugin/inputsdl/keyboardsdl.h:
+	- cleanded up keyboardSDL implementation
+	- fixed enqueueing of keyboard events. KeyboardSDL now uses
+	hardware independent SDL keyboard constants instead of system
+	scancodes and translates these to the IC_xxx constants of the
+	InputServer. For the windows port of SDL the reported scan codes
+	are identical to the IC_xxx constants of the InputServer. This is
+	not the cas for the X-Window port.
+
+	* lib/kerosin/inputserver/inputserver.cpp, 
+	* lib/kerosin/inputserver/inputserver.h:
+	- cleaned up the inputserver implementation
+
+	* lib/kerosin/inputserver/inputsystem.cpp, 
+	* lib/kerosin/inputserver/inputsystem.h:
+	- some formatting cleanup
+
+		-----------------
 2004-03-05  Oliver Obst  <fruit@robolog.org>
 
 	* configure.ac: 
@@ -90,7 +152,7 @@
 	Give to oxygen what belongs to oxygen...
 	Moved oxygen classes below oxygen namespace
 	
-2004-02-20  rollmark  <rollmark@vader>
+2004-02-20  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/rcssmonitor3d/main.cpp:
 	- cosmetic change: use STR_PM_Unknown instead of a string constant
