@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.5 2003/11/19 17:51:16 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.6 2003/11/23 16:52:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 using namespace boost;
 using namespace oxygen;
 using namespace spades;
+using namespace std;
 
 #define THIS_IS_A_DEMO_ONLY 1
 
@@ -119,14 +120,14 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     }
 
 
-    shared_ptr<oxygen::SceneServer> sceneServer =
-        shared_static_cast<oxygen::SceneServer>(GetCore()->Get("/sys/server/scene"));
+    shared_ptr<SceneServer> sceneServer =
+        shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
 #if THIS_IS_A_DEMO_ONLY
       // test the loop
       // print the current location of the sphere collider
-      shared_ptr<oxygen::BaseNode> sphereNode =
-        shared_static_cast<oxygen::BaseNode>(GetCore()->Get("/usr/scene/sphere"));
+      shared_ptr<BaseNode> sphereNode =
+        shared_static_cast<BaseNode>(GetCore()->Get("/usr/scene/sphere"));
 
       if (sphereNode.get() != 0)
       {
@@ -147,21 +148,56 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     }
 }
 
+boost::shared_ptr<MonitorServer>
+SpadesServer::GetMonitorServer()
+{
+    return shared_static_cast<MonitorServer>
+        (
+         GetCore()->Get("/sys/server/monitor")
+         );
+}
+
+
 DataArray
 SpadesServer::getMonitorHeaderInfo()
 {
-    return DataArray();
+    shared_ptr<MonitorServer> monitorServer =
+        GetMonitorServer();
+
+    if (monitorServer != NULL)
+        {
+            return DataArray(monitorServer->GetMonitorHeaderInfo());
+        } else
+            {
+                return DataArray();
+            }
 }
 
 DataArray
-SpadesServer::getMonitorInfo(SimTime time)
+SpadesServer::getMonitorInfo(SimTime /*time*/)
 {
-    return DataArray();
+    shared_ptr<MonitorServer> monitorServer =
+        GetMonitorServer();
+
+    if (monitorServer != NULL)
+        {
+            return DataArray(monitorServer->GetMonitorInfo());
+        } else
+            {
+                return DataArray();
+            }
 }
 
 void
 SpadesServer::parseMonitorMessage (const char* data, unsigned datalen)
 {
+    shared_ptr<MonitorServer> monitorServer =
+        GetMonitorServer();
+
+    if (monitorServer != NULL)
+        {
+            return monitorServer->ParseMonitorMessage(string(data,datalen));
+        }
 }
 
 SimTime
