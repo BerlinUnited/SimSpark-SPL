@@ -1,3 +1,36 @@
+2003-09-01  Oliver Obst  <fruit@robolog.org>
+
+	* utility/glextgen/script/glfrontend.rb: 
+	- added a filter to the scan method to filter out some misleading lines
+	  (some comments containing the ' gl' substring were translated 
+	   to functions)
+
+2003-08-31  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/
+	- moved all classes to namespace oxygen
+
+	* lib/oxygen/Makefile.am: 
+	- added boxycollider and ccylindercollider
+
+	* lib/kerosin/Makefile.am: 
+	- added freetype flags 
+	- removed some of the files that have been going to oxygen
+
+	* plugin/Makefile.am:
+	* plugin/filesystemrar/Makefile.am:
+	* plugin/filesystemstd/Makefile.am:
+	* plugin/filesystemzip/Makefile.am:
+	* plugin/inputsdl/Makefile.am:
+	* plugin/soundsystembass/Makefile.am:
+	* plugin/soundsystemfmod/Makefile.am:
+	* plugin/survival/Makefile.am:
+	- initial revisions 
+	
+	* configure.ac: 
+	- added freetype check 
+	- added Makefiles below plugin/
+
 2003-08-31  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* lib/oxygen/physicsserver
 	- added copyleft and comments
