@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: kicknrun.cpp,v 1.1.2.6 2004/02/09 14:19:54 fruit Exp $
+$Id: kicknrun.cpp,v 1.1.2.7 2004/02/10 19:54:52 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,11 +39,75 @@ KickNRun::~KickNRun()
 void KickNRun::BehaveBeforeKickOff()
 {
     // do nothing
+    Drive(Vector3f(0,0,0));
 }
 
 void KickNRun::BehaveKickOff()
 {
+    TTeamIndex ti = mWM->GetMyTeam();
+    if (ti == TI_NONE)
+        {
+            return;
+        }
+
+    TPlayMode myKickOff = (mWM->GetMyTeam() == TI_LEFT) ?
+        PM_KickOff_Left : PM_KickOff_Right;
+
+    if (mWM->GetPlayMode() == myKickOff)
+        {
+            BehaveMyKickOff();
+            GetLog()->Debug() << "MyKickOff\n";
+        } else
+            {
+                BehaveTheirKickOff();
+                GetLog()->Debug() << "TheirKickOff\n";
+            }
+}
+
+void KickNRun::BehaveMyKickOff()
+{
+    // for now, just kick and run
     BehavePlayOn();
+}
+
+void KickNRun::BehaveTheirKickOff()
+{
+    // do nothing
+    Drive(Vector3f(0,0,0));
+}
+
+void KickNRun::BehaveKickIn()
+{
+    TTeamIndex ti = mWM->GetMyTeam();
+    if (ti == TI_NONE)
+        {
+            return;
+        }
+
+    TPlayMode myKickIn = (mWM->GetMyTeam() == TI_LEFT) ?
+        PM_KickIn_Left : PM_KickIn_Right;
+
+    if (mWM->GetPlayMode() == myKickIn)
+        {
+            BehaveMyKickIn();
+            GetLog()->Debug() << "MyKickIn\n";
+        } else
+            {
+                BehaveTheirKickIn();
+                GetLog()->Debug() << "TheirKickIn\n";
+            }
+}
+
+void KickNRun::BehaveMyKickIn()
+{
+    // for now just kick and run
+    BehavePlayOn();
+}
+
+void KickNRun::BehaveTheirKickIn()
+{
+    // do nothing
+    Drive(Vector3f(0,0,0));
 }
 
 void KickNRun::BehavePlayOn()
@@ -107,12 +171,18 @@ void KickNRun::Behave()
             BehaveBeforeKickOff();
             break;
 
-        case PM_KickOff :
+        case PM_KickOff_Left :
+        case PM_KickOff_Right :
             BehaveKickOff();
             break;
 
         case PM_PlayOn :
             BehavePlayOn();
+            break;
+
+        case PM_KickIn_Left :
+        case PM_KickIn_Right :
+            BehaveKickIn();
             break;
 
         default:
