@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: vector.h,v 1.6 2003/11/14 14:05:54 fruit Exp $
+   $Id: vector.h,v 1.7 2004/12/17 20:18:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,6 +53,29 @@ public:
     explicit        Vector2f(const float *f)        : TVector2<float, Vector2f>() { SetData(f);  }
     f_inline        Vector2f(const Vector2f &v)     : TVector2<float, Vector2f>(v) { }
     explicit        Vector2f(float f)                       : TVector2<float, Vector2f>() { Fill(f); }
+
+    float           GetAngleRad() const
+    {
+        const double length = Length();
+        if (length == 0)
+            {
+                return 0.0;
+            }
+
+        double rad = gArcCos(Get(0) / length);
+
+        if (Get(1) < 0)
+            {
+                rad = 2*M_PI - rad;
+            }
+
+        return rad;
+    }
+
+    float           GetAngleDeg() const
+    {
+        return gRadToDeg(GetAngleRad());
+    }
 };
 
 class Vector3f : public TVector3<float, Vector3f>
