@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.1 2004/03/09 17:14:44 fruit Exp $
+   $Id: camera.cpp,v 1.2 2004/03/09 19:48:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ Camera::SetViewByMouse(const Vector2f& mousePos,
   if(mTheta < mMouseSensitivity) mTheta = mMouseSensitivity;
   else if (mTheta >  gPI - mMouseSensitivity) mTheta = gPI - mMouseSensitivity;
 
-  mPhi += mMouseSensitivity * deltaX;
+  mPhi -= mMouseSensitivity * deltaX;
   if(mPhi < 0) mPhi += 2*gPI;
   else if (mPhi > 2*gPI) mPhi -= 2*gPI;
 
