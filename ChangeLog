@@ -1,8 +1,91 @@
+2004-06-06  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	* app/rcssmonitor3d/lite/monitor.h: 
+	- added method to return a successor of a kickoff mode 
+	- added kickoff mode member variable 
+	- added member variable for message counting
+	- added msgskip command line argument to skip server messages 
+	- implemented indicator for the team doing the next kick off with the 
+	  status line 
+	- using the space key to change the team doing the next kick off 
+	- added using the 'b' key to drop the ball at its current position
+
+	* app/rcssmonitor3d/lib/logfileserver.cpp: 
+	* app/rcssmonitor3d/lib/logfileserver.h:
+	- removed empty methods that are implemented as empty in the 
+	  base class now
+
+	* app/rcssmonitor3d/lib/commserver.h: 
+	- changed SendKickOffCmd to take kick off mode as argument
+	  (with random as default argument)
+	- added SendDropBallCmd method
+
+	* app/rcssmonitor3d/lib/commserverbase.h: 
+	- added enum for kick offs (left, right, random) 
+	- changed some methods from pure virtuals to virtual methods that do 
+	  nothing.  Only the required methods are pure virtual now.  
+	- Added virtual method for dropping the ball 
+	- Changed SendKickOffCmd to take an kickoff mode as argument
+
+	* app/rcssmonitor3d/lib/gamestate.cpp:
+	* app/rcssmonitor3d/lib/gamestate.h: 
+	- made GetPlayerMessage method const
+	- fixed GetPlayerMessage to return false if no message was sent. 
+	  The previous version returned false only if a player did not exist.
+	
+	* plugin/soccer/soccertypes.h: removed KickOff pseudo play mode
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp: 
+	* plugin/soccer/trainercommandparser/trainercommandparser.h: 
+	- added new monitor/trainer commands for doing the kick off and
+	  dropping the ball. The new command for kick off was required to
+	  remove the pseudo play mode "kick_off" with no particular side.  
+	- added member variables to hold the game state and the soccer rule
+	  aspect.
+	- removed use of KickOff play mode from the play mode map.  
+	- added some play modes (corner kick, goal kick, ...) to the play mode
+	  map, so that monitors / trainers can set these modes.  
+	- calling the soccer rule DropBall method when the respective command 
+	  is sent from the monitor 
+	- calling the game state kick off method to do a random kick off when 
+	  the respective command is sent from the monitor
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	- added methods to drop the ball 
+	- renamed MoveAwayPlayers methods to ClearPlayers 
+	- added (rule) variable for the time to drop the ball
+	- dropping the ball after mDropBallTime seconds in
+	  the kick modes for kick off, kick in, goal kick, and corner kick.
+	
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	- added method to get SoccerRuleAspect
+
+2004-06-05  Oliver Obst  <fruit@robolog.org>
+
+	* lib/salt/bounds.h: 
+	fixed bug in initialization of AABB2
+
+	* lib/salt/gmath.h: 
+	- using constants from <cmath> instead of defining them anew 
+	- made the return type of gRadToDeg and gDegToRad double instead of float 
+	- added gSign function
+
 2004-06-03  Patrick Riley <pfr@cs.cmu.edu>
+
 	* app/rcssmonitor3d/lite/monitor.cpp
 	- Added #include <sstream> and std:: namespace qualifiers
 	(reported by Michel Tokic)
 	
+2004-05-27  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- fixed setting play mode after goals 
+	- changed setting playmode to PlayOn in GoalKickMode changed 
+	- reduced size of penalty area boxes to match the original size of the penalty areas
+
 2004-05-24  Patrick Riley <pfr@cs.cmu.edu>
 
 	* lib/oxygen/spadesserver/spadesserver.cpp:
