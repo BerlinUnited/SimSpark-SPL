@@ -28,6 +28,8 @@ utility/classserver/classserver.lo
 utility/classserver/libclassserver.la
 utility/console/Makefile
 utility/console/Makefile.in
+utility/console/commands/signature/.deps
+utility/console/commands/signature/.dirstamp
 utility/forwarder/.deps
 utility/forwarder/.libs
 utility/forwarder/Makefile
