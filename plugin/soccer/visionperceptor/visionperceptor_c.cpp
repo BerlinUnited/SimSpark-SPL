@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor_c.cpp,v 1.1.2.2 2004/02/02 18:31:52 fruit Exp $
+   $Id: visionperceptor_c.cpp,v 1.1.2.3 2004/02/10 15:21:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,6 +55,15 @@ FUNCTION(setPredicateName)
     }
 }
 
+FUNCTION(setSenseMyPos)
+{
+  if (in.size() == 1)
+    {
+        VisionPerceptor* vp = static_cast<VisionPerceptor*>(obj);
+        vp->SetSenseMyPos(boost::any_cast<bool>(in[0]));
+    }
+}
+
 void
 CLASS(VisionPerceptor)::DefineClass()
 {
@@ -62,4 +71,5 @@ CLASS(VisionPerceptor)::DefineClass()
     DEFINE_FUNCTION(setNoiseParams);
     DEFINE_FUNCTION(addNoise);
     DEFINE_FUNCTION(setPredicateName);
+    DEFINE_FUNCTION(setSenseMyPos);
 }
