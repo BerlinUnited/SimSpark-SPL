@@ -1,22 +1,82 @@
-2003-12-28  Oliver Obst  <fruit@robolog.org>
+2004-01-06  Markus Rollmann  <rollmark@uni-koblenz.de>
 
-	* plugin/soccer/initeffector/initeffector.cpp: 
-	- changed initeffector due to changes with FindParameter. InitEffector 
- 	  now correctly sets both team name and uniform number (currently we use
-	  the node name for both).
+	* plugin/soccer/createeffector/createeffector.cpp:
+	CreateEffector creates an AgentState node
 
-	* lib/oxygen/gamecontrolserver/predicate.cpp: 
-	- added ParameterName functional class implementation (for use as STL
-	  predicate) 
-	- added FindParameter implementation
+	* plugin/soccer/export.cpp: 
+	exporting class AgentState
 
-	* lib/oxygen/gamecontrolserver/predicate.h: 
-	- removed GetNthValue
-	- changed FindParameter to find the first element of 
-	  Predicate::parameter that can be casted to a TParameterList, which
-	  (again) contains a first element that can be casted to a
-	  std::string and is equal to the given name.  
-	- moved parts of the implementation into predicate.cpp
+	* plugin/soccer/initeffector/initeffector.cpp:
+	changed the InitEffector to store the team name and uniform number
+	in an AgentState
+
+	* plugin/soccer/Makefile.am: added AgentState related files
+	added /plugin to the include path for the soccer bundle
+
+	* plugin/soccer/agentstate/.cvsignore,
+	* plugin/soccer/agentstate/agentstate.cpp,
+	* plugin/soccer/agentstate/agentstate.h,
+	* plugin/soccer/agentstate/agentstate_c.cpp:
+	added AgentState plugin. This class should store all agent
+	specific state and data, like the agents team name and uniform
+	number.
+
+	* app/spadestest/spadestest.rb, app/simulator/simulator.rb:
+	importing soccer bundle
+
+	* configure.ac:
+	removed Makefiles of InitEffector and CreateEffector as they now are part of
+	the same bundle
+
+	* plugin/soccer/export.cpp: New file.
+
+	* plugin/soccer/Makefile.am,
+	* plugin/soccer/createeffector/Makefile.am,
+	* plugin/soccer/createeffector/export.cpp, plugin/soccer/export.cpp,
+	* plugin/soccer/initeffector/Makefile.am,
+	* plugin/soccer/initeffector/export.cpp:
+	moved soccer specific plugins into one bundle
+
+2003-12-29  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/gamecontrolserver/predicate.cpp:
+	ParameterName now works with a ParameterList reference instead of
+	a new copy
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	ParameterName now uses a reference to the ParameterList instead of
+	generating a complete copy
+
+	* app/rcssmonitor3d/main.cpp: 
+	adapted to use Predicate::Iterator
+
+	* plugin/soccer/initeffector/initeffector.cpp:
+	adapted GetActionObject() to simpler GetValue() syntax
+
+	* lib/oxygen/gamecontrolserver/predicate.cpp, 
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	added class Predicate::Iterator encapsulating a
+	TParameterList::const_iterator. Adapted FindParameter and GetValue
+	to use Predicate::iterator. Added GetValue(string name, value) to
+	cover most common use case of FindParameter/GetValue combo.
+
+	* lib/oxygen/Makefile.am: 
+	added gamecontrolserver/predicate.cpp
+
+2003-12-27  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	added GetValue for unsigned int
+
+	* app/rcssmonitor3d/communit.cpp: setting up rcss::net::SocketStreamBuf
+	changed GetMessage to use SocketStreamBuf
+
+	* app/rcssmonitor3d/communit.h: using rcss::net::SocketStreamBuf
+
+	* app/rcssmonitor3d/commserver.cpp: adapted to CommUnit change
+
+	* plugin/monitortest/monitortest.cpp: removed debug output
+	delimiting generated string with \n
 
 2003-12-27  Oliver Obst  <fruit@robolog.org>
 
