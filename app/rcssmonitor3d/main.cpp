@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.9 2004/01/29 13:20:22 heni Exp $
+   $Id: main.cpp,v 1.3.2.10 2004/01/31 15:05:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ char* gSoccerServer = DEFAULT_HOST;
 int gOldX           = DEFAULT_MOUSE_POSX;
 int gOldY           = DEFAULT_MOUSE_POSY;
 
-// automatic camera 
+// automatic camera
 bool gAutoCam       = DEFAULT_AUTO_CAM;
 
 // window width and height
@@ -195,8 +195,8 @@ bool parseInfoHeader(shared_ptr<Predicate::TList> predicates)
 
 //----------------------drawScene----------------------------------------------
 //
-// Draws all object in given predicate onto the screen 
-//------------------------------------------------------------------------------ 
+// Draws all object in given predicate onto the screen
+//------------------------------------------------------------------------------
 void drawScene(shared_ptr<Predicate::TList> predicates)
 {
     static const struct ObjType
@@ -270,8 +270,8 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
                 {
                     continue;
                 }
-            
-            // if 'automatic-camera' is on 
+
+            // if 'automatic-camera' is on
             // we set the camera to look at the ball
             if(predicate.name =="ball" && gAutoCam)
                     gGLServer.SetLookAtPos(pos);
@@ -340,17 +340,17 @@ void display(void)
 
    // get messages sent from server
    shared_ptr<Predicate::TList> predicates = gCommServer->GetPredicates();
-   
+
    // if we still didn't parse the init string
    // we do so and set the readInit to 'false'
    // such that we don't have to parse it twice
-   if (readInit) 
+   if (readInit)
        {
            if(parseInfoHeader(predicates))
                readInit = false;
        }
 
-   // draw cached positions 
+   // draw cached positions
    drawScene(predicates);
 
    glutSwapBuffers();
@@ -390,7 +390,7 @@ void mouseMotion(int x, int y)
 }
 
 //------------------------------keyboad-------------------------------------
-// 
+//
 // processing of keyboard input
 // Button Descr. :
 //     + if 'w' is pressed the camera will move in
@@ -421,14 +421,11 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
       gGLServer.MoveCamStrafe(-camDelta);
       break;
   case 'c':
-      //toggle autocam on
-      gAutoCam = true;
-      cout <<"----AUTOMATIC CAMERA ON----"<<endl;
-      break;
-  case 'C':
-      //toggle autocam off
-      gAutoCam = false;
-      cout <<"----AUTOMATIC CAMERA OFF---"<<endl;
+      //toggle autocam mode
+      gAutoCam = !gAutoCam;
+      cout <<"--- AUTOMATIC CAMERA ";
+      cout << gAutoCam ? "ON" : "OFF";
+      cout << " ----" << endl;
       break;
   default:
       break;
@@ -495,7 +492,7 @@ int main(int argc, char* argv[])
       }
 
   gCommServer->Init("SexpParser",gSoccerServer,gPort);
-   
+
   // enter glut main loop
   glutMainLoop();
 
