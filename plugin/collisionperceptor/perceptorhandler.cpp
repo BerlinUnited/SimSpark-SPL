@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptorhandler.cpp,v 1.1.2.1 2004/01/12 14:50:06 rollmark Exp $
+   $Id: perceptorhandler.cpp,v 1.1.2.2 2004/01/12 17:42:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "perceptorhandler.h"
+#include "collisionperceptor.h"
 #include <oxygen/physicsserver/collider.h>
-#include <oxygen/agentaspect/collisionperceptor.h>
 #include <oxygen/sceneserver/transform.h>
 
 using namespace oxygen;
