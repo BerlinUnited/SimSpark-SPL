@@ -203,6 +203,13 @@ lib/salt/gcc/.deps
 lib/salt/gcc/.dirstamp
 lib/salt/gcc/.libs
 lib/salt/gcc/*.lo
+lib/spark/.deps
+lib/spark/.libs
+lib/spark/Makefile
+lib/spark/Makefile.in
+lib/spark/kerosin-config
+lib/spark/libkerosin*.la
+lib/spark/libkerosin*.lo
 lib/zeitgeist/*.la
 lib/zeitgeist/*.lo
 lib/zeitgeist/.deps
