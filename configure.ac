@@ -123,6 +123,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/sexpparser/Makefile \
 		 plugin/soccer/Makefile \
 		 plugin/soundsystemfmod/Makefile \
+		 plugin/collisionperceptor/Makefile \
 		 app/Makefile \
 		 app/agenttest/Makefile \
 		 app/coretest/Makefile \
