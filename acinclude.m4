@@ -296,9 +296,9 @@ AC_DEFUN(RCSS_BUILD_KEROSIN_INIT, [
 	# --enable-kerosin
 	AC_ARG_ENABLE(kerosin,
 		AC_HELP_STRING([--enable-kerosin=@<:@yes|no@:>@],       
-	 		       [whether to compile libkerosin (default is yes)]),
+	 		       [whether to compile libkerosin (default is no)]),
 		    [rcss_build_kerosin="$enableval"],
-		    [rcss_build_kerosin=yes]
+		    [rcss_build_kerosin=no]
 	)
 	if test "$rcss_build_kerosin" = yes; then
 		AC_MSG_NOTICE([Checking prerequisites for kerosin (building kerosin is optional)])
