@@ -57,6 +57,7 @@ gamecontrolserver/baseparser.cpp \
 gamecontrolserver/baseparser_c.cpp \
 gamecontrolserver/gamecontrolserver.cpp \
 gamecontrolserver/gamecontrolserver_c.cpp \
+gamecontrolserver/predicate.cpp \
 oxygen.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
