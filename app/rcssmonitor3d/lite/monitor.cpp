@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+ /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.17 2004/07/21 09:08:18 rollmark Exp $
+   $Id: monitor.cpp,v 1.18 2005/01/24 12:36:26 anita_maas Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
 #include <sstream>
 #include <soccer/soccertypes.h>
 #include <types.h>
+#include <unistd.h>
+#include "GL/glut.h"
 
 void
 display()
@@ -139,6 +141,8 @@ Monitor::Monitor(std::string rel_path_prefix)
     mLogserver = false;
     mSingleStep = false;
     mAdvance = false;
+    mRealTime = true;
+    mDiffTime = 0;
 
     FlagInfo fi;
     fi.mOffset = Vector3f(0,0,0);
@@ -693,6 +697,7 @@ Monitor::Display()
 {
 
 
+    
     const Vector3f szGoal1 = mGameState.GetGoalSize(false);
     const Vector3f szGoal2 = mGameState.GetGoalSize(true);
 
@@ -832,6 +837,8 @@ Monitor::Display()
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     // (end 2D Elements)
+    
+   
 
 
     glutSwapBuffers();
@@ -945,6 +952,17 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         // show keybindings
         KeyBindings();
         break;
+	
+    case 'f' :
+        // fast
+	mRealTime = false;
+        break;
+	
+    case 'F' :
+        // slow
+	mRealTime = true;
+	mDiffTime = DiffTime() ;
+        break;
 #if 0
     case 'v':
         mCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
@@ -1000,16 +1018,62 @@ Monitor::Reshape(int width, int height)
     mGLServer.Reshape(width,height);
 }
 
+long int
+Monitor::DiffTime()
+{
+	
+    int time;
+    unsigned int utime, ugametime;
+    float gametime;
+    
+	 
+    time = glutGet(GLUT_ELAPSED_TIME) * 1000;// millisec (0,001) --> micro
+    utime = (unsigned int) time;
+   
+    gametime = mGameState.GetTime() * 1000000; // sec (in float) -->microsec (0,000001)
+    ugametime = (unsigned int) gametime;
+    
+    return ugametime - utime;
+}
+
 void
 Monitor::Idle()
 {
 
-    usleep (10);
-
+     	
+    int time;
+    unsigned int utime, ugametime;
+    float gametime;
+    
+	 
+    time = glutGet(GLUT_ELAPSED_TIME) * 1000;// millisec (0,001) --> micro
+    utime = (unsigned int) time;
+   
+    gametime = mGameState.GetTime() * 1000000; // sec (in float) -->microsec (0,000001)
+    ugametime = (unsigned int) gametime;
+    
+      
+    if (DiffTime() - mDiffTime  > 0)   
+    {
+       cout << DiffTime() << " " << mDiffTime << endl;
+    
+       if (mRealTime)
+       {
+       
+           usleep(DiffTime() - mDiffTime);
+       }
+       
+       else
+       
+           usleep(10);
+    }
+    
+        
+    
     // If we are in singlestep mode and not advancing then return
     if (mLogserver && mSingleStep && !mAdvance)
         return;
-
+ 
     if (mGameState.IsFinished())
     {
         cerr << "simulation finished... monitor exiting\n";
@@ -1038,10 +1102,12 @@ Monitor::Idle()
         mGameState.ProcessInput(predicates);
 
         mAdvance = false;
+	  
 
         glutPostRedisplay();
 
 }
+
 
 Monitor::ECameraMode
 Monitor::NextCameraMode(ECameraMode mode) const
