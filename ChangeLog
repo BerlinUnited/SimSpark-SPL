@@ -1,3 +1,10 @@
+2003-11-14  Oliver Obst  <fruit@robolog.org>
+
+	* configure.ac: 
+	the PREFIX preprocessor variable was set to NONE
+	if no --prefix was given to configure on the command line. In this
+	case the autoconf default prefix is used now ($ac_default_prefix).
+
 2003-11-14  Markus Rollmann  <rollmark@uni-koblenz.de>
 	- Modified the startup behaviour of the libraries wrt the handling
 	of the ruby scripts that are automatically started.
