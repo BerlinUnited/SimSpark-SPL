@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.6 2004/04/22 14:18:36 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.7 2004/04/23 13:23:20 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -106,10 +106,6 @@ public:
         has advanced deltaTime seconds. The GameControlServer will in turn
         update all registered GameControlAspects below it. */
     void Update(float deltaTime);
-    /** This method is called when the simulation is up and running.
-        It is called from the simulation controller (aka SpadesServer).
-        It is used to update all registered GameControlAspects below. */
-    void StartUpHook();
 
 protected:
     /** helper method that queries the SceneServer for the currently

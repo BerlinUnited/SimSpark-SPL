@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.10 2004/04/15 15:52:32 fruit Exp $
+   $Id: spadesserver.cpp,v 1.11 2004/04/23 13:26:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ using namespace std;
 SpadesServer::SpadesServer() :
     zeitgeist::Node(), spades::WorldModel(),
     mSimEngine(0), mSimulationModeChanged(false),
-    mOffsetCreateSense(0),mNextInitialCreateSense(0)
+    mOffsetCreateSense(0),mNextInitialCreateSense(0),
+    mStartUpHookTime(10)
 {
 }
 
@@ -91,7 +92,6 @@ SpadesServer::OnLink()
 
     // cache frequently queried ruby values here
     mTimePerStep = 0.01f;
-    GetScript()->GetVariable("Spades.TimePerStep", mTimePerStep);
 }
 
 void
@@ -136,7 +136,7 @@ SpadesServer::GetRunIntegratedCommserver() const
 int
 SpadesServer::GetMonitorInterval() const
 {
-    int monitor_interval = 4;
+    int monitor_interval = 10;
     GetScript()->GetVariable("Spades.MonitorInterval", monitor_interval);
 
     return monitor_interval;
@@ -474,8 +474,12 @@ SpadesServer::notifyCommserverConnect(ServerID /*s*/)
 }
 
 void
-SpadesServer::notifyCommserverDisconnect(ServerID /*s*/
-    )
+SpadesServer::notifyCommserverDisconnect(ServerID /*s*/)
 {
 }
 
+void
+SpadesServer::UpdateCached()
+{
+    GetScript()->GetVariable("Spades.TimePerStep", mTimePerStep);
+}
