@@ -2,6 +2,7 @@
 \usepackage{fancyheadings}
 \usepackage{natbib}
 \usepackage{pstricks}
+\usepackage{todo}
 
 \oddsidemargin0.5cm
 \textwidth15.5cm
@@ -15,10 +16,12 @@
 \begin{document}
 
 \title{New Soccer Server Initiative}
-\author{Artur Merke, Oliver Obst, Martin Riedmiller, Tom Howard, ...}
+\author{Artur Merke, Oliver Obst, Martin Riedmiller, Tom Howard,
+  Patrick Riley, ...}
 
 \maketitle
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Main Statement}
 
 The current soccer-server is a suited testbed for principle research
@@ -40,6 +43,7 @@ Therefore, we propose the following
 \item Develop a new simulator from scratch (Features below)
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Features of the New Simulator}
 
 Central Idea: Open-Source Development of a new simulator environment
@@ -65,6 +69,7 @@ To be suited as a scientific testbed, the simulator should show the basic featur
 \item 3 D
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Requirements and Directions}
 
 \begin{itemize}
@@ -94,6 +99,7 @@ modules to gain flexibility below have been described in
   follows}.
 
 
+%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Console Subsystem}
 
 The console subsystem is used for online configuration of soccer
@@ -103,6 +109,7 @@ The console subsystem is also responsible for printing and redirecting
 store configuration variables.
 
 
+%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Variable Subsystem}
 
 The variable subsystem stores the console variables and provides
@@ -114,12 +121,15 @@ modules of soccer server 3D. The console variable callback mechanism
 can execute methods within soccer server 3D whenever the value of the
 respective console variable changes.
 
+%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Forwarder Subsystem}
 
 The forwarder subsystem is used to print and redirect messages
 intended to be read by humans.
 
+%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Scene Graph (Tree)}
+\label{sec:scene_graph}
 
 Entities and their spatial relation are stored in a tree
 structure (scene graph), where each node contains an entity, the pose
@@ -139,7 +149,9 @@ pose without further changes within the scene graph.
 
 
 
+%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{World Objects}
+\label{sec:world_objects}
 
 \begin{itemize}
 \item entity\\
@@ -171,6 +183,7 @@ pose without further changes within the scene graph.
 
 
 
+%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Rule System}
 
 The simulator will also need a way of representing the various rules that
@@ -224,7 +237,59 @@ changed for another reason), it is replaced by the original goal scoring rule.
   \end{itemize}
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Robot Models}
+\label{sec:robot_models}
+% added by pfr@cs.cmu.edu aka patstg@users.sf.net 8/07/2002
 
+A robot model object should encapsulate the physical existence of a
+simulated robot, and all interaction between the agent's ``brain'' and
+the simulated body. The important components are:
+
+\begin{itemize}
+ \item The segment of the scene graph (Section~\ref{sec:scene_graph})
+  corresponding to this robot. \todo{It's actually not clear to me
+  where this data should live. Maybe there's a global graph that we
+  have a pointer into for this?}
+  
+ \item The control loop. This is a function which should get called
+  every simulator step (or at least on a small, regular interval)
+  which provides low level control of a robot. The idea is that the
+  control loops handles the physical manipulation of the robot given a
+  higher level command from the agent's brain. Notably, we can allow
+  violation of physics here. For example, we can have magic 'balancing
+  forces' to keep a humanoid standing upright. This allows us to do
+  things which aren't currently physically possible (such as a running
+  humanoid) and still get something that is physically somewhat
+  reasonable. The key is that this bit of magic is standard across all
+  agents, so even though it's not pure physics, it's still standard.
+  
+  For example, an agent may send a velocity request to the control
+  loop. The control loop then modifies the wheel torques to attempt to
+  reach that velocity. Alternatively, a magic force is applied to
+  accelerate the robot in the desired direction.
+
+  This allows us to have tight control loops (which are necessary for
+  good performance of the robot) while still not having to interact
+  with the agent's brain every simulator step (which would cause poor
+  efficiency in the simulation, especially if the brain is distributed
+  to a different machine).
+
+ \item Action request reception. The brain of the agent should send
+  higher level commands than joint angle requests and motor
+  voltages. Action requests are received here and change parameters
+  for the control loop, which then physically causes the
+  change. \todo{I'm not sure what format the action requests should
+    be. We could send a text string and let the robot model do the
+    parsing, but that seems ugly to have parsing all spread out like
+    that. Alternatively, we could have some virtual base Action class
+    that robot model actions have to inherit from. We'd get some
+    dynamic casting ugliness there though}
+
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliography{simulator3d}
 
 \bibliographystyle{plain}
