@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYGRAPH_GEOMETRYNODE_H
-#define RCSS_ENTITYGRAPH_GEOMETRYNODE_H
+#ifndef RCSS_ENTITY_GEOMETRYNODE_H
+#define RCSS_ENTITY_GEOMETRYNODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,12 +29,13 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0
 }}
 #endif
 
+class DirNode;
 class WorldNode;
 
 class GeometryNode : public BaseNode
@@ -42,17 +43,20 @@ class GeometryNode : public BaseNode
 public:
     GeometryNode(WorldNode& world_node,
                  const std::string& name = "<unknown>",
-                 BaseNode* parent = 0);
+                 DirNode* parent = 0);
 
     ~GeometryNode();
 
     dGeomID getID();
     
+    void setBody(dBodyID body_id);
+    dBodyID getBody() const;
+
 protected:
     GeometryNode(WorldNode& world_node,
                  NodeType node_type,
                  const std::string& name = "<unknown>",
-                 BaseNode* parent = 0);
+                 DirNode* parent = 0);
 
     dGeomID M_geometry_id;
 };
