@@ -6,6 +6,7 @@ importBundle "createeffector"
 # the CreateEffector uses these plugins
 importBundle "perfectvisionperceptor"
 importBundle "forceeffector"
+importBundle "initeffector"
 
 #
 # Init
