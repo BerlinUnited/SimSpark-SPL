@@ -1,1 +1,4 @@
-SUBDIRS = glextgen libobj sfsexp
+SUBDIRS = glextgen \
+	  libobj \
+	  rcssnet \
+	  sfsexp
