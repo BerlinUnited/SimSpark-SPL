@@ -21,7 +21,7 @@ main(int argc, const char *const *argv)
 
     // run the init scripts
     shared_ptr<ScriptServer> scriptServer = zg.GetCore()->GetScriptServer();
-    scriptServer->Run("rcssserver3D.rb");
+    scriptServer->RunInitScript("rcssserver3D.rb", "../simulator");
 
 #ifdef HAVE_SPADES_HEADERS
     shared_ptr<oxygen::SpadesServer> spadesServer =
