@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.2.2.1 2003/12/29 17:53:16 rollmark Exp $
+   $Id: predicate.h,v 1.2.2.2 2004/01/15 21:03:38 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ public:
         use the generic FindParameter/GetValue functions.
 
         \param name Name of the parameter to find.
-        \param T reference to the value, that will receive the
+        \param value reference to the value that will receive the
         parameter value on success
         \return true if parameter name was found.
      */
@@ -267,7 +267,7 @@ public:
         interprete a single element of the TParameterList as a
         TVector. If this fails it tries to build a vector from a
         sequence of values in the TParameterList. Depending on the way
-        the Vector is built the \param iter is incremented either by
+        the Vector is built iter is incremented either by
         one element or the number scalar elements that make up a
         vector of the given type.
 
@@ -277,6 +277,10 @@ public:
         common case of a float vector this enables GetVectorValue to
         handle any mixture of float and string representation within
         the TParameterList.
+
+        \param iter
+        \param value a vector extracted from a parameter list
+        \return true if extraction successful
      */
     template <typename DATATYPE, int ELEMENTS, typename TYPE> f_inline bool
     GetVectorValue(Iterator& iter,

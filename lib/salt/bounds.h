@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bounds.h,v 1.5 2003/11/14 14:05:54 fruit Exp $
+   $Id: bounds.h,v 1.5.8.1 2004/01/15 21:02:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -217,7 +217,9 @@ public:
     f_inline BoundingSphere(const Vector3f &pos, float rad)
         : center(pos), radius(rad), radiusSq(rad*rad) {}
 
-    /** constructs a sphere around pos with radius rad
+    /** Constructs a bounding sphere
+     *  \param pos The position where the sphere is constructed
+     *  \param rad is the radius of the sphere
      *  \param radSq is the user supplied square of rad
      */
     f_inline BoundingSphere(const Vector3f &pos, float rad, float radSq)
