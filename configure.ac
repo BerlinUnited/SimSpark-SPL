@@ -128,6 +128,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/fonttest/Makefile \
 		 app/inputtest/Makefile \
 		 app/scenetest/Makefile \
+		 app/simulator/Makefile \
 		 app/spadestest/Makefile \
 		 app/rcssmonitor3d/Makefile \
 		 app/zeitgeisttest/Makefile \
