@@ -6,8 +6,8 @@ AC_CONFIG_AUX_DIR([config.aux])
 
 AM_INIT_AUTOMAKE([gnu subdir-objects])
 AC_LANG([C++])
-AM_ENABLE_SHARED(no)
-AM_ENABLE_STATIC(yes)
+AM_ENABLE_SHARED(yes)
+AM_ENABLE_STATIC(no)
 
 AC_ARG_ENABLE(debug,
      AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
@@ -23,6 +23,7 @@ AC_PROG_CXX
 AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
+AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 AC_PROG_AWK
 
@@ -80,7 +81,7 @@ AC_FUNC_SETVBUF_REVERSED
 AC_FUNC_VPRINTF
 AC_CONFIG_LIBOBJ_DIR(./utility/libobj/)
 AC_REPLACE_FUNCS([_vsnprintf])
-AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr])
+AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr strupr])
 
 ## checks for system services
 AC_PATH_X
