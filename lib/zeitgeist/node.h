@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.h,v 1.10 2004/04/29 12:27:32 rollmark Exp $
+   $Id: node.h,v 1.11 2004/05/05 07:53:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -81,6 +81,9 @@ public:
 
     /** returns false to indicate that this node isn't a lead */
     virtual bool IsLeaf() const;
+
+    /** update variables from a script */
+    virtual void UpdateCached();
 
     /** removes base from the set of children. */
     virtual void RemoveChildReference(const boost::shared_ptr<Leaf> &base);

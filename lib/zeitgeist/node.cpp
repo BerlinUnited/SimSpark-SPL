@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.cpp,v 1.10 2004/04/30 09:26:05 rollmark Exp $
+   $Id: node.cpp,v 1.11 2004/05/05 07:53:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -263,3 +263,20 @@ Leaf::TLeafList::const_iterator Node::end() const
 {
         return mChildren.end();
 }
+
+void Node::UpdateCached()
+{
+    // update all Leaves found
+    for (TLeafList::iterator iter = begin();
+         iter != end();
+         ++iter
+         )
+        {
+            // node specific update
+            (*iter)->UpdateCachedInternal();
+
+            // recurse
+            (*iter)->UpdateCached();
+        }
+}
+
