@@ -5,7 +5,7 @@
 inputServer = get('/sys/server/input');
 
 if (inputServer == nil)
-  print "(bindings.rb) cannot find the InputServer)\n";
+  print "(bindings.rb) ERROR: cannot find the InputServer\n";
 else
   print "(bindings.rb) setting up bindings\n";
 
