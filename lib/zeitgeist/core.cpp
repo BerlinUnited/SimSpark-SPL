@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.13 2004/04/24 11:57:32 rollmark Exp $
+   $Id: core.cpp,v 1.14 2004/04/29 12:22:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,19 +43,15 @@ using namespace zeitgeist;
 
 /** Create the fundamental classes needed for the hierarchy to operate
  */
-Core::Core() : mClassClass(new CLASS(Class))
+Core::Core()
 {
+    mClassClass = shared_ptr<Class>(new CLASS(Class));
+    mClassClass->Construct(mClassClass, shared_ptr<Class>());
 }
 
 Core::~Core()
 {
-    mRoot.reset();
-    mFileServer.reset();
-    mLogServer.reset();
-    mScriptServer.reset();
-    mNodeClass.reset();
     mBundles.clear();
-    cout << "(Core) End" << endl;
 }
 
 void Core::Construct(const boost::weak_ptr<Core>& self)
@@ -99,6 +95,22 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
     // create the random server
     mRandomServer = shared_static_cast<RandomServer>
         (context->New("zeitgeist/RandomServer", "/sys/server/random"));
+}
+
+void Core::Desctruct()
+{
+    // destruct hierarchy
+    mRoot.reset();
+
+    // reset server references
+    mRandomServer.reset();
+    mClassClass.reset();
+    mNodeClass.reset();
+    mFileServer.reset();
+    mLogServer.reset();
+    mScriptServer.reset();
+
+    cout << "(Core) End" << endl;
 }
 
 boost::shared_ptr<CoreContext> Core::CreateContext()

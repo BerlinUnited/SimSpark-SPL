@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.h,v 1.6 2004/04/08 13:37:39 rollmark Exp $
+   $Id: core.h,v 1.7 2004/04/29 12:22:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,6 +65,10 @@ public:
         servers for the basic services
     */
     void Construct(const boost::weak_ptr<Core>& self);
+
+    /** Destructs the core, i.e. unlinks the hierarchy below the root
+        object */
+    void Desctruct();
 
     /** creates a context for this Core */
     boost::shared_ptr<CoreContext> CreateContext();
