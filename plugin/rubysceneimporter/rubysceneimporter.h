@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.2 2004/04/10 09:22:00 rollmark Exp $
+   $Id: rubysceneimporter.h,v 1.3 2004/04/12 13:52:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,12 +28,30 @@
 
 class RubySceneImporter : public oxygen::SceneImporter
 {
+protected:
+    //! mapping from parameter name to parameter index
+    typedef std::map<std::string, int> TParameterMap;
+
+    //! a parameter environment
+    struct ParamEnv
+    {
+        TParameterMap parameterMap;
+        boost::shared_ptr<zeitgeist::ParameterList> parameter;
+
+        ParamEnv();
+        ParamEnv(boost::shared_ptr<zeitgeist::ParameterList> p)
+            : parameter(p) {};
+    };
+
+    typedef std::list<ParamEnv> TParameterStack;
+
 public:
     RubySceneImporter();
     virtual ~RubySceneImporter();
 
     virtual bool ImportScene(const std::string& fileName,
-                             boost::shared_ptr<oxygen::BaseNode> root);
+                             boost::shared_ptr<oxygen::BaseNode> root,
+                             boost::shared_ptr<zeitgeist::ParameterList> parameter);
 
 protected:
     bool ReadHeader(sexp_t* sexp);
@@ -42,6 +60,11 @@ protected:
     bool ReadMethodCall(sexp_t** _sexp, boost::shared_ptr<oxygen::BaseNode> node);
     boost::shared_ptr<oxygen::BaseNode> CreateNode(sexp_t* sexp);
     bool InvokeMethods(sexp_t** sexp, boost::shared_ptr<oxygen::BaseNode> node);
+    bool ParseTemplate(sexp_t** sexp);
+
+    void PushParameter(boost::shared_ptr<zeitgeist::ParameterList> parameter);
+    void PopParameter();
+    ParamEnv& GetParamEnv();
 
 protected:
     /** the major version of the scen graph file */
@@ -52,6 +75,9 @@ protected:
 
     /** the last supplied fileName */
     std::string mFileName;
+
+    /** a stack of parameter environments */
+    TParameterStack mParameterStack;
 };
 
 DECLARE_CLASS(RubySceneImporter);

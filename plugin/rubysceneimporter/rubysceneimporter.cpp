@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.2 2004/04/10 09:21:59 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.3 2004/04/12 13:52:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ using namespace std;
 /**
     (RubySceneGraph <version major> <version minor>)
     (
+    (Template varName1 varName2 ...)
     (NodeName
         .MethodCall param param ...
         .MethodCall param ...
@@ -59,7 +60,8 @@ RubySceneImporter::~RubySceneImporter()
 }
 
 bool RubySceneImporter::ImportScene(const std::string& fileName,
-                                    shared_ptr<BaseNode> root)
+                                    shared_ptr<BaseNode> root,
+                                    shared_ptr<ParameterList> parameter)
 {
     // try to open the file
     shared_ptr<salt::RFile> file = GetFile()->Open(fileName);
@@ -96,6 +98,8 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
         }
 
     // advance to next sexpression- the scene graph
+    PushParameter(parameter);
+
     destroy_sexp(sexp);
     sexp = iparse_sexp(buffer.get(),file->Size(),pcont);
 
@@ -104,7 +108,41 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
     destroy_sexp(sexp);
     destroy_continuation(pcont);
 
+    PopParameter();
     return ok;
+}
+
+void RubySceneImporter::PushParameter(shared_ptr<ParameterList> parameter)
+{
+    mParameterStack.push_back(ParamEnv(parameter));
+}
+
+void RubySceneImporter::PopParameter()
+{
+    if (mParameterStack.empty())
+        {
+            GetLog()->Debug()
+                << "(RubySceneImporter) ERROR: PopParameter "
+                << "called on empty stack\n";
+            return;
+        }
+
+    mParameterStack.pop_back();
+}
+
+RubySceneImporter::ParamEnv& RubySceneImporter::GetParamEnv()
+{
+    if (mParameterStack.empty())
+        {
+            GetLog()->Debug()
+                << "(RubySceneImporter) ERROR: GetParamEnv "
+                << "called on empty stack\n";
+
+            static ParamEnv nullEnv;
+            return nullEnv;
+        }
+
+    return mParameterStack.back();
 }
 
 bool RubySceneImporter::ReadHeader(sexp_t* sexp)
@@ -261,6 +299,7 @@ bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
     (*sexp) = (*sexp)->next;
 
     // collect the parameters
+    const ParamEnv& env = GetParamEnv();
     ParameterList parameter;
 
     while (
@@ -280,6 +319,49 @@ bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
                     break;
                 }
 
+            if (param[0] == '$')
+                {
+                    // replace a template parameter
+                    param.erase(param.begin(),param.begin()+1);
+                    TParameterMap::const_iterator iter = env.parameterMap.find(param);
+
+                    if (iter == env.parameterMap.end())
+                        {
+                            GetLog()->Error()
+                                << "(RubySceneImporter) ERROR: in file '"
+                                << mFileName
+                                << "': unknown parameter '"
+                                << param << "'\n";
+                            return false;
+                        }
+
+                    int idx = (*iter).second;
+
+                    if (idx >= env.parameter->GetSize())
+                        {
+                            GetLog()->Error()
+                                << "(RubySceneImporter) ERROR: in file '"
+                                << mFileName
+                                << "': parameter value '"
+                                << param << "' not supplied\n";
+                            return false;
+                        }
+
+                    string value;
+                    ParameterList::TVector::const_iterator pIter = (*env.parameter)[idx];
+                    if (! env.parameter->AdvanceValue(pIter,value))
+                        {
+                            GetLog()->Error()
+                                << "(RubySceneImporter) ERROR: in file '"
+                                << mFileName
+                                << "': failed to read parameter value '"
+                                << param << "'\n";
+                            return false;
+                        }
+
+                    param = value;
+
+                }
             parameter.AddValue(param);
             (*sexp) = (*sexp)->next;
         }
@@ -336,6 +418,65 @@ bool RubySceneImporter::InvokeMethods(sexp_t** sexp, shared_ptr<BaseNode> node)
     return true;
 }
 
+bool RubySceneImporter::ParseTemplate(sexp_t** sexp)
+{
+    if (
+        (sexp == 0) ||
+        ((*sexp) == 0) ||
+        ((*sexp)->val == 0) ||
+        (string((*sexp)->val) != "Template")
+        )
+        {
+            return false;
+        }
+
+
+    (*sexp) = (*sexp)->next;
+    ParamEnv& env = GetParamEnv();
+
+    while (
+           ((*sexp) != 0) &&
+           ((*sexp)->ty == SEXP_VALUE)
+           )
+        {
+            string param = (*sexp)->val;
+
+            if (param.size() == 0)
+                {
+                    (*sexp) = (*sexp)->next;
+                    continue;
+                }
+
+            if (
+                (param[0] != '$') ||
+                (param.size() < 2)
+                )
+                {
+                    GetLog()->Error()
+                        << "(RubySceneImporter) ERROR: in file '" << mFileName
+                        << "': template parameter name expected\n";
+                    return false;
+                }
+
+            param.erase(param.begin(),param.begin()+1);
+            TParameterMap::const_iterator iter = env.parameterMap.find(param);
+
+            if (iter != env.parameterMap.end())
+                {
+                    GetLog()->Error()
+                        << "(RubySceneImporter) ERROR: in file '" << mFileName
+                        << "': duplicate template parameter name '" << param << "'\n";
+                    return false;
+                }
+
+            int idx = env.parameterMap.size();
+            env.parameterMap[param] = idx;
+            (*sexp) = (*sexp)->next;
+        }
+
+    return true;
+}
+
 bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 {
     if (sexp == 0)
@@ -353,17 +494,36 @@ bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                 case SEXP_VALUE:
                     if (firstValue)
                         {
-                            // a node declaration
-                            node = CreateNode(sexp);
-
-                            if (node.get() == 0)
+                            firstValue = false;
+                            if (sexp->val == 0)
                                 {
                                     return false;
                                 }
+                            string name(sexp->val);
 
-                            // add node to the scene graph
-                            root->AddChildReference(node);
-                            root = node;
+                            if (name == "Template")
+                                {
+                                    // a template declaration
+                                    if (! ParseTemplate(&sexp))
+                                        {
+                                            return false;
+                                        }
+                                    continue;
+                                } else
+                                    {
+
+                                        // a node declaration
+                                        node = CreateNode(sexp);
+
+                                        if (node.get() == 0)
+                                            {
+                                                return false;
+                                            }
+
+                                        // add node to the scene graph
+                                        root->AddChildReference(node);
+                                        root = node;
+                                    }
                         } else
                             {
                                 // list of method invokations
@@ -374,8 +534,6 @@ bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 
                                 continue;
                             }
-
-                    firstValue = false;
                     break;
 
                 case SEXP_LIST:
