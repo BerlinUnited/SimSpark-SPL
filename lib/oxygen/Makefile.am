@@ -16,11 +16,13 @@ spadesserver/spadesserver.cpp \
 spadesserver/spadesserver_c.cpp \
 spadesserver/paramreader.cpp \
 spadesserver/paramreader_c.cpp \
-spadesserver/paramstorer.cpp
+spadesserver/paramstorer.cpp \
+spadesserver/spadescreatesenseevent.cpp \
 spades_headers = \
 spadesserver/spadesserver.h \
 spadesserver/paramreader.h \
-spadesserver/paramstorer.h
+spadesserver/paramstorer.h \
+spadesserver/spadescreatesenseevent.h \
 spades_libs = -lspades
 else
 spades_sources =
@@ -99,6 +101,7 @@ agentaspect/perceptor.h \
 controlaspect/controlaspect.h \
 gamecontrolserver/gamecontrolserver.h \
 gamecontrolserver/baseparser.h \
+gamecontrolserver/actionobject.h \
 oxygen.h \
 physicsserver/body.h \
 physicsserver/boxcollider.h \
