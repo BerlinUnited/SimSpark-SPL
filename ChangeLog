@@ -1,3 +1,53 @@
+2004-02-20  rollmark  <rollmark@vader>
+
+	* app/rcssmonitor3d/main.cpp:
+	- cosmetic change: use STR_PM_Unknown instead of a string constant
+
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	- changed method GetVariable to return a GCValue
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	cleaned up the scriptserver
+	- changed method GetVariable to return a GCValue object
+	- various formatting fixes
+	- use the GCValue wrapper instead of VALUE wherever possible
+	- properly report ruby error messages
+
+	* lib/zeitgeist/scriptserver/rubywrapper.cpp:
+	* lib/zeitgeist/scriptserver/rubywrapper.h:
+	- added struct RbArguments, a structure that describes a ruby
+	function call
+	- added function RbFuncallWrap, RbEvalStringWrap, RbGetError and RbPrintError
+
+	* lib/zeitgeist/scriptserver/gcvalue.cpp:
+	* lib/zeitgeist/scriptserver/gcvalue.h:
+	- added class GCValue, a ruby VALUE wrapper. It is responsible to
+	register and unregister the wrapped value as busy with the ruby
+	garbage collector.
+
+	* lib/zeitgeist/Makefile.am:
+	- added gcvalue.h gcvalue.cpp and rubywrapper.cpp
+
+2004-02-19  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/agenttest/main.cpp:
+	- moved zeitgeist and oxygen init into main(). They should not go
+	out of scope after init()
+
+	* plugin/soccer/beameffector/beameffector.cpp:
+	- fixed the check that an agent can only beam within it's own
+	field half and fixed the conversion into the internal coordinate
+	system: A max check was missing and the check used the wrong
+	coordinate system. Additionally the conversion to the global
+	internal coordinate system was wrong.
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	- reset mGoalState to TI_NONE if checks for both goal collider
+	fail
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- added missing cases for PM_Goal_Left and in PM_Goal_Right
+
 2004-02-19  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
@@ -8,13 +58,6 @@
 	- added missing cases for PM_Goal_Left and in PM_Goal_Right
 
 2004-02-18  Markus Rollmann  <rollmark@uni-koblenz.de>
-
-	* lib/oxygen/spadesserver/spadesserver.h: 
-	- added member mTimePerStep
-
-	* lib/oxygen/spadesserver/spadesserver.cpp:
-	- cache the Spades.TimePerStep value in the mTimePerStep intstead
-	of repeatedly querying the ScriptServer
 
 	* lib/oxygen/spadesserver/spadesserver.h: 
 	- added member mTimePerStep
