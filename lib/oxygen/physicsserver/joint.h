@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.5 2004/04/20 14:16:07 rollmark Exp $
+   $Id: joint.h,v 1.6 2004/05/01 11:29:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -132,12 +132,100 @@ public:
     */
     salt::Vector3f GetFeedbackTorque(EBodyIndex idx);
 
+    /** sets the bouncyness of the stops. This is a restitution
+        parameter in the range 0..1. 0 means the stops are not bouncy
+        at all, 1 means maximum bouncyness.
+    */
+    void SetBounce(EAxisIndex idx, float bounce);
+
+    /** returns the bouncyness of the stops */
+    float GetBounce(EAxisIndex idx);
+
+    /** sets the low stop angle in degrees, this stop must be greater
+        than -180 to be effective
+    */
+    void SetLowStopDeg(EAxisIndex idx, float deg);
+
+    /** returns the low stop angle in degrees */
+    float GetLowStopDeg(EAxisIndex idx);
+
+    /** sets the high stop angle in degrees, this stop must be less
+        than +180 to be effective
+    */
+    void SetHighStopDeg(EAxisIndex idx, float deg);
+
+    /** returns the high stop angle in degrees */
+    float GetHighStopDeg(EAxisIndex idx);
+
+    /** sets the low stop position */
+    void SetLowStopPos(EAxisIndex idx, float deg);
+
+    /** returns the low stop position */
+    float GetLowStopPos(EAxisIndex idx);
+
+    /** sets the high stop position */
+    void SetHighStopPos(EAxisIndex idx, float deg);
+
+    /** returns the high stop position */
+    float GetHighStopPos(EAxisIndex idx);
+
+    /** the constraint force mixing (CFM) value used when not at a
+        stop */
+    void SetCFM(EAxisIndex idx, float cfm);
+
+    /** returns the constraint force mixing value used when not a a
+        stop */
+    float GetCFM(EAxisIndex idx);
+
+    /** sets the constraint force mixing (CFM) value used by the
+        stops. Together with the ERP value this can be used to get
+        spongy or soft stops. This is intended for unpowered joints,
+        it does not really work as expected when a powered joint
+        reaches its limit.
+    */
+    void SetStopCFM(EAxisIndex idx, float cfm);
+
+    /** returns the constraint force mixing value used by the stops */
+    float GetStopCFM(EAxisIndex idx);
+
+    /** sets the error reduction parameter (ERP) used by the stops. */
+    void SetStopERP(EAxisIndex idx, float erp);
+
+    /** returns the error reduction parameter used by the stops */
+    float GetStopERP(EAxisIndex idx);
+
+    /** sets the suspension error reduction parameter (ERP). As of ode
+        0.039 this is only implemented on the hinge-2 joint.
+    */
+    void SetSuspensionERP(EAxisIndex idx, float erp);
+
+    /** returns the suspension error reduction parameter (ERP). As of
+        ode 0.039 this is only implemented on the hinge-2 joint.
+    */
+    float GetSuspensionERP(EAxisIndex idx);
+
+    /** sets the suspension constraint force mixing value. As of ode
+        0.039 this is only implemented on the hinge-2 joint.
+    */
+    void SetSuspensionCFM(EAxisIndex idx, float cfm);
+
+    /** returns the suspension constraint force mixing value. As of
+        ode 0.039 this is only implemented on the hinge-2 joint.
+    */
+    float GetSuspensionCFM(EAxisIndex idx);
+
 protected:
     /** associated the created ODE joint with this node */
     virtual void OnLink();
 
     /** get the node at 'path' and tries a cast to Body */
     boost::shared_ptr<Body> GetBody(const std::string& path);
+
+    /** sets a joint parameter value */
+    virtual void SetParameter(int parameter, float value) = 0;
+
+    /** returns a joint parameter value */
+    virtual float GetParameter(int parameter) = 0;
 
 protected:
     /** the managed ODE joint */
@@ -147,7 +235,7 @@ protected:
     boost::shared_ptr<dJointFeedback> mFeedback;
 };
 
-DECLARE_CLASS(Joint);
+DECLARE_ABSTRACTCLASS(Joint);
 
 } // namespace oxygen
 

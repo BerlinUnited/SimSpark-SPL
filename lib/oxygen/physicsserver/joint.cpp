@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.2 2004/04/10 14:07:31 rollmark Exp $
+   $Id: joint.cpp,v 1.3 2004/05/01 11:29:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -260,3 +260,105 @@ Vector3f Joint::GetFeedbackTorque(EBodyIndex idx)
             return Vector3f(0,0,0);
         }
 }
+
+void Joint::SetBounce(EAxisIndex idx, float bounce)
+{
+    SetParameter(dParamBounce + (idx * dParamGroup),bounce);
+}
+
+float Joint::GetBounce(EAxisIndex idx)
+{
+    return GetParameter(dParamBounce + (idx * dParamGroup));
+}
+
+void Joint::SetLowStopPos(EAxisIndex idx, float pos)
+{
+    SetParameter(dParamLoStop + (idx * dParamGroup), pos);
+}
+
+float Joint::GetLowStopPos(EAxisIndex idx)
+{
+    return GetParameter(dParamLoStop + (idx * dParamGroup));
+}
+
+void Joint::SetHighStopPos(EAxisIndex idx, float pos)
+{
+    SetParameter(dParamHiStop + (idx * dParamGroup), pos);
+}
+
+float Joint::GetHighStopPos(EAxisIndex idx)
+{
+    return GetParameter(dParamHiStop + (idx * dParamGroup));
+}
+
+void Joint::SetLowStopDeg(EAxisIndex idx, float deg)
+{
+    SetParameter(dParamLoStop + (idx * dParamGroup), gDegToRad(deg));
+}
+
+float Joint::GetLowStopDeg(EAxisIndex idx)
+{
+    return gRadToDeg(GetParameter(dParamLoStop + (idx * dParamGroup)));
+}
+
+void Joint::SetHighStopDeg(EAxisIndex idx, float deg)
+{
+    SetParameter(dParamHiStop + (idx * dParamGroup), gDegToRad(deg));
+}
+
+float Joint::GetHighStopDeg(EAxisIndex idx)
+{
+    return gRadToDeg(GetParameter(dParamHiStop + (idx * dParamGroup)));
+}
+
+void Joint::SetCFM(EAxisIndex idx, float cfm)
+{
+    SetParameter(dParamCFM + (idx * dParamGroup), cfm);
+}
+
+float Joint::GetCFM(EAxisIndex idx)
+{
+    return GetParameter(dParamCFM + (idx * dParamGroup));
+}
+
+void Joint::SetStopCFM(EAxisIndex idx, float cfm)
+{
+    SetParameter(dParamStopCFM + (idx * dParamGroup), cfm);
+}
+
+float Joint::GetStopCFM(EAxisIndex idx)
+{
+    return GetParameter(dParamStopCFM + (idx * dParamGroup));
+}
+
+void Joint::SetStopERP(EAxisIndex idx, float erp)
+{
+    SetParameter(dParamStopERP + (idx * dParamGroup), erp);
+}
+
+float Joint::GetStopERP(EAxisIndex idx)
+{
+    return GetParameter(dParamStopERP + (idx * dParamGroup));
+}
+
+void Joint::SetSuspensionERP(EAxisIndex idx, float erp)
+{
+    SetParameter(dParamSuspensionERP + (idx * dParamGroup), erp);
+}
+
+float Joint::GetSuspensionERP(EAxisIndex idx)
+{
+    return GetParameter(dParamSuspensionERP + (idx * dParamGroup));
+}
+
+void Joint::SetSuspensionCFM(EAxisIndex idx, float cfm)
+{
+    SetParameter(dParamSuspensionCFM + (idx * dParamGroup), cfm);
+}
+
+float Joint::GetSuspensionCFM(EAxisIndex idx)
+{
+    return GetParameter(dParamSuspensionCFM + (idx * dParamGroup));
+}
+
+
