@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.h,v 1.1 2004/04/25 16:43:51 rollmark Exp $
+   $Id: simcontrolnode.h,v 1.2 2004/12/22 15:54:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class SimulationServer;
     reading of mouse and keyboard input, writing a simulation log,
     rendering etc.
  */
-class SimControlNode : public zeitgeist::Leaf
+class SimControlNode : public zeitgeist::Node
 {
 public:
     SimControlNode();
