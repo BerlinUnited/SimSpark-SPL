@@ -39,8 +39,8 @@ $serverPath = '/sys/server/'
 
 # the start positions of the agents
 $agentX = -2.5
-$agentY = 0.0
-$agentZ = 0.5
+$agentY = 10.0
+$agentZ = 2.5
 
 # register a variable in the soccer namespace
 def addSoccerVar(name, value)
@@ -55,17 +55,17 @@ def getSoccerVar(name)
 end
 
 def addAgent(path)
-  if ($useCars == 'yes')
-    scene = get($scenePath)
-    scene.importScene('rsg/agent/soccerplayer.rsg')
-  else
     # move different agents away from each other
     aspect = get(path)
     aspect.setLocalPos($agentX,$agentY,$agentZ)
-    $agentX += 5.0
-    $agentY += 0.0
-    $agentZ += 0.1
+    $agentX -= 4.0
+    $agentY += 1.0
+    $agentZ += 1.1
 
+  if ($useCars == 'yes')
+    scene = get(path)
+    scene.importScene('rsg/agent/soccerplayer.rsg')
+  else
     # physics setup
     physics = new('oxygen/Body', path+'physics')
     physics.setSphereTotal(getSoccerVar('AgentMass'),
