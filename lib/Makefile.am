@@ -1,1 +1,2 @@
-SUBDIRS = salt zeitgeist oxygen kerosin
+SUBDIRS = salt zeitgeist oxygen kerosin spark
+
