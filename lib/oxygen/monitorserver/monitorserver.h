@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.h,v 1.1.2.2 2003/11/19 18:37:25 rollmark Exp $
+   $Id: monitorserver.h,v 1.1.2.3 2003/11/23 16:50:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include "monitorsystem.h"
 
 namespace oxygen
 {
@@ -34,28 +35,39 @@ public:
     MonitorServer();
     virtual ~MonitorServer();
 
+    // one note about std::string. This class is capable of handling
+    // binary data (i.e. not NULL terminated strings). Use the
+    // std::string(basic_string(const charT* s, size_type n)
+    // constructor to construct a string containing binary data and
+    // the const charT* data() member to access binary data.
+
     /** This function creates an instance of class 'monitorSysName'
      *  and adds it as a child node below this server
      */
     bool RegisterMonitorSystem(const std::string& monitorSysName);
 
-#if 0
-    /** This function is called once for every monitor. It should return any
-     *  header/setup information that is needed.
+    /** the following set of functions if called by the SpadesServer */
+
+    /** This function is called once for every monitor. It should
+     *  return any header/setup information that is needed.
      */
-    spades::DataArray getMonitorHeaderInfo();
-    /* This function will be called periodically to get information about the
-     * current state of the world. The format is completely determined by what
-     * the monitors will expect; no processing is done by the simulation engine
+    std::string GetMonitorHeaderInfo();
+
+    /** This function will be called periodically to get information
+     * about the current state of the world. The format is completely
+     * determined by what the monitors will expect; no processing is
+     * done by the simulation engine
      */
-    spades::DataArray getMonitorInfo(spades::SimTime time);
-    /* If a monitor sends information to the world model, this function is
-     * called to process it. Note that only the data section of the message
-     * (not the ID part which indicates that it is a message for the world
-     * model and not the simulation engine) is included here. If you need to
-     * keep the data, you must copy it */
-    void parseMonitorMessage(const char* data, unsigned datalen);
-#endif
+    std::string GetMonitorInfo();
+
+    /** If a monitor sends information to the world model, this
+     * function is called to process it.
+     */
+    void ParseMonitorMessage(std::string data);
+
+protected:
+    /** returns a shared_ptr to the first registered MonitorSystem */
+    boost::shared_ptr<MonitorSystem> GetMonitorSystem();
 
 private:
 };
