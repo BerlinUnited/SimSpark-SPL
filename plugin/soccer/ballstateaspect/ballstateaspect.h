@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.1.2.1 2004/01/25 12:00:48 rollmark Exp $
+   $Id: ballstateaspect.h,v 1.1.2.2 2004/01/29 10:28:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,12 +51,34 @@ public:
     boost::shared_ptr<oxygen::AgentAspect> GetLastCollidingAgent();
 
 protected:
+    /** updates the reference to the last agent that collided with the
+        ball
+    */
+    void UpdateLastCollidingAgent();
+
+    /** checks if the ball is on the playing field an updates the
+        mBallOnField flag
+    */
+    void UpdateBallOnField();
+
+
+protected:
+    /** reference to the Ball node */
+    //    boost::shared_ptr<Ball> mBall;
+
     /** reference to the Ball collision recorder */
     boost::shared_ptr<oxygen::RecorderHandler> mBallRecorder;
+
+    /** reference to the field collider */
+    boost::shared_ptr<oxygen::RecorderHandler> mFieldRecorder;
 
     /** holds a reference to the last agent that collided with the
         ball */
     boost::shared_ptr<oxygen::AgentAspect> mLastCollidingAgent;
+
+    /** true if the ball on the soccer field, i.e. not on the border
+        surrounding the soccer field */
+    bool mBallOnField;
 };
 
 DECLARE_CLASS(BallStateAspect);
