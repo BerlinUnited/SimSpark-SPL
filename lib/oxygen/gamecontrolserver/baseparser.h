@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: baseparser.h,v 1.2.2.1 2003/12/25 13:16:00 rollmark Exp $
+   $Id: baseparser.h,v 1.2.2.2 2003/12/25 13:50:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,12 +28,20 @@
 
 namespace oxygen
 {
-
+/** \class BaseParser defines the interface for a parser and generator
+    that is used with the GameControlServer. A BaseParser is
+    responsible to parse a string into a list of predicates (see
+    \class Predicate) and to assemble a string representing a given
+    list of predicates.
+ */
 class BaseParser : public zeitgeist::Leaf
 {
 public:
-
+    /** parses the \param input string into a list of Predicates */
     virtual boost::shared_ptr<Predicate::TList> Parse(const std::string& input) = 0;
+
+    /** generates a string representing the given \param input list of
+        predicates */
     virtual std::string Generate(boost::shared_ptr<Predicate::TList> input) = 0;
 };
 
