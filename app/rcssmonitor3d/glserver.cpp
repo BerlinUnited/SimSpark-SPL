@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3.2.3 2004/01/27 12:54:06 heni Exp $
+   $Id: glserver.cpp,v 1.3.2.4 2004/01/27 15:44:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,12 +53,12 @@ void GLserver::InitGL (void)
 {
     //switch z-buffer on
     glEnable(GL_DEPTH_TEST);
-    
+
     //create a viewport
     glViewport(0,0,mWidth,mHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+
     //setup camera angle, ratio, near and far clipping plane
     gluPerspective(45.0f,(GLfloat)mWidth/(GLfloat)mHeight,0.1f,200.0f);
 
@@ -95,8 +95,8 @@ void GLserver::DrawText(const char* string, salt::Vector2f pos)
     glRasterPos2f(-1+pos[0], 1-pos[1]);
     for (s = string; *s; s++)
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *s);
-}    
-    
+}
+
 //--------------------------drawGround-----------------------------------
 //
 // draws a virtual grid ground out of several green lines
@@ -187,11 +187,11 @@ void GLserver::DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz)
 {
     GLUquadricObj *cyl;
     cyl = gluNewQuadric();
-    
+
     glPushMatrix();
     glTranslatef(goalPos[0], goalPos[1], goalPos[2]);
 
-    // draw goal sides as cylinders 
+    // draw goal sides as cylinders
     glPushMatrix();
     glTranslatef(0,sz[1],0);
     gluCylinder(cyl,0.1,0.1,sz[2],15,15);
@@ -209,6 +209,8 @@ void GLserver::DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz)
     glPopMatrix();
 
     glPopMatrix();
+
+    gluDeleteQuadric(cyl);
 }
 
 //------------------------drawSphere-------------------------------------
