@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.11 2004/01/31 17:29:36 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.12 2004/02/01 11:03:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ static const struct ObjType
         {
             "ballAgent",
             OC_SPHERE,
-            {1.0f, 0.5f, 0.5f, 1.0f},
+            {1.0f, 1.0f, 1.0f, 1.0f},
             0.3f
         },
         {
@@ -146,7 +146,7 @@ static const struct ObjType
         },
         {
             "teamR",
-            OC_TEAML,
+            OC_TEAMR,
             {1.0f, 1.0f, 1.0f},
             1.0f
         },
@@ -181,6 +181,10 @@ static const struct ObjType
             1.0f
         }
     };
+
+// color for player of the different teams
+const float gTeamLColor[4] = {1.0f, 0.2f, 0.2f, 1.0f};
+const float gTeamRColor[4] = {0.2f, 0.2f, 1.0f, 1.0f};
 
 //--------------------------printHelp------------------------------------
 //
@@ -382,6 +386,10 @@ void parseGameState(const Predicate& predicate, const ObjType& type)
 void drawObject(const Predicate& predicate, const ObjType& type)
 {
     Predicate::Iterator param(predicate);
+    if (! predicate.FindParameter(param, "pos"))
+        {
+            return;
+        }
 
     salt::Vector3f pos;
     if (! predicate.GetValue(param,pos))
@@ -389,17 +397,60 @@ void drawObject(const Predicate& predicate, const ObjType& type)
             return;
         }
 
-    // if 'automatic-camera' is on
-    // we set the camera to look at the ball
-    if (
-        (predicate.name =="ball") &&
-        (gAutoCam)
-        )
+    const float* color = type.color;
+
+    if (predicate.name == "ball")
         {
-            gGLServer.SetLookAtPos(pos);
+            // if 'automatic-camera' is on
+            // we set the camera to look at the ball
+            if (gAutoCam)
+                {
+                    gGLServer.SetLookAtPos(pos);
+                }
+        }
+    else if (predicate.name == "agent")
+        {
+            // team
+            Predicate::Iterator teamIter(predicate);
+            if (predicate.FindParameter(teamIter, "team"))
+            {
+                string team;
+                if (predicate.GetValue(teamIter,team))
+                {
+                    switch (team[0])
+                        {
+                        default:
+                        case 'N' :
+                            // keep default color
+                            break;
+
+                        case 'L' :
+                            color = gTeamLColor;
+                            break;
+
+                        case 'R' :
+                            color = gTeamRColor;
+                            break;
+                        }
+                }
+            }
+
+#if 0
+            // uniform number
+            Predicate::Iterator unumIter(predicate);
+            if (predicate.FindParameter(unumIter, "unum"))
+                {
+                    int unum;
+                    if (predicate.GetValue(unumIter,unum))
+                    {
+                        // TODO: draw uniform number for the agents
+                    }
+
+                }
+#endif
         }
 
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, type.color);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
     gGLServer.DrawSphere(pos, type.size);
     gGLServer.DrawShadowOfSphere(pos, type.size);
 }
