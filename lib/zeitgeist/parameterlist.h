@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.h,v 1.1 2004/03/22 10:27:18 rollmark Exp $
+   $Id: parameterlist.h,v 1.2 2004/03/23 09:20:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,6 +57,9 @@ public:
     /** returns true if the managed sequence is empty */
     bool IsEmpty() const;
 
+    /** removes all elements from the managed sequence */
+    void Clear();
+
     /** returns an iterator pointing at the begin of the managed
         sequence */
     TVector::const_iterator begin() const;
@@ -75,11 +78,11 @@ public:
         It tries to cast the parameter at iter to a value of type
         T. If successful it returns true, assigns the casted parameter
         to value and increments the iterator iter. Otherwise false is
-        returned and value and iter are unchanged.  Note that AdvanceValue
-        increments iter to transparently allow specialized functions
-        for types that are represented by more than one entry in the
-        ParameterList. An example is a three dimensional vector
-        represented by a sequence of three floats.
+        returned and value and iter are unchanged.  Note that
+        AdvanceValue increments iter to transparently allow
+        specialized functions for types that are represented by more
+        than one entry in the ParameterList. An example is a three
+        dimensional vector represented by a sequence of three floats.
 
         Note: the AdvanceAnyValue and AdvanceValue have distinct
         names, as C++ does not support partly specialized template
@@ -110,7 +113,7 @@ public:
     }
 
     template<typename T> f_inline bool
-    GetAnyVale(const TVector::const_iterator& iter, T& value) const
+    GetAnyValue(const TVector::const_iterator& iter, T& value) const
     {
         TVector::const_iterator tmp = iter;
         return AdvanceAnyValue(tmp,value);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.cpp,v 1.1 2004/03/22 10:27:18 rollmark Exp $
+   $Id: parameterlist.cpp,v 1.2 2004/03/23 09:20:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,6 +49,12 @@ bool
 ParameterList::IsEmpty() const
 {
     return mList.empty();
+}
+
+void
+ParameterList::Clear()
+{
+    mList.clear();
 }
 
 ParameterList::TVector::const_iterator
@@ -156,6 +162,38 @@ ParameterList::AdvanceValue(TVector::const_iterator& iter, salt::Vector2f& value
 {
     return GetVectorValue(iter, value);
 }
+
+/*
+  The following declarations are here to force the compiler to
+  generate a type_info object for the template classes
+  boost::holder<>. Several plugins, e.g. PerfectVisionPerceptor and
+  SexpParser rely on the runtime type information to generate and
+  parse ParameterLists.
+
+  If these declarations are omitted the linker does not resolve the
+  separately generated type_info classes for each module and a
+  comparison between otherwise identical types fails.
+
+  Strictly it would be sufficient to typedef two instances of the
+  boost::holder<> class. But as this class is an implementation detail
+  of boost I chose the more portable way and went with it's public
+  wrapper boost:any.
+
+  The following declarations are unfortunately needed for all
+  structured types used inside a TParameterList. Currently this only
+  is std::string and the TParameterList itself to allow nesting of
+  parameter lists.
+*/
+namespace
+{
+  const zeitgeist::ParameterList paramList;
+  const boost::any anyDummyParamList(paramList);
+
+  const std::string str;
+  const boost::any anyStr(str);
+};
+
+
 
 
 
