@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.6 2004/04/23 15:08:43 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.7 2004/05/05 07:55:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -494,7 +494,7 @@ SoccerRuleAspect::Update(float deltaTime)
         // At the beginning of the match, we update the member variables
         // with the values from the ruby script (once). At this point in time,
         // the ruby script has definitely been processed.
-        UpdateCached();
+        UpdateCachedInternal();
         // Below is the check we do during before kick off mode.
         UpdateBeforeKickOff();
         break;
@@ -574,7 +574,7 @@ SoccerRuleAspect::OnUnlink()
 
 
 void
-SoccerRuleAspect::UpdateCached()
+SoccerRuleAspect::UpdateCachedInternal()
 {
     SoccerBase::GetSoccerVar(*this,"BallRadius",mBallRadius);
     SoccerBase::GetSoccerVar(*this,"RuleGoalPauseTime",mGoalPauseTime);

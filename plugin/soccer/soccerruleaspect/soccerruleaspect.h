@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.4 2004/04/23 14:54:21 fruit Exp $
+   $Id: soccerruleaspect.h,v 1.5 2004/05/05 07:55:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,10 +48,11 @@ public:
     */
     virtual void Update(float deltaTime);
 
-    virtual void UpdateCached();
-
 protected:
-   /** set up the reference to the ball and field collider */
+    /** rereads the current soccer script values */
+    virtual void UpdateCachedInternal();
+
+    /** set up the reference to the ball and field collider */
     virtual void OnLink();
 
     /** reset the reference to the ball and field recorder */
