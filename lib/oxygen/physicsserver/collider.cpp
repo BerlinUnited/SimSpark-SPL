@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.4.8.2 2004/01/12 14:36:40 rollmark Exp $
+   $Id: collider.cpp,v 1.4.8.3 2004/01/16 11:07:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -136,6 +136,25 @@ bool Collider::AddCollisionHandler(const std::string& handlerName)
 
 void Collider::OnCollision(dGeomID collidee, dContact& contact)
 {
+  // get the collider corresponding to the collidee's dGeomID and
+  // retrieve a shared pointer to it
+  Collider* colPtr = Collider::GetCollider(collidee);
+  if (colPtr == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (Collider) no Collider found for dGeomID "
+        << collidee << "\n";
+      return;
+    }
+
+  shared_ptr<Collider> colShared = shared_static_cast<Collider>
+    (make_shared(colPtr->GetSelf()));
+
+  if (colShared.get() == 0)
+    {
+      return;
+    }
+
   TLeafList colHandler;
   GetChildrenSupportingClass("CollisionHandler",colHandler);
 
@@ -157,7 +176,8 @@ void Collider::OnCollision(dGeomID collidee, dContact& contact)
     {
       shared_ptr<CollisionHandler> handler =
         shared_static_cast<CollisionHandler>(*iter);
-      handler->HandleCollision(collidee, contact);
+
+      handler->HandleCollision(colShared, contact);
     }
 }
 
