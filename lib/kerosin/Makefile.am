@@ -67,8 +67,6 @@ sceneserver/staticmesh.cpp \
 sceneserver/staticmesh_c.cpp \
 soundserver/soundserver.cpp \
 soundserver/soundserver_c.cpp \
-sceneserver/transform.cpp \
-sceneserver/transform_c.cpp \
 textureserver/texture.cpp \
 textureserver/texture2d.cpp \
 textureserver/textureserver.cpp \
@@ -99,7 +97,6 @@ sceneserver/helper/nv_math/nv_mathdecl.h \
 sceneserver/light.h \
 sceneserver/sphere.h \
 sceneserver/staticmesh.h \
-sceneserver/transform.h \
 soundserver/soundeffect.h \
 soundserver/soundmodule.h \
 soundserver/soundobject.h \
