@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: transform.h,v 1.4.4.1 2003/12/21 10:25:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class Transform : public BaseNode
     //
 public:
     Transform();
-    ~Transform();
+    virtual ~Transform();
 
     // transformation related
 
