@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector.cpp,v 1.1.2.6 2004/02/06 10:08:38 rollmark Exp $
+   $Id: dasheffector.cpp,v 1.1.2.7 2004/02/08 22:45:11 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ using namespace oxygen;
 using namespace salt;
 
 DashEffector::DashEffector() : oxygen::Effector(),
-                               mForceFactor(500.0),mSigma(-1.0),mMaxPower(100.0)
+                               mForceFactor(60.0),mSigma(-1.0),mMaxPower(100.0)
 {
 }
 
@@ -43,6 +43,9 @@ DashEffector::~DashEffector()
 bool
 DashEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
+    GetLog()->Error()
+        << "ERROR: (DashEffector) Realize\n ";
+
     if (mBody.get() == 0)
     {
         return false;
@@ -67,58 +70,25 @@ DashEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    Vector3f vec = parent->GetWorldTransform().Pos();
-
-    shared_ptr<SphereCollider> geom =
-        shared_dynamic_cast<SphereCollider>(parent->GetChild("geometry"));
-
-    float max_dist = std::numeric_limits<float>::epsilon();
-    if (geom.get() == 0)
-    {
-        GetLog()->Error() << "ERROR: (DashEffector) parent node has "
-                          << "no 'geometry' sphere child\n";
-    } else
-        {
-            max_dist += geom->GetRadius();
-        }
-
-    // we can only dash if the sphere is on the ground
-    if (vec[1] > max_dist)
-    {
-        return true;
-    }
-
-    Vector3f force = dashAction->GetForce();
+    mForce[0] = dashAction->GetForce().x();
+    mForce[1] = dashAction->GetForce().z();
+    mForce[2] = dashAction->GetForce().y();
 
     // cut down the dash power vector to maximum length
-    if (force.SquareLength() > mMaxPower * mMaxPower)
+    if (mForce.SquareLength() > mMaxPower * mMaxPower)
     {
-        force.Normalize();
-        force *= mMaxPower;
+        mForce.Normalize();
+        mForce *= mMaxPower;
     }
 
     if (mSigma > 0.0)
     {
-        force[0] = force[0] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
-        force[1] = force[1] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
-        force[2] = force[2] * mForceFactor / salt::NormalRNG<>(mMaxPower,mSigma)();
+        mForce[0] = mForce[0] * salt::NormalRNG<>(1.0,mSigma)() * mForceFactor;
+        mForce[1] = mForce[1] * salt::NormalRNG<>(1.0,mSigma)() * mForceFactor;
+        mForce[2] = mForce[2] * salt::NormalRNG<>(1.0,mSigma)() * mForceFactor;
     } else {
-        force = force * mForceFactor / mMaxPower;
+        mForce = mForce * mForceFactor;
     }
-
-    if (mAgentState.get() == 0)
-    {
-        mAgentState =
-            shared_static_cast<AgentState>(parent->GetChild("AgentState"));
-    }
-
-    TTeamIndex ti = TI_NONE;
-    if (mAgentState.get() != 0)
-    {
-        ti = mAgentState->GetTeamIndex();
-    }
-    mBody->AddForce(SoccerBase::FlipView(Vector3f(force[0],force[2],force[1]), ti));
-
     return true;
 }
 
@@ -144,13 +114,30 @@ DashEffector::GetActionObject(const Predicate& predicate)
   return shared_ptr<ActionObject>(new DashAction(GetPredicate(),force));
 }
 
-void DashEffector::OnLink()
+void
+DashEffector::OnLink()
 {
+    SoccerBase::GetTransformParent(*this,mTransformParent);
     SoccerBase::GetBody(*this,mBody);
+    SoccerBase::GetAgentState(*this,mAgentState);
+
+    shared_ptr<SphereCollider> geom =
+        shared_dynamic_cast<SphereCollider>(mTransformParent->GetChild("geometry"));
+
+    mMaxDistance = 0.001;
+    if (geom.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (DashEffector) parent node has "
+                          << "no 'geometry' sphere child\n";
+    } else {
+            mMaxDistance += geom->GetRadius();
+    }
 }
 
-void DashEffector::OnUnlink()
+void
+DashEffector::OnUnlink()
 {
+    mTransformParent.reset();
     mBody.reset();
 }
 
@@ -170,4 +157,20 @@ void
 DashEffector::SetMaxPower(float max_power)
 {
     mMaxPower = max_power;
+}
+
+void
+DashEffector::PrePhysicsUpdateInternal(float deltaTime)
+{
+    Effector::PrePhysicsUpdateInternal(deltaTime);
+    if (mBody.get() == 0 ||
+        mForce.Length() <= std::numeric_limits<float>::epsilon())
+    {
+        return;
+    }
+
+    Vector3f vec = mTransformParent->GetWorldTransform().Pos();
+    if (vec[1] > mMaxDistance) return;
+
+    mBody->AddForce(mAgentState->ApplyMotorForce(mForce * deltaTime));
 }
