@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.1.2.6 2003/12/27 11:41:30 rollmark Exp $
+   $Id: predicate.h,v 1.1.2.7 2003/12/27 13:23:31 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,12 +24,15 @@
 
 #include <list>
 #include <string>
+#include <functional>
 #include <boost/any.hpp>
 #include <salt/vector.h>
 
 namespace oxygen
 {
-/** A \class Predicate encapsulates a predicate name together with its
+    class ParameterName;
+
+/** \class Predicate encapsulates a predicate name together with its
     list of parameters.
 
     It is used as an internal representation for commands issued by
@@ -54,21 +57,26 @@ class Predicate
     typedef std::list<boost::any> TParameterList;
 
     /** This declares a list of predicates. It is used as output
-        format of the \class BaseParser interface
+        format of the BaseParser interface.
     */
     typedef std::list<Predicate> TList;
 
 public:
     /** GetValue is a generic templated helper function for consumers
-        of TParameterLists. It tries to cast the parameter at \param
-        iter to a value of type \param T. If successful it returns
-        true, assigns the casted parameter to \param value and
-        increments the iterator \param iter. Otherwise false is
-        returned and \parm value and \param iter are unchanged.  Note
-        the GetValue increments \param iter to transparently allow
-        specialized functions for types that are represented by more
-        than one entry in the ParameterList. An example is a three
-        dimensional vector represented by a sequence of three floats.
+        of TParameterLists.
+
+        It tries to cast the parameter at iter to a value of type
+        T. If successful it returns true, assigns the casted parameter
+        to value and increments the iterator iter. Otherwise false is
+        returned and value and iter are unchanged.  Note the GetValue
+        increments iter to transparently allow specialized functions
+        for types that are represented by more than one entry in the
+        ParameterList. An example is a three dimensional vector
+        represented by a sequence of three floats.
+
+        \param iter position of the parameter
+        \param value extracted value of the parameter
+        \return true if extraction successful, false otherwise
      */
     template<typename T> bool
     GetValue(TParameterList::const_iterator& iter, T& value) const
@@ -83,6 +91,31 @@ public:
             {
                 return false;
             }
+    }
+
+    /** Extract a value from a list of parameters.
+
+        This method is similar to the generic GetValue method. The difference
+        is that this method takes a reference to a parameter list as first
+        argument (instead of an iterator to a liust element). The position
+        of the parameter can be given by an integer (counting starts at 0).
+
+        \param plist the parameter list.
+        \param value will be set to the nth value of plist (if types match).
+        \param nth position of the parameter (start at 0).
+        \return true if nth parameter was successfully extracted.
+    */
+    template<typename T> bool
+    GetNthValue(const TParameterList& plist, T& value, int nth=0) const
+    {
+        TParameterList::const_iterator i = plist.begin();
+        while (nth > 0 && i != plist.end())
+        {
+            --nth;
+            ++i;
+        }
+        if (i == plist.end()) return false;
+        return GetValue(i,value);
     }
 
     /** Below are GetValue helper functions spezialiced for a single type */
@@ -123,8 +156,45 @@ public:
         return GetVectorValue(iter,value);
     }
 
+    /** Find a parameter with a given name and return the nth value of type T.
+
+        For this method, we assume that parameters are represented by lists
+        consisting of a name (a string) and a (number of) values. An example
+        for the init predicate with sexp as sample representation (any other
+        representation possible):
+        "(init (teamname RoboLog) (unum 1) (playername Oliver Kahn))"
+
+        The part after init is the list of parameters. To extract the teamname,
+        simply do 'FindParameter("teamname", name, 1)'. To get the players last
+        name, do 'FindParameter("playername", name, 2)'. In this case, "name"
+        should be a string parameter which will be set by this method.
+
+        \param name The name of the parameter as std::string.
+        \param value The value of the parameter. Will be changed only if
+                     parameter can be found.
+        \param nth position of the value to extract. Paramaters can have
+                   arbitrary many values; this method extracts exactly one.
+        \return true if the nth value of parameter name was found. In this
+                     case, value is set accordingly. We return false, if there
+                     is no parameter with the given name, if the value type
+                     does not match, or if the parameter has no nth value.
+    */
+    template<typename T> bool
+    FindParameter(const std::string& name, T& value, int nth=1) const
+    {
+        TParameterList::const_iterator i;
+        i = find_if(parameter.begin(), parameter.end(),
+                    std::bind2nd(ParameterName(), name));
+        if (i == parameter.end()) return false;
+        // At this point we know that the value i is pointing to is
+        // another TParameterList with the first element being a string 'name'.
+        // We are looking for the nth element after the name now. This is the
+        // value we are looking for.
+        return GetNthValue(boost::any_cast<TParameterList>(*i), value, nth);
+    }
+
  protected:
-    /** Note: As c++ does not support partially specialized function
+    /** \note As c++ does not support partially specialized function
         templates (this concept does only apply to template classes),
         the compiler would always call the generic GetValue function
         and not our partially specialized functions. To work around
@@ -230,6 +300,28 @@ public:
  public:
     std::string name;
     TParameterList parameter;
+};
+
+/** A functional class to find a specific parameter for use as STL predicate.
+*/
+class ParameterName : public std::binary_function<boost::any,std::string,bool>
+{
+public:
+    bool operator() (const boost::any& param, const std::string& pred) const
+    {
+        try
+        {
+            Predicate::TParameterList lst =
+                boost::any_cast<Predicate::TParameterList>(param);
+            if (lst.empty()) return false;
+            std::string s = boost::any_cast<std::string>(lst.front());
+            return pred == s;
+        }
+        catch(const boost::bad_any_cast &)
+        {
+            return false;
+        }
+    }
 };
 
 }  // namespace oxygen
