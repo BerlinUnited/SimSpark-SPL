@@ -252,3 +252,6 @@ utility/libobj/Makefile.in
 utility/libobj/Makefile
 utility/libobj/*.la
 utility/libobj/*.lo
+utility/sfsexp/.deps
+utility/sfsexp/Makefile
+utility/sfsexp/Makefile.in
