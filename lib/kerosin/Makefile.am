@@ -9,8 +9,12 @@ nobase_nodist_pkginclude_HEADERS = openglserver/glextensionreg.h
 openglserver/glextensionreg.cpp: ${top_srcdir}/utility/glextgen/glextensionreg.cpp
 	@echo "Copying generated glextension sources"
 	cp ${top_srcdir}/utility/glextgen/glextensionreg.cpp $@
+
 openglserver/glextensionreg.h: ${top_srcdir}/utility/glextgen/glextensionreg.h
 	cp ${top_srcdir}/utility/glextgen/glextensionreg.h $@
+
+${top_srcdir}/utility/glextgen/glextensionreg.cpp ${top_srcdir}/utility/glextgen/glextensionreg.h:
+	cd ${top_srcdir}/utility/glextgen/ && $(MAKE) $(AM_MAKEFLAGS) all
 
 libkerosin_la_SOURCES = \
 agentaspect/agentaspect.cpp \
