@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler_c.cpp,v 1.4 2004/03/30 09:53:37 rollmark Exp $
+   $Id: contactjointhandler_c.cpp,v 1.5 2004/03/31 11:14:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,21 @@ FUNCTION(ContactJointHandler,setMinBounceVel)
         }
 
     obj->SetMinBounceVel(inVel);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setContactBounceValue)
+{
+    float inValue;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inValue))
+        )
+        {
+            return false;
+        }
+
+    obj->SetBounceValue(inValue);
     return true;
 }
 
@@ -147,6 +162,7 @@ void CLASS(ContactJointHandler)::DefineClass()
 {
   DEFINE_BASECLASS(oxygen/CollisionHandler);
   DEFINE_FUNCTION(setContactBounceMode);
+  DEFINE_FUNCTION(setContactBounceValue);
   DEFINE_FUNCTION(setMinBounceVel);
   DEFINE_FUNCTION(setContactSoftERPMode);
   DEFINE_FUNCTION(setContactSoftERP);

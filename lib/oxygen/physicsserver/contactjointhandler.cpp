@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.4 2004/03/31 10:28:12 rollmark Exp $
+   $Id: contactjointhandler.cpp,v 1.5 2004/03/31 11:14:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -191,6 +191,12 @@ void
 ContactJointHandler::SetMinBounceVel(float vel)
 {
   mSurfaceParameter.bounce_vel = std::max<float>(0.0f,vel);
+}
+
+void
+ContactJointHandler::SetBounceValue(float bounce)
+{
+  mSurfaceParameter.bounce = std::max<float>(0.0f,bounce);
 }
 
 void

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.4 2004/03/31 10:28:12 rollmark Exp $
+   $Id: contactjointhandler.h,v 1.5 2004/03/31 11:14:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,6 +67,9 @@ public:
 
     /** sets or resets the dContactBounce mode flag */
     void SetContactBounceMode(bool set);
+
+    /** sets the bounce value */
+    void SetBounceValue(float bounce);
 
     /** sets the mininum incoming velocity necessary for bounce */
     void SetMinBounceVel(float vel);
