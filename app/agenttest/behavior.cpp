@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: behavior.cpp,v 1.1.2.2 2004/02/08 14:01:46 rollmark Exp $
+$Id: behavior.cpp,v 1.1.2.3 2004/02/10 14:55:59 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,17 +34,6 @@ Behavior::Behavior()
 Behavior::~Behavior()
 {
 }
-
-void Behavior::SetWorldModel(boost::shared_ptr<WorldModel> wm)
-{
-    mWM = wm;
-}
-
-void Behavior::SetCommServer(boost::shared_ptr<CommServer> comm)
-{
-    mComm = comm;
-}
-
 
 void Behavior::ProcessInitMessage()
 {
@@ -95,5 +84,30 @@ void Behavior::Think()
 
     mComm->PutOutput(DoneThinkingMessage());
 }
+
+void Behavior::OnLink()
+{
+    mWM = shared_dynamic_cast<WorldModel>
+        (GetCore()->Get("/sys/WorldModel"));
+    if (mWM.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (Behavior) cannot find WorldModel\n";
+        }
+
+    mComm = shared_dynamic_cast<CommServer>
+        (GetCore()->Get("/sys/CommServer"));
+
+    if (mComm.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (Behavior) cannot find CommServer\n";
+        }
+}
+
+void Behavior::OnUnlink()
+{
+    mWM.reset();
+    mComm.reset();
+}
+
 
 

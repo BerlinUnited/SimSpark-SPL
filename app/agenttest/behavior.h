@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: behavior.h,v 1.1.2.2 2004/02/08 14:01:46 rollmark Exp $
+$Id: behavior.h,v 1.1.2.3 2004/02/10 14:55:59 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,18 +22,15 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef BEHAVIOR_H
 #define BEHAVIOR_H
 
-#include <zeitgeist/object.h>
+#include <zeitgeist/leaf.h>
 #include "worldmodel.h"
 #include "commserver.h"
 
-class Behavior : public zeitgeist::Object
+class Behavior : public zeitgeist::Leaf
 {
 public:
     Behavior();
     virtual ~Behavior();
-
-    void SetWorldModel(boost::shared_ptr<WorldModel> wm);
-    void SetCommServer(boost::shared_ptr<CommServer> comm);
 
     void ProcessInitMessage();
     void ProcessThinkTimeMessage();
@@ -42,6 +39,10 @@ public:
 
     static std::string DoneThinkingMessage() { return "D"; }
     static std::string DoneInitMessage() { return "I"; }
+
+protected:
+    virtual void OnLink();
+    virtual void OnUnlink();
 
 protected:
     /** a reference to the WorldModel */

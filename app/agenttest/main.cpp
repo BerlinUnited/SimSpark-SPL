@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.12 2004/02/07 16:30:58 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.13 2004/02/10 14:55:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -108,40 +108,48 @@ int Init(int argc, char* argv[])
   Zeitgeist zg("." PACKAGE_NAME);
   Oxygen oygen(zg);
 
+  // register agent classes
+  zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "");
+  zg.GetCore()->RegisterClassObject(new CLASS(WorldModel), "");
+  zg.GetCore()->RegisterClassObject(new CLASS(KickNRun), "");
+
+  // run init script
+  zg.GetCore()->GetScriptServer()->RunInitScript("agenttest.rb", "../agenttest");
+
   // read command line options
   ReadOptions(argc,argv);
 
   // register and create the CommServer
-  zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "");
-  comm = shared_dynamic_cast<CommServer>(zg.GetCore()->New("CommServer"));
+  comm = shared_dynamic_cast<CommServer>
+      (zg.GetCore()->Get("/sys/CommServer"));
+
   if (comm.get() == 0)
       {
-          Log("cannot create CommServer\n");
+          Log("cannot find CommServer\n");
           return 1;
       }
 
   // register and create the WorldModel
-  zg.GetCore()->RegisterClassObject(new CLASS(WorldModel), "");
-  wm = shared_dynamic_cast<WorldModel>(zg.GetCore()->New("WorldModel"));
-  if (wm.get() == 0)
-    {
-      Log("cannot create WorldModel\n");
-      return 1;
-    }
+  wm = shared_dynamic_cast<WorldModel>
+      (zg.GetCore()->Get("/sys/WorldModel"));
 
-  // register and create the KickNRun class
-  zg.GetCore()->RegisterClassObject(new CLASS(KickNRun), "");
-  behave = shared_dynamic_cast<Soccer>(zg.GetCore()->New("KickNRun"));
+  if (wm.get() == 0)
+      {
+          Log("cannot find WorldModel\n");
+          return 1;
+      }
+
+  // get the installed behavior
+  behave = shared_dynamic_cast<Soccer>
+       (zg.GetCore()->Get("sys/Behavior"));
 
   if (behave.get() == 0)
       {
-          Log("cannot create Behavior\n");
+          Log("cannot find Behavior\n");
           return 1;
       }
 
   behave->SetTeamName(teamName);
-  behave->SetWorldModel(wm);
-  behave->SetCommServer(comm);
 
   return 0;
 }

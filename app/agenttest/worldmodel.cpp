@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.1.2.4 2004/02/09 14:19:54 fruit Exp $
+   $Id: worldmodel.cpp,v 1.1.2.5 2004/02/10 14:55:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,14 +72,6 @@ WorldModel::SetupGameStateMap()
 bool
 WorldModel::ConstructInternal()
 {
-    // init the s-expression parser
-    if (! GetCore()->ImportBundle("sexpparser"))
-        {
-            GetLog()->Error()
-                << "ERROR: (WorldModel) cannot import bundle sexpparser\n";
-            return false;
-        }
-
     mParser = shared_dynamic_cast<BaseParser>(GetCore()->New("SexpParser"));
     if (mParser.get() == 0)
         {
@@ -306,6 +298,7 @@ Vector3f WorldModel::GetDriveVec(const WorldModel::VisionSense& vision)
 
 void WorldModel::CalcPlayerPosition()
 {
+    // insert self localization using flags here...
 }
 
 salt::Vector3f WorldModel::GetMyPosition()

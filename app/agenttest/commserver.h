@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.1.2.1 2004/02/07 16:30:58 rollmark Exp $
+   $Id: commserver.h,v 1.1.2.2 2004/02/10 14:55:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@
 #define COMMSERVER_H
 
 #include <string>
-#include <zeitgeist/object.h>
 #include <zeitgeist/class.h>
+#include <zeitgeist/leaf.h>
 
-class CommServer : public zeitgeist::Object
+class CommServer : public zeitgeist::Leaf
 {
  public:
   CommServer();

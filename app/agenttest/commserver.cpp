@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.1.2.1 2004/02/07 16:30:58 rollmark Exp $
+   $Id: commserver.cpp,v 1.1.2.2 2004/02/10 14:55:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ using namespace zeitgeist;
 using namespace std;
 using namespace boost;
 using namespace salt;
+
+#include <zeitgeist/logserver/logserver.h>
 
 CommServer::CommServer()
   : mReadFd(3), mWriteFd(4)
@@ -59,8 +61,11 @@ bool CommServer::GetInput()
   // read the first message segment
   if (! SelectInput())
     {
+        GetLog()->Debug() << "CommServer::GetInput false\n";
       return false;
     }
+
+        GetLog()->Debug() << "CommServer::GetInput true\n";
 
   unsigned int bytesRead = read(mReadFd, mBuffer, sizeof(mBuffer));
   if (bytesRead < sizeof(unsigned int))
