@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.8 2004/02/12 14:07:23 fruit Exp $
+   $Id: leaf.h,v 1.8.2.1 2004/03/27 10:26:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -115,6 +115,32 @@ public:
         that class or are derived from it. The Leaf class will
         always return an empty list */
     virtual void GetChildrenSupportingClass(const std::string &name, TLeafList &baseList, bool recursive = false);
+
+    /** constructs a list of all children supporting a class 'name'
+        i.e. they are an instance of that class or are derived from
+        it. This implementation of GetChildrenSupportingClass does not
+        rely on the associated zeitgeist class name but uses the c++
+        typeid system.
+    */
+    template<class CLASS>
+    void ListChildrenSupportingClass(TLeafList& list, bool recursive = false)
+    {
+        TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
+        for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
+            {
+                // check if we have found a match and add it
+                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                if (child.get() != 0)
+                    {
+                        list.push_back(child);
+                    }
+
+                if (recursive)
+                    {
+                        (*i)->ListChildrenSupportingClass<CLASS>(list,recursive);
+                    }
+            }
+    }
 
     /** defines an interface to get the first parent node on the way
         up the hierarchy that supports a class 'name', i.e. is an
