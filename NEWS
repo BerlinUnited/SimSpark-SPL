@@ -1,3 +1,16 @@
+[0.3]
+This release is intended to be used as official version on RoboCup 2004.
+With respect to the soccer rules, this release mainly fixes some bugs contained
+in the 0.2.2 release. New things here are both an automatic and a manual drop 
+ball feature and physical goal posts.
+With respect to the simulation system itself and usability, a few keys have 
+been added to the rcssmonitor3d-lite and the system shuts down automatically
+after a match is over. Printing messages is turned off by default now (can be
+changed by adding log streams from a ruby file).
+Bugs that have been fixed included some math things (like a bug in the setup of
+axis aligned bounding boxes), bugs in the use of SPADES, and in the sample 
+agent communication server.
+
 [0.2.2]
 This release adds both soccer simulation specific features (like better rules 
  and an initial version of a logplayer) and general simulation features 
