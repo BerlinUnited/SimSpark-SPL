@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.3 2003/11/17 13:17:10 fruit Exp $
+   $Id: spadesserver.cpp,v 1.1.2.4 2003/11/17 16:18:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,8 +26,16 @@ using namespace boost;
 using namespace oxygen;
 using namespace spades;
 
+#define THIS_IS_A_DEMO_ONLY 1
+
 #include <zeitgeist/corecontext.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <spades/SimEngine.hpp>
+
+#if THIS_IS_A_DEMO_ONLY
+#include <oxygen/sceneserver/basenode.h>
+#endif
 
 SpadesServer::SpadesServer() :
     zeitgeist::Leaf(), spades::WorldModel(), mSimEngine(0)
@@ -101,17 +109,54 @@ SpadesServer::finalize()
 SimTime
 SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
 {
-    return time_desired;
+    float time_per_step = 0.01f;
+    int steps = time_desired - time_curr;
+
+    if (steps <= 0)
+    {
+        GetLog()->Warning() << "WARNING: Will not simulate <= 0 steps\n";
+        return time_curr;
+    }
+
+
+    shared_ptr<oxygen::SceneServer> sceneServer =
+        shared_static_cast<oxygen::SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+#if THIS_IS_A_DEMO_ONLY
+      // test the loop
+      // print the current location of the sphere collider
+      shared_ptr<oxygen::BaseNode> sphereNode =
+        shared_static_cast<oxygen::BaseNode>(GetCore()->Get("/usr/scene/sphere"));
+
+      if (sphereNode.get() != 0)
+      {
+          const salt::Matrix& transform = sphereNode->GetWorldTransform();
+          const salt::Vector3f& pos = transform.Pos();
+          std::cout << "found the sphereNode at " << pos[0] << "," << pos[1] << "," << pos[2] << std::endl;
+      }
+#endif
+
+    if (sceneServer.get() != 0)
+    {
+        sceneServer->Update(time_per_step * steps);
+        GetLog()->Debug() << "updated the scene by " << steps*time_per_step << " seconds.\n";
+        return time_desired;
+    } else {
+        GetLog()->Warning() << "WARNING: No SceneServer present\n";
+        return time_curr;
+    }
 }
 
 DataArray
 SpadesServer::getMonitorHeaderInfo()
 {
+    return DataArray();
 }
 
 DataArray
 SpadesServer::getMonitorInfo(SimTime time)
 {
+    return DataArray();
 }
 
 void
@@ -122,31 +167,38 @@ SpadesServer::parseMonitorMessage (const char* data, unsigned datalen)
 SimTime
 SpadesServer::getMinActionLatency() const
 {
+    return 0;
 }
 
 SimTime
 SpadesServer::getMinSenseLatency() const
 {
+    return 0;
 }
 
 ActEvent*
 SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen) const
 {
+    return 0;
 }
 
 void
 SpadesServer::pauseModeCallback()
 {
+    // no time to pause
+    mSimEngine->changeSimulationMode(SM_RunNormal);
 }
 
 bool
 SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator at)
 {
+    return false;
 }
 
 bool
 SpadesServer::agentDisappear(AgentID agent, AgentLostReason reason)
 {
+    return false;
 }
 
 void
