@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.2.2.1 2003/12/23 12:10:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,8 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
 
     if (mSceneServer.get() == 0)
         {
-            mSceneServer = shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+            mSceneServer = shared_static_cast<SceneServer>
+                (GetCore()->Get("/sys/server/scene"));
         }
 
     if (mSceneServer.get() == 0)
@@ -56,18 +57,24 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
             return false;
         }
 
-    TLeafList transformList;
-
     shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
+    if (activeScene.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (PerfectVisionPerceptor) SceneServer reports no active scene\n";
+            return false;
+        }
+
+    TLeafList transformList;
     activeScene->GetChildrenSupportingClass("Transform", transformList, true);
 
-    std::list<any> element;
     for (TLeafList::iterator i = transformList.begin();
          i != transformList.end(); ++i)
         {
             shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
             const salt::Vector3f& pos = j->GetWorldTransform().Pos();
-            element.clear();
+
+            BaseParser::TParameterList element;
             element.push_back((*i)->GetName());
             element.push_back(pos[0]);
             element.push_back(pos[1]);
