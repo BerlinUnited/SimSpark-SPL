@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.4 2003/08/31 21:53:45 fruit Exp $
+   $Id: body.cpp,v 1.4.8.1 2004/01/11 11:10:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -194,3 +194,10 @@ void Body::PostPhysicsUpdateInternal()
     vel = dBodyGetAngularVel(mODEBody);
     dBodyAddTorque(mODEBody, -0.3f*vel[0], -0.3f*vel[1], -0.3f*vel[2]);
 }
+
+Body* Body::GetBody(dBodyID id)
+{
+  return id ?
+    static_cast<Body*>(dBodyGetData(id)) : 0;
+}
+
