@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.8 2004/12/21 19:46:26 rollmark Exp $
+   $Id: sexpmonitor.h,v 1.9 2004/12/30 15:21:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -88,11 +88,6 @@ protected:
 
     /** adds ball data to output string stream */
     void AddBall(boost::shared_ptr<oxygen::Scene> activeScene, std::ostringstream& ss) const;
-
-    /** helper method that queries the ScriptServer for the float
-        variable name and generates a S-Expression describing it
-    */
-    std::string PutFloatParam(const std::string& name);
 
     /** sets the reference to the GameStateAspect */
     virtual void OnLink();

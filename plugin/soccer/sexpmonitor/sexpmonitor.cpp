@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.12 2004/12/21 19:46:26 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.13 2004/12/30 15:21:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -241,21 +241,6 @@ SexpMonitor::GetMonitorInfo(const oxygen::PredicateList& pList)
 }
 
 string
-SexpMonitor::PutFloatParam(const string& name)
-{
-    float value;
-    if (! SoccerBase::GetSoccerVar(*this,name,value))
-    {
-        return "";
-    }
-
-    stringstream ss;
-    ss << "(" << name << " " << value << ")";
-
-    return ss.str();
-}
-
-string
 SexpMonitor::GetMonitorHeaderInfo(const oxygen::PredicateList& pList)
 {
     // if a new monitor connected, we have to resend all required data
@@ -263,40 +248,6 @@ SexpMonitor::GetMonitorHeaderInfo(const oxygen::PredicateList& pList)
 
     ostringstream ss;
     ss << "(Init ";
-
-    // field geometry parameter
-    ss << PutFloatParam("FieldLength");
-    ss << PutFloatParam("FieldWidth");
-    ss << PutFloatParam("FieldHeight");
-    ss << PutFloatParam("GoalWidth");
-    ss << PutFloatParam("GoalDepth");
-    ss << PutFloatParam("GoalHeight");
-    ss << PutFloatParam("BorderSize");
-    ss << PutFloatParam("FreeKickDistance");
-    ss << PutFloatParam("WaitBeforeKickOff");
-
-    // agent parameter
-    ss << PutFloatParam("AgentMass");
-    ss << PutFloatParam("AgentRadius");
-    ss << PutFloatParam("AgentMaxSpeed");
-
-    // ball parameter
-    ss << PutFloatParam("BallRadius");
-    ss << PutFloatParam("BallMass");
-
-    // soccer rule parameters
-    ss << PutFloatParam("RuleGoalPauseTime");
-    ss << PutFloatParam("RuleKickInPauseTime");
-    ss << PutFloatParam("RuleHalfTime");
-
-    // play modes
-    ss << "(play_modes";
-    for (int i=0; i<PM_NONE; ++i)
-    {
-        ss << " " << SoccerBase::PlayMode2Str(static_cast<TPlayMode>(i));
-    }
-    ss << ")";
-
     AddPredicates(ss, pList);
     ss << ")\n";
 
