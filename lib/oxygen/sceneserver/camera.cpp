@@ -1,9 +1,8 @@
-/* -*- mode: c++ -*-
-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.cpp,v 1.5 2004/02/12 14:07:23 fruit Exp $
+   $Id: camera.cpp,v 1.6 2004/03/09 12:22:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +20,7 @@
 
 #include "camera.h"
 #include <salt/matrix.h>
+#include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 
 using namespace oxygen;
@@ -28,17 +28,16 @@ using namespace salt;
 
 Camera::Camera() : BaseNode()
 {
-  mViewTransform.Identity();
+    mViewTransform.Identity();
+    mFOV    = 60.0f;
+    mZNear  = 1.0f;
+    mZFar   = 2000.0f;
+    mX      = 0;
+    mY      = 0;
+    mWidth  = 640;
+    mHeight = 480;
 
-  mFOV    = 60.0f;
-  mZNear  = 1.0f;
-  mZFar   = 2000.0f;
-  mX      = 0;
-  mY      = 0;
-  mWidth  = 640;
-  mHeight = 480;
-
-  SetName("camera");
+    SetName("camera");
 }
 
 Camera::~Camera()
@@ -51,149 +50,163 @@ Camera::~Camera()
 */
 void Camera::DescribeFrustum(Frustum& frustum) const
 {
-  // concatenate projection and view transform
-  Matrix frustumMatrix = mProjectionTransform * mViewTransform;
+    // concatenate projection and view transform
+    Matrix frustumMatrix = mProjectionTransform * mViewTransform;
 
-  // Get plane parameters
-  float* m = frustumMatrix.m;
+    // Get plane parameters
+    float* m = frustumMatrix.m;
 
-  Plane *p = &frustum.mPlanes[Frustum::PI_RIGHT];
-  p->normal.Set(m[3]-m[0], m[7]-m[4], m[11]-m[8]);
-  p->d = m[15]-m[12];
+    Plane *p = &frustum.mPlanes[Frustum::PI_RIGHT];
+    p->normal.Set(m[3]-m[0], m[7]-m[4], m[11]-m[8]);
+    p->d = m[15]-m[12];
 
-  p = &frustum.mPlanes[Frustum::PI_LEFT];
-  p->normal.Set(m[3]+m[0], m[7]+m[4], m[11]+m[8]);
-  p->d = m[15]+m[12];
+    p = &frustum.mPlanes[Frustum::PI_LEFT];
+    p->normal.Set(m[3]+m[0], m[7]+m[4], m[11]+m[8]);
+    p->d = m[15]+m[12];
 
-  p = &frustum.mPlanes[Frustum::PI_BOTTOM];
-  p->normal.Set(m[3]+m[1], m[7]+m[5], m[11]+m[9]);
-  p->d = m[15]+m[13];
+    p = &frustum.mPlanes[Frustum::PI_BOTTOM];
+    p->normal.Set(m[3]+m[1], m[7]+m[5], m[11]+m[9]);
+    p->d = m[15]+m[13];
 
-  p = &frustum.mPlanes[Frustum::PI_TOP];
-  p->normal.Set(m[3]-m[1], m[7]-m[5], m[11]-m[9]);
-  p->d = m[15]-m[13];
+    p = &frustum.mPlanes[Frustum::PI_TOP];
+    p->normal.Set(m[3]-m[1], m[7]-m[5], m[11]-m[9]);
+    p->d = m[15]-m[13];
 
-  p = &frustum.mPlanes[Frustum::PI_NEAR];
-  p->normal.Set(m[3]-m[2], m[7]-m[6], m[11]-m[10]);
-  p->d = m[15]-m[14];
+    p = &frustum.mPlanes[Frustum::PI_NEAR];
+    p->normal.Set(m[3]-m[2], m[7]-m[6], m[11]-m[10]);
+    p->d = m[15]-m[14];
 
-  p = &frustum.mPlanes[Frustum::PI_FAR];
-  p->normal.Set(m[3]+m[2], m[7]+m[6], m[11]+m[10]);
-  p->d = m[15]+m[14];
+    p = &frustum.mPlanes[Frustum::PI_FAR];
+    p->normal.Set(m[3]+m[2], m[7]+m[6], m[11]+m[10]);
+    p->d = m[15]+m[14];
 
-  // Normalize all plane normals
-  for(int i=0;i<6;++i)
-    {
-      frustum.mPlanes[i].Normalize();
-    }
+    // Normalize all plane normals
+    for(int i=0;i<6;++i)
+        {
+            frustum.mPlanes[i].Normalize();
+        }
 
-  // set base position
-  frustum.mBasePos = GetWorldTransform().Pos();
+    // set base position
+    frustum.mBasePos = GetWorldTransform().Pos();
 }
 
 void Camera::Bind()
 {
-  mViewTransform        = GetWorldTransform();
-  mViewTransform.InvertRotationMatrix();
+    mViewTransform        = GetWorldTransform();
+    mViewTransform.InvertRotationMatrix();
 
-  // setup the projection matrix
-  mProjectionTransform.CalcInfiniteFrustum(-mHalfWorldWidth, mHalfWorldWidth, -mHalfWorldHeight, mHalfWorldHeight, mZNear);
+    // setup the projection matrix
+    mProjectionTransform.CalcInfiniteFrustum(
+                                             -mHalfWorldWidth,
+                                             mHalfWorldWidth,
+                                             -mHalfWorldHeight,
+                                             mHalfWorldHeight,
+                                             mZNear);
 }
 
 void Camera::OnLink()
 {
-  GetScript()->GetVariable("Viewport.xRes", mWidth);
-  GetScript()->GetVariable("Viewport.yRes", mHeight);
+    bool gotSetup =
+        (
+         GetScript()->GetVariable("Viewport.XRes", mWidth) &&
+         GetScript()->GetVariable("Viewport.YRes", mHeight)
+         );
+
+    if (! gotSetup)
+        {
+            GetLog()->Error()
+                << "(Camera) unable to read setup from ScriptServer\n";
+        }
 }
 
 void Camera::UpdateHierarchyInternal()
 {
-  // make sure values are within bounds
-  gClamp(mFOV, 10.0f, 170.0f);
+    // make sure values are within bounds
+    gClamp(mFOV, 10.0f, 170.0f);
 
-  mHalfWorldWidth =  mZNear * (float)tan(gDegToRad(mFOV*0.5f));
-  mHalfWorldHeight = mHalfWorldWidth * (mHeight/(float)mWidth);
+    mHalfWorldWidth =  mZNear * (float)tan(gDegToRad(mFOV*0.5f));
+    mHalfWorldHeight = mHalfWorldWidth * (mHeight/(float)mWidth);
 }
 
 void Camera::SetViewport(int x, int y, int width, int height)
 {
-  mX = x;
-  mY = y;
-  mWidth = width;
-  mHeight = height;
+    mX = x;
+    mY = y;
+    mWidth = width;
+    mHeight = height;
 }
 
 int Camera::GetViewportX()
 {
-  return mX;
+    return mX;
 }
 
 int Camera::GetViewportY()
 {
-  return mY;
+    return mY;
 }
 
 int Camera::GetViewportWidth()
 {
-  return mWidth;
+    return mWidth;
 }
 
 int Camera::GetViewportHeight()
 {
-  return mHeight;
+    return mHeight;
 }
 
 void Camera::SetFOV(const float fov)
 {
-  mFOV = fov;
+    mFOV = fov;
 }
 
 void Camera::SetZNear(const float zNear)
 {
-  mZNear = zNear;
+    mZNear = zNear;
 }
 
 void Camera::SetZFar(const float zFar)
 {
-  mZFar = zFar;
+    mZFar = zFar;
 }
 
 void Camera::AdjustFOV(const float fov)
 {
-  mFOV+=fov;
+    mFOV+=fov;
 }
 
 void Camera::AdjustZNear(const float zNear)
 {
-  mZNear+=zNear;
+    mZNear+=zNear;
 }
 
 void Camera::AdjustZFar(const float zFar)
 {
-  mZFar+=zFar;
+    mZFar+=zFar;
 }
 
 float Camera::GetFOV() const
 {
-  return mFOV;
+    return mFOV;
 }
 
 float Camera::GetZNear() const
 {
-  return mZNear;
+    return mZNear;
 }
 
 float Camera::GetZFar()const
 {
-  return mZFar;
+    return mZFar;
 }
 
 const salt::Matrix& Camera::GetViewTransform() const
 {
-  return mViewTransform;
+    return mViewTransform;
 }
 
 const salt::Matrix& Camera::GetProjectionTransform() const
 {
-  return mProjectionTransform;
+    return mProjectionTransform;
 }
