@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.1.2.3 2004/02/06 10:55:16 rollmark Exp $
+   $Id: soccerbase.h,v 1.1.2.4 2004/02/06 13:06:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <soccer/soccertypes.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
 
 namespace zeitgeist
 {
@@ -104,6 +105,26 @@ public:
 
     /** flips horizontal coordinates according to the side of the agent */
     static salt::Vector3f FlipView(const salt::Vector3f& pos, TTeamIndex ti);
+
+    /** looks up a ruby variable in the Soccer namespace */
+    template<typename TYPE>
+    static bool GetSoccerVar(const zeitgeist::Leaf& base, const std::string& name,
+                      TYPE& value)
+    {
+        static const std::string nSpace = "Soccer.";
+        bool ok = base.GetCore()->GetScriptServer()->GetVariable
+            (std::string(nSpace + name),value);
+
+        if (! ok)
+            {
+                base.GetLog()->Error()
+                    << "ERROR: (SoccerBase: " << base.GetName()
+                    << ") soccer variable '" << name << "' not found\n";
+                return false;
+            }
+
+        return ok;
+    }
 };
 
 #endif
