@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorlib.cpp,v 1.1 2004/03/12 17:22:02 rollmark Exp $
+   $Id: monitorlib.cpp,v 1.1.4.1 2004/05/05 14:49:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,15 +21,15 @@
 */
 #include "monitorlib.h"
 #include "commserver.h"
-#include "monitorparser.h"
+#include "gamestate.h"
 
 using namespace zeitgeist;
 
 MonitorLib::MonitorLib(Zeitgeist& zg)
 {
-  // register classes to zeitgeist
-  zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "rcssmonitor3d/");
-  zg.GetCore()->RegisterClassObject(new CLASS(MonitorParser), "rcssmonitor3d/");
+    // register classes to zeitgeist
+    zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "rcssmonitor3d/");
+    zg.GetCore()->RegisterClassObject(new CLASS(GameState), "rcssmonitor3d/");
 }
 
 MonitorLib::~MonitorLib()
