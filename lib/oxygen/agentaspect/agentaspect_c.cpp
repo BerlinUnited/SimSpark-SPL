@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect_c.cpp,v 1.3 2003/11/10 23:11:42 fruit Exp $
+   $Id: agentaspect_c.cpp,v 1.3.6.1 2003/12/22 21:18:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,5 +27,5 @@ using namespace oxygen;
 
 void CLASS(AgentAspect)::DefineClass()
 {
-    DEFINE_BASECLASS(kerosin/BaseNode);
+    DEFINE_BASECLASS(kerosin/Transform);
 }
