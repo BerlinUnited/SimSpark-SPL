@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.5.2.1 2004/03/28 13:36:29 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.5.2.2 2004/03/28 15:41:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,11 +86,8 @@ VisionPerceptor::ConstructInternal()
 }
 
 bool
-VisionPerceptor::Percept(Predicate& predicate)
+VisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
-    predicate.name = mPredicateName;
-    predicate.parameter.Clear();
-
     if (
         (mTransformParent.get() == 0) ||
         (mActiveScene.get() == 0) ||
@@ -100,12 +97,16 @@ VisionPerceptor::Percept(Predicate& predicate)
         return false;
     }
 
+    Predicate& predicate = predList->AddPredicate();
+    predicate.name = mPredicateName;
+    predicate.parameter.Clear();
+
     TTeamIndex  ti = mAgentState->GetTeamIndex();
 
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
     TLeafList objectList;
-    mActiveScene->GetChildrenSupportingClass("ObjectState", objectList, true);
+    mActiveScene->ListChildrenSupportingClass<ObjectState>(objectList, true);
 
     ObjectData od;
     std::list<ObjectData> visibleObjects;
@@ -114,7 +115,7 @@ VisionPerceptor::Percept(Predicate& predicate)
          i != objectList.end(); ++i)
     {
         od.mVisible = true;
-        od.mObj = shared_dynamic_cast<ObjectState>(*i);
+        od.mObj = shared_static_cast<ObjectState>(*i);
         if (od.mObj.get() == 0)
         {
             GetLog()->Error() << "Error: (VisionPerceptor) skipped: "
