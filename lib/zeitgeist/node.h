@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.h,v 1.7 2004/04/22 14:32:26 fruit Exp $
+   $Id: node.h,v 1.8 2004/04/22 14:56:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,9 +90,6 @@ public:
 
     /** writes debug data to stdout */
     virtual void Dump() const;
-
-    /** update variables from a script */
-    virtual void UpdateCached() {}
 
     // iterator helpers
     virtual TLeafList::iterator begin();
