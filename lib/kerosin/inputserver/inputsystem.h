@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystem.h,v 1.5 2004/03/05 18:47:13 rollmark Exp $
+   $Id: inputsystem.h,v 1.6 2004/04/23 20:19:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,9 +23,6 @@
 #define KEROSIN_INPUTSYSTEM_H
 
 /*      \class InputSystem
-        $Id: inputsystem.h,v 1.5 2004/03/05 18:47:13 rollmark Exp $
-
-        InputSystem
 
         An input system is the basic abstraction for an input API. You would
         want to have a specific input system for SDL, DirectX, Windows API, X,
@@ -36,20 +33,13 @@
                 - Initialize the inputcodes used in the InputServer
                 - Handle the creation of individual devices
 
-        NOTE:
-
-        HISTORY:
-                21.08.02 - MK
-                        - Initial version
-
-        TODO:
-
-        TOFIX:
+        HISTORY: 21.08.02 - MK - Initial version
 */
+
+#include "inputserver.h"
 
 #include <deque>
 #include <zeitgeist/node.h>
-#include "inputserver.h"
 
 namespace kerosin
 {
@@ -64,29 +54,29 @@ public:
     virtual ~InputSystem();
 
     //! init the subsystem
-    virtual bool Init(kerosin::InputServer *inputServer);
+    virtual bool Init(kerosin::InputServer* inputServer);
 
     /** creates an instance of a device via zeitgeist object
         creation. Should use name mangling.
     */
-    virtual bool CreateDevice(const std::string &deviceName) = 0;
+    virtual bool CreateDevice(const std::string& deviceName) = 0;
 
     /** Add the input to the queue. Uses AddInputInternal. This was
         necessary to allow derived classes to wrap this call in a
         mutex and use the definitely unwrapped addition via
         AddInputInternal().
     */
-    virtual void AddInput(InputServer::Input &input);
+    virtual void AddInput(InputServer::Input& input);
 
     /** this is the actual addition of input to the queue. It should
         only be used by InputDevices!
      */
-    void AddInputInternal(InputServer::Input &input);
+    void AddInputInternal(InputServer::Input& input);
 
     //! retrieve an input from the queue
-    virtual bool GetInput(InputServer::Input &input);
+    virtual bool GetInput(InputServer::Input& input);
 
-    InputServer* GetInputServer()        {       return mInputServer;    }
+    InputServer* GetInputServer() { return mInputServer; }
 
 protected:
     virtual bool UpdateTimerInput(InputServer::Input &input);
@@ -100,6 +90,8 @@ protected:
 private:
     std::deque<InputServer::Input>  mInputQueue;
 };
+
+DECLARE_ABSTRACTCLASS(InputSystem);
 
 } // namespace kerosin
 
