@@ -3,13 +3,18 @@ pkglib_LTLIBRARIES = liboxygen_debug.la
 liboxygen_debug_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall -Woverloaded-virtual -Wno-deprecated 
 liboxygen_debug_la_LIBADD = -lode ${spades_libs}
-liboxygen_debug_la_LDFLAGS = -version-info @oxygen_version_info@
+liboxygen_debug_la_LDFLAGS = \
+	-version-info @oxygen_version_info@ \
+	${top_srcdir}/utility/rcssnet/librcssnet3D.la
+
 else
 pkglib_LTLIBRARIES = liboxygen.la
 liboxygen_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_la_CXXFLAGS = -O2 -Wno-deprecated 
 liboxygen_la_LIBADD = -lode $(spades_libs) 
-liboxygen_la_LDFLAGS = -version-info @oxygen_version_info@
+liboxygen_la_LDFLAGS = \
+	-version-info @oxygen_version_info@ \
+	${top_srcdir}/utility/rcssnet/librcssnet3D.la
 endif
 
 bin_SCRIPTS = oxygen-config
