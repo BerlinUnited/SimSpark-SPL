@@ -9,7 +9,11 @@ kill_server()
 if test -x ../agenttest/agenttest; then
     SIMULATOR="./rcssserver3D"
     PARAM="--ipc_force_remove $*"
-    MONITOR="../rcssmonitor3d/rcssmonitor3D" 
+    if test -x ../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin; then
+	MONITOR="../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin" 
+    else
+	MONITOR="../rcssmonitor3d/lite/rcssmonitor3D-lite" 
+    fi
 else
     prefix=@prefix@
     exec_prefix=@exec_prefix@
@@ -17,7 +21,11 @@ else
     pkgdatadir=${datadir}/@PACKAGE@
     SIMULATOR="${exec_prefix}/bin/rcssserver3D"
     PARAM="--ipc_force_remove --agent_db_fn ${pkgdatadir}/agentdb.list $*"
-    MONITOR="${exec_prefix}/bin/rcssmonitor3D"
+    if test -x "${exec_prefix}/bin/rcssmonitor3D-kerosin"; then
+	MONITOR="${exec_prefix}/bin/rcssmonitor3D-kerosin"
+    else
+	MONITOR="${exec_prefix}/bin/rcssmonitor3D-lite"
+    fi
 fi
 
 ${SIMULATOR} ${PARAM} &
