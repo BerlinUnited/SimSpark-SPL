@@ -293,6 +293,7 @@ void ScriptServer::CreateVariable(const string &varName, const string &value)
   stringstream s;
   // create a string with: "createVariable 'ns', 'varName', 'value'"
   s << "createVariable '" << varName << "', '" << value << "'";
+  cout << "createVariable '" << varName << "', '" << value << "'" << endl;
   Eval(s.str());
 }
 
@@ -484,17 +485,15 @@ bool ScriptServer::RunInitScript(const string &fileName, const string &relPath)
   // destroy the buffer allocated by getcwd()
   delete cwd;
 
-  // convert the Macro PREFIX to a string constant
-  #define XSTRINGIFY(s) STRINGIFY(s)
-  #define STRINGIFY(s) #s
-  string prefix = XSTRINGIFY(PREFIX);
+  // some macro magic (not at all)
+  string pkgdatadir = PREFIX "/share/" PACKAGE_NAME;
 
   bool ok =
     (
      (
        (validDotDir) && (RunInitScript(dotDir, fileName, false))
        )
-      || (RunInitScript(prefix,  fileName, validDotDir, dotDir))
+      || (RunInitScript(pkgdatadir,  fileName, validDotDir, dotDir))
       || (RunInitScript(relPath, fileName, validDotDir, dotDir))
       );
 
