@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: random.h,v 1.1.2.2 2004/02/05 15:50:20 fruit Exp $
+   $Id: random.h,v 1.1.2.3 2004/02/06 20:15:01 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -98,12 +98,12 @@ public:
  * exponential distribution: p(x) = lambda * exp(-lambda * x)
  */
 template<class RealType = double>
-class ExponentialRNG : public boost::normal_distribution<salt::RandomEngine,RealType>
+class ExponentialRNG : public boost::exponential_distribution<salt::RandomEngine>
 {
 public:
-    ExponentialRNG(RealType lamda = RealType(1))
-        : boost::exponential_distribution<salt::RandomEngine,RealType>
-    (salt::RandomEngine::instance(),lamda)
+    ExponentialRNG(double lambda = RealType(1))
+        : boost::exponential_distribution<salt::RandomEngine>
+    (salt::RandomEngine::instance(),lambda)
     {}
 };
 
