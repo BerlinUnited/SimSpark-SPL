@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.9 2004/05/14 14:35:25 fruit Exp $
+   $Id: sexpmonitor.cpp,v 1.10 2004/06/08 12:58:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -316,12 +316,20 @@ SexpMonitor::GetMonitorHeaderInfo()
     ss << PutFloatParam("RuleKickInPauseTime");
     ss << PutFloatParam("RuleHalfTime");
 
-    ss << ")\n\0";
+    // play modes
+    ss << "(play_modes";
+    for (int i=0; i<PM_NONE; ++i)
+    {
+        ss << " " << SoccerBase::PlayMode2Str(static_cast<TPlayMode>(i));
+    }
+    ss << ")";
 
+    ss << ")\n\0";
     return ss.str();
 }
 
-void SexpMonitor::OnLink()
+void
+SexpMonitor::OnLink()
 {
     SoccerBase::GetGameState(*this,mGameState);
 
