@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: keyboardsdl.h,v 1.4 2004/03/05 18:53:24 rollmark Exp $
+   $Id: keyboardsdl.h,v 1.5 2004/04/23 20:41:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,15 +21,7 @@
 
    KeyboardSDL
 
-        NOTE:
-
-        HISTORY:
-                22.08.02 - MK
-                        - Initial version
-
-        TODO:
-
-        TOFIX:
+   HISTORY: 22.08.02 - MK - Initial version
 */
 #ifndef KEYBOARDSDL_H__
 #define KEYBOARDSDL_H__
@@ -38,18 +30,18 @@
 
 class KeyboardSDL : public InputDeviceSDL
 {
-        //
-        // functions
-        //
+    //
+    // functions
+    //
 public:
-        KeyboardSDL();
-        virtual ~KeyboardSDL();
+    KeyboardSDL();
+    virtual ~KeyboardSDL();
 
-        //! init the device
-        virtual bool Init(kerosin::InputSystem *inputSystem);
+    //! init the device
+    virtual bool Init(kerosin::InputSystem* inputSystem);
 
-        //! this filters an SDL specific input
-        virtual int EventFilter(const SDL_Event *event);
+    //! this filters an SDL specific input
+    virtual int EventFilter(const SDL_Event* event);
 
 protected:
     /** sets up the mapping from SDL key constants to InputServer key
@@ -59,7 +51,7 @@ protected:
 
     /** translates a SDL key constant to an InputServer key
         constant. returns true on success
-     */
+    */
     bool TranslateSymbol(int& sym);
 
 protected:
