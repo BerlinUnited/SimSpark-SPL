@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccertypes.h,v 1.1.2.1 2004/01/31 15:09:29 rollmark Exp $
+   $Id: soccertypes.h,v 1.1.2.2 2004/01/31 17:22:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,5 +44,11 @@ enum TTeamIndex
   };
 
 typedef float TTime;
+
+enum TGameHalf
+    {
+        GH_FIRST = 0,
+        GH_SECOND = 1
+    };
 
 #endif // SOCCERTYPES_H
