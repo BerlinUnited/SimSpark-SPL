@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.4.8.6 2004/01/12 18:52:54 rollmark Exp $
+   $Id: space.cpp,v 1.4.8.7 2004/01/29 10:14:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,6 +70,31 @@ void Space::Collide()
     dSpaceCollide(mODESpace, this, collisionNearCallback);
 }
 
+shared_ptr<Collider> Space::GetCollider(dGeomID obj)
+{
+  // get a shared pointer to the two Collider
+  Collider* colPtr = Collider::GetCollider(obj);
+  if (colPtr == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (Space) no Collider found for dGeomID "
+        << obj << "\n";
+      return shared_ptr<Collider>();
+    }
+
+  shared_ptr<Collider> collider = shared_static_cast<Collider>
+    (make_shared(colPtr->GetSelf()));
+
+  if (collider.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (Space) got no shared_ptr for dGeomID "
+        << obj << "\n";
+    }
+
+  return collider;
+}
+
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
     // return immediately if the two bodies corresponding to the
@@ -86,23 +111,33 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         return;
       }
 
-    // dSpaceCollide(), is guaranteed to pass all intersecting geom
-    // pairs to the callback function, but depending on the internal
-    // algorithms used by the space it may also make mistakes and pass
-    // non-intersecting pairs. Thus we can not expect that dCollide()
-    // will return contacts for every pair passed to the callback.
+    // dSpaceCollide(), is guaranteed to pass all potentially
+    // intersecting geom pairs to the callback function, but depending
+    // on the internal algorithms used by the space it may also make
+    // mistakes and pass non-intersecting pairs. Thus we can not
+    // expect that dCollide() will return contacts for every pair
+    // passed to the callback.
     dContact contact;
     if (! dCollide (obj1, obj2, 0, &contact.geom, sizeof(dContactGeom)))
     {
       return;
     }
 
-    // lookup and notify the collider node
-    Collider* collider = Collider::GetCollider(obj1);
-    if (collider)
+    // get shared pointers to the two corresponding Collider nodes
+    shared_ptr<Collider> collider = GetCollider(obj1);
+    shared_ptr<Collider> collidee = GetCollider(obj2);
+
+    if (
+        (collider.get() == 0) ||
+        (collidee.get() == 0)
+        )
       {
-        collider->OnCollision(obj2, contact);
+        return;
       }
+
+    // notify the collider nodes
+    collider->OnCollision(collidee,contact,Collider::CT_DIRECT);
+    collidee->OnCollision(collider,contact,Collider::CT_SYMMETRIC);
 }
 
 bool Space::ConstructInternal()
