@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.14 2004/06/11 07:59:46 fruit Exp $
+   $Id: spadesserver.cpp,v 1.15 2004/06/13 06:37:51 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -161,7 +161,8 @@ SpadesServer::GetGameControlServer() const
 void
 SpadesServer::StartAgents(const AgentItem& ai)
 {
-    std::cerr << "SpadesServer::StartAgents(" << ai.mAgentType << ", " << ai.mNumber << ")\n";
+    GetLog()->Debug() << "SpadesServer::StartAgents("
+                      << ai.mAgentType << ", " << ai.mNumber << ")\n";
 
     if (!mSimEngine || mSimEngine->getNumCommServers () < 1)
     {
