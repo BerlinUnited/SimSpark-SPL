@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.20 2004/05/05 07:54:30 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.21 2004/05/14 16:05:51 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ ScriptServer::GetZeitgeistObject(boost::shared_ptr<Leaf> leaf)
     if (leaf.get() != 0)
     {
         stringstream ss;
-        ss << "ZeitgeistObject.new (" << (unsigned long) leaf.get() <<")";
+        ss << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
         v = RbEvalStringWrap(ss.str());
     }
 
@@ -260,7 +260,7 @@ ScriptServer::Run(shared_ptr<salt::RFile> file)
     file->Read(buffer.get(), file->Size());
     buffer[file->Size()] = 0;
 
-    bool ok = Eval (buffer.get());
+    bool ok = Eval(buffer.get());
     UpdateCachedAllNodes();
     return ok;
 }
@@ -276,7 +276,7 @@ ScriptServer::Run(const string &fileName)
         return false;
     }
 
-    GetLog()->Normal() << "(ScriptServer) Running " << fileName << endl;
+    GetLog()->Debug() << "(ScriptServer) Running " << fileName << endl;
 
     return Run(file);
 }
@@ -455,7 +455,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
 {
     // run the init script in the sourceDir
     string sourcePath = sourceDir + "/" + name;
-    GetLog()->Normal() << "(ScriptServer) Running " << sourcePath << "... ";
+    GetLog()->Debug() << "(ScriptServer) Running " << sourcePath << "... ";
 
     shared_ptr<salt::StdFile> file(new(salt::StdFile));
     if (
@@ -463,11 +463,11 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
         (! Run(file))
         )
     {
-        GetLog()->Normal() << "failed" << endl;
+        GetLog()->Debug() << "failed" << endl;
         return false;
     } else
     {
-        GetLog()->Normal() << "ok" << endl;
+        GetLog()->Debug() << "ok" << endl;
     }
 
     // copy it to the destDir
