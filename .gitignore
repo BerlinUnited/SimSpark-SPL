@@ -59,6 +59,9 @@ app/rcssmonitor3d/kerosin/*.lo
 app/rcssmonitor3d/kerosin/.deps
 app/rcssmonitor3d/kerosin/.dirstamp
 app/rcssmonitor3d/kerosin/.libs
+app/rcssmonitor3d/kerosin/Makefile
+app/rcssmonitor3d/kerosin/Makefile.in
+app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin
 app/rcssmonitor3d/lib/*.lo
 app/rcssmonitor3d/lib/.deps
 app/rcssmonitor3d/lib/.dirstamp
@@ -84,9 +87,7 @@ app/simspark/.libs
 app/simspark/Logfiles
 app/simspark/Makefile
 app/simspark/Makefile.in
-app/simspark/createagentdb.sh
-app/simspark/rcsoccersim3D
-app/simspark/rcssserver3D
+app/simspark/simspark
 app/simulator/.deps
 app/simulator/.libs
 app/simulator/Logfiles
