@@ -1,0 +1,160 @@
+===== Dez 2 2003
+
+- Parser / Generator should parse / generate a list of pairs <string. list<any> >
+- methods for parsing / generating are member of the same class (BaseParser)
+
+===== Nov 27 2003
+
+(solved issues)
+We were already able to solve two issues with the help of Patrick. The
+first one was the integration of the two independent logging systems:
+Both spades and out simulator implement such a system. The fix was,
+that the simulator gives spades two streams under it's control that
+spades will use to do it's logging to.
+
+The second issue I'm still working on with the help of Patrick is the
+unification of the command line parsing. The problem here is that the
+configuration of the simulator is managed by the ruby variable
+system. It should therefore be possible to assign values to arbitrary
+variables on the command line in order to be as flexible as
+possible. However the spades command line parser required the static
+registration of all options available on the command line. The
+intention is to solve this by a plugin system for command line
+parsers, spades does offer now.
+
+Apart from these two issues further changes and additions to the
+simulator are needed in order to work well with spades. Major
+components missing are a game control facility, that enforces the
+rules of the game and holds the current game state, a framework to
+parse and realize agent actions and a system to manage the agents
+sensors facilities.
+
+These components should be provided by a GameControlServer. It
+provides a framework with which different aspects of a specific
+simulation can be modeled using plugins, called ControlAspects. Below
+I try to outline the interaction between spades and the simulator.
+
+(parsing of agent actions)
+Suppose a simulation is already running and agents are connected. A
+string, describing actions an agent wants to carry out is delivered by
+spades to the world model. This interface already provides the
+SpadesServer with it's method ::parseAct. The SpadesServer gives the
+string to the GameControlServer, who is responsible to parse it. Our
+intention is use spades specific types and code only in the
+SpadesServer. Every other component should be reusable without spades
+being present.
+
+The GameControlServer should further delegate the task of parsing this
+string. This is done with two types of plugin. The first plugin parses
+the language used into a list of predicates along with their
+parameters. The language used can be anything from XML to
+S-Expressions. The list of predicates should be represented
+independently from the language used. A map of boost:any entries may
+be possible for this purpose.
+
+The GameControlServer then traverses this list, and looks up which
+effector is responsible for a given predicate and uses this to further
+process it. An effector has two jobs. One is two construct an object
+derived from ActionObject. This object should contain all information
+necessary to carry out the action at a later time, which is the second
+job of an Effector.
+
+Note that an effector should only work with the abstract list of
+predicates that is independent from the language used to transmit the
+actions of an agent. This allow for the implementation of different
+parsers with no change to the effector classes.
+
+The indirection of using an ActionObject serves two purposes. One is
+to play well with spades. It expects the simulator first to only parse
+an action of an agent. The result will be stored as an event and
+carried out later when this event is realized. An ActionObject serves
+the simulator as the payload of such an ActEvent. The second purpose
+is to avoid the usage of spades classes outside the SpadesServer in
+the simulator. The alternative would be to derive an ActEvent class
+for each effector, making the GameControlServer dependent on spades.
+
+The GameControlServer will hand these ActionObjects back to the
+SpadesServer which will wrap it in a class derived from spades'
+ActEvent and hand it back to spades. In this design only the
+SpadesServer needs to know about the presence of spades.
+
+(realization of actions and enforcement of game rules)
+Later on spades will decide to carry out actions that were parsed and
+stored as described above. It does so by calling the
+realizeEventWorldModel() of a particular event. At this point the
+ActEvent class of the simulator gets in control.
+
+Before realizing the action described by the enclosed ActionObject it
+must make sure that this action is valid in the current situation in
+the game. One rule could for example invalidate all kick actions in
+the state before_kick_off etc.
+
+These checks are implemented by a set of ControlAspects registered to
+the GameControlServer. Each ControlAspect implements one rule check of
+the game. Before an event is realized all registered ControlAspect are
+queried if a particular action is valid. If one ControlAspect denies
+this the action will be rejected otherwise the corresponding effector
+of the ActionObject is looked up and the action is realized.
+
+The second chance for a ControlAspect to check and enforce a rule of
+the game is after an update of the scene graph is carried out. This
+update is triggered by a call from spades to the SceneServer method
+simToTime(). It will stepwise advance the physics simulation until it
+reaches the game time desired by spades. After each step the
+GameControlServer is called to check the current state of the
+game. The GameControlServer will delegate this call to a registered
+set of ControlAspects.
+
+These ControlAspects in turn can check for a violation of a game rule,
+change the current state of the game, as for example if the ball got
+out of the playing field, track the current score of the involved
+teams and do similar tasks.
+
+(Agent management)
+Another important issue is agent management within the
+simulation. Connection and disconnection of an agent process from the
+simulation is tracked by spades and reported to the SpadesServer by
+the methods agentConnect() and agentDisappear(). Spades uses unique
+AgentIDs to discriminate among the Agents. Note that this ID tells the
+instance and not the type of an agent.
+
+When an agent connects to the simulator the World Model has to register
+it and construct a representation corresponding to the agent within
+the simulation. This simulation specific aspect is delegated by the
+SpadesServer to the GameControlServer.
+
+The GameControlServer should maintain a map to keep track of all
+registered agents. This map should tell whether the agent is already
+known to the simulation and point to the class tracking and describing
+the agents current state. This state is hold in a class derived from
+AgentAspect. The intention is that each type of agent corresponds to a
+particular AgentAspect class.
+
+The construction of the corresponding AgentAspect class however is not
+done at the time the agent connects. It should rather be deferred
+until the type of the agent is known. This is achieved by using an
+effector specific to each agent type. This effector makes the type of
+the agent known to the simulation and at the same time constructs the
+physical aspect of the agent.
+
+For example a field player would use a 'construct_field_player'
+effector to introduce itself to the simulation. The agent uses this
+effector in the same way as any other effector. It constructs an
+action string which is send to the simulator, that parses it and
+constructs a spades event. No special treatment for agent setup is
+necessary.
+
+However new types of agents as for example a coach agent can be
+introduced to the simulator at runtime by registering corresponding
+sets of effector and AgentAspects.
+
+At the time an agent is disconnected from the simulation. The
+GameControlServer uses the corresponding AgentAspect instance to clean
+up after the agent. It is up to the AgentAspect to take the necessary
+steps, e.g. remove the physical aspects of the agent.
+
+(open issue sensor management, 'SenseEvents')
+A last open issue is the management of the agent's sensors and it's
+interaction with spades 's SenseEvents. Oliver and I are currently
+looking into it.
+
