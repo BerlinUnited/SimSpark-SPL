@@ -45,12 +45,10 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
         mSelf = self;
 
         // setup the node class
-        cout << "  Creating Node class object...\n";
         mNodeClass.reset(new CLASS(Node));
         BindClass(mNodeClass);
 
         // create the root node
-        cout << "  Creating root node...\n";
         mRoot = shared_static_cast<Leaf>(mNodeClass->Create());
         mRoot->SetName("");
 
@@ -78,8 +76,6 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
         // create the log server
         mLogServer->Normal() << "  Creating ScriptServer..." << endl;
         mScriptServer = shared_static_cast<ScriptServer>(context->New("zeitgeist/ScriptServer", "/sys/server/script"));
-
-        cout << endl;
 }
 
 boost::shared_ptr<CoreContext> Core::CreateContext()
@@ -87,7 +83,8 @@ boost::shared_ptr<CoreContext> Core::CreateContext()
         return shared_ptr<CoreContext>(new CoreContext(make_shared(mSelf), GetRoot()));
 }
 
-boost::shared_ptr<Object>       Core::New(const std::string& className)
+boost::shared_ptr<Object>
+Core::New(const std::string& className)
 {
         shared_ptr<CoreContext> context = CreateContext();
         // select the correct class to create our instance
