@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: randomserver_c.cpp,v 1.3 2004/03/22 10:47:02 rollmark Exp $
+   $Id: randomserver_c.cpp,v 1.4 2004/05/01 17:16:51 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 */
 #include "randomserver.h"
+#include <cmath>
 
 using namespace boost;
 using namespace zeitgeist;
