@@ -50,7 +50,7 @@ new('kerosin/FontServer', $serverPath+'font');
 
 # create world and space aspects
 world = new('oxygen/World', $scenePath+'world')
-world.setGravity(0.0, -9.81, 0)
+world.setGravity(0.0, 0.0, -9.81)
 new('oxygen/Space', $scenePath+'space')
 
 #
@@ -60,7 +60,7 @@ new('oxygen/Space', $scenePath+'space')
 # add a camera with an FPS Controller to the scene at path
 def sparkAddFPSCamera(
 		      path,
-		      x = 0.0, y = 0.0, z = 0.0,
+		      x = 0.0, y = 0.0, z = 4,
 		      maxSpeed = 15.0,
 		      accel = 40.0,
 		      drag = 4,
