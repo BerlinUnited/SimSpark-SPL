@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.1 2003/08/26 09:06:02 fruit Exp $
+   $Id: renderserver.h,v 1.2 2003/08/26 10:57:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,8 @@ namespace kerosin
 #endif
 
 class SceneServer;
+class Scene;
+
 
 class RenderServer : public zeitgeist::Leaf
 {
@@ -58,17 +60,21 @@ public:
     void Render();
 
 protected:
-    /*! overload this to perform stuff after the object has
+    /** overload this to perform stuff after the object has
         been created and attached to a core
     */
     virtual bool ConstructInternal();
+
+    /** get the active scene node from the sceneServer */
+    void RenderServer::GetActiveScene();
+
 
     //
     // Members
     //
 private:
     boost::shared_ptr<Scene> mActiveScene;
-    shared_ptr<SceneServer> mSceneServer;
+    boost::shared_ptr<SceneServer> mSceneServer;
     unsigned int mAmbientVP;
 };
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.1 2003/08/26 09:07:44 fruit Exp $
+   $Id: renderserver.cpp,v 1.2 2003/08/26 10:57:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,11 +21,19 @@
 */
 
 #include "renderserver.h"
+#include "../sceneserver/scene.h"
+#include "../sceneserver/sceneserver.h"
+#include "../openglserver/openglserver.h"
+#include "../sceneserver/camera.h"
+#include "../sceneserver/staticmesh.h"
+#include "../sceneserver/light.h"
+#include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
 using namespace kerosin;
 using namespace salt;
 using namespace zeitgeist;
+
 
 RenderServer::RenderServer() :
 Leaf()
@@ -41,7 +49,7 @@ RenderServer::GetActiveScene()
 {
     if (mSceneServer.get() != NULL)
     {
-        mActiveScene = mSceneServer.GetActiveScene();
+        mActiveScene = mSceneServer->GetActiveScene();
     }
 }
 
