@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: balljoint.h,v 1.2 2004/04/10 15:42:58 rollmark Exp $
+   $Id: balljoint.h,v 1.3 2004/04/12 19:54:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_CONTACTJOINT_H
-#define OXYGEN_CONTACTJOINT_H
+#ifndef OXYGEN_BALLJOINT_H
+#define OXYGEN_BALLJOINT_H
 
 #include "joint.h"
 
@@ -33,7 +33,7 @@ public:
     virtual ~BallJoint();
 
     /** Set the joint anchor point. The joint will try to keep this
-        point on each body together. The input is specified in world
+        point on each body together. The input is specified in local
         coordinates.
     */
     void SetBallAnchor(const salt::Vector3f& anchor);
