@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: materialserver.cpp,v 1.4 2004/04/18 16:35:32 rollmark Exp $
+$Id: materialserver.cpp,v 1.5 2004/04/25 17:24:50 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include "material.h"
+#include "materialsolid.h"
 
 using namespace boost;
 using namespace kerosin;
@@ -48,4 +49,12 @@ shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
         }
 
     return material;
+}
+
+void MaterialServer::OnLink()
+{
+    // create the default material
+    shared_ptr<MaterialSolid> defMat(new MaterialSolid());
+    defMat->SetName("default");
+    AddChildReference(defMat);
 }
