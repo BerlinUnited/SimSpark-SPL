@@ -24,7 +24,7 @@
 
 #include <string>
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace Utility;
 using namespace std;
 
@@ -33,7 +33,7 @@ ConSelectnode::ConSelectnode()
 {
     M_usage = "  Selectnode <STRING path>";
 
-    M_help = getUsage() + "\n" "Select a node in the scenegraph.";
+    M_help = getUsage() + "\n" "Select a node in the entity graph.";
 
     // the signatures
     M_signatures.add((new CommandSignature())->add(new ComSigString()));
@@ -50,7 +50,7 @@ ConSelectnode::executeSignature(int signature,
 
     if (!EntityTree::instance().changeNode(path))
     {
-        smux.error() << "Invalid path to scene graph node: '"
+        smux.error() << "Invalid path to entity graph node: '"
                      << path << "'.\n";
     }
 

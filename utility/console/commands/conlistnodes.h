@@ -27,7 +27,7 @@
 
 namespace rcss
 {
-    namespace EntityTree
+    namespace entity
     {
         class BaseNode;
     }
@@ -39,7 +39,7 @@ public:
     ConListnodes();
 
 protected:
-    void listNodes(rcss::EntityTree::BaseNode* current, int depth) const;
+    void listNodes(rcss::entity::BaseNode* current, int depth) const;
 
     //! list nodes in the scene graph.
     ConExecResult executeSignature(int signature,

@@ -27,7 +27,7 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
         class BaseNode;
     }
@@ -40,7 +40,7 @@ namespace rcss
 
 class DirCreator : public NodeCreator
 {
-    EntityTree::BaseNode* create(const ConVar::ConVars& parameter);
+    entity::BaseNode* create(const ConVar::ConVars& parameter);
 
 };
 

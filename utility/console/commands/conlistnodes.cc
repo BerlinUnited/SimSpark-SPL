@@ -29,7 +29,7 @@
 // #include "connodecommands.h"
 // #include "conselectnode.h"
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace Utility;
 using namespace std;
 

@@ -20,6 +20,7 @@
 #include "dircreator.h"
 #include "planecreator.h"
 #include "spherecreator.h"
+#include "sphereobjectcreator.h"
 #include "worldcreator.h"
 
 #include <classserver.h>
@@ -33,6 +34,7 @@ using namespace std;
 CS_CreateFactory(DirCreator)
 CS_CreateFactory(PlaneCreator)
 CS_CreateFactory(SphereCreator)
+CS_CreateFactory(SphereobjectCreator)
 CS_CreateFactory(WorldCreator)
 
 void
@@ -42,6 +44,7 @@ NodeCommands::registerNodeCreators()
         CS_FunctionRegisterToGroup(NodeCreator, DirCreator)
         CS_FunctionRegisterToGroup(NodeCreator, PlaneCreator)
         CS_FunctionRegisterToGroup(NodeCreator, SphereCreator)
+        CS_FunctionRegisterToGroup(NodeCreator, SphereobjectCreator)
         CS_FunctionRegisterToGroup(NodeCreator, WorldCreator)
     CS_FunctionEnd()
 }

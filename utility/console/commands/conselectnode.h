@@ -27,7 +27,7 @@
 
 namespace rcss
 {
-    namespace EntityTree
+    namespace entity
     {
         class BaseNode;
     }

@@ -29,7 +29,7 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
         class BaseNode;
     }
@@ -65,10 +65,10 @@ class NodeCreator
 public:
     virtual ~NodeCreator()	{}
 
-    virtual EntityTree::BaseNode* 
+    virtual entity::BaseNode* 
     create(const std::string& parameter);
 
-    virtual EntityTree::BaseNode* 
+    virtual entity::BaseNode* 
     create(const ConVar::ConVars& parameter) = 0;
 };
 

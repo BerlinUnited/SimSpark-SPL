@@ -20,7 +20,7 @@
 
 #include <consoleparser.h>
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace rcss::NodeCreator;
 using namespace std;
 

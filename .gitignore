@@ -19,6 +19,12 @@ doc/proposal/simulator3d.aux
 doc/proposal/simulator3d.blg
 doc/proposal/simulator3d.dvi
 doc/proposal/simulator3d.log
+simulator/nodecreator/.deps
+simulator/nodecreator/.libs
+simulator/nodecreator/Makefile
+simulator/nodecreator/Makefile.in
+simulator/nodecreator/*.lo
+simulator/nodecreator/*.la
 utility/Makefile
 utility/Makefile.in
 utility/classserver/.deps

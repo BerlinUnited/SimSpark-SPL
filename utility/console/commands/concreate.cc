@@ -26,7 +26,7 @@
 #include <nodecreator/nodecommands.h>
 #include <nodecreator/nodecreator.h>
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace rcss::NodeCreator;
 using namespace Utility;
 using namespace std;

@@ -24,7 +24,7 @@
 #include <entitytree.h>
 #include <forwarder.h>
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace rcss::NodeCreator;
 using namespace Utility;
 using namespace std;
@@ -42,10 +42,11 @@ DirCreator::create(const ConVar::ConVars& parameter)
     string name;
     parameter[0]->getString(name);
     
-    BaseNode* current = EntityTree::EntityTree::instance().getCurrentNode();
+    DirNode* current = 
+        dynamic_cast<DirNode*>(EntityTree::instance().getCurrentNode());
     DirNode* dir = 0;
     
-    if (current != 0 && (current->getType() & BaseNode::S_DIRECTORY != 0))
+    if (current != 0) // && (current->getType() & BaseNode::S_DIRECTORY != 0))
     {
         dir = new DirNode(name, current);
     }

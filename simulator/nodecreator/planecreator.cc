@@ -27,7 +27,7 @@
 
 #include <ode.h>
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace rcss::NodeCreator;
 using namespace Utility;
 using namespace std;
@@ -53,7 +53,9 @@ PlaneCreator::create(const ConVar::ConVars& parameter)
         string name;
         parameter[4]->getString(name);
 
-        BaseNode* current = EntityTree::EntityTree::instance().getCurrentNode();
+        DirNode* current =
+            dynamic_cast<DirNode*>(EntityTree::instance().getCurrentNode());
+
         WorldNode* world = 0;
         if (current != 0) 
             world = dynamic_cast<WorldNode*>(current->getAncestor(BaseNode::S_GEOM_BASE));

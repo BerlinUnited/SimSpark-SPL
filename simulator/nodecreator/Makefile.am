@@ -4,6 +4,7 @@ libnodecreator_la_SOURCES = dircreator.cc dircreator.h \
 			    nodecreator.cc nodecreator.h \
 			    planecreator.cc planecreator.h \
 			    spherecreator.cc spherecreator.h \
+			    sphereobjectcreator.cc sphereobjectcreator.h \
 			    worldcreator.cc worldcreator.h	
 
 AM_CPPFLAGS = \
