@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: gameparam.h,v 1.1 2004/03/10 20:44:24 rollmark Exp $
+$Id: gameparam.h,v 1.2 2004/03/20 09:43:34 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -57,18 +57,40 @@ public:
     const float& GetGoalHeight();
     void SetGoalHeight(float f);
 
+    const float& GetAgentMass();
+    void SetAgentMass(float f);
+
+    const float& GetAgentRadius();
+    void SetAgentRadius(float f);
+
+    const float& GetAgentMaxSpeed();
+    void SetAgentMaxSpeed(float f);
+
+    const float& GetBallRadius();
+    void SetBallRadius(float f);
+
+    const float& GetBallMass();
+    void SetBallMass(float f);
+
 protected:
+    // field
     float mFieldLength;
     float mFieldWidth;
     float mFieldHeight;
-
     float mBorderSize;
     float mLineWidth;
-
-    // goal box size
     float mGoalWidth;
     float mGoalDepth;
     float mGoalHeight;
+
+    // agent
+    float mAgentMass;
+    float mAgentRadius;
+    float mAgentMaxSpeed;
+
+    // ball
+    float mBallRadius;
+    float mBallMass;
 };
 
 #endif // GAMEPARAM_H

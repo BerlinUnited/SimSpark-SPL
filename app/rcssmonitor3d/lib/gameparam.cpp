@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: gameparam.cpp,v 1.1 2004/03/10 20:44:24 rollmark Exp $
+$Id: gameparam.cpp,v 1.2 2004/03/20 09:43:34 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,11 +39,17 @@ GameParam::GameParam()
     mGoalWidth    = DEFAULT_GOAL_WIDTH;
     mGoalDepth    = DEFAULT_GOAL_DEPTH;
     mGoalHeight   = DEFAULT_GOAL_HEIGHT;
+
+    mAgentMass      = DEFAULT_AGENT_MASS;
+    mAgentRadius    = DEFAULT_AGENT_RADIUS;
+    mAgentMaxSpeed  = DEFAULT_AGENT_MAXSPEED;
+
+    mBallRadius = DEFAULT_BALL_RADIUS;
+    mBallMass   = DEFAULT_BALL_MASS;
 }
 
 GameParam::~GameParam()
 {
-
 }
 
 const float& GameParam::GetFieldLength()
@@ -124,5 +130,59 @@ void GameParam::SetGoalHeight(float f)
 {
     mGoalHeight = f;
 }
+
+const float& GameParam::GetAgentMass()
+{
+    return mAgentMass;
+}
+
+void GameParam::SetAgentMass(float f)
+{
+    mAgentMass = f;
+}
+
+const float& GameParam::GetAgentRadius()
+{
+    return mAgentRadius;
+}
+
+void GameParam::SetAgentRadius(float f)
+{
+    mAgentRadius = f;
+}
+
+const float& GameParam::GetAgentMaxSpeed()
+{
+    return mAgentMaxSpeed;
+}
+
+void GameParam::SetAgentMaxSpeed(float f)
+{
+    mAgentMaxSpeed = f;
+}
+
+const float& GameParam::GetBallRadius()
+{
+    return mBallRadius;
+}
+
+void GameParam::SetBallRadius(float f)
+{
+    mBallRadius = f;
+}
+
+const float& GameParam::GetBallMass()
+{
+    return mBallMass;
+}
+
+void GameParam::SetBallMass(float f)
+{
+    mBallMass = f;
+}
+
+
+
+
 
 
