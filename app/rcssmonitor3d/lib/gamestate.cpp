@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.1.4.1 2004/05/05 14:55:37 fruit Exp $
+   $Id: gamestate.cpp,v 1.1.4.2 2004/05/10 11:24:46 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -172,6 +172,14 @@ GameState::GetFlag(EFlagType id, salt::Vector3f& pos) const
     return true;
 }
 
+std::string
+GameState::GetFlagName(EFlagType id) const
+{
+    TFlagNameMap::const_iterator i = mFlagNameMap.find(id);
+    if (i == mFlagNameMap.end()) return std::string();
+    return i->second;
+}
+
 void
 GameState::ResetBall()
 {
@@ -211,14 +219,15 @@ void
 GameState::SetupFlagMap()
 {
     mFlagTypeMap.clear();
-    mFlagTypeMap["F_1_l"] = eFLAG_1_L;
-    mFlagTypeMap["F_2_l"] = eFLAG_2_L;
-    mFlagTypeMap["F_1_r"] = eFLAG_1_R;
-    mFlagTypeMap["F_2_r"] = eFLAG_2_R;
-    mFlagTypeMap["G_1_l"] = eGOAL_1_L;
-    mFlagTypeMap["G_2_l"] = eGOAL_2_L;
-    mFlagTypeMap["G_1_r"] = eGOAL_1_R;
-    mFlagTypeMap["G_2_r"] = eGOAL_2_R;
+    mFlagNameMap.clear();
+    mFlagTypeMap["F_1_l"] = eFLAG_1_L;  mFlagNameMap[eFLAG_1_L] = "F_1_l";
+    mFlagTypeMap["F_2_l"] = eFLAG_2_L;  mFlagNameMap[eFLAG_2_L] = "F_2_l";
+    mFlagTypeMap["F_1_r"] = eFLAG_1_R;  mFlagNameMap[eFLAG_1_R] = "F_1_r";
+    mFlagTypeMap["F_2_r"] = eFLAG_2_R;  mFlagNameMap[eFLAG_2_R] = "F_2_r";
+    mFlagTypeMap["G_1_l"] = eGOAL_1_L;  mFlagNameMap[eGOAL_1_L] = "G_1_l";
+    mFlagTypeMap["G_2_l"] = eGOAL_2_L;  mFlagNameMap[eGOAL_2_L] = "G_2_l";
+    mFlagTypeMap["G_1_r"] = eGOAL_1_R;  mFlagNameMap[eGOAL_1_R] = "G_1_r";
+    mFlagTypeMap["G_2_r"] = eGOAL_2_R;  mFlagNameMap[eGOAL_2_R] = "G_2_r";
 }
 
 void
@@ -235,6 +244,11 @@ GameState::ProcessInit(const Predicate& predicate)
     predicate.GetValue(iter, "BorderSize", mBorderSize);
     predicate.GetValue(iter, "LineWidth", mLineWidth);
     predicate.GetValue(iter, "FreeKickDistance", mFreeKickDistance);
+    predicate.GetValue(iter, "AgentMass", mAgentMass);
+    predicate.GetValue(iter, "AgentRadius", mAgentRadius);
+    predicate.GetValue(iter, "AgentMaxSpeed", mAgentMaxSpeed);
+    predicate.GetValue(iter, "BallRadius", mBallRadius);
+    predicate.GetValue(iter, "BallMass", mBallMass);
 }
 
 void
@@ -354,6 +368,18 @@ GameState::GetGoalWidth() const
     return mGoalWidth;
 }
 
+float
+GameState::GetGoalHeight() const
+{
+    return mGoalHeight;
+}
+
+float
+GameState::GetGoalDepth() const
+{
+    return mGoalDepth;
+}
+
 salt::Vector3f
 GameState::GetGoalSize(bool invert_x) const
 {
@@ -361,3 +387,34 @@ GameState::GetGoalSize(bool invert_x) const
                           mGoalWidth,
                           mGoalHeight);
 }
+
+float
+GameState::GetAgentMass() const
+{
+    return mAgentMass;
+}
+
+float
+GameState::GetAgentRadius() const
+{
+    return mAgentRadius;
+}
+
+float
+GameState::GetAgentMaxSpeed() const
+{
+    return mAgentMaxSpeed;
+}
+
+float
+GameState::GetBallRadius() const
+{
+    return mBallRadius;
+}
+
+float
+GameState::GetBallMass() const
+{
+    return mBallMass;
+}
+

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.h,v 1.2.2.1 2004/05/05 14:53:19 fruit Exp $
+   $Id: gamestate.h,v 1.2.2.2 2004/05/10 11:24:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -119,6 +119,11 @@ public:
     */
     bool GetFlag(EFlagType id, salt::Vector3f& pos) const;
 
+    /*! Get flag name as string.
+        \param id the flag id
+        \return name of the flag if it was found; the empty string otherwise.
+    */
+    std::string GetFlagName(EFlagType id) const;
     //! \return information about the field length
     float GetFieldLength() const;
     //! \return information about the field width
@@ -131,8 +136,22 @@ public:
     float GetBorderSize() const;
     //! \return the width of goals
     float GetGoalWidth() const;
+    //! \return the height of goals
+    float GetGoalHeight() const;
+    //! \return the depth of goals
+    float GetGoalDepth() const;
     //! \return information about the goals (depth, width, height)
     salt::Vector3f GetGoalSize(bool invert_x = false) const;
+    //! \return the mass of an agent
+    float GetAgentMass() const;
+    //! \return the radius of an agent
+    float GetAgentRadius() const;
+    //! \return the max speed of an agent
+    float GetAgentMaxSpeed() const;
+    //! \return the ball radius
+    float GetBallRadius() const;
+    //! \return the ball mass
+    float GetBallMass() const;
 
 protected:
     void ResetBall();
@@ -151,6 +170,7 @@ protected:
         int mUnum;
     };
     typedef std::map<std::string, EFlagType> TFlagTypeMap;
+    typedef std::map<EFlagType, std::string> TFlagNameMap;
 
     std::vector<std::string> mPlaymodes;
     std::string mTeamLeft;
@@ -164,6 +184,7 @@ protected:
     bool mSeenBall;
     std::vector<PlayerInfo> mPlayers;
     std::vector<bool> mSeenPlayers;
+    TFlagNameMap mFlagNameMap;
     TFlagTypeMap mFlagTypeMap;
     std::map<EFlagType, salt::Vector3f> mFlags;
     std::map<EFlagType, bool> mSeenFlags;
@@ -178,6 +199,11 @@ protected:
     float mBorderSize;
     float mLineWidth;
     float mFreeKickDistance;
+    float mAgentMass;
+    float mAgentRadius;
+    float mAgentMaxSpeed;
+    float mBallRadius;
+    float mBallMass;
 
 private:
     // typedefs etc.
