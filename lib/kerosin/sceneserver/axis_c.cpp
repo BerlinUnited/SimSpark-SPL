@@ -6,5 +6,5 @@ using namespace zeitgeist;
 
 void CLASS(Axis)::DefineClass()
 {
-	DEFINE_BASECLASS(kerosin/BaseNode);
+        DEFINE_BASECLASS(oxygen/BaseNode);
 }
