@@ -221,6 +221,12 @@ plugin/monitortest/Makefile
 plugin/monitortest/Makefile.in
 plugin/monitortest/*.la
 plugin/monitortest/*.lo
+plugin/sexpparser/*.la
+plugin/sexpparser/*.lo
+plugin/sexpparser/.deps
+plugin/sexpparser/.libs
+plugin/sexpparser/Makefile
+plugin/sexpparser/Makefile.in
 plugin/soundsystembass/.deps
 plugin/soundsystembass/.libs
 plugin/soundsystembass/Makefile
