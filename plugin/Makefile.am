@@ -1,11 +1,13 @@
 SUBDIRS = \
 	  filesystemstd \
 	  filesystemzip \
+	  forceeffector \
 	  inputsdl \
-	  survival
-
-EXTRA_DIST = plugin.dsw
+	  monitortest \
+	  perfectvisionperceptor \
+	  sexpparser \
+	  soundsystemfmod
 
 # filesystemrar 
 # soundsystembass
-# soundsystemfmod 
+# 

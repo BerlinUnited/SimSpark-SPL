@@ -1,3 +1,25 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: inputsystemsdl.cpp,v 1.4 2003/12/21 23:36:38 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
 #include "inputsystemsdl.h"
 #include "inputdevicesdl.h"
 #include <kerosin/inputserver/inputserver.h>
@@ -56,12 +78,11 @@ bool InputSystemSDL::Init(InputServer *inputServer)
 {
         if (InputSystem::Init(inputServer) == false) return false;
 
-
         // here we check whether SDL has been initialized prior to adding this
         // input is part of the video subsystem (because of event loops, etc..)
         if (!SDL_WasInit(SDL_INIT_VIDEO))
         {
-                GetLog()->Error() << "ERROR: SDL not initialized!" << std::endl;
+                GetLog()->Error() << "ERROR: (InputSystemSDL) SDL not initialized!" << std::endl;
                 return false;
         }
 
@@ -84,14 +105,14 @@ bool InputSystemSDL::CreateDevice(const std::string &deviceName)
 
         if (device.get() == NULL)
         {
-                GetLog()->Error() << "ERROR: Creating device '" << mangledName << "'" << std::endl;
+                GetLog()->Error() << "ERROR: (InputSystemSDL) Creating device '" << mangledName << "'" << std::endl;
                 return false;
         }
 
         // initialize the device
         if (device->Init(this) == false)
         {
-                GetLog()->Error() << "ERROR: Initializing device '" << mangledName << "'" << std::endl;
+                GetLog()->Error() << "ERROR: (InputSystemSDL) Initializing device '" << mangledName << "'" << std::endl;
                 return false;
         }
 
@@ -106,7 +127,7 @@ bool InputSystemSDL::CreateDevice(const std::string &deviceName)
                 // try to link the device into the inputserver
                 if (AddChildReference(device) == false)
                 {
-                        GetLog()->Error() << "ERROR: Linking device '" << mangledName << "'" << std::endl;
+                        GetLog()->Error() << "ERROR: (InputSystemSDL) Linking device '" << mangledName << "'" << std::endl;
                         SDL_UnlockMutex(mMutex);
                         return false;
                 }

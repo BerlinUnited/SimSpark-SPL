@@ -5,12 +5,12 @@ loadFromZip = false
 
 if loadFromZip == true
 	importBundle 'filesystemzip';
-	fileServer = get ('/sys/server/file');
-	fileServer.mount ('FileSystemZIP', 'data.zip');
+	fileServer = get('/sys/server/file');
+	fileServer.mount('FileSystemZIP', 'data.zip');
 else
 	importBundle 'filesystemstd';
-	fileServer = get ('/sys/server/file');
-	fileServer.mount ('FileSystemSTD', 'data/');
+	fileServer = get('/sys/server/file');
+	fileServer.mount('FileSystemSTD', 'data/');
 end
 
 importBundle ('inputsdl');

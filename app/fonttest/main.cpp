@@ -53,17 +53,18 @@ int main(int argc, char **argv)
         shared_ptr<FontServer> fontServer = shared_static_cast<FontServer>(context->Get("/sys/server/font"));
         if (fontServer.get() == NULL) return 1;
 
-        shared_ptr<kerosin::Font> font = fontServer->GetFont("data/font/andalemo.ttf", 12);
+        shared_ptr<kerosin::Font> font = fontServer->GetFont("data/font/VeraMono.ttf", 24);
         if (font.get() == NULL) return 1;
 
         shared_ptr<ImageServer> imageServer = shared_static_cast<ImageServer>(context->New("kerosin/ImageServer", "/sys/server/image"));
         shared_ptr<TextureServer> textureServer = shared_static_cast<TextureServer>(context->New("kerosin/TextureServer", "/sys/server/texture"));
 
-        /*imageServer->Load("data/image/jpg.jpg");
-        imageServer->Save(image, "jpg.tga");
+        imageServer->Load("data/image/jpg.jpg");
+        /* imageServer->Save(image, "jpg.tga");
         image = imageServer->Load("image/bmp.bmp");
         imageServer->Save(image, "bmp.tga"); */
-        imageServer->Load("image/png.png"); /*
+        //imageServer->Load("image/png.png");
+/*
         imageServer->Save(image, "png.tga");
         image = imageServer->Load("image/png-gray.png");
         imageServer->Save(image, "png-gray.tga");

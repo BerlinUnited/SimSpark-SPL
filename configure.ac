@@ -67,10 +67,39 @@ AC_REPLACE_FUNCS([_vsnprintf])
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr strupr])
 
 ## checks for system services
+RCSS_CHECK_RCSSBASE
 RCSS_BUILD_KEROSIN
 RCSS_BUILD_SOUNDSYSTEMFMOD
 RCSS_PATH_RUBY
 RCSS_CHECK_ODE
+
+AC_ARG_VAR(SPADES, [prefix of SPADES installation])
+if test "$SPADES"; then
+  if test -z "$PATH"; then
+    PATH="$SPADES/bin"
+  else
+    PATH="$PATH:$SPADES/bin"
+  fi
+  if test -z "$LDFLAGS"; then
+    LDFLAGS="-L$SPADES/lib"
+  else
+    LDFLAGS="$LDFLAGS -L$SPADES/lib"
+  fi
+  if test -z "$CPPFLAGS"; then
+    CPPFLAGS="-I$SPADES/include"
+  else
+    CPPFLAGS="$CPPFLAGS -I$SPADES/include"
+  fi
+fi
+
+AC_LIB_SPADES(
+	[rcss_build_spades=yes
+	 AC_DEFINE([HAVE_SPADES_HEADERS], 1, [Define to 1 if you have the SPADES header files])],
+	[rcss_build_spades=no
+         AC_MSG_WARN([the SPADES (http://spades-sim.sourceforge.net) library cannot be found. Please specify the prefix used when installing SPADES with the SPADES enviroment variable.])
+	 AC_MSG_NOTICE([SpadesServer will not be build])]
+	)
+AM_CONDITIONAL(BUILD_SPADES_MODULES, test $rcss_build_spades = yes)
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
@@ -78,27 +107,30 @@ AC_CONFIG_FILES([Makefile \
 		 utility/glextgen/Makefile \
 		 utility/glextgen/glextgen.rb \
 		 utility/libobj/Makefile \
+		 utility/sfsexp/Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/zeitgeist/Makefile \
 		 lib/kerosin/Makefile \
 		 lib/oxygen/Makefile \
 		 plugin/Makefile \
-		 plugin/filesystemrar/Makefile \
 		 plugin/filesystemstd/Makefile \
 		 plugin/filesystemzip/Makefile \
+		 plugin/forceeffector/Makefile \
 		 plugin/inputsdl/Makefile \
-		 plugin/soundsystembass/Makefile \
+		 plugin/monitortest/Makefile \
+		 plugin/perfectvisionperceptor/Makefile \
+		 plugin/sexpparser/Makefile \
 		 plugin/soundsystemfmod/Makefile \
-		 plugin/survival/Makefile \
 		 app/Makefile \
+		 app/agenttest/Makefile \
 		 app/coretest/Makefile \
 		 app/fonttest/Makefile \
 		 app/inputtest/Makefile \
 		 app/scenetest/Makefile \
-		 app/simulator/Makefile \
-		 app/zeitgeisttest/Makefile \
 		 app/spadestest/Makefile \
+		 app/rcssmonitor3d/Makefile \
+		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
 AC_OUTPUT

@@ -1,8 +1,842 @@
+2003-12-21  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/rcssmonitor3d/.cvsignore, app/rcssmonitor3d/Makefile.am,
+	* app/rcssmonitor3d/camera.cpp, app/rcssmonitor3d/camera.h,
+	* app/rcssmonitor3d/commserver.cpp, app/rcssmonitor3d/commserver.h,
+	* app/rcssmonitor3d/communit.cpp, app/rcssmonitor3d/communit.h,
+	* app/rcssmonitor3d/glserver.cpp, app/rcssmonitor3d/glserver.h,
+	* app/rcssmonitor3d/main.cpp, app/rcssmonitor3d/rcssmonitor3d.rb,
+	* app/rcssmonitor3d/tcpsocket.cpp, app/rcssmonitor3d/tcpsocket.h,
+	* app/rcssmonitor3d/types.h:
+	Added initial version of rcssserv3d. This is a simple monitor that
+	works together with the MonitorTest class in
+	/plugin/monitortest. By default it connects to 127.0.0.1:12001,
+	the default spades monitorport for a local server. MonitorTest and
+	RcssMonitor3d exchange very simple S-Expressions in the form
+	'(player x y z)' that are intepreted as 3 dimensional
+	coordinates. The received coordinates are displayed as spheres
+	above a grid.
+
+	* app/Makefile.am: 
+	added rcssmonitor3d
+
+	* configure.ac: 
+	added app/rcssmonitor3d/Makefile
+
+	* plugin/monitortest/monitortest.cpp:
+	added additional debug output implemented GetMonitorInfo analogous
+	to PerfectVisionPerceptor. GetMonitorInfo collects the position of
+	all AgentAspects and create an s-expression (player x y z).
+
+	* plugin/monitortest/monitortest.h:
+	removed stub methods, moved implementation to .cpp
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	commented out diagnostic output of simToTime() set the monitor
+	update interval to 2 simulation time steps
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	some formatting change and additional debug output
+
+	* lib/oxygen/agentaspect/createeffector.cpp:
+	move the AgentAspect away from the origin (debug aid for the
+	monitor)
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	using method GetActiveScene to query the SceneServer for the
+	currently active scene node. This avoids a hard coded '/usr/scene'
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added method GetActiveScene
+
+2003-12-21  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/forceeffector/forceeffector.cpp:
+	fixed constructor to call BaseClass constructor
+	added empty destructor
+	some whitespace and formatting changes
+
+	* plugin/forceeffector/forceeffector.h:
+	added virtual destructor and some formatting changes
+
+	* plugin/Makefile.am: 
+	added PerfectVisionPerceptor
+
+	* lib/zeitgeist/core.cpp:
+	changed some error messages to be more descriptive
+
+	* lib/oxygen/agentaspect/effector_c.cpp:
+	revomed boost namespace usage 
+	added class.h #include
+
+	* lib/oxygen/agentaspect/effector.h:
+	added explicit constructor and virtual desctructor
+	some whitespace changes
+
+	* configure.ac: 
+	added PerfectVisionPerceptor Makefile
+
+	* app/spadestest/spadestest.rb:
+	Added 'importBundle' for 'perfectVisionPerceptor' and
+	'ForceEffector'. These two plugins are used by the dummy
+	CreateEffector. Removed setup of the dummy sphere agent. This setup
+	code now also resides in the CreateEffector
+
+	* app/spadestest/agentdb.list: 
+	fixed version tag
+
+	* app/agenttest/main.cpp: 
+	added further processing of spades messages
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	removed code for PerfectVisionSensor debug output
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	fixed some return statements and formatting
+
+	* lib/oxygen/sceneserver/transform.h: 
+	made destructor virtual
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	fixed test in AgentConnect() for an already known agent. The created
+	AgentAspect is now also linked to the object hierarchy below
+	'/usr/scene'. Additionally AgentAspect::init() is called.  Parse()
+	queries the AgentAspect corresponding to the given id, rather than
+	using the internal EffectorMap of the GameControlServer.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	Parse() takes an addition argument id, giving the agent for which
+	a message should be parsed. Removed EffectorMap. Every AgentAspect
+	is now responsible for its effectors.
+
+	* lib/oxygen/oxygen.h: 
+	some #includes fixed
+
+	* lib/oxygen/oxygen.cpp: 
+	added registration of CreateEffector
+	removed registation of PerfectVisionPerceptor
+
+	* lib/oxygen/agentaspect/agentaspect.cpp, lib/oxygen/agentaspect/agentaspect.h:
+	Added method Init. This method is called from the
+	GameControlServer immediately after the AgentAspect is
+	constructed. It is responsible for setting up the CreateEffector.
+	Added method GetEffector. This method is an interface to the map
+	of Effectors of the AgentAspect.
+
+	* lib/oxygen/agentaspect/createaction.h:
+	Added CreateAction. This Object stores the 'create' request an agent
+	can issue using the CreateEffector
+
+	* lib/oxygen/Makefile.am: removed perfectvisionperceptor files
+	added createeffector files
+
+	* lib/oxygen/agentaspect/createeffector.cpp, lib/oxygen/agentaspect/createeffector.h, lib/oxygen/agentaspect/createeffector_c.cpp:
+	added CreateEffector. This effector is constructed by the AgentAspect. It's
+	purpose is to construct sensors, perceptors and geometry that make up an
+	agent. After an agent connected to the simulation it uses the 'create'
+	effector to request these objects. In it's current for the 'create' command
+	does not take any parameters and creates a dummy agent that consists of a
+	sphere with a PerfectVisionSensor and a ForceEffector.
+
+	* plugin/perfectvisionperceptor/.cvsignore:
+	* plugin/perfectvisionperceptor/Makefile.am:
+	* plugin/perfectvisionperceptor/export.cpp:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.h:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor_c.cpp:
+	moved perfectvisionperceptor files to plugin/
+
+	* lib/salt/gcc/sharedlibrary.cpp:
+	added more descriptive error message for SharedLibrary::Open()
+	
+2003-12-16  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* plugin/forceeffector/forceaction.h:
+	* plugin/forceeffector/forceeffector.cpp:
+	* plugin/forceeffector/forceeffector.h:
+	initial version of ForceAction. This class is derived from ActionObject and
+	stores the force vector, the ForceEffector should apply.
+	implemented ForceEffector::GetActionObject and ForceEffector::Realize.
+	GetActionObject constructs an ForceEffector object and Realize applies the
+	stored force vector.
+
+	* plugin/forceeffector/Makefile.am:
+	added Makefile for ForceEffector and ForceAction
+
+	* plugin/forceeffector/.cvsignore,
+	plugin/forceeffector/export.cpp,
+	plugin/forceeffector/forceeffector.cpp,
+	plugin/forceeffector/forceeffector.h,
+	plugin/forceeffector/forceeffector_c.cpp:
+	added forceeffector files
+
+	* lib/oxygen/agentaspect/forceeffector.cpp,
+	lib/oxygen/agentaspect/forceeffector.h,
+	lib/oxygen/agentaspect/forceeffector_c.cpp:
+	removed forceeffector files
+
+	* plugin/Makefile.am: 
+	added forceeffector/
+
+	* lib/oxygen/oxygen.h: 
+	removed forceeffector include
+
+	* lib/oxygen/oxygen.cpp: 
+	removed registration of the forceeffector
+
+	* lib/oxygen/Makefile.am:
+	removed forceeffector files (moved to plugin/forceeffector)
+
+	* configure.ac: 
+	added plugin/forceeffector/Makefile
+
+	* app/agenttest/main.cpp:
+	app/agenttest is a dummy agent created for testing with the
+	SpadesTest. It reads length prefixed data (see spades manual 6.3)
+	from fd 3 and writes to fd 4. A corresponding agent DB
+	(app/spadestest/agentdb.list, entry 'default') exists in the
+	spadestest directory. Currently it does nothing but sending an
+	'init done' message, i.e. 'I' (see spades manual 6.4) back to
+	spades.
+
+	* app/agenttest/Makefile.am: 
+	added Makefile for app/agenttest
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	The SpadesServer starts one instance of the 'default' agent. This
+	is the app/agenttest dummy agent.
+
+	* app/spadestest/agentdb.list:
+	the spades agent database for app/agenttest
+
+	* app/Makefile.am: 
+	added agenttest
+
+	* configure.ac: 
+	added app/agenttest/Makefile
+
+2003-12-10  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/sexpparser/sexpparser.cpp:
+	adapted to changed baseparser interface
+
+	* plugin/sexpparser/sexpparser.h:
+	adapted to changed BaseParser interface
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	QueryPerceptors traverses all Perceptors below the AgentAspect,
+	collects their data and builds a TPredicateList.
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	QueryPerceptors returns TPredicateList using a shared_ptr
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	adapted to changed BaseParser inteface
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	adapted TmpGenerate to changed BaseParser interface
+
+	* lib/oxygen/gamecontrolserver/baseparser.h:
+	using shared_ptr to pass input to Generate()
+
+	* lib/oxygen/Makefile.am: removed effector.cpp
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	implemented UpdateEffectorMap. This method builds a map from a
+	predicate string to the corresponding Effector below the AgentAspect
+	node.
+	implemented RealizeActions. This method traverses a list of
+	ActionObjects and realizes them using the corresponding effector
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	added helper UpdateEffectorMap to build a map of effectors below an
+	AgentAspect
+
+	* lib/oxygen/agentaspect/forceeffector.cpp:
+	minimal changes to make ForceEffector compile with the new Effector interface
+
+	* lib/oxygen/agentaspect/forceeffector.h:
+	adapted ForceEffector to the new Effector interface
+
+	* lib/oxygen/agentaspect/effector.cpp:
+	removed effector.cpp as Effector is a virtual base class now
+
+	* lib/oxygen/agentaspect/effector.h: removed method Perfom
+	added method Realize. Realize() should realize an ActionObject
+
+	* lib/oxygen/gamecontrolserver/actionobject.h:
+	ActionObject stores the name of the described predicate to allow
+	AgentAspecto to find the correct effector.
+
+2003-12-09  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	implemented createSense. This methods collects a list of senses
+	from the AgentAspect and uses the parser registered to the
+	GameControlServer to create a string describing these sense. This
+	string is encapsulated as an spades::DataObject into a
+	spades::SenseEvent and enqued by spades. 
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	added method GetParser
+	added GetSenseLatency stub
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added method GetParser
+	added method GetSenseLatency
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	added QueryPerceptors stub
+
+	* lib/oxygen/agentaspect/agentaspect.h: 
+	added method QueryPerceptors
+
+	* lib/oxygen/agentaspect/agentaspect.cpp: 
+	added method realizeActions
+
+	* lib/oxygen/agentaspect/agentaspect.h: 
+	removed method Think
+	removed method getVelocity
+	removed mehtod prePhysicsUpdateInternal
+	added method RealizedActions (moved here from the gcs)
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	removed method InitEffector
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	removed method InitEffector; effectors should be registered below the
+	AgentAspect
+	removed method RealizeActions
+	added GetAgentAspect
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	removed method InitEffector
+	removed method RealizeActions (now part of AgentAspect)
+	added method GetAgentAspect
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	using the AgentAspect to realize stored ActionObjects
+
+	* plugin/Makefile.am: removed survival directory
+
+	* plugin/survival/survivalagentaspect.h:
+	* plugin/survival/survivalagentaspect_c.cpp:
+	* plugin/survival/survivalcontrolaspect.cpp:
+	* plugin/survival/survivalcontrolaspect.h:
+	* plugin/survival/survivalcontrolaspect_c.cpp:
+	* plugin/survival/.cvsignore: plugin/survival/Makefile.am:
+	* plugin/survival/export.cpp:
+	* plugin/survival/linesegmentperceptor.cpp:
+	* plugin/survival/linesegmentperceptor.h:
+	* plugin/survival/linesegmentperceptor_c.cpp:
+	* plugin/survival/survival.dsp: plugin/survival/survival.rb:
+	* plugin/survival/survivalagentaspect.cpp: 
+	delete survival plugins/simulator application until we can come up with a new one 
+	removed plugins belonging to the survival demo.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	using shared_ptr to work with the TPredicateList
+
+	* plugin/sexpparser/sexpparser.cpp, plugin/sexpparser/sexpparser.h, lib/oxygen/gamecontrolserver/baseparser.h:
+	return the TPredicateList as shared_ptr
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	derived the AgentAspect from Transport
+
+2003-12-08  Oliver Obst  <fruit@robolog.org>
+
+	* app/spadestest/spadestest.rb: 
+	creating a PerfectVisionPerceptor after startup for testing
+
+	* plugin/survival/survivalagentaspect.h: 
+	* plugin/survival/survivalagentaspect.cpp: 
+	* plugin/survival/linesegmentperceptor.h: 
+	* plugin/survival/linesegmentperceptor.cpp: 	
+	fixes due to interface changes in perceptor base class. The fixes only make 
+	these classes compile, but they don't work yet.
+
+	* plugin/sexpparser/sexpparser.cpp: 
+	changed ListToString method to convert also atoms that are integer or float.
+
+	* lib/oxygen/oxygen.h: 	
+	* lib/oxygen/oxygen.cpp: 
+	added PerfectVisionPerceptor to initialization. The PerfectVisionPerceptor 
+	is registered below the oxygen namespace.
+
+	* lib/oxygen/agentaspect/perfectvisionperceptor.h:
+	* lib/oxygen/agentaspect/perfectvisionperceptor.cpp:
+	* lib/oxygen/agentaspect/perfectvisionperceptor_c.cpp:
+	added first version of PerfectVisionPerceptor. A PerfectVisionPerceptor 
+	sees all objects that are transform nodes (or derived of transform
+	nodes) and returns a list of the respective object names and their
+	absolute (cartesian) coordinates
+	(could be changed to relative (polar) coordinates later).
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp: 
+	- flushing buffers after error messages 
+	- fixed copy/paste bugs in InitEffector 
+	- added TmpGenerate method for testing
+
+	* lib/oxygen/agentaspect/collisionperceptor.h: 
+	* lib/oxygen/agentaspect/collisionperceptor.cpp:
+	changes due to Percept interface changes in base class.
+
+	* lib/oxygen/agentaspect/perceptor.h: 
+	changed data type of perceptors to BaseParser::TPredicate. This new 
+	interface fits better to the BaseParser::Generate method, which takes 
+	lists of TPredicates.
+
+2003-12-04  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/agentaspect/forceeffector.cpp,
+	* lib/oxygen/agentaspect/forceeffector.h:
+	added dummy methods to implement the virtual effector interface
+
+	* lib/oxygen/agentaspect/effector.h:
+	added GetPredicate() that returns the name of the predicate an
+	effector is responsible for; As one predicate could be implemented by
+	different classes this call was made explicit and the predicate name was not
+	derived from the class name.
+	added GetActionObject() that constructs an Actionobject, describing a
+	predicate.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	renamed Init to InitParser
+	added InitEffector
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	added InitEffector()
+	added RealizeActions() that realizes a list of ActionObjects with the help
+	of the registered effectors corresponding to the predicates
+	added GetEffector(), a helper function to lookup an effector for a given
+	predicate name
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	renamed Init() to InitParser
+	added InitEffector()
+	added RealizeAction()
+	added GetEffector()
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	added call to GameControlServer::RealizeActions in
+	::realizeEventWorldModel
+
+2003-12-04  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp: 
+	Register init method to ruby
+
+2003-12-03  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/gamecontrolserver/baseparser.h: 
+	Added pure virtual Generate method
+
+	* plugin/sexpparser/.cvsignore:
+	* plugin/sexpparser/Makefile.am:
+	* plugin/sexpparser/export.cpp:
+	* plugin/sexpparser/sexpparser.h:
+	* plugin/sexpparser/sexpparser_c.cpp:
+	Added an initial version of a parser module for s-expressions. For our
+	purposes, sexpr have to have an atom at first element of the list. The 
+	sexpr given as string to the Parse method are converted into lists of predicates.
+	Predicates consist of a name (a string) and a list of boost:any elements. 
+	In practice, these elements are either strings or lists containing elements (i.e.
+	strings or lists containing elements (i.e. ... you get it)).
+	This kind of representation is suitable for our effectors.
+	The Generate method of the parser converts lists of elements into an sexpr string.
+	Currently, the user of the Generate method has to take care of properly 
+	double-quoting strings containing whitespace or single quoting strings that 
+	look like s-expressions and so on.
+
+	* utility/sfsexp/Makefile.am:
+	* utility/sfsexp/README:
+	* utility/sfsexp/cstring.c:
+	* utility/sfsexp/cstring.h:
+	* utility/sfsexp/faststack.c:
+	* utility/sfsexp/faststack.h:
+	* utility/sfsexp/io.c:
+	* utility/sfsexp/malloc_util.c:
+	* utility/sfsexp/malloc_util.h:
+	* utility/sfsexp/parser.c:
+	* utility/sfsexp/sexp.c:
+	* utility/sfsexp/sexp.h:
+	* utility/sfsexp/sexp_ops.c:
+	* utility/sfsexp/sexp_ops.h:
+	Added files from the sfsexp library. I've chosen to add the files to the utility
+	directory over requiring the user to install it because there is no "make install"
+	target in the original sfsexp distribution. Also it would be possible to convert
+	the underlying sexp representation into one using proper c++ types. 
+
+2003-12-03  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* lib/oxygen/Makefile.am: 
+	added SpadesActEvent files
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	initial version of Parse() added
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added Parse() method used to segment an action string from an
+	agent into a list of ActionObjects
+
+	* lib/oxygen/gamecontrolserver/actionobject.h:
+	intiial version of actionobject added
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	made GetGameControlServer() const
+	implemented parseAct()
+
+	* lib/oxygen/spadesserver/spadesserver.h:
+	made GetGameCotrolServer() const; it is called from parseAct(),
+	which is const
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	removed a compiler warning about an unused parameter
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	* lib/oxygen/spadesserver/spadescreatesenseevent.h:
+	made destructor is virtual
+	added explicit virtual declaration to member methods
+	removed a compile warning about unused parameters
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	*lib/oxygen/spadesserver/spadesactevent.h:
+	initial version of SpadesActEvent added
+
+2003-12-02  Christoph Ringelstein <cringel@users.sourceforge.net>
+
+	* lib/kerosin/renderserver/renderserver.cpp, lib/kerosin/renderserver/renderserver.h:
+	Fixed typecasting bug in ConstructInternal by removing member mSceneServer.
+
+2003-12-02  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	moved main execution path of AgentConnect method out of
+	conditional statement
+	implemented AgentDisappear method added GetSenseInterval
+
+	* lib/oxygen/gamecontrolserver/baseparser.h:
+	changed TPredicateList definition
+
+	* lib/oxygen/oxygen.h: 
+	added include for actionobject
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	lib/oxygen/spadesserver/spadescreatesenseevent.h: New file
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	* lib/oxygen/spadesserver/spadescreatesenseevent.h: 
+	initial version of SpadesCreateSenseEvent
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	added GetTimePerStep method (also used by SpadesCreateSenseEvent)
+	made GetGameControlServer a public method
+	added GetSimEngine method
+
+	* lib/oxygen/spadesserver/paramstorer.h: 
+	fixed some typos in a comment
+
+	* lib/oxygen/oxygen.cpp: 
+	registered ActionObject to ZeitGeist
+
+	* lib/oxygen/Makefile.am:
+	added SpadesCreateSenseEvent and ActionObject files to Makefile.am
+
+2003-12-02  Oliver Obst  <fruit@robolog.org>
+	* TODO: 
+	New file.
+
+	* app/spadestest/spadestest.rb: 
+	creating game control server
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	using default constructor of shared ptr instead of tmp variable
+
+2003-12-01  Oliver Obst  <fruit@robolog.org>
+
+	* lib/kerosin/Makefile.am:
+	removed visionperceptor from the list of files to be compiled
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	- implemented helper function to get GameControlServer
+	- agentConnect calls the GameControlServer::AgentConnect method
+
+	* lib/oxygen/spadesserver/spadesserver.h:
+	added helper function to get GameControlServer
+
+	* lib/oxygen/oxygen.cpp, lib/oxygen/oxygen.h:
+	Added GameControlServer to the oxygen initialization
+
+	* lib/oxygen/gamecontrolserver/.cvsignore: New file.
+
+	* lib/oxygen/gamecontrolserver/baseparser.h:
+	* lib/oxygen/gamecontrolserver/baseparser_c.cpp:
+	Added a base parser class BaseParser that the GameControlServer
+	uses to hold a reference to the specific parser used by a
+	simulation.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	Added first version of a GameControlServer
+
+2003-12-01  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/spadestest/spadestest.rb:
+	removed dummy variable for test with the ParamReader. Set
+	Spades.TimePerStep on startup.
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	made simulation parameter time_per_step accessible via ruby
+	(Spades.TimePerStep).
+
+	* lib/oxygen/spadesserver/paramreader.cpp: 
+	modified warning messages
+	removed extensive check for the presence of the scriptserver
+
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	added GetVariable method to work with floats
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	some cosmetic changes. moved main path out of conditional
+	statement
+	
+2003-12-01  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- implemented helper function to get GameControlServer 
+	- agentConnect calls the GameControlServer::AgentConnect method
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	added helper function to get GameControlServer
+
+	* lib/oxygen/oxygen.h: 
+	* lib/oxygen/oxygen.cpp: 	
+	Added GameControlServer to the oxygen initialization
+
+	* lib/oxygen/gamecontrolserver/baseparser.h: 
+	* lib/oxygen/gamecontrolserver/baseparser_c.cpp: 	
+	Added a base parser class BaseParser that the GameControlServer uses
+	to hold a reference to the specific parser used by a simulation. 
+	
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	Added first version of a GameControlServer
+
+2003-12-01  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/spadestest/spadestest.rb:
+	removed dummy variable for test with the ParamReader. Set Spades.TimePerStep
+	on startup.
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	made simulation parameter time_per_step accessible via ruby
+	(Spades.TimePerStep).
+
+	* lib/oxygen/spadesserver/paramreader.cpp: 
+	modified warning messages
+	removed extensive check for the presence of the scriptserver
+
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	added GetVariable method to work with floats
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	some cosmetic changes. moved main path out of conditional statement
+
+2003-11-30  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/spadesserver/paramstorer.h:
+	added missing paramstorer.h to repository
+
+	* lib/oxygen/spadesserver/paramstorer.h: 
+	New file.
+
+2003-11-27  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/spadestest/spadestest.rb: 
+	removed call to spadesserver.init
+	created new variable Test.value to test with the ParamReader
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp, lib/zeitgeist/scriptserver/scriptserver.h:
+	added new method ExistsVariable to test if the script server knows a
+	variable, used by the ParamReader
+
+	* lib/oxygen/Makefile.am:
+	added ParamStorer and ParamReader to Makefile.am
+
+	* lib/oxygen/spadesserver/paramreader.cpp:
+	* lib/oxygen/spadesserver/paramstorer.cpp:
+	New file.
+
+	* lib/oxygen/spadesserver/paramreader.cpp:
+	* lib/oxygen/spadesserver/paramreader.h:
+	* lib/oxygen/spadesserver/paramstorer.cpp:
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:
+	intial version of ParamStorer class
+	removed Init() from SpadesServer, creating ParamReader in
+	parseParameters()
+	initial working version of ParamReader. Use "--<rubyVarName>
+	value" to set values in ruby variables on the command
+	line. Strings passed as value must be quoted.
+
+2003-11-23  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	some cleanup and whitespace change
+	implemented calls to the MonitorServer
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	* lib/oxygen/monitorserver/monitorserver.h:
+	* lib/oxygen/monitorserver/monitorsystem.h:
+	implemented the callbacks from SpadesServer in MonitorServer.
+	completed the MonitorSystem interface.
+
+2003-11-20  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/preinit.rb: 
+	fixed some ruby warnings
+
+	* plugin/inputsdl/inputsystemsdl.cpp:
+	changed some diagnostic messages to be more specific
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	fixed some ruby warnings with 1.8.0
+	added missing gpl header
+	whitespace changes
+
+	* lib/kerosin/openglserver/openglserver_c.cpp: 
+	whitespace only
+
+	* lib/kerosin/openglserver/openglserver.cpp:
+	lib/kerosin/openglserver/openglserver.h:
+	added missing gpl header
+	removed Init() declaration from header with no corresponding implementation
+	added more diagnostic output to the openglserver
+
+	* lib/kerosin/inputserver/inputserver.cpp:
+	added missing gpl header and whitespace changes
+
+	* lib/kerosin/kerosin.rb: 
+	worked around annoying ruby 1.8.0 warning
+	"(eval):86: warning: don't put space before argument parentheses"
+
+2003-11-19  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/Makefile.am:
+	* lib/oxygen/oxygen.cpp:
+	* lib/oxygen/oxygen.h:
+ 	- added MonitorServer related files to Makefile.am
+	- registered MonitorServer and MonitorSystem in oxygen.cpp
+
+	* app/spadestest/spadestest.rb:
+	- spadestest.rb creates the MonitorServer and registers the
+	MonitorTest system to it.
+
+	* configure.ac, plugin/monitortest/Makefile.am:
+	* plugin/monitortest/export.cpp:
+	* plugin/monitortest/monitortest.cpp:
+	* plugin/monitortest/monitortest.h: 
+	* plugin/monitortest/monitortest_c.cpp:
+	- initial monitor system added
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	* lib/oxygen/monitorserver/monitorserver.h:
+	* lib/oxygen/monitorserver/monitorserver_c.cpp:
+	* lib/oxygen/monitorserver/monitorsystem.cpp:
+	* lib/oxygen/monitorserver/monitorsystem.h:
+	* lib/oxygen/monitorserver/monitorsystem_c.cpp:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	- extended the initial version of the monitor server
+	- added the initial version of the monitor system
+	- changed the base class of SpadesServer to be zeitgeist::Node as
+	a ParamReader should be registered below it
+
+2003-11-19  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/monitorserver/monitorserver.h: 
+	* lib/oxygen/monitorserver/monitorserver.cpp: 
+	Initial version of MonitorServer
+
+2003-11-17  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- moved some demo code into the simToTime() method 
+	- returning default values for all the empty methods 
+	- pauseMethodCallBack starts up the simulation immediatly
+
+	* app/spadestest/main.cpp: 
+	- using the SpadesServer to simulate. 
+	- disabled interactivity (console).
+	
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	added command line parsing via spades::EngineParam style parameter reader
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	made inheritance from spades::WorldModel public
+
+	* lib/oxygen/spadesserver/paramreader.h: 
+	made inheritance from spades::EngineParam public
+
+	* lib/oxygen/oxygen.cpp:
+	* lib/oxygen/spadesserver/paramreader.h:
+	* lib/oxygen/spadesserver/paramreader_c.cpp:	
+	* lib/oxygen/spadesserver/spadesserver.h:	
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:	
+	added initial version of the parameter reader base class (representing
+	the zeitgeist equivalent of spades::EngineParam)
+
+	* app/spadestest/spadestest.rb: 
+	creating the Parameter Reader on startup
+
+2003-11-16  Oliver Obst  <fruit@robolog.org>
+
+	* configure.ac: 
+	checking for SPADES library. SPADES can be used
+	optional right now.
+
+	* acinclude.m4: added AC_LIB_SPADES from rcss3d
+
+	* app/spadestest/main.cpp: 
+	accessing the SpadesServer from main.cpp
+
+	* app/spadestest/spadestest.rb: 
+	- create the SpadesServer 
+	- added a second sphere
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:
+	added initial revision of SpadesServer (it doesn't do
+	anything yet)
+
+	* lib/oxygen/oxygen.cpp: 
+	register spadesserver during initialization
+
+	* lib/oxygen/oxygen.h: 
+	- including spadesserver 
+	- including indexbuffer
+
+	* lib/oxygen/Makefile.am: 
+	- added spadesserver subdirectory and files. build spadesserver only if
+	the spades library is available.
+	
+
 2003-11-15  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
-	fixed the script path and removed the STRINGIFY macros as configure properly places
-	quotes around the prefix now.
+	fixed the script path and removed the STRINGIFY macros as configure 
+	properly places quotes around the prefix now.
 
 	* lib/zeitgeist/zeitgeist.rb: 
 	- createVariable was taking 3 parameters: 
@@ -76,14 +910,14 @@
 	  into separate macros.
           The basic libraries (libsalt, libzeitgeist, and libkerosin) do not 
 	  need them, so they should not depend on them. 
-	  The macros have gone to acinclude and are only called in configure.ac. 
+	  The macros have gone to acinclude and are only called in configure.ac.
 	  If the libraries are not available on a particular system or if the 
 	  user configures with --disable-kerosin, libkerosin and the test 
 	  dependend on kerosin will not be build. 
         - moved the check for ODE into a separate macro. Removed dependency on 
 	  libode for the base libraries libsalt and libzeitgeist. Applications 
-	  need only to link the .la files from our libraries, other dependencies 
-	  will be resolved automatically by libtool. 
+	  need only to link the .la files from our libraries, other dependencies
+	  will be resolved automatically by libtool.
         - added the app/fonttest Makefile
 
 	* acinclude.m4:
@@ -135,9 +969,9 @@
 	  anymore. Instead, we're using FMUSIC_LoadSongEx now.
 	
 	* plugin/soundsystemfmod/soundstreamfmod.cpp: 
-	- changes so that the file compiles with FMOD 3.7. Some of the "Load" functions in
-	  FMOD have been changed, so that this changes was required in order
-	  to be up to date.
+	- changes so that the file compiles with FMOD 3.7. Some of the "Load" 
+	  functions in FMOD have been changed, so that this changes was 
+	  required in order to be up to date.
 
 	* configure.ac: 
 	added check if the soundsystemfmod plugin should be built

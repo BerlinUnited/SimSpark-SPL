@@ -38,8 +38,6 @@ ${top_srcdir}/utility/glextgen/glextensionreg.cpp ${top_srcdir}/utility/glextgen
 	cd ${top_srcdir}/utility/glextgen/ && $(MAKE) $(AM_MAKEFLAGS) all
 
 sources = \
-agentaspect/visionperceptor.cpp \
-agentaspect/visionperceptor_c.cpp \
 fontserver/font.cpp \
 fontserver/fontserver.cpp \
 fontserver/fontserver_c.cpp \
@@ -81,7 +79,6 @@ renderserver/renderserver_c.cpp \
 openglserver/glextensionreg.cpp
 
 nobase_libpkginclude_HEADERS = \
-agentaspect/visionperceptor.h \
 fontserver/font.h \
 fontserver/fontserver.h \
 fontserver/glyph.h \
@@ -102,6 +99,7 @@ sceneserver/helper/nv_math/nv_mathdecl.h \
 sceneserver/light.h \
 sceneserver/sphere.h \
 sceneserver/staticmesh.h \
+sceneserver/transform.h \
 soundserver/soundeffect.h \
 soundserver/soundmodule.h \
 soundserver/soundobject.h \
@@ -112,6 +110,6 @@ textureserver/texture.h \
 textureserver/texture2d.h \
 textureserver/textureserver.h \
 openglserver/openglserver.h \
-renderserver/renderserver.cpp
+renderserver/renderserver.h
 
 #sceneserver/camera.h 

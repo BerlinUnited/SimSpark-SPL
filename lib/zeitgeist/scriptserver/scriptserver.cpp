@@ -1,3 +1,24 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: scriptserver.cpp,v 1.8 2003/12/21 23:36:37 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #include <boost/any.hpp>
 #include <boost/scoped_array.hpp>
 #include <sstream>
@@ -74,7 +95,7 @@ VALUE selectObject(VALUE /*self*/, VALUE path)
   if (leaf.get() != NULL)
     {
       stringstream s;
-      s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
+      s << "ZeitgeistObject.new (" << (unsigned long) leaf.get() <<")";
       return rb_eval_string(s.str().c_str());
     }
   else
@@ -140,7 +161,7 @@ VALUE newObject(VALUE /*self*/, VALUE className, VALUE pathStr)
   if (leaf.get() != NULL)
     {
       stringstream s;
-      s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
+      s << "ZeitgeistObject.new (" << (unsigned long) leaf.get() <<")";
       return rb_eval_string(s.str().c_str());
     }
   else
@@ -234,24 +255,15 @@ bool ScriptServer::Run(salt::RFile* file)
 
 bool ScriptServer::Run(const string &fileName)
 {
-  /*int error;
-    rb_load_protect(rb_str_new2(fileName.c_str()), 0, &error);
-
-    if (error)
-    {
-    VALUE mes = rb_inspect(rb_gv_get("$!"));
-    GetLog()->Error().Printf("ERROR: %s\n", RSTRING(mes)->ptr);
-    return false;
-    }
-    return true;*/
   salt::RFile* file = GetFile()->Open(fileName.c_str());
-
   if (file == NULL)
     {
       GetLog()->Error().Printf("ERROR: ScriptServer::Run() - Can't locate file '%s'\n",
                                fileName.c_str());
       return false;
     }
+
+  GetLog()->Normal() << "ScriptServer: Running " << fileName << endl;
 
   bool result = Run(file);
   delete file;
@@ -276,7 +288,7 @@ void ScriptServer::CreateVariable(const string &varName, int value)
 {
   stringstream s;
   // create a string with: "createVariable 'varName', value"
-  s << "createVariable '" << varName << "', " << value;
+  s << "createVariable('" << varName << "', " << value << ")";
   Eval(s.str());
 }
 
@@ -284,7 +296,7 @@ void ScriptServer::CreateVariable(const string &varName, float value)
 {
   stringstream s;
   // create a string with: "createVariable 'ns', 'varName', value"
-  s << "createVariable '" << varName << "', " << value;
+  s << "createVariable('" << varName << "', " << value << ")";
   Eval(s.str());
 }
 
@@ -292,15 +304,59 @@ void ScriptServer::CreateVariable(const string &varName, const string &value)
 {
   stringstream s;
   // create a string with: "createVariable 'ns', 'varName', 'value'"
-  s << "createVariable '" << varName << "', '" << value << "'";
-  cout << "createVariable '" << varName << "', '" << value << "'" << endl;
+  s << "createVariable('" << varName << "', '" << value << "')";
   Eval(s.str());
+}
+
+bool ScriptServer::ExistsVariable(const string &varName)
+{
+  stringstream    s(varName);
+  string current;
+  vector<string>  tokens;
+
+  // parse varName
+  while(!s.eof())
+    {
+      getline(s, current,'.');
+      if (current.size())
+        tokens.push_back(current);
+    }
+
+  if (tokens.size() != 2)
+    {
+        // invalid name
+        return false;
+    }
+
+  char firstChar = (tokens[0])[0];
+  if (
+      (firstChar < 'A') ||
+      (firstChar > 'Z')
+      )
+      {
+          // namespace must start with a capital letter
+          return false;
+      }
+
+  // get class
+  VALUE ns =      rb_const_get(rb_cObject, rb_intern(tokens[0].c_str()));
+
+  if (NIL_P(ns))
+      {
+          // invalid namespace
+          return false;
+      }
+
+  ID var  = rb_intern(tokens[1].c_str());
+  VALUE v = rb_funcall(ns, var, 0);
+
+  return !(NIL_P(v));
 }
 
 VALUE ScriptServer::GetVariable(const string &varName)
 {
   stringstream    s(varName);
-  string                  current;
+  string current;
   vector<string>  tokens;
 
   // parse varName
@@ -345,6 +401,23 @@ bool ScriptServer::GetVariable(const string &varName, int &value)
       return true;
     }
 }
+
+/** reads the value of a ruby float, returns true on success */
+bool ScriptServer::GetVariable(const std::string &varName, float &value)
+{
+    VALUE val = GetVariable(varName);
+
+    if (NIL_P(val))
+    {
+        return false;
+    }
+    else
+        {
+            value = (float)NUM2DBL(val);
+            return true;
+        }
+}
+
 
 bool ScriptServer::GetVariable(const string &varName, bool &value)
 {
@@ -404,7 +477,7 @@ bool ScriptServer::RunInitScript(const string &sourceDir, const string &name,
 {
   // run the init script in the sourceDir
   string sourcePath = sourceDir + "/" + name;
-  GetLog()->Normal() << "Running " << sourcePath << "... ";
+  GetLog()->Normal() << "ScriptServer: Running " << sourcePath << "... ";
 
   salt::StdFile file;
   if (

@@ -6,7 +6,7 @@ config.h
 
 doc:	doc-recursive
 doc-recursive:	
-	cd doc && $(MAKE) $(AM_MAKEFLAGS) all
+	cd doc && $(MAKE) $(AM_MAKEFLAGS) doc
 
 CLEANFILES = 
 

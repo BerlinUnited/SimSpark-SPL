@@ -45,12 +45,12 @@ glXExtensionHash = {}
 frontEnd = frontEndClass.new
 
 # queue up some jobs to scan
-frontEnd.addFile ($path+"glext.h", '(#ifndef) (GL_\w+)', '(.+) (gl\w+)', glExtensionHash)
+frontEnd.addFile($path+"glext.h", '(#ifndef) (GL_\w+)', '(.+) (gl\w+)', glExtensionHash)
 if $target == "win32"
-	frontEnd.addFile ($path+"wglext.h", '(#ifndef) (WGL_\w+)', '(.+) (wgl\w+)', wglExtensionHash)
+	frontEnd.addFile($path+"wglext.h", '(#ifndef) (WGL_\w+)', '(.+) (wgl\w+)', wglExtensionHash)
 end
 if $target == "x"
-	frontEnd.addFile ($path+"glxext.h", '(#ifndef) (GLX_\w+)', '(.+) (glX\w+)', glXExtensionHash)
+	frontEnd.addFile($path+"glxext.h", '(#ifndef) (GLX_\w+)', '(.+) (glX\w+)', glXExtensionHash)
 end
 
 # let's work it
@@ -103,7 +103,7 @@ frontEnd.scanAll
 	# Note: we are also passing in the frontEnd, because it should contain information
 	#		on how to 'procize' a function (generate function pointer typedef given a
 	#		function name)
-	backEnd.generate (frontEnd, glExtensionArray, wglExtensionArray, glXExtensionArray)
+	backEnd.generate(frontEnd, glExtensionArray, wglExtensionArray, glXExtensionArray)
 rescue StandardError => bang
 	print "ERROR: ", bang, "\n"
 end

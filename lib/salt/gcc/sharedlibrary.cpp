@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sharedlibrary.cpp,v 1.3 2003/11/13 13:22:24 fruit Exp $
+   $Id: sharedlibrary.cpp,v 1.4 2003/12/21 23:36:37 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,12 +21,10 @@
 */
 #include "../sharedlibrary.h"
 #include <dlfcn.h>
-
-#if RCSS_DEBUG
 # include <iostream>
-#endif
 
 using namespace salt;
+
 
 bool SharedLibrary::Open(const std::string &libName)
 {
@@ -38,6 +36,12 @@ bool SharedLibrary::Open(const std::string &libName)
         std::cerr << "Opening " << libName + ".so\n";
 #endif
         mLibHandle = ::dlopen((libName + ".so").c_str(), RTLD_LAZY);
+
+        if (mLibHandle == NULL)
+            {
+                std::cerr << "(SharedLibrary) dlopen faild for " << libName
+                          << " with: \n\t" << dlerror() << std::endl;
+            }
 
         return (mLibHandle!=NULL);
 }

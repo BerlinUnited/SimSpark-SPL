@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: effector.h,v 1.5 2003/12/21 23:36:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,18 +27,30 @@
 // #endif
 
 #include <oxygen/sceneserver/basenode.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 
 namespace oxygen
 {
+class ActionObject;
 
 class Effector : public BaseNode
 {
 public:
-    //! this routine performs the action of the effector. It acts on >base<
-    virtual bool Perform(boost::shared_ptr<BaseNode> &base, float deltaTime);
+    Effector() : BaseNode() {};
+    virtual ~Effector() {};
+
+    /** realizes the action described by the ActionObject */
+    virtual bool Realize(boost::shared_ptr<ActionObject> action) = 0;
+
+    /** returns the name of the predicate this effector implements */
+    virtual std::string GetPredicate() = 0;
+
+    /** constructs an Actionobject, describing a predicate */
+    virtual boost::shared_ptr<ActionObject>
+    GetActionObject(const BaseParser::TPredicate& predicate) = 0;
 };
 
-DECLARE_CLASS(Effector);
+DECLARE_ABSTRACTCLASS(Effector);
 
 } // namespace oxygen
 

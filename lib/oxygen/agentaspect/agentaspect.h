@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.5 2003/11/14 14:05:53 fruit Exp $
+   $Id: agentaspect.h,v 1.6 2003/12/21 23:36:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,9 @@
 // #include <config.h>
 // #endif
 
-#include "../sceneserver/basenode.h"
+#include <oxygen/sceneserver/transform.h>
+#include <oxygen/gamecontrolserver/actionobject.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 #include "effector.h"
 #include "perceptor.h"
 
@@ -36,20 +38,43 @@ namespace oxygen
 }
 #endif
 
-class AgentAspect : public BaseNode
+class AgentAspect : public Transform
 {
 public:
-    //! this method must be implemented for the agents 'think' behavior
-    virtual void Think(float deltaTime) = 0;
+    AgentAspect() : Transform() {};
+    virtual ~AgentAspect() {};
+
+    /** Initializes the AgentAspect. Called immediately after the
+        AgentAspect is created by the GameControlServer
+     */
+    virtual bool Init();
+
+    /** RealizeActions realizes the actions described by \param
+        actions using the corresponding effectors
+    */
+    virtual bool RealizeActions(boost::shared_ptr<ActionObject::TList> actions);
+
+    /** QuerySensors collects data from all perceptors below this
+        AgentAspect
+     */
+    virtual boost::shared_ptr<BaseParser::TPredicateList> QueryPerceptors();
+
+    /** updates the map of Effectors below this AgentAspect */
+    virtual void UpdateEffectorMap();
+
+    /** looks up the effector corresponding to a predicate */
+    virtual boost::shared_ptr<Effector> GetEffector(const std::string predicate) const;
 
 protected:
-    salt::Vector3f GetVelocity() const;
+    typedef std::map<std::string, boost::shared_ptr<Effector> > TEffectorMap;
+
+    //! the map of effectors below this AgentAspect
+    TEffectorMap mEffectorMap;
+
 private:
-    //! update internal state before physics calculation ... class Think()
-    void PrePhysicsUpdateInternal(float deltaTime);
 };
 
-DECLARE_ABSTRACTCLASS(AgentAspect);
+DECLARE_CLASS(AgentAspect);
 
 } // namespace oxygen
 

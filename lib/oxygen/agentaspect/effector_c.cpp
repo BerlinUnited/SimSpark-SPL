@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector_c.cpp,v 1.3 2003/11/10 23:11:42 fruit Exp $
+   $Id: effector_c.cpp,v 1.4 2003/12/21 23:36:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <zeitgeist/class.h>
 #include "effector.h"
 
-using namespace boost;
 using namespace oxygen;
 
 void CLASS(Effector)::DefineClass()

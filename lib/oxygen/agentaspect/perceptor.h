@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptor.h,v 1.3 2003/11/14 14:05:53 fruit Exp $
+   $Id: perceptor.h,v 1.4 2003/12/21 23:36:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,41 +22,22 @@
 #ifndef OXYGEN_PERCEPTOR_H
 #define OXYGEN_PERCEPTOR_H
 
-#include "../sceneserver/basenode.h"
-
-#ifdef HAVE_HASH_MAP
-#include <hash_map>
-#else
-#include <map>
-#endif
+#include <oxygen/sceneserver/basenode.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 
 namespace oxygen
 {
 
 class Perceptor : public oxygen::BaseNode
 {
-    //
-    // types
-    //
-public:
-#ifdef HAVE_HASH_MAP
-    typedef std::hash_map<std::string, boost::any> TDictionary;
-#else
-    typedef std::map<std::string, boost::any> TDictionary;
-#endif
-
-
-    //
-    // functions
-    //
 public:
     /*!
       This is called by agents to trigger the percept event implemented by
-      this perceptor. The perceptor can return data through the dictionary,
+      this perceptor. The perceptor can return data through the predicate
       which is passed as a parameter.
       \return true, if valid data is available and false otherwise.
     */
-    virtual bool Percept(TDictionary &dictionary) = 0;
+    virtual bool Percept(BaseParser::TPredicate& predicate) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(Perceptor);

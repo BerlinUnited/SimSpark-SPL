@@ -1,0 +1,33 @@
+===== Dez 19 2003
+
+Branch: rcssserver3D-0.1
+This branch should be created from the main branch once
+rcssserver3D-add-gamecontrol is merged back. I'd like to release
+rcssserver3D-0.1 on Dec 31 at the latest. Things to do that should be
+included until then are
+- more cleanup for the 'make dist' target (Oliver)
+- generate a document describing general stuff (what can we do now,
+  what's still to do, and want we to do, open issues, where to find help,...)
+- fix bug that sense events do not seem to get back to agents
+- optionally: integrate our basic monitor that accesses the SG
+              directly (no network)
+
+Branch: rcssserver3D-0.2
+- add Heni's monitor 
+- add rcssbase socket streams (i.e. test for rcssbase in configure.ac)
+  for monitor
+- optional stuff:
+  - add some control aspects
+  - add more effectors / perceptors
+
+Branch: rcssserver3D-0.3
+This should be the branch where the latest changes for Lisbon are
+introduced. In parallel, we will be working here on more features for
+RoboCup 2005 on a different branch.
+
+Branch: rcssserver3D-X.Y
+We are going to add joints and more of the more advanced ODE stuff
+during winter/spring/summer 2004. Joschka from my group here is
+already working on a way to integrate bones into the simulator (so we
+will get articulated creatures).
+

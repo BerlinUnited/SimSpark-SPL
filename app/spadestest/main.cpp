@@ -9,7 +9,8 @@ using namespace zeitgeist;
 #undef GetObject
 #endif
 
-int main()
+int
+main(int argc, const char *const *argv)
 {
   // init zeitgeist
   Zeitgeist zg("." PACKAGE_NAME);
@@ -18,7 +19,7 @@ int main()
   shared_ptr<CoreContext> context = zg.CreateContext();
 
   // init oxygen
-  oxygen::Oxygen                          kOxygen(zg);
+  oxygen::Oxygen kOxygen(zg);
 
   // run the init scripts
   shared_ptr<ScriptServer> scriptServer
@@ -27,52 +28,14 @@ int main()
   scriptServer->Run("spadestest.rb");
 
   // print a greeting
-  cout << "CoreTest - A Small Interactive Text-Based Console Sample" << endl << endl;
-  cout << "Enter 'exit' command to quit application" << endl << endl;
+  cout << "SpadesTest - A Small Non-Interactive example" << endl << endl;
 
-  // loop until the 'exit' command
-  bool done = false;
-  while (!done)
-    {
-      // update the scene by delta seconds
-      float delta = 0.1f;
+#ifdef HAVE_SPADES_HEADERS
+  shared_ptr<oxygen::SpadesServer> spadesServer =
+      shared_static_cast<oxygen::SpadesServer>(context->Get("/sys/server/spades"));
 
-      shared_ptr<oxygen::SceneServer> sceneServer =
-        shared_static_cast<oxygen::SceneServer>(context->Get("/sys/server/scene"));
-      if (sceneServer.get() != NULL)
-        {
-          sceneServer->Update(delta);
-          cout << "updated the scene by " << delta << " seconds." << endl;
-        }
-
-      // print the current location of the sphere collider
-      shared_ptr<oxygen::BaseNode> sphereNode =
-        shared_static_cast<oxygen::BaseNode>(context->Get("/usr/scene/sphere"));
-
-      if (sphereNode.get() != NULL)
-        {
-          const salt::Matrix& transform = sphereNode->GetWorldTransform();
-          const salt::Vector3f& pos = transform.Pos();
-          cout << "found the sphereNode at " << pos[0] << "," << pos[1] << "," << pos[2] << endl;
-        }
-
-      // read and execute ruby commands
-      std::string command = "";
-
-      boost::shared_ptr<Leaf> selectedObject = scriptServer->GetContext()->GetObject();
-
-      cout << endl << selectedObject->GetFullPath() << "> ";
-      getline(cin, command,'\n');
-
-      if (command.compare("exit")==0)
-        {
-          done = true;
-        }
-      else
-        {
-          scriptServer->Eval(command.c_str());
-        }
-    }
+  spades::SimulationEngineMain(argc, argv, spadesServer.get());
+#endif
 
   return 0;
 }
