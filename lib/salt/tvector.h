@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tvector.h,v 1.8 2004/05/01 16:43:59 fruit Exp $
+   $Id: tvector.h,v 1.9 2004/05/05 08:33:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
 
 #include "defines.h"
 #include "gmath.h"
-#include <cstdio>
+#include <iostream>
 
 namespace salt
 {
@@ -185,6 +185,16 @@ private:
     DATATYPE mData[ELEMENTS];
 };
 
+template <typename DATATYPE, int ELEMENTS, typename TYPE>
+std::ostream& operator <<(std::ostream& ost, const TVector<DATATYPE,ELEMENTS,TYPE>& v)
+{
+    if (ELEMENTS < 1) return ost;
+    ost << "V(" << v[0];
+    for (int i=1; i<ELEMENTS; ++i) ost << ", " << v[i];
+    ost << ")";
+    return ost;
+}
+
 /** TVector2 is a two dimensional version of TVector */
 template <typename DATATYPE, class TYPE>
 class TVector2 : public TVector<DATATYPE, 2, TYPE>
@@ -313,8 +323,8 @@ template <typename DATATYPE, int ELEMENTS, typename TYPE>
 inline void TVector<DATATYPE, ELEMENTS, TYPE>::Dump() const
 {
     for (int i=0; i<ELEMENTS; i++)
-        printf("%f ", (float)mData[i]);
-    printf("\n");
+        std::cout << mData[i] << " ";
+    std::cout << "\n";
 }
 
 // fill vector with value 'fill'
