@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.2.2.4 2004/01/21 15:48:43 rollmark Exp $
+   $Id: createeffector.cpp,v 1.2.2.5 2004/01/22 06:44:10 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ void
 CreateEffector::OnLink()
 {
     GetScript()->CreateVariable("Agent.Mass", 75.0f);
-    GetScript()->CreateVariable("Agent.Radius", 1.0f);
+    GetScript()->CreateVariable("Agent.Radius", 0.5f);
     GetScript()->CreateVariable("Agent.MaxSpeed", 10.0f);
 }
 
@@ -55,7 +55,7 @@ CreateEffector::GetAgentMass() const
 float
 CreateEffector::GetAgentRadius() const
 {
-    float agentRadius = 1.0;
+    float agentRadius = 0.5;
     GetScript()->GetVariable("Agent.Radius", agentRadius);
 
     return agentRadius;
@@ -167,17 +167,17 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
   effector->SetName("_InitEffector");
   aspect->AddChildReference(effector);
 
-  // add perfect vision perceptor
+  // add imperfect vision perceptor
   shared_ptr<Perceptor> perceptor =
-      shared_dynamic_cast<Perceptor>(GetCore()->New("PerfectVisionPerceptor"));
+      shared_dynamic_cast<Perceptor>(GetCore()->New("VisionPerceptor"));
 
   if (perceptor.get() == 0)
       {
-          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the PerfectVisionPerceptor\n";
+          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the VisionPerceptor\n";
           return false;
       }
 
-  perceptor->SetName("_PerfectVisionPerceptor");
+  perceptor->SetName("_VisionPerceptor");
   aspect->AddChildReference(perceptor);
 
   // add agent state

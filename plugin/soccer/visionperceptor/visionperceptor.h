@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1.2.6 2004/01/22 06:44:10 fruit Exp $
+   $Id: visionperceptor.h,v 1.1.2.1 2004/01/22 06:44:10 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,25 +19,25 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef VISIONPERCEPTOR_H
+#define VISIONPERCEPTOR_H
 
-#include <zeitgeist/zeitgeist.h>
-#include "createeffector/createeffector.h"
-#include "initeffector/initeffector.h"
-#include "gamestateaspect/gamestateaspect.h"
-#include "agentstate/agentstate.h"
-#include "sexpmonitor/sexpmonitor.h"
-#include "fieldflag/fieldflag.h"
-#include "ball/ball.h"
-#include "visionperceptor/visionperceptor.h"
+#include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/sceneserver/sceneserver.h>
 
-ZEITGEIST_EXPORT_BEGIN()
-        ZEITGEIST_EXPORT(GameStateAspect);
-        ZEITGEIST_EXPORT(CreateEffector);
-        ZEITGEIST_EXPORT(InitEffector);
-        ZEITGEIST_EXPORT(AgentState);
-        ZEITGEIST_EXPORT(SexpMonitor);
-        ZEITGEIST_EXPORT(FieldFlag);
-        ZEITGEIST_EXPORT(Ball);
-        ZEITGEIST_EXPORT(VisionPerceptor);
-ZEITGEIST_EXPORT_END()
+class VisionPerceptor : public oxygen::Perceptor
+{
+public:
+    VisionPerceptor();
+    virtual ~VisionPerceptor();
 
+    //! \return true, if valid data is available and false otherwise.
+    bool Percept(oxygen::Predicate& predicate);
+
+private:
+    boost::shared_ptr<oxygen::SceneServer> mSceneServer;
+};
+
+DECLARE_CLASS(VisionPerceptor);
+
+#endif //VISIONPERCEPTOR_H
