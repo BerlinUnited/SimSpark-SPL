@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.3 2004/02/26 21:08:59 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.4 2004/04/15 19:52:32 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,10 +31,9 @@
 
 using namespace oxygen;
 using namespace boost;
-using namespace std;
-using namespace salt;
+using salt::Vector3f;
 
-SoccerRuleAspect::SoccerRuleAspect() : SoccerControlAspect()
+SoccerRuleAspect::SoccerRuleAspect()
 {
 }
 
@@ -42,39 +41,43 @@ SoccerRuleAspect::~SoccerRuleAspect()
 {
 }
 
-void SoccerRuleAspect::MoveBall(const salt::Vector3f& pos)
+void
+SoccerRuleAspect::MoveBall(const Vector3f& pos)
 {
     mBallBody->SetPosition(pos);
     mBallBody->SetVelocity(Vector3f(0,0,0));
     mBallBody->SetAngularVelocity(Vector3f(0,0,0));
 }
 
-void SoccerRuleAspect::UpdateBeforeKickOff()
+void
+SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // before the game starts the ball should stay in the middle of
     // the playing field
-    salt::Vector3f pos(0,0,mBallRadius);
+    Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
 }
 
-void SoccerRuleAspect::UpdateKickOff()
+void
+SoccerRuleAspect::UpdateKickOff()
 {
     // after the first agent touches the ball move to PM_PLAYON
     shared_ptr<AgentAspect> agent;
     TTime time;
     if (mBallState->GetLastCollidingAgent(agent,time))
-        {
-            mGameState->SetPlayMode(PM_PlayOn);
-        }
+    {
+        mGameState->SetPlayMode(PM_PlayOn);
+    }
 }
 
-void SoccerRuleAspect::UpdateKickIn()
+void
+SoccerRuleAspect::UpdateKickIn()
 {
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     // after the first agent touches the ball move to PM_PLAYON. the
     // time when the agent last touches the ball must be after the
@@ -82,28 +85,29 @@ void SoccerRuleAspect::UpdateKickIn()
     shared_ptr<AgentAspect> agent;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     TTime lastChange = mGameState->GetLastModeChange();
     if (time > lastChange)
-        {
-            mGameState->SetPlayMode(PM_PlayOn);
-        } else
-            {
-                // move the ball back on the ground where it left the playing
-                // field
-                MoveBall(mLastValidBallPos);
-            }
+    {
+        mGameState->SetPlayMode(PM_PlayOn);
+    } else
+    {
+        // move the ball back on the ground where it left the playing
+        // field
+        MoveBall(mLastValidBallPos);
+    }
 }
 
-bool SoccerRuleAspect::CheckBallLeftField()
+bool
+SoccerRuleAspect::CheckBallLeftField()
 {
     if (mBallState->GetBallOnField())
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     // get the team of the last agent touching the ball and set the
     // correct kick in playmode
@@ -111,33 +115,34 @@ bool SoccerRuleAspect::CheckBallLeftField()
     TTime time;
 
     if (mBallState->GetLastCollidingAgent(agent,time))
+    {
+        shared_ptr<AgentState> agentState;
+        if (SoccerBase::GetAgentState(agent,agentState))
         {
-            shared_ptr<AgentState> agentState;
-            if (SoccerBase::GetAgentState(agent,agentState))
-                {
-                    mGameState->SetPlayMode
-                        (
-                         (agentState->GetTeamIndex() == TI_LEFT) ?
-                         PM_KickIn_Right : PM_KickIn_Left
-                         );
+            mGameState->SetPlayMode
+                (
+                    (agentState->GetTeamIndex() == TI_LEFT) ?
+                    PM_KickIn_Right : PM_KickIn_Left
+                    );
 
-                    mLastValidBallPos =
-                        mBallState->GetLastValidBallPosition();
-                    mLastValidBallPos[2] = mBallRadius;
-                }
+            mLastValidBallPos =
+                mBallState->GetLastValidBallPosition();
+            mLastValidBallPos[2] = mBallRadius;
         }
+    }
 
     return true;
 }
 
-bool SoccerRuleAspect::CheckGoal()
+bool
+SoccerRuleAspect::CheckGoal()
 {
     // check if the ball is in one of the goals
     TTeamIndex idx = mBallState->GetGoalState();
     if (idx == TI_NONE)
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     // score the lucky team
     mGameState->ScoreTeam((idx == TI_LEFT) ? TI_RIGHT : TI_LEFT);
@@ -146,44 +151,47 @@ bool SoccerRuleAspect::CheckGoal()
     return true;
 }
 
-void SoccerRuleAspect::UpdatePlayOn()
+void
+SoccerRuleAspect::UpdatePlayOn()
 {
     // check if the ball is in one of the goals
     if (CheckGoal())
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     // check if the ball is otherwise not on the playing field
     if (CheckBallLeftField())
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     // other checks go here...
 }
 
-void SoccerRuleAspect::UpdateGoal()
+void
+SoccerRuleAspect::UpdateGoal()
 {
     // check if the pause time after the goal has elapsed
     if (mGameState->GetModeTime() < mGoalPauseTime)
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     // put the ball back in the middle of the playing field
-    salt::Vector3f pos(0,0,0);
+    Vector3f pos(0,0,0);
     SoccerBase::GetSoccerVar(*this,"BallRadius",pos[2]);
     MoveBall(pos);
 
     // kick off for the opposite team
     mGameState->SetPlayMode(
-                            mGameState->GetPlayMode() == PM_Goal_Left ?
-                            PM_KickOff_Right : PM_KickOff_Left
-                            );
+        mGameState->GetPlayMode() == PM_Goal_Left ?
+        PM_KickOff_Right : PM_KickOff_Left
+        );
 }
 
-void SoccerRuleAspect::CheckTime()
+void
+SoccerRuleAspect::CheckTime()
 {
     TTime now = mGameState->GetTime();
     TGameHalf half = mGameState->GetGameHalf();
@@ -192,72 +200,74 @@ void SoccerRuleAspect::CheckTime()
         (half == GH_FIRST) &&
         (now >= mHalfTime)
         )
-        {
-            // the first gmae half is over
-            mGameState->SetPlayMode(PM_BeforeKickOff);
-            mGameState->SetGameHalf(GH_SECOND);
-        } else if (
-                   (half == GH_SECOND) &&
-                   (now >= 2 * mHalfTime)
-                   )
-            {
-                // the game is over
-                mGameState->SetPlayMode(PM_GameOver);
-            }
+    {
+        // the first gmae half is over
+        mGameState->SetPlayMode(PM_BeforeKickOff);
+        mGameState->SetGameHalf(GH_SECOND);
+    } else if (
+        (half == GH_SECOND) &&
+        (now >= 2 * mHalfTime)
+        )
+    {
+        // the game is over
+        mGameState->SetPlayMode(PM_GameOver);
+    }
 }
 
-void SoccerRuleAspect::Update(float deltaTime)
+void
+SoccerRuleAspect::Update(float deltaTime)
 {
     if (
         (mGameState.get() == 0) ||
         (mBallState.get() == 0) ||
         (mBallBody.get() == 0)
         )
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     CheckTime();
 
     TPlayMode playMode = mGameState->GetPlayMode();
 
     switch (playMode)
-        {
-        case PM_BeforeKickOff:
-            UpdateBeforeKickOff();
-            break;
+    {
+    case PM_BeforeKickOff:
+        UpdateBeforeKickOff();
+        break;
 
-        case PM_PlayOn:
-            UpdatePlayOn();
-            break;
+    case PM_PlayOn:
+        UpdatePlayOn();
+        break;
 
-        case PM_KickOff_Left:
-        case PM_KickOff_Right:
-            UpdateKickOff();
-            break;
+    case PM_KickOff_Left:
+    case PM_KickOff_Right:
+        UpdateKickOff();
+        break;
 
-        case PM_KickIn_Left:
-        case PM_KickIn_Right:
-            UpdateKickIn();
-            break;
+    case PM_KickIn_Left:
+    case PM_KickIn_Right:
+        UpdateKickIn();
+        break;
 
-        case PM_Goal_Left:
-        case PM_Goal_Right:
-            UpdateGoal();
-            break;
+    case PM_Goal_Left:
+    case PM_Goal_Right:
+        UpdateGoal();
+        break;
 
-        case PM_GameOver:
-            break;
+    case PM_GameOver:
+        break;
 
-        default:
-            GetLog()->Error()
-                << "ERROR: (SoccerRuleAspect) unknown play mode "
-                << playMode << "\n";
-            break;
-        }
+    default:
+        GetLog()->Error()
+            << "ERROR: (SoccerRuleAspect) unknown play mode "
+            << playMode << "\n";
+        break;
+    }
 }
 
-void SoccerRuleAspect::OnLink()
+void
+SoccerRuleAspect::OnLink()
 {
     SoccerControlAspect::OnLink();
 
@@ -282,7 +292,8 @@ void SoccerRuleAspect::OnLink()
     SoccerBase::GetSoccerVar(*this,"RuleHalfTime",mHalfTime);
 }
 
-void SoccerRuleAspect::OnUnlink()
+void
+SoccerRuleAspect::OnUnlink()
 {
     SoccerControlAspect::OnUnlink();
 
