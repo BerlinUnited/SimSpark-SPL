@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.16 2004/02/09 13:11:46 fruit Exp $
+   $Id: main.cpp,v 1.3.2.17 2004/02/10 19:55:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -475,21 +475,28 @@ void drawStatusText()
         case    PM_BeforeKickOff:
             mode = STR_PM_BeforeKickOff;
             break;
-        case    PM_KickOff:
-            mode = STR_PM_KickOff;
-            break;
-        case    PM_PlayOn:
-            mode = STR_PM_PlayOn;
-            break;
         case    PM_KickOff_Left:
             mode = STR_PM_KickOff_Left;
             break;
         case    PM_KickOff_Right:
             mode = STR_PM_KickOff_Right;
             break;
+        case    PM_PlayOn:
+            mode = STR_PM_PlayOn;
+            break;
+        case    PM_KickIn_Left:
+            mode = STR_PM_KickIn_Left;
+            break;
+        case    PM_KickIn_Right:
+            mode = STR_PM_KickIn_Right;
+            break;
         case  PM_FirstHalfOver:
             mode = STR_PM_FirstHalfOver;
             break;
+        case PM_Goal_Left:
+            mode = STR_PM_Goal_Left;
+        case PM_Goal_Right:
+            mode = STR_PM_Goal_Left;
         default:
             mode = "(unknown playmode)";
             break;
