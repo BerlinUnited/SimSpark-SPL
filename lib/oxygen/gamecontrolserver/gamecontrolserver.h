@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.3 2003/12/03 18:01:11 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.4 2003/12/04 17:26:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,15 +22,15 @@
 #ifndef OXYGEN_GAMECONTROLSERVER_H
 #define OXYGEN_GAMECONTROLSERVER_H
 
-#include "baseparser.h"
 #include "actionobject.h"
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 
 namespace oxygen
 {
-
+class BaseParser;
 class AgentAspect;
+class Effector;
 
 class GameControlServer : public zeitgeist::Node
 {
@@ -38,7 +38,15 @@ public:
     GameControlServer();
     ~GameControlServer();
 
-    bool Init(const std::string& parserName);
+    /** creates a parser \param parserName instance and registers it
+        to the GameControlServer
+     */
+    bool InitParser(const std::string& parserName);
+
+    /** creates an effector \param effectorName instance and registers
+        it to the GameControlServer
+     */
+    bool InitEffector(const std::string& effectorName);
 
     /** parses a command string using the registerd parser and uses
         the registered effectors to construct an ActionObject. This
@@ -47,6 +55,11 @@ public:
         modifying the world model.
     */
     boost::shared_ptr<ActionObject::TList> Parse(std::string str) const;
+
+    /** RealizeActions realizes the actions described by \param
+        actions using the corresponding effectors
+    */
+    bool RealizeActions(boost::shared_ptr<ActionObject::TList> actions);
 
     /** notifies the GameControlServer that an agent has connected to
         the simulation. \param id should be a unique identifier for
@@ -67,12 +80,17 @@ public:
     */
     float GetSenseInterval(int id);
 
-private:
+protected:
+    /** looks up the effector registered to \param predicate */
+    boost::shared_ptr<Effector> GetEffector(std::string predicate) const;
+
+protected:
     typedef std::map<int, boost::shared_ptr<AgentAspect> > TAgentMap;
+    typedef std::map<std::string, boost::shared_ptr<Effector> > TEffectorMap;
 
     TAgentMap mAgentMap;
+    TEffectorMap mEffectorMap;
     boost::shared_ptr<BaseParser> mParser;
-
 };
 
 DECLARE_CLASS(GameControlServer);
