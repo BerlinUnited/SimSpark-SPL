@@ -1,8 +1,8 @@
 pkglib_LTLIBRARIES = perfectvisionperceptor.la
 
 perfectvisionperceptor_la_SOURCES = export.cpp \
-perfectvisionperceptor.cpp perfectvisionperceptor.h \
-perfectvisionperceptor_c.cpp
+                                    perfectvisionperceptor.cpp \
+                                    perfectvisionperceptor_c.cpp
 
 # -module tells automake we're not building a library but a loadable module
 # so we don't need the "lib" prefix in the module name
