@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.12 2004/02/01 11:03:47 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.13 2004/02/06 15:06:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -470,22 +470,22 @@ void drawStatusText()
     switch (gPlayMode)
         {
         case    PM_BeforeKickOff:
-            mode = "BeforeKickOff";
+            mode = STR_PM_BeforeKickOff;
             break;
         case    PM_KickOff:
-            mode = "KickOff";
+            mode = STR_PM_KickOff;
             break;
         case    PM_PlayOn:
-            mode = "PlayOn";
+            mode = STR_PM_PlayOn;
             break;
         case    PM_KickOff_Left:
-            mode = "KickOffLeft";
+            mode = STR_PM_KickOff_Left;
             break;
         case    PM_KickOff_Right:
-            mode = "KickOffRight";
+            mode = STR_PM_KickOff_Right;
             break;
         case  PM_FirstHalfOver:
-            mode = "FirstHalfOver";
+            mode = STR_PM_FirstHalfOver;
             break;
         default:
             mode = "(unknown playmode)";
@@ -705,6 +705,10 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
       //mode camera down
       gGLServer.MoveCamUp(-gCamDelta);
       break;
+
+  case 'q':
+      // quit
+      exit(0);
 
   default:
       break;
