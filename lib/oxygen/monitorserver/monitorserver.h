@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.h,v 1.1.2.1 2003/11/19 14:56:29 fruit Exp $
+   $Id: monitorserver.h,v 1.1.2.2 2003/11/19 18:37:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,12 +22,24 @@
 #ifndef OXYGEN_MONITORSERVER_H
 #define OXYGEN_MONITORSERVER_H
 
+#include <zeitgeist/class.h>
+#include <zeitgeist/node.h>
+
+namespace oxygen
+{
+
 class MonitorServer : public zeitgeist::Node
 {
 public:
     MonitorServer();
-    ~MonitorServer();
+    virtual ~MonitorServer();
 
+    /** This function creates an instance of class 'monitorSysName'
+     *  and adds it as a child node below this server
+     */
+    bool RegisterMonitorSystem(const std::string& monitorSysName);
+
+#if 0
     /** This function is called once for every monitor. It should return any
      *  header/setup information that is needed.
      */
@@ -43,13 +55,13 @@ public:
      * model and not the simulation engine) is included here. If you need to
      * keep the data, you must copy it */
     void parseMonitorMessage(const char* data, unsigned datalen);
+#endif
 
 private:
 };
 
 DECLARE_CLASS(MonitorServer);
 
-
-};
+} // namespace oxygen
 
 #endif // OXYGEN_MONITORSERVER_H

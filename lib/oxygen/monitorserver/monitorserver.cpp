@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.1.2.1 2003/11/19 14:54:55 fruit Exp $
+   $Id: monitorserver.cpp,v 1.1.2.2 2003/11/19 18:37:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
+#include <zeitgeist/logserver/logserver.h>
 #include "monitorserver.h"
+#include "monitorsystem.h"
 
 using namespace oxygen;
 using namespace boost;
@@ -33,15 +36,36 @@ MonitorServer::~MonitorServer()
 {
 }
 
-void
-MonitorServer::Init(const string&  monitorSysName)
+bool MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
 {
-    GetLog()->Normal() << "MonitorServer::Init -> " << sndSysName << "\n";
+    // check if a monitor system of the requested type was already created
+    shared_ptr<MonitorSystem> monitorSys =
+        shared_static_cast<MonitorSystem>(GetChildOfClass(monitorSysName));
 
-    // create the monitorsystem
-    shared_ptr<MonitorSystem> monitorSys = shared_static_cast<MonitorSystem>(GetChild);
-    mSoundSystem = shared_static_cast<SoundSystem>(GetCore()->New(sndSysName));
+    if (monitorSys != 0)
+        {
+            return true;
+        }
 
+    // create the monitor system
+    monitorSys = shared_static_cast<MonitorSystem>(GetCore()->New(monitorSysName));
+
+    if (monitorSys == 0)
+        {
+            GetLog()->Error() << "ERROR: (MonitorServer) Cannot create monitor system '"
+                              << monitorSysName << "'\n";
+            return false;
+        }
+
+    // link the monitor system in the hierarchy
+    monitorSys->SetName(monitorSysName);
+
+    if (! AddChildReference(monitorSys))
+        {
+            GetLog()->Error() << "ERROR: (MonitorServer) Cannot link the monitor system '"
+                              << monitorSysName << "' to the hierarchy\n";
+            return false;
+        }
 
     return true;
 }
