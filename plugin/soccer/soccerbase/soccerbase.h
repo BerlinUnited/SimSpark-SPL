@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.1.2.6 2004/02/10 19:36:25 rollmark Exp $
+   $Id: soccerbase.h,v 1.1.2.7 2004/02/10 21:46:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ namespace oxygen
     class Perceptor;
     class Body;
     class SphereCollider;
+    class ControlAspect;
 }
 
 namespace salt
@@ -72,6 +73,12 @@ public:
         transform parent */
     static bool
     GetBody(const zeitgeist::Leaf& base, boost::shared_ptr<oxygen::Body>& body);
+
+    /** returns a reference to the Body node below the given Transform
+        node */
+    static bool
+    GetAgentBody(const boost::shared_ptr<oxygen::Transform> transform,
+                 boost::shared_ptr<oxygen::Body>& agent_body);
 
     /** returns a reference to the AgentState node below the closest
         Transform parent */
@@ -111,6 +118,11 @@ public:
 
     /** flips horizontal coordinates according to the side of the agent */
     static salt::Vector3f FlipView(const salt::Vector3f& pos, TTeamIndex ti);
+
+    /** returns a reference to a ControlAspect registered to the
+        GameControlServer */
+    static boost::shared_ptr<oxygen::ControlAspect>
+    GetControlAspect(const zeitgeist::Leaf& base, const std::string& name);
 
     /** looks up a ruby variable in the Soccer namespace */
     template<typename TYPE>
