@@ -23,6 +23,9 @@ doc/proposal/simulator3d.dvi
 doc/proposal/simulator3d.log
 lib/Makefile
 lib/Makefile.in
+lib/kerosin/.deps
+lib/kerosin/Makefile
+lib/kerosin/Makefile.in
 lib/salt/.deps
 lib/salt/.libs
 lib/salt/Makefile.in
