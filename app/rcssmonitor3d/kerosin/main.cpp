@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.9 2004/04/12 17:25:03 rollmark Exp $
+   $Id: main.cpp,v 1.10 2004/04/23 21:40:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -353,8 +353,11 @@ bool MonitorSpark::InitApp(int argc, char** argv)
     GetScriptServer()->CreateVariable("Command.KickOff", CmdKickOff);
 
     // run initialization scripts
-    GetScriptServer()->Run("rcssmonitor3D-kerosin.rb");
-    GetScriptServer()->Run("bindings.rb");
+    GetScriptServer()->RunInitScript("rcssmonitor3D-kerosin.rb",
+                                     "app/rcssmonitor3d/kerosin/");
+    GetScriptServer()->RunInitScript("bindings.rb",
+                                     "app/rcssmonitor3d/kerosin/",
+                                     ScriptServer::IS_COMMON);
 
     // tell spark the loaction of our camera
     if (! SetFPSController("/usr/scene/camera/physics/controller"))
@@ -404,11 +407,12 @@ int main(int argc, char** argv)
 {
     // the spark app framework instance
     MonitorSpark spark("../../../");
+    std::cerr << "spark done \n";
 
     if (! spark.Init(argc, argv))
-        {
-            return 1;
-        }
+    {
+        return 1;
+    }
 
     spark.Run();
 
