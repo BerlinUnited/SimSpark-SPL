@@ -1,0 +1,27 @@
+#! /bin/sh
+
+kill_server()
+{
+        kill -s SIGINT $PID
+        exit 0
+}
+
+if test -x ../agenttest/agenttest; then
+    SIMULATOR="./rcssserver3D"
+    PARAM="--ipc_force_remove $*"
+    MONITOR="../rcssmonitor3d/rcssmonitor3D" 
+else
+    prefix=@prefix@
+    exec_prefix=@exec_prefix@
+    datadir=@datadir@
+    pkgdatadir=${datadir}/@PACKAGE@
+    SIMULATOR="${exec_prefix}/bin/rcssserver3D"
+    PARAM="--ipc_force_remove --agent_db_fn ${pkgdatadir}/agentdb.list $*"
+    MONITOR="${exec_prefix}/bin/rcssmonitor3D"
+fi
+
+${SIMULATOR} ${PARAM} &
+PID=$!
+sleep 1
+${MONITOR}
+kill_server

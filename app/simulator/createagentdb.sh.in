@@ -1,0 +1,40 @@
+#! /bin/sh
+
+cat <<EOF
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<agentdb
+  xmlns:adb="http://spades-sim.sourceforge.net/agentdbxml.html"
+  xmlns="http://spades-sim.sourceforge.net/agentdbxml.html"
+  adb:version="0.91"
+>
+
+<!--  This file specifies the different agent types and how to execute the agents -->
+
+<agent_type_external name="foo">
+  <inputfd>3</inputfd>
+  <outputfd>4</outputfd>
+  <timer>default</timer>
+  <working_dir>/tmp</working_dir>
+EOF
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+echo "  <exec_line>${exec_prefix}/bin/agenttest --teamname foo</exec_line>"
+cat <<EOF
+</agent_type_external>
+
+<agent_type_external name="bar">
+  <inputfd>3</inputfd>
+  <outputfd>4</outputfd>
+  <timer>default</timer>
+  <working_dir>/tmp</working_dir>
+EOF
+
+echo "  <exec_line>${exec_prefix}/bin/agenttest --teamname bar</exec_line>"
+cat <<EOF
+</agent_type_external>
+</agentdb>
+EOF
+
+

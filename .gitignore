@@ -51,7 +51,9 @@ app/simulator/.libs
 app/simulator/Logfiles
 app/simulator/Makefile
 app/simulator/Makefile.in
-app/simulator/simulator
+app/simulator/createagentdb.sh
+app/simulator/rcsoccersim3D
+app/simulator/rcssserver3D
 app/spadestest/.deps
 app/spadestest/.libs
 app/spadestest/Makefile
