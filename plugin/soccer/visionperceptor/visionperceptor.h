@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.1.2.3 2004/02/01 22:17:55 fruit Exp $
+   $Id: visionperceptor.h,v 1.1.2.4 2004/02/02 17:15:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,13 +37,15 @@ public:
     //! \return true, if valid data is available and false otherwise.
     bool Percept(oxygen::Predicate& predicate);
 
-    /** setup the member variables */
-    virtual void OnLink();
+protected:
+    /** constructs the internal ray collider */
+    virtual bool ConstructInternal();
 
 private:
     struct ObjectData
     {
-        TLeafList::iterator mObj;
+        boost::shared_ptr<Leaf> mObj;
+
         float mDist; float mTheta, mPhi;
         salt::Vector3f mRelPos;
         bool mVisible;
@@ -64,16 +66,22 @@ private:
 
     //! a reference to the scene server
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
+
     //! vision calibration error
     salt::Vector3f mError;
+
     //! random measurement error generator (x-coordinate)
     std::auto_ptr<salt::NormalRNG<> > mDistErrorRNG;
+
     //! random measurement error generator (y-coordinate)
     std::auto_ptr<salt::NormalRNG<> > mThetaErrorRNG;
+
     //! random measurement error generator (z-coordinate)
     std::auto_ptr<salt::NormalRNG<> > mPhiErrorRNG;
+
     //! flag if we should noisify the data
     bool mAddNoise;
+
     //! ray collider to check occlusion
     boost::shared_ptr<oxygen::RayCollider> mRay;
 };
