@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.1.2.2 2004/01/26 15:19:52 fruit Exp $
+   $Id: kickeffector.h,v 1.1.2.3 2004/02/01 18:53:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/body.h>
+#include <soccer/ball/ball.h>
 
 class KickEffector : public oxygen::Effector
 {
@@ -53,6 +54,18 @@ public:
     /** set the kick margin (the area within objects are kickable) */
     void SetKickMargin(float margin);
 
+    /** Set the force factor.
+     *
+     * The kick power vector is multiplied by this factor.
+     */
+    void SetForceFactor(float force_factor);
+
+    /** Set the number of steps the force is applied.
+     * \param min the minimum number of steps.
+     * \param max the maximum number of steps
+     */
+    void SetSteps(int min, int max);
+
     /** Set the noise parameters.
      *  If used, the noise values are normally distributed around 0.0.
      *  Using this method, the sigmas of the distributions can be set.
@@ -66,13 +79,32 @@ public:
                         double sigma_theta,
                         double sigma_phi);
 
+    /** Set the maximum kick power. */
+    void SetMaxPower(float max_power);
+
 protected:
-    /** reference to the body nod of the ball */
+    /** reference to the body node of the agent */
+    boost::shared_ptr<oxygen::Body> mBody;
+    /** reference to the body node of the ball */
     boost::shared_ptr<oxygen::Body> mBallBody;
+    /** reference to the body node of the ball */
+    boost::shared_ptr<Ball> mBall;
 
 private:
     /** the margin where objects can be kicked */
     float mKickMargin;
+    /** radius of the player */
+    float mPlayerRadius;
+    /** radius of the ball */
+    float mBallRadius;
+    /** force factor */
+    float mForceFactor;
+    /** Set the maximum kick power */
+    float mMaxPower;
+    /** Minimum number of simulation steps for applying kick force */
+    int mMinSteps;
+    /** Maximum number of simulation steps for applying kick force */
+    int mMaxSteps;
     /** sigma for force error */
     double mSigmaForce;
     /** sigma for angle error (x-y angle) */
