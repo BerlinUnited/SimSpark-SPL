@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.4 2004/05/19 16:36:04 fruit Exp $
+   $Id: gamestate.cpp,v 1.5 2004/06/06 10:35:03 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,9 +152,12 @@ GameState::GetAck(std::string &ack)
 }
 
 bool
-GameState::GetPlayerMessage(int index, std::string& message)
+GameState::GetPlayerMessage(int index, std::string& message) const
 {
     if (index < 0 || index >= mSeenPlayers.size() || !mSeenPlayers[index])
+        return false;
+
+    if (mPlayers[index].mMessage.empty())
         return false;
 
     message = mPlayers[index].mMessage;
