@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserver.h,v 1.4 2003/11/14 14:05:55 fruit Exp $
+   $Id: logserver.h,v 1.5 2004/05/14 16:02:01 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ public:
 
     /** selects the priority for the messages to be written. It
         returns a reference to this logserver instance, allowing
-        muiltiple priority changes in one stream expression,
+        multiple priority changes in one stream expression,
         e.g. log << Priority(eNormal) << "normal msg" <<
         Priority(eDbug) << "debug msg"
     */
