@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.1.2.7 2004/02/10 21:47:05 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.1.2.8 2004/02/19 16:38:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -300,6 +300,12 @@ SoccerBase::PlayMode2Str(const TPlayMode mode)
 
         case PM_GameOver:
             return STR_PM_GameOver;
+
+        case PM_Goal_Left:
+            return STR_PM_Goal_Left;
+
+        case PM_Goal_Right:
+            return STR_PM_Goal_Right;
 
         default:
             return STR_PM_Unknown;
