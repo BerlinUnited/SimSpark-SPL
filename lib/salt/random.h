@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: random.h,v 1.2 2004/02/12 14:07:23 fruit Exp $
+   $Id: random.h,v 1.3 2004/05/10 21:16:50 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define SALT_RANDOM_H
 
 #include <boost/random.hpp>
+#include <boost/version.hpp>
 
 namespace salt
 {
@@ -33,7 +34,7 @@ namespace salt
 /** A wrapper to a boost random number generator.
  *
  * This class was created so that the underlying generator can be exchanged
- * easiliy. Making this class a singleton prevents initializing the generator
+ * easily. Making this class a singleton prevents initializing the generator
  * more than once (which can be expensive).
  *
  * The only thing users should do with this class is to set the seed of the
@@ -67,6 +68,56 @@ public:
 private:
     RandomEngine() : boost::mt19937() {}
 };
+
+#if (defined(BOOST_VERSION) && (BOOST_VERSION >= 103100))
+#include <boost/random/variate_generator.hpp>
+
+/** This random number generator should be used to produce
+ *  uniformly distributed random numbers.
+ */
+template<class RealType = double>
+class UniformRNG : public boost::variate_generator<salt::RandomEngine,
+                                                   boost::uniform_real<RealType> >
+{
+public:
+    UniformRNG(RealType min = RealType(0), RealType max = RealType(1))
+        : boost::variate_generator<RandomEngine, boost::uniform_real<RealType> >
+    (salt::RandomEngine::instance(), boost::uniform_real<RealType>(min,max))
+    {}
+};
+
+/** A random number generator producing normally distributed numbers.
+ */
+template<class RealType = double>
+class NormalRNG : public boost::variate_generator<salt::RandomEngine,
+                                                  boost::normal_distribution<RealType> >
+{
+public:
+    NormalRNG(double mean, double sigma = (1))
+        : boost::variate_generator<RandomEngine,
+                                   boost::normal_distribution<RealType> >
+    (salt::RandomEngine::instance(), boost::normal_distribution<RealType>(mean,sigma))
+    {}
+};
+
+/** A random number generator with an exponential distribution.
+ *
+ * exponential distribution: p(x) = lambda * exp(-lambda * x)
+ */
+template<class RealType = double>
+class ExponentialRNG : public boost::variate_generator<salt::RandomEngine,
+                                                       boost::exponential_distribution<RealType> >
+{
+public:
+    ExponentialRNG(double lambda = RealType(1))
+        : boost::variate_generator<RandomEngine,
+                                   boost::exponential_distribution<RealType> >
+    (salt::RandomEngine::instance(),
+     boost::exponential_distribution<RealType>(lambda))
+    {}
+};
+
+#else // BOOST_VERSION >= 103100
 
 /** This random number generator should be used to produce
  *  uniformly distributed random numbers.
@@ -106,6 +157,8 @@ public:
     (salt::RandomEngine::instance(),lambda)
     {}
 };
+
+#endif
 
 } // namespace salt
 
