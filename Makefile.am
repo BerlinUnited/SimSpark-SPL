@@ -23,9 +23,9 @@ branch-minor: commit
 	tag=`echo "@PACKAGE@-$$ver" | sed s/\\\\./_/g`; \
 	echo ""; \
 	echo "Creating minor brach: $$tag"; \
-	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; 
+	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; \
 	echo ""; \
-	echo `cvs tag -b $$tag`; \
+	cvs tag -b "$$tag"; \
 	$(AWK) -f @srcdir@/rel.awk -v change=2 @srcdir@/configure.in > configure.tmp;
 	mv configure.tmp @srcdir@/configure.in
 	$(MAKE) $(AM_MAKEFLAGS) commit
