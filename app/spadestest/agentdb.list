@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<agentdb
+  xmlns:adb="http://spades-sim.sourceforge.net/agentdbxml.html"
+  xmlns="http://spades-sim.sourceforge.net/agentdbxml.html"
+>
+<!--  This file specifies the different agent types and how to execute the agents -->
+<version>0.815</version>
+
+<agent_type_external name="default">
+  <inputfd>3</inputfd>
+  <outputfd>4</outputfd>
+  <timer>default</timer>
+  <working_dir>../agenttest</working_dir>
+  <exec_line>agenttest</exec_line>
+</agent_type_external>
+
+</agentdb>
