@@ -1,6 +1,10 @@
 Authors of rcssserver3D:
 
-Tom Howard		<tomhoward@users.sourceforge.net>
-Oliver Obst		<fruit@robolog.org>
+The current code is based on the Diploma Thesis of
+
+Marco Kögler		<koegler@uni-koblenz.de>
+ 
+who is the main author of the running initial simulator version. 
+
 
 Also see files ChangeLog and THANKS.

@@ -1,1 +1,0 @@
-SUBDIRS = classserver forwarder console

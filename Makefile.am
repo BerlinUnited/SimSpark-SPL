@@ -1,4 +1,4 @@
-SUBDIRS = doc utility simulator
+SUBDIRS = doc 
 
 pkginclude_HEADERS = \
 config.h

@@ -1,0 +1,36 @@
+Used Libraries
+==============
+
+This file describes what libraries (and which version) are currently used
+within the project and where they can be obtained.
+
+Sound Playback
+--------------
+
+FMOD 	3.6					http://www.fmod.org/
+BASS 	1.6		(VC only)	http://www.un4seen.com/music/
+
+
+File System
+-----------
+
+ZLIB 	1.1.4				http://www.gzip.org/zlib/
+unRAR 	3.0		(VC only)	http://www.rarlab.com/
+unACE	2.11 	(VC only)	http://www.winace.com/licence.html
+
+Scripting
+---------
+
+Ruby 	1.6.7				http://www.ruby-lang.org/
+
+
+General
+-------
+
+STLport 4.5.3				http://www.stlport.org/
+Boost 1.28.0				http://www.boost.org/
+
+Input + OpenGL
+--------------
+
+SDL 1.2						http://www.libsdl.org/
