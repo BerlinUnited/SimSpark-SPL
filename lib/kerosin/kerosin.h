@@ -1,28 +1,28 @@
 /* -*- mode: c++ -*-
-   
+
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: kerosin.h,v 1.3 2003/08/22 22:43:14 rollmark Exp $
+   $Id: kerosin.h,v 1.4 2003/09/03 12:15:46 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
    Kerosin
 
-	HISTORY:
-		11.07.2002 MK
-			- initial version
+        HISTORY:
+                11.07.2002 MK
+                        - initial version
 
 */
 
@@ -35,43 +35,20 @@
 #include "fontserver/fontserver.h"
 #include "fontserver/font.h"
 #include "openglserver/openglserver.h"
+#include "renderserver/renderserver.h"
 #include "textureserver/textureserver.h"
 #include "textureserver/texture.h"
 #include "materialserver/materialserver.h"
 #include "materialserver/material.h"
 
 // scene graph
-#include "sceneserver/sceneserver.h"
 #include "sceneserver/axis.h"
-#include "sceneserver/basenode.h"
 #include "sceneserver/camera.h"
-#include "sceneserver/fpscontroller.h"
 #include "sceneserver/light.h"
-#include "sceneserver/scene.h"
-#include "sceneserver/sphere.h"
 #include "sceneserver/staticmesh.h"
 #include "sceneserver/transform.h"
 
-// physics
-#include "physicsserver/physicsserver.h"
-#include "physicsserver/body.h"
-#include "physicsserver/odeobject.h"
-#include "physicsserver/space.h"
-#include "physicsserver/world.h"
-// collider
-#include "physicsserver/collider.h"
-#include "physicsserver/planecollider.h"
-#include "physicsserver/spherecollider.h"
-
-// agent aspect
-#include "agentaspect/agentaspect.h"
-#include "agentaspect/effector.h"
-#include "agentaspect/forceeffector.h"
-#include "agentaspect/perceptor.h"
-#include "agentaspect/visionperceptor.h"
-
 // control aspect
-#include "controlaspect/controlaspect.h"
 #include <zeitgeist/zeitgeist.h>
 
 namespace kerosin
@@ -83,31 +60,31 @@ namespace kerosin
 */
 class Kerosin
 {
-	//
-	// types
-	//
+        //
+        // types
+        //
 public:
 protected:
 private:
 
-	//
-	// functions
-	//
+        //
+        // functions
+        //
 public:
-    /** initializes the kerosin framework 
+    /** initializes the kerosin framework
         \param zg is a reference to an already initialized zeitgeist framwork
-	in which the internal kerosin libraries get installed
+        in which the internal kerosin libraries get installed
     */
-	Kerosin(zeitgeist::Zeitgeist &zg);
-	virtual ~Kerosin() {};
+        Kerosin(zeitgeist::Zeitgeist &zg);
+        virtual ~Kerosin() {};
 protected:
 private:
-	Kerosin(const Kerosin& obj);
-	Kerosin& operator=(const Kerosin& obj);
+        Kerosin(const Kerosin& obj);
+        Kerosin& operator=(const Kerosin& obj);
 
-	//
-	// members
-	//
+        //
+        // members
+        //
 public:
 protected:
 private:

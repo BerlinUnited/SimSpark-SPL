@@ -1,21 +1,21 @@
 #ifndef AXIS_H__
 #define AXIS_H__
 
-#include "basenode.h"
+#include <oxygen/sceneserver/basenode.h>
 
 namespace kerosin
 {
 
-class Axis : public BaseNode
+class Axis : public oxygen::BaseNode
 {
-	//
-	// Functions
-	//
+        //
+        // Functions
+        //
 public:
-	Axis();
+        Axis();
 
 private:
-	virtual void RenderInternal();
+        virtual void RenderInternal();
 };
 
 DECLARE_CLASS(Axis);

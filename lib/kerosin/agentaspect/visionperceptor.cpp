@@ -1,6 +1,6 @@
 #include "visionperceptor.h"
-#include "../sceneserver/sceneserver.h"
-#include "../sceneserver/scene.h"
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/scene.h>
 #include "../sceneserver/staticmesh.h"
 #include <salt/frustum.h>
 
@@ -10,70 +10,71 @@ using namespace salt;
 
 bool VisionPerceptor::Percept(TDictionary &dictionary)
 {
-	// reset internal state
-	TLeafList visibleObjects;
+        // reset internal state
+        TLeafList visibleObjects;
 
-	shared_ptr<Scene> scene = shared_static_cast<Scene>(GetCore()->Get("/usr/scene/"));
+        shared_ptr<oxygen::Scene> scene =
+            shared_static_cast<oxygen::Scene>(GetCore()->Get("/usr/scene/"));
 
-	if (scene)
-	{
-		Matrix mat;
-		mat.LookAt(GetWorldTransform().Pos(), mDir, Vector3f(0, 1, 0));
-		Frustum frustum;
-		frustum.Set(mat, 90.0f, 0.1f, 2000.0f);
+        if (scene)
+        {
+                Matrix mat;
+                mat.LookAt(GetWorldTransform().Pos(), mDir, Vector3f(0, 1, 0));
+                Frustum frustum;
+                frustum.Set(mat, 90.0f, 0.1f, 2000.0f);
 
-		TLeafList allMeshes;
-		TLeafList visibleMeshes;
-		TLeafList::iterator i, j;
+                TLeafList allMeshes;
+                TLeafList visibleMeshes;
+                TLeafList::iterator i, j;
 
-		scene->GetChildrenSupportingClass("StaticMesh", allMeshes, true);
-		
-		for (i = allMeshes.begin(); i != allMeshes.end(); ++i)
-		{
-			// try to cull meshes, which are outside the viewing frustum
-			if (frustum.Intersects(shared_static_cast<StaticMesh>(*i)->GetWorldBoundingBox())!=Frustum::FS_OUTSIDE)
-			{
-				visibleMeshes.push_back(*i);
-			}
-		}
+                scene->GetChildrenSupportingClass("StaticMesh", allMeshes, true);
 
-		// get visual aspect of the agent we belong to
+                for (i = allMeshes.begin(); i != allMeshes.end(); ++i)
+                {
+                        // try to cull meshes, which are outside the viewing frustum
+                        if (frustum.Intersects(shared_static_cast<StaticMesh>(*i)->GetWorldBoundingBox())!=Frustum::FS_OUTSIDE)
+                        {
+                                visibleMeshes.push_back(*i);
+                        }
+                }
 
-		// perform the raycheck between our position and the 
-		for (i = visibleMeshes.begin(); i != visibleMeshes.end(); ++i)
-		{
-			// (*i) is the target mesh
+                // get visual aspect of the agent we belong to
 
-			bool isOccluded = false;
-			// create on Opcode ray from our position to the target
-			for (j = visibleMeshes.begin(); isOccluded == false && j != visibleMeshes.end(); ++j)
-			{
-				// (*j) are potential occluders
+                // perform the raycheck between our position and the
+                for (i = visibleMeshes.begin(); i != visibleMeshes.end(); ++i)
+                {
+                        // (*i) is the target mesh
 
-				// make sure (*j) is not the visual aspect of the same object
-				// the agent aspect belongs to
-				//if (ray intersects occluder)
+                        bool isOccluded = false;
+                        // create on Opcode ray from our position to the target
+                        for (j = visibleMeshes.begin(); isOccluded == false && j != visibleMeshes.end(); ++j)
+                        {
+                                // (*j) are potential occluders
 
-				if (false)
-				{
-					printf("isOccluded");
-					isOccluded = true;
-				}
-			}
+                                // make sure (*j) is not the visual aspect of the same object
+                                // the agent aspect belongs to
+                                //if (ray intersects occluder)
 
-			// if the target mesh is not occluded, we add it to the list of
-			// visible objects
-			if (!isOccluded)
-			{
-				visibleObjects.push_back(make_shared((*i)->GetParent()));
-			}
-		}
-	}
+                                if (false)
+                                {
+                                        printf("isOccluded");
+                                        isOccluded = true;
+                                }
+                        }
 
-	if (!visibleObjects.empty())
-	{
-		dictionary["visibleObjects"] = visibleObjects;
-	}
+                        // if the target mesh is not occluded, we add it to the list of
+                        // visible objects
+                        if (!isOccluded)
+                        {
+                                visibleObjects.push_back(make_shared((*i)->GetParent()));
+                        }
+                }
+        }
 
-	return (!visibleObjects.empty());
+        if (!visibleObjects.empty())
+        {
+                dictionary["visibleObjects"] = visibleObjects;
+        }
+
+        return (!visibleObjects.empty());
 }

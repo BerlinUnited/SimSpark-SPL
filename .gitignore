@@ -36,9 +36,6 @@ lib/kerosin/Makefile.in
 lib/kerosin/agentaspect/*.lo
 lib/kerosin/agentaspect/.deps
 lib/kerosin/agentaspect/.dirstamp
-lib/kerosin/controlaspect/*.lo
-lib/kerosin/controlaspect/.deps
-lib/kerosin/controlaspect/.dirstamp
 lib/kerosin/fontserver/*.lo
 lib/kerosin/fontserver/.deps
 lib/kerosin/fontserver/.dirstamp
@@ -56,9 +53,6 @@ lib/kerosin/openglserver/.deps
 lib/kerosin/openglserver/.dirstamp
 lib/kerosin/openglserver/glextensionreg.cpp
 lib/kerosin/openglserver/glextensionreg.h
-lib/kerosin/physicsserver/*.lo
-lib/kerosin/physicsserver/.deps
-lib/kerosin/physicsserver/.dirstamp
 lib/kerosin/renderserver/*.lo
 lib/kerosin/renderserver/.deps
 lib/kerosin/renderserver/.dirstamp

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.3 2003/08/28 20:00:35 rollmark Exp $
+   $Id: renderserver.cpp,v 1.4 2003/09/03 12:15:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -205,3 +205,20 @@ void RenderServer::Render()
 
 
 
+void
+RenderServer::RenderScene(boost::shared_ptr<Scene> scene)
+{
+    glPushMatrix();
+    glMultMatrixf(scene->GetWorldTransform().m);
+
+    scene->RenderInternal();
+
+    glPopMatrix();
+
+    // perform update on hierarchy
+    for (TLeafList::iterator i = scene->begin(); i!= scene->end(); ++i)
+    {
+        if ((*i)->GetClass()->Supports("BaseNode"))
+            RenderScene(shared_static_cast<BaseNode>(*i));
+    }
+}

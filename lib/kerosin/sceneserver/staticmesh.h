@@ -1,7 +1,7 @@
 #ifndef STATICMESH_H__
 #define STATICMESH_H__
 
-#include "basenode.h"
+#include <oxygen/sceneserver/basenode.h>
 #include "../textureserver/textureserver.h"
 #include "indexbuffer.h"
 
@@ -36,7 +36,7 @@ namespace kerosin
 
 class Material;
 
-class StaticMesh : public BaseNode
+class StaticMesh : public oxygen::BaseNode
 {
         //
         // Types
