@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbehavior.h,v 1.2 2004/12/17 20:33:52 rollmark Exp $
+   $Id: soccerbehavior.h,v 1.3 2004/12/18 14:32:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ public:
     virtual std::string Init();
     virtual std::string Think(const std::string& message);
 
-    VisionSense GetVisionSense(VisionObject obj);
+    const VisionSense& GetVisionSense(VisionObject obj) const;
 
 protected:
     void ParseObjectVision(const oxygen::Predicate& predicate);
@@ -64,10 +64,12 @@ protected:
     std::string TurnLeft() const;
     std::string TurnRight() const;
     std::string Forward() const;
+    std::string Kick() const;
+    std::string SeekBall() const;
 
-    salt::Vector3f GetPosition(VisionSense sense);
-    salt::Vector3f GetPosition(VisionObject obj);
-    salt::Vector3f GetDriveVec(const VisionSense& vision);
+    salt::Vector3f GetPosition(const VisionSense& sense) const;
+    salt::Vector3f GetPosition(const VisionObject& obj) const;
+    salt::Vector3f GetDriveVec(const VisionSense& vision) const;
 
 protected:
     zeitgeist::Zeitgeist mZG;

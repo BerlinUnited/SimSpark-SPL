@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbehavior.cpp,v 1.2 2004/12/17 20:33:53 rollmark Exp $
+   $Id: soccerbehavior.cpp,v 1.3 2004/12/18 14:32:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,9 +125,9 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
         }
 }
 
-SoccerBehavior::VisionSense SoccerBehavior::GetVisionSense(VisionObject obj)
+const SoccerBehavior::VisionSense& SoccerBehavior::GetVisionSense(VisionObject obj) const
 {
-    TVisionMap::iterator iter = mVisionMap.find(obj);
+    TVisionMap::const_iterator iter = mVisionMap.find(obj);
 
     if (iter == mVisionMap.end())
         {
@@ -138,17 +138,17 @@ SoccerBehavior::VisionSense SoccerBehavior::GetVisionSense(VisionObject obj)
     return (*iter).second;
 }
 
-Vector3f SoccerBehavior::GetPosition(VisionSense sense)
+Vector3f SoccerBehavior::GetPosition(const VisionSense& sense) const
 {
     return mMyPos + GetDriveVec(sense) * sense.distance;
 }
 
-Vector3f SoccerBehavior::GetPosition(VisionObject obj)
+Vector3f SoccerBehavior::GetPosition(const VisionObject& obj) const
 {
     return GetPosition(GetVisionSense(obj));
 }
 
-Vector3f SoccerBehavior::GetDriveVec(const VisionSense& vision)
+Vector3f SoccerBehavior::GetDriveVec(const VisionSense& vision) const
 {
     return Vector3f
         (
@@ -199,6 +199,35 @@ string SoccerBehavior::Forward() const
     return "(lte 100)(rte 100)";
 }
 
+string SoccerBehavior::Kick() const
+{
+//     std::cerr << "kick";
+    return "(kick 0  100)";
+}
+
+string SoccerBehavior::SeekBall() const
+{
+    const VisionSense& vs = GetVisionSense(VO_BALL);
+    float d = gAbs(vs.theta);
+
+    if (d > 90)
+        {
+            return TurnLeft();
+        } else if (d < 5)
+        {
+            return Forward();
+        } else
+        {
+            if (vs.theta <  0)
+                {
+                    return TurnRight();
+                } else
+                {
+                    return TurnLeft();
+                }
+        }
+}
+
 string SoccerBehavior::Think(const std::string& message)
 {
     shared_ptr<PredicateList> predList =
@@ -225,24 +254,13 @@ string SoccerBehavior::Think(const std::string& message)
             }
     }
 
-    VisionSense vs = GetVisionSense(VO_BALL);
+    const VisionSense& vs = GetVisionSense(VO_BALL);
 
-    float d = gAbs(vs.theta);
-
-    if (d > 90)
+    if (vs.distance <= 1.5)
         {
-            return TurnLeft();
-        } else if (d < 5)
-        {
-            return Forward();
+            return Kick();
         } else
         {
-            if (vs.theta <  0)
-                {
-                    return TurnRight();
-                } else
-                {
-                    return TurnLeft();
-                }
+            return SeekBall();
         }
 }
