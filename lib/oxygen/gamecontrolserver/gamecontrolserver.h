@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.2 2003/12/02 16:57:31 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.3 2003/12/03 18:01:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define OXYGEN_GAMECONTROLSERVER_H
 
 #include "baseparser.h"
+#include "actionobject.h"
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 
@@ -38,6 +39,14 @@ public:
     ~GameControlServer();
 
     bool Init(const std::string& parserName);
+
+    /** parses a command string using the registerd parser and uses
+        the registered effectors to construct an ActionObject. This
+        method must be const as it is also called from
+        SpadesServer::ParseAct, which is const to prevent it from
+        modifying the world model.
+    */
+    boost::shared_ptr<ActionObject::TList> Parse(std::string str) const;
 
     /** notifies the GameControlServer that an agent has connected to
         the simulation. \param id should be a unique identifier for
