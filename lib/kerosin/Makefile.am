@@ -21,11 +21,13 @@ libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
 dist_pkgdata_DATA = kerosin.rb
 
 if BUILD_KEROSIN
-CLEANFILES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 BUILT_SOURCES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
+endif
+CLEANFILES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
 nobase_nodist_libpkginclude_HEADERS = openglserver/glextensionreg.h
 
+if BUILD_KEROSIN
 openglserver/glextensionreg.cpp: ${top_srcdir}/utility/glextgen/glextensionreg.cpp
 	@echo "Copying generated glextension sources"
 	cp ${top_srcdir}/utility/glextgen/glextensionreg.cpp $@
@@ -75,7 +77,8 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
 renderserver/renderserver.cpp \
-renderserver/renderserver_c.cpp 
+renderserver/renderserver_c.cpp \
+openglserver/glextensionreg.cpp
 
 nobase_libpkginclude_HEADERS = \
 fontserver/font.h \
