@@ -1,5 +1,9 @@
 2004-06-06  Oliver Obst  <fruit@robolog.org>
 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- fixed the side for clearing the players from penalty areas during 
+	  goal kicks (reported from the Aria team <robotics@ce.aut.ac.ir>).
+
 	* app/rcssmonitor3d/lite/monitor.cpp: 
 	* app/rcssmonitor3d/lite/monitor.h: 
 	- added method to return a successor of a kickoff mode 
