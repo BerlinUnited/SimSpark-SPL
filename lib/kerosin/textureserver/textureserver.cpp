@@ -1,3 +1,25 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+this file is part of rcssserver3D
+Fri May 9 2003
+Copyright (C) 2002,2003 Koblenz University
+Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+$Id: textureserver.cpp,v 1.3 2004/04/18 16:28:20 rollmark Exp $
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 2 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
 #include "textureserver.h"
 #include <zeitgeist/logserver/logserver.h>
 #include "../openglserver/openglserver.h"
@@ -16,49 +38,70 @@ TextureServer::~TextureServer()
 {
 }
 
-bool TextureServer::Init(const std::string &openglPath)
+void TextureServer::OnLink()
 {
-        mOpenGLServer = shared_static_cast<OpenGLServer>(GetCore()->Get(openglPath));
+    // setup OpenGLServer reference
+    mOpenGLServer = shared_dynamic_cast<OpenGLServer>
+        (GetCore()->Get("sys/server/opengl"));
 
-        if (mOpenGLServer.get() != NULL)
+    if (mOpenGLServer.get() == 0)
         {
-                GetLog()->Error()       << "ERROR - TextureServer::Init(): Requires OpenGLServer under '"
-                                                        << openglPath << "'" << std::endl;
-                return false;
+            GetLog()->Error()
+                << "(TextureServer) ERROR: OpenGLServer not found\n";
         }
 
-        return true;
+    // setup ImageServer reference
+    mImageServer = shared_dynamic_cast<ImageServer>
+        (GetCore()->Get("sys/server/image"));
+
+    if (mImageServer.get() == 0)
+        {
+            GetLog()->Error()
+                << "(TextureServer) ERROR: ImageServer not found\n";
+        }
+}
+
+void TextureServer::OnUnlink()
+{
+    mOpenGLServer.reset();
+    mImageServer.reset();
 }
 
 boost::shared_ptr<OpenGLServer> TextureServer::GetOpenGLServer() const
 {
-        return mOpenGLServer;
+    return mOpenGLServer;
 }
 
 boost::shared_ptr<Texture> TextureServer::GetTexture(const std::string &name)
 {
-        TTextureCache::iterator entry = mTextureCache.find(name);
+    TTextureCache::iterator entry = mTextureCache.find(name);
 
-        if (entry != mTextureCache.end())
+    if (entry != mTextureCache.end())
         {
-                // we already have a match
-                return (*entry).second;
+            // we already have a match
+            return (*entry).second;
         }
 
-        shared_ptr<Texture> texture;
-
-        // no match for that name, so we have to load it
-        shared_ptr<ImageServer> imageServer = shared_static_cast<ImageServer>(GetCore()->Get("/sys/server/image"));
-        shared_ptr<Image> image = imageServer->Load(name.c_str());
-
-        if (image.get())
+    if (mImageServer.get() == 0)
         {
-                Texture2D *tex2D = new Texture2D(shared_static_cast<TextureServer>(make_shared(GetSelf())));
-                tex2D->Create(image);
-                texture.reset(tex2D);
+            return shared_ptr<Texture>();
         }
 
-        // register the texture, so we will find it later
-        mTextureCache[name] = texture;
-        return texture;
+    // no match for that name, so we have to load it
+    shared_ptr<Image> image = mImageServer->Load(name.c_str());
+
+    if (! image.get())
+        {
+            return shared_ptr<Texture>();
+        }
+
+    Texture2D *tex2D = new Texture2D(shared_static_cast<TextureServer>
+                                     (make_shared(GetSelf())));
+    tex2D->Create(image);
+    shared_ptr<Texture> texture(tex2D);
+
+    // register the texture, so we will find it later
+    mTextureCache[name] = texture;
+
+    return texture;
 }

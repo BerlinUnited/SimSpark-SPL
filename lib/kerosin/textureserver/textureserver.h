@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: textureserver.h,v 1.6 2003/11/14 14:05:52 fruit Exp $
+   $Id: textureserver.h,v 1.7 2004/04/18 16:28:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ namespace kerosin
 #endif
 
 class OpenGLServer;
+class ImageServer;
 class Texture;
 
 class TextureServer : public zeitgeist::Leaf
@@ -77,19 +78,33 @@ public:
     TextureServer();
     virtual ~TextureServer();
 
-    //! initializes the TextureServer ... checks for the existance of the OpenGLServer
-    bool Init(const std::string &openglPath);
-    //! retrieve pointer to the OpenGL server ... used by Textures to check extensions
+    /** retrieve pointer to the OpenGL server ... used by Textures to
+        check extensions
+     */
     boost::shared_ptr<OpenGLServer> GetOpenGLServer() const;
-    //! load (or returned cached) texture
+
+    /** load (or returned cached) texture  */
     boost::shared_ptr<Texture> GetTexture(const std::string &name);
+
+protected:
+    /** set up the OpenGLServer and ImageServer reference */
+    virtual void OnLink();
+
+    /** reset OpenGLServer and ImageServer reference */
+    virtual void OnUnlink();
 
     //
     // members
     //
 private:
+    /** reference to the OpenGLServer */
     boost::shared_ptr<OpenGLServer> mOpenGLServer;
-    TTextureCache mTextureCache;          // registry of cached textures
+
+    /** reference to the ImageServer */
+    boost::shared_ptr<ImageServer> mImageServer;
+
+    /** registry of cached textures */
+    TTextureCache mTextureCache;
 };
 
 DECLARE_CLASS(TextureServer);
