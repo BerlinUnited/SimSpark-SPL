@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.4.8.4 2004/02/01 12:31:07 fruit Exp $
+   $Id: body.cpp,v 1.4.8.5 2004/02/08 15:26:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,10 +152,26 @@ void Body::SetSphere(float density, float radius)
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-salt::Vector3f Body::GetVelocity() const
+Vector3f Body::GetVelocity() const
 {
     const dReal* vel = dBodyGetLinearVel(mODEBody);
     return Vector3f(vel[0], vel[1], vel[2]);
+}
+
+void Body::SetVelocity(const Vector3f& vel)
+{
+    dBodySetLinearVel(mODEBody, vel[0], vel[1], vel[2]);
+}
+
+Vector3f Body::GetAngularVelocity()
+{
+    const dReal* vel = dBodyGetAngularVel(mODEBody);
+    return Vector3f(vel[0], vel[1], vel[2]);
+}
+
+void Body::SetAngularVelocity(const Vector3f& vel)
+{
+  dBodySetAngularVel(mODEBody, vel[0], vel[1], vel[2]);
 }
 
 void Body::PostPhysicsUpdateInternal()

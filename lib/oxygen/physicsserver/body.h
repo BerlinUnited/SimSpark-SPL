@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.5.8.5 2004/02/01 12:30:37 fruit Exp $
+   $Id: body.h,v 1.5.8.6 2004/02/08 15:25:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,8 +84,17 @@ public:
     /** sets the maximum speed this body is allowed to move at */
     void SetMaxSpeed(float speed);
 
-    /** returns the current velocity vector of this body */
+    /** returns the current linear velocity vector of this body */
     salt::Vector3f GetVelocity() const;
+
+    /** sets the current linear velocity of this body */
+    void SetVelocity(const salt::Vector3f& vel);
+
+    /** returns the current angular velocity of this body */
+    salt::Vector3f GetAngularVelocity();
+
+    /** sets the current angular velocity of this body */
+    void SetAngularVelocity(const salt::Vector3f& vel);
 
     /** returns the Body node corresponding to the given ODE body */
     static Body* GetBody(dBodyID id);
