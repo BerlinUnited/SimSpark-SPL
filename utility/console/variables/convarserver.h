@@ -17,111 +17,210 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARSERVER_H_
-#define _CONVARSERVER_H_
+#ifndef UTILITY_CONVARSERVER_H
+#define UTILITY_CONVARSERVER_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "convar.h"
 #include "convarattributes.h"
 
-#include <macros.h>
-#include <hash_map>
+//#include <hash_map>
+#include <map>
 
+/*! \class ConVarServer
+  $Id: convarserver.h,v 1.2 2002/08/21 08:18:39 fruit Exp $
 
-/** $Id: convarserver.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  * ConVarServer - Console Variable Server
-  * 
-  *      This class provides a pool of ConVars.
-  *      It assures that every contained ConVar has a unique name.
-  *      It is a singleton and should be retrieved with Instance()
-  * 
-  * HISTORY:
-  * 
-  *    08.10.01 - AF
-  *       - Initial version
-  * 
-  *    15.10.01 - AF
-  *       - Made singleton implementation more robust
-  * 
-  *    16.10.01 - AF
-  *       - dump no longer prints to stdout but returns a string
-  *
-  *      18.11.01 - AF
-  *         - Documentation added
-  * 
-  *      31.03.02 - AF
-  *         - replaced the self-made hash map with the hash map from stlport
-  * 
-  * TODO:
-  * 
-  *   TOFIX:
-  */
+    ConVarServer - Console Variable Server
 
-class ConVarServer 
+    This class provides a pool of ConVars.
+    It assures that every contained ConVar has a unique name.
+    It is a singleton and should be retrieved with instance().
+
+    HISTORY:
+    The console/variable subsystem was taken from a student project at
+    the AI Research Group, Koblenz University. Original development by
+    Alexander Fuchs <alexf@uni-koblenz.de>,
+    Marco Koegler <koegler@uni-koblenz.de>, 
+    Markus Rollmann <rollmark@uni-koblenz.de>, et.al.
+*/
+class ConVarServer
 {
 public:
-   //! the return type of the method List()
-   typedef std::list<std::string> TVarNames;
-
+    //! the return type of the method listNames()
+    typedef std::list < std::string > VarNames;
 
     //! deletes all contained ConVars
     ~ConVarServer();
 
-    //! these factory methods create new ConVars which are managed (and finally deleted) by the ConVarServer.
-   //! for every creatable variable type exists the appropriate create method.
-   ConVar* CreateUndefined (const ConVarAttributes& attributes);
-   ConVar* CreateBool (const ConVarAttributes& attributes, bool value);
-   ConVar* CreateInt (const ConVarAttributes& attributes, int value);
-   ConVar* CreateFloat (const ConVarAttributes& attributes, float value);
-   ConVar* CreateString (const ConVarAttributes& attributes, const std::string& value);
-   ConVar* CreateCharString (const ConVarAttributes& attributes, const char* value);
-   ConVar* CreateVector (const ConVarAttributes& attributes, const float x, const float y, const float z);
-   ConVar* CreateVector (const ConVarAttributes& attributes, const Vector3& value);
-   ConVar* CreateCommand (const ConVarAttributes& attributes, const ConCommand* value);
-   ConVar* CreateVariable (const ConVarAttributes& attributes, ConVar* value);
-   ConVar* CreateRefBool (const ConVarAttributes& attributes, bool* value);
-   ConVar* CreateRefInt (const ConVarAttributes& attributes, int* value);
-   ConVar* CreateRefFloat (const ConVarAttributes& attributes, float* value);
-   ConVar* CreateRefString (const ConVarAttributes& attributes, std::string* value);
-   //! The referenced char string must already be defined (or set to NULL) as it will be deleted on its change.
-   ConVar* CreateRefCharString (const ConVarAttributes& attributes, char** value);
-   ConVar* CreateRefVector (const ConVarAttributes& attributes, Vector3* value);
+    /*! This factory method creates a new ConVar (type undefined)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @return pointer to new variable
+     */ 
+    ConVar* createUndefined(const ConVarAttributes& attributes);
+    /*! This factory method creates a new ConVar (type bool)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createBool(const ConVarAttributes& attributes, bool value);
+    /*! This factory method creates a new ConVar (type int)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createInt(const ConVarAttributes& attributes, int value);
+    /*! This factory method creates a new ConVar (type float)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createFloat(const ConVarAttributes& attributes, TFloat value);
+    /*! This factory method creates a new ConVar (type string)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createString(const ConVarAttributes& attributes,
+                         const std::string& value);
+    /*! This factory method creates a new ConVar (type char string)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createCharString(const ConVarAttributes& attributes,
+                             const char* value);
+    /*! This factory method creates a new ConVar (type Vector3)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createVector(const ConVarAttributes& attributes, 
+                         TFloat x, TFloat y, TFloat z);
+    /*! This factory method creates a new ConVar (type Vector3)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createVector(const ConVarAttributes& attributes,
+                         const Vector3& value);
+    /*! This factory method creates a new ConVar (type ConCommand)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createCommand(const ConVarAttributes& attributes,
+                          const ConCommand* value);
+    /*! This factory method creates a new ConVar (type reference to Variable)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createVariable(const ConVarAttributes& attributes, ConVar* value);
+    /*! This factory method creates a new ConVar (type reference to bool)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createRefBool(const ConVarAttributes& attributes, bool* value);
+    /*! This factory method creates a new ConVar (type reference to int)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createRefInt(const ConVarAttributes& attributes, int* value);
+    /*! This factory method creates a new ConVar (type reference to float)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createRefFloat(const ConVarAttributes& attributes, TFloat* value);
+    /*! This factory method creates a new ConVar (type reference to string)
+        which is managed (and finally deleted) by the ConVarServer.
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createRefString(const ConVarAttributes& attributes,
+                            std::string* value);
+    /*! This factory method creates a new ConVar (type reference to
+        char string) which is managed (and finally deleted) by the
+        ConVarServer.
 
-   //! does a variable with the given name exist in the pool?
-    bool Exists (const std::string& name) const;
-   //! returns a ConVar with the given name if it exists, NULL otherwise
-   //! this ConVar may not be deleted, it is managed by the ConVarServer
-    ConVar* get (const std::string& name) const;
-   //! deletes a ConVar from the ConVarServer if it exists and is removable (isRemovable) 
-   //! returns true on a successful deletion, false otherwise
-    bool Delete (const std::string& name);
+        The referenced char string must already be defined (or set to
+        0) as it will be deleted on its change.
 
-   //! retrieves the names of all contained ConVars
-   TVarNames List() const;
-    
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+    */ 
+    ConVar* createRefCharString(const ConVarAttributes& attributes,
+                                char** value);
+    /*! This factory method creates a new ConVar (type reference to
+        Vector3) which is managed (and finally deleted) by the
+        ConVarServer.
+
+        @param attributes variable attributes
+        @param value initial value
+        @return pointer to new variable
+     */ 
+    ConVar* createRefVector(const ConVarAttributes& attributes, Vector3* value);
+
+    //! does a variable with the given name exist in the pool?
+    bool exists(const std::string& name) const;
+    /*! get a variable
+        @param name name of variable
+        @return a pointer to a ConVar with the given name if it
+                exists, 0 otherwise
+
+        This ConVar may not be deleted, it is managed by the ConVarServer.
+    */
+    ConVar* get(const std::string& name) const;
+    /*! delete a ConVar from the ConVarServer if it exists and if it
+        is removable (isRemovable)
+        @param name name of variable
+        @return true on a successful deletion, false otherwise
+    */
+    bool remove(const std::string& name);
+
+    //! retrieves the names of all contained ConVars
+    VarNames listNames() const;
+
     //! returns a string description of all contained ConVars
-   std::string dump() const;
+    std::string dump() const;
     //! returns a long string description: every attribute
-   std::string dumpWithSignature() const;
-   
+    std::string dumpWithSignature() const;
+
     //! returns the singleton instance
-    static ConVarServer& Instance();
-    
+    static ConVarServer& instance();
+
 protected:
-   //! the ConVars are stored in this container type
-   typedef std::map<std::string, ConVar*> TConVarMap;
-   //! the stored ConVars
-   TConVarMap mConVarStorage;
+    //! the ConVars are stored in this container type
+    typedef std::map < std::string, ConVar* > ConVarMap;
+    //! the stored ConVars
+    ConVarMap M_conVarStorage;
 
+    //! ConVarServer is a singleton, so the constructor is not public
+    ConVarServer() {}
+    ConVarServer(const ConVarServer &) {}
+    ConVarServer& operator =(const ConVarServer &) {}
 
-    //! ConVarServer is a singleton, so the constructor should be private
-    ConVarServer() {};
-    ConVarServer (const ConVarServer&) {};
-    ConVarServer& operator=(const ConVarServer&) {};
-
-   //! stores the variable under the name
-   void Store (const std::string& name, ConVar* variable);
+    //! stores the variable under the name
+    void store(const std::string& name, ConVar* variable);
 };
-
-#endif // _CONVARSERVER_H_
-
+#endif                          // UTILITY_CONVARSERVER_H

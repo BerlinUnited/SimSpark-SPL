@@ -17,54 +17,56 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARCOMMAND_H_
-#define _CONVARCOMMAND_H_
+#ifndef UTILITY_CONVARCOMMAND_H
+#define UTILITY_CONVARCOMMAND_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "convarstate.h"
 
 class ConCommand;
 
-/** $Id: convarcommand.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  *   ConVarCommand
-  * 
-  *      This variable contains a reference to a console command (ConCommand).
-  *
-  *   HISTORY:
-  *       04.02.02 - AF
-  *         - First working version
-  * 
-  *   TODO:
-  * 
-  *   TOFIX:
-  */
+/*! \class ConVarCommand
+  $Id: convarcommand.h,v 1.2 2002/08/21 08:18:39 fruit Exp $
 
+    ConVarCommand
 
+    This variable contains a reference to a console command
+    (ConCommand).
+
+    HISTORY:
+    The console/variable subsystem was taken from a student project at
+    the AI Research Group, Koblenz University. Original development by
+    Alexander Fuchs <alexf@uni-koblenz.de>,
+    Marco Koegler <koegler@uni-koblenz.de>, 
+    Markus Rollmann <rollmark@uni-koblenz.de>, et.al.
+*/
 class ConVarCommand : public ConVarState
 {
 public:
-   ConVarCommand (const ConVarAttributes& attributes, const ConCommand* value);
-   
-   virtual ConVarState* clone() const;
+    ConVarCommand(const ConVarAttributes& attributes,
+                  const ConCommand* value);
 
-   virtual ConVar::EConVarType getType() const;
+    virtual ConVarState* clone() const;
 
-   virtual bool setCommand (const ConCommand* value);
-   virtual bool setVariable (ConVar* value);
-   
-   virtual bool getCommand (const ConCommand** value) const;
-   
-   virtual std::string dumpValue() const;
-   virtual std::string dumpType() const;
+    virtual ConVar::ConVarType getType() const;
+
+    virtual bool setCommand(const ConCommand* value);
+    virtual bool setVariable(ConVar* value);
+
+    virtual bool getCommand(const ConCommand** value) const;
+
+    virtual std::string dumpValue() const;
+    virtual std::string dumpType() const;
 
 protected:
-   virtual void setValue (const ConCommand* value);
-   virtual const ConCommand* getValue() const;
+    virtual void setValue(const ConCommand* value);
+    virtual const ConCommand* getValue() const;
 
 private:
-   const ConCommand*   mValue;
+    const ConCommand* M_value;
 };
 
-
-#endif // _CONVARCOMMAND_H_
-
+#endif                          // UTILITY_CONVARCOMMAND_H

@@ -24,43 +24,39 @@
 
 using namespace std;
 
-
-
-ConVarRefString::ConVarRefString (const ConVarAttributes& attributes, string* value) :
-   ConVarString (attributes), mValue (value)
+ConVarRefString::ConVarRefString(const ConVarAttributes& attributes, 
+                                 string* value) :
+    ConVarString(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarRefString::clone() const
+ConVarState*
+ConVarRefString::clone() const
 {
-   return new ConVarRefString (mAttributes, mValue);
+    return new ConVarRefString(M_attributes, M_value);
 }
 
-   
-
-ConVar::EConVarType ConVarRefString::getType() const
+ConVar::ConVarType 
+ConVarRefString::getType() const
 {
-   return ConVar::CVT_REF_STRING;
+    return ConVar::S_CVT_REF_STRING;
 }
 
-
-
-
-string ConVarRefString::dumpType() const
+string
+ConVarRefString::dumpType() const
 {
-   return "string ref";
+    return "string ref";
 }
 
-
-
-
-void ConVarRefString::setValue (string value)
+void
+ConVarRefString::setValue(string value)
 {
-   *mValue = value;
-   mAttributes.CallBack();
+    *M_value = value;
+    M_attributes.callBack();
 }
 
-string ConVarRefString::getValue() const
+string
+ConVarRefString::getValue() const
 {
-   return *mValue;
+    return *M_value;
 }

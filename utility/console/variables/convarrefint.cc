@@ -21,41 +21,38 @@
 
 using namespace std;
 
-
-ConVarRefInt::ConVarRefInt (const ConVarAttributes& attributes, int* value) :
-   ConVarInt (attributes), mValue (value)
+ConVarRefInt::ConVarRefInt(const ConVarAttributes& attributes, int* value) :
+    ConVarInt(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarRefInt::clone() const
+ConVarState*
+ConVarRefInt::clone() const
 {
-   return new ConVarRefInt (mAttributes, mValue);
+    return new ConVarRefInt(M_attributes, M_value);
 }
 
-   
-ConVar::EConVarType ConVarRefInt::getType() const
+ConVar::ConVarType 
+ConVarRefInt::getType() const
 {
-   return ConVar::CVT_REF_INT;
+    return ConVar::S_CVT_REF_INT;
 }
 
-
-
-
-string ConVarRefInt::dumpType() const
+string
+ConVarRefInt::dumpType() const
 {
-   return "int ref";
+    return "int ref";
 }
 
-
-
-
-void ConVarRefInt::setValue (int value)
+void
+ConVarRefInt::setValue(int value)
 {
-   *mValue = value;
-   mAttributes.CallBack();
+    *M_value = value;
+    M_attributes.callBack();
 }
 
-int ConVarRefInt::getValue() const
+int
+ConVarRefInt::getValue() const
 {
-   return *mValue;
+    return *M_value;
 }

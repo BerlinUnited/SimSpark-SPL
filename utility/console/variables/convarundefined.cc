@@ -19,38 +19,35 @@
 */
 #include "convarundefined.h"
 
-
 #include <sstream>
 #include <iomanip>
 
 using namespace std;
 
-
-ConVarUndefined::ConVarUndefined (const ConVarAttributes& attributes) :
-   ConVarState (attributes)
+ConVarUndefined::ConVarUndefined(const ConVarAttributes& attributes) :
+    ConVarState(attributes)
 {
 }
 
-ConVarState* ConVarUndefined::clone() const
+ConVarState*
+ConVarUndefined::clone() const
 {
-   return new ConVarUndefined (mAttributes);
+    return new ConVarUndefined(M_attributes);
 }
 
-   
-ConVar::EConVarType ConVarUndefined::getType() const
+ConVar::ConVarType ConVarUndefined::getType() const
 {
-   return ConVar::CVT_UNDEFINED;
+    return ConVar::S_CVT_UNDEFINED;
 }
 
-
-
-
-string ConVarUndefined::dumpValue() const
+string
+ConVarUndefined::dumpValue() const
 {
-   return "";
+    return "";
 }
 
-string ConVarUndefined::dumpType() const
+string
+ConVarUndefined::dumpType() const
 {
-   return "Undefined";
+    return "Undefined";
 }

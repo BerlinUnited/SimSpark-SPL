@@ -19,86 +19,86 @@
 */
 #include "convarcommand.h"
 
-#include "../commands/concommand.h"
+#include <commands/concommand.h>
 
 #include <sstream>
 #include <iomanip>
 
 using namespace std;
 
-
-
-ConVarCommand::ConVarCommand (const ConVarAttributes& attributes, const ConCommand* value) :
-   ConVarState (attributes), mValue (value)
+ConVarCommand::ConVarCommand(const ConVarAttributes& attributes, 
+                             const ConCommand* value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarCommand::clone() const
+ConVarState*
+ConVarCommand::clone() const
 {
-   return new ConVarCommand (mAttributes, mValue);
-}
-   
-   
-ConVar::EConVarType ConVarCommand::getType() const
-{
-   return ConVar::CVT_COMMAND;
+    return new ConVarCommand(M_attributes, M_value);
 }
 
-
-
-bool ConVarCommand::setCommand (const ConCommand* value)
+ConVar::ConVarType 
+ConVarCommand::getType() const
 {
-   if (mAttributes.isConstant())
-   {
-      return false;
-   }
-   
-   setValue (value);
-   return true;
+    return ConVar::S_CVT_COMMAND;
 }
 
-
-
-bool ConVarCommand::setVariable (ConVar* value)
+bool
+ConVarCommand::setCommand(const ConCommand* value)
 {
-   const ConCommand* containedValue;
-   
-   if (value->getCommand (&containedValue))
-   {
-      return setCommand (containedValue);
-   } else {
-      return false;
-   }
+    if (M_attributes.isConstant())
+    {
+        return false;
+    }
+
+    setValue(value);
+    return true;
 }
 
-bool ConVarCommand::getCommand (const ConCommand** value) const
+bool
+ConVarCommand::setVariable(ConVar* value)
 {
-   *value = getValue();
-   return true;
+    const ConCommand* contained_value;
+
+    if (value->getCommand(&contained_value))
+    {
+        return setCommand(contained_value);
+    }
+    else
+    {
+        return false;
+    }
 }
 
-
-
-
-string ConVarCommand::dumpValue() const
+bool
+ConVarCommand::getCommand(const ConCommand** value) const
 {
-   return mValue->getUsage();
+    *value = getValue();
+    return true;
 }
 
-string ConVarCommand::dumpType() const
+string
+ConVarCommand::dumpValue() const
 {
-   return "command";
+    return M_value->getUsage();
 }
 
-
-
-void ConVarCommand::setValue (const ConCommand* value)
+string
+ConVarCommand::dumpType() const
 {
-   mValue = value;
-   mAttributes.CallBack();
+    return "command";
 }
 
-const ConCommand* ConVarCommand::getValue() const
+void
+ConVarCommand::setValue(const ConCommand* value)
 {
-   return mValue;
+    M_value = value;
+    M_attributes.callBack();
+}
+
+const ConCommand*
+ConVarCommand::getValue() const
+{
+    return M_value;
 }

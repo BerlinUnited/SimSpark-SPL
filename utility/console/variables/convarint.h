@@ -17,55 +17,57 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARINT_H_
-#define _CONVARINT_H_
+#ifndef UTILITY_CONVARINT_H
+#define UTILITY_CONVARINT_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "convarstate.h"
 
-/** $Id: convarint.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  *   ConVarInt
-  * 
-  *      This variable contains an integer.
-  *
-  *   HISTORY:
-  *       04.02.02 - AF
-  *         - First working version
-  * 
-  *   TODO:
-  * 
-  *   TOFIX:
-  */
+/*! \class ConVarInt
+  $Id: convarint.h,v 1.2 2002/08/21 08:18:39 fruit Exp $
+
+    ConVarInt
+
+    This variable contains an integer.
+
+    HISTORY:
+    The console/variable subsystem was taken from a student project at
+    the AI Research Group, Koblenz University. Original development by
+    Alexander Fuchs <alexf@uni-koblenz.de>,
+    Marco Koegler <koegler@uni-koblenz.de>, 
+    Marcus Rollmann <rollmark@uni-koblenz.de>, et.al.
+*/
 
 class ConVarInt : public ConVarState
 {
 public:
-   ConVarInt (const ConVarAttributes& attributes);
-   ConVarInt (const ConVarAttributes& attributes, int value);
-   
-   virtual ConVarState* clone() const;
-   
-   virtual ConVar::EConVarType getType() const;
-   
-   virtual bool setInt (int value);
-   virtual bool setVariable (ConVar* value);
+    ConVarInt(const ConVarAttributes& attributes);
+    ConVarInt(const ConVarAttributes& attributes, int value);
 
-   virtual bool getInt (int& value) const;
-   virtual bool getFloat (float& value) const;
-   virtual bool getString (std::string& value) const;
-   virtual bool getCharString (char** value) const;
-   
-   virtual std::string dumpValue() const;
-   virtual std::string dumpType() const;
+    virtual ConVarState* clone() const;
+
+    virtual ConVar::ConVarType getType() const;
+
+    virtual bool setInt(int value);
+    virtual bool setVariable(ConVar* value);
+
+    virtual bool getInt(int& value) const;
+    virtual bool getFloat(TFloat& value) const;
+    virtual bool getString(std::string& value) const;
+    virtual bool getCharString(char** value) const;
+
+    virtual std::string dumpValue() const;
+    virtual std::string dumpType() const;
 
 protected:
-   virtual void setValue (int value);
-   virtual int getValue() const;
+    virtual void setValue(int value);
+    virtual int getValue() const;
 
 private:
-   int mValue;
+    int M_value;
 };
-   
 
-#endif // _CONVARINT_H_
-
+#endif                          // _CONVARINT_H_

@@ -21,41 +21,38 @@
 
 using namespace std;
 
-
-ConVarRefBool::ConVarRefBool (const ConVarAttributes& attributes, bool* value) :
-   ConVarBool (attributes), mValue (value)
+ConVarRefBool::ConVarRefBool(const ConVarAttributes& attributes, bool* value) :
+    ConVarBool(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarRefBool::clone() const
+ConVarState*
+ConVarRefBool::clone() const
 {
-   return new ConVarRefBool (mAttributes, mValue);
+    return new ConVarRefBool(M_attributes, M_value);
 }
 
-   
-ConVar::EConVarType ConVarRefBool::getType() const
+ConVar::ConVarType 
+ConVarRefBool::getType() const
 {
-   return ConVar::CVT_REF_BOOL;
+    return ConVar::S_CVT_REF_BOOL;
 }
 
-
-
-
-string ConVarRefBool::dumpType() const
+string
+ConVarRefBool::dumpType() const
 {
-   return "bool ref";
+    return "bool ref";
 }
 
-
-
-
-void ConVarRefBool::setValue (bool value)
+void
+ConVarRefBool::setValue(bool value)
 {
-   *mValue = value;
-   mAttributes.CallBack();
+    *M_value = value;
+    M_attributes.callBack();
 }
 
-bool ConVarRefBool::getValue() const
+bool
+ConVarRefBool::getValue() const
 {
-   return *mValue;
+    return *M_value;
 }

@@ -17,54 +17,54 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARVECTOR_H_
-#define _CONVARVECTOR_H_
+#ifndef UTILITY_CONVARVECTOR_H
+#define UTILITY_CONVARVECTOR_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <vector3.h>
 
 #include "convarstate.h"
 
-#include <vector.h>
+/*! \class ConVarVector
+  $Id: convarvector.h,v 1.2 2002/08/21 08:18:41 fruit Exp $
 
-/** $Id: convarvector.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  *   ConVarVector
-  * 
-  *      This variable contains a Vector3.
-  *
-  *   HISTORY:
-  *       04.02.02 - AF
-  *         - First working version
-  * 
-  *   TODO:
-  * 
-  *   TOFIX:
-  */
+    ConVarVector
+    This variable contains a Vector3.
 
+    HISTORY:
+    The console/variable subsystem was taken from a student project at
+    the AI Research Group, Koblenz University. Original development by
+    Alexander Fuchs <alexf@uni-koblenz.de>,
+    Marco Koegler <koegler@uni-koblenz.de>, 
+    Markus Rollmann <rollmark@uni-koblenz.de>, et.al.
+*/
 class ConVarVector : public ConVarState
 {
 public:
-   ConVarVector (const ConVarAttributes& attributes);
-   ConVarVector (const ConVarAttributes& attributes, const Vector3& value);
-   
-   virtual ConVarState* clone() const;
-   
-   virtual ConVar::EConVarType getType() const;
-   
-   virtual bool setVector (const Vector3& value);
-   virtual bool setVariable (ConVar* value);
+    ConVarVector(const ConVarAttributes& attributes);
+    ConVarVector(const ConVarAttributes& attributes, const Vector3& value);
 
-   virtual bool getVector (Vector3& value) const;
-   
-   virtual std::string dumpValue() const;
-   virtual std::string dumpType() const;
-   
+    virtual ConVarState* clone() const;
+
+    virtual ConVar::ConVarType getType() const;
+
+    virtual bool setVector(const Vector3& value);
+    virtual bool setVariable(ConVar* value);
+
+    virtual bool getVector(Vector3& value) const;
+
+    virtual std::string dumpValue() const;
+    virtual std::string dumpType() const;
+
 protected:
-   virtual void setValue (const Vector3& value);
-   virtual Vector3    getValue() const;
-   
+    virtual void setValue(const Vector3& value);
+    virtual Vector3 getValue() const;
+
 private:
-   Vector3   mValue;
+    Vector3 M_value;
 };
 
-
-#endif // _CONVARVECTOR_H_
-
+#endif                          // UTILITY_CONVARVECTOR_H

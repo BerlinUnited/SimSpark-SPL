@@ -24,89 +24,88 @@
 
 using namespace std;
 
-
-ConVarVector::ConVarVector (const ConVarAttributes& attributes) :
-ConVarState (attributes)
+ConVarVector::ConVarVector(const ConVarAttributes& attributes) :
+    ConVarState(attributes)
 {
 }
 
-ConVarVector::ConVarVector (const ConVarAttributes& attributes, const Vector3&   value) :
-   ConVarState (attributes), mValue (value)
+ConVarVector::ConVarVector(const ConVarAttributes& attributes,
+                           const Vector3& value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarVector::clone() const
+ConVarState*
+ConVarVector::clone() const
 {
-   return new ConVarVector (mAttributes, mValue);
+    return new ConVarVector(M_attributes, M_value);
 }
 
-   
-
-ConVar::EConVarType ConVarVector::getType() const
+ConVar::ConVarType 
+ConVarVector::getType() const
 {
-   return ConVar::CVT_VECTOR;
+    return ConVar::S_CVT_VECTOR;
 }
 
-
-
-
-bool ConVarVector::setVector (const Vector3& value)
+bool
+ConVarVector::setVector(const Vector3& value)
 {
-    if (mAttributes.isConstant())
+    if (M_attributes.isConstant())
     {
         return false;
     }
-   
-   setValue (value);
-   return true;
+
+    setValue(value);
+    return true;
 }
 
-bool ConVarVector::setVariable (ConVar* value)
+bool
+ConVarVector::setVariable(ConVar* value)
 {
-   Vector3 containedValue;
-   
-   if (value->getVector (containedValue))
-   {
-      return setVector (containedValue);
-   } else {
-      return false;
-   }
+    Vector3 contained_value;
+
+    if (value->getVector(contained_value))
+    {
+        return setVector(contained_value);
+    }
+    else
+    {
+        return false;
+    }
 }
 
-
-
-bool ConVarVector::getVector (Vector3& value) const
+bool
+ConVarVector::getVector(Vector3& value) const
 {
-   value = getValue();
-   return true;
+    value = getValue();
+    return true;
 }
 
-
-
-string ConVarVector::dumpValue() const
+string
+ConVarVector::dumpValue() const
 {
-   stringstream ss;
-   Vector3 value = getValue();
+    stringstream ss;
+    Vector3 value = getValue();
 
-   ss << "<" << value.x() << "," << value.y() << "," << value.z() << ">";
-   return ss.str();
+    ss << "<" << value.x() << "," << value.y() << "," << value.z() << ">";
+    return ss.str();
 }
 
-string ConVarVector::dumpType() const
+string
+ConVarVector::dumpType() const
 {
-   return "vector";
+    return "vector";
 }
 
-
-
-void ConVarVector::setValue (const Vector3& value)
+void
+ConVarVector::setValue(const Vector3& value)
 {
-   mValue   = value;
-   mAttributes.CallBack();
+    M_value = value;
+    M_attributes.callBack();
 }
 
-Vector3    ConVarVector::getValue() const
+Vector3
+ConVarVector::getValue() const
 {
-   return mValue;
+    return M_value;
 }
-

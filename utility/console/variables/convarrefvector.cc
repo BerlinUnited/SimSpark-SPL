@@ -24,42 +24,39 @@
 
 using namespace std;
 
-
-ConVarRefVector::ConVarRefVector (const ConVarAttributes& attributes, Vector3*   value) :
-   ConVarVector (attributes), mValue (value)
+ConVarRefVector::ConVarRefVector(const ConVarAttributes& attributes, 
+                                 Vector3* value) :
+    ConVarVector(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarRefVector::clone() const
+ConVarState*
+ConVarRefVector::clone() const
 {
-   return new ConVarRefVector (mAttributes, mValue);
+    return new ConVarRefVector(M_attributes, M_value);
 }
 
-   
-
-ConVar::EConVarType ConVarRefVector::getType() const
+ConVar::ConVarType 
+ConVarRefVector::getType() const
 {
-   return ConVar::CVT_REF_VECTOR;
+    return ConVar::S_CVT_REF_VECTOR;
 }
 
-
-
-
-string ConVarRefVector::dumpType() const
+string
+ConVarRefVector::dumpType() const
 {
-   return "vector ref";
+    return "vector ref";
 }
 
-
-
-void ConVarRefVector::setValue (const Vector3& value)
+void
+ConVarRefVector::setValue(const Vector3& value)
 {
-   *mValue = value;
-   mAttributes.CallBack();
+    *M_value = value;
+    M_attributes.callBack();
 }
 
-Vector3    ConVarRefVector::getValue() const
+Vector3
+ConVarRefVector::getValue() const
 {
-   return *mValue;
+    return *M_value;
 }
-

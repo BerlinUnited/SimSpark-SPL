@@ -17,27 +17,30 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARATTRIBUTES_H_
-#define _CONVARATTRIBUTES_H_
+#ifndef UTILITY_CONVARATTRIBUTES_H
+#define UTILITY_CONVARATTRIBUTES_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <string>
-// #include <macros.h>  // contains evil stuff, try to avoid
 
 class ConVarCallBack;
 
 /*! \class ConVarAttributes
-  $Id: convarattributes.h,v 1.2 2002/08/14 09:24:53 fruit Exp $
+  $Id: convarattributes.h,v 1.3 2002/08/21 08:18:39 fruit Exp $
 
     ConVarAttributes
 
     Contains the attributes of a console variable (ConVar + ConVarState).
 
-        defaults (as returned by getDefault):
-   name            : ""
-   removable       : true;
-   constant        : false;
-   group           : eCVG_USER;
-   mCallBackObject : NULL;
+    defaults (as returned by getDefault):
+    name               : ""
+    removable          : true;
+    constant           : false;
+    group              : S_CVG_USER;
+    M_call_back_object : NULL;
 
     HISTORY:
     The console/variable subsystem was taken from a student project at
@@ -46,36 +49,35 @@ class ConVarCallBack;
     Marco Koegler <koegler@uni-koblenz.de>, 
     Marcus Rollmann <rollmark@uni-koblenz.de>, et.al.
 */
-
 class ConVarAttributes
 {
 public:
     //! the possible groups: a ConVar belongs to arbitrary many groups
-    enum EConVarGroup
+    enum ConVarGroup
     {
         //! user defined: typically created by the user with the console
-        eCVG_USER               = 0x00000000,        
+        S_CVG_USER = 0x00000000,
         /*! a ConVar which may be bound by ConBind to a key and 
-            represents a command
-   */
-        eCVG_COMMAND            = 0x00000001,
+           represents a command
+         */
+        S_CVG_COMMAND = 0x00000001,
         //! a console configuration variable from Consolesettings
-        eCVG_CON_SET            = 0x00000002,
+        S_CVG_CON_SET = 0x00000002,
         /*! a console configuration variable from Consolesettings: 
-            specialized for color
-   */
-        eCVG_CON_SET_COLOR      = 0x00000004,
+           specialized for color
+         */
+        S_CVG_CON_SET_COLOR = 0x00000004,
         /*! a constant defined and used by Consolesettings: 
-       specialized for color 
-   */
-        eCVG_CONST_COLOR        = 0x00000008,
+           specialized for color 
+         */
+        S_CVG_CONST_COLOR = 0x00000008,
         //! this makes the enum to be 32-bits
-        eCVG_FORCE32BIT         = 0xffffffff    
+        S_CVG_FORCE32BIT = 0xffffffff
     };
 
     ConVarAttributes();
-    ConVarAttributes (const ConVarAttributes& attributes);
-    
+    ConVarAttributes(const ConVarAttributes& attributes);
+
     //! returns a ConVarAttribute object with default values
     static ConVarAttributes getDefault();
 
@@ -84,8 +86,8 @@ public:
     //! returns the name of the variable
     std::string getName() const;
     /*! sets if the variable is removable.
-        If not a user may not delete it with a console command. 
-    */
+       If not a user may not delete it with a console command. 
+     */
     void setRemovable(bool removable = true);
     //! returns if the variable should be removable with the console
     bool isRemovable() const;
@@ -93,25 +95,25 @@ public:
     void setConstant(bool constant = true);
     //! returns if the variable is constant
     bool isConstant() const;
-    
+
     //! sets the group
-    void setGroup(EConVarGroup group);
+    void setGroup(ConVarGroup group);
     //! returns the set of groups of which the variable is a member
-    EConVarGroup getGroup() const;
+    ConVarGroup getGroup() const;
     //! adds the variable to a group
-    void addGroup(EConVarGroup group);
+    void addGroup(ConVarGroup group);
     //! removes the variable from a group
-    void removeGroup(EConVarGroup group);
+    void removeGroup(ConVarGroup group);
     //! tests the group membership
-    bool isInGroup(EConVarGroup group) const;
+    bool isInGroup(ConVarGroup group) const;
     /*! sets a callback method and index (ConVarCallBack). This method
-        will be executed by CallBack(). It enables to signal
-        immediately the change of a variable to another object
-    */
-    void setCallBack(ConVarCallBack* callBackObject, int callBackIndex);
+       will be executed by CallBack(). It enables to signal
+       immediately the change of a variable to another object
+     */
+    void setCallBack(ConVarCallBack* call_back_object, int call_back_index);
     /*! Calls the callback method. This method should be called by
-        the variable on every change of its contained value.
-    */
+       the variable on every change of its contained value.
+     */
     void callBack() const;
     //! sets a help string
     void setHelp(std::string help);
@@ -125,16 +127,15 @@ public:
     std::string dumpConstant() const;
 
 protected:
-    std::string mName;                    
-    std::string mHelp;
-    bool mRemovable;                    
-    bool mConstant;                        
-    EConVarGroup mGroup;
-    ConVarCallBack* mCallBackObject;
-    int mCallBackIndex;
+    std::string M_name;
+    std::string M_help;
+    bool M_removable;
+    bool M_constant;
+    ConVarGroup M_group;
+    ConVarCallBack *M_call_back_object;
+    int M_call_back_index;
 
-    static ConVarAttributes sDefault;
+    static ConVarAttributes S_default;
 };
 
-#endif // _CONVARATTRIBUTES_H_
-
+#endif                          // UTILITY_CONVARATTRIBUTES_H

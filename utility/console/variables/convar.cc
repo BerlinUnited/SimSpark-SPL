@@ -41,423 +41,450 @@ using namespace std;
 
 ConVar::ConVar(ConVarState* state)
 {
-    mState = state;
+    M_state = state;
 }
 
-ConVar::ConVar(const ConVar& conVar)
+ConVar::ConVar(const ConVar& con_var)
 {
-    *mState = *conVar.mState;
+    *M_state = *con_var.M_state;
 }
 
-void 
-ConVar::operator =(const ConVar& conVar)
+void
+ConVar::operator =(const ConVar& con_var) 
 {
-    *mState = *conVar.mState;
+    *M_state = *con_var.M_state;
 }
 
-ConVar::~ConVar() 
+ConVar::~ConVar()
 {
-    delete mState;
+    delete M_state;
 }
 
-ConVar* 
+ConVar*
 ConVar::clone() const
 {
-    return new ConVar(mState->clone());
+    return new ConVar(M_state->clone());
 }
 
-ConVar* 
+ConVar*
 ConVar::createUndefined(const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarUndefined(attributes));
 }
 
-ConVar* 
+ConVar*
 ConVar::createBool(bool value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarBool(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createInt(int value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarInt(attributes, value));
 }
 
-ConVar* 
-ConVar::createFloat(float value, const ConVarAttributes& attributes)
+ConVar*
+ConVar::createFloat(TFloat value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarFloat(attributes, value));
 }
 
-ConVar* 
-ConVar::createString(const std::string& value, 
-           const ConVarAttributes& attributes)
+ConVar*
+ConVar::createString(const std::string& value,
+                     const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarString(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createCharString(const char* value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarCharString(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createVector(const Vector3& value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarVector(attributes, value));
 }
 
-ConVar* 
-ConVar::createVector(float x, float y, float z, 
-           const ConVarAttributes& attributes)
+ConVar*
+ConVar::createVector(TFloat x, TFloat y, TFloat z,
+                     const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarVector(attributes, Vector3(x, y, z)));
 }
 
-ConVar* 
-ConVar::createCommand(const ConCommand* value, 
-            const ConVarAttributes& attributes)
+ConVar*
+ConVar::createCommand(const ConCommand* value,
+                      const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarCommand(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createVariable(ConVar* value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarVariable(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createRefBool(bool* value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarRefBool(attributes, value));
 }
 
-ConVar* 
-ConVar::createRefInt(int* value, const ConVarAttributes& attributes)
+ConVar*
+ConVar::createRefInt(int *value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarRefInt(attributes, value));
 }
 
-ConVar* 
-ConVar::createRefFloat(float* value, const ConVarAttributes& attributes)
+ConVar*
+ConVar::createRefFloat(TFloat* value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarRefFloat(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createRefString(string* value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarRefString(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createRefCharString(char** value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarRefCharString(attributes, value));
 }
 
-ConVar* 
+ConVar*
 ConVar::createRefVector(Vector3* value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarRefVector(attributes, value));
 }
 
-ConVar* 
-ConVar::createLabel(const std::string& value, 
-          const ConVarAttributes& attributes)
+ConVar*
+ConVar::createLabel(const std::string& value,
+                    const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarLabel(attributes, value));
 }
 
-ConVar* 
-ConVar::createSeparator(const std::string& value, 
-         const ConVarAttributes& attributes)
+ConVar*
+ConVar::createSeparator(const std::string& value,
+                        const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarSeparator(attributes, value));
 }
 
-ConVar* 
-ConVar::createSeparator(const char value, const ConVarAttributes& attributes)
+ConVar*
+ConVar::createSeparator(char value, const ConVarAttributes& attributes)
 {
     return new ConVar(new ConVarSeparator(attributes, string(1, value)));
 }
 
-
-ConVarAttributes 
-ConVar::getAttributes() const
+ConVarAttributes ConVar::getAttributes() const
 {
-    return mState->getAttributes();
+    return M_state->getAttributes();
 }
 
-void 
+void
 ConVar::setAttributes(const ConVarAttributes& attributes)
 {
-    mState->setAttributes(attributes);
+    M_state->setAttributes(attributes);
 }
 
-ConVar::EConVarType 
-ConVar::getType()  const
+ConVar::ConVarType 
+ConVar::getType() const
 {
-    return mState->getType();
+    return M_state->getType();
 }
 
 bool 
-ConVar::isOfType(EConVarType type) const
+ConVar::isOfType(ConVarType type) const
 {
-    return mState->isOfType(type);
+    return M_state->isOfType(type);
 }
 
 bool 
-ConVar::isConvertibleTo(EConVarType type) const
+ConVar::isConvertibleTo(ConVarType type) const
 {
     // test if this variable can return a variable of the asked type
-    switch(type)
+    switch (type)
     {
-    case eCVT_UNDEFINED:
-   if(isUndefined())
-   {
-       return true;
-   }
+        case S_CVT_UNDEFINED:
+            if (isUndefined())
+            {
+                return true;
+            }
 
-   if (isVariable())
-   {
-       ConVar* dummy;
-       if (getVariable(&dummy))
-       {
-      return dummy->isConvertibleTo(type);
-       } else {
-      return false;
-       }
-   }
-   return false;
-    case eCVT_BOOL: 
-    case eCVT_REF_BOOL: 
-   bool dummy;
-   return getBool(dummy);
-    case eCVT_INT: 
-    case eCVT_REF_INT: 
-   int dummy;
-   return getInt(dummy);
-    case eCVT_FLOAT: 
-    case eCVT_REF_FLOAT: 
-   float dummy;
-   return getFloat(dummy);
-    case eCVT_STRING: 
-    case eCVT_REF_STRING: 
-   string dummy;
-   return getString(dummy);
-    case eCVT_CHARSTRING: 
-    case eCVT_REF_CHARSTRING: 
-   char* dummy;
-   bool success;
+            if (isVariable())
+            {
+                ConVar* dummy;
+                if (getVariable(&dummy))
+                {
+                    return dummy->isConvertibleTo(type);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        case S_CVT_BOOL:
+        case S_CVT_REF_BOOL:
+        {
+            bool dummy;
+            return getBool(dummy);
+        }
+        case S_CVT_INT:
+        case S_CVT_REF_INT:
+        {
+            int dummy;
+            return getInt(dummy);
+        }
+        case S_CVT_FLOAT:
+        case S_CVT_REF_FLOAT:
+        {
+            TFloat dummy;
+            return getFloat(dummy);
+        }
+        case S_CVT_STRING:
+        case S_CVT_REF_STRING:
+        {
+            string dummy;
+            return getString(dummy);
+        }
+        case S_CVT_CHARSTRING:
+        case S_CVT_REF_CHARSTRING:
+        {
+            char* dummy;
+            bool success;
 
-   success = getCharString(&dummy);
-   if (success)
-   {
-       delete dummy;
-       return true;
-   } else {
-       return false;
-   }
-    case eCVT_VECTOR: 
-    case eCVT_REF_VECTOR: 
-   Vector3 dummy;
-   return getVector(dummy);
-    case eCVT_COMMAND: 
-   const ConCommand* dummy;
-   return getCommand(&dummy);
-    case eCVT_VARIABLE: 
-   return isVariable();
-    case eCVT_LABEL: 
-   return isLabel();
-    case eCVT_SEPARATOR: 
-   return isSeparator();
-    default:
-   return false;
+            success = getCharString(&dummy);
+            if (success)
+            {
+                delete dummy;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        case S_CVT_VECTOR:
+        case S_CVT_REF_VECTOR:
+        {
+            Vector3 dummy;
+            return getVector(dummy);
+        }
+        case S_CVT_COMMAND:
+        {
+            const ConCommand* dummy;
+            return getCommand(&dummy);
+        }
+        case S_CVT_VARIABLE:
+            return isVariable();
+        case S_CVT_LABEL:
+            return isLabel();
+        case S_CVT_SEPARATOR:
+            return isSeparator();
+        default:
+            return false;
     }
 }
 
 bool 
 ConVar::isBool() const
 {
-    return isOfType(eCVT_BOOL);
+    return isOfType(S_CVT_BOOL);
 }
 
 bool 
 ConVar::isInt() const
 {
-    return isOfType(eCVT_INT);
+    return isOfType(S_CVT_INT);
 }
 
 bool 
 ConVar::isFloat() const
 {
-    return isOfType(eCVT_FLOAT);
+    return isOfType(S_CVT_FLOAT);
 }
 
 bool 
 ConVar::isString() const
 {
-    return isOfType(eCVT_STRING);
+    return isOfType(S_CVT_STRING);
 }
 
 bool 
 ConVar::isCharString() const
 {
-    return isOfType(eCVT_CHARSTRING);
+    return isOfType(S_CVT_CHARSTRING);
 }
 
 bool 
 ConVar::isVector() const
 {
-    return isOfType(eCVT_VECTOR);
+    return isOfType(S_CVT_VECTOR);
 }
 
 bool 
 ConVar::isRefBool() const
 {
-    return isOfType(eCVT_REF_BOOL);
+    return isOfType(S_CVT_REF_BOOL);
 }
 
 bool 
 ConVar::isRefInt() const
 {
-    return isOfType(eCVT_REF_INT);
+    return isOfType(S_CVT_REF_INT);
 }
 
 bool 
 ConVar::isRefFloat() const
 {
-    return isOfType(eCVT_REF_FLOAT);
+    return isOfType(S_CVT_REF_FLOAT);
 }
 
 bool 
 ConVar::isRefString() const
 {
-    return isOfType(eCVT_REF_CHARSTRING);
+    return isOfType(S_CVT_REF_CHARSTRING);
 }
 
 bool 
 ConVar::isRefCharString() const
 {
-    return isOfType(eCVT_REF_CHARSTRING);
+    return isOfType(S_CVT_REF_CHARSTRING);
 }
 
 bool 
 ConVar::isRefVector() const
 {
-    return isOfType(eCVT_REF_VECTOR);
+    return isOfType(S_CVT_REF_VECTOR);
 }
 
 bool 
 ConVar::isVariable() const
 {
-    return isOfType(eCVT_VARIABLE);
+    return isOfType(S_CVT_VARIABLE);
 }
 
 bool 
 ConVar::isCommand() const
 {
-    return isOfType(eCVT_COMMAND);
+    return isOfType(S_CVT_COMMAND);
 }
 
 bool 
 ConVar::isUndefined() const
 {
-    return isOfType(eCVT_UNDEFINED);
+    return isOfType(S_CVT_UNDEFINED);
 }
 
 bool 
 ConVar::isLabel() const
 {
-    return isOfType(eCVT_LABEL);
+    return isOfType(S_CVT_LABEL);
 }
 
 bool 
 ConVar::isSeparator() const
 {
-    return isOfType(eCVT_SEPARATOR);
+    return isOfType(S_CVT_SEPARATOR);
 }
 
 // value access + type definition
-
 bool 
-ConVar::setBool(const bool value)
+ConVar::setBool(bool value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarBool(mState->getAttributes(), value);
+        M_state = new ConVarBool(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setBool(value);
+    }
+    else
+    {
+        return M_state->setBool(value);
     }
 }
 
 bool 
 ConVar::setInt(int value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarInt(mState->getAttributes(), value);
+        M_state = new ConVarInt(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setInt(value);
+    }
+    else
+    {
+        return M_state->setInt(value);
     }
 }
 
 bool 
-ConVar::setFloat(float value)
+ConVar::setFloat(TFloat value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarFloat(mState->getAttributes(), value);
+        M_state = new ConVarFloat(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setFloat(value);
+    }
+    else
+    {
+        return M_state->setFloat(value);
     }
 }
 
 bool 
 ConVar::setString(const string& value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarString(mState->getAttributes(), value);
+        M_state = new ConVarString(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setString(value);
+    }
+    else
+    {
+        return M_state->setString(value);
     }
 }
 
 bool 
 ConVar::setCharString(const char* value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarCharString(mState->getAttributes(), value);
+        M_state = new ConVarCharString(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setCharString(value);
+    }
+    else
+    {
+        return M_state->setCharString(value);
     }
 }
 
 bool 
 ConVar::setVector(const Vector3& value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarVector(mState->getAttributes(), value);
+        M_state = new ConVarVector(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setVector(value);
+    }
+    else
+    {
+        return M_state->setVector(value);
     }
 }
 
 bool 
-ConVar::setVector(float x, float y, float z)
+ConVar::setVector(TFloat x, TFloat y, TFloat z)
 {
     return setVector(Vector3(x, y, z));
 }
@@ -465,11 +492,13 @@ ConVar::setVector(float x, float y, float z)
 bool 
 ConVar::setRefBool(bool* value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarRefBool(mState->getAttributes(), value);
+        M_state = new ConVarRefBool(M_state->getAttributes(), value);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
@@ -477,23 +506,27 @@ ConVar::setRefBool(bool* value)
 bool 
 ConVar::setRefInt(int* value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarRefInt(mState->getAttributes(), value);
+        M_state = new ConVarRefInt(M_state->getAttributes(), value);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
 
 bool 
-ConVar::setRefFloat(float* value)
+ConVar::setRefFloat(TFloat* value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarRefFloat(mState->getAttributes(), value);
+        M_state = new ConVarRefFloat(M_state->getAttributes(), value);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
@@ -501,11 +534,13 @@ ConVar::setRefFloat(float* value)
 bool 
 ConVar::setRefString(string* value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarRefString(mState->getAttributes(), value);
+        M_state = new ConVarRefString(M_state->getAttributes(), value);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
@@ -513,11 +548,13 @@ ConVar::setRefString(string* value)
 bool 
 ConVar::setRefCharString(char** value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarRefCharString(mState->getAttributes(), value);
+        M_state = new ConVarRefCharString(M_state->getAttributes(), value);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
@@ -527,9 +564,11 @@ ConVar::setRefVector(Vector3* value)
 {
     if (isUndefined())
     {
-        mState = new ConVarRefVector(mState->getAttributes(), value);
+        M_state = new ConVarRefVector(M_state->getAttributes(), value);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
@@ -537,122 +576,133 @@ ConVar::setRefVector(Vector3* value)
 bool 
 ConVar::setCommand(const ConCommand* value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarCommand(mState->getAttributes(), value);
+        M_state = new ConVarCommand(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setCommand(value);
+    }
+    else
+    {
+        return M_state->setCommand(value);
     }
 }
 
 bool 
 ConVar::setVariable(ConVar* value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarVariable(mState->getAttributes(), value);
+        M_state = new ConVarVariable(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setVariable(value);
-    }        
+    }
+    else
+    {
+        return M_state->setVariable(value);
+    }
 }
 
 bool 
 ConVar::setLabel(const string& value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarLabel(mState->getAttributes(), value);
+        M_state = new ConVarLabel(M_state->getAttributes(), value);
         return true;
-    } else {
-        return mState->setLabel(value);
+    }
+    else
+    {
+        return M_state->setLabel(value);
     }
 }
 
 bool 
 ConVar::setSeparator(const string& value)
 {
-    if (isUndefined()) 
+    if (isUndefined())
     {
-        mState = new ConVarSeparator(mState->getAttributes(), value);
+        M_state = new ConVarSeparator(M_state->getAttributes(), value);
         return true;
-    } else if (isSeparator()) {
-        return mState->setString(value);
-    } else {
+    }
+    else if (isSeparator())
+    {
+        return M_state->setString(value);
+    }
+    else
+    {
         return false;
     }
 }
 
 bool 
-ConVar::setSeparator(const char value)
+ConVar::setSeparator(char value)
 {
     return setSeparator(string(1, value));
 }
 
 // value access
-
 bool 
 ConVar::getBool(bool& value) const
 {
-    return mState->getBool(value);
+    return M_state->getBool(value);
 }
 
 bool 
-ConVar::getInt(int& value) const
+ConVar::getInt(int &value) const
 {
-    return mState->getInt(value);
+    return M_state->getInt(value);
 }
 
 bool 
-ConVar::getFloat(float& value) const
+ConVar::getFloat(TFloat& value) const
 {
-    return mState->getFloat(value);
+    return M_state->getFloat(value);
 }
 
 bool 
 ConVar::getString(string& value) const
 {
-    return mState->getString(value);
+    return M_state->getString(value);
 }
-        
+
 bool 
 ConVar::getCharString(char** value) const
 {
-    return mState->getCharString(value);
+    return M_state->getCharString(value);
 }
 
 bool 
 ConVar::getVariable(ConVar** value) const
 {
-    return mState->getVariable(value);
+    return M_state->getVariable(value);
 }
 
 bool 
-ConVar::getCommand(const ConCommand** value) const
+ConVar::getCommand(const ConCommand ** value) const
 {
-    return mState->getCommand(value);
+    return M_state->getCommand(value);
 }
 
 bool 
 ConVar::getVector(Vector3& value) const
 {
-    return mState->getVector(value);
+    return M_state->getVector(value);
 }
 
 bool 
 ConVar::getLabel(string& value) const
 {
-    return mState->getLabel(value);
+    return M_state->getLabel(value);
 }
 
 bool 
 ConVar::getSeparator(string& value) const
 {
-    if (isSeparator()) 
+    if (isSeparator())
     {
-        return mState->getString(value);
-    } else {
+        return M_state->getString(value);
+    }
+    else
+    {
         return false;
     }
 }
@@ -660,17 +710,17 @@ ConVar::getSeparator(string& value) const
 string 
 ConVar::dump() const
 {
-    return mState->dump();
+    return M_state->dump();
 }
 
 string 
 ConVar::dumpWithSignature() const
 {
-    return mState->dumpWithSignature();
+    return M_state->dumpWithSignature();
 }
 
 string 
 ConVar::dumpValue() const
 {
-    return mState->dumpValue();
+    return M_state->dumpValue();
 }

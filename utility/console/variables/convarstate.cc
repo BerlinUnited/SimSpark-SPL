@@ -26,11 +26,11 @@ using namespace std;
 
 ConVarState::ConVarState()
 {
-    mAttributes = ConVarAttributes::getDefault();
+    M_attributes = ConVarAttributes::getDefault();
 }
 
-ConVarState::ConVarState(const ConVarAttributes& attributes) :
-    mAttributes(attributes)
+ConVarState::ConVarState(const ConVarAttributes& attributes) : 
+    M_attributes(attributes)
 {
 }
 
@@ -39,13 +39,13 @@ ConVarState::~ConVarState()
 }
 
 bool 
-ConVarState::isOfType(ConVar::EConVarType type) const
+ConVarState::isOfType(ConVar::ConVarType type) const
 {
     return getType() == type;
 }
 
 bool 
-ConVarState::setBool(const bool value)
+ConVarState::setBool(bool value)
 {
     return false;
 }
@@ -57,7 +57,7 @@ ConVarState::setInt(int value)
 }
 
 bool 
-ConVarState::setFloat(float value)
+ConVarState::setFloat(TFloat value)
 {
     return false;
 }
@@ -111,7 +111,7 @@ ConVarState::getInt(int& value) const
 }
 
 bool 
-ConVarState::getFloat(float& value) const
+ConVarState::getFloat(TFloat& value) const
 {
     return false;
 }
@@ -129,7 +129,7 @@ ConVarState::getCharString(char** value) const
 }
 
 bool 
-ConVarState::getVariable (ConVar** value) const
+ConVarState::getVariable(ConVar** value) const
 {
     return false;
 }
@@ -140,7 +140,7 @@ ConVarState::getCommand(const ConCommand** value) const
     return false;
 }
 
-bool 
+bool
 ConVarState::getVector(Vector3& value) const
 {
     return false;
@@ -155,13 +155,13 @@ ConVarState::getLabel(std::string& value) const
 ConVarAttributes 
 ConVarState::getAttributes() const
 {
-    return mAttributes;
+    return M_attributes;
 }
 
-void 
+void
 ConVarState::setAttributes(const ConVarAttributes& attributes)
 {
-    mAttributes = attributes;
+    M_attributes = attributes;
 }
 
 string 
@@ -178,11 +178,10 @@ ConVarState::dumpWithSignature() const
 {
     stringstream ss;
 
-    ss << setw(5) << getAttributes().dumpRemovable() 
-       << setw(6) << getAttributes().dumpConstant() 
-       << setw(14) << dumpType()    
-       << setw(25) << getAttributes().dumpGroup() 
-       << dump();
+    ss << setw(5) << getAttributes().dumpRemovable()
+       << setw(6) << getAttributes().dumpConstant()
+       << setw(14) << dumpType()
+       << setw(25) << getAttributes().dumpGroup() << dump();
 
     return ss.str();
 }

@@ -24,126 +24,126 @@
 
 using namespace std;
 
-
-ConVarString::ConVarString (const ConVarAttributes& attributes) :
-ConVarState (attributes)
+ConVarString::ConVarString(const ConVarAttributes& attributes) :
+    ConVarState(attributes)
 {
 }
 
-ConVarString::ConVarString (const ConVarAttributes& attributes, const string& value) :
-   ConVarState (attributes), mValue (value)
+ConVarString::ConVarString(const ConVarAttributes& attributes,
+                           const string& value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarString::clone() const
+ConVarState*
+ConVarString::clone() const
 {
-   return new ConVarString (mAttributes, mValue);
+    return new ConVarString(M_attributes, M_value);
 }
 
-   
-
-ConVar::EConVarType ConVarString::getType() const
+ConVar::ConVarType 
+ConVarString::getType() const
 {
-   return ConVar::CVT_STRING;
+    return ConVar::S_CVT_STRING;
 }
 
-
-
-
-bool ConVarString::setInt (int value)
+bool
+ConVarString::setInt(int value)
 {
-   stringstream ss;
-   
-   ss << value;
+    stringstream ss;
 
-   return setString (ss.str());
+    ss << value;
+
+    return setString(ss.str());
 }
 
-
-bool ConVarString::setFloat (float value)
+bool
+ConVarString::setFloat(TFloat value)
 {
-   stringstream ss;
-   
-   ss << value;
-   
-   return setString (ss.str());
+    stringstream ss;
+
+    ss << value;
+
+    return setString(ss.str());
 }
 
-
-bool ConVarString::setString (const string& value)
+bool
+ConVarString::setString(const string& value)
 {
-    if (mAttributes.isConstant())
+    if (M_attributes.isConstant())
     {
         return false;
     }
-   
-   setValue (value);
-   return true;
+
+    setValue(value);
+    return true;
 }
 
-
-bool ConVarString::setCharString (const char* value)
+bool
+ConVarString::setCharString(const char* value)
 {
-   return setString (value);
+    return setString(value);
 }
 
-bool ConVarString::setVariable (ConVar* value)
+bool
+ConVarString::setVariable(ConVar* value)
 {
-   string containedValue;
-   
-   if (value->getString (containedValue))
-   {
-      return setString (containedValue);
-   } else {
-      return false;
-   }
+    string contained_value;
+
+    if (value->getString(contained_value))
+    {
+        return setString(contained_value);
+    }
+    else
+    {
+        return false;
+    }
 }
 
-
-
-bool ConVarString::getString (std::string& value) const
+bool
+ConVarString::getString(std::string& value) const
 {
-   value = getValue();
+    value = getValue();
 
-   return true;
+    return true;
 }
 
-bool ConVarString::getCharString (char** value) const
+bool
+ConVarString::getCharString(char** value) const
 {
-   string stringValue;
-   getString (stringValue);
+    string string_value;
+    getString(string_value);
 
-   *value = new char [strlen (stringValue.c_str()) + 1];
-   strcpy (*value, stringValue.c_str());
+    *value = new char[strlen(string_value.c_str()) + 1];
+    strcpy(*value, string_value.c_str());
 
-   return true;
+    return true;
 }
 
-
-
-
-string ConVarString::dumpValue() const
+string
+ConVarString::dumpValue() const
 {
-   string dump;
-   getString (dump);
+    string dump;
+    getString(dump);
 
-   return "'" + dump + "'";
+    return "'" + dump + "'";
 }
 
-string ConVarString::dumpType() const
+string
+ConVarString::dumpType() const
 {
-   return "string";
+    return "string";
 }
 
-
-
-void ConVarString::setValue (string value)
+void
+ConVarString::setValue(const string& value)
 {
-   mValue = value;
-   mAttributes.CallBack();
+    M_value = value;
+    M_attributes.callBack();
 }
 
-string ConVarString::getValue() const
+string
+ConVarString::getValue() const
 {
-   return mValue;
+    return M_value;
 }

@@ -25,162 +25,155 @@ using namespace std;
 /*! the static default variable is initialized with the default
     constructor initialization
  */
-ConVarAttributes ConVarAttributes::sDefault;
+ConVarAttributes ConVarAttributes::S_default;
 
 ConVarAttributes::ConVarAttributes()
 {
-    mName = "";
-    mRemovable  = true;
-    mConstant = false;
-    mGroup = eCVG_USER;
-    mCallBackObject = NULL;
+    M_name = "";
+    M_removable = true;
+    M_constant = false;
+    M_group = S_CVG_USER;
+    M_call_back_object = 0;
 }
 
 ConVarAttributes::ConVarAttributes(const ConVarAttributes& attributes)
 {
-    mName = attributes.mName;
-    mHelp = attributes.mHelp;
-    mRemovable = attributes.mRemovable;
-    mConstant = attributes.mConstant;
-    mGroup = attributes.mGroup;
-    mCallBackObject = attributes.mCallBackObject;
-    mCallBackIndex = attributes.mCallBackIndex;
+    M_name = attributes.M_name;
+    M_help = attributes.M_help;
+    M_removable = attributes.M_removable;
+    M_constant = attributes.M_constant;
+    M_group = attributes.M_group;
+    M_call_back_object = attributes.M_call_back_object;
+    M_call_back_index = attributes.M_call_back_index;
 }
-
 
 ConVarAttributes 
 ConVarAttributes::getDefault()
 {
-    return sDefault;
+    return S_default;
 }
 
-void 
+void
 ConVarAttributes::setName(std::string name)
 {
-    mName = name;
+    M_name = name;
 }
 
 std::string 
 ConVarAttributes::getName() const
 {
-    return mName;
+    return M_name;
 }
 
-
-void 
+void
 ConVarAttributes::setRemovable(bool removable)
 {
-    mRemovable = removable;
+    M_removable = removable;
 }
 
 bool 
 ConVarAttributes::isRemovable() const
 {
-    return mRemovable;
+    return M_removable;
 }
 
-void 
+void
 ConVarAttributes::setConstant(bool constant)
 {
-    mConstant = constant;
+    M_constant = constant;
 }
 
 bool 
 ConVarAttributes::isConstant() const
 {
-    return mConstant;
+    return M_constant;
 }
 
-void 
-ConVarAttributes::setGroup(EConVarGroup group)
+void
+ConVarAttributes::setGroup(ConVarGroup group)
 {
-    mGroup = group;
+    M_group = group;
 }
 
-ConVarAttributes::EConVarGroup 
+ConVarAttributes::ConVarGroup 
 ConVarAttributes::getGroup() const
 {
-    return mGroup;
+    return M_group;
 }
 
-void 
-ConVarAttributes::addGroup(EConVarGroup group)
+void
+ConVarAttributes::addGroup(ConVarGroup group)
 {
-    mGroup = (EConVarGroup) (mGroup | group);
+    M_group = (ConVarGroup) (M_group | group);
 }
 
-void 
-ConVarAttributes::removeGroup(EConVarGroup group)
+void
+ConVarAttributes::removeGroup(ConVarGroup group)
 {
-    mGroup =(EConVarGroup) (mGroup & group);
+    M_group = (ConVarGroup) (M_group & group);
 }
 
 bool 
-ConVarAttributes::isInGroup(EConVarGroup group) const
+ConVarAttributes::isInGroup(ConVarGroup group) const
 {
-    return (mGroup & group);
+    return (M_group & group);
 }
-
 
 void
-ConVarAttributes::setCallBack(ConVarCallBack* callBackObject, 
-               int callBackIndex)
+ConVarAttributes::setCallBack(ConVarCallBack* call_back_object,
+                              int call_back_index)
 {
-    mCallBackObject = callBackObject;
-    mCallBackIndex = callBackIndex;
+    M_call_back_object = call_back_object;
+    M_call_back_index = call_back_index;
 }
 
-void 
+void
 ConVarAttributes::callBack() const
 {
-    if (mCallBackObject != NULL)
+    if (M_call_back_object != 0)
     {
-        mCallBackObject->callBack(mCallBackIndex);
+        M_call_back_object->callBack(M_call_back_index);
     }
 }
 
-
-void 
+void
 ConVarAttributes::setHelp(std::string help)
 {
-    mHelp = help;
+    M_help = help;
 }
 
 string 
 ConVarAttributes::getHelp() const
 {
-    return mHelp;
+    return M_help;
 }
-
-
-
 
 string 
 ConVarAttributes::dumpGroup() const
 {
     string group;
 
-    if (isInGroup(eCVG_USER))
+    if (isInGroup(S_CVG_USER))
     {
         group += "user ";
     }
 
-    if (isInGroup(eCVG_COMMAND))
+    if (isInGroup(S_CVG_COMMAND))
     {
         group += "command ";
     }
 
-    if (isInGroup(eCVG_CON_SET))
+    if (isInGroup(S_CVG_CON_SET))
     {
         group += "con_set ";
     }
 
-    if (isInGroup(eCVG_CON_SET_COLOR))
+    if (isInGroup(S_CVG_CON_SET_COLOR))
     {
         group += "con_set_col ";
     }
 
-    if (isInGroup(eCVG_CONST_COLOR))
+    if (isInGroup(S_CVG_CONST_COLOR))
     {
         group += "con_const_col ";
     }
@@ -194,9 +187,11 @@ ConVarAttributes::dumpRemovable() const
     if (isRemovable())
     {
         return "";
-    } else {
+    }
+    else
+    {
         return "unrm";
-    } 
+    }
 }
 
 string 
@@ -205,7 +200,9 @@ ConVarAttributes::dumpConstant() const
     if (isConstant())
     {
         return "const";
-    } else {
+    }
+    else
+    {
         return "";
     }
 }

@@ -17,62 +17,65 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARCHARSTRING_H_
-#define _CONVARCHARSTRING_H_
+#ifndef UTILITY_CONVARCHARSTRING_H
+#define UTILITY_CONVARCHARSTRING_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "convarstate.h"
 
-/** $Id: convarcharstring.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  *   ConVarCharString
-  * 
-  *      This variable contains an old fashioned char* string.
-  *
-  *   HISTORY:
-  *       04.02.02 - AF
-  *         - First working version
-  * 
-  *   TODO:
-  * 
-  *   TOFIX:
-  */
+/*! \class ConVarCharString 
+  $Id: convarcharstring.h,v 1.2 2002/08/21 08:18:39 fruit Exp $
 
+    ConVarCharString
+
+    This variable contains an old fashioned char* string.
+
+    HISTORY:
+    The console/variable subsystem was taken from a student project at
+    the AI Research Group, Koblenz University. Original development by
+    Alexander Fuchs <alexf@uni-koblenz.de>,
+    Marco Koegler <koegler@uni-koblenz.de>, 
+    Marcus Rollmann <rollmark@uni-koblenz.de>, et.al.
+*/
 class ConVarCharString : public ConVarState
 {
 public:
-   ConVarCharString (const ConVarAttributes& attributes, const char* value);
-   
-   ConVarCharString (const ConVarCharString& conVar);
-   void operator= (const ConVarCharString& conVar);
-   
-   virtual ~ConVarCharString();
-      
-   virtual ConVarState* clone() const;
+    ConVarCharString(const ConVarAttributes& attributes, const char *value);
 
-   virtual ConVar::EConVarType getType() const;
-   
-   virtual bool setInt (int value);
-   virtual bool setFloat (float value);
-   virtual bool setString (const std::string& value);
-   //! stores a copy of the parameter
-   virtual bool setCharString (const char* value);
-   virtual bool setVariable (ConVar* value);
-   
-   virtual bool getString (std::string& value) const;
-   //! copies the contained value to the parameter: the caller has to delete it
-   virtual bool getCharString (char** value) const;
-   
-   virtual std::string dumpValue() const;
-   virtual std::string dumpType() const;
+    ConVarCharString(const ConVarCharString& con_var);
+    void operator =(const ConVarCharString& con_var);
+
+    virtual ~ConVarCharString();
+
+    virtual ConVarState *clone() const;
+
+    virtual ConVar::ConVarType getType() const;
+
+    virtual bool setInt(int value);
+    virtual bool setFloat(float value);
+    virtual bool setString(const std::string& value);
+    //! stores a copy of the parameter
+    virtual bool setCharString(const char* value);
+    virtual bool setVariable(ConVar* value);
+
+    virtual bool getString(std::string& value) const;
+    /*! Copies the contained value to the parameter. 
+        The caller has to delete it.
+    */
+    virtual bool getCharString(char** value) const;
+
+    virtual std::string dumpValue() const;
+    virtual std::string dumpType() const;
 
 protected:
-   virtual void setValue (const char* value);
-   virtual char* getValue() const;
+    virtual void setValue(const char* value);
+    virtual char *getValue() const;
 
 private:
-   char* mValue;
+    char* M_value;
 };
 
-
-#endif // _CONVARCHARSTRING_H_
-
+#endif                          // UTILITY_CONVARCHARSTRING_H

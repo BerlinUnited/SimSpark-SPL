@@ -21,11 +21,8 @@
 #include "../console.h"
 #include "../consolesettings.h"
 
-   
-void ConVarCallBackConsole::CallBack (int index)
+void
+ConVarCallBackConsole::callBack(int index)
 {
-   gConsole.getsettings().UpdateOnCallBack (index);
+    Console::instance().getSettings().updateOnCallBack(index);
 }
-
-
-

@@ -17,35 +17,33 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARCALLBACKCONSOLE_H_
-#define _CONVARCALLBACKCONSOLE_H_
+#ifndef UTILITY_CONVARCALLBACKCONSOLE_H
+#define UTILITY_CONVARCALLBACKCONSOLE_H
 
 #include "convarcallback.h"
 
-/** $Id: convarcallbackconsole.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  * ConVarCallBackConsole
-  * 
-  *      The console's call back functionality.
-  *
-  *      Allows the change of the message interests of the console,
-  *      i.e. which message types should be displayed.
-  * 
-  * HISTORY:
-  * 
-  *      08.11.01 - AF
-  *       - First working version
-  *
-  *      09.04.02 - AF
-  *         - Simplified: only the delegation code remains
-  *
-  */
+/*! \class ConVarCallBackConsole  
+  $Id: convarcallbackconsole.h,v 1.2 2002/08/21 08:18:39 fruit Exp $
 
+    ConVarCallBackConsole
+
+    The console's call back functionality.
+
+    Allows the change of the message interests of the console,
+    i.e. which message types should be displayed.
+
+    HISTORY:
+    The console subsystem was taken from a student project at the AI
+    Research Group, Koblenz University. Original development by Marco
+    Koegler <koegler@uni-koblenz.de>, Marcus Rollmann
+    <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
+    et.al.
+*/
 class ConVarCallBackConsole : public ConVarCallBack
 {
 public:
-   //! the call back method
-   virtual void CallBack (int index);
+    //! the call back method
+    virtual void callBack(int index);
 };
 
-#endif // _CONVARCALLBACKCONSOLE_H_
+#endif                          // UTILITY_CONVARCALLBACKCONSOLE_H

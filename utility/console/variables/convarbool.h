@@ -17,52 +17,51 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARBOOL_H_
-#define _CONVARBOOL_H_
+#ifndef UTILITY_CONVARBOOL_H
+#define UTILITY_CONVARBOOL_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "convarstate.h"
 
-/** $Id: convarbool.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  *   ConVarBool
-  * 
-  *      This variable contains a bool.
-  *
-  *   HISTORY:
-  *       15.04.02 - AF
-  *         - First working version
-  * 
-  *   TODO:
-  * 
-  *   TOFIX:
-  */
+/*! \class ConVarBool
+  $Id: convarbool.h,v 1.2 2002/08/21 08:18:39 fruit Exp $
 
+    ConVarBool
+
+    This variable contains a bool.
+
+    HISTORY:
+    The console/variable subsystem was taken from a student project at
+    the AI Research Group, Koblenz University. Original development by
+    Alexander Fuchs <alexf@uni-koblenz.de>,
+    Marco Koegler <koegler@uni-koblenz.de>, 
+    Marcus Rollmann <rollmark@uni-koblenz.de>, et.al.
+*/
 class ConVarBool : public ConVarState
 {
 public:
-   ConVarBool (const ConVarAttributes& attributes);
-   ConVarBool (const ConVarAttributes& attributes, const bool value);
-   
-   virtual ConVarState* clone() const;
+    ConVarBool(const ConVarAttributes& attributes);
+    ConVarBool(const ConVarAttributes& attributes, bool value);
 
-   virtual ConVar::EConVarType getType() const;
-   
-   virtual bool setBool (const bool value);
-   virtual bool setVariable (ConVar* value);
-      
-   virtual bool getBool (bool& value) const;
-   
-   virtual std::string dumpValue() const;
-   virtual std::string dumpType() const;
+    virtual ConVarState* clone() const;
+    virtual ConVar::ConVarType getType() const;
+
+    virtual bool setBool(bool value);
+    virtual bool setVariable(ConVar* value);
+    virtual bool getBool(bool& value) const;
+
+    virtual std::string dumpValue() const;
+    virtual std::string dumpType() const;
 
 protected:
-   virtual void setValue (bool value);
-   virtual bool getValue() const;
+    virtual void setValue(bool value);
+    virtual bool getValue() const;
 
 private:
-   bool mValue;
+    bool M_value;
 };
-   
 
-#endif // _CONVARBOOL_H_
-
+#endif                          // UTILITY_CONVARBOOL_H

@@ -24,115 +24,118 @@
 
 using namespace std;
 
-
-ConVarInt::ConVarInt (const ConVarAttributes& attributes) :
-ConVarState (attributes)
+ConVarInt::ConVarInt(const ConVarAttributes& attributes) :
+    ConVarState(attributes)
 {
 }
 
-ConVarInt::ConVarInt (const ConVarAttributes& attributes, int value) :
-   ConVarState (attributes), mValue (value)
+ConVarInt::ConVarInt(const ConVarAttributes& attributes, int value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarInt::clone() const
+ConVarState*
+ConVarInt::clone() const
 {
-   return new ConVarInt (mAttributes, mValue);
+    return new ConVarInt(M_attributes, M_value);
 }
 
-   
-ConVar::EConVarType ConVarInt::getType() const
+ConVar::ConVarType 
+ConVarInt::getType() const
 {
-   return ConVar::CVT_INT;
+    return ConVar::S_CVT_INT;
 }
 
-
-
-bool ConVarInt::setInt (int value)
+bool
+ConVarInt::setInt(int value)
 {
-    if (mAttributes.isConstant())
+    if (M_attributes.isConstant())
     {
         return false;
     }
-   
-   setValue (value);
 
-   return true;
+    setValue(value);
+
+    return true;
 }
 
-bool ConVarInt::setVariable (ConVar* value)
+bool
+ConVarInt::setVariable(ConVar* value)
 {
-   int containedValue;
-   
-   if (value->getInt (containedValue))
-   {
-      return setInt (containedValue);
-   } else {
-      return false;
-   }
+    int contained_value;
+
+    if (value->getInt(contained_value))
+    {
+        return setInt(contained_value);
+    }
+    else
+    {
+        return false;
+    }
 }
 
-
-
-bool ConVarInt::getInt (int& value) const
+bool
+ConVarInt::getInt(int &value) const
 {
-   value = getValue();
-   return true;
+    value = getValue();
+    return true;
 }
 
-bool ConVarInt::getFloat (float& value) const
+bool
+ConVarInt::getFloat(TFloat& value) const
 {
-   int intValue;
-   getInt (intValue);
-   value = float (intValue);
+    int int_value;
+    getInt(int_value);
+    value = static_cast<TFloat>(int_value);
 
-   return true;
+    return true;
 }
 
-bool ConVarInt::getString (string& value) const
+bool
+ConVarInt::getString(string& value) const
 {
-   int intValue;
-   getInt (intValue);
-   
-   stringstream ss;
-   ss << intValue;
-   value = ss.str();
+    int int_value;
+    getInt(int_value);
 
-   return true;
+    stringstream ss;
+    ss << int_value;
+    value = ss.str();
+
+    return true;
 }
 
-bool ConVarInt::getCharString (char** value) const
+bool
+ConVarInt::getCharString(char** value) const
 {
-   *value = new char [strlen (dumpValue().c_str()) + 1];
-   strcpy (*value, dumpValue().c_str());
-   
-   return true;
+    *value = new char[strlen(dumpValue().c_str()) + 1];
+    strcpy(*value, dumpValue().c_str());
+
+    return true;
 }
 
-
-
-string ConVarInt::dumpValue() const
+string
+ConVarInt::dumpValue() const
 {
-   string dump;
-   getString (dump);
-   return dump;
+    string dump;
+    getString(dump);
+    return dump;
 }
 
-string ConVarInt::dumpType() const
+string
+ConVarInt::dumpType() const
 {
-   return "int";
+    return "int";
 }
 
-
-
-
-void ConVarInt::setValue (int value)
+void
+ConVarInt::setValue(int value)
 {
-   mValue = value;
-   mAttributes.CallBack();
+    M_value = value;
+    M_attributes.callBack();
 }
 
-int ConVarInt::getValue() const
+int
+ConVarInt::getValue() const
 {
-   return mValue;
+    return M_value;
 }

@@ -21,45 +21,48 @@
 
 using namespace std;
 
-
-ConVarSeparator::ConVarSeparator (const ConVarAttributes& attributes, const string& value) 
-   : ConVarString (attributes), mValue (value)
+ConVarSeparator::ConVarSeparator(const ConVarAttributes& attributes, 
+                                 const string& value) : 
+    ConVarString(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarSeparator::clone() const
+ConVarState*
+ConVarSeparator::clone() const
 {
-   return new ConVarSeparator (mAttributes, mValue);
+    return new ConVarSeparator(M_attributes, M_value);
 }
 
-
-
-ConVar::EConVarType ConVarSeparator::getType() const
+ConVar::ConVarType 
+ConVarSeparator::getType() const
 {
-   return ConVar::CVT_SEPARATOR;
+    return ConVar::S_CVT_SEPARATOR;
 }
 
-
-void ConVarSeparator::setValue (string value)
+void
+ConVarSeparator::setValue(const string& value)
 {
-   mValue = value;
-   mAttributes.CallBack();
+    M_value = value;
+    M_attributes.callBack();
 }
 
-string ConVarSeparator::getValue() const
+string
+ConVarSeparator::getValue() const
 {
-   return mValue;
+    return M_value;
 }
 
-string ConVarSeparator::dumpValue() const
+string
+ConVarSeparator::dumpValue() const
 {
-   string dump;
-   getString (dump);
+    string dump;
+    getString(dump);
 
-   return "'" + dump + "'";
+    return "'" + dump + "'";
 }
 
-string ConVarSeparator::dumpType() const
+string
+ConVarSeparator::dumpType() const
 {
-   return "separator";
+    return "separator";
 }

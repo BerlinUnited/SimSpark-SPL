@@ -21,91 +21,90 @@
 
 using namespace std;
 
-
-ConVarBool::ConVarBool (const ConVarAttributes& attributes) 
-   : ConVarState (attributes)
+ConVarBool::ConVarBool(const ConVarAttributes& attributes) :
+    ConVarState(attributes)
 {
 }
 
-ConVarBool::ConVarBool (const ConVarAttributes& attributes, const bool value) 
-   : ConVarState (attributes), mValue (value)
+ConVarBool::ConVarBool(const ConVarAttributes& attributes, bool value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-
-ConVarState* ConVarBool::clone() const
+ConVarState*
+ConVarBool::clone() const
 {
-   return new ConVarBool (mAttributes, mValue);
+    return new ConVarBool(M_attributes, M_value);
 }
 
-
-ConVar::EConVarType ConVarBool::getType() const
+ConVar::ConVarType 
+ConVarBool::getType() const
 {
-   return ConVar::CVT_BOOL;
+    return ConVar::S_CVT_BOOL;
 }
 
-
-
-bool ConVarBool::setBool (const bool value)
+bool ConVarBool::setBool(bool value)
 {
-    if (mAttributes.isConstant())
+    if (M_attributes.isConstant())
     {
         return false;
     }
-   
-   setValue (value);
 
-   return true;
+    setValue(value);
+
+    return true;
 }
 
-bool ConVarBool::setVariable (ConVar* value)
+bool 
+ConVarBool::setVariable(ConVar* value)
 {
-   bool containedValue;
-   
-   if (value->getBool (containedValue))
-   {
-      return setBool (containedValue);
-   } else {
-      return false;
-   }
+    bool contained_value;
+
+    if (value->getBool(contained_value))
+    {
+        return setBool(contained_value);
+    }
+    else
+    {
+        return false;
+    }
 }
 
-
-
-bool ConVarBool::getBool (bool& value) const
+bool 
+ConVarBool::getBool(bool& value) const
 {
-   value = getValue();
-   return true;
+    value = getValue();
+    return true;
 }
 
-
-
-
-string ConVarBool::dumpValue() const
+string 
+ConVarBool::dumpValue() const
 {
-   if (getValue())
-   {
-      return "true";
-   } else {
-      return "false";
-   }
+    if (getValue())
+    {
+        return "true";
+    }
+    else
+    {
+        return "false";
+    }
 }
 
-string ConVarBool::dumpType() const
+string 
+ConVarBool::dumpType() const
 {
-   return "bool";
+    return "bool";
 }
 
-
-
-
-void ConVarBool::setValue (bool value)
+void
+ConVarBool::setValue(bool value)
 {
-   mValue = value;
-   mAttributes.CallBack();
+    M_value = value;
+    M_attributes.callBack();
 }
 
-bool ConVarBool::getValue() const
+bool 
+ConVarBool::getValue() const
 {
-   return mValue;
+    return M_value;
 }

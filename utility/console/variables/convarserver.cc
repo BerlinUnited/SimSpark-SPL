@@ -23,308 +23,342 @@
 
 using namespace std;
 
-
 ConVarServer::~ConVarServer()
 {
-   for (TConVarMap::iterator iter = mConVarStorage.begin(); iter != mConVarStorage.end(); ++iter)
-   {
-      delete (*iter).second;
-   }
+    for (ConVarMap::iterator iter = M_conVarStorage.begin();
+         iter != M_conVarStorage.end(); ++iter)
+    {
+        delete (*iter).second;
+    }
 }
 
-ConVarServer& ConVarServer::Instance()
+ConVarServer& 
+ConVarServer::instance()
 {
     static ConVarServer sInstance;
-    
+
     return sInstance;
 }
 
-
-
-void ConVarServer::Store (const std::string& name, ConVar* variable)
+void
+ConVarServer::store(const std::string& name, ConVar* variable)
 {
-   mConVarStorage[name] = variable;
+    M_conVarStorage[name] = variable;
 }
 
-
-
-ConVar* ConVarServer::CreateUndefined (const ConVarAttributes& attributes)
+ConVar*
+ConVarServer::createUndefined(const ConVarAttributes& attributes)
 {
-   // if a variable with this name does already exist, exit
-    if (Exists (attributes.getName())) {
-        return NULL;
+    // if a variable with this name does already exist, exit
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
 
-   ConVar* conVar = ConVar::CreateUndefined (attributes);
-   Store (attributes.getName(), conVar);
+    ConVar* con_var = ConVar::createUndefined(attributes);
+    store(attributes.getName(), con_var);
 
-   return conVar;
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateBool (const ConVarAttributes& attributes, bool value)
+ConVar*
+ConVarServer::createBool(const ConVarAttributes& attributes, bool value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateBool (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createBool(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateInt (const ConVarAttributes& attributes, int value)
+ConVar*
+ConVarServer::createInt(const ConVarAttributes& attributes, int value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateInt (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createInt(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateFloat (const ConVarAttributes& attributes, float value)
+ConVar*
+ConVarServer::createFloat(const ConVarAttributes& attributes, TFloat value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateFloat (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createFloat(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateString (const ConVarAttributes& attributes, const string& value)
+ConVar*
+ConVarServer::createString(const ConVarAttributes& attributes,
+                           const string& value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateString (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createString(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateCharString (const ConVarAttributes& attributes, const char* value)
+ConVar*
+ConVarServer::createCharString(const ConVarAttributes& attributes,
+                               const char* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateCharString (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createCharString(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateVector (const ConVarAttributes& attributes, const float x, const float y, const float z)
+ConVar*
+ConVarServer::createVector(const ConVarAttributes& attributes, 
+                           TFloat x, TFloat y, TFloat z)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateVector (x, y, z, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createVector(x, y, z, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateVector (const ConVarAttributes& attributes, const Vector3& value)
+ConVar*
+ConVarServer::createVector(const ConVarAttributes& attributes,
+                           const Vector3& value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateVector (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createVector(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateCommand (const ConVarAttributes& attributes, const ConCommand* value)
+ConVar*
+ConVarServer::createCommand(const ConVarAttributes& attributes,
+                            const ConCommand* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateCommand (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createCommand(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateVariable (const ConVarAttributes& attributes, ConVar* value)
+ConVar*
+ConVarServer::createVariable(const ConVarAttributes& attributes,
+                             ConVar* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateVariable (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createVariable(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateRefBool (const ConVarAttributes& attributes, bool* value)
+ConVar*
+ConVarServer::createRefBool(const ConVarAttributes& attributes, bool* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateRefBool (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createRefBool(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateRefInt (const ConVarAttributes& attributes, int* value)
+ConVar*
+ConVarServer::createRefInt(const ConVarAttributes& attributes, int* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateRefInt (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createRefInt(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateRefFloat (const ConVarAttributes& attributes, float* value)
+ConVar*
+ConVarServer::createRefFloat(const ConVarAttributes& attributes, TFloat* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateRefFloat (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createRefFloat(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateRefString (const ConVarAttributes& attributes, string* value)
+ConVar*
+ConVarServer::createRefString(const ConVarAttributes& attributes,
+                              string* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateRefString (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createRefString(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateRefCharString (const ConVarAttributes& attributes, char** value)
+ConVar*
+ConVarServer::createRefCharString(const ConVarAttributes& attributes,
+                                  char** value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateRefCharString (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createRefCharString(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-ConVar* ConVarServer::CreateRefVector (const ConVarAttributes& attributes, Vector3* value)
+ConVar*
+ConVarServer::createRefVector(const ConVarAttributes& attributes,
+                              Vector3* value)
 {
-    if (Exists (attributes.getName())) {
-        return NULL;
+    if (exists(attributes.getName()))
+    {
+        return 0;
     }
-   
-   ConVar* conVar = ConVar::CreateRefVector (value, attributes);
-   Store (attributes.getName(), conVar);
-   
-   return conVar;
+
+    ConVar* con_var = ConVar::createRefVector(value, attributes);
+    store(attributes.getName(), con_var);
+
+    return con_var;
 }
 
-
-
-
-
-
-bool ConVarServer::Exists (const string& name) const
+bool
+ConVarServer::exists(const string& name) const
 {
-    return (mConVarStorage.find (name) != mConVarStorage.end());
+    return (M_conVarStorage.find(name) != M_conVarStorage.end());
 }
 
-ConVar* ConVarServer::get (const string& name) const
+ConVar*
+ConVarServer::get(const string& name) const
 {
-   TConVarMap::const_iterator iter = mConVarStorage.find (name);
-   
-   if (iter == mConVarStorage.end()) 
-   {
-      return NULL;
-   }
+    ConVarMap::const_iterator iter = M_conVarStorage.find(name);
 
-   return (*iter).second;
+    if (iter == M_conVarStorage.end())
+    {
+        return 0;
+    }
+
+    return (*iter).second;
 }
 
-bool ConVarServer::Delete (const string& name)
+bool
+ConVarServer::remove(const string& name)
 {
-   TConVarMap::iterator iter = mConVarStorage.find (name);
-   
-   if (iter == mConVarStorage.end()) 
-   {
-      return false;
-   }
+    ConVarMap::iterator iter = M_conVarStorage.find(name);
 
-   delete (*iter).second;
-   mConVarStorage.erase (iter);
+    if (iter == M_conVarStorage.end())
+    {
+        return false;
+    }
 
-   return true;
+    delete (*iter).second;
+    M_conVarStorage.erase(iter);
+
+    return true;
 }
 
-
-
-ConVarServer::TVarNames ConVarServer::List() const
+ConVarServer::VarNames 
+ConVarServer::listNames() const
 {
-   TVarNames variables;
+    VarNames variables;
 
-   for (TConVarMap::const_iterator iter = mConVarStorage.begin(); iter != mConVarStorage.end(); ++iter)
-   {
-      variables.push_back ((*iter).first);
-   }
+    for (ConVarMap::const_iterator iter = M_conVarStorage.begin();
+         iter != M_conVarStorage.end(); ++iter)
+    {
+        variables.push_back((*iter).first);
+    }
 
-   return variables;
+    return variables;
 }
 
-
-
-
-string ConVarServer::dump() const
+string
+ConVarServer::dump() const
 {
-   TVarNames names = List();
-   names.sort();
+    VarNames names = listNames();
+    names.sort();
 
-   string dump;
-   TConVarMap::const_iterator storageIter;
-   for (TVarNames::iterator iter = names.begin(); iter != names.end(); ++iter)
-   {
-      storageIter = mConVarStorage.find (*iter);
-      dump += (*storageIter).second->dump();
-   }
+    string dump;
+    ConVarMap::const_iterator storage_iter;
+    for (VarNames::iterator iter = names.begin(); iter != names.end(); ++iter)
+    {
+        storage_iter = M_conVarStorage.find(*iter);
+        dump += (*storage_iter).second->dump();
+    }
 
-   return dump;
+    return dump;
 }
 
-string ConVarServer::dumpWithSignature() const
+string
+ConVarServer::dumpWithSignature() const
 {
-   TVarNames names = List();
-   names.sort();
-   
-   string dump;
-   TConVarMap::const_iterator storageIter;
-   for (TVarNames::iterator iter = names.begin(); iter != names.end(); ++iter)
-   {
-      storageIter = mConVarStorage.find (*iter);
-      dump += (*storageIter).second->dumpWithSignature();
-   }
-   
-   return dump;
+    VarNames names = listNames();
+    names.sort();
+
+    string dump;
+    ConVarMap::const_iterator storage_iter;
+    for (VarNames::iterator iter = names.begin(); iter != names.end(); ++iter)
+    {
+        storage_iter = M_conVarStorage.find(*iter);
+        dump += (*storage_iter).second->dumpWithSignature();
+    }
+
+    return dump;
 }
-
-

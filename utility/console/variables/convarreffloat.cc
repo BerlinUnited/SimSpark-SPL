@@ -17,49 +17,46 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "convarreffloat.h"
-
 #include <sstream>
 #include <iomanip>
 
+#include "convarreffloat.h"
+
 using namespace std;
 
-
-ConVarRefFloat::ConVarRefFloat (const ConVarAttributes& attributes, float*   value) :
-   ConVarFloat (attributes), mValue (value)
+ConVarRefFloat::ConVarRefFloat(const ConVarAttributes& attributes, 
+                               TFloat* value) :
+    ConVarFloat(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarRefFloat::clone() const
+ConVarState*
+ConVarRefFloat::clone() const
 {
-   return new ConVarRefFloat (mAttributes, mValue);
+    return new ConVarRefFloat(M_attributes, M_value);
 }
 
-   
-   
-ConVar::EConVarType ConVarRefFloat::getType() const
+ConVar::ConVarType 
+ConVarRefFloat::getType() const
 {
-   return ConVar::CVT_REF_FLOAT;
+    return ConVar::S_CVT_REF_FLOAT;
 }
 
-
-
-string ConVarRefFloat::dumpType() const
+string 
+ConVarRefFloat::dumpType() const
 {
-   return "float ref";
+    return "float ref";
 }
 
-
-
-
-void ConVarRefFloat::setValue (float value)
+void
+ConVarRefFloat::setValue(TFloat value)
 {
-   *mValue = value;
-   mAttributes.CallBack();
+    *M_value = value;
+    M_attributes.callBack();
 }
 
-
-float ConVarRefFloat::getValue() const
+TFloat 
+ConVarRefFloat::getValue() const
 {
-   return *mValue;
+    return *M_value;
 }

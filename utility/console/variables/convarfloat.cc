@@ -17,118 +17,120 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "convarfloat.h"
-
 #include <sstream>
 #include <iomanip>
 
+#include "convarfloat.h"
+
 using namespace std;
 
-
-ConVarFloat::ConVarFloat (const ConVarAttributes& attributes) :
-ConVarState (attributes)
+ConVarFloat::ConVarFloat(const ConVarAttributes& attributes) :
+    ConVarState(attributes)
 {
 }
 
-ConVarFloat::ConVarFloat (const ConVarAttributes& attributes, float value) :
-   ConVarState (attributes), mValue (value)
+ConVarFloat::ConVarFloat(const ConVarAttributes& attributes, TFloat value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarFloat::clone() const
+ConVarState*
+ConVarFloat::clone() const
 {
-   return new ConVarFloat (mAttributes, mValue);
+    return new ConVarFloat(M_attributes, M_value);
 }
 
-   
-ConVar::EConVarType ConVarFloat::getType() const
+ConVar::ConVarType 
+ConVarFloat::getType() const
 {
-   return ConVar::CVT_FLOAT;
+    return ConVar::S_CVT_FLOAT;
 }
 
-
-
-bool ConVarFloat::setInt (int value)
+bool 
+ConVarFloat::setInt(int value)
 {
-   return setFloat (float (value));
+    return setFloat(static_cast < TFloat > (value));
 }
 
-
-bool ConVarFloat::setFloat (float value)
+bool 
+ConVarFloat::setFloat(TFloat value)
 {
-    if (mAttributes.isConstant())
+    if (M_attributes.isConstant())
     {
         return false;
     }
 
-   setValue (value);
-   return true;
+    setValue(value);
+    return true;
 }
 
-bool ConVarFloat::setVariable (ConVar* value)
+bool 
+ConVarFloat::setVariable(ConVar* value)
 {
-   float containedValue;
-   
-   if (value->getFloat (containedValue))
-   {
-      return setFloat (containedValue);
-   } else {
-      return false;
-   }
+    TFloat contained_value;
+
+    if (value->getFloat(contained_value))
+    {
+        return setFloat(contained_value);
+    }
+    else
+    {
+        return false;
+    }
 }
 
-
-
-bool ConVarFloat::getFloat (float& value) const
+bool 
+ConVarFloat::getFloat(TFloat& value) const
 {
-   value = getValue();
-   return true;
+    value = getValue();
+    return true;
 }
 
-bool ConVarFloat::getString (string& value) const
+bool 
+ConVarFloat::getString(string& value) const
 {
-   float floatValue;
-   getFloat (floatValue);
-   
-   stringstream ss;
-   ss << floatValue;
-   value = ss.str();
-   
-   return true;
+    TFloat float_value;
+    getFloat(float_value);
+
+    stringstream ss;
+    ss << float_value;
+    value = ss.str();
+
+    return true;
 }
 
-bool ConVarFloat::getCharString (char** value) const
+bool 
+ConVarFloat::getCharString(char** value) const
 {
-   *value = new char [strlen (dumpValue().c_str()) + 1];
-   strcpy (*value, dumpValue().c_str());
-   
-   return true;
+    *value = new char[strlen(dumpValue().c_str()) + 1];
+    strcpy(*value, dumpValue().c_str());
+
+    return true;
 }
 
-
-
-
-string ConVarFloat::dumpValue() const
+string 
+ConVarFloat::dumpValue() const
 {
-   string dump;
-   getString (dump);
-   return dump;
+    string dump;
+    getString(dump);
+    return dump;
 }
 
-string ConVarFloat::dumpType() const
+string 
+ConVarFloat::dumpType() const
 {
-   return "float";
+    return "float";
 }
 
-
-
-void ConVarFloat::setValue (float value)
+void
+ConVarFloat::setValue(TFloat value)
 {
-   mValue = value;
-   mAttributes.CallBack();
+    M_value = value;
+    M_attributes.callBack();
 }
 
-float ConVarFloat::getValue() const
+TFloat 
+ConVarFloat::getValue() const
 {
-   return mValue;
+    return M_value;
 }

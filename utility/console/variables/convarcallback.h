@@ -17,11 +17,15 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARCALLBACK_H_
-#define _CONVARCALLBACK_H_
+#ifndef UTILITY_CONVARCALLBACK_H
+#define UTILITY_CONVARCALLBACK_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 /*! \class ConVarCallBack
- $Id: convarcallback.h,v 1.2 2002/08/14 09:24:53 fruit Exp $
+ $Id: convarcallback.h,v 1.3 2002/08/21 08:18:39 fruit Exp $
 
     ConVarCallBack - Call Back Functionality for Console Variables
 
@@ -42,16 +46,15 @@
     Marco Koegler <koegler@uni-koblenz.de>, 
     Marcus Rollmann <rollmark@uni-koblenz.de>, et.al.
 */
-
 class ConVarCallBack
 {
 public:
-   virtual ~ConVarCallBack() {};
-   
-   /*! The entry point for all callback functionality.
+    virtual ~ConVarCallBack() {}
+
+    /*! The entry point for all callback functionality.
        Something should be done dependend on the index.
-   */
-   virtual void callBack(int index) = 0;
+     */
+    virtual void callBack(int index) = 0;
 };
 
-#endif // _CONVARCALLBACK_H_
+#endif                          // UTILITY_CONVARCALLBACK_H

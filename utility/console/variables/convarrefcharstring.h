@@ -17,49 +17,49 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARREFCHARSTRING_H_
-#define _CONVARREFCHARSTRING_H_
+#ifndef UTILITY_CONVARREFCHARSTRING_H
+#define UTILITY_CONVARREFCHARSTRING_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include "convarcharstring.h"
 
-/** $Id: convarrefcharstring.h,v 1.1 2002/08/14 09:24:53 fruit Exp $
-  * 
-  *   ConVarRefCharString
-  * 
-  *      This variable contains a reference to an old fashioned char* string.
-  *
-  *      The referenced char string must already be defined as it will be deleted on its change.
-  *
-  *   HISTORY:
-  *       04.02.02 - AF
-  *         - First working version
-  * 
-  *   TODO:
-  * 
-  *   TOFIX:
-  */
+/*! \class ConVarRefCharString 
+  $Id: convarrefcharstring.h,v 1.2 2002/08/21 08:18:39 fruit Exp $
 
+    ConVarRefCharString
+
+    This variable contains a reference to an old fashioned char*
+    string.  The referenced char string must already be defined as it
+    will be deleted on its change.
+
+    HISTORY:
+    The console/variable subsystem was taken from a student project at
+    the AI Research Group, Koblenz University. Original development by
+    Alexander Fuchs <alexf@uni-koblenz.de>,
+    Marco Koegler <koegler@uni-koblenz.de>, 
+    Markus Rollmann <rollmark@uni-koblenz.de>, et.al.
+*/
 class ConVarRefCharString : public ConVarCharString
 {
 public:
-   ConVarRefCharString (const ConVarAttributes& attributes, char**   value);
-   
-   virtual ConVarState* clone() const;
-   
-   virtual ConVar::EConVarType getType() const;
-   
-   virtual std::string dumpType() const;
-   
+    ConVarRefCharString(const ConVarAttributes& attributes, char** value);
+
+    virtual ConVarState* clone() const;
+
+    virtual ConVar::ConVarType getType() const;
+
+    virtual std::string dumpType() const;
+
 protected:
 
-   virtual void setValue (const char* value);
-   virtual char* getValue() const;
-   
-private:
+    virtual void setValue(const char* value);
+    virtual char* getValue() const;
 
-   char**   mValue;
+private:
+    char** M_value;
 };
 
-
-#endif // _CONVARREFCHARSTRING_H_
-
+#endif                          // UTILITY_CONVARREFCHARSTRING_H

@@ -21,67 +21,68 @@
 
 using namespace std;
 
-
-ConVarLabel::ConVarLabel (const ConVarAttributes& attributes, const string& value) :
-   ConVarState (attributes), mValue (value)
+ConVarLabel::ConVarLabel(const ConVarAttributes& attributes, 
+                         const string& value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarLabel::clone() const
+ConVarState*
+ConVarLabel::clone() const
 {
-   return new ConVarLabel (mAttributes, mValue);
+    return new ConVarLabel(M_attributes, M_value);
 }
 
-   
-
-ConVar::EConVarType ConVarLabel::getType() const
+ConVar::ConVarType 
+ConVarLabel::getType() const
 {
-   return ConVar::CVT_LABEL;
+    return ConVar::S_CVT_LABEL;
 }
 
-
-
-bool ConVarLabel::setLabel (const string& value)
+bool
+ConVarLabel::setLabel(const string& value)
 {
-    if (mAttributes.isConstant())
+    if (M_attributes.isConstant())
     {
         return false;
     }
-   
-   setValue (value);
-   return true;
+
+    setValue(value);
+    return true;
 }
 
-bool ConVarLabel::getLabel (std::string& value) const
+bool
+ConVarLabel::getLabel(std::string& value) const
 {
-   value = getValue();
-   
-   return true;
+    value = getValue();
+
+    return true;
 }
 
-
-string ConVarLabel::dumpValue() const
+string
+ConVarLabel::dumpValue() const
 {
-   string dump;
-   getString (dump);
+    string dump;
+    getString(dump);
 
-   return dump;
+    return dump;
 }
 
-string ConVarLabel::dumpType() const
+string
+ConVarLabel::dumpType() const
 {
-   return "label";
+    return "label";
 }
 
-
-
-void ConVarLabel::setValue (string value)
+void
+ConVarLabel::setValue(const string& value)
 {
-   mValue = value;
-   mAttributes.CallBack();
+    M_value = value;
+    M_attributes.callBack();
 }
 
-string ConVarLabel::getValue() const
+string
+ConVarLabel::getValue() const
 {
-   return mValue;
+    return M_value;
 }

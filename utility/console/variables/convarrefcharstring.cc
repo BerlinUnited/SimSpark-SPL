@@ -24,47 +24,45 @@
 
 using namespace std;
 
-
-ConVarRefCharString::ConVarRefCharString (const ConVarAttributes& attributes, char** value) :
-   ConVarCharString (attributes, NULL), mValue (value)
+ConVarRefCharString::ConVarRefCharString(const ConVarAttributes& attributes, 
+                                         char** value) :
+    ConVarCharString(attributes, 0), M_value(value)
 {
 }
 
-ConVarState* ConVarRefCharString::clone() const
+ConVarState*
+ConVarRefCharString::clone() const
 {
-   return new ConVarRefCharString (mAttributes, mValue);
+    return new ConVarRefCharString(M_attributes, M_value);
 }
 
-   
-
-ConVar::EConVarType ConVarRefCharString::getType() const
+ConVar::ConVarType 
+ConVarRefCharString::getType() const
 {
-   return ConVar::CVT_REF_CHARSTRING;
+    return ConVar::S_CVT_REF_CHARSTRING;
 }
 
-
-
-
-string ConVarRefCharString::dumpType() const
+string
+ConVarRefCharString::dumpType() const
 {
-   return "char* ref";
+    return "char* ref";
 }
 
-
-
-void ConVarRefCharString::setValue (const char* value)
+void
+ConVarRefCharString::setValue(const char* value)
 {
-   delete[] *mValue;
-   *mValue   = new char [strlen (value) + 1];
-   strcpy (*mValue, value);
-   
-   mAttributes.CallBack();
+    delete[] * M_value;
+    *M_value = new char[strlen(value) + 1];
+    strcpy(*M_value, value);
+
+    M_attributes.callBack();
 }
 
-char* ConVarRefCharString::getValue() const
+char*
+ConVarRefCharString::getValue() const
 {
-   char* value = new char [strlen (*mValue) + 1];
-   strcpy (value, *mValue);
-   
-   return value;
+    char *value = new char[strlen(*M_value) + 1];
+    strcpy(value, *M_value);
+
+    return value;
 }

@@ -24,123 +24,131 @@
 
 using namespace std;
 
-
-ConVarVariable::ConVarVariable (const ConVarAttributes& attributes, ConVar* value) :
-   ConVarState (attributes), mValue (value)
+ConVarVariable::ConVarVariable(const ConVarAttributes& attributes, 
+                               ConVar* value) :
+    ConVarState(attributes), M_value(value)
 {
 }
 
-ConVarState* ConVarVariable::clone() const
+ConVarState*
+ConVarVariable::clone() const
 {
-   return new ConVarVariable (mAttributes, mValue);
+    return new ConVarVariable(M_attributes, M_value);
 }
 
-   
-
-ConVar::EConVarType ConVarVariable::getType() const
+ConVar::ConVarType 
+ConVarVariable::getType() const
 {
-   return ConVar::CVT_VARIABLE;
+    return ConVar::S_CVT_VARIABLE;
 }
 
-
-
-bool ConVarVariable::setInt (int value)
+bool
+ConVarVariable::setInt(int value)
 {
-   return mValue->setInt (value);
+    return M_value->setInt(value);
 }
 
-bool ConVarVariable::setFloat (float value)
+bool
+ConVarVariable::setFloat(TFloat value)
 {
-   return mValue->setFloat (value);
+    return M_value->setFloat(value);
 }
 
-bool ConVarVariable::setString (const string& value)
+bool
+ConVarVariable::setString(const string& value)
 {
-   return mValue->setString (value);
+    return M_value->setString(value);
 }
 
-bool ConVarVariable::setCharString (const char* value)
+bool
+ConVarVariable::setCharString(const char* value)
 {
-   return mValue->setCharString (value);
+    return M_value->setCharString(value);
 }
 
-bool ConVarVariable::setVector (const Vector3& value)
+bool
+ConVarVariable::setVector(const Vector3& value)
 {
-   return mValue->setVector (value);
+    return M_value->setVector(value);
 }
 
-bool ConVarVariable::setCommand (const ConCommand* value)
+bool
+ConVarVariable::setCommand(const ConCommand* value)
 {
-   return mValue->setCommand (value);
+    return M_value->setCommand(value);
 }
 
-
-bool ConVarVariable::setVariable (ConVar* value)
+bool
+ConVarVariable::setVariable(ConVar* value)
 {
-   return mValue->setVariable (value);
+    return M_value->setVariable(value);
 }
 
-
-
-
-bool ConVarVariable::getInt (int& value) const
+bool
+ConVarVariable::getInt(int& value) const
 {
-   return mValue->getInt (value);
+    return M_value->getInt(value);
 }
 
-bool ConVarVariable::getFloat (float& value) const
+bool
+ConVarVariable::getFloat(TFloat& value) const
 {
-   return mValue->getFloat (value);
+    return M_value->getFloat(value);
 }
 
-bool ConVarVariable::getString (string& value) const
+bool
+ConVarVariable::getString(string& value) const
 {
-   return mValue->getString (value);
+    return M_value->getString(value);
 }
 
-bool ConVarVariable::getCharString (char** value) const
+bool
+ConVarVariable::getCharString(char** value) const
 {
-   return mValue->getCharString (value);
+    return M_value->getCharString(value);
 }
 
-bool ConVarVariable::getCommand (const ConCommand** value) const
+bool
+ConVarVariable::getCommand(const ConCommand** value) const
 {
-   return mValue->getCommand (value);
+    return M_value->getCommand(value);
 }
 
-bool ConVarVariable::getVector (Vector3& value) const
+bool
+ConVarVariable::getVector(Vector3& value) const
 {
-   return mValue->getVector (value);
+    return M_value->getVector(value);
 }
 
-bool ConVarVariable::getVariable (ConVar** value) const
+bool
+ConVarVariable::getVariable(ConVar** value) const
 {
-   *value = mValue;
-   return true;
+    *value = M_value;
+    return true;
 }
-
-
 
 // this method should never be called
-string ConVarVariable::dumpValue() const
+string
+ConVarVariable::dumpValue() const
 {
-   return "";
+    return "";
 }
 
 // this method should never be called
-string ConVarVariable::dumpType() const
+string
+ConVarVariable::dumpType() const
 {
-   return "";
+    return "";
 }
 
-
-string ConVarVariable::dump() const
+string
+ConVarVariable::dump() const
 {
-   return mValue->dump();
+    return M_value->dump();
 }
 
-string ConVarVariable::dumpWithSignature() const
+string
+ConVarVariable::dumpWithSignature() const
 {
-   return mValue->dumpWithSignature();
+    return M_value->dumpWithSignature();
 }
-

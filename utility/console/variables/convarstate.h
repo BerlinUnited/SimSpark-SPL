@@ -17,16 +17,22 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _CONVARSTATE_H_
-#define _CONVARSTATE_H_
+#ifndef UTILITY_CONVARSTATE_H
+#define UTILITY_CONVARSTATE_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <vector.h>
+
+#include <vector3.h>
 
 #include "convarattributes.h"
 #include "convar.h"
 
 /*! \class ConVarState
- $Id: convarstate.h,v 1.2 2002/08/14 09:24:53 fruit Exp $
+ $Id: convarstate.h,v 1.3 2002/08/21 08:18:40 fruit Exp $
 
     ConVarState
     The base class of the console variable types.  It contains the
@@ -36,7 +42,7 @@
     For every type should exist a set and a get method accepting the
     variable type it stores, e.g. void setInt(int), int getInt().
 
-    A subclass should call mAttributes.callBack() on a change of its
+    A subclass should call M_attributes.callBack() on a change of its
     value.
 
     The types are managed by the wrapper class ConVar. Look there for
@@ -57,31 +63,31 @@ public:
     ConVarState();
     ConVarState(const ConVarAttributes& attributes);
     virtual ~ConVarState();
-    
+
     /*! It would be nice if the subclasses could use a covariant
-        overriding, but VC++ does not support it
-    */
+       overriding, but VC++ does not support it
+     */
     virtual ConVarState* clone() const = 0;
 
     //! which type has this variable?
-    virtual ConVar::EConVarType getType() const = 0;
+    virtual ConVar::ConVarType getType() const = 0;
     //! is this variable of the given type?
-    virtual bool isOfType(ConVar::EConVarType type) const;
+    virtual bool isOfType(ConVar::ConVarType type) const;
 
     //! a set and get method for each variable type 
-    virtual bool setBool(const bool value);
+    virtual bool setBool(bool value);
     virtual bool setInt(int value);
-    virtual bool setFloat(float value);
+    virtual bool setFloat(TFloat value);
     virtual bool setString(const std::string& value);
     virtual bool setCharString(const char* value);
     virtual bool setVector(const Vector3& value);
     virtual bool setCommand(const ConCommand* value);
     virtual bool setVariable(ConVar* value);
     virtual bool setLabel(const std::string& value);
-    
+
     virtual bool getBool(bool& value) const;
     virtual bool getInt(int& value) const;
-    virtual bool getFloat(float& value) const;
+    virtual bool getFloat(TFloat& value) const;
     virtual bool getString(std::string& value) const;
     virtual bool getCharString(char** value) const;
     virtual bool getCommand(const ConCommand** value) const;
@@ -99,11 +105,9 @@ public:
     //! this is used by the ConExport to export the variable settings
     virtual std::string dump() const;
     virtual std::string dumpWithSignature() const;
-        
+
 protected:
-    ConVarAttributes mAttributes;
+     ConVarAttributes M_attributes;
 };
 
-
-#endif // _CONVARSTATE_H_
-
+#endif                          // UTILITY_CONVARSTATE_H
