@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorparser.cpp,v 1.3 2004/03/20 09:44:12 rollmark Exp $
+   $Id: monitorparser.cpp,v 1.4 2004/03/23 09:44:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -223,14 +223,12 @@ void MonitorParser::ParseObject(const Predicate& predicate, Expression& expr)
 
 void MonitorParser::ParseGameState(const Predicate& predicate, EExprType& type, GameState& state)
 {
-    Predicate::Iterator param(predicate);
-
     switch (type)
         {
         case ET_TEAML :
             {
                 std::string teaml;
-                if (predicate.GetValue(param,teaml))
+                if (predicate.GetValue(predicate.begin(),teaml))
                     {
                         state.SetTeamL(teaml);
                     }
@@ -239,7 +237,7 @@ void MonitorParser::ParseGameState(const Predicate& predicate, EExprType& type, 
         case ET_TEAMR :
             {
                 std::string teamr;
-                if (predicate.GetValue(param,teamr))
+                if (predicate.GetValue(predicate.begin(),teamr))
                     {
                         state.SetTeamR(teamr);
                     }
@@ -248,7 +246,7 @@ void MonitorParser::ParseGameState(const Predicate& predicate, EExprType& type, 
         case ET_HALF :
             {
                 int half;
-                if (predicate.GetValue(param,half))
+                if (predicate.GetValue(predicate.begin(),half))
                     {
                         switch (half)
                             {
@@ -267,7 +265,7 @@ void MonitorParser::ParseGameState(const Predicate& predicate, EExprType& type, 
         case ET_TIME :
             {
                 float time;
-                if (predicate.GetValue(param,time))
+                if (predicate.GetValue(predicate.begin(),time))
                     {
                         state.SetTime(time);
                     }
@@ -276,7 +274,7 @@ void MonitorParser::ParseGameState(const Predicate& predicate, EExprType& type, 
         case ET_SCOREL :
             {
                 int score;
-                if (predicate.GetValue(param,score))
+                if (predicate.GetValue(predicate.begin(),score))
                     {
                         state.SetScoreL(score);
                     }
@@ -285,7 +283,7 @@ void MonitorParser::ParseGameState(const Predicate& predicate, EExprType& type, 
         case ET_SCORER :
             {
                 int score;
-                if (predicate.GetValue(param,score))
+                if (predicate.GetValue(predicate.begin(),score))
                     {
                         state.SetScoreR(score);
                     }
@@ -294,7 +292,7 @@ void MonitorParser::ParseGameState(const Predicate& predicate, EExprType& type, 
         case ET_PLAYMODE :
             {
                 int mode;
-                if (predicate.GetValue(param,mode))
+                if (predicate.GetValue(predicate.begin(),mode))
                     {
                         state.SetPlayMode((TPlayMode)mode);
                     }
@@ -378,7 +376,3 @@ void MonitorParser::ParsePredicates(oxygen::Predicate::TList& predList,
             exprList.push_back(expr);
         }
 }
-
-
-
-

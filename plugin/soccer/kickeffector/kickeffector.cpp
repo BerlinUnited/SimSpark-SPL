@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.5 2004/03/22 18:10:56 fruit Exp $
+   $Id: kickeffector.cpp,v 1.6 2004/03/23 09:38:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -149,7 +149,7 @@ KickEffector::GetActionObject(const Predicate& predicate)
       Predicate::Iterator iter = predicate.begin();
 
       float angle;
-      if (!predicate.GetValue(iter, angle))
+      if (! predicate.AdvanceValue(iter, angle))
       {
           GetLog()->Error()
               << "ERROR: (KickEffector) kick angle parameter expected\n";
@@ -157,7 +157,7 @@ KickEffector::GetActionObject(const Predicate& predicate)
       }
 
       float power;
-      if (! predicate.GetValue(iter, power))
+      if (! predicate.AdvanceValue(iter, power))
           {
               GetLog()->Error()
                   << "ERROR: (KickEffector) kick power expected\n";

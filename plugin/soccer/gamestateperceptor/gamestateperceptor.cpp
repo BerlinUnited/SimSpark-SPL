@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: gamestateperceptor.cpp,v 1.3 2004/03/23 09:36:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 
+using namespace zeitgeist;
 using namespace oxygen;
 using namespace boost;
 using namespace std;
@@ -47,20 +48,20 @@ GameStatePerceptor::InsertSoccerParam(Predicate& predicate, const std::string& n
             return;
         }
 
-    Predicate::TParameterList element;
-    element.push_back(name);
-    element.push_back(value);
-    predicate.parameter.push_back(element);
+    ParameterList element;
+    element.AddValue(name);
+    element.AddValue(value);
+    predicate.parameter.AddValue(element);
 }
 
 void
 GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
 {
     // uniform number
-    Predicate::TParameterList element;
-    element.push_back(string("unum"));
-    element.push_back(mAgentState->GetUniformNumber());
-    predicate.parameter.push_back(element);
+    ParameterList element;
+    element.AddValue(string("unum"));
+    element.AddValue(mAgentState->GetUniformNumber());
+    predicate.parameter.AddValue(element);
 
     // team index
     std::string team;
@@ -77,10 +78,10 @@ GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
             break;
         }
 
-    element.clear();
-    element.push_back(string("team"));
-    element.push_back(team);
-    predicate.parameter.push_back(element);
+    element.Clear();
+    element.AddValue(string("team"));
+    element.AddValue(team);
+    predicate.parameter.AddValue(element);
 
     // soccer variables
     // field geometry parameter
@@ -114,7 +115,7 @@ GameStatePerceptor::Percept(Predicate& predicate)
         }
 
     predicate.name = "GameState";
-    predicate.parameter.clear();
+    predicate.parameter.Clear();
 
     // with the first GameState percept after the player is assigned
     // to a team it receives info about it's team and unum assignment
@@ -129,16 +130,16 @@ GameStatePerceptor::Percept(Predicate& predicate)
         }
 
     // time
-    Predicate::TParameterList element;
-    element.push_back(string("time"));
-    element.push_back(mGameState->GetTime());
-    predicate.parameter.push_back(element);
+    ParameterList element;
+    element.AddValue(string("time"));
+    element.AddValue(mGameState->GetTime());
+    predicate.parameter.AddValue(element);
 
     // playmode
-    element.clear();
-    element.push_back(string("playmode"));
-    element.push_back(SoccerBase::PlayMode2Str(mGameState->GetPlayMode()));
-    predicate.parameter.push_back(element);
+    element.Clear();
+    element.AddValue(string("playmode"));
+    element.AddValue(SoccerBase::PlayMode2Str(mGameState->GetPlayMode()));
+    predicate.parameter.AddValue(element);
 
     return true;
 }

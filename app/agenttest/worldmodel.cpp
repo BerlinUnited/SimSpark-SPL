@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.4 2004/03/22 18:12:00 fruit Exp $
+   $Id: worldmodel.cpp,v 1.5 2004/03/23 09:41:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -107,60 +107,66 @@ WorldModel::ConstructInternal()
 }
 
 void
-WorldModel::ParseTeamIndex(const Predicate& predicate,
-                           Predicate::Iterator& objIter)
+WorldModel::ParseTeamIndex(const Predicate& predicate)
 {
-    // parse team index
     string team;
-    if (predicate.GetValue(objIter,team))
+    if (! predicate.GetValue(predicate.begin(),"team",team))
         {
-            if (team == "left")
-                mTeamIndex = TI_LEFT;
-            else if (team == "right")
-                mTeamIndex = TI_RIGHT;
-            else
-                {
-                    mTeamIndex = TI_NONE;
-                    GetLog()->Debug()
-                        << "(WorldModel) received TeamIndex TI_NONE\n";
-                }
+            return;
+        }
+
+    // parse team index
+    if (team == "left")
+        mTeamIndex = TI_LEFT;
+    else if (team == "right")
+        mTeamIndex = TI_RIGHT;
+    else
+        {
+            mTeamIndex = TI_NONE;
+            GetLog()->Debug()
+                << "(WorldModel) received TeamIndex TI_NONE\n";
         }
 }
 
-void WorldModel::ParsePlayMode(const Predicate& predicate,
-                               Predicate::Iterator& objIter)
+void WorldModel::ParsePlayMode(const Predicate& predicate)
 {
     string mode;
-    // parse play mode
-    if (predicate.GetValue(objIter,mode))
+    if (! predicate.GetValue(predicate.begin(),"playmode", mode))
         {
-            TPlayModeMap::iterator iter = mPlayModeMap.find(mode);
-            if (iter != mPlayModeMap.end())
-                {
-                    mPlayMode = (TPlayMode)(*iter).second;
-                } else
-                    {
-                        GetLog()->Debug()
-                            << "ERROR: (WorldModel) could not parse playmode "
-                            << mode << "\n";
-                    }
+            return;
         }
-}
 
+    // parse play mode
+    TPlayModeMap::iterator iter = mPlayModeMap.find(mode);
+    if (iter != mPlayModeMap.end())
+        {
+            mPlayMode = (TPlayMode)(*iter).second;
+        } else
+            {
+                GetLog()->Debug()
+                    << "ERROR: (WorldModel) could not parse playmode "
+                    << mode << "\n";
+            }
+}
 
 void WorldModel::ParseGameState(const Predicate& predicate)
 {
-    GetGameStateParam(predicate, "FieldLength", mFieldLength);
-    GetGameStateParam(predicate, "FieldWidth",  mFieldWidth);
-    GetGameStateParam(predicate, "FieldHeigth", mFieldHeight);
-    GetGameStateParam(predicate, "GoalWidth",   mGoalWidth);
-    GetGameStateParam(predicate, "GoalDepth",   mGoalDepth);
-    GetGameStateParam(predicate, "GoalHeight",  mGoalHeight);
-    GetGameStateParam(predicate, "BorderSize",  mBorderSize);
-    GetGameStateParam(predicate, "time",  mTime);
-    GetGameStateParam(predicate, "playmode",mPlayMode);
-    GetGameStateParam(predicate, "unum",  mTeamUnum);
-    GetGameStateParam(predicate, "team",  mTeamIndex);
+    ParseTeamIndex(predicate);
+    ParsePlayMode(predicate);
+    predicate.GetValue(predicate.begin(),"FieldLength",   mFieldLength);
+    predicate.GetValue(predicate.begin(),"FieldWidth",    mFieldWidth);
+    predicate.GetValue(predicate.begin(),"FieldHeigth",   mFieldHeight);
+    predicate.GetValue(predicate.begin(),"GoalWidth",     mGoalWidth);
+    predicate.GetValue(predicate.begin(),"GoalDepth",     mGoalDepth);
+    predicate.GetValue(predicate.begin(),"GoalHeight",    mGoalHeight);
+    predicate.GetValue(predicate.begin(),"BorderSize",    mBorderSize);
+    predicate.GetValue(predicate.begin(),"time",          mTime);
+    predicate.GetValue(predicate.begin(),"unum",          mTeamUnum);
+    predicate.GetValue(predicate.begin(),"AgentRadius",   mAgentRadius);
+    predicate.GetValue(predicate.begin(),"AgentMass",     mAgentMass);
+    predicate.GetValue(predicate.begin(),"AgentMaxSpeed", mAgentMaxSpeed);
+    predicate.GetValue(predicate.begin(),"BallRadius",    mBallRadius);
+    predicate.GetValue(predicate.begin(),"BallMass",      mBallMass);
 }
 
 void WorldModel::ParseObjectVision(const Predicate& predicate)
@@ -171,37 +177,24 @@ void WorldModel::ParseObjectVision(const Predicate& predicate)
          ++iter
          )
         {
-            // try to extract the first element as a parameter list
-            const Predicate::TParameterList* paramList
-                = boost::any_cast<Predicate::TParameterList>(&(*iter));
-
-            if (
-                (paramList == 0) ||
-                (paramList->size() < 2)
-                )
+            // extract the element as a parameter list
+            Predicate::Iterator paramIter = iter;
+            if (! predicate.DescentList(paramIter))
                 {
                     continue;
                 }
 
-            // try to extract the first parameter a string
-            Predicate::Iterator paramIter(paramList,paramList->begin());
-
+            // read the object name
             string name;
             if (! predicate.GetValue(paramIter,name))
             {
                 continue;
             }
 
-            // try to read the 'id' section
-            Predicate::Iterator idIter = paramIter;
-            if (predicate.FindParameter(idIter,"id"))
+            // try read the 'id' section
+            string strId;
+            if (predicate.GetValue(paramIter,"id", strId))
                 {
-                    string strId;
-                    if (! predicate.GetValue(idIter,strId))
-                        {
-                            continue;
-                        }
-
                     name += strId;
                 }
 
@@ -262,14 +255,12 @@ WorldModel::ParseVision(const Predicate& predicate)
     VisionSense sense;
 
     predicate.GetValue(iter,mMyPos);
-    GetLog()->Debug()
-        << "***** ParseVision " << mMyPos[0] << " "
-        << mMyPos[1] << " "
-        << mMyPos[2] << "\n";
 }
 
 void WorldModel::Parse(const string& message)
 {
+    GetLog()->Debug() << "(WorldModel::Parse) " << message << "\n";
+
     shared_ptr<Predicate::TList> predicates =
         mParser->Parse(message);
 

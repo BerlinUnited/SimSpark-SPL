@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.4 2004/02/26 21:08:59 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.5 2004/03/23 09:38:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <oxygen/sceneserver/transform.h>
 #include <soccer/soccerbase/soccerbase.h>
 
+using namespace zeitgeist;
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
@@ -88,7 +89,7 @@ bool
 VisionPerceptor::Percept(Predicate& predicate)
 {
     predicate.name = mPredicateName;
-    predicate.parameter.clear();
+    predicate.parameter.Clear();
 
     if (
         (mTransformParent.get() == 0) ||
@@ -151,35 +152,35 @@ VisionPerceptor::Percept(Predicate& predicate)
     for (std::list<ObjectData>::iterator i = visibleObjects.begin();
          i != visibleObjects.end(); ++i)
     {
-        Predicate::TParameterList position;
+        ParameterList position;
 #define DEBUG_VISIBILITY_CHECK
 #ifdef DEBUG_VISIBILITY_CHECK
         if (i->mVisible)
-            position.push_back(std::string("pol"));
+            position.AddValue(std::string("pol"));
         else
-            position.push_back(std::string("invisible"));
+            position.AddValue(std::string("invisible"));
 #else
         if (! i->mVisible) continue;
-        position.push_back(std::string("pol"));
+        position.AddValue(std::string("pol"));
 #endif
 
-        position.push_back(i->mDist);
-        position.push_back(i->mTheta);
-        position.push_back(i->mPhi);
+        position.AddValue(i->mDist);
+        position.AddValue(i->mTheta);
+        position.AddValue(i->mPhi);
 
-        Predicate::TParameterList element;
-        element.push_back(i->mObj->GetPerceptName());
+        ParameterList element;
+        element.AddValue(i->mObj->GetPerceptName());
 
         if (!i->mObj->GetID().empty())
         {
-            Predicate::TParameterList id;
-            id.push_back(std::string("id"));
-            id.push_back(i->mObj->GetID());
-            element.push_back(id);
+            ParameterList id;
+            id.AddValue(std::string("id"));
+            id.AddValue(i->mObj->GetID());
+            element.AddValue(id);
         }
 
-        element.push_back(position);
-        predicate.parameter.push_back(element);
+        element.AddValue(position);
+        predicate.parameter.AddValue(element);
     }
 
     if (mSenseMyPos)
@@ -187,12 +188,12 @@ VisionPerceptor::Percept(Predicate& predicate)
             Vector3f sensedMyPos = myPos;
             SoccerBase::FlipView(sensedMyPos, ti);
 
-            Predicate::TParameterList element;
-            element.push_back(std::string("mypos"));
-            element.push_back(sensedMyPos[0]);
-            element.push_back(sensedMyPos[1]);
-            element.push_back(sensedMyPos[2]);
-            predicate.parameter.push_back(element);
+            ParameterList element;
+            element.AddValue(std::string("mypos"));
+            element.AddValue(sensedMyPos[0]);
+            element.AddValue(sensedMyPos[1]);
+            element.AddValue(sensedMyPos[2]);
+            predicate.parameter.AddValue(element);
         }
 
     return true;
