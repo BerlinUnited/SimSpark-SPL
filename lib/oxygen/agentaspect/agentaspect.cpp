@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.3.4.3 2003/12/10 10:26:35 rollmark Exp $
+   $Id: agentaspect.cpp,v 1.3.4.4 2003/12/10 10:56:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,15 +64,45 @@ AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> actions)
   return true;
 }
 
-BaseParser::TPredicateList
+shared_ptr<BaseParser::TPredicateList>
 AgentAspect::QueryPerceptors()
 {
-  // traverse all Perceptors and build a list of the collected
-  // Predicates
-  return BaseParser::TPredicateList();
+  // build list of perceptors, searching recursively
+  TLeafList perceptors;
+  GetChildrenSupportingClass("oxygen/Perceptor",perceptors,true);
+
+  shared_ptr<BaseParser::TPredicateList>
+    predList(new BaseParser::TPredicateList());
+
+  // query the perceptors for new data
+  for (
+       TLeafList::iterator iter = perceptors.begin();
+       iter != perceptors.end();
+       ++iter
+       )
+    {
+      shared_ptr<Perceptor> perceptor
+        = shared_dynamic_cast<Perceptor>(*iter);
+
+      if (perceptor.get() == 0)
+        {
+          continue;
+        }
+
+      BaseParser::TPredicate predicate;
+      bool hasData = perceptor->Percept(predicate);
+
+      if (hasData)
+        {
+          predList->push_back(predicate);
+        }
+    }
+
+  return predList;
 }
 
-void AgentAspect::UpdateEffectorMap()
+void
+AgentAspect::UpdateEffectorMap()
 {
   // build list of effectors, searching recursively
   TLeafList effectors;
