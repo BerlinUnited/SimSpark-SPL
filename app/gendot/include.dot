@@ -1,0 +1,6 @@
+# include.dot: include file for the gendot tool
+#
+size ="7.5,10";
+ratio = "1.01";
+rotate ="90";
+

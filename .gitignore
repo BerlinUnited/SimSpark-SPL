@@ -27,6 +27,14 @@ app/fonttest/.libs
 app/fonttest/Makefile
 app/fonttest/Makefile.in
 app/fonttest/fonttest
+app/gendot/.deps
+app/gendot/.libs
+app/gendot/Logfiles
+app/gendot/Makefile
+app/gendot/Makefile.in
+app/gendot/createagentdb.sh
+app/gendot/rcsoccersim3D
+app/gendot/rcssserver3D
 app/inputtest/.deps
 app/inputtest/.libs
 app/inputtest/Makefile
