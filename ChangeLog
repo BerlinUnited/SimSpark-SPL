@@ -1,3 +1,9 @@
+2004-03-09  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	fixed bug that player y coordinate was used for 
+	checking if player is in the air (reported by Michael Gollin)
+
 2004-03-09  Markus Rollmann  <rollmark@uni-koblenz.de>
 	
 	* plugin/inputsdl/inputsystemsdl.cpp:
