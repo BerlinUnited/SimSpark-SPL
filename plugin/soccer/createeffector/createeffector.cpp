@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.1.2.3 2003/12/25 13:19:37 rollmark Exp $
+   $Id: createeffector.cpp,v 1.1.2.4 2003/12/26 11:35:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,9 +48,7 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
   // the CreateAction object; for now just create a default agent
   //
 
-  // assume that the AgentAspect is our parent node
-  shared_ptr<AgentAspect> aspect =
-    shared_dynamic_cast<AgentAspect>(make_shared(GetParent()));
+  shared_ptr<AgentAspect> aspect = GetAgentAspect();
 
   if (aspect.get() == 0)
     {
