@@ -52,15 +52,17 @@ addlog:
 	if test "$$USEREMAIL" = ""; then \
 	    USEREMAIL="sserver-admin@lists.sf.net"; \
 	fi; \
-	cvs -z9 diff -u --brief 2>&1 > @srcdir@/addlog.tmp; \
+	cvs -z9 diff -u --brief 2>&1 | $(AWK) '\
+	/^Index/ { print "\t* ./" $$2 } \
+	/^cvs server: .* is a new entry/ { print "\t* ./" $$3 }' \
+	> @srcdir@/addlog.tmp;
 	if test -s @srcdir@/addlog.tmp; then \
 		DATE=`date +"%Y-%m-%d"`; \
-		LOGHEADER=`echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n"`; \
-		cat @srcdir@/addlog.tmp | $(AWK) \
-		-v LOGHEADER="$$LOGHEADER" 'BEGIN { print LOGHEADER "\n" } \
-		/^Index/ { print "\t* ./" $$2 } \
-		/^cvs server: .* is a new entry/ { print "\t* ./" $$3 }	\
-		END { print "" }' | cat - @srcdir@/ChangeLog > ChangeLog.tmp; \
+		echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n" \
+		> ChangeLog.tmp; \
+		cat @srcdir@/addlog.tmp >> ChangeLog.tmp; \
+		echo "" >> ChangeLog.tmp; \
+		cat @srcdir@/ChangeLog >> ChangeLog.tmp; \
 		mv ChangeLog.tmp @srcdir@/ChangeLog; \
 		if test -n "$(CVSEDITOR)"; then $(CVSEDITOR) ChangeLog; \
 		elif test -n "$(VISUAL)"; then $(VISUAL) ChangeLog; \
@@ -76,6 +78,4 @@ addlog:
 			fi; \
 		fi; \
 	fi
-
-
 
