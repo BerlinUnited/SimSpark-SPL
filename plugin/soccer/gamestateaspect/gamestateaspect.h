@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.1.2.7 2004/02/10 21:42:32 rollmark Exp $
+   $Id: gamestateaspect.h,v 1.1.2.8 2004/02/11 09:45:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,8 +75,11 @@ public:
 
     /** called from the InitEffector to request a uniformn number and
         teamname */
-    bool GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
-                                         std::string teamName, unsigned int unum);
+    bool RequestUniform(boost::shared_ptr<AgentState> agentState,
+                        std::string teamName, unsigned int unum);
+
+    /** returns the next uniform number not taken for the given team */
+    int RequestUniformNumber(const TTeamIndex ti);
 
     /** called from the InitEffector to request an initial position
         for an agent */
@@ -126,6 +129,9 @@ protected:
 
     /** the set of uniform number for each team */
     TUnumSet mUnumSet[2];
+
+    /** the maximal uniform number handed out for each team */
+    int mMaxUnum[2];
 
     /** the scores of two teams */
     int mScore[2];
