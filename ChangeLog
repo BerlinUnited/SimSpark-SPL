@@ -1,3 +1,24 @@
+2003-06-03  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/scriptserver/scriptserver.h: 
+	added define so that ruby can be included with gnuc
+
+	* lib/zeitgeist/object.cpp: 
+	added check for boost version. Needs to be expanded, as get() 
+	for shared_ptr disappeared after 1-28-0. 
+
+	* lib/zeitgeist/leaf.h: 
+	moved declaration of leaf class factory to class.h
+
+	* lib/zeitgeist/class.h, lib/zeitgeist/class.cpp,
+	lib/zeitgeist/class_m.h:
+	- moved class macros to class_m.h 
+	- checking for hash_map availability
+	  (will be replaced by std::map if necessary)
+
+	* lib/zeitgeist/base.cpp: 
+	added shared_ptr casts for better compatibility
+
 2003-05-19  Oliver Obst  <fruit@robolog.org>
 
 	* Makefile.am, configure.ac, lib/Makefile.am, 
