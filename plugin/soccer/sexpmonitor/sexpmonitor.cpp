@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.13 2004/12/30 15:21:36 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.14 2004/12/31 14:17:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,16 +67,6 @@ SexpMonitor::ParseMonitorMessage(const string& data)
         return;
     }
 
-    if (mSexpParser.get() == 0)
-    {
-        GetLog()->Error() << "(SexpMonitor) ERROR: can't get SexpParser\n";
-        mPredicates = shared_ptr<PredicateList>();
-        return;
-    }
-
-    // get the predicates
-    mPredicates = mSexpParser->Parse(data);
-
     if (mCommandParser.get() == 0)
     {
         GetLog()->Error() << "(SexpMonitor) ERROR: can't get TrainerCommandParser\n";
@@ -84,7 +74,7 @@ SexpMonitor::ParseMonitorMessage(const string& data)
     }
 
     // interpret the commands in the predicates
-    mCommandParser->ParsePredicates(*mPredicates);
+    mCommandParser->ParseMonitorMessage(data);
 }
 
 void
@@ -259,16 +249,6 @@ SexpMonitor::OnLink()
 {
     SoccerBase::GetGameState(*this,mGameState);
 
-    // we need the SexpParser to generate the predicates
-    // from S-Expressions
-    mSexpParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New("SexpParser"));
-
-    if (mSexpParser.get() == 0)
-    {
-        GetLog()->Error() << "ERROR: (SexpMonitor) failed to create SexpParser\n";
-        return;
-    }
-
     // we need the TrainerCommandParser to parse the predicates
     // and interpret the commands
     mCommandParser = shared_dynamic_cast<TrainerCommandParser>
@@ -279,6 +259,9 @@ SexpMonitor::OnLink()
         GetLog()->Error() << "ERROR: (SexpMonitor) failed to create parser TrainerCommandParser\n";
         return;
     }
+
+    mCommandParser->SetName("TrainerCommandParser");
+    AddChildReference(mCommandParser);
 
     UpdateCached();
 }
@@ -301,7 +284,6 @@ SexpMonitor::OnUnlink()
 {
     mGameState.reset();
     mCommandParser.reset();
-    mSexpParser.reset();
     mBallState.reset();
 }
 
