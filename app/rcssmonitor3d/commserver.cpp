@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.2.2.3 2003/12/25 18:29:55 rollmark Exp $
+   $Id: commserver.cpp,v 1.2.2.4 2003/12/27 11:15:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,19 +48,14 @@ CommServer::Init(std::string parser, std::string host, int port)
 bool
 CommServer::GetMessage()
 {
-  static char rawmsg[MAX_MSG_LEN];
+    string line = mCommUnit.GetMessage();
+    if (line == "")
+        {
+            return false;
+        }
 
-  int l =  mCommUnit.GetMessage(rawmsg, MAX_MSG_LEN);
-  if (l == 0)
-    {
-      return (false);
-    }
-
-  // zero terminate and parse received data
-  rawmsg[l] = 0;
-  Parse(rawmsg);
-
-  return (true);
+    Parse(line);
+    return true;
 }
 
 
