@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.5 2004/06/08 09:22:27 jamu Exp $
+   $Id: monitor.h,v 1.6 2004/06/10 18:23:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,6 +91,14 @@ private:
     static const GLfloat sTeamColorRight[4];
     static const GLfloat sSphereDefaultColor[4];
     static const GLfloat sBallColor[4];
+    static const GLfloat sUnumColor[4];
+    static const GLfloat sCenterRadius;
+    static const GLfloat sGoalBoxLength;
+    static const GLfloat sPenaltyLength;
+
+    static const float s2DLowX;
+    static const float s2DLowY;
+    static const float s2DScale;
 
 private:
     // Constructor is private since monitor is a singleton
@@ -99,6 +107,11 @@ private:
     EReturnType InitInternal(int argc, char* argv[]);
     void DrawScene(int pass);
     void DrawStatusLine();
+    void DrawStatusText();
+
+    salt::Vector3f Get2DPos(const salt::Vector3f& pos);
+    void DrawOverview();
+
     void DrawFlag(GameState::EFlagType i, salt::Vector3f pos, int pass);
     void DrawPlayer(TTeamIndex side, int unum, const salt::Vector3f& pos, float size, int pass);
     void DrawBall(const salt::Vector3f& pos, float size, int pass);
@@ -134,6 +147,8 @@ private:
     CommServerBase::EKickOff mKickOff;
     //! flag if we want to see uniform numbers
     bool mDrawUnums;
+    //! flag if we want to draw the 2D overview
+    bool mDrawOverview;
     // connection parameters
     //! the server name
     std::string mServer;
@@ -154,7 +169,7 @@ private:
     bool mSingleStep;
     //! flag for advancing
     bool mAdvance;
-    
-    
+
+
 };
 

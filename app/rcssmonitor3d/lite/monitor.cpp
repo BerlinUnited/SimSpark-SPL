@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.9 2004/06/08 09:22:27 jamu Exp $
+   $Id: monitor.cpp,v 1.10 2004/06/10 18:23:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,6 +80,9 @@ const GLfloat
 Monitor::sLineColor[4]   = {0.6f, 1.0f, 0.6f, 1.0f};
 const GLfloat
 Monitor::sSphereDefaultColor[4] = { 0.8, 0.8, 0.2, 1.0 };
+
+const GLfloat
+Monitor::sUnumColor[4]      = {1.0, 1.0, 1.0, 1.0};
 // color for player of the different teams
 const GLfloat
 Monitor::sTeamColorLeft[4] = {1.0f, 0.2f, 0.2f, 1.0f};
@@ -88,6 +91,28 @@ Monitor::sTeamColorRight[4] = {0.2f, 0.2f, 1.0f, 1.0f};
 // ball color
 const GLfloat
 Monitor::sBallColor[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+// radius of center circle
+const float
+Monitor::sCenterRadius = 9.15;
+
+// length of the goal box
+const float
+Monitor::sGoalBoxLength = 5.5;
+
+// length of the penalty area
+const float
+Monitor::sPenaltyLength = 16.5;
+
+// 2D Overview constants
+const float
+Monitor::s2DLowX = 0.01; // left pos
+
+const float
+Monitor::s2DLowY = 0.12; // top pos
+
+const float
+Monitor::s2DScale = 0.01; // Skalierung
 
 Monitor::Monitor(std::string rel_path_prefix)
     : mZeitgeist("." PACKAGE_NAME, rel_path_prefix),
@@ -99,6 +124,7 @@ Monitor::Monitor(std::string rel_path_prefix)
     mCamDelta = 0.5;
     mCameraMode = eFree;
     mDrawUnums = true;
+    mDrawOverview = true;
     mServer = DEFAULT_HOST;
     mPort = DEFAULT_PORT;
     mSkip = 1;
@@ -276,6 +302,7 @@ Monitor::KeyBindings()
         "p          | pause the simulation/logplayer\n"
         "r          | unpause the simulation/logplayer\n"
         "n          | toggle display of uniform numbers\n"
+        "2          | toggle display of two dimensional overview\n"
         "?          | display keybindings\n"
         "----------------------------------------------------\n"
         "CAMERA MOVEMENT\n"
@@ -298,7 +325,7 @@ Monitor::KeyBindings()
         ">          | move one step forward\n"
         "----------------------------------------------------\n"
         "\n";
-    
+
 }
 
 Monitor::EReturnType
@@ -377,48 +404,16 @@ Monitor::DrawScene(int pass)
 }
 
 void
-Monitor::DrawStatusLine()
+Monitor::DrawStatusText()
 {
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    gluOrtho2D(-1, 1, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glColor4fv(sTeamColorLeft);
-    mGLServer.DrawSphere(Vector3f(-0.97,0.93,0.0), 0.025, 20);
-    glColor4fv(sTeamColorRight);
-    mGLServer.DrawSphere(Vector3f( 0.97,0.93,0.0), 0.025, 20);
-
-
-    int play_mode = mGameState.GetPlayMode();
-
-    if (play_mode == PM_BeforeKickOff)
-    {
-        glColor4fv(sSphereDefaultColor);
-        switch (mKickOff)
-        {
-        case CommServerBase::eRandom:
-            mGLServer.DrawSphere(Vector3f( 0.0,0.93,0.0), 0.025, 20);
-            break;
-        case CommServerBase::eLeft:
-            mGLServer.DrawSphere(Vector3f( -0.92,0.93,0.0), 0.025, 20);
-            break;
-        case CommServerBase::eRight:
-            mGLServer.DrawSphere(Vector3f( 0.92,0.93,0.0), 0.025, 20);
-            break;
-        }
-    }
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-
     std::stringstream sl, sc, sr;
 
     sl << mGameState.GetTeamnameLeft() << " " << mGameState.GetScoreLeft();
     sr << mGameState.GetScoreRight() << " " << mGameState.GetTeamnameRight();
     sc << "(" << ((mGameState.GetHalf() == GH_FIRST) ?
                   "first" : "second") << " half) ";
+
+    int play_mode = mGameState.GetPlayMode();
 
     switch (play_mode)
     {
@@ -442,6 +437,161 @@ Monitor::DrawStatusLine()
     mGLServer.DrawTextPix(sr.str().c_str(),
                           Vector2f( 0, mGLServer.GetTextHeight()),
                           GLServer::eRIGHT);
+}
+
+void
+Monitor::DrawStatusLine()
+{
+    glColor4fv(sTeamColorLeft);
+    mGLServer.DrawSphere(Vector3f(-0.97,0.93,0.0), 0.025, 20);
+    glColor4fv(sTeamColorRight);
+    mGLServer.DrawSphere(Vector3f( 0.97,0.93,0.0), 0.025, 20);
+
+    int play_mode = mGameState.GetPlayMode();
+
+    if (play_mode == PM_BeforeKickOff)
+    {
+        glColor4fv(sSphereDefaultColor);
+        switch (mKickOff)
+        {
+        case CommServerBase::eRandom:
+            mGLServer.DrawSphere(Vector3f( 0.0,0.93,0.0), 0.025, 20);
+            break;
+        case CommServerBase::eLeft:
+            mGLServer.DrawSphere(Vector3f( -0.92,0.93,0.0), 0.025, 20);
+            break;
+        case CommServerBase::eRight:
+            mGLServer.DrawSphere(Vector3f( 0.92,0.93,0.0), 0.025, 20);
+            break;
+        }
+    }
+}
+
+Vector3f Monitor::Get2DPos(const Vector3f& pos)
+{
+    return Vector3f
+        (
+         -1.0 + s2DLowX + s2DScale * (pos[0] + mGameState.GetFieldLength()/2),
+
+         1.0 - s2DLowY - (s2DScale * mGameState.GetFieldWidth()) +
+         s2DScale * (pos[1] + mGameState.GetFieldWidth()/2),
+
+         0.0
+         );
+}
+
+void
+Monitor::DrawOverview()
+{
+    // radius of player
+    float pl_radius = 0.01;
+//         = sSzY / mGameState.GetFieldWidth() *
+//         mGameState.GetAgentRadius();
+
+    // radius of ball
+    float b_radius = 0.005;
+
+//         sSzY / mGameState.GetFieldWidth() *
+//         mGameState.GetBallRadius();
+
+    // resolution of a sphere
+    int res  = 8;
+
+    const float& fl = mGameState.GetFieldLength();
+    const float& fw = mGameState.GetFieldWidth();
+//     const float& fh = mGameState.GetFieldHeight();
+//     const float& lw = mGameState.GetLineWidth();
+//     const float& bs = mGameState.GetBorderSize();
+    const float& gw = mGameState.GetGoalWidth();
+
+    // field rect
+    glColor4fv(sLineColor);
+    glBegin(GL_LINE_STRIP);
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(fl/2,-fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(fl/2,fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
+    glEnd();
+
+    // middle line
+    glBegin(GL_LINES);
+    glVertex3fv(Get2DPos(Vector3f(0,-fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(0,fw/2,0)).GetData());
+    glEnd();
+
+    // middle circle
+    mGLServer.DrawCircle(Get2DPos(Vector3f(0,0,0)),sCenterRadius*s2DScale);
+
+    // left goal box
+    glBegin(GL_LINE_STRIP);
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,gw/2+sGoalBoxLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2+sGoalBoxLength,gw/2+sGoalBoxLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2+sGoalBoxLength,-gw/2-sGoalBoxLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,-gw/2-sGoalBoxLength,0)).GetData());
+    glEnd();
+
+    // right goal box
+    glBegin(GL_LINE_STRIP);
+    glVertex3fv(Get2DPos(Vector3f(+fl/2,gw/2+sGoalBoxLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(+fl/2-sGoalBoxLength,gw/2+sGoalBoxLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(+fl/2-sGoalBoxLength,-gw/2-sGoalBoxLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(+fl/2,-gw/2-sGoalBoxLength,0)).GetData());
+    glEnd();
+
+    // penalty area left
+    glBegin(GL_LINE_STRIP);
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,gw/2+sPenaltyLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2+sPenaltyLength,gw/2+sPenaltyLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2+sPenaltyLength,-gw/2-sPenaltyLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,-gw/2-sPenaltyLength,0)).GetData());
+    glEnd();
+
+    // penalty area right
+    glBegin(GL_LINE_STRIP);
+    glVertex3fv(Get2DPos(Vector3f(+fl/2,gw/2+sPenaltyLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(+fl/2-sPenaltyLength,gw/2+sPenaltyLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(+fl/2-sPenaltyLength,-gw/2-sPenaltyLength,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(+fl/2,-gw/2-sPenaltyLength,0)).GetData());
+    glEnd();
+
+    Vector3f pos;
+    float size;
+    if (mGameState.GetBall(pos, size))
+    {
+        glColor4fv(sBallColor);
+        mGLServer.DrawSphere(Get2DPos(pos), b_radius, res);
+    }
+
+    int i = 0;
+    int unum;
+    TTeamIndex side;
+    while (mGameState.GetPlayer(i, pos, side, unum, size))
+    {
+        switch (side)
+            {
+            case TI_LEFT:
+                glColor4fv(sTeamColorLeft);
+                break;
+            case TI_RIGHT:
+                glColor4fv(sTeamColorRight);
+                break;
+            default:
+                glColor4fv(sSphereDefaultColor);
+            }
+
+        mGLServer.DrawSphere(Get2DPos(pos), pl_radius, res);
+
+        if (mDrawUnums)
+            {
+                glColor4fv(sUnumColor);
+                stringstream ss;
+                ss << unum;
+                mGLServer.DrawText3D(ss.str(), Get2DPos(pos));
+            }
+
+        ++i;
+    }
 }
 
 void
@@ -496,7 +646,7 @@ Monitor::DrawPlayer(TTeamIndex side,
 
         if (mDrawUnums && unum > 0)
         {
-            glColor3f(1.0, 1.0, 1.0);
+            glColor4fv(sUnumColor);
             std::stringstream ss;
             ss << unum;
             mGLServer.DrawText3D(ss.str(), pos);
@@ -592,27 +742,27 @@ Monitor::Display()
                                   lw, fw - 2*lw, 0);
 
     // goal box area right side
-    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - 5.5, -gw/2 - 5.5, 0.05), lw, gw + 11, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - 5.5, -gw/2 - 5.5, 0.05), 5.5, lw, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - 5.5, gw/2 + 5.5, 0.05), 5.5, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), lw, gw + 11, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), sGoalBoxLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, gw/2 + sGoalBoxLength, 0.05), sGoalBoxLength, lw, 0);
 
     // goal box area left side
-    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 5.5, -gw/2 - 5.5, 0.05), lw, gw + 11, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 5.5, -gw/2 - 5.5, 0.05), -5.5, lw, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 5.5, gw/2 + 5.5, 0.05), -5.5, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), lw, gw + 11, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), -sGoalBoxLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sGoalBoxLength, gw/2 + sGoalBoxLength, 0.05), -sGoalBoxLength, lw, 0);
 
     // penalty area right side
-    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - 16.5, -gw/2 - 16.5, 0.05), lw, gw + 33, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - 16.5, -gw/2 - 16.5, 0.05), 16.5, lw, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - 16.5, gw/2 + 16.5, 0.05), 16.5, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), lw, gw + 33, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), sPenaltyLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sPenaltyLength, gw/2 + sPenaltyLength, 0.05), sPenaltyLength, lw, 0);
 
     // penalty area left side
-    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 16.5, -gw/2 - 16.5, 0.05), lw, gw + 33, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 16.5, -gw/2 - 16.5, 0.05), -16.5, lw, 0);
-    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + 16.5, gw/2 + 16.5, 0.05), -16.5, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), lw, gw + 33, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), -sPenaltyLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sPenaltyLength, gw/2 + sPenaltyLength, 0.05), -sPenaltyLength, lw, 0);
 
     // center circle
-    mGLServer.DrawCircle(Vector3f(0.0,0.0,0.05), 9.15);
+    mGLServer.DrawCircle(Vector3f(0.0,0.0,0.05), sCenterRadius);
 
     // fieldBox
     mGLServer.DrawWireBox(Vector3f(-fl/2.0,-fw/2.0,0.0),
@@ -634,8 +784,31 @@ Monitor::Display()
 
     // draw cached positions
     DrawScene(1);
+
+    DrawStatusText();
+
+    // draw 2D Elements
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     // draw the info text
     DrawStatusLine();
+
+    // draw two dimensional overview
+    if (mDrawOverview)
+        {
+            DrawOverview();
+        }
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    // (end 2D Elements)
+
 
     glutSwapBuffers();
 }
@@ -685,6 +858,10 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
     case 'n':
         // toggle drawing of unums
         mDrawUnums = !mDrawUnums;
+        break;
+    case '2':
+        // toggle drawing of 2D overview
+        mDrawOverview  = !mDrawOverview;
         break;
     case 'q':
         // quit
@@ -790,7 +967,7 @@ Monitor::Idle()
         cout << "single step mode...exiting\n";
         return;
     }
-    
+
     if (! mCommServer->ReadMessage())
     {
         return;
