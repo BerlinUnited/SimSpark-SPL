@@ -1,3 +1,4 @@
+#line 2 "utility/glextgen/tocopy/header_begin.txt"
 #ifndef GLEXTENSIONREG_H__
 #define GLEXTENSIONREG_H__
 

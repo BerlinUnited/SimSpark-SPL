@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector.h,v 1.2 2003/08/31 21:53:45 fruit Exp $
+   $Id: effector.h,v 1.3 2003/09/11 02:31:39 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,9 +22,9 @@
 #ifndef OXYGEN_EFFECTOR_H
 #define OXYGEN_EFFECTOR_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+// #ifdef HAVE_CONFIG_H
+// #include <config.h>
+// #endif
 
 #include <oxygen/sceneserver/basenode.h>
 

@@ -1,1 +1,2 @@
+#line 2 "utility/glextgen/tocopy/header_end.txt"
 #endif //GLEXTENSIONREG_H__

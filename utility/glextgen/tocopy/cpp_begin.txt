@@ -1,5 +1,11 @@
-#include "glextensionreg.h"
+#line 2 "utility/glextgen/tocopy/cpp_begin.txt"
+
 #include <string.h>
+#if !defined(_WIN32)
+#include <GL/glx.h>
+#include <GL/glxext.h>
+#endif
+
 
 #define GET_PROC_ADDRESS(ptr, function) function = (ptr)GetProcedure( #function ); if (function == NULL) return false;
 
@@ -8,7 +14,8 @@ void* GetProcedure(const char *name)
 #if defined(_WIN32)
     void *t = wglGetProcAddress(name);
 #else
-    void *t = glXGetProcAddressARB((unsigned char*)name);
+    void *t = NULL;// cant find glxGetProcAddressARB on my system
+//      void *t = glXGetProcAddressARB((unsigned char*)name);
 #endif //_WIN32
     return t;
 }

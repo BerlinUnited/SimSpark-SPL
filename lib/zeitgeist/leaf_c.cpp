@@ -8,9 +8,12 @@ using namespace zeitgeist;
 
 FUNCTION(getName)
 {
-	Leaf *leaf = static_cast<Leaf*>(obj);
+    if( in.empty() )
+    {
+        Leaf *leaf = static_cast<Leaf*>(obj);
 
-	leaf->GetLog()->Normal() << leaf->GetName() << endl;
+        leaf->GetLog()->Normal() << leaf->GetName() << endl;
+    }
 }
 
 /*FUNCTION(status)
@@ -20,9 +23,12 @@ FUNCTION(getName)
 
 FUNCTION(isLeaf)
 {
-	Leaf *leaf = static_cast<Leaf*>(obj);
+    if( in.empty() )
+    {
+        Leaf *leaf = static_cast<Leaf*>(obj);
 
-	cout << leaf->IsLeaf() << endl;
+        cout << leaf->IsLeaf() << endl;
+    }
 }
 
 void CLASS(Leaf)::DefineClass()

@@ -1,3 +1,20 @@
+2003-09-11	Tom Howard	<tomhoward@users.sf.net>
+
+	* ./configure.ac
+	* ./lib/kerosin/Makefile.am
+	* ./lib/oxygen/agentaspect/collisionperceptor.h
+	* ./lib/oxygen/agentaspect/effector.h
+	* ./lib/oxygen/agentaspect/forceeffector.h
+	* ./lib/salt/frustum.h
+	* ./lib/salt/plane.h
+	* ./lib/zeitgeist/leaf_c.cpp
+	* ./utility/glextgen/script/glbackend.rb
+	* ./utility/glextgen/tocopy/cpp_begin.txt
+	* ./utility/glextgen/tocopy/header_begin.txt
+	* ./utility/glextgen/tocopy/header_end.txt
+	Fixed some more compile problems and hacked away at glextgen
+	
+
 2003-09-10	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./app/simulator/Makefile.am

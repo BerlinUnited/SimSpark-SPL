@@ -86,6 +86,18 @@ AC_CHECK_HEADERS([ode/ode.h],,[
 AC_CHECK_LIB(ode,dWorldCreate,,[
         AC_MSG_ERROR([The ode library (libode.a) cannot be found. Please specify the location of the ode installtion, by using the ODE environment variable (e.g. ./configure ODE=$HOME/ode-0.03)])])
 
+AC_ARG_VAR(SDL, [location of SDL installation])
+if test $SDL; then
+   CPPFLAGS="$CPPFLAGS -I$SDL/include"
+   LDFLAGS="$LDFLAGS -L$SDL/lib"
+fi
+
+AC_CHECK_HEADERS([SDL/SDL.h],,[
+        AC_MSG_ERROR([The SDL headers (e.g. SDL/SDL.h) cannot be found. Please specify the location of the SDL installtion, by using the SDL environment variable (e.g. ./configure SDL=$HOME/SDL)])])
+
+AC_CHECK_LIB(SDL, SDL_Init,,[
+        AC_MSG_ERROR([The SDL library (libSDL.a) cannot be found. Please specify the location of the SDL installtion, by using the SDL environment variable (e.g. ./configure SDL=$HOME/SSL)])])
+
 
 AC_ARG_VAR(DEVIL, [location of DevIL installation])
 if test $DEVIL; then
@@ -94,9 +106,9 @@ if test $DEVIL; then
 fi
 
 AC_CHECK_HEADERS([IL/il.h],,[
-        AC_MSG_ERROR([The DevIL headers (e.g. il/il.h) cannot be found. Please specify the location of the DevIL installtion, by using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])])
+        AC_MSG_ERROR([The DevIL headers (e.g. IL/il.h) cannot be found. Please specify the location of the DevIL installtion, by using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])])
 
-#AC_CHECK_LIB(il,ilInit,,[
+#AC_CHECK_LIB(IL,ilInit,,[
 #        AC_MSG_ERROR([The DevIL library (libIL.la) cannot be found. Please specify the location of the DevIL installtion, by using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])])
 
 

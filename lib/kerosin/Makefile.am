@@ -58,8 +58,8 @@ sceneserver/staticmesh.cpp \
 sceneserver/staticmesh_c.cpp \
 soundserver/soundserver.cpp \
 soundserver/soundserver_c.cpp \
-soundserver/transform.cpp \
-soundserver/transform_c.cpp \
+sceneserver/transform.cpp \
+sceneserver/transform_c.cpp \
 textureserver/texture.cpp \
 textureserver/texture2d.cpp \
 textureserver/textureserver.cpp \
@@ -67,7 +67,8 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
 renderserver/renderserver.cpp \
-renderserver/renderserver_c.cpp
+renderserver/renderserver_c.cpp \
+openglserver/glextensionreg.cpp
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/visionperceptor.h \
