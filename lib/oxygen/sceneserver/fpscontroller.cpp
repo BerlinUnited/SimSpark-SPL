@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller.cpp,v 1.8 2004/04/05 08:47:56 rollmark Exp $
+   $Id: fpscontroller.cpp,v 1.9 2004/04/12 17:19:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,12 +53,12 @@ void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
     // determine force direction
     Vector3f vec(0.0f,0.0f,0.0f);
 
-    if (mForward)  vec.z() -= 1.0f;
-    if (mBackward) vec.z() += 1.0f;
+    if (mForward)  vec.y() += 1.0f;
+    if (mBackward) vec.y() -= 1.0f;
     if (mRight)    vec.x() += 1.0f;
     if (mLeft)     vec.x() -= 1.0f;
-    if (mUp)       vec.y() += 1.0f;
-    if (mDown)     vec.y() -= 1.0f;
+    if (mUp)       vec.z() += 1.0f;
+    if (mDown)     vec.z() -= 1.0f;
 
     // constrain angles
     if(mVAngle > 88.0f)
@@ -70,7 +70,7 @@ void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
             }
 
     Matrix matrix;
-    matrix.RotationY(gDegToRad(-mHAngle));
+    matrix.RotationZ(gDegToRad(-mHAngle));
     matrix.RotateX(gDegToRad(-mVAngle));
     mBody->SetRotation(matrix);
 
