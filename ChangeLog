@@ -1,3 +1,18 @@
+2003-09-02  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/survival/Makefile.am: Added freetype include flag
+
+	* utility/glextgen/glextgen.rb.in: 
+	- reading command line parameter as namespace to be used (optional)
+
+	* utility/glextgen/Makefile.am:
+	- calling the glextgen ruby script with namespace parameter 'kerosin'
+	- added more dependencies
+	
+	* utility/glextgen/script/glbackend.rb: 
+	- backend can optionally insert a namespace into the generated 
+	files so that all the methods live in it
+
 2003-09-01  Oliver Obst  <fruit@robolog.org>
 
 	* utility/glextgen/script/glfrontend.rb: 
