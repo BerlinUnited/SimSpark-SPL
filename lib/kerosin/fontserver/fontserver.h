@@ -1,7 +1,7 @@
 #ifndef FONTSERVER_H__
 #define FONTSERVER_H__
 
-/*	$Id: fontserver.h,v 1.2 2003/04/30 14:21:24 fruit Exp $
+/*	$Id: fontserver.h,v 1.3 2003/08/22 22:43:15 rollmark Exp $
 
 	The fontserver manages Font objects. It prevents a single font from being loaded
 	several times by the runtime system.
@@ -20,6 +20,7 @@
 */
 
 #include <zeitgeist/leaf.h>
+#include <zeitgeist/class.h>
 // strange as this may seem
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -61,3 +62,4 @@ DECLARE_CLASS(FontServer);
 } //namespace kerosin
 
 #endif //__FONTSERVER_H__
+

@@ -23,9 +23,9 @@ FontServer::~FontServer()
 	mFonts.clear();
 }
 
-boost::shared_ptr<Font> FontServer::GetFont(const std::string &name, unsigned int size)
+boost::shared_ptr<kerosin::Font> FontServer::GetFont(const std::string &name, unsigned int size)
 {
-	boost::shared_ptr<Font> theFont = FindFont(name, size);
+	boost::shared_ptr<kerosin::Font> theFont = FindFont(name, size);
 
 	if(theFont.get() == NULL)
 	{
@@ -40,14 +40,14 @@ boost::shared_ptr<Font> FontServer::GetFont(const std::string &name, unsigned in
 		}
 		else
 		{
-			return boost::shared_ptr<Font>();
+			return boost::shared_ptr<kerosin::Font>();
 		}
 	}
 
 	return theFont;
 }
 
-boost::shared_ptr<Font> FontServer::FindFont(const std::string &name, unsigned int size) const
+boost::shared_ptr<kerosin::Font> FontServer::FindFont(const std::string &name, unsigned int size) const
 {
 	//GetLog()->Normal() << "FontServer: Finding " << name << " " << size << endl;
 	for (TFontList::const_iterator i = mFonts.begin(); i != mFonts.end(); ++i)
@@ -59,10 +59,10 @@ boost::shared_ptr<Font> FontServer::FindFont(const std::string &name, unsigned i
 		}
 	}
 
-	return boost::shared_ptr<Font>();
+	return boost::shared_ptr<kerosin::Font>();
 }
 
-bool FontServer::LoadFont(const std::string &name, unsigned int size, boost::shared_ptr<Font> &font)
+bool FontServer::LoadFont(const std::string &name, unsigned int size, boost::shared_ptr<kerosin::Font> &font)
 {
 	GetLog()->Normal() << "FontServer: Loading font file -> " << name << endl;
 	salt::RFile *file = GetFile()->Open(name.c_str());

@@ -1,6 +1,7 @@
 #ifndef MATERIALSERVER_H__
 #define MATERIALSERVER_H__
 
+#include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 
 namespace kerosin

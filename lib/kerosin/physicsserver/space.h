@@ -47,4 +47,4 @@ DECLARE_CLASS(Space);
 
 } //namespace kerosin
 
-#endif SPACE_H__
+#endif // SPACE_H__

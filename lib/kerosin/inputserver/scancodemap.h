@@ -2,7 +2,7 @@
 #define SCANCODEMAP_H__
 
 /*	\class ScanCodeMap
-	$Id: scancodemap.h,v 1.2 2003/04/30 14:21:28 fruit Exp $
+	$Id: scancodemap.h,v 1.3 2003/08/22 22:43:15 rollmark Exp $
 
 	ScanCodeMap
 

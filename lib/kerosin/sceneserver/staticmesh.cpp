@@ -6,7 +6,7 @@
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include "helper/NVMeshMender.h"
 #include <salt/fileclasses.h>
-#include <opcode/opcode.h>
+#include <opcode/Opcode.h>
 
 using namespace boost;
 using namespace kerosin;
@@ -51,7 +51,7 @@ bool StaticMesh::Load(const std::string& fileName)
 	int temp;
 	int i;
 
-	printf("Loading '%s'...\n", fileName);
+	printf("Loading '%s'...\n", fileName.c_str();
 	file->Gets(buffer, 1024);
 	sscanf(buffer, "TotalTriCount: %d", &temp);
 	printf("  TotalTriCount: %d\n", temp);

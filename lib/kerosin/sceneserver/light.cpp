@@ -1,7 +1,7 @@
 #include "light.h"
 #include "../openglserver/openglserver.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <opcode/opcode.h>
+#include <opcode/Opcode.h>
 
 using namespace boost;
 using namespace kerosin;
@@ -50,7 +50,7 @@ void Light::Prepare()
 	glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, -1.0f/(mRadius*mRadius), 1.0f, 1.0f, 1.0f);
 }
 
-void Light::RenderLitMesh(boost::shared_ptr<StaticMesh>& mesh)
+void Light::RenderLitMesh(boost::shared_ptr<StaticMesh> mesh)
 {
 	if (mCacheFlushed || (GetWorldTransform().Pos()-mOldPos).SquareLength() > 0.1 ||
 		!mesh->GetWorldTransform().IsEqual(mMeshOldTransform))

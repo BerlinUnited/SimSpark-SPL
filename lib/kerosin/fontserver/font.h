@@ -1,13 +1,4 @@
-#ifndef FONT_H__
-#define FONT_H__
-
-/*	$Id: font.h,v 1.2 2003/04/30 14:21:22 fruit Exp $
-
-	Font allows the use of a 'texture'-based font. The font is loaded from
-	Fluid Studios Font Files, which can be generated with a small utility from
-	any Windows font. Care has to be taken, that the resulting font will fit in
-	a 256x256 texture! Our font will only contain characters for the ASCII value
-	range 32-128 ... this should cover the major alphanumeric characters!
+/*	$Id: font.h,v 1.3 2003/08/22 22:43:15 rollmark Exp $
 	
 	NOTE:
 
@@ -31,6 +22,9 @@
 		- ImageServer activation hack (see FIXME in cpp file)
 */
 
+#ifndef FONT_H__
+#define FONT_H__
+
 #include <string>
 #include <salt/vector.h>
 #include "glyph.h"
@@ -40,6 +34,13 @@ namespace kerosin
 
 class FontServer;
 
+/** Font allows the use of a 'texture'-based font. The font is loaded from
+    Fluid Studios Font Files, which can be generated with a small utility from
+    any Windows font. Care has to be taken, that the resulting font will fit
+    in a 256x256 texture! Our font will only contain characters for the ASCII
+    value range 32-128 ... this should cover the major alphanumeric
+    characters!
+ */
 class Font
 {
 private:
@@ -56,9 +57,7 @@ public:
 	Font(FontServer &fontServer);
 	~Font();
 
-	//! scale font, load glyphs, setup texture
 	bool	Init(const std::string &name, unsigned int size, FT_Face face);
-
 	bool	Bind(int vRows = -1);
 	void	Dump();
 	void	DrawString(float x, float y, const char *string);

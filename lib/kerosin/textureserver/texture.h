@@ -1,5 +1,5 @@
 /*	\class Texture
-	$Id: texture.h,v 1.1 2003/04/30 14:21:47 fruit Exp $
+	$Id: texture.h,v 1.2 2003/08/22 22:43:16 rollmark Exp $
 
 	This is the base class of all OpenGL based textures. In OpenGL a texture
 	is represented by a so-called texture ID. This is a simple handle. The

@@ -2,7 +2,7 @@
 #define SCENESERVER_H__
 
 /*	\class SceneServer
-	$Id: sceneserver.h,v 1.1 2003/04/30 14:21:41 fruit Exp $
+	$Id: sceneserver.h,v 1.2 2003/08/22 22:43:16 rollmark Exp $
 
 	SceneServer
 
@@ -22,6 +22,7 @@
 	TOFIX:
 */
 
+#include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 
 namespace kerosin

@@ -2,7 +2,7 @@
 #define SCENE_H__
 
 /*	\class Scene
-	$Id: scene.h,v 1.1 2003/04/30 14:21:40 fruit Exp $
+	$Id: scene.h,v 1.2 2003/08/22 22:43:16 rollmark Exp $
 
 	Scene
 

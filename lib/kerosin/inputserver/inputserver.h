@@ -2,7 +2,7 @@
 #define INPUTSERVER_H__
 
 /*	\class InputServer
-	$Id: inputserver.h,v 1.2 2003/04/30 14:21:27 fruit Exp $
+	$Id: inputserver.h,v 1.3 2003/08/22 22:43:15 rollmark Exp $
 
 	InputServer
 
@@ -304,3 +304,4 @@ DECLARE_CLASS(InputServer);
 }
 
 #endif //INPUTSERVER_H__
+

@@ -1,6 +1,7 @@
 #ifndef PHYSICSSERVER_H__
 #define PHYSICSSERVER_H__
 
+#include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 
 namespace kerosin

@@ -29,3 +29,4 @@ DECLARE_CLASS(ODEObject);
 } //namespace kerosin
 
 #endif //ODEOBJECT_H__
+

@@ -1,7 +1,7 @@
 #ifndef SOUNDSERVER_H__
 #define SOUNDSERVER_H__
 
-/*	$Id: soundserver.h,v 1.2 2003/04/30 14:21:46 fruit Exp $
+/*	$Id: soundserver.h,v 1.3 2003/08/22 22:43:16 rollmark Exp $
 
 	SoundServer
 
@@ -29,6 +29,7 @@
 
 #include <list>
 #include <hash_map>
+#include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 
 namespace kerosin

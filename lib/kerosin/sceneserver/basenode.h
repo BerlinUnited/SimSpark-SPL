@@ -2,7 +2,7 @@
 #define BASENODE_H__
 
 /*	\class BaseNode
-	$Id: basenode.h,v 1.1 2003/04/30 14:21:40 fruit Exp $
+	$Id: basenode.h,v 1.2 2003/08/22 22:43:16 rollmark Exp $
 
 	BaseNode
 

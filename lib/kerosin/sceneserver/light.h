@@ -27,7 +27,7 @@ public:
 	virtual void	Prepare();
 
 	//! draw lit triangles of mesh
-	void			RenderLitMesh(boost::shared_ptr<StaticMesh>& mesh);
+	void			RenderLitMesh(boost::shared_ptr<StaticMesh> mesh);
 
 	//! flush the internal cached geometry
 	void			FlushCache();

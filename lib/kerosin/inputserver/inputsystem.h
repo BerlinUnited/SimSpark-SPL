@@ -2,7 +2,7 @@
 #define INPUTSYSTEM_H__
 
 /*	\class InputSystem
-	$Id: inputsystem.h,v 1.2 2003/04/30 14:21:28 fruit Exp $
+	$Id: inputsystem.h,v 1.3 2003/08/22 22:43:15 rollmark Exp $
 
 	InputSystem
 
@@ -74,3 +74,4 @@ private:
 }
 
 #endif //INPUTSYSTEM_H__
+

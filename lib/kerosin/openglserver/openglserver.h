@@ -1,6 +1,7 @@
 #ifndef OPENGLSERVER_H__
 #define OPENGLSERVER_H__
 
+#include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 #include "glextensionreg.h"
 
