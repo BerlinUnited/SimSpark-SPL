@@ -77,18 +77,18 @@ ClassServer::~ClassServer()
 
 // Register a class factory to the <null> group
 bool 
-ClassServer::registerFactory(CS_Factory* in_factory)
+ClassServer::doRegister(CS_Factory* in_factory)
 {
-    return registerFactory("<null>", in_factory);
+    return doRegister("<null>", in_factory);
 }
 
 
 // Register a class factory to a group
 bool 
-ClassServer::registerFactory(const char* in_group, CS_Factory* in_factory)
+ClassServer::doRegister(const char* in_group, CS_Factory* in_factory)
 {
     // do some error checking
-    if (in_factory == NULL) return false;
+    if (in_factory == 0) return false;
 
     // register it only, if it doesn't exist
     if (probe(in_group, in_factory->getName())==false)
@@ -107,7 +107,7 @@ bool
 ClassServer::registerLibrary(const char* in_lib_name)
 {
     // catch major errors
-    if (in_lib_name == NULL) return false;
+    if (in_lib_name == 0) return false;
 
     // open the shared library
     void* lib = CS_LoadLibrary(in_lib_name);
@@ -115,7 +115,7 @@ ClassServer::registerLibrary(const char* in_lib_name)
     if (lib)
     {
         // get our registration entry point
-        void(*CS_RegisterClasses)(ClassServer*) = NULL;
+        void(*CS_RegisterClasses)(ClassServer*) = 0;
         CS_RegisterClasses = 
         (void(*)(ClassServer*))CS_GetProcAddress(lib, "CS_RegisterClasses");
 
@@ -149,7 +149,7 @@ ClassServer::create(const char* in_group, const char* in_name)
     if (map_iter == M_registry.end())
     {
         // guess not ... damn
-        return NULL;
+        return 0;
     }
 
     // now find the class factory
@@ -159,7 +159,7 @@ ClassServer::create(const char* in_group, const char* in_name)
     if (fac_iter == (*map_iter).second.end())
     {
         // uh, oh ... something went wrong
-        return NULL;
+        return 0;
     }
 
     // ok, create our object
@@ -176,7 +176,7 @@ ClassServer::create(const char* in_name)
     void* ret = create("<null>", in_name);
 
     // if we got a class ... return it
-    if (ret!=NULL) return ret;
+    if (ret!=0) return ret;
 
     // ok, the "<null>" group didn't have it, so we'll try the other groups
     for (GroupMap::iterator i=M_registry.begin(); i!=M_registry.end(); i++)
@@ -199,7 +199,7 @@ ClassServer::create(const char* in_name)
     }
 
     // we have tried everything, but didn't find a matching classname
-    return NULL;
+    return 0;
 }
 
 // This tests if a class is already registered
@@ -265,8 +265,8 @@ ClassServer::listNames(CommandNames& class_list, const char* in_group)
 void 
 ClassServer::scan(const char* in_path)
 {
-    char* search_pattern = NULL;
-    char* corrected_path = NULL;
+    char* search_pattern = 0;
+    char* corrected_path = 0;
     int len;
 
     // correct in_path
@@ -340,13 +340,13 @@ ClassServer::scan(const char* in_path)
     dir_stream = opendir(corrected_path);
 
     // if something went wrong, we'll just return silently
-    if (dir_stream == NULL)
+    if (dir_stream == 0)
         return;
 
     // now let's try and iterate over the entries
     dir_entry = readdir(dir_stream);
 
-    while(dir_entry != NULL)
+    while(dir_entry != 0)
     {
         char* new_path = new char[strlen(corrected_path)+
                                  strlen(dir_entry->d_name)+1];
