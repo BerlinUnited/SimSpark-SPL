@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: spadesserver.cpp,v 1.2.2.1 2003/12/22 18:05:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ SpadesServer::finalize()
 }
 
 float
-SpadesServer::GetTimePerStep()
+SpadesServer::GetTimePerStep() const
 {
     float time_per_step = 0.01f;
     GetScript()->GetVariable("Spades.TimePerStep", time_per_step);
@@ -142,6 +142,8 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     }
 
 #if THIS_IS_A_DEMO_ONLY
+    //    GetLog()->Debug() << "(SpadesServer) time_curr=" << time_curr
+    //                  << " time_desired=" << time_desired << endl;
     //    GetLog()->Debug() << "updated the scene by " << steps - i << " * "
     //                << timePerStep << " seconds.\n";
 
@@ -213,7 +215,7 @@ SpadesServer::parseMonitorMessage(const char* data, unsigned datalen)
 SimTime
 SpadesServer::getMinActionLatency() const
 {
-    return 10;
+    return 90;
 }
 
 SimTime
@@ -239,7 +241,10 @@ SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen)
             return 0;
         }
 
-    return new SpadesActEvent(t, a, actionList);
+    float latency = gcs->GetActionLatency(a);
+    SimTime arrival = t + static_cast<int>(latency / GetTimePerStep());
+
+    return new SpadesActEvent(arrival, a, actionList);
 }
 
 void
