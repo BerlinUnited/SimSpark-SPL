@@ -3,11 +3,13 @@ pkglib_LTLIBRARIES = libzeitgeist_debug.la
 libzeitgeist_debug_la_SOURCES = $(sources)
 libzeitgeist_debug_la_CXXFLAGS = -O -g -W -Wall
 libzeitgeist_debug_la_LIBADD = @RUBY_LDFLAGS@ @RUBY_LDADD@
+libzeitgeist_debug_la_LDFLAGS = -version-info 1:0:0
 else
 pkglib_LTLIBRARIES = libzeitgeist.la 
 libzeitgeist_la_SOURCES = $(sources)
 libzeitgeist_la_CXXFLAGS = -O2
 libzeitgeist_la_LIBADD = @RUBY_LDFLAGS@ @RUBY_LDADD@
+libzeitgeist_la_LDFLAGS = -version-info 1:0:0
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
@@ -59,7 +61,8 @@ fileserver/filesystem.h \
 logserver/logserver.h \
 logserver/logserverstreambuf.h \
 randomserver/randomserver.h \
-scriptserver/scriptserver.h
+scriptserver/scriptserver.h \
+scriptserver/rubywrapper.h 
 
 #telnetserver/telnetdaemon.h \
 #telnetserver/telnetserver.h \
