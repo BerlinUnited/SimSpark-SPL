@@ -20,7 +20,9 @@ LDADD = -lpthread -lGL -lGLU -lglut \
 simspark_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility \
+              @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 simspark_SOURCES = \
