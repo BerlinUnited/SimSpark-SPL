@@ -2,6 +2,7 @@ SUBDIRS = \
 	  filesystemstd \
 	  filesystemzip \
 	  inputsdl \
+	  sexpparser \
 	  survival \
 	  monitortest	
 
