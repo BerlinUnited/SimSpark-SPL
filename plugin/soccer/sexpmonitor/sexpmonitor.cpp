@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.6 2004/01/31 17:27:10 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.7 2004/02/01 11:02:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include <soccer/soccertypes.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/ballstateaspect/ballstateaspect.h>
+#include <soccer/agentstate/agentstate.h>
 #include <netinet/in.h>
 
 using namespace oxygen;
@@ -65,7 +66,7 @@ std::string SexpMonitor::GenerateSexp(string type, TLeafList& list)
             shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
             const salt::Vector3f& pos = j->GetWorldTransform().Pos();
 
-            ss << "(" << type << " " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
+            ss << "(" << type << " (pos " << pos[0] << " " << pos[1] << " " << pos[2] << "))";
         }
 
     return ss.str();
@@ -128,16 +129,66 @@ SexpMonitor::GetGameStateData()
 }
 
 string
+SexpMonitor::GetAgentData(shared_ptr<Scene> activeScene)
+{
+    TLeafList nodes;
+    activeScene->GetChildrenSupportingClass("AgentAspect", nodes, true);
+
+    stringstream ss;
+
+    for (TLeafList::iterator i = nodes.begin();i != nodes.end();++i)
+        {
+            shared_ptr<AgentAspect> aspect =
+                shared_static_cast<AgentAspect>(*i);
+            const salt::Vector3f& pos = aspect->GetWorldTransform().Pos();
+
+            shared_ptr<AgentState> state = shared_static_cast<AgentState>
+                (aspect->GetChildOfClass("AgentState"));
+
+            ss << "(agent ";
+
+            // pos
+            ss << "(pos " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
+
+            if (state.get() != 0)
+                {
+                    ss << "(team ";
+
+                    switch (state->GetTeamIndex())
+                        {
+                        case TI_NONE :
+                            ss << "N";
+                            break;
+                        case TI_LEFT :
+                            ss << "L";
+                            break;
+                        case TI_RIGHT :
+                            ss << "R";
+                            break;
+                        }
+
+                    ss << ")";
+
+                    ss << "(unum " << state->GetUniformNumber() << ")";
+                }
+
+            ss << ")";
+        }
+
+    return ss.str();
+}
+
+string
 SexpMonitor::GetMonitorInfo()
 {
-    // map from class types to be recognized to their expression type
+    // map from generic class types to be recognized to their
+    // expression type
     static const struct ExpressionType
     {
         string className;
         string typeName;
     } typeMap[] =
         {
-            {"AgentAspect","agent"},
             {"FieldFlag","flag"},
             {"Ball","ball"},
         };
@@ -154,6 +205,10 @@ SexpMonitor::GetMonitorInfo()
     shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
     stringstream expression;
 
+    // AgentAspects
+    expression << GetAgentData(activeScene);
+
+    // generic classes
     int n = sizeof(typeMap) / sizeof(ExpressionType);
     for (int i=0;i<n;++i)
         {
