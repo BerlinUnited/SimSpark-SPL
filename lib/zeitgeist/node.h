@@ -2,7 +2,7 @@
 #define NODE_H__
 
 /*! \class Node
-	$Id: node.h,v 1.2 2003/04/30 14:21:50 fruit Exp $
+	$Id: node.h,v 1.3 2003/06/03 12:20:36 fruit Exp $
 	
 	Node
 	:TODO: Class description for Node
@@ -15,6 +15,7 @@
 */
 
 #include <salt/defines.h>
+#include "class.h"
 #include "leaf.h"
 
 namespace zeitgeist
