@@ -192,6 +192,12 @@ plugin/inputsdl/Makefile
 plugin/inputsdl/Makefile.in
 plugin/inputsdl/*.la
 plugin/inputsdl/*.lo
+plugin/monitortest/.deps
+plugin/monitortest/.libs
+plugin/monitortest/Makefile
+plugin/monitortest/Makefile.in
+plugin/monitortest/*.la
+plugin/monitortest/*.lo
 plugin/soundsystembass/.deps
 plugin/soundsystembass/.libs
 plugin/soundsystembass/Makefile
