@@ -1,16 +1,56 @@
 #! /bin/sh
 
+print_help()
+{
+   cat << EOH
+
+usage: $0 [-h|-light]
+
+  -h      print this help and exit
+  -light  Force the use of rcssmonitor3D-lite, even if
+          rcssmonitor3D-kerosin is available
+
+EOH
+}
+
+
 kill_server()
 {
-        kill -s SIGINT $PID
-        exit 0
+    kill -s SIGINT $PID
+    exit 0
 }
+
+#---------------------------------
+
+DEFAULTMONITOR="kerosin"
+
+# process options
+while test -n "$1"
+do
+    case $1 in
+	-h)
+	    help="yes"
+	    ;;
+	-light)
+	    DEFAULTMONITOR="lite"
+	    ;;
+	*)
+            echo "ignoring unknown option: $1"
+    esac
+   shift
+done
+    
+if test "x${help}" = "xyes"; then
+    print_help
+    exit 0
+fi
+
 
 if test -x ../agenttest/agenttest; then
     SIMULATOR="./rcssserver3D"
     PARAM="--ipc_force_remove $*"
     if test -x ../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin; then
-	MONITOR="../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin" 
+	MONITOR="../rcssmonitor3d/${DEFAULTMONITOR}/rcssmonitor3D-${DEFAULTMONITOR}" 
     else
 	MONITOR="../rcssmonitor3d/lite/rcssmonitor3D-lite" 
     fi
@@ -20,9 +60,9 @@ else
     datadir=@datadir@
     pkgdatadir=${datadir}/@PACKAGE@
     SIMULATOR="${exec_prefix}/bin/rcssserver3D"
-    PARAM="--ipc_force_remove --agent_db_fn ${pkgdatadir}/agentdb.xml $*"
+    PARAM="--ipc_force_remove --agent_db_fn ${pkgdatadir}/agentdb.list $*"
     if test -x "${exec_prefix}/bin/rcssmonitor3D-kerosin"; then
-	MONITOR="${exec_prefix}/bin/rcssmonitor3D-kerosin"
+	MONITOR="${exec_prefix}/bin/rcssmonitor3D-${DEFAULTMONITOR}"
     else
 	MONITOR="${exec_prefix}/bin/rcssmonitor3D-lite"
     fi
