@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.1.2.6 2004/02/10 19:49:49 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.1.2.7 2004/02/10 20:47:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,11 +64,11 @@ WorldModel::SetupGameStateMap()
     mPlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
     mPlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
     mPlayModeMap[STR_PM_PlayOn]        = PM_PlayOn;
-    mPlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
-    mPlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
-    mPlayModeMap[STR_PM_FirstHalfOver] = PM_FirstHalfOver;
+    mPlayModeMap[STR_PM_KickIn_Left]   = PM_KickIn_Left;
+    mPlayModeMap[STR_PM_KickIn_Right]  = PM_KickIn_Right;
     mPlayModeMap[STR_PM_Goal_Left]     = PM_Goal_Left;
     mPlayModeMap[STR_PM_Goal_Right]    = PM_Goal_Right;
+    mPlayModeMap[STR_PM_GameOver]      = PM_GameOver;
 }
 
 
