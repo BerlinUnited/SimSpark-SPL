@@ -176,6 +176,173 @@ you get from this perceptor tells you about some of the game variables
 The AgentStatePerceptor notifies you about internal states of the agent (currently 
 only the battery state).
 
+Monitor Protocol for the Soccer Simulation
+------------------------------------------
+
+The default monitor port for the soccer simulation is 12001. The
+server periodically sends you lines of text that contain
+S-Expressions.
+
+The monitor log file, that contains the recorded sequence of all
+expressions sent to the monitor is further used as the log file
+format. It is automatically generated in Logfiles/monitor.log relative
+to the server directory.
+
+== INIT Expression ==
+
+Initially one 'Init' expression is sent. An example init expression is
+given below. Note that S-Expressions from the server are received as a
+single line. Their are reformatted here for readability.
+
+(Init 
+      (FieldLength 104)(FieldWidth 68)(FieldHeight 40)
+      (GoalWidth 7.32)(GoalDepth 2)(GoalHeight 0.5)(BorderSize 10)
+      (FreeKickDistance 9.15)(WaitBeforeKickOff 2)(AgentMass 75)
+      (AgentRadius 0.22)(AgentMaxSpeed 10)(BallRadius 0.111)
+      (BallMass 0.425878)(RuleGoalPauseTime 3)(RuleKickInPauseTime 1)
+      (RuleHalfTime 300)
+      (play_modes BeforeKickOff KickOff_Left KickOff_Right PlayOn
+      KickIn_Left KickIn_Right corner_kick_left corner_kick_right
+      goal_kick_left goal_kick_right offside_left offside_right
+      GameOver Goal_Left Goal_Right free_kick_left free_kick_right)
+      )
+
+Each subexpression of the init expression is a name value pair that
+gives one parameter that the current instance of the simulation
+uses. The meaning of the different parameters:
+
+- FieldLength,FieldWidth,FieldHeight: dimensions of the soccer field
+in meter
+
+- GoalWidth, GoalDepth, GoalHeight: dimensions of the goals in meter
+
+- BorderSize: the simulated soccer field is surrounded by an off field
+area. BorderSize gives the extra space in meters relative to the
+regular field dimensions in meters
+
+- FreeKickDistance: gives the distance in meters that agents of the
+opposite have to adhere when a player carries out a free kick.
+
+- WaitBeforeKickOff: gives the time in seconds the server waits before automatically starting the game
+
+- AgentMass: the mass of each agent in kg
+
+- AgentRadius: the radius of each agent in m
+
+- AgentMaxSpeed: the maximum speed of each agent in m/s
+
+- BallRadius: the radius if the ball in m
+
+- BallMass: the mass of the ball in kg
+
+- RuleGoalPauseTime: the time in seconds that the server waits after a
+goal is scored before switching to kick off playmode
+
+- RuleKickInPauseTime: the time in seconds that the server waits after
+the ball left the field before switching to the kick in playmode
+
+- RuleHalfTime: the length of one half time in seconds
+
+- play_modes: lists the the different play_modes of the soccer
+simulation. Later on play_modes are referenced by a zero based index
+into this list.
+
+== INFO Expression == 
+
+After the initial init message is sent only Info expressions are
+sent. These expressions contain the full state of the current
+simulation state. An example Info expression is given below:
+
+(Info 
+      (time 0)(half 1)(score_left 0)(score_right 0)(play_mode 0)
+      (P (pos 0 0 0))(P (pos 0 0 0))(P (pos 0 0 0))(P (pos 0 0 0))
+      (P (pos 0 0 0))(P (pos 0 0 0))(P (pos 0 0 0))(P (pos 0 0 0))
+      (P (pos 0 0 0))(P (pos 0 0 0))(F (id 1_l)(pos -52 -34 0))
+      (F (id 2_l)(pos -52 34 0))(F (id 1_r)(pos 52 -34 0))(F (id 2_r)(pos 52 34 0))
+      (G (id 1_l)(pos -52 -3.66 0))(G (id 2_l)(pos -52 3.66 0))
+      (G (id 1_r)(pos 52 -3.66 0))(G (id 2_r)(pos 52 3.66 0))
+      (B (pos 0 0 10))
+      )
+
+Each subexpression of the info expression is a name value pair that
+contains information about one aspect of the current simulation
+state. Not all subexpressions are repeated. This concers the positions
+of the field flags and the names of the two teams. This information is
+only sent once. Further game state information like the score count,
+and the current game state is only sent if it changed. The meaning of
+the different expressions:
+
+- Die: notifies the monitor that the soccer simulation is about to terminate
+
+- time: the current simulation time in seconds
+
+- half: the current game half, 0 means the first, 1 means the second game half
+
+- score_left, score_right: the score count of the left and right team respectively
+
+- team_left, team_right: gives the names of the left and right team
+respectively; the information is only sent once as it remains static
+
+- play_mode: the current play mode as 0 based index into the
+play_modes list given in the init expression
+
+- P: gives information about a player. This expression may contain
+further subexpressions.
+  - s: gives the team the player belongs to; 0 for the left, 1 for the
+  right team
+  - id: gives the uniform number of the player
+  - pos: gives the position of the player as a three component vector
+  - last: if this subexpression is present, the player was the last to
+  touch the ball
+  - say: this expression gives the string the player sent using the
+  optional SayEffector
+
+- F: gives information about a flag on the field. Information about a
+flag is only sent once, as it remains static
+  - pos: gives the position of the flag as a three component vector
+  - id: gives the name of the flag
+
+- B: gives information about the ball
+  - pos: gives the position of the ball as a three component vector
+
+- ack: acknowledges a command that is carried out by the server;
+carries a user defined cooky string as parameter; see below for
+further explanation
+
+== Monitor Command Parser ==
+
+A connected monitor can further send commands as S-Expressions to the
+server using the monitor connection. These commands allow a connected
+monitor to set the current playmode and to move players and the ball
+to arbitrary positions on the field. This allows for the
+implementation of trainer clients.
+
+Supported expressions are:
+
+(kickOff): start the soccer game, tossing a coin to select the team
+that kicks off first
+
+(playMode <play_mode>): set the current playmode. Possible playmodes
+are given as strings in the play_modes expression of the init
+expression the monitor receives when it connects. Example: (playMode
+corner_kick_left).
+
+(agent(team [R,L])(unum <uniform number>(pos <x,y,z>)(vel <vx,vy,vz))
+: set the position and velocity of the given player on the
+field. Example: (agent (team L)(unum 1)(pos -52.0 0.0 0.3)(vel 0.0 0.0 0.0))
+
+(ball (pos <x,y,z>)): set the position of the ball on the
+field. Example: (ball (pos 10,20,1))
+
+(dropBall): Drop ball at its current position and move all players
+away by the free kick radius.
+
+(getAck <cooky string>): experimental feature, currently
+disabled. Requests an (ack <cooky>) reply from the server. The server
+will send the answer as soon as the command is carried out. This is
+used to synchronize a trainer implementation wit the server. The
+getAck expression is appended behind one of the above
+commands. Example: ((kickOff)(getAck kicked_off))
 
 END OF TEXT.
 
@@ -186,3 +353,8 @@ Be ready to get confused
 There's definitely, definitely, definitely no logic.
 
 (Bjork, Human Behaviour)
+
+
+"Duct tape is a lot like the Force... It has a dark side, it has a light
+side, and it binds the galaxy together...."
+	(unknown author)
