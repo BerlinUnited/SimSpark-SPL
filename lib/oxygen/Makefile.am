@@ -53,9 +53,10 @@ agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
+gamecontrolserver/actionobject_c.cpp \
+gamecontrolserver/baseparser_c.cpp \
 gamecontrolserver/gamecontrolserver.cpp \
 gamecontrolserver/gamecontrolserver_c.cpp \
-gamecontrolserver/baseparser_c.cpp \
 oxygen.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
