@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   $Id: sceneserver.cpp,v 1.4 2003/11/10 23:11:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ SceneServer::~SceneServer()
 boost::shared_ptr<Scene> SceneServer::CreateScene(const std::string &location)
 {
     shared_ptr<CoreContext> context = GetCore()->CreateContext();
-    shared_ptr<Scene> scene = shared_static_cast<Scene>(context->New("oxygen/Scene", location));
+    shared_ptr<Scene> scene = shared_static_cast<Scene>(context->New("kerosin/Scene", location));
 
     if (scene.get() != NULL)
     {

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller_c.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   $Id: fpscontroller_c.cpp,v 1.4 2003/11/10 23:11:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,5 +26,5 @@ using namespace oxygen;
 
 void CLASS(FPSController)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/BaseNode);
+        DEFINE_BASECLASS(kerosin/BaseNode);
 }
