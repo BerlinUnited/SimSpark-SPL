@@ -123,6 +123,14 @@ sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
 sceneserver/camera.cpp \
 sceneserver/camera_c.cpp \
+geometryserver/geometryserver.h \
+geometryserver/geometryserver.cpp \
+geometryserver/geometryserver_c.cpp \
+geometryserver/meshimporter.cpp \
+geometryserver/meshimporter_c.cpp \
+geometryserver/stdmeshimporter.cpp \
+geometryserver/stdmeshimporter_c.cpp \
+geometryserver/trimesh.cpp \
 monitorserver/monitorserver.cpp \
 monitorserver/monitorserver_c.cpp \
 monitorserver/monitorsystem_c.cpp
@@ -172,6 +180,10 @@ sceneserver/sceneimporter.h \
 sceneserver/indexbuffer.h \
 sceneserver/transform.h \
 sceneserver/camera.h \
+geometryserver/geometryserver.h \
+geometryserver/meshimporter.h \
+geometryserver/stdmeshimporter.h \
+geometryserver/trimesh.h \
 monitorserver/monitorserver.h \
 monitorserver/monitorsystem.h \
 $(spades_headers)
