@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.5 2004/01/29 17:41:05 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.6 2004/01/31 17:27:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,9 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/agentaspect/agentaspect.h>
+#include <soccer/soccertypes.h>
+#include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/ballstateaspect/ballstateaspect.h>
 #include <netinet/in.h>
 
@@ -84,6 +87,47 @@ shared_ptr<AgentAspect> SexpMonitor::GetLastBallAgent()
 }
 
 string
+SexpMonitor::GetGameStateData()
+{
+    if (mGameState.get() == 0)
+        {
+            return "";
+        }
+
+    stringstream ss;
+
+    // team names
+    std::string name = mGameState->GetTeamName(TI_LEFT);
+    if (name != "")
+        {
+            ss << "(teamL " << mGameState->GetTeamName(TI_LEFT) << ")";
+        }
+
+    name = mGameState->GetTeamName(TI_RIGHT);
+    if (name != "")
+        {
+            ss << "(teamR " << mGameState->GetTeamName(TI_RIGHT) << ")";
+        }
+
+    // game half
+    ss << "(half "
+       << ((mGameState->GetGameHalf() == GH_FIRST) ? "1" : "2")
+       << ")";
+
+    // time
+    ss << "(time " << mGameState->GetTime() << ")";
+
+    // scores
+    ss << "(scoreL " << mGameState->GetScore(TI_LEFT) << ")";
+    ss << "(scoreR " << mGameState->GetScore(TI_RIGHT) << ")";
+
+    // gamestate
+    ss << "(playMode " << mGameState->GetPlayMode() << ")";
+
+    return ss.str();
+}
+
+string
 SexpMonitor::GetMonitorInfo()
 {
     // map from class types to be recognized to their expression type
@@ -129,6 +173,9 @@ SexpMonitor::GetMonitorInfo()
             node.push_back(lastBallAgent);
             expression << GenerateSexp("ballAgent", node);
         }
+
+    // collect info from the GameStateAspect
+    expression << GetGameStateData();
 
     expression << endl;
     return expression.str();
@@ -179,6 +226,23 @@ SexpMonitor::GetMonitorHeaderInfo()
     ss << ")";
 
     return ss.str();
+}
+
+void SexpMonitor::OnLink()
+{
+    mGameState = shared_dynamic_cast<GameStateAspect>
+        (GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
+
+    if (mGameState.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (SexpMonitor) Cannot locate GameStateAspect\n";
+        }
+}
+
+void SexpMonitor::OnUnlink()
+{
+    mGameState.reset();
 }
 
 
