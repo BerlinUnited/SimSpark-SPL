@@ -1,3 +1,9 @@
+2004-02-16  Patrick Riley  <pfr@cs.cmu.edu>
+
+	* app/agenttest/main.cpp
+	* app/rcssmonitor3d/commserver.cpp
+	added system include files needed for my compilation on RH7.1
+
 2004-02-14  Oliver Obst  <fruit@robolog.org>
 
 	* lib/kerosin/Makefile.am: 
