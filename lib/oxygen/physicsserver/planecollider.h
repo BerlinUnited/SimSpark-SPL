@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: planecollider.h,v 1.8 2004/04/15 14:20:53 rollmark Exp $
+   $Id: planecollider.h,v 1.9 2004/04/15 18:34:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,11 +42,22 @@ class PlaneCollider : public Collider
 public:
     PlaneCollider();
 
-    /** sets the parameters of the plane equation a*x+b*y+c*z = d */
+    /** sets the parameters of the plane equation a*x+b*y+c*z = d ,
+        all parameters are given in global coordinates
+     */
     void SetParams(float a, float b, float c, float d);
 
-    /** set the parameters of the plane given a position and a normal vector */
+    /** set the parameters of the plane given a position and a normal
+        vector; all parameters are given in global coordinates
+    */
     void SetParams(const salt::Vector3f& pos, salt::Vector3f normal);
+
+    /** returns the depth of the given relative position in the
+        managed plane. Points inside the geom will have positive
+        depth, points outside it will have negative depth, and points
+        on the surface will have zero depth.
+    */
+    float GetPointDepth(const salt::Vector3f& pos);
 
     /** this is a stub method that does not nothing, as a plane is a non
         placeable geom.

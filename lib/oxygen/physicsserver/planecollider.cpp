@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: planecollider.cpp,v 1.7 2004/04/15 14:20:53 rollmark Exp $
+   $Id: planecollider.cpp,v 1.8 2004/04/15 18:34:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,5 +75,14 @@ PlaneCollider::SetRotation(const Matrix& /*rot*/)
 {
     // planes are non placeable geoms
 }
+
+float
+PlaneCollider::GetPointDepth(const Vector3f& pos)
+{
+    Vector3f worldPos(GetWorldTransform() * pos);
+    return dGeomPlanePointDepth
+        (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+}
+
 
 

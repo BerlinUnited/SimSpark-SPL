@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: planecollider_c.cpp,v 1.7 2004/03/22 10:56:05 rollmark Exp $
+$Id: planecollider_c.cpp,v 1.8 2004/04/15 18:34:06 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -65,8 +65,24 @@ FUNCTION(PlaneCollider,setParams)
     return true;
 }
 
+FUNCTION(PlaneCollider,getPointDepth)
+{
+    Vector3f inPos;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inPos))
+        )
+        {
+            return 0;
+        }
+
+    return obj->GetPointDepth(inPos);
+}
+
 void CLASS(PlaneCollider)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Collider);
     DEFINE_FUNCTION(setParams);
+    DEFINE_FUNCTION(getPointDepth);
 }
