@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: inputserver.cpp,v 1.4 2003/12/21 23:36:35 fruit Exp $
+$Id: inputserver.cpp,v 1.5 2004/03/05 18:47:53 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ const InputServer::TInputCode InputServer::IC_7 = 0x08;
 const InputServer::TInputCode InputServer::IC_8 = 0x09;
 const InputServer::TInputCode InputServer::IC_9 = 0x0a;
 const InputServer::TInputCode InputServer::IC_0 = 0x0b;
+
 // function keys
 const InputServer::TInputCode InputServer::IC_F1 = 0x3b;
 const InputServer::TInputCode InputServer::IC_F2 = 0x3c;
@@ -55,6 +56,7 @@ const InputServer::TInputCode InputServer::IC_F9 = 0x43;
 const InputServer::TInputCode InputServer::IC_F10 = 0x44;
 const InputServer::TInputCode InputServer::IC_F11 = 0x57;
 const InputServer::TInputCode InputServer::IC_F12 = 0x58;
+
 // alphabet
 const InputServer::TInputCode InputServer::IC_A = 0x1e;
 const InputServer::TInputCode InputServer::IC_B = 0x30;
@@ -82,57 +84,61 @@ const InputServer::TInputCode InputServer::IC_W = 0x11;
 const InputServer::TInputCode InputServer::IC_X = 0x2d;
 const InputServer::TInputCode InputServer::IC_Y = 0x15;
 const InputServer::TInputCode InputServer::IC_Z = 0x2c;
+
 // keypad
-const InputServer::TInputCode InputServer::IC_KP0                       = 0x52;
-const InputServer::TInputCode InputServer::IC_KP1                       = 0x4f;
-const InputServer::TInputCode InputServer::IC_KP2                       = 0x50;
-const InputServer::TInputCode InputServer::IC_KP3                       = 0x51;
-const InputServer::TInputCode InputServer::IC_KP4                       = 0x4b;
-const InputServer::TInputCode InputServer::IC_KP5                       = 0x4c;
-const InputServer::TInputCode InputServer::IC_KP6                       = 0x4d;
-const InputServer::TInputCode InputServer::IC_KP7                       = 0x47;
-const InputServer::TInputCode InputServer::IC_KP8                       = 0x48;
-const InputServer::TInputCode InputServer::IC_KP9                       = 0x49;
-const InputServer::TInputCode InputServer::IC_KP_DECIMAL        = 0x53;
-const InputServer::TInputCode InputServer::IC_KP_DIVIDE         = 0xb5;
-const InputServer::TInputCode InputServer::IC_KP_MULTIPLY       = 0x37;
-const InputServer::TInputCode InputServer::IC_KP_MINUS          = 0x4a;
-const InputServer::TInputCode InputServer::IC_KP_PLUS           = 0x4e;
-const InputServer::TInputCode InputServer::IC_KP_ENTER          = 0x8d;
+const InputServer::TInputCode InputServer::IC_KP0 = 0x52;
+const InputServer::TInputCode InputServer::IC_KP1 = 0x4f;
+const InputServer::TInputCode InputServer::IC_KP2 = 0x50;
+const InputServer::TInputCode InputServer::IC_KP3 = 0x51;
+const InputServer::TInputCode InputServer::IC_KP4 = 0x4b;
+const InputServer::TInputCode InputServer::IC_KP5 = 0x4c;
+const InputServer::TInputCode InputServer::IC_KP6 = 0x4d;
+const InputServer::TInputCode InputServer::IC_KP7 = 0x47;
+const InputServer::TInputCode InputServer::IC_KP8 = 0x48;
+const InputServer::TInputCode InputServer::IC_KP9 = 0x49;
+const InputServer::TInputCode InputServer::IC_KP_DECIMAL  = 0x53;
+const InputServer::TInputCode InputServer::IC_KP_DIVIDE   = 0xb5;
+const InputServer::TInputCode InputServer::IC_KP_MULTIPLY = 0x37;
+const InputServer::TInputCode InputServer::IC_KP_MINUS    = 0x4a;
+const InputServer::TInputCode InputServer::IC_KP_PLUS     = 0x4e;
+const InputServer::TInputCode InputServer::IC_KP_ENTER    = 0x8d;
+
 // arrows + home/end pad
-const InputServer::TInputCode InputServer::IC_UP                = 0xc8;
-const InputServer::TInputCode InputServer::IC_DOWN              = 0xd0;
-const InputServer::TInputCode InputServer::IC_LEFT              = 0xcb;
-const InputServer::TInputCode InputServer::IC_RIGHT             = 0xcd;
+const InputServer::TInputCode InputServer::IC_UP        = 0xc8;
+const InputServer::TInputCode InputServer::IC_DOWN      = 0xd0;
+const InputServer::TInputCode InputServer::IC_LEFT      = 0xcb;
+const InputServer::TInputCode InputServer::IC_RIGHT     = 0xcd;
 const InputServer::TInputCode InputServer::IC_INSERT    = 0xd2;
 const InputServer::TInputCode InputServer::IC_DELETE    = 0xd3;
-const InputServer::TInputCode InputServer::IC_HOME              = 0xc7;
-const InputServer::TInputCode InputServer::IC_END               = 0xcf;
+const InputServer::TInputCode InputServer::IC_HOME      = 0xc7;
+const InputServer::TInputCode InputServer::IC_END       = 0xcf;
 const InputServer::TInputCode InputServer::IC_PAGEUP    = 0xc9;
 const InputServer::TInputCode InputServer::IC_PAGEDOWN  = 0xd1;
+
 // key state modifier keys
 const InputServer::TInputCode InputServer::IC_NUMLOCK   = 0x45;
 const InputServer::TInputCode InputServer::IC_CAPSLOCK  = 0x3a;
 const InputServer::TInputCode InputServer::IC_SCROLLOCK = 0x46;
 const InputServer::TInputCode InputServer::IC_LSHIFT    = 0x2a;
 const InputServer::TInputCode InputServer::IC_RSHIFT    = 0x36;
-const InputServer::TInputCode InputServer::IC_LCTRL             = 0x1d;
-const InputServer::TInputCode InputServer::IC_RCTRL             = 0x9d;
-const InputServer::TInputCode InputServer::IC_LALT              = 0x38;
-const InputServer::TInputCode InputServer::IC_RALT              = 0xb8;
+const InputServer::TInputCode InputServer::IC_LCTRL     = 0x1d;
+const InputServer::TInputCode InputServer::IC_RCTRL     = 0x9d;
+const InputServer::TInputCode InputServer::IC_LALT      = 0x38;
+const InputServer::TInputCode InputServer::IC_RALT      = 0xb8;
 const InputServer::TInputCode InputServer::IC_LSUPER    = 0xdb; // Left "Windows" key
 const InputServer::TInputCode InputServer::IC_RSUPER    = 0xdc; // Right "Windows" key
+
 // other keys (cursor control, punctuation)
 const InputServer::TInputCode InputServer::IC_ESCAPE    = 0x01;
-const InputServer::TInputCode InputServer::IC_PRINT             = 0xb7;
-const InputServer::TInputCode InputServer::IC_PAUSE             = 0xc5;
-const InputServer::TInputCode InputServer::IC_GRAVE             = 0x29;
-const InputServer::TInputCode InputServer::IC_MINUS             = 0x0c;
+const InputServer::TInputCode InputServer::IC_PRINT     = 0xb7;
+const InputServer::TInputCode InputServer::IC_PAUSE     = 0xc5;
+const InputServer::TInputCode InputServer::IC_GRAVE     = 0x29;
+const InputServer::TInputCode InputServer::IC_MINUS     = 0x0c;
 const InputServer::TInputCode InputServer::IC_EQUALS    = 0x0d;
 const InputServer::TInputCode InputServer::IC_BACKSLASH = 0x2b;
 const InputServer::TInputCode InputServer::IC_BACKSPACE = 0x0e;
 
-const InputServer::TInputCode InputServer::IC_TAB               = 0x0f;
+const InputServer::TInputCode InputServer::IC_TAB       = 0x0f;
 const InputServer::TInputCode InputServer::IC_LBRACKET  = 0x1a;
 const InputServer::TInputCode InputServer::IC_RBRACKET  = 0x1b;
 const InputServer::TInputCode InputServer::IC_RETURN    = 0x1c;
@@ -141,20 +147,22 @@ const InputServer::TInputCode InputServer::IC_SEMICOLON = 0x27;
 const InputServer::TInputCode InputServer::IC_APOSTROPHE= 0x28;
 
 const InputServer::TInputCode InputServer::IC_OEM_102   = 0x56; // German <>|
-const InputServer::TInputCode InputServer::IC_COMMA             = 0x33;
+const InputServer::TInputCode InputServer::IC_COMMA     = 0x33;
 const InputServer::TInputCode InputServer::IC_PERIOD    = 0x34;
-const InputServer::TInputCode InputServer::IC_SLASH             = 0x35;
+const InputServer::TInputCode InputServer::IC_SLASH     = 0x35;
 
-const InputServer::TInputCode InputServer::IC_SPACE             = 0x39;
+const InputServer::TInputCode InputServer::IC_SPACE     = 0x39;
 
 // mouse buttons
 const InputServer::TInputCode InputServer::IC_MOUSE_LEFT        = 0x1000;       // left
 const InputServer::TInputCode InputServer::IC_MOUSE_RIGHT       = 0x1001;       // right
 const InputServer::TInputCode InputServer::IC_MOUSE_MIDDLE      = 0x1002;       // middle
+
 //mouse axis
 const InputServer::TInputCode InputServer::IC_AXISX     = 0x2000;
 const InputServer::TInputCode InputServer::IC_AXISY     = 0x2001;
 const InputServer::TInputCode InputServer::IC_AXISZ     = 0x2002;
+
 // timer
 const InputServer::TInputCode InputServer::IC_AXIST = 0x3000;
 
@@ -170,7 +178,7 @@ InputServer::~InputServer()
 
 bool InputServer::Init(const std::string &inputSysName)
 {
-    GetLog()->Normal().Printf("InputServer::Init -> '%s'\n", inputSysName.c_str());
+    GetLog()->Normal() << "(InputServer) Init " << inputSysName << "\n";
     Reset();
 
     // push our variables into the scriptserver
@@ -184,6 +192,7 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_8", IC_8);
     GetScript()->CreateVariable("Input.IC_9", IC_9);
     GetScript()->CreateVariable("Input.IC_0", IC_0);
+
     // function keys
     GetScript()->CreateVariable("Input.IC_F1", IC_F1);
     GetScript()->CreateVariable("Input.IC_F2", IC_F2);
@@ -197,6 +206,7 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_F10", IC_F10);
     GetScript()->CreateVariable("Input.IC_F11", IC_F11);
     GetScript()->CreateVariable("Input.IC_F12", IC_F12);
+
     // alphabet
     GetScript()->CreateVariable("Input.IC_A", IC_A);
     GetScript()->CreateVariable("Input.IC_B", IC_B);
@@ -224,6 +234,7 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_X", IC_X);
     GetScript()->CreateVariable("Input.IC_Y", IC_Y);
     GetScript()->CreateVariable("Input.IC_Z", IC_Z);
+
     // keypad
     GetScript()->CreateVariable("Input.IC_KP0", IC_KP0);
     GetScript()->CreateVariable("Input.IC_KP1", IC_KP1);
@@ -241,6 +252,7 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_KP_MINUS", IC_KP_MINUS);
     GetScript()->CreateVariable("Input.IC_KP_PLUS", IC_KP_PLUS);
     GetScript()->CreateVariable("Input.IC_KP_ENTER", IC_KP_ENTER);
+
     // arrows + home/end pad
     GetScript()->CreateVariable("Input.IC_UP", IC_UP);
     GetScript()->CreateVariable("Input.IC_DOWN", IC_DOWN);
@@ -252,6 +264,7 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_END", IC_END);
     GetScript()->CreateVariable("Input.IC_PAGEUP", IC_PAGEUP);
     GetScript()->CreateVariable("Input.IC_PAGEDOWN", IC_PAGEDOWN);
+
     // key state modifier keys
     GetScript()->CreateVariable("Input.IC_NUMLOCK", IC_NUMLOCK);
     GetScript()->CreateVariable("Input.IC_CAPSLOCK", IC_CAPSLOCK);
@@ -262,8 +275,9 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_RCTRL", IC_RCTRL);
     GetScript()->CreateVariable("Input.IC_LALT", IC_LALT);
     GetScript()->CreateVariable("Input.IC_RALT", IC_RALT);
-    GetScript()->CreateVariable("Input.IC_LSUPER", IC_LSUPER);      // Left "Windows" key
-    GetScript()->CreateVariable("Input.IC_RSUPER", IC_RSUPER);      // Right "Windows" key
+    GetScript()->CreateVariable("Input.IC_LSUPER", IC_LSUPER); // Left "Windows" key
+    GetScript()->CreateVariable("Input.IC_RSUPER", IC_RSUPER); // Right "Windows" key
+
     // other keys (cursor control, punctuation)
     GetScript()->CreateVariable("Input.IC_ESCAPE", IC_ESCAPE);
     GetScript()->CreateVariable("Input.IC_PRINT", IC_PRINT);
@@ -293,20 +307,24 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_MOUSE_LEFT", IC_MOUSE_LEFT);// left
     GetScript()->CreateVariable("Input.IC_MOUSE_RIGHT", IC_MOUSE_RIGHT);// right
     GetScript()->CreateVariable("Input.IC_MOUSE_MIDDLE", IC_MOUSE_MIDDLE);  // middle
+
     //mouse axis
     GetScript()->CreateVariable("Input.IC_AXISX", IC_AXISX);
     GetScript()->CreateVariable("Input.IC_AXISY", IC_AXISY);
     GetScript()->CreateVariable("Input.IC_AXISZ", IC_AXISZ);
+
     // timer
     GetScript()->CreateVariable("Input.IC_AXIST", IC_AXIST);
 
     // create the inputsystem
-    shared_ptr<InputSystem> inputSystem = shared_static_cast<InputSystem>(GetCore()->New(inputSysName));
+    shared_ptr<InputSystem> inputSystem =
+        shared_dynamic_cast<InputSystem>(GetCore()->New(inputSysName));
 
-    if(!inputSystem.get())
+    if(inputSystem.get() == 0)
         {
             // could not create InputSystem
-            GetLog()->Error().Printf("ERROR: Unable to create '%s'\n", inputSysName.c_str());
+            GetLog()->Error() << "(InputServer) ERROR: unable to create "
+                              << inputSysName << "\n";
             return false;
         }
 
@@ -314,7 +332,8 @@ bool InputServer::Init(const std::string &inputSysName)
 
     if (inputSystem->Init(this) == false)
         {
-            GetLog()->Error().Printf("ERROR: Unable to initialize '%s'\n", inputSysName.c_str());
+            GetLog()->Error() << "(InputServer) ERROR: unable to initialize "
+                              << inputSysName << "\n";
             Reset();
             return false;
         }
@@ -322,14 +341,30 @@ bool InputServer::Init(const std::string &inputSysName)
     return AddChildReference(inputSystem);
 }
 
+shared_ptr<InputSystem> InputServer::GetInputSystem()
+{
+    shared_ptr<InputSystem> inputSystem = shared_dynamic_cast<InputSystem>
+        (GetChild("inputsystem"));
+
+    return inputSystem;
+}
+
+
 bool InputServer::CreateDevice(const std::string &deviceName)
 {
-    GetLog()->Normal().Printf("InputServer::CreateDevice -> '%s'\n", deviceName.c_str());
-    shared_ptr<InputSystem> inputSystem = shared_static_cast<InputSystem>(GetChild("inputsystem"));
+    GetLog()->Normal() << "(InputServer) CreateDevice " << deviceName << "\n";
 
-    if (!inputSystem.get())
+    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+
+    if (inputSystem.get() == 0)
         {
-            GetLog()->Error() << "ERROR: CreateDevice - No InputSystem installed" << std::endl;
+            GetLog()->Error()
+                << "(InputSystem) ERROR: no InputSystem installed\n";
+            return false;
+        }
+
+    if (inputSystem.get() == 0)
+        {
             return false;
         }
 
@@ -338,76 +373,104 @@ bool InputServer::CreateDevice(const std::string &deviceName)
 
 void InputServer::Reset()
 {
-    shared_ptr<Leaf> inputSystem = GetChild("inputsystem");
-    if (inputSystem.get() != NULL)
+    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+
+    if (inputSystem.get() != 0)
         {
             inputSystem->Unlink();
             inputSystem.reset();
         }
+
     mScanCodeMap->Reset();
 }
 
 bool InputServer::GetInput(Input &input, bool raw)
 {
-    shared_ptr<InputSystem> inputSystem = shared_static_cast<InputSystem>(GetChild("inputsystem"));
-    if (inputSystem.get() != NULL)
+    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+
+    if (inputSystem.get() == 0)
         {
-            if (inputSystem->GetInput(input) == true)
+            GetLog()->Error()
+                << "(InputServer) ERROR: no InputSystem installed\n";
+            input.id = -1;
+            return false;
+        }
+
+    if (! inputSystem->GetInput(input))
+        {
+            input.id = -1;
+            return false;
+        }
+
+    if (
+        (input.type == eUser) ||
+        (raw)
+        )
+        {
+            // return eUser input
+            return true;
+        }
+
+    // translate raw input to binding
+    TBindMap::iterator bindListIter = mBindings.find(input.code);
+    if (bindListIter == mBindings.end())
+        {
+            input.id = -1;
+            return false;
+        }
+
+    // we have an entry for the scan code
+    TBindList& bindList = (*bindListIter).second;
+
+    for (
+         TBindList::const_iterator bindIter = bindList.begin();
+         bindIter != bindList.end();
+         ++bindIter
+         )
+        {
+            const Bind& bind = (*bindIter);
+
+            //printf("Looking at: %d %d %d", (*bind).code, (*bind).cmd, (*bind).modifier);
+            if (bind.modifier == mModifierState)
                 {
-                    if (input.type != eUser && raw == false)
+                    if (input.type == eButton)
                         {
-                            // translate raw input to binding
-                            TBindMap::iterator bindList = mBindings.find(input.code);
-                            if (bindList != mBindings.end())
+                            if ((bind.event == eKeyUpDown) ||
+                                (bind.event == eKeyUp && input.data.l == 0) ||
+                                (bind.event == eKeyDown && input.data.l == 1)
+                                )
                                 {
-                                    // we have an entry for the scan code
-                                    TBindList::const_iterator bind = (*bindList).second.begin();
-                                    for (;bind != (*bindList).second.end(); ++bind)
-                                        {
-                                            //printf("Looking at: %d %d %d", (*bind).code, (*bind).cmd, (*bind).modifier);
-                                            if ((*bind).modifier == mModifierState)
-                                                {
-                                                    if (input.type == eButton)
-                                                        {
-                                                            if (((*bind).event == eKeyUpDown) ||
-                                                                ((*bind).event == eKeyUp && input.data.l == 0) ||
-                                                                ((*bind).event == eKeyDown && input.data.l == 1)
-                                                                )
-                                                                {
-                                                                    input.id = (*bind).cmd;
-                                                                    return true;
-                                                                }
-                                                        } else if (input.type == eAxis)
-                                                            {
-                                                                input.id = (*bind).cmd;
-                                                                return true;
-                                                            }
-                                                }
-                                        }
+                                    input.id = bind.cmd;
+                                    return true;
                                 }
-                        }
-                    else
-                        {
-                            // return eUser input
-                            return true;
-                        }
+                        } else if (input.type == eAxis)
+                            {
+                                input.id = bind.cmd;
+                                return true;
+                            }
                 }
         }
+
+
     input.id = -1;
     return false;
 }
 
 bool InputServer::BindCommand(const std::string &desc, int cmd)
 {
-    // first we have to translate the description to a correct Bind struct
+    // first we have to translate the description to a correct Bind
+    // struct
     Bind bind;
-    if (ParseBindDescription(bind, desc) == false)
-        return false;
+    if (! ParseBindDescription(bind, desc))
+        {
+            return false;
+        }
 
-    //GetLog()->Normal() << "Binding " << cmd << endl;
-    //GetLog()->Normal() << "  code: " << bind.code << endl;
-    //GetLog()->Normal() << "  modifier: " << bind.modifier << endl;
-    //GetLog()->Normal() << "  event: " << bind.event << endl;
+    // GetLog()->Normal() << "Binding " << cmd << endl;
+    // GetLog()->Normal() << "  code: " << bind.code << endl;
+    // GetLog()->Normal() << "  modifier: " << bind.modifier << endl;
+    // GetLog()->Normal() << "  event: " << bind.event << endl;
+
     bind.cmd = cmd;
 
     mBindings[bind.code].push_front(bind);
@@ -421,32 +484,35 @@ void InputServer::ImportScanCodeMapping(const std::string &name)
     GetScript()->Run(name);
 }
 
-void InputServer::AddCode(TInputCode ic, const std::string &name, char noMod, char shiftMod, char altMod)
+void InputServer::AddCode(TInputCode ic, const std::string &name, char noMod,
+                          char shiftMod, char altMod)
 {
     mScanCodeMap->AddCode(ic, name, noMod, shiftMod, altMod);
 }
 
 bool InputServer::ParseBindDescription(Bind &bind, const std::string &desc)
 {
-    stringstream    s(desc);
-    string                  current;
-    list<string>    tokens;
+    stringstream s(desc);
+    string current;
+    list<string> tokens;
 
     while(!s.eof())
         {
             getline(s, current,' ');
             if (current.size())
-                tokens.push_back(current);
+                {
+                    tokens.push_back(current);
+                }
         }
 
     if (tokens.size() == 0)
         {
-            GetLog()->Error() << "ERROR: Empty(?) bind description '" << desc << "'" << endl;
+            GetLog()->Error() << "(InputServer) ERROR: Empty bind description? '"
+                              << desc << "'" << endl;
             return false;
         }
 
-    // separated string is in tokens
-    // first we handle all the modifiers
+    // separated string is in tokens first we handle all the modifiers
     bind.modifier = eNone;
 
     while (tokens.size() > 1)
@@ -460,20 +526,29 @@ bool InputServer::ParseBindDescription(Bind &bind, const std::string &desc)
     current = tokens.front();
     tokens.pop_front();
 
+    // current now holds the event to which to bind to, plus (maybe)
+    // its pressed/release modifier
     bind.event = eKeyUpDown;
-    // current now holds the event to which to bind to, plus (maybe) its pressed/release modifier
-    if (current[0]=='+')
-        bind.event = eKeyDown;
-    else if (current[0]=='-')
-        bind.event = eKeyUp;
 
-    if (bind.event != eKeyUpDown) current = current.substr(1);
+    if (current[0]=='+')
+        {
+            bind.event = eKeyDown;
+        } else if (current[0]=='-')
+            {
+                bind.event = eKeyUp;
+            }
+
+    if (bind.event != eKeyUpDown)
+        {
+            current = current.substr(1);
+        }
 
     bind.code = mScanCodeMap->GetCode(current);
 
     if (bind.code == 0)
         {
-            GetLog()->Error() << "ERROR: Erroneous code description '" << current << "'" << endl;
+            GetLog()->Error() << "ERROR: Erroneous code description '"
+                              << current << "'" << endl;
             return false;
         }
 
@@ -495,7 +570,8 @@ int InputServer::ParseModifier(const std::string &modifier) const
     return eNone;
 }
 
-bool InputServer::TranslateCode(TInputCode code, unsigned long state, char &ch) const
+bool InputServer::TranslateCode(TInputCode code,
+                                unsigned long state, char &ch) const
 {
     state = mModifierState;
     return mScanCodeMap->TranslateCode(code, state, ch);
@@ -510,9 +586,13 @@ void InputServer::Invoke(int cmd)
     input.id   = cmd;
     input.data.l = 0;
 
-    shared_ptr<InputSystem> inputSystem = shared_static_cast<InputSystem>(GetChild("inputsystem"));
-    if (inputSystem.get() != NULL)
+    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+    if (inputSystem.get() == 0)
         {
-            inputSystem->AddInput(input);
+            GetLog()->Error()
+                << "(InputServer) ERROR:  no InputSystem installed\n";
+            return;
         }
+
+    inputSystem->AddInput(input);
 }
