@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.4.8.1 2004/01/09 13:19:02 rollmark Exp $
+   $Id: space.cpp,v 1.4.8.2 2004/01/09 13:45:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "space.h"
 #include "world.h"
 #include "body.h"
+#include "physicsserver.h"
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/agentaspect/collisionperceptor.h>
@@ -122,13 +123,12 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         return;
       }
 
-    Body *body1 = (ODEBody1) ? static_cast<Body*>(dBodyGetData(ODEBody1)) : 0;
-    Body *body2 = (ODEBody2) ? static_cast<Body*>(dBodyGetData(ODEBody2)) : 0;
-
     dContact contact;
-
     if (dCollide (obj1, obj2, 0, &contact.geom, sizeof(dContactGeom)))
     {
+        Body* body1 = PhysicsServer::GetBody(ODEBody1);
+        Body* body2 = PhysicsServer::GetBody(ODEBody2);
+
         // notify potential CollisionPerceptors
         NotifyCollisionPerceptor(body1, body2);
         NotifyCollisionPerceptor(body2, body1);
