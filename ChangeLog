@@ -1,3 +1,8 @@
+2003-12-04  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp: 
+	Register init method to ruby
+
 2003-12-03  Oliver Obst  <fruit@robolog.org>
 
 	* lib/oxygen/gamecontrolserver/baseparser.h: 
