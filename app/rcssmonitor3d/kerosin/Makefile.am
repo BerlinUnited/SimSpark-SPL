@@ -32,6 +32,4 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 rcssmonitor3D_kerosin_SOURCES = \
 	main.cpp
 
-dist_pkgdata_DATA = rcssmonitor3D-kerosin.rb
-
-
+dist_pkgdata_DATA = rcssmonitor3D-kerosin.rb bindings.rb
