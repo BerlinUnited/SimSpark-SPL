@@ -242,4 +242,5 @@ monitorServer.registerMonitorSystem('SexpMonitor')
 
 #
 # queue agents for startup
-spadesServer.queueAgents('default', 3)
+spadesServer.queueAgents('foo', 2)
+spadesServer.queueAgents('bar', 2)
