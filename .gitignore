@@ -442,6 +442,12 @@ plugin/soundsystemfmod/Makefile
 plugin/soundsystemfmod/Makefile.in
 plugin/soundsystemfmod/*.la
 plugin/soundsystemfmod/*.lo
+plugin/voidmeshimporter/*.la
+plugin/voidmeshimporter/*.lo
+plugin/voidmeshimporter/.deps
+plugin/voidmeshimporter/.libs
+plugin/voidmeshimporter/Makefile
+plugin/voidmeshimporter/Makefile.in
 utility/Makefile.in
 utility/Makefile
 utility/glextgen/Makefile
