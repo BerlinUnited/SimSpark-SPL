@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libsurvival.la
 
-AM_CPPFLAGS = -I${top_srcdir}/lib
+AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/survival
