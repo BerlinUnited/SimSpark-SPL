@@ -1,0 +1,10 @@
+2002-08-12  Oliver Obst  <fruit@robolog.org>
+
+	* ./utility/forwarder/forwarder.h
+	* ./utility/forwarder/forwarder.cc
+	Added initial revision of Forwarder output stream
+
+	* ./utility/forwarder/forwarderstreambuf.h
+	* ./utility/forwarder/forwarderstreambuf.cc
+	Added initial revision of ForwarderStreamBuf, a streambuf which
+	can stream to a list of streams
