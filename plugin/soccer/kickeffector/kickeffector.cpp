@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.1.2.3 2004/02/01 19:00:52 fruit Exp $
+   $Id: kickeffector.cpp,v 1.1.2.4 2004/02/05 15:37:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,8 +34,9 @@ using namespace std;
 KickEffector::KickEffector()
     : oxygen::Effector(),
       mKickMargin(0.04),mForceFactor(4.0),mMaxPower(100.0),
+      mMinAngle(0.0),mMaxAngle(50.0),
       mMinSteps(3),mMaxSteps(75),
-      mSigmaForce(0.4), mSigmaTheta(0.02), mSigmaPhi(0.025)
+      mSigmaForce(0.4), mSigmaTheta(0.02), mSigmaPhiEnd(0.9), mSigmaPhiMid(4.5)
 {
 }
 
@@ -94,16 +95,17 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         theta += salt::NormalRNG<>(0.0,mSigmaTheta)();
     }
-    double phi;
-    if (mSigmaPhi > 0.0)
+    float phi = salt::gMin(salt::gMax(kickAction->GetAngle(), mMinAngle), mMaxAngle);
+    if (mSigmaPhiEnd > 0.0 || mSigmaPhiMid > 0.0)
     {
-        if (kickAction->GetType() == KickAction::KT_HORIZONTAL)
-        {
-            phi = salt::NormalRNG<>(gPI/2,mSigmaPhi)();
-        } else {
-            phi = salt::NormalRNG<>(gPI/4,mSigmaPhi)();
-        }
+        // f will be close to 0.0 if the angle is near the minimum or the maximum.
+        // f will be close to 1.0 if the angle is somewhere in the middle of the range.
+        float f = 1.0 - 2.0 * salt::gAbs((phi - mMinAngle) / (mMaxAngle - mMinAngle) - 0.5);
+        // f is set to a number between mSigmaPhiEnd and mSigmaPhiMid
+        f = salt::gMax(mSigmaPhiEnd + f * (mSigmaPhiMid-mSigmaPhiEnd), 0.0);
+        phi = salt::NormalRNG<>(phi,f)();
     }
+    phi = salt::gDegToRad(90.0-phi);
 
     // x = r * cos(theta) * sin(90 - phi), with r = 1.0
     force[0] = salt::gCos(theta) * salt::gSin(phi);
@@ -121,7 +123,7 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     int steps = mMinSteps + static_cast<int>((mMaxSteps-mMinSteps) * (kick_power / mMaxPower));
 
     force *= (mForceFactor * kick_power);
-    Vector3f torque(-force[2]/(salt::g2PI * mBallRadius),
+    Vector3f torque(force[2]/(salt::g2PI * mBallRadius),
                     0.0,
                     -force[0]/(salt::g2PI * mBallRadius));
 
@@ -151,29 +153,13 @@ KickEffector::GetActionObject(const Predicate& predicate)
 
       Predicate::Iterator iter = predicate.begin();
 
-      string strType;
-      if (! predicate.GetValue(iter, strType))
-          {
-              GetLog()->Error()
-                  << "ERROR: (KickEffector) kick type parameter expected\n";
-              break;
-          }
-
-      KickAction::EKickType type;
-      if (strType == "up")
-          {
-              type = KickAction::KT_STEEP;
-          }
-      else if (strType == "down")
-          {
-              type = KickAction::KT_HORIZONTAL;
-          }
-      else
-          {
-              GetLog()->Error()
-                  << "ERROR: (KickEffector) kick type parameter expected\n";
-              break;
-          }
+      float angle;
+      if (!predicate.GetValue(iter, angle))
+      {
+          GetLog()->Error()
+              << "ERROR: (KickEffector) kick angle parameter expected\n";
+          break;
+      }
 
       float power;
       if (! predicate.GetValue(iter, power))
@@ -184,7 +170,7 @@ KickEffector::GetActionObject(const Predicate& predicate)
           }
 
       // construct the KickAction object
-      return shared_ptr<KickAction>(new KickAction(GetPredicate(),type,power));
+      return shared_ptr<KickAction>(new KickAction(GetPredicate(),angle,power));
 
   } while (0);
 
@@ -235,18 +221,6 @@ KickEffector::OnLink()
     } else {
         mBallRadius = geom->GetRadius();
     }
-
-    // parent should be a transform, or some other node, which has a
-    // Body-child
-    mBody = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
-
-    if (mBody.get() == 0)
-    {
-        GetLog()->Error()
-            << "ERROR: (KickEffector) parent node has no Body child;"
-            << " cannot apply force\n";
-        return;
-    }
 }
 
 void
@@ -262,11 +236,13 @@ KickEffector::SetKickMargin(float margin)
 }
 
 void
-KickEffector::SetNoiseParams(double sigma_force, double sigma_theta, double sigma_phi)
+KickEffector::SetNoiseParams(double sigma_force, double sigma_theta,
+                             double sigma_phi_end, double sigma_phi_mid)
 {
     mSigmaForce = sigma_force;
     mSigmaTheta = sigma_theta;
-    mSigmaPhi = sigma_phi;
+    mSigmaPhiEnd = sigma_phi_end;
+    mSigmaPhiMid = sigma_phi_mid;
 }
 
 void
@@ -286,4 +262,17 @@ void
 KickEffector::SetMaxPower(float max_power)
 {
     mMaxPower = max_power;
+}
+
+void
+KickEffector::SetAngleRange(float min, float max)
+{
+    if (max <= min)
+    {
+        GetLog()->Error()
+            << "ERROR: (KickEffector) min. kick angle should be < max kick angle\n";
+        return;
+    }
+    mMinAngle = min;
+    mMaxAngle = max;
 }
