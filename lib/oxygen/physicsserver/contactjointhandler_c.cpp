@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler_c.cpp,v 1.5 2004/03/31 11:14:29 rollmark Exp $
+   $Id: contactjointhandler_c.cpp,v 1.6 2004/04/15 19:55:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -158,6 +158,22 @@ FUNCTION(ContactJointHandler,setContactSlip)
     return true;
 }
 
+FUNCTION(ContactJointHandler,setContactMu)
+{
+    float inMu;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inMu))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactMu(inMu);
+    return true;
+
+}
+
 void CLASS(ContactJointHandler)::DefineClass()
 {
   DEFINE_BASECLASS(oxygen/CollisionHandler);
@@ -170,4 +186,5 @@ void CLASS(ContactJointHandler)::DefineClass()
   DEFINE_FUNCTION(setContactSoftCFM);
   DEFINE_FUNCTION(setContactSlipMode);
   DEFINE_FUNCTION(setContactSlip);
+  DEFINE_FUNCTION(setContactMu);
 }

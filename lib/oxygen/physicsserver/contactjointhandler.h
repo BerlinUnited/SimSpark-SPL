@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.5 2004/03/31 11:14:28 rollmark Exp $
+   $Id: contactjointhandler.h,v 1.6 2004/04/15 19:55:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -98,6 +98,9 @@ public:
     /** sets the force dependent slip (FDS)
      */
     void SetContactSlip(float slip);
+
+    /** sets the Coulomb friction coefficient */
+    void SetContactMu(float mu);
 
 protected:
     f_inline float MixValues(const float v1, const float v2, const int n) const;

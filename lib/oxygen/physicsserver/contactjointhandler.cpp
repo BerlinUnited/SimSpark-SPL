@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.7 2004/04/15 14:24:01 rollmark Exp $
+   $Id: contactjointhandler.cpp,v 1.8 2004/04/15 19:55:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -234,6 +234,12 @@ void ContactJointHandler::SetContactSlip(float slip)
     mSurfaceParameter.slip1 = slip;
     mSurfaceParameter.slip2 = slip;
 }
+
+void ContactJointHandler::SetContactMu(float mu)
+{
+    mSurfaceParameter.mu = mu;
+}
+
 
 
 
