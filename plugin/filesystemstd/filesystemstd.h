@@ -1,57 +1,59 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: filesystemstd.h,v 1.2.4.1 2003/11/19 18:48:49 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   FileSystemSTD
+*/
+
 #ifndef FILESYSTEMSTD_H__
 #define FILESYSTEMSTD_H__
-
-/*!	\class FileSystemSTD
-	$Id: filesystemstd.h,v 1.2 2003/04/30 15:42:58 anoncvs_rssview Exp $
-
-	FileSystemSTD - The 'Standard' File System
-
-	OK, this one is really simple. It just loads a file from a
-	given base directory ... no fancy conversions, just a simple
-	Open("blah").
-
-	NOTE:
-
-	HISTORY:
-		13.07.01 - MK
-			- Initial version
-		29.08.01 - MK
-			- Made the Open() accept a 'const char*' instead of just a 'char*'
-			- Added some comments
-		26.01.02 - MR
-			- added ForEachFile
-		27.06.02 - MK
-			- moved to Zeitgeist
-		09.07.02 - MR
-			- moved to Kerosin
-
-	TODO:
-		- implement ForEachFile platform independent
-
-	TOFIX:
-*/
 
 #include <string>
 #include <zeitgeist/fileserver/filesystem.h>
 
+/**     \class FileSystemSTD
+
+        FileSystemSTD - The 'Standard' File System
+
+        OK, this one is really simple. It just loads a file from a
+        given base directory ... no fancy conversions, just a simple
+        Open("blah").
+*/
 class FileSystemSTD : public zeitgeist::FileSystem
 {
-	//
-	// Methods
-	//
+        //
+        // Methods
+        //
 public:
-	FileSystemSTD();
-	virtual ~FileSystemSTD();
+        FileSystemSTD();
+        virtual ~FileSystemSTD();
 
-	virtual salt::RFile*	Open(const char* inName);
-	virtual bool			SetPath(const char* inPath);
-	virtual int				ForEachFile(const char* expression, TCallback callback, void* param);
+        virtual salt::RFile*    Open(const char* inName);
+        virtual bool                    SetPath(const char* inPath);
+        virtual int                             ForEachFile(const char* expression, TCallback callback, void* param);
 
-	//
-	// members
-	//
+        //
+        // members
+        //
 protected:
-	std::string	mPath;
+        std::string     mPath;
 };
 
 DECLARE_CLASS(FileSystemSTD);
