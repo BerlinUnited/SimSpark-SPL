@@ -19,3 +19,9 @@ doc/proposal/simulator3d.aux
 doc/proposal/simulator3d.blg
 doc/proposal/simulator3d.dvi
 doc/proposal/simulator3d.log
+lib/salt/.deps
+lib/salt/.libs
+lib/salt/Makefile.in
+lib/salt/Makefile
+lib/salt/*.la
+lib/salt/*.lo
