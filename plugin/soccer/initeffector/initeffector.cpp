@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.1.2.3 2003/12/27 13:27:41 fruit Exp $
+   $Id: initeffector.cpp,v 1.1.2.4 2003/12/28 16:20:46 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,7 +60,9 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    // temporary way of setting the unum.
+    if (initAction->GetName().empty()) return false;
+
+    // temporary way of setting name and unum.
     std::ostringstream ost;
     ost << "#" << initAction->GetNumber();
 
@@ -78,13 +80,27 @@ InitEffector::GetActionObject(const Predicate& predicate)
         return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
     }
 
+    Predicate::TParameterList::const_iterator iter;
     std::string name;
-    int unum = 0;
-    predicate.FindParameter("unum", unum);
+    if (predicate.FindParameter(iter, "teamname"))
+    {
+        Predicate::TParameterList plist =
+            boost::any_cast<Predicate::TParameterList>(*iter);
+        iter = plist.begin();
+        if (++iter != plist.end())
+            predicate.GetValue(iter,name);
+    }
 
-    if (predicate.FindParameter("teamname", name))
-        return shared_ptr<ActionObject>(new InitAction(name,unum));
+    int unum;
+    if (predicate.FindParameter(iter, "unum"))
+    {
+        Predicate::TParameterList plist =
+            boost::any_cast<Predicate::TParameterList>(*iter);
+        iter = plist.begin();
+        if (++iter != plist.end())
+            predicate.GetValue(iter,unum);
+    }
 
-    return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+    return shared_ptr<ActionObject>(new InitAction(name,unum));
 }
 
