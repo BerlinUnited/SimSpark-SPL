@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.9 2004/04/11 11:56:34 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.10 2004/05/05 14:04:19 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -162,7 +162,7 @@ VisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         if(i->mObj->GetPerceptName() == "Player")
         {
             ParameterList player;
-            player.AddValue(std::string("Team"));
+            player.AddValue(std::string("team"));
             player.AddValue(std::string( i->mObj->GetPerceptName(ObjectState::PT_Player) ));
             element.AddValue(player);
         }
