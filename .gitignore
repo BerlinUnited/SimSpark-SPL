@@ -167,6 +167,7 @@ lib/salt/*.la
 lib/salt/*.lo
 lib/salt/gcc/.deps
 lib/salt/gcc/.dirstamp
+lib/salt/gcc/.libs
 lib/salt/gcc/*.lo
 lib/zeitgeist/.deps
 lib/zeitgeist/.libs
