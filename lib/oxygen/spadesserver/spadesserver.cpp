@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.3.2.3 2004/01/25 11:42:00 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.3.2.4 2004/02/06 21:19:40 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,8 +60,11 @@ SpadesServer::~SpadesServer()
 bool
 SpadesServer::ConstructInternal()
 {
-    // setup script variables used to customzize the SpadesServer
+    // setup script variables used to customize the SpadesServer
     GetScript()->CreateVariable("Spades.TimePerStep", 0.01f);
+    GetScript()->CreateVariable("Spades.MonitorInterval", 4);
+    GetScript()->CreateVariable("Spades.RunIntegratedCommserver", false);
+    GetScript()->CreateVariable("Spades.SendAgentThinkTimes", false);
 
     return true;
 }
@@ -115,6 +118,35 @@ SpadesServer::GetTimePerStep() const
     GetScript()->GetVariable("Spades.TimePerStep", time_per_step);
 
     return time_per_step;
+}
+
+bool
+SpadesServer::GetRunIntegratedCommserver() const
+{
+    bool run_integrated_commserver = false;
+    GetScript()->GetVariable("Spades.RunIntegratedCommserver",
+                             run_integrated_commserver);
+
+    return run_integrated_commserver;
+}
+
+int
+SpadesServer::GetMonitorInterval() const
+{
+    int monitor_interval = 4;
+    GetScript()->GetVariable("Spades.MonitorInterval", monitor_interval);
+
+    return monitor_interval;
+}
+
+bool
+SpadesServer::GetSendAgentThinkTimes() const
+{
+    bool send_agent_think_times = false;
+    GetScript()->GetVariable("Spades.SendAgentThinkTimes",
+                             send_agent_think_times);
+
+    return send_agent_think_times;
 }
 
 boost::shared_ptr<GameControlServer>
@@ -187,16 +219,15 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
     // can return a simple pointer
     mParamReader->getOptions(argc, argv);
 
-#if THIS_IS_A_DEMO_ONLY
     // start an inprocess commserver
-    mParamReader->setParam ("run_integrated_commserver", true);
+    mParamReader->setParam("run_integrated_commserver",
+                           GetRunIntegratedCommserver());
 
-    // send updates to the monitor every second cycle
-    mParamReader->setParam ("monitor_interval",2);
+    // send updates to the monitor every nth cycle
+    mParamReader->setParam("monitor_interval", GetMonitorInterval());
 
     // don't send think time messages to connected agents
-    mParamReader->setParam ("send_agent_think_times",false);
-#endif
+    mParamReader->setParam("send_agent_think_times", GetSendAgentThinkTimes());
 
     return mParamReader.get();
 }
