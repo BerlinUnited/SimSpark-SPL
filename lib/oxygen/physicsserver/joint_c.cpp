@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint_c.cpp,v 1.2 2004/04/10 14:07:31 rollmark Exp $
+   $Id: joint_c.cpp,v 1.3 2004/04/12 19:44:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ FUNCTION(Joint,attach)
 
     if (
         (in.GetSize() != 2) ||
-        (! in.GetValue(in.begin(), inPath1)) ||
-        (! in.GetValue(in.begin(), inPath2))
+        (! in.GetValue(in[0], inPath1)) ||
+        (! in.GetValue(in[1], inPath2))
         )
         {
             return false;
