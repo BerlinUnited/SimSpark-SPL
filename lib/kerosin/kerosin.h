@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kerosin.h,v 1.7 2003/11/14 14:05:51 fruit Exp $
+   $Id: kerosin.h,v 1.8 2004/03/04 13:49:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,7 +46,6 @@
 #include "sceneserver/light.h"
 #include "sceneserver/sphere.h"
 #include "sceneserver/staticmesh.h"
-#include "sceneserver/transform.h"
 
 // control aspect
 #include <zeitgeist/zeitgeist.h>
