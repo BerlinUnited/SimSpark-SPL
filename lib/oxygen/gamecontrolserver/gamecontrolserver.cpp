@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.3 2003/12/02 16:57:31 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.4 2003/12/03 18:01:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 using namespace zeitgeist;
+using namespace boost;
+using namespace std;
 
 GameControlServer::GameControlServer() : zeitgeist::Node()
 {
@@ -92,3 +94,14 @@ float GameControlServer::GetSenseInterval(int /*id*/)
     // the agent.
     return 0.1;
 }
+
+shared_ptr<ActionObject::TList> GameControlServer::Parse(string /*str*/) const
+{
+    // use the parser to create a TPredicateList
+
+    // lookup the effectors and contruct the corresponding list of
+    // ActionObjects
+
+    return shared_ptr<ActionObject::TList>(new ActionObject::TList);
+}
+
