@@ -1,3 +1,4 @@
+if BUILD_KEROSIN
 bin_PROGRAMS = rcssmonitor3D-kerosin
 
 if DEBUG
@@ -18,6 +19,8 @@ LDADD = \
         ${top_srcdir}/lib/salt/libsalt.la \
 	${top_srcdir}/app/rcssmonitor3d/lib/librcssmonitor3D.a
 rcssmonitor3D_kerosin_CXXFLAGS = -O2
+endif
+
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/app/rcssmonitor3d/lib -I${top_srcdir}/lib -I${top_srcdir}/plugin/soccer @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
