@@ -1,3 +1,212 @@
+2003-12-27  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/createeffector/createeffector.cpp: 
+	added InitEffector to the agent
+
+	* plugin/soccer/initeffector/initeffector.cpp: 
+	using FindParameter to extract the team name and uniform number
+
+	* lib/oxygen/gamecontrolserver/predicate.h: 
+	- added a functional class ParameterName to find parameters in a 
+	  parameter list 
+	- added a template method GetNthValue to extract a parameter from a 
+	  given parameter list 
+	- added a template method FindParameter. FindParameter extracts values 
+	  of a parameter with a given name from the predicate parameter list.
+	
+2003-12-26  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/simulator.rb: 
+	queuing up some agents to start initially
+
+	* lib/oxygen/spadesserver/spadesserver_c.cpp: 
+	added ruby interface for the QueueAgents method
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- added flag for simulation engine mode changes. The
+	  pauseModeCallback checks this flag for changes and sets the
+	  simulation engine mode as scheduled.
+	- added StartAgents method to start up new agents. Agents can only
+	  be started after SPADES called the SpadesServer::initialize
+	  method, so init scripts cannot start agents by calling this method
+	  directly. Because of this
+	- I added the QueueAgents method, that collects the agents to start in a
+	  queue. The agent queue will be used in the pause method to call
+	  the StartAgents method. QueueAgents can be called from ruby
+	  scripts as "queueAgents".
+
+2003-12-25  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/sceneserver/basenode.h:
+	moved private internal update methods to protected section,
+	because they cannot be overloaded otherwise (which was intended
+	originally).
+
+2003-12-25  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	moved GetVectorValue to protected section
+	added method ConvertStringValue
+	implemented GetValue helper for float, double and int
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	removed superfluous #include
+
+	* app/rcssmonitor3d/commserver.cpp,
+	* app/rcssmonitor3d/commserver.h, 
+	* app/rcssmonitor3d/main.cpp:
+	adapted rcssmonitor3d to Predicate changes
+	using new GetValue helper to parse a vector
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	added a set of helper functions to access values stored in a
+	TParameterList
+
+	* lib/oxygen/gamecontrolserver/predicate.h, lib/oxygen/gamecontrolserver/baseparser.h:
+	added some comments
+
+	* plugin/soccer/initeffector/initeffector.h,
+	* plugin/soccer/createeffector/createeffector.cpp,
+	* plugin/soccer/createeffector/createeffector.h,
+	* plugin/soccer/initeffector/initeffector.cpp,
+	* plugin/sexpparser/sexpparser.cpp, plugin/sexpparser/sexpparser.h,
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp,
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.h,
+	* plugin/forceeffector/forceeffector.cpp,
+	* plugin/forceeffector/forceeffector.h,
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp,
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp,
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h,
+	* lib/oxygen/gamecontrolserver/baseparser.cpp,
+	* lib/oxygen/gamecontrolserver/baseparser.h,
+	* lib/oxygen/agentaspect/collisionperceptor.cpp,
+	* lib/oxygen/agentaspect/collisionperceptor.h,
+	* lib/oxygen/agentaspect/effector.h,
+	* lib/oxygen/agentaspect/perceptor.h,
+	* lib/oxygen/agentaspect/agentaspect.h,
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	fixed Predicate usage
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	moved struct TPredicate to class Predicate
+
+	* lib/oxygen/Makefile.am: 
+	added predicate.h
+
+2003-12-25  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/createeffector/createeffector.cpp:
+	fixed bug that the agent aspect position is set after child references
+	(causes strange behaviour on update).
+
+2003-12-25  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/simulator.rb:
+	* app/spadestest/spadestest.rb: 
+	using the CreateEffector as a plugin
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	changed init to create the effector passed as a parameter and adapted
+	debug output accordingly
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	added parameter createEffector to init
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	exported method initEffector to ruby
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	implemented InitEffector
+	changed agentConnect to pass the create effector name to the
+	AgentAspect
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added method InitEffector
+
+	* configure.ac: 
+	added plugin/soccer/createeffector Makefile
+
+	* lib/oxygen/oxygen.cpp:
+	removed zeitgeist registration of CreateEffector
+
+	* lib/oxygen/oxygen.h: 
+	removed CreateEffector include
+
+	* lib/oxygen/Makefile.am: removed CreateEffector files
+	added baseparser.cpp
+
+	* lib/oxygen/agentaspect/createeffector.cpp,
+	* lib/oxygen/agentaspect/createeffector.h,
+	*lib/oxygen/agentaspect/createeffector_c.cpp: removed
+	CreateEffector files (now in plugin/soccer)
+
+	* plugin/soccer/Makefile.am,
+	* plugin/soccer/createeffector/.cvsignore,
+	* plugin/soccer/createeffector/Makefile.am,
+	* plugin/soccer/createeffector/createaction.h,
+	* plugin/soccer/createeffector/createeffector.cpp,
+	* plugin/soccer/createeffector/createeffector.h,
+	* plugin/soccer/createeffector/createeffector_c.cpp,
+	* plugin/soccer/createeffector/export.cpp: 
+	moved CreateEffector to plugin/soccer
+
+2003-12-24  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/.cvsignore:
+	* plugin/soccer/Makefile.am:
+	* plugin/soccer/initeffector/.cvsignore:
+	* plugin/soccer/initeffector/Makefile.am: 
+	* plugin/soccer/initeffector/export.cpp: 
+	* plugin/soccer/initeffector/initaction.h: 
+	* plugin/soccer/initeffector/initeffector.cpp:
+	* plugin/soccer/initeffector/initeffector.h: 
+	* plugin/soccer/initeffector/initeffector_c.cpp:
+	added soccer initeffector. The initeffector sets name and uniform number of players. 
+
+2003-12-23  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp: 
+	- including logserver header to make logging compile 
+	- changed message format to be more descriptive and extendible
+
+	* lib/zeitgeist/zeitgeist.cpp: 
+	* lib/zeitgeist/core.cpp: 
+	removed some of the debug output
+
+	* lib/oxygen/Makefile.am: 
+	added baseparser.cpp to be compiled
+
+	* plugin/sexpparser/sexpparser.h: 
+	* plugin/sexpparser/sexpparser.cpp: 	
+	- renamed some of the private method to a more descriptive name 
+	- fixed insertion of spaces
+
+2003-12-23  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
+	some cleanup
+	moved TParameterList inside loop to avoid repeat clear()
+	added additional check for a non existant scene
+
+	* plugin/sexpparser/sexpparser.h:
+	removed methods IsString and IsParameterList
+
+	* plugin/sexpparser/sexpparser.cpp:
+	removed methods IsString and IsParameterList. ListToString
+	compares now directly based on their type_info
+
+	* lib/oxygen/gamecontrolserver/baseparser.cpp:
+	added declarations to force the generation of RTTI type_info
+	objects. This solves the problem of comparing two types across
+	plugins boundaries.
+
+2003-12-23  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/sexpparser/sexpparser.h: 
+	* plugin/sexpparser/sexpparser.cpp: 
+	added further type check and error message
+
 2003-12-22  Oliver Obst  <fruit@robolog.org>
 
 	* merged rcssserver3D-add-gamecontrol back to main branch	

@@ -1,4 +1,0 @@
-Material.Diffuse	= "texture/food_d.jpg";
-Material.Normal		= "texture/food_local.png";
-Material.Specular	= "texture/food_d.jpg";
-

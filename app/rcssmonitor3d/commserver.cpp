@@ -1,60 +1,78 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: commserver.cpp,v 1.3 2003/12/27 17:53:40 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #include "commserver.h"
 
 using namespace std;
+using namespace boost;
+using namespace oxygen;
 
-CommServer::CommServer(string host, int port) : mCommUnit(host,port)
+CommServer::CommServer()
 {
 }
 
-bool CommServer::GetMessage()
+bool
+CommServer::Init(std::string parser, std::string host, int port)
 {
-  char rawmsg[MAX_MSG];
+    mParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New(parser));
 
-  int l =  mCommUnit.GetMessage(rawmsg, MAX_MSG);
-  if (l == 0)
-    {
-      return (false);
-    }
-
-  // zero terminate and parse received data
-  rawmsg[l] = 0;
-  ParseTuples(rawmsg, strlen(rawmsg));
-
-  return (true);
-}
-
-
-void CommServer::ParseTuples(const char* msg, const size_t& len)
-{
-  // clear all previous vectors
-  mPositions.clear();
-
-  //extract all breakets
-  static char* tmp[MAX_MSG];
-
-  sscanf(msg, "( %[^)] )", mData);
-
-  for(uint i = 0; i < len; i++)
-    {
-      switch(mData[i])
+    if (mParser.get() == 0)
         {
-        case 'p' :
-          // player pos
-          salt::Vector3f vec;
-          sscanf(mData, "%[a-z] %f %f %f",tmp, &vec[0], &vec[1], &vec[2]);
-
-          cout << " pos x: "<< vec[0]
-               << " pos y:" << vec[1]
-               << " pos z:" << vec[2]
-               << endl;
-
-          mPositions.push_back(vec);
-          break;
+            GetLog()->Error() <<
+                "ERROR: (CommServer) failed to create parser " << parser << endl;
+            return false;
         }
-    }
+
+    return mCommUnit.OpenConnection(host,port);
 }
 
-const CommServer::TPositions& CommServer::GetPositions()
+
+bool
+CommServer::GetMessage()
 {
-  return mPositions;
+    string line = mCommUnit.GetMessage();
+    if (line == "")
+        {
+            return false;
+        }
+
+    Parse(line);
+    return true;
+}
+
+
+void
+CommServer::Parse(std::string msg)
+{
+    if (mParser.get() == 0)
+        {
+            mPredicates = shared_ptr<Predicate::TList>();
+            return;
+        }
+
+    mPredicates = mParser->Parse(msg);
+}
+
+shared_ptr<Predicate::TList>
+CommServer::GetPredicates()
+{
+  return mPredicates;
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.6 2003/12/21 23:36:36 fruit Exp $
+   $Id: agentaspect.h,v 1.7 2003/12/27 17:53:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,13 +41,15 @@ namespace oxygen
 class AgentAspect : public Transform
 {
 public:
-    AgentAspect() : Transform() {};
-    virtual ~AgentAspect() {};
+    AgentAspect();
+    virtual ~AgentAspect();
 
     /** Initializes the AgentAspect. Called immediately after the
-        AgentAspect is created by the GameControlServer
+        AgentAspect is created by the GameControlServer. \param
+        createEffector is the name of the initial effector class that
+        the agent uses to construct all remaining parts
      */
-    virtual bool Init();
+    virtual bool Init(const std::string& createEffector);
 
     /** RealizeActions realizes the actions described by \param
         actions using the corresponding effectors
@@ -57,7 +59,7 @@ public:
     /** QuerySensors collects data from all perceptors below this
         AgentAspect
      */
-    virtual boost::shared_ptr<BaseParser::TPredicateList> QueryPerceptors();
+    virtual boost::shared_ptr<Predicate::TList> QueryPerceptors();
 
     /** updates the map of Effectors below this AgentAspect */
     virtual void UpdateEffectorMap();

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: salt.h,v 1.8 2003/11/14 14:05:54 fruit Exp $
+   $Id: salt.h,v 1.9 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,8 +44,7 @@
  *
  * - <b><a href="developers/implementation.html">Implementation</a></b> This
  *   section gives an overview of how the source code distribution
- *   is structured. It also explains how the projects can be built. Refers to
- *   the Windows version, so it is unfortunately already dated a bit.
+ *   is structured. You should read it first.
  *
  * - <b><a href="developers/howtos.html">HowTos</a></b> This is probably
  *   the most useful section as it describes how to go about using the
@@ -60,7 +59,7 @@
  *
  * - <b><a href="http://www.uni-koblenz.de/~fruit/ftp/teaching/koe03-diplomarbeit.pdf">Thesis PDF</a></b> Diploma thesis of Marco Kögler (in PDF format)
  *   describing the concepts of a framework for simulating and visualizing
- *   agents in 3D environments.
+ *   agents in 3D environments. This framework was used as base for the current simulator.
  */
 
 #endif //SALT_SALT_H

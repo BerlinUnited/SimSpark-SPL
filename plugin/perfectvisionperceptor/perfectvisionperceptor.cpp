@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,10 +20,11 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "perfectvisionperceptor.h"
+#include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 
-#define TEST_ME 1
+#define TEST_ME 0
 
 #if TEST_ME
 #include <iostream>
@@ -41,39 +42,66 @@ PerfectVisionPerceptor::~PerfectVisionPerceptor()
 }
 
 bool
-PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
+PerfectVisionPerceptor::Percept(Predicate& predicate)
 {
     predicate.name = "PerfectVision";
     predicate.parameter.clear();
 
     if (mSceneServer.get() == 0)
-        {
-            mSceneServer = shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
-        }
+    {
+        mSceneServer = shared_static_cast<SceneServer>
+            (GetCore()->Get("/sys/server/scene"));
+    }
 
     if (mSceneServer.get() == 0)
+    {
+        return false;
+    }
+
+    shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
+    if (activeScene.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (PerfectVisionPerceptor) SceneServer reports no active scene\n";
+        return false;
+    }
+
+    // we want positions relative to the closest parent transform node
+    shared_ptr<Transform> parent =
+        shared_dynamic_cast<Transform>(GetParentSupportingClass("Transform"));
+
+    salt::Vector3f myPos(0,0,0);
+    if (parent.get() == 0)
+    {
+        GetLog()->Warning()
+            << "WARNING: (PerfectVisionPerceptor) parent node is not derived from TransformNode\n";
+    } else
         {
-            return false;
+            myPos = parent->GetWorldTransform().Pos();
         }
 
     TLeafList transformList;
-
-    shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
     activeScene->GetChildrenSupportingClass("Transform", transformList, true);
 
-    std::list<any> element;
     for (TLeafList::iterator i = transformList.begin();
          i != transformList.end(); ++i)
-        {
-            shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
-            const salt::Vector3f& pos = j->GetWorldTransform().Pos();
-            element.clear();
-            element.push_back((*i)->GetName());
-            element.push_back(pos[0]);
-            element.push_back(pos[1]);
-            element.push_back(pos[2]);
-            predicate.parameter.push_back(element);
-        }
+    {
+        shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
+        const salt::Vector3f& pos = j->GetWorldTransform().Pos() - myPos;
+
+        Predicate::TParameterList position;
+        position.push_back(std::string("pos"));
+        position.push_back(pos[0]);
+        position.push_back(pos[1]);
+        position.push_back(pos[2]);
+
+        Predicate::TParameterList element;
+
+        element.push_back((*i)->GetName());
+        element.push_back(position);
+
+        predicate.parameter.push_back(element);
+    }
 
     return true;
 }

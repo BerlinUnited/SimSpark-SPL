@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: spadesserver.h,v 1.3 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,12 @@
 #define OXYGEN_SPADESSERVER_H
 
 #include <spades/enginemain.hpp>
+#include <spades/SimEngine.hpp>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 #include <oxygen/monitorserver/monitorserver.h>
 #include "paramreader.h"
+#include <queue>
 
 namespace oxygen
 {
@@ -57,8 +59,18 @@ public:
     /** returns the amount of time in seconds a single simulation step
         corresponds to
     */
-    float GetTimePerStep();
+    float GetTimePerStep() const;
 
+    /** queue up agents to be started.
+        \param agentType agent type to be found in the SPADES agent database.
+        \param num number of agents to be started of the given type.
+    */
+    void QueueAgents(const std::string& agentType="default", int num=1);
+
+    /** set simulation mode to normal */
+    void Unpause();
+
+    // ----------------------------------------------------------------------
     // SPADES interface methods start here
 
     /** You probably want to inherit some parameters from EngineParam
@@ -177,6 +189,20 @@ public:
     void notifyCommserverDisconnect(spades::ServerID s);
 
 protected:
+    struct AgentItem
+    {
+        AgentItem(const std::string& agentType = "", int num = 0) :
+            mAgentType(agentType), mNumber(num) {}
+        std::string mAgentType;
+        int mNumber;
+    };
+
+    /** Start up a number of agents of a given type.
+        \param ai contains the agent type from the agent database and the
+                  number of agents to start.
+    */
+    void StartAgents(const AgentItem& ai);
+
     /** helper function to locate the monitor server */
     boost::shared_ptr<MonitorServer> GetMonitorServer();
 
@@ -186,6 +212,15 @@ private:
 
     /** our commandline parser */
     boost::shared_ptr<ParamReader> mParamReader;
+
+    /** flag if there is a simulation mode change scheduled */
+    bool mSimulationModeChanged;
+
+    /** the next simulation mode for a mode change */
+    spades::SimulationMode mNewSimulationMode;
+
+    /** a queue of agents to be started up */
+    std::queue<AgentItem> mAgentQueue;
 };
 
 DECLARE_CLASS(SpadesServer);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.h,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: perfectvisionperceptor.h,v 1.3 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ public:
     virtual ~PerfectVisionPerceptor();
 
     //! \return true, if valid data is available and false otherwise.
-    bool Percept(oxygen::BaseParser::TPredicate& predicate);
+    bool Percept(oxygen::Predicate& predicate);
 
 private:
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: baseparser.h,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: baseparser.h,v 1.3 2003/12/27 17:53:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,29 +22,27 @@
 #ifndef OXYGEN_BASEPARSER_H
 #define OXYGEN_BASEPARSER_H
 
-#include <list>
-#include <boost/any.hpp>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include "predicate.h"
 
 namespace oxygen
 {
-
+/** \class BaseParser defines the interface for a parser and generator
+    that is used with the GameControlServer. A BaseParser is
+    responsible to parse a string into a list of predicates (see
+    \class Predicate) and to assemble a string representing a given
+    list of predicates.
+ */
 class BaseParser : public zeitgeist::Leaf
 {
 public:
-    typedef std::list<boost::any> TParameterList;
+    /** parses the \param input string into a list of Predicates */
+    virtual boost::shared_ptr<Predicate::TList> Parse(const std::string& input) = 0;
 
-    struct TPredicate
-    {
-        std::string name;
-        TParameterList parameter;
-    };
-
-    typedef std::list<TPredicate> TPredicateList;
-
-    virtual boost::shared_ptr<TPredicateList> Parse(const std::string& input) = 0;
-    virtual std::string Generate(boost::shared_ptr<TPredicateList> input) = 0;
+    /** generates a string representing the given \param input list of
+        predicates */
+    virtual std::string Generate(boost::shared_ptr<Predicate::TList> input) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(BaseParser);

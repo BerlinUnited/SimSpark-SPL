@@ -5,6 +5,7 @@ SUBDIRS = \
 	  inputtest \
 	  rcssmonitor3d \
 	  scenetest \
+	  simulator \
 	  spadestest \
 	  zeitgeisttest 
 

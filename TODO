@@ -1,4 +1,4 @@
-===== Dez 19 2003
+===== Dez 22 2003
 
 Branch: rcssserver3D-0.1
 This branch should be created from the main branch once
@@ -9,14 +9,9 @@ included until then are
 - generate a document describing general stuff (what can we do now,
   what's still to do, and want we to do, open issues, where to find help,...)
 - fix bug that sense events do not seem to get back to agents
-- optionally: integrate our basic monitor that accesses the SG
-              directly (no network)
+- integrate our basic monitor 
 
 Branch: rcssserver3D-0.2
-- add Heni's monitor 
-- add rcssbase socket streams (i.e. test for rcssbase in configure.ac)
-  for monitor
-- optional stuff:
   - add some control aspects
   - add more effectors / perceptors
 

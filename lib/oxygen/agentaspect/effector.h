@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector.h,v 1.5 2003/12/21 23:36:36 fruit Exp $
+   $Id: effector.h,v 1.6 2003/12/27 17:53:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 namespace oxygen
 {
 class ActionObject;
+class AgentAspect;
 
 class Effector : public BaseNode
 {
@@ -47,7 +48,11 @@ public:
 
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<ActionObject>
-    GetActionObject(const BaseParser::TPredicate& predicate) = 0;
+    GetActionObject(const Predicate& predicate) = 0;
+
+protected:
+    /** Returns the AgentAspect this Effector belongs to */
+    boost::shared_ptr<AgentAspect> GetAgentAspect();
 };
 
 DECLARE_ABSTRACTCLASS(Effector);

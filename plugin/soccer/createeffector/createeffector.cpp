@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: createeffector.cpp,v 1.2 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,17 +21,12 @@
 */
 #include "createeffector.h"
 #include "createaction.h"
-#include "agentaspect.h"
+#include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
-
-#define THIS_IS_A_DEMO_ONLY 1
-
-#ifdef THIS_IS_A_DEMO_ONLY
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/physicsserver/spherecollider.h>
-#endif
 
 using namespace oxygen;
 using namespace boost;
@@ -53,9 +48,7 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
   // the CreateAction object; for now just create a default agent
   //
 
-  // assume that the AgentAspect is our parent node
-  shared_ptr<AgentAspect> aspect =
-    shared_dynamic_cast<AgentAspect>(make_shared(GetParent()));
+  shared_ptr<AgentAspect> aspect = GetAgentAspect();
 
   if (aspect.get() == 0)
     {
@@ -64,9 +57,17 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
       return false;
     }
 
-  // construct the nodes below the AgentAspect
+  // move different AgentAspect away from each other
+  // position has to be set before adding child references
+  static float x = -12.5;
+  static float y = 100;
+  static float z = -12.5;
+  aspect->SetLocalPos(x, y, z);
+  x+=10;
+  y+=50;
+  z+=10;
 
-#ifdef THIS_IS_A_DEMO_ONLY
+  // construct the nodes below the AgentAspect
 
   // add a sphere body and collider
   shared_ptr<Body> physics =
@@ -94,9 +95,6 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
               geometry->SetName("_geometry");
               aspect->AddChildReference(geometry);
               geometry->SetRadius(1.0);
-
-              // move the AgentAspect further up
-              aspect->SetLocalPos(-12.5, 100.0, -12.5);
           }
 
   //
@@ -116,6 +114,18 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
   effector->SetName("_ForceEffector");
   aspect->AddChildReference(effector);
 
+  // add init effector
+  effector = shared_dynamic_cast<Effector>(GetCore()->New("InitEffector"));
+
+  if (effector.get() == 0)
+  {
+      GetLog()->Error() << "ERROR: (CreateEffector) cannot create the InitEffector\n";
+      return false;
+  }
+
+  effector->SetName("_InitEffector");
+  aspect->AddChildReference(effector);
+
   // add perfect vision perceptor
   shared_ptr<Perceptor> perceptor =
       shared_dynamic_cast<Perceptor>(GetCore()->New("PerfectVisionPerceptor"));
@@ -129,14 +139,13 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
   perceptor->SetName("_PerfectVisionPerceptor");
   aspect->AddChildReference(perceptor);
 
-
-#endif // THIS_IS_A_DEMO_ONLY
+  GetLog()->Debug() << "(CreateEffector) created dummy agent" << std::endl;
 
   return true;
 }
 
 shared_ptr<ActionObject>
-CreateEffector::GetActionObject(const BaseParser::TPredicate& predicate)
+CreateEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {

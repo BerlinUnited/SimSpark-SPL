@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector_c.cpp,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: initeffector.h,v 1.2 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,14 +19,32 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef INITEFFECTOR_H
+#define INITEFFECTOR_H
 
-#include <zeitgeist/class.h>
-#include "createeffector.h"
+#include <oxygen/agentaspect/effector.h>
 
-using namespace oxygen;
-
-void CLASS(CreateEffector)::DefineClass()
+class InitEffector : public oxygen::Effector
 {
-  DEFINE_BASECLASS(kerosin/Effector);
-}
+    //
+    // functions
+    //
+public:
+    InitEffector();
+    virtual ~InitEffector();
 
+    /** realizes the action described by the ActionObject */
+    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
+
+    /** returns the name of the predicate this effector implements. */
+    virtual std::string GetPredicate() { return "init"; }
+
+    /** constructs an Actionobject, describing a predicate */
+    virtual boost::shared_ptr<oxygen::ActionObject>
+    GetActionObject(const oxygen::Predicate& predicate);
+
+};
+
+DECLARE_CLASS(InitEffector);
+
+#endif // INITEFFECTOR_H

@@ -2,14 +2,14 @@ noinst_PROGRAMS = rcssmonitor3D
 
 if DEBUG
 LDADD = \
-	-lGL -lGLU -lglut -lrcssnet \
+	-lpthread -lGL -lGLU -lglut -lrcssnet \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
         ${top_srcdir}/lib/salt/libsalt_debug.la 
 rcssmonitor3D_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = \
-	-lGL -lGLU -lglut -lrcssnet \
+	-lpthread -lGL -lGLU -lglut -lrcssnet \
 	${top_srcdir}/lib/oxygen/liboxygen.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
         ${top_srcdir}/lib/salt/libsalt.la 
@@ -25,6 +25,7 @@ rcssmonitor3D_SOURCES = \
 	glserver.cpp \
 	communit.cpp \
 	commserver.cpp \
+	commserver_c.cpp \
 	tcpsocket.cpp
 
 EXTRA_DIST = rcssmonitor3d.rb

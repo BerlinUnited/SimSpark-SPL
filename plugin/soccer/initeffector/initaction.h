@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.h,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: initaction.h,v 1.2 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,34 +19,29 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_CREATEEFFECTOR_H
-#define OXYGEN_CREATEEFFECTOR_H
+#ifndef INITACTION_H
+#define INITACTION_H
 
-#include "effector.h"
+#include <oxygen/gamecontrolserver/actionobject.h>
 
-namespace oxygen
+
+class InitAction : public oxygen::ActionObject
 {
-class CreateEffector : public Effector
-{
- public:
-    CreateEffector() : Effector() {}
-    virtual ~CreateEffector() {};
+public:
+    InitAction(const std::string& name, int number)
+        : ActionObject("init"), mName(name), mNumber(number) {}
+    virtual ~InitAction() {}
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<ActionObject> action);
+    /** @return the requested team name */
+    const std::string& GetName() { return mName; }
+    /** @return the requested uniform number */
+    int GetNumber() { return mNumber; }
 
-    /** returns the name of the predicate this effector implements.
-     */
-    virtual std::string GetPredicate() { return "create"; }
-
-    /** constructs an Actionobject, describing a predicate */
-    virtual boost::shared_ptr<ActionObject>
-    GetActionObject(const BaseParser::TPredicate& predicate);
+protected:
+    /** the team name to set */
+    std::string mName;
+    /** the requested uniform number */
+    int mNumber;
 };
 
-DECLARE_CLASS(CreateEffector);
-
-} // namespace oxygen
-
-#endif // OXYGEN_CREATEEFFECTOR_H
-
+#endif // INITACTION_H

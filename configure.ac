@@ -121,6 +121,9 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/monitortest/Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
 		 plugin/sexpparser/Makefile \
+		 plugin/soccer/Makefile \
+		 plugin/soccer/initeffector/Makefile \
+		 plugin/soccer/createeffector/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 app/Makefile \
 		 app/agenttest/Makefile \
@@ -128,6 +131,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/fonttest/Makefile \
 		 app/inputtest/Makefile \
 		 app/scenetest/Makefile \
+		 app/simulator/Makefile \
 		 app/spadestest/Makefile \
 		 app/rcssmonitor3d/Makefile \
 		 app/zeitgeisttest/Makefile \

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: spadesserver.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,10 +43,12 @@ using namespace std;
 #if THIS_IS_A_DEMO_ONLY
 #include <oxygen/sceneserver/basenode.h>
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/sceneserver/scene.h>
 #endif
 
 SpadesServer::SpadesServer() :
-    zeitgeist::Node(), spades::WorldModel(), mSimEngine(0)
+    zeitgeist::Node(), spades::WorldModel(),
+    mSimEngine(0), mSimulationModeChanged(false)
 {
 }
 
@@ -64,6 +66,89 @@ SpadesServer::ConstructInternal()
 }
 
 
+spades::SimEngine*
+SpadesServer::GetSimEngine()
+{
+    return mSimEngine;
+}
+
+float
+SpadesServer::GetTimePerStep() const
+{
+    float time_per_step = 0.01f;
+    GetScript()->GetVariable("Spades.TimePerStep", time_per_step);
+
+    return time_per_step;
+}
+
+boost::shared_ptr<MonitorServer>
+SpadesServer::GetMonitorServer()
+{
+    return shared_static_cast<MonitorServer>
+        (
+         GetCore()->Get("/sys/server/monitor")
+         );
+}
+
+boost::shared_ptr<GameControlServer>
+SpadesServer::GetGameControlServer() const
+{
+    return shared_dynamic_cast<GameControlServer>
+        (GetCore()->Get("/sys/server/gamecontrol"));
+}
+
+void
+SpadesServer::StartAgents(const AgentItem& ai)
+{
+    std::cerr << "SpadesServer::StartAgents(" << ai.mAgentType << ", " << ai.mNumber << ")\n";
+
+    if (!mSimEngine || mSimEngine->getNumCommServers () < 1)
+    {
+        GetLog()->Error() << "(SpadesServer) No simulation engine or comm server, "
+                          << "cannot start agents\n" << endl;
+        return;
+    }
+
+    AgentTypeDB::AgentTypeConstIterator
+        at = mSimEngine->getAgentTypeDB()->getAgentType(ai.mAgentType);
+
+    if (at == mSimEngine->getAgentTypeDB()->nullIterator())
+    {
+        GetLog()->Error()
+            << "ERROR: (SpadesServer) could not find agent type "
+            << ai.mAgentType << endl;
+        return;
+    }
+
+    int num = std::max(ai.mNumber, 0);
+
+    while (num > 0)
+    {
+        if (mSimEngine->startNewAgent(at) == AGENTID_INVALID)
+        {
+            num = 0;
+            GetLog()->Error()
+                << "ERROR: (SpadesServer) starting agent of type " << ai.mAgentType
+                << " failed" << endl;
+        }
+        --num;
+    }
+}
+
+void
+SpadesServer::Unpause()
+{
+    mNewSimulationMode = SM_RunNormal;
+    mSimulationModeChanged = true;
+}
+
+void
+SpadesServer::QueueAgents(const std::string& agentType, int num)
+{
+    mAgentQueue.push(AgentItem(agentType, num));
+}
+
+// ----------------------------------------------------------------------
 // SPADES interface methods
 EngineParam*
 SpadesServer::parseParameters(int argc, const char *const *argv)
@@ -77,8 +162,14 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
     mParamReader->getOptions(argc, argv);
 
 #if THIS_IS_A_DEMO_ONLY
+    // start an inprocess commserver
     mParamReader->setParam ("run_integrated_commserver", true);
+
+    // send updates to the monitor every second cycle
     mParamReader->setParam ("monitor_interval",2);
+
+    // don't send think time messages to connected agents
+    mParamReader->setParam ("send_agent_think_times",false);
 #endif
 
     return mParamReader.get();
@@ -91,26 +182,10 @@ SpadesServer::initialize(SimEngine* pSE)
     return true;
 }
 
-spades::SimEngine*
-SpadesServer::GetSimEngine()
-{
-    return mSimEngine;
-}
-
-
 bool
 SpadesServer::finalize()
 {
     return true;
-}
-
-float
-SpadesServer::GetTimePerStep()
-{
-    float time_per_step = 0.01f;
-    GetScript()->GetVariable("Spades.TimePerStep", time_per_step);
-
-    return time_per_step;
 }
 
 SimTime
@@ -142,6 +217,8 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     }
 
 #if THIS_IS_A_DEMO_ONLY
+    //    GetLog()->Debug() << "(SpadesServer) time_curr=" << time_curr
+    //                  << " time_desired=" << time_desired << endl;
     //    GetLog()->Debug() << "updated the scene by " << steps - i << " * "
     //                << timePerStep << " seconds.\n";
 
@@ -150,22 +227,6 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
     // return the simulation time when the loop stopped
     // (the '- i' makes sense if we exit the while loop earlier)
     return time_desired - i;
-}
-
-boost::shared_ptr<MonitorServer>
-SpadesServer::GetMonitorServer()
-{
-    return shared_static_cast<MonitorServer>
-        (
-         GetCore()->Get("/sys/server/monitor")
-         );
-}
-
-boost::shared_ptr<GameControlServer>
-SpadesServer::GetGameControlServer() const
-{
-    return shared_dynamic_cast<GameControlServer>
-        (GetCore()->Get("/sys/server/gamecontrol"));
 }
 
 DataArray
@@ -213,18 +274,20 @@ SpadesServer::parseMonitorMessage(const char* data, unsigned datalen)
 SimTime
 SpadesServer::getMinActionLatency() const
 {
-    return 10;
+    return 1;
 }
 
 SimTime
 SpadesServer::getMinSenseLatency() const
 {
-    return 10;
+    return 1;
 }
 
 ActEvent*
-SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen) const
+SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
 {
+    GetLog()->Normal() << "(SpadesServer) Agent " << a << " sent " << data << endl;
+
     const shared_ptr<GameControlServer> gcs = GetGameControlServer();
     if (gcs.get() == 0)
         {
@@ -239,41 +302,29 @@ SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen)
             return 0;
         }
 
-    return new SpadesActEvent(t, a, actionList);
+    float latency = gcs->GetActionLatency(a);
+    SimTime arrival = mSimEngine->getSimulationTime() + static_cast<int>(latency / GetTimePerStep());
+
+    return new SpadesActEvent(arrival, a, actionList);
 }
 
 void
 SpadesServer::pauseModeCallback()
 {
-#if THIS_IS_A_DEMO_ONLY
-    // start a 'default' agent
-    if (mSimEngine->getNumCommServers () < 1)
-        {
-            GetLog()->Warning() << "(SpadesServer) No comm server yet, waiting\n" << endl;
-            return;
-        }
-
-    AgentTypeDB::AgentTypeConstIterator
-        at = mSimEngine->getAgentTypeDB()->getAgentType("default");
-
-    if (at == mSimEngine->getAgentTypeDB()->nullIterator())
-        {
-            GetLog()->Error() <<
-                "ERROR: (SpadesServer) could not find 'default' agent\n" << endl;
-            return;
-        }
-
-    AgentID a = mSimEngine->startNewAgent(at);
-    if (a == AGENTID_INVALID)
-        {
-            GetLog()->Error() <<
-                "ERROR: (SpadesServer) could not start 'default' agent\n" << endl;
-            return;
-        }
-#endif
-
-    // no time to pause
-    mSimEngine->changeSimulationMode(SM_RunNormal);
+    // the first time pauseModeCallback will be called is immediatly after startup
+    // when SPADES is in SM_PausedInitial mode
+    while (!mAgentQueue.empty())
+    {
+        StartAgents(mAgentQueue.front());
+        mAgentQueue.pop();
+    }
+    if (mSimulationModeChanged)
+    {
+        mSimEngine->changeSimulationMode(mNewSimulationMode);
+        mSimulationModeChanged = false;
+    }
+    if (mSimEngine->getSimulationMode() == SM_PausedInitial)
+        Unpause();
 }
 
 bool

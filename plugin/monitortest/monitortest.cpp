@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitortest.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: monitortest.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
+#include <netinet/in.h>
 
 using namespace oxygen;
 using namespace std;
@@ -81,7 +82,7 @@ string MonitorTest::GetMonitorInfo()
             ss << "(player " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
         }
 
-    GetLog()->Debug() << "(MonitorTest) info: " << ss.str() << "\n";
+    ss << endl;
 
     return ss.str();
 }

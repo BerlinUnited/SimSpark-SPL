@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.3 2003/12/27 17:53:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,11 @@ public:
      */
     bool InitParser(const std::string& parserName);
 
+    /** sets \param effectorName as the effector class that is
+        initially created with every new AgentAspect instance
+    */
+    void InitEffector(const std::string& effectorName);
+
     /** returns the parser currently registered to the
         GameControlServer
     */
@@ -76,16 +81,18 @@ public:
     */
     float GetSenseInterval(int id);
 
-    /** GetSenseLatency returns latency to simulate it takes to query
-        the sensors of an agent in seconds
+    /** GetSenseLatency returns latency it takes to query the sensors
+        of an agent in seconds
      */
     float GetSenseLatency(int id);
 
+    /** GetActionLatency returns the latency it takes to realize an
+        agent action in seconds
+    */
+    float GetActionLatency(int id);
+
     /** returns the AgentAspect for the given \param id */
     boost::shared_ptr<AgentAspect> GetAgentAspect(int id);
-
-    /** temporary method, do not use */
-    std::string TmpGenerate(const BaseParser::TPredicate& pred);
 
 protected:
     /** helper method that queries the SceneServer for the currently
@@ -96,8 +103,15 @@ protected:
 protected:
     typedef std::map<int, boost::shared_ptr<AgentAspect> > TAgentMap;
 
+    /** a map from agent IDs to agent instances */
     TAgentMap mAgentMap;
+
+    /** the parser instance used */
     boost::shared_ptr<BaseParser> mParser;
+
+    /** the name of the initial effector class of each new agent has
+        to construct all remaining parts */
+    std::string mCreateEffector;
 };
 
 DECLARE_CLASS(GameControlServer);

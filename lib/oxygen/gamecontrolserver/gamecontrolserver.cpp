@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: gamecontrolserver.cpp,v 1.3 2003/12/27 17:53:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,6 +57,12 @@ GameControlServer::InitParser(const std::string& parserName)
     return true;
 }
 
+void
+GameControlServer::InitEffector(const std::string& effectorName)
+{
+   mCreateEffector = effectorName;
+}
+
 shared_ptr<BaseParser>
 GameControlServer::GetParser()
 {
@@ -104,11 +110,14 @@ GameControlServer::AgentConnect(int id)
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() == 0)
         {
+            GetLog()->Error()
+                << "ERROR: (GameControlServer) Got no active scene from the SceneServer to"
+                << " create the AgentAspect in.\n";
             return false;
         }
 
-    // create a new AgentAspect for the new ID in the scene and add it
-    // to our map of AgentAspects
+    // create a new AgentAspect for the ID in the scene and add it to
+    // our map of AgentAspects
     shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
         (GetCore()->New("kerosin/AgentAspect"));
 
@@ -126,7 +135,7 @@ GameControlServer::AgentConnect(int id)
     scene->AddChildReference(aspect);
     mAgentMap[id] = aspect;
 
-    return aspect->Init();
+    return aspect->Init(mCreateEffector);
 }
 
 bool GameControlServer::AgentDisappear(int id)
@@ -161,15 +170,23 @@ float GameControlServer::GetSenseInterval(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent.
-    return 2;
+    return 0.1;
 }
 
 float GameControlServer::GetSenseLatency(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent
-    return 2;
+    return 0.1;
 }
+
+float GameControlServer::GetActionLatency(int /*id*/)
+{
+    // the real thing should query the AgentAspect corresponding to
+    // the agent.
+    return 0.1;
+}
+
 
 shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) const
 {
@@ -191,7 +208,7 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) con
         }
 
     // use the parser to create a TPredicateList
-    shared_ptr<BaseParser::TPredicateList> predicates(mParser->Parse(str));
+    shared_ptr<Predicate::TList> predicates(mParser->Parse(str));
 
     // construct an ActionList using the registered effectors
     shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
@@ -202,12 +219,12 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) con
 
     for
         (
-         BaseParser::TPredicateList::iterator iter = predicates->begin();
+         Predicate::TList::iterator iter = predicates->begin();
          iter != predicates->end();
          ++iter
         )
         {
-            BaseParser::TPredicate& predicate = (*iter);
+            Predicate& predicate = (*iter);
 
             shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
             if (effector.get() == 0)
@@ -241,19 +258,4 @@ shared_ptr<AgentAspect> GameControlServer::GetAgentAspect(int id)
             {
                 return (*iter).second;
             }
-}
-
-
-
-std::string
-GameControlServer::TmpGenerate(const BaseParser::TPredicate& pred)
-{
-    if (mParser != 0)
-    {
-        shared_ptr<BaseParser::TPredicateList>
-            plist(new BaseParser::TPredicateList());
-        plist->push_back(pred);
-        return mParser->Generate(plist);
-    }
-    return string();
 }

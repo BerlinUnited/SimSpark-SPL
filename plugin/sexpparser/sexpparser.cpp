@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: sexpparser.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,18 +26,12 @@ using namespace oxygen;
 using namespace std;
 using namespace boost;
 
-bool
-SexpParser::IsString(const boost::any & operand)
-{
-    return boost::any_cast<std::string>(&operand);
-}
-
-shared_ptr<SexpParser::TPredicateList>
+shared_ptr<Predicate::TList>
 SexpParser::Parse(const std::string& input)
 {
     size_t len = input.length();
 
-    shared_ptr<TPredicateList> pList(new TPredicateList);
+    shared_ptr<Predicate::TList> pList(new Predicate::TList);
     if (len == 0) return pList;
 
     char* c = new char[len+1];
@@ -47,11 +41,11 @@ SexpParser::Parse(const std::string& input)
     pcont_t* pcont = init_continuation(c);
     sexp_t* sexp = iparse_sexp(c,len,pcont);
 
-    TPredicate predicate;
+    Predicate predicate;
 
     while (sexp != 0)
     {
-        predicate = SexpToPlist(sexp);
+        predicate = SexpToPredicate(sexp);
         if (!predicate.name.empty())
         {
             pList->push_back(predicate);
@@ -66,26 +60,25 @@ SexpParser::Parse(const std::string& input)
 }
 
 std::string
-SexpParser::Generate(shared_ptr<TPredicateList> input)
+SexpParser::Generate(shared_ptr<Predicate::TList> input)
 {
     string s;
-    TPredicateList::const_iterator i = input->begin();
+    Predicate::TList::const_iterator i = input->begin();
 
     while (i != input->end())
     {
-        s += '(' + i->name +  " ";
-        s += ListToString(i->parameter) + ')';
+        s += PredicateToString(*i);
         ++i;
     }
     return s;
 }
 
-BaseParser::TParameterList
+Predicate::TParameterList
 SexpParser::SexpToList(const sexp_t* const sexp)
 {
     sexp_t* s = const_cast<sexp_t*>(sexp);
 
-    TParameterList arguments;
+    Predicate::TParameterList arguments;
 
     while (s != 0)
     {
@@ -94,7 +87,7 @@ SexpParser::SexpToList(const sexp_t* const sexp)
             string elem(s->val);
             arguments.push_back(elem);
         } else {
-            TParameterList elem = SexpToList(s->list);
+            Predicate::TParameterList elem = SexpToList(s->list);
             arguments.push_back(elem);
         }
         s = s->next;
@@ -102,10 +95,10 @@ SexpParser::SexpToList(const sexp_t* const sexp)
     return arguments;
 }
 
-BaseParser::TPredicate
-SexpParser::SexpToPlist(const sexp_t* const sexp)
+Predicate
+SexpParser::SexpToPredicate(const sexp_t* const sexp)
 {
-    TPredicate predicate;
+    Predicate predicate;
 
     // throw away outer brackets (i.e. we have a list at the top level)
     if (sexp->ty == SEXP_LIST)
@@ -122,15 +115,18 @@ SexpParser::SexpToPlist(const sexp_t* const sexp)
 }
 
 std::string
-SexpParser::ListToString(const TParameterList& lst)
+SexpParser::ListToString(const Predicate::TParameterList& lst)
 {
     string s;
     string space;
-    bool round1 = true;
 
-    for (TParameterList::const_iterator i = lst.begin(); i != lst.end(); ++i)
+    for (
+         Predicate::TParameterList::const_iterator i = lst.begin();
+         i != lst.end();
+         ++i
+         )
     {
-        if (IsString(*i))
+        if (i->type() == typeid(string))
         {
             s += space + boost::any_cast<string>(*i);
         }
@@ -145,19 +141,23 @@ SexpParser::ListToString(const TParameterList& lst)
             ostringstream strm;
             strm << boost::any_cast<float>(*i);
             s += space + strm.str();
-        } else {
-            string t = ListToString(boost::any_cast<TParameterList>(*i));
+        }
+        else if (i->type() == typeid(Predicate::TParameterList))
+        {
+            string t = ListToString(boost::any_cast<Predicate::TParameterList>(*i));
             s += space + '(' + t + ')';
         }
-        if (round1) space = " ";
+        else s += space + "(error data format unknown)";
+
+        space = " ";
     }
     return s;
 }
 
 std::string
-SexpParser::PlistToString(const TPredicate& plist)
+SexpParser::PredicateToString(const Predicate& plist)
 {
-    string s = '(' + plist.name +  " ";
+    string s = '(' + plist.name + ' ';
     s += ListToString(plist.parameter);
     return s + ')';
 }
