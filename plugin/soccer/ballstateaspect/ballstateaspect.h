@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.1.2.4 2004/02/01 15:32:07 rollmark Exp $
+   $Id: ballstateaspect.h,v 1.1.2.5 2004/02/10 19:27:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,8 +46,10 @@ public:
     */
     virtual void Update(float deltaTime);
 
-    /** returns the last agent that collided with the ball */
-    boost::shared_ptr<oxygen::AgentAspect> GetLastCollidingAgent();
+    /** returns the last agent that collided with the ball and the
+        time when this happened*/
+    bool GetLastCollidingAgent
+    (boost::shared_ptr<oxygen::AgentAspect>& agent, TTime& time);
 
     /** returns true if the ball over the playing field */
     bool GetBallOnField();
@@ -105,6 +107,12 @@ protected:
     /** holds a reference to the last agent that collided with the
         ball */
     boost::shared_ptr<oxygen::AgentAspect> mLastCollidingAgent;
+
+    /** holds a reference to the GameStateAspect */
+    boost::shared_ptr<GameStateAspect> mGameState;
+
+    /** then time when the last agent collided with the ball */
+    TTime mLastAgentCollisionTime;
 
     /** true if the ball on the soccer field, i.e. not on the border
         surrounding the soccer field */
