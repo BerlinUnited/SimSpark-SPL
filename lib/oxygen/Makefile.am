@@ -61,6 +61,8 @@ gamecontrolserver/predicate.cpp \
 oxygen.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
+physicsserver/bodycontroller.cpp \
+physicsserver/bodycontroller_c.cpp \
 physicsserver/boxcollider.cpp \
 physicsserver/boxcollider_c.cpp \
 physicsserver/ccylindercollider.cpp \
@@ -71,7 +73,6 @@ physicsserver/collisionhandler.cpp \
 physicsserver/collisionhandler_c.cpp \
 physicsserver/contactjointhandler.cpp \
 physicsserver/contactjointhandler_c.cpp \
-physicsserver/odeobject.cpp \
 physicsserver/odeobject_c.cpp \
 physicsserver/physicsserver.cpp \
 physicsserver/physicsserver_c.cpp \
@@ -87,6 +88,8 @@ physicsserver/spherecollider.cpp \
 physicsserver/spherecollider_c.cpp \
 physicsserver/world.cpp \
 physicsserver/world_c.cpp \
+physicsserver/dragcontroller.cpp \
+physicsserver/dragcontroller_c.cpp \
 sceneserver/basenode.cpp \
 sceneserver/basenode_c.cpp \
 sceneserver/fpscontroller.cpp \
@@ -116,6 +119,7 @@ gamecontrolserver/baseparser.h \
 gamecontrolserver/actionobject.h \
 oxygen.h \
 physicsserver/body.h \
+physicsserver/bodycontroller.h \
 physicsserver/boxcollider.h \
 physicsserver/ccylindercollider.h \
 physicsserver/collider.h \
@@ -129,6 +133,7 @@ physicsserver/recorderhandler.h \
 physicsserver/space.h \
 physicsserver/spherecollider.h \
 physicsserver/world.h \
+physicsserver/dragcontroller.h \
 sceneserver/basenode.h \
 sceneserver/fpscontroller.h \
 sceneserver/scene.h \
