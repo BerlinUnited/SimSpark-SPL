@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.11 2003/12/21 23:36:37 fruit Exp $
+   $Id: scriptserver.h,v 1.11.4.1 2004/01/26 20:38:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -141,6 +141,19 @@ protected:
         success.
     */
     virtual bool ConstructInternal();
+
+    /** parses a ruby variable into a namespace and variable name
+        part. Valid variable names are 'Namespace.Name'.
+
+        \returns true if a valid variable name was parsed
+
+        \param varName is the variable name to parse
+        \param nameSpace receives the namespace
+        \param name receives the variable name
+     */
+    bool ParseVarName(const std::string& varName,
+                      std::string& nameSpace, std::string& name);
+
 
 private:
     ScriptServer(const ScriptServer& obj);
