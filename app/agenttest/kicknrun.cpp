@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: kicknrun.cpp,v 1.1.2.2 2004/02/08 14:01:46 rollmark Exp $
+$Id: kicknrun.cpp,v 1.1.2.3 2004/02/08 15:20:18 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ void KickNRun::Behave()
             BehaveBeforeKickOff();
             break;
 
+        case PM_KickOff :
         case PM_PlayOn :
             BehavePlayOn();
             break;
