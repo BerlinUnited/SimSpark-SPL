@@ -1,3 +1,74 @@
+2004-04-21  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- added UpdateCached method. This method updates the soccer variables 
+	  from the ruby scripts. Adding this method was required because the
+	  soccer bundle is initialized before the variables are set in the
+	  scripts.  
+	- the Update<PLAYMODE> methods got an optional parameter indicating 
+	  which teams playmode should be updated.  
+	- added an MoveAgent method to move a given agent to a given position. 
+	  The method sets the agent velocity to 0.  
+	- added MoveAwayPlayers methods. These methods move away players from 
+	  a given team, if they stay in a given area. The area can be either 
+	  rectangular or spherical.  
+	- added some member variables caching the soccer variables from a ruby 
+	  script 
+	- in KickOff mode, players from a team are moved away from the opponent 
+	  half 
+	- in KickIn mode, players from the opponent team are moved away from 
+          the ball 
+	- in GoalKick mode, the ball is moved into the goal area. Players from
+	  the opponent team are moved away from the penalty area. The play
+	  mode is set to PLAY_ON, if the ball leaves the penalty area.  
+	- in CornerKick mode, players from the opponent team are moved away
+	  from the ball.  
+	- the check for the ball leaving the field has been fixed to include 
+	  corner kicks and goal kicks. Also we check for the ball leaving the 
+	  field through the ground (which is possible if you change the 
+	  ODE params).
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:  
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	- added GetAgentStates to get a list of references to all agents with 
+	  a given team index 
+	- added OpponentTeam to get the team index of the opponent team
+	- made GetAgentBody more secure (wrt uninitialized references) 
+	- added conversions for new play modes into strings
+
+2004-04-20  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/soccertypes.h: 
+	added new play modes and the respective play mode strings
+
+	* app/rcssmonitor3d/lite/main.cpp: 
+	- skipping drawing of goal flags 
+	- drawing corner flags 1.5m in the air (to make the ball visible on corner kicks) 
+	- split the status line into 3 parts (left team, game state, right team) 
+	- added additional play modes
+	- changed line and ball colors for better visibility 
+	- added more field lines and center circle 
+	- added team colors to the status line 
+	- made corner flags smaller
+	
+	* app/rcssmonitor3d/lite/glserver.cpp: 
+	- changed DrawTextPix to align 2D text horizontally in the windows (optionally) 
+	- implemented GetTextWidth - implemented DrawCircle 
+	- changed DrawSphere to take an optional resolution parameter 
+	- reduced distance of sphere shadow
+	
+	* app/rcssmonitor3d/lite/glserver.h: 
+	- added enum for 2D text alignment 
+	- added optional parameter to DrawTextPix to align 2D text 
+	  horizontally in the windows 
+	- made GetTextHeight const 
+	- added optional parameter to set resolution of spheres 
+	- added method GetTextWidth
+
+	* app/rcssmonitor3d/lib/types.h: 
+	changed default line width from 12cm to 8cm
+
 2004-04-18  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/kerosin/sceneserver/staticmesh.h,
