@@ -1,11 +1,12 @@
-SUBDIRS = lib plugin doc 
+### utility subdir has to be made first
+SUBDIRS = utility lib plugin doc 
 
 pkginclude_HEADERS = \
 config.h
 
 doc:	doc-recursive
 doc-recursive:	
-	cd doc && $(MAKE) $(AM_MAKEFLAGS) all doxygen-doc
+	cd doc && $(MAKE) $(AM_MAKEFLAGS) all
 
 
 branch-major: commit
