@@ -2,16 +2,10 @@
 # rcssmonitor3D-kerosin.rb
 #
 
-# import required plugins
-importBundle 'sexpparser'
+# setup spark rendering support
+sparkSetupRendering()
 
-# setup the CommServer
-new('rcssmonitor3d/CommServer', $serverPath+'comm')
-
-# setup the MonitorParser
-new('rcssmonitor3d/MonitorParser', $serverPath+'parser')
-
-# let spark create a default camera
+# create a default camera
 sparkAddFPSCamera(
 		  $scenePath+'camera', 
 		  x = 0, 
@@ -21,6 +15,23 @@ sparkAddFPSCamera(
 		  accel = 40.0,
 		  drag = 4
 		  )
+
+# setup the CommServer
+new('rcssmonitor3d/CommServer', $serverPath+'comm')
+
+# setup the MonitorParser
+new('rcssmonitor3d/MonitorParser', $serverPath+'parser')
+
+#
+# configure the Simulation server
+simulationServer = get($serverPath+'simulation')
+simulationServer.setSimStep(0.05)
+
+# receive and parse data from the soccer server
+simulationServer.initControlNode('MonitorClientControl')
+
+# handle custom input events (kickoff etc.)
+simulationServer.initControlNode('MonitorInputControl')
 
 #
 # collection of callbacks and helper functions
@@ -106,9 +117,5 @@ material = new('kerosin/MaterialSolid', $serverPath+'material/matGround');
 material.setDiffuse(0.0,0.1,0.0,1.0)
 
 addVisual('Axis','myAxis',0.0,0.0,0.0)
-
-
-
-
 
 
