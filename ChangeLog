@@ -1,4 +1,284 @@
+2004-05-01  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/scenetest/Makefile.am: 
+	- added utility include directory
+
+	* plugin/sparkmonitor/sparkmonitorclient.cpp,
+	* plugin/sparkmonitor/sparkmonitorclient.h:
+	- moved network specific code to NetClient
+
+	* lib/oxygen/Makefile.am: 
+	- added NetClient classes
+
+	* lib/oxygen/simulationserver/netclient.cpp,
+	* lib/oxygen/simulationserver/netclient.h,
+	* lib/oxygen/simulationserver/netclient_c.cpp,
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- added class NetClient, containing network client functions
+	common to agents and monitor
+
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+	- added support for parameterized meshes
+
+	* lib/kerosin/sceneserver/staticmesh.cpp,
+	* lib/kerosin/sceneserver/staticmesh.h:
+	- added member mMeshName and mMeshParameter
+	- added method GetMeshName and GetMeshParameter
+	- staticmesh stores the name and the list of parameters of the
+	last imported mesh
+
+	* lib/zeitgeist/parameterlist.cpp:
+	- extended AdvanceValue method for std::string to convert strings
+	from int,float or double
+
+	* app/simspark/rsg/jointtest/hinge2thing.rsg,
+	* app/simspark/rsg/jointtest/hingething.rsg,
+	* app/simspark/rsg/jointtest/simspark.rsg,
+	* app/simspark/rsg/jointtest/sliderthing.rsg,
+	* app/simspark/rsg/jointtest/universalthing.rsg:
+	- testing joint stop parameters
+	- modified the joint demo
+
+	* lib/oxygen/physicsserver/angularmotor.cpp,
+	* lib/oxygen/physicsserver/angularmotor.h,
+	* lib/oxygen/physicsserver/balljoint.cpp,
+	* lib/oxygen/physicsserver/balljoint.h,
+	* lib/oxygen/physicsserver/body.cpp,
+	* lib/oxygen/physicsserver/body.h,
+	* lib/oxygen/physicsserver/body_c.cpp,
+	* lib/oxygen/physicsserver/contactjointhandler_c.cpp,
+	* lib/oxygen/physicsserver/fixedjoint.cpp,
+	* lib/oxygen/physicsserver/fixedjoint.h,
+	* lib/oxygen/physicsserver/hinge2joint.cpp,
+	* lib/oxygen/physicsserver/hinge2joint.h,
+	* lib/oxygen/physicsserver/hingejoint.cpp,
+	* lib/oxygen/physicsserver/hingejoint.h,
+	* lib/oxygen/physicsserver/sliderjoint.cpp,
+	* lib/oxygen/physicsserver/sliderjoint.h,
+	* lib/oxygen/physicsserver/universaljoint.cpp,
+	* lib/oxygen/physicsserver/universaljoint.h:
+	- implemented SetParameter and GetParameter
+
+	* lib/oxygen/physicsserver/joint.cpp,
+	* lib/oxygen/physicsserver/joint.h,
+	*lib/oxygen/physicsserver/joint_c.cpp:
+	- added joint stop set/get functions
+
+	* lib/spark/Makefile.am, app/monitorspark/Makefile.am,
+	* app/simspark/Makefile.am:
+	- added utility include dir
+
+2004-04-30  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/physicsserver/space.cpp:
+	- reject collisions between bodies that are connected with joints
+	- handle multiple returned contact points
+
+	* lib/spark/spark.rb: 
+	- configuring monitor port and socket type
+
+	* plugin/sparkmonitor/sparkmonitorclient.cpp,
+	* plugin/sparkmonitor/sparkmonitorclient.h,
+	* plugin/sparkmonitor/sparkmonitorclient_c.cpp:
+	- added member SetServer, GetServer, SetPort, GetPort,
+	SetClientType and GetClientType
+
+	* lib/oxygen/simulationserver/agentcontrol_c.cpp,
+	* lib/oxygen/simulationserver/monitorcontrol_c.cpp:	
+	- fixed ruby export BaseClass definitions
+
+	* lib/spark/spark.rb:
+	- set the monitor update interval in the spark setup script
+
+	* lib/oxygen/simulationserver/monitorcontrol.cpp,
+	* lib/oxygen/simulationserver/monitorcontrol.h,
+	* lib/oxygen/simulationserver/monitorcontrol_c.cpp:
+	- added method GetMonitorInterval and SetMonitorInterval
+
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+	- if an incremental update is sent, Transform nodes are only
+	updated if they are marked modified. The values of a current
+	transform matrix are compared to it's previous state using a
+	simple distance metric to further cut out Transform matrices that
+	are nearly identical.
+
+	* lib/oxygen/sceneserver/transform.cpp, lib/oxygen/sceneserver/transform.h:
+	- added member mChangedMark and mOldLocalTransform
+	- added method GetChangedMark and GetOldLocalTransform
+	- a Transform node now marks itself as modified using the current
+	mark value from the SceneServer and stores the old transformation
+	matrix
+
+	* lib/oxygen/sceneserver/sceneserver.cpp, lib/oxygen/sceneserver/sceneserver.h:
+	- added member mTransformMark
+	- added method GetTransformMark
+	- Transform nodes that are modified during a scene traversal are
+	marked using an integer that is changed every cycle. This allows
+	to filter changed Transform nodes quickly without resetting the
+	mark in an extra pass
+	- added method ReparentTransformChildren and RemoveTransformPaths
+	- after importing a scene with a SceneImporter the generated Scene
+	graph is cleaned from from paths consisting only of Transform
+	nodes. The minimal case is a Transform node whose only childs are
+	Transform nodes. These childs are reparented to their grandparent
+	and their local transform matrix is adapted, i.e. multiplied with
+	the parent's matrix. The original parent node is removed from the
+	scene. This reduces the number of updates that must be calculated
+	and sent to a monitor client.
+
+	* lib/zeitgeist/node.cpp:
+	- don't remove child from ChildList in UnlinkChildren, now
+	automatically done in SetParent()
+
+	* lib/zeitgeist/leaf.cpp:
+	- remove parent child reference in SetParent() when resetting the
+	parent
+
+2004-04-29  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simspark/simspark.rb: 
+	- removed rendering and input setup
+	- added server setup
+
+	* configure.ac: 
+	- added app/monitorspark/Makefile
+
+	* app/Makefile.am: 
+	- added monitorspark
+
+	* app/monitorspark/.cvsignore, app/monitorspark/Makefile.am,
+	* app/monitorspark/bindings.rb, app/monitorspark/main.cpp,
+	* app/monitorspark/monitorspark.rb:
+	- added app/MonitorSpark; a monitor intended to be used together
+	with app/simspark
+
+	* lib/spark/spark.rb: 
+	- fixed a diagnostic message
+
+	* plugin/sparkmonitor/sparkmonitor.cpp,
+	* plugin/sparkmonitor/sparkmonitor.h,
+	* plugin/sparkmonitor/sparkmonitorclient.cpp:
+	- added member mFullState
+	- a full update of the scene is sent only in the initial header
+	information; after that only incremental updates containing
+	changes in Transform nodes are sent
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp, 
+	* plugin/rubysceneimporter/rubysceneimporter.h:
+	- added member mDeltaScene
+	- added method ReadDeltaGraph, that parses SceneGraph updates;
+	used together with the SparkMonitor
+
+	* plugin/sparkmonitor/sparkmonitorclient.cpp:
+	- calling UnlinkChildren() instead of RemoveChildren()
+
+	* lib/kerosin/materialserver/materialserver.cpp:
+	- fixed setup of the default material (use the Core to create the
+	instance); similar errors are now caught by a diagnostic message
+	in objec.cpp
+
+	* lib/zeitgeist/object.cpp:
+	- added a diagnostic message to Object::GetClass()
+
+	* lib/zeitgeist/node.cpp, lib/zeitgeist/node.h:
+	- removed method RemoveChildren
+	- added method UnlinkChildren, that recursively destructs the
+	hierarchy below the current node
+
+	* lib/zeitgeist/leaf.cpp, lib/zeitgeist/leaf.h:
+	- removed method RemoveChildren
+	- added method UnlinkChildren
+	- fixed method SetParent to properly call OnUnlink()
+
+	* lib/zeitgeist/core.cpp, lib/zeitgeist/core.h: 
+	- added method Destruct
+	- calling Construct on the ClassClass instance to set mSelf
+	properly
+
+	* lib/zeitgeist/zeitgeist.cpp: 
+	- destructing the core object explicitly
+
+2004-04-28  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/spark/spark.rb:
+	- registering the SparkMonitor to the MonitorServer
+	- added function sparkSetupMonitor() that inits the
+	SparkMonitorClient control node
+
+	* configure.ac: 
+	- added plugin/sparkmonitor/Makefile
+
+	* plugin/Makefile.am: - added sparkmonitor\
+
+	* plugin/sparkmonitor/.cvsignore, plugin/sparkmonitor/Makefile.am,
+	* plugin/sparkmonitor/export.cpp,
+	* plugin/sparkmonitor/sparkmonitor.cpp,
+	* plugin/sparkmonitor/sparkmonitor.h,
+	* plugin/sparkmonitor/sparkmonitor_c.cpp,
+	* plugin/sparkmonitor/sparkmonitorclient.cpp,
+	* plugin/sparkmonitor/sparkmonitorclient.h,
+	* plugin/sparkmonitor/sparkmonitorclient_c.cpp:
+	- added class SparkMonitor- a MonitorSystem generating
+	RubySceneGraph expressions
+	- added class SparkMonitorClient- a SimControlNode parsing
+	received rsg expressions
+
+	* plugin/rubysceneimporter/rubysceneimporter.h,
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	- adapted to changed SceneImporter interface
+	- added method ParseScene
+
+	* lib/kerosin/sceneserver/staticmesh.cpp,
+	* lib/kerosin/sceneserver/staticmesh.h,
+	- lib/kerosin/sceneserver/staticmesh_c.cpp:
+	- added method GetMesh
+	- exported method SetScale
+
+	* lib/kerosin/sceneserver/singlematnode.h:
+	- changed DECLARE_ABSTRACTCLASS to DECLARE_CLASS, to enable class
+	instantiation from zeitgeist
+
+	* lib/kerosin/renderserver/renderserver.cpp:
+	- resetting mActiveScene in OnUnlink()
+
+	* lib/kerosin/renderserver/rendernode.h: 
+	- fixed a comment
+
+	* lib/kerosin/openglserver/glbase.h: 
+	- added const method variants
+
+	* lib/oxygen/sceneserver/transform_c.cpp:
+	- added method setLocalTransform
+
+	* lib/oxygen/sceneserver/sceneimporter.h:
+	- added method ParseScene to SceneImporter interface
+
+	* lib/oxygen/simulationserver/monitorcontrol.cpp,
+	* lib/oxygen/simulationserver/monitorcontrol.h:
+	- added member mMonitorInterval
+	- limiting monitor update rate according to mMonitorInterval
+
+	* lib/oxygen/simulationserver/netcontrol.cpp,
+	* lib/oxygen/simulationserver/netcontrol.h:
+	- made CreateSocket a static method
+	- fixed some log messages
+
+	* lib/oxygen/simulationserver/netmessage.cpp: 
+	- some minor cleanup
+
+	* lib/oxygen/simulationserver/simulationserver.cpp,
+	* lib/oxygen/simulationserver/simulationserver.h:
+	- added member mCycle
+	- added method GetCycle
+
+	* lib/zeitgeist/leaf.cpp, lib/zeitgeist/leaf.h,
+	* lib/zeitgeist/node.cpp, lib/zeitgeist/node.h:
+	- added method RemoveChildren
+
 2004-04-27  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/kerosin/Makefile.am: 
+	- added rendernode.cpp
 
 	* lib/kerosin/sceneserver/staticmesh.h:
 	- changed BaseClass to RenderNode
