@@ -17,11 +17,11 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _FORWARDERSTREAMBUF_H_
-#define _FORWARDERSTREAMBUF_H_
+#ifndef UTILITY_FORWARDERSTREAMBUF_H
+#define UTILITY_FORWARDERSTREAMBUF_H
 
 /*! \class ForwarderStreamBuf
-  $Id: forwarderstreambuf.h,v 1.1 2002/08/12 09:52:07 fruit Exp $
+  $Id: forwarderstreambuf.h,v 1.2 2002/08/16 15:41:55 fruit Exp $
 
   ForwarderStreamBuf
 
@@ -45,6 +45,7 @@
 #include <config.h>
 #endif
 
+#include <functional>
 #include <vector>
 
 #ifdef HAVE_STREAMBUF
@@ -64,17 +65,17 @@ class ForwarderStreamBuf : public std::streambuf
     //
 protected:
 #if HAVE_STREAMBUF
-    typedef std::char_traits<char> TTraits;
-    typedef traits_type::int_type TInt;
-#define FORWARDER_SB_EOF TTraits::eof()
+    typedef std::char_trait>s<char> TraitsType;
+    typedef traits_type::int_type IntType;
+#define FORWARDER_SB_EOF TraitsType::eof()
 #else
-    typedef char TTraits;
-    typedef int  TInt;
+    typedef char TraitsType;
+    typedef int  IntType;
 #define FORWARDER_SB_EOF EOF
 #endif
 private:
-    typedef std::pair<unsigned int, std::ostream*> TMaskStream;
-    typedef std::vector<TMaskStream> TMaskStreams;
+    typedef std::pair<unsigned int, std::ostream*> MaskStream;
+    typedef std::vector<MaskStream> MaskStreams;
 
     // functions
     //
@@ -82,12 +83,46 @@ public:
     ForwarderStreamBuf(unsigned int size);
     virtual ~ForwarderStreamBuf();
 
+    /*! Add a stream to the list of streams.
+
+        First, it is checked if the stream is already in. If the stream
+        is found, we only install a new priority mask, so no stream can
+        be added twice.
+
+        @param stream   the stream to add
+        @param mask     the (new) priority mask for the stream
+    */
     void addStream(std::ostream* stream, unsigned int mask);
+    /*! Remove a stream from the list of streams.
+        @param stream   the stream to remove
+        @return         true if the stream was found (and thus removed)
+    */
+    bool removeStream(const std::ostream* stream);
+    /*! Set priority mask of a stream in the list.
+        @param stream   the stream for which we want to set the priority mask
+        @param mask     the new priority mask
+        @return         true if the stream was found
+    */
+    bool setPriorityMask(const std::ostream* stream, unsigned int mask);
+    /*! Get priority mask of a stream in the list.
+        @param stream   the stream for which we want to set the priority mask
+        @return         the priority mask; 0 if stream was not found
+    */
+    unsigned int getPriorityMask(const std::ostream* stream) const;
+
+    /*! Set the current priority level. 
+
+        All data which is streamed into the forwarder after this point
+        will use the current priority level. Before the priority level
+        is adjusted, all buffered data is flushed.
+
+        @param priority current priority level (see EPriorityLevel)
+    */
     void setCurrentPriority(unsigned int priority);
 
 protected:
     // these functions implement the streambuf interface ... handle with care
-    TInt overflow(TInt c);
+    IntType overflow(IntType c);
     int sync();
 
 private:
@@ -99,17 +134,28 @@ private:
     //! stream out complete internal buffer
     void putBuffer();
     //! stream out a single character
-    void putChar(TInt chr);
+    void putChar(IntType chr);
+
+    //! A predicate to compare streams in a MaskStream list (or vector). 
+    class MaskStreamEQ : public unary_function<MaskStream,bool>
+    {
+    private:
+        const std::ostream* stream;
+    public:
+        explicit MaskStreamEQ(const std::ostream *str) : stream(str) {}
+        bool operator ()(const MaskStream& ms)
+        { return ms.second == stream; }
+    };
 
     // members
     //
 private:
     //! size of the internal buffer to use
-    unsigned int    mSize;
-    unsigned int    mCurrentPriority;
-    TMaskStreams    mStreams;
+    unsigned int    M_size;
+    unsigned int    M_current_priority;
+    MaskStreams     M_streams;
 };
 
-} //namespace Utility
+} //namespace
 
-#endif // _FORWARDERSTREAMBUF_H_
+#endif // UTILITY_FORWARDERSTREAMBUF_H

@@ -17,19 +17,21 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include <algorithm>
+
 #include "forwarderstreambuf.h"
 
 using namespace std;
 using namespace Utility;
 
 ForwarderStreamBuf::ForwarderStreamBuf(unsigned int size) :
-streambuf(), mSize(size), mCurrentPriority(0xffffffff)
+streambuf(), M_size(size), M_current_priority(0xffffffff)
 {
     // Here we set up the 'put' area, where data is streamed in
-    if (mSize)
+    if (M_size)
     {
-        char* ptr = new char[mSize];
-        setp(ptr, ptr + mSize);
+        char* ptr = new char[M_size];
+        setp(ptr, ptr + M_size);
     }
     else
     {
@@ -45,11 +47,10 @@ ForwarderStreamBuf::~ForwarderStreamBuf()
     // flush buffer
     sync();
 
-    // delete streams
-    while (mStreams.size() != 0)
+    // delete mask-stream elements. The streams will not be deleted.
+    while (M_streams.size() != 0)
     {
-        delete mStreams.back().second;
-        mStreams.pop_back();
+        M_streams.pop_back();
     }
 
     // delete buffer
@@ -59,33 +60,81 @@ ForwarderStreamBuf::~ForwarderStreamBuf()
 void
 ForwarderStreamBuf::addStream(std::ostream* stream, unsigned int mask)
 {
-    TMaskStream pstream(mask, stream);
+    MaskStreams::iterator i;
+    i = find_if(M_streams.begin(), M_streams.end(), MaskStreamEQ(stream));
 
-    mStreams.push_back(pstream);
+    if (i == M_streams.end()) 
+    {
+        MaskStream pstream(mask, stream);
+        M_streams.push_back(pstream);
+    } 
+    else 
+    {
+        i->first = mask;
+    }
 }
 
-/*!
-    This function is used to set the current priority level. All data which
-    is streamed into the forwarder after this point will use the current
-    priority level. Before the priority level is adjusted, all buffered data
-    is flushed.
+bool
+ForwarderStreamBuf::removeStream(const std::ostream* stream)
+{
+    // flush buffer
+    sync();
 
-    @param priority current priority level (see EPriorityLevel)
-*/
+    MaskStreams::iterator i;
+    i = find_if(M_streams.begin(), M_streams.end(), MaskStreamEQ(stream));
+
+    if (i != M_streams.end()) 
+    {
+        M_streams.erase(i);
+        return true;
+    } 
+    return false;
+}
+
+bool
+ForwarderStreamBuf::setPriorityMask(const std::ostream* stream, 
+                                    unsigned int mask)
+{
+    // flush buffer
+    sync();
+
+    MaskStreams::iterator i;
+    i = find_if(M_streams.begin(), M_streams.end(), MaskStreamEQ(stream));
+
+    if (i != M_streams.end()) 
+    {
+        i->first = mask;
+        return true;
+    }
+    return false;
+}
+
+unsigned int
+ForwarderStreamBuf::getPriorityMask(const std::ostream* stream) const
+{
+    MaskStreams::const_iterator i;
+    i = find_if(M_streams.begin(), M_streams.end(), MaskStreamEQ(stream));
+
+    if (i != M_streams.end()) 
+    {
+        return i->first;
+    }
+    return 0;
+}
+
 void 
 ForwarderStreamBuf::setCurrentPriority(unsigned int priority)
 {
     sync();
-    mCurrentPriority = priority;
+    M_current_priority = priority;
 }
 
 /*!
     This routine is called by the iostream library if our internal buffer is
     overflowing (the put area is full).
 */
-
-ForwarderStreamBuf::TInt 
-ForwarderStreamBuf::overflow(TInt c)
+ForwarderStreamBuf::IntType 
+ForwarderStreamBuf::overflow(IntType c)
 {
     // write out the buffered content
     putBuffer();
@@ -123,10 +172,10 @@ ForwarderStreamBuf::sync()
 void
 ForwarderStreamBuf::forward(const char* buffer, unsigned int length)
 {
-    TMaskStreams::iterator i;
-    for (i=mStreams.begin(); i!= mStreams.end(); ++i)
+    MaskStreams::iterator i;
+    for (i=M_streams.begin(); i!= M_streams.end(); ++i)
     {
-        if ((*i).first & mCurrentPriority)
+        if ((*i).first & M_current_priority)
         {
             (*i).second->write(buffer, length);
         }
@@ -150,7 +199,7 @@ ForwarderStreamBuf::putBuffer()
 }
 
 void 
-ForwarderStreamBuf::putChar(TInt chr)
+ForwarderStreamBuf::putChar(IntType chr)
 {
     char a[1];
     a[0] = chr;
