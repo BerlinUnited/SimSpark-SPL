@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionhandler.h,v 1.1.2.3 2004/01/29 10:18:41 rollmark Exp $
+   $Id: collisionhandler.h,v 1.1.2.4 2004/01/29 19:58:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ public:
         symmetric handler.
 
         For other CollisionHandlers, e.g. the CollisionRecorder this
-        behaviour does not suffice as both CollisionHandler must be
+        behaviour does not suffice and both CollisionHandlers must be
         notified if a collision occurs as both involved colliders want
         to record a collision as it happens. In any case the collision
         should be reported to both CollisionHandlers. The
