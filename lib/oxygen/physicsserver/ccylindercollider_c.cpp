@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider_c.cpp,v 1.6 2004/03/22 10:56:05 rollmark Exp $
+   $Id: ccylindercollider_c.cpp,v 1.7 2004/04/15 18:35:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,8 +21,9 @@
 
 #include "ccylindercollider.h"
 
-using namespace boost;
 using namespace oxygen;
+using namespace boost;
+using namespace salt;
 
 FUNCTION(CCylinderCollider,setParams)
 {
@@ -42,8 +43,70 @@ FUNCTION(CCylinderCollider,setParams)
     return true;
 }
 
+FUNCTION(CCylinderCollider,setRadius)
+{
+    float inRadius;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inRadius))
+        )
+        {
+            return false;
+        }
+
+    obj->SetRadius(inRadius);
+    return true;
+}
+
+FUNCTION(CCylinderCollider,setLength)
+{
+    float inLength;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inLength))
+        )
+        {
+            return false;
+        }
+
+    obj->SetLength(inLength);
+    return true;
+}
+
+FUNCTION(CCylinderCollider,getRadius)
+{
+    return obj->GetRadius();
+}
+
+FUNCTION(CCylinderCollider,getLength)
+{
+    return obj->GetLength();
+}
+
+FUNCTION(CCylinderCollider,getPointDepth)
+{
+    Vector3f inPos;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inPos))
+        )
+        {
+            return 0;
+        }
+
+    return obj->GetPointDepth(inPos);
+}
+
 void CLASS(CCylinderCollider)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/Collider);
-        DEFINE_FUNCTION(setParams);
+    DEFINE_BASECLASS(oxygen/Collider);
+    DEFINE_FUNCTION(setParams);
+    DEFINE_FUNCTION(setRadius);
+    DEFINE_FUNCTION(setLength);
+    DEFINE_FUNCTION(getRadius);
+    DEFINE_FUNCTION(getLength);
+    DEFINE_FUNCTION(getPointDepth);
 }

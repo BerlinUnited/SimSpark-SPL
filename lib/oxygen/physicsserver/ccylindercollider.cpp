@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.cpp,v 1.4 2004/04/15 16:48:58 rollmark Exp $
+   $Id: ccylindercollider.cpp,v 1.5 2004/04/15 18:35:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "ccylindercollider.h"
 
 using namespace oxygen;
+using namespace salt;
 
 CCylinderCollider::CCylinderCollider() : Collider()
 {
@@ -30,6 +31,37 @@ CCylinderCollider::CCylinderCollider() : Collider()
 void CCylinderCollider::SetParams(float radius, float length)
 {
     dGeomCCylinderSetParams (mODEGeom, radius, length);
+}
+
+void CCylinderCollider::SetRadius(float radius)
+{
+    SetParams(radius,GetLength());
+}
+
+void CCylinderCollider::SetLength(float length)
+{
+    SetParams(GetRadius(),length);
+}
+
+void CCylinderCollider::GetParams(float& radius, float& length)
+{
+    dGeomCCylinderGetParams(mODEGeom,&radius,&length);
+}
+
+float CCylinderCollider::GetRadius()
+{
+    float length;
+    float radius;
+    GetParams(radius,length);
+    return radius;
+}
+
+float CCylinderCollider::GetLength()
+{
+    float radius;
+    float length;
+    GetParams(radius,length);
+    return length;
 }
 
 bool CCylinderCollider::ConstructInternal()
@@ -44,3 +76,12 @@ bool CCylinderCollider::ConstructInternal()
 
     return (mODEGeom != 0);
 }
+
+float
+CCylinderCollider::GetPointDepth(const Vector3f& pos)
+{
+    Vector3f worldPos(GetWorldTransform() * pos);
+    return dGeomCCylinderPointDepth
+        (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+}
+

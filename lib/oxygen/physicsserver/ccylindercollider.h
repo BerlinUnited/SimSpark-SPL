@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ccylindercollider.h,v 1.4 2004/02/12 14:07:22 fruit Exp $
+   $Id: ccylindercollider.h,v 1.5 2004/04/15 18:35:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,12 +40,34 @@ class CCylinderCollider : public Collider
 public:
     CCylinderCollider();
 
-    /** Sets the parameters of the capped cylinder.
+    /** sets the parameters of the capped cylinder.
 
        \param radius is the radius of the caps, and of the cylinder itself
        \param length is the height of the cylinder, not counting the caps
     */
     void SetParams(float radius, float length);
+
+    /** sets the radius of the capped cylinder */
+    void SetRadius(float radius);
+
+    /** sets the length of the capped cylinder */
+    void SetLength(float length);
+
+    /** gets the radius and the length of the capped cylinder */
+    void GetParams(float& radius, float& length);
+
+    /** returns the radius of the capped cylinder */
+    float GetRadius();
+
+    /** return the length of the capped cylinder */
+    float GetLength();
+
+    /** returns the depth of the given relative position in the
+       managed capped cylinder geom. Points inside the geom will have
+       positive depth, points outside it will have negative depth, and
+       points on the surface will have zero depth.
+     */
+    float GetPointDepth(const salt::Vector3f& pos);
 
 protected:
     /** constructs a default capped cylinder with an radius of 1 and a
