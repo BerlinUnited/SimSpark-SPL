@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.cpp,v 1.3 2004/04/05 14:18:00 rollmark Exp $
+   $Id: parameterlist.cpp,v 1.4 2004/04/11 17:03:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,6 +62,22 @@ void
 ParameterList::Clear()
 {
     mList.clear();
+}
+
+void ParameterList::Pop_Front()
+{
+    if (! mList.empty())
+        {
+            mList.erase(mList.begin());
+        }
+}
+
+void ParameterList::Pop_Back()
+{
+    if (! mList.empty())
+        {
+            mList.erase(mList.end());
+        }
 }
 
 ParameterList::TVector::const_iterator
