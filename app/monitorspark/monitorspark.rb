@@ -18,6 +18,9 @@ sparkAddFPSCamera(
 		  addCollider = true
 		  )
 
+# setup default input bindings
+run "bindings.rb"
+
 #
 # create materials 
 # material setup is not sent via the monitor protocol (yet)

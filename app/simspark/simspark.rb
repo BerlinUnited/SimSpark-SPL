@@ -19,6 +19,9 @@ sparkAddFPSCamera(
 		  addCollider = false
 		  )
 
+# setup default input bindings
+run "bindings.rb"
+
 # create custom materials
 material = new('kerosin/MaterialSolid', $serverPath+'material/matYellow');
 material.setDiffuse(1.0,1.0,0.0,1.0)

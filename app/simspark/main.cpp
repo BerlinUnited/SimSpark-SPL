@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.3 2004/04/25 17:08:23 rollmark Exp $
+   $Id: main.cpp,v 1.4 2004/12/30 16:02:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,8 +94,7 @@ bool SimSpark::InitApp(int argc, char** argv)
         }
 
     // run initialization scripts
-     GetScriptServer()->Run("simspark.rb");
-     GetScriptServer()->Run("bindings.rb");
+    GetScriptServer()->Run("simspark.rb");
 
     // tell the inputControl node the loaction of our camera
     shared_ptr<InputControl> inputCtr = GetInputControl();
