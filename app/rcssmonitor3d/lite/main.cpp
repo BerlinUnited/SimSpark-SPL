@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.2 2004/03/09 19:43:17 rollmark Exp $
+   $Id: main.cpp,v 1.3 2004/03/09 20:25:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -451,7 +451,7 @@ void drawObject(const Predicate& predicate, const ObjType& type)
                 }
         }
 
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
+    glColor4fv(color);
     gGLServer.DrawSphere(pos, type.size);
     gGLServer.DrawShadowOfSphere(pos, type.size);
 
@@ -588,7 +588,7 @@ void display(void)
    const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
    const GLfloat borderColor[4] = {0.2f, 0.8f, 0.2f, 1.0f};
 
-   glClearColor(0.1f,0.1f,0.1f,1.0f);
+   glClearColor(0.15f,0.15f,0.3f,1.0f);
 
    glClear (GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
    glColor3f (1, 1, 1);
@@ -598,11 +598,11 @@ void display(void)
    gGLServer.ApplyCamera();
 
    // ground
-   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
+   glColor4fv(groundColor);
    gGLServer.DrawGround(Vector3f(-gFieldLength/2,-gFieldWidth/2,0),gFieldLength,gFieldWidth);
 
    // border
-   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, borderColor);
+   glColor4fv(borderColor);
    gGLServer.DrawGround(Vector3f(-gFieldLength/2-gBorderSize,-gFieldWidth/2-gBorderSize,0), gBorderSize, gFieldWidth+2*gBorderSize);
    gGLServer.DrawGround(Vector3f(gFieldLength/2,-gFieldWidth/2-gBorderSize,0), gBorderSize, gFieldWidth+2*gBorderSize);
    gGLServer.DrawGround(Vector3f(-gFieldLength/2,-gFieldWidth/2-gBorderSize,0), gFieldLength, gBorderSize);
@@ -615,12 +615,12 @@ void display(void)
                          );
 
    // goal
-   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
+   glColor4fv(goalColor);
    gGLServer.DrawWireBox(Vector3f(-gFieldLength/2,-gGoalWidth/2.0,0),szGoal1);
    gGLServer.DrawGoal(Vector3f(-gFieldLength/2,-gGoalWidth/2.0,0),szGoal1);
 
    // goal
-   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
+   glColor4fv(goalColor);
    gGLServer.DrawWireBox(Vector3f(gFieldLength/2,-gGoalWidth/2.0,0),szGoal2);
    gGLServer.DrawGoal(Vector3f(gFieldLength/2,-gGoalWidth/2.0,0),szGoal2);
 
