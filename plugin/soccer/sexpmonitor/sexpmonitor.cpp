@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.2 2004/01/20 19:11:50 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.3 2004/01/25 12:57:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
+#include <soccer/ballstateaspect/ballstateaspect.h>
 #include <netinet/in.h>
 
 using namespace oxygen;
@@ -66,6 +67,21 @@ std::string SexpMonitor::GenerateSexp(string type, TLeafList& list)
     return ss.str();
 }
 
+shared_ptr<AgentAspect> SexpMonitor::GetLastBallAgent()
+{
+    // query the ball state aspect for the last Agent
+    shared_ptr<BallStateAspect> ballState = shared_dynamic_cast<BallStateAspect>
+        (GetCore()->Get("/sys/server/gamecontrol/BallStateAspect"));
+
+    if (ballState.get() == 0)
+        {
+            GetLog()->Error() << "(SexpMonitor) found no BallStateAspect" << endl;
+            return shared_ptr<AgentAspect>();
+        }
+
+    return ballState->GetLastCollidingAgent();
+}
+
 string
 SexpMonitor::GetMonitorInfo()
 {
@@ -78,7 +94,7 @@ SexpMonitor::GetMonitorInfo()
         {
             {"AgentAspect","agent"},
             {"FieldFlag","flag"},
-            {"Ball","ball"}
+            {"Ball","ball"},
         };
 
     shared_ptr<SceneServer> sceneServer =
@@ -101,6 +117,16 @@ SexpMonitor::GetMonitorInfo()
             TLeafList nodes;
             activeScene->GetChildrenSupportingClass(entry.className, nodes, true);
             expression << GenerateSexp(entry.typeName, nodes);
+        }
+
+    // get the last agent touching the ball
+    shared_ptr<AgentAspect> lastBallAgent = GetLastBallAgent();
+
+    if (lastBallAgent.get() != 0)
+        {
+            TLeafList node;
+            node.push_back(lastBallAgent);
+            expression << GenerateSexp("ballAgent", node);
         }
 
     expression << endl;
