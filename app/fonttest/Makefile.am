@@ -25,8 +25,12 @@ fonttest_SOURCES = main.cpp
 
 EXTRA_DIST = \
 data/font/VeraMono.ttf.gz \
-data/image/jpg.jpg 
-
+data/image/jpg.jpg \
+script/default.rb \
+script/fonttest.rb \
+script/german.scan.rb \
+script/init.rb \
+script/us.scan.rb
 
 data/font/VeraMono.ttf: data/font/VeraMono.ttf.gz
 	gunzip -c data/font/VeraMono.ttf.gz > data/font/VeraMono.ttf
