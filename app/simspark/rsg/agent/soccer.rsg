@@ -9,6 +9,9 @@
  (define $FieldLength (eval Soccer.FieldLength))
  (define $FieldWidth  (eval Soccer.FieldWidth))
  (define $BorderExt   (eval Soccer.BorderSize))
+ (define $GoalWidth   (eval Soccer.GoalWidth))
+ (define $GoalDepth   (eval Soccer.GoalDepth))
+ (define $GoalHeight  (eval Soccer.GoalHeight))
 
 ; height of the field ground plane
  (define $FieldBaseHeight 4) 
@@ -26,12 +29,16 @@
  (define $BorderMaterial matYellow)
  (define $SideMaterial matGrey)
  (define $LineMaterial matWhite)
+ (define $GoalMaterial matWhite)
 
 ; calc some helper vars
  (define $FieldBase (eval -1 * $FieldBaseHeight / 2.0))
  (define $LineBase 0)
  (define $FieldHalfLength (eval $FieldLength / 2.0))
  (define $FieldHalfWidth  (eval $FieldWidth / 2.0))
+ (define $GoalHalfWidth   (eval $GoalWidth / 2.0))
+ (define $GoalHalfHeight  (eval $GoalHeight / 2.0))
+ (define $GoalHalfDepth   (eval $GoalDepth / 2.0))
 
  (define $HalfBorderExt   (eval $BorderExt / 2.0))
  (define $BorderLength    (eval $FieldHalfLength + $HalfBorderExt))
@@ -39,8 +46,11 @@
 
  (define $SideLength      (eval $FieldHalfLength + $BorderExt))
  (define $SideWidth       (eval $FieldHalfWidth  + $BorderExt))
-
- (define $LineWidth       (eval $FieldWidth - $LineHeight))
+ 
+ (define $LineWidth       (eval $FieldWidth - $LineHeight)) 
+ 
+ (define $BarDiameter     $LineHeight)
+ (define $BarRadius       (eval $BarDiameter / 2.0))
 
 ;
 ; construct playing field
@@ -81,6 +91,134 @@
 		   )
 	     )
        )
+       
+; create the left goal
+ (node Transform
+       (setName GoalBoxL)
+       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth)) 0 $GoalHalfHeight)
+       (node BoxCollider
+             (setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
+	     (node ContactJointHandler
+		    (setContactBounceMode false)
+	            )
+	     )
+       (node RecorderHandler 
+             (setName recorder)
+	     )  
+       )
+       
+; create the goal bar on top of the goal (left goal)
+ (node Transform
+       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
+                               0
+			       (eval $GoalHeight + $BarRadius)
+			       )
+       (node Box
+       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+	     (setMaterial $GoalMaterial)
+	     )
+	(node BoxCollider
+       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+	     )     
+       
+       )   
+       
+; create the left goal post (left goal)
+ (node Transform
+       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
+                               (eval -1 * (eval $GoalHalfWidth + $BarRadius))
+			       (eval $GoalHalfHeight + $BarRadius)
+			       )
+       (node Box
+       	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
+	     (setMaterial $GoalMaterial)
+	     )
+       (node BoxCollider
+       	     (setBoxLengths $GoalDepth $BarDiameter $GoalHeight)
+	     ) 	     
+       
+       )  
+
+; create the right goal post (left goal)
+ (node Transform
+       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
+                               (eval $GoalHalfWidth + $BarRadius)
+			       (eval $GoalHalfHeight + $BarRadius)
+			       )
+       (node Box
+       	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
+	     (setMaterial $GoalMaterial)
+	     )
+       (node BoxCollider
+       	     (setBoxLengths $GoalDepth $BarDiameter $GoalHeight)
+	     )
+       
+       )   
+
+; create the right goal
+ (node Transform
+       (setName GoalBoxR)
+       (setLocalPos (eval $FieldHalfLength + $GoalHalfDepth) 0 $GoalHalfHeight)
+       (node BoxCollider
+       	     (setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
+	     (node ContactJointHandler
+		    (setContactBounceMode false)
+	            )
+	     )
+       (node RecorderHandler 
+             (setName recorder)
+	     )  
+       )
+       
+; create the goal bar on top of the goal (right goal)
+ (node Transform
+       (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
+                               0
+			       (eval $GoalHeight + $BarRadius)
+			       )
+       (node Box
+       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+	     (setMaterial $GoalMaterial)
+	     )
+	(node BoxCollider
+       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+	     )
+       
+       )   
+       
+; create the left goal post (right goal)
+ (node Transform
+       (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
+                               (eval -1 * (eval $GoalHalfWidth + $BarRadius))
+			       (eval $GoalHalfHeight + $BarRadius)
+			       )
+       (node Box
+       	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
+	     (setMaterial $GoalMaterial)
+	     )
+	(node BoxCollider
+       	     (setBoxLengths $GoalDepth $BarDiameter $GoalHeight)
+	     )
+       
+       )  
+
+; create the right goal post (right goal)
+ (node Transform
+       (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
+                               (eval $GoalHalfWidth + $BarRadius)
+			       (eval $GoalHalfHeight + $BarRadius)
+			       )
+       (node Box
+       	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
+	     (setMaterial $GoalMaterial)
+	     )
+	(node BoxCollider
+       	     (setBoxLengths $GoalDepth $BarDiameter $GoalHeight)
+	     )
+       
+       )   
+
+
 
 
 ; create left side
@@ -244,9 +382,39 @@
 	      $FieldHalfLength 
 	      (eval -1 * $FieldHalfWidth) 
 	      0 
-	      Flag_2_r 
-	      matBlue
+	      Flag_2_r matBlue
 	      )
+	      
+	      
+  ; mark the left goal
+ (importScene rsg/agent/flag.rsg
+	      (eval -1 * $FieldHalfLength)
+	      (eval -1 * $GoalHalfWidth)
+	      0
+	      Goal_1_l matRed
+	      )
+
+ (importScene rsg/agent/flag.rsg
+	      (eval -1 * $FieldHalfLength)
+	      $GoalHalfWidth
+	      0
+	      Goal_2_l matRed
+	      )
+
+; mark the right goal
+ (importScene rsg/agent/flag.rsg
+	      $FieldHalfLength
+	      (eval -1 * $GoalHalfWidth)
+	      0
+	      Goal_1_r matBlue
+	      )
+
+ (importScene rsg/agent/flag.rsg
+	      $FieldHalfLength
+	      $GoalHalfWidth
+	      0
+	      Goal_2_r matBlue
+	      )	      
 
 ;;
 ;; add the ball
