@@ -43,9 +43,9 @@ void printHelp()
 {
   cout << "\nusage: rcsserver3D [options]" << endl;
   cout << "\noptions:" << endl;
-  cout << " -help\t print this message." << endl;
-  cout << " -port\t sets the port number" << endl;
-  cout << " -server\t sets the server name" << endl;
+  cout << " --help\t print this message." << endl;
+  cout << " --port\t sets the port number" << endl;
+  cout << " --server\t sets the server name" << endl;
   cout << "\n";
 }
 
@@ -57,7 +57,7 @@ void processInput(int argc, char* argv[])
 {
   for( int i = 0; i < argc; i++)
     {
-      if( strcmp( argv[i], "-server" ) == 0 )
+      if( strcmp( argv[i], "--server" ) == 0 )
         {
           if( i+1  < argc)
             {
@@ -65,7 +65,7 @@ void processInput(int argc, char* argv[])
               ++i;
             }
         }
-      else if( strcmp( argv[i], "-port" ) == 0 )
+      else if( strcmp( argv[i], "--port" ) == 0 )
         {
           if( i+1 < argc )
             {
@@ -73,9 +73,10 @@ void processInput(int argc, char* argv[])
               ++i;
             }
         }
-      else if( strcmp( argv[i], "-help" ) == 0 )
+      else if( strcmp( argv[i], "--help" ) == 0 )
         {
           printHelp();
+          exit(0);
         }
     }
 }
@@ -187,14 +188,19 @@ int main(int argc, char* argv[])
   shared_ptr<CoreContext> context = zg.CreateContext();
   shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
 
-  scriptServer->Run("/sys/rcssmonitor3D.rb");
+  scriptServer->Run("rcssmonitor3d.rb");
   // print a greeting
   cout << "rcssmonitor3D version 0.2" << endl;
-  cout << "Copyright (c) 2003, Heni Ben Amor <amor@uni-koblenz.de> and Markus Rollmann <rollmark@uni-koblenz.de>\n The Robocup SoccerServer Maintainance Group" << endl;
-  cout << "Type '--help' for further information" << endl;
+  cout << "Copyright (C) 2003, Heni Ben Amor and Markus Rollmann, "
+       << "Universität Koblenz.\n";
+
+  cout << "Copyright (C) 2004, "
+       << "The RoboCup Soccer Server Maintenance Group." << endl;
 
   //process typed options
   processInput(argc, argv);
+
+  cout << "\nType '--help' for further information" << endl;
 
   glutMainLoop();
   return 0;
