@@ -41,8 +41,9 @@ addSoccerVar('AgentRadius',  0.22)
 addSoccerVar('AgentMaxSpeed', 10.0)
 
 # ball parameters
-addSoccerVar('BallRadius', 1.0)
+addSoccerVar('BallRadius', 0.7) # FIFA: 68-70 cm
 addSoccerVar('BallDensity',2)
+addSoccerVar('BallMass',0.45) # FIFA: 410-450 g
 
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
