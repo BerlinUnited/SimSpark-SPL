@@ -57,8 +57,7 @@ sceneserver/indexbuffer.cpp \
 sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
 sceneserver/camera.cpp \
-sceneserver/camera_c.cpp \
-sceneserver/indexbuffer.cpp
+sceneserver/camera_c.cpp 
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
@@ -83,5 +82,5 @@ sceneserver/scene.h \
 sceneserver/sceneserver.h \
 sceneserver/indexbuffer.h \
 sceneserver/transform.h \
-sceneserver/camera.h \
-sceneserver/indexbuffer.h 
+sceneserver/camera.h 
+
