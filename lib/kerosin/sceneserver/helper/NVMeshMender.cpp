@@ -349,7 +349,7 @@ bool NVMeshMender::Munge(  const NVMeshMender::VAVector& input,
 			bool minz,miny,minx;
 			minx = miny = minz = false;
 
-			float deltaMajor;
+			float deltaMajor = 0.0;
 
 			if ( ( delta.x >= delta.y ) && ( delta.x >= delta.z ) )
 			{
@@ -399,7 +399,7 @@ bool NVMeshMender::Munge(  const NVMeshMender::VAVector& input,
 
 				vec3 texCoords = ( ( maxPosition + minPosition ) / 2.0f ) - pPositions[ p ];
 				
-				float Major, Minor, Other = nv_zero;
+				float Major = 0.0, Minor = 0.0, Other = nv_zero;
 
 				if ( maxx )
 				{

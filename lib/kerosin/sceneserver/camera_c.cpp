@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "oxygen/sceneserver/camera.h"
 
 using namespace boost;
 using namespace kerosin;

@@ -162,8 +162,8 @@ bool Font::Bind(int vRows)
 	glPushMatrix();
 	glLoadIdentity();
 
-	int xRes;
-	int yRes;
+// 	int xRes;
+// 	int yRes;
 	
 	//if (!mFontServer.GetScript()->GetVariable("Viewport.xRes", xRes)) return false;
 	//if (!mFontServer.GetScript()->GetVariable("Viewport.yRes", yRes)) return false;

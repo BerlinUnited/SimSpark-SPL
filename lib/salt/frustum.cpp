@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: frustum.cpp,v 1.2 2003/05/19 21:37:49 fruit Exp $
+   $Id: frustum.cpp,v 1.3 2003/09/10 05:54:53 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ using namespace salt;
 
 void Frustum::Dump() const
 {
-	printf("Frustum %x:\n", this);
+	printf("Frustum %p:\n", this);
 	for(int i=0; i<6; ++i)
 	{
 		printf("  %d: %f %f %f %f\n", i, mPlanes[i].normal.x(), mPlanes[i].normal.y(), mPlanes[i].normal.z(), mPlanes[i].d);

@@ -67,7 +67,7 @@ void getParameterList(VALUE args, Class::TParameterList &params)
 	}
 }
 
-VALUE selectObject(VALUE self, VALUE path)
+VALUE selectObject(VALUE /*self*/, VALUE path)
 {
 	shared_ptr<Leaf> leaf = gMyPrivateContext->Select(STR2CSTR(path));
 
@@ -81,7 +81,7 @@ VALUE selectObject(VALUE self, VALUE path)
 		return Qnil;
 }
 
-VALUE selectCall(VALUE self, VALUE functionName, VALUE args)
+VALUE selectCall(VALUE /*self*/, VALUE functionName, VALUE args)
 {
 	Class::TParameterList in;
 
@@ -101,7 +101,7 @@ VALUE selectCall(VALUE self, VALUE functionName, VALUE args)
 	return Qnil;
 }
 
-VALUE thisCall(VALUE self, VALUE objPointer, VALUE functionName, VALUE args)
+VALUE thisCall(VALUE /*self*/, VALUE objPointer, VALUE functionName, VALUE args)
 {
 	Class::TParameterList in;
 
@@ -122,13 +122,13 @@ VALUE thisCall(VALUE self, VALUE objPointer, VALUE functionName, VALUE args)
 	return Qnil;
 }
 
-VALUE importBundle(VALUE self, VALUE path)
+VALUE importBundle(VALUE /*self*/, VALUE path)
 {
 	gMyPrivateContext->GetCore()->ImportBundle(STR2CSTR(path));
 	return Qnil;
 }
 
-VALUE newObject(VALUE self, VALUE className, VALUE pathStr)
+VALUE newObject(VALUE /*self*/, VALUE className, VALUE pathStr)
 {
 	shared_ptr<Leaf> leaf = gMyPrivateContext->New(STR2CSTR(className), STR2CSTR(pathStr));
 
@@ -142,14 +142,14 @@ VALUE newObject(VALUE self, VALUE className, VALUE pathStr)
 		return Qnil;
 }
 
-VALUE deleteObject(VALUE self, VALUE name)
+VALUE deleteObject(VALUE /*self*/, VALUE name)
 {
 	gMyPrivateContext->Delete(STR2CSTR(name));
 
 	return Qnil;
 }
 
-VALUE getObject(VALUE self, VALUE path)
+VALUE getObject(VALUE /*self*/, VALUE path)
 {
 	shared_ptr<Leaf> leaf = gMyPrivateContext->Get(STR2CSTR(path));
 
@@ -163,28 +163,28 @@ VALUE getObject(VALUE self, VALUE path)
 		return Qnil;
 }
 
-VALUE listObjects(VALUE self)
+VALUE listObjects(VALUE /*self*/)
 {
 	gMyPrivateContext->ListObjects();
 
 	return Qnil;
 }
 
-VALUE pushd(VALUE self)
+VALUE pushd(VALUE /*self*/)
 {
 	gMyPrivateContext->Push();
 
 	return Qnil;
 }
 
-VALUE popd(VALUE self)
+VALUE popd(VALUE /*self*/)
 {
 	gMyPrivateContext->Pop();
 
 	return Qnil;
 }
 
-VALUE dirs(VALUE self)
+VALUE dirs(VALUE /*self*/)
 {
 	gMyPrivateContext->Dir();
 

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: tvector.h,v 1.4 2003/08/21 08:56:49 rollmark Exp $
+   $Id: tvector.h,v 1.5 2003/09/10 05:54:53 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@
 #define TVECTOR_H__
 
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+// #ifdef HAVE_CONFIG_H
+// #include <config.h>
+// #endif
 
 #include "defines.h"
 #include "gmath.h"

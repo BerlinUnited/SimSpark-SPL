@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.6 2003/09/09 15:33:28 rollmark Exp $
+   $Id: renderserver.cpp,v 1.7 2003/09/10 05:54:53 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ RenderServer::ConstructInternal()
 void 
 RenderServer::RenderFancyLighting(const salt::Frustum& frustum, 
                                   boost::shared_ptr<oxygen::Camera>& camera,
-                                  TLeafList& myLights, TLeafList& allMeshes, 
+                                  TLeafList& myLights, TLeafList& /*allMeshes*/, 
                                   TLeafList& visibleMeshes)
 
 {

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.cpp,v 1.2 2003/08/27 22:44:27 fruit Exp $
+   $Id: leaf.cpp,v 1.3 2003/09/10 05:54:53 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ const boost::weak_ptr<Node>& Leaf::GetParent() const
     return mParent;
 }
 
-boost::shared_ptr<Leaf> Leaf::GetChild(const std::string &name, bool recursive)
+boost::shared_ptr<Leaf> Leaf::GetChild(const std::string &name, bool /*recursive*/)
 {
     if (name.compare("..") == 0)
     {
@@ -62,17 +62,17 @@ boost::shared_ptr<Leaf> Leaf::GetChild(const std::string &name, bool recursive)
     return boost::shared_ptr<Leaf>();
 }
 
-boost::shared_ptr<Leaf> Leaf::GetChildOfClass(const std::string &name, bool recursive)
+boost::shared_ptr<Leaf> Leaf::GetChildOfClass(const std::string &/*name*/, bool /*recursive*/)
 {
     return boost::shared_ptr<Leaf>();
 }
 
-boost::shared_ptr<Leaf> Leaf::GetChildSupportingClass(const std::string &name, bool recursive)
+boost::shared_ptr<Leaf> Leaf::GetChildSupportingClass(const std::string &/*name*/, bool /*recursive*/)
 {
     return boost::shared_ptr<Leaf>();
 }
 
-void Leaf::GetChildren(const std::string &name, TLeafList &baseList, bool recursive)
+void Leaf::GetChildren(const std::string &name, TLeafList &baseList, bool /*recursive*/)
 {
     if (name.compare("..") == 0)
     {
@@ -85,11 +85,11 @@ void Leaf::GetChildren(const std::string &name, TLeafList &baseList, bool recurs
     }
 }
 
-void Leaf::GetChildrenOfClass(const std::string &name, TLeafList &baseList, bool recursive)
+void Leaf::GetChildrenOfClass(const std::string &/*name*/, TLeafList &/*baseList*/, bool /*recursive*/)
 {
 }
 
-void Leaf::GetChildrenSupportingClass(const std::string &name, TLeafList &baseList, bool recursive)
+void Leaf::GetChildrenSupportingClass(const std::string &/*name*/, TLeafList &/*baseList*/, bool /*recursive*/)
 {
 }
 
@@ -98,11 +98,11 @@ bool Leaf::IsLeaf() const
     return true;
 }
 
-void Leaf::RemoveChildReference(const boost::shared_ptr<Leaf> &base)
+void Leaf::RemoveChildReference(const boost::shared_ptr<Leaf> &/*base*/)
 {
 }
 
-bool Leaf::AddChildReference(const boost::shared_ptr<Leaf> &base)
+bool Leaf::AddChildReference(const boost::shared_ptr<Leaf> &/*base*/)
 {
     return false;
 }

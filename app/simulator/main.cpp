@@ -186,7 +186,7 @@ static void update()
         // process the input events, which have occured
         float deltaTime = processInput();
 
-        shared_ptr<SceneServer> sceneServer = shared_static_cast<SceneServer>(gContext->Get("/sys/server/scene"));
+        shared_ptr<oxygen::SceneServer> sceneServer = shared_static_cast<oxygen::SceneServer>(gContext->Get("/sys/server/scene"));
         if (sceneServer.get() != NULL)
         {
                 sceneServer->Update(deltaTime);

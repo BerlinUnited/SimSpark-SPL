@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: gmath.h,v 1.5 2003/08/30 15:04:23 fruit Exp $
+   $Id: gmath.h,v 1.6 2003/09/10 05:54:53 tomhoward Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,9 +25,9 @@
 #ifndef SALT_GMATH_H
 #define SALT_GMATH_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+// #ifdef HAVE_CONFIG_H
+// #include <config.h>
+// #endif
 
 #include "defines.h"
 #include <cmath>

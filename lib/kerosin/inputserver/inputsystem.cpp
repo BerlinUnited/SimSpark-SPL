@@ -53,7 +53,7 @@ void InputSystem::AddInputInternal(InputServer::Input &input)
 	mInputQueue.push_back(input);
 }
 
-bool InputSystem::UpdateTimerInput(InputServer::Input &input)
+bool InputSystem::UpdateTimerInput(InputServer::Input &/*input*/)
 {
 	return false;
 }

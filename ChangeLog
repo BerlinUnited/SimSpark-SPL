@@ -1,5 +1,28 @@
 2003-09-10	Tom Howard	<tomhoward@users.sf.net>
 
+	* ./app/simulator/Makefile.am
+	* ./app/simulator/main.cpp
+	* ./lib/kerosin/Makefile.am
+	* ./lib/kerosin/fontserver/font.cpp
+	* ./lib/kerosin/inputserver/inputsystem.cpp
+	* ./lib/kerosin/renderserver/renderserver.cpp
+	* ./lib/kerosin/sceneserver/camera_c.cpp
+	* ./lib/kerosin/sceneserver/helper/NVMeshMender.cpp
+	* ./lib/oxygen/agentaspect/agentaspect.h
+	* ./lib/salt/bounds.h
+	* ./lib/salt/frustum.cpp
+	* ./lib/salt/gmath.h
+	* ./lib/salt/matrix.h
+	* ./lib/salt/tvector.h
+	* ./lib/salt/vector.h
+	* ./lib/zeitgeist/leaf.cpp
+	* ./lib/zeitgeist/fileserver/fileserver_c.cpp
+	* ./lib/zeitgeist/scriptserver/scriptserver.cpp
+	Fixed some build warnings and errors
+	
+
+2003-09-10	Tom Howard	<tomhoward@users.sf.net>
+
 	* ./lib/kerosin/openglserver/openglserver.cpp
 	* ./lib/kerosin/openglserver/openglserver.h
 	* ./lib/kerosin/sceneserver/light.cpp
