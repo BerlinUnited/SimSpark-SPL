@@ -1,5 +1,4 @@
 pkglib_LTLIBRARIES = librcssmonitor3D.la
-librcssmonitor3D_la_LIBADD = ${top_srcdir}/utility/rcssnet/librcssnet3D.la
 
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin -I${top_srcdir}/utility @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 
