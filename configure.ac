@@ -155,6 +155,8 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/Makefile \
 		 app/spadestest/Makefile \
 		 app/rcssmonitor3d/Makefile \
+		 app/rcssmonitor3d/lib/Makefile \
+		 app/rcssmonitor3d/lite/Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile],
