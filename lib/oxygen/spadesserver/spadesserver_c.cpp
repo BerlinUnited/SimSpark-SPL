@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver_c.cpp,v 1.1.2.2 2003/11/17 10:10:53 fruit Exp $
+   $Id: spadesserver_c.cpp,v 1.1.2.3 2003/11/19 17:51:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,6 @@ FUNCTION(init)
 
 void CLASS(SpadesServer)::DefineClass()
 {
-    DEFINE_BASECLASS(zeitgeist/Leaf);
+    DEFINE_BASECLASS(zeitgeist/Node);
     DEFINE_FUNCTION(init);
 }

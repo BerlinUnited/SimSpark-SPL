@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.3 2003/11/17 13:13:26 fruit Exp $
+   $Id: spadesserver.h,v 1.1.2.4 2003/11/19 17:50:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,17 +24,17 @@
 
 #include <spades/enginemain.hpp>
 #include <zeitgeist/class.h>
-#include <zeitgeist/leaf.h>
+#include <zeitgeist/node.h>
 
 namespace oxygen
 {
 
 class ParamReader;
 
-/*! The SpadesServer serves as interface between the SceneServer and the agents
+/*! The SpadesServer serves as an interface between the SceneServer and the agents
  */
 class SpadesServer :
-        public zeitgeist::Leaf,
+        public zeitgeist::Node,
         public spades::WorldModel
 {
 public:
