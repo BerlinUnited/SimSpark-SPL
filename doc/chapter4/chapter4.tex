@@ -1,76 +1,78 @@
-\chapter{Unit tests with CPPUnit}
+\chapter{Unit Tests}
 
-CppUnit is the C++ port of the famous JUnit framework for unit testing. Test %%@
-output is in XML or text format for automatic testing and GUI based for %%@
+Unit tests help to ensure that code units work according to their specification.
+They help to increase the code quality in two ways: First they directly 
+ensure that code covered by test cases contains fewer bugs. Second they indirectly
+improve the code quality by increasing a developers confidence that changes
+to a piece of code did not introduce bugs. Therefore the barrier for making
+necessary design changes is much lower for code covered by unit tests.
+ 
+CppUnit is the C++ port of the famous JUnit framework for unit testing. 
+it simplifies the creation and execution of unit tests for C++ code.
+Test output is in XML or text format for automatic testing and GUI based for
 supervised tests.
 
+\section{Installation}
 
-\section{Downloads}
-
-The important files can all be downloaded from the CPPUnit file
-page:
+\subsection{Downloads}
+Necessary files for CPPUnit can all be downloaded from the CPPUnit page:
 \begin{verbatim}
 http://sourceforge.net/project/showfiles.php?group_id=11795
 \end{verbatim}
 
-At the moment, the latest version of CPPUnit is 1.8.0
+By now the latest version of CPPUnit is 1.8.0
 
-For the first steps you only must download the following files:
+For the first steps you only have to download the following files:
 \begin{itemize}
 \item cppunit-1.8.0.tar.gz
 \item cppunit-docs-1.8.0.tar.gz
 \end{itemize}
 
-\section{Installation under Unix}
+\subsection{Linux}
 
-I haven't tried to install the CPPUnit library under a Linux System, yet.
+TODO Sebastian:
 
-\section{Installation under Windows}
+\subsection{Windows}
 
-At the current time, the only supported WIN32 platform is Microsoft Visual C++. %%@
-You must have VC++ 6.0 at least.
+Currently, the only supported WIN32 platform is Microsoft Visual C++ version 6.0 or later.
+We tried with MS Visual C++ Standard Edition and it worked.
 
-I tried it with MS Visual C++ Standard Edition and it worked.
+The libraries and DLL can all be built from the
+\textit{src/CppUnitLibraries.dsw} workspace which is located in your CPPUnit directory.
 
-The libraries and DLL can all be built from the %%@
-\textit{src/CppUnitLibraries.dsw} workspace which is placed in your CPPUnit %%@
-directory.
-
-These are only the first steps. For additional information read the %%@
-\textit{INSTALL-WIN32.TXT} placed in the CPPUnit directory. There you also have %%@
-a list of the different libraries and you can choose your
+For additional information read the 
+\textit{INSTALL-WIN32.TXT} located in the CPPUnit directory. There you also have 
+a list of the different libraries of which you can choose your
 preferred library.
 
-To write your first unit tests with MS Visual C++, you have do the following %%@
-steps:
-\begin{itemize}
-\item RTTI must be enabled (Project -> Settings -> C++ -> C++ Language)
-\item link against \textit{lib/cppunitXX.lib} (XX for the chosen library)
-\item write the include directory of your cppunit directory in the search path
-\end{itemize}
-
-\section{The documentation}
-
-There are two ways to integrate the documentation of the CPPUnit library. The %%@
-documentation can be integrated in the MSDN library or simply can be read as %%@
+\subsection{Documentation}
+There are two possibilities to access the documentation of the CPPUnit library: 
+The documentation can be integrated in the MSDN library or simply can be read as 
 HTML version.
 
-To use the HTML documentaion extract the archieve cppunit-docs-1.8.0.tar.gz to %%@
-the directory where you want to have the documentation and then start with the %%@
-index.html in any browser you want.
+To use the HTML documentaion extract the archive cppunit-docs-1.8.0.tar.gz to 
+the desired directory and start with the file index.html in any browser you prefer.
 
-If you want to integrate the documentation in the MSDN library you must %%@
-download \begin{verbatim} CppUnitMsdnDoc-1_8_0.zip \end{verbatim}, read the %%@
-\textit{Installing-Doc.txt} and follow the steps mentioned there.
-I also haven't tried this way, yet.
+If you want to integrate the documentation in the MSDN library you have to 
+download \begin{verbatim} CppUnitMsdnDoc-1_8_0.zip \end{verbatim}
+Have a look at \textit{Installing-Doc.txt} and follow the steps described there.
 
-\section{First unit tests}
+
+\section{Creating Unit Tests}
 
 To write your first unit tests follow the instructions in the
 \begin{verbatim} CPPUnit Cookbook \end{verbatim} which you can find on the first page of
-the HTML documentation.
+the HTML documentation mentioned above.
 
-Another way to learn how to make unit tests is, to watch any existing example %%@
-for unit test and try to understand what they do there.
+Another way to learn how to make unit tests is, to look at any existing example 
+of a unit test and try to understand what is done there.
 
-More instructions will follow soon.
+To write your first unit tests with MS Visual C++, you have to do the following steps:
+\begin{itemize}
+\item RTTI must be enabled (Project : Settings : C++ : C++ Language)
+\item link against \textit{lib/cppunitXX.lib} (XX for the chosen library)
+\item add the include directory of your cppunit directory to the search path
+\end{itemize}
+
+TODO Sebastian: example
+
