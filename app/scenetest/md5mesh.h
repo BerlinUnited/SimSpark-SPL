@@ -1,8 +1,8 @@
 #ifndef ME5MESH_H__
 #define ME5MESH_H__
 
-#include <kerosin/sceneserver/basenode.h>
-#include "lightvertexbuffer.h"
+#include <oxygen/sceneserver/basenode.h>
+// #include "lightvertexbuffer.h"
 
 struct Bone
 {
@@ -50,45 +50,45 @@ struct Mesh
 
 struct Channel
 {
-	int boneId;		// the bone, this channel modifies
-	int paramId;	// parameter being interpolated (x=0, y, z, pitch, yaw, roll)
-	float startTime;
-	float endTime;
-	float frameRate;
-	int range[2];
-	int	numKeys;
-	float *keys;
+        int boneId;             // the bone, this channel modifies
+        int paramId;    // parameter being interpolated (x=0, y, z, pitch, yaw, roll)
+        float startTime;
+        float endTime;
+        float frameRate;
+        int range[2];
+        int     numKeys;
+        float *keys;
 
-	Channel() : boneId(-1), paramId(-1), startTime(0), endTime(0), frameRate(0), numKeys(0), keys(0)	{}
+        Channel() : boneId(-1), paramId(-1), startTime(0), endTime(0), frameRate(0), numKeys(0), keys(0)        {}
 };
 
-class MD5Mesh : public kerosin::BaseNode
+class MD5Mesh : public oxygen::BaseNode
 {
-	//
-	// Function
-	//
+        //
+        // Function
+        //
 public:
-	MD5Mesh();
-	~MD5Mesh();
+        MD5Mesh();
+        ~MD5Mesh();
 
-	bool Load(const std::string &name);
-	bool LoadAnimation(const std::string &name);
+        bool Load(const std::string &name);
+        bool LoadAnimation(const std::string &name);
 
 private:
-	virtual void RenderInternal();
+        virtual void RenderInternal();
 
-	void CalcBasis();
+        void CalcBasis();
 
-	//
-	// Members
-	//
+        //
+        // Members
+        //
 private:
-	int		mNumMeshes;
-	Mesh	*mMeshes;
-	int		mNumBones;
-	Bone	*mBones;
-	int		mNumChannels;
-	Channel *mChannels;
+        int             mNumMeshes;
+        Mesh    *mMeshes;
+        int             mNumBones;
+        Bone    *mBones;
+        int             mNumChannels;
+        Channel *mChannels;
 };
 
 DECLARE_CLASS(MD5Mesh);
