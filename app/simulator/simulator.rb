@@ -195,7 +195,6 @@ sceneServer.createScene($scenePath)
 #
 # setup the MonitorServer and a simple MonitorSystem
 monitorServer = new('oxygen/MonitorServer', $serverPath+'monitor')
-monitorServer.registerMonitorSystem('SexpMonitor')
 
 #
 # setup the GameControlServer
@@ -236,6 +235,10 @@ addBall(0.0,1.0,0.0)
 gameControlServer.initControlAspect('GameStateAspect')
 gameControlServer.initControlAspect('BallStateAspect')
 gameControlServer.initControlAspect('SoccerRuleAspect')
+
+#
+# register the SexpMonitorSystem
+monitorServer.registerMonitorSystem('SexpMonitor')
 
 #
 # queue agents for startup
