@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.22 2004/12/19 14:09:27 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.23 2004/12/21 14:50:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -168,6 +168,13 @@ importBundle(VALUE /*self*/, VALUE path)
 }
 
 VALUE
+run (VALUE /*self*/, VALUE file)
+{
+    gMyPrivateContext->GetCore()->GetScriptServer()->Run(STR2CSTR(file));
+    return Qnil;
+}
+
+VALUE
 newObject(VALUE /*self*/, VALUE className, VALUE pathStr)
 {
     shared_ptr<Leaf> leaf =
@@ -226,6 +233,7 @@ ScriptServer::ScriptServer()
     rb_define_global_function("selectCall",   RUBY_METHOD_FUNC(selectCall), 2);
     rb_define_global_function("thisCall",     RUBY_METHOD_FUNC(thisCall), 3);
     rb_define_global_function("importBundle", RUBY_METHOD_FUNC(importBundle), 1);
+    rb_define_global_function("run",          RUBY_METHOD_FUNC(run), 1);
     rb_define_global_function("new",          RUBY_METHOD_FUNC(newObject), 2);
     rb_define_global_function("delete",       RUBY_METHOD_FUNC(deleteObject), 1);
     rb_define_global_function("get",          RUBY_METHOD_FUNC(getObject), 1);
