@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.10 2004/02/10 19:33:07 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.11 2004/02/10 20:40:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mGameHalf = GH_FIRST;
     mScore[0] = 0;
     mScore[1] = 0;
+    mLastKickOff = TI_NONE;
 }
 
 GameStateAspect::~GameStateAspect()
@@ -47,7 +48,7 @@ void GameStateAspect::UpdateTime(float deltaTime)
 {
   if (
       (mPlayMode != PM_BeforeKickOff) &&
-      (mPlayMode != PM_FirstHalfOver)
+      (mPlayMode != PM_GameOver)
       )
       {
           mTime += deltaTime;
@@ -81,9 +82,22 @@ void GameStateAspect::SetPlayMode(TPlayMode mode)
 
 void GameStateAspect::KickOff()
 {
-    // throw a coin to determine which team kicks off
-    SetPlayMode((salt::UniformRNG<>(0,1)() <= 0.5) ?
-                PM_KickOff_Left : PM_KickOff_Right);
+    if (mGameHalf == GH_FIRST)
+        {
+            // throw a coin to determine which team kicks off
+            TTeamIndex ti = (salt::UniformRNG<>(0,1)() <= 0.5) ?
+                TI_LEFT : TI_RIGHT;
+
+            SetPlayMode((ti == TI_LEFT)
+                        ? PM_KickOff_Left : PM_KickOff_Right);
+
+            mLastKickOff = ti;
+        } else
+            {
+                // in the second half, let the opposite team kick off
+                SetPlayMode((mLastKickOff == TI_LEFT)
+                            ? PM_KickOff_Right : PM_KickOff_Left);
+            }
 }
 
 TTime GameStateAspect::GetTime() const
