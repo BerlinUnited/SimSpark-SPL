@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.13 2004/04/24 12:34:13 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.14 2004/05/05 09:04:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -155,6 +155,9 @@ GameControlServer::AgentConnect(int id)
     scene->AddChildReference(aspect);
     mAgentMap[id] = aspect;
 
+    // mark the scene as modified
+    scene->SetModified(true);
+
     return aspect->Init(mCreateEffector);
 }
 
@@ -176,6 +179,9 @@ bool GameControlServer::AgentDisappear(int id)
     if (scene.get() != 0)
     {
         RemoveChildReference((*iter).second);
+
+        // mark the scene as modified
+        scene->SetModified(true);
     }
 
     mAgentMap.erase(id);
