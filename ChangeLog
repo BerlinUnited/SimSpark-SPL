@@ -1,5 +1,7 @@
 2004-03-22  Oliver Obst  <fruit@robolog.org>
 
+	* released rcssserver3D-0.2.1
+
 	* app/simulator/rcssserver3D.rb: 
 	- changed parameters due to kickeffector changes
 
