@@ -2,12 +2,7 @@
 # simspark.rb
 #
 
-# sparkSetupServer()
-sparkSetupRendering()
-sparkSetupInput()
-
-# import required plugins
-importBundle 'sexpparser'
+sparkSetupServer()
 
 # let spark create a default camera
 sparkAddFPSCamera(
