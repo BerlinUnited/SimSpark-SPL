@@ -51,9 +51,11 @@ imageserver/image.cpp \
 imageserver/imageserver.cpp \
 imageserver/imageserver_c.cpp \
 inputserver/inputdevice.cpp \
+inputserver/inputdevice_c.cpp \
 inputserver/inputserver.cpp \
 inputserver/inputserver_c.cpp \
 inputserver/inputsystem.cpp \
+inputserver/inputsystem_c.cpp \
 inputserver/scancodemap.cpp \
 kerosin.cpp \
 materialserver/material.cpp \
