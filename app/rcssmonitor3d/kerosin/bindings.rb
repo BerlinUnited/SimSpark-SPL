@@ -25,4 +25,5 @@ else
   inputServer.bindCommand('up',         Command.Forward)
   inputServer.bindCommand('s',          Command.Backward)
   inputServer.bindCommand('down',       Command.Backward)
+  inputServer.bindCommand('k',          Command.KickOff)
 end
