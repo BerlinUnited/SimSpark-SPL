@@ -1,5 +1,12 @@
 2004-05-10  Oliver Obst  <fruit@robolog.org>
 
+	* merged new-monitor-protocoll-and-library branch
+	This enables a new monitor protocol for soccer simulations.
+
+	* app/rcssmonitor3d/lib/gamestate.cpp:
+	* app/rcssmonitor3d/lib/gamestate.h:	
+	- added method to get information about player say messages
+
 	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb: 
 	removed monitorparser setup
 
