@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gmath.h,v 1.7 2003/11/14 14:05:54 fruit Exp $
+   $Id: gmath.h,v 1.8 2004/06/05 08:41:11 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,9 +39,10 @@ namespace salt
 }
 #endif
 
-static const float gPI          = ((float)3.1415926535);
-static const float g2PI         = ((float)6.283185307);
-static const float gHalfPI      = ((float)1.570796326794895);
+// better directly use the cmath constants
+static const double gPI          = M_PI;   // was ((float)3.1415926535);
+static const double g2PI         = 2*M_PI; // was ((float)6.283185307);
+static const double gHalfPI      = M_PI_2; // was ((float)1.570796326794895);
 
 template <typename TYPE>
 f_inline TYPE gSqrt(const TYPE &v)
@@ -141,17 +142,23 @@ f_inline void gSwap(TYPE &a, TYPE &b)
     b = temp;
 }
 
+template <class TYPE>
+f_inline int gSign(TYPE a)
+{
+    return a > 0 ? 1 : a < 0 ? -1 : 0;
+}
+
 // some math conversion functions
 template <class TYPE>
-f_inline float gDegToRad(TYPE deg)
+f_inline double gDegToRad(TYPE deg)
 {
-    return ((float)deg) * (gPI / 180.0f);
+    return (static_cast<double>(deg)) * (M_PI / 180.0);
 }
 
 template <class TYPE>
-f_inline float gRadToDeg(TYPE rad)
+f_inline double gRadToDeg(TYPE rad)
 {
-    return ((float)rad) * (180.0f/gPI);
+    return (static_cast<double>(rad)) * (180.0 / M_PI);
 }
 
 template <class TYPE>
