@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.5.8.4 2004/01/29 10:15:53 rollmark Exp $
+   $Id: collider.h,v 1.5.8.5 2004/02/02 17:03:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,6 +101,10 @@ public:
     */
     void SetPosition(salt::Vector3f pos);
 
+    /** returns true if the ODE geom managed by this
+        Collider intersects with the geom managed by the given collider
+     */
+    bool Intersects(boost::shared_ptr<Collider> collider);
 
 protected:
     /** registers the managed geom to the Space of the Scene and to
