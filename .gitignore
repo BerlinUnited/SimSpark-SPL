@@ -251,6 +251,12 @@ plugin/sexpparser/Makefile
 plugin/sexpparser/Makefile.in
 plugin/soccer/Makefile
 plugin/soccer/Makefile.in
+plugin/soccer/agentstate/*.lo
+plugin/soccer/agentstate/.deps
+plugin/soccer/agentstate/.libs
+plugin/soccer/agentstate/Makefile
+plugin/soccer/agentstate/Makefile.in
+plugin/soccer/agentstate/initeffector.la
 plugin/soccer/createeffector/*.lo
 plugin/soccer/createeffector/.deps
 plugin/soccer/createeffector/.libs
