@@ -1,3 +1,26 @@
+2004-01-15  Oliver Obst  <fruit@robolog.org>
+
+	* app/agenttest/main.cpp: 
+	- changed movement of agents slightly so that 
+	agents move backward and forward now.
+
+	* app/simulator/simulator.rb: 
+	- fixed flag positions 
+	- added 2 more agents 
+	- added Agent.Something variables (commented out, doesn't work yet)
+
+	* plugin/soccer/createeffector/createeffector.h: 
+	* plugin/soccer/createeffector/createeffector.cpp: 
+	- added GetAgentMass() to get the agent mass from the script server 
+	- added GetAgentRadius() to get the agent radius from the script
+	  server 
+	- added GetAgentMaxSpeed() to get the agent maximum speed
+	  from... you get it 
+	- added OnLink method to create the three Agent.Something variables 
+	  in the ScriptServer. Unfortunatley, this seems
+	  not to be enough to init the variables while executing the init
+	  script.
+
 2004-01-08  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/soccer/initeffector/initeffector_c.cpp:
