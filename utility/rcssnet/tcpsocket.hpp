@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tcpsocket.hpp,v 1.1 2004/04/16 15:08:18 fruit Exp $
+   $Id: tcpsocket.hpp,v 1.2 2004/04/25 19:24:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,10 +35,11 @@ namespace rcss
             TCPSocket();
             TCPSocket( const Addr& addr );
             TCPSocket( const Addr& addr, const Addr& dest );
+            virtual Socket* accept(Addr& addr);
 
-        private:
-            void
-            doOpen( int& fd );
+        protected:
+            TCPSocket( int socket );
+            virtual void doOpen( int& fd );
         };
     }
 }
