@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.3.2.1 2004/03/28 13:43:23 rollmark Exp $
+   $Id: gamestateperceptor.cpp,v 1.3.2.2 2004/03/28 15:37:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
 }
 
 bool
-GameStatePerceptor::Percept(Predicate& predicate)
+GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
     if (
         (mGameState.get() == 0) ||
@@ -111,6 +111,7 @@ GameStatePerceptor::Percept(Predicate& predicate)
             return false;
         }
 
+    Predicate& predicate = predList->AddPredicate();
     predicate.name = "GameState";
     predicate.parameter.Clear();
 
