@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: font.h,v 1.4 2003/11/14 14:05:51 fruit Exp $
+   $Id: font.h,v 1.5 2004/03/04 16:11:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,12 +31,12 @@ namespace kerosin
 
 class FontServer;
 
-/** Font allows the use of a 'texture'-based font. The font is loaded from
-    Fluid Studios Font Files, which can be generated with a small utility from
-    any Windows font. Care has to be taken, that the resulting font will fit
-    in a 256x256 texture! Our font will only contain characters for the ASCII
-    value range 32-128 ... this should cover the major alphanumeric
-    characters!
+/** Font allows the use of a 'texture'-based font. The font is loaded
+    from Fluid Studios Font Files, which can be generated with a small
+    utility from any Windows font. Care has to be taken, that the
+    resulting font will fit in a 256x256 texture! Our font will only
+    contain characters for the ASCII value range 32-128 ... this
+    should cover the major alphanumeric characters!
 
         NOTE:
 
@@ -65,12 +65,13 @@ class Font
 private:
     struct GlyphMetric
     {
-        unsigned int                                            mByteWidth;
-        unsigned int                                            mByteHeight;
-        unsigned int                                            mXOffset;
-        unsigned int                                            mYOffset;
-        unsigned int                                            mAdvance;
-        salt::Vector2f                                          mTC1, mTC2;
+        unsigned int   mByteWidth;
+        unsigned int   mByteHeight;
+        unsigned int   mXOffset;
+        unsigned int   mYOffset;
+        unsigned int   mAdvance;
+        salt::Vector2f mTC1;
+        salt::Vector2f mTC2;
     };
 public:
     Font(FontServer &fontServer);
@@ -82,19 +83,42 @@ public:
     void    DrawString(float x, float y, const char *string);
     void    Printf(float x, float y, const char *format, ...);
     void    RowPrintf(float x, float row, const char *format, ...);
-    float   GetStringWidth(const char* string, int numChar = -1);
-    float   GetRowHeight()  {       return (float)mRowHeight;       }
 
-    const std::string&      GetName() const {       return mName;   }
-    unsigned int            GetSize() const {       return mSize;   }
+    /**!  calculates the width of a string, printed with this
+          font. Set numChar to a value between 1 and strlen(string) to
+          calculate intermediate string lengths. A value of -1 (which
+          is the default value) calculates the width if the whole
+          string
+    */
+    float   GetStringWidth(const char* string, int numChar = -1);
+
+    //! returns the height in pixels of a row
+    float GetRowHeight();
+
+    //! returns the name of the font
+    const std::string& GetName() const;
+
+    //! returns the size of the font
+    unsigned int GetSize() const;
 
 private:
-    GlyphMetric             mMetrics[96];   // the metrics of all glyphs
-    unsigned int    mTexID;                 // OpenGL Texture ID
-    unsigned int    mRowHeight;             // height (in pixels) of a row
-    std::string             mName;  // name of font
-    unsigned int    mSize;  // size of font
-    FontServer&             mFontServer;
+    //! the metrics of all glyphs
+    GlyphMetric  mMetrics[96];
+
+    //! OpenGL Texture ID
+    unsigned int mTexID;
+
+    //! height (in pixels) of a row
+    unsigned int mRowHeight;
+
+    //! font name
+    std::string mName;
+
+    //! size of font
+    unsigned int mSize;
+
+    //! reference to the fontserver
+    FontServer& mFontServer;
 };
 
 } // namespace kerosin
