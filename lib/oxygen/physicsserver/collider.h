@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.5.8.3 2004/01/25 11:34:03 rollmark Exp $
+   $Id: collider.h,v 1.5.8.4 2004/01/29 10:15:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,6 +46,19 @@ class Collider : public ODEObject
     // Functions
     //
 public:
+    /** enumerates the two different collision instances reported to
+        the OnCollision member for each collision reported from ODE.
+     */
+    enum ECollisionType
+     {
+         /** the collision pair as reported from ODE */
+         CT_DIRECT,
+
+         /** the symmetric pair to the pair reported from ODE */
+         CT_SYMMETRIC
+     };
+
+public:
     Collider();
     virtual ~Collider();
 
@@ -61,8 +74,12 @@ public:
 
        \param holds the contact points between the two affected geoms
        as returned from ODE dCollide function
+
+       \param symmetric indicates tha this collision indicates a
+       symmetric case
     */
-    virtual void OnCollision(dGeomID collidee,dContact& contact);
+    virtual void OnCollision (boost::shared_ptr<Collider> collidee,
+                              dContact& contact, ECollisionType type);
 
     /** registers a new collision handler to this collider. If no
         collision handler is registered until the first call to
@@ -84,6 +101,7 @@ public:
     */
     void SetPosition(salt::Vector3f pos);
 
+
 protected:
     /** registers the managed geom to the Space of the Scene and to
         the associated ODE body
@@ -94,6 +112,11 @@ protected:
         geom is removed from the body later within the destructor.
      */
     virtual void OnUnlink();
+
+    /** registers a ContactJointHandler if no handler node was
+        registered
+    */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
     //
     // Members
