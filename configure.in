@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3D],[0.1],[sserver-bugs@sf.net])
+AC_INIT([rcssserver3D],[0.1],[sserver-bugs@lists.sf.net])
 AC_CONFIG_SRCDIR([utility/forwarder/forwarderstreambuf.h])
 AC_CONFIG_AUX_DIR(config.aux)
 AM_INIT_AUTOMAKE([gnu subdir-objects])
@@ -40,5 +40,7 @@ AC_CONFIG_FILES([Makefile \
 		 utility/Makefile \
 		 utility/classserver/Makefile \
 		 utility/console/Makefile \
-		 utility/forwarder/Makefile])
+		 utility/forwarder/Makefile \
+         simulator/Makefile \
+         simulator/sensor/Makefile])
 AC_OUTPUT
