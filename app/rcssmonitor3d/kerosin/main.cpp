@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.4 2004/03/20 13:17:51 rollmark Exp $
+   $Id: main.cpp,v 1.5 2004/03/20 15:53:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -490,6 +490,9 @@ void processUpdates()
             gScriptServer->CreateVariable("Soccer.AgentMaxSpeed",  gGameParam.GetAgentMaxSpeed());
             gScriptServer->CreateVariable("Soccer.BallRadius", gGameParam.GetBallRadius());
             gScriptServer->CreateVariable("Soccer.BallMass", gGameParam.GetBallMass());
+
+            // create the playing field with the acutal dimensions
+            gScriptServer->Eval("addField()");
 
             initialUpdate = false;
         }
