@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.11 2004/06/11 15:02:17 fruit Exp $
+   $Id: monitor.cpp,v 1.12 2004/06/13 06:39:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -158,13 +158,6 @@ Monitor::Monitor(std::string rel_path_prefix)
     mFlagInfo[GameState::eFLAG_1_R] = fi;
     mFlagInfo[GameState::eFLAG_2_R] = fi;
 
-    // set up the logging stuff
-    mZeitgeist.GetCore()->GetLogServer()->RemoveStream(&std::cout);
-    mZeitgeist.GetCore()->GetLogServer()->AddStream(&std::cout,
-                                                    LogServer::eNormal |
-                                                    LogServer::eWarning );
-    mZeitgeist.GetCore()->GetLogServer()->AddStream(&std::cerr,
-                                                    LogServer::eError);
 }
 
 Monitor::~Monitor()
@@ -284,7 +277,7 @@ Monitor::Copyleft()
 {
     std::cerr <<
 "rcssmonitor3D-lite written by\n"
-"Heni Ben Amor, Oliver Obst, Christoph Ringelstein,  Markus Rollmann, and Jan Murray;\n"
+"Heni Ben Amor, Oliver Obst, Christoph Ringelstein, Markus Rollmann & Jan Murray;\n"
 "Copyright (C) 2003 Universitaet Koblenz, Germany.\n"
 "Copyright (C) 2004 The RoboCup Soccer Server Maintenance Group.\n\n";
 }
