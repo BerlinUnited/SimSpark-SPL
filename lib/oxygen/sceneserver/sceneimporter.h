@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneimporter.h,v 1.3 2004/04/11 17:06:55 rollmark Exp $
+   $Id: sceneimporter.h,v 1.4 2004/04/28 14:40:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,9 +36,15 @@ public:
     SceneImporter() : zeitgeist::Leaf() {}
     virtual ~SceneImporter() {};
 
+    /** import a scene from a file */
     virtual bool ImportScene(const std::string& fileName,
                              boost::shared_ptr<BaseNode> root,
                              boost::shared_ptr<zeitgeist::ParameterList> parameter) = 0;
+
+    /** import a scene from a string description */
+    virtual bool ParseScene(const std::string& scene,
+                            boost::shared_ptr<BaseNode> root,
+                            boost::shared_ptr<zeitgeist::ParameterList> parameter) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(SceneImporter);
