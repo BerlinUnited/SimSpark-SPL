@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h,v 1.5 2004/04/05 08:47:08 rollmark Exp $
+   $Id: odeobject.h,v 1.6 2004/04/07 11:37:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@
 
 namespace oxygen
 {
-
-class PhysicsServer;
+class Space;
+class World;
 
 /** ODEObject is the base of all classes encapsulating ODE concepts
  */
@@ -40,6 +40,19 @@ public:
     //
     ODEObject() : BaseNode() {};
     virtual ~ODEObject() {};
+
+protected:
+    /** returns the world node */
+    boost::shared_ptr<World> GetWorld();
+
+    /** returns the space node */
+    boost::shared_ptr<Space> GetSpace();
+
+    /** returns the ODE world handle */
+    dWorldID GetWorldID();
+
+    /** returns the ODE space handle */
+    dSpaceID GetSpaceID();
 };
 
 DECLARE_ABSTRACTCLASS(ODEObject);
