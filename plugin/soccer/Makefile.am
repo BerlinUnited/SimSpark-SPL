@@ -5,10 +5,16 @@ createeffector/createeffector.cpp \
 createeffector/createeffector_c.cpp \
 initeffector/initeffector.cpp \
 initeffector/initeffector_c.cpp \
+dasheffector/dasheffector.cpp \
+dasheffector/dasheffector_c.cpp \
+kickeffector/kickeffector.cpp \
+kickeffector/kickeffector_c.cpp \
 gamestateaspect/gamestateaspect.cpp \
 gamestateaspect/gamestateaspect_c.cpp \
 agentstate/agentstate.cpp \
 agentstate/agentstate_c.cpp \
+ballstateaspect/ballstateaspect.cpp \
+ballstateaspect/ballstateaspect_c.cpp \
 sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor_c.cpp \
 fieldflag/fieldflag.cpp \
@@ -18,6 +24,8 @@ ball/ball_c.cpp \
 visionperceptor/visionperceptor.h \
 visionperceptor/visionperceptor.cpp \
 visionperceptor/visionperceptor_c.cpp
+
+
 
 # -module tells automake we're not building a library but a loadable module
 # so we don't need the "lib" prefix in the module name
