@@ -3,7 +3,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: zeitgeist.cpp,v 1.4 2004/03/12 08:51:55 rollmark Exp $
+   $Id: zeitgeist.cpp,v 1.5 2004/03/12 16:39:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,7 +69,8 @@ void Zeitgeist::RunInitScript(string dotName)
     mCore->GetScriptServer()->RunInitScript
         (
          "zeitgeist.rb",
-         "lib/zeitgeist"
+         "lib/zeitgeist",
+         ScriptServer::IS_COMMON
          );
 }
 
