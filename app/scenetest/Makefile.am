@@ -2,6 +2,7 @@ noinst_PROGRAMS = scenetest
 
 all-local:
 	mkdir -p ${srcdir}/sys/
+	rm -f ${srcdir}/sys/script
 	cd ${srcdir}/sys/ && \
 	${LN_S} ../script .
 
