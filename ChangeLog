@@ -1,3 +1,34 @@
+2002-08-23  Oliver Obst  <fruit@robolog.org>
+
+	* ./utility/forwarder/forwarder.cc
+	* ./utility/forwarder/forwarder.h	
+	Fixed problem with multiple global instances of smux.
+
+	* ./utility/console/example.cc 
+	tied cin to the smux output stream to flush the output
+	automatically when this becomes necessary. Print help at startup
+	additionally.
+
+	* ./utility/console/Makefile.am 
+	Added new console commands a Macro for the Console Version Number.
+
+	* ./utility/console/commands/commandserver.cc
+	* ./utility/console/commands/concmdlist.cc
+	* ./utility/console/commands/concmdlist.h
+	* ./utility/console/commands/conhelp.cc
+	* ./utility/console/commands/conhelp.h
+	* ./utility/console/commands/conset.cc
+	* ./utility/console/commands/conset.h
+	* ./utility/console/commands/conusage.cc
+	* ./utility/console/commands/conusage.h
+	added commands 'set', 'usage', 'cmdlist' and 'help'.
+
+	* ./utility/console/commands/signature/commandsignature.cc
+	including signature.h header instead of all the single signatures
+
+	* ./utility/console/commands/signature/signatures.h
+	header to include all signature files
+
 2002-08-22  Oliver Obst  <fruit@robolog.org>
 
 	* ./configure.in
