@@ -37,8 +37,7 @@ AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper
 libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
 
 ## architecture independent data (scripts) to be installed and distributed
-dist_pkgdata_DATA = kerosin.rb
-
+dist_pkgdata_DATA = kerosin.rb inputserver/german.scan.rb
 
 sources = \
 fontserver/font.cpp \
