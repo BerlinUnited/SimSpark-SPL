@@ -5,13 +5,13 @@
  
  (node Transform
        (setName top)
-       (setLocalPos 0 0 4)
+       (setLocalPos 0 0 6)
        (importScene rsg/boxspheres/sphere.rsg 1 1 matRed)
        )
 
  (node Transform
        (setName mid)
-       (setLocalPos 0 0 2)
+       (setLocalPos 0 0 4)
        (importScene rsg/boxspheres/box.rsg 2 1 2 2 matYellow)
        )
 
@@ -23,10 +23,14 @@
 
  (node SliderJoint
        (attach ../top/sphereBody ../mid/boxBody)
+       (setLowStopPos 0 1)
+       (setHighStopPos 0 1.5)
        )
 
  (node SliderJoint
        (attach ../bottom/sphereBody ../mid/boxBody)
+       (setLowStopPos 0 1)
+       (setHighStopPos 0 1.5)
        )
 
 )

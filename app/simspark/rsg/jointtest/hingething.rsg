@@ -23,10 +23,14 @@
  (node HingeJoint
        (attach ../mid/boxBody ../right/boxBody)
        (setAnchor 3 0 0)
+       (setLowStopDeg 0 -40)
+       (setHighStopDeg 0 +40)
        )
 
  (node HingeJoint
        (attach ../mid/boxBody ../left/boxBody)
        (setAnchor -3 0 0)
+       (setLowStopDeg 0 -40)
+       (setHighStopDeg 0 +40)
        )
  )

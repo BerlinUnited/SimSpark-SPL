@@ -24,10 +24,18 @@
  (node UniversalJoint
        (attach ../top/sphereBody ../mid/boxBody)
        (setAnchor 0 0 1)
+       (setLowStopDeg 0 -30)
+       (setHighStopDeg 0 30)
+       (setLowStopDeg 1 -45)
+       (setHighStopDeg 1 45)
        )
 
  (node UniversalJoint
        (attach ../bottom/sphereBody ../mid/boxBody)
        (setAnchor 0 0 3)
+       (setLowStopDeg 0 -30)
+       (setHighStopDeg 0 30)
+       (setLowStopDeg 1 -45)
+       (setHighStopDeg 1 45)
        )
 )
