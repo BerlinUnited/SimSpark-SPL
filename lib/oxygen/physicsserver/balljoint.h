@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: balljoint.h,v 1.1 2004/04/07 11:36:12 rollmark Exp $
+   $Id: balljoint.h,v 1.2 2004/04/10 15:42:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public:
         point on each body together. The input is specified in world
         coordinates.
     */
-    void SetBallAnchor(salt::Vector3f anchor);
+    void SetBallAnchor(const salt::Vector3f& anchor);
 
     /** Returns the joint anchor point in world coordinates on one of
         the two bodies. If the joint is perfectly satisfied, the joint
