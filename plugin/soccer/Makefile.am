@@ -20,6 +20,10 @@ driveeffector/driveaction.h \
 driveeffector/driveeffector.cpp \
 driveeffector/driveeffector.h \
 driveeffector/driveeffector_c.cpp \
+beameffector/beamaction.h \
+beameffector/beameffector.h \
+beameffector/beameffector.cpp \
+beameffector/beameffector_c.cpp \
 fieldflag/fieldflag.h \
 fieldflag/fieldflag_c.cpp \
 gamestateaspect/gamestateaspect.cpp \
