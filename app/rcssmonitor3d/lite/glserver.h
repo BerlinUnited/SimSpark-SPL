@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.4 2004/05/10 14:10:46 fruit Exp $
+   $Id: glserver.h,v 1.5 2004/06/08 09:22:27 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,6 +85,12 @@ public:
     inline void MoveCamForward(float steps)
     {
         mCamera.MoveCamForward(steps);
+        mCamPos = mCamera.GetLookAtPos();
+        mLookAt = mCamera.GetCameraPos();
+    }
+    inline void MoveCamStrafeForward(float steps)
+    {
+        mCamera.MoveCamStrafeForward(steps);
         mCamPos = mCamera.GetLookAtPos();
         mLookAt = mCamera.GetCameraPos();
     }

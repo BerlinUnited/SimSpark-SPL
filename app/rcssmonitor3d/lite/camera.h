@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.h,v 1.1 2004/03/09 17:14:44 fruit Exp $
+   $Id: camera.h,v 1.2 2004/06/08 09:22:27 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ class Camera
   void RefreshCam();
   void MoveCamStrafe(float steps);
   void MoveCamForward(float steps);
+  void MoveCamStrafeForward(float steps);
   void MoveCamUp(float steps);
   void SetCameraPos(const Vector3f& newCamPos);
   void SetLookAtPos(const Vector3f& lookAtPos);

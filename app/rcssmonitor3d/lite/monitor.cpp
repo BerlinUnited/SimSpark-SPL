@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.8 2004/06/07 14:24:46 fruit Exp $
+   $Id: monitor.cpp,v 1.9 2004/06/08 09:22:27 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,12 @@ void
 keyboard(unsigned char key, int x, int y)
 {
     Monitor::Instance()->Keyboard(key, x, y);
+}
+
+void
+specialkeys(int glutkey, int x, int y)
+{
+    Monitor::Instance()->SpecialKeys(glutkey, x, y);
 }
 
 void
@@ -97,6 +103,11 @@ Monitor::Monitor(std::string rel_path_prefix)
     mPort = DEFAULT_PORT;
     mSkip = 1;
 
+    //JAN
+    mLogserver = false;
+    mSingleStep = false;
+    mAdvance = false;
+
     FlagInfo fi;
     fi.mOffset = Vector3f(0,0,0);
     fi.mRadius = 0.16;
@@ -147,7 +158,7 @@ Monitor::Init(int argc, char* argv[])
     int c = 0;
     EReturnType status = eOK;
     int option_index;
-    bool logplayer = false;
+    //bool logplayer = false;
     bool server = false;
 
     option long_options[] = {
@@ -182,7 +193,7 @@ Monitor::Init(int argc, char* argv[])
             break;
         case 'l': // -- logplayer
             mServer = std::string(optarg);
-            logplayer = true;
+            mLogserver = true;
             break;
         case 'm': // --msgskip
             mSkip = atoi(optarg);
@@ -192,7 +203,8 @@ Monitor::Init(int argc, char* argv[])
         }
     }
 
-    if (logplayer && server)
+//    if (logplayer && server)
+    if (mLogserver && server)
     {
         status = eErrInit;
         mZeitgeist.GetCore()->GetLogServer()->Error()
@@ -205,7 +217,7 @@ Monitor::Init(int argc, char* argv[])
     if (status == eOK)
     {
         shared_ptr<CoreContext> context = mZeitgeist.GetCore()->CreateContext();
-        if (logplayer)
+        if (mLogserver)
         {
             context->New("rcssmonitor3d/LogfileServer", "/sys/server/comm");
         } else {
@@ -236,6 +248,8 @@ Monitor::Usage()
 "   --server    specify the server host (default is '" << DEFAULT_HOST << "')\n"
 "   --logfile   specify the logfile to read (not with --server)\n"
 "   --msgskip   every but the nth message should be discarded (default is 1)\n"
+"\n"
+"Press '?' for a list of keybindings.\n"
 "\n";
 }
 
@@ -244,9 +258,47 @@ Monitor::Copyleft()
 {
     std::cerr <<
 "rcssmonitor3D-lite written by\n"
-"Heni Ben Amor, Oliver Obst, Christoph Ringelstein, and Markus Rollmann;\n"
+"Heni Ben Amor, Oliver Obst, Christoph Ringelstein,  Markus Rollmann, and Jan Murray;\n"
 "Copyright (C) 2003 Universitaet Koblenz, Germany.\n"
 "Copyright (C) 2004 The RoboCup Soccer Server Maintenance Group.\n\n";
+}
+
+void
+Monitor::KeyBindings()
+{
+    std::cerr <<
+        "\n\nKeybindings for rcssmonitor3D-lite:\n"
+        "\n"
+         "----------------------------------------------------\n"
+        "GENERAL\n"
+        "----------------------------------------------------\n"
+        "q          | quit the monitor\n"
+        "p          | pause the simulation/logplayer\n"
+        "r          | unpause the simulation/logplayer\n"
+        "n          | toggle display of uniform numbers\n"
+        "?          | display keybindings\n"
+        "----------------------------------------------------\n"
+        "CAMERA MOVEMENT\n"
+        "----------------------------------------------------\n"
+        "c          | toggle automatic (ball centered) camera\n"
+        "w/s        | move camera forward/back (zoomlike)\n"
+        "a/d        | move camera left/right\n"
+        "+/-        | move camera up/down\n"
+        "Arrow keys | move camera\n"
+        "----------------------------------------------------\n"
+        "SIMULATION\n"
+        "----------------------------------------------------\n"
+        "k          | kick off (start the game)\n"
+        "b          | drop the ball at its current position\n"
+        "[SPACE]    | toggle kick off side (left-right-random)\n"
+        "----------------------------------------------------\n"
+        "LOGPLAYER\n"
+        "----------------------------------------------------\n"
+        "m          | toggle single step mode for logplayer\n"
+        ">          | move one step forward\n"
+        "----------------------------------------------------\n"
+        "\n";
+    
 }
 
 Monitor::EReturnType
@@ -273,6 +325,7 @@ Monitor::InitInternal(int argc, char* argv[])
     glutDisplayFunc(display);
     glutMotionFunc(mouseMotion);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(specialkeys);
     glutMouseFunc(mouse);
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
@@ -658,11 +711,55 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         cout <<"--- Running Simulation" << endl;
         mCommServer->SendRunCmd();
         break;
+//JAN
+    case 'm' :
+        // toggle single step mode (aka _m_anual advance)
+        mSingleStep = !mSingleStep;
+        mAdvance = false;
+        break;
+    case '>' :
+        // advance a step
+        mAdvance = true;
+        mSingleStep = true;
+        break;
+    case '?' :
+        // show keybindings
+        KeyBindings();
+        break;
 #if 0
     case 'v':
         mCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
         break;
 #endif
+    default:
+        return;
+    }
+
+    glutPostRedisplay();
+
+}
+
+void
+Monitor::SpecialKeys(int glutkey, int /*x*/, int /*y*/)
+{
+    salt::Vector3f pos;
+    switch (glutkey) {
+    case GLUT_KEY_UP:
+        //strafe cam forward
+        mGLServer.MoveCamStrafeForward(mCamDelta);
+        break;
+    case GLUT_KEY_DOWN:
+        //strafe cam back
+        mGLServer.MoveCamStrafeForward(-mCamDelta);
+        break;
+    case GLUT_KEY_LEFT:
+        //strafe cam left
+        mGLServer.MoveCamStrafe(mCamDelta);
+        break;
+    case GLUT_KEY_RIGHT:
+        // strafe cam right
+        mGLServer.MoveCamStrafe(-mCamDelta);
+        break;
     default:
         return;
     }
@@ -687,6 +784,13 @@ Monitor::Reshape(int width, int height)
 void
 Monitor::Idle()
 {
+    // If we are in singlestep mode and not advancing then return
+    if (mLogserver && mSingleStep && !mAdvance)
+    {
+        cout << "single step mode...exiting\n";
+        return;
+    }
+    
     if (! mCommServer->ReadMessage())
     {
         return;
@@ -702,12 +806,16 @@ Monitor::Idle()
         first_time = false;
     }
 
-    boost::shared_ptr<oxygen::PredicateList> predicates =
+
+        boost::shared_ptr<oxygen::PredicateList> predicates =
         mCommServer->GetPredicates();
 
-    mGameState.ProcessInput(predicates);
+        mGameState.ProcessInput(predicates);
 
-    glutPostRedisplay();
+        mAdvance = false;
+
+        glutPostRedisplay();
+
 }
 
 Monitor::ECameraMode

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.2 2004/03/09 19:48:03 rollmark Exp $
+   $Id: camera.cpp,v 1.3 2004/06/08 09:22:27 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,6 +93,18 @@ Camera::MoveCamForward(float steps)
 {
   //move camera 'steps' meters into direction we are facing
   Vector3f dir = steps*(mLookAtPos - mPosition).Normalized();
+  mPosition   += dir;
+  mLookAtPos  += dir;
+}
+
+void
+Camera::MoveCamStrafeForward(float steps)
+{
+  //move camera 'steps' meters into direction we are facing
+  Vector3f dir = steps*(mLookAtPos - mPosition).Normalized();
+  //remove z-coord
+  dir[2]=0.0f;
+  
   mPosition   += dir;
   mLookAtPos  += dir;
 }

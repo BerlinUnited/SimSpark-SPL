@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.4 2004/06/06 11:52:00 fruit Exp $
+   $Id: monitor.h,v 1.5 2004/06/08 09:22:27 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,9 +59,13 @@ public:
     /** Print copyright message */
     static void Copyleft();
 
+    /** show keybindings */
+    static void KeyBindings();
+
     void Display();
     void MouseMotion(int x, int y);
     void Keyboard(unsigned char key, int x, int y);
+    void SpecialKeys(int glutkey, int x, int y);
     void Mouse(int button, int state, int x, int y);
     void Reshape(int width, int height);
     void Idle();
@@ -142,5 +146,15 @@ private:
     TFlagInfoMap mFlagInfo;
     //! default flag information (used for all flags not found in mFlagInfo)
     FlagInfo mDefaultFlagInfo;
+
+    //JAN
+    //! flag for logserver
+    bool mLogserver;
+    //! flag for single step
+    bool mSingleStep;
+    //! flag for advancing
+    bool mAdvance;
+    
+    
 };
 
