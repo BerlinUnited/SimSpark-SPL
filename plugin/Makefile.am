@@ -6,6 +6,7 @@ SUBDIRS = \
 	  monitortest \
 	  perfectvisionperceptor \
 	  sexpparser \
+	  soccer \
 	  soundsystemfmod
 
 # filesystemrar 
