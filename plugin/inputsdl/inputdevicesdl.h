@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputdevicesdl.h,v 1.4 2004/04/23 20:27:12 fruit Exp $
+   $Id: inputdevicesdl.h,v 1.5 2004/04/23 20:59:09 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,5 +43,7 @@ public:
     //! this filters an SDL specific input
     virtual int EventFilter(const SDL_Event* event) = 0;
 };
+
+DECLARE_ABSTRACTCLASS(InputDeviceSDL);
 
 #endif //INPUTDEVICESDL_H__
