@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: matrix.cpp,v 1.2 2003/05/19 21:37:49 fruit Exp $
+   $Id: matrix.cpp,v 1.3 2003/08/21 08:56:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,16 +40,6 @@ void Matrix::Dump() const
 	printf("%f %f %f %f\n", m[3], m[7], m[11], m[15]);
 }
 
-void Matrix::GetModelView()
-{
-	//glGetFloatv(GL_MODELVIEW_MATRIX, m);
-}
-
-void Matrix::SetModelView()
-{
-	//glLoadMatrixf(m);
-	//glMultMatrixf(m);
-}
 
 void Matrix::LookAt(const Vector3f & inEye, const Vector3f & inDirection, const Vector3f & inUp)
 {

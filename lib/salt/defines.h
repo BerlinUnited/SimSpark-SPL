@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: defines.h,v 1.2 2003/05/19 21:37:49 fruit Exp $
+   $Id: defines.h,v 1.3 2003/08/21 08:56:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,14 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
+
+/* this file contains defines that are ugly but necessary, to
+ * disable compiler warnings or work around differences between 
+ * supported compilers
+ */
+
 #ifndef DEFINES_H__
 #define DEFINES_H__
 

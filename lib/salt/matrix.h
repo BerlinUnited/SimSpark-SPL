@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: matrix.h,v 1.2 2003/05/19 21:32:40 fruit Exp $
+   $Id: matrix.h,v 1.3 2003/08/21 08:56:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #ifndef MATRIX_H__
 #define MATRIX_H__
 
@@ -27,7 +28,6 @@
 
 #include "defines.h"
 #include "vector.h"
-
 #include <memory.h>
 
 namespace salt
@@ -36,82 +36,164 @@ namespace salt
 }
 #endif
 
+/** Matrix provides a 4x4 float Matrix along with methods to set
+  *	up and manipulate it.
+  */
 class Matrix
 {
 public:
-    float m[16];			// 16 float values
-    f_inline Matrix(){}		// do nothing constructor
+    /** the values of the matrix */
+    float m[16];			
+
+    /** do nothing constructor, the matrix values are undefined for performance reasons*/
+    f_inline Matrix(){}		
+
+    /** copy constructs the matrix from newMatrix, a pointer to a float array*/
     f_inline Matrix(float *newMatrix)	{	memcpy(m, newMatrix,	sizeof(float)*16);	}
+
+    /** copy constructs the matrix from newMatrix, a reference to another Matrix*/
+    f_inline Matrix(const Matrix &newMatrix)	{	memcpy(m, newMatrix.m,	sizeof(float)*16);	}
+
+    /** copy constructs the matrix from newMatrix, a pointer to another Matrix*/
+    f_inline Matrix(Matrix *newMatrix)			{	memcpy(m, newMatrix->m, sizeof(float)*16);	}
+
+    /** constructs the matrix from 16 float values */
     f_inline Matrix(float m00, float m01, float m02, float m03,
                     float m10, float m11, float m12, float m13,
                     float m20, float m21, float m22, float m23,
                     float m30, float m31, float m32, float m33);
-    f_inline Matrix(const Matrix &newMatrix)	{	memcpy(m, newMatrix.m,	sizeof(float)*16);	}
-    f_inline Matrix(Matrix *newMatrix)			{	memcpy(m, newMatrix->m, sizeof(float)*16);	}
-
-    // matrix initializations
+  
+    /** sets up the identity matrix */
     f_inline void Identity()			{	memcpy(m, mIdentity,	sizeof(float)*16);	}
-    f_inline void RotationX(float inAngle);				// Create rotation matrix
-    f_inline void RotationY(float inAngle);				// Create rotation matrix
-    f_inline void RotationZ(float inAngle);				// Create rotation matrix
-    f_inline void Translation(const Vector3f &inVector);		// Create translation matrix
-    f_inline void Scale(const Vector3f & inVector);			// Create scale matrix
+
+    /** sets up a X-rotation matrix with inAngle degrees */
+    f_inline void RotationX(float inAngle);				
+
+    /** sets up a Y-rotation matrix with inAngle degrees */
+    f_inline void RotationY(float inAngle);				
+
+    /** sets up a Z-rotation matrix with inAngle degrees */
+    f_inline void RotationZ(float inAngle);
+
+    /** sets up a translation matrix with inVector */
+    f_inline void Translation(const Vector3f &inVector);
+
+    /** sets up a scaling matrix with inVector */
+    f_inline void Scale(const Vector3f & inVector);		  
+
+    /** sets up a rotation matrix, looking from inEye in inDirection,
+	  *	with inUp pointing up
+	  */
     void LookAt(const Vector3f & inEye, const Vector3f & inDirection, const Vector3f & inUp);
 
-    // misc functions (subject to change)
-    void	SetModelView();
-    void	GetModelView();
+    /** print the matrix to stdout for debugging purposes*/
     void	Dump() const;
+
+    /** sets up the matrix from 16 float values */
     f_inline void	Set(float m00, float m01, float m02, float m03,
                             float m10, float m11, float m12, float m13,
                             float m20, float m21, float m22, float m23,
                             float m30, float m31, float m32, float m33);
-	
-    f_inline const Matrix &	RotateX(float inAngle);			// Rotate the matrix around the axis X with <inAngle> radians
-    f_inline const Matrix &	RotateY(float inAngle);			// Rotate the matrix around the axis Y with <inAngle> radians
-    f_inline const Matrix &	RotateZ(float inAngle);			// Rotate the matrix around the axis Z with <inAngle> radians
-    f_inline const Matrix &	Translate(const Vector3f & inVector);	// Translate the matrix by vector <inVector>
 
+    /** rotate the matrix around the axis X with inAngle radians */
+    f_inline const Matrix &	RotateX(float inAngle);
+
+    /** Rotate the matrix around the axis Y with inAngle radians */
+    f_inline const Matrix &	RotateY(float inAngle);		
+
+    /** Rotate the matrix around the axis Z with inAngle radians */
+    f_inline const Matrix &	RotateZ(float inAngle);		
+
+    /** Translate the matrix by vector inVector */
+    f_inline const Matrix &	Translate(const Vector3f & inVector);	
+
+    /** returns a const reference to the right vector of the matrix */
     f_inline const Vector3f &	Right() const		{ return *(const Vector3f*) &El(0, 0); }
+
+    /** returns a reference to the right vector of the matrix */
     f_inline Vector3f &	Right()				{ return *(Vector3f*)  &El(0, 0); }
+
+    /** returns a const reference to the up vector of the matrix */
     f_inline const Vector3f &	Up() const			{ return *(const Vector3f*) &El(0, 1); }
+
+    /** returns a reference to the up vector of the matrix */
     f_inline Vector3f &	Up()				{ return *(Vector3f*)  &El(0, 1); }
+
+    /** returns a const reference to the forward vector of the matrix */
     f_inline const Vector3f &	Forward() const		{ return *(const Vector3f*) &El(0, 2); }
+
+    /** returns a reference to the forward vector of the matrix */
     f_inline Vector3f &	Forward()			{ return *(Vector3f*)  &El(0, 2); }
+
+    /** returns a const reference to the pos vector of the matrix */
     f_inline const Vector3f &	Pos() const			{ return *(const Vector3f*) &El(0, 3); }
+
+    /** returns a reference to the pos vector of the matrix */
     f_inline Vector3f &	Pos()				{ return *(Vector3f*)  &El(0, 3); }
 
+    /** returns true if this matrix is equal to <matrix> */
     bool	IsEqual(const Matrix& matrix) const;
-    // matrix inversion (rotation matrix only)
+
+    /** inverts a matrix, spezialized for rotation matrices only */
     f_inline void		InvertRotationMatrix();
 
-    // matrix*vector (including some special case 'hacks')
+    /** multiplies the matrix with inVector */
     f_inline Vector3f	Transform(const Vector3f & inVector);
+  
+    /** rotates the matrix by inVector */
     f_inline Vector3f	Rotate(const Vector3f & inVector);
+
+    /** inverse rotates the matrix by inVector */
     f_inline Vector3f	InverseRotate(const Vector3f & inVector);
 
     // special lighting matrices
+
+    /** sets up an attenuation matrix without rotation */
     void CalcAttenuationNoRotation(const Vector3f &pos, float radius);
+
+    /** sets up an attenuation matrix with rotation */
     void CalcAttenuationWithRotation(const Matrix &lightWorldMatrix, float radius);
+
+    /** sets up an infinite projection matrix */
     void CalcInfiniteProjection(float width, float height, float fov, float zNear);
+
+    /** sets up an infinite frustum */
     void CalcInfiniteFrustum(float left, float right, float bottom, float top, float zNear);
+
+    /** sets up a special lighting matrix for a spotlight */
     void CalcSpotLight(const Matrix &lightWorldTransform, float fov, float width, float height, float zNear);
 
     // Operators
-    f_inline const Matrix	operator*(const Matrix &inRHS) const;	// Multiply this Matrix with another Matrix
-    f_inline const Vector3f	operator*(const Vector3f &inRHS) const;	// Multiply a Vector3f with this Matrix
-    f_inline const Vector3f	operator*(const Vector2f &inRHS) const;	// Multiply a Vector2 with this Matrix
-    f_inline const Matrix &	operator*=(const Matrix &inRHS);		// Multiply this Matrix with another Matrix
 
+    /** multiplies the matrix with another matrix */
+    f_inline const Matrix	operator*(const Matrix &inRHS) const;	
+
+    /** multiplies the matrix with another Matrix */
+    f_inline const Matrix &	operator*=(const Matrix &inRHS);		
+  
+    /** Multipies the matrix with a 3 dimensional vector */
+    f_inline const Vector3f	operator*(const Vector3f &inRHS) const;	
+
+    /** multiplies the matrix with a 2 dimensional vector */
+    f_inline const Vector3f	operator*(const Vector2f &inRHS) const;	
 
     // Element access operators
+
+    /** returns a reference to a single element of the matrix */
     f_inline float& operator() (int inRow, int inColumn) {	return El(inRow, inColumn);	}
+
+    /** returns a const reference to a single element of the matrix */
     f_inline const float& operator() (int inRow, int inColumn) const {	return El(inRow, inColumn);	}
+
 protected:
+    /** returns a reference to a single element of the matrix */
     f_inline float& El(int inRow, int inColumn)	{	return m[inColumn*4 + inRow];	}
+
+    /** returns a const reference to a single element of the matrix */
     f_inline const float& El(int inRow, int inColumn) const {	return m[inColumn*4 + inRow];	}
 
 private:
+    /** the identity matrix */
     static float mIdentity[16];
 };
 

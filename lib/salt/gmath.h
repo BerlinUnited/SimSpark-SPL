@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: gmath.h,v 1.3 2003/05/19 21:37:49 fruit Exp $
+   $Id: gmath.h,v 1.4 2003/08/21 08:56:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,11 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
+/* this file contains some templated math functions and constants
+ * visible in the salt namespace
+ */
+
 #ifndef GMATH_H__
 #define GMATH_H__
 

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: plane.h,v 1.2 2003/05/19 21:32:39 fruit Exp $
+   $Id: plane.h,v 1.3 2003/08/21 08:56:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,20 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Plane
+
+   NOTE:
+
+   HISTORY:
+		11.06.01 - MK
+			- Initial version
+
+   TODO:
+
+   TOFIX:
 */
+
 #ifndef PLANE_H__
 #define PLANE_H__
 
@@ -29,28 +42,10 @@
 #include "vector.h"
 #include "bounds.h"
 
-/*
-	Plane - Plane Math Classes
-
-	A mathematical plane is modelled by this class. This can be used to classify
-	points against planes (in front, on plane, etc...). Several useful functions
-	for constructing a plane are provided.
-
-	NOTE:
-
-	HISTORY:
-		11.06.01 - MK
-			- Initial version
-
-	TODO:
-
-	TOFIX:
-*/
-
 namespace salt
 {
 
-// a side on the plane
+/** defines possible sides on the plane */
 enum EPlaneSide
 {
 	PLANESIDE_BACK			=	0,
@@ -61,7 +56,7 @@ enum EPlaneSide
 };
 
 
-// a dominant plane
+/** defines possible dominant plane values */
 enum EPlane
 {
 	PLANE_XY			=	0,
@@ -71,44 +66,72 @@ enum EPlane
 };
 
 
-/*
-	Plane
-
-	A plane is defined by the formula. Ax+By+Cz+D=0. The vector formed by the coefficients
-	<A,B,C> is the normal vector to the plane. In order to specify a plane in 3D you need
-	three distinct points.
-*/
-
+/**
+  *	A mathematical plane is modeled by this class. It can be used to
+  *	classify points against planes (in front, on plane,
+  *	etc...). Several useful functions for constructing a plane are
+  *	provided. A plane is defined by the formula. Ax+By+Cz+D=0. The
+  *	vector formed by the coefficients <A,B,C> is the normal vector to
+  *	the plane. 
+  */
 class Plane
 {
 // Members
 public:
+    /** the normal vector of the modeled plane */
 	Vector3f	normal;
+
+    /** the distance */
 	float		d;
 
 // Methods
 public:
+    /** empty constructor for an undefined plane */
 	f_inline Plane() {}		// empty constructor ... performance
-	// construct plane from normal and a point on the plane
+	
+    /** constructs a plane from a normal and a point on the plane */
 	f_inline Plane(const Vector3f& norm, const Vector3f& pnt)						{ normal=norm; d=-((norm.x()*pnt.x()) + (norm.y()*pnt.y()) + (norm.z()*pnt.z())); }
-	// construct plane from normal and constant D. If normal is a unit vector, then D is the distance to the origin
+
+    /** constructs a plane from normal and constant D. If normal is a
+	  * unit vector, then D is the distance to the origin
+	  */
 	f_inline Plane(const Vector3f& norm, const float D)								{ normal=norm; d=D; }
-	// construct plane from 3 distinct points
+
+    /** constructs a plane from 3 distinct points */
 	f_inline Plane(const Vector3f& v1,  const Vector3f &v2, const Vector3f &v3)		{ normal=(v2-v1).Cross(v3-v1).Normalized(); d=-normal.Dot(v1); }
 	
 	// inline functions
-	f_inline EPlaneSide	GetOrientation(const Vector3f &v, float delta=0.0001f) const	{ float dist=normal.Dot(v)+d; if (dist<-delta) return PLANESIDE_BACK; if (dist>delta) return PLANESIDE_FRONT; return PLANESIDE_ONPLANE;  }
+
+	/** calculates the orientation of v to the plane */
+  f_inline EPlaneSide	GetOrientation(const Vector3f &v, float delta=0.0001f) const	{ float dist=normal.Dot(v)+d; if (dist<-delta) return PLANESIDE_BACK; if (dist>delta) return PLANESIDE_FRONT; return PLANESIDE_ONPLANE;  }
+
+    /** calculates the dominant plane */
 	f_inline EPlane		GetDominantPlane() const									{ return (gAbs(normal.y()) > gAbs(normal.x()) ? (gAbs(normal.z()) > gAbs(normal.y()) ? PLANE_XY : PLANE_XZ) : (gAbs(normal.z()) > gAbs(normal.x()) ? PLANE_XY : PLANE_YZ)); }
+
+    /** calculates the distance from v to the plane */
 	f_inline float		GetDistanceTo(const Vector3f &v) const						{ return normal.Dot(v) + d; }
 
-	EPlaneSide ClassifyBox(const AABB3& bb) const;
-	void Normalize();
+	
+    /** calculates the relationship between the plane and the box */
+    EPlaneSide ClassifyBox(const AABB3& bb) const;
+	
+    /** normalizes the plane */
+    void Normalize();
 
+    /** sets up a plane from a normal and a point on the plane */
 	f_inline void Set(const Vector3f& norm, const Vector3f& pnt)						{ normal=norm; d=-((norm.x()*pnt.x()) + (norm.y()*pnt.y()) + (norm.z()*pnt.z())); }
+
+    /** sets up a plane from normal and constant D. If normal is a
+	  * unit vector, then D is the distance to the origin
+	  */
 	f_inline void Set(const Vector3f& norm, const float D)							{ normal=norm; d=D; }
+
+    /** sets up a plane from 3 distinct points */
 	f_inline void Set(const Vector3f& v1,   const Vector3f &v2, const Vector3f &v3)	{ normal=(v2-v1).Cross(v3-v1).Normalized(); d=-normal.Dot(v1); }
 
+    /** the assignment operator for planes */
 	f_inline const Plane&	operator=(const Plane& p)								{ normal=p.normal; d=p.d; return *this; }
+
 };
 
 }

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: path.h,v 1.3 2003/05/19 21:32:40 fruit Exp $
+   $Id: path.h,v 1.4 2003/08/21 08:56:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,16 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Path
+
+   HISTORY:
+		13.06.2002 MK
+			- initial version
+		31.08.2002 MK
+			- moved to salt
 */
+
 #ifndef PATH_H__
 #define PATH_H__
 
@@ -28,25 +37,13 @@
 #include <string>
 #include <list>
 
-/*! \class Path
-	$Id: path.h,v 1.3 2003/05/19 21:32:40 fruit Exp $
-	
-	Path
-
-	This class serves as a helper for paths within the object hierarchy. It is
-	capable of cleaning paths and separating a path into path components.
-
-	HISTORY:
-		13.06.2002 MK
-			- initial version
-		31.08.2002 MK
-			- moved to salt
-
-*/
-
 namespace salt
 {
 
+/** This class serves as a helper for path strings within the object
+  *	hierarchy. It is capable of cleaning paths and separating a path
+  *	into path components.
+  */
 class Path
 {
 	//
@@ -59,25 +56,50 @@ public:
 	// functions
 	//
 public:
+  
+        /** constructs a path object from a string, using the Set
+	  * method 
+	  */
 	Path(const std::string &path = "");
 
+        /** Sets the managed path expression. The path gets tokenized
+	  *  and can be read element by element using Back(), Front(),
+	  *  PopBack() and PopFront()
+	  */
 	void Set(const std::string &path);
 
-	std::string GetCleanPath(const std::string &sep = "/") const;
-
+        /** returns true if the managed path expression denotes an
+          * absoulute path, i.e. has a leading slash
+	  */
 	bool IsAbsolute() const;
-	bool IsEmpty() const;
 
+        /** returns the first path component */
 	const std::string& Front() const;
+
+        /** returns and removes the first path component */
 	void PopFront();
 
+        /** returns the last path component */
 	const std::string& Back() const;
+
+        /** returns and removes the last path component */
 	void PopBack();
+
+        /** returns true, if no path components remain, i.e. all path
+          * components are popped
+          */
+	bool IsEmpty() const;
+
+        /** returns a cleaned path expression, removing superfluous
+          * separators
+	  */
+	std::string GetCleanPath(const std::string &sep = "/") const;
 	
 private:
 	Path(const Path &obj);
 	Path& operator=(const Path &obj);
 
+        /** tokenizes the path components */
 	void Tokenize(const std::string &path);
 
 	//
@@ -85,9 +107,12 @@ private:
 	//
 public:
 protected:
-private:
+        /** the list of tokenized path components */
 	TStringList mPathComponents;
+    
+        /** indicates an absolute path expression */
 	bool		mIsAbsolute;
+private:
 };
 
 } //namespace salt
