@@ -1,1 +1,7 @@
-SUBDIRS = coretest inputtest scenetest simulator zeitgeisttest spadestest
+SUBDIRS = coretest \
+	  fonttest \
+	  inputtest \
+	  scenetest \
+	  simulator \
+	  spadestest \
+	  zeitgeisttest 
