@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.9 2004/05/27 15:06:54 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.10 2004/06/06 10:12:29 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,8 +68,8 @@ SoccerRuleAspect::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
 }
 
 void
-SoccerRuleAspect::MoveAwayPlayers(const salt::Vector3f& pos, float radius,
-                                  float min_dist, TTeamIndex idx)
+SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
+                               float min_dist, TTeamIndex idx)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
@@ -114,8 +114,8 @@ SoccerRuleAspect::MoveAwayPlayers(const salt::Vector3f& pos, float radius,
 }
 
 void
-SoccerRuleAspect::MoveAwayPlayers(const salt::AABB2& box,
-                                  float min_dist, TTeamIndex idx)
+SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
+                               float min_dist, TTeamIndex idx)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
@@ -150,14 +150,45 @@ SoccerRuleAspect::MoveAwayPlayers(const salt::AABB2& box,
 }
 
 void
+SoccerRuleAspect::DropBall()
+{
+    DropBall(mBallBody->GetPosition());
+}
+
+void
+SoccerRuleAspect::DropBall(Vector3f pos)
+{
+    salt::Vector2f ball_pos(pos.x(), pos.y());
+
+    // we do not drop the ball within the penalty area
+    if (mLeftPenaltyArea.Contains(ball_pos))
+    {
+        pos[0] = mLeftPenaltyArea.maxVec[0];
+        pos[1] = pos.y() < 0 ?
+            mLeftPenaltyArea.minVec[1] : mLeftPenaltyArea.maxVec[1];
+    }
+    else if (mRightPenaltyArea.Contains(ball_pos))
+    {
+        pos[0] = mRightPenaltyArea.minVec[0];
+        pos[1] = pos.y() < 0 ?
+            mRightPenaltyArea.minVec[1] : mRightPenaltyArea.maxVec[1];
+    }
+
+    MoveBall(pos);
+    ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_LEFT);
+    ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_RIGHT);
+    mGameState->SetPlayMode(PM_PlayOn);
+}
+
+void
 SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // before the game starts the ball should stay in the middle of
     // the playing field
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
-    MoveAwayPlayers(mRightHalf, 1.0, TI_LEFT);
-    MoveAwayPlayers(mLeftHalf, 1.0, TI_RIGHT);
+    ClearPlayers(mRightHalf, 1.0, TI_LEFT);
+    ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
 
     if (mAutomaticKickOff && mGameState->GetModeTime() > mWaitBeforeKickOff)
     {
@@ -168,10 +199,20 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
-    MoveAwayPlayers(mRightHalf, 1.0, TI_LEFT);
-    MoveAwayPlayers(mLeftHalf, 1.0, TI_RIGHT);
-    MoveAwayPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,
-                    SoccerBase::OpponentTeam(idx));
+    ClearPlayers(mRightHalf, 1.0, TI_LEFT);
+    ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
+    ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,
+                 SoccerBase::OpponentTeam(idx));
+
+    // if no player touched the ball for mDropBallTime, we move away
+    // all players and set the play mode to play on
+    if (mDropBallTime > 0 &&
+        mGameState->GetModeTime() > mDropBallTime)
+    {
+        DropBall(mFreeKickPos);
+        return;
+    }
+
     // after the first agent touches the ball move to PM_PLAYON
     shared_ptr<AgentAspect> agent;
     TTime time;
@@ -194,8 +235,17 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
         return;
     }
     // move away opponent team
-    MoveAwayPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
-                    SoccerBase::OpponentTeam(idx));
+    ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
+                 SoccerBase::OpponentTeam(idx));
+
+    // if no player touched the ball for mDropBallTime, we move away
+    // all players and set the play mode to play on
+    if (mDropBallTime > 0 &&
+        mGameState->GetModeTime() > mDropBallTime)
+    {
+        DropBall(mFreeKickPos);
+        return;
+    }
 
     // after the first agent touches the ball move to PM_PLAY_ON. the
     // time when the agent last touches the ball must be after the
@@ -230,12 +280,20 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
         return;
     }
     // move away opponent team
-    MoveAwayPlayers(idx == TI_LEFT ? mRightPenaltyArea : mLeftPenaltyArea,
-                    1.0, SoccerBase::OpponentTeam(idx));
+    ClearPlayers(idx == TI_LEFT ? mRightPenaltyArea : mLeftPenaltyArea,
+                 1.0, SoccerBase::OpponentTeam(idx));
+
+    // if no player touched the ball for mDropBallTime, we move away
+    // all players and set the play mode to play on
+    if (mDropBallTime > 0 &&
+        mGameState->GetModeTime() > mDropBallTime)
+    {
+        DropBall(mFreeKickPos);
+        return;
+    }
 
     // after the first agent touches the ball, we do nothing until
     // the ball leaves the penalty area.
-
     shared_ptr<AgentAspect> agent;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
@@ -278,8 +336,17 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
         return;
     }
     // move away opponent team
-    MoveAwayPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
-                    SoccerBase::OpponentTeam(idx));
+    ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
+                 SoccerBase::OpponentTeam(idx));
+
+    // if no player touched the ball for mDropBallTime, we move away
+    // all players and set the play mode to play on
+    if (mDropBallTime > 0 &&
+        mGameState->GetModeTime() > mDropBallTime)
+    {
+        DropBall(mFreeKickPos);
+        return;
+    }
 
     // after the first agent touches the ball move to PM_PLAY_ON. the
     // time when the agent last touches the ball must be after the
@@ -586,6 +653,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"RuleGoalPauseTime",mGoalPauseTime);
     SoccerBase::GetSoccerVar(*this,"RuleKickInPauseTime",mKickInPauseTime);
     SoccerBase::GetSoccerVar(*this,"RuleHalfTime",mHalfTime);
+    SoccerBase::GetSoccerVar(*this,"RuleDropBallTime",mDropBallTime);
     SoccerBase::GetSoccerVar(*this,"FieldLength",mFieldLength);
     SoccerBase::GetSoccerVar(*this,"FieldWidth",mFieldWidth);
     SoccerBase::GetSoccerVar(*this,"GoalWidth",mGoalWidth);
@@ -602,10 +670,10 @@ SoccerRuleAspect::UpdateCachedInternal()
     mLeftHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0 - 10.0),
                             Vector2f(-mFieldLength/2.0 - 10, mFieldWidth/2.0 + 10.0));
 
-    // the penalty areas are oversized towards the end of the field
+    // the penalty areas (exact sizes)
     mRightPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - 16.5, -16.5 - mGoalWidth/2.0),
                                     Vector2f(mFieldLength/2.0 , 16.5 + mGoalWidth/2.0));
-    mLeftPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - 16.5, -16.5 - mGoalWidth/2.0),
-                                   Vector2f(mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
+    mLeftPenaltyArea = salt::AABB2(Vector2f(-mFieldLength/2.0 + 16.5, -16.5 - mGoalWidth/2.0),
+                                   Vector2f(-mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
 }
 
