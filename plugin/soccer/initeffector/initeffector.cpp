@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.1.2.2 2003/12/25 13:19:37 rollmark Exp $
+   $Id: initeffector.cpp,v 1.1.2.3 2003/12/27 13:27:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "initaction.h"
 #include "initeffector.h"
 #include <zeitgeist/logserver/logserver.h>
-
+#include <oxygen/gamecontrolserver/predicate.h>
 #include <sstream>
 
 using namespace boost;
@@ -78,24 +78,13 @@ InitEffector::GetActionObject(const Predicate& predicate)
         return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
     }
 
-    if (predicate.parameter.size() < 1 || predicate.parameter.size() > 2)
-    {
-        GetLog()->Error() << "ERROR: (InitEffector) predicate has "
-                          << predicate.parameter.size() << " parameters.\n";
-        return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
-    }
+    std::string name;
+    int unum = 0;
+    predicate.FindParameter("unum", unum);
 
-    Predicate::TParameterList::const_iterator i = predicate.parameter.begin();
+    if (predicate.FindParameter("teamname", name))
+        return shared_ptr<ActionObject>(new InitAction(name,unum));
 
-    std::string name = any_cast<std::string>(*i);
-    std::string number = "0";
-    ++i;
-    if (i != predicate.parameter.end())
-        {
-            number = any_cast<std::string>(*i);
-        }
-
-    int n = std::atoi(number.c_str());
-    return shared_ptr<ActionObject>(new InitAction(name,n));
+    return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
 }
 
