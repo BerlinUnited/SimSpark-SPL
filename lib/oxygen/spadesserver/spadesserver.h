@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.6.2.3 2003/12/02 16:52:36 rollmark Exp $
+   $Id: spadesserver.h,v 1.1.2.6.2.4 2003/12/03 17:57:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public:
     virtual bool ConstructInternal();
 
     /** helper function to locate the game control server */
-    boost::shared_ptr<GameControlServer> GetGameControlServer();
+    boost::shared_ptr<GameControlServer> GetGameControlServer() const;
 
     /** returns the amount of time in seconds a single simulation step
         corresponds to
