@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fpscontroller.h,v 1.5 2004/02/12 14:07:23 fruit Exp $
+   $Id: fpscontroller.h,v 1.6 2004/03/09 12:14:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 namespace oxygen
 {
+class Body;
 
 /** FPSController is a node, that provides first person shooter (FPS)
  * movement, i.e. moving forward, backward, strafing etc. It's
@@ -68,15 +69,24 @@ public:
     /** enables or disables down movement */
     void Down(const bool state);
 
-private:
+protected:
     /** calculates and applies the force needed to perfom the
      * activated movements */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
+
+    /** set up the parent body reference */
+    virtual void OnLink();
+
+    /** reset the parent body reference */
+    virtual void OnUnlink();
 
     //
     // Members
     //
 protected:
+    /** reference to the parent body node */
+    boost::shared_ptr<Body> mBody;
+
     /** the current horizontal angle */
     float   mHAngle;
 
