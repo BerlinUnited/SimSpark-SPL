@@ -1,3 +1,5 @@
+
+$useCars = 'yes'
 #
 # import needed bundles
 #
@@ -6,10 +8,16 @@
 # generic plugins
 importBundle "filesystemstd"
 importBundle "sexpparser"
+if ($useCars == 'yes')
+  importBundle "rubysceneimporter"
+end
 
 #
 # bundle of soccer plugins
 importBundle "soccer"
+if ($useCars == 'yes')
+  importBundle "sparkagent"
+end
 
 #
 # setup gloabal constants
@@ -47,75 +55,81 @@ def getSoccerVar(name)
 end
 
 def addAgent(path)
-  # move different agents away from each other
-  aspect = get(path)
-  aspect.setLocalPos($agentX,$agentY,$agentZ)
-  $agentX += 5.0
-  $agentY += 0.0
-  $agentZ += 0.1
+  if ($useCars == 'yes')
+    scene = get($scenePath)
+    scene.importScene('rsg/agent/soccerplayer.rsg')
+  else
+    # move different agents away from each other
+    aspect = get(path)
+    aspect.setLocalPos($agentX,$agentY,$agentZ)
+    $agentX += 5.0
+    $agentY += 0.0
+    $agentZ += 0.1
 
-  # physics setup
-  physics = new('oxygen/Body', path+'physics')
-  physics.setSphereTotal(getSoccerVar('AgentMass'),
-			 getSoccerVar('AgentRadius'))
+    # physics setup
+    physics = new('oxygen/Body', path+'physics')
+    physics.setSphereTotal(getSoccerVar('AgentMass'),
+	  		 getSoccerVar('AgentRadius'))
 
-  maxVel = new('oxygen/VelocityController', path+'physics/maxVelCtr')
-  maxVel.setMaxVelocity(getSoccerVar('AgentMaxSpeed'))
+    maxVel = new('oxygen/VelocityController', path+'physics/maxVelCtr')
+    maxVel.setMaxVelocity(getSoccerVar('AgentMaxSpeed'))
 
-  drag = new('oxygen/DragController',path+'physics/drag')
-  drag.setAngularDrag(12.0)
-  drag.setLinearDrag(12.0)
+    drag = new('oxygen/DragController',path+'physics/drag')
+    drag.setAngularDrag(12.0)
+    drag.setLinearDrag(12.0)
 
-  # geometry setup
+    # geometry setup
 
-  geomPath = path+'geometry/'
-  geometry = new('oxygen/SphereCollider', geomPath)
-  geometry.setRadius(getSoccerVar('AgentRadius'))
+    geomPath = path+'geometry/'
+    geometry = new('oxygen/SphereCollider', geomPath)
+    geometry.setRadius(getSoccerVar('AgentRadius'))
 
-  contact = new('oxygen/ContactJointHandler', geomPath+'contact')
+    contact = new('oxygen/ContactJointHandler', geomPath+'contact')
 
-  # agent state (needs to be set up before perceptors)
-  new('AgentState', path+'AgentState')
+    # agent state (needs to be set up before perceptors)
+    new('AgentState', path+'AgentState')
 
-  # effector setup
-  new('InitEffector', path+'InitEffector')
+    # effector setup
+    new('InitEffector', path+'InitEffector')
 
-  # driveeffector setup
-  driveEffector = new('DriveEffector', path+'DriveEffector')
-  # this sets the acceleration of the robot.
-  # (values are still experimental :)
-  driveEffector.setForceFactor(35.0 * 12.0 / 100.0);
-  driveEffector.setSigma(0.005);
-  # drive consumption. (higher value means lower consumption) 
-  # untested if this is enough or too much 
-  driveEffector.setConsumption(120 * 75.0 * 12.0 * 4);
+    # driveeffector setup
+    driveEffector = new('DriveEffector', path+'DriveEffector')
+    # this sets the acceleration of the robot.
+    # (values are still experimental :)
+    driveEffector.setForceFactor(35.0 * 12.0 / 100.0);
+    driveEffector.setSigma(0.005);
+    # drive consumption. (higher value means lower consumption) 
+    # untested if this is enough or too much 
+    driveEffector.setConsumption(120 * 75.0 * 12.0 * 4);
 
-  kickEffector = new('KickEffector', path+'KickEffector')
-  kickEffector.setKickMargin(0.07)
-  kickEffector.setForceFactor(0.7)
-  kickEffector.setTorqueFactor(0.1)
-  kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
-  kickEffector.setSteps(10)
-  kickEffector.setMaxPower(100.0)
-  kickEffector.setAngleRange(0.0,50.0)
+    kickEffector = new('KickEffector', path+'KickEffector')
+    kickEffector.setKickMargin(0.07)
+    kickEffector.setForceFactor(0.7)
+    kickEffector.setTorqueFactor(0.1)
+    kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
+    kickEffector.setSteps(10)
+    kickEffector.setMaxPower(100.0)
+    kickEffector.setAngleRange(0.0,50.0)
 
-  new('BeamEffector', path+'BeamEffector')
+    new('BeamEffector', path+'BeamEffector')
 
-  # perceptor setup
-  visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
-  # set to true for debugging. will be set to false during competition
-  visionPerceptor.setSenseMyPos(false);
-  visionPerceptor.addNoise(true);
-  visionPerceptor.useRandomNoise(false);
+    # perceptor setup
+    visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
+    # set to true for debugging. will be set to false during competition
+    visionPerceptor.setSenseMyPos(false);
+    visionPerceptor.addNoise(true);
+    visionPerceptor.useRandomNoise(false);
 
-#   pvisionPerceptor = new('VisionPerceptor', path+'PerfectVisionPerceptor')
-#   # set to true for debugging. will be set to false during competition
-#   pvisionPerceptor.setSenseMyPos(false);
-#   pvisionPerceptor.addNoise(false);
-#   pvisionPerceptor.setPredicateName('PerfectVision')
+#     pvisionPerceptor = new('VisionPerceptor', path+'PerfectVisionPerceptor')
+#     # set to true for debugging. will be set to false during competition
+#     pvisionPerceptor.setSenseMyPos(false);
+#     pvisionPerceptor.addNoise(false);
+#     pvisionPerceptor.setPredicateName('PerfectVision')
 
-  new('GameStatePerceptor', path+'GameStatePerceptor')
-  new('AgentStatePerceptor', path+'AgentStatePerceptor')
+    new('GameStatePerceptor', path+'GameStatePerceptor')
+    new('AgentStatePerceptor', path+'AgentStatePerceptor')
+
+  end 
 end
 
 # add a field flag to (x,y,z)
@@ -369,6 +383,10 @@ new('oxygen/PhysicsServer', $serverPath+'physics')
 sceneServer = new('oxygen/SceneServer', $serverPath+'scene')
 sceneServer.createScene($scenePath)
 
+if ($useCars == 'yes')
+  sceneServer.initSceneImporter("RubySceneImporter")
+end
+
 #
 # setup the MonitorServer and a simple MonitorSystem
 monitorServer = new('oxygen/MonitorServer', $serverPath+'monitor')
@@ -437,3 +455,4 @@ monitorServer.registerMonitorItem('GameStateItem')
 # queue agents for startup
 spadesServer.queueAgents('foo', 11)
 spadesServer.queueAgents('bar', 11)
+
