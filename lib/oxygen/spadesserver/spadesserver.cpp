@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.3.2.1 2004/01/08 12:39:37 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.3.2.2 2004/01/21 15:47:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -293,8 +293,6 @@ SpadesServer::getMinSenseLatency() const
 ActEvent*
 SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
 {
-    GetLog()->Normal() << "(SpadesServer) Agent " << a << " sent " << data << endl;
-
     const shared_ptr<GameControlServer> gcs = GetGameControlServer();
     if (gcs.get() == 0)
         {
