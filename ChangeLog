@@ -1,3 +1,9 @@
+2003-09-03  Oliver Obst  <fruit@robolog.org>
+
+	* lib/kerosin/:
+	updated kerosin library: changes for the files that have been 
+	going to the oxygen library.
+
 2003-09-02  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/survival/Makefile.am: Added freetype include flag
