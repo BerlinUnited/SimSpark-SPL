@@ -14,6 +14,6 @@ FUNCTION(load)
 
 void CLASS(StaticMesh)::DefineClass()
 {
-        DEFINE_BASECLASS(kerosin/BaseNode);
+        DEFINE_BASECLASS(oxygen/BaseNode);
         DEFINE_FUNCTION(load);
 }
