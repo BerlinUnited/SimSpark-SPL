@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.2 2004/02/12 14:07:23 fruit Exp $
+   $Id: contactjointhandler.cpp,v 1.3 2004/03/30 09:53:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,3 +91,73 @@ ContactJointHandler::SetSurfaceParameter(const dSurfaceParameters& surface)
 {
   mSurfaceParameter = surface;
 }
+
+void
+ContactJointHandler::SetContactMode(int mode, bool set)
+{
+  if (set)
+  {
+    mSurfaceParameter.mode |= mode;
+  } else
+  {
+    mSurfaceParameter.mode &= ~mode;
+  }
+}
+
+void
+ContactJointHandler::SetContactBounceMode(bool set)
+{
+  SetContactMode(dContactBounce,set);
+}
+
+void
+ContactJointHandler::SetMinBounceVel(float vel)
+{
+  mSurfaceParameter.bounce_vel = std::max<float>(0.0f,vel);
+}
+
+void
+ContactJointHandler::SetContactSoftERPMode(bool set)
+{
+  SetContactMode(dContactSoftERP,set);
+}
+
+void
+ContactJointHandler::SetContactSoftERP(float erp)
+{
+  salt::gClamp(erp,0.0f,1.0f);
+  mSurfaceParameter.soft_erp = erp;
+}
+
+void
+ContactJointHandler::SetContactSoftCFMMode(bool set)
+{
+  SetContactMode(dContactSoftCFM,set);
+}
+
+void
+ContactJointHandler::SetContactSoftCFM(float cfm)
+{
+  mSurfaceParameter.soft_cfm = std::max<float>(0.0f,cfm);
+}
+
+void ContactJointHandler::SetContactSlipMode (bool set)
+{
+  SetContactMode(dContactSlip1,set);
+  SetContactMode(dContactSlip2,set);
+}
+
+void ContactJointHandler::SetContactSlip(float slip)
+{
+  mSurfaceParameter.slip1 = slip;
+  mSurfaceParameter.slip2 = slip;
+}
+
+
+
+
+
+
+
+
+

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.2 2004/02/12 14:07:23 fruit Exp $
+   $Id: contactjointhandler.h,v 1.3 2004/03/30 09:53:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,35 +33,70 @@ namespace oxygen
  */
 class ContactJointHandler : public CollisionHandler
 {
- public:
-  ContactJointHandler();
-  virtual ~ContactJointHandler();
+public:
+    ContactJointHandler();
+    virtual ~ContactJointHandler();
 
-  /** Check if the collidee also has a ContactJoint handler registered
-      to it. If yes, create a contact joint between the bodies
-      corresponding to our Collider and the collidee's geom using the
-      surface parameters stored in the mSurfaceParameter member.
+    /** Check if the collidee also has a ContactJoint handler
+        registered to it. If yes, create a contact joint between the
+        bodies corresponding to our Collider and the collidee's geom
+        using the surface parameters stored in the mSurfaceParameter
+        member.
 
-       \param collidee is the geom ID of the colliders collision
-       partner
+        \param collidee is the geom ID of the colliders collision
+        partner
 
-       \param holds the contact points between the two affected geoms
-       as returned from the ODE dCollide function
-  */
-  virtual void HandleCollision
-  (boost::shared_ptr<Collider> collidee, dContact& contact);
+        \param holds the contact points between the two affected geoms
+        as returned from the ODE dCollide function
+    */
+    virtual void HandleCollision
+    (boost::shared_ptr<Collider> collidee, dContact& contact);
 
-  /** sets the surface parameters for the contact joints that the
-      CollisionHandler creates
-  */
-  virtual void SetSurfaceParameter(const dSurfaceParameters& surface);
+    /** the ContactJointHandler is not a symmetric handler. See
+        CollisionHandler::IsSymmetricHandler for an explanation
+    */
+    virtual bool IsSymmetricHandler() { return false; }
 
-  /** the ContactJointHandler is not a symmetric handler. See
-      CollisionHandler::IsSymmetricHandler for an explanation
-  */
-  virtual bool IsSymmetricHandler() { return false; }
+    /** sets the surface parameters for the contact joints that the
+        CollisionHandler creates
+    */
+    void SetSurfaceParameter(const dSurfaceParameters& surface);
 
- protected:
+    /** sets or resets a contact mode flag in the surface parameter*/
+    void SetContactMode(int mode, bool set);
+
+    /** sets or resets the dContactBounce mode flag */
+    void SetContactBounceMode(bool set);
+
+    /** sets the mininum incoming velocity necessary for bounce */
+    void SetMinBounceVel(float vel);
+
+    /** sets or resets the error reduction parameter (ERP) mode,
+        useful to make surfaces soft
+    */
+    void SetContactSoftERPMode(bool set);
+
+    /** sets the contact normal error reduction parameter (ERP) */
+    void SetContactSoftERP(float erp);
+
+    /** sets or resets the constraint force mixing mode (CFM), useful
+        to make surfaces soft
+    */
+    void SetContactSoftCFMMode(bool set);
+
+    /** sets the constraint force mixing parameter (CFM)
+    */
+    void SetContactSoftCFM(float cfm);
+
+    /** sets or resets the force dependent contact slip mode (FDS)
+     */
+    void SetContactSlipMode (bool set);
+
+    /** sets the force dependent slip (FDS)
+     */
+    void SetContactSlip(float slip);
+
+protected:
     /** the ODE surface parameters of the created contact joint */
     dSurfaceParameters mSurfaceParameter;
 };

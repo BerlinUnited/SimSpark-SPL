@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler_c.cpp,v 1.3 2004/02/21 15:30:44 fruit Exp $
+   $Id: contactjointhandler_c.cpp,v 1.4 2004/03/30 09:53:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,135 @@
 
 using namespace oxygen;
 
+FUNCTION(ContactJointHandler,setContactBounceMode)
+{
+    bool inSet;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inSet))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactBounceMode(inSet);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setMinBounceVel)
+{
+    float inVel;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inVel))
+        )
+        {
+            return false;
+        }
+
+    obj->SetMinBounceVel(inVel);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setContactSoftERPMode)
+{
+    bool inSet;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inSet))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactSoftERPMode(inSet);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setContactSoftERP)
+{
+    float inERP;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inERP))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactSoftERP(inERP);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setContactSoftCFMMode)
+{
+    bool inSet;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inSet))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactSoftCFMMode(inSet);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setContactSoftCFM)
+{
+    float inCFM;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inCFM))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactSoftCFM(inCFM);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setContactSlipMode)
+{
+    bool inSet;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inSet))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactSlipMode(inSet);
+    return true;
+}
+
+FUNCTION(ContactJointHandler,setContactSlip)
+{
+    float inSlip;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inSlip))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactSlip(inSlip);
+    return true;
+}
+
 void CLASS(ContactJointHandler)::DefineClass()
 {
   DEFINE_BASECLASS(oxygen/CollisionHandler);
+  DEFINE_FUNCTION(setContactBounceMode);
+  DEFINE_FUNCTION(setMinBounceVel);
+  DEFINE_FUNCTION(setContactSoftERPMode);
+  DEFINE_FUNCTION(setContactSoftERP);
+  DEFINE_FUNCTION(setContactSoftCFMMode);
+  DEFINE_FUNCTION(setContactSoftCFM);
+  DEFINE_FUNCTION(setContactSlipMode);
+  DEFINE_FUNCTION(setContactSlip);
 }
