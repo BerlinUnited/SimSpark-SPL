@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserver_c.cpp,v 1.2 2004/03/22 10:45:00 rollmark Exp $
+   $Id: logserver_c.cpp,v 1.3 2004/06/13 05:40:37 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,66 +35,66 @@ FUNCTION(LogServer,addStream)
         (! in.GetValue(in[0],inName)) ||
         (! in.GetValue(in[1],inPriority))
         )
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     std::ostream *stream = NULL;
     if (inName == ":cout")
-        {
-            stream = &std::cout;
-        } else if (inName == ":cerr")
-            {
-                stream = &std::cerr;
-            } else
-                {
-                    stream = new std::ofstream(inName.c_str());
-                }
+    {
+        stream = &std::cout;
+    } else if (inName == ":cerr")
+    {
+        stream = &std::cerr;
+    } else
+    {
+        stream = new std::ofstream(inName.c_str());
+    }
 
     unsigned int pLevel = LogServer::eNone;
 
     do
+    {
+        if (inPriority == "eNone")
         {
-            if (inPriority == "eNone")
-                {
-                    pLevel = LogServer::eNone;
-                    break;
-                }
+            pLevel = LogServer::eNone;
+            break;
+        }
 
-            if (inPriority == "eDebug")
-                {
-                    pLevel = LogServer::eDebug;
-                    break;
-                }
+        if (inPriority == "eDebug")
+        {
+            pLevel = LogServer::eDebug;
+            break;
+        }
 
-            if (inPriority == "eNormal")
-                {
-                    pLevel = LogServer::eNormal;
-                    break;
-                }
+        if (inPriority == "eNormal")
+        {
+            pLevel = LogServer::eNormal;
+            break;
+        }
 
-            if (inPriority == "eWarning")
-                {
-                    pLevel = LogServer::eWarning;
-                    break;
-                }
+        if (inPriority == "eWarning")
+        {
+            pLevel = LogServer::eWarning;
+            break;
+        }
 
-            if (inPriority == "eError")
-                {
-                    pLevel = LogServer::eError;
-                    break;
-                }
+        if (inPriority == "eError")
+        {
+            pLevel = LogServer::eError;
+            break;
+        }
 
-            if (inPriority == "eAll")
-                {
-                    pLevel = LogServer::eAll;
-                    break;
-                }
+        if (inPriority == "eAll")
+        {
+            pLevel = LogServer::eAll;
+            break;
+        }
 
-            // no match
-            return false;
+        // no match
+        return false;
 
-        } while(true);
+    } while(true);
 
     obj->AddStream(stream, pLevel);
     return true;
