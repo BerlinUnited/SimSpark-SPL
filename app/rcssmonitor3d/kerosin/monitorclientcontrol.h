@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorclientcontrol.h,v 1.1 2004/04/25 17:11:43 rollmark Exp $
+   $Id: monitorclientcontrol.h,v 1.1.2.1 2004/05/10 11:36:10 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,9 +19,14 @@
 */
 
 #include <oxygen/simulationserver/simcontrolnode.h>
-#include <monitorparser.h>
-#include <commserver.h>
-#include <monitorparser.h>
+#include <gamestate.h>
+
+namespace oxygen
+{
+    class Transform;
+}
+
+class CommServer;
 
 /** \class MonitorClientControl is a SimControlNode that handles the
     communication with the soccer server using the MonitorLib and
@@ -35,16 +40,14 @@ public:
     virtual void StartCycle();
 
 protected:
-    /** mangles the given expression and construcs the corresponding
-        sphere or returns an already existing instance
-    */
-    boost::shared_ptr<oxygen::Transform>
-    GetSphere(MonitorParser::Expression& expr);
+    /** constructs the corresponding ball or returns an already existing instance */
+    boost::shared_ptr<oxygen::Transform> GetBall();
 
-    /** constructs a unique string used as the node name for the give
-        expression
-    */
-    bool MangleExpr(MonitorParser::Expression& expr, std::string& name);
+    /** constructs the corresponding agent or returns an already existing instance */
+    boost::shared_ptr<oxygen::Transform> GetAgent(TTeamIndex side, int unum);
+
+    /** constructs the corresponding flag or returns an already existing instance */
+    boost::shared_ptr<oxygen::Transform> GetFlag(GameState::EFlagType i);
 
     virtual void OnLink();
 
@@ -52,14 +55,9 @@ protected:
     /** game state data */
     GameState mGameState;
 
-    /** game parameter data */
-    GameParam mGameParam;
-
     /** the cached CommServer reference */
     boost::shared_ptr<CommServer> mCommServer;
 
-    /** the cached MonitorParser reference */
-    boost::shared_ptr<MonitorParser> mMonitorParser;
 };
 
 DECLARE_CLASS(MonitorClientControl);
