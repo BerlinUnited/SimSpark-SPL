@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.4.8.5 2004/01/29 10:18:08 rollmark Exp $
+   $Id: collider.cpp,v 1.4.8.6 2004/02/02 17:03:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -182,5 +182,27 @@ Collider* Collider::GetCollider(dGeomID id)
 void Collider::SetPosition(salt::Vector3f pos)
 {
   dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
+}
+
+bool Collider::Intersects(boost::shared_ptr<Collider> collider)
+{
+  if (
+      (mODEGeom == 0) ||
+      (collider.get() == 0)
+      )
+    {
+      return false;
+    }
+
+  dContactGeom contact;
+
+  return dCollide
+    (
+     mODEGeom,
+     collider->GetODEGeom(),
+     1, /* ask for at most one collision point */
+     &contact,
+     sizeof(contact)
+    ) > 0;
 }
 
