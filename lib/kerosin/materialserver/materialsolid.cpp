@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid.cpp,v 1.2 2004/04/12 13:25:57 rollmark Exp $
+   $Id: materialsolid.cpp,v 1.3 2004/04/18 16:30:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ MaterialSolid::~MaterialSolid()
 {
 }
 
-void MaterialSolid::Bind()
+void MaterialSolid::SetupMaterial()
 {
     // set ambient material reflectance
     glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,mAmbient);
@@ -55,7 +55,11 @@ void MaterialSolid::Bind()
 
     // set light emission
     glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,mEmission);
+}
 
+void MaterialSolid::Bind()
+{
+    SetupMaterial();
     glDisable(GL_TEXTURE_2D);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
