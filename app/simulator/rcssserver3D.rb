@@ -68,15 +68,19 @@ def addAgent(aspectPath)
 
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
+
   driveEffector = new('DriveEffector', aspectPath+'DriveEffector')
   driveEffector.setForceFactor(60.0);
   driveEffector.setSigma(0.005);
+
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
   kickEffector.setForceFactor(4.0)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
   kickEffector.setSteps(3,75)
   kickEffector.setMaxPower(100.0)
   kickEffector.setAngleRange(0.0,50.0)
+
+  new('BeamEffector', aspectPath+'BeamEffector')
 
   # perceptor setup
   visionPerceptor = new('VisionPerceptor', aspectPath+'VisionPerceptor')
@@ -314,3 +318,5 @@ monitorServer.registerMonitorSystem('SexpMonitor')
 # queue agents for startup
 spadesServer.queueAgents('foo', 2)
 spadesServer.queueAgents('bar', 2)
+
+
