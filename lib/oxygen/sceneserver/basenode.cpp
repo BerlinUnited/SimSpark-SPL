@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode.cpp,v 1.4 2003/08/31 21:53:45 fruit Exp $
+   $Id: basenode.cpp,v 1.4.6.1 2003/12/26 11:31:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -170,24 +170,9 @@ void BaseNode::RenderAmbient()
         }
 }
 
-boost::shared_ptr<Scene>        BaseNode::GetScene()
+boost::shared_ptr<Scene> BaseNode::GetScene()
 {
-        shared_ptr<Leaf> leaf = shared_static_cast<Leaf>(make_shared(GetSelf()));
-
-        while(leaf && leaf->GetClass() && !leaf->GetClass()->Supports("Scene"))
-        {
-                leaf = make_shared(leaf->GetParent());
-        }
-
-        if (leaf && leaf->GetClass())
-        {
-                // class name has to be "Scene"
-                return shared_static_cast<Scene>(leaf);
-        }
-        else
-        {
-                return shared_ptr<Scene>();
-        }
+  return shared_dynamic_cast<Scene>(GetParentSupportingClass("Scene"));
 }
 
 void BaseNode::EnableDebugMode()
