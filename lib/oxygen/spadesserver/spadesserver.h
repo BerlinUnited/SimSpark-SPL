@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: spadesserver.h,v 1.2.2.1 2003/12/22 18:05:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public:
     /** returns the amount of time in seconds a single simulation step
         corresponds to
     */
-    float GetTimePerStep();
+    float GetTimePerStep() const;
 
     // SPADES interface methods start here
 
