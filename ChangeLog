@@ -1,3 +1,21 @@
+2003-09-26  Oliver Obst  <fruit@robolog.org>
+
+	* acinclude.m4: changed ruby check to look at the right places
+	(seems not to work for ruby 1.8.0, though)
+
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	including ruby.h instead of ruby/ruby.h
+
+	* lib/kerosin/imageserver/image.h: 
+	including IL/il.h instead of il/il.h
+
+	* app/simulator/Makefile.am:
+	* app/zeitgeisttest/Makefile.am:
+	* lib/kerosin/Makefile.am:
+	* lib/zeitgeist/Makefile.am:
+	* plugin/survival/Makefile.am: 
+	- added RUBY_CPPFLAGS
+
 2003-09-16	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./lib/kerosin/openglserver/openglserver.cpp
