@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.3 2004/03/23 09:36:38 rollmark Exp $
+   $Id: gamestateperceptor.cpp,v 1.3.2.1 2004/03/28 13:43:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,20 +48,18 @@ GameStatePerceptor::InsertSoccerParam(Predicate& predicate, const std::string& n
             return;
         }
 
-    ParameterList element;
+    ParameterList& element = predicate.parameter.AddList();
     element.AddValue(name);
     element.AddValue(value);
-    predicate.parameter.AddValue(element);
 }
 
 void
 GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
 {
     // uniform number
-    ParameterList element;
-    element.AddValue(string("unum"));
-    element.AddValue(mAgentState->GetUniformNumber());
-    predicate.parameter.AddValue(element);
+    ParameterList& unumElement = predicate.parameter.AddList();
+    unumElement.AddValue(string("unum"));
+    unumElement.AddValue(mAgentState->GetUniformNumber());
 
     // team index
     std::string team;
@@ -78,10 +76,9 @@ GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
             break;
         }
 
-    element.Clear();
-    element.AddValue(string("team"));
-    element.AddValue(team);
-    predicate.parameter.AddValue(element);
+    ParameterList& teamElement = predicate.parameter.AddList();
+    teamElement.AddValue(string("team"));
+    teamElement.AddValue(team);
 
     // soccer variables
     // field geometry parameter
@@ -130,16 +127,14 @@ GameStatePerceptor::Percept(Predicate& predicate)
         }
 
     // time
-    ParameterList element;
-    element.AddValue(string("time"));
-    element.AddValue(mGameState->GetTime());
-    predicate.parameter.AddValue(element);
+    ParameterList& timeElement = predicate.parameter.AddList();
+    timeElement.AddValue(string("time"));
+    timeElement.AddValue(mGameState->GetTime());
 
     // playmode
-    element.Clear();
-    element.AddValue(string("playmode"));
-    element.AddValue(SoccerBase::PlayMode2Str(mGameState->GetPlayMode()));
-    predicate.parameter.AddValue(element);
+    ParameterList& pmElement = predicate.parameter.AddList();
+    pmElement.AddValue(string("playmode"));
+    pmElement.AddValue(SoccerBase::PlayMode2Str(mGameState->GetPlayMode()));
 
     return true;
 }
