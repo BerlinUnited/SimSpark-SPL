@@ -41,14 +41,14 @@ Ruby 	1.8.0					http://www.ruby-lang.org/
 
 General
 -------
-
+rcssbase 9.4.5	socket streams, etc.		http://www.sf.net/projects/sserver/
 STLport 4.5.3	optional, not needed		http://www.stlport.org/
 Boost 1.30.2	older versions should also work	http://www.boost.org/
 
 
 Input + OpenGL
 --------------
-
+GL, GLUT	required for the monitor
 SDL 1.2						http://www.libsdl.org/
 
 
