@@ -28,6 +28,7 @@ controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
+physicsserver/boxcollider.cpp \
 physicsserver/boxcollider_c.cpp \
 physicsserver/ccylindercollider.cpp \
 physicsserver/ccylindercollider_c.cpp \
