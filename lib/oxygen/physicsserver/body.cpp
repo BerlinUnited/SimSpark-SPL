@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.14 2004/04/10 14:06:28 rollmark Exp $
+   $Id: body.cpp,v 1.15 2004/04/10 15:38:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -120,7 +120,7 @@ void Body::OnLink()
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (make_shared(GetParent()));
 
-    Matrix mat = baseNode->GetWorldTransform();
+    const Matrix& mat = baseNode->GetWorldTransform();
     dBodySetPosition(mODEBody, mat.Pos().x(), mat.Pos().y(), mat.Pos().z());
 }
 
