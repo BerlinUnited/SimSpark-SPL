@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.6 2004/03/23 09:38:01 rollmark Exp $
+   $Id: kickeffector.cpp,v 1.7 2004/04/21 13:37:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -119,13 +119,8 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     force *= (mForceFactor * kick_power);
     Vector3f torque(force[1]/(salt::g2PI * mBallRadius),
-                    -force[0]/(salt::g2PI * mBallRadius),
+                    force[0]/(salt::g2PI * mBallRadius),
                     0.0);
-
-    GetLog()->Debug() << "DEBUG: (KickEffector): " << kick_power << ": "
-                      << force[0] << " " << force[1] << " " << force[2] << " / "
-                      << torque[0] << " " << torque[1] << " " << torque[2] << " / "
-                      << mSteps << std::endl;
 
     // if the agent doesn't have a body, we're done (this should never happen)
     if (mBall.get() == 0) return true;
