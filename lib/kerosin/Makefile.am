@@ -54,10 +54,8 @@ inputserver/scancodemap.cpp \
 kerosin.cpp \
 materialserver/material.cpp \
 materialserver/material_c.cpp \
-materialserver/material2dtexture.h \
 materialserver/material2dtexture.cpp \
 materialserver/material2dtexture_c.cpp \
-materialserver/materialsolid.h \
 materialserver/materialsolid.cpp \
 materialserver/materialsolid_c.cpp \
 materialserver/materialserver.cpp \
@@ -68,6 +66,10 @@ sceneserver/helper/NVMeshMender.cpp \
 sceneserver/helper/nv_algebra.cpp \
 sceneserver/light.cpp \
 sceneserver/light_c.cpp \
+sceneserver/singlematnode.cpp \
+sceneserver/singlematnode_c.cpp \
+sceneserver/box.cpp \
+sceneserver/box_c.cpp \
 sceneserver/sphere.cpp \
 sceneserver/sphere_c.cpp \
 sceneserver/staticmesh.cpp \
@@ -101,8 +103,12 @@ sceneserver/helper/NVMeshMender.h \
 sceneserver/helper/nv_math/nv_algebra.h \
 sceneserver/helper/nv_math/nv_math.h \
 sceneserver/helper/nv_math/nv_mathdecl.h \
+materialserver/material2dtexture.h \
+materialserver/materialsolid.h \
+sceneserver/singlematnode.h \
 sceneserver/light.h \
 sceneserver/sphere.h \
+sceneserver/box.h \
 sceneserver/staticmesh.h \
 soundserver/soundeffect.h \
 soundserver/soundmodule.h \
