@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.cpp,v 1.1.2.2 2004/02/08 14:01:46 rollmark Exp $
+   $Id: worldmodel.cpp,v 1.1.2.3 2004/02/08 17:16:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -198,6 +198,29 @@ WorldModel::ParseVision(const Predicate& predicate)
     GetVision(predicate,"Goal_1_r",VO_GOAL1R);
     GetVision(predicate,"Goal_2_l",VO_GOAL2L);
     GetVision(predicate,"Goal_2_r",VO_GOAL2R);
+
+    //
+    // DEBUG get mypos player pos
+    //
+    // find the PerfectVision data about the object
+    Predicate::Iterator iter(predicate);
+
+    // advance to the section about object 'name'
+    if (! predicate.FindParameter(iter,"mypos"))
+        {
+            return;
+        }
+
+    // read my position
+    VisionSense sense;
+
+    predicate.GetValue(iter,mMyPos);
+    GetLog()->Debug()
+        << "***** ParseVision " << mMyPos[0] << " "
+        << mMyPos[1] << " "
+        << mMyPos[2] << "\n";
+
+    std::swap<float>(mMyPos[1],mMyPos[2]);
 }
 
 void WorldModel::Parse(const string& message)
@@ -251,6 +274,17 @@ WorldModel::VisionSense WorldModel::GetVisionSense(VisionObject obj)
     return (*iter).second;
 }
 
+Vector3f WorldModel::GetPosition(VisionSense sense)
+{
+    return mMyPos + GetDashVec(sense) * sense.distance;
+}
+
+Vector3f WorldModel::GetObjectPosition(VisionObject obj)
+{
+    return GetPosition(GetVisionSense(obj));
+}
+
+
 TPlayMode WorldModel::GetPlayMode()
 {
     return mPlayMode;
@@ -274,10 +308,22 @@ void WorldModel::CalcPlayerPosition()
 {
 }
 
-salt::Vector3f GetMyPosition()
+salt::Vector3f WorldModel::GetMyPosition()
 {
-    return Vector3f(0,0,0);
+    return mMyPos;
 }
+
+TTeamIndex WorldModel::GetMyTeam()
+{
+    return mTeamIndex;
+}
+
+float WorldModel::GetMinimalKickDistance()
+{
+    return mAgentRadius + mBallRadius + 0.04;
+}
+
+
 
 
 
