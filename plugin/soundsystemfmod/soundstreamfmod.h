@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundstreamfmod.h,v 1.2 2003/11/10 16:27:02 fruit Exp $
+   $Id: soundstreamfmod.h,v 1.3 2004/04/10 12:00:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,15 +28,16 @@
 class SoundStreamFMOD : public kerosin::SoundStream
 {
 public:
-        SoundStreamFMOD(kerosin::SoundServer &inServer);
-        virtual ~SoundStreamFMOD();
+    SoundStreamFMOD(kerosin::SoundServer &inServer);
+    virtual ~SoundStreamFMOD();
 
-        void Load(const char *inName);
-        void Load(void *inBuffer, int inSize);
-        void Play();
+    void Load(const std::string& inName);
+    void Load(void *inBuffer, int inSize);
+    void Play();
 
 protected:
-        FSOUND_STREAM*  mHandle;
-        char*                   mBuffer;
+    FSOUND_STREAM*  mHandle;
+    char* mBuffer;
 };
+
 #endif //SOUNDSTREAMFMOD_H__

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundstreamfmod.cpp,v 1.2 2003/11/10 16:29:25 fruit Exp $
+   $Id: soundstreamfmod.cpp,v 1.3 2004/04/10 12:01:01 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,35 +21,36 @@
 */
 #include "soundstreamfmod.h"
 
-SoundStreamFMOD::SoundStreamFMOD(kerosin::SoundServer &inServer) : SoundStream(inServer), mHandle(NULL), mBuffer(NULL)
+SoundStreamFMOD::SoundStreamFMOD(kerosin::SoundServer &inServer) :
+    SoundStream(inServer), mHandle(NULL), mBuffer(NULL)
 {
 }
 
 SoundStreamFMOD::~SoundStreamFMOD()
 {
-        delete[] mBuffer;
-        if(mHandle != 0)
-        {
-                FSOUND_Stream_Close(mHandle);
-        }
+    delete[] mBuffer;
+    if(mHandle != 0)
+    {
+        FSOUND_Stream_Close(mHandle);
+    }
 }
 
-void SoundStreamFMOD::Load(const char* inName)
+void SoundStreamFMOD::Load(const std::string& inName)
 {
-        mHandle = FSOUND_Stream_Open(inName, FSOUND_LOOP_NORMAL, 0, 0);
-        SetFileName(inName);
+    mHandle = FSOUND_Stream_Open(inName.c_str(), FSOUND_LOOP_NORMAL, 0, 0);
+    SetFileName(inName);
 }
 
 void SoundStreamFMOD::Load(void *inBuffer, int inSize)
 {
-        mBuffer = (char*)inBuffer;
-        mHandle = FSOUND_Stream_Open((const char *) mBuffer, FSOUND_LOADMEMORY, 0, inSize);
+    mBuffer = (char*)inBuffer;
+    mHandle = FSOUND_Stream_Open((const char *) mBuffer, FSOUND_LOADMEMORY, 0, inSize);
 }
 
 void SoundStreamFMOD::Play()
 {
-        if(mHandle != 0)
-        {
-                FSOUND_Stream_Play(FSOUND_FREE, mHandle);
-        }
+    if(mHandle != 0)
+    {
+        FSOUND_Stream_Play(FSOUND_FREE, mHandle);
+    }
 }

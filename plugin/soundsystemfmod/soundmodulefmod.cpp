@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundmodulefmod.cpp,v 1.2 2003/11/10 16:33:08 fruit Exp $
+   $Id: soundmodulefmod.cpp,v 1.3 2004/04/10 12:00:12 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,25 +22,26 @@
 #include "soundmodulefmod.h"
 
 
-SoundModuleFMOD::SoundModuleFMOD(kerosin::SoundServer &inServer) : SoundModule(inServer)
+SoundModuleFMOD::SoundModuleFMOD(kerosin::SoundServer& inServer) :
+    SoundModule(inServer)
 {
-        mHandle = NULL;
+    mHandle = NULL;
 }
 
 
 SoundModuleFMOD::~SoundModuleFMOD()
 {
-        if (mHandle != NULL)
-        {
-                FMUSIC_FreeSong(mHandle);
-        }
+    if (mHandle != NULL)
+    {
+        FMUSIC_FreeSong(mHandle);
+    }
 }
 
 
-void SoundModuleFMOD::Load(const char *inName)
+void SoundModuleFMOD::Load(const std::string& inName)
 {
-        mHandle = FMUSIC_LoadSong(inName);
-        SetFileName(inName);
+    mHandle = FMUSIC_LoadSong(inName.c_str());
+    SetFileName(inName);
 }
 
 
@@ -54,5 +55,5 @@ void SoundModuleFMOD::Load(void *inBuffer, int inSize)
 
 void SoundModuleFMOD::Play()
 {
-        FMUSIC_PlaySong(mHandle);
+    FMUSIC_PlaySong(mHandle);
 }

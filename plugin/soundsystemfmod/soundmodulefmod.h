@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundmodulefmod.h,v 1.2 2003/11/10 16:26:09 fruit Exp $
+   $Id: soundmodulefmod.h,v 1.3 2004/04/10 11:59:46 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@
 class SoundModuleFMOD : public kerosin::SoundModule
 {
 public:
-        SoundModuleFMOD(kerosin::SoundServer &inServer);
-        virtual ~SoundModuleFMOD();
+    SoundModuleFMOD(kerosin::SoundServer &inServer);
+    virtual ~SoundModuleFMOD();
 
-        void Load(const char *inName);
-        void Load(void *inBuffer, int inSize);
-        void Play();
+    void Load(const std::string& inName);
+    void Load(void *inBuffer, int inSize);
+    void Play();
 
 protected:
-        FMUSIC_MODULE* mHandle;
+    FMUSIC_MODULE* mHandle;
 };
 #endif //SOUNDMODULEFMOD_H__
