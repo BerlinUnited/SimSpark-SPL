@@ -3,8 +3,10 @@ SUBDIRS = lib plugin doc
 pkginclude_HEADERS = \
 config.h
 
-doc:	
+doc:	doc-recursive
+doc-recursive:	
 	cd doc && $(MAKE) $(AM_MAKEFLAGS) all doxygen-doc
+
 
 branch-major: commit
 	ver=`echo "@VERSION@" | sed s/\\\\.[0-9][0-9]*\\\\.[0-9][0-9]*$$//`; \
