@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.cpp,v 1.2 2004/03/23 09:20:53 rollmark Exp $
+   $Id: parameterlist.cpp,v 1.2.2.1 2004/03/28 13:35:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,13 @@ void
 ParameterList::AddValue(const boost::any& value)
 {
     mList.push_back(value);
+}
+
+ParameterList&
+ParameterList::AddList()
+{
+    mList.push_back(ParameterList());
+    return *any_cast<ParameterList>(&mList.back());
 }
 
 int
