@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.1.2.4 2004/02/05 15:37:45 fruit Exp $
+   $Id: kickeffector.cpp,v 1.1.2.5 2004/02/06 10:09:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/physicsserver/spherecollider.h>
+#include <soccer/soccerbase/soccerbase.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -181,17 +182,7 @@ KickEffector::GetActionObject(const Predicate& predicate)
 void
 KickEffector::OnLink()
 {
-    mBall = shared_dynamic_cast<Ball>(GetCore()->Get("/usr/scene/Ball"));
-
-    mBallBody = shared_dynamic_cast<Body>
-        (GetCore()->Get("/usr/scene/Ball/physics"));
-
-    if (mBallBody.get() == 0)
-    {
-        GetLog()->Error()
-            << "ERROR: (KickEffector) Ball body node not found\n";
-        return;
-    }
+    SoccerBase::GetBallBody(*this,mBallBody);
 
     shared_ptr<BaseNode> parent =
         shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
@@ -209,18 +200,20 @@ KickEffector::OnLink()
     {
         GetLog()->Error()
             << "ERROR: (KickEffector) parent node has no SphereCollider child\n";
-    } else {
-        mPlayerRadius = geom->GetRadius();
-    }
+    } else
+        {
+            mPlayerRadius = geom->GetRadius();
+        }
 
     geom = shared_dynamic_cast<SphereCollider>(mBall->GetChild("geometry"));
     if (geom.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (KickEffector) ball node has no SphereCollider child\n";
-    } else {
-        mBallRadius = geom->GetRadius();
-    }
+    } else
+        {
+            mBallRadius = geom->GetRadius();
+        }
 }
 
 void
