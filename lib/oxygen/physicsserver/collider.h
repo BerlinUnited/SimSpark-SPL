@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.8 2004/04/07 08:34:27 rollmark Exp $
+   $Id: collider.h,v 1.9 2004/04/07 11:40:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -127,9 +127,6 @@ protected:
     // Members
     //
 protected:
-    /** the space this collider is associated with */
-    boost::shared_ptr<Space> mSpace;
-
     /** the ode collision geometry */
     dGeomID mODEGeom;
 };

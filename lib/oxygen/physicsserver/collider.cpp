@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.9 2004/04/07 08:34:27 rollmark Exp $
+   $Id: collider.cpp,v 1.10 2004/04/07 11:40:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,20 +61,7 @@ void Collider::OnLink()
         }
 
     // if we have a space add the geom to it
-    shared_ptr<Scene> scene = GetScene();
-    if (scene.get() == 0)
-        {
-            return;
-        }
-
-    mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
-    if (mSpace.get() == 0)
-        {
-            return;
-        }
-
-    dSpaceID space = mSpace->GetODESpace();
-
+    dSpaceID space = GetSpaceID();
     if (
         (space) &&
         (! dSpaceQuery(space, mODEGeom))
@@ -89,16 +76,16 @@ void Collider::OnUnlink()
 {
     ODEObject::OnUnlink();
 
+    // remove collision geometry from space
+    dSpaceID space = GetSpaceID();
+
     if (
-        (mSpace.get() == 0) ||
-        (mODEGeom == 0)
+        (mODEGeom == 0) ||
+        (space == 0)
         )
         {
             return;
         }
-
-    // remove collision geometry from space
-    dSpaceID space = mSpace->GetODESpace();
 
     if (
         (space) &&
@@ -107,8 +94,6 @@ void Collider::OnUnlink()
         {
             dSpaceRemove(space, mODEGeom);
         }
-
-    mSpace.reset();
 }
 
 void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
