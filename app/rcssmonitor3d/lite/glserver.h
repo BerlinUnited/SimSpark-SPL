@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.2 2004/03/09 21:22:01 rollmark Exp $
+   $Id: glserver.h,v 1.3 2004/04/20 12:27:07 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 class GLServer
 {
 public:
+    enum ETextAlign { eNONE, eLEFT, eRIGHT, eCENTER };
+
     GLServer(){};
     GLServer(int width, int height,
              salt::Vector3f camPos,
@@ -38,14 +40,17 @@ public:
     void InitGL();
     void DrawGroundRectangle(salt::Vector3f pos, float szX, float szY,
                              float angleDeg, float height = 0.0f);
+    void DrawCircle(const salt::Vector3f& pos, float radius,
+                    float start_angle = 0.0, float end_angle = 360.0);
     void ApplyCamera();
     void DrawText(const char* text, salt::Vector2f pos);
     void DrawText3D(const char* text, salt::Vector3f pos);
-    void DrawTextPix(const char* text, salt::Vector2f pix);
-    int GetTextHeight();
+    void DrawTextPix(const char* text, salt::Vector2f pix, ETextAlign = eNONE);
+    int GetTextHeight() const;
+    int GetTextWidth(const char* text) const;
 
     void DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz);
-    void DrawSphere(salt::Vector3f spherePos, float radius);
+    void DrawSphere(salt::Vector3f spherePos, float radius, int res = 10);
     void DrawShadowOfSphere(salt::Vector3f spherePos,float radius);
     void DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz);
     void Reshape(int width, int height)
