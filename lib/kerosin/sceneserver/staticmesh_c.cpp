@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh_c.cpp,v 1.6 2004/04/28 14:46:59 rollmark Exp $
+   $Id: staticmesh_c.cpp,v 1.7 2004/05/02 09:49:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,14 +29,23 @@ using namespace std;
 
 FUNCTION(StaticMesh,load)
 {
+    // load <fileName> parameter ...
     string inFileName;
-    ParameterList parameter;
 
-    return (
-            (in.GetSize() == 1) &&
-            (in.GetValue(in.begin(), inFileName)) &&
-            (obj->Load(inFileName))
-            );
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in[0],inFileName))
+        )
+        {
+            return false;
+        }
+
+    ParameterList parameter(in);
+
+    // remove filename argument
+    parameter.Pop_Front();
+
+    return obj->Load(inFileName, parameter);
 }
 
 FUNCTION(StaticMesh,setScale)
