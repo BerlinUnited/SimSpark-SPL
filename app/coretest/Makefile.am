@@ -1,15 +1,25 @@
-if BUILD_KEROSIN
 noinst_PROGRAMS = coretest
+
+if BUILD_KEROSIN
+if DEBUG
+my_ldadd=${top_srcdir}/lib/kerosin/libkerosin_debug.la
+else
+my_ldadd=${top_srcdir}/lib/kerosin/libkerosin.la
+endif
+else
+my_ldadd= 
 endif
 
+
+
 if DEBUG
-LDADD = \
+LDADD = ${my_ldadd} \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
         ${top_srcdir}/lib/salt/libsalt_debug.la 
 coretest_CXXFLAGS = -O -g -W -Wall
 else
-LDADD = \
+LDADD = ${my_ldadd} \
 	${top_srcdir}/lib/oxygen/liboxygen.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
         ${top_srcdir}/lib/salt/libsalt.la 
