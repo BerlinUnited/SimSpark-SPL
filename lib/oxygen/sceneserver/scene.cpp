@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: scene.cpp,v 1.5 2004/04/11 17:06:09 rollmark Exp $
+   $Id: scene.cpp,v 1.6 2004/05/05 09:02:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,8 +26,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 
-Scene::Scene() :
-BaseNode()
+Scene::Scene() : BaseNode(), mModified(false)
 {
 }
 
@@ -43,4 +42,15 @@ const salt::Matrix& Scene::GetWorldTransform() const
 void Scene::SetWorldTransform(const salt::Matrix &/*transform*/)
 {
 }
+
+void Scene::SetModified(bool modified)
+{
+    mModified = modified;
+}
+
+bool Scene::GetModified()
+{
+    return mModified;
+}
+
 

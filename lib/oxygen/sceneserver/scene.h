@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scene.h,v 1.5 2004/04/10 12:52:27 rollmark Exp $
+   $Id: scene.h,v 1.6 2004/05/05 09:02:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,6 +55,19 @@ public:
 
     /** sets the world transform of this node */
     virtual void SetWorldTransform(const salt::Matrix &transform);
+
+    /** marks the scene as modified, i.e. scene nodes were added or
+        removed since the last update. This useful for monitors to
+        decide between an incremental or a full state update
+     */
+    void SetModified(bool modified);
+
+    /** returns true iff the scene is marked modified */
+    bool GetModified();
+
+protected:
+    /** true, if the scene is modified */
+    bool mModified;
 };
 
 DECLARE_CLASS(Scene);
