@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.16 2004/04/14 18:28:25 rollmark Exp $
+   $Id: body.cpp,v 1.17 2004/04/15 14:15:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -227,21 +227,9 @@ void Body::SetVelocity(const Vector3f& vel)
 
 void Body::SetRotation(const Matrix& rot)
 {
-    dMatrix3 ODEMatrix;
-    ODEMatrix[0] = rot.m[0];
-    ODEMatrix[1] = rot.m[4];
-    ODEMatrix[2] = rot.m[8];
-    ODEMatrix[3] = 0;
-    ODEMatrix[4] = rot.m[1];
-    ODEMatrix[5] = rot.m[5];
-    ODEMatrix[6] = rot.m[9];
-    ODEMatrix[7] = 0;
-    ODEMatrix[8] = rot.m[2];
-    ODEMatrix[9] = rot.m[6];
-    ODEMatrix[10] = rot.m[10];
-    ODEMatrix[11] = 0;
-
-    dBodySetRotation(mODEBody, ODEMatrix);
+    dMatrix3 m;
+    ConvertRotationMatrix(rot,m);
+    dBodySetRotation(mODEBody,m);
 }
 
 Vector3f Body::GetAngularVelocity()
