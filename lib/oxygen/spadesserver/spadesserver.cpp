@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.5 2003/12/02 17:19:58 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.6 2003/12/03 17:58:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,8 +34,11 @@ using namespace std;
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/gamecontrolserver/actionobject.h>
 #include <spades/SimEngine.hpp>
 #include "spadescreatesenseevent.h"
+#include "spadesactevent.h"
+
 
 #if THIS_IS_A_DEMO_ONLY
 #include <oxygen/sceneserver/basenode.h>
@@ -167,7 +170,7 @@ SpadesServer::GetMonitorServer()
 }
 
 boost::shared_ptr<GameControlServer>
-SpadesServer::GetGameControlServer()
+SpadesServer::GetGameControlServer() const
 {
     return shared_static_cast<GameControlServer>
         (GetCore()->Get("/sys/server/gamecontrol"));
@@ -230,7 +233,21 @@ SpadesServer::getMinSenseLatency() const
 ActEvent*
 SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen) const
 {
-    return 0;
+    const shared_ptr<GameControlServer> gcs = GetGameControlServer();
+    if (gcs.get() == NULL)
+        {
+            return NULL;
+        }
+
+    shared_ptr<ActionObject::TList> actionList
+        = gcs->Parse(std::string(data,datalen));
+
+    if (actionList.get() == 0)
+        {
+            return 0;
+        }
+
+    return new SpadesActEvent(t, a, actionList);
 }
 
 void
