@@ -43,7 +43,7 @@ ConsoleInputLineBinding::execute(InputLine* input_line)
     else
     {
         smux.warning() << "ConsoleInputLineBinding::execute: "
-                       << "M_action_console points to NULL.\n";
+                       << "M_action_console points to NULL." << endl;
     }
 }
 

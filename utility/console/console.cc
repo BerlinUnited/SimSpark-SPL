@@ -93,7 +93,7 @@ Console::execute(const string& input)
     scan_result = M_parser.scan(input);
     if (!scan_result.first)
     {
-        smux.error() << "Couldn't execute input: Scan error.\n";
+        smux.error() << "Couldn't execute input: Scan error." << endl;
         return false;
     }
 
@@ -101,7 +101,7 @@ Console::execute(const string& input)
     if (!ConsoleParser::parse(scan_result.second))
     {
         ConsoleParser::deleteStatements(scan_result.second);
-        smux.error() << "Couldn't execute input: Syntax error.\n";
+        smux.error() << "Couldn't execute input: Syntax error." << endl;
         return false;
     }
 
@@ -143,7 +143,7 @@ Console::perform(ConVar::ConVars& conVars)
         smux.normal() << "the command " 
                       << commandVar->getAttributes().getName() 
                       << " could not be executed: wrong type of arguments.\n";
-        smux << command->getUsage() << "\n";
+        smux << command->getUsage() << endl;
         return false;
     }
 

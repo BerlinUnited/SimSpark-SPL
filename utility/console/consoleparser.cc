@@ -93,7 +93,8 @@ ConsoleParser::parse(const StatementList& statements)
         ConVar* commandVar = (*iter)[0];
         if (!commandVar->isConvertibleTo(ConVar::S_CVT_COMMAND))
         {
-            smux.warning() << "the statement does not begin with a command.\n";
+            smux.warning() << "the statement does not begin with a command."
+                           << endl;
             return false;
         }
 
@@ -130,7 +131,7 @@ ConsoleParser::scan(const string& input, TStrings used_aliases) const
         {
             case Scanner::S_TT_INVALID:
                 smux.warning() << "The scanner returned token S_TT_INVALID "
-                               << "in string " << input << "\n";
+                               << "in string " << input << endl;
                 deleteStatement(tokens);
                 return make_pair(false, tokens);
             case Scanner::S_TT_SEPARATOR:
@@ -160,7 +161,7 @@ ConsoleParser::scan(const string& input, TStrings used_aliases) const
                              used_aliases.end(), label) != used_aliases.end())
                     {
                         // yes, -> return
-                        smux.normal() << "alias loop.\n";
+                        smux.normal() << "alias loop." << endl;
                         deleteStatement(tokens);
                         return make_pair(false, tokens);
                     }
@@ -202,7 +203,7 @@ ConsoleParser::scan(const string& input, TStrings used_aliases) const
             }
             default:
                 smux.warning() << "The scanner returned the unknown token type "
-                               << token.type << " in string " << input << "\n";
+                               << token.type << " in string " << input << endl;
                 deleteStatement(tokens);
                 return make_pair(false, tokens);
         }
