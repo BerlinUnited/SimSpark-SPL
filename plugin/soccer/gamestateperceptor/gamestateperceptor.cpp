@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.1.2.2 2004/02/06 10:56:25 rollmark Exp $
+   $Id: gamestateperceptor.cpp,v 1.1.2.3 2004/02/06 13:46:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "gamestateperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <soccer/soccerbase/soccerbase.h>
+#include <soccer/agentstate/agentstate.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 
 using namespace oxygen;
@@ -30,13 +31,15 @@ using namespace std;
 
 GameStatePerceptor::GameStatePerceptor() : oxygen::Perceptor()
 {
+    mFirstPercept = true;
 }
 
 GameStatePerceptor::~GameStatePerceptor()
 {
 }
 
-string GameStatePerceptor::PlayMode2Str(const TPlayMode mode) const
+string
+GameStatePerceptor::PlayMode2Str(const TPlayMode mode) const
 {
     switch (mode)
         {
@@ -57,16 +60,95 @@ string GameStatePerceptor::PlayMode2Str(const TPlayMode mode) const
         };
 }
 
+void
+GameStatePerceptor::InsertSoccerParam(Predicate& predicate, const std::string& name)
+{
+    float value;
+    if (! SoccerBase::GetSoccerVar(*this,name,value))
+        {
+            return;
+        }
+
+    Predicate::TParameterList element;
+    element.push_back(name);
+    element.push_back(value);
+    predicate.parameter.push_back(element);
+}
+
+void
+GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
+{
+    // uniform number
+    Predicate::TParameterList element;
+    element.push_back(string("unum"));
+    element.push_back(mAgentState->GetUniformNumber());
+    predicate.parameter.push_back(element);
+
+    // team index
+    std::string team;
+    switch (mAgentState->GetTeamIndex())
+        {
+        case TI_NONE :
+            team = "none";
+            break;
+        case TI_LEFT :
+            team = "left";
+            break;
+        case TI_RIGHT :
+            team = "right";
+            break;
+        }
+
+    element.clear();
+    element.push_back(string("team"));
+    element.push_back(team);
+    predicate.parameter.push_back(element);
+
+    // soccer variables
+    // field geometry parameter
+    InsertSoccerParam(predicate,"FieldLength");
+    InsertSoccerParam(predicate,"FieldWidth");
+    InsertSoccerParam(predicate,"FieldHeight");
+    InsertSoccerParam(predicate,"GoalWidth");
+    InsertSoccerParam(predicate,"GoalDepth");
+    InsertSoccerParam(predicate,"GoalHeight");
+    InsertSoccerParam(predicate,"BorderSize");
+
+    // agent parameter
+    InsertSoccerParam(predicate,"AgentMass");
+    InsertSoccerParam(predicate,"AgentRadius");
+    InsertSoccerParam(predicate,"AgentMaxSpeed");
+
+    // ball parameter
+    InsertSoccerParam(predicate,"BallRadius");
+    InsertSoccerParam(predicate,"BallMass");
+}
+
 bool
 GameStatePerceptor::Percept(Predicate& predicate)
 {
-    if (mGameState.get() == 0)
+    if (
+        (mGameState.get() == 0) ||
+        (mAgentState.get() == 0)
+        )
         {
             return false;
         }
 
     predicate.name = "GameState";
     predicate.parameter.clear();
+
+    // with the first GameState percept after the player is assigned
+    // to a team it receives info about it's team and unum assignment
+    // along with outher soccer parameters
+    if (
+        (mFirstPercept) &&
+        (mAgentState->GetTeamIndex() != TI_NONE)
+        )
+        {
+            mFirstPercept = false;
+            InsertInitialPercept(predicate);
+        }
 
     // time
     Predicate::TParameterList element;
@@ -83,12 +165,16 @@ GameStatePerceptor::Percept(Predicate& predicate)
     return true;
 }
 
-void GameStatePerceptor::OnLink()
+void
+GameStatePerceptor::OnLink()
 {
     SoccerBase::GetGameState(*this,mGameState);
+    SoccerBase::GetAgentState(*this,mAgentState);
 }
 
-void GameStatePerceptor::OnUnlink()
+void
+GameStatePerceptor::OnUnlink()
 {
     mGameState.reset();
+    mAgentState.reset();
 }
