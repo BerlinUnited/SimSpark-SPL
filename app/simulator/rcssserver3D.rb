@@ -68,9 +68,9 @@ def addAgent(aspectPath)
 
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
-  dashEffector = new('DashEffector', aspectPath+'DashEffector')
-  dashEffector.setForceFactor(60.0);
-  dashEffector.setSigma(0.005);
+  driveEffector = new('DriveEffector', aspectPath+'DriveEffector')
+  driveEffector.setForceFactor(60.0);
+  driveEffector.setSigma(0.005);
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
   kickEffector.setForceFactor(4.0)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
