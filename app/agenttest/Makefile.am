@@ -17,5 +17,16 @@ endif
 AM_CPPFLAGS = -I${top_srcdir}/plugin/soccer -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
-agenttest_SOURCES = main.cpp
+agenttest_SOURCES = \
+	main.cpp \
+	worldmodel.cpp \
+	worldmodel_c.cpp \
+	commserver.cpp \
+	commserver_c.cpp \
+	behavior.cpp \
+	behavior_c.cpp \
+	kicknrun.cpp \
+	kicknrun_c.cpp \
+	soccer.cpp \
+	soccer_c.cpp
 

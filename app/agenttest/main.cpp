@@ -1,21 +1,43 @@
-// This is a dummy agent created for testing with the SpadesTest. It
-// reads length prefixed data (see spades manual 6.3) from fd 3 and
-// writes to fd 4. A corresponding agent DB (agentdb.list, entry
-// 'default') exists in the spadestest directory.
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: main.cpp,v 1.3.2.12 2004/02/07 16:30:58 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Main of the rcssmonitor3D application
+
+   This is a very simple 3D monitor example which will hopefully be
+   used for the first steps of the 3D SoccerServer
+*/
+
+/** This is a dummy agent created for testing with the SpadesTest. It
+    reads length prefixed data (see spades manual 6.3) from fd 3 and
+    writes to fd 4. A corresponding agent DB (agentdb.list, entry
+    'default') exists in the spadestest directory.
+*/
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
-#include <sstream>
-
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <map>
-#include <netinet/in.h>
-#include <sys/time.h>
-#include <sys/select.h>
 #include <soccertypes.h>
+#include "worldmodel.h"
+#include "commserver.h"
+#include "behavior.h"
+#include "soccer.h"
+#include "kicknrun.h"
 
 using namespace zeitgeist;
 using namespace std;
@@ -23,53 +45,17 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-// the receive buffer of the agent
-static char buffer[4096];
+// commserver instance
+static shared_ptr<CommServer> comm;
 
-// pointer to the payload received in the buffer
-static char* msg_data = buffer + sizeof(long);
+// worldmodel instance
+static shared_ptr<WorldModel> wm;
 
-// parser instance
-static shared_ptr<BaseParser> parser;
-
-// input file descriptor
-const int readFd = 3;
-
-// outp file descriptor
-const int writeFd = 4;
+// behavior instance
+static shared_ptr<Soccer> behave;
 
 // the default team name
 string teamName = "Robolog";
-
-// mapping from gamestate string to TPlayMode
-typedef map<string, TPlayMode> TPlayModeMap;
-TPlayModeMap PlayModeMap;
-
-// soccer variables
-float FieldLength = 105.0;
-float FieldWidth = 68.0;
-float FieldHeight = 20.0;
-float GoalWidth = 7.32;
-float GoalDepth = 2.0;
-float GoalHeight = 2.44;
-float BorderSize = 4.0f;
-
-// agent parameter
-float AgentMass = 75;
-float AgentRadius = 0.22;
-float AgentMaxSpeed = 10;
-
-// ball parameter
-float BallRadius = 0.111;
-float BallMass = 0.4;
-
-// team information
-TTeamIndex TeamIndex = TI_NONE;
-unsigned int TeamUnum = 0;
-
-// game information
-float Time;
-unsigned int PlayMode;
 
 // set to 1 to write debug information to stdout
 #define ENABLE_LOGGING 1
@@ -84,388 +70,6 @@ void Log(const char* out)
  #define Log(x)
 #endif
 
-bool SelectInput()
-{
-  fd_set readfds;
-  FD_ZERO(&readfds);
-  FD_SET(readFd,&readfds);
-
-  return select(readFd+1,&readfds, 0, 0, 0) > 0;
-}
-
-bool GetInput()
-{
-  // read the first message segment
-  if (! SelectInput())
-    {
-      return false;
-    }
-
-  unsigned int bytesRead = read(readFd, buffer, sizeof(buffer));
-  if (bytesRead < sizeof(unsigned int))
-    {
-      return false;
-    }
-
-  // msg is prefixed with it's total length
-  unsigned int msgLen = ntohl(*(unsigned int*)buffer);
-
-  // read remaining message segments
-  unsigned int msgRead = bytesRead - sizeof(unsigned int);
-  char *offset = buffer + bytesRead;
-
-  while (msgRead < msgLen)
-    {
-      if (! SelectInput())
-        {
-          return false;
-        }
-
-      msgRead += read(readFd, offset, sizeof(buffer) - msgRead);
-      offset += msgRead;
-    }
-
-  // zero terminate received data
-  (*offset) = 0;
-
-  return true;
-}
-
-void PutOutput(const char* out)
-{
-  strcpy(msg_data, out);
-  unsigned int len = strlen(out);
-  unsigned int netlen = htonl(len);
-  memcpy(buffer,&netlen,sizeof(netlen));
-  write(writeFd, buffer, len + sizeof(netlen));
-}
-
-void PutOutput(const string& str)
-{
-  PutOutput(str.c_str());
-}
-
-// --------------------
-
-void CreateAgent()
-{
-  // use the create effector to setup the Sensors and Effectors
-  Log(msg_data);
-  Log("\n");
-  Log("creating agent\n");
-  PutOutput("A(create)");
-}
-
-void InitAgent()
-{
-  Log(msg_data);
-  Log("\n");
-  Log("sending init command\n");
-
-  stringstream ss;
-  ss << "A(init (unum " << getpid() << ") (teamname " << teamName << "))";
-  PutOutput(ss.str().c_str());
-}
-
-void RandomBehave(int numSensation)
-{
-  static bool back = false;
-
-  Log("received another sensation ");
-  Log(msg_data);
-
-  if (numSensation % 100 == 0) back = !back;
-
-  Log("using dash effector\n ");
-  if (back)
-    {
-      if (numSensation % 10 == 0)
-        PutOutput("A(dash 0 0 100)");
-      else
-        PutOutput("A(dash 0 0 100)");
-    } else {
-      if (numSensation % 10 == 0)
-        PutOutput("A(dash 0 0 100)");
-      else
-        PutOutput("A(dash 0 0 100)");
-    }
-}
-
-bool GetObjectPos(const Predicate& predicate, const string& name, Vector3f& pos)
-{
-  // find the PerfectVision data about the object
-  Predicate::Iterator objIter(predicate);
-
-  // advance to the section about object 'name'
-  if (! predicate.FindParameter(objIter,name))
-    {
-      return false;
-    }
-
-  // advance to the 'pos' entry in the object's section
-  if (! predicate.FindParameter(objIter,"pol"))
-    {
-      return false;
-    }
-
-  // read the position vector
-  if (! predicate.GetValue(objIter,pos))
-    {
-      return false;
-    }
-
-  return true;
-}
-
-void CalcDashVec(const Vector3f& polTo, Vector3f& dashVec)
-{
-  dashVec[0] = 15 * polTo[0] * gCos(gDegToRad(polTo[1])) *
-    gSin(gDegToRad(90.0 - polTo[2]));
-  dashVec[1] = 15 * polTo[0] * gSin(gDegToRad(polTo[1])) *
-    gSin(gDegToRad(90.0 - polTo[2]));
-  dashVec[2] = 15 * polTo[0] * gCos(gDegToRad(90.0 - polTo[2]));
-}
-
-void ParseTeamIndex(const Predicate& predicate, Predicate::Iterator& objIter)
-{
-  // parse team index
-  string team;
-  if (predicate.GetValue(objIter,team))
-    {
-      if (team == "left")
-        TeamIndex = TI_LEFT;
-      else if (team == "right")
-        TeamIndex = TI_RIGHT;
-      else TeamIndex = TI_NONE;
-
-      stringstream ss;
-      ss << "GameState: parsed TeamIndex" << team << "("
-         << TeamIndex << ")\n";
-      Log(ss.str().c_str());
-    }
-}
-
-void ParsePlayMode(const Predicate& predicate, Predicate::Iterator& objIter)
-{
-  string mode;
-  // parse play mode
-  if (predicate.GetValue(objIter,mode))
-    {
-      TPlayModeMap::iterator iter = PlayModeMap.find(mode);
-      if (iter != PlayModeMap.end())
-        {
-          PlayMode = (*iter).second;
-
-          stringstream ss;
-          ss << "GameState: parsed playmode " << mode << "("
-             << PlayMode << ")\n";
-          Log(ss.str().c_str());
-        } else
-          {
-            stringstream ss;
-            ss << "GameState: could not parse playmode " << mode << "\n";
-            Log(ss.str().c_str());
-          }
-    }
-}
-
-template<typename TYPE>
-void GetGameStateParam(const Predicate& predicate,
-                       const string& name, TYPE& value)
-{
-  // find the GameStateData
-  Predicate::Iterator objIter(predicate);
-
-  if (! predicate.FindParameter(objIter,name))
-    {
-      return;
-    }
-
-  const void* var = (void*)(&value);
-
-  // parse special cases
-  if (var == &TeamIndex)
-    {
-      ParseTeamIndex(predicate,objIter);
-    } else if (var == &PlayMode)
-      {
-        ParsePlayMode(predicate,objIter);
-      } else
-      {
-        // parse generic cases
-        predicate.GetValue(objIter,value);
-        stringstream ss;
-        ss << "GameState: receceived " << name << " " << value << "\n";
-        Log(ss.str().c_str());
-      }
-}
-
-void ParseGameState(const Predicate& predicate)
-{
-  GetGameStateParam(predicate, "FieldLength", FieldLength);
-  GetGameStateParam(predicate, "FieldWidth",  FieldWidth);
-  GetGameStateParam(predicate, "FieldHeigth", FieldHeight);
-  GetGameStateParam(predicate, "GoalWidth",   GoalWidth);
-  GetGameStateParam(predicate, "GoalDepth",   GoalDepth);
-  GetGameStateParam(predicate, "GoalHeight",  GoalHeight);
-  GetGameStateParam(predicate, "BorderSize",  BorderSize);
-  GetGameStateParam(predicate, "time",  Time);
-  GetGameStateParam(predicate, "playmode",PlayMode);
-  GetGameStateParam(predicate, "unum",  TeamUnum);
-  GetGameStateParam(predicate, "team",  TeamIndex);
-}
-
-void Behave(int /*numSensation*/)
-{
-  shared_ptr<Predicate::TList> predicates =
-    parser->Parse(msg_data);
-
-  Log("received sensation ");
-  Log(msg_data);
-  Log("\n");
-
-  for (
-       Predicate::TList::const_iterator iter = predicates->begin();
-       iter != predicates->end();
-       ++iter
-       )
-    {
-      const Predicate& predicate = (*iter);
-
-      if (predicate.name == "GameState")
-        {
-          Log ("received gamestate\n");
-          ParseGameState(predicate);
-          continue;
-        }
-
-      // check for the Vision perceptor
-      if (predicate.name != "Vision")
-        {
-          Log ("skipped ");
-          Log (predicate.name.c_str());
-          Log("\n");
-          continue;
-        }
-
-      Log(string(predicate.name + "\n").c_str());
-
-      Vector3f ballVec;
-      if (! GetObjectPos(predicate, "Ball", ballVec))
-        {
-          return;
-        }
-
-      const float dist = ballVec[0];
-
-      static char buffer[512];
-      sprintf(buffer,"ballVec is %.2f %.2f %.2f, l= %.2f\n",ballVec[0],ballVec[1],ballVec[2],dist);
-      Log(buffer);
-
-      if (dist <= 0.22 + 0.111 + 0.04)
-        {
-          // kick the ball
-          Log("Kicking \n");
-          PutOutput("A(kick 20.0 80.0)");
-        } else {
-            Vector3f dashVec;
-            stringstream s0;
-            s0 << "Dash to: " << ballVec[0] << " " << ballVec[1] << " " << ballVec[2] << "\n";
-            Log(s0.str().c_str());
-
-            CalcDashVec(ballVec, dashVec);
-
-            stringstream ss;
-            ss << "A(dash"
-               << " " << dashVec[0]
-               << " " << dashVec[1]
-               << "  " << dashVec[2]
-               << ")";
-
-            PutOutput(ss.str().c_str());
-          }
-    }
-}
-
-// --------------------
-
-
-void ProcessSensation()
-{
-  // Stime time data
-
-  // This is a sensation to be given to the agent. It begins a
-  // thinking cycle. The first time is the simulation time the
-  // sensation was generated (also known as the send time) and the
-  // second is the time that the sensation is delivered to the agent
-  // (also known as the arrive time). If the parameter send agent send
-  // time is off, -1 is always sent as the send time, and if the
-  // parameter send agent arrive time is off, -1 is always sent as the
-  // arrive time. The data is an arbitrary data string generated by
-  // the world model. The agent can reply with act messages, and must
-  // finish with a done thinking message.
-
-  static int numSensation = 0;
-
-  switch (numSensation)
-    {
-    case 0:
-      Log ("received first sensation ");
-      CreateAgent();
-      break;
-
-    case 1:
-      Log("received second sensation ");
-      InitAgent();
-      break;
-
-    default:
-      Behave(numSensation);
-    }
-
-  Log("writing done thinking message\n");
-  PutOutput("D");
-
-   ++numSensation;
-}
-
-void ProcessInitMessage()
-{
-  // Ddata
-
-  // After startup, this initialization data message is sent to the
-  // agent. On a normal startup, data will be empty. On an agent
-  // migration (see Section 5.3), the data returned by the old agent
-  // processes will be given to the new agent. An initialization done
-  // message should be sent once the initialization data has been
-  // processed and all other startup is complete.
-
-  Log("received init message 'D'\n");
-
-  // init here
-
-  Log("writing init done message\n");
-  PutOutput("I");
-}
-
-void ProcessThinkTimeMessage()
-{
-  // Ktime
-
-  // This is a think time message that notifies the agent how much
-  // thinking time was used for the last thinking cycle. These are
-  // only sent if send agent think times is on.
-
-  Log ("received a think time message ");
-  Log (msg_data);
-  Log ("\n");
-
-  Log("writing done thinking message\n");
-  PutOutput("D");
-}
-
-
-//-----------------------------------------------------------------------
 void printHelp()
 {
   cout << "\nusage: agenttest [options]" << endl;
@@ -498,19 +102,7 @@ void ReadOptions(int argc, char* argv[])
     }
 }
 
-void SetupGameStateMap()
-{
-  PlayModeMap.clear();
-
-  PlayModeMap[STR_PM_BeforeKickOff] = PM_BeforeKickOff;
-  PlayModeMap[STR_PM_KickOff]       = PM_KickOff;
-  PlayModeMap[STR_PM_PlayOn]        = PM_PlayOn;
-  PlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
-  PlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
-  PlayModeMap[STR_PM_FirstHalfOver] = PM_FirstHalfOver;
-}
-
-int main(int argc, char* argv[])
+int Init(int argc, char* argv[])
 {
   //init zeitgeist and oxygen
   Zeitgeist zg("." PACKAGE_NAME);
@@ -519,58 +111,85 @@ int main(int argc, char* argv[])
   // read command line options
   ReadOptions(argc,argv);
 
-  // setup map for GameState parsing
-  SetupGameStateMap();
+  // register and create the CommServer
+  zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "");
+  comm = shared_dynamic_cast<CommServer>(zg.GetCore()->New("CommServer"));
+  if (comm.get() == 0)
+      {
+          Log("cannot create CommServer\n");
+          return 1;
+      }
 
-  // init the s-expression parser
-  if (! zg.GetCore()->ImportBundle("sexpparser"))
+  // register and create the WorldModel
+  zg.GetCore()->RegisterClassObject(new CLASS(WorldModel), "");
+  wm = shared_dynamic_cast<WorldModel>(zg.GetCore()->New("WorldModel"));
+  if (wm.get() == 0)
     {
+      Log("cannot create WorldModel\n");
       return 1;
     }
 
-  parser = shared_dynamic_cast<BaseParser>(zg.GetCore()->New("SexpParser"));
-  if (parser.get() == 0)
-    {
-      Log("cannot create SexpParser");
-    }
+  // register and create the KickNRun class
+  zg.GetCore()->RegisterClassObject(new CLASS(KickNRun), "");
+  behave = shared_dynamic_cast<Soccer>(zg.GetCore()->New("KickNRun"));
 
+  if (behave.get() == 0)
+      {
+          Log("cannot create Behavior\n");
+          return 1;
+      }
+
+  behave->SetTeamName(teamName);
+  behave->SetWorldModel(wm);
+  behave->SetCommServer(comm);
+
+  return 0;
+}
+
+void Run()
+{
   Log("AgentTest started\n");
 
-  timeval tv;
-  gettimeofday(&tv, 0);
-  srand(tv.tv_usec);
-
-  //
-  // perfom any agent init here
-  //
-
-  // 'initialization done' message
   while (true)
     {
-      if (! GetInput())
+      if (! comm->GetInput())
         {
           break;
         }
 
-      switch(msg_data[0])
+      wm->Parse(comm->GetMsg());
+
+      switch(comm->GetMsg()[0])
         {
         case 'D' :
-          ProcessInitMessage();
+            behave->ProcessInitMessage();
+            break;
+
+        case 'K' :
+            behave->ProcessThinkTimeMessage();
           break;
 
         case 'S' :
-          ProcessSensation();
-          break;
-
-        case 'K' :
-          ProcessThinkTimeMessage();
+            behave->Think();
           break;
 
         default:
           Log("received unknown data: ");
-          Log(msg_data);
+          Log(comm->GetMsg());
           Log("\n");
           break;
         }
     }
+}
+
+int main(int argc, char* argv[])
+{
+  int ret = Init(argc, argv);
+
+  if (ret > 0)
+      {
+          return ret;
+      }
+
+  Run();
 }
