@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadescreatesenseevent.h,v 1.1.2.1 2003/12/02 16:53:00 rollmark Exp $
+   $Id: spadescreatesenseevent.h,v 1.1.2.2 2003/12/03 17:52:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,10 +50,10 @@ class SpadesCreateSenseEvent : public spades::CreateSenseEvent
   SpadesCreateSenseEvent (spades::SimTime t, spades::AgentID a)
     : CreateSenseEvent (t, a) {}
 
-  ~SpadesCreateSenseEvent () {}
+  virtual ~SpadesCreateSenseEvent () {}
 
-  void Print (std::ostream & o) const;
-  bool realizeEventWorldModel(spades::WorldModel* pWM);
+  virtual void Print (std::ostream & o) const;
+  virtual bool realizeEventWorldModel(spades::WorldModel* pWM);
 
   virtual spades::SenseEvent* createSense(spades::WorldModel* p);
 };
