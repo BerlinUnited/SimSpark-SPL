@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.h,v 1.4 2004/03/22 18:12:00 fruit Exp $
+   $Id: worldmodel.h,v 1.5 2004/03/23 09:40:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,42 +110,11 @@ protected:
     void ParseGameState(const oxygen::Predicate& predicate);
     void ParseVision(const oxygen::Predicate& predicate);
 
-    void ParsePlayMode(const oxygen::Predicate& predicate,
-                       oxygen::Predicate::Iterator& objIter);
-    void ParseTeamIndex(const oxygen::Predicate& predicate,
-                        oxygen::Predicate::Iterator& objIter);
+    void ParsePlayMode(const oxygen::Predicate& predicate);
+    void ParseTeamIndex(const oxygen::Predicate& predicate);
 
     void SetupGameStateMap();
     void SetupVisionObjectMap();
-
-
-    template<typename TYPE>
-    void GetGameStateParam(const oxygen::Predicate& predicate,
-                           const std::string& name, TYPE& value)
-    {
-        // find the GameStateData
-        oxygen::Predicate::Iterator objIter(predicate);
-
-        if (! predicate.FindParameter(objIter,name))
-            {
-                return;
-            }
-
-        const void* var = (void*)(&value);
-
-        // parse special cases
-        if (var == &mTeamIndex)
-            {
-                ParseTeamIndex(predicate,objIter);
-            } else if (var == &mPlayMode)
-                {
-                    ParsePlayMode(predicate,objIter);
-                } else
-                    {
-                        // parse generic cases
-                        predicate.GetValue(objIter,value);
-                    }
-    }
 
 protected:
     // mapping from gamestate string to TPlayMode
