@@ -2,7 +2,8 @@ SUBDIRS = \
 	  filesystemstd \
 	  filesystemzip \
 	  inputsdl \
-	  survival
+	  survival \
+	  monitortest	
 
 EXTRA_DIST = plugin.dsw
 
