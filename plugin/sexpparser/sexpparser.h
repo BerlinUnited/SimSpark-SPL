@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.h,v 1.1.2.1 2003/12/03 22:39:38 fruit Exp $
+   $Id: sexpparser.h,v 1.1.2.2 2003/12/05 10:12:28 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,8 +29,13 @@
 class SexpParser : public oxygen::BaseParser
 {
 public:
-    SexpParser();
-    ~SexpParser();
+    SexpParser()
+    {
+    }
+
+    ~SexpParser()
+    {
+    }
 
     TPredicateList Parse(const std::string& input);
     std::string Generate(const TPredicateList& input);
