@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.3.2.3.2.4 2003/12/16 15:45:40 rollmark Exp $
+   $Id: oxygen.h,v 1.3.2.3.2.5 2003/12/21 10:07:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include "agentaspect/collisionperceptor.h"
 #include "agentaspect/effector.h"
 #include "agentaspect/perceptor.h"
-#include "agentaspect/perfectvisionperceptor.h"
+#include "agentaspect/createeffector.h"
 
 #include "controlaspect/controlaspect.h"
 
