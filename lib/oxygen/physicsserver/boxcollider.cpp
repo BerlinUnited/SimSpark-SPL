@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: boxcollider.cpp,v 1.3 2004/03/22 10:53:54 rollmark Exp $
+   $Id: boxcollider.cpp,v 1.4 2004/04/15 18:32:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,12 +44,48 @@ bool
 BoxCollider::ConstructInternal()
 {
     if (! Collider::ConstructInternal())
-      {
-        return false;
-      }
+        {
+            return false;
+        }
 
     // create a unit box
     mODEGeom = dCreateBox (0, 1.0f, 1.0f, 1.0f);
 
     return (mODEGeom != 0);
 }
+
+void
+BoxCollider::GetBoxLengths(Vector3f& extents)
+{
+    dVector3 lengths;
+    dGeomBoxGetLengths(mODEGeom,lengths);
+    extents[0] = lengths[0];
+    extents[1] = lengths[1];
+    extents[2] = lengths[2];
+}
+
+float
+BoxCollider::GetBoxLength(int axis)
+{
+    if (
+        (axis<0) ||
+        (axis>2)
+        )
+        {
+            return 0;
+        }
+
+    Vector3f extents;
+    GetBoxLengths(extents);
+    return extents[axis];
+}
+
+float
+BoxCollider::GetPointDepth(const Vector3f& pos)
+{
+    Vector3f worldPos(GetWorldTransform() * pos);
+    return dGeomBoxPointDepth
+        (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+}
+
+

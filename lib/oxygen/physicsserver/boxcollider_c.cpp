@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: boxcollider_c.cpp,v 1.7 2004/03/22 10:54:40 rollmark Exp $
+   $Id: boxcollider_c.cpp,v 1.8 2004/04/15 18:32:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,8 +41,40 @@ FUNCTION(BoxCollider,setBoxLengths)
     return true;
 }
 
+FUNCTION(BoxCollider,getBoxLength)
+{
+    int inAxis;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inAxis))
+        )
+        {
+            return 0;
+        }
+
+    return obj->GetBoxLength(inAxis);
+}
+
+FUNCTION(BoxCollider,getPointDepth)
+{
+    Vector3f inPos;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inPos))
+        )
+        {
+            return 0;
+        }
+
+    return obj->GetPointDepth(inPos);
+}
+
 void CLASS(BoxCollider)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Collider);
     DEFINE_FUNCTION(setBoxLengths);
+    DEFINE_FUNCTION(getBoxLength);
+    DEFINE_FUNCTION(getPointDepth);
 }

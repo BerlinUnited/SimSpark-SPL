@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: boxcollider.h,v 1.4 2004/03/22 10:53:54 rollmark Exp $
+   $Id: boxcollider.h,v 1.5 2004/04/15 18:32:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,8 +37,24 @@ class BoxCollider : public Collider
 public:
     BoxCollider();
 
-    /** Sets the side lengths of the box geom */
+    /** sets the side lengths of the box geom */
     void SetBoxLengths(const salt::Vector3f& extents);
+
+    /** gets the side lengths of the box geom */
+    void GetBoxLengths(salt::Vector3f& extents);
+
+    /** gets the length of on side of the box
+
+        \param axis gives the queried axis, 0-X, 1-Y, 2-Z
+     */
+    float GetBoxLength(int axis);
+
+    /** returns the depth of the given relative position in the
+       managed box geom. Points inside the geom will have positive
+       depth, points outside it will have negative depth, and points
+       on the surface will have zero depth.
+     */
+    float GetPointDepth(const salt::Vector3f& pos);
 
 protected:
     /** constructs a default box with side lengths of 1 */
