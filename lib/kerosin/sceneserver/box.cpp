@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: box.cpp,v 1.3 2004/04/19 15:45:57 rollmark Exp $
+   $Id: box.cpp,v 1.4 2004/04/22 17:21:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ using namespace kerosin;
 using namespace zeitgeist;
 using namespace salt;
 
-Box::Box() : SingleMatNode(), mExtents(1.0f,1.0f,1.0f)
+Box::Box() : SingleMatNode()
 {
 }
 
@@ -36,70 +36,18 @@ Box::~Box()
 {
 }
 
+void Box::OnLink()
+{
+    Load("StdUnitBox");
+}
+
 void Box::SetExtents(const salt::Vector3f& extents)
 {
-  mExtents = extents;
+    mScale = extents;
 }
 
 const Vector3f& Box::GetExtents()
 {
-  return mExtents;
+    return mScale;
 }
 
-void Box::RenderInternal()
-{
-    shared_ptr<Material> material = GetMaterial();
-    if (material.get() == 0)
-        {
-            return;
-        }
-
-    material->Bind();
-
-    glScalef(
-             mExtents.x() * 0.5,
-             mExtents.y() * 0.5,
-             mExtents.z() * 0.5
-             );
-
-    glBegin(GL_QUADS);
-
-    // Front Face
-    glNormal3f( 0.0f, 0.0f, 1.0f); // Normal Pointing Towards Viewer
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-    // Back Face
-    glNormal3f( 0.0f, 0.0f,-1.0f); // Normal Pointing Away From Viewer
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-    // Top Face
-    glNormal3f( 0.0f, 1.0f, 0.0f); // Normal Pointing Up
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-    // Bottom Face
-    glNormal3f( 0.0f,-1.0f, 0.0f); // Normal Pointing Down
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-    // Right face
-    glNormal3f( 1.0f, 0.0f, 0.0f); // Normal Pointing Right
-    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-    // Left Face
-    glNormal3f(-1.0f, 0.0f, 0.0f); // Normal Pointing Left
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-
-    glEnd();
-}

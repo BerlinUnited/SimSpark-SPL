@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: box.h,v 1.1 2004/03/20 15:50:09 rollmark Exp $
+   $Id: box.h,v 1.2 2004/04/22 17:21:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,9 @@ namespace kerosin
 {
 class Material;
 
+/** Box is a SingleMatNode that automatically loads and renders a box
+    mesh that is scaled to the given extents.
+ */
 class Box : public SingleMatNode
 {
     //
@@ -37,17 +40,14 @@ public:
     Box();
     virtual ~Box();
 
+    /** sets the extents box */
     void SetExtents(const salt::Vector3f& extents);
+
+    /** returns the extents of box */
     const salt::Vector3f& GetExtents();
 
 protected:
-    virtual void RenderInternal();
-
-    //
-    // Members
-    //
-protected:
-    salt::Vector3f mExtents;
+    virtual void OnLink();
 };
 
 DECLARE_CLASS(Box);
