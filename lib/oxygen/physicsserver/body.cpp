@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.7 2004/03/14 16:15:17 rollmark Exp $
+   $Id: body.cpp,v 1.8 2004/03/22 10:51:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,7 +83,12 @@ bool Body::UsesGravity() const
 
 void Body::SetMaxSpeed(float speed)
 {
-  mMaxSpeed = speed;
+    mMaxSpeed = speed;
+}
+
+float Body::GetMaxSpeed()
+{
+    return mMaxSpeed;
 }
 
 void Body::OnLink()
