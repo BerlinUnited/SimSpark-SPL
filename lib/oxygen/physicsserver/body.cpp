@@ -1,9 +1,8 @@
-/* -*- mode: c++ -*-
-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.5 2004/02/12 14:07:22 fruit Exp $
+   $Id: body.cpp,v 1.6 2004/03/09 12:10:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,12 +16,12 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
 */
 
 #include "body.h"
 #include "world.h"
 #include "../sceneserver/scene.h"
+#include "zeitgeist/logserver/logserver.h"
 
 using namespace boost;
 using namespace oxygen;
@@ -100,12 +99,14 @@ void Body::OnLink()
     mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
     if (mWorld.get() == 0)
       {
+        GetLog()->Error() << "(Body) ERROR: found no World node\n";
         return;
       }
 
     dWorldID world = mWorld->GetODEWorld();
     if (world == 0)
       {
+        GetLog()->Error() << "(Body) ERROR: World returned empty ODE handle\n";
         return;
       }
 
@@ -113,6 +114,7 @@ void Body::OnLink()
     mODEBody = dBodyCreate(world);
     if (mODEBody == 0)
     {
+      GetLog()->Error() << "(Body) ERROR: could not create new ODE body\n";
       return;
     }
 
@@ -144,6 +146,13 @@ void Body::SetMass(float mass)
     dMassAdjust(&ODEMass, mass);
 }
 
+float Body::GetMass()
+{
+    dMass m;
+    dBodyGetMass(mODEBody, &m);
+    return m.mass;
+}
+
 void Body::SetSphere(float density, float radius)
 {
     dMass ODEMass;
@@ -163,6 +172,22 @@ void Body::SetVelocity(const Vector3f& vel)
     dBodySetLinearVel(mODEBody, vel[0], vel[1], vel[2]);
 }
 
+void Body::SetRotation(const Matrix& rot)
+{
+    dMatrix3 ODEMatrix;
+    dRSetIdentity(ODEMatrix);
+    ODEMatrix[0]  = rot.m[0];
+    ODEMatrix[4]  = rot.m[1];
+    ODEMatrix[8]  = rot.m[2];
+    ODEMatrix[1]  = rot.m[4];
+    ODEMatrix[5]  = rot.m[5];
+    ODEMatrix[9]  = rot.m[6];
+    ODEMatrix[2]  = rot.m[8];
+    ODEMatrix[6]  = rot.m[9];
+    ODEMatrix[10] = rot.m[10];
+    dBodySetRotation(mODEBody, ODEMatrix);
+}
+
 Vector3f Body::GetAngularVelocity()
 {
     const dReal* vel = dBodyGetAngularVel(mODEBody);
@@ -171,7 +196,7 @@ Vector3f Body::GetAngularVelocity()
 
 void Body::SetAngularVelocity(const Vector3f& vel)
 {
-  dBodySetAngularVel(mODEBody, vel[0], vel[1], vel[2]);
+    dBodySetAngularVel(mODEBody, vel[0], vel[1], vel[2]);
 }
 
 void Body::PostPhysicsUpdateInternal()

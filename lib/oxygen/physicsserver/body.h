@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.6 2004/02/12 14:07:22 fruit Exp $
+   $Id: body.h,v 1.7 2004/03/09 12:10:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,6 +75,9 @@ public:
     /** sets the mass of this body */
     void SetMass(float mass);
 
+    /** returns the mass of this body */
+    float GetMass();
+
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)
         relative to the body.
@@ -89,6 +92,9 @@ public:
 
     /** sets the current linear velocity of this body */
     void SetVelocity(const salt::Vector3f& vel);
+
+    /** sets the roation of this body */
+    void SetRotation(const salt::Matrix& rot);
 
     /** returns the current angular velocity of this body */
     salt::Vector3f GetAngularVelocity();
