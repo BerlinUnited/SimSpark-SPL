@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.cpp,v 1.3.6.1 2003/12/26 11:31:09 rollmark Exp $
+   $Id: leaf.cpp,v 1.4.2.1 2004/01/09 13:10:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ void Leaf::GetChildrenSupportingClass(const std::string &/*name*/, TLeafList &/*
 {
 }
 
-boost::shared_ptr<Node> Leaf::GetParentSupportingClass(const std::string &name)
+boost::weak_ptr<Node> Leaf::GetParentSupportingClass(const std::string &name)
 {
   shared_ptr<Node> node
     = shared_static_cast<Node>(make_shared(GetParent()));
@@ -108,7 +108,7 @@ boost::shared_ptr<Node> Leaf::GetParentSupportingClass(const std::string &name)
       node = make_shared(node->GetParent());
     }
 
-  return node;
+  return weak_ptr<Node>(node);
 }
 
 bool Leaf::IsLeaf() const
