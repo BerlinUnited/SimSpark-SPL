@@ -3,14 +3,16 @@ pkglib_LTLIBRARIES = libzeitgeist_debug.la
 libzeitgeist_debug_la_SOURCES = $(sources)
 libzeitgeist_debug_la_CXXFLAGS = -O -g -W -Wall
 libzeitgeist_debug_la_LIBADD = @RUBY_LDFLAGS@ @RUBY_LDADD@
-libzeitgeist_debug_la_LDFLAGS = -version-info 2:0:1
+libzeitgeist_debug_la_LDFLAGS = -version-info @zeitgeist_version_info@
 else
 pkglib_LTLIBRARIES = libzeitgeist.la 
 libzeitgeist_la_SOURCES = $(sources)
 libzeitgeist_la_CXXFLAGS = -O2
 libzeitgeist_la_LIBADD = @RUBY_LDFLAGS@ @RUBY_LDADD@
-libzeitgeist_la_LDFLAGS = -version-info 2:0:1
+libzeitgeist_la_LDFLAGS = -version-info @zeitgeist_version_info@
 endif
+
+bin_SCRIPTS = zeitgeist-config
 
 AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@
 

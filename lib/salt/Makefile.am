@@ -3,14 +3,16 @@ pkglib_LTLIBRARIES = libsalt_debug.la
 libsalt_debug_la_SOURCES = $(sources)
 libsalt_debug_la_CXXFLAGS = -O -g -W -Wall
 libsalt_debug_la_LIBADD = @SALT_LIBADD@ ${top_srcdir}/utility/libobj/liblibobject.la
-libsalt_debug_la_LDFLAGS = -version-info 1:0:1
+libsalt_debug_la_LDFLAGS = -version-info @salt_version_info@
 else
 pkglib_LTLIBRARIES = libsalt.la
 libsalt_la_SOURCES = $(sources)
 libsalt_la_CXXFLAGS = -O2
 libsalt_la_LIBADD = @SALT_LIBADD@ ${top_srcdir}/utility/libobj/liblibobject.la
-libsalt_la_LDFLAGS = -version-info 1:0:1
+libsalt_la_LDFLAGS = -version-info @salt_version_info@
 endif
+
+bin_SCRIPTS = salt-config
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/salt
