@@ -1,6 +1,10 @@
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
 
+#if HAVE_KEROSIN_H
+#include <kerosin/kerosin.h>
+#endif
+
 using namespace boost;
 using namespace std;
 using namespace zeitgeist;
@@ -14,7 +18,10 @@ int main()
         Zeitgeist       zg;
 
         shared_ptr<CoreContext> context = zg.CreateContext();
-        oxygen::Oxygen                          kOxygen(zg);
+#if HAVE_KEROSIN_H
+        kerosin::Kerosin kKerosin(zg);
+#endif
+        oxygen::Oxygen kOxygen(zg);
 
         shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
 
