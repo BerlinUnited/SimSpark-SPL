@@ -10,6 +10,7 @@ SUBDIRS = \
 	  soccer \
           rubysceneimporter\
           voidmeshimporter\
+          sparkmonitor\
 	  soundsystemfmod
 
 # filesystemrar 
