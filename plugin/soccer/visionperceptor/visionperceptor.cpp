@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.9 2004/02/08 17:20:27 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.10 2004/02/08 22:49:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -167,7 +167,7 @@ VisionPerceptor::Percept(Predicate& predicate)
         position.push_back(i->mPhi);
 
         Predicate::TParameterList element;
-        element.push_back(i->mObj->GetName());
+        element.push_back(i->mObj->GetPerceptName());
 
         if (!i->mObj->GetID().empty())
         {
