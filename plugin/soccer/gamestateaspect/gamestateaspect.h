@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.1.2.4 2004/01/31 17:24:12 rollmark Exp $
+   $Id: gamestateaspect.h,v 1.1.2.5 2004/02/10 19:30:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,8 +47,19 @@ public:
     /** sets the current play mode */
     void SetPlayMode(TPlayMode mode);
 
+    /** set the current play mode randomly to PM_KickOff_Left or
+        PM_KickOff_Right
+    */
+    void KickOff();
+
     /** returns the current game time */
     TTime GetTime() const;
+
+    /** returns the time passed since the last playmode change */
+    TTime GetModeTime();
+
+    /** returns the time of the last playmode change */
+    TTime GetLastModeChange();
 
     /** sets the current game half */
     void SetGameHalf(TGameHalf half);
@@ -90,6 +101,9 @@ protected:
 protected:
     /** the current play mode */
     TPlayMode mPlayMode;
+
+    /** the last time the play mode changed */
+    TTime mLastModeChange;
 
     /** the current game time */
     TTime mTime;
