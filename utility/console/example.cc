@@ -28,10 +28,12 @@ main()
 {
     flush(*Console::instance().getStream());
     Utility::smux.addStream(&cout);
+    cin.tie(&Utility::smux);
     
     string s;
     long int i = 0;
     
+    Console::instance().execute("help");
     while (true) 
     {    
         Utility::smux.normal() << "console:/ " << i << ") " << flush;
