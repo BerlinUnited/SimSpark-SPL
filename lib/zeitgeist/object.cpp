@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: object.cpp,v 1.5 2004/02/12 14:07:23 fruit Exp $
+   $Id: object.cpp,v 1.6 2004/03/22 10:39:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,15 +85,14 @@ void Object::Dump() const
 
 void Object::Invoke(const std::string &functionName)
 {
-    Class::TParameterList in;
+    ParameterList in;
 
     Class::TCmdProc cmd = mClass->GetCmdProc(functionName);
     if (cmd != NULL)
       {
         if (shared_ptr<Object> self = GetSelf().lock())
           {
-            VALUE out;
-            cmd(self.get(), in, out);
+            GCValue out = cmd(self.get(), in);
           }
       }
 }
