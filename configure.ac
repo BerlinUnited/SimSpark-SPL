@@ -13,15 +13,13 @@ rcss_prefix=\"$prefix\"
 test "$rcss_prefix" = \"NONE\" && rcss_prefix=\"$ac_default_prefix\"
 AC_DEFINE_UNQUOTED(PREFIX, $rcss_prefix, [Define the install prefix. Needed by the libraries to check for ruby scripts.])
 
-AC_ARG_ENABLE(debug,
+AC_ARG_ENABLE([debug],
      AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
      [case "${enableval}" in
-       yes) debug=true && 
-	    AC_DEFINE(RCSS_DEBUG, 1, 
-                      [Define to 1 if we are building a debug version]) ;;
+       yes) udebug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ;;
        no)  debug=false ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
-     esac],[debug=true])
+     esac],[debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
 # Checks for programs.
@@ -37,6 +35,11 @@ AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes)
 AC_CHECK_PROG([HAVE_DOT], [dot], [YES], [NO])
 AC_PATH_PROG([PERL], [perl], [perl])
 # Checks for libraries.
+TMP_LIBS=$LIBS
+AC_CHECK_LIB(dl, dlopen, [AC_SUBST(SALT_LIBADD, [-ldl])],
+    	     [AC_CHECK_FUNC(dlopen, [], [AC_MSG_ERROR([cannot find required library libdl or dlopen() function.])]
+	    )])
+LIBS=$TMP_LIBS
 
 # Checks for header files.
 AC_HEADER_STDC
