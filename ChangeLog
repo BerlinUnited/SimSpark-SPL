@@ -1,6 +1,67 @@
+2004-04-27  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/kerosin/sceneserver/staticmesh.h:
+	- changed BaseClass to RenderNode
+
+	* lib/kerosin/kerosin.cpp, lib/kerosin/kerosin.h:
+	- registering RenderNode files
+
+	* lib/kerosin/renderserver/renderserver.cpp:
+	- adapted renderloop to test for RendeNodes
+
+	* lib/kerosin/renderserver/rendernode.h,
+	* lib/kerosin/renderserver/rendernode_c.cpp:
+	- added class RenderNode, a base class for all nodes which are
+	part of the scene hierarchy and are able to render itself
+
+	* lib/oxygen/sceneserver/basenode.cpp,
+	* lib/oxygen/sceneserver/basenode.h:
+	- removed method RenderInternal
+
+2004-04-26  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/Makefile.am, app/simspark/Makefile.am,
+	* app/rcssmonitor3d/lib/Makefile.am, 
+	* app/agenttest/Makefile.am:
+	- removed dependency to librcssnet3d, now implicit through oxygen
+
+	* lib/oxygen/Makefile.am: 
+	- linking against rcssnet3d
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp,
+	* plugin/soccer/sexpmonitor/sexpmonitor.h,
+	* plugin/monitortest/monitortest.cpp,
+	* plugin/monitortest/monitortest.h: 
+	- adapted to changed MonitorSystem interface
+
+	* lib/oxygen/monitorserver/monitorsystem.h:
+	- changed ParseMonitorMessage to accept a const reference to a
+	std::string to avoid an implicit copy
+
 2004-04-25  Markus Rollmann  <rollmark@uni-koblenz.de>
 
-	* lib/kerosin/materialserver/materialserver.cpp, lib/kerosin/materialserver/materialserver.h:
+	* app/agenttest/Makefile.am, app/simulator/Makefile.am:
+	- linking against rcssnet
+
+	* utility/rcssnet/tcpsocket.cpp, utility/rcssnet/tcpsocket.hpp:
+	- added method accept()
+
+	* utility/rcssnet/socket.cpp, utility/rcssnet/socket.hpp: 
+	- ws changes
+	- removed unused member m_dest
+	- added method listen and accept
+
+	* utility/rcssnet/exception.cpp, 
+	* utility/rcssnet/exception.hpp:
+	- ws changes
+	- added exception classes BindErr, ListenErr and AcceptErr
+
+	* utility/rcssnet/addr.cpp, utility/rcssnet/addr.hpp:
+	- implemented operator == and operator <= as member functions
+	- added method setPort
+
+	* lib/kerosin/materialserver/materialserver.cpp,
+	* lib/kerosin/materialserver/materialserver.h: 
 	- creating a default material that is used as a fallback for
 	missing material definitions
 
