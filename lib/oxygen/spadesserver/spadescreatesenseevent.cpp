@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadescreatesenseevent.cpp,v 1.1.2.4 2003/12/10 10:53:43 rollmark Exp $
+   $Id: spadescreatesenseevent.cpp,v 1.1.2.5 2003/12/21 10:27:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,23 +86,26 @@ bool SpadesCreateSenseEvent::realizeEventWorldModel(spades::WorldModel* pWM)
 spades::SenseEvent* SpadesCreateSenseEvent::createSense(spades::WorldModel* p)
 {
     SpadesServer* spadesServer = dynamic_cast<SpadesServer*>(p);
-    if (spadesServer == 0) return false;
+    if (spadesServer == 0)
+        {
+            return 0;
+        }
 
     shared_ptr<GameControlServer> gcs(spadesServer->GetGameControlServer());
     if (gcs.get() == 0)
         {
             spadesServer->GetLog()->Error()
                 << "(SpadesCreateSenseEvent) GameControlServer not found.\n";
-            return false;
+            return 0;
         }
 
     shared_ptr<BaseParser> parser = gcs->GetParser();
     if (parser.get() == 0)
         {
             spadesServer->GetLog()->Error()
-                << "ERROR: (SpadesActEvent) got no parser from "
+                << "ERROR: (SpadesCreateSenseEvent) got no parser from "
                 << " the GameControlServer" << endl;
-            return false;
+            return 0;
         }
 
     // lookup the AgentAspect
@@ -112,9 +115,9 @@ spades::SenseEvent* SpadesCreateSenseEvent::createSense(spades::WorldModel* p)
     if (agent.get() == 0)
         {
             spadesServer->GetLog()->Error()
-                << "ERROR: (SpadesActEvent) got no AgentAspect for id"
+                << "ERROR: (SpadesCreateSenseEvent) got no AgentAspect for id "
                 << id << " from the GameControlServer" << endl;
-            return false;
+            return 0;
         }
 
     // get a list of senses from the agent and generate a string
