@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   $Id: agentaspect.cpp,v 1.3.4.1 2003/12/09 19:31:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,18 +26,9 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-salt::Vector3f
-AgentAspect::GetVelocity() const
+bool AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> /*actions*/)
 {
-    shared_ptr<Body> body = shared_static_cast<Body>(make_shared(GetParent())->GetChildOfClass("Body"));
-    if (body)
-        return body->GetVelocity();
-    else
-        return Vector3f(0,0,0);
-}
-
-void
-AgentAspect::PrePhysicsUpdateInternal(float deltaTime)
-{
-    Think(deltaTime);
+  // traverse the actionlist and find the corresponding effector
+  // for each action
+  return true;
 }
