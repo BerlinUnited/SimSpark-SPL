@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.h,v 1.8 2004/04/21 07:05:52 rollmark Exp $
+   $Id: sceneserver.h,v 1.9 2004/04/30 09:32:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ class Scene;
 class Space;
 class World;
 class BaseNode;
+class Transform;
 
 /** The scene server manages displayable subtrees within the object
    hierarchy. Each subtree begins with a Scene node. The scene server knows
@@ -86,6 +87,9 @@ public:
     */
     bool InitSceneImporter(const std::string& importerName);
 
+    /** returns the current label for modified transform nodes */
+    static int GetTransformMark();
+
 protected:
     //
     // Members
@@ -100,6 +104,17 @@ protected:
     /** resets all cached references */
     virtual void OnUnlink();
 
+    /** reparents all children of node to the parent of node; Their
+        local transform matrix is multiplied with the local transform
+        matrix of node
+     */
+    void ReparentTransformChildren(boost::shared_ptr<Transform> node);
+
+    /** recursively reparents all transform nodes whose only children
+        are also transform node
+     */
+    void RemoveTransformPaths(boost::shared_ptr<zeitgeist::Leaf> root);
+
 private:
     /** the current active scene */
     boost::shared_ptr<Scene> mActiveScene;
@@ -109,6 +124,11 @@ private:
 
     /** cached reference to the World node below the active scene */
     boost::shared_ptr<World> mActiveWorld;
+
+    /** modified transform nodes are labeled with this value, the
+        value is incremented each cycle to avoid a resetting
+     */
+    static int mTransformMark;
 };
 
 DECLARE_CLASS(SceneServer);

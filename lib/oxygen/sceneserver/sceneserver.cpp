@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.12 2004/04/11 17:08:02 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.13 2004/04/30 09:32:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <zeitgeist/fileserver/fileserver.h>
 #include <salt/vector.h>
 #include <salt/frustum.h>
+#include "transform.h"
 #include "scene.h"
 #include "sceneimporter.h"
 #include <oxygen/physicsserver/world.h>
@@ -36,6 +37,8 @@ using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 using namespace std;
+
+int SceneServer::mTransformMark = 0;
 
 SceneServer::SceneServer() : Node()
 {
@@ -111,6 +114,11 @@ void SceneServer::OnUnlink()
     ResetCache();
 }
 
+int SceneServer::GetTransformMark()
+{
+    return mTransformMark;
+}
+
 /** Update the scene graph. We do not make the distinction between
     'controllers' and 'scene graph nodes'. This design forces us to
     perform several update passes through the hierarchy. Nevertheless,
@@ -160,6 +168,7 @@ void SceneServer::Update(float deltaTime)
         }
 
     UpdateCache();
+    ++mTransformMark;
 
     mActiveScene->PrePhysicsUpdate(deltaTime);
 
@@ -214,6 +223,9 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                         << "(SceneServer) imported scene file '"
                         << fileName << " with '"
                         << importer->GetName() << "'\n";
+
+
+                    RemoveTransformPaths(root);
                     return true;
                 }
         }
@@ -222,6 +234,87 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                       << fileName << "'\n";
 
     return false;
+}
+
+void SceneServer::ReparentTransformChildren(shared_ptr<Transform> node)
+{
+    shared_ptr<BaseNode> parent =
+        shared_dynamic_cast<BaseNode>(make_shared(node->GetParent()));
+
+    // while not empty
+    while (node->begin() != node->end())
+        {
+            shared_ptr<Leaf> child = (*node->begin());
+
+            shared_ptr<Transform> tChild
+                = shared_dynamic_cast<Transform>(child);
+
+            if (tChild.get() != 0)
+                {
+                    tChild->SetLocalTransform
+                        (node->GetLocalTransform() * tChild->GetLocalTransform());
+                }
+
+            child->Unlink();
+            parent->AddChildReference(child);
+        }
+}
+
+void SceneServer::RemoveTransformPaths(shared_ptr<Leaf> root)
+{
+    if (root.get() == 0)
+        {
+            return;
+        }
+
+    // go top down and remove Transform nodes that only have Transform
+    // node children and reparent them; note that reparented transform
+    // nodes are automatically checked in the parent loop, as they are
+    // appended to the child list in subsequent calls to
+    // RemoveTransformPaths; this process leaves some transform node
+    // without children, that are removed in a second pass
+
+    for (
+         TLeafList::iterator iter = root->begin();
+         iter != root->end();
+         ++iter
+         )
+        {
+            RemoveTransformPaths(*iter);
+        }
+
+    shared_ptr<Transform> trans = shared_dynamic_cast<Transform>(root);
+    bool tRoot = (trans.get() != 0);
+    bool tChildOnly = true;
+
+    TLeafList::iterator iter = root->begin();
+    while (iter != root->end())
+        {
+            shared_ptr<Transform> tChild = shared_dynamic_cast<Transform>(*iter);
+            if (tChild.get() == 0)
+                {
+                    tChildOnly = false;
+                } else
+                    {
+                        if (tChild->begin() == tChild->end())
+                            {
+                                // remove a transform node without
+                                // children
+                                tChild->Unlink();
+
+                                // restart as iter is now invalidated
+                                iter = root->begin();
+                                continue;
+                            }
+                    }
+
+            ++iter;
+        }
+
+    if ( (tRoot) && (tChildOnly))
+        {
+            ReparentTransformChildren(trans);
+        }
 }
 
 bool SceneServer::InitSceneImporter(const std::string& importerName)
