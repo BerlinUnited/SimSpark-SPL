@@ -16,7 +16,7 @@ LDADD = \
 rcssserver3D_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 rcssserver3D_SOURCES = main.cpp

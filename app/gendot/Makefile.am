@@ -18,7 +18,7 @@ LDADD = \
 gendot_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/app/rcssmonitor3d/lib -I${top_srcdir}/lib -I${top_srcdir}/plugin/soccer @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/app/rcssmonitor3d/lib -I${top_srcdir}/lib -I${top_srcdir}/utility -I${top_srcdir}/plugin @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 
 else
 
@@ -36,7 +36,7 @@ LDADD = \
 gendot_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/app/rcssmonitor3d/lib -I${top_srcdir}/lib -I${top_srcdir}/plugin/soccer @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/app/rcssmonitor3d/lib -I${top_srcdir}/lib -I${top_srcdir}/utility -I${top_srcdir}/plugin @RUBY_CPPFLAGS@
 endif
 
 AM_LDFLAGS  = @RUBY_LDFLAGS@
