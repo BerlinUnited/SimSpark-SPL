@@ -1,3 +1,36 @@
+2003-11-19  rollmark  <rollmark@gandalf>
+
+	* lib/oxygen/Makefile.am:
+	* lib/oxygen/oxygen.cpp:
+	* lib/oxygen/oxygen.h:
+ 	- added MonitorServer related files to Makefile.am
+	- registered MonitorServer and MonitorSystem in oxygen.cpp
+
+	* app/spadestest/spadestest.rb:
+	- spadestest.rb creates the MonitorServer and registers the
+	MonitorTest system to it.
+
+	* configure.ac, plugin/monitortest/Makefile.am:
+	* plugin/monitortest/export.cpp:
+	* plugin/monitortest/monitortest.cpp:
+	* plugin/monitortest/monitortest.h: 
+	* plugin/monitortest/monitortest_c.cpp:
+	- initial monitor system added
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	* lib/oxygen/monitorserver/monitorserver.h:
+	* lib/oxygen/monitorserver/monitorserver_c.cpp:
+	* lib/oxygen/monitorserver/monitorsystem.cpp:
+	* lib/oxygen/monitorserver/monitorsystem.h:
+	* lib/oxygen/monitorserver/monitorsystem_c.cpp:
+	* lib/oxygen/spadesserver/spadesserver_c.cpp:
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/spadesserver/spadesserver.h:
+	- extended the initial version of the monitor server
+	- added the initial version of the monitor system
+	- changed the base class of SpadesServer to be zeitgeist::Node as
+	a ParamReader should be registered below it
+
 2003-11-19  Oliver Obst  <fruit@robolog.org>
 
 	* lib/oxygen/monitorserver/monitorserver.h: 
