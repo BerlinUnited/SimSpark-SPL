@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timersdl.h,v 1.3 2004/03/09 12:47:01 rollmark Exp $
+   $Id: timersdl.h,v 1.4 2004/04/23 20:52:10 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,15 +21,8 @@
 
    TimerSDL
 
-        NOTE:
+   HISTORY: 24.10.02 - MK - Initial version
 
-        HISTORY:
-                24.10.02 - MK
-                        - Initial version
-
-        TODO:
-
-        TOFIX:
 */
 #ifndef TIMERSDL_H__
 #define TIMERSDL_H__
@@ -41,24 +34,24 @@
 */
 class TimerSDL : public InputDeviceSDL
 {
-        //
-        // functions
-        //
+    //
+    // functions
+    //
 public:
-        TimerSDL();
-        virtual ~TimerSDL();
+    TimerSDL();
+    virtual ~TimerSDL();
 
-        //! init the device
-        virtual bool Init(kerosin::InputSystem *inputSystem);
+    //! init the device
+    virtual bool Init(kerosin::InputSystem* inputSystem);
 
-        //! this filters an SDL specific input
-        virtual int EventFilter(const SDL_Event *event);
+    //! this filters an SDL specific input
+    virtual int EventFilter(const SDL_Event* event);
 
-        //! return an Input
-        void GetInput(kerosin::InputServer::Input &input);
+    //! return an Input
+    void GetInput(kerosin::InputServer::Input &input);
 
 protected:
-        unsigned long   mLastTicks;
+    unsigned long mLastTicks;
 };
 
 DECLARE_CLASS(TimerSDL);
