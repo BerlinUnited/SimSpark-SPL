@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.7 2004/03/09 12:18:52 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.7.2.1 2004/03/27 13:02:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ boost::shared_ptr<Scene> SceneServer::CreateScene(const std::string &location)
 
   if (scene.get() != 0)
     {
+      ResetCache();
       mActiveScene = scene;
     }
 
@@ -64,11 +65,47 @@ bool SceneServer::SetActiveScene(const std::string &location)
 
   if (scene.get() != 0)
     {
+      ResetCache();
       mActiveScene = scene;
       return true;
     }
 
   return false;
+}
+
+void SceneServer::ResetCache()
+{
+  mActiveScene.reset();
+  mActiveSpace.reset();
+  mActiveWorld.reset();
+}
+
+void SceneServer::UpdateCache()
+{
+  if (mActiveScene.get() == 0)
+    {
+      ResetCache();
+      return;
+    }
+
+  if (mActiveSpace.get() == 0)
+    {
+      // cache the space reference
+      mActiveSpace = shared_dynamic_cast<Space>
+        (mActiveScene->GetChildOfClass("Space"));
+    }
+
+  if (mActiveWorld.get() == 0)
+    {
+      // cache the world reference
+      mActiveWorld = shared_dynamic_cast<World>
+        (mActiveScene->GetChildOfClass("World"));
+    }
+}
+
+void SceneServer::OnUnlink()
+{
+  ResetCache();
 }
 
 /** Update the scene graph. We do not make the distinction between
@@ -119,22 +156,20 @@ void SceneServer::Update(float deltaTime)
       return;
     }
 
+  UpdateCache();
+
   mActiveScene->PrePhysicsUpdate(deltaTime);
 
   // determine collisions
-  shared_ptr<Space> space = shared_static_cast<Space>
-    (mActiveScene->GetChildOfClass("Space"));
-  if (space.get() != 0)
+  if (mActiveSpace.get() != 0)
     {
-      space->Collide();
+      mActiveSpace->Collide();
     }
 
   // do physics
-  shared_ptr<World> world = shared_static_cast<World>
-    (mActiveScene->GetChildOfClass("World"));
-  if (world.get() != 0)
+  if (mActiveWorld.get() != 0)
     {
-      world->Step(deltaTime);
+      mActiveWorld->Step(deltaTime);
     }
 
   mActiveScene->PostPhysicsUpdate();
