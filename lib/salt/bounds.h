@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bounds.h,v 1.6 2004/02/12 14:07:23 fruit Exp $
+   $Id: bounds.h,v 1.7 2004/04/14 12:25:09 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,28 +45,52 @@ public:
     f_inline AABB3()                                                                                                                        { Init(); }
 
     /** constructs a bounding box encapsulating mn and mx */
-    f_inline AABB3(const Vector3f &mn, const Vector3f &mx)                                          { Init(); Encapsulate(mn); Encapsulate(mx); }
+    f_inline AABB3(const Vector3f &mn, const Vector3f &mx)
+    { Init(); Encapsulate(mn); Encapsulate(mx); }
 
     // inline functions
 
     /** sets minVec and maxVec to describe an empty bounding box */
-    f_inline void Init()                                                                                                    { minVec.Set(FLT_MAX, FLT_MAX, FLT_MAX); maxVec.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX); }
+    f_inline void Init()
+    { minVec.Set(FLT_MAX, FLT_MAX, FLT_MAX);
+      maxVec.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    }
 
     /** encapsulates the Vector v, growing the box if necessary */
-    f_inline void Encapsulate(const Vector3f &v)                                                            { minVec.x() = gMin(minVec.x(), v.x()); minVec.y() = gMin(minVec.y(), v.y()); minVec.z() = gMin(minVec.z(), v.z()); maxVec.x() = gMax(maxVec.x(), v.x()); maxVec.y() = gMax(maxVec.y(), v.y()); maxVec.z() = gMax(maxVec.z(), v.z()); }
+    f_inline void Encapsulate(const Vector3f &v)
+    { minVec.x() = gMin(minVec.x(), v.x());
+      minVec.y() = gMin(minVec.y(), v.y());
+      minVec.z() = gMin(minVec.z(), v.z());
+      maxVec.x() = gMax(maxVec.x(), v.x());
+      maxVec.y() = gMax(maxVec.y(), v.y());
+      maxVec.z() = gMax(maxVec.z(), v.z()); }
 
     /** encapsulates the Vector <x,y,z>, growing the box if necessary */
-    f_inline void Encapsulate(const float x, const float y, const float z)  { minVec.x() = gMin(minVec.x(), x); minVec.y() = gMin(minVec.y(), y); minVec.z() = gMin(minVec.z(), z); maxVec.x() = gMax(maxVec.x(), x); maxVec.y() = gMax(maxVec.y(), y); maxVec.z() = gMax(maxVec.z(), z); }
+    f_inline void Encapsulate(const float x, const float y, const float z)
+    { minVec.x() = gMin(minVec.x(), x);
+      minVec.y() = gMin(minVec.y(), y);
+      minVec.z() = gMin(minVec.z(), z);
+      maxVec.x() = gMax(maxVec.x(), x);
+      maxVec.y() = gMax(maxVec.y(), y);
+      maxVec.z() = gMax(maxVec.z(), z); }
 
     /** encapsulates another box, growing the box if necessary */
     f_inline void Encapsulate(const AABB3 &box)
     { Encapsulate(box.minVec); Encapsulate(box.maxVec);}
 
     /** grows the box evenly with delta along all axis */
-    f_inline void Widen(float delta)                                                                                { minVec.x()-=delta; minVec.y()-=delta; minVec.z()-=delta; maxVec.x()+=delta; maxVec.y()+=delta; maxVec.z()+=delta; }
+    f_inline void Widen(float delta)
+    { minVec.x()-=delta;
+      minVec.y()-=delta;
+      minVec.z()-=delta;
+      maxVec.x()+=delta;
+      maxVec.y()+=delta;
+      maxVec.z()+=delta;
+    }
 
     /** moves the box along the vector v */
-    f_inline void Translate(const Vector3f &v)                                                              { minVec+=v; maxVec+=v; }
+    f_inline void Translate(const Vector3f &v)
+    { minVec+=v; maxVec+=v; }
 
     /** returns true if he box contains the vector v */
     f_inline bool Contains(const Vector3f &v) const
@@ -170,8 +194,11 @@ public:
 
     /** returns true if this box and the box b have some space in common */
     f_inline bool Intersects(const AABB2 &b) const
-    { return !(minVec.x() > b.maxVec.x() || maxVec.x() < b.minVec.x() || minVec.y() > b.maxVec.y() || maxVec.y() < b.minVec.y()); }
-
+    { return !(minVec.x() > b.maxVec.x() ||
+               maxVec.x() < b.minVec.x() ||
+               minVec.y() > b.maxVec.y() ||
+               maxVec.y() < b.minVec.y());
+    }
 
     /** calculates the current width of the box */
     f_inline float GetWidth() const
