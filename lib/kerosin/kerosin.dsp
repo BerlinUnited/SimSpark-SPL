@@ -559,6 +559,18 @@ SOURCE=.\agentaspect\agentaspect_c.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\agentaspect\collisionperceptor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\collisionperceptor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\agentaspect\collisionperceptor_c.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\agentaspect\effector.cpp
 # End Source File
 # Begin Source File

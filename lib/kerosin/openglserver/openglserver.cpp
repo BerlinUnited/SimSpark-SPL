@@ -117,6 +117,12 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
 */
 unsigned int OpenGLServer::LoadARBVertexProgram(const char* fileName)
 {
+	// only try to load stuff if the extension is supported
+	if (!mExtensionReg->Has_GL_ARB_vertex_program())
+	{
+		return 0;
+	}
+
 	return LoadARBProgram(GL_VERTEX_PROGRAM_ARB, fileName);
 }
 
@@ -127,6 +133,12 @@ unsigned int OpenGLServer::LoadARBVertexProgram(const char* fileName)
 */
 unsigned int OpenGLServer::LoadARBFragmentProgram(const char* fileName)
 {
+	// only try to load stuff if the extension is supported
+	if (!mExtensionReg->Has_GL_ARB_fragment_program())
+	{
+		return 0;
+	}
+
 	return LoadARBProgram(GL_FRAGMENT_PROGRAM_ARB, fileName);
 }
 
@@ -190,13 +202,22 @@ bool OpenGLServer::ConstructInternal()
 
 	// check if fancy lighting is supported
 	mSupportsFancyLighting = true;
-	if (!mExtensionReg->Has_GL_ARB_vertex_program())
+	if (!mExtensionReg->Has_GL_ARB_vertex_program() || !mExtensionReg->Has_GL_ARB_fragment_program())
 	{
 		GetLog()->Normal() << "WARNING: GL_ARB_vertex_program not supported ... disabling fancy lighting" << std::endl;
 		mSupportsFancyLighting = false;
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	GetLog()->Normal() << "Initialized OpenGL Window" << std::endl;
+	const unsigned char* val = NULL;
+	val = glGetString(GL_RENDERER);
+	GetLog()->Normal() << "  GL_RENDERER:   " << val << std::endl;
+	val = glGetString(GL_VERSION);
+	GetLog()->Normal() << "  GL_VERSION:    " << val << std::endl;
+	val = glGetString(GL_EXTENSIONS);
+	GetLog()->Normal() << "  GL_EXTENSIONS: " << val << std::endl << std::endl;
 
 	return true;
 }
@@ -208,3 +229,4 @@ void OpenGLServer::ToggleFancyLighting()
 	else
 		mSupportsFancyLighting = true;
 }
+

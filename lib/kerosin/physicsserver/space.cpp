@@ -2,6 +2,7 @@
 #include "world.h"
 #include "body.h"
 #include "../sceneserver/scene.h"
+#include "../agentaspect/collisionperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
@@ -53,7 +54,7 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 	if (dGeomGetClass(obj1) == dPlaneClass && dGeomGetClass(obj2) == dPlaneClass) return;
 
 	ODEBody1 = dGeomGetBody(obj1);
-	ODEBody2= dGeomGetBody(obj2);
+	ODEBody2 = dGeomGetBody(obj2);
 
 	if (ODEBody1 && ODEBody2 && dAreConnected (ODEBody1, ODEBody2)) return;
 
@@ -82,6 +83,26 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 		}
 		if (!camera)
 		{
+			shared_ptr<CollisionPerceptor> colPerceptor;
+			// notify a potential collisionperceptor
+			if (body1)
+			{
+				colPerceptor = shared_static_cast<CollisionPerceptor>(make_shared(body1->GetParent())->GetChildOfClass("CollisionPerceptor", true));
+				if (colPerceptor && body2)
+				{
+					colPerceptor->GetCollidees().push_back(make_shared(body2->GetParent()));
+				}
+			}
+			// notify a potential collisionperceptor
+			if (body2)
+			{
+				colPerceptor = shared_static_cast<CollisionPerceptor>(make_shared(body2->GetParent())->GetChildOfClass("CollisionPerceptor", true));
+				if (colPerceptor && body1)
+				{
+					colPerceptor->GetCollidees().push_back(make_shared(body1->GetParent()));
+				}
+			}
+
 			contact.surface.mode = dContactBounce;
 			contact.surface.mu = dInfinity;
 			contact.surface.bounce = 0.8f;
