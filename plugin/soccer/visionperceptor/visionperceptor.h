@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.1.2.5 2004/02/02 18:26:27 fruit Exp $
+   $Id: visionperceptor.h,v 1.1.2.6 2004/02/05 10:24:11 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@
 #define VISIONPERCEPTOR_H
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/physicsserver/raycollider.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/transform.h>
 #include <soccer/agentstate/agentstate.h>
-#include <soccer/soccertypes.h>
 
 class VisionPerceptor : public oxygen::Perceptor
 {
@@ -58,12 +58,10 @@ public:
     void AddNoise(bool use_it)
     { mAddNoise = use_it; }
 
-    //! change predicate name (for debugging purposes)
-    void SetPredicateName(const std::string& my_name)
-    { mPredicateName = my_name; }
+    //! change predicate name (for example for debugging purposes)
+    void SetPredicateName(const std::string& my_name);
 
-    //! flip horizontal coordinates according to the side of the agent
-    static salt::Vector3f FlipView(const salt::Vector3f& pos, TTeamIndex ti);
+    void OnLink();
 
 protected:
     /** constructs the internal ray collider */
@@ -93,13 +91,6 @@ private:
                         std::list<ObjectData>& visible_objects) const;
 
 
-    //! return a reference to the active scene from SceneServer
-    bool GetActiveScene(boost::shared_ptr<oxygen::Scene>& active_scene);
-
-    //! a reference to the scene server
-    boost::shared_ptr<oxygen::SceneServer> mSceneServer;
-    //! a reference to the agent state
-    boost::shared_ptr<AgentState> mAgentState;
     //! vision calibration error
     salt::Vector3f mError;
 
@@ -118,6 +109,14 @@ private:
 
     //! ray collider to check occlusion
     boost::shared_ptr<oxygen::RayCollider> mRay;
+
+    boost::shared_ptr<oxygen::Scene> mActiveScene;
+    //! a reference to the next transorm parent
+    boost::shared_ptr<oxygen::Transform> mTransformParent;
+    //! a reference to the scene server
+    boost::shared_ptr<oxygen::SceneServer> mSceneServer;
+    //! a reference to the agent state
+    boost::shared_ptr<AgentState> mAgentState;
 };
 
 DECLARE_CLASS(VisionPerceptor);
