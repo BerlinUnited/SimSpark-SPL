@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.7 2004/04/11 11:40:31 rollmark Exp $
+   $Id: main.cpp,v 1.8 2004/04/12 13:49:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -384,6 +384,7 @@ bool MonitorSpark::InitApp(int argc, char** argv)
           return false;
         }
 
+    SetSimStep(0.05);
     return true;
 }
 

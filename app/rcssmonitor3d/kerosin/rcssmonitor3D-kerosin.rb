@@ -78,24 +78,32 @@ def addField()
   field.setExtents(110.0,0.2,73.0)
 end  
 
+# add a light
+transform = new('oxygen/Transform', $scenePath+'lightTrans')
+transform.setLocalPos(0, 50, 0)
+light = new('kerosin/Light', $scenePath+'lightTrans/light')
+light.setDiffuse(1.0, 1.0, 1.0, 1.0)
+light.setSpecular(0.1, 0.1, 0.1, 1.0)
+light.setAmbient(0.5, 0.5, 0.5, 1.0)
+
 # create custom materials
 material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentN');
-material.setColor(0.8,0.8,0.2)
+material.setDiffuse(1.0,1.0,0.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentL');
-material.setColor(1.0,0.2,0.2)
+material.setDiffuse(1.0,0.0,0.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentR');
-material.setColor(0.2,0.2,1.0)
+material.setDiffuse(0.0,0.0,1.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matBall');
-material.setColor(1.0,1.0,1.0)
+material.setDiffuse(1.0,1.0,1.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matFlag');
-material.setColor(1.0,0.0,0.0)
+material.setDiffuse(1.0,0.0,0.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGround');
-material.setColor(0.1,0.5,0.1)
+material.setDiffuse(0.0,0.1,0.0,1.0)
 
 addVisual('Axis','myAxis',0.0,0.0,0.0)
 
