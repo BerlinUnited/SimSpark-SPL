@@ -2,7 +2,7 @@ if DEBUG
 pkglib_LTLIBRARIES = liboxygen_debug.la
 liboxygen_debug_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall -Woverloaded-virtual -Wno-deprecated 
-liboxygen_debug_la_LIBADD = -lode $(spades_libs)
+liboxygen_debug_la_LIBADD = -lode ${spades_libs}
 else
 pkglib_LTLIBRARIES = liboxygen.la
 liboxygen_la_SOURCES = $(sources) $(spades_sources)
@@ -18,13 +18,13 @@ spadesserver/paramreader.cpp \
 spadesserver/paramreader_c.cpp \
 spadesserver/paramstorer.cpp \
 spadesserver/spadescreatesenseevent.cpp \
-spadesserver/spadesactevent.cpp \
+spadesserver/spadesactevent.cpp
 spades_headers = \
 spadesserver/spadesserver.h \
 spadesserver/paramreader.h \
 spadesserver/paramstorer.h \
 spadesserver/spadescreatesenseevent.h \
-spadesserver/spadesactevent.h \
+spadesserver/spadesactevent.h
 spades_libs = -lspades
 else
 spades_sources =
@@ -51,6 +51,8 @@ agentaspect/forceeffector.cpp \
 agentaspect/forceeffector_c.cpp \
 agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
+agentaspect/perfectvisionperceptor.cpp \
+agentaspect/perfectvisionperceptor_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
 gamecontrolserver/actionobject_c.cpp \
@@ -101,6 +103,7 @@ agentaspect/collisionperceptor.h \
 agentaspect/effector.h \
 agentaspect/forceeffector.h \
 agentaspect/perceptor.h \
+agentaspect/perfectvisionperceptor.h \
 controlaspect/controlaspect.h \
 gamecontrolserver/gamecontrolserver.h \
 gamecontrolserver/baseparser.h \
