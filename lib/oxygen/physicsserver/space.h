@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.4.8.2 2004/01/11 11:21:02 rollmark Exp $
+   $Id: space.h,v 1.4.8.3 2004/01/12 18:13:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ class Space : public ODEObject
     //
 public:
     Space();
-    ~Space();
+    virtual ~Space();
 
     /** returns the ID of the managed ODE space */
     dSpaceID GetODESpace() const;
@@ -59,44 +59,32 @@ public:
 
     /** callback to handle a potential collision between two contained
         geoms. It will look up and notify the corresponding colliders
-        for a potential collision. For all determined collisions an
-        ODE contact joint will be created and inserted into
-        mODEContactGroup, an ODE group of joints.
+        for a potential collision.
     */
     virtual void HandleCollide(dGeomID obj1, dGeomID obj2);
 
 protected:
-    /** creates ode dynamics space and makes sure that mODESpace is valid */
-    virtual bool ConstructInternal();
-
-    /** looks up the world this space belongs to and sets up mWorld */
+    /** creates them managed ODE space and a contact joint group */
     virtual void OnLink();
 
-    /** This rountine is called, before the hierarchy object is
-        removed from the parent. It can be overridden to support
-        custom 'unlink' behavior.
-    */
+    /** destroys the managed ODE space and the contact joint group */
     virtual void OnUnlink();
 
-    /** updates internal state before physics calculation */
-    virtual void PrePhysicsUpdateInternal(float deltaTime);
+    /** updates internal state after physics calculation */
+    virtual void PostPhysicsUpdateInternal();
 
     //
     // Members
     //
 private:
     /** the managed ODE space */
-    dSpaceID                mODESpace;
+    dSpaceID mODESpace;
 
     /** the ODE group for all created contact joints */
-    dJointGroupID   mODEContactGroup;
-
-    /** the cached ODE world this space belongs to, updated vias
-        OnLink() */
-    dWorldID                mWorld;
+    dJointGroupID mODEContactGroup;
 };
 
-    DECLARE_CLASS(Space);
+DECLARE_CLASS(Space);
 
 } //namespace oxygen
 
