@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.cpp,v 1.5 2004/04/10 12:50:59 rollmark Exp $
+   $Id: transform.cpp,v 1.6 2004/04/14 13:52:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,12 +28,12 @@ using namespace salt;
 using namespace zeitgeist;
 
 Transform::Transform() :
-BaseNode()
+    BaseNode()
 {
-        mLocalTransform.Identity();
-        mWorldTransform.Identity();
+    mLocalTransform.Identity();
+    mWorldTransform.Identity();
 
-        SetName("transform");
+    SetName("transform");
 }
 
 Transform::~Transform()
@@ -42,17 +42,17 @@ Transform::~Transform()
 
 const salt::Matrix& Transform::GetLocalTransform() const
 {
-        return mLocalTransform;
+    return mLocalTransform;
 }
 
 const salt::Matrix& Transform::GetWorldTransform() const
 {
-        return mWorldTransform;
+    return mWorldTransform;
 }
 
 void Transform::SetLocalTransform(const salt::Matrix &transform)
 {
-        mLocalTransform = transform;
+    mLocalTransform = transform;
 }
 
 void Transform::SetWorldTransform(const salt::Matrix &transform)
@@ -61,9 +61,9 @@ void Transform::SetWorldTransform(const salt::Matrix &transform)
         (make_shared(mParent));
 
     if (parent.get() == 0)
-      {
-        return;
-      }
+        {
+            return;
+        }
 
     mLocalTransform = transform;
     parent->SetWorldTransform(mIdentityMatrix);
@@ -71,26 +71,25 @@ void Transform::SetWorldTransform(const salt::Matrix &transform)
 
 void Transform::SetLocalPos(const salt::Vector3f &pos)
 {
-        mLocalTransform.Pos() = pos;
-        UpdateHierarchyInternal();
+    mLocalTransform.Pos() = pos;
+    UpdateHierarchyInternal();
 }
 
 void Transform::OnLink()
 {
-        UpdateHierarchyInternal();
+    UpdateHierarchyInternal();
 }
 
 void Transform::UpdateHierarchyInternal()
 {
-        shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(mParent));
+    shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(mParent));
 
-        // no parent, return local transform
-        if (parent.get() == NULL)
-          {
-                mWorldTransform = mLocalTransform;
-          }
-        else
-          {
+    // no parent, return local transform
+    if (parent.get() == NULL)
+        {
+            mWorldTransform = mLocalTransform;
+        } else
+            {
                 mWorldTransform = parent->GetWorldTransform() * mLocalTransform;
-          }
+            }
 }
