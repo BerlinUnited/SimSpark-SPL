@@ -1,3 +1,24 @@
+2003-09-05  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/core.cpp: 
+	- removed telnetserver for now (seems to be windows 
+	   specific code inside)
+
+	* lib/zeitgeist/Makefile.am: 
+	- added fileserver stuff
+
+	* lib/oxygen/oxygen.h: 
+	- added oxygen.h file to include all the oxygen headers at once
+
+	* configure.ac: 
+	- moved check for freetype stuff into a Macro in acinclude.m4 
+	- added check for SDL 
+	- added check for ruby (a macro in acinclude.m4)
+
+	* acinclude.m4: added some autoconf macros: 
+	- RCSS_PATH_RUBY for checking the ruby configuration 
+	- RCSS_PATH_FREETYPE for checking the freetype2 configuration
+
 2003-09-03  Oliver Obst  <fruit@robolog.org>
 
 	* lib/kerosin/:
