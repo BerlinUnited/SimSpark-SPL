@@ -11,9 +11,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <map>
 #include <netinet/in.h>
 #include <sys/time.h>
 #include <sys/select.h>
+#include <soccertypes.h>
 
 using namespace zeitgeist;
 using namespace std;
@@ -37,7 +39,37 @@ const int readFd = 3;
 const int writeFd = 4;
 
 // the default team name
-std::string teamName = "Robolog";
+string teamName = "Robolog";
+
+// mapping from gamestate string to TPlayMode
+typedef map<string, TPlayMode> TPlayModeMap;
+TPlayModeMap PlayModeMap;
+
+// soccer variables
+float FieldLength = 105.0;
+float FieldWidth = 68.0;
+float FieldHeight = 20.0;
+float GoalWidth = 7.32;
+float GoalDepth = 2.0;
+float GoalHeight = 2.44;
+float BorderSize = 4.0f;
+
+// agent parameter
+float AgentMass = 75;
+float AgentRadius = 0.22;
+float AgentMaxSpeed = 10;
+
+// ball parameter
+float BallRadius = 0.111;
+float BallMass = 0.4;
+
+// team information
+TTeamIndex TeamIndex = TI_NONE;
+unsigned int TeamUnum = 0;
+
+// game information
+float Time;
+unsigned int PlayMode;
 
 // set to 1 to write debug information to stdout
 #define ENABLE_LOGGING 1
@@ -89,7 +121,7 @@ bool GetInput()
           return false;
         }
 
-      msgRead += read(3, offset, sizeof(buffer) - msgRead);
+      msgRead += read(readFd, offset, sizeof(buffer) - msgRead);
       offset += msgRead;
     }
 
@@ -108,7 +140,7 @@ void PutOutput(const char* out)
   write(writeFd, buffer, len + sizeof(netlen));
 }
 
-void PutOutput(const std::string& str)
+void PutOutput(const string& str)
 {
   PutOutput(str.c_str());
 }
@@ -130,7 +162,7 @@ void InitAgent()
   Log("\n");
   Log("sending init command\n");
 
-  std::stringstream ss;
+  stringstream ss;
   ss << "A(init (unum " << getpid() << ") (teamname " << teamName << "))";
   PutOutput(ss.str().c_str());
 }
@@ -185,6 +217,104 @@ bool GetObjectPos(const Predicate& predicate, const string& name, Vector3f& pos)
   return true;
 }
 
+void CalcDashVec(const Vector3f& polTo, Vector3f& dashVec)
+{
+  dashVec[0] = 15 * polTo[0] * gCos(gDegToRad(polTo[1])) *
+    gSin(gDegToRad(90.0 - polTo[2]));
+  dashVec[1] = 15 * polTo[0] * gSin(gDegToRad(polTo[1])) *
+    gSin(gDegToRad(90.0 - polTo[2]));
+  dashVec[2] = 15 * polTo[0] * gCos(gDegToRad(90.0 - polTo[2]));
+}
+
+void ParseTeamIndex(const Predicate& predicate, Predicate::Iterator& objIter)
+{
+  // parse team index
+  string team;
+  if (predicate.GetValue(objIter,team))
+    {
+      if (team == "left")
+        TeamIndex = TI_LEFT;
+      else if (team == "right")
+        TeamIndex = TI_RIGHT;
+      else TeamIndex = TI_NONE;
+
+      stringstream ss;
+      ss << "GameState: parsed TeamIndex" << team << "("
+         << TeamIndex << ")\n";
+      Log(ss.str().c_str());
+    }
+}
+
+void ParsePlayMode(const Predicate& predicate, Predicate::Iterator& objIter)
+{
+  string mode;
+  // parse play mode
+  if (predicate.GetValue(objIter,mode))
+    {
+      TPlayModeMap::iterator iter = PlayModeMap.find(mode);
+      if (iter != PlayModeMap.end())
+        {
+          PlayMode = (*iter).second;
+
+          stringstream ss;
+          ss << "GameState: parsed playmode " << mode << "("
+             << PlayMode << ")\n";
+          Log(ss.str().c_str());
+        } else
+          {
+            stringstream ss;
+            ss << "GameState: could not parse playmode " << mode << "\n";
+            Log(ss.str().c_str());
+          }
+    }
+}
+
+template<typename TYPE>
+void GetGameStateParam(const Predicate& predicate,
+                       const string& name, TYPE& value)
+{
+  // find the GameStateData
+  Predicate::Iterator objIter(predicate);
+
+  if (! predicate.FindParameter(objIter,name))
+    {
+      return;
+    }
+
+  const void* var = (void*)(&value);
+
+  // parse special cases
+  if (var == &TeamIndex)
+    {
+      ParseTeamIndex(predicate,objIter);
+    } else if (var == &PlayMode)
+      {
+        ParsePlayMode(predicate,objIter);
+      } else
+      {
+        // parse generic cases
+        predicate.GetValue(objIter,value);
+        stringstream ss;
+        ss << "GameState: receceived " << name << " " << value << "\n";
+        Log(ss.str().c_str());
+      }
+}
+
+void ParseGameState(const Predicate& predicate)
+{
+  GetGameStateParam(predicate, "FieldLength", FieldLength);
+  GetGameStateParam(predicate, "FieldWidth",  FieldWidth);
+  GetGameStateParam(predicate, "FieldHeigth", FieldHeight);
+  GetGameStateParam(predicate, "GoalWidth",   GoalWidth);
+  GetGameStateParam(predicate, "GoalDepth",   GoalDepth);
+  GetGameStateParam(predicate, "GoalHeight",  GoalHeight);
+  GetGameStateParam(predicate, "BorderSize",  BorderSize);
+  GetGameStateParam(predicate, "time",  Time);
+  GetGameStateParam(predicate, "playmode",PlayMode);
+  GetGameStateParam(predicate, "unum",  TeamUnum);
+  GetGameStateParam(predicate, "team",  TeamIndex);
+}
+
 void Behave(int /*numSensation*/)
 {
   shared_ptr<Predicate::TList> predicates =
@@ -202,7 +332,14 @@ void Behave(int /*numSensation*/)
     {
       const Predicate& predicate = (*iter);
 
-      // check for the PerfectVision perceptor
+      if (predicate.name == "GameState")
+        {
+          Log ("received gamestate\n");
+          ParseGameState(predicate);
+          continue;
+        }
+
+      // check for the Vision perceptor
       if (predicate.name != "Vision")
         {
           Log ("skipped ");
@@ -211,7 +348,7 @@ void Behave(int /*numSensation*/)
           continue;
         }
 
-      Log(std::string(predicate.name + "\n").c_str());
+      Log(string(predicate.name + "\n").c_str());
 
       Vector3f ballVec;
       if (! GetObjectPos(predicate, "Ball", ballVec))
@@ -222,7 +359,7 @@ void Behave(int /*numSensation*/)
       const float dist = ballVec[0];
 
       static char buffer[512];
-      sprintf(buffer,"******** ballVec %.2f %.2f %.2f, l= %.2f\n",ballVec[0],ballVec[1],ballVec[2],dist);
+      sprintf(buffer,"ballVec is %.2f %.2f %.2f, l= %.2f\n",ballVec[0],ballVec[1],ballVec[2],dist);
       Log(buffer);
 
       if (dist <= 0.22 + 0.111 + 0.04)
@@ -233,14 +370,10 @@ void Behave(int /*numSensation*/)
         } else {
             Vector3f dashVec;
             stringstream s0;
-            s0 << "Dash to: " << ballVec[0] << " " << ballVec[1] << " " << ballVec[2];
+            s0 << "Dash to: " << ballVec[0] << " " << ballVec[1] << " " << ballVec[2] << "\n";
             Log(s0.str().c_str());
 
-            dashVec[0] = 15 * ballVec[0] * gCos(gDegToRad(ballVec[1])) *
-                gSin(gDegToRad(90.0 - ballVec[2]));
-            dashVec[1] = 15 * ballVec[0] * gSin(gDegToRad(ballVec[1])) *
-                gSin(gDegToRad(90.0 - ballVec[2]));
-            dashVec[2] = 15 * ballVec[0] * gCos(gDegToRad(90.0 - ballVec[2]));
+            CalcDashVec(ballVec, dashVec);
 
             stringstream ss;
             ss << "A(dash"
@@ -365,6 +498,18 @@ void ReadOptions(int argc, char* argv[])
     }
 }
 
+void SetupGameStateMap()
+{
+  PlayModeMap.clear();
+
+  PlayModeMap[STR_PM_BeforeKickOff] = PM_BeforeKickOff;
+  PlayModeMap[STR_PM_KickOff]       = PM_KickOff;
+  PlayModeMap[STR_PM_PlayOn]        = PM_PlayOn;
+  PlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
+  PlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
+  PlayModeMap[STR_PM_FirstHalfOver] = PM_FirstHalfOver;
+}
+
 int main(int argc, char* argv[])
 {
   //init zeitgeist and oxygen
@@ -373,6 +518,9 @@ int main(int argc, char* argv[])
 
   // read command line options
   ReadOptions(argc,argv);
+
+  // setup map for GameState parsing
+  SetupGameStateMap();
 
   // init the s-expression parser
   if (! zg.GetCore()->ImportBundle("sexpparser"))
