@@ -1,16 +1,11 @@
-2002-11-19	Tom Howard	<tomhoward@users.sf.net>
+2002-12-10	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./Makefile.am
-	Fixed bug in make addlog
-
+	Added branching targets
+	
 2002-11-15      Tom Howard      <tomhoward@users.sf.net>
 
-	* ./Makefile.am
-        addlog no longer creates empty logs
-
-2002-11-15      Tom Howard      <tomhoward@users.sf.net>
-
-	* ./Makefile.am
+        * ./Makefile.am
         tag target now creates branch
 
 2002-10-16  Oliver Obst  <fruit@robolog.org>
