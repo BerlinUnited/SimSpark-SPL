@@ -1,3 +1,9 @@
+2004-02-16  Patrick Riley  <pfr@cs.cmu.edu>
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp
+	added #include <spades/SenseEvent.hpp>
+	(needed for spades >= 0.91)
+
 2004-02-14  Oliver Obst  <fruit@robolog.org>
 
 	* lib/kerosin/Makefile.am: 
