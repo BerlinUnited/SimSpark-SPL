@@ -1,3 +1,8 @@
 You need some additional files that are available as package 
 rcssserver3D-data on SourceForge. For this version of rcssserver3D,
 you need at least version 0.1 of rcssserver3D-data.
+
+
+Problems:
+- if during linking the compiler complains that it cannot find -lslang,
+  set a symbolic link /usr/lib/libslang.so linking to /usr/lib/libslang.so.1
