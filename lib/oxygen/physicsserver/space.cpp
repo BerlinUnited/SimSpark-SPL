@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.7 2004/04/12 19:58:32 rollmark Exp $
+   $Id: space.cpp,v 1.8 2004/04/30 14:48:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,16 +72,30 @@ void Space::Collide()
 
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
+    // reject collisions between bodies that are connected with joints
+    const dBodyID b1 = dGeomGetBody(obj1);
+    const dBodyID b2 = dGeomGetBody(obj2);
+
+    if ((b1) && (b2) && (dAreConnected(b1,b2)))
+        {
+            return;
+        }
+
     // dSpaceCollide(), is guaranteed to pass all potentially
     // intersecting geom pairs to the callback function, but depending
     // on the internal algorithms used by the space it may also make
     // mistakes and pass non-intersecting pairs. Thus we can not
     // expect that dCollide() will return contacts for every pair
     // passed to the callback.
-    dContact contact;
-    if (! dCollide (obj1, obj2, 0, &contact.geom, sizeof(dContactGeom)))
+    static const int nContacts = 6;
+    static dContact contacts[nContacts];
+
+    int n = dCollide (obj1, obj2, nContacts,
+                      &contacts[0].geom, sizeof(dContact));
+
+    if (n == 0)
     {
-      return;
+        return;
     }
 
     // get shared pointers to the two corresponding Collider nodes
@@ -96,9 +110,12 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         return;
       }
 
-    // notify the collider nodes
-    collider->OnCollision(collidee,contact,Collider::CT_DIRECT);
-    collidee->OnCollision(collider,contact,Collider::CT_SYMMETRIC);
+    for (int i=0;i<n;++i)
+        {
+            // notify the collider nodes
+            collider->OnCollision(collidee,contacts[i],Collider::CT_DIRECT);
+            collidee->OnCollision(collider,contacts[i],Collider::CT_SYMMETRIC);
+        }
 }
 
 bool Space::ConstructInternal()
