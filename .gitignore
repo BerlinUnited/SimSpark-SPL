@@ -33,6 +33,12 @@ app/inputtest/Makefile
 app/inputtest/Makefile.in
 app/inputtest/inputtest
 app/inputtest/sys
+app/rcssmonitor3d/.deps
+app/rcssmonitor3d/.libs
+app/rcssmonitor3d/Makefile
+app/rcssmonitor3d/Makefile.in
+app/rcssmonitor3d/spadestest
+app/rcssmonitor3d/sys
 app/scenetest/.deps
 app/scenetest/.libs
 app/scenetest/Makefile
