@@ -9,6 +9,7 @@ SUBDIRS = \
 	  sexpparser \
 	  soccer \
           rubysceneimporter\
+          voidmeshimporter\
 	  soundsystemfmod
 
 # filesystemrar 
