@@ -5,6 +5,14 @@
 #
 # below is a set of utility functions for the user app
 #
+def sparkSetupMonitor
+  print "(spark.rb) sparkSetupServer\n"
+
+  # add the agent control node
+  simulationServer = get($serverPath+'simulation');
+  simulationServer.initControlNode('SparkMonitorClient')
+end
+
 def sparkSetupServer
   print "(spark.rb) sparkSetupServer\n"
 
@@ -149,6 +157,10 @@ new('kerosin/MaterialServer', $serverPath+'material');
 #
 # setup the MonitorServer
 monitorServer = new('oxygen/MonitorServer', $serverPath+'monitor')
+
+# register the SparkMonitor system
+importBundle 'sparkmonitor'
+monitorServer.registerMonitorSystem('SparkMonitor')
 
 #
 # setup the GameControlServer
