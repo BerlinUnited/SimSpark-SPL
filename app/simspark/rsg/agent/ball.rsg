@@ -2,27 +2,36 @@
 
 (RubySceneGraph 0 1)
 (
+ (define $Radius (eval Soccer.BallRadius))
+ (define $Material matWhite)
+ (define $Density (eval Soccer.BallDensity))
+
  (node Ball
-       (setLocalPos 0 0 30)
+       (setLocalPos 0 0 100)
        (setName Ball)
 
        (node Sphere
-	     (setRadius 1.0)
-	     (setMaterial matWhite)
+	     (setRadius $Radius)
+	     (setMaterial $Material)
+	     )
+
+       (node Box
+	     (setMaterial matRed)
+	     (setExtents $Radius $Radius $Radius)
 	     )
 
        (node Body
 	     (setName physics)
-	     (setSphere 2 1.0)
+	     (setSphere $Density $Radius)
 	     (node DragController
 		   (setAngularDrag 0.2)
 		   (setLinearDrag 0.4)
 		   )
 	     )
-       
+
        (node SphereCollider
 	     (setName geometry)
-	     (setRadius 1.0)
+	     (setRadius $Radius)
 
 	     (node ContactJointHandler
 		   (setContactBounceMode false)
@@ -37,7 +46,6 @@
 		   (setContactSoftCFM 0.3)
 		   )
 	     )
-
 
        (node ObjectState
 	     (setPerceptName Ball)
