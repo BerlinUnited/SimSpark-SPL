@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.6 2004/02/21 15:30:44 fruit Exp $
+   $Id: collider.cpp,v 1.6.2.1 2004/03/27 11:36:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -149,14 +149,14 @@ void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
                             dContact& contact, ECollisionType type)
 
 {
-  TLeafList colHandler;
-  GetChildrenSupportingClass("CollisionHandler",colHandler);
+  TLeafList handlers;
+  ListChildrenSupportingClass<CollisionHandler>(handlers);
 
    for (
-       TLeafList::iterator iter = colHandler.begin();
-       iter != colHandler.end();
-       ++iter
-       )
+        TLeafList::iterator iter = handlers.begin();
+        iter != handlers.end();
+        ++iter
+        )
     {
       shared_ptr<CollisionHandler> handler =
         shared_static_cast<CollisionHandler>(*iter);
