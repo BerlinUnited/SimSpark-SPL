@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.12 2004/04/10 07:24:52 rollmark Exp $
+   $Id: body.cpp,v 1.13 2004/04/10 12:56:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -195,7 +195,7 @@ void Body::PostPhysicsUpdateInternal()
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (make_shared(GetParent()));
 
-    Matrix mat = baseNode->GetLocalTransform();
+    Matrix mat;
     mat.m[0] = rot[0];
     mat.m[1] = rot[4];
     mat.m[2] = rot[8];
@@ -212,7 +212,8 @@ void Body::PostPhysicsUpdateInternal()
     mat.m[13] = pos[1];
     mat.m[14] = pos[2];
     mat.m[15] = 1;
-    baseNode->SetLocalTransform(mat);
+
+    baseNode->SetWorldTransform(mat);
 }
 
 shared_ptr<Body> Body::GetBody(dBodyID id)
