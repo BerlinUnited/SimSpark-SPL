@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.8 2004/05/05 09:08:52 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.9 2004/05/07 12:09:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -201,6 +201,7 @@ bool RubySceneImporter::ReadHeader(sexp_t* sexp)
 
     string val(sexp->val);
 
+    mDeltaScene = false;
     if (val == "RubyDeltaScene")
         {
             mDeltaScene = true;
