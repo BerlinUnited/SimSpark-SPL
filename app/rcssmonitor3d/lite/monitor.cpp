@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.15 2004/06/16 13:36:02 jamu Exp $
+   $Id: monitor.cpp,v 1.16 2004/06/17 11:14:13 cringel Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -487,6 +487,7 @@ void
 Monitor::DrawOverview()
 {
     // radius of player
+
     float pl_radius = 0.01;
 //         = sSzY / mGameState.GetFieldWidth() *
 //         mGameState.GetAgentRadius();
@@ -688,6 +689,8 @@ Monitor::DrawDebug()
 void
 Monitor::Display()
 {
+
+
     const Vector3f szGoal1 = mGameState.GetGoalSize(false);
     const Vector3f szGoal2 = mGameState.GetGoalSize(true);
 
@@ -998,6 +1001,9 @@ Monitor::Reshape(int width, int height)
 void
 Monitor::Idle()
 {
+
+    usleep (10);
+
     // If we are in singlestep mode and not advancing then return
     if (mLogserver && mSingleStep && !mAdvance)
         return;
