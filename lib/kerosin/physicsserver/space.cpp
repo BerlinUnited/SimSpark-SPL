@@ -124,10 +124,9 @@ bool Space::ConstructInternal()
 	if (!ODEObject::ConstructInternal()) return false;
 
 	// create the ode space
-	
-	// the line below does not compile with a recent ODE version
-	// due to an API change
-	mODESpace = dHashSpaceCreate();
+	// :TODO: recent versions of ODE require a dSpaceID parameter to
+	// create an ODESpace object, a 0 is used for now to make it compile
+	mODESpace = dHashSpaceCreate(0);
 	if (mODESpace == 0) return false;
 
 	// create a joint group for the contacts
