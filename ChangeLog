@@ -1,3 +1,8 @@
+2002-12-11	Tom Howard	<tomhoward@users.sf.net>
+
+	* ./Makefile.am
+	Fixed bug in branching targets
+	
 2002-12-10	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./Makefile.am
