@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.5 2004/06/06 10:35:03 fruit Exp $
+   $Id: gamestate.cpp,v 1.6 2004/06/07 14:32:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ GameState::GameState() :
     ResetFlags();
     SetupProcessMap();
     SetupFlagMap();
+    SetupPlaymodeMap();
 
     mFieldWidth = DEFAULT_FIELD_WIDTH;
     mFieldLength = DEFAULT_FIELD_LENGTH;
@@ -252,6 +253,36 @@ GameState::SetupFlagMap()
 }
 
 void
+GameState::SetupPlaymodeMap()
+{
+    // This is the default mapping for play modes.
+    // It was used for the first version of the logfile format, when the
+    // simulator did not send the play modes mapping in the init message.
+    // In order to be able to replay these logfiles, this mapping here should
+    // not be changed.
+    // In this logfiles, modes 3,11,12,16, and 17 should not occur.
+    mPlaymodes.resize(18);
+    mPlaymodes[0] = STR_PM_BeforeKickOff;       //  0: before kick off
+    mPlaymodes[1] = STR_PM_KickOff_Left;        //  1: kick off left
+    mPlaymodes[2] = STR_PM_KickOff_Right;       //  2: kick off right
+    mPlaymodes[3] = "kick_off";                 //  3: pseudo kick off state
+    mPlaymodes[4] = STR_PM_PlayOn;              //  4: play on
+    mPlaymodes[5] = STR_PM_KickIn_Left;         //  5: kick in left
+    mPlaymodes[6] = STR_PM_KickIn_Right;        //  6: kick in right
+    mPlaymodes[7] = STR_PM_CORNER_KICK_LEFT;    //  7: corner kick left
+    mPlaymodes[8] = STR_PM_CORNER_KICK_RIGHT;   //  8: corner kick right
+    mPlaymodes[9] = STR_PM_GOAL_KICK_LEFT;      //  9: goal kick left
+    mPlaymodes[10] = STR_PM_GOAL_KICK_RIGHT;    // 10: goal kick right
+    mPlaymodes[11] = STR_PM_OFFSIDE_LEFT;       // 11: offside left
+    mPlaymodes[12] = STR_PM_OFFSIDE_RIGHT;      // 12: offside left
+    mPlaymodes[13] = STR_PM_GameOver;           // 13: game over
+    mPlaymodes[14] = STR_PM_Goal_Left;          // 14: goal left
+    mPlaymodes[15] = STR_PM_Goal_Right;         // 15: goal right
+    mPlaymodes[16] = STR_PM_FREE_KICK_LEFT;     // 16: free kick left
+    mPlaymodes[17] = STR_PM_FREE_KICK_RIGHT;    // 17: free kick right
+}
+
+void
 GameState::ProcessInit(const Predicate& predicate)
 {
     Predicate::Iterator iter(predicate);
@@ -270,6 +301,43 @@ GameState::ProcessInit(const Predicate& predicate)
     predicate.GetValue(iter, "AgentMaxSpeed", mAgentMaxSpeed);
     predicate.GetValue(iter, "BallRadius", mBallRadius);
     predicate.GetValue(iter, "BallMass", mBallMass);
+
+    if (predicate.FindParameter(iter, "play_modes"))
+    {
+        for (int i=0; i<mPlaymodes.size(); ++i)
+        {
+            mPlaymodes[i] = STR_PM_Unknown;
+        }
+        for (Predicate::Iterator i = iter; i != iter.end(); ++i)
+        {
+            Predicate::Iterator j = i;
+            predicate.DescentList(j);
+            // read the play mode number
+            int n;
+            if (!predicate.GetValue(j,n))
+            {
+                continue;
+            }
+            ++j;
+            // read the play mode name
+            std::string name;
+            if (!predicate.GetValue(j,name) || name.length() == 0)
+            {
+                continue;
+            }
+            if (n < 0 || n > 99)
+            {
+                std::cerr << "(GameState) ERROR: play mode number (" << n
+                          << ") should be between 0 and 99\n";
+                continue;
+            }
+            if (mPlaymodes.size() <= n)
+            {
+                mPlaymodes.resize(n+1);
+            }
+            mPlaymodes[n] = name;
+        }
+    }
 }
 
 void
