@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.4.8.3 2004/01/16 11:07:39 rollmark Exp $
+   $Id: collider.cpp,v 1.4.8.4 2004/01/25 11:34:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -185,4 +185,9 @@ Collider* Collider::GetCollider(dGeomID id)
 {
   return id ?
     static_cast<Collider*>(dGeomGetData(id)) : 0;
+}
+
+void Collider::SetPosition(salt::Vector3f pos)
+{
+  dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
 }
