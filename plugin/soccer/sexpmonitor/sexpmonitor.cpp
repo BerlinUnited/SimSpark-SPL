@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.7 2004/02/01 11:02:35 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.8 2004/02/06 10:56:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <soccer/soccertypes.h>
+#include <soccer/soccerbase/soccerbase.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/ballstateaspect/ballstateaspect.h>
 #include <soccer/agentstate/agentstate.h>
@@ -285,14 +286,7 @@ SexpMonitor::GetMonitorHeaderInfo()
 
 void SexpMonitor::OnLink()
 {
-    mGameState = shared_dynamic_cast<GameStateAspect>
-        (GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
-
-    if (mGameState.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (SexpMonitor) Cannot locate GameStateAspect\n";
-        }
+    SoccerBase::GetGameState(*this,mGameState);
 }
 
 void SexpMonitor::OnUnlink()

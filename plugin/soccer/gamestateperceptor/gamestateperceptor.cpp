@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.1.2.1 2004/02/03 09:35:32 rollmark Exp $
+   $Id: gamestateperceptor.cpp,v 1.1.2.2 2004/02/06 10:56:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 #include "gamestateperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <soccer/soccerbase/soccerbase.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 
 using namespace oxygen;
@@ -84,14 +85,7 @@ GameStatePerceptor::Percept(Predicate& predicate)
 
 void GameStatePerceptor::OnLink()
 {
-    mGameState = shared_dynamic_cast<GameStateAspect>
-        (GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
-
-    if (mGameState.get() == 0)
-        {
-            GetLog()->Error()
-                << "(GameStatePerceptor) found no GameStateAspect\n";
-        }
+    SoccerBase::GetGameState(*this,mGameState);
 }
 
 void GameStatePerceptor::OnUnlink()
