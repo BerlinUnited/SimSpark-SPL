@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.5.8.4 2004/01/25 11:25:41 rollmark Exp $
+   $Id: body.h,v 1.5.8.5 2004/02/01 12:30:37 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,6 +92,9 @@ public:
 
     /** applies a force to the managed ODE body */
     void AddForce(const salt::Vector3f& force);
+
+    /** aplies a  force to the managed ODE body */
+    void AddTorque(const salt::Vector3f& torque);
 
     /** sets the position of the managed ODE body */
     void SetPosition(const salt::Vector3f& pos);
