@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.11 2004/06/06 16:54:30 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.12 2004/06/11 08:54:03 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/sceneserver/scene.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/ballstateaspect/ballstateaspect.h>
@@ -522,6 +523,24 @@ SoccerRuleAspect::UpdateGoal()
 }
 
 void
+SoccerRuleAspect::UpdateGameOver()
+{
+    // wait for 10 seconds to finish
+    if (mGameState->GetModeTime() < 9)
+    {
+        return;
+    }
+    mGameState->Finish();
+
+    if (mGameState->GetModeTime() >= 10)
+    {
+        boost::shared_ptr<GameControlServer> gameControlServer =
+            shared_dynamic_cast<GameControlServer>(GetCore()->Get("/sys/server/gamecontrol"));
+        gameControlServer->Quit();
+    }
+}
+
+void
 SoccerRuleAspect::CheckTime()
 {
     TTime now = mGameState->GetTime();
@@ -611,6 +630,7 @@ SoccerRuleAspect::Update(float deltaTime)
         break;
 
     case PM_GameOver:
+        UpdateGameOver();
         break;
 
     default:
