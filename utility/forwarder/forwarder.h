@@ -17,11 +17,11 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef _FORWARDER_H_
-#define _FORWARDER_H_
+#ifndef UTILITY_FORWARDER_H
+#define UTILITY_FORWARDER_H
 
 /*! \class Forwarder
-  $Id: forwarder.h,v 1.2 2002/08/13 13:26:19 fruit Exp $
+  $Id: forwarder.h,v 1.3 2002/08/16 15:42:29 fruit Exp $
     
     Forwarder
 
@@ -54,14 +54,14 @@ class Forwarder : public std::ostream
 public:
     // types
     //
-    enum EPriorityLevel 
+    enum PriorityLevel 
     {
-        eNone    = 0,
-        eDebug   = 1,
-        eNormal  = 2,
-        eWarning = 4,
-        eError   = 8,
-        eAll     = 0xffffffff
+        S_NONE    = 0,
+        S_DEBUG   = 1,
+        S_NORMAL  = 2,
+        S_WARNING = 4,
+        S_ERROR   = 8,
+        S_ALL     = 0xffffffff
     };
 
     // functions
@@ -69,23 +69,52 @@ public:
     Forwarder(unsigned int size = 1024);
     virtual ~Forwarder();
 
-    void addStream(std::ostream* stream, unsigned int mask = eAll);
+    /*! Add a stream to the list of streams.
 
-    // Priority Selection
-    Forwarder& priority(unsigned int mask);
+        First, it is checked if the stream is already in. If the stream
+        is found, we only install a new priority mask, so no stream can
+        be added twice.
 
-    Forwarder& debug()    { return priority(eDebug); }
-    Forwarder& normal()   { return priority(eNormal); }
-    Forwarder& warning()  { return priority(eWarning); }
-    Forwarder& error()    { return priority(eError); }
+        @param stream   the stream to add
+        @param mask     the (new) priority mask for the stream
+    */
+    void addStream(std::ostream* stream, unsigned int mask = S_ALL);
+    /*! Remove a stream from the list of streams.
+        @param stream   the stream to remove
+        @return         true if the stream was found (and thus removed)
+    */
+    bool removeStream(const std::ostream* stream);
+    /*! Set priority mask of a stream in the list.
+        @param stream   the stream for which we want to set the priority mask
+        @param mask     the new priority mask
+        @return         true if the stream was found
+    */
+    bool setPriorityMask(const std::ostream* stream, unsigned int mask);
+    /*! Get priority mask of a stream in the list.
+        @param stream   the stream for which we want to set the priority mask
+        @return         the priority mask; 0 if stream was not found
+    */
+    unsigned int getPriorityMask(const std::ostream* stream) const;
+
+    //! Priority selection for the messages to be written
+    Forwarder& priority(unsigned int prio);
+
+    Forwarder& debug()    { return priority(S_DEBUG); }
+    Forwarder& normal()   { return priority(S_NORMAL); }
+    Forwarder& warning()  { return priority(S_WARNING); }
+    Forwarder& error()    { return priority(S_ERROR); }
 
 private:
     Forwarder(const Forwarder& obj);
     Forwarder& operator=(const Forwarder& obj);
 
+    const ForwarderStreamBuf& getStreamBuf() const;
     ForwarderStreamBuf& getStreamBuf();
+
 };
 
-} //namespace Utility
+static Forwarder smux;
 
-#endif // _FORWARDER_H_
+} //namespace 
+
+#endif // UTILITY_FORWARDER_H

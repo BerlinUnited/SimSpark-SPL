@@ -23,6 +23,8 @@
 using namespace std;
 using namespace Utility;
 
+Forwarder smux(1024);
+
 Forwarder::Forwarder(unsigned int size) :
 ostream(new ForwarderStreamBuf(size))
 {
@@ -40,11 +42,36 @@ Forwarder::addStream(std::ostream* stream, unsigned int mask)
     getStreamBuf().addStream(stream, mask);
 }
 
-Forwarder& 
-Forwarder::priority(unsigned int mask)
+bool 
+Forwarder::removeStream(const std::ostream* stream)
 {
-    getStreamBuf().setCurrentPriority(mask);
+    return getStreamBuf().removeStream(stream);
+}
+    
+unsigned int 
+Forwarder::getPriorityMask(const std::ostream* stream) const
+{
+    return getStreamBuf().getPriorityMask(stream);
+}
+    
+bool 
+Forwarder::setPriorityMask(const std::ostream* stream, unsigned int mask)
+{
+    return getStreamBuf().setPriorityMask(stream, mask);
+}
+
+Forwarder& 
+Forwarder::priority(unsigned int prio)
+{
+    getStreamBuf().setCurrentPriority(prio);
     return *this;
+}
+
+const ForwarderStreamBuf& 
+Forwarder::getStreamBuf() const
+{
+    ForwarderStreamBuf* streamBuf = dynamic_cast<ForwarderStreamBuf*>(rdbuf());
+    return *streamBuf;
 }
 
 ForwarderStreamBuf& 
