@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserverbase.h,v 1.1 2004/05/11 09:15:14 fruit Exp $
+   $Id: commserverbase.h,v 1.2 2004/06/06 10:40:11 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,9 @@
 class CommServerBase : public zeitgeist::Leaf
 {
 public:
+    enum EKickOff { eRandom, eLeft, eRight };
+
+public:
     virtual ~CommServerBase() {};
 
     virtual bool Init(const std::string& parser, const std::string& s, int n) = 0;
@@ -35,12 +38,13 @@ public:
     virtual bool ReadMessage(std::string& msg) = 0;
     virtual boost::shared_ptr<oxygen::PredicateList> GetPredicates() const = 0;
 
-    virtual void SendKickOffCmd() = 0;
-    virtual void SendTrainerCmd(const std::string& cmd) = 0;
+    virtual void SendKickOffCmd(EKickOff mode = eRandom) {}
+    virtual void SendTrainerCmd(const std::string& /* cmd */ ) {}
     virtual void SendPauseCmd() = 0;
     virtual void SendRunCmd() = 0;
-    virtual void SendDisconnectCmd() = 0;
-    virtual void SendToWorldModel(const std::string& msg) = 0;
+    virtual void SendDisconnectCmd() {}
+    virtual void SendDropBallCmd() {}
+    virtual void SendToWorldModel(const std::string& /* msg */ ) {}
 };
 
 DECLARE_ABSTRACTCLASS(CommServerBase);
