@@ -9,27 +9,19 @@ AC_LANG([C++])
 AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 
-# Here are the version numbers of our libraries. They should be updated (only)
-# immediatly before a release of the package. See libtool manual for details.
-RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'1:0:1')
-RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'2:0:1')
-RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'1:1:0')
-RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'0:0:0')
+## Here are the version numbers of our libraries. They should be updated (only)
+## immediately before a release of the package. See libtool manual for details.
+RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'2:0:2')
+RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'3:0:0')
+RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'2:0:0')
+RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'1:0:0')
 RCSS_LIBRARY_VERSION_INFO(spark_version_info,spark_version,'0:0:0')
+RCSS_LIBRARY_VERSION_INFO(rcssmonitor3D_version_info,rcssmonitor3D_version,'1:0:0')
+RCSS_LIBRARY_VERSION_INFO(rcssnet3D_version_info,rcssnet3D_version,'0:0:0')
 
 rcss_prefix=\"$prefix\"
 test "$rcss_prefix" = \"NONE\" && rcss_prefix=\"$ac_default_prefix\"
 AC_DEFINE_UNQUOTED(PREFIX, $rcss_prefix, [Define the install prefix. Needed by the libraries to check for ruby scripts.])
-
-AC_ARG_ENABLE([debug],
-     AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
-     [case "${enableval}" in
-       yes) debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ;;
-       no)  debug=false ;;
-       *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
-     esac],[debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ])
-AC_SUBST(debug, [$debug])
-AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
 # Checks for programs.
 AC_PROG_CXX
@@ -100,6 +92,17 @@ fi
 AM_CONDITIONAL(HAVE_BOOST_REGEX, test $rcss_have_boost_regex = yes)
 
 ## checks for system services
+
+# check if we want to build the debug version
+AC_ARG_ENABLE([debug],
+     AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
+     [case "${enableval}" in
+       yes) debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ;;
+       no)  debug=false ;;
+       *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
+     esac],[debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ])
+AC_SUBST(debug, [$debug])
+AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
 # This test is required here because of the soccer monitor.
 # It can be dropped as soon as the monitor uses libkerosin.
@@ -206,6 +209,7 @@ AC_CONFIG_FILES([Makefile \
                  doc/Makefile \
 		 doc/Doxyfile \
                  doc/devel/Makefile \
+                 doc/devel/howtos/Makefile \
 		 doc/users/Makefile ],
 	        [test -f lib/salt/salt-config && chmod a+x lib/salt/salt-config && \
 		 test -f lib/zeitgeist/zeitgeist-config && chmod a+x lib/zeitgeist/zeitgeist-config && \
