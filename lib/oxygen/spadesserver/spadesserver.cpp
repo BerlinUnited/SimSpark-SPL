@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.6 2003/12/03 17:58:39 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.7 2003/12/04 17:21:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -182,7 +182,7 @@ SpadesServer::getMonitorHeaderInfo()
     shared_ptr<MonitorServer> monitorServer =
         GetMonitorServer();
 
-    if (monitorServer != NULL)
+    if (monitorServer != 0)
         {
             return DataArray(monitorServer->GetMonitorHeaderInfo());
         } else
@@ -197,7 +197,7 @@ SpadesServer::getMonitorInfo(SimTime /*time*/)
     shared_ptr<MonitorServer> monitorServer =
         GetMonitorServer();
 
-    if (monitorServer != NULL)
+    if (monitorServer != 0)
         {
             return DataArray(monitorServer->GetMonitorInfo());
         } else
@@ -212,7 +212,7 @@ SpadesServer::parseMonitorMessage (const char* data, unsigned datalen)
     shared_ptr<MonitorServer> monitorServer =
         GetMonitorServer();
 
-    if (monitorServer != NULL)
+    if (monitorServer != 0)
         {
             return monitorServer->ParseMonitorMessage(string(data,datalen));
         }
@@ -234,9 +234,9 @@ ActEvent*
 SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen) const
 {
     const shared_ptr<GameControlServer> gcs = GetGameControlServer();
-    if (gcs.get() == NULL)
+    if (gcs.get() == 0)
         {
-            return NULL;
+            return 0;
         }
 
     shared_ptr<ActionObject::TList> actionList
@@ -264,7 +264,7 @@ SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*
     shared_ptr<GameControlServer> gcs = GetGameControlServer();
 
     if (
-        (gcs.get() == NULL) ||
+        (gcs.get() == 0) ||
         (! gcs->AgentConnect(static_cast<int>(agent)))
         )
         {
@@ -289,7 +289,7 @@ bool
 SpadesServer::agentDisappear(AgentID agent, AgentLostReason /*reason*/)
 {
     shared_ptr<GameControlServer> gcs = GetGameControlServer();
-    if (gcs.get() == NULL)
+    if (gcs.get() == 0)
         {
             return false;
         }
