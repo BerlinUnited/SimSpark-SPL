@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: paramreader.h,v 1.1.2.3 2003/11/27 12:45:09 rollmark Exp $
+   $Id: paramstorer.cpp,v 1.1.2.1 2003/11/27 12:45:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,34 +19,18 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_PARAMETERREADER_H
-#define OXYGEN_PARAMETERREADER_H
+#include "paramstorer.h"
 
-#include <zeitgeist/class.h>
-#include <zeitgeist/leaf.h>
-#include <spades/EngineParam.hpp>
+using namespace oxygen;
 
-namespace oxygen
+int
+ParamStorer::readCmdLineArgs(const std::string& key,
+                             int argc, const char* const* argv)
 {
+    if (mParamReader != NULL)
+        {
+            return mParamReader->readCmdLineArgs(key,argc,argv);
+        }
 
-/*!
- */
-class ParamReader :
-        public zeitgeist::Leaf,
-        public spades::EngineParam
-{
-public:
-    ParamReader();
-
-    /** returns the number of args processed otherwise see the spades
-        RR_values. This method is called from within the ParamStorer.
-    */
-     int readCmdLineArgs(const std::string& key,
-                                int argc, const char* const* argv);
-};
-
-DECLARE_CLASS(ParamReader);
-
-} // namespace oxygen
-
-#endif // OXYGEN_PARAMETERREADER_H
+    return 0;
+}

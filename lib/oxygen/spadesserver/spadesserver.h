@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.1.2.5 2003/11/23 16:52:06 rollmark Exp $
+   $Id: spadesserver.h,v 1.1.2.6 2003/11/27 12:45:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,11 +26,11 @@
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 #include <oxygen/monitorserver/monitorserver.h>
+#include "paramreader.h"
 
 namespace oxygen
 {
 
-class ParamReader;
 
 /*! The SpadesServer serves as an interface between the SceneServer and the agents
  */
@@ -45,20 +45,6 @@ public:
     // Methods starting with small letters are SPADES interface methods.
     // Methods with a initial capital letter are additional methods needed
     // for the zeitgeist framework.
-
-    /** This method should be called after the SpadesServer is
-        created.  It is used to load the parameter reader for a
-        specific simulation.  @param paramReaderName name of the
-        parameter reader module @return true if loading the parameter
-        reader succeeded
-
-        @todo the method creates a parameter reader based on the given
-        name and saves a pointer to the parameter reader. It would be
-        better to put the parameter reader somewhere into the
-        hierarchy (maybe below the spadesserver) and get it from there
-        if needed.
-    */
-    bool Init(const std::string& paramReaderName);
 
     // SPADES interface methods start here
 
@@ -179,8 +165,11 @@ protected:
     boost::shared_ptr<MonitorServer> GetMonitorServer();
 
 private:
+    /** the Spades simulation engine */
     spades::SimEngine* mSimEngine;
-    boost::shared_ptr<oxygen::ParamReader> mParamReader;
+
+    /** our commandline parser */
+    boost::shared_ptr<ParamReader> mParamReader;
 };
 
 DECLARE_CLASS(SpadesServer);
