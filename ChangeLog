@@ -1,3 +1,19 @@
+2004-06-07  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/lib/gamestate.cpp: 
+	- added reading play mode map from the simulator 
+	  If no play mode map is sent, the default mapping is used 
+	  (as in the first versions of the simulator).
+
+	* app/rcssmonitor3d/lib/gamestate.h: 
+	- added SetPlayModeMap method
+
+	* app/rcssmonitor3d/lite/glserver.cpp: 
+	- fixed drawing the goal posts by adding the goal post size to the position
+
+	* app/simulator/rcssserver3D.rb: 
+	- added goal posts
+	
 2004-06-06  Oliver Obst  <fruit@robolog.org>
 
 	* app/simulator/createagentdb.sh.in: 
