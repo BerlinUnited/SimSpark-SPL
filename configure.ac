@@ -27,7 +27,7 @@ AC_ARG_ENABLE([debug],
        no)  debug=false ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
      esac],[debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ])
-# AC_ SUBST(debug, [$debug])
+AC_SUBST(debug, [$debug])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
 # Checks for programs.
