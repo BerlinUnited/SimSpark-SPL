@@ -31,8 +31,8 @@ LogServerStreamBuf::~LogServerStreamBuf()
     // delete mask-stream elements. The streams will not be deleted.
     while (mStreams.size() != 0)
     {
-		if (mStreams.back().second != std::cout && mStreams.back().second != std::cerr)
-			delete mStreams.back().second;
+                if (mStreams.back().second != &std::cout && mStreams.back().second != &std::cerr)
+                        delete mStreams.back().second;
         mStreams.pop_back();
     }
 
@@ -45,12 +45,12 @@ void LogServerStreamBuf::AddStream(std::ostream *stream, unsigned int mask)
     TMaskStreams::iterator i;
     i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
 
-    if (i == mStreams.end()) 
+    if (i == mStreams.end())
     {
         TMaskStream pstream(mask, stream);
         mStreams.push_back(pstream);
-    } 
-    else 
+    }
+    else
     {
         i->first = mask;
     }
@@ -61,44 +61,44 @@ bool LogServerStreamBuf::RemoveStream(const std::ostream *stream)
     // flush buffer
     sync();
 
-	TMaskStreams::iterator i;
-	i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
+        TMaskStreams::iterator i;
+        i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
 
-	if (i != mStreams.end()) 
-	{
-		mStreams.erase(i);
-		return true;
-	} 
-	return false;
+        if (i != mStreams.end())
+        {
+                mStreams.erase(i);
+                return true;
+        }
+        return false;
 }
 
 bool
 LogServerStreamBuf::SetPriorityMask(const std::ostream *stream, unsigned int mask)
 {
-	// flush buffer
-	sync();
+        // flush buffer
+        sync();
 
-	TMaskStreams::iterator i;
-	i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
+        TMaskStreams::iterator i;
+        i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
 
-	if (i != mStreams.end()) 
-	{
-		i->first = mask;
-		return true;
-	}
-	return false;
+        if (i != mStreams.end())
+        {
+                i->first = mask;
+                return true;
+        }
+        return false;
 }
 
 unsigned int LogServerStreamBuf::GetPriorityMask(const std::ostream *stream) const
 {
-	TMaskStreams::const_iterator i;
-	i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
+        TMaskStreams::const_iterator i;
+        i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
 
-	if (i != mStreams.end()) 
-	{
-		return i->first;
-	}
-	return 0;
+        if (i != mStreams.end())
+        {
+                return i->first;
+        }
+        return 0;
 }
 
 void LogServerStreamBuf::SetCurrentPriority(unsigned int priority)
@@ -140,42 +140,42 @@ LogServerStreamBuf::TIntType LogServerStreamBuf::overflow(TIntType c)
 */
 int LogServerStreamBuf::sync()
 {
-	PutBuffer();
+        PutBuffer();
 
-	return 0;
+        return 0;
 }
 
 void LogServerStreamBuf::Forward(const char *buffer, unsigned int length)
 {
-	TMaskStreams::iterator i;
-	for (i=mStreams.begin(); i!= mStreams.end(); ++i)
-	{
-		if ((*i).first & mCurrentPriority)
-		{
-			(*i).second->write(buffer, length);
-		}
-	}
+        TMaskStreams::iterator i;
+        for (i=mStreams.begin(); i!= mStreams.end(); ++i)
+        {
+                if ((*i).first & mCurrentPriority)
+                {
+                        (*i).second->write(buffer, length);
+                }
+        }
 }
 
 void LogServerStreamBuf::PutBuffer()
 {
-	// if we have data to stream out
-	if (pbase() != pptr())
-	{
-		int len = (pptr() - pbase());
-    
-		// pbase() = buffer address
-		Forward(pbase(), len);
+        // if we have data to stream out
+        if (pbase() != pptr())
+        {
+                int len = (pptr() - pbase());
 
-		// reset pointers == put area is empty
-		setp(pbase(), epptr());
-	}
+                // pbase() = buffer address
+                Forward(pbase(), len);
+
+                // reset pointers == put area is empty
+                setp(pbase(), epptr());
+        }
 }
 
-void 
+void
 LogServerStreamBuf::PutChar(TIntType chr)
 {
-	char a[1];
-	a[0] = chr;
-	Forward(a, 1);
+        char a[1];
+        a[0] = chr;
+        Forward(a, 1);
 }
