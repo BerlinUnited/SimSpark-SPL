@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.5 2004/05/14 16:51:58 fruit Exp $
+   $Id: monitor.cpp,v 1.6 2004/06/03 15:19:19 patstg Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include <sstream>
 #include "monitor.h"
 #include "gamestate.h"
 #include <types.h>
@@ -333,7 +334,7 @@ Monitor::DrawStatusLine()
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
 
-    stringstream sl, sc, sr;
+    std::stringstream sl, sc, sr;
 
     sl << mGameState.GetTeamnameLeft() << " " << mGameState.GetScoreLeft();
     sr << mGameState.GetScoreRight() << " " << mGameState.GetTeamnameRight();
@@ -467,7 +468,7 @@ Monitor::DrawPlayer(TTeamIndex side,
         if (mDrawUnums && unum > 0)
         {
             glColor3f(1.0, 1.0, 1.0);
-            stringstream ss;
+            std::stringstream ss;
             ss << unum;
             mGLServer.DrawText3D(ss.str(), pos);
         }
