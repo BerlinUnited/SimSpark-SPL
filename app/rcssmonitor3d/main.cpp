@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.10 2004/01/31 15:05:05 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.11 2004/01/31 17:29:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@
 #include "types.h"
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
+#include <sstream>
+#include <soccertypes.h>
 
 using namespace std;
 using namespace boost;
@@ -76,6 +78,109 @@ float gBorderSize   = DEFAULT_BORDER_SIZE;
 float gGoalWidth    = DEFAULT_GOAL_WIDTH;
 float gGoalDepth    = DEFAULT_GOAL_DEPTH;
 float gGoalHeight   = DEFAULT_GOAL_HEIGHT;
+
+// camera step size
+ const float gCamDelta = 0.5f;
+
+// game state data
+string gTeamL       = "teamL";
+string gTeamR       = "teamR";
+float gTime         = 0.0f;
+int gHalf           = 1;
+int gScoreL         = 0;
+int gScoreR         = 0;
+int gPlayMode       = PM_BeforeKickOff;
+
+// possible s-expression classes
+enum ObjClass
+    {
+        OC_SPHERE, // a sphere to be drawn
+        OC_TEAML,  // team name left
+        OC_TEAMR,  // team name right
+        OC_HALF,   // half time (1 or 2)
+        OC_TIME,   // game time in seconds
+        OC_SCOREL,   // score of left team
+        OC_SCORER,  // score of right team
+        OC_PLAYMODE,  // playmode
+    };
+
+// obect type description
+static const struct ObjType
+{
+    string type;
+    ObjClass obj;
+    float color[4];
+    float size;
+} typeMap[] =
+    {
+        // sphere types
+        {
+            "agent",
+            OC_SPHERE,
+            {0.8f, 0.8f, 0.2f, 1.0f},
+            0.3f
+        },
+        {
+            "flag",
+            OC_SPHERE,
+            {1.0f, 0, 0, 1.0f},
+            0.5f
+        },
+        {
+            "ball",
+            OC_SPHERE,
+            {1.0f, 1.0f, 1.0f, 1.0f},
+            0.111f
+        },
+        {
+            "ballAgent",
+            OC_SPHERE,
+            {1.0f, 0.5f, 0.5f, 1.0f},
+            0.3f
+        },
+        {
+            "teamL",
+            OC_TEAML,
+            {1.0f, 1.0f, 1.0f},
+            1.0f
+        },
+        {
+            "teamR",
+            OC_TEAML,
+            {1.0f, 1.0f, 1.0f},
+            1.0f
+        },
+        {
+            "half",
+            OC_HALF,
+            {1.0f, 1.0f, 1.0f},
+            1.0f
+        },
+        {
+            "time",
+            OC_TIME,
+            {1.0f, 1.0f, 1.0f},
+            1.0f
+        },
+        {
+            "scoreL",
+            OC_SCOREL,
+            {1.0f, 1.0f, 1.0f},
+            1.0f
+        },
+        {
+            "scoreR",
+            OC_SCORER,
+            {1.0f, 1.0f, 1.0f},
+            1.0f
+        },
+        {
+            "playMode",
+            OC_PLAYMODE,
+            {1.0f, 1.0f, 1.0f},
+            1.0f
+        }
+    };
 
 //--------------------------printHelp------------------------------------
 //
@@ -189,9 +294,160 @@ bool parseInfoHeader(shared_ptr<Predicate::TList> predicates)
             getObjectParam(predicate, "GoalHeight",  gGoalHeight);
             getObjectParam(predicate, "BorderSize",  gBorderSize);
         }
-    // parsing successfull
+    // parsing successful
     return recvInit;
 }
+
+//---------------------------parseGameState--------------------------------------
+//
+//-------------------------------------------------------------------------------
+void parseGameState(const Predicate& predicate, const ObjType& type)
+{
+    Predicate::Iterator param(predicate);
+
+    switch (type.obj)
+        {
+        case OC_TEAML :
+            {
+                std::string teaml;
+                if (predicate.GetValue(param,teaml))
+                    {
+                        gTeamL = teaml;
+                    }
+                break;
+            }
+        case OC_TEAMR :
+            {
+                std::string teamr;
+                if (predicate.GetValue(param,teamr))
+                    {
+                        gTeamR = teamr;
+                    }
+                break;
+            }
+        case OC_HALF :
+            {
+                int half;
+                if (predicate.GetValue(param,half))
+                    {
+                        gHalf = half;
+                    }
+                break;
+            }
+        case OC_TIME :
+            {
+                float time;
+                if (predicate.GetValue(param,time))
+                    {
+                        gTime = time;
+                    }
+                break;
+            }
+        case OC_SCOREL :
+            {
+                int score;
+                if (predicate.GetValue(param,score))
+                    {
+                        gScoreL = score;
+                    }
+                break;
+            }
+        case OC_SCORER :
+            {
+                int score;
+                if (predicate.GetValue(param,score))
+                    {
+                        gScoreR = score;
+                    }
+                break;
+            }
+        case OC_PLAYMODE :
+            {
+                int mode;
+                if (predicate.GetValue(param,mode))
+                    {
+                        gPlayMode = mode;
+                    }
+                break;
+            }
+
+        default:
+            break;
+        }
+}
+
+//---------------------------drawObject------------------------------------------
+//
+//-------------------------------------------------------------------------------
+void drawObject(const Predicate& predicate, const ObjType& type)
+{
+    Predicate::Iterator param(predicate);
+
+    salt::Vector3f pos;
+    if (! predicate.GetValue(param,pos))
+        {
+            return;
+        }
+
+    // if 'automatic-camera' is on
+    // we set the camera to look at the ball
+    if (
+        (predicate.name =="ball") &&
+        (gAutoCam)
+        )
+        {
+            gGLServer.SetLookAtPos(pos);
+        }
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, type.color);
+    gGLServer.DrawSphere(pos, type.size);
+    gGLServer.DrawShadowOfSphere(pos, type.size);
+}
+
+//---------------------------DrawStatusText--------------------------------------
+//
+//-------------------------------------------------------------------------------
+void drawStatusText()
+{
+    stringstream ss;
+
+    ss << gTeamL << " " << gScoreL << ":"
+       << gScoreR << " " << gTeamR << " ";
+    ss << "(" << ((gHalf == 1) ? "first" : "second") << " half) ";
+
+    string mode;
+    switch (gPlayMode)
+        {
+        case    PM_BeforeKickOff:
+            mode = "BeforeKickOff";
+            break;
+        case    PM_KickOff:
+            mode = "KickOff";
+            break;
+        case    PM_PlayOn:
+            mode = "PlayOn";
+            break;
+        case    PM_KickOff_Left:
+            mode = "KickOffLeft";
+            break;
+        case    PM_KickOff_Right:
+            mode = "KickOffRight";
+            break;
+        case  PM_FirstHalfOver:
+            mode = "FirstHalfOver";
+            break;
+        default:
+            mode = "(unknown playmode)";
+            break;
+
+            }
+    ss << mode << " ";
+    ss << "t=" << gTime;
+
+    glColor3f   ( 1.0, 1.0, 1.0  );
+    gGLServer.DrawText(ss.str().c_str(),Vector2f( -0.99, 0.97));
+}
+
 
 //----------------------drawScene----------------------------------------------
 //
@@ -199,35 +455,6 @@ bool parseInfoHeader(shared_ptr<Predicate::TList> predicates)
 //------------------------------------------------------------------------------
 void drawScene(shared_ptr<Predicate::TList> predicates)
 {
-    static const struct ObjType
-    {
-        string type;
-        float color[4];
-        float size;
-    } typeMap[] =
-        {
-            {
-                "agent",
-                {0.8f, 0.8f, 0.2f, 1.0f},
-                0.3f
-            },
-            {
-                "flag",
-                {1.0f, 0, 0, 1.0f},
-                0.5f
-            },
-            {
-                "ball",
-                {1.0f, 1.0f, 1.0f, 1.0f},
-                0.111f
-            },
-            {
-                "ballAgent",
-                {1.0f, 0.5f, 0.5f, 1.0f},
-                0.3f
-            }
-        };
-
     static int typeCount = sizeof(typeMap)/sizeof(ObjType);
 
     if (predicates.get() == 0)
@@ -238,7 +465,6 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
     // color and size setup
     typedef GLfloat TColor[4];
 
-    // look for "(player x y z)(player x y z)..."
     for (
          Predicate::TList::const_iterator iter = predicates->begin();
          iter != predicates->end();
@@ -263,23 +489,14 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
                     continue;
                 }
 
-            Predicate::Iterator param(predicate);
-
-            salt::Vector3f pos;
-            if (! predicate.GetValue(param,pos))
-                {
-                    continue;
-                }
-
-            // if 'automatic-camera' is on
-            // we set the camera to look at the ball
-            if(predicate.name =="ball" && gAutoCam)
-                    gGLServer.SetLookAtPos(pos);
-
             const ObjType& type = typeMap[idx];
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, type.color);
-            gGLServer.DrawSphere(pos, type.size);
-            gGLServer.DrawShadowOfSphere(pos, type.size);
+            if (type.obj == OC_SPHERE)
+                {
+                    drawObject(predicate,type);
+                } else
+                    {
+                        parseGameState(predicate,type);
+                    }
         }
 }
 
@@ -352,7 +569,7 @@ void display(void)
 
    // draw cached positions
    drawScene(predicates);
-
+   drawStatusText();
    glutSwapBuffers();
 }
 
@@ -401,24 +618,23 @@ void mouseMotion(int x, int y)
 //--------------------------------------------------------------------------
 void keyboard(unsigned char key, int /*x*/, int /*y*/)
 {
-  const float camDelta = 0.5f;
   salt::Vector3f pos;
   switch (key) {
   case 'w':
       //move cam in
-      gGLServer.MoveCamForward(camDelta);
+      gGLServer.MoveCamForward(gCamDelta);
       break;
   case 's':
       //move cam out
-      gGLServer.MoveCamForward(-camDelta);
+      gGLServer.MoveCamForward(-gCamDelta);
       break;
   case 'a':
       //strafe cam left
-      gGLServer.MoveCamStrafe(camDelta);
+      gGLServer.MoveCamStrafe(gCamDelta);
       break;
   case 'd':
       // strafe cam right
-      gGLServer.MoveCamStrafe(-camDelta);
+      gGLServer.MoveCamStrafe(-gCamDelta);
       break;
   case 'c':
       //toggle autocam mode
@@ -427,9 +643,33 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
       cout << gAutoCam ? "ON" : "OFF";
       cout << " ----" << endl;
       break;
+
+  case '+':
+      //move camera up
+      gGLServer.MoveCamUp(gCamDelta);
+      break;
+
+  case '-':
+  case ' ' :
+      //mode camera down
+      gGLServer.MoveCamUp(-gCamDelta);
+      break;
+
   default:
       break;
   }
+}
+
+//------------------------------reshape-------------------------------------
+//
+// processing of reshape events
+//
+// width, height are the new dimensions of the windw
+//--------------------------------------------------------------------------
+
+void reshape(int width, int height)
+{
+    gGLServer.Reshape(width,height);
 }
 
 int main(int argc, char* argv[])
@@ -451,6 +691,7 @@ int main(int argc, char* argv[])
   glutMotionFunc(mouseMotion);
   glutKeyboardFunc(keyboard);
   glutMouseFunc(mouse);
+  glutReshapeFunc(reshape);
   glutIdleFunc(idle);
 
   //init zeitgeist

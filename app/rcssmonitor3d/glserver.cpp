@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3.2.5 2004/01/28 10:59:38 heni Exp $
+   $Id: glserver.cpp,v 1.3.2.6 2004/01/31 17:29:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,17 +42,10 @@ GLserver::GLserver(int width, int height,
 //----------------------------------------------------------------------
 void GLserver::ApplyCamera()
 {
-    mCamera.Look();
-}
-
-//---------------------------------initGL-------------------------------
-//
-// OpenGL initialisation function
-//----------------------------------------------------------------------
-void GLserver::InitGL (void)
-{
     //switch z-buffer on
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
 
     //create a viewport
     glViewport(0,0,mWidth,mHeight);
@@ -65,6 +58,15 @@ void GLserver::InitGL (void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    mCamera.Look();
+}
+
+//---------------------------------initGL-------------------------------
+//
+// OpenGL initialisation function
+//----------------------------------------------------------------------
+void GLserver::InitGL (void)
+{
     //setup lightsource
     if(!mWireframe)
         {
@@ -87,14 +89,27 @@ void GLserver::InitGL (void)
 }
 //--------------------------drawText-------------------------------------
 // draws a given text string onto the screen at position pos
+//
+// (-1,1) is top left, (+1,-1) is bottom right of the screen
 //-----------------------------------------------------------------------
-void GLserver::DrawText(const char* string, salt::Vector2f pos)
+void GLserver::DrawText(const char* text, salt::Vector2f pos)
 {
-    //FIXME: preeliminary version
-    const char* s;
-    glRasterPos2f(-1+pos[0], 1-pos[1]);
-    for (s = string; *s; s++)
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *s);
+    glDisable (GL_LIGHTING);
+    glDisable (GL_TEXTURE_2D);
+    glDisable (GL_DEPTH_TEST);
+
+    glMatrixMode (GL_PROJECTION);
+    glPushMatrix ();
+    glLoadIdentity ();
+    glOrtho (0.0,mWidth,0.0,mHeight,-0.0,0.0);
+    glMatrixMode (GL_MODELVIEW);
+    glLoadIdentity();
+
+    glRasterPos2f(pos[0],pos[1]);
+    for (const char* s = text; *s; ++s)
+        {
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *s);
+        }
 }
 
 //--------------------------drawGround-----------------------------------
@@ -110,7 +125,7 @@ void GLserver::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
 
     glPushMatrix();
     glTranslatef(gridPos[0],gridPos[1], gridPos[2]);
-   
+
     // store the sizes of our faces
     // and create normal vector
     deltaX = szX/faceNum;
@@ -233,19 +248,19 @@ void GLserver::DrawSphere(salt::Vector3f spherePos,float radius)
 }
 //-----------------------DrawShadowOfSphere------------------------------
 //
-// draws the shadow of a sphere with given radius by scaling its size onto 
-// the ground (no y component) 
+// draws the shadow of a sphere with given radius by scaling its size onto
+// the ground (no y component)
 //-----------------------------------------------------------------------
 void GLserver::DrawShadowOfSphere(salt::Vector3f spherePos,float radius)
 {
-    // distance between ground and shadows 
+    // distance between ground and shadows
     const float delta = 0.08f;
 
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glColor3f(0.0f, 0.0f, 0.0f);
-    
-    // draw the flat sphere just a 'bit' 
+
+    // draw the flat sphere just a 'bit'
     // ontop of the playing gound
     glTranslatef(spherePos[0], delta, spherePos[2]);
     glScalef(1.0f, 0.0f, 1.0f);

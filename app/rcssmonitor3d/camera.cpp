@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.3.2.2 2004/01/28 10:59:39 heni Exp $
+   $Id: camera.cpp,v 1.3.2.3 2004/01/31 17:29:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ Camera::Camera(const salt::Vector3f& camPos,
   mLookAtPos = lookAtPos;
   mUpVector  = upVector;
 
-  //resets the camera 
+  //resets the camera
   RefreshCam();
 
   mFixDist = 8.0;
@@ -79,7 +79,7 @@ Camera::Look()
              mUpVector[0], mUpVector[1], mUpVector[2]);
 }
 
-void 
+void
 Camera::RefreshCam()
 {
   //resets the camera attributes mTheta and mPhi
@@ -97,7 +97,13 @@ Camera::MoveCamForward(float steps)
   mLookAtPos  += dir;
 }
 
-void 
+void Camera::MoveCamUp(float steps)
+{
+    mPosition[1] += steps;
+    mLookAtPos[1] += steps;
+}
+
+void
 Camera::MoveCamStrafe(float steps)
 {
   //move cam perpendicular to our current direction

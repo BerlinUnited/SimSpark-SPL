@@ -16,16 +16,16 @@ LDADD = \
 rcssmonitor3D_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin/soccer @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 rcssmonitor3D_SOURCES = \
 	main.cpp \
-	camera.cpp camera.h \
-	glserver.cpp glserver.h \
-	communit.cpp communit.h \
-	commserver.cpp commserver.h commserver_c.cpp \
-	tcpsocket.cpp tcpsocket.h \
-	types.h
+	camera.cpp \
+	glserver.cpp \
+	communit.cpp \
+	commserver.cpp \
+	commserver_c.cpp \
+	tcpsocket.cpp
 
 EXTRA_DIST = rcssmonitor3d.rb
