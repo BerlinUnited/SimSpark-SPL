@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.cpp,v 1.3 2003/11/14 14:47:09 rollmark Exp $
+   $Id: oxygen.cpp,v 1.3.2.1 2003/11/16 16:02:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,6 +52,11 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(ForceEffector), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(Perceptor), "kerosin/");
     // zg.GetCore()->RegisterClassObject(new CLASS(VisionPerceptor), "kerosin/");
+
+#ifdef HAVE_SPADES_HEADERS
+    // spades
+    zg.GetCore()->RegisterClassObject(new CLASS(SpadesServer), "kerosin/");
+#endif
 
     // controlaspect
     zg.GetCore()->RegisterClassObject(new CLASS(ControlAspect), "kerosin/");
