@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.h,v 1.4 2004/02/12 14:07:24 fruit Exp $
+   $Id: perfectvisionperceptor.h,v 1.4.2.1 2004/03/28 15:35:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ public:
     virtual ~PerfectVisionPerceptor();
 
     //! \return true, if valid data is available and false otherwise.
-    bool Percept(oxygen::Predicate& predicate);
+    bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
     /** Set a factor of -1 or 1 for each axis.
      * \param x set to true if invert x-axis
