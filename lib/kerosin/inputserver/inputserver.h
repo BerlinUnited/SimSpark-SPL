@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputserver.h,v 1.7 2004/04/11 07:01:39 rollmark Exp $
+   $Id: inputserver.h,v 1.8 2004/04/11 11:22:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -196,8 +196,10 @@ public:
     */
     bool BindCommand(const std::string &desc, int cmd);
 
-    //! import a new scan code mapping
-    void ImportScanCodeMapping(const std::string &name);
+    /** sets the name of the input mapping to be imported on init, the
+        name of a ruby script is expected
+    */
+    void SetScanCodeMapping(const std::string &name);
 
     //! add a code to the scancode map
     void AddCode(TInputCode ic, const std::string &name,
@@ -352,7 +354,13 @@ public:
     unsigned int    mModifierState;
 
 private:
+    /** the name of the scan code script to be imported */
+    std::string mScanCodeScript;
+
+    /** the scan code mapping */
     boost::shared_ptr<ScanCodeMap>  mScanCodeMap;
+
+    /** map of active bindings */
     TBindMap mBindings;
 };
 

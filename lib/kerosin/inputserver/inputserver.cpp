@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: inputserver.cpp,v 1.5 2004/03/05 18:47:53 rollmark Exp $
+$Id: inputserver.cpp,v 1.6 2004/04/11 11:22:56 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -169,6 +169,8 @@ const InputServer::TInputCode InputServer::IC_AXIST = 0x3000;
 InputServer::InputServer() :
     Node(), mModifierState(eNone), mScanCodeMap(new ScanCodeMap())
 {
+    // default to a german keyboard layout
+    mScanCodeScript = "german.scan.rb";
 }
 
 InputServer::~InputServer()
@@ -338,7 +340,17 @@ bool InputServer::Init(const std::string &inputSysName)
             return false;
         }
 
-    return AddChildReference(inputSystem);
+    AddChildReference(inputSystem);
+
+    // import the scan code map
+    GetScript()->RunInitScript
+        (
+         mScanCodeScript,
+         "lib/kerosin/inputserver",
+         ScriptServer::IS_COMMON
+         );
+
+    return true;
 }
 
 shared_ptr<InputSystem> InputServer::GetInputSystem()
@@ -478,10 +490,9 @@ bool InputServer::BindCommand(const std::string &desc, int cmd)
     return true;
 }
 
-void InputServer::ImportScanCodeMapping(const std::string &name)
+void InputServer::SetScanCodeMapping(const std::string &name)
 {
-    mScanCodeMap->Reset();
-    GetScript()->Run(name);
+    mScanCodeScript = name;
 }
 
 void InputServer::AddCode(TInputCode ic, const std::string &name, char noMod,

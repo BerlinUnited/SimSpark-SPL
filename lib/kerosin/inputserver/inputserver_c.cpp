@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputserver_c.cpp,v 1.4 2004/03/22 11:23:30 rollmark Exp $
+   $Id: inputserver_c.cpp,v 1.5 2004/04/11 11:22:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ FUNCTION(InputServer,bindCommand)
            );
 }
 
-FUNCTION(InputServer,importScanCodeMapping)
+FUNCTION(InputServer,setScanCodeMapping)
 {
     string inName;
 
@@ -79,7 +79,7 @@ FUNCTION(InputServer,importScanCodeMapping)
             return false;
         }
 
-    obj->ImportScanCodeMapping(inName);
+    obj->SetScanCodeMapping(inName);
     return true;
 }
 
@@ -114,6 +114,6 @@ void CLASS(InputServer)::DefineClass()
     DEFINE_FUNCTION(createDevice);
     DEFINE_FUNCTION(reset);
     DEFINE_FUNCTION(bindCommand);
-    DEFINE_FUNCTION(importScanCodeMapping);
+    DEFINE_FUNCTION(setScanCodeMapping);
     DEFINE_FUNCTION(addCode);
 }
