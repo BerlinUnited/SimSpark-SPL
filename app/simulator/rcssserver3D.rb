@@ -430,6 +430,9 @@ gameControlServer.initControlAspect('SoccerRuleAspect')
 # register the SexpMonitorSystem
 monitorServer.registerMonitorSystem('SexpMonitor')
 
+# init monitorItems to transmit game state information
+monitorServer.registerMonitorItem('GameStateItem')
+
 #
 # queue agents for startup
 spadesServer.queueAgents('foo', 11)
