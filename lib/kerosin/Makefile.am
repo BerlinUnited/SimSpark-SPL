@@ -2,13 +2,15 @@ if DEBUG
 pkglib_LTLIBRARIES = libkerosin_debug.la
 libkerosin_debug_la_SOURCES = $(sources)
 libkerosin_debug_la_CXXFLAGS = -O -g -W -Wall
+libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@
 else
 pkglib_LTLIBRARIES = libkerosin.la
 libkerosin_la_SOURCES = $(sources)
 libkerosin_la_CXXFLAGS = -O2
+libkerosin_la_LIBADD = @FREETYPE_LIBADD@
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib
+AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
@@ -57,30 +59,12 @@ kerosin.cpp \
 materialserver/material.cpp \
 materialserver/materialserver.cpp \
 materialserver/materialserver_c.cpp \
-physicsserver/body.cpp \
-physicsserver/body_c.cpp \
-physicsserver/collider.cpp \
-physicsserver/collider_c.cpp \
-physicsserver/odeobject.cpp \
-physicsserver/odeobject_c.cpp \
-physicsserver/physicsserver.cpp \
-physicsserver/physicsserver_c.cpp \
-physicsserver/planecollider.cpp \
-physicsserver/planecollider_c.cpp \
-physicsserver/space.cpp \
-physicsserver/space_c.cpp \
-physicsserver/spherecollider.cpp \
-physicsserver/spherecollider_c.cpp \
-physicsserver/world.cpp \
-physicsserver/world_c.cpp \
 sceneserver/axis.cpp \
 sceneserver/axis_c.cpp \
 sceneserver/basenode.cpp \
 sceneserver/basenode_c.cpp \
 sceneserver/camera.cpp \
 sceneserver/camera_c.cpp \
-sceneserver/fpscontroller.cpp \
-sceneserver/fpscontroller_c.cpp \
 sceneserver/helper/NVMeshMender.cpp \
 sceneserver/indexbuffer.cpp \
 sceneserver/light.cpp \
@@ -104,6 +88,26 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp 
 
+#physicsserver/body.cpp \
+#physicsserver/body_c.cpp \
+#physicsserver/collider.cpp \
+#physicsserver/collider_c.cpp \
+#physicsserver/odeobject.cpp \
+#physicsserver/odeobject_c.cpp \
+#physicsserver/physicsserver.cpp \
+#physicsserver/physicsserver_c.cpp \
+#physicsserver/planecollider.cpp \
+#physicsserver/planecollider_c.cpp \
+#physicsserver/space.cpp \
+#physicsserver/space_c.cpp \
+#physicsserver/spherecollider.cpp \
+#physicsserver/spherecollider_c.cpp \
+#physicsserver/world.cpp \
+#physicsserver/world_c.cpp 
+
+#sceneserver/fpscontroller.cpp \
+#sceneserver/fpscontroller_c.cpp 
+
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
 agentaspect/effector.h \
@@ -123,19 +127,9 @@ inputserver/scancodemap.h \
 kerosin.h \
 materialserver/material.h \
 materialserver/materialserver.h \
-physicsserver/body.h \
-physicsserver/collider.h \
-physicsserver/odeobject.h \
-physicsserver/physicsserver.h \
-physicsserver/planecollider.h \
-physicsserver/posbody.h \
-physicsserver/space.h \
-physicsserver/spherecollider.h \
-physicsserver/world.h \
 sceneserver/axis.h \
 sceneserver/basenode.h \
 sceneserver/camera.h \
-sceneserver/fpscontroller.h \
 sceneserver/helper/NVMeshMender.h \
 sceneserver/helper/nv_math/nv_algebra.h \
 sceneserver/helper/nv_math/nv_math.h \
@@ -156,5 +150,18 @@ soundserver/soundsystem.h \
 textureserver/texture.h \
 textureserver/texture2d.h \
 textureserver/textureserver.h \
-openglserver/glfnproto.h \
 openglserver/openglserver.h
+
+#physicsserver/body.h \
+#physicsserver/collider.h \
+#physicsserver/odeobject.h \
+#physicsserver/physicsserver.h \
+#physicsserver/planecollider.h \
+#physicsserver/posbody.h \
+#physicsserver/space.h \
+#physicsserver/spherecollider.h \
+#physicsserver/world.h 
+
+#sceneserver/fpscontroller.h
+
+#openglserver/glfnproto.h 
