@@ -1,5 +1,11 @@
 2004-03-22  Oliver Obst  <fruit@robolog.org>
 
+	* app/simulator/rcssserver3D.rb: 
+	the force factor from the kicker seems to be too big. reducing it by factor 
+	10 seems to be more reasonable.
+
+	* merged rcssserver3D-0-2 branch to the main branch
+
 	* released rcssserver3D-0.2.1
 
 	* app/simulator/rcssserver3D.rb: 
