@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.14 2004/05/05 07:52:41 rollmark Exp $
+   $Id: leaf.h,v 1.15 2004/05/10 21:19:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -193,17 +193,17 @@ public:
             = boost::shared_static_cast<Node>(make_shared(GetParent()));
 
         while (node.get() != 0)
+        {
+            boost::shared_ptr<CLASS> test =
+                boost::shared_dynamic_cast<CLASS>(node);
+
+            if (test.get() != 0)
             {
-                boost::shared_ptr<CLASS> test =
-                    boost::shared_dynamic_cast<CLASS>(node);
-
-                if (test.get() != 0)
-                    {
-                        return test;
-                    }
-
-                node = boost::make_shared(node->GetParent());
+                return test;
             }
+
+            node = boost::shared_static_cast<Node>(make_shared(node->GetParent()));
+        }
 
         return boost::shared_ptr<CLASS>();
     }
