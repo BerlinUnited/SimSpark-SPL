@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.12 2004/04/21 07:02:08 rollmark Exp $
+   $Id: core.cpp,v 1.13 2004/04/24 11:57:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -109,18 +109,22 @@ boost::shared_ptr<CoreContext> Core::CreateContext()
 boost::shared_ptr<Object>
 Core::New(const std::string& className)
 {
-    shared_ptr<CoreContext> context = CreateContext();
     // select the correct class to create our instance
-    shared_ptr<Class> theClass = shared_static_cast<Class>
+    shared_ptr<CoreContext> context = CreateContext();
+    shared_ptr<Class> theClass = shared_dynamic_cast<Class>
         (context->Get("/classes/"+className));
 
     // here we will store our created instance
-    shared_ptr<Object>      instance;
-    if (theClass.get() != NULL)
+    shared_ptr<Object> instance;
+
+    if (theClass.get() == 0)
         {
-            // create the instance
-            instance = theClass->Create();
-        }
+            mLogServer->Error() << "(Core::New) unkown class '"
+                                << className << "'\n";
+        } else
+            {
+                instance = theClass->Create();
+            }
 
     return instance;
 }
