@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector.h,v 1.1.2.3 2004/02/02 18:34:42 fruit Exp $
+   $Id: dasheffector.h,v 1.1.2.4 2004/02/08 22:31:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,17 +61,27 @@ public:
     /** Set the maximum length of the dash power vector. */
     void SetMaxPower(float max_power);
 
+protected:
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
+
     /** setup the reference to the agents body node */
     virtual void OnLink();
 
     /** remove the reference to the agents body node */
     virtual void OnUnlink();
 
-protected:
+    /** the reference to the parent transform node */
+    boost::shared_ptr<oxygen::Transform> mTransformParent;
     /** the reference to the parents body node */
     boost::shared_ptr<oxygen::Body> mBody;
     //! a reference to the agent state
     boost::shared_ptr<AgentState> mAgentState;
+
+    /** the force that should be applied to the agent body */
+    salt::Vector3f mForce;
+
+    /** the maximum distance from the plane */
+    float mMaxDistance;
 
     /** The force factor is the force applied to the body if the length of
         the dash power vector is greater or equal to mMaxDashPower */
