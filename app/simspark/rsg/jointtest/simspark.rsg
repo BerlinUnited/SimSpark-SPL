@@ -18,6 +18,20 @@
        (importScene rsg/boxspheres/arena.rsg)
        )
 
+
+ ; add a platform
+ (node Transform
+       (setLocalPos 0 20 10)
+       (setLocalRotation 20 0 0)
+       (importScene rsg/boxspheres/staticbox.rsg 15 60 0.2 matGreen)
+       )
+
+ ; add some bodies connected with joints
+ (node Transform
+       (setLocalPos -2 40 20)
+       (importScene rsg/jointtest/hinge2thing.rsg)
+       )
+
  (node Transform 
        (setLocalRotation 45 0 0)
        (setLocalPos 0 0 20)
@@ -35,4 +49,5 @@
        (setLocalRotation 45 0 0)
        (importScene rsg/jointtest/universalthing.rsg)
        )
+ 
  )
