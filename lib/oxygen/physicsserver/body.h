@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.7 2004/03/09 12:10:35 rollmark Exp $
+   $Id: body.h,v 1.8 2004/03/14 16:13:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -140,14 +140,8 @@ protected:
     /** the managed ode body */
     dBodyID mODEBody;
 
-    /** linear drag (default 0.3) */
-    float mLinearDrag;
-
     /** maximum velocity, this body can attain */
     float mMaxSpeed;
-
-    /** maximum force which can be applied to this body */
-    float mMaxForce;
 };
 
 DECLARE_CLASS(Body);
