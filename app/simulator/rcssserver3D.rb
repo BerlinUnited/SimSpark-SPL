@@ -70,8 +70,9 @@ def addAgent(aspectPath)
   new('InitEffector', aspectPath+'InitEffector')
 
   driveEffector = new('DriveEffector', aspectPath+'DriveEffector')
-  driveEffector.setForceFactor(60.0);
+  driveEffector.setForceFactor(0.75);
   driveEffector.setSigma(0.005);
+  driveEffector.setConsumption(9000.0);
 
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
   kickEffector.setForceFactor(4.0)
@@ -230,7 +231,7 @@ addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
 addSoccerVar('GoalHeight', 2.44)
-addSoccerVar('BorderSize', 4.0)
+addSoccerVar('BorderSize', 10.0)
 
 # agent parameters
 addSoccerVar('AgentMass', 75.0)
