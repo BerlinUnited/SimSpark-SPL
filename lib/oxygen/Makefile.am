@@ -154,11 +154,13 @@ geometryserver/trimesh.cpp \
 geometryserver/indexbuffer.cpp \
 monitorserver/monitorserver.cpp \
 monitorserver/monitorserver_c.cpp \
+monitorserver/monitorsystem.cpp \
 monitorserver/monitorsystem_c.cpp \
 monitorserver/monitoritem_c.cpp \
 monitorserver/custommonitor.cpp \
-monitorserver/custommonitor_c.cpp
-
+monitorserver/custommonitor_c.cpp \
+monitorserver/monitorcmdparser.cpp \
+monitorserver/monitorcmdparser_c.cpp
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
@@ -221,4 +223,6 @@ monitorserver/monitorserver.h \
 monitorserver/monitorsystem.h \
 monitorserver/monitoritem.h \
 monitorserver/custommonitor.h \
+monitorserver/monitorcmdparser.h \
 $(spades_headers)
+
