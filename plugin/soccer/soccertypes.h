@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccertypes.h,v 1.4 2004/04/23 15:25:21 fruit Exp $
+   $Id: soccertypes.h,v 1.5 2004/05/05 14:00:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ enum TPlayMode
     PM_Goal_Left,
     PM_Goal_Right,
     PM_FREE_KICK_LEFT,         /*!< free_kick_l:       free kick for left team */
-    PM_FREE_KICK_RIGHT         /*!< free_kick_r:       free kick for right team*/
+    PM_FREE_KICK_RIGHT,        /*!< free_kick_r:       free kick for right team*/
+    PM_NONE
 };
 
 /** mapping from TPlayMode to string constants */
@@ -73,17 +74,18 @@ enum TPlayMode
 
 enum TTeamIndex
 {
-    TI_NONE = -1,
-    TI_LEFT = 0,
-    TI_RIGHT = 1
+    TI_NONE = 0,
+    TI_LEFT = 1,
+    TI_RIGHT = 2
 };
 
 typedef float TTime;
 
 enum TGameHalf
 {
-        GH_FIRST = 0,
-        GH_SECOND = 1
+    GH_NONE = 0,
+    GH_FIRST = 1,
+    GH_SECOND = 2
 };
 
 #endif // SOCCERTYPES_H
