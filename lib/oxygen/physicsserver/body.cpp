@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.4.8.2 2004/01/12 14:44:31 rollmark Exp $
+   $Id: body.cpp,v 1.4.8.3 2004/01/25 11:26:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -213,4 +213,16 @@ Body* Body::GetBody(dBodyID id)
   return id ?
     static_cast<Body*>(dBodyGetData(id)) : 0;
 }
+
+void Body::AddForce(const Vector3f& force)
+{
+  dBodyAddForce(mODEBody, force.x(), force.y(), force.z());
+}
+
+void Body::SetPosition(const Vector3f& pos)
+{
+  dBodySetPosition(mODEBody, pos.x(), pos.y(), pos.z());
+  // the parent node will be updated in the next physics cycle
+}
+
 
