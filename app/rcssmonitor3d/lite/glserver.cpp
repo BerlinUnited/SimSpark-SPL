@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.5 2004/04/21 18:35:50 rollmark Exp $
+   $Id: glserver.cpp,v 1.5.2.1 2004/05/05 15:43:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,16 +110,33 @@ GLServer::GetTextWidth(const char* text) const
     return width;
 }
 
-void GLServer::DrawText3D(const char* text, Vector3f pos)
+void
+GLServer::DrawText3D(const char* text, const Vector3f& pos)
 {
     glDisable (GL_DEPTH_TEST);
     glDisable (GL_TEXTURE_2D);
 
     glRasterPos3f(pos[0],pos[1],pos[2]);
     for (const char* s = text; *s; ++s)
-        {
-            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *s);
-        }
+    {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *s);
+    }
+
+    glEnable (GL_TEXTURE_2D);
+    glEnable (GL_DEPTH_TEST);
+}
+
+void
+GLServer::DrawText3D(const std::string& text, const Vector3f& pos)
+{
+    glDisable (GL_DEPTH_TEST);
+    glDisable (GL_TEXTURE_2D);
+
+    glRasterPos3f(pos[0],pos[1],pos[2]);
+    for (int i = 0; i < text.length(); ++i)
+    {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, text[i]);
+    }
 
     glEnable (GL_TEXTURE_2D);
     glEnable (GL_DEPTH_TEST);
