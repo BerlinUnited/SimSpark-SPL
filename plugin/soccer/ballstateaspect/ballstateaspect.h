@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.1.2.5 2004/02/10 19:27:43 rollmark Exp $
+   $Id: ballstateaspect.h,v 1.1.2.6 2004/03/22 09:59:28 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,6 +61,11 @@ public:
     /** returns the goal in which the balls position is or TI_NONE
         otherwise */
     TTeamIndex GetGoalState();
+
+    /** updates the reference to the last agent that collided with the
+        ball
+    */
+    void UpdateLastCollidingAgent(boost::shared_ptr<oxygen::AgentAspect> agent);
 
 protected:
     /** set up the reference to the ball and field collider */
