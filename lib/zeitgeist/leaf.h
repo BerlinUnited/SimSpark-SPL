@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.13 2004/04/29 12:24:22 rollmark Exp $
+   $Id: leaf.h,v 1.14 2004/05/05 07:52:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -238,7 +238,7 @@ public:
 
     /** clears any cached data (e.g. the cached full path and
         forces the node to recalculate all values */
-    void                                ClearCachedData() const;
+    void ClearCachedData() const;
 
     /** sets the name of this node */
     void        SetName(const std::string &name)
@@ -250,6 +250,11 @@ public:
     virtual TLeafList::iterator end();
     virtual TLeafList::const_iterator end() const;
 protected:
+    /** called from within UpdatCached; override to perform node
+        specific updates
+    */
+    virtual void UpdateCachedInternal() {}
+
     /** Sets the parent of this node. It has to be implemented
         'very carefully'. The parent object always holds a
         shared pointer reference to mSelf. What we have to do
@@ -257,7 +262,7 @@ protected:
         parent. Insert it into the new parent and change the
         parent pointer.
     */
-    void        SetParent(const boost::shared_ptr<Node> &parent);
+    void SetParent(const boost::shared_ptr<Node> &parent);
 
     /** This method is called, when the hierarchy object has been
         linked to a parent. At that point, traversal can
