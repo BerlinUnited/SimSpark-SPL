@@ -1,4 +1,7 @@
-
+2003-06-28  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* /app/simulator/survival/survival.rb, /app/simulator/survival/survivalcontrolaspect.cpp
+	- added a penalty for an agent that dies; it will be catapulted
+	randomly in the air, to create a nice effect :)
 
 2003-06-28  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* /app/simulator/survival/survival.rb
