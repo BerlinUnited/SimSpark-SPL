@@ -1,3 +1,17 @@
+===== Dez 9 2003
+
+- shared_ptr vs weak_ptr for pointers to parent classes in leaf/core
+- CreateSenseEvent: query the perceptors
+- return TPredicateList as shared_ptr (BaseParser)
+- configure should check for rcssbase (for socket streams)
+- check how to change ForceEffector
+- collapse AgentAspect and Transform nodes to new AgentAspect
+- AgentAspect gets new interface to take ActionObjects. AgentAspects take care of 
+  performing the actions.
+- Effectors should be below AgentAspect (not below GCS)
+- change spadestest.rb to fit new Agent design (hierarchy)
+
+
 ===== Dez 2 2003
 
 - Parser / Generator should parse / generate a list of pairs <string. list<any> >
