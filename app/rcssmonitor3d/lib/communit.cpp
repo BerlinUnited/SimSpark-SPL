@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.cpp,v 1.5 2004/05/10 14:10:45 fruit Exp $
+   $Id: communit.cpp,v 1.6 2004/06/13 06:41:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,9 +50,6 @@ CommUnit::OpenConnection(const std::string& host, int port)
 {
     mSocket.open();
 
-    cout << "(CommUnit) connecting to ";
-    cout << host << ":" << port << endl;
-
     Addr local(INADDR_ANY,INADDR_ANY);
     mSocket.bind(local);
 
@@ -71,7 +68,6 @@ CommUnit::OpenConnection(const std::string& host, int port)
 
     if (mSocket.isConnected())
     {
-        cout << "(CommUnit) connected successfully" << endl;
         return true;
     }
 
