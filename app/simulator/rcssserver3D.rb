@@ -274,7 +274,8 @@ addSoccerVar('BallMass',randomServer.uniformRND(0.41,0.45))
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
 addSoccerVar('RuleKickInPauseTime',1.0)
-addSoccerVar('RuleHalfTime',4.0 * 60)
+addSoccerVar('RuleHalfTime',5.0 * 60)
+addSoccerVar('RuleDropBallTime',30)
 
 #
 # mount a standard file system
