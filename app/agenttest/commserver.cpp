@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.8 2004/10/04 08:05:23 rollmark Exp $
+   $Id: commserver.cpp,v 1.9 2004/10/04 08:21:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,8 +59,6 @@ CommServer::PutOutput(const char* out)
     unsigned int netlen = htonl(len);
     memcpy(mBuffer,&netlen,sizeof(netlen));
     write(mWriteFd, mBuffer, len + sizeof(netlen));
-
-    std::cerr << "CommServer::PutOutput" << out << std::endl;
 }
 
 bool
