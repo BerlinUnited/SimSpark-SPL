@@ -1,3 +1,7 @@
+2003-12-22  Oliver Obst  <fruit@robolog.org>
+
+	* merged rcssserver3D-add-gamecontrol back to main branch	
+
 2003-12-21  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/rcssmonitor3d/.cvsignore, app/rcssmonitor3d/Makefile.am,
