@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.13 2004/04/30 09:32:30 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.14 2004/05/05 09:04:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -226,6 +226,14 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
 
 
                     RemoveTransformPaths(root);
+
+                    // mark the corresponding scene as modified
+                    shared_ptr<Scene> scene = root->GetScene();
+                    if (scene.get() != 0)
+                        {
+                            scene->SetModified(true);
+                        }
+
                     return true;
                 }
         }
