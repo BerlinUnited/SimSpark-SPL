@@ -27,10 +27,13 @@ module GLExtGen
 	end
 
 	def scan (fileName, extensionExp, functionExp, extensionHash)
+            predefinedExp = Regexp.new("(.*)APIENTRY gl(.*) \\((.*)");
 	    currentExtension = nil
 	    File.open(fileName).each { |line|
 		if line =~ /^(\s*)(\/+)(.*) (gl\w+)/
 		    print "removing misleading line ", line
+		elsif md = predefinedExp.match(line)
+		    print "predefined fct gl", md[2], ":\n"
 		elsif md = extensionExp.match(line)
 		    extensionName = md[2]
 		    currentExtension = extensionHash[extensionName]
