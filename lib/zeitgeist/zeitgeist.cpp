@@ -3,7 +3,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: zeitgeist.cpp,v 1.6 2004/04/22 19:25:34 rollmark Exp $
+   $Id: zeitgeist.cpp,v 1.7 2004/04/29 12:20:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,16 @@ Zeitgeist::Zeitgeist(string dotName, string relPathPrefix)
 Zeitgeist::~Zeitgeist()
 {
     cout << "(Zeitgeist) shutting down" << endl;
+
+    // this Zeitgeist object owns the only shared_ptr to the
+    // core. Class objects only own weak_ptrs to the core. Destructing
+    // the core implicitly after this destructor finishes, invalidates
+    // our shared_ptr prior to the call to Core::~Core() and all
+    // instances are left without a valid core reference on shutdown
+    // (calls to OnUnlink). Therefore we destruct the core and the hierarchy explicitly
+    // with the mCore reference intact.
+
+    mCore->Desctruct();
 }
 
 void Zeitgeist::ConstructCore()
