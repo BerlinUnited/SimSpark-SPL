@@ -56,6 +56,28 @@ AC_DEFUN(RCSS_PATH_RUBY, [
 	AC_SUBST(RUBY_LDADD)
 ]) # RCSS_PATH_RUBY
 
+# RCSS_CHECK_RCSSBASE
+#-----------------------------------------------------------------------------
+AC_DEFUN(RCSS_CHECK_RCSSBASE, [
+	AC_ARG_VAR(RCSSBASE, [location of rcssbase installation])
+	if test $RCSSBASE; then
+	   CPPFLAGS="$CPPFLAGS -I$RCSSBASE/include"
+	   LDFLAGS="$LDFLAGS -L$RCSSBASE/lib"
+	fi
+
+	AC_CHECK_HEADERS([rcssbase/net/udpsocket.hpp],,[
+        		 AC_MSG_ERROR([The rcssbase headers (e.g. rcssbase/net/udpsocket.hpp) cannot be found. Please specify the location of the rcssbase installation, by using the RCSSBASE environment variable (e.g. ./configure RCSSBASE=$HOME/rcssbase)])])
+
+	AC_MSG_CHECKING([for the rcssnet library])
+	rcss_tmp="$LDFLAGS"
+	LDFLAGS="$LDFLAGS -lrcssnet"
+ 	AC_LINK_IFELSE([int main() { return 0; }],
+		       [AC_MSG_RESULT([yes])],
+		       [AC_MSG_RESULT([no])
+		        AC_MSG_ERROR([The rcssnet library (librcssnet.a or librcssnet.so) cannot be found. Please specify the location of the rcssbase installation using the RCSSBASE environment variable (e.g. ./configure RCSSBASE=$HOME/rcssbase)])])
+	LDFLAGS="$rcss_tmp"
+]) # RCSS_CHECK_RCSSBASE
+
 # RCSS_CHECK_ODE
 #-----------------------------------------------------------------------------
 AC_DEFUN(RCSS_CHECK_ODE, [
