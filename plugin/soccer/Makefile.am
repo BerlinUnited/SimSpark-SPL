@@ -7,6 +7,7 @@ initeffector/initeffector.cpp \
 initeffector/initeffector_c.cpp \
 dasheffector/dasheffector.cpp \
 dasheffector/dasheffector_c.cpp \
+kickeffector/kickeffector.h \
 kickeffector/kickeffector.cpp \
 kickeffector/kickeffector_c.cpp \
 soccercontrolaspect/soccercontrolaspect.cpp \
