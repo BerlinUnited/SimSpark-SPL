@@ -309,6 +309,12 @@ plugin/soccer/gamestateaspect/.dirstamp
 plugin/soccer/gamestateaspect/.libs
 plugin/soccer/gamestateaspect/Makefile
 plugin/soccer/gamestateaspect/Makefile.in
+plugin/soccer/gamestateperceptor/*.lo
+plugin/soccer/gamestateperceptor/.deps
+plugin/soccer/gamestateperceptor/.dirstamp
+plugin/soccer/gamestateperceptor/.libs
+plugin/soccer/gamestateperceptor/Makefile
+plugin/soccer/gamestateperceptor/Makefile.in
 plugin/soccer/initeffector/*.lo
 plugin/soccer/initeffector/.deps
 plugin/soccer/initeffector/.libs
