@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionhandler.cpp,v 1.1.2.1 2004/01/12 14:41:16 rollmark Exp $
+   $Id: collisionhandler.cpp,v 1.1.2.2 2004/01/29 10:20:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "world.h"
 #include "space.h"
 #include "collider.h"
+#include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 
 using namespace oxygen;
@@ -33,9 +34,27 @@ CollisionHandler::OnLink()
 {
     // setup the scene, world, space and collider references
     shared_ptr<Scene> scene = GetScene();
+
     mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
+    if (mWorld.get() == 0)
+        {
+            GetLog()->Debug()
+                << "(CollisionHandler) found no World node\n";
+        }
+
     mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
+    if (mSpace.get() == 0)
+        {
+            GetLog()->Debug()
+                << "(CollisionHandler) found no Space node\n";
+        }
+
     mCollider = shared_static_cast<Collider>(make_shared(GetParent()));
+    if (mCollider.get() == 0)
+        {
+            GetLog()->Debug()
+                << "(CollisionHandler) found no parent Collider node\n";
+        }
 }
 
 void
