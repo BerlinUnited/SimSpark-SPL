@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: linesegmentperceptor.h,v 1.2.2.1 2003/11/19 19:07:38 rollmark Exp $
+   $Id: linesegmentperceptor.h,v 1.2.2.1.2.1 2003/12/08 15:16:06 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define LINESEGMENTPERCEPTOR_H__
 
 #include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 
 class LineSegmentPerceptor : public oxygen::Perceptor
 {
@@ -35,7 +36,7 @@ public:
                 Performs a line segment intersection test with all static meshes of the
                 scene.
         */
-        virtual bool Percept(TDictionary &dictionary);
+        virtual bool Percept(oxygen::BaseParser::TPredicate& predicate);
 private:
         //! starting point of line segment
         salt::Vector3f  mStart;
