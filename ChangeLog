@@ -1,3 +1,7 @@
+2003-09-10	Tom Howard	<tomhoward@users.sf.net>
+
+	* ./config.aux/cvs.am
+	Removed obsolete addlog target
 2003-09-09  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* lib/kerosin/
 	* lib/kerosin/sceneserver/

@@ -88,41 +88,6 @@ commit: update commitlog
 	@cvs -z9 commit -F commitlog
 	@rm -f commitlog
 
-addlog:
-	@if test "$$USERNAME" = ""; then \
-	    USERNAME="$$USER"; \
-	fi; \
-	@if test "$$USEREMAIL" = ""; then \
-	    USEREMAIL="sserver-admin@lists.sf.net"; \
-	fi; \
-	@cvs -z9 diff -u --brief 2>&1 | $(AWK) '\
-	/^Index/ { print "\t* ./" $$2 } \
-	/^cvs server: .* is a new entry/ { print "\t* ./" $$3 }' \
-	> @srcdir@/addlog.tmp;
-	@if test -s @srcdir@/addlog.tmp; then \
-		DATE=`date +"%Y-%m-%d"`; \
-		echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n" \
-		> ChangeLog.tmp; \
-		cat @srcdir@/addlog.tmp >> ChangeLog.tmp; \
-		echo "" >> ChangeLog.tmp; \
-		cat @srcdir@/ChangeLog >> ChangeLog.tmp; \
-		mv ChangeLog.tmp @srcdir@/ChangeLog; \
-		if test -n "$(CVSEDITOR)"; then $(CVSEDITOR) ChangeLog; \
-		elif test -n "$(VISUAL)"; then $(VISUAL) ChangeLog; \
-		elif test -n "$(EDITOR)"; then $(EDITOR) ChangeLog; \
-		else \
-			EDITOR=`which vi`; \
-			if test -n "$$EDITOR" && test -x "$$EDITOR"; then \
-				$$EDITOR ChangeLog; \
-			else \
-				echo ""; \
-				echo "Cannot find an editor."; \
-				echo "Please edit ChangeLog manually\n"; \
-			fi; \
-		fi; \
-	fi
-
-
 commitlog: $(DISTFILES)
 	@if test "$$USERNAME" = ""; then \
 	    USERNAME="$$USER"; \
