@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.1.2.2 2004/02/01 15:35:11 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.1.2.3 2004/02/06 13:08:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,6 +77,9 @@ protected:
 
     /** reference to the BallStateAspect */
     boost::shared_ptr<BallStateAspect> mBallState;
+
+    /** the radius of the Ball */
+    float mBallRadius;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);
