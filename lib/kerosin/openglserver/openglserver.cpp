@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.cpp,v 1.10 2003/12/21 23:36:35 fruit Exp $
+   $Id: openglserver.cpp,v 1.11 2004/03/04 13:53:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
 
-OpenGLServer::OpenGLServer() : Leaf(), mExtensionReg(new GLExtensionReg()), mWantsToQuit(false), mHolder( new MapHolder() )
+OpenGLServer::OpenGLServer() : Leaf(), mExtensionReg(new GLExtensionReg()),
+                               mWantsToQuit(false), mHolder( new MapHolder() )
 {
 }
 
@@ -87,11 +88,6 @@ void OpenGLServer::SwapBuffers() const
   SDL_GL_SwapBuffers();
 }
 
-/*!
-  Load an ARB program
-
-  returns 0 on fail, non-zero on success
-*/
 unsigned int OpenGLServer::LoadARBProgram(GLenum /*target*/, const char* /*fileName*/)
 {
 #if 0
@@ -153,11 +149,6 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum /*target*/, const char* /*fileN
 #endif
 }
 
-/*!
-  Load a vertex program
-
-  returns 0 on fail, non-zero on success
-*/
 unsigned int OpenGLServer::LoadARBVertexProgram(const char* fileName)
 {
   // only try to load stuff if the extension is supported
@@ -169,11 +160,6 @@ unsigned int OpenGLServer::LoadARBVertexProgram(const char* fileName)
   return LoadARBProgram(GL_VERTEX_PROGRAM_ARB, fileName);
 }
 
-/*!
-  Load a fragment program
-
-  returns 0 on fail, non-zero on success
-*/
 unsigned int OpenGLServer::LoadARBFragmentProgram(const char* /*fileName*/)
 {
   // only try to load stuff if the extension is supported
@@ -195,57 +181,95 @@ bool OpenGLServer::ConstructInternal()
 
   if( result < 0 )
     {
-      GetLog()->Error() << "ERROR: (OpenGLServer) Could not init SDL. SDL_Init returned error "
-                        << result << endl;
+      GetLog()->Error() << "ERROR: (OpenGLServer) Could not init SDL."
+                        << "SDL_Init returned error "
+                        << result << "\n";
       return false;
     }
 
   const SDL_VideoInfo* info = SDL_GetVideoInfo();
 
-  int             intValue;
-  bool            boolValue;
-  string strVal;
+  int redBits;
+  int greenBits;
+  int blueBits;
+  int alphaBits;
+  int depthBits;
+  int stencilBits;
+  bool doubleBuffer;
+  bool fullScreen;
+  int xRes, yRes;
+  string title;
 
-  GetScript()->GetVariable("Viewport.redBits", intValue);
-  SDL_GL_SetAttribute(SDL_GL_RED_SIZE, intValue);
-  GetScript()->GetVariable("Viewport.greenBits", intValue);
-  SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, intValue);
-  GetScript()->GetVariable("Viewport.blueBits", intValue);
-  SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, intValue);
-  GetScript()->GetVariable("Viewport.alphaBits", intValue);
-  SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, intValue);
+  bool getConfig =
+    (
+     GetScript()->GetVariable("Viewport.RedBits", redBits) &&
+     GetScript()->GetVariable("Viewport.GreenBits", greenBits) &&
+     GetScript()->GetVariable("Viewport.BlueBits", blueBits) &&
+     GetScript()->GetVariable("Viewport.AlphaBits", alphaBits) &&
+     GetScript()->GetVariable("Viewport.DepthBits", depthBits) &&
+     GetScript()->GetVariable("Viewport.StencilBits", stencilBits) &&
+     GetScript()->GetVariable("Viewport.DoubleBuffer", doubleBuffer) &&
+     GetScript()->GetVariable("Viewport.FullScreen", fullScreen) &&
+     GetScript()->GetVariable("Viewport.XRes", xRes) &&
+     GetScript()->GetVariable("Viewport.YRes", yRes) &&
+     GetScript()->GetVariable("Application.Title", title)
+     );
 
-  GetScript()->GetVariable("Viewport.depthBits", intValue);
-  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, intValue);
-  GetScript()->GetVariable("Viewport.stencilBits", intValue);
-  SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, intValue);
+  if (! getConfig)
+    {
+      GetLog()->Error()
+        << "(OpenGLServer) error reading config from ScriptServer\n";
+      return false;
+    }
 
-  GetScript()->GetVariable("Viewport.doubleBuffer", boolValue);
-  if (boolValue)
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1);
-  else
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0);
+  GetLog()->Normal() << "(OpenGLServer) bits per channel (RGB): "
+                     << redBits << " "
+                     << greenBits << " "
+                     << blueBits << "\n";
+
+  GetLog()->Normal() << "(OpenGLServer)"
+                     << " depth bits= " << depthBits
+                     << " alpha depth= " << alphaBits
+                     << " stencil depth= " << stencilBits
+                     << "\n";
+
+  GetLog()->Normal() << "(OpenGLServer)"
+                     << " doubleBuffer= " << doubleBuffer
+                     << " fullScreen= " << fullScreen
+                     << "\n";
+
+  GetLog()->Normal() << "(OpenGLServer)"
+                     << " xRes = " << xRes
+                     << " yRes = " << yRes
+                     << "\n";
+
+  SDL_GL_SetAttribute(SDL_GL_RED_SIZE, redBits);
+  SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, greenBits);
+  SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, blueBits);
+  SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, alphaBits);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, depthBits);
+  SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, stencilBits);
+  SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, doubleBuffer ? 1:0);
 
   int flags = SDL_OPENGL;
-  GetScript()->GetVariable("Viewport.fullScreen", boolValue);
-  if (boolValue)
-    flags |= SDL_FULLSCREEN;
-
-  int xRes, yRes;
-  GetScript()->GetVariable("Viewport.xRes", xRes);
-  GetScript()->GetVariable("Viewport.yRes", yRes);
-
-  SDL_Surface *screen = SDL_SetVideoMode(xRes, yRes, info->vfmt->BitsPerPixel, flags);
-  if ( screen == NULL )
+  if (fullScreen)
     {
-      GetLog()->Error() << "ERROR: (OpenGLServer) SDL_SetVideoMode() failed " << endl;
+      flags |= SDL_FULLSCREEN;
+    }
+
+  SDL_Surface *screen = SDL_SetVideoMode
+    (xRes, yRes, info->vfmt->BitsPerPixel, flags);
+
+  if (screen == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (OpenGLServer) SDL_SetVideoMode() failed\n";
       return false;
     }
 
   SDL_ShowCursor(SDL_DISABLE);
 
-  GetScript()->GetVariable("Application.title", strVal);
-  SDL_WM_SetCaption(strVal.c_str(), NULL);
+  SDL_WM_SetCaption(title.c_str(), NULL);
 
   mExtensionReg->Init();
 
@@ -254,23 +278,22 @@ bool OpenGLServer::ConstructInternal()
 
   //      if (!mExtensionReg->Has_GL_ARB_vertex_program() || !mExtensionReg->Has_GL_ARB_fragment_program())
   //      {
-  GetLog()->Normal() << "WARNING: GL_ARB_vertex_program not supported ... "
-                     << "disabling fancy lighting" << endl;
+  GetLog()->Normal() << "WARNING: GL_ARB_vertex_program not supported. "
+                     << "disabling fancy lighting\n" << endl;
   mSupportsFancyLighting = false;
   //      }
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  GetLog()->Normal() << "Initialized OpenGL Window" << endl;
+  GetLog()->Normal() << "(OpenGLServer) Initialized OpenGL Window\n";
 
-  const unsigned char* val = NULL;
-  val = glGetString(GL_RENDERER);
+  const unsigned char* glRenderer = glGetString(GL_RENDERER);
+  const unsigned char* glVersion = glGetString(GL_VERSION);
+  const unsigned char* glExtensions = glGetString(GL_EXTENSIONS);
 
-  GetLog()->Normal() << "  GL_RENDERER:   " << val << endl;
-  val = glGetString(GL_VERSION);
-  GetLog()->Normal() << "  GL_VERSION:    " << val << endl;
-  val = glGetString(GL_EXTENSIONS);
-  GetLog()->Normal() << "  GL_EXTENSIONS: " << val << endl << endl;
+  GetLog()->Normal() << "(OpenGLServer) GL_RENDERER:   " << glRenderer   << "\n";
+  GetLog()->Normal() << "(OpenGLServer) GL_VERSION:    " << glVersion    << "\n";
+  GetLog()->Normal() << "(OpenGLServer) GL_EXTENSIONS: " << glExtensions << "\n";
 
   return true;
 }
