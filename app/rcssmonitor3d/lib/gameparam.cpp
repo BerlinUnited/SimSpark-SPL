@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: gameparam.cpp,v 1.2 2004/03/20 09:43:34 rollmark Exp $
+$Id: gameparam.cpp,v 1.3 2004/04/09 19:20:28 fruit Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ This is a very simple 3D monitor example which will hopefully be
 useful for the first steps of 3D SoccerServer
 */
 #include "gameparam.h"
-#include <types.h>
+#include "types.h"
 
 GameParam::GameParam()
 {
@@ -52,26 +52,32 @@ GameParam::~GameParam()
 {
 }
 
-const float& GameParam::GetFieldLength()
+const float&
+GameParam::GetFieldLength() const
 {
     return mFieldLength;
 }
-void GameParam::SetFieldLength(float f)
+
+void
+GameParam::SetFieldLength(float f)
 {
     mFieldLength = f;
 }
 
-const float& GameParam::GetFieldWidth()
+const float&
+GameParam::GetFieldWidth() const
 {
     return mFieldWidth;
 }
 
-void GameParam::SetFieldWidth(float f)
+void
+GameParam::SetFieldWidth(float f)
 {
     mFieldWidth = f;
 }
 
-const float& GameParam::GetFieldHeight()
+const float&
+GameParam::GetFieldHeight() const
 {
     return mFieldHeight;
 }
@@ -81,108 +87,122 @@ void GameParam::SetFieldHeight(float f)
     mFieldHeight = f;
 }
 
-const float& GameParam::GetBorderSize()
+const float&
+GameParam::GetBorderSize() const
 {
     return mBorderSize;
 }
 
-void GameParam::SetBorderSize(float f)
+void
+GameParam::SetBorderSize(float f)
 {
     mBorderSize = f;
 }
 
-const float& GameParam::GetLineWidth()
+const float&
+GameParam::GetLineWidth() const
 {
     return mLineWidth;
 }
 
-void GameParam::SetLineWidth(float f)
+void
+GameParam::SetLineWidth(float f)
 {
     mLineWidth = f;
 }
 
-const float& GameParam::GetGoalWidth()
+const float&
+GameParam::GetGoalWidth() const
 {
     return mGoalWidth;
 }
 
-void GameParam::SetGoalWidth(float f)
+void
+GameParam::SetGoalWidth(float f)
 {
     mGoalWidth = f;
 }
 
-const float& GameParam::GetGoalDepth()
+const float&
+GameParam::GetGoalDepth() const
 {
     return mGoalDepth;
 }
 
-void GameParam::SetGoalDepth(float f)
+void
+GameParam::SetGoalDepth(float f)
 {
     mGoalDepth = f;
 }
 
-const float& GameParam::GetGoalHeight()
+const float&
+GameParam::GetGoalHeight() const
 {
     return mGoalHeight;
 }
 
-void GameParam::SetGoalHeight(float f)
+void
+GameParam::SetGoalHeight(float f)
 {
     mGoalHeight = f;
 }
 
-const float& GameParam::GetAgentMass()
+const float&
+GameParam::GetAgentMass() const
 {
     return mAgentMass;
 }
 
-void GameParam::SetAgentMass(float f)
+void
+GameParam::SetAgentMass(float f)
 {
     mAgentMass = f;
 }
 
-const float& GameParam::GetAgentRadius()
+const float&
+GameParam::GetAgentRadius() const
 {
     return mAgentRadius;
 }
 
-void GameParam::SetAgentRadius(float f)
+void
+GameParam::SetAgentRadius(float f)
 {
     mAgentRadius = f;
 }
 
-const float& GameParam::GetAgentMaxSpeed()
+const float&
+GameParam::GetAgentMaxSpeed() const
 {
     return mAgentMaxSpeed;
 }
 
-void GameParam::SetAgentMaxSpeed(float f)
+void
+GameParam::SetAgentMaxSpeed(float f)
 {
     mAgentMaxSpeed = f;
 }
 
-const float& GameParam::GetBallRadius()
+const float&
+GameParam::GetBallRadius() const
 {
     return mBallRadius;
 }
 
-void GameParam::SetBallRadius(float f)
+void
+GameParam::SetBallRadius(float f)
 {
     mBallRadius = f;
 }
 
-const float& GameParam::GetBallMass()
+const float&
+GameParam::GetBallMass() const
 {
     return mBallMass;
 }
 
-void GameParam::SetBallMass(float f)
+void
+GameParam::SetBallMass(float f)
 {
     mBallMass = f;
 }
-
-
-
-
-
-
