@@ -25,7 +25,6 @@ AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility \
               @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 AM_LDFLAGS  = @RUBY_LDFLAGS@
 
-agentspark_SOURCES = \
-	main.cpp \
-	carbehavior.cpp
-
+agentspark_SOURCES = main.cpp \
+	behavior.h \
+	carbehavior.cpp carbehavior.h 
