@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fontserver.h,v 1.5 2003/11/14 14:29:50 fruit Exp $
+   $Id: fontserver.h,v 1.6 2004/03/04 16:12:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,23 +55,30 @@ public:
     ~FontServer();
 
     //! load a font with a given size
-    boost::shared_ptr<Font> GetFont(const std::string &name, unsigned int size = 12);
+    boost::shared_ptr<Font> GetFont(const std::string &name,
+                                    unsigned int size = 12);
 
     //! test if a specific font has been loaded
-    boost::shared_ptr<Font> FindFont(const std::string &name, unsigned int size) const;
+    boost::shared_ptr<Font> FindFont(const std::string &name,
+                                     unsigned int size) const;
 
-    // rendering
-    void    Begin();
-    void    End();
+    //! setup opengl states for font rendering
+    void Begin();
+
+    //! reset opengl states after font rendering
+    void End();
 
 protected:
-    bool                                    LoadFont(const std::string &name, unsigned int size, boost::shared_ptr<Font> &font);
+    bool LoadFont(const std::string &name, unsigned int size,
+                  boost::shared_ptr<Font> &font);
 
 private:
     typedef std::list<boost::shared_ptr<kerosin::Font> > TFontList;
-    TFontList       mFonts;         // this is a registry of loaded fonts
 
-    // FreeType
+    //! the registry of loaded fonts
+    TFontList       mFonts;
+
+    //! FreeType
     FT_Library  mFreeTypeLib;
 };
 
