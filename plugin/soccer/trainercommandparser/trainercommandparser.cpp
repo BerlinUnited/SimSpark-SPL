@@ -38,9 +38,11 @@ using namespace oxygen;
 TrainerCommandParser::TrainerCommandParser() : Leaf()
 {
     // setup command map
-    mCommandMap["agent"]    = CT_PLAYER;
-    mCommandMap["ball"]     = CT_BALL;
+    mCommandMap["agent"] = CT_PLAYER;
+    mCommandMap["ball"] = CT_BALL;
     mCommandMap["playMode"] = CT_PLAYMODE;
+    mCommandMap["dropBall"] = CT_DROP_BALL;
+    mCommandMap["kickOff"] = CT_KICK_OFF;
     mCommandMap["getAck"] = CT_ACK;
 
     // setup team index map
@@ -52,10 +54,17 @@ TrainerCommandParser::TrainerCommandParser() : Leaf()
     mPlayModeMap[STR_PM_BeforeKickOff] = PM_BeforeKickOff;
     mPlayModeMap[STR_PM_KickOff_Left]  = PM_KickOff_Left;
     mPlayModeMap[STR_PM_KickOff_Right] = PM_KickOff_Right;
-    mPlayModeMap[STR_PM_KickOff]       = PM_KickOff;
     mPlayModeMap[STR_PM_PlayOn]        = PM_PlayOn;
     mPlayModeMap[STR_PM_KickIn_Left]   = PM_KickIn_Left;
     mPlayModeMap[STR_PM_KickIn_Right]  = PM_KickIn_Right;
+    mPlayModeMap[STR_PM_CORNER_KICK_LEFT] = PM_CORNER_KICK_LEFT;
+    mPlayModeMap[STR_PM_CORNER_KICK_RIGHT] = PM_CORNER_KICK_RIGHT;
+    mPlayModeMap[STR_PM_GOAL_KICK_LEFT] = PM_GOAL_KICK_LEFT;
+    mPlayModeMap[STR_PM_GOAL_KICK_RIGHT] = PM_GOAL_KICK_RIGHT;
+    mPlayModeMap[STR_PM_OFFSIDE_LEFT] = PM_OFFSIDE_LEFT;
+    mPlayModeMap[STR_PM_OFFSIDE_RIGHT] = PM_OFFSIDE_RIGHT;
+    mPlayModeMap[STR_PM_FREE_KICK_LEFT] = PM_FREE_KICK_LEFT;
+    mPlayModeMap[STR_PM_FREE_KICK_RIGHT] = PM_FREE_KICK_RIGHT;
     mPlayModeMap[STR_PM_Goal_Left]     = PM_Goal_Left;
     mPlayModeMap[STR_PM_Goal_Right]    = PM_Goal_Right;
     mPlayModeMap[STR_PM_GameOver]      = PM_GameOver;
@@ -68,9 +77,13 @@ TrainerCommandParser::~TrainerCommandParser()
 
 }
 
-bool TrainerCommandParser::SendAck(std::string &reply)
+bool
+TrainerCommandParser::SendAck(std::string &reply)
 {
-    if(!mGetAck){return false;}
+    if (!mGetAck)
+    {
+        return false;
+    }
 
     reply = "best";
     mGetAck= false;
@@ -94,8 +107,12 @@ void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
     }
 }
 
-bool TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
+bool
+TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
 {
+    SoccerBase::GetGameState(*this,mGameState);
+    SoccerBase::GetSoccerRuleAspect(*this,mSoccerRule);
+
     // lookup the command type corresponding to the predicate name
     TCommandMap::iterator iter = mCommandMap.find(predicate.name);
 
@@ -114,6 +131,17 @@ bool TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         break;
     case CT_PLAYMODE:
         ParsePlayModeCommand(predicate);
+        break;
+    case CT_DROP_BALL:
+        mSoccerRule->DropBall();
+        break;
+    case CT_KICK_OFF:
+        if (mGameState.get() == 0)
+        {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR "
+                              << "no GameStateAspect found, cannot kick off\n";
+        }
+        else mGameState->KickOff(TI_NONE);
         break;
     case CT_ACK:
     {
@@ -280,7 +308,8 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
     }
 }
 
-void TrainerCommandParser::ParseBallCommand(const oxygen::Predicate & predicate)
+void
+TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
 {
     Predicate::Iterator posParam(predicate);
 
@@ -339,41 +368,24 @@ void TrainerCommandParser::ParseBallCommand(const oxygen::Predicate & predicate)
     }
 }
 
-void TrainerCommandParser::ParsePlayModeCommand(const oxygen::Predicate & predicate)
+void
+TrainerCommandParser::ParsePlayModeCommand(const oxygen::Predicate& predicate)
 {
     Predicate::Iterator pmParam(predicate);
-    string              mode;
+    string mode;
 
     if (predicate.GetValue(pmParam,mode))
     {
         TPlayModeMap::const_iterator playmode = mPlayModeMap.find(mode);
         if (playmode != mPlayModeMap.end())
         {
-            // set new playmode
-            shared_ptr<GameStateAspect> gameState;
-
-            SoccerBase::GetGameState(*this,gameState);
-
-            switch (playmode->second)
-            {
-            case PM_KickOff_Left:
-                gameState->KickOff(TI_LEFT);
-                break;
-            case PM_KickOff_Right:
-                gameState->KickOff(TI_RIGHT);
-                break;
-            case PM_KickOff:
-                gameState->KickOff(TI_NONE);
-                break;
-            default:
-                gameState->SetPlayMode(playmode->second);
-            }
+            mGameState->SetPlayMode(playmode->second);
         }
         else
         {
             GetLog()->Debug()
-                << "(TrainerCommandParser) ERROR: unknown playmode"
-                << mode << "was passed\n";
+                << "(TrainerCommandParser) ERROR: an unknown playmode"
+                << mode << " was passed\n";
         }
     }
     else
@@ -383,3 +395,4 @@ void TrainerCommandParser::ParsePlayModeCommand(const oxygen::Predicate & predic
             << mode << "\n";
     }
 }
+
