@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentcontrol.h,v 1.1 2004/04/25 16:46:57 rollmark Exp $
+   $Id: agentcontrol.h,v 1.2 2004/05/06 09:37:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,13 @@ public:
 
     /** called when a client disconnects */
     virtual void ClientDisconnect(boost::shared_ptr<Client> client);
+
+    /** forwards all pending messages from all connected agents to the
+        GameControlServer */
+    virtual void StartCycle();
+
+    /** generates and sends sense updates to all connected agents */
+    virtual void EndCycle();
 
 protected:
     virtual void OnLink();

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentcontrol.cpp,v 1.1 2004/04/25 16:46:57 rollmark Exp $
+   $Id: agentcontrol.cpp,v 1.2 2004/05/06 09:37:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,8 +19,10 @@
 */
 #include "agentcontrol.h"
 #include "simulationserver.h"
+#include "netmessage.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/agentaspect/agentaspect.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -74,5 +76,111 @@ void AgentControl::ClientDisconnect(shared_ptr<Client> client)
         }
 
     mGameControlServer->AgentDisappear(client->id);
+}
+
+void AgentControl::StartCycle()
+{
+    NetControl::StartCycle();
+
+    if (
+        (mGameControlServer.get() == 0) ||
+        (mNetMessage.get() == 0)
+        )
+        {
+            return;
+        }
+
+    // pass all received messages on to the GameControlServer
+    for (
+         TBufferMap::iterator iter = mBuffers.begin();
+         iter != mBuffers.end();
+         ++iter
+         )
+        {
+            shared_ptr<NetBuffer>& netBuff = (*iter).second;
+            if (
+                (netBuff.get() == 0) ||
+                (netBuff->IsEmpty())
+                )
+                {
+                    continue;
+                }
+
+            // lookup the client entry corresponding for the buffer
+            // entry
+            TAddrMap::iterator clientIter = mClients.find(netBuff->GetAddr());
+            if (clientIter == mClients.end())
+                {
+                    continue;
+                }
+            shared_ptr<Client>& client = (*clientIter).second;
+
+            // lookup the AgentAspect node correspoding to the client
+            shared_ptr<AgentAspect> agent =
+                mGameControlServer->GetAgentAspect(client->id);
+            if (agent.get() == 0)
+                {
+                    continue;
+                }
+
+            // parse and immediately realize the action
+            string message;
+            while (mNetMessage->Extract(netBuff,message))
+                {
+                    agent->RealizeActions
+                        (mGameControlServer->Parse(client->id,message));
+                }
+        }
+}
+
+void AgentControl::EndCycle()
+{
+    NetControl::EndCycle();
+
+    if (
+        (mGameControlServer.get() == 0) ||
+        (mNetMessage.get() == 0) ||
+        (mClients.size() == 0)
+        )
+        {
+            return;
+        }
+
+    shared_ptr<BaseParser> parser = mGameControlServer->GetParser();
+    if (parser.get() == 0)
+        {
+            GetLog()->Error()
+                << "(AgentControl) ERROR:  got no parser from "
+                << " the GameControlServer" << endl;
+            return;
+        }
+
+    // generate senses for all agents and send them to the
+    // corresponding net clients
+    for (
+         TAddrMap::iterator iter = mClients.begin();
+         iter != mClients.end();
+         ++iter
+         )
+        {
+            shared_ptr<Client>& client = (*iter).second;
+
+            shared_ptr<AgentAspect> agent =
+                mGameControlServer->GetAgentAspect(client->id);
+            if (agent.get() == 0)
+                {
+                    continue;
+                }
+
+            shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
+            string senses = parser->Generate(senseList);
+            if (senses.empty())
+                {
+                    continue;
+                }
+
+            mNetMessage->PrepareToSend(senses);
+            SendMessage(client,senses);
+        }
 }
 
