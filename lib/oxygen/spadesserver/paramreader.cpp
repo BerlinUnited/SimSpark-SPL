@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: paramreader.cpp,v 1.1.2.1 2003/11/27 12:45:09 rollmark Exp $
+   $Id: paramreader.cpp,v 1.1.2.1.2.1 2003/12/01 10:31:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,24 +40,15 @@ int ParamReader::readCmdLineArgs(const std::string& key,
                                  int argc, const char* const* argv)
 {
     // lookup the ScriptServer
-    shared_ptr<ScriptServer> scriptServer =
-        shared_static_cast<ScriptServer>(GetCore()->Get("/sys/server/script"));
-
-    if (scriptServer == NULL)
-        {
-            GetLog()->Warning() << "(ParamReader) ScriptServer not found.\n";
-            return spades::ParamReader::ParamStorer::RR_None;
-        }
-
     if (argc < 2)
         {
             return spades::ParamReader::ParamStorer::RR_None;
         }
 
     // check if varName is valid
-    if (! scriptServer->ExistsVariable(key))
+    if (! GetScript()->ExistsVariable(key))
         {
-            GetLog()->Warning() << "(ParamReader) Unknown variable '" << key << "'\n";
+            GetLog()->Warning() << "WARNING: (ParamReader) Unknown variable '" << key << "'\n";
             return spades::ParamReader::ParamStorer::RR_FormatErr;
         }
 
@@ -68,9 +59,9 @@ int ParamReader::readCmdLineArgs(const std::string& key,
     stringstream ss;
     ss << key << "=" << value;
 
-    if (scriptServer->Eval(ss.str()))
+    if (GetScript()->Eval(ss.str()))
         {
-            GetLog()->Warning() << "(ParamReader) set '" << key
+            GetLog()->Normal() << "(ParamReader) set '" << key
                                 << "' to " << value << "\n";
         }
 
