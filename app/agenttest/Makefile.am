@@ -23,6 +23,8 @@ agenttest_SOURCES = \
 	commserver.h commserver.cpp commserver_c.cpp \
 	behavior.h behavior.cpp behavior_c.cpp \
 	kicknrun.h kicknrun.cpp kicknrun_c.cpp \
-	soccer.h soccer.cpp soccer_c.cpp ReadBuffFD.cpp
+	soccer.h soccer.cpp soccer_c.cpp
+
+# ReadBuffFD.cpp
 
 dist_pkgdata_DATA = agenttest.rb

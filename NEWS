@@ -1,3 +1,8 @@
+[0.x.x]
+This release has been ported to OS X.  Besides the normal
+requirements, it requires an X server to be installed on the machine,
+along with a glut library for X windows.
+
 [0.3]
 This release is intended to be used as official version on RoboCup 2004.
 With respect to the soccer rules, this release mainly fixes some bugs contained

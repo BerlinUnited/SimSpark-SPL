@@ -10,13 +10,13 @@ endif
 install-data-local: $(srcdir)/api/index.html
 	rm -rf $(DESTDIR)$(pkgdatadir)/api/
 	rm -rf $(DESTDIR)$(pkgdatadir)/html/
-	mkdir --parents $(DESTDIR)$(pkgdatadir)/
+	mkdir -p $(DESTDIR)$(pkgdatadir)/
 	cp -r $(srcdir)/api $(DESTDIR)$(pkgdatadir)/
 	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/api
 
 apidoc: Doxyfile
 	rm -rf $(srcdir)/api/developers
-	mkdir --parents $(srcdir)/api/developers
+	mkdir -p $(srcdir)/api/developers
 	cp $(srcdir)/devel/howtos/*.* $(srcdir)/api/developers/
 if DOXYGEN
 	doxygen Doxyfile

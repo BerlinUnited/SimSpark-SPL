@@ -32,7 +32,9 @@ AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 AC_PROG_AWK
 AC_CHECK_PROG([DOXYGEN], [doxygen], [yes], [no])
-AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes)
+AC_CHECK_PROG([PDFLATEX], [pdflatex])
+AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes )
+AM_CONDITIONAL(COND_PDFLATEX, test x$PDFLATEX != x)
 AC_CHECK_PROG([HAVE_DOT], [dot], [YES], [NO])
 AC_PATH_PROG([PERL], [perl], [perl])
 # Checks for libraries.
@@ -152,6 +154,9 @@ else
 	AC_MSG_NOTICE([SpadesServer will not be build])
 fi
 AM_CONDITIONAL(BUILD_SPADES_MODULES, test $rcss_build_spades = yes)
+
+
+
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
