@@ -235,6 +235,7 @@ addBall(0.0,1.0,0.0)
 # register game control aspects
 gameControlServer.initControlAspect('GameStateAspect')
 gameControlServer.initControlAspect('BallStateAspect')
+gameControlServer.initControlAspect('SoccerRuleAspect')
 
 #
 # queue agents for startup
