@@ -1,3 +1,112 @@
+2004-01-08  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/soccer/initeffector/initeffector_c.cpp:
+	namespace boost is not needed here
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	removed debug message
+
+	* app/agenttest/main.cpp: some cleanup
+	the now agent uses the force effector to move along the playing
+	field
+
+	* app/simulator/simulator.rb: starting only 1 agent for now
+	added FieldFlags to mark the extends of the playing field
+
+	* plugin/soccer/createeffector/createeffector.cpp:
+	changed default starting location of agents to be within the
+	soccer field
+
+	* app/rcssmonitor3d/main.cpp:
+	added support for FieldFlag display. FieldFlags are displayed as
+	red sphere with half the size of agent spheres
+
+	* plugin/monitortest/monitortest.cpp: some whitespace changes
+	changed expression type from 'player' to 'agent'
+
+	* plugin/soccer/export.cpp:
+	exporting sexpmonitor and fieldflag to zeitgeist
+
+	* plugin/soccer/Makefile.am: 
+	added sexpmonitor and fieldflag files
+
+	* plugin/soccer/sexpmonitor/sexpmonitor_c.cpp:
+	ruby interface of sexpmonitor
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	derived implementation of SexpMonitor is from MonitorTest
+	added support for generic mapping from ClassType to expression type
+	added support for FieldFlag
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.h:
+	class SexpMonitor added. This monitor class is derived from
+	MonitorTest. It has additional support for FieldFlag ojbects and
+	is therefore specific to the soccer simulation and no longer
+	generic like MonitorTest.
+
+	* plugin/soccer/fieldflag/fieldflag.cpp,
+	* plugin/soccer/fieldflag/fieldflag.h,
+	* plugin/soccer/fieldflag/fieldflag_c.cpp:
+	added class FieldFlag. For now this class servers as a debugging
+	aid (it is drawn in the monitor). Later this class should mark
+	positions on the playing field for agent navigation.
+
+	* plugin/forceeffector/forceeffector.cpp: 
+	fixed parameter parsing
+
+	* app/simulator/simulator.rb:
+	registering a GameControlAspect to the GameControlServer
+
+	* plugin/soccer/export.cpp: 
+	exporting GameStateAspect to zeitgeist
+
+	* plugin/soccer/Makefile.am: 
+	added GameStateAspect files
+
+	* plugin/soccer/gamestateaspect/.cvsignore,
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp,
+	* plugin/soccer/gamestateaspect/gamestateaspect.h,
+	* plugin/soccer/gamestateaspect/gamestateaspect_c.cpp:
+	added simple GameStateAspect. This aspect should encapsulate all
+	global soccer game state. Currently it defines defines several
+	play modes taken from the 2D server and provides access to the
+	current one. It further manages the current game time and
+	increments it when in PM_PlayOn.
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	changed some diagnostic messages
+	added call to GameControlServer::Update to simToTime loop
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	exporting initControlAspect() to ruby
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	implemented method InitControlAspect() and Update()
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added method InitControlAspect that registers a new ControlAspect
+	to the GameControlserver
+	added method Update that updates all registered ControlAspects
+
+	* lib/oxygen/sceneserver/sceneserver.cpp:
+	removed special handling of ControlAspects from the SceneServer
+
+	* lib/oxygen/controlaspect/controlaspect.cpp:
+	removed old ControlAspect implementation
+
+	* lib/oxygen/controlaspect/controlaspect.h:
+	replaced old ControlAspect interface. A ControlAspect is now
+	updated by the GameControlServer.
+
+2004-01-07 Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	always return true to indicate that we handled the event
+
+	* lib/oxygen/spadesserver/spadesactevent.h:
+	added comment to realizeEventWorldModel() to explain semantic of
+	its return value
+
 2004-01-06  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/soccer/createeffector/createeffector.cpp:
