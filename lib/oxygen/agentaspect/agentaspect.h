@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.5.2.1.2.1 2003/12/09 12:53:07 rollmark Exp $
+   $Id: agentaspect.h,v 1.5.2.1.2.2 2003/12/09 19:31:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 // #endif
 
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/gamecontrolserver/actionobject.h>
 #include "effector.h"
 #include "perceptor.h"
 
@@ -39,14 +40,13 @@ namespace oxygen
 class AgentAspect : public Transform
 {
 public:
-    //! this method must be implemented for the agents 'think' behavior
-    virtual void Think(float deltaTime) = 0;
+    /** RealizeActions realizes the actions described by \param
+        actions using the corresponding effectors
+    */
+    bool RealizeActions(boost::shared_ptr<ActionObject::TList> actions);
 
 protected:
-    salt::Vector3f GetVelocity() const;
 private:
-    //! update internal state before physics calculation ... class Think()
-    void PrePhysicsUpdateInternal(float deltaTime);
 };
 
 DECLARE_ABSTRACTCLASS(AgentAspect);
