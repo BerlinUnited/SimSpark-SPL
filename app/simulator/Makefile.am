@@ -21,8 +21,9 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 rcssserver3D_SOURCES = main.cpp
 dist_pkgdata_DATA = rcssserver3D.rb
-EXTRA_DIST = agentdb.list
+EXTRA_DIST = agentdb.xml
 
 install-data-local: createagentdb.sh
-	${srcdir}/createagentdb.sh > ${pkgdatadir}/agentdb.list
-	chmod 644 ${pkgdatadir}/agentdb.list
+	rm -f ${pkgdatadir}/agentdb.list
+	${srcdir}/createagentdb.sh > ${pkgdatadir}/agentdb.xml
+	chmod 644 ${pkgdatadir}/agentdb.xml
