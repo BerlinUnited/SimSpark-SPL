@@ -15,9 +15,7 @@ app/agentspark/.deps
 app/agentspark/.libs
 app/agentspark/Makefile
 app/agentspark/Makefile.in
-app/agentspark/rcssmonitor3D
-app/agentspark/spadestest
-app/agentspark/sys
+app/agentspark/agentspark
 app/agenttest/.deps
 app/agenttest/.libs
 app/agenttest/Makefile
@@ -36,12 +34,9 @@ app/fonttest/Makefile.in
 app/fonttest/data/font/VeraMono.ttf
 app/gendot/.deps
 app/gendot/.libs
-app/gendot/Logfiles
 app/gendot/Makefile
 app/gendot/Makefile.in
-app/gendot/createagentdb.sh
-app/gendot/rcsoccersim3D
-app/gendot/rcssserver3D
+app/gendot/gendot
 app/inputtest/.deps
 app/inputtest/.libs
 app/inputtest/Makefile
@@ -52,9 +47,7 @@ app/monitorspark/.deps
 app/monitorspark/.libs
 app/monitorspark/Makefile
 app/monitorspark/Makefile.in
-app/monitorspark/rcssmonitor3D
-app/monitorspark/spadestest
-app/monitorspark/sys
+app/monitorspark/monitorspark
 app/rcssmonitor3d/.deps
 app/rcssmonitor3d/.libs
 app/rcssmonitor3d/Makefile
@@ -131,6 +124,8 @@ doc/devel/auto
 doc/devel/manual.aux
 doc/devel/manual.log
 doc/devel/manual.pdf
+doc/devel/howtos/Makefile.in
+doc/devel/howtos/Makefile
 doc/papers/proposal/auto
 doc/papers/proposal/Makefile
 doc/papers/proposal/Makefile.in
@@ -142,6 +137,9 @@ doc/papers/proposal/simulator3d.log
 doc/users/Makefile
 doc/users/Makefile.in
 doc/users/auto
+doc/users/manual.aux
+doc/users/manual.log
+doc/users/manual.pdf
 lib/Makefile
 lib/Makefile.in
 lib/kerosin/.deps
