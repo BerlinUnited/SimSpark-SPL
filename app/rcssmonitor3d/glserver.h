@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.3.2.5 2004/01/31 17:29:36 rollmark Exp $
+   $Id: glserver.h,v 1.3.2.6 2004/02/08 15:19:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,63 +25,69 @@
 #include <GL/glut.h>
 #include "camera.h"
 
-class GLserver
+class GLServer
 {
- public:
-  GLserver(){};
-  GLserver(int width, int height,
-           salt::Vector3f camPos,
-           salt::Vector3f lookAtPos,
-           salt::Vector3f up, bool wire);
-  ~GLserver() {};
+public:
+    GLServer(){};
+    GLServer(int width, int height,
+             salt::Vector3f camPos,
+             salt::Vector3f lookAtPos,
+             salt::Vector3f up, bool wire);
+    ~GLServer() {};
 
-  void InitGL();
-  void DrawGround(salt::Vector3f gridPos, float szX, float szZ);
-  void ApplyCamera();
-  void DrawText(const char* text, salt::Vector2f pos);
-  void DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz);
-  void DrawSphere(salt::Vector3f spherePos, float radius);
-  void DrawShadowOfSphere(salt::Vector3f spherePos,float radius);
-  void DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz);
-  void Reshape(int width, int height)
+    void InitGL();
+    void DrawGround(salt::Vector3f gridPos, float szX, float szZ);
+    void ApplyCamera();
+    void DrawText(const char* text, salt::Vector2f pos);
+    void DrawTextPix(const char* text, salt::Vector2f pix);
+    int GLServer::GetTextHeight();
+
+    void DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz);
+    void DrawSphere(salt::Vector3f spherePos, float radius);
+    void DrawShadowOfSphere(salt::Vector3f spherePos,float radius);
+    void DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz);
+    void Reshape(int width, int height)
     {
         mWidth = width;
         mHeight = height;
     }
 
-  //inline functions
-  inline void SetViewByMouse(const Vector2f& mousePos, const Vector2f& refPos)
+    int GetWidth() { return mWidth; }
+    int GetHeight() { return mHeight; }
+
+    //inline functions
+    inline void SetViewByMouse(const Vector2f& mousePos, const Vector2f& refPos)
     {
         mCamera.SetViewByMouse(mousePos, refPos);
     }
-  inline salt::Vector3f GetCameraPos()
+    inline salt::Vector3f GetCameraPos()
     {
         return mCamPos;
     }
-  inline void SetCameraPos(const salt::Vector3f& newPos)
+    inline void SetCameraPos(const salt::Vector3f& newPos)
     {
         mCamPos = newPos;
         mCamera.SetCameraPos(newPos);
     }
-  inline void SetLookAtPos(const salt::Vector3f& newPos)
+    inline void SetLookAtPos(const salt::Vector3f& newPos)
     {
         mLookAt = newPos;
         mCamera.SetLookAtPos(newPos);
     }
-  inline void MoveCamForward(float steps)
+    inline void MoveCamForward(float steps)
     {
         mCamera.MoveCamForward(steps);
         mCamPos = mCamera.GetLookAtPos();
         mLookAt = mCamera.GetCameraPos();
     }
-  inline void MoveCamStrafe(float steps)
+    inline void MoveCamStrafe(float steps)
     {
         mCamera.MoveCamStrafe(steps);
         mCamPos = mCamera.GetLookAtPos();
         mLookAt = mCamera.GetCameraPos();
     }
 
-  inline void MoveCamUp(float steps)
+    inline void MoveCamUp(float steps)
     {
         mCamera.MoveCamUp(steps);
         mCamPos = mCamera.GetLookAtPos();
@@ -89,13 +95,13 @@ class GLserver
     }
 
 protected:
-  salt::Vector3f mCamPos;
-  salt::Vector3f mLookAt;
-  salt::Vector3f mUp;
-  Camera mCamera;
-  bool mWireframe;
-  int mWidth;
-  int mHeight;
+    salt::Vector3f mCamPos;
+    salt::Vector3f mLookAt;
+    salt::Vector3f mUp;
+    Camera mCamera;
+    bool mWireframe;
+    int mWidth;
+    int mHeight;
 };
 
 #endif // _GLSERVER_H

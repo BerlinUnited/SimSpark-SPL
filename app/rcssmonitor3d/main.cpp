@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.14 2004/02/06 21:45:21 fruit Exp $
+   $Id: main.cpp,v 1.3.2.15 2004/02/08 15:19:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,10 +44,13 @@ using namespace oxygen;
 //--------------------------Globals---------------------------------------
 
 // open-gl server
-GLserver gGLServer;
+GLServer gGLServer;
 
 // communication Server
 boost::shared_ptr<CommServer> gCommServer;
+
+// last parsed predicates
+shared_ptr<Predicate::TList> gPredicates;
 
 // monitor port
 int gPort           = DEFAULT_PORT;
@@ -260,13 +263,13 @@ bool getObjectParam(const Predicate& predicate, const string& name, float& value
 //
 // parses the game parameters sent by the server during the init sequence
 //-------------------------------------------------------------------------
-bool parseInfoHeader(shared_ptr<Predicate::TList> predicates)
+bool parseInfoHeader()
 {
     // true if we received an init
     bool recvInit = false;
 
     // check if we received something
-    if (predicates.get() == 0)
+    if (gPredicates.get() == 0)
         {
             return false;
         }
@@ -274,8 +277,8 @@ bool parseInfoHeader(shared_ptr<Predicate::TList> predicates)
     // first look for "(init (...))"
     // then read the inner breakets
     for (
-         Predicate::TList::const_iterator iter = predicates->begin();
-         iter != predicates->end();
+         Predicate::TList::const_iterator iter = gPredicates->begin();
+         iter != gPredicates->end();
          ++iter
          )
         {
@@ -496,7 +499,8 @@ void drawStatusText()
     ss << "t=" << gTime;
 
     glColor3f   ( 1.0, 1.0, 1.0  );
-    gGLServer.DrawText(ss.str().c_str(),Vector2f( -0.99, 0.97));
+    //    gGLServer.DrawText(ss.str().c_str(),Vector2f( -0.99, 0.97));
+    gGLServer.DrawTextPix(ss.str().c_str(),Vector2f( 0, gGLServer.GetTextHeight()));
 }
 
 
@@ -504,11 +508,11 @@ void drawStatusText()
 //
 // Draws all object in given predicate onto the screen
 //------------------------------------------------------------------------------
-void drawScene(shared_ptr<Predicate::TList> predicates)
+void drawScene()
 {
     static int typeCount = sizeof(typeMap)/sizeof(ObjType);
 
-    if (predicates.get() == 0)
+    if (gPredicates.get() == 0)
         {
             return;
         }
@@ -517,8 +521,8 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
     typedef GLfloat TColor[4];
 
     for (
-         Predicate::TList::const_iterator iter = predicates->begin();
-         iter != predicates->end();
+         Predicate::TList::const_iterator iter = gPredicates->begin();
+         iter != gPredicates->end();
          ++iter
          )
         {
@@ -558,7 +562,6 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
 //------------------------------------------------------------------------
 void display(void)
 {
-   static bool readInit = true;
    const Vector3f szGoal1(-gGoalDepth,gGoalHeight,gGoalWidth);
    const Vector3f szGoal2(gGoalDepth,gGoalHeight,gGoalWidth);
 
@@ -603,23 +606,8 @@ void display(void)
    gGLServer.DrawWireBox(Vector3f(gFieldLength/2,0,-gGoalWidth/2.0),szGoal2);
    gGLServer.DrawGoal(Vector3f(gFieldLength/2,0,-gGoalWidth/2.0),szGoal2);
 
-   // check for positions update
-   gCommServer->GetMessage();
-
-   // get messages sent from server
-   shared_ptr<Predicate::TList> predicates = gCommServer->GetPredicates();
-
-   // if we still didn't parse the init string
-   // we do so and set the readInit to 'false'
-   // such that we don't have to parse it twice
-   if (readInit)
-       {
-           if(parseInfoHeader(predicates))
-               readInit = false;
-       }
-
    // draw cached positions
-   drawScene(predicates);
+   drawScene();
    drawStatusText();
    glutSwapBuffers();
 }
@@ -630,7 +618,26 @@ void display(void)
 //------------------------------------------------------------------------
 void idle(void)
 {
-  glutPostRedisplay();
+    // check for positions update
+    if (gCommServer->GetMessage())
+        {
+            // get messages sent from server
+            gPredicates = gCommServer->GetPredicates();
+            static bool readInit = true;
+
+            // if we still didn't parse the init string
+            // we do so and set the readInit to 'false'
+            // such that we don't have to parse it twice
+            if (readInit)
+                {
+                    if(parseInfoHeader())
+                        {
+                            readInit = false;
+                        }
+                }
+
+            glutPostRedisplay();
+        }
 }
 
 //--------------------------mouse-----------------------------------------
@@ -655,6 +662,7 @@ void mouseMotion(int x, int y)
   gGLServer.SetViewByMouse(tmp1, tmp2);
   gOldX = x;
   gOldY = y;
+  glutPostRedisplay();
 }
 
 //------------------------------keyboad-------------------------------------
@@ -669,50 +677,72 @@ void mouseMotion(int x, int y)
 //--------------------------------------------------------------------------
 void keyboard(unsigned char key, int /*x*/, int /*y*/)
 {
-  salt::Vector3f pos;
-  switch (key) {
-  case 'w':
-      //move cam in
-      gGLServer.MoveCamForward(gCamDelta);
-      break;
-  case 's':
-      //move cam out
-      gGLServer.MoveCamForward(-gCamDelta);
-      break;
-  case 'a':
-      //strafe cam left
-      gGLServer.MoveCamStrafe(gCamDelta);
-      break;
-  case 'd':
-      // strafe cam right
-      gGLServer.MoveCamStrafe(-gCamDelta);
-      break;
-  case 'c':
-      //toggle autocam mode
-      gAutoCam = !gAutoCam;
-      cout <<"--- AUTOMATIC CAMERA ";
-      cout << gAutoCam ? "ON" : "OFF";
-      cout << " ----" << endl;
-      break;
+    salt::Vector3f pos;
+    switch (key) {
+    case 'w':
+        //move cam in
+        gGLServer.MoveCamForward(gCamDelta);
+        break;
+    case 's':
+        //move cam out
+        gGLServer.MoveCamForward(-gCamDelta);
+        break;
+    case 'a':
+        //strafe cam left
+        gGLServer.MoveCamStrafe(gCamDelta);
+        break;
+    case 'd':
+        // strafe cam right
+        gGLServer.MoveCamStrafe(-gCamDelta);
+        break;
+    case 'c':
+        //toggle autocam mode
+        gAutoCam = !gAutoCam;
+        cout <<"--- Automatic Camera ";
+        cout << gAutoCam ? "ON" : "OFF";
+        cout << " ----" << endl;
+        break;
 
-  case '+':
-      //move camera up
-      gGLServer.MoveCamUp(gCamDelta);
-      break;
+    case '+':
+        //move camera up
+        gGLServer.MoveCamUp(gCamDelta);
+        break;
 
-  case '-':
-  case ' ' :
-      //mode camera down
-      gGLServer.MoveCamUp(-gCamDelta);
-      break;
+    case '-':
+    case ' ' :
+        //move camera down
+        gGLServer.MoveCamUp(-gCamDelta);
+        break;
 
-  case 'q':
-      // quit
-      exit(0);
+    case 'q':
+        // quit
+        cout <<"--- Disconnect" << endl;
+        gCommServer->SendDisconnectCmd();
+        exit(0);
 
-  default:
-      break;
-  }
+    case 'k' :
+        // kick off
+        cout <<"--- Kick Off" << endl;
+        gCommServer->SendKickOffCmd();
+        break;
+
+    case 'p' :
+        // pause simulation
+        cout <<"--- Pausing Simulation" << endl;
+        gCommServer->SendPauseCmd();
+        break;
+
+    case 'r' :
+        // run simulation (after pause command)
+        cout <<"--- Running Simulation" << endl;
+        gCommServer->SendRunCmd();
+        break;
+
+    default:
+        return;
+    }
+
+    glutPostRedisplay();
 }
 
 //------------------------------reshape-------------------------------------
@@ -739,7 +769,7 @@ int main(int argc, char* argv[])
   salt::Vector3f pos(0.0, 7.0,24.0);
   salt::Vector3f lookAt(0.0,0.0,0.0);
   salt::Vector3f up(0.0,1.0,0.0);
-  gGLServer = GLserver(gWidth, gHeight, pos, lookAt, up, false);
+  gGLServer = GLServer(gWidth, gHeight, pos, lookAt, up, false);
   gGLServer.InitGL();
 
   glutDisplayFunc(display);

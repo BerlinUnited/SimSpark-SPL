@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.h,v 1.2.2.2 2003/12/27 11:16:39 rollmark Exp $
+   $Id: communit.h,v 1.3.2.1 2004/02/08 15:19:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,17 +29,18 @@
 class CommUnit
 {
 public:
-  CommUnit ();
-  ~CommUnit ();
+    CommUnit ();
+    ~CommUnit ();
 
-  bool OpenConnection(std::string host, int port);
-  void CloseConnection ();
-  std::string GetMessage ();
+    bool OpenConnection(std::string host, int port);
+    void CloseConnection ();
+    std::string GetMessage ();
+    void PutMessage(const std::string& message);
 
 protected:
     rcss::net::TCPSocket mSocket;
     rcss::net::SocketStreamBuf mStreamBuf;
-    std::istream mStream;
+    std::istream mInStream;
 };
 
 #endif // _COMMUNIt_H

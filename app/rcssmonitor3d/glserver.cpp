@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3.2.6 2004/01/31 17:29:36 rollmark Exp $
+   $Id: glserver.cpp,v 1.3.2.7 2004/02/08 15:19:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 */
 #include "glserver.h"
 
-GLserver::GLserver(int width, int height,
+GLServer::GLServer(int width, int height,
                    salt::Vector3f camPos,
                    salt::Vector3f lookAtPos,
                    salt::Vector3f up, bool wire)
@@ -40,7 +40,7 @@ GLserver::GLserver(int width, int height,
 //---------------------------------ApplyCamera--------------------------
 //
 //----------------------------------------------------------------------
-void GLserver::ApplyCamera()
+void GLServer::ApplyCamera()
 {
     //switch z-buffer on
     glEnable(GL_DEPTH_TEST);
@@ -65,7 +65,7 @@ void GLserver::ApplyCamera()
 //
 // OpenGL initialisation function
 //----------------------------------------------------------------------
-void GLserver::InitGL (void)
+void GLServer::InitGL (void)
 {
     //setup lightsource
     if(!mWireframe)
@@ -87,12 +87,28 @@ void GLserver::InitGL (void)
             glLightfv(GL_LIGHT0, GL_POSITION, position);
         }
 }
+
+void GLServer::DrawTextPix(const char* text, salt::Vector2f pix)
+{
+    const salt::Vector2f pos(
+                             pix[0] / (float)mWidth * 2 - 1.0f,
+                             1.0f - (pix[1] / (float)mHeight * 2)
+                             );
+
+    DrawText(text,pos);
+}
+
+int GLServer::GetTextHeight()
+{
+    // currently only GLUT_BITMAP_9_BY_15 is used
+    return 15;
+}
+
 //--------------------------drawText-------------------------------------
-// draws a given text string onto the screen at position pos
-//
-// (-1,1) is top left, (+1,-1) is bottom right of the screen
+//draws a given text string onto the screen at position pos;; (-1,1)
+//is top left, (+1,-1) is bottom right of the viewport
 //-----------------------------------------------------------------------
-void GLserver::DrawText(const char* text, salt::Vector2f pos)
+void GLServer::DrawText(const char* text, salt::Vector2f pos)
 {
     glDisable (GL_LIGHTING);
     glDisable (GL_TEXTURE_2D);
@@ -116,7 +132,7 @@ void GLserver::DrawText(const char* text, salt::Vector2f pos)
 //
 // draws a virtual grid ground out of several green lines
 //-----------------------------------------------------------------------
-void GLserver::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
+void GLServer::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
 {
     // The ground is drawn as a set of quadric faces(strips)
     // faceNum stores the number of faces
@@ -153,7 +169,7 @@ void GLserver::DrawGround(salt::Vector3f gridPos, float szX, float szZ)
 //
 // draws a wireframbox with given dimensions to position 'boxPos'
 //-----------------------------------------------------------------------
-void GLserver::DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz)
+void GLServer::DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz)
 {
     glColor3ub(255,0,255);
 
@@ -204,7 +220,7 @@ void GLserver::DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz)
 //
 // draws a goal with given dimensions to position 'goalPos'
 //-----------------------------------------------------------------------
-void GLserver::DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz)
+void GLServer::DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz)
 {
     GLUquadricObj *cyl;
     cyl = gluNewQuadric();
@@ -238,7 +254,7 @@ void GLserver::DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz)
 //
 // draws a solid sphere with given radius to position 'spherePos'
 //-----------------------------------------------------------------------
-void GLserver::DrawSphere(salt::Vector3f spherePos,float radius)
+void GLServer::DrawSphere(salt::Vector3f spherePos,float radius)
 {
     glPushMatrix();
     glTranslatef(spherePos[0],spherePos[1], spherePos[2]);
@@ -251,7 +267,7 @@ void GLserver::DrawSphere(salt::Vector3f spherePos,float radius)
 // draws the shadow of a sphere with given radius by scaling its size onto
 // the ground (no y component)
 //-----------------------------------------------------------------------
-void GLserver::DrawShadowOfSphere(salt::Vector3f spherePos,float radius)
+void GLServer::DrawShadowOfSphere(salt::Vector3f spherePos,float radius)
 {
     // distance between ground and shadows
     const float delta = 0.08f;
