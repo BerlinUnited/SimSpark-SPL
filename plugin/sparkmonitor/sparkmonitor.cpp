@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.7 2004/12/22 16:10:49 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.8 2004/12/31 14:29:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <kerosin/sceneserver/singlematnode.h>
 #include <kerosin/materialserver/material.h>
+#include <oxygen/monitorserver/monitorcmdparser.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <sstream>
 
@@ -63,6 +64,19 @@ void SparkMonitor::OnUnlink()
 
 void SparkMonitor::ParseMonitorMessage(const std::string& data)
 {
+    // pass the received string on to all installed CommandParsers
+    TLeafList items;
+    ListChildrenSupportingClass<MonitorCmdParser>(items);
+
+    for (
+         TLeafList::iterator iter = items.begin();
+         iter != items.end();
+         ++iter
+         )
+        {
+            shared_static_cast<MonitorCmdParser>(*iter)
+                ->ParseMonitorMessage(data);
+        }
 }
 
 string SparkMonitor::GetMonitorInfo(const PredicateList& pList)
