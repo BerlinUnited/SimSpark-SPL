@@ -180,6 +180,11 @@ $scenePath = '/usr/scene/'
 $serverPath = '/sys/server/'
 
 #
+# set up logging
+logServer = get($serverPath+'log')
+logServer.addStream(':cerr', 'eError')
+
+#
 # setup the PhysicsServer
 new('oxygen/PhysicsServer', $serverPath+'physics')
 
