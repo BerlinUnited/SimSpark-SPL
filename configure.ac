@@ -120,7 +120,6 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/sexpparser/Makefile \
 		 plugin/soundsystembass/Makefile \
 		 plugin/soundsystemfmod/Makefile \
-		 plugin/survival/Makefile \
 		 plugin/monitortest/Makefile \
 		 app/Makefile \
 		 app/coretest/Makefile \
