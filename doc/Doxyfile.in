@@ -59,9 +59,9 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = @top_srcdir@/lib \
-                         @top_srcdir@/app \
                          @top_srcdir@/utility \
-                         @top_srcdir@/plugin
+                         @top_srcdir@/plugin \
+                         @top_srcdir@/app/simulator
 FILE_PATTERNS          = *.h \
                          *.cpp
 RECURSIVE              = YES
@@ -167,7 +167,7 @@ EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = @top_srcdir@
 INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = 
+PREDEFINED             = HAVE_CONFIG_H
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = NO
 #---------------------------------------------------------------------------
@@ -190,7 +190,7 @@ UML_LOOK               = NO
 TEMPLATE_RELATIONS     = YES
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
-CALL_GRAPH             = NO
+CALL_GRAPH             = YES
 GRAPHICAL_HIERARCHY    = YES
 DOT_IMAGE_FORMAT       = png
 DOT_PATH               = 
