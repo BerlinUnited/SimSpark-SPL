@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.9 2003/12/16 14:59:03 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.10 2003/12/21 10:29:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ using namespace std;
 
 #if THIS_IS_A_DEMO_ONLY
 #include <oxygen/sceneserver/basenode.h>
-#include <oxygen/agentaspect/perfectvisionperceptor.h>
 #include <oxygen/sceneserver/transform.h>
 #endif
 
@@ -133,21 +132,6 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         return time_curr;
     }
 
-#if THIS_IS_A_DEMO_ONLY
-    shared_ptr<oxygen::PerfectVisionPerceptor> v360 =
-        shared_static_cast<oxygen::PerfectVisionPerceptor>(GetCore()->Get("/v360"));
-
-    if (v360.get() != 0)
-    {
-        BaseParser::TPredicate x;
-        if (v360->Percept(x) && GetGameControlServer())
-        {
-            std::cout << GetGameControlServer()->TmpGenerate(x) << std::endl;
-        }
-    }
-    else std::cout << "No Sensor present\n";
-#endif
-
     float timePerStep = GetTimePerStep();
     int i = steps;
 
@@ -163,7 +147,7 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
 
 #endif
 
-    // return the simulation time when loop stopped
+    // return the simulation time when the loop stopped
     // (the '- i' makes sense if we exit the while loop earlier)
     return time_desired - i;
 }
@@ -180,7 +164,7 @@ SpadesServer::GetMonitorServer()
 boost::shared_ptr<GameControlServer>
 SpadesServer::GetGameControlServer() const
 {
-    return shared_static_cast<GameControlServer>
+    return shared_dynamic_cast<GameControlServer>
         (GetCore()->Get("/sys/server/gamecontrol"));
 }
 
@@ -229,13 +213,13 @@ SpadesServer::parseMonitorMessage(const char* data, unsigned datalen)
 SimTime
 SpadesServer::getMinActionLatency() const
 {
-    return 0;
+    return 10;
 }
 
 SimTime
 SpadesServer::getMinSenseLatency() const
 {
-    return 0;
+    return 10;
 }
 
 ActEvent*
@@ -248,7 +232,7 @@ SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen)
         }
 
     shared_ptr<ActionObject::TList> actionList
-        = gcs->Parse(std::string(data,datalen));
+        = gcs->Parse(a,std::string(data,datalen));
 
     if (actionList.get() == 0)
         {
@@ -310,7 +294,7 @@ SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*
         }
 
     //
-    // Should we also us an InitSenseEvent as the spades sample does ?
+    // Should we also use an InitSenseEvent as the spades sample does ?
     //
 
     // schedule the first SpadesCreateSenseEvent for the following
