@@ -26,7 +26,7 @@ app/fonttest/.deps
 app/fonttest/.libs
 app/fonttest/Makefile
 app/fonttest/Makefile.in
-app/fonttest/fonttest
+app/fonttest/data/font/VeraMono.ttf
 app/gendot/.deps
 app/gendot/.libs
 app/gendot/Logfiles
@@ -41,7 +41,13 @@ app/inputtest/Makefile
 app/inputtest/Makefile.in
 app/inputtest/inputtest
 app/inputtest/sys
-app/fonttest/data/font/VeraMono.ttf
+app/monitorspark/.deps
+app/monitorspark/.libs
+app/monitorspark/Makefile
+app/monitorspark/Makefile.in
+app/monitorspark/rcssmonitor3D
+app/monitorspark/spadestest
+app/monitorspark/sys
 app/rcssmonitor3d/.deps
 app/rcssmonitor3d/.libs
 app/rcssmonitor3d/Makefile
