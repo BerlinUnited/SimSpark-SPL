@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.15 2004/05/10 21:19:22 fruit Exp $
+   $Id: leaf.h,v 1.16 2005/03/08 13:12:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -242,7 +242,7 @@ public:
 
     /** sets the name of this node */
     void        SetName(const std::string &name)
-    {   mName = name;   }
+        {   mName = name;  ClearCachedData(); }
 
     // iterator helpers
     virtual TLeafList::iterator begin();
