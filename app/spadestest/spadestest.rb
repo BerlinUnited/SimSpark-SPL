@@ -3,6 +3,10 @@ importBundle "filesystemstd"
 importBundle "monitortest"
 importBundle "spadestest"
 
+# the dummy CreateEffector uses these plugins
+importBundle "perfectvisionperceptor"
+importBundle "forceeffector"
+
 #
 # Init
 #
@@ -28,10 +32,6 @@ gameControlServer.initParser('SexpParser');
 
 # setup the SpadesServer
 spadesServer = new('oxygen/SpadesServer', '/sys/server/spades');
-
-# test perceptor
-print "\n##### Creating a Gadgetron PerfectVision 360 perceptor #####\n\n";
-vision360 = new('oxygen/PerfectVisionPerceptor', '/v360');
 
 # set the time of a single simulation step
 Spades.TimePerStep = 0.01
@@ -63,25 +63,3 @@ w3.setParams(0.0, 0.0, -1.0, -25.0);
 
 w4 = new('kerosin/PlaneCollider', '/usr/scene/w4');
 w4.setParams(0.0, 0.0, 1.0, -25.0);
-
-# add a sphere collider
-trans = new('kerosin/Transform', '/usr/scene/sphere');
-trans.setLocalPos(-12.5, 50.0, -12.5);
-physics = new('kerosin/Body', '/usr/scene/sphere/_physics');
-physics.setSphere(1.0, 1.0);
-physics.setMass(10.0);
-physics.setMaxSpeed(13.0);
-geometry = new('kerosin/SphereCollider', '/usr/scene/sphere/_geometry');
-geometry.setRadius(1.0);
-agent = new('TestAgentAspect', '/usr/scene/sphere/_agent');
-
-# a second collider
-trans = new('kerosin/Transform', '/usr/scene/sphere2');
-trans.setLocalPos(-12.5, 9.0, -12.4);
-physics = new('kerosin/Body', '/usr/scene/sphere2/_physics');
-physics.setSphere(1.0, 1.0);
-physics.setMass(1.0);
-physics.setMaxSpeed(4.0);
-geometry = new('kerosin/SphereCollider', '/usr/scene/sphere2/_geometry');
-geometry.setRadius(1.0);
- 
