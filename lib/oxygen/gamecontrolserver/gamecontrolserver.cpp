@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.7 2004/04/05 14:51:08 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.8 2004/04/07 18:46:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,10 +70,10 @@ GameControlServer::InitControlAspect(const string& aspectName)
     shared_ptr<ControlAspect> aspect
         = shared_dynamic_cast<ControlAspect>(GetCore()->New(aspectName));
 
-    if (mParser.get() == 0)
+    if (aspect.get() == 0)
     {
-        GetLog()->Error() << "ERROR: (GameControlServer::InitControlAspect) Unable to create "
-                          << aspectName << "\n";
+        GetLog()->Error() << "ERROR: (GameControlServer::InitControlAspect) "
+                          << "Unable to create " << aspectName << "\n";
         return false;
     }
 
