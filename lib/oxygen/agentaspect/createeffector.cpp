@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.1.2.1 2003/12/21 09:52:22 rollmark Exp $
+   $Id: createeffector.cpp,v 1.1.2.2 2003/12/21 19:23:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,6 +94,9 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
               geometry->SetName("_geometry");
               aspect->AddChildReference(geometry);
               geometry->SetRadius(1.0);
+
+              // move the AgentAspect further up
+              aspect->SetLocalPos(-12.5, 100.0, -12.5);
           }
 
   //
