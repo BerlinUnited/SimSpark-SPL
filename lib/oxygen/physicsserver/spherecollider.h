@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spherecollider.h,v 1.5 2003/11/14 14:05:53 fruit Exp $
+   $Id: spherecollider.h,v 1.5.8.1 2004/01/25 18:02:14 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,9 @@ public:
 
     /** sets the radius of the managed ODE sphere geom */
     void SetRadius(float r);
+
+    /** get the radius back from ODE */
+    float GetRadius() const;
 
 protected:
     /** constructs a default sphere with a radius of 1 */

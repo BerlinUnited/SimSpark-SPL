@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spherecollider.cpp,v 1.3.8.2 2004/01/12 18:41:51 rollmark Exp $
+   $Id: spherecollider.cpp,v 1.3.8.3 2004/01/25 18:04:08 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,17 +27,25 @@ SphereCollider::SphereCollider() : Collider()
 {
 }
 
-void SphereCollider::SetRadius(float r)
+void
+SphereCollider::SetRadius(float r)
 {
-  dGeomSphereSetRadius(mODEGeom, r);
+    dGeomSphereSetRadius(mODEGeom, r);
 }
 
-bool SphereCollider::ConstructInternal()
+float
+SphereCollider::GetRadius() const
+{
+    return dGeomSphereGetRadius(mODEGeom);
+}
+
+bool
+SphereCollider::ConstructInternal()
 {
     if (! Collider::ConstructInternal())
-      {
+    {
         return false;
-      }
+    }
 
     // create a unit sphere
     mODEGeom = dCreateSphere(0, 1.0f);
