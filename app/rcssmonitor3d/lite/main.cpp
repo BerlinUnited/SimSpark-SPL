@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.1 2004/03/09 17:14:44 fruit Exp $
+   $Id: main.cpp,v 1.2 2004/03/09 19:43:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -812,7 +812,8 @@ int main(int argc, char* argv[])
   zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "rcssmonitor3d/");
 
   // run init script
-  zg.GetCore()->GetScriptServer()->RunInitScript("rcssmonitor3D-lite.rb", "../rcssmonitor3d");
+  zg.GetCore()->GetScriptServer()->RunInitScript
+      ("rcssmonitor3D-lite.rb", "../../rcssmonitor3d/lite");
 
   // print a greeting
   zg.GetCore()->GetLogServer()->Normal()
