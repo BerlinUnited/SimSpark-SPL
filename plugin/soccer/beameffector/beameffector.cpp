@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.7 2004/06/17 13:25:39 rollmark Exp $
+   $Id: beameffector.cpp,v 1.8 2004/06/17 13:42:42 cringel Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,9 +67,9 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
 
         // reject nan or infinite numbers in the beam position
         if (
-            (! isnormal(pos[0])) ||
-            (! isnormal(pos[1])) ||
-            (! isnormal(pos[2]))
+            (! isfinite(pos[0])) ||
+            (! isfinite(pos[1])) ||
+            (! isfinite(pos[2]))
             )
             {
                 return false;
