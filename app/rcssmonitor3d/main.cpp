@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.13 2004/02/06 15:06:44 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.14 2004/02/06 21:45:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ static const struct ObjType
             "agent",
             OC_SPHERE,
             {0.8f, 0.8f, 0.2f, 1.0f},
-            0.3f
+            0.22f
         },
         {
             "flag",
@@ -136,7 +136,7 @@ static const struct ObjType
             "ballAgent",
             OC_SPHERE,
             {1.0f, 1.0f, 1.0f, 1.0f},
-            0.3f
+            0.22f
         },
         {
             "teamL",
