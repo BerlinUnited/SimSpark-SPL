@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.13 2004/05/24 16:55:52 patstg Exp $
+   $Id: spadesserver.cpp,v 1.14 2004/06/11 07:59:46 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ using namespace std;
 #include <oxygen/monitorserver/monitorserver.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
 #include <spades/SimEngine.hpp>
+#include <spades/EndSimulationEvent.hpp>
 #include "spadescreatesenseevent.h"
 #include "spadesactevent.h"
 
@@ -276,6 +277,14 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         mSceneServer->Update(mTimePerStep);
         mGameControlServer->Update(mTimePerStep);
         --i;
+    }
+
+    static bool once = true;
+    if (mGameControlServer->IsFinished() && once)
+    {
+        once = false;
+        // initiate shutdown here (what time should we use?)
+        mSimEngine->enqueueEvent(new EndSimulationEvent(time_desired+1));
     }
 
     //    GetLog()->Debug() << "(SpadesServer) time_curr=" << time_curr
