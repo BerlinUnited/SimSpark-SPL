@@ -105,6 +105,11 @@ void PutOutput(const char* out)
   write(writeFd, buffer, len + sizeof(netlen));
 }
 
+void PutOutput(const std::string& str)
+{
+  PutOutput(str.c_str());
+}
+
 // --------------------
 
 void CreateAgent()
@@ -121,7 +126,10 @@ void InitAgent()
   Log(msg_data);
   Log("\n");
   Log("sending init command\n");
-  PutOutput("A(init (unum 8) (teamname RoboLog))");
+
+  std::stringstream ss;
+  ss << "A(init (unum " << getpid() << ") (teamname RoboLog))";
+  PutOutput(ss.str().c_str());
 }
 
 void RandomBehave(int numSensation)
@@ -218,7 +226,7 @@ void Behave(int /*numSensation*/)
         {
           // kick the ball
           Log("Kicking \n");
-          PutOutput("A(kick up 20000)");
+          PutOutput("A(kick up 200000)");
         } else
           {
             // seek the ball
