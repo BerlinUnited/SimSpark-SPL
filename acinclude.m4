@@ -49,12 +49,42 @@ AC_DEFUN([RCSS_PATH_RUBY], [
 	RUBY_LDADD=`$RUBY -rrbconfig -e "print Config::CONFIG[['LIBS']]"`
 	AC_MSG_RESULT($RUBY_LDADD)
 	
+	AC_MSG_CHECKING([for libruby])
+	rcss_tmp="$LDFLAGS"
+	LDFLAGS="$LDFLAGS $RUBY_LDFLAGS"
+ 	AC_LINK_IFELSE([int main() { return 0; }],
+		       [AC_MSG_RESULT([yes])],
+		       [AC_MSG_RESULT([no])
+		        AC_MSG_ERROR([libruby cannot be found. If you compile ruby on your own,
+	make sure to configure ruby with '--enable-shared' to create the library.])])
+	LDFLAGS="$rcss_tmp"
+
 	# Substitute Makefile Vars.
 	AC_SUBST(RUBY)
 	AC_SUBST(RUBY_CPPFLAGS)
 	AC_SUBST(RUBY_LDFLAGS)
 	AC_SUBST(RUBY_LDADD)
 ]) # RCSS_PATH_RUBY
+
+AC_DEFUN([RCSS_CHECK_RUBY_VERSION], [
+	AC_MSG_CHECKING([ruby version])
+	AC_REQUIRE([RCSS_PATH_RUBY])
+	MAJOR="$1"
+	RUBY_MAJOR=`$RUBY -rrbconfig -e "print Config::CONFIG[['MAJOR']]"`
+	test -z "$1" && MAJOR="$RUBY_MAJOR"
+	MINOR="$2"
+	RUBY_MINOR=`$RUBY -rrbconfig -e "print Config::CONFIG[['MINOR']]"`
+	test -z "$2" && MINOR="$RUBY_MINOR"
+	TEENY="$3"
+	RUBY_TEENY=`$RUBY -rrbconfig -e "print Config::CONFIG[['TEENY']]"`
+	test -z "$3" && TEENY="$RUBY_TEENY"
+	AC_MSG_RESULT($RUBY_MAJOR.$RUBY_MINOR.$RUBY_TEENY)
+	if test \( "$RUBY_MAJOR" -lt "$MAJOR" \) -o \
+		\( "$RUBY_MAJOR" -eq "$MAJOR" -a "$RUBY_MINOR" -lt "$MINOR" \) -o \
+		\( "$RUBY_MAJOR" -eq "$MAJOR" -a "$RUBY_MINOR" -eq "$MINOR" -a "$RUBY_TEENY" -lt "$TEENY" \); then
+		AC_MSG_ERROR([Your ruby is too old. Use at least ruby-$MAJOR.$MINOR.$TEENY])
+	fi
+]) # RCSS_CHECK_RUBY_VERSION
 
 # RCSS_CHECK_RCSSBASE
 #-----------------------------------------------------------------------------
@@ -138,8 +168,8 @@ AC_DEFUN([RCSS_PATH_FREETYPE], [
 AC_DEFUN([RCSS_CHECK_GL], [
 	RCSS_KEROSIN_IF_ELSE([
 	# check for OpenGL location and used extensions
-    		AC_CHECK_HEADER([GL/gl.h],,
-                                RCSS_BUILD_KEROSIN_ERROR([the OpenGL headers could not be found. Please specify the location  of the OpenGL header directory using the CPPFLAGS environment variable]))
+    		AC_CHECK_HEADERS([GL/gl.h GL/glut.h],,
+                                RCSS_BUILD_KEROSIN_ERROR([not all required OpenGL headers could not be found. Please specify the location  of the OpenGL header directory using the CPPFLAGS environment variable]))
 		RCSS_KEROSIN_IF_ELSE([
 			AC_CHECK_HEADERS([GL/glx.h], AC_SUBST([GLTARGET], [x]),
                         		 AC_CHECK_HEADERS([GL/wglext.h],
