@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.1 2004/03/09 17:14:44 fruit Exp $
+   $Id: glserver.h,v 1.2 2004/03/09 21:22:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,8 @@ public:
     ~GLServer() {};
 
     void InitGL();
-    void DrawGround(salt::Vector3f gridPos, float szX, float szZ);
+    void DrawGroundRectangle(salt::Vector3f pos, float szX, float szY,
+                             float angleDeg, float height = 0.0f);
     void ApplyCamera();
     void DrawText(const char* text, salt::Vector2f pos);
     void DrawText3D(const char* text, salt::Vector3f pos);
