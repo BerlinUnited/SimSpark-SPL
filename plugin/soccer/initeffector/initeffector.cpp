@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.2.2.5 2004/02/10 21:45:47 rollmark Exp $
+   $Id: initeffector.cpp,v 1.2.2.6 2004/02/11 09:49:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,6 +85,8 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
     if (SoccerBase::GetAgentBody(mAgentAspect,body))
         {
             body->SetPosition(pos);
+            body->SetVelocity(Vector3f(0,0,0));
+            body->SetAngularVelocity(Vector3f(0,0,0));
         }
 
     return true;
