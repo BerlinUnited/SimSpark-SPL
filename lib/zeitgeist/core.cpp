@@ -7,6 +7,7 @@
 #include "fileserver/fileserver.h"
 #include "fileserver/filesystem.h"
 #include "logserver/logserver.h"
+#include "telnetserver/telnetserver.h"
 #include "scriptserver/scriptserver.h"
 
 #include <salt/path.h>
@@ -84,6 +85,8 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
 	RegisterClassObject(new CLASS(FileSystem), "zeitgeist/");
 	RegisterClassObject(new CLASS(LogServer), "zeitgeist/");
 	RegisterClassObject(new CLASS(ScriptServer), "zeitgeist/");
+
+	RegisterClassObject(new CLASS(TelnetServer), "zeitgeist/");
 
 	// create the log server
 	mLogServer = shared_static_cast<LogServer>(context->New("zeitgeist/LogServer", "/sys/server/log"));

@@ -146,6 +146,38 @@ SOURCE=.\fileserver\filesystem.h
 SOURCE=.\fileserver\filesystem_c.cpp
 # End Source File
 # End Group
+# Begin Group "telnetserver"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\telnetserver\telnetdaemon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\telnetserver\telnetdaemon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\telnetserver\telnetserver.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\telnetserver\telnetserver.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\telnetserver\telnetserver_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\telnetserver\telnetsession.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\telnetserver\telnetsession.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\class.cpp
