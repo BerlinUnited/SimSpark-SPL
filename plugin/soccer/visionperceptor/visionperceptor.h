@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.3 2004/04/05 14:51:37 rollmark Exp $
+   $Id: visionperceptor.h,v 1.4 2004/04/11 11:45:06 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,9 +61,6 @@ public:
     void AddNoise(bool use_it)
     { mAddNoise = use_it; }
 
-    //! change predicate name (for example for debugging purposes)
-    void SetPredicateName(const std::string& my_name);
-
 protected:
     /** constructs the internal ray collider */
     virtual bool ConstructInternal();
@@ -101,8 +98,6 @@ private:
     //! true, if the absolute position of the agent is sensed.
     bool mSenseMyPos;
 
-    //! the predicate name (default is "Vision")
-    std::string mPredicateName;
     //! sigma for random measurement error (distance)
     float mSigmaDist;
     //! sigma for random measurement error (horizontal angle)
