@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.3 2004/04/07 13:23:50 fruit Exp $
+   $Id: commserver.h,v 1.4 2004/06/11 14:55:38 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ protected:
     const int mWriteFd;
 
     // the receive buffer
-    char mBuffer[4096];
+    char mBuffer[8192];
 };
 
 DECLARE_CLASS(CommServer);
