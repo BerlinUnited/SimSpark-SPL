@@ -1,3 +1,22 @@
+2004-10-04  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/agenttest/commserver.cpp:
+	- use 'unsigned int' instead of 'long' in CommServer::PutOutput to
+	prevent problems with the length prefix size on 64bit builds; this
+	fixes a bug reported by liyang <subwood@ustc.edu> and Patrick
+	Riley
+
+	* app/rcssmonitor3d/lib/commserver.cpp:
+	- use 'unsigned int' instead of 'unsigned long' in
+	CommServer::SendMessage to prevent problems on 64bit builds with the
+	length prefix size 
+
+2004-10-03  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- split section 1 into a server and a monitor description
+	- described how to distribute agents using remote Commservers
+
 2004-09-29  Patrick Riley <pfr@cs.cmu.edu>
 
 	* app/agenttest/ReadBuffFD.cpp
