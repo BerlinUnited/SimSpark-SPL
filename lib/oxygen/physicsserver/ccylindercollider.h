@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ccylindercollider.h,v 1.3 2003/11/14 14:05:53 fruit Exp $
+   $Id: ccylindercollider.h,v 1.3.8.1 2004/01/12 18:36:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,10 +27,10 @@
 namespace oxygen
 {
 
-/** CCylinderCollider encapsulates an ODE capped cylinder geometry object.A
-    capped cylinder is like a normal cylinder except it has half-sphere caps
-    at its ends. This feature makes the internal collision detection code
-    particularly fast and accurate.
+/** CCylinderCollider encapsulates an ODE capped cylinder geometry
+    object. A capped cylinder is like a normal cylinder except it has
+    half-sphere caps at its ends. This feature makes the internal
+    collision detection code particularly fast and accurate.
  */
 class CCylinderCollider : public Collider
 {
@@ -40,15 +40,16 @@ class CCylinderCollider : public Collider
 public:
     CCylinderCollider();
 
-    /* Sets the parameters of the capped cylinder. The cylinder's length,
-       not counting the caps, is given by length. The cylinder is aligned
-       along the geom's local Z axis. The radius of the caps, and of the
-       cylinder itself, is given by radius.
+    /** Sets the parameters of the capped cylinder.
+
+       \param radius is the radius of the caps, and of the cylinder itself
+       \param length is the height of the cylinder, not counting the caps
     */
     void SetParams(float radius, float length);
 
 protected:
-    /** constructs a default capped cylinder with an radius of 1 and a length of 1 */
+    /** constructs a default capped cylinder with an radius of 1 and a
+        length of 1 */
     virtual bool ConstructInternal();
 };
 
