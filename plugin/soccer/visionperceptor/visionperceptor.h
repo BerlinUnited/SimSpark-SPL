@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.5 2004/06/19 12:34:55 fruit Exp $
+   $Id: visionperceptor.h,v 1.6 2004/07/21 08:53:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,35 @@
 
 class VisionPerceptor : public oxygen::Perceptor
 {
+protected:
+    typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;
+
+    struct ObjectData
+    {
+        boost::shared_ptr<ObjectState> mObj;
+
+        float mTheta;  // angle in the X-Y (horizontal) plane
+        float mPhi;    // latitude angle
+        float mDist;  // distance between perceptor and object
+        salt::Vector3f mRelPos;
+
+        ObjectData& operator=(const ObjectData& rhs)
+        {
+            mObj     = rhs.mObj;
+            mRelPos  = rhs.mRelPos;
+            mTheta   = rhs.mTheta;
+            mPhi     = rhs.mPhi;
+            mDist    = rhs.mDist;
+        }
+
+        int operator==(const ObjectData& rhs) const
+        { return mDist == rhs.mDist; }
+        int operator<(const ObjectData& rhs) const
+        { return mDist < rhs.mDist; }
+    };
+
+    typedef std::list<ObjectData> TObjectList;
+
 public:
     VisionPerceptor();
     virtual ~VisionPerceptor();
@@ -68,39 +97,38 @@ public:
     */
     void UseRandomNoise(bool random_noise);
 
+    //! Turn senses relative to the X-axis of the team off/on
+    void SetStaticSenseAxis(bool static_axis);
+
 protected:
     /** constructs the internal ray collider */
     virtual bool ConstructInternal();
 
+    /** prepares a list of visible objects */
+    void SetupVisibleObjects(TObjectList& visibleObjects);
+
+    /** Percept implementation for a static relative axis */
+    bool StaticAxisPercept(boost::shared_ptr<oxygen::PredicateList> predList);
+
+    /** Percept implementation relative to the current orientation of
+        the VisionPerceptor node
+    */
+    bool DynamicAxisPercept(boost::shared_ptr<oxygen::PredicateList> predList);
+
+    /** Checks if the given object is occluded, seen from from my_pos */
+    bool CheckOcclusion(const salt::Vector3f& my_pos, const ObjectData& od) const;
+
+    /** constructs a sense entry for the given object in the given
+        predicate*/
+    void AddSense(oxygen::Predicate& predicate, ObjectData& od) const;
+
+    /** applies noise to the setup ObjectData */
+    void VisionPerceptor::ApplyNoise(ObjectData& od) const;
+
     virtual void OnLink();
     virtual void OnUnlink();
 
-private:
-    typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;
-
-    struct ObjectData
-    {
-        boost::shared_ptr<ObjectState> mObj;
-
-        float mDist; float mTheta, mPhi;
-        salt::Vector3f mRelPos;
-        bool mVisible;
-
-        ObjectData& operator=(const ObjectData& rhs)
-        { mObj = rhs.mObj; mVisible = rhs.mVisible;
-          mRelPos = rhs.mRelPos;
-          mDist = rhs.mDist; mTheta = rhs.mTheta; mPhi = rhs.mPhi; }
-
-        int operator==(const ObjectData& rhs) const
-        { return mDist == rhs.mDist; }
-        int operator<(const ObjectData& rhs) const
-        { return mDist < rhs.mDist; }
-    };
-
-    void CheckOcclusion(const salt::Vector3f& my_pos,
-                        std::list<ObjectData>& visible_objects) const;
-
-
+protected:
     //! vision calibration error
     salt::Vector3f mError;
 
@@ -119,6 +147,11 @@ private:
     bool mAddNoise;
     //! flag if the error should be randomized each step
     bool mUseRandomNoise;
+
+    /** flag if the senses are always relative to the X-axis of the
+        team, default true
+    */
+    bool mStaticSenseAxis;
 
     //! ray collider to check occlusion
     boost::shared_ptr<oxygen::RayCollider> mRay;
