@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.3.2.1 2004/01/08 13:22:18 rollmark Exp $
+   $Id: forceeffector.cpp,v 1.3.2.2 2004/01/25 12:22:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 #include "forceeffector.h"
 #include "forceaction.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <oxygen/physicsserver/body.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
 
 using namespace boost;
@@ -32,8 +31,6 @@ using namespace salt;
 
 ForceEffector::ForceEffector() : oxygen::Effector()
 {
-    mForce.Set(0, 0, 0);
-    mMaxForce = 5.0f;
 }
 
 ForceEffector::~ForceEffector()
@@ -42,6 +39,11 @@ ForceEffector::~ForceEffector()
 
 bool ForceEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
+  if (mBody.get() == 0)
+    {
+      return false;
+    }
+
   shared_ptr<ForceAction> forceAction =
     shared_dynamic_cast<ForceAction>(action);
 
@@ -52,28 +54,8 @@ bool ForceEffector::Realize(boost::shared_ptr<ActionObject> action)
       return false;
     }
 
-  shared_ptr<BaseNode> parent =
-    shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
-
-  if (parent.get() == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (ForceEffector) parent node is not derived from BaseNode\n";
-      return false;
-    }
-
-  // parent should be a transform, or some other node, which has a Body-child
-  shared_ptr<Body> body = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
-
-  if (body.get() == 0)
-    {
-      GetLog()->Warning()
-        << "(ForceEffector) parent node has no Body child; cannot apply force\n";
-      return false;
-    }
-
   const Vector3f& force = forceAction->GetForce();
-  dBodyAddForce(body->GetODEBody(), force.x(), force.y(), force.z());
+  mBody->AddForce(force);
 
   return true;
 }
@@ -85,17 +67,49 @@ ForceEffector::GetActionObject(const Predicate& predicate)
     {
       GetLog()->Error() << "ERROR: (ForceEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+      return shared_ptr<ActionObject>();
     }
 
   Predicate::Iterator iter = predicate.begin();
   Vector3f force;
   if (! predicate.GetValue(iter, force))
   {
-      GetLog()->Error() << "ERROR: (ForceEffector) Vector3f parameter expected\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
-  }
+      GetLog()->Error()
+        << "ERROR: (ForceEffector) Vector3f parameter expected\n";
+      return shared_ptr<ActionObject>();
+  };
 
-  return shared_ptr<ActionObject>(new ForceAction(force));
+  return shared_ptr<ActionObject>(new ForceAction(GetPredicate(),force));
 }
+
+void ForceEffector::OnLink()
+{
+  shared_ptr<BaseNode> parent =
+    shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+
+  if (parent.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (ForceEffector) parent node is not derived from BaseNode\n";
+      return;
+    }
+
+  // parent should be a transform, or some other node, which has a
+  // Body-child
+  mBody = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
+
+  if (mBody.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (ForceEffector) parent node has no Body child;"
+          "cannot apply force\n";
+      return;
+    }
+}
+
+void ForceEffector::OnUnlink()
+{
+    mBody.reset();
+}
+
 
