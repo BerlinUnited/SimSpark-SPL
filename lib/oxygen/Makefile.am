@@ -48,8 +48,8 @@ agentaspect/collisionperceptor_c.cpp \
 agentaspect/effector_c.cpp \
 agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
-agentaspect/perfectvisionperceptor.cpp \
-agentaspect/perfectvisionperceptor_c.cpp \
+agentaspect/createeffector.cpp \
+agentaspect/createeffector_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
 gamecontrolserver/actionobject_c.cpp \
@@ -99,7 +99,8 @@ agentaspect/agentaspect.h \
 agentaspect/collisionperceptor.h \
 agentaspect/effector.h \
 agentaspect/perceptor.h \
-agentaspect/perfectvisionperceptor.h \
+agentaspect/createeffector.h \
+agentaspect/createaction.h \
 controlaspect/controlaspect.h \
 gamecontrolserver/gamecontrolserver.h \
 gamecontrolserver/baseparser.h \
