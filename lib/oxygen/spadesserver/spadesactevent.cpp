@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesactevent.cpp,v 1.1.2.3 2003/12/04 17:25:03 rollmark Exp $
+   $Id: spadesactevent.cpp,v 1.1.2.4 2003/12/09 19:25:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,12 @@
 #include "spadesserver.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/agentaspect/agentaspect.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
 using namespace boost;
+using namespace std;
 
 void SpadesActEvent::Print (std::ostream & /*o*/) const
 {
@@ -45,16 +47,26 @@ bool SpadesActEvent::realizeEventWorldModel(spades::WorldModel* pWM)
           return false;
         }
 
-  // call the game control server to realize the list of actions
   shared_ptr<GameControlServer> gcs = spadesServer->GetGameControlServer();
   if (gcs.get() == 0)
       {
           spadesServer->GetLog()->Error()
-              << "(SpadesActEvent) GameControlServer not found.\n";
+              << "(SpadesActEvent) GameControlServer not found." << endl;
           return false;
       }
 
-  gcs->RealizeActions(mActionList);
+  // lookup the AgentAspect
+  int id = getAgent();
+  shared_ptr<AgentAspect> agent = gcs->GetAgentAspect(id);
 
-  return true;
+  if (agent.get() == 0)
+      {
+          spadesServer->GetLog()->Warning()
+              << "ERROR: (SpadesActEvent) no AgentAspect for id " << id
+              << "found." << endl;
+          return false;
+      }
+
+  // realize the stored actions
+  return agent->RealizeActions(mActionList);
 }
