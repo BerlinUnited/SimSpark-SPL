@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.7 2004/03/31 08:57:52 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.8 2004/04/21 09:15:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,9 +80,6 @@ SoccerBase::GetAgentState(const shared_ptr<Transform> transform,
 
     if (agent_state.get() == 0)
     {
-        transform->GetLog()->Error()
-            << "Error: (SoccerBase: " << transform->GetName()
-            << ") node has no AgentState child\n";
         return false;
     }
 
@@ -110,21 +107,21 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
 
 bool
 SoccerBase::GetAgentBody(const Leaf& base, TTeamIndex idx,
-                         int unum, shared_ptr<Body> & agent_body)
+                         int unum, shared_ptr<Body>& agent_body)
 {
     shared_ptr<AgentState> agentState;
     shared_ptr<Transform>  parent;
 
     // get matching AgentState
-    GetAgentState(base, idx, unum, agentState);
+    if (!GetAgentState(base, idx, unum, agentState))
+        return false;
 
     // get AgentAspect
-    GetTransformParent(*agentState, parent);
+    if (!GetTransformParent(*agentState, parent))
+        return false;
 
     // call GetAgentBody with matching AgentAspect
-    GetAgentBody(parent, agent_body);
-
-    return true;
+    return GetAgentBody(parent, agent_body);
 }
 
 bool
@@ -137,7 +134,7 @@ SoccerBase::GetAgentState(const Leaf& base,
         return false;
     }
 
-    return SoccerBase::GetAgentState(parent,agent_state);
+    return GetAgentState(parent,agent_state);
 }
 
 bool
@@ -176,20 +173,67 @@ SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
             shared_ptr<Transform> agentAspect =
              shared_dynamic_cast<Transform>(*iter);
 
-            GetAgentState(agentAspect, agentState);
-
-            if (
+            if (GetAgentState(agentAspect, agentState) &&
                 (agentState->GetTeamIndex() == idx) &&
-                (agentState->GetUniformNumber() == unum)
-               )
+                (agentState->GetUniformNumber() == unum))
             {
                 return true;
             }
         }
-
-        return false;
     }
+    return false;
 }
+
+bool
+SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
+                           std::list<boost::shared_ptr<AgentState> >& agentStates,
+                           TTeamIndex idx)
+{
+    // get the active scene
+    shared_ptr<Scene> activeScene;
+
+    if (GetActiveScene(base, activeScene))
+    {
+        Leaf::TLeafList leafList;
+
+        // get a list of all the agent aspects
+        activeScene->GetChildrenOfClass("AgentAspect", leafList);
+
+        if (leafList.size() == 0)
+        {
+            base.GetLog()->Error()
+                << "ERROR: (SoccerBase) active scene doesn't have "
+                << "children of type AgentAspect\n";
+
+            return false;
+        }
+
+        shared_ptr<AgentState> agentState;
+        Leaf::TLeafList::iterator iter = leafList.begin();
+        // search through the list to find an agent state
+        // with matching team index
+        for (iter;
+             iter != leafList.end();
+             ++iter
+            )
+        {
+            shared_ptr<Transform> agentAspect =
+                shared_dynamic_cast<Transform>(*iter);
+
+            if (agentAspect.get() == 0) continue;
+
+            if (GetAgentState(agentAspect, agentState) &&
+                ((agentState->GetTeamIndex() == idx) ||
+                 (idx == TI_NONE)))
+            {
+                agentStates.push_back(agentState);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 
 bool
 SoccerBase::GetGameState(const Leaf& base,
@@ -326,7 +370,8 @@ salt::Vector3f
 SoccerBase::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
 {
     salt::Vector3f newPos;
-    switch (ti) {
+    switch (ti)
+    {
     case TI_NONE:
         newPos[0] = 0.0;
         newPos[1] = 0.0;
@@ -344,41 +389,79 @@ SoccerBase::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
     return newPos;
 }
 
+TTeamIndex
+SoccerBase::OpponentTeam(TTeamIndex ti)
+{
+    switch (ti)
+    {
+    case TI_RIGHT:
+        return TI_LEFT;
+    case TI_LEFT:
+        return TI_RIGHT;
+    default:
+        return TI_NONE;
+    }
+}
+
 string
 SoccerBase::PlayMode2Str(const TPlayMode mode)
 {
     switch (mode)
-        {
-        case PM_BeforeKickOff:
-            return STR_PM_BeforeKickOff;
+    {
+    case PM_BeforeKickOff:
+        return STR_PM_BeforeKickOff;
 
-        case PM_KickOff_Left:
-            return STR_PM_KickOff_Left;
+    case PM_KickOff_Left:
+        return STR_PM_KickOff_Left;
 
-        case PM_KickOff_Right:
-            return STR_PM_KickOff_Right;
+    case PM_KickOff_Right:
+        return STR_PM_KickOff_Right;
 
-        case PM_PlayOn:
-            return STR_PM_PlayOn;
+    case PM_PlayOn:
+        return STR_PM_PlayOn;
 
-        case PM_KickIn_Left:
-            return STR_PM_KickIn_Left;
+    case PM_KickIn_Left:
+        return STR_PM_KickIn_Left;
 
-        case PM_KickIn_Right:
-            return STR_PM_KickIn_Right;
+    case PM_KickIn_Right:
+        return STR_PM_KickIn_Right;
 
-        case PM_GameOver:
-            return STR_PM_GameOver;
+    case PM_CORNER_KICK_LEFT:
+        return STR_PM_CORNER_KICK_LEFT;
 
-        case PM_Goal_Left:
-            return STR_PM_Goal_Left;
+    case PM_CORNER_KICK_RIGHT:
+        return STR_PM_CORNER_KICK_RIGHT;
 
-        case PM_Goal_Right:
-            return STR_PM_Goal_Right;
+    case PM_GOAL_KICK_LEFT:
+        return STR_PM_GOAL_KICK_LEFT;
 
-        default:
-            return STR_PM_Unknown;
-        };
+    case PM_GOAL_KICK_RIGHT:
+        return STR_PM_GOAL_KICK_RIGHT;
+
+    case PM_OFFSIDE_LEFT:
+        return STR_PM_OFFSIDE_LEFT;
+
+    case PM_OFFSIDE_RIGHT:
+        return STR_PM_OFFSIDE_RIGHT;
+
+    case PM_GameOver:
+        return STR_PM_GameOver;
+
+    case PM_Goal_Left:
+        return STR_PM_Goal_Left;
+
+    case PM_Goal_Right:
+        return STR_PM_Goal_Right;
+
+    case PM_FREE_KICK_LEFT:
+        return STR_PM_FREE_KICK_LEFT;
+
+    case PM_FREE_KICK_RIGHT:
+        return STR_PM_FREE_KICK_RIGHT;
+
+    default:
+        return STR_PM_Unknown;
+    };
 }
 
 shared_ptr<ControlAspect>
