@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.2.2.2 2003/12/23 12:05:23 rollmark Exp $
+   $Id: sexpparser.cpp,v 1.2.2.3 2003/12/23 16:08:00 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ SexpParser::Parse(const std::string& input)
 
     while (sexp != 0)
     {
-        predicate = SexpToPlist(sexp);
+        predicate = SexpToPredicate(sexp);
         if (!predicate.name.empty())
         {
             pList->push_back(predicate);
@@ -67,8 +67,7 @@ SexpParser::Generate(shared_ptr<TPredicateList> input)
 
     while (i != input->end())
     {
-        s += '(' + i->name +  " ";
-        s += ListToString(i->parameter) + ')';
+        s += PredicateToString(*i);
         ++i;
     }
     return s;
@@ -97,7 +96,7 @@ SexpParser::SexpToList(const sexp_t* const sexp)
 }
 
 BaseParser::TPredicate
-SexpParser::SexpToPlist(const sexp_t* const sexp)
+SexpParser::SexpToPredicate(const sexp_t* const sexp)
 {
     TPredicate predicate;
 
@@ -148,13 +147,13 @@ SexpParser::ListToString(const TParameterList& lst)
 
         space = " ";
     }
-    return space + s;
+    return s;
 }
 
 std::string
-SexpParser::PlistToString(const TPredicate& plist)
+SexpParser::PredicateToString(const TPredicate& plist)
 {
-    string s = '(' + plist.name;
+    string s = '(' + plist.name + ' ';
     s += ListToString(plist.parameter);
     return s + ')';
 }
