@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.17 2004/04/15 14:15:35 rollmark Exp $
+   $Id: body.cpp,v 1.18 2004/04/15 21:21:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -134,7 +134,8 @@ Body::SetMass(float mass)
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-float Body::GetMass()
+float
+Body::GetMass() const
 {
     dMass m;
     dBodyGetMass(mODEBody, &m);
@@ -225,20 +226,23 @@ void Body::SetVelocity(const Vector3f& vel)
     dBodySetLinearVel(mODEBody, vel[0], vel[1], vel[2]);
 }
 
-void Body::SetRotation(const Matrix& rot)
+void
+Body::SetRotation(const Matrix& rot)
 {
     dMatrix3 m;
     ConvertRotationMatrix(rot,m);
     dBodySetRotation(mODEBody,m);
 }
 
-Vector3f Body::GetAngularVelocity()
+Vector3f
+Body::GetAngularVelocity() const
 {
     const dReal* vel = dBodyGetAngularVel(mODEBody);
     return Vector3f(vel[0], vel[1], vel[2]);
 }
 
-void Body::SetAngularVelocity(const Vector3f& vel)
+void
+Body::SetAngularVelocity(const Vector3f& vel)
 {
     dBodySetAngularVel(mODEBody, vel[0], vel[1], vel[2]);
 }
@@ -317,10 +321,16 @@ Body::AddTorque(const Vector3f& torque)
     dBodyAddTorque(mODEBody, torque.x(), torque.y(), torque.z());
 }
 
-void Body::SetPosition(const Vector3f& pos)
+void
+Body::SetPosition(const Vector3f& pos)
 {
     dBodySetPosition(mODEBody, pos.x(), pos.y(), pos.z());
     // the parent node will be updated in the next physics cycle
 }
 
-
+Vector3f
+Body::GetPosition() const
+{
+    const dReal* pos = dBodyGetPosition(mODEBody);
+    return Vector3f(pos[0], pos[1], pos[2]);
+}

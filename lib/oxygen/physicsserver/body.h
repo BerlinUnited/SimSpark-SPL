@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.12 2004/04/14 18:28:25 rollmark Exp $
+   $Id: body.h,v 1.13 2004/04/15 21:21:03 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ public:
     void SetMass(float mass);
 
     /** returns the mass of this body */
-    float GetMass();
+    float GetMass() const;
 
 
     /** sets the mass parameters to represent a sphere of the given
@@ -147,7 +147,7 @@ public:
     void SetRotation(const salt::Matrix& rot);
 
     /** returns the current angular velocity of this body */
-    salt::Vector3f GetAngularVelocity();
+    salt::Vector3f GetAngularVelocity() const;
 
     /** sets the current angular velocity of this body */
     void SetAngularVelocity(const salt::Vector3f& vel);
@@ -163,6 +163,9 @@ public:
 
     /** sets the position of the managed ODE body */
     void SetPosition(const salt::Vector3f& pos);
+
+    /** returns the current poosition of this body */
+    salt::Vector3f GetPosition() const;
 
 protected:
     /** creates the managed ODE body and moves it to the position of
