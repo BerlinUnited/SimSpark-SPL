@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.3 2004/05/17 19:13:20 markelic Exp $
+   $Id: gamestate.cpp,v 1.4 2004/05/19 16:36:04 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -327,7 +327,6 @@ GameState::ProcessInfo(const Predicate& predicate)
             }
             if (!predicate.GetValue(j, "say", pi.mMessage))
             {
-                std::cout<<"kein say gefunden\n";
                 pi.mMessage.clear();
             }
             if (mSeenPlayers.size() <= players_seen)
