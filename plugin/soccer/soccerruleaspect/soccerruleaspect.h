@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.2 2004/02/12 14:07:27 fruit Exp $
+   $Id: soccerruleaspect.h,v 1.3 2004/04/21 09:28:04 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,11 @@
 class GameStateAspect;
 class BallStateAspect;
 
+namespace salt
+{
+    class AABB2;
+}
+
 namespace oxygen
 {
     class Body;
@@ -43,6 +48,8 @@ public:
     */
     virtual void Update(float deltaTime);
 
+    virtual void UpdateCached();
+
 protected:
    /** set up the reference to the ball and field collider */
     virtual void OnLink();
@@ -57,10 +64,16 @@ protected:
     void UpdateBeforeKickOff();
 
     /** updates the RuleAspect during KickOff mode */
-    void UpdateKickOff();
+    void UpdateKickOff(TTeamIndex idx = TI_NONE);
 
     /** updates the RuleAspect during KickIn mode */
-    void UpdateKickIn();
+    void UpdateKickIn(TTeamIndex ti = TI_NONE);
+
+    /** updates the RuleAspect during Goal Kick mode */
+    void UpdateGoalKick(TTeamIndex ti = TI_NONE);
+
+    /** updates the RuleAspect during Corner Kick mode */
+    void UpdateCornerKick(TTeamIndex ti = TI_NONE);
 
     /** update the RuleAspect during PlayOn mode */
     void UpdatePlayOn();
@@ -83,6 +96,37 @@ protected:
     /** moves the ball to pos setting its linear and angular velocity
         to 0 */
     void MoveBall(const salt::Vector3f& pos);
+
+    /** Moves an agent to pos setting its linear and angular velocity to 0.
+     *  \param agent_body a reference to the agent body
+     *  \param pos the position where the agent should be
+     */
+    void MoveAgent(boost::shared_ptr<oxygen::Body> agent_body,
+                   const salt::Vector3f& pos);
+
+    /** Move all the players from a team which are too close to pos away
+        from pos.
+        \param pos the center of the area to be checked
+        \param radius the radius of the area to be checked
+        \param min_dist the minimum distance players will be moved away from pos
+        \param idx the team which should be checked.
+
+        If idx is TI_NONE, nothing will happen. Players are moved towards their
+        side of the field. If they would leave the playing field, they are moved
+        towards the X axis (the line from the left goal to the right goal).
+    */
+    void MoveAwayPlayers(const salt::Vector3f& pos, float radius,
+                         float min_dist, TTeamIndex idx);
+    /** Move all the players from a team inside an rectangular area away
+        from that area.
+        \param box the rectangular area to be checked
+        \param min_dist the minimum distance players will be moved away from box
+        \param idx the team which should be checked.
+
+        If idx is TI_NONE, nothing will happen. Players are moved towards their
+        side of the field.
+    */
+    void MoveAwayPlayers(const salt::AABB2& box, float min_dist, TTeamIndex idx);
 
 protected:
     /** reference to the body node of the Ball */
@@ -108,6 +152,28 @@ protected:
 
     /** the point above the ground, where the ball left the field */
     salt::Vector3f mLastValidBallPos;
+    /** the field length (in meters) */
+    float mFieldLength;
+    /** the field width (in meters) */
+    float mFieldWidth;
+    /** the goal width (in meters) */
+    float mGoalWidth;
+    /** the point on the field where we do the kick in, free kick etc. */
+    salt::Vector3f mFreeKickPos;
+    /** the distance opponents have to keep during free kicks, kick ins etc. */
+    float mFreeKickDist;
+    /** the (least) distance opponents will be moved away if they are to close
+        during a free kick, kick in and situations like that. */
+    float mFreeKickMoveDist;
+    // areas where opponents are not allowed in certain play modes
+    /** bounding box for the right half of the field */
+    salt::AABB2 mRightHalf;
+    /** bounding box for the left half of the field */
+    salt::AABB2 mLeftHalf;
+    /** bounding box for the right penalty area */
+    salt::AABB2 mRightPenaltyArea;
+    /** bounding box for the left penalty area */
+    salt::AABB2 mLeftPenaltyArea;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);
