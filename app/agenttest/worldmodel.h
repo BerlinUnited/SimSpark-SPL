@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.h,v 1.1.2.2 2004/02/08 14:01:46 rollmark Exp $
+   $Id: worldmodel.h,v 1.1.2.3 2004/02/08 17:14:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,6 +70,13 @@ public:
     /** returns the polar coordinates of the requested object */
     VisionSense GetVisionSense(VisionObject obj);
 
+    /** returns the global cartesian coordinates of the sensed
+        object */
+    salt::Vector3f GetPosition(VisionSense sense);
+
+    /** returns the coordinates of the requested object */
+    salt::Vector3f GetObjectPosition(VisionObject obj);
+
     /** returns the current PlayMode */
     TPlayMode GetPlayMode();
 
@@ -81,6 +88,17 @@ public:
 
     /** returns the players calculated position */
     salt::Vector3f GetMyPosition();
+
+    /** returns the players team index */
+    TTeamIndex GetMyTeam();
+
+    float GetFieldWidth() { return mFieldWidth; }
+    float GetFieldLength() { return mFieldLength; }
+
+    float GetAgentRadius() { return mAgentRadius; }
+    float GetBallRadius() { return mBallRadius; }
+
+    float GetMinimalKickDistance();
 
 protected:
     virtual bool ConstructInternal();
@@ -167,7 +185,8 @@ protected:
     float mTime;
     TPlayMode mPlayMode;
 
-    // vision perceptor data
+    // the players position
+    salt::Vector3f mMyPos;
 };
 
 DECLARE_CLASS(WorldModel);
