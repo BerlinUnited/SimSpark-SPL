@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.7 2003/12/02 17:25:19 cringel Exp $
+   $Id: renderserver.h,v 1.8 2004/02/12 14:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ protected:
 
 private:
     /** render a scene recursively.
-        \param scene the scene base node
+        \param node the scene base node
     */
     void RenderScene(boost::shared_ptr<oxygen::BaseNode> node);
 

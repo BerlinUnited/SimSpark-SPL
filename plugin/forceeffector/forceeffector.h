@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.h,v 1.3 2003/12/27 17:53:42 fruit Exp $
+   $Id: forceeffector.h,v 1.4 2004/02/12 14:07:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define FORCEEFFECTOR_H
 
 #include <oxygen/agentaspect/effector.h>
+#include <oxygen/physicsserver/body.h>
 
 class ForceEffector : public oxygen::Effector
 {
@@ -43,14 +44,15 @@ public:
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
 
-    //
-    // members
-    //
-private:
-    // the accumulated force this effector applies
-    salt::Vector3f mForce;
-    //! maximum amount of force, this effector can apply
-    float mMaxForce;
+    /** setup the reference to the agents body node */
+    virtual void OnLink();
+
+    /** remove the reference to the agents body node */
+    virtual void OnUnlink();
+
+protected:
+    /** the reference to the parents body node */
+    boost::shared_ptr<oxygen::Body> mBody;
 };
 
 DECLARE_CLASS(ForceEffector);

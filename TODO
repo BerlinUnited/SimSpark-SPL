@@ -1,20 +1,23 @@
-===== Dez 31 2003
+===== 03 Feb 04
 
-Currently, most soccer specific stuff is missing. Things
-like rules, score, and a real soccer field have to be implemented
-next. The basic infrastructure for all these lacking features has 
-already been created so that a version 0.2 should be ready in near 
-future. 
+- Spades Timing (Sense Intervals, Acting)
++ Kicker: solve effet (done)
++ Kicker: latitudal angle (done)
+- Kick and run team
+- Agents need to get information about team
++ Flag names
+- Game States:
+  before kick off
+  kick in: ball inside field
+  goal_l / goal_right 
+  corner_kick
+  goal_kick_l / r (beam ball in front of goal)  
+  half time (timing?)
++ list of features (comparison to soccer) / description of perceptors/actuators
+/ Battery / Temperature ???
+- change play mode from monitor
+- scripts
 
-Branch: rcssserver3D-0.2
-
-  - add some control aspects
-    Control aspects will be responsible for setting a game state,
-    controlling the use of effectors and the soccer rules. A first
-    possible control aspect could be one setting the game state (like
-    play_on, before_kick_off, ...). Other CAs in later versions.
-
-  - add more effectors / perceptors
 
 Branch: rcssserver3D-0.3
 This should be the branch where the latest changes for Lisbon are

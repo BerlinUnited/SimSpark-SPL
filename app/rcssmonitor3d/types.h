@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: types.h,v 1.3 2003/12/27 17:53:40 fruit Exp $
+   $Id: types.h,v 1.4 2004/02/12 14:07:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,12 +22,34 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
+// communication params
 #define MAX_MSG_LEN 4096
 
 #define DEFAULT_PORT 12001
 #define DEFAULT_HOST "localhost"
 
-#define DEFAULT_WIDTH  500
-#define DEFAULT_HEIGHT 500
+// mouse params
+#define DEFAULT_MOUSE_POSX 0
+#define DEFAULT_MOUSE_POSY 0
+
+//soccer field params
+#define DEFAULT_WIDTH  700
+#define DEFAULT_HEIGHT 700
+
+#define DEFAULT_FIELD_LENGTH 105.0
+#define DEFAULT_FIELD_WIDTH  68.0
+#define DEFAULT_FIELD_HEIGHT 20.0
+
+#define DEFAULT_BORDER_SIZE  4.0
+
+#define DEFAULT_GOAL_WIDTH   7.32
+#define DEFAULT_GOAL_DEPTH   2.0
+#define DEFAULT_GOAL_HEIGHT  2.44
+
+// camera mode
+#define DEFAULT_AUTO_CAM 0
+
+// default draw mode
+#define DEFAULT_DRAW_UNUMS true
 
 #endif // _TYPES_H

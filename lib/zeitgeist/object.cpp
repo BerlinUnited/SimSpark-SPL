@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: object.cpp,v 1.4 2003/08/27 22:44:27 fruit Exp $
+   $Id: object.cpp,v 1.5 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -89,8 +89,13 @@ void Object::Invoke(const std::string &functionName)
 
     Class::TCmdProc cmd = mClass->GetCmdProc(functionName);
     if (cmd != NULL)
+      {
         if (shared_ptr<Object> self = GetSelf().lock())
-            cmd(self.get(), in);
+          {
+            VALUE out;
+            cmd(self.get(), in, out);
+          }
+      }
 }
 
 const boost::shared_ptr<FileServer>& Object::GetFile() const

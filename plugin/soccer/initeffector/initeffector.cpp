@@ -3,8 +3,8 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.3 2004/01/01 18:24:34 fruit Exp $
+   Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
+   $Id: initeffector.cpp,v 1.4 2004/02/12 14:07:26 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,11 +22,17 @@
 #include "initaction.h"
 #include "initeffector.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/predicate.h>
+#include <oxygen/physicsserver/body.h>
+#include <soccer/soccerbase/soccerbase.h>
+#include <soccer/agentstate/agentstate.h>
+#include <soccer/gamestateaspect/gamestateaspect.h>
 #include <sstream>
 
 using namespace boost;
 using namespace oxygen;
+using namespace salt;
 
 InitEffector::InitEffector() : oxygen::Effector()
 {
@@ -39,6 +45,14 @@ InitEffector::~InitEffector()
 bool
 InitEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
+    if (
+        (mGameState.get() == 0) ||
+        (mAgentAspect.get() == 0)
+        )
+        {
+            return false;
+        }
+
     shared_ptr<InitAction> initAction =
         shared_dynamic_cast<InitAction>(action);
 
@@ -49,24 +63,32 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    // we want to change the name of the parent node
-    shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+    // search for the AgentState
+    shared_ptr<AgentState> state = shared_static_cast<AgentState>
+        (mAgentAspect->GetChildOfClass("AgentState",true));
 
-    if (parent.get() == 0)
+    if (state.get() == 0)
     {
         GetLog()->Error()
-            << "ERROR: (InitEffector) parent node is not derived from BaseNode\n";
+            << "ERROR: (InitEffector) cannot find AgentState\n";
         return false;
     }
 
-    if (initAction->GetName().empty()) return false;
+    // register the uniform number and team index to the GameStateAspect
+    mGameState->RequestUniform
+        (state, initAction->GetName(), initAction->GetNumber());
 
-    // temporary way of setting name and unum.
-    std::ostringstream ost;
-    ost << "#" << initAction->GetNumber();
+    // request an initial position for the agent and move it there
+    Vector3f pos = mGameState->RequestInitPosition(state->GetTeamIndex());
 
-    parent->SetName(initAction->GetName() + ost.str());
+    shared_ptr<Body> body;
+    if (SoccerBase::GetAgentBody(mAgentAspect,body))
+        {
+            body->SetPosition(pos);
+            body->SetVelocity(Vector3f(0,0,0));
+            body->SetAngularVelocity(Vector3f(0,0,0));
+        }
+
     return true;
 }
 
@@ -77,30 +99,35 @@ InitEffector::GetActionObject(const Predicate& predicate)
     {
         GetLog()->Error() << "ERROR: (InitEffector) invalid predicate"
                           << predicate.name << "\n";
-        return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+        return shared_ptr<ActionObject>();
     }
 
     Predicate::TParameterList::const_iterator iter;
     std::string name;
-    if (predicate.FindParameter(iter, "teamname"))
-    {
-        Predicate::TParameterList plist =
-            boost::any_cast<Predicate::TParameterList>(*iter);
-        iter = plist.begin();
-        if (++iter != plist.end())
-            predicate.GetValue(iter,name);
-    }
+    predicate.GetValue("teamname",name);
 
-    int unum;
-    if (predicate.FindParameter(iter, "unum"))
-    {
-        Predicate::TParameterList plist =
-            boost::any_cast<Predicate::TParameterList>(*iter);
-        iter = plist.begin();
-        if (++iter != plist.end())
-            predicate.GetValue(iter,unum);
-    }
+    int unum = 0;
+    predicate.GetValue("unum",unum);
 
-    return shared_ptr<ActionObject>(new InitAction(name,unum));
+    return shared_ptr<ActionObject>(new InitAction(GetPredicate(),name,unum));
 }
+
+void InitEffector::OnLink()
+{
+    mGameState = shared_dynamic_cast<GameStateAspect>
+        (SoccerBase::GetControlAspect(*this,"GameStateAspect"));
+    mAgentAspect = GetAgentAspect();
+    if (mAgentAspect.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (InitEffector) cannot get AgentAspect\n";
+    }
+}
+
+void InitEffector::OnUnlink()
+{
+    mGameState.reset();
+    mAgentAspect.reset();
+}
+
 

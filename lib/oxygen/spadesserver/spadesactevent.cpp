@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesactevent.cpp,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: spadesactevent.cpp,v 1.3 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,5 +68,8 @@ bool SpadesActEvent::realizeEventWorldModel(spades::WorldModel* pWM)
       }
 
   // realize the stored actions
-  return agent->RealizeActions(mActionList);
+  agent->RealizeActions(mActionList);
+
+  // indicate that we 'did something' with the event
+  return true;
 }

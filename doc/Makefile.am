@@ -9,6 +9,7 @@ doc: Doxyfile
 	rm -rf $(srcdir)/html/developers
 	mkdir --parents $(srcdir)/html/developers
 	cp *.html html/developers
+	doxygen Doxyfile
 if DOXYGEN
 	doxygen Doxyfile
 else
@@ -18,13 +19,12 @@ endif
 install-data-local: doc
 	mkdir --parents $(DESTDIR)$(pkgdatadir)/html/developers
 	$(INSTALL_DATA) $(srcdir)/html/*.* $(DESTDIR)$(pkgdatadir)/html/
-	$(INSTALL_DATA) $(srcdir)/html/developers/*.* $(DESTDIR)$(pkgdatadir)/html/developers/
 
 maintainer-clean-local:
 	rm -rf html
 	rm -rf *~
 
-EXTRA_DIST = \
+EXTRA_DIST = TEXT_INSTEAD_OF_A_MANUAL.txt \
 fileserver.html \
 howto_agent.html \
 howto_class.html \

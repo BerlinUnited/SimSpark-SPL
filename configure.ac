@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d], 0.1, [sserver-admin@lists.sf.net])
+AC_INIT([rcssserver3d], 0.2, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([lib/salt/salt.h])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
@@ -124,9 +124,8 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
 		 plugin/sexpparser/Makefile \
 		 plugin/soccer/Makefile \
-		 plugin/soccer/initeffector/Makefile \
-		 plugin/soccer/createeffector/Makefile \
 		 plugin/soundsystemfmod/Makefile \
+		 plugin/collisionperceptor/Makefile \
 		 app/Makefile \
 		 app/agenttest/Makefile \
 		 app/coretest/Makefile \
@@ -141,6 +140,6 @@ AC_CONFIG_FILES([Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile],
-		 [test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D \
-	          test -f app/simulator/createagentdb.sh && chmod +x app/simulator/createagentdb.sh])
+	        [test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D \
+                 test -f app/simulator/createagentdb.sh && chmod +x app/simulator/createagentdb.sh])
 AC_OUTPUT

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fpscontroller.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: fpscontroller.h,v 1.5 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,11 +28,12 @@ namespace oxygen
 {
 
 /** FPSController is a node, that provides first person shooter (FPS)
- * movement, i.e. moving forward, backward, strafing etc. It's intended usage
- * is as a child node of an ODE body. The node maintains a state for each
- * movement. This state can either be activated or deactivated with some
- * accessor functions. As long as a state is activated the node performs the
- * associated action during each time step.
+ * movement, i.e. moving forward, backward, strafing etc. It's
+ * intended usage is as a child node of an ODE body. The node
+ * maintains a state for each movement. This state can either be
+ * activated or deactivated with some accessor functions. As long as a
+ * state is activated the node performs the associated action during
+ * each time step.
  */
 class FPSController : public BaseNode
 {
@@ -44,45 +45,43 @@ public:
     ~FPSController();
 
     /** adds a delta increment to the current horizontal angle */
-    void AdjustHAngle(const float delta)
-    {       mHAngle += delta;       }
+    void AdjustHAngle(const float delta);
 
     /** adds a delta increment to the current vertical angle */
-    void AdjustVAngle(const float delta) {       mVAngle += delta;       }
+    void AdjustVAngle(const float delta);
 
     /** enables or disables forward movement */
-    void Forward(const bool state)
-    {       mForward = state;       }
+    void Forward(const bool state);
 
     /** enables or disables backwad movement */
-    void Backward(const bool state) {       mBackward = state;      }
+    void Backward(const bool state);
 
     /** enables or disables left strafing */
-    void StrafeLeft(const bool state)    {       mLeft = state;  }
+    void StrafeLeft(const bool state);
 
     /** enables or disables right strafing */
-    void StrafeRight(const bool state)   {       mRight= state;  }
+    void StrafeRight(const bool state);
 
     /** enables or disables up movement */
-    void Up(const bool state)                    {       mUp = state;    }
+    void Up(const bool state);
 
     /** enables or disables down movement */
-    void Down(const bool state)                  {       mDown = state;  }
+    void Down(const bool state);
 
 private:
-    /** calculates and applies the force needed to perfom the activated
-     * movements */
+    /** calculates and applies the force needed to perfom the
+     * activated movements */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
+
     //
     // Members
     //
 protected:
-
     /** the current horizontal angle */
-    float   mHAngle;        // horizontal angle
+    float   mHAngle;
 
     /** the current vertical angle */
-    float   mVAngle;        // vertical angle
+    float   mVAngle;
 
     // event states
 

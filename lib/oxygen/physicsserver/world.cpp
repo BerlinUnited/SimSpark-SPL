@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: world.cpp,v 1.3 2003/08/31 21:53:45 fruit Exp $
+   $Id: world.cpp,v 1.4 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,67 +23,64 @@
 
 using namespace oxygen;
 
-World::World() :
-    mODEWorld(0)
+World::World() : mODEWorld(0)
 {
 }
 
 World::~World()
 {
-    // release ode world
-    if (mODEWorld)
+  // release the ODE world
+  if (mODEWorld)
     {
-        dWorldDestroy(mODEWorld);
-        mODEWorld = 0;
+      dWorldDestroy(mODEWorld);
+      mODEWorld = 0;
     }
 }
 
 dWorldID World::GetODEWorld() const
 {
-    return mODEWorld;
+  return mODEWorld;
 }
 
 void World::SetGravity(float x, float y, float z)
 {
-    dWorldSetGravity(mODEWorld, x, y, z);
+  dWorldSetGravity(mODEWorld, x, y, z);
 }
 
 void World::SetGravity(const salt::Vector3f &v)
 {
-    SetGravity(v.x(), v.y(), v.z());
+  SetGravity(v.x(), v.y(), v.z());
 }
 
 void World::SetERP(float erp)
 {
-    dWorldSetERP(mODEWorld, erp);
+  dWorldSetERP(mODEWorld, erp);
 }
 
 float World::GetERP() const
 {
-    return dWorldGetERP(mODEWorld);
+  return dWorldGetERP(mODEWorld);
 }
 
 void World::SetCFM(float cfm)
 {
-    dWorldSetCFM(mODEWorld, cfm);
+  dWorldSetCFM(mODEWorld, cfm);
 }
 
 float World::GetCFM() const
 {
-    return dWorldGetCFM(mODEWorld);
+  return dWorldGetCFM(mODEWorld);
 }
 
 void World::Step(float deltaTime)
 {
-    dWorldStep(mODEWorld, deltaTime);
+  dWorldStep(mODEWorld, deltaTime);
 }
 
 bool World::ConstructInternal()
 {
-    if (!ODEObject::ConstructInternal()) return false;
+  // create an ode world
+  mODEWorld = dWorldCreate();
 
-    // create an ode world
-    mODEWorld = dWorldCreate();
-
-    return (mODEWorld != 0);
+  return (mODEWorld != 0);
 }

@@ -5,6 +5,7 @@ SUBDIRS = \
 	  inputsdl \
 	  monitortest \
 	  perfectvisionperceptor \
+	  collisionperceptor \
 	  sexpparser \
 	  soccer \
 	  soundsystemfmod

@@ -283,7 +283,7 @@ AC_DEFUN(RCSS_BUILD_KEROSIN, [
     	AC_MSG_CHECKING([if libkerosin will be build])
  	AC_MSG_RESULT([$rcss_build_kerosin])
 	RCSS_KEROSIN_IF_ELSE([AC_DEFINE(HAVE_KEROSIN_H, 1, [Define to 1 if using the kerosin header])],[
- 		AC_MSG_WARN([libkerosin will not be build.])
+ 		AC_MSG_NOTICE([libkerosin will not be build. That does not matter now.])
     		AC_MSG_NOTICE([the list of libraries required for kerosin can be found in the documentation])
  	])
 	AM_CONDITIONAL(BUILD_KEROSIN, test x$rcss_build_kerosin = xyes)

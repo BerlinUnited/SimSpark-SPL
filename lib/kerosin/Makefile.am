@@ -4,11 +4,13 @@ pkglib_LTLIBRARIES = libkerosin_debug.la
 libkerosin_debug_la_SOURCES = $(sources)
 libkerosin_debug_la_CXXFLAGS = -O -g -W -Wall
 libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
+libkerosin_debug_la_LDFLAGS = -version-info 0:0:0
 else
 pkglib_LTLIBRARIES = libkerosin.la
 libkerosin_la_SOURCES = $(sources)
 libkerosin_la_CXXFLAGS = -O2
 libkerosin_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
+libkerosin_la_LDFLAGS = -version-info 0:0:0
 endif
 endif
 
@@ -25,6 +27,8 @@ CLEANFILES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 BUILT_SOURCES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
 nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
 nobase_nodist_libpkginclude_HEADERS = openglserver/glextensionreg.h
+
+GLEXTENSIONREG=openglserver/glextensionreg.cpp
 
 openglserver/glextensionreg.cpp: ${top_srcdir}/utility/glextgen/glextensionreg.cpp
 	@echo "Copying generated glextension sources"
@@ -75,7 +79,8 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
 renderserver/renderserver.cpp \
-renderserver/renderserver_c.cpp 
+renderserver/renderserver_c.cpp \
+$(GLEXTENSIONREG)
 
 nobase_libpkginclude_HEADERS = \
 fontserver/font.h \

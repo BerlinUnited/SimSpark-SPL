@@ -3,11 +3,13 @@ pkglib_LTLIBRARIES = liboxygen_debug.la
 liboxygen_debug_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall -Woverloaded-virtual -Wno-deprecated 
 liboxygen_debug_la_LIBADD = -lode ${spades_libs}
+liboxygen_debug_la_LDFLAGS = -version-info 1:0:0
 else
 pkglib_LTLIBRARIES = liboxygen.la
 liboxygen_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_la_CXXFLAGS = -O2 -Wno-deprecated 
 liboxygen_la_LIBADD = -lode $(spades_libs)
+liboxygen_la_LDFLAGS = -version-info 1:0:0
 endif
 
 if BUILD_SPADES_MODULES
@@ -43,15 +45,12 @@ dist_pkgdata_DATA = oxygen.rb
 sources = \
 agentaspect/agentaspect.cpp \
 agentaspect/agentaspect_c.cpp \
-agentaspect/collisionperceptor.cpp \
-agentaspect/collisionperceptor_c.cpp \
 agentaspect/effector.cpp \
 agentaspect/effector_c.cpp \
 agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
-gamecontrolserver/baseparser.cpp \
 gamecontrolserver/actionobject_c.cpp \
 gamecontrolserver/baseparser.cpp \
 gamecontrolserver/baseparser_c.cpp \
@@ -67,12 +66,20 @@ physicsserver/ccylindercollider.cpp \
 physicsserver/ccylindercollider_c.cpp \
 physicsserver/collider.cpp \
 physicsserver/collider_c.cpp \
+physicsserver/collisionhandler.cpp \
+physicsserver/collisionhandler_c.cpp \
+physicsserver/contactjointhandler.cpp \
+physicsserver/contactjointhandler_c.cpp \
 physicsserver/odeobject.cpp \
 physicsserver/odeobject_c.cpp \
 physicsserver/physicsserver.cpp \
 physicsserver/physicsserver_c.cpp \
 physicsserver/planecollider.cpp \
 physicsserver/planecollider_c.cpp \
+physicsserver/raycollider.cpp \
+physicsserver/raycollider_c.cpp \
+physicsserver/recorderhandler.cpp \
+physicsserver/recorderhandler_c.cpp \
 physicsserver/space.cpp \
 physicsserver/space_c.cpp \
 physicsserver/spherecollider.cpp \
@@ -98,7 +105,6 @@ monitorserver/monitorsystem_c.cpp
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
-agentaspect/collisionperceptor.h \
 agentaspect/effector.h \
 agentaspect/perceptor.h \
 agentaspect/createaction.h \
@@ -112,9 +118,13 @@ physicsserver/body.h \
 physicsserver/boxcollider.h \
 physicsserver/ccylindercollider.h \
 physicsserver/collider.h \
+physicsserver/collisionhandler.h \
+physicsserver/contactjointhandler.h \
 physicsserver/odeobject.h \
 physicsserver/physicsserver.h \
 physicsserver/planecollider.h \
+physicsserver/raycollider.h \
+physicsserver/recorderhandler.h \
 physicsserver/space.h \
 physicsserver/spherecollider.h \
 physicsserver/world.h \

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.2 2003/12/27 17:53:42 fruit Exp $
+   $Id: beameffector_c.cpp,v 1.2 2004/02/12 14:07:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,9 +20,12 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "createeffector.h"
-#include <zeitgeist/zeitgeist.h>
+#include "beameffector.h"
 
-ZEITGEIST_EXPORT_BEGIN()
-        ZEITGEIST_EXPORT(CreateEffector);
-ZEITGEIST_EXPORT_END()
+using namespace oxygen;
+
+void
+CLASS(BeamEffector)::DefineClass()
+{
+    DEFINE_BASECLASS(kerosin/Effector);
+}

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.2 2003/12/27 17:53:42 fruit Exp $
+   $Id: createeffector.cpp,v 1.3 2004/02/12 14:07:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,11 +25,15 @@
 #include <oxygen/gamecontrolserver/actionobject.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
-#include <oxygen/physicsserver/body.h>
-#include <oxygen/physicsserver/spherecollider.h>
 
 using namespace oxygen;
 using namespace boost;
+using namespace zeitgeist;
+using namespace std;
+
+CreateEffector::CreateEffector() : Effector()
+{
+}
 
 bool CreateEffector::Realize(shared_ptr<ActionObject> action)
 {
@@ -43,13 +47,7 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
       return false;
     }
 
-  //
-  // construct an agent depending on the type information stored in
-  // the CreateAction object; for now just create a default agent
-  //
-
   shared_ptr<AgentAspect> aspect = GetAgentAspect();
-
   if (aspect.get() == 0)
     {
       GetLog()->Error()
@@ -57,89 +55,12 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
       return false;
     }
 
-  // move different AgentAspect away from each other
-  // position has to be set before adding child references
-  static float x = -12.5;
-  static float y = 100;
-  static float z = -12.5;
-  aspect->SetLocalPos(x, y, z);
-  x+=10;
-  y+=50;
-  z+=10;
-
-  // construct the nodes below the AgentAspect
-
-  // add a sphere body and collider
-  shared_ptr<Body> physics =
-      shared_dynamic_cast<Body>(GetCore()->New("kerosin/Body"));
-
-  shared_ptr<SphereCollider>geometry =
-      shared_dynamic_cast<SphereCollider>(GetCore()->New("kerosin/SphereCollider"));
-
-  if (
-      (physics.get() == 0) ||
-      (geometry.get() == 0)
-      )
-      {
-          GetLog()->Error()
-              << "ERROR: (CreateEffector) cannot create Sphere\n";
-          return false;
-      } else
-          {
-              physics->SetName("_physics");
-              aspect->AddChildReference(physics);
-              physics->SetSphere(1.0, 1.0);
-              physics->SetMass(1.0);
-              physics->SetMaxSpeed(3.0);
-
-              geometry->SetName("_geometry");
-              aspect->AddChildReference(geometry);
-              geometry->SetRadius(1.0);
-          }
-
-  //
-  // spadestest.rb must import the plugins for the following to work
-  //
-
-  // add forceeffector
-  shared_ptr<Effector> effector =
-      shared_dynamic_cast<Effector>(GetCore()->New("ForceEffector"));
-
-  if (effector.get() == 0)
-      {
-          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the ForceEffector\n";
-          return false;
-      }
-
-  effector->SetName("_ForceEffector");
-  aspect->AddChildReference(effector);
-
-  // add init effector
-  effector = shared_dynamic_cast<Effector>(GetCore()->New("InitEffector"));
-
-  if (effector.get() == 0)
-  {
-      GetLog()->Error() << "ERROR: (CreateEffector) cannot create the InitEffector\n";
-      return false;
-  }
-
-  effector->SetName("_InitEffector");
-  aspect->AddChildReference(effector);
-
-  // add perfect vision perceptor
-  shared_ptr<Perceptor> perceptor =
-      shared_dynamic_cast<Perceptor>(GetCore()->New("PerfectVisionPerceptor"));
-
-  if (perceptor.get() == 0)
-      {
-          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the PerfectVisionPerceptor\n";
-          return false;
-      }
-
-  perceptor->SetName("_PerfectVisionPerceptor");
-  aspect->AddChildReference(perceptor);
-
-  GetLog()->Debug() << "(CreateEffector) created dummy agent" << std::endl;
+  // call the ruby addAgent function that has to be defined in the
+  // simulator init script with the AgentAspect path as the
+  // argument. This function is then responsible to construct the
+  // remaining agent nodes
+  string cmd = "addAgent('" + aspect->GetFullPath() + "')";
+  GetCore()->GetScriptServer()->Eval(cmd);
 
   return true;
 }
@@ -151,7 +72,7 @@ CreateEffector::GetActionObject(const Predicate& predicate)
     {
       GetLog()->Error() << "ERROR: (CreateEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+      return shared_ptr<ActionObject>();
     }
 
   //
@@ -159,6 +80,6 @@ CreateEffector::GetActionObject(const Predicate& predicate)
   // type should be passed later on and stored in the CreateAction object
   //
 
-  return shared_ptr<CreateAction>(new CreateAction());
+  return shared_ptr<CreateAction>(new CreateAction(GetPredicate()));
 }
 

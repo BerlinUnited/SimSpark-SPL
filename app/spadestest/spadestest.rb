@@ -1,11 +1,12 @@
 importBundle "filesystemstd"
 importBundle "sexpparser"
 importBundle "monitortest"
-importBundle "createeffector"
 
-# the CreateEffector uses these plugins
 importBundle "perfectvisionperceptor"
 importBundle "forceeffector"
+
+# import plugins specific to the soccer simulation
+importBundle "soccer"
 
 #
 # Init

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceaction.h,v 1.2 2003/12/21 23:36:38 fruit Exp $
+   $Id: forceaction.h,v 1.3 2004/02/12 14:07:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,10 +28,11 @@
 class ForceAction : public oxygen::ActionObject
 {
 public:
-    ForceAction(salt::Vector3f force)
-        : ActionObject("force"), mForce(force) {}
+    ForceAction(const std::string& predicate, salt::Vector3f force)
+        : ActionObject(predicate), mForce(force) {}
     virtual ~ForceAction() {}
 
+    /** returns the stored force vector */
     const salt::Vector3f& GetForce() { return mForce; }
 
 protected:

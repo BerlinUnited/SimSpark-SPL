@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.cpp,v 1.5 2003/12/27 17:53:41 fruit Exp $
+   $Id: oxygen.cpp,v 1.6 2004/02/12 14:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,8 +43,16 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
 
     // collider
     zg.GetCore()->RegisterClassObject(new CLASS(Collider), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(BoxCollider), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(CCylinderCollider), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(PlaneCollider), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(RayCollider), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(SphereCollider), "kerosin/");
+
+    // collision handler
+    zg.GetCore()->RegisterClassObject(new CLASS(CollisionHandler), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ContactJointHandler), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(RecorderHandler), "kerosin/");
 
     // agentaspect
     zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "kerosin/");
@@ -62,6 +70,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(MonitorSystem), "oxygen/");
 
     // game control and controlaspects
+    zg.GetCore()->RegisterClassObject(new CLASS(BaseParser), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(GameControlServer), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(ControlAspect), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(ActionObject), "kerosin/");

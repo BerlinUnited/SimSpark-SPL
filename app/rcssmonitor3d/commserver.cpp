@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.3 2003/12/27 17:53:40 fruit Exp $
+   $Id: commserver.cpp,v 1.4 2004/02/12 14:07:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,3 +76,38 @@ CommServer::GetPredicates()
 {
   return mPredicates;
 }
+
+void CommServer::SendMessage(const std::string& message)
+{
+    unsigned long len = htonl(message.size());
+    std::string s((const char*)&len,sizeof(len));
+    s += message;
+    mCommUnit.PutMessage(s);
+}
+
+void CommServer::SendPauseCmd()
+{
+    SendMessage("P");
+}
+
+void CommServer::SendRunCmd()
+{
+    SendMessage("R");
+}
+
+void CommServer::SendDisconnectCmd()
+{
+    SendMessage("D");
+}
+
+void CommServer::SendToWorldModel(const std::string& msg)
+{
+    SendMessage("W"+msg);
+}
+
+void CommServer::SendKickOffCmd()
+{
+    SendToWorldModel("(kickoff)");
+}
+
+

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.cpp,v 1.4 2003/09/09 16:04:20 rollmark Exp $
+   $Id: camera.cpp,v 1.5 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,97 +26,174 @@
 using namespace oxygen;
 using namespace salt;
 
-Camera::Camera() :
-BaseNode()
+Camera::Camera() : BaseNode()
 {
-        mViewTransform.Identity();
+  mViewTransform.Identity();
 
-        mFOV    = 60.0f;
-        mZNear  = 1.0f;
-        mZFar   = 2000.0f;
-        mX              = 0;
-        mY              = 0;
-        mWidth  = 640;
-        mHeight = 480;
+  mFOV    = 60.0f;
+  mZNear  = 1.0f;
+  mZFar   = 2000.0f;
+  mX      = 0;
+  mY      = 0;
+  mWidth  = 640;
+  mHeight = 480;
 
-        SetName("camera");
+  SetName("camera");
 }
 
 Camera::~Camera()
 {
 }
 
-/*!
-        This is some dangerous looking code, but it's not as bad as it seems.
-        The code extracts a frustum given the projection and view transforms.
-        It is really fast and very generic because of that.
+/** This is some dangerous looking code, but it's not as bad as it
+    seems.  The code extracts a frustum given the projection and view
+    transforms.  It is really fast and very generic because of that.
 */
 void Camera::DescribeFrustum(Frustum& frustum) const
 {
-        // concatenate projection and view transform
-        Matrix frustumMatrix = mProjectionTransform * mViewTransform;
+  // concatenate projection and view transform
+  Matrix frustumMatrix = mProjectionTransform * mViewTransform;
 
-        // Get plane parameters
-    float *m= frustumMatrix.m;
+  // Get plane parameters
+  float* m = frustumMatrix.m;
 
-    Plane *p = &frustum.mPlanes[Frustum::PI_RIGHT];
-        p->normal.Set(m[3]-m[0], m[7]-m[4], m[11]-m[8]);
-        p->d = m[15]-m[12];
+  Plane *p = &frustum.mPlanes[Frustum::PI_RIGHT];
+  p->normal.Set(m[3]-m[0], m[7]-m[4], m[11]-m[8]);
+  p->d = m[15]-m[12];
 
-        p = &frustum.mPlanes[Frustum::PI_LEFT];
-        p->normal.Set(m[3]+m[0], m[7]+m[4], m[11]+m[8]);
-        p->d = m[15]+m[12];
+  p = &frustum.mPlanes[Frustum::PI_LEFT];
+  p->normal.Set(m[3]+m[0], m[7]+m[4], m[11]+m[8]);
+  p->d = m[15]+m[12];
 
-        p = &frustum.mPlanes[Frustum::PI_BOTTOM];
-        p->normal.Set(m[3]+m[1], m[7]+m[5], m[11]+m[9]);
-        p->d = m[15]+m[13];
+  p = &frustum.mPlanes[Frustum::PI_BOTTOM];
+  p->normal.Set(m[3]+m[1], m[7]+m[5], m[11]+m[9]);
+  p->d = m[15]+m[13];
 
-        p = &frustum.mPlanes[Frustum::PI_TOP];
-        p->normal.Set(m[3]-m[1], m[7]-m[5], m[11]-m[9]);
-        p->d = m[15]-m[13];
+  p = &frustum.mPlanes[Frustum::PI_TOP];
+  p->normal.Set(m[3]-m[1], m[7]-m[5], m[11]-m[9]);
+  p->d = m[15]-m[13];
 
-        p = &frustum.mPlanes[Frustum::PI_NEAR];
-        p->normal.Set(m[3]-m[2], m[7]-m[6], m[11]-m[10]);
-        p->d = m[15]-m[14];
+  p = &frustum.mPlanes[Frustum::PI_NEAR];
+  p->normal.Set(m[3]-m[2], m[7]-m[6], m[11]-m[10]);
+  p->d = m[15]-m[14];
 
-        p = &frustum.mPlanes[Frustum::PI_FAR];
-        p->normal.Set(m[3]+m[2], m[7]+m[6], m[11]+m[10]);
-        p->d = m[15]+m[14];
+  p = &frustum.mPlanes[Frustum::PI_FAR];
+  p->normal.Set(m[3]+m[2], m[7]+m[6], m[11]+m[10]);
+  p->d = m[15]+m[14];
 
-        // Normalize all plane normals
-        for(int i=0;i<6;++i)
-        {
-                frustum.mPlanes[i].Normalize();
-        }
+  // Normalize all plane normals
+  for(int i=0;i<6;++i)
+    {
+      frustum.mPlanes[i].Normalize();
+    }
 
-        // set base position
-        frustum.mBasePos = GetWorldTransform().Pos();
+  // set base position
+  frustum.mBasePos = GetWorldTransform().Pos();
 }
 
 void Camera::Bind()
 {
-        mViewTransform	= GetWorldTransform();
-        mViewTransform.InvertRotationMatrix();
+  mViewTransform        = GetWorldTransform();
+  mViewTransform.InvertRotationMatrix();
 
-        // setup the projection matrix
-        mProjectionTransform.CalcInfiniteFrustum(-mHalfWorldWidth, mHalfWorldWidth, -mHalfWorldHeight, mHalfWorldHeight, mZNear);
+  // setup the projection matrix
+  mProjectionTransform.CalcInfiniteFrustum(-mHalfWorldWidth, mHalfWorldWidth, -mHalfWorldHeight, mHalfWorldHeight, mZNear);
 }
 
 void Camera::OnLink()
 {
-        int xRes, yRes;
-        GetScript()->GetVariable("Viewport.xRes", xRes);
-        GetScript()->GetVariable("Viewport.yRes", yRes);
-
-        mWidth = xRes;
-        mHeight = yRes;
+  GetScript()->GetVariable("Viewport.xRes", mWidth);
+  GetScript()->GetVariable("Viewport.yRes", mHeight);
 }
 
 void Camera::UpdateHierarchyInternal()
 {
-        // make sure values are within bounds
-        gClamp(mFOV, 10.0f, 170.0f);
+  // make sure values are within bounds
+  gClamp(mFOV, 10.0f, 170.0f);
 
-        mHalfWorldWidth         = mZNear * (float)tan(gDegToRad(mFOV*0.5f));
-        mHalfWorldHeight        = mHalfWorldWidth * (mHeight/(float)mWidth);
+  mHalfWorldWidth =  mZNear * (float)tan(gDegToRad(mFOV*0.5f));
+  mHalfWorldHeight = mHalfWorldWidth * (mHeight/(float)mWidth);
+}
+
+void Camera::SetViewport(int x, int y, int width, int height)
+{
+  mX = x;
+  mY = y;
+  mWidth = width;
+  mHeight = height;
+}
+
+int Camera::GetViewportX()
+{
+  return mX;
+}
+
+int Camera::GetViewportY()
+{
+  return mY;
+}
+
+int Camera::GetViewportWidth()
+{
+  return mWidth;
+}
+
+int Camera::GetViewportHeight()
+{
+  return mHeight;
+}
+
+void Camera::SetFOV(const float fov)
+{
+  mFOV = fov;
+}
+
+void Camera::SetZNear(const float zNear)
+{
+  mZNear = zNear;
+}
+
+void Camera::SetZFar(const float zFar)
+{
+  mZFar = zFar;
+}
+
+void Camera::AdjustFOV(const float fov)
+{
+  mFOV+=fov;
+}
+
+void Camera::AdjustZNear(const float zNear)
+{
+  mZNear+=zNear;
+}
+
+void Camera::AdjustZFar(const float zFar)
+{
+  mZFar+=zFar;
+}
+
+float Camera::GetFOV() const
+{
+  return mFOV;
+}
+
+float Camera::GetZNear() const
+{
+  return mZNear;
+}
+
+float Camera::GetZFar()const
+{
+  return mZFar;
+}
+
+const salt::Matrix& Camera::GetViewTransform() const
+{
+  return mViewTransform;
+}
+
+const salt::Matrix& Camera::GetProjectionTransform() const
+{
+  return mProjectionTransform;
 }

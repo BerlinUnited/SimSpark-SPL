@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.4 2003/08/31 21:53:45 fruit Exp $
+   $Id: space.cpp,v 1.5 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,9 +21,8 @@
 
 #include "space.h"
 #include "world.h"
-#include "body.h"
-#include "../sceneserver/scene.h"
-#include "../agentaspect/collisionperceptor.h"
+#include "collider.h"
+#include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
@@ -32,31 +31,37 @@ using namespace oxygen;
 static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
 {
     Space *space = (Space*)data;
-
     space->HandleCollide(obj1, obj2);
 }
 
-Space::Space() :
-    mODESpace(0), mODEContactGroup(0), mWorld(0)
+Space::Space() : mODESpace(0), mODEContactGroup(0)
 {
 }
 
 Space::~Space()
 {
-    if (mODEContactGroup)
+  if (mODEContactGroup)
     {
-        //dJointGroupEmpty(mODEContactGroup);
-        dJointGroupDestroy(mODEContactGroup);
+      dJointGroupDestroy(mODEContactGroup);
+      mODEContactGroup = 0;
     }
 
-    // release the ODE space
-    if (mODESpace)
-        dSpaceDestroy(mODESpace);
+  // release the ODE space
+  if (mODESpace)
+    {
+      dSpaceDestroy(mODESpace);
+      mODESpace = 0;
+    }
 }
 
 dSpaceID Space::GetODESpace() const
 {
-    return mODESpace;
+  return mODESpace;
+}
+
+dJointGroupID Space::GetODEJointGroup() const
+{
+  return mODEContactGroup;
 }
 
 void Space::Collide()
@@ -65,121 +70,95 @@ void Space::Collide()
     dSpaceCollide(mODESpace, this, collisionNearCallback);
 }
 
+shared_ptr<Collider> Space::GetCollider(dGeomID obj)
+{
+  // get a shared pointer to the two Collider
+  Collider* colPtr = Collider::GetCollider(obj);
+  if (colPtr == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (Space) no Collider found for dGeomID "
+        << obj << "\n";
+      return shared_ptr<Collider>();
+    }
+
+  shared_ptr<Collider> collider = shared_static_cast<Collider>
+    (make_shared(colPtr->GetSelf()));
+
+  if (collider.get() == 0)
+    {
+      GetLog()->Error()
+        << "ERROR: (Space) got no shared_ptr for dGeomID "
+        << obj << "\n";
+    }
+
+  return collider;
+}
+
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
-    // exit without doing anything if the two bodies are connected by a joint
-    dBodyID ODEBody1, ODEBody2;
+    // return immediately if the two bodies corresponding to the
+    // geoms are connected by a joint
+    dBodyID ODEBody1 = dGeomGetBody(obj1);
+    dBodyID ODEBody2 = dGeomGetBody(obj2);
 
-    if (dGeomGetClass(obj1) == dPlaneClass && dGeomGetClass(obj2) == dPlaneClass) return;
+    if (
+        (ODEBody1) &&
+        (ODEBody2) &&
+        (dAreConnected (ODEBody1, ODEBody2))
+        )
+      {
+        return;
+      }
 
-    ODEBody1 = dGeomGetBody(obj1);
-    ODEBody2 = dGeomGetBody(obj2);
-
-    if (ODEBody1 && ODEBody2 && dAreConnected (ODEBody1, ODEBody2)) return;
-
-    Body *body1 = NULL;
-    if (ODEBody1)
-        body1 = (Body*)dBodyGetData(ODEBody1);
-
-    Body *body2 = NULL;
-    if (ODEBody2)
-        body2 = (Body*)dBodyGetData(ODEBody2);
-
+    // dSpaceCollide(), is guaranteed to pass all potentially
+    // intersecting geom pairs to the callback function, but depending
+    // on the internal algorithms used by the space it may also make
+    // mistakes and pass non-intersecting pairs. Thus we can not
+    // expect that dCollide() will return contacts for every pair
+    // passed to the callback.
     dContact contact;
-
-    bool camera = false;
-    if (dCollide (obj1, obj2, 0, &contact.geom, sizeof(dContactGeom)))
+    if (! dCollide (obj1, obj2, 0, &contact.geom, sizeof(dContactGeom)))
     {
-        // this ensures that the camera only collides, but
-        // does not affect the simulation
-        if (body1 && make_shared(body1->GetParent())->GetChildOfClass("Camera").get() != 0)
-        {
-            //ODEBody2 = 0;
-            camera = true;
-        } else if (body2 && make_shared(body2->GetParent())->GetChildOfClass("Camera").get() != 0)
-        {
-            //ODEBody1 = 0;
-            camera = true;
-        }
-        if (!camera)
-        {
-            shared_ptr<CollisionPerceptor> colPerceptor;
-            // notify a potential collisionperceptor
-            if (body1)
-            {
-                colPerceptor = shared_static_cast<CollisionPerceptor>(make_shared(body1->GetParent())->GetChildOfClass("CollisionPerceptor", true));
-                if (colPerceptor && body2)
-                {
-                    colPerceptor->GetCollidees().push_back(make_shared(body2->GetParent()));
-                }
-            }
-            // notify a potential collisionperceptor
-            if (body2)
-            {
-                colPerceptor = shared_static_cast<CollisionPerceptor>(make_shared(body2->GetParent())->GetChildOfClass("CollisionPerceptor", true));
-                if (colPerceptor && body1)
-                {
-                    colPerceptor->GetCollidees().push_back(make_shared(body1->GetParent()));
-                }
-            }
-
-            contact.surface.mode = dContactBounce;
-            contact.surface.mu = dInfinity;
-            contact.surface.bounce = 0.8f;
-            contact.surface.bounce_vel = 2.0f;
-        }
-        else
-        {
-            contact.surface.mode = 0;
-            contact.surface.mu = 0;
-        }
-
-        dJointID c = dJointCreateContact (mWorld, mODEContactGroup, &contact);
-        dJointAttach (c, ODEBody1, ODEBody2);
+      return;
     }
+
+    // get shared pointers to the two corresponding Collider nodes
+    shared_ptr<Collider> collider = GetCollider(obj1);
+    shared_ptr<Collider> collidee = GetCollider(obj2);
+
+    if (
+        (collider.get() == 0) ||
+        (collidee.get() == 0)
+        )
+      {
+        return;
+      }
+
+    // notify the collider nodes
+    collider->OnCollision(collidee,contact,Collider::CT_DIRECT);
+    collidee->OnCollision(collider,contact,Collider::CT_SYMMETRIC);
 }
 
 bool Space::ConstructInternal()
 {
-    if (!ODEObject::ConstructInternal()) return false;
+  // create the ode space, 0 indicates that this space should
+  // not be inserted into another space, i.e. we always create a
+  // toplevel space object
+  mODESpace = dHashSpaceCreate(0);
 
-    // create the ode space, 0 indicates that this space should
-    // not be inserted into another space, i.e. we always create a
-    // toplevel space object
-    mODESpace = dHashSpaceCreate(0);
-    if (mODESpace == 0)
-    {
-        return false;
-    }
+  // create a joint group for the contacts
+  mODEContactGroup = dJointGroupCreate(0);
 
-    // create a joint group for the contacts
-    mODEContactGroup = dJointGroupCreate(0);
-    if (mODEContactGroup == 0) return false;
-
-    return true;
+  return (
+          (mODESpace != 0) &&
+          (mODEContactGroup != 0)
+          );
 }
 
-void Space::OnLink()
-{
-    shared_ptr<Scene> scene = GetScene();
-
-    if (scene.get() != NULL)
-    {
-        shared_ptr<World> world = shared_static_cast<World>(scene->GetChildOfClass("World"));
-        if (world)
-            mWorld = world->GetODEWorld();
-        else
-            GetLog()->Error() << "ERROR: Could not find a World to link to..." << std::endl;
-    }
-}
-
-void Space::OnUnlink()
-{
-    mWorld = 0;
-}
-
-void Space::PrePhysicsUpdateInternal(float /*deltaTime*/)
+void Space::PostPhysicsUpdateInternal()
 {
     // remove all contact joints
     dJointGroupEmpty (mODEContactGroup);
 }
+

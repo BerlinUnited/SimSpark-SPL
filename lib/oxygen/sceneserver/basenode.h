@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.6 2003/12/27 17:53:41 fruit Exp $
+   $Id: basenode.h,v 1.7 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ namespace oxygen
 
 class Scene;
 
-/** BaseNode is the base class for all nodes which are part of the scene
-    hierarchy.  It's Hierarchy functionality (children, naming, etc..) is
-    inherited from zeitgeist. It does NOT have an explicit local and world
-    transform.
+/** BaseNode is the base class for all nodes which are part of the
+    scene hierarchy.  It's Hierarchy functionality (children, naming,
+    etc..) is inherited from zeitgeist. It does NOT have an explicit
+    local and world transform.
 */
 
 class BaseNode : public zeitgeist::Node
@@ -60,13 +60,13 @@ public:
 
     // transformation related
 
-    /** return the local transform of this node (default: returns
+    /** return the local transform of this node. (default: returns
      * identity) */
-    virtual const salt::Matrix&     GetLocalTransform()     const;
+    virtual const salt::Matrix& GetLocalTransform() const;
 
-    /** returns the world transform of this node (default: returns parents
-     * world transform) */
-    virtual const salt::Matrix&     GetWorldTransform()     const;
+    /** returns the world transform of this node (default: returns
+     * parents world transform) */
+    virtual const salt::Matrix& GetWorldTransform() const;
 
     /** sets the local transform of this node (default: ignored) */
     virtual void SetLocalTransform(const salt::Matrix &transform);
@@ -77,11 +77,10 @@ public:
     // bounding box related
 
     /** computes the local bounding box of the node */
-    virtual void    ComputeBoundingBox();
+    virtual void ComputeBoundingBox();
 
     /** returns the world bounding box of this node */
-    const salt::AABB3&      GetWorldBoundingBox() const
-    {       return mWorldBoundingBox;               }
+    const salt::AABB3& GetWorldBoundingBox() const;
 
     // scene graph update passes
 
@@ -91,16 +90,12 @@ public:
     /** updates internal state after physics calculation */
     void PostPhysicsUpdate();
 
-    /** update hierarchical date (position, bounding volumes, etc..) */
+    /** update hierarchical data (position, bounding volumes,
+        etc..) */
     void UpdateHierarchy();
 
-    // scene graph rendering
-    void Render();
-
-    void RenderAmbient();
-
     /** moves up the hierarchy, until it finds a scene */
-    boost::shared_ptr<Scene>        GetScene();
+    boost::shared_ptr<Scene> GetScene();
 
     /** enables debug mode controls */
     void EnableDebugMode();
@@ -121,7 +116,8 @@ protected:
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal();
 
-    /** updates hierarchical date (position, bounding volumes, etc..) */
+    /** updates hierarchical date (position, bounding volumes,
+        etc..) */
     virtual void UpdateHierarchyInternal();
 
     //
@@ -129,16 +125,16 @@ protected:
     //
 protected:
     /** the identity matrix */
-    static salt::Matrix             mIdentityMatrix;
+    static const salt::Matrix mIdentityMatrix;
 
     /** debug mode (for additional visualization) */
-    bool                                    mDebugMode;
+    bool mDebugMode;
 
     /** local bounding box */
-    salt::AABB3                             mLocalBoundingBox;
+    salt::AABB3 mLocalBoundingBox;
 
     /** world bounding box */
-    salt::AABB3                             mWorldBoundingBox;
+    salt::AABB3 mWorldBoundingBox;
 };
 
 DECLARE_CLASS(BaseNode);

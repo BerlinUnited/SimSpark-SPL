@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.h,v 1.3 2003/11/14 14:05:53 fruit Exp $
+   $Id: controlaspect.h,v 1.4 2004/02/12 14:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,38 +22,32 @@
 #ifndef OXYGEN_CONTROLASPECT_H
 #define OXYGEN_CONTROLASPECT_H
 
-#include "../sceneserver/basenode.h"
-#include "../agentaspect/effector.h"
-#include "../agentaspect/perceptor.h"
-#include "../agentaspect/agentaspect.h"
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
+class Scene;
 
 class ControlAspect : public BaseNode
 {
 public:
-    //! called by scene server, before the world is updated
-    void        PerformKills();
+    ControlAspect() {};
+    virtual ~ControlAspect() {};
 
-    //! function used by agents to request effectors
-    boost::shared_ptr<Effector> RequestEffector(boost::shared_ptr<AgentAspect>& agent, const std::string& effectorName);
-    //! function used by agents to request perceptors
-    boost::shared_ptr<Perceptor> RequestPerceptor(boost::shared_ptr<AgentAspect>& agent, const std::string& perceptorName);
-protected:
-    //! function used by agents to request effectors (this must be implemented to provide custom behavior)
-    virtual boost::shared_ptr<Effector> RequestEffectorInternal(boost::shared_ptr<AgentAspect>& agent, const std::string& effectorName) = 0;
-    //! function used by agents to request perceptors (this must be implemented to provide custom behavior)
-    virtual boost::shared_ptr<Perceptor> RequestPerceptorInternal(boost::shared_ptr<AgentAspect>& agent, const std::string& perceptorName) = 0;
+    /** called during the update of the GameControlServer to allow the
+        ControlAspect to perform any necessary checks.
 
-    //! creates an instance of an effector class (used in RequestEffector)
-    boost::shared_ptr<Effector> CreateEffector(const std::string& effectorName);
-    //! creates an instance of a perceptor class (used in RequestPerceptor)
-    boost::shared_ptr<Perceptor> CreatePerceptor(const std::string& perceptorName);
+        \param time is the time passed since the last update in
+        seconds
+     */
+    virtual void Update(float deltaTime) = 0;
 
-private:
-    // this list holds references to agents, which need to be killed in the next frame
-    TLeafList   mKillList;
+    /** queries the SceneServer for the currently active scene node */
+    boost::shared_ptr<Scene> GetActiveScene();
+
+    /** returns a reference to a ControlAspect registered to the
+        GameControlServer */
+    boost::shared_ptr<ControlAspect> GetControlAspect(const std::string& name);
 };
 
 DECLARE_ABSTRACTCLASS(ControlAspect);

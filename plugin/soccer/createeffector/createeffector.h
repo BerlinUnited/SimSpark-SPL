@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.h,v 1.2 2003/12/27 17:53:42 fruit Exp $
+   $Id: createeffector.h,v 1.3 2004/02/12 14:07:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,15 +19,15 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_CREATEEFFECTOR_H
-#define OXYGEN_CREATEEFFECTOR_H
+#ifndef CREATEEFFECTOR_H
+#define CREATEEFFECTOR_H
 
 #include <oxygen/agentaspect/effector.h>
 
 class CreateEffector : public oxygen::Effector
 {
  public:
-    CreateEffector() : Effector() {}
+    CreateEffector();
     virtual ~CreateEffector() {};
 
     /** realizes the action described by the ActionObject */
@@ -43,5 +43,5 @@ class CreateEffector : public oxygen::Effector
 
 DECLARE_CLASS(CreateEffector);
 
-#endif // OXYGEN_CREATEEFFECTOR_H
+#endif // CREATEEFFECTOR_H
 

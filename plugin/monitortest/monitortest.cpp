@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitortest.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
+   $Id: monitortest.cpp,v 1.4 2004/02/12 14:07:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ MonitorTest::ParseMonitorMessage(std::string data)
 string MonitorTest::GetMonitorInfo()
 {
     /*    GetLog()->Debug() << "**** (MonitorTest::GetMonitorInfo)\n";
-          return ("(player 0.3 1.4 0.2)");*/
+          return ("(agent 0.3 1.4 0.2)");*/
 
     shared_ptr<SceneServer> sceneServer =
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
@@ -79,7 +79,7 @@ string MonitorTest::GetMonitorInfo()
             shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
             const salt::Vector3f& pos = j->GetWorldTransform().Pos();
 
-            ss << "(player " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
+            ss << "(agent " << pos[0] << " " << pos[1] << " " << pos[2] << ")";
         }
 
     ss << endl;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor_c.cpp,v 1.3 2003/11/10 23:11:42 fruit Exp $
+   $Id: collisionperceptor.cpp,v 1.2 2004/02/12 14:07:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,44 @@
 using namespace boost;
 using namespace oxygen;
 
-void CLASS(CollisionPerceptor)::DefineClass()
+bool
+CollisionPerceptor::Percept(Predicate& predicate)
 {
-    DEFINE_BASECLASS(kerosin/Perceptor);
+    predicate.name = "collision";
+    predicate.parameter.clear();
+
+    if (mCollidees.empty())
+    {
+      return false;
+    }
+
+     for (
+          TLeafList::const_iterator i = GetCollidees().begin();
+          i != GetCollidees().end();
+          ++i
+          )
+       {
+         predicate.parameter.push_back(*i);
+       }
+
+    return true;
 }
+
+void
+CollisionPerceptor::PrePhysicsUpdateInternal(float /*deltaTime*/)
+{
+  mCollidees.clear();
+}
+
+void
+CollisionPerceptor::AddCollidee(boost::shared_ptr<Node> collidee)
+{
+  if (collidee.get() == 0)
+    {
+      return;
+    }
+
+  mCollidees.push_back(collidee);
+}
+
+

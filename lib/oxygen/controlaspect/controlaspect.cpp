@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.cpp,v 1.2 2003/08/31 21:53:45 fruit Exp $
+   $Id: controlaspect.cpp,v 1.3 2004/02/12 14:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,91 +21,49 @@
 */
 
 #include "controlaspect.h"
+#include <zeitgeist/logserver/logserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
 
+using namespace std;
 using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
 
-void ControlAspect::PerformKills()
+shared_ptr<Scene> ControlAspect::GetActiveScene()
 {
-    while (mKillList.size())
-    {
-        // get the transform the agent to kill was attached to and unlink it
-        mKillList.back()->Unlink();
-        // lose our reference to it ... bye, bye
-        mKillList.pop_back();
-    }
+    shared_ptr<SceneServer> sceneServer =
+        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+    if (sceneServer.get() == 0)
+        {
+            GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
+            return shared_ptr<Scene>();
+        }
+
+    shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
+
+    if (activeScene.get() == 0)
+        {
+            GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
+            return shared_ptr<Scene>();
+        }
+
+    return activeScene;
 }
 
-shared_ptr<Effector> ControlAspect::RequestEffector(shared_ptr<AgentAspect>& agent, const std::string& effectorName)
+shared_ptr<ControlAspect> ControlAspect::GetControlAspect(const string& name)
 {
-    // try internal function to see if we allow the creation of the effector
-    shared_ptr<Effector> effector = RequestEffectorInternal(agent, effectorName);
+  static const string gcsPath = "/sys/server/gamecontrol/";
 
-    if (effector)
+  shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
+    (GetCore()->Get(gcsPath + name));
+
+  if (aspect.get() == 0)
     {
-        // we were allowed to create the effector, now we attach it to the agent aspect
-        agent->AddChildReference(effector);
-    }
-    else
-    {
-        printf("EKill\n");
-        // the agent tried to create an effector, which is illegal, we will remember its
-        // name, so we can unlink it (which destroys it!)
-        mKillList.push_back(make_shared(agent->GetParent()));
+      GetLog()->Error() << "(ControlAspect) found no " << name << "\n";
     }
 
-    return effector;
+  return aspect;
 }
 
-shared_ptr<Perceptor> ControlAspect::RequestPerceptor(shared_ptr<AgentAspect>& agent, const std::string& perceptorName)
-{
-    // try internal function to see if we allow the creation of the effector
-    shared_ptr<Perceptor> perceptor = RequestPerceptorInternal(agent, perceptorName);
 
-    if (perceptor)
-    {
-        // we were allowed to create the effector, now we attach it to the agent aspect
-        agent->AddChildReference(perceptor);
-    }
-    else
-    {
-        // the agent tried to create an effector, which is illegal, we will remember its
-        // name, so we can unlink it (which destroys it!)
-        mKillList.push_back(make_shared(agent->GetParent()));
-    }
-
-    return perceptor;
-}
-
-shared_ptr<Effector> ControlAspect::CreateEffector(const std::string& effectorName)
-{
-    // try to create an instance
-    shared_ptr<Object> instance = GetCore()->New(effectorName);
-
-    // check if we got a valid instance
-    if (instance && instance->GetClass()->Supports("Effector"))
-    {
-        return shared_static_cast<Effector>(instance);
-    }
-    else
-    {
-        return shared_ptr<Effector>();
-    }
-}
-
-shared_ptr<Perceptor> ControlAspect::CreatePerceptor(const std::string& perceptorName)
-{
-    // try to create an instance
-    shared_ptr<Object> instance = GetCore()->New(perceptorName);
-
-    // check if we got a valid instance
-    if (instance && instance->GetClass()->Supports("Perceptor"))
-    {
-        return shared_static_cast<Perceptor>(instance);
-    }
-    else
-    {
-        return shared_ptr<Perceptor>();
-    }
-}

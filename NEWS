@@ -1,3 +1,31 @@
+[0.2]
+This release adds already big parts of the soccer specific parts to the 
+simulator. All soccer specific things are realized as plugins to the 
+simulator, they are located in the soccer bundle in plugin/soccer/.
+
+- rcssmonitor3D and soccer simulation:
+  Starting with our simple monitor: here are the most visible changes.
+  You can see a soccer field with two goals, a ball and agents in different
+  colors dependend on the side they are playing on. 
+  You can use keys 'a', 's,', 'd', and 'w' to move the camera (as was as 
+  the mouse). The monitor can send simple commands to the simulator now.
+  ('k' is of kick off, that is what you probably wanted to know).
+  The soccer field is a standard FIFA size field with variable size, same with
+  the ball and goals.
+- Soccer Plugins
+  Here is the really big part of the changes. Agents have an (omni-)drive and 
+  a kicker now, they can perceive the environment with a kind of 360° omnicam
+  and they get updates about the game state and things like the battery state.
+  Using the omnidrive, agents can do 100m in something about 13s or 14s.
+
+On startup, the simulator will start two different types of agents now. Even 
+though there are only a few soccer rules implemented, it should be possible
+to implement a simple soccer team. To facilitate programming a new team, we 
+enhanced the sample client a bit. 
+
+Finally, we added a small text (lacking a comprehensive manual),
+describing the basic features of the simulated robots in the simulation. 
+
 [0.1]
 This is the initial release of rcssserver3D. To get an idea of what
 rcssserver3D provides in general, please see also the file README.

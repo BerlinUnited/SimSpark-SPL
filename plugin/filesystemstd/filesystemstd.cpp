@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemstd.cpp,v 1.2 2003/12/21 23:36:38 fruit Exp $
+   $Id: filesystemstd.cpp,v 1.3 2004/02/12 14:07:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ salt::RFile* FileSystemSTD::Open(const char* inName)
 {
         //Assert(inName != NULL, "No name specified for openening a file");
 
-        RFile*          file            = new StdFile();
+        salt::RFile*    file            = new StdFile();
         std::string     fileName        = mPath;
 
         fileName += inName;     // append inName

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: planecollider.h,v 1.5 2003/11/14 14:05:53 fruit Exp $
+   $Id: planecollider.h,v 1.6 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@
 namespace oxygen
 {
 
-/** PlaneCollider encapsulates an ODE plane geometry object. Planes are
-    non-placeable geoms, i.e.  unlike placeable geoms, planes do not have an
-    assigned position and rotation. This means that the parameters (a,b,c,d)
-    are always in global coordinates. In other words it is assumed that the
-    plane is always part of the static environment and not tied to any movable
-    object.
+/** PlaneCollider encapsulates an ODE plane geometry object. Planes
+    are non-placeable geoms, i.e.  unlike placeable geoms, planes do
+    not have an assigned position and rotation. This means that the
+    parameters (a,b,c,d) are always in global coordinates. In other
+    words it is assumed that the plane is always part of the static
+    environment and not tied to any movable object.
 */
 class PlaneCollider : public Collider
 {
@@ -46,7 +46,8 @@ public:
     void SetParams(float a, float b, float c, float d);
 
 protected:
-    /** constructs a default plane with normal pointing up, going through the origin */
+    /** constructs a default plane with normal pointing up, going
+        through the origin */
     virtual bool ConstructInternal();
 };
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.h,v 1.6 2003/12/27 17:53:41 fruit Exp $
+   $Id: behavior_c.cpp,v 1.2 2004/02/12 14:07:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,36 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_COLLISIONPERCEPTOR_H
-#define OXYGEN_COLLISIONPERCEPTOR_H
+#include "behavior.h"
 
-#include "perceptor.h"
-
-namespace oxygen
+void CLASS(Behavior)::DefineClass()
 {
-#if 0
 }
-#endif
-
-/*!
-        The CollisionPerceptor class is used to filter collisions as they occur
-        within the scenegraph.
-*/
-class CollisionPerceptor : public Perceptor
-{
-public:
-    /** \param predicate set "collidees" as a TLeafList as arguments of predicate
-        \return true if data is available
-     */
-    bool Percept(Predicate& predicate);
-
-    TLeafList& GetCollidees()  { return mCollidees; }
-
-private:
-    TLeafList mCollidees;
-};
-
-DECLARE_CLASS(CollisionPerceptor);
-
-}
-#endif //OXYGEN_COLLISIONPERCEPTOR_H

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.3 2003/12/27 17:53:41 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.4 2004/02/12 14:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,6 +48,11 @@ public:
         initially created with every new AgentAspect instance
     */
     void InitEffector(const std::string& effectorName);
+
+    /** creates an instance of \param aspectName and registers it as a
+        ControlAspect to the GameControlServer
+    */
+    bool InitControlAspect(const std::string& aspectName);
 
     /** returns the parser currently registered to the
         GameControlServer
@@ -93,6 +98,12 @@ public:
 
     /** returns the AgentAspect for the given \param id */
     boost::shared_ptr<AgentAspect> GetAgentAspect(int id);
+
+    /** notifies the GameControlServer, that the game has advanced
+        deltaTime seconds. The GameControlServer will in turn update
+        all registered GameControlAspects below it.
+     */
+    void Update(float deltaTime);
 
 protected:
     /** helper method that queries the SceneServer for the currently

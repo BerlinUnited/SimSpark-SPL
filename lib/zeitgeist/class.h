@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.h,v 1.8 2003/11/14 14:05:54 fruit Exp $
+   $Id: class.h,v 1.9 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 */
 #ifndef ZEITGEIST_CLASS_H
 #define ZEITGEIST_CLASS_H
+
+#include <zeitgeist/scriptserver/rubywrapper.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -75,8 +77,20 @@ namespace zeitgeist
         void DefineClass();\
     };
 
+    /* Note: FUNCTION and OUT_FUNCTION are identical, except that
+       FUNCTION has the 'out' parameter commented out, for ruby
+       exports not using this parameter. This prevents compiler
+       warnings about unused parameters
+    */
 #define FUNCTION(functionName)\
-    static void functionName(zeitgeist::Object *obj, const zeitgeist::Class::TParameterList &in)
+    static void functionName(zeitgeist::Object *obj, \
+                              const zeitgeist::Class::TParameterList &in, \
+                              VALUE& /*out*/)
+
+#define OUT_FUNCTION(functionName)\
+    static void functionName(zeitgeist::Object *obj, \
+                              const zeitgeist::Class::TParameterList &in, \
+                              VALUE& out)
 
 #define DEFINE_FUNCTION(functionName)\
     mFunctions[#functionName] = functionName;
@@ -150,7 +164,7 @@ public:
         class from which it is a member function along with a
         list of paramters.
     */
-    typedef void (*TCmdProc)(Object *obj, const TParameterList &in);
+    typedef void (*TCmdProc)(Object *obj, const TParameterList &in, VALUE& out);
     typedef std::list<std::string> TStringList;
 
 private:

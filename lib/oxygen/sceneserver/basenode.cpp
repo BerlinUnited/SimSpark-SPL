@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode.cpp,v 1.5 2003/12/27 17:53:41 fruit Exp $
+   $Id: basenode.cpp,v 1.6 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,13 +27,11 @@ using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 
-salt::Matrix BaseNode::mIdentityMatrix;
+const salt::Matrix BaseNode::mIdentityMatrix(salt::Matrix::GetIdentity());
 
 BaseNode::BaseNode() :
-zeitgeist::Node(), mDebugMode(false)
+  zeitgeist::Node(), mDebugMode(false)
 {
-        // a bit redundant, but somehow we have to ensure that this is ALWAYS set
-        mIdentityMatrix.Identity();
 }
 
 BaseNode::~BaseNode()
@@ -42,18 +40,22 @@ BaseNode::~BaseNode()
 
 const salt::Matrix& BaseNode::GetLocalTransform() const
 {
-        return mIdentityMatrix;
+  return mIdentityMatrix;
 }
 
 const salt::Matrix& BaseNode::GetWorldTransform() const
 {
-        shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(mParent));
+  shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>
+    (make_shared(mParent));
 
-        // no parent, return identity
-        if (parent.get() == NULL)
-                return mIdentityMatrix;
-        else
-                return parent->GetWorldTransform();
+  // no parent, return identity
+  if (parent.get() == 0)
+    {
+      return mIdentityMatrix;
+    } else
+      {
+        return parent->GetWorldTransform();
+      }
 }
 
 void BaseNode::SetLocalTransform(const salt::Matrix& /*transform*/)
@@ -64,125 +66,85 @@ void BaseNode::SetWorldTransform(const salt::Matrix& /*transform*/)
 {
 }
 
-/*!
-        This routine is responsible for updating the local bounding box of the
-        node. The default behavior is to treat the node as a point!
-
-        Please note that this is always called from Compute()!
-*/
+// This routine is responsible for updating the local bounding box of
+// the node. The default behavior is to treat the node as a point.
+// Note that this is always called from Compute().
 void BaseNode::ComputeBoundingBox()
 {
-        mLocalBoundingBox.minVec.Set(0,0,0);
-        mLocalBoundingBox.maxVec.Set(0,0,0);
+  mLocalBoundingBox.minVec.Set(0,0,0);
+  mLocalBoundingBox.maxVec.Set(0,0,0);
 }
 
 void BaseNode::PrePhysicsUpdate(float deltaTime)
 {
-        // perform update on hierarchy
-        for (TLeafList::iterator i = begin(); i!= end(); ++i)
-        {
-                if ((*i)->GetClass()->Supports("BaseNode"))
-                        (shared_static_cast<BaseNode>(*i))->PrePhysicsUpdate(deltaTime);
-        }
+  // perform update on hierarchy
+  for (TLeafList::iterator i = begin(); i!= end(); ++i)
+    {
+      if ((*i)->GetClass()->Supports("BaseNode"))
+        (shared_static_cast<BaseNode>(*i))->PrePhysicsUpdate(deltaTime);
+    }
 
-        // do the internal update ... can be overridden by derived classes to add
-        // custom behavior
-        PrePhysicsUpdateInternal(deltaTime);
+  // do the internal update. This can be overridden by derived classes
+  // to add custom behavior
+  PrePhysicsUpdateInternal(deltaTime);
 
-        ComputeBoundingBox();
+  ComputeBoundingBox();
 }
 
 void BaseNode::PostPhysicsUpdate()
 {
-        // perform update on hierarchy
-        for (TLeafList::iterator i = begin(); i!= end(); ++i)
-        {
-                if ((*i)->GetClass()->Supports("BaseNode"))
-                        (shared_static_cast<BaseNode>(*i))->PostPhysicsUpdate();
-        }
+  // perform update on hierarchy
+  for (TLeafList::iterator i = begin(); i!= end(); ++i)
+    {
+      if ((*i)->GetClass()->Supports("BaseNode"))
+        (shared_static_cast<BaseNode>(*i))->PostPhysicsUpdate();
+    }
 
-        // do the internal update ... can be overridden by derived classes to add
-        // custom behavior
-        PostPhysicsUpdateInternal();
+  // do the internal update this can be overridden by derived classes
+  // to add custom behavior
+  PostPhysicsUpdateInternal();
 }
 
 void BaseNode::UpdateHierarchy()
 {
-        // do the internal update ... can be overridden by derived classes to add
-        // custom behavior
-        UpdateHierarchyInternal();
+  // do the internal update this can be overridden by derived classes
+  // to add custom behavior
+  UpdateHierarchyInternal();
 
-        // generate the bounding volume of this node
-        Matrix worldTransform = GetWorldTransform();
-        mWorldBoundingBox = mLocalBoundingBox;
-        mWorldBoundingBox.TransformBy(worldTransform);
+  // generate the bounding volume of this node
+  Matrix worldTransform = GetWorldTransform();
+  mWorldBoundingBox = mLocalBoundingBox;
+  mWorldBoundingBox.TransformBy(worldTransform);
 
-        // perform update on hierarchy
-        for (TLeafList::iterator i = begin(); i!= end(); ++i)
+  // perform update on hierarchy
+  for (TLeafList::iterator i = begin(); i!= end(); ++i)
+    {
+      if ((*i)->GetClass()->Supports("BaseNode"))
         {
-                if ((*i)->GetClass()->Supports("BaseNode"))
-                {
-                        shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
-                        node->UpdateHierarchy();
-                        // here we merge our world bounding volume with the child volumes
-                        mWorldBoundingBox.Encapsulate(node->GetWorldBoundingBox());
-                }
-        }
-}
+          shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
+          node->UpdateHierarchy();
 
-void BaseNode::Render()
-{
-#if 0
-        // do the internal update ... can be overridden by derived classes to add
-        // custom behavior
-        glPushMatrix();
-        glMultMatrixf(GetWorldTransform().m);
-#endif
-        RenderInternal();
-#if 0
-        glPopMatrix();
-#endif
-        // perform update on hierarchy
-        for (TLeafList::iterator i = begin(); i!= end(); ++i)
-        {
-                if ((*i)->GetClass()->Supports("BaseNode"))
-                        (shared_static_cast<BaseNode>(*i))->Render();
+          // here we merge our world bounding volume with the child
+          // volumes
+          mWorldBoundingBox.Encapsulate(node->GetWorldBoundingBox());
         }
-}
-
-void BaseNode::RenderAmbient()
-{
-#if 0
-        // do the internal update ... can be overridden by derived classes to add
-        // custom behavior
-        glPushMatrix();
-        glMultMatrixf(GetWorldTransform().m);
-#endif
-        RenderAmbientInternal();
-#if 0
-        glPopMatrix();
-#endif
-        // perform update on hierarchy
-        for (TLeafList::iterator i = begin(); i!= end(); ++i)
-        {
-                if ((*i)->GetClass()->Supports("BaseNode"))
-                        (shared_static_cast<BaseNode>(*i))->RenderAmbient();
-        }
+    }
 }
 
 boost::shared_ptr<Scene> BaseNode::GetScene()
 {
-  return shared_dynamic_cast<Scene>(GetParentSupportingClass("Scene"));
+  return shared_dynamic_cast<Scene>
+    (make_shared(GetParentSupportingClass("Scene")));
 }
 
 void BaseNode::EnableDebugMode()
 {
-        mDebugMode = true;
+  mDebugMode = true;
 }
 
 void BaseNode::DisableDebugMode()
 {
-        mDebugMode = false;
+  mDebugMode = false;
 }
 
 void BaseNode::PrePhysicsUpdateInternal(float /*deltaTime*/)
@@ -204,3 +166,9 @@ void BaseNode::RenderInternal()
 void BaseNode::RenderAmbientInternal()
 {
 }
+
+const salt::AABB3& BaseNode::GetWorldBoundingBox() const
+{
+  return mWorldBoundingBox;
+}
+

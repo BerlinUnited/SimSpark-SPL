@@ -1,10 +1,9 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++ -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.cpp,v 1.4 2003/12/27 17:53:41 fruit Exp $
+   Copyright (C) 2003 Koblenz University
+   $Id: raycollider.cpp,v 1.2 2004/02/12 14:07:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,26 +19,32 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "collisionperceptor.h"
+#include "raycollider.h"
 
-using namespace boost;
 using namespace oxygen;
 
-bool
-CollisionPerceptor::Percept(Predicate& predicate)
+RayCollider::RayCollider() : Collider()
 {
-    predicate.name = "collision";
-    predicate.parameter.clear();
+}
 
-    if (!mCollidees.empty())
+void
+RayCollider::SetParams(salt::Vector3f pos,
+                            salt::Vector3f dir, float length)
+{
+    dGeomRaySet(mODEGeom, pos[0], pos[1], pos[2], dir[0], dir[1], dir[2]);
+    dGeomRaySetLength(mODEGeom, length);
+}
+
+bool
+RayCollider::ConstructInternal()
+{
+    if (! Collider::ConstructInternal())
     {
-        for (TLeafList::const_iterator i = GetCollidees().begin();
-             i != GetCollidees().end(); ++i)
-        {
-            predicate.parameter.push_back(*i);
-        }
-        GetCollidees().clear();
-        return true;
+        return false;
     }
-    return false;
+
+    // create a unit ray
+    mODEGeom = dCreateRay(0, 1.0f);
+
+    return (mODEGeom != 0);
 }

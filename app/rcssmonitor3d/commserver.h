@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.3 2003/12/27 17:53:40 fruit Exp $
+   $Id: commserver.h,v 1.4 2004/02/12 14:07:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,8 +43,15 @@ class CommServer : public zeitgeist::Object
     const TPositions& GetPositions();
     boost::shared_ptr<oxygen::Predicate::TList> GetPredicates();
 
+    void SendKickOffCmd();
+    void SendPauseCmd();
+    void SendRunCmd();
+    void SendDisconnectCmd();
+    void SendToWorldModel(const std::string& msg);
+
  protected:
     void Parse(std::string msg);
+    void SendMessage(const std::string& message);
 
  protected:
     // socket wrapper

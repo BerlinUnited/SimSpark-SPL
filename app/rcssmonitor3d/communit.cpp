@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.cpp,v 1.3 2003/12/27 17:53:40 fruit Exp $
+   $Id: communit.cpp,v 1.4 2004/02/12 14:07:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@
 using namespace std;
 using namespace rcss::net;
 
-CommUnit::CommUnit() : mStreamBuf(mSocket),mStream(&mStreamBuf)
+CommUnit::CommUnit() :
+    mStreamBuf(mSocket),mInStream(&mStreamBuf)
 {
 }
 
@@ -77,7 +78,12 @@ bool CommUnit::OpenConnection(std::string host, int port)
 string CommUnit::GetMessage ()
 {
     static char line[MAX_MSG_LEN];
-    mStream.getline(line,MAX_MSG_LEN);
+    mInStream.getline(line,MAX_MSG_LEN);
 
     return line;
+}
+
+void CommUnit::PutMessage(const string& message)
+{
+    mSocket.send(message.c_str(),message.size());
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor_c.cpp,v 1.2 2003/12/21 23:36:39 fruit Exp $
+   $Id: perfectvisionperceptor_c.cpp,v 1.3 2004/02/12 14:07:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,8 +25,20 @@
 using namespace boost;
 using namespace oxygen;
 
+FUNCTION(setInversion)
+{
+    if (in.size() == 3)
+    {
+        PerfectVisionPerceptor* pp = static_cast<PerfectVisionPerceptor*>(obj);
+        pp->SetInversion(boost::any_cast<bool>(in[0]),
+                         boost::any_cast<bool>(in[1]),
+                         boost::any_cast<bool>(in[2]));
+    }
+}
+
 void
 CLASS(PerfectVisionPerceptor)::DefineClass()
 {
     DEFINE_BASECLASS(kerosin/Perceptor);
+    DEFINE_FUNCTION(setInversion);
 }

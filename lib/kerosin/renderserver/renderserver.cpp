@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.9 2003/12/02 17:25:19 cringel Exp $
+   $Id: renderserver.cpp,v 1.10 2004/02/12 14:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,10 +67,10 @@ RenderServer::ConstructInternal()
     return true;
 }
 
-void 
-RenderServer::RenderFancyLighting(const salt::Frustum& /*frustum*/, 
+void
+RenderServer::RenderFancyLighting(const salt::Frustum& /*frustum*/,
                                   boost::shared_ptr<oxygen::Camera>& /*camera*/,
-                                  TLeafList& /*myLights*/, TLeafList& /*allMeshes*/, 
+                                  TLeafList& /*myLights*/, TLeafList& /*allMeshes*/,
                                   TLeafList& /*visibleMeshes*/)
 
 {
@@ -139,7 +139,7 @@ RenderServer::RenderFancyLighting(const salt::Frustum& /*frustum*/,
 #endif
 }
 
-void 
+void
 RenderServer::Render()
 {
     GetActiveScene();
@@ -209,10 +209,10 @@ RenderServer::Render()
     {
         // ambient lighting only
         glColor3f(1, 1, 1);
-        mActiveScene->RenderAmbient();
+//        mActiveScene->RenderAmbient();
 
         // standard rendering
-        mActiveScene->Render();
+//        mActiveScene->Render();
     }
 }
 
@@ -251,7 +251,7 @@ RenderServer::BindCamera(boost::shared_ptr<Camera>& camera)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glMultMatrixf(camera->GetProjectionTransform().m);
-	
+
     // initialize the modelview stack
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

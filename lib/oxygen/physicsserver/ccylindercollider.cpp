@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.cpp,v 1.2 2003/08/31 21:53:45 fruit Exp $
+   $Id: ccylindercollider.cpp,v 1.3 2004/02/12 14:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,23 +23,24 @@
 
 using namespace oxygen;
 
-CCylinderCollider::CCylinderCollider() :
-Collider()
+CCylinderCollider::CCylinderCollider() : Collider()
 {
 }
 
 void CCylinderCollider::SetParams(float radius, float length)
 {
-        if (mODEGeom)
-            dGeomCCylinderSetParams (mODEGeom, radius, length);
+  dGeomCCylinderSetParams (mODEGeom, radius, length);
 }
 
 bool CCylinderCollider::ConstructInternal()
 {
-        if (!Collider::ConstructInternal()) return false;
+  if (! Collider::ConstructInternal())
+    {
+      return false;
+    }
 
-        // create a unit capped cylinder
-        mODEGeom = dCreateCCylinder (0, 1.0f, 1.0f);
+  // create a unit capped cylinder
+  mODEGeom = dCreateCCylinder (0, 1.0f, 1.0f);
 
-        return (mODEGeom != 0);
+  return (mODEGeom != 0);
 }
