@@ -1,3 +1,171 @@
+2004-12-22  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/kerosin/renderserver/rendercontrol.cpp:
+	- backed out some debug output...
+
+	* app/monitorspark/monitorspark.rb, app/monitorspark/soccersim.rb:
+	- moved soccer monitor init to a separate file soccersim.rb
+
+	* app/monitorspark/VeraMono.ttf:
+	- added a font used by the soccer monitor
+
+	* app/simspark/soccersim.rb:
+	- registering the GameStateItem to the monitorServer to transmit
+	soccer game state information
+
+	* app/simspark/rsg/agent/soccer.rsg:
+	- fixed construction of the left side line
+
+	* configure.ac: - added plugin/soccermonitor/Makefile
+
+	* plugin/soccermonitor/.cvsignore,
+	* plugin/soccermonitor/Makefile.am:
+	- Makefile for the soccermonitor
+
+	* plugin/soccermonitor/soccerrender.cpp,
+	* plugin/soccermonitor/soccerrender.h,
+	* plugin/soccermonitor/soccerrender_c.cpp:
+	- added class SoccerRender, a spark render extension that should draw
+	the soccer monitor overlay (scores, time etc.); initial version
+
+	* plugin/soccermonitor/soccermonitor.cpp,
+	* plugin/soccermonitor/soccermonitor.h,
+	* plugin/soccermonitor/soccermonitor_c.cpp:
+	- added class SoccerMonitor, a spark monitor extenrsion for the soccer
+	simulation. It parses and maintains the soccer game state
+
+	* plugin/sparkmonitor/sparkmonitorclient.cpp,
+	* plugin/sparkmonitor/sparkmonitorclient.h:
+	- added method ParseCustomPredicates that parses the received list
+	of custom predicates and dispatches them to registered
+	CustomMonitor nodes
+
+	* plugin/sparkmonitor/sparkmonitor.cpp,
+	* plugin/sparkmonitor/sparkmonitor.h:
+	- added method DescribeCustomPredicates that converts custom
+	predicates received from registered CustomMonitor nodes into
+	s-expressions.
+
+	* plugin/Makefile.am: 
+	- added soccermonitor directory
+
+	* lib/kerosin/renderserver/rendercontrol.cpp,
+	* lib/kerosin/renderserver/rendercontrol.h:
+	- calling registered CustomRender nodes everytime the scene graph is
+	rendered
+
+	* lib/kerosin/renderserver/customrender.cpp,
+	* lib/kerosin/renderserver/customrender.h,
+	* lib/kerosin/renderserver/customrender_c.cpp:
+	- added class CustomRender, a base class for nodes installed below
+	the Spark RenderControl node. This serves as a hook mechanism to
+	render objects or overlays that are not part of the scene graph
+
+	* lib/kerosin/inputserver/inputcontrol_c.cpp,
+	* lib/kerosin/inputserver/inputcontrol.cpp:
+	- added checks for a vaild FPSContoller
+	- exported setFPSController to ruby
+
+	* lib/kerosin/Makefile.am: 
+	- added CustomRender files
+
+	* lib/oxygen/simulationserver/simulationserver.cpp,
+	* lib/oxygen/simulationserver/simulationserver.h,
+	* lib/oxygen/simulationserver/simulationserver_c.cpp:
+	- changed method InitControlNode to take the name of the installed
+	control node as a parameter. Deriving it from the classname caused
+	problems when the name contained a namespace component
+
+	* lib/oxygen/simulationserver/simcontrolnode_c.cpp:
+	- changed baseclass to zeitgeist/Node
+
+	* lib/oxygen/simulationserver/simcontrolnode.cpp:
+	- changed baseclass to zeitgeist::Node
+
+	* lib/oxygen/simulationserver/simcontrolnode.h:
+	- changed baseclass to zeitgeist::Node to enable SimControlNodes
+	to have child nodes
+
+	* lib/oxygen/monitorserver/custommonitor.cpp,
+	* lib/oxygen/monitorserver/custommonitor.h,
+	* lib/oxygen/monitorserver/custommonitor_c.cpp:
+	- added class CustomMonitor, a base class for objects used to
+	extent the Spark monitor protocol for specific simulations,
+	e.g. the soccer gamestate
+
+	* lib/oxygen/monitorserver/monitoritem_c.cpp:
+	- registering class MonitorItem to zeitgeist
+
+2004-12-21  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/rcssserver3D.rb:
+	- register a GameStateItem to the MonitorServer
+
+	* plugin/soccer/export.cpp: 
+	- export GameStateItem to Ruby
+
+	* plugin/soccer/Makefile.am: 
+	- added GameStateItem files
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp,
+	* plugin/soccer/sexpmonitor/sexpmonitor.h:
+	- adapted to changed interface
+	- added method AddPredicates that constructs S-Expressions of
+	predicates received from MonitorItems
+	- removed GameStateAspect related S-Expression composition (now
+	part of GameStateItem)
+
+	* plugin/soccer/gamestateaspect/gamestateitem.cpp,
+	* plugin/soccer/gamestateaspect/gamestateitem.h,
+	* plugin/soccer/gamestateaspect/gamestateitem_c.cpp:
+	- added class GameStatItem, a MonitorItem that collects information
+	from the GameStateAspect
+
+	* plugin/sparkmonitor/sparkmonitor.cpp,
+	* plugin/sparkmonitor/sparkmonitor.h,
+	* plugin/monitortest/monitortest.cpp,
+	*plugin/monitortest/monitortest.h:
+	- adapted to changed interface
+
+	* lib/oxygen/Makefile.am: 
+	- added MonitorItem files
+
+	* lib/oxygen/monitorserver/monitoritem.h,
+	* lib/oxygen/monitorserver/monitorserver.cpp,
+	* lib/oxygen/monitorserver/monitorserver.h,
+	* lib/oxygen/monitorserver/monitorserver_c.cpp,
+	* lib/oxygen/monitorserver/monitorsystem.h:
+	- added class MonitorItem. Instances of this class are registered
+	to the MonitorServer. The intent is to use MonitorItems to collect
+	data that can be transfered using any MonitorSystem, e.g. debug
+	probes or reusable monitor components.  A MonitorItem creates a
+	list of predicates that is passed to the installed MonitorSystems
+	which transfers it to the client in it's native format.
+
+	* app/agentspark/soccerbehavior.cpp:
+	- use the beam effector to move away from the ball at startup
+
+	* app/simspark/simspark.rb, 
+	* app/simspark/soccersim.rb:
+	- moved setup of the soccer simulation into a separate .rb file that
+	is source from simspark.rb
+	- reused setup of the soccer variables from the rcssserver3d.rb script
+
+	* app/simspark/rsg/agent/soccer.rsg:
+	- using variables from the ScriptServer Soccer namespace
+	- moved base plane to height 0, to work with the SoccerRuleAspect
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- reading soccer variables from the ScriptServer Soccer namespace
+	- using variables to parameterize ball setup
+
+	* app/simspark/rsg/agent/soccerplayer.rsg: 
+	- installed the beameffector
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- added ruby function 'run' that sources another ruby script from
+	within the current running script
+	
 2004-12-20	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./acinclude.m4
