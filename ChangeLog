@@ -1,3 +1,13 @@
+2003-11-10  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/.cvsignore: 
+	* lib/oxygen/Makefile.am:
+	* lib/oxygen/oxygen.cpp:
+	* lib/oxygen/oxygen.h:
+	added oxygen class to register servers
+	
+	* app/coretest/coretest.rb: removed "bundle" from the module names
+
 2003-11-09  Oliver Obst  <fruit@robolog.org>
 
 	* configure.ac: 
