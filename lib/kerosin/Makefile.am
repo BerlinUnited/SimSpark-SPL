@@ -94,6 +94,7 @@ openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
 renderserver/renderserver.cpp \
 renderserver/renderserver_c.cpp \
+renderserver/rendernode.cpp \
 renderserver/rendernode_c.cpp \
 renderserver/rendercontrol.cpp \
 renderserver/rendercontrol_c.cpp
