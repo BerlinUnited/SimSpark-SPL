@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.2.2.1 2003/12/23 01:44:23 fruit Exp $
+   $Id: sexpparser.cpp,v 1.2.2.2 2003/12/23 12:05:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,18 +25,6 @@
 using namespace oxygen;
 using namespace std;
 using namespace boost;
-
-bool
-SexpParser::IsString(const boost::any& operand)
-{
-    return boost::any_cast<std::string>(&operand);
-}
-
-bool
-SexpParser::IsParameterList(const boost::any& operand)
-{
-    return boost::any_cast<TParameterList>(&operand);
-}
 
 shared_ptr<SexpParser::TPredicateList>
 SexpParser::Parse(const std::string& input)
@@ -135,7 +123,7 @@ SexpParser::ListToString(const TParameterList& lst)
 
     for (TParameterList::const_iterator i = lst.begin(); i != lst.end(); ++i)
     {
-        if (IsString(*i))
+        if (i->type() == typeid(string))
         {
             s += space + boost::any_cast<string>(*i);
         }
@@ -151,7 +139,7 @@ SexpParser::ListToString(const TParameterList& lst)
             strm << boost::any_cast<float>(*i);
             s += space + strm.str();
         }
-        else if (IsParameterList(*i))
+        else if (i->type() == typeid(TParameterList))
         {
             string t = ListToString(boost::any_cast<TParameterList>(*i));
             s += space + '(' + t + ')';
