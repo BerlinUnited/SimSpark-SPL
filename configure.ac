@@ -172,6 +172,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/createagentdb.sh \
 		 app/simulator/rcsoccersim3D \
 		 app/simulator/Makefile \
+		 app/simspark/Makefile \
 		 app/spadestest/Makefile \
 		 app/rcssmonitor3d/Makefile \
 		 app/rcssmonitor3d/lib/Makefile \
