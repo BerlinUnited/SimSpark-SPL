@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.cpp,v 1.6 2004/04/08 07:17:08 rollmark Exp $
+   $Id: fileserver.cpp,v 1.7 2004/04/18 16:19:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,26 +39,27 @@ FileServer::~FileServer()
 
 shared_ptr<salt::RFile> FileServer::Open(const string& inName)
 {
-  for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
-    {
-      shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(*i);
-      shared_ptr<salt::RFile> file(fileSys->Open(inName));
-
-      //first successful is returned
-      if(file.get() != 0)
+    for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
         {
-          return file;
+            shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(*i);
+
+            shared_ptr<salt::RFile> file(fileSys->Open(inName));
+
+            //first successful is returned
+            if(file.get() != 0)
+                {
+                    return file;
+                }
         }
-    }
 
-  // try to open it via the regular file system
-  shared_ptr<salt::RFile> file(new StdFile());
-  if (! file->Open(inName.c_str()))
-    {
-        file.reset();
-    }
+    // try to open it via the regular file system
+    shared_ptr<salt::RFile> file(new StdFile());
+    if (! file->Open(inName.c_str()))
+        {
+            file.reset();
+        }
 
-  return file;
+    return file;
 }
 
 FileServer::THandle FileServer::Register(const string& inName)
@@ -94,7 +95,7 @@ shared_ptr<salt::RFile> FileServer::Get(THandle handle) const
 
 void FileServer::Close(THandle handle)
 {
-   TFileMap::iterator iter = mFileMap.find(handle);
+    TFileMap::iterator iter = mFileMap.find(handle);
 
     if (iter == mFileMap.end())
         {
@@ -131,59 +132,62 @@ bool FileServer::Exist(const string& inName)
 // this routine registers a new file system instance with the server
 bool FileServer::Mount(const string& inFileSysName, const string& inPath)
 {
-  shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(GetChild(inPath));
+    shared_ptr<FileSystem> fileSys =
+        shared_static_cast<FileSystem>(GetChild(inPath));
 
-  if (fileSys)
-    {
-      // we already have a file system which is bound to the same name
-      if (fileSys->GetClass()->GetName().compare(inFileSysName) == 0)
+    if (fileSys)
         {
-          // as the file system has the same type, we can return true
-          return true;
+            // we already have a file system which is bound to the same name
+            if (fileSys->GetClass()->GetName().compare(inFileSysName) == 0)
+                {
+                    // as the file system has the same type, we can return true
+                    return true;
+                }
+            else
+                {
+                    // already have a file system of a different type, so return false
+                    GetLog()->Error()
+                        << "(FileServer) ERROR: a FileSystem is already mounted a "
+                        << inPath << "\n";
+                    return false;
+                }
         }
-      else
+
+    // try to instantiate the file system
+    fileSys = shared_static_cast<FileSystem>(GetCore()->New(inFileSysName));
+
+    if (
+        (fileSys.get() == 0) ||
+        (! fileSys->SetPath(inPath))
+        )
         {
-          // already have a file system of a different type, so return false
-          return false;
+            return false;
         }
-    }
 
-  // try to instantiate the file system
-  fileSys = shared_static_cast<FileSystem>(GetCore()->New(inFileSysName));
+    // link it into our hierarchy
+    AddChildReference(fileSys);
 
-  if(fileSys)
-    {
-      if(fileSys->SetPath(inPath))
-        {
-          // try to name the file system
-          fileSys->SetName(inPath);
-
-          // link it into our hierarchy
-          if (AddChildReference(fileSys))
-            {
-              return true;
-            }
-        }
-      // once we reach this point something hase gone wrong
-    }
-
-  return false;
+    GetLog()->Normal() <<
+        "(FileServer) successfully mounted a '"
+                       << inFileSysName << "' at '"
+                       << inPath << "'\n";
+    return true;
 }
 
 bool FileServer::Unmount(const string& inPath)
 {
-  // try to remove a std file system first
-  if (Unmount ("FileSystemSTD", inPath))
-    {
-      return true;
-    }
+    // try to remove a std file system first
+    if (Unmount ("FileSystemSTD", inPath))
+        {
+            return true;
+        }
 
-  shared_ptr<Leaf> leaf = GetChild(inPath);
+    shared_ptr<Leaf> leaf = GetChild(inPath);
 
-  if(leaf)
+    if(leaf)
     {
-      leaf->Unlink();
-      return true;
+        leaf->Unlink();
+ return true;
     }
 
   return false;
