@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.1 2004/04/11 17:15:02 rollmark Exp $
+   $Id: main.cpp,v 1.2 2004/04/14 18:34:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,8 +32,7 @@ class SimSpark : public Spark
 {
 public:
     SimSpark(const std::string& relPathPrefix) :
-        Spark(relPathPrefix),
-        mRsgFileName("rsg/boxspheres/simspark.rsg")
+        Spark(relPathPrefix)
     {};
 
     /** process user defined input constants */
@@ -53,9 +52,6 @@ public:
 
     /** process command line options */
     bool ProcessCmdLine(int argc, char* argv[]);
-
-public:
-    string mRsgFileName;
 };
 
 void SimSpark::PrintGreeting()
@@ -114,17 +110,6 @@ bool SimSpark::InitApp(int argc, char** argv)
 
     // tell spark the loaction of our camera
     if (! SetFPSController("/usr/scene/camera/physics/controller"))
-        {
-            return false;
-        }
-
-    // load the given rsg file
-    if (
-        (! mRsgFileName.empty()) &&
-        (! GetActiveScene()->ImportScene(mRsgFileName,
-                                         shared_ptr<ParameterList>(new ParameterList))
-         )
-        )
         {
             return false;
         }
