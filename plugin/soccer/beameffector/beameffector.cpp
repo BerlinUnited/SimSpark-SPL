@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.1.2.1 2004/02/11 11:17:47 rollmark Exp $
+   $Id: beameffector.cpp,v 1.1.2.2 2004/02/19 19:11:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,20 +61,31 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
     // the beam effector only has an effect in PM_BeforeKickOff
     if (mGameState->GetPlayMode() == PM_BeforeKickOff)
         {
-            Vector3f pos = SoccerBase::FlipView
-                (
-                 beamAction->GetPosition(),
-                 mAgentState->GetTeamIndex()
-                );
+            // swap external and internal z-coordinates; after the
+            // swap pos is still relative to the team
+            Vector3f pos = beamAction->GetPosition();
+            std::swap(pos[1],pos[2]);
 
             // an agent can only beam within it's own field half
             float minX = -mFieldLength/2 + mAgentRadius;
             pos[0] = std::max<float>(pos[0],minX);
+            pos[0] = std::min<float>(pos[0],0.0f);
 
             float minY = -mFieldWidth/2 + mAgentRadius;
-            pos[2] = std::max<float>(minY,pos[1]);
+            float maxY = mFieldWidth/2 - mAgentRadius;
+            pos[2] = std::max<float>(minY,pos[2]);
+            pos[2] = std::min<float>(maxY,pos[2]);
 
             pos[1] = mAgentRadius;
+
+            // swap x and y coordinates accordingly for the current
+            // team; after the flip pos is global and not independent
+            // on the team
+            pos = SoccerBase::FlipView
+                (
+                 pos,
+                 mAgentState->GetTeamIndex()
+                 );
 
             mBody->SetPosition(pos);
             mBody->SetVelocity(Vector3f(0,0,0));
