@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.4.8.4 2004/01/25 11:34:29 rollmark Exp $
+   $Id: collider.cpp,v 1.4.8.5 2004/01/29 10:18:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -111,6 +111,17 @@ void Collider::OnUnlink()
   mSpace.reset();
 }
 
+void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
+{
+  if (GetChildSupportingClass("CollisionHandler").get() == 0)
+    {
+      // for convenience we add a ContactJointHandler if no other
+      // handler is registered. This behaviour covers the majority of
+      // all use cases and eases the creation of Colliders.
+      AddCollisionHandler("kerosin/ContactJointHandler");
+    }
+}
+
 dGeomID Collider::GetODEGeom()
 {
   return mODEGeom;
@@ -134,41 +145,14 @@ bool Collider::AddCollisionHandler(const std::string& handlerName)
   return AddChildReference(handler);
 }
 
-void Collider::OnCollision(dGeomID collidee, dContact& contact)
+void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
+                            dContact& contact, ECollisionType type)
+
 {
-  // get the collider corresponding to the collidee's dGeomID and
-  // retrieve a shared pointer to it
-  Collider* colPtr = Collider::GetCollider(collidee);
-  if (colPtr == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (Collider) no Collider found for dGeomID "
-        << collidee << "\n";
-      return;
-    }
-
-  shared_ptr<Collider> colShared = shared_static_cast<Collider>
-    (make_shared(colPtr->GetSelf()));
-
-  if (colShared.get() == 0)
-    {
-      return;
-    }
-
   TLeafList colHandler;
   GetChildrenSupportingClass("CollisionHandler",colHandler);
 
-  if (colHandler.size() == 0)
-    {
-      // for convenience we add a ContactJointHandler if no other
-      // handler is registered. This behaviour covers the majority of
-      // all use cases and eases the creation of Colliders.
-
-      AddCollisionHandler("kerosin/ContactJointHandler");
-      GetChildrenSupportingClass("CollisionHandler",colHandler);
-    }
-
-  for (
+   for (
        TLeafList::iterator iter = colHandler.begin();
        iter != colHandler.end();
        ++iter
@@ -177,7 +161,15 @@ void Collider::OnCollision(dGeomID collidee, dContact& contact)
       shared_ptr<CollisionHandler> handler =
         shared_static_cast<CollisionHandler>(*iter);
 
-      handler->HandleCollision(colShared, contact);
+      if (
+          (type == CT_SYMMETRIC) &&
+          (! handler->IsSymmetricHandler())
+          )
+        {
+          continue;
+        }
+
+      handler->HandleCollision(collidee, contact);
     }
 }
 
@@ -191,3 +183,4 @@ void Collider::SetPosition(salt::Vector3f pos)
 {
   dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
 }
+
