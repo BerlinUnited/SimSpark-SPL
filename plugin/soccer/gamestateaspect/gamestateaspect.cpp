@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.5 2004/04/23 13:56:44 fruit Exp $
+   $Id: gamestateaspect.cpp,v 1.6 2004/04/23 15:22:14 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
 {
     mPlayMode = PM_BeforeKickOff;
     mTime = 0;
+    mLeadTime = 0;
     mLastModeChange = 0;
     mGameHalf = GH_FIRST;
     mScore[0] = 0;
@@ -56,9 +57,13 @@ GameStateAspect::UpdateTime(float deltaTime)
       (mPlayMode != PM_BeforeKickOff) &&
       (mPlayMode != PM_GameOver)
       )
-      {
-          mTime += deltaTime;
-      }
+  {
+      mTime += deltaTime;
+  }
+  else if (mPlayMode == PM_BeforeKickOff)
+  {
+      mLeadTime += deltaTime;
+  }
 }
 
 void
@@ -77,37 +82,38 @@ void
 GameStateAspect::SetPlayMode(TPlayMode mode)
 {
     if (mode == mPlayMode)
-        {
-            return;
-        }
-
+    {
+        return;
+    }
 
     GetLog()->Normal() << "(GameStateAspect) playmode changed to "
                        << SoccerBase::PlayMode2Str(mode) << " at t="
                        << mTime << "\n";
     mPlayMode = mode;
     mLastModeChange = mTime;
+    mLeadTime = 0.0;
 }
 
 void
-GameStateAspect::KickOff()
+GameStateAspect::KickOff(TTeamIndex ti)
 {
     if (mGameHalf == GH_FIRST)
+    {
+        // throw a coin to determine which team kicks off
+        if (ti == TI_NONE)
         {
-            // throw a coin to determine which team kicks off
-            TTeamIndex ti = (salt::UniformRNG<>(0,1)() <= 0.5) ?
-                TI_LEFT : TI_RIGHT;
+            ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
+        }
 
-            SetPlayMode((ti == TI_LEFT)
-                        ? PM_KickOff_Left : PM_KickOff_Right);
+        SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
 
-            mLastKickOff = ti;
-        } else
-            {
-                // in the second half, let the opposite team kick off
-                SetPlayMode((mLastKickOff == TI_LEFT)
-                            ? PM_KickOff_Right : PM_KickOff_Left);
-            }
+        mLastKickOff = ti;
+    }
+    else
+    {
+        // in the second half, let the opposite team kick off
+        SetPlayMode((mLastKickOff == TI_LEFT) ? PM_KickOff_Right : PM_KickOff_Left);
+    }
 }
 
 TTime
@@ -117,13 +123,14 @@ GameStateAspect::GetTime() const
 }
 
 TTime
-GameStateAspect::GetModeTime()
+GameStateAspect::GetModeTime() const
 {
+    if (mPlayMode == PM_BeforeKickOff) return mLeadTime;
     return mTime - mLastModeChange;
 }
 
 TTime
-GameStateAspect::GetLastModeChange()
+GameStateAspect::GetLastModeChange() const
 {
     return mLastModeChange;
 }
@@ -135,23 +142,23 @@ GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
         (idx != TI_LEFT) &&
         (idx != TI_RIGHT)
         )
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     mTeamName[idx] = name;
 }
 
 std::string
-GameStateAspect::GetTeamName(TTeamIndex idx)
+GameStateAspect::GetTeamName(TTeamIndex idx) const
 {
     if (
         (idx != TI_LEFT) &&
         (idx != TI_RIGHT)
         )
-        {
-            return "";
-        }
+    {
+        return "";
+    }
 
     return mTeamName[idx];
 }
@@ -160,18 +167,18 @@ TTeamIndex
 GameStateAspect::GetTeamIndex(const std::string& teamName)
 {
     for (int i=TI_LEFT;i<=TI_RIGHT;++i)
+    {
+        if (mTeamName[i] == "")
         {
-            if (mTeamName[i] == "")
-                {
-                    mTeamName[i] = teamName;
-                    return (TTeamIndex)i;
-                }
-
-            if (mTeamName[i] == teamName)
-                {
-                    return (TTeamIndex)i;
-                }
+            mTeamName[i] = teamName;
+            return (TTeamIndex)i;
         }
+
+        if (mTeamName[i] == teamName)
+        {
+            return (TTeamIndex)i;
+        }
+    }
 
     return TI_NONE;
 }
@@ -183,9 +190,9 @@ GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
         (idx != TI_LEFT) &&
         (idx != TI_RIGHT)
         )
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     TUnumSet& set = mUnumSet[idx];
 
@@ -193,9 +200,9 @@ GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
         (set.size() >= 11) ||
         (set.find(unum) != set.end())
         )
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     set.insert(unum);
     mMaxUnum[idx] = std::max<int>(unum, mMaxUnum[idx]);
@@ -263,7 +270,7 @@ GameStateAspect::SetGameHalf(TGameHalf half)
 }
 
 TGameHalf
-GameStateAspect::GetGameHalf()
+GameStateAspect::GetGameHalf() const
 {
     return mGameHalf;
 }
@@ -283,7 +290,7 @@ GameStateAspect::ScoreTeam(TTeamIndex idx)
 }
 
 int
-GameStateAspect::GetScore(TTeamIndex idx)
+GameStateAspect::GetScore(TTeamIndex idx) const
 {
     if (
         (idx != TI_LEFT) &&
