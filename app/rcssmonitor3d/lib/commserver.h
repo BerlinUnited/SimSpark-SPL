@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.1 2004/03/09 17:13:33 fruit Exp $
+   $Id: commserver.h,v 1.2 2004/03/12 17:24:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include "communit.h"
 #include <vector>
 
-class CommServer : public zeitgeist::Object
+class CommServer : public zeitgeist::Leaf
 {
  public:
   typedef std::vector<salt::Vector3f> TPositions;
