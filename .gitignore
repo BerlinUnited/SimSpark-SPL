@@ -47,6 +47,7 @@ app/scenetest/scenetest
 app/scenetest/sys
 app/simulator/.deps
 app/simulator/.libs
+app/simulator/Logfiles
 app/simulator/Makefile
 app/simulator/Makefile.in
 app/simulator/simulator
