@@ -21,11 +21,11 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 rcssmonitor3D_SOURCES = \
 	main.cpp \
-	camera.cpp \
-	glserver.cpp \
-	communit.cpp \
-	commserver.cpp \
-	commserver_c.cpp \
-	tcpsocket.cpp
+	camera.cpp camera.h \
+	glserver.cpp glserver.h \
+	communit.cpp communit.h \
+	commserver.cpp commserver.h commserver_c.cpp \
+	tcpsocket.cpp tcpsocket.h \
+	types.h
 
 EXTRA_DIST = rcssmonitor3d.rb
