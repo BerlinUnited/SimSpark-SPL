@@ -1,3 +1,80 @@
+2004-01-20  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/soccer/Makefile.am: 
+	added ball files
+
+	* lib/oxygen/controlaspect/controlaspect.h: 
+	comment change
+
+	* app/rcssmonitor3d/main.cpp:
+	parsing the ball position updates and drawing the ball
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	send the ball position to the monitor
+
+	* app/simulator/simulator.rb: 
+	adding a ball object to the scene
+
+	* plugin/soccer/export.cpp: 
+	exporting "Ball' to zeitgeist
+
+	* plugin/soccer/ball/.cvsignore, 
+	* plugin/soccer/ball/ball.cpp,
+	* plugin/soccer/ball/ball.h, 
+	* plugin/soccer/ball/ball_c.cpp:
+	added soccer/ball files. A ball constructs a simple sphere
+	together with a collider
+
+	* lib/oxygen/sceneserver/fpscontroller.cpp: 
+	some cleanup; moved implementation from fpscontroller.h her
+
+	* lib/oxygen/sceneserver/fpscontroller.h: some cleanup
+	moved implementation to fpscontroller.cpp
+
+	* lib/oxygen/sceneserver/camera.cpp:
+	moved implementation from camera.h here
+
+	* lib/oxygen/sceneserver/camera.h: 
+	moved implementation to camera.cpp
+	cleaned up comments
+
+	* lib/oxygen/sceneserver/basenode_c.cpp: 
+	some cleanup
+
+	* lib/oxygen/sceneserver/basenode.cpp: some cleanup
+	moved setup of static mIdentityMatrix out of BaseNode constructor
+
+	* lib/salt/matrix.h:
+	added method GetIdentity returning a pointer to a static identity
+	matrix
+
+	* lib/oxygen/sceneserver/basenode.h: 
+	comments and formatting cleanup
+
+2004-01-16  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/simulator.rb:
+	constructing wall collider from the same set of variables as the
+	flags
+
+	* lib/oxygen/physicsserver/collider.cpp:
+	OnCollision looks up the Collider corresponding to the collidee
+	geomID and retrieves a shared pointer to it
+
+	* plugin/collisionperceptor/perceptorhandler.cpp,
+	* plugin/collisionperceptor/perceptorhandler.h:
+	new HandleCollision signature
+
+	* lib/oxygen/physicsserver/contactjointhandler.cpp:
+	adapted to new HandleCollision signature
+
+	* lib/oxygen/physicsserver/contactjointhandler.h:
+	changed to new HandleCollision signature
+
+	* lib/oxygen/physicsserver/collisionhandler.h:
+	modified HandleCollision() signature to receive the collidee as a
+	shared pointer to another collider
+
 2004-01-15  Oliver Obst  <fruit@robolog.org>
 
 	* app/agenttest/main.cpp: 
