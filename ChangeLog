@@ -1,6 +1,15 @@
 2003-11-17  Oliver Obst  <fruit@robolog.org>
 
 	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- moved some demo code into the simToTime() method 
+	- returning default values for all the empty methods 
+	- pauseMethodCallBack starts up the simulation immediatly
+
+	* app/spadestest/main.cpp: 
+	- using the SpadesServer to simulate. 
+	- disabled interactivity (console).
+	
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
 	added command line parsing via spades::EngineParam style parameter reader
 
 	* lib/oxygen/spadesserver/spadesserver.h: 
