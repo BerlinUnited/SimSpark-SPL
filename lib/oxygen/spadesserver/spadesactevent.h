@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesactevent.h,v 1.2 2003/12/21 23:36:37 fruit Exp $
+   $Id: spadesactevent.h,v 1.2.4.1 2004/01/07 15:50:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,11 @@ class SpadesActEvent : public spades::ActEvent
   virtual ~SpadesActEvent (){}
 
   virtual void Print (std::ostream & o) const;
+
+  /** realizes the stored list of ActionObjects. As a sanity check it
+      returns whether the world model did anything with this event. In
+      our case always true.
+  */
   virtual bool realizeEventWorldModel(spades::WorldModel* pWM);
 
  protected:
