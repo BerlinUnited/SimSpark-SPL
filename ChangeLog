@@ -1,3 +1,64 @@
+2004-04-14  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/spark/spark.rb: 
+	- fixed a ruby syntax error
+
+	* app/simspark/rsg/jointtest/sliderthing.rsg:
+	- creating a simple scene using the slider joint
+
+	* app/simspark/rsg/boxspheres/arena.rsg,
+	* app/simspark/rsg/boxspheres/box.rsg,
+	* app/simspark/rsg/boxspheres/layer.rsg,
+	* app/simspark/rsg/boxspheres/row.rsg,
+	* app/simspark/rsg/boxspheres/simspark.rsg,
+	* app/simspark/rsg/boxspheres/sphere.rsg,
+	* app/simspark/rsg/jointtest/hingething.rsg,
+	* app/simspark/rsg/jointtest/simspark.rsg:
+	- adapted to changed RubySceneImporter syntax
+	- setup inerta matrix correctly
+
+	* app/simspark/simspark.rb:
+	- importing scene rsg/boxspheres/simspark.rsg
+
+	* app/simspark/main.cpp: - removed member mRsgFileName
+	- scene is now imported from the ruby script
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp,
+	plugin/rubysceneimporter/rubysceneimporter.h:
+	- changed RubySceneGraph syntax: Node declaration need the
+	keywoard 'node'. Changed template keywoard from upper case to
+	lower case. Method invocation are no longer prefixed wit a dot,
+	but are contained in their own sub expression
+
+	* lib/oxygen/sceneserver/transform.cpp,
+	* lib/oxygen/sceneserver/transform.h,
+	* lib/oxygen/sceneserver/transform_c.cpp:
+	- added method SetLocalRotation
+
+	* lib/oxygen/physicsserver/body.cpp,
+	* lib/oxygen/physicsserver/body.h,
+	* lib/oxygen/physicsserver/body_c.cpp:
+	- added method SetSphereTotal, SetBox, SetBoxTotal, SetCylinder,
+	SetCylinderTotal, SetCappedCylinder and SetCappedCylinderTotal to
+	setup the body's mass parameters and inerta matrix.
+
+	* lib/oxygen/physicsserver/joint.h: 
+	- indentation fix
+
+	* lib/oxygen/physicsserver/hingejoint.cpp,
+	* lib/oxygen/physicsserver/hingejoint.h,
+	* lib/oxygen/physicsserver/hingejoint_c.cpp:
+	- added method GetHingeAngle() and GetHingeAngleRate()
+
+	* lib/oxygen/Makefile.am, lib/oxygen/oxygen.cpp,
+	lib/oxygen/oxygen.h:
+	- registered SliderJoint
+
+	* lib/oxygen/physicsserver/sliderjoint.cpp,
+	* lib/oxygen/physicsserver/sliderjoint.h,
+	* lib/oxygen/physicsserver/sliderjoint_c.cpp:
+	- added class SliderJoint
+
 2004-04-14  Oliver Obst  <fruit@robolog.org>
 
 	* app/simspark/Makefile.am: 
