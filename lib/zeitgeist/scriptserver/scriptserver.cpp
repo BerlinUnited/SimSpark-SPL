@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.8 2003/12/21 23:36:37 fruit Exp $
+   $Id: scriptserver.cpp,v 1.8.4.1 2004/01/26 20:40:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -308,83 +308,74 @@ void ScriptServer::CreateVariable(const string &varName, const string &value)
   Eval(s.str());
 }
 
+bool ScriptServer::ParseVarName(const string& varName, string& nameSpace, string& name)
+{
+    stringstream  ss(varName);
+    string current;
+    vector<string>  tokens;
+
+    // segment varName
+    while(! ss.eof())
+        {
+            getline(ss, current,'.');
+            if (current.size())
+                {
+                    tokens.push_back(current);
+                }
+        }
+
+    if (tokens.size() != 2)
+        {
+            return false;
+        }
+
+    nameSpace = tokens[0];
+    name = tokens[1];
+
+    return (
+            (nameSpace.size() >= 1) &&
+            (nameSpace[0] >= 'A') &&
+            (nameSpace[0] <= 'Z') &&
+            (name.size() >= 1) &&
+            (name[0] >= 'A') &&
+            (name[0] <= 'Z')
+            );
+}
+
 bool ScriptServer::ExistsVariable(const string &varName)
 {
-  stringstream    s(varName);
-  string current;
-  vector<string>  tokens;
-
-  // parse varName
-  while(!s.eof())
-    {
-      getline(s, current,'.');
-      if (current.size())
-        tokens.push_back(current);
-    }
-
-  if (tokens.size() != 2)
-    {
-        // invalid name
-        return false;
-    }
-
-  char firstChar = (tokens[0])[0];
-  if (
-      (firstChar < 'A') ||
-      (firstChar > 'Z')
-      )
-      {
-          // namespace must start with a capital letter
-          return false;
-      }
-
-  // get class
-  VALUE ns =      rb_const_get(rb_cObject, rb_intern(tokens[0].c_str()));
-
-  if (NIL_P(ns))
-      {
-          // invalid namespace
-          return false;
-      }
-
-  ID var  = rb_intern(tokens[1].c_str());
-  VALUE v = rb_funcall(ns, var, 0);
-
-  return !(NIL_P(v));
+    return (! NIL_P(GetVariable(varName)));
 }
 
 VALUE ScriptServer::GetVariable(const string &varName)
 {
-  stringstream    s(varName);
-  string current;
-  vector<string>  tokens;
+    string nameSpace;
+    string name;
 
-  // parse varName
-  while(!s.eof())
-    {
-      getline(s, current,'.');
-      if (current.size())
-        tokens.push_back(current);
-    }
-
-  if (tokens.size() != 2)
-    {
-      GetLog()->Error() << "ERROR: Invalid variable '" << varName << "'" << endl;
-      return Qnil;
-    }
-  else
-    {
-      // get class
-      VALUE ns =      rb_const_get(rb_cObject, rb_intern(tokens[0].c_str()));
-      if (NIL_P(ns))
+    if (! ParseVarName(varName,nameSpace,name))
         {
-          GetLog()->Error() << "ERROR: Invalid namespace '"
-                            << tokens[0] << "'" << endl;
-          return false;
+            return Qnil;
         }
-      ID var= rb_intern(tokens[1].c_str());
-      return rb_funcall(ns, var, 0);
-    }
+
+    VALUE v = Qnil;
+
+    if (nameSpace == "")
+        {
+            rb_const_get(rb_cObject, rb_intern(name.c_str()));
+        } else
+            {
+                // get namespace class
+                VALUE ns = rb_const_get(rb_cObject, rb_intern(nameSpace.c_str()));
+
+                if (! NIL_P(ns))
+                    {
+                        // get member variable of namespace object
+                        ID var = rb_intern(name.c_str());
+                        v = rb_funcall(ns, var, 0);
+                    }
+        }
+
+    return v;
 }
 
 bool ScriptServer::GetVariable(const string &varName, int &value)
@@ -411,11 +402,10 @@ bool ScriptServer::GetVariable(const std::string &varName, float &value)
     {
         return false;
     }
-    else
-        {
-            value = (float)NUM2DBL(val);
-            return true;
-        }
+
+    value = (float)NUM2DBL(val);
+
+    return true;
 }
 
 
@@ -424,23 +414,23 @@ bool ScriptServer::GetVariable(const string &varName, bool &value)
   VALUE val = GetVariable(varName);
 
   if (NIL_P(val))
-    {
+  {
       return false;
-    }
-  else
-    {
-      if (TYPE(val) == T_TRUE)
-        {
-          value = true;
-          return true;
-        }
-      if (TYPE(val) == T_FALSE)
-        {
-          value = false;
-          return true;
-        }
+  }
+
+  switch(TYPE(val))
+  {
+  case T_TRUE :
+      value = true;
+      return true;
+
+  case T_FALSE :
+      value = false;
       return false;
-    }
+
+  default:
+      return false;
+  }
 }
 
 bool ScriptServer::GetVariable(const string &varName, string &value)
@@ -451,11 +441,9 @@ bool ScriptServer::GetVariable(const string &varName, string &value)
     {
       return false;
     }
-  else
-    {
-      value = STR2CSTR(val);
-      return true;
-    }
+
+  value = STR2CSTR(val);
+  return true;
 }
 
 boost::shared_ptr<CoreContext> ScriptServer::GetContext() const
