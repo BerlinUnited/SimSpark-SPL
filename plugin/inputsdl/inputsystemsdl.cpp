@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystemsdl.cpp,v 1.5 2004/03/09 12:48:29 rollmark Exp $
+   $Id: inputsystemsdl.cpp,v 1.6 2004/04/22 19:27:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,11 +64,6 @@ InputSystemSDL::InputSystemSDL() : InputSystem(), mMutex(NULL)
 InputSystemSDL::~InputSystemSDL()
 {
     SDL_WM_GrabInput(SDL_GRAB_OFF);
-
-    GetLog()->Normal()
-        << "(InputSsystem) InputSystemSDL shutting down"
-        << std::endl;
-
     SDL_LockMutex(mMutex);
     SDL_SetEventFilter(NULL);
     gInputSystem = NULL;
