@@ -29,6 +29,7 @@ new features.
 - Players accelerate (and break) faster; something like air resistance and 
   friction was added to the players and the ball so that they eventually stop 
   with no acceleration.
+- The torque from the kicker was made configurable from rcssserver3D.rb
 - An experimental say-effector has been added; up to now, only monitors 
   (and trainers implemented as monitors) can hear the messages.
 
@@ -60,10 +61,12 @@ new features.
   is part of rcssserver3D now and has been extended by TCP sockets.
 - Added simspark demo simulations. 
 
-* Fixes (both soccer specific and general):
+* Fixes/Changes (both soccer specific and general):
 
 - The simulator compiles with recent versions of boost (tested with 1-31-0)
 - Goals are properly counted now
+- Goals are only 50cm heigh now because agents cannot jump high 
+- The default torque from the kicker is low now (was way to high before)
 - Making the API documentation has been reduced to only the necessary cases.
 - Some math bugs in libsalt have been fixed.
 - The kerosin library has been overhauled (lights / meshes / etc).
