@@ -1,3 +1,4 @@
+importBundle "sexpparser"
 importBundle "filesystemstd"
 importBundle "monitortest"
 
@@ -17,18 +18,19 @@ sceneServer = new('kerosin/SceneServer', '/sys/server/scene');
 sceneServer.createScene('/usr/scene');
 
 # setup the MonitorServer and a simple MonitorSystem
-print "\nCreating MonitorServer\n";
 monitorServer = new('oxygen/MonitorServer', '/sys/server/monitor');
 monitorServer.registerMonitorSystem('MonitorTest');
 
 # setup the GameControlServer
-print "\nCreating GameControlServer\n";
-spadesServer = new('oxygen/GameControlServer', '/sys/server/gamecontrol');
-
+gameControlServer = new('oxygen/GameControlServer', '/sys/server/gamecontrol');
+gameControlServer.initParser('SexpParser');
 
 # setup the SpadesServer
-print "\nCreating SpadesServer\n";
 spadesServer = new('oxygen/SpadesServer', '/sys/server/spades');
+
+# test perceptor
+print "\n##### Creating a Gadgetron PerfectVision 360 perceptor #####\n\n";
+vision360 = new('oxygen/PerfectVisionPerceptor', '/v360');
 
 # set the time of a single simulation step
 Spades.TimePerStep = 0.01
