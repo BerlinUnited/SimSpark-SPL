@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.h,v 1.4.4.1 2003/12/04 17:33:26 rollmark Exp $
+   $Id: forceeffector.h,v 1.4.4.2 2003/12/10 10:22:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,19 +35,20 @@ class ForceEffector : public Effector
 public:
     ForceEffector();
 
-    /** Apply the force to the physics aspect attached to base.
-        \return true on success, false if no body was found */
-    virtual bool Perform(boost::shared_ptr<BaseNode> &base, float deltaTime);
+    /** realizes the action described by the ActionObject */
+    virtual bool Realize(boost::shared_ptr<ActionObject> action);
+
+    /** returns the name of the predicate this effector implements.
+     */
+    virtual std::string GetPredicate() { return "force"; }
+
+    /** constructs an Actionobject, describing a predicate */
+    virtual boost::shared_ptr<ActionObject>
+    GetActionObject(const BaseParser::TPredicate& predicate);
 
     //! accumulates a force to be applied to a physics aspect
     void AddForce(const salt::Vector3f& force);
-
     void SetMaxForce(float maxForce)    {       mMaxForce = maxForce;   }
-
-    virtual std::string GetPredicate() { return "force"; }
-
-    virtual boost::shared_ptr<ActionObject>
-    GetActionObject(const BaseParser::TPredicate& predicate);
 
     //
     // members
