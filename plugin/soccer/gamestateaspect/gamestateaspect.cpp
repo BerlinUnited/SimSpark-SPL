@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.4 2004/04/08 14:33:56 markelic Exp $
+   $Id: gamestateaspect.cpp,v 1.5 2004/04/23 13:56:44 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,8 @@ GameStateAspect::~GameStateAspect()
 {
 }
 
-void GameStateAspect::UpdateTime(float deltaTime)
+void
+GameStateAspect::UpdateTime(float deltaTime)
 {
   if (
       (mPlayMode != PM_BeforeKickOff) &&
@@ -60,17 +61,20 @@ void GameStateAspect::UpdateTime(float deltaTime)
       }
 }
 
-void GameStateAspect::Update(float deltaTime)
+void
+GameStateAspect::Update(float deltaTime)
 {
     UpdateTime(deltaTime);
 }
 
-TPlayMode GameStateAspect::GetPlayMode() const
+TPlayMode
+GameStateAspect::GetPlayMode() const
 {
     return mPlayMode;
 }
 
-void GameStateAspect::SetPlayMode(TPlayMode mode)
+void
+GameStateAspect::SetPlayMode(TPlayMode mode)
 {
     if (mode == mPlayMode)
         {
@@ -85,7 +89,8 @@ void GameStateAspect::SetPlayMode(TPlayMode mode)
     mLastModeChange = mTime;
 }
 
-void GameStateAspect::KickOff()
+void
+GameStateAspect::KickOff()
 {
     if (mGameHalf == GH_FIRST)
         {
@@ -105,22 +110,26 @@ void GameStateAspect::KickOff()
             }
 }
 
-TTime GameStateAspect::GetTime() const
+TTime
+GameStateAspect::GetTime() const
 {
     return mTime;
 }
 
-TTime GameStateAspect::GetModeTime()
+TTime
+GameStateAspect::GetModeTime()
 {
     return mTime - mLastModeChange;
 }
 
-TTime GameStateAspect::GetLastModeChange()
+TTime
+GameStateAspect::GetLastModeChange()
 {
     return mLastModeChange;
 }
 
-void GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
+void
+GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
 {
     if (
         (idx != TI_LEFT) &&
@@ -133,7 +142,8 @@ void GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
     mTeamName[idx] = name;
 }
 
-std::string GameStateAspect::GetTeamName(TTeamIndex idx)
+std::string
+GameStateAspect::GetTeamName(TTeamIndex idx)
 {
     if (
         (idx != TI_LEFT) &&
@@ -146,7 +156,8 @@ std::string GameStateAspect::GetTeamName(TTeamIndex idx)
     return mTeamName[idx];
 }
 
-TTeamIndex GameStateAspect::GetTeamIndex(const std::string& teamName)
+TTeamIndex
+GameStateAspect::GetTeamIndex(const std::string& teamName)
 {
     for (int i=TI_LEFT;i<=TI_RIGHT;++i)
         {
@@ -165,7 +176,8 @@ TTeamIndex GameStateAspect::GetTeamIndex(const std::string& teamName)
     return TI_NONE;
 }
 
-bool GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
+bool
+GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
 {
     if (
         (idx != TI_LEFT) &&
@@ -191,36 +203,37 @@ bool GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
     return true;
 }
 
-bool GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
-                        std::string teamName, unsigned int unum)
+bool
+GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
+                                std::string teamName, unsigned int unum)
 {
     if (agentState.get() == 0)
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     TTeamIndex idx = GetTeamIndex(teamName);
 
     if (idx == TI_NONE)
-        {
-            GetLog()->Error()
-                << "ERROR: (GameStateAspect::RequestUniform) invalid teamname "
-                << teamName << "\n";
-            return false;
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::RequestUniform) invalid teamname "
+            << teamName << "\n";
+        return false;
+    }
 
     if (unum == 0)
-        {
-            unum = RequestUniformNumber(idx);
-        }
+    {
+        unum = RequestUniformNumber(idx);
+    }
 
     if (! InsertUnum(idx,unum))
-        {
-            GetLog()->Error()
-                << "ERROR: (GameStateAspect::RequestUniform) cannot insert uniform"
-                " number " << unum << " to team " << teamName << "\n";
-            return false;
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::RequestUniform) cannot insert uniform"
+            " number " << unum << " to team " << teamName << "\n";
+        return false;
+    }
 
     agentState->SetUniformNumber(unum);
     agentState->SetTeamIndex(idx);
@@ -235,59 +248,64 @@ bool GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
     return true;
 }
 
-void GameStateAspect::SetGameHalf(TGameHalf half)
+void
+GameStateAspect::SetGameHalf(TGameHalf half)
 {
     if (
         (half != GH_FIRST) &&
         (half != GH_SECOND)
         )
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     mGameHalf = half;
 }
 
-TGameHalf GameStateAspect::GetGameHalf()
+TGameHalf
+GameStateAspect::GetGameHalf()
 {
     return mGameHalf;
 }
 
-void GameStateAspect::ScoreTeam(TTeamIndex idx)
+void
+GameStateAspect::ScoreTeam(TTeamIndex idx)
 {
     if (
         (idx != TI_LEFT) &&
         (idx != TI_RIGHT)
         )
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     ++mScore[idx];
 }
 
-int GameStateAspect::GetScore(TTeamIndex idx)
+int
+GameStateAspect::GetScore(TTeamIndex idx)
 {
     if (
         (idx != TI_LEFT) &&
         (idx != TI_RIGHT)
         )
-        {
-            return 0;
-        }
+    {
+        return 0;
+    }
 
     return mScore[idx];
 }
 
-Vector3f GameStateAspect::RequestInitPosition(const TTeamIndex ti)
+Vector3f
+GameStateAspect::RequestInitPosition(const TTeamIndex ti)
 {
     if (ti == TI_NONE)
-        {
-            GetLog()->Debug()
-                << "(GameStateAspect) RequestInitPosition called with "
-                << "ti=TI_NONE\n";
-            return Vector3f(0,20,0);
-        }
+    {
+        GetLog()->Debug()
+            << "(GameStateAspect) RequestInitPosition called with "
+            << "ti=TI_NONE\n";
+        return Vector3f(0,20,0);
+    }
 
     salt::Vector3f& init = (ti ==TI_LEFT) ? mLeftInit : mRightInit;
 
@@ -297,7 +315,8 @@ Vector3f GameStateAspect::RequestInitPosition(const TTeamIndex ti)
     return pos;
 }
 
-void GameStateAspect::OnLink()
+void
+GameStateAspect::OnLink()
 {
     // setup the initial starting positions for the agents
     float fieldWidth = 64.0;
@@ -311,20 +330,21 @@ void GameStateAspect::OnLink()
 
     mLeftInit = Vector3f
         (
-         -fieldLength/2.0 + mAgentRadius*2,
-         fieldWidth/2 - mAgentRadius*2,
-         mAgentRadius
-         );
+            -fieldLength/2.0 + mAgentRadius*2,
+            fieldWidth/2 - mAgentRadius*2,
+            mAgentRadius
+            );
 
     mRightInit = Vector3f
         (
-         +fieldLength/2.0 - mAgentRadius*2,
-         fieldWidth/2  - mAgentRadius*2,
-         mAgentRadius
-         );
+            +fieldLength/2.0 - mAgentRadius*2,
+            fieldWidth/2  - mAgentRadius*2,
+            mAgentRadius
+            );
 }
 
-int GameStateAspect::RequestUniformNumber(const TTeamIndex ti)
+int
+GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
 {
     return mMaxUnum[ti] + 1;
 }
