@@ -1,7 +1,7 @@
 #ifndef IMAGE_H__
 #define IMAGE_H__
 
-/*	$Id: image.h,v 1.3 2003/08/22 22:43:15 rollmark Exp $
+/*	$Id: image.h,v 1.4 2003/09/08 13:49:44 fruit Exp $
 
 	Image - A Wrapper for the DevIL Library
 
@@ -25,7 +25,7 @@
 	TOFIX:
 */
 
-#include <il/il.h>
+#include <IL/il.h>
 
 namespace kerosin
 {
