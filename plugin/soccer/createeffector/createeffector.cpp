@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.2.2.3 2004/01/15 21:00:07 fruit Exp $
+   $Id: createeffector.cpp,v 1.2.2.4 2004/01/21 15:48:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -98,12 +98,13 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
 
   // move different AgentAspect away from each other
   // position has to be set before adding child references
-  static float x = 25.0;
-  static float y = 5;
-  static float z = 15.0;
+  static float x = 12.0;
+  static float y = 2;
+  static float z = 7.0;
   aspect->SetLocalPos(x, y, z);
-  x+=10;
-  y+=50;
+  x+=2.5;
+  z+=1;
+  y+=3;
 
   // construct the nodes below the AgentAspect
 
