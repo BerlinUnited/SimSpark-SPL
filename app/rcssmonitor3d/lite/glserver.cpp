@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.3 2004/03/09 21:22:01 rollmark Exp $
+   $Id: glserver.cpp,v 1.4 2004/04/20 12:40:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,21 +71,43 @@ void GLServer::InitGL (void)
     glDisable(GL_LIGHTING);
 }
 
-void GLServer::DrawTextPix(const char* text, Vector2f pix)
+void GLServer::DrawTextPix(const char* text, Vector2f pix, ETextAlign ta)
 {
-    const Vector2f pos
-        (
-         pix[0] / (float)mWidth * 2 - 1.0f,
-         1.0f - (pix[1] / (float)mHeight * 2)
-         );
 
+    int width = GetTextWidth(text);
+    switch (ta)
+    {
+    case eCENTER:
+        pix[0] = (mWidth - width)/ 2.0 + pix[0];
+        break;
+    case eRIGHT:
+        pix[0] = mWidth - width + pix[0];
+        break;
+    default: ;
+    }
+
+    const Vector2f pos(pix[0] / (float)mWidth * 2 - 1.0f,
+                       1.0f - (pix[1] / (float)mHeight * 2));
     DrawText(text,pos);
 }
 
-int GLServer::GetTextHeight()
+int
+GLServer::GetTextHeight() const
 {
     // currently only GLUT_BITMAP_9_BY_15 is used
     return 15;
+}
+
+int
+GLServer::GetTextWidth(const char* text) const
+{
+    // currently only GLUT_BITMAP_9_BY_15 is used
+    int width = 0;
+    for (const char* s = text; *s; ++s)
+    {
+        width += glutBitmapWidth(GLUT_BITMAP_9_BY_15, *s);
+    }
+    return width;
 }
 
 void GLServer::DrawText3D(const char* text, Vector3f pos)
@@ -126,6 +148,7 @@ void GLServer::DrawText(const char* text, Vector2f pos)
         }
 }
 
+
 void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
                                    float angleDeg, float height)
 {
@@ -158,6 +181,22 @@ void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
             glVertex3f(x+deltaX,y+deltaY,height);
             glEnd();
         }
+    glPopMatrix();
+}
+
+void
+GLServer::DrawCircle(const salt::Vector3f& pos, float radius, float start_angle, float end_angle)
+{
+    glPushMatrix();
+    glBegin(GL_LINE_LOOP);
+    int num_lines = 36;
+
+    for(int i =0;i<num_lines;i++)
+    {
+        double angle = i*2*M_PI/num_lines;
+        glVertex3f(pos[0] + radius*cos(angle), pos[1] + radius*sin(angle), pos[2]);
+    }
+    glEnd();
     glPopMatrix();
 }
 
@@ -247,14 +286,16 @@ void GLServer::DrawGoal(Vector3f goalPos, Vector3f sz)
 //
 // draws a solid sphere with given radius to position 'spherePos'
 //-----------------------------------------------------------------------
-void GLServer::DrawSphere(Vector3f spherePos,float radius)
+void GLServer::DrawSphere(Vector3f spherePos,float radius, int res)
 {
     glPushMatrix();
     glTranslatef(spherePos[0],spherePos[1], spherePos[2]);
-    if(!mWireframe) glutSolidSphere(radius, 10, 10);
-    else glutWireSphere(radius, 10, 10);
+    if(!mWireframe) glutSolidSphere(radius, res, res);
+    else glutWireSphere(radius, res, res);
     glPopMatrix();
 }
+
+
 //-----------------------DrawShadowOfSphere------------------------------
 //
 // draws the shadow of a sphere with given radius by scaling its size onto
@@ -263,7 +304,7 @@ void GLServer::DrawSphere(Vector3f spherePos,float radius)
 void GLServer::DrawShadowOfSphere(Vector3f spherePos,float radius)
 {
     // distance between ground and shadows
-    const float delta = 0.08f;
+    const float delta = 0.051f;
 
     glPushMatrix();
     glColor3f(0.0f, 0.0f, 0.0f);
@@ -276,5 +317,4 @@ void GLServer::DrawShadowOfSphere(Vector3f spherePos,float radius)
 
     glPopMatrix();
 }
-
 
