@@ -25,3 +25,4 @@ agenttest_SOURCES = \
 	kicknrun.h kicknrun.cpp kicknrun_c.cpp \
 	soccer.h soccer.cpp soccer_c.cpp
 
+dist_pkgdata_DATA = agenttest.rb
