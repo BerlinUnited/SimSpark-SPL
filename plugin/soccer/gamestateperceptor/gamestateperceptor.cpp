@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.4 2004/04/05 14:51:36 rollmark Exp $
+   $Id: gamestateperceptor.cpp,v 1.5 2004/06/09 09:22:27 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,9 +44,9 @@ GameStatePerceptor::InsertSoccerParam(Predicate& predicate, const std::string& n
 {
     float value;
     if (! SoccerBase::GetSoccerVar(*this,name,value))
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     ParameterList& element = predicate.parameter.AddList();
     element.AddValue(name);
@@ -64,17 +64,17 @@ GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
     // team index
     std::string team;
     switch (mAgentState->GetTeamIndex())
-        {
-        case TI_NONE :
-            team = "none";
-            break;
-        case TI_LEFT :
-            team = "left";
-            break;
-        case TI_RIGHT :
-            team = "right";
-            break;
-        }
+    {
+    case TI_NONE :
+        team = "none";
+        break;
+    case TI_LEFT :
+        team = "left";
+        break;
+    case TI_RIGHT :
+        team = "right";
+        break;
+    }
 
     ParameterList& teamElement = predicate.parameter.AddList();
     teamElement.AddValue(string("team"));
@@ -107,9 +107,9 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         (mGameState.get() == 0) ||
         (mAgentState.get() == 0)
         )
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     Predicate& predicate = predList->AddPredicate();
     predicate.name = "GameState";
@@ -122,10 +122,10 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         (mFirstPercept) &&
         (mAgentState->GetTeamIndex() != TI_NONE)
         )
-        {
-            mFirstPercept = false;
-            InsertInitialPercept(predicate);
-        }
+    {
+        mFirstPercept = false;
+        InsertInitialPercept(predicate);
+    }
 
     // time
     ParameterList& timeElement = predicate.parameter.AddList();
