@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: odeobject.h,v 1.5 2004/04/05 08:47:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #ifndef OXYGEN_ODEOBJECT_H
 #define OXYGEN_ODEOBJECT_H
 
-#include "../sceneserver/basenode.h"
+#include <oxygen/sceneserver/basenode.h>
 #include <ode/ode.h>
 
 namespace oxygen
@@ -34,20 +34,15 @@ class PhysicsServer;
  */
 class ODEObject : public BaseNode
 {
+public:
     //
     // Functions
     //
-protected:
-    virtual bool ConstructInternal();
-
-    //
-    // Members
-    //
-protected:
-    boost::shared_ptr<PhysicsServer>    mPhysicsServer;
+    ODEObject() : BaseNode() {};
+    virtual ~ODEObject() {};
 };
 
-    DECLARE_CLASS(ODEObject);
+DECLARE_ABSTRACTCLASS(ODEObject);
 
 } //namespace oxygen
 
