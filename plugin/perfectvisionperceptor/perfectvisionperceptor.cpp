@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.2.2.5 2003/12/26 13:37:37 rollmark Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.3.2.1 2004/01/09 13:20:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,8 +67,8 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
     }
 
     // we want positions relative to the closest parent transform node
-    shared_ptr<Transform> parent =
-        shared_dynamic_cast<Transform>(GetParentSupportingClass("Transform"));
+    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+        (make_shared(GetParentSupportingClass("Transform")));
 
     salt::Vector3f myPos(0,0,0);
     if (parent.get() == 0)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector.cpp,v 1.4.2.1 2003/12/26 11:33:15 rollmark Exp $
+   $Id: effector.cpp,v 1.5.2.1 2004/01/09 13:15:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,6 @@ using namespace boost;
 shared_ptr<AgentAspect>
 Effector::GetAgentAspect()
 {
-  return shared_dynamic_cast<AgentAspect>
-    (GetParentSupportingClass("AgentAspect"));
+  return shared_static_cast<AgentAspect>
+    (make_shared(GetParentSupportingClass("AgentAspect")));
 }

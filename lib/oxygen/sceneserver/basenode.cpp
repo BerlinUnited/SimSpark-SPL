@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode.cpp,v 1.4.6.1 2003/12/26 11:31:51 rollmark Exp $
+   $Id: basenode.cpp,v 1.5.2.1 2004/01/09 13:19:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -172,7 +172,8 @@ void BaseNode::RenderAmbient()
 
 boost::shared_ptr<Scene> BaseNode::GetScene()
 {
-  return shared_dynamic_cast<Scene>(GetParentSupportingClass("Scene"));
+  return shared_dynamic_cast<Scene>
+    (make_shared(GetParentSupportingClass("Scene")));
 }
 
 void BaseNode::EnableDebugMode()
