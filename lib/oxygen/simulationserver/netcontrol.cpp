@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.cpp,v 1.3 2004/04/30 13:07:55 fruit Exp $
+   $Id: netcontrol.cpp,v 1.4 2004/05/01 17:11:19 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <rcssnet/tcpsocket.hpp>
 #include <rcssnet/udpsocket.hpp>
 #include <sstream>
+#include <cerrno>
 
 using namespace rcss::net;
 using namespace oxygen;
