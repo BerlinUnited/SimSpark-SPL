@@ -69,10 +69,15 @@ def addAgent(aspectPath)
   # effector setup
   new('InitEffector', aspectPath+'InitEffector')
 
+  # driveeffector setup
   driveEffector = new('DriveEffector', aspectPath+'DriveEffector')
-  driveEffector.setForceFactor(0.75);
+  # the driveeffector is good for acceleration up to 12m/s² of a 75kg robot 
+  # (if there was no friction. but there is. :)
+  driveEffector.setForceFactor(75.0 * 12.0 / 100.0);
   driveEffector.setSigma(0.005);
-  driveEffector.setConsumption(9000.0);
+  # drive consumption. (higher value means lower consumption) 
+  # untested if this is enough or too much 
+  driveEffector.setConsumption(120 * 75.0 * 12.0 * 4);
 
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
   kickEffector.setForceFactor(22.0)
