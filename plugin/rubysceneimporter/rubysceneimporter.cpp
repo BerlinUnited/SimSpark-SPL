@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.1 2004/04/08 14:56:02 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.2 2004/04/10 09:21:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 #include "rubysceneimporter.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/fileserver/fileserver.h>
 #include <boost/scoped_array.hpp>
 
 using namespace zeitgeist;
@@ -29,7 +30,6 @@ using namespace boost;
 using namespace std;
 
 /**
-
     (RubySceneGraph <version major> <version minor>)
     (
     (NodeName
@@ -58,13 +58,20 @@ RubySceneImporter::~RubySceneImporter()
 {
 }
 
-bool RubySceneImporter::ImportScene(const shared_ptr<salt::RFile> file,
+bool RubySceneImporter::ImportScene(const std::string& fileName,
                                     shared_ptr<BaseNode> root)
 {
+    // try to open the file
+    shared_ptr<salt::RFile> file = GetFile()->Open(fileName);
+
     if (file.get() == 0)
         {
+            GetLog()->Error() << "(RubySceneImporter) ERROR: cannot open file '"
+                              << fileName << "'\n";
             return false;
         }
+
+    mFileName = fileName;
 
     // read entire file into a temporary buffer
     scoped_array<char> buffer(new char[file->Size() + 1]);
@@ -102,7 +109,7 @@ bool RubySceneImporter::ImportScene(const shared_ptr<salt::RFile> file,
 
 bool RubySceneImporter::ReadHeader(sexp_t* sexp)
 {
-    // (RubySceneGraph <float version>)
+    // (RubySceneGraph <float majorVersion> <float minorVersion>)
     if (
         (sexp == 0) ||
         (sexp->ty != SEXP_LIST) ||
@@ -164,11 +171,6 @@ bool RubySceneImporter::ReadHeader(sexp_t* sexp)
     mVersionMajor = major;
     mVersionMinor = minor;
 
-
-    GetLog()->Normal()
-        << "(RubySceneImporter) reading ruby scene graph version "
-        << major << "." << minor << "\n";
-
     return true;
 }
 
@@ -209,7 +211,8 @@ shared_ptr<BaseNode> RubySceneImporter::CreateNode(sexp_t* sexp)
     if (obj.get() == 0)
         {
             GetLog()->Error()
-                << "(RubySceneImporter) ERROR: unknown class '"
+                << "(RubySceneImporter) ERROR: in file '" << mFileName
+                << "': unknown class '"
                 << className << "'\n";
             return shared_ptr<BaseNode>();
         }
@@ -219,8 +222,8 @@ shared_ptr<BaseNode> RubySceneImporter::CreateNode(sexp_t* sexp)
     if (node.get() == 0)
         {
             GetLog()->Error()
-                << "(RubySceneImporter) ERROR: class '"
-                << className << " is not derived from BaseNode'\n";
+                << "(RubySceneImporter) ERROR: in file '" << mFileName
+                << className << "': is not derived from BaseNode'\n";
             return shared_ptr<BaseNode>();
         }
 
@@ -248,7 +251,8 @@ bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
         )
         {
             GetLog()->Error()
-                << "(RubySceneImporter) ERROR: invalid method name '"
+                << "(RubySceneImporter) ERROR: in file '" << mFileName
+                << "': invalid methdod name '"
                 << method << "'\n";
             return false;
         }
@@ -281,9 +285,27 @@ bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
         }
 
     // invoke the method on the object
-    // TODO: check if methodname is valid
-    node->Invoke(method, parameter);
+    shared_ptr<Class> theClass = node->GetClass();
 
+    if (theClass.get() == 0)
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: cannot get class object for node "
+                << node->GetFullPath() << "\n";
+            return false;
+        }
+
+    if (! theClass->SupportsCommand(method))
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '" << mFileName
+                << "': unknown method name '"
+                << method << "' for node '" << node->GetFullPath()
+                << "' (a " << theClass->GetName() << ")\n";
+            return false;
+        }
+
+    node->Invoke(method, parameter);
     return true;
 }
 

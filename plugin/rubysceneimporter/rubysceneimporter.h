@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.1 2004/04/08 14:56:02 rollmark Exp $
+   $Id: rubysceneimporter.h,v 1.2 2004/04/10 09:22:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ public:
     RubySceneImporter();
     virtual ~RubySceneImporter();
 
-    virtual bool ImportScene(const boost::shared_ptr<salt::RFile> file,
+    virtual bool ImportScene(const std::string& fileName,
                              boost::shared_ptr<oxygen::BaseNode> root);
 
 protected:
@@ -43,8 +43,6 @@ protected:
     boost::shared_ptr<oxygen::BaseNode> CreateNode(sexp_t* sexp);
     bool InvokeMethods(sexp_t** sexp, boost::shared_ptr<oxygen::BaseNode> node);
 
-
-
 protected:
     /** the major version of the scen graph file */
     float mVersionMajor;
@@ -52,6 +50,8 @@ protected:
     /** the minor version of the scen graph file */
     float mVersionMinor;
 
+    /** the last supplied fileName */
+    std::string mFileName;
 };
 
 DECLARE_CLASS(RubySceneImporter);
