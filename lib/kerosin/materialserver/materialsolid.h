@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid.h,v 1.1 2004/03/20 12:54:07 rollmark Exp $
+   $Id: materialsolid.h,v 1.2 2004/04/12 13:25:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define KEROSIN_MATERIALSOLID_H
 
 #include "material.h"
+#include <kerosin/openglserver/glbase.h>
 #include <salt/vector.h>
 
 namespace kerosin
@@ -38,15 +39,45 @@ public:
 
     virtual void Bind();
 
-    /** sets the color of the solid surface */
-    void SetColor(const salt::Vector3f& color);
+    /** sets the ambient material reflectance */
+    void SetAmbient(const RGBA& ambient);
+
+    /** returns the ambient material reflectance */
+    const RGBA& GetAmbient();
+
+    /** sets the diffuse material reflectance */
+    void SetDiffuse(const RGBA& diffuse);
+
+    /** returns the diffuse material reflectancee */
+    const RGBA& GetDiffuse();
+
+    /** sets the specular material reflectance */
+    void SetSpecular(const RGBA& specular);
+
+    /** returns the specular material reflectance */
+    const RGBA& GetSpecular();
+
+    /** sets the light emission */
+    void SetEmission(const RGBA& emission);
+
+    /** returns the light emission */
+    const RGBA& GetEmission();
 
     //
     // Members
     //
 protected:
-    /** the color of the solid surface */
-    salt::Vector3f mColor;
+    /** the ambient material refeflectance */
+    RGBA mAmbient;
+
+    /** the diffuse material reflectance */
+    RGBA mDiffuse;
+
+    /** the specular material reflectance */
+    RGBA mSpecular;
+
+    /** the emitted light intensity of the material */
+    RGBA mEmission;
 };
 
 DECLARE_CLASS(MaterialSolid);

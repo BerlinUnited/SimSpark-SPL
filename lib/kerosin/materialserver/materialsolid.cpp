@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid.cpp,v 1.1 2004/03/20 12:54:07 rollmark Exp $
+   $Id: materialsolid.cpp,v 1.2 2004/04/12 13:25:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,11 @@ using namespace boost;
 using namespace std;
 
 MaterialSolid::MaterialSolid()
-    : Material(), mColor(1,1,1)
+    : Material(),
+      mAmbient(0.2f,0.2f,0.2f,1.0f),
+      mDiffuse(1.0f,1.0f,1.0f,1.0f),
+      mSpecular(0.0f,0.0f,0.0f,1.0f),
+      mEmission(0.0f,0.0f,0.0f,1.0f)
 {
 }
 
@@ -39,13 +43,62 @@ MaterialSolid::~MaterialSolid()
 
 void MaterialSolid::Bind()
 {
-    glColor3fv(mColor.GetData());
+    // set ambient material reflectance
+    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,mAmbient);
+
+    // set diffuse material reflectance
+    glColor3fv(mDiffuse);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,mDiffuse);
+
+    // set specular material reflectance
+    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,mSpecular);
+
+    // set light emission
+    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,mEmission);
+
     glDisable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void MaterialSolid::SetColor(const Vector3f& color)
+void MaterialSolid::SetAmbient(const RGBA& ambient)
 {
-    mColor = color;
+    mAmbient = ambient;
 }
+
+const RGBA& MaterialSolid::GetAmbient()
+{
+    return mAmbient;
+}
+
+void MaterialSolid::SetDiffuse(const RGBA& diffuse)
+{
+    mDiffuse = diffuse;
+}
+
+const RGBA& MaterialSolid::GetDiffuse()
+{
+    return mDiffuse;
+}
+
+void MaterialSolid::SetSpecular(const RGBA& specular)
+{
+    mSpecular = specular;
+}
+
+const RGBA& MaterialSolid::GetSpecular()
+{
+    return mSpecular;
+}
+
+void MaterialSolid::SetEmission(const RGBA& emission)
+{
+    mEmission = emission;
+}
+
+const RGBA& MaterialSolid::GetEmission()
+{
+    return mEmission;
+}
+
+
+

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid_c.cpp,v 1.2 2004/03/22 11:16:47 rollmark Exp $
+   $Id: materialsolid_c.cpp,v 1.3 2004/04/12 13:25:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,24 +26,75 @@ using namespace kerosin;
 using namespace salt;
 using namespace boost;
 
-FUNCTION(MaterialSolid,setColor)
+static bool readRGBA(const zeitgeist::ParameterList& in, RGBA& m)
 {
-    Vector3f color;
-
     if (
-        (in.GetSize() == 0) ||
-        (! in.GetValue(in.begin(), color))
+        (in.GetSize() != 4) ||
+        (! in.GetValue(in[0], m.r())) ||
+        (! in.GetValue(in[1], m.g())) ||
+        (! in.GetValue(in[2], m.b())) ||
+        (! in.GetValue(in[3], m.a()))
         )
         {
             return false;
         }
 
-    obj->SetColor(color);
+    return true;
+}
+
+FUNCTION(MaterialSolid,setAmbient)
+{
+    RGBA m;
+    if (! readRGBA(in,m))
+        {
+            return false;
+        }
+
+    obj->SetAmbient(m);
+    return true;
+}
+
+FUNCTION(MaterialSolid,setDiffuse)
+{
+    RGBA m;
+    if (! readRGBA(in,m))
+        {
+            return false;
+        }
+
+    obj->SetDiffuse(m);
+    return true;
+}
+
+FUNCTION(MaterialSolid,setSpecular)
+{
+    RGBA m;
+    if (! readRGBA(in,m))
+        {
+            return false;
+        }
+
+    obj->SetSpecular(m);
+    return true;
+}
+
+FUNCTION(MaterialSolid,setEmission)
+{
+    RGBA m;
+    if (! readRGBA(in,m))
+        {
+            return false;
+        }
+
+    obj->SetEmission(m);
     return true;
 }
 
 void CLASS(MaterialSolid)::DefineClass()
 {
     DEFINE_BASECLASS(kerosin/Material);
-    DEFINE_FUNCTION(setColor);
+    DEFINE_FUNCTION(setAmbient);
+    DEFINE_FUNCTION(setDiffuse);
+    DEFINE_FUNCTION(setSpecular);
+    DEFINE_FUNCTION(setEmission);
 }
