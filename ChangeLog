@@ -1,4 +1,50 @@
+2004-05-11  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/sparkagent/Makefile.am: 
+	- added hinge2action.h to the list of sources
+
+	* app/rcssmonitor3d/lite/rcssmonitor3D-lite.rb: 
+	- added line for using the lite-monitor as logplayer
+	  (needs to be commented out; the CommServer has to be replaced by the LogfileServer)
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	- added --logfile option.  
+	  The --logfile option is internally the same as the --server option;
+	  the given string is stored in a std::string variable. There is no
+	  check if giving the --logfile option makes sense (makes no sense
+	  if the LogfileServer is not used).  
+	- On initialization, the internal reference to the commserver is casted to the
+	  CommServerBase class
+	
+	* app/rcssmonitor3d/lite/monitor.h: 
+	- replaced CommServer by CommServerBase
+
+	* app/rcssmonitor3d/lib/monitorlib.cpp: 
+	- register the CommServerBase and the LogfileServer
+
+	* app/rcssmonitor3d/lib/logfileserver_c.cpp:
+	* app/rcssmonitor3d/lib/logfileserver.cpp: 
+	* app/rcssmonitor3d/lib/logfileserver.h: 
+	- The logfileserver is derived from CommServerBase and reads its data 
+	  from monitor logfiles (e.g. monitor.log as recorded by SPADES).
+	
+	* app/rcssmonitor3d/lib/commserver_c.cpp: 
+	* app/rcssmonitor3d/lib/commserver.cpp: 
+	* app/rcssmonitor3d/lib/commserver.h: 
+	The CommServer for SPADES/TCP connections is now derived from the 
+	CommServerBase. The functionality remains the same.
+
+	* app/rcssmonitor3d/lib/commserverbase.h: 
+	- added an abstract commserverbase class
+
 2004-05-10  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/leaf.h: 
+	fixed a cast based for more recent boost versions / gcc versions (whatever).
+	Based upon a suggestion by Michael Gollin <gollin@informatik.hu-berlin.de>
+
+	* lib/salt/random.h: 
+	- added some code for the more recent versions of boost
 
 	* merged new-monitor-protocoll-and-library branch
 	This enables a new monitor protocol for soccer simulations.

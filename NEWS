@@ -1,6 +1,73 @@
-- The monitor protocoll has been changed to produce less redundant data. Specifically,
-  field flags will only be sent once, and information like team names and scores will 
-  be sent only if they change.
+[0.2.2]
+This release adds both soccer simulation specific features (like better rules 
+ and an initial version of a logplayer) and general simulation features 
+(almost all ODE features are supported now, and an initial version of an
+alternative simulation server as a SPADES replacement). For the 0.3 release,
+some of these new features need some polishing :-). Below a short summary of 
+new features. 
+
+* Features (soccer):
+
+- The rcssmonitor3D protocol has been changed to produce less redundant data. 
+  Specifically, field flags will only be sent once, and information like team 
+  names and scores will be sent only if they change.
+- rcssmonitor3D-lite can be used as a logplayer now. To do this, replace the 
+  CommServer plugin setup in rcssserver3D-lite.rb by the LogfileServer setup.
+  Monitor logfiles get recorded by SPADES automatically, and the new monitor
+  protocol can be used as Logfile format.
+- The rcssmonitor3D - library got an user-friendly interface
+- rcssmonitor3D-lite looks better now and the display is more informative.
+- The body and effector parameters have been changed based on suggestions from
+  the mailing lists.
+- A trainercommandparser has been added so that it is possible to use soccer
+  monitor applications as trainer program (to repoduce specific situations etc).
+- Players are moved away from the ball in certain situations (like kick in for 
+  the other team or kick off, etc).
+- It is possible to do automatic kick offs now (in rcssserver3D.rb)
+- Due to various improvements and changes, the simulator is now reasonable fast
+  to extend the half time length to 4 minutes. 
+- Players accelerate (and break) faster; something like air resistance and 
+  friction was added to the players and the ball so that they eventually stop 
+  with no acceleration.
+- An experimental say-effector has been added; up to now, only monitors 
+  (and trainers implemented as monitors) can hear the messages.
+
+* Features (general):
+
+- Several types of ODE joints are supported now.
+- An initial version of a generic simulation server has been added. It 
+  reimplements some of the more general SPADES concepts (like network support 
+  and a run loop). It is intended to use it as an alternative to SPADES when 
+  reproducibility of events is not key. The advantage is that faster 
+  simulations (or simulations with more agents) are possible by less overhead.
+- A general description language for 3D simulations has been added. By using
+  this description language, it is possible to set up different 3D simulations
+  based on text configuration files. Simulations are described by sets of 
+  S-Expressions (any other format possible by changing plugins).
+- The ScriptServer has been changed so that ruby functions can also read back
+  values from the simulator easily.
+- Body controllers have been introduced. Body controllers can be used to 
+  constrain/control the motion of associated bodies (things like adding drag 
+  forces or changing the "bouncyness" of objects can be controlled).
+- Added a tool that visualizes the internal zeitgeist class hierarchy.
+- Added a new library libspark that contains an application framework for
+  applications using both liboxygen and libkerosin classes. 
+- Added a new application SimSpark. SimSpark is a monolithic simulator bases
+  on libspark. With this new simulator, we have been testing most of the new
+  generic features (like the description language and ODE joints) we have been
+  adding. 
+- Got rid of the rcssbase package dependency. The "net" part of this package
+  is part of rcssserver3D now and has been extended by TCP sockets.
+- Added simspark demo simulations. 
+
+* Fixes (both soccer specific and general):
+
+- The simulator compiles with recent versions of boost (tested with 1-31-0)
+- Goals are properly counted now
+- Making the API documentation has been reduced to only the necessary cases.
+- Some math bugs in libsalt have been fixed.
+- The kerosin library has been overhauled (lights / meshes / etc).
+- Added support to update cached script variables after reading ruby files.
 
 [0.2.1]
 This is a bugfix release. It removes some (but not all) bugs found

@@ -1,3 +1,100 @@
+rcssserver3D-0.2.2 Installation
+===============================
+(C) 2004 Universitaet Koblenz, Germany.
+
+Prior to compiling and installing the rcssserver3D, you need to 
+install a few software packages. You can compile and install 
+rcssserver3D in two different ways, a "light" installation and the 
+full installation. 
+With the full installation, you get an additional library 
+(called kerosin), which is useful to visualize objects nicely, 
+especially articulated objects (this are objects consisting of more 
+than one geometry linked with joints). These features are not (yet) 
+required for the soccer simulation.
+The light installation, which is the default, you get a not so fancy
+OpenGL visualization.
+
+To enable the full installation, pass the "--enable-kerosin" flag to 
+the `configure' shell script.
+For the generic installation instructions, see the text below the 
+specific instructions here.
+
+
+Required libraries for the default installation
+===============================================
+
+* spades
+  - working versions: 0.93, older versions may also work
+  - get it at: http://sourceforge.net/projects/spades-sim
+  - description: agent middleware, handles timing issues and networking
+  - additional info: you need a recent version of expat for spades
+
+* ruby
+  - working versions: 1.8.0 or newer
+  - get it at: http://www.ruby-lang.org/
+  - description: scripting language
+  - additional info: if you compile ruby yourself, configure with
+    --enable-shared
+
+* boost
+  - working versions: 1.30.2, 1.31.0
+  - get it at: http://www.boost.org/
+  - description: c++ programming extensions
+
+* ode
+  - working versions: 0.039
+  - get it at: http://sourceforge.net/projects/opende
+  - descriptions: for simulating articulated rigid body dynamics
+
+* OpenGL, GLUT
+  You need the OpenGL and GLUT headers for the visualization. This may
+  be dependent on your graphics card. (GLUT is the OpenGL Utility 
+   Toolkit)
+  - part for example of XFree86-Mesa-devel
+  - you should get it with your linux distro.
+
+* additional required stuff (usually present in any decent system)
+  - zlib, http://www.gzip.org/zlib/
+  - recent versions of automake, autoconf, libtool can be helpful if 
+    config files need to be regenerated
+
+Additionally required libraries for the full installation
+=========================================================
+
+* SDL
+  - working versions: 1.2
+  - get it at: http://www.libsdl.org/
+  - description: low level access to audio, keyboard, mouse, joystick,
+                 3D hardware via OpenGL, and 2D video framebuffer
+
+* freetype
+  - working versions: 2.1.2
+  - get it at: http://www.freetype.org/
+  - description: FreeType 2 is a software font engine
+
+Optional useful libraries for the full installation
+===================================================
+
+* fmod
+  - working versions: 3.7
+  - get it at: http://www.fmod.org/
+  - description: sound support
+  - installation notes:
+     - Unpack the .tar.gz file. 
+     - Move the header files from the ./api/inc/ directory in the 
+       package into a "fmod/" directory in your "include" tree, e.g.
+       /usr/local/include/fmod/
+     - Move the library (the libfmod-X.YZ.so file) from the ./api/ 
+       directory of the package into a library tree, e.g. 
+       /usr/local/lib/. 
+     - Create a symbolic link from /usr/local/lib/libfmod.so (or 
+       whatever directory you've chosen) to the fmod library.
+
+
+=== specific installation instructions part ends here ===
+=== generic installation instructions below this line ===
+
+ 
 Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002 Free Software
 Foundation, Inc.
 
