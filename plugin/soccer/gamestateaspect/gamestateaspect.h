@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.1.2.2 2004/01/29 19:53:53 rollmark Exp $
+   $Id: gamestateaspect.h,v 1.1.2.3 2004/01/31 15:14:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,9 +23,15 @@
 #define GAMESTATEASPECT_H
 
 #include <soccer/soccercontrolaspect/soccercontrolaspect.h>
+#include <set>
+
+class AgentState;
 
 class GameStateAspect : public SoccerControlAspect
 {
+protected:
+    typedef std::set<int> TUnumSet;
+
 public:
     GameStateAspect();
     virtual ~GameStateAspect();
@@ -44,12 +50,43 @@ public:
     /** returns the current game time */
     TTime GetTime() const;
 
+    /** sets the name of a team */
+    void SetTeamName(TTeamIndex idx, std::string name);
+
+    /** returns the name of a team */
+    std::string GetTeamName(TTeamIndex idx);
+
+    /** called from the InitEffector to request a uniformn number and
+        teamname */
+    bool GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
+                                         std::string teamName, unsigned int unum);
+
+protected:
+    /** advances the game time */
+    void UpdateTime(float deltaTime);
+
+    /** checks if the set of uniform numbers of given team already
+        contains a uniform number unum and inserts it. */
+    bool GameStateAspect::InsertUnum(TTeamIndex idx, int unum);
+
+    /** returns the team index corresponding to the given teamName. If
+        the teamname does not exist and less than two teams are
+        registered, the given team name is registered.
+    */
+    TTeamIndex GetTeamIndex(const std::string& teamName);
+
 protected:
     /** the current play mode */
     TPlayMode mPlayMode;
 
     /** the current game time */
     TTime mTime;
+
+    /** the names of the two teams */
+    std::string mTeamName[2];
+
+    /** the set of uniform number for each team */
+    TUnumSet mUnumSet[2];
 };
 
 DECLARE_CLASS(GameStateAspect);
