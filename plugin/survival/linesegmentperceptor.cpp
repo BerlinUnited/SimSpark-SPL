@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: linesegmentperceptor.cpp,v 1.2.2.1 2003/11/19 19:07:38 rollmark Exp $
+   $Id: linesegmentperceptor.cpp,v 1.2.2.1.2.1 2003/12/08 15:17:38 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,8 +39,11 @@ void LineSegmentPerceptor::SetLineSegment(const salt::Vector3f& start, const sal
         mEnd    = end;
 }
 
-bool LineSegmentPerceptor::Percept(TDictionary &dictionary)
+bool
+LineSegmentPerceptor::Percept(oxygen::BaseParser::TPredicate& predicate)
 {
+#warning "Need to reimplement LineSegmentPerceptor::Percept()"
+#if 0
         // update control aspects
         TLeafList meshes;
         TLeafList::iterator i;
@@ -62,5 +65,6 @@ bool LineSegmentPerceptor::Percept(TDictionary &dictionary)
                         }
                 }
         }
+#endif
         return true;
 }
