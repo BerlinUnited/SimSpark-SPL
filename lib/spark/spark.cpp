@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.cpp,v 1.1 2004/04/11 11:17:53 rollmark Exp $
+   $Id: spark.cpp,v 1.2 2004/04/11 17:12:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,7 +38,9 @@ Spark::Spark(const string& relPathPrefix) :
     mTime(0.0f),
     mFramesRendered(0),
     mHorSens(0.3),
-    mVertSens(0.3)
+    mVertSens(0.3),
+    mSimStep(-1),
+    mSumDeltaTime(0.0)
 {
 }
 
@@ -222,6 +224,13 @@ int Spark::GetFramesRendered()
     return mFramesRendered;
 }
 
+void Spark::SetSimStep(float time)
+{
+    mSimStep = time;
+    GetLog()->Normal() << "(SPARK) using a sim steptime of "
+                       << time << "s\n";
+}
+
 Zeitgeist& Spark::GetZeitgeist()
 {
     return mZeitgeist;
@@ -329,7 +338,19 @@ void Spark::Run()
             UpdatePreRenderFrame();
 
             // update the scene graph and do physics
-            mSceneServer->Update(mDeltaTime);
+            if (mSimStep > 0)
+                {
+                    mSumDeltaTime += mDeltaTime;
+
+                    while (mSumDeltaTime >= mSimStep)
+                        {
+                            mSceneServer->Update(mSimStep);
+                            mSumDeltaTime -= mSimStep;
+                        }
+                } else
+                    {
+                        mSceneServer->Update(mDeltaTime);
+                    }
 
             // update the window (pumps event loop, etc..) and render
             // the current frame

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.h,v 1.1 2004/04/11 11:17:53 rollmark Exp $
+   $Id: spark.h,v 1.2 2004/04/11 17:12:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -102,6 +102,9 @@ public:
     /** returns the total number of rendered frames */
     int GetFramesRendered();
 
+    /** sets the size of a simstep*/
+    void SetSimStep(float time);
+
     /** returns the zeitgeist instance */
     zeitgeist::Zeitgeist& GetZeitgeist();
 
@@ -139,20 +142,27 @@ protected:
     oxygen::Oxygen mOxygen;
     kerosin::Kerosin mKerosin;
 
-    // the last measured timestep
+    //! the last measured timestep
     float mDeltaTime;
 
-    // total time passed
+    //! total time passed
     float mTime;
 
-    // total frames rendered
+    //! total frames rendered
     int mFramesRendered;
 
-    // horizontal mouse sensitivity
+    //! horizontal mouse sensitivity
     float mHorSens;
 
-    // vertical mouse sensitivity
+    //! vertical mouse sensitivity
     float mVertSens;
+
+    //! the deltaTime of a single simStep, set to nonzero to force a
+    //fixed simstep
+    float mSimStep;
+
+    //! the summed up deltatimes until a simStep is accumulated
+    float mSumDeltaTime;
 };
 
 } // namespace kerosin
