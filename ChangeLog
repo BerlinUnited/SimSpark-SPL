@@ -1,5 +1,36 @@
 2002-08-21  Oliver Obst  <fruit@robolog.org>
 
+	* ./utility/classserver/classserver.h
+	* ./utility/classserver/classserver.cc
+	Fixed some coding style issues and some bugs related to that.
+
+	* ./utility/console/console.h
+	* ./utility/console/console.cc	
+	Removed dependencies to inputserver +
+	coding style stuff.
+
+	* ./utility/console/consoleparser.h
+	* ./utility/console/consoleparser.cc	
+	* ./utility/console/scanner.h
+	* ./utility/console/scanner.cc
+	Coding style changes.	
+
+	* ./utility/console/commands/commandserver.h
+	* ./utility/console/commands/commandserver.cc
+	Added command server; a singleton class that provides a pool
+	of console commands.
+
+	* ./utility/console/commands/concommand.h
+	* ./utility/console/commands/concommand.cc
+	Added an ABC for all console commands.
+	
+	* ./utility/console/commands/conquit.h
+	* ./utility/console/commands/conquit.cc	
+	Added a console command to quit (the main program)
+	
+	* ./utility/console/variables/ 
+	Changes in all of the files mostly related to the coding style.
+
 	* ./utility/console/commands/signature/
 	Added various files for implementing the signatures of console 
 	commands. 
