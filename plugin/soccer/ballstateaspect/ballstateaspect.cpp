@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.1.2.5 2004/02/06 10:17:23 rollmark Exp $
+   $Id: ballstateaspect.cpp,v 1.1.2.6 2004/02/10 19:28:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/physicsserver/recorderhandler.h>
+#include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/ball/ball.h>
 
@@ -38,24 +39,24 @@ BallStateAspect::BallStateAspect() : SoccerControlAspect()
     mBallOnField = false;
     mLastValidBallPos = Vector3f(0,0,0);
     mGoalState = TI_NONE;
+    mLastAgentCollisionTime = 0;
 }
 
 BallStateAspect::~BallStateAspect()
 {
 }
 
-shared_ptr<AgentAspect> BallStateAspect::GetLastCollidingAgent()
+bool BallStateAspect::GetLastCollidingAgent(shared_ptr<AgentAspect>& agent,
+                                            TTime& time)
 {
-    return mLastCollidingAgent;
+    agent = mLastCollidingAgent;
+    time  = mLastAgentCollisionTime;
+
+    return (agent.get() != 0);
 }
 
 void BallStateAspect::UpdateLastCollidingAgent()
 {
-    if (mBallRecorder.get() == 0)
-        {
-            return;
-        }
-
     // get a list of agents that collided with the ball since the last
     // update of the recorder and remember the first returned node as
     // the last agent that collided with the ball.
@@ -66,6 +67,7 @@ void BallStateAspect::UpdateLastCollidingAgent()
         {
             mLastCollidingAgent = shared_static_cast<AgentAspect>
                 (make_shared(agents.front()));
+            mLastAgentCollisionTime = mGameState->GetTime();
         }
 
     // empty the recorder buffer
@@ -74,11 +76,6 @@ void BallStateAspect::UpdateLastCollidingAgent()
 
 void BallStateAspect::UpdateBallOnField()
 {
-    if (mFieldRecorder.get() == 0)
-        {
-            return;
-        }
-
     // get a list of Ball nodes that collided with the field
     RecorderHandler::TParentList ball;
     mFieldRecorder->GetParentsSupportingClass("Ball",ball);
@@ -103,16 +100,6 @@ void BallStateAspect::UpdateLastValidBallPos()
 
 void BallStateAspect::UpdateGoalState()
 {
-    if (
-        (mBallOnField) ||
-        (mLeftGoalRecorder.get() == 0) ||
-        (mRightGoalRecorder.get() == 0)
-        )
-        {
-            mGoalState = TI_NONE;
-            return;
-        }
-
     // check both goal box collider
     RecorderHandler::TParentList agents;
     mLeftGoalRecorder->GetParentsSupportingClass("AgentAspect",agents);
@@ -142,6 +129,17 @@ TTeamIndex BallStateAspect::GetGoalState()
 
 void BallStateAspect::Update(float deltaTime)
 {
+    if (
+        (mFieldRecorder.get() == 0) ||
+        (mBall.get() == 0) ||
+        (mBallRecorder.get() == 0) ||
+        (mLeftGoalRecorder.get() == 0) ||
+        (mRightGoalRecorder.get() == 0)
+        )
+        {
+            return;
+        }
+
     UpdateLastCollidingAgent();
     UpdateBallOnField();
     UpdateLastValidBallPos();
@@ -157,6 +155,9 @@ void BallStateAspect::OnLink()
     mBallRecorder = GetBallRecorder();
     mLeftGoalRecorder = GetLeftGoalRecorder();
     mRightGoalRecorder = GetRightGoalRecorder();
+
+    mGameState = shared_dynamic_cast<GameStateAspect>
+        (GetControlAspect("GameStateAspect"));
 }
 
 void BallStateAspect::OnUnlink()
@@ -168,6 +169,7 @@ void BallStateAspect::OnUnlink()
     mLastCollidingAgent.reset();
     mLeftGoalRecorder.reset();
     mRightGoalRecorder.reset();
+    mGameState.reset();
 }
 
 bool BallStateAspect::GetBallOnField()
