@@ -1,3 +1,50 @@
+2004-03-23  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	- fixed BallStateAspect::UpdateGoalState(). A check for 'Ball'
+	instead for 'AgentAspect' inside a goal makes more sense ;-)
+
+	* app/agenttest/worldmodel.h: 
+	- adapted to new Predicate interface
+	- removed GetGameStateParam template
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp,
+	* plugin/soccer/kickeffector/kickeffector.cpp,
+	* plugin/soccer/initeffector/initeffector.cpp,
+	* plugin/soccer/gamestateperceptor/gamestateperceptor.cpp,
+	* plugin/soccer/driveeffector/driveeffector.cpp,
+	* plugin/soccer/beameffector/beameffector.cpp,
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp,
+	* plugin/forceeffector/forceeffector.cpp,
+	* plugin/collisionperceptor/collisionperceptor.cpp: 
+	* app/rcssmonitor3d/lib/monitorparser.cpp:
+	* app/agenttest/worldmodel.cpp: 
+	- adapted to new Predicate interface
+
+	* plugin/sexpparser/sexpparser.cpp, plugin/sexpparser/sexpparser.h:
+	- adapted to new Predicate interface
+	- changed ListToString to pass a pointer to an embedded list on
+	recursion instead of a reference to temporary copy
+
+	* lib/oxygen/gamecontrolserver/predicate.cpp,
+	* lib/oxygen/gamecontrolserver/predicate.h: 
+	- changed Predicate to use the ParameterList 
+	- addedd method DescentList()
+
+	* lib/oxygen/gamecontrolserver/baseparser.cpp:
+	- removed baseparser.cpp; declarations now part of
+	zeitgeist/parameterlist.cpp
+
+	* lib/oxygen/Makefile.am:
+	- removed baseparser.cpp; declaration now part of
+	zeitgeist/parameterlist.cpp
+
+	* lib/zeitgeist/parameterlist.cpp, lib/zeitgeist/parameterlist.h:
+	- added method Clear
+	- fixed a comment
+	- fixed typo 'GetAnyVale'
+
 2004-03-22  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/salt/defines.h: 
