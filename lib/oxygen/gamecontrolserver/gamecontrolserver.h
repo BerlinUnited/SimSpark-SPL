@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.7 2004/04/23 13:23:20 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.8 2004/05/06 09:33:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,7 +67,8 @@ public:
         is called from SpadesServer::ParseAct, which is const to
         prevent it from modifying the world model.
     */
-    boost::shared_ptr<ActionObject::TList> Parse(int id, std::string str) const;
+    boost::shared_ptr<ActionObject::TList> Parse
+    (int id, const std::string& str) const;
 
     /** notifies the GameControlServer that an agent has connected to
         the simulation.

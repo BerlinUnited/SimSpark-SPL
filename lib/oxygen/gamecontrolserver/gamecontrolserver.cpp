@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.14 2004/05/05 09:04:47 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.15 2004/05/06 09:33:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -107,7 +107,8 @@ GameControlServer::GetActiveScene()
     if (scene.get() == 0)
     {
         GetLog()->Error()
-            << "ERROR: (GameControlServer) SceneServer reports no active scene\n";
+            << "ERROR: (GameControlServer) SceneServer "
+            << "reports no active scene\n";
     }
 
     return scene;
@@ -217,14 +218,15 @@ GameControlServer::GetActionLatency(int /*id*/)
 }
 
 shared_ptr<ActionObject::TList>
-GameControlServer::Parse(int id, string str) const
+GameControlServer::Parse(int id, const string& str) const
 {
     TAgentMap::const_iterator iter = mAgentMap.find(id);
 
     if (iter == mAgentMap.end())
     {
         GetLog()->Error()
-            << "ERROR: (GameControlServer::Parse) Parse called with unknown agent id "
+            << "ERROR: (GameControlServer::Parse) Parse "
+            << "called with unknown agent id "
             << id << "\n";
         return shared_ptr<ActionObject::TList>();
     }
@@ -259,7 +261,8 @@ GameControlServer::Parse(int id, string str) const
         if (effector.get() == 0)
         {
             GetLog()->Warning()
-                << "(GameControlServer::Parse) No effector registered for predicate "
+                << "(GameControlServer::Parse) No effector"
+                << "registered for predicate "
                 << predicate.name << "\n";
             continue;
         }
