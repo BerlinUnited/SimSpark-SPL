@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.2.2.2 2004/01/06 21:50:14 rollmark Exp $
+   $Id: initeffector.cpp,v 1.2.2.3 2004/01/25 12:54:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ InitEffector::GetActionObject(const Predicate& predicate)
     {
         GetLog()->Error() << "ERROR: (InitEffector) invalid predicate"
                           << predicate.name << "\n";
-        return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+        return shared_ptr<ActionObject>();
     }
 
     std::string name;
@@ -94,6 +94,6 @@ InitEffector::GetActionObject(const Predicate& predicate)
     int unum = 0;
     predicate.GetValue("unum",unum);
 
-    return shared_ptr<ActionObject>(new InitAction(name,unum));
+    return shared_ptr<ActionObject>(new InitAction(GetPredicate(),name,unum));
 }
 
