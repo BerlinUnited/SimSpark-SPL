@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.1.2.7 2004/02/06 15:11:02 rollmark Exp $
+   $Id: kickeffector.cpp,v 1.1.2.8 2004/03/22 10:46:01 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,8 +35,7 @@ using namespace std;
 KickEffector::KickEffector()
     : oxygen::Effector(),
       mKickMargin(0.04),mForceFactor(4.0),mMaxPower(100.0),
-      mMinAngle(0.0),mMaxAngle(50.0),
-      mMinSteps(3),mMaxSteps(75),
+      mMinAngle(0.0),mMaxAngle(50.0), mSteps(10),
       mSigmaForce(0.4), mSigmaTheta(0.02), mSigmaPhiEnd(0.9), mSigmaPhiMid(4.5)
 {
 }
@@ -55,10 +54,7 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
-
-    if (parent.get() == 0)
+    if (mAgent.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (KickEffector) parent node is not derived from BaseNode\n";
@@ -77,12 +73,12 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     Vector3f force =
         mBallBody->GetWorldTransform().Pos() -
-        parent->GetWorldTransform().Pos();
+        mAgent->GetWorldTransform().Pos();
 
     // the ball can be kicked if the distance is
     // less then Ball-Radius + Player-Radius + KickMargin AND
     // the player is close to the ground
-    if (parent->GetWorldTransform().Pos().y() > mPlayerRadius + 0.01 ||
+    if (mAgent->GetWorldTransform().Pos().y() > mPlayerRadius + 0.01 ||
         force.Length() > mPlayerRadius + mBallRadius + mKickMargin)
     {
         // ball is out of reach, or player is in the air:
@@ -121,8 +117,6 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
         kick_power += salt::NormalRNG<>(0.0,mSigmaForce)();
     }
 
-    int steps = mMinSteps + static_cast<int>((mMaxSteps-mMinSteps) * (kick_power / mMaxPower));
-
     force *= (mForceFactor * kick_power);
     Vector3f torque(force[2]/(salt::g2PI * mBallRadius),
                     0.0,
@@ -131,12 +125,12 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     GetLog()->Debug() << "DEBUG: (KickEffector): " << kick_power << ": "
                       << force[0] << " " << force[1] << " " << force[2] << " / "
                       << torque[0] << " " << torque[1] << " " << torque[2] << " / "
-                      << steps << std::endl;
+                      << mSteps << std::endl;
 
     // if the agent doesn't have a body, we're done (this should never happen)
     if (mBall.get() == 0) return true;
 
-    mBall->SetAcceleration(steps,force,torque);
+    mBall->SetAcceleration(mSteps,force,torque,mAgent);
     return true;
 }
 
@@ -185,18 +179,17 @@ KickEffector::OnLink()
     SoccerBase::GetBall(*this,mBall);
     SoccerBase::GetBallBody(*this,mBallBody);
 
-    shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+    mAgent = shared_dynamic_cast<AgentAspect>(make_shared(GetParent()));
 
-    if (parent.get() == 0)
+    if (mAgent.get() == 0)
     {
         GetLog()->Error()
-            << "ERROR: (KickEffector) parent node is not derived from BaseNode\n";
+            << "ERROR: (KickEffector) parent node is not derived from AgentAspect\n";
         return;
     }
 
     shared_ptr<SphereCollider> geom =
-        shared_dynamic_cast<SphereCollider>(parent->GetChild("geometry"));
+        shared_dynamic_cast<SphereCollider>(mAgent->GetChild("geometry"));
     if (geom.get() == 0)
     {
         GetLog()->Error()
@@ -220,6 +213,7 @@ void
 KickEffector::OnUnlink()
 {
     mBallBody.reset();
+    mAgent.reset();
 }
 
 void
@@ -245,10 +239,9 @@ KickEffector::SetForceFactor(float force_factor)
 }
 
 void
-KickEffector::SetSteps(int min, int max)
+KickEffector::SetSteps(int steps)
 {
-    mMinSteps = min;
-    mMaxSteps = max;
+    mSteps = steps;
 }
 
 void
