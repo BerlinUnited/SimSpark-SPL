@@ -1,3 +1,55 @@
+2004-02-21  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/rcssserver3D.rb: 
+	changes due to moving classes from kerosin to oxygen
+
+	* plugin/collisionperceptor/collisionperceptor_c.cpp:
+	* plugin/collisionperceptor/perceptorhandler_c.cpp:
+	* plugin/forceeffector/forceeffector_c.cpp:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor_c.cpp:
+	* plugin/soccer/agentstateperceptor/agentstateperceptor_c.cpp:
+	* plugin/soccer/ball/ball_c.cpp:
+	* plugin/soccer/beameffector/beameffector_c.cpp:
+	* plugin/soccer/createeffector/createeffector_c.cpp: 
+	* plugin/soccer/driveeffector/driveeffector_c.cpp: 
+	* plugin/soccer/fieldflag/fieldflag_c.cpp:
+	* plugin/soccer/gamestateperceptor/gamestateperceptor_c.cpp:
+	* plugin/soccer/initeffector/initeffector_c.cpp:
+	* plugin/soccer/kickeffector/kickeffector_c.cpp: 
+	* plugin/soccer/objectstate/objectstate_c.cpp:
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect_c.cpp:
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp:
+	moved classes into oxygen namespace
+
+	* lib/oxygen/oxygen.cpp: 
+	* lib/oxygen/agentaspect/agentaspect_c.cpp:
+	* lib/oxygen/agentaspect/effector_c.cpp:
+	* lib/oxygen/agentaspect/perceptor_c.cpp: 
+	* lib/oxygen/controlaspect/controlaspect_c.cpp:
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	* lib/oxygen/physicsserver/body_c.cpp: 
+	* lib/oxygen/physicsserver/boxcollider_c.cpp: 
+	* lib/oxygen/physicsserver/ccylindercollider_c.cpp: 
+	* lib/oxygen/physicsserver/collider.cpp:
+	* lib/oxygen/physicsserver/collider_c.cpp: 
+	* lib/oxygen/physicsserver/collisionhandler_c.cpp: 
+	* lib/oxygen/physicsserver/contactjointhandler_c.cpp: 
+	* lib/oxygen/physicsserver/odeobject_c.cpp: 
+	* lib/oxygen/physicsserver/planecollider_c.cpp: 
+	* lib/oxygen/physicsserver/raycollider_c.cpp: 
+	* lib/oxygen/physicsserver/recorderhandler_c.cpp: 
+	* lib/oxygen/physicsserver/space_c.cpp: 
+	* lib/oxygen/physicsserver/spherecollider_c.cpp: 
+	* lib/oxygen/physicsserver/world_c.cpp: 
+	* lib/oxygen/sceneserver/camera_c.cpp:
+	* lib/oxygen/sceneserver/fpscontroller_c.cpp:
+	* lib/oxygen/sceneserver/scene_c.cpp:
+	* lib/oxygen/sceneserver/sceneserver.cpp:
+	* lib/oxygen/sceneserver/transform_c.cpp:
+	Give to oxygen what belongs to oxygen...
+	Moved oxygen classes below oxygen namespace
+	
 2004-02-20  rollmark  <rollmark@vader>
 
 	* app/rcssmonitor3d/main.cpp:
