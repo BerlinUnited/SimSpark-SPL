@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.2 2004/01/08 16:06:14 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.3 2004/01/20 19:13:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -109,6 +109,32 @@ void processInput(int argc, char* argv[])
 
 void drawScene(shared_ptr<Predicate::TList> predicates)
 {
+    static const struct ObjType
+    {
+        string type;
+        float color[4];
+        float size;
+    } typeMap[] =
+        {
+            {
+                "agent",
+                {0.8f, 0.8f, 0.2f, 1.0f},
+                1.0f
+            },
+            {
+                "flag",
+                {1.0f, 0, 0, 1.0f},
+                0.5f
+            },
+            {
+                "ball",
+                {1.0f, 1.0f, 1.0f, 1.0f},
+                0.3f
+            }
+        };
+
+    static int typeCount = sizeof(typeMap)/sizeof(ObjType);
+
     if (predicates.get() == 0)
         {
             return;
@@ -116,14 +142,6 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
 
     // color and size setup
     typedef GLfloat TColor[4];
-
-    // agent constants
-    TColor agentColor = {0.8f, 0.8f, 0.2f, 1.0f};
-    float agentSize = 1.0f;
-
-    // flag constants
-    TColor flagColor = {1.0f, 0, 0, 1.0f};
-    float flagSize = 0.5;
 
     // look for "(player x y z)(player x y z)..."
     for (
@@ -134,21 +152,21 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
         {
             const Predicate& predicate = (*iter);
 
-            GLfloat* color;
-            float size;
-
-            if (predicate.name == "agent")
+            int idx;
+            for (idx=0;idx<typeCount;++idx)
                 {
-                    color = agentColor;
-                    size = agentSize;
-                } else if (predicate.name == "flag")
-                    {
-                        color = flagColor;
-                        size = flagSize;
-                    } else
+                    const ObjType& type = typeMap[idx];
+
+                    if (type.type == predicate.name)
                         {
-                            continue;
+                            break;
                         }
+                }
+
+            if (idx == typeCount)
+                {
+                    continue;
+                }
 
             Predicate::Iterator param(predicate);
 
@@ -158,8 +176,9 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
                     continue;
                 }
 
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
-            gGLServer.DrawSphere(pos, size);
+            const ObjType& type = typeMap[idx];
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, type.color);
+            gGLServer.DrawSphere(pos, type.size);
         }
 }
 
