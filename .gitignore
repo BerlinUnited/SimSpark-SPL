@@ -158,3 +158,9 @@ utility/glextgen/Makefile.in
 utility/glextgen/glextensionreg.cpp
 utility/glextgen/glextensionreg.h
 utility/glextgen/glextgen.rb
+utility/libobj/.deps
+utility/libobj/.libs
+utility/libobj/Makefile.in
+utility/libobj/Makefile
+utility/libobj/*.la
+utility/libobj/*.lo
