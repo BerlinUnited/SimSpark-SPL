@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.cpp,v 1.5 2004/02/12 14:07:23 fruit Exp $
+   $Id: fileserver.cpp,v 1.6 2004/04/08 07:17:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,13 +21,15 @@
 */
 #include "fileserver.h"
 #include <salt/fileclasses.h>
+#include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/core.h>
 
 using namespace boost;
 using namespace salt;
 using namespace zeitgeist;
+using namespace std;
 
-FileServer::FileServer() : Node()
+FileServer::FileServer() : Node(), mNextHandle(1)
 {
 }
 
@@ -35,47 +37,99 @@ FileServer::~FileServer()
 {
 }
 
-salt::RFile* FileServer::Open(const char* inName)
+shared_ptr<salt::RFile> FileServer::Open(const string& inName)
 {
   for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
     {
       shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(*i);
-      salt::RFile *file = fileSys->Open(inName);
+      shared_ptr<salt::RFile> file(fileSys->Open(inName));
 
       //first successful is returned
-      if(file != NULL)
+      if(file.get() != 0)
         {
           return file;
         }
     }
 
   // try to open it via the regular file system
-  salt::RFile *file = new StdFile();
-  if (file->Open(inName))
+  shared_ptr<salt::RFile> file(new StdFile());
+  if (! file->Open(inName.c_str()))
     {
-      return file;
+        file.reset();
     }
 
-  // too bad ... didn't work
-  delete file;
-  return NULL;
+  return file;
 }
 
-bool FileServer::Exist(const char *inName)
+FileServer::THandle FileServer::Register(const string& inName)
 {
-  salt::RFile *file = Open(inName);
+    shared_ptr<salt::RFile> file = Open(inName);
 
-  if(file == NULL)
-    {
-      return false;
-    }
+    if (file.get() == 0)
+        {
+            return 0;
+        }
 
-  delete file;
-  return true;
+    mFileMap[mNextHandle] = file;
+    THandle h = mNextHandle;
+    ++mNextHandle;
+
+    return h;
+}
+
+shared_ptr<salt::RFile> FileServer::Get(THandle handle) const
+{
+    TFileMap::const_iterator iter = mFileMap.find(handle);
+
+    if (iter == mFileMap.end())
+        {
+            GetLog()->Warning()
+                << "(FileServer::Get) Warning: Unknown file handle "
+                << handle << "\n";
+            return shared_ptr<salt::RFile>();
+        }
+
+    return (*iter).second;
+}
+
+void FileServer::Close(THandle handle)
+{
+   TFileMap::iterator iter = mFileMap.find(handle);
+
+    if (iter == mFileMap.end())
+        {
+            GetLog()->Warning()
+                << "(FileServer::Close) Warning: Unknown file handle "
+                << handle << "\n";
+            return;
+        }
+
+    mFileMap.erase(iter);
+
+    if (mFileMap.empty())
+        {
+            // restart handle counting on empty FileMap
+            mNextHandle = 1;
+        }
+}
+
+void FileServer::OnUnlink()
+{
+    if (! mFileMap.empty())
+        {
+            GetLog()->Warning() << "(FileServer) There are "
+                                << mFileMap.size()
+                                << " files left in the registry\n";
+        }
+}
+
+bool FileServer::Exist(const string& inName)
+{
+    return (Open(inName).get() != 0);
 }
 
 // this routine registers a new file system instance with the server
-bool FileServer::Mount(const char *inFileSysName, const char *inPath)
+bool FileServer::Mount(const string& inFileSysName, const string& inPath)
 {
   shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(GetChild(inPath));
 
@@ -116,7 +170,7 @@ bool FileServer::Mount(const char *inFileSysName, const char *inPath)
   return false;
 }
 
-bool FileServer::Unmount(const char* inPath)
+bool FileServer::Unmount(const string& inPath)
 {
   // try to remove a std file system first
   if (Unmount ("FileSystemSTD", inPath))
@@ -135,7 +189,7 @@ bool FileServer::Unmount(const char* inPath)
   return false;
 }
 
-bool FileServer::Unmount(const char* inFileSysName, const char* inPath)
+bool FileServer::Unmount(const string& inFileSysName, const string& inPath)
 {
   shared_ptr<FileSystem> fileSystem = shared_static_cast<FileSystem>(GetChild(inPath));
 
@@ -151,7 +205,9 @@ bool FileServer::Unmount(const char* inFileSysName, const char* inPath)
   return false;
 }
 
-int FileServer::ForEachFile(const char* /*directory*/, const char* /*name*/, const char* /*extension*/, FileSystem::TCallback /*callback*/, void* /*param*/)
+int FileServer::ForEachFile(const string& /*directory*/, const string& /*name*/,
+                            const string& /*extension*/,
+                            FileSystem::TCallback /*callback*/, void* /*param*/)
 {
   int count = 0;
   /*for (TDescriptionList::iterator iter = mFileSystems.begin (); iter != mFileSystems.end (); ++iter)

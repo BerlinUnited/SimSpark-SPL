@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.h,v 1.5 2003/11/14 14:05:54 fruit Exp $
+   $Id: fileserver.h,v 1.6 2004/04/08 07:17:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,12 @@ class FileServer : public Node
     // functions
     //
 public:
+    typedef int THandle;
+
+protected:
+    typedef std::map<THandle, boost::shared_ptr<salt::RFile> > TFileMap;
+
+public:
     /** constructs the fileserver */
     FileServer();
     ~FileServer();
@@ -94,10 +100,23 @@ public:
         filesystem stack. The first succesful opened file is
         returned.
     */
-    salt::RFile*    Open(const char *inName);
+    boost::shared_ptr<salt::RFile> Open(const std::string& inName);
+
+    /** tries to open the requested file and registers it. On success
+        it returns a non 0 handle assiociated with the file object.
+     */
+    THandle Register(const std::string& inName);
+
+    /** returns the file corresponding to the given handle.
+     */
+    boost::shared_ptr<salt::RFile> Get(THandle handle) const;
+
+    /** closes the file corresponding to the given handle
+     */
+    void Close(THandle handle);
 
     /** returns true if the file 'inName' exists. */
-    bool Exist(const char *inName);
+    bool Exist(const std::string& inName);
 
     /** registers a filesystem to the fileserver. A file system
         may be registered only once, on each further try nothing
@@ -107,18 +126,18 @@ public:
         \param inPath is the mount point in the virtual file
         system provided by the fileserver
     */
-    bool Mount(const char *inFileSysName, const char* inPath);
+    bool Mount(const std::string& inFileSysName, const std::string& inPath);
 
     /** unmounts a file system at the mount point inPath. if no
         file system id is given, for a first try FileSystemSTD is
         assumed, then the type is ignored. Returns true on success.
     */
-    bool Unmount(const char* inPath);
+    bool Unmount(const std::string& inPath);
 
     /** unmounts a file system at the mount point inPath. Returns
         true on success.
     */
-    bool Unmount(const char* inClass, const char* inPath);
+    bool Unmount(const std::string& inClass, const std::string& inPath);
 
     /** iterates through files. 'directory', 'name' and
      * 'extension' give directory, name and extension a file must
@@ -129,11 +148,26 @@ public:
      * 'param'. param is just passed through to the callback and
      * has no meaning to the filesystem.
      */
-    int ForEachFile(const char* directory, const char* name, const char* extension, FileSystem::TCallback callback, void* param);
+    int ForEachFile(const std::string& directory, const std::string& name,
+                    const std::string& extension,
+                    FileSystem::TCallback callback, void* param);
+
+protected:
+    /** This rountine is called, before the FileServer hierarchy
+        object is removed from the parent.
+    */
+    virtual void OnUnlink();
 
 private:
     FileServer(const FileServer&);
     FileServer& operator=(const FileServer&);
+
+protected:
+    /** registry of opened files using the handle base system */
+    TFileMap mFileMap;
+
+    /** the next free handle */
+    THandle mNextHandle;
 };
 
 DECLARE_CLASS(FileServer)
