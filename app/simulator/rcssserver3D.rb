@@ -58,7 +58,9 @@ def addAgent(aspectPath)
   # geometry and physics setup
   physics = new('oxygen/Body', aspectPath+'physics')
   physics.setMass(getSoccerVar('AgentMass'))
-  physics.setMaxSpeed(getSoccerVar('AgentMaxSpeed'))
+
+  maxVel = new('oxygen/VelocityController', aspectPath+'physics/maxVelCtr')
+  maxVel.setMaxVelocity(getSoccerVa('AgentMaxSpeed'))
 
   geometry = new('oxygen/SphereCollider', aspectPath+'geometry')
   geometry.setRadius(getSoccerVar('AgentRadius'))
