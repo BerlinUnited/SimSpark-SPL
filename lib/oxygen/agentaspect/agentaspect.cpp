@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.3.4.1 2003/12/09 19:31:45 rollmark Exp $
+   $Id: agentaspect.cpp,v 1.3.4.2 2003/12/09 20:23:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,15 @@ using namespace salt;
 
 bool AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> /*actions*/)
 {
-  // traverse the actionlist and find the corresponding effector
-  // for each action
+  // traverse the actionlist, find the corresponding effector
+  // for each action and realize it
   return true;
 }
+
+BaseParser::TPredicateList AgentAspect::QueryPerceptors()
+{
+  // traverse all Perceptors and build a list of the collected
+  // Predicates
+  return BaseParser::TPredicateList();
+}
+
