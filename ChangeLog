@@ -153,12 +153,57 @@
 	* app/agenttest/agenttest.rb: 
 	- added setup script for agenttest
 
-	* app/agenttest/behavior.cpp, app/agenttest/behavior.h, app/agenttest/commserver.cpp, app/agenttest/commserver.h, app/agenttest/main.cpp, app/agenttest/worldmodel.cpp, app/agenttest/worldmodel.h:
+	* app/agenttest/behavior.cpp:
+	* app/agenttest/behavior.h:
+	* app/agenttest/commserver.cpp:
+	* app/agenttest/commserver.h: 
+	* app/agenttest/main.cpp: 
+	* app/agenttest/worldmodel.cpp: 
+	* app/agenttest/worldmodel.h:
 	more agenttest cleanup
 	- constructing the CommServer, WorldModel and the Behavior in the
-	init script
+	  init script
+
+2004-02-10  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/agentstate/: 
+	* plugin/soccer/driveeffector/: 
+	Changed the agentstate and the driveeffector so that the drive
+	consumes the battery (and knows about the power it consumes).
+	The AgentState is just used to reduce the battery and check if enough
+	battery power is available.
 
 2004-02-09  Oliver Obst  <fruit@robolog.org>
+
+	* app/agenttest/:
+	changes due to renaming the dasheffector to driveffector
+
+	* plugin/soccer/Makefile.am: 
+	* plugin/soccer/dasheffector/:
+	* plugin/soccer/driveeffector/:
+	renamed dasheffector to driveeffector
+
+	* lib/oxygen/Makefile.am: 
+	* lib/salt/Makefile.am: 
+	- added version info for libtool to LDFLAGS
+
+	* lib/zeitgeist/Makefile.am: 
+	- added version info for libtool to LDFLAGS 
+	- added rubywrapper.h to go into the distribution
+	
+	* lib/kerosin/Makefile.am: 
+	- added version info for libtool to LDFLAGS 
+	- fixed bug for compiling with no kerosin
+
+	* app/rcssmonitor3d/Makefile.am: 
+	- added header files so that they go into the distribution
+
+	* app/rcssmonitor3d/main.cpp: 
+	running init script with RunInitScript instead of using Run
+
+	* app/agenttest/Makefile.am: 
+	- added header files so that they go into the distribution 
+	- installing agenttest in bin directory
 
 	* app/simulator/: 
 	- name changes from simulator to rcssserver3D (as in previous release)

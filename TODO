@@ -1,8 +1,8 @@
 ===== 03 Feb 04
 
 - Spades Timing (Sense Intervals, Acting)
-+ Kicker: solve effet
-+ Kicker: latitudal angle 
++ Kicker: solve effet (done)
++ Kicker: latitudal angle (done)
 - Kick and run team
 - Agents need to get information about team
 + Flag names
@@ -18,6 +18,8 @@
 - change play mode from monitor
 - scripts
 
+===== 
+
 Controlaspects:
 
 - below GCS
@@ -28,7 +30,6 @@ Controlaspects:
 - last player to ball
 - Agentstate
 - tcpsocket into rcssbase
-useit.com
 
 ===== Dez 22 2003
 
