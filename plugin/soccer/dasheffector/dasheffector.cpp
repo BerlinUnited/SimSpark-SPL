@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector.cpp,v 1.1.2.5 2004/02/05 10:27:30 fruit Exp $
+   $Id: dasheffector.cpp,v 1.1.2.6 2004/02/06 10:08:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,9 +77,10 @@ DashEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         GetLog()->Error() << "ERROR: (DashEffector) parent node has "
                           << "no 'geometry' sphere child\n";
-    } else {
-        max_dist += geom->GetRadius();
-    }
+    } else
+        {
+            max_dist += geom->GetRadius();
+        }
 
     // we can only dash if the sphere is on the ground
     if (vec[1] > max_dist)
@@ -110,6 +111,7 @@ DashEffector::Realize(boost::shared_ptr<ActionObject> action)
         mAgentState =
             shared_static_cast<AgentState>(parent->GetChild("AgentState"));
     }
+
     TTeamIndex ti = TI_NONE;
     if (mAgentState.get() != 0)
     {
@@ -144,27 +146,7 @@ DashEffector::GetActionObject(const Predicate& predicate)
 
 void DashEffector::OnLink()
 {
-  shared_ptr<BaseNode> parent =
-    shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
-
-  if (parent.get() == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (DashEffector) parent node is not derived from BaseNode\n";
-      return;
-    }
-
-  // parent should be a transform, or some other node, which has a
-  // Body-child
-  mBody = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
-
-  if (mBody.get() == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (DashEffector) parent node has no Body child;"
-          "cannot apply force\n";
-      return;
-    }
+    SoccerBase::GetBody(*this,mBody);
 }
 
 void DashEffector::OnUnlink()
