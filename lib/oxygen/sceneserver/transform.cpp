@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.cpp,v 1.8 2004/04/15 10:40:05 rollmark Exp $
+   $Id: transform.cpp,v 1.9 2004/04/30 09:34:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 
 #include "transform.h"
+#include "sceneserver.h"
 
 using namespace boost;
 using namespace oxygen;
@@ -30,7 +31,9 @@ using namespace zeitgeist;
 Transform::Transform() :
     BaseNode()
 {
+    mChangedMark = -1;
     mLocalTransform.Identity();
+    mOldLocalTransform.Identity();
     mWorldTransform.Identity();
 
     SetName("transform");
@@ -40,9 +43,19 @@ Transform::~Transform()
 {
 }
 
+int Transform::GetChangedMark() const
+{
+    return mChangedMark;
+}
+
 const salt::Matrix& Transform::GetLocalTransform() const
 {
     return mLocalTransform;
+}
+
+const salt::Matrix& Transform::GetOldLocalTransform() const
+{
+    return mOldLocalTransform;
 }
 
 const salt::Matrix& Transform::GetWorldTransform() const
@@ -52,6 +65,9 @@ const salt::Matrix& Transform::GetWorldTransform() const
 
 void Transform::SetLocalTransform(const salt::Matrix &transform)
 {
+    mChangedMark = SceneServer::GetTransformMark();
+    mOldLocalTransform = mLocalTransform;
+
     mLocalTransform = transform;
 }
 
@@ -65,23 +81,33 @@ void Transform::SetWorldTransform(const salt::Matrix &transform)
             return;
         }
 
+    mChangedMark = SceneServer::GetTransformMark();
+    mOldLocalTransform = mLocalTransform;
+
     mLocalTransform = transform;
     parent->SetWorldTransform(mIdentityMatrix);
 }
 
 void Transform::SetLocalPos(const salt::Vector3f &pos)
 {
+    mChangedMark = SceneServer::GetTransformMark();
+    mOldLocalTransform = mLocalTransform;
+
     mLocalTransform.Pos() = pos;
     UpdateHierarchyInternal();
 }
 
 void Transform::SetLocalRotation(const salt::Vector3f &rot)
 {
+    mChangedMark = SceneServer::GetTransformMark();
+    mOldLocalTransform = mLocalTransform;
+
     Vector3f pos = mLocalTransform.Pos();
     mLocalTransform.RotationX(gDegToRad(rot[0]));
     mLocalTransform.RotateY(gDegToRad(rot[1]));
     mLocalTransform.RotateZ(gDegToRad(rot[2]));
     mLocalTransform.Pos() = pos;
+
     UpdateHierarchyInternal();
 }
 
