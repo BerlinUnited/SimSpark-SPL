@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: matrix.h,v 1.5 2003/11/14 14:05:54 fruit Exp $
+   $Id: matrix.h,v 1.5.8.1 2004/01/20 17:41:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,6 +65,9 @@ public:
 
     /** sets up the identity matrix */
     f_inline void Identity()                    {       memcpy(m, mIdentity,    sizeof(float)*16);      }
+
+    /** returns a pointer to a float array describing an identity matrix */
+    static float* GetIdentity() { return mIdentity; }
 
     /** sets up a X-rotation matrix with inAngle degrees */
     f_inline void RotationX(float inAngle);
