@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.8 2004/03/12 17:27:05 rollmark Exp $
+   $Id: main.cpp,v 1.9 2004/03/31 08:35:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -200,6 +200,9 @@ void drawObject(const SphereType& type, const MonitorParser::Expression& expr)
                     // keep default color
                     break;
                 }
+            break;
+
+        case MonitorParser::ET_FLAG:
             break;
 
         default:
