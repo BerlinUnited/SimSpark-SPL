@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundeffectfmod.h,v 1.2 2003/11/10 16:24:27 fruit Exp $
+   $Id: soundeffectfmod.h,v 1.3 2004/04/10 11:58:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,14 +28,15 @@
 class SoundEffectFMOD : public kerosin::SoundEffect
 {
 public:
-        SoundEffectFMOD(kerosin::SoundServer &inServer);
-        virtual ~SoundEffectFMOD();
+    SoundEffectFMOD(kerosin::SoundServer &inServer);
+    virtual ~SoundEffectFMOD();
 
-        void Load(const char *inName);
-        void Load(void *inBuffer, int inSize);
-        void Play();
+    void Load(const std::string& inName);
+    void Load(void *inBuffer, int inSize);
+    void Play();
 
 protected:
-        FSOUND_SAMPLE* mHandle;
+    FSOUND_SAMPLE* mHandle;
 };
+
 #endif //SOUNDEFFECTFMOD_H__

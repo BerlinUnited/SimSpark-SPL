@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundeffectfmod.cpp,v 1.3 2003/11/10 16:34:46 fruit Exp $
+   $Id: soundeffectfmod.cpp,v 1.4 2004/04/10 11:59:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,37 +21,42 @@
 */
 #include "soundeffectfmod.h"
 
-SoundEffectFMOD::SoundEffectFMOD(kerosin::SoundServer &inServer) : SoundEffect(inServer)
+SoundEffectFMOD::SoundEffectFMOD(kerosin::SoundServer& inServer) : SoundEffect(inServer)
 {
-        mHandle = NULL;
+    mHandle = NULL;
 }
 
 SoundEffectFMOD::~SoundEffectFMOD()
 {
-        if (mHandle != NULL)
-        {
-                FSOUND_Sample_Free(mHandle);
-        }
+    if (mHandle != NULL)
+    {
+        FSOUND_Sample_Free(mHandle);
+    }
 }
 
-void SoundEffectFMOD::Load(const char* inName)
+void
+SoundEffectFMOD::Load(const std::string& inName)
 {
-        // Loading the sound as a Loop off, 8bit mono, signed, not hardware accelerated sample
-        mHandle = FSOUND_Sample_Load(FSOUND_FREE, inName, FSOUND_NORMAL, 0, 0);
-        SetFileName(inName);
+    // Loading the sound as a Loop off, 8bit mono, signed, not hardware accelerated sample
+    mHandle = FSOUND_Sample_Load(FSOUND_FREE, inName.c_str(),
+                                 FSOUND_NORMAL, 0, 0);
+    SetFileName(inName);
 }
 
-void SoundEffectFMOD::Load(void *inBuffer, int inSize)
+void
+SoundEffectFMOD::Load(void *inBuffer, int inSize)
 {
-        // Loading the sound as a Loop off, 8bit mono, signed, not hardware accelerated sample
+    // Loading the sound as a Loop off, 8bit mono, signed, not hardware accelerated sample
 
-        mHandle = FSOUND_Sample_Load(FSOUND_FREE, (const char*)inBuffer, (FSOUND_NORMAL | FSOUND_LOADMEMORY), inSize, 0);
+    mHandle = FSOUND_Sample_Load(FSOUND_FREE, (const char*)inBuffer,
+                                 (FSOUND_NORMAL | FSOUND_LOADMEMORY), inSize, 0);
 }
 
-void SoundEffectFMOD::Play()
+void
+SoundEffectFMOD::Play()
 {
-        if (mHandle != NULL)
-        {
-                FSOUND_PlaySound(FSOUND_FREE, mHandle);
-        }
+    if (mHandle != NULL)
+    {
+        FSOUND_PlaySound(FSOUND_FREE, mHandle);
+    }
 }
