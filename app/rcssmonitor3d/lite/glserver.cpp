@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.1 2004/03/09 17:14:44 fruit Exp $
+   $Id: glserver.cpp,v 1.2 2004/03/09 20:24:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,6 @@ void GLServer::ApplyCamera()
 {
     //switch z-buffer on
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
 
     //create a viewport
@@ -67,33 +66,16 @@ void GLServer::ApplyCamera()
 //----------------------------------------------------------------------
 void GLServer::InitGL (void)
 {
-    //setup lightsource
-    if(!mWireframe)
-        {
-            GLfloat position[] = { 0.5, 1.5, 1.0, 0.0 };
-            GLfloat ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-            GLfloat diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-            GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
-
-            glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-            glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-            glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-
-            glEnable(GL_LIGHTING);
-            glEnable(GL_LIGHT0);
-            glEnable(GL_NORMALIZE);
-            glShadeModel(GL_SMOOTH);
-
-            glLightfv(GL_LIGHT0, GL_POSITION, position);
-        }
+    glDisable(GL_LIGHTING);
 }
 
 void GLServer::DrawTextPix(const char* text, salt::Vector2f pix)
 {
-    const salt::Vector2f pos(
-                             pix[0] / (float)mWidth * 2 - 1.0f,
-                             1.0f - (pix[1] / (float)mHeight * 2)
-                             );
+    const salt::Vector2f pos
+        (
+         pix[0] / (float)mWidth * 2 - 1.0f,
+         1.0f - (pix[1] / (float)mHeight * 2)
+         );
 
     DrawText(text,pos);
 }
@@ -108,7 +90,6 @@ void GLServer::DrawText3D(const char* text, salt::Vector3f pos)
 {
     glDisable (GL_DEPTH_TEST);
     glDisable (GL_TEXTURE_2D);
-    glDisable (GL_LIGHTING);
 
     glRasterPos3f(pos[0],pos[1],pos[2]);
     for (const char* s = text; *s; ++s)
@@ -116,7 +97,6 @@ void GLServer::DrawText3D(const char* text, salt::Vector3f pos)
             glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *s);
         }
 
-    glEnable (GL_LIGHTING);
     glEnable (GL_TEXTURE_2D);
     glEnable (GL_DEPTH_TEST);
 }
@@ -127,7 +107,6 @@ void GLServer::DrawText3D(const char* text, salt::Vector3f pos)
 //-----------------------------------------------------------------------
 void GLServer::DrawText(const char* text, salt::Vector2f pos)
 {
-    glDisable (GL_LIGHTING);
     glDisable (GL_TEXTURE_2D);
     glDisable (GL_DEPTH_TEST);
 
@@ -188,8 +167,6 @@ void GLServer::DrawGround(salt::Vector3f gridPos, float szX, float szY)
 //-----------------------------------------------------------------------
 void GLServer::DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz)
 {
-    glColor3ub(255,0,255);
-
     glPushMatrix();
     glTranslatef(boxPos[0],boxPos[1], boxPos[2]);
 
@@ -289,7 +266,6 @@ void GLServer::DrawShadowOfSphere(salt::Vector3f spherePos,float radius)
     const float delta = 0.08f;
 
     glPushMatrix();
-    glDisable(GL_LIGHTING);
     glColor3f(0.0f, 0.0f, 0.0f);
 
     // draw the flat sphere just a 'bit'
@@ -298,7 +274,6 @@ void GLServer::DrawShadowOfSphere(salt::Vector3f spherePos,float radius)
     glScalef(1.0f, 1.0f, 0.0f);
     glutSolidSphere(radius, 10, 10);
 
-    glEnable(GL_LIGHTING);
     glPopMatrix();
 }
 
