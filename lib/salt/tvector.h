@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tvector.h,v 1.9 2004/05/05 08:33:47 fruit Exp $
+   $Id: tvector.h,v 1.10 2004/05/05 14:12:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -189,9 +189,8 @@ template <typename DATATYPE, int ELEMENTS, typename TYPE>
 std::ostream& operator <<(std::ostream& ost, const TVector<DATATYPE,ELEMENTS,TYPE>& v)
 {
     if (ELEMENTS < 1) return ost;
-    ost << "V(" << v[0];
-    for (int i=1; i<ELEMENTS; ++i) ost << ", " << v[i];
-    ost << ")";
+    ost << v[0];
+    for (int i=1; i<ELEMENTS; ++i) ost << " " << v[i];
     return ost;
 }
 
