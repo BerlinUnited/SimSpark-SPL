@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.13 2004/03/12 16:38:16 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.14 2004/03/22 10:36:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,10 +35,9 @@ using namespace zeitgeist;
 
 boost::shared_ptr<CoreContext> gMyPrivateContext;
 
-void getParameterList(VALUE args, Class::TParameterList &params)
+void getParameterList(VALUE args, ParameterList &params)
 {
     int argc = RARRAY(args)->len;
-    params.resize(argc);
 
     for (int i = 0; i<argc; ++i)
         {
@@ -82,7 +81,8 @@ void getParameterList(VALUE args, Class::TParameterList &params)
                     }
                     break;
                 }
-            params[i] = var;
+
+            params.AddValue(var);
         }
 }
 
@@ -103,47 +103,50 @@ VALUE selectObject(VALUE /*self*/, VALUE path)
 
 VALUE selectCall(VALUE /*self*/, VALUE functionName, VALUE args)
 {
-    Class::TParameterList in;
+    ParameterList in;
     getParameterList(args, in);
 
     Class::TCmdProc cmd =
-        gMyPrivateContext->GetObject()->GetClass()->GetCmdProc(STR2CSTR(functionName));
+        gMyPrivateContext->GetObject()->GetClass()->GetCmdProc
+        (STR2CSTR(functionName));
 
-    VALUE out = Qnil;
+    GCValue out;
 
     if (cmd != 0)
         {
-            cmd(static_cast<Object*>(gMyPrivateContext->GetObject().get()), in, out);
+            out = cmd(static_cast<Object*>(gMyPrivateContext->GetObject().get()), in);
         } else
             {
                 gMyPrivateContext->GetCore()->GetLogServer()->Error()
-                    << "(ScriptServer) ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << endl;
+                    << "(ScriptServer) ERROR: Unknown function '"
+                    << STR2CSTR(functionName) << "'" << endl;
             }
 
-    return out;
+    return out.Get();
 }
 
 VALUE thisCall(VALUE /*self*/, VALUE objPointer, VALUE functionName, VALUE args)
 {
-    Class::TParameterList in;
+    ParameterList in;
     getParameterList(args, in);
 
     Object *obj = (Object*)NUM2INT(objPointer);
     Class::TCmdProc cmd =
         obj->GetClass()->GetCmdProc(STR2CSTR(functionName));
 
-    VALUE out = Qnil;
+    GCValue out;
 
     if (cmd != 0)
         {
-            cmd(obj, in, out);
+            out = cmd(obj, in);
         } else
             {
                 gMyPrivateContext->GetCore()->GetLogServer()->Error()
-                    << "(ScriptServer) ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << endl;
+                    << "(ScriptServer) ERROR: Unknown function '"
+                    << STR2CSTR(functionName) << "'" << endl;
             }
 
-    return out;
+    return out.Get();
 }
 
 VALUE importBundle(VALUE /*self*/, VALUE path)
