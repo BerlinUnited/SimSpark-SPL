@@ -22,11 +22,10 @@ ballstateaspect/ballstateaspect_c.cpp \
 sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor_c.cpp \
 fieldflag/fieldflag_c.cpp \
-ball/ball_c.cpp \
+ball/ball.cpp ball/ball_c.cpp ball/ball.h \
 visionperceptor/visionperceptor.h \
 visionperceptor/visionperceptor.cpp \
 visionperceptor/visionperceptor_c.cpp
-
 
 
 # -module tells automake we're not building a library but a loadable module
