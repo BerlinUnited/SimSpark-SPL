@@ -47,32 +47,35 @@ commit:
 
 addlog:
 	if test "$$USERNAME" = ""; then \
-	    USERNAME="$$USER"; fi; \
+	    USERNAME="$$USER"; \
+	fi; \
 	if test "$$USEREMAIL" = ""; then \
-	    USEREMAIL="sserver-admin@lists.sf.net"; fi; \
-	DATE=`date +"%Y-%m-%d"`; \
-	LOGHEADER=`echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n"`; \
-	cvs -z9 diff -u --brief 2>&1 | \
-	$(AWK) -v LOGHEADER="$$LOGHEADER" 'BEGIN { print LOGHEADER "\n" } \
-	/^Index/ { print "\t* ./" $$2 } \
-	/^cvs server: .* is a new entry/ { print "\t* ./" $$3 } \
-    END { print "" }' | \
-	cat - @srcdir@/ChangeLog > ChangeLog.tmp
-	mv ChangeLog.tmp @srcdir@/ChangeLog
-	if test -n "$(CVSEDITOR)"; then $(CVSEDITOR) ChangeLog; \
-	elif test -n "$(VISUAL)"; then $(VISUAL) ChangeLog; \
-	elif test -n "$(EDITOR)"; then $(EDITOR) ChangeLog; \
-	else \
-		EDITOR=`which vi`; \
-		if test -n "$$EDITOR" && test -x "$$EDITOR"; then \
-			$$EDITOR ChangeLog; \
+	    USEREMAIL="sserver-admin@lists.sf.net"; \
+	fi; \
+	cvs -z9 diff -u --brief 2>&1 > @srcdir@/addlog.tmp; \
+	if test -s @srcdir@/addlog.tmp; then \
+		DATE=`date +"%Y-%m-%d"`; \
+		LOGHEADER=`echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n"`; \
+		cat @srcdir@/addlog.tmp | $(AWK) \
+		-v LOGHEADER="$$LOGHEADER" 'BEGIN { print LOGHEADER "\n" } \
+		/^Index/ { print "\t* ./" $$2 } \
+		/^cvs server: .* is a new entry/ { print "\t* ./" $$3 }	\
+		END { print "" }' | cat - @srcdir@/ChangeLog > ChangeLog.tmp; \
+		mv ChangeLog.tmp @srcdir@/ChangeLog; \
+		if test -n "$(CVSEDITOR)"; then $(CVSEDITOR) ChangeLog; \
+		elif test -n "$(VISUAL)"; then $(VISUAL) ChangeLog; \
+		elif test -n "$(EDITOR)"; then $(EDITOR) ChangeLog; \
 		else \
-			echo ""; \
-			echo "Cannot find an editor."; \
-			echo "Please edit ChangeLog manually\n"; \
+			EDITOR=`which vi`; \
+			if test -n "$$EDITOR" && test -x "$$EDITOR"; then \
+				$$EDITOR ChangeLog; \
+			else \
+				echo ""; \
+				echo "Cannot find an editor."; \
+				echo "Please edit ChangeLog manually\n"; \
+			fi; \
 		fi; \
 	fi
-
 
 
 
