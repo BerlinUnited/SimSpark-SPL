@@ -97,7 +97,9 @@ renderserver/renderserver_c.cpp \
 renderserver/rendernode.cpp \
 renderserver/rendernode_c.cpp \
 renderserver/rendercontrol.cpp \
-renderserver/rendercontrol_c.cpp
+renderserver/rendercontrol_c.cpp \
+renderserver/customrender.cpp \
+renderserver/customrender_c.cpp
 
 nobase_libpkginclude_HEADERS = \
 fontserver/font.h \
@@ -138,5 +140,6 @@ textureserver/textureserver.h \
 openglserver/openglserver.h \
 renderserver/renderserver.h \
 renderserver/rendernode.h \
-renderserver/rendercontrol.h
+renderserver/rendercontrol.h \
+renderserver/customrender.h
 
