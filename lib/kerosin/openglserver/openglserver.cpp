@@ -4,25 +4,6 @@
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/logserver/logserver.h>
 
-#ifdef HAVE_CONFIG_H
-# ifdef PACKAGE_BUGREPORT
-#  undef PACKAGE_BUGREPORT
-# endif
-# ifdef PACKAGE_NAME
-#  undef PACKAGE_NAME
-# endif
-# ifdef PACKAGE_STRING
-#  undef PACKAGE_STRING
-# endif
-# ifdef PACKAGE_TARNAME
-#  undef PACKAGE_TARNAME
-# endif
-# ifdef PACKAGE_VERSION
-#  undef PACKAGE_VERSION
-# endif
-#include "config.h"
-#endif
-
 namespace kerosin
 {
     class MapHolder
@@ -87,7 +68,7 @@ void OpenGLServer::SwapBuffers() const
 
         returns 0 on fail, non-zero on success
 */
-unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
+unsigned int OpenGLServer::LoadARBProgram(GLenum /*target*/, const char* /*fileName*/)
 {
 #if 0
         // only try to load stuff if the extension is supported

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: scriptserver.h,v 1.5 2003/09/26 12:22:10 fruit Exp $
+   $Id: scriptserver.h,v 1.6 2003/11/06 09:34:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,11 +30,31 @@
 #ifndef SCRIPTSERVER_H__
 #define SCRIPTSERVER_H__
 
+// Both <ruby.h> and "config.h" define PACKAGE_ constants.
+// To suppress compiler warnings about redefinitions they
+// are #undef'ed here
+
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+
 #ifndef __GNUC__
 #define EXTERN extern __declspec(dllimport)
 #endif
 #include <ruby.h>
 #undef EXTERN
+
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/class.h>
