@@ -17,7 +17,6 @@ ballstateaspect/ballstateaspect.cpp \
 ballstateaspect/ballstateaspect_c.cpp \
 sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor_c.cpp \
-fieldflag/fieldflag.cpp \
 fieldflag/fieldflag_c.cpp \
 ball/ball_c.cpp \
 visionperceptor/visionperceptor.h \
