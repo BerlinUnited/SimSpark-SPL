@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.6.2.1 2004/01/12 19:09:27 rollmark Exp $
+   $Id: basenode.h,v 1.6.2.2 2004/01/20 17:39:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ namespace oxygen
 
 class Scene;
 
-/** BaseNode is the base class for all nodes which are part of the scene
-    hierarchy.  It's Hierarchy functionality (children, naming, etc..) is
-    inherited from zeitgeist. It does NOT have an explicit local and world
-    transform.
+/** BaseNode is the base class for all nodes which are part of the
+    scene hierarchy.  It's Hierarchy functionality (children, naming,
+    etc..) is inherited from zeitgeist. It does NOT have an explicit
+    local and world transform.
 */
 
 class BaseNode : public zeitgeist::Node
@@ -60,13 +60,13 @@ public:
 
     // transformation related
 
-    /** return the local transform of this node (default: returns
+    /** return the local transform of this node. (default: returns
      * identity) */
-    virtual const salt::Matrix&     GetLocalTransform()     const;
+    virtual const salt::Matrix& GetLocalTransform() const;
 
-    /** returns the world transform of this node (default: returns parents
-     * world transform) */
-    virtual const salt::Matrix&     GetWorldTransform()     const;
+    /** returns the world transform of this node (default: returns
+     * parents world transform) */
+    virtual const salt::Matrix& GetWorldTransform() const;
 
     /** sets the local transform of this node (default: ignored) */
     virtual void SetLocalTransform(const salt::Matrix &transform);
@@ -116,7 +116,8 @@ protected:
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal();
 
-    /** updates hierarchical date (position, bounding volumes, etc..) */
+    /** updates hierarchical date (position, bounding volumes,
+        etc..) */
     virtual void UpdateHierarchyInternal();
 
     //
@@ -124,16 +125,16 @@ protected:
     //
 protected:
     /** the identity matrix */
-    static salt::Matrix             mIdentityMatrix;
+    static const salt::Matrix mIdentityMatrix;
 
     /** debug mode (for additional visualization) */
-    bool                                    mDebugMode;
+    bool mDebugMode;
 
     /** local bounding box */
-    salt::AABB3                             mLocalBoundingBox;
+    salt::AABB3 mLocalBoundingBox;
 
     /** world bounding box */
-    salt::AABB3                             mWorldBoundingBox;
+    salt::AABB3 mWorldBoundingBox;
 };
 
 DECLARE_CLASS(BaseNode);
