@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: kicknrun.cpp,v 1.1.2.4 2004/02/08 17:18:01 rollmark Exp $
+$Id: kicknrun.cpp,v 1.1.2.5 2004/02/08 23:12:14 fruit Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ void KickNRun::BehavePlayOn()
             // we are far away, go full power
             kickDashLine *= 100;
             Dash(kickDashLine);
-        } else
+        } else if (kickPosDist > minKickDist)
         {
             // we're getting closer, go slower
             kickDashLine *= 20;
@@ -95,7 +95,7 @@ void KickNRun::BehavePlayOn()
         } else
             {
                 // we are close enough to kick the ball
-                Kick(20,30);
+                Kick(20,100);
             }
 }
 
