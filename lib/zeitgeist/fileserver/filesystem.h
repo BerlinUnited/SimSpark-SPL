@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystem.h,v 1.5 2003/11/14 14:05:54 fruit Exp $
+   $Id: filesystem.h,v 1.6 2004/04/08 07:14:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@
 
 namespace zeitgeist
 {
-  /**   This class defines the interface which derived filesystems
-        must implement in order to be used with the fileserver.
+  /** this class defines the interface which derived filesystems must
+      implement in order to be used with the fileserver.
    */
 class FileSystem : public Leaf
 {
@@ -58,30 +58,29 @@ public:
     FileSystem() : Leaf()       {}
     virtual ~FileSystem() {}
 
-    /** tries to open the file named inName. Returns an instance
-        of a salt::RFile on success, NULL otherwise */
-    virtual salt::RFile*        Open(const char* inName) = 0;
+    /** tries to open the file named inName. Returns an instance of a
+        salt::RFile on success, NULL otherwise */
+    virtual salt::RFile* Open(const std::string& inName) = 0;
 
     /** sets the path all calls to Open are relative to. For a
         standard file system this call maps directly to a
-        directory. For Filesystems providing access to an archive
-        it is used to select the archive, i.e. it is the filename
-        of an archive. Please refer to concrete Filesystems for an
-        example implementation. */
-    virtual bool        SetPath(const char* inPath) = 0;
-
+        directory. For Filesystems providing access to an archive it
+        is used to select the archive, i.e. it is the filename of an
+        archive. Please refer to concrete Filesystems for an example
+        implementation. */
+    virtual bool SetPath(const std::string& inPath) = 0;
 
     /** iterates over all files managed by this filesystem.
-     * 'directory', 'name' and 'extension' give directory, name
-     * and extension a file must match. directory,name and
-     * extension may be NULL, in wich case every
-     * directory,extension and/or name matches. For each match
-     * the function callback is called with the name of the
-     * matched file and the additional user parameter
-     * 'param'. param is just passed through to the callback and
-     * has no meaning to the filesystem.
+     * 'directory', 'name' and 'extension' give directory, name and
+     * extension a file must match. directory,name and extension may
+     * be NULL, in wich case every directory,extension and/or name
+     * matches. For each match the function callback is called with
+     * the name of the matched file and the additional user parameter
+     * 'param'. param is just passed through to the callback and has
+     * no meaning to the filesystem.
      */
-    virtual int ForEachFile(const char* expression, TCallback callback, void* param) = 0;
+    virtual int ForEachFile(const std::string&, TCallback callback,
+                            void* param) = 0;
 
 private:
     FileSystem(const FileSystem& obj);
