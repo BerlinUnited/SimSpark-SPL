@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.4.8.6 2004/03/19 15:41:07 fruit Exp $
+   $Id: body.cpp,v 1.4.8.7 2004/03/22 14:12:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -203,27 +203,22 @@ void Body::PostPhysicsUpdateInternal()
     mat.m[15] = 1;
     baseNode->SetLocalTransform(mat);
 
-    // slow down bodies
+    // enforce maximum speed
+    if (mMaxSpeed == 0)
+        {
+            return;
+        }
 
-    //force = - drag_coefficient * mass * velocity
-    dMass m;
-    dBodyGetMass(mODEBody, &m);
+    Vector3f vel = GetVelocity();
+    if (vel.Length() < mMaxSpeed)
+        {
+            return;
+        }
 
-    const dReal* vel = dBodyGetLinearVel(mODEBody);
-    float speed = gSqrt(vel[0]*vel[0]+vel[1]*vel[1]+vel[2]*vel[2]);
-    float factor = mLinearDrag;
+    vel.Normalize();
+    vel *= mMaxSpeed;
 
-    if (speed > mMaxSpeed)
-    {
-        factor += speed/mMaxSpeed - 1.0f;
-    }
-
-    dBodyAddForce(mODEBody, -factor*vel[0]*m.mass,
-                  -factor*vel[1]*m.mass, -factor*vel[2]*m.mass);
-
-    //torque = - angular_drag_coefficient * inertia_matrix * angular_velocity
-    vel = dBodyGetAngularVel(mODEBody);
-    dBodyAddTorque(mODEBody, -0.3f*vel[0], -0.3f*vel[1], -0.3f*vel[2]);
+    SetVelocity(vel);
 }
 
 Body* Body::GetBody(dBodyID id)
