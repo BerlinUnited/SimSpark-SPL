@@ -1,3 +1,111 @@
+2003-12-25  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	moved GetVectorValue to protected section
+	added method ConvertStringValue
+	implemented GetValue helper for float, double and int
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	removed superfluous #include
+
+	* app/rcssmonitor3d/commserver.cpp,
+	* app/rcssmonitor3d/commserver.h, 
+	* app/rcssmonitor3d/main.cpp:
+	adapted rcssmonitor3d to Predicate changes
+	using new GetValue helper to parse a vector
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	added a set of helper functions to access values stored in a
+	TParameterList
+
+	* lib/oxygen/gamecontrolserver/predicate.h, lib/oxygen/gamecontrolserver/baseparser.h:
+	added some comments
+
+	* plugin/soccer/initeffector/initeffector.h,
+	* plugin/soccer/createeffector/createeffector.cpp,
+	* plugin/soccer/createeffector/createeffector.h,
+	* plugin/soccer/initeffector/initeffector.cpp,
+	* plugin/sexpparser/sexpparser.cpp, plugin/sexpparser/sexpparser.h,
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp,
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.h,
+	* plugin/forceeffector/forceeffector.cpp,
+	* plugin/forceeffector/forceeffector.h,
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp,
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp,
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h,
+	* lib/oxygen/gamecontrolserver/baseparser.cpp,
+	* lib/oxygen/gamecontrolserver/baseparser.h,
+	* lib/oxygen/agentaspect/collisionperceptor.cpp,
+	* lib/oxygen/agentaspect/collisionperceptor.h,
+	* lib/oxygen/agentaspect/effector.h,
+	* lib/oxygen/agentaspect/perceptor.h,
+	* lib/oxygen/agentaspect/agentaspect.h,
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	fixed Predicate usage
+
+	* lib/oxygen/gamecontrolserver/predicate.h:
+	moved struct TPredicate to class Predicate
+
+	* lib/oxygen/Makefile.am: 
+	added predicate.h
+
+2003-12-25  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/createeffector/createeffector.cpp:
+	fixed bug that the agent aspect position is set after child references
+	(causes strange behaviour on update).
+
+2003-12-25  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* app/simulator/simulator.rb:
+	* app/spadestest/spadestest.rb: 
+	using the CreateEffector as a plugin
+
+	* lib/oxygen/agentaspect/agentaspect.cpp:
+	changed init to create the effector passed as a parameter and adapted
+	debug output accordingly
+
+	* lib/oxygen/agentaspect/agentaspect.h:
+	added parameter createEffector to init
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver_c.cpp:
+	exported method initEffector to ruby
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	implemented InitEffector
+	changed agentConnect to pass the create effector name to the
+	AgentAspect
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added method InitEffector
+
+	* configure.ac: 
+	added plugin/soccer/createeffector Makefile
+
+	* lib/oxygen/oxygen.cpp:
+	removed zeitgeist registration of CreateEffector
+
+	* lib/oxygen/oxygen.h: 
+	removed CreateEffector include
+
+	* lib/oxygen/Makefile.am: removed CreateEffector files
+	added baseparser.cpp
+
+	* lib/oxygen/agentaspect/createeffector.cpp,
+	* lib/oxygen/agentaspect/createeffector.h,
+	*lib/oxygen/agentaspect/createeffector_c.cpp: removed
+	CreateEffector files (now in plugin/soccer)
+
+	* plugin/soccer/Makefile.am,
+	* plugin/soccer/createeffector/.cvsignore,
+	* plugin/soccer/createeffector/Makefile.am,
+	* plugin/soccer/createeffector/createaction.h,
+	* plugin/soccer/createeffector/createeffector.cpp,
+	* plugin/soccer/createeffector/createeffector.h,
+	* plugin/soccer/createeffector/createeffector_c.cpp,
+	* plugin/soccer/createeffector/export.cpp: 
+	moved CreateEffector to plugin/soccer
+
 2003-12-23  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp: 
