@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.14 2004/03/12 08:47:22 rollmark Exp $
+   $Id: scriptserver.h,v 1.15 2004/03/12 16:38:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,16 @@ class ScriptServer : public Leaf
     // types
     //
 public:
+    enum EInitScriptType
+        {
+            IS_COMMON,  // the init script is common for all users,
+                        // i.e. it won't be copied to the local dot
+                        // directory
+            IS_USERLOCAL // the init script is local to the user, i.e
+                         // it will be copied to the user's dot
+                         // direcotry
+        };
+
 protected:
 private:
 
@@ -74,12 +84,14 @@ public:
      */
     void SetInitRelPathPrefix(const std::string &relPathPrefix);
 
-    /** searches in ~/<mDotName>/, PREFIX/share/PACKAGE_NAME/ and
-     * <relPath>/ for the script <fileName>.  If found the script is
-     * run and copied to ~/<dotName>/. If this directory is missing it
-     * is automatically created
+    /** searches in ~/<mDotName>/ if dotScript is true,
+     * PREFIX/share/PACKAGE_NAME/ and <mRelPathPrefix><relPath>/ for
+     * the script <fileName>.  If found the script is run and if
+     * dotScript is true copied to ~/<dotName>/. If this directory is
+     * missing it is automatically created
      */
-    bool RunInitScript(const std::string &fileName, const std::string &relPath);
+    bool RunInitScript(const std::string &fileName, const std::string &relPath,
+                       EInitScriptType type = IS_USERLOCAL);
 
     /** sets name of the dot directory */
     void SetDotName(const std::string &dotName) { mDotName = dotName; }
@@ -143,8 +155,17 @@ private:
     GCValue GetVariable(const std::string &varName);
 
     /** private helper function */
-    bool RunInitScript(const std::string &dir, const std::string &name,
-                       bool copy,  const std::string& destDir = "");
+    bool RunInitScriptInternal(const std::string &dir, const std::string &name,
+                               bool copy,  const std::string& destDir = "");
+
+    /** construct the path of the local dot directory that contains
+        the users init scripts
+     */
+    bool GetDotDirName(std::string& dotDir);
+
+    /** checks if the directory <dotDir> exists and if not creates it
+     */
+    bool CreateDotDir(const std::string& dotDir);
 
     //
     // members

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.12 2004/03/12 08:50:06 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.13 2004/03/12 16:38:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -230,7 +230,7 @@ ScriptServer::ScriptServer()
     rb_define_global_function("popd",         RUBY_METHOD_FUNC(popd), 0);
     rb_define_global_function("dirs",         RUBY_METHOD_FUNC(dirs), 0);
 
-    mRelPathPrefix = '../../';
+    mRelPathPrefix = "../../";
 }
 
 ScriptServer::~ScriptServer()
@@ -423,8 +423,8 @@ void ScriptServer::SetInitRelPathPrefix(const std::string &relPathPrefix)
     mRelPathPrefix = relPathPrefix;
 }
 
-bool ScriptServer::RunInitScript(const string &sourceDir, const string &name,
-                                 bool copy, const string& destDir)
+bool ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
+                                         bool copy, const string& destDir)
 {
     // run the init script in the sourceDir
     string sourcePath = sourceDir + "/" + name;
@@ -461,54 +461,65 @@ bool ScriptServer::RunInitScript(const string &sourceDir, const string &name,
     return true;
 }
 
-bool ScriptServer::RunInitScript(const string &fileName, const string &relPath)
+bool ScriptServer::GetDotDirName(string& dotDir)
 {
-    // create and change to the user's dot directory
-    bool validDotDir = true;
-
     if (mDotName == "")
         {
-            GetLog()->Warning() << "WARNING: Dot directory name unset.\n";
-            validDotDir = false;
+            GetLog()->Warning() << "(ScriptServer) WARNING: Dot directory name unset.\n";
+            return false;
         }
 
     char* home = getenv("HOME");
-    string dotDir;
-    if (home)
+    if (!home)
         {
-            dotDir = string(home) + "/" + mDotName;
-        } else
-            {
-                validDotDir = false;
-            }
+            GetLog()->Warning() << "(ScriptServer) WARNING: $HOME is unset.\n";
+            return false;
+        }
 
+    dotDir = string(home) + "/" + mDotName;
+
+    return true;
+}
+
+bool ScriptServer::CreateDotDir(const string& dotDir)
+{
     char cwd[PATH_MAX+1];
     if (getcwd(cwd,sizeof(cwd)) == NULL)
         {
-            GetLog()->Error() << "ERROR: Cannot get current directory\n";
-            validDotDir = false;
+            GetLog()->Error()
+                << "(ScriptServer) ERROR: Cannot get current directory\n";
+            return false;
         }
 
-    if (
-        (validDotDir) &&
-        (chdir(dotDir.c_str()) != 0)
-        )
+    if (chdir(dotDir.c_str()) == 0)
         {
-            if (mkdir(dotDir.c_str(),0777) != 0)
-                {
-                    GetLog()->Error() << "ERROR: Cannot create directory '"
-                                      << dotDir << "'\n";
-                    validDotDir = false;
-                } else
-                    {
-                        GetLog()->Normal() << "Created Directory '"
-                                           << dotDir << "'\n";
-                    }
-        } else
-            {
-                // change back to the original directory
-                chdir(cwd);
-            }
+            // dot dir exists; change back to original directory
+            chdir(cwd);
+            return true;
+        }
+
+    // dot dir is not existent, try to create it
+    if (mkdir(dotDir.c_str(),0777) != 0)
+        {
+            GetLog()->Error() << "ERROR: Cannot create directory '"
+                              << dotDir << "'\n";
+            return false;
+        }
+
+    GetLog()->Normal() << "Created Directory '"
+                       << dotDir << "'\n";
+
+    return true;
+}
+
+bool ScriptServer::RunInitScript(const string &fileName, const string &relPath,
+                                 EInitScriptType type)
+{
+    string dotDir;
+    bool validDotDir =
+        (type == IS_USERLOCAL) &&
+        GetDotDirName(dotDir) &&
+        CreateDotDir(dotDir);
 
     // some macro magic (not at all)
     string pkgdatadir = PREFIX "/share/" PACKAGE_NAME;
@@ -516,10 +527,10 @@ bool ScriptServer::RunInitScript(const string &fileName, const string &relPath)
     bool ok =
         (
          (
-          (validDotDir) && (RunInitScript(dotDir, fileName, false))
+          (validDotDir) && (RunInitScriptInternal(dotDir, fileName, false))
           )
-         || (RunInitScript(pkgdatadir,  fileName, validDotDir, dotDir))
-         || (RunInitScript(mRelPathPrefix+relPath, fileName, validDotDir, dotDir))
+         || (RunInitScriptInternal(pkgdatadir,  fileName, validDotDir, dotDir))
+         || (RunInitScriptInternal(mRelPathPrefix+relPath, fileName, validDotDir, dotDir))
          );
 
     if (! ok)
