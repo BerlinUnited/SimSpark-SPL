@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: soccer.cpp,v 1.1.2.3 2004/02/09 14:19:54 fruit Exp $
+$Id: soccer.cpp,v 1.1.2.4 2004/02/10 19:52:12 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ Soccer::Soccer() : Behavior()
 {
     mTeamName = "unnamed";
     mSensationCount = 0;
+    mDriveVec = Vector3f(0,0,0);
 }
 
 Soccer::~Soccer()
@@ -73,11 +74,18 @@ void Soccer::Kick(const float angle, const float power)
 void Soccer::Drive(const salt::Vector3f& driveVec)
 {
     GetLog()->Debug()
-        << "driveing ["
+        << "driving ["
         << driveVec[0] << " "
         << driveVec[1] << " "
         << driveVec[2]
         << "]\n";
+
+    if (driveVec == mDriveVec)
+        {
+            // no explicit change needed
+            GetLog()->Debug()
+                << "not changing drive vector\n";
+        }
 
     stringstream ss;
     ss << "A(drive"
