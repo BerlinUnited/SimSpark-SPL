@@ -18,7 +18,9 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "exception.hpp"
 #include <cstring>
@@ -52,7 +54,7 @@ namespace rcss
         HostNotFound::what() const throw()
         {
 #if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
-	    return "Network error";
+        return "Network error";
 #else
             return hstrerror( m_err );
 #endif
