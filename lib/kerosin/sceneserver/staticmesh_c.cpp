@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh_c.cpp,v 1.5 2004/04/22 17:17:39 rollmark Exp $
+   $Id: staticmesh_c.cpp,v 1.6 2004/04/28 14:46:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
+using namespace salt;
 using namespace std;
 
 FUNCTION(StaticMesh,load)
@@ -38,8 +39,25 @@ FUNCTION(StaticMesh,load)
             );
 }
 
+FUNCTION(StaticMesh,setScale)
+{
+    Vector3f inScale;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in[0], inScale))
+        )
+        {
+            return false;
+        }
+
+    obj->SetScale(inScale);
+    return true;
+}
+
 void CLASS(StaticMesh)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
     DEFINE_FUNCTION(load);
+    DEFINE_FUNCTION(setScale);
 }

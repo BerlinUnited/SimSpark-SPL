@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.11 2004/04/27 10:03:12 rollmark Exp $
+   $Id: staticmesh.h,v 1.12 2004/04/28 14:46:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,6 +72,9 @@ public:
 
     /** renders the node */
     virtual void RenderInternal();
+
+    /** returns the managed mesh */
+    const boost::shared_ptr<oxygen::TriMesh> GetMesh();
 
     //
     // Members
