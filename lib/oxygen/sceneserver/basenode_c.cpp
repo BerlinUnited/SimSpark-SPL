@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode_c.cpp,v 1.4 2004/02/12 14:07:23 fruit Exp $
+   $Id: basenode_c.cpp,v 1.5 2004/04/08 14:47:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,8 +22,25 @@
 #include "basenode.h"
 
 using namespace oxygen;
+using namespace std;
+
+FUNCTION(BaseNode,importScene)
+{
+    string inFileName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inFileName))
+        )
+        {
+            return false;
+        }
+
+    return obj->ImportScene(inFileName);
+}
 
 void CLASS(BaseNode)::DefineClass()
 {
-        DEFINE_BASECLASS(zeitgeist/Node);
+    DEFINE_BASECLASS(zeitgeist/Node);
+    DEFINE_FUNCTION(importScene);
 }
