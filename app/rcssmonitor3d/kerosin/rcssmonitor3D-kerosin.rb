@@ -5,6 +5,7 @@
 # import required plugins
 importBundle 'filesystemstd';
 importBundle 'inputsdl';
+importBundle 'sexpparser'
 
 # scene and server path
 $scenePath = '/usr/scene/'
@@ -42,37 +43,52 @@ world = new('oxygen/World', $scenePath+'world')
 world.setGravity(0.0, 0.0, -9.81)
 new('oxygen/Space', $scenePath+'space')
 
-# add a camera
+# add a camera. The camera movement is controlled using an
+# FPSController.
 cameraTransform = new('oxygen/Transform',$scenePath+'camera0')
 cameraTransform.setLocalPos(0.0,0.0,10.0)
 new('oxygen/Camera',$scenePath+'camera0/camera')
+
+# the camera is not affected by gravity but restricted to a maximum
+# speed
 body = new('oxygen/Body',$scenePath+'camera0/physics')
 body.useGravity(false);
-new('oxygen/FPSController',$scenePath+'camera0/physics/controller')
+body.setMaxSpeed(15.0)
+
+# add an FPSController to move the camera and set the applied
+# acceleration
+fpsController = new('oxygen/FPSController',$scenePath+'camera0/physics/controller')
+fpsController.setAcceleration(40.0)
+
+# setup the CommServer
+new('rcssmonitor3d/CommServer', $serverPath+'comm')
+
+# setup the MonitorParser
+new('rcssmonitor3d/MonitorParser', $serverPath+'parser')
 
 #
-# setup a dummy scene
+# collection of callbacks and helper functions
 #
+
+# create a transform node and a node of class <className>
 def addVisual(className, nodeName, x, y, z)
   transform = new('oxygen/Transform', $scenePath+nodeName)
   transform.setLocalPos(x,y,z)
   new('kerosin/'+className,$scenePath+nodeName+'/'+'visual')
 end
 
+# called from the monitor to create an agent named <nodeName>
+def addAgent(nodeName)
+  addVisual('Sphere',nodeName,0.0,0.0,0.0)
+end
+
+# called from the monitor to create a ball
+def addBall(nodeName)
+  addVisual('Sphere',nodeName,0.0,0.0,0.0)
+end
+
 # add an axis
 addVisual('Axis','myAxis',0.0,0.0,0.0)
-
-# add some spheres
-addVisual('Sphere','sphere1',0.0,0.0,0.0);
-
-addVisual('Sphere','sphere2',5.0,0.0,0.0);
-addVisual('Sphere','sphere3',-5.0,0.0,0.0);
-
-addVisual('Sphere','sphere4',0.0,5.0,0.0);
-addVisual('Sphere','sphere5',0.0,-5.0,0.0);
-
-addVisual('Sphere','sphere6',0.0,0.0,5.0);
-addVisual('Sphere','sphere7',0.0,0.0,-5.0);
 
 
 
