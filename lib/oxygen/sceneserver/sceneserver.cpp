@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.6 2004/02/21 15:30:44 fruit Exp $
+   $Id: sceneserver.cpp,v 1.7 2004/03/09 12:18:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -112,30 +112,31 @@ bool SceneServer::SetActiveScene(const std::string &location)
 void SceneServer::Update(float deltaTime)
 {
   if (
-      (deltaTime > 0.0f) &&
-      (mActiveScene)
+      (deltaTime == 0.0f) ||
+      (mActiveScene.get() == 0)
       )
     {
-      mActiveScene->PrePhysicsUpdate(deltaTime);
-
-      // determine collisions
-      shared_ptr<Space> space = shared_static_cast<Space>
-        (mActiveScene->GetChildOfClass("Space"));
-      if (space.get() != 0)
-        {
-          space->Collide();
-        }
-
-      // do physics
-      shared_ptr<World> world = shared_static_cast<World>
-        (mActiveScene->GetChildOfClass("World"));
-      if (world.get() != 0)
-        {
-          world->Step(deltaTime);
-        }
-
-      mActiveScene->PostPhysicsUpdate();
-
-      mActiveScene->UpdateHierarchy();
+      return;
     }
+
+  mActiveScene->PrePhysicsUpdate(deltaTime);
+
+  // determine collisions
+  shared_ptr<Space> space = shared_static_cast<Space>
+    (mActiveScene->GetChildOfClass("Space"));
+  if (space.get() != 0)
+    {
+      space->Collide();
+    }
+
+  // do physics
+  shared_ptr<World> world = shared_static_cast<World>
+    (mActiveScene->GetChildOfClass("World"));
+  if (world.get() != 0)
+    {
+      world->Step(deltaTime);
+    }
+
+  mActiveScene->PostPhysicsUpdate();
+  mActiveScene->UpdateHierarchy();
 }
