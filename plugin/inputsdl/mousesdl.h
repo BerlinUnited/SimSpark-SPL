@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: mousesdl.h,v 1.3 2003/12/21 23:36:39 fruit Exp $
+   $Id: mousesdl.h,v 1.4 2004/04/23 20:23:04 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,37 +21,28 @@
 
    MouseSDL
 
+   HISTORY: 22.08.02 - MK - Initial version
 
-        NOTE:
-
-        HISTORY:
-                22.08.02 - MK
-                        - Initial version
-
-        TODO:
-
-        TOFIX:
 */
 #ifndef MOUSESDL_H__
 #define MOUSESDL_H__
-
 
 #include "inputdevicesdl.h"
 
 class MouseSDL : public InputDeviceSDL
 {
-        //
-        // functions
-        //
+    //
+    // functions
+    //
 public:
-        MouseSDL();
-        virtual ~MouseSDL();
+    MouseSDL();
+    virtual ~MouseSDL();
 
-        //! init the device
-        virtual bool Init(kerosin::InputSystem *inputSystem);
+    //! init the device
+    virtual bool Init(kerosin::InputSystem* inputSystem);
 
-        //! this filters an SDL specific input
-        virtual int EventFilter(const SDL_Event *event);
+    //! this filters an SDL specific input
+    virtual int EventFilter(const SDL_Event* event);
 };
 
 DECLARE_CLASS(MouseSDL);

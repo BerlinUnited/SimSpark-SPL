@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputdevicesdl.h,v 1.3 2003/12/21 23:36:38 fruit Exp $
+   $Id: inputdevicesdl.h,v 1.4 2004/04/23 20:27:12 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,15 +21,7 @@
 
    InputDeviceSDL
 
-        NOTE:
-
-        HISTORY:
-                21.08.02 - MK
-                        - Initial version
-
-        TODO:
-
-        TOFIX:
+   HISTORY: 21.08.02 - MK - Initial version
 */
 
 #ifndef INPUTDEVICESDL_H__
@@ -44,12 +36,12 @@
 */
 class InputDeviceSDL : public kerosin::InputDevice
 {
-        //
-        // functions
-        //
+    //
+    // functions
+    //
 public:
-        //! this filters an SDL specific input
-        virtual int EventFilter(const SDL_Event *event) = 0;
+    //! this filters an SDL specific input
+    virtual int EventFilter(const SDL_Event* event) = 0;
 };
 
 #endif //INPUTDEVICESDL_H__
