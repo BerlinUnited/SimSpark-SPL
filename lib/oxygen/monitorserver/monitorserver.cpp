@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.2 2003/12/21 23:36:36 fruit Exp $
+   $Id: monitorserver.cpp,v 1.2.6.1 2004/03/27 11:28:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ boost::shared_ptr<MonitorSystem> MonitorServer::GetMonitorSystem()
 {
     return shared_static_cast<MonitorSystem>
         (
-         GetChildSupportingClass("MonitorSystem")
+         FindChildSupportingClass<MonitorSystem>()
          );
 }
 
@@ -85,7 +85,7 @@ string MonitorServer::GetMonitorHeaderInfo()
 {
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
-    if (monitorSystem != NULL)
+    if (monitorSystem.get() != 0)
         {
             return monitorSystem->GetMonitorHeaderInfo();
         } else
@@ -98,7 +98,7 @@ string MonitorServer::GetMonitorInfo()
 {
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
-    if (monitorSystem != NULL)
+    if (monitorSystem.get() != 0)
         {
             return monitorSystem->GetMonitorInfo();
         } else
@@ -111,7 +111,7 @@ void MonitorServer::ParseMonitorMessage(string data)
 {
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
-    if (monitorSystem != NULL)
+    if (monitorSystem.get() != 0)
         {
             monitorSystem->ParseMonitorMessage(data);
         }
