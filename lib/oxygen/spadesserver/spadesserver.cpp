@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.2.2.1 2003/12/22 18:05:05 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.2.2.2 2003/12/22 18:44:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,8 +77,14 @@ SpadesServer::parseParameters(int argc, const char *const *argv)
     mParamReader->getOptions(argc, argv);
 
 #if THIS_IS_A_DEMO_ONLY
+    // start an inprocess commserver
     mParamReader->setParam ("run_integrated_commserver", true);
+
+    // send updates to the monitor every second cycle
     mParamReader->setParam ("monitor_interval",2);
+
+    // don't send think time messages to connected agents
+    mParamReader->setParam ("send_agent_think_times",false);
 #endif
 
     return mParamReader.get();
@@ -225,7 +231,7 @@ SpadesServer::getMinSenseLatency() const
 }
 
 ActEvent*
-SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen) const
+SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
 {
     const shared_ptr<GameControlServer> gcs = GetGameControlServer();
     if (gcs.get() == 0)
@@ -242,7 +248,7 @@ SpadesServer::parseAct(SimTime t, AgentID a, const char* data, unsigned datalen)
         }
 
     float latency = gcs->GetActionLatency(a);
-    SimTime arrival = t + static_cast<int>(latency / GetTimePerStep());
+    SimTime arrival = mSimEngine->getSimulationTime() + static_cast<int>(latency / GetTimePerStep());
 
     return new SpadesActEvent(arrival, a, actionList);
 }
