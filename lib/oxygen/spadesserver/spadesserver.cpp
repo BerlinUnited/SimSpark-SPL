@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.8 2003/11/27 12:45:09 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9 2003/11/30 17:00:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,10 +110,13 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         while (i > 0)
         {
             sceneServer->Update(time_per_step);
-            GetLog()->Debug() << "updated the scene by "
-                              << time_per_step << " seconds.\n";
             --i;
         }
+#if THIS_IS_A_DEMO_ONLY
+        GetLog()->Debug() << "updated the scene by " << steps - i << " * "
+                          << time_per_step << " seconds.\n";
+
+#endif
         // return the simulation time when loop stopped
         // (the '- i' makes sense if we exit the while loop earlier)
         return time_desired - i;
