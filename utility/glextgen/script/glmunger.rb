@@ -57,11 +57,11 @@ module GLExtGen
 					print "Processing " + extensionName + " -> "
 					if extensionHash[extensionName] != nil
 						if extensionName.index("VERSION") != nil
-							print "Clearing Functions"
+							print "Clearing Functions\n"
 							# for a GL_VERSION definition, we just throw away the functions
 							extensionHash[extensionName].functionList.clear
 						else
-							print "Removing"
+							print "Removing\n"
 							# throw away the extension, as it is double defined
 							extensionHash.delete(extensionName)
 						end

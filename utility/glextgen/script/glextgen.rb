@@ -69,10 +69,10 @@ frontEnd.scanAll
 	File.open($path+"gl.h").each { |line|
 		if md = extensionExp.match(line)
 			glNativeSupportArray.push(md[2]);
-			#print "Found extension: " + md[2] + "\n"
+			print "Found extension: " + md[2] + "\n"
 		elsif md = versionExp.match(line)
 			glNativeSupportArray.push(md[2]);
-			#print "Found version: " + md[2] + "\n"
+			print "Found version: " + md[2] + "\n"
 		end
 	}
 
