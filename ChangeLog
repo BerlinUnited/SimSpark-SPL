@@ -1,4 +1,8 @@
 2003-08-22  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* /lib/kerosin
+	- fixed various warnings and errors, when compiling kerosin with gcc 
+
+2003-08-22  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* /lib/salt/
 	- removed ptr.h ptrmanager.h and quadlink.h from Makefile.am
 	- added gcc/sharedlibrary.cpp to Makefile.am
