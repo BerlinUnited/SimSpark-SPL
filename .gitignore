@@ -67,6 +67,14 @@ app/scenetest/Makefile
 app/scenetest/Makefile.in
 app/scenetest/scenetest
 app/scenetest/sys
+app/simspark/.deps
+app/simspark/.libs
+app/simspark/Logfiles
+app/simspark/Makefile
+app/simspark/Makefile.in
+app/simspark/createagentdb.sh
+app/simspark/rcsoccersim3D
+app/simspark/rcssserver3D
 app/simulator/.deps
 app/simulator/.libs
 app/simulator/Logfiles
