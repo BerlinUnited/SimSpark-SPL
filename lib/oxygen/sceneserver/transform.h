@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.h,v 1.6 2004/03/22 11:02:32 rollmark Exp $
+   $Id: transform.h,v 1.7 2004/04/14 18:30:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,6 +66,9 @@ public:
 
     /** sets the local position of this node */
     void SetLocalPos(const salt::Vector3f &pos);
+
+    /** sets the local rotation of this node in degrees */
+    void SetLocalRotation(const salt::Vector3f &rot);
 
 protected:
     /** upon linkage, we have to update our world transform */
