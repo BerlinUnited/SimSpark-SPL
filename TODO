@@ -19,14 +19,22 @@ For later:
   game state (in GameStateAspect). The methods to move objects (currently
   in SoccerRuleAspect) should go to the GameStateAspect.
 
-For 0.3:
+- This bug was reported by Alexey Vasilyev <servent@apollo.lv>:
+   Sometimes (probabilisticaly) GameState token passed to the agent has
+   no initial information about the game/agent parameters, i.e. it has no unum,
+   team, FieldLength, etc. tokens.
+
+   The only token it has is
+   (GameState (time 0) (playmode BeforeKickOff)
+   instead of
+   (GameState (unum 1) (team left) (FieldLength 108) (FieldWidth 73) ...
+
+
+Done:
 
 - The default LogServer behavior is to open cout for eAll. When an application
   wants to change this, zeitgeist sent already some Debug messages, which may
   be desired or not. The application should be able to change this as well.
-
-Done:
-
 - add kick off selection to monitor (left/right/random)
 - add rule to get rid of this message (ScriptServer) ERROR: Unknown function 'RuleFreeKickPauseTime'
 - adjust goal height (and the goal flags position in the lite monitor)
