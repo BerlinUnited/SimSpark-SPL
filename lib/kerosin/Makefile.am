@@ -1,6 +1,17 @@
 pkglib_LTLIBRARIES = libkerosin.la 
 AM_CPPFLAGS = -I${top_srcdir}/lib
 
+BUILT_SOURCES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
+CLEANFILES = openglserver/glextensionreg.cpp openglserver/glextensionreg.h
+nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
+nobase_nodist_pkginclude_HEADERS = openglserver/glextensionreg.h
+
+openglserver/glextensionreg.cpp: ${top_srcdir}/utility/glextgen/glextensionreg.cpp
+	@echo "Copying generated glextension sources"
+	cp ${top_srcdir}/utility/glextgen/glextensionreg.cpp $@
+openglserver/glextensionreg.h: ${top_srcdir}/utility/glextgen/glextensionreg.h
+	cp ${top_srcdir}/utility/glextgen/glextensionreg.h $@
+
 libkerosin_la_SOURCES = \
 agentaspect/agentaspect.cpp \
 agentaspect/agentaspect_c.cpp \
@@ -74,7 +85,6 @@ textureserver/texture.cpp \
 textureserver/texture2d.cpp \
 textureserver/textureserver.cpp \
 textureserver/textureserver_c.cpp \
-openglserver/glextensionreg.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp 
 
@@ -132,6 +142,5 @@ soundserver/soundsystem.h \
 textureserver/texture.h \
 textureserver/texture2d.h \
 textureserver/textureserver.h \
-openglserver/glextensionreg.h \
 openglserver/glfnproto.h \
 openglserver/openglserver.h
