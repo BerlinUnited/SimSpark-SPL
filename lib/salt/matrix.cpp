@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: matrix.cpp,v 1.3 2003/08/21 08:56:49 rollmark Exp $
+   $Id: matrix.cpp,v 1.4 2003/09/08 08:58:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,10 +110,6 @@ void Matrix::CalcInfiniteProjection(float width, float height, float fov, float 
 {
 	const float halfWidth	= zNear * (float)tan(gDegToRad(fov*0.5f));
 	const float halfHeight	= halfWidth * (height/width);
-	const float left		= -halfWidth;
-	const float right		= halfWidth;
-	const float bottom		= -halfHeight;
-	const float top			= halfHeight;
 
 	CalcInfiniteFrustum(-halfWidth, halfWidth, -halfHeight, halfHeight, zNear);
 }

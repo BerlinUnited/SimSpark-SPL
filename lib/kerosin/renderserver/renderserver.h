@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.3 2003/09/03 12:15:47 fruit Exp $
+   $Id: renderserver.h,v 1.4 2003/09/08 08:58:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <salt/frustum.h>
 
 namespace kerosin
 {
@@ -45,6 +46,7 @@ namespace kerosin
 
 class SceneServer;
 class Scene;
+class Camera;
 
 class RenderServer : public zeitgeist::Leaf
 {
@@ -57,6 +59,9 @@ public:
 
     //! display the current active scene
     void Render();
+
+    //! render the scene with fancy lighting 
+    void RenderFancyLighting(const salt::Frustum& frustum);
 
 protected:
     /** overload this to perform stuff after the object has
@@ -71,8 +76,11 @@ private:
     /** render a scene recursively.
         \param scene the scene base node
     */
-    void RenderScene(boost::shared_ptr<Scene> scene);
+    void RenderScene(boost::shared_ptr<Scene>& scene);
 
+    /** sets the OpenGl view parameters for a camera
+     */
+    void BindCamera(boost::shared_ptr<Camera>& camera);
 
     //
     // Members

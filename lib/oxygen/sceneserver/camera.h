@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.h,v 1.2 2003/08/31 13:08:42 rollmark Exp $
+   $Id: camera.h,v 1.3 2003/09/08 08:58:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,14 @@ public:
         // set properties
 
         /** sets viewpoint properties */
-        f_inline void   SetViewport(int x, int y, int width, int height)        {       mX = x; mY = y; mWidth = width; mHeight = height;       }
+        f_inline void   SetViewport(int x, int y, int width, int height)        
+   	    {       mX = x; mY = y; mWidth = width; mHeight = height;       }
+
+	f_inline int GetViewportX() { return mX; }
+	f_inline int GetViewportY() { return mY; }
+	f_inline int GetViewportWidth() { return mWidth; }
+	f_inline int GetViewportHeight() { return mHeight; }
+
 
         /** sets the field of view (FOV) */
         f_inline void   SetFOV(const float fov)         {       mFOV = fov;             }
@@ -76,11 +83,17 @@ public:
         /** returns the view transformation matrix */
         f_inline const salt::Matrix&    GetViewTransform() const        {       return mViewTransform;  }
 
+        /** returns the projection matrix */
+	f_inline const salt::Matrix&    GetProjectionTransform() const { return mProjectionTransform; }
+
         /** fills in a frustum object with the correct parameters for this camera */
         void DescribeFrustum(salt::Frustum& frustum) const;
 
-        /** sets up the OpgenGL view parameters */
+        /** sets the view transform to be the inverted WorldTransform and sets
+	    up the projection transform matrix
+	**/
         void Bind();
+
 
 protected:
 

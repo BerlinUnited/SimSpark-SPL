@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.cpp,v 1.2 2003/08/31 13:08:42 rollmark Exp $
+   $Id: camera.cpp,v 1.3 2003/09/08 08:58:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 
 #include "camera.h"
 #include <salt/matrix.h>
-#include <kerosin/openglserver/openglserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 
 using namespace kerosin;
@@ -41,13 +40,10 @@ BaseNode()
         mHeight = 480;
 
         SetName("camera");
-
-        //gSceneNode.AddCamera(this);
 }
 
 Camera::~Camera()
 {
-        //gSceneNode.RemoveCamera(this);
 }
 
 /*!
@@ -99,25 +95,11 @@ void Camera::DescribeFrustum(Frustum& frustum) const
 
 void Camera::Bind()
 {
-        mViewTransform          = GetWorldTransform();
+        mViewTransform	= GetWorldTransform();
         mViewTransform.InvertRotationMatrix();
 
-        // adjust the viewport
-        glViewport(mX, mY, mWidth, mHeight);
-
-        // set depth range
-        glDepthRange(0, 1);
-
         // setup the projection matrix
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
         mProjectionTransform.CalcInfiniteFrustum(-mHalfWorldWidth, mHalfWorldWidth, -mHalfWorldHeight, mHalfWorldHeight, mZNear);
-        glMultMatrixf(mProjectionTransform.m);
-
-        // initialize the modelview stack
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glMultMatrixf(mViewTransform.m);
 }
 
 void Camera::OnLink()

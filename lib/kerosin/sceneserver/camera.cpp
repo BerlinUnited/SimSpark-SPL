@@ -1,6 +1,5 @@
 #include "camera.h"
 #include <salt/matrix.h>
-#include <kerosin/openglserver/openglserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 
 using namespace kerosin;
@@ -20,13 +19,10 @@ BaseNode()
 	mHeight	= 480;
 	
 	SetName("camera");
-
-	//gSceneNode.AddCamera(this);
 }
 
 Camera::~Camera()
 {
-	//gSceneNode.RemoveCamera(this);
 }
 
 /*!
@@ -36,10 +32,10 @@ Camera::~Camera()
 */
 void Camera::DescribeFrustum(Frustum& frustum) const
 {
-	// concatenate projection and view transform
-	Matrix frustumMatrix = mProjectionTransform * mViewTransform;
+    // concatenate projection and view transform
+    Matrix frustumMatrix = mProjectionTransform * mViewTransform;
 
-	// Get plane parameters
+    // Get plane parameters
     float *m= frustumMatrix.m;
    
     Plane *p = &frustum.mPlanes[Frustum::PI_RIGHT];
@@ -78,25 +74,10 @@ void Camera::DescribeFrustum(Frustum& frustum) const
 
 void Camera::Bind()
 {
-	mViewTransform		= GetWorldTransform();
-	mViewTransform.InvertRotationMatrix();
+    mViewTransform	= GetWorldTransform();
+    mViewTransform.InvertRotationMatrix();
 
-	// adjust the viewport
-	glViewport(mX, mY, mWidth, mHeight);
-
-	// set depth range
-	glDepthRange(0, 1);
-
-	// setup the projection matrix
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	mProjectionTransform.CalcInfiniteFrustum(-mHalfWorldWidth, mHalfWorldWidth, -mHalfWorldHeight, mHalfWorldHeight, mZNear);
-	glMultMatrixf(mProjectionTransform.m);
-	
-	// initialize the modelview stack
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glMultMatrixf(mViewTransform.m);
+    mProjectionTransform.CalcInfiniteFrustum(-mHalfWorldWidth, mHalfWorldWidth, -mHalfWorldHeight, mHalfWorldHeight, mZNear);
 }
 
 void Camera::OnLink()

@@ -17,7 +17,14 @@ public:
         virtual ~Camera();
 
         // set properties
-        f_inline void   SetViewport(int x, int y, int width, int height)        {       mX = x; mY = y; mWidth = width; mHeight = height;       }
+        f_inline void   SetViewport(int x, int y, int width, int height)        
+	    {       mX = x; mY = y; mWidth = width; mHeight = height;       }
+
+	f_inline int GetViewportX() { return mX; }
+	f_inline int GetViewportY() { return mY; }
+	f_inline int GetViewportWidth() { return mWidth; }
+	f_inline int GetViewportHeight() { return mHeight; }
+
         f_inline void   SetFOV(const float fov)         {       mFOV = fov;             }
         f_inline void   SetZNear(const float zNear)     {       mZNear = zNear; }
         f_inline void   SetZFar(const float zFar)       {       mZFar = zFar;   }
@@ -30,12 +37,19 @@ public:
         f_inline float                                  GetFOV()const                           {       return mFOV;    }
         f_inline float                                  GetZNear()const                         {       return mZNear;  }
         f_inline float                                  GetZFar()const                          {       return mZFar;   }
+
+        /** returns the view transformation matrix */
         f_inline const salt::Matrix&    GetViewTransform() const        {       return mViewTransform;  }
+
+        /** returns the projection matrix */
+	f_inline const salt::Matrix&    GetProjectionTransform() const { return mProjectionTransform; }
 
         //! this fills in a frustum object with the correct parameters for this camera
         void DescribeFrustum(salt::Frustum& frustum) const;
 
-        //! sets the OpenGL view parameters
+        /** sets the view transform to be the inverted WorldTransform and sets
+	    up the projection transform matrix
+	**/
         void Bind();
 protected:
         //! gets the right viewport resolution

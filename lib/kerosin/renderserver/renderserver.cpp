@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.4 2003/09/03 12:15:47 fruit Exp $
+   $Id: renderserver.cpp,v 1.5 2003/09/08 08:58:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ using namespace boost;
 using namespace kerosin;
 using namespace salt;
 using namespace zeitgeist;
-
 
 RenderServer::RenderServer() :
 Leaf()
@@ -69,7 +68,74 @@ RenderServer::ConstructInternal()
     return true;
 }
 
-void RenderServer::Render()
+void 
+RenderServer::RenderFancyLighting(const& Frustum frustum)
+{
+    glEnable(GL_VERTEX_PROGRAM_ARB);
+    glBindProgramARB(GL_VERTEX_PROGRAM_ARB, mAmbientVP);
+
+    glColor3f(0.1f,0.1f,0.1f);
+    mActiveScene->RenderAmbient();
+
+    // render lights
+    glBlendFunc(GL_ONE, GL_ONE);
+    glEnable(GL_BLEND);
+    //glEnable(GL_ALPHA_TEST);
+    //glAlphaFunc(GL_GREATER, 0.0f);
+    glDepthMask(0);
+    glDepthFunc(GL_EQUAL);
+
+    for (TLeafList::iterator i=myLights.begin(); i != myLights.end(); ++i)
+    {
+        shared_ptr<Light> light = shared_static_cast<Light>(*i);
+
+        // only render the light if it is visible
+        if (frustum.Intersects(light->GetWorldBoundingBox())!=Frustum::FS_OUTSIDE)
+        {
+            for (TLeafList::iterator j=visibleMeshes.begin(); j != visibleMeshes.end(); ++j)
+            {
+                shared_ptr<StaticMesh> mesh = shared_static_cast<StaticMesh>(*j);
+
+                // we only have to render meshes, whose bounding volume intersects the light volume
+                if (light->GetWorldBoundingBox().Intersects(mesh->GetWorldBoundingBox()))
+                {
+                    Matrix   toObjectSpace;
+                    toObjectSpace.Identity();
+                    toObjectSpace = mesh->GetWorldTransform();
+                    toObjectSpace.InvertRotationMatrix();
+                    //light->GetWorldTransform().Pos().Dump();
+                    light->Prepare();
+                    Vector3f lightPos = toObjectSpace.Transform(light->GetWorldTransform().Pos());
+                    Vector3f viewPos = toObjectSpace.Transform(camera->GetWorldTransform().Pos());
+                    glProgramLocalParameter4fARB(GL_VERTEX_PROGRAM_ARB, 0, lightPos.x(), lightPos.y(), lightPos.z(), 1.0f);
+                    glProgramLocalParameter4fARB(GL_VERTEX_PROGRAM_ARB, 1, viewPos.x(), viewPos.y(), viewPos.z(), 1.0f);
+                    light->RenderLitMesh(shared_static_cast<StaticMesh>(*j));
+                }
+            }
+        }
+    }
+
+    glDisable(GL_BLEND);
+    glDepthMask(1);
+
+    glActiveTextureARB(GL_TEXTURE0_ARB);
+    glDisable(GL_TEXTURE_2D);
+    glActiveTextureARB(GL_TEXTURE1_ARB);
+    glDisable(GL_TEXTURE_2D);
+    glActiveTextureARB(GL_TEXTURE2_ARB);
+    glDisable(GL_TEXTURE_2D);
+
+    glEnable(GL_VERTEX_PROGRAM_ARB);
+    glBindProgramARB(GL_VERTEX_PROGRAM_ARB, mAmbientVP);
+
+    // standard rendering
+    mActiveScene->Render();
+
+    glDisable(GL_VERTEX_PROGRAM_ARB);
+}
+
+void 
+RenderServer::Render()
 {
     GetActiveScene();
 
@@ -80,133 +146,73 @@ void RenderServer::Render()
 
     // get a camera to render with
     shared_ptr<Camera> camera = shared_static_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
+
     // get opengl server
     shared_ptr<OpenGLServer> openglServer = shared_static_cast<OpenGLServer>(GetCore()->Get("/sys/server/opengl"));
 
-    if (camera.get() != NULL && openglServer.get() != NULL)
+    if (camera.get() == NULL || openglServer.get() == NULL)
     {
-        glClearColor(0,0,0,0);
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-        glColor3f(1,1,1);
+        return
+    }
 
-        // set the view transformation
-        camera->Bind();
-        Frustum frustum;
-        camera->DescribeFrustum(frustum);
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glColor3f(1,1,1);
 
-        // cull lights and geometries against the frustum
-        TLeafList myLights;
-        TLeafList allMeshes;
-        TLeafList visibleMeshes;
-        TLeafList::iterator i;
+    // set the view transformation
+    camera->Bind();
+    BindCamera(camera);
 
-        mActiveScene->GetChildrenSupportingClass("Light", myLights, true);
-        mActiveScene->GetChildrenSupportingClass("StaticMesh", allMeshes, true);
+    // get the view frustum from the camera
+    Frustum frustum;
+    camera->DescribeFrustum(frustum);
 
-        for (i = allMeshes.begin(); i != allMeshes.end(); ++i)
+    // cull lights and geometries against the frustum
+    TLeafList myLights;
+    TLeafList allMeshes;
+    TLeafList visibleMeshes;
+    TLeafList::iterator i;
+
+    mActiveScene->GetChildrenSupportingClass("Light", myLights, true);
+    mActiveScene->GetChildrenSupportingClass("StaticMesh", allMeshes, true);
+
+    for (i = allMeshes.begin(); i != allMeshes.end(); ++i)
+    {
+        // try to cull meshes, which are outside the viewing frustum
+        if (frustum.Intersects(shared_static_cast<StaticMesh>(*i)->GetWorldBoundingBox())!=Frustum::FS_OUTSIDE)
         {
-            // try to cull meshes, which are outside the viewing frustum
-            if (frustum.Intersects(shared_static_cast<StaticMesh>(*i)->GetWorldBoundingBox())!=Frustum::FS_OUTSIDE)
-            {
-                visibleMeshes.push_back(*i);
-            }
+            visibleMeshes.push_back(*i);
         }
+    }
 
-        // actual rendering
+    // actual rendering
 
-        // ambient pass
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
+    // ambient pass
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
-/*      if (openglServer->SupportsFancyLighting())
-        {
-            glEnable(GL_VERTEX_PROGRAM_ARB);
-            glBindProgramARB(GL_VERTEX_PROGRAM_ARB, mAmbientVP);
+    // test for fancy lighting support - disabled for now
+    const bool doFancyLighting = false; /*openglServer->SupportsFancyLighting()*/
 
-            glColor3f(0.1f,0.1f,0.1f);
-            mActiveScene->RenderAmbient();
+    if (doFancyLighting)
+    {
+        RenderFancyLighting(frustum);
+    }
+    else
+    {
+        // ambient lighting only
+        glColor3f(1, 1, 1);
+        mActiveScene->RenderAmbient();
 
-            // render lights
-            glBlendFunc(GL_ONE, GL_ONE);
-            glEnable(GL_BLEND);
-            //glEnable(GL_ALPHA_TEST);
-            //glAlphaFunc(GL_GREATER, 0.0f);
-            glDepthMask(0);
-            glDepthFunc(GL_EQUAL);
-
-            for (TLeafList::iterator i=myLights.begin(); i != myLights.end(); ++i)
-            {
-                shared_ptr<Light> light = shared_static_cast<Light>(*i);
-
-                // only render the light if it is visible
-                if (frustum.Intersects(light->GetWorldBoundingBox())!=Frustum::FS_OUTSIDE)
-                {
-                    for (TLeafList::iterator j=visibleMeshes.begin(); j != visibleMeshes.end(); ++j)
-                    {
-                        shared_ptr<StaticMesh> mesh = shared_static_cast<StaticMesh>(*j);
-
-                        // we only have to render meshes, whose bounding volume intersects the light volume
-                        if (light->GetWorldBoundingBox().Intersects(mesh->GetWorldBoundingBox()))
-                        {
-
-                            Matrix   toObjectSpace;
-                            toObjectSpace.Identity();
-                            toObjectSpace = mesh->GetWorldTransform();
-                            toObjectSpace.InvertRotationMatrix();
-                            //light->GetWorldTransform().Pos().Dump();
-                            light->Prepare();
-                            Vector3f lightPos = toObjectSpace.Transform(light->GetWorldTransform().Pos());
-                            Vector3f viewPos = toObjectSpace.Transform(camera->GetWorldTransform().Pos());
-                            glProgramLocalParameter4fARB(GL_VERTEX_PROGRAM_ARB, 0, lightPos.x(), lightPos.y(), lightPos.z(), 1.0f);
-                            glProgramLocalParameter4fARB(GL_VERTEX_PROGRAM_ARB, 1, viewPos.x(), viewPos.y(), viewPos.z(), 1.0f);
-                            light->RenderLitMesh(shared_static_cast<StaticMesh>(*j));
-                        }
-                    }
-                }
-            }
-
-            glDisable(GL_BLEND);
-            glDepthMask(1);
-
-            glActiveTextureARB(GL_TEXTURE0_ARB);
-            glDisable(GL_TEXTURE_2D);
-            glActiveTextureARB(GL_TEXTURE1_ARB);
-            glDisable(GL_TEXTURE_2D);
-            glActiveTextureARB(GL_TEXTURE2_ARB);
-            glDisable(GL_TEXTURE_2D);
-        }
-        else */
-        {
-            // ambient lighting only
-            glColor3f(1, 1, 1);
-            mActiveScene->RenderAmbient();
-        }
-
-/*
-        if (openglServer->SupportsFancyLighting())
-        {
-            glEnable(GL_VERTEX_PROGRAM_ARB);
-            glBindProgramARB(GL_VERTEX_PROGRAM_ARB, mAmbientVP);
-        }
-*/
         // standard rendering
         mActiveScene->Render();
-
-/*
-        if (openglServer->SupportsFancyLighting())
-        {
-            glDisable(GL_VERTEX_PROGRAM_ARB);
-        }
-*/
     }
 }
 
-
-
 void
-RenderServer::RenderScene(boost::shared_ptr<Scene> scene)
+RenderServer::RenderScene(boost::shared_ptr<Scene>& scene)
 {
     glPushMatrix();
     glMultMatrixf(scene->GetWorldTransform().m);
@@ -219,6 +225,30 @@ RenderServer::RenderScene(boost::shared_ptr<Scene> scene)
     for (TLeafList::iterator i = scene->begin(); i!= scene->end(); ++i)
     {
         if ((*i)->GetClass()->Supports("BaseNode"))
+        {
             RenderScene(shared_static_cast<BaseNode>(*i));
+        }
     }
+}
+
+void
+RenderServer::BindCamera(boost::shared_ptr<Camera>& camera)
+{
+    camera->Bind();
+
+    // adjust the viewport
+    glViewport(camera->GetViewportX, camera->GetViewportY, camera->GetViewportWidth, camera->GetViewportHeight);
+
+    // set depth range
+    glDepthRange(0, 1);
+
+    // setup the projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMultMatrixf(camera->GetProjectionTransform().m);
+	
+    // initialize the modelview stack
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMultMatrixf(camera->GetViewTransform().m);
 }
