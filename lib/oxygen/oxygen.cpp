@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.cpp,v 1.7 2004/02/21 15:30:42 fruit Exp $
+   $Id: oxygen.cpp,v 1.8 2004/03/12 08:52:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,6 +79,6 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->GetRoot()->GetScript()->RunInitScript
         (
          "oxygen.rb",
-         "../../lib/oxygen"
+         "lib/oxygen"
          );
 }
