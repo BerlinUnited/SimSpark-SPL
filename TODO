@@ -1,11 +1,21 @@
-===== 03 Feb 04
+For 0.3:
 
-- Spades Timing (Sense Intervals, Acting)
-+ Kicker: solve effet (done)
-+ Kicker: latitudal angle (done)
+- add kick off selection to monitor (left/right/random)
+- The default LogServer behavior is to open cout for eAll. When an application
+  wants to change this, zeitgeist sent already some Debug messages, which may
+  be desired or not. The application should be able to change this as well.
+
+Done:
+
+- add rule to get rid of this message (ScriptServer) ERROR: Unknown function 'RuleFreeKickPauseTime'
+- adjust goal height (and the goal flags position in the lite monitor)
+- remove error message 'failed to get Class object for 'ClassClass0x804ad24'...#
+- monitor / logplayer should work without changing config files
+- Kicker: solve effet
+- Kicker: latitudal angle
 - Kick and run team
 - Agents need to get information about team
-+ Flag names
+- Flag names
 - Game States:
   before kick off
   kick in: ball inside field
@@ -13,19 +23,6 @@
   corner_kick
   goal_kick_l / r (beam ball in front of goal)  
   half time (timing?)
-+ list of features (comparison to soccer) / description of perceptors/actuators
-/ Battery / Temperature ???
 - change play mode from monitor
-- scripts
+- ODE joint types
 
-
-Branch: rcssserver3D-0.3
-This should be the branch where the latest changes for Lisbon are
-introduced. In parallel, we will be working here on more features for
-RoboCup 2005 on a different branch.
-
-Branch: rcssserver3D-X.Y
-We are going to add joints and more of the more advanced ODE stuff
-during winter/spring/summer 2004. Joschka from my group here is
-already working on a way to integrate bones into the simulator (so we
-will get articulated creatures for RoboCup 2005).
