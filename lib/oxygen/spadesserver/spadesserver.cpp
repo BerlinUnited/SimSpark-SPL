@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.7 2003/12/04 17:21:57 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.8 2003/12/08 14:50:50 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ using namespace std;
 
 #if THIS_IS_A_DEMO_ONLY
 #include <oxygen/sceneserver/basenode.h>
+#include <oxygen/agentaspect/perfectvisionperceptor.h>
+#include <oxygen/sceneserver/transform.h>
 #endif
 
 SpadesServer::SpadesServer() :
@@ -117,20 +119,6 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         return time_curr;
     }
 
-#if THIS_IS_A_DEMO_ONLY
-      // test the loop
-      // print the current location of the sphere collider
-      shared_ptr<BaseNode> sphereNode =
-        shared_static_cast<BaseNode>(GetCore()->Get("/usr/scene/sphere"));
-
-      if (sphereNode.get() != 0)
-      {
-          const salt::Matrix& transform = sphereNode->GetWorldTransform();
-          const salt::Vector3f& pos = transform.Pos();
-          std::cout << "found the sphereNode at " << pos[0] << "," << pos[1] << "," << pos[2] << std::endl;
-      }
-#endif
-
     shared_ptr<SceneServer> sceneServer =
         shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
@@ -139,6 +127,21 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         GetLog()->Warning() << "WARNING: No SceneServer present\n";
         return time_curr;
     }
+
+#if THIS_IS_A_DEMO_ONLY
+    shared_ptr<oxygen::PerfectVisionPerceptor> v360 =
+        shared_static_cast<oxygen::PerfectVisionPerceptor>(GetCore()->Get("/v360"));
+
+    if (v360.get() != 0)
+    {
+        BaseParser::TPredicate x;
+        if (v360->Percept(x) && GetGameControlServer())
+        {
+            std::cout << GetGameControlServer()->TmpGenerate(x) << std::endl;
+        }
+    }
+    else std::cout << "No Sensor present\n";
+#endif
 
     float timePerStep = GetTimePerStep();
     int i = steps;
@@ -207,7 +210,7 @@ SpadesServer::getMonitorInfo(SimTime /*time*/)
 }
 
 void
-SpadesServer::parseMonitorMessage (const char* data, unsigned datalen)
+SpadesServer::parseMonitorMessage(const char* data, unsigned datalen)
 {
     shared_ptr<MonitorServer> monitorServer =
         GetMonitorServer();
