@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYGRAPH_SPHERENODE_H
-#define RCSS_ENTITYGRAPH_SPHERENODE_H
+#ifndef RCSS_ENTITY_SPHERENODE_H
+#define RCSS_ENTITY_SPHERENODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,7 +29,7 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0
 }}
@@ -43,7 +43,7 @@ public:
     SphereNode(WorldNode& world_node,
                dReal radius,
                const std::string& name = "<unknown>",
-               BaseNode* parent = 0);
+               DirNode* parent = 0);
 
 };
 

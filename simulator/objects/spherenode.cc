@@ -19,13 +19,13 @@
 #include "spherenode.h"
 #include "worldnode.h"
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace std;
 
 SphereNode::SphereNode(WorldNode& world_node, dReal radius,
-                       const std::string& name, BaseNode* parent)
+                       const string& name, DirNode* parent)
     : GeometryNode(world_node, name, parent)
 {
     M_geometry_id = dCreateSphere(world_node.getSpace(),radius);
-    dGeomSetPosition(M_geometry_id, 0, 0, 0);
+    dGeomSetPosition(M_geometry_id, 0, 0, 10);
 }
