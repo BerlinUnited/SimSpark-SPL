@@ -1,3 +1,48 @@
+2003-12-27  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/createeffector/createeffector.cpp: 
+	added InitEffector to the agent
+
+	* plugin/soccer/initeffector/initeffector.cpp: 
+	using FindParameter to extract the team name and uniform number
+
+	* lib/oxygen/gamecontrolserver/predicate.h: 
+	- added a functional class ParameterName to find parameters in a 
+	  parameter list 
+	- added a template method GetNthValue to extract a parameter from a 
+	  given parameter list 
+	- added a template method FindParameter. FindParameter extracts values 
+	  of a parameter with a given name from the predicate parameter list.
+	
+2003-12-26  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/simulator.rb: 
+	queuing up some agents to start initially
+
+	* lib/oxygen/spadesserver/spadesserver_c.cpp: 
+	added ruby interface for the QueueAgents method
+
+	* lib/oxygen/spadesserver/spadesserver.h: 
+	* lib/oxygen/spadesserver/spadesserver.cpp: 
+	- added flag for simulation engine mode changes. The
+	  pauseModeCallback checks this flag for changes and sets the
+	  simulation engine mode as scheduled.
+	- added StartAgents method to start up new agents. Agents can only
+	  be started after SPADES called the SpadesServer::initialize
+	  method, so init scripts cannot start agents by calling this method
+	  directly. Because of this
+	- I added the QueueAgents method, that collects the agents to start in a
+	  queue. The agent queue will be used in the pause method to call
+	  the StartAgents method. QueueAgents can be called from ruby
+	  scripts as "queueAgents".
+
+2003-12-25  Oliver Obst  <fruit@robolog.org>
+
+	* lib/oxygen/sceneserver/basenode.h:
+	moved private internal update methods to protected section,
+	because they cannot be overloaded otherwise (which was intended
+	originally).
+
 2003-12-25  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/gamecontrolserver/predicate.h:
