@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: object.cpp,v 1.8 2004/04/22 19:24:36 rollmark Exp $
+   $Id: object.cpp,v 1.9 2004/04/29 12:28:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,6 +53,22 @@ bool Object::Construct(const boost::shared_ptr<Object>& self, const boost::share
 
 boost::shared_ptr<Class> Object::GetClass() const
 {
+    if (mClass.get() == 0)
+        {
+          std::cout << "(Object) ERROR: failed to get Class object ";
+          const Leaf* leaf = dynamic_cast<const Leaf*>(this);
+
+          if (leaf != 0)
+              {
+                  std::cout << "for '" << leaf->GetName()
+                            << std::cout << "' installed at '"
+                            << leaf->GetFullPath()
+                            << "'";
+              }
+
+          std::cout << std::endl;
+
+        }
     return mClass;
 }
 
@@ -74,7 +90,6 @@ boost::shared_ptr<Core> Object::GetCore() const
     if (core.get() == 0)
       {
           std::cout << "(Object) ERROR: failed to get zeitgeist core ";
-
           const Leaf* leaf = dynamic_cast<const Leaf*>(this);
 
           if (leaf != 0)
