@@ -35,6 +35,8 @@ fileserver/filesystem_c.cpp \
 logserver/logserver.cpp \
 logserver/logserver_c.cpp \
 logserver/logserverstreambuf.cpp \
+randomserver/randomserver.cpp \
+randomserver/randomserver_c.cpp \
 scriptserver/scriptserver.cpp \
 scriptserver/scriptserver_c.cpp
 
@@ -56,6 +58,7 @@ fileserver/fileserver.h \
 fileserver/filesystem.h \
 logserver/logserver.h \
 logserver/logserverstreambuf.h \
+randomserver/randomserver.h \
 scriptserver/scriptserver.h
 
 #telnetserver/telnetdaemon.h \

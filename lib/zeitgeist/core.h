@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.h,v 1.4 2003/11/14 14:05:54 fruit Exp $
+   $Id: core.h,v 1.4.8.1 2004/02/06 13:36:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ class LogServer;
 class ScriptServer;
 class CoreContext;
 class Object;
+class RandomServer;
 
 /** The Core is the hierarchy, i.e. it creates the root node, some
     basic class objects and installs fundamental server classes needed
@@ -144,6 +145,9 @@ private:
 
     /** a reference to the scriptserver */
     boost::shared_ptr<ScriptServer> mScriptServer;
+
+    /** a reference to the randomserver */
+    boost::shared_ptr<RandomServer> mRandomServer;
 
     /** a reference to the core, a smart this pointer */
     boost::weak_ptr<Core>                   mSelf;

@@ -9,6 +9,7 @@
 #include "logserver/logserver.h"
 // #include "telnetserver/telnetserver.h"
 #include "scriptserver/scriptserver.h"
+#include "randomserver/randomserver.h"
 
 #include <salt/path.h>
 #include <salt/sharedlibrary.h>
@@ -61,6 +62,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
         RegisterClassObject(new CLASS(FileServer), "zeitgeist/");
         RegisterClassObject(new CLASS(FileSystem), "zeitgeist/");
         RegisterClassObject(new CLASS(LogServer), "zeitgeist/");
+        RegisterClassObject(new CLASS(RandomServer), "zeitgeist/");
         RegisterClassObject(new CLASS(ScriptServer), "zeitgeist/");
 #ifdef  THE_TELNETSERVER_COMPILES_FOR_OLIVER
         RegisterClassObject(new CLASS(TelnetServer), "zeitgeist/");
@@ -71,8 +73,13 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
 
         mFileServer = shared_static_cast<FileServer>(context->New("zeitgeist/FileServer", "/sys/server/file"));
 
-        // create the log server
-        mScriptServer = shared_static_cast<ScriptServer>(context->New("zeitgeist/ScriptServer", "/sys/server/script"));
+        // create the script server
+        mScriptServer = shared_static_cast<ScriptServer>
+            (context->New("zeitgeist/ScriptServer", "/sys/server/script"));
+
+        // create the random server
+        mRandomServer = shared_static_cast<RandomServer>
+            (context->New("zeitgeist/RandomServer", "/sys/server/random"));
 }
 
 boost::shared_ptr<CoreContext> Core::CreateContext()
