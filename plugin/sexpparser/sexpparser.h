@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.h,v 1.3 2003/12/27 17:53:42 fruit Exp $
+   $Id: sexpparser.h,v 1.4 2004/03/23 09:31:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,11 +41,10 @@ public:
     virtual std::string Generate(boost::shared_ptr<oxygen::Predicate::TList> input);
 
 private:
-    oxygen::Predicate::TParameterList SexpToList(const sexp_t* const sexp);
+    zeitgeist::ParameterList SexpToList(const sexp_t* const sexp);
     oxygen::Predicate SexpToPredicate(const sexp_t* const sexp);
-    std::string ListToString(const oxygen::Predicate::TParameterList& lst);
+    std::string ListToString(const zeitgeist::ParameterList& lst);
     std::string PredicateToString(const oxygen::Predicate& predicate);
-
 };
 
 DECLARE_CLASS(SexpParser);

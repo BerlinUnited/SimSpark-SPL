@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
+   $Id: sexpparser.cpp,v 1.4 2004/03/23 09:31:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <sstream>
 
 using namespace oxygen;
+using namespace zeitgeist;
 using namespace std;
 using namespace boost;
 
@@ -70,25 +71,26 @@ SexpParser::Generate(shared_ptr<Predicate::TList> input)
         s += PredicateToString(*i);
         ++i;
     }
+
     return s;
 }
 
-Predicate::TParameterList
+ParameterList
 SexpParser::SexpToList(const sexp_t* const sexp)
 {
     sexp_t* s = const_cast<sexp_t*>(sexp);
 
-    Predicate::TParameterList arguments;
+    ParameterList arguments;
 
     while (s != 0)
     {
         if (s->ty == SEXP_VALUE)
         {
             string elem(s->val);
-            arguments.push_back(elem);
+            arguments.AddValue(elem);
         } else {
-            Predicate::TParameterList elem = SexpToList(s->list);
-            arguments.push_back(elem);
+            ParameterList elem = SexpToList(s->list);
+            arguments.AddValue(elem);
         }
         s = s->next;
     }
@@ -115,13 +117,13 @@ SexpParser::SexpToPredicate(const sexp_t* const sexp)
 }
 
 std::string
-SexpParser::ListToString(const Predicate::TParameterList& lst)
+SexpParser::ListToString(const ParameterList& lst)
 {
     string s;
     string space;
 
     for (
-         Predicate::TParameterList::const_iterator i = lst.begin();
+         ParameterList::TVector::const_iterator i = lst.begin();
          i != lst.end();
          ++i
          )
@@ -142,9 +144,11 @@ SexpParser::ListToString(const Predicate::TParameterList& lst)
             strm << boost::any_cast<float>(*i);
             s += space + strm.str();
         }
-        else if (i->type() == typeid(Predicate::TParameterList))
+        else if (i->type() == typeid(ParameterList))
         {
-            string t = ListToString(boost::any_cast<Predicate::TParameterList>(*i));
+            const any* v = &(*i);
+            const ParameterList* lst = any_cast<ParameterList>(v);
+            string t = ListToString(*lst);
             s += space + '(' + t + ')';
         }
         else s += space + "(error data format unknown)";
