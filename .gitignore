@@ -263,6 +263,8 @@ plugin/soccer/agentstate/.libs
 plugin/soccer/agentstate/Makefile
 plugin/soccer/agentstate/Makefile.in
 plugin/soccer/agentstate/initeffector.la
+plugin/soccer/ball/Makefile
+plugin/soccer/ball/Makefile.in
 plugin/soccer/createeffector/*.lo
 plugin/soccer/createeffector/.deps
 plugin/soccer/createeffector/.libs
