@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadescreatesenseevent.cpp,v 1.1.2.2 2003/12/03 17:52:18 rollmark Exp $
+   $Id: spadescreatesenseevent.cpp,v 1.1.2.3 2003/12/09 20:27:33 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,9 @@
 #include "spadescreatesenseevent.h"
 #include "spadesserver.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/gamecontrolserver/baseparser.h>
 
 using namespace oxygen;
 using namespace spades;
@@ -41,7 +43,7 @@ bool SpadesCreateSenseEvent::realizeEventWorldModel(spades::WorldModel* pWM)
     // SpadesServer
     SpadesServer* spadesServer = dynamic_cast<SpadesServer*>(pWM);
 
-    if (spadesServer == NULL)
+    if (spadesServer == 0)
         {
             // we can't use the LogServer here :(
             return false;
@@ -49,7 +51,7 @@ bool SpadesCreateSenseEvent::realizeEventWorldModel(spades::WorldModel* pWM)
 
     shared_ptr<GameControlServer> gcs(spadesServer->GetGameControlServer());
 
-    if (gcs.get() == NULL)
+    if (gcs.get() == 0)
         {
             spadesServer->GetLog()->Error()
                 << "(SpadesCreateSenseEvent) GameControlServer not found.\n";
@@ -66,7 +68,7 @@ bool SpadesCreateSenseEvent::realizeEventWorldModel(spades::WorldModel* pWM)
 
     // schedule the next CreateSenseEvent
     SimEngine* simEngine = spadesServer->GetSimEngine();
-    if (simEngine == NULL)
+    if (simEngine == 0)
         {
             spadesServer->GetLog()->Error()
                 << "(SpadesCreateSenseEvent) spades SimEngine not found.\n";
@@ -81,7 +83,62 @@ bool SpadesCreateSenseEvent::realizeEventWorldModel(spades::WorldModel* pWM)
     return true;
 }
 
-spades::SenseEvent* SpadesCreateSenseEvent::createSense(spades::WorldModel* /*p*/)
+spades::SenseEvent* SpadesCreateSenseEvent::createSense(spades::WorldModel* p)
 {
-  return 0;
+    SpadesServer* spadesServer = dynamic_cast<SpadesServer*>(p);
+    if (spadesServer == 0) return false;
+
+    shared_ptr<GameControlServer> gcs(spadesServer->GetGameControlServer());
+    if (gcs.get() == 0)
+        {
+            spadesServer->GetLog()->Error()
+                << "(SpadesCreateSenseEvent) GameControlServer not found.\n";
+            return false;
+        }
+
+    shared_ptr<BaseParser> parser = gcs->GetParser();
+    if (parser.get() == 0)
+        {
+            spadesServer->GetLog()->Error()
+                << "ERROR: (SpadesActEvent) got no parser from "
+                << " the GameControlServer" << endl;
+            return false;
+        }
+
+    // lookup the AgentAspect
+    int id = getAgent();
+    shared_ptr<AgentAspect> agent = gcs->GetAgentAspect(id);
+
+    if (agent.get() == 0)
+        {
+            spadesServer->GetLog()->Error()
+                << "ERROR: (SpadesActEvent) got no AgentAspect for id"
+                << id << " from the GameControlServer" << endl;
+            return false;
+        }
+
+    // get a list of senses from the agent and generate a string
+    // describing them
+    BaseParser::TPredicateList senseList = agent->QueryPerceptors();
+    std::string senses = parser->Generate(senseList);
+
+    // create the sense event
+    float senseDelay = gcs->GetSenseLatency(getAgent());
+
+    SimTime senseArriveTime =
+        getTime() +
+        static_cast<int>(senseDelay / spadesServer->GetTimePerStep());
+
+    //
+    // what's the correct value for ttype here ?
+    // (see spades/shared/sharedtypes.hpp)
+    //
+    ThinkingType ttype = TT_Regular;
+
+    SenseEvent* event = new SenseEvent
+        (ttype, getTime(), senseArriveTime, getAgent());
+
+    event->setData(senses);
+
+    return event;
 }
