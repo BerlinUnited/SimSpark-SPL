@@ -3,6 +3,9 @@
 #
 
 sparkSetupServer()
+# sparkSetupRendering()
+# sparkSetupInput()
+
 
 # let spark create a default camera
 sparkAddFPSCamera(
@@ -13,7 +16,7 @@ sparkAddFPSCamera(
 		  maxSpeed = 15.0,
 		  accel = 400.0,
 		  drag = 4,
-		  addCollider = true
+		  addCollider = false
 		  )
 
 #
@@ -39,10 +42,12 @@ material.setEmission(0.5,0.0,0.0,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGreen');
 material.setDiffuse(0.1,0.5,0.1,1.0)
+material.setAmbient(0.1,0.4,0.1,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
 material.setDiffuse(0.1,0.1,0.1,1.0)
 
 # load a scene file
+importBundle "soccer"
 scene = get($scenePath)
-scene.importScene('rsg/boxspheres/simspark.rsg')
+scene.importScene('rsg/agent/soccer.rsg')
