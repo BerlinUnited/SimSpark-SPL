@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.5 2003/12/27 17:53:41 fruit Exp $
+   $Id: agentaspect.cpp,v 1.5.4.1 2004/03/27 10:45:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ AgentAspect::QueryPerceptors()
 {
   // build list of perceptors, searching recursively
   TLeafList perceptors;
-  GetChildrenSupportingClass("Perceptor",perceptors,true);
+  ListChildrenSupportingClass<Perceptor>(perceptors,true);
 
   shared_ptr<Predicate::TList>
     predList(new Predicate::TList());
@@ -89,16 +89,8 @@ AgentAspect::QueryPerceptors()
        ++iter
        )
     {
-      shared_ptr<Perceptor> perceptor
-        = shared_dynamic_cast<Perceptor>(*iter);
-
-      if (perceptor.get() == 0)
-        {
-          continue;
-        }
-
       Predicate predicate;
-      bool hasData = perceptor->Percept(predicate);
+      bool hasData = shared_static_cast<Perceptor>(*iter)->Percept(predicate);
 
       if (hasData)
         {
@@ -127,7 +119,7 @@ AgentAspect::UpdateEffectorMap()
 {
   // build list of effectors, searching recursively
   TLeafList effectors;
-  GetChildrenSupportingClass("Effector",effectors,true);
+  ListChildrenSupportingClass<Effector>(effectors,true);
 
   // build the effector map
   mEffectorMap.clear();
@@ -138,14 +130,7 @@ AgentAspect::UpdateEffectorMap()
        ++iter
        )
     {
-      shared_ptr<Effector> effector
-        = shared_dynamic_cast<Effector>(*iter);
-
-      if (effector.get() == 0)
-        {
-          continue;
-        }
-
+      shared_ptr<Effector> effector = shared_static_cast<Effector>(*iter);
       mEffectorMap[effector->GetPredicate()] = effector;
     }
 }
