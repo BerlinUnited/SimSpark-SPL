@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: custommonitor.h,v 1.1 2004/12/22 15:53:08 rollmark Exp $
+   $Id: custommonitor.h,v 1.2 2004/12/31 14:10:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ public:
 
     /** This function will be called be called periodically from the
         monitor implementation to do any monitor updates. Custom
-        predicates received via the Monitor client are passed as a
+        predicates that the Monitor client receives are passed as a
         PredicateList
      */
     virtual void ParseCustomPredicates(const oxygen::PredicateList& pList) = 0;
