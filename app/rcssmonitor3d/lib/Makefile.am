@@ -1,16 +1,24 @@
-noinst_LIBRARIES = librcssmonitor3D.a
-
+pkglib_LIBRARIES = librcssmonitor3D.a
+librcssmonitor3D_a_LIBADD = @RUBY_LDFLAGS@
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin/soccer @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
-AM_LDFLAGS  = @RUBY_LDFLAGS@
+
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/rcssmonitor3d
 
 librcssmonitor3D_a_SOURCES = \
-	monitorlib.h monitorlib.cpp \
-	communit.h communit.cpp \
-	commserver.h commserver.cpp commserver_c.cpp \
-	tcpsocket.h tcpsocket.cpp \
-	monitorparser.h monitorparser.cpp monitorparser_c.cpp\
-	gameparam.h gameparam.cpp \
-	gamestate.h gamestate.cpp
+	monitorlib.cpp \
+	communit.cpp \
+	commserver.cpp commserver_c.cpp \
+	tcpsocket.cpp \
+	monitorparser.cpp monitorparser_c.cpp\
+	gameparam.cpp \
+	gamestate.cpp
 
-
-
+libpkginclude_HEADERS = \
+	monitorlib.h \
+	communit.h \
+	commserver.h \
+	tcpsocket.h \
+	monitorparser.h \
+	gameparam.h \
+	gamestate.h 
