@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.h,v 1.8 2003/11/14 14:05:51 fruit Exp $
+   $Id: imageserver.h,v 1.9 2004/04/18 16:24:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,11 +69,17 @@ public:
     ImageServer();
 
     // load/save
-    boost::shared_ptr<Image>        Load(const char *inName, ILenum inType = IL_TYPE_UNKNOWN);                                      // interpret the file with the filter associated with inExt
-    bool    Save(const boost::shared_ptr<Image> &inImage, const char *inName, ILenum inType = IL_TYPE_UNKNOWN);     // interpret the file with the filter associated with inExt
+
+    /** interpret the file with the filter associated with inExt */
+    boost::shared_ptr<Image> Load(const std::string& inName,
+                                  ILenum inType = IL_TYPE_UNKNOWN);
+
+    /** interpret the file with the filter associated with inExt */
+    bool Save(const boost::shared_ptr<Image> &inImage, const std::string& inName,
+              ILenum inType = IL_TYPE_UNKNOWN);
 
 private:
-    // some internal error checking
+    /** some internal error checking */
     bool    HandleErrors();
 };
 

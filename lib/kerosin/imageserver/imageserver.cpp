@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.cpp,v 1.6 2004/04/08 07:26:46 rollmark Exp $
+   $Id: imageserver.cpp,v 1.7 2004/04/18 16:24:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ using namespace boost;
 using namespace kerosin;
 using namespace salt;
 using namespace zeitgeist;
+using namespace std;
 
 shared_ptr<FileServer> gFileServer;
 
@@ -118,7 +119,7 @@ ImageServer::ImageServer()
 // then the library will try to find a handler by the file extension provided.
 // This behavior is done automatically by the library!
 //
-boost::shared_ptr<Image> ImageServer::Load(const char *inName, ILenum inType)
+boost::shared_ptr<Image> ImageServer::Load(const string& inName, ILenum inType)
 {
     // create a new image
     boost::shared_ptr<Image> image(new Image());
@@ -130,7 +131,7 @@ boost::shared_ptr<Image> ImageServer::Load(const char *inName, ILenum inType)
     gFileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
 
     // load the image
-    ilLoad(inType, (ILstring)inName);
+    ilLoad(inType, (ILstring)inName.c_str());
 
     // set the file server to 0 again
     gFileServer.reset();
@@ -145,7 +146,7 @@ boost::shared_ptr<Image> ImageServer::Load(const char *inName, ILenum inType)
     return image;
 }
 
-bool ImageServer::Save(const boost::shared_ptr<Image> &inImage, const char *inName, ILenum inType)
+bool ImageServer::Save(const boost::shared_ptr<Image> &inImage, const string& inName, ILenum inType)
 {
     // make the image active
     inImage->Bind();
@@ -154,7 +155,7 @@ bool ImageServer::Save(const boost::shared_ptr<Image> &inImage, const char *inNa
     gFileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
 
     // save the image
-    ilSave(inType, (ILstring)inName);
+    ilSave(inType, (ILstring)inName.c_str());
 
     // set the file server to 0 again
     gFileServer.reset();
@@ -181,7 +182,111 @@ bool ImageServer::HandleErrors()
     while ((error = ilGetError()) != IL_NO_ERROR)
         {
             ret = true;
-            GetLog()->Error().Printf("DevIL Error: %x\n", error);
+
+            string msg;
+
+            switch(error)
+                {
+                case IL_INVALID_ENUM :
+                    msg = "invalid enum";
+                    break;
+
+                case IL_OUT_OF_MEMORY :
+                    msg = "out of memory";
+                    break;
+
+                case IL_FORMAT_NOT_SUPPORTED :
+                    msg = "format not supported";
+                    break;
+
+                case IL_INTERNAL_ERROR :
+                    msg = "internal error";
+                    break;
+
+                case IL_INVALID_VALUE :
+                    msg = "invalid value";
+                    break;
+
+                case IL_ILLEGAL_OPERATION :
+                    msg = "illegal operation";
+                    break;
+
+                case IL_ILLEGAL_FILE_VALUE :
+                    msg  = "illegal file value";
+                    break;
+
+                case IL_INVALID_FILE_HEADER :
+                    msg = "invalid file header";
+                    break;
+
+                case IL_INVALID_PARAM :
+                    msg  = "invalid param";
+                    break;
+
+                case IL_COULD_NOT_OPEN_FILE :
+                    msg = "could not open file";
+                    break;
+
+                case IL_INVALID_EXTENSION :
+                    msg = "invalid extension";
+                    break;
+
+                case IL_FILE_ALREADY_EXISTS :
+                    msg = "file already exists";
+                    break;
+
+                case IL_OUT_FORMAT_SAME :
+                    msg = "out format same";
+                    break;
+
+                case IL_STACK_OVERFLOW :
+                    msg  ="stack overflow";
+                    break;
+
+                case IL_STACK_UNDERFLOW :
+                    msg  ="stack underflow";
+                    break;
+
+                case IL_INVALID_CONVERSION :
+                    msg = "invalid conversion";
+                    break;
+
+                case IL_BAD_DIMENSIONS :
+                    msg = "bad dimensions";
+                    break;
+
+                case IL_FILE_READ_ERROR :
+                    //case IL_FILE_WRITE_ERROR :
+                    msg = "file read/write error";
+                    break;
+
+                case IL_LIB_GIF_ERROR :
+                    msg = "lib gif error";
+                    break;
+
+                case IL_LIB_JPEG_ERROR :
+                    msg = "lib jpeg error";
+                    break;
+
+                case IL_LIB_PNG_ERROR :
+                    msg = "lib png error";
+                    break;
+
+                case IL_LIB_TIFF_ERROR :
+                    msg = "lib tiff error";
+                    break;
+
+                case IL_LIB_MNG_ERROR :
+                    msg = "lib mng error";
+                    break;
+
+                default:
+                    msg = "unknown IL error";
+                    break;
+                }
+
+            GetLog()->Error() << "(ImageServer) ERROR: DevIL returned error "
+                              << error << " (" << msg << ")\n";
         }
 
     return ret;
