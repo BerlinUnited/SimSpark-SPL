@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.1.2.6 2004/02/10 20:41:07 rollmark Exp $
+   $Id: gamestateaspect.h,v 1.1.2.7 2004/02/10 21:42:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,6 +78,10 @@ public:
     bool GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
                                          std::string teamName, unsigned int unum);
 
+    /** called from the InitEffector to request an initial position
+        for an agent */
+    salt::Vector3f RequestInitPosition(const TTeamIndex ti);
+
     /** increments the score of a team */
     void ScoreTeam(TTeamIndex idx);
 
@@ -85,6 +89,9 @@ public:
     int GetScore(TTeamIndex idx);
 
 protected:
+    /** setup the init positions for the agents */
+    virtual void OnLink();
+
     /** advances the game time */
     void UpdateTime(float deltaTime);
 
@@ -122,6 +129,15 @@ protected:
 
     /** the scores of two teams */
     int mScore[2];
+
+    /** the position where the last left player was put initially */
+    salt::Vector3f mLeftInit;
+
+    /** the position where the last right player was put initially */
+    salt::Vector3f mRightInit;
+
+    /** the radius of an agent */
+    float mAgentRadius;
 };
 
 DECLARE_CLASS(GameStateAspect);
