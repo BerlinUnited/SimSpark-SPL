@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: basenode.cpp,v 1.5.2.2 2004/01/12 19:10:31 rollmark Exp $
+   $Id: basenode.cpp,v 1.5.2.3 2004/01/20 17:45:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,14 +27,11 @@ using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 
-salt::Matrix BaseNode::mIdentityMatrix;
+const salt::Matrix BaseNode::mIdentityMatrix(salt::Matrix::GetIdentity());
 
 BaseNode::BaseNode() :
   zeitgeist::Node(), mDebugMode(false)
 {
-  // a bit redundant, but somehow we have to ensure that this is
-  // ALWAYS set
-  mIdentityMatrix.Identity();
 }
 
 BaseNode::~BaseNode()
@@ -126,7 +123,9 @@ void BaseNode::UpdateHierarchy()
         {
           shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
           node->UpdateHierarchy();
-          // here we merge our world bounding volume with the child volumes
+
+          // here we merge our world bounding volume with the child
+          // volumes
           mWorldBoundingBox.Encapsulate(node->GetWorldBoundingBox());
         }
     }
