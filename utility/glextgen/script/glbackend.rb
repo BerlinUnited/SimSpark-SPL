@@ -1,4 +1,4 @@
-# GLBackEnd
+# GLBackEnd    -*- mode: ruby; ruby-indent-level: 4 -*-
 #
 # This backend generates CPP code
 
