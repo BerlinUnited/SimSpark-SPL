@@ -129,6 +129,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/Makefile \
 		 app/zeitgeisttest/Makefile \
 		 app/spadestest/Makefile \
+		 app/agenttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
 AC_OUTPUT
