@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.cpp,v 1.8 2004/04/29 12:24:22 rollmark Exp $
+   $Id: leaf.cpp,v 1.9 2004/04/30 09:25:01 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -200,13 +200,6 @@ void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
     shared_ptr<Node> oldParent = make_shared(GetParent());
     if (oldParent.get() != 0)
         {
-            if (newParent.get() == 0)
-                {
-                    // time to clean up
-                    OnUnlink();
-                    ClearCachedData();
-                }
-
             // we have a parent, so update our state
             shared_ptr<Leaf> self
                 = shared_static_cast<Leaf>(make_shared(GetSelf()));
@@ -214,6 +207,14 @@ void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
             // here reference count should be > 1 (at least one in the
             // parent, and one in this routine)
             assert(self.use_count() > 1);
+
+            if (newParent.get() == 0)
+                {
+                    // time to clean up
+                    OnUnlink();
+                    ClearCachedData();
+                    oldParent->RemoveChildReference(self);
+                }
 
             // we remove ourself from the old parent's list of children
             oldParent->RemoveChildReference(self);
