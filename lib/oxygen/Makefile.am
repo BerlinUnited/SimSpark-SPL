@@ -43,15 +43,12 @@ dist_pkgdata_DATA = oxygen.rb
 sources = \
 agentaspect/agentaspect.cpp \
 agentaspect/agentaspect_c.cpp \
-agentaspect/collisionperceptor.cpp \
-agentaspect/collisionperceptor_c.cpp \
 agentaspect/effector.cpp \
 agentaspect/effector_c.cpp \
 agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
-gamecontrolserver/baseparser.cpp \
 gamecontrolserver/actionobject_c.cpp \
 gamecontrolserver/baseparser.cpp \
 gamecontrolserver/baseparser_c.cpp \
@@ -79,6 +76,10 @@ physicsserver/spherecollider.cpp \
 physicsserver/spherecollider_c.cpp \
 physicsserver/world.cpp \
 physicsserver/world_c.cpp \
+physicsserver/collisionhandler.cpp \
+physicsserver/collisionhandler_c.cpp \
+physicsserver/contactjointhandler.cpp \
+physicsserver/contactjointhandler_c.cpp \
 sceneserver/basenode.cpp \
 sceneserver/basenode_c.cpp \
 sceneserver/fpscontroller.cpp \
@@ -98,7 +99,6 @@ monitorserver/monitorsystem_c.cpp
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
-agentaspect/collisionperceptor.h \
 agentaspect/effector.h \
 agentaspect/perceptor.h \
 agentaspect/createaction.h \
@@ -118,6 +118,8 @@ physicsserver/planecollider.h \
 physicsserver/space.h \
 physicsserver/spherecollider.h \
 physicsserver/world.h \
+physicsserver/collisionhandler.h \
+physicsserver/contactjointhandler.h \
 sceneserver/basenode.h \
 sceneserver/fpscontroller.h \
 sceneserver/scene.h \
