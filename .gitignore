@@ -263,6 +263,8 @@ plugin/soccer/createeffector/.libs
 plugin/soccer/createeffector/Makefile
 plugin/soccer/createeffector/Makefile.in
 plugin/soccer/createeffector/initeffector.la
+plugin/soccer/gamestateaspect/Makefile
+plugin/soccer/gamestateaspect/Makefile.in
 plugin/soccer/initeffector/*.lo
 plugin/soccer/initeffector/.deps
 plugin/soccer/initeffector/.libs
