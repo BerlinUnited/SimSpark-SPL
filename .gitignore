@@ -122,4 +122,6 @@ utility/Makefile.in
 utility/Makefile
 utility/glextgen/Makefile
 utility/glextgen/Makefile.in
+utility/glextgen/glextensionreg.cpp
+utility/glextgen/glextensionreg.h
 utility/glextgen/glextgen.rb
