@@ -14,10 +14,13 @@ if BUILD_SPADES_MODULES
 spades_sources = \
 spadesserver/spadesserver.cpp \
 spadesserver/spadesserver_c.cpp \
-spadesserver/paramreader_c.cpp
+spadesserver/paramreader.cpp \
+spadesserver/paramreader_c.cpp \
+spadesserver/paramstorer.cpp
 spades_headers = \
 spadesserver/spadesserver.h \
-spadesserver/paramreader.h
+spadesserver/paramreader.h \
+spadesserver/paramstorer.h
 spades_libs = -lspades
 else
 spades_sources =
