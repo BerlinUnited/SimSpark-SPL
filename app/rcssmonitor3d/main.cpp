@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.2.2.1 2003/12/22 15:21:53 rollmark Exp $
+   $Id: main.cpp,v 1.2.2.2 2003/12/23 18:14:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 using namespace std;
 using namespace boost;
 using namespace zeitgeist;
+using namespace oxygen;
 
 #ifdef GetObject
 #undef GetObject
@@ -58,7 +59,7 @@ const int gHeight = DEFAULT_HEIGHT;
 GLserver gGLServer;
 
 // Communication Server
-CommServer gCommServer;
+boost::shared_ptr<CommServer> gCommServer;
 
 //--------------------------printHelp------------------------------------
 //
@@ -106,6 +107,56 @@ void processInput(int argc, char* argv[])
     }
 }
 
+void drawScene(shared_ptr<BaseParser::TPredicateList> predicates)
+{
+    if (predicates.get() == 0)
+        {
+            return;
+        }
+
+    // look for "(player x y z)(player x y z)..."
+    for (
+         BaseParser::TPredicateList::const_iterator iter = predicates->begin();
+         iter != predicates->end();
+         ++iter
+         )
+        {
+            const BaseParser::TPredicate& predicate = (*iter);
+
+            if (predicate.name != "player")
+                {
+                    continue;
+                }
+
+            salt::Vector3f pos(0,0,0);
+            int i(0);
+            BaseParser::TParameterList::const_iterator param=predicate.parameter.begin();
+
+            while (
+                   (param != predicate.parameter.end()) &&
+                   (i<=2)
+                   )
+                {
+                    if ((*param).type() != typeid(string))
+                        {
+                            break;
+                        }
+
+                    pos[i] = atof(any_cast<string>(*param).c_str());
+
+                    ++param;
+                    ++i;
+                }
+
+            if (i != 3)
+                {
+                    continue;
+                }
+
+            gGLServer.DrawSphere(pos, 1.0f);
+        }
+}
+
 //---------------------------display--------------------------------------
 //
 // OpenGL display function:
@@ -134,19 +185,11 @@ void display(void)
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, teapotColor);
 
    // check for positions update
-   gCommServer.GetMessage();
+   gCommServer->GetMessage();
 
    // draw cached positions
-   const CommServer::TPositions& positions = gCommServer.GetPositions();
-
-   for (
-        CommServer::TPositions::const_iterator iter = positions.begin();
-        iter != positions.end();
-        ++iter
-     )
-     {
-       gGLServer.DrawSphere(*iter, 1.0f);
-     }
+   shared_ptr<BaseParser::TPredicateList> predicates = gCommServer->GetPredicates();
+   drawScene(predicates);
 
    glutSwapBuffers();
 }
@@ -211,6 +254,9 @@ int main(int argc, char* argv[])
   //init oxygen
   oxygen::Oxygen kOxygen(zg);
 
+  // register rcsssmonitor3d classes to zeitgeist
+  zg.GetCore()->RegisterClassObject(new CLASS(CommServer), "rcssmonitor3d/");
+
   // run init script
   zg.GetCore()->GetScriptServer()->Run("rcssmonitor3d.rb");
 
@@ -229,7 +275,18 @@ int main(int argc, char* argv[])
     << "\nType '--help' for further information" << endl;
 
   // init the commserver
-  gCommServer.Init(gSoccerServer,gPort);
+  gCommServer = shared_dynamic_cast<CommServer>
+      (zg.GetCore()->New("rcssmonitor3d/CommServer"));
+
+  if (gCommServer.get() == 0)
+      {
+          zg.GetCore()->GetLogServer()->Normal()
+              << "ERROR: cannot create CommServer." << endl;
+
+          return 1;
+      }
+
+  gCommServer->Init("SexpParser",gSoccerServer,gPort);
 
   // enter glut main loop
   glutMainLoop();
