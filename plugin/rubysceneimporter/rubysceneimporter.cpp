@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.4 2004/04/13 14:15:08 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.5 2004/04/14 18:33:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,21 +32,25 @@ using namespace std;
 /**
     (RubySceneGraph <version major> <version minor>)
     (
-    (Template varName1 varName2 ...)
-    (NodeName
-        .MethodCall param param ...
-        .MethodCall param ...
-        (NodeName
-            .MethodCall param param
-            .MethodCall param param
+    (template varName1 varName2 ...)
+    (define varName value ...)
+    (node <NodeName>
+        method param param ...
+        method param ...
+
+        (node <NodeName>
+            method param param ...
+            method param ...
+            )
+
+            (node <NodeName>
+            method param param ...
+            method param ...
+            )
+
+        method param param ...
+        method param ...
         )
-        (NodeName
-            .MethodCall param param
-            .MethodCall param param
-        )
-        .MethodCall param param ...
-        .MethodCall param ...
-    )
 */
 
 RubySceneImporter::RubySceneImporter() : SceneImporter()
@@ -147,7 +151,7 @@ RubySceneImporter::ParamEnv& RubySceneImporter::GetParamEnv()
 
 bool RubySceneImporter::ReadHeader(sexp_t* sexp)
 {
-    // (RubySceneGraph <float majorVersion> <float minorVersion>)
+    // (RubySceneGraph <int majorVersion> <int minorVersion>)
     if (
         (sexp == 0) ||
         (sexp->ty != SEXP_LIST) ||
@@ -268,62 +272,37 @@ shared_ptr<BaseNode> RubySceneImporter::CreateNode(sexp_t* sexp)
     return node;
 }
 
-bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
+bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
 {
-    if (
-        (sexp == 0) ||
-        ((*sexp) == 0) ||
-        ((*sexp)->ty != SEXP_VALUE)
-        )
+    if (sexp == 0)
         {
             return false;
         }
-
 
     // read the method name
-    string method = ((*sexp)->val);
-
-    if (
-        (method.size() < 2) ||
-        (method[0] != '.')
-        )
-        {
-            GetLog()->Error()
-                << "(RubySceneImporter) ERROR: in file '" << mFileName
-                << "': invalid methdod name '"
-                << method << "'\n";
-            return false;
-        }
-
-    method.erase(method.begin(),method.begin()+1);
-    (*sexp) = (*sexp)->next;
+    string method = sexp->val;
+    sexp = sexp->next;
 
     // collect the parameters
     const ParamEnv& env = GetParamEnv();
     ParameterList parameter;
 
-    while (
-           ((*sexp) != 0) &&
-           ((*sexp)->ty == SEXP_VALUE)
-           )
+    while (sexp != 0)
         {
-            string param = (*sexp)->val;
+            if (sexp->ty != SEXP_VALUE)
+                {
+                    GetLog()->Error()
+                        << "(RubySceneImporter) ERROR: in file '"
+                        << mFileName
+                        << "': parameterlist contains another list\n";
+                    return false;
+                }
+
+            string param = sexp->val;
 
             if (param.size() == 0)
                 {
                     continue;
-                }
-
-            if (param[0] == '.')
-                {
-                    if (
-                        (param.size() > 1) &&
-                        (param[1] >= 'a') &&
-                        (param[1] <= 'z')
-                        )
-                        {
-                            break;
-                        }
                 }
 
             if (param[0] == '$')
@@ -369,8 +348,9 @@ bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
                     param = value;
 
                 }
+
             parameter.AddValue(param);
-            (*sexp) = (*sexp)->next;
+            sexp = sexp->next;
         }
 
     // invoke the method on the object
@@ -395,62 +375,29 @@ bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
         }
 
     node->Invoke(method, parameter);
-    return true;
-}
-
-bool RubySceneImporter::InvokeMethods(sexp_t** sexp, shared_ptr<BaseNode> node)
-{
-    if (
-        (node.get() == 0) ||
-        (sexp == 0) ||
-        ((*sexp) == 0)
-        )
-        {
-            return false;
-        }
-
-    while ((*sexp) != 0)
-        {
-            if ((*sexp)->ty == SEXP_LIST)
-                {
-                    return true;
-                }
-
-            if (! ReadMethodCall(sexp,node))
-                {
-                    return false;
-                }
-        }
 
     return true;
 }
 
-bool RubySceneImporter::ParseTemplate(sexp_t** sexp)
+bool RubySceneImporter::ParseTemplate(sexp_t* sexp)
 {
-    if (
-        (sexp == 0) ||
-        ((*sexp) == 0) ||
-        ((*sexp)->val == 0) ||
-        (string((*sexp)->val) != "Template")
-        )
+    if (sexp == 0)
         {
             return false;
         }
 
-
-    (*sexp) = (*sexp)->next;
     ParamEnv& env = GetParamEnv();
 
     while (
-           ((*sexp) != 0) &&
-           ((*sexp)->ty == SEXP_VALUE)
+           (sexp != 0) &&
+           (sexp->ty == SEXP_VALUE)
            )
         {
-            string param = (*sexp)->val;
+            string param = sexp->val;
 
             if (param.size() == 0)
                 {
-                    (*sexp) = (*sexp)->next;
+                    sexp = sexp->next;
                     continue;
                 }
 
@@ -478,7 +425,7 @@ bool RubySceneImporter::ParseTemplate(sexp_t** sexp)
 
             int idx = env.parameterMap.size();
             env.parameterMap[param] = idx;
-            (*sexp) = (*sexp)->next;
+            sexp = sexp->next;
         }
 
     return true;
@@ -486,61 +433,34 @@ bool RubySceneImporter::ParseTemplate(sexp_t** sexp)
 
 bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 {
-    if (sexp == 0)
-        {
-            return false;
-        }
-
-    bool firstValue = true;
-    shared_ptr<BaseNode> node;
-
     while (sexp != 0)
         {
             switch (sexp->ty)
                 {
                 case SEXP_VALUE:
-                    if (firstValue)
-                        {
-                            firstValue = false;
-                            if (sexp->val == 0)
-                                {
-                                    return false;
-                                }
-                            string name(sexp->val);
-
-                            if (name == "Template")
-                                {
-                                    // a template declaration
-                                    if (! ParseTemplate(&sexp))
-                                        {
-                                            return false;
-                                        }
-                                    continue;
-                                } else
-                                    {
-
-                                        // a node declaration
-                                        node = CreateNode(sexp);
-
-                                        if (node.get() == 0)
-                                            {
-                                                return false;
-                                            }
-
-                                        // add node to the scene graph
-                                        root->AddChildReference(node);
-                                        root = node;
-                                    }
-                        } else
+                    {
+                        string name(sexp->val);
+                        if (name == "node")
                             {
-                                // list of method invokations
-                                if (! InvokeMethods(&sexp,node))
+                                sexp = sexp->next;
+                                shared_ptr<BaseNode> node = CreateNode(sexp);
+
+                                if (node.get() == 0)
                                     {
                                         return false;
                                     }
 
-                                continue;
-                            }
+                                root->AddChildReference(node);
+                                root = node;
+                            } else if (name == "template")
+                                {
+                                    sexp = sexp->next;
+                                    return ParseTemplate(sexp);
+                                } else
+                                    {
+                                        return ReadMethodCall(sexp, root);
+                                    }
+                    }
                     break;
 
                 case SEXP_LIST:
