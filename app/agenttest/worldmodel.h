@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.h,v 1.1.2.6 2004/02/11 11:22:18 rollmark Exp $
+   $Id: worldmodel.h,v 1.1.2.7 2004/02/25 17:05:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public:
             VO_GOAL1L = 5,
             VO_GOAL1R = 6,
             VO_GOAL2L = 7,
-            VO_GOAL2R = 8
+            VO_GOAL2R = 8,
         };
 
 public:
@@ -106,6 +106,7 @@ protected:
 
     void CalcPlayerPosition();
 
+    void ParseObjectVision(const oxygen::Predicate& predicate);
     void ParseGameState(const oxygen::Predicate& predicate);
     void ParseVision(const oxygen::Predicate& predicate);
 
@@ -115,10 +116,8 @@ protected:
                         oxygen::Predicate::Iterator& objIter);
 
     void SetupGameStateMap();
+    void SetupVisionObjectMap();
 
-    bool WorldModel::GetVision(const oxygen::Predicate& predicate,
-                               const std::string& name,
-                               const VisionObject obj);
 
     template<typename TYPE>
     void GetGameStateParam(const oxygen::Predicate& predicate,
@@ -156,6 +155,10 @@ protected:
     // mapping from vision object to VisionSense
     typedef std::map<VisionObject, VisionSense> TVisionMap;
     TVisionMap mVisionMap;
+
+    // mapping from <ObjectName>+<ID> to VisionObject
+    typedef std::map<std::string, VisionObject> TVisionObjectMap;
+    TVisionObjectMap mVisionObjectMap;
 
     // parser instance
     boost::shared_ptr<oxygen::BaseParser> mParser;
