@@ -28,7 +28,8 @@ using namespace std;
 using namespace Utility;
 
 // the console is per default inactive
-Console::Console():M_active(false), M_stream(&cout), M_settings(M_stream)
+Console::Console() : 
+    M_active(false), M_stream(&cout), M_settings(M_stream), M_quit(false)
 {
     // add the forwarder to the message multiplexer
     smux.addStream(M_stream);
@@ -52,6 +53,19 @@ Console::isActive() const
 {
     return M_active;
 }
+
+void
+Console::setQuit(bool quit)
+{
+    M_quit = quit;
+}
+
+bool
+Console::hasQuit() const
+{
+    return M_quit;
+}
+
 #if 0
 void
 Console::processInput(const BaseInputDevice::Input & input)

@@ -40,7 +40,7 @@
 class ConsoleBaseView;
 
 /*! \class Console
-  $Id: console.h,v 1.4 2002/08/21 14:11:16 fruit Exp $
+  $Id: console.h,v 1.5 2002/10/16 14:08:40 fruit Exp $
 
     Console
 
@@ -85,6 +85,10 @@ public:
     void setActive(bool active = true);
     //! is the console active?
     bool isActive() const;
+    //! sets the console quit state
+    void setQuit(bool quit = true);
+    //! has the user issued 'quit'
+    bool hasQuit() const;
 #if 0
     /*! If the console is active the input is processed by the input
        line (ConsoleInputLine). Otherwise the input bindings
@@ -142,6 +146,9 @@ protected:
 
     //! is the console active?
     bool M_active;
+    //! quit everything
+    bool M_quit;
+    
     //! the registered views
     TViews M_views;
     /*! The console stream.

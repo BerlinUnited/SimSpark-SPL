@@ -17,6 +17,7 @@
  ***************************************************************************/
 #include "conquit.h"
 
+#include <console.h>
 #include <forwarder.h>
 
 using namespace std;
@@ -34,9 +35,6 @@ ConQuit::ConQuit()
 ConCommand::ConExecResult 
 ConQuit::executeSignature(int signature, ConVar::ConVars& parameter) const
 {
-    // FIXME:
-    // use command to quit the server
-    smux.error() << "quit server not implemented yet, using exit(-1)\n";
-    exit(-1);
+    Console::instance().setQuit();
     return ConCommand::S_CER_OK;
 }
