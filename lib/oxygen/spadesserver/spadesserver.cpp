@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9.2.4 2003/12/02 16:52:36 rollmark Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.5 2003/12/02 17:19:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ using namespace std;
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <spades/SimEngine.hpp>
+#include "spadescreatesenseevent.h"
 
 #if THIS_IS_A_DEMO_ONLY
 #include <oxygen/sceneserver/basenode.h>
@@ -242,13 +243,29 @@ SpadesServer::pauseModeCallback()
 bool
 SpadesServer::agentConnect(AgentID agent, AgentTypeDB::AgentTypeConstIterator /*at*/)
 {
+    // try to register the agent to the game control server
     shared_ptr<GameControlServer> gcs = GetGameControlServer();
-    if (gcs.get() == NULL)
+
+    if (
+        (gcs.get() == NULL) ||
+        (! gcs->AgentConnect(static_cast<int>(agent)))
+        )
         {
             return false;
         }
 
-    return gcs->AgentConnect(static_cast<int>(agent));
+    //
+    // Should we also us an InitSenseEvent as the spades sample does ?
+    //
+
+    // schedule the first SpadesCreateSenseEvent for the following
+    // simulation step
+    SpadesCreateSenseEvent* event = new SpadesCreateSenseEvent
+        (mSimEngine->getSimulationTime() + 1, agent);
+
+    mSimEngine->enqueueEvent(event);
+
+    return true;
 }
 
 bool
