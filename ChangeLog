@@ -1,3 +1,15 @@
+2004-05-05  Oliver Obst  <fruit@robolog.org>
+
+	* lib/salt/tvector.h: 
+	changed TVector output operator to print only the vector values 
+	(separated by whitespace)
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
+	- changed SetTeamName to take const string reference instead of a copy
+	- made GameStateAspect more independent from the actual values of the
+	  TTeamIndex enums
+
 2004-05-05  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/sparkmonitor/sparkmonitorclient.cpp:
@@ -71,6 +83,12 @@
 	* lib/kerosin/sceneserver/staticmesh_c.cpp:
 	- changed exported load method to pass parameters on to the
 	StaticMesh
+
+2004-05-01  Oliver Obst  <fruit@robolog.org>
+
+	* acinclude.m4: 
+	changed configure to fail if kerosin should be build and there are 
+	unfullfilled prerequisites
 
 2004-05-01  Oliver Obst  <fruit@robolog.org>
 
