@@ -1,5 +1,20 @@
 2002-08-21  Oliver Obst  <fruit@robolog.org>
 
+	* ./utility/Makefile.am
+	added console subdir, as the console compiles now completely
+
+	* ./utility/classserver/classserver.cc
+	fixed forgotten renaming of methods
+	
+	* ./utility/console/
+	Added some remaining classes to get the console (almost) working.
+	Other file changes due to the coding style changes.
+	Some console commands have still to be added; and the example 
+	doesn't really work yet.
+
+	* ./utility/forwarder/Makefile.am
+	compiling the library and the example using libtool
+
 	* ./utility/classserver/classserver.h
 	* ./utility/classserver/classserver.cc
 	Fixed some coding style issues and some bugs related to that.
