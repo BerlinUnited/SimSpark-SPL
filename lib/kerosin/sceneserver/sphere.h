@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere.h,v 1.2 2003/11/10 21:41:05 fruit Exp $
+   $Id: sphere.h,v 1.3 2004/03/20 12:57:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 namespace kerosin
 {
+class Material;
 
 class Sphere : public oxygen::BaseNode
 {
@@ -39,6 +40,8 @@ public:
     float GetRadius() const;
     void SetRadius(float radius);
 
+    void SetMaterial(const std::string& name);
+
 private:
     virtual void RenderInternal();
 
@@ -47,6 +50,7 @@ private:
     //
 private:
     float   mRadius;
+    boost::shared_ptr<Material> mMaterial;
 };
 
 DECLARE_CLASS(Sphere);
