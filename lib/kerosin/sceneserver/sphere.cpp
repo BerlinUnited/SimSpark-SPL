@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere.cpp,v 1.5 2004/03/20 15:49:10 rollmark Exp $
+   $Id: sphere.cpp,v 1.6 2004/04/12 13:32:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -130,8 +130,17 @@ void Sphere::RenderInternal()
     glScalef(mRadius, mRadius, mRadius);
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3,GL_FLOAT, 0, gSphereVertices);
+
+    // vertices describe a unit sphere around the origin; vertex
+    // coordinates and normals are therefore identical
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glNormalPointer(GL_FLOAT, 0, gSphereVertices);
+
     glDrawElements(GL_TRIANGLES,224*3,GL_UNSIGNED_SHORT, gSphereFaces);
+
     glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
 }

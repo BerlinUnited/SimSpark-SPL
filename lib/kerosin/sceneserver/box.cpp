@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: box.cpp,v 1.1 2004/03/20 15:50:09 rollmark Exp $
+   $Id: box.cpp,v 1.2 2004/04/12 13:31:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,49 +61,44 @@ void Box::RenderInternal()
              mExtents.z() * 0.5
              );
 
-    static Vector3f v[8]  = {
-      Vector3f(+1.0f,+1.0f,+1.0f),
-      Vector3f(-1.0f,+1.0f,+1.0f),
-      Vector3f(+1.0f,-1.0f,+1.0f),
-      Vector3f(-1.0f,-1.0f,+1.0f),
-      Vector3f(+1.0f,+1.0f,-1.0f),
-      Vector3f(-1.0f,+1.0f,-1.0f),
-      Vector3f(+1.0f,-1.0f,-1.0f),
-      Vector3f(-1.0f,-1.0f,-1.0f)
-    };
-
     glBegin(GL_QUADS);
 
-    // front
-    glVertex3fv(v[0].GetData());
-    glVertex3fv(v[1].GetData());
-    glVertex3fv(v[3].GetData());
-    glVertex3fv(v[2].GetData());
-    // back
-    glVertex3fv(v[6].GetData());
-    glVertex3fv(v[7].GetData());
-    glVertex3fv(v[5].GetData());
-    glVertex3fv(v[4].GetData());
-    // left
-    glVertex3fv(v[5].GetData());
-    glVertex3fv(v[7].GetData());
-    glVertex3fv(v[3].GetData());
-    glVertex3fv(v[1].GetData());
-    // right
-    glVertex3fv(v[0].GetData());
-    glVertex3fv(v[2].GetData());
-    glVertex3fv(v[6].GetData());
-    glVertex3fv(v[4].GetData());
-    // top
-    glVertex3fv(v[4].GetData());
-    glVertex3fv(v[5].GetData());
-    glVertex3fv(v[1].GetData());
-    glVertex3fv(v[0].GetData());
-    // bottom
-    glVertex3fv(v[2].GetData());
-    glVertex3fv(v[3].GetData());
-    glVertex3fv(v[7].GetData());
-    glVertex3fv(v[6].GetData());
+    // Front Face
+    glNormal3f( 0.0f, 0.0f, 1.0f); // Normal Pointing Towards Viewer
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+    // Back Face
+    glNormal3f( 0.0f, 0.0f,-1.0f); // Normal Pointing Away From Viewer
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
+    // Top Face
+    glNormal3f( 0.0f, 1.0f, 0.0f); // Normal Pointing Up
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
+    // Bottom Face
+    glNormal3f( 0.0f,-1.0f, 0.0f); // Normal Pointing Down
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+    // Right face
+    glNormal3f( 1.0f, 0.0f, 0.0f); // Normal Pointing Right
+    glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+    // Left Face
+    glNormal3f(-1.0f, 0.0f, 0.0f); // Normal Pointing Left
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
 
     glEnd();
 }
