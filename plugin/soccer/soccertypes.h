@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccertypes.h,v 1.6 2004/06/06 10:30:02 fruit Exp $
+   $Id: soccertypes.h,v 1.7 2004/06/08 12:56:10 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,10 +30,11 @@
 
 enum TPlayMode
 {
-    PM_BeforeKickOff,
-    PM_KickOff_Left,           /*!< kick_off_left:     kick off for the left team  */
-    PM_KickOff_Right,          /*!< kick_off_right:    kick off for the right team */
-    PM_PlayOn,
+    // the order of the first 3 play modes should not be changed.
+    PM_BeforeKickOff = 0,      /*!< before_kick_off:   before the match  */
+    PM_KickOff_Left = 1,       /*!< kick_off_left:     kick off for the left team  */
+    PM_KickOff_Right = 2,      /*!< kick_off_right:    kick off for the right team */
+    PM_PlayOn,                 /*!< play_on:           regular game play */
     PM_KickIn_Left,
     PM_KickIn_Right,
     PM_CORNER_KICK_LEFT,       /*!< corner_kick_l:     corner kick left team   */
@@ -47,7 +48,7 @@ enum TPlayMode
     PM_Goal_Right,
     PM_FREE_KICK_LEFT,         /*!< free_kick_l:       free kick for left team */
     PM_FREE_KICK_RIGHT,        /*!< free_kick_r:       free kick for right team*/
-    PM_NONE
+    PM_NONE                    /*!< no play mode, this must be the last entry */
 };
 
 /** mapping from TPlayMode to string constants */
