@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.h,v 1.4 2004/04/11 17:03:53 rollmark Exp $
+   $Id: parameterlist.h,v 1.5 2004/12/19 14:06:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,18 @@ public:
     /** returns an iterator pointing at the nth element of the managed
         sequence */
     TVector::const_iterator operator[] (int n) const;
+
+    /** returns an iterator pointing at the nth element of the managed
+        sequence */
+    TVector::iterator operator[] (int n);
+
+    /** returns an iterator pointing at the begin of the managed
+        sequence */
+    TVector::iterator begin();
+
+    /** returns an iterator pointing at the end of the managed
+        sequence */
+    TVector::iterator end();
 
     /** AdvanceAnyValue is a generic templated helper function for consumers
         of ParameterLists.

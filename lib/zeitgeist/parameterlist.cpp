@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.cpp,v 1.7 2004/12/14 12:17:25 rollmark Exp $
+   $Id: parameterlist.cpp,v 1.8 2004/12/19 14:06:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,6 +95,32 @@ ParameterList::end() const
 
 ParameterList::TVector::const_iterator
 ParameterList::operator[] (int n) const
+{
+    if (
+        (n <0) ||
+        (n >= static_cast<int>(mList.size()))
+        )
+        {
+            return mList.end();
+        }
+
+    return (mList.begin() + n);
+}
+
+ParameterList::TVector::iterator
+ParameterList::begin()
+{
+    return mList.begin();
+}
+
+ParameterList::TVector::iterator
+ParameterList::end()
+{
+    return mList.end();
+}
+
+ParameterList::TVector::iterator
+ParameterList::operator[] (int n)
 {
     if (
         (n <0) ||
