@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: boxcollider_c.cpp,v 1.4 2003/11/10 23:11:42 fruit Exp $
+   $Id: boxcollider_c.cpp,v 1.4.8.1 2004/01/29 19:57:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,11 @@ FUNCTION(setBoxLengths)
         if (in.size() == 3)
         {
                 BoxCollider *bc = static_cast<BoxCollider*>(obj);
-                bc->SetBoxLengths(any_cast<float>(in[0]),any_cast<float>(in[1]),any_cast<float>(in[2]));
+                bc->SetBoxLengths(
+                                  any_cast<float>(in[0]),
+                                  any_cast<float>(in[1]),
+                                  any_cast<float>(in[2])
+                                  );
         }
 }
 
