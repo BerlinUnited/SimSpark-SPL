@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.4.2.1 2003/12/25 12:27:12 rollmark Exp $
+   $Id: oxygen.h,v 1.5.2.1 2004/01/12 14:55:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,12 +23,12 @@
 #define OXYGEN_OXYGEN_H
 
 #include "agentaspect/agentaspect.h"
-#include "agentaspect/collisionperceptor.h"
 #include "agentaspect/effector.h"
 #include "agentaspect/perceptor.h"
 
 #include "controlaspect/controlaspect.h"
 
+#include "gamecontrolserver/baseparser.h"
 #include "gamecontrolserver/gamecontrolserver.h"
 #include "gamecontrolserver/actionobject.h"
 
@@ -42,6 +42,8 @@
 #include "physicsserver/space.h"
 #include "physicsserver/spherecollider.h"
 #include "physicsserver/world.h"
+#include "physicsserver/collisionhandler.h"
+#include "physicsserver/contactjointhandler.h"
 
 #include "sceneserver/basenode.h"
 #include "sceneserver/camera.h"
