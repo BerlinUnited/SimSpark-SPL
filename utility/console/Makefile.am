@@ -10,7 +10,7 @@ noinst_PROGRAMS = example
 example_SOURCES = example.cc
 example_LDADD   = libconsole.la \
 $(top_srcdir)/utility/forwarder/libforwarder.la \
-$(top_srcdir)/utility/classserver/libclassserver.la -ldl
+$(top_srcdir)/utility/classserver/libclassserver.la
 
 libconsole_la_SOURCES = \
 console.cc console.h \
