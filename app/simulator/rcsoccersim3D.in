@@ -48,7 +48,7 @@ fi
 
 if test -x ../agenttest/agenttest; then
     SIMULATOR="./rcssserver3D"
-    PARAM="--ipc_force_remove $*"
+    PARAM="--ipc_force_remove --agent_db_fn agentdb.xml $*"
     if test -x ../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin; then
 	MONITOR="../rcssmonitor3d/${DEFAULTMONITOR}/rcssmonitor3D-${DEFAULTMONITOR}" 
     else
@@ -60,7 +60,7 @@ else
     datadir=@datadir@
     pkgdatadir=${datadir}/@PACKAGE@
     SIMULATOR="${exec_prefix}/bin/rcssserver3D"
-    PARAM="--ipc_force_remove --agent_db_fn ${pkgdatadir}/agentdb.list $*"
+    PARAM="--ipc_force_remove --agent_db_fn ${pkgdatadir}/agentdb.xml $*"
     if test -x "${exec_prefix}/bin/rcssmonitor3D-kerosin"; then
 	MONITOR="${exec_prefix}/bin/rcssmonitor3D-${DEFAULTMONITOR}"
     else
