@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.cpp,v 1.6 2004/05/01 17:07:53 fruit Exp $
+   $Id: sparkmonitorclient.cpp,v 1.7 2004/05/05 09:10:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,9 +70,9 @@ void SparkMonitorClient::InitSimulation()
             return;
         }
 
-    // create the SceneImporter
+    // get the SceneImporter
     mSceneImporter = shared_dynamic_cast<SceneImporter>
-        (GetCore()->New("RubySceneImporter"));
+        (GetCore()->Get("/sys/server/scene/RubySceneImporter"));
 
     if (mSceneImporter.get() == 0)
         {
