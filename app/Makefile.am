@@ -1,1 +1,1 @@
-SUBDIRS = simulator
+SUBDIRS = zeitgeisttest simulator
