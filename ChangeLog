@@ -1,5 +1,14 @@
 2004-02-07  Oliver Obst  <fruit@robolog.org>
 
+	* lib/zeitgeist/node.cpp: 
+	fixed copy/paste bug in GetChildSupportingClass: 
+	on recursion, GetChildOfClass was called (instead of GetChildSupportingClass)
+	fixed copy/paste bug in GetChildrenSupportingClass: 
+	- The wrong base method was called (Leaf::GetChildrenOfClass) 
+	- Same bug on recursion: called GetChildrenOfClass instead 
+	  of GetChildrenSupportingClass
+	==> visionperceptor works again also for AgentStates
+	
 	* app/simulator/simulator.rb: 
 	added ObjectAspects to flags and to the ball so that they are visible 
 	for the VisionPerceptor
