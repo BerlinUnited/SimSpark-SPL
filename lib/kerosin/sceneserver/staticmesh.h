@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.12 2004/04/28 14:46:59 rollmark Exp $
+   $Id: staticmesh.h,v 1.13 2004/05/01 13:46:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,6 +76,12 @@ public:
     /** returns the managed mesh */
     const boost::shared_ptr<oxygen::TriMesh> GetMesh();
 
+    /** returns the name of the loaded mesh */
+    const std::string& GetMeshName();
+
+    /** returns the parameter list of the loaded mesh */
+    const zeitgeist::ParameterList& GetMeshParameter();
+
     //
     // Members
     //
@@ -88,6 +94,12 @@ protected:
 
     /** the materials used to render the mesh */
     std::vector<boost::shared_ptr<Material> > mMaterials;
+
+    /** the name of the loaded mesh */
+    std::string mMeshName;
+
+    /** the list of parameters the mesh was loaded with */
+    zeitgeist::ParameterList mMeshParameter;
 };
 
 DECLARE_CLASS(StaticMesh);
