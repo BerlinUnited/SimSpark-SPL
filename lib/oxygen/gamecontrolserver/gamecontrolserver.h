@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.1.2.7 2003/12/09 20:24:57 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.1.2.8 2003/12/21 10:15:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,12 +49,12 @@ public:
     boost::shared_ptr<BaseParser> GetParser();
 
     /** parses a command string using the registerd parser and uses
-        the registered effectors to construct an ActionObject. This
-        method must be const as it is also called from
-        SpadesServer::ParseAct, which is const to prevent it from
-        modifying the world model.
+        the registered effectors of the agent identified by param \id
+        to construct an ActionObject. This method must be const as it
+        is called from SpadesServer::ParseAct, which is const to
+        prevent it from modifying the world model.
     */
-    boost::shared_ptr<ActionObject::TList> Parse(std::string str) const;
+    boost::shared_ptr<ActionObject::TList> Parse(int id, std::string str) const;
 
     /** notifies the GameControlServer that an agent has connected to
         the simulation. \param id should be a unique identifier for
@@ -87,15 +87,9 @@ public:
     std::string TmpGenerate(const BaseParser::TPredicate& pred);
 
 protected:
-    /** looks up the effector registered to \param predicate */
-    boost::shared_ptr<Effector> GetEffector(std::string predicate) const;
-
-protected:
     typedef std::map<int, boost::shared_ptr<AgentAspect> > TAgentMap;
-    typedef std::map<std::string, boost::shared_ptr<Effector> > TEffectorMap;
 
     TAgentMap mAgentMap;
-    TEffectorMap mEffectorMap;
     boost::shared_ptr<BaseParser> mParser;
 };
 
