@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.3.2.2 2004/01/25 11:23:36 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.3.2.3 2004/01/26 13:33:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -176,9 +176,13 @@ bool GameControlServer::AgentDisappear(int id)
 
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() != 0)
-        {
-            RemoveChildReference((*iter).second);
-        }
+    {
+        GetLog()->Debug() << "(GameControlServer) should remove child reference now "
+                          << "(disabled to prevent core dumps)\n";
+#if 0
+        RemoveChildReference((*iter).second);
+#endif
+    }
 
     GetLog()->Debug() << "(GameControlServer) An agent disconnected (id: "
                       << id << ")\n";
