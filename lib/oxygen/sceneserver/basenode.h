@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.5.6.1 2003/12/22 21:17:27 rollmark Exp $
+   $Id: basenode.h,v 1.5.6.2 2003/12/25 19:52:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ public:
     /** renders node */
     virtual void RenderAmbientInternal();
 
-private:
+protected:
     /** updates internal state before physics calculation */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
 
