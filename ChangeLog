@@ -1,3 +1,47 @@
+2004-04-10  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/Makefile.am: 
+	- installing the headers into a soccer subdir
+
+	* plugin/soundsystemfmod/soundstreamfmod.cpp:
+	* plugin/soundsystemfmod/soundstreamfmod.h:
+	* plugin/soundsystemfmod/soundmodulefmod.cpp:
+	* plugin/soundsystemfmod/soundmodulefmod.h:
+	* plugin/soundsystemfmod/soundeffectfmod.cpp: 
+	* plugin/soundsystemfmod/soundeffectfmod.h: 
+	- changed Load method to take std::string arguments (due to changes in the base class)
+
+	* app/scenetest/md5mesh_c.cpp: 
+	- fixed md5mesh for new ruby interface 
+	- added GPL header
+
+	* lib/oxygen/Makefile.am: 
+	- added sceneimporter
+
+2004-04-09  Oliver Obst  <fruit@robolog.org>
+
+	* app/gendot/main.cpp: changed order of includes
+
+	* app/rcssmonitor3d/kerosin/Makefile.am:
+	* app/rcssmonitor3d/lite/Makefile.am: 
+	- fixed include dir
+
+	* app/rcssmonitor3d/lib/Makefile.am: 
+	- fixed include dir 
+	- added types.h to the headers
+
+	* app/rcssmonitor3d/lib/gameparam.h: 
+	* app/rcssmonitor3d/lib/gameparam.cpp:
+	make Get... methods const
+
+	* app/rcssmonitor3d/lite/main.cpp: 
+	* app/rcssmonitor3d/lib/gamestate.h: 
+	* app/rcssmonitor3d/lib/monitorparser.h: 
+	- fixed include
+
+	* plugin/rubysceneimporter/Makefile.am: 
+	- added Makefile.am instead of the generated Makefile
+
 2004-04-07  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* configure.ac: 
