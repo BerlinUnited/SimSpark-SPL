@@ -106,6 +106,19 @@
 	* plugin/soccer/createeffector/export.cpp: 
 	moved CreateEffector to plugin/soccer
 
+2003-12-24  Oliver Obst  <fruit@robolog.org>
+
+	* plugin/soccer/.cvsignore:
+	* plugin/soccer/Makefile.am:
+	* plugin/soccer/initeffector/.cvsignore:
+	* plugin/soccer/initeffector/Makefile.am: 
+	* plugin/soccer/initeffector/export.cpp: 
+	* plugin/soccer/initeffector/initaction.h: 
+	* plugin/soccer/initeffector/initeffector.cpp:
+	* plugin/soccer/initeffector/initeffector.h: 
+	* plugin/soccer/initeffector/initeffector_c.cpp:
+	added soccer initeffector. The initeffector sets name and uniform number of players. 
+
 2003-12-23  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp: 
