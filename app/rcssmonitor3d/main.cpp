@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.4 2004/01/21 15:56:16 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.5 2004/01/25 13:09:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -130,6 +130,11 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
                 "ball",
                 {1.0f, 1.0f, 1.0f, 1.0f},
                 0.3f
+            },
+            {
+                "ballAgent",
+                {1.0f, 0.5f, 0.5f, 1.0f},
+                1.1f
             }
         };
 
@@ -190,9 +195,11 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
 void display(void)
 {
    // soccer field size
-   const float fx = 52.5;
-   const float fz = 34.0;
-   const float fy = 0.1;
+   const float fieldLength = 52.5;
+   const float fieldWidth = 34.0;
+   const float fieldHeight = 10.0;
+
+   const float borderSize = 4.0;
 
    // goal box size
    const float goalWidth = 7.0;
@@ -202,8 +209,10 @@ void display(void)
    const Vector3f szGoal1(-goalDepth,goalHeight,goalWidth);
    const Vector3f szGoal2(goalDepth,goalHeight,goalWidth);
 
-   // grid constants
+   // color constants
    const GLfloat groundColor[4] = {0.0f, 0.9f, 0.0f, 1.0f};
+   const GLfloat goalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
+   const GLfloat borderColor[4] = {0.0f, 0.0f, 1.0f, 1.0f};
 
    glClearColor(0.0f,0.0f,0.0f,1.0f);
 
@@ -214,11 +223,30 @@ void display(void)
 
    gGLServer.ApplyCamera();
 
+   // ground
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
+   gGLServer.DrawGround(Vector3f(-fieldLength/2,0,-fieldWidth/2),fieldLength,fieldWidth);
 
-   gGLServer.DrawGround(Vector3f(-fx/2,fy,-fz/2),fx,fz);
-   gGLServer.DrawWireBox(Vector3f(-fx/2,fy,-goalWidth/2.0),szGoal1);
-   gGLServer.DrawWireBox(Vector3f(fx/2,fy,-goalWidth/2.0),szGoal2);
+   // border
+   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, borderColor);
+   gGLServer.DrawGround(Vector3f(-fieldLength/2-borderSize,0,-fieldWidth/2-borderSize), borderSize, fieldWidth+2*borderSize);
+   gGLServer.DrawGround(Vector3f(fieldLength/2,0,-fieldWidth/2-borderSize), borderSize, fieldWidth+2*borderSize);
+   gGLServer.DrawGround(Vector3f(-fieldLength/2,0,-fieldWidth/2-borderSize), fieldLength, borderSize);
+   gGLServer.DrawGround(Vector3f(-fieldLength/2,0,fieldWidth/2), fieldLength, borderSize);
+
+   // fieldBox
+   gGLServer.DrawWireBox(
+                         Vector3f(-fieldLength/2.0,0.0,-fieldWidth/2.0),
+                         Vector3f(fieldLength,fieldHeight,fieldWidth)
+                         );
+
+   // goal
+   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
+   gGLServer.DrawWireBox(Vector3f(-fieldLength/2,0,-goalWidth/2.0),szGoal1);
+
+   // goal
+   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
+   gGLServer.DrawWireBox(Vector3f(fieldLength/2,0,-goalWidth/2.0),szGoal2);
 
    // check for positions update
    gCommServer->GetMessage();
