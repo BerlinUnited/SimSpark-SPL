@@ -21,14 +21,14 @@ AC_PROG_LIBTOOL
 AC_CHECK_LIB(ode, dWorldCreate, true, 
   AC_MSG_ERROR([your system fails at linking a small ODE application!
 Install ODE on your system and try again.]))
-
+AC_CHECK_LIB(readline, readline)
 AC_SEARCH_LIBS(dlopen, dl)
 
 # Checks for header files.
 AC_HEADER_STDC
 ## originally in check_header: stdlib.h string.h unistd.h 
 ## but do we really need this?
-AC_CHECK_HEADERS([streambuf])
+AC_CHECK_HEADERS([streambuf readline/readline.h])
 AC_CHECK_HEADER([ode.h],,
   AC_MSG_ERROR([failure to include the ode header. Please install ODE
 	          and/or set the CPPFLAGS environment variable to include
