@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tvector.h,v 1.7 2004/05/01 16:26:23 fruit Exp $
+   $Id: tvector.h,v 1.8 2004/05/01 16:43:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@
 
 #include "defines.h"
 #include "gmath.h"
+#include <cstdio>
 
 namespace salt
 {
@@ -200,25 +201,25 @@ public:
 
     /** returns a reference to the first component */
     f_inline DATATYPE& x()
-    { return El(0); }
+    { return this->El(0); }
 
     /** returns a constant reference to the first component */
     f_inline const DATATYPE& x() const
-    { return El(0); }
+    { return this->El(0); }
 
     /** returns a reference to the second component */
     f_inline DATATYPE& y()
-    { return El(1); }
+    { return this->El(1); }
 
     /** returns a constant reference to the second component */
     f_inline const DATATYPE& y() const
-    { return El(1); }
+    { return this->El(1); }
 
     /** sets up the vector from x and y */
     f_inline const TYPE& Set(const DATATYPE& x, const DATATYPE& y)
     {
-        El(0) = x;
-        El(1) = y;
+        this->El(0) = x;
+        this->El(1) = y;
         return *static_cast<TYPE*>(this);
     }
 };
@@ -241,36 +242,36 @@ public:
 
     /** returns a reference to the first component */
     f_inline DATATYPE& x()
-    { return El(0); }
+    { return this->El(0); }
 
     /** returns a constant reference to the first component */
     f_inline const DATATYPE& x() const
-    { return El(0); }
+    { return this->El(0); }
 
     /** returns a reference to the second component */
     f_inline DATATYPE& y()
-    { return El(1); }
+    { return this->El(1); }
 
     /** returns a constant reference to the second component */
     f_inline const DATATYPE& y() const
-    { return El(1); }
+    { return this->El(1); }
 
     /** returns a reference to the third component */
     f_inline DATATYPE& z()
-    { return El(2); }
+    { return this->El(2); }
 
     /** returns a constant reference to the third component */
     f_inline const DATATYPE& z() const
-    { return El(2); }
+    { return this->El(2); }
 
     /** calculates the cross product, returning a new TVector3 */
     const TYPE Cross(const TVector<DATATYPE, 3, TYPE>& v) const
     {
         // Create a new one
         TYPE r;
-        r[0] = El(1) * v[2] - El(2) * v[1];
-        r[1] = El(2) * v[0] - El(0) * v[2];
-        r[2] = El(0) * v[1] - El(1) * v[0];
+        r[0] = this->El(1) * v[2] - this->El(2) * v[1];
+        r[1] = this->El(2) * v[0] - this->El(0) * v[2];
+        r[2] = this->El(0) * v[1] - this->El(1) * v[0];
         return r;
     }
 
@@ -281,9 +282,9 @@ public:
     /** sets up the vector from x,y and z */
     const TYPE& Set(const DATATYPE& x, const DATATYPE& y, const DATATYPE& z)
     {
-        El(0) = x;
-        El(1) = y;
-        El(2) = z;
+        this->El(0) = x;
+        this->El(1) = y;
+        this->El(2) = z;
         return *static_cast<TYPE*>(this);
     }
 
@@ -291,9 +292,9 @@ public:
     /** sets up the vector from another TVector3 v */
     const TYPE& Set(const TYPE& v)
     {
-        El(0) = v.x();
-        El(1) = v.y();
-        El(2) = v.z();
+        this->El(0) = v.x();
+        this->El(1) = v.y();
+        this->El(2) = v.z();
         return *static_cast<TYPE*>(this);
     }
 };
