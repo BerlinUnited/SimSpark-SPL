@@ -19,9 +19,10 @@ simulator, or maybe also from your favourite programming language :).
 Some technical data of the environment and of your new robots:
 
 The playing field is a plane with FIFA standard soccer field
-size. Goal boxes and the ball are also standard FIFA size:
+size (length between 100m and 110m, width between 64m and 75m).
+Goal boxes and the ball are also standard FIFA size:
 goals are 7.32m wide and 2.44m high; the ball has got a diameter of
-0.222m and weighs 0.4kg. 
+0.222m and weighs between 0.41kg and 0.45kg. 
 FIFA does not say too much about gravity (probably because they can't
 change it anyway), but in our simulation, gravity is fixed to
 9.81m/s². 
@@ -37,14 +38,14 @@ the robot body. By using the omnidrive, it is possible to accelerate
 into any direction, and it is also possible to jump up. However, the
 omnidrive does only work if the robot is actually touching the soccer
 field. If you stop accelerating, robots will still move for a while,
-and you also cannot suddenly stop when moving with full speed. The
-maximum speed and the maximum height for jumping up if yet to be
-discovered. To use the omnidrive, you have to use the "dasheffector",
-which takes a cartesian vector (x y z) with a maximum length of 100
-units. The x-coordinate points towards the opponents team side of the
-field, z points up. The dasheffector works realiable, there is a
-small error for forces along each axis. For each axis, noise is
-normally distributed around 0.0.
+and you also cannot suddenly stop when moving with full speed (but you
+can use it for breaking). The maximum speed and the maximum height for
+jumping up if yet to be discovered. To use the omnidrive, you have to
+use the "dasheffector", which takes a cartesian vector (x y z) with a
+maximum length of 100 units. The x-coordinate points towards the
+opponents team side of the field, z points up. The dasheffector works
+realiable, there is a small error for forces along each axis. For each
+axis, noise is normally distributed around 0.0.
 It is also possible to push away other robots. Using this feature to
 push away opponents is discouraged :). 
 
@@ -95,13 +96,14 @@ Vision: Your robots possess a special omnicam with some smart image
 proccessing software attached :). Robots have a 360 degrees view. The
 visionperceptor delivers lists of seen objects, where objects are
 either others robots, the ball, or markers on the field (there are
-currently 8 markers on the field: 4 flags and 4 goal posts). 
-With each object you get its distance, the angle in the x-y plane
-and the latitudal angle. Contrary to 2D soccer simulation, the vision
-system does not deliver object velocities. 
-Objects can be occluded by other objects (this is not implemented
-yet). All distances and angles are given relative to the camera
-position (currently at the center of the robot sphere).
+currently 8 markers on the field: 4 flags and 4 goal posts). With each
+object you get its distance, the angle in the x-y plane (0 degrees
+into direction of the opponent half) and the latitudal angle 
+(0 degrees means horizontally). Contrary to 2D soccer simulation, the 
+vision system does not deliver object velocities. Objects can be
+occluded by other objects (this is not implemented yet). All distances
+and angles are given relative to the camera position (currently at the
+center of the robot sphere).
 
 The noise parameters of the vision system are as follows:
 - calibration error: 
