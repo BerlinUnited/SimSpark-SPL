@@ -90,3 +90,9 @@ flag = new('FieldFlag','/usr/scene/flag4');
 flag.setLocalPos(-fx,fy,-fz);
 
 spadesServer.queueAgents('default', 3);
+
+# put the ball on the soccer field
+ball = new('Ball','/usr/scene/ball');
+ball.SetLocalPos(0.0,0.0,0.0);
+
+
