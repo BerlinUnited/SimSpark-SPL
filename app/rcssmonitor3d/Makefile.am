@@ -25,6 +25,7 @@ rcssmonitor3D_SOURCES = \
 	glserver.cpp \
 	communit.cpp \
 	commserver.cpp \
+	commserver_c.cpp \
 	tcpsocket.cpp
 
 EXTRA_DIST = rcssmonitor3d.rb
