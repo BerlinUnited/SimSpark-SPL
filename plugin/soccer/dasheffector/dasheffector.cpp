@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector.cpp,v 1.1.2.4 2004/02/02 18:36:02 fruit Exp $
+   $Id: dasheffector.cpp,v 1.1.2.5 2004/02/05 10:27:30 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include <salt/gmath.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/physicsserver/spherecollider.h>
-#include <soccer/visionperceptor/visionperceptor.h>
+#include <soccer/soccerbase/soccerbase.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -115,7 +115,7 @@ DashEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         ti = mAgentState->GetTeamIndex();
     }
-    mBody->AddForce(VisionPerceptor::FlipView(Vector3f(force[0],force[2],force[1]), ti));
+    mBody->AddForce(SoccerBase::FlipView(Vector3f(force[0],force[2],force[1]), ti));
 
     return true;
 }
