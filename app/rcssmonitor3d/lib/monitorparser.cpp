@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorparser.cpp,v 1.6 2004/04/20 07:24:35 fruit Exp $
+   $Id: monitorparser.cpp,v 1.7 2004/05/03 13:51:33 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -177,10 +177,16 @@ MonitorParser::GetObjectParam(const Predicate& predicate,
 void
 MonitorParser::ParseObject(const Predicate& predicate, Expression& expr)
 {
+   
     Predicate::Iterator posParam(predicate);
     if (predicate.FindParameter(posParam, "pos"))
     {
         predicate.GetValue(posParam,expr.pos);
+        
+       
+
+
+
     } else
     {
         // pos not given
@@ -363,7 +369,7 @@ MonitorParser::ParsePredicates(oxygen::PredicateList& predList,
             mParsedInfoHeader = true;
         }
 
-        return;
+        // return;
     }
 
     for (
