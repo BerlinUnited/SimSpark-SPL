@@ -1,3 +1,39 @@
+2004-06-19  Oliver Obst  <fruit@robolog.org>
+
+	* app/agenttest/soccer.cpp: 
+	- fixed agent to avoid yellow balls when initializing the agents
+
+	* lib/oxygen/spadesserver/spadesserver.cpp: changed debug output
+
+	* app/agenttest/agenttest.rb: - set up agent logging
+
+	* app/agenttest/main.cpp: 
+	- stop the agent when SPADES sends an 'X'.
+
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp: 
+	- added ruby method 'useRandomNoise' to switch between original 
+	  and intended error generation methods
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	- fixed a bug with generating the noise during each simulation step.
+	  Originally, it was intended to add random noise to be added to
+	  each percept. The bug caused the error to be the same throughout a
+	  match.  
+	- Added a method UseRandomNoise that can be used to switch back to the original
+	  (buggy) behavior where the noise is generated only once.
+	- setting up three random number generators for setting up the
+	  noises generated
+	- Added pointers to hold references to 3 random number generators
+	  for creating the measurement noise.
+
+	* plugin/soccer/driveeffector/driveeffector.h: 
+	* plugin/soccer/driveeffector/driveeffector.cpp: 
+	- fixed a bug with generating random numbers for the force values. The errors
+	  were essentially the same during each step.  
+	- replaced variable for holding the sigma of the random distribution by a 
+	  pointer to a random number generator with this sigma.
+
 2004-06-17  Christoph Ringelstein  <cringel@uni-koblenz.de>
 
 	* app/rcssmonitor3d/lite/monitor.cpp: 
