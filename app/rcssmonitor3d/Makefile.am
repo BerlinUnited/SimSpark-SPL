@@ -1,4 +1,4 @@
-noinst_PROGRAMS = rcssmonitor3D
+bin_PROGRAMS = rcssmonitor3D
 
 if DEBUG
 LDADD = \
@@ -28,4 +28,4 @@ rcssmonitor3D_SOURCES = \
 	tcpsocket.cpp tcpsocket.h \
 	types.h
 
-EXTRA_DIST = rcssmonitor3d.rb
+dist_pkgdata_DATA = rcssmonitor3D.rb
