@@ -1,5 +1,43 @@
 2004-04-23  Oliver Obst  <fruit@robolog.org>
 
+	* app/rcssmonitor3d/kerosin/main.cpp: 
+	- changed calling the init scripts: use RunInitScripts instead of Run
+
+	* lib/kerosin/renderserver/renderserver.cpp: 
+	- disabled annoying error messages about vertex program
+
+	* lib/kerosin/kerosin.h:
+	* lib/kerosin/kerosin.cpp:
+	- including inputdevice and inputsystem; both classes are registered
+	  during kerosin startup.
+
+	* lib/kerosin/inputserver/inputdevice_c.cpp: 
+	- added InputDevice class server
+
+	* lib/kerosin/inputserver/inputdevice.h: 
+	- added class server declaration
+
+	* plugin/inputsdl/export.cpp: 
+	- register InputDeviceSDL additionally
+
+	* plugin/inputsdl/inputdevicesdl_c.cpp: 
+	- added InputDeviceSDL class server
+
+	* plugin/inputsdl/inputdevicesdl.h: 
+	- added class server declaration
+
+	* plugin/inputsdl/inputsystemsdl_c.cpp:
+	* plugin/inputsdl/keyboardsdl_c.cpp:
+	* plugin/inputsdl/mousesdl_c.cpp: 
+	* plugin/inputsdl/timersdl_c.cpp: 
+	- fixed the class server base classes
+
+	* lib/kerosin/inputserver/inputsystem_c.cpp: 
+	- added inputsystem class server
+
+	* lib/kerosin/inputserver/inputsystem.h: 
+	- added declaration of inputsystem class server
+
 	* app/simulator/rcssserver3D.rb: 
 	- removed unneeded perfectvisionperceptor 
 	- added drag controllers to simulate friction / air resistance 
