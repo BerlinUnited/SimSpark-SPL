@@ -7,6 +7,7 @@
 
 using namespace boost;
 using namespace kerosin;
+using namespace oxygen;
 using namespace salt;
 using namespace std;
 using namespace zeitgeist;
@@ -203,6 +204,8 @@ int main(int argc, char **argv)
         Zeitgeist       myZeitgeist;
         // initialize Kerosin (input, windowing)
         Kerosin         myKerosin(myZeitgeist);
+	// initialize Oxygen
+	Oxygen myOxygen(myZeitgeist);
         // create our global context (object hierarchy position container)
         gContext = myZeitgeist.CreateContext();
         // application specific initialization
