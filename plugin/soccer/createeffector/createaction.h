@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createaction.h,v 1.1.2.1 2003/12/25 12:23:33 rollmark Exp $
+   $Id: createaction.h,v 1.2.2.1 2004/01/25 12:38:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,8 @@ namespace oxygen
 class CreateAction : public oxygen::ActionObject
 {
 public:
-  CreateAction() : ActionObject("create") {}
+  CreateAction(const std::string& predicate)
+      : ActionObject(predicate) {}
   virtual ~CreateAction() {}
 };
 
