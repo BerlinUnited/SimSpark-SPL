@@ -15,6 +15,10 @@ new ('kerosin/PhysicsServer', '/sys/server/physics');
 sceneServer = new ('kerosin/SceneServer', '/sys/server/scene');
 sceneServer.createScene('/usr/scene');
 
+# setup the SpadesServer
+print "\nCreating SpadesServer\n\n";
+spadesServer = new ('kerosin/SpadesServer', '/sys/server/spades');
+
 # 
 # Scene setup
 #
@@ -53,12 +57,13 @@ physics.setMaxSpeed(3.0);
 geometry = new ('kerosin/SphereCollider', '/usr/scene/sphere/_geometry');
 geometry.setRadius(1.0);
 
-
-
-
-
-
-
-
-
-
+# a second collider
+trans = new ('kerosin/Transform', '/usr/scene/sphere2');
+trans.setLocalPos(-12.0, 9.0, -12.4);
+physics = new ('kerosin/Body', '/usr/scene/sphere2/_physics');
+physics.setSphere(1.0, 1.0);
+physics.setMass(1.0);
+physics.setMaxSpeed(4.0);
+geometry = new ('kerosin/SphereCollider', '/usr/scene/sphere2/_geometry');
+geometry.setRadius(1.0);
+ 
