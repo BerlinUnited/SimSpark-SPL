@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.4.8.5 2004/02/08 15:26:06 rollmark Exp $
+   $Id: body.cpp,v 1.4.8.6 2004/03/19 15:41:07 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -137,11 +137,13 @@ void Body::OnUnlink()
     mWorld.reset();
 }
 
-void Body::SetMass(float mass)
+void
+Body::SetMass(float mass)
 {
     dMass ODEMass;
     dBodyGetMass(mODEBody, &ODEMass);
     dMassAdjust(&ODEMass, mass);
+    dBodySetMass(mODEBody, &ODEMass);
 }
 
 void Body::SetSphere(float density, float radius)
