@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gmath.h,v 1.8 2004/06/05 08:41:11 fruit Exp $
+   $Id: gmath.h,v 1.9 2004/12/17 20:21:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -150,15 +150,15 @@ f_inline int gSign(TYPE a)
 
 // some math conversion functions
 template <class TYPE>
-f_inline double gDegToRad(TYPE deg)
+f_inline TYPE gDegToRad(TYPE deg)
 {
     return (static_cast<double>(deg)) * (M_PI / 180.0);
 }
 
 template <class TYPE>
-f_inline double gRadToDeg(TYPE rad)
+f_inline TYPE gRadToDeg(TYPE rad)
 {
-    return (static_cast<double>(rad)) * (180.0 / M_PI);
+    return (static_cast<TYPE>(rad)) * (180.0 / M_PI);
 }
 
 template <class TYPE>
@@ -166,6 +166,39 @@ f_inline bool   gInRange(const TYPE& val, const TYPE& low, const TYPE& high)
 {
     return ((val>=low) && (val<=high));
 }
+
+template <class TYPE>
+f_inline double gNormalizeDeg(TYPE angle)
+{
+    while (angle > 180)
+        {
+            angle -= 360;
+        }
+
+    while (angle < -180)
+        {
+            angle += 360;
+        }
+
+    return angle;
+}
+
+template <class TYPE>
+f_inline double gNormalizeRad(TYPE angle)
+{
+    while (angle > M_PI)
+        {
+            angle -= (2*M_PI);
+        }
+
+    while (angle < -M_PI)
+        {
+            angle += (2*M_PI);
+        }
+
+    return angle;
+}
+
 
 } //namespace salt
 
