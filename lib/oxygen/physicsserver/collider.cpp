@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.10 2004/04/07 11:40:05 rollmark Exp $
+   $Id: collider.cpp,v 1.11 2004/04/15 14:19:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,8 +25,9 @@
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
 
-using namespace boost;
 using namespace oxygen;
+using namespace salt;
+using namespace boost;
 using namespace std;
 
 Collider::Collider() : ODEObject(), mODEGeom(0)
@@ -51,15 +52,6 @@ void Collider::OnLink()
             return;
         }
 
-    // if there is a Body below our parent, link to it
-    shared_ptr<Body> body = shared_static_cast<Body>
-        (make_shared(GetParent())->GetChildOfClass("Body"));
-
-    if (body.get() != 0)
-        {
-            dGeomSetBody (mODEGeom, body->GetODEBody());
-        }
-
     // if we have a space add the geom to it
     dSpaceID space = GetSpaceID();
     if (
@@ -70,6 +62,21 @@ void Collider::OnLink()
             dGeomSetData(mODEGeom, this);
             dSpaceAdd(space, mODEGeom);
         }
+
+    // if there is a Body below our parent, link to it
+    shared_ptr<Body> body = shared_static_cast<Body>
+        (make_shared(GetParent())->GetChildOfClass("Body"));
+
+    if (body.get() != 0)
+        {
+            dGeomSetBody (mODEGeom, body->GetODEBody());
+        } else
+            {
+                // no body node found, setup initial position and
+                // orientation identical to the parent node
+                SetRotation(GetWorldTransform());
+                SetPosition(Vector3f(0,0,0));
+            }
 }
 
 void Collider::OnUnlink()
@@ -190,9 +197,17 @@ shared_ptr<Collider> Collider::GetCollider(dGeomID id)
     return collider;
 }
 
-void Collider::SetPosition(salt::Vector3f pos)
+void Collider::SetRotation(const Matrix& rot)
 {
-    dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
+    dMatrix3 m;
+    ConvertRotationMatrix(rot,m);
+    dGeomSetRotation(mODEGeom,m);
+}
+
+void Collider::SetPosition(const Vector3f& pos)
+{
+    Vector3f globalPos(GetWorldTransform() * pos);
+    dGeomSetPosition (mODEGeom, globalPos[0], globalPos[1], globalPos[2]);
 }
 
 bool Collider::Intersects(boost::shared_ptr<Collider> collider)
