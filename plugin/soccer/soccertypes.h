@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccertypes.h,v 1.1.2.3 2004/02/06 14:47:36 rollmark Exp $
+   $Id: soccertypes.h,v 1.1.2.4 2004/02/10 19:25:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,20 +31,26 @@
 enum TPlayMode
   {
     PM_BeforeKickOff,
-    PM_KickOff,
-    PM_PlayOn,
     PM_KickOff_Left,
     PM_KickOff_Right,
-    PM_FirstHalfOver
+    PM_PlayOn,
+    PM_KickIn_Left,
+    PM_KickIn_Right,
+    PM_FirstHalfOver,
+    PM_Goal_Left,
+    PM_Goal_Right
   };
 
 /** mapping from TPlayMode to string constants */
 #define STR_PM_BeforeKickOff "BeforeKickOff"
-#define STR_PM_KickOff "KickOff"
-#define STR_PM_PlayOn "PlayOn"
 #define STR_PM_KickOff_Left "KickOff_Left"
 #define STR_PM_KickOff_Right "KickOff_Right"
+#define STR_PM_PlayOn "PlayOn"
+#define STR_PM_KickIn_Left "KickIn_Left"
+#define STR_PM_KickIn_Right "KickIn_Right"
 #define STR_PM_FirstHalfOver "FirstHalfOver"
+#define STR_PM_Goal_Left "Goal_Left"
+#define STR_PM_Goal_Right "Goal_Right"
 #define STR_PM_Unknown "unknown"
 
 enum TTeamIndex
