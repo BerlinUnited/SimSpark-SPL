@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.1.2.5 2003/12/25 19:05:44 rollmark Exp $
+   $Id: predicate.h,v 1.1.2.6 2003/12/27 11:41:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,6 +101,12 @@ public:
 
     /** GetValue helper for int */
     bool GetValue(TParameterList::const_iterator& iter, int& value) const
+    {
+        return ConvertStringValue(iter, value);
+    }
+
+    /** GetValue helper for unsigned int */
+    bool GetValue(TParameterList::const_iterator& iter, unsigned int& value) const
     {
         return ConvertStringValue(iter, value);
     }
