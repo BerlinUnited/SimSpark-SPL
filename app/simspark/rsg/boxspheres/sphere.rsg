@@ -1,0 +1,25 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+ (Template $radius $mass $material)
+ (Sphere
+  .setRadius $radius
+  .setMaterial $material
+  )
+ (Body
+  .setName sphereBody
+  .setMass $mass
+  (DragController
+   .setAngularDrag 0.2
+   .setLinearDrag 0.4
+   )
+  )
+ (SphereCollider
+  .setRadius $radius
+  )
+ (ContactJointHandler
+  .setContactBounceMode false
+  )
+ )
+)

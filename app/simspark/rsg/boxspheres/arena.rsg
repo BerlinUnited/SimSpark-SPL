@@ -1,0 +1,21 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+ (Template $lenX $lenY $height $material)
+; create the base plane
+ (Transform
+  .setLocalPos 0 -1 0
+  (Box
+   .setMaterial $material
+   .setExtents $lenX 2 $lenY
+   )
+  (PlaneCollider
+   .setParams 0 1.0 0 0
+   (ContactJointHandler
+    .setContactBounceMode false
+    )
+   )
+  )
+ 
+ )

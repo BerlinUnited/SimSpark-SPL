@@ -1,0 +1,25 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+ (Template $lenX $lenY $lenZ $mass $material)
+ (Box
+  .setExtents $lenX $lenY $lenZ
+  .setMaterial $material
+  )
+ (Body
+  .setName boxBody
+  .setMass $mass
+  (DragController
+   .setAngularDrag 0.2
+   .setLinearDrag 0.4
+   )
+  )
+ (BoxCollider
+  .setBoxLengths $lenX $lenY $lenZ
+  (ContactJointHandler
+   .setContactBounceMode false
+   )
+  )
+ )
+)

@@ -1,0 +1,31 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+; create the arena
+ (Transform
+  .setLocalPos 0 -1 0
+  .importScene rsg/boxspheres/arena.rsg 100 100 50 matGreen
+  )
+
+; add two boxes
+ (Transform
+  .setLocalPos -8 30 0
+  .importScene rsg/boxspheres/box.rsg 3 4 5 130 matYellow
+  )
+
+ (Transform
+  .setLocalPos -7 15 0
+  .importScene rsg/boxspheres/box.rsg 2 2 2 30 matRed
+  )
+
+; add two layer of spheres
+ (Transform
+  .setLocalPos 0 0.6 0
+  .importScene rsg/boxspheres/layer.rsg 1 50
+  )
+ (Transform
+  .setLocalPos 0 2 0.0
+  .importScene rsg/boxspheres/layer.rsg 1 50
+  )
+ )
