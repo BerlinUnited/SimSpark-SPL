@@ -115,7 +115,7 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum target, const char* fileName)
 	unsigned char *buffer = new unsigned char[file->Size()+1];
 	file->Read(buffer, file->Size());
 
-	fun_glGenProgramsARB(1, &id);
+	glGenProgramsARB(1, &id);
 	glBindProgramARB(target, id);
 
 	// try to load the actual program

@@ -1,3 +1,10 @@
+2003-09-16	Tom Howard	<tomhoward@users.sf.net>
+
+	* ./lib/kerosin/openglserver/openglserver.cpp
+	* ./utility/glextgen/script/glbackend.rb
+	Still trying to get it to work
+	
+
 2003-09-11	Tom Howard	<tomhoward@users.sf.net>
 
 	* ./configure.ac
