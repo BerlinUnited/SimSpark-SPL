@@ -2,9 +2,8 @@ if BUILD_KEROSIN
 pkglib_LTLIBRARIES = inputsdl.la
 endif
 
-inputsdl_la_SOURCES = \
-export.cpp \
-inputdevicesdl.h \
+inputsdl_la_SOURCES = export.cpp \
+inputdevicesdl.h inputdevicesdl_c.cpp \
 inputsystemsdl.cpp \
 inputsystemsdl.h \
 inputsystemsdl_c.cpp \
