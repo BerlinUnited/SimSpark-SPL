@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.1.2.1 2004/01/29 19:53:53 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.1.2.2 2004/02/01 15:36:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,23 +49,63 @@ void SoccerRuleAspect::UpdateBeforeKickOff()
     mBallBody->SetPosition(pos);
 }
 
-void SoccerRuleAspect::UpdatePlayOn()
+bool SoccerRuleAspect::CheckBallLeftField()
 {
-    if (mBallBody.get() == 0)
-        {
-            GetLog()->Debug() << "(SoccerRuleAspect::UpdatePlayOn) ballbody is null " << std::endl;
-        }
-
-    // check if the ball is not on the playing field
     if (mBallState->GetBallOnField())
         {
-            return;
+            return false;
         }
 
     // move the ball back on the ground where it left the playing field
     Vector3f lastValid = mBallState->GetLastValidBallPosition();
     GetSoccerVar("BallRadius",lastValid[1]);
     mBallBody->SetPosition(lastValid);
+
+    return true;
+}
+
+bool SoccerRuleAspect::CheckGoal()
+{
+    TTeamIndex idx = mBallState->GetGoalState();
+    if (idx == TI_NONE)
+        {
+            return false;
+        }
+
+    // score the lucky team
+    if (idx == TI_LEFT)
+        {
+            // ball is in the left goal, score the right team
+            mGameState->ScoreTeam(TI_RIGHT);
+        } else
+            {
+                // ball is in the right goal, score the left team
+                mGameState->ScoreTeam(TI_LEFT);
+            }
+
+    // put the ball back in the middle of the playing field
+    salt::Vector3f pos(0,0,0);
+    GetSoccerVar("BallRadius",pos[1]);
+    mBallBody->SetPosition(pos);
+
+    return true;
+}
+
+void SoccerRuleAspect::UpdatePlayOn()
+{
+    // check if the ball is in one of the goals
+    if (CheckGoal())
+        {
+            return;
+        }
+
+    // check if the ball is otherwise not on the playing field
+    if (CheckBallLeftField())
+        {
+            return;
+        }
+
+    // other checks go here...
 }
 
 void SoccerRuleAspect::Update(float deltaTime)
@@ -93,7 +133,8 @@ void SoccerRuleAspect::Update(float deltaTime)
 
         default:
             GetLog()->Error()
-                << "ERROR: (SoccerRuleAspect) unknown play mode " << playMode << "\n";
+                << "ERROR: (SoccerRuleAspect) unknown play mode "
+                << playMode << "\n";
             break;
         }
 }
