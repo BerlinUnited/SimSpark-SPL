@@ -1,4 +1,17 @@
+For sooner:
+
+KickEffector: 
+The kickeffector wants to be below a SphereCollider now. It should be
+changed so that the KickEffector can be somewhere else.
+
+RSG-Files:
+.rsg-files are startet relative to the current directory. -> proposed change 
+is to use a absolute directory
+
+
 For later:
+
+- see dysim tübingen
 
 - Split Spark and Soccer stuff, create new SF project simspark
   The soccer specific stuff remains at sserver.
@@ -15,6 +28,12 @@ For later:
 - Sparkmonitor 
 
 - get voidimporter running
+
+- add documentation
+  + Monitor Protocol (old / new)
+  + HOWTOs (creating a new simulation, scene description language,
+            creating a new sensor, creating a new effector, ...)
+  
 
 - To simulate aerodynamic drag, it would be better to use the square
   of the velocity, because that's how drag works in reality. The force
@@ -44,7 +63,6 @@ For later:
    (GameState (time 0) (playmode BeforeKickOff)
    instead of
    (GameState (unum 1) (team left) (FieldLength 108) (FieldWidth 73) ...
-
 
 Done:
 
