@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: kicknrun.cpp,v 1.1.2.3 2004/02/08 15:20:18 rollmark Exp $
+$Id: kicknrun.cpp,v 1.1.2.4 2004/02/08 17:18:01 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,23 +41,61 @@ void KickNRun::BehaveBeforeKickOff()
     // do nothing
 }
 
+void KickNRun::BehaveKickOff()
+{
+    BehavePlayOn();
+}
+
 void KickNRun::BehavePlayOn()
 {
     WorldModel::VisionSense ballSense =
         mWM->GetVisionSense(WorldModel::VO_BALL);
 
-    // agentradius + ballradius + maxKickDist
-    if (ballSense.distance <= 0.22 + 0.111 + 0.04)
+    // calculate kick position behind the ball, looking towards the
+    // opponent goal
+    Vector3f goal(
+                  mWM->GetFieldLength(),
+                  mWM->GetFieldWidth()/2.0,
+                  0
+                  );
+
+    GetLog()->Debug() << "GOAL :" << goal[0] << " " << goal[1] << " " << goal[2] << "\n";
+
+    Vector3f ballPos = mWM->GetPosition(ballSense);
+
+    GetLog()->Debug() << "BALL :" << ballPos[0] << " " << ballPos[1] << " " << ballPos[2] << "\n";
+
+    Vector3f goalDashLine(goal - ballPos);
+    goalDashLine.Normalize();
+
+    float minKickDist = mWM->GetMinimalKickDistance();
+    goalDashLine *= minKickDist;
+
+    Vector3f kickPos = ballPos + goalDashLine;
+
+    GetLog()->Debug() << "KICK :" << kickPos[0] << " " << kickPos[1] << " " << kickPos[2] << "\n";
+
+    // if we are far away from the kickPos dash towards it
+    Vector3f myPos = mWM->GetMyPosition();
+    GetLog()->Debug() << "MYPOS :" << myPos[0] << " " << myPos[1] << " " << myPos[2] << "\n";
+
+    Vector3f kickDashLine = kickPos - myPos;
+    float kickPosDist = kickDashLine.Length();
+    kickDashLine.Normalize();
+    if (kickPosDist > 10)
         {
-            // kick the ball
-            Kick(20,80);
+            // we are far away, go full power
+            kickDashLine *= 100;
+            Dash(kickDashLine);
+        } else
+        {
+            // we're getting closer, go slower
+            kickDashLine *= 20;
+            Dash(kickDashLine);
         } else
             {
-                // dash towards the ball
-                Vector3f dashVec(mWM->GetDashVec(ballSense));
-                dashVec *= 15;
-
-                Dash(dashVec);
+                // we are close enough to kick the ball
+                Kick(20,30);
             }
 }
 
@@ -70,6 +108,9 @@ void KickNRun::Behave()
             break;
 
         case PM_KickOff :
+            BehaveKickOff();
+            break;
+
         case PM_PlayOn :
             BehavePlayOn();
             break;
