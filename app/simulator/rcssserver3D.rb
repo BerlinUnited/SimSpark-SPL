@@ -93,6 +93,7 @@ def addAgent(path)
   kickEffector = new('KickEffector', path+'KickEffector')
   kickEffector.setKickMargin(0.07)
   kickEffector.setForceFactor(0.7)
+  kickEffector.setTorqueFactor(0.1)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
   kickEffector.setSteps(10)
   kickEffector.setMaxPower(100.0)
@@ -140,7 +141,7 @@ def addBall(x,y,z)
 			 getSoccerVar('BallRadius'))
 
   drag = new('oxygen/DragController',path+'physics/drag')
-  drag.setAngularDrag(0.1)
+  drag.setAngularDrag(0.0)
   drag.setLinearDrag(0.3)
 
   geomPath = path+'geometry/'
@@ -255,7 +256,7 @@ addSoccerVar('FieldWidth', randomServer.uniformRND(64.0,75.9).floor().to_f())
 addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
-addSoccerVar('GoalHeight', 2.44)
+addSoccerVar('GoalHeight', 0.5) # FIFA: 2.44 
 addSoccerVar('BorderSize', 10.0)
 addSoccerVar('FreeKickDistance', 9.15)
 addSoccerVar('AutomaticKickOff', false)
@@ -272,7 +273,7 @@ addSoccerVar('BallMass',randomServer.uniformRND(0.41,0.45))
 
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
-addSoccerVar('RuleKickingPauseTime',1.0)
+addSoccerVar('RuleKickInPauseTime',1.0)
 addSoccerVar('RuleHalfTime',4.0 * 60)
 
 #
