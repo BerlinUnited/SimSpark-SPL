@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver_c.cpp,v 1.1 2004/04/25 16:39:59 rollmark Exp $
+   $Id: simulationserver_c.cpp,v 1.2 2004/12/22 15:58:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,17 +33,19 @@ FUNCTION(SimulationServer,quit)
 
 FUNCTION(SimulationServer,initControlNode)
 {
-    string inControlName;
+    string inClassName;
+    string inName;
 
     if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(),inControlName))
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inClassName)) ||
+        (! in.GetValue(in[1],inName))
         )
         {
             return false;
         }
 
-    return obj->InitControlNode(inControlName);
+    return obj->InitControlNode(inClassName,inName);
 }
 
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.2 2004/04/28 14:27:13 rollmark Exp $
+   $Id: simulationserver.h,v 1.3 2004/12/22 15:58:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ public:
 
     /** creates and registers a new SimControlNode to the
         SimulationServer */
-    bool InitControlNode(const std::string& controlName);
+    bool InitControlNode(const std::string& className, const std::string& name);
 
     /** sets the auto time mode of the SimulationServer. if set to
         true the SimulationServer automatically advances the

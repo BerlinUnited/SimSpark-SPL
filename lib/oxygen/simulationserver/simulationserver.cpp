@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.3 2004/05/01 14:20:33 rollmark Exp $
+   $Id: simulationserver.cpp,v 1.4 2004/12/22 15:58:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -150,24 +150,24 @@ int SimulationServer::GetCycle()
     return mCycle;
 }
 
-bool SimulationServer::InitControlNode(const string& controlName)
+bool SimulationServer::InitControlNode(const std::string& className, const std::string& name)
 {
     shared_ptr<SimControlNode> importer
-        = shared_dynamic_cast<SimControlNode>(GetCore()->New(controlName));
+        = shared_dynamic_cast<SimControlNode>(GetCore()->New(className));
 
     if (importer.get() == 0)
         {
             GetLog()->Error() << "(SimulationServer) ERROR: "
-                              << "Unable to create '" << controlName << "'\n";
+                              << "Unable to create '" << className << "'\n";
             return false;
         }
 
-    importer->SetName(controlName);
+    importer->SetName(name);
     AddChildReference(importer);
 
     GetLog()->Normal()
         << "(SimulationServer) SimControlNode '"
-        << controlName << "' registered\n";
+        << name << "' registered\n";
 
     return true;
 }
@@ -232,7 +232,12 @@ void SimulationServer::ControlEvent(EControlEvent event)
          )
         {
             shared_ptr<SimControlNode> ctrNode =
-                shared_static_cast<SimControlNode>(*iter);
+                shared_dynamic_cast<SimControlNode>(*iter);
+
+            if (ctrNode.get() == 0)
+                {
+                    continue;
+                }
 
             switch (event)
                 {
