@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.6 2004/02/05 10:21:02 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.7 2004/02/06 10:16:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,11 +56,16 @@ VisionPerceptor::SetNoiseParams(float sigma_dist, float sigma_phi,
 void
 VisionPerceptor::OnLink()
 {
-    SoccerBase::GetSceneServer(*this, mSceneServer);
-    if (SoccerBase::GetTransformParent(*this, mTransformParent))
-    {
-        SoccerBase::GetAgentState(*this, mTransformParent, mAgentState);
-    }
+    SoccerBase::GetTransformParent(*this,mTransformParent);
+    SoccerBase::GetAgentState(*this, mAgentState);
+    SoccerBase::GetActiveScene(*this,mActiveScene);
+}
+
+void VisionPerceptor::OnUnlink()
+{
+    mTransformParent.reset();
+    mAgentState.reset();
+    mActiveScene.reset();
 }
 
 bool
@@ -84,24 +89,17 @@ VisionPerceptor::Percept(Predicate& predicate)
     predicate.name = mPredicateName;
     predicate.parameter.clear();
 
-    if (!SoccerBase::GetActiveScene(*this,mSceneServer,mActiveScene))
+    if (
+        (mTransformParent.get() == 0) ||
+        (mActiveScene.get() == 0) ||
+        (mAgentState.get() == 0)
+        )
     {
         return false;
     }
 
-    if (mTransformParent.get() == 0)
-    {
-        GetLog()->Error()
-            << "Error: (VisionPerceptor) "
-            << "parent node is not derived from TransformNode\n";
-        return false;
-    }
+    TTeamIndex  ti = mAgentState->GetTeamIndex();
 
-    TTeamIndex ti = TI_NONE;
-    if (mAgentState.get() != 0)
-    {
-        ti = mAgentState->GetTeamIndex();
-    }
 #undef DEBUG_SIDE
 #ifdef DEBUG_SIDE
     if (ti == TI_LEFT) predicate.parameter.push_back(std::string("(debug_message left)"));
