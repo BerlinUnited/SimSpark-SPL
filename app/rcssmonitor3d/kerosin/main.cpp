@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.3 2004/03/20 09:45:43 rollmark Exp $
+   $Id: main.cpp,v 1.4 2004/03/20 13:17:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -334,6 +334,18 @@ bool mangleExpr(MonitorParser::Expression& expr, string& name)
             name = "ball";
             break;
 
+        case MonitorParser::ET_FLAG:
+            {
+                // flags are differing only in the pos
+                stringstream ss;
+                ss << "flag"
+                   << expr.pos[0]
+                   << expr.pos[1]
+                   << expr.pos[2];
+                name = ss.str();
+                break;
+            }
+
         case MonitorParser::ET_AGENT:
             {
                 stringstream ss;
@@ -401,7 +413,31 @@ shared_ptr<Transform> getSphere(MonitorParser::Expression& expr)
             break;
 
         case MonitorParser::ET_AGENT:
-            fktName = "addAgent";
+            {
+                stringstream ss;
+                ss << "addAgent";
+
+                switch (expr.team)
+                    {
+                    case TI_NONE:
+                        ss << "N";
+                        break;
+
+                    case TI_LEFT:
+                        ss << "L";
+                        break;
+
+                    case TI_RIGHT:
+                        ss << "R";
+                        break;
+                    }
+
+                fktName = ss.str();
+                break;
+            }
+
+        case MonitorParser::ET_FLAG:
+            fktName = "addFlag";
             break;
         }
 
