@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.1.2.3 2004/01/27 15:20:07 rollmark Exp $
+   $Id: sexpmonitor.h,v 1.1.2.4 2004/01/31 17:26:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,12 @@
 #include <string>
 #include <oxygen/monitorserver/monitorsystem.h>
 
-#include <oxygen/agentaspect/agentaspect.h>
+class GameStateAspect;
 
+namespace oxygen
+{
+    class AgentAspect;
+}
 
 /**     \class SexpMonitor is a monitor plugin that generates lisp
         like-expressions for the rcssmonitor3d
@@ -75,10 +79,23 @@ protected:
     /** returns the last agent that touched the ball */
     boost::shared_ptr<oxygen::AgentAspect> GetLastBallAgent();
 
+    /** collects data from the GameStateAspect and describing
+        constructs S-Expressions  */
+    std::string SexpMonitor::GetGameStateData();
+
     /** helper method that queries the ScriptServer for the float
         variable name and generates a S-Expression describing it
     */
     std::string SexpMonitor::PutFloatParam(const std::string& name);
+
+    /** sets the reference to the GameStateAspect */
+    virtual void OnLink();
+
+    /** resets the reference to the GameStateAspect */
+    virtual void OnUnlink();
+
+protected:
+    boost::shared_ptr<GameStateAspect> mGameState;
 };
 
 DECLARE_CLASS(SexpMonitor);
