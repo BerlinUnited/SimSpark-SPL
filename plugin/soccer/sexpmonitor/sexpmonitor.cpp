@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.10 2004/02/08 15:23:57 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.11 2004/02/10 19:35:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ SexpMonitor::ParseMonitorMessage(std::string data)
             // transition from PM_BeforeKickOff to PM_PlayOn
             if (mGameState->GetPlayMode() == PM_BeforeKickOff)
                 {
-                    mGameState->SetPlayMode(PM_KickOff);
+                    mGameState->KickOff();
                 }
         }
 }
@@ -101,7 +101,10 @@ shared_ptr<AgentAspect> SexpMonitor::GetLastBallAgent()
             return shared_ptr<AgentAspect>();
         }
 
-    return ballState->GetLastCollidingAgent();
+    shared_ptr<AgentAspect> agent;
+    TTime time;
+    ballState->GetLastCollidingAgent(agent,time);
+    return agent;
 }
 
 string
