@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubywrapper.h,v 1.1.2.1 2004/02/02 20:15:26 rollmark Exp $
+   $Id: rubywrapper.h,v 1.1.2.2 2004/02/20 12:08:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,9 +22,11 @@
 #ifndef ZEITGEIST_RUBYWRAPPER_H
 #define ZEITGEIST_RUBYWRAPPER_H
 
+//
 // Both <ruby.h> and "config.h" define PACKAGE_ constants.
 // To suppress compiler warnings about redefinitions they
 // are #undef'ed in this wrapper
+//
 
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
@@ -43,6 +45,51 @@
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
+
+#include <iostream>
+
+namespace zeitgeist
+{
+    /** RbArguments is a structure that describes a ruby function
+        call.
+        \param recv is the ruby object that receives the function call
+        \param id is the ruby id of the receiver member function
+        \param n is the number of parameters passed
+        \param *argv is a pointer to an array containnig the function
+        parameters
+    */
+    struct RbArguments
+    {
+        VALUE recv;
+        ID id;
+        int n;
+        VALUE *argv;
+
+        RbArguments(VALUE recv, ID id, int n, VALUE *argv) :
+            recv(recv), id(id), n(n), argv(argv) {};
+    };
+
+    /** a functor for the rb_protect function, used to safely excecute
+        ruby code */
+    VALUE RbFuncallWrap(VALUE arg);
+
+    /** calls a safe rb_eval_string variant and prints any ruby error
+        messages along with a backtrace to stdout
+     */
+    VALUE RbEvalStringWrap(const std::string& str);
+
+    /** calls a safe rb_eval_string variant and prints any ruby error
+        messages along with a backtrace to stdout. The error code
+        returned from ruby is stored in the 'error' parameter.
+     */
+    VALUE RbEvalStringWrap(const std::string& str, int& error);
+
+    /** qeuries ruby for a string that describes the last error */
+    std::string RbGetError();
+
+    /** prints the last ruby error to stdout along with a backtrace */
+    void RbPrintError();
+};
 
 #endif // ZEITGEIST_RUBYWRAPPER_H
 
