@@ -21,7 +21,9 @@
 #include "basenode.h"
 #include "dirnode.h"
 
-using namespace rcss::EntityTree;
+#include <iostream>
+
+using namespace rcss::entity;
 using namespace std;
 
 EntityTree::EntityTree()
@@ -32,14 +34,16 @@ EntityTree::EntityTree()
 
 EntityTree::~EntityTree()
 {
+    cerr << "deleting entity tree..." << endl;
     delete M_root;
+    cerr << "done" << endl;
 }
 
 EntityTree&
 EntityTree::instance()
 {
-    static EntityTree S_instance;
-    return S_instance;
+    static EntityTree* S_instance = new EntityTree();
+    return *S_instance;
 }
 
 void
@@ -68,7 +72,7 @@ EntityTree::changeNode(const std::string& name)
     string::size_type idx = name.find('/');
     if (idx == string::npos)
     {
-        if (name == ".") return true;
+        if (name.empty() || name == ".") return true;
         if (name == "..")
         {
             if (M_current->getParent() != 0)

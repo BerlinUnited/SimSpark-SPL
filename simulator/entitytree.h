@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYTREE_ENTITYTREE_H
-#define RCSS_ENTITYTREE_ENTITYTREE_H
+#ifndef RCSS_ENTITY_ENTITYTREE_H
+#define RCSS_ENTITY_ENTITYTREE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -27,7 +27,7 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0
 }}
