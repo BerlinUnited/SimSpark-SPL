@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: kicknrun.cpp,v 1.1.2.7 2004/02/10 19:54:52 rollmark Exp $
+$Id: kicknrun.cpp,v 1.1.2.8 2004/02/11 11:20:55 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,7 +38,14 @@ KickNRun::~KickNRun()
 
 void KickNRun::BehaveBeforeKickOff()
 {
-    // do nothing
+    int num = mWM->GetTeamUnum();
+    float f = mWM->GetAgentRadius() * 10;
+    Vector3f pos;
+    pos[0] = (-1 - (num % 4)) * f;
+    pos[1] = ((num / 4) - 2) *f;
+    pos[2] = 0;
+
+    Beam(Vector3f(pos));
     Drive(Vector3f(0,0,0));
 }
 
