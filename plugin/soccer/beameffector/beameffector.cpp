@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.6 2004/03/23 09:34:54 rollmark Exp $
+   $Id: beameffector.cpp,v 1.7 2004/06/17 13:25:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,12 @@
 #include "beameffector.h"
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/agentstate/agentstate.h>
+#include <cmath>
 
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
+using namespace std;
 
 BeamEffector::BeamEffector() : oxygen::Effector()
 {
@@ -62,6 +64,16 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
     if (mGameState->GetPlayMode() == PM_BeforeKickOff)
     {
         Vector3f pos = beamAction->GetPosition();
+
+        // reject nan or infinite numbers in the beam position
+        if (
+            (! isnormal(pos[0])) ||
+            (! isnormal(pos[1])) ||
+            (! isnormal(pos[2]))
+            )
+            {
+                return false;
+            }
 
         // an agent can only beam within it's own field half
         float minX = -mFieldLength/2 + mAgentRadius;
