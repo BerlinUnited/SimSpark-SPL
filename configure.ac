@@ -176,10 +176,10 @@ AC_CONFIG_FILES([Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile],
-	        [test -f lib/salt/salt-config && chmod a+x lib/salt/salt-config \
-		 test -f lib/zeitgeist/zeitgeist-config && chmod a+x lib/zeitgeist/zeitgeist-config \
-		 test -f lib/oxygen/oxygen-config && chmod a+x lib/oxygen/oxygen-config \
-		 test -f lib/kerosin/kerosin-config && chmod a+x lib/kerosin/kerosin-config \
-		 test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D \
+	        [test -f lib/salt/salt-config && chmod a+x lib/salt/salt-config && \
+		 test -f lib/zeitgeist/zeitgeist-config && chmod a+x lib/zeitgeist/zeitgeist-config && \
+		 test -f lib/oxygen/oxygen-config && chmod a+x lib/oxygen/oxygen-config && \
+		 test -f lib/kerosin/kerosin-config && chmod a+x lib/kerosin/kerosin-config && \
+		 test -f app/simulator/rcsoccersim3D && chmod +x app/simulator/rcsoccersim3D && \
                  test -f app/simulator/createagentdb.sh && chmod +x app/simulator/createagentdb.sh])
 AC_OUTPUT
