@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.9 2003/12/09 20:25:40 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.10 2003/12/10 10:52:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -193,8 +193,9 @@ GameControlServer::TmpGenerate(const BaseParser::TPredicate& pred)
 {
     if (mParser != 0)
     {
-        BaseParser::TPredicateList plist;
-        plist.push_back(pred);
+        shared_ptr<BaseParser::TPredicateList>
+            plist(new BaseParser::TPredicateList());
+        plist->push_back(pred);
         return mParser->Generate(plist);
     }
     return string();
