@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccercontrolaspect.cpp,v 1.1.2.3 2004/02/06 10:14:02 rollmark Exp $
+   $Id: soccercontrolaspect.cpp,v 1.1.2.4 2004/02/06 13:07:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -107,12 +107,6 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetRightGoalRecorder()
         }
 
     return node;
-}
-
-void SoccerControlAspect::GetSoccerVar(const std::string& name, float& value)
-{
-    static const string nSpace = "Soccer.";
-    GetCore()->GetScriptServer()->GetVariable(string(nSpace + name),value);
 }
 
 
