@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.3 2004/01/25 12:57:50 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.4 2004/01/27 09:07:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "sexpmonitor.h"
 #include <sstream>
 #include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
@@ -134,9 +135,46 @@ SexpMonitor::GetMonitorInfo()
 }
 
 string
+SexpMonitor::PutFloatParam(const string& name)
+{
+    float value;
+
+    string var = "Soccer."+name;
+
+    if (! GetCore()->GetScriptServer()->GetVariable(var,value))
+        {
+            return "";
+        }
+
+    stringstream ss;
+    ss << "(" << name << " " << value << ")";
+
+    return ss.str();
+}
+
+string
 SexpMonitor::GetMonitorHeaderInfo()
 {
-    return "";
+    stringstream ss;
+    ss << "(init ";
+
+    // field geometry parameter
+    ss << PutFloatParam("FieldLength");
+    ss << PutFloatParam("FieldWidth");
+    ss << PutFloatParam("FieldHeight");
+    ss << PutFloatParam("GoalWidth");
+    ss << PutFloatParam("GoalDepth");
+    ss << PutFloatParam("GoalHeight");
+    ss << PutFloatParam("BorderSize");
+
+    // agent parameter
+    ss << PutFloatParam("AgentMass");
+    ss << PutFloatParam("AgentRadius");
+    ss << PutFloatParam("AgentMaxSpeed");
+
+    ss << ")";
+
+    return ss.str();
 }
 
 
