@@ -1,12 +1,12 @@
-importBundle "bundle/filesystemstd"
+importBundle "filesystemstd"
 
 # mount a standard file system
 fileServer = get ('/sys/server/file');
 fileServer.mount ('FileSystemSTD', 'data/');
 
 def testSoundSystem
-	importBundle "bundle/soundsystemfmod"
-	importBundle "bundle/soundsystembass"
+	importBundle "soundsystemfmod"
+	importBundle "soundsystembass"
 	print "SoundServer Test\n"
 	print "Creating SoundServer\n"
 	soundServer = new ('kerosin/SoundServer', '/sys/server/sound');
