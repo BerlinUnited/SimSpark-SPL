@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.8 2004/05/06 09:33:48 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.9 2004/06/11 07:55:16 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -108,6 +108,17 @@ public:
         update all registered GameControlAspects below it. */
     void Update(float deltaTime);
 
+    /** This method is used to indicate that the simulation is finished.
+        The GameControlServer knows that the simulatio is finished if
+        one of the GameControlAspects below indicate that the simulation is
+        finished. The finished state is set during GameControlServer::Update().
+        \return true if the simulation should be stopped.
+    */
+    bool IsFinished() const;
+
+    /** This method is used to set the simulation into the 'finished' state. */
+    void Quit();
+
 protected:
     /** helper method that queries the SceneServer for the currently
         active Scene
@@ -126,6 +137,9 @@ protected:
     /** the name of the initial effector class of each new agent has
         to construct all remaining parts */
     std::string mCreateEffector;
+
+    /** flag if the simulation is over */
+    bool mExit;
 };
 
 DECLARE_CLASS(GameControlServer);
