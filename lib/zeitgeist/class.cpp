@@ -1,3 +1,4 @@
+#include "class.h"
 #include "leaf.h"
 #include "core.h"
 #include <iostream>
