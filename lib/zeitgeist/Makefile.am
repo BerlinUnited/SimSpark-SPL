@@ -1,7 +1,19 @@
-pkglib_LTLIBRARIES = libzeitgeist.la libzeitgeist_debug.la
+if DEBUG
+pkglib_LTLIBRARIES = libzeitgeist_debug.la
+libzeitgeist_debug_la_SOURCES = $(sources)
+libzeitgeist_debug_la_CXXFLAGS = -O -g -W -Wall
+else
+pkglib_LTLIBRARIES = libzeitgeist.la 
+libzeitgeist_la_SOURCES = $(sources)
+libzeitgeist_la_CXXFLAGS = -O2
+endif
+
 AM_CPPFLAGS = -I${top_srcdir}/lib
 
-libzeitgeist_la_SOURCES = \
+## define include directory local to the pkgincludedir
+libpkgincludedir = $(includedir)/@PACKAGE@/zeitgeist
+
+sources = \
 class.cpp \
 core.cpp \
 corecontext.cpp \
@@ -18,28 +30,12 @@ logserver/logserverstreambuf.cpp \
 scriptserver/scriptserver.cpp \
 scriptserver/scriptserver_c.cpp
 
-libzeitgeist_la_CXXFLAGS = -O2
+#telnetserver/telnetdaemon.cpp \
+#telnetserver/telnetserver.cpp \
+#telnetserver/telnetserver_c.cpp \
+#telnetserver/telnetsession.cpp
 
-libzeitgeist_debug_la_SOURCES = \
-class.cpp \
-core.cpp \
-corecontext.cpp \
-leaf.cpp \
-leaf_c.cpp \
-node.cpp \
-node_c.cpp \
-object.cpp \
-object_c.cpp \
-zeitgeist.cpp \
-logserver/logserver.cpp \
-logserver/logserver_c.cpp \
-logserver/logserverstreambuf.cpp \
-scriptserver/scriptserver.cpp \
-scriptserver/scriptserver_c.cpp
-
-libzeitgeist_debug_la_CXXFLAGS = -O -g
-
-nobase_pkginclude_HEADERS = \
+nobase_libpkginclude_HEADERS = \
 class.h \
 core.h \
 corecontext.h \
@@ -50,4 +46,8 @@ object_c.h \
 zeitgeist.h \
 logserver/logserver.h \
 logserver/logserverstreambuf.h \
-scriptserver/scriptserver.h 
+scriptserver/scriptserver.h
+
+#telnetserver/telnetdaemon.h \
+#telnetserver/telnetserver.h \
+#telnetserver/telnetsession.h
