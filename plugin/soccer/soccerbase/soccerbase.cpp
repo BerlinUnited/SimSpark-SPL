@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.1.2.3 2004/02/06 10:55:46 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.1.2.4 2004/02/06 14:49:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 using namespace boost;
 using namespace zeitgeist;
 using namespace oxygen;
+using namespace std;
 
 bool
 SoccerBase::GetSceneServer(const Leaf& base,
@@ -246,3 +247,26 @@ SoccerBase::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
     }
     return newPos;
 }
+
+string
+SoccerBase::PlayMode2Str(const TPlayMode mode)
+{
+    switch (mode)
+        {
+        case    PM_BeforeKickOff:
+            return STR_PM_BeforeKickOff;
+        case    PM_KickOff:
+            return STR_PM_KickOff;
+        case    PM_PlayOn:
+            return STR_PM_PlayOn;
+        case    PM_KickOff_Left:
+            return STR_PM_KickOff_Left;
+        case    PM_KickOff_Right:
+            return STR_PM_KickOff_Right;
+        case    PM_FirstHalfOver:
+            return STR_PM_FirstHalfOver;
+        default:
+            return STR_PM_Unknown;
+        };
+}
+
