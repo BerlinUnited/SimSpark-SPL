@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: planecollider_c.cpp,v 1.5 2004/02/21 15:30:44 fruit Exp $
+   $Id: planecollider_c.cpp,v 1.6 2004/02/26 21:14:06 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ FUNCTION(setParams)
         {
                 PlaneCollider *pc = static_cast<PlaneCollider*>(obj);
                 pc->SetParams(any_cast<float>(in[0]), any_cast<float>(in[1]), any_cast<float>(in[2]), any_cast<float>(in[3]));
+        }
+        else if (in.size() == 6)
+        {
+                PlaneCollider *pc = static_cast<PlaneCollider*>(obj);
+                pc->SetParams(salt::Vector3f(any_cast<float>(in[0]), any_cast<float>(in[1]), any_cast<float>(in[2])),
+                              salt::Vector3f(any_cast<float>(in[3]), any_cast<float>(in[4]), any_cast<float>(in[5])));
         }
 }
 

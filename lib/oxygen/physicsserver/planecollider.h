@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: planecollider.h,v 1.6 2004/02/12 14:07:23 fruit Exp $
+   $Id: planecollider.h,v 1.7 2004/02/26 21:14:06 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,9 @@ public:
 
     /** sets the parameters of the plane equation a*x+b*y+c*z = d */
     void SetParams(float a, float b, float c, float d);
+
+    /** set the parameters of the plane given a position and a normal vector */
+    void SetParams(const salt::Vector3f& pos, salt::Vector3f normal);
 
 protected:
     /** constructs a default plane with normal pointing up, going
