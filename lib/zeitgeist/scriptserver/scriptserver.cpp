@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.15 2004/04/08 07:18:55 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.16 2004/04/08 14:39:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,10 +86,9 @@ void getParameterList(VALUE args, ParameterList &params)
         }
 }
 
-VALUE selectObject(VALUE /*self*/, VALUE path)
+GCValue ScriptServer::GetZeitgeistObject(boost::shared_ptr<Leaf> leaf)
 {
-    shared_ptr<Leaf> leaf = gMyPrivateContext->Select(STR2CSTR(path));
-    VALUE v = Qnil;
+    GCValue v;
 
     if (leaf.get() != 0)
         {
@@ -99,6 +98,13 @@ VALUE selectObject(VALUE /*self*/, VALUE path)
         }
 
     return v;
+}
+
+
+VALUE selectObject(VALUE /*self*/, VALUE path)
+{
+    shared_ptr<Leaf> leaf = gMyPrivateContext->Select(STR2CSTR(path));
+    return ScriptServer::GetZeitgeistObject(leaf).Get();
 }
 
 VALUE selectCall(VALUE /*self*/, VALUE functionName, VALUE args)
@@ -159,16 +165,7 @@ VALUE newObject(VALUE /*self*/, VALUE className, VALUE pathStr)
 {
     shared_ptr<Leaf> leaf =
         gMyPrivateContext->New(STR2CSTR(className), STR2CSTR(pathStr));
-    VALUE v = Qnil;
-
-    if (leaf.get() != NULL)
-        {
-            stringstream s;
-            s << "ZeitgeistObject.new (" << (unsigned long) leaf.get() <<")";
-            v =  RbEvalStringWrap(s.str());
-        }
-
-    return v;
+    return ScriptServer::GetZeitgeistObject(leaf).Get();
 }
 
 VALUE deleteObject(VALUE /*self*/, VALUE name)
@@ -180,16 +177,7 @@ VALUE deleteObject(VALUE /*self*/, VALUE name)
 VALUE getObject(VALUE /*self*/, VALUE path)
 {
     shared_ptr<Leaf> leaf = gMyPrivateContext->Get(STR2CSTR(path));
-    VALUE v = Qnil;
-
-    if (leaf.get() != NULL)
-        {
-            stringstream s;
-            s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
-            v = RbEvalStringWrap(s.str());
-        }
-
-    return v;
+    return ScriptServer::GetZeitgeistObject(leaf).Get();
 }
 
 VALUE listObjects(VALUE /*self*/)
@@ -541,3 +529,4 @@ bool ScriptServer::RunInitScript(const string &fileName, const string &relPath,
 
     return ok;
 }
+

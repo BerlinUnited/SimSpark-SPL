@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.17 2004/04/08 07:18:55 rollmark Exp $
+   $Id: scriptserver.h,v 1.18 2004/04/08 14:39:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -128,6 +128,10 @@ public:
     /** returns the context, the ScriptServer operates in */
     boost::shared_ptr<CoreContext> GetContext() const;
 
+    /** constructs the ZeitgeistObject corresponding to a given
+        leaf */
+    static GCValue GetZeitgeistObject(boost::shared_ptr<Leaf> leaf);
+
 protected:
     /** initializes the ScriptServer and runs the default startup
         script 'sys/script/zeitgeist.rb', returning true on
@@ -147,11 +151,7 @@ protected:
     bool ParseVarName(const std::string& varName,
                       std::string& nameSpace, std::string& name);
 
-
-private:
-    ScriptServer(const ScriptServer& obj);
-    ScriptServer& operator=(const ScriptServer& obj);
-
+    /** returns the content of a variable*/
     GCValue GetVariable(const std::string &varName);
 
     /** private helper function */
@@ -167,11 +167,14 @@ private:
      */
     bool CreateDotDir(const std::string& dotDir);
 
+private:
+    ScriptServer(const ScriptServer& obj);
+    ScriptServer& operator=(const ScriptServer& obj);
     //
     // members
     //
-  public:
-  protected:
+public:
+protected:
     /** the name of the users dot directory, used by ::RunInitScript to search
      * for script files: ~/<mDotName>
      */
@@ -181,7 +184,7 @@ private:
      */
     std::string mRelPathPrefix;
 
-  private:
+private:
   };
 
 DECLARE_CLASS(ScriptServer);
