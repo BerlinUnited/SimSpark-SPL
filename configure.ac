@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d], 0.2.1, [sserver-admin@lists.sf.net])
+AC_INIT([rcssserver3d], 0.2.2, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([lib/salt/salt.h])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
@@ -204,7 +204,9 @@ AC_CONFIG_FILES([Makefile \
 		 app/rcssmonitor3d/kerosin/Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
-		 doc/Doxyfile],
+		 doc/Doxyfile \
+                 doc/devel/Makefile \
+		 doc/users/Makefile ],
 	        [test -f lib/salt/salt-config && chmod a+x lib/salt/salt-config && \
 		 test -f lib/zeitgeist/zeitgeist-config && chmod a+x lib/zeitgeist/zeitgeist-config && \
 		 test -f lib/oxygen/oxygen-config && chmod a+x lib/oxygen/oxygen-config && \
