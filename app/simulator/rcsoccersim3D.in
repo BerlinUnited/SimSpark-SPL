@@ -8,7 +8,7 @@ kill_server()
 
 if test -x ../agenttest/agenttest; then
     SIMULATOR="./rcssserver3D"
-    PARAM="--ipc_force_remove --agent_db_fn ./agentdb.list.local $*"
+    PARAM="--ipc_force_remove $*"
     MONITOR="../rcssmonitor3d/rcssmonitor3D" 
 else
     prefix=@prefix@
