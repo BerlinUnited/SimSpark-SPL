@@ -1,4 +1,5 @@
 importBundle "filesystemstd"
+importBundle "monitortest"
 
 #
 # Init
@@ -15,10 +16,16 @@ new ('kerosin/PhysicsServer', '/sys/server/physics');
 sceneServer = new ('kerosin/SceneServer', '/sys/server/scene');
 sceneServer.createScene('/usr/scene');
 
+# setup the MonitorServer and a simple MonitorSystem
+print "\nCreating MonitorServer\n";
+monitorServer = new('oxygen/MonitorServer', '/sys/server/monitor');
+monitorServer.registerMonitorSystem('MonitorTest');
+
 # setup the SpadesServer
-print "\nCreating SpadesServer\n\n";
+print "\nCreating SpadesServer\n";
 spadesServer = new ('oxygen/SpadesServer', '/sys/server/spades');
 spadesServer.init('oxygen/ParamReader');
+
 
 # 
 # Scene setup
