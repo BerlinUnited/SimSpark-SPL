@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.6 2004/04/05 14:51:37 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.7 2004/04/08 14:36:04 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <soccer/soccerbase/soccerbase.h>
-
+#include <iostream>
 using namespace zeitgeist;
 using namespace oxygen;
 using namespace boost;
@@ -155,6 +155,16 @@ VisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     {
         ParameterList& element = predicate.parameter.AddList();
         element.AddValue(i->mObj->GetPerceptName());
+	std::cout << "ddd " << i->mObj->GetPerceptName() << "\n";
+	std::cout << "hier drinnen\n";
+	
+        if(i->mObj->GetPerceptName() == "Player"){
+	    std::cout << "da drinnen\n";
+	    ParameterList player;
+	    player.AddValue(std::string("Team"));
+	    player.AddValue(std::string( i->mObj->GetPerceptName(ObjectState::PT_Player) ));
+	    element.AddValue(player);
+        }	
 
         if (!i->mObj->GetID().empty())
         {
