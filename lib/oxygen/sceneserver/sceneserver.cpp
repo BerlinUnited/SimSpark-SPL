@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.1 2003/08/29 14:12:56 fruit Exp $
+   $Id: sceneserver.cpp,v 1.2 2003/08/29 16:59:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,9 +29,7 @@
 #include "scene.h"
 #include "../physicsserver/world.h"
 #include "../physicsserver/space.h"
-#include "../openglserver/openglserver.h"
 #include "../controlaspect/controlaspect.h"
-#include "light.h"
 
 using namespace boost;
 using namespace kerosin;
