@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.7 2004/05/11 09:20:41 fruit Exp $
+   $Id: commserver.h,v 1.8 2004/06/06 10:51:06 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,11 +36,12 @@ public:
     virtual bool ReadMessage(std::string& msg);
     virtual boost::shared_ptr<oxygen::PredicateList> GetPredicates() const;
 
-    virtual void SendKickOffCmd();
+    virtual void SendKickOffCmd(EKickOff mode = eRandom);
     virtual void SendTrainerCmd(const std::string& cmd);
     virtual void SendPauseCmd();
     virtual void SendRunCmd();
     virtual void SendDisconnectCmd();
+    virtual void SendDropBallCmd();
     virtual void SendToWorldModel(const std::string& msg);
 
 protected:
