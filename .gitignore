@@ -42,8 +42,11 @@ doc/proposal/simulator3d.log
 lib/Makefile
 lib/Makefile.in
 lib/kerosin/.deps
+lib/kerosin/.libs
 lib/kerosin/Makefile
 lib/kerosin/Makefile.in
+lib/kerosin/libkerosin*.la
+lib/kerosin/libkerosin*.lo
 lib/kerosin/agentaspect/*.lo
 lib/kerosin/agentaspect/.deps
 lib/kerosin/agentaspect/.dirstamp
@@ -83,7 +86,7 @@ lib/oxygen/.deps
 lib/oxygen/.libs
 lib/oxygen/Makefile
 lib/oxygen/Makefile.in
-lib/oxygen/liboxygen.la
+lib/oxygen/liboxygen*.la
 lib/oxygen/agentaspect/*.lo
 lib/oxygen/agentaspect/.deps
 lib/oxygen/agentaspect/.dirstamp
@@ -102,6 +105,9 @@ lib/salt/Makefile.in
 lib/salt/Makefile
 lib/salt/*.la
 lib/salt/*.lo
+lib/salt/gcc/.deps
+lib/salt/gcc/.dirstamp
+lib/salt/gcc/*.lo
 lib/zeitgeist/.deps
 lib/zeitgeist/.libs
 lib/zeitgeist/Makefile
@@ -123,6 +129,8 @@ lib/zeitgeist/scriptserver/.dirstamp
 lib/zeitgeist/scriptserver/.libs
 lib/zeitgeist/scriptserver/*.la
 lib/zeitgeist/scriptserver/*.lo
+lib/zeitgeist/telnetserver/.deps
+lib/zeitgeist/telnetserver/.dirstamp
 utility/Makefile.in
 utility/Makefile
 utility/glextgen/Makefile
