@@ -25,8 +25,8 @@ monitorServer.registerMonitorSystem('MonitorTest');
 print "\nCreating SpadesServer\n";
 spadesServer = new ('oxygen/SpadesServer', '/sys/server/spades');
 
-# create some dummy variables to test with the ParamReader
-createVariable('Test.value', 'test');
+# set the time of a single simulation step
+Spades.TimePerStep = 0.01
 
 # 
 # Scene setup
