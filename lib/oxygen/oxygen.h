@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: oxygen.h,v 1.1 2003/09/05 12:07:05 fruit Exp $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: oxygen.h,v 1.2 2003/11/10 11:58:57 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,5 +47,37 @@
 #include "sceneserver/scene.h"
 #include "sceneserver/sceneserver.h"
 #include "sceneserver/transform.h"
+
+// control aspect
+#include <zeitgeist/zeitgeist.h>
+
+namespace oxygen
+{
+
+/** This is the main class, which initializes the Oxygen framework. It
+     registers all internal classes.
+
+ @TODO: kerosin automatically runs the default init script
+        'sys/script/default.rb' if it exists. Is there a script which
+        should be run by Oxygen?
+*/
+class Oxygen
+{
+public:
+    /** initializes the oxygen framework
+        \param zg is a reference to an already initialized zeitgeist framwork
+        in which the internal oxygen libraries get installed
+    */
+    Oxygen(zeitgeist::Zeitgeist& zg);
+    virtual ~Oxygen() {}
+
+private:
+    Oxygen(const Oxygen& obj);
+    Oxygen& operator=(const Oxygen& obj);
+
+};
+
+} //namespace oxygen
+
 
 #endif // OXYGEN_OXYGEN_H

@@ -88,6 +88,7 @@ lib/kerosin/soundserver/.dirstamp
 lib/kerosin/textureserver/*.lo
 lib/kerosin/textureserver/.deps
 lib/kerosin/textureserver/.dirstamp
+lib/oxygen/*.lo
 lib/oxygen/.deps
 lib/oxygen/.libs
 lib/oxygen/Makefile

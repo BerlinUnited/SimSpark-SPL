@@ -26,6 +26,7 @@ agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
+oxygen.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
 physicsserver/boxcollider.cpp \
@@ -67,6 +68,7 @@ agentaspect/effector.h \
 agentaspect/forceeffector.h \
 agentaspect/perceptor.h \
 controlaspect/controlaspect.h \
+oxygen.h \
 physicsserver/body.h \
 physicsserver/boxcollider.h \
 physicsserver/ccylindercollider.h \
