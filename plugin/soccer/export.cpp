@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1.2.1 2003/12/25 12:23:33 rollmark Exp $
+   $Id: export.cpp,v 1.1.2.1 2004/01/06 15:44:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,9 +20,12 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "createeffector.h"
 #include <zeitgeist/zeitgeist.h>
+#include "createeffector/createeffector.h"
+#include "initeffector/initeffector.h"
 
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(CreateEffector);
+        ZEITGEIST_EXPORT(InitEffector);
 ZEITGEIST_EXPORT_END()
+
