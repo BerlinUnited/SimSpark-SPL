@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.10 2004/04/22 17:17:39 rollmark Exp $
+   $Id: staticmesh.h,v 1.11 2004/04/27 10:03:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #ifndef KEROSIN_STATICMESH_H
 #define KEROSIN_STATICMESH_H
 
-#include <oxygen/sceneserver/basenode.h>
+#include <kerosin/renderserver/rendernode.h>
 #include <oxygen/geometryserver/geometryserver.h>
 
 namespace kerosin
@@ -30,11 +30,11 @@ namespace kerosin
 
 class Material;
 
-/** \class StaticMesh is a BaseNode that renders a TriMesh. The mesh
-    is imported using the GeometryServer and all referenced materials
-    are automatically loaded using the MaterialServer.
+/** \class StaticMesh is a Render that renders a TriMesh. The mesh is
+    imported using the GeometryServer and all referenced materials are
+    automatically loaded using the MaterialServer.
  */
-class StaticMesh : public oxygen::BaseNode
+class StaticMesh : public RenderNode
 {
     //
     // Types
@@ -70,7 +70,7 @@ public:
     /** sets the scale vector that is used to render the mesh */
     void SetScale(const salt::Vector3f& scale);
 
-protected:
+    /** renders the node */
     virtual void RenderInternal();
 
     //
