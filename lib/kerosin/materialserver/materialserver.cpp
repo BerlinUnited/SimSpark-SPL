@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: materialserver.cpp,v 1.5 2004/04/25 17:24:50 rollmark Exp $
+$Id: materialserver.cpp,v 1.6 2004/04/29 12:30:58 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -54,7 +54,8 @@ shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
 void MaterialServer::OnLink()
 {
     // create the default material
-    shared_ptr<MaterialSolid> defMat(new MaterialSolid());
+    shared_ptr<MaterialSolid> defMat = shared_dynamic_cast<MaterialSolid>
+        (GetCore()->New("kerosin/MaterialSolid"));
     defMat->SetName("default");
     AddChildReference(defMat);
 }
