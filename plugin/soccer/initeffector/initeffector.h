@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.h,v 1.1.2.2 2003/12/25 13:19:38 rollmark Exp $
+   $Id: initeffector.h,v 1.2.2.1 2004/02/10 21:44:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 #define INITEFFECTOR_H
 
 #include <oxygen/agentaspect/effector.h>
+
+class GameStateAspect;
 
 class InitEffector : public oxygen::Effector
 {
@@ -43,6 +45,19 @@ public:
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
 
+protected:
+    /** set up the reference GameStateAspect */
+    virtual void OnLink();
+
+    /** reset the reference to the GameStateAspect */
+    virtual void OnUnlink();
+
+protected:
+    /** reference to the GameStateAspect */
+    boost::shared_ptr<GameStateAspect> mGameState;
+
+    /** reference to the AgentAspect */
+    boost::shared_ptr<oxygen::AgentAspect> mAgentAspect;
 };
 
 DECLARE_CLASS(InitEffector);
