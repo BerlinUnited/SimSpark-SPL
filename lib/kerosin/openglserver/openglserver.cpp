@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.cpp,v 1.13 2004/04/17 10:53:39 rollmark Exp $
+   $Id: openglserver.cpp,v 1.14 2004/04/18 16:29:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -279,8 +279,8 @@ bool OpenGLServer::ConstructInternal()
 
     //      if (!mExtensionReg->Has_GL_ARB_vertex_program() || !mExtensionReg->Has_GL_ARB_fragment_program())
     //      {
-    GetLog()->Normal() << "WARNING: GL_ARB_vertex_program not supported. "
-                       << "disabling fancy lighting\n" << endl;
+    // GetLog()->Normal() << "WARNING: GL_ARB_vertex_program not supported. "
+    //                   << "disabling fancy lighting\n" << endl;
     mSupportsFancyLighting = false;
     //      }
 
