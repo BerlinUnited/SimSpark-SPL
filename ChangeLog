@@ -1,3 +1,43 @@
+2003-12-03  Markus Rollmann  <rollmark@uni-koblenz.de>
+	* lib/oxygen/Makefile.am: 
+	added SpadesActEvent files
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	initial version of Parse() added
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added Parse() method used to segment an action string from an
+	agent into a list of ActionObjects
+
+	* lib/oxygen/gamecontrolserver/actionobject.h:
+	intiial version of actionobject added
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	made GetGameControlServer() const
+	implemented parseAct()
+
+	* lib/oxygen/spadesserver/spadesserver.h:
+	made GetGameCotrolServer() const; it is called from parseAct(),
+	which is const
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	removed a compiler warning about an unused parameter
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	* lib/oxygen/spadesserver/spadescreatesenseevent.h:
+	made destructor is virtual
+	added explicit virtual declaration to member methods
+	removed a compile warning about unused parameters
+
+	* lib/oxygen/spadesserver/spadesactevent.cpp:
+	*lib/oxygen/spadesserver/spadesactevent.h:
+	initial version of SpadesActEvent added
+
+2003-12-02  Christoph Ringelstein <cringel@users.sourceforge.net>
+
+	* lib/kerosin/renderserver/renderserver.cpp, lib/kerosin/renderserver/renderserver.h:
+	Fixed typecasting bug in ConstructInternal by removing member mSceneServer.
+
 2003-12-02  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
