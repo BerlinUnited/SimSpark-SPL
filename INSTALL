@@ -72,6 +72,12 @@ Additionally required libraries for the full installation
   - get it at: http://www.freetype.org/
   - description: FreeType 2 is a software font engine
 
+* DevIL
+  - working versions: 1.6.5
+  - get it at: http://openil.sourceforge.net/
+  - description: Developer's Image Library (DevIL) is a library that
+  provides image loading capabilities,
+
 Optional useful libraries for the full installation
 ===================================================
 
