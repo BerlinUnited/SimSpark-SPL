@@ -1,3 +1,163 @@
+2004-02-10  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- implemented GetAgentBody and GetControlAspect
+
+	* plugin/soccer/soccerbase/soccerbase.h:
+	- added method GetControlAspect and GetAgentBody
+
+	* plugin/soccer/initeffector/initeffector.cpp: 
+	- some cleanup
+	- using the GameStateEffector to request an initial start position
+	for a fresh agent and moving it there; the agent are queued behind
+	their goal line
+
+	* plugin/soccer/initeffector/initeffector.h:
+	- added method OnLink and OnUnlink
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- setting up initial starting positins for the agents in the OnLink
+	method
+	- the RequestInitPosition method returns the next start position for
+	the given team, it is called from the InitEffector
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	- added method RequestInitPosition and OnLink
+	- added member mLeftInit and mRightInit
+
+	* app/simulator/rcssserver3D.rb:
+	- setting SoccerVariabler for the SoccerRuleAspect
+
+	* app/rcssmonitor3d/main.cpp: - updated due to playmode changes
+
+	* app/agenttest/worldmodel.cpp: - changes due to changed playmodes
+	- fixed a mapping error for the KickIn playmodes; this prevented the
+	agent to react properly in kickin situations
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- CheckTime checks if a half time completely passed and sets the play
+	mode accordingly
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- added method CheckTime
+	- added member mHalfTime
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- changes due to playmode changes and formatting cleanup
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp: - formatting changes
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	- added member mLastKickOff
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- updating time in all playmodes expcept beforekickoff and gameover
+	- changed kickoff to choose a team randomly in the first half and
+	to chose the other team in the second half
+
+	* plugin/soccer/soccertypes.h: 
+	- removed playmode PM_FIRSTHALFOVER
+	- added playmode PM_GAMEOVER
+
+	* app/rcssmonitor3d/main.cpp: 
+	- adapted to playmode changes
+
+	* app/agenttest/kicknrun.cpp:
+	- implemeted BehaveKickIn and BehaveKickOff to check if the our
+	team has to do a KickOff or KickIn. Behave methods are called
+	accordingly.
+
+	* app/agenttest/kicknrun.h:
+	- added method BehaveMyKickOff, BehaveTheirKickOff, BehaveKickIn,
+	BehaveMyKickIn and BehaveTheirKickIn
+
+	* app/agenttest/soccer.cpp:
+	- the Drive method stores the last driveVec in mDriveVec. If the
+	same driveVec is passed again, no drive command is sent to the
+	server
+
+	* app/agenttest/soccer.h: 
+	- added method GetDriveVec
+	- added member mDriveVec
+
+	* app/agenttest/worldmodel.cpp:
+	- adapted mPlayModeMap to soccertype changes
+	- some cleanup
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- better handling of KickIn and Goal situations; still rough edges
+	- after a the ball leaves the field, the playmode changes
+	immediately to KickIn, but the SoccerRuleAspect waits at least
+	mKickInPauseTime until it places the ball back on the field
+	- after a goal has happened the RuleAspect waits at least
+	mGoalPauseTime until it places the ball back in the middle of the
+	field and switches to KickOff
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- added method UpdateKickIn, UpdateGoal and MoveBall
+	- added member mGoalPauseTime, mKickInPauseTime and
+	mLastValidBallPos
+
+	* plugin/soccer/soccerbase/soccerbase.cpp: 
+	- implemented GetAgentState
+
+	* plugin/soccer/soccerbase/soccerbase.h:
+	- added second GetAgentState method accepting a transform node and
+	returning an AgentStateAspect below
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	- don't set the playmode directly, call GameStateAspect::KickOff
+	instead; the GameStateAspect in turn will give kick off to one of
+	the teams randomly
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- changed UpdateTime to advance the game time in every game mode
+	except BeforeKickOff and FirstHalfOver
+	- SetPlayMode records the time of a playmode change and prints a
+	diagnostic output
+	- implemented GetModeTime to return the time since the last
+	playmode change
+	- implemented GetLastModeChange to return the time of the last
+	playmode change
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	- added method KickOff, GetModeTime and GetLastModeChange
+	- added member mLastModeChange
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	- setting up a reference to the GameStateAspect
+	- keeping track of the time the last agent touched the ball
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h:
+	- changed signature of GetLastCollidingAgent to also return the
+	time of the collision
+	- added member mGameState and mLastAgentCollisionTime
+
+	* plugin/soccer/soccertypes.h:
+	- removed playmode PM_KickOff, added PM_KickOff_Left and
+	PM_KickOff_Right
+	- remove playmode PM_KickIn, added PM_KickIn_Left and
+	PM_KickIn_Right
+
+	* plugin/soccer/visionperceptor/visionperceptor_c.cpp:
+	- exported setSenseMyPos to ruby
+
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	- implemented SetSenseMyPos
+	- the agents own position is sensed only if mSenseMyPos is true
+
+	* plugin/soccer/visionperceptor/visionperceptor.h:
+	- added method SetSenseMyPos
+	- added member mSenseMyPos
+
+	* app/agenttest/agenttest.rb: 
+	- added setup script for agenttest
+
+	* app/agenttest/behavior.cpp, app/agenttest/behavior.h, app/agenttest/commserver.cpp, app/agenttest/commserver.h, app/agenttest/main.cpp, app/agenttest/worldmodel.cpp, app/agenttest/worldmodel.h:
+	more agenttest cleanup
+	- constructing the CommServer, WorldModel and the Behavior in the
+	init script
+
 2004-02-09  Oliver Obst  <fruit@robolog.org>
 
 	* app/simulator/: 
