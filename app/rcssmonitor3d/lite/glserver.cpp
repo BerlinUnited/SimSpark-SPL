@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.8 2004/06/13 13:27:47 fruit Exp $
+   $Id: glserver.cpp,v 1.9 2004/06/16 13:20:59 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -214,6 +214,18 @@ GLServer::DrawCircle(const salt::Vector3f& pos, float radius,
         double angle = i*2*M_PI/num_lines;
         glVertex3f(pos[0] + radius*cos(angle), pos[1] + radius*sin(angle), pos[2]);
     }
+    glEnd();
+    glPopMatrix();
+}
+void
+GLServer::DrawArbitraryLine(const salt::Vector3f& startPos, const salt::Vector3f& endPos)
+{
+    glPushMatrix();
+    glBegin(GL_LINES);
+
+    glVertex3f(startPos[0],startPos[1],startPos[2]);
+    glVertex3f(endPos[0], endPos[1],endPos[2]);
+
     glEnd();
     glPopMatrix();
 }

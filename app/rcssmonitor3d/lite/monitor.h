@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.6 2004/06/10 18:23:47 rollmark Exp $
+   $Id: monitor.h,v 1.7 2004/06/16 13:20:59 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,6 +91,9 @@ private:
     static const GLfloat sTeamColorRight[4];
     static const GLfloat sSphereDefaultColor[4];
     static const GLfloat sBallColor[4];
+    static const GLfloat sDebugColorCyan[4];
+    static const GLfloat sDebugColorPink[4];
+
     static const GLfloat sUnumColor[4];
     static const GLfloat sCenterRadius;
     static const GLfloat sGoalBoxLength;
@@ -115,6 +118,8 @@ private:
     void DrawFlag(GameState::EFlagType i, salt::Vector3f pos, int pass);
     void DrawPlayer(TTeamIndex side, int unum, const salt::Vector3f& pos, float size, int pass);
     void DrawBall(const salt::Vector3f& pos, float size, int pass);
+    void DrawDebug();
+    
     //! successor of a camera mode
     ECameraMode NextCameraMode(ECameraMode mode) const;
     //! successor of a kick off mode
@@ -149,6 +154,8 @@ private:
     bool mDrawUnums;
     //! flag if we want to draw the 2D overview
     bool mDrawOverview;
+    //! flag if we want to draw debug stuff
+    bool mDrawDebug;
     // connection parameters
     //! the server name
     std::string mServer;
@@ -162,7 +169,6 @@ private:
     //! default flag information (used for all flags not found in mFlagInfo)
     FlagInfo mDefaultFlagInfo;
 
-    //JAN
     //! flag for logserver
     bool mLogserver;
     //! flag for single step

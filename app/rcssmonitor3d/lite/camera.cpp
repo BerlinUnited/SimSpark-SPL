@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.3 2004/06/08 09:22:27 jamu Exp $
+   $Id: camera.cpp,v 1.4 2004/06/16 13:20:59 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,12 @@ Camera::GetLookAtPos()
   return mLookAtPos;
 }
 
+Vector3f
+Camera::GetUpVector()
+{
+  return mUpVector;
+}
+
 void
 Camera::SetCameraPos(const Vector3f& newCamPos)
 {
@@ -61,6 +67,8 @@ void
 Camera::SetLookAtPos(const Vector3f& lookAtPos)
 {
   mLookAtPos = lookAtPos;
+  SetUpVector(Vector3f(0,0,1));
+  
   RefreshCam();
 }
 
@@ -101,15 +109,27 @@ void
 Camera::MoveCamStrafeForward(float steps)
 {
   //move camera 'steps' meters into direction we are facing
-  Vector3f dir = steps*(mLookAtPos - mPosition).Normalized();
+  Vector3f dir = (mLookAtPos - mPosition) + mUpVector;
   //remove z-coord
   dir[2]=0.0f;
+  dir = steps*dir.Normalized();
   
   mPosition   += dir;
   mLookAtPos  += dir;
 }
 
-void Camera::MoveCamUp(float steps)
+
+void
+Camera::TurnCamDown()
+{
+    mLookAtPos = mPosition;
+    mLookAtPos[2] = 0;
+    mUpVector = Vector3f(0,1,0);
+}
+
+
+void
+Camera::MoveCamUp(float steps)
 {
     mPosition[2] += steps;
     mLookAtPos[2] += steps;

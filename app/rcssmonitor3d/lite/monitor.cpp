@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.13 2004/06/13 13:23:09 fruit Exp $
+   $Id: monitor.cpp,v 1.14 2004/06/16 13:20:59 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,7 +90,13 @@ const GLfloat
 Monitor::sTeamColorRight[4] = {0.2f, 0.2f, 1.0f, 1.0f};
 // ball color
 const GLfloat
-Monitor::sBallColor[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+Monitor::sBallColor[4] = {1.0f, 0.67f, 0.0f, 1.0f};
+// debug color1
+const GLfloat
+Monitor::sDebugColorCyan[4] = {0.0f, 0.8f, 0.8f, 0.3f};
+// debug color2
+const GLfloat
+Monitor::sDebugColorPink[4] = {1.0f, 0.0f, 1.0f, 0.5f};
 
 // radius of center circle
 const float
@@ -125,11 +131,11 @@ Monitor::Monitor(std::string rel_path_prefix)
     mCameraMode = eFree;
     mDrawUnums = true;
     mDrawOverview = true;
+    mDrawDebug = false;
     mServer = DEFAULT_HOST;
     mPort = DEFAULT_PORT;
     mSkip = 1;
 
-    //JAN
     mLogserver = false;
     mSingleStep = false;
     mAdvance = false;
@@ -295,6 +301,7 @@ Monitor::KeyBindings()
         "p          | pause the simulation/logplayer\n"
         "r          | unpause the simulation/logplayer\n"
         "n          | toggle display of uniform numbers\n"
+        "1          | toggle display of debug information\n"
         "2          | toggle display of two dimensional overview\n"
         "?          | display keybindings\n"
         "----------------------------------------------------\n"
@@ -304,6 +311,8 @@ Monitor::KeyBindings()
         "w/s        | move camera forward/back (zoomlike)\n"
         "a/d        | move camera left/right\n"
         "+/-        | move camera up/down\n"
+        "3          | move camera behind left goal\n"
+        "4          | move camera behind right goal\n"
         "Arrow keys | move camera\n"
         "----------------------------------------------------\n"
         "SIMULATION\n"
@@ -357,6 +366,7 @@ Monitor::InitInternal(int argc, char* argv[])
     mGLServer = GLServer(mWidth, mHeight, pos, lookAt, up, false);
     mGLServer.InitGL();
 
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
     return eOK;
 }
 
@@ -499,12 +509,11 @@ Monitor::DrawOverview()
 
     // field rect
     glColor4fv(sLineColor);
-    glBegin(GL_LINE_STRIP);
+    glBegin(GL_LINE_LOOP);
     glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
     glVertex3fv(Get2DPos(Vector3f(fl/2,-fw/2,0)).GetData());
     glVertex3fv(Get2DPos(Vector3f(fl/2,fw/2,0)).GetData());
     glVertex3fv(Get2DPos(Vector3f(-fl/2,fw/2,0)).GetData());
-    glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
     glEnd();
 
     // middle line
@@ -662,6 +671,20 @@ Monitor::DrawBall(const salt::Vector3f& pos, float size, int pass)
     }
 }
 
+// Example for DrawDebug
+void
+Monitor::DrawDebug()
+{
+    // this example method just draws the positive axes on the field 
+    glColor4fv(sDebugColorPink);
+    
+    mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(10,0,0));
+    mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,10,0));
+    mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,0,10));
+    return;
+}
+
+                                                       
 void
 Monitor::Display()
 {
@@ -778,6 +801,9 @@ Monitor::Display()
     // draw cached positions
     DrawScene(1);
 
+    if (mDrawDebug)
+        DrawDebug();
+    
     DrawStatusText();
 
     // draw 2D Elements
@@ -818,6 +844,9 @@ Monitor::MouseMotion(int x, int y)
 void
 Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
 {
+    float hfl = mGameState.GetFieldLength()/2;
+    Vector3f uv = mGLServer.GetUpVector();
+
     salt::Vector3f pos;
     switch (key) {
     case 'w':
@@ -848,13 +877,29 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         //move camera down
         mGLServer.MoveCamUp(-mCamDelta);
         break;
-    case 'n':
-        // toggle drawing of unums
-        mDrawUnums = !mDrawUnums;
+    case '1':
+        // toggle drawing of debug stuff
+        mDrawDebug  = !mDrawDebug;
         break;
     case '2':
         // toggle drawing of 2D overview
         mDrawOverview  = !mDrawOverview;
+        break;
+    case '3':
+        //Move cam behind left goal
+        mGLServer.SetCameraPos(Vector3f(-hfl-2,0,0.2));
+        mGLServer.SetLookAtPos(Vector3f(0,0,1));
+        mGLServer.SetUpVector(Vector3f(0,0,1));
+        break;
+    case '4':
+        //Move cam behind right goal
+        mGLServer.SetCameraPos(Vector3f(hfl+2,0,0.2));
+        mGLServer.SetLookAtPos(Vector3f(0,0,1));
+        mGLServer.SetUpVector(Vector3f(0,0,1));
+        break;
+    case 'n':
+        // toggle drawing of unums
+        mDrawUnums = !mDrawUnums;
         break;
     case 'q':
         // quit
@@ -881,7 +926,6 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         cout <<"--- Running Simulation" << endl;
         mCommServer->SendRunCmd();
         break;
-//JAN
     case 'm' :
         // toggle single step mode (aka _m_anual advance)
         mSingleStep = !mSingleStep;
@@ -959,7 +1003,6 @@ Monitor::Idle()
     {
         cout << "single step mode...exiting\n";
         return;
-    }
 
     if (mGameState.IsFinished())
     {

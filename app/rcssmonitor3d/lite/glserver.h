@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.6 2004/06/13 13:24:38 fruit Exp $
+   $Id: glserver.h,v 1.7 2004/06/16 13:20:59 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ public:
     void InitGL();
     void DrawGroundRectangle(salt::Vector3f pos, float szX, float szY,
                              float angleDeg, float height = 0.0f);
+    void DrawArbitraryLine(const salt::Vector3f& startPos, const salt::Vector3f& endPos);
     void DrawCircle(const salt::Vector3f& pos, float radius,
                     float start_angle = 0.0, float end_angle = 360.0);
     void ApplyCamera();
@@ -77,6 +78,19 @@ public:
         mCamPos = newPos;
         mCamera.SetCameraPos(newPos);
     }
+    inline salt::Vector3f GetUpVector()
+    {
+        return mUp;
+    }
+    inline void SetUpVector(const salt::Vector3f& newUp)
+    {
+        mUp = newUp;
+        mCamera.SetUpVector(newUp);
+    }
+    inline salt::Vector3f GetLookAtPos()
+    {
+        return mLookAt;
+    }
     inline void SetLookAtPos(const salt::Vector3f& newPos)
     {
         mLookAt = newPos;
@@ -85,27 +99,34 @@ public:
     inline void MoveCamForward(float steps)
     {
         mCamera.MoveCamForward(steps);
-        mCamPos = mCamera.GetLookAtPos();
-        mLookAt = mCamera.GetCameraPos();
+        mLookAt = mCamera.GetLookAtPos();
+        mCamPos = mCamera.GetCameraPos();
     }
     inline void MoveCamStrafeForward(float steps)
     {
         mCamera.MoveCamStrafeForward(steps);
-        mCamPos = mCamera.GetLookAtPos();
-        mLookAt = mCamera.GetCameraPos();
+        mLookAt = mCamera.GetLookAtPos();
+        mCamPos = mCamera.GetCameraPos();
     }
     inline void MoveCamStrafe(float steps)
     {
         mCamera.MoveCamStrafe(steps);
-        mCamPos = mCamera.GetLookAtPos();
-        mLookAt = mCamera.GetCameraPos();
+        mLookAt = mCamera.GetLookAtPos();
+        mCamPos = mCamera.GetCameraPos();
+    }
+    inline void TurnCamDown()
+    {
+        mCamera.TurnCamDown();
+        mLookAt = mCamera.GetLookAtPos();
+        mCamPos = mCamera.GetCameraPos();
+        mUp = mCamera.GetUpVector();
     }
 
     inline void MoveCamUp(float steps)
     {
         mCamera.MoveCamUp(steps);
-        mCamPos = mCamera.GetLookAtPos();
-        mLookAt = mCamera.GetCameraPos();
+        mLookAt = mCamera.GetLookAtPos();
+        mCamPos = mCamera.GetCameraPos();
     }
 
 protected:
