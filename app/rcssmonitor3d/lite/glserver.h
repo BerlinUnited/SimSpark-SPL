@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.3 2004/04/20 12:27:07 fruit Exp $
+   $Id: glserver.h,v 1.3.2.1 2004/05/05 15:39:07 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,8 @@ public:
                     float start_angle = 0.0, float end_angle = 360.0);
     void ApplyCamera();
     void DrawText(const char* text, salt::Vector2f pos);
-    void DrawText3D(const char* text, salt::Vector3f pos);
+    void DrawText3D(const char* text, const salt::Vector3f& pos);
+    void DrawText3D(const std::string& text, const salt::Vector3f& pos);
     void DrawTextPix(const char* text, salt::Vector2f pix, ETextAlign = eNONE);
     int GetTextHeight() const;
     int GetTextWidth(const char* text) const;
