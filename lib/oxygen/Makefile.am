@@ -49,6 +49,9 @@ agentaspect/perceptor.cpp \
 agentaspect/perceptor_c.cpp \
 controlaspect/controlaspect.cpp \
 controlaspect/controlaspect_c.cpp \
+gamecontrolserver/gamecontrolserver.cpp \
+gamecontrolserver/gamecontrolserver_c.cpp \
+gamecontrolserver/baseparser_c.cpp \
 oxygen.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
@@ -94,6 +97,8 @@ agentaspect/effector.h \
 agentaspect/forceeffector.h \
 agentaspect/perceptor.h \
 controlaspect/controlaspect.h \
+gamecontrolserver/gamecontrolserver.h \
+gamecontrolserver/baseparser.h \
 oxygen.h \
 physicsserver/body.h \
 physicsserver/boxcollider.h \
