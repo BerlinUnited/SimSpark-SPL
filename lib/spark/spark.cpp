@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.cpp,v 1.3 2004/04/25 17:04:23 rollmark Exp $
+   $Id: spark.cpp,v 1.4 2004/12/31 11:27:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,6 @@ Spark::~Spark()
     mLogServer.reset();
     mScriptServer.reset();
     mSceneServer.reset();
-    mFPSController.reset();
     mSimulationServer.reset();
 }
 

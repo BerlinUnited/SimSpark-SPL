@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.h,v 1.3 2004/04/25 17:04:23 rollmark Exp $
+   $Id: spark.h,v 1.4 2004/12/31 11:27:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,7 +84,6 @@ protected:
     boost::shared_ptr<zeitgeist::LogServer> mLogServer;
     boost::shared_ptr<zeitgeist::ScriptServer> mScriptServer;
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
-    boost::shared_ptr<oxygen::FPSController> mFPSController;
     boost::shared_ptr<oxygen::SimulationServer> mSimulationServer;
 
     zeitgeist::Zeitgeist mZeitgeist;
