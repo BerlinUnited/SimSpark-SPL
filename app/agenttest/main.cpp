@@ -3,6 +3,10 @@
 // writes to fd 4. A corresponding agent DB (agentdb.list, entry
 // 'default') exists in the spadestest directory.
 
+#include <zeitgeist/zeitgeist.h>
+#include <oxygen/oxygen.h>
+#include <sstream>
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,7 +14,11 @@
 #include <netinet/in.h>
 #include <sys/time.h>
 
+using namespace zeitgeist;
 using namespace std;
+using namespace boost;
+using namespace oxygen;
+using namespace salt;
 
 // the receive buffer of the agent
 static char buffer[4096];
@@ -18,15 +26,16 @@ static char buffer[4096];
 // pointer to the payload received in the buffer
 static char* msg_data = &buffer[sizeof(long)];
 
-void
-log(const char* out)
+// parser instance
+static shared_ptr<BaseParser> parser;
+
+void Log(const char* out)
 {
   printf(out);
   fflush(NULL);
 }
 
-int
-getInput()
+int GetInput()
 {
   ssize_t sz = read(3, buffer, sizeof(buffer));
 
@@ -45,8 +54,7 @@ getInput()
   return len;
 }
 
-void
-putOutput(const char* out)
+void PutOutput(const char* out)
 {
   strcpy(msg_data, out);
   unsigned int len = strlen(out);
@@ -55,8 +63,147 @@ putOutput(const char* out)
   write(4, buffer, len + sizeof(netlen));
 }
 
-void
-ProcessSensation()
+// --------------------
+
+void CreateAgent()
+{
+  // use the create effector to setup the Sensors and Effectors
+  Log(msg_data);
+  Log("\n");
+  Log("creating agent\n");
+  PutOutput("A(create)");
+}
+
+void InitAgent()
+{
+  Log(msg_data);
+  Log("\n");
+  Log("sending init command\n");
+  PutOutput("A(init (unum 8) (teamname RoboLog))");
+}
+
+void RandomBehave(int numSensation)
+{
+  static bool back = false;
+
+  Log("received another sensation ");
+  Log(msg_data);
+
+  if (numSensation % 100 == 0) back = !back;
+
+  Log("using dash effector\n ");
+  if (back)
+    {
+      if (numSensation % 10 == 0)
+        PutOutput("A(dash 0 300 0)");
+      else
+        PutOutput("A(dash -50 -10 -50)");
+    } else {
+      if (numSensation % 10 == 0)
+        PutOutput("A(dash 0 300 0)");
+      else
+        PutOutput("A(dash 50 -10 50)");
+    }
+}
+
+bool GetObjectPos(const Predicate& predicate, const string& name, Vector3f& pos)
+{
+  // find the PerfectVision data about the object
+  Predicate::Iterator objIter(predicate);
+
+  // advance to the section about object 'name'
+  if (! predicate.FindParameter(objIter,name))
+    {
+      return false;
+    }
+
+  // advance to the 'pos' entry in the object's section
+  if (! predicate.FindParameter(objIter,"pos"))
+    {
+      return false;
+    }
+
+  // read the position vector
+  if (! predicate.GetValue(objIter,pos))
+    {
+      return false;
+    }
+
+  return true;
+}
+
+void Behave(int /*numSensation*/)
+{
+  shared_ptr<Predicate::TList> predicates =
+    parser->Parse(msg_data);
+
+  Log("received sensation ");
+  Log(msg_data);
+  Log("\n");
+
+  for (
+       Predicate::TList::const_iterator iter = predicates->begin();
+       iter != predicates->end();
+       ++iter
+       )
+    {
+      const Predicate& predicate = (*iter);
+
+      // check for the PerfectVision perceptor
+      if (predicate.name != "PerfectVision")
+        {
+          Log ("skipped ");
+          Log (predicate.name.c_str());
+          Log("\n");
+          continue;
+        }
+
+      Log("PerfectVision\n");
+
+      Vector3f ballVec;
+      if (! GetObjectPos(predicate, "Ball", ballVec))
+        {
+          return;
+        }
+
+      const float dist = ballVec.Length();
+
+      static char buffer[512];
+      sprintf(buffer,"******** ballVec %.2f %.2f %.2f, l= %.2f\n",ballVec[0],ballVec[1],ballVec[2],dist);
+      Log(buffer);
+
+      if (dist < 2)
+        {
+          // kick the ball
+          Log("Kicking \n");
+          PutOutput("A(kick down 20000)");
+        } else
+          {
+            // seek the ball
+            if (dist > 1)
+              {
+                ballVec *= 20;
+              } else
+                {
+                  ballVec *= 5;
+                }
+
+            stringstream ss;
+            ss << "A(dash"
+               << " " << ballVec[0]
+               << " " << ballVec[1]
+               << "  " << ballVec[2]
+               << ")";
+
+            PutOutput(ss.str().c_str());
+          }
+    }
+}
+
+// --------------------
+
+
+void ProcessSensation()
 {
   // Stime time data
 
@@ -71,64 +218,31 @@ ProcessSensation()
   // the world model. The agent can reply with act messages, and must
   // finish with a done thinking message.
 
-  // 'A'- action
-  // (init (teamname RoboLog) (unum 4711))
-
-
   static int numSensation = 0;
-  static bool back = false;
 
   switch (numSensation)
     {
     case 0:
-      // this is the first received sensation. use the create effector
-      // to setup the Sensors and Effectors
-      log ("received first sensation ");
-      log(msg_data);
-      log("\n");
-      log("creating agent\n");
-      putOutput("A(create)");
+      Log ("received first sensation ");
+      CreateAgent();
       break;
 
     case 1:
-      log("received second sensation ");
-      log(msg_data);
-      log("\n");
-      log("sending init command\n");
-      putOutput("A(init (unum 8) (teamname RoboLog))");
-
-      numSensation +=  (100.0*rand()/(RAND_MAX+1.0));
+      Log("received second sensation ");
+      InitAgent();
       break;
 
     default:
-      log("received another sensation ");
-      log(msg_data);
-
-      if (numSensation % 100 == 0) back = !back;
-
-      log("using force effector\n ");
-      if (back)
-      {
-          if (numSensation % 10 == 0)
-              putOutput("A(force 0 300 0)");
-          else
-              putOutput("A(force -50 -10 -50)");
-      } else {
-          if (numSensation % 10 == 0)
-              putOutput("A(force 0 300 0)");
-          else
-              putOutput("A(force 50 -10 50)");
-      }
+      Behave(numSensation);
     }
 
-  log("writing done thinking message\n");
-  putOutput("D");
+  Log("writing done thinking message\n");
+  PutOutput("D");
 
    ++numSensation;
 }
 
-void
-ProcessInitMessage()
+void ProcessInitMessage()
 {
   // Ddata
 
@@ -139,16 +253,15 @@ ProcessInitMessage()
   // message should be sent once the initialization data has been
   // processed and all other startup is complete.
 
-  log("received init message 'D'\n");
+  Log("received init message 'D'\n");
 
   // init here
 
-  log("writing init done message\n");
-  putOutput("I");
+  Log("writing init done message\n");
+  PutOutput("I");
 }
 
-void
-ProcessThinkTimeMessage()
+void ProcessThinkTimeMessage()
 {
   // Ktime
 
@@ -156,18 +269,33 @@ ProcessThinkTimeMessage()
   // thinking time was used for the last thinking cycle. These are
   // only sent if send agent think times is on.
 
-  log ("received a think time message ");
-  log (msg_data);
-  log ("\n");
+  Log ("received a think time message ");
+  Log (msg_data);
+  Log ("\n");
 
-  log("writing done thinking message\n");
-  putOutput("D");
+  Log("writing done thinking message\n");
+  PutOutput("D");
 }
 
-int
-main(int /*argc*/, const char *const */*argv*/)
+int main(int /*argc*/, const char *const */*argv*/)
 {
-  log("AgentTest started\n");
+  //init zeitgeist and oxygen
+  Zeitgeist zg("." PACKAGE_NAME);
+  Oxygen oygen(zg);
+
+  // init the s-expression parser
+  if (! zg.GetCore()->ImportBundle("sexpparser"))
+    {
+      return 1;
+    }
+
+  parser = shared_dynamic_cast<BaseParser>(zg.GetCore()->New("SexpParser"));
+  if (parser.get() == 0)
+    {
+      Log("cannot create SexpParser");
+    }
+
+  Log("AgentTest started\n");
 
   timeval tv;
   gettimeofday(&tv, 0);
@@ -180,7 +308,7 @@ main(int /*argc*/, const char *const */*argv*/)
   // 'initialization done' message
   while (true)
     {
-      if (getInput())
+      if (GetInput())
         {
           switch(msg_data[0])
             {
@@ -197,9 +325,9 @@ main(int /*argc*/, const char *const */*argv*/)
               break;
 
             default:
-              log("received unknown data: ");
-              log(msg_data);
-              log("\n");
+              Log("received unknown data: ");
+              Log(msg_data);
+              Log("\n");
               break;
             }
         }
