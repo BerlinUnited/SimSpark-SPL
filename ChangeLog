@@ -1,3 +1,31 @@
+2002-08-13  Oliver Obst  <fruit@robolog.org>
+
+	
+	* ./configure.in
+	* ./pre-make
+	* ./doc/Makefile.am
+	* ./doc/proposal/Makefile.am
+	* ./utility/Makefile.am
+	+ some other files:
+	Added initial files for automake/autoconf support
+
+	* ./utility/console/console.h
+	* ./utility/console/console.cc
+	* ./utility/console/Makefile.am
+	Added initial stuff for a console with console variables
+	(the variables will keep the server configuration). Needs still a
+	lot of work.
+
+	* ./utility/forwarder/Makefile.am
+	* ./utility/forwarder/forwarder.h
+	Added Makefile.am to build a convenience library from the
+	Forwarder. This library will not be installed.
+	
+	* ./utility/classserver/Makefile.am
+	Added Makefile.am to build a dynamic libtool library from the
+	ClassServer. libclassserver will be installed in the pkglib dir
+	($exec_prefix/rcssserver3d/).
+
 2002-08-12  Oliver Obst  <fruit@robolog.org>
 
 	* ./utility/classserver/classserver.h

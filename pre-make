@@ -1,0 +1,9 @@
+
+aclocal
+autoheader
+automake -a
+libtoolize --force
+aclocal
+autoconf
+automake
+

@@ -1,0 +1,43 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT([rcssserver3D],[0.1],[sserver-bugs@sf.net])
+AC_CONFIG_SRCDIR([utility/forwarder/forwarderstreambuf.h])
+AC_CONFIG_AUX_DIR(config.aux)
+AM_INIT_AUTOMAKE([gnu subdir-objects])
+AM_CONFIG_HEADER([config.h])
+
+AC_LANG(C++)
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_CXX
+# the ClassServer probably wants to dlopen other libraries later on
+AC_LIBTOOL_DLOPEN
+# use libtool for linking
+AC_PROG_LIBTOOL
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_HEADER_STDC
+## originally in check_header: stdlib.h string.h unistd.h 
+## but do we really need this?
+AC_CHECK_HEADERS([streambuf])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_STRUCT_TM
+
+# Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_MALLOC
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([memmove memset strrchr])
+
+AC_CONFIG_FILES([Makefile \
+	         doc/Makefile \
+		 doc/proposal/Makefile \
+		 utility/Makefile \
+		 utility/classserver/Makefile \
+		 utility/console/Makefile \
+		 utility/forwarder/Makefile])
+AC_OUTPUT

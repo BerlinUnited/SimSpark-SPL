@@ -1,0 +1,1 @@
+SUBDIRS = classserver forwarder
