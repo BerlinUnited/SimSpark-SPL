@@ -1,3 +1,114 @@
+2002-10-07  Oliver Obst  <fruit@robolog.org>
+
+	* ./configure.in
+	Added checks for Perl and dot (for doxygen), and added checks
+	for ODE.
+
+	* ./Makefile.am
+	* ./doc/Makefile.am
+	Added a target to build the doxygen documentation
+	("make doc" from the top level).
+
+	* ./simulator/basenode.cc
+	* ./simulator/basenode.h
+	Added the base node type for the entity tree.
+	
+	* ./simulator/dirnode.cc
+	* ./simulator/dirnode.h
+	Added a node type that can have subnodes.
+	
+	* ./simulator/entitytree.cc
+	* ./simulator/entitytree.h
+	Added an interface to the entity tree (a singleton)
+
+	* ./simulator/example.cc
+	* ./simulator/simulator.cc
+	* ./simulator/simulator.h
+	Extended the example.
+
+	* ./simulator/textures/ground.ppm
+	* ./simulator/textures/sky.ppm	
+	* ./simulator/textures/wood.ppm
+	Added the (unfortunately necessary) textures for the ODE
+	libdrawstuff sample output.
+
+	* ./simulator/objects/bodynode.cc
+	* ./simulator/objects/bodynode.h
+	Entity class for an ODE body.
+	
+	* ./simulator/objects/geometrynode.cc
+	* ./simulator/objects/geometrynode.h
+	Base class entity for an ODE geometry.
+	
+	* ./simulator/objects/planenode.cc
+	* ./simulator/objects/planenode.h
+	Entity class for an ODE plane.
+	
+	* ./simulator/objects/spherenode.cc
+	* ./simulator/objects/spherenode.h
+	Entity class for an ODE sphere.
+	
+	* ./simulator/objects/worldnode.cc
+	* ./simulator/objects/worldnode.h	
+	Entity class for an ODE world (a node containing a world, 
+	a space and possibly some subnodes).
+
+	* ./simulator/nodecreator/Makefile.am
+	Makefile.am for a nodecreator convenience library.
+
+	* ./simulator/nodecreator/nodecreator.cc
+	* ./simulator/nodecreator/nodecreator.h
+	Base type for all creator classes. A node creator is  
+	basically an interface to an object that can create nodes 
+	in the entity graph. 
+
+	* ./simulator/nodecreator/nodecommands.cc
+	* ./simulator/nodecreator/nodecommands.h
+	Register new creator types to the classserver.
+	
+	* ./simulator/nodecreator/dircreator.cc
+	* ./simulator/nodecreator/dircreator.h
+	Creator to create directory type nodes.
+	
+	* ./simulator/nodecreator/planecreator.cc
+	* ./simulator/nodecreator/planecreator.h
+	Creator to create plane (ODE) nodes.
+	
+	* ./simulator/nodecreator/spherecreator.cc
+	* ./simulator/nodecreator/spherecreator.h
+	Creator to create sphere (ODE) nodes.
+
+	* ./simulator/nodecreator/worldcreator.cc
+	* ./simulator/nodecreator/worldcreator.h
+	Creator to create ODE world nodes.	
+
+	* ./utility/console/Makefile.am
+	Removed the sample program, because there are mutual dependencies 
+	between the simulator and the console now. 'example' was meant to
+	be running without the simulator, but this does not work for now. 
+
+	* ./utility/console/consolesettings.h
+	Added a missing 'const'
+
+	* ./utility/console/commands/commandserver.h
+	* ./utility/console/commands/commandserver.cc
+	Added 'create', 'listnodes' and 'selectnode' to the commandserver.
+	
+	* ./utility/console/commands/concreate.h
+	* ./utility/console/commands/concreate.cc	
+	Added a command to add entities to the entity graph.
+
+	* ./utility/console/commands/conlistnodes.h
+	* ./utility/console/commands/conlistnodes.cc
+	Added a command to list the current node.
+
+	* ./utility/console/commands/conselectnode.h
+	* ./utility/console/commands/conselectnode.cc
+	Added a command to select nodes within the entity tree.
+
+	* ./utility/console/variables/convarstate.h
+	Removed superfluous include line
+
 2002-09-26  Oliver Obst  <fruit@robolog.org>
 
 	* ./simulator/Makefile.am 

@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                           worldcreator.h
+    class for objects that create world nodes
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 05 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,35 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#ifndef RCSS_NODECREATOR_WORLDCREATOR_H
+#define RCSS_NODECREATOR_WORLDCREATOR_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <ode/ode.h>
+#include "nodecreator.h"
 
 namespace rcss
-{ //} start rcss namespace
+{ 
+    namespace EntityTree
+    { 
+        class BaseNode;
+    }
+    namespace NodeCreator
+    {
+            
+#if 0   // only for indenting
+    }}  
+#endif
 
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+class WorldCreator : public NodeCreator
 {
-public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    EntityTree::BaseNode* create(const ConVar::ConVars& parameter);
 
 };
 
-} // end namespace
+    }  // namespace
+}  // namespace
 
-#endif                          // RCSS_SIMULATOR_H
+#endif

@@ -28,9 +28,6 @@
 #include <map>
 
 /*! \class CommandServer
-  $Id: commandserver.h,v 1.1 2002/08/21 08:41:06 fruit Exp $
-
-    CommandServer
 
     This class provides a pool of Commands.
 
@@ -47,6 +44,8 @@
     Koegler <koegler@uni-koblenz.de>, Markus Rollmann
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
+
+  $Id: commandserver.h,v 1.2 2002/10/07 15:57:56 fruit Exp $
 */
 class CommandServer
 {

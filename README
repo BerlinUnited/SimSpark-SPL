@@ -1,0 +1,10 @@
+To compile and run rcssserver3D, you need ode installed on your system
+(see http://www.q12.org/ode/ode.html).
+
+Additionally, the drawstuff stuff from ODE is used for debugging purposes. 
+After installing ODE simply copy the ode-0.03/include/drawstuff/ and 
+ode-0.03/lib/librawstuff.a to suitable places, e.g.
+
+       include/drawstuff  --> /usr/local/include/drawstuff
+       lib/libdrawstuff.a --> /usr/local/lib/libdrawstuff.a
+

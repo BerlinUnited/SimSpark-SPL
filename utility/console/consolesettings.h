@@ -65,9 +65,6 @@ static const int CS_CALL_BACK_ERROR = 1;
 static const int CS_CALL_BACK_DEBUG = 2;
 
 /*! \class ConsoleSettings
-  $Id: consolesettings.h,v 1.1 2002/08/21 14:11:17 fruit Exp $
-
-    ConsoleSettings
 
     Contains all variables which customize the console behaviour.
     These variables are stored as ConVars and can be changed in the
@@ -89,6 +86,8 @@ static const int CS_CALL_BACK_DEBUG = 2;
     Koegler <koegler@uni-koblenz.de>, Markus Rollmann
     <rollmark@uni-koblenz.de>, Alexander Fuchs <alexf@uni-koblenz.de>,
     et.al.
+
+    $Id: consolesettings.h,v 1.2 2002/10/07 15:57:56 fruit Exp $
 */
 class ConsoleSettings
 {
@@ -268,7 +267,7 @@ protected:
         method has to be executed on the callback.
     */
     typedef void (ConsoleSettings::*CallBackFunction)
-        (const std::ostream* stream);
+        (const std::ostream* stream) const;
 
     typedef std::map < int, CallBackFunction > CallBackMap;
     CallBackMap M_callback_map;

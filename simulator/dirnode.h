@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                             dirnode.h
+    containment node for the entity graph
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Sep 30 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,54 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#ifndef RCSS_ENTITYGRAPH_DIRNODE_H
+#define RCSS_ENTITYGRAPH_DIRNODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <ode/ode.h>
+#include "basenode.h"
+
+#include <list>
+#include <string>
 
 namespace rcss
-{ //} start rcss namespace
+{ 
+    namespace EntityTree
+    { 
+#if 0 // fix xemacs indent
+}}
+#endif
 
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+class DirNode : public BaseNode
 {
 public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    DirNode(const std::string& name = "<unknown>",
+            BaseNode* parent = 0);
+    ~DirNode();
 
+    std::string getPath() const;
+
+    void registerChild(BaseNode* child);
+    void unregisterChild(BaseNode* child);
+    bool hasChild(const BaseNode* child) const;
+
+    BaseNode* getChild(const std::string& name) const;
+
+    
+    void leafNames(std::set<std::string>& names) const;
+
+protected:
+    DirNode(NodeType node_type, 
+            const std::string& name = "<unknown>",
+            BaseNode* parent = 0);
+
+    std::list<BaseNode*> M_children;        
+        
 };
 
-} // end namespace
+    } // namespace 
+} // namespace
 
-#endif                          // RCSS_SIMULATOR_H
+#endif

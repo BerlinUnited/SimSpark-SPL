@@ -23,7 +23,7 @@
 using namespace std;
 using namespace Utility;
 
-static Forwarder Utility::smux(1024);
+Forwarder Utility::smux(1024);
 
 Forwarder::Forwarder(unsigned int size) :
 ostream(new ForwarderStreamBuf(size))

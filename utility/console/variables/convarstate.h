@@ -24,17 +24,13 @@
 #include <config.h>
 #endif
 
-#include <vector.h>
-
 #include <vector3.h>
 
 #include "convarattributes.h"
 #include "convar.h"
 
 /*! \class ConVarState
- $Id: convarstate.h,v 1.3 2002/08/21 08:18:40 fruit Exp $
 
-    ConVarState
     The base class of the console variable types.  It contains the
     attributes of the variable, a subclass has to define its type and
     its content.
@@ -55,6 +51,8 @@
     Alexander Fuchs <alexf@uni-koblenz.de>,
     Marco Koegler <koegler@uni-koblenz.de>, 
     Marcus Rollmann <rollmark@uni-koblenz.de>, et.al.
+
+    $Id: convarstate.h,v 1.4 2002/10/07 15:57:56 fruit Exp $
 */
 
 class ConVarState

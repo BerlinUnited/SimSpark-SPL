@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                           planenode.cc
+    node for a plane within the entity graph
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 02 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,24 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#include "planenode.h"
+#include "worldnode.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+using namespace rcss::EntityTree;
+using namespace std;
 
-#include <ode/ode.h>
-
-namespace rcss
-{ //} start rcss namespace
-
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+PlaneNode::PlaneNode(WorldNode& world_node,
+                     dReal a, dReal b, dReal c, dReal d,
+                     const std::string& name, BaseNode* parent)
+    : GeometryNode(world_node,name,parent)
 {
-public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    M_geometry_id = dCreatePlane(world_node.getSpace(),a,b,c,d);
+}
 
-};
-
-} // end namespace
-
-#endif                          // RCSS_SIMULATOR_H
+PlaneNode::PlaneNode(WorldNode& world_node,
+                     dReal v[4],
+                     const std::string& name, BaseNode* parent)
+    : GeometryNode(world_node,name,parent)
+{
+    M_geometry_id = dCreatePlane(world_node.getSpace(),v[0],v[1],v[2],v[3]);
+}

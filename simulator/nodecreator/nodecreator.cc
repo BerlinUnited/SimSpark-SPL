@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                             nodecreator.h
+    abstract base class for objects that create entity graph nodes
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 02 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,28 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#include "nodecreator.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <consoleparser.h>
 
-#include <ode/ode.h>
+using namespace rcss::EntityTree;
+using namespace rcss::NodeCreator;
+using namespace std;
 
-namespace rcss
-{ //} start rcss namespace
-
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+BaseNode* 
+NodeCreator::create(const string& parameter)
 {
-public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    // try to parse the parameters into a convar list
+    ConsoleParser parser;
+    pair<bool, ConsoleParser::StatementList> result = parser.scan(parameter);
 
-};
+    if (!result.first) return 0;
+	
+    // try to create the entity node using the parsed convars
+    BaseNode *node = create(result.second.front());
+	
+    // free the parameter list
+    ConsoleParser::deleteStatements(result.second);
 
-} // end namespace
-
-#endif                          // RCSS_SIMULATOR_H
+    return node;
+}

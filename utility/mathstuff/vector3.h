@@ -29,7 +29,7 @@
 #include "mathstuff.h"
 
 /*! Vector3 - Vector Math Classes
-  $Id: vector3.h,v 1.1 2002/08/14 13:28:31 fruit Exp $
+  $Id: vector3.h,v 1.2 2002/10/07 15:57:56 fruit Exp $
 
     This header implements some useful vector math classes. Functions
     are inlined for efficiency. Operators are overloaded for usability.
@@ -132,7 +132,7 @@ public:
     inline operator const TFloat*() const
     { return (const TFloat*)_v; }
     void Dump()    
-    { cout << _v[0] << " " << _v[1] << _v[2] << "\n"; }
+    { std::cout << _v[0] << " " << _v[1] << _v[2] << "\n"; }
 };
 
 // Vector3 operators

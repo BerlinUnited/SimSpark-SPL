@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                           spherenode.h
+    node for a sphere within the entity graph
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 02 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,16 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#include "spherenode.h"
+#include "worldnode.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+using namespace rcss::EntityTree;
+using namespace std;
 
-#include <ode/ode.h>
-
-namespace rcss
-{ //} start rcss namespace
-
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+SphereNode::SphereNode(WorldNode& world_node, dReal radius,
+                       const std::string& name, BaseNode* parent)
+    : GeometryNode(world_node, name, parent)
 {
-public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
-
-};
-
-} // end namespace
-
-#endif                          // RCSS_SIMULATOR_H
+    M_geometry_id = dCreateSphere(world_node.getSpace(),radius);
+    dGeomSetPosition(M_geometry_id, 0, 0, 0);
+}

@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                             bodynode.cc
+    node for a rigid body within the entity graph
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Sep 27 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,26 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#include "bodynode.h"
+#include "worldnode.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+using namespace rcss::EntityTree;
+using namespace std;
 
-#include <ode/ode.h>
-
-namespace rcss
-{ //} start rcss namespace
-
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+BodyNode::BodyNode(WorldNode& world_node, const std::string& name,
+                   BaseNode* parent)
+    : BaseNode(S_CONTAINER, name, parent)
 {
-public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    dBodyCreate(world_node.getWorld());
+}
 
-};
+BodyNode::~BodyNode()
+{
+    dBodyDestroy(M_body_id);
+}
 
-} // end namespace
-
-#endif                          // RCSS_SIMULATOR_H
+dBodyID
+BodyNode::getID()
+{
+    return M_body_id;
+}

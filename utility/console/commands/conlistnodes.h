@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                           concreate.h
+    console command to create new nodes in the entity graph
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 03 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,34 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#ifndef UTILITY_CONLISTNODES_H
+#define UTILITY_CONLISTNODES_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <ode/ode.h>
+#include "concommand.h"
 
 namespace rcss
-{ //} start rcss namespace
+{
+    namespace EntityTree
+    {
+        class BaseNode;
+    }
+}
 
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+class ConListnodes : public ConCommand
 {
 public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    ConListnodes();
 
+protected:
+    void listNodes(rcss::EntityTree::BaseNode* current, int depth) const;
+
+    //! list nodes in the scene graph.
+    ConExecResult executeSignature(int signature,
+                                   ConVar::ConVars& parameter) const;
 };
 
-} // end namespace
-
-#endif                          // RCSS_SIMULATOR_H
+#endif  

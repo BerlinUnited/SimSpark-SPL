@@ -3,6 +3,9 @@ SUBDIRS = doc utility simulator
 pkginclude_HEADERS = \
 config.h
 
+doc:	
+	cd doc && $(MAKE) all doxygen-doc
+
 release:	update distcheck add_rel commit upload tag commit
 
 quick-release:	update add_rel commit upload tag commit

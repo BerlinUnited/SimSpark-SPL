@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                           nodecommands.h
+    code for entity graph nodes commands
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 02 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,31 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#ifndef RCSS_NODECREATOR_NODECOMMANDS_H
+#define RCSS_NODECREATOR_NODECOMMANDS_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <ode/ode.h>
+#include <string>
 
 namespace rcss
-{ //} start rcss namespace
+{ 
+    namespace NodeCreator
+    {
+#if 0   // only for indenting
+    }}  
+#endif
 
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+class NodeCommands
 {
 public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
-
+    static std::string formatCreator(const std::string& type);
+    static void registerNodeCreators();
 };
 
-} // end namespace
+    }
+}
 
-#endif                          // RCSS_SIMULATOR_H
+#endif

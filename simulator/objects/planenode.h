@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                           planenode.h
+    base node for a plane within the entity graph
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 02 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,44 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#ifndef RCSS_ENTITYGRAPH_PLANENODE_H
+#define RCSS_ENTITYGRAPH_PLANENODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <ode/ode.h>
+#include "geometrynode.h"
+
+#include <ode.h>
 
 namespace rcss
-{ //} start rcss namespace
+{ 
+    namespace EntityTree
+    { 
+#if 0
+}}
+#endif
 
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
+class WorldNode;
 
-    Simulator
-
-*/
-class Simulator
+class PlaneNode : public GeometryNode
 {
 public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    PlaneNode(WorldNode& world_node,
+              dReal a, dReal b, dReal c, dReal d,
+              const std::string& name = "<unknown>",
+              BaseNode* parent = 0);
+    PlaneNode(WorldNode& world_node,
+              dReal v[4],
+              const std::string& name = "<unknown>",
+              BaseNode* parent = 0);
 
 };
 
-} // end namespace
+    } // namespace 
+} // namespace
 
-#endif                          // RCSS_SIMULATOR_H
+#endif
+
+

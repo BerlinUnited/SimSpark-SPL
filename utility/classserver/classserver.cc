@@ -19,8 +19,11 @@
 */
 #define SHARED_LIB_COMPILE
 
-#include <iostream>
 #include "classserver.h"
+
+#include <iostream>
+
+using namespace std;
 
 // platformspecific stuff
 #if defined(WIN32)

@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                           worldcreator.cc
+    class for objects that create world nodes
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Oct 05 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,38 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#include "worldcreator.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <basenode.h>
+#include <consoleparser.h>
+#include <entitytree.h>
+#include <forwarder.h>
+#include <objects/worldnode.h>
 
-#include <ode/ode.h>
+using namespace rcss::EntityTree;
+using namespace rcss::NodeCreator;
+using namespace Utility;
+using namespace std;
 
-namespace rcss
-{ //} start rcss namespace
-
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+BaseNode* 
+WorldCreator::create(const ConVar::ConVars& parameter)
 {
-public:
-    Simulator();
-    ~Simulator();
+    // check parameter list
+    if (parameter.size() != 1)
+    {
+        smux.error() << "(WorldCreator::create) syntax error.\n";
+        return 0;
+    }
     
-    bool execute();
+    string name;
+    parameter[0]->getString(name);
     
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
-
-};
-
-} // end namespace
-
-#endif                          // RCSS_SIMULATOR_H
+    BaseNode* current = EntityTree::EntityTree::instance().getCurrentNode();
+    WorldNode* world = 0;
+    
+    if (current != 0 && (current->getType() & BaseNode::S_DIRECTORY != 0))
+    {
+        world = new WorldNode(name, current);
+    }
+    return world;
+}

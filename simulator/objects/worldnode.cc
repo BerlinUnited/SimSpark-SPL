@@ -1,8 +1,8 @@
 /* -*-c++-*- ***************************************************************
-                             simulator.h
-    the base soccer 3d simulator
+                             worldnode.cc
+    node for a world/space within the entity graph
                            ------------------------
-    begin                : Sep 24 2002  Oliver Obst
+    begin                : Sep 27 2002  Oliver Obst
     copyright            : (C) 2002 by The RoboCup Soccer Simulator
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
@@ -16,40 +16,35 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_SIMULATOR_H
-#define RCSS_SIMULATOR_H
+#include "worldnode.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <string>
 
-#include <ode/ode.h>
+using namespace rcss::EntityTree;
+using namespace std;
 
-namespace rcss
-{ //} start rcss namespace
-
-/*! \class Simulator
-  $Id: simulator.h,v 1.2 2002/10/07 15:57:54 fruit Exp $
-
-    Simulator
-
-*/
-class Simulator
+WorldNode::WorldNode(const string& name, BaseNode* parent)
+    : DirNode(static_cast<NodeType>(S_DIRECTORY | S_CONTAINER | S_GEOM_BASE),
+              name, parent)
 {
-public:
-    Simulator();
-    ~Simulator();
-    
-    bool execute();
-    
-protected:
-    dBodyID M_body;
-    dWorldID M_world;
-    dSpaceID M_space;
-    dJointGroupID M_contact_group;
+    M_world = dWorldCreate(); 
+    M_space = dHashSpaceCreate();
+}
 
-};
+WorldNode::~WorldNode()
+{
+    dSpaceDestroy(M_space);
+    dWorldDestroy(M_world);
+}
 
-} // end namespace
+dWorldID
+WorldNode::getWorld()
+{
+    return M_world;
+}
 
-#endif                          // RCSS_SIMULATOR_H
+dSpaceID
+WorldNode::getSpace()
+{
+    return M_space;
+}

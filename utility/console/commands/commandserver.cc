@@ -19,8 +19,11 @@
 #include "commandserver.h"
 
 #include "concmdlist.h"
+#include "concreate.h"
 #include "conhelp.h"
 #include "conquit.h"
+#include "conlistnodes.h"
+#include "conselectnode.h"
 #include "conset.h"
 #include "conusage.h"
 
@@ -46,7 +49,6 @@
 #include "conaddcontroller.h"
 #include "conremovenode.h"
 #include "conlistnodes.h"
-#include "conselectnode.h"
 #include "conmovenode.h"
 #include "coninfonode.h"
 #include "conexportnode.h"
@@ -58,15 +60,20 @@
 #include <classserver.h>
 
 #include <algorithm>
+#include <cctype>
+#include <functional>
 
 using namespace std;
 
 // create the ClassServer factories
 
 CS_CreateFactory(ConCmdlist)
+CS_CreateFactory(ConCreate)
 CS_CreateFactory(ConHelp)
+CS_CreateFactory(ConListnodes)
 CS_CreateFactory(ConQuit)
 CS_CreateFactory(ConSet)
+CS_CreateFactory(ConSelectnode)
 CS_CreateFactory(ConUsage)
 
 #if 0
@@ -91,7 +98,7 @@ CS_CreateFactory(ConAddchild)
 CS_CreateFactory(ConAddcontroller)
 CS_CreateFactory(ConRemovenode)
 CS_CreateFactory(ConListnodes)
-CS_CreateFactory(ConSelectnode)
+
 CS_CreateFactory(ConMovenode)
 CS_CreateFactory(ConExportnode)
 CS_CreateFactory(ConInfonode)
@@ -104,8 +111,11 @@ CommandServer::CommandServer()
     // Register all commands to the ClassServer
     CS_FunctionBegin()
         CS_FunctionRegisterToGroup(ConCommand, ConCmdlist)
+        CS_FunctionRegisterToGroup(ConCommand, ConCreate)
         CS_FunctionRegisterToGroup(ConCommand, ConHelp)
+        CS_FunctionRegisterToGroup(ConCommand, ConListnodes)
         CS_FunctionRegisterToGroup(ConCommand, ConQuit)
+        CS_FunctionRegisterToGroup(ConCommand, ConSelectnode)
         CS_FunctionRegisterToGroup(ConCommand, ConSet)
         CS_FunctionRegisterToGroup(ConCommand, ConUsage)
 #if 0
@@ -164,7 +174,8 @@ CommandServer::get(const string& name)
 {
     // use the lowercase version of the command's name to store and access it
     string lower;
-    transform(name.begin(), name.end(), back_inserter(lower), tolower);
+
+    transform(name.begin(), name.end(), back_inserter(lower), ::tolower);
 
     // does the command already exist?
     Commands::const_iterator iter = M_commands.find(lower);
@@ -219,7 +230,8 @@ CommandServer::formatCommand(const string& command) const
 {
     string formated;
 
-    transform(command.begin(), command.end(), back_inserter(formated), tolower);
+    transform(command.begin(), command.end(), back_inserter(formated), 
+              ::tolower);
 
     // make the first letter uppercase
     if (command.size() > 0)

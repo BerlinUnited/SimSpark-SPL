@@ -4,15 +4,16 @@ VERSION_MACRO = CONSOLE_VERSION=0.2
 AM_CPPFLAGS = -D$(VERSION_MACRO) \
 -I$(top_srcdir)/utility/mathstuff/ \
 -I$(top_srcdir)/utility/forwarder/ \
--I$(top_srcdir)/utility/classserver 
-# the inputserver needs to be used for an interactive console only
-# -I$(top_srcdir)/utility/inputserver
+-I$(top_srcdir)/utility/classserver/ \
+-I$(top_srcdir)/simulator/
 
-noinst_PROGRAMS = example
-example_SOURCES = example.cc
-example_LDADD   = libconsole.la \
-$(top_srcdir)/utility/forwarder/libforwarder.la \
-$(top_srcdir)/utility/classserver/libclassserver.la
+## the sample program does not work anymore because of the 
+## mutual dependencies between console and simulator
+# noinst_PROGRAMS = example
+# example_SOURCES = example.cc
+# example_LDADD   = libconsole.la \
+# $(top_srcdir)/utility/forwarder/libforwarder.la \
+# $(top_srcdir)/utility/classserver/libclassserver.la
 
 libconsole_la_SOURCES = \
 console.cc console.h \
@@ -24,8 +25,11 @@ scanner.cc scanner.h \
 commands/commandserver.cc commands/commandserver.h \
 commands/concommand.cc commands/concommand.h \
 commands/concmdlist.cc commands/concmdlist.h \
+commands/concreate.cc commands/concreate.h \
 commands/conhelp.cc commands/conhelp.h \
+commands/conlistnodes.cc commands/conlistnodes.h \
 commands/conquit.cc commands/conquit.h \
+commands/conselectnode.cc commands/conselectnode.h \
 commands/conset.cc commands/conset.h \
 commands/conusage.cc commands/conusage.h \
 commands/signature/commandsignature.cc commands/signature/commandsignature.h \
