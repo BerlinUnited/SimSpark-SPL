@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.9 2004/03/22 10:51:33 rollmark Exp $
+   $Id: body.h,v 1.10 2004/04/07 08:33:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -106,7 +106,7 @@ public:
     void SetAngularVelocity(const salt::Vector3f& vel);
 
     /** returns the Body node corresponding to the given ODE body */
-    static Body* GetBody(dBodyID id);
+    static boost::shared_ptr<Body> GetBody(dBodyID id);
 
     /** applies a force to the managed ODE body */
     void AddForce(const salt::Vector3f& force);
@@ -123,8 +123,8 @@ protected:
     */
     virtual void OnLink();
 
-    /** destroys the managed ODE body */
-    virtual void OnUnlink();
+    /** create the managed ODE body; returns true on success */
+    bool CreateBody();
 
 private:
     /** updates the the internal state after physics calculation,
@@ -137,9 +137,6 @@ private:
     // Members
     //
 protected:
-    /** the world this body is contained in */
-    boost::shared_ptr<World> mWorld;
-
     /** the managed ode body */
     dBodyID mODEBody;
 

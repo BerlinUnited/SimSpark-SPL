@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.9 2004/03/22 18:11:07 fruit Exp $
+   $Id: body.cpp,v 1.10 2004/04/07 08:33:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
+using namespace std;
 
 Body::Body() : ODEObject(), mODEBody(0)
 {
@@ -36,10 +37,10 @@ Body::Body() : ODEObject(), mODEBody(0)
 Body::~Body()
 {
     if (mODEBody)
-    {
-        dBodyDestroy(mODEBody);
-        mODEBody = 0;
-    }
+        {
+            dBodyDestroy(mODEBody);
+            mODEBody = 0;
+        }
 }
 
 dBodyID Body::GetODEBody() const
@@ -65,15 +66,15 @@ bool Body::IsEnabled() const
 void Body::UseGravity(bool f)
 {
     if (f == true)
-    {
-        // body is affected by gravity
-        dBodySetGravityMode(mODEBody, 1);
-    }
+        {
+            // body is affected by gravity
+            dBodySetGravityMode(mODEBody, 1);
+        }
     else
-    {
-        // body is not affected by gravity
-        dBodySetGravityMode(mODEBody, 0);
-    }
+        {
+            // body is not affected by gravity
+            dBodySetGravityMode(mODEBody, 0);
+        }
 }
 
 bool Body::UsesGravity() const
@@ -91,57 +92,65 @@ float Body::GetMaxSpeed()
     return mMaxSpeed;
 }
 
-void Body::OnLink()
+bool Body::CreateBody()
 {
-    ODEObject::OnLink();
+    if (mODEBody != 0)
+        {
+            return true;
+        }
 
     shared_ptr<Scene> scene = GetScene();
     if (scene.get() == 0)
-      {
-        return;
-      }
+        {
+            GetLog()->Error() << "(Body) ERROR: found no Scene node\n";
+            return false;
+        }
 
-    mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
-    if (mWorld.get() == 0)
-      {
-        GetLog()->Error() << "(Body) ERROR: found no World node\n";
-        return;
-      }
+    shared_ptr<World> worldNode = shared_dynamic_cast<World>
+        (scene->GetChildOfClass("World"));
+    if (worldNode.get() == 0)
+        {
+            GetLog()->Error() << "(Body) ERROR: found no World node\n";
+            return false;
+        }
 
-    dWorldID world = mWorld->GetODEWorld();
+    dWorldID world = worldNode->GetODEWorld();
     if (world == 0)
-      {
-        GetLog()->Error() << "(Body) ERROR: World returned empty ODE handle\n";
-        return;
-      }
+        {
+            GetLog()->Error()
+                << "(Body) ERROR: World returned empty ODE handle\n";
+            return false;
+        }
 
     // create the managed body
     mODEBody = dBodyCreate(world);
     if (mODEBody == 0)
-    {
-      GetLog()->Error() << "(Body) ERROR: could not create new ODE body\n";
-      return;
-    }
+        {
+            GetLog()->Error()
+                << "(Body) ERROR: could not create new ODE body\n";
+            return false;
+        }
+
+    return true;
+}
+
+void Body::OnLink()
+{
+    ODEObject::OnLink();
+
+    if (! CreateBody())
+        {
+            return;
+        }
 
     // let the body, take on the world space position of the parent
     dBodySetData(mODEBody, this);
 
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
-      (make_shared(GetParent()));
+        (make_shared(GetParent()));
 
     Matrix mat = baseNode->GetWorldTransform();
     dBodySetPosition(mODEBody, mat.Pos().x(), mat.Pos().y(), mat.Pos().z());
-}
-
-void Body::OnUnlink()
-{
-    if (mODEBody)
-    {
-        dBodyDestroy(mODEBody);
-        mODEBody = 0;
-    }
-
-    mWorld.reset();
 }
 
 void
@@ -213,7 +222,7 @@ void Body::PostPhysicsUpdateInternal()
     const dReal* rot = dBodyGetRotation(mODEBody);
 
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
-      (make_shared(GetParent()));
+        (make_shared(GetParent()));
 
     Matrix mat = baseNode->GetLocalTransform();
     mat.m[0] = rot[0];
@@ -252,10 +261,35 @@ void Body::PostPhysicsUpdateInternal()
     SetVelocity(vel);
 }
 
-Body* Body::GetBody(dBodyID id)
+shared_ptr<Body> Body::GetBody(dBodyID id)
 {
-  return id ?
-    static_cast<Body*>(dBodyGetData(id)) : 0;
+    if (id == 0)
+        {
+            return shared_ptr<Body>();
+        }
+
+    Body* bodyPtr =
+        static_cast<Body*>(dBodyGetData(id));
+
+    if (bodyPtr == 0)
+        {
+            // we cannot use the logserver here
+            cerr << "ERROR: (Body) no body found for dBodyID "
+                 << id << "\n";
+            return shared_ptr<Body>();
+        }
+
+    shared_ptr<Body> body = shared_static_cast<Body>
+        (make_shared(bodyPtr->GetSelf()));
+
+    if (body.get() == 0)
+        {
+            // we cannot use the logserver here
+            cerr << "ERROR: (Body) got no shared_ptr for dBodyID "
+                 << id << "\n";
+        }
+
+    return body;
 }
 
 void
@@ -272,8 +306,8 @@ Body::AddTorque(const Vector3f& torque)
 
 void Body::SetPosition(const Vector3f& pos)
 {
-  dBodySetPosition(mODEBody, pos.x(), pos.y(), pos.z());
-  // the parent node will be updated in the next physics cycle
+    dBodySetPosition(mODEBody, pos.x(), pos.y(), pos.z());
+    // the parent node will be updated in the next physics cycle
 }
 
 
