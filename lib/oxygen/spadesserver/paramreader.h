@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: paramreader.h,v 1.1.2.1 2003/11/17 10:10:52 fruit Exp $
+   $Id: paramreader.h,v 1.1.2.2 2003/11/17 13:12:13 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,9 @@ namespace oxygen
 
 /*!
  */
-class ParamReader : public zeitgeist::Leaf, spades::EngineParam
+class ParamReader :
+        public zeitgeist::Leaf,
+        public spades::EngineParam
 {
 public:
     ParamReader() : zeitgeist::Leaf(), spades::EngineParam() {}
