@@ -29,7 +29,7 @@ addSoccerVar('FieldWidth', randomServer.uniformRND(64.0,75.9).floor().to_f())
 addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
-addSoccerVar('GoalHeight', 0.5) # FIFA: 2.44 
+addSoccerVar('GoalHeight', 0.75) # FIFA: 2.44 
 addSoccerVar('BorderSize', 10.0)
 addSoccerVar('FreeKickDistance', 9.15)
 addSoccerVar('AutomaticKickOff', false)
@@ -41,7 +41,7 @@ addSoccerVar('AgentRadius',  0.22)
 addSoccerVar('AgentMaxSpeed', 10.0)
 
 # ball parameters
-addSoccerVar('BallRadius', 1)
+addSoccerVar('BallRadius', 1.0)
 addSoccerVar('BallDensity',2)
 
 # soccer rule parameters
