@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorsystem.h,v 1.4 2004/12/21 19:39:33 rollmark Exp $
+   $Id: monitorsystem.h,v 1.5 2004/12/31 14:09:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,18 +23,18 @@
 #define OXYGEN_MONITORSYSTEM_H
 
 #include <zeitgeist/class.h>
-#include <zeitgeist/leaf.h>
+#include <zeitgeist/node.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 
 namespace oxygen
 {
 
-class MonitorSystem : public zeitgeist::Leaf
+class MonitorSystem : public zeitgeist::Node
 {
 public:
-    MonitorSystem() : Leaf() {}
+    MonitorSystem();
 
-    virtual ~MonitorSystem() {}
+    virtual ~MonitorSystem();
 
     // one note about std::string. This class is capable of handling
     // binary data (i.e. not NULL terminated strings). Use the
