@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hingejoint_c.cpp,v 1.2 2004/04/14 18:25:08 rollmark Exp $
+   $Id: hingejoint_c.cpp,v 1.3 2004/04/15 10:43:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ using namespace oxygen;
 using namespace salt;
 
 
-FUNCTION(HingeJoint,setHingeAnchor)
+FUNCTION(HingeJoint,setAnchor)
 {
     Vector3f inAnchor;
 
@@ -38,24 +38,24 @@ FUNCTION(HingeJoint,setHingeAnchor)
             return false;
         }
 
-    obj->SetHingeAnchor(inAnchor);
+    obj->SetAnchor(inAnchor);
     return true;
 }
 
-FUNCTION(HingeJoint,getHingeAngle)
+FUNCTION(HingeJoint,getAngle)
 {
-    return obj->GetHingeAngle();
+    return obj->GetAngle();
 }
 
-FUNCTION(HingeJoint,getHingeAngleRate)
+FUNCTION(HingeJoint,getAngleRate)
 {
-    return obj->GetHingeAngleRate();
+    return obj->GetAngleRate();
 }
 
 void CLASS(HingeJoint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Joint);
-    DEFINE_FUNCTION(setHingeAnchor);
-    DEFINE_FUNCTION(getHingeAngle);
-    DEFINE_FUNCTION(getHingeAngleRate);
+    DEFINE_FUNCTION(setAnchor);
+    DEFINE_FUNCTION(getAngle);
+    DEFINE_FUNCTION(getAngleRate);
 }

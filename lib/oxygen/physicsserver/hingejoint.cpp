@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.cpp,v 1.2 2004/04/14 18:25:08 rollmark Exp $
+   $Id: hingejoint.cpp,v 1.3 2004/04/15 10:43:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,46 +43,50 @@ void HingeJoint::OnLink()
     mODEJoint = dJointCreateHinge(world, 0);
 }
 
-void HingeJoint::SetHingeAnchor(const Vector3f& anchor)
+void HingeJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
     dJointSetHingeAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 
     // calculate hinge axis (pos. z, relative to world transform)
-    Vector3f up(GetWorldTransform() * Vector3f(0,0,1));
+    Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
     dJointSetHingeAxis(mODEJoint, up[0], up[1], up[2]);
 }
 
-Vector3f HingeJoint::GetHingeAnchor(EBodyIndex idx)
+Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
 {
+    Vector3f pos(0,0,0);
+
     switch (idx)
         {
         case BI_FIRST:
             {
                 dReal anchor[3];
                 dJointGetHingeAnchor (mODEJoint, anchor);
-                return Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
             }
 
         case BI_SECOND:
             {
                 dReal anchor[3];
                 dJointGetHingeAnchor2(mODEJoint, anchor);
-                return Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
             }
 
         default:
-            return Vector3f(0,0,0);
+            break;
         }
+
+    return GetLocalPos(pos);
 }
 
-float HingeJoint::GetHingeAngle()
+float HingeJoint::GetAngle()
 {
     return dJointGetHingeAngle(mODEJoint);
 }
 
-float HingeJoint::GetHingeAngleRate()
+float HingeJoint::GetAngleRate()
 {
     return dJointGetHingeAngleRate (mODEJoint);
 }

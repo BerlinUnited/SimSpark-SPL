@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.h,v 1.2 2004/04/14 18:25:08 rollmark Exp $
+   $Id: hingejoint.h,v 1.3 2004/04/15 10:43:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,22 +36,22 @@ public:
         point on each body together. The input is specified in local
         coordinates.
     */
-    void SetHingeAnchor(const salt::Vector3f& anchor);
+    void SetAnchor(const salt::Vector3f& anchor);
 
-    /** Returns the joint anchor point in world coordinates on one of
+    /** Returns the joint anchor point in local coordinates on one of
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
-    salt::Vector3f GetHingeAnchor (EBodyIndex idx);
+    salt::Vector3f GetAnchor (EBodyIndex idx);
 
     /** returns the hinge angle, measured between the two bodies, or
         between the body and the static environment. The angle will be
         between -pi..pi.
     */
-    float GetHingeAngle();
+    float GetAngle();
 
     /** returns the time derivate of the hinge angle */
-    float GetHingeAngleRate();
+    float GetAngleRate();
 
 protected:
     /** creates a new contact joint */
