@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.1 2004/01/08 16:01:10 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.2 2004/01/20 19:11:50 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,14 +70,15 @@ string
 SexpMonitor::GetMonitorInfo()
 {
     // map from class types to be recognized to their expression type
-    const struct ExpressionType
+    static const struct ExpressionType
     {
         string className;
         string typeName;
     } typeMap[] =
         {
             {"AgentAspect","agent"},
-            {"FieldFlag","flag"}
+            {"FieldFlag","flag"},
+            {"Ball","ball"}
         };
 
     shared_ptr<SceneServer> sceneServer =
