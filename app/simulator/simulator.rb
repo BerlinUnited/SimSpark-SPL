@@ -31,7 +31,7 @@ $serverPath = '/sys/server/'
 # the full path of the AgentAspect
 
 # the start positions of the agents
-$agentX = -8.0
+$agentX = -2.5
 $agentY = 0.0
 $agentZ = 0.5
 
@@ -51,9 +51,9 @@ def addAgent(aspectPath)
   # move different agents away from each other
   aspect = get(aspectPath)
   aspect.setLocalPos($agentX,$agentZ,$agentY)
-  $agentX += 2.5
-  $agentY += 3.0
-  $agentZ += 1.0
+  $agentX += 5.0
+  $agentY += 0.0
+  $agentZ += 0.1
 
   # geometry and physics setup
   physics = new('kerosin/Body', aspectPath+'physics')
@@ -75,7 +75,6 @@ def addAgent(aspectPath)
   kickEffector.setMaxPower(100.0)
 
   # perceptor setup
-  new('PerfectVisionPerceptor', aspectPath+'PerfectVisionPerceptor')
   new('VisionPerceptor', aspectPath+'VisionPerceptor')
 
   # agent state
