@@ -4,3 +4,5 @@ doc/proposal/simulator3d.aux
 doc/proposal/simulator3d.blg
 doc/proposal/simulator3d.dvi
 doc/proposal/simulator3d.log
+utility/console/Makefile
+utility/console/Makefile.in
