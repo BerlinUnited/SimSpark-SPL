@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.6 2004/01/31 17:25:28 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.7 2004/02/07 18:50:41 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -167,6 +167,7 @@ bool GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
 
     agentState->SetUniformNumber(unum);
     agentState->SetTeamIndex(idx);
+    agentState->SetName(teamName);
 
     GetLog()->Normal() << "(GameStateAspect) handed out uniform number "
                        << unum << " for team " << teamName << "\n";
