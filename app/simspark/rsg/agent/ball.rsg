@@ -15,11 +15,6 @@
 	     (setMaterial $Material)
 	     )
 
-       (node Box
-	     (setMaterial matRed)
-	     (setExtents $Radius $Radius $Radius)
-	     )
-
        (node Body
 	     (setName physics)
 	     (setSphere $Density $Radius)
