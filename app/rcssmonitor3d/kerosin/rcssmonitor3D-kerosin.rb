@@ -77,14 +77,20 @@ def addVisual(className, nodeName, x, y, z)
   new('kerosin/'+className,$scenePath+nodeName+'/'+'visual')
 end
 
+def addSphere(nodeName, radius)
+  transform = new('oxygen/Transform', $scenePath+nodeName)
+  sphere = new('kerosin/Sphere',$scenePath+nodeName+'/'+'visual')
+  sphere.setRadius(radius)
+end  
+
 # called from the monitor to create an agent named <nodeName>
 def addAgent(nodeName)
-  addVisual('Sphere',nodeName,0.0,0.0,0.0)
+  addSphere(nodeName,Soccer.AgentRadius)
 end
 
 # called from the monitor to create a ball
 def addBall(nodeName)
-  addVisual('Sphere',nodeName,0.0,0.0,0.0)
+  addSphere(nodeName,Soccer.BallRadius)
 end
 
 # add an axis
