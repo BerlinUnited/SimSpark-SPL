@@ -38,6 +38,9 @@ material.setColor(1.0,1.0,1.0)
 material = new('kerosin/MaterialSolid', $serverPath+'material/matFlag');
 material.setColor(1.0,0.0,0.0)
 
+material = new('kerosin/MaterialSolid', $serverPath+'material/matGround');
+material.setColor(0.1,0.5,0.1)
+
 # setup the RenderServer
 new('kerosin/RenderServer', $serverPath+'render');
 
@@ -63,7 +66,7 @@ new('oxygen/Space', $scenePath+'space')
 # add a camera. The camera movement is controlled using an
 # FPSController.
 cameraTransform = new('oxygen/Transform',$scenePath+'camera0')
-cameraTransform.setLocalPos(0.0,0.0,10.0)
+cameraTransform.setLocalPos(0.0,10.0,0.0)
 new('oxygen/Camera',$scenePath+'camera0/camera')
 
 # the camera is not affected by gravity but restricted to a maximum
@@ -124,8 +127,24 @@ def addFlag(nodeName)
   addSphere(nodeName,1.0,'matFlag')
 end
 
+# called from the monitor to create the playing field after the
+# dimensions are received
+def addField()
+  # create the green
+  fieldThickness = 0.5
+
+  transform = new('oxygen/Transform', $scenePath+'field')
+  transform.setLocalPos(0.0,-fieldThickness/2.0,0.0)
+
+  field = new('kerosin/Box',$scenePath+'field/visual')
+  field.setMaterial('matGround')
+
+  field.setExtents(110.0,0.2,73.0)
+end  
+
 # add an axis
 addVisual('Axis','myAxis',0.0,0.0,0.0)
+
 
 
 
