@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.1.2.11 2004/02/10 19:35:14 rollmark Exp $
+   $Id: sexpmonitor.cpp,v 1.1.2.12 2004/02/10 20:42:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,10 +63,10 @@ SexpMonitor::ParseMonitorMessage(std::string data)
             return;
         }
 
-    // this is just preliminary parsing; the SexpParser should be used here
+    // this is just preliminary parsing; the SexpParser should be used
+    // here
     if (data == "(kickoff)")
         {
-            // transition from PM_BeforeKickOff to PM_PlayOn
             if (mGameState->GetPlayMode() == PM_BeforeKickOff)
                 {
                     mGameState->KickOff();
