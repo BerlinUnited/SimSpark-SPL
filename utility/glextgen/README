@@ -1,0 +1,192 @@
+GLExtGen -----------------------------------------------------------------------
+
+The code in this directory is used to generate a OpenGL Extension Loading 
+Library automatically. Besides only very small changes and leaving out 
+unnecessary parts for the rcssserver3D project, it is original code 
+from Marco Koegler (marco.koegler@web.de).  
+The original readme.txt file is attached below. 
+
+Please note that for the version distributed in this directory, we left
+out the windows binary, as you need ruby for compiling the project anyway. 
+--------------------------------------------------------------------------------
+
+
+GLExtGen
+========
+
+This project was inspired by the OpenGL Extension Loading Library by Lev
+Povalahev, which can be found here:
+
+http://www.uni-karlsruhe.de/~uli2/
+
+The general idea is the same, but I believe that Lev is maintaining his
+library 'by hand', whereas this solution does it completely automatically.
+If you are using plain 'C' I suggest using his library, as the backend
+provided here only generates a C++ class. It should be easy enough to write
+a C backend, but I currently don't have the time to do that.
+
+
+Disclaimer
+----------
+The author of this software is not responsible for any harm done by running
+or modifying it.
+
+
+License - Any-Ware
+------------------
+The software can be used for any kind of project (private, commercial,
+whatever)... I hope you have fun with it and it makes your life coding OpenGL
+applications easier.
+
+
+Found Bugs?
+-----------
+Please contact the author under marco.koegler@web.de
+
+
+Installation
+------------
+Just extract the archive to a directory (Examples use glextgen/). It will then contain
+the executable (glextgen/*), scripts (glextgen/script/*) and some necessary files
+(glextgen/tocopy/*).
+
+Also make sure that you have installed the following extension header files:
+	* For MS-Windows:
+		- GL/glext.h
+		- GL/wglext.h
+	* For X-Windows (e.g. Mesa under Linux):
+		- GL/glext.h
+		- GL/glxext.h
+
+Of course you also need the OpenGL header file (GL/gl.h). A current lazyness of my
+code requires for all these files to be in the same GL/ directory (you have to specify
+a path to that directory). I just have a subdirectory glextgen/ containing a copy of
+these files and use those instead of the actual header files used by the compiler.
+
+A very complete set of extension header files can be obtained at: 
+
+http://oss.sgi.com/projects/ogl-sample/sdk.html
+
+These were the files I used to test this thing with (hint, hint)!
+
+
+Configuration
+-------------
+Open up the file glextgen/glextgen.rb. It contains the declaration of two global Variables:
+$path and $target. You should modify these to fit your configuration
+
+$target can take two values: "win32" and "x". It triggers the inclusion of wglext.h or glxext.h,
+respectively.
+
+$path is the path to the directory containing the OpenGL header files (regular and extensions).
+A few examples are in the glextgen/glextgen.rb file (they are commeted out with '#'). Make sure
+that you use forward slashes (/) in the paths, otherwise you might trigger an escape sequence.
+
+That's it.
+
+
+Generating files using GLExtGen
+-------------------------------
+There are two ways to run GLExtGen, one for people which have Ruby (a scripting language)
+installed on their machines and one for people which don't (only under Windows, though).
+
+If you DO have Ruby installed:
+	- Run the file 'glextgen/glextgen.rb' either by double-clicking on it or entering
+	  'ruby glextgen.rb' at the command prompt while you are in the glextgen/-directory.
+
+If you DON'T have Ruby installed:
+	- Run the file 'glextgen/glextgen.exe' either by double-clicking on it or entering
+	  'glextgen.exe' at the command prompt while you are in the glextgen/-directory.
+
+This should generate output similar to this (Note: Some paths and the processing stuff
+might differ):
+
+***BEGIN Example Output
+Digesting 'wingl/GL/glext.h'...
+Digesting 'wingl/GL/wglext.h'...
+
+Searching for native extensions in 'wingl/GL/gl.h
+Processing GL_VERSION_1_1 -> No Action
+
+Generating 'glextensionreg.h'
+Generating 'glextensionreg.cpp'
+***END Example Output
+
+Now, we have two new files in the glextgen/-directory. The files contain an implementation
+of a class called 'GLExtensionReg,' which brings us to the next topic...
+
+
+Using GLExtensionReg
+--------------------
+This is quite simple:
+	- Add the files glextensionreg.h and glextensionreg.cpp to your project
+	- #include "glextensionreg.h"
+	- Create an instance of GLExtensionReg (I'll refer to it as 'reg').
+	- After having set up your context (at the point where you would usually initialize your
+	  extensions), just call Init() on your GLExtensionReg instance (so, reg.Init() or reg->Init()).
+	  This sets up all known and available OpenGL extensions.
+
+You can check for the availability of an extension using the 'Has_' functions. So, you might do:
+
+reg.Init();
+
+if (reg.Has_GL_ARB_multitexture())
+{
+	// use multitexturing
+	glActiveTextureARB(GL_TEXTURE0_ARB);
+	
+	... etc ...
+}
+
+This can also be used to check for OpenGL versions:
+
+reg.Init();
+
+if (reg.Has_GL_VERSION_1_3())
+{
+	// use multitexturing ... no need for the ARB functions
+	glActiveTexture(GL_TEXTURE0);
+	
+	... etc ...
+}
+
+Now, another problem is that the function entry points might differ for multiple
+OpenGL contexts. So, if you have your general split-view it could happen that the
+function pointers to call for multitexturing for one context might differ from
+another (imagine one context using accelerated OpenGL and another using software
+rendering). So, you would have to keep different sets of function pointers and
+possibly also extension capabilities (the 'Has'-stuff). Now, this can also be
+done here:
+
+GLExtensionReg           reg;
+GLExtGenFunctionPointers ptr;
+GLExtGenExtensions       extensions;
+
+void init(void)
+{
+	// a context is current
+	
+	// init the function pointers and extensions for the current context
+	reg.Init(&ptr, &extensions);
+	
+	if (extensions.mGL_ARB_multitexture)
+	{
+		ptr.glActiveTextureARB(GL_TEXTURE0_ARB);
+		
+		...
+	}
+}
+
+OK, hope that gets everyone going.
+
+
+Future Releases
+---------------
+Future releases may contain:
+	- Support for GLX, currently none of the glX-Extensions are written out in the
+	  backend as I don't have a good test platform for this :(
+	- Multiple search paths for files (so gl.h and glext.h don't have to be
+	  in the same directory)
+	- specification of a destination directory for the generated files
+	- An identical interface for GLExtGenExtensions and GLExtensionReg (both using 'Has'-functions)
+	- Might derive GLExtensionReg from GLExtGenExtensions

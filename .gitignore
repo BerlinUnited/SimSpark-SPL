@@ -50,3 +50,6 @@ lib/zeitgeist/scriptserver/.dirstamp
 lib/zeitgeist/scriptserver/.libs
 lib/zeitgeist/scriptserver/*.la
 lib/zeitgeist/scriptserver/*.lo
+utility/glextgen/Makefile
+utility/glextgen/Makefile.in
+utility/glextgen/glextgen.rb

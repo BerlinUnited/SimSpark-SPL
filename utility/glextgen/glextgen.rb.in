@@ -1,0 +1,10 @@
+# just redirect to 'script/glextgen.rb'
+
+# the 'target' string controls whether wgl or glX extensions are considered
+# target should be either 'x' or 'win32'
+$target = "@GLTARGET@"
+
+# the following string designates the path of the 'GL/' subdirectory
+$path = "@GLDIR@/"
+
+require 'script/glextgen.rb'
