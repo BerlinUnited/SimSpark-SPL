@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.2.2.5 2004/01/22 06:44:10 fruit Exp $
+   $Id: createeffector.cpp,v 1.2.2.6 2004/01/25 12:41:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,49 +25,14 @@
 #include <oxygen/gamecontrolserver/actionobject.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
-#include <oxygen/physicsserver/body.h>
-#include <oxygen/physicsserver/spherecollider.h>
 
 using namespace oxygen;
 using namespace boost;
+using namespace zeitgeist;
+using namespace std;
 
 CreateEffector::CreateEffector() : Effector()
 {
-}
-
-void
-CreateEffector::OnLink()
-{
-    GetScript()->CreateVariable("Agent.Mass", 75.0f);
-    GetScript()->CreateVariable("Agent.Radius", 0.5f);
-    GetScript()->CreateVariable("Agent.MaxSpeed", 10.0f);
-}
-
-float
-CreateEffector::GetAgentMass() const
-{
-    float agentMass = 75.0;
-    GetScript()->GetVariable("Agent.Mass", agentMass);
-
-    return agentMass;
-}
-
-float
-CreateEffector::GetAgentRadius() const
-{
-    float agentRadius = 0.5;
-    GetScript()->GetVariable("Agent.Radius", agentRadius);
-
-    return agentRadius;
-}
-
-float
-CreateEffector::GetAgentMaxSpeed() const
-{
-    float agentMaxSpeed = 10.0;
-    GetScript()->GetVariable("Agent.MaxSpeed", agentMaxSpeed);
-
-    return agentMaxSpeed;
 }
 
 bool CreateEffector::Realize(shared_ptr<ActionObject> action)
@@ -82,13 +47,7 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
       return false;
     }
 
-  //
-  // construct an agent depending on the type information stored in
-  // the CreateAction object; for now just create a default agent
-  //
-
   shared_ptr<AgentAspect> aspect = GetAgentAspect();
-
   if (aspect.get() == 0)
     {
       GetLog()->Error()
@@ -96,104 +55,12 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
       return false;
     }
 
-  // move different AgentAspect away from each other
-  // position has to be set before adding child references
-  static float x = 12.0;
-  static float y = 2;
-  static float z = 7.0;
-  aspect->SetLocalPos(x, y, z);
-  x+=2.5;
-  z+=1;
-  y+=3;
-
-  // construct the nodes below the AgentAspect
-
-  // add a sphere body and collider
-  shared_ptr<Body> physics =
-      shared_dynamic_cast<Body>(GetCore()->New("kerosin/Body"));
-
-  shared_ptr<SphereCollider>geometry =
-      shared_dynamic_cast<SphereCollider>(GetCore()->New("kerosin/SphereCollider"));
-
-  if (
-      (physics.get() == 0) ||
-      (geometry.get() == 0)
-      )
-      {
-          GetLog()->Error()
-              << "ERROR: (CreateEffector) cannot create Sphere\n";
-          return false;
-      } else
-          {
-              GetLog()->Warning()
-              << "(CreateEffector) creating sphere physics\n";
-              physics->SetName("_physics");
-              aspect->AddChildReference(physics);
-              // should be OK to use 1.0 as density here, because
-              // both SetSphere and SetMass do an ODE::dMassAdjust
-              physics->SetSphere(1.0, GetAgentRadius());
-              physics->SetMass(GetAgentMass());
-              physics->SetMaxSpeed(GetAgentMaxSpeed());
-
-              geometry->SetName("_geometry");
-              aspect->AddChildReference(geometry);
-              geometry->SetRadius(GetAgentRadius());
-              GetLog()->Warning()
-              << "(CreateEffector) creating sphere physics done\n";
-          }
-
-  // add forceeffector
-  shared_ptr<Effector> effector =
-      shared_dynamic_cast<Effector>(GetCore()->New("ForceEffector"));
-
-  if (effector.get() == 0)
-      {
-          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the ForceEffector\n";
-          return false;
-      }
-
-  effector->SetName("_ForceEffector");
-  aspect->AddChildReference(effector);
-
-  // add init effector
-  effector = shared_dynamic_cast<Effector>(GetCore()->New("InitEffector"));
-
-  if (effector.get() == 0)
-  {
-      GetLog()->Error() << "ERROR: (CreateEffector) cannot create the InitEffector\n";
-      return false;
-  }
-
-  effector->SetName("_InitEffector");
-  aspect->AddChildReference(effector);
-
-  // add imperfect vision perceptor
-  shared_ptr<Perceptor> perceptor =
-      shared_dynamic_cast<Perceptor>(GetCore()->New("VisionPerceptor"));
-
-  if (perceptor.get() == 0)
-      {
-          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the VisionPerceptor\n";
-          return false;
-      }
-
-  perceptor->SetName("_VisionPerceptor");
-  aspect->AddChildReference(perceptor);
-
-  // add agent state
-  shared_ptr<BaseNode> state =
-      shared_dynamic_cast<BaseNode>(GetCore()->New("AgentState"));
-
-  if (state.get() == 0)
-      {
-          GetLog()->Error() << "ERROR: (CreateEffector) cannot create the AgentState\n";
-          return false;
-      }
-
-  state->SetName("_AgentState");
-  aspect->AddChildReference(state);
-
-  GetLog()->Debug() << "(CreateEffector) created dummy agent" << std::endl;
+  // call the ruby addAgent function that has to be defined in the
+  // simulator init script with the AgentAspect path as the
+  // argument. This function is then responsible to construct the
+  // remaining agent nodes
+  string cmd = "addAgent('" + aspect->GetFullPath() + "')";
+  GetCore()->GetScriptServer()->Eval(cmd);
 
   return true;
 }
@@ -205,7 +72,7 @@ CreateEffector::GetActionObject(const Predicate& predicate)
     {
       GetLog()->Error() << "ERROR: (CreateEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+      return shared_ptr<ActionObject>();
     }
 
   //
@@ -213,6 +80,6 @@ CreateEffector::GetActionObject(const Predicate& predicate)
   // type should be passed later on and stored in the CreateAction object
   //
 
-  return shared_ptr<CreateAction>(new CreateAction());
+  return shared_ptr<CreateAction>(new CreateAction(GetPredicate()));
 }
 
