@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: dasheffector_c.cpp,v 1.1.2.1 2004/01/25 12:09:24 rollmark Exp $
+   $Id: dasheffector_c.cpp,v 1.1.2.2 2004/01/31 14:11:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,38 @@
 
 using namespace oxygen;
 
-void CLASS(DashEffector)::DefineClass()
+FUNCTION(setForceFactor)
+{
+    if (in.size() == 1)
+    {
+        DashEffector* de = static_cast<DashEffector*>(obj);
+        de->SetForceFactor(boost::any_cast<float>(in[0]));
+    }
+}
+
+FUNCTION(setSigma)
+{
+    if (in.size() == 1)
+    {
+        DashEffector* de = static_cast<DashEffector*>(obj);
+        de->SetSigma(boost::any_cast<float>(in[0]));
+    }
+}
+
+FUNCTION(setMaxPower)
+{
+    if (in.size() == 1)
+    {
+        DashEffector* de = static_cast<DashEffector*>(obj);
+        de->SetMaxPower(boost::any_cast<float>(in[0]));
+    }
+}
+
+void
+CLASS(DashEffector)::DefineClass()
 {
     DEFINE_BASECLASS(kerosin/Effector);
+    DEFINE_FUNCTION(setForceFactor);
+    DEFINE_FUNCTION(setSigma);
+    DEFINE_FUNCTION(setMaxPower);
 }
