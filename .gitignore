@@ -416,6 +416,10 @@ plugin/soccer/soccerruleaspect/.dirstamp
 plugin/soccer/soccerruleaspect/.libs
 plugin/soccer/soccerruleaspect/Makefile
 plugin/soccer/soccerruleaspect/Makefile.in
+plugin/soccer/trainercommandparser/*.lo
+plugin/soccer/trainercommandparser/.deps
+plugin/soccer/trainercommandparser/.dirstamp
+plugin/soccer/trainercommandparser/.libs
 plugin/soccer/visionperceptor/*.lo
 plugin/soccer/visionperceptor/.deps
 plugin/soccer/visionperceptor/.dirstamp
