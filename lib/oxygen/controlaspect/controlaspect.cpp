@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.cpp,v 1.2.8.1 2004/01/08 12:31:07 rollmark Exp $
+   $Id: controlaspect.cpp,v 1.2.8.2 2004/01/29 19:56:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,49 @@
 */
 
 #include "controlaspect.h"
+#include <zeitgeist/logserver/logserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
 
+using namespace std;
 using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
+
+shared_ptr<Scene> ControlAspect::GetActiveScene()
+{
+    shared_ptr<SceneServer> sceneServer =
+        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+    if (sceneServer.get() == 0)
+        {
+            GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
+            return shared_ptr<Scene>();
+        }
+
+    shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
+
+    if (activeScene.get() == 0)
+        {
+            GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
+            return shared_ptr<Scene>();
+        }
+
+    return activeScene;
+}
+
+shared_ptr<ControlAspect> ControlAspect::GetControlAspect(const string& name)
+{
+  static const string gcsPath = "/sys/server/gamecontrol/";
+
+  shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
+    (GetCore()->Get(gcsPath + name));
+
+  if (aspect.get() == 0)
+    {
+      GetLog()->Error() << "(ControlAspect) found no " << name << "\n";
+    }
+
+  return aspect;
+}
+
+
