@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.1.2.7 2004/02/06 10:16:21 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.1.2.8 2004/02/07 18:56:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,24 +100,28 @@ VisionPerceptor::Percept(Predicate& predicate)
 
     TTeamIndex  ti = mAgentState->GetTeamIndex();
 
-#undef DEBUG_SIDE
-#ifdef DEBUG_SIDE
-    if (ti == TI_LEFT) predicate.parameter.push_back(std::string("(debug_message left)"));
-    else if (ti == TI_RIGHT) predicate.parameter.push_back(std::string("(debug_message right)"));
-#endif
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
-    TLeafList transformList;
-    mActiveScene->GetChildrenSupportingClass("Transform", transformList, true);
+    TLeafList objectList;
+    mActiveScene->GetChildrenSupportingClass("ObjectState", objectList, true);
 
     ObjectData od;
     std::list<ObjectData> visibleObjects;
 
-    for (TLeafList::iterator i = transformList.begin();
-         i != transformList.end(); ++i)
+    for (TLeafList::iterator i = objectList.begin();
+         i != objectList.end(); ++i)
     {
         od.mVisible = true;
-        shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
+        od.mObj = shared_dynamic_cast<ObjectState>(*i);
+        if (od.mObj.get() == 0)
+        {
+            GetLog()->Error() << "Error: (VisionPerceptor) skipped: "
+                              << (*i)->GetName() << "\n";
+            continue; // this should never happen
+        }
+        shared_ptr<Transform> j = od.mObj->GetTransformParent();
+        if (j.get() == 0) continue; // this should never happen
+
         od.mRelPos = SoccerBase::FlipView(j->GetWorldTransform().Pos() - myPos, ti);
         if (mAddNoise) od.mRelPos += mError;
 
@@ -125,7 +129,6 @@ VisionPerceptor::Percept(Predicate& predicate)
 
         if (od.mDist > 0.1)
         {
-            od.mObj = (*i);
             // theta is the angle in the X-Y (horizontal) plane
             od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[2], od.mRelPos[0]));
             // latitude
@@ -164,8 +167,16 @@ VisionPerceptor::Percept(Predicate& predicate)
         position.push_back(i->mPhi);
 
         Predicate::TParameterList element;
-
         element.push_back(i->mObj->GetName());
+
+        if (!i->mObj->GetID().empty())
+        {
+            Predicate::TParameterList id;
+            id.push_back(std::string("id"));
+            id.push_back(i->mObj->GetID());
+            element.push_back(id);
+        }
+
         element.push_back(position);
         predicate.parameter.push_back(element);
     }
