@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.15 2004/05/14 15:59:02 fruit Exp $
+   $Id: core.cpp,v 1.16 2004/06/13 06:33:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,9 +84,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
     mLogServer = shared_static_cast<LogServer>
         (context->New("zeitgeist/LogServer", "/sys/server/log"));
 
-#if RCSS_DEBUG
-    mLogServer->AddStream(&cout, LogServer::eAll);
-#else
+#if INIT_DEBUG
     mLogServer->AddStream(&cout,
                           LogServer::eNormal |
                           LogServer::eWarning |
