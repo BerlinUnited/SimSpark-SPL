@@ -15,7 +15,7 @@
 \begin{document}
 
 \title{New Soccer Server Initiative}
-\author{Artur Merke, Oliver Obst, Martin Riedmiller, ...}
+\author{Artur Merke, Oliver Obst, Martin Riedmiller, Tom Howard, ...}
 
 \maketitle
 
@@ -83,24 +83,24 @@ core simulator of soccer server 3D. The key idea to gain flexibility
 with respect to the simulated robots, sensors, actuators and
 environment is to have a small number of extensible base entities by
 which the entire world model is made up. Base entities required are 3d
-physical objects, sensors, actuators and a representation of the
-terrain. Extensibility of soccer server 3D is achieved by using the
+physical objects, sensors and actuators. Extensibility of soccer server
+3D is achieved by using the
 concept of factories (from object-oriented programming) for each of
 these entity types and by deriving the needed entities from these
 entity base classes. A \emph{class server} is used to manage these
 factory classes; an approach like this and some of the additional
 modules to gain flexibility below have been described in
 \cite{ABF+02}\footnote{It's in German, so a summary of the concepts
-  follows}. 
+  follows}.
 
 
 \subsubsection{Console Subsystem}
 
 The console subsystem is used for online configuration of soccer
-server 3D and for scripting facilities. % (eventually). 
+server 3D and for scripting facilities. % (eventually).
 The console subsystem is also responsible for printing and redirecting
 (error and warning) messages and uses a \emph{variable subsystem} to
-store configuration variables. 
+store configuration variables.
 
 
 \subsubsection{Variable Subsystem}
@@ -117,7 +117,7 @@ respective console variable changes.
 \subsubsection{Forwarder Subsystem}
 
 The forwarder subsystem is used to print and redirect messages
-intended to be read by humans. 
+intended to be read by humans.
 
 \subsubsection{Scene Graph (Tree)}
 
@@ -148,10 +148,10 @@ pose without further changes within the scene graph.
 
 \item object3d\\
   A base class for representation of three dimensional objects in the
-  world; derived from the entity base class. object3d and derived
+  world including the terrain; derived from the entity base class. object3d and derived
   classes describe for instance (FIXME) the shape and the weight of 3d
   objects (but not the pose of the object in the world).
-  
+
 \item sensor\\
   A base class for sensor devices, derived from the entity base class.
   A sensor device consists at least of a method that, given a certain
@@ -160,20 +160,70 @@ pose without further changes within the scene graph.
   properties like weight by itself. To represent for instance a
   camera, a 3d physical object entity representing the camera and a
   sensor entity have to be used together.
-  
+
 \item actuator\\
   A base class with a method creating a force that is applied to 3d
   physical objects for some time, derived from the entity base class.
   Actuators have a method for changing their current state, possibly
   for some time only. Like a sensor, an actuator alone does not have a
   spatial extension on its own.
-  
-\item terrain \\
-  A representation of the terrain (i.e. the soccer field), derived
-  from the entity base class. A possible representation of the terrain
-  is for instance a height map, a two dimensional array where each
-  value stands for the height at a certain position.
 \end{itemize}
+
+
+
+\subsubsection{Rule System}
+
+The simulator will also need a way of representing the various rules that
+control the progession of the environement being simulated.  These are
+different from the rules that govern the actual phyical modeling of the objects
+in the simulator, which is taken care of by the underlying physics engine.
+The rule system will for instance allow rules such as when the ball crosses into
+the goal area, a point is awarded.
+
+The rule system will store the current rules and they will each be called each
+simulator step.  When a rule is called it is possible that it could remove itself
+or other rules from the store and/or create new rules in the store.  This allows
+the rule system to keep only a few current rules in the store making it easier to
+determine what rules are currently affecting the simulation.
+
+For instance, normally in a soccer match if a player kicks the ball into the goal,
+a point is awarded.  However, when an indirect free kick is taken and the player kicks,
+the ball into the goal, a goal kick (or corner kick if it's the players own goal) is
+awarded.  In this scenario when an indirect free kick is awarded the normal goal scoring
+rule is replaced with it's alternate.  When the indirect free kick goal scoring rule
+no longer applies (either because an other player kicked the ball or the state of play
+changed for another reason), it is replaced by the original goal scoring rule.
+
+\begin{itemize}
+\item Rule\\
+  An abstract base class for rules in the simulated environment that are not
+  handled by the underlying physics engine.
+  \begin{itemize}
+  \item virtual void evaluate() = 0;\\
+    Abstract method that evaluates the rules based on the current state of
+    the enviroment and possibly the previous states that this rule was also
+    evaluated for.
+
+    Evaluation may result in the rule making changes to the enviroment or the
+    rules in the RuleStore
+  \end{itemize}
+
+\item RuleFactory\\
+  A class for creating rules without needing to reference the concrete rule type
+
+\item RuleStore\\
+  Maintains a list of the current rules that need to be evaluated each simulator
+  step
+  \begin{itemize}
+  \item void evaluate();\\
+    Calls evaluate on each rule currently in the store
+  \item void add( Rule\& );\\
+    Adds a rule to the Store
+  \item void remove( Rule\& );\\
+    Removes a rule from the store
+  \end{itemize}
+\end{itemize}
+
 
 \bibliography{simulator3d}
 
