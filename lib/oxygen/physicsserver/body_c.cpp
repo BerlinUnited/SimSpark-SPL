@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.5 2004/02/21 15:30:44 fruit Exp $
+   $Id: body_c.cpp,v 1.6 2004/03/22 10:52:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,68 +23,197 @@
 
 using namespace boost;
 using namespace oxygen;
+using namespace salt;
 
-FUNCTION(enable)
+FUNCTION(Body,enable)
 {
-        if (in.size() == 0)
-        {
-                Body *b = static_cast<Body*>(obj);
-                b->Enable();
-        }
+   obj->Enable();
+   return true;
 }
 
-FUNCTION(disable)
+FUNCTION(Body,disable)
 {
-        if (in.size() == 0)
-        {
-                Body *b = static_cast<Body*>(obj);
-                b->Disable();
-        }
+    obj->Disable();
+    return true;
 }
 
-FUNCTION(useGravity)
+FUNCTION(Body,isEnabled)
 {
-        if (in.size() == 1)
-        {
-                Body *b = static_cast<Body*>(obj);
-                b->UseGravity(any_cast<bool>(in[0]));
-        }
+    return obj->IsEnabled();
 }
 
-FUNCTION(setMass)
+FUNCTION(Body,useGravity)
 {
-        if (in.size() == 1)
+    bool inB;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inB))
+        )
         {
-                Body *b = static_cast<Body*>(obj);
-                b->SetMass(any_cast<float>(in[0]));
+            return false;
         }
+
+    obj->UseGravity(inB);
+    return true;
 }
 
-FUNCTION(setMaxSpeed)
+FUNCTION(Body,setMass)
 {
-        if (in.size() == 1)
+    float inMass;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inMass))
+         )
         {
-                Body *b = static_cast<Body*>(obj);
-                b->SetMaxSpeed(any_cast<float>(in[0]));
+            return false;
         }
+
+        obj->SetMass(inMass);
+        return true;
 }
 
-FUNCTION(setSphere)
+FUNCTION(Body,getMass)
 {
-        if (in.size() == 2)
-        {
-                Body *b = static_cast<Body*>(obj);
-                b->SetSphere(any_cast<float>(in[0]), any_cast<float>(in[1]));
-        }
+    return obj->GetMass();
 }
+
+FUNCTION(Body,setSphere)
+{
+    float inDensity;
+    float inRadius;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inRadius))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSphere(inDensity,inRadius);
+    return true;
+}
+
+FUNCTION(Body,setMaxSpeed)
+{
+    float inSpeed;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inSpeed))
+        )
+        {
+            return false;
+        }
+
+    obj->SetMaxSpeed(inSpeed);
+    return true;
+}
+
+FUNCTION(Body,getMaxSpeed)
+{
+    return obj->GetMaxSpeed();
+}
+
+FUNCTION(Body,setVelocity)
+{
+    Vector3f inVel;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inVel))
+        )
+        {
+            return false;
+        }
+
+    obj->SetVelocity(inVel);
+    return true;
+}
+
+FUNCTION(Body,setAngularVelocity)
+{
+    Vector3f inVel;
+
+    if (
+        (in.GetSize() == 1) ||
+        (! in.GetValue(in.begin(), inVel))
+        )
+        {
+            return false;
+        }
+
+    obj->SetAngularVelocity(inVel);
+    return true;
+}
+
+FUNCTION(Body,addForce)
+{
+    Vector3f inForce;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inForce))
+        )
+        {
+            return false;
+        }
+
+    obj->AddForce(inForce);
+    return true;
+}
+
+FUNCTION(Body,addTorque)
+{
+    Vector3f inTorque;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inTorque))
+        )
+        {
+            return false;
+        }
+
+    obj->AddForce(inTorque);
+    return true;
+}
+
+FUNCTION(Body,setPosition)
+{
+    Vector3f inPos;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inPos))
+        )
+        {
+            return false;
+        }
+
+    obj->AddForce(inPos);
+    return true;
+}
+
 
 void CLASS(Body)::DefineClass()
 {
         DEFINE_BASECLASS(oxygen/ODEObject);
         DEFINE_FUNCTION(enable);
         DEFINE_FUNCTION(disable);
+        DEFINE_FUNCTION(isEnabled);
         DEFINE_FUNCTION(useGravity);
-        DEFINE_FUNCTION(setMass);
-        DEFINE_FUNCTION(setMaxSpeed);
         DEFINE_FUNCTION(setSphere);
+        DEFINE_FUNCTION(setMass);
+        DEFINE_FUNCTION(getMass);
+        DEFINE_FUNCTION(setMaxSpeed);
+        DEFINE_FUNCTION(getMaxSpeed);
+        DEFINE_FUNCTION(setVelocity);
+        DEFINE_FUNCTION(setAngularVelocity);
+        DEFINE_FUNCTION(addForce);
+        DEFINE_FUNCTION(addTorque);
+        DEFINE_FUNCTION(setPosition);
 }
