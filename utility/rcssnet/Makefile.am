@@ -19,6 +19,7 @@ tcpsocket.hpp \
 udpsocket.hpp 
 
 librcssnet3D_la_LIBADD = @NET_LIBS@
+librcssnet3D_la_LDFLAGS = -version-info @rcssnet3D_version_info@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/rcssnet
