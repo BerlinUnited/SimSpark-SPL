@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstateperceptor.cpp,v 1.3 2004/03/23 09:33:58 rollmark Exp $
+   $Id: agentstateperceptor.cpp,v 1.3.2.1 2004/03/28 13:37:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,14 +41,14 @@ AgentStatePerceptor::Percept(oxygen::Predicate& predicate)
 {
     if (mAgentState.get() == 0)
     {
-            return false;
+        return false;
     }
 
     --mSenses;
 
     if (mSenses > 0)
     {
-            return false;
+        return false;
     }
 
     mSenses = mPerceptRate;
@@ -57,16 +57,14 @@ AgentStatePerceptor::Percept(oxygen::Predicate& predicate)
     predicate.parameter.Clear();
 
     // battery
-    ParameterList element;
-    element.AddValue(std::string("battery"));
-    element.AddValue(mAgentState->GetBattery());
-    predicate.parameter.AddValue(element);
+    ParameterList& batteryElement = predicate.parameter.AddList();
+    batteryElement.AddValue(std::string("battery"));
+    batteryElement.AddValue(mAgentState->GetBattery());
 
     // temperature
-    element.Clear();
-    element.AddValue(std::string("temp"));
-    element.AddValue(mAgentState->GetTemperature());
-    predicate.parameter.AddValue(element);
+    ParameterList& tempElement = predicate.parameter.AddList();
+    tempElement.AddValue(std::string("temp"));
+    tempElement.AddValue(mAgentState->GetTemperature());
 
     return true;
 }
