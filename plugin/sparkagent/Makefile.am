@@ -1,6 +1,7 @@
 pkglib_LTLIBRARIES = sparkagent.la
 
 sparkagent_la_SOURCES = \
+	hinge2action.h \
 	hinge2perceptor.h \
 	hinge2perceptor.cpp \
 	hinge2perceptor_c.cpp \
