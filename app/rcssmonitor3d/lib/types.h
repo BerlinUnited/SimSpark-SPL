@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: types.h,v 1.3 2004/03/20 09:42:26 rollmark Exp $
+   $Id: types.h,v 1.4 2004/04/20 11:46:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@
 #define DEFAULT_FIELD_HEIGHT 20.0
 
 #define DEFAULT_BORDER_SIZE  4.0
-#define DEFAULT_LINE_WIDTH 0.12
+#define DEFAULT_LINE_WIDTH 0.08
 
 #define DEFAULT_GOAL_WIDTH   7.32
 #define DEFAULT_GOAL_DEPTH   2.0
