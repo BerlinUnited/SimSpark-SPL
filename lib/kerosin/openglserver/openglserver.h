@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.h,v 1.7 2003/11/14 14:05:52 fruit Exp $
+   $Id: openglserver.h,v 1.7.2.1 2003/11/20 20:15:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,9 +56,6 @@ private:
 public:
     OpenGLServer();
     ~OpenGLServer();
-
-    //! setup application window, initialize OpenGL, autoregister extensions
-    bool Init();
 
     boost::shared_ptr<GLExtensionReg> GetExtensionReg() const;
     //! if this is called, the application will 'want to quit'
