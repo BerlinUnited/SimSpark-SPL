@@ -27,6 +27,14 @@ Comments:
 #else
 #include <limits.h>
 #endif
+
+#ifdef MACOS
+#define sqrtf sqrt
+#define sinf sin
+#define cosf cos
+#define tanf tan
+#endif
+
 #include <memory.h>
 #include <stdlib.h>
 #include <float.h>

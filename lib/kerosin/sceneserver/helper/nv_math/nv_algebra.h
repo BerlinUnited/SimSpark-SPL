@@ -423,10 +423,10 @@ struct DECLSPEC_NV_MATH mat4
 
     void set_col(int i, const vec4 & v)
     {
-        mat_array[i] = v.x;
-        mat_array[i + 1] = v.y;
-        mat_array[i + 2] = v.z;
-        mat_array[i + 3] = v.w;
+        mat_array[i * 4] = v.x;
+        mat_array[i * 4 + 1] = v.y;
+        mat_array[i * 4 + 2] = v.z;
+        mat_array[i * 4 + 3] = v.w;
     }
 
     void set_row(int i, const vec4 & v)
@@ -485,6 +485,10 @@ public:
 	quat(const vec3& axis, nv_scalar angle);
 	quat(const mat3& rot);
 	quat& operator=(const quat& quat);
+	quat operator-()
+	{
+		return quat(-x, -y, -z, -w);
+	}
 	quat Inverse();
 	void Normalize();
 	void FromMatrix(const mat3& mat);
@@ -503,6 +507,9 @@ public:
 const quat operator*(const quat&, const quat&);
 extern quat & conj(quat & p, const quat & q);
 extern quat & add_quats(quat & p, const quat & q1, const quat & q2);
+extern nv_scalar dot(const quat & p, const quat & q);
+extern quat & dot(nv_scalar s, const quat & p, const quat & q);
+extern quat & slerp_quats(quat & p, nv_scalar s, const quat & q1, const quat & q2);
 extern quat & axis_to_quat(quat & q, const vec3 & a, const nv_scalar phi);
 extern mat3 & quat_2_mat(mat3 &M, const quat &q );
 extern quat & mat_2_quat(quat &q,const mat3 &M);
