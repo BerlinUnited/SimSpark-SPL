@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.6 2004/04/05 14:51:08 rollmark Exp $
+   $Id: agentaspect.cpp,v 1.7 2004/04/24 12:02:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ using namespace std;
 
 AgentAspect::AgentAspect() : Transform()
 {
-  SetName("agentAspect");
+    SetName("agentAspect");
 }
 
 AgentAspect::~AgentAspect()
@@ -39,125 +39,125 @@ AgentAspect::~AgentAspect()
 bool
 AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> actions)
 {
-  UpdateEffectorMap();
+    UpdateEffectorMap();
 
-  for (
-       ActionObject::TList::iterator iter = actions->begin();
-       iter != actions->end();
-       ++iter
-       )
-    {
-      shared_ptr<ActionObject> action = (*iter);
-      std::string predicate = action->GetPredicate();
-
-      shared_ptr<Effector> effector = GetEffector(predicate);
-      if (effector.get() == 0)
+    for (
+         ActionObject::TList::iterator iter = actions->begin();
+         iter != actions->end();
+         ++iter
+         )
         {
-          GetLog()->Warning()
-            <<  "(AgentAspect) No effector found for predicate "
-            << predicate << "\n";
-          continue;
+            shared_ptr<ActionObject> action = (*iter);
+            std::string predicate = action->GetPredicate();
+
+            shared_ptr<Effector> effector = GetEffector(predicate);
+            if (effector.get() == 0)
+                {
+                    GetLog()->Warning()
+                        <<  "(AgentAspect) No effector found for predicate "
+                        << predicate << "\n";
+                    continue;
+                }
+
+            bool realized = effector->Realize(action);
+
+            if (! realized)
+                {
+                    GetLog()->Warning()
+                        << "(AgentAspect) Failed to realize predicate "
+                        << predicate << "\n";
+                }
         }
 
-      bool realized = effector->Realize(action);
-
-      if (! realized)
-        {
-          GetLog()->Warning()
-            << "(AgentAspect) Failed to realize predicate "
-            << predicate << "\n";
-        }
-    }
-
-  return true;
+    return true;
 }
 
 shared_ptr<PredicateList>
 AgentAspect::QueryPerceptors()
 {
-  // build list of perceptors, searching recursively
-  TLeafList perceptors;
-  ListChildrenSupportingClass<Perceptor>(perceptors,true);
+    // build list of perceptors, searching recursively
+    TLeafList perceptors;
+    ListChildrenSupportingClass<Perceptor>(perceptors,true);
 
-  shared_ptr<PredicateList> predList(new PredicateList());
+    shared_ptr<PredicateList> predList(new PredicateList());
 
-  // query the perceptors for new data
-  for (
-       TLeafList::iterator iter = perceptors.begin();
-       iter != perceptors.end();
-       ++iter
-       )
-    {
-      shared_static_cast<Perceptor>(*iter)->Percept(predList);
-    }
+    // query the perceptors for new data
+    for (
+         TLeafList::iterator iter = perceptors.begin();
+         iter != perceptors.end();
+         ++iter
+         )
+        {
+            shared_static_cast<Perceptor>(*iter)->Percept(predList);
+        }
 
-  return predList;
+    return predList;
 }
 
 shared_ptr<Effector>
 AgentAspect::GetEffector(const std::string predicate) const
 {
-  TEffectorMap::const_iterator iter = mEffectorMap.find(predicate);
+    TEffectorMap::const_iterator iter = mEffectorMap.find(predicate);
 
-  if (iter == mEffectorMap.end())
-    {
-      return shared_ptr<Effector>();
-    }
+    if (iter == mEffectorMap.end())
+        {
+            return shared_ptr<Effector>();
+        }
 
-  return (*iter).second;
+    return (*iter).second;
 }
 
 void
 AgentAspect::UpdateEffectorMap()
 {
-  // build list of effectors, searching recursively
-  TLeafList effectors;
-  ListChildrenSupportingClass<Effector>(effectors,true);
+    // build list of effectors, searching recursively
+    TLeafList effectors;
+    ListChildrenSupportingClass<Effector>(effectors,true);
 
-  // build the effector map
-  mEffectorMap.clear();
+    // build the effector map
+    mEffectorMap.clear();
 
-  for (
-       TLeafList::iterator iter = effectors.begin();
-       iter != effectors.end();
-       ++iter
-       )
-    {
-      shared_ptr<Effector> effector = shared_static_cast<Effector>(*iter);
-      mEffectorMap[effector->GetPredicate()] = effector;
-    }
+    for (
+         TLeafList::iterator iter = effectors.begin();
+         iter != effectors.end();
+         ++iter
+         )
+        {
+            shared_ptr<Effector> effector = shared_static_cast<Effector>(*iter);
+            mEffectorMap[effector->GetPredicate()] = effector;
+        }
 }
 
-bool AgentAspect::Init(const string& createEffector)
+bool
+AgentAspect::Init(const string& createEffector)
 {
+    shared_ptr<Effector> create = shared_dynamic_cast<Effector>
+        (GetCore()->New(createEffector));
 
-  shared_ptr<Effector> create = shared_dynamic_cast<Effector>
-    (GetCore()->New(createEffector));
+    if (create.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (AgentAspect) Could not construct a createEffector '"
+                << createEffector << "'\n";
+            return false;
+        }
 
-  if (create.get() == 0)
-    {
-      GetLog()->Error()
-        << "ERROR: (AgentAspect) Could not construct a createEffector '"
-        << createEffector << "'\n";
-      return false;
-    }
+    create->SetName("_CreateEffector");
 
-  create->SetName("_CreateEffector");
+    // link it into our hierarchy
+    bool added = AddChildReference(create);
 
-  // link it into our hierarchy
-  bool added = AddChildReference(create);
+    if (! added)
+        {
+            GetLog()->Error()
+                << "ERROR: (AgentAspect) failed to set up the CreateEffector '"
+                << createEffector << "'\n";
+            return false;
+        } else
+            {
+                GetLog()->Debug() << "(AgentAspect) created CreateEffector '"
+                                  << createEffector << "'\n";
+            }
 
-  if (! added)
-    {
-      GetLog()->Error()
-        << "ERROR: (AgentAspect) failed to set up the CreateEffector '"
-        << createEffector << "'\n";
-      return false;
-    } else
-      {
-        GetLog()->Debug() << "(AgentAspect) created CreateEffector '"
-        << createEffector << "'\n";
-      }
-
-  return added;
+    return added;
 }
