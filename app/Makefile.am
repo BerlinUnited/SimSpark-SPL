@@ -1,8 +1,8 @@
-SUBDIRS = coretest \
+SUBDIRS = \
+	  agenttest \
+	  coretest \
 	  fonttest \
 	  inputtest \
 	  scenetest \
-	  simulator \
 	  spadestest \
-	  agenttest \
 	  zeitgeisttest 
