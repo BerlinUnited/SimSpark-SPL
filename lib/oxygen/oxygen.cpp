@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.cpp,v 1.1 2003/11/10 11:58:57 fruit Exp $
+   $Id: oxygen.cpp,v 1.2 2003/11/10 21:33:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,33 @@ using namespace zeitgeist;
 
 Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
 {
-    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServer), "kerosin/");
+    // scene graph
     zg.GetCore()->RegisterClassObject(new CLASS(SceneServer), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(BaseNode), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Camera), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(FPSController), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Scene), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Transform), "kerosin/");
 
+    // physics
+    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServer), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Body), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Space), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(World), "kerosin/");
+
+    // collider
+    zg.GetCore()->RegisterClassObject(new CLASS(Collider), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(PlaneCollider), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(SphereCollider), "kerosin/");
+
+    // agentaspect
+    zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Effector), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ForceEffector), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Perceptor), "kerosin/");
+    // zg.GetCore()->RegisterClassObject(new CLASS(VisionPerceptor), "kerosin/");
+
+    // controlaspect
+    zg.GetCore()->RegisterClassObject(new CLASS(ControlAspect), "kerosin/");
 }
