@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture_c.cpp,v 1.1 2004/03/20 12:53:10 rollmark Exp $
+   $Id: material2dtexture_c.cpp,v 1.2 2004/04/18 16:32:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,8 +23,57 @@
 
 using namespace zeitgeist;
 using namespace kerosin;
+using namespace std;
+
+FUNCTION(Material2DTexture,setDiffuseTexture)
+{
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inName))
+        )
+    {
+        return false;
+    }
+
+    return obj->SetDiffuseTexture(inName);
+}
+
+FUNCTION(Material2DTexture,setNormalTexture)
+{
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inName))
+        )
+    {
+        return false;
+    }
+
+    return obj->SetNormalTexture(inName);
+}
+
+FUNCTION(Material2DTexture,setSpecularTexture)
+{
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inName))
+        )
+    {
+        return false;
+    }
+
+    return obj->SetSpecularTexture(inName);
+}
 
 void CLASS(Material2DTexture)::DefineClass()
 {
-        DEFINE_BASECLASS(kerosin/Material);
+    DEFINE_BASECLASS(kerosin/MaterialSolid);
+    DEFINE_FUNCTION(setDiffuseTexture);
+    DEFINE_FUNCTION(setNormalTexture);
+    DEFINE_FUNCTION(setSpecularTexture);
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture.cpp,v 1.1 2004/03/20 12:53:10 rollmark Exp $
+   $Id: material2dtexture.cpp,v 1.2 2004/04/18 16:32:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ using namespace kerosin;
 using namespace boost;
 using namespace std;
 
-Material2DTexture::Material2DTexture() : Material()
+Material2DTexture::Material2DTexture() : MaterialSolid()
 {
 }
 
@@ -39,11 +39,13 @@ Material2DTexture::~Material2DTexture()
 {
 }
 
-bool Material2DTexture::Load(const std::string& matName)
+bool Material2DTexture::LoadTexture(const std::string& texName, shared_ptr<Texture>& store)
 {
     shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
     shared_ptr<TextureServer> textureServer = shared_dynamic_cast<TextureServer>
         (GetCore()->Get("/sys/server/texture"));
+
+    store.reset();
 
     if (textureServer.get() == 0)
         {
@@ -52,41 +54,29 @@ bool Material2DTexture::Load(const std::string& matName)
             return false;
         }
 
-    if (
-        (scriptServer.get() == 0) ||
-        (! scriptServer->Run(matName))
-        )
-    {
-        return false;
-    }
+    store = textureServer->GetTexture(texName);
+    return (store.get() != 0);
+}
 
-    string diffuse, normal, specular;
-    if(scriptServer->GetVariable("Material.Diffuse", diffuse) == false)
-        {
-            // backup - default diffuse texture
-            diffuse = "sys/white.png";
-        }
-    mTexDiffuse = textureServer->GetTexture(diffuse);
+bool Material2DTexture::SetDiffuseTexture(const std::string& texName)
+{
+    return LoadTexture(texName,mTexDiffuse);
+}
 
-    if(scriptServer->GetVariable("Material.Normal", normal) == false)
-        {
-            // backup - default normal texture
-            normal = "sys/defaultNormal.png";
-        }
-    mTexNormal = textureServer->GetTexture(normal);
+bool Material2DTexture::SetNormalTexture(const std::string& texName)
+{
+    return LoadTexture(texName,mTexNormal);
+}
 
-    if(scriptServer->GetVariable("Material.Specular", specular) == false)
-        {
-            // backup - default specular texture
-            specular = diffuse;
-        }
-    mTexSpecular = textureServer->GetTexture(specular);
-
-    return true;
+bool Material2DTexture::SetSpecularTexture(const std::string& texName)
+{
+    return LoadTexture(texName,mTexSpecular);
 }
 
 void Material2DTexture::Bind()
 {
+    SetupMaterial();
+
     if (mTexDiffuse.get() != 0)
         {
             glActiveTextureARB(GL_TEXTURE0_ARB);

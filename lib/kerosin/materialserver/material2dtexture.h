@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture.h,v 1.1 2004/03/20 12:53:10 rollmark Exp $
+   $Id: material2dtexture.h,v 1.2 2004/04/18 16:32:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,13 +22,13 @@
 #ifndef KEROSIN_MATERIAL2DTEXTURE_H
 #define KEROSIN_MATERIAL2DTEXTURE_H
 
-#include "material.h"
+#include "materialsolid.h"
 
 namespace kerosin
 {
 class Texture;
 
-class Material2DTexture : public Material
+class Material2DTexture : public MaterialSolid
 {
     //
     // Functions
@@ -37,20 +37,35 @@ public:
     Material2DTexture();
     virtual ~Material2DTexture();
 
-    /** loads a set of textures. It runs a script matName that should
-        set three variables named Material.Diffuse, Material.Normal
-        and Material.Specular giving the names of the textures to load
-     */
-    bool Load(const std::string& matName);
+    /** loads the diffuse texture */
+    bool SetDiffuseTexture(const std::string& texName);
 
+    /** loads the normal texture */
+    bool SetNormalTexture(const std::string& texName);
+
+    /** loads the specular texture */
+    bool SetSpecularTexture(const std::string& texName);
+
+    /** binds the managed material, i.e. sets all necessary OpenGL
+        states */
     virtual void Bind();
+
+protected:
+    /** tries to load the texturee texName and stores a reference */
+    bool LoadTexture(const std::string& texName,
+                     boost::shared_ptr<Texture>& store);
 
     //
     // Members
     //
 protected:
+    /** the diffuse texture */
     boost::shared_ptr<Texture> mTexDiffuse;
+
+    /** the normal texture */
     boost::shared_ptr<Texture> mTexNormal;
+
+    /** the specular texture */
     boost::shared_ptr<Texture> mTexSpecular;
 };
 
