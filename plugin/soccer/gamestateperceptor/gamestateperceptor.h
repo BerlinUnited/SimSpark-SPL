@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.h,v 1.1.2.2 2004/02/06 13:44:53 rollmark Exp $
+   $Id: gamestateperceptor.h,v 1.1.2.3 2004/02/06 14:49:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,9 +48,6 @@ protected:
 
     /** resets the reference to the GameStateAspect */
     virtual void OnUnlink();
-
-    /** returns a string describing the given playmode */
-    std::string PlayMode2Str(const TPlayMode mode) const;
 
     /** inserts predicate parameters the agent receives once after a
         successful init command into the predicate. These are it's
