@@ -31,7 +31,7 @@ getInput()
 
   long len;
   memcpy(&len, buffer, sizeof(long));
-  len = ntohl(l);
+  len = ntohl(len);
 
   // zero terminate received data
   buffer[sizeof(long) + len] = 0;
