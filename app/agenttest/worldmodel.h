@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: worldmodel.h,v 1.6 2004/04/07 13:41:11 fruit Exp $
+   $Id: worldmodel.h,v 1.7 2004/04/08 14:27:29 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,6 +99,10 @@ public:
 
     float GetMinimalKickDistance();
     int GetTeamUnum();
+    
+    void SetTeamName(std::string name);  
+    std::string GetTeamName();             
+    std::string GetOppTeamName();
 
 protected:
     virtual bool ConstructInternal();
@@ -130,6 +134,8 @@ protected:
 
     // parser instance
     boost::shared_ptr<oxygen::BaseParser> mParser;
+    
+    void SetOppTeamName(std::string name);
 
     // soccer variables
     float mFieldLength;
@@ -152,6 +158,8 @@ protected:
     // team information
     TTeamIndex mTeamIndex;
     unsigned int mTeamUnum;
+    std::string mTeamName;
+    std::string mOppTeamName;
 
     // game state information
     float mTime;
