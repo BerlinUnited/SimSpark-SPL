@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.18 2004/02/10 20:49:45 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.19 2004/02/11 10:10:21 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,6 +65,9 @@ int gOldY           = DEFAULT_MOUSE_POSY;
 // automatic camera
 bool gAutoCam       = DEFAULT_AUTO_CAM;
 
+// draw player unums
+bool gDrawUnums     = DEFAULT_DRAW_UNUMS;
+
 // window width and height
 const int gWidth    = DEFAULT_WIDTH;
 const int gHeight   = DEFAULT_HEIGHT;
@@ -83,7 +86,7 @@ float gGoalDepth    = DEFAULT_GOAL_DEPTH;
 float gGoalHeight   = DEFAULT_GOAL_HEIGHT;
 
 // camera step size
- const float gCamDelta = 0.5f;
+const float gCamDelta = 0.5f;
 
 // game state data
 string gTeamL       = "teamL";
@@ -401,6 +404,7 @@ void drawObject(const Predicate& predicate, const ObjType& type)
         }
 
     const float* color = type.color;
+    int unum = 0;
 
     if (predicate.name == "ball")
         {
@@ -438,24 +442,29 @@ void drawObject(const Predicate& predicate, const ObjType& type)
                 }
             }
 
-#if 0
+
             // uniform number
             Predicate::Iterator unumIter(predicate);
             if (predicate.FindParameter(unumIter, "unum"))
                 {
-                    int unum;
-                    if (predicate.GetValue(unumIter,unum))
-                    {
-                        // TODO: draw uniform number for the agents
-                    }
-
+                    predicate.GetValue(unumIter,unum);
                 }
-#endif
         }
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
     gGLServer.DrawSphere(pos, type.size);
     gGLServer.DrawShadowOfSphere(pos, type.size);
+
+    if (
+        (gDrawUnums) &&
+        (unum > 0)
+        )
+        {
+            glColor3f   ( 1.0, 1.0, 1.0  );
+            stringstream ss;
+            ss << unum;
+            gGLServer.DrawText3D(ss.str().c_str(),pos);
+        }
 }
 
 //---------------------------DrawStatusText--------------------------------------
@@ -715,6 +724,11 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
     case '+':
         //move camera up
         gGLServer.MoveCamUp(gCamDelta);
+        break;
+
+    case 'n':
+        // toggle drawing of unums
+        gDrawUnums = !gDrawUnums;
         break;
 
     case '-':
