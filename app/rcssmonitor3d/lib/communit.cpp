@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.cpp,v 1.1 2004/03/09 17:13:33 fruit Exp $
+   $Id: communit.cpp,v 1.2 2004/03/19 15:59:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,8 +75,32 @@ bool CommUnit::OpenConnection(std::string host, int port)
   return false;
 }
 
+bool CommUnit::SelectInput(bool wait)
+{
+    int fd = mSocket.getFD();
+
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(fd,&readfds);
+
+    timeval time;
+    time.tv_sec = 0;
+    time.tv_usec = 0;
+
+    return select
+        (
+         fd+1, &readfds, 0, 0,
+         wait ? 0:&time
+         ) > 0;
+}
+
 string CommUnit::GetMessage ()
 {
+    if (! SelectInput(false))
+        {
+            return "";
+        }
+
     static char line[MAX_MSG_LEN];
     mInStream.getline(line,MAX_MSG_LEN);
     return line;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: communit.h,v 1.1 2004/03/09 17:13:33 fruit Exp $
+   $Id: communit.h,v 1.2 2004/03/19 15:59:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ public:
     void CloseConnection ();
     std::string GetMessage ();
     void PutMessage(const std::string& message);
+
+protected:
+    bool SelectInput(bool wait);
 
 protected:
     rcss::net::TCPSocket mSocket;
