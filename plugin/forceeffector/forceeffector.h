@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.h,v 1.1.2.2 2003/12/16 16:28:14 rollmark Exp $
+   $Id: forceeffector.h,v 1.1.2.3 2003/12/21 10:48:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,12 +31,12 @@ class ForceEffector : public oxygen::Effector
     //
 public:
     ForceEffector();
+    virtual ~ForceEffector();
 
     /** realizes the action described by the ActionObject */
     virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
 
-    /** returns the name of the predicate this effector implements.
-     */
+    /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "force"; }
 
     /** constructs an Actionobject, describing a predicate */
