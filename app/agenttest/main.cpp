@@ -69,11 +69,11 @@ ProcessSensation()
   // the world model. The agent can reply with act messages, and must
   // finish with a done thinking message.
 
-  static bool firstSense = true;
+  static int step = 0;
 
 
-  if (firstSense)
-    {
+  switch (step) {
+  case 0:
       // this is the first received sensation. use the create effector
       // to setup the Sensors and Effectors
       log ("received first sensation ");
@@ -85,14 +85,28 @@ ProcessSensation()
       // 'A'- action
       // (create)- s-expr, predicate 'create' without parameters
       putOutput("A(create)");
-
-      firstSense = false;
-    } else
-      {
-        log("received sensation ");
-        log(msg_data);
-        log("\n");
-      }
+      ++step;
+      break;
+  case 1:
+      log("received sensation 1 ");
+      log(msg_data);
+      log("\n");
+      ++step;
+      break;
+  case 2:
+      log("received sensation 2 ");
+      log(msg_data);
+      log("\n");
+      // 'A'- action
+      // (init (teamname RoboLog) (unum 4711))
+      putOutput("A(init (unum 8) (teamname RoboLog))");
+      ++step;
+      break;
+  default:
+      log("received sensation X ");
+      log(msg_data);
+      log("\n");
+  }
 
   log("writing done thinking message\n");
   putOutput("D");
