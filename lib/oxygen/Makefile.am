@@ -8,7 +8,7 @@ else
 pkglib_LTLIBRARIES = liboxygen.la
 liboxygen_la_SOURCES = $(sources) $(spades_sources)
 liboxygen_la_CXXFLAGS = -O2 -Wno-deprecated 
-liboxygen_la_LIBADD = -lode $(spades_libs)
+liboxygen_la_LIBADD = -lode $(spades_libs) 
 liboxygen_la_LDFLAGS = -version-info @oxygen_version_info@
 endif
 
@@ -122,6 +122,20 @@ sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
 sceneserver/camera.cpp \
 sceneserver/camera_c.cpp \
+simulationserver/simulationserver.h \
+simulationserver/simulationserver.cpp \
+simulationserver/simulationserver_c.cpp \
+simulationserver/simcontrolnode.cpp \
+simulationserver/simcontrolnode_c.cpp \
+simulationserver/agentcontrol.cpp \
+simulationserver/agentcontrol_c.cpp \
+simulationserver/monitorcontrol.cpp \
+simulationserver/monitorcontrol_c.cpp \
+simulationserver/netcontrol.cpp \
+simulationserver/netcontrol_c.cpp \
+simulationserver/netmessage.cpp \
+simulationserver/netmessage_c.cpp \
+simulationserver/netbuffer.cpp \
 geometryserver/geometryserver.h \
 geometryserver/geometryserver.cpp \
 geometryserver/geometryserver_c.cpp \
@@ -179,6 +193,13 @@ sceneserver/sceneserver.h \
 sceneserver/sceneimporter.h \
 sceneserver/transform.h \
 sceneserver/camera.h \
+simulationserver/simulationserver.h \
+simulationserver/simcontrolnode.h \
+simulationserver/agentcontrol.h \
+simulationserver/monitorcontrol.h \
+simulationserver/netcontrol.h \
+simulationserver/netmessage.h \
+simulationserver/netbuffer.h \
 geometryserver/geometryserver.h \
 geometryserver/meshimporter.h \
 geometryserver/stdmeshimporter.h \
