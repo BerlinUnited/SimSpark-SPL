@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.7 2004/06/06 11:55:50 fruit Exp $
+   $Id: monitor.cpp,v 1.8 2004/06/07 14:24:46 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -231,10 +231,11 @@ Monitor::Usage()
     std::cerr <<
 "Usage: rcssserver3D-lite [options]\n"
 "Simple visualization of rcssserver3D soccer matches\n\n"
-"       --help          print this message and exit\n"
-"       --port          specify the port number (default is " << DEFAULT_PORT << ")\n"
-"       --server        specify the server host (default is '" << DEFAULT_HOST << "')\n"
-"       --logfile       specify the logfile to read (not with --server)\n"
+"   --help      print this message and exit\n"
+"   --port      specify the port number (default is " << DEFAULT_PORT << ")\n"
+"   --server    specify the server host (default is '" << DEFAULT_HOST << "')\n"
+"   --logfile   specify the logfile to read (not with --server)\n"
+"   --msgskip   every but the nth message should be discarded (default is 1)\n"
 "\n";
 }
 
@@ -336,7 +337,10 @@ Monitor::DrawStatusLine()
     glColor4fv(sTeamColorRight);
     mGLServer.DrawSphere(Vector3f( 0.97,0.93,0.0), 0.025, 20);
 
-    if (mGameState.GetPlayMode() == PM_BeforeKickOff)
+
+    int play_mode = mGameState.GetPlayMode();
+
+    if (play_mode == PM_BeforeKickOff)
     {
         glColor4fv(sSphereDefaultColor);
         switch (mKickOff)
@@ -352,7 +356,6 @@ Monitor::DrawStatusLine()
             break;
         }
     }
-
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
@@ -364,69 +367,17 @@ Monitor::DrawStatusLine()
     sc << "(" << ((mGameState.GetHalf() == GH_FIRST) ?
                   "first" : "second") << " half) ";
 
-    std::string mode;
-
-    switch (mGameState.GetPlayMode())
+    switch (play_mode)
     {
-    case PM_BeforeKickOff:
-        mode = STR_PM_BeforeKickOff;
-        break;
     case PM_KickOff_Left:
-        mode = STR_PM_KickOff_Left;
         mKickOff = CommServerBase::eRight;
         break;
     case PM_KickOff_Right:
-        mode = STR_PM_KickOff_Right;
         mKickOff = CommServerBase::eLeft;
-        break;
-    case PM_PlayOn:
-        mode = STR_PM_PlayOn;
-        break;
-    case PM_KickIn_Left:
-        mode = STR_PM_KickIn_Left;
-        break;
-    case PM_KickIn_Right:
-        mode = STR_PM_KickIn_Right;
-        break;
-    case PM_CORNER_KICK_LEFT:
-        mode = STR_PM_CORNER_KICK_LEFT;
-        break;
-    case PM_CORNER_KICK_RIGHT:
-        mode = STR_PM_CORNER_KICK_RIGHT;
-        break;
-    case PM_GOAL_KICK_LEFT:
-        mode = STR_PM_GOAL_KICK_LEFT;
-        break;
-    case PM_GOAL_KICK_RIGHT:
-        mode = STR_PM_GOAL_KICK_RIGHT;
-        break;
-    case PM_OFFSIDE_LEFT:
-        mode = STR_PM_OFFSIDE_LEFT;
-        break;
-    case PM_OFFSIDE_RIGHT:
-        mode = STR_PM_OFFSIDE_RIGHT;
-        break;
-    case PM_GameOver:
-        mode = STR_PM_GameOver;
-        break;
-    case PM_Goal_Left:
-        mode = STR_PM_Goal_Left;
-        break;
-    case PM_Goal_Right:
-        mode = STR_PM_Goal_Right;
-        break;
-    case PM_FREE_KICK_LEFT:
-        mode = STR_PM_FREE_KICK_LEFT;
-        break;
-    case PM_FREE_KICK_RIGHT:
-        mode = STR_PM_FREE_KICK_RIGHT;
-        break;
-    default:
-        mode = STR_PM_Unknown;
         break;
     };
 
-    sc << mode << " ";
+    sc << mGameState.PlayMode2Str(play_mode) << " ";
     sc << "t=" << setiosflags(ios::fixed) << setprecision(2) << mGameState.GetTime();
 
     glColor3f(1.0, 1.0, 1.0);
@@ -670,7 +621,6 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         // select camera mode
         mCameraMode = NextCameraMode(mCameraMode);
         break;
-
     case '+':
         //move camera up
         mGLServer.MoveCamUp(mCamDelta);
