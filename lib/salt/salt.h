@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: salt.h,v 1.8.6.1 2003/12/23 16:14:06 fruit Exp $
+   $Id: salt.h,v 1.9.2.1 2004/01/25 17:49:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,12 +26,13 @@
 #ifndef SALT_SALT_H
 #define SALT_SALT_H
 
+#include "bounds.h"
 #include "fileclasses.h"
 #include "matrix.h"
 #include "quadlink.h"
+#include "random.h"
 #include "sharedlibrary.h"
 #include "vector.h"
-#include "bounds.h"
 #include "plane.h"
 #include "frustum.h"
 
