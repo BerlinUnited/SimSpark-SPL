@@ -15,7 +15,7 @@ new features.
   CommServer plugin setup in rcssserver3D-lite.rb by the LogfileServer setup.
   Monitor logfiles get recorded by SPADES automatically, and the new monitor
   protocol can be used as Logfile format.
-- The rcssmonitor3D - library got an user-friendly interface
+- The rcssmonitor3D - library got an user-friendly interface.
 - rcssmonitor3D-lite looks better now and the display is more informative.
 - The body and effector parameters have been changed based on suggestions from
   the mailing lists.
@@ -23,10 +23,11 @@ new features.
   monitor applications as trainer program (to repoduce specific situations etc).
 - Players are moved away from the ball in certain situations (like kick in for 
   the other team or kick off, etc).
-- It is possible to do automatic kick offs now (in rcssserver3D.rb)
+- It is possible to do automatic kick offs now (in rcssserver3D.rb).
 - Due to various improvements and changes, the simulator is now reasonable fast
-  to extend the half time length to 4 minutes. 
-- Players accelerate (and break) faster; something like air resistance and 
+  to extend the half time length to 4 minutes; suggestions for the competition 
+  match lenght are welcome. 
+- Players accelerate (and break) faster; something like air resistance or 
   friction was added to the players and the ball so that they eventually stop 
   with no acceleration.
 - The torque from the kicker was made configurable from rcssserver3D.rb
@@ -58,16 +59,17 @@ new features.
   generic features (like the description language and ODE joints) we have been
   adding. 
 - Got rid of the rcssbase package dependency. The "net" part of this package
-  is part of rcssserver3D now and has been extended by TCP sockets.
+  is part of rcssserver3D now and has been extended by TCP sockets. The list 
+  of required libraries should be reasonable small now.
 - Added simspark demo simulations. 
 
-* Fixes/Changes (both soccer specific and general):
+* Important fixes/Changes (both soccer specific and general):
 
-- The simulator compiles with recent versions of boost (tested with 1-31-0)
-- Goals are properly counted now
-- Goals are only 50cm heigh now because agents cannot jump high 
-- The default torque from the kicker is low now (was way to high before)
-- Making the API documentation has been reduced to only the necessary cases.
+- The simulator compiles with recent versions of boost (tested with 1-31-0).
+- Goals are properly counted now.
+- Goals are only 50cm heigh now because agents cannot jump high. 
+- The default torque from the kicker is low now (was way to high before).
+- Building the API documentation has been reduced to only the necessary cases.
 - Some math bugs in libsalt have been fixed.
 - The kerosin library has been overhauled (lights / meshes / etc).
 - Added support to update cached script variables after reading ruby files.
