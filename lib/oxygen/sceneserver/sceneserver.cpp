@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.4 2003/11/10 23:11:42 fruit Exp $
+   $Id: sceneserver.cpp,v 1.4.8.1 2004/01/08 12:32:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 #include "scene.h"
 #include "../physicsserver/world.h"
 #include "../physicsserver/space.h"
-#include "../controlaspect/controlaspect.h"
 
 using namespace boost;
 using namespace oxygen;
@@ -110,18 +109,6 @@ void SceneServer::Update(float deltaTime)
 {
     if (deltaTime > 0.0f && mActiveScene)
     {
-        // update control aspects
-        TLeafList controlAspects;
-        TLeafList::iterator i;
-
-        mActiveScene->GetChildrenSupportingClass("ControlAspect", controlAspects);
-
-        for (i = controlAspects.begin(); i != controlAspects.end(); ++i)
-        {
-            shared_static_cast<ControlAspect>(*i)->PerformKills();
-        }
-
-
         mActiveScene->PrePhysicsUpdate(deltaTime);
 
         // determine collisions
