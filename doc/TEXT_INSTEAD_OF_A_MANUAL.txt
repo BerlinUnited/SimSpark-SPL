@@ -118,6 +118,20 @@ Prior to initializing, your effectors and perceptors will not work properly.
 Example: "(init (unum 7) (teamname RoboLog))".  
 
 
+"Beaming" agents: the beameffector
+Similar to the kickeffector, the initial plan was not to introduce any artificial 
+actions like "beaming" agents from one place to another place ("move"
+command in 2d soccer server). Still, the plan is to develop the soccer
+simulation so that beaming can disappear from the set of
+effectors. However the problem was that due to limited time we had to
+do something about moving agents to their half in before kick off
+mode. To remove "beaming", the referee has to be extended to send
+yellow or red cards to players that don't behave properly... with your
+help :) we are going to work on this feature in the near future. Until
+then, beaming of agents is allowed in beforekickoff mode.
+
+
+
 Vision: Your robots possess a special omnicam with some smart image
 proccessing software attached :). Robots have a 360 degrees view. The
 visionperceptor delivers lists of seen objects, where objects are
