@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.11.4.1 2004/01/26 20:38:35 rollmark Exp $
+   $Id: scriptserver.h,v 1.11.4.2 2004/02/02 20:34:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,32 +29,6 @@
 */
 #ifndef ZEITGEIST_SCRIPTSERVER_H
 #define ZEITGEIST_SCRIPTSERVER_H
-
-// Both <ruby.h> and "config.h" define PACKAGE_ constants.
-// To suppress compiler warnings about redefinitions they
-// are #undef'ed here
-
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-
-#ifndef __GNUC__
-#define EXTERN extern __declspec(dllimport)
-#endif
-#include <ruby.h>
-#undef EXTERN
-
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/class.h>
