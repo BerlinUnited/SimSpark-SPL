@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spherecollider.cpp,v 1.4 2004/02/12 14:07:23 fruit Exp $
+   $Id: spherecollider.cpp,v 1.5 2004/04/15 18:33:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "spherecollider.h"
 
 using namespace oxygen;
+using namespace salt;
 
 SphereCollider::SphereCollider() : Collider()
 {
@@ -51,4 +52,12 @@ SphereCollider::ConstructInternal()
     mODEGeom = dCreateSphere(0, 1.0f);
 
     return (mODEGeom != 0);
+}
+
+float
+SphereCollider::GetPointDepth(const Vector3f& pos)
+{
+  Vector3f worldPos(GetWorldTransform() * pos);
+  return dGeomSpherePointDepth
+    (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
 }

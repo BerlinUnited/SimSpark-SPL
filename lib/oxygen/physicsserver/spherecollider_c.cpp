@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: spherecollider_c.cpp,v 1.6 2004/03/22 10:56:05 rollmark Exp $
+$Id: spherecollider_c.cpp,v 1.7 2004/04/15 18:33:15 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,8 +21,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 #include "spherecollider.h"
 
-using namespace boost;
 using namespace oxygen;
+using namespace boost;
+using namespace salt;
 
 FUNCTION(SphereCollider,setRadius)
 {
@@ -45,9 +46,25 @@ FUNCTION(SphereCollider,getRadius)
     return obj->GetRadius();
 }
 
+FUNCTION(SphereCollider,getPointDepth)
+{
+    Vector3f inPos;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inPos))
+        )
+        {
+            return 0;
+        }
+
+    return obj->GetPointDepth(inPos);
+}
+
 void CLASS(SphereCollider)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Collider);
     DEFINE_FUNCTION(setRadius);
     DEFINE_FUNCTION(getRadius);
+    DEFINE_FUNCTION(getPointDepth);
 }

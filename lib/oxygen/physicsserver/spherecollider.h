@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spherecollider.h,v 1.6 2004/02/12 14:07:23 fruit Exp $
+   $Id: spherecollider.h,v 1.7 2004/04/15 18:33:15 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,13 @@ public:
 
     /** get the radius back from ODE */
     float GetRadius() const;
+
+    /** returns the depth of the given relative position in the
+        managed sphere. Points inside the geom will have positive
+        depth, points outside it will have negative depth, and points
+        on the surface will have zero depth.
+     */
+    float GetPointDepth(const salt::Vector3f& pos);
 
 protected:
     /** constructs a default sphere with a radius of 1 */
