@@ -105,6 +105,7 @@ sceneserver/scene.cpp \
 sceneserver/scene_c.cpp \
 sceneserver/sceneserver.cpp \
 sceneserver/sceneserver_c.cpp \
+sceneserver/sceneimporter_c.cpp \
 sceneserver/indexbuffer.cpp \
 sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
@@ -149,6 +150,7 @@ sceneserver/basenode.h \
 sceneserver/fpscontroller.h \
 sceneserver/scene.h \
 sceneserver/sceneserver.h \
+sceneserver/sceneimporter.h \
 sceneserver/indexbuffer.h \
 sceneserver/transform.h \
 sceneserver/camera.h \
