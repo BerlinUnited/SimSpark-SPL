@@ -3,7 +3,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerrender.cpp,v 1.1 2004/12/22 16:17:32 rollmark Exp $
+   $Id: soccerrender.cpp,v 1.2 2004/12/30 15:57:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,9 @@
 
    SoccerRender
 */
+#include <sstream>
 #include "soccerrender.h"
+#include "soccermonitor.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <kerosin/openglserver/openglserver.h>
 #include <kerosin/fontserver/fontserver.h>
@@ -40,22 +42,32 @@ SoccerRender::~SoccerRender()
 
 void SoccerRender::OnLink()
 {
+    // get the FontServer
     mFontServer =
         shared_static_cast<FontServer>(GetCore()->Get("/sys/server/font"));
     if (mFontServer.get() == 0)
         {
-            GetLog()->Error() << "(SoccerRender) Unable to get FontServer\n";
-            return;
+            GetLog()->Error() << "ERROR: (SoccerRender) Unable to get FontServer\n";
+        } else
+        {
+            string font = "VeraMono.ttf";
+            int fontSize = 24;
+            mFont = mFontServer->GetFont(font, fontSize);
+
+            if (mFont.get() == 0)
+                {
+                    GetLog()->Error() << "(SoccerRender) Unable to get font "
+                                      << font << " " << fontSize << "\n";
+                }
         }
 
-    string font = "VeraMono.ttf";
-    int fontSize = 24;
-    mFont = mFontServer->GetFont(font, fontSize);
+    // get the SoccerMonitor
+    mMonitor = shared_static_cast<SoccerMonitor>
+        (GetCore()->Get("/sys/server/simulation/SparkMonitorClient/SoccerMonitor"));
 
-    if (mFont.get() == 0)
+    if (mMonitor.get() == 0)
         {
-            GetLog()->Error() << "(SoccerRender) Unable to get font "
-                              << font << " " << fontSize << "\n";
+            GetLog()->Error() << "ERROR: (SoccerRender) Unable to get SoccerMonitor\n";
         }
 }
 
@@ -63,6 +75,7 @@ void SoccerRender::OnUnlink()
 {
     mFont.reset();
     mFontServer.reset();
+    mMonitor.reset();
 }
 
 
@@ -70,15 +83,21 @@ void SoccerRender::Render()
 {
     if (
         (mFontServer.get() == 0) ||
-        (mFont.get() == 0)
+        (mFont.get() == 0) ||
+        (mMonitor.get() == 0)
         )
         {
             return;
         }
 
+    stringstream ss;
+    ss << "(" << mMonitor->GetGameHalfString() << ") ";
+    ss << mMonitor->GetPlayModeString();
+    ss << " t=" << mMonitor->GetTime();
+
     mFontServer->Begin();
     mFont->Bind();
-    glColor3f(1,0,0);
-    mFont->DrawString(0, 100, "Testing text output...");
+    glColor3f(1,1,1);
+    mFont->DrawString(0, 0, ss.str().c_str());
     mFontServer->End();
 }
