@@ -1,3 +1,65 @@
+2004-04-07  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* configure.ac: 
+	- added app/gendot Makefile
+
+	* app/gendot/.cvsignore, app/gendot/Makefile.am,
+	* app/gendot/gendot.rb, app/gendot/include.dot, app/gendot/main.cpp:
+	- added app/gendot a tool to create a graphviz dotfile of the
+	runtime zeitgeist class hierarachy
+
+	* lib/oxygen/oxygen.cpp, lib/oxygen/oxygen.h:
+	- registering ball and balljoint classes
+
+	* lib/oxygen/Makefile.am: - readded odeobject.cpp
+	- added joint and balljoint files
+
+	* lib/oxygen/physicsserver/body.cpp:
+	- using ODEObject utility functions to access world and space
+	nodes
+
+	* lib/oxygen/physicsserver/collider.cpp,
+	* lib/oxygen/physicsserver/collider.h:
+	- removed member mSpace
+	- using utility functions of ODEObject base to acces world and
+	space nodes
+
+	* lib/oxygen/physicsserver/odeobject.cpp,
+	* lib/oxygen/physicsserver/odeobject.h:
+	- readded odeoebject.cpp
+	- add methods GetWorld, GetSpace, GetWorldID and GetSpaceID that
+	are used in various places throughout the PhysicsServer
+	implementation
+
+	* lib/oxygen/physicsserver/balljoint.cpp,
+	* lib/oxygen/physicsserver/balljoint.h,
+	* lib/oxygen/physicsserver/balljoint_c.cpp:
+	- added class BallJoint encapsulating an ODE 'ball and socket'
+	joint
+
+	* lib/oxygen/physicsserver/joint.cpp,
+	* lib/oxygen/physicsserver/joint.h,
+	* lib/oxygen/physicsserver/joint_c.cpp:
+	- added class joint that encapsulates an ODE joint and functions
+	common to all joint types
+
+	* lib/oxygen/physicsserver/space.cpp,
+	* lib/oxygen/physicsserver/space.h:
+	- removed method GetCollider, now part of Collider; using
+	Collider::GetCollider instead
+
+	* lib/oxygen/physicsserver/collider.cpp,
+	* lib/oxygen/physicsserver/collider.h:
+	- changed method GetCollider to return a shared_ptr to the node
+	corresponding to the given dGeomID
+
+	* lib/oxygen/physicsserver/body.cpp,
+	* lib/oxygen/physicsserver/body.h:
+	- changed method GetBody to return a shared_ptr to the node
+	corresponding to the given dBodyId
+	- added method CreateBody, factored out of OnLink()
+	- remove method OnUnlink(), content moved into destructor
+
 2004-04-06  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/Makefile.am: 
