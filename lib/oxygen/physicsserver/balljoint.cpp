@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: balljoint.cpp,v 1.1 2004/04/07 11:36:12 rollmark Exp $
+   $Id: balljoint.cpp,v 1.2 2004/04/07 13:30:44 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,16 +53,16 @@ Vector3f BallJoint::GetBallAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                Vector3f anchor;
-                dJointGetBallAnchor (mODEJoint, anchor.GetData());
-                return anchor;
+                dReal anchor[3];
+                dJointGetBallAnchor (mODEJoint, anchor);
+                return Vector3f(anchor[0],anchor[1],anchor[2]);
             }
 
         case BI_SECOND:
             {
-                Vector3f anchor;
-                dJointGetBallAnchor2(mODEJoint, anchor.GetData());
-                return anchor;
+                dReal anchor[3];
+                dJointGetBallAnchor2(mODEJoint, anchor);
+                return Vector3f(anchor[0],anchor[1],anchor[2]);
             }
 
         default:
