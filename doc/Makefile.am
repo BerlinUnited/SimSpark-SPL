@@ -1,11 +1,15 @@
 all-local:
 if DOXYGEN
 	@echo "***"
-	@echo "*** To build the Doxygen API documentation, use 'make doc'"
+	@echo "*** To (re-)build the Doxygen API documentation, use 'make apidoc'"
 	@echo "***"
 endif
 
-doc: Doxyfile
+install-data-local: $(srcdir)/html/index.html
+	mkdir --parents $(DESTDIR)$(pkgdatadir)/html/developers
+	$(INSTALL_DATA) $(srcdir)/html/*.* $(DESTDIR)$(pkgdatadir)/html/
+
+apidoc: Doxyfile
 	rm -rf $(srcdir)/html/developers
 	mkdir --parents $(srcdir)/html/developers
 	cp *.html html/developers
@@ -16,9 +20,8 @@ else
 	touch html/index.html
 endif
 
-install-data-local: doc
-	mkdir --parents $(DESTDIR)$(pkgdatadir)/html/developers
-	$(INSTALL_DATA) $(srcdir)/html/*.* $(DESTDIR)$(pkgdatadir)/html/
+$(srcdir)/html/index.html: 
+	@$(MAKE) apidoc
 
 maintainer-clean-local:
 	rm -rf html
@@ -42,4 +45,5 @@ index.html \
 logserver.html \
 menu.html \
 scriptserver.html \
-welcome.html
+welcome.html \
+used_libraries.txt
