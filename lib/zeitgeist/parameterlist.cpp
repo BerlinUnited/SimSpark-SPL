@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.cpp,v 1.5 2004/05/01 13:44:38 rollmark Exp $
+   $Id: parameterlist.cpp,v 1.6 2004/05/17 09:08:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -188,11 +188,41 @@ ParameterList::AdvanceValue(TVector::const_iterator& iter, int& value) const
 bool
 ParameterList::AdvanceValue(TVector::const_iterator& iter, bool& value) const
 {
-    return
+    if
         (
         (GetValueInternal<bool,bool>(iter,value)) ||
         (GetValueInternal<int,bool>(iter,value))
-        );
+        )
+        {
+            return true;
+        }
+
+    const any& param = (*iter);
+    string str;
+    if (param.type() == typeid(std::string))
+        {
+            str = boost::any_cast<std::string>(param);
+        } else if (param.type() == typeid(char*))
+        {
+            str = boost::any_cast<char*>(param);
+        } else
+        {
+            return false;
+        }
+
+    if (str == "true")
+        {
+            value = true;
+            return true;
+        }
+
+    if (str == "false")
+        {
+            value = false;
+            return false;
+        }
+
+    return false;
 }
 
 bool
