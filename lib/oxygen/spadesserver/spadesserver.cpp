@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.1.2.9 2003/11/30 17:00:58 fruit Exp $
+   $Id: spadesserver.cpp,v 1.1.2.9.2.1 2003/12/01 08:48:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,10 +86,6 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
         return time_curr;
     }
 
-
-    shared_ptr<SceneServer> sceneServer =
-        shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
-
 #if THIS_IS_A_DEMO_ONLY
       // test the loop
       // print the current location of the sphere collider
@@ -104,26 +100,31 @@ SpadesServer::simToTime(SimTime time_curr, SimTime time_desired)
       }
 #endif
 
-    if (sceneServer.get() != 0)
-    {
-        int i = steps;
-        while (i > 0)
-        {
-            sceneServer->Update(time_per_step);
-            --i;
-        }
-#if THIS_IS_A_DEMO_ONLY
-        GetLog()->Debug() << "updated the scene by " << steps - i << " * "
-                          << time_per_step << " seconds.\n";
+    shared_ptr<SceneServer> sceneServer =
+        shared_static_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
-#endif
-        // return the simulation time when loop stopped
-        // (the '- i' makes sense if we exit the while loop earlier)
-        return time_desired - i;
-    } else {
+    if (sceneServer.get() == 0)
+    {
         GetLog()->Warning() << "WARNING: No SceneServer present\n";
         return time_curr;
     }
+
+    int i = steps;
+    while (i > 0)
+    {
+        sceneServer->Update(time_per_step);
+        --i;
+    }
+
+#if THIS_IS_A_DEMO_ONLY
+    GetLog()->Debug() << "updated the scene by " << steps - i << " * "
+                      << time_per_step << " seconds.\n";
+
+#endif
+
+    // return the simulation time when loop stopped
+    // (the '- i' makes sense if we exit the while loop earlier)
+    return time_desired - i;
 }
 
 boost::shared_ptr<MonitorServer>
