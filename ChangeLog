@@ -1,6 +1,6 @@
 2003-08-21  Markus Rollmann  <rollmark@uni-koblenz.de>
-	* /lib/salt
-	- added comments to the salt library conforming with doxygen.
+	* /lib/salt /lib/zeitgeist
+	- added comments and gpl headers to the salt and zeitgeist libraries
 	- removed ptr.h, ptrmangager.h and quadlink.h as they were not
 	in use
 
