@@ -1,3 +1,26 @@
+2004-05-10  Oliver Obst  <fruit@robolog.org>
+
+	* app/rcssmonitor3d/kerosin/rcssmonitor3D-kerosin.rb: 
+	removed monitorparser setup
+
+	* app/rcssmonitor3d/kerosin/monitorclientcontrol.cpp:
+	* app/rcssmonitor3d/kerosin/monitorclientcontrol.h: 
+	- removed the use of monitorparser 
+	- replaced GetSphere() method by 3 specialized methods GetBall(), GetAgent(), GetFlag() 
+	- removed MangleExpr method
+	- using the new GameState instead of the MonitorParser
+	
+	* app/rcssmonitor3d/lib/gamestate.h: 
+	* app/rcssmonitor3d/lib/gamestate.cpp: 
+	- added method GetFlagName to get the string representation of a given flag 
+	- added method to get the height of the goals 
+	- added method to get the depth of the goals 
+	- added method to get the mass of an agent 
+	- added method to get the radius of an agent 
+	- added method to get the max speed of an agent 
+	- added method to get the ball radius 
+	- added method to get the ball mass
+	
 2004-05-05  Oliver Obst  <fruit@robolog.org>
 
 	* app/rcssmonitor3d/lite/main.cpp: 
