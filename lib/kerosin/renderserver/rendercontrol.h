@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: rendercontrol.h,v 1.1 2004/04/25 16:57:34 rollmark Exp $
+   $Id: rendercontrol.h,v 1.2 2004/12/22 16:05:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,6 +46,8 @@ public:
 protected:
     virtual void OnLink();
     virtual void OnUnlink();
+
+    void RenderCustom();
 
 protected:
     /** cached reference to the RenderServer */
