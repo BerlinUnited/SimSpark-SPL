@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptorhandler.cpp,v 1.1.2.2 2004/01/12 17:42:05 rollmark Exp $
+   $Id: perceptorhandler.cpp,v 1.1.2.3 2004/01/16 11:06:35 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ using namespace oxygen;
 using namespace boost;
 
 void
-PerceptorHandler::HandleCollision(dGeomID collidee, dContact& /*contact*/)
+PerceptorHandler::HandleCollision
+(boost::shared_ptr<Collider> collidee, dContact& /*contact*/)
 {
   // find the first CollisionPerceptor below our closest Transform node
   shared_ptr<Transform> transformParent = shared_static_cast<Transform>
@@ -49,14 +50,8 @@ PerceptorHandler::HandleCollision(dGeomID collidee, dContact& /*contact*/)
     }
 
   // now find the closest Transform node above the collidee
-  Collider* colNode = Collider::GetCollider(collidee);
-  if (colNode == 0)
-    {
-      return;
-    }
-
   shared_ptr<Transform> colTransformParent = shared_static_cast<Transform>
-    (make_shared(colNode->GetParentSupportingClass("Transform")));
+    (make_shared(collidee->GetParentSupportingClass("Transform")));
 
   if (colTransformParent.get() == 0)
     {
