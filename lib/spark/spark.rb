@@ -6,7 +6,7 @@
 # below is a set of utility functions for the user app
 #
 def sparkSetupMonitor
-  print "(spark.rb) sparkSetupServer\n"
+  print "(spark.rb) sparkSetupMonitor\n"
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
