@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.10 2004/04/07 13:37:26 fruit Exp $
+   $Id: main.cpp,v 1.11 2004/04/08 12:06:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 #include <sstream>
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
-#include <soccertypes.h>
+#include <soccer/soccertypes.h>
 #include "worldmodel.h"
 #include "commserver.h"
 #include "behavior.h"
