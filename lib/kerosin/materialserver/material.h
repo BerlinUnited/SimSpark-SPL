@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material.h,v 1.2 2003/11/14 14:05:51 fruit Exp $
+   $Id: material.h,v 1.3 2004/03/20 12:49:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,42 +22,27 @@
 #ifndef KEROSIN_MATERIAL_H
 #define KEROSIN_MATERIAL_H
 
-#include <boost/weak_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <zeitgeist/class.h>
+#include <zeitgeist/leaf.h>
 #include <string>
 
 namespace kerosin
 {
-
-class Texture;
-class MaterialServer;
-
-class Material
+class Material : public zeitgeist::Leaf
 {
     //
     // Functions
     //
 public:
-    Material(const boost::shared_ptr<MaterialServer> &materialServer);
+    Material();
     virtual ~Material();
 
-
-    bool Load(const std::string& matName);
-
-    void Bind();
-
-    void BindAmbient();
-
-    //
-    // Members
-    //
-private:
-    // material server, which created this object
-    boost::weak_ptr<MaterialServer> mMaterialServer;
-    boost::shared_ptr<Texture> mTexDiffuse;
-    boost::shared_ptr<Texture> mTexNormal;
-    boost::shared_ptr<Texture> mTexSpecular;
+    /** binds the managed material, i.e. sets all necessary OpenGL
+        states */
+    virtual void Bind() = 0;
 };
+
+DECLARE_ABSTRACTCLASS(Material);
 
 } //namespace kerosin
 
