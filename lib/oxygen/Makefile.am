@@ -141,6 +141,7 @@ physicsserver/world.h \
 physicsserver/dragcontroller.h \
 physicsserver/joint.h \
 physicsserver/balljoint.h \
+sceneserver/sceneimporter.h \
 sceneserver/basenode.h \
 sceneserver/fpscontroller.h \
 sceneserver/scene.h \
