@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.3 2004/03/30 09:53:37 rollmark Exp $
+   $Id: contactjointhandler.cpp,v 1.4 2004/03/31 10:28:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,82 @@ ContactJointHandler::~ContactJointHandler()
 {
 }
 
+float
+ContactJointHandler::MixValues(const float v1, const float v2, const int n) const
+{
+    switch(n)
+        {
+        default:
+        case 0:
+            // undefined, default 0
+            return 0.0f;
+
+        case 1:
+            // first one defined
+            return v1;
+
+        case 2:
+            // second one defined
+            return v2;
+
+        case 3:
+            // both defined, return average
+            return (v1 + v2) / 2.0f;
+        }
+}
+
+void
+ContactJointHandler::CalcSurfaceParam(dSurfaceParameters& surface,
+                                      const dSurfaceParameters& collideeParam)
+{
+  // init surface
+  surface.mode = 0;
+
+  // calculate average mu; mu can be dInfinity, so first multiply with
+  // 0.5 and the sum up to avoid a range error
+  surface.mu = mSurfaceParameter.mu*0.5f + collideeParam.mu*0.5f;
+
+  // soft cfm
+  const int nCfm =
+      ((mSurfaceParameter.mode & dContactSoftCFM) ? 1:0) +
+      ((collideeParam.mode & dContactSoftCFM) ? 2:0);
+
+  if (nCfm>0)
+      {
+          surface.soft_cfm = MixValues
+              (mSurfaceParameter.soft_cfm, collideeParam.soft_cfm, nCfm);
+          surface.mode |= dContactSoftCFM;
+      }
+
+  // soft_erp
+  const int nErp =
+      ((mSurfaceParameter.mode & dContactSoftERP) ? 1:0) +
+      ((collideeParam.mode & dContactSoftERP) ? 2:0);
+
+  if (nErp>0)
+      {
+          surface.soft_erp = MixValues
+              (mSurfaceParameter.soft_erp, collideeParam.soft_erp, nErp);
+          surface.mode |= dContactSoftERP;
+      }
+
+  // bounce
+  const int nBounce =
+      ((mSurfaceParameter.mode & dContactBounce) ? 1:0) +
+      ((collideeParam.mode & dContactBounce) ? 2:0);
+
+  if (nBounce>0)
+      {
+          surface.bounce = MixValues
+              (mSurfaceParameter.bounce, collideeParam.bounce, nBounce);
+
+          surface.bounce_vel = MixValues
+              (mSurfaceParameter.bounce_vel, collideeParam.bounce_vel, nBounce);
+
+          surface.mode |= dContactBounce;
+      }
+}
+
 void
 ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& contact)
 {
@@ -55,19 +131,20 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& co
       }
 
   // check if the collidee has a ContactJointHandler registered to it
-  shared_ptr<Leaf> handler =
-      collidee->GetChildSupportingClass("ContactJointHandler");
+  shared_ptr<ContactJointHandler> handler =
+      shared_static_cast<ContactJointHandler>
+      (collidee->GetChildSupportingClass("ContactJointHandler"));
 
   if (handler.get() == 0)
       {
           return;
       }
 
+  // to create a contact joint it we must have at least one body to
+  // attach it to.
   dBodyID myBody = dGeomGetBody(mCollider->GetODEGeom());
   dBodyID collideeBody = dGeomGetBody(collidee->GetODEGeom());
 
-  // to create a contact joint it we must have at least one body to
-  // attach it to.
   if (
       (myBody == 0) &&
       (collideeBody == 0)
@@ -76,8 +153,8 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& co
       return;
     }
 
-  // fill in the surface parameters
-  contact.surface = mSurfaceParameter;
+  // calculate the resulting surface parameters
+  CalcSurfaceParam(contact.surface,handler->mSurfaceParameter);
 
   // create the contact joint and attach it to the body
   dJointID joint = dJointCreateContact

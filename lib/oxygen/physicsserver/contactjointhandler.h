@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.3 2004/03/30 09:53:37 rollmark Exp $
+   $Id: contactjointhandler.h,v 1.4 2004/03/31 10:28:12 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,6 +95,12 @@ public:
     /** sets the force dependent slip (FDS)
      */
     void SetContactSlip(float slip);
+
+protected:
+    f_inline float MixValues(const float v1, const float v2, const int n) const;
+
+    void CalcSurfaceParam(dSurfaceParameters& surface,
+                          const dSurfaceParameters& collideeParam);
 
 protected:
     /** the ODE surface parameters of the created contact joint */
