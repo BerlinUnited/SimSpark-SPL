@@ -17,6 +17,8 @@ beameffector/beameffector_c.cpp \
 fieldflag/fieldflag_c.cpp \
 gamestateaspect/gamestateaspect.cpp \
 gamestateaspect/gamestateaspect_c.cpp \
+gamestateaspect/gamestateitem.cpp \
+gamestateaspect/gamestateitem_c.cpp \
 gamestateperceptor/gamestateperceptor.cpp \
 gamestateperceptor/gamestateperceptor_c.cpp \
 initeffector/initeffector.cpp \
@@ -53,6 +55,7 @@ driveeffector/driveaction.h \
 driveeffector/driveeffector.h \
 fieldflag/fieldflag.h \
 gamestateaspect/gamestateaspect.h \
+gamestateaspect/gamestateitem.h \
 gamestateperceptor/gamestateperceptor.h \
 initeffector/initaction.h \
 initeffector/initeffector.h \
