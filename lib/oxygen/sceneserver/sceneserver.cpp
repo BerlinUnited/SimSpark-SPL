@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.10 2004/04/10 09:02:13 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.11 2004/04/10 09:20:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -181,13 +181,11 @@ void SceneServer::Update(float deltaTime)
 
 bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root)
 {
-    // try to open the file
-    shared_ptr<salt::RFile> file = GetFile()->Open(fileName.c_str());
-
-    if (file.get() == 0)
+    if (! GetFile()->Exist(fileName))
         {
             GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
                               << fileName << "'\n";
+
             return false;
         }
 
@@ -196,7 +194,8 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root)
 
     if (importer.size() == 0)
         {
-            GetLog()->Error() << "(SceneServer) Warning: no SceneImporter registered\n";
+            GetLog()->Error()
+                << "(SceneServer) Warning: no SceneImporter registered\n";
         }
 
     for (
@@ -208,11 +207,12 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root)
             shared_ptr<SceneImporter> importer =
                 shared_static_cast<SceneImporter>(*iter);
 
-            if (importer->ImportScene(file,root))
+            if (importer->ImportScene(fileName,root))
                 {
                     GetLog()->Normal()
-                        << "(SceneServer) successfully imported scene file '"
-                        << fileName << "'\n";
+                        << "(SceneServer) imported scene file '"
+                        << fileName << " with '"
+                        << importer->GetName() << "'\n";
                     return true;
                 }
         }
