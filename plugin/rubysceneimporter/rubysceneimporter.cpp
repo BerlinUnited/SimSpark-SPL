@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.10 2004/12/19 14:13:40 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.11 2005/03/01 13:47:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -275,12 +275,13 @@ shared_ptr<Object> RubySceneImporter::CreateInstance(const string& className)
     return shared_ptr<Object>();
 }
 
-shared_ptr<BaseNode> RubySceneImporter::CreateNode(sexp_t* sexp)
+shared_ptr<BaseNode>
+RubySceneImporter::CreateNode(sexp_t* sexp)
 {
     if (sexp == 0)
-        {
-            return shared_ptr<BaseNode>();
-        }
+    {
+        return shared_ptr<BaseNode>();
+    }
 
     string className(sexp->val);
 
@@ -288,23 +289,23 @@ shared_ptr<BaseNode> RubySceneImporter::CreateNode(sexp_t* sexp)
     shared_ptr<Object> obj = CreateInstance(className);
 
     if (obj.get() == 0)
-        {
-            GetLog()->Error()
-                << "(RubySceneImporter) ERROR: in file '" << mFileName
-                << "': unknown class '"
-                << className << "'\n";
-            return shared_ptr<BaseNode>();
-        }
+    {
+        GetLog()->Error()
+            << "(RubySceneImporter) ERROR: in file '" << mFileName
+            << "': unknown class '"
+            << className << "'\n";
+        return shared_ptr<BaseNode>();
+    }
 
     shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(obj);
 
     if (node.get() == 0)
-        {
-            GetLog()->Error()
-                << "(RubySceneImporter) ERROR: in file '" << mFileName
-                << className << "': is not derived from BaseNode'\n";
-            return shared_ptr<BaseNode>();
-        }
+    {
+        GetLog()->Error()
+            << "(RubySceneImporter) ERROR: in file '" << mFileName
+            << className << "': is not derived from BaseNode'\n";
+        return shared_ptr<BaseNode>();
+    }
 
     return node;
 }
@@ -633,128 +634,141 @@ bool RubySceneImporter::ParseTemplate(sexp_t* sexp)
     return true;
 }
 
-bool RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
+bool
+RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 {
     TLeafList::const_iterator iter = root->begin();
 
     while (sexp != 0)
+    {
+        switch (sexp->ty)
         {
-            switch (sexp->ty)
+        case SEXP_VALUE:
+            {
+                string name(sexp->val);
+
+                if (name == "node")
                 {
-                case SEXP_VALUE:
+                    while (
+                        (sexp != 0) &&
+                        (sexp->ty != SEXP_LIST)
+                        )
                     {
-                        string name(sexp->val);
-
-                        if (name == "node")
-                            {
-                                while (
-                                       (sexp != 0) &&
-                                       (sexp->ty != SEXP_LIST)
-                                       )
-                                    {
-                                        sexp = sexp->next;
-                                    }
-                                continue;
-                            } else
-                                {
-                                    return ReadMethodCall(sexp, root);
-                                }
+                        sexp = sexp->next;
                     }
-                    break;
-
-                case SEXP_LIST:
-                    {
-                        sexp_t* sub = sexp->list;
-                        if (sub != 0)
-                            {
-                                shared_ptr<BaseNode> node;
-
-                                if (
-                                    (sub->ty == SEXP_VALUE) &&
-                                    (string(sub->val) == "node")
-                                    )
-                                    {
-                                        node = shared_dynamic_cast<BaseNode>(*iter);
-                                        if (iter != node->end())
-                                            {
-                                                ++iter;
-                                            }
-                                    } else
-                                        {
-                                            node = root;
-                                        }
-
-                                if (! ReadDeltaGraph(sub, node))
-                                    {
-                                        return false;
-                                    }
-                            }
-                    }
-                    break;
-
-                default:
-                    return false;
-
+                    continue;
+                } else {
+                    return ReadMethodCall(sexp, root);
                 }
+            }
+            break;
+        case SEXP_LIST:
+            {
+                sexp_t* sub = sexp->list;
+                if (sub != 0)
+                {
+                    shared_ptr<BaseNode> node;
 
-            sexp = sexp->next;
+                    if (
+                        (sub->ty == SEXP_VALUE) &&
+                        (string(sub->val) == "node")
+                        )
+                    {
+                        node = shared_dynamic_cast<BaseNode>(*iter);
+                        if (iter != node->end())
+                        {
+                            ++iter;
+                        }
+                    } else {
+                        node = root;
+                    }
+
+                    if (! ReadDeltaGraph(sub, node))
+                    {
+                        return false;
+                    }
+                }
+            }
+            break;
+        default:
+            return false;
+
         }
-
+        sexp = sexp->next;
+    }
     return true;
 }
 
-bool RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
+bool
+RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 {
     while (sexp != 0)
+    {
+        switch (sexp->ty)
         {
-            switch (sexp->ty)
+        case SEXP_VALUE:
+            {
+                string name(sexp->val);
+
+                if (name == "node")
                 {
-                case SEXP_VALUE:
+                    sexp = sexp->next;
+                    shared_ptr<BaseNode> node = CreateNode(sexp);
+
+                    if (node.get() == 0)
                     {
-                        string name(sexp->val);
-
-                        if (name == "node")
-                            {
-                                sexp = sexp->next;
-                                shared_ptr<BaseNode> node
-                                    = CreateNode(sexp);
-
-                                if (node.get() == 0)
-                                    {
-                                        return false;
-                                    }
-
-                                root->AddChildReference(node);
-                                root = node;
-                            } else if (name == "template")
-                                {
-                                    sexp = sexp->next;
-                                    return ParseTemplate(sexp);
-                                } else if (name == "define")
-                            {
-                                sexp = sexp->next;
-                                return ParseDefine(sexp);
-                            } else
-                            {
-                                return ReadMethodCall(sexp, root);
-                            }
+                        return false;
                     }
-                    break;
 
-                case SEXP_LIST:
-                    if (! ReadGraph(sexp->list,root))
-                        {
-                            return false;
-                        }
-                    break;
-
-                default:
-                    return false;
+                    root->AddChildReference(node);
+                    root = node;
                 }
+                else if (name == "select")
+                {
+                    sexp = sexp->next;
+                    string name(sexp->val);
 
-            sexp = sexp->next;
+                    shared_ptr<BaseNode> node =
+                        shared_dynamic_cast<BaseNode>(root->GetChild(name));
+
+                    if (node.get() == 0)
+                    {
+                        GetLog()->Error() << "ERROR: Select: " << name << " not found\n";
+                        return false;
+                    }
+                    root = node;
+                }
+                else if (name == "pwd")
+                {
+                    GetLog()->Error() << "DEBUG: pwd: " << root->GetFullPath() << "\n";
+                }
+                else if (name == "template")
+                {
+                    sexp = sexp->next;
+                    return ParseTemplate(sexp);
+                }
+                else if (name == "define")
+                {
+                    sexp = sexp->next;
+                    return ParseDefine(sexp);
+                } else {
+                    return ReadMethodCall(sexp, root);
+                }
+            }
+            break;
+
+        case SEXP_LIST:
+            if (! ReadGraph(sexp->list,root))
+            {
+                return false;
+            }
+            break;
+
+        default:
+            return false;
         }
-
+        sexp = sexp->next;
+    }
     return true;
 }
 
