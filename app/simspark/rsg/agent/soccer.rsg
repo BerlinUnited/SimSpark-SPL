@@ -3,21 +3,33 @@
 (RubySceneGraph 0 1)
 (
 ;
-; define constants
+; define constants, copy values from the ScriptServer Soccer namespace
 ;
- (define $FieldLength 100)
- (define $FieldWidth  70)
- (define $FieldBaseHeight 4)
- (define $BorderExt 5)
- (define $SideExt 2)
- (define $SideHeight 1)
- (define $LineExt 0.2)
+
+ (define $FieldLength (eval Soccer.FieldLength))
+ (define $FieldWidth  (eval Soccer.FieldWidth))
+ (define $BorderExt   (eval Soccer.BorderSize))
+
+; height of the field ground plane
+ (define $FieldBaseHeight 4) 
+
+; with of the side boundary
+ (define $SideExt 2) 
+
+; height of the side boundary
+ (define $SideHeight 1) 
+
+; height of a field line
+ (define $LineHeight 0.2)
 
  (define $FieldMaterial matGreen)
  (define $BorderMaterial matYellow)
  (define $SideMaterial matGrey)
  (define $LineMaterial matWhite)
- 
+
+; calc some helper vars
+ (define $FieldBase (eval -1 * $FieldBaseHeight / 2.0))
+ (define $LineBase 0)
  (define $FieldHalfLength (eval $FieldLength / 2.0))
  (define $FieldHalfWidth  (eval $FieldWidth / 2.0))
 
@@ -28,7 +40,7 @@
  (define $SideLength      (eval $FieldHalfLength + $BorderExt))
  (define $SideWidth       (eval $FieldHalfWidth  + $BorderExt))
 
- (define $LineWidth       (eval $FieldWidth - $LineExt))
+ (define $LineWidth       (eval $FieldWidth - $LineHeight))
 
 ;
 ; construct playing field
@@ -57,13 +69,13 @@
 
 ; create the base plane
  (node Transform
-       (setLocalPos 0 0 -3)
+       (setLocalPos 0 0 $FieldBase)
        (node Box
 	     (setMaterial $FieldMaterial)
 	     (setExtents $FieldLength $FieldWidth $FieldBaseHeight)
 	     )
        (node PlaneCollider
-	     (setParams 0 0 1.0 -1)
+	     (setParams 0 0 1.0 0)
 	     (node ContactJointHandler
 		   (setContactBounceMode false)
 		   )
@@ -114,7 +126,7 @@
        (setLocalPos 0 (eval -1 * $SideWidth) 0)
        (node Box
 	     (setMaterial $SideMaterial)
-	     (setExtents (eval $FieldLength + 2 * $BorderExt) 1 2)
+	     (setExtents (eval $FieldLength + 2 * $BorderExt) $SideHeight $SideExt)
 	     ) 
        (node PlaneCollider
 	     (setParams 0 1.0 0 (eval -1 * $SideWidth))
@@ -123,27 +135,27 @@
 
 ; create middle line
  (node Transform
-       (setLocalPos 0 0 -1)
+       (setLocalPos 0 0 $LineBase)
        (node Box
-	     (setExtents $LineExt $LineWidth $LineExt)
+	     (setExtents $LineHeight $LineWidth $LineHeight)
 	     (setMaterial $LineMaterial)
 	     )
        )
 
 ; create front line
  (node Transform
-       (setLocalPos 0 (eval -1 * $FieldHalfWidth) -1)
+       (setLocalPos 0 (eval -1 * $FieldHalfWidth) $LineBase)
        (node Box
-	     (setExtents $FieldLength $LineExt $LineExt)
+	     (setExtents $FieldLength $LineHeight $LineHeight)
 	     (setMaterial $LineMaterial)
 	     )
        )
 
 ; create back line
  (node Transform
-       (setLocalPos 0 $FieldHalfWidth -1)
+       (setLocalPos 0 $FieldHalfWidth $LineBase)
        (node Box
-	     (setExtents $FieldLength $LineExt $LineExt)
+	     (setExtents $FieldLength $LineHeight $LineHeight)
 	     (setMaterial $LineMaterial)
 	     )
        )
@@ -152,53 +164,53 @@
  (node Transform
        (setLocalPos (eval -1 * $FieldHalfLength) 0 -1)
        (node Box
-	     (setExtents $LineExt $LineWidth $LineExt)
+	     (setExtents $LineHeight $LineWidth $LineHeight)
 	     (setMaterial $LineMaterial)
 	     )
        )
 
 ; create right line
  (node Transform
-       (setLocalPos $FieldHalfLength 0 -1)
+       (setLocalPos $FieldHalfLength 0 $LineBase)
        (node Box
-	     (setExtents $LineExt $LineWidth $LineExt)
+	     (setExtents $LineHeight $LineWidth $LineHeight)
 	     (setMaterial $LineMaterial)
 	     )
        )
 
 ; create left outer field
  (node Transform
-       (setLocalPos (eval -1 * $BorderLength) 0 -3)
+       (setLocalPos (eval -1 * $BorderLength) 0 $FieldBase)
        (node Box
 	     (setMaterial $BorderMaterial)
-	     (setExtents $BorderExt $FieldWidth 4)
+	     (setExtents $BorderExt $FieldWidth $FieldBaseHeight)
 	     )
        )
 
 ; create right outer field
  (node Transform
-       (setLocalPos $BorderLength 0 -3)
+       (setLocalPos $BorderLength 0 $FieldBase)
        (node Box
 	     (setMaterial $BorderMaterial)
-	     (setExtents $BorderExt $FieldWidth 4)
+	     (setExtents $BorderExt $FieldWidth $FieldBaseHeight)
 	     )
        )
 
 ; create front outer field
  (node Transform
-       (setLocalPos 0 (eval -1 * $BorderWidth) -3)
+       (setLocalPos 0 (eval -1 * $BorderWidth) $FieldBase)
        (node Box
 	     (setMaterial $BorderMaterial)
-	     (setExtents (eval $FieldLength + 2 * $BorderExt) 5 4)
+	     (setExtents (eval $FieldLength + 2 * $BorderExt) $BorderExt $FieldBaseHeight)
 	     )
        )
 
 ; create back outer field
  (node Transform
-       (setLocalPos 0 $BorderWidth -3)
+       (setLocalPos 0 $BorderWidth $FieldBase)
        (node Box
 	     (setMaterial $BorderMaterial)
-	     (setExtents (eval $FieldLength + 2 * $BorderExt) 5 4)
+	     (setExtents (eval $FieldLength + 2 * $BorderExt) $BorderExt $FieldBaseHeight)
 	     )
        )
 
@@ -206,6 +218,7 @@
 ;; add flags
 ;;
 
+; mark the soccer field with 4 field flags
  (importScene rsg/agent/flag.rsg 
 	      (eval -1 * $FieldHalfLength)  
 	      $FieldHalfWidth
