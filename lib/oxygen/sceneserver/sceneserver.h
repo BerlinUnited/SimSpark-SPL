@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.h,v 1.7 2004/04/11 17:08:02 rollmark Exp $
+   $Id: sceneserver.h,v 1.8 2004/04/21 07:05:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,7 +62,8 @@ public:
     SceneServer();
     ~SceneServer();
 
-    /** creates a new scene hierarchy at a specific location, new hierarchy is also made current */
+    /** creates a new scene hierarchy at a specific location, new
+        hierarchy is also made current */
     boost::shared_ptr<Scene> CreateScene(const std::string &location);
 
     /** sets the active scene */
@@ -71,7 +72,8 @@ public:
     /** returns a reference to the current active scene */
     boost::shared_ptr<Scene> GetActiveScene() { return mActiveScene; }
 
-    /** updates the state of the current active scene (deltaTime is in seconds) */
+    /** updates the state of the current active scene (deltaTime is in
+        seconds) */
     void Update(float deltaTime);
 
     /** imports a scene from a file below the given BaseNode */
@@ -79,8 +81,8 @@ public:
                      boost::shared_ptr<BaseNode> root,
                      boost::shared_ptr<zeitgeist::ParameterList> parameter);
 
-    /** creates an instance of \param importerName and registers it as a
-        SceneImporter to the SceneServer
+    /** creates an instance of \param importerName and registers it as
+        a SceneImporter to the SceneServer
     */
     bool InitSceneImporter(const std::string& importerName);
 
@@ -112,4 +114,5 @@ private:
 DECLARE_CLASS(SceneServer);
 
 } //namespace oxygen
-#endif //KEROSIN_SCENESERVER_H
+
+#endif //OXYGEN_SCENESERVER_H
