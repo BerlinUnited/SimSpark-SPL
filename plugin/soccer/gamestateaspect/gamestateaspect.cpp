@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.1.2.4 2004/01/29 19:53:53 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.1.2.5 2004/01/31 15:15:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 #include "gamestateaspect.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <soccer/agentstate/agentstate.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -36,7 +37,7 @@ GameStateAspect::~GameStateAspect()
 {
 }
 
-void GameStateAspect::Update(float deltaTime)
+void GameStateAspect::UpdateTime(float deltaTime)
 {
   if (mPlayMode == PM_PlayOn)
       {
@@ -44,7 +45,12 @@ void GameStateAspect::Update(float deltaTime)
       }
 }
 
-GameStateAspect::TPlayMode GameStateAspect::GetPlayMode() const
+void GameStateAspect::Update(float deltaTime)
+{
+    UpdateTime(deltaTime);
+}
+
+TPlayMode GameStateAspect::GetPlayMode() const
 {
     return mPlayMode;
 }
@@ -54,7 +60,116 @@ void GameStateAspect::SetPlayMode(TPlayMode mode)
     mPlayMode = mode;
 }
 
-GameStateAspect::TTime GameStateAspect::GetTime() const
+TTime GameStateAspect::GetTime() const
 {
     return mTime;
 }
+
+void GameStateAspect::SetTeamName(TTeamIndex idx, std::string name)
+{
+    if (
+        (idx != TI_LEFT) &&
+        (idx != TI_RIGHT)
+        )
+        {
+            return;
+        }
+
+    mTeamName[idx] = name;
+}
+
+/** returns the name of a team */
+std::string GameStateAspect::GetTeamName(TTeamIndex idx)
+{
+    if (
+        (idx != TI_LEFT) &&
+        (idx != TI_RIGHT)
+        )
+        {
+            return "";
+        }
+
+    return mTeamName[idx];
+}
+
+TTeamIndex GameStateAspect::GetTeamIndex(const std::string& teamName)
+{
+    for (int i=TI_LEFT;i<=TI_RIGHT;++i)
+        {
+            if (mTeamName[i] == "")
+                {
+                    mTeamName[i] = teamName;
+                    return (TTeamIndex)i;
+                }
+
+            if (mTeamName[i] == teamName)
+                {
+                    return (TTeamIndex)i;
+                }
+        }
+
+    return TI_NONE;
+}
+
+bool GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
+{
+    if (
+        (idx != TI_LEFT) &&
+        (idx != TI_RIGHT)
+        )
+        {
+            return false;
+        }
+
+    TUnumSet& set = mUnumSet[idx];
+
+    if (
+        (set.size() >= 11) ||
+        (set.find(unum) != set.end())
+        )
+        {
+            return false;
+        }
+
+    set.insert(unum);
+
+    return true;
+}
+
+bool GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
+                        std::string teamName, unsigned int unum)
+{
+    if (agentState.get() == 0)
+        {
+            return false;
+        }
+
+    TTeamIndex idx = GetTeamIndex(teamName);
+
+    if (idx == TI_NONE)
+        {
+            GetLog()->Error()
+                << "ERROR: (GameStateAspect::RequestUniform) invalid teamname "
+                << teamName << "\n";
+            return false;
+        }
+
+    if (! InsertUnum(idx,unum))
+        {
+            GetLog()->Error()
+                << "ERROR: (GameStateAspect::RequestUniform) cannot insert uniform"
+                " number " << unum << " to team " << teamName << "\n";
+            return false;
+        }
+
+    agentState->SetUniformNumber(unum);
+    agentState->SetTeamIndex(idx);
+
+    GetLog()->Normal() << "(GameStateAspect) handed out uniform number "
+                       << unum << " for team " << teamName << "\n";
+
+    return true;
+}
+
+
+
