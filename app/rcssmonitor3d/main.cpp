@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.1 2003/12/29 17:59:32 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.2 2004/01/08 16:06:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -114,6 +114,17 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
             return;
         }
 
+    // color and size setup
+    typedef GLfloat TColor[4];
+
+    // agent constants
+    TColor agentColor = {0.8f, 0.8f, 0.2f, 1.0f};
+    float agentSize = 1.0f;
+
+    // flag constants
+    TColor flagColor = {1.0f, 0, 0, 1.0f};
+    float flagSize = 0.5;
+
     // look for "(player x y z)(player x y z)..."
     for (
          Predicate::TList::const_iterator iter = predicates->begin();
@@ -123,10 +134,21 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
         {
             const Predicate& predicate = (*iter);
 
-            if (predicate.name != "player")
+            GLfloat* color;
+            float size;
+
+            if (predicate.name == "agent")
                 {
-                    continue;
-                }
+                    color = agentColor;
+                    size = agentSize;
+                } else if (predicate.name == "flag")
+                    {
+                        color = flagColor;
+                        size = flagSize;
+                    } else
+                        {
+                            continue;
+                        }
 
             Predicate::Iterator param(predicate);
 
@@ -136,7 +158,8 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
                     continue;
                 }
 
-            gGLServer.DrawSphere(pos, 1.0f);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
+            gGLServer.DrawSphere(pos, size);
         }
 }
 
@@ -147,10 +170,8 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
 //------------------------------------------------------------------------
 void display(void)
 {
-   //OPEN GL STUFF
-   //initialize colors
-   GLfloat groundColor[4] = {0.0f, 0.9f, 0.0f, 1.0f};
-   GLfloat teapotColor[4] = {0.8f, 0.8f, 0.2f, 1.0f};
+   // grid constants
+   const GLfloat groundColor[4] = {0.0f, 0.9f, 0.0f, 1.0f};
 
    glClearColor(0.0f,0.0f,0.0f,1.0f);
 
@@ -164,8 +185,6 @@ void display(void)
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
 
    gGLServer.DrawGround();
-
-   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, teapotColor);
 
    // check for positions update
    gCommServer->GetMessage();
