@@ -1,1 +1,1 @@
-SUBDIRS = zeitgeisttest simulator
+SUBDIRS = coretest inputtest scenetest simulator zeitgeisttest 

@@ -145,6 +145,9 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/survival/Makefile \
 		 app/Makefile \
+		 app/coretest/Makefile \
+		 app/inputtest/Makefile \
+		 app/scenetest/Makefile \
 		 app/simulator/Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
