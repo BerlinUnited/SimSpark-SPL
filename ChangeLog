@@ -1,3 +1,103 @@
+2003-12-21  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* plugin/forceeffector/forceeffector.cpp:
+	fixed constructor to call BaseClass constructor
+	added empty destructor
+	some whitespace and formatting changes
+
+	* plugin/forceeffector/forceeffector.h:
+	added virtual destructor and some formatting changes
+
+	* plugin/Makefile.am: 
+	added PerfectVisionPerceptor
+
+	* lib/zeitgeist/core.cpp:
+	changed some error messages to be more descriptive
+
+	* lib/oxygen/agentaspect/effector_c.cpp:
+	revomed boost namespace usage 
+	added class.h #include
+
+	* lib/oxygen/agentaspect/effector.h:
+	added explicit constructor and virtual desctructor
+	some whitespace changes
+
+	* configure.ac: 
+	added PerfectVisionPerceptor Makefile
+
+	* app/spadestest/spadestest.rb:
+	Added 'importBundle' for 'perfectVisionPerceptor' and
+	'ForceEffector'. These two plugins are used by the dummy
+	CreateEffector. Removed setup of the dummy sphere agent. This setup
+	code now also resides in the CreateEffector
+
+	* app/spadestest/agentdb.list: 
+	fixed version tag
+
+	* app/agenttest/main.cpp: 
+	added further processing of spades messages
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	removed code for PerfectVisionSensor debug output
+
+	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp:
+	fixed some return statements and formatting
+
+	* lib/oxygen/sceneserver/transform.h: 
+	made destructor virtual
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	fixed test in AgentConnect() for an already known agent. The created
+	AgentAspect is now also linked to the object hierarchy below
+	'/usr/scene'. Additionally AgentAspect::init() is called.  Parse()
+	queries the AgentAspect corresponding to the given id, rather than
+	using the internal EffectorMap of the GameControlServer.
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	Parse() takes an addition argument id, giving the agent for which
+	a message should be parsed. Removed EffectorMap. Every AgentAspect
+	is now responsible for its effectors.
+
+	* lib/oxygen/oxygen.h: 
+	some #includes fixed
+
+	* lib/oxygen/oxygen.cpp: 
+	added registration of CreateEffector
+	removed registation of PerfectVisionPerceptor
+
+	* lib/oxygen/agentaspect/agentaspect.cpp, lib/oxygen/agentaspect/agentaspect.h:
+	Added method Init. This method is called from the
+	GameControlServer immediately after the AgentAspect is
+	constructed. It is responsible for setting up the CreateEffector.
+	Added method GetEffector. This method is an interface to the map
+	of Effectors of the AgentAspect.
+
+	* lib/oxygen/agentaspect/createaction.h:
+	Added CreateAction. This Object stores the 'create' request an agent
+	can issue using the CreateEffector
+
+	* lib/oxygen/Makefile.am: removed perfectvisionperceptor files
+	added createeffector files
+
+	* lib/oxygen/agentaspect/createeffector.cpp, lib/oxygen/agentaspect/createeffector.h, lib/oxygen/agentaspect/createeffector_c.cpp:
+	added CreateEffector. This effector is constructed by the AgentAspect. It's
+	purpose is to construct sensors, perceptors and geometry that make up an
+	agent. After an agent connected to the simulation it uses the 'create'
+	effector to request these objects. In it's current for the 'create' command
+	does not take any parameters and creates a dummy agent that consists of a
+	sphere with a PerfectVisionSensor and a ForceEffector.
+
+	* plugin/perfectvisionperceptor/.cvsignore:
+	* plugin/perfectvisionperceptor/Makefile.am:
+	* plugin/perfectvisionperceptor/export.cpp:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.h:
+	* plugin/perfectvisionperceptor/perfectvisionperceptor_c.cpp:
+	moved perfectvisionperceptor files to plugin/
+
+	* lib/salt/gcc/sharedlibrary.cpp:
+	added more descriptive error message for SharedLibrary::Open()
+	
 2003-12-16  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* plugin/forceeffector/forceaction.h:
 	* plugin/forceeffector/forceeffector.cpp:
