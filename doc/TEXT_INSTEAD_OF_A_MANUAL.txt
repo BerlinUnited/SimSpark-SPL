@@ -43,9 +43,19 @@ can use it for breaking). The maximum speed and the maximum height for
 jumping up if yet to be discovered. To use the omnidrive, you have to
 use the "dasheffector", which takes a cartesian vector (x y z) with a
 maximum length of 100 units. The x-coordinate points towards the
-opponents team side of the field, z points up. The dasheffector works
-realiable, there is a small error for forces along each axis. For each
-axis, noise is normally distributed around 0.0.
+opponents team side of the field, z points up. With the dasheffector, 
+you set a kind of motor force, i.e. if you want to drive full speed for a 
+while, it is sufficient to use the dasheffector *once*. The force you set
+is applied at each simulator step until you change it again (btw simulator 
+steps are 0.01s long). 
+The dasheffector works realiable, there is a small error for forces along 
+each axis (each up to 2% of the applied force). The error is normally 
+distributed around 0.0.
+
+Using the omnidrive consumes battery. You get to know of battery states 
+by reading the agentstateperceptor. If the battery is empty, the omnidrive
+will stop working.
+
 It is also possible to push away other robots. Using this feature to
 push away opponents is discouraged :). 
 
@@ -92,6 +102,22 @@ touches the soccer field.
 Example command: (kick 20.0 80.0)
 
 
+At startup, you have to do two things: 
+1) create the robot you want to use
+2) initialize the robot with a teamname
+
+1) When you at first connect to the simulator, your agent does not have any 
+physical representation. The only thing your agent has got is a "createeffector". 
+The idea of the createeffector is that you can request different effectors,
+perceptors or robot types. Currently, there is only one fixed robot type, so the
+createefector ignores all parameters. For now, you should simply do "(create)" 
+at the beginning and you will get the default robot type.
+
+2) To set the teamname and uniform number, you have to use the initeffector. 
+Prior to initializing, your effectors and perceptors will not work properly.
+Example: "(init (unum 7) (teamname RoboLog))".  
+
+
 Vision: Your robots possess a special omnicam with some smart image
 proccessing software attached :). Robots have a 360 degrees view. The
 visionperceptor delivers lists of seen objects, where objects are
@@ -116,18 +142,24 @@ The noise parameters of the vision system are as follows:
   + angle error (latitudal): sigma = 0.1480
 
 Example Vision output: 
-(Vision (Flag1 (pol 60.4264 -34.2719 -0.0357255)) (Flag2 (pol 64.6379
--148.497 -0.206611)) (Flag3 (pol 64.7042 148.213 -0.194732)) (Flag4
-(pol 60.4241 34.4168 -0.168905)) (Goal1l (pol 50.2566 4.30122
--0.548845)) (Goal1r (pol 50.1495 -4.38376 -0.285932)) (Goal2l (pol
-54.9372 176.133 -0.0666542)) (Goal2r (pol 55.102 -175.997 -0.279753))
-(Ball (pol 34.9437 16.6809 -0.0461624)) (AgentAspect3 (pol 14.8641
-180.126 1.00389)) (AgentAspect2 (pol 10.125 179.968 1.08724))
-(AgentAspect1 (pol 5.02996 179.999 1.1926))) 
+(Vision (Flag (id 1_l) (pol 60.1403 34.5596 -0.328613)) (Flag (id 2_l) 
+(pol 60.0956 -34.4602 -0.456952)) (Flag (id 1_r) (pol 64.2538 147.935 -0.359082)) 
+(Flag (id 2_r) (pol 64.148 -148.223 -0.421845)) (Goal (id 1_l) 
+(pol 49.8231 4.27208 -0.323971)) (Goal (id 2_l) (pol 49.5938 -4.14056 -0.529796)) 
+(Goal (id 1_r) (pol 54.5179 176.296 -0.523109)) (Goal (id 2_r) 
+(pol 54.6331 -175.957 -0.211688)) (Ball (pol 2.6942 -179.859 -6.07302)) 
+(foo (id 1099) (pol 5.12495 -180.146 0.156113)) (bar (id 1100) 
+(pol 9.98603 -179.868 -0.227677)) (bar (id 1101) 
+(pol 15.0581 -179.983 -0.206302)))
 
 
+The GameStatePerceptor tells you about the current status of the game. The first percept
+you get from this perceptor tells you about some of the game variables 
+(like ball weight and field size etc) additionally.
 
-  
+The AgentStatePerceptor notifies you about internal states of the agent (currently 
+only the battery state).
+
 
 END OF TEXT.
 
