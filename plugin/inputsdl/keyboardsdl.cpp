@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: keyboardsdl.cpp,v 1.4 2004/03/05 18:53:24 rollmark Exp $
+   $Id: keyboardsdl.cpp,v 1.5 2004/04/23 20:43:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 using namespace kerosin;
 
-KeyboardSDL::KeyboardSDL() : InputDeviceSDL()
+KeyboardSDL::KeyboardSDL()
 {
     SetupSymMap();
 }
@@ -181,75 +181,73 @@ void KeyboardSDL::SetupSymMap()
     // SDLK_UNDO
 }
 
-bool KeyboardSDL::Init(kerosin::InputSystem *inputSystem)
+bool
+KeyboardSDL::Init(kerosin::InputSystem *inputSystem)
 {
-    if (! InputDevice::Init(inputSystem))
-        {
-            return false;
-        }
-
-    return true;
+    return InputDevice::Init(inputSystem);
 }
 
-bool KeyboardSDL::TranslateSymbol(int& sym)
+bool
+KeyboardSDL::TranslateSymbol(int& sym)
 {
     TSymMap::iterator iter = mSymbols.find(sym);
     if (iter == mSymbols.end())
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     sym = (*iter).second;
     return true;
 }
 
-int KeyboardSDL::EventFilter(const SDL_Event *event)
+int
+KeyboardSDL::EventFilter(const SDL_Event* event)
 {
     // we only want keyboard events
     if (
         (event->type != SDL_KEYDOWN) &&
         (event->type != SDL_KEYUP)
         )
-        {
-            return 1;
-        }
+    {
+        return 1;
+    }
 
     unsigned int& modState =
         mInputSystem->GetInputServer()->mModifierState;
 
     if (event->key.keysym.mod & KMOD_LSHIFT)
-        {
-            modState |= InputServer::eLShift;
-        }
+    {
+        modState |= InputServer::eLShift;
+    }
 
     if (event->key.keysym.mod & KMOD_RSHIFT)
-        {
-            modState |= InputServer::eRShift;
-        }
+    {
+        modState |= InputServer::eRShift;
+    }
 
     if (event->key.keysym.mod & KMOD_LALT)
-        {
-            modState |= InputServer::eLAlt;
-        }
+    {
+        modState |= InputServer::eLAlt;
+    }
 
     if (event->key.keysym.mod & KMOD_RALT)
-        {
-            modState |= InputServer::eRAlt;
-        }
+    {
+        modState |= InputServer::eRAlt;
+    }
 
     if (event->key.keysym.sym == 0)
-        {
-            return 1;
-        }
+    {
+        return 1;
+    }
 
     int sym = event->key.keysym.sym;
     if (! TranslateSymbol(sym))
-        {
-            GetLog()->Warning()
-                << "(KeyboardSDL) WARNING: encountered unknown SDL key symbol "
-                << sym << "\n";
-            return 1;
-        }
+    {
+        GetLog()->Warning()
+            << "(KeyboardSDL) WARNING: encountered unknown SDL key symbol "
+            << sym << "\n";
+        return 1;
+    }
 
     InputServer::Input input(InputServer::eButton, sym);
     input.data.l = (event->type == SDL_KEYDOWN);
