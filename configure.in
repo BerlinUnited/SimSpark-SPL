@@ -15,6 +15,9 @@ AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 
 # Checks for libraries.
+AC_CHECK_LIB(ode, dWorldCreate, true, 
+  AC_MSG_ERROR([your system fails at linking a small ODE application!
+Install ODE on your system and try again.]))
 AC_SEARCH_LIBS(dlopen, dl)
 
 # Checks for header files.
