@@ -6,7 +6,6 @@
 # generic plugins
 importBundle "filesystemstd"
 importBundle "sexpparser"
-importBundle "perfectvisionperceptor"
 
 #
 # bundle of soccer plugins
@@ -58,12 +57,21 @@ def addAgent(aspectPath)
   # geometry and physics setup
   physics = new('oxygen/Body', aspectPath+'physics')
   physics.setMass(getSoccerVar('AgentMass'))
+## this method below should give a better distribution of the agent weight.
+## needs to be tested though
+#  physics.setSphereTotal(getSoccerVar('AgentMass'),
+#                         getSoccerVar('AgentRadius')
+#                         )
 
   maxVel = new('oxygen/VelocityController', aspectPath+'physics/maxVelCtr')
   maxVel.setMaxVelocity(getSoccerVar('AgentMaxSpeed'))
 
   geometry = new('oxygen/SphereCollider', aspectPath+'geometry')
   geometry.setRadius(getSoccerVar('AgentRadius'))
+
+  drag = new('oxygen/DragController',aspectPath+'physics/drag')
+  drag.setAngularDrag(12.0)
+  drag.setLinearDrag(12.0)
 
   # agent state (needs to be set up before perceptors)
   new('AgentState', aspectPath+'AgentState')
@@ -73,16 +81,16 @@ def addAgent(aspectPath)
 
   # driveeffector setup
   driveEffector = new('DriveEffector', aspectPath+'DriveEffector')
-  # the driveeffector is good for acceleration up to 12m/s² of a 75kg robot 
-  # (if there was no friction. but there is. :)
-  driveEffector.setForceFactor(75.0 * 12.0 / 100.0);
+  # this sets the acceleration of the robot.
+  # (values are still experimental :)
+  driveEffector.setForceFactor(75.0 * 12.0 / 80.0);
   driveEffector.setSigma(0.005);
   # drive consumption. (higher value means lower consumption) 
   # untested if this is enough or too much 
   driveEffector.setConsumption(120 * 75.0 * 12.0 * 4);
 
   kickEffector = new('KickEffector', aspectPath+'KickEffector')
-  kickEffector.setForceFactor(2.2)
+  kickEffector.setForceFactor(1.8)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
   kickEffector.setSteps(10)
   kickEffector.setMaxPower(100.0)
@@ -92,7 +100,8 @@ def addAgent(aspectPath)
 
   # perceptor setup
   visionPerceptor = new('VisionPerceptor', aspectPath+'VisionPerceptor')
-  visionPerceptor.setSenseMyPos(true);
+  # set to true for debugging. will be set to false during competition
+  visionPerceptor.setSenseMyPos(false);
 
   new('GameStatePerceptor', aspectPath+'GameStatePerceptor')
   new('AgentStatePerceptor', aspectPath+'AgentStatePerceptor')
@@ -125,11 +134,20 @@ def addBall(x,y,z)
 
   physics = new('oxygen/Body', path+'physics')
   physics.setMass(getSoccerVar('BallMass'))
+## this method below should give a better distribution of the ball weight.
+## needs to be tested though
+#  physics.setSphereTotal(getSoccerVar('BallMass'),
+#                         getSoccerVar('BallRadius')
+#                         )
 
   geomPath = path+'geometry/'
 
   geometry = new('oxygen/SphereCollider', geomPath)
   geometry.setRadius(getSoccerVar('BallRadius'))
+
+  drag = new('oxygen/DragController',path+'physics/drag')
+  drag.setAngularDrag(0.1)
+  drag.setLinearDrag(0.3)
 
   new('oxygen/RecorderHandler', geomPath+'recorder')
   new('oxygen/ContactJointHandler', geomPath+'contact')
@@ -239,6 +257,9 @@ addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
 addSoccerVar('GoalHeight', 2.44)
 addSoccerVar('BorderSize', 10.0)
+addSoccerVar('FreeKickDistance', 9.15)
+addSoccerVar('AutomaticKickOff', false)
+addSoccerVar('WaitBeforeKickOff', 2.0)
 
 # agent parameters
 addSoccerVar('AgentMass', 75.0)
@@ -252,7 +273,7 @@ addSoccerVar('BallMass',randomServer.uniformRND(0.41,0.45))
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
 addSoccerVar('RuleKickingPauseTime',1.0)
-addSoccerVar('RuleHalfTime',2.25 * 60)
+addSoccerVar('RuleHalfTime',4.0 * 60)
 
 #
 # mount a standard file system
@@ -303,7 +324,7 @@ addField()
 Spades.TimePerStep = 0.01
 
 # set up the number of simsteps per monitor message
-Spades.MonitorInterval = 4
+Spades.MonitorInterval = 15
 
 # start  the integrated comm server
 Spades.RunIntegratedCommserver = true
