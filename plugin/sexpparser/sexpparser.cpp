@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.1.2.2 2003/12/08 15:11:35 fruit Exp $
+   $Id: sexpparser.cpp,v 1.1.2.3 2003/12/09 13:51:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 using namespace oxygen;
 using namespace std;
+using namespace boost;
 
 bool
 SexpParser::IsString(const boost::any & operand)
@@ -31,12 +32,12 @@ SexpParser::IsString(const boost::any & operand)
     return boost::any_cast<std::string>(&operand);
 }
 
-BaseParser::TPredicateList
+shared_ptr<SexpParser::TPredicateList>
 SexpParser::Parse(const std::string& input)
 {
     size_t len = input.length();
 
-    TPredicateList pList;
+    shared_ptr<TPredicateList> pList(new TPredicateList);
     if (len == 0) return pList;
 
     char* c = new char[len+1];
@@ -53,13 +54,14 @@ SexpParser::Parse(const std::string& input)
         predicate = SexpToPlist(sexp);
         if (!predicate.name.empty())
         {
-            pList.push_back(predicate);
+            pList->push_back(predicate);
         }
         destroy_sexp(sexp);
         sexp = iparse_sexp(c,len,pcont);
     }
     destroy_continuation(pcont);
     delete [] c;
+
     return pList;
 }
 
