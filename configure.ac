@@ -100,6 +100,8 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/soundsystembass/Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/survival/Makefile \
+		 app/Makefile \
+		 app/simulator/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile])
 AC_OUTPUT

@@ -1,5 +1,5 @@
 ### utility subdir has to be made first
-SUBDIRS = utility lib plugin doc 
+SUBDIRS = utility lib plugin app doc
 
 pkginclude_HEADERS = \
 config.h
