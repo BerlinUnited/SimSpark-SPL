@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d],[0.1],[fruit@robolog.org])
+AC_INIT([rcssserver3d], 0.0.0, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([plugin/inputsdl/keyboardsdl_c.cpp])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])

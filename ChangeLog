@@ -1,3 +1,14 @@
+2003-09-08	Tom Howard	<tomhoward@users.sf.net>
+
+	* ./Makefile.am
+	* ./configure.ac
+	* ./config.aux/cvs.am
+	* ./config.aux/dist.am
+	* ./config.aux/msi.am
+	* ./config.aux/rpm.am
+	* ./config.aux/sf.am
+	Added custom maintainer targets
+
 2003-09-05  Oliver Obst  <fruit@robolog.org>
 
 	* lib/zeitgeist/core.cpp: 
