@@ -15,19 +15,9 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#include "commandsignature.h"
 
-#include "comsigbase.h"
-#include "comsigany.h"
-#include "comsigelliptic.h"
-#include "comsiglabel.h"
-#include "comsigbool.h"
-#include "comsigint.h"
-#include "comsigfloat.h"
-#include "comsigstring.h"
-#include "comsigvariable.h"
-#include "comsigvector.h"
-#include "comsigcommand.h"
+#include "commandsignature.h"
+#include "signatures.h"
 
 CommandSignature::CommandSignature()
 {
