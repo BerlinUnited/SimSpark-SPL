@@ -1,3 +1,47 @@
+2004-03-22  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/rcssserver3D.rb: 
+	- changed parameters due to kickeffector changes
+
+	* app/simulator/agentdb.list: changed default timer to jiffies
+
+	* plugin/soccer/kickeffector/kickeffector.h: 
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	* plugin/soccer/kickeffector/kickeffector_c.cpp: 
+	- changed the KickEffector so that applies force and torque over a 
+	  fixed number of steps. The SetSteps method could be simplified 
+	  because of that.
+	- The KickEffector parent node needs to be (derived from) an
+	  AgentAspect.  When applying the acceleration, a reference to the
+	  AgentAspect is passed to the ball to update the last collidee.
+	
+	* plugin/soccer/ball/ball.h: 
+	* plugin/soccer/ball/ball.cpp: 
+	- Simplified the kicker. A constant force and torque is applied now 
+	  over a fixed number of simulation steps. This was possible because 
+	  Agents and the ball get the correct mass. The agents do not "jump" 
+	  up anymore when kicking the ball.  
+	- If the agent kicks the ball, it is set as last colliding agent in 
+	  the BallStateAspect.
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h: 
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp: 
+	- added public method UpdateLastCollidingAgent(agent) to set the last 
+	  colliding agent. This method is used by the kickeffector to set the 
+	  agent kicking the ball as last collidee.
+
+2004-03-19  Oliver Obst  <fruit@robolog.org>
+
+	* app/simulator/rcssserver3D.rb: 
+	- fixed the driveeffector forcefactor for the new update
+
+	* plugin/soccer/driveeffector/driveeffector.cpp: 
+	- removed the deltaTime dependecy from the physics update
+
+	* lib/oxygen/physicsserver/body.cpp: 
+	Body::SetMass didn't set the mass. This bug caused all bodies 
+	to have the same weight (of 1).
+
 2004-02-16  Patrick Riley  <pfr@cs.cmu.edu>
 
 	* lib/oxygen/spadesserver/spadescreatesenseevent.cpp
