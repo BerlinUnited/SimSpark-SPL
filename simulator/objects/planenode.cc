@@ -19,12 +19,12 @@
 #include "planenode.h"
 #include "worldnode.h"
 
-using namespace rcss::EntityTree;
+using namespace rcss::entity;
 using namespace std;
 
 PlaneNode::PlaneNode(WorldNode& world_node,
                      dReal a, dReal b, dReal c, dReal d,
-                     const std::string& name, BaseNode* parent)
+                     const string& name, DirNode* parent)
     : GeometryNode(world_node,name,parent)
 {
     M_geometry_id = dCreatePlane(world_node.getSpace(),a,b,c,d);
@@ -32,7 +32,7 @@ PlaneNode::PlaneNode(WorldNode& world_node,
 
 PlaneNode::PlaneNode(WorldNode& world_node,
                      dReal v[4],
-                     const std::string& name, BaseNode* parent)
+                     const string& name, DirNode* parent)
     : GeometryNode(world_node,name,parent)
 {
     M_geometry_id = dCreatePlane(world_node.getSpace(),v[0],v[1],v[2],v[3]);

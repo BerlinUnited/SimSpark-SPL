@@ -16,8 +16,8 @@
  *   later version.                                                        *
  *                                                                         *
  ***************************************************************************/
-#ifndef RCSS_ENTITYGRAPH_PLANENODE_H
-#define RCSS_ENTITYGRAPH_PLANENODE_H
+#ifndef RCSS_ENTITY_PLANENODE_H
+#define RCSS_ENTITY_PLANENODE_H
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -29,12 +29,13 @@
 
 namespace rcss
 { 
-    namespace EntityTree
+    namespace entity
     { 
 #if 0
 }}
 #endif
 
+class DirNode;
 class WorldNode;
 
 class PlaneNode : public GeometryNode
@@ -43,11 +44,11 @@ public:
     PlaneNode(WorldNode& world_node,
               dReal a, dReal b, dReal c, dReal d,
               const std::string& name = "<unknown>",
-              BaseNode* parent = 0);
+              DirNode* parent = 0);
     PlaneNode(WorldNode& world_node,
               dReal v[4],
               const std::string& name = "<unknown>",
-              BaseNode* parent = 0);
+              DirNode* parent = 0);
 
 };
 
