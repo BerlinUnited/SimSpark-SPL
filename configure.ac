@@ -9,7 +9,9 @@ AC_LANG([C++])
 AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 
-AC_DEFINE_UNQUOTED(PREFIX, $prefix, [Define the install prefix. Needed by the libraries to check for ruby scripts.])
+rcss_prefix=$prefix
+test "$rcss_prefix" = NONE && rcss_prefix=$ac_default_prefix
+AC_DEFINE_UNQUOTED(PREFIX, $rcss_prefix, [Define the install prefix. Needed by the libraries to check for ruby scripts.])
 
 AC_ARG_ENABLE(debug,
      AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
