@@ -1,9 +1,7 @@
 #include <zeitgeist/zeitgeist.h>
-#include <kerosin/kerosin.h>
 #include <oxygen/oxygen.h>
 
 using namespace boost;
-using namespace kerosin;
 using namespace std;
 using namespace zeitgeist;
 
@@ -18,9 +16,6 @@ int main()
 
   // setup a browsing context
   shared_ptr<CoreContext> context = zg.CreateContext();
-
-  // init kerosin
-  Kerosin                                 kCore(zg);
 
   // init oxygen
   oxygen::Oxygen                          kOxygen(zg);
