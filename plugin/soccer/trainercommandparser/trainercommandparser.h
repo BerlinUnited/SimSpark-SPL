@@ -30,7 +30,7 @@
 #include <zeitgeist/class.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <salt/vector.h>
-#include <soccertypes.h>
+#include <soccer/soccertypes.h>
 
 class TrainerCommandParser : public zeitgeist::Leaf
 {
