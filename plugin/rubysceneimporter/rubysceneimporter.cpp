@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.3 2004/04/12 13:52:49 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.4 2004/04/13 14:15:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -316,7 +316,14 @@ bool RubySceneImporter::ReadMethodCall(sexp_t** sexp, shared_ptr<BaseNode> node)
 
             if (param[0] == '.')
                 {
-                    break;
+                    if (
+                        (param.size() > 1) &&
+                        (param[1] >= 'a') &&
+                        (param[1] <= 'z')
+                        )
+                        {
+                            break;
+                        }
                 }
 
             if (param[0] == '$')
