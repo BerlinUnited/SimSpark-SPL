@@ -53,6 +53,13 @@ inputserver/inputsystem.cpp \
 inputserver/scancodemap.cpp \
 kerosin.cpp \
 materialserver/material.cpp \
+materialserver/material_c.cpp \
+materialserver/material2dtexture.h \
+materialserver/material2dtexture.cpp \
+materialserver/material2dtexture_c.cpp \
+materialserver/materialsolid.h \
+materialserver/materialsolid.cpp \
+materialserver/materialsolid_c.cpp \
 materialserver/materialserver.cpp \
 materialserver/materialserver_c.cpp \
 sceneserver/axis.cpp \
