@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: kickeffector.cpp,v 1.3 2004/02/26 21:08:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
     // get the kick angle in the horizontal plane
-    double theta = salt::gArcTan2(force[2], force[0]);
+    double theta = salt::gArcTan2(force[1], force[0]);
     if (mSigmaTheta > 0.0)
     {
         theta += salt::NormalRNG<>(0.0,mSigmaTheta)();
@@ -111,9 +111,9 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     // x = r * cos(theta) * sin(90 - phi), with r = 1.0
     force[0] = salt::gCos(theta) * salt::gSin(phi);
     // y = r * sin(theta) * sin(90 - phi), with r = 1.0
-    force[2] = salt::gSin(theta) * salt::gSin(phi);
+    force[1] = salt::gSin(theta) * salt::gSin(phi);
     // z = r * cos(90 - phi),              with r = 1.0
-    force[1] = salt::gCos(phi);
+    force[2] = salt::gCos(phi);
 
     float kick_power = salt::gMin(salt::gMax(kickAction->GetPower(), 1.0f), mMaxPower);
     if (mSigmaForce > 0.0)
@@ -124,9 +124,9 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     int steps = mMinSteps + static_cast<int>((mMaxSteps-mMinSteps) * (kick_power / mMaxPower));
 
     force *= (mForceFactor * kick_power);
-    Vector3f torque(force[2]/(salt::g2PI * mBallRadius),
-                    0.0,
-                    -force[0]/(salt::g2PI * mBallRadius));
+    Vector3f torque(force[1]/(salt::g2PI * mBallRadius),
+                    -force[0]/(salt::g2PI * mBallRadius),
+                    0.0);
 
     GetLog()->Debug() << "DEBUG: (KickEffector): " << kick_power << ": "
                       << force[0] << " " << force[1] << " " << force[2] << " / "

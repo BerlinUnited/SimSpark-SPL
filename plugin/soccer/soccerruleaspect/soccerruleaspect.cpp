@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.2 2004/02/12 14:07:27 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.3 2004/02/26 21:08:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ void SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // before the game starts the ball should stay in the middle of
     // the playing field
-    salt::Vector3f pos(0,mBallRadius,0);
+    salt::Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
 }
 
@@ -123,7 +123,7 @@ bool SoccerRuleAspect::CheckBallLeftField()
 
                     mLastValidBallPos =
                         mBallState->GetLastValidBallPosition();
-                    mLastValidBallPos[1] = mBallRadius;
+                    mLastValidBallPos[2] = mBallRadius;
                 }
         }
 
@@ -173,7 +173,7 @@ void SoccerRuleAspect::UpdateGoal()
 
     // put the ball back in the middle of the playing field
     salt::Vector3f pos(0,0,0);
-    SoccerBase::GetSoccerVar(*this,"BallRadius",pos[1]);
+    SoccerBase::GetSoccerVar(*this,"BallRadius",pos[2]);
     MoveBall(pos);
 
     // kick off for the opposite team

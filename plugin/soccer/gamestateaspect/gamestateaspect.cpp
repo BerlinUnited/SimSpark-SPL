@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: gamestateaspect.cpp,v 1.3 2004/02/26 21:08:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -284,14 +284,13 @@ Vector3f GameStateAspect::RequestInitPosition(const TTeamIndex ti)
             GetLog()->Debug()
                 << "(GameStateAspect) RequestInitPosition called with "
                 << "ti=TI_NONE\n";
-            return Vector3f(0,0,20);
+            return Vector3f(0,20,0);
         }
 
-    salt::Vector3f& init = (ti ==TI_LEFT) ?
-        mLeftInit : mRightInit;
+    salt::Vector3f& init = (ti ==TI_LEFT) ? mLeftInit : mRightInit;
 
     Vector3f pos = init;
-    init[2] -= mAgentRadius * 3;
+    init[1] -= mAgentRadius * 3;
 
     return pos;
 }
@@ -311,15 +310,15 @@ void GameStateAspect::OnLink()
     mLeftInit = Vector3f
         (
          -fieldLength/2.0 + mAgentRadius*2,
-         mAgentRadius,
-         fieldWidth/2 - mAgentRadius*2
+         fieldWidth/2 - mAgentRadius*2,
+         mAgentRadius
          );
 
     mRightInit = Vector3f
         (
          +fieldLength/2.0 - mAgentRadius*2,
-         mAgentRadius,
-         fieldWidth/2  - mAgentRadius*2
+         fieldWidth/2  - mAgentRadius*2,
+         mAgentRadius
          );
 }
 

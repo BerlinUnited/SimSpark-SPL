@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.3 2004/02/19 16:40:16 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.4 2004/02/26 21:08:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -265,8 +265,8 @@ SoccerBase::FlipView(const salt::Vector3f& pos, TTeamIndex ti)
         break;
     case TI_LEFT:
         newPos[0] = -pos[0];
-        newPos[1] = pos[1];
-        newPos[2] = -pos[2];
+        newPos[1] = -pos[1];
+        newPos[2] = pos[2];
         break;
     case TI_RIGHT:
         newPos = pos;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.3 2004/02/21 15:46:36 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.4 2004/02/26 21:08:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -131,9 +131,9 @@ VisionPerceptor::Percept(Predicate& predicate)
         if (od.mDist > 0.1)
         {
             // theta is the angle in the X-Y (horizontal) plane
-            od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[2], od.mRelPos[0]));
+            od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0]));
             // latitude
-            od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[1]/od.mDist));
+            od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[2]/od.mDist));
             // make some noise
             if (mAddNoise)
             {

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.3 2004/02/19 19:12:38 rollmark Exp $
+   $Id: beameffector.cpp,v 1.4 2004/02/26 21:08:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,7 +64,6 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
             // swap external and internal z-coordinates; after the
             // swap pos is still relative to the team
             Vector3f pos = beamAction->GetPosition();
-            std::swap(pos[1],pos[2]);
 
             // an agent can only beam within it's own field half
             float minX = -mFieldLength/2 + mAgentRadius;
@@ -73,10 +72,10 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
 
             float minY = -mFieldWidth/2 + mAgentRadius;
             float maxY = mFieldWidth/2 - mAgentRadius;
-            pos[2] = std::max<float>(minY,pos[2]);
-            pos[2] = std::min<float>(maxY,pos[2]);
+            pos[1] = std::max<float>(minY,pos[1]);
+            pos[1] = std::min<float>(maxY,pos[1]);
 
-            pos[1] = mAgentRadius;
+            pos[2] = mAgentRadius;
 
             // swap x and y coordinates accordingly for the current
             // team; after the flip pos is global and not independent

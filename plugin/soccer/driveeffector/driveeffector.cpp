@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector.cpp,v 1.2 2004/02/12 14:07:25 fruit Exp $
+   $Id: driveeffector.cpp,v 1.3 2004/02/26 21:08:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,9 +68,7 @@ DriveEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    mForce[0] = driveAction->GetForce().x();
-    mForce[1] = driveAction->GetForce().z();
-    mForce[2] = driveAction->GetForce().y();
+    mForce = driveAction->GetForce();
 
     // cut down the drive power vector to maximum length
     if (mForce.SquareLength() > mMaxPower * mMaxPower)
@@ -168,7 +166,7 @@ DriveEffector::PrePhysicsUpdateInternal(float deltaTime)
     }
 
     Vector3f vec = mTransformParent->GetWorldTransform().Pos();
-    if (vec[1] > mMaxDistance) return;
+    if (vec.z() > mMaxDistance) return;
 
     salt::Vector3f step_force = mForce * deltaTime;
 
