@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: boxcollider.cpp,v 1.2 2004/02/12 14:07:22 fruit Exp $
+   $Id: boxcollider.cpp,v 1.3 2004/03/22 10:53:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,15 +23,21 @@
 #include "boxcollider.h"
 
 using namespace oxygen;
+using namespace salt;
 
 BoxCollider::BoxCollider() : Collider()
 {
 }
 
 void
-BoxCollider::SetBoxLengths(float x, float y, float z)
+BoxCollider::SetBoxLengths(const Vector3f& extents)
 {
-  dGeomBoxSetLengths(mODEGeom,x,y,z);
+    dGeomBoxSetLengths(
+                       mODEGeom,
+                       extents[0],
+                       extents[1],
+                       extents[2]
+                       );
 }
 
 bool
