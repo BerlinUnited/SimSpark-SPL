@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.5 2004/04/14 18:33:20 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.6 2004/04/28 14:48:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,11 +84,26 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
     file->Read(buffer.get(), file->Size());
     buffer[file->Size()] = 0;
 
-    // parse s-expressions
-    pcont_t* pcont = init_continuation(buffer.get());
-    sexp_t* sexp = iparse_sexp(buffer.get(),file->Size(),pcont);
+    return ParseScene(buffer.get(), file->Size(), root, parameter);
+}
 
-    // read file magic and version
+bool RubySceneImporter::ParseScene(const std::string& scene,
+                                   shared_ptr<BaseNode> root,
+                                   shared_ptr<ParameterList> parameter)
+{
+    mFileName = "<from string>";
+    return ParseScene(scene.c_str(),scene.size(),root,parameter);
+}
+
+bool RubySceneImporter::ParseScene(const char* scene, int size,
+                                   boost::shared_ptr<oxygen::BaseNode> root,
+                                   boost::shared_ptr<zeitgeist::ParameterList> parameter)
+{
+    // parse s-expressions
+    pcont_t* pcont = init_continuation(const_cast<char*>(scene));
+    sexp_t* sexp = iparse_sexp(const_cast<char*>(scene),size,pcont);
+
+    // read scene magic and version
     if (
         (sexp == 0) ||
         (! ReadHeader(sexp)) ||
@@ -105,7 +120,7 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
     PushParameter(parameter);
 
     destroy_sexp(sexp);
-    sexp = iparse_sexp(buffer.get(),file->Size(),pcont);
+    sexp = iparse_sexp(const_cast<char*>(scene),size,pcont);
 
     bool ok = ReadGraph(sexp,root);
 
