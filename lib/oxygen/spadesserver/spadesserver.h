@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.h,v 1.8 2004/04/05 14:51:09 rollmark Exp $
+   $Id: spadesserver.h,v 1.9 2004/04/23 13:27:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,6 +95,9 @@ public:
 
     /** set simulation mode to normal */
     void Unpause();
+
+    /** update cached variables */
+    virtual void UpdateCached();
 
     // ----------------------------------------------------------------------
     // SPADES interface methods start here
