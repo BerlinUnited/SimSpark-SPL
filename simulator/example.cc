@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "basenode.h"
 #include "dirnode.h"
 #include "entitytree.h"
@@ -9,14 +13,23 @@
 
 #include <pthread.h>
 #include <drawstuff/drawstuff.h>
+#include <fstream>
 #include <set>
+#include <sstream>
 #include <string>
 
-using namespace rcss::EntityTree;
+#if HAVE_READLINE_READLINE_H
+#include <cstdio>
+#include <readline/readline.h>
+#include <readline/history.h>
+#endif
+
+using namespace rcss::entity;
 using namespace Utility;
 using namespace std;
 
 pthread_mutex_t mutex;
+rcss::Simulator* sim;
 
 #ifdef dDOUBLE
 #define dsDrawBox dsDrawBoxD
@@ -38,11 +51,9 @@ start()
 static void 
 simLoop(int pause)
 {
-    static rcss::Simulator sim;
-
     pthread_mutex_lock(&mutex);
     // loop =
-    sim.execute();
+    sim->execute();
     pthread_mutex_unlock(&mutex);
     drawTree(0);
 }
@@ -51,6 +62,7 @@ static void
 command(int cmd)
 {
 }
+
 
 void*
 simulator_thread(void *)
@@ -72,34 +84,54 @@ void*
 console_thread(void *)
 {
     flush(*Console::instance().getStream());
-    smux.addStream(&cout);
+    smux.addStream(&cout, Forwarder::S_NORMAL | Forwarder::S_WARNING |
+                   Forwarder::S_ERROR);
     cin.tie(&smux);
     
     string s;
     long int i = 0;
     
+    Console::instance().execute("create \"World\" \"world\"");
+    Console::instance().execute("selectnode \"world\"");
+    Console::instance().execute("create \"Plane\" 0 0 1 0 \"plane\"");
+    Console::instance().execute("selectnode \"/\"");
+    
     Console::instance().execute("help");
     BaseNode* node;
+
+    ostringstream prompt;
     
-    while (true) 
+    while (!Console::instance().hasQuit())
     {    
         node = EntityTree::instance().getCurrentNode();
-        smux.normal() << "console:"
-                      << EntityTree::instance().getCurrentNode()->getPath()
-                      << " " << i << ") " << flush;
+        prompt << "console:"
+               << EntityTree::instance().getCurrentNode()->getPath()
+               << " " << i << ") ";
 
-        ++i;
+#if HAVE_READLINE_READLINE_H        
+        s = readline(prompt.str().c_str());
+#else
+        cout << prompt.str() << flush;
         getline(std::cin,s);
-        pthread_mutex_lock(&mutex);
-        Console::instance().execute(s);
-        pthread_mutex_unlock(&mutex);
+#endif
+        prompt.str("");
+        string::size_type j = s.length();
+        while (j > 0 && s[j-1] == ' ') --j;
+        s = s.substr(0,j);
+        if (!s.empty()) 
+        {
+            ++i;
+            pthread_mutex_lock(&mutex);
+            Console::instance().execute(s);
+            pthread_mutex_unlock(&mutex);
+        }
     }
-
+    cerr << "Console thread finished\n";
     return 0;
 }
 
 void 
-drawGeom (dGeomID g, const dReal *pos, const dReal *R)
+drawGeom(dGeomID g, const dReal *pos, const dReal *R)
 {
     if (!g) return;
     if (!pos) pos = dGeomGetPosition (g);
@@ -166,15 +198,24 @@ drawTree(BaseNode* node)
 int
 main(int argc, char **argv)
 {
+    ofstream debug_log("debug.log");
+    smux.addStream(&debug_log,Forwarder::S_DEBUG);
+    smux.debug() << "rcssserver3D debug log" << endl;
 
+    sim = new rcss::Simulator();
+#if 1
     pthread_t p1, p2;
     pthread_mutex_init (&mutex, 0);
 
     pthread_create(&p1, 0, simulator_thread, 0);
     pthread_create(&p2, 0, console_thread, 0);
 
-    pthread_join(p1, 0);
+//    pthread_join(p1, 0);
     pthread_join(p2, 0);
-
+#else
+    console_thread(0);
+#endif
+    
+    delete sim;
     return 0;
 }
