@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.12 2004/04/23 13:31:27 fruit Exp $
+   $Id: spadesserver.cpp,v 1.13 2004/05/24 16:55:52 patstg Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -334,7 +334,7 @@ SpadesServer::getMinSenseLatency() const
 }
 
 ActEvent*
-SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned datalen) const
+SpadesServer::parseAct(SimTime act_received_time, AgentID a, const char* data, unsigned datalen) const
 {
     if (mGameControlServer.get() == 0)
     {
@@ -350,7 +350,12 @@ SpadesServer::parseAct(SimTime /*t*/, AgentID a, const char* data, unsigned data
     }
 
     float latency = mGameControlServer->GetActionLatency(a);
-    SimTime arrival = mSimEngine->getSimulationTime() + static_cast<int>(latency / GetTimePerStep());
+    // pfr 5/24/2004
+    // the time act_received_time is the time that the commserver reports as the actions being
+    // sent. Notably, this includes the thinking latency.
+    // This is NOT the same as mSimEngine->getSimulationTime() (which is what was here before)
+    // since SPADES does out of order event reception and processing reasoning
+    SimTime arrival = act_received_time + static_cast<int>(latency / GetTimePerStep());
 
     return new SpadesActEvent(arrival, a, actionList);
 }
