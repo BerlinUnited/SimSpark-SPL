@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller.cpp,v 1.9 2004/04/12 17:19:23 rollmark Exp $
+   $Id: fpscontroller.cpp,v 1.10 2005/01/04 10:56:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,17 +70,26 @@ void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
             }
 
     Matrix matrix;
-    matrix.RotationZ(gDegToRad(-mHAngle));
-    matrix.RotateX(gDegToRad(-mVAngle));
+    float hAngle = gDegToRad(-mHAngle);
+    float vAngle = gDegToRad(-mVAngle);
+    matrix.RotationZ(hAngle);
+    matrix.RotateX(vAngle);
     mBody->SetRotation(matrix);
 
     if (vec.SquareLength() > 0)
         {
-            // accelerate the body
-            vec.Normalize();
-            Vector3f force = matrix.Rotate
-                (vec * mBody->GetMass() * mAcceleration);
-            mBody->AddForce(force);
+            float force = mBody->GetMass() * mAcceleration;
+            vec *= force;
+
+            Matrix fwd;
+            fwd.RotationZ(hAngle);
+            mBody->AddForce(vec.y() * fwd.Up());
+
+            Matrix side;
+            side.RotationX(vAngle);
+            mBody->AddForce(vec.x() * fwd.Right());
+
+            mBody->AddForce(vec.z() * Vector3f(0,0,1));
         }
 }
 
