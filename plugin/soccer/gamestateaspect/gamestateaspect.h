@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.3 2004/04/23 15:17:47 fruit Exp $
+   $Id: gamestateaspect.h,v 1.4 2004/05/05 13:54:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ public:
     TGameHalf GetGameHalf() const;
 
     /** sets the name of a team */
-    void SetTeamName(TTeamIndex idx, std::string name);
+    void SetTeamName(TTeamIndex idx, const std::string& name);
 
     /** returns the name of a team */
     std::string GetTeamName(TTeamIndex idx) const;
