@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.8 2004/06/11 14:30:33 fruit Exp $
+   $Id: gamestate.cpp,v 1.9 2004/06/12 08:11:52 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -333,9 +333,13 @@ GameState::ProcessInit(const Predicate& predicate)
 void
 GameState::ProcessInfo(const Predicate& predicate)
 {
+    bool sawBall = false;
+    bool sawPlayer = false;
+    bool sawFlag = false;
+    
     ResetBall();
     ResetPlayers();
-    ResetFlags();
+//     ResetFlags(); // don't reset flags, as they are only sent once
 
     Predicate::Iterator iter(predicate);
     mAck.clear();
@@ -377,10 +381,24 @@ GameState::ProcessInfo(const Predicate& predicate)
         switch (name[0])
         {
         case 'B':
+            if (sawBall)
+                GetLog()->Error() << "Found more than one ball in this message.\n";
+            else
+            {
+                sawBall = true;
+                ResetBall();
+            }
+
             mSeenBall = true;
             mBall = pos;
             break;
         case 'P':
+            if (!sawPlayer)
+            {
+                sawPlayer = true;
+                ResetPlayers();
+            }
+            
             pi.mPos = pos;
             if (predicate.GetValue(j, "s", t1))
             {
@@ -404,6 +422,12 @@ GameState::ProcessInfo(const Predicate& predicate)
             break;
         case 'F':
         case 'G':
+            if (!sawFlag)
+            {
+                sawFlag = true;
+                ResetFlags();
+            }
+
             t2 = "";
             if (!predicate.GetValue(j, "id", t2))
             {
@@ -418,6 +442,10 @@ GameState::ProcessInfo(const Predicate& predicate)
             break;
         }
     }
+    if (!sawBall)
+        GetLog()->Error()<< "Didn't see a ball in this message\n";
+    if (!sawPlayer)
+        GetLog()->Error() << "Didn't see any players in this message\n";
 }
 
 void
