@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.2.2.3 2004/01/25 12:54:41 rollmark Exp $
+   $Id: initeffector.cpp,v 1.2.2.4 2004/01/31 15:16:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <soccer/agentstate/agentstate.h>
+#include <soccer/gamestateaspect/gamestateaspect.h>
 #include <sstream>
 
 using namespace boost;
@@ -71,11 +72,19 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    // set the team name an uniform number in the AgentState
-    state->SetTeamName(initAction->GetName());
-    state->SetUniformNumber(initAction->GetNumber());
+    // register the uniform number and team index to the GameStateAspect
+    shared_ptr<GameStateAspect> gameState = shared_dynamic_cast<GameStateAspect>
+        (GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
 
-    return true;
+    if (gameState.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (InitEffector) cannot find GameStateAspect\n";
+            return false;
+        }
+
+    return gameState->RequestUniform
+        (state, initAction->GetName(), initAction->GetNumber());
 }
 
 shared_ptr<ActionObject>
