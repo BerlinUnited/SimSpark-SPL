@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.5 2003/09/08 08:58:53 rollmark Exp $
+   $Id: renderserver.cpp,v 1.6 2003/09/09 15:33:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,15 +21,13 @@
 */
 
 #include "renderserver.h"
-#include "../sceneserver/scene.h"
-#include "../sceneserver/sceneserver.h"
 #include "../openglserver/openglserver.h"
-#include "../sceneserver/camera.h"
 #include "../sceneserver/staticmesh.h"
 #include "../sceneserver/light.h"
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
+using namespace oxygen;
 using namespace kerosin;
 using namespace salt;
 using namespace zeitgeist;
@@ -69,7 +67,11 @@ RenderServer::ConstructInternal()
 }
 
 void 
-RenderServer::RenderFancyLighting(const& Frustum frustum)
+RenderServer::RenderFancyLighting(const salt::Frustum& frustum, 
+                                  boost::shared_ptr<oxygen::Camera>& camera,
+                                  TLeafList& myLights, TLeafList& allMeshes, 
+                                  TLeafList& visibleMeshes)
+
 {
     glEnable(GL_VERTEX_PROGRAM_ARB);
     glBindProgramARB(GL_VERTEX_PROGRAM_ARB, mAmbientVP);
@@ -152,7 +154,7 @@ RenderServer::Render()
 
     if (camera.get() == NULL || openglServer.get() == NULL)
     {
-        return
+        return;
     }
 
     glClearColor(0,0,0,0);
@@ -171,11 +173,11 @@ RenderServer::Render()
     TLeafList myLights;
     TLeafList allMeshes;
     TLeafList visibleMeshes;
-    TLeafList::iterator i;
 
     mActiveScene->GetChildrenSupportingClass("Light", myLights, true);
     mActiveScene->GetChildrenSupportingClass("StaticMesh", allMeshes, true);
 
+    TLeafList::iterator i;
     for (i = allMeshes.begin(); i != allMeshes.end(); ++i)
     {
         // try to cull meshes, which are outside the viewing frustum
@@ -198,7 +200,7 @@ RenderServer::Render()
 
     if (doFancyLighting)
     {
-        RenderFancyLighting(frustum);
+        RenderFancyLighting(frustum, camera, myLights, allMeshes, visibleMeshes);
     }
     else
     {
@@ -212,17 +214,17 @@ RenderServer::Render()
 }
 
 void
-RenderServer::RenderScene(boost::shared_ptr<Scene>& scene)
+RenderServer::RenderScene(boost::shared_ptr<BaseNode> node)
 {
     glPushMatrix();
-    glMultMatrixf(scene->GetWorldTransform().m);
+    glMultMatrixf(node->GetWorldTransform().m);
 
-    scene->RenderInternal();
+    node->RenderInternal();
 
     glPopMatrix();
 
     // perform update on hierarchy
-    for (TLeafList::iterator i = scene->begin(); i!= scene->end(); ++i)
+    for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
     {
         if ((*i)->GetClass()->Supports("BaseNode"))
         {
@@ -237,7 +239,7 @@ RenderServer::BindCamera(boost::shared_ptr<Camera>& camera)
     camera->Bind();
 
     // adjust the viewport
-    glViewport(camera->GetViewportX, camera->GetViewportY, camera->GetViewportWidth, camera->GetViewportHeight);
+    glViewport(camera->GetViewportX(), camera->GetViewportY(), camera->GetViewportWidth(), camera->GetViewportHeight());
 
     // set depth range
     glDepthRange(0, 1);

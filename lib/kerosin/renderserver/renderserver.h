@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.4 2003/09/08 08:58:53 rollmark Exp $
+   $Id: renderserver.h,v 1.5 2003/09/09 15:33:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,19 +34,18 @@
 #ifndef KEROSIN_RENDERSERVER_H
 #define KEROSIN_RENDERSERVER_H
 
+#include <salt/frustum.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
-#include <salt/frustum.h>
+#include <oxygen/sceneserver/scene.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/sceneserver/camera.h>
 
 namespace kerosin
 {
 #if 0
 }
 #endif
-
-class SceneServer;
-class Scene;
-class Camera;
 
 class RenderServer : public zeitgeist::Leaf
 {
@@ -61,7 +60,10 @@ public:
     void Render();
 
     //! render the scene with fancy lighting 
-    void RenderFancyLighting(const salt::Frustum& frustum);
+    void RenderFancyLighting(const salt::Frustum& frustum, 
+                             boost::shared_ptr<oxygen::Camera>& camera,
+                             TLeafList& myLights, TLeafList& allMeshes, 
+                             TLeafList& visibleMeshes);
 
 protected:
     /** overload this to perform stuff after the object has
@@ -76,18 +78,18 @@ private:
     /** render a scene recursively.
         \param scene the scene base node
     */
-    void RenderScene(boost::shared_ptr<Scene>& scene);
+    void RenderScene(boost::shared_ptr<oxygen::BaseNode> node);
 
     /** sets the OpenGl view parameters for a camera
      */
-    void BindCamera(boost::shared_ptr<Camera>& camera);
+    void BindCamera(boost::shared_ptr<oxygen::Camera>& camera);
 
     //
     // Members
     //
 private:
-    boost::shared_ptr<Scene> mActiveScene;
-    boost::shared_ptr<SceneServer> mSceneServer;
+    boost::shared_ptr<oxygen::Scene> mActiveScene;
+    boost::shared_ptr<oxygen::SceneServer> mSceneServer;
     unsigned int mAmbientVP;
 };
 

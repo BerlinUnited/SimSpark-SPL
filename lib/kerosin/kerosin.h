@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: kerosin.h,v 1.4 2003/09/03 12:15:46 fruit Exp $
+   $Id: kerosin.h,v 1.5 2003/09/09 15:33:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,6 @@
 
 // scene graph
 #include "sceneserver/axis.h"
-#include "sceneserver/camera.h"
 #include "sceneserver/light.h"
 #include "sceneserver/staticmesh.h"
 #include "sceneserver/transform.h"

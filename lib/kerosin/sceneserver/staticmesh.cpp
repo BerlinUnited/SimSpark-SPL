@@ -91,8 +91,6 @@ bool StaticMesh::Load(const std::string& fileName)
         file->Gets(buffer, 1024);
 
         // for every mesh in the object
-
-        int maxMaterial = 0;
         NVMeshMender::VertexAttribute accumulatedIndices;
         vector<NVMeshMender::VertexAttribute> indices;
         indices.resize(meshCount);

@@ -51,8 +51,6 @@ materialserver/materialserver.cpp \
 materialserver/materialserver_c.cpp \
 sceneserver/axis.cpp \
 sceneserver/axis_c.cpp \
-sceneserver/camera.cpp \
-sceneserver/camera_c.cpp \
 sceneserver/helper/NVMeshMender.cpp \
 sceneserver/light.cpp \
 sceneserver/light_c.cpp \

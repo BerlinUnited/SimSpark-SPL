@@ -25,7 +25,6 @@ Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
         // scene graph
 
         zg.GetCore()->RegisterClassObject(new CLASS(Axis), "kerosin/");
-        zg.GetCore()->RegisterClassObject(new CLASS(Camera), "kerosin/");
         zg.GetCore()->RegisterClassObject(new CLASS(Light), "kerosin/");
         zg.GetCore()->RegisterClassObject(new CLASS(StaticMesh), "kerosin/");
         zg.GetCore()->RegisterClassObject(new CLASS(Transform), "kerosin/");
