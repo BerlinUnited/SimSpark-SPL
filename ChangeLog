@@ -3,7 +3,7 @@
 	* lib/kerosin/sceneserver/
 	* lib/oxygen/sceneserver/
 	- moved OpenGl camera setup code to the renderserver
-	- kerosin::Camera now 
+	- kerosin::Camera now independent from any OpenGl specific code
 	
 	* lib/salt/matrix.cpp
 	- removed some unused variables
