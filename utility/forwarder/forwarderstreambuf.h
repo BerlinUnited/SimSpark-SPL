@@ -21,7 +21,7 @@
 #define UTILITY_FORWARDERSTREAMBUF_H
 
 /*! \class ForwarderStreamBuf
-  $Id: forwarderstreambuf.h,v 1.3 2002/08/22 10:44:21 fruit Exp $
+  $Id: forwarderstreambuf.h,v 1.4 2002/08/22 19:29:32 fruit Exp $
 
   ForwarderStreamBuf
 
@@ -140,11 +140,11 @@ private:
     class MaskStreamEQ : public std::unary_function<MaskStream,bool>
     {
     private:
-        const std::ostream* stream;
+        const std::ostream* M_stream;
     public:
-        explicit MaskStreamEQ(const std::ostream *str) : stream(str) {}
+        explicit MaskStreamEQ(const std::ostream *str) : M_stream(str) {}
         bool operator ()(const MaskStream& ms)
-        { return ms.second == stream; }
+        { return ms.second == M_stream; }
     };
 
     // members
