@@ -2,7 +2,7 @@
 #define SCRIPTSERVER_H__
 
 /*! \class ScriptServer
-	$Id: scriptserver.h,v 1.2 2003/04/30 14:21:53 fruit Exp $
+	$Id: scriptserver.h,v 1.3 2003/06/03 14:15:06 fruit Exp $
 	
 	ScriptServer
 	:TODO: Class description for ScriptServer
@@ -13,8 +13,12 @@
 
 */
 
-#include "../leaf.h"
+#include <zeitgeist/leaf.h>
+#include <zeitgeist/class.h>
+
+#ifndef __GNUC__
 #define EXTERN extern __declspec(dllimport)
+#endif
 #include <ruby/ruby.h>
 #undef EXTERN
 
