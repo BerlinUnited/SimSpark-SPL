@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.8 2004/04/18 18:45:29 rollmark Exp $
+   $Id: staticmesh.h,v 1.9 2004/04/19 16:03:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,9 @@ public:
 
     bool Load(const std::string& fileName);
 
-    //! empty! this prevents the bounding box from being updated ... it cannot change!
+    /** empty! this prevents the bounding box from being updated, as
+        it cannot change
+    */
     virtual void ComputeBoundingBox();
 
     //! calculates the local bounding box
@@ -61,7 +63,7 @@ protected:
     //
     // Members
     //
-private:
+protected:
     int mVertexCount;
     boost::shared_array<float> mPos;
     boost::shared_array<float> mTexCoords;
