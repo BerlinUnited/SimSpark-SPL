@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.6 2004/06/03 15:19:19 patstg Exp $
+   $Id: monitor.cpp,v 1.7 2004/06/06 11:55:50 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,13 +19,13 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <sstream>
 #include "monitor.h"
 #include "gamestate.h"
-#include <types.h>
 #include <getopt.h>
-#include <soccer/soccertypes.h>
 #include <iomanip>
+#include <sstream>
+#include <soccer/soccertypes.h>
+#include <types.h>
 
 void
 display()
@@ -95,6 +95,7 @@ Monitor::Monitor(std::string rel_path_prefix)
     mDrawUnums = true;
     mServer = DEFAULT_HOST;
     mPort = DEFAULT_PORT;
+    mSkip = 1;
 
     FlagInfo fi;
     fi.mOffset = Vector3f(0,0,0);
@@ -155,6 +156,7 @@ Monitor::Init(int argc, char* argv[])
         { "port", required_argument, 0, 'p' },
         { "server", required_argument, 0, 's' },
         { "logfile", required_argument, 0, 'l' },
+        { "msgskip", required_argument, 0, 'm' },
         { 0, 0, 0, 0 }
     };
 
@@ -181,6 +183,9 @@ Monitor::Init(int argc, char* argv[])
         case 'l': // -- logplayer
             mServer = std::string(optarg);
             logplayer = true;
+            break;
+        case 'm': // --msgskip
+            mSkip = atoi(optarg);
             break;
         default:
             status = eErrInit;
@@ -330,6 +335,24 @@ Monitor::DrawStatusLine()
     mGLServer.DrawSphere(Vector3f(-0.97,0.93,0.0), 0.025, 20);
     glColor4fv(sTeamColorRight);
     mGLServer.DrawSphere(Vector3f( 0.97,0.93,0.0), 0.025, 20);
+
+    if (mGameState.GetPlayMode() == PM_BeforeKickOff)
+    {
+        glColor4fv(sSphereDefaultColor);
+        switch (mKickOff)
+        {
+        case CommServerBase::eRandom:
+            mGLServer.DrawSphere(Vector3f( 0.0,0.93,0.0), 0.025, 20);
+            break;
+        case CommServerBase::eLeft:
+            mGLServer.DrawSphere(Vector3f( -0.92,0.93,0.0), 0.025, 20);
+            break;
+        case CommServerBase::eRight:
+            mGLServer.DrawSphere(Vector3f( 0.92,0.93,0.0), 0.025, 20);
+            break;
+        }
+    }
+
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
@@ -350,9 +373,11 @@ Monitor::DrawStatusLine()
         break;
     case PM_KickOff_Left:
         mode = STR_PM_KickOff_Left;
+        mKickOff = CommServerBase::eRight;
         break;
     case PM_KickOff_Right:
         mode = STR_PM_KickOff_Right;
+        mKickOff = CommServerBase::eLeft;
         break;
     case PM_PlayOn:
         mode = STR_PM_PlayOn;
@@ -650,34 +675,34 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         //move camera up
         mGLServer.MoveCamUp(mCamDelta);
         break;
-
     case '-':
-    case ' ':
         //move camera down
         mGLServer.MoveCamUp(-mCamDelta);
         break;
-
     case 'n':
         // toggle drawing of unums
         mDrawUnums = !mDrawUnums;
         break;
-
     case 'q':
         // quit
         mCommServer->SendDisconnectCmd();
         exit(0);
-
     case 'k' :
         // kick off
-        mCommServer->SendKickOffCmd();
+        mCommServer->SendKickOffCmd(mKickOff);
         break;
-
+    case 'b':
+        // drop ball
+        mCommServer->SendDropBallCmd();
+        break;
     case 'p' :
         // pause simulation
         cout <<"--- Pausing Simulation" << endl;
         mCommServer->SendPauseCmd();
         break;
-
+    case ' ':
+        mKickOff = NextKickOffMode(mKickOff);
+        break;
     case 'r' :
         // run simulation (after pause command)
         cout <<"--- Running Simulation" << endl;
@@ -716,6 +741,17 @@ Monitor::Idle()
     {
         return;
     }
+
+    static bool first_time = true;
+    static int n = 10; // the first 10 messages should not be skipped
+    --n;
+    if (!first_time && n > 0) return;
+    if (n <= 0)
+    {
+        n = mSkip;
+        first_time = false;
+    }
+
     boost::shared_ptr<oxygen::PredicateList> predicates =
         mCommServer->GetPredicates();
 
@@ -731,5 +767,16 @@ Monitor::NextCameraMode(ECameraMode mode) const
     {
     case eFree: return eFollowBall;
     default:    return eFree;
+    }
+}
+
+CommServerBase::EKickOff
+Monitor::NextKickOffMode(CommServerBase::EKickOff mode) const
+{
+    switch (mode)
+    {
+    case CommServerBase::eRandom: return CommServerBase::eLeft;
+    case CommServerBase::eLeft: return CommServerBase::eRight;
+    default: return CommServerBase::eRandom;
     }
 }
