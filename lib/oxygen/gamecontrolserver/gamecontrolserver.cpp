@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.1.2.10 2003/12/10 10:52:39 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.1.2.11 2003/12/21 10:21:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,10 +19,13 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include <sstream>
 #include "gamecontrolserver.h"
 #include "baseparser.h"
 #include <oxygen/agentaspect/agentaspect.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
+#include <zeitgeist/corecontext.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -40,14 +43,12 @@ GameControlServer::~GameControlServer()
 bool
 GameControlServer::InitParser(const std::string& parserName)
 {
-    GetLog()->Debug() << "(GameControlServer::InitParser) creating parser: "
-                      << parserName << "\n";
-
     mParser = shared_dynamic_cast<BaseParser>(GetCore()->New(parserName));
 
     if (mParser.get() == 0)
     {
-        GetLog()->Error() << "ERROR: InitParser: Unable to create " << parserName << std::endl;
+        GetLog()->Error() << "ERROR: (GameControlServer::InitParser) Unable to create "
+                          << parserName << std::endl;
         return false;
     }
 
@@ -67,16 +68,31 @@ GameControlServer::AgentConnect(int id)
     // for map::insert(Elem), the test here is not required. map::insert does not
     // overwrite existing elements. The test is required to report if the agent
     // was already connected or not.
-    if (mAgentMap.find(id) == mAgentMap.end())
+    if (mAgentMap.find(id) != mAgentMap.end())
     {
         return false;
     }
 
-    // insert an agent ID with an empty AgentAspect reference
-    mAgentMap[id] = boost::shared_ptr<AgentAspect>();
+    GetLog()->Debug()
+        << "(GameControlServer) A new agent connected (id: " << id << ")\n";
 
-    GetLog()->Debug() << "(GameControlServer) A new agent connected (id: " << id << ")\n";
-    return true;
+    // create a new AgentAspect for the new ID in the scene
+    stringstream name;
+    name << "/usr/scene/_AgentAspect" << id;
+
+    shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
+        (GetCore()->GetScriptServer()->GetContext()->New("kerosin/AgentAspect",name.str()));
+
+    if (aspect.get() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (GameControlServer) cannot create new AgentAspect\n";
+            return false;
+        }
+
+    mAgentMap[id] = aspect;
+
+    return aspect->Init();
 }
 
 bool GameControlServer::AgentDisappear(int id)
@@ -85,6 +101,9 @@ bool GameControlServer::AgentDisappear(int id)
 
     if (iter == mAgentMap.end())
         {
+            GetLog()->Error()
+                << "ERROR: (GameControlServer) AgentDisappear called for unknown agent id "
+                << id << "\n";
             return false;
         }
 
@@ -93,6 +112,8 @@ bool GameControlServer::AgentDisappear(int id)
     RemoveChildReference((*iter).second);
     mAgentMap.erase(id);
 
+    GetLog()->Debug() << "(GameControlServer) An agent disconnected (id: " << id << ")\n";
+
     return true;
 }
 
@@ -100,36 +121,32 @@ float GameControlServer::GetSenseInterval(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent.
-    return 0.1;
+    return 2;
 }
 
 float GameControlServer::GetSenseLatency(int /*id*/)
 {
     // the real thing should query the AgentAspect corresponding to
     // the agent
-    return 0.0;
+    return 2;
 }
 
-
-shared_ptr<Effector> GameControlServer::GetEffector(std::string predicate) const
+shared_ptr<ActionObject::TList> GameControlServer::Parse(int id, string str) const
 {
-    TEffectorMap::const_iterator iter = mEffectorMap.find(predicate);
+    TAgentMap::const_iterator iter = mAgentMap.find(id);
 
-    if (iter == mEffectorMap.end())
+    if (iter == mAgentMap.end())
         {
-            return shared_ptr<Effector>();
-        } else
-            {
-                return (*iter).second;
-            }
-}
+            GetLog()->Error()
+                << "ERROR: (GameControlServer::Parse) Parse called with unknown agent id "
+                << id << "\n";
+            return shared_ptr<ActionObject::TList>(new ActionObject::TList());
+        }
 
-shared_ptr<ActionObject::TList> GameControlServer::Parse(string str) const
-{
     if (mParser.get() == 0)
         {
             GetLog()->Error()
-                << "(GameControlServer::Parse) No parser registered.\n";
+                << "ERROR: (GameControlServer::Parse) No parser registered.\n";
             return shared_ptr<ActionObject::TList>(new ActionObject::TList());
         }
 
@@ -138,6 +155,10 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(string str) const
 
     // construct an ActionList using the registered effectors
     shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
+
+    // update the map of effectors below the agentaspect
+    shared_ptr<AgentAspect> aspect = (*iter).second;
+    aspect->UpdateEffectorMap();
 
     for
         (
@@ -148,7 +169,7 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(string str) const
         {
             BaseParser::TPredicate& predicate = (*iter);
 
-            shared_ptr<Effector> effector = GetEffector(predicate.name);
+            shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
             if (effector.get() == 0)
                 {
                     GetLog()->Warning()
@@ -167,11 +188,7 @@ shared_ptr<ActionObject::TList> GameControlServer::Parse(string str) const
             actionList->push_back(action);
         }
 
-    //
-    // lookup the effectors and contruct the list of ActionObjects
-    //
-
-    return shared_ptr<ActionObject::TList>(new ActionObject::TList());
+    return actionList;
 }
 
 shared_ptr<AgentAspect> GameControlServer::GetAgentAspect(int id)
