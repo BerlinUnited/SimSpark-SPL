@@ -1,4 +1,4 @@
-noinst_PROGRAMS = agenttest
+bin_PROGRAMS = agenttest
 
 if DEBUG
 LDADD = \
