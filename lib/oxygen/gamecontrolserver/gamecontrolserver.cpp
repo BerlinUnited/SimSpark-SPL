@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.15 2004/05/06 09:33:48 rollmark Exp $
+   $Id: gamecontrolserver.cpp,v 1.16 2004/05/07 08:19:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -179,11 +179,17 @@ bool GameControlServer::AgentDisappear(int id)
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() != 0)
     {
-        RemoveChildReference((*iter).second);
+        (*iter).second->UnlinkChildren();
+        (*iter).second->Unlink();
 
         // mark the scene as modified
         scene->SetModified(true);
-    }
+    } else
+        {
+            GetLog()->Error()
+                << "ERROR: (GameControlServer) failed to remove AgentAspect "
+                << "for agent id " << id << "\n";
+        }
 
     mAgentMap.erase(id);
 
