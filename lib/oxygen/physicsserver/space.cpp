@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.4.8.4 2004/01/11 11:27:07 rollmark Exp $
+   $Id: space.cpp,v 1.4.8.5 2004/01/12 18:16:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,27 +31,15 @@ using namespace oxygen;
 static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
 {
     Space *space = (Space*)data;
-
     space->HandleCollide(obj1, obj2);
 }
 
-Space::Space() :
-    mODESpace(0), mODEContactGroup(0), mWorld(0)
+Space::Space() : mODESpace(0), mODEContactGroup(0)
 {
 }
 
 Space::~Space()
 {
-    if (mODEContactGroup)
-      {
-        dJointGroupDestroy(mODEContactGroup);
-      }
-
-    // release the ODE space
-    if (mODESpace)
-      {
-        dSpaceDestroy(mODESpace);
-      }
 }
 
 dSpaceID Space::GetODESpace() const
@@ -105,51 +93,39 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
       }
 }
 
-bool Space::ConstructInternal()
-{
-    if (! ODEObject::ConstructInternal())
-      {
-        return false;
-      }
-
-    // create the ode space, 0 indicates that this space should
-    // not be inserted into another space, i.e. we always create a
-    // toplevel space object
-    mODESpace = dHashSpaceCreate(0);
-    if (mODESpace == 0)
-    {
-        return false;
-    }
-
-    // create a joint group for the contacts
-    mODEContactGroup = dJointGroupCreate(0);
-    return (mODEContactGroup != 0);
-}
-
 void Space::OnLink()
 {
-    shared_ptr<Scene> scene = GetScene();
+  // create the ode space, 0 indicates that this space should
+  // not be inserted into another space, i.e. we always create a
+  // toplevel space object
+  mODESpace = dHashSpaceCreate(0);
 
-    if (scene.get() != NULL)
+  if (mODESpace == 0)
     {
-        shared_ptr<World> world = shared_static_cast<World>(scene->GetChildOfClass("World"));
-        if (world)
-          {
-            mWorld = world->GetODEWorld();
-          }
-        else
-          {
-            GetLog()->Error() << "ERROR: Could not find a World to link to..." << std::endl;
-          }
+      return;
     }
+
+  // create a joint group for the contacts
+  mODEContactGroup = dJointGroupCreate(0);
 }
 
 void Space::OnUnlink()
 {
-    mWorld = 0;
+    if (mODEContactGroup)
+      {
+        dJointGroupDestroy(mODEContactGroup);
+        mODEContactGroup = 0;
+      }
+
+    // release the ODE space
+    if (mODESpace)
+      {
+        dSpaceDestroy(mODESpace);
+        mODESpace = 0;
+      }
 }
 
-void Space::PrePhysicsUpdateInternal(float /*deltaTime*/)
+void Space::PostPhysicsUpdateInternal()
 {
     // remove all contact joints
     dJointGroupEmpty (mODEContactGroup);
