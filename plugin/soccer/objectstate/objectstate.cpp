@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate.cpp,v 1.2 2004/02/12 14:07:26 fruit Exp $
+   $Id: objectstate.cpp,v 1.3 2004/04/08 14:32:30 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,15 @@ ObjectState::SetPerceptName(const std::string& name, TPerceptType pt)
 {
     mPerceptNames[pt] = name;
 }
+
+void
+ObjectState::SetPerceptName(const std::string& name, TPerceptType pt1, TPerceptType pt2)
+{
+    mPerceptNames[pt1] = "Player";
+    mPerceptNames[pt2] = name;
+ 
+}
+
 
 
 std::string
