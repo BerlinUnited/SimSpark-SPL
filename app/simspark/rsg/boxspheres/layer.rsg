@@ -3,11 +3,11 @@
 (
  (Template $radius $mass)
  (Transform
-  .setLocalPos -6 0 -4
+  .setLocalPos -6 -4 0 
   .importScene rsg/boxspheres/row.rsg $radius $mass
   )
  (Transform
-  .setLocalPos -6 0 -2
+  .setLocalPos -6 -2 0
   .importScene rsg/boxspheres/row.rsg $radius $mass
   )
  (Transform
@@ -15,11 +15,11 @@
   .importScene rsg/boxspheres/row.rsg $radius $mass
   )
  (Transform
-  .setLocalPos -6 0 2
+  .setLocalPos -6 2 0
   .importScene rsg/boxspheres/row.rsg $radius $mass
   )
  (Transform
-  .setLocalPos -6 0 4
+  .setLocalPos -6 4 0
   .importScene rsg/boxspheres/row.rsg $radius $mass
   )
 )
