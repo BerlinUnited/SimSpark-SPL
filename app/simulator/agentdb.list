@@ -11,7 +11,7 @@
 <agent_type_external name="foo">
   <inputfd>3</inputfd>
   <outputfd>4</outputfd>
-  <timer>default</timer>
+  <timer>jiffies 2000</timer>
   <working_dir>../agenttest</working_dir>
   <exec_line>agenttest --teamname foo</exec_line>
 </agent_type_external>
@@ -19,7 +19,7 @@
 <agent_type_external name="bar">
   <inputfd>3</inputfd>
   <outputfd>4</outputfd>
-  <timer>default</timer>
+  <timer>jiffies 2000</timer>
   <working_dir>../agenttest</working_dir>
   <exec_line>agenttest --teamname bar</exec_line>
 </agent_type_external>
