@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.cpp,v 1.6 2004/04/15 21:18:06 fruit Exp $
+   $Id: ccylindercollider.cpp,v 1.7 2004/04/16 06:45:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,9 +46,10 @@ void CCylinderCollider::SetLength(float length)
 void
 CCylinderCollider::GetParams(float& radius, float& length)
 {
-    dGeomCCylinderGetParams(mODEGeom,
-                            reinterpret_cast<dReal*>(&radius),
-                            reinterpret_cast<dReal*>(&length));
+    dReal r,l;
+    dGeomCCylinderGetParams(mODEGeom,&r,&l);
+    radius = r;
+    length = l;
 }
 
 float
