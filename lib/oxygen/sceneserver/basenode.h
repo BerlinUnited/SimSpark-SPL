@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.7 2004/02/12 14:07:23 fruit Exp $
+   $Id: basenode.h,v 1.8 2004/04/08 14:42:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -108,6 +108,9 @@ public:
 
     /** renders node */
     virtual void RenderAmbientInternal();
+
+    /** imports a scene from a file below this Node */
+    bool ImportScene(const std::string& fileName);
 
 protected:
     /** updates internal state before physics calculation */
