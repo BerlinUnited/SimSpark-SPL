@@ -9,8 +9,10 @@
 /Makefile
 /Makefile.in
 /stamp-h1
+doc/Doxyfile
 doc/Makefile
 doc/Makefile.in
+doc/html
 doc/proposal/auto
 doc/proposal/Makefile
 doc/proposal/Makefile.in
