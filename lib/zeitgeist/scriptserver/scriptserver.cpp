@@ -1,12 +1,12 @@
 #include <boost/any.hpp>
 #include <boost/scoped_array.hpp>
 #include <sstream>
-#include <salt/fileclasses.h>
 #include "scriptserver.h"
 #include <zeitgeist/corecontext.h>
 #include <zeitgeist/core.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/fileserver/fileserver.h>
+#include <sys/stat.h>
 
 using namespace boost;
 using namespace std;
@@ -73,7 +73,7 @@ VALUE selectObject(VALUE /*self*/, VALUE path)
 
   if (leaf.get() != NULL)
     {
-      std::stringstream s;
+      stringstream s;
       s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
       return rb_eval_string(s.str().c_str());
     }
@@ -97,7 +97,7 @@ VALUE selectCall(VALUE /*self*/, VALUE functionName, VALUE args)
   else
     {
       gMyPrivateContext->GetCore()->GetLogServer()->Error()
-        << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << std::endl;
+        << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << endl;
     }
 
   return Qnil;
@@ -120,7 +120,7 @@ VALUE thisCall(VALUE /*self*/, VALUE objPointer, VALUE functionName, VALUE args)
   else
     {
       gMyPrivateContext->GetCore()->GetLogServer()->Error()
-        << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << std::endl;
+        << "ERROR: Unknown function '" << STR2CSTR(functionName) << "'" << endl;
     }
 
   return Qnil;
@@ -139,7 +139,7 @@ VALUE newObject(VALUE /*self*/, VALUE className, VALUE pathStr)
 
   if (leaf.get() != NULL)
     {
-      std::stringstream s;
+      stringstream s;
       s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
       return rb_eval_string(s.str().c_str());
     }
@@ -160,7 +160,7 @@ VALUE getObject(VALUE /*self*/, VALUE path)
 
   if (leaf.get() != NULL)
     {
-      std::stringstream s;
+      stringstream s;
       s << "ZeitgeistObject.new(" << (unsigned long) leaf.get() <<")";
       return rb_eval_string(s.str().c_str());
     }
@@ -218,7 +218,21 @@ ScriptServer::~ScriptServer()
 {
 }
 
-bool ScriptServer::Run(const std::string &fileName)
+bool ScriptServer::Run(salt::RFile* file)
+{
+  if (file == NULL)
+    {
+      return false;
+    }
+
+  boost::scoped_array<char> buffer(new char[file->Size() + 1]);
+  file->Read(buffer.get(), file->Size());
+  buffer[file->Size()] = 0;
+
+  return Eval (buffer.get());
+}
+
+bool ScriptServer::Run(const string &fileName)
 {
   /*int error;
     rb_load_protect(rb_str_new2(fileName.c_str()), 0, &error);
@@ -230,7 +244,7 @@ bool ScriptServer::Run(const std::string &fileName)
     return false;
     }
     return true;*/
-  salt::RFile *file = GetFile()->Open(fileName.c_str());
+  salt::RFile* file = GetFile()->Open(fileName.c_str());
 
   if (file == NULL)
     {
@@ -239,15 +253,13 @@ bool ScriptServer::Run(const std::string &fileName)
       return false;
     }
 
-  boost::scoped_array<char> buffer(new char[file->Size()+1]);
-  file->Read(buffer.get(), file->Size());
-  buffer[file->Size()] = 0;
+  bool result = Run(file);
   delete file;
 
-  return Eval (buffer.get());
+  return result;
 }
 
-bool ScriptServer::Eval(const std::string &command)
+bool ScriptServer::Eval(const string &command)
 {
   int error;
   rb_eval_string_protect(command.c_str(), &error);
@@ -260,31 +272,31 @@ bool ScriptServer::Eval(const std::string &command)
   return true;
 }
 
-void ScriptServer::CreateVariable(const std::string &varName, int value)
+void ScriptServer::CreateVariable(const string &varName, int value)
 {
-  std::stringstream s;
+  stringstream s;
   // create a string with: "createVariable 'varName', value"
   s << "createVariable '" << varName << "', " << value;
   Eval(s.str());
 }
 
-void ScriptServer::CreateVariable(const std::string &varName, float value)
+void ScriptServer::CreateVariable(const string &varName, float value)
 {
-  std::stringstream s;
+  stringstream s;
   // create a string with: "createVariable 'ns', 'varName', value"
   s << "createVariable '" << varName << "', " << value;
   Eval(s.str());
 }
 
-void ScriptServer::CreateVariable(const std::string &varName, const std::string &value)
+void ScriptServer::CreateVariable(const string &varName, const string &value)
 {
-  std::stringstream s;
+  stringstream s;
   // create a string with: "createVariable 'ns', 'varName', 'value'"
   s << "createVariable '" << varName << "', '" << value << "'";
   Eval(s.str());
 }
 
-VALUE ScriptServer::GetVariable(const std::string &varName)
+VALUE ScriptServer::GetVariable(const string &varName)
 {
   stringstream    s(varName);
   string                  current;
@@ -318,7 +330,7 @@ VALUE ScriptServer::GetVariable(const std::string &varName)
     }
 }
 
-bool ScriptServer::GetVariable(const std::string &varName, int &value)
+bool ScriptServer::GetVariable(const string &varName, int &value)
 {
   VALUE val = GetVariable(varName);
 
@@ -333,7 +345,7 @@ bool ScriptServer::GetVariable(const std::string &varName, int &value)
     }
 }
 
-bool ScriptServer::GetVariable(const std::string &varName, bool &value)
+bool ScriptServer::GetVariable(const string &varName, bool &value)
 {
   VALUE val = GetVariable(varName);
 
@@ -357,7 +369,7 @@ bool ScriptServer::GetVariable(const std::string &varName, bool &value)
     }
 }
 
-bool ScriptServer::GetVariable(const std::string &varName, std::string &value)
+bool ScriptServer::GetVariable(const string &varName, string &value)
 {
   VALUE val = GetVariable(varName);
 
@@ -381,11 +393,115 @@ bool ScriptServer::ConstructInternal()
 {
   if (Leaf::ConstructInternal() == false) return false;
 
-  // now follows the init script, which sets up the zeitgeist scripting
-  // environment within ruby.
-  if (Run("sys/script/zeitgeist.rb") == false) return false;
-
   gMyPrivateContext = GetCore()->CreateContext();
 
   return true;
+}
+
+bool ScriptServer::RunInitScript(const string &sourceDir, const string &name,
+                                 bool copy, const string& destDir)
+{
+  // run the init script in the sourceDir
+  string sourcePath = sourceDir + "/" + name;
+  GetLog()->Normal() << "Running " << sourcePath << "... ";
+
+  salt::StdFile file;
+  if (
+      (! file.Open(sourcePath.c_str())) ||
+      (! Run(&file))
+       )
+  {
+    GetLog()->Normal() << "failed" << endl;
+    return false;
+  } else
+    {
+      GetLog()->Normal() << "ok" << endl;
+    }
+
+  // copy it to the destDir
+  if (! copy)
+    {
+      return true;
+    }
+
+  string destPath = destDir + "/" + name;
+
+  GetLog()->Normal() << "Copying " << sourcePath << " to " << destPath << endl;
+
+  stringstream s;
+  s << "cp " << sourcePath << " " << destPath;
+  system(s.str().c_str());
+
+  return true;
+}
+
+bool ScriptServer::RunInitScript(const string &fileName, const string &relPath)
+{
+  // create and change to the user's dot directory
+  bool validDotDir = true;
+
+  if (mDotName == "")
+    {
+      GetLog()->Warning() << "WARNING: Dot directory name unset." << endl;
+      validDotDir = false;
+    }
+
+  char* home = getenv("HOME");
+  string dotDir;
+  if (home)
+    {
+      dotDir = string(home) + "/" + mDotName;
+    } else
+      {
+        validDotDir = false;
+      }
+
+  char* cwd = getcwd(NULL,0);
+  if (cwd == NULL)
+    {
+      GetLog()->Error() << "ERROR: Cannot get current directory" << endl;
+      validDotDir = false;
+    }
+
+  if (
+      (validDotDir) &&
+      (chdir(dotDir.c_str()) != 0)
+      )
+    {
+      if (mkdir(dotDir.c_str(),0777) != 0)
+        {
+          GetLog()->Error() << "ERROR: Cannot create directory '" << dotDir << "'" << endl;
+          validDotDir = false;
+        } else
+          {
+            GetLog()->Normal() << "Created Directory " << dotDir << endl;
+          }
+    } else
+      {
+        chdir(cwd);
+      }
+
+  // destroy the buffer allocated by getcwd()
+  delete cwd;
+
+  // convert the Macro PREFIX to a string constant
+  #define XSTRINGIFY(s) STRINGIFY(s)
+  #define STRINGIFY(s) #s
+  string prefix = XSTRINGIFY(PREFIX);
+
+  bool ok =
+    (
+     (
+       (validDotDir) && (RunInitScript(dotDir, fileName, false))
+       )
+      || (RunInitScript(prefix,  fileName, validDotDir, dotDir))
+      || (RunInitScript(relPath, fileName, validDotDir, dotDir))
+      );
+
+  if (! ok)
+    {
+      GetLog()->Error() << "ERROR: Cannot locate init script " << fileName << endl;
+    }
+
+  return ok;
 }

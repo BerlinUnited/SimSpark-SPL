@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.8 2003/11/14 14:05:55 fruit Exp $
+   $Id: scriptserver.h,v 1.9 2003/11/14 14:45:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,11 +53,12 @@
 #undef PACKAGE_VERSION
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/class.h>
+#include <salt/fileclasses.h>
 
 namespace zeitgeist
 {
@@ -86,8 +87,21 @@ public:
     ScriptServer();
     virtual ~ScriptServer();
 
-    /** loads an runs a ruby script, returns true on success */
+    /** loads and runs a ruby script, returns true on success */
     bool Run(const std::string &fileName);
+
+    /** loads and runs a ruby script from an RFile */
+    bool Run(salt::RFile* file);
+
+    /** searches in ~/<mDotName>/, PREFIX/ and <relPath>/ for the
+     * script <fileName>.  If found the script is run and copied to
+     * ~/<dotName>/. If this directory is missing it is automatically
+     * created
+     */
+    bool RunInitScript(const std::string &fileName, const std::string &relPath);
+
+    /** sets name of the dot directory */
+    void SetDotName(const std::string &dotName) { mDotName = dotName; }
 
     /** evaluates a ruby statement, returns true on success */
     bool Eval(const std::string &command);
@@ -128,13 +142,22 @@ private:
 
     VALUE GetVariable(const std::string &varName);
 
+    /** private helper function */
+    bool RunInitScript(const std::string &dir, const std::string &name,
+                       bool copy,  const std::string& destDir = "");
+
     //
     // members
     //
-public:
-protected:
-private:
-};
+  public:
+  protected:
+    /** the name of the users dot directory, used by ::RunInitScript to search
+     * for script files: ~/<mDotName>
+     */
+    std::string mDotName;
+
+  private:
+  };
 
 DECLARE_CLASS(ScriptServer);
 
