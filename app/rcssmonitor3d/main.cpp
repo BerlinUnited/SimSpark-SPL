@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.2.2.3 2003/12/25 18:29:55 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.1 2003/12/29 17:59:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -128,8 +128,7 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
                     continue;
                 }
 
-            Predicate::TParameterList::const_iterator param
-                = predicate.parameter.begin();
+            Predicate::Iterator param(predicate);
 
             salt::Vector3f pos;
             if (! predicate.GetValue(param,pos))
