@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.7.2.1 2003/11/20 20:20:35 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.7.2.2 2003/11/27 12:47:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -308,10 +308,55 @@ void ScriptServer::CreateVariable(const string &varName, const string &value)
   Eval(s.str());
 }
 
+bool ScriptServer::ExistsVariable(const string &varName)
+{
+  stringstream    s(varName);
+  string current;
+  vector<string>  tokens;
+
+  // parse varName
+  while(!s.eof())
+    {
+      getline(s, current,'.');
+      if (current.size())
+        tokens.push_back(current);
+    }
+
+  if (tokens.size() != 2)
+    {
+        // invalid name
+        return false;
+    }
+
+  char firstChar = (tokens[0])[0];
+  if (
+      (firstChar < 'A') ||
+      (firstChar > 'Z')
+      )
+      {
+          // namespace must start with a capital letter
+          return false;
+      }
+
+  // get class
+  VALUE ns =      rb_const_get(rb_cObject, rb_intern(tokens[0].c_str()));
+
+  if (NIL_P(ns))
+      {
+          // invalid namespace
+          return false;
+      }
+
+  ID var  = rb_intern(tokens[1].c_str());
+  VALUE v = rb_funcall(ns, var, 0);
+
+  return !(NIL_P(v));
+}
+
 VALUE ScriptServer::GetVariable(const string &varName)
 {
   stringstream    s(varName);
-  string                  current;
+  string current;
   vector<string>  tokens;
 
   // parse varName

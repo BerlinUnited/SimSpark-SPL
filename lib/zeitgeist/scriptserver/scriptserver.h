@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.10 2003/11/16 15:41:12 fruit Exp $
+   $Id: scriptserver.h,v 1.10.2.1 2003/11/27 12:47:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -107,6 +107,9 @@ public:
     bool Eval(const std::string &command);
 
     // script variable functions
+
+    /** returns true if the variable varName exists */
+    bool ExistsVariable(const std::string &varName);
 
     /** creates a ruby integer variable */
     void CreateVariable(const std::string &varName, int value);
