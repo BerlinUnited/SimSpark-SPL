@@ -155,7 +155,10 @@ geometryserver/indexbuffer.cpp \
 monitorserver/monitorserver.cpp \
 monitorserver/monitorserver_c.cpp \
 monitorserver/monitorsystem_c.cpp \
-monitorserver/monitoritem_c.cpp
+monitorserver/monitoritem_c.cpp \
+monitorserver/custommonitor.cpp \
+monitorserver/custommonitor_c.cpp
+
 
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
@@ -217,4 +220,5 @@ geometryserver/indexbuffer.h \
 monitorserver/monitorserver.h \
 monitorserver/monitorsystem.h \
 monitorserver/monitoritem.h \
+monitorserver/custommonitor.h \
 $(spades_headers)
