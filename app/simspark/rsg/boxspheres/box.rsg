@@ -21,6 +21,16 @@
        (setBoxLengths $lenX $lenY $lenZ)
        (node ContactJointHandler
 	     (setContactBounceMode false)
+
+	     (setContactSlipMode true)
+	     (setContactSlip 0.1 0.1)
+
+	     (setContactSoftERPMode true)
+	     (setContactSoftERP 0.5)
+
+	     (setContactSoftCFM true)
+	     (setContactSoftCFM 0.3)
+
 	     )
        )
 )
