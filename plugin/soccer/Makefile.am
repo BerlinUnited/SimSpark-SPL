@@ -43,12 +43,12 @@ kickeffector/kickeffector_c.cpp \
 objectstate/objectstate.h \
 objectstate/objectstate.cpp \
 objectstate/objectstate_c.cpp \
-trainercommandparser/trainercommandparser.h\
-trainercommandparser/trainercommandparser.cpp\
-trainercommandparser/trainercommandparser_c.cpp\
+trainercommandparser/trainercommandparser.h \
+trainercommandparser/trainercommandparser.cpp \
+trainercommandparser/trainercommandparser_c.cpp \
 sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor.h \
-sexpmonitor/sexpmonitor_c.cpp \ 
+sexpmonitor/sexpmonitor_c.cpp \
 soccerbase/soccerbase.cpp \
 soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.cpp \
