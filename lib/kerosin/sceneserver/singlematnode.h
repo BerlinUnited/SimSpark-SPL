@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematnode.h,v 1.1 2004/03/20 15:47:54 rollmark Exp $
+   $Id: singlematnode.h,v 1.2 2004/03/22 11:12:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,10 @@ public:
     SingleMatNode();
     virtual ~SingleMatNode();
 
-    void SetMaterial(const std::string& name);
+    /** queries the MaterialServer for the material \param name and
+        caches a reference to it. It returns true on success.
+     */
+    bool SetMaterial(const std::string& name);
 
 private:
     //

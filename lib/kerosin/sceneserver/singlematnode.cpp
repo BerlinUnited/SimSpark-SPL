@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematnode.cpp,v 1.1 2004/03/20 15:47:54 rollmark Exp $
+   $Id: singlematnode.cpp,v 1.2 2004/03/22 11:12:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ SingleMatNode::~SingleMatNode()
 {
 }
 
-void SingleMatNode::SetMaterial(const std::string& name)
+bool SingleMatNode::SetMaterial(const std::string& name)
 {
     shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
@@ -44,9 +44,11 @@ void SingleMatNode::SetMaterial(const std::string& name)
         {
             GetLog()->Error()
               << "(SingleMatNode) ERROR: Cannot find MaterialServer\n";
-            return;
+            return false;
         }
 
     mMaterial = materialServer->GetMaterial(name);
+
+    return mMaterial.get() != 0;
 }
 
