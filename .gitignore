@@ -301,6 +301,12 @@ plugin/soccer/initeffector/.libs
 plugin/soccer/initeffector/Makefile
 plugin/soccer/initeffector/Makefile.in
 plugin/soccer/initeffector/initeffector.la
+plugin/soccer/kickeffector/.deps
+plugin/soccer/kickeffector/.libs
+plugin/soccer/kickeffector/Makefile
+plugin/soccer/kickeffector/Makefile.in
+plugin/soccer/kickeffector/*.la
+plugin/soccer/kickeffector/*.lo
 plugin/soundsystembass/.deps
 plugin/soundsystembass/.libs
 plugin/soundsystembass/Makefile
