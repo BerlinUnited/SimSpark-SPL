@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.2.2.1 2003/12/22 18:01:08 rollmark Exp $
+   $Id: gamecontrolserver.h,v 1.2.2.2 2003/12/25 12:29:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,11 @@ public:
         to the GameControlServer
      */
     bool InitParser(const std::string& parserName);
+
+    /** sets \param effectorName as the effector class that is
+        initially created with every new AgentAspect instance
+    */
+    void InitEffector(const std::string& effectorName);
 
     /** returns the parser currently registered to the
         GameControlServer
@@ -101,8 +106,15 @@ protected:
 protected:
     typedef std::map<int, boost::shared_ptr<AgentAspect> > TAgentMap;
 
+    /** a map from agent IDs to agent instances */
     TAgentMap mAgentMap;
+
+    /** the parser instance used */
     boost::shared_ptr<BaseParser> mParser;
+
+    /** the name of the initial effector class of each new agent has
+        to construct all remaining parts */
+    std::string mCreateEffector;
 };
 
 DECLARE_CLASS(GameControlServer);
