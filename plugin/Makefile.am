@@ -4,6 +4,7 @@ SUBDIRS = \
 	  inputsdl \
 	  sexpparser \
 	  forceeffector \
+	  perfectvisionperceptor \
 	  monitortest
 
 EXTRA_DIST = plugin.dsw
