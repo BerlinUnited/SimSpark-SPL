@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.3 2004/02/26 21:08:59 fruit Exp $
+   $Id: kickeffector.cpp,v 1.4 2004/03/09 14:33:44 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     // the ball can be kicked if the distance is
     // less then Ball-Radius + Player-Radius + KickMargin AND
     // the player is close to the ground
-    if (parent->GetWorldTransform().Pos().y() > mPlayerRadius + 0.01 ||
+    if (parent->GetWorldTransform().Pos().z() > mPlayerRadius + 0.01 ||
         force.Length() > mPlayerRadius + mBallRadius + mKickMargin)
     {
         // ball is out of reach, or player is in the air:
