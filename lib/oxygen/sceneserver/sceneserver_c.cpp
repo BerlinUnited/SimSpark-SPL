@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver_c.cpp,v 1.4 2004/03/22 11:02:59 rollmark Exp $
+   $Id: sceneserver_c.cpp,v 1.5 2004/04/08 14:49:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,9 +66,25 @@ FUNCTION(SceneServer,setActiveScene)
     return true;
 }
 
+FUNCTION(SceneServer,initSceneImporter)
+{
+    string inImporterName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inImporterName))
+        )
+        {
+            return false;
+        }
+
+    return obj->InitSceneImporter(inImporterName);
+}
+
 void CLASS(SceneServer)::DefineClass()
 {
-    DEFINE_BASECLASS(zeitgeist/Leaf);
+    DEFINE_BASECLASS(zeitgeist/Node);
     DEFINE_FUNCTION(createScene);
     DEFINE_FUNCTION(setActiveScene);
+    DEFINE_FUNCTION(initSceneImporter);
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.8 2004/04/05 14:51:09 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.9 2004/04/08 14:49:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,18 +23,21 @@
 #include "sceneserver.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/corecontext.h>
+#include <zeitgeist/fileserver/fileserver.h>
 #include <salt/vector.h>
 #include <salt/frustum.h>
 #include "scene.h"
-#include "../physicsserver/world.h"
-#include "../physicsserver/space.h"
+#include "sceneimporter.h"
+#include <oxygen/physicsserver/world.h>
+#include <oxygen/physicsserver/space.h>
 
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
+using namespace std;
 
-SceneServer::SceneServer() : Leaf()
+SceneServer::SceneServer() : Node()
 {
 }
 
@@ -175,3 +178,70 @@ void SceneServer::Update(float deltaTime)
   mActiveScene->PostPhysicsUpdate();
   mActiveScene->UpdateHierarchy();
 }
+
+bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root)
+{
+  // try to open the file
+  shared_ptr<salt::RFile> file = GetFile()->Open(fileName.c_str());
+
+  if (file.get() == 0)
+    {
+      GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
+                        << fileName << "'\n";
+      return false;
+    }
+
+  TLeafList importer;
+  ListChildrenSupportingClass<SceneImporter>(importer);
+
+  if (importer.size() == 0)
+    {
+      GetLog()->Error() << "(SceneServer) Warning: no SceneImporter registered\n";
+    }
+
+  for (
+       TLeafList::iterator iter = importer.begin();
+       iter != importer.end();
+       ++iter
+       )
+    {
+      shared_ptr<SceneImporter> importer =
+        shared_static_cast<SceneImporter>(*iter);
+
+      if (importer->ImportScene(file,root))
+        {
+          GetLog()->Normal()
+            << "(SceneServer) successfully imported scene file '"
+            << fileName << "'\n";
+          return true;
+        }
+    }
+
+  GetLog()->Error() << "(SceneServer) ERROR: cannot import scene file '"
+                  << fileName << "'\n";
+
+  return false;
+}
+
+bool SceneServer::InitSceneImporter(const std::string& importerName)
+{
+  shared_ptr<SceneImporter> importer
+    = shared_dynamic_cast<SceneImporter>(GetCore()->New(importerName));
+
+    if (importer.get() == 0)
+    {
+        GetLog()->Error() << "ERROR (SceneServer::InitSceneImporter) "
+                          << "Unable to create '" << importerName << "'\n";
+        return false;
+    }
+
+    importer->SetName(importerName);
+    AddChildReference(importer);
+
+    GetLog()->Normal()
+      << "(SceneServer) SceneImporter '" << importerName << "' registered\n";
+
+    return true;
+}
+
+
