@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.3 2003/09/10 00:30:09 tomhoward Exp $
+   $Id: forceeffector.cpp,v 1.3.4.1 2003/12/04 17:33:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 */
 
 #include "forceeffector.h"
-#include "../physicsserver/body.h"
+#include <oxygen/physicsserver/body.h>
+#include <oxygen/gamecontrolserver/actionobject.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -54,3 +55,10 @@ void ForceEffector::AddForce(const salt::Vector3f& force)
 {
     mForce += force;
 }
+
+shared_ptr<ActionObject>
+ ForceEffector::GetActionObject(const BaseParser::TPredicate& /*predicate*/)
+{
+  return shared_ptr<ActionObject>(new ActionObject());
+}
+

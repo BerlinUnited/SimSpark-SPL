@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.h,v 1.4 2003/11/14 14:05:53 fruit Exp $
+   $Id: forceeffector.h,v 1.4.4.1 2003/12/04 17:33:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,12 @@ public:
     void AddForce(const salt::Vector3f& force);
 
     void SetMaxForce(float maxForce)    {       mMaxForce = maxForce;   }
+
+    virtual std::string GetPredicate() { return "force"; }
+
+    virtual boost::shared_ptr<ActionObject>
+    GetActionObject(const BaseParser::TPredicate& predicate);
+
     //
     // members
     //
