@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.1.2.3 2003/11/23 16:50:50 rollmark Exp $
+   $Id: monitorserver.cpp,v 1.1.2.3.2.1 2003/12/19 23:40:57 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,26 +35,27 @@ MonitorServer::~MonitorServer()
 {
 }
 
-bool MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
+bool
+MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
 {
     // check if a monitor system of the requested type was already created
     shared_ptr<MonitorSystem> monitorSys =
         shared_static_cast<MonitorSystem>(GetChildOfClass(monitorSysName));
 
-    if (monitorSys != 0)
-        {
-            return true;
-        }
+    if (monitorSys.get() != 0)
+    {
+        return true;
+    }
 
     // create the monitor system
     monitorSys = shared_static_cast<MonitorSystem>(GetCore()->New(monitorSysName));
 
-    if (monitorSys == 0)
-        {
-            GetLog()->Error() << "ERROR: (MonitorServer) Cannot create monitor system '"
-                              << monitorSysName << "'\n";
-            return false;
-        }
+    if (monitorSys.get() == 0)
+    {
+        GetLog()->Error() << "ERROR: (MonitorServer) Cannot create monitor system '"
+                          << monitorSysName << "'" << std::endl;
+        return false;
+    }
 
     // link the monitor system in the hierarchy
     monitorSys->SetName(monitorSysName);
