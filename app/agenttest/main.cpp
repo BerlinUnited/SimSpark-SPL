@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.13 2004/02/10 14:55:59 rollmark Exp $
+   $Id: main.cpp,v 1.3.2.14 2004/02/11 09:44:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,6 +57,10 @@ static shared_ptr<Soccer> behave;
 // the default team name
 string teamName = "Robolog";
 
+// the playes uniform number, if left to zero the server will allocate
+// the next freee unum
+int teamUnum = 0;
+
 // set to 1 to write debug information to stdout
 #define ENABLE_LOGGING 1
 
@@ -74,8 +78,9 @@ void printHelp()
 {
   cout << "\nusage: agenttest [options]" << endl;
   cout << "\noptions:" << endl;
-  cout << " --help      print this message." << endl;
+  cout << " --help      prints this message." << endl;
   cout << " --teamname  sets the team name. " << endl;
+  cout << " --unum      sets the uniform number." << endl;
   cout << "\n";
 }
 
@@ -98,7 +103,14 @@ void ReadOptions(int argc, char* argv[])
         {
           printHelp();
           exit(0);
-        }
+        } else if (strcmp( argv[i], "--unum" ) == 0 )
+            {
+                teamUnum = atoi(argv[i+1]);
+                ++i;
+                stringstream ss;
+                ss << "setting uniform number to " << teamUnum << "\n";
+                Log(ss.str().c_str());
+            }
     }
 }
 
@@ -150,6 +162,7 @@ int Init(int argc, char* argv[])
       }
 
   behave->SetTeamName(teamName);
+  behave->SetTeamUnum(teamUnum);
 
   return 0;
 }
