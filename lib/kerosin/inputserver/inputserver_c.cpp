@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputserver_c.cpp,v 1.3 2004/03/22 11:16:09 rollmark Exp $
+   $Id: inputserver_c.cpp,v 1.4 2004/03/22 11:23:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,15 +100,6 @@ FUNCTION(InputServer,addCode)
         (! in.GetValue(in[4],inAltMod))
         )
         {
-            std::cout<<"****** AddCode " << in.GetSize()
-                     <<" " << inIc
-                     << " " << inName
-                     << " " << inNoMod
-                     << " " << inShiftMod
-                     << " " << inAltMod
-                     << "\n";
-
-
             return  false;
         }
 
