@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.2.2.2 2003/12/23 16:28:54 fruit Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.2.2.3 2003/12/24 18:03:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,15 +48,15 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
     predicate.parameter.clear();
 
     if (mSceneServer.get() == 0)
-        {
-            mSceneServer = shared_static_cast<SceneServer>
-                (GetCore()->Get("/sys/server/scene"));
-        }
+    {
+        mSceneServer = shared_static_cast<SceneServer>
+            (GetCore()->Get("/sys/server/scene"));
+    }
 
     if (mSceneServer.get() == 0)
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
     if (activeScene.get() == 0)
@@ -66,6 +66,19 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
         return false;
     }
 
+    // we want positions relative the parent transform node
+    shared_ptr<Transform> parent =
+        shared_dynamic_cast<Transform>(make_shared(GetParent()));
+
+    salt::Vector3f myPos;
+    if (parent.get() == 0)
+    {
+        GetLog()->Warning()
+            << "WARNING: (PerfectVisionPerceptor) parent node is not derived from TransformNode\n";
+    } else {
+        myPos = parent->GetWorldTransform().Pos();
+    }
+
     TLeafList transformList;
     activeScene->GetChildrenSupportingClass("Transform", transformList, true);
 
@@ -73,7 +86,7 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
          i != transformList.end(); ++i)
     {
         shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
-        const salt::Vector3f& pos = j->GetWorldTransform().Pos();
+        const salt::Vector3f& pos = j->GetWorldTransform().Pos() - myPos;
 
         BaseParser::TParameterList position;
         position.push_back(std::string("pos"));
@@ -82,6 +95,7 @@ PerfectVisionPerceptor::Percept(BaseParser::TPredicate& predicate)
         position.push_back(pos[2]);
 
         BaseParser::TParameterList element;
+
         element.push_back((*i)->GetName());
         element.push_back(position);
 
