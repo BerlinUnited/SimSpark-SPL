@@ -79,7 +79,9 @@ def addAgent(aspectPath)
   kickEffector.setAngleRange(0.0,50.0)
 
   # perceptor setup
-  new('VisionPerceptor', aspectPath+'VisionPerceptor')
+  visionPerceptor = new('VisionPerceptor', aspectPath+'VisionPerceptor')
+  visionPerceptor.setSenseMyPos(true);
+
   new('GameStatePerceptor', aspectPath+'GameStatePerceptor')
   new('AgentStatePerceptor', aspectPath+'AgentStatePerceptor')
 
@@ -234,6 +236,11 @@ addSoccerVar('AgentMaxSpeed', 10.0)
 # ball parameters
 addSoccerVar('BallRadius', 0.111)
 addSoccerVar('BallMass',randomServer.uniformRND(0.41,0.45))
+
+# soccer rule parameters
+addSoccerVar('RuleGoalPauseTime',3.0)
+addSoccerVar('RuleKickingPauseTime',1.0)
+addSoccerVar('RuleHalfTime',2.25 * 60)
 
 #
 # mount a standard file system
