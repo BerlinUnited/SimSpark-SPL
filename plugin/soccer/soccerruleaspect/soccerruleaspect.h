@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.3 2004/04/21 09:28:04 fruit Exp $
+   $Id: soccerruleaspect.h,v 1.4 2004/04/23 14:54:21 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -165,6 +165,10 @@ protected:
     /** the (least) distance opponents will be moved away if they are to close
         during a free kick, kick in and situations like that. */
     float mFreeKickMoveDist;
+    /** flag if the simulator should do the kick off automatically after the agent */
+    bool mAutomaticKickOff;
+    /** time to wait until we kick off automatically */
+    float mWaitBeforeKickOff;
     // areas where opponents are not allowed in certain play modes
     /** bounding box for the right half of the field */
     salt::AABB2 mRightHalf;
