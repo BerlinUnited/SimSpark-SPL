@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.cpp,v 1.1 2004/04/28 14:52:57 rollmark Exp $
+   $Id: sparkmonitorclient.cpp,v 1.2 2004/04/29 12:32:29 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ void SparkMonitorClient::OnUnlink()
     mSceneServer.reset();
     if (mManagedScene.get() != 0)
         {
-            mManagedScene->RemoveChildren();
+            mManagedScene->UnlinkChildren();
             mManagedScene.reset();
         }
 }
@@ -257,7 +257,7 @@ void SparkMonitorClient::ParseMessage(const string& msg)
 
     if (mManagedScene.get() != 0)
         {
-            mManagedScene->RemoveChildren();
+            mManagedScene->UnlinkChildren();
         } else
             {
                 mManagedScene = shared_dynamic_cast<BaseNode>
