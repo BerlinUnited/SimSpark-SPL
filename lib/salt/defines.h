@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: defines.h,v 1.4 2003/11/14 14:05:54 fruit Exp $
+   $Id: defines.h,v 1.5 2004/03/22 11:28:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,6 +45,8 @@
         #define SHARED_LIB_EXPORT       __declspec(dllexport)
         // other symbols
         #define f_inline                        __forceinline
+        // hide the attribute definitions from MSVC
+        #define  __attribute__(x)  /*NOTHING*/
 #elif   defined(__GNUC__)
         #define SHARED_LIB_EXPORT
         #define f_inline                        inline
