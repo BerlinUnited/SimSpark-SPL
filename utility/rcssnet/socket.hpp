@@ -4,7 +4,7 @@
                socket.hpp  -  Base newtork socket class
                              -------------------
     begin                : 08-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -34,19 +34,24 @@ namespace rcss
             enum CheckingType { CHECK, DONT_CHECK };
 
             Socket();
-            
+
             virtual
             ~Socket();
-            
+
             void
             open();
 
             void
             bind( const Addr& addr );
-            
+
+            void
+            listen( int backlog );
+
+            virtual Socket* accept(Addr& addr);
+
             Addr
             getName() const;
-        
+
             void
             connect( const Addr& addr );
 
@@ -59,53 +64,53 @@ namespace rcss
             int
             setCloseOnExec( bool on = true );
 
-            int 
+            int
             setNonBlocking( bool on = true );
 
-            int 
+            int
             setAsync( bool on = true );
 
             int
             setBroadcast( bool on = true );
 
-            int 
+            int
             getFD() const;
-            
-            bool 
+
+            bool
             isOpen() const;
-            
-            bool 
+
+            bool
             isConnected() const;
-            
-            Addr 
+
+            Addr
             getDest() const; // deprecated.  Use getPeer instead.
 
-            int 
-            send( const char* msg, 
-                  size_t len, 
+            int
+            send( const char* msg,
+                  size_t len,
                   const Addr& dest,
                   int flags = 0,
                   CheckingType check = CHECK );
 
-            int 
-            send( const char* msg, 
-                  size_t len, 
+            int
+            send( const char* msg,
+                  size_t len,
                   int flags = 0,
                   CheckingType check = CHECK );
 
-            int 
-            recv( char* msg, 
-                  size_t len, 
+            int
+            recv( char* msg,
+                  size_t len,
                   Addr& from,
                   int flags = 0,
                   CheckingType check = CHECK );
-            
+
             int
-            recv( char* msg, 
-                  size_t len, 
+            recv( char* msg,
+                  size_t len,
                   int flags = 0,
                   CheckingType check = CHECK );
-            
+
     // The following two methods allow a timeout to be specified.
     // Overall, it's slower than the untimed varients so if you do
     // need to specify a timeout and you just want it the recv to
@@ -114,18 +119,18 @@ namespace rcss
     // without timeouts.
             int
             recv( int timeout,
-                  char* msg, 
-                  size_t len, 
-                  Addr& from, 
+                  char* msg,
+                  size_t len,
+                  Addr& from,
                   int flags = 0 );
 
             int
             recv( int timeout,
-                  char* msg, 
-                  size_t len, 
+                  char* msg,
+                  size_t len,
                   int flags = 0 );
-            
-        private:
+
+        protected:
             virtual
             void
             doOpen( int& fd ) = 0;
@@ -134,11 +139,10 @@ namespace rcss
             Socket( const Socket& );
             Socket& operator=( const Socket& );
 
-        private:
-            int m_socket;
+        protected:
+            int  m_socket;
             bool m_open;
             bool m_connected;
-            Addr m_dest;
         };
     }
 }

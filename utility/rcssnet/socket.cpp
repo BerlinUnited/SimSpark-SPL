@@ -2,7 +2,7 @@
                socket.cpp  -  Base newtork socket class
                              -------------------
     begin                : 08-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -76,6 +76,20 @@ namespace rcss
                 throw BindErr( errno );
         }
 
+        void
+        Socket::listen( int backlog )
+        {
+            int err = ::listen( m_socket, backlog );
+            if (err < 0 )
+              throw ListenErr( errno );
+        }
+
+        Socket* Socket::accept(Addr& addr)
+        {
+            throw AcceptErr( EOPNOTSUPP );
+            return 0;
+        }
+
         Addr
         Socket::getName() const
         {
@@ -86,7 +100,7 @@ namespace rcss
                                      &from_len );
             if( err < 0 )
                 throw GetNameErr( errno );
-            
+
             return Addr( name );
         }
 
@@ -98,7 +112,7 @@ namespace rcss
                                  sizeof( addr.getAddr() ) );
             if ( err < 0 )
                 throw ConnectErr( errno );
-            
+
             m_connected = true;
         }
 
@@ -112,7 +126,7 @@ namespace rcss
                                      &from_len );
             if( err < 0 )
                 throw GetNameErr( errno );
-            
+
             return Addr( name );
         }
 
@@ -130,38 +144,38 @@ namespace rcss
 
         int
         Socket::setCloseOnExec( bool on )
-        { 
-            return fcntl( m_socket, F_SETFD, 
+        {
+            return fcntl( m_socket, F_SETFD,
                           ( on ? FD_CLOEXEC : ~FD_CLOEXEC ) );
         }
 
-        int 
-        Socket::setNonBlocking( bool on ) 
+        int
+        Socket::setNonBlocking( bool on )
         {
             int flags = fcntl( m_socket, F_GETFL, 0 );
             if( flags == -1 )
                 return flags;
-            
+
             if( on )
-                return fcntl( m_socket, F_SETFL, 
+                return fcntl( m_socket, F_SETFL,
                               O_NONBLOCK | flags );
             else
-                return fcntl( m_socket, F_SETFL, 
+                return fcntl( m_socket, F_SETFL,
                               ~O_NONBLOCK & flags );
         }
 
-        int 
-        Socket::setAsync( bool on ) 
+        int
+        Socket::setAsync( bool on )
         {
 #ifdef O_ASYNC
             int flags = fcntl( m_socket, F_GETFL, 0 );
-            
+
             if ( on )
-                return fcntl ( m_socket, F_SETFL, 
+                return fcntl ( m_socket, F_SETFL,
                                    O_ASYNC | flags );
             else
-                return fcntl ( m_socket, F_SETFL, 
-                               ~O_ASYNC & flags );      
+                return fcntl ( m_socket, F_SETFL,
+                               ~O_ASYNC & flags );
 #else
             errno = EPERM;
             return -1;
@@ -181,36 +195,36 @@ namespace rcss
 #endif
         }
 
-        int 
+        int
         Socket::getFD() const
         { return m_socket; }
-        
-        bool 
+
+        bool
         Socket::isOpen() const
         { return m_open; }
-        
-        bool 
+
+        bool
         Socket::isConnected() const
-        { 
-            return m_connected; 
+        {
+            return m_connected;
         }
-        
-        Addr 
+
+        Addr
         Socket::getDest() const
         { return getPeer(); }
 
-        int 
-        Socket::send( const char* msg, 
+        int
+        Socket::send( const char* msg,
                       size_t len,
-                      const Addr& dest, 
+                      const Addr& dest,
                       int flags,
-                      CheckingType check ) 
+                      CheckingType check )
         {
             if( check == DONT_CHECK )
             {
                 return ::sendto( m_socket, msg, len, flags,
                                  (struct sockaddr *)&( dest.getAddr() ),
-                                 sizeof( dest.getAddr() ) ); 
+                                 sizeof( dest.getAddr() ) );
             }
             else
             {
@@ -219,7 +233,7 @@ namespace rcss
                     int sent = ::sendto( m_socket, msg, len, flags,
                                          (struct sockaddr *)&( dest.getAddr() ),
                                          sizeof( dest.getAddr() ) );
-                    if( sent != -1 
+                    if( sent != -1
                         || ( errno != EINTR
                              && errno != EWOULDBLOCK ) )
                         return sent;
@@ -227,22 +241,22 @@ namespace rcss
             }
         }
 
-        int 
-        Socket::send( const char* msg, 
-                      size_t len, 
+        int
+        Socket::send( const char* msg,
+                      size_t len,
                       int flags,
-                      CheckingType check ) 
+                      CheckingType check )
         {
             if( check == DONT_CHECK )
             {
-                return ::send( m_socket, msg, len, flags ); 
+                return ::send( m_socket, msg, len, flags );
             }
             else
             {
                 for(;;)
                 {
                     int sent = ::send( m_socket, msg, len, flags );
-                    if( sent != -1 
+                    if( sent != -1
                         || ( errno != EINTR
                              && errno != EWOULDBLOCK ) )
                         return sent;
@@ -250,9 +264,9 @@ namespace rcss
             }
         }
 
-        int 
-        Socket::recv( char* msg, 
-                      size_t len, 
+        int
+        Socket::recv( char* msg,
+                      size_t len,
                       Addr& from,
                       int flags,
                       CheckingType check )
@@ -261,7 +275,7 @@ namespace rcss
             {
                 Addr::AddrType addr;
                 socklen_t from_len = sizeof( addr );
-                int rval = ::recvfrom( m_socket, msg, len, flags, 
+                int rval = ::recvfrom( m_socket, msg, len, flags,
                                        (struct sockaddr *)&addr, &from_len );
                 from = Addr( addr );
                 return rval;
@@ -272,7 +286,7 @@ namespace rcss
                 {
                     Addr::AddrType addr;
                     socklen_t from_len = sizeof( addr );
-                    int received = ::recvfrom( m_socket, msg, len, flags, 
+                    int received = ::recvfrom( m_socket, msg, len, flags,
                                                (struct sockaddr *)&addr,
                                                &from_len );
                     from = Addr( addr );
@@ -282,13 +296,13 @@ namespace rcss
                 }
             }
         }
-       
+
         int
-        Socket::recv( char* msg, 
-                      size_t len, 
+        Socket::recv( char* msg,
+                      size_t len,
                       int flags,
                       CheckingType check )
-        { 
+        {
             if( check == DONT_CHECK )
                 return ::recv( m_socket, msg, len, flags );
             else
@@ -302,12 +316,12 @@ namespace rcss
                 }
             }
         }
-            
+
         int
         Socket::recv( int timeout,
-                      char* msg, 
-                      size_t len, 
-                      Addr& from, 
+                      char* msg,
+                      size_t len,
+                      Addr& from,
                       int flags )
         {
 #if defined (HAVE_POLL_H)
@@ -334,8 +348,8 @@ namespace rcss
 
         int
         Socket::recv( int timeout,
-                      char* msg, 
-                      size_t len, 
+                      char* msg,
+                      size_t len,
                       int flags )
         {
 #if defined (HAVE_POLL_H)
