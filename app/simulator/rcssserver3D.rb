@@ -46,66 +46,67 @@ def getSoccerVar(name)
   EOS
 end
 
-def addAgent(aspectPath)
+def addAgent(path)
   # move different agents away from each other
-  aspect = get(aspectPath)
+  aspect = get(path)
   aspect.setLocalPos($agentX,$agentY,$agentZ)
   $agentX += 5.0
   $agentY += 0.0
   $agentZ += 0.1
 
-  # geometry and physics setup
-  physics = new('oxygen/Body', aspectPath+'physics')
-  physics.setMass(getSoccerVar('AgentMass'))
-## this method below should give a better distribution of the agent weight.
-## needs to be tested though
-#  physics.setSphereTotal(getSoccerVar('AgentMass'),
-#                         getSoccerVar('AgentRadius')
-#                         )
+  # physics setup
+  physics = new('oxygen/Body', path+'physics')
+  physics.setSphereTotal(getSoccerVar('AgentMass'),
+			 getSoccerVar('AgentRadius'))
 
-  maxVel = new('oxygen/VelocityController', aspectPath+'physics/maxVelCtr')
+  maxVel = new('oxygen/VelocityController', path+'physics/maxVelCtr')
   maxVel.setMaxVelocity(getSoccerVar('AgentMaxSpeed'))
 
-  geometry = new('oxygen/SphereCollider', aspectPath+'geometry')
-  geometry.setRadius(getSoccerVar('AgentRadius'))
-
-  drag = new('oxygen/DragController',aspectPath+'physics/drag')
+  drag = new('oxygen/DragController',path+'physics/drag')
   drag.setAngularDrag(12.0)
   drag.setLinearDrag(12.0)
 
+  # geometry setup
+
+  geomPath = path+'geometry/'
+  geometry = new('oxygen/SphereCollider', geomPath)
+  geometry.setRadius(getSoccerVar('AgentRadius'))
+
+  contact = new('oxygen/ContactJointHandler', geomPath+'contact')
+
   # agent state (needs to be set up before perceptors)
-  new('AgentState', aspectPath+'AgentState')
+  new('AgentState', path+'AgentState')
 
   # effector setup
-  new('InitEffector', aspectPath+'InitEffector')
+  new('InitEffector', path+'InitEffector')
 
   # driveeffector setup
-  driveEffector = new('DriveEffector', aspectPath+'DriveEffector')
+  driveEffector = new('DriveEffector', path+'DriveEffector')
   # this sets the acceleration of the robot.
   # (values are still experimental :)
-  driveEffector.setForceFactor(75.0 * 12.0 / 80.0);
+  driveEffector.setForceFactor(35.0 * 12.0 / 100.0);
   driveEffector.setSigma(0.005);
   # drive consumption. (higher value means lower consumption) 
   # untested if this is enough or too much 
   driveEffector.setConsumption(120 * 75.0 * 12.0 * 4);
 
-  kickEffector = new('KickEffector', aspectPath+'KickEffector')
-  kickEffector.setForceFactor(1.8)
+  kickEffector = new('KickEffector', path+'KickEffector')
+  kickEffector.setKickMargin(0.07)
+  kickEffector.setForceFactor(0.7)
   kickEffector.setNoiseParams(0.4,0.02,0.9,4.5)
   kickEffector.setSteps(10)
   kickEffector.setMaxPower(100.0)
   kickEffector.setAngleRange(0.0,50.0)
 
-  new('BeamEffector', aspectPath+'BeamEffector')
+  new('BeamEffector', path+'BeamEffector')
 
   # perceptor setup
-  visionPerceptor = new('VisionPerceptor', aspectPath+'VisionPerceptor')
+  visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
   # set to true for debugging. will be set to false during competition
   visionPerceptor.setSenseMyPos(false);
 
-  new('GameStatePerceptor', aspectPath+'GameStatePerceptor')
-  new('AgentStatePerceptor', aspectPath+'AgentStatePerceptor')
-
+  new('GameStatePerceptor', path+'GameStatePerceptor')
+  new('AgentStatePerceptor', path+'AgentStatePerceptor')
 end
 
 # add a field flag to (x,y,z)
@@ -123,6 +124,8 @@ end
 def addWall(name,a,b,c,d)
   wall = new('oxygen/PlaneCollider', $scenePath+name)
   wall.setParams(a,b,c,d)
+
+  contact = new('oxygen/ContactJointHandler', $scenePath+name+'/contact')
 end
 
 # construct a ball at (x,y,z)
@@ -133,25 +136,22 @@ def addBall(x,y,z)
   ball.setLocalPos(x,y,z)
 
   physics = new('oxygen/Body', path+'physics')
-  physics.setMass(getSoccerVar('BallMass'))
-## this method below should give a better distribution of the ball weight.
-## needs to be tested though
-#  physics.setSphereTotal(getSoccerVar('BallMass'),
-#                         getSoccerVar('BallRadius')
-#                         )
+  physics.setSphereTotal(getSoccerVar('BallMass'),
+			 getSoccerVar('BallRadius'))
+
+  drag = new('oxygen/DragController',path+'physics/drag')
+  drag.setAngularDrag(0.1)
+  drag.setLinearDrag(0.3)
 
   geomPath = path+'geometry/'
 
   geometry = new('oxygen/SphereCollider', geomPath)
   geometry.setRadius(getSoccerVar('BallRadius'))
 
-  drag = new('oxygen/DragController',path+'physics/drag')
-  drag.setAngularDrag(0.1)
-  drag.setLinearDrag(0.3)
-
   new('oxygen/RecorderHandler', geomPath+'recorder')
-  new('oxygen/ContactJointHandler', geomPath+'contact')
 
+  contact = new('oxygen/ContactJointHandler', geomPath+'contact')
+  
   # object state
   state = new('ObjectState', path+'ObjectState')
   state.setPerceptName('Ball')
@@ -354,5 +354,3 @@ monitorServer.registerMonitorSystem('SexpMonitor')
 # queue agents for startup
 spadesServer.queueAgents('foo', 11)
 spadesServer.queueAgents('bar', 11)
-
-
