@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.cpp,v 1.5 2004/04/15 18:35:04 rollmark Exp $
+   $Id: ccylindercollider.cpp,v 1.6 2004/04/15 21:18:06 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,12 +43,16 @@ void CCylinderCollider::SetLength(float length)
     SetParams(GetRadius(),length);
 }
 
-void CCylinderCollider::GetParams(float& radius, float& length)
+void
+CCylinderCollider::GetParams(float& radius, float& length)
 {
-    dGeomCCylinderGetParams(mODEGeom,&radius,&length);
+    dGeomCCylinderGetParams(mODEGeom,
+                            reinterpret_cast<dReal*>(&radius),
+                            reinterpret_cast<dReal*>(&length));
 }
 
-float CCylinderCollider::GetRadius()
+float
+CCylinderCollider::GetRadius()
 {
     float length;
     float radius;
@@ -56,7 +60,8 @@ float CCylinderCollider::GetRadius()
     return radius;
 }
 
-float CCylinderCollider::GetLength()
+float
+CCylinderCollider::GetLength()
 {
     float radius;
     float length;
@@ -64,15 +69,16 @@ float CCylinderCollider::GetLength()
     return length;
 }
 
-bool CCylinderCollider::ConstructInternal()
+bool
+CCylinderCollider::ConstructInternal()
 {
     if (! Collider::ConstructInternal())
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     // create a unit capped cylinder
-    mODEGeom = dCreateCCylinder (0, 1.0f, 1.0f);
+    mODEGeom = dCreateCCylinder(0, 1.0f, 1.0f);
 
     return (mODEGeom != 0);
 }
