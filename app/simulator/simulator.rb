@@ -58,24 +58,25 @@ new('kerosin/Space', '/usr/scene/_space');
 pc = new('kerosin/PlaneCollider', '/usr/scene/pc');
 pc.setParams(0.0, 1.0 ,0.0, 0.0); 
 
-# wall collider
-w1 = new('kerosin/PlaneCollider', '/usr/scene/w1');
-w1.setParams(-1.0, 0.0, 0.0, -52.5);
-
-w2 = new('kerosin/PlaneCollider', '/usr/scene/w2');
-w2.setParams(1.0, 0.0, 0.0, -52.5);
-
-w3 = new('kerosin/PlaneCollider', '/usr/scene/w3');
-w3.setParams(0.0, 0.0, -1.0, -34.0);
-
-w4 = new('kerosin/PlaneCollider', '/usr/scene/w4');
-w4.setParams(0.0, 0.0, 1.0, -34.0);
-
-# mark the soccer field with 4 field flags
+# setup soccer field size
 fx = 52.5;
 fz = 34.0;
 fy = 1.0;
 
+# wall collider
+w1 = new('kerosin/PlaneCollider', '/usr/scene/w1');
+w1.setParams(-fy, 0.0, 0.0, -fx);
+
+w2 = new('kerosin/PlaneCollider', '/usr/scene/w2');
+w2.setParams(fy, 0.0, 0.0, -fx);
+
+w3 = new('kerosin/PlaneCollider', '/usr/scene/w3');
+w3.setParams(0.0, 0.0, -fy, -fz);
+
+w4 = new('kerosin/PlaneCollider', '/usr/scene/w4');
+w4.setParams(0.0, 0.0, fy, -fz);
+
+# mark the soccer field with 4 field flags
 flag = new('FieldFlag','/usr/scene/flag1');
 flag.setLocalPos(-fx,fy,fz);
 
