@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: randomserver_c.cpp,v 1.1.2.1 2004/02/06 13:28:23 fruit Exp $
+   $Id: randomserver_c.cpp,v 1.1.2.2 2004/02/06 20:21:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,24 +35,42 @@ FUNCTION(seed)
     }
 }
 
-#if 0
-OUT_FUNCTION(uniformRandom)
+OUT_FUNCTION(uniformRND)
 {
     if (in.size() == 2)
     {
         RandomServer* rs = static_cast<RandomServer*>(obj);
-        out = rs->GetUniformRandom<float>(boost::any_cast<float>(in[0]),
-                                          boost::any_cast<float>(in[1]));
+        out = rb_float_new(rs->GetUniformRandom<float>(boost::any_cast<float>(in[0]),
+                                                       boost::any_cast<float>(in[1])));
     }
 }
-#endif
+
+OUT_FUNCTION(normalRND)
+{
+    if (in.size() == 2)
+    {
+        RandomServer* rs = static_cast<RandomServer*>(obj);
+        out = rb_float_new(rs->GetNormalRandom<float>(boost::any_cast<float>(in[0]),
+                                                      boost::any_cast<float>(in[1])));
+    }
+}
+
+OUT_FUNCTION(exponentialRND)
+{
+    if (in.size() == 1)
+    {
+        RandomServer* rs = static_cast<RandomServer*>(obj);
+        out = rb_float_new(rs->GetExponentialRandom<float>
+                           (boost::any_cast<float>(in[0])));
+    }
+}
 
 void
 CLASS(RandomServer)::DefineClass()
 {
     DEFINE_BASECLASS(zeitgeist/Node);
     DEFINE_FUNCTION(seed);
-#if 0
-    DEFINE_FUNCTION(uniformRandom);
-#endif
+    DEFINE_FUNCTION(uniformRND);
+    DEFINE_FUNCTION(normalRND);
+    DEFINE_FUNCTION(exponentialRND);
 }
