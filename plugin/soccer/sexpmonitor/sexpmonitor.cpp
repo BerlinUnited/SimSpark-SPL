@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.8 2004/05/10 14:10:46 fruit Exp $
+   $Id: sexpmonitor.cpp,v 1.9 2004/05/14 14:35:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -313,7 +313,7 @@ SexpMonitor::GetMonitorHeaderInfo()
 
     // soccer rule parameters
     ss << PutFloatParam("RuleGoalPauseTime");
-    ss << PutFloatParam("RuleFreeKickPauseTime");
+    ss << PutFloatParam("RuleKickInPauseTime");
     ss << PutFloatParam("RuleHalfTime");
 
     ss << ")\n\0";
