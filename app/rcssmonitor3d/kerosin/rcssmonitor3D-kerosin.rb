@@ -21,6 +21,23 @@ sceneServer.createScene($scenePath)
 # setup the OpenGLServer
 new('kerosin/OpenGLServer', $serverPath+'opengl');
 
+# setup the MaterialServer
+new('kerosin/MaterialServer', $serverPath+'material');
+material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentN');
+material.setColor(0.8,0.8,0.2)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentL');
+material.setColor(1.0,0.2,0.2)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matAgentR');
+material.setColor(0.2,0.2,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matBall');
+material.setColor(1.0,1.0,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matFlag');
+material.setColor(1.0,0.0,0.0)
+
 # setup the RenderServer
 new('kerosin/RenderServer', $serverPath+'render');
 
@@ -77,20 +94,34 @@ def addVisual(className, nodeName, x, y, z)
   new('kerosin/'+className,$scenePath+nodeName+'/'+'visual')
 end
 
-def addSphere(nodeName, radius)
+def addSphere(nodeName, radius, material)
   transform = new('oxygen/Transform', $scenePath+nodeName)
   sphere = new('kerosin/Sphere',$scenePath+nodeName+'/'+'visual')
   sphere.setRadius(radius)
+  sphere.setMaterial(material)
 end  
 
 # called from the monitor to create an agent named <nodeName>
-def addAgent(nodeName)
-  addSphere(nodeName,Soccer.AgentRadius)
+def addAgentN(nodeName)
+  addSphere(nodeName,Soccer.AgentRadius,'matAgentN')
+end
+
+def addAgentL(nodeName)
+  addSphere(nodeName,Soccer.AgentRadius,'matAgentL')
+end
+
+def addAgentR(nodeName)
+  addSphere(nodeName,Soccer.AgentRadius,'matAgentR')
 end
 
 # called from the monitor to create a ball
 def addBall(nodeName)
-  addSphere(nodeName,Soccer.BallRadius)
+  addSphere(nodeName,Soccer.BallRadius,'matBall')
+end
+
+# called from the monitor to create a flag
+def addFlag(nodeName)
+  addSphere(nodeName,1.0,'matFlag')
 end
 
 # add an axis
