@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.2 2003/11/10 11:58:57 fruit Exp $
+   $Id: oxygen.h,v 1.3 2003/11/10 21:31:54 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@
 #include "physicsserver/world.h"
 
 #include "sceneserver/basenode.h"
+#include "sceneserver/camera.h"
 #include "sceneserver/fpscontroller.h"
 // #include "sceneserver/indexbuffer.h"
 #include "sceneserver/scene.h"
