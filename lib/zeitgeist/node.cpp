@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.cpp,v 1.8 2004/04/28 14:24:19 rollmark Exp $
+   $Id: node.cpp,v 1.9 2004/04/29 12:27:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@ Node::Node(const std::string& name) : Leaf(name)
 
 Node::~Node()
 {
-        //cout << "~Node() '" << mName << "' " << mChildren.size() <<" -> " << (void*)this << endl;
 }
 
 boost::shared_ptr<Leaf> Node::GetChild(const std::string &name, bool recursive)
@@ -190,18 +189,46 @@ void Node::RemoveChildReference(const boost::shared_ptr<Leaf> &leaf)
     mChildren.remove(leaf);
 }
 
-void Node::RemoveChildren()
+void Node::UnlinkChildren()
 {
-    mChildren.clear();
+    string cname;
+    if (GetClass().get() != 0)
+        {
+            cname = GetClass()->GetName();
+        }
+
+    while (! mChildren.empty())
+        {
+            shared_ptr<Leaf> node = mChildren.front();
+
+            string className;
+            if (node->GetClass().get()!= 0)
+                {
+                    className=node->GetClass()->GetName();
+                }
+            mChildren.pop_front();
+            node->UnlinkChildren();
+            node->Unlink();
+        }
 }
 
 bool Node::AddChildReference(const boost::shared_ptr<Leaf> &leaf)
 {
-    mChildren.push_back(leaf);
-    //cout << "Node: self " << (void*) GetSelf().get() << endl;
-    leaf->SetParent(shared_static_cast<Node>(make_shared(GetSelf())));
+    if (leaf.get() == 0)
+        {
+            return false;
+        }
 
-        return true;
+    if (leaf->GetClass() == 0)
+        {
+            cout << "(Node::AddChildReference) ERROR: object has "
+                 << "no assigned class object." << endl;
+            return false;
+        }
+
+    mChildren.push_back(leaf);
+    leaf->SetParent(shared_static_cast<Node>(make_shared(GetSelf())));
+    return true;
 }
 
 void Node::Dump() const
