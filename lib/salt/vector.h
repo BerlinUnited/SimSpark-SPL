@@ -1,8 +1,36 @@
+/* -*- mode: c++ -*-
+   
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: vector.h,v 1.3 2003/05/19 21:37:49 fruit Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ 
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #ifndef VECTOR_H__
 #define VECTOR_H__
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "tvector.h"
+#include <cstdlib>
+#include <climits>
+
 /*! 
-	$Id: vector.h,v 1.2 2003/04/30 14:21:49 fruit Exp $
+	$Id: vector.h,v 1.3 2003/05/19 21:37:49 fruit Exp $
 
 	Here we define/complete the vector definitions of TVector into specific
 	vector types (2d float, 3d float, etc...).
@@ -12,10 +40,6 @@
 			- initial version
 
 */
-
-#include "tvector.h"
-#include <stdlib.h>
-#include <limits.h>
 
 namespace salt
 {
