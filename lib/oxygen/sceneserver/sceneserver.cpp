@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.9 2004/04/08 14:49:00 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.10 2004/04/10 09:02:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,68 +47,68 @@ SceneServer::~SceneServer()
 
 boost::shared_ptr<Scene> SceneServer::CreateScene(const std::string &location)
 {
-  shared_ptr<CoreContext> context = GetCore()->CreateContext();
+    shared_ptr<CoreContext> context = GetCore()->CreateContext();
 
-  shared_ptr<Scene> scene = shared_static_cast<Scene>
-    (context->New("oxygen/Scene", location));
+    shared_ptr<Scene> scene = shared_static_cast<Scene>
+        (context->New("oxygen/Scene", location));
 
-  if (scene.get() != 0)
-    {
-      ResetCache();
-      mActiveScene = scene;
-    }
+    if (scene.get() != 0)
+        {
+            ResetCache();
+            mActiveScene = scene;
+        }
 
-  return scene;
+    return scene;
 }
 
 bool SceneServer::SetActiveScene(const std::string &location)
 {
-  shared_ptr<Scene> scene =
-    shared_dynamic_cast<Scene>(GetCore()->Get(location));
+    shared_ptr<Scene> scene =
+        shared_dynamic_cast<Scene>(GetCore()->Get(location));
 
-  if (scene.get() != 0)
-    {
-      ResetCache();
-      mActiveScene = scene;
-      return true;
-    }
+    if (scene.get() != 0)
+        {
+            ResetCache();
+            mActiveScene = scene;
+            return true;
+        }
 
-  return false;
+    return false;
 }
 
 void SceneServer::ResetCache()
 {
-  mActiveScene.reset();
-  mActiveSpace.reset();
-  mActiveWorld.reset();
+    mActiveScene.reset();
+    mActiveSpace.reset();
+    mActiveWorld.reset();
 }
 
 void SceneServer::UpdateCache()
 {
-  if (mActiveScene.get() == 0)
-    {
-      ResetCache();
-      return;
-    }
+    if (mActiveScene.get() == 0)
+        {
+            ResetCache();
+            return;
+        }
 
-  if (mActiveSpace.get() == 0)
-    {
-      // cache the space reference
-      mActiveSpace = shared_dynamic_cast<Space>
-        (mActiveScene->GetChildOfClass("Space"));
-    }
+    if (mActiveSpace.get() == 0)
+        {
+            // cache the space reference
+            mActiveSpace = shared_dynamic_cast<Space>
+                (mActiveScene->GetChildOfClass("Space"));
+        }
 
-  if (mActiveWorld.get() == 0)
-    {
-      // cache the world reference
-      mActiveWorld = shared_dynamic_cast<World>
-        (mActiveScene->GetChildOfClass("World"));
-    }
+    if (mActiveWorld.get() == 0)
+        {
+            // cache the world reference
+            mActiveWorld = shared_dynamic_cast<World>
+                (mActiveScene->GetChildOfClass("World"));
+        }
 }
 
 void SceneServer::OnUnlink()
 {
-  ResetCache();
+    ResetCache();
 }
 
 /** Update the scene graph. We do not make the distinction between
@@ -151,95 +151,95 @@ void SceneServer::OnUnlink()
 */
 void SceneServer::Update(float deltaTime)
 {
-  if (
-      (deltaTime == 0.0f) ||
-      (mActiveScene.get() == 0)
-      )
-    {
-      return;
-    }
+    if (
+        (deltaTime == 0.0f) ||
+        (mActiveScene.get() == 0)
+        )
+        {
+            return;
+        }
 
-  UpdateCache();
+    UpdateCache();
 
-  mActiveScene->PrePhysicsUpdate(deltaTime);
+    mActiveScene->PrePhysicsUpdate(deltaTime);
 
-  // determine collisions
-  if (mActiveSpace.get() != 0)
-    {
-      mActiveSpace->Collide();
-    }
+    // determine collisions
+    if (mActiveSpace.get() != 0)
+        {
+            mActiveSpace->Collide();
+        }
 
-  // do physics
-  if (mActiveWorld.get() != 0)
-    {
-      mActiveWorld->Step(deltaTime);
-    }
+    // do physics
+    if (mActiveWorld.get() != 0)
+        {
+            mActiveWorld->Step(deltaTime);
+        }
 
-  mActiveScene->PostPhysicsUpdate();
-  mActiveScene->UpdateHierarchy();
+    mActiveScene->PostPhysicsUpdate();
+    mActiveScene->UpdateHierarchy();
 }
 
 bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root)
 {
-  // try to open the file
-  shared_ptr<salt::RFile> file = GetFile()->Open(fileName.c_str());
+    // try to open the file
+    shared_ptr<salt::RFile> file = GetFile()->Open(fileName.c_str());
 
-  if (file.get() == 0)
-    {
-      GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
-                        << fileName << "'\n";
-      return false;
-    }
-
-  TLeafList importer;
-  ListChildrenSupportingClass<SceneImporter>(importer);
-
-  if (importer.size() == 0)
-    {
-      GetLog()->Error() << "(SceneServer) Warning: no SceneImporter registered\n";
-    }
-
-  for (
-       TLeafList::iterator iter = importer.begin();
-       iter != importer.end();
-       ++iter
-       )
-    {
-      shared_ptr<SceneImporter> importer =
-        shared_static_cast<SceneImporter>(*iter);
-
-      if (importer->ImportScene(file,root))
+    if (file.get() == 0)
         {
-          GetLog()->Normal()
-            << "(SceneServer) successfully imported scene file '"
-            << fileName << "'\n";
-          return true;
+            GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
+                              << fileName << "'\n";
+            return false;
         }
-    }
 
-  GetLog()->Error() << "(SceneServer) ERROR: cannot import scene file '"
-                  << fileName << "'\n";
+    TLeafList importer;
+    ListChildrenSupportingClass<SceneImporter>(importer);
 
-  return false;
+    if (importer.size() == 0)
+        {
+            GetLog()->Error() << "(SceneServer) Warning: no SceneImporter registered\n";
+        }
+
+    for (
+         TLeafList::iterator iter = importer.begin();
+         iter != importer.end();
+         ++iter
+         )
+        {
+            shared_ptr<SceneImporter> importer =
+                shared_static_cast<SceneImporter>(*iter);
+
+            if (importer->ImportScene(file,root))
+                {
+                    GetLog()->Normal()
+                        << "(SceneServer) successfully imported scene file '"
+                        << fileName << "'\n";
+                    return true;
+                }
+        }
+
+    GetLog()->Error() << "(SceneServer) ERROR: cannot import scene file '"
+                      << fileName << "'\n";
+
+    return false;
 }
 
 bool SceneServer::InitSceneImporter(const std::string& importerName)
 {
-  shared_ptr<SceneImporter> importer
-    = shared_dynamic_cast<SceneImporter>(GetCore()->New(importerName));
+    shared_ptr<SceneImporter> importer
+        = shared_dynamic_cast<SceneImporter>(GetCore()->New(importerName));
 
     if (importer.get() == 0)
-    {
-        GetLog()->Error() << "ERROR (SceneServer::InitSceneImporter) "
-                          << "Unable to create '" << importerName << "'\n";
-        return false;
-    }
+        {
+            GetLog()->Error() << "ERROR (SceneServer::InitSceneImporter) "
+                              << "Unable to create '" << importerName << "'\n";
+            return false;
+        }
 
     importer->SetName(importerName);
     AddChildReference(importer);
 
     GetLog()->Normal()
-      << "(SceneServer) SceneImporter '" << importerName << "' registered\n";
+        << "(SceneServer) SceneImporter '" << importerName << "' registered\n";
 
     return true;
 }
