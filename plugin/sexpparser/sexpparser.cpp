@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.1.2.1 2003/12/03 22:39:38 fruit Exp $
+   $Id: sexpparser.cpp,v 1.1.2.2 2003/12/08 15:11:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "sexpparser.h"
+#include <sstream>
 
 using namespace oxygen;
 using namespace std;
@@ -130,6 +131,18 @@ SexpParser::ListToString(const TParameterList& lst)
         if (IsString(*i))
         {
             s += space + boost::any_cast<string>(*i);
+        }
+        else if (i->type() == typeid(int))
+        {
+            ostringstream strm;
+            strm << boost::any_cast<int>(*i);
+            s += space + strm.str();
+        }
+        else if (i->type() == typeid(float))
+        {
+            ostringstream strm;
+            strm << boost::any_cast<float>(*i);
+            s += space + strm.str();
         } else {
             string t = ListToString(boost::any_cast<TParameterList>(*i));
             s += space + '(' + t + ')';
@@ -146,13 +159,3 @@ SexpParser::PlistToString(const TPredicate& plist)
     s += ListToString(plist.parameter);
     return s + ')';
 }
-
-#if 0
-int
-main(int argc, char** argv)
-{
-    parse(argv[1]);
-    return 0;
-}
-#endif
-
