@@ -12,7 +12,7 @@ using namespace zeitgeist;
 int main()
 {
   // init zeitgeist
-  Zeitgeist       zg;
+  Zeitgeist zg(".rcssserver3d");
 
   // setup a browsing context
   shared_ptr<CoreContext> context = zg.CreateContext();
