@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.2 2004/05/07 12:23:19 rollmark Exp $
+   $Id: main.cpp,v 1.3 2004/05/17 09:20:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,9 +25,7 @@
 #include <netinet/in.h>
 #include <behavior.h>
 #include <boost/scoped_ptr.hpp>
-
-#include "carbehavior.h"
-boost::scoped_ptr<Behavior> gBehavior(new CarBehavior());
+#include "soccerbehavior.h"
 
 using namespace rcss::net;
 using namespace std;
@@ -36,8 +34,6 @@ using namespace boost;
 TCPSocket gSocket;
 string gHost = "127.0.0.1";
 int gPort = 3100;
-
-
 
 void PrintGreeting()
 {
@@ -174,12 +170,15 @@ bool GetMessage(string& msg)
 
 void Run()
 {
-    PutMessage(gBehavior->Init());
+    scoped_ptr<Behavior> behavior(new SoccerBehavior());
+
+
+    PutMessage(behavior->Init());
 
     string msg;
     while (GetMessage(msg))
         {
-            PutMessage(gBehavior->Think(msg));
+            PutMessage(behavior->Think(msg));
         }
 }
 
