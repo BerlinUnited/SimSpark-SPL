@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadescreatesenseevent.cpp,v 1.3 2003/12/27 17:53:42 fruit Exp $
+   $Id: spadescreatesenseevent.cpp,v 1.4 2004/01/05 16:55:34 patstg Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 #include "spadescreatesenseevent.h"
 #include "spadesserver.h"
+#include <spades/SenseEvent.hpp>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
