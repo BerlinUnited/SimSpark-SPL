@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.cpp,v 1.3.2.1 2003/12/25 13:15:13 rollmark Exp $
+   $Id: collisionperceptor.cpp,v 1.4.2.1 2004/01/09 13:14:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,15 +31,38 @@ CollisionPerceptor::Percept(Predicate& predicate)
     predicate.name = "collision";
     predicate.parameter.clear();
 
-    if (!mCollidees.empty())
+    if (mCollidees.empty())
     {
-        for (TLeafList::const_iterator i = GetCollidees().begin();
-             i != GetCollidees().end(); ++i)
-        {
-            predicate.parameter.push_back(*i);
-        }
-        GetCollidees().clear();
-        return true;
+      return false;
     }
-    return false;
+
+     for (
+          TLeafList::const_iterator i = GetCollidees().begin();
+          i != GetCollidees().end();
+          ++i
+          )
+       {
+         predicate.parameter.push_back(*i);
+       }
+
+    return true;
 }
+
+void
+CollisionPerceptor::PrePhysicsUpdateInternal(float /*deltaTime*/)
+{
+  mCollidees.clear();
+}
+
+void
+CollisionPerceptor::AddCollidee(boost::shared_ptr<Node> collidee)
+{
+  if (collidee.get() == 0)
+    {
+      return;
+    }
+
+  mCollidees.push_back(collidee);
+}
+
+
