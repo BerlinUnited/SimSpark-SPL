@@ -1,5 +1,12 @@
 2003-09-08	Tom Howard	<tomhoward@users.sf.net>
 
+	* ./configure.ac
+	Added checks for ode and DevIL.  Could seam to get DevIL library
+	check working properly so that is commented out.
+	
+
+2003-09-08	Tom Howard	<tomhoward@users.sf.net>
+
 	* ./Makefile.am
 	* ./configure.ac
 	* ./config.aux/cvs.am

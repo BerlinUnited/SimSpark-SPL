@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d], 0.0.0, [sserver-admin@lists.sf.net])
+AC_INIT([rcssserver3d], 0.1, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([plugin/inputsdl/keyboardsdl_c.cpp])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
@@ -73,6 +73,32 @@ AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr
 AC_PATH_X
 RCSS_PATH_FREETYPE
 RCSS_PATH_RUBY
+
+AC_ARG_VAR(ODE, [location of ode installation])
+if test $ODE; then
+   CPPFLAGS="$CPPFLAGS -I$ODE/include"
+   LDFLAGS="$LDFLAGS -L$ODE/lib"
+fi
+
+AC_CHECK_HEADERS([ode/ode.h],,[
+        AC_MSG_ERROR([The ode headers (e.g. ode/ode.h) cannot be found. Please specify the location of the ode installtion, by using the ODE environment variable (e.g. ./configure ODE=$HOME/ode-0.03)])])
+
+AC_CHECK_LIB(ode,dWorldCreate,,[
+        AC_MSG_ERROR([The ode library (libode.a) cannot be found. Please specify the location of the ode installtion, by using the ODE environment variable (e.g. ./configure ODE=$HOME/ode-0.03)])])
+
+
+AC_ARG_VAR(DEVIL, [location of DevIL installation])
+if test $DEVIL; then
+   CPPFLAGS="$CPPFLAGS -I$DEVIL/include"
+   LDFLAGS="$LDFLAGS -L$DEVIL/lib"
+fi
+
+AC_CHECK_HEADERS([il/il.h],,[
+        AC_MSG_ERROR([The DevIL headers (e.g. il/il.h) cannot be found. Please specify the location of the DevIL installtion, by using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])])
+
+#AC_CHECK_LIB(il,ilInit,,[
+#        AC_MSG_ERROR([The DevIL library (libIL.la) cannot be found. Please specify the location of the DevIL installtion, by using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])])
+
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
