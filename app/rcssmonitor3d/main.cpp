@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.20 2004/02/18 21:43:31 fruit Exp $
+   $Id: main.cpp,v 1.3.2.21 2004/02/20 17:40:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -509,10 +509,9 @@ void drawStatusText()
             mode = STR_PM_Goal_Left;
             break;
         default:
-            mode = "(unknown playmode)";
+            mode = STR_PM_Unknown;
             break;
-
-            }
+        }
     ss << mode << " ";
     ss << "t=" << gTime;
 
