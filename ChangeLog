@@ -1,3 +1,36 @@
+2004-03-25  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp,
+	* plugin/soccer/sexpmonitor/sexpmonitor.h: 
+	- sexpmonitor uses sexpparser and trainercommandparser for
+	commands sent by a monitor now
+
+	* plugin/soccer/soccerbase/soccerbase.cpp,
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	- added methods GetAgentState and GetAgentBody which take a team 
+	index and a unum as parameter and return a reference to the agent
+	body and state, respectively
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp,
+	* plugin/soccer/trainercommandparser/trainercommandparser_c.cpp,
+	* plugin/soccer/trainercommandparser/trainercommandparser.h: 
+	- initial version of the trainercommandparser added to the repository
+
+	* plugin/soccer/export.cpp:
+	- added export for new class TrainerCommandParser
+
+	* plugin/soccer/Makefile.am:
+	- added entries for new subdir trainercommandparser
+
+	* plugin/soccer/agentstate/agentstate.cpp,
+	* plugin/soccer/agentstate/agentstate.h: 
+	- added methods SetBattery and SetTemperature
+
+	* app/rcssmonitor3d/lib/commserver.cpp,
+	* app/rcssmonitor3d/lib/commserver.h:
+	- added method SendTrainerCmd()
+	- changed string in SendKickOffCmd()
+
 2004-03-23  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
