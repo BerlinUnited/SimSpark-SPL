@@ -2,7 +2,7 @@
 #define LEAF_H__
 
 /*! \class Leaf
-	$Id: leaf.h,v 1.1 2003/04/30 14:21:50 fruit Exp $
+	$Id: leaf.h,v 1.2 2003/06/03 12:17:21 fruit Exp $
 	
 	Leaf
 	
@@ -120,6 +120,7 @@ private:
 
 } //namespace zeitgeist;
 
+/* moved the next lines to class.h to avoid cyclic dependencies
 #include "class.h"
 
 namespace zeitgeist
@@ -128,5 +129,6 @@ namespace zeitgeist
 DECLARE_CLASS(Leaf);
 
 }
+*/
 
 #endif //LEAF_H__
