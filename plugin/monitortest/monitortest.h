@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitortest.h,v 1.1.2.2 2003/11/24 10:24:57 fruit Exp $
+   $Id: monitortest.h,v 1.1.2.2.2.1 2003/12/21 19:27:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,22 +37,21 @@ public:
     MonitorTest();
     virtual ~MonitorTest();
 
-    std::string GetMonitorHeaderInfo()
-    { return std::string(); }
-
-
-    /** This function will be called periodically to get information
-     * about the current state of the world.
-     */
-    std::string GetMonitorInfo()
-    { return "((object 1) 0 0 0)"; }
-
-
     /** If a monitor sends information to the world model, this
      * function is called to process it.
      * @param data data sent from monitor to monitorsystem via SPADES.
      */
     void ParseMonitorMessage(std::string data);
+
+    /** This function will be called periodically to get information
+     * about the current state of the world.
+     */
+    virtual std::string GetMonitorInfo();
+
+    /** This function is called once for every MonitorSystem. It
+     *  should return any header/setup information that is needed.
+     */
+    virtual std::string GetMonitorHeaderInfo();
 
 protected:
 
