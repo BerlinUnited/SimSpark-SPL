@@ -1,19 +1,33 @@
-// -*- c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: types.h,v 1.2.2.1 2003/12/22 15:21:53 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #ifndef _TYPES_H
 #define _TYPES_H
 
-#define MAX_MSG 4096
+#define MAX_MSG_LEN 4096
 
-#define DEFAULT_PORT 6010
-#define WAIT_FOREVER   -1
+#define DEFAULT_PORT 12001
+#define DEFAULT_HOST "localhost"
 
-#define RECV_SUCCESS    1
-#define RECV_NOMESSAGE -1
-#define RECV_INTERRUPT -2
-#define RECV_TIMEOUT   -3
+#define DEFAULT_WIDTH  500
+#define DEFAULT_HEIGHT 500
 
-#define SEND_SUCCESS    1
-#define SEND_FAILED     0
-
-#endif
+#endif // _TYPES_H

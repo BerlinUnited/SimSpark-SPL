@@ -1,12 +1,32 @@
-/**
- * Main of the rcssmonitor3D application
- *
- * Desc.  : This is a very simple 3D monitor example
- *          which will hopefully be used for the first steps
- *          of the 3D SoccerServer
- **/
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: main.cpp,v 1.2.2.1 2003/12/22 15:21:53 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Main of the rcssmonitor3D application
+
+   This is a very simple 3D monitor example which will hopefully be
+   used for the first steps of the 3D SoccerServer
+*/
 #include "glserver.h"
 #include "commserver.h"
+#include "types.h"
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>
 
@@ -19,21 +39,26 @@ using namespace zeitgeist;
 #endif
 
 ////////////////////////////Globals//////////////////////////////////////
-int gPort = 12001; // default spades monitor port
-char* gSoccerServer("127.0.0.1");
 
-//old mouse position
-int gOldX, gOldY;
+// monitor port
+int gPort = DEFAULT_PORT;
 
-//screen width and height
-const int gWidth  = 500;
-const int gHeight = 500;
+// server machine
+char* gSoccerServer = DEFAULT_HOST;
+
+// old mouse position
+int gOldX = 0;
+int gOldY = 0;
+
+// window width and height
+const int gWidth  = DEFAULT_WIDTH;
+const int gHeight = DEFAULT_HEIGHT;
 
 // Open-Gl server
 GLserver gGLServer;
 
 // Communication Server
-CommServer gCommServer(gSoccerServer, gPort);
+CommServer gCommServer;
 
 //--------------------------printHelp------------------------------------
 //
@@ -162,13 +187,13 @@ void mouseMotion(int x, int y)
 
 int main(int argc, char* argv[])
 {
+  // init glut
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(gWidth, gHeight);
   glutCreateWindow("rcssmonitor3D");
 
-  //setup the GLserver
-  //with camera coordinates
+  //setup the GLserver with camera coordinates
   salt::Vector3f pos(-8.0, 10.0,4.0);
   salt::Vector3f lookAt(0.0,0.0,0.0);
   salt::Vector3f up(0.0,1.0,0.0);
@@ -182,26 +207,32 @@ int main(int argc, char* argv[])
 
   //init zeitgeist
   Zeitgeist zg("." PACKAGE_NAME);
+
   //init oxygen
   oxygen::Oxygen kOxygen(zg);
-  //setting up a brwosing context
-  shared_ptr<CoreContext> context = zg.CreateContext();
-  shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
 
-  scriptServer->Run("rcssmonitor3d.rb");
+  // run init script
+  zg.GetCore()->GetScriptServer()->Run("rcssmonitor3d.rb");
+
   // print a greeting
-  cout << "rcssmonitor3D version 0.2" << endl;
-  cout << "Copyright (C) 2003, Heni Ben Amor and Markus Rollmann, "
-       << "Universität Koblenz.\n";
+  zg.GetCore()->GetLogServer()->Normal()
+    << "rcssmonitor3D version 0.2" << endl
+    << "Copyright (C) 2003, Heni Ben Amor and Markus Rollmann, "
+    << "Universität Koblenz." << endl
+    << "Copyright (C) 2004, "
+    << "The RoboCup Soccer Server Maintenance Group." << endl;
 
-  cout << "Copyright (C) 2004, "
-       << "The RoboCup Soccer Server Maintenance Group." << endl;
-
-  //process typed options
+  // process command line
   processInput(argc, argv);
 
-  cout << "\nType '--help' for further information" << endl;
+  zg.GetCore()->GetLogServer()->Normal()
+    << "\nType '--help' for further information" << endl;
 
+  // init the commserver
+  gCommServer.Init(gSoccerServer,gPort);
+
+  // enter glut main loop
   glutMainLoop();
+
   return 0;
 }
