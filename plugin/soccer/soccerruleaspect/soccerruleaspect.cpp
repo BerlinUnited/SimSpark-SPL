@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.7 2004/05/05 07:55:51 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.8 2004/05/14 15:50:32 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -578,7 +578,7 @@ SoccerRuleAspect::UpdateCachedInternal()
 {
     SoccerBase::GetSoccerVar(*this,"BallRadius",mBallRadius);
     SoccerBase::GetSoccerVar(*this,"RuleGoalPauseTime",mGoalPauseTime);
-    SoccerBase::GetSoccerVar(*this,"RuleKickingPauseTime",mKickInPauseTime);
+    SoccerBase::GetSoccerVar(*this,"RuleKickInPauseTime",mKickInPauseTime);
     SoccerBase::GetSoccerVar(*this,"RuleHalfTime",mHalfTime);
     SoccerBase::GetSoccerVar(*this,"FieldLength",mFieldLength);
     SoccerBase::GetSoccerVar(*this,"FieldWidth",mFieldWidth);
