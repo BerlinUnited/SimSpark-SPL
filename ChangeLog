@@ -1,3 +1,13 @@
+2004-05-01  Oliver Obst  <fruit@robolog.org>
+
+	* lib/zeitgeist/randomserver/randomserver.cpp: 
+	* lib/zeitgeist/randomserver/randomserver_c.cpp: 
+	* app/rcssmonitor3d/lib/communit.cpp: 
+	* lib/oxygen/simulationserver/netcontrol.cpp: 
+	* plugin/sparkmonitor/sparkmonitorclient.cpp: 
+	* lib/salt/tvector.h: 
+	fixes for gcc 3.4 as reported by Michael Gollin <gollin@informatik.hu-berlin.de>
+	
 2004-05-01  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/scenetest/Makefile.am: 
