@@ -1,5 +1,56 @@
 2003-12-21  Markus Rollmann  <rollmark@uni-koblenz.de>
 
+	* app/rcssmonitor3d/.cvsignore, app/rcssmonitor3d/Makefile.am,
+	* app/rcssmonitor3d/camera.cpp, app/rcssmonitor3d/camera.h,
+	* app/rcssmonitor3d/commserver.cpp, app/rcssmonitor3d/commserver.h,
+	* app/rcssmonitor3d/communit.cpp, app/rcssmonitor3d/communit.h,
+	* app/rcssmonitor3d/glserver.cpp, app/rcssmonitor3d/glserver.h,
+	* app/rcssmonitor3d/main.cpp, app/rcssmonitor3d/rcssmonitor3d.rb,
+	* app/rcssmonitor3d/tcpsocket.cpp, app/rcssmonitor3d/tcpsocket.h,
+	* app/rcssmonitor3d/types.h:
+	Added initial version of rcssserv3d. This is a simple monitor that
+	works together with the MonitorTest class in
+	/plugin/monitortest. By default it connects to 127.0.0.1:12001,
+	the default spades monitorport for a local server. MonitorTest and
+	RcssMonitor3d exchange very simple S-Expressions in the form
+	'(player x y z)' that are intepreted as 3 dimensional
+	coordinates. The received coordinates are displayed as spheres
+	above a grid.
+
+	* app/Makefile.am: 
+	added rcssmonitor3d
+
+	* configure.ac: 
+	added app/rcssmonitor3d/Makefile
+
+	* plugin/monitortest/monitortest.cpp:
+	added additional debug output implemented GetMonitorInfo analogous
+	to PerfectVisionPerceptor. GetMonitorInfo collects the position of
+	all AgentAspects and create an s-expression (player x y z).
+
+	* plugin/monitortest/monitortest.h:
+	removed stub methods, moved implementation to .cpp
+
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	commented out diagnostic output of simToTime() set the monitor
+	update interval to 2 simulation time steps
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	some formatting change and additional debug output
+
+	* lib/oxygen/agentaspect/createeffector.cpp:
+	move the AgentAspect away from the origin (debug aid for the
+	monitor)
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	using method GetActiveScene to query the SceneServer for the
+	currently active scene node. This avoids a hard coded '/usr/scene'
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h:
+	added method GetActiveScene
+
+2003-12-21  Markus Rollmann  <rollmark@uni-koblenz.de>
+
 	* plugin/forceeffector/forceeffector.cpp:
 	fixed constructor to call BaseClass constructor
 	added empty destructor
