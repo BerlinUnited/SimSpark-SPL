@@ -13,6 +13,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #include <sys/time.h>
+#include <sys/select.h>
 
 using namespace zeitgeist;
 using namespace std;
@@ -24,34 +25,75 @@ using namespace salt;
 static char buffer[4096];
 
 // pointer to the payload received in the buffer
-static char* msg_data = &buffer[sizeof(long)];
+static char* msg_data = buffer + sizeof(long);
 
 // parser instance
 static shared_ptr<BaseParser> parser;
 
+// input file descriptor
+const int readFd = 3;
+
+// outp file descriptor
+const int writeFd = 4;
+
+// set to 1 to write debug information to stdout
+#define ENABLE_LOGGING 0
+
+#ifdef ENABLE_LOGGING
 void Log(const char* out)
 {
-  printf(out);
-  fflush(NULL);
+   printf(out);
+   fflush(0);
+}
+#else
+ #define Log(x)
+#endif
+
+bool SelectInput()
+{
+  fd_set readfds;
+  FD_ZERO(&readfds);
+  FD_SET(readFd,&readfds);
+
+  return select(readFd+1,&readfds, 0, 0, 0) > 0;
 }
 
-int GetInput()
+bool GetInput()
 {
-  ssize_t sz = read(3, buffer, sizeof(buffer));
-
-  if ((unsigned int)sz < sizeof(unsigned int))
+  // read the first message segment
+  if (! SelectInput())
     {
-      return 0;
+      return false;
     }
 
-  unsigned int len;
-  memcpy(&len, buffer, sizeof(unsigned int));
-  len = ntohl(len);
+  unsigned int bytesRead = read(readFd, buffer, sizeof(buffer));
+  if (bytesRead < sizeof(unsigned int))
+    {
+      return false;
+    }
+
+  // msg is prefixed with it's total length
+  unsigned int msgLen = ntohl(*(unsigned int*)buffer);
+
+  // read remaining message segments
+  unsigned int msgRead = bytesRead - sizeof(unsigned int);
+  char *offset = buffer + bytesRead;
+
+  while (msgRead < msgLen)
+    {
+      if (! SelectInput())
+        {
+          return false;
+        }
+
+      msgRead += read(3, offset, sizeof(buffer) - msgRead);
+      offset += msgRead;
+    }
 
   // zero terminate received data
-  buffer[sizeof(unsigned int) + len] = 0;
+  (*offset) = 0;
 
-  return len;
+  return true;
 }
 
 void PutOutput(const char* out)
@@ -60,7 +102,7 @@ void PutOutput(const char* out)
   unsigned int len = strlen(out);
   unsigned int netlen = htonl(len);
   memcpy(buffer,&netlen,sizeof(netlen));
-  write(4, buffer, len + sizeof(netlen));
+  write(writeFd, buffer, len + sizeof(netlen));
 }
 
 // --------------------
@@ -308,28 +350,30 @@ int main(int /*argc*/, const char *const */*argv*/)
   // 'initialization done' message
   while (true)
     {
-      if (GetInput())
+      if (! GetInput())
         {
-          switch(msg_data[0])
-            {
-            case 'D' :
-              ProcessInitMessage();
-              break;
+          break;
+        }
 
-            case 'S' :
-              ProcessSensation();
-              break;
+      switch(msg_data[0])
+        {
+        case 'D' :
+          ProcessInitMessage();
+          break;
 
-            case 'K' :
-              ProcessThinkTimeMessage();
-              break;
+        case 'S' :
+          ProcessSensation();
+          break;
 
-            default:
-              Log("received unknown data: ");
-              Log(msg_data);
-              Log("\n");
-              break;
-            }
+        case 'K' :
+          ProcessThinkTimeMessage();
+          break;
+
+        default:
+          Log("received unknown data: ");
+          Log(msg_data);
+          Log("\n");
+          break;
         }
     }
 }
