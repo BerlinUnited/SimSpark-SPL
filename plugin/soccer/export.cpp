@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.4 2004/05/07 17:11:28 markelic Exp $
+   $Id: export.cpp,v 1.5 2004/12/21 19:47:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "initeffector/initeffector.h"
 #include "soccercontrolaspect/soccercontrolaspect.h"
 #include "gamestateaspect/gamestateaspect.h"
+#include "gamestateaspect/gamestateitem.h"
 #include "ballstateaspect/ballstateaspect.h"
 #include "soccerruleaspect/soccerruleaspect.h"
 #include "agentstate/agentstate.h"
@@ -43,6 +44,7 @@
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerControlAspect);
         ZEITGEIST_EXPORT(GameStateAspect);
+        ZEITGEIST_EXPORT(GameStateItem);
         ZEITGEIST_EXPORT(BallStateAspect);
         ZEITGEIST_EXPORT(SoccerRuleAspect);
         ZEITGEIST_EXPORT(CreateEffector);
@@ -53,7 +55,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(InitEffector);
         ZEITGEIST_EXPORT(ObjectState);
         ZEITGEIST_EXPORT(AgentState);
-        ZEITGEIST_EXPORT(TrainerCommandParser);                
+        ZEITGEIST_EXPORT(TrainerCommandParser);
         ZEITGEIST_EXPORT(SexpMonitor);
         ZEITGEIST_EXPORT(FieldFlag);
         ZEITGEIST_EXPORT(Ball);
