@@ -42,6 +42,11 @@ Spades.TimePerStep = 0.01
 # Scene setup
 #
 
+# agent parameters
+# Agent.Mass = 75.0
+# Agent.Radius = 1.0
+# Agent.MaxSpeed = 10.0
+
 # create world and space aspects
 world = new('kerosin/World', '/usr/scene/_world');
 world.setGravity(0.0, -9.81, 0.0);
@@ -72,15 +77,15 @@ fz = 34.0;
 fy = 1.0;
 
 flag = new('FieldFlag','/usr/scene/flag1');
-flag.setLocalPos(0.0,fy,fz);
+flag.setLocalPos(-fx,fy,fz);
 
 flag = new('FieldFlag','/usr/scene/flag2');
 flag.setLocalPos(fx,fy,fz);
 
 flag = new('FieldFlag','/usr/scene/flag3');
-flag.setLocalPos(fx,fy,0.0);
+flag.setLocalPos(fx,fy,-fz);
 
 flag = new('FieldFlag','/usr/scene/flag4');
-flag.setLocalPos(0.0,fy,0.0,0.0);
+flag.setLocalPos(-fx,fy,-fz);
 
-spadesServer.queueAgents('default', 1);
+spadesServer.queueAgents('default', 3);
