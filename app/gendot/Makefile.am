@@ -45,3 +45,12 @@ gendot_SOURCES = \
 	main.cpp
 
 dist_pkgdata_DATA = gendot.rb include.dot
+
+zeitgeist.ps: zeitgeist.dot
+	dot -Tps zeitgeist.dot -o zeitgeist.ps
+
+zeitgeist.gif: zeitgeist.dot
+	dot -Tgif zeitgeist.dot -o zeitgeist.gif
+
+zeitgeist.dot: gendot include.dot 
+	./gendot
