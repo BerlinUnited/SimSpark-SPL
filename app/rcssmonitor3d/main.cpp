@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.3.2.8 2004/01/28 10:59:39 heni Exp $
+   $Id: main.cpp,v 1.3.2.9 2004/01/29 13:20:22 heni Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,27 +39,43 @@ using namespace oxygen;
 #undef GetObject
 #endif
 
-////////////////////////////Globals//////////////////////////////////////
+//--------------------------Globals---------------------------------------
+
+// open-gl server
+GLserver gGLServer;
+
+// communication Server
+boost::shared_ptr<CommServer> gCommServer;
 
 // monitor port
-int gPort = DEFAULT_PORT;
+int gPort           = DEFAULT_PORT;
 
 // server machine
 char* gSoccerServer = DEFAULT_HOST;
 
 // old mouse position
-int gOldX = 0;
-int gOldY = 0;
+int gOldX           = DEFAULT_MOUSE_POSX;
+int gOldY           = DEFAULT_MOUSE_POSY;
+
+// automatic camera 
+bool gAutoCam       = DEFAULT_AUTO_CAM;
 
 // window width and height
-const int gWidth  = DEFAULT_WIDTH;
-const int gHeight = DEFAULT_HEIGHT;
+const int gWidth    = DEFAULT_WIDTH;
+const int gHeight   = DEFAULT_HEIGHT;
 
-// Open-Gl server
-GLserver gGLServer;
+// field Info:
+// soccer field size
+float gFieldLength  = DEFAULT_FIELD_LENGTH;
+float gFieldWidth   = DEFAULT_FIELD_WIDTH;
+float gFieldHeight  = DEFAULT_FIELD_HEIGHT;
 
-// Communication Server
-boost::shared_ptr<CommServer> gCommServer;
+float gBorderSize   = DEFAULT_BORDER_SIZE;
+
+// goal box size
+float gGoalWidth    = DEFAULT_GOAL_WIDTH;
+float gGoalDepth    = DEFAULT_GOAL_DEPTH;
+float gGoalHeight   = DEFAULT_GOAL_HEIGHT;
 
 //--------------------------printHelp------------------------------------
 //
@@ -107,6 +123,80 @@ void processInput(int argc, char* argv[])
     }
 }
 
+//----------------------getObjectParam---------------------------------------
+//
+// Reads the parameters for an object with given name from given predicate
+//---------------------------------------------------------------------------
+bool getObjectParam(const Predicate& predicate, const string& name, float& value)
+{
+  // find the PerfectVision data about the object
+  Predicate::Iterator objIter(predicate);
+
+  // advance to the section about object 'name'
+  if (! predicate.FindParameter(objIter,name))
+    {
+      return false;
+    }
+
+  // read the position vector
+  if (! predicate.GetValue(objIter,value))
+    {
+      return false;
+    }
+
+  return true;
+}
+
+//----------------------parseInfoHeader------------------------------------
+//
+// parses the game parameters sent by the server during the init sequence
+//-------------------------------------------------------------------------
+bool parseInfoHeader(shared_ptr<Predicate::TList> predicates)
+{
+    // true if we received an init
+    bool recvInit = false;
+
+    // check if we received something
+    if (predicates.get() == 0)
+        {
+            return false;
+        }
+
+    // first look for "(init (...))"
+    // then read the inner breakets
+    for (
+         Predicate::TList::const_iterator iter = predicates->begin();
+         iter != predicates->end();
+         ++iter
+         )
+        {
+            const Predicate& predicate = (*iter);
+
+            // check if it's the init information
+            // if so, remember that we received an init
+            if (predicate.name != "init")
+                {
+                    continue;
+                }
+            else recvInit = true;
+
+            //parse object params
+            getObjectParam(predicate, "FieldLength", gFieldLength);
+            getObjectParam(predicate, "FieldWidth",  gFieldWidth);
+            getObjectParam(predicate, "FieldHeigth", gFieldHeight);
+            getObjectParam(predicate, "GoalWidth",   gGoalWidth);
+            getObjectParam(predicate, "GoalDepth",   gGoalDepth);
+            getObjectParam(predicate, "GoalHeight",  gGoalHeight);
+            getObjectParam(predicate, "BorderSize",  gBorderSize);
+        }
+    // parsing successfull
+    return recvInit;
+}
+
+//----------------------drawScene----------------------------------------------
+//
+// Draws all object in given predicate onto the screen 
+//------------------------------------------------------------------------------ 
 void drawScene(shared_ptr<Predicate::TList> predicates)
 {
     static const struct ObjType
@@ -180,6 +270,11 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
                 {
                     continue;
                 }
+            
+            // if 'automatic-camera' is on 
+            // we set the camera to look at the ball
+            if(predicate.name =="ball" && gAutoCam)
+                    gGLServer.SetLookAtPos(pos);
 
             const ObjType& type = typeMap[idx];
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, type.color);
@@ -195,25 +290,9 @@ void drawScene(shared_ptr<Predicate::TList> predicates)
 //------------------------------------------------------------------------
 void display(void)
 {
-// Laenge       mindestens      100 m
-//              hoechstens      110 m
-// Breite       mindestens      64 m
-//              hoechstens      75 m
-
-   // soccer field size
-   const float fieldLength = 105.0;
-   const float fieldWidth = 68.0;
-   const float fieldHeight = 20.0;
-
-   const float borderSize = 4.0;
-
-   // goal box size
-   const float goalWidth = 7.32;
-   const float goalDepth = 2.0;
-   const float goalHeight = 2.44;
-
-   const Vector3f szGoal1(-goalDepth,goalHeight,goalWidth);
-   const Vector3f szGoal2(goalDepth,goalHeight,goalWidth);
+   static bool readInit = true;
+   const Vector3f szGoal1(-gGoalDepth,gGoalHeight,gGoalWidth);
+   const Vector3f szGoal2(gGoalDepth,gGoalHeight,gGoalWidth);
 
    // color constants
    const GLfloat groundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
@@ -231,36 +310,47 @@ void display(void)
 
    // ground
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, groundColor);
-   gGLServer.DrawGround(Vector3f(-fieldLength/2,0,-fieldWidth/2),fieldLength,fieldWidth);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2,0,-gFieldWidth/2),gFieldLength,gFieldWidth);
 
    // border
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, borderColor);
-   gGLServer.DrawGround(Vector3f(-fieldLength/2-borderSize,0,-fieldWidth/2-borderSize), borderSize, fieldWidth+2*borderSize);
-   gGLServer.DrawGround(Vector3f(fieldLength/2,0,-fieldWidth/2-borderSize), borderSize, fieldWidth+2*borderSize);
-   gGLServer.DrawGround(Vector3f(-fieldLength/2,0,-fieldWidth/2-borderSize), fieldLength, borderSize);
-   gGLServer.DrawGround(Vector3f(-fieldLength/2,0,fieldWidth/2), fieldLength, borderSize);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2-gBorderSize,0,-gFieldWidth/2-gBorderSize), gBorderSize, gFieldWidth+2*gBorderSize);
+   gGLServer.DrawGround(Vector3f(gFieldLength/2,0,-gFieldWidth/2-gBorderSize), gBorderSize, gFieldWidth+2*gBorderSize);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2,0,-gFieldWidth/2-gBorderSize), gFieldLength, gBorderSize);
+   gGLServer.DrawGround(Vector3f(-gFieldLength/2,0,gFieldWidth/2), gFieldLength, gBorderSize);
 
    // fieldBox
    gGLServer.DrawWireBox(
-                         Vector3f(-fieldLength/2.0,0.0,-fieldWidth/2.0),
-                         Vector3f(fieldLength,fieldHeight,fieldWidth)
+                         Vector3f(-gFieldLength/2.0,0.0,-gFieldWidth/2.0),
+                         Vector3f(gFieldLength,gFieldHeight,gFieldWidth)
                          );
 
    // goal
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
-   gGLServer.DrawWireBox(Vector3f(-fieldLength/2,0,-goalWidth/2.0),szGoal1);
-   gGLServer.DrawGoal(Vector3f(-fieldLength/2,0,-goalWidth/2.0),szGoal1);
+   gGLServer.DrawWireBox(Vector3f(-gFieldLength/2,0,-gGoalWidth/2.0),szGoal1);
+   gGLServer.DrawGoal(Vector3f(-gFieldLength/2,0,-gGoalWidth/2.0),szGoal1);
 
    // goal
    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, goalColor);
-   gGLServer.DrawWireBox(Vector3f(fieldLength/2,0,-goalWidth/2.0),szGoal2);
-   gGLServer.DrawGoal(Vector3f(fieldLength/2,0,-goalWidth/2.0),szGoal2);
+   gGLServer.DrawWireBox(Vector3f(gFieldLength/2,0,-gGoalWidth/2.0),szGoal2);
+   gGLServer.DrawGoal(Vector3f(gFieldLength/2,0,-gGoalWidth/2.0),szGoal2);
 
    // check for positions update
    gCommServer->GetMessage();
 
-   // draw cached positions
+   // get messages sent from server
    shared_ptr<Predicate::TList> predicates = gCommServer->GetPredicates();
+   
+   // if we still didn't parse the init string
+   // we do so and set the readInit to 'false'
+   // such that we don't have to parse it twice
+   if (readInit) 
+       {
+           if(parseInfoHeader(predicates))
+               readInit = false;
+       }
+
+   // draw cached positions 
    drawScene(predicates);
 
    glutSwapBuffers();
@@ -307,6 +397,7 @@ void mouseMotion(int x, int y)
 //     + if 's' is pressed the camera will move out
 //     + if 'a' is pressed the camera will strafe left
 //     + if 'd' is pressed the camera will strafe right
+//     + if 'c' is pressed the camera will automatically follow the ball
 //--------------------------------------------------------------------------
 void keyboard(unsigned char key, int /*x*/, int /*y*/)
 {
@@ -328,6 +419,16 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/)
   case 'd':
       // strafe cam right
       gGLServer.MoveCamStrafe(-camDelta);
+      break;
+  case 'c':
+      //toggle autocam on
+      gAutoCam = true;
+      cout <<"----AUTOMATIC CAMERA ON----"<<endl;
+      break;
+  case 'C':
+      //toggle autocam off
+      gAutoCam = false;
+      cout <<"----AUTOMATIC CAMERA OFF---"<<endl;
       break;
   default:
       break;
@@ -394,11 +495,6 @@ int main(int argc, char* argv[])
       }
 
   gCommServer->Init("SexpParser",gSoccerServer,gPort);
-
-  // first parse the paremeters 
-  // such as the fieldwidth
-  // shared_ptr<Predicate::TList> predicates = gCommServer->GetPredicates();
-  // createGameParameters(predicates);
    
   // enter glut main loop
   glutMainLoop();
