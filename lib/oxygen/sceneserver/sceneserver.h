@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.h,v 1.1 2003/08/29 14:12:56 fruit Exp $
+   $Id: sceneserver.h,v 1.2 2003/08/31 13:08:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,11 +21,6 @@
 
    SceneServer
 
-   The scene server manages displayable subtrees within the object
-   hierarchy. Each subtree begins with a Scene node. The scene server
-   knows which scene node is currently active and updates/displays
-   that node (and its corresponding subtree).
-
    NOTE:
 
    HISTORY:
@@ -36,6 +31,7 @@
 
    TOFIX:
 */
+
 #ifndef KEROSIN_SCENESERVER_H
 #define KEROSIN_SCENESERVER_H
 
@@ -50,6 +46,11 @@ namespace kerosin
 
 class Scene;
 
+/** The scene server manages displayable subtrees within the object
+   hierarchy. Each subtree begins with a Scene node. The scene server knows
+   which scene node is currently active and updates that node (and its
+   corresponding subtree).
+ */
 class SceneServer : public zeitgeist::Leaf
 {
     //
@@ -59,15 +60,16 @@ public:
     SceneServer();
     ~SceneServer();
 
-    //! create a new scene hierarchy at a specific location, new hierarchy is also made current
+    /** creates a new scene hierarchy at a specific location, new hierarchy is also made current */
     boost::shared_ptr<Scene> CreateScene(const std::string &location);
-    //! set the active scene
+
+    /** sets the active scene */
     bool SetActiveScene(const std::string &location);
 
-    //! returns a reference to the current active scen
-    boost::shared_ptr<Scene> GetActiveScene() { mActiveScene; }
+    /** returns a reference to the current active scene */
+    boost::shared_ptr<Scene> GetActiveScene() { return mActiveScene; }
 
-    //! update the state of the current active scene (deltaTime is in seconds)
+    /** updates the state of the current active scene (deltaTime is in seconds) */
     void Update(float deltaTime);
 
 protected:
@@ -75,6 +77,8 @@ protected:
     // Members
     //
 private:
+
+    /** the current active scene */
     boost::shared_ptr<Scene>        mActiveScene;
 };
 

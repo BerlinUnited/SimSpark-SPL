@@ -1,3 +1,24 @@
+/* -*- mode: c++ -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: basenode.cpp,v 1.3 2003/08/31 13:08:42 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
 #include "basenode.h"
 #include "scene.h"
 // #include "../openglserver/openglserver.h"
@@ -36,11 +57,11 @@ const salt::Matrix& BaseNode::GetWorldTransform() const
                 return parent->GetWorldTransform();
 }
 
-void BaseNode::SetLocalTransform(const salt::Matrix &transform)
+void BaseNode::SetLocalTransform(const salt::Matrix& /*transform*/)
 {
 }
 
-void BaseNode::SetWorldTransform(const salt::Matrix &transform)
+void BaseNode::SetWorldTransform(const salt::Matrix& /*transform*/)
 {
 }
 
@@ -180,7 +201,7 @@ void BaseNode::DisableDebugMode()
         mDebugMode = false;
 }
 
-void BaseNode::PrePhysicsUpdateInternal(float deltaTime)
+void BaseNode::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
 }
 
