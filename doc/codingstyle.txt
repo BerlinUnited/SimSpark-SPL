@@ -3,11 +3,11 @@
 coding - style
 ==============
 
-  This is the coding style I'm trying to use for the 3D server. Would be 
-  nice if everybody else also tries to use it; however, I'm not going to
-  start holy wars on it :)
-  If you think something should be changed for a good reason, please do
-  so. (Oliver)
+  This is the coding style used for the initial parts of the 3D simulator.
+  PLEASE everyone contributing try to use it as well. Even in case you 
+  don't like specific parts: changes in the style guide would mean either
+  inconsistencies or cause lot of work for changing the already existing 
+  code. 
 
 
 * Tabs 
@@ -21,6 +21,7 @@ coding - style
   instead of modifying the code so that it is readable in your own
   editor because your tab stops are different, please remove the
   tabs. There are several utilities which will do this.
+  See also http://www.jwz.org/doc/tabs-vs-spaces.html
 
 * Indentation
 
@@ -64,31 +65,34 @@ ClassName::function()
 
 * Naming Conventions
 
-  class         ClassName;
-  struct        StructName;
-  typedef int   MyInt;
-  union		UnionName;
+  class         ClassName;    // not Class_Name 
+  struct        StructName;   // like classes
+  typedef int   TMyInt;       // start with a capital T, 
+                              // followed by a capital letter
+  union		UnionName;    
 
 ** Enums
 
-  Enumeration types 'enum' are starting with a capital letter.
+  Enumeration types 'enum' are starting with 'E', followed by a type-name 
+  starting with a capital letter.
 
-  Enumeration elements start with 'S_', followed by the
-  name of the constant in all capitals (words separated by '_'). 
+  Enumeration elements start with 'e', followed by the
+  name of the constant starting with a capital letter
 
   Example:
-  enum EnumName
+  enum EEnumName
   {
-      S_ENUM_ELEMENT_1,
-      S_ENUM_ELEMENT_2
+      eEnumElement1,
+      eEnumElement2
   };
 
 ** Functions:
 
    void 
-   ClassName::functionName()
+   ClassName::FunctionName()
 
-   - place the return type on a separate line 
+   - Function name starting with capital letter (!)
+   - optional: place the return type on a separate line 
    - no blanks between function name and parenthesis
 
 ** Variables:
@@ -96,21 +100,21 @@ ClassName::function()
 *** Variables with local scope 
 
    Variables with local scope start with a small letter. New words
-   within the variable are separated by '_'.
+   within the variable start with capital letters.
 
-   Example: my_variable
+   Example: myVariable
 
 *** Member variables
 
-   Member variables start with 'M_', followed by the variable name in small 
-   letters. New words within the variable name are separated by '_'.
+   Member variables start with 'm', followed by the variable name starting 
+   with a capital letter. New words within the variable name start with capital   letters.
 
-   Example: M_member_variable
+   Example: mMemberVariable
 
-   Constant static member variables (and enums) are the same but
-   capitalised.
+   Constant static member variables (and enums) are the same as the 
+   non-static types but capitalized and words are separated by '_'. 
 
-   Example: S_STATIC_CONST_MEMBER_VARIABLE
+   Example: M_STATIC_CONST_MEMBER_VARIABLE
 
 ** Macros 
 
@@ -149,28 +153,32 @@ ClassName::function()
 * Files
 
 - file names consist of only small letters
-- .h is the suffix for c++ header files, .cc is the suffix for c++ source files
+- .h is the suffix for c++ header files, .cpp is the suffix for c++ source 
+  files
 - max line length is 80 characters
 - include copyright:
 
-/* -*-c++-*- ***************************************************************
-                                   filename  
-                                 Description
-                             -------------------
-    begin                : begin date
-    copyright            : (C) year (or years) by The RoboCup Soccer Simulator
-                           Maintenance Group.
-    email                : sserver-admin@lists.sourceforge.net
- ***************************************************************************/
+/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
+   
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: codingstyle.txt,v 1.4 2003/08/19 22:59:46 fruit Exp $
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU GPL as published by the Free Software  *
- *   Foundation; either version 2 of the License, or (at your option) any  *
- *   later version.                                                        *
- *                                                                         *
- ***************************************************************************/
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ 
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
 
 ** Header files
 
@@ -237,3 +245,5 @@ private:
 -nbad -bap -sob --dont-star-comments --no-comment-delimiters-on-blank-lines
 -cp33 -d0 -nfc1 -nfca -bl -bli0 -cli4 -cbi0 -ss -npcs -nprs -saf -saw -sai -cs
 -ip0 -di1 -nbc -psl -bls -i4 -nut -ci0 -di1 -lp -l80 -nbbo -hnl
+
+  @TODO: double check this list of options
