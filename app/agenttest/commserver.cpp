@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.6 2004/06/09 12:12:07 fruit Exp $
+   $Id: commserver.cpp,v 1.7 2004/09/29 13:48:18 patstg Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,12 +30,15 @@ using namespace salt;
 #include <zeitgeist/logserver/logserver.h>
 
 CommServer::CommServer()
-  : mReadFd(3), mWriteFd(4)
+    : mReadFd(3), mWriteFd(4), rdfd(mReadFd)
 {
+    mBufferSize = DEFAULT_BUFFER_SIZE;
+    mBuffer = new char[mBufferSize];
 }
 
 CommServer::~CommServer()
 {
+    delete [] mBuffer;
 }
 
 bool
@@ -61,43 +64,38 @@ CommServer::PutOutput(const char* out)
 bool
 CommServer::GetInput()
 {
-    memset(mBuffer,0,sizeof(mBuffer));
-    // read the first message segment
-    if (! SelectInput())
-    {
-        GetLog()->Debug() << "CommServer::GetInput false\n";
-        return false;
-    }
-
-    GetLog()->Debug() << "CommServer::GetInput true\n";
-
-    unsigned int bytesRead = read(mReadFd, mBuffer, sizeof(mBuffer));
-
-    if (bytesRead < sizeof(unsigned int))
-    {
-        return false;
-    }
-
-    // msg is prefixed with it's total length
-    unsigned int msgLen = ntohl(*(unsigned int*)mBuffer);
-
-    // read remaining message segments
-    unsigned int msgRead = bytesRead - sizeof(unsigned int);
-    char *offset = mBuffer + bytesRead;
-
-    while (msgRead < msgLen)
-    {
-        if (! SelectInput())
+    for (int count = 0; count < 100; count++)
         {
-            return false;
+            
+            int res = rdfd.readLengthPrefixed(&mBuffer, &mBufferSize);
+            if (res < 0)
+                {
+                    GetLog()->Debug() << "CommServer::GetInput: readLeangthPrefixed returned -1\n";
+                    return false;
+                }
+            else if (res > 0)
+                {
+                    // successful read
+                    if (res == mBufferSize)
+                        {
+                            GetLog()->Debug() << "CommServer::GetInput: read exactly buffer size! can't null term\n";
+                            return false;
+                        }
+                    mBuffer[res] = 0;
+                    return true;
+                }
+
+            // if we are here, res == 0, which means not enough input
+
+            // this blocks until more input
+            if (! SelectInput())
+                {
+                    GetLog()->Debug() << "CommServer::GetInput select returned false\n";
+                    return false;
+                }
         }
 
-        msgRead += read(mReadFd, offset, sizeof(mBuffer) - msgRead);
-        offset += msgRead;
-    }
-    // zero terminate received data
-    (*offset) = 0;
-
-    return true;
+    GetLog()->Debug() << "CommServer::GetInput: fell out of for loop\n";
+    return false;
 }
 

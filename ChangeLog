@@ -1,3 +1,14 @@
+2004-09-29  Patrick Riley <pfr@cs.cmu.edu>
+
+	* app/agenttest/ReadBuffFD.cpp
+	* app/agenttest/ReadBuffFD.h
+	* app/agenttest/commserver.cpp
+	* app/agenttest/commserver.h
+	- These changes were actually made at RoboCup, but I forgot to
+	check them in :-( This fixes a network problem in agenttest that
+	could cause messages to be dropped at random times. The ReadBuffFD
+	files are from SPADES.
+	
 2004-07-21  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* app/rcssmonitor3d/lite/monitor.cpp:

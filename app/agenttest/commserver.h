@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.h,v 1.4 2004/06/11 14:55:38 fruit Exp $
+   $Id: commserver.h,v 1.5 2004/09/29 13:48:18 patstg Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <string>
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include "ReadBuffFD.h"
 
 class CommServer : public zeitgeist::Leaf
 {
@@ -36,7 +37,7 @@ public:
     void PutOutput(const char* out);
     void PutOutput(const std::string& str) { PutOutput(str.c_str()); }
 
-    const char* GetMsg() const { return mBuffer + sizeof(long); }
+    const char* GetMsg() const { return mBuffer; }
 
 protected:
     bool SelectInput();
@@ -49,7 +50,12 @@ protected:
     const int mWriteFd;
 
     // the receive buffer
-    char mBuffer[8192];
+    static const unsigned int DEFAULT_BUFFER_SIZE = 8192;
+    char* mBuffer;
+    unsigned int mBufferSize;
+
+private:
+    spades::ReadBuffFD rdfd;
 };
 
 DECLARE_CLASS(CommServer);
