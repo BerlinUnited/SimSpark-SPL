@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.4 2004/04/15 18:30:19 rollmark Exp $
+   $Id: joint.h,v 1.5 2004/04/20 14:16:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,24 @@ namespace oxygen
 {
 class Body;
 
+/** \class Joint encapsulates an ODE joint object. A joint is a
+    relationship (a constraint) that is enforced between two bodies so
+    that they can only have certain positions and orientations
+    relative to each other.
+
+    Note that the joint geometry parameter setting functions should
+    only be called after the joint has been attached to bodies, and
+    those bodies have been correctly positioned, otherwise the joint
+    may not be initialized correctly. If the joint is not already
+    attached, these functions will do nothing.
+
+    The default anchor for all joints is global (0,0,0). The default
+    axis for all joints is global (1,0,0).
+
+    There are no functions to set joint angles or positions (or their
+    rates) directly, instead you must set the corresponding body
+    positions and velocities.
+ */
 class Joint : public ODEObject
 {
 public:
@@ -40,7 +58,8 @@ public:
     enum EAxisIndex
         {
             AI_FIRST = 0,
-            AI_SECOND = 1
+            AI_SECOND = 1,
+            AI_THIRD = 2
         };
 
     Joint();
