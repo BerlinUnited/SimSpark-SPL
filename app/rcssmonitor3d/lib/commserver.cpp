@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.5 2004/04/05 14:51:54 rollmark Exp $
+   $Id: commserver.cpp,v 1.6 2004/04/20 07:29:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,11 +37,11 @@ CommServer::Init(std::string parser, std::string host, int port)
     mParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New(parser));
 
     if (mParser.get() == 0)
-        {
-            GetLog()->Error() <<
-                "ERROR: (CommServer) failed to create parser " << parser << endl;
-            return false;
-        }
+    {
+        GetLog()->Error() <<
+            "ERROR: (CommServer) failed to create parser " << parser << endl;
+        return false;
+    }
 
     return mCommUnit.OpenConnection(host,port);
 }
@@ -51,9 +51,9 @@ CommServer::GetMessage()
 {
     string line = mCommUnit.GetMessage();
     if (line == "")
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     Parse(line);
     return true;
@@ -63,10 +63,10 @@ void
 CommServer::Parse(std::string msg)
 {
     if (mParser.get() == 0)
-        {
-            mPredicates = shared_ptr<PredicateList>();
-            return;
-        }
+    {
+        mPredicates = shared_ptr<PredicateList>();
+        return;
+    }
 
     mPredicates = mParser->Parse(msg);
 }
@@ -74,10 +74,11 @@ CommServer::Parse(std::string msg)
 shared_ptr<PredicateList>
 CommServer::GetPredicates()
 {
-  return mPredicates;
+    return mPredicates;
 }
 
-void CommServer::SendMessage(const std::string& message)
+void
+CommServer::SendMessage(const std::string& message)
 {
     unsigned long len = htonl(message.size());
     std::string s((const char*)&len,sizeof(len));
@@ -85,32 +86,38 @@ void CommServer::SendMessage(const std::string& message)
     mCommUnit.PutMessage(s);
 }
 
-void CommServer::SendPauseCmd()
+void
+CommServer::SendPauseCmd()
 {
     SendMessage("P");
 }
 
-void CommServer::SendRunCmd()
+void
+CommServer::SendRunCmd()
 {
     SendMessage("R");
 }
 
-void CommServer::SendDisconnectCmd()
+void
+CommServer::SendDisconnectCmd()
 {
     SendMessage("D");
 }
 
-void CommServer::SendToWorldModel(const std::string& msg)
+void
+CommServer::SendToWorldModel(const std::string& msg)
 {
     SendMessage("W"+msg);
 }
 
-void CommServer::SendTrainerCmd(const std::string& cmd)
+void
+CommServer::SendTrainerCmd(const std::string& cmd)
 {
     SendToWorldModel(cmd);
 }
 
-void CommServer::SendKickOffCmd()
+void
+CommServer::SendKickOffCmd()
 {
     SendToWorldModel("(playMode KickOff_Left)");
 }
