@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perfectvisionperceptor.cpp,v 1.3.2.1 2004/01/09 13:20:54 rollmark Exp $
+   $Id: perfectvisionperceptor.cpp,v 1.3.2.2 2004/02/01 22:14:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,8 +92,8 @@ PerfectVisionPerceptor::Percept(Predicate& predicate)
         Predicate::TParameterList position;
         position.push_back(std::string("pos"));
         position.push_back(pos[0]);
-        position.push_back(pos[1]);
         position.push_back(pos[2]);
+        position.push_back(pos[1]);
 
         Predicate::TParameterList element;
 
