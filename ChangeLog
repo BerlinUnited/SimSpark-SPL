@@ -1,3 +1,8 @@
+2005-04-29  Patrick Riley <pfr@cs.cmu.edu>
+	* app/agenttest/Makefile.am
+	- For some inexplicable reason, Tom removed ReadBuffFD from the 
+	  sources list during the OSX port. I've put it back.
+	
 2005-02-24  Oliver Obst  <fruit@robolog.org>
 
 	* plugin/soccer/sexpmonitor/sexpmonitor.cpp: 
