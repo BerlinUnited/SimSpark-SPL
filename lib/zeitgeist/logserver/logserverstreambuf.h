@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserverstreambuf.h,v 1.3 2003/11/14 14:05:55 fruit Exp $
+   $Id: logserverstreambuf.h,v 1.4 2005/05/18 14:55:21 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #define ZEITGEIST_LOGSERVERSTREAMBUF_H
 
 /*! \class LogServerStreamBuf
-  $Id: logserverstreambuf.h,v 1.3 2003/11/14 14:05:55 fruit Exp $
+  $Id: logserverstreambuf.h,v 1.4 2005/05/18 14:55:21 jamu Exp $
 
   ForwarderStreamBuf
 
@@ -72,9 +72,9 @@ public:
 
     /*! Add a stream to the list of streams.
 
-        First, it is checked if the stream is already in. If the stream
-        is found, we only install a new priority mask, so no stream can
-        be added twice.
+        First, it is checked if the stream is already in. If the
+        stream is found, we only add a new priority mask to the
+        existing ones, so no stream can be added twice.
 
         @param stream   the stream to add
         @param mask     the (new) priority mask for the stream

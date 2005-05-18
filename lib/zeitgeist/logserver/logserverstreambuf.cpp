@@ -49,10 +49,10 @@ void LogServerStreamBuf::AddStream(std::ostream *stream, unsigned int mask)
     {
         TMaskStream pstream(mask, stream);
         mStreams.push_back(pstream);
-    }
+    }   
     else
     {
-        i->first = mask;
+        i->first |= mask;
     }
 }
 
