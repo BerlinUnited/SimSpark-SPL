@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.18 2005/01/24 12:36:26 anita_maas Exp $
+   $Id: monitor.cpp,v 1.19 2005/05/24 11:31:16 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,7 +70,6 @@ idle()
 {
     Monitor::Instance()->Idle();
 }
-
 // color constants
 const GLfloat
 Monitor::sGroundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
@@ -99,6 +98,9 @@ Monitor::sDebugColorCyan[4] = {0.0f, 0.8f, 0.8f, 0.3f};
 // debug color2
 const GLfloat
 Monitor::sDebugColorPink[4] = {1.0f, 0.0f, 1.0f, 0.5f};
+//color for ground of overview field
+const GLfloat
+Monitor::sGroundColor2D[4] = {0.0f, 0.6f, 0.0f, 0.8f};
 
 // radius of center circle
 const float
@@ -134,6 +136,7 @@ Monitor::Monitor(std::string rel_path_prefix)
     mDrawUnums = true;
     mDrawOverview = true;
     mDrawDebug = false;
+    mDrawVelocity = false;
     mServer = DEFAULT_HOST;
     mPort = DEFAULT_PORT;
     mSkip = 1;
@@ -307,6 +310,7 @@ Monitor::KeyBindings()
         "n          | toggle display of uniform numbers\n"
         "1          | toggle display of debug information\n"
         "2          | toggle display of two dimensional overview\n"
+        "v          | toggle display of velocities\n"
         "?          | display keybindings\n"
         "----------------------------------------------------\n"
         "CAMERA MOVEMENT\n"
@@ -327,6 +331,8 @@ Monitor::KeyBindings()
         "----------------------------------------------------\n"
         "LOGPLAYER\n"
         "----------------------------------------------------\n"
+        "f          | toggle fast/realtime replay\n"
+        "F          | Realtime replay\n"
         "m          | toggle single step mode for logplayer\n"
         ">          | move one step forward\n"
         "----------------------------------------------------\n"
@@ -505,7 +511,7 @@ Monitor::DrawOverview()
 //         mGameState.GetBallRadius();
 
     // resolution of a sphere
-    int res  = 8;
+    int res  = 6;
 
     const float& fl = mGameState.GetFieldLength();
     const float& fw = mGameState.GetFieldWidth();
@@ -515,6 +521,18 @@ Monitor::DrawOverview()
     const float& gw = mGameState.GetGoalWidth();
 
     // field rect
+
+    glEnable(GL_BLEND);         // Turn Blending On
+    
+    glColor4fv(sGroundColor2D);
+    glBegin(GL_TRIANGLE_STRIP);
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(fl/2,-fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(-fl/2,fw/2,0)).GetData());
+    glVertex3fv(Get2DPos(Vector3f(fl/2,fw/2,0)).GetData());
+    glEnd();
+    glDisable(GL_BLEND);                // Turn Blending Off
+
     glColor4fv(sLineColor);
     glBegin(GL_LINE_LOOP);
     glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
@@ -564,17 +582,16 @@ Monitor::DrawOverview()
     glVertex3fv(Get2DPos(Vector3f(+fl/2,-gw/2-sPenaltyLength,0)).GetData());
     glEnd();
 
-    Vector3f pos;
+    Vector3f pos,oldpos;
     float size;
-    if (mGameState.GetBall(pos, size))
-    {
-        glColor4fv(sBallColor);
-        mGLServer.DrawSphere(Get2DPos(pos), b_radius, res);
-    }
 
     int i = 0;
     int unum;
     TTeamIndex side;
+
+    //JAN
+    float timeDiff = mGameState.GetTime() - mOldGameState.GetTime();
+
     while (mGameState.GetPlayer(i, pos, side, unum, size))
     {
         switch (side)
@@ -591,6 +608,14 @@ Monitor::DrawOverview()
 
         mGLServer.DrawSphere(Get2DPos(pos), pl_radius, res);
 
+        if (mDrawVelocity && timeDiff != 0.0)
+        {
+            
+            glColor3f(1.0f,1.0f,1.0f);
+            mOldGameState.GetPlayer(i, oldpos, side, unum, size);
+            mGLServer.DrawArbitraryLine(Get2DPos(pos), Get2DPos(pos + (pos-oldpos)/timeDiff));
+        }
+        
         if (mDrawUnums)
             {
                 glColor4fv(sUnumColor);
@@ -601,6 +626,20 @@ Monitor::DrawOverview()
 
         ++i;
     }
+    
+    if (mGameState.GetBall(pos, size))
+    {
+        glDisable(GL_DEPTH_TEST);
+        glColor4fv(sBallColor);
+        mGLServer.DrawSphere(Get2DPos(pos), b_radius, res);
+        if (mDrawVelocity && timeDiff != 0.0)
+        {
+            glColor3f(1.0f,1.0f,1.0f);
+            mOldGameState.GetBall(oldpos);
+            mGLServer.DrawArbitraryLine(Get2DPos(pos), Get2DPos(pos + (pos-oldpos)/timeDiff));
+        }
+        glEnable(GL_DEPTH_TEST);
+    }   
 }
 
 void
@@ -685,10 +724,60 @@ Monitor::DrawDebug()
     // this example method just draws the positive axes on the field
     glColor4fv(sDebugColorPink);
 
-    mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(10,0,0));
-    mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,10,0));
-    mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,0,10));
+    // mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(10,0,0));
+    // mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,10,0));
+    // mGLServer.DrawArbitraryLine(Vector3f(0,0,0), Vector3f(0,0,10));
+
+    Vector3f pos;
+    float size;
+
+    if (mGameState.GetBall(pos, size))
+    {
+        mGLServer.DrawCircle(pos, 1.0, 0 , 360);
+    }
+    
     return;
+}
+
+
+void
+Monitor::DrawVelocities()
+{
+    Vector3f pos, oldpos;
+
+    float timeDiff = mGameState.GetTime() - mOldGameState.GetTime();
+
+    // if no time has passed, no velocity can be calculated
+    // TODO: this should set a default for stop clock cycles
+    if (timeDiff == 0.0)
+        return;
+    
+    //glDisable(GL_DEPTH_TEST);
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+
+    if (mGameState.GetBall(pos) && mOldGameState.GetBall(oldpos))
+    {
+        //DrawBall(pos, size, pass);
+        //For scaling must divide by (timeDiff)
+        
+        mGLServer.DrawArbitraryLine(pos, pos + (pos-oldpos)/timeDiff);
+        //mGLServer.DrawArbitraryLine(pos, pos + (pos-oldpos)/timeDiff);
+    }
+
+    int i = 0;
+    int unum;
+    TTeamIndex side;
+    float size;
+    while (mGameState.GetPlayer(i, pos, side, unum, size))
+    {
+        mOldGameState.GetPlayer(i, oldpos, side, unum, size);
+        mGLServer.DrawArbitraryLine(pos, pos + (pos-oldpos)/timeDiff);
+        ++i;
+    }
+
+    //glEnable(GL_DEPTH_TEST);
+    
 }
 
 
@@ -813,6 +902,10 @@ Monitor::Display()
 
     if (mDrawDebug)
         DrawDebug();
+
+    // JAN
+    if (mDrawVelocity)
+        DrawVelocities();
 
     DrawStatusText();
 
@@ -955,7 +1048,9 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
 	
     case 'f' :
         // fast
-	mRealTime = false;
+	mRealTime = !mRealTime;
+        if (mRealTime)
+            mDiffTime=DiffTime();
         break;
 	
     case 'F' :
@@ -963,11 +1058,12 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
 	mRealTime = true;
 	mDiffTime = DiffTime() ;
         break;
-#if 0
+
     case 'v':
-        mCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
+        mDrawVelocity = !mDrawVelocity;
+        //mCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
         break;
-#endif
+
     default:
         return;
     }
@@ -1055,7 +1151,7 @@ Monitor::Idle()
       
     if (DiffTime() - mDiffTime  > 0)   
     {
-       cout << DiffTime() << " " << mDiffTime << endl;
+        //cout << DiffTime() << " " << mDiffTime << endl;
     
        if (mRealTime)
        {
@@ -1099,8 +1195,15 @@ Monitor::Idle()
         boost::shared_ptr<oxygen::PredicateList> predicates =
         mCommServer->GetPredicates();
 
+        //JAN
+        if (mDrawVelocity)
+            mOldGameState = mGameState;
+        
         mGameState.ProcessInput(predicates);
 
+        //cout << "old time = " << mOldGameState.GetTime() << endl;
+        //cout << "new time = " << mGameState.GetTime() << endl;
+        
         mAdvance = false;
 	  
 

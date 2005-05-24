@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.8 2005/01/24 12:37:14 anita_maas Exp $
+   $Id: monitor.h,v 1.9 2005/05/24 11:31:16 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,6 +85,7 @@ private:
     typedef std::map<GameState::EFlagType, FlagInfo> TFlagInfoMap;
 
     static const GLfloat sGroundColor[4];
+    static const GLfloat sGroundColor2D[4];
     static const GLfloat sGoalColor[4];
     static const GLfloat sBorderColor[4];
     static const GLfloat sLineColor[4];
@@ -120,6 +121,7 @@ private:
     void DrawPlayer(TTeamIndex side, int unum, const salt::Vector3f& pos, float size, int pass);
     void DrawBall(const salt::Vector3f& pos, float size, int pass);
     void DrawDebug();
+    void DrawVelocities();
     long int DiffTime();
     
     //! successor of a camera mode
@@ -131,6 +133,10 @@ private:
     // member variables
     GLServer mGLServer;
     GameState mGameState;
+
+    //JAN
+    GameState mOldGameState;
+    
     //! the zeitgeist core
     zeitgeist::Zeitgeist mZeitgeist;
     //! the oxygen core
@@ -175,11 +181,11 @@ private:
     bool mLogserver;
     //! flag for single step
     bool mSingleStep;
+    //! flag for drawing velocities
+    bool mDrawVelocity;
     //! flag for advancing
     bool mAdvance;
+    //! flag for real time or fast playback
     bool mRealTime;
     long int mDiffTime;
-
-
 };
-
