@@ -1,5 +1,20 @@
+2005-05-24  Jan Murray <murray@uni-koblenz.de>
+	
+	* app/rcssmonitor3d/lite/monitor.h,
+	* app/rcssmonitor3d/lite/monitor.cpp:
+	- updated list of key bindings
+	- fast/realtime replay of logs can be toggled with 'f'
+	- added support for drawing of velocities in 2D and 3D (toggle with 'v')
+	- removed some obsolete debugging output
+	- added translucent background to 2D overview
+
+	* app/rcssmonitor3d/lib/gamestate.h,
+	* app/rcssmonitor3d/lib/gamestate.cpp:
+	added assignment operator to gamestate class.
+	
 2005-04-29  Patrick Riley <pfr@cs.cmu.edu>
-	* app/agenttest/Makefile.am
+
+	* app/agenttest/Makefile.am:
 	- For some inexplicable reason, Tom removed ReadBuffFD from the 
 	  sources list during the OSX port. I've put it back.
 	
@@ -8,7 +23,7 @@
 	* plugin/soccer/sexpmonitor/sexpmonitor.cpp: 
 	- added rotation matrix to agent nodes in the monitor protocol
 
-2005-01-14  Jan Murray  <fruit@robolog.org>
+2005-01-14  Jan Murray  <murray@uni-koblenz.de>
 
 	* app/simulator/rcsoccersim3D.in:
 	added options -h (usage message) and -light to force use of
