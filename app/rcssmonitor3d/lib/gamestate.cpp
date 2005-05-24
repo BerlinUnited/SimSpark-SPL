@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestate.cpp,v 1.11 2005/02/24 17:01:24 heni Exp $
+   $Id: gamestate.cpp,v 1.12 2005/05/24 11:19:55 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -545,3 +545,39 @@ GameState::GetBallMass() const
     return mBallMass;
 }
 
+GameState&
+GameState::operator=(const GameState &obj)
+{
+ mFieldLength = obj.mFieldLength;
+ mFieldWidth = obj.mFieldWidth;
+ mFieldHeight = obj.mFieldHeight;
+ mGoalWidth = obj.mGoalWidth;
+ mGoalDepth = obj.mGoalDepth;
+ mGoalHeight = obj.mGoalHeight;
+ mBorderSize = obj.mBorderSize;
+ mLineWidth = obj.mLineWidth;
+ mFreeKickDistance = obj.mFreeKickDistance;
+ mAgentMass = obj.mAgentMass;
+ mAgentRadius = obj.mAgentRadius;
+ mAgentMaxSpeed = obj.mAgentMaxSpeed;
+ mBallRadius = obj.mBallRadius;
+ mBallMass = obj.mBallMass;
+ mAck = obj.mAck;
+ mFinished = obj.mFinished;
+ mPlaymodes = obj.mPlaymodes;
+ mTeamLeft = obj.mTeamLeft;
+ mTeamRight = obj.mTeamRight;
+ mHalf = obj.mHalf;
+ mTime = obj.mTime;
+ mScoreLeft = obj.mScoreLeft;
+ mScoreRight = obj.mScoreRight;
+ mPlayMode = obj.mPlayMode;
+ mBall = obj.mBall;
+ mSeenBall = obj.mSeenBall;
+ mPlayers = obj.mPlayers;
+ mSeenPlayers = obj.mSeenPlayers;
+ mFlagNameMap = obj.mFlagNameMap;
+ mFlagTypeMap = obj.mFlagTypeMap;
+ mFlags = obj.mFlags;
+ mSeenFlags = obj.mSeenFlags;
+}
