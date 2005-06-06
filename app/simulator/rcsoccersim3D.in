@@ -16,7 +16,7 @@ EOH
 
 kill_server()
 {
-    kill -s SIGINT $PID
+    kill -s 15 $PID
     exit 0
 }
 
