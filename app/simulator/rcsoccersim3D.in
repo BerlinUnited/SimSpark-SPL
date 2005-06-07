@@ -4,71 +4,108 @@ print_help()
 {
    cat << EOH
 
-usage: $0 [-h|-light]
+usage: $0 [-h[elp] | -light | -agentdb DB | -logdir DIR]
 
-  -h      print this help and exit
-  -light  Force the use of rcssmonitor3D-lite, even if
-          rcssmonitor3D-kerosin is available
+  -h[elp]      Print this help and exit
+  -logdir DIR  Write logfiles to DIR. If this option is not given,
+               the default from commserver.conf will be used
+  -agentdb DB  Use DB as agentdb.  If this option is not given,
+               the default agentdb.xml is used.
+  -light       Force the use of rcssmonitor3D-lite, even if
+               rcssmonitor3D-kerosin is available.
 
+	      
 EOH
 }
 
 
 kill_server()
 {
-    kill -s 15 $PID
+    kill -s INT $PID
     exit 0
 }
 
 #---------------------------------
 
+#set default values
 DEFAULTMONITOR="kerosin"
+LOGFILEDIR=""
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+datadir=@datadir@
+pkgdatadir=${datadir}/@PACKAGE@
+SIMULATOR="${exec_prefix}/bin/rcssserver3D"
+AGENTDB=""
+
+SPADESPARAM="--ipc_force_remove"
+
 
 # process options
 while test -n "$1"
 do
     case $1 in
 	-h)
+	-help)
 	    help="yes"
 	    ;;
 	-light)
 	    DEFAULTMONITOR="lite"
 	    ;;
+	-agentdb)
+	    if test -f "$2"; then
+		AGENTDB="$2"
+	    else
+		echo "File $2 not found. ignoring"
+	    fi
+	    shift
+	    ;;
+	-logdir)
+	    LOGFILEDIR="$2"
+	    shift
+	    ;;
 	*)
-            echo "ignoring unknown option: $1"
+            echo "Passing unknown option $1 to SPADES"
+	    SPADESPARAM="$SPADESPARAM $1"
     esac
    shift
 done
-    
+
+# print help message and exit
 if test "x${help}" = "xyes"; then
     print_help
     exit 0
 fi
 
 
+# set logfile dir if given on commandline
+if test -n "$LOGFILEDIR"; then
+    SPADESPARAM="$SPADESPARAM --logfile_dir $LOGFILEDIR"
+fi
+
+
 if test -x ../agenttest/agenttest; then
     SIMULATOR="./rcssserver3D"
-    PARAM="--ipc_force_remove --agent_db_fn agentdb.xml $*"
+    SPADESPARAM="$SPADESPARAM --agent_db_fn ${AGENTDB:-agentdb.xml}"
     if test -x ../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin; then
 	MONITOR="../rcssmonitor3d/${DEFAULTMONITOR}/rcssmonitor3D-${DEFAULTMONITOR}" 
     else
 	MONITOR="../rcssmonitor3d/lite/rcssmonitor3D-lite" 
     fi
 else
-    prefix=@prefix@
-    exec_prefix=@exec_prefix@
-    datadir=@datadir@
-    pkgdatadir=${datadir}/@PACKAGE@
-    SIMULATOR="${exec_prefix}/bin/rcssserver3D"
-    PARAM="--ipc_force_remove --agent_db_fn ${pkgdatadir}/agentdb.xml $*"
+    SPADESPARAM="$SPADESPARAM --agent_db_fn ${AGENTDB:-${pkgdatadir}/agentdb.xml}"
     if test -x "${exec_prefix}/bin/rcssmonitor3D-kerosin"; then
 	MONITOR="${exec_prefix}/bin/rcssmonitor3D-${DEFAULTMONITOR}"
     else
 	MONITOR="${exec_prefix}/bin/rcssmonitor3D-lite"
     fi
 fi
+# agent_db_fn 
 
-${SIMULATOR} ${PARAM} &
+echo "Starting Simulator with these Parameters: $SPADESPARAM"
+echo
+
+${SIMULATOR} ${SPADESPARAM}&
 PID=$!
 sleep 1
 ${MONITOR}
