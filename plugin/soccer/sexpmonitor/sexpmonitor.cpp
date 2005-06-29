@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.15 2005/02/24 12:01:35 fruit Exp $
+   $Id: sexpmonitor.cpp,v 1.16 2005/06/29 08:39:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ using namespace zeitgeist;
 using namespace std;
 using namespace boost;
 
-SexpMonitor::SexpMonitor() : MonitorSystem()
+SexpMonitor::SexpMonitor() : MonitorSystem(), mSendRotMatrix(false)
 {
 }
 
@@ -136,16 +136,19 @@ SexpMonitor::AddAgents(shared_ptr<Scene> activeScene, std::ostringstream& ss) co
         // pos
         ss << "(pos " << pos << ")";
 
-        // world transform
-        ss << "(rot ";
-
-        const salt::Matrix& trans = aspect->GetWorldTransform();
-        for (int i=0;i<16;++i)
+        if (mSendRotMatrix)
         {
-            ss << trans.m[i] << " ";
-        }
+            // world transform
+            ss << "(rot ";
 
-        ss << ")";
+            const salt::Matrix& trans = aspect->GetWorldTransform();
+            for (int i=0;i<16;++i)
+            {
+                ss << trans.m[i] << " ";
+            }
+
+            ss << ")";
+        }
 
         // extra field if the agent was the last colliding with the ball
         shared_ptr<AgentAspect> agent;
@@ -304,4 +307,10 @@ void
 SexpMonitor::ResetSentFlags()
 {
     mSentFlags = false;
+}
+
+void
+SexpMonitor::SendRotationMatrix(bool send)
+{
+    mSendRotMatrix = send;
 }

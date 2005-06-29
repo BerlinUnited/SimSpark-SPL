@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.10 2004/12/31 14:17:52 rollmark Exp $
+   $Id: sexpmonitor.h,v 1.11 2005/06/29 08:39:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -73,6 +73,12 @@ public:
      */
     virtual std::string GetMonitorHeaderInfo(const oxygen::PredicateList& pList);
 
+    /** This method can be used to set the flag for sending the rotation matrix
+        of every object to the monitor.
+        \param send flag wether to send the matrix or not
+    */
+    void SendRotationMatrix(bool send);
+
 protected:
     /** called after the object has been created and attached to a
         core to allow for object dependent internal
@@ -109,6 +115,9 @@ protected:
     boost::shared_ptr<TrainerCommandParser> mCommandParser;
 
     boost::shared_ptr<BallStateAspect> mBallState;
+
+    // flag if we want to send the rotation matrix
+    bool mSendRotMatrix;
 
     // flags for sent information
     //! flag if the monitors received field flags information
