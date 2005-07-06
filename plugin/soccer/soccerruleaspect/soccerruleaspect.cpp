@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.13 2004/06/14 16:07:45 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.14 2005/07/06 07:11:27 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,8 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mFreeKickDist(9.15),
     mFreeKickMoveDist(15.15),
     mAutomaticKickOff(false),
-    mWaitBeforeKickOff(1.0)
+    mWaitBeforeKickOff(1.0),
+    mSingleHalfTime(false)
 {
 }
 
@@ -546,18 +547,19 @@ SoccerRuleAspect::CheckTime()
     TTime now = mGameState->GetTime();
     TGameHalf half = mGameState->GetGameHalf();
 
-    if (
-        (half == GH_FIRST) &&
-        (now >= mHalfTime)
-        )
+    if ((half == GH_FIRST) && (now >= mHalfTime))
     {
-        // the first game half is over
-        mGameState->SetPlayMode(PM_BeforeKickOff);
-        mGameState->SetGameHalf(GH_SECOND);
-    } else if (
-        (half == GH_SECOND) &&
-        (now >= 2 * mHalfTime)
-        )
+        if (mSingleHalfTime)
+        {
+            // we want to play only one half of the match
+            mGameState->SetPlayMode(PM_GameOver);
+        } else {
+            // the first game half is over
+            mGameState->SetPlayMode(PM_BeforeKickOff);
+            mGameState->SetGameHalf(GH_SECOND);
+        }
+    }
+    else if ((half == GH_SECOND) && (now >= 2 * mHalfTime))
     {
         // the game is over
         mGameState->SetPlayMode(PM_GameOver);
@@ -686,6 +688,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"FreeKickDistance",mFreeKickDist);
     SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
+    SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
 
     // set up bounding boxes for halfs and goal areas
 
