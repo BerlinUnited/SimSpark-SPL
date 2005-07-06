@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.19 2005/05/24 11:31:16 jamu Exp $
+   $Id: monitor.cpp,v 1.20 2005/07/06 07:43:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include <types.h>
 #include <unistd.h>
 #include "GL/glut.h"
-
+#include <queue>
 void
 display()
 {
@@ -381,6 +381,43 @@ Monitor::InitInternal(int argc, char* argv[])
 }
 
 void
+Monitor::SetupCameraPositions()
+{
+    mLeftCamPositions.clear();
+    mRightCamPositions.clear();
+    float hfl = mGameState.GetFieldLength()/2;
+    float hfw = mGameState.GetFieldWidth()/2;
+
+    salt::Vector3f lp, rp;
+
+    // first position somewhere in the middle of the respective half
+    // on the side of the field
+    lp[0] = -1*hfl/2;        rp[0] = -lp[0];
+    lp[1] = -hfw-4;          rp[1] = lp[1];
+    lp[2] = 5.5;             rp[2] = lp[2];
+    mLeftCamPositions.push_back(lp);
+    mRightCamPositions.push_back(rp);
+
+    // second position somewhere in the middle of the respective half
+    // but zoomed into the field
+    lp[0] = -1*hfl/2;        rp[0] = -lp[0];
+    lp[1] = -hfw+4;          rp[1] = lp[1];
+    lp[2] = 10.0;             rp[2] = lp[2];
+    mLeftCamPositions.push_back(lp);
+    mRightCamPositions.push_back(rp);
+
+    // third position for watching the penalty area
+    lp[0] = -hfl+5;          rp[0] = -lp[0];
+    lp[1] = -hfw+4;          rp[1] = lp[1];
+    lp[2] = 5.5;             rp[2] = lp[2];
+    mLeftCamPositions.push_back(lp);
+    mRightCamPositions.push_back(rp);
+
+
+
+}
+
+void
 Monitor::DrawScene(int pass)
 {
     Vector3f pos;
@@ -422,6 +459,7 @@ void
 Monitor::DrawStatusText()
 {
     std::stringstream sl, sc, sr;
+    static std::stringstream debug;
 
     sl << mGameState.GetTeamnameLeft() << " " << mGameState.GetScoreLeft();
     sr << mGameState.GetScoreRight() << " " << mGameState.GetTeamnameRight();
@@ -452,6 +490,34 @@ Monitor::DrawStatusText()
     mGLServer.DrawTextPix(sr.str().c_str(),
                           Vector2f( 0, mGLServer.GetTextHeight()),
                           GLServer::eRIGHT);
+
+    if (mDrawDebug)
+    {
+#if 0
+        ++frame;
+        time=glutGet(GLUT_ELAPSED_TIME);
+        if (time - timebase > 1000)
+        {
+            debug.str("");
+            debug << setiosflags(ios::fixed) << setprecision(2)
+                  << "FPS: " << frame*1000.0/(time-timebase);
+        }
+        timebase = time;
+        frame = 0;
+#elif 1
+        debug.str("");
+        Vector3f pos;
+        mGameState.GetBall(pos);
+        debug << setiosflags(ios::fixed) << setprecision(2)
+              << mGameState.GetTime() << "   Ball position: " << pos;
+        pos[2] = 0.0;
+        debug << "   Ground distance from origin: " << pos.Length();
+#endif
+
+        mGLServer.DrawTextPix(debug.str().c_str(),
+                              Vector2f( 0,  glutGet(GLUT_WINDOW_HEIGHT) - mGLServer.GetTextHeight()),
+                              GLServer::eCENTER);
+    }
 }
 
 void
@@ -523,7 +589,7 @@ Monitor::DrawOverview()
     // field rect
 
     glEnable(GL_BLEND);         // Turn Blending On
-    
+
     glColor4fv(sGroundColor2D);
     glBegin(GL_TRIANGLE_STRIP);
     glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
@@ -590,7 +656,7 @@ Monitor::DrawOverview()
     TTeamIndex side;
 
     //JAN
-    float timeDiff = mGameState.GetTime() - mOldGameState.GetTime();
+    double timeDiff = mGameState.GetTime() - mOldGameState.GetTime();
 
     while (mGameState.GetPlayer(i, pos, side, unum, size))
     {
@@ -610,12 +676,12 @@ Monitor::DrawOverview()
 
         if (mDrawVelocity && timeDiff != 0.0)
         {
-            
+
             glColor3f(1.0f,1.0f,1.0f);
             mOldGameState.GetPlayer(i, oldpos, side, unum, size);
             mGLServer.DrawArbitraryLine(Get2DPos(pos), Get2DPos(pos + (pos-oldpos)/timeDiff));
         }
-        
+
         if (mDrawUnums)
             {
                 glColor4fv(sUnumColor);
@@ -626,7 +692,75 @@ Monitor::DrawOverview()
 
         ++i;
     }
-    
+
+    static double pass = mGameState.GetTime();
+    if (pass == mGameState.GetTime()) return;
+    pass = mGameState.GetTime();
+#if 0
+    static double vel0 = 0.0;
+    static double vel1 = 0.0;
+    static std::queue<Vector3f> prev;
+    while (prev.size() < 10) prev.push(Vector3f(0,0,0));
+
+    mOldGameState.GetPlayer(0, oldpos, side, unum, size);
+    mGameState.GetPlayer(0,pos,side,unum,size);
+    vel1 = ((pos-oldpos)/timeDiff).x();
+
+
+    std::cerr << mGameState.GetTime() << " " << pos << "  "
+              << vel0 << " " << vel1 << " "
+              << pos.x() << " " << (pos-prev.front()).x() << "\n";
+
+    prev.push(pos);
+    prev.pop();
+
+    vel0 = vel1;
+#elif 0
+    mGameState.GetPlayer(0,pos,side,unum,size);
+    std::cerr << mGameState.GetTime() << " "
+              << (pos - Vector3f(-1,-1,pos[2])).Length() << "\n";
+#elif 0
+    static double vel0 = 0.0;
+    static double vel1 = 0.0;
+    static bool once = true;
+
+    if (once)
+    {
+        once = false;
+        std::cerr << "## Time | pos.z | oldvel.z | vel.z | velZDiff | TimeDiff | vel.z*TimeDiff \n\n";
+    }
+
+    mOldGameState.GetBall(oldpos, size);
+    mGameState.GetBall(pos, size);
+
+    vel1 = (pos-oldpos).z()/timeDiff;
+    if ((vel0 < 0) && !(vel1 <= 0))
+    {
+        std::cerr << mGameState.GetTime() << " " << pos.z() << " " << vel0 << " " << vel1
+                  << " " << vel1 - vel0  << " " << timeDiff << " " << (pos-oldpos).z() << "\n";
+    }
+    vel0 = vel1;
+#elif 0
+    static Vector3f vel0;
+    static Vector3f vel1;
+    static bool once = true;
+
+    if (once)
+    {
+        once = false;
+        std::cerr << "## Time | pos | oldvel | vel | velDiff \n\n";
+    }
+
+    mOldGameState.GetBall(oldpos, size);
+    mGameState.GetBall(pos, size);
+
+
+    vel1 = (pos-oldpos)/timeDiff;
+    std::cerr << mGameState.GetTime() << " " << pos << " "
+              << vel0 << " " << vel1 << " " << vel1 - vel0 << "\n";
+    vel0 = vel1;
+
+#endif
     if (mGameState.GetBall(pos, size))
     {
         glDisable(GL_DEPTH_TEST);
@@ -639,7 +773,7 @@ Monitor::DrawOverview()
             mGLServer.DrawArbitraryLine(Get2DPos(pos), Get2DPos(pos + (pos-oldpos)/timeDiff));
         }
         glEnable(GL_DEPTH_TEST);
-    }   
+    }
 }
 
 void
@@ -735,7 +869,7 @@ Monitor::DrawDebug()
     {
         mGLServer.DrawCircle(pos, 1.0, 0 , 360);
     }
-    
+
     return;
 }
 
@@ -751,7 +885,7 @@ Monitor::DrawVelocities()
     // TODO: this should set a default for stop clock cycles
     if (timeDiff == 0.0)
         return;
-    
+
     //glDisable(GL_DEPTH_TEST);
 
     glColor3f(0.0f, 0.0f, 0.0f);
@@ -760,7 +894,7 @@ Monitor::DrawVelocities()
     {
         //DrawBall(pos, size, pass);
         //For scaling must divide by (timeDiff)
-        
+
         mGLServer.DrawArbitraryLine(pos, pos + (pos-oldpos)/timeDiff);
         //mGLServer.DrawArbitraryLine(pos, pos + (pos-oldpos)/timeDiff);
     }
@@ -777,7 +911,7 @@ Monitor::DrawVelocities()
     }
 
     //glEnable(GL_DEPTH_TEST);
-    
+
 }
 
 
@@ -786,7 +920,7 @@ Monitor::Display()
 {
 
 
-    
+
     const Vector3f szGoal1 = mGameState.GetGoalSize(false);
     const Vector3f szGoal2 = mGameState.GetGoalSize(true);
 
@@ -930,8 +1064,8 @@ Monitor::Display()
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     // (end 2D Elements)
-    
-   
+
+
 
 
     glutSwapBuffers();
@@ -992,14 +1126,26 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         break;
     case '3':
         //Move cam behind left goal
-        mGLServer.SetCameraPos(Vector3f(-hfl-2,0,0.2));
+        mGLServer.SetCameraPos(Vector3f(-hfl-5,0,4.2));
         mGLServer.SetLookAtPos(Vector3f(0,0,1));
         mGLServer.SetUpVector(Vector3f(0,0,1));
         break;
     case '4':
         //Move cam behind right goal
-        mGLServer.SetCameraPos(Vector3f(hfl+2,0,0.2));
+        mGLServer.SetCameraPos(Vector3f(hfl+5,0,4.2));
         mGLServer.SetLookAtPos(Vector3f(0,0,1));
+        mGLServer.SetUpVector(Vector3f(0,0,1));
+        break;
+    case '5':
+        //Move cam to left half
+        mGLServer.SetCameraPos(NextCameraPosition(mLeftCamPositions));
+        if (mCameraMode == eFree) mGLServer.SetLookAtPos(Vector3f(0,0,1));
+        mGLServer.SetUpVector(Vector3f(0,0,1));
+        break;
+    case '6':
+        //Move cam behind right half
+        mGLServer.SetCameraPos(NextCameraPosition(mRightCamPositions));
+        if (mCameraMode == eFree) mGLServer.SetLookAtPos(Vector3f(0,0,1));
         mGLServer.SetUpVector(Vector3f(0,0,1));
         break;
     case 'n':
@@ -1045,18 +1191,18 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         // show keybindings
         KeyBindings();
         break;
-	
+
     case 'f' :
         // fast
-	mRealTime = !mRealTime;
+    mRealTime = !mRealTime;
         if (mRealTime)
             mDiffTime=DiffTime();
         break;
-	
+
     case 'F' :
         // slow
-	mRealTime = true;
-	mDiffTime = DiffTime() ;
+    mRealTime = true;
+    mDiffTime = DiffTime() ;
         break;
 
     case 'v':
@@ -1117,18 +1263,18 @@ Monitor::Reshape(int width, int height)
 long int
 Monitor::DiffTime()
 {
-	
+
     int time;
     unsigned int utime, ugametime;
     float gametime;
-    
-	 
+
+
     time = glutGet(GLUT_ELAPSED_TIME) * 1000;// millisec (0,001) --> micro
     utime = (unsigned int) time;
-   
+
     gametime = mGameState.GetTime() * 1000000; // sec (in float) -->microsec (0,000001)
     ugametime = (unsigned int) gametime;
-    
+
     return ugametime - utime;
 }
 
@@ -1136,40 +1282,28 @@ void
 Monitor::Idle()
 {
 
-     	
+
     int time;
     unsigned int utime, ugametime;
     float gametime;
-    
-	 
+
     time = glutGet(GLUT_ELAPSED_TIME) * 1000;// millisec (0,001) --> micro
     utime = (unsigned int) time;
-   
+
     gametime = mGameState.GetTime() * 1000000; // sec (in float) -->microsec (0,000001)
     ugametime = (unsigned int) gametime;
-    
-      
-    if (DiffTime() - mDiffTime  > 0)   
+
+
+    if ((DiffTime() - mDiffTime  > 0) && mRealTime && mLogserver)
     {
-        //cout << DiffTime() << " " << mDiffTime << endl;
-    
-       if (mRealTime)
-       {
-       
-           usleep(DiffTime() - mDiffTime);
-       }
-       
-       else
-       
-           usleep(10);
+        usleep(DiffTime() - mDiffTime);
     }
-    
-        
-    
+    else usleep(10);
+
     // If we are in singlestep mode and not advancing then return
     if (mLogserver && mSingleStep && !mAdvance)
         return;
- 
+
     if (mGameState.IsFinished())
     {
         cerr << "simulation finished... monitor exiting\n";
@@ -1182,6 +1316,8 @@ Monitor::Idle()
     }
 
     static bool first_time = true;
+    if (first_time) SetupCameraPositions();
+
     static int n = 10; // the first 10 messages should not be skipped
     --n;
     if (!first_time && n > 0) return;
@@ -1192,23 +1328,16 @@ Monitor::Idle()
     }
 
 
-        boost::shared_ptr<oxygen::PredicateList> predicates =
+    boost::shared_ptr<oxygen::PredicateList> predicates =
         mCommServer->GetPredicates();
 
-        //JAN
-        if (mDrawVelocity)
-            mOldGameState = mGameState;
-        
-        mGameState.ProcessInput(predicates);
+    //        if (mDrawVelocity)
+    mOldGameState = mGameState;
 
-        //cout << "old time = " << mOldGameState.GetTime() << endl;
-        //cout << "new time = " << mGameState.GetTime() << endl;
-        
-        mAdvance = false;
-	  
+    mGameState.ProcessInput(predicates);
 
-        glutPostRedisplay();
-
+    mAdvance = false;
+    glutPostRedisplay();
 }
 
 
@@ -1222,6 +1351,20 @@ Monitor::NextCameraMode(ECameraMode mode) const
     }
 }
 
+salt::Vector3f
+Monitor::NextCameraPosition(const list<salt::Vector3f>& positions) const
+{
+    if (positions.empty()) return salt::Vector3f(0,0,0);
+
+    list<salt::Vector3f>::const_iterator i;
+
+    i = find(positions.begin(), positions.end(), mGLServer.GetCameraPos());
+    if (i != positions.end()) i++;
+    if (i == positions.end()) i = positions.begin();
+
+    return *i;
+}
+
 CommServerBase::EKickOff
 Monitor::NextKickOffMode(CommServerBase::EKickOff mode) const
 {
@@ -1232,3 +1375,5 @@ Monitor::NextKickOffMode(CommServerBase::EKickOff mode) const
     default: return CommServerBase::eRandom;
     }
 }
+
+

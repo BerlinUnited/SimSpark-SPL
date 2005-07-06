@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.9 2005/05/24 11:31:16 jamu Exp $
+   $Id: monitor.h,v 1.10 2005/07/06 07:43:47 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -123,9 +123,17 @@ private:
     void DrawDebug();
     void DrawVelocities();
     long int DiffTime();
-    
+
+    //! Set the default camera positions
+    void SetupCameraPositions();
+
     //! successor of a camera mode
     ECameraMode NextCameraMode(ECameraMode mode) const;
+    /** Get the successor of the current camera position from a list.
+        If the current camera position is not in the list, the first position from
+        the list is returned.
+    */
+    salt::Vector3f NextCameraPosition(const std::list<salt::Vector3f>& positions) const;
     //! successor of a kick off mode
     CommServerBase::EKickOff NextKickOffMode(CommServerBase::EKickOff mode) const;
 
@@ -136,7 +144,7 @@ private:
 
     //JAN
     GameState mOldGameState;
-    
+
     //! the zeitgeist core
     zeitgeist::Zeitgeist mZeitgeist;
     //! the oxygen core
@@ -145,6 +153,11 @@ private:
     MonitorLib mMonitorLib;
     //! communication Server
     boost::shared_ptr<CommServerBase> mCommServer;
+
+    //! a list of standard camera positions for the left team
+    std::list<salt::Vector3f> mLeftCamPositions;
+    //! a list of standard camera positions for the right team
+    std::list<salt::Vector3f> mRightCamPositions;
 
     //! window width
     int mWidth;
