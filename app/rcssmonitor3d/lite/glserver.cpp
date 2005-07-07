@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.9 2004/06/16 13:20:59 jamu Exp $
+   $Id: glserver.cpp,v 1.10 2005/07/07 15:10:28 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,18 +94,18 @@ void GLServer::DrawTextPix(const char* text, Vector2f pix, ETextAlign ta)
 int
 GLServer::GetTextHeight() const
 {
-    // currently only GLUT_BITMAP_9_BY_15 is used
-    return 15;
+    // currently only GLUT_BITMAP_HELVETICA_18 is used
+    return 18;
 }
 
 int
 GLServer::GetTextWidth(const char* text) const
 {
-    // currently only GLUT_BITMAP_9_BY_15 is used
+    // currently GLUT_BITMAP_HELVETICA_18 is used
     int width = 0;
     for (const char* s = text; *s; ++s)
     {
-        width += glutBitmapWidth(GLUT_BITMAP_9_BY_15, *s);
+        width += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, *s);
     }
     return width;
 }
@@ -161,7 +161,7 @@ void GLServer::DrawText(const char* text, Vector2f pos)
     glRasterPos2f(pos[0],pos[1]);
     for (const char* s = text; *s; ++s)
         {
-            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *s);
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *s);
         }
 }
 
