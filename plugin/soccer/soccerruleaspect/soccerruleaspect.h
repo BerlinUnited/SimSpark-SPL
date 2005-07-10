@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.7 2004/06/11 08:51:10 fruit Exp $
+   $Id: soccerruleaspect.h,v 1.8 2005/07/10 05:18:02 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -187,6 +187,8 @@ protected:
     bool mAutomaticKickOff;
     /** time to wait until we kick off automatically */
     float mWaitBeforeKickOff;
+    /** flag if we want to play only one half of the match */
+    bool mSingleHalfTime;
     // areas where opponents are not allowed in certain play modes
     /** bounding box for the right half of the field */
     salt::AABB2 mRightHalf;
