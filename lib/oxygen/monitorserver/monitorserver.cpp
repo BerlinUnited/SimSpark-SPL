@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.5 2004/12/21 19:39:33 rollmark Exp $
+   $Id: monitorserver.cpp,v 1.6 2005/07/10 05:28:11 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -120,28 +120,29 @@ boost::shared_ptr<MonitorSystem> MonitorServer::GetMonitorSystem()
          );
 }
 
-void MonitorServer::CollectItemPredicates(bool initial, PredicateList& pList)
+void
+MonitorServer::CollectItemPredicates(bool initial, PredicateList& pList)
 {
     Leaf::TLeafList itemList;
     ListChildrenSupportingClass<MonitorItem>(itemList);
 
     for (
-         Leaf::TLeafList::const_iterator iter = itemList.begin();
-         iter != itemList.end();
-         ++iter
-         )
-        {
-            shared_ptr<MonitorItem> item =
-                shared_static_cast<MonitorItem>(*iter);
+        Leaf::TLeafList::const_iterator iter = itemList.begin();
+        iter != itemList.end();
+        ++iter
+        )
+    {
+        shared_ptr<MonitorItem> item =
+            shared_static_cast<MonitorItem>(*iter);
 
-            if (initial)
-                {
-                    item->GetInitialPredicates(pList);
-                } else
-                {
-                    item->GetPredicates(pList);
-                }
+        if (initial)
+        {
+            item->GetInitialPredicates(pList);
+        } else
+        {
+            item->GetPredicates(pList);
         }
+    }
 }
 
 string MonitorServer::GetMonitorHeaderInfo()
@@ -149,9 +150,11 @@ string MonitorServer::GetMonitorHeaderInfo()
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
     if (monitorSystem.get() == 0)
-        {
-            return string();
-        }
+    {
+        GetLog()->Warning()
+            << "WARNING: (MonitorServer) Monitor System missing.\n";
+        return string();
+    }
 
     PredicateList pList;
     CollectItemPredicates(true,pList);
