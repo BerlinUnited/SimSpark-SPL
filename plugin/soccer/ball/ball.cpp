@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ball.cpp,v 1.3 2004/03/22 18:10:56 fruit Exp $
+   $Id: ball.cpp,v 1.4 2005/07/13 01:07:34 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ Ball::SetAcceleration(int steps, const salt::Vector3f& force,
                       const salt::Vector3f& torque,
                       boost::shared_ptr<oxygen::AgentAspect> agent)
 {
+    if (mForceTTL > 0 && mKickedLast == agent) return;
+
     mForceTTL = steps;
 
     mForce = force;
