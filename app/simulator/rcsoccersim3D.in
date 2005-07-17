@@ -45,7 +45,7 @@ SPADESPARAM="--ipc_force_remove"
 while test -n "$1"
 do
     case $1 in
-	-h) | -help)
+	-h | -help)
 	    help="yes"
 	    ;;
 	-light)
