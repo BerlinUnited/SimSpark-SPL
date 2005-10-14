@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.h,v 1.11 2004/05/05 07:53:51 rollmark Exp $
+   $Id: node.h,v 1.12 2005/10/14 11:04:01 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -113,6 +113,42 @@ protected:
     // object hierarchy related stuff
     TLeafList mChildren;
 };
+
+
+// define this here to avoid cyclic dependencies
+
+    /** defines an interface to get the first parent node on the way
+        up the hierarchy that supports a class 'name', i.e. is an
+        instance of that class or is derived from it. This
+        implementation of GetParentSupportingClass does not rely on
+        the associated zeitgeist class name but uses the c++ typeid
+        system.
+     */
+template<class CLASS>
+boost::weak_ptr<CLASS>
+Leaf::FindParentSupportingClass() const
+{
+    boost::shared_ptr<Node> node
+        = boost::shared_static_cast<Node>(make_shared(GetParent()));
+    
+    while (node.get() != 0)
+    {
+        boost::shared_ptr<CLASS> test =
+            boost::shared_dynamic_cast<CLASS>(node);
+        
+        if (test.get() != 0)
+        {
+            return test;
+        }
+        
+        //node = boost::shared_static_cast<Node>(make_shared(node->GetParent()));
+        node = boost::shared_static_cast<Node>(node->GetParent().lock());
+        
+    }
+    
+    return boost::shared_ptr<CLASS>();
+}
+
 
 DECLARE_CLASS(Node);
 
