@@ -1,3 +1,10 @@
+2005-12-04  Markus Rollmann  <rollmark@uni-koblenz.de>
+
+	* lib/zeitgeist/core.cpp, lib/zeitgeist/core.h:
+	Implemented a path string to node instance lookup cache for the
+	zeitgeist core. Credits go to the Brainstormers 3D team for their
+	profiling work and their work on the initial version.
+
 2005-05-24  Jan Murray <murray@uni-koblenz.de>
 	
 	* app/rcssmonitor3d/lite/monitor.h,
