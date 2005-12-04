@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.16 2004/06/13 06:33:42 fruit Exp $
+   $Id: core.cpp,v 1.17 2005/12/04 17:50:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,50 @@ using namespace boost;
 using namespace salt;
 using namespace std;
 using namespace zeitgeist;
+
+// -------- struct Core::CacheKey
+
+bool Core::CacheKey::operator == (const CacheKey& key) const
+{
+    return (
+            (root.expired() == key.root.expired()) &&
+            (
+             (root.expired()) ||
+             (root.lock() == key.root.lock())
+             ) &&
+            (path == key.path)
+            );
+}
+
+bool Core::CacheKey::operator < (const CacheKey& key) const
+{
+    if (root.expired())
+        {
+            if (! key.root.expired())
+                {
+                    return true;
+                }
+        } else
+        {
+            if (key.root.expired())
+                {
+                    return false;
+                }
+
+        }
+
+    shared_ptr<Leaf> myRoot = root.lock();
+    shared_ptr<Leaf> keyRoot = key.root.lock();
+
+    if (myRoot != keyRoot)
+        {
+            return (myRoot.get() < keyRoot.get());
+        }
+
+    return (path < key.path);
+}
+
+// -------- class Core
 
 /** Create the fundamental classes needed for the hierarchy to operate
  */
@@ -228,16 +272,32 @@ const boost::shared_ptr<ScriptServer>& Core::GetScriptServer() const
 boost::shared_ptr<Leaf> Core::GetInternal(const std::string &pathStr,
                                           const boost::shared_ptr<Leaf>& leaf)
 {
-    boost::shared_ptr<Leaf> current;
-    Path path(pathStr);
+    // lookup the path in the internal cache
+    CacheKey key(leaf, pathStr);
 
-    // check if we have a relative or absolute path
+    TPathCache::iterator iter = mPathCache.find(key);
+    if (iter != mPathCache.end())
+        {
+            boost::weak_ptr<Leaf>& entry = (*iter).second;
+            if (! entry.expired())
+                {
+                    return entry.lock();
+                }
+
+            // remove entry as it points to an expired node
+            mPathCache.erase(key);
+        }
+
+    // walk the hierarchy
+    Path path(pathStr);
+    boost::shared_ptr<Leaf> current;
+
     if (
         (path.IsAbsolute()) ||
         (leaf.get() == NULL)
         )
         {
-            current = mRoot;
+            current= mRoot;
         } else
             {
                 current = leaf;
@@ -251,6 +311,13 @@ boost::shared_ptr<Leaf> Core::GetInternal(const std::string &pathStr,
             //printf("%s\n", path.Front().c_str());
             current = current->GetChild(path.Front());
             path.PopFront();
+        }
+
+    // update cache; note that we can't cache the fact, that a node is
+    // not present as it may be created later on
+    if (current.get() != 0)
+        {
+            mPathCache[key] = current;
         }
 
     return current;

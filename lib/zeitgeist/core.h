@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.h,v 1.7 2004/04/29 12:22:30 rollmark Exp $
+   $Id: core.h,v 1.8 2005/12/04 17:50:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -53,6 +54,34 @@ class RandomServer;
  */
 class Core
 {
+protected:
+    //
+    // types
+    //
+
+    /** CacheKey is a struct used as the key for the internal node
+        lookup cache
+    */
+    struct CacheKey
+    {
+    public:
+        //! node to which the path of this key is relative to
+        boost::weak_ptr<Leaf> root;
+
+        //! the path expression of this key
+        std::string path;
+
+    public:
+        CacheKey(boost::weak_ptr<Leaf> r, const std::string& p) : root(r), path(p) {};
+        bool operator == (const CacheKey& key) const;
+        bool operator < (const CacheKey& key) const;
+    };
+
+    /** TPathCache defines a mapping from a CacheKey to a weak
+        reference of the corresponding Leaf
+    */
+    typedef std::map<CacheKey, boost::weak_ptr<Leaf> > TPathCache;
+
     //
     // functions
     //
@@ -207,6 +236,9 @@ private:
         enough.
     */
     std::list<boost::shared_ptr<salt::SharedLibrary> >      mBundles;
+
+    //! the internal node lookup cache
+    TPathCache mPathCache;
 };
 
 } //namespace zeitgeist
