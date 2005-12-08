@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: netclient.cpp,v 1.2 2004/12/17 20:24:14 rollmark Exp $
+   $Id: netclient.cpp,v 1.3 2005/12/08 10:26:19 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <netinet/in.h>
 #include <rcssnet/exception.hpp>
+#include <cerrno>
 
 using namespace oxygen;
 using namespace zeitgeist;
