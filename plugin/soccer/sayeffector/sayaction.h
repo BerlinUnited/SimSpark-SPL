@@ -4,7 +4,6 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sayaction.h,v 1.1 2004/05/07 17:04:16 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,24 +22,23 @@
 #define SAYACTION_H
 
 #include <oxygen/gamecontrolserver/actionobject.h>
-//#include <salt/vector.h>
 
 class SayAction : public oxygen::ActionObject
 {
 public:
-    SayAction(const std::string& predicate, const std::string& text)
-        : ActionObject(predicate), mText(text) {}
+    SayAction(const std::string& predicate, std::string message)
+        : ActionObject(predicate), mMessage(message)
+        {}
 
     virtual ~SayAction() {}
+    
+    void GetMessage(std::string& msg)
+    {
+        msg = mMessage;
+    }
 
-    /** returns text */
-    inline std::string  GetText() const { return mText; }
-
-   
 protected:
-    /** the amount of force to be applied to be the ball */
-    std::string  mText;
-
+    std::string mMessage;
 };
 
 #endif // SAYACTION_H

@@ -4,7 +4,6 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sayeffector.h,v 1.1 2004/05/07 17:04:17 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,8 +21,16 @@
 #ifndef SAYEFFECTOR_H
 #define SAYEFFECTOR_H
 
-#include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/agentaspect/effector.h>
+
+namespace oxygen
+{
+       class AgentAspect;
+}
+
+class SoccerRuleAspect;
+
+class AgentState;
 
 class SayEffector : public oxygen::Effector
 {
@@ -41,14 +48,32 @@ public:
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
 
+    /** setup the reference to the ball body node */
+    virtual void OnLink();
+
+    /** remove the reference to the ball body node */
+    virtual void OnUnlink();
+
     std::string GetText();
 
     bool IfText()const;
 
- private:
-    std::string mText;
+protected:
+    /** reference to the agent aspect */
+    boost::shared_ptr<oxygen::AgentAspect> mAgent;
+    
+    /** reference to the agentstate */
+    boost::shared_ptr<AgentState> mAgentState;
+
+    /** reference to the soccer rule aspect */
+    boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
+
+private:
+    /** said message */
+    std::string mMessage;
+
     bool ifText;
- };
+};
 
 DECLARE_CLASS(SayEffector);
 

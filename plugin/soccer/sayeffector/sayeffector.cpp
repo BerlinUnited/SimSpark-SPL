@@ -4,7 +4,6 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sayeffector.cpp,v 1.1 2004/05/07 17:04:17 markelic Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +21,10 @@
 #include "sayaction.h"
 #include "sayeffector.h"
 #include <zeitgeist/logserver/logserver.h>
-
+#include <oxygen/agentaspect/agentaspect.h>
+#include <soccer/agentstate/agentstate.h>
+#include <soccer/soccerbase/soccerbase.h>
+#include <soccer/soccerruleaspect/soccerruleaspect.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -30,6 +32,7 @@ using namespace salt;
 using namespace std;
 
 SayEffector::SayEffector()
+    : oxygen::Effector()
 {
 }
 
@@ -38,10 +41,20 @@ SayEffector::~SayEffector()
 }
 
 bool
-SayEffector::Realize(boost::shared_ptr<ActionObject> action)
+SayEffector::Realize(shared_ptr<ActionObject> action)
 {
-   
-   
+    if (mAgent.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (SayEffector) parent node is not derived from "
+            << "BaseNode\n";
+        return false;
+    }
+
+    if (mAgentState.get() == 0)
+    {
+        return false;
+    }
 
     shared_ptr<SayAction> sayAction =
         shared_dynamic_cast<SayAction>(action);
@@ -53,16 +66,20 @@ SayEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    mText = sayAction->GetText();
+    sayAction->GetMessage(mMessage);
     ifText=true;
+
+    mSoccerRule->Broadcast(mMessage, mAgent->GetWorldTransform().Pos(),
+        mAgentState->GetUniformNumber(), mAgentState->GetTeamIndex());
+
     return true;
 }
-
-std::string
+/*
+string
 SayEffector::GetText()
 {
     ifText=false;
-    return mText;
+    return mMessage;
 }
 
 bool
@@ -70,37 +87,57 @@ SayEffector::IfText()const
 {
     return ifText;
 }
-
+*/
 shared_ptr<ActionObject>
 SayEffector::GetActionObject(const Predicate& predicate)
 {
-  do
-  {
-      if (predicate.name != GetPredicate())
-          {
-              GetLog()->Error() << "ERROR: (SayEffector) invalid predicate"
-                                << predicate.name << "\n";
-              break;
-          }
+    if (predicate.name != GetPredicate())
+    {
+        GetLog()->Error() << "ERROR: (SayEffector) invalid predicate"
+                          << predicate.name << "\n";
 
-      Predicate::Iterator iter = predicate.begin();
+        // some error happened
+        return shared_ptr<ActionObject>();
+    }
 
-      std::string text;
-      if (! predicate.AdvanceValue(iter, text))
-      {
-          GetLog()->Error()
-              << "ERROR: (SayEffector) said message expected\n";
-          break;
-      }
+    Predicate::Iterator iter = predicate.begin();
 
-     
+    std::string message;
+    if (! predicate.AdvanceValue(iter, message))
+    {
+        GetLog()->Error()
+            << "ERROR: (SayEffector) said message expected\n";
 
-      // construct the SayAction object
-      return shared_ptr<SayAction>(new SayAction(GetPredicate(),text));
+        // some error happened
+        return shared_ptr<ActionObject>();
+    }
 
-  } while (0);
+    // construct the SayAction object
+    return shared_ptr<SayAction>(new SayAction(GetPredicate(), message));
 
-  // some error happened
-  return shared_ptr<ActionObject>();
 }
 
+void
+SayEffector::OnLink()
+{
+    SoccerBase::GetAgentState(*this,mAgentState);
+    SoccerBase::GetSoccerRuleAspect(*this,mSoccerRule);
+
+    mAgent = shared_dynamic_cast<AgentAspect>(make_shared(GetParent()));
+
+    if (mAgent.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (SayEffector) parent node is not derived from "
+            << "AgentAspect\n";
+        return;
+    }
+}
+
+void
+SayEffector::OnUnlink()
+{
+    mAgent.reset();
+    mAgentState.reset();
+    mSoccerRule.reset();
+}
