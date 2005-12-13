@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.8 2005/07/10 05:18:02 fruit Exp $
+   $Id: soccerruleaspect.h,v 1.9 2005/12/13 20:57:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,9 +23,11 @@
 #define SOCCERRULEASPECT_H
 
 #include <soccer/soccercontrolaspect/soccercontrolaspect.h>
+#include <soccer/soccertypes.h>
 
 class GameStateAspect;
 class BallStateAspect;
+class AgentState;
 
 namespace salt
 {
@@ -39,6 +41,9 @@ namespace oxygen
 
 class SoccerRuleAspect : public SoccerControlAspect
 {
+public:
+    typedef std::list<boost::shared_ptr<AgentState> > TAgentStateList;
+
 public:
     SoccerRuleAspect();
     virtual ~SoccerRuleAspect();
@@ -57,6 +62,15 @@ public:
         \param pos position where the ball should be dropped-
     */
     void DropBall(salt::Vector3f pos);
+
+    /** broadcast a said message to all players
+        \param message said message-
+        \param pos positon of the player-
+        \param num uniform number-
+        \param idx team index-
+    */
+    void Broadcast(const std::string& message, const salt::Vector3f& pos,
+                   int number, TTeamIndex idx);
 
 protected:
     /** rereads the current soccer script values */
@@ -198,6 +212,11 @@ protected:
     salt::AABB2 mRightPenaltyArea;
     /** bounding box for the left penalty area */
     salt::AABB2 mLeftPenaltyArea;
+
+    /** say message size max limit */
+    int mSayMsgSize;
+    /** max distance that player can hear a message */
+    float mAudioCutDist;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);

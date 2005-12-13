@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.14 2005/07/06 07:11:27 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.15 2005/12/13 20:57:17 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 
 using namespace oxygen;
 using namespace boost;
+using namespace std;
 using salt::Vector2f;
 using salt::Vector3f;
 
@@ -45,7 +46,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mFreeKickMoveDist(15.15),
     mAutomaticKickOff(false),
     mWaitBeforeKickOff(1.0),
-    mSingleHalfTime(false)
+    mSingleHalfTime(false),
+    mSayMsgSize(512),
+    mAudioCutDist(50.0)
 {
 }
 
@@ -706,3 +709,79 @@ SoccerRuleAspect::UpdateCachedInternal()
                                    Vector2f(-mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
 }
 
+void 
+SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
+                            int number, TTeamIndex idx)
+{
+    TAgentStateList agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+    {
+        return;
+    }
+
+    TAgentStateList opponent_agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, opponent_agent_states,
+                                     SoccerBase::OpponentTeam(idx)))
+    {
+        return;
+    }
+
+    if (message.size() > mSayMsgSize)
+    {
+        return;
+    }
+
+    salt::BoundingSphere sphere(pos, mAudioCutDist);
+    
+    shared_ptr<Transform> transform_parent;
+    shared_ptr<Body> agent_body;
+    
+    for (
+        TAgentStateList::const_iterator it = agent_states.begin();
+        it != agent_states.end();
+        it++
+        )
+    {    
+        if ( (*it)->GetUniformNumber() == number)
+        {
+            (*it)->AddSelfMessage(message);
+            continue;
+        }
+        SoccerBase::GetTransformParent(*(*it), transform_parent);
+
+        // call GetAgentBody with matching AgentAspect
+        SoccerBase::GetAgentBody(transform_parent, agent_body);
+
+        // if the player is in the range, send the message
+        Vector3f new_pos = agent_body->GetPosition();
+        if (sphere.Contains(new_pos))
+        {
+            Vector3f relPos = pos - new_pos;
+            relPos = SoccerBase::FlipView(relPos, idx);
+            float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
+            (*it)->AddMessage(message, direction, true);
+        }
+    }
+
+    for (
+        SoccerBase::TAgentStateList::const_iterator it = agent_states.begin();
+        it != agent_states.end();
+        it++
+        )
+    {    
+        SoccerBase::GetTransformParent(*(*it), transform_parent);
+
+        // call GetAgentBody with matching AgentAspect
+        SoccerBase::GetAgentBody(transform_parent, agent_body);
+
+        // if the player is in the range, send the message
+        Vector3f new_pos = agent_body->GetPosition();
+        if (sphere.Contains(new_pos))
+        {
+            Vector3f relPos = pos - new_pos;
+            relPos = SoccerBase::FlipView(relPos, SoccerBase::OpponentTeam(idx));
+            float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
+            (*it)->AddMessage(message, direction, false);
+        }
+    }
+}
