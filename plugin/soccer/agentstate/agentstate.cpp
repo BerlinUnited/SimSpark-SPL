@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.cpp,v 1.3 2004/03/25 22:10:27 jboedeck Exp $
+   $Id: agentstate.cpp,v 1.4 2005/12/13 20:50:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,9 +25,14 @@
 #include <sstream>
 
 using namespace oxygen;
+using namespace std;
 
 AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
-                           mTemperature(20.0), mBattery(100.0)
+                           mTemperature(20.0), mBattery(100.0),
+                           mHearMax(2), mHearInc(1),
+                           mHearDecay(2), mHearMateCap(2),
+                           mHearOppCap(2), mIfSelfMsg(false),
+                           mIfMateMsg(false), mIfOppMsg(false)
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
@@ -113,4 +118,93 @@ AgentState::ReduceBattery(double consumption)
     return false;
 }
 
+void
+AgentState::AddMessage(const string& msg, float direction, bool teamMate)
+{
+    if (teamMate)
+    {
+        if (mHearMateCap < mHearDecay)
+        {
+            return;
+        }
 
+        mHearMateCap -= mHearDecay;
+
+        mMateMsg = msg;
+        mMateMsgDir = direction;
+        mIfMateMsg = true;
+    } 
+    else
+    {
+        if (mHearOppCap < mHearDecay)
+        {
+            return;
+        }
+
+        mHearOppCap -= mHearDecay;
+
+        mOppMsg = msg;
+        mOppMsgDir = direction;
+        mIfOppMsg = true;
+    }
+}
+
+void
+AgentState::AddSelfMessage(const string& msg)
+{
+    mSelfMsg = msg;
+    mIfSelfMsg = true;
+}
+
+bool
+AgentState::GetMessage(string& msg, float& direction, bool teamMate)
+{
+    if (teamMate)
+    {
+        if (mHearMateCap < mHearMax)
+        {
+            mHearMateCap += mHearInc;
+        }
+
+        if (! mIfMateMsg)
+        {
+            return false;
+        }
+
+        msg = mMateMsg;
+        direction = mMateMsgDir;
+        mIfMateMsg = false;
+        return true;
+    } 
+    else
+    {
+        if (mHearOppCap < mHearMax)
+        {
+            mHearOppCap += mHearInc;
+        }
+
+        if (! mIfOppMsg)
+        {
+            return false;
+        }
+
+        msg = mOppMsg;
+        direction = mOppMsgDir;
+        mIfOppMsg = false;
+        return true;
+    }
+}
+
+bool
+AgentState::GetSelfMessage(string& msg)
+{
+    if (! mIfSelfMsg)
+    {
+        return false;
+    }
+
+    msg = mSelfMsg;
+    mIfSelfMsg = false;
+
+    return true;
+}

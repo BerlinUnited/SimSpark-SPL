@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.3 2004/03/25 22:10:27 jboedeck Exp $
+   $Id: agentstate.h,v 1.4 2005/12/13 20:50:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,6 +83,14 @@ public:
      */
     bool ReduceBattery(double consumption);
 
+    /** Add a new message to the list */
+    void AddMessage(const std::string& msg, float direction, bool teamMate);
+    void AddSelfMessage(const std::string& msg);
+
+    /** Get the first message from the list */
+    bool GetMessage(std::string& msg, float& direction, bool teamMate);
+    bool GetSelfMessage(std::string& msg);
+
 protected:
     /** team index */
     TTeamIndex mTeamIndex;
@@ -95,6 +103,36 @@ protected:
 
     /** battery state */
     double mBattery;
+
+    /** self message */
+    std::string mSelfMsg;
+
+    /** team-mate's message */
+    std::string mMateMsg;
+    float mMateMsgDir;
+
+    /** opponent's message */
+    std::string mOppMsg;
+    float mOppMsgDir;
+
+    /** max hear capacity units */
+    int mHearMax;
+    /** hear capacity increase units when it's silent */
+    int mHearInc;
+    /** hear capacity decrease units when player hears a message */
+    int mHearDecay;
+
+    /** hear capacity for his team */
+    int mHearMateCap;
+    /** hear capacity for opponent team */
+    int mHearOppCap;
+
+    /** is there any message from myself */
+    bool mIfSelfMsg;
+    /** is there any message from teammate */
+    bool mIfMateMsg;
+    /** is there any message from oponnent */
+    bool mIfOppMsg;
 };
 
 DECLARE_CLASS(AgentState);
