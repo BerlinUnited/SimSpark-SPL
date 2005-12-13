@@ -112,6 +112,7 @@ def addAgent(path)
     kickEffector.setAngleRange(0.0,50.0)
 
     new('BeamEffector', path+'BeamEffector')
+    new('SayEffector', path+'SayEffector')
 
     # perceptor setup
     visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
@@ -128,6 +129,7 @@ def addAgent(path)
 
     new('GameStatePerceptor', path+'GameStatePerceptor')
     new('AgentStatePerceptor', path+'AgentStatePerceptor')
+    new('HearPerceptor', path+'HearPerceptor')
 
   end 
 end
