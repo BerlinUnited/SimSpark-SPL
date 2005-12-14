@@ -74,7 +74,7 @@ SayEffector::Realize(shared_ptr<ActionObject> action)
 
     return true;
 }
-/*
+
 string
 SayEffector::GetText()
 {
@@ -87,7 +87,7 @@ SayEffector::IfText()const
 {
     return ifText;
 }
-*/
+
 shared_ptr<ActionObject>
 SayEffector::GetActionObject(const Predicate& predicate)
 {

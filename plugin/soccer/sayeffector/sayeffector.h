@@ -61,7 +61,7 @@ public:
 protected:
     /** reference to the agent aspect */
     boost::shared_ptr<oxygen::AgentAspect> mAgent;
-    
+
     /** reference to the agentstate */
     boost::shared_ptr<AgentState> mAgentState;
 
