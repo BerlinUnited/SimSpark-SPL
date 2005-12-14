@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.5 2004/12/21 19:47:49 rollmark Exp $
+   $Id: export.cpp,v 1.6 2005/12/14 17:51:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 #include "visionperceptor/visionperceptor.h"
 #include "gamestateperceptor/gamestateperceptor.h"
 #include "agentstateperceptor/agentstateperceptor.h"
+#include "hearperceptor/hearperceptor.h"
 
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerControlAspect);
@@ -62,5 +63,6 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(VisionPerceptor);
         ZEITGEIST_EXPORT(GameStatePerceptor);
         ZEITGEIST_EXPORT(AgentStatePerceptor);
+        ZEITGEIST_EXPORT(HearPerceptor);
 ZEITGEIST_EXPORT_END()
 
