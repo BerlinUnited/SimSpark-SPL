@@ -27,6 +27,8 @@ kickeffector/kickeffector.cpp \
 kickeffector/kickeffector_c.cpp \
 sayeffector/sayeffector.cpp \
 sayeffector/sayeffector_c.cpp \
+hearperceptor/hearperceptor.cpp \
+hearperceptor/hearperceptor_c.cpp \
 objectstate/objectstate.cpp \
 objectstate/objectstate_c.cpp \
 trainercommandparser/trainercommandparser.cpp \
