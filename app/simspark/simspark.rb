@@ -50,6 +50,13 @@ material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
 material.setDiffuse(0.1,0.1,0.1,1.0)
 
 #
+# uncomment for logging setup (see spark.rb for reference)
+#
+
+# sparkLogAllToFile('./spark.txt')
+# sparkLogDebugToCerr()
+
+#
 # uncomment any of the following to run a simulation
 #
 
