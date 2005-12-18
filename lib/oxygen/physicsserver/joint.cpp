@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.4 2004/05/02 11:44:41 rollmark Exp $
+   $Id: joint.cpp,v 1.5 2005/12/18 10:50:03 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,8 +90,33 @@ void Joint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
             return;
         }
 
-    const dBodyID id1 = (body1.get() == 0) ? 0 : body1->GetODEBody();
-    const dBodyID id2 = (body2.get() == 0) ? 0 : body2->GetODEBody();
+    string path1,path2;
+    dBodyID id1,id2;
+
+    static const char strStaticEnv[] = "<static environment>";
+
+    if (body1.get() == 0)
+        {
+            id1   = 0;
+            path1 = strStaticEnv;
+        } else
+        {
+            id1   = body1->GetODEBody();
+            path1 = body1->GetFullPath();
+        }
+
+    if (body2.get() == 0)
+        {
+            id2   = 0;
+            path2 = strStaticEnv;
+        } else
+        {
+            id2   = body2->GetODEBody();
+            path2 = body2->GetFullPath();
+        }
+
+    GetLog()->Debug() << "(Joint) Attaching '" << path1 << "' to '"
+                      << path2 << "'\n" << std::endl;
 
     dJointAttach(mODEJoint, id1, id2);
 }
