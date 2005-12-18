@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.5 2005/12/18 10:50:03 rollmark Exp $
+   $Id: joint.cpp,v 1.6 2005/12/18 18:06:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ void Joint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
         }
 
     GetLog()->Debug() << "(Joint) Attaching '" << path1 << "' to '"
-                      << path2 << "'\n" << std::endl;
+                      << path2 << '\n';
 
     dJointAttach(mODEJoint, id1, id2);
 }
