@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.11 2005/03/01 13:47:35 fruit Exp $
+   $Id: rubysceneimporter.cpp,v 1.12 2005/12/18 17:52:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
+#include <oxygen/sceneserver/transform.h>
 #include <boost/scoped_array.hpp>
 
 using namespace zeitgeist;
@@ -53,6 +54,18 @@ using namespace std;
         method param ...
         )
 */
+
+#define S_NODE     "node"
+#define S_SELECT   "select"
+#define S_PWD      "pwd"
+#define S_TEMPLATE "template"
+#define S_DEFINE   "define"
+#define S_ATTACH   "attach"
+
+#define S_DELTASCENE "RubyDeltaScene"
+#define S_SCENEGRAPH "RubySceneGraph"
+
+#define S_FROMSTRING "<from string>";
 
 RubySceneImporter::RubySceneImporter() : SceneImporter()
 {
@@ -99,7 +112,7 @@ bool RubySceneImporter::ParseScene(const std::string& scene,
                                    shared_ptr<BaseNode> root,
                                    shared_ptr<ParameterList> parameter)
 {
-    mFileName = "<from string>";
+    mFileName = S_FROMSTRING;
     return ParseScene(scene.c_str(),scene.size(),root,parameter);
 }
 
@@ -145,6 +158,7 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
     destroy_sexp(sexp);
     destroy_continuation(pcont);
 
+    InvokeMethods();
     PopParameter();
     return ok;
 }
@@ -203,10 +217,10 @@ bool RubySceneImporter::ReadHeader(sexp_t* sexp)
     string val(sexp->val);
 
     mDeltaScene = false;
-    if (val == "RubyDeltaScene")
+    if (val == S_DELTASCENE)
         {
             mDeltaScene = true;
-        }  else if (val != "RubySceneGraph")
+        }  else if (val != S_SCENEGRAPH)
             {
                 return false;
             }
@@ -445,6 +459,83 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
     return true;
 }
 
+void RubySceneImporter::PushInvocation(const MethodInvocation& invoc)
+{
+    shared_ptr<Class> baseNodeClass =
+        shared_dynamic_cast<Class>(GetCore()->Get("/classes/oxygen/Transform"));
+
+    if (baseNodeClass.get() == 0)
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: failed to get class object for Transform\n";
+            return;
+        }
+
+    if (baseNodeClass->SupportsCommand(invoc.method))
+        {
+            // invoke basic methods, i.e. methods already supported by
+            // Transform immediately (e.g. setName, setLocalPos etc.)
+            Invoke(invoc);
+        } else
+        {
+            // defer methods on other nodes, to allow for forward
+            // references to nodes that are not installed yet
+            // (e.g. 'attach' on Joint nodes)
+            ParamEnv& env = GetParamEnv();
+            env.invocationList.push_back(invoc);
+        }
+}
+
+bool RubySceneImporter::Invoke(const MethodInvocation& invoc)
+{
+    if (invoc.node.expired())
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: Invoke called with expired node\n";
+            return false;
+        }
+
+    // invoke the method on the object
+    shared_ptr<Node> node = invoc.node.lock();
+    shared_ptr<Class> theClass = node->GetClass();
+
+    if (theClass.get() == 0)
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: cannot get class object for node "
+                << node->GetFullPath() << "\n";
+            return false;
+        }
+
+    if (! theClass->SupportsCommand(invoc.method))
+        {
+            GetLog()->Error()
+                << "(RubySceneImporter) ERROR: in file '" << mFileName
+                << "': unknown method name '"
+                << invoc.method << "' for node '" << node->GetFullPath()
+                << "' (a " << theClass->GetName() << ")\n";
+            return false;
+        }
+
+    node->Invoke(invoc.method, invoc.parameter);
+    return true;
+}
+
+bool RubySceneImporter::InvokeMethods()
+{
+    RubySceneImporter::ParamEnv& env = GetParamEnv();
+
+    for (
+         TMethodInvocationList::const_iterator iter = env.invocationList.begin();
+         iter != env.invocationList.end();
+         ++iter
+         )
+        {
+            const MethodInvocation& invoc = (*iter);
+            Invoke(invoc);
+        }
+}
+
 bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
 {
     if (sexp == 0)
@@ -456,8 +547,10 @@ bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
     string method = sexp->val;
     sexp = sexp->next;
 
-    // collect the parameters
-    ParameterList parameter;
+    // build method invocation struct
+    MethodInvocation invocation;
+    invocation.node      = node;
+    invocation.method    = method;
 
     while (sexp != 0)
         {
@@ -483,32 +576,11 @@ bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
                         }
                 }
 
-            parameter.AddValue(param);
+            invocation.parameter.AddValue(param);
             sexp = sexp->next;
         }
 
-    // invoke the method on the object
-    shared_ptr<Class> theClass = node->GetClass();
-
-    if (theClass.get() == 0)
-        {
-            GetLog()->Error()
-                << "(RubySceneImporter) ERROR: cannot get class object for node "
-                << node->GetFullPath() << "\n";
-            return false;
-        }
-
-    if (! theClass->SupportsCommand(method))
-        {
-            GetLog()->Error()
-                << "(RubySceneImporter) ERROR: in file '" << mFileName
-                << "': unknown method name '"
-                << method << "' for node '" << node->GetFullPath()
-                << "' (a " << theClass->GetName() << ")\n";
-            return false;
-        }
-
-    node->Invoke(method, parameter);
+    PushInvocation(invocation);
     return true;
 }
 
@@ -647,7 +719,7 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
             {
                 string name(sexp->val);
 
-                if (name == "node")
+                if (name == S_NODE)
                 {
                     while (
                         (sexp != 0) &&
@@ -671,7 +743,7 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 
                     if (
                         (sub->ty == SEXP_VALUE) &&
-                        (string(sub->val) == "node")
+                        (string(sub->val) == S_NODE)
                         )
                     {
                         node = shared_dynamic_cast<BaseNode>(*iter);
@@ -710,7 +782,7 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
             {
                 string name(sexp->val);
 
-                if (name == "node")
+                if (name == S_NODE)
                 {
                     sexp = sexp->next;
                     shared_ptr<BaseNode> node = CreateNode(sexp);
@@ -723,7 +795,7 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                     root->AddChildReference(node);
                     root = node;
                 }
-                else if (name == "select")
+                else if (name == S_SELECT)
                 {
                     sexp = sexp->next;
                     string name(sexp->val);
@@ -738,16 +810,16 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                     }
                     root = node;
                 }
-                else if (name == "pwd")
+                else if (name == S_PWD)
                 {
-                    GetLog()->Error() << "DEBUG: pwd: " << root->GetFullPath() << "\n";
+                    GetLog()->Debug() << "DEBUG: pwd: " << root->GetFullPath() << "\n";
                 }
-                else if (name == "template")
+                else if (name == S_TEMPLATE)
                 {
                     sexp = sexp->next;
                     return ParseTemplate(sexp);
                 }
-                else if (name == "define")
+                else if (name == S_DEFINE)
                 {
                     sexp = sexp->next;
                     return ParseDefine(sexp);

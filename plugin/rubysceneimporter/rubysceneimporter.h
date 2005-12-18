@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.8 2004/12/19 14:13:40 rollmark Exp $
+   $Id: rubysceneimporter.h,v 1.9 2005/12/18 17:52:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,11 +32,22 @@ protected:
     //! mapping from parameter name to parameter index
     typedef std::map<std::string, int> TParameterMap;
 
+    //! defines a method invocation
+    struct MethodInvocation
+    {
+        boost::weak_ptr<zeitgeist::Node> node;
+        std::string method;
+        zeitgeist::ParameterList parameter;
+    };
+
+    typedef std::list<MethodInvocation> TMethodInvocationList;
+
     //! a parameter environment
     struct ParamEnv
     {
         TParameterMap parameterMap;
         boost::shared_ptr<zeitgeist::ParameterList> parameter;
+        TMethodInvocationList invocationList;
 
         ParamEnv();
         ParamEnv(boost::shared_ptr<zeitgeist::ParameterList> p)
@@ -74,7 +85,12 @@ protected:
     bool ReadGraph(sexp_t* sexp, boost::shared_ptr<oxygen::BaseNode> root);
     bool ReadDeltaGraph(sexp_t* sexp, boost::shared_ptr<oxygen::BaseNode> root);
     boost::shared_ptr<zeitgeist::Object> CreateInstance(const std::string& className);
+
+    void PushInvocation(const MethodInvocation& invoc);
+    bool Invoke(const MethodInvocation& invoc);
+    bool InvokeMethods();
     bool ReadMethodCall(sexp_t* _sexp, boost::shared_ptr<oxygen::BaseNode> node);
+
     bool ReplaceVariable(std::string& param);
     bool EvalParameter(sexp_t* sexp, std::string& value);
 
