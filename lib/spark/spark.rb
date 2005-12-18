@@ -209,6 +209,52 @@ def sparkAddFPSCamera(
 end
 
 #
+# registers a new logTarget to the LogServer
+#
+# valid logTarget value are ':cout' and ':cerr' for stdout and stderr
+# output, as well as any other file name, e.g. 'log.txt'
+#
+# logType denotes the debug to be attached to the
+# logtarget. Valid streams are 'eNone', 'eDebug' and 'eWarning'
+#
+def sparkEnableLog(logTarget, logType)
+  print "(spark.rb) sparkEnableLog logTarget="+logTarget+" logType="+logType+"\n"
+
+  logServer = get($serverPath+'log')
+  logServer.addStream(logTarget, logType)
+end
+
+# logs all error output to cerr
+def sparkLogErrorToCerr()
+  sparkEnableLog(':cerr', 'eError')
+end
+
+# logs all debug output to cerr
+def sparkLogDebugToCerr()
+  sparkEnableLog(':cerr', 'eDebug')
+end
+
+# logs all output to cerr
+def sparkLogAllToCerr()
+  sparkEnableLog(':cerr', 'eAll')
+end
+
+# logs all error output to 'fileName'
+def sparkLogErrorToFile(fileName)
+  sparkEnableLog(fileName, 'eError')
+end
+
+# logs all debug output to 'fileName'
+def sparkLogDebugToFile(fileName)
+  sparkEnableLog(fileName, 'eDebug')
+end
+
+# logs all output to 'fileName'
+def sparkLogAllToFile(filenName)
+  sparkEnableLog(fileName, 'eAll')
+end
+
+#
 # setup spark
 #
 
@@ -219,8 +265,7 @@ $serverPath = '/sys/server/'
 
 #
 # set up logging
-logServer = get($serverPath+'log')
-logServer.addStream(':cerr', 'eError')
+sparkLogErrorToCerr()
 
 #
 # setup the PhysicsServer
