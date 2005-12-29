@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.15 2005/12/13 20:57:17 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.16 2005/12/29 18:44:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -709,7 +709,7 @@ SoccerRuleAspect::UpdateCachedInternal()
                                    Vector2f(-mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
 }
 
-void 
+void
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
@@ -732,16 +732,16 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     }
 
     salt::BoundingSphere sphere(pos, mAudioCutDist);
-    
+
     shared_ptr<Transform> transform_parent;
     shared_ptr<Body> agent_body;
-    
+
     for (
         TAgentStateList::const_iterator it = agent_states.begin();
         it != agent_states.end();
         it++
         )
-    {    
+    {
         if ( (*it)->GetUniformNumber() == number)
         {
             (*it)->AddSelfMessage(message);
@@ -764,11 +764,11 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     }
 
     for (
-        SoccerBase::TAgentStateList::const_iterator it = agent_states.begin();
-        it != agent_states.end();
+        SoccerBase::TAgentStateList::const_iterator it = opponent_agent_states.begin();
+        it != opponent_agent_states.end();
         it++
         )
-    {    
+    {
         SoccerBase::GetTransformParent(*(*it), transform_parent);
 
         // call GetAgentBody with matching AgentAspect
