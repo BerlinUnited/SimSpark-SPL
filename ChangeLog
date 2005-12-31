@@ -1,3 +1,56 @@
+2005-12-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/sparkagent/export.cpp: 
+	- added exports for HingePerceptor and HingeEffector
+
+	* plugin/sparkagent/Makefile.am: 
+	- included files for HingePerceptor, HingeEffector,
+	  and HingeAction
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h,
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- added Hesham's implementation of the offside rule:
+	  methods CheckOffside and UpdateOffside
+
+	* lib/oxygen/physicsserver/hingejoint.h,
+	* lib/oxygen/physicsserver/hingejoint.cpp,
+	* lib/oxygen/physicsserver/hingejoint_c.cpp,: 
+	- implemented methods GetAxis and SetAxis
+
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt: 
+	- added Hesham's Hear Perceptor and Say Effector
+	  documentation
+
+	* app/simulator/rcssserver3D.rb: 
+	- changed useCars to 'no' by default
+	- changed useRandomNoise to 'true'
+
+	* app/monitorspark/monitorspark.rb,
+	* app/simspark/simspark.rb: 
+	- tweaked some material values, just eye-candy ;-)
+
+	* app/agentspark/main.cpp: 
+	- changed default behavior to LeggedSphereBehavior
+	  for demonstration of the new agent
+
+	* app/agentspark/Makefile.am: 
+	- included files for the LeggedSphereBehavior
+
+	* app/agentspark/soccerbehavior.cpp: 
+	- corrected include and a typo
+
+	* app/agentspark/leggedspherebehavior.h,
+	* app/agentspark/leggedspherebehavior.cpp,
+	* app/simspark/rsg/agent/leggedsphere.rsg,
+	* plugin/sparkagent/hingeaction.h,
+	* plugin/sparkagent/hingeeffector.h,
+	* plugin/sparkagent/hingeeffector.cpp,
+	* plugin/sparkagent/hingeeffector_c.cpp,
+	* plugin/sparkagent/hingeperceptor.h,
+	* plugin/sparkagent/hingeperceptor.cpp,
+	* plugin/sparkagent/hingeperceptor_c.cpp:
+	- added files to the repository	
+
 2005-12-04  Markus Rollmann  <rollmark@uni-koblenz.de>
 
 	* lib/zeitgeist/core.cpp, lib/zeitgeist/core.h:
