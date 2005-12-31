@@ -30,4 +30,7 @@ agentspark_SOURCES = main.cpp \
 	carbehavior.cpp \
 	carbehavior.h \
 	soccerbehavior.h \
-	soccerbehavior.cpp
+	soccerbehavior.cpp \
+	leggedspherebehavior.h \
+	leggedspherebehavior.cpp
+
