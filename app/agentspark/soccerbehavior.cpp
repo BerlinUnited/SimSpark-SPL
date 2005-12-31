@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbehavior.cpp,v 1.4 2004/12/21 14:58:22 rollmark Exp $
+   $Id: soccerbehavior.cpp,v 1.5 2005/12/31 13:51:52 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "soccerbehavior.h"
-#include <iostream.h>
+#include <iostream>
 #include <sstream>
 
 using namespace oxygen;
@@ -100,7 +100,7 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
 
             VisionObject vo = (*iter).second;
 
-            // find  to the 'pol' entry in the object's section
+            // find the 'pol' entry in the object's section
             Predicate::Iterator polIter = paramIter;
             if (! predicate.FindParameter(polIter,"pol"))
                 {
