@@ -1,0 +1,175 @@
+; -*- mode: lisp; -*-
+
+;
+; sphere with two legs
+;
+
+(RubySceneGraph 0 1)
+( 
+    ; create the sphere
+    (node Transform
+        (setName body)
+        (setLocalPos 0 0 3)
+        (importScene rsg/boxspheres/sphere.rsg 1.2 1 matRed)
+        )
+    
+    ; attach left thigh
+    (node Transform
+        (setName leftthigh)
+        (setLocalPos 1.25 0 2.25)
+        (importScene rsg/boxspheres/box.rsg 0.5 0.5 1 1 matGrey)
+
+        ; install the joint to connect to the body
+        (node HingeJoint
+            (attach ../boxBody ../../body/sphereBody)
+            (setAnchor 0 0 0)
+            (setAxis 0) ; move around the x-axis
+    
+            ; enable the joint motor
+            (setMaxMotorForce 0 100)
+    
+            ; install a perceptor to measure the tire movement
+            (node HingePerceptor
+                (setName lefthip)
+            )
+    
+            ; install an effector to control the joint motor
+            (node HingeEffector
+                    (setName lhe)
+            )
+        )
+    )
+
+    ; attach left shin
+    (node Transform
+        (setName leftshin)
+        (setLocalPos 1.25 0 1)
+        (importScene rsg/boxspheres/box.rsg 0.5 0.5 1 1 matGrey)
+
+        ; install the joint to connect to the body
+        (node HingeJoint
+            (attach ../boxBody ../../leftthigh/boxBody)
+            (setAnchor 0 0 0)
+            (setAxis 0) ; move around the x-axis
+    
+            ; enable the joint motor
+            (setMaxMotorForce 0 100)
+    
+            ; install a perceptor to measure the tire movement
+            (node HingePerceptor
+                (setName leftknee)
+            )
+    
+            ; install an effector to control the joint motor
+            (node HingeEffector
+                (setName lke)
+            )
+        )
+    )
+
+    ; attach left foot
+    (node Transform
+        (setName leftfoot)
+        (setLocalPos 1.25 0 0.125)
+        (importScene rsg/boxspheres/box.rsg 1 1.25 0.25 1 matGrey)
+
+        ; install the joint to connect to the body
+        (node HingeJoint
+            (attach ../boxBody ../../leftshin/boxBody)
+            (setAnchor 0 0 0)
+            (setAxis 0) ; move around the x-axis
+    
+            ; enable the joint motor
+            (setMaxMotorForce 0 100)
+    
+            ; install a perceptor to measure the tire movement
+            (node HingePerceptor
+                (setName leftankle)
+            )
+    
+            ; install an effector to control the joint motor
+            (node HingeEffector
+                (setName lae)
+            )
+        )
+    )
+
+    ; attach right thigh
+    (node Transform
+        (setName rightthigh)
+        (setLocalPos -1.25 0 2.25)
+        (importScene rsg/boxspheres/box.rsg 0.5 0.5 1 1 matGrey)
+        (node HingeJoint
+            (attach ../boxBody ../../body/sphereBody)
+            (setAnchor 0 0 0)
+            (setAxis 0) ; move around the x-axis
+
+            ; enable the joint motor
+            (setMaxMotorForce 0 100)
+    
+            ; install a perceptor to measure the tire movement
+            (node HingePerceptor
+                (setName righthip)
+            )
+    
+            ; install an effector to control the joint motor
+            (node HingeEffector
+                    (setName rhe)
+            )
+        )
+    )
+
+    ; attach right shin
+    (node Transform
+        (setName rightshin)
+        (setLocalPos -1.25 0 1)
+        (importScene rsg/boxspheres/box.rsg 0.5 0.5 1 1 matGrey)
+
+        ; install the joint to connect to the body
+        (node HingeJoint
+            (attach ../boxBody ../../rightthigh/boxBody)
+            (setAnchor 0 0 0)
+            (setAxis 0) ; move around the x-axis
+    
+            ; enable the joint motor
+            (setMaxMotorForce 0 100)
+    
+            ; install a perceptor to measure the tire movement
+            (node HingePerceptor
+                (setName rightknee)
+            )
+    
+            ; install an effector to control the joint motor
+            (node HingeEffector
+                (setName rke)
+            )
+        )
+    )
+
+    ; attach right foot
+    (node Transform
+        (setName rightfoot)
+        (setLocalPos -1.25 0 0.125)
+        (importScene rsg/boxspheres/box.rsg 1 1.25 0.25 1 matGrey)
+
+        ; install the joint to connect to the body
+        (node HingeJoint
+            (attach ../boxBody ../../rightshin/boxBody)
+            (setAnchor 0 0 0)
+            (setAxis 0) ; move around the x-axis
+    
+            ; enable the joint motor
+            (setMaxMotorForce 0 100)
+    
+            ; install a perceptor to measure the tire movement
+            (node HingePerceptor
+                (setName rightankle)
+            )
+    
+            ; install an effector to control the joint motor
+            (node HingeEffector
+                (setName rae)
+            )
+        )
+    )
+)
