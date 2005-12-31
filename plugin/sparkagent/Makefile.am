@@ -11,7 +11,14 @@ sparkagent_la_SOURCES = \
 	timeperceptor.h \
 	timeperceptor.cpp \
 	timeperceptor_c.cpp \
-	export.cpp
+	export.cpp \
+	hingeaction.h \
+	hingeeffector.h \
+	hingeeffector.cpp \
+	hingeeffector_c.cpp \
+	hingeperceptor.h \
+	hingeperceptor.cpp \
+	hingeperceptor_c.cpp
 
 sparkagent_la_LDFLAGS = -module -version-info 0:0:0
 
