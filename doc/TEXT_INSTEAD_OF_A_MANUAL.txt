@@ -13,18 +13,20 @@ Contents
 2. Soccer Simulation
 2.1.  Soccer Team
 2.2   Environment
-
 2.3   Players
 2.3.1 Create Effector
 2.3.2 Init Effector
 2.3.3 Beam Effector
 2.3.4 Drive Effector
 2.3.5 Kick Effector
-2.3.6. Vision Perceptor
-2.3.7. GameState Perceptor
-2.3.8. AgentState Perceptor
+2.3.6 Say Effector
+2.3.7 Vision Perceptor
+2.3.8 GameState Perceptor
+2.3.9 AgentState Perceptor
+2.3.10 Hear Perceptor
 
 3. Monitor and Trainer Protocol
+
 4. References
 
 
@@ -119,7 +121,7 @@ high -- the official FIFA height is 2.44m.
 
 FIFA does not say too much about gravity (probably because they can't
 change it anyway), but in our simulation, gravity is fixed to
-9.81m/s². 
+9.81m/s. 
 
 Simulator steps are 0.01 seconds long. Connected monitors receive an
 update every 15th simulator step.
@@ -278,7 +280,24 @@ gets higher with sigma up to 4.5.
 
 Example command: (kick 20.0 80.0)
 
-2.3.6. Vision Perceptor
+2.3.6. Say Effector
+-------------------
+
+To broadcast messages to other players, you have to use the
+SayEffector. Messages can be sayMsgSize(for now 512) characters long,
+where valid characters for say messages are the printing characters*
+except space and (). Messages players say can be heard within a
+distance of audioCutDist(for now 50 meters) by members of both
+teams. The use of the SayEffector is only restricted by limited
+capacity of the players of hearing messages.
+
+* In the seven-bit ASCII character set, the printing characters are 0x20 to 0x7E.
+
+(say <message>)
+
+Example command: (say player10_Pass)
+
+2.3.7. Vision Perceptor
 -----------------------
 
 Your robots possess a special omnicam with some smart image
@@ -381,6 +400,58 @@ Example AgentState output:
 
 (AgentState (battery 100) (temp 23))
 
+2.3.10. Hear Perceptor
+----------------------
+
+You get percepts from this perceptor when a player uses SayEffector
+and sends a message. The format of the aural sensor message from the
+is:
+
+(hear <time> <direction in degree> <message>)
+
+<time> indicates the current time.
+
+<direction in degree> is relative direction to sender (without noise)
+if it is another player, otherwise it is "self" (without quotation
+mark).
+
+<message> is the message. The maximum length is sayMsgSize bytes.
+
+The server parameters that affect the Hear perceptor are:
+
+Parameter                      Value
+---------------------------------------
+audioCutDist                    50.0
+hearMax                         2
+hearInc                         1
+hearDecay                       2
+sayMsgSize                      512
+
+A player can only hear a message if the player's hear capacity is at
+least hearDecay, since the hear capacity of the player is decreased by
+that number when a message is heard. Every cycle the hear capacity is
+increased with hearInc. The maximum hear capacity is hearMax. To avoid
+a team from making the other team's communication useless by
+overloading the channel the players have separate hear capacities for
+each team. With the current values this means that a player can hear
+at most one message from each team every second perceptor update.
+
+If more messages arrive at the same time than the player can hear the
+messages actually heard are undefined (The current implementation
+choose the messages according to the order of arrival). This rule does
+not include messages from oneself. In other words, a player can hear a
+message from himself and hear a message from another player in the
+same perceptor output.
+
+A message said by a player is transmitted only to players within
+audioCutDist meters from that player. For example, a defender, who may
+be near his own goal, can hear a message from his goal-keeper but a
+striker who is near the opponent goal can not hear the message.
+
+Example Hear output:
+
+(hear 0.8 -179.99 Test_1)
+(hear 0.4 self Test_2)
 
 3. Monitor and Trainer Protocol
 -------------------------------
