@@ -1,3 +1,43 @@
+[0.4]
+This release includes some speed improvements, agent communication,
+an implementation of the offside rule, and a first, unfinished version
+of the new legged-sphere agent type amongst other things. 
+Here is a summary with some more details:
+
+* Features (general):
+
+- A cache for node references has been added to the Zeitgeist
+  core to speed up the simulation considerably. Thanks go to the
+  Brainstormers3D team for the initial patch and to Markus Rollmann
+  for the modification and integration.
+- The Spark based simulation (which will be used in the future for
+  simulations using the articulated agents) has been made much more
+  flexible by Markus Rollmann.
+- A sample agent and behaviors for a Spark based soccer simulation
+  using either small cars or legged-sphere agents has been
+  added. Currently, the legged-sphere agents are used by default. 
+  The behavior of the agents is very simple (in the legged-sphere case) 
+  and is solely meant to demonstrate how to use the new perceptors and 
+  effectors.
+
+* Features (soccer):
+
+- The offside rule has been implemented by Hesham Ebrahimi
+- Agent communication is now possible. It is based on the
+  2D communication model. Documentation can be found in the
+  file doc/TEXT_INSTEAD_OF_A_MANUAL.txt. Thanks go again to
+  Hesham Ebrahimi for the implementation and documentation
+- The lite-monitor is able to draw velocities in 2D and 3D. 
+  Added by Jan Murray.
+
+* Important fixes:
+
+- Fix for gcc 4.0 and above compatibility by Jan Murray
+- An issue with 64bit builds, reported by Li Yang and Patrick Riley,
+  was fixed by Markus Rollmann
+- The distance error in the vision perceptor was made dependent on the
+  real distance by Oliver Obst
+
 [0.x.x]
 This release has been ported to OS X.  Besides the normal
 requirements, it requires an X server to be installed on the machine,
