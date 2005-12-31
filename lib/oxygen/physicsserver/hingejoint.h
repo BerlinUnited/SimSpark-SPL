@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.h,v 1.5 2004/05/01 11:30:31 rollmark Exp $
+   $Id: hingejoint.h,v 1.6 2005/12/31 13:53:56 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,15 @@ public:
     */
     salt::Vector3f GetAnchor(EBodyIndex idx);
 
+    /** Sets the joint axis. The connected bodies movements will be
+       constrained to move around this axis.
+    */
+    void SetAxis(EAxisIndex idx);
+
+    /** Returns the hinge axis in the local coordinate system
+   */
+    salt::Vector3f GetAxis();
+
     /** returns the hinge angle in degrees, measured between the two
         bodies, or between the body and the static environment.
     */
@@ -52,15 +61,15 @@ public:
     /** returns the time derivate of the hinge angle */
     float GetAngleRate();
 
-protected:
-    /** creates a new hingejoint joint */
-    virtual void OnLink();
-
     /** sets a joint parameter value */
     virtual void SetParameter(int parameter, float value);
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter);
+
+protected:
+    /** creates a new hingejoint joint */
+    virtual void OnLink();
 };
 
 DECLARE_CLASS(HingeJoint);

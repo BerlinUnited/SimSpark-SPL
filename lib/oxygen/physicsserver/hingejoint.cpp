@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.cpp,v 1.5 2004/05/01 11:30:31 rollmark Exp $
+   $Id: hingejoint.cpp,v 1.6 2005/12/31 13:53:56 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,10 +48,6 @@ void HingeJoint::SetAnchor(const Vector3f& anchor)
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
     dJointSetHingeAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
-
-    // calculate hinge axis (pos. z, relative to world transform)
-    Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-    dJointSetHingeAxis(mODEJoint, up[0], up[1], up[2]);
 }
 
 Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
@@ -79,6 +75,43 @@ Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
         }
 
     return GetLocalPos(pos);
+}
+
+void HingeJoint::SetAxis(EAxisIndex idx)
+{
+    switch(idx)
+    {
+    case AI_FIRST:
+    {
+        // calculate hinge axis (pos. x, relative to world transform)
+        Vector3f right(GetWorldTransform().Rotate(Vector3f(1,0,0)));
+        dJointSetHingeAxis(mODEJoint, right[0], right[1], right[2]);
+        break;
+    }
+    case AI_SECOND:
+    {
+       // calculate hinge axis (pos. y, relative to world transform)
+        Vector3f forward(GetWorldTransform().Rotate(Vector3f(0,1,0)));
+        dJointSetHingeAxis(mODEJoint, forward[0], forward[1], forward[2]); 
+        break;
+    }
+    case AI_THIRD:
+    {
+        // calculate hinge axis (pos. z, relative to world transform)
+        Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
+        dJointSetHingeAxis(mODEJoint, up[0], up[1], up[2]);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+Vector3f HingeJoint::GetAxis()
+{
+    dReal axis[3];
+    dJointGetHingeAxis(mODEJoint, axis);
+    return Vector3f (axis[0], axis[1], axis[2]);
 }
 
 float HingeJoint::GetAngle()

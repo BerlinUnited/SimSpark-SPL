@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hingejoint_c.cpp,v 1.3 2004/04/15 10:43:34 rollmark Exp $
+   $Id: hingejoint_c.cpp,v 1.4 2005/12/31 13:53:56 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,10 +52,29 @@ FUNCTION(HingeJoint,getAngleRate)
     return obj->GetAngleRate();
 }
 
+FUNCTION(HingeJoint,setAxis)
+{
+    // 0 = x-axis, 1 = y-axis, 2 = z-axis
+    int inAxis;
+
+    // test if we got a parameter and get the value
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inAxis))
+        )
+        {
+            return false;
+        }
+
+    obj->SetAxis(static_cast<Joint::EAxisIndex>(inAxis));
+    return true;
+}
+
 void CLASS(HingeJoint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Joint);
     DEFINE_FUNCTION(setAnchor);
     DEFINE_FUNCTION(getAngle);
     DEFINE_FUNCTION(getAngleRate);
+    DEFINE_FUNCTION(setAxis);
 }
