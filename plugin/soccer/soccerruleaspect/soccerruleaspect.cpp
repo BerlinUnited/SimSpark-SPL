@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.16 2005/12/29 18:44:40 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.17 2005/12/31 13:54:20 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -503,6 +503,12 @@ SoccerRuleAspect::UpdatePlayOn()
         return;
     }
 
+    // check if the players are in offside
+    if (CheckOffside())
+    {
+        return;
+    }
+
     // other checks go here...
 }
 
@@ -640,6 +646,13 @@ SoccerRuleAspect::Update(float deltaTime)
         UpdateGoal();
         break;
 
+    case PM_OFFSIDE_LEFT:
+        UpdateOffside(TI_LEFT);
+        break;
+    case PM_OFFSIDE_RIGHT:
+        UpdateOffside(TI_RIGHT);
+        break;
+
     case PM_GameOver:
         UpdateGameOver();
         break;
@@ -709,7 +722,7 @@ SoccerRuleAspect::UpdateCachedInternal()
                                    Vector2f(-mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
 }
 
-void
+void 
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
@@ -732,16 +745,16 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     }
 
     salt::BoundingSphere sphere(pos, mAudioCutDist);
-
+    
     shared_ptr<Transform> transform_parent;
     shared_ptr<Body> agent_body;
-
+    
     for (
         TAgentStateList::const_iterator it = agent_states.begin();
         it != agent_states.end();
         it++
         )
-    {
+    {    
         if ( (*it)->GetUniformNumber() == number)
         {
             (*it)->AddSelfMessage(message);
@@ -768,7 +781,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
         it != opponent_agent_states.end();
         it++
         )
-    {
+    {    
         SoccerBase::GetTransformParent(*(*it), transform_parent);
 
         // call GetAgentBody with matching AgentAspect
@@ -783,5 +796,236 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
             (*it)->AddMessage(message, direction, false);
         }
+    }
+}
+
+bool
+SoccerRuleAspect::CheckOffside()
+{
+    shared_ptr<AgentAspect> agent;
+    shared_ptr<AgentState> agentState;
+    TTime time;
+
+    if (! mBallState->GetLastCollidingAgent(agent,time))
+    {
+        return false;
+    }
+    
+    // if the previous last collinding agent is the last colliding agent, 
+    // there is no offside
+    if (mPreLastCollidingAgent == agent)
+    {
+        return false;
+    }
+    else
+    {
+        mPreLastCollidingAgent = agent;
+    }
+
+    if (! SoccerBase::GetAgentState(agent,agentState))
+    {
+        return false;
+    }
+    
+    TTeamIndex idx = agentState->GetTeamIndex();
+        
+    // find opponent's goalkeeper and last defender positions
+    list<shared_ptr<AgentState> > opp_agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, opp_agent_states, 
+          SoccerBase::OpponentTeam(idx)))
+    {
+        return false;
+    }
+
+    float opp_goalkeeper_pos;
+    float opp_defender_pos;
+    if (SoccerBase::OpponentTeam(idx) == TI_LEFT)
+    {
+        opp_goalkeeper_pos = mFieldLength/2.0;
+        opp_defender_pos   = mFieldLength/2.0;
+    }
+    else
+    {
+        opp_goalkeeper_pos = -mFieldLength/2.0;
+        opp_defender_pos   = -mFieldLength/2.0;
+    }    
+            
+    shared_ptr<Transform> transform_parent;
+    shared_ptr<Body> agent_body;
+    
+    list<shared_ptr<AgentState> >::const_iterator it;
+    for (it = opp_agent_states.begin(); it != opp_agent_states.end(); it++)
+    {
+        SoccerBase::GetTransformParent(*(*it), transform_parent);
+        SoccerBase::GetAgentBody(transform_parent, agent_body);
+        
+        Vector3f opp_agent_pos = agent_body->GetPosition();
+        
+        if (SoccerBase::OpponentTeam(idx) == TI_LEFT)
+        {
+            if (opp_agent_pos[0] <= opp_goalkeeper_pos)
+            {
+                opp_defender_pos   = opp_goalkeeper_pos; 
+                opp_goalkeeper_pos = opp_agent_pos[0];
+            }
+            else if (opp_agent_pos[0] <= opp_defender_pos)
+            {
+                opp_defender_pos = opp_agent_pos[0];
+            }
+        }
+        else
+        {
+            if (opp_agent_pos[0] >= opp_goalkeeper_pos)
+            {
+                opp_defender_pos   = opp_goalkeeper_pos; 
+                opp_goalkeeper_pos = opp_agent_pos[0];
+            }
+            else if (opp_agent_pos[0] >= opp_defender_pos)
+            {
+                opp_defender_pos = opp_agent_pos[0];
+            }
+        }
+    }
+    
+    // if an agent,that touches the ball, is in offside position and was in 
+    // offside position before the last shot, change the mode to offside
+    if (idx == TI_LEFT)
+    {
+        vector<int>::const_iterator it_offside;
+        for (
+            it_offside = mInOffsideLeftPlayers.begin();
+            it_offside != mInOffsideLeftPlayers.end(); 
+            it_offside++)
+        {
+            if (agentState->GetUniformNumber() == *it_offside)
+            {
+                SoccerBase::GetTransformParent(*agentState, transform_parent);
+                SoccerBase::GetAgentBody(transform_parent, agent_body);
+                
+                Vector3f agent_pos = agent_body->GetPosition();
+                
+                if (agent_pos[0] > opp_defender_pos)
+                {
+                    mGameState->SetPlayMode(PM_OFFSIDE_RIGHT);
+                }
+            }
+        }
+    }
+    else
+    {
+        vector<int>::const_iterator it_offside;
+        for (
+            it_offside = mInOffsideRightPlayers.begin();
+            it_offside != mInOffsideRightPlayers.end();
+            it_offside++
+            )
+        {
+            if (agentState->GetUniformNumber() == *it_offside)
+            {
+                SoccerBase::GetTransformParent(*agentState, transform_parent);
+                SoccerBase::GetAgentBody(transform_parent, agent_body);
+                
+                Vector3f agent_pos = agent_body->GetPosition();
+                
+                if (agent_pos[0] < opp_defender_pos)
+                {
+                    mGameState->SetPlayMode(PM_OFFSIDE_LEFT);
+                }
+            }
+        }
+    }
+    
+    // update the list of players that are in offside poistion 
+    mInOffsideLeftPlayers.clear();
+    mInOffsideRightPlayers.clear();
+    
+    list<shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+    {
+        return false;
+    }
+
+    for (it = agent_states.begin(); it != agent_states.end(); it++)
+    {
+        SoccerBase::GetTransformParent(*(*it), transform_parent);
+        SoccerBase::GetAgentBody(transform_parent, agent_body);
+        
+        Vector3f agent_pos = agent_body->GetPosition();
+        
+        if (idx == TI_LEFT)
+        {
+            if (agent_pos[0] > opp_defender_pos)
+            {
+                mInOffsideLeftPlayers.push_back((*it)->GetUniformNumber());
+                mFreeKickPos = mBallState->GetLastValidBallPosition();
+                mFreeKickPos[2] = mBallRadius;
+            }
+        }
+        else
+        {
+            if (agent_pos[0] < opp_defender_pos)
+            {
+                mInOffsideRightPlayers.push_back((*it)->GetUniformNumber());
+                mFreeKickPos = mBallState->GetLastValidBallPosition();
+                mFreeKickPos[2] = mBallRadius;
+            }
+        }
+    }
+    
+    return true;
+}
+
+void
+SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
+{
+    // do nothing for the duration of mKickInPauseTime
+    if (mGameState->GetModeTime() < mKickInPauseTime)
+    {
+        return;
+    }
+
+    // move away opponent team
+    Vector3f ball_pos = mBallBody->GetPosition();
+    ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
+                 SoccerBase::OpponentTeam(idx));
+
+    // if no player touched the ball for mDropBallTime, we move away
+    // all players and set the play mode to play on
+    if (mDropBallTime > 0 &&
+        mGameState->GetModeTime() > mDropBallTime)
+    {
+        DropBall(mFreeKickPos);
+        return;
+    }
+
+    // after the first agent touches the ball move to PM_PLAY_ON. the
+    // time when the agent last touches the ball must be after the
+    // change to the OffsideKick mode
+    shared_ptr<AgentAspect> agent;
+    shared_ptr<AgentState> agentState;
+    TTime time;
+    if (! mBallState->GetLastCollidingAgent(agent,time))
+    {
+        GetLog()->Error() 
+            << "ERROR: (SoccerRuleAspect) no agent collided yet\n";
+        return;
+    }
+
+    if (! SoccerBase::GetAgentState(agent,agentState))
+    {
+        return;
+    }
+
+    TTeamIndex collidingAgentIdx = agentState->GetTeamIndex();
+
+    TTime lastChange = mGameState->GetLastModeChange();
+    if (time > lastChange && collidingAgentIdx==idx)
+    {
+        mGameState->SetPlayMode(PM_PlayOn);
+    } 
+    else
+    {
+        // move the ball back on the free kick position
+        MoveBall(mFreeKickPos);
     }
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.9 2005/12/13 20:57:17 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.10 2005/12/31 13:54:20 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ namespace salt
 namespace oxygen
 {
     class Body;
+    class AgentAspect;
 }
 
 class SoccerRuleAspect : public SoccerControlAspect
@@ -106,6 +107,9 @@ protected:
     /** update the RuleAspect during Goal mode */
     void UpdateGoal();
 
+    /** update the RuleAspect during Offside mode */
+    void UpdateOffside(TTeamIndex ti = TI_NONE);
+
     /** update the RuleAspect when the match is over */
     void UpdateGameOver();
 
@@ -120,6 +124,9 @@ protected:
         \return true if the ball was in one of the goals.
     */
     bool CheckGoal();
+
+    /** checks if the assistant referee should raise the flag for offside */
+    bool CheckOffside();
 
     /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
@@ -217,6 +224,11 @@ protected:
     int mSayMsgSize;
     /** max distance that player can hear a message */
     float mAudioCutDist;
+
+    /** list of players that are in offside position */
+    std::vector<int> mInOffsideLeftPlayers;
+    std::vector<int> mInOffsideRightPlayers;
+    boost::shared_ptr<oxygen::AgentAspect> mPreLastCollidingAgent;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);
