@@ -1,5 +1,5 @@
 
-$useCars = 'yes'
+$useCars = 'no'
 #
 # import needed bundles
 #
@@ -119,7 +119,7 @@ def addAgent(path)
     # set to true for debugging. will be set to false during competition
     visionPerceptor.setSenseMyPos(false);
     visionPerceptor.addNoise(true);
-    visionPerceptor.useRandomNoise(false);
+    visionPerceptor.useRandomNoise(true);
 
 #     pvisionPerceptor = new('VisionPerceptor', path+'PerfectVisionPerceptor')
 #     # set to true for debugging. will be set to false during competition
