@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1 2004/05/07 12:18:34 rollmark Exp $
+   $Id: export.cpp,v 1.2 2005/12/31 13:54:58 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <zeitgeist/zeitgeist.h>
+#include "hingeperceptor.h"
+#include "hingeeffector.h"
 #include "hinge2perceptor.h"
 #include "hinge2effector.h"
 #include "timeperceptor.h"
@@ -28,4 +30,6 @@ ZEITGEIST_EXPORT_BEGIN()
     ZEITGEIST_EXPORT(Hinge2Effector);
     ZEITGEIST_EXPORT(Hinge2Perceptor);
     ZEITGEIST_EXPORT(TimePerceptor);
+    ZEITGEIST_EXPORT(HingeEffector);
+    ZEITGEIST_EXPORT(HingePerceptor);
 ZEITGEIST_EXPORT_END()
