@@ -22,7 +22,7 @@ ball has got a diameter of 0.222m and weighs between 0.41kg and
 
 FIFA does not say too much about gravity (probably because they can't
 change it anyway), but in our simulation, gravity is fixed to
-9.81m/$s^2$.
+9.81m/$s$.
 
 Simulator steps are 0.01 seconds long. Connected monitors receive an
 update every 15th simulator step.
@@ -257,6 +257,90 @@ Example Vision output:
 -0.149385)) (Goal (id 2_r) (pol 55.5585 8.45381 -0.146933)) (Ball (pol
 6.2928 45.0858 -0.94987)) (Player (team robolog) (id 1) (pol 7.33643
 37.5782 5.86774)))
+\end{verbatim}
+
+\subsubsection{Say Effector}
+
+To broadcast messages to other players, you have to use the
+SayEffector. Messages can be \texttt{sayMsgSize} (for now 512)
+characters long, where valid characters for say messages are the
+printing characters* except space and (). Messages players say can be
+heard within a distance of \texttt{audioCutDist} meters (for now 50)
+by members of both teams. The use of the SayEffector is only
+restricted by the limited capacity of the players of hearing messages.
+See the Hear Perceptor section for a list of server variables
+affecting these capacities.
+
+* In the seven-bit ASCII character set, the printing characters are
+0x20 to 0x7E.
+
+Syntax: 
+\begin{verbatim}
+(say <message>)
+\end{verbatim}
+
+Example command:
+\begin{verbatim}
+(say player10_Pass)
+\end{verbatim}
+
+\subsubsection{Hear Perceptor}
+
+You get percepts from this perceptor when a player uses SayEffector
+and sends a message. The format of the aural sensor message from the
+is:
+
+\begin{verbatim}
+(hear <time> <direction in degree> <message>)
+\end{verbatim}
+
+\texttt{<time>} indicates the current time.
+
+\texttt{<direction in degree>} is relative direction to sender
+(without noise) if it is another player, otherwise it is
+\texttt{"self"} (without quotation mark).
+
+\texttt{<message>} is the message. The maximum length is
+\texttt{sayMsgSize} bytes.
+
+The server parameters that affect the Hear perceptor are:
+
+
+\begin{itemize}
+\item \texttt{audioCutDist}, default 50.0
+\item \texttt{hearMax}, default 2
+\item \texttt{hearInc}, default 1
+\item \texttt{hearDecay}, default 2
+\item \texttt{sayMsgSize}, default 512
+\end{itemize}
+
+A player can only hear a message if the player's hear capacity is at
+least \texttt{hearDecay}, since the hear capacity of the player is
+decreased by that number when a message is heard. Every cycle the hear
+capacity is increased with \texttt{hearInc}. The maximum hear capacity
+is \texttt{hearMax}. To avoid a team from making the other team's
+communication useless by overloading the channel the players have
+separate hear capacities for each team. With the current values this
+means that a player can hear at most one message from each team every
+second perceptor update.
+
+If more messages arrive at the same time than the player can hear the
+messages actually heard are undefined (The current implementation
+choose the messages according to the order of arrival). This rule does
+not include messages from oneself. In other words, a player can hear a
+message from himself and hear a message from another player in the
+same perceptor output.
+
+A message said by a player is transmitted only to players within
+\texttt{audioCutDist} meters from that player. For example, a
+defender, who may be near his own goal, can hear a message from his
+goal-keeper but a striker who is near the opponent goal can not hear
+the message.
+
+Example Hear output:
+\begin{verbatim}
+(hear 0.8 -179.99 Test_1)
+(hear 0.4 self Test_2)
 \end{verbatim}
 
 \subsubsection{GameStatePerceptor}
