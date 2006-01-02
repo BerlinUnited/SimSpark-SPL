@@ -214,6 +214,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/zeitgeisttest/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile \
+                 doc/manual/Makefile \
                  doc/devel/Makefile \
                  doc/devel/howtos/Makefile \
 		 doc/users/Makefile ],
