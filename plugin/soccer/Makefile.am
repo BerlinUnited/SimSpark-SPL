@@ -71,7 +71,9 @@ sexpmonitor/sexpmonitor.h \
 soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.h \
 soccerruleaspect/soccerruleaspect.h \
-visionperceptor/visionperceptor.h 
+visionperceptor/visionperceptor.h \
+hearperceptor/hearperceptor.h
+
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/soccer
