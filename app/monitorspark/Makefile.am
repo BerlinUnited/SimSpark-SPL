@@ -32,4 +32,5 @@ dist_pkgdata_DATA = \
 	bindings.rb \
 	soccersim.rb \
 	monitorspark.rb \
-	soccerbindings.rb
+	soccerbindings.rb \
+	VeraMono.ttf
