@@ -1,5 +1,9 @@
 2006-01-02  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
+	* app/simulator/rcssserver3D.rb: 
+	- added soccer variable indicating whether only
+	  a single half time should be played.
+
 	* plugin/soccer/Makefile.am: 
 	- added hearperceptor/hearperceptor.h to the 
 	  nobase_libpkginclude_HEADERS list. This file is
