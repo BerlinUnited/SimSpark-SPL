@@ -1,4 +1,18 @@
+2006-01-02  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/soccer/Makefile.am: 
+	- added hearperceptor/hearperceptor.h to the 
+	  nobase_libpkginclude_HEADERS list. This file is
+	  missing in the rcssserver3D-0.4 release :-(
+
+	* app/simulator/rcsoccersim3D.in: 
+	- commented out parts enabling the use of 
+	  rcssmonitor3D-kerosin since it is no longer
+	  maintained (and doesn't work with current settings)
+
 2005-12-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* released rcssserver3D-0.4
 
 	* plugin/sparkagent/export.cpp: 
 	- added exports for HingePerceptor and HingeEffector
