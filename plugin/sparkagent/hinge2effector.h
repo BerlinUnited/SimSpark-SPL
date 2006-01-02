@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.h,v 1.2 2004/05/17 09:13:30 rollmark Exp $
+   $Id: hinge2effector.h,v 1.3 2006/01/02 17:55:45 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,10 +41,11 @@ public:
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
 
-    /** setup the reference to the ball body node */
+protected:
+    /** setup the reference to the Hinge2Joint parent node */
     virtual void OnLink();
 
-    /** remove the reference to the ball body node */
+    /** remove the reference to the Hinge2Joint parent node */
     virtual void OnUnlink();
 
 protected:

@@ -39,10 +39,11 @@ public:
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
 
-    /** setup the reference to the ball body node */
+protected:
+    /** setup the reference to the HingeJoint parent node */
     virtual void OnLink();
 
-    /** remove the reference to the ball body node */
+    /** remove the reference to the HingeJoint parent node */
     virtual void OnUnlink();
 
 protected:
