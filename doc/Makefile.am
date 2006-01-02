@@ -1,4 +1,4 @@
-SUBDIRS = devel users
+SUBDIRS = manual devel users 
 
 all-local:
 if DOXYGEN

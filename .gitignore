@@ -127,6 +127,16 @@ doc/devel/manual.log
 doc/devel/manual.pdf
 doc/devel/howtos/Makefile.in
 doc/devel/howtos/Makefile
+doc/manual/Makefile
+doc/manual/Makefile.in
+doc/manual/auto
+doc/manual/manual.log
+doc/manual/manual.pdf
+doc/manual/manual.aux
+doc/manual/manual.toc
+doc/manual/manual.bib
+doc/manual/manual.dvi
+doc/manual/manual.out
 doc/papers/proposal/auto
 doc/papers/proposal/Makefile
 doc/papers/proposal/Makefile.in
