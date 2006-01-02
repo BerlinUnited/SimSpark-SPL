@@ -12,8 +12,8 @@ usage: $0 [-h[elp] | -light | -agentdb DB | -logdir DIR]
   -agentdb DB  Use DB as agentdb.  If this option is not given,
                the default agentdb.xml is used.
   -light       Force the use of rcssmonitor3D-lite, even if
-               rcssmonitor3D-kerosin is available.
-
+               rcssmonitor3D-kerosin is available. This setting is now
+               the default as rcssmonitor3D-kerosin is no longer supported.
 	      
 EOH
 }
@@ -86,18 +86,18 @@ fi
 if test -x ../agenttest/agenttest; then
     SIMULATOR="./rcssserver3D"
     SPADESPARAM="$SPADESPARAM --agent_db_fn ${AGENTDB:-agentdb.xml}"
-    if test -x ../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin; then
-	MONITOR="../rcssmonitor3d/${DEFAULTMONITOR}/rcssmonitor3D-${DEFAULTMONITOR}" 
-    else
+#    if test -x ../rcssmonitor3d/kerosin/rcssmonitor3D-kerosin; then
+#	MONITOR="../rcssmonitor3d/${DEFAULTMONITOR}/rcssmonitor3D-${DEFAULTMONITOR}" 
+#    else
 	MONITOR="../rcssmonitor3d/lite/rcssmonitor3D-lite" 
-    fi
+#    fi
 else
     SPADESPARAM="$SPADESPARAM --agent_db_fn ${AGENTDB:-${pkgdatadir}/agentdb.xml}"
-    if test -x "${exec_prefix}/bin/rcssmonitor3D-kerosin"; then
-	MONITOR="${exec_prefix}/bin/rcssmonitor3D-${DEFAULTMONITOR}"
-    else
+#    if test -x "${exec_prefix}/bin/rcssmonitor3D-kerosin"; then
+#	MONITOR="${exec_prefix}/bin/rcssmonitor3D-${DEFAULTMONITOR}"
+#    else
 	MONITOR="${exec_prefix}/bin/rcssmonitor3D-lite"
-    fi
+#    fi
 fi
 # agent_db_fn 
 
