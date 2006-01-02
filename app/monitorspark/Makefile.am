@@ -27,3 +27,9 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 monitorspark_SOURCES = \
 	main.cpp
+
+dist_pkgdata_DATA = \
+	bindings.rb \
+	soccersim.rb \
+	monitorspark.rb \
+	soccerbindings.rb

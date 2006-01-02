@@ -27,3 +27,20 @@ AM_LDFLAGS  = @RUBY_LDFLAGS@
 
 simspark_SOURCES = \
 	main.cpp
+
+dist_pkgdata_DATA = \
+	simspark.rb \
+	bindings.rb \
+	soccersim.rb \
+	rsg/agent/soccerplayer.rsg \
+	rsg/agent/leggedsphere.rsg \
+	rsg/agent/soccer.rsg \
+	rsg/agent/flag.rsg \
+	rsg/agent/simspark.rsg \
+	rsg/agent/ball.rsg \
+	rsg/boxspheres/staticsphere.rsg \
+	rsg/boxspheres/staticccylinder.rsg \
+	rsg/boxspheres/sphere.rsg \
+	rsg/boxspheres/simspark.rsg \
+	rsg/boxspheres/arena.rsg \
+	rsg/boxspheres/box.rsg
