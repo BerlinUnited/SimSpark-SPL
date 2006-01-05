@@ -53,19 +53,6 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-/*
-    Vector3f axis = mJoint->GetAxis();
-
-    GetLog()->Error() << "(HingeEffector) axis is ("
-                      << axis[0] << "," << axis[1] << "," << axis[2] << ")\n";
-    
-    GetLog()->Error() << "(HingeEffector) current vel = "
-                      << mJoint->GetAngularMotorVelocity(Joint::AI_FIRST) << "\n";
-
-    GetLog()->Error() << "(HingeEffector) set vel to "
-                      << hingeAction->GetMotorVelocity() << "\n";
-*/
-
     mJoint->SetParameter(dParamVel, hingeAction->GetMotorVelocity());
 
     return true;
