@@ -18,7 +18,14 @@ sparkagent_la_SOURCES = \
 	hingeeffector_c.cpp \
 	hingeperceptor.h \
 	hingeperceptor.cpp \
-	hingeperceptor_c.cpp
+	hingeperceptor_c.cpp \
+	universaljointaction.h \
+	universaljointeffector.h \
+	universaljointeffector.cpp \
+	universaljointeffector_c.cpp \
+	universaljointperceptor.h \
+	universaljointperceptor.cpp \
+	universaljointperceptor_c.cpp
 
 sparkagent_la_LDFLAGS = -module -version-info 0:0:0
 
