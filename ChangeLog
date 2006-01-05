@@ -1,3 +1,37 @@
+2006-01-05  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* lib/oxygen/physicsserver/universaljoint_c.cpp: 
+	- implemented ruby function calls for setAxis1 and setAxis2
+
+	* lib/oxygen/physicsserver/universaljoint.h,
+	* lib/oxygen/physicsserver/universaljoint.cpp: 
+	- made SetParameter and GetParameter public in order
+	  to set joint velocities correctly (doesn't work with the
+	  base class methods)
+	- implemented SetAxis1 and SetAxis2 to separate setup of anchor
+	  and axis
+
+	* plugin/sparkagent/Makefile.am: 
+	- added files for universal joint perceptor, effector,
+	  and action
+
+	* plugin/sparkagent/export.cpp: 
+	- added exports for the universal joint perceptor and
+	  effector
+
+	* plugin/sparkagent/hingeeffector.cpp: 
+	- removed some commented out code
+
+	* plugin/sparkagent/universaljointaction.h,
+	* plugin/sparkagent/universaljointeffector.cpp,
+	* plugin/sparkagent/universaljointeffector.h,
+	* plugin/sparkagent/universaljointeffector_c.cpp,
+	* plugin/sparkagent/universaljointperceptor.cpp,
+	* plugin/sparkagent/universaljointperceptor.h,
+	* plugin/sparkagent/universaljointperceptor_c.cpp: 
+	- initial version of action, perceptor, and effector
+	  for the universal joint
+
 2006-01-02  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/monitorspark/Makefile.am,
