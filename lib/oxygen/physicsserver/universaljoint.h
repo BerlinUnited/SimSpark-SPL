@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.h,v 1.4 2004/05/01 11:30:31 rollmark Exp $
+   $Id: universaljoint.h,v 1.5 2006/01/05 14:57:44 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,23 @@ public:
     */
     salt::Vector3f GetAnchor (EBodyIndex idx);
 
-    /** returns one of the hinge angles in degrees, measured between
+    /** This function sets up the first axis of the joint
+        \param axis a vector describing the axis in relative coordinates
+    */
+    void SetAxis1(salt::Vector3f & axis);
+
+    /** This function sets up the second axis of the joint
+        \param axis a vector describing the axis in local coordinates
+    */
+    void SetAxis2(salt::Vector3f & axis);
+
+    /** returns the vector describing one of the two axis
+        (in local coordinates)
+        \param idx index of the desired axis 
+    */
+    salt::Vector3f GetAxis(EAxisIndex idx);
+
+    /** returns one of the axis angles in degrees, measured between
         the two bodies, or between the body and the static
         environment.
     */
@@ -53,15 +69,15 @@ public:
     /** returns the time derivate of one of the hinge angles */
     float GetAngleRate(EAxisIndex idx);
 
-protected:
-    /** creates a new universal joint */
-    virtual void OnLink();
-
     /** sets a joint parameter value */
     virtual void SetParameter(int parameter, float value);
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter);
+
+protected:
+    /** creates a new universal joint */
+    virtual void OnLink();
 };
 
 DECLARE_CLASS(UniversalJoint);

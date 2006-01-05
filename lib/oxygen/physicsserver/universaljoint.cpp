@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.cpp,v 1.4 2004/05/01 11:30:31 rollmark Exp $
+   $Id: universaljoint.cpp,v 1.5 2006/01/05 14:57:44 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,10 +35,11 @@ UniversalJoint::~UniversalJoint()
 void UniversalJoint::OnLink()
 {
     dWorldID world = GetWorldID();
+
     if (world == 0)
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     mODEJoint = dJointCreateUniversal(world, 0);
 }
@@ -48,14 +49,6 @@ void UniversalJoint::SetAnchor(const Vector3f& anchor)
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
     dJointSetUniversalAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
-
-    // relative universal axis 1 points up
-    Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-    dJointSetUniversalAxis1(mODEJoint,up[0],up[1],up[2]);
-
-    // relative universal axis 2 points right
-    Vector3f right(GetWorldTransform().Rotate(Vector3f(1,0,0)));
-    dJointSetUniversalAxis2(mODEJoint,right[0],right[1],right[2]);
 }
 
 Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
@@ -63,41 +56,80 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
     Vector3f pos(0,0,0);
 
     switch (idx)
-        {
-        case BI_FIRST:
-            {
-                dReal anchor[3];
-                dJointGetUniversalAnchor (mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
-            }
+    {
+    case BI_FIRST:
+    {
+        dReal anchor[3];
+        dJointGetUniversalAnchor (mODEJoint, anchor);
+        pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+    }
 
-        case BI_SECOND:
-            {
-                dReal anchor[3];
-                dJointGetUniversalAnchor2(mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
-            }
+    case BI_SECOND:
+    {
+        dReal anchor[3];
+        dJointGetUniversalAnchor2(mODEJoint, anchor);
+        pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+    }
 
-        default:
-            break;
-        }
+    default:
+        break;
+    }
 
     return GetLocalPos(pos);
+}
+
+void UniversalJoint::SetAxis1(Vector3f & axis)
+{
+    Vector3f first(GetWorldTransform().Rotate(axis));
+    dJointSetUniversalAxis1(mODEJoint,first[0],first[1],first[2]);
+}
+
+void UniversalJoint::SetAxis2(Vector3f & axis)
+{
+    Vector3f second(GetWorldTransform().Rotate(axis));
+    dJointSetUniversalAxis2(mODEJoint,second[0],second[1],second[2]);
+}
+
+Vector3f UniversalJoint::GetAxis(EAxisIndex idx)
+{
+    Vector3f vec(0,0,0);
+
+    switch (idx)
+    {
+    case AI_FIRST:
+    {
+        dReal axis[3];
+        dJointGetUniversalAxis1(mODEJoint, axis);
+        vec = Vector3f(axis[0],axis[1],axis[2]);
+    }
+
+    case AI_SECOND:
+    {
+        dReal axis[3];
+        dJointGetUniversalAxis2(mODEJoint, axis);
+        vec = Vector3f(axis[0],axis[1],axis[2]);
+    }
+
+    default:
+        break;
+    }
+
+    return GetLocalPos(vec);
 }
 
 float UniversalJoint::GetAngle(EAxisIndex idx)
 {
     switch (idx)
-        {
-        case AI_FIRST:
-            return gRadToDeg(dJointGetUniversalAngle1(mODEJoint));
+    {
+    case AI_FIRST:
+        return gRadToDeg(dJointGetUniversalAngle1(mODEJoint));
 
-        case AI_SECOND:
-            return gRadToDeg(dJointGetUniversalAngle2(mODEJoint));
+    case AI_SECOND:
+        return gRadToDeg(dJointGetUniversalAngle2(mODEJoint));
 
-        default:
-            return 0;
-        }
+    default:
+        return 0;
+    }
 }
 
 float UniversalJoint::GetAngleRate(EAxisIndex idx)
