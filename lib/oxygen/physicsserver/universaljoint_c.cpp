@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: universaljoint_c.cpp,v 1.3 2006/01/05 15:02:03 jboedeck Exp $
+   $Id: universaljoint_c.cpp,v 1.4 2006/01/08 10:08:55 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ FUNCTION(UniversalJoint,setAxis2)
             return false;
         }
 
-    obj->SetAxis1(inAxis2);
+    obj->SetAxis2(inAxis2);
     return true;
 }
 
