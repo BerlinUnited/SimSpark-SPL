@@ -27,7 +27,7 @@
 class LeggedSphereBehavior : public Behavior
 {
 public:
-    struct JointSense
+    struct HingeJointSense
     {
         /** joint angle */
         float angle;
@@ -35,7 +35,24 @@ public:
         /** joint angle rate */
         float rate;
 
-        JointSense() : angle(0), rate(0) {};
+        HingeJointSense() : angle(0), rate(0) {};
+    };
+
+    struct UniversalJointSense
+    {
+        /** joint angle axis 1*/
+        float angle1;
+
+        /** joint angle axis 2*/
+        float angle2;
+
+        /** joint angle rate axis 1*/
+        float rate1;
+
+        /** joint angle rate axis 2*/
+        float rate2;
+
+        UniversalJointSense() : angle1(0), angle2(0), rate1(0), rate2(0) {};
     };
 
     enum JointID
@@ -58,15 +75,19 @@ protected:
     void SetupJointIDMap();
     void ParseHingeJointInfo(const oxygen::Predicate& predicate);
     void ParseUniversalJointInfo(const oxygen::Predicate& predicate);
-    void ParseBallJointInfo(const oxygen::Predicate& predicate);
+    void ParseAMotorInfo(const oxygen::Predicate& predicate);
 
 protected:
     zeitgeist::Zeitgeist mZG;
     boost::shared_ptr<oxygen::BaseParser> mParser;
 
-    // mapping from joint id to joint sense object
-    typedef std::map<JointID, JointSense> TJointSenseMap;
-    TJointSenseMap mJointSenseMap;
+    // mapping from joint id to joint hinge sense object
+    typedef std::map<JointID, HingeJointSense> THingeJointSenseMap;
+    THingeJointSenseMap mHingeJointSenseMap;
+
+    // mapping from joint id to joint hinge sense object
+    typedef std::map<JointID, UniversalJointSense> TUniversalJointSenseMap;
+    TUniversalJointSenseMap mUniversalJointSenseMap;
 
     // mapping from object name to joint id
     typedef std::map<std::string, JointID> TJointIDMap;

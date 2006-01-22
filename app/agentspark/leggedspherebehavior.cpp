@@ -59,12 +59,13 @@ string LeggedSphereBehavior::Init()
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
     return
-        "(scene rsg/agent/leggedsphere.rsg)"
-        "(beam -6 -6 1)";
+        "(scene rsg/agent/leggedsphere.rsg)";
 }
 
 void LeggedSphereBehavior::ParseHingeJointInfo(const oxygen::Predicate& predicate)
 {
+    //cout << "(LeggedSphereBehavior) parsing HJ info" << endl;
+
     // read the object name
     string name;
     Predicate::Iterator iter(predicate);
@@ -85,22 +86,73 @@ void LeggedSphereBehavior::ParseHingeJointInfo(const oxygen::Predicate& predicat
     JointID jid = (*idIter).second;
 
     // read the angle value
-    JointSense sense;
+    HingeJointSense sense;
     if (! predicate.GetValue(iter,"axis", sense.angle))
     {
         return;
     }
 
     // update the map
-    mJointSenseMap[jid] = sense;
+    mHingeJointSenseMap[jid] = sense;
 }
 
 void LeggedSphereBehavior::ParseUniversalJointInfo(const oxygen::Predicate& predicate)
 {
+    // read the object name
+    string name;
+    Predicate::Iterator iter(predicate);
 
+    if (! predicate.GetValue(iter, "name", name))
+    {
+        return;
+    }
+
+    // try to lookup the joint id
+    TJointIDMap::iterator idIter = mJointIDMap.find(name);
+    if (idIter == mJointIDMap.end())
+    {
+        cerr << "(LeggedSphereBehavior) unknown joint id!" << endl;
+        return;
+    }
+
+    JointID jid = (*idIter).second;
+
+    // record the angle and rate values
+    UniversalJointSense sense;
+
+    // try to read axis1 angle
+    if (! predicate.GetValue(iter,"axis1", sense.angle1))
+    {
+        cerr << "(LeggedSphereBehavior) could not parse universal joint angle1!" << endl;
+        return;
+    }
+    // try to read axis1 rate
+    if (! predicate.GetValue(iter,"rate1", sense.rate1))
+    {
+        cerr << "(LeggedSphereBehavior) could not parse universal joint rate1!" << endl;
+        return;
+    }   
+    // try to read axis2 angle
+    if (! predicate.GetValue(iter,"axis2", sense.angle2))
+    {
+        cerr << "(LeggedSphereBehavior) could not parse universal joint angle2!" << endl;
+        return;
+    }   
+    // try to read axis2 rate
+    if (! predicate.GetValue(iter,"rate2", sense.rate2))
+    {
+        cerr << "(LeggedSphereBehavior) could not parse universal joint rate2!" << endl;
+        return;
+    }
+
+    //cout << "(ParseUniversalJointInfo) got angles " << sense.angle1 
+    //     << " and " << sense.angle2 << endl;
+
+    // update the map
+    mUniversalJointSenseMap[jid] = sense;
 }
 
-void LeggedSphereBehavior::ParseBallJointInfo(const oxygen::Predicate& predicate)
+void LeggedSphereBehavior::ParseAMotorInfo(const oxygen::Predicate& predicate)
 {
 
 }
@@ -108,14 +160,10 @@ void LeggedSphereBehavior::ParseBallJointInfo(const oxygen::Predicate& predicate
 string LeggedSphereBehavior::Think(const std::string& message)
 {
     static float gain = 0.1;
-    static float desiredLHVel = 0.0;
-    static float desiredLHAngle = 0.0;
-    static float desiredRHVel = 0.0;
-    static float desiredRHAngle = 0.0;
     static float i = 0.0;
 
     // parse message and extract joint angles
-    // cout << "(LeggedSphereBehavior) received message " << message << endl;
+    //cout << "(LeggedSphereBehavior) received message " << message << endl;
 
     shared_ptr<PredicateList> predList =
         mParser->Parse(message);
@@ -129,50 +177,55 @@ string LeggedSphereBehavior::Think(const std::string& message)
              iter != list.end();
              ++iter
              )
-            {
-                const Predicate& predicate = (*iter);
+        {
+            const Predicate& predicate = (*iter);
 
-                // check for a joint percept
-                switch(predicate.name[0])
-                { 
-                case 'H': // hinge joint (HJ)
-                    ParseHingeJointInfo(predicate);
-                    break;
-                case 'U': // universal joint (UJ)
-                    ParseUniversalJointInfo(predicate);
-                    break;
-                case 'B': // ball joint (BJ)
-                    if (predicate.name == "BJ")
-                    {
-                        ParseBallJointInfo(predicate);
-                    }
-                    break;
-                default:
-                    break;
-                }
+            // check for a joint percept
+            switch(predicate.name[0])
+            { 
+            case 'H': // hinge joint (HJ)
+                ParseHingeJointInfo(predicate);
+                break;
+            case 'U': // universal joint (UJ)
+                ParseUniversalJointInfo(predicate);
+                break;
+            case 'A': // angular motor (AM)
+                ParseAMotorInfo(predicate);
+                break;
+            default:
+                break;
             }
+        }
     }
 
     // reset i after 360 degrees
     if (i == 360.0) i = 0.0;
 
-    const float & currentLHAngle = mJointSenseMap[JID_HIP_LEFT].angle; 
-    const float & currentRHAngle = mJointSenseMap[JID_HIP_RIGHT].angle; 
+    const float & currentLHAngle1 = mUniversalJointSenseMap[JID_HIP_LEFT].angle1; 
+    const float & currentRHAngle1 = mUniversalJointSenseMap[JID_HIP_RIGHT].angle1; 
 
     // move left and right leg with a phase difference of 90 degrees and
     // with a maximum angle of 60 degrees
-    desiredLHAngle = abs(sin(gDegToRad(i)) * 60.0);
-    desiredRHAngle = abs(cos(gDegToRad(i)) * 60.0);
+    const float desiredLHAngle1 = abs(sin(gDegToRad(i)) * 60.0);
+    const float desiredRHAngle1 = abs(cos(gDegToRad(i)) * 60.0);
 
-    ++i;
+    i += 0.5;
 
     // simulating a servo motor
-    desiredLHVel = gain * (desiredLHAngle - currentLHAngle);
-    desiredRHVel = gain * (desiredRHAngle - currentRHAngle);
+    const float desiredLHVel1 = gain * (desiredLHAngle1 - currentLHAngle1);
+    const float desiredRHVel1 = gain * (desiredRHAngle1 - currentRHAngle1);
+
+//     cout << "+++" << endl;
+//     cout << "current angles: " << currentLHAngle1 << " " << currentRHAngle1 << endl;
+//     cout << "desired angles: " << desiredLHAngle1 << " " << desiredRHAngle1 << endl;
 
     // send commands to server
     stringstream ss;
-    ss << "(lhe "  << desiredLHVel << ")(rhe " << desiredRHVel << ")";
+
+    ss << "(lhe "  << desiredLHVel1 << " 0.0)(rhe " << desiredRHVel1 << " 0.0)";
+
+//     cout << "(Behavior) sending string " << ss.str() << " to server" << endl;
+//     cout << "---" << endl;
 
     return ss.str();
 }
