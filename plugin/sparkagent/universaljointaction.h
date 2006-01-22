@@ -26,13 +26,14 @@ class UniversalJointAction : public oxygen::ActionObject
 {
 public:
     UniversalJointAction(const std::string& predicate, float velocity1, float velocity2)
-        : ActionObject(predicate), mVelocityAxis1(velocity1), mVelocityAxis2(velocity2) {};
+        : ActionObject(predicate), mVelocityAxis1(velocity1), mVelocityAxis2(velocity2) 
+    {};
 
     virtual ~UniversalJointAction() {}
     
     float GetMotorVelocity(oxygen::Joint::EAxisIndex idx) 
     { 
-        if (oxygen::Joint::AI_FIRST) 
+        if (idx == oxygen::Joint::AI_FIRST) 
             return mVelocityAxis1; 
         else 
             return mVelocityAxis2;

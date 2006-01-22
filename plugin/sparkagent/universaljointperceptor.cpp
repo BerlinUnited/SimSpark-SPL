@@ -53,15 +53,31 @@ void UniversalJointPerceptor::OnUnlink()
 void UniversalJointPerceptor::InsertAxisAngle(Predicate& predicate, Joint::EAxisIndex idx)
 {
     ParameterList& axisElement = predicate.parameter.AddList();
-    axisElement.AddValue(string("axis"));
-    axisElement.AddValue(mJoint->GetAngle(idx));
+    if (idx == Joint::AI_FIRST)
+    {
+        axisElement.AddValue(string("axis1"));
+        axisElement.AddValue(mJoint->GetAngle(Joint::AI_FIRST));
+    }
+    else
+    {
+        axisElement.AddValue(string("axis2"));
+        axisElement.AddValue(mJoint->GetAngle(Joint::AI_SECOND));
+    }
 }
 
 void UniversalJointPerceptor::InsertAxisRate(Predicate& predicate, Joint::EAxisIndex idx)
 {
     ParameterList& axisElement = predicate.parameter.AddList();
-    axisElement.AddValue(string("rate"));
-    axisElement.AddValue(mJoint->GetAngleRate(idx));
+    if (idx == Joint::AI_FIRST)
+    {
+        axisElement.AddValue(string("rate1"));
+        axisElement.AddValue(mJoint->GetAngleRate(Joint::AI_FIRST));
+    }
+    else
+    {
+        axisElement.AddValue(string("rate2"));
+        axisElement.AddValue(mJoint->GetAngleRate(Joint::AI_SECOND));
+    }
 }
 
 bool UniversalJointPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)

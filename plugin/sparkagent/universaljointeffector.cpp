@@ -35,7 +35,7 @@ UniversalJointEffector::~UniversalJointEffector()
 {
 }
 
-bool UniversalJointEffector::Realize(boost::shared_ptr<ActionObject> action)
+bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
 {
     if (mJoint.get() == 0)
         {
