@@ -1,3 +1,32 @@
+2006-01-22  Joschka Boedecker  <jboedeck@>
+
+	* app/agentspark/leggedspherebehavior.cpp,
+	* app/agentspark/leggedspherebehavior.h:
+	- changed struct JointSense to HingeJointSense and introduced
+	  struct UniversalJointSense
+	- changed JointMaps accordingly
+	- changed method name ParseBallJointInfo to ParseAMotorInfo
+	- implemented ParseUniversalJointInfo
+	- changed behavior to use the affect the angles around the x-axis
+	  of the hip joint
+
+	* app/simspark/rsg/agent/leggedsphere.rsg: 
+	- the legged sphere model now uses universal joints for the
+	  hips and ankles resulting in 5 DOF per leg instead of 3
+
+	* plugin/sparkagent/universaljointperceptor.cpp: 
+	- changed the percepts for the axis angle and rate to have
+	  unique names
+
+	* plugin/sparkagent/universaljointaction.h: 
+	- condition in the if-statement of GetMotorVelocity was not
+	  comparing any values and therefore always resulted in 'false'
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- added Hesham's fix for the offside bug reported by Yuan Xu
+	  ("A player is not in an offside position if he is in his 
+	    own half of the field of play")
+
 2006-01-08  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* lib/oxygen/physicsserver/universaljoint_c.cpp: 
