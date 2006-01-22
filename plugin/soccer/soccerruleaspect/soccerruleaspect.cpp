@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.17 2005/12/31 13:54:20 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.18 2006/01/22 11:43:20 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -839,16 +839,9 @@ SoccerRuleAspect::CheckOffside()
 
     float opp_goalkeeper_pos;
     float opp_defender_pos;
-    if (SoccerBase::OpponentTeam(idx) == TI_LEFT)
-    {
-        opp_goalkeeper_pos = mFieldLength/2.0;
-        opp_defender_pos   = mFieldLength/2.0;
-    }
-    else
-    {
-        opp_goalkeeper_pos = -mFieldLength/2.0;
-        opp_defender_pos   = -mFieldLength/2.0;
-    }    
+
+    opp_goalkeeper_pos = 0.0;
+    opp_defender_pos   = 0.0;
             
     shared_ptr<Transform> transform_parent;
     shared_ptr<Body> agent_body;
@@ -1029,3 +1022,4 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
         MoveBall(mFreeKickPos);
     }
 }
+
