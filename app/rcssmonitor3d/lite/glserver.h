@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.8 2005/06/29 09:14:39 fruit Exp $
+   $Id: glserver.h,v 1.9 2006/02/08 15:04:52 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,9 @@ public:
              salt::Vector3f up, bool wire);
     ~GLServer() {};
 
+    void InitTexture(const string &tFile);
+    bool ReadTexture(const string &tFile);
+    
     void InitGL();
     void DrawGroundRectangle(salt::Vector3f pos, float szX, float szY,
                              float angleDeg, float height = 0.0f);
@@ -63,6 +66,8 @@ public:
 
     int GetWidth() { return mWidth; }
     int GetHeight() { return mHeight; }
+
+    void SetTextureFile(const string &tfile);
 
     //inline functions
     inline void SetViewByMouse(const Vector2f& mousePos, const Vector2f& refPos)
@@ -137,6 +142,11 @@ protected:
     bool mWireframe;
     int mWidth;
     int mHeight;
+    GLubyte mTexture[128][128][4];
+    int mTextureWidth;
+    int mTextureHeight;
+    GLuint mTexName;
+    //string mTextureFile;
 };
 
 #endif // _GLSERVER_H

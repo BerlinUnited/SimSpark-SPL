@@ -25,4 +25,4 @@ rcssmonitor3D_lite_SOURCES = \
 	camera.h camera.cpp \
 	glserver.h glserver.cpp
 
-dist_pkgdata_DATA = rcssmonitor3D-lite.rb
+dist_pkgdata_DATA = rcssmonitor3D-lite.rb grass.ppm

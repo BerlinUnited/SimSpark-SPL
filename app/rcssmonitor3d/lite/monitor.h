@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.10 2005/07/06 07:43:47 fruit Exp $
+   $Id: monitor.h,v 1.11 2006/02/08 15:04:52 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -141,7 +141,8 @@ private:
     // member variables
     GLServer mGLServer;
     GameState mGameState;
-
+    string mTextureFile;
+    
     //JAN
     GameState mOldGameState;
 

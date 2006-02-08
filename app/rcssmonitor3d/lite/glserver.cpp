@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.10 2005/07/07 15:10:28 jamu Exp $
+   $Id: glserver.cpp,v 1.11 2006/02/08 15:04:52 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,136 @@ GLServer::GLServer(int width, int height,
     mCamera = Camera(camPos, lookAtPos, up);
 }
 
+
+void
+GLServer::InitTexture(const string &tFile)
+{
+
+    if (!ReadTexture(tFile))
+    {
+        mTextureWidth  = 128;
+        mTextureHeight = 128;
+
+        cout << "Texture: Loading " << tFile << " failed, using random image.\n";
+    
+        int c;
+
+        for (int i = 0;i <  mTextureHeight; i++) {        
+            for (int j = 0;j <  mTextureWidth; j++) { 
+                
+                c = ((((i&0x10)==0)^((j&0x10))==0))*15;      
+            
+                mTexture[i][j][0] = (GLubyte) 55+c;
+                mTexture[i][j][1] = (GLubyte) 156+c;
+                mTexture[i][j][2] = (GLubyte) 55+c;
+                mTexture[i][j][3] = (GLubyte) 255;
+            }
+        }
+    }
+}
+
+
+bool
+GLServer::ReadTexture(const string &tFile)
+{
+    // FIXME: This is a crude hack. No flexibility in the file allowed.
+    // rewrite with fileserver etc...
+    ifstream texturefile;
+
+    // absolute path to texturefile
+    string absTFile = "";
+    
+    if (tFile[0] == '/')
+    {
+        // absolute path
+        absTFile = tFile;
+        
+        texturefile.open(absTFile.c_str()); 
+    }
+    else
+    {
+        // relative path given, so we try ~/.rcssserver3d/ and
+        // $prefix/share/rcssserver3d/ as directories
+
+        char* home = getenv("HOME");
+
+        if (home)
+        {
+            absTFile = string(home)+"/.rcssserver3d/"+tFile;
+            texturefile.open(absTFile.c_str()); 
+        }
+
+        if (!texturefile)
+        {
+            // some macro magic (not at all)
+            absTFile = PREFIX "/share/" PACKAGE_NAME "/"+tFile;
+
+            texturefile.open(absTFile.c_str()); 
+        }
+    }
+    
+    if (!texturefile) 
+    {
+        cout << "Texture: could not open texture file" << endl;
+        return false;
+    }
+
+    string line;
+    
+    //read magic no.
+    texturefile >> line;
+    
+    if (line != "P6")
+    {
+        cout << "Texture: wrong magic number. No raw PPM" << endl;
+        return false;
+    }
+    
+    // comment by gimp
+    texturefile >> line;
+    texturefile.ignore(INT_MAX, '\n');
+    
+    // read the size
+    texturefile >> mTextureWidth >> mTextureHeight;
+    
+    if ((mTextureWidth != 128) || (mTextureHeight > 128))
+    {
+        // texture has the wrong size
+        cout << "Texture: Wrong Size" << endl;
+        return false;
+    }       
+    
+    int numcolors;
+    texturefile >> numcolors;
+    if (numcolors > 255)
+    {
+        cout << "Texture: too many colors (" << numcolors << ")" << endl;
+        return false;
+    }
+    
+    GLubyte r,g,b;
+    
+    for (int i = 0;i <  mTextureHeight; i++)
+    {        
+        for (int j = 0;j <  mTextureWidth; j++)
+        { 
+            texturefile >> r >> g >> b;
+            
+            mTexture[i][j][0] = (GLubyte) r;
+            mTexture[i][j][1] = (GLubyte) g;
+            mTexture[i][j][2] = (GLubyte) b;
+                mTexture[i][j][3] = (GLubyte) 255;
+        }
+    }
+    texturefile.close();
+    
+    return true;
+    
+}
+
+
+
+
 //---------------------------------ApplyCamera--------------------------
 //
 //----------------------------------------------------------------------
@@ -46,7 +176,7 @@ void GLServer::ApplyCamera()
 {
     //switch z-buffer on
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
 
     //create a viewport
     glViewport(0,0,mWidth,mHeight);
@@ -66,9 +196,25 @@ void GLServer::ApplyCamera()
 //
 // OpenGL initialisation function
 //----------------------------------------------------------------------
+
 void GLServer::InitGL (void)
 {
     glDisable(GL_LIGHTING);
+    
+        
+        
+    //JAN
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glGenTextures(1, &mTexName);
+    glBindTexture(GL_TEXTURE_2D, mTexName);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mTextureWidth, mTextureHeight,
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, mTexture); 
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+          
 }
 
 void GLServer::DrawTextPix(const char* text, Vector2f pix, ETextAlign ta)
@@ -114,7 +260,7 @@ void
 GLServer::DrawText3D(const char* text, const Vector3f& pos)
 {
     glDisable (GL_DEPTH_TEST);
-    glDisable (GL_TEXTURE_2D);
+    //glDisable (GL_TEXTURE_2D);
 
     glRasterPos3f(pos[0],pos[1],pos[2]);
     for (const char* s = text; *s; ++s)
@@ -122,7 +268,7 @@ GLServer::DrawText3D(const char* text, const Vector3f& pos)
         glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *s);
     }
 
-    glEnable (GL_TEXTURE_2D);
+    //glEnable (GL_TEXTURE_2D);
     glEnable (GL_DEPTH_TEST);
 }
 
@@ -130,7 +276,7 @@ void
 GLServer::DrawText3D(const std::string& text, const Vector3f& pos)
 {
     glDisable (GL_DEPTH_TEST);
-    glDisable (GL_TEXTURE_2D);
+    //glDisable (GL_TEXTURE_2D);
 
     glRasterPos3f(pos[0],pos[1],pos[2]);
     for (unsigned int i = 0; i < text.length(); ++i)
@@ -138,7 +284,7 @@ GLServer::DrawText3D(const std::string& text, const Vector3f& pos)
         glutBitmapCharacter(GLUT_BITMAP_9_BY_15, text[i]);
     }
 
-    glEnable (GL_TEXTURE_2D);
+    //glEnable (GL_TEXTURE_2D);
     glEnable (GL_DEPTH_TEST);
 }
 
@@ -148,7 +294,7 @@ GLServer::DrawText3D(const std::string& text, const Vector3f& pos)
 //-----------------------------------------------------------------------
 void GLServer::DrawText(const char* text, Vector2f pos)
 {
-    glDisable (GL_TEXTURE_2D);
+    //glDisable (GL_TEXTURE_2D);
     glDisable (GL_DEPTH_TEST);
 
     glMatrixMode (GL_PROJECTION);
@@ -169,7 +315,7 @@ void GLServer::DrawText(const char* text, Vector2f pos)
 void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
                                    float angleDeg, float height)
 {
-    const int faceNum = 10;
+    //const int faceNum = 10;
 
     glPushMatrix();
     glRotatef(0,1,0,angleDeg);
@@ -177,30 +323,69 @@ void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
     glNormal3f(0,0,1);
 
     // store the sizes of our faces
-    GLfloat deltaX = szX/faceNum;
-    GLfloat deltaY = szY/faceNum;
+//     GLfloat deltaX = szX/faceNum;
+//     GLfloat deltaY = szY/faceNum;
+    
+    GLfloat x=0.0;
+    GLfloat y=0.0;
 
-    GLfloat x,y;
-
-    for (int i=0; i<faceNum; i++)
-        {
-            y = i*deltaY;
-
-            //draw face as Quadric strip
-            glBegin(GL_QUAD_STRIP);
-            for (int j=0; j<faceNum; j++)
-                {
-                    x = j*deltaX;
-                    glVertex3f(x,y,height);
-                    glVertex3f(x,y+deltaY,height);
-                }
-            glVertex3f(x+deltaX,y,height);
-            glVertex3f(x+deltaX,y+deltaY,height);
-            glEnd();
-        }
+    glBegin(GL_QUADS);
+    glTexCoord2f(5.0, 5.0);
+    glVertex3f(x,y,height);
+    glTexCoord2f(0.0, 5.0);
+    glVertex3f(x,y+szY,height);
+    
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(x+szX,y+szY,height);
+    glTexCoord2f(5.0, 0.0);
+    glVertex3f(x+szX,y,height);
+    glEnd();
     glPopMatrix();
 }
 
+//====================================================================================
+
+// void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
+//                                    float angleDeg, float height)
+// {
+//     const int faceNum = 2;
+
+//     glPushMatrix();
+//     glRotatef(0,1,0,angleDeg);
+//     glTranslatef(pos[0],pos[1], pos[2]);
+//     glNormal3f(0,0,1);
+
+//     // store the sizes of our faces
+//     GLfloat deltaX = szX/faceNum;
+//     GLfloat deltaY = szY/faceNum;
+
+//     GLfloat x,y;
+
+
+//     glDisable(GL_LIGHTING);
+    
+        
+//     for (int i=0; i<faceNum; i++)
+//         {
+//             y = i*deltaY;
+
+//             //draw face as Quadric strip
+//             glBegin(GL_QUAD_STRIP);
+//             for (int j=0; j<faceNum; j++)
+//                 {
+//                     x = j*deltaX;
+//                     glTexCoord2f(0.0, 0.0); glVertex3f(x,y,height);
+//                     glTexCoord2f(0.0, 1.0); glVertex3f(x,y+deltaY,height);
+//                 }
+//             glTexCoord2f(1.0, 0.0); glVertex3f(x+deltaX,y,height);
+//             glTexCoord2f(1.0, 1.0); glVertex3f(x+deltaX,y+deltaY,height);
+//             glEnd();
+//         }
+
+//     glPopMatrix();
+// }
+
+//====================================================================================
 void
 GLServer::DrawCircle(const salt::Vector3f& pos, float radius,
                      float /*start_angle*/, float /*end_angle*/)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.20 2005/07/06 07:43:47 fruit Exp $
+   $Id: monitor.cpp,v 1.21 2006/02/08 15:04:52 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -171,6 +171,7 @@ Monitor::Monitor(std::string rel_path_prefix)
     mFlagInfo[GameState::eFLAG_1_R] = fi;
     mFlagInfo[GameState::eFLAG_2_R] = fi;
 
+    mTextureFile="grass.ppm";
 }
 
 Monitor::~Monitor()
@@ -200,6 +201,7 @@ Monitor::Init(int argc, char* argv[])
         { "server", required_argument, 0, 's' },
         { "logfile", required_argument, 0, 'l' },
         { "msgskip", required_argument, 0, 'm' },
+        { "texture", required_argument, 0, 't' },
         { 0, 0, 0, 0 }
     };
 
@@ -229,6 +231,9 @@ Monitor::Init(int argc, char* argv[])
             break;
         case 'm': // --msgskip
             mSkip = atoi(optarg);
+            break;
+        case 't': // --texture
+            mTextureFile = std::string(optarg);
             break;
         default:
             status = eErrInit;
@@ -275,11 +280,13 @@ Monitor::Usage()
     std::cerr <<
 "Usage: rcssserver3D-lite [options]\n"
 "Simple visualization of rcssserver3D soccer matches\n\n"
-"   --help      print this message and exit\n"
-"   --port      specify the port number (default is " << DEFAULT_PORT << ")\n"
-"   --server    specify the server host (default is '" << DEFAULT_HOST << "')\n"
-"   --logfile   specify the logfile to read (not with --server)\n"
-"   --msgskip   every but the nth message should be discarded (default is 1)\n"
+"   --help      Print this message and exit.\n"
+"   --port      Specify the port number (default is " << DEFAULT_PORT << ").\n"
+"   --server    Specify the server host (default is '" << DEFAULT_HOST << "').\n"
+"   --logfile   Specify the logfile to read (not with --server).\n"
+"   --msgskip   Every but the nth message should be discarded (default is 1).\n"
+"   --texture   Set the name of the texturefile to use.  If no absolute path is given\n"
+"               the file is assumed to reside in your ~/.rcssserver3d/ directory.\n"
 "\n"
 "Press '?' for a list of keybindings.\n"
 "\n";
@@ -369,11 +376,16 @@ Monitor::InitInternal(int argc, char* argv[])
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
 
-    //setup the GLserver with camera coordinates
+
+    // setup the GLserver with camera coordinates
+    // and texture
     salt::Vector3f pos(0.0,-24.0, 7.0);
     salt::Vector3f lookAt(0.0,0.0,0.0);
     salt::Vector3f up(0.0,0.0,1.0);
     mGLServer = GLServer(mWidth, mHeight, pos, lookAt, up, false);
+
+    mGLServer.InitTexture(mTextureFile);
+    
     mGLServer.InitGL();
 
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
@@ -588,8 +600,7 @@ Monitor::DrawOverview()
 
     // field rect
 
-    glEnable(GL_BLEND);         // Turn Blending On
-
+    glEnable(GL_BLEND);                // Turn Blending Off
     glColor4fv(sGroundColor2D);
     glBegin(GL_TRIANGLE_STRIP);
     glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
@@ -598,7 +609,7 @@ Monitor::DrawOverview()
     glVertex3fv(Get2DPos(Vector3f(fl/2,fw/2,0)).GetData());
     glEnd();
     glDisable(GL_BLEND);                // Turn Blending Off
-
+        
     glColor4fv(sLineColor);
     glBegin(GL_LINE_LOOP);
     glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
@@ -940,18 +951,23 @@ Monitor::Display()
 
     // ground
     glColor4fv(sGroundColor);
+    //glColor4fv(sDebugColorPink);
 
     // left half
+    //JANxxx
+    glEnable(GL_TEXTURE_2D);
     mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw, -fw/2 + lw, 0),
                                   fl/2 - lw - lw/2, fw - 2*lw, 0);
+    
 
     // right half
     mGLServer.DrawGroundRectangle(Vector3f(lw/2, -fw/2 + lw, 0),
                                   fl/2 - lw - lw/2, fw - 2*lw, 0);
+    glDisable(GL_TEXTURE_2D);
 
     // border
     glColor4fv(sBorderColor);
-    glDisable (GL_DEPTH_TEST);
+    //glDisable (GL_DEPTH_TEST);
 
     // border at left goal
     mGLServer.DrawGroundRectangle(Vector3f(-fl/2-bs,-fw/2-bs,0),
