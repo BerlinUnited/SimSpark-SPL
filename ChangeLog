@@ -1,3 +1,26 @@
+2006-02-08  Jan Murray  <murray@uni-koblenz.de>
+	* lib/salt/gmath.h:
+	fixed a very small mistake that probably resulted in lots of
+	superfluous casts.
+
+	* app/rcssmonitor3d/lite/glserver.cpp,
+	* app/rcssmonitor3d/lite/glserver.h,
+	* app/rcssmonitor3d/lite/monitor.cpp,
+	* app/rcssmonitor3d/lite/monitor.h,
+	* app/rcssmonitor3d/lite/Makefile.am:
+	Added ability to draw a very simple grasslike texture to
+	rcssmonitor3D-lite. The default texture is
+	$prefix/local/share/rcssserver3d/grass.ppm. With the option
+	"--texture" another texture of size 128x128 can be given. If no
+	absolute path is given in this option, the monitor looks in
+	~/.rcssserver3d/ and $prefix/local/share/rcssserver3d/ for the
+	file. 
+	If no texturefile is found a random texture (currently some kind
+	of checkerboard) is created. 
+
+	* app/rcssmonitor3d/lite/grass.ppm:
+	the default texture
+
 2006-01-22  Joschka Boedecker  <jboedeck@>
 
 	* app/agentspark/leggedspherebehavior.cpp,
