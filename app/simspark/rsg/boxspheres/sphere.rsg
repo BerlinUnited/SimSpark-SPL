@@ -13,8 +13,8 @@
        (setName sphereBody)
        (setSphere $density $radius)
        (node DragController
-	     (setAngularDrag 0.2)
-	     (setLinearDrag 0.4)
+	     (setAngularDrag 0.01)
+	     (setLinearDrag 0.01)
 	     )
 )
        
