@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.8 2004/06/11 09:06:56 fruit Exp $
+   $Id: gamestateaspect.cpp,v 1.9 2006/02/27 17:43:09 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mMaxUnum[0] = 0;
     mMaxUnum[1] = 0;
     mLastKickOff = TI_NONE;
+    mSecondHalfKickOff = TI_NONE;
     mLeftInit = Vector3f(0,0,0);
     mRightInit = Vector3f(0,0,0);
     mFinished = false;
@@ -111,11 +112,18 @@ GameStateAspect::KickOff(TTeamIndex ti)
         SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
 
         mLastKickOff = ti;
+        if (mSecondHalfKickOff == TI_NONE)
+        {
+            //clog << "setting mSecondHalfKickOff\n";
+
+            mSecondHalfKickOff = 
+                 (mLastKickOff == TI_LEFT) ? TI_RIGHT : TI_LEFT;
+        }
     }
     else
     {
         // in the second half, let the opposite team kick off
-        SetPlayMode((mLastKickOff == TI_LEFT) ? PM_KickOff_Right : PM_KickOff_Left);
+        SetPlayMode((mSecondHalfKickOff == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
     }
 }
 
