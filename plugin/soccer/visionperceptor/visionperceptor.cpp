@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.14 2004/12/17 20:28:10 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.15 2006/02/27 17:29:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -262,8 +262,7 @@ VisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> predList)
 
     if (mSenseMyPos)
     {
-        Vector3f sensedMyPos = myPos;
-        SoccerBase::FlipView(sensedMyPos, ti);
+        Vector3f sensedMyPos = SoccerBase::FlipView(myPos, ti);
 
         ParameterList& element = predicate.parameter.AddList();
         element.AddValue(std::string("mypos"));
