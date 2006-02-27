@@ -1,3 +1,12 @@
+2006-02-27  Oliver Obst  <fruit@users.sourceforge.net>
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	- added a fix so that the second half kick off is always done by the 
+	  team that didn't have the kick of in the first half. The bug was 
+	  reported by Jackson Matsuura <jackson@ita.br> and many others, the 
+	  fix was implemented by Hesham <heshamebrahimi@gmail.com> and 
+	  Jan <murray@uni-koblenz.de>.
+
 2006-02-08  Jan Murray  <murray@uni-koblenz.de>
 	* lib/salt/gmath.h:
 	fixed a very small mistake that probably resulted in lots of
