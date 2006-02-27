@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logfileserver.cpp,v 1.2 2004/06/06 11:11:34 fruit Exp $
+   $Id: logfileserver.cpp,v 1.3 2006/02/27 17:16:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,13 @@ LogfileServer::Init(const std::string& parser, const std::string& filename, int 
     mLog.open(filename.c_str(), std::ifstream::in);
     return true;
 }
+
+void
+LogfileServer::Reset()
+{
+    mLog.seekg(0);
+}
+
 
 bool
 LogfileServer::ReadMessage()

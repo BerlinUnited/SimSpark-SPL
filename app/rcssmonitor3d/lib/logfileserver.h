@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logfileserver.h,v 1.2 2004/06/06 11:10:54 fruit Exp $
+   $Id: logfileserver.h,v 1.3 2006/02/27 17:16:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ public:
 
     virtual void SendPauseCmd();
     virtual void SendRunCmd();
+
+    void Reset();
 
 protected:
     void Parse(const std::string& message);
