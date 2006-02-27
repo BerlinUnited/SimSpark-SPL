@@ -1,6 +1,24 @@
 2006-02-27  Oliver Obst  <fruit@users.sourceforge.net>
 
+	* app/simulator/rcssserver3D.rb: 
+	- added new setup for catcheffector 
+	- added variable for using offside
+          (implemented by Hesham <heshamebrahimi@gmail.com>)
+	
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h
+	- changes to reflect new rules due to the new catch command
+	  and the offside rule 
+	  (implemented by Hesham <heshamebrahimi@gmail.com>)
+	
+	* plugin/soccer/catcheffector/catchaction.h 
+	* plugin/soccer/catcheffector/catcheffector.cpp 
+	* plugin/soccer/catcheffector/catcheffector.h 
+	* plugin/soccer/catcheffector/catcheffector_c.cpp 
+	- added catch effector implemented by Hesham <heshamebrahimi@gmail.com>
+
 	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
 	- added a fix so that the second half kick off is always done by the 
 	  team that didn't have the kick of in the first half. The bug was 
 	  reported by Jackson Matsuura <jackson@ita.br> and many others, the 
