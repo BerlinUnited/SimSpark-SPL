@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.18 2006/01/22 11:43:20 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.19 2006/02/27 19:12:45 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,10 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mWaitBeforeKickOff(1.0),
     mSingleHalfTime(false),
     mSayMsgSize(512),
-    mAudioCutDist(50.0)
+    mAudioCutDist(50.0),
+    mUseOffside(true),
+    mFirstCollidingAgent(true),
+    mNotOffside(false)
 {
 }
 
@@ -504,7 +507,7 @@ SoccerRuleAspect::UpdatePlayOn()
     }
 
     // check if the players are in offside
-    if (CheckOffside())
+    if (mUseOffside && CheckOffside())
     {
         return;
     }
@@ -705,6 +708,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
+    SoccerBase::GetSoccerVar(*this,"UseOffside",mUseOffside);
 
     // set up bounding boxes for halfs and goal areas
 
@@ -810,26 +814,37 @@ SoccerRuleAspect::CheckOffside()
     {
         return false;
     }
-    
-    // if the previous last collinding agent is the last colliding agent, 
-    // there is no offside
-    if (mPreLastCollidingAgent == agent)
+
+    TTime lastModeChange = mGameState->GetLastModeChange();
+
+    if (time == lastModeChange)
     {
-        return false;
-    }
-    else
-    {
-        mPreLastCollidingAgent = agent;
+        mFirstCollidingAgent = true;
     }
 
+    // if the previous last collinding agent is the last colliding agent,
+    // there is no offside
+    if (mGameState->GetTime() == time)
+    {
+        if (mPreLastCollidingAgent == agent)
+        {
+            mNotOffside = true;
+        }
+        else
+        {
+            mPreLastCollidingAgent = agent;
+            mNotOffside = false;
+        }
+    }
+
+    // find opponent's goalkeeper and last defender positions
     if (! SoccerBase::GetAgentState(agent,agentState))
     {
         return false;
     }
-    
+
     TTeamIndex idx = agentState->GetTeamIndex();
-        
-    // find opponent's goalkeeper and last defender positions
+
     list<shared_ptr<AgentState> > opp_agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, opp_agent_states, 
           SoccerBase::OpponentTeam(idx)))
@@ -842,7 +857,7 @@ SoccerRuleAspect::CheckOffside()
 
     opp_goalkeeper_pos = 0.0;
     opp_defender_pos   = 0.0;
-            
+           
     shared_ptr<Transform> transform_parent;
     shared_ptr<Body> agent_body;
     
@@ -870,7 +885,7 @@ SoccerRuleAspect::CheckOffside()
         {
             if (opp_agent_pos[0] >= opp_goalkeeper_pos)
             {
-                opp_defender_pos   = opp_goalkeeper_pos; 
+                opp_defender_pos   = opp_goalkeeper_pos;
                 opp_goalkeeper_pos = opp_agent_pos[0];
             }
             else if (opp_agent_pos[0] >= opp_defender_pos)
@@ -879,32 +894,50 @@ SoccerRuleAspect::CheckOffside()
             }
         }
     }
+
+    SoccerBase::GetTransformParent(*agentState, transform_parent);
+    SoccerBase::GetAgentBody(transform_parent, agent_body);
+    Vector3f agent_pos = agent_body->GetPosition();
+
+    if ( (mGameState->GetTime() == time) && mFirstCollidingAgent )
+    {
+        if ((((idx == TI_LEFT) && (agent_pos[0] > opp_defender_pos)) ||
+            ((idx == TI_RIGHT) && (agent_pos[0] < opp_defender_pos)))  )
+            mFirstCollidingAgent = true;
+        else
+            mFirstCollidingAgent = false;
+    }
     
-    // if an agent,that touches the ball, is in offside position and was in 
+    // if the agent,that touches the ball, is in offside position and was in 
     // offside position before the last shot, change the mode to offside
-    if (idx == TI_LEFT)
+    bool offside = false;
+
+    if ((idx == TI_LEFT) && !mFirstCollidingAgent && !mNotOffside)
     {
         vector<int>::const_iterator it_offside;
         for (
             it_offside = mInOffsideLeftPlayers.begin();
-            it_offside != mInOffsideLeftPlayers.end(); 
+            it_offside != mInOffsideLeftPlayers.end();
             it_offside++)
         {
             if (agentState->GetUniformNumber() == *it_offside)
             {
                 SoccerBase::GetTransformParent(*agentState, transform_parent);
                 SoccerBase::GetAgentBody(transform_parent, agent_body);
-                
+
                 Vector3f agent_pos = agent_body->GetPosition();
-                
+
                 if (agent_pos[0] > opp_defender_pos)
                 {
                     mGameState->SetPlayMode(PM_OFFSIDE_RIGHT);
+                    offside = true;
                 }
             }
         }
+        if (!offside && (agent_pos[0] > opp_defender_pos))
+            mFirstCollidingAgent = true;
     }
-    else
+    else if (!mFirstCollidingAgent && !mNotOffside)
     {
         vector<int>::const_iterator it_offside;
         for (
@@ -917,54 +950,60 @@ SoccerRuleAspect::CheckOffside()
             {
                 SoccerBase::GetTransformParent(*agentState, transform_parent);
                 SoccerBase::GetAgentBody(transform_parent, agent_body);
-                
+
                 Vector3f agent_pos = agent_body->GetPosition();
-                
+
                 if (agent_pos[0] < opp_defender_pos)
                 {
                     mGameState->SetPlayMode(PM_OFFSIDE_LEFT);
+                    offside = true;
                 }
             }
         }
-    }
-    
-    // update the list of players that are in offside poistion 
-    mInOffsideLeftPlayers.clear();
-    mInOffsideRightPlayers.clear();
-    
-    list<shared_ptr<AgentState> > agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
-    {
-        return false;
+        if (!offside && (agent_pos[0] < opp_defender_pos))
+            mFirstCollidingAgent = true;
     }
 
-    for (it = agent_states.begin(); it != agent_states.end(); it++)
+    // update the list of players that are in offside poistion 
+    if ( mGameState->GetTime() == time)
     {
-        SoccerBase::GetTransformParent(*(*it), transform_parent);
-        SoccerBase::GetAgentBody(transform_parent, agent_body);
-        
-        Vector3f agent_pos = agent_body->GetPosition();
-        
-        if (idx == TI_LEFT)
+        mInOffsideLeftPlayers.clear();
+        mInOffsideRightPlayers.clear();
+
+        mFreeKickPos = mBallState->GetLastValidBallPosition();
+        mFreeKickPos[2] = mBallRadius;
+
+        list<shared_ptr<AgentState> > agent_states;
+        if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
         {
-            if (agent_pos[0] > opp_defender_pos)
+            return false;
+        }
+
+        for (it = agent_states.begin(); it != agent_states.end(); it++)
+        {
+            SoccerBase::GetTransformParent(*(*it), transform_parent);
+            SoccerBase::GetAgentBody(transform_parent, agent_body);
+
+            Vector3f agent_pos = agent_body->GetPosition();
+
+            if (idx == TI_LEFT)
             {
-                mInOffsideLeftPlayers.push_back((*it)->GetUniformNumber());
-                mFreeKickPos = mBallState->GetLastValidBallPosition();
-                mFreeKickPos[2] = mBallRadius;
+                if (agent_pos[0] > opp_defender_pos)
+                {
+                    mInOffsideLeftPlayers.push_back((*it)->GetUniformNumber());
+                }
+            }
+            else
+            {
+                if (agent_pos[0] < opp_defender_pos)
+                {
+                    mInOffsideRightPlayers.push_back((*it)->GetUniformNumber());
+                }
             }
         }
-        else
-        {
-            if (agent_pos[0] < opp_defender_pos)
-            {
-                mInOffsideRightPlayers.push_back((*it)->GetUniformNumber());
-                mFreeKickPos = mBallState->GetLastValidBallPosition();
-                mFreeKickPos[2] = mBallRadius;
-            }
-        }
+
     }
-    
+
     return true;
 }
 
@@ -1023,3 +1062,52 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
     }
 }
 
+void
+SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos, 
+                               float radius, float min_dist, TTeamIndex idx,
+                               shared_ptr<AgentState> agentState)
+{
+    if (idx == TI_NONE || mBallState.get() == 0) return;
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+        return;
+
+    salt::BoundingSphere sphere(pos, radius);
+    boost::shared_ptr<oxygen::Transform> transform_parent;
+    boost::shared_ptr<oxygen::Body> agent_body;
+    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    for (i = agent_states.begin(); i != agent_states.end(); ++i)
+    {
+        if (agentState == (*i))
+            continue;
+
+        SoccerBase::GetTransformParent(*(*i), transform_parent);
+        // call GetAgentBody with matching AgentAspect
+        SoccerBase::GetAgentBody(transform_parent, agent_body);
+        // if agent is too close, move it away
+        Vector3f new_pos = agent_body->GetPosition();
+        if (sphere.Contains(new_pos))
+        {
+            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+
+            if (idx == TI_LEFT)
+            {
+                if (pos[0] - dist < -mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] - dist;
+                }
+            } else {
+                if (pos[0] + dist > mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] + dist;
+                }
+            }
+            new_pos[2] = 1.0;
+            MoveAgent(agent_body, new_pos);
+        }
+    }
+}

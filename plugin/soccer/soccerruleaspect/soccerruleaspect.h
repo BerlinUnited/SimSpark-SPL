@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.10 2005/12/31 13:54:20 jboedeck Exp $
+   $Id: soccerruleaspect.h,v 1.11 2006/02/27 19:12:24 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,6 +72,20 @@ public:
     */
     void Broadcast(const std::string& message, const salt::Vector3f& pos,
                    int number, TTeamIndex idx);
+
+    /** Move all the players from a team which are too close to pos away
+        from pos, with exception of the specified agent.
+        \param pos the center of the area to be checked
+        \param radius the radius of the area to be checked
+        \param min_dist the minimum distance players will be moved away from pos
+        \param idx the team which should be checked.
+
+        If idx is TI_NONE, nothing will happen. Players are moved towards their
+        side of the field. If they would leave the playing field, they are moved
+        towards the X axis (the line from the left goal to the right goal).
+    */
+    void ClearPlayersWithException(const salt::Vector3f& pos, float radius, float min_dist, 
+                      TTeamIndex idx, boost::shared_ptr<AgentState> agentState);
 
 protected:
     /** rereads the current soccer script values */
@@ -229,6 +243,15 @@ protected:
     std::vector<int> mInOffsideLeftPlayers;
     std::vector<int> mInOffsideRightPlayers;
     boost::shared_ptr<oxygen::AgentAspect> mPreLastCollidingAgent;
+
+    /** first colliding player in playon mode */
+    bool mFirstCollidingAgent;
+
+    /** if agents don't pass don't worry about offside */
+    bool mNotOffside;
+
+    /** use offside law */
+    bool mUseOffside;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);
