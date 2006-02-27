@@ -394,6 +394,11 @@ plugin/soccer/beameffector/*.lo
 plugin/soccer/beameffector/.deps
 plugin/soccer/beameffector/.dirstamp
 plugin/soccer/beameffector/.libs
+plugin/soccer/catcheffector/*.la
+plugin/soccer/catcheffector/*.lo
+plugin/soccer/catcheffector/.deps
+plugin/soccer/catcheffector/.dirstamp
+plugin/soccer/catcheffector/.libs
 plugin/soccer/createeffector/*.la
 plugin/soccer/createeffector/*.lo
 plugin/soccer/createeffector/.deps
@@ -425,6 +430,11 @@ plugin/soccer/gamestateperceptor/.dirstamp
 plugin/soccer/gamestateperceptor/.libs
 plugin/soccer/gamestateperceptor/Makefile
 plugin/soccer/gamestateperceptor/Makefile.in
+plugin/soccer/hearperceptor/*.la
+plugin/soccer/hearperceptor/*.lo
+plugin/soccer/hearperceptor/.deps
+plugin/soccer/hearperceptor/.dirstamp
+plugin/soccer/hearperceptor/.libs
 plugin/soccer/initeffector/*.lo
 plugin/soccer/initeffector/.deps
 plugin/soccer/initeffector/.libs

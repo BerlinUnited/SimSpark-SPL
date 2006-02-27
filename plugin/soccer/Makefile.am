@@ -27,6 +27,8 @@ kickeffector/kickeffector.cpp \
 kickeffector/kickeffector_c.cpp \
 sayeffector/sayeffector.cpp \
 sayeffector/sayeffector_c.cpp \
+catcheffector/catcheffector.cpp \
+catcheffector/catcheffector_c.cpp \
 hearperceptor/hearperceptor.cpp \
 hearperceptor/hearperceptor_c.cpp \
 objectstate/objectstate.cpp \
@@ -65,6 +67,8 @@ kickeffector/kickaction.h \
 kickeffector/kickeffector.h \
 sayeffector/sayeffector.h \
 sayeffector/sayaction.h \
+catcheffector/catcheffector.h \
+catcheffector/catchaction.h \
 objectstate/objectstate.h \
 trainercommandparser/trainercommandparser.h \
 sexpmonitor/sexpmonitor.h \
@@ -73,7 +77,6 @@ soccercontrolaspect/soccercontrolaspect.h \
 soccerruleaspect/soccerruleaspect.h \
 visionperceptor/visionperceptor.h \
 hearperceptor/hearperceptor.h
-
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/soccer
