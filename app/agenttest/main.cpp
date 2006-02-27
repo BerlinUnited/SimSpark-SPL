@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: main.cpp,v 1.13 2004/06/19 13:10:31 fruit Exp $
+   $Id: main.cpp,v 1.14 2006/02/27 17:21:33 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,11 +18,6 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Main of the rcssmonitor3D application
-
-   This is a very simple 3D monitor example which will hopefully be
-   used for the first steps of the 3D SoccerServer
 */
 
 /** This is a dummy agent created for testing with the SpadesTest. It
