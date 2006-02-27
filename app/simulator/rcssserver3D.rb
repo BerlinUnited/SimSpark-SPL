@@ -114,6 +114,8 @@ def addAgent(path)
     new('BeamEffector', path+'BeamEffector')
     new('SayEffector', path+'SayEffector')
 
+    catchEffector = new('CatchEffector', path+'CatchEffector')
+
     # perceptor setup
     visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
     # set to true for debugging. will be set to false during competition
@@ -371,6 +373,7 @@ addSoccerVar('RuleKickInPauseTime',1.0)
 addSoccerVar('RuleHalfTime',5.0 * 60)
 addSoccerVar('RuleDropBallTime',30)
 addSoccerVar('SingleHalfTime',false)
+addSoccerVar('UseOffside', true)
 
 #
 # mount a standard file system
