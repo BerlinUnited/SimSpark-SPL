@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.6 2006/02/27 19:02:14 fruit Exp $
+   $Id: gamestateaspect.h,v 1.7 2006/02/28 17:00:49 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -138,8 +138,8 @@ protected:
     /** the team that had the last KickOff */
     TTeamIndex mLastKickOff;
 
-    /** the team that has the KickOff in 2nd half*/
-    TTeamIndex mSecondHalfKickOff;
+//     /** the team that has to start the second half */
+//     TTeamIndex mSecondHalfKickOff;
 
     /** the names of the two teams */
     std::string mTeamName[2];

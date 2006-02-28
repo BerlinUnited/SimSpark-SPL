@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.9 2006/02/27 17:43:09 fruit Exp $
+   $Id: gamestateaspect.cpp,v 1.10 2006/02/28 17:00:49 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mMaxUnum[0] = 0;
     mMaxUnum[1] = 0;
     mLastKickOff = TI_NONE;
-    mSecondHalfKickOff = TI_NONE;
+    //mSecondHalfKickOff = TI_NONE;
     mLeftInit = Vector3f(0,0,0);
     mRightInit = Vector3f(0,0,0);
     mFinished = false;
@@ -98,6 +98,7 @@ GameStateAspect::SetPlayMode(TPlayMode mode)
     mFupTime = 0.0;
 }
 
+
 void
 GameStateAspect::KickOff(TTeamIndex ti)
 {
@@ -111,22 +112,46 @@ GameStateAspect::KickOff(TTeamIndex ti)
 
         SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
 
-        mLastKickOff = ti;
-        if (mSecondHalfKickOff == TI_NONE)
-        {
-            //clog << "setting mSecondHalfKickOff\n";
-
-            mSecondHalfKickOff = 
-                 (mLastKickOff == TI_LEFT) ? TI_RIGHT : TI_LEFT;
-        }
+        if (mLastKickOff == TI_NONE)
+            mLastKickOff = ti;
     }
     else
     {
         // in the second half, let the opposite team kick off
-        SetPlayMode((mSecondHalfKickOff == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
+        SetPlayMode((mLastKickOff == TI_LEFT) ? PM_KickOff_Right : PM_KickOff_Left);
     }
 }
+//---------------------------------------------
+// void
+// GameStateAspect::KickOff(TTeamIndex ti)
+// {
+//     if (mGameHalf == GH_FIRST)
+//     {
+//         // throw a coin to determine which team kicks off
+//         if (ti == TI_NONE)
+//         {
+//             ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
+//         }
 
+//         SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
+
+//         mLastKickOff = ti;
+//         if (mSecondHalfKickOff == TI_NONE)
+//         {
+//             //clog << "setting mSecondHalfKickOff\n";
+
+//             mSecondHalfKickOff = 
+//                  (mLastKickOff == TI_LEFT) ? TI_RIGHT : TI_LEFT;
+//         }
+//     }
+//     else
+//     {
+//         // in the second half, let the opposite team kick off
+//         SetPlayMode((mSecondHalfKickOff == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
+//     }
+// }
+
+//---------------------------------------------
 TTime
 GameStateAspect::GetTime() const
 {
