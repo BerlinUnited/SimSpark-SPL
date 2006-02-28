@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.19 2006/02/27 19:12:45 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.20 2006/02/28 17:13:00 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -529,9 +529,16 @@ SoccerRuleAspect::UpdateGoal()
     MoveBall(pos);
 
     // kick off for the opposite team
-    mGameState->SetPlayMode(
+    // Original
+//     mGameState->SetPlayMode(
+//         mGameState->GetPlayMode() == PM_Goal_Left ?
+//         PM_KickOff_Right : PM_KickOff_Left
+//         );
+    
+    // kick off for the opposite team
+    mGameState->KickOff(
         mGameState->GetPlayMode() == PM_Goal_Left ?
-        PM_KickOff_Right : PM_KickOff_Left
+        TI_RIGHT : TI_LEFT
         );
 }
 
