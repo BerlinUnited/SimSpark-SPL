@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserver.cpp,v 1.13 2004/12/21 23:04:45 tomhoward Exp $
+   $Id: commserver.cpp,v 1.14 2006/02/28 15:40:50 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -137,13 +137,13 @@ CommServer::SendKickOffCmd(EKickOff mode)
     switch (mode)
     {
     case eRandom:
-        SendToWorldModel("(kickOff)");
+        SendToWorldModel("(kickOff None)");
         break;
     case eLeft:
-        SendToWorldModel("(playMode KickOff_Left)");
+        SendToWorldModel("(kickOff Left)");
         break;
     case eRight:
-        SendToWorldModel("(playMode KickOff_Right)");
+        SendToWorldModel("(kickOff Right)");
         break;
     }
 }
