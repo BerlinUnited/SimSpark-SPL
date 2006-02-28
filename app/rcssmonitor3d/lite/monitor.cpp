@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.21 2006/02/08 15:04:52 jamu Exp $
+   $Id: monitor.cpp,v 1.22 2006/02/28 15:46:24 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ Monitor::Monitor(std::string rel_path_prefix)
     mWidth = DEFAULT_WIDTH;
     mHeight = DEFAULT_HEIGHT;
     mCamDelta = 0.5;
-    mCameraMode = eFree;
+    mCameraMode = eFollowBall;
     mDrawUnums = true;
     mDrawOverview = true;
     mDrawDebug = false;
@@ -146,7 +146,8 @@ Monitor::Monitor(std::string rel_path_prefix)
     mAdvance = false;
     mRealTime = true;
     mDiffTime = 0;
-
+    mSecondHalfKickOff = CommServerBase::eRandom;
+    
     FlagInfo fi;
     fi.mOffset = Vector3f(0,0,0);
     fi.mRadius = 0.1;
@@ -375,7 +376,8 @@ Monitor::InitInternal(int argc, char* argv[])
     glutMouseFunc(mouse);
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
-
+    glutSetCursor(GLUT_CURSOR_NONE);
+    
 
     // setup the GLserver with camera coordinates
     // and texture
@@ -482,6 +484,14 @@ Monitor::DrawStatusText()
 
     switch (play_mode)
     {
+    case PM_PlayOn:
+        if (mSecondHalfKickOff==CommServerBase::eRandom)
+            mSecondHalfKickOff=mKickOff;    //store who will kickoff at 2nd half
+        break;
+    case PM_BeforeKickOff:
+        if (mGameState.GetHalf() == GH_SECOND)
+            mKickOff=mSecondHalfKickOff; 
+        break;    
     case PM_KickOff_Left:
         mKickOff = CommServerBase::eRight;
         break;
@@ -1223,6 +1233,14 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
 
     case 'v':
         mDrawVelocity = !mDrawVelocity;
+        //mCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
+        break;
+
+    case 'Z':
+        glutFullScreen();
+        glutPositionWindow(0,0);
+        
+        //    mDrawVelocity = !mDrawVelocity;
         //mCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
         break;
 

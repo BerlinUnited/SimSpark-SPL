@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.11 2006/02/08 15:04:52 jamu Exp $
+   $Id: monitor.h,v 1.12 2006/02/28 15:46:24 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -172,6 +172,9 @@ private:
     ECameraMode mCameraMode;
     //! the current kick off mode
     CommServerBase::EKickOff mKickOff;
+    //! the team kicking off the second half
+    // Needed for SHOWING the right team
+    CommServerBase::EKickOff mSecondHalfKickOff;
     //! flag if we want to see uniform numbers
     bool mDrawUnums;
     //! flag if we want to draw the 2D overview
