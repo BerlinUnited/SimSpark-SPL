@@ -453,6 +453,12 @@ plugin/soccer/objectstate/*.lo
 plugin/soccer/objectstate/.deps
 plugin/soccer/objectstate/.dirstamp
 plugin/soccer/objectstate/.libs
+plugin/soccer/restrictedvisionperceptor/*.lo
+plugin/soccer/restrictedvisionperceptor/.deps
+plugin/soccer/restrictedvisionperceptor/.dirstamp
+plugin/soccer/restrictedvisionperceptor/.libs
+plugin/soccer/restrictedvisionperceptor/Makefile
+plugin/soccer/restrictedvisionperceptor/Makefile.in
 plugin/soccer/sayeffector/*.la
 plugin/soccer/sayeffector/*.lo
 plugin/soccer/sayeffector/.deps
