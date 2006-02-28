@@ -129,6 +129,16 @@ def addAgent(path)
 #     pvisionPerceptor.addNoise(false);
 #     pvisionPerceptor.setPredicateName('PerfectVision')
 
+
+    # perceptor setup: restricted vision perceptor
+#     visionPerceptor = new('VisionPerceptor', path+'RestrictedVisionPerceptor')
+#     visionPerceptor.setSenseMyPos(false);
+#     visionPerceptor.addNoise(true);
+#     visionPerceptor.useRandomNoise(true);
+#     visionPerceptor.setStaticSenseAxis(false);
+#     visionPerceptor.setVisionAngles(90,90);
+
+
     new('GameStatePerceptor', path+'GameStatePerceptor')
     new('AgentStatePerceptor', path+'AgentStatePerceptor')
     new('HearPerceptor', path+'HearPerceptor')
