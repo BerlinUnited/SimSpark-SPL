@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.7 2006/02/27 19:14:37 fruit Exp $
+   $Id: export.cpp,v 1.8 2006/02/28 17:24:02 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@
 #include "fieldflag/fieldflag.h"
 #include "ball/ball.h"
 #include "visionperceptor/visionperceptor.h"
+#include "restrictedvisionperceptor/restrictedvisionperceptor.h"
 #include "gamestateperceptor/gamestateperceptor.h"
 #include "agentstateperceptor/agentstateperceptor.h"
 #include "hearperceptor/hearperceptor.h"
@@ -63,6 +64,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(FieldFlag);
         ZEITGEIST_EXPORT(Ball);
         ZEITGEIST_EXPORT(VisionPerceptor);
+        ZEITGEIST_EXPORT(RestrictedVisionPerceptor);
         ZEITGEIST_EXPORT(GameStatePerceptor);
         ZEITGEIST_EXPORT(AgentStatePerceptor);
         ZEITGEIST_EXPORT(HearPerceptor);
