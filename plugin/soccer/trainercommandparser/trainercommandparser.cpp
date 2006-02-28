@@ -46,9 +46,12 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mCommandMap["getAck"] = CT_ACK;
 
     // setup team index map
-    mTeamIndexMap["L"]       = TI_LEFT;
-    mTeamIndexMap["R"]       = TI_RIGHT;
-    mTeamIndexMap["N"]       = TI_NONE;
+    // Originally  team sides were "L","R" and "N"
+    // But this seems to be unused
+    // ParseKickOffCommand depends on the long names
+    mTeamIndexMap["Left"]  = TI_LEFT;
+    mTeamIndexMap["Right"] = TI_RIGHT;
+    mTeamIndexMap["None"]  = TI_NONE;
 
     // setup play mode map
     mPlayModeMap[STR_PM_BeforeKickOff] = PM_BeforeKickOff;
@@ -123,7 +126,7 @@ void TrainerCommandParser::ParseMonitorMessage(const std::string& data)
 
 void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
 {
-    for (
+        for (
          PredicateList::TList::const_iterator iter = predList.begin();
          iter != predList.end();
          ++iter
@@ -167,12 +170,7 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         mSoccerRule->DropBall();
         break;
     case CT_KICK_OFF:
-        if (mGameState.get() == 0)
-        {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR "
-                              << "no GameStateAspect found, cannot kick off\n";
-        }
-        else mGameState->KickOff(TI_NONE);
+        ParseKickOffCommand(predicate);
         break;
     case CT_ACK:
     {
@@ -424,6 +422,44 @@ TrainerCommandParser::ParsePlayModeCommand(const oxygen::Predicate& predicate)
         GetLog()->Debug()
             << "(TrainerCommandParser) ERROR: could not parse playmode "
             << mode << "\n";
+    }
+}
+
+
+void
+TrainerCommandParser::ParseKickOffCommand(const oxygen::Predicate& predicate)
+{
+    Predicate::Iterator koParam(predicate);
+    string team;
+
+
+    if (predicate.GetValue(koParam,team))
+    {
+        TTeamIndexMap::const_iterator kickoffteam = mTeamIndexMap.find(team);
+        if (kickoffteam != mTeamIndexMap.end())
+        {
+            if (mGameState.get() == 0)
+            {
+                GetLog()->Error() << "(TrainerCommandParser) ERROR "
+                                  << "no GameStateAspect found, cannot kick off\n";
+            }
+            else
+            {
+                mGameState->KickOff(kickoffteam->second);
+            }
+        }
+        else
+        {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: unknown team"
+                              << team << "\n";
+            
+        }
+    }
+    else
+    {
+        GetLog()->Debug()
+            << "(TrainerCommandParser) ERROR: could not parse team "
+            << team << "\n";
     }
 }
 

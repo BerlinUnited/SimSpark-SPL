@@ -96,6 +96,11 @@ protected:
     */
     void ParsePlayModeCommand(const oxygen::Predicate & predicate);
 
+    /** parses and executes the kick off command contained in the given
+        predicate
+    */
+    void ParseKickOffCommand(const oxygen::Predicate & predicate);
+
 protected:
     TCommandMap    mCommandMap;
 
