@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.4 2004/05/14 16:37:24 fruit Exp $
+   $Id: kickeffector.h,v 1.5 2006/03/01 15:49:26 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #ifndef KICKEFFECTOR_H
 #define KICKEFFECTOR_H
 
+#include <salt/random.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/body.h>
@@ -97,12 +98,19 @@ public:
     void SetAngleRange(float min, float max);
 
 protected:
+    typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;
+
     /** reference to the body node of the ball */
     boost::shared_ptr<oxygen::Body> mBallBody;
     /** reference to the body node of the ball */
     boost::shared_ptr<Ball> mBall;
     /** reference to the agent aspect */
     boost::shared_ptr<oxygen::AgentAspect> mAgent;
+
+    /** random number generator for the error distribution of the applied force */
+    NormalRngPtr mForceErrorRNG;
+    /** random number generator for the error distribution of the theta */
+    NormalRngPtr mThetaErrorRNG;
 
 private:
     /** the margin where objects can be kicked */
@@ -123,10 +131,6 @@ private:
     float mMaxAngle;
     /** number of simulation steps for applying kick force */
     int mSteps;
-    /** sigma for force error */
-    double mSigmaForce;
-    /** sigma for angle error (x-y angle) */
-    double mSigmaTheta;
     /** sigma for angle error at the end of the range (latitudal angle) */
     double mSigmaPhiEnd;
     /** sigma for angle error in the middle of the range (latitudal angle) */
