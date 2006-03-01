@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.cpp,v 1.1 2006/02/28 17:20:45 jamu Exp $
+   $Id: restrictedvisionperceptor.cpp,v 1.2 2006/03/01 18:32:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -205,25 +205,11 @@ void
 RestrictedVisionPerceptor::ApplyNoise(ObjectData& od) const
 {
     if (mAddNoise)
-        {
-            if (mUseRandomNoise)
-                {
-                    od.mDist  += (*(mDistRng.get()))() * od.mDist / 100.0;
-                    od.mTheta += (*(mThetaRng.get()))();
-                    od.mPhi   += (*(mPhiRng.get()))();
-                } else
-                {
-                    /* This gives a constant random error throughout the whole
-                     * match. This behavior was not intended and is a bug and
-                     * not an intended feature.
-                     * It was kept in the simulator because I discovered this
-                     * bug only shortly before the competition. *sigh* oliver
-                     */
-                    od.mDist  += salt::NormalRNG<>(0.0,mSigmaDist)();
-                    od.mTheta += salt::NormalRNG<>(0.0,mSigmaTheta)();
-                    od.mPhi  += salt::NormalRNG<>(0.0,mSigmaPhi)();
-                }
-        }
+    {
+        od.mDist  += (*(mDistRng.get()))() * od.mDist / 100.0;
+        od.mTheta += (*(mThetaRng.get()))();
+        od.mPhi   += (*(mPhiRng.get()))();
+    }
 }
 
 
@@ -265,6 +251,12 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
 
         // theta is the angle in the X-Y (horizontal) plane
         od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0]));
+        {
+            ParameterList& element = predicate.parameter.AddList();
+            element.AddValue(std::string("debug"));
+            element.AddValue(od.mTheta);
+            element.AddValue(mHAngle/2);
+        }
 
         if ((gAbs(od.mTheta) > mHAngle/2) && (od.mObj->GetPerceptName() != "Flag"))
         {
@@ -327,21 +319,27 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
     // FIXME: this is magic
     double fwPhi = 0.0;
     
-    // log for 1st agent of the first team
-    if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==1))
-        GetLog()->Debug() << "percept: "
-                          << up << " theta " << gRadToDeg(fwTheta)
-                          << " phi " << gRadToDeg(fwPhi) << "\n";      
     
     TObjectList visibleObjects;
     SetupVisibleObjects(visibleObjects);
     
+    // log for 7th agent of the first team
+    if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
+        GetLog()->Debug() << "percept: " << visibleObjects.size() << " objects. :::"
+                          << up << " theta " << gRadToDeg(fwTheta)
+                          << " phi " << gRadToDeg(fwPhi) << "\n";      
+
     for (std::list<ObjectData>::iterator i = visibleObjects.begin();
          i != visibleObjects.end(); ++i)
     {   
         ObjectData& od = (*i);
 
+
         od.mRelPos = SoccerBase::FlipView(od.mRelPos, ti);
+        if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
+            GetLog()->Debug() << "object " << od.mObj->GetPerceptName()
+                              << " at : " << od.mRelPos << "\n";
+
         if (mAddNoise)
         {
             od.mRelPos += mError;
@@ -358,7 +356,6 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
                                   Vector2f(od.mRelPos[0],od.mRelPos[1]).GetAngleRad() -
                                   fwTheta
                                   ));
-
         // flags are always visible
         if ((gAbs(od.mTheta) > hAngle_2) && (od.mObj->GetPerceptName() != "Flag"))
         {
@@ -379,34 +376,35 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
 
         
         if ((gAbs(od.mPhi) > vAngle_2) && (od.mObj->GetPerceptName() != "Flag"))
-        {
-            // object is out of view range
-//                                 GetLog()->Debug() << "(RestrictedVisionPerceptor) Omitting "
-//                                       << od.mObj->GetPerceptName() << od.mObj->GetID()
-//                                       << ": v-angle = " << od.mPhi << ".\n" ;
+            continue;
             
+        // log for 7th agent of the first team
+        if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
+            GetLog()->Debug() << "percept: " << "adding object: "
+                              << gAbs(od.mPhi) << ":" << vAngle_2 << "\n";
+
         // make some noise
-            ApplyNoise(od);
+        ApplyNoise(od);
 
         // generate a sense entry
-            AddSense(predicate,od);
-        }
+        AddSense(predicate,od);
 
-        if (mSenseMyPos)
-        {
-            salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
-            
-            Vector3f sensedMyPos = myPos;
-            SoccerBase::FlipView(sensedMyPos, ti);
-            
-            ParameterList& element = predicate.parameter.AddList();
-            element.AddValue(std::string("mypos"));
-            element.AddValue(sensedMyPos[0]);
-            element.AddValue(sensedMyPos[1]);
-            element.AddValue(sensedMyPos[2]);
-        }
-        return true;
     }
+ 
+    if (mSenseMyPos)
+    {
+        salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
+            
+        Vector3f sensedMyPos = myPos;
+        SoccerBase::FlipView(sensedMyPos, ti);
+            
+        ParameterList& element = predicate.parameter.AddList();
+        element.AddValue(std::string("mypos"));
+        element.AddValue(sensedMyPos[0]);
+        element.AddValue(sensedMyPos[1]);
+        element.AddValue(sensedMyPos[2]);
+    }
+    return true;
 }
 
 
