@@ -117,11 +117,11 @@ def addAgent(path)
     catchEffector = new('CatchEffector', path+'CatchEffector')
 
     # perceptor setup
-    visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
+#    visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
     # set to true for debugging. will be set to false during competition
-    visionPerceptor.setSenseMyPos(false);
-    visionPerceptor.addNoise(true);
-    visionPerceptor.useRandomNoise(true);
+#    visionPerceptor.setSenseMyPos(false);
+#    visionPerceptor.addNoise(true);
+#    visionPerceptor.useRandomNoise(true);
 
 #     pvisionPerceptor = new('VisionPerceptor', path+'PerfectVisionPerceptor')
 #     # set to true for debugging. will be set to false during competition
@@ -131,12 +131,12 @@ def addAgent(path)
 
 
     # perceptor setup: restricted vision perceptor
-#     visionPerceptor = new('VisionPerceptor', path+'RestrictedVisionPerceptor')
-#     visionPerceptor.setSenseMyPos(false);
-#     visionPerceptor.addNoise(true);
-#     visionPerceptor.useRandomNoise(true);
-#     visionPerceptor.setStaticSenseAxis(false);
-#     visionPerceptor.setVisionAngles(90,90);
+    visionPerceptor = new('RestrictedVisionPerceptor', path+'VisionPerceptor')
+    visionPerceptor.setSenseMyPos(false);
+    visionPerceptor.addNoise(true);
+    visionPerceptor.useRandomNoise(true);
+    visionPerceptor.setStaticSenseAxis(false);
+    visionPerceptor.setVisionAngles(90,90);
 
 
     new('GameStatePerceptor', path+'GameStatePerceptor')
