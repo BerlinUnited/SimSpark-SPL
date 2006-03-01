@@ -1,3 +1,22 @@
+2006-03-01  Oliver Obst  <fruit@users.sourceforge.net>
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	- fixed bug in DynamicAxisPercept, so that at most one object
+          would appear in the list of seen object (don't know why). 
+	  The same bug is probably still in the staticaxispercept. 
+	  The code also needs a cleanup.
+
+	* app/simulator/rcssserver3D.rb: 
+	- made the restricted vision perceptor default and fixed a small bug in intializing it
+
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	* plugin/soccer/kickeffector/kickeffector.h: 
+	- added random number generator references
+	- using random number generator pointers instead of new copies for 
+	  each random number. This (mostly) removes a bug where the error 
+	  remains constant during the whole match (implemented 
+	  by Hesham <heshamebrahimi@gmail.com>)
+	
 2006-02-27  Oliver Obst  <fruit@users.sourceforge.net>
 
 	* app/simulator/rcssserver3D.rb: 
