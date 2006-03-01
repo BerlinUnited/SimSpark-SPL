@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.10 2004/12/18 14:27:31 rollmark Exp $
+   $Id: kickeffector.cpp,v 1.11 2006/03/01 15:51:58 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ KickEffector::KickEffector()
       mForceFactor(4.0),mTorqueFactor(0.1),
       mMaxPower(100.0),
       mMinAngle(0.0),mMaxAngle(50.0), mSteps(10),
-      mSigmaForce(0.4), mSigmaTheta(0.02), mSigmaPhiEnd(0.9), mSigmaPhiMid(4.5)
+      mSigmaPhiEnd(0.9), mSigmaPhiMid(4.5)
 {
 }
 
@@ -93,10 +93,11 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     // get the kick angle in the horizontal plane
     double theta = salt::gArcTan2(force[1], force[0]);
-    if (mSigmaTheta > 0.0)
+    if (mThetaErrorRNG.get() != 0)
     {
-        theta += salt::NormalRNG<>(0.0,mSigmaTheta)();
+        theta += (*(mThetaErrorRNG.get()))();
     }
+
     float phi = salt::gMin(salt::gMax(kickAction->GetAngle(), mMinAngle), mMaxAngle);
     if (mSigmaPhiEnd > 0.0 || mSigmaPhiMid > 0.0)
     {
@@ -117,9 +118,9 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     force[2] = salt::gCos(phi);
 
     float kick_power = salt::gMin(salt::gMax(kickAction->GetPower(), 1.0f), mMaxPower);
-    if (mSigmaForce > 0.0)
+    if (mForceErrorRNG.get() != 0)
     {
-        kick_power += salt::NormalRNG<>(0.0,mSigmaForce)();
+        kick_power += (*(mForceErrorRNG.get()))();
     }
 
     force *= (mForceFactor * kick_power);
@@ -210,6 +211,8 @@ KickEffector::OnLink()
 void
 KickEffector::OnUnlink()
 {
+    mForceErrorRNG.reset();
+    mThetaErrorRNG.reset();
     mBallBody.reset();
     mAgent.reset();
 }
@@ -224,8 +227,10 @@ void
 KickEffector::SetNoiseParams(double sigma_force, double sigma_theta,
                              double sigma_phi_end, double sigma_phi_mid)
 {
-    mSigmaForce = sigma_force;
-    mSigmaTheta = sigma_theta;
+    NormalRngPtr rng(new salt::NormalRNG<>(0.0,sigma_force));
+    mForceErrorRNG = rng;
+    NormalRngPtr rng2(new salt::NormalRNG<>(0.0,sigma_theta));
+    mThetaErrorRNG = rng2;
     mSigmaPhiEnd = sigma_phi_end;
     mSigmaPhiMid = sigma_phi_mid;
 }
