@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d], 0.4, [sserver-admin@lists.sf.net])
+AC_INIT([rcssserver3d], 0.5, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([lib/salt/salt.h])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
@@ -9,11 +9,30 @@ AC_LANG([C++])
 AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 
+  1. Start with version information of `0:0:0' for each libtool library.
+
+  2. Update the version information only immediately before a public
+     release of your software.  More frequent updates are unnecessary,
+     and only guarantee that the current interface number gets larger
+     faster.
+
+  3. If the library source code has changed at all since the last
+     update, then increment REVISION (`C:R:A' becomes `C:r+1:A').
+
+  4. If any interfaces have been added, removed, or changed since the
+     last update, increment CURRENT, and set REVISION to 0.
+
+  5. If any interfaces have been added since the last public release,
+     then increment AGE.
+
+  6. If any interfaces have been removed since the last public release,
+     then set AGE to 0.
+
 ## Here are the version numbers of our libraries. They should be updated (only)
 ## immediately before a release of the package. See libtool manual for details.
-RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'3:0:3')
+RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'3:1:3')
 RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'3:1:0')
-RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'3:0:1')
+RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'4:0:1')
 RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'1:0:0')
 RCSS_LIBRARY_VERSION_INFO(spark_version_info,spark_version,'0:0:0')
 RCSS_LIBRARY_VERSION_INFO(rcssmonitor3D_version_info,rcssmonitor3D_version,'2:0:1')
