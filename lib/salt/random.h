@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: random.h,v 1.3 2004/05/10 21:16:50 fruit Exp $
+   $Id: random.h,v 1.4 2006/03/01 16:07:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,8 @@ public:
     typedef boost::mt19937::result_type result_type;
 
     static RandomEngine& instance()
-    { static RandomEngine the_instance; return the_instance; }
+    { static std::auto_ptr<RandomEngine> the_instance(new RandomEngine()); 
+              return *the_instance; }
 
     static RandomEngine&
 #if defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x520)
@@ -66,7 +67,7 @@ public:
     static RandomEngine& instance(Generator& gen)
     { instance().seed( gen ); return instance(); }
 private:
-    RandomEngine() : boost::mt19937() {}
+    RandomEngine() : boost::mt19937() { }
 };
 
 #if (defined(BOOST_VERSION) && (BOOST_VERSION >= 103100))
