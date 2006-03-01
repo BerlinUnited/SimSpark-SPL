@@ -1,3 +1,32 @@
+[0.5]
+This release introduces a few new features, and also some bugfixes 
+(and probably some new bugs :). Important new features and fixes are 
+as follows:
+
+* Features (soccer):
+
+- Goalies. 
+  Players with uniform number '1' can catch the ball using the (catch) 
+  command. 
+
+- A restricted vision perceptor, so that not all other agents are
+  visible at the same time. With this perceptor, the communication
+  introduced in the 0.4 release becomes important.
+
+- The offside and some other rules have been cleaned up and some bugs
+  have been removed. Also, files that have been missing in the
+  0.4. release are now present.
+
+- rcssmonitor3D-lite looks a little more interesting now, and 
+  some bugs with the random number generators have been fixed.
+
+* Features (general):
+
+- a couple of new physics functions have been added, general simulation 
+  settings have been fixed. This doesn't change the current soccer 
+  simulation, but is important for the general simulator.
+
+
 [0.4]
 This release includes some speed improvements, agent communication,
 an implementation of the offside rule, and a first, unfinished version

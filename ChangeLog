@@ -1,5 +1,7 @@
 2006-03-01  Oliver Obst  <fruit@users.sourceforge.net>
 
+	* released rcssserver3D-0.5
+
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
 	- fixed bug in DynamicAxisPercept, so that at most one object
           would appear in the list of seen object (don't know why). 

@@ -8,50 +8,117 @@ RELEASE News for different forums                        -*- outline -*-
 
 ** [Soccer Lists]
 
-we have just released rcssserver3D-0.3. 
 
-In this release, a few bugs have been fixed and the soccer rules have
-been polished for the competition. In the soccer simulation, the ball
-is dropped when no player goes to the ball; it is also possible to
-drop the ball manually now. The match length has been extended to 2* 5
-minutes. The goals got physical goalposts and a crossbar.
+we have just released the rcssserver3D-0.5. This release introduces a
+few new features, and also some bugfixes (and probably some new bugs
+:).
 
-We added a 2D view and some more keys to the 'lite' monitor (in the
-monitor window, press '?' for an overview). Logfiles can be watched in
-single step mode. When the match is over, simulator and monitor are
-automatically terminated now.
+Important new features and fixes are listed at the end of the
+mail. For details have a look into the ChangeLog. Besides the usual
+.tar.gz file, we've also created a rpm package (build on a SuSE 10
+system). If all goes well, and you installed all the necessary
+packages, you can just skip the recompiling this time :). You can find
+both at the usual location on SourceForge [1].
 
-For details have a look into the ChangeLog.
+(For the rpm, you'll have to use the rpm "--nodeps" option, and don't
+forget to update the rcssserver3D.rb file in your home directory
+manually).
 
-You can get the package on the Soccer Simulator page on SourceForge [1].
+This time, creating the new release has been extremely stressful,
+because many of the contributing authors were also involved in the
+qualification. To finish his thesis, Joschka passed back the
+maintenance torch to me :)
 
-cheers
-Oliver Obst
+To get a stable and better documented version of the simulator for the
+competition, we need your help. Here's the outline of the plans for
+the next 2 or 3 weeks:
+
+- we get rid of bugs by the patches and bug reports you guys send
+  to us or to the mailing list. We really need your help :) as we have all 
+  our projects we're supposed to work on. Also, information about 
+  parameter settings would really be helpful (how wide should the view 
+  angle be, etc. Please use the mailing list to discuss.)
+- I know that the documentation is far from optimal, so please help us 
+  making it better. Jan <murray@uni-koblenz.de> has already started to 
+  write and collect information, but any help is really appreciated. 
+
+  What I really don't want is that you wait telling us the bugs until
+  you appear on RoboCup. This makes me feel stupid ;-) and even worse
+  everybody else works with a buggy system. 
+  
+- The last (but important) point is that we didn't manage to implement a 
+  new timer yet (to unplug Spades). We are planning to do that from now 
+  until March 20, where we want to release a version with a fixed timer, 
+  all the bugs removed, plus the documentation you help us to write.
+
+If you think these changes are late, you might be right, but please
+see that we are working on the 2007 version at the same time (which we
+plan to show on RoboCup). If you are worried about the late changes,
+please have a look at the midsize mailing list and relax (SCNR ;-).
+
+With the last two releases of rcssserver3D, new authors got involved
+(e.g. for this version, many parts are contributed by Hesham
+<heshamebrahimi@gmail.com>). With the additional contributions from
+the development competition we expect to get a pretty nice system for
+RC2007 shortly after RC2006.
+
+for the maintenance comittee
+Oliver
+
+* Features (soccer):
+
+- Goalies. 
+  Players with uniform number '1' can catch the ball using the (catch) 
+  command. 
+- A restricted vision perceptor, so that not all other agents are
+  visible at the same time. With this perceptor, the communication
+  introduced in the 0.4 release becomes important.
+- The offside and some other rules have been cleaned up and some bugs
+  have been removed. Also, files that have been missing in the
+  0.4. release are now present.
+- rcssmonitor3D-lite looks a little more interesting now, and 
+  some bugs with the random number generators have been fixed.
+
+* Features (general):
+
+- a couple of new physics functions have been added, general simulation 
+  settings have been fixed. This doesn't change the current soccer 
+  simulation, but is important for the general simulator.
 
 [1] http://sourceforge.net/projects/sserver/
 
 
 ** [General (SF Project News etc)]
 
-we have just released rcssserver3D-0.3. 
+we have just released rcssserver3D-0.5. 
 
 rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
 framework and a scene description language for setting up different
 kinds of simulations. The soccer simulation built on top of this will
-be used for the 3D Simulation League competition on RoboCup 2004 
-(see http://www.robocup2004.pt/).
+be used for the 3D Simulation League competition on RoboCup 2006 
+(see http://www.robocup2006.org/).
 
-In this release, a few bugs have been fixed and the soccer rules have
-been polished for the competition. In the soccer simulation, the ball
-is dropped when no player goes to the ball; it is also possible to
-drop the ball manually now. The match length has been extended to 2* 5
-minutes. The goals got physical goalposts and a crossbar.
+Important new features:
 
-We added a 2D view and some more keys to the 'lite' monitor (in the
-monitor window, press '?' for an overview). Logfiles can be watched in
-single step mode. When the match is over, simulator and monitor are
-automatically terminated now.
+- Goalies. 
+  Players with uniform number '1' can catch the ball using the (catch) 
+  command. 
+- A restricted vision perceptor, so that not all other agents are
+  visible at the same time. With this perceptor, the communication
+  introduced in the 0.4 release becomes important.
+- The offside and some other rules have been cleaned up and some bugs
+  have been removed. Also, files that have been missing in the
+  0.4. release are now present.
+- rcssmonitor3D-lite looks a little more interesting now, and 
+  some bugs with the random number generators have been fixed.
+
+* Features (general):
+
+- a couple of new physics functions have been added, general simulation 
+  settings have been fixed. This doesn't change the current soccer 
+  simulation, but is important for the general simulator.
+
 
 For details have a look into the ChangeLog coming with the package.
 
