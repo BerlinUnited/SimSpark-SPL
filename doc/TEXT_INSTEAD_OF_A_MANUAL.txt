@@ -19,11 +19,12 @@ Contents
 2.3.3 Beam Effector
 2.3.4 Drive Effector
 2.3.5 Kick Effector
-2.3.6 Say Effector
-2.3.7 Vision Perceptor
-2.3.8 GameState Perceptor
-2.3.9 AgentState Perceptor
-2.3.10 Hear Perceptor
+2.3.6 Catch Effector
+2.3.7 Say Effector
+2.3.8 Vision Perceptor
+2.3.9 GameState Perceptor
+2.3.10 AgentState Perceptor
+2.3.11 Hear Perceptor
 
 3. Monitor and Trainer Protocol
 
@@ -280,7 +281,23 @@ gets higher with sigma up to 4.5.
 
 Example command: (kick 20.0 80.0)
 
-2.3.6. Say Effector
+2.3.6. Catch Effector
+-------------------
+
+The goalie (agent number 1) is the only player with the ability to
+catch a ball. The goalie can catch the ball in play mode 'playe_on',
+if the ball is inside the penalty area and close to the robot, i.e. it
+has to be within the so called catch margin of the player. The current
+value of catch margin is 2 meters.
+
+The catcheffector puts the ball in front of the goalie on the ground
+and moves players away that are closer than 2 meters to the goalie by
+5 meters.
+
+(catch)
+
+
+2.3.7. Say Effector
 -------------------
 
 To broadcast messages to other players, you have to use the
@@ -297,12 +314,17 @@ capacity of the players of hearing messages.
 
 Example command: (say player10_Pass)
 
-2.3.7. Vision Perceptor
+2.3.8 Vision Perceptor
 -----------------------
 
-Your robots possess a special omnicam with some smart image
-processing software attached :). Robots have a 360 degrees view. The
-VisionPerceptor delivers lists of seen objects, where objects are
+Your robots possess a special omnicam with some smart image processing
+software attached :). If using the regular visionperceptor, Robots
+have a 360 degrees view. With the RestrictedVisionPerceptor (which
+became the default in version 0.5), the view field of the robot is
+restricted to 90 degrees (this is of course configurable in
+rcssserver3D.rb).
+
+The VisionPerceptor delivers lists of seen objects, where objects are
 either others robots, the ball, or markers on the field. Currently
 there are 8 markers on the field: one at each corner point of the
 field and one at each goal post.
@@ -356,7 +378,7 @@ Example Vision output:
 6.2928 45.0858 -0.94987)) (Player (team robolog) (id 1) (pol 7.33643
 37.5782 5.86774)))
 
-2.3.7. GameStatePerceptor
+2.3.9 GameStatePerceptor
 -------------------------
 
 The GameStatePerceptor tells you about the current status of the
@@ -384,7 +406,7 @@ Example GameState output:
 
 (GameState (time 0) (playmode BeforeKickOff))
 
-2.3.8. AgentState perceptor
+2.3.10 AgentState perceptor
 ---------------------------
 
 The AgentStatePerecptor tells you about the current state of your
@@ -400,7 +422,7 @@ Example AgentState output:
 
 (AgentState (battery 100) (temp 23))
 
-2.3.10. Hear Perceptor
+2.3.11 Hear Perceptor
 ----------------------
 
 You get percepts from this perceptor when a player uses SayEffector
