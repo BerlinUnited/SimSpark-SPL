@@ -453,6 +453,10 @@ plugin/soccer/objectstate/*.lo
 plugin/soccer/objectstate/.deps
 plugin/soccer/objectstate/.dirstamp
 plugin/soccer/objectstate/.libs
+plugin/soccer/pantilteffector/*.lo
+plugin/soccer/pantilteffector/.deps
+plugin/soccer/pantilteffector/.dirstamp
+plugin/soccer/pantilteffector/.libs
 plugin/soccer/restrictedvisionperceptor/*.lo
 plugin/soccer/restrictedvisionperceptor/.deps
 plugin/soccer/restrictedvisionperceptor/.dirstamp
