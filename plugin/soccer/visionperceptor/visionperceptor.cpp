@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.15 2006/02/27 17:29:35 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.16 2006/03/12 14:11:22 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <soccer/soccerbase/soccerbase.h>
-#include <iostream>
+
 using namespace zeitgeist;
 using namespace oxygen;
 using namespace boost;
