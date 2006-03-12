@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.8 2006/02/28 17:24:02 jamu Exp $
+   $Id: export.cpp,v 1.9 2006/03/12 14:22:03 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,13 +21,14 @@
 */
 
 #include <zeitgeist/zeitgeist.h>
+#include "beameffector/beameffector.h"
+#include "catcheffector/catcheffector.h"
 #include "createeffector/createeffector.h"
 #include "driveeffector/driveeffector.h"
-#include "beameffector/beameffector.h"
-#include "kickeffector/kickeffector.h"
-#include "sayeffector/sayeffector.h"
-#include "catcheffector/catcheffector.h"
 #include "initeffector/initeffector.h"
+#include "kickeffector/kickeffector.h"
+#include "pantilteffector/pantilteffector.h"
+#include "sayeffector/sayeffector.h"
 #include "soccercontrolaspect/soccercontrolaspect.h"
 #include "gamestateaspect/gamestateaspect.h"
 #include "gamestateaspect/gamestateitem.h"
@@ -50,23 +51,24 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(GameStateItem);
         ZEITGEIST_EXPORT(BallStateAspect);
         ZEITGEIST_EXPORT(SoccerRuleAspect);
+        ZEITGEIST_EXPORT(BeamEffector);
+        ZEITGEIST_EXPORT(CatchEffector);
         ZEITGEIST_EXPORT(CreateEffector);
         ZEITGEIST_EXPORT(DriveEffector);
-        ZEITGEIST_EXPORT(BeamEffector);
-        ZEITGEIST_EXPORT(KickEffector);
-        ZEITGEIST_EXPORT(SayEffector);
-        ZEITGEIST_EXPORT(CatchEffector);
         ZEITGEIST_EXPORT(InitEffector);
+        ZEITGEIST_EXPORT(KickEffector);
+        ZEITGEIST_EXPORT(PanTiltEffector);
+        ZEITGEIST_EXPORT(SayEffector);
         ZEITGEIST_EXPORT(ObjectState);
         ZEITGEIST_EXPORT(AgentState);
         ZEITGEIST_EXPORT(TrainerCommandParser);
         ZEITGEIST_EXPORT(SexpMonitor);
         ZEITGEIST_EXPORT(FieldFlag);
         ZEITGEIST_EXPORT(Ball);
-        ZEITGEIST_EXPORT(VisionPerceptor);
-        ZEITGEIST_EXPORT(RestrictedVisionPerceptor);
-        ZEITGEIST_EXPORT(GameStatePerceptor);
         ZEITGEIST_EXPORT(AgentStatePerceptor);
+        ZEITGEIST_EXPORT(GameStatePerceptor);
         ZEITGEIST_EXPORT(HearPerceptor);
+        ZEITGEIST_EXPORT(RestrictedVisionPerceptor);
+        ZEITGEIST_EXPORT(VisionPerceptor);
 ZEITGEIST_EXPORT_END()
 

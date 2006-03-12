@@ -8,12 +8,14 @@ agentstateperceptor/agentstateperceptor_c.cpp \
 ball/ball.cpp ball/ball_c.cpp \
 ballstateaspect/ballstateaspect.cpp \
 ballstateaspect/ballstateaspect_c.cpp \
+beameffector/beameffector.cpp \
+beameffector/beameffector_c.cpp \
+catcheffector/catcheffector.cpp \
+catcheffector/catcheffector_c.cpp \
 createeffector/createeffector.cpp \
 createeffector/createeffector_c.cpp \
 driveeffector/driveeffector.cpp \
 driveeffector/driveeffector_c.cpp \
-beameffector/beameffector.cpp \
-beameffector/beameffector_c.cpp \
 fieldflag/fieldflag_c.cpp \
 gamestateaspect/gamestateaspect.cpp \
 gamestateaspect/gamestateaspect_c.cpp \
@@ -21,20 +23,20 @@ gamestateaspect/gamestateitem.cpp \
 gamestateaspect/gamestateitem_c.cpp \
 gamestateperceptor/gamestateperceptor.cpp \
 gamestateperceptor/gamestateperceptor_c.cpp \
+hearperceptor/hearperceptor.cpp \
+hearperceptor/hearperceptor_c.cpp \
 initeffector/initeffector.cpp \
 initeffector/initeffector_c.cpp \
 kickeffector/kickeffector.cpp \
 kickeffector/kickeffector_c.cpp \
-sayeffector/sayeffector.cpp \
-sayeffector/sayeffector_c.cpp \
-catcheffector/catcheffector.cpp \
-catcheffector/catcheffector_c.cpp \
-hearperceptor/hearperceptor.cpp \
-hearperceptor/hearperceptor_c.cpp \
 objectstate/objectstate.cpp \
 objectstate/objectstate_c.cpp \
-trainercommandparser/trainercommandparser.cpp \
-trainercommandparser/trainercommandparser_c.cpp \
+pantilteffector/pantilteffector.cpp \
+pantilteffector/pantilteffector_c.cpp \
+restrictedvisionperceptor/restrictedvisionperceptor.cpp \
+restrictedvisionperceptor/restrictedvisionperceptor_c.cpp \
+sayeffector/sayeffector.cpp \
+sayeffector/sayeffector_c.cpp \
 sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor_c.cpp \
 soccerbase/soccerbase.cpp \
@@ -42,10 +44,10 @@ soccercontrolaspect/soccercontrolaspect.cpp \
 soccercontrolaspect/soccercontrolaspect_c.cpp \
 soccerruleaspect/soccerruleaspect.cpp \
 soccerruleaspect/soccerruleaspect_c.cpp \
+trainercommandparser/trainercommandparser.cpp \
+trainercommandparser/trainercommandparser_c.cpp \
 visionperceptor/visionperceptor.cpp \
-visionperceptor/visionperceptor_c.cpp \
-restrictedvisionperceptor/restrictedvisionperceptor.cpp \
-restrictedvisionperceptor/restrictedvisionperceptor_c.cpp
+visionperceptor/visionperceptor_c.cpp 
 
 nobase_libpkginclude_HEADERS = \
 soccertypes.h \
@@ -55,6 +57,8 @@ ball/ball.h \
 ballstateaspect/ballstateaspect.h \
 beameffector/beamaction.h \
 beameffector/beameffector.h \
+catcheffector/catchaction.h \
+catcheffector/catcheffector.h \
 createeffector/createaction.h \
 createeffector/createeffector.h \
 driveeffector/driveaction.h \
@@ -63,23 +67,22 @@ fieldflag/fieldflag.h \
 gamestateaspect/gamestateaspect.h \
 gamestateaspect/gamestateitem.h \
 gamestateperceptor/gamestateperceptor.h \
+hearperceptor/hearperceptor.h \
 initeffector/initaction.h \
 initeffector/initeffector.h \
 kickeffector/kickaction.h \
 kickeffector/kickeffector.h \
-sayeffector/sayeffector.h \
-sayeffector/sayaction.h \
-catcheffector/catcheffector.h \
-catcheffector/catchaction.h \
 objectstate/objectstate.h \
-trainercommandparser/trainercommandparser.h \
+pantilteffector/pantilteffector.h \
+restrictedvisionperceptor/restrictedvisionperceptor.h \
+sayeffector/sayaction.h \
+sayeffector/sayeffector.h \
 sexpmonitor/sexpmonitor.h \
 soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.h \
 soccerruleaspect/soccerruleaspect.h \
-visionperceptor/visionperceptor.h \
-restrictedvisionperceptor/restrictedvisionperceptor.h \
-hearperceptor/hearperceptor.h
+trainercommandparser/trainercommandparser.h \
+visionperceptor/visionperceptor.h 
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/soccer
