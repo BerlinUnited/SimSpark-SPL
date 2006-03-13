@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.20 2006/02/28 17:13:00 jamu Exp $
+   $Id: soccerruleaspect.cpp,v 1.21 2006/03/13 22:08:25 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -902,20 +902,28 @@ SoccerRuleAspect::CheckOffside()
         }
     }
 
+    Vector3f ball_pos = mBallBody->GetPosition();
+
     SoccerBase::GetTransformParent(*agentState, transform_parent);
     SoccerBase::GetAgentBody(transform_parent, agent_body);
     Vector3f agent_pos = agent_body->GetPosition();
 
     if ( (mGameState->GetTime() == time) && mFirstCollidingAgent )
     {
-        if ((((idx == TI_LEFT) && (agent_pos[0] > opp_defender_pos)) ||
-            ((idx == TI_RIGHT) && (agent_pos[0] < opp_defender_pos)))  )
+        if (((idx == TI_LEFT) && (agent_pos[0] > opp_defender_pos)
+		&& (agent_pos[0] > ball_pos[0])) ||
+            ((idx == TI_RIGHT) && (agent_pos[0] < opp_defender_pos)
+		&& (agent_pos[0] < ball_pos[0])))
+        {
             mFirstCollidingAgent = true;
+        }
         else
+        {
             mFirstCollidingAgent = false;
+        }
     }
-    
-    // if the agent,that touches the ball, is in offside position and was in 
+
+    // if the agent,that touches the ball was in 
     // offside position before the last shot, change the mode to offside
     bool offside = false;
 
@@ -929,16 +937,8 @@ SoccerRuleAspect::CheckOffside()
         {
             if (agentState->GetUniformNumber() == *it_offside)
             {
-                SoccerBase::GetTransformParent(*agentState, transform_parent);
-                SoccerBase::GetAgentBody(transform_parent, agent_body);
-
-                Vector3f agent_pos = agent_body->GetPosition();
-
-                if (agent_pos[0] > opp_defender_pos)
-                {
-                    mGameState->SetPlayMode(PM_OFFSIDE_RIGHT);
-                    offside = true;
-                }
+                mGameState->SetPlayMode(PM_OFFSIDE_RIGHT);
+                offside = true;
             }
         }
         if (!offside && (agent_pos[0] > opp_defender_pos))
@@ -955,16 +955,8 @@ SoccerRuleAspect::CheckOffside()
         {
             if (agentState->GetUniformNumber() == *it_offside)
             {
-                SoccerBase::GetTransformParent(*agentState, transform_parent);
-                SoccerBase::GetAgentBody(transform_parent, agent_body);
-
-                Vector3f agent_pos = agent_body->GetPosition();
-
-                if (agent_pos[0] < opp_defender_pos)
-                {
-                    mGameState->SetPlayMode(PM_OFFSIDE_LEFT);
-                    offside = true;
-                }
+                mGameState->SetPlayMode(PM_OFFSIDE_LEFT);
+                offside = true;
             }
         }
         if (!offside && (agent_pos[0] < opp_defender_pos))
@@ -995,14 +987,16 @@ SoccerRuleAspect::CheckOffside()
 
             if (idx == TI_LEFT)
             {
-                if (agent_pos[0] > opp_defender_pos)
+                if ((agent_pos[0] > opp_defender_pos)
+		    && (agent_pos[0] > ball_pos[0]))
                 {
                     mInOffsideLeftPlayers.push_back((*it)->GetUniformNumber());
                 }
             }
             else
             {
-                if (agent_pos[0] < opp_defender_pos)
+                if ((agent_pos[0] < opp_defender_pos)
+		    && (agent_pos[0] < ball_pos[0]))
                 {
                     mInOffsideRightPlayers.push_back((*it)->GetUniformNumber());
                 }
