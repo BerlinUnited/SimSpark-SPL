@@ -116,6 +116,10 @@ def addAgent(path)
 
     catchEffector = new('CatchEffector', path+'CatchEffector')
 
+    pantiltEffector = new('PanTiltEffector', path+'PanTiltEffector')
+    pantiltEffector.setMaxPanAngleDelta(90);
+    pantiltEffector.setMaxTiltAngleDelta(10);
+
     # perceptor setup
 #    visionPerceptor = new('VisionPerceptor', path+'VisionPerceptor')
     # set to true for debugging. will be set to false during competition
@@ -134,9 +138,8 @@ def addAgent(path)
     visionPerceptor = new('RestrictedVisionPerceptor', path+'VisionPerceptor')
     visionPerceptor.setSenseMyPos(false);
     visionPerceptor.addNoise(true);
-    visionPerceptor.useRandomNoise(true);
-    visionPerceptor.setStaticSenseAxis(false);
-    visionPerceptor.setVisionAngles(90,90);
+    visionPerceptor.setStaticSenseAxis(true);
+    visionPerceptor.setViewCones(90,90);
 
 
     new('GameStatePerceptor', path+'GameStatePerceptor')
