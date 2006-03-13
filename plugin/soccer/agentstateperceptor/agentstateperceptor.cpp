@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstateperceptor.cpp,v 1.4 2004/04/05 14:51:36 rollmark Exp $
+   $Id: agentstateperceptor.cpp,v 1.5 2006/03/13 23:22:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,9 +22,11 @@
 #include "agentstateperceptor.h"
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/soccerbase/soccerbase.h>
+#include <soccer/restrictedvisionperceptor/restrictedvisionperceptor.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
+using namespace boost;
 
 AgentStatePerceptor::AgentStatePerceptor() : oxygen::Perceptor()
 {
@@ -56,6 +58,29 @@ AgentStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     Predicate& predicate = predList->AddPredicate();
     predicate.name = "AgentState";
     predicate.parameter.Clear();
+
+    shared_ptr<BaseNode> parent =
+        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+
+    if (parent.get() == 0)
+    {
+        GetLog()->Warning() << "WARNING: (AgentStatePerceptor) "
+                            << "parent node is not derived from BaseNode\n";
+    } else {
+        shared_ptr<RestrictedVisionPerceptor> rvp =
+            parent->FindChildSupportingClass<RestrictedVisionPerceptor>(false);
+        if (rvp.get() == 0)
+        {
+            GetLog()->Warning() << "WARNING: (AgentStatePerceptor) "
+                                << "cannot find RestrictedVisionPerceptor instance\n";
+        } else {
+            // pan tilt information
+            ParameterList& pantiltElement = predicate.parameter.AddList();
+            pantiltElement.AddValue(std::string("pan_tilt"));
+            pantiltElement.AddValue(static_cast<int>(roundf(rvp->GetPan())));
+            pantiltElement.AddValue(static_cast<int>(roundf(rvp->GetTilt())));
+        }
+    }
 
     // battery
     ParameterList& batteryElement = predicate.parameter.AddList();
