@@ -91,7 +91,17 @@
 		   )
 	     )
        )
-       
+
+; create box collider around playing field
+ (node BoxCollider
+       (setName FieldBox)
+       (setPosition 0 0 20)
+       (setBoxLengths $FieldLength $FieldWidth 40)
+       (node RecorderHandler 
+	     (setName recorder)
+	     )  
+       )
+
 ; create the left goal
  (node Transform
        (setName GoalBoxL)
