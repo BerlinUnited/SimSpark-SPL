@@ -428,10 +428,11 @@ Example GameState output:
 ---------------------------
 
 The AgentStatePerecptor tells you about the current state of your
-agent, currently its battery level and temperature.
+agent, currently the pan/tilt angle of the camera (in degrees, rounded 
+to the next integer value), the battery level and temperature.
 
 (AgentState
-	(pantilt <pan in degrees> <tilt in degrees>)
+	(pan_tilt <pan in degrees> <tilt in degrees>)
 	(battery <battery level in percent>)
 	(temp <temperature in degree>)
 )
@@ -439,7 +440,7 @@ agent, currently its battery level and temperature.
 
 Example AgentState output:
 
-(AgentState (battery 100) (temp 23))
+(AgentState (pan_tilt -89 -2) (battery 100) (temp 23))
 
 2.3.12 Hear Perceptor
 ----------------------
