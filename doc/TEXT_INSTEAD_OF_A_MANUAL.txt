@@ -21,10 +21,11 @@ Contents
 2.3.5 Kick Effector
 2.3.6 Catch Effector
 2.3.7 Say Effector
-2.3.8 Vision Perceptor
-2.3.9 GameState Perceptor
-2.3.10 AgentState Perceptor
-2.3.11 Hear Perceptor
+2.3.8 PanTilt Effector
+2.3.9 Vision Perceptor
+2.3.10 GameState Perceptor
+2.3.11 AgentState Perceptor
+2.3.12 Hear Perceptor
 
 3. Monitor and Trainer Protocol
 
@@ -314,7 +315,21 @@ capacity of the players of hearing messages.
 
 Example command: (say player10_Pass)
 
-2.3.8 Vision Perceptor
+2.3.8 PanTilt Effector
+----------------------
+
+The PanTilt Effector changes the view direction of the
+RestrictedVisionPerceptor (RVP), if the StaticPercept is used (this is
+default for the RVP). The command to change the view direction is
+(pantilt <panDelta> <tiltDelta>), where <panDelta> and <tiltDelta> are
+angle changes (in degrees) of the pan and tilt angle, respectively.
+The maximum pan and tilt angle deltas can be configured in rcssserver3D.rb
+with the pantilteffector methods setMaxPanAngleDelta and setMaxTiltAngleDelta. 
+These values are standing for the maximum angle change at a time.
+The pan and tilt angles are reported with the agentstateperceptor, with
+the current angles rounded to the next integer.
+
+2.3.9 Vision Perceptor
 -----------------------
 
 Your robots possess a special omnicam with some smart image processing
@@ -322,7 +337,10 @@ software attached :). If using the regular visionperceptor, Robots
 have a 360 degrees view. With the RestrictedVisionPerceptor (which
 became the default in version 0.5), the view field of the robot is
 restricted to 90 degrees (this is of course configurable in
-rcssserver3D.rb).
+rcssserver3D.rb). The direction of the view (pan and tilt) can be
+changed with the pantilt effector. The camera can pan to any angle
+(the initial 0 degrees pan direction is the direction towards the
+opponent side), and tilt around the horizontal plane.
 
 The VisionPerceptor delivers lists of seen objects, where objects are
 either others robots, the ball, or markers on the field. Currently
@@ -378,7 +396,7 @@ Example Vision output:
 6.2928 45.0858 -0.94987)) (Player (team robolog) (id 1) (pol 7.33643
 37.5782 5.86774)))
 
-2.3.9 GameStatePerceptor
+2.3.10 GameStatePerceptor
 -------------------------
 
 The GameStatePerceptor tells you about the current status of the
@@ -406,13 +424,14 @@ Example GameState output:
 
 (GameState (time 0) (playmode BeforeKickOff))
 
-2.3.10 AgentState perceptor
+2.3.11 AgentState perceptor
 ---------------------------
 
 The AgentStatePerecptor tells you about the current state of your
 agent, currently its battery level and temperature.
 
 (AgentState
+	(pantilt <pan in degrees> <tilt in degrees>)
 	(battery <battery level in percent>)
 	(temp <temperature in degree>)
 )
@@ -422,7 +441,7 @@ Example AgentState output:
 
 (AgentState (battery 100) (temp 23))
 
-2.3.11 Hear Perceptor
+2.3.12 Hear Perceptor
 ----------------------
 
 You get percepts from this perceptor when a player uses SayEffector
