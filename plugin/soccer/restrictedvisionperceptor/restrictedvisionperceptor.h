@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.h,v 1.1 2006/02/28 17:20:45 jamu Exp $
+   $Id: restrictedvisionperceptor.h,v 1.2 2006/03/14 12:12:59 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ protected:
         float mDist;  // distance between perceptor and object
         salt::Vector3f mRelPos; //position relative to perceptor
         //string name; // name of the object
-         
+
 
         ObjectData& operator=(const ObjectData& rhs)
         {
@@ -94,16 +94,53 @@ public:
     */
     void AddNoise(bool add_noise);
 
-    /** Turn randomization off/on.
-        \param random_noise flag if the measurement noise is randomized each step.
-    */
-    void UseRandomNoise(bool random_noise);
-
     //! Turn senses relative to the X-axis of the team off/on
     void SetStaticSenseAxis(bool static_axis);
 
     //! Set the visible area of the perceptor
-    void SetVisionAngles(int hAngle, int vAngle);
+    void SetViewCones(unsigned int hAngle, unsigned int vAngle);
+
+    /** Set the pan range.
+     *  As long as the agents have no inherent direction and 0 degrees
+     *  horizontally is always directed towards the opponent side, it
+     *  does not make much sense to restrict the pan range other than
+     *  to a fixed angle, which disables panning effectively.
+     *  A range of 360 degrees (e.g. from -180 to 180) means no restriction.
+     * @param lower lower bound (in degrees)
+     * @param upper upper bound (in degrees)
+     */
+    void SetPanRange(int lower, int upper);
+    /** Set the tilt range.
+     *  Contrary to the pan range, it makes much sense to restrict the
+     *  tilt range. However, a range of 360 degrees (e.g. from -180 to 180)
+     *  means no restriction.
+     * @param lower lower bound (in degrees)
+     * @param upper upper bound (in degrees)
+     */
+    void SetTiltRange(int lower, int upper);
+
+    /** Set the view angles
+     * @param pan the horizontal view angle in degrees
+     *        (0 degrees is the x-axis towards the opponent side)
+     * @param tilt is the vertical view angle in degrees
+     *        (0 degrees is the angle parallel to the floor)
+     */
+    void SetPanTilt(float pan, float tilt);
+    /** Add values to the current view angles.
+     * @param pan the horizontal view angle in degrees
+     *        (0 degrees is the x-axis towards the opponent side)
+     * @param tilt is the vertical view angle in degrees
+     *        (0 degrees is the angle parallel to the floor)
+     */
+    void ChangePanTilt(float pan, float tilt);
+    /** Get the horizontal view direction.
+     * @return the pan angle in degrees
+     */
+    float GetPan() const;
+    /** Get the horizontal view direction.
+     * @return the tilt angle in degrees
+     */
+    float GetTilt() const;
 
 protected:
     /** constructs the internal ray collider */
@@ -150,8 +187,6 @@ protected:
     float mCalErrorAbs;
     //! flag if we should noisify the data
     bool mAddNoise;
-    //! flag if the error should be randomized each step
-    bool mUseRandomNoise;
 
     /** flag if the senses are always relative to the X-axis of the
         team, default true
@@ -159,10 +194,22 @@ protected:
     bool mStaticSenseAxis;
 
     //! horizontal opening of the vision cone
-    int mHAngle;
+    unsigned int mHViewCone;
     //! vertical opening of the vision cone
-    int mVAngle;
-    
+    unsigned int mVViewCone;
+    //! horizontal view direction in degrees
+    float mPan;
+    //! the lower bound for the horizontal view direction in degrees
+    int mPanLower;
+    //! the upper bound for the horizontal view direction in degrees
+    int mPanUpper;
+    //! vertical view direction in degrees
+    float mTilt;
+    //! the lower bound for the vertical view direction in degrees
+    int mTiltLower;
+    //! the upper bound for the vertical view direction in degrees
+    int mTiltUpper;
+
     //! ray collider to check occlusion
     boost::shared_ptr<oxygen::RayCollider> mRay;
 
