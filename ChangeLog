@@ -1,6 +1,9 @@
 2006-03-14  Oliver Obst  <fruit@users.sourceforge.net>
 
-* released rcssserver3D-0.5.1
+        * released rcssserver3D-0.5.1
+
+	* plugin/soccer/Makefile.am: 
+	- added pantiltaction class to Makefile
 
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
