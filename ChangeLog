@@ -1,6 +1,16 @@
 2006-03-14  Oliver Obst  <fruit@users.sourceforge.net>
 
-	* released rcssserver3D-0.5.1
+* released rcssserver3D-0.5.1
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	- added method to set the range for panning the perceptor 
+	- added method to set the range for tilting the perceptor 
+	- changed interface: the visible area is set with SetViewCones now 
+	- SetPanTilt and ChangePanTilt are used to set the current pan and
+	  tilt angles (Change... means changing relatively to the current
+	  angles) 
+	- GetPan() and GetTilt() return the current pan/tilt angles
 
 	* app/simspark/rsg/agent/ball.rsg: 
 	- added ball RecorderHandler

@@ -8,89 +8,42 @@ RELEASE News for different forums                        -*- outline -*-
 
 ** [Soccer Lists]
 
+we have just released version 0.5.1 of rcssserver3D. This release
+fixes mainly two problems:
 
-we have just released the rcssserver3D-0.5. This release introduces a
-few new features, and also some bugfixes (and probably some new bugs
-:).
+- Offside Rules. We received a patch from the Virtual Werder Team
+  (Arne Stahlbock et.al.) containing some fixes for the offside 
+  implementation. The Source package contains also a file README-soccer
+  with some observations/explanations. 
 
-Important new features and fixes are listed at the end of the
-mail. For details have a look into the ChangeLog. Besides the usual
-.tar.gz file, we've also created a rpm package (build on a SuSE 10
-system). If all goes well, and you installed all the necessary
-packages, you can just skip the recompiling this time :). You can find
-both at the usual location on SourceForge [1].
+- The new RestrictedVisionPerceptor (RVP) was hardly useable, so we
+  fixed the vision by making it static (and not dependend on how the
+  spheres are rolling). A new PanTilt Effector can be used to change
+  the view direction. With a static percept, the RVP sees only objects 
+  in the view cone (it does not see flags outside the view cone).
 
-(For the rpm, you'll have to use the rpm "--nodeps" option, and don't
-forget to update the rcssserver3D.rb file in your home directory
-manually).
+You can find the package at the usual place [1]. In addition to the
+full source package, we created a binary rpm (built on SuSE 10), and a
+source patch. If you installed the 0.5 version from source, the patch
+can be applied to your sources and hopefully helps to save compilation
+time. 
 
-This time, creating the new release has been extremely stressful,
-because many of the contributing authors were also involved in the
-qualification. To finish his thesis, Joschka passed back the
-maintenance torch to me :)
+Please note that you should update the rcssserver3D.rb file in your
+~/.rcssserver3d/ directory manually (again).
 
-To get a stable and better documented version of the simulator for the
-competition, we need your help. Here's the outline of the plans for
-the next 2 or 3 weeks:
+cheers
+Oliver (for the maintenance comittee)
 
-- we get rid of bugs by the patches and bug reports you guys send
-  to us or to the mailing list. We really need your help :) as we have all 
-  our projects we're supposed to work on. Also, information about 
-  parameter settings would really be helpful (how wide should the view 
-  angle be, etc. Please use the mailing list to discuss.)
-- I know that the documentation is far from optimal, so please help us 
-  making it better. Jan <murray@uni-koblenz.de> has already started to 
-  write and collect information, but any help is really appreciated. 
+P.S.: Please note that using Ruby 1.8.4 causes problems with our simulator
+      (this problem was identified thanks to Daniel Hein and Markus Rollmann)
 
-  What I really don't want is that you wait telling us the bugs until
-  you appear on RoboCup. This makes me feel stupid ;-) and even worse
-  everybody else works with a buggy system. 
-  
-- The last (but important) point is that we didn't manage to implement a 
-  new timer yet (to unplug Spades). We are planning to do that from now 
-  until March 20, where we want to release a version with a fixed timer, 
-  all the bugs removed, plus the documentation you help us to write.
-
-If you think these changes are late, you might be right, but please
-see that we are working on the 2007 version at the same time (which we
-plan to show on RoboCup). If you are worried about the late changes,
-please have a look at the midsize mailing list and relax (SCNR ;-).
-
-With the last two releases of rcssserver3D, new authors got involved
-(e.g. for this version, many parts are contributed by Hesham
-<heshamebrahimi@gmail.com>). With the additional contributions from
-the development competition we expect to get a pretty nice system for
-RC2007 shortly after RC2006.
-
-for the maintenance comittee
-Oliver
-
-* Features (soccer):
-
-- Goalies. 
-  Players with uniform number '1' can catch the ball using the (catch) 
-  command. 
-- A restricted vision perceptor, so that not all other agents are
-  visible at the same time. With this perceptor, the communication
-  introduced in the 0.4 release becomes important.
-- The offside and some other rules have been cleaned up and some bugs
-  have been removed. Also, files that have been missing in the
-  0.4. release are now present.
-- rcssmonitor3D-lite looks a little more interesting now, and 
-  some bugs with the random number generators have been fixed.
-
-* Features (general):
-
-- a couple of new physics functions have been added, general simulation 
-  settings have been fixed. This doesn't change the current soccer 
-  simulation, but is important for the general simulator.
 
 [1] http://sourceforge.net/projects/sserver/
 
 
 ** [General (SF Project News etc)]
 
-we have just released rcssserver3D-0.5. 
+we have just released rcssserver3D-0.5.1. 
 
 rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
@@ -99,26 +52,15 @@ kinds of simulations. The soccer simulation built on top of this will
 be used for the 3D Simulation League competition on RoboCup 2006 
 (see http://www.robocup2006.org/).
 
-Important new features:
+Important fixes and new features:
 
-- Goalies. 
-  Players with uniform number '1' can catch the ball using the (catch) 
-  command. 
-- A restricted vision perceptor, so that not all other agents are
-  visible at the same time. With this perceptor, the communication
-  introduced in the 0.4 release becomes important.
-- The offside and some other rules have been cleaned up and some bugs
-  have been removed. Also, files that have been missing in the
-  0.4. release are now present.
-- rcssmonitor3D-lite looks a little more interesting now, and 
-  some bugs with the random number generators have been fixed.
+- The Offside Rules were fixed.
 
-* Features (general):
-
-- a couple of new physics functions have been added, general simulation 
-  settings have been fixed. This doesn't change the current soccer 
-  simulation, but is important for the general simulator.
-
+- The new RestrictedVisionPerceptor (RVP) was hardly useable, so we
+  fixed the vision by making it static (and not dependend on how the
+  spheres are rolling). A new PanTilt Effector can be used to change
+  the view direction. With a static percept, the RVP sees only objects 
+  in the view cone (it does not see flags outside the view cone).
 
 For details have a look into the ChangeLog coming with the package.
 
