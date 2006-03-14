@@ -1,4 +1,4 @@
-rcssserver3D-0.3 README
+rcssserver3D-0.5.1 README
 
 General Information
 
@@ -31,7 +31,7 @@ middleware system for agent based simulations. SPADES was presented
 on the 2002 RoboCup Symposium in Fukuoka [2] (SPADES itself is not
 part of this package).
 
-If you installed rcssserver3D-0.2.x or 0.1 before, make sure to clean
+If you installed rcssserver3D-0.x before, make sure to clean
 the ~/.rcssserver3D/ directory prior to using the new version. Also
 better remove the old installed libraries in /usr/local/lib/
 rcssserver3D manually. Sorry for this inconvenience.

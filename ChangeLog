@@ -1,3 +1,47 @@
+2006-03-14  Oliver Obst  <fruit@users.sourceforge.net>
+
+	* app/agenttest/soccer.h: 
+	* app/agenttest/soccer.cpp:
+	- added PanTilt() method
+
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
+	- added RestrictedVisionPerceptor information to 
+	  the agentstate perceptor (the pan and tilt angles are reported)
+
+	* app/simulator/rcssserver3D.rb: 
+	- added PanTiltEffector setup 
+	- fixed RestrictedVisionPerceptor setup for new static vision method
+
+2006-03-13  Oliver Obst  <fruit@users.sourceforge.net>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- applied patch submitted by Arne Stahlbock
+	  <wolf359@informatik.uni-bremen.de> to fix the offside rules
+
+2006-03-12  Oliver Obst  <fruit@users.sourceforge.net>
+
+	* plugin/soccer/export.cpp: 
+	* plugin/soccer/Makefile.am: 
+	- added PanTiltEffector to the plugin
+
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
+	- the AgentStatePerceptor delivers information about the pantilt angles
+	  now.  Angles are rounded to the next integer.
+
+2006-03-10  Oliver Obst  <fruit@users.sourceforge.net>
+
+	* plugin/soccer/pantilteffector/pantiltaction.h: 
+	* plugin/soccer/pantilteffector/pantilteffector.h: 
+	* plugin/soccer/pantilteffector/pantilteffector.cpp: 
+	* plugin/soccer/pantilteffector/pantilteffector_c.cpp: 
+	- added a pan/tilt unit so that the restrictedvisionperceptor can be
+	  moved. In order to make this working, the restrictedvisionperceptor
+	  has to use a the 'StaticSenseAxis' percept. The new agent command to
+	  use the pantilt unit is (pantilt <PanDelta> <TiltDelta>), where 
+	  both deltas are measured in degrees. The maximum absolute value of the 
+	  deltas to be applied at a time can be configured in 
+	  rcssserver3D.rb 
+	
 2006-03-01  Oliver Obst  <fruit@users.sourceforge.net>
 
 	* released rcssserver3D-0.5

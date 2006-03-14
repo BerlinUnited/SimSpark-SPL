@@ -10,6 +10,8 @@ doc-recursive:
 
 CLEANFILES = 
 
+EXTRA_DIST = README-soccer
+
 EXTRA_SRC_DISTS =
 EXTRA_BIN_DISTS =
 include $(top_srcdir)/config.aux/dist.am

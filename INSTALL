@@ -1,4 +1,4 @@
-rcssserver3D-0.3 Installation
+rcssserver3D-0.5.1 Installation
 ===============================
 (C) 2004 Universitaet Koblenz, Germany.
 
@@ -30,7 +30,7 @@ Required libraries for the default installation
   - additional info: you need a recent version of expat for spades
 
 * ruby
-  - working versions: 1.8.0 or newer
+  - working versions: 1.8.0 or newer, version 1.8.4 does *NOT* work, however
   - get it at: http://www.ruby-lang.org/
   - description: scripting language
   - additional info: if you compile ruby yourself, configure with
