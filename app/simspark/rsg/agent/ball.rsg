@@ -28,6 +28,10 @@
 	     (setName geometry)
 	     (setRadius $Radius)
 
+	     (node RecorderHandler
+		   (setName recorder)
+		   )
+
 	     (node ContactJointHandler
 		   (setContactBounceMode false)
 
