@@ -1,3 +1,10 @@
+[0.5.1]
+Release 0.5.1 contains mainly two fixes:
+- the Offside rules are now closer to the FIFA rules. 
+- the RestrictedVisionPerceptor (RVP) was hardly useable. The RVP 
+  can now be controlled by using a PanTilt Effector.
+
+
 [0.5]
 This release introduces a few new features, and also some bugfixes 
 (and probably some new bugs :). Important new features and fixes are 

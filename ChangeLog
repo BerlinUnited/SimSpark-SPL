@@ -1,5 +1,10 @@
 2006-03-14  Oliver Obst  <fruit@users.sourceforge.net>
 
+	* released rcssserver3D-0.5.1
+
+	* app/simspark/rsg/agent/ball.rsg: 
+	- added ball RecorderHandler
+
 	* app/agenttest/soccer.h: 
 	* app/agenttest/soccer.cpp:
 	- added PanTilt() method
