@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor_c.cpp,v 1.1 2006/02/28 17:20:45 jamu Exp $
+   $Id: restrictedvisionperceptor_c.cpp,v 1.2 2006/03/14 12:33:56 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,22 +64,6 @@ FUNCTION(RestrictedVisionPerceptor,addNoise)
     return true;
 }
 
-FUNCTION(RestrictedVisionPerceptor,useRandomNoise)
-{
-    bool inRandomNoise;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(),inRandomNoise))
-        )
-    {
-        return false;
-    }
-
-    obj->UseRandomNoise(inRandomNoise);
-    return true;
-}
-
 FUNCTION(RestrictedVisionPerceptor,setSenseMyPos)
 {
     bool inSenseMyPos;
@@ -112,7 +96,7 @@ FUNCTION(RestrictedVisionPerceptor,setStaticSenseAxis)
     return true;
 }
 
-FUNCTION(RestrictedVisionPerceptor,setVisionAngles)
+FUNCTION(RestrictedVisionPerceptor,setViewCones)
 {
     int inHAngle;
     int inVAngle;
@@ -120,13 +104,49 @@ FUNCTION(RestrictedVisionPerceptor,setVisionAngles)
     if (
         (in.GetSize() != 2) ||
         (! in.GetValue(in[0],inHAngle)) ||
-        (! in.GetValue(in[1],inVAngle)) 
+        (! in.GetValue(in[1],inVAngle))
         )
         {
             return false;
         }
 
-    obj->SetVisionAngles(inHAngle,inVAngle);
+    obj->SetViewCones(inHAngle,inVAngle);
+    return true;
+}
+
+FUNCTION(RestrictedVisionPerceptor,setPanRange)
+{
+    int inLower;
+    int inUpper;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inLower)) ||
+        (! in.GetValue(in[1],inUpper))
+        )
+        {
+            return false;
+        }
+
+    obj->SetPanRange(inLower,inUpper);
+    return true;
+}
+
+FUNCTION(RestrictedVisionPerceptor,setTiltRange)
+{
+    int inLower;
+    int inUpper;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inLower)) ||
+        (! in.GetValue(in[1],inUpper))
+        )
+        {
+            return false;
+        }
+
+    obj->SetTiltRange(inLower,inUpper);
     return true;
 }
 
@@ -135,8 +155,9 @@ void CLASS(RestrictedVisionPerceptor)::DefineClass()
     DEFINE_BASECLASS(oxygen/Perceptor);
     DEFINE_FUNCTION(setNoiseParams);
     DEFINE_FUNCTION(addNoise);
-    DEFINE_FUNCTION(useRandomNoise);
     DEFINE_FUNCTION(setSenseMyPos);
     DEFINE_FUNCTION(setStaticSenseAxis);
-    DEFINE_FUNCTION(setVisionAngles);
+    DEFINE_FUNCTION(setViewCones);
+    DEFINE_FUNCTION(setPanRange);
+    DEFINE_FUNCTION(setTiltRange);
 }
