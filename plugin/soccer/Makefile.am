@@ -73,6 +73,7 @@ initeffector/initeffector.h \
 kickeffector/kickaction.h \
 kickeffector/kickeffector.h \
 objectstate/objectstate.h \
+pantilteffector/pantiltaction.h \
 pantilteffector/pantilteffector.h \
 restrictedvisionperceptor/restrictedvisionperceptor.h \
 sayeffector/sayaction.h \
