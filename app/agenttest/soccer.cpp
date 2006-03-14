@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: soccer.cpp,v 1.3 2004/06/19 13:32:22 fruit Exp $
+$Id: soccer.cpp,v 1.4 2006/03/14 08:23:00 fruit Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -100,12 +100,12 @@ void Soccer::Drive(const salt::Vector3f& driveVec)
         << "]\n";
 
     if (driveVec == mDriveVec)
-        {
-            // no explicit change needed
-            GetLog()->Debug()
-                << "not changing drive vector\n";
-            return;
-        }
+    {
+        // no explicit change needed
+        GetLog()->Debug()
+            << "not changing drive vector\n";
+        return;
+    }
 
     stringstream ss;
     ss << "A(drive"
@@ -113,6 +113,25 @@ void Soccer::Drive(const salt::Vector3f& driveVec)
        << " " << driveVec[1]
        << "  " << driveVec[2]
        << ")";
+
+    mComm->PutOutput(ss.str());
+}
+
+void
+Soccer::PanTilt(float pan, float tilt)
+{
+    GetLog()->Debug() << "panning+tilting ["
+                      << pan << " " << tilt << "]\n";
+
+    if (pan == 0 && tilt == 0)
+    {
+        // no explicit change needed
+        GetLog()->Debug() << "not changing camera\n";
+        return;
+    }
+
+    stringstream ss;
+    ss << "A(pantilt"  << " " << pan << " " << tilt << ")";
 
     mComm->PutOutput(ss.str());
 }
