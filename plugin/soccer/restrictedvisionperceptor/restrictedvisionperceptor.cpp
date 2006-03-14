@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.cpp,v 1.2 2006/03/01 18:32:23 fruit Exp $
+   $Id: restrictedvisionperceptor.cpp,v 1.3 2006/03/14 12:14:51 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,8 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <soccer/soccerbase/soccerbase.h>
-#include <iostream>
+#include <salt/gmath.h>
+
 using namespace zeitgeist;
 using namespace oxygen;
 using namespace boost;
@@ -33,14 +34,16 @@ using namespace salt;
 RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mSenseMyPos(false),
                                      mAddNoise(true),
-                                     mUseRandomNoise(true),
                                      mStaticSenseAxis(true)
 {
     // set predicate name
     SetPredicateName("Vision");
     // set some default noise values
     SetNoiseParams(0.0965, 0.1225, 0.1480, 0.005);
-    SetVisionAngles(90,90);
+    SetViewCones(90,90);
+    SetPanRange(-90,90);
+    SetTiltRange(-20,20);
+    SetPanTilt(0,0);
 }
 
 RestrictedVisionPerceptor::~RestrictedVisionPerceptor()
@@ -71,16 +74,78 @@ RestrictedVisionPerceptor::SetNoiseParams(float sigma_dist, float sigma_phi,
 }
 
 void
-RestrictedVisionPerceptor::SetVisionAngles(int hAngle, int vAngle)
+RestrictedVisionPerceptor::SetViewCones(unsigned int hAngle, unsigned int vAngle)
 {
-    mHAngle = hAngle;
-    mVAngle = vAngle;
-
-//     std::cerr << "setting vision angles to (" << mHAngle
-//               << ", " << mVAngle << ").\n";
-    
+    mHViewCone = hAngle;
+    mVViewCone = vAngle;
 }
 
+void
+RestrictedVisionPerceptor::SetPanRange(int lower, int upper)
+{
+    /* The total pan range is 360 degrees, starting at -180 degrees
+     * and ending at 180 degrees. For restricting this range:
+     * - the normal case is: lower < upper, which means that
+     *   the horizontal pan angles should be between lower and upper.
+     * - the not so normal case is upper < lower, which means that
+     *   the pan angles should be *either* smaller than 180 and > lower, *or*
+     *   they should be greater than -180 and < upper.
+     */
+    mPanLower = gNormalizeDeg(lower);
+    mPanUpper = gNormalizeDeg(upper);
+}
+
+void
+RestrictedVisionPerceptor::SetTiltRange(int lower, int upper)
+{
+    mTiltLower = gNormalizeDeg(lower);
+    mTiltUpper = gNormalizeDeg(upper);
+}
+
+// this should really go to gmath.h for the full release
+template <class TYPE1, class TYPE2>
+f_inline TYPE1 gClampAngleDeg(TYPE1 &val, TYPE2 min, TYPE2 max)
+{
+    val = gNormalizeDeg(val);
+    if (min <= max)
+    {
+        if (val<min) val=min;
+        if (val>max) val=max;
+    } else {
+        if (val>=min || val<=max) return val;
+        if (val>=(min+max)/2.0) val = min; else val = max;
+    }
+    return val;
+}
+
+
+
+void
+RestrictedVisionPerceptor::SetPanTilt(float pan, float tilt)
+{
+    pan = gNormalizeDeg(pan);
+    mPan = gClampAngleDeg(pan,mPanLower,mPanUpper);
+    tilt = gNormalizeDeg(tilt);
+    mTilt = gClampAngleDeg(tilt,mTiltLower,mTiltUpper);
+}
+
+void
+RestrictedVisionPerceptor::ChangePanTilt(float pan, float tilt)
+{
+    SetPanTilt(mPan + pan, mTilt + tilt);
+}
+
+float
+RestrictedVisionPerceptor::GetPan() const
+{
+    return mPan;
+}
+
+float
+RestrictedVisionPerceptor::GetTilt() const
+{
+    return mTilt;
+}
 
 void
 RestrictedVisionPerceptor::OnLink()
@@ -108,12 +173,6 @@ RestrictedVisionPerceptor::AddNoise(bool add_noise)
 }
 
 void
-RestrictedVisionPerceptor::UseRandomNoise(bool random_noise)
-{
-    mUseRandomNoise = random_noise;
-}
-
-void
 RestrictedVisionPerceptor::SetStaticSenseAxis(bool static_axis)
 {
     mStaticSenseAxis = static_axis;
@@ -122,7 +181,7 @@ RestrictedVisionPerceptor::SetStaticSenseAxis(bool static_axis)
 bool
 RestrictedVisionPerceptor::ConstructInternal()
 {
-    mRay = shared_static_cast<oxygen::RayCollider>
+    mRay = shared_static_cast<RayCollider>
         (GetCore()->New("oxygen/RayCollider"));
 
     if (mRay.get() == 0)
@@ -169,30 +228,27 @@ RestrictedVisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
         }
 }
 
-void RestrictedVisionPerceptor::AddSense(oxygen::Predicate& predicate, ObjectData& od) const
+void
+RestrictedVisionPerceptor::AddSense(Predicate& predicate, ObjectData& od) const
 {
     ParameterList& element = predicate.parameter.AddList();
     element.AddValue(od.mObj->GetPerceptName());
 
     if(od.mObj->GetPerceptName() == "Player")
-        {
-            ParameterList player;
-            player.AddValue(std::string("team"));
-            player.AddValue
-                (std::string
-                 (od.mObj->GetPerceptName(ObjectState::PT_Player)
-                  )
-                 );
-            element.AddValue(player);
-        }
+    {
+        ParameterList player;
+        player.AddValue(std::string("team"));
+        player.AddValue(od.mObj->GetPerceptName(ObjectState::PT_Player));
+        element.AddValue(player);
+    }
 
     if (!od.mObj->GetID().empty())
-        {
-            ParameterList id;
-            id.AddValue(std::string("id"));
-            id.AddValue(od.mObj->GetID());
-            element.AddValue(id);
-        }
+    {
+        ParameterList id;
+        id.AddValue(std::string("id"));
+        id.AddValue(od.mObj->GetID());
+        element.AddValue(id);
+    }
 
     ParameterList& position = element.AddList();
     position.AddValue(std::string("pol"));
@@ -220,9 +276,6 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
     predicate.name       = mPredicateName;
     predicate.parameter.Clear();
 
-    const int hAngle_2 = mHAngle>>1;
-    const int vAngle_2 = mVAngle>>1;
-    
     TTeamIndex  ti       = mAgentState->GetTeamIndex();
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
@@ -236,9 +289,9 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
 
         od.mRelPos = SoccerBase::FlipView(od.mRelPos, ti);
         if (mAddNoise)
-            {
-                od.mRelPos += mError;
-            }
+        {
+            od.mRelPos += mError;
+        }
 
         if (
             (od.mRelPos.Length() <= 0.1) ||
@@ -250,28 +303,19 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
         }
 
         // theta is the angle in the X-Y (horizontal) plane
-        od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0]));
-        {
-            ParameterList& element = predicate.parameter.AddList();
-            element.AddValue(std::string("debug"));
-            element.AddValue(od.mTheta);
-            element.AddValue(mHAngle/2);
-        }
-
-        if ((gAbs(od.mTheta) > mHAngle/2) && (od.mObj->GetPerceptName() != "Flag"))
-        {
-            // object is out of view range
-            GetLog()->Debug() << "(RestrictedVisionPerceptor) Omitting "
-                              << od.mObj->GetPerceptName() << od.mObj->GetID()
-                              << ": h-angle = " << od.mTheta << ".\n" ;
-                continue;       
-            }   
-
+        assert(gAbs(GetPan()) <= 360);
+        od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0])) - GetPan();
+        od.mTheta = gNormalizeDeg(od.mTheta);
         // latitude
-        od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[2]/od.mDist));
+        assert(gAbs(GetTilt()) <= 360);
+        od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[2]/od.mDist)) - GetTilt();
+        od.mPhi = gNormalizeDeg(od.mPhi);
 
         // make some noise
         ApplyNoise(od);
+        // check if the object is in the current field of view
+        if (gAbs(od.mTheta) > mHViewCone) continue;
+        if (gAbs(od.mPhi) > mVViewCone) continue;
 
         // generate a sense entry
         AddSense(predicate,od);
@@ -279,8 +323,7 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
 
     if (mSenseMyPos)
     {
-        Vector3f sensedMyPos = myPos;
-        SoccerBase::FlipView(sensedMyPos, ti);
+        Vector3f sensedMyPos = SoccerBase::FlipView(myPos, ti);
 
         ParameterList& element = predicate.parameter.AddList();
         element.AddValue(std::string("mypos"));
@@ -298,40 +341,38 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
     Predicate& predicate = predList->AddPredicate();
     predicate.name       = mPredicateName;
     predicate.parameter.Clear();
-    
-    const int hAngle_2 = mHAngle>>1;
-    const int vAngle_2 = mVAngle>>1;
-    
-    //std::cout << "mHAngle = " << mHAngle << " / hAngle_2 = " << hAngle_2 << std::endl;
-    
+
+    const int hAngle_2 = mHViewCone>>1;
+    const int vAngle_2 = mVViewCone>>1;
+
     TTeamIndex  ti = mAgentState->GetTeamIndex();
-    
+
     const Vector3f& up = mTransformParent->GetWorldTransform().Up();
-    
+
     // calc the percptors angle in the horizontal plane
     double fwTheta = gNormalizeRad(Vector2f(up[0],up[1]).GetAngleRad());
-    
+
     // calc the perceptors angle in the vertical plane
     // for this the vector has to rotated, i.e. you cannot just use x and z component
     //double fwPhi = gNormalizeRad(Vector2f(Vector2f(up[0],up[1]).Length(),up[2]).GetAngleRad());
-    
+
     // assume that perceptor is always horizontal.
     // FIXME: this is magic
     double fwPhi = 0.0;
-    
-    
+
+
     TObjectList visibleObjects;
     SetupVisibleObjects(visibleObjects);
-    
+
     // log for 7th agent of the first team
     if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
         GetLog()->Debug() << "percept: " << visibleObjects.size() << " objects. :::"
                           << up << " theta " << gRadToDeg(fwTheta)
-                          << " phi " << gRadToDeg(fwPhi) << "\n";      
+                          << " phi " << gRadToDeg(fwPhi) << "\n";
 
     for (std::list<ObjectData>::iterator i = visibleObjects.begin();
          i != visibleObjects.end(); ++i)
-    {   
+    {
         ObjectData& od = (*i);
 
 
@@ -344,12 +385,12 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         {
             od.mRelPos += mError;
         }
-        
+
         if (od.mRelPos.Length() <= 0.1)
         {
             // object is too close
             continue;
-        }       
+        }
 
         // theta is the angle in horizontal plane, with fwAngle as 0 degree
         od.mTheta = gRadToDeg(gNormalizeRad(
@@ -365,8 +406,8 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
 //                               << ": h-angle = " << od.mTheta << ".\n" ;
             continue;
         }
-        
-        
+
+
         // latitude with fwPhi as 0 degreee
         od.mPhi = gRadToDeg(gNormalizeRad(
                                 Vector2f(
@@ -374,10 +415,10 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
                                     od.mRelPos[2]).GetAngleRad() - fwPhi
                                 ));
 
-        
+
         if ((gAbs(od.mPhi) > vAngle_2) && (od.mObj->GetPerceptName() != "Flag"))
             continue;
-            
+
         // log for 7th agent of the first team
         if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
             GetLog()->Debug() << "percept: " << "adding object: "
@@ -390,14 +431,14 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         AddSense(predicate,od);
 
     }
- 
+
     if (mSenseMyPos)
     {
         salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
-            
+
         Vector3f sensedMyPos = myPos;
         SoccerBase::FlipView(sensedMyPos, ti);
-            
+
         ParameterList& element = predicate.parameter.AddList();
         element.AddValue(std::string("mypos"));
         element.AddValue(sensedMyPos[0]);
@@ -406,7 +447,6 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
     }
     return true;
 }
-
 
 bool
 RestrictedVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
@@ -419,10 +459,13 @@ RestrictedVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     {
         return false;
     }
-
+#if 1
+    return StaticAxisPercept(predList);
+#else
     return mStaticSenseAxis ?
         StaticAxisPercept(predList) :
         DynamicAxisPercept(predList);
+#endif
 }
 
 bool RestrictedVisionPerceptor::CheckOcclusion(const Vector3f& my_pos, const ObjectData& od) const
