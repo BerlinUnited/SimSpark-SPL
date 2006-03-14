@@ -140,6 +140,8 @@ def addAgent(path)
     visionPerceptor.addNoise(true);
     visionPerceptor.setStaticSenseAxis(true);
     visionPerceptor.setViewCones(90,90);
+    visionPerceptor.setPanRange(-180,180);
+    visionPerceptor.setTiltRange(-10,10);
 
 
     new('GameStatePerceptor', path+'GameStatePerceptor')
