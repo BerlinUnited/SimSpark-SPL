@@ -30,6 +30,8 @@ $soccerNameSpace = "Soccer"
 $scenePath = '/usr/scene/'
 $serverPath = '/sys/server/'
 
+
+
 #
 # declare some helper methods
 #
@@ -114,8 +116,12 @@ def addAgent(path)
     new('BeamEffector', path+'BeamEffector')
     new('SayEffector', path+'SayEffector')
 
+    # setup catch effector
     catchEffector = new('CatchEffector', path+'CatchEffector')
+    catchEffector.setCatchMargin(1.0);
 
+
+    # setup pan/tilt effector
     pantiltEffector = new('PanTiltEffector', path+'PanTiltEffector')
     pantiltEffector.setMaxPanAngleDelta(90);
     pantiltEffector.setMaxTiltAngleDelta(10);
@@ -355,6 +361,8 @@ end
 # set up logging
 logServer = get($serverPath+'log')
 logServer.addStream(':cerr', 'eError')
+#logServer.addStream(':cout', 'eDebug')
+
 
 # set a random seed (a seed of 0 means: use a random random seed)
 randomServer = get($serverPath+'random')
