@@ -29,7 +29,10 @@ Contents
 
 3. Monitor and Trainer Protocol
 
-4. References
+4. External Links
+
+5. References
+
 
 
 1. System Overview
@@ -58,7 +61,7 @@ server an integrated Commserver is started.
 It is to possible start more than one Commserver in order to
 distribute agent processes across different systems. Please see the
 SPADES manual for further details about how to start and configure a
-remote Commserver. In this setup the 3d server has to be configured to
+remote Commserver. In this setup the 3D server has to be configured to
 wait until all Commservers are connected before it unpauses the
 simulation. The relevant settings are found in the server startup
 script rcssserver3D.rb.
@@ -94,6 +97,8 @@ implements a simple kick and run behavior.
 
 Because there is no manual for the simulator, this text tries to
 describe the features of the simulated robots.
+
+
 
 2. Soccer Simulation
 --------------------
@@ -495,6 +500,8 @@ Example Hear output:
 (hear 0.8 -179.99 Test_1)
 (hear 0.4 self Test_2)
 
+
+
 3. Monitor and Trainer Protocol
 -------------------------------
 
@@ -639,8 +646,9 @@ implementation of trainer clients.
 
 Supported expressions are:
 
-(kickOff): start the soccer game, tossing a coin to select the team
-that kicks off first
+(kickOff <side>): start the soccer game with a kick-off for the team
+on the specified field side. <side> has to be either 'Left', 'Right',
+or 'None', where 'None' means that a coin is tossed to select a team.
 
 (playMode <play_mode>): set the current playmode. Possible playmodes
 are given as strings in the play_modes expression of the init
@@ -665,7 +673,19 @@ getAck expression is appended behind one of the above
 commands. Example: ((kickOff)(getAck kicked_off))
 
 
-4. References
+
+4. External Links
+-----------------
+This section contains links to external resources that may be
+helpful. 
+
+- http://www.ele.ita.br/~jackson/itandroids/guias.html
+  This page contains startup guides for 3D and 2D soccer in English
+  and Portuguese.
+
+
+
+5. References
 -------------
 [1] http://spades-sim.sourceforge.net/
 [2] http://www.uni-koblenz.de/~maas/WWW/overview.html
