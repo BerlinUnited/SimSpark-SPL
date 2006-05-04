@@ -40,7 +40,7 @@ using namespace std;
 
 CatchEffector::CatchEffector()
     : oxygen::Effector(),
-      mCatchMargin(2.00),mPlayerRadius(0.0),mBallRadius(0.0)
+      mCatchMargin(1.00),mPlayerRadius(0.0),mBallRadius(0.0)
 {
 }
 
