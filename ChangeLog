@@ -1,3 +1,27 @@
+2006-05-04  Jan Murray  <murray@aeonflux>
+
+	* plugin/soccer/catcheffector/catcheffector.cpp:
+	- set default catch margin to 1.0m (was 2.0m)
+
+	* app/simulator/main.cpp:
+	- added rudimentary support for commandline options
+	- added Option "--help" with the expected semantics
+	- added Option "--initscript <script>" for reading <script>
+	  instead of rcssserver3D.rb. <script> must reside in ~/.rcssserver3d/
+
+	* app/simulator/rcssserver3D.rb:
+	- added setup for catch margin in catch effector (1m)
+	- added some comments
+	- added a debug stream (commented out)
+
+	* THANKS:
+        - Added Philipp Vorst
+
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- fixed entry for kickoff command in trainercommandparser
+	- added "External Links" section
+	- added URL of Jackson Matsuura's guide to external links
+
 2006-03-14  Oliver Obst  <fruit@users.sourceforge.net>
 
         * released rcssserver3D-0.5.1
