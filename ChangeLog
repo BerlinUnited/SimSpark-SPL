@@ -1,4 +1,17 @@
-2006-05-04  Jan Murray  <murray@aeonflux>
+2006-05-16  Jan Murray  <jamu@users.sourceforge.net>
+
+	* plugin/soccer/catcheffector/catcheffector.cpp:
+	- added enum returntype for running init scripts
+	- RunInitScript distinguishes between faulty and missing scripts
+	  now. user local scripts are NOT overwritten if they contain
+	  errors. If they are missing, the global scripts are still
+	  installed.
+	  Previously your local copy of the init script was overwritten,
+	  if it contained a mistake. This is usually not, what you want. ;-)
+	- Error/Debug messages make more sense now.
+	- RunInitScriptInternal returns error type instead of boolean value now
+
+2006-05-04  Jan Murray  <jamu@users.sourceforge.net>
 
 	* plugin/soccer/catcheffector/catcheffector.cpp:
 	- set default catch margin to 1.0m (was 2.0m)
