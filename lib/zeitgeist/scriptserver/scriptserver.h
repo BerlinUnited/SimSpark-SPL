@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.20 2004/12/19 14:09:27 rollmark Exp $
+   $Id: scriptserver.h,v 1.21 2006/05/16 10:07:04 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,6 +60,14 @@ public:
                          // it will be copied to the user's dot
                          // direcotry
         };
+
+    enum ERunScriptErrorType
+    {
+        eOK,       // no errors
+        eNotFound, // could not find script
+        eError    // some error occured while executing the script
+    };
+
 
 protected:
 private:
@@ -161,8 +169,8 @@ protected:
     GCValue GetVariable(const std::string &varName);
 
     /** private helper function */
-    bool RunInitScriptInternal(const std::string &dir, const std::string &name,
-                               bool copy,  const std::string& destDir = "");
+    ERunScriptErrorType RunInitScriptInternal(const std::string &dir, const std::string &name,
+                                              bool copy,  const std::string& destDir = "");
 
     /** construct the path of the local dot directory that contains
         the users init scripts

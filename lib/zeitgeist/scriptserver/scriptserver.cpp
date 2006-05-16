@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.23 2004/12/21 14:50:57 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.24 2006/05/16 10:07:03 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -465,7 +465,7 @@ ScriptServer::SetInitRelPathPrefix(const std::string &relPathPrefix)
     mRelPathPrefix = relPathPrefix;
 }
 
-bool
+ScriptServer::ERunScriptErrorType
 ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
                                     bool copy, const string& destDir)
 {
@@ -474,13 +474,14 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
     GetLog()->Debug() << "(ScriptServer) Running " << sourcePath << "... ";
 
     shared_ptr<salt::StdFile> file(new(salt::StdFile));
-    if (
-        (! file->Open(sourcePath.c_str())) ||
-        (! Run(file))
-        )
+    if (! file->Open(sourcePath.c_str()))
     {
-        GetLog()->Debug() << "failed" << endl;
-        return false;
+        GetLog()->Debug() << "failed (script not found)" << endl;
+        return eNotFound;
+    } else if (! Run(file))
+    {
+        GetLog()->Debug() << "failed (error in script" << endl;
+        return eError;
     } else
     {
         GetLog()->Debug() << "ok" << endl;
@@ -489,7 +490,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
     // copy it to the destDir
     if (! copy)
     {
-        return true;
+        return eOK;
     }
 
     string destPath = destDir + "/" + name;
@@ -501,7 +502,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
     s << "cp " << sourcePath << " " << destPath;
     system(s.str().c_str());
 
-    return true;
+    return eOK;
 }
 
 bool
@@ -570,21 +571,72 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     // some macro magic (not at all)
     string pkgdatadir = PREFIX "/share/" PACKAGE_NAME;
 
-    bool ok =
-        (
-            (
-                (validDotDir) && (RunInitScriptInternal(dotDir, fileName, false))
-                )
-            || (RunInitScriptInternal(pkgdatadir,  fileName, validDotDir, dotDir))
-            || (RunInitScriptInternal(mRelPathPrefix+relPath, fileName, validDotDir, dotDir))
-            );
+    //std::cout << "dotDir = " << dotDir << std::endl;
+    //std::cout << "pkgdatadir = " << pkgdatadir << std::endl;
+    //std::cout << "filename = " << fileName << std::endl;
 
-    if (! ok)
+    ERunScriptErrorType result;
+
+    if (validDotDir)
+    {
+        result = RunInitScriptInternal(dotDir, fileName, false);
+    }
+
+    if (result == eOK)
+    {
+        GetLog()->Debug() << "(ScriptServer) : Ran init script '"
+                          << dotDir << "/" << fileName << "'\n";
+        return true;
+    }
+    
+    if (result == eNotFound)
+    {
+        GetLog()->Debug() << "(ScriptServer) : Did not find init script '"
+                          << dotDir << "/" << fileName << "'\n";
+    }
+    else if (result == eError)
+    {
+        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+                          << dotDir << "/" << fileName << "'\n";
+        return false;
+    }
+    
+
+    // 
+    result = RunInitScriptInternal(pkgdatadir,  fileName, validDotDir, dotDir);
+    
+    if (result == eOK)
+    {
+        GetLog()->Debug() << "(ScriptServer) : Ran init script '"
+                          << pkgdatadir << "/" << fileName << "'\n";
+        return true;
+    }
+    
+    if (result == eNotFound)
+    {
+        GetLog()->Debug() << "(ScriptServer) : Did not find init script '"
+                          << pkgdatadir << "/" << fileName << "'\n";
+    }
+    else if (result == eError)
+    {
+        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+                          << pkgdatadir << "/" << fileName << "'\n";
+    }   
+    
+
+    result = RunInitScriptInternal(mRelPathPrefix+relPath, fileName, validDotDir, dotDir);
+
+    if (result == eNotFound)
     {
         GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate init script '"
                           << fileName << "'\n";
     }
-
-    return ok;
+    else if (result == eError)
+    {
+        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+                          << mRelPathPrefix+relPath << "/" << fileName << "'\n";
+    }
+    
+    return (result == eOK);
 }
 
