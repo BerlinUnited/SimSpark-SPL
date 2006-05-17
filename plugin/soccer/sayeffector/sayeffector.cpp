@@ -69,6 +69,19 @@ SayEffector::Realize(shared_ptr<ActionObject> action)
     sayAction->GetMessage(mMessage);
     ifText=true;
 
+    // If " ", "(" or ")" are in mMessage, return false
+    if (mMessage.find_first_of("() ") != std::string::npos)
+    {
+        GetLog()->Debug()
+            << "(SayEffector) found illegal character. Ignoring message ["
+            << mMessage << "]\n";
+
+        ifText=false;
+
+        return false;
+    }
+    
+
     mSoccerRule->Broadcast(mMessage, mAgent->GetWorldTransform().Pos(),
         mAgentState->GetUniformNumber(), mAgentState->GetTeamIndex());
 
