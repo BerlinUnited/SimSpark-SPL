@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: soccer.cpp,v 1.4 2006/03/14 08:23:00 fruit Exp $
+$Id: soccer.cpp,v 1.5 2006/05/17 11:52:18 jamu Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -135,6 +135,18 @@ Soccer::PanTilt(float pan, float tilt)
 
     mComm->PutOutput(ss.str());
 }
+
+void Soccer::Say(string message)
+{
+
+    GetLog()->Debug() << "saying [" << message << "]\n";
+    stringstream ss;
+        
+    ss << "A(say"  << " " << message << ")";
+
+    mComm->PutOutput(ss.str());
+}
+
 
 void Soccer::Think()
 {

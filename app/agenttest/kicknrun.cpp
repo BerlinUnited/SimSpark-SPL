@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: kicknrun.cpp,v 1.3 2006/03/14 08:24:34 fruit Exp $
+$Id: kicknrun.cpp,v 1.4 2006/05/17 11:52:18 jamu Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -119,9 +119,11 @@ void KickNRun::BehaveTheirKickIn()
 
 void KickNRun::BehavePlayOn()
 {
-    PanTilt(45,0);
-
-    WorldModel::VisionSense ballSense =
+    //PanTilt(45,0);
+    
+    Say("Hello_World");
+    
+        WorldModel::VisionSense ballSense =
         mWM->GetVisionSense(WorldModel::VO_BALL);
 
     // calculate kick position behind the ball, looking towards the
