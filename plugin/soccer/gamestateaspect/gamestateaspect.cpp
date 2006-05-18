@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.10 2006/02/28 17:00:49 jamu Exp $
+   $Id: gamestateaspect.cpp,v 1.11 2006/05/18 09:56:02 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,28 +99,46 @@ GameStateAspect::SetPlayMode(TPlayMode mode)
 }
 
 
+// let the monitor handle who kicks off in 2nd half. 
 void
 GameStateAspect::KickOff(TTeamIndex ti)
 {
-    if (mGameHalf == GH_FIRST)
+    // throw a coin to determine which team kicks off
+    if (ti == TI_NONE)
     {
-        // throw a coin to determine which team kicks off
-        if (ti == TI_NONE)
-        {
-            ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
-        }
-
-        SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
-
-        if (mLastKickOff == TI_NONE)
-            mLastKickOff = ti;
+        ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
     }
-    else
-    {
-        // in the second half, let the opposite team kick off
-        SetPlayMode((mLastKickOff == TI_LEFT) ? PM_KickOff_Right : PM_KickOff_Left);
-    }
+    
+    SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
+    
+    if (mLastKickOff == TI_NONE)
+        mLastKickOff = ti;
 }
+
+
+
+// void
+// GameStateAspect::KickOff(TTeamIndex ti)
+// {
+//     if (mGameHalf == GH_FIRST)
+//     {
+//         // throw a coin to determine which team kicks off
+//         if (ti == TI_NONE)
+//         {
+//             ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
+//         }
+
+//         SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
+
+//         if (mLastKickOff == TI_NONE)
+//             mLastKickOff = ti;
+//     }
+//     else
+//     {
+//         // in the second half, let the opposite team kick off
+//         SetPlayMode((mLastKickOff == TI_LEFT) ? PM_KickOff_Right : PM_KickOff_Left);
+//     }
+// }
 //---------------------------------------------
 // void
 // GameStateAspect::KickOff(TTeamIndex ti)
