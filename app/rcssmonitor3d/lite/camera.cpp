@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.4 2004/06/16 13:20:59 jamu Exp $
+   $Id: camera.cpp,v 1.5 2006/05/18 09:43:57 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -87,14 +87,25 @@ Camera::Look()
              mUpVector[0], mUpVector[1], mUpVector[2]);
 }
 
+
+//proposal by Ma Jie
 void
-Camera::RefreshCam()
-{
+Camera::RefreshCam() {
   //resets the camera attributes mTheta and mPhi
-  Vector3f tmp = Vector3f(mPosition[0],mPosition[1],mPosition[2]).Normalized();
-  mTheta     = gPI - acos( tmp.Dot(Vector3f(0.0, 1.0, 0.0)));
-  mPhi       = 2*gPI - acos(tmp.Dot(Vector3f(-1.0, 0.0, 0.0)));
+  Vector3f tmp = mLookAtPos-mPosition;
+  mTheta = tmp.Length()!=0 ? acos(tmp.z()/tmp.Length()) : 0;
+  mPhi = tmp.x()!=0 ? atan(tmp.y()/tmp.x()) :0;
 }
+
+//original version
+// void
+// Camera::RefreshCam()
+// {
+//   //resets the camera attributes mTheta and mPhi
+//   Vector3f tmp = Vector3f(mPosition[0],mPosition[1],mPosition[2]).Normalized();
+//   mTheta     = gPI - acos( tmp.Dot(Vector3f(0.0, 1.0, 0.0)));
+//   mPhi       = 2*gPI - acos(tmp.Dot(Vector3f(-1.0, 0.0, 0.0)));
+// }
 
 void
 Camera::MoveCamForward(float steps)
