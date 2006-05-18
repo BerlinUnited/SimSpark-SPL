@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.21 2006/03/13 22:08:25 fruit Exp $
+   $Id: soccerruleaspect.cpp,v 1.22 2006/05/18 09:51:51 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -198,6 +198,12 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
 
+    // 
+    // TODO: this has to be tested (compiles and no crashes at least)
+    mInOffsideLeftPlayers.clear();
+    mInOffsideRightPlayers.clear();
+
+
     if (mAutomaticKickOff && mGameState->GetModeTime() > mWaitBeforeKickOff)
     {
         mGameState->KickOff();
@@ -217,7 +223,9 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     if (mDropBallTime > 0 &&
         mGameState->GetModeTime() > mDropBallTime)
     {
-        DropBall(mFreeKickPos);
+        // Drop the ball at its current position.
+        // This should always be (0,0) during kickoff.
+        DropBall(mBallBody->GetPosition());
         return;
     }
 
