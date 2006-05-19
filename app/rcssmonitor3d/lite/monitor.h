@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.12 2006/02/28 15:46:24 jamu Exp $
+   $Id: monitor.h,v 1.13 2006/05/19 07:47:43 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,12 +80,14 @@ private:
         GLfloat mColor[4];
     };
 
-    enum ECameraMode { eFree, eFollowBall };
+    enum ECameraMode { eFree, eFollowBall, eCenterBall };
 
     typedef std::map<GameState::EFlagType, FlagInfo> TFlagInfoMap;
 
     static const GLfloat sGroundColor[4];
     static const GLfloat sGroundColor2D[4];
+    static const GLfloat sSecondGroundColor[4];
+
     static const GLfloat sGoalColor[4];
     static const GLfloat sBorderColor[4];
     static const GLfloat sLineColor[4];
@@ -137,12 +139,25 @@ private:
     //! successor of a kick off mode
     CommServerBase::EKickOff NextKickOffMode(CommServerBase::EKickOff mode) const;
 
+    // ALI
+    //void DrawReport();
+    void checkAndShow();
+    void drawSecondView( int, int, Vector3f , Vector3f );
+
+
 private:
     // member variables
     GLServer mGLServer;
     GameState mGameState;
     string mTextureFile;
     
+		// ALI
+		double mCenterBallCameraY;
+		double mCenterBallCameraZ;
+		bool   mUseTexture;
+		bool   mShowSecondView;
+                //bool   mShowReport;
+
     //JAN
     GameState mOldGameState;
 

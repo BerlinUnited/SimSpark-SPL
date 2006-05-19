@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.22 2006/02/28 15:46:24 jamu Exp $
+   $Id: monitor.cpp,v 1.23 2006/05/19 07:47:43 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -74,6 +74,8 @@ idle()
 const GLfloat
 Monitor::sGroundColor[4] = {0.1f, 0.5f, 0.1f, 1.0f};
 const GLfloat
+Monitor::sSecondGroundColor[4] = {0.05f, 0.43f, 0.07f, 1.0f};
+const GLfloat
 Monitor::sGoalColor[4]   = {1.0f, 1.0f, 1.0f, 1.0f};
 const GLfloat
 Monitor::sBorderColor[4] = {0.2f, 0.8f, 0.2f, 1.0f};
@@ -140,6 +142,15 @@ Monitor::Monitor(std::string rel_path_prefix)
     mServer = DEFAULT_HOST;
     mPort = DEFAULT_PORT;
     mSkip = 1;
+
+    mCenterBallCameraY = -28.0;
+    mCenterBallCameraZ = 20.0;
+    mShowSecondView = false;
+    mUseTexture = true;
+    //mShowReport = false;
+//     mBallInLeft = 1;
+//     mBallInCenter = 1;
+//     mBallInRight = 1;
 
     mLogserver = false;
     mSingleStep = false;
@@ -319,11 +330,14 @@ Monitor::KeyBindings()
         "1          | toggle display of debug information\n"
         "2          | toggle display of two dimensional overview\n"
         "v          | toggle display of velocities\n"
+        "t          | toggle display of texture\n"
+        "Z          | switch to fullscreen\n"
+        "X          | toggle display of 2nd view (pip)\n"
         "?          | display keybindings\n"
         "----------------------------------------------------\n"
         "CAMERA MOVEMENT\n"
         "----------------------------------------------------\n"
-        "c          | toggle automatic (ball centered) camera\n"
+        "c          | switch through camera modes\n"
         "w/s        | move camera forward/back (zoomlike)\n"
         "a/d        | move camera left/right\n"
         "+/-        | move camera up/down\n"
@@ -343,6 +357,7 @@ Monitor::KeyBindings()
         "F          | Realtime replay\n"
         "m          | toggle single step mode for logplayer\n"
         ">          | move one step forward\n"
+        "<          | move one step back\n"
         "----------------------------------------------------\n"
         "\n";
 
@@ -465,6 +480,15 @@ Monitor::DrawScene(int pass)
             ballGroundPos[2] = 0.0f;
             mGLServer.SetLookAtPos(ballGroundPos);
         }
+
+        if (mCameraMode == eCenterBall && pass == 0)
+        {
+            Vector3f ballGroundPos = pos;
+            mGLServer.SetLookAtPos(ballGroundPos);
+            ballGroundPos[1] = mCenterBallCameraY;
+            ballGroundPos[2] = mCenterBallCameraZ;
+            mGLServer.SetCameraPos(ballGroundPos);
+        }
     }
 
 }
@@ -486,18 +510,30 @@ Monitor::DrawStatusText()
     {
     case PM_PlayOn:
         if (mSecondHalfKickOff==CommServerBase::eRandom)
+        {
             mSecondHalfKickOff=mKickOff;    //store who will kickoff at 2nd half
+        }
+        
+        
         break;
     case PM_BeforeKickOff:
         if (mGameState.GetHalf() == GH_SECOND)
-            mKickOff=mSecondHalfKickOff; 
-        break;    
+        {
+            mKickOff=mSecondHalfKickOff;
+        }
+        break;
     case PM_KickOff_Left:
         mKickOff = CommServerBase::eRight;
         break;
     case PM_KickOff_Right:
         mKickOff = CommServerBase::eLeft;
         break;
+//     case PM_Goal_Left:
+//         cout << "GOOOAAAAAAAAAAAAAAAAAAAAAAAAL! (left) \n";
+//         break;
+//     case PM_Goal_Right:
+//         cout << "GOOOAAAAAAAAAAAAAAAAAAAAAAAAL! (right) \n";
+//         break;
     };
 
     sc << mGameState.PlayMode2Str(play_mode) << " ";
@@ -965,7 +1001,8 @@ Monitor::Display()
 
     // left half
     //JANxxx
-    glEnable(GL_TEXTURE_2D);
+    if (mUseTexture)
+        glEnable(GL_TEXTURE_2D);
     mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw, -fw/2 + lw, 0),
                                   fl/2 - lw - lw/2, fw - 2*lw, 0);
     
@@ -973,11 +1010,12 @@ Monitor::Display()
     // right half
     mGLServer.DrawGroundRectangle(Vector3f(lw/2, -fw/2 + lw, 0),
                                   fl/2 - lw - lw/2, fw - 2*lw, 0);
-    glDisable(GL_TEXTURE_2D);
+    if (mUseTexture)
+        glDisable(GL_TEXTURE_2D);
 
     // border
     glColor4fv(sBorderColor);
-    //glDisable (GL_DEPTH_TEST);
+    glDisable (GL_DEPTH_TEST);
 
     // border at left goal
     mGLServer.DrawGroundRectangle(Vector3f(-fl/2-bs,-fw/2-bs,0),
@@ -1090,9 +1128,8 @@ Monitor::Display()
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     // (end 2D Elements)
-
-
-
+		
+		checkAndShow();
 
     glutSwapBuffers();
 }
@@ -1142,6 +1179,40 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         //move camera down
         mGLServer.MoveCamUp(-mCamDelta);
         break;
+    case '{':
+        // select CenterBall camera mode
+        mCenterBallCameraZ += 1.0;
+        break;
+    case '}':
+        // select CenterBall camera mode
+        mCenterBallCameraZ -= 1.0;
+        break;
+    case ']':
+        mCenterBallCameraY += 2.0;
+        break;
+    case '[':
+        mCenterBallCameraY -= 2.0;
+        break;
+    case ')':
+        {
+            //Rotate cam to right
+            Vector3f t(mGLServer.GetLookAtPos()-mGLServer.GetCameraPos() );
+            Vector3f d(cos(0.02) * t.x() + sin(0.02) * t.y()
+                       ,-sin(0.02) * t.x() + cos(0.02) * t.y(), t.z());
+            mGLServer.SetLookAtPos(d + mGLServer.GetCameraPos());
+            mGLServer.SetUpVector(Vector3f(0,0,1));
+        }
+        break;
+    case '(':
+        {
+            //Rotate cam to left
+            Vector3f t(mGLServer.GetLookAtPos()-mGLServer.GetCameraPos() );
+            Vector3f d(cos(0.02) * t.x() - sin(0.02) * t.y()
+                       ,sin(0.02) * t.x() + cos(0.02) * t.y(), t.z());
+            mGLServer.SetLookAtPos(d + mGLServer.GetCameraPos());
+            mGLServer.SetUpVector(Vector3f(0,0,1));
+        }
+        break;
     case '1':
         // toggle drawing of debug stuff
         mDrawDebug  = !mDrawDebug;
@@ -1184,15 +1255,20 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         exit(0);
     case 'k' :
         // kick off
+        cerr << "(rcssmonitor3d) " << mGameState.GetTime() << ": Kickoff "
+             << ((mKickOff == CommServerBase::eLeft) ? "left" :
+                 ((mKickOff == CommServerBase::eRight) ? "right" : "random")) << endl;
         mCommServer->SendKickOffCmd(mKickOff);
         break;
     case 'b':
         // drop ball
+        cerr << "(rcssmonitor3d) " << mGameState.GetTime()
+             << ": Dropping ball manually." << endl;
         mCommServer->SendDropBallCmd();
         break;
     case 'p' :
         // pause simulation
-        cout <<"--- Pausing Simulation" << endl;
+        cout <<"(rcssmonitor3d) -- Pausing Simulation --" << endl;
         mCommServer->SendPauseCmd();
         break;
     case ' ':
@@ -1200,9 +1276,18 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         break;
     case 'r' :
         // run simulation (after pause command)
-        cout <<"--- Running Simulation" << endl;
+        cout <<"(rcssmonitor3d) -- Running Simulation --" << endl;
         mCommServer->SendRunCmd();
         break;
+    case 't':
+        // toggle texture
+        mUseTexture = ! mUseTexture;
+        break;
+    case 'X':
+        // select CenterBall camera mode
+        mShowSecondView = ! mShowSecondView;
+        break;
+
     case 'm' :
         // toggle single step mode (aka _m_anual advance)
         mSingleStep = !mSingleStep;
@@ -1213,6 +1298,19 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         mAdvance = true;
         mSingleStep = true;
         break;
+    case '<' :
+        if (mLogserver)
+        {
+            mCommServer->GoBack(2);
+            mCommServer->ReadMessage();
+            boost::shared_ptr<oxygen::PredicateList> predicates = mCommServer->GetPredicates();
+            mOldGameState = mGameState;
+            mGameState.ProcessInput(predicates);
+            Display();
+        }
+        break;
+
+
     case '?' :
         // show keybindings
         KeyBindings();
@@ -1381,6 +1479,7 @@ Monitor::NextCameraMode(ECameraMode mode) const
     switch (mode)
     {
     case eFree: return eFollowBall;
+		case eFollowBall: return eCenterBall;
     default:    return eFree;
     }
 }
@@ -1410,4 +1509,177 @@ Monitor::NextKickOffMode(CommServerBase::EKickOff mode) const
     }
 }
 
+// void
+// Monitor::DrawReport()
+// {
+//     char buf[1024];
+
+//     glEnable(GL_BLEND);         // Turn Blending On
+//     glColor4fv(sReportColor);
+//     mGLServer.DrawGroundRectangle( Vector3f( -0.5, -0.7, 0 ), 1.0, 1.4, 0); 
+//     glColor3f(1.0, 1.0, 1.0);
+
+//     mGLServer.DrawTextPix("--   rcssmonitor3D Game Report   --",
+//                           Vector2f( 0, 4*mGLServer.GetTextHeight() + 100),
+//                           GLServer::eCENTER);
+
+//     sprintf(buf, "Ball Existence In Left Field : %'.2f %%", 100.0*mBallInLeft/(mBallInLeft+mBallInCenter+mBallInRight) );
+//     mGLServer.DrawTextPix(buf, Vector2f( 0, 7*mGLServer.GetTextHeight() + 100), GLServer::eCENTER);
+
+//     sprintf(buf, "Ball Existence In Field's Center : %'.2f %%", 100.0*mBallInCenter/(mBallInLeft+mBallInCenter+mBallInRight) );
+//     mGLServer.DrawTextPix(buf, Vector2f( 0, 8*mGLServer.GetTextHeight() + 100), GLServer::eCENTER);
+
+//     sprintf(buf, "Ball Existence In Right Field : %'.2f %%", 100.0*mBallInRight/(mBallInLeft+mBallInCenter+mBallInRight) );
+//     mGLServer.DrawTextPix(buf, Vector2f( 0, 9*mGLServer.GetTextHeight() + 100), GLServer::eCENTER);
+
+//     glDisable(GL_BLEND);         // Turn Blending Off
+// }
+
+void
+Monitor::checkAndShow()
+{
+    if (! mShowSecondView) return;
+    
+    Vector3f pos;
+    float size;
+    mGameState.GetBall(pos, size);
+    
+    if (pos[0] > 35)
+        drawSecondView(20, 30, Vector3f(48.0f,-10.0f,5.0f), Vector3f(50.0f,18.0f,-15.0f) );
+    else if (pos[0] < -35)
+        drawSecondView(20, 30, Vector3f(-48.0f,-10.0f,5.0f), Vector3f(-50.0f,18.0f,-15.0f) );
+    else
+        drawSecondView(20, 30, Vector3f(0.0f,-6.0f,4.0f) + pos , Vector3f(0.0f,6.0f,-6.0f) + pos );
+}
+
+void
+Monitor::drawSecondView( int sx, int sy, Vector3f campos, Vector3f lookat )
+{
+    const Vector3f szGoal1 = mGameState.GetGoalSize(false);
+    const Vector3f szGoal2 = mGameState.GetGoalSize(true);
+
+    glColor3f (1, 1, 1);
+    glLoadIdentity();
+
+		Vector3f look = mGLServer.GetLookAtPos();
+		Vector3f pos = mGLServer.GetCameraPos();
+		
+    mGLServer.SetCameraPos( campos );
+    mGLServer.SetLookAtPos( lookat );
+		mGLServer.ApplyCamera();
+		glViewport(sx, sy, mWidth/3 - 60, 160);
+
+    const float& fl = mGameState.GetFieldLength();
+    const float& fw = mGameState.GetFieldWidth();
+    const float& fh = mGameState.GetFieldHeight();
+    const float& lw = mGameState.GetLineWidth();
+    const float& bs = mGameState.GetBorderSize();
+    const float& gw = mGameState.GetGoalWidth();
+
+    // ground
+    glColor4fv(sSecondGroundColor);
+
+    // left half
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw, -fw/2 + lw, 0),
+                                  fl/2 - lw - lw/2, fw - 2*lw, 0);
+
+    // right half
+    mGLServer.DrawGroundRectangle(Vector3f(lw/2, -fw/2 + lw, 0),
+                                  fl/2 - lw - lw/2, fw - 2*lw, 0);
+
+    // border
+    glColor4fv(sBorderColor);
+    glDisable (GL_DEPTH_TEST);
+
+    // border at left goal
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2-bs,-fw/2-bs,0),
+                                  bs, fw+2*bs, 0);
+
+    // border at right goal
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2,-fw/2-bs,0),
+                                  bs, fw+2*bs, 0);
+
+    // long top border
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2,-fw/2-bs,0),
+                                  fl, bs, 0);
+
+    // long bottom border
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2,fw/2,0),
+                                  fl, bs, 0);
+
+    // lines
+    glColor4fv(sLineColor);
+
+    // left goal
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2,-fw/2,0), lw, fw, 0);
+
+    // right goal
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - lw,-fw/2,0), lw, fw, 0);
+
+    // long top border
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw,-fw/2,0),
+                                  fl - 2*lw, lw, 0);
+
+    // long bottom border
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw,fw/2 - lw,0),
+                                  fl - 2*lw, lw, 0);
+
+    // middle line
+    mGLServer.DrawGroundRectangle(Vector3f(-lw/2,-fw/2 + lw,0),
+                                  lw, fw - 2*lw, 0);
+
+    // goal box area right side
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), lw, gw + 11, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), sGoalBoxLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, gw/2 + sGoalBoxLength, 0.05), sGoalBoxLength, lw, 0);
+
+    // goal box area left side
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), lw, gw + 11, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), -sGoalBoxLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sGoalBoxLength, gw/2 + sGoalBoxLength, 0.05), -sGoalBoxLength, lw, 0);
+
+    // penalty area right side
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), lw, gw + 33, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), sPenaltyLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sPenaltyLength, gw/2 + sPenaltyLength, 0.05), sPenaltyLength, lw, 0);
+
+    // penalty area left side
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), lw, gw + 33, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sPenaltyLength, -gw/2 - sPenaltyLength, 0.05), -sPenaltyLength, lw, 0);
+    mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + sPenaltyLength, gw/2 + sPenaltyLength, 0.05), -sPenaltyLength, lw, 0);
+
+    // center circle
+    mGLServer.DrawCircle(Vector3f(0.0,0.0,0.05), sCenterRadius);
+
+    // fieldBox
+    mGLServer.DrawWireBox(Vector3f(-fl/2.0,-fw/2.0,0.0),
+                          Vector3f(fl,fw,fh));
+
+    // draw shadows of cached positions
+    DrawScene(0);
+    glDisable(GL_DEPTH_TEST);
+
+    // goal
+    glColor4fv(sGoalColor);
+    mGLServer.DrawWireBox(Vector3f(-fl/2,-gw/2.0,0),szGoal1);
+    mGLServer.DrawGoal(Vector3f(-fl/2,-gw/2.0,0),szGoal1,lw/2.0);
+
+    // goal
+    glColor4fv(sGoalColor);
+    mGLServer.DrawWireBox(Vector3f(fl/2,-gw/2.0,0),szGoal2);
+    mGLServer.DrawGoal(Vector3f(fl/2,-gw/2.0,0),szGoal2,lw/2.0);
+
+    // draw cached positions
+    DrawScene(1);
+
+    // JAN
+    if (mDrawVelocity)
+        DrawVelocities();
+
+    glLoadIdentity();
+
+    mGLServer.SetCameraPos( pos );
+    mGLServer.SetLookAtPos( look );
+		mGLServer.ApplyCamera();
+}
 
