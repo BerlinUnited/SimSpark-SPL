@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: commserverbase.h,v 1.2 2004/06/06 10:40:11 fruit Exp $
+   $Id: commserverbase.h,v 1.3 2006/05/19 07:52:12 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ public:
     virtual ~CommServerBase() {};
 
     virtual bool Init(const std::string& parser, const std::string& s, int n) = 0;
+    virtual void GoBack(int lineCount) {}
     virtual bool ReadMessage() = 0;
     virtual bool ReadMessage(std::string& msg) = 0;
     virtual boost::shared_ptr<oxygen::PredicateList> GetPredicates() const = 0;

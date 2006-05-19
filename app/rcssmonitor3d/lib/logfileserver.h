@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logfileserver.h,v 1.3 2006/02/27 17:16:18 fruit Exp $
+   $Id: logfileserver.h,v 1.4 2006/05/19 07:52:12 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "commserverbase.h"
 #include "communit.h"
 #include <fstream>
+#include <stack>
 
 class LogfileServer : public CommServerBase
 {
@@ -35,6 +36,7 @@ public:
 
     virtual bool Init(const std::string& parser, const std::string& filename, int dummy);
 
+    virtual void GoBack(int lineCount);
     virtual bool ReadMessage();
     virtual bool ReadMessage(std::string& msg);
     virtual boost::shared_ptr<oxygen::PredicateList> GetPredicates() const;
@@ -62,6 +64,9 @@ private:
 
     //! flag if we are paused
     bool mPaused;
+
+    //! line numbers storage
+    std::stack<unsigned> linePositions;
 };
 
 DECLARE_CLASS(LogfileServer);

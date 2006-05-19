@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logfileserver.cpp,v 1.3 2006/02/27 17:16:18 fruit Exp $
+   $Id: logfileserver.cpp,v 1.4 2006/05/19 07:52:12 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,15 @@ LogfileServer::Reset()
     mLog.seekg(0);
 }
 
+void
+LogfileServer::GoBack(int lineCount)
+{
+    if (linePositions.size() < 4)
+        return;
+    for(unsigned i = 0; i<lineCount; i++)
+        linePositions.pop();
+    mLog.seekg( linePositions.top() );
+}
 
 bool
 LogfileServer::ReadMessage()
@@ -64,6 +73,7 @@ LogfileServer::ReadMessage(std::string& msg)
 {
     if (!mLog.good() || mPaused) return false;
 
+		linePositions.push( mLog.tellg() );
     std::getline(mLog,msg);
     Parse(msg);
     return true;
