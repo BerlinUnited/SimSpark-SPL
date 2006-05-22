@@ -1,3 +1,58 @@
+2006-05-22  Jan Murray  <murray@aeonflux>
+
+	* app/simulator/rcssserver3d.rb
+	changed goalheight to 1.4 and catchmargin to 0.8 as announced on
+	the list.
+
+
+2006-05-19  Jan Murray  <murray@aeonflux>
+	
+	* app/rcssmonitor3d/lite/monitor.h, app/rcssmonitor3d/lite/monitor.cpp:
+	- made manual commands (dropball,kickoff) a little more verbose
+	- added greatest part of patch by Ali Nadalizadeh
+	  o new autocam mode, that keeps camera X-coord on ball height
+	  o toggling of texture
+	  o show second view (pic in pic)
+        - step backwards in logviewer-mode
+
+	* app/rcssmonitor3d/lib/logfileserver.h, app/rcssmonitor3d/lib/logfileserver.cpp
+	* app/rcssmonitor3d/lib/commserverbase.h:
+	added infrastructure for stepping back in logfiles
+        Thanks to Ali Nadalizadeh for the patch
+
+	* THANKS:
+	added Ali Nadalizadeh and Ma Jie
+
+
+2006-05-18  Jan Murray  <jamu@users.sourceforge.net>
+
+	* app/rcssmonitor3d/lite/camera.cpp:
+	added Ma Jie's patch for mousehandling
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- clear offsidemarks in before_kickoff mode
+	- fixed bug that automatic dropball after a goal moved the ball
+	  from the center.
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- made kickoff more stupid. This fixes a bug that ALL kickoffs in
+	  the 2nd half are assigned to the same team.
+
+
+2006-05-17  Jan Murray  <jamu@users.sourceforge.net>
+
+	* app/agenttest/soccer.h: 
+	* app/agenttest/soccer.cpp: 
+	* app/agenttest/kicknrun.cpp: 
+	- added say command+sample
+	- commented out call to PanTilt to make agents do something
+	  sensible again
+
+	* plugin/soccer/sayeffector/sayeffector.cpp: 
+	- messages containing illegal characters, i.e. '(', ')' or ' ' are
+	  ignored
+
+	
 2006-05-16  Jan Murray  <jamu@users.sourceforge.net>
 
 	* plugin/soccer/catcheffector/catcheffector.cpp:
