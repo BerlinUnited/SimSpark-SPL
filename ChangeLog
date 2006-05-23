@@ -1,11 +1,30 @@
+2006-05-23  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* app/simulator/rcssserver3D.rb:
+	- changed goalheight to 1.6
+
+	* plugin/soccer/catcheffector/catcheffector.cpp:
+	- checking the pan + tilt values for NAN to avoid server crash
+	  Thanks to Yuan Xu for the fix
+
+	* plugin/soccer/kickeffector/kickeffector.cpp:
+	- fixed sign bug in the torque vector calculation as reported by the
+	  UTUtd team and Yuan Xu. Fixes the problem that for a kicks with
+	  the same power but different directions (in the horizontal
+	  plane), the distance would be different.
+
+	* plugin/soccer/pantilteffector/pantilteffector.cpp:
+	- fixed a comment describing the catch margin calculation
+
+
 2006-05-23  Jan Murray  <jamu@users.sourceforge.net>
 
 	* app/rcssmonitor3d/lite/monitor.cpp, app/rcssmonitor3d/lite/monitor.h:
 	- brought list of keybindings up to date
 	- added display of cam mode: after switching cam mode, the current
 	  mode is displayed in the status line for 10 cycles
-	  - added function to move goalies from goals, bound to 'g'
-	
+	- added function to move goalies from goals, bound to 'g'
+
 
 2006-05-22  Jan Murray  <jamu@users.sourceforge.net>
 
