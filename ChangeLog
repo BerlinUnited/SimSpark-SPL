@@ -1,11 +1,22 @@
+2006-05-23  Jan Murray <jamu@users.sourceforge.net>
+
+	* lib/kerosin/sceneserver/helper/NVMeshMender.h
+	* lib/oxygen/gamecontrolserver/predicate.h
+	* lib/oxygen/simulationserver/netcontrol.h
+	* plugin/soccer/gamestateaspect/gamestateaspect.h
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h
+	* plugin/soccer/soccerbase/soccerbase.h
+	* plugin/soccer/visionperceptor/visionperceptor.h:
+	- applied patches for gcc 4.1 Thanks to Tobias Warden
+
+
 2006-05-23  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/simulator/rcssserver3D.rb:
 	- changed goalheight to 1.6
 
 	* plugin/soccer/catcheffector/catcheffector.cpp:
-	- checking the pan + tilt values for NAN to avoid server crash
-	  Thanks to Yuan Xu for the fix
+	- fixed a comment describing the catch margin calculation
 
 	* plugin/soccer/kickeffector/kickeffector.cpp:
 	- fixed sign bug in the torque vector calculation as reported by the
@@ -14,7 +25,8 @@
 	  plane), the distance would be different.
 
 	* plugin/soccer/pantilteffector/pantilteffector.cpp:
-	- fixed a comment describing the catch margin calculation
+	- checking the pan + tilt values for NAN to avoid server crash
+	  Thanks to Yuan Xu for the fix
 
 
 2006-05-23  Jan Murray  <jamu@users.sourceforge.net>
