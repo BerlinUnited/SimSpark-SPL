@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.6 2004/07/21 08:53:02 rollmark Exp $
+   $Id: visionperceptor.h,v 1.7 2006/05/23 14:41:42 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ protected:
     void AddSense(oxygen::Predicate& predicate, ObjectData& od) const;
 
     /** applies noise to the setup ObjectData */
-    void VisionPerceptor::ApplyNoise(ObjectData& od) const;
+    void ApplyNoise(ObjectData& od) const;
 
     virtual void OnLink();
     virtual void OnUnlink();

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.h,v 1.2 2006/03/14 12:12:59 fruit Exp $
+   $Id: restrictedvisionperceptor.h,v 1.3 2006/05/23 14:41:42 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -165,7 +165,7 @@ protected:
     void AddSense(oxygen::Predicate& predicate, ObjectData& od) const;
 
     /** applies noise to the setup ObjectData */
-    void RestrictedVisionPerceptor::ApplyNoise(ObjectData& od) const;
+    void ApplyNoise(ObjectData& od) const;
 
     virtual void OnLink();
     virtual void OnUnlink();

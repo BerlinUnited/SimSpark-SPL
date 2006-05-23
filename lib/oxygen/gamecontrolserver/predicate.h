@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: predicate.h,v 1.7 2004/04/05 14:51:08 rollmark Exp $
+   $Id: predicate.h,v 1.8 2006/05/23 14:41:42 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ class Predicate
 
         /** constructs an Iterator pointing to the first element of
             list l */
-        Iterator::Iterator(const zeitgeist::ParameterList* l);
+        Iterator(const zeitgeist::ParameterList* l);
 
         /** constructs an Iterator pointing to the first element of
             predicate::parameter */

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.7 2006/02/28 17:00:49 jamu Exp $
+   $Id: gamestateaspect.h,v 1.8 2006/05/23 14:41:42 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ protected:
 
     /** checks if the set of uniform numbers of given team already
         contains a uniform number unum and inserts it. */
-    bool GameStateAspect::InsertUnum(TTeamIndex idx, int unum);
+    bool InsertUnum(TTeamIndex idx, int unum);
 
     /** returns the team index corresponding to the given teamName. If
         the teamname does not exist and less than two teams are

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.6 2005/12/13 20:55:09 rollmark Exp $
+   $Id: soccerbase.h,v 1.7 2006/05/23 14:41:42 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,12 +24,14 @@
 
 #include <soccer/soccertypes.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
+#include <zeitgeist/leaf.h>
+#include <zeitgeist/logserver/logserver.h>
 #include <boost/shared_ptr.hpp>
 
-namespace zeitgeist
-{
-    class Leaf;
-}
+//namespace zeitgeist
+//{
+//    class Leaf;
+//}
 
 namespace oxygen
 {
