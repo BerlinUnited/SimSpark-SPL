@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.11 2006/03/01 15:51:58 fruit Exp $
+   $Id: kickeffector.cpp,v 1.12 2006/05/23 12:04:28 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     force *= (mForceFactor * kick_power);
 
-    const Vector3f torque(mTorqueFactor*force[1]/salt::g2PI,
+    const Vector3f torque(-mTorqueFactor*force[1]/salt::g2PI,
                           mTorqueFactor*force[0]/salt::g2PI,
                           0.0);
 
