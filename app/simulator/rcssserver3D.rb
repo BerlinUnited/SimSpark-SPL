@@ -374,7 +374,7 @@ addSoccerVar('FieldWidth', randomServer.uniformRND(64.0,75.9).floor().to_f())
 addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalDepth', 2.0)
-addSoccerVar('GoalHeight', 1.4) # FIFA: 2.44 
+addSoccerVar('GoalHeight', 1.6) # FIFA: 2.44 
 addSoccerVar('BorderSize', 10.0)
 addSoccerVar('LineWidth', 0.08) # this isn't sent to the monitor yet
 addSoccerVar('FreeKickDistance', 9.15)
