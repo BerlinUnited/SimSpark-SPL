@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.13 2006/05/19 07:47:43 jamu Exp $
+   $Id: monitor.h,v 1.14 2006/05/23 09:02:47 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -139,6 +139,9 @@ private:
     //! successor of a kick off mode
     CommServerBase::EKickOff NextKickOffMode(CommServerBase::EKickOff mode) const;
 
+    //! kick goalies from goal
+    void KickGoalies();
+
     // ALI
     //void DrawReport();
     void checkAndShow();
@@ -151,12 +154,12 @@ private:
     GameState mGameState;
     string mTextureFile;
     
-		// ALI
-		double mCenterBallCameraY;
-		double mCenterBallCameraZ;
-		bool   mUseTexture;
-		bool   mShowSecondView;
-                //bool   mShowReport;
+    // ALI
+    double mCenterBallCameraY;
+    double mCenterBallCameraZ;
+    bool   mUseTexture;
+    bool   mShowSecondView;
+    //bool   mShowReport;
 
     //JAN
     GameState mOldGameState;
@@ -185,6 +188,10 @@ private:
     float mCamDelta;
     //! the current camera mode
     ECameraMode mCameraMode;
+    //! map from camera modes to strings 
+    std::map<ECameraMode, std::string> mCamModeMap;
+    //! number of cycles to show camera mode in status line
+    int mShowCamIconTime;
     //! the current kick off mode
     CommServerBase::EKickOff mKickOff;
     //! the team kicking off the second half

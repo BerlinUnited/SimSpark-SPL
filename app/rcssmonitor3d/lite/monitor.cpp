@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.23 2006/05/19 07:47:43 jamu Exp $
+   $Id: monitor.cpp,v 1.24 2006/05/23 09:02:47 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -134,7 +134,13 @@ Monitor::Monitor(std::string rel_path_prefix)
     mWidth = DEFAULT_WIDTH;
     mHeight = DEFAULT_HEIGHT;
     mCamDelta = 0.5;
+
     mCameraMode = eFollowBall;
+    mShowCamIconTime = 0;
+    mCamModeMap[eFree] = "[F]"; // F_ree mode
+    mCamModeMap[eFollowBall] = "[A]"; // A_utomatic cam
+    mCamModeMap[eCenterBall] = "[X]" ; // keep cam at X_coord of ball
+
     mDrawUnums = true;
     mDrawOverview = true;
     mDrawDebug = false;
@@ -147,10 +153,6 @@ Monitor::Monitor(std::string rel_path_prefix)
     mCenterBallCameraZ = 20.0;
     mShowSecondView = false;
     mUseTexture = true;
-    //mShowReport = false;
-//     mBallInLeft = 1;
-//     mBallInCenter = 1;
-//     mBallInRight = 1;
 
     mLogserver = false;
     mSingleStep = false;
@@ -320,7 +322,7 @@ Monitor::KeyBindings()
     std::cerr <<
         "\n\nKeybindings for rcssmonitor3D-lite:\n"
         "\n"
-         "----------------------------------------------------\n"
+        "----------------------------------------------------\n"
         "GENERAL\n"
         "----------------------------------------------------\n"
         "q          | quit the monitor\n"
@@ -328,7 +330,7 @@ Monitor::KeyBindings()
         "r          | unpause the simulation/logplayer\n"
         "n          | toggle display of uniform numbers\n"
         "1          | toggle display of debug information\n"
-        "2          | toggle display of two dimensional overview\n"
+        "2          | toggle display of 2D overview\n"
         "v          | toggle display of velocities\n"
         "t          | toggle display of texture\n"
         "Z          | switch to fullscreen\n"
@@ -337,18 +339,27 @@ Monitor::KeyBindings()
         "----------------------------------------------------\n"
         "CAMERA MOVEMENT\n"
         "----------------------------------------------------\n"
-        "c          | switch through camera modes\n"
+        "c          | switch through camera modes (F,A,X)\n"
+        "Arrow keys | move camera\n"
         "w/s        | move camera forward/back (zoomlike)\n"
         "a/d        | move camera left/right\n"
+        "(/)        | rotate camera left/right\n"
+        "[/]        | adjust y-coord of camera in autocam mode (X)\n"
+        "{/}        | adjust height of camera in autocam mode (X)\n"
         "+/-        | move camera up/down\n"
         "3          | move camera behind left goal\n"
         "4          | move camera behind right goal\n"
-        "Arrow keys | move camera\n"
+        "5          | cycle through stationary cam positions on\n"
+        "           | left half\n"
+        "6          | cycle through stationary cam positions on\n"
+        "           | right half\n"
         "----------------------------------------------------\n"
         "SIMULATION\n"
         "----------------------------------------------------\n"
         "k          | kick off (start the game)\n"
         "b          | drop the ball at its current position\n"
+        "g          | kick the goalies towards the field,\n"
+        "           | if they sit on a goal\n"
         "[SPACE]    | toggle kick off side (left-right-random)\n"
         "----------------------------------------------------\n"
         "LOGPLAYER\n"
@@ -501,6 +512,13 @@ Monitor::DrawStatusText()
 
     sl << mGameState.GetTeamnameLeft() << " " << mGameState.GetScoreLeft();
     sr << mGameState.GetScoreRight() << " " << mGameState.GetTeamnameRight();
+
+    if (mShowCamIconTime>=0)
+    {
+        mShowCamIconTime--;
+        sc << mCamModeMap[mCameraMode] << "   ";
+    }
+
     sc << "(" << ((mGameState.GetHalf() == GH_FIRST) ?
                   "first" : "second") << " half) ";
 
@@ -585,6 +603,10 @@ Monitor::DrawStatusLine()
     mGLServer.DrawSphere(Vector3f(-0.97,0.93,0.0), 0.025, 20);
     glColor4fv(sTeamColorRight);
     mGLServer.DrawSphere(Vector3f( 0.97,0.93,0.0), 0.025, 20);
+
+
+    // Test: draw a big blue ball
+    //mGLServer.DrawSphere(Vector3f( 0.5,.9,0.0), 0.1, 20);
 
     int play_mode = mGameState.GetPlayMode();
 
@@ -1013,6 +1035,23 @@ Monitor::Display()
     if (mUseTexture)
         glDisable(GL_TEXTURE_2D);
 
+// ------------------------------
+
+//     glPushMatrix();
+//     glRotatef(0,1,0,0);
+//     //glTranslatef(pos[0],pos[1], pos[2]);
+//     glNormal3f(0,0,1);
+
+//     glBegin(GL_QUADS);
+//     glVertex3f(-4.5,-4.5,3.0);
+//     glVertex3f( 4.5,-4.5,3.0);
+//     glVertex3f( 4.5, 4.5,3.0);
+//     glVertex3f(-4.5, 4.5,3.0);
+//     glEnd();
+//     glPopMatrix();
+
+    //--------------------------------------------------------------
+    
     // border
     glColor4fv(sBorderColor);
     glDisable (GL_DEPTH_TEST);
@@ -1118,6 +1157,15 @@ Monitor::Display()
     // draw the info text
     DrawStatusLine();
 
+
+    // mit fenstergröße skalieren
+//     glBegin(GL_QUADS);
+//     glVertex2f(1.0,1.0);
+//     glVertex2f(1.0,0.0);
+//     glVertex2f(0.0,0.0);
+//     glVertex2f(0.0,1.0);
+//     glEnd();
+
     // draw two dimensional overview
     if (mDrawOverview)
         {
@@ -1170,6 +1218,8 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
     case 'c':
         // select camera mode
         mCameraMode = NextCameraMode(mCameraMode);
+        // reset time to show icon (10 cycles)
+        mShowCamIconTime = 10;
         break;
     case '+':
         //move camera up
@@ -1240,7 +1290,7 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         mGLServer.SetUpVector(Vector3f(0,0,1));
         break;
     case '6':
-        //Move cam behind right half
+        //Move cam to right half
         mGLServer.SetCameraPos(NextCameraPosition(mRightCamPositions));
         if (mCameraMode == eFree) mGLServer.SetLookAtPos(Vector3f(0,0,1));
         mGLServer.SetUpVector(Vector3f(0,0,1));
@@ -1262,9 +1312,11 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
         break;
     case 'b':
         // drop ball
-        cerr << "(rcssmonitor3d) " << mGameState.GetTime()
-             << ": Dropping ball manually." << endl;
         mCommServer->SendDropBallCmd();
+        break;
+    case 'g':
+        // Kick goalies if they are on the goals
+        KickGoalies();
         break;
     case 'p' :
         // pause simulation
@@ -1478,9 +1530,12 @@ Monitor::NextCameraMode(ECameraMode mode) const
 {
     switch (mode)
     {
-    case eFree: return eFollowBall;
-		case eFollowBall: return eCenterBall;
-    default:    return eFree;
+    case eFree:
+        return eFollowBall;
+    case eFollowBall:
+        return eCenterBall;
+    default:
+        return eFree;
     }
 }
 
@@ -1506,6 +1561,34 @@ Monitor::NextKickOffMode(CommServerBase::EKickOff mode) const
     case CommServerBase::eRandom: return CommServerBase::eLeft;
     case CommServerBase::eLeft: return CommServerBase::eRight;
     default: return CommServerBase::eRandom;
+    }
+}
+
+void
+Monitor::KickGoalies()
+{
+    Vector3f pos;
+    int i = 0;
+    int unum;
+    TTeamIndex side;
+    float size;
+    std::stringstream cmd;
+
+    cerr << "(rcssmonitor3d) " << mGameState.GetTime()
+         << ": Kicking Goalies." << endl;
+
+    while (mGameState.GetPlayer(i, pos, side, unum, size))
+    {
+        if (unum == 1 && pos[2] >= mGameState.GetGoalHeight())
+        {
+            // we found a goalie
+            cmd << "(agent (team " << (side==TI_RIGHT ? "Right" : "Left")
+                << ")(unum " << unum << ")(pos " << pos[0]<< " " << pos[1] << " " << pos[2]
+                << ")(vel " << pos[0]/-pos[0] << " 0.0 1.0))";
+
+            mCommServer->SendToWorldModel(cmd.str());
+        }
+        ++i;
     }
 }
 
