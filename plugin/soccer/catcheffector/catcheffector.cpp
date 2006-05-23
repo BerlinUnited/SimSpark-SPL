@@ -119,7 +119,7 @@ CatchEffector::Realize(boost::shared_ptr<ActionObject> action)
         mAgent->GetWorldTransform().Pos();
 
     // the ball can be catched if the distance is
-    // less then Ball-Radius + Player-Radius + KickMargin AND
+    // less then Ball-Radius + Player-Radius + CatchMargin AND
     // the player is close to the ground
     if (mAgent->GetWorldTransform().Pos().z() > mPlayerRadius + 0.01 ||
         ballVec.Length() > mPlayerRadius + mBallRadius + mCatchMargin)
