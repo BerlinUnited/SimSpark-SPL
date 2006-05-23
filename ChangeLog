@@ -1,11 +1,20 @@
-2006-05-22  Jan Murray  <murray@aeonflux>
+2006-05-23  Jan Murray  <jamu@users.sourceforge.net>
+
+	* app/rcssmonitor3d/lite/monitor.cpp, app/rcssmonitor3d/lite/monitor.h:
+	- brought list of keybindings up to date
+	- added display of cam mode: after switching cam mode, the current
+	  mode is displayed in the status line for 10 cycles
+	  - added function to move goalies from goals, bound to 'g'
+	
+
+2006-05-22  Jan Murray  <jamu@users.sourceforge.net>
 
 	* app/simulator/rcssserver3d.rb
 	changed goalheight to 1.4 and catchmargin to 0.8 as announced on
 	the list.
 
 
-2006-05-19  Jan Murray  <murray@aeonflux>
+2006-05-19  Jan Murray  <jamu@users.sourceforge.net>
 	
 	* app/rcssmonitor3d/lite/monitor.h, app/rcssmonitor3d/lite/monitor.cpp:
 	- made manual commands (dropball,kickoff) a little more verbose
