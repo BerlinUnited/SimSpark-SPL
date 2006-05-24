@@ -655,7 +655,7 @@ are given as strings in the play_modes expression of the init
 expression the monitor receives when it connects. Example: (playMode
 corner_kick_left).
 
-(agent(team [R,L])(unum <uniform number>(pos <x,y,z>)(vel <vx,vy,vz))
+(agent(team [Right,Left])(unum <uniform number>(pos <x,y,z>)(vel <vx,vy,vz))
 : set the position and velocity of the given player on the
 field. Example: (agent (team L)(unum 1)(pos -52.0 0.0 0.3)(vel 0.0 0.0 0.0))
 
