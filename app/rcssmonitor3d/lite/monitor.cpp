@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.24 2006/05/23 09:02:47 jamu Exp $
+   $Id: monitor.cpp,v 1.25 2006/05/24 09:00:29 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -173,7 +173,7 @@ Monitor::Monitor(std::string rel_path_prefix)
     mFlagInfo[GameState::eFLAG_1_L] = fi;
     mFlagInfo[GameState::eFLAG_2_L] = fi;
     // goal flags left team
-    fi.mOffset = Vector3f(0,0,0.5);
+    fi.mOffset = Vector3f(0,0,1.6);
     mFlagInfo[GameState::eGOAL_1_L] = fi;
     mFlagInfo[GameState::eGOAL_2_L] = fi;
     // goal flags right team
