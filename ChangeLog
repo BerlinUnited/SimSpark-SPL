@@ -1,3 +1,18 @@
+2006-05-24  Joschka Boedecker  <joschka@uni-koblenz.de>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- applied patch from Hesham Ebrahimi to fix an offside bug; the
+	  bug could occur if a player and the ball cross the opponents line
+	  of defense, and this player was the last one to shot the ball
+	  before crossing.
+
+	* app/rcssmonitor3d/lite/monitor.cpp:
+	- changed the offset for the goal flag visualization to match the
+	  new goalheight.
+
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- fixed description of trainer command for moving players on the field
+
 2006-05-23  Jan Murray <jamu@users.sourceforge.net>
 
 	* lib/kerosin/sceneserver/helper/NVMeshMender.h
