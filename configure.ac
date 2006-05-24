@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d], 0.5.1, [sserver-admin@lists.sf.net])
+AC_INIT([rcssserver3d], 0.5.2, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([lib/salt/salt.h])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
