@@ -1,3 +1,31 @@
+[0.5.2]
+This is mainly a bug fix release to get a stable version and change some  parameters
+for the RoboCup-2006 in Bremen. Some new features, mainly in the monitor are
+introduced as well.
+
+* Features (general):
+
+- the catch margin of the catch effector has been reduced to 0.8m and the goal
+  height was increased to 1.6m to reflect the stronger goalie capabilities and
+  offside rule implications.
+- the monitor features a new autocam mode, "picture-in-picture" view, a
+  display of the current camera mode, and the ground texture can be toggled
+- logfiles can now be stepped backwards
+- agenttest was updated with a say command and sample code
+
+* Important fixes:
+
+- the calculation of the torque vector in the kickeffector was fixed
+- the parameters for the pan/tilt effector are checked for NAN
+- the list of the monitor keybindings was updated
+- a bug in offside was fixed that could occur if a player and the ball cross the
+  opponents line of defense, and this player was the last one to shot the ball
+  before crossing.
+- the code has been updated for gcc 4.1
+- some bugs relating to kickoff have been fixed
+- say effector ignores some illegal characters
+
+
 [0.5.1]
 Release 0.5.1 contains mainly two fixes:
 - the Offside rules are now closer to the FIFA rules. 
