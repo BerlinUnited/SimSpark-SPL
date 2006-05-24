@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.25 2006/05/24 09:00:29 jboedeck Exp $
+   $Id: monitor.cpp,v 1.26 2006/05/24 09:21:50 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -1508,6 +1508,16 @@ Monitor::Idle()
     if (n <= 0)
     {
         n = mSkip;
+
+        // set the goal markers to the right height
+        if (first_time)
+        {
+            mFlagInfo[GameState::eGOAL_1_L].mOffset[2] = mGameState.GetGoalHeight();
+            mFlagInfo[GameState::eGOAL_2_L].mOffset[2] = mGameState.GetGoalHeight();
+            mFlagInfo[GameState::eGOAL_1_R].mOffset[2] = mGameState.GetGoalHeight();
+            mFlagInfo[GameState::eGOAL_2_R].mOffset[2] = mGameState.GetGoalHeight();
+        }
+        
         first_time = false;
     }
 
