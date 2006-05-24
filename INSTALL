@@ -1,4 +1,4 @@
-rcssserver3D-0.5.1 Installation
+rcssserver3D-0.5.2 Installation
 ===============================
 (C) 2004 Universitaet Koblenz, Germany.
 
@@ -37,12 +37,12 @@ Required libraries for the default installation
     --enable-shared
 
 * boost
-  - working versions: 1.30.2, 1.31.0
+  - working versions: 1.30.2, 1.31.0, 1.33.1
   - get it at: http://www.boost.org/
   - description: c++ programming extensions
 
 * ode
-  - working versions: 0.039
+  - working versions: 0.039, 0.5
   - get it at: http://sourceforge.net/projects/opende
   - descriptions: for simulating articulated rigid body dynamics
 
