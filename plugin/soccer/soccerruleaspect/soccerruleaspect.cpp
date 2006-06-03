@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.23 2006/05/24 09:00:43 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.24 2006/06/03 14:03:52 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -821,15 +821,30 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
 bool
 SoccerRuleAspect::CheckOffside()
 {
+    shared_ptr<AgentAspect> collidingAgent;
+    shared_ptr<AgentAspect> kickingAgent;
     shared_ptr<AgentAspect> agent;
     shared_ptr<AgentState> agentState;
+    TTime collidingTime;
+    TTime kickingTime;
     TTime time;
 
-    if (! mBallState->GetLastCollidingAgent(agent,time))
+    if (! mBallState->GetLastCollidingAgent(collidingAgent,collidingTime) &&
+        ! mBallState->GetLastKickingAgent(kickingAgent,kickingTime) )
     {
         return false;
     }
 
+    if (collidingTime > kickingTime)
+    {
+        time = collidingTime;
+        agent = collidingAgent;
+    }
+    else
+    {
+        time = kickingTime;
+        agent = kickingAgent;
+    }
     // if the last colliding agent is the first agent that touches the ball
     // after "a goal kick" or "a kick-in(FIFA: throw-in)" or "a corner kick"
     TTime lastModeChange = mGameState->GetLastModeChange();

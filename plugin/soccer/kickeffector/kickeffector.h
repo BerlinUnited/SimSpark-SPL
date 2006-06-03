@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.5 2006/03/01 15:49:26 fruit Exp $
+   $Id: kickeffector.h,v 1.6 2006/06/03 14:03:52 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 #include <oxygen/physicsserver/body.h>
 #include <soccer/ball/ball.h>
 #include <soccer/ballstateaspect/ballstateaspect.h>
+
+class BallStateAspect;
 
 class KickEffector : public oxygen::Effector
 {
@@ -111,6 +113,9 @@ protected:
     NormalRngPtr mForceErrorRNG;
     /** random number generator for the error distribution of the theta */
     NormalRngPtr mThetaErrorRNG;
+
+    /** reference to the ball state aspect */
+    boost::shared_ptr<BallStateAspect> mBallStateAspect;
 
 private:
     /** the margin where objects can be kicked */

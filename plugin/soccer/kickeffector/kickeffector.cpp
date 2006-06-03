@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.12 2006/05/23 12:04:28 jboedeck Exp $
+   $Id: kickeffector.cpp,v 1.13 2006/06/03 14:03:52 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -130,6 +130,9 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
                           0.0);
 
     mBall->SetAcceleration(mSteps,force,torque,mAgent);
+
+    mBallStateAspect->UpdateLastKickingAgent(mAgent);
+
     return true;
 }
 
@@ -205,6 +208,13 @@ KickEffector::OnLink()
     } else
     {
         mBallRadius = geom->GetRadius();
+    }
+
+    if (mBallStateAspect.get() == 0)
+    {
+        mBallStateAspect = shared_dynamic_cast<BallStateAspect>
+            (GetCore()->Get("/sys/server/gamecontrol/BallStateAspect"));
+        if (mBallStateAspect.get() == 0) return;
     }
 }
 

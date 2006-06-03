@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.5 2004/03/23 10:40:52 rollmark Exp $
+   $Id: ballstateaspect.cpp,v 1.6 2006/06/03 14:03:52 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,6 +55,15 @@ bool BallStateAspect::GetLastCollidingAgent(shared_ptr<AgentAspect>& agent,
     return (agent.get() != 0);
 }
 
+bool BallStateAspect::GetLastKickingAgent(shared_ptr<AgentAspect>& agent,
+                                            TTime& time)
+{
+    agent = mLastKickingAgent;
+    time  = mLastAgentKickTime;
+
+    return (agent.get() != 0);
+}
+
 void BallStateAspect::UpdateLastCollidingAgent()
 {
     // get a list of agents that collided with the ball since the last
@@ -79,6 +88,13 @@ BallStateAspect::UpdateLastCollidingAgent(boost::shared_ptr<AgentAspect> agent)
 {
     mLastCollidingAgent = agent;
     mLastAgentCollisionTime = mGameState->GetTime();
+}
+
+void
+BallStateAspect::UpdateLastKickingAgent(boost::shared_ptr<AgentAspect> agent)
+{
+    mLastKickingAgent = agent;
+    mLastAgentKickTime = mGameState->GetTime();
 }
 
 void BallStateAspect::UpdateBallOnField()

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.3 2004/03/22 18:10:56 fruit Exp $
+   $Id: ballstateaspect.h,v 1.4 2006/06/03 14:03:52 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,6 +51,11 @@ public:
     bool GetLastCollidingAgent
     (boost::shared_ptr<oxygen::AgentAspect>& agent, TTime& time);
 
+    /** returns the last agent that kicked the ball and the
+        time when this happened*/
+    bool GetLastKickingAgent
+    (boost::shared_ptr<oxygen::AgentAspect>& agent, TTime& time);
+
     /** returns true if the ball over the playing field */
     bool GetBallOnField();
 
@@ -66,6 +71,9 @@ public:
         ball
     */
     void UpdateLastCollidingAgent(boost::shared_ptr<oxygen::AgentAspect> agent);
+
+    /** updates the reference to the last agent that kicked the ball */
+    void UpdateLastKickingAgent(boost::shared_ptr<oxygen::AgentAspect> agent);
 
 protected:
     /** set up the reference to the ball and field collider */
@@ -113,11 +121,17 @@ protected:
         ball */
     boost::shared_ptr<oxygen::AgentAspect> mLastCollidingAgent;
 
+    /** holds a reference to the last agent that kicked the ball */
+    boost::shared_ptr<oxygen::AgentAspect> mLastKickingAgent;
+
     /** holds a reference to the GameStateAspect */
     boost::shared_ptr<GameStateAspect> mGameState;
 
     /** then time when the last agent collided with the ball */
     TTime mLastAgentCollisionTime;
+
+    /** then time when the last agent kicked the ball */
+    TTime mLastAgentKickTime;
 
     /** true if the ball on the soccer field, i.e. not on the border
         surrounding the soccer field */
