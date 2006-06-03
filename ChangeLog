@@ -1,3 +1,15 @@
+2006-06-03  Joschka Boedecker  <joschka@>
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h.
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp,
+	* plugin/soccer/kickeffector/kickeffector.h,
+	* plugin/soccer/kickeffector/kickeffector.cpp,
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- kickeffector updates the last player which kicked the ball, in
+	  ballstateaspect. soccerruleaspect compares the time of the last
+	  collision and the last kick, and then uses the latest to make
+	  decision. Thanks to Hesham for the changes.
+
 2006-05-24  Joschka Boedecker  <joschka@uni-koblenz.de>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
