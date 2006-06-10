@@ -1,4 +1,18 @@
-2006-06-03  Joschka Boedecker  <joschka@>
+2006-06-11  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	- commented out sending of say messages to the monitor after a
+	  suggestion from Mojtaba Solgi.
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h, 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- fix from Hesham: in method CheckOffside the last playmode is now
+	  considered.
+
+	* lib/kerosin/renderserver/renderserver.h:
+	- compile fix for gcc 4.1.
+
+2006-06-03  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* plugin/soccer/ballstateaspect/ballstateaspect.h.
 	* plugin/soccer/ballstateaspect/ballstateaspect.cpp,
@@ -290,7 +304,7 @@
 	* app/rcssmonitor3d/lite/grass.ppm:
 	the default texture
 
-2006-01-22  Joschka Boedecker  <jboedeck@>
+2006-01-22  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/agentspark/leggedspherebehavior.cpp,
 	* app/agentspark/leggedspherebehavior.h:
