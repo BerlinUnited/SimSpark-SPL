@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.16 2005/06/29 08:39:59 fruit Exp $
+   $Id: sexpmonitor.cpp,v 1.17 2006/06/10 16:39:00 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -160,7 +160,7 @@ SexpMonitor::AddAgents(shared_ptr<Scene> activeScene, std::ostringstream& ss) co
         }
         if (sayEff !=0 && sayEff->IfText())
         {
-            ss <<"(say " <<sayEff->GetText()<<")";
+            //ss <<"(say " <<sayEff->GetText()<<")";
         }
         ss << ")";
     }
