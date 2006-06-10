@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.24 2006/06/03 14:03:52 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.25 2006/06/10 16:38:06 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,7 +51,8 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mAudioCutDist(50.0),
     mUseOffside(true),
     mFirstCollidingAgent(true),
-    mNotOffside(false)
+    mNotOffside(false),
+    mLastModeWasPlayOn(false)
 {
 }
 
@@ -611,6 +612,8 @@ SoccerRuleAspect::Update(float deltaTime)
 
     static bool updated = false;
 
+    mLastModeWasPlayOn = false;
+
     switch (playMode)
     {
     case PM_BeforeKickOff:
@@ -628,6 +631,7 @@ SoccerRuleAspect::Update(float deltaTime)
 
     case PM_PlayOn:
         UpdatePlayOn();
+        mLastModeWasPlayOn = true;
         break;
 
     case PM_KickOff_Left:
@@ -828,6 +832,12 @@ SoccerRuleAspect::CheckOffside()
     TTime collidingTime;
     TTime kickingTime;
     TTime time;
+
+    if (! mLastModeWasPlayOn)
+    {
+        mInOffsideLeftPlayers.clear();
+        mInOffsideRightPlayers.clear();
+    }
 
     if (! mBallState->GetLastCollidingAgent(collidingAgent,collidingTime) &&
         ! mBallState->GetLastKickingAgent(kickingAgent,kickingTime) )

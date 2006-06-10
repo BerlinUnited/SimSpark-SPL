@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.11 2006/02/27 19:12:24 fruit Exp $
+   $Id: soccerruleaspect.h,v 1.12 2006/06/10 16:38:06 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -249,6 +249,9 @@ protected:
 
     /** if agents don't pass don't worry about offside */
     bool mNotOffside;
+
+    /** if last mode was not playon, clear offside lists*/
+    bool mLastModeWasPlayOn;
 
     /** use offside law */
     bool mUseOffside;
