@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.9 2004/04/12 08:32:04 rollmark Exp $
+   $Id: renderserver.h,v 1.10 2006/06/10 16:36:15 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public:
 
 protected:
     /** get the active scene node from the sceneServer */
-    bool RenderServer::GetActiveScene();
+    bool GetActiveScene();
 
     /** set up SceneServer reference */
     virtual void OnLink();
