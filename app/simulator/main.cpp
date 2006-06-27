@@ -25,6 +25,8 @@ main(int argc, char *const *argv)
 
     int option_index;
     int c = 0;
+
+    
     
     // read some command line options
     option long_options[] = {
@@ -46,26 +48,27 @@ main(int argc, char *const *argv)
             break;
         case 'h': // --help
                 //std::cout << "You asked for help but you are on your own." << std::endl;
-            std::cout << "---------------------------------------------------------------------" << std::endl;
-            std::cout << " Usage: rcssserver3D [--help|--initscript <script>] <SPADES options>\n" << std::endl;
+            std::cout << "------------------------------------------------------------------------" << std::endl;
+            std::cout << " Usage: rcssserver3D [--help|--initscript <script>] -- <SPADES options>\n" << std::endl;
             std::cout << " --help: Show this help." << std::endl;
             std::cout << " --initscript <script>: Run <script> instead of rcssserver3D.rb" << std::endl;
             std::cout << "   <script> must reside in your ~/.rcssserver3d directory.  If" << std::endl;
             std::cout << "   <script> is not found, the default (rcssserver3D.rb) is loaded." << std::endl;
-            std::cout << "\n ALL command line options are also passed to SPADES." << std::endl;
-            std::cout << "---------------------------------------------------------------------\n" << std::endl;
-            break;
+            std::cout << "\n Options that should be passed to SPADES follow after \'--\'." << std::endl;
+            std::cout << " For a list of options refer to the SPADES manual." << std::endl;
+            std::cout << "------------------------------------------------------------------------\n" << std::endl;
+            exit(1);  //break;
         case 'i': // --initscript
             std::cout << "Using " << std::string(optarg)
                       << " as init script" << std::endl;
             initScript=std::string(optarg);
             break;
         default:
-            std::cout << "Passing unknown option to Spades.\n\n";
+            std::cout << "IGNORING!" << std::endl;
         }
     }
-    
-        
+
+
         
     
     // run the init scripts
@@ -80,10 +83,13 @@ main(int argc, char *const *argv)
     
     
 #ifdef HAVE_SPADES_HEADERS
+    int spadesArgc = (argc - optind + 1);
+    char *const *spadesArgv = &argv[optind-1];
+    
     shared_ptr<oxygen::SpadesServer> spadesServer =
       shared_static_cast<oxygen::SpadesServer>(zg.GetCore()->Get("/sys/server/spades"));
 
-    spades::SimulationEngineMain(argc, argv, spadesServer.get());
+    spades::SimulationEngineMain(spadesArgc, spadesArgv, spadesServer.get());
 #endif
 
     return 0;
