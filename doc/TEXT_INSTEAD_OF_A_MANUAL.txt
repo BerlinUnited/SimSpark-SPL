@@ -644,33 +644,51 @@ monitor to set the current playmode and to move players and the ball
 to arbitrary positions on the field. This allows for the
 implementation of trainer clients.
 
+Please note that sending a command may have no effect in certain
+playmodes. E.g moving the ball away from the center position in
+BeforeKickOff mode is immediately counteracted by the simulator.
+
+
 Supported expressions are:
 
-(kickOff <side>): start the soccer game with a kick-off for the team
-on the specified field side. <side> has to be either 'Left', 'Right',
-or 'None', where 'None' means that a coin is tossed to select a team.
+- (kickOff <side>):
+  Start the soccer game with a kick-off for the team on the specified
+  field side. <side> has to be either 'Left', 'Right', or 'None',
+  where 'None' means that a coin is tossed to select a team.
+  Example: (kickOff Left)
 
-(playMode <play_mode>): set the current playmode. Possible playmodes
-are given as strings in the play_modes expression of the init
-expression the monitor receives when it connects. Example: (playMode
-corner_kick_left).
 
-(agent(team [Right,Left])(unum <uniform number>(pos <x,y,z>)(vel <vx,vy,vz))
-: set the position and velocity of the given player on the
-field. Example: (agent (team L)(unum 1)(pos -52.0 0.0 0.3)(vel 0.0 0.0 0.0))
+- (playMode <play_mode>):
+  Set the current playmode. Possible playmodes are given as strings in
+  the play_modes expression of the init expression the monitor
+  receives when it connects.
+  Example: (playMode corner_kick_left).
 
-(ball (pos <x,y,z>)): set the position of the ball on the
-field. Example: (ball (pos 10,20,1))
 
-(dropBall): Drop ball at its current position and move all players
-away by the free kick radius.
+- (agent (team [Right,Left])(unum <n>)(pos <x y z>)(vel <vx vy vz)):
+  Set the position and velocity of the given player on the field.
+  Example: (agent (team L)(unum 1)(pos -52.0 0.0 0.3)(vel 0.0 0.0 0.0))
 
-(getAck <cooky string>): experimental feature, currently
-disabled. Requests an (ack <cooky>) reply from the server. The server
-will send the answer as soon as the command is carried out. This is
-used to synchronize a trainer implementation wit the server. The
-getAck expression is appended behind one of the above
-commands. Example: ((kickOff)(getAck kicked_off))
+ 
+- (ball (pos <x y z>)):
+  Set the position of the ball on the field.
+  Example: (ball (pos 10 20 1))
+
+
+- (dropBall):
+  Drop ball at its current position and move all players away by the free kick radius.
+  Example: (dropBall)
+ 
+
+- (getAck <cookie string>):
+
+  Experimental feature, currently disabled. Requests an (ack <cookie>)
+  reply from the server. The server will send the answer as soon as
+  the command is carried out. This is used to synchronize a trainer
+  implementation wit the server. The getAck expression is appended
+  behind one of the above commands.
+
+  Example: ((ball (pos 0.0 0.0 50.0))(getAck moved_ball_in_the_air))
 
 
 
