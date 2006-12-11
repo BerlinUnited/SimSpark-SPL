@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: sceneeffector.cpp,v 1.1 2004/05/06 09:30:25 rollmark Exp $
+$Id: sceneeffector.cpp,v 1.2 2006/12/11 10:45:37 jboedeck Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ bool SceneEffector::Realize(boost::shared_ptr<ActionObject> action)
             return false;
         }
 
-    boost::shared_ptr<AgentAspect> aspect =GetAgentAspect();
+    shared_ptr<AgentAspect> aspect =GetAgentAspect();
 
     if (aspect.get() == 0)
         {
@@ -61,7 +61,9 @@ bool SceneEffector::Realize(boost::shared_ptr<ActionObject> action)
             return false;
         }
 
-    aspect->ImportScene(sceneAction->GetScene(), shared_ptr<ParameterList>());
+    shared_ptr<ParameterList> parameter(new ParameterList());
+
+    aspect->ImportScene(sceneAction->GetScene(), parameter);
     return true;
 }
 
