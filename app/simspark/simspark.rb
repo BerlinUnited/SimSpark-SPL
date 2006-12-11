@@ -3,8 +3,8 @@
 #
 
 sparkSetupServer()
-#sparkSetupRendering()
-#sparkSetupInput()
+sparkSetupRendering()
+sparkSetupInput()
 
 
 # let spark create a default camera
