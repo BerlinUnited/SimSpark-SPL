@@ -34,6 +34,7 @@ dist_pkgdata_DATA = \
 	soccersim.rb \
 	rsg/agent/soccerplayer.rsg \
 	rsg/agent/leggedsphere.rsg \
+	rsg/agent/hoap2.rsg \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
 	rsg/agent/simspark.rsg \
