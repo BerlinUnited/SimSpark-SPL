@@ -7,7 +7,7 @@
  (define $Density (eval Soccer.BallDensity))
 
  (node Ball
-       (setLocalPos 0 0 0.5)
+       (setLocalPos 5.0 0.0 0.5)
        (setName Ball)
 
        (node Sphere
