@@ -14,8 +14,8 @@
        (node DragController
 	     (setAngularDrag 0.01)
 	     (setLinearDrag 0.01)
-	     )
-       )
+	)
+ )
 
  (node BoxCollider
        (setBoxLengths $lenX $lenY $lenZ)
@@ -26,10 +26,10 @@
 	     (setContactSlip 0.1 0.1)
 
 	     (setContactSoftERPMode true)
-	     (setContactSoftERP 0.5)
+	     (setContactSoftERP 0.2)
 
 	     (setContactSoftCFM true)
-	     (setContactSoftCFM 0.3)
+	     (setContactSoftCFM 0.01)
 
 	     )
        )
