@@ -289,6 +289,10 @@ sceneServer.initSceneImporter("RubySceneImporter");
 # create world and space aspects
 world = new('oxygen/World', $scenePath+'world')
 world.setGravity(0.0, 0.0, -9.81)
+world.setCFM(0.001)
+world.setAutoDisableFlag(true)
+world.setContactSurfaceLayer(0.001)
+
 new('oxygen/Space', $scenePath+'space')
 
 #
