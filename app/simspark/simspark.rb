@@ -49,6 +49,9 @@ material.setAmbient(0.1,0.3,0.1,1.0)
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
 material.setDiffuse(0.1,0.1,0.1,1.0)
 
+material = new('kerosin/MaterialSolid', $serverPath+'material/matLightBlue');
+material.setDiffuse(0.0,0.75,1.0,1.0)
+
 #
 # uncomment for logging setup (see spark.rb for reference)
 #
