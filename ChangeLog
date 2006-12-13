@@ -1,3 +1,60 @@
+2006-12-13  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* app/simspark/Makefile.am:
+	- included the file hoap2.rsg for distribution
+
+	* lib/spark/spark.rb:
+	- setting global CFM to 0.001
+	- using auto disable
+	- setting the depth for contact surface layer to 0.001
+
+	* lib/oxygen/physicsserver/world.h,
+	* lib/oxygen/physicsserver/world.cpp,
+	* lib/oxygen/physicsserver/world_c.cpp:
+	- implemented methods GetAutoDisableFlag, SetAutoDisableFlag,
+	  GetContactSurfaceLayer, and SetContactSurfaceLayer that are
+	  useful to get more stable simulations
+
+	* lib/oxygen/physicsserver/space.cpp:
+	- in the test for possible collision reject all bodies that
+	  are connected with joints except for contact joints
+	- reduced max number of contact points from 6 to 4
+
+	* lib/oxygen/physicsserver/fixedjoint.h,
+	* lib/oxygen/physicsserver/fixedjoint.cpp,
+	* lib/oxygen/physicsserver/fixedjoint_c.cpp:
+	- implemented method SetFixed which is required for the joint
+	  to function correctly
+
+	* app/simspark/rsg/boxspheres/box.rsg,
+	* app/simspark/rsg/boxspheres/sphere.rsg:
+	- modified contact parameters CFM and ERP to get a more stable
+	  simulation
+
+	* app/simspark/rsg/agent/soccer.rsg:
+	- modified the contact parameters of the ground plane
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- moved ball to the side a bit (make space for the big robot) :-)
+
+	* app/agentspark/Makefile.am,
+	* app/agentspark/main.cpp:
+	- added entries for the HOAP2 model and behavior
+
+	* app/simspark/rsg/agent/hoap2.rsg,
+	* app/agentspark/hoap2behavior.cpp,
+	* app/agentspark/hoap2behavior.h:
+	- added files for the HOAP2 simulation
+
+	* plugin/sceneeffector/sceneeffector.cpp:
+	- fixed a bug that resulted in a crash if defines were used in RSG 
+	  agent descriptions
+
+	* app/simspark/simspark.rb:
+	- added material matLightBlue
+	- uncommented setup of rendering and input to have correct timing 
+	  enables (thanks go to Yuan Xu for the notice)
+
 2006-06-11  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
