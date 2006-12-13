@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: world.h,v 1.6 2004/03/22 10:59:02 rollmark Exp $
+   $Id: world.h,v 1.7 2006/12/13 11:00:17 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,19 @@ public:
         simulation for a deltaTime seconds interval.
     */
     void Step(float deltaTime);
+
+    bool GetAutoDisableFlag() const;
+    void SetAutoDisableFlag(bool flag);
+
+    /** Set and get the depth of the surface layer around all geometry
+        objects. Contacts are allowed to sink into the surface layer up to
+        the given depth before coming to rest. The default value is
+        zero. Increasing this to some small value (e.g. 0.001) can help
+        prevent jittering problems due to contacts being repeatedly made
+        and broken. 
+    */
+    void SetContactSurfaceLayer(float depth); 
+    float GetContactSurfaceLayer() const;
 
 protected:
     /** creates them managed ODE world */

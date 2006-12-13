@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: world.cpp,v 1.5 2004/03/22 10:59:02 rollmark Exp $
+   $Id: world.cpp,v 1.6 2006/12/13 11:00:18 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -74,7 +74,29 @@ float World::GetCFM() const
 
 void World::Step(float deltaTime)
 {
+  //printf("step: deltaTime was %.4f\n", deltaTime);
+
   dWorldStep(mODEWorld, deltaTime);
+}
+
+bool World::GetAutoDisableFlag() const
+{
+  return (static_cast<bool>(dWorldGetAutoDisableFlag(mODEWorld)));
+}
+
+void World::SetAutoDisableFlag(bool flag)
+{
+  dWorldSetAutoDisableFlag(mODEWorld, static_cast<int>(flag));
+}
+
+void World::SetContactSurfaceLayer(float depth)
+{
+  dWorldSetContactSurfaceLayer(mODEWorld, depth);
+}
+
+float World::GetContactSurfaceLayer() const
+{
+  return dWorldGetContactSurfaceLayer(mODEWorld);
 }
 
 bool World::ConstructInternal()

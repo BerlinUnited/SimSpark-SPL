@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: world_c.cpp,v 1.7 2004/03/22 13:51:25 rollmark Exp $
+$Id: world_c.cpp,v 1.8 2006/12/13 11:00:16 jboedeck Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -83,6 +83,48 @@ FUNCTION(World,getCFM)
     return obj->GetCFM();
 }
 
+FUNCTION(World,setAutoDisableFlag)
+{
+    float inFlag;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inFlag))
+        )
+        {
+            return false;
+        }
+
+    obj->SetAutoDisableFlag(inFlag);
+    return true;
+}
+
+FUNCTION(World,getAutoDisableFlag)
+{
+    return obj->GetAutoDisableFlag();
+}
+
+FUNCTION(World,setContactSurfaceLayer)
+{
+    float inDepth;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inDepth))
+        )
+        {
+            return false;
+        }
+
+    obj->SetContactSurfaceLayer(inDepth);
+    return true;
+}
+
+FUNCTION(World,getContactSurfaceLayer)
+{
+    return obj->GetContactSurfaceLayer();
+}
+
 void CLASS(World)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/ODEObject);
@@ -91,4 +133,8 @@ void CLASS(World)::DefineClass()
     DEFINE_FUNCTION(getERP);
     DEFINE_FUNCTION(setCFM);
     DEFINE_FUNCTION(getCFM);
+    DEFINE_FUNCTION(setAutoDisableFlag);
+    DEFINE_FUNCTION(getAutoDisableFlag);
+    DEFINE_FUNCTION(setContactSurfaceLayer);
+    DEFINE_FUNCTION(getContactSurfaceLayer);
 }
