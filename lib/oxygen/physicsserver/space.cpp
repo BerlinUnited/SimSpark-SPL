@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.8 2004/04/30 14:48:15 rollmark Exp $
+   $Id: space.cpp,v 1.9 2006/12/13 10:59:45 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
     const dBodyID b1 = dGeomGetBody(obj1);
     const dBodyID b2 = dGeomGetBody(obj2);
 
-    if ((b1) && (b2) && (dAreConnected(b1,b2)))
+    if ((b1) && (b2) && (dAreConnectedExcluding(b1,b2,dJointTypeContact)))
         {
             return;
         }
@@ -87,7 +87,7 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
     // mistakes and pass non-intersecting pairs. Thus we can not
     // expect that dCollide() will return contacts for every pair
     // passed to the callback.
-    static const int nContacts = 6;
+    static const int nContacts = 4;
     static dContact contacts[nContacts];
 
     int n = dCollide (obj1, obj2, nContacts,
