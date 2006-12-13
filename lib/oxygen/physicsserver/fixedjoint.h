@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fixedjoint.h,v 1.2 2004/05/01 11:30:31 rollmark Exp $
+   $Id: fixedjoint.h,v 1.3 2006/12/13 10:59:16 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,11 @@ class FixedJoint : public Joint
 public:
     FixedJoint();
     virtual ~FixedJoint();
+
+    /** Call this on the fixed joint after it has been attached to remember 
+        the current desired relative offset and desired relative rotation 
+        between the bodies. */
+    void SetFixed();
 
 protected:
     /** creates a new fixed joint */
