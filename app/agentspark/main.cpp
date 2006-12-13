@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.4 2005/12/31 13:51:36 jboedeck Exp $
+   $Id: main.cpp,v 1.5 2006/12/13 10:41:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@
 #include <behavior.h>
 #include <boost/scoped_ptr.hpp>
 //#include "soccerbehavior.h"
-#include "leggedspherebehavior.h"
+//#include "leggedspherebehavior.h"
+#include "hoap2behavior.h"
 
 
 using namespace rcss::net;
@@ -171,9 +172,10 @@ bool GetMessage(string& msg)
 }
 
 void Run()
-{
-    scoped_ptr<Behavior> behavior(new LeggedSphereBehavior());
+{    
     //scoped_ptr<Behavior> behavior(new SoccerBehavior());
+    //scoped_ptr<Behavior> behavior(new LeggedSphereBehavior());
+    scoped_ptr<Behavior> behavior(new Hoap2Behavior());
 
     PutMessage(behavior->Init());
 
