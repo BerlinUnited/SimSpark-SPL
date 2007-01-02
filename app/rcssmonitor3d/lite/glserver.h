@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.9 2006/02/08 15:04:52 jamu Exp $
+   $Id: glserver.h,v 1.10 2007/01/02 13:56:55 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,14 @@
 #include <GL/glut.h>
 #include "camera.h"
 
+/* Image type - contains height, width, and data */
+struct Image {
+    unsigned long sizeX;
+    unsigned long sizeY;
+    char *data;
+};
+typedef struct Image Image;
+
 class GLServer
 {
 public:
@@ -39,6 +47,7 @@ public:
 
     void InitTexture(const string &tFile);
     bool ReadTexture(const string &tFile);
+    bool BMPImageLoad(const char *filename, Image *image) ;
     
     void InitGL();
     void DrawGroundRectangle(salt::Vector3f pos, float szX, float szY,
@@ -55,7 +64,8 @@ public:
     int GetTextWidth(const char* text) const;
 
     void DrawGoal(salt::Vector3f goalPos, salt::Vector3f sz, float barRadius = 0.06);
-    void DrawSphere(salt::Vector3f spherePos, float radius, int res = 10);
+    void DrawSphere(salt::Vector3f spherePos, float radius, int res = 10, bool wireframe = false);
+    void DrawSkyBackground(float x, float y, float z, float width, float height, float length);
     void DrawShadowOfSphere(salt::Vector3f spherePos,float radius);
     void DrawWireBox(salt::Vector3f boxPos, salt::Vector3f sz);
     void Reshape(int width, int height)
@@ -135,6 +145,9 @@ public:
     }
 
 protected:
+    //typedef GLubyte IconArray[32][32][4];
+    
+
     salt::Vector3f mCamPos;
     salt::Vector3f mLookAt;
     salt::Vector3f mUp;
@@ -143,9 +156,11 @@ protected:
     int mWidth;
     int mHeight;
     GLubyte mTexture[128][128][4];
+//    std::map<Monitor::ECameraMode, IconArray> mCamModeIconMap;
     int mTextureWidth;
     int mTextureHeight;
     GLuint mTexName;
+    GLuint mTexNames[8];
     //string mTextureFile;
 };
 

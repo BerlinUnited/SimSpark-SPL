@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.cpp,v 1.5 2006/05/18 09:43:57 jamu Exp $
+   $Id: camera.cpp,v 1.6 2007/01/02 13:56:55 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,7 +94,8 @@ Camera::RefreshCam() {
   //resets the camera attributes mTheta and mPhi
   Vector3f tmp = mLookAtPos-mPosition;
   mTheta = tmp.Length()!=0 ? acos(tmp.z()/tmp.Length()) : 0;
-  mPhi = tmp.x()!=0 ? atan(tmp.y()/tmp.x()) :0;
+  // mPhi = tmp.x()!=0 ? atan(tmp.y()/tmp.x()) :0;
+  mPhi = tmp.x()!=0 ? atan(tmp.y()/tmp.x()) :gHalfPI; // fix by Junqing Wang
 }
 
 //original version

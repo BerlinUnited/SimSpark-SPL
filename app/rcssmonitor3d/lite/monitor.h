@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.h,v 1.14 2006/05/23 09:02:47 jamu Exp $
+   $Id: monitor.h,v 1.15 2007/01/02 13:56:55 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -222,6 +222,8 @@ private:
     bool mSingleStep;
     //! flag for drawing velocities
     bool mDrawVelocity;
+    //! flag for toggling pause mode
+    bool mPauseGame;
     //! flag for advancing
     bool mAdvance;
     //! flag for real time or fast playback
