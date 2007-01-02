@@ -58,6 +58,17 @@ Required libraries for the default installation
   - recent versions of automake, autoconf, libtool can be helpful if 
     config files need to be regenerated
 
+* Texture files for the rcssmonitor3D-lite Monitor
+  - you need textures for the grass and the skybox. They have to be in
+    BMP format with 1 plane and 24bpp.
+  - the files have to be named grass.bmp, front.bmp, back.bmp, left.bmp,
+    right.bmp, top.bmp, bottom.bmp.
+  - put the files in your $HOME/.rcssserver3d directory after it has been created.
+  - A simple set of textures can be downloaded from
+    http://www.uni-koblenz.de/~murray/robocup/rcssmonitor-lite-textures.tgz
+    Just extract the archive to your $HOME/.rcssserver3d using
+    tar xvfz rcssmonitor-lite-textures.tgz
+
 Additionally required libraries for the full installation
 =========================================================
 
