@@ -104,7 +104,7 @@ fi
 echo "Starting Simulator with these Parameters: $SPADESPARAM"
 echo
 
-${SIMULATOR} ${SPADESPARAM}&
+${SIMULATOR} -- ${SPADESPARAM}&
 PID=$!
 sleep 1
 ${MONITOR}
