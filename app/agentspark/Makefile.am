@@ -31,6 +31,8 @@ agentspark_SOURCES = main.cpp \
 	carbehavior.h \
 	soccerbehavior.h \
 	soccerbehavior.cpp \
+	soccerbotbehavior.h \
+	soccerbotbehavior.cpp \
 	leggedspherebehavior.h \
 	leggedspherebehavior.cpp \
 	hoap2behavior.h \
