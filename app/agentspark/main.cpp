@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.6 2007/01/26 11:21:22 jamu Exp $
+   $Id: main.cpp,v 1.7 2007/01/26 15:29:30 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@ void PrintHelp()
     cout << "\nusage: agentspark [options]" << endl;
     cout << "\noptions:" << endl;
     cout << " --help      prints this message." << endl;
+    cout << " --host=IP   IP of the server." << endl;
     cout << "\n";
 }
 
@@ -59,11 +60,24 @@ void ReadOptions(int argc, char* argv[])
 {
     for( int i = 0; i < argc; i++)
         {
-            if( strcmp( argv[i], "--help" ) == 0 )
+            if ( strcmp( argv[i], "--help" ) == 0 )
                 {
                     PrintHelp();
                     exit(0);
                 }
+            else if ( strncmp( argv[i], "--host", 6 ) == 0 )
+            {
+                string tmp=argv[i];
+                
+                if ( tmp.length() <= 7 ) // minimal sanity check
+                {
+                    PrintHelp();
+                    exit(0);
+                }
+                gHost = tmp.substr(7);
+            }
+            
+                
         }
 }
 
@@ -143,6 +157,13 @@ bool GetMessage(string& msg)
     static char buffer[16 * 1024];
 
     unsigned int bytesRead = read(gSocket.getFD(), buffer, sizeof(buffer));
+    cerr << "buffer = |" << string(buffer+1) << "|\n";
+    cerr << "bytesRead = |" << bytesRead << "|\n";
+    cerr << "Size of buffer = |" << sizeof(buffer) << "|\n";
+    cerr << "buffer = |" << buffer << "|\n";
+    cerr << "buffer[5] = |" << buffer[5] << "|\n";
+    printf ("xxx-%s\n", buffer+5);
+    
     if (bytesRead < sizeof(unsigned int))
     {
         return false;
@@ -150,9 +171,13 @@ bool GetMessage(string& msg)
 
     // msg is prefixed with it's total length
     unsigned int msgLen = ntohl(*(unsigned int*)buffer);
+    cerr << "GM 6 / " << msgLen << "\n";
 
     // read remaining message segments
     unsigned int msgRead = bytesRead - sizeof(unsigned int);
+
+    cerr << "msgRead = |" << msgRead << "|\n";
+
     char *offset = buffer + bytesRead;
 
     while (msgRead < msgLen)
@@ -163,6 +188,7 @@ bool GetMessage(string& msg)
         }
 
         msgRead += read(gSocket.getFD(), offset, sizeof(buffer) - msgRead);
+        cerr << "msgRead = |" << msgRead << "|\n";
         offset += msgRead;
     }
 
@@ -170,12 +196,15 @@ bool GetMessage(string& msg)
     (*offset) = 0;
 
     msg = string(buffer+sizeof(unsigned int));
+
     //cerr << msg << endl;
+
     return true;
 }
 
 void Run()
 {    
+    scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
     //scoped_ptr<Behavior> behavior(new SoccerBehavior());
     scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
     //scoped_ptr<Behavior> behavior(new CarBehavior());
