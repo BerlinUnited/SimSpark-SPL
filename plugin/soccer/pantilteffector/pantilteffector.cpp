@@ -4,7 +4,7 @@
    Mon May 9 2005
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: pantilteffector.cpp,v 1.2 2006/05/23 12:04:48 jboedeck Exp $
+   $Id: pantilteffector.cpp,v 1.3 2007/02/04 01:24:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ PanTiltEffector::Realize(boost::shared_ptr<ActionObject> action)
     float pan = panTiltAction->GetPanAngle();
 
     // check for NAN
-    if (isnan(pan))
+    if (std::isnan(pan))
     {
         return true;
     }
@@ -86,7 +86,7 @@ PanTiltEffector::Realize(boost::shared_ptr<ActionObject> action)
     float tilt = panTiltAction->GetTiltAngle();
 
     // check for NAN
-    if (isnan(tilt))
+    if (std::isnan(tilt))
     {
         return true;
     }
