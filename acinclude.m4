@@ -165,6 +165,44 @@ AC_DEFUN([RCSS_PATH_FREETYPE], [
 #	Substitutes: @GLDIR@ with the directory where the gl headers can be found
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_GL], [
+    AC_CHECK_HEADERS([OpenGL/gl.h GLUT/glut.h],
+                     [iamamac=yes 
+		      AC_MSG_NOTICE([I am a Mac])],
+		     [iamamac=no])
+    if test "$iamamac" = yes; then
+       RCSS_KEROSIN_IF_ELSE([
+			AC_CHECK_HEADERS([GL/glx.h], AC_SUBST([GLTARGET], [x]),
+                        		  RCSS_BUILD_KEROSIN_ERROR([could not find GL extensions]),
+					  [#include <OpenGL/gl.h>])
+
+	# subst'ing the directory where the prepocessor finds gl.h
+        GLDIR=`echo "#include <OpenGL/gl.h>" | cpp -M | awk '{ print @S|@2 }'`
+        GLDIR=`dirname "$GLDIR"`
+        AC_SUBST([GLDIR], [$GLDIR])
+
+	# checking if linking against libGL succeeds 
+	RCSS_KEROSIN_IF_ELSE([
+		AC_MSG_CHECKING([if linking against libGL succeeds])
+		rcss_tmp="$LDFLAGS"
+		LDFLAGS="$LDFLAGS -framework GLUT -framework OpenGL"
+ 		AC_LINK_IFELSE([#include <OpenGL/gl.h>
+				int main() { glColor3f(0,0,0); }],
+				[AC_MSG_RESULT([yes])],
+				[AC_MSG_RESULT([no])
+				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
+		LDFLAGS="$rcss_tmp"
+		AC_MSG_CHECKING([if linking against libglut succeeds])
+		LDFLAGS="$LDFLAGS -framework GLUT -framework OpenGL"
+ 		AC_LINK_IFELSE([#include <GLUT/glut.h>
+				int main() { glutMainLoop(); }],
+				[AC_MSG_RESULT([yes])],
+				[AC_MSG_RESULT([no])
+				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libglut or can be found])
+				 ])
+		LDFLAGS="$rcss_tmp"
+		])
+    ])
+    else	
 	RCSS_KEROSIN_IF_ELSE([
 	# check for OpenGL location and used extensions
     		AC_CHECK_HEADERS([GL/gl.h GL/glut.h],,
@@ -179,7 +217,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
                           [#include <GL/gl.h>])
 
 	# subst'ing the directory where the prepocessor finds gl.h
-        GLDIR=`echo "#include <GL/gl.h>" | /lib/cpp -M | awk '{ print @S|@2 }'`
+        GLDIR=`echo "#include <GL/gl.h>" | cpp -M | awk '{ print @S|@2 }'`
         GLDIR=`dirname "$GLDIR"`
         AC_SUBST([GLDIR], [$GLDIR])
 
@@ -206,6 +244,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 		])
     ])
   ])
+  fi
 ]) # RCSS_CHECK_GL
 
 # RCSS_CHECK_DEVIL
