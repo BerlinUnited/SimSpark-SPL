@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.7 2007/01/26 15:29:30 jamu Exp $
+   $Id: main.cpp,v 1.8 2007/02/05 06:51:01 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -206,7 +206,6 @@ void Run()
 {    
     scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
     //scoped_ptr<Behavior> behavior(new SoccerBehavior());
-    scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
     //scoped_ptr<Behavior> behavior(new CarBehavior());
     //scoped_ptr<Behavior> behavior(new LeggedSphereBehavior());
     //scoped_ptr<Behavior> behavior(new Hoap2Behavior());
