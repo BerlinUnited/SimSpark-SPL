@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.25 2006/06/10 16:38:06 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.26 2007/02/06 22:49:31 heshamebrahimi Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mAutomaticKickOff(false),
     mWaitBeforeKickOff(1.0),
     mSingleHalfTime(false),
-    mSayMsgSize(512),
+    mSayMsgSize(20),
     mAudioCutDist(50.0),
     mUseOffside(true),
     mFirstCollidingAgent(true),
@@ -832,6 +832,7 @@ SoccerRuleAspect::CheckOffside()
     TTime collidingTime;
     TTime kickingTime;
     TTime time;
+    static TTime lastCollisionTime = 0.0;
 
     if (! mLastModeWasPlayOn)
     {
@@ -839,8 +840,12 @@ SoccerRuleAspect::CheckOffside()
         mInOffsideRightPlayers.clear();
     }
 
-    if (! mBallState->GetLastCollidingAgent(collidingAgent,collidingTime) &&
-        ! mBallState->GetLastKickingAgent(kickingAgent,kickingTime) )
+    if (! mBallState->GetLastCollidingAgent(collidingAgent,collidingTime) )
+    {
+        return false;
+    }
+
+    if (! mBallState->GetLastKickingAgent(kickingAgent,kickingTime) )
     {
         return false;
     }
@@ -855,6 +860,7 @@ SoccerRuleAspect::CheckOffside()
         time = kickingTime;
         agent = kickingAgent;
     }
+
     // if the last colliding agent is the first agent that touches the ball
     // after "a goal kick" or "a kick-in(FIFA: throw-in)" or "a corner kick"
     TTime lastModeChange = mGameState->GetLastModeChange();
@@ -867,10 +873,11 @@ SoccerRuleAspect::CheckOffside()
     // only when an agent collides with the ball it maybe affect
     // offside, if we sometime want to consider
     // "interfering with an opponent" we should remove this condition
-    if (mGameState->GetTime() != time)
+    if (lastCollisionTime == time)
     {
         return false;
     }
+    lastCollisionTime = time;
 
     // if the second last collinding agent is the last colliding agent,
     // there is no offside
