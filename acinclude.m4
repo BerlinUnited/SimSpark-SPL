@@ -176,7 +176,8 @@ AC_DEFUN([RCSS_CHECK_GL], [
 					  [#include <OpenGL/gl.h>])
 
 	# subst'ing the directory where the prepocessor finds gl.h
-        GLDIR=`echo "#include <OpenGL/gl.h>" | cpp -M | awk '{ print @S|@2 }'`
+	# JAN: the awk command may have to be state more precisely, if problems with distris occur
+        GLDIR=`echo "#include <OpenGL/gl.h>" | cpp -M | awk '/gl.h/ { print @S|@2 }'`
         GLDIR=`dirname "$GLDIR"`
         AC_SUBST([GLDIR], [$GLDIR])
 
@@ -217,7 +218,8 @@ AC_DEFUN([RCSS_CHECK_GL], [
                           [#include <GL/gl.h>])
 
 	# subst'ing the directory where the prepocessor finds gl.h
-        GLDIR=`echo "#include <GL/gl.h>" | cpp -M | awk '{ print @S|@2 }'`
+	# JAN: the awk command may have to be state more precisely, if problems with distris occur
+        GLDIR=`echo "#include <GL/gl.h>" | cpp -M | awk '/gl.h/ { print @S|@2 }'`
         GLDIR=`dirname "$GLDIR"`
         AC_SUBST([GLDIR], [$GLDIR])
 
