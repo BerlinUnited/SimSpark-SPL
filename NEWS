@@ -1,3 +1,37 @@
+[0.5.3] 
+This release contains some fixes for the offside code and some
+eye candy for the lite monitor. Furthermore, it includes the new
+Fujitsu HOAP-2 inspired robot for simspark as well as the derived
+SoccerBot (work in progress), and some improvements to the physics
+code (mainly related to stability issues).
+
+* Features:
+
+- rcssmonitor3D-lite features a SkyBox (by Heni Ben Amor) and improved 
+  colors and lights (by Tobias Warden). Please see the comment about
+  texture files in the INSTALL file.
+- simspark includes hoap2.rsg and soccerbot.rsg robot models
+- agent communication was restricted to a message length of 20 Bytes in
+  rcssserver3D
+
+* Important fixes:
+
+rcssmonitor3D-lite:
+- toggling pause with p (r will be used for assigning free kicks)
+- correct aspect in 2D overview
+- Mousehandling patch (by Junqing Wang)
+
+rcssserver3D:
+- several fixes for the offside rule code
+- fixed bug that prevents arguments to be passed to SPADES (by Sander van Dijk)
+
+simspark:
+- fixed bug in the sceneffector that resulted in a crash if defines were used in RSG
+  agent descriptions
+- modified several parameters of the physics system to get a more stable simulation
+- fixed the fixed joint type ;-)
+
+
 [0.5.2]
 This is mainly a bug fix release to get a stable version and change some parameters
 for the RoboCup-2006 in Bremen. Some new features, mainly in the monitor are

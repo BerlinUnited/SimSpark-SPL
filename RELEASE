@@ -8,32 +8,32 @@ RELEASE News for different forums                        -*- outline -*-
 
 ** [Soccer Lists]
 
-we have just released version 0.5.2 of rcssserver3D. This is mainly a bug fix
-release to get a more stable version and change some parameters for the
-RoboCup-2006 in Bremen. Some new features, mainly in the monitor are
-introduced as well: 
+We have just released version 0.5.3 of rcssserver3D. This release
+contains some fixes for the offside code and some eye candy for the
+lite monitor. Furthermore, it includes the new Fujitsu HOAP-2 inspired
+robot for simspark as well as the derived SoccerBot (work in
+progress), and some improvements to the physics code (mainly related
+to stability issues).
 
-- we received a patch from Tobias Warden to fix compilation problems with gcc
-  4.1.
+- rcssmonitor3D-lite features a sky box (thanks to Heni Ben Amor) and improved 
+  colors and lights (thanks to Tobias Warden). Please see the comment about
+  texture files in the INSTALL file.
 
-- the goal height and the catch margin have been changed because of a stronger
-  goalie and the offside implementation.
+- simspark includes hoap2.rsg and soccerbot.rsg robot models
 
-- Ali Nadalizadeh sent a patch to enable the monitor to step backwards when
-  playing logfiles and implements new camera modes. 
+- agent communication was restricted to a message length of 20 Bytes in
+  rcssserver3D
 
-- Ma Jie sent a patch to improve the mousehandling in the monitor.
-
-- several problems in the offside code, the kickeffector, the sayeffector,
-  and the pan/tilt effector have been fixed. Thanks go to Yuan Xu and Nima
-  Aghaeepour.
+- several fixes in the rcssmonitor3D-lite, rcssserver3D, and simspark. For
+  details, please see the NEWS file. Thanks go to Junquing Wang and Sander
+  van Dijk.
 
 You can find the package at the usual place [1].
 
 Please note that you should update the rcssserver3D.rb file in your
 ~/.rcssserver3d/ directory manually (again).
 
-cheers
+Cheers
 Joschka (for the maintenance comittee)
 
 
@@ -42,32 +42,29 @@ Joschka (for the maintenance comittee)
 
 ** [General (SF Project News etc)]
 
-we have just released rcssserver3D-0.5.2. 
+We have just released rcssserver3D-0.5.3. 
 
 rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
 framework and a scene description language for setting up different
-kinds of simulations. The soccer simulation built on top of this will
-be used for the 3D Simulation League competition on RoboCup 2006 
-(see http://www.robocup2006.org/).
+kinds of simulations. The soccer simulation built on top of this is used
+in the RoboCup 3D Soccer Simulation League.
 
 Important fixes and new features:
 
-- More fixes for problems in the offside code, the agent communication, the
-  kick effector, and the pan/tilt effector that moves the agent's camera.
+- the visualization features a sky box and other eye candy now.
 
-- compile fixes for gcc 4.1.
+- includes the first prototypes of humanoid robot models
 
-- several improvements to the handling of the monitor for visualization of the
-  simulation. 
+- agent communication was restricted to a message length of 20 Bytes 
 
-- some parameter changes to fix the settings for the competition at RoboCup-2006.
+- several fixes in the rcssmonitor3D-lite, rcssserver3D, and simspark
 
 For details have a look into the ChangeLog coming with the package.
 
 You can get the package on the Soccer Simulator page on SourceForge
 at http://sourceforge.net/projects/sserver/
 
-cheers
+Cheers
 Joschka Boedecker
 
