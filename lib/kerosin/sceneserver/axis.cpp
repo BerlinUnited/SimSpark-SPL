@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: axis.cpp,v 1.4 2004/04/12 17:19:48 rollmark Exp $
+$Id: axis.cpp,v 1.5 2007/02/12 19:44:34 rollmark Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -71,3 +71,8 @@ void Axis::SetSize(float size)
     mSize = std::max<float>(0.1f,size);
 }
 
+void Axis::ComputeBoundingBox()
+{
+    mLocalBoundingBox.minVec.Set(0.0, 0.0, 0.0);
+    mLocalBoundingBox.maxVec.Set(mSize,mSize,mSize);
+}
