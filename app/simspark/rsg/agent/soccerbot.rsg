@@ -1,7 +1,7 @@
 ; -*- mode: lisp; -*-
 
 ;
-; approximation of the Fujitsu Hoap-2 robot
+; possible base for the Atlanta 2007 robot
 ;
 
 (RubySceneGraph 0 1)
@@ -463,8 +463,8 @@
     (node Transform
         (setName rightlowerarm)
         (setLocalPos $RightLowerArmPosX $RightLowerArmPosY $RightLowerArmPosZ)
+	;(setLocalRotation 0 0 180)
         (importScene rsg/boxspheres/box.rsg $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass matGrey)
-	(setLocalRotation 0 0 180)
 
         ; install hinge joint to connect to the upper arm
         (node HingeJoint
@@ -488,37 +488,41 @@
 
 	; static hand
 	(node Transform
-	     (setLocalPos (eval -1 * (eval (eval $LowerarmLength / 2.0) - (eval $HandBox1Length / 2.0) - 0.06))
-			  0.0
-			  (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox1Height / 2.0)))
-	      )
-	     (node Box
-		   (setMaterial matGrey)
-		   (setExtents $HandBox1Length $HandBox1Width $HandBox1Height)
-	     )	     
-        )
-	
-	(node Transform
-	     (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox2Length / 2.0) - 0.06)
-			  0.0
-			  (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox2Height / 2.0)))
-	      )
-	     (node Box
-		   (setMaterial matGrey)
-		   (setExtents $HandBox2Length $HandBox2Width $HandBox2Height)
-	     )
-	)
+	      (setLocalRotation 0 0 180)
 
-	(node Transform
-	     (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox3Length / 2.0) - 0.06)
-			  0.0
-			  (eval -1 * (eval (eval $LowerarmHeight / 2.0) + $HandBox2Height + (eval $HandBox3Height / 2.0)))
+	      (node Transform
+		    (setLocalPos (eval -1 * (eval (eval $LowerarmLength / 2.0) - (eval $HandBox1Length / 2.0) - 0.06))
+				 0.0
+				 (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox1Height / 2.0)))
+		    )
+		    (node Box
+			  (setMaterial matGrey)
+			  (setExtents $HandBox1Length $HandBox1Width $HandBox1Height)
+		    )	     
+	       )
+	
+	      (node Transform
+		    (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox2Length / 2.0) - 0.06)
+				 0.0
+				 (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox2Height / 2.0)))
+	            )
+		    (node Box
+			  (setMaterial matGrey)
+			  (setExtents $HandBox2Length $HandBox2Width $HandBox2Height)
+	            )
 	      )
-	     (node Box
-		   (setMaterial matGrey)
-		   (setExtents $HandBox3Length $HandBox3Width $HandBox3Width)
-	     )
-	)	
+
+	      (node Transform
+		    (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox3Length / 2.0) - 0.06)
+				 0.0
+				 (eval -1 * (eval (eval $LowerarmHeight / 2.0) + $HandBox2Height + (eval $HandBox3Height / 2.0)))
+	            )
+		    (node Box
+			  (setMaterial matGrey)
+			  (setExtents $HandBox3Length $HandBox3Width $HandBox3Width)
+	            )
+	      )
+	 )
     )
 
     ;;; -------------------------------------
