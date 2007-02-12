@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: light.cpp,v 1.6 2004/04/12 13:36:39 rollmark Exp $
+   $Id: light.cpp,v 1.7 2007/02/12 19:45:38 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -158,7 +158,9 @@ void Light::RenderLitMesh(boost::shared_ptr<StaticMesh> /*mesh*/)
 
 void Light::FlushCache()
 {
-    const unsigned int n = mCachedIndices.size();
+    const unsigned int n 
+        = static_cast<unsigned int>(mCachedIndices.size());
+
     for (unsigned int i=0; i<n; ++i)
         {
             mCachedIndices[i].Flush();
