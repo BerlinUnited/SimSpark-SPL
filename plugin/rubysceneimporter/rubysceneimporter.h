@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.9 2005/12/18 17:52:32 rollmark Exp $
+   $Id: rubysceneimporter.h,v 1.10 2007/02/12 19:08:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ protected:
         boost::shared_ptr<zeitgeist::ParameterList> parameter;
         TMethodInvocationList invocationList;
 
-        ParamEnv();
+        ParamEnv() {};
         ParamEnv(boost::shared_ptr<zeitgeist::ParameterList> p)
             : parameter(p) {};
     };

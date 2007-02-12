@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.12 2005/12/18 17:52:32 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.13 2007/02/12 19:08:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -534,6 +534,8 @@ bool RubySceneImporter::InvokeMethods()
             const MethodInvocation& invoc = (*iter);
             Invoke(invoc);
         }
+
+    return true;
 }
 
 bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
