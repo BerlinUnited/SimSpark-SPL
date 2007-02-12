@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: stdmeshimporter.cpp,v 1.1 2004/04/22 17:07:32 rollmark Exp $
+   $Id: stdmeshimporter.cpp,v 1.2 2007/02/12 19:23:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -308,8 +308,8 @@ shared_ptr<TriMesh> StdMeshImporter::UnitCCylinder(const ParameterList& paramete
     int i,j;
     float tmp,nx,start_nx,start_ny;
 
-    float l = ccLength * 0.5;
-    float a = g2PI / n;
+    float l = ccLength * 0.5f;
+    float a = static_cast<float>(g2PI / n);
     float sa = gSin(a);
     float ca = gCos(a);
 
