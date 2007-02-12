@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.cpp,v 1.6 2005/12/31 13:53:56 jboedeck Exp $
+   $Id: hingejoint.cpp,v 1.7 2007/02/12 19:14:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,27 +84,30 @@ void HingeJoint::SetAxis(EAxisIndex idx)
     case AI_FIRST:
     {
         // calculate hinge axis (pos. x, relative to world transform)
-        Vector3f right(GetWorldTransform().Rotate(Vector3f(1,0,0)));
-        dJointSetHingeAxis(mODEJoint, right[0], right[1], right[2]);
+        SetAxis(Vector3f(1,0,0));
         break;
     }
     case AI_SECOND:
     {
-       // calculate hinge axis (pos. y, relative to world transform)
-        Vector3f forward(GetWorldTransform().Rotate(Vector3f(0,1,0)));
-        dJointSetHingeAxis(mODEJoint, forward[0], forward[1], forward[2]); 
+        // calculate hinge axis (pos. y, relative to world transform)
+        SetAxis(Vector3f(0,1,0));
         break;
     }
     case AI_THIRD:
     {
         // calculate hinge axis (pos. z, relative to world transform)
-        Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-        dJointSetHingeAxis(mODEJoint, up[0], up[1], up[2]);
+        SetAxis(Vector3f(0,0,1));
         break;
     }
     default:
         break;
     }
+}
+
+void HingeJoint::SetAxis(const Vector3f& axis)
+{
+    Vector3f absAxis(GetWorldTransform().Rotate(axis));
+    dJointSetHingeAxis(mODEJoint, absAxis[0], absAxis[1], absAxis[2]);
 }
 
 Vector3f HingeJoint::GetAxis()
@@ -129,7 +132,7 @@ void HingeJoint::SetParameter(int parameter, float value)
     dJointSetHingeParam(mODEJoint, parameter, value);
 }
 
-float HingeJoint::GetParameter(int parameter)
+float HingeJoint::GetParameter(int parameter) const
 {
     return dJointGetHingeParam(mODEJoint, parameter);
 }
