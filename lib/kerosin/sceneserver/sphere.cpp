@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sphere.cpp,v 1.8 2004/04/22 17:23:23 rollmark Exp $
+   $Id: sphere.cpp,v 1.9 2007/02/12 19:45:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,4 +50,5 @@ void Sphere::SetRadius(float radius)
     mScale[0] = radius;
     mScale[1] = radius;
     mScale[2] = radius;
+    CalcBoundingBox();
 }

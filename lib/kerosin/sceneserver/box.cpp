@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: box.cpp,v 1.4 2004/04/22 17:21:41 rollmark Exp $
+   $Id: box.cpp,v 1.5 2007/02/12 19:45:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ void Box::OnLink()
 void Box::SetExtents(const salt::Vector3f& extents)
 {
     mScale = extents;
+    CalcBoundingBox();
 }
 
 const Vector3f& Box::GetExtents()
