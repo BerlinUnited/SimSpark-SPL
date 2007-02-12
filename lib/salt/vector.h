@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: vector.h,v 1.7 2004/12/17 20:18:46 rollmark Exp $
+   $Id: vector.h,v 1.8 2007/02/12 19:08:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public:
                 rad = 2*M_PI - rad;
             }
 
-        return rad;
+        return static_cast<float>(rad);
     }
 
     float           GetAngleDeg() const

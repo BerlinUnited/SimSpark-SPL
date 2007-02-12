@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gmath.h,v 1.10 2006/02/08 12:25:16 jamu Exp $
+   $Id: gmath.h,v 1.11 2007/02/12 19:08:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,13 +152,13 @@ f_inline int gSign(TYPE a)
 template <class TYPE>
 f_inline TYPE gDegToRad(TYPE deg)
 {
-    return (static_cast<TYPE>(deg)) * (M_PI / 180.0);
+    return (static_cast<TYPE>(deg * (M_PI / 180.0)));
 }
 
 template <class TYPE>
 f_inline TYPE gRadToDeg(TYPE rad)
 {
-    return (static_cast<TYPE>(rad)) * (180.0 / M_PI);
+    return (static_cast<TYPE>(rad * (180.0 / M_PI)));
 }
 
 template <class TYPE>
