@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.cpp,v 1.12 2004/05/05 09:03:10 rollmark Exp $
+   $Id: basenode.cpp,v 1.13 2007/02/12 19:12:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,17 +50,14 @@ const salt::Matrix& BaseNode::GetLocalTransform() const
 
 const salt::Matrix& BaseNode::GetWorldTransform() const
 {
-    shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>
-        (make_shared(mParent));
-
-    // no parent, return identity
-    if (parent.get() == 0)
+    if (mParent.expired())
         {
             return mIdentityMatrix;
         } else
-            {
-                return parent->GetWorldTransform();
-            }
+        {
+            return shared_static_cast<BaseNode>
+                (mParent.lock())->GetWorldTransform();
+        }
 }
 
 void BaseNode::SetLocalTransform(const salt::Matrix& /*transform*/)
@@ -69,15 +66,13 @@ void BaseNode::SetLocalTransform(const salt::Matrix& /*transform*/)
 
 void BaseNode::SetWorldTransform(const salt::Matrix& transform)
 {
-    shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>
-        (make_shared(mParent));
-
-    if (parent.get() == 0)
+    if (mParent.expired())
         {
             return;
         }
 
-    parent->SetWorldTransform(transform);
+    shared_static_cast<BaseNode>
+        (mParent.lock())->SetWorldTransform(transform);
 }
 
 // This routine is responsible for updating the local bounding box of
@@ -149,7 +144,9 @@ void BaseNode::UpdateHierarchy()
 shared_ptr<Scene> BaseNode::GetScene()
 {
     // is this node the scene node ?
-    shared_ptr<Scene> self = shared_dynamic_cast<Scene>(make_shared(GetSelf()));
+    shared_ptr<Scene> self =
+        shared_dynamic_cast<Scene>(GetSelf().lock());
+
     if (self.get() != 0)
         {
             return self;
@@ -197,8 +194,9 @@ bool BaseNode::ImportScene(const string& fileName, shared_ptr<ParameterList> par
             return false;
         }
 
-    shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>
-        (make_shared(GetSelf()));
+    shared_ptr<BaseNode> node =
+        shared_dynamic_cast<BaseNode>(GetSelf().lock());
+
     return sceneServer->ImportScene(fileName,node,parameter);
 }
 
