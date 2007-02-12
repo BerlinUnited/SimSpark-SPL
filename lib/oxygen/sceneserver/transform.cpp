@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.cpp,v 1.9 2004/04/30 09:34:44 rollmark Exp $
+   $Id: transform.cpp,v 1.10 2007/02/12 19:10:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,18 +97,28 @@ void Transform::SetLocalPos(const salt::Vector3f &pos)
     UpdateHierarchyInternal();
 }
 
-void Transform::SetLocalRotation(const salt::Vector3f &rot)
+void Transform::SetLocalRotationRad(const salt::Vector3f &rot)
 {
     mChangedMark = SceneServer::GetTransformMark();
     mOldLocalTransform = mLocalTransform;
 
     Vector3f pos = mLocalTransform.Pos();
-    mLocalTransform.RotationX(gDegToRad(rot[0]));
-    mLocalTransform.RotateY(gDegToRad(rot[1]));
-    mLocalTransform.RotateZ(gDegToRad(rot[2]));
+    mLocalTransform.RotationX(rot[0]);
+    mLocalTransform.RotateY(rot[1]);
+    mLocalTransform.RotateZ(rot[2]);
     mLocalTransform.Pos() = pos;
 
     UpdateHierarchyInternal();
+}
+
+void Transform::SetLocalRotationDeg(const salt::Vector3f &rot)
+{
+    SetLocalRotationRad(Vector3f(
+                                 gDegToRad(rot[0]),
+                                 gDegToRad(rot[1]),
+                                 gDegToRad(rot[2])
+                                 )
+                        );
 }
 
 void Transform::OnLink()

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform_c.cpp,v 1.9 2004/04/28 14:41:03 rollmark Exp $
+   $Id: transform_c.cpp,v 1.10 2007/02/12 19:10:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ FUNCTION(Transform,setLocalRotation)
             return false;
         }
 
-    obj->SetLocalRotation(inRot);
+    obj->SetLocalRotationDeg(inRot);
     return true;
 }
 
