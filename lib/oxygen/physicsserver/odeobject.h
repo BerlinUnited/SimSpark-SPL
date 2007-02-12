@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h,v 1.7 2004/04/15 14:14:13 rollmark Exp $
+   $Id: odeobject.h,v 1.8 2007/02/12 22:10:33 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@
 #define OXYGEN_ODEOBJECT_H
 
 #include <oxygen/sceneserver/basenode.h>
-#include <ode/ode.h>
+//#include <ode/ode.h>
+#include "odewrapper.h"
 
 namespace oxygen
 {
