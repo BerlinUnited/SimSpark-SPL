@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fixedjoint.cpp,v 1.3 2006/12/13 10:59:16 jboedeck Exp $
+   $Id: fixedjoint.cpp,v 1.4 2007/02/12 19:17:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
     // no ode set param fkt. defined
 }
 
-float FixedJoint::GetParameter(int /*parameter*/)
+float FixedJoint::GetParameter(int /*parameter*/) const
 {
     // no ode get param fkt. defined
     return 0;

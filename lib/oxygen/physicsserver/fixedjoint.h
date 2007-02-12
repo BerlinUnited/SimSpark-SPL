@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fixedjoint.h,v 1.3 2006/12/13 10:59:16 jboedeck Exp $
+   $Id: fixedjoint.h,v 1.4 2007/02/12 19:17:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ protected:
     virtual void SetParameter(int parameter, float value);
 
     /** returns a joint parameter value */
-    virtual float GetParameter(int parameter);
+    virtual float GetParameter(int parameter) const;
 };
 
 DECLARE_CLASS(FixedJoint);

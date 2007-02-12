@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.cpp,v 1.5 2006/01/05 14:57:44 jboedeck Exp $
+   $Id: universaljoint.cpp,v 1.6 2007/02/12 19:13:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ void UniversalJoint::SetParameter(int parameter, float value)
     dJointSetUniversalParam(mODEJoint, parameter, value);
 }
 
-float UniversalJoint::GetParameter(int parameter)
+float UniversalJoint::GetParameter(int parameter) const
 {
     return dJointGetUniversalParam(mODEJoint, parameter);
 }

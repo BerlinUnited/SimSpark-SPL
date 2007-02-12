@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.h,v 1.5 2006/01/05 14:57:44 jboedeck Exp $
+   $Id: universaljoint.h,v 1.6 2007/02/12 19:13:43 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public:
 
     /** returns the vector describing one of the two axis
         (in local coordinates)
-        \param idx index of the desired axis 
+        \param idx index of the desired axis
     */
     salt::Vector3f GetAxis(EAxisIndex idx);
 
@@ -73,7 +73,7 @@ public:
     virtual void SetParameter(int parameter, float value);
 
     /** returns a joint parameter value */
-    virtual float GetParameter(int parameter);
+    virtual float GetParameter(int parameter) const;
 
 protected:
     /** creates a new universal joint */
