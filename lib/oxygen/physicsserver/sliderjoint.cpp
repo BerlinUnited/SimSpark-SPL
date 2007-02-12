@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: sliderjoint.cpp,v 1.3 2004/05/01 11:30:31 rollmark Exp $
+   $Id: sliderjoint.cpp,v 1.4 2007/02/12 19:14:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ void SliderJoint::SetParameter(int parameter, float value)
     dJointSetSliderParam(mODEJoint, parameter, value);
 }
 
-float SliderJoint::GetParameter(int parameter)
+float SliderJoint::GetParameter(int parameter) const
 {
     return dJointGetSliderParam(mODEJoint, parameter);
 }
