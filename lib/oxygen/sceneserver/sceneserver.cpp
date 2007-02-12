@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.16 2007/02/12 19:11:06 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.17 2007/02/12 22:19:19 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -191,12 +191,25 @@ void SceneServer::Update(float deltaTime)
 bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                               shared_ptr<ParameterList> parameter)
 {
-    if (! GetFile()->Exist(fileName))
-        {
-            GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
-                              << fileName << "'\n";
 
-            return false;
+        string pkgdatadir = PREFIX "/share/" PACKAGE_NAME;
+        string globalfile = pkgdatadir + "/" + fileName;
+        string file = fileName;
+
+        if (! GetFile()->Exist(fileName))
+        {
+            GetLog()->Debug() << "(ScriptServer) Cannot locate file '"
+                              << fileName << "', trying " << globalfile << "\n";
+
+            if (! GetFile()->Exist(globalfile))
+            {
+                GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
+                                  << fileName << "'\n";
+
+                return false;
+            }
+
+            file = globalfile;
         }
 
     if (root.get() == 0)
@@ -230,11 +243,11 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
             GetLog()->Debug()
                 << "(SceneServer) trying importer " << importer->GetName() << std::endl;
 
-            if (importer->ImportScene(fileName,root,parameter))
+            if (importer->ImportScene(file,root,parameter))
                 {
                     GetLog()->Normal()
                         << "(SceneServer) imported scene file '"
-                        << fileName << " with '"
+                        << file << " with '"
                         << importer->GetName()
                         << " at " << root->GetFullPath() << endl;
 
@@ -252,7 +265,7 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
         }
 
     GetLog()->Error() << "(SceneServer) ERROR: cannot import scene file '"
-                      << fileName << "'\n";
+                      << file << "'\n";
 
     return false;
 }
