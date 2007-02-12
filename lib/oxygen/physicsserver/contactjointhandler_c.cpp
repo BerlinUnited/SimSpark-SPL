@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler_c.cpp,v 1.7 2004/05/01 11:30:31 rollmark Exp $
+   $Id: contactjointhandler_c.cpp,v 1.8 2007/02/12 19:26:23 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ FUNCTION(ContactJointHandler,setMinBounceVel)
             return false;
         }
 
-    obj->SetMinBounceVel(inVel);
+    obj->SetMinBounceVel(static_cast<float>(inVel));
     return true;
 }
 
@@ -64,7 +64,7 @@ FUNCTION(ContactJointHandler,setContactBounceValue)
             return false;
         }
 
-    obj->SetBounceValue(inValue);
+    obj->SetBounceValue(static_cast<float>(inValue));
     return true;
 }
 
@@ -94,7 +94,7 @@ FUNCTION(ContactJointHandler,setContactSoftERP)
             return false;
         }
 
-    obj->SetContactSoftERP(inERP);
+    obj->SetContactSoftERP(static_cast<float>(inERP));
     return true;
 }
 
@@ -124,7 +124,7 @@ FUNCTION(ContactJointHandler,setContactSoftCFM)
             return false;
         }
 
-    obj->SetContactSoftCFM(inCFM);
+    obj->SetContactSoftCFM(static_cast<float>(inCFM));
     return true;
 }
 
@@ -154,7 +154,7 @@ FUNCTION(ContactJointHandler,setContactSlip)
             return false;
         }
 
-    obj->SetContactSlip(inSlip);
+    obj->SetContactSlip(static_cast<float>(inSlip));
     return true;
 }
 
@@ -169,7 +169,7 @@ FUNCTION(ContactJointHandler,setContactMu)
             return false;
         }
 
-    obj->SetContactMu(inMu);
+    obj->SetContactMu(static_cast<float>(inMu));
     return true;
 
 }
