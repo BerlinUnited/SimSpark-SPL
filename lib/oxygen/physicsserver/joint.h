@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.7 2004/05/02 11:44:41 rollmark Exp $
+   $Id: joint.h,v 1.8 2007/02/12 19:16:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ public:
         dJointTypeSlider, dJointTypeContact, dJointTypeUniversal,
         dJointTypeHinge2, dJointTypeFixed or dJointTypeAMotor.
      */
-    int GetType();
+    int GetType() const;
 
     /** returns true if the two given bodies are connected by a
         joint */
@@ -120,17 +120,17 @@ public:
 
     /** returns true if the joint is set to collect feedback
         information */
-    bool FeedBackEnabled();
+    bool FeedBackEnabled() const;
 
     /** queries the force that the joint applied to one body attached
         to it during the last timestep.
     */
-    salt::Vector3f GetFeedbackForce(EBodyIndex idx);
+    salt::Vector3f GetFeedbackForce(EBodyIndex idx) const;
 
     /** queries the torque that the joint applied to one body attached
         to it during the last timestep.
     */
-    salt::Vector3f GetFeedbackTorque(EBodyIndex idx);
+    salt::Vector3f GetFeedbackTorque(EBodyIndex idx) const;
 
     /** sets the bouncyness of the stops. This is a restitution
         parameter in the range 0..1. 0 means the stops are not bouncy
@@ -139,7 +139,7 @@ public:
     void SetBounce(EAxisIndex idx, float bounce);
 
     /** returns the bouncyness of the stops */
-    float GetBounce(EAxisIndex idx);
+    float GetBounce(EAxisIndex idx) const;
 
     /** sets the low stop angle in degrees, this stop must be greater
         than -180 to be effective
@@ -147,7 +147,7 @@ public:
     void SetLowStopDeg(EAxisIndex idx, float deg);
 
     /** returns the low stop angle in degrees */
-    float GetLowStopDeg(EAxisIndex idx);
+    float GetLowStopDeg(EAxisIndex idx) const;
 
     /** sets the high stop angle in degrees, this stop must be less
         than +180 to be effective
@@ -155,19 +155,19 @@ public:
     void SetHighStopDeg(EAxisIndex idx, float deg);
 
     /** returns the high stop angle in degrees */
-    float GetHighStopDeg(EAxisIndex idx);
+    float GetHighStopDeg(EAxisIndex idx) const;
 
     /** sets the low stop position */
     void SetLowStopPos(EAxisIndex idx, float deg);
 
     /** returns the low stop position */
-    float GetLowStopPos(EAxisIndex idx);
+    float GetLowStopPos(EAxisIndex idx) const;
 
     /** sets the high stop position */
     void SetHighStopPos(EAxisIndex idx, float deg);
 
     /** returns the high stop position */
-    float GetHighStopPos(EAxisIndex idx);
+    float GetHighStopPos(EAxisIndex idx) const;
 
     /** the constraint force mixing (CFM) value used when not at a
         stop */
@@ -175,7 +175,7 @@ public:
 
     /** returns the constraint force mixing value used when not a a
         stop */
-    float GetCFM(EAxisIndex idx);
+    float GetCFM(EAxisIndex idx) const;
 
     /** sets the constraint force mixing (CFM) value used by the
         stops. Together with the ERP value this can be used to get
@@ -186,13 +186,13 @@ public:
     void SetStopCFM(EAxisIndex idx, float cfm);
 
     /** returns the constraint force mixing value used by the stops */
-    float GetStopCFM(EAxisIndex idx);
+    float GetStopCFM(EAxisIndex idx) const;
 
     /** sets the error reduction parameter (ERP) used by the stops. */
     void SetStopERP(EAxisIndex idx, float erp);
 
     /** returns the error reduction parameter used by the stops */
-    float GetStopERP(EAxisIndex idx);
+    float GetStopERP(EAxisIndex idx) const;
 
     /** sets the suspension error reduction parameter (ERP). As of ode
         0.039 this is only implemented on the hinge-2 joint.
@@ -202,7 +202,7 @@ public:
     /** returns the suspension error reduction parameter (ERP). As of
         ode 0.039 this is only implemented on the hinge-2 joint.
     */
-    float GetSuspensionERP(EAxisIndex idx);
+    float GetSuspensionERP(EAxisIndex idx) const;
 
     /** sets the suspension constraint force mixing value. As of ode
         0.039 this is only implemented on the hinge-2 joint.
@@ -212,19 +212,19 @@ public:
     /** returns the suspension constraint force mixing value. As of
         ode 0.039 this is only implemented on the hinge-2 joint.
     */
-    float GetSuspensionCFM(EAxisIndex idx);
+    float GetSuspensionCFM(EAxisIndex idx) const;
 
     /** sets the linear motor velocity */
     void SetLinearMotorVelocity(EAxisIndex idx, float vel);
 
     /** returns the linear motor velocity */
-    float GetLinearMotorVelocity(EAxisIndex idx);
+    float GetLinearMotorVelocity(EAxisIndex idx) const;
 
     /** sets the angular motor velocity in degrees */
     void SetAngularMotorVelocity(EAxisIndex idx, float deg);
 
     /** returns the angular motor velocity in degrees */
-    float GetAngularMotorVelocity(EAxisIndex idx);
+    float GetAngularMotorVelocity(EAxisIndex idx) const;
 
     /** sets the maximum force or torque that the motor will use to
         achieve the desired velocity. This must always be greater than
@@ -236,7 +236,7 @@ public:
     /** returns the maximum force or torque that the motor will use to
         achieve the desired velocity.
     */
-    float GetMaxMotorForce(EAxisIndex idx);
+    float GetMaxMotorForce(EAxisIndex idx) const;
 
 protected:
     /** associated the created ODE joint with this node */
@@ -249,7 +249,7 @@ protected:
     virtual void SetParameter(int parameter, float value) = 0;
 
     /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) = 0;
+    virtual float GetParameter(int parameter) const = 0;
 
 protected:
     /** the managed ODE joint */

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.6 2005/12/18 18:06:18 rollmark Exp $
+   $Id: joint.cpp,v 1.7 2007/02/12 19:16:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -161,7 +161,7 @@ void Joint::Attach(const std::string& path1, const std::string& path2)
     Attach(body1,body2);
 }
 
-int Joint::GetType()
+int Joint::GetType() const
 {
     return dJointGetType(mODEJoint);
 }
@@ -181,7 +181,11 @@ bool Joint::AreConnected (shared_ptr<Body> body1, shared_ptr<Body> body2)
             return false;
         }
 
-    return dAreConnected(body1->GetODEBody(),body2->GetODEBody());
+    const bool connected =
+        (dAreConnected(body1->GetODEBody(),body2->GetODEBody())
+         == 1);
+
+    return connected;
 }
 
 bool Joint::AreConnectedExcluding (shared_ptr<Body> body1,
@@ -196,8 +200,14 @@ bool Joint::AreConnectedExcluding (shared_ptr<Body> body1,
             return false;
         }
 
-    return dAreConnectedExcluding(body1->GetODEBody(),body2->GetODEBody(),
-                                  joint_type);
+    const bool connected =
+        (dAreConnectedExcluding(body1->GetODEBody(),
+                                body2->GetODEBody(),
+                                joint_type
+                                )
+         == 1);
+
+    return connected;
 }
 
 void Joint::EnableFeedback(bool enable)
@@ -220,12 +230,12 @@ void Joint::EnableFeedback(bool enable)
     dJointSetFeedback(mODEJoint,mFeedback.get());
 }
 
-bool Joint::FeedBackEnabled()
+bool Joint::FeedBackEnabled() const
 {
     return (dJointGetFeedback(mODEJoint) != 0);
 }
 
-Vector3f Joint::GetFeedbackForce(EBodyIndex idx)
+Vector3f Joint::GetFeedbackForce(EBodyIndex idx) const
 {
     dJointFeedback* fb = mFeedback.get();
     if (fb == 0)
@@ -254,7 +264,7 @@ Vector3f Joint::GetFeedbackForce(EBodyIndex idx)
         }
 }
 
-Vector3f Joint::GetFeedbackTorque(EBodyIndex idx)
+Vector3f Joint::GetFeedbackTorque(EBodyIndex idx) const
 {
     dJointFeedback* fb = mFeedback.get();
     if (fb == 0)
@@ -288,7 +298,7 @@ void Joint::SetBounce(EAxisIndex idx, float bounce)
     SetParameter(dParamBounce + (idx * dParamGroup),bounce);
 }
 
-float Joint::GetBounce(EAxisIndex idx)
+float Joint::GetBounce(EAxisIndex idx) const
 {
     return GetParameter(dParamBounce + (idx * dParamGroup));
 }
@@ -298,7 +308,7 @@ void Joint::SetLowStopPos(EAxisIndex idx, float pos)
     SetParameter(dParamLoStop + (idx * dParamGroup), pos);
 }
 
-float Joint::GetLowStopPos(EAxisIndex idx)
+float Joint::GetLowStopPos(EAxisIndex idx) const
 {
     return GetParameter(dParamLoStop + (idx * dParamGroup));
 }
@@ -308,7 +318,7 @@ void Joint::SetHighStopPos(EAxisIndex idx, float pos)
     SetParameter(dParamHiStop + (idx * dParamGroup), pos);
 }
 
-float Joint::GetHighStopPos(EAxisIndex idx)
+float Joint::GetHighStopPos(EAxisIndex idx) const
 {
     return GetParameter(dParamHiStop + (idx * dParamGroup));
 }
@@ -318,7 +328,7 @@ void Joint::SetLowStopDeg(EAxisIndex idx, float deg)
     SetParameter(dParamLoStop + (idx * dParamGroup), gDegToRad(deg));
 }
 
-float Joint::GetLowStopDeg(EAxisIndex idx)
+float Joint::GetLowStopDeg(EAxisIndex idx) const
 {
     return gRadToDeg(GetParameter(dParamLoStop + (idx * dParamGroup)));
 }
@@ -328,7 +338,7 @@ void Joint::SetHighStopDeg(EAxisIndex idx, float deg)
     SetParameter(dParamHiStop + (idx * dParamGroup), gDegToRad(deg));
 }
 
-float Joint::GetHighStopDeg(EAxisIndex idx)
+float Joint::GetHighStopDeg(EAxisIndex idx) const
 {
     return gRadToDeg(GetParameter(dParamHiStop + (idx * dParamGroup)));
 }
@@ -338,7 +348,7 @@ void Joint::SetCFM(EAxisIndex idx, float cfm)
     SetParameter(dParamCFM + (idx * dParamGroup), cfm);
 }
 
-float Joint::GetCFM(EAxisIndex idx)
+float Joint::GetCFM(EAxisIndex idx) const
 {
     return GetParameter(dParamCFM + (idx * dParamGroup));
 }
@@ -348,7 +358,7 @@ void Joint::SetStopCFM(EAxisIndex idx, float cfm)
     SetParameter(dParamStopCFM + (idx * dParamGroup), cfm);
 }
 
-float Joint::GetStopCFM(EAxisIndex idx)
+float Joint::GetStopCFM(EAxisIndex idx) const
 {
     return GetParameter(dParamStopCFM + (idx * dParamGroup));
 }
@@ -358,7 +368,7 @@ void Joint::SetStopERP(EAxisIndex idx, float erp)
     SetParameter(dParamStopERP + (idx * dParamGroup), erp);
 }
 
-float Joint::GetStopERP(EAxisIndex idx)
+float Joint::GetStopERP(EAxisIndex idx) const
 {
     return GetParameter(dParamStopERP + (idx * dParamGroup));
 }
@@ -368,7 +378,7 @@ void Joint::SetSuspensionERP(EAxisIndex idx, float erp)
     SetParameter(dParamSuspensionERP + (idx * dParamGroup), erp);
 }
 
-float Joint::GetSuspensionERP(EAxisIndex idx)
+float Joint::GetSuspensionERP(EAxisIndex idx) const
 {
     return GetParameter(dParamSuspensionERP + (idx * dParamGroup));
 }
@@ -378,7 +388,7 @@ void Joint::SetSuspensionCFM(EAxisIndex idx, float cfm)
     SetParameter(dParamSuspensionCFM + (idx * dParamGroup), cfm);
 }
 
-float Joint::GetSuspensionCFM(EAxisIndex idx)
+float Joint::GetSuspensionCFM(EAxisIndex idx) const
 {
     return GetParameter(dParamSuspensionCFM + (idx * dParamGroup));
 }
@@ -388,7 +398,7 @@ void Joint::SetLinearMotorVelocity(EAxisIndex idx, float vel)
     SetParameter(dParamVel + (idx * dParamGroup), vel);
 }
 
-float Joint::GetLinearMotorVelocity(EAxisIndex idx)
+float Joint::GetLinearMotorVelocity(EAxisIndex idx) const
 {
     return GetParameter(dParamVel + (idx * dParamGroup));
 }
@@ -398,7 +408,7 @@ void Joint::SetAngularMotorVelocity(EAxisIndex idx, float deg)
     SetParameter(dParamVel + (idx * dParamGroup), gDegToRad(deg));
 }
 
-float Joint::GetAngularMotorVelocity(EAxisIndex idx)
+float Joint::GetAngularMotorVelocity(EAxisIndex idx) const
 {
     return gRadToDeg(GetParameter(dParamVel + (idx * dParamGroup)));
 }
@@ -408,7 +418,7 @@ void Joint::SetMaxMotorForce(EAxisIndex idx, float f)
     SetParameter(dParamFMax + (idx * dParamGroup), f);
 }
 
-float Joint::GetMaxMotorForce(EAxisIndex idx)
+float Joint::GetMaxMotorForce(EAxisIndex idx) const
 {
     return GetParameter(dParamFMax + (idx * dParamGroup));
 }
