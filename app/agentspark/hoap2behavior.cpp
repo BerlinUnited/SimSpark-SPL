@@ -236,9 +236,9 @@ string Hoap2Behavior::Think(const std::string& message)
             break;
         case ARM_ROTATE:
             curAngle = mHingeJointSenseMap[JID_RARM_3].angle;
-            if (curAngle < 90.0)
+            if (curAngle > -90.0)
             {
-                newAngle = gain * (90.0 - curAngle);
+                newAngle = gain * (-90.0 - curAngle);
                 ss << "(rarm_eff_3 " << newAngle << ")";
             }
             else    
