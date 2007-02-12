@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.9 2004/05/01 11:30:31 rollmark Exp $
+   $Id: body_c.cpp,v 1.10 2007/02/12 19:25:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -358,6 +358,21 @@ FUNCTION(Body,setPosition)
     return true;
 }
 
+FUNCTION(Body,translateMass)
+{
+    Vector3f inV;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(), inV))
+        )
+        {
+            return false;
+        }
+
+    obj->TranslateMass(inV);
+    return true;
+}
 
 void CLASS(Body)::DefineClass()
 {
@@ -382,4 +397,5 @@ void CLASS(Body)::DefineClass()
         DEFINE_FUNCTION(addTorque);
         DEFINE_FUNCTION(setPosition);
         DEFINE_FUNCTION(setMassParameters);
+        DEFINE_FUNCTION(translateMass);
 }

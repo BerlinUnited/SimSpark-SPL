@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.14 2004/05/01 11:30:31 rollmark Exp $
+   $Id: body.h,v 1.15 2007/02/12 19:25:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -141,6 +141,9 @@ public:
        is oriented along the body's z axis.
     */
     void SetCappedCylinderTotal(float total_mass, float radius, float length);
+
+    /** displace the mass center relative to the body frame */
+    void TranslateMass(const salt::Vector3f& v);
 
     /** returns the current linear velocity vector of this body */
     salt::Vector3f GetVelocity() const;

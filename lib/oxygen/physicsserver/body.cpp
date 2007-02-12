@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.19 2004/05/01 11:30:31 rollmark Exp $
+   $Id: body.cpp,v 1.20 2007/02/12 19:25:49 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -343,4 +343,11 @@ Body::GetPosition() const
 {
     const dReal* pos = dBodyGetPosition(mODEBody);
     return Vector3f(pos[0], pos[1], pos[2]);
+}
+
+void Body::TranslateMass(const salt::Vector3f& v)
+{
+    dMass m;
+    dBodyGetMass(mODEBody, &m);
+    dMassTranslate(&m,v[0],v[1],v[2]);
 }
