@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.15 2004/05/06 09:38:22 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.16 2007/02/12 19:11:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -199,6 +199,16 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
             return false;
         }
 
+    if (root.get() == 0)
+        {
+            GetLog()->Error()
+                << "(SceneServer) ERROR: NULL node given as ImportScene "
+                << "root node, fileName was " << fileName << "\n";
+        }
+
+    GetLog()->Debug() << "(SceneServer) ImportScene fileName=" << fileName
+                      << " root=" << root->GetFullPath() << "\n";
+
     TLeafList importer;
     ListChildrenSupportingClass<SceneImporter>(importer);
 
@@ -216,6 +226,9 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
         {
             shared_ptr<SceneImporter> importer =
                 shared_static_cast<SceneImporter>(*iter);
+
+            GetLog()->Debug()
+                << "(SceneServer) trying importer " << importer->GetName() << std::endl;
 
             if (importer->ImportScene(fileName,root,parameter))
                 {
