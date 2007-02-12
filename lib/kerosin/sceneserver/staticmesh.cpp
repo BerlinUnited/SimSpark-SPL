@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.12 2004/05/01 13:46:53 rollmark Exp $
+   $Id: staticmesh.cpp,v 1.13 2007/02/12 19:43:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ void StaticMesh::CalcBoundingBox()
             return;
         }
 
-    const int n = mMesh->GetVertexCount() * 3;
+    const int n = mMesh->GetVertexCount();
 
     const float* arPos = mMesh->GetPos().get();
     if (arPos == 0)
@@ -155,7 +155,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
     mMeshParameter = parameter;
     mMesh.reset();
     mMaterials.clear();
-    ComputeBoundingBox();
+    CalcBoundingBox();
 
     shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
         (GetCore()->Get("/sys/server/geometry"));
@@ -184,7 +184,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
             return false;
         }
 
-    ComputeBoundingBox();
+    CalcBoundingBox();
 
     // load corresponding materials
     for (
