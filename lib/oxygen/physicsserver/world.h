@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: world.h,v 1.7 2006/12/13 11:00:17 jboedeck Exp $
+   $Id: world.h,v 1.8 2007/02/12 19:12:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,6 +48,9 @@ public:
 
     /** sets the gravity vector of this vorld */
     void SetGravity(const salt::Vector3f& gravity);
+
+    /** gets the gravity vector of this world */
+    salt::Vector3f GetGravity() const;
 
     /** sets the Error Reduction Parameter of this world. The ERP
         specifies what proportion of a joint error will be fixed

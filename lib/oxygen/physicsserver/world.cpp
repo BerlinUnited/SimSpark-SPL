@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: world.cpp,v 1.6 2006/12/13 11:00:18 jboedeck Exp $
+   $Id: world.cpp,v 1.7 2007/02/12 19:12:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,13 @@ void World::SetGravity(const Vector3f& gravity)
                    gravity.y(),
                    gravity.z()
                    );
+}
+
+salt::Vector3f World::GetGravity() const
+{
+  dVector3 dGravity;
+  dWorldGetGravity(mODEWorld,dGravity);
+  return Vector3f(dGravity[0],dGravity[1],dGravity[2]);
 }
 
 void World::SetERP(float erp)
