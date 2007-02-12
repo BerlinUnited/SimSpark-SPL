@@ -279,7 +279,7 @@ string SoccerbotBehavior::Think(const std::string& message)
 //    cout << "+++" << endl;
 //    cout << "current angle: " << curAngle  << endl;
 //    cout << "desired angle: " << newAngle  << endl;
-    cout << "(Behavior) sending string " << ss.str() << " to server" << endl;
+//    cout << "(Behavior) sending string " << ss.str() << " to server" << endl;
 //    cout << "State is " << state << endl;
 //    cout << "---" << endl;
 
