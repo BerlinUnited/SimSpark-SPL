@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.cpp,v 1.9 2004/04/25 16:33:30 rollmark Exp $
+   $Id: class.cpp,v 1.10 2007/02/12 19:46:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -131,6 +131,11 @@ void Class::SetBundle(const boost::shared_ptr<salt::SharedLibrary> &bundle)
     mBundle = bundle;
 }
 
+const Class::TCommandMap& Class::GetCommandMap() const
+{
+    return mFunctions;
+}
+
 Class::TCmdProc Class::GetCmdProc(const std::string &functionName) const
 {
     TCommandMap::const_iterator cmd = mFunctions.find(functionName);
@@ -217,4 +222,9 @@ bool Class::SupportsClass(const std::string &name) const
     }
 
     return false;
+}
+
+boost::shared_ptr<salt::SharedLibrary> Class::GetBundle() const
+{
+    return mBundle;
 }

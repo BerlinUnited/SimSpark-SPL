@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.h,v 1.12 2004/04/10 08:55:46 rollmark Exp $
+   $Id: class.h,v 1.13 2007/02/12 19:46:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -151,16 +151,17 @@ public:
     typedef GCValue (*TCmdProc)(Object* , const zeitgeist::ParameterList &in);
     typedef std::list<std::string> TStringList;
 
-private:
-    /** defines a list of pointers to object instances */
-    typedef std::list< boost::weak_ptr<Object> > TObjectList;
-
     /** defines a mapping from member names to command procedures */
 #ifdef HAVE_HASH_MAP
     typedef std::hash_map<std::string, TCmdProc> TCommandMap;
 #else
     typedef std::map<std::string, TCmdProc> TCommandMap;
 #endif
+
+private:
+    /** defines a list of pointers to object instances */
+    typedef std::list< boost::weak_ptr<Object> > TObjectList;
+
 
     //
     // functions
@@ -195,6 +196,12 @@ public:
      *  procedure is registered
      */
     bool SupportsCommand(const std::string &name) const;
+
+    /** returns the command map of this class */
+    const TCommandMap& GetCommandMap() const;
+
+    /** a shared pointer to the bundle, this class object came from */
+    boost::shared_ptr<salt::SharedLibrary>  GetBundle() const;
 
 protected:
     /** adds an instance to the local list of instances */
