@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.24 2006/05/16 10:07:03 jamu Exp $
+   $Id: scriptserver.cpp,v 1.25 2007/02/12 22:22:23 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -273,15 +273,28 @@ ScriptServer::Run(shared_ptr<salt::RFile> file)
     return ok;
 }
 
-bool
+bool    
 ScriptServer::Run(const string &fileName)
 {
     shared_ptr<salt::RFile> file = GetFile()->Open(fileName.c_str());
     if (file.get() == 0)
     {
-        GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate file '"
-                          << fileName << "'\n";
-        return false;
+        // some macro magic (not at all)
+        string pkgdatadir = PREFIX "/share/" PACKAGE_NAME;
+        string globalfile = pkgdatadir + "/" + fileName;
+
+        GetLog()->Debug() << "(ScriptServer) Cannot locate file '"
+                          << fileName << "', trying " << globalfile << "\n";
+
+        file = GetFile()->Open(globalfile.c_str());
+        
+        if (file.get() == 0)
+        {
+            GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate file '"
+                              << fileName << "'\n";
+            return false;
+        }
+        
     }
 
     GetLog()->Debug() << "(ScriptServer) Running " << fileName << endl;
