@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.8 2004/04/15 19:55:08 rollmark Exp $
+   $Id: contactjointhandler.cpp,v 1.9 2007/02/12 19:21:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -168,6 +168,12 @@ ContactJointHandler::SetSurfaceParameter(const dSurfaceParameters& surface)
     mSurfaceParameter = surface;
 }
 
+const dSurfaceParameters&
+ContactJointHandler::SetSurfaceParameter() const
+{
+    return mSurfaceParameter;
+}
+
 void
 ContactJointHandler::SetContactMode(int mode, bool set)
 {
@@ -178,6 +184,12 @@ ContactJointHandler::SetContactMode(int mode, bool set)
             {
                 mSurfaceParameter.mode &= ~mode;
             }
+}
+
+int
+ContactJointHandler::GetContactMode() const
+{
+    return mSurfaceParameter.mode;
 }
 
 void
@@ -192,10 +204,22 @@ ContactJointHandler::SetMinBounceVel(float vel)
     mSurfaceParameter.bounce_vel = std::max<float>(0.0f,vel);
 }
 
+float
+ContactJointHandler::GetMinBounceVel() const
+{
+    return mSurfaceParameter.bounce_vel;
+}
+
 void
 ContactJointHandler::SetBounceValue(float bounce)
 {
     mSurfaceParameter.bounce = std::max<float>(0.0f,bounce);
+}
+
+float
+ContactJointHandler::GetBounceValue() const
+{
+    return mSurfaceParameter.bounce;
 }
 
 void
@@ -211,6 +235,12 @@ ContactJointHandler::SetContactSoftERP(float erp)
     mSurfaceParameter.soft_erp = erp;
 }
 
+float
+ContactJointHandler::GetContactSoftERP() const
+{
+    return mSurfaceParameter.soft_erp;
+}
+
 void
 ContactJointHandler::SetContactSoftCFMMode(bool set)
 {
@@ -221,6 +251,11 @@ void
 ContactJointHandler::SetContactSoftCFM(float cfm)
 {
     mSurfaceParameter.soft_cfm = std::max<float>(0.0f,cfm);
+}
+
+float ContactJointHandler::GetContactSoftCFM() const
+{
+    return mSurfaceParameter.soft_cfm;
 }
 
 void ContactJointHandler::SetContactSlipMode (bool set)
@@ -235,10 +270,28 @@ void ContactJointHandler::SetContactSlip(float slip)
     mSurfaceParameter.slip2 = slip;
 }
 
+float
+ContactJointHandler::GetContactSlip1() const
+{
+    return mSurfaceParameter.slip1;
+}
+
+float
+ContactJointHandler::GetContactSlip2() const
+{
+    return mSurfaceParameter.slip2;
+}
+
 void ContactJointHandler::SetContactMu(float mu)
 {
     mSurfaceParameter.mu = mu;
 }
+
+float ContactJointHandler::GetContactMu() const
+{
+    return mSurfaceParameter.mu;
+}
+
 
 
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.6 2004/04/15 19:55:07 rollmark Exp $
+   $Id: contactjointhandler.h,v 1.7 2007/02/12 19:22:02 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,8 +62,18 @@ public:
     */
     void SetSurfaceParameter(const dSurfaceParameters& surface);
 
+    /** returns the surface parameters for the contact joints taht the
+        CollisionHandler creates
+    */
+    const dSurfaceParameters& SetSurfaceParameter() const;
+
     /** sets or resets a contact mode flag in the surface parameter*/
     void SetContactMode(int mode, bool set);
+
+    /** returns the current set of contact mode flags in the surface
+        parameter
+     */
+    int GetContactMode() const;
 
     /** sets or resets the dContactBounce mode flag */
     void SetContactBounceMode(bool set);
@@ -71,8 +81,14 @@ public:
     /** sets the bounce value */
     void SetBounceValue(float bounce);
 
+    /** returns the bounce value */
+    float GetBounceValue() const;
+
     /** sets the mininum incoming velocity necessary for bounce */
     void SetMinBounceVel(float vel);
+
+    /** returns the mininum incoming velocity necessary for bounce */
+    float GetMinBounceVel() const;
 
     /** sets or resets the error reduction parameter (ERP) mode,
         useful to make surfaces soft
@@ -82,25 +98,44 @@ public:
     /** sets the contact normal error reduction parameter (ERP) */
     void SetContactSoftERP(float erp);
 
+    /** returns the contact normal error reduction parameter (ERP) */
+    float GetContactSoftERP() const;
+
     /** sets or resets the constraint force mixing mode (CFM), useful
         to make surfaces soft
     */
     void SetContactSoftCFMMode(bool set);
 
-    /** sets the constraint force mixing parameter (CFM)
-    */
+    /** sets the constraint force mixing parameter (CFM) */
     void SetContactSoftCFM(float cfm);
+
+    /** returns the constraint force mixing parameter (CFM) */
+    float GetContactSoftCFM() const;
 
     /** sets or resets the force dependent contact slip mode (FDS)
      */
     void SetContactSlipMode (bool set);
 
-    /** sets the force dependent slip (FDS)
-     */
+    /** sets the force dependent slip (FDS) in both friction
+        directions
+    */
     void SetContactSlip(float slip);
+
+    /** returns the force dependent slip in the first slip direction
+        (FDS)
+    */
+    float GetContactSlip1() const;
+
+    /** returns the force dependent slip in the second slip direction
+        (FDS)
+    */
+    float GetContactSlip2() const;
 
     /** sets the Coulomb friction coefficient */
     void SetContactMu(float mu);
+
+    /** returns the Coulomb friction coefficient */
+    float GetContactMu() const;
 
 protected:
     f_inline float MixValues(const float v1, const float v2, const int n) const;
