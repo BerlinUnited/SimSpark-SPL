@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: balljoint.cpp,v 1.5 2004/05/01 11:30:31 rollmark Exp $
+   $Id: balljoint.cpp,v 1.6 2007/02/12 19:24:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ void BallJoint::SetParameter(int /*parameter*/, float /*value*/)
     // no ode set param fkt. defined
 }
 
-float BallJoint::GetParameter(int /*parameter*/)
+float BallJoint::GetParameter(int /*parameter*/) const
 {
     // no ode get param fkt. defined
     return 0;

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: dragcontroller.cpp,v 1.1 2004/04/05 08:45:45 rollmark Exp $
+   $Id: dragcontroller.cpp,v 1.2 2007/02/12 19:19:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ void DragController::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 }
 
-float DragController::GetLinearDrag()
+float DragController::GetLinearDrag() const
 {
     return mLinearDrag;
 }
@@ -65,7 +65,7 @@ void DragController::SetLinearDrag(float d)
     mLinearDrag = d;
 }
 
-float DragController::GetAngularDrag()
+float DragController::GetAngularDrag() const
 {
     return mAngularDrag;
 }

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: dragcontroller.h,v 1.1 2004/04/05 08:45:45 rollmark Exp $
+   $Id: dragcontroller.h,v 1.2 2007/02/12 19:19:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,13 +38,13 @@ public:
     virtual ~DragController();
 
     // returns the applied linear drag
-    float GetLinearDrag();
+    float GetLinearDrag() const;
 
     // sets the applied linear drag
     void SetLinearDrag(float d);
 
     // returns the applied angular drag
-    float GetAngularDrag();
+    float GetAngularDrag() const;
 
     // sets the applied angular drag
     void SetAngularDrag(float d);
