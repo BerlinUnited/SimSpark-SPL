@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.8 2007/02/05 06:51:01 jboedeck Exp $
+   $Id: main.cpp,v 1.9 2007/02/12 06:59:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -157,12 +157,12 @@ bool GetMessage(string& msg)
     static char buffer[16 * 1024];
 
     unsigned int bytesRead = read(gSocket.getFD(), buffer, sizeof(buffer));
-    cerr << "buffer = |" << string(buffer+1) << "|\n";
-    cerr << "bytesRead = |" << bytesRead << "|\n";
-    cerr << "Size of buffer = |" << sizeof(buffer) << "|\n";
-    cerr << "buffer = |" << buffer << "|\n";
-    cerr << "buffer[5] = |" << buffer[5] << "|\n";
-    printf ("xxx-%s\n", buffer+5);
+    //cerr << "buffer = |" << string(buffer+1) << "|\n";
+    //cerr << "bytesRead = |" << bytesRead << "|\n";
+    //cerr << "Size of buffer = |" << sizeof(buffer) << "|\n";
+    //cerr << "buffer = |" << buffer << "|\n";
+    //cerr << "buffer[5] = |" << buffer[5] << "|\n";
+    //printf ("xxx-%s\n", buffer+5);
     
     if (bytesRead < sizeof(unsigned int))
     {
@@ -171,12 +171,12 @@ bool GetMessage(string& msg)
 
     // msg is prefixed with it's total length
     unsigned int msgLen = ntohl(*(unsigned int*)buffer);
-    cerr << "GM 6 / " << msgLen << "\n";
+    //cerr << "GM 6 / " << msgLen << "\n";
 
     // read remaining message segments
     unsigned int msgRead = bytesRead - sizeof(unsigned int);
 
-    cerr << "msgRead = |" << msgRead << "|\n";
+    //cerr << "msgRead = |" << msgRead << "|\n";
 
     char *offset = buffer + bytesRead;
 
@@ -188,7 +188,7 @@ bool GetMessage(string& msg)
         }
 
         msgRead += read(gSocket.getFD(), offset, sizeof(buffer) - msgRead);
-        cerr << "msgRead = |" << msgRead << "|\n";
+        //cerr << "msgRead = |" << msgRead << "|\n";
         offset += msgRead;
     }
 
