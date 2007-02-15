@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.9 2006/12/13 10:59:45 jboedeck Exp $
+   $Id: space.cpp,v 1.10 2007/02/15 21:32:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
     space->HandleCollide(obj1, obj2);
 }
 
-Space::Space() : mODESpace(0), mODEContactGroup(0)
+Space::Space() : ODEObject(), mODESpace(0), mODEContactGroup(0)
 {
 }
 
