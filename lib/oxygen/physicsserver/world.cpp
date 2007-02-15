@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: world.cpp,v 1.7 2007/02/12 19:12:59 rollmark Exp $
+   $Id: world.cpp,v 1.8 2007/02/15 21:32:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 using namespace oxygen;
 using namespace salt;
 
-World::World() : mODEWorld(0)
+World::World() : ODEObject(), mODEWorld(0)
 {
 }
 
@@ -88,7 +88,7 @@ void World::Step(float deltaTime)
 
 bool World::GetAutoDisableFlag() const
 {
-  return (static_cast<bool>(dWorldGetAutoDisableFlag(mODEWorld)));
+  return (dWorldGetAutoDisableFlag(mODEWorld) == 1);
 }
 
 void World::SetAutoDisableFlag(bool flag)
