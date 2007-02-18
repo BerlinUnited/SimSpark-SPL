@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.13 2007/02/12 19:08:10 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.14 2007/02/18 13:05:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -344,7 +344,10 @@ bool RubySceneImporter::ReplaceVariable(string& param)
 
     int idx = (*iter).second;
 
-    if (idx >= env.parameter->GetSize())
+    if (
+        (idx < 0) ||
+        (idx >= env.parameter->GetSize())
+        )
         {
             GetLog()->Error()
                 << "(RubySceneImporter) ERROR: in file '"
@@ -644,7 +647,8 @@ bool RubySceneImporter::ParseDefine(sexp_t* sexp)
         {
             // create a new variable
             env.parameter->AddValue(value);
-            env.parameterMap[varname] = (env.parameterMap.size() - 1);
+            int idx = (static_cast<int>(env.parameterMap.size()));
+            env.parameterMap[varname] = idx;
         } else
         {
             // update value of existing variable
