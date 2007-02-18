@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.13 2007/02/12 19:43:37 rollmark Exp $
+   $Id: staticmesh.cpp,v 1.14 2007/02/18 13:05:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,7 +75,10 @@ void StaticMesh::CalcBoundingBox()
 
 void StaticMesh::RenderInternal()
 {
-    if (mMesh.get() == 0)
+    if (
+        (mMesh.get() == 0) ||
+        (mMaterials.empty())
+        )
         {
             return;
         }
