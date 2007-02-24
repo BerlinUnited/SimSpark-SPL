@@ -183,31 +183,7 @@
         (node FixedJoint
             (attach ../sphereBody ../../body/boxBody)
 	    (setFixed)
-            ;(setAnchor $TorsoPosX (eval $TorsoPosY - 0.1) (eval $TorsoPosZ + (eval $TorsoBox1Height / 2.0) + $NeckHeight))
-            ;(setAxis 0) ; move around the x-axis
-
-            ; enable the joint motor
-            ;(setMaxMotorForce 0 100)
-
         )
-;        (node HingeJoint
-;            (attach ../sphereBody ../../neck/boxBody)
-;            (setAnchor $TorsoPosX (eval $TorsoPosY - 0.1) (eval $TorsoPosZ + (eval $TorsoBox1Height / 2.0) + $NeckHeight))
-;            (setAxis 0) ; move around the x-axis
-
-;            ; enable the joint motor
-;            (setMaxMotorForce 0 100)
-
-;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName head_joint_1)
-;            )
-
-;            ; install an effector to control the joint motor
-;            (node HingeEffector
-;                (setName head_eff_1)
-;            )
-;        )
     )
 
     ;;; -------------------------------------
@@ -254,9 +230,9 @@
             (setMaxMotorForce 1 100)           
 
             ; install a perceptor
-;            (node UniversalJointPerceptor
-;                (setName larm_joint_1_2)
-;            )
+            (node UniversalJointPerceptor
+                (setName larm_joint_1_2)
+            )
 
             ; install an effector to control the joint motors
             (node UniversalJointEffector
@@ -284,9 +260,9 @@
 		(setMaxMotorForce 1 100)           
 
 ;                ; install a perceptor
-;                (node UniversalJointPerceptor
-;                    (setName rarm_joint_1_2)
-;		)
+                (node UniversalJointPerceptor
+                    (setName rarm_joint_1_2)
+		)
 
                 ; install an effector to control the joint motors
                 (node UniversalJointEffector
@@ -321,9 +297,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName larm_joint_3)
-;            )
+            (node HingePerceptor
+                (setName larm_joint_3)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -359,9 +335,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName rarm_joint_3)
-;            )
+            (node HingePerceptor
+                (setName rarm_joint_3)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -414,9 +390,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName larm_joint_4)
-;            )
+            (node HingePerceptor
+                (setName larm_joint_4)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -476,9 +452,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName rarm_joint_4)
-;            )
+            (node HingePerceptor
+                (setName rarm_joint_4)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -554,9 +530,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName lleg_joint_1)
-;            )
+            (node HingePerceptor
+                (setName lleg_joint_1)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -581,9 +557,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName rleg_joint_1)
-;            )
+            (node HingePerceptor
+                (setName rleg_joint_1)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -618,9 +594,9 @@
             (setMaxMotorForce 1 100)           
 
 ;            ; install a perceptor
-;            (node UniversalJointPerceptor
-;                (setName lleg_joint_2_3)
-;            )
+            (node UniversalJointPerceptor
+                (setName lleg_joint_2_3)
+            )
 
             ; install an effector to control the joint motors
             (node UniversalJointEffector
@@ -647,9 +623,9 @@
             (setMaxMotorForce 1 100)           
 
 ;            ; install a perceptor
-;            (node UniversalJointPerceptor
-;                (setName rleg_joint_2_3)
-;            )
+            (node UniversalJointPerceptor
+                (setName rleg_joint_2_3)
+            )
 
             ; install an effector to control the joint motors
             (node UniversalJointEffector
@@ -682,9 +658,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName lleg_joint_4)
-;            )
+            (node HingePerceptor
+                (setName lleg_joint_4)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -709,9 +685,9 @@
             (setMaxMotorForce 0 100)
 
 ;            ; install a perceptor
-;            (node HingePerceptor
-;                (setName rleg_joint_4)
-;            )
+            (node HingePerceptor
+                (setName rleg_joint_4)
+            )
 
             ; install an effector to control the joint motors
             (node HingeEffector
@@ -741,9 +717,9 @@
            (setMaxMotorForce 1 100)           
 
 ;            ; install a perceptor
-;          (node UniversalJointPerceptor
-;              (setName lleg_joint_5_6)
-;         )
+          (node UniversalJointPerceptor
+              (setName lleg_joint_5_6)
+         )
 
             ; install an effector to control the joint motors
             (node UniversalJointEffector
@@ -785,9 +761,9 @@
             (setMaxMotorForce 1 100)           
 
 ;            ; install a perceptor
-;            (node UniversalJointPerceptor
-;                (setName rleg_joint_5_6)
-;            )
+            (node UniversalJointPerceptor
+                (setName rleg_joint_5_6)
+            )
 
             ; install an effector to control the joint motors
             (node UniversalJointEffector
