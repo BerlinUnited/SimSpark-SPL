@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.16 2006/03/12 14:11:22 fruit Exp $
+   $Id: visionperceptor.cpp,v 1.17 2007/02/25 18:02:10 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ VisionPerceptor::VisionPerceptor() : Perceptor(),
                                      mStaticSenseAxis(true)
 {
     // set predicate name
-    SetPredicateName("Vision");
+    SetPredicateName("See");
     // set some default noise values
     SetNoiseParams(0.0965, 0.1225, 0.1480, 0.005);
 }
@@ -161,7 +161,8 @@ void VisionPerceptor::AddSense(oxygen::Predicate& predicate, ObjectData& od) con
     ParameterList& element = predicate.parameter.AddList();
     element.AddValue(od.mObj->GetPerceptName());
 
-    if(od.mObj->GetPerceptName() == "Player")
+//    if(od.mObj->GetPerceptName() == "Player")
+    if(od.mObj->GetPerceptName() == "P")
         {
             ParameterList player;
             player.AddValue(std::string("team"));
