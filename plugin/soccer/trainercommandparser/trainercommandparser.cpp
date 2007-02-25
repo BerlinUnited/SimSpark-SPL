@@ -357,7 +357,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
 
         if (SoccerBase::GetBallBody(*this, body))
         {
-            // set new velocity in the body
+            // set new position in the body
             body->SetPosition(pos);
         }
         else
