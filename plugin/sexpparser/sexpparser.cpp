@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.5 2004/04/05 14:51:36 rollmark Exp $
+   $Id: sexpparser.cpp,v 1.6 2007/02/25 17:35:19 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -121,6 +121,9 @@ void
 SexpParser::ListToString(stringstream& ss, const ParameterList& lst)
 {
     string space;
+
+    ss.setf(ios_base::fixed,ios_base::floatfield);
+    ss.precision(2);
 
     for (
          ParameterList::TVector::const_iterator i = lst.begin();
