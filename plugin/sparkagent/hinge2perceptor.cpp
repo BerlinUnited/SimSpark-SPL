@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2perceptor.cpp,v 1.1 2004/05/07 12:14:51 rollmark Exp $
+   $Id: hinge2perceptor.cpp,v 1.2 2007/02/25 18:01:02 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ void Hinge2Perceptor::OnUnlink()
 void Hinge2Perceptor::InsertAxisAngle(Predicate& predicate, Joint::EAxisIndex idx)
 {
     ParameterList& axisElement = predicate.parameter.AddList();
-    axisElement.AddValue(string("axis"));
+    axisElement.AddValue(string("ax"));
     axisElement.AddValue(static_cast<int>(idx));
     axisElement.AddValue(mJoint->GetAngle(idx));
 }
@@ -63,7 +63,7 @@ void Hinge2Perceptor::InsertAxisAngle(Predicate& predicate, Joint::EAxisIndex id
 void Hinge2Perceptor::InsertAxisRate(Predicate& predicate, Joint::EAxisIndex idx)
 {
     ParameterList& axisElement = predicate.parameter.AddList();
-    axisElement.AddValue(string("rate"));
+    axisElement.AddValue(string("rt"));
     axisElement.AddValue(static_cast<int>(idx));
     axisElement.AddValue(mJoint->GetAngleRate(idx));
 }
@@ -76,7 +76,7 @@ bool Hinge2Perceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
         }
 
     Predicate& predicate = predList->AddPredicate();
-    predicate.name = "hinge2";
+    predicate.name = "H2J";
     predicate.parameter.Clear();
 
     ParameterList& nameElement = predicate.parameter.AddList();
@@ -84,7 +84,7 @@ bool Hinge2Perceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
     nameElement.AddValue(GetName());
 
     InsertAxisAngle(predicate,Joint::AI_FIRST);
-    InsertAxisRate(predicate,Joint::AI_SECOND);
+//    InsertAxisRate(predicate,Joint::AI_SECOND);
 
     return true;
 }

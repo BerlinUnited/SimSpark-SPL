@@ -53,14 +53,14 @@ void HingePerceptor::OnUnlink()
 void HingePerceptor::InsertAxisAngle(Predicate& predicate)
 {
     ParameterList& axisElement = predicate.parameter.AddList();
-    axisElement.AddValue(string("axis"));
+    axisElement.AddValue(string("ax"));
     axisElement.AddValue(mJoint->GetAngle());
 }
 
 void HingePerceptor::InsertAxisRate(Predicate& predicate)
 {
     ParameterList& axisElement = predicate.parameter.AddList();
-    axisElement.AddValue(string("rate"));
+    axisElement.AddValue(string("rt"));
     axisElement.AddValue(mJoint->GetAngleRate());
 }
 
@@ -80,7 +80,7 @@ bool HingePerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
     nameElement.AddValue(GetName());
 
     InsertAxisAngle(predicate);
-    InsertAxisRate(predicate);
+    //InsertAxisRate(predicate);
 
     return true;
 }

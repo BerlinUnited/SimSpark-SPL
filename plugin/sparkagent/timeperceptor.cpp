@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timeperceptor.cpp,v 1.1 2004/05/07 12:12:40 rollmark Exp $
+   $Id: timeperceptor.cpp,v 1.2 2007/02/25 18:01:01 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,9 +67,9 @@ bool TimePerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
     nowElement.AddValue(string("now"));
     nowElement.AddValue(mSimulationServer->GetTime());
 
-    ParameterList& stepElement = predicate.parameter.AddList();
-    stepElement.AddValue(string("step"));
-    stepElement.AddValue(mSimulationServer->GetSimStep());
+//     ParameterList& stepElement = predicate.parameter.AddList();
+//     stepElement.AddValue(string("st"));
+//     stepElement.AddValue(mSimulationServer->GetSimStep());
 
     return true;
 }

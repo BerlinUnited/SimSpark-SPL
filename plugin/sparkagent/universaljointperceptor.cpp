@@ -55,12 +55,12 @@ void UniversalJointPerceptor::InsertAxisAngle(Predicate& predicate, Joint::EAxis
     ParameterList& axisElement = predicate.parameter.AddList();
     if (idx == Joint::AI_FIRST)
     {
-        axisElement.AddValue(string("axis1"));
+        axisElement.AddValue(string("ax1"));
         axisElement.AddValue(mJoint->GetAngle(Joint::AI_FIRST));
     }
     else
     {
-        axisElement.AddValue(string("axis2"));
+        axisElement.AddValue(string("ax2"));
         axisElement.AddValue(mJoint->GetAngle(Joint::AI_SECOND));
     }
 }
@@ -70,12 +70,12 @@ void UniversalJointPerceptor::InsertAxisRate(Predicate& predicate, Joint::EAxisI
     ParameterList& axisElement = predicate.parameter.AddList();
     if (idx == Joint::AI_FIRST)
     {
-        axisElement.AddValue(string("rate1"));
+        axisElement.AddValue(string("rt1"));
         axisElement.AddValue(mJoint->GetAngleRate(Joint::AI_FIRST));
     }
     else
     {
-        axisElement.AddValue(string("rate2"));
+        axisElement.AddValue(string("rt2"));
         axisElement.AddValue(mJoint->GetAngleRate(Joint::AI_SECOND));
     }
 }
@@ -96,9 +96,9 @@ bool UniversalJointPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> p
     nameElement.AddValue(GetName());
 
     InsertAxisAngle(predicate, Joint::AI_FIRST);
-    InsertAxisRate(predicate, Joint::AI_FIRST);
+//    InsertAxisRate(predicate, Joint::AI_FIRST);
     InsertAxisAngle(predicate, Joint::AI_SECOND);
-    InsertAxisRate(predicate, Joint::AI_SECOND);
+//    InsertAxisRate(predicate, Joint::AI_SECOND);
 
     return true;
 }
