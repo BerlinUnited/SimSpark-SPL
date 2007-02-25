@@ -10,6 +10,7 @@
        )
        
  (node Body
+       (setName ccylinderBody)
        (setCappedCylinder $density $radius $length)
        )
 	     
