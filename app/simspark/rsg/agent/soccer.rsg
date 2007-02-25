@@ -380,28 +380,28 @@
 	      (eval -1 * $FieldHalfLength)  
 	      $FieldHalfWidth
 	      0 
-	      Flag_1_l matRed
+	      F1L matRed
 	      )
 
  (importScene rsg/agent/flag.rsg 
 	      (eval -1 * $FieldHalfLength) 
 	      (eval -1 * $FieldHalfWidth)
 	      0
-	      Flag_2_l matRed
+	      F2L matRed
 	      )
 
  (importScene rsg/agent/flag.rsg 
 	      $FieldHalfLength 
 	      $FieldHalfWidth 
 	      0 
-	      Flag_1_r matBlue
+	      F1R matBlue
 	      )
 
  (importScene rsg/agent/flag.rsg 
 	      $FieldHalfLength 
 	      (eval -1 * $FieldHalfWidth) 
 	      0 
-	      Flag_2_r matBlue
+	      F2R matBlue
 	      )
 	      
 	      
@@ -410,14 +410,14 @@
 	      (eval -1 * $FieldHalfLength)
 	      (eval -1 * $GoalHalfWidth)
 	      0
-	      Goal_1_l matRed
+	      G1L matRed
 	      )
 
  (importScene rsg/agent/flag.rsg
 	      (eval -1 * $FieldHalfLength)
 	      $GoalHalfWidth
 	      0
-	      Goal_2_l matRed
+	      G2L matRed
 	      )
 
 ; mark the right goal
@@ -425,14 +425,14 @@
 	      $FieldHalfLength
 	      (eval -1 * $GoalHalfWidth)
 	      0
-	      Goal_1_r matBlue
+	      G1R matBlue
 	      )
 
  (importScene rsg/agent/flag.rsg
 	      $FieldHalfLength
 	      $GoalHalfWidth
 	      0
-	      Goal_2_r matBlue
+	      G2R matBlue
 	      )	      
 
 ;;
