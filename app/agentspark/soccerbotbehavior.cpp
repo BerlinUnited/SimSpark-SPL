@@ -98,7 +98,7 @@ void SoccerbotBehavior::ParseHingeJointInfo(const oxygen::Predicate& predicate)
 
     // read the angle value
     HingeJointSense sense;
-    if (! predicate.GetValue(iter,"axis", sense.angle))
+    if (! predicate.GetValue(iter,"ax", sense.angle))
     {
         return;
     }
@@ -137,12 +137,6 @@ void SoccerbotBehavior::ParseUniversalJointInfo(const oxygen::Predicate& predica
         cerr << "(SoccerbotBehavior) could not parse universal joint angle1!" << endl;
         return;
     }
-    // try to read axis1 rate
-    if (! predicate.GetValue(iter,"rt1", sense.rate1))
-    {
-        cerr << "(SoccerbotBehavior) could not parse universal joint rate1!" << endl;
-        return;
-    }   
     // try to read axis2 angle
     if (! predicate.GetValue(iter,"ax2", sense.angle2))
     {
@@ -150,14 +144,6 @@ void SoccerbotBehavior::ParseUniversalJointInfo(const oxygen::Predicate& predica
         return;
     }   
     // try to read axis2 rate
-    if (! predicate.GetValue(iter,"rt2", sense.rate2))
-    {
-        cerr << "(SoccerbotBehavior) could not parse universal joint rate2!" << endl;
-        return;
-    }
-
-    //cout << "(ParseUniversalJointInfo) got angles " << sense.angle1 
-    //     << " and " << sense.angle2 << endl;
 
     // update the map
     mUniversalJointSenseMap[jid] = sense;
@@ -169,8 +155,12 @@ string SoccerbotBehavior::Think(const std::string& message)
 {
     //sleep(1);
 
+    //bow before me
+//    return "(rleg_eff_2_3 -1 0)(lleg_eff_2_3 2 0)";
+
     static const float gain = 0.1;
-    static BehaviorState state = ARM_UP;
+    static BehaviorState leftstate = ARM_UP;
+    static BehaviorState rightstate = ARM_UP;
 
     // parse message and extract joint angles
     //cout << "(SoccerbotBehavior) received message " << message << endl;
@@ -219,8 +209,8 @@ string SoccerbotBehavior::Think(const std::string& message)
 //        ss << "(lleg_eff_5_6 0.0 " << newAngle << ")";
 //    }
 
-#if 0
-    switch(state)
+#if 1
+    switch(rightstate)
     {
         case ARM_UP:
             curAngle = mUniversalJointSenseMap[JID_RARM_1_2].angle2;
@@ -231,19 +221,21 @@ string SoccerbotBehavior::Think(const std::string& message)
             }
             else
             {
-                state = ARM_ROTATE;
+                rightstate = ARM_ROTATE;
             }
             break;
         case ARM_ROTATE:
             curAngle = mHingeJointSenseMap[JID_RARM_3].angle;
-            if (curAngle < 90.0)
+            //cout << curAngle << endl;
+            
+            if (curAngle > -90.0)
             {
-                newAngle = gain * (90.0 - curAngle);
+                newAngle = gain * (-90.0 - curAngle);
                 ss << "(rarm_eff_3 " << newAngle << ")";
             }
             else    
             {
-                state = ARM_WAVE_1;
+                rightstate = ARM_WAVE_1;
             }
             break;
         case ARM_WAVE_1:
@@ -255,19 +247,77 @@ string SoccerbotBehavior::Think(const std::string& message)
             }
             else
             {
-                state = ARM_WAVE_2;
+                rightstate = ARM_WAVE_2;
             }
             break;
         case ARM_WAVE_2:
             curAngle = mHingeJointSenseMap[JID_RARM_4].angle;
-            if (curAngle > 60.0 || curAngle <= 59.5)
+            if (curAngle > 45.0 || curAngle <= 44.5)
             {
-                newAngle = gain * (60.0 - curAngle);
+                newAngle = gain * (45.0 - curAngle);
                 ss << "(rarm_eff_4 " << newAngle << ")";
             }
             else
             {
-                state = ARM_WAVE_1;
+                rightstate = ARM_WAVE_1;
+            }
+            break;
+        default:   
+            break;
+    }
+#endif
+    
+#if 1
+    switch(leftstate)
+    {
+        case ARM_UP:
+            curAngle = mUniversalJointSenseMap[JID_LARM_1_2].angle2;
+            if (curAngle < 90.0)
+            {
+                newAngle = gain * (90.0 - curAngle);
+                ss << "(larm_eff_1_2 0.0 " << newAngle << ")";
+            }
+            else
+            {
+                leftstate = ARM_ROTATE;
+            }
+            break;
+        case ARM_ROTATE:
+            curAngle = mHingeJointSenseMap[JID_LARM_3].angle;
+            //cout << curAngle << endl;
+            
+            if (curAngle < 90.0)
+            {
+                newAngle = gain * (90.0 - curAngle);
+                ss << "(larm_eff_3 " << newAngle << ")";
+            }
+            else    
+            {
+                leftstate = ARM_WAVE_1;
+            }
+            break;
+        case ARM_WAVE_1:
+            curAngle = mHingeJointSenseMap[JID_LARM_4].angle;
+            if (curAngle < 90.0)
+            {
+                newAngle = gain * (90.0 - curAngle);
+                ss << "(larm_eff_4 " << newAngle << ")"; 
+            }
+            else
+            {
+                leftstate = ARM_WAVE_2;
+            }
+            break;
+        case ARM_WAVE_2:
+            curAngle = mHingeJointSenseMap[JID_LARM_4].angle;
+            if (curAngle > 45.0 || curAngle <= 44.5)
+            {
+                newAngle = gain * (45.0 - curAngle);
+                ss << "(larm_eff_4 " << newAngle << ")";
+            }
+            else
+            {
+                leftstate = ARM_WAVE_1;
             }
             break;
         default:   
@@ -283,6 +333,6 @@ string SoccerbotBehavior::Think(const std::string& message)
 //    cout << "State is " << state << endl;
 //    cout << "---" << endl;
 
-    //return ss.str();
-    return string("");
+    return ss.str();
+    //return string("");
 }
