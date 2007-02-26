@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.h,v 1.6 2004/04/08 07:17:08 rollmark Exp $
+   $Id: fileserver.h,v 1.7 2007/02/26 08:43:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ class FileServer : public Node
     // functions
     //
 public:
-    typedef int THandle;
+    typedef long THandle;
 
 protected:
     typedef std::map<THandle, boost::shared_ptr<salt::RFile> > TFileMap;
