@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.26 2007/02/06 22:49:31 heshamebrahimi Exp $
+   $Id: soccerruleaspect.cpp,v 1.27 2007/02/27 04:01:55 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -192,6 +192,19 @@ SoccerRuleAspect::DropBall(Vector3f pos)
 void
 SoccerRuleAspect::UpdateBeforeKickOff()
 {
+    // get game control server to check agent count
+    shared_ptr<GameControlServer> game_control = shared_dynamic_cast<GameControlServer>
+        (GetCore()->Get("/sys/server/gamecontrol"));
+
+    if (game_control.get() == 0)
+    {
+        GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer\n.";
+        return;
+    }
+
+    // if no players are connected, just return
+    if (! game_control->GetAgentCount()) return;
+
     // before the game starts the ball should stay in the middle of
     // the playing field
     Vector3f pos(0,0,mBallRadius);
@@ -199,7 +212,7 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
 
-    // 
+    //
     // TODO: this has to be tested (compiles and no crashes at least)
     mInOffsideLeftPlayers.clear();
     mInOffsideRightPlayers.clear();
@@ -543,7 +556,7 @@ SoccerRuleAspect::UpdateGoal()
 //         mGameState->GetPlayMode() == PM_Goal_Left ?
 //         PM_KickOff_Right : PM_KickOff_Left
 //         );
-    
+
     // kick off for the opposite team
     mGameState->KickOff(
         mGameState->GetPlayMode() == PM_Goal_Left ?
@@ -745,7 +758,7 @@ SoccerRuleAspect::UpdateCachedInternal()
                                    Vector2f(-mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
 }
 
-void 
+void
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
@@ -768,16 +781,16 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     }
 
     salt::BoundingSphere sphere(pos, mAudioCutDist);
-    
+
     shared_ptr<Transform> transform_parent;
     shared_ptr<Body> agent_body;
-    
+
     for (
         TAgentStateList::const_iterator it = agent_states.begin();
         it != agent_states.end();
         it++
         )
-    {    
+    {
         if ( (*it)->GetUniformNumber() == number)
         {
             (*it)->AddSelfMessage(message);
@@ -804,7 +817,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
         it != opponent_agent_states.end();
         it++
         )
-    {    
+    {
         SoccerBase::GetTransformParent(*(*it), transform_parent);
 
         // call GetAgentBody with matching AgentAspect
@@ -1082,7 +1095,7 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
-        GetLog()->Error() 
+        GetLog()->Error()
             << "ERROR: (SoccerRuleAspect) no agent collided yet\n";
         return;
     }
@@ -1098,7 +1111,7 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
     if (time > lastChange && collidingAgentIdx==idx)
     {
         mGameState->SetPlayMode(PM_PlayOn);
-    } 
+    }
     else
     {
         // move the ball back on the free kick position
@@ -1107,7 +1120,7 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
 }
 
 void
-SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos, 
+SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                                float radius, float min_dist, TTeamIndex idx,
                                shared_ptr<AgentState> agentState)
 {
