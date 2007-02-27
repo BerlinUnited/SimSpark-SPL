@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netmessage.cpp,v 1.2 2004/04/28 14:30:30 rollmark Exp $
+   $Id: netmessage.cpp,v 1.3 2007/02/27 03:44:50 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,6 +46,12 @@ bool NetMessage::Extract(shared_ptr<NetBuffer> buffer, std::string& msg)
 {
     // a message is prefixed with it's payload length
     const unsigned int preSz = sizeof(unsigned int);
+
+    if (buffer.get() == 0)
+    {
+        return false;
+    }
+
     string& data = buffer->GetData();
 
     if (data.size() < preSz)
