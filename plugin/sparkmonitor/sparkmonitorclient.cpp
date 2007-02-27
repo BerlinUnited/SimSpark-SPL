@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.cpp,v 1.8 2004/12/22 16:12:45 rollmark Exp $
+   $Id: sparkmonitorclient.cpp,v 1.9 2007/02/27 03:37:20 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ void SparkMonitorClient::OnLink()
     if (mSceneServer.get() == 0)
         {
             GetLog()->Error()
-                << "(SparkMonitor) ERROR: SceneServer not found\n";
+                << "(SparkMonitorClient) ERROR: SceneServer not found\n";
         }
 }
 
@@ -98,10 +98,14 @@ void SparkMonitorClient::StartCycle()
     ReadFragments();
 
     string msg;
-    while (mNetMessage->Extract(mNetBuffer, msg))
+
+    if (mNetMessage.get() != 0)
+    {
+        while (mNetMessage->Extract(mNetBuffer, msg))
         {
             ParseMessage(msg);
         }
+    }
 }
 
 void SparkMonitorClient::ParseCustomPredicates(sexp_t* sexp, PredicateList& pList)
