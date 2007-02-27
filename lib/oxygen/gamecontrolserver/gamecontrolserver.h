@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.9 2004/06/11 07:55:16 fruit Exp $
+   $Id: gamecontrolserver.h,v 1.10 2007/02/27 04:00:26 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -99,6 +99,11 @@ public:
         agent action in seconds
     */
     float GetActionLatency(int id);
+
+    /** returns the number of agents currently connected
+        to the simulator
+    */
+    int GetAgentCount();
 
     /** returns the AgentAspect for the given \param id */
     boost::shared_ptr<AgentAspect> GetAgentAspect(int id);

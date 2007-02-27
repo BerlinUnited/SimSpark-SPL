@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.18 2004/06/11 07:57:47 fruit Exp $
+   $Id: gamecontrolserver.cpp,v 1.19 2007/02/27 04:00:26 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -222,6 +222,12 @@ GameControlServer::GetActionLatency(int /*id*/)
     // the real thing should query the AgentAspect corresponding to
     // the agent.
     return 0.1;
+}
+
+int
+GameControlServer::GetAgentCount()
+{
+    return mAgentMap.size();
 }
 
 shared_ptr<ActionObject::TList>
