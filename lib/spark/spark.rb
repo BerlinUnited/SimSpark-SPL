@@ -250,7 +250,7 @@ def sparkLogDebugToFile(fileName)
 end
 
 # logs all output to 'fileName'
-def sparkLogAllToFile(filenName)
+def sparkLogAllToFile(fileName)
   sparkEnableLog(fileName, 'eAll')
 end
 
@@ -266,6 +266,7 @@ $serverPath = '/sys/server/'
 #
 # set up logging
 sparkLogErrorToCerr()
+#sparkLogAllToCerr()
 
 #
 # setup the PhysicsServer
