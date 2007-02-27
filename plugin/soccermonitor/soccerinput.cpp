@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.1 2004/12/31 11:30:30 rollmark Exp $
+   $Id: soccerinput.cpp,v 1.2 2007/02/27 03:40:37 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
         case CmdKickOff:
             if (input.KeyPress())
                 {
-                    SendCommand("(kickOff)");
+                    SendCommand("(kickOff Left)");
                 }
             break;
         };
