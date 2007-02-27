@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.19 2007/02/27 04:00:26 jboedeck Exp $
+   $Id: gamecontrolserver.cpp,v 1.20 2007/02/27 07:03:41 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -225,7 +225,7 @@ GameControlServer::GetActionLatency(int /*id*/)
 }
 
 int
-GameControlServer::GetAgentCount()
+GameControlServer::GetAgentCount() const
 {
     return mAgentMap.size();
 }
