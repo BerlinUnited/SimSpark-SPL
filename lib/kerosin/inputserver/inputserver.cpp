@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: inputserver.cpp,v 1.6 2004/04/11 11:22:56 rollmark Exp $
+$Id: inputserver.cpp,v 1.7 2007/03/02 17:43:32 jamu Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -443,9 +443,12 @@ bool InputServer::GetInput(Input &input, bool raw)
             const Bind& bind = (*bindIter);
 
             //printf("Looking at: %d %d %d", (*bind).code, (*bind).cmd, (*bind).modifier);
-            if (bind.modifier == mModifierState)
-                {
-                    if (input.type == eButton)
+            // JAN: either both are 0 or test with &
+             if ((bind.modifier == 0 && mModifierState == 0) ||
+                 (bind.modifier & mModifierState))
+            {
+
+                if (input.type == eButton)
                         {
                             if ((bind.event == eKeyUpDown) ||
                                 (bind.event == eKeyUp && input.data.l == 0) ||

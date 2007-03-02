@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: keyboardsdl.cpp,v 1.5 2004/04/23 20:43:54 fruit Exp $
+   $Id: keyboardsdl.cpp,v 1.6 2007/03/02 17:43:32 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -215,6 +215,9 @@ KeyboardSDL::EventFilter(const SDL_Event* event)
     unsigned int& modState =
         mInputSystem->GetInputServer()->mModifierState;
 
+    //JAN: reset modifier state
+    modState = InputServer::eNone;
+    
     if (event->key.keysym.mod & KMOD_LSHIFT)
     {
         modState |= InputServer::eLShift;
