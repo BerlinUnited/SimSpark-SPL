@@ -1,3 +1,27 @@
+2007-02-27  Joschka  Boedecker <joschka@uni-koblenz.de>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- check if any players are connected in play mode before
+	  kick off and don't do anything if not
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h,
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+	- implemented method GetAgentCount which returns the number
+	  of agents currently connected to the server
+
+	* lib/oxygen/simulationserver/netmessage.cpp:
+	- check whether buffer pointer is non-zero before accessing
+
+	* plugin/soccermonitor/soccerinput.cpp: 
+	- fixed kickOff command
+
+	* plugin/sparkmonitor/sparkmonitorclient.cpp: 
+	- check if mNetMessage pointer is non-zero before trying to
+	  extract message
+
+	* lib/spark/spark.rb:
+	- fixed typo in parameter name for sparkLogAllToFile function
+
 2006-12-13  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/simspark/Makefile.am:
