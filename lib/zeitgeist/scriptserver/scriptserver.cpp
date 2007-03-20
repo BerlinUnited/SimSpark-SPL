@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.25 2007/02/12 22:22:23 jamu Exp $
+   $Id: scriptserver.cpp,v 1.26 2007/03/20 13:20:55 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -588,7 +588,7 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     //std::cout << "pkgdatadir = " << pkgdatadir << std::endl;
     //std::cout << "filename = " << fileName << std::endl;
 
-    ERunScriptErrorType result;
+    ERunScriptErrorType result = eUninit;
 
     if (validDotDir)
     {
@@ -609,7 +609,7 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     }
     else if (result == eError)
     {
-        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script (1)'"
                           << dotDir << "/" << fileName << "'\n";
         return false;
     }
@@ -632,7 +632,7 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     }
     else if (result == eError)
     {
-        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script (2)'"
                           << pkgdatadir << "/" << fileName << "'\n";
     }   
     
@@ -646,7 +646,7 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     }
     else if (result == eError)
     {
-        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script (3)'"
                           << mRelPathPrefix+relPath << "/" << fileName << "'\n";
     }
     
