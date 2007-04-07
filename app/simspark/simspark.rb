@@ -6,18 +6,23 @@ sparkSetupServer()
 sparkSetupRendering()
 sparkSetupInput()
 
+# sparkAddFPSCamera($scenePath+'camera', 
+#                   -10,-10,5,15,248,4,false,2,10,10)
 
 # let spark create a default camera
 sparkAddFPSCamera(
-		  $scenePath+'camera', 
-		  x = -5, 
-		  y = -40, 
-		  z = 2,
-		  maxSpeed = 15.0,
-		  accel = 400.0,
-		  drag = 4,
-		  addCollider = false
-		  )
+ 		  $scenePath+'camera', 
+ 		  x = -5, 
+ 		  y = -40, 
+ 		  z = 2,
+                  vAngle = 10.0,
+                  hAngle = 10.0,
+                  maxSpeed = 15.0,
+ 		  accel = 400.0,
+ 		  drag = 4,
+ 		  addCollider = false,
+                  colliderRadius = 2.0
+ 		  )
 
 # setup default input bindings
 run "bindings.rb"
