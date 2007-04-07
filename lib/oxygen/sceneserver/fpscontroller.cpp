@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller.cpp,v 1.10 2005/01/04 10:56:51 rollmark Exp $
+   $Id: fpscontroller.cpp,v 1.11 2007/04/07 13:12:06 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ using namespace salt;
 FPSController::FPSController() : BodyController()
 {
     mHAngle   = 0.0f;
-    mVAngle   = 0.0f;
+    mVAngle   = 30.0f;
     mForward  = false;
     mBackward = false;
     mLeft     = false;
@@ -81,6 +81,8 @@ void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
             float force = mBody->GetMass() * mAcceleration;
             vec *= force;
 
+            std::cerr << "vec = " << vec << " / force = " << force << " / accel = " << mAcceleration << "\n";
+            
             Matrix fwd;
             fwd.RotationZ(hAngle);
             mBody->AddForce(vec.y() * fwd.Up());
@@ -91,6 +93,16 @@ void FPSController::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
             mBody->AddForce(vec.z() * Vector3f(0,0,1));
         }
+}
+
+void FPSController::SetHAngle(const float angle)
+{
+    mHAngle = angle;
+}
+
+void FPSController::SetVAngle(const float angle)
+{
+    mVAngle = angle;
 }
 
 void FPSController::AdjustHAngle(const float delta)

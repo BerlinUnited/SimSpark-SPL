@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fpscontroller.h,v 1.8 2004/04/05 08:47:56 rollmark Exp $
+   $Id: fpscontroller.h,v 1.9 2007/04/07 13:12:06 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,13 @@ class FPSController : public BodyController
 public:
     FPSController();
     virtual ~FPSController();
+
+
+    /** sets the applied horizontal angle */
+    void SetHAngle(const float angle);
+
+    /** sets the applied vertical angle */
+    void SetVAngle(const float angle);
 
     /** adds a delta increment to the current horizontal angle */
     void AdjustHAngle(const float delta);
