@@ -1,7 +1,7 @@
 #
 # spark.rb, setup kerosin application framework
 #
-
+ 
 #
 # define constants used to setup spark
 #
@@ -150,7 +150,7 @@ def sparkSetupRendering
 end
 
 def sparkSetupInput()
-  print "(spark.rb) sparkSetupRendering\n"
+  print "(spark.rb) sparkSetupInput\n"
 
   # 
   # register input control node to the simulation server
@@ -164,8 +164,10 @@ end
 def sparkAddFPSCamera(
 		      path,
 		      x = 0.0, y = 0.0, z = 4,
+                      vAngle = 45.0,
+                      hAngle = 10.0,
 		      maxSpeed = 15.0,
-		      accel = 40.0,
+		      accel = 30.0,
 		      drag = 4,
 		      addCollider = false,
 		      colliderRadius = 2.0
@@ -190,6 +192,8 @@ def sparkAddFPSCamera(
   # acceleration
   fpsController = new('oxygen/FPSController',path+'/physics/controller')
   fpsController.setAcceleration(accel)
+  fpsController.setVAngle(vAngle)
+  fpsController.setHAngle(hAngle)
   inputControl = get($serverPath+'simulation/InputControl')
   inputControl.setFPSController(path+'/physics/controller')
 
