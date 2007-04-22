@@ -16,6 +16,18 @@
 	     
  (node CCylinderCollider
        (setParams $radius $length)
+       (node ContactJointHandler
+	     (setContactBounceMode false)
+
+	     (setContactSlipMode true)
+	     (setContactSlip 0.1 0.1)
+
+	     (setContactSoftERPMode true)
+	     (setContactSoftERP 0.2)
+
+	     (setContactSoftCFM true)
+	     (setContactSoftCFM 0.01)
+	     )
        )
  )
 
