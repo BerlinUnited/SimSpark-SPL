@@ -2,8 +2,11 @@
 # simspark.rb
 #
 
+# toggle log file recording
+$recordLogfile = false
+
 sparkSetupServer()
-sparkSetupRendering()
+#sparkSetupRendering()
 sparkSetupInput()
 
 # sparkAddFPSCamera($scenePath+'camera', 
@@ -52,17 +55,25 @@ material.setDiffuse(0.1,0.6,0.1,1.0)
 material.setAmbient(0.1,0.3,0.1,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
-material.setDiffuse(0.1,0.1,0.1,1.0)
+material.setDiffuse(0.2,0.2,0.2,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matDarkGrey');
+material.setDiffuse(0.05,0.05,0.05,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matLightBlue');
 material.setDiffuse(0.0,0.75,1.0,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matMagenta');
+material.setDiffuse(1.0,0.0,0.75,1.0)
 
 #
 # uncomment for logging setup (see spark.rb for reference)
 #
 
+
 #sparkLogAllToFile('./spark.txt')
 #sparkLogDebugToCerr()
+sparkLogAllToCerr()
 
 #
 # uncomment any of the following to run a simulation
