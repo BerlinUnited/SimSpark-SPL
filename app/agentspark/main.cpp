@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.9 2007/02/12 06:59:38 jboedeck Exp $
+   $Id: main.cpp,v 1.10 2007/04/26 15:41:24 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,9 +18,11 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <errno.h>
 #include <string>
 #include <iostream>
 #include <rcssnet/tcpsocket.hpp>
+//#include <rcssnet/udpsocket.hpp>
 #include <rcssnet/exception.hpp>
 #include <netinet/in.h>
 #include <behavior.h>
@@ -37,6 +39,7 @@ using namespace std;
 using namespace boost;
 
 TCPSocket gSocket;
+//UDPSocket gSocket;
 string gHost = "127.0.0.1";
 int gPort = 3100;
 
@@ -84,6 +87,7 @@ void ReadOptions(int argc, char* argv[])
 bool Init()
 {
     cout << "connecting to TCP " << gHost << ":" << gPort << "\n";
+    //cout << "connecting to UDP " << gHost << ":" << gPort << "\n";
 
     try
         {
@@ -126,10 +130,26 @@ void Done()
 bool SelectInput()
 {
     fd_set readfds;
+    struct timeval tv = {60,0};
     FD_ZERO(&readfds);
     FD_SET(gSocket.getFD(),&readfds);
-
-    return select(gSocket.getFD()+1,&readfds, 0, 0, 0) > 0;
+    
+    while(1) {
+        switch(select(gSocket.getFD()+1,&readfds, 0, 0, &tv)) {
+        case 1:
+            return 1;
+        case 0:
+            cerr << "(SelectInput) select failed " << strerror(errno) << endl;
+            abort();
+            return 0;
+        default:
+            if(errno == EINTR)
+                continue;
+            cerr << "(SelectInput) select failed " << strerror(errno) << endl;
+            abort();
+            return 0;
+        }
+    }
 }
 
 void PutMessage(const string& msg)
@@ -148,30 +168,32 @@ void PutMessage(const string& msg)
 
 bool GetMessage(string& msg)
 {
-    // try to read the first message segment
-    if (! SelectInput())
-    {
-        return false;
-    }
-
     static char buffer[16 * 1024];
 
-    unsigned int bytesRead = read(gSocket.getFD(), buffer, sizeof(buffer));
+    unsigned int bytesRead = 0;
+    while(bytesRead < sizeof(unsigned int))
+    {
+        SelectInput();
+        int readResult = read(gSocket.getFD(), buffer + bytesRead, sizeof(unsigned int) - bytesRead);
+        if(readResult < 0)
+            continue;
+        bytesRead += readResult;
+    }
+
     //cerr << "buffer = |" << string(buffer+1) << "|\n";
     //cerr << "bytesRead = |" << bytesRead << "|\n";
     //cerr << "Size of buffer = |" << sizeof(buffer) << "|\n";
     //cerr << "buffer = |" << buffer << "|\n";
     //cerr << "buffer[5] = |" << buffer[5] << "|\n";
     //printf ("xxx-%s\n", buffer+5);
-    
-    if (bytesRead < sizeof(unsigned int))
-    {
-        return false;
-    }
 
     // msg is prefixed with it's total length
     unsigned int msgLen = ntohl(*(unsigned int*)buffer);
-    //cerr << "GM 6 / " << msgLen << "\n";
+    // cerr << "GM 6 / " << msgLen << " (bytesRead " << bytesRead << ")\n";
+    if(sizeof(unsigned int) + msgLen > sizeof(buffer)) {
+        cerr << "too long message; aborting" << endl;
+        abort();
+    }
 
     // read remaining message segments
     unsigned int msgRead = bytesRead - sizeof(unsigned int);
@@ -187,9 +209,16 @@ bool GetMessage(string& msg)
             return false;
         }
 
-        msgRead += read(gSocket.getFD(), offset, sizeof(buffer) - msgRead);
+        int readLen = sizeof(buffer) - msgRead;
+        if(readLen > msgLen - msgRead)
+            readLen = msgLen - msgRead;
+ 
+        int readResult = read(gSocket.getFD(), offset, readLen);
+        if(readResult < 0)
+            continue;
+        msgRead += readResult;
+        offset += readResult;
         //cerr << "msgRead = |" << msgRead << "|\n";
-        offset += msgRead;
     }
 
     // zero terminate received data
