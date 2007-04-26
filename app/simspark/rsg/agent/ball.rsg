@@ -4,7 +4,7 @@
 (
  (define $Radius (eval Soccer.BallRadius))
  (define $Material matOrange)
- (define $Density (eval Soccer.BallDensity))
+ (define $Mass (eval Soccer.BallMass))
 
  (node Ball
        (setLocalPos 5.0 0.0 0.5)
@@ -17,7 +17,7 @@
 
        (node Body
 	     (setName physics)
-	     (setSphere $Density $Radius)
+	     (setSphereTotal $Mass $Radius)
 	     (node DragController
 		   (setAngularDrag 0.2)
 		   (setLinearDrag 0.4)
