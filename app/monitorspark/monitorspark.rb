@@ -1,22 +1,30 @@
 #
-# simspark.rb
+# monitorspark.rb
 #
 
 sparkSetupRendering()
 sparkSetupInput()
-sparkSetupMonitor()
+
+if ($logPlayerMode == true)
+  sparkSetupMonitorLogPlayer()
+else
+  sparkSetupMonitor()
+end
 
 # let spark create a default camera
 sparkAddFPSCamera(
-		  $scenePath+'camera', 
-		  x = -5, 
-		  y = -40, 
-		  z = 2,
-		  maxSpeed = 15.0,  
-		  accel = 400.0,
-		  drag = 4,
-		  addCollider = true
-		  )
+ 		  $scenePath+'camera', 
+ 		  x = -5, 
+ 		  y = -40, 
+ 		  z = 2,
+                  vAngle = 10.0,
+                  hAngle = 10.0,
+                  maxSpeed = 15.0,
+ 		  accel = 400.0,
+ 		  drag = 4,
+ 		  addCollider = false,
+                  colliderRadius = 2.0
+ 		  )
 
 # setup default input bindings
 run "bindings.rb"
@@ -49,7 +57,16 @@ material.setDiffuse(0.1,0.5,0.1,1.0)
 material.setAmbient(0.1,0.4,0.1,1.0)
 
 material = new('kerosin/MaterialSolid', $serverPath+'material/matGrey');
-material.setDiffuse(0.1,0.1,0.1,1.0)
+material.setDiffuse(0.2,0.2,0.2,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matDarkGrey');
+material.setDiffuse(0.05,0.05,0.05,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matLightBlue');
+material.setDiffuse(0.0,0.75,1.0,1.0)
+
+material = new('kerosin/MaterialSolid', $serverPath+'material/matMagenta');
+material.setDiffuse(1.0,0.0,0.75,1.0)
 
 #
 # uncomment for logging setup (see spark.rb for reference)
