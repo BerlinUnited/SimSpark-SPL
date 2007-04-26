@@ -127,26 +127,26 @@
        )
        
 ; create the goal bar on top of the goal (left goal)
- (node Transform
-       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
-                               0
-			       (eval $GoalHeight + $BarRadius)
-			       )
-       (node Box
-       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-	     (setMaterial $GoalMaterial)
-	     )
-	(node BoxCollider
-       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-	     )     
-       
-       )   
+; (node Transform
+;       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
+;                               0
+;			       (eval $GoalHeight + $BarRadius)
+;			       )
+;       (node Box
+;       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+;	     (setMaterial $GoalMaterial)
+;	     )
+;	(node BoxCollider
+;       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+;	     )     
+;       
+;       )   
        
 ; create the left goal post (left goal)
  (node Transform
        (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
                                (eval -1 * (eval $GoalHalfWidth + $BarRadius))
-			       (eval $GoalHalfHeight + $BarRadius)
+			       (eval $GoalHalfHeight)
 			       )
        (node Box
        	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
@@ -162,7 +162,7 @@
  (node Transform
        (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
                                (eval $GoalHalfWidth + $BarRadius)
-			       (eval $GoalHalfHeight + $BarRadius)
+			       (eval $GoalHalfHeight)
 			       )
        (node Box
        	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
@@ -170,6 +170,22 @@
 	     )
        (node BoxCollider
        	     (setBoxLengths $GoalDepth $BarDiameter $GoalHeight)
+	     )
+       
+       )
+
+; create goal back wall (left goal)
+ (node Transform
+       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalDepth) + $LineHeight) 
+                               0
+			       (eval $GoalHalfHeight)
+			       )
+       (node Box
+       	     (setExtents $LineHeight $GoalWidth $GoalHeight)
+	     (setMaterial matYellow)
+	     )
+       (node BoxCollider
+       	     (setBoxLengths $LineHeight $GoalWidth $GoalHeight)
 	     )
        
        )   
@@ -190,26 +206,26 @@
        )
        
 ; create the goal bar on top of the goal (right goal)
- (node Transform
-       (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
-                               0
-			       (eval $GoalHeight + $BarRadius)
-			       )
-       (node Box
-       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-	     (setMaterial $GoalMaterial)
-	     )
-	(node BoxCollider
-       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-	     )
-       
-       )   
+; (node Transform
+;       (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
+;                               0
+;			       (eval $GoalHeight + $BarRadius)
+;			       )
+;       (node Box
+;       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+;	     (setMaterial $GoalMaterial)
+;	     )
+;	(node BoxCollider
+;       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
+;	     )
+;       
+;       )   
        
 ; create the left goal post (right goal)
  (node Transform
        (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
                                (eval -1 * (eval $GoalHalfWidth + $BarRadius))
-			       (eval $GoalHalfHeight + $BarRadius)
+			       (eval $GoalHalfHeight)
 			       )
        (node Box
        	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
@@ -225,7 +241,7 @@
  (node Transform
        (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
                                (eval $GoalHalfWidth + $BarRadius)
-			       (eval $GoalHalfHeight + $BarRadius)
+			       (eval $GoalHalfHeight)
 			       )
        (node Box
        	     (setExtents $GoalDepth $BarDiameter $GoalHeight)
@@ -238,6 +254,21 @@
        )   
 
 
+; create goal back wall (right goal)
+ (node Transform
+       (setLocalPos (eval (eval $FieldHalfLength + $GoalDepth) - $LineHeight) 
+                               0
+			       (eval $GoalHalfHeight)
+			       )
+       (node Box
+       	     (setExtents $LineHeight $GoalWidth $GoalHeight)
+	     (setMaterial matBlue)
+	     )
+       (node BoxCollider
+       	     (setBoxLengths $LineHeight $GoalWidth $GoalHeight)
+	     )
+       
+       )
 
 
 ; create left side
@@ -376,64 +407,64 @@
 ;;
 
 ; mark the soccer field with 4 field flags
- (importScene rsg/agent/flag.rsg 
-	      (eval -1 * $FieldHalfLength)  
-	      $FieldHalfWidth
-	      0 
-	      F1L matRed
-	      )
+; (importScene rsg/agent/flag.rsg 
+;	      (eval -1 * $FieldHalfLength)  
+;	      $FieldHalfWidth
+;	      0 
+;	      F1L matRed
+;	      )
 
- (importScene rsg/agent/flag.rsg 
-	      (eval -1 * $FieldHalfLength) 
-	      (eval -1 * $FieldHalfWidth)
-	      0
-	      F2L matRed
-	      )
+; (importScene rsg/agent/flag.rsg 
+;	      (eval -1 * $FieldHalfLength) 
+;	      (eval -1 * $FieldHalfWidth)
+;	      0
+;	      F2L matRed
+;	      )
 
- (importScene rsg/agent/flag.rsg 
-	      $FieldHalfLength 
-	      $FieldHalfWidth 
-	      0 
-	      F1R matBlue
-	      )
+; (importScene rsg/agent/flag.rsg 
+;	      $FieldHalfLength 
+;	      $FieldHalfWidth 
+;	      0 
+;	      F1R matBlue
+;	      )
 
- (importScene rsg/agent/flag.rsg 
-	      $FieldHalfLength 
-	      (eval -1 * $FieldHalfWidth) 
-	      0 
-	      F2R matBlue
-	      )
+; (importScene rsg/agent/flag.rsg 
+;	      $FieldHalfLength 
+;	      (eval -1 * $FieldHalfWidth) 
+;	      0 
+;	      F2R matBlue
+;	      )
 	      
 	      
   ; mark the left goal
- (importScene rsg/agent/flag.rsg
-	      (eval -1 * $FieldHalfLength)
-	      (eval -1 * $GoalHalfWidth)
-	      0
-	      G1L matRed
-	      )
+; (importScene rsg/agent/flag.rsg
+;	      (eval -1 * $FieldHalfLength)
+;	      (eval -1 * $GoalHalfWidth)
+;	      0
+;	      G1L matRed
+;	      )
 
- (importScene rsg/agent/flag.rsg
-	      (eval -1 * $FieldHalfLength)
-	      $GoalHalfWidth
-	      0
-	      G2L matRed
-	      )
+; (importScene rsg/agent/flag.rsg
+;	      (eval -1 * $FieldHalfLength)
+;	      $GoalHalfWidth
+;	      0
+;	      G2L matRed
+;	      )
 
 ; mark the right goal
- (importScene rsg/agent/flag.rsg
-	      $FieldHalfLength
-	      (eval -1 * $GoalHalfWidth)
-	      0
-	      G1R matBlue
-	      )
+; (importScene rsg/agent/flag.rsg
+;	      $FieldHalfLength
+;	      (eval -1 * $GoalHalfWidth)
+;	      0
+;	      G1R matBlue
+;	      )
 
- (importScene rsg/agent/flag.rsg
-	      $FieldHalfLength
-	      $GoalHalfWidth
-	      0
-	      G2R matBlue
-	      )	      
+; (importScene rsg/agent/flag.rsg
+;	      $FieldHalfLength
+;	      $GoalHalfWidth
+;	      0
+;	      G2R matBlue
+;	      )	      
 
 ;;
 ;; add the ball
