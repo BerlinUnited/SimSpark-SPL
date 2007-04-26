@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.18 2004/12/31 14:12:03 rollmark Exp $
+   $Id: oxygen.h,v 1.19 2007/04/26 15:33:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,6 +71,7 @@
 #include "simulationserver/netmessage.h"
 #include "simulationserver/agentcontrol.h"
 #include "simulationserver/monitorcontrol.h"
+#include "simulationserver/monitorlogger.h"
 
 #include "geometryserver/geometryserver.h"
 #include "geometryserver/meshimporter.h"

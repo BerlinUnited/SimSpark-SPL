@@ -136,6 +136,8 @@ simulationserver/agentcontrol.cpp \
 simulationserver/agentcontrol_c.cpp \
 simulationserver/monitorcontrol.cpp \
 simulationserver/monitorcontrol_c.cpp \
+simulationserver/monitorlogger.cpp \
+simulationserver/monitorlogger_c.cpp \
 simulationserver/netcontrol.cpp \
 simulationserver/netcontrol_c.cpp \
 simulationserver/netclient.cpp \
@@ -210,6 +212,7 @@ simulationserver/simulationserver.h \
 simulationserver/simcontrolnode.h \
 simulationserver/agentcontrol.h \
 simulationserver/monitorcontrol.h \
+simulationserver/monitorlogger.h \
 simulationserver/netcontrol.h \
 simulationserver/netclient.h \
 simulationserver/netmessage.h \
