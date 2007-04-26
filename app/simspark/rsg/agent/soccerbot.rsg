@@ -79,7 +79,7 @@
 
     ; head
     (define $HeadRadius 0.39)
-    (define $HeadMass 0.00000001)
+    (define $HeadMass 0.3)
 
     ; neck
     (define $NeckLength 0.2)
@@ -131,7 +131,7 @@
     (node AgentAspect
         (setName body)
         (setLocalPos $TorsoPosX $TorsoPosY $TorsoPosZ)
-        (importScene rsg/boxspheres/box.rsg $TorsoBox1Length $TorsoBox1Width $TorsoBox1Height $TorsoBox1Mass matGrey)
+        (importScene rsg/boxspheres/box.rsg $TorsoBox1Length $TorsoBox1Width $TorsoBox1Height $TorsoBox1Mass matMagenta)
 
 	; install a node holding agent state data
         (node AgentState
@@ -152,7 +152,7 @@
 	     (setLocalPos $offsetLeftShoulderCylX $offsetLeftShoulderCylY $offsetLeftShoulderCylZ)
 	     (setLocalRotation 0 90 0)
 	     (node CCylinder
-		   (setMaterial matGrey)
+		   (setMaterial matDarkGrey)
 		   (setParams $TorsoCylinderRadius $TorsoCylinderLength)
 	     )
 	)
@@ -161,7 +161,7 @@
 	     (setLocalPos $offsetRightShoulderCylX $offsetRightShoulderCylY $offsetRightShoulderCylZ)
 	     (setLocalRotation 0 90 0)
 	     (node CCylinder
-		   (setMaterial matGrey)
+		   (setMaterial matDarkGrey)
 		   (setParams $TorsoCylinderRadius $TorsoCylinderLength)
 	     )
 	)
@@ -177,7 +177,7 @@
         (setLocalPos (eval $TorsoPosX)
 		     (eval $TorsoPosY + 0.05) 
 		     (eval $TorsoPosZ + 0.1 + (eval $TorsoBox1Height / 2.0) + (eval $HeadRadius / 2.0)))
-        (importScene rsg/boxspheres/sphere.rsg $HeadRadius $HeadMass matLightBlue)
+        (importScene rsg/boxspheres/sphere.rsg $HeadRadius $HeadMass matGrey)
 
         ; install hinge joint to connect to the neck
         (node FixedJoint
@@ -216,7 +216,7 @@
     (node Transform
         (setName leftshoulder)
         (setLocalPos $LeftShoulderPosX $LeftShoulderPosY $LeftShoulderPosZ)
-        (importScene rsg/boxspheres/box.rsg $ShoulderLength $ShoulderWidth $ShoulderHeight $ShoulderMass matRed)
+        (importScene rsg/boxspheres/box.rsg $ShoulderLength $ShoulderWidth $ShoulderHeight $ShoulderMass matDarkGrey)
 
         ; install universal joint to connect to the torso
         (node UniversalJoint
@@ -245,7 +245,7 @@
     (node Transform
         (setName rightshoulder)
         (setLocalPos $RightShoulderPosX $RightShoulderPosY $RightShoulderPosZ)
-        (importScene rsg/boxspheres/box.rsg $ShoulderLength $ShoulderWidth $ShoulderHeight $ShoulderMass matRed)
+        (importScene rsg/boxspheres/box.rsg $ShoulderLength $ShoulderWidth $ShoulderHeight $ShoulderMass matDarkGrey)
         (setLocalRotation 0 0 180)
 
             ; install universal joint to connect to the torso
@@ -285,7 +285,7 @@
     (node Transform
         (setName leftupperarm)
         (setLocalPos $LeftUpperArmPosX $LeftUpperArmPosY $LeftUpperArmPosZ)
-        (importScene rsg/boxspheres/box.rsg $UpperarmLength $UpperarmWidth $UpperarmHeight $UpperarmMass matLightBlue)
+        (importScene rsg/boxspheres/box.rsg $UpperarmLength $UpperarmWidth $UpperarmHeight $UpperarmMass matGrey)
 
         ; install hinge joint to connect to the shoulder
         (node HingeJoint
@@ -322,7 +322,7 @@
     (node Transform
         (setName rightupperarm)
         (setLocalPos $RightUpperArmPosX $RightUpperArmPosY $RightUpperArmPosZ)
-        (importScene rsg/boxspheres/box.rsg $UpperarmLength $UpperarmWidth $UpperarmHeight $UpperarmMass matLightBlue)
+        (importScene rsg/boxspheres/box.rsg $UpperarmLength $UpperarmWidth $UpperarmHeight $UpperarmMass matGrey)
 	;(setLocalRotation 180 0 0)
 
         ; install hinge joint to connect to the shoulder
@@ -378,7 +378,7 @@
     (node Transform
         (setName leftlowerarm)
         (setLocalPos $LeftLowerArmPosX $LeftLowerArmPosY $LeftLowerArmPosZ)
-        (importScene rsg/boxspheres/box.rsg $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass matDarkGrey)
 
         ; install hinge joint to connect to the upper arm
         (node HingeJoint
@@ -440,7 +440,7 @@
         (setName rightlowerarm)
         (setLocalPos $RightLowerArmPosX $RightLowerArmPosY $RightLowerArmPosZ)
 	;(setLocalRotation 0 0 180)
-        (importScene rsg/boxspheres/box.rsg $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass matDarkGrey)
 
         ; install hinge joint to connect to the upper arm
         (node HingeJoint
@@ -518,7 +518,7 @@
     (node Transform
         (setName lefthip)
         (setLocalPos $LeftHipPosX $LeftHipPosY $LeftHipPosZ)
-        (importScene rsg/boxspheres/box.rsg $HipLength $HipWidth $HipHeight $HipMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $HipLength $HipWidth $HipHeight $HipMass matDarkGrey)
 
         ; install hinge joint to connect to the torso
         (node HingeJoint
@@ -545,7 +545,7 @@
     (node Transform
         (setName righthip)
         (setLocalPos $RightHipPosX $RightHipPosY $RightHipPosZ)
-        (importScene rsg/boxspheres/box.rsg $HipLength $HipWidth $HipHeight $HipMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $HipLength $HipWidth $HipHeight $HipMass matDarkGrey)
 
         ; install hinge joint to connect to the torso
         (node HingeJoint
@@ -646,7 +646,7 @@
     (node Transform
         (setName leftshank)
         (setLocalPos $LeftShankPosX $LeftShankPosY $LeftShankPosZ)
-        (importScene rsg/boxspheres/box.rsg $ShankLength $ShankWidth $ShankHeight $ShankMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $ShankLength $ShankWidth $ShankHeight $ShankMass matDarkGrey)
 
         ; install hinge joint to connect to the thigh
         (node HingeJoint
@@ -673,7 +673,7 @@
     (node Transform
         (setName rightshank)
         (setLocalPos $RightShankPosX $RightShankPosY $RightShankPosZ)
-        (importScene rsg/boxspheres/box.rsg $ShankLength $ShankWidth $ShankHeight $ShankMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $ShankLength $ShankWidth $ShankHeight $ShankMass matDarkGrey)
 
         ; install hinge joint to connect to the thigh
         (node HingeJoint
