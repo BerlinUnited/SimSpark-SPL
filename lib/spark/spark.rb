@@ -1,25 +1,31 @@
 #
 # spark.rb, setup kerosin application framework
 #
- 
+
 #
 # define constants used to setup spark
 #
 
+#
+# (AgentControl) constants
+#
+
+$agentType = 'tcp'
+$agentPort = 3100
+
 # (MonitorControl) constants
 # 
 
-# define the monitor update interval in cylcles
-$monitorInterval = 10;
+# define the monitor update interval in cycles
+$monitorInterval = 2;
 $serverType = 'tcp'
 $serverPort = 3200
+
 
 # (SparkMonitorClient) constants
 # 
 $monitorServer = '127.0.0.1'
 $monitorPort = 3200
-
-# socket type ('tcp' or 'udp')
 $monitorType = 'tcp'
 
 #
@@ -46,6 +52,20 @@ def sparkSetupMonitor
 	 print "\n"
        end
   end
+
+  rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
+  rubySceneImporter.setUnlinkOnCompleteScenes(true);
+end
+
+def sparkSetupMonitorLogPlayer
+  print "(spark.rb) sparkSetupMonitorLogPlayer\n"
+
+  # add the agent control node
+  simulationServer = get($serverPath+'simulation');
+
+  monitorClient = new('SparkMonitorLogFileServer', 
+		      $serverPath+'simulation/SparkMonitorLogFileServer')
+  monitorClient.setFileName($logPlayerFile)
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
   rubySceneImporter.setUnlinkOnCompleteScenes(true);
@@ -94,6 +114,21 @@ def sparkSetupServer
   simulationServer = get($serverPath+'simulation');
   simulationServer.initControlNode('oxygen/AgentControl','AgentControl')  
 
+  # set port and socket type for agent control
+  agentControl = get($serverPath+'simulation/AgentControl');
+  agentControl.setServerPort($agentPort)
+
+  if ($agentType == 'udp') 
+	agentControl.setServerTypeUDP()
+  else if ($agentType == 'tcp')
+	agentControl.setServerTypeTCP()
+       else
+	 print "(spark.rb) unknown agent socket type "
+	 print $agentType
+	 print "\n"
+       end
+  end
+
   monitorControl = new('oxygen/MonitorControl',
 		       $serverPath+'simulation/MonitorControl')
   monitorControl.setMonitorInterval($monitorInterval)
@@ -109,15 +144,25 @@ def sparkSetupServer
 	 print "\n"
        end
   end
+
+  #
+  # log recording setup
+
+  if ($recordLogfile == true)
+    print "(spark.rb) recording Logfile as 'sparkmonitor.log'\n"
+    monitorLogger = new('oxygen/MonitorLogger',
+	  	       $serverPath+'simulation/MonitorLogger')
+    monitorLogger.setMonitorLoggerInterval($monitorInterval)
+  end
 end
 
 def sparkSetupRendering
   print "(spark.rb) sparkSetupRendering\n"
   #
   # setup the GeometryServer
-  geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
-  importBundle 'voidmeshimporter'
-  geometryServer.initMeshImporter("VoidMeshImporter");
+  #geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
+  #importBundle 'voidmeshimporter'
+  #geometryServer.initMeshImporter("VoidMeshImporter");
   
   #
   # setup the kerosin render framework
@@ -125,6 +170,20 @@ def sparkSetupRendering
   new('kerosin/RenderServer', $serverPath+'render');
   new('kerosin/ImageServer', $serverPath+'image');
   new('kerosin/TextureServer', $serverPath+'texture');
+
+  # setup the FontServer
+  new('kerosin/FontServer', $serverPath+'font');
+
+  
+
+  # 
+  # register render control node to the simulation server
+  simulationServer = get($serverPath+'simulation');
+  simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
+end
+
+def sparkSetupInput()
+  print "(spark.rb) sparkSetupInput\n"
 
   #
   # setup the InputServer
@@ -140,18 +199,6 @@ def sparkSetupRendering
   inputServer.createDevice('Keyboard')
   inputServer.createDevice('Mouse')
 
-  # setup the FontServer
-  new('kerosin/FontServer', $serverPath+'font');
-
-  # 
-  # register render control node to the simulation server
-  simulationServer = get($serverPath+'simulation');
-  simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
-end
-
-def sparkSetupInput()
-  print "(spark.rb) sparkSetupInput\n"
-
   # 
   # register input control node to the simulation server
   simulationServer = get($serverPath+'simulation');
@@ -164,7 +211,7 @@ end
 def sparkAddFPSCamera(
 		      path,
 		      x = 0.0, y = 0.0, z = 4,
-                      vAngle = 45.0,
+		      vAngle = 45.0,
                       hAngle = 10.0,
 		      maxSpeed = 15.0,
 		      accel = 30.0,
@@ -270,7 +317,6 @@ $serverPath = '/sys/server/'
 #
 # set up logging
 sparkLogErrorToCerr()
-#sparkLogAllToCerr()
 
 #
 # setup the PhysicsServer
