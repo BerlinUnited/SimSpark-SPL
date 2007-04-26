@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystemsdl.cpp,v 1.7 2004/12/06 08:44:08 rollmark Exp $
+   $Id: inputsystemsdl.cpp,v 1.8 2007/04/26 15:31:31 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,7 +78,11 @@ bool InputSystemSDL::Init(InputServer *inputServer)
 
     // here we check whether SDL has been initialized prior to adding this
     // input is part of the video subsystem (because of event loops, etc..)
-    if (!SDL_WasInit(SDL_INIT_VIDEO))
+    if (!(
+          SDL_WasInit(SDL_INIT_VIDEO) ||
+          SDL_WasInit(SDL_INIT_TIMER)
+          )
+        )
         {
             GetLog()->Error()
                 << "ERROR: (InputSystemSDL) SDL not initialized!"
