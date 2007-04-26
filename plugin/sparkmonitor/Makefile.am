@@ -7,7 +7,10 @@ sparkmonitor_la_SOURCES = \
 	sparkmonitor.h \
 	sparkmonitorclient.h \
 	sparkmonitorclient.cpp \
-	sparkmonitorclient_c.cpp
+	sparkmonitorclient_c.cpp \
+	sparkmonitorlogfileserver.h \
+	sparkmonitorlogfileserver.cpp \
+	sparkmonitorlogfileserver_c.cpp
 
 sparkmonitor_la_LDFLAGS = -module -version-info 0:0:0 -L${top_srcdir}/utility/sfsexp/
 sparkmonitor_la_LIBADD = -lsexp

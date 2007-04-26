@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.1 2004/04/28 14:52:57 rollmark Exp $
+   $Id: export.cpp,v 1.2 2007/04/26 15:30:40 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 #include "sparkmonitor.h"
 #include "sparkmonitorclient.h"
+#include "sparkmonitorlogfileserver.h"
 #include <zeitgeist/zeitgeist.h>
 
 using namespace oxygen;
@@ -28,4 +29,5 @@ using namespace oxygen;
 ZEITGEIST_EXPORT_BEGIN()
     ZEITGEIST_EXPORT(SparkMonitor);
     ZEITGEIST_EXPORT(SparkMonitorClient);
+    ZEITGEIST_EXPORT(SparkMonitorLogFileServer);
 ZEITGEIST_EXPORT_END()
