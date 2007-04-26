@@ -8,6 +8,8 @@ if (inputServer == nil)
   print "(soccerbindings.rb) no InputServer present\n";
 else
   print "(soccerbindings.rb) setting up bindings\n";
-
-  inputServer.bindCommand('k',      Command.KickOff);
+  if ($logPlayerMode == false)
+    inputServer.bindCommand('k',      Command.KickOff);
+  else
+  end
 end
