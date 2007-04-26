@@ -1,4 +1,102 @@
-2007-02-27  Joschka  Boedecker <joschka@uni-koblenz.de>
+2007-04-27  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* app/agentspark/main.cpp:
+	- applied patch to fix problems related to input selection
+	  and reading message from the socket (thanks to snow)
+
+	* app/monitorspark/main.cpp: 
+	- added command line parameter for the logfile name
+	  (thanks Hesham)
+
+	* app/monitorspark/monitorspark.rb:
+	- setup logplayer if in logplayer mode and
+	  normal monitor otherwise
+	- adjust initial camera rotation
+	- added materials (see simspark.rb)
+
+	* app/monitorspark/soccerbindings.rb:
+	- only bind KickOff command if we are not in
+	  logplayer mode
+
+	* app/simspark/soccersim.rb:
+	- changed GoalHeight to 2.44
+	- changed BallRadius to 0.4
+
+	* app/rcssmonitor3d/lite/Makefile.am:
+	- removed dependencies for libXi and libXmu
+
+	* app/simspark/simspark.rb:
+	- added toggle for logfile recording
+	- commented out sparkSetupRendering (monitorspark
+	  should be used for visualization)
+	- added materials matDarkGrey and matMagenta
+	- changed matGrey a little
+	- made log output verbose for now
+
+	* app/monitorspark/soccersim.rb:
+	- only register SoccerInput if we are not in logplay mode
+	  (we should have a separate input for that later)
+
+	* app/simspark/rsg/agent/soccerbot.rsg:
+	- fixed head mass (now 0.3)
+	- changed colors a little: using dark and light grey
+	  for different limbs and the head, and magenta for the torso;
+	  other side should use cyan as shirt color (TODO)
+
+	* app/simspark/rsg/agent/soccer.rsg:
+	- changed appearance of the field a bit:
+	  goal height is now 2.44m, goals have blue and
+	  yellow back walls, goal bars commented out, 
+	  flags commented out
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- setting ball total mass instead of density
+
+	* app/simspark/rsg/boxspheres/box.rsg
+	* app/simspark/rsg/boxspheres/sphere.rsg
+	* app/simspark/rsg/boxspheres/ccylinder.rsg:
+	- added function calls to the set...Total methods
+	  in order to really set the mass and not the density.
+	  Resulted in some strange behavior of the agent though
+	  so it is commented out for now (needs to be fixed)
+
+	* doc/Makefile.am:
+	- changed target 'apidoc' to 'doc'
+	- api documentation is only (re-)build if 'make doc'
+	  is called explicitly from the parent directory and
+	  not as part of 'make install'
+
+	* lib/kerosin/inputserver/inputserver.cpp:
+	- initialize SDL timer in the constructor
+
+	* lib/oxygen/Makefile.am,
+	* lib/oxygen/oxygen.cpp,
+	* lib/oxygen/oxygen.h:
+	- added files for logfile recording
+
+	* lib/spark/spark.rb:
+	- setup AgentControl in the ruby script: port and
+	  socket type can be configured now
+	- set (external) monitor interval to 2 cycles
+	- included Hesham's setup of the log recorder and player
+	- commented out setup of a second geometry server and
+	  VoidMeshImporter (thanks Oli)
+	- moved setup of the InputServer to sparkSetupInput in order
+	  to enable running the server without rendering (no OpenGL setup
+	  needed anymore)
+
+	* plugin/inputsdl/inputsystemsdl.cpp:
+	- extended SDL init check to succeed if either
+	  timer or video system was previously inititalized.
+	  I initialize the timer now as part of the InputServer
+	  constructor to have the server running without the need
+	  to setup the OpenGL server for the SDL initialization.
+
+	* plugin/sparkmonitor/Makefile.am,
+	* plugin/sparkmonitor/export.cpp:
+	- added files for logfile playback (thanks Hesham)
+
+2007-02-27  Joschka Boedecker <jboedeck@uni-koblenz.de>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
 	- check if any players are connected in play mode before
