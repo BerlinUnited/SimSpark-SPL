@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.2 2004/12/30 16:03:01 rollmark Exp $
+   $Id: main.cpp,v 1.3 2007/04/26 15:41:05 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ void SimSpark::PrintGreeting()
 {
     GetLog()->Normal()
         << "monitorspark, 0.1\n"
-        << "Universität Koblenz.\n"
+        << "Koblenz University.\n"
         << "Copyright (C) 2004, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
         << "\nType '--help' for further information\n\n";
@@ -64,6 +64,7 @@ void SimSpark::PrintHelp()
         << "\nusage: monitorspark [options]\n"
          << "\noptions:\n"
          << " --help\t print this message.\n"
+         << " --logfile\t logfilename\t plays the log file.\n"
          << "\n";
 }
 
@@ -72,6 +73,11 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
   for( int i = 0; i < argc; i++)
     {
       if( strcmp( argv[i], "--help" ) == 0 )
+        {
+          PrintHelp();
+          return false;
+        }
+      else if( strcmp( argv[i], "--logfile" ) == 0 && (i+1 == argc) )
         {
           PrintHelp();
           return false;
@@ -93,7 +99,19 @@ bool SimSpark::InitApp(int argc, char** argv)
         }
 
     // run initialization scripts
-    GetScriptServer()->Run("monitorspark.rb");
+
+    if(argc == 3 && strcmp( argv[1], "--logfile" ) == 0)
+        {
+            GetScriptServer()->Eval("$logPlayerMode = true");
+
+            char fileStr[80];
+            strcpy(fileStr, "$logPlayerFile = \"");
+            strcat(fileStr, argv[2]);
+            strcat(fileStr, "\"");
+            GetScriptServer()->Eval(fileStr);
+        }
+
+     GetScriptServer()->Run("monitorspark.rb");
 
     // tell the inputControl node the loaction of our camera
     shared_ptr<InputControl> inputCtr = GetInputControl();
