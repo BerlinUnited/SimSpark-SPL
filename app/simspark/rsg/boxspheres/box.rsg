@@ -2,7 +2,7 @@
 
 (RubySceneGraph 0 1)
 (
- (template $lenX $lenY $lenZ $density $material)
+ (template $lenX $lenY $lenZ $totalMass $material)
  (node Box
        (setExtents $lenX $lenY $lenZ)
        (setMaterial $material)
@@ -10,7 +10,8 @@
 
  (node Body
        (setName boxBody)
-       (setBox $density $lenX $lenY $lenZ)
+       ;(setBoxTotal $totalMass $lenX $lenY $lenZ)
+       (setBox $totalMass $lenX $lenY $lenZ)
        (node DragController
 	     (setAngularDrag 0.01)
 	     (setLinearDrag 0.01)

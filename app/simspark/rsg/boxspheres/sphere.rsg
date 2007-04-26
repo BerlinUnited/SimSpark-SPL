@@ -2,7 +2,7 @@
 
 (RubySceneGraph 0 1)
 (
- (template $radius $density $material)
+ (template $radius $totalMass $material)
 
  (node Sphere
        (setRadius $radius)
@@ -11,7 +11,8 @@
 
  (node Body
        (setName sphereBody)
-       (setSphere $density $radius)
+       ;(setSphereTotal $totalMass $radius)
+       (setSphere $totalMass $radius)
        (node DragController
              (setAngularDrag 0.01)
 	     (setLinearDrag 0.01)

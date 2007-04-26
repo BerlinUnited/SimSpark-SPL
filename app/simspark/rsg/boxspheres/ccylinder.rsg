@@ -2,7 +2,7 @@
 
 (RubySceneGraph 0 1)
 (
- (template $radius $length $density $material)
+ (template $radius $length $totalMass $material)
 
  (node CCylinder
        (setParams $radius $length)
@@ -11,7 +11,8 @@
        
  (node Body
        (setName ccylinderBody)
-       (setCappedCylinder $density $radius $length)
+       ;(setCappedCylinderTotal $totalMass $radius $length)
+       (setCappedCylinder $totalMass $radius $length)
        )
 	     
  (node CCylinderCollider
