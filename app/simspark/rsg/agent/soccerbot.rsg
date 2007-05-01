@@ -141,6 +141,10 @@
 	;add a time perceptor
 	(node TimePerceptor)
 
+	; EXPERIMENTAL
+	; add gyro rate sensor
+	(node GyroRatePerceptor)
+
 	(node VisionPerceptor
 	     (setSenseMyPos false)
 	     (setStaticSenseAxis false)
