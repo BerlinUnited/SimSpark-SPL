@@ -184,6 +184,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/inputsdl/Makefile \
 		 plugin/monitortest/Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
+		 plugin/gyrorateperceptor/Makefile \
 		 plugin/sexpparser/Makefile \
 		 plugin/soccer/Makefile \
 		 plugin/soccermonitor/Makefile \
