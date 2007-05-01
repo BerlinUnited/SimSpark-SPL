@@ -378,6 +378,9 @@ simulationServer = new('oxygen/SimulationServer', $serverPath+'simulation')
 # import the spark perceptors and effector set
 importBundle "sparkagent"
 
+#
+importBundle "gyrorateperceptor"
+
 
 
 
