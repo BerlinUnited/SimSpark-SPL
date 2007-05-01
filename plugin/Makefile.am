@@ -2,6 +2,7 @@ SUBDIRS = \
 	  filesystemstd \
 	  filesystemzip \
 	  forceeffector \
+	  gyrorateperceptor \
 	  inputsdl \
 	  monitortest \
 	  perfectvisionperceptor \
