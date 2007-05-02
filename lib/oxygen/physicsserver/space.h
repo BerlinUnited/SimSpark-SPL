@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.6 2004/04/07 08:35:53 rollmark Exp $
+   $Id: space.h,v 1.6.6.1 2007/05/02 19:35:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,13 +58,29 @@ public:
     */
     void Collide();
 
+    /** returns the ODE handle ID of the containing parent space */
+    virtual dSpaceID GetParentSpaceID();
+
+    /** returns true if this is the top global, i.e. top level space object */
+    bool IsGlobalSpace();
+
+protected:
+    static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
+
+    /** registers the managed space to the containing parent space */
+    virtual void OnLink();
+
     /** callback to handle a potential collision between two contained
         geoms. It will look up and notify the corresponding colliders
         for a potential collision.
     */
-    virtual void HandleCollide(dGeomID obj1, dGeomID obj2);
+    void HandleCollide(dGeomID obj1, dGeomID obj2);
 
-protected:
+    /** handle the collision between two geoms from which at least one
+        is a space geom
+    */
+    void HandleSpaceCollide(dGeomID obj1, dGeomID obj2);
+
     /** creates them managed ODE space and a contact joint group */
     virtual bool ConstructInternal();
 
