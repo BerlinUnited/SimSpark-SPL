@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h,v 1.8 2007/02/12 22:10:33 jamu Exp $
+   $Id: odeobject.h,v 1.8.2.1 2007/05/02 19:35:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,12 +41,18 @@ public:
     //
     ODEObject() : BaseNode() {};
     virtual ~ODEObject() {};
+    
+    /** returns the nearest parent space ODE handle */
+    dSpaceID FindSpaceID();
+
+    /** returns the ODE handle ID of the containing parent space */
+    virtual dSpaceID GetParentSpaceID();
 
 protected:
     /** returns the world node */
     boost::shared_ptr<World> GetWorld();
 
-    /** returns the space node */
+    /** finds the nearest parent space node */
     boost::shared_ptr<Space> GetSpace();
 
     /** returns the ODE world handle */
