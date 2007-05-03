@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.11.6.1 2007/05/02 19:35:37 rollmark Exp $
+   $Id: collider.cpp,v 1.11.6.2 2007/05/03 17:34:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ void Collider::OnLink()
         }
 
     // if we have a space add the geom to it
-    dSpaceID space = GetSpaceID();
+    dSpaceID space = FindSpaceID();
     if (
         (space) &&
         (! dSpaceQuery(space, mODEGeom))
@@ -65,7 +65,7 @@ void Collider::OnLink()
 
     // if there is a Body below our parent, link to it
     shared_ptr<Body> body = shared_static_cast<Body>
-        (make_shared(GetParent())->GetChildOfClass("Body"));
+        (parent.lock()->GetChildOfClass("Body"));
 
     if (body.get() != 0)
         {
