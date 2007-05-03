@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h,v 1.8.2.1 2007/05/02 19:35:52 rollmark Exp $
+   $Id: odeobject.h,v 1.8.2.2 2007/05/03 17:33:19 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,9 +57,6 @@ protected:
 
     /** returns the ODE world handle */
     dWorldID GetWorldID();
-
-    /** returns the ODE space handle */
-    dSpaceID GetSpaceID();
 
     /** converts the rotation part of a salt::Matrix to an ODE
         dMatrix3 */
