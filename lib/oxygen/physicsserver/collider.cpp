@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.11.6.2 2007/05/03 17:34:19 rollmark Exp $
+   $Id: collider.cpp,v 1.11.6.3 2007/05/04 09:46:50 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,10 +47,23 @@ void Collider::OnLink()
 {
     ODEObject::OnLink();
 
-    if (mODEGeom == 0)
+
+// JAN: taken from simspark
+    weak_ptr<Node> parent = GetParent();
+    if (
+        (mODEGeom == 0) ||
+        (parent.expired())
+        )
         {
             return;
         }
+
+
+
+//    if (mODEGeom == 0)
+  //      {
+    //        return;
+      //  }
 
     // if we have a space add the geom to it
     dSpaceID space = FindSpaceID();
