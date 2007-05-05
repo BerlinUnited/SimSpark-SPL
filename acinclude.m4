@@ -447,7 +447,7 @@ AC_SUBST([$2])
 
 # RCSS_BOOST_REGEX([ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ---------------------------------------------------------
-# Checks for the spades library
+# Checks for the boost regex library
 AC_DEFUN([RCSS_BOOST_REGEX],
 [AS_VAR_PUSHDEF([rcss_boost_regex], [rcss_cv_boost_regex])dnl
 AC_CACHE_CHECK(if linking against boost_regex succeeds, rcss_cv_boost_regex,
@@ -463,3 +463,30 @@ AC_CACHE_CHECK(if linking against boost_regex succeeds, rcss_cv_boost_regex,
 AS_IF([test AS_VAR_GET(rcss_boost_regex) = yes], [$1], [$2])
 AS_VAR_POPDEF([rcss_boost_regex])dnl
 ])# RCSS_BOOST_REGEX
+
+# RCSS_BOOST_THREADS_LIB
+# ---------------------------------------------------------
+# Checks for the boost threads library under various names
+# Substitutes: @BOOST_THREADS_LIB@
+AC_DEFUN([RCSS_BOOST_THREADS_LIB], [
+  AC_MSG_CHECKING(boost thread library)
+  AC_LANG_PUSH(C++)
+  OLD_LDFLAGS="$LDFLAGS"
+  LDFLAGS="$OLDLDFLAGS -lboost_thread"
+  AC_LINK_IFELSE([int main() { return 0; }],
+                 [rcss_boost_threads_lib=boost_thread], 
+                 [LDFLAGS="$OLDLDFLAGS -lboost_thread-mt"
+      AC_LINK_IFELSE([int main() { return 0; }],
+                   [rcss_boost_threads_lib=boost_thread-mt], 
+                   [  LDFLAGS="$OLDLDFLAGS -lboost_thread-gcc-mt"
+          AC_LINK_IFELSE([int main() { return 0; }],
+                       [rcss_boost_threads_lib=boost_thread-gcc-mt], 
+                       [rcss_boost_threads_lib=])
+                    ])
+                ])
+  LDFLAGS="$OLD_LDFLAGS"
+  AC_LANG_POP(C++)
+  BOOST_THREADS_LIB=$rcss_boost_threads_lib
+  AC_MSG_RESULT($rcss_boost_threads_lib)
+  AC_SUBST(BOOST_THREADS_LIB)  
+])# RCSS_BOOST_THREADS_LIBS
