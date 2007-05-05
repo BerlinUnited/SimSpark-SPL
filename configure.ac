@@ -92,6 +92,7 @@ if test "$rcss_have_boost_regex" = no; then
 	AC_MSG_WARN([the ZIP filesystem plugin cannot be build])
 fi
 AM_CONDITIONAL(HAVE_BOOST_REGEX, test $rcss_have_boost_regex = yes)
+RCSS_BOOST_THREADS_LIB
 
 ## checks for system services
 
