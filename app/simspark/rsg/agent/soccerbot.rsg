@@ -133,17 +133,25 @@
         (setLocalPos $TorsoPosX $TorsoPosY $TorsoPosZ)
         (importScene rsg/boxspheres/box.rsg $TorsoBox1Length $TorsoBox1Width $TorsoBox1Height $TorsoBox1Mass matMagenta)
 
+	; we want to initialize
+	;(node InitEffector)
+	(node SingleMatInitEffector)
+
+	;add a time perceptor
+	(node TimePerceptor)
+
 	; install a node holding agent state data
         (node AgentState
 	     (setName AgentState)
 	)
-	
-	;add a time perceptor
-	(node TimePerceptor)
 
-	; EXPERIMENTAL
+	; add beam effector
+	(node BeamEffector)
+
 	; add gyro rate sensor
-	(node GyroRatePerceptor)
+	(node GyroRatePerceptor
+	      (setName torsogyro)
+	      )
 
 	(node VisionPerceptor
 	     (setSenseMyPos false)
@@ -171,6 +179,12 @@
 	)
     )
 	
+    ;;; DEBUG
+    ;(node FixedJoint
+;	  (attach ../body/boxBody 0) ; attach to the static environment
+;	  (setFixed)
+;    )
+
     ;;; -------------------------------------
     ;;; HEAD
     ;;; -------------------------------------
@@ -707,12 +721,17 @@
 		     $LeftShankPosY
 		     (eval $LeftShankPosZ - (eval $ShankHeight / 2.0) - (eval $FootHeight / 2.0) - 0.05)
 	 )
-        (importScene rsg/boxspheres/box.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
+	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
+
+	; install touch perceptor
+	(node TouchPerceptor
+	      (setName footleft)
+	)
 
         ; install hinge joint to connect to the shank
         (node UniversalJoint
             (attach ../boxBody ../../leftshank/boxBody)
-            (setAnchor 0.0 0.0 (eval $FootHeight / 2.0))   
+            (setAnchor 0.0 0.0 (eval $FootHeight * 3.0))   
             (setAxis1 1.0 0.0 0.0) ; move around the x-axis
             (setAxis2 0.0 1.0 0.0) ; move around the y-axis
 
@@ -751,12 +770,18 @@
 		     $RightShankPosY
 		     (eval $RightShankPosZ - (eval $ShankHeight / 2.0) - (eval $FootHeight / 2.0) - 0.05)
 	 )
-        (importScene rsg/boxspheres/box.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
+        (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
+					
+        ; install touch perceptor
+	(node TouchPerceptor
+	      (setName footright)
+	)
+	
 
         ; install hinge joint to connect to the shank
         (node UniversalJoint
             (attach ../boxBody ../../rightshank/boxBody)
-            (setAnchor 0.0 0.0 (eval $FootHeight / 2.0))   
+            (setAnchor 0.0 0.0 (eval $FootHeight * 3.0))   
             (setAxis1 1.0 0.0 0.0) ; move around the x-axis
             (setAxis2 0.0 1.0 0.0) ; move around the y-axis
 
@@ -773,6 +798,8 @@
             (node UniversalJointEffector
                 (setName rleg_eff_5_6)
             )
+
+	    
         )
 
 	; static box at the back of the foot
