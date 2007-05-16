@@ -37,13 +37,13 @@ addSoccerVar('WaitBeforeKickOff', 2.0)
 
 # agent parameters
 addSoccerVar('AgentMass', 75.0)
-addSoccerVar('AgentRadius',  0.22)
+addSoccerVar('AgentRadius',  3.5)
 addSoccerVar('AgentMaxSpeed', 10.0)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.4)
 #addSoccerVar('BallDensity',2)
-addSoccerVar('BallMass',0.45) # FIFA: 410-450 g
+addSoccerVar('BallMass',0.2) # FIFA: 410-450 g
 
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
