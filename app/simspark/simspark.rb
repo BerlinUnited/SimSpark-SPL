@@ -6,7 +6,7 @@
 $recordLogfile = false
 
 sparkSetupServer()
-#sparkSetupRendering()
+sparkSetupRendering()
 sparkSetupInput()
 
 # sparkAddFPSCamera($scenePath+'camera', 
@@ -71,7 +71,7 @@ material.setDiffuse(1.0,0.0,0.75,1.0)
 #
 
 
-#sparkLogAllToFile('./spark.txt')
+#sparkLogAllToFile('spark.txt')
 #sparkLogDebugToCerr()
 sparkLogAllToCerr()
 
