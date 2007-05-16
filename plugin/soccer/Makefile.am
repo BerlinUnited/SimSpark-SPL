@@ -27,6 +27,8 @@ hearperceptor/hearperceptor.cpp \
 hearperceptor/hearperceptor_c.cpp \
 initeffector/initeffector.cpp \
 initeffector/initeffector_c.cpp \
+initeffector/singlematiniteffector.cpp \
+initeffector/singlematiniteffector_c.cpp \
 kickeffector/kickeffector.cpp \
 kickeffector/kickeffector_c.cpp \
 objectstate/objectstate.cpp \
@@ -70,6 +72,7 @@ gamestateperceptor/gamestateperceptor.h \
 hearperceptor/hearperceptor.h \
 initeffector/initaction.h \
 initeffector/initeffector.h \
+initeffector/singlematiniteffector.h \
 kickeffector/kickaction.h \
 kickeffector/kickeffector.h \
 objectstate/objectstate.h \
