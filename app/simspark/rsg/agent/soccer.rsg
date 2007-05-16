@@ -406,69 +406,71 @@
 ;; add flags
 ;;
 
-; mark the soccer field with 4 field flags
-; (importScene rsg/agent/flag.rsg 
-;	      (eval -1 * $FieldHalfLength)  
-;	      $FieldHalfWidth
-;	      0 
-;	      F1L matRed
-;	      )
+; mark the soccer field with 4 field flags (no visualization)
+ (importScene rsg/agent/flag_no_viz.rsg 
+	      (eval -1 * $FieldHalfLength)  
+	      $FieldHalfWidth
+	      0 
+	      F1L
+	      )
 
-; (importScene rsg/agent/flag.rsg 
-;	      (eval -1 * $FieldHalfLength) 
-;	      (eval -1 * $FieldHalfWidth)
-;	      0
-;	      F2L matRed
-;	      )
+ (importScene rsg/agent/flag_no_viz.rsg 
+	      (eval -1 * $FieldHalfLength) 
+	      (eval -1 * $FieldHalfWidth)
+	      0
+	      F2L
+	      )
 
-; (importScene rsg/agent/flag.rsg 
-;	      $FieldHalfLength 
-;	      $FieldHalfWidth 
-;	      0 
-;	      F1R matBlue
-;	      )
+ (importScene rsg/agent/flag_no_viz.rsg 
+	      $FieldHalfLength 
+	      $FieldHalfWidth 
+	      0 
+	      F1R
+	      )
 
-; (importScene rsg/agent/flag.rsg 
-;	      $FieldHalfLength 
-;	      (eval -1 * $FieldHalfWidth) 
-;	      0 
-;	      F2R matBlue
-;	      )
+ (importScene rsg/agent/flag_no_viz.rsg 
+	      $FieldHalfLength 
+	      (eval -1 * $FieldHalfWidth) 
+	      0 
+	      F2R
+	      )
 	      
 	      
-  ; mark the left goal
-; (importScene rsg/agent/flag.rsg
-;	      (eval -1 * $FieldHalfLength)
-;	      (eval -1 * $GoalHalfWidth)
-;	      0
-;	      G1L matRed
-;	      )
+  ; mark the left goal (no visualization)
+ (importScene rsg/agent/flag_no_viz.rsg
+	      (eval -1 * $FieldHalfLength)
+	      (eval -1 * $GoalHalfWidth)
+	      0
+	      G1L
+	      )
 
-; (importScene rsg/agent/flag.rsg
-;	      (eval -1 * $FieldHalfLength)
-;	      $GoalHalfWidth
-;	      0
-;	      G2L matRed
-;	      )
+ (importScene rsg/agent/flag_no_viz.rsg
+	      (eval -1 * $FieldHalfLength)
+	      $GoalHalfWidth
+	      0
+	      G2L
+	      )
 
-; mark the right goal
-; (importScene rsg/agent/flag.rsg
-;	      $FieldHalfLength
-;	      (eval -1 * $GoalHalfWidth)
-;	      0
-;	      G1R matBlue
-;	      )
+ ; mark the right goal (no visualization)
+ (importScene rsg/agent/flag_no_viz.rsg
+	      $FieldHalfLength
+	      (eval -1 * $GoalHalfWidth)
+	      0
+	      G1R
+	      )
 
-; (importScene rsg/agent/flag.rsg
-;	      $FieldHalfLength
-;	      $GoalHalfWidth
-;	      0
-;	      G2R matBlue
-;	      )	      
+ (importScene rsg/agent/flag_no_viz.rsg
+	      $FieldHalfLength
+	      $GoalHalfWidth
+	      0
+	      G2R
+	      )	      
 
 ;;
 ;; add the ball
 ;;
  (importScene rsg/agent/ball.rsg)
+
+; (importScene rsg/agent/hierarchytest4.rsg)
 
  )
