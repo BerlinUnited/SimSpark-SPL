@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gyrorateperceptor.cpp,v 1.1 2007/05/01 16:54:23 jboedeck Exp $
+   $Id: gyrorateperceptor.cpp,v 1.2 2007/05/16 14:23:44 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,20 +43,25 @@ bool
 GyroRatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
     Predicate& predicate = predList->AddPredicate();
-    predicate.name = "gyro";
+    predicate.name = "GYR";
     predicate.parameter.Clear();
     
+    ParameterList & nameElement = predicate.parameter.AddList();
+    nameElement.AddValue(std::string("name"));
+    nameElement.AddValue(GetName());
+
     shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-    (make_shared(GetParentSupportingClass("Transform")));
-    shared_ptr<Body> body = shared_static_cast<Body>( transformParent->GetChildOfClass("Body") );
-    
-    ParameterList &rates = predicate.parameter.AddList();
-    rates.AddValue(transformParent->GetName());
-    
+        (GetParentSupportingClass("Transform").lock());
+
+    shared_ptr<Body> body = shared_static_cast<Body>
+        (transformParent->GetChildOfClass("Body"));    
+
     Vector3f rate = body->GetAngularVelocity();
-    rates.AddValue(rate.x());
-    rates.AddValue(rate.y());
-    rates.AddValue(rate.z());
+
+    ParameterList & ratesElement = predicate.parameter.AddList();    
+    ratesElement.AddValue(rate.x());
+    ratesElement.AddValue(rate.y());
+    ratesElement.AddValue(rate.z());
 
     return true;
 }
