@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptorhandler.cpp,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: perceptorhandler.cpp,v 1.3 2007/05/16 14:24:30 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,12 +40,17 @@ PerceptorHandler::HandleCollision
       return;
     }
 
+  //shared_ptr<CollisionPerceptor> perceptor =
+  //  shared_static_cast<CollisionPerceptor>
+  //  (transformParent->GetChildOfClass("CollisionPerceptor", true));
+
   shared_ptr<CollisionPerceptor> perceptor =
     shared_static_cast<CollisionPerceptor>
-    (transformParent->GetChildOfClass("CollisionPerceptor", true));
+    (transformParent->GetChildSupportingClass("CollisionPerceptor", true));
 
   if (perceptor.get() == 0)
     {
+        GetLog()->Error() << "PerceptorHandler: no suitable child node found!\n";
       return;
     }
 
