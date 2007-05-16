@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.5 2004/03/23 09:37:13 rollmark Exp $
+   $Id: initeffector.cpp,v 1.6 2007/05/16 14:22:05 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,17 +78,60 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
     mGameState->RequestUniform
         (state, initAction->GetName(), initAction->GetNumber());
 
-    // request an initial position for the agent and move it there
-    Vector3f pos = mGameState->RequestInitPosition(state->GetTeamIndex());
+    TTeamIndex team = state->GetTeamIndex();
 
-    shared_ptr<Body> body;
-    if (SoccerBase::GetAgentBody(mAgentAspect,body))
+    // request an initial position for the agent and move it there
+    Vector3f pos = mGameState->RequestInitPosition(team);
+
+    // get parent of the agent aspect
+    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+        (mAgentAspect->GetParent().lock());
+
+    if (parent.get() == 0)
+	{
+            GetLog()->Error()
+                << "ERROR: (InitEffector) agent aspect doesn't have "
+                << "children of type Body\n";
+
+    	    return false;
+	}
+
+    Leaf::TLeafList leafList;  
+
+    // get absolute position of the agent
+    Vector3f bodyPos = mAgentAspect->GetWorldTransform().Pos();
+
+    // get all the bodies below the parent of the agent aspect
+    parent->GetChildrenSupportingClass("Body", leafList, true);
+
+    if (leafList.size() == 0)
         {
-            body->SetPosition(pos);
-            body->SetVelocity(Vector3f(0,0,0));
-            body->SetAngularVelocity(Vector3f(0,0,0));
+            GetLog()->Error()
+                << "ERROR: (InitEffector) agent aspect doesn't have "
+                << "children of type Body\n";
+
+            return false;
         }
 
+    Leaf::TLeafList::iterator iter = leafList.begin();
+    
+    // move all the child bodies to the new relative position
+    for (iter;
+         iter != leafList.end();
+         ++iter
+         )
+        {    
+            shared_ptr<Body> childBody =
+                shared_dynamic_cast<Body>(*iter);
+                
+            Vector3f childPos = childBody->GetPosition();
+            Vector3f newPos   = pos + (childPos-bodyPos);            
+
+            childBody->SetPosition(newPos);
+            childBody->SetVelocity(Vector3f(0,0,0));
+            childBody->SetAngularVelocity(Vector3f(0,0,0));
+        }
+       
     return true;
 }
 
