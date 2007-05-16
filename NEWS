@@ -1,3 +1,48 @@
+[0.5.4] 
+This release contains fixes for known problems (e.g. in the
+visionperceptor or the spark sample agent), updates of old plug-ins
+for the new simulation (beameffector, initeffector), and new features
+like a log player, and new perceptors.
+
+* Important fixes:
+
+visionperceptor: 
+- patch (vision6) by Yuan to fix problems related to the local 
+  reference frame of the robot
+
+soccerbot:
+- anchor of the ankle joint was set higher to avoid foot penetration
+  when doing large steps (thanks Guangbin Cui)
+
+beameffector:
+- all the bodies below the parent of the effector are moved now 
+  instead of only one (thanks Amin)
+
+initeffector:
+- move all the bodies below the parent of the effector to the initial position
+
+simspark:
+- increased goal height
+- reduced ball size and mass
+- internal rendering can be switched off without affecting timing now
+- support for ODE collision spaces was implemented by Markus
+- a 64-Bit compile issue was fixed (thanks Sander van Dijk)
+
+agentspark:
+- patch by snow to fix problems in the GetMessage function
+- sending init message in the SoccerBotBehavior
+
+* Features:
+
+- simspark now uses the new SingleMatInitEffector to initialize 
+  agents based on their teamname (different initial position and 
+  different uniform color)
+- simspark can record logfiles (thanks Hesham & Amin)
+- monitorspark can playback the recorded logfiles (thanks Hesham & Amin)
+- new gyro rate perceptor (thanks Hedayat)
+- new binary touch sensor
+
+
 [0.5.3] 
 This release contains some fixes for the offside code and some
 eye candy for the lite monitor. Furthermore, it includes the new

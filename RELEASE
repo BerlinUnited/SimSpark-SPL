@@ -8,25 +8,49 @@ RELEASE News for different forums                        -*- outline -*-
 
 ** [Soccer Lists]
 
-We have just released version 0.5.3 of rcssserver3D. This release
-contains some fixes for the offside code and some eye candy for the
-lite monitor. Furthermore, it includes the new Fujitsu HOAP-2 inspired
-robot for simspark as well as the derived SoccerBot (work in
-progress), and some improvements to the physics code (mainly related
-to stability issues).
+We have just released version 0.5.4 of rcssserver3D. This release
+contains fixes for known problems (e.g. in the visionperceptor or the
+spark sample agent), updates of old plug-ins for the new simulation
+(beameffector, initeffector), and new features like a log player, and
+new perceptors. 
 
-- rcssmonitor3D-lite features a sky box (thanks to Heni Ben Amor) and improved 
-  colors and lights (thanks to Tobias Warden). Please see the comment about
-  texture files in the INSTALL file.
+* Important fixes:
 
-- simspark includes hoap2.rsg and soccerbot.rsg robot models
+visionperceptor: 
+- patch (vision6) by Yuan to fix problems related to the local 
+  reference frame of the robot
 
-- agent communication was restricted to a message length of 20 Bytes in
-  rcssserver3D
+soccerbot:
+- anchor of the ankle joint was set higher to avoid foot penetration
+  when doing large steps (thanks Guangbin Cui)
 
-- several fixes in the rcssmonitor3D-lite, rcssserver3D, and simspark. For
-  details, please see the NEWS file. Thanks go to Junquing Wang and Sander
-  van Dijk.
+beameffector:
+- all the bodies below the parent of the effector are moved now 
+  instead of only one (thanks Amin)
+
+initeffector:
+- move all the bodies below the parent of the effector to the initial position
+
+simspark:
+- increased goal height
+- reduced ball size and mass
+- internal rendering can be switched off without affecting timing now
+- support for ODE collision spaces was implemented by Markus
+- a 64-Bit compile issue was fixed (thanks Sander van Dijk)
+
+agentspark:
+- patch by snow to fix problems in the GetMessage function
+- sending init message in the SoccerBotBehavior
+
+* Features:
+
+- simspark now uses the new SingleMatInitEffector to initialize 
+  agents based on their teamname (different initial position and 
+  different uniform color)
+- simspark can record logfiles (thanks Hesham & Amin)
+- monitorspark can playback the recorded logfiles (thanks Hesham & Amin)
+- new gyro rate perceptor (thanks Hedayat)
+- new binary touch sensor
 
 You can find the package at the usual place [1].
 
@@ -42,7 +66,7 @@ Joschka (for the maintenance comittee)
 
 ** [General (SF Project News etc)]
 
-We have just released rcssserver3D-0.5.3. 
+We have just released rcssserver3D-0.5.4. 
 
 rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
@@ -52,13 +76,18 @@ in the RoboCup 3D Soccer Simulation League.
 
 Important fixes and new features:
 
-- the visualization features a sky box and other eye candy now.
+- issues concerning the local reference frame of the robot's vision
+  perceptor have been fixed
 
-- includes the first prototypes of humanoid robot models
+- issues in the sample agent concerning message retrieval from the
+  network socket have been fixed
 
-- agent communication was restricted to a message length of 20 Bytes 
+- several effectors have been updated to be compatible with the new
+  simspark simulation
 
-- several fixes in the rcssmonitor3D-lite, rcssserver3D, and simspark
+- new perceptors have been implemented (gyro rate, touch)
+
+- log file recording & playback was implemented 
 
 For details have a look into the ChangeLog coming with the package.
 
