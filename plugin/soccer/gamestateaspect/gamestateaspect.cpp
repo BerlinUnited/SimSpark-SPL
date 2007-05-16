@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.11 2006/05/18 09:56:02 jamu Exp $
+   $Id: gamestateaspect.cpp,v 1.12 2007/05/16 14:22:31 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -387,6 +387,15 @@ GameStateAspect::RequestInitPosition(const TTeamIndex ti)
 
     Vector3f pos = init;
     init[1] -= mAgentRadius * 3;
+    
+    float fieldWidth;
+    SoccerBase::GetSoccerVar(*this,"FieldWidth",fieldWidth);    
+        
+    if (init[1] < -fieldWidth/2.0)
+        {
+            init[1] = fieldWidth/2 - mAgentRadius*2;
+            init[0] += mAgentRadius * 2;
+        }
 
     return pos;
 }
@@ -401,7 +410,7 @@ GameStateAspect::OnLink()
     float fieldLength = 100.0;
     SoccerBase::GetSoccerVar(*this,"FieldLength",fieldLength);
 
-    mAgentRadius = 0.22;
+    mAgentRadius = 3.5;
     SoccerBase::GetSoccerVar(*this,"AgentRadius",mAgentRadius);
 
     mLeftInit = Vector3f
