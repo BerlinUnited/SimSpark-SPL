@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.10 2007/04/26 15:41:24 jboedeck Exp $
+   $Id: main.cpp,v 1.11 2007/05/16 14:29:02 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 */
 
 #include <errno.h>
+#include <signal.h>
 #include <string>
 #include <iostream>
 #include <rcssnet/tcpsocket.hpp>
@@ -42,6 +43,16 @@ TCPSocket gSocket;
 //UDPSocket gSocket;
 string gHost = "127.0.0.1";
 int gPort = 3100;
+
+// bool to indicate whether to continue the agent mainloop
+static bool gLoop = true;
+
+// SIGINT handler prototype
+extern "C" void handler(int sig)
+{
+    if (sig == SIGINT)
+        gLoop = false;
+}
 
 void PrintGreeting()
 {
@@ -226,7 +237,8 @@ bool GetMessage(string& msg)
 
     msg = string(buffer+sizeof(unsigned int));
 
-    //cerr << msg << endl;
+    // DEBUG
+    //cout << msg << endl;
 
     return true;
 }
@@ -242,8 +254,9 @@ void Run()
     PutMessage(behavior->Init());
 
     string msg;
-    while (GetMessage(msg))
-        {
+    while (gLoop)
+        {  
+            GetMessage(msg);
             PutMessage(behavior->Think(msg));
         }
 }
@@ -251,6 +264,9 @@ void Run()
 int
 main(int argc, char* argv[])
 {
+    // registering the handler, catching SIGINT signals 
+    signal(SIGINT, handler);
+
     PrintGreeting();
     ReadOptions(argc,argv);
 
