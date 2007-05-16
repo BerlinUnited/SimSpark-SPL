@@ -26,6 +26,8 @@ Contents
 2.3.10 GameState Perceptor
 2.3.11 AgentState Perceptor
 2.3.12 Hear Perceptor
+2.3.13 GyroRate Perceptor
+2.3.14 Touch Perceptor
 
 3. Monitor and Trainer Protocol
 
@@ -500,6 +502,45 @@ Example Hear output:
 (hear 0.8 -179.99 Test_1)
 (hear 0.4 self Test_2)
 
+2.3.13 GyroRate Perceptor
+-------------------------
+
+The GyroRate perceptor will give information about the change in
+orientation of the body below its parent node (e.g. an ODE body below
+an AgentAspect node). The perceptor provides three values
+corresponding to change rates of angles around the X, Y, and Z axis respectively.
+
+Message format:
+
+(GYR (name <nodename>) (<x> <y> <z>))
+
+<nodename> can be set arbitrarily
+
+<x> <y> <z> are the change rates of angles around the X, Y, and Z axis respectively.
+
+Example output:
+
+(GYR (name torsogyro) (0.00 0.00 -0.00))
+
+2.3.14 Touch Perceptor
+----------------------
+
+The touch perceptor provides simple binary information of whether the
+collider below its parent node has been involved in a collision or
+not.
+
+Message format:
+
+(TCH (name <nodename>) (val <value>))
+
+<nodename> can be set arbitrarily
+
+<value> is 1 in case of a collision and 0 in case no collision was
+detected
+
+Example output:
+
+(TCH (name footleft) (val 1))
 
 
 3. Monitor and Trainer Protocol
