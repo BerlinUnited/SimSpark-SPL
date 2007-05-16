@@ -1,3 +1,97 @@
+2007-05-16  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp:
+	- slowed down the log file server with usleep(33000)
+
+	* plugin/soccer/initeffector/singlematiniteffector.cpp,
+	* plugin/soccer/initeffector/singlematiniteffector.h,
+	* plugin/soccer/initeffector/singlematiniteffector_c.cpp:
+	- added files for SingleMatInitEffector which is derived
+	  from InitEffector, but which can change the material name of a
+	  single material node under the parent node of the effector
+	  based on the provided team name
+
+	* plugin/soccer/initeffector/initeffector.cpp:
+	- move all bodies below the parent of the agent aspect
+	  to the initial position (relative to the agent aspect)
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- changed default agent radius
+	- changed calulation of initial positions slightly
+
+	* plugin/soccer/beameffector/beameffector.cpp:
+	- changed BeamEffector to move all the bodies below the parent
+	  node of the perceptor (thanks Amin)
+
+	* plugin/soccer/export.cpp:
+	- include SingleMatInitEffector
+
+	* plugin/soccer/Makefile.am: 
+	- added SingleMatInitEffector files
+
+	* plugin/gyrorateperceptor/gyrorateperceptor.cpp:
+	- changed percept name to "GYR"
+	- modified percept format to be more compatible with other percepts
+
+	* plugin/collisionperceptor/touchperceptor.h,
+	* plugin/collisionperceptor/touchperceptor.cpp,
+	* plugin/collisionperceptor/touchperceptor_c.cpp:
+	- added TouchPerceptor files
+
+	* plugin/collisionperceptor/perceptorhandler.cpp:
+	- changed search for suitable node supporting class
+	  CollisionPerceptor (derived classes are also permitted)	
+
+	* plugin/collisionperceptor/export.cpp:
+	- included TouchPerceptor
+
+	* plugin/collisionperceptor/collisionperceptor.h:
+	- made Percept method virtual
+
+	* plugin/collisionperceptor/Makefile.am:
+	- added TouchPerceptor files which is derived from
+	  CollisionPerceptor and implements a simple binary touch
+	  sensor	
+
+	* lib/spark/spark.rb:
+	- import collisionperceptor bundle
+
+	* app/simspark/rsg/boxspheres/box_with_handler.rsg:
+	- added box with perceptor handler below the collider
+
+	* app/simspark/rsg/agent/soccerbot.rsg:
+	- added SingleMatInitEffector below the AgentAspect which
+	  allows initialization and change of the uniform color
+	  for agents of different teams
+	- added BeamEffector (thanks Amin)
+	- named GyroRatePerceptor (thanks Hedayat)
+	- added TouchPerceptors to both feet
+	- raised the ankle joint anchor for both legs to avoid penetration
+	  of the feet doing large steps (thanks Guangbin Cui)
+
+	* app/simspark/rsg/agent/soccer.rsg:
+	- re-activated the flags (left commented out by mistake before)
+	- flags are not visualized but can be perceived
+
+	* app/simspark/rsg/agent/flag_no_viz.rsg:
+	- added flag without visualization
+
+	* app/simspark/soccersim.rb:
+	- set agent radius to 3.5, ball mass to 0.2
+
+	* app/simspark/simspark.rb:
+	- re-activated internal rendering by default since external
+	  monitor still has strange problems
+
+	* app/agentspark/soccerbotbehavior.h,
+	* app/agentspark/soccerbotbehavior.cpp:
+	- added flag that indicates whether we sent the init msg
+	- implemented sending the init msg in the behavior
+	- removed some commented out code
+
+	* app/agentspark/main.cpp:
+	- register signal handler for SIGINT to stop the agent
+
 2007-04-27  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/agentspark/main.cpp:
