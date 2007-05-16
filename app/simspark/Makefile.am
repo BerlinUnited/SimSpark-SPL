@@ -38,6 +38,7 @@ dist_pkgdata_DATA = \
 	rsg/agent/soccerbot.rsg \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
+	rsg/agent/flag_no_viz.rsg \
 	rsg/agent/simspark.rsg \
 	rsg/agent/ball.rsg \
 	rsg/boxspheres/staticsphere.rsg \
@@ -45,4 +46,5 @@ dist_pkgdata_DATA = \
 	rsg/boxspheres/sphere.rsg \
 	rsg/boxspheres/simspark.rsg \
 	rsg/boxspheres/arena.rsg \
-	rsg/boxspheres/box.rsg
+	rsg/boxspheres/box.rsg \
+	rsg/boxspheres/box_with_handler.rsg
