@@ -183,6 +183,7 @@ physicsserver/collider.h \
 physicsserver/collisionhandler.h \
 physicsserver/contactjointhandler.h \
 physicsserver/odeobject.h \
+physicsserver/odewrapper.h \
 physicsserver/physicsserver.h \
 physicsserver/planecollider.h \
 physicsserver/raycollider.h \
