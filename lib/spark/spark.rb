@@ -381,6 +381,8 @@ importBundle "sparkagent"
 #
 importBundle "gyrorateperceptor"
 
+#
+importBundle "collisionperceptor"
 
 
 
