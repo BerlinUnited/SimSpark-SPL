@@ -27,7 +27,7 @@ using namespace std;
 using namespace boost;
 using namespace salt;
 
-SoccerbotBehavior::SoccerbotBehavior() : mZG("." PACKAGE_NAME)
+SoccerbotBehavior::SoccerbotBehavior() : mZG("." PACKAGE_NAME), mInit(false)
 {
 }
 
@@ -153,6 +153,12 @@ void SoccerbotBehavior::ParseUniversalJointInfo(const oxygen::Predicate& predica
 
 string SoccerbotBehavior::Think(const std::string& message)
 {
+    if (!mInit)
+    {
+        mInit = true;
+        return "(init (unum 0)(teamname RoboLog))";
+    }
+
     //sleep(1);
 
     //bow before me
@@ -200,15 +206,7 @@ string SoccerbotBehavior::Think(const std::string& message)
  
     // string stream for the server commands
     stringstream ss("");
-
-//    curAngle = mUniversalJointSenseMap[JID_LLEG_5_6].angle1;
-
-//    if (curAngle < 40.0)
-//    {
-//        newAngle = gain * (40.0 - curAngle);
-//        ss << "(lleg_eff_5_6 0.0 " << newAngle << ")";
-//    }
-
+    
 #if 1
     switch(rightstate)
     {

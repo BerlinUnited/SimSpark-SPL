@@ -111,6 +111,9 @@ protected:
     // mapping from object name to joint id
     typedef std::map<std::string, JointID> TJointIDMap;
     TJointIDMap mJointIDMap;
+
+    // flag whether we sent the init message yet
+    bool mInit;
 };
 
 #endif // SOCCERBOTBEHAVIOR_H
