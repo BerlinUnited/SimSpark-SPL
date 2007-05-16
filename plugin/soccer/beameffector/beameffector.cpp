@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.9 2004/12/21 23:04:46 tomhoward Exp $
+   $Id: beameffector.cpp,v 1.10 2007/05/16 14:22:44 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,12 +84,12 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
             }
 
         // an agent can only beam within it's own field half
-        float minX = -mFieldLength/2 + mAgentRadius;
+        float minX = -mFieldLength/2;
         pos[0] = std::max<float>(pos[0],minX);
         pos[0] = std::min<float>(pos[0],0.0f);
 
-        float minY = -mFieldWidth/2 + mAgentRadius;
-        float maxY = mFieldWidth/2 - mAgentRadius;
+        float minY = -mFieldWidth/2;
+        float maxY = mFieldWidth/2;
         pos[1] = std::max<float>(minY,pos[1]);
         pos[1] = std::min<float>(maxY,pos[1]);
 
@@ -104,11 +104,54 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
                 mAgentState->GetTeamIndex()
                 );
 
-        mBody->SetPosition(pos);
-        mBody->SetVelocity(Vector3f(0,0,0));
-        mBody->SetAngularVelocity(Vector3f(0,0,0));
-    }
+	Vector3f bodyPos = mBody->GetPosition();
+        //mBody->SetPosition(pos);
+        //mBody->SetVelocity(Vector3f(0,0,0));
+        //mBody->SetAngularVelocity(Vector3f(0,0,0));
 
+	shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+	    (GetParent().lock());
+	parent = shared_dynamic_cast<Transform>
+	    (parent->GetParent().lock());
+
+	if (parent.get()==0)
+	{
+    	    return false;
+	}
+
+        Leaf::TLeafList leafList;
+
+        // get a list of all child body nodes
+        parent->GetChildrenSupportingClass("Body", leafList, true);
+
+        if (leafList.size() == 0)
+        {
+            GetLog()->Error()
+                << "ERROR: (BeamEffector) agent aspect doesn't have "
+                << "children of type Body\n";
+
+            return false;
+        }
+
+        Leaf::TLeafList::iterator iter = leafList.begin();
+       
+        // move all child bodies 
+        for (iter;
+             iter != leafList.end();
+             ++iter
+            )
+        {            
+	    shared_ptr<Body> childBody = 
+                shared_dynamic_cast<Body>(*iter);
+	    
+    	    Vector3f childPos = childBody->GetPosition();
+
+    	    childBody->SetPosition(pos + (childPos-bodyPos));
+    	    childBody->SetVelocity(Vector3f(0,0,0));
+    	    childBody->SetAngularVelocity(Vector3f(0,0,0));
+    	}
+    }
+    
     return true;
 }
 
