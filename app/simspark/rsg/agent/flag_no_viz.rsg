@@ -1,0 +1,18 @@
+; -*- mode: lisp; -*-
+;
+; create a field flag at ($PosX $PosY $PosZ) named $Name with the
+; given $Material
+;
+
+(RubySceneGraph 0 1)
+(
+ (template $PosX $PosY $PosZ $Name)
+
+ (node Transform
+       (setLocalPos $PosX $PosY $PosZ)
+
+       (node ObjectState
+	     (setPerceptName $Name)
+	     )
+       )
+ )
