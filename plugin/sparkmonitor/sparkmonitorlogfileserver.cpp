@@ -107,6 +107,8 @@ void SparkMonitorLogFileServer::StartCycle()
         {
             ParseMessage(msg);
         }
+
+    usleep(33000);
 }
 
 void SparkMonitorLogFileServer::ParseCustomPredicates(sexp_t* sexp, PredicateList& pList)
