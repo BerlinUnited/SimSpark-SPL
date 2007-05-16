@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: export.cpp,v 1.3 2007/05/16 14:25:03 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,8 +22,10 @@
 
 #include "collisionperceptor.h"
 #include "perceptorhandler.h"
+#include "touchperceptor.h"
 
 ZEITGEIST_EXPORT_BEGIN()
     ZEITGEIST_EXPORT(CollisionPerceptor);
     ZEITGEIST_EXPORT(PerceptorHandler);
+    ZEITGEIST_EXPORT(TouchPerceptor);
 ZEITGEIST_EXPORT_END()
