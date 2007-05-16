@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.17 2007/02/25 18:02:10 jamu Exp $
+   $Id: visionperceptor.cpp,v 1.18 2007/05/16 14:45:17 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -284,13 +284,8 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
 
     TTeamIndex  ti          = mAgentState->GetTeamIndex();
 
-    const Vector3f& up = mTransformParent->GetWorldTransform().Up();
-
-    // calc the percptors angle in the horizontal plane
-    double fwTheta = gNormalizeRad(Vector2f(up[0],up[1]).GetAngleRad());
-
-    // calc the perceptors angle in the vertical plane
-    double fwPhi = gNormalizeRad(Vector2f(up[0],up[2]).GetAngleRad());
+	// get the transformation matrix describing the current orientation
+    const Matrix& mat = mTransformParent->GetWorldTransform();
 
     TObjectList visibleObjects;
     SetupVisibleObjects(visibleObjects);
@@ -312,16 +307,18 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
             continue;
         }
 
+		// determine position relative to the local reference frame
+        Vector3f localRelPos = mat.InverseRotate(od.mRelPos);
+        
+        
         // theta is the angle in horizontal plane, with fwAngle as 0 degree
-        od.mTheta = gRadToDeg(gNormalizeRad(
-                              Vector2f(od.mRelPos[0],od.mRelPos[1]).GetAngleRad() -
-                              fwTheta
-                              ));
+        od.mTheta = gNormalizeDeg (gRadToDeg(gNormalizeRad(
+                              gArcTan2(localRelPos[1],localRelPos[0])
+                              )) -90 );
 
         // latitude with fwPhi as 0 degreee
         od.mPhi = gRadToDeg(gNormalizeRad(
-                            Vector2f(od.mRelPos[0],od.mRelPos[2]).GetAngleRad() -
-                            fwPhi
+							gArcTan2( localRelPos[2], Vector2f(localRelPos[0], localRelPos[1]).Length())
                             ));
 
         // make some noise
@@ -329,6 +326,18 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
 
         // generate a sense entry
         AddSense(predicate,od);
+    }
+
+    if (mSenseMyPos)
+    {
+        salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
+        Vector3f sensedMyPos = SoccerBase::FlipView(myPos, ti);
+
+        ParameterList& element = predicate.parameter.AddList();
+        element.AddValue(std::string("mypos"));
+        element.AddValue(sensedMyPos[0]);
+        element.AddValue(sensedMyPos[1]);
+        element.AddValue(sensedMyPos[2]);
     }
 
     return true;
