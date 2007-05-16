@@ -1,0 +1,39 @@
+; -*- mode: lisp; -*-
+
+(RubySceneGraph 0 1)
+(
+ (template $lenX $lenY $lenZ $totalMass $material)
+ (node Box
+       (setExtents $lenX $lenY $lenZ)
+       (setMaterial $material)
+       )
+
+ (node Body
+       (setName boxBody)
+       ;(setBoxTotal $totalMass $lenX $lenY $lenZ)
+       (setBox $totalMass $lenX $lenY $lenZ)
+       (node DragController
+	     (setAngularDrag 0.01)
+	     (setLinearDrag 0.01)
+	)
+ )
+
+ (node BoxCollider
+       (setBoxLengths $lenX $lenY $lenZ)
+       (node ContactJointHandler
+	     (setContactBounceMode false)
+
+	     (setContactSlipMode true)
+	     (setContactSlip 0.1 0.1)
+
+	     (setContactSoftERPMode true)
+	     (setContactSoftERP 0.2)
+
+	     (setContactSoftCFM true)
+	     (setContactSoftCFM 0.01)
+
+	     )
+
+       (node PerceptorHandler)
+       )
+)
