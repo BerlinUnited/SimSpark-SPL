@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionperceptor.h,v 1.3 2004/04/05 14:51:36 rollmark Exp $
+   $Id: collisionperceptor.h,v 1.4 2007/05/16 14:25:16 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public:
     /** \param predicate set "collidees" as a TLeafList as arguments of predicate
         \return true if data is available
      */
-    bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
+    virtual bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
     /** returns the stored list of collidees */
     const zeitgeist::Leaf::TLeafList& GetCollidees()  { return mCollidees; }
