@@ -6,7 +6,10 @@ collisionperceptor_la_SOURCES = export.cpp \
                                 collisionperceptor_c.cpp \
 				perceptorhandler.h \
                                 perceptorhandler.cpp \
-                                perceptorhandler_c.cpp
+                                perceptorhandler_c.cpp \
+				touchperceptor.h \
+				touchperceptor.cpp \
+				touchperceptor_c.cpp
 
 # -module tells automake we're not building a library but a loadable module
 # so we don't need the "lib" prefix in the module name
