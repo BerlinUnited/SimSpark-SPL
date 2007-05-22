@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.cpp,v 1.15 2004/12/06 08:41:16 rollmark Exp $
+   $Id: openglserver.cpp,v 1.15.6.1 2007/05/22 03:53:18 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 */
 
 #include "openglserver.h"
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/logserver/logserver.h>
@@ -47,7 +47,7 @@ using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
 
-OpenGLServer::OpenGLServer() : Leaf(), mExtensionReg(new GLExtensionReg()),
+OpenGLServer::OpenGLServer() : Leaf(), 
                                mWantsToQuit(false), mHolder( new MapHolder() )
 {
 }
@@ -57,54 +57,54 @@ OpenGLServer::~OpenGLServer()
     SDL_Quit();
 }
 
-boost::shared_ptr<GLExtensionReg> OpenGLServer::GetExtensionReg() const
-{
-    return mExtensionReg;
-}
-
-void OpenGLServer::Quit()
+void 
+OpenGLServer::Quit()
 {
     mWantsToQuit = true;
 }
 
-bool OpenGLServer::WantsToQuit() const
+bool 
+OpenGLServer::WantsToQuit() const
 {
     return mWantsToQuit;
 }
 
-void OpenGLServer::Update()
+void 
+OpenGLServer::Update()
 {
     // Our SDL event placeholder.
     SDL_Event event;
 
     // Grab all the events off the queue.
     while( SDL_PollEvent( &event ) )
-        {
-        }
+    {
+    }
 }
 
-void OpenGLServer::SwapBuffers() const
+void 
+OpenGLServer::SwapBuffers() const
 {
     SDL_GL_SwapBuffers();
 }
 
-unsigned int OpenGLServer::LoadARBProgram(GLenum /*target*/, const char* /*fileName*/)
+unsigned int 
+OpenGLServer::LoadARBProgram(GLenum /*target*/, const char* /*fileName*/)
 {
 #if 0
     // only try to load stuff if the extension is supported
     if (!mExtensionReg->Has_GL_ARB_vertex_program())
-        {
-            return 0;
-        }
+    {
+        return 0;
+    }
 
     // before actually loading, try the cache
     MapHolder::TProgramCache::iterator entry = mHolder->mPrograms.find(fileName);
 
     if (entry != mHolder->mPrograms.end())
-        {
-            // we already have a match
-            return (*entry).second;
-        }
+    {
+        // we already have a match
+        return (*entry).second;
+    }
 
     unsigned int id = 0;
 
@@ -131,14 +131,14 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum /*target*/, const char* /*fileN
 
     // if an error occured, display error message
     if (error[0] != 0)
-        {
-            int i;
-            glDeleteProgramsARB(1, &id);
-            glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &i);
-            GetCore()->GetLogServer()->Error() << "ERROR: Loading ARB program (Pos: " << i << ")..." << endl;
-            GetCore()->GetLogServer()->Error() << "  => " << error << endl;
-            return 0;
-        }
+    {
+        int i;
+        glDeleteProgramsARB(1, &id);
+        glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &i);
+        GetCore()->GetLogServer()->Error() << "ERROR: Loading ARB program (Pos: " << i << ")..." << endl;
+        GetCore()->GetLogServer()->Error() << "  => " << error << endl;
+        return 0;
+    }
 
     // enter program into the cache
     mHolder->mPrograms[fileName] = id;
@@ -149,18 +149,21 @@ unsigned int OpenGLServer::LoadARBProgram(GLenum /*target*/, const char* /*fileN
 #endif
 }
 
-unsigned int OpenGLServer::LoadARBVertexProgram(const char* fileName)
+unsigned int 
+OpenGLServer::LoadARBVertexProgram(const char* fileName)
 {
+#if 0
     // only try to load stuff if the extension is supported
     if (!mExtensionReg->Has_GL_ARB_vertex_program())
         {
             return 0;
         }
-
+#endif
     return LoadARBProgram(GL_VERTEX_PROGRAM_ARB, fileName);
 }
 
-unsigned int OpenGLServer::LoadARBFragmentProgram(const char* /*fileName*/)
+unsigned int 
+OpenGLServer::LoadARBFragmentProgram(const char* /*fileName*/)
 {
     // only try to load stuff if the extension is supported
     //      if (!mExtensionReg->Has_GL_ARB_fragment_program())
@@ -175,17 +178,18 @@ unsigned int OpenGLServer::LoadARBFragmentProgram(const char* /*fileName*/)
 /*!
   Set up the OpenGL viewport, initialize extension registry
 */
-bool OpenGLServer::ConstructInternal()
+bool 
+OpenGLServer::ConstructInternal()
 {
     int result = SDL_Init(SDL_INIT_VIDEO);
 
-    if( result < 0 )
-        {
-            GetLog()->Error() << "ERROR: (OpenGLServer) Could not init SDL."
-                              << "SDL_Init returned error "
-                              << result << "\n";
-            return false;
-        }
+    if ( result < 0 )
+    {
+        GetLog()->Error() << "ERROR: (OpenGLServer) Could not init SDL."
+                          << "SDL_Init returned error "
+                          << result << "\n";
+        return false;
+    }
 
     const SDL_VideoInfo* info = SDL_GetVideoInfo();
 
@@ -216,11 +220,10 @@ bool OpenGLServer::ConstructInternal()
          );
 
     if (! getConfig)
-        {
-            GetLog()->Error()
-                << "(OpenGLServer) error reading config from ScriptServer\n";
-            return false;
-        }
+    {
+        GetLog()->Error() << "(OpenGLServer) error reading config from ScriptServer\n";
+        return false;
+    }
 
     GetLog()->Normal() << "(OpenGLServer) bits per channel (RGB): "
                        << redBits << " "
@@ -253,24 +256,24 @@ bool OpenGLServer::ConstructInternal()
 
     int flags = SDL_OPENGL;
     if (fullScreen)
-        {
-            flags |= SDL_FULLSCREEN;
-        }
+    {
+        flags |= SDL_FULLSCREEN;
+    }
 
     SDL_Surface *screen = SDL_SetVideoMode
         (xRes, yRes, info->vfmt->BitsPerPixel, flags);
 
     if (screen == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (OpenGLServer) SDL_SetVideoMode() failed\n";
-            return false;
-        }
+    {
+        GetLog()->Error()
+            << "ERROR: (OpenGLServer) SDL_SetVideoMode() failed\n";
+        return false;
+    }
 
     SDL_WarpMouse(xRes/2,yRes/2);
     SDL_WM_SetCaption(title.c_str(), NULL);
 
-    mExtensionReg->Init();
+    //    mExtensionReg->Init();
 
     // check if fancy lighting is supported
     mSupportsFancyLighting = true;
@@ -297,14 +300,15 @@ bool OpenGLServer::ConstructInternal()
 
     // prepare the set of available lights
     for (int i=0;i<GL_MAX_LIGHTS;++i)
-        {
-            mAvailableLights.insert(GL_LIGHT0+i);
-        }
+    {
+        mAvailableLights.insert(GL_LIGHT0+i);
+    }
 
     return true;
 }
 
-void OpenGLServer::ToggleFancyLighting()
+void 
+OpenGLServer::ToggleFancyLighting()
 {
     if (mSupportsFancyLighting)
         mSupportsFancyLighting = false;
@@ -316,9 +320,9 @@ int
 OpenGLServer::AllocLight()
 {
     if (mAvailableLights.size() == 0)
-        {
-            return -1;
-        }
+    {
+        return -1;
+    }
 
     TLightSet::iterator iter = mAvailableLights.begin();
     int l = (*iter);
@@ -333,5 +337,3 @@ OpenGLServer::PutLight(int l)
     glDisable(l);
     mAvailableLights.insert(l);
 }
-
-
