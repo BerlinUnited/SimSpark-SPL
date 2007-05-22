@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglwrapper.h,v 1.1.2.1 2007/05/22 06:38:20 fruit Exp $
+   $Id: openglwrapper.h,v 1.1.2.2 2007/05/22 13:05:39 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #else
 #include <GL/gl.h>
 #include <GL/glext.h>
+#include <GL/glut.h>
 #endif
 
 #if defined(WIN32)
