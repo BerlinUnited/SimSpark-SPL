@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rect.h,v 1.4 2003/11/14 14:05:54 fruit Exp $
+   $Id: rect.h,v 1.4.18.1 2007/05/22 00:35:13 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #define SALT_RECT_H
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <sparkconfig.h>
 #endif
 
 #include "defines.h"
