@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystemsdl.h,v 1.4 2004/04/23 20:10:57 fruit Exp $
+   $Id: inputsystemsdl.h,v 1.4.8.1 2007/05/22 01:55:43 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #include <kerosin/inputserver/inputsystem.h>
 #include <kerosin/inputserver/inputserver.h>
 #include <kerosin/openglserver/openglserver.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 struct SDL_mutex;
 
