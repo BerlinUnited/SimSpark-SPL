@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.17 2007/02/12 22:19:19 jamu Exp $
+   $Id: sceneserver.cpp,v 1.17.4.1 2007/05/22 03:36:55 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,10 @@
 #include "sceneimporter.h"
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
+
+#undef PREFIX
+#undef PACKAGE_NAME
+#include <sparkconfig.h>
 
 using namespace boost;
 using namespace oxygen;
