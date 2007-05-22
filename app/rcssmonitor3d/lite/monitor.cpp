@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.27 2007/01/02 13:56:55 jamu Exp $
+   $Id: monitor.cpp,v 1.27.4.1 2007/05/22 05:14:09 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 #include <soccer/soccertypes.h>
 #include <types.h>
 #include <unistd.h>
-#include "GL/glut.h"
+#include <kerosin/openglserver/openglwrapper.h>
 #include <queue>
 void
 display()
@@ -422,7 +422,7 @@ Monitor::InitInternal(int argc, char* argv[])
 
 
 
-// Somewhere in the initialization part of your program$B!D(B
+// Somewhere in the initialization part of your program
 glEnable(GL_LIGHTING);
 glEnable(GL_LIGHT0);
 
@@ -1266,7 +1266,7 @@ Monitor::Display()
     DrawStatusLine();
 
 
-    // mit fenstergröße skalieren
+    // mit fenstergroesse skalieren
 //     glBegin(GL_QUADS);
 //     glVertex2f(1.0,1.0);
 //     glVertex2f(1.0,0.0);
