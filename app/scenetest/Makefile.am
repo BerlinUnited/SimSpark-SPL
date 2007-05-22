@@ -25,7 +25,8 @@ scenetest_CXXFLAGS = -O2
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility \
-              @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+              @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@ @SDL_CPPFLAGS@
+AM_LDFLAGS  = @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@
 
 scenetest_SOURCES = main.cpp \
 md5mesh.cpp md5mesh.h md5mesh_c.cpp 
