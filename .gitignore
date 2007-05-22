@@ -1,7 +1,7 @@
 /aclocal.m4
 /autom4te.cache
-/config.h
-/config.h.in
+/sparkconfig.h
+/sparkconfig.h.in
 /config.log
 /config.status
 /configure
@@ -322,6 +322,12 @@ plugin/forceeffector/Makefile
 plugin/forceeffector/Makefile.in
 plugin/forceeffector/*.la
 plugin/forceeffector/*.lo
+plugin/gyrorateperceptor/.deps
+plugin/gyrorateperceptor/.libs
+plugin/gyrorateperceptor/Makefile
+plugin/gyrorateperceptor/Makefile.in
+plugin/gyrorateperceptor/*.la
+plugin/gyrorateperceptor/*.lo
 plugin/inputsdl/.deps
 plugin/inputsdl/.libs
 plugin/inputsdl/Makefile
