@@ -2,36 +2,22 @@ if BUILD_KEROSIN
 if DEBUG
 pkglib_LTLIBRARIES = libkerosin_debug.la
 libkerosin_debug_la_SOURCES = $(sources) 
-nodist_libkerosin_debug_la_SOURCES = openglserver/glextensionreg.cpp
 libkerosin_debug_la_CXXFLAGS = -O -g -W -Wall
-libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
-libkerosin_debug_la_LDFLAGS = -version-info @kerosin_version_info@
+libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ @SDL_LIBADD@ @IL_LIBADD@ @GL_LIBADD@
+libkerosin_debug_la_LDFLAGS = -version-info @kerosin_version_info@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
 else
 pkglib_LTLIBRARIES = libkerosin.la
 libkerosin_la_SOURCES = $(sources) 
-nodist_libkerosin_la_SOURCES = openglserver/glextensionreg.cpp
 libkerosin_la_CXXFLAGS = -O2
-libkerosin_la_LIBADD = @FREETYPE_LIBADD@ -lSDL -lIL -lGL 
-libkerosin_la_LDFLAGS = -version-info @kerosin_version_info@
+libkerosin_la_LIBADD = @FREETYPE_LIBADD@ @SDL_LIBADD@ @IL_LIBADD@ @GL_LIBADD@
+libkerosin_la_LDFLAGS = -version-info @kerosin_version_info@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@
 endif
 
 bin_SCRIPTS = kerosin-config
 
-BUILT_SOURCES = openglserver/glextensionreg.h
-nobase_nodist_libpkginclude_HEADERS = openglserver/glextensionreg.h
-
-openglserver/glextensionreg.cpp: ${top_srcdir}/utility/glextgen/glextensionreg.cpp
-	@echo "Copying generated glextension sources"
-	cp ${top_srcdir}/utility/glextgen/glextensionreg.cpp $@
-
-openglserver/glextensionreg.h: ${top_srcdir}/utility/glextgen/glextensionreg.h
-	cp ${top_srcdir}/utility/glextgen/glextensionreg.h $@
-
-${top_srcdir}/utility/glextgen/glextensionreg.cpp ${top_srcdir}/utility/glextgen/glextensionreg.h:
-	cd ${top_srcdir}/utility/glextgen/ && $(MAKE) $(AM_MAKEFLAGS) all
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper @SDL_CPPFLAGS@ @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
@@ -141,6 +127,7 @@ textureserver/texture.h \
 textureserver/texture2d.h \
 textureserver/textureserver.h \
 openglserver/openglserver.h \
+openglserver/openglwrapper.h \
 renderserver/renderserver.h \
 renderserver/rendernode.h \
 renderserver/rendercontrol.h \
