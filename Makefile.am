@@ -2,7 +2,7 @@
 SUBDIRS = utility lib plugin app doc
 
 pkginclude_HEADERS = \
-config.h
+sparkconfig.h
 
 doc:	doc-recursive
 doc-recursive:	
