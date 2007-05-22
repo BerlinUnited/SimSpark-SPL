@@ -18,7 +18,8 @@ LDADD = \
 inputtest_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@ @SDL_CPPFLAGS@
+AM_LDFLAGS = @IL_LDFLAGS@ @SDL_LDFLAGS@ @GL_LDFLAGS@
 
 inputtest_SOURCES = main.cpp
 EXTRA_DIST = inputtest.rb init.rb german.scan.rb
