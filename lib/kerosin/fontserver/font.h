@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: font.h,v 1.5 2004/03/04 16:11:56 rollmark Exp $
+   $Id: font.h,v 1.5.10.1 2007/05/22 04:56:49 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <string>
 #include <salt/vector.h>
+#include <kerosin/openglserver/openglwrapper.h>
 #include "glyph.h"
 
 namespace kerosin
@@ -106,7 +107,7 @@ private:
     GlyphMetric  mMetrics[96];
 
     //! OpenGL Texture ID
-    unsigned int mTexID;
+    GLuint mTexID;
 
     //! height (in pixels) of a row
     unsigned int mRowHeight;
