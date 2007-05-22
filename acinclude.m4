@@ -51,7 +51,7 @@ AC_DEFUN([RCSS_PATH_RUBY], [
 	AC_MSG_CHECKING([for libruby])
 	rcss_tmp="$LDFLAGS"
 	LDFLAGS="$LDFLAGS $RUBY_LDFLAGS"
- 	AC_LINK_IFELSE([int main() { return 0; }],
+ 	AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
 		       [AC_MSG_RESULT([yes])],
 		       [AC_MSG_RESULT([no])
 		        AC_MSG_ERROR([libruby cannot be found. If you compile ruby on your own,
@@ -122,7 +122,7 @@ AC_DEFUN([RCSS_CHECK_ODE], [
 	AC_MSG_CHECKING([for the ODE library])
 	rcss_tmp="$LDFLAGS"
 	LDFLAGS="$LDFLAGS -lode"
- 	AC_LINK_IFELSE([int main() { return 0; }],
+ 	AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
 		       [AC_MSG_RESULT([yes])],
 		       [AC_MSG_RESULT([no])
 		        AC_MSG_ERROR([The ode library (libode.a or libode.so) cannot be found. Please specify the location of the ode installation using the ODE environment variable (e.g. ./configure ODE=$HOME/ode-0.03)])])
@@ -163,6 +163,8 @@ AC_DEFUN([RCSS_PATH_FREETYPE], [
 # 	if rcss_build_kerosin is (still) set to 'yes', check for the GL
 #	headers and libraries.
 #	Substitutes: @GLDIR@ with the directory where the gl headers can be found
+#		     @GL_LIBADD@ with linker options for libraries linking libgl
+#                    @GL_LDFLAGS@ with linker flags for libraries linking libgl
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_GL], [
     AC_CHECK_HEADERS([OpenGL/gl.h GLUT/glut.h],
@@ -171,21 +173,18 @@ AC_DEFUN([RCSS_CHECK_GL], [
 		     [iamamac=no])
     if test "$iamamac" = yes; then
        RCSS_KEROSIN_IF_ELSE([
-			AC_CHECK_HEADERS([GL/glx.h], AC_SUBST([GLTARGET], [x]),
-                        		  RCSS_BUILD_KEROSIN_ERROR([could not find GL extensions]),
-					  [#include <OpenGL/gl.h>])
-
 	# subst'ing the directory where the prepocessor finds gl.h
 	# JAN: the awk command may have to be state more precisely, if problems with distris occur
         GLDIR=`echo "#include <OpenGL/gl.h>" | cpp -M | awk '/gl.h/ { print @S|@2 }'`
         GLDIR=`dirname "$GLDIR"`
         AC_SUBST([GLDIR], [$GLDIR])
-
+	rcss_GL_LIBADD=""
+	rcss_GL_LDFLAGS="-framework GLUT -framework OpenGL"
 	# checking if linking against libGL succeeds 
 	RCSS_KEROSIN_IF_ELSE([
 		AC_MSG_CHECKING([if linking against libGL succeeds])
 		rcss_tmp="$LDFLAGS"
-		LDFLAGS="$LDFLAGS -framework GLUT -framework OpenGL"
+		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <OpenGL/gl.h>
 				int main() { glColor3f(0,0,0); }],
 				[AC_MSG_RESULT([yes])],
@@ -193,7 +192,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
 		LDFLAGS="$rcss_tmp"
 		AC_MSG_CHECKING([if linking against libglut succeeds])
-		LDFLAGS="$LDFLAGS -framework GLUT -framework OpenGL"
+		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <GLUT/glut.h>
 				int main() { glutMainLoop(); }],
 				[AC_MSG_RESULT([yes])],
@@ -226,8 +225,10 @@ AC_DEFUN([RCSS_CHECK_GL], [
 	# checking if linking against libGL succeeds 
 	RCSS_KEROSIN_IF_ELSE([
 		AC_MSG_CHECKING([if linking against libGL succeeds])
+		rcss_GL_LIBADD="-lGL"
+		rcss_GL_LDFLAGS=""
 		rcss_tmp="$LDFLAGS"
-		LDFLAGS="$LDFLAGS -lGL"
+		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <GL/gl.h>
 				int main() { glColor3f(0,0,0); }],
 				[AC_MSG_RESULT([yes])],
@@ -235,7 +236,9 @@ AC_DEFUN([RCSS_CHECK_GL], [
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
 		LDFLAGS="$rcss_tmp"
 		AC_MSG_CHECKING([if linking against libglut succeeds])
-		LDFLAGS="$LDFLAGS -lGL -lGLU -lglut"
+		rcss_GL_LIBADD="-lGL-lGLU -lglut"
+		rcss_GL_LDFLAGS=""
+		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <GL/glut.h>
 				int main() { glutMainLoop(); }],
 				[AC_MSG_RESULT([yes])],
@@ -247,6 +250,8 @@ AC_DEFUN([RCSS_CHECK_GL], [
     ])
   ])
   fi
+  AC_SUBST([GL_LIBADD], [$rcss_GL_LIBADD])
+  AC_SUBST([GL_LDFLAGS], [$rcss_GL_LDFLAGS])
 ]) # RCSS_CHECK_GL
 
 # RCSS_CHECK_DEVIL
@@ -254,8 +259,12 @@ AC_DEFUN([RCSS_CHECK_GL], [
 #	headers and libraries.
 #	If DEVIL headers or libraries can not be found, building kerosin will 
 #	be disabled.
+#	Substitutes: @IL_LIBADD@ with linker options for libraries linking libIL
+#                    @IL_LDFLAGS@ with linker flags for libraries linking libIL
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_DEVIL], [
+	rcss_IL_LIBADD=""
+	rcss_IL_LDFLAGS=""		     
 	AC_ARG_VAR(DEVIL, [location of DevIL installation])
 	if test $DEVIL; then
 		CPPFLAGS="$CPPFLAGS -I$DEVIL/include"
@@ -268,15 +277,22 @@ Please set CPPFLAGS appropriately or you can specify the location of the DevIL i
                               ])
 	RCSS_KEROSIN_IF_ELSE([
                               rcss_tmp="$LDFLAGS"
-                              LDFLAGS="$LDFLAGS -lIL"
+			      if test $iamamac = "yes"; then	
+			      	rcss_IL_LDFLAGS="-framework IL"		     
+			      else 
+                                rcss_IL_LIBADD="-lIL"
+			      fi		
+			      LDFLAGS="$LDFLAGS $rcss_IL_LDFLAGS $rcss_IL_LIBADD"
                               AC_LINK_IFELSE([#include <IL/il.h>
 #include <stdarg.h> /* _vsnprintf may be undefined (and it is needed by libIL) */
 extern "C" int _vsnprintf(char *str, size_t size, const char *format, va_list ap) { return 0;}
-                                              int main() { ilInit(); return 0; }],,
+int main(int argc, char **argv) { ilInit(); return 0; }],,
         		      RCSS_BUILD_KEROSIN_ERROR([The DevIL library (libIL.a or libIL.so) cannot be found. 
 Please set LDFLAGS appropriately or you can specify the location of the DevIL installation using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)]))
                               LDFLAGS="$rcss_tmp"
                               ])
+   AC_SUBST([IL_LIBADD],[$rcss_IL_LIBADD])
+   AC_SUBST([IL_LDFLAGS],[$rcss_IL_LDFLAGS])
 ]) # RCSS_CHECK_DEVIL
 
 # RCSS_CHECK_SDL
@@ -284,42 +300,64 @@ Please set LDFLAGS appropriately or you can specify the location of the DevIL in
 #	headers and libraries.
 #	If SDL headers or libraries can not be found, building kerosin will be
 #       disabled.
+#	Substitutes: @SDL_LIBADD@ with linker options for libraries linking libSDL
+#                    @SDL_LDFLAGS@ with linker flags for libraries linking libSDL
+#		     @SDL_CPPFLAGS@ with compiler flags for using libSDL
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_SDL], [
+	AC_PATH_PROG(SDLCONFIG, [sdl-config], no, [$SDL/bin:$PATH])
 	AC_ARG_VAR(SDL, [location of SDL installation])
-	if test $SDL; then
-		CPPFLAGS="$CPPFLAGS -I$SDL/include"
-		LDFLAGS="$LDFLAGS -L$SDL/lib"
+	rcss_SDL_LIBADD=""
+	rcss_SDL_LDFLAGS=""
+	rcss_SDL_CPPFLAGS=""
+	if test "$SDLCONFIG" !=	"no"; then
+	   rcss_SDL_CPPFLAGS="`$SDLCONFIG --cflags`"
+	   rcss_SDL_LDFLAGS="`$SDLCONFIG --libs`"
+	else 
+	  if test $SDL; then
+	    rcss_SDL_CPPFLAGS="-I$SDL/include/SDL"
+	    rcss_SDL_LDFLAGS="-L$SDL/lib -lSDL"
+	  fi
 	fi
+	rcss_tmp_CPPFLAGS=$CPPFLAGS
+	rcss_tmp_LDFLAGS=$LDFLAGS
+	CPPFLAGS="$CPPFLAGS $rcss_SDL_CPPFLAGS"
+	LDFLAGS="$LDFLAGS $rcss_SDL_LDFLAGS $rcss_LIBADD"
 	RCSS_KEROSIN_IF_ELSE([
-                              AC_CHECK_HEADER([SDL/SDL.h],,
+                              AC_CHECK_HEADER([SDL.h],,
                               RCSS_BUILD_KEROSIN_ERROR([Simple DirectMedia Layer (SDL) headers not found. 
 Please set CPPFLAGS appropriately or you can specify the location of the SDL installation using the SDL environment variable (e.g. ./configure SDL=$HOME/SDL)]))
                               ])
 	RCSS_KEROSIN_IF_ELSE([
-                              rcss_tmp="$LDFLAGS"
-                              LDFLAGS="$LDFLAGS -lSDL"
-                              AC_LINK_IFELSE([#include <SDL/SDL.h>
-                                              int main() { return SDL_Init(0); }],,
+                              AC_LINK_IFELSE([#include <SDL.h>
+                                              int main(int argc, char **argv) { return SDL_Init(0); }],,
         		      RCSS_BUILD_KEROSIN_ERROR([The SDL library (libSDL.a or libSDL.so) cannot be found. 
 Please set LDFLAGS appropriately or you can specify the location of the SDL installation using the SDL environment variable (e.g. ./configure SDL=$HOME/SDL)]))
-                              LDFLAGS="$rcss_tmp"
                               ])
-
-
+	CPPFLAGS=$rcss_tmp_CPPFLAGS
+	LDFLAGS=$rcss_tmp_LDFLAGS		      
+        AC_SUBST([SDL_LIBADD], [$rcss_SDL_LIBADD])
+        AC_SUBST([SDL_LDFLAGS], [$rcss_SDL_LDFLAGS])
+        AC_SUBST([SDL_CPPFLAGS], [$rcss_SDL_CPPFLAGS])
 ]) # RCSS_CHECK_SDL
 
 # RCSS_CHECK_SLANG
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_SLANG], [
-	RCSS_KEROSIN_IF_ELSE([
+	AC_MSG_CHECKING([for the S-Lang library])		     
+        if test $iamamac = "yes"; then
+	    AC_MSG_RESULT([not needed])
+	else			     
+	    RCSS_KEROSIN_IF_ELSE([
                               rcss_tmp="$LDFLAGS"
                               LDFLAGS="$LDFLAGS -lslang"
-                              AC_LINK_IFELSE([int main() { return 0; }],,
+                              AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],,AC_MSG_RESULT(no)
         		      RCSS_BUILD_KEROSIN_ERROR([The S-Lang library (libslang.a or libslang.so) cannot be found. 
 Please set LDFLAGS appropriately.]))
                               LDFLAGS="$rcss_tmp"
-	])
+	    ])
+	    AC_MSG_RESULT(yes)
+     	fi
 ]) # RCSS_CHECK_SLANG
 
 # RCSS_BUILD_SOUNDSYSTEMFMOD
@@ -373,9 +411,9 @@ AC_DEFUN([RCSS_BUILD_KEROSIN], [
 	# --enable-kerosin
 	AC_ARG_ENABLE(kerosin,
 		AC_HELP_STRING([--enable-kerosin=@<:@yes|no@:>@],       
-	 		       [whether to compile libkerosin (default is no)]),
+	 		       [whether to compile libkerosin (default is yes)]),
 		    [rcss_build_kerosin="$enableval"],
-		    [rcss_build_kerosin=no]
+		    [rcss_build_kerosin=yes]
 	)
 	if test "$rcss_build_kerosin" = yes; then
 		AC_MSG_NOTICE([Checking prerequisites for kerosin...])
