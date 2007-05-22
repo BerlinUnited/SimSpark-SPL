@@ -100,7 +100,7 @@ AC_DEFUN([RCSS_CHECK_RCSSBASE], [
 	AC_MSG_CHECKING([for the rcssnet library])
 	rcss_tmp="$LDFLAGS"
 	LDFLAGS="$LDFLAGS -lrcssnet"
- 	AC_LINK_IFELSE([int main() { return 0; }],
+ 	AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
 		       [AC_MSG_RESULT([yes])],
 		       [AC_MSG_RESULT([no])
 		        AC_MSG_ERROR([The rcssnet library (librcssnet.a or librcssnet.so) cannot be found. Please specify the location of the rcssbase installation using the RCSSBASE environment variable (e.g. ./configure RCSSBASE=$HOME/rcssbase)])])
@@ -186,7 +186,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 		rcss_tmp="$LDFLAGS"
 		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <OpenGL/gl.h>
-				int main() { glColor3f(0,0,0); }],
+				int main(int argc, char **argv) { glColor3f(0,0,0); }],
 				[AC_MSG_RESULT([yes])],
 				[AC_MSG_RESULT([no])
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
@@ -194,7 +194,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 		AC_MSG_CHECKING([if linking against libglut succeeds])
 		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <GLUT/glut.h>
-				int main() { glutMainLoop(); }],
+				int main(int argc, char **argv) { glutMainLoop(); }],
 				[AC_MSG_RESULT([yes])],
 				[AC_MSG_RESULT([no])
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libglut or can be found])
@@ -230,7 +230,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 		rcss_tmp="$LDFLAGS"
 		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <GL/gl.h>
-				int main() { glColor3f(0,0,0); }],
+				int main(int argc, char **argv) { glColor3f(0,0,0); }],
 				[AC_MSG_RESULT([yes])],
 				[AC_MSG_RESULT([no])
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
@@ -240,7 +240,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 		rcss_GL_LDFLAGS=""
 		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <GL/glut.h>
-				int main() { glutMainLoop(); }],
+				int main(int argc, char **argv) { glutMainLoop(); }],
 				[AC_MSG_RESULT([yes])],
 				[AC_MSG_RESULT([no])
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libglut or can be found])
@@ -277,18 +277,26 @@ Please set CPPFLAGS appropriately or you can specify the location of the DevIL i
                               ])
 	RCSS_KEROSIN_IF_ELSE([
                               rcss_tmp="$LDFLAGS"
-			      if test $iamamac = "yes"; then	
-			      	rcss_IL_LDFLAGS="-framework IL"		     
-			      else 
-                                rcss_IL_LIBADD="-lIL"
-			      fi		
+			      rcss_IL_LIBADD="-lIL"
 			      LDFLAGS="$LDFLAGS $rcss_IL_LDFLAGS $rcss_IL_LIBADD"
                               AC_LINK_IFELSE([#include <IL/il.h>
 #include <stdarg.h> /* _vsnprintf may be undefined (and it is needed by libIL) */
 extern "C" int _vsnprintf(char *str, size_t size, const char *format, va_list ap) { return 0;}
-int main(int argc, char **argv) { ilInit(); return 0; }],,
-        		      RCSS_BUILD_KEROSIN_ERROR([The DevIL library (libIL.a or libIL.so) cannot be found. 
-Please set LDFLAGS appropriately or you can specify the location of the DevIL installation using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)]))
+int main(int argc, char **argv) { ilInit(); return 0; }], rcss_tmp_il_ok="yes",rcss_tmp_il_ok="no")
+    	     	   	      if test $rcss_tmp_il_ok = "no"; then
+			        if test $iamamac = "yes"; then	
+			      	  rcss_IL_LDFLAGS="-framework IL"
+				  LDFLAGS="$rcss_tmp $rcss_IL_LDFLAGS"
+				  AC_LINK_IFELSE([#include <IL/il.h>
+#include <stdarg.h> /* _vsnprintf may be undefined (and it is needed by libIL) */
+extern "C" int _vsnprintf(char *str, size_t size, const char *format, va_list ap) { return 0;}
+int main(int argc, char **argv) { ilInit(); return 0; }], rcss_tmp_il_ok="yes",rcss_tmp_il_ok="no")
+			        fi
+			      fi		
+			      if test $rcss_tmp_il_ok = "no"; then
+          		        RCSS_BUILD_KEROSIN_ERROR([The DevIL library (libIL.a or libIL.so) cannot be found. 
+Please set LDFLAGS appropriately or you can specify the location of the DevIL installation using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)])
+       	   	   	      fi
                               LDFLAGS="$rcss_tmp"
                               ])
    AC_SUBST([IL_LIBADD],[$rcss_IL_LIBADD])
@@ -375,7 +383,7 @@ AC_DEFUN([RCSS_BUILD_SOUNDSYSTEMFMOD], [
 		rcss_tmp="$LDFLAGS"
 		LDFLAGS="$LDFLAGS -lfmod"
  		AC_LINK_IFELSE([#include <fmod/fmod.h>
-				int main() { return FSOUND_GetVolume(0); }],
+				int main(int argc, char **argv) { return FSOUND_GetVolume(0); }],
 				[rcss_soundsystemfmod="true" && AC_MSG_RESULT([yes])],
 				[rcss_soundsystemfmod="false" && 
 				 AC_MSG_RESULT([no]) &&
@@ -459,7 +467,7 @@ AC_CACHE_CHECK(whether the spades library is available, ac_cv_lib_spades,
                 OLD_LDFLAGS="$LDFLAGS"
                 LDFLAGS="$LDFLAGS -lspades"
                 AC_LINK_IFELSE([@%:@include <spades/enginemain.hpp>
-                                int main()
+                                int main(int argc, char **argv)
                                 {
                                     spades::SimulationEngineMain( 0, NULL, NULL );
                                     return 0;
@@ -492,7 +500,7 @@ AC_CACHE_CHECK(if linking against boost_regex succeeds, rcss_cv_boost_regex,
                [AC_LANG_PUSH(C++)
                 OLD_LDFLAGS="$LDFLAGS"
                 LDFLAGS="$LDFLAGS -lboost_regex"
-                AC_LINK_IFELSE([int main() { return 0; }],
+                AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
                                [AS_VAR_SET(rcss_boost_regex, yes)], 
                                [AS_VAR_SET(rcss_boost_regex, no)])
                 LDFLAGS="$OLD_LDFLAGS"
@@ -511,13 +519,13 @@ AC_DEFUN([RCSS_BOOST_THREADS_LIB], [
   AC_LANG_PUSH(C++)
   OLD_LDFLAGS="$LDFLAGS"
   LDFLAGS="$OLDLDFLAGS -lboost_thread"
-  AC_LINK_IFELSE([int main() { return 0; }],
+  AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
                  [rcss_boost_threads_lib=boost_thread], 
                  [LDFLAGS="$OLDLDFLAGS -lboost_thread-mt"
-      AC_LINK_IFELSE([int main() { return 0; }],
+      AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
                    [rcss_boost_threads_lib=boost_thread-mt], 
                    [  LDFLAGS="$OLDLDFLAGS -lboost_thread-gcc-mt"
-          AC_LINK_IFELSE([int main() { return 0; }],
+          AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
                        [rcss_boost_threads_lib=boost_thread-gcc-mt], 
                        [rcss_boost_threads_lib=])
                     ])
