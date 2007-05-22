@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gmath.h,v 1.11 2007/02/12 19:08:56 rollmark Exp $
+   $Id: gmath.h,v 1.11.4.1 2007/05/22 00:38:37 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,10 +25,6 @@
  */
 #ifndef SALT_GMATH_H
 #define SALT_GMATH_H
-
-// #ifdef HAVE_CONFIG_H
-// #include <config.h>
-// #endif
 
 #include "defines.h"
 #include <cmath>

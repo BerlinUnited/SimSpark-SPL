@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bounds.h,v 1.9 2004/06/05 11:20:51 fruit Exp $
+   $Id: bounds.h,v 1.9.6.1 2007/05/22 00:39:44 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
 */
 #ifndef SALT_BOUNDS_H
 #define SALT_BOUNDS_H
-
-// #ifdef HAVE_CONFIG_H
-// #include <config.h>
-// #endif
 
 #include "defines.h"
 #include "matrix.h"
