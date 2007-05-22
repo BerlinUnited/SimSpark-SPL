@@ -236,7 +236,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
 		LDFLAGS="$rcss_tmp"
 		AC_MSG_CHECKING([if linking against libglut succeeds])
-		rcss_GL_LIBADD="-lGL-lGLU -lglut"
+		rcss_GL_LIBADD="-lGL -lGLU -lglut"
 		rcss_GL_LDFLAGS=""
 		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
  		AC_LINK_IFELSE([#include <GL/glut.h>
