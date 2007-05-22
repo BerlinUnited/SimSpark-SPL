@@ -285,6 +285,7 @@ extern "C" int _vsnprintf(char *str, size_t size, const char *format, va_list ap
 int main(int argc, char **argv) { ilInit(); return 0; }], rcss_tmp_il_ok="yes",rcss_tmp_il_ok="no")
     	     	   	      if test $rcss_tmp_il_ok = "no"; then
 			        if test $iamamac = "yes"; then	
+				  rcss_IL_LIBADD=""
 			      	  rcss_IL_LDFLAGS="-framework IL"
 				  LDFLAGS="$rcss_tmp $rcss_IL_LDFLAGS"
 				  AC_LINK_IFELSE([#include <IL/il.h>
