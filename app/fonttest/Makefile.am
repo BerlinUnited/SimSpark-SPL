@@ -19,7 +19,8 @@ LDADD = \
 fonttest_CXXFLAGS = -O2
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility @FREETYPE_CPPFLAGS@ @SDL_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_LDFLAGS = @IL_LDFLAGS@ @SDL_LDFLAGS@ @GL_LDFLAGS@
 
 fonttest_SOURCES = main.cpp 
 
