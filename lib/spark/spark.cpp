@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.cpp,v 1.4.4.1 2007/05/22 02:00:10 fruit Exp $
+   $Id: spark.cpp,v 1.4.4.2 2007/05/22 12:57:17 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ shared_ptr<InputControl> Spark::GetInputControl()
         }
 
     return shared_dynamic_cast<InputControl>
-        (mSimulationServer->GetControlNode("kerosin/InputControl"));
+        (mSimulationServer->GetControlNode("InputControl"));
 }
 
 shared_ptr<RenderControl> Spark::GetRenderControl()
@@ -143,7 +143,7 @@ shared_ptr<RenderControl> Spark::GetRenderControl()
         }
 
     return shared_dynamic_cast<RenderControl>
-        (mSimulationServer->GetControlNode("kerosin/RenderControl"));
+        (mSimulationServer->GetControlNode("RenderControl"));
 }
 
 
