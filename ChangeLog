@@ -1,5 +1,28 @@
-2007-05-22    Oliver Obst  <fruit@users.sourceforge.net>
+2007-05-22 Oliver Obst <fruit@users.sourceforge.net>
 
+	* Makefile.am: - added README.MacOSX to distribution
+
+	* acinclude.m4: 
+	added omitted whitespace between 2 linked libs to fix compile problem
+	(problem reported by Jan Murray)
+
+	* lib/kerosin/fontserver/font.cpp: 
+	explicitly qualifying Font as kerosin::Font to fix name clashes
+	(problem reported by Jan Murray)
+
+	* lib/kerosin/openglserver/openglwrapper.h: 
+	- including GLUT for Linux, too
+	(problem reported by Jan Murray)
+	
+	* plugin/inputsdl/inputsystemsdl.cpp: 
+	instead of SDL/SDL_thread.h, include SDL_thread.h
+	(problem reported by Tobias Warden)
+	
+	* lib/spark/spark.cpp: 
+	- get control nodes InputControl and RenderControl just by their name
+	  (removed "kerosin/" prefix from string)
+	(problem reported by Tobias Warden)
+	
 	* acinclude.m4: 
 	- changed signature of  the test programs main methods to avoid some 
 	  nasty problems with using the SDL (errors would happen only if the 
@@ -16,6 +39,8 @@
 	- on MacOS, we check for OpenGL, GLUT and IL frameworks
 	- additionally checking for unix style installation of IL (i.e. openil 
 	   aka Devil aka libIL) on Mac OS X
+
+	* app/monitorspark/main.cpp: include SDL
 
 	* lib/kerosin/openglserver/openglwrapper.h: 
 	- new wrapper for opengl to hide away platform differences
