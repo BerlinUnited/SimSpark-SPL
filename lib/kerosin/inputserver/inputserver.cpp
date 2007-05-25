@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: inputserver.cpp,v 1.8 2007/04/26 15:34:25 jboedeck Exp $
+$Id: inputserver.cpp,v 1.9 2007/05/25 06:59:51 jboedeck Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -360,47 +360,32 @@ bool InputServer::Init(const std::string &inputSysName)
          ScriptServer::IS_COMMON
          );
 
+    // cache the reference to the input system
+    mInputSystem = inputSystem;
+
     return true;
 }
-
-shared_ptr<InputSystem> InputServer::GetInputSystem()
-{
-    shared_ptr<InputSystem> inputSystem = shared_dynamic_cast<InputSystem>
-        (GetChild("inputsystem"));
-
-    return inputSystem;
-}
-
 
 bool InputServer::CreateDevice(const std::string &deviceName)
 {
     GetLog()->Normal() << "(InputServer) CreateDevice " << deviceName << "\n";
 
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
-
-    if (inputSystem.get() == 0)
+    if (mInputSystem.get() == 0)
         {
             GetLog()->Error()
                 << "(InputSystem) ERROR: no InputSystem installed\n";
             return false;
         }
 
-    if (inputSystem.get() == 0)
-        {
-            return false;
-        }
-
-    return inputSystem->CreateDevice(deviceName);
+    return mInputSystem->CreateDevice(deviceName);
 }
 
 void InputServer::Reset()
 {
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
-
-    if (inputSystem.get() != 0)
+    if (mInputSystem.get() != 0)
         {
-            inputSystem->Unlink();
-            inputSystem.reset();
+            mInputSystem->Unlink();
+            mInputSystem.reset();
         }
 
     mScanCodeMap->Reset();
@@ -408,9 +393,7 @@ void InputServer::Reset()
 
 bool InputServer::GetInput(Input &input, bool raw)
 {
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
-
-    if (inputSystem.get() == 0)
+    if (mInputSystem.get() == 0)
         {
             GetLog()->Error()
                 << "(InputServer) ERROR: no InputSystem installed\n";
@@ -418,7 +401,7 @@ bool InputServer::GetInput(Input &input, bool raw)
             return false;
         }
 
-    if (! inputSystem->GetInput(input))
+    if (! mInputSystem->GetInput(input))
         {
             input.id = -1;
             return false;
@@ -609,14 +592,14 @@ void InputServer::Invoke(int cmd)
     input.code = -1;
     input.id   = cmd;
     input.data.l = 0;
-
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
-    if (inputSystem.get() == 0)
+    
+    if (mInputSystem.get() == 0)
         {
             GetLog()->Error()
                 << "(InputServer) ERROR:  no InputSystem installed\n";
             return;
         }
 
-    inputSystem->AddInput(input);
+    mInputSystem->AddInput(input);
 }
+

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputserver.h,v 1.9 2004/12/31 11:03:10 rollmark Exp $
+   $Id: inputserver.h,v 1.10 2007/05/25 06:59:51 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -224,7 +224,6 @@ public:
 private:
     bool ParseBindDescription(Bind &bind, const std::string &desc);
     int ParseModifier(const std::string &modifier) const;
-    boost::shared_ptr<InputSystem> GetInputSystem();
 
     //
     // Members
@@ -370,6 +369,9 @@ private:
 
     /** map of active bindings */
     TBindMap mBindings;
+
+    /** reference to the input system */
+    boost::shared_ptr<InputSystem> mInputSystem;
 };
 
 DECLARE_CLASS(InputServer);
