@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gyrorateperceptor.cpp,v 1.2 2007/05/16 14:23:44 jboedeck Exp $
+   $Id: gyrorateperceptor.cpp,v 1.3 2007/05/26 20:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,9 +59,22 @@ GyroRatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     Vector3f rate = body->GetAngularVelocity();
 
     ParameterList & ratesElement = predicate.parameter.AddList();    
-    ratesElement.AddValue(rate.x());
-    ratesElement.AddValue(rate.y());
-    ratesElement.AddValue(rate.z());
+//    ratesElement.AddValue(std::string("rt"));
+    ratesElement.AddValue(gRadToDeg(rate.x()));
+    ratesElement.AddValue(gRadToDeg(rate.y()));
+    ratesElement.AddValue(gRadToDeg(rate.z()));
 
+   // What should be done when yrotate is around 90? in that case, the parameters of the atan2 are 0!
+//    const dReal* q = dBodyGetQuaternion(body->GetODEBody());
+//    float xrotate = gArcTan2(2*(q[0]*q[1]+q[2]*q[3]), 1-2*(q[1]*q[1]+q[2]*q[2]));
+//    float yrotate = gArcSin(2*(q[0]*q[2] - q[3]*q[1]));
+//    float zrotate = gArcTan2(2*(q[0]*q[3] + q[1]*q[2]), 1-2*(q[2]*q[2]+q[3]*q[3]));
+//    
+//    ParameterList & anglesElement = predicate.parameter.AddList();    
+//    anglesElement.AddValue(std::string("ang"));
+//    anglesElement.AddValue(gRadToDeg(xrotate));
+//    anglesElement.AddValue(gRadToDeg(yrotate));
+//    anglesElement.AddValue(gRadToDeg(zrotate));
+    
     return true;
 }
