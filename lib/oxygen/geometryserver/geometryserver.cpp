@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: geometryserver.cpp,v 1.1 2004/04/22 17:01:18 rollmark Exp $
+   $Id: geometryserver.cpp,v 1.2 2007/05/28 16:13:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -124,7 +124,7 @@ shared_ptr<TriMesh> GeometryServer::GetMesh
 
             shared_ptr<TriMesh> mesh = importer->ImportMesh(name,parameter);
 
-            if (mesh.get() == 0)
+            if (mesh.get() == 0 || mesh->GetVertexCount() == 0)
                 {
                     continue;
                 }
