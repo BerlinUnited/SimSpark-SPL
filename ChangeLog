@@ -1,3 +1,30 @@
+2007-05-29  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/voidmeshimporter/voidmeshimporter.cpp:
+	- added a minimal sanity check whether the parsed
+	  file actually is a valid .void file
+
+	* plugin/Makefile.am:
+	- added entry for the objimporter subdir
+
+	* lib/spark/spark.rb:
+	- added initialization of the new OBJ importer
+
+	* lib/oxygen/geometryserver/geometryserver.cpp:
+	- added a check whether the mesh returned by a mesh
+	  importer actually has any faces 
+
+	* configure.ac:
+	- Makefile for plugin/objimporter
+
+	* plugin/objimporter/Makefile.am,
+	* plugin/objimporter/export.cpp,
+	* plugin/objimporter/objimporter.h,
+	* plugin/objimporter/objimporter.cpp,
+	* plugin/objimporter/objimporter_c.cpp:
+	- added files for a very first, quick & dirty
+	  Wavefront OBJ importer
+
 2007-05-16  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp:
