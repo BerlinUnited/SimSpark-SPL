@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: voidmeshimporter.cpp,v 1.1 2004/04/22 17:43:30 rollmark Exp $
+   $Id: voidmeshimporter.cpp,v 1.2 2007/05/28 16:15:47 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,6 +68,15 @@ shared_ptr<TriMesh> VoidMeshImporter::ImportMesh
     char buffer[1024];
     int temp;
     int i;
+
+    // minimal check whether we're importing a void file
+    string tempBuffer(buffer);
+    if (tempBuffer.find("TotalTriCount") == string::npos)
+        {
+            GetLog()->Normal() << "(VoidMeshImporter) not a .void mesh, aborting.\n";
+
+            return shared_ptr<TriMesh>();
+        }
 
     GetLog()->Normal() << "(VoidMeshImporter) Loading " << name << "\n";
     file->Gets(buffer, 1024);
