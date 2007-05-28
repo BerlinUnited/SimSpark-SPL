@@ -5,6 +5,7 @@ SUBDIRS = \
 	  gyrorateperceptor \
 	  inputsdl \
 	  monitortest \
+	  objimporter \
 	  perfectvisionperceptor \
 	  collisionperceptor \
 	  sexpparser \
