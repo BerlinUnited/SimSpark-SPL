@@ -332,6 +332,8 @@ sceneServer.createScene($scenePath)
 geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
 importBundle 'voidmeshimporter'
 geometryServer.initMeshImporter("VoidMeshImporter");
+importBundle 'objimporter'
+geometryServer.initMeshImporter("ObjImporter");
 
 # use the ruby scene importer to import scenes
 importBundle 'rubysceneimporter'
