@@ -193,6 +193,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/collisionperceptor/Makefile \
 		 plugin/rubysceneimporter/Makefile \
 		 plugin/voidmeshimporter/Makefile \
+		 plugin/objimporter/Makefile \
 		 plugin/sparkmonitor/Makefile \
 		 plugin/sparkagent/Makefile \
 		 app/Makefile \
