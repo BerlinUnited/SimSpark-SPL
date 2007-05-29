@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.14 2007/02/18 13:05:28 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.15 2007/05/29 21:25:45 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,15 +55,26 @@ using namespace std;
         )
 */
 
-#define S_NODE     "node"
-#define S_SELECT   "select"
-#define S_PWD      "pwd"
-#define S_TEMPLATE "template"
-#define S_DEFINE   "define"
-#define S_ATTACH   "attach"
+// JAN: original definitions
+// see also plugin/sparkmonitor/sparkmonitor.cpp
+// #define S_NODE     "node"
+// #define S_SELECT   "select"
+// #define S_PWD      "pwd"
+// #define S_TEMPLATE "template"
+// #define S_DEFINE   "define"
+// #define S_ATTACH   "attach"
 
-#define S_DELTASCENE "RubyDeltaScene"
-#define S_SCENEGRAPH "RubySceneGraph"
+// #define S_DELTASCENE "RubyDeltaScene"
+// #define S_SCENEGRAPH "RubySceneGraph"
+#define S_NODE     "nd"
+#define S_SELECT   "sel"
+#define S_PWD      "pwd"
+#define S_TEMPLATE "templ"
+#define S_DEFINE   "def"
+//#define S_ATTACH   "attach"
+
+#define S_DELTASCENE "RDS"
+#define S_SCENEGRAPH "RSG"
 
 #define S_FROMSTRING "<from string>";
 
