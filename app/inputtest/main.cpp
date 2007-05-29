@@ -1,10 +1,9 @@
 #include <zeitgeist/zeitgeist.h>
 #include <kerosin/kerosin.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include <GL/gl.h>
 
 using namespace boost;
 using namespace kerosin;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.h,v 1.10 2007/01/02 13:56:55 jamu Exp $
+   $Id: glserver.h,v 1.11 2007/05/29 09:45:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #ifndef _GLSERVER_H
 #define _GLSERVER_H
 
-#include <GL/glut.h>
 #include "camera.h"
 
 /* Image type - contains height, width, and data */

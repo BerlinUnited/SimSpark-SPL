@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.cpp,v 1.4 2004/12/31 11:27:05 rollmark Exp $
+   $Id: spark.cpp,v 1.5 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "spark.h"
 #include <zeitgeist/zeitgeist.h>
 
-//#include <SDL/SDL.h>
 using namespace spark;
 using namespace kerosin;
 using namespace oxygen;
@@ -133,7 +132,7 @@ shared_ptr<InputControl> Spark::GetInputControl()
         }
 
     return shared_dynamic_cast<InputControl>
-        (mSimulationServer->GetControlNode("kerosin/InputControl"));
+        (mSimulationServer->GetControlNode("InputControl"));
 }
 
 shared_ptr<RenderControl> Spark::GetRenderControl()
@@ -144,7 +143,7 @@ shared_ptr<RenderControl> Spark::GetRenderControl()
         }
 
     return shared_dynamic_cast<RenderControl>
-        (mSimulationServer->GetControlNode("kerosin/RenderControl"));
+        (mSimulationServer->GetControlNode("RenderControl"));
 }
 
 

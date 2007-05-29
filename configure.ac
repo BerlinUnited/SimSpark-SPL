@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT([rcssserver3d], 0.5.4, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([lib/salt/salt.h])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([sparkconfig.h])
 AC_CONFIG_AUX_DIR([config.aux])
 
 AM_INIT_AUTOMAKE([gnu subdir-objects 1.7])
@@ -124,9 +124,9 @@ RCSS_CHECK_ODE
 AC_ARG_VAR(SPADES, [prefix of SPADES installation])
 AC_ARG_WITH([spades],
 	    [AC_HELP_STRING([--with-spades],
-	 	 	    [whether to support SPADES-SIM (default is yes)])],
+	 	 	    [whether to support SPADES-SIM (default is no)])],
 	    [rcss_with_spades=$withval],
-	    [rcss_with_spades=yes])
+	    [rcss_with_spades=no])
 
 if test "$rcss_with_spades" = yes; then
 	if test "$SPADES"; then

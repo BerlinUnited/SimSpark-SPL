@@ -4,7 +4,6 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: inputserver.cpp,v 1.9 2007/05/25 06:59:51 jboedeck Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "inputserver.h"
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "inputsystem.h"
 #include "inputdevice.h"
 #include "scancodemap.h"

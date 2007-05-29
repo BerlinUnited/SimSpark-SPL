@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tvector.h,v 1.10 2004/05/05 14:12:43 fruit Exp $
+   $Id: tvector.h,v 1.11 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,10 +32,6 @@
 */
 #ifndef SALT_TVECTOR_H
 #define SALT_TVECTOR_H
-
-// #ifdef HAVE_CONFIG_H
-// #include <config.h>
-// #endif
 
 #include "defines.h"
 #include "gmath.h"

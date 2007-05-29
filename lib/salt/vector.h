@@ -3,8 +3,8 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: vector.h,v 1.8 2007/02/12 19:08:56 rollmark Exp $
+   Copyright (C) 2003-2007 RoboCup Soccer Server 3D Maintenance Group
+   $Id: vector.h,v 1.9 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,10 +29,6 @@
 */
 #ifndef SALT_VECTOR_H
 #define SALT_VECTOR_H
-
-// #ifdef HAVE_CONFIG_H
-// #include <config.h>
-// #endif
 
 #include "tvector.h"
 #include <cstdlib>

@@ -1,10 +1,12 @@
 #include <zeitgeist/zeitgeist.h>
 #include <kerosin/kerosin.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include <GL/gl.h>
+#if HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
 
 using namespace boost;
 using namespace kerosin;

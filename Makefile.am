@@ -2,7 +2,7 @@
 SUBDIRS = utility lib plugin app doc
 
 pkginclude_HEADERS = \
-config.h
+sparkconfig.h
 
 doc:	doc-recursive
 doc-recursive:	
@@ -10,7 +10,7 @@ doc-recursive:
 
 CLEANFILES = 
 
-EXTRA_DIST = README-soccer
+EXTRA_DIST = README-soccer README.MacOSX
 
 EXTRA_SRC_DISTS =
 EXTRA_BIN_DISTS =

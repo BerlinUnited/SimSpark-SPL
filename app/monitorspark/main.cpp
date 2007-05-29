@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.3 2007/04/26 15:41:05 jboedeck Exp $
+   $Id: main.cpp,v 1.4 2007/05/29 09:45:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 */
 
 #include <spark/spark.h>
+#include <SDL.h>
 
 using namespace spark;
 using namespace kerosin;

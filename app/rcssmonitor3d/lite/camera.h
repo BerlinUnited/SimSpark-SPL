@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.h,v 1.3 2004/06/16 13:20:59 jamu Exp $
+   $Id: camera.h,v 1.4 2007/05/29 09:45:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #define _CAMERA_H
 
 #include <math.h>
-#include <GL/glut.h>
+#include <kerosin/openglserver/openglwrapper.h>
 #include <salt/gmath.h>
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/oxygen.h>

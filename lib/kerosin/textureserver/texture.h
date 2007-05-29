@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: texture.h,v 1.3 2003/11/14 14:05:52 fruit Exp $
+   $Id: texture.h,v 1.4 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,31 +24,24 @@
 
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <kerosin/openglserver/openglwrapper.h>
 
 namespace kerosin
 {
 
 class TextureServer;
 
-/*      \class Texture
+/* \class Texture
 
-        This is the base class of all OpenGL based textures. In OpenGL a texture
-        is represented by a so-called texture ID. This is a simple handle. The
-        basic operations for creating/deleting this handle are contained in this
-        class.
+   This is the base class of all OpenGL based textures. In OpenGL a
+   texture is represented by a so-called texture ID. This is a simple
+   handle. The basic operations for creating/deleting this handle are
+   contained in this class.
 
-        Usually, textures are created via the texture server.
+   Usually, textures are created via the texture server.
 
-        NOTE:
-
-        HISTORY:
-                14.10.02 - MK
-                        - Initial version
-
-        TODO:
-                - support mipmap building (currently done only when SGIS_generate_mipmap is supported)
-
-        TOFIX:
+   HISTORY: 14.10.02 - MK  - Initial version
+   TODO:    - support mipmap building (currently done only when SGIS_generate_mipmap is supported)
 */
 class Texture
 {
@@ -84,9 +77,12 @@ public:
     // members
     //
 protected:
-    unsigned int                                        mTexID;                         // OpenGL texture handle (initialized to 0)
-    unsigned int                                        mWidth;                         // width of texture
-    unsigned int                                        mHeight;                        // height of texture
+    //! OpenGL texture handle (initialized to 0)
+    GLuint mTexID;
+    //! width of texture
+    unsigned int mWidth;                         
+    //! height of texture
+    unsigned int mHeight;
 private:
     boost::weak_ptr<TextureServer>      mTextureServer;         // texture server, which created this object
 };

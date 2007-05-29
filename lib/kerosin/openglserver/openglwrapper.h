@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputdevicesdl.h,v 1.6 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: openglwrapper.h,v 1.2 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,32 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   InputDeviceSDL
-
-   HISTORY: 21.08.02 - MK - Initial version
 */
+#ifndef KEROSIN_OPENGLWRAPPER_H
+#define KEROSIN_OPENGLWRAPPER_H
 
-#ifndef INPUTDEVICESDL_H__
-#define INPUTDEVICESDL_H__
+#define GL_GLEXT_PROTOTYPES
 
-#include <kerosin/inputserver/inputdevice.h>
-#include <kerosin/inputserver/inputserver.h>
-#include <SDL.h>
+#ifdef WIN32
+#define WIN32_LEAN_AND_MEAN 1
+#include <windows.h>
+#endif
 
-/**     \class InputDeviceSDL
-        This class introduces SDL-specific callback functions for the event filtering.
-*/
-class InputDeviceSDL : public kerosin::InputDevice
-{
-    //
-    // functions
-    //
-public:
-    //! this filters an SDL specific input
-    virtual int EventFilter(const SDL_Event* event) = 0;
-};
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <GL/glut.h>
+#endif
 
-DECLARE_ABSTRACTCLASS(InputDeviceSDL);
+#if defined(WIN32)
+#include <GL/wglext.h>
+#elif defined(__APPLE__)
+/* nothing here */
+#else
+#include <GL/glx.h>
+#include <GL/glxext.h>
+#endif
 
-#endif //INPUTDEVICESDL_H__
+#endif // KEROSIN_OPENGLWRAPPER_H

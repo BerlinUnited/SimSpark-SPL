@@ -25,7 +25,121 @@
 	- added files for a very first, quick & dirty
 	  Wavefront OBJ importer
 
-2007-05-16  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+2007-05-22 Oliver Obst <fruit@users.sourceforge.net>
+
+	* Makefile.am: 
+	- added README.MacOSX to distribution
+
+	* acinclude.m4: 
+	added omitted whitespace between 2 linked libs to fix compile problem
+	(problem reported by Jan Murray)
+
+	* lib/kerosin/fontserver/font.cpp: 
+	explicitly qualifying Font as kerosin::Font to fix name clashes
+	(problem reported by Jan Murray)
+
+	* lib/kerosin/openglserver/openglwrapper.h: 
+	- including GLUT for Linux, too
+	(problem reported by Jan Murray)
+	
+	* plugin/inputsdl/inputsystemsdl.cpp: 
+	instead of SDL/SDL_thread.h, include SDL_thread.h
+	(problem reported by Tobias Warden)
+	
+	* lib/spark/spark.cpp: 
+	- get control nodes InputControl and RenderControl just by their name
+	  (removed "kerosin/" prefix from string)
+	(problem reported by Tobias Warden)
+	
+	* acinclude.m4: 
+	- changed signature of  the test programs main methods to avoid some 
+	  nasty problems with using the SDL (errors would happen only if the 
+	  SDL is always linked in by setting some environment variables, but 
+	  anyway) 
+	- added some more  meta-variables to the existing tests, specifically 
+	  the OpenGL test, the Devil test, and the SDL test. Now, more details 
+	  of the results are saved in these, so they can be better used in the
+	  Makefiles 
+	- compiling kerosin is now 'yes' by default 
+	- on Mac OS, the S-Lang library is not needed (it's needed on linux
+	  possibly also only because other libs depend on it, we don't use
+	  it directly).  
+	- on MacOS, we check for OpenGL, GLUT and IL frameworks
+	- additionally checking for unix style installation of IL (i.e. openil 
+	   aka Devil aka libIL) on Mac OS X
+
+	* app/monitorspark/main.cpp: 
+	- include SDL
+
+	* lib/kerosin/openglserver/openglwrapper.h: 
+	- new wrapper for opengl to hide away platform differences
+	
+	* app/fonttest/main.cpp: 
+	- include sparkconfig.h 
+	- include SDL.h instead of SDL/SDL.h
+
+	* app/rcssmonitor3d/lite/camera.h: 
+	removed including glut.h and replaced by including the openglwrapper
+
+	* app/rcssmonitor3d/lite/glserver.h: removed including glut.h
+
+	* app/rcssmonitor3d/lite/monitor.cpp: 
+	- removed including glut.h and replaced by including the openglwrapper 
+	- removed some strange UTF characters from comments
+
+	* lib/kerosin/Makefile.am: 
+	- removed using the glextensionreg files 
+	- changed hard coded compile and linker options to meta-variables 
+	   created by configure 
+	- added openglwrapper.h file
+
+	* lib/kerosin/fontserver/font.h: 
+	- included openglwrapper.h 
+	- changed type of texture id from unsigned int to GLuint
+
+	* lib/kerosin/openglserver/openglserver.cpp: 
+	* lib/kerosin/openglserver/openglserver.h: 
+	- include SDL.h instead of SDL/SDL.h 
+	- removed methods and variables refering to the GL extension registry 
+	- whitespace / reformatting
+
+	* lib/kerosin/textureserver/texture.h: 
+	- included new openglwrapper 
+	- changed type of texture handle from unsigned int to GLuint
+
+	* app/fonttest/Makefile.am: 
+	- added some configure meta-variables
+
+	* app/agentspark/Makefile.am: 
+	* app/monitorspark/Makefile.am: 
+	* app/rcssmonitor3d/kerosin/Makefile.am: 
+	* app/rcssmonitor3d/lite/Makefile.am: 
+	* app/scenetest/Makefile.am: 
+	* app/simspark/Makefile.am: 
+	* plugin/inputsdl/Makefile.am: 
+	* lib/spark/Makefile.am: 
+	changed hard coded compile and linker options to meta-variables 
+	created by configure
+
+	* app/inputtest/main.cpp: 
+	* app/scenetest/main.cpp: 
+	* lib/kerosin/inputserver/inputserver.cpp: 
+	* plugin/inputsdl/inputdevicesdl.h: 
+	* plugin/inputsdl/inputsystemsdl.h: 
+	include SDL.h instead of SDL/SDL.h
+
+	* lib/oxygen/physicsserver/odewrapper.h:
+	* lib/salt/defines.h:
+	* lib/salt/path.h: 
+	* utility/rcssnet/exception.cpp: 
+	* utility/rcssnet/socket.cpp: 
+	* plugin/filesystemzip/filesystemzip.h:
+	* lib/zeitgeist/class.h: 
+	* lib/salt/rect.h: 
+	* lib/salt/sharedlibrary.h: 
+	config.h -> sparkconfig.h
+
+2007-05-16 Joschka Boedecker <jboedeck@uni-koblenz.de>
 
 	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp:
 	- slowed down the log file server with usleep(33000)

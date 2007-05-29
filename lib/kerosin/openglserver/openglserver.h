@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.h,v 1.9 2004/04/12 13:28:25 rollmark Exp $
+   $Id: openglserver.h,v 1.10 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,14 +22,10 @@
 #ifndef KEROSIN_OPENGLSERVER_H
 #define KEROSIN_OPENGLSERVER_H
 
-// #ifdef HAVE_CONFIG_H
-// #include "config.h"
-// #endif
-
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
-#include "glextensionreg.h"
 #include <set>
+#include <kerosin/openglserver/openglwrapper.h>
 
 namespace kerosin
 {
@@ -41,17 +37,7 @@ class MapHolder;
 
 class OpenGLServer : public zeitgeist::Leaf
 {
-    //
-    // types
-    //
 protected:
-    //! this structure will be used to map program names to OpenGL IDs
-// #if HAVE_HASH_MAP
-//     typedef std::hash_map<std::string, unsigned int> TProgramCache;
-// #else
-//     typedef std::map<std::string, unsigned int> TProgramCache;
-// #endif
-
     //! set of OpenGL light constants
     typedef std::set<int> TLightSet;
 
@@ -62,7 +48,7 @@ public:
     OpenGLServer();
     ~OpenGLServer();
 
-    boost::shared_ptr<GLExtensionReg> GetExtensionReg() const;
+    //    boost::shared_ptr<GLExtensionReg> GetExtensionReg() const;
     //! if this is called, the application will 'want to quit'
     void Quit();
 
@@ -103,9 +89,6 @@ protected:
     // members
     //
 protected:
-    //! this contains information on all available extensions
-    boost::shared_ptr<GLExtensionReg> mExtensionReg;
-
     //! a flag, which can be used to control the shutdown of the display window and the application
     bool mWantsToQuit;
 

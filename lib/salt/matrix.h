@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: matrix.h,v 1.7 2004/04/15 10:03:03 rollmark Exp $
+   $Id: matrix.h,v 1.8 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
 */
 #ifndef SALT_MATRIX_H
 #define SALT_MATRIX_H
-
-// #ifdef HAVE_CONFIG_H
-// #include <config.h>
-// #endif
 
 #include "defines.h"
 #include "vector.h"

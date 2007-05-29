@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: filesystemzip.h,v 1.5 2004/04/18 16:21:56 rollmark Exp $
+$Id: filesystemzip.h,v 1.6 2007/05/29 09:45:38 jboedeck Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #define FILESYSTEMZIP_H__
 
 /*      \class FileSystemZIP
-        $Id: filesystemzip.h,v 1.5 2004/04/18 16:21:56 rollmark Exp $
+        $Id: filesystemzip.h,v 1.6 2007/05/29 09:45:38 jboedeck Exp $
 
         FileSystemZIP - The ZIP File System
 
@@ -49,7 +49,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
         TOFIX:
 */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <sparkconfig.h>
 #endif
 
 #ifdef HAVE_HASH_MAP

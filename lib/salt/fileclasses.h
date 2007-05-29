@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileclasses.h,v 1.6 2003/11/14 14:05:54 fruit Exp $
+   $Id: fileclasses.h,v 1.7 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,10 +30,6 @@
  */
 #ifndef SALT_FILECLASSES_H
 #define SALT_FILECLASSES_H
-
-// #ifdef HAVE_CONFIG_H
-// #include <config.h>
-// #endif
 
 #include <cstdio>
 #include <cstdlib>

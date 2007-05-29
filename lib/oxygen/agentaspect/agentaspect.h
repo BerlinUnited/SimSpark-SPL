@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.8 2004/04/05 14:51:08 rollmark Exp $
+   $Id: agentaspect.h,v 1.9 2007/05/29 09:45:38 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
 */
 #ifndef OXYGEN_AGENTASPECT_H
 #define OXYGEN_AGENTASPECT_H
-
-// #ifdef HAVE_CONFIG_H
-// #include <config.h>
-// #endif
 
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/gamecontrolserver/actionobject.h>

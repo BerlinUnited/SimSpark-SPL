@@ -1,7 +1,7 @@
 #include <zeitgeist/zeitgeist.h>
 #include <kerosin/kerosin.h>
 #include <oxygen/oxygen.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include <zeitgeist/fileserver/fileserver.h>
 
 using namespace boost;
