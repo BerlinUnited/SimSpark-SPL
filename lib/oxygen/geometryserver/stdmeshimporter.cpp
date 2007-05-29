@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: stdmeshimporter.cpp,v 1.2 2007/02/12 19:23:32 rollmark Exp $
+   $Id: stdmeshimporter.cpp,v 1.3 2007/05/29 21:36:29 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -192,17 +192,29 @@ static float gBoxNormals[gNumBoxVertices*3] =
          -1.0f,0.0f,0.0f, -1.0f,0.0f,0.0f, -1.0f,0.0f,0.0f
     };
 
+// by jan
 static float gBoxTexCoords[gNumBoxVertices*3] =
     {
-        0.0f,0.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
-        0.0f,1.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
-        0.0f,1.0f,0.0f,  0.0f,0.0f,0.0f,  0.0f,1.0f,0.0f,
-        0.0f,0.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
-        1.0f,1.0f,0.0f,  0.0f,1.0f,0.0f,  0.0f,0.0f,0.0f,
-        1.0f,0.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
-        0.0f,1.0f,0.0f,  0.0f,0.0f,0.0f,  0.0f,0.0f,0.0f,
-        1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,  0.0f,1.0f,0.0f
+        0.0f,1.0f,0.0f,  1.0f,1.0f,0.0f,  1.0f,0.0f,0.0f, 0.0f,0.0f,0.0f,
+        0.0f,0.0f,0.0f, 0.0f,1.0f,0.0f,  1.0f,1.0f,0.0f,  1.0f,0.0f,0.0f,
+        1.0f,1.0f,0.0f, 1.0f,0.0f,0.0f,  0.0f,0.0f,0.0f,  0.0f,1.0f,0.0f,
+        0.0f,1.0f,0.0f,  1.0f,1.0f,0.0f,  1.0f,0.0f,0.0f, 0.0f,0.0f,0.0f,
+        0.0f,1.0f,0.0f,  1.0f,1.0f,0.0f, 1.0f,0.0f,0.0f,  0.0f,0.0f,0.0f,
+        1.0f,1.0f,0.0f, 1.0f,0.0f,0.0f,  0.0f,0.0f,0.0f,  0.0f,1.0f,0.0f
     };
+
+//Original
+// static float gBoxTexCoords[gNumBoxVertices*3] =
+//     {
+//         0.0f,0.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
+//         0.0f,1.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
+//         0.0f,1.0f,0.0f,  0.0f,0.0f,0.0f,  0.0f,1.0f,0.0f,
+//         0.0f,0.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
+//         1.0f,1.0f,0.0f,  0.0f,1.0f,0.0f,  0.0f,0.0f,0.0f,
+//         1.0f,0.0f,0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,
+//         0.0f,1.0f,0.0f,  0.0f,0.0f,0.0f,  0.0f,0.0f,0.0f,
+//         1.0f,0.0f,0.0f,  1.0f,1.0f,0.0f,  0.0f,1.0f,0.0f
+//     };
 
 static unsigned int gBoxFaces[gNumSphereFaces*3] =
     {
