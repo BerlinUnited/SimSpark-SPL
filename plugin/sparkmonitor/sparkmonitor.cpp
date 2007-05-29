@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.8 2004/12/31 14:29:46 rollmark Exp $
+   $Id: sparkmonitor.cpp,v 1.9 2007/05/29 21:27:42 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ void SparkMonitor::DescribeCustomPredicates(stringstream& ss,const PredicateList
 
 void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)
 {
-    ss << "(node Light ";
+    ss << "(nd Light ";
 
     const RGBA& diff = light->GetDiffuse();
     ss << "(setDiffuse " << diff.r() << " " << diff.g() << " "
@@ -155,10 +155,10 @@ void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> tra
 
     if (mFullState)
         {
-            ss << "(node Transform";
+            ss << "(nd Transform";
         } else
             {
-                ss << "(node";
+                ss << "(nd";
             }
 
     // include transform data only for fullstate or a modified
@@ -207,10 +207,10 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
 
     if (singleMat.get() != 0)
         {
-            ss << "(node SingleMatNode";
+            ss << "(nd SingleMatNode";
         } else
             {
-                ss << "(node StaticMesh";
+                ss << "(nd StaticMesh";
             }
 
     ss << " (load " << mesh->GetMeshName();
@@ -284,10 +284,10 @@ void SparkMonitor::DescribeNode(stringstream& ss, shared_ptr<BaseNode> node)
     if (mFullState)
         {
             // default to BaseNode
-            ss << "(node BaseNode";
+            ss << "(nd BaseNode";
         } else
             {
-                ss << "(node";
+                ss << "(nd";
             }
 }
 
@@ -312,10 +312,10 @@ void SparkMonitor::DescribeActiveScene(stringstream& ss)
 
             if (mFullState)
                 {
-                    ss << "(RubySceneGraph 0 1)";
+                    ss << "(RSG 0 1)";
                 } else
                     {
-                        ss << "(RubyDeltaScene 0 1)";
+                        ss << "(RDS 0 1)";
                     }
 
             DescribeScene(ss,mActiveScene);
