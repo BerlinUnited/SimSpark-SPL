@@ -4,15 +4,15 @@
 ; given $Material
 ;
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
- (template $PosX $PosY $PosZ $Name $Material)
+ (templ $PosX $PosY $PosZ $Name $Material)
 
- (node Transform
+ (nd Transform
        (setLocalPos $PosX $PosY $PosZ)
        (importScene rsg/boxspheres/staticsphere.rsg 1 $Material)
 
-       (node ObjectState
+       (nd ObjectState
 	     (setPerceptName $Name)
 	     )
        )

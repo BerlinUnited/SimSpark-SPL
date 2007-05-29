@@ -1,23 +1,23 @@
 ; -*- mode: lisp; -*-
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
- (template $radius $length $totalMass $material)
+ (templ $radius $length $totalMass $material)
 
- (node CCylinder
+ (nd CCylinder
        (setParams $radius $length)
        (setMaterial $material)
        )
        
- (node Body
+ (nd Body
        (setName ccylinderBody)
        ;(setCappedCylinderTotal $totalMass $radius $length)
        (setCappedCylinder $totalMass $radius $length)
        )
 	     
- (node CCylinderCollider
+ (nd CCylinderCollider
        (setParams $radius $length)
-       (node ContactJointHandler
+       (nd ContactJointHandler
 	     (setContactBounceMode false)
 
 	     (setContactSlipMode true)

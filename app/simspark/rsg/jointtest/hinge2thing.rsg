@@ -1,49 +1,49 @@
 ; -*- mode: lisp; -*-
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
 
- (node Transform
+ (nd Transform
        (setName chassis)
        (setLocalPos 0 0 0.5)
        (importScene rsg/boxspheres/box.rsg 1 3 0.8 10 matRed)
        )
 
- (node Transform
+ (nd Transform
        (setName leftBack)
        (setLocalPos -0.5 -1.5 0)
        (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
-       (node Hinge2Joint
+       (nd Hinge2Joint
 	     (attach ../sphereBody ../../chassis/boxBody)
 	     (setAnchor 0 0 0)
 	     )
        )
 
- (node Transform
+ (nd Transform
        (setName leftFront)
        (setLocalPos -0.5 +1.5 0)
        (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
-       (node Hinge2Joint
+       (nd Hinge2Joint
 	     (attach ../sphereBody ../../chassis/boxBody)
 	     (setAnchor 0 0 0)
 	     )
        )
 
- (node Transform
+ (nd Transform
        (setName rightBack)
        (setLocalPos 0.5 -1.5 0)
        (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
-       (node Hinge2Joint
+       (nd Hinge2Joint
 	     (attach ../sphereBody ../../chassis/boxBody)
 	     (setAnchor 0 0 0)
 	     )
        )
 
- (node Transform
+ (nd Transform
        (setName rightFront)
        (setLocalPos 0.5 +1.5 0)
        (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
-       (node Hinge2Joint
+       (nd Hinge2Joint
 	     (attach ../sphereBody ../../chassis/boxBody)
 	     (setAnchor 0 0 0)
 	     )

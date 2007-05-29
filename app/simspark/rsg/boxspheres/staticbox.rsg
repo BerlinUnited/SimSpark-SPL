@@ -1,16 +1,16 @@
 ; -*- mode: lisp; -*-
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
- (template $lenX $lenY $lenZ $material)
- (node Box
+ (templ $lenX $lenY $lenZ $material)
+ (nd Box
        (setExtents $lenX $lenY $lenZ)
        (setMaterial $material)
        )
 
- (node BoxCollider
+ (nd BoxCollider
        (setBoxLengths $lenX $lenY $lenZ)
-       (node ContactJointHandler
+       (nd ContactJointHandler
 	     (setContactBounceMode false)
 	     )
        )

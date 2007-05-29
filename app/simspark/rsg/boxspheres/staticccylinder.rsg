@@ -1,15 +1,15 @@
 ; -*- mode: lisp; -*-
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
- (template $radius $length $density $material)
+ (templ $radius $length $density $material)
 
- (node CCylinder
+ (nd CCylinder
        (setParams $radius $length)
        (setMaterial $material)
        )
        
- (node CCylinderCollider
+ (nd CCylinderCollider
        (setParams $radius $length)
        )
  )

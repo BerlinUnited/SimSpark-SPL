@@ -1,66 +1,66 @@
 ; -*- mode: lisp; -*-
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
 ; create the base plane
- (node Transform
+ (nd Transform
        (setLocalPos 0 0 -1)
-       (node Box
+       (nd Box
 	     (setMaterial matGreen)
 	     (setExtents 100 100 4)
 	     )
-       (node PlaneCollider
+       (nd PlaneCollider
 	     (setParams 0 0 1.0 0)
-	     (node ContactJointHandler
+	     (nd ContactJointHandler
 		   (setContactBounceMode false)
 		   )
 	     )
        )
 
 ; create left side
- (node Transform
+ (nd Transform
        (setLocalPos -50 0 10)
-       (node Box
+       (nd Box
 	     (setMaterial matWhite)
 	     (setExtents 1 100 20)
 	     ) 
-       (node PlaneCollider
+       (nd PlaneCollider
 	     (setParams 1.0 0 0 -49)
 	     )
        )
 
 ; create back side
- (node Transform
+ (nd Transform
        (setLocalPos 0 50 10)
-       (node Box
+       (nd Box
 	     (setMaterial matGrey)
 	     (setExtents 100 1 20)
 	     ) 
-       (node PlaneCollider
+       (nd PlaneCollider
 	     (setParams 0 -1.0 0 -49)
 	     )
        )
 
 ; create right side
- (node Transform
+ (nd Transform
        (setLocalPos 50 0 10)
-       (node Box
+       (nd Box
 	     (setMaterial matWhite)
 	     (setExtents 1 100 20)
 	     ) 
-       (node PlaneCollider
+       (nd PlaneCollider
 	     (setParams -1.0 0 0 -49)
 	     )
        )
 
 ; create front side
- (node Transform
+ (nd Transform
        (setLocalPos 0 -50 10)
-       (node Box
+       (nd Box
 	     (setMaterial matGrey)
 	     (setExtents 100 1 20)
 	     ) 
-       (node PlaneCollider
+       (nd PlaneCollider
 	     (setParams 0 1.0 0 -49)
 	     )
        )

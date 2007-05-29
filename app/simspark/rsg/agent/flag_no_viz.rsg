@@ -4,14 +4,14 @@
 ; given $Material
 ;
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
- (template $PosX $PosY $PosZ $Name)
+ (templ $PosX $PosY $PosZ $Name)
 
- (node Transform
+ (nd Transform
        (setLocalPos $PosX $PosY $PosZ)
 
-       (node ObjectState
+       (nd ObjectState
 	     (setPerceptName $Name)
 	     )
        )

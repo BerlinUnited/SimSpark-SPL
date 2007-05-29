@@ -1,18 +1,18 @@
 ; -*- mode: lisp; -*-
 
-(RubySceneGraph 0 1)
+(RSG 0 1)
 (
- (template $radius $material)
+ (templ $radius $material)
 
- (node Sphere
+ (nd Sphere
        (setRadius $radius)
        (setMaterial $material)
        )
 
- (node SphereCollider
+ (nd SphereCollider
        (setRadius $radius)
 
-       (node ContactJointHandler
+       (nd ContactJointHandler
 	     (setContactBounceMode false)
 	     )
 
