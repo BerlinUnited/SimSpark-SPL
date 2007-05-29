@@ -1,3 +1,8 @@
+2007-05-30  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/gyrorateperceptor/gyrorateperceptor.cpp:
+	- "rt" added in the rate output to be compatible with the other percepts. 
+
 2007-05-29  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* configure.ac,
@@ -7353,7 +7358,7 @@
 2003-06-22  Markus Rollmann  <rollmark@uni-koblenz.de>
 	* app/
 	- replaced files in app/ directory with the latest version of the
-	original author (Marco Kögler)
+	original author (Marco Kï¿½gler)
 	- added missing projects to the vc app.dsw workspace and tested
 	the projects
 
@@ -7417,8 +7422,8 @@
 2003-04-30  Oliver Obst  <fruit@uni-koblenz.de>
 
 	* Moved everything done so far into a separate branch
-	(genesis). Added code from Diploma Thesis of Marco Kögler
-	<kögler@uni-koblenz.de>, which provides an already running
+	(genesis). Added code from Diploma Thesis of Marco Kï¿½gler
+	<kï¿½gler@uni-koblenz.de>, which provides an already running
 	and flexible simulator for physical 3D simulations. The initial
 	version is running on MS Windows, so one of the tasks is to
 	provide Makefiles and changes to compile a Linux version. 
