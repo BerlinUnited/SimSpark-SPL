@@ -1,3 +1,46 @@
+2007-05-29  Jan Murray  <murray@uni-koblenz.de>
+
+	* lib/oxygen/geometryserver/stdmeshimporter.cpp:
+  	  Changed texture coordinates for unitbox
+
+	* app/simspark/rsg/jointtest/universalthing.rsg,
+	* app/simspark/rsg/jointtest/sliderthing.rsg,
+	* app/simspark/rsg/jointtest/simspark.rsg,
+	* app/simspark/rsg/jointtest/rotorthing.rsg,
+	* app/simspark/rsg/jointtest/rotorlayer.rsg,
+	* app/simspark/rsg/jointtest/hingething.rsg,
+	* app/simspark/rsg/jointtest/hinge2thing.rsg,
+	* app/simspark/rsg/boxspheres/staticsphere.rsg,
+	* app/simspark/rsg/boxspheres/staticccylinder.rsg,
+	* app/simspark/rsg/boxspheres/staticbox.rsg,
+	* app/simspark/rsg/boxspheres/sphere.rsg,
+	* app/simspark/rsg/boxspheres/simspark.rsg,
+	* app/simspark/rsg/boxspheres/row.rsg,
+	* app/simspark/rsg/boxspheres/layer.rsg,
+	* app/simspark/rsg/boxspheres/ccylinder.rsg,
+	* app/simspark/rsg/boxspheres/box_with_handler.rsg,
+	* app/simspark/rsg/boxspheres/box.rsg,
+	* app/simspark/rsg/boxspheres/arena.rsg,
+	* app/simspark/rsg/agent/soccerplayer.rsg,
+	* app/simspark/rsg/agent/soccerbot.rsg,
+	* app/simspark/rsg/agent/soccer.rsg,
+	* app/simspark/rsg/agent/simspark.rsg,
+	* app/simspark/rsg/agent/leggedsphere.rsg,
+	* app/simspark/rsg/agent/hoap2.rsg,
+	* app/simspark/rsg/agent/flag_no_viz.rsg,
+	* app/simspark/rsg/agent/flag.rsg,
+	* app/simspark/rsg/agent/buggy.rsg,
+	* app/simspark/rsg/agent/ball.rsg:
+	
+	  .rsg files use short keywords now
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	  shortened rsg keywords:
+  	  node -> nd, template -> templ, define -> def, RubySceneGraph -> RSG, RubyDeltaScene -> RDS
+
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+          adapted generation of rsg expressions to new syntax
+
 2007-05-30  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/gyrorateperceptor/gyrorateperceptor.cpp:
