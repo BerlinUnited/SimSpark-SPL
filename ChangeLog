@@ -1,3 +1,28 @@
+2007-05-30  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* lib/kerosin/sceneserver/cylinder.cpp,
+	* lib/kerosin/sceneserver/cylinder.h
+	* lib/kerosin/sceneserver/cylinder_c.cpp:
+	- added files that allow creation of a unit cylinder
+	  mesh
+
+	* lib/kerosin/Makefile.am:
+	- added files for the cylinder
+	
+	* lib/kerosin/kerosin.cpp,
+	* lib/kerosin/kerosin.h:
+	- include cylinder header and register Cylinder class
+	  with Zeitgeist
+
+	* lib/oxygen/geometryserver/stdmeshimporter.cpp,
+	* lib/oxygen/geometryserver/stdmeshimporter.h:
+	- added method to create a unit cylinder mesh
+
+	* plugin/soccer/initeffector/initeffector.cpp:
+	- fixed the search for an appropriate parent of the
+	  AgentAspect (since we use spaces for each agent now
+	  we have to go one step higher in the hierarchy).
+
 2007-05-29  Jan Murray  <murray@uni-koblenz.de>
 
 	* lib/oxygen/geometryserver/stdmeshimporter.cpp:
