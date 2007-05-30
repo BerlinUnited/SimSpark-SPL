@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.7 2007/05/30 09:09:22 jboedeck Exp $
+   $Id: initeffector.cpp,v 1.8 2007/05/30 13:17:13 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/space.h>
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
@@ -83,11 +84,12 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
     // request an initial position for the agent and move it there
     Vector3f pos = mGameState->RequestInitPosition(team);
 
-    // agents are now encapsulated in their own collision spaces, so we need
-    // to get the parent of the parent of the agent aspect
+    // agents may be encapsulated in their own collision spaces, so we need
+    // to get the parent of the parent of the agent aspect in this case
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-        ((mAgentAspect->GetParent().lock())->GetParent().lock());
-
+        (mAgentAspect->GetParentSupportingClass("Transform").lock());
+    
+    
     if (parent.get() == 0)
 	{
             GetLog()->Error()
@@ -108,7 +110,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
         {
             GetLog()->Error()
                 << "ERROR: (InitEffector) agent aspect doesn't have "
-                << "children of type Body\n";
+                << "children of type Body \n";
 
             return false;
         }
