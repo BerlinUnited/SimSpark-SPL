@@ -34,24 +34,24 @@ SoccerbotBehavior::SoccerbotBehavior() : mZG("." PACKAGE_NAME), mInit(false)
 void SoccerbotBehavior::SetupJointIDMap()
 {
     mJointIDMap.clear();
-    mJointIDMap["head_joint_2"]   = JID_HEAD_2;
-    mJointIDMap["head_joint_1"]   = JID_HEAD_1;
-    mJointIDMap["lleg_joint_1"]   = JID_LLEG_1;
-    mJointIDMap["rleg_joint_1"]   = JID_RLEG_1;
-    mJointIDMap["lleg_joint_2_3"] = JID_LLEG_2_3;
-    mJointIDMap["rleg_joint_2_3"] = JID_RLEG_2_3;
-    mJointIDMap["lleg_joint_4"]   = JID_LLEG_4;
-    mJointIDMap["rleg_joint_4"]   = JID_RLEG_4;
-    mJointIDMap["lleg_joint_5_6"] = JID_LLEG_5_6;
-    mJointIDMap["rleg_joint_5_6"] = JID_RLEG_5_6;
-    mJointIDMap["larm_joint_1_2"] = JID_LARM_1_2;
-    mJointIDMap["rarm_joint_1_2"] = JID_RARM_1_2;
-    mJointIDMap["larm_joint_3"]   = JID_LARM_3;
-    mJointIDMap["rarm_joint_3"]   = JID_RARM_3;
-    mJointIDMap["larm_joint_4"]   = JID_LARM_4;
-    mJointIDMap["rarm_joint_4"]   = JID_RARM_4;
-    mJointIDMap["larm_joint_5"]   = JID_LARM_5;
-    mJointIDMap["rarm_joint_5"]   = JID_RARM_5;
+    //mJointIDMap["head_joint_2"]   = JID_HEAD_2;
+    //mJointIDMap["head_joint_1"]   = JID_HEAD_1;
+    mJointIDMap["llj1"]   = JID_LLEG_1;
+    mJointIDMap["rlj1"]   = JID_RLEG_1;
+    mJointIDMap["llj2_3"] = JID_LLEG_2_3;
+    mJointIDMap["rlj2_3"] = JID_RLEG_2_3;
+    mJointIDMap["llj4"]   = JID_LLEG_4;
+    mJointIDMap["rlj4"]   = JID_RLEG_4;
+    mJointIDMap["llj5_6"] = JID_LLEG_5_6;
+    mJointIDMap["rlj5_6"] = JID_RLEG_5_6;
+    mJointIDMap["laj1_2"] = JID_LARM_1_2;
+    mJointIDMap["raj1_2"] = JID_RARM_1_2;
+    mJointIDMap["laj3"]   = JID_LARM_3;
+    mJointIDMap["raj3"]   = JID_RARM_3;
+    mJointIDMap["laj4"]   = JID_LARM_4;
+    mJointIDMap["raj4"]   = JID_RARM_4;
+    mJointIDMap["laj5"]   = JID_LARM_5;
+    mJointIDMap["raj5"]   = JID_RARM_5;
 }
 
 string SoccerbotBehavior::Init()
@@ -215,7 +215,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle < 90.0)
             {
                 newAngle = gain * (90.0 - curAngle);
-                ss << "(rarm_eff_1_2 0.0 " << newAngle << ")";
+                ss << "(rae1_2 0.0 " << newAngle << ")";
             }
             else
             {
@@ -229,7 +229,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle > -90.0)
             {
                 newAngle = gain * (-90.0 - curAngle);
-                ss << "(rarm_eff_3 " << newAngle << ")";
+                ss << "(rae3 " << newAngle << ")";
             }
             else    
             {
@@ -241,7 +241,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle < 90.0)
             {
                 newAngle = gain * (90.0 - curAngle);
-                ss << "(rarm_eff_4 " << newAngle << ")"; 
+                ss << "(rae4 " << newAngle << ")"; 
             }
             else
             {
@@ -253,7 +253,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle > 45.0 || curAngle <= 44.5)
             {
                 newAngle = gain * (45.0 - curAngle);
-                ss << "(rarm_eff_4 " << newAngle << ")";
+                ss << "(rae4 " << newAngle << ")";
             }
             else
             {
@@ -273,7 +273,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle < 90.0)
             {
                 newAngle = gain * (90.0 - curAngle);
-                ss << "(larm_eff_1_2 0.0 " << newAngle << ")";
+                ss << "(lae1_2 0.0 " << newAngle << ")";
             }
             else
             {
@@ -287,7 +287,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle < 90.0)
             {
                 newAngle = gain * (90.0 - curAngle);
-                ss << "(larm_eff_3 " << newAngle << ")";
+                ss << "(lae3 " << newAngle << ")";
             }
             else    
             {
@@ -299,7 +299,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle < 90.0)
             {
                 newAngle = gain * (90.0 - curAngle);
-                ss << "(larm_eff_4 " << newAngle << ")"; 
+                ss << "(lae4 " << newAngle << ")"; 
             }
             else
             {
@@ -311,7 +311,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             if (curAngle > 45.0 || curAngle <= 44.5)
             {
                 newAngle = gain * (45.0 - curAngle);
-                ss << "(larm_eff_4 " << newAngle << ")";
+                ss << "(lae4 " << newAngle << ")";
             }
             else
             {
