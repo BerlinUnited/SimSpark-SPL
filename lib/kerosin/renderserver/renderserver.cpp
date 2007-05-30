@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.20 2004/12/30 15:53:47 rollmark Exp $
+$Id: renderserver.cpp,v 1.21 2007/05/30 18:41:40 jboedeck Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -215,8 +215,8 @@ RenderServer::Render()
     TLeafList allMeshes;
     TLeafList visibleMeshes;
 
-    mActiveScene->GetChildrenSupportingClass("Light", myLights, true);
-    mActiveScene->GetChildrenSupportingClass("StaticMesh", allMeshes, true);
+    mActiveScene->ListChildrenSupportingClass<Light>(myLights, true);
+    mActiveScene->ListChildrenSupportingClass<StaticMesh>(allMeshes, true);
 
     TLeafList::iterator i;
     for (i = allMeshes.begin(); i != allMeshes.end(); ++i)
