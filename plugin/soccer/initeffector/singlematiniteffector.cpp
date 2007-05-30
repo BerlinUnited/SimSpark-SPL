@@ -102,24 +102,28 @@ SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
             return false;
         }
 
-
     shared_ptr<SingleMatNode> matNode;
 
     std::vector<std::string>::const_iterator it;
 
     for (it = jersey.begin(); it != jersey.end(); ++it)
     {
-        matNode = shared_dynamic_cast<SingleMatNode>(parent->GetChild((*it),true)->GetChildSupportingClass("SingleMatNode",true));
+        matNode = shared_dynamic_cast<SingleMatNode>
+            (parent->GetChild((*it),true)->FindChildSupportingClass<SingleMatNode>(true));
+
         if (matNode.get() == 0)
         {
             GetLog()->Error()
-                << "ERROR: (SingleMatInitEffector) cannot find SingleMatNode of " << (*it) << "\n";
+                << "ERROR: (SingleMatInitEffector) cannot find SingleMatNode of " 
+                << (*it) << "\n";
             return false;   
         }
         if ((*it) == "body")
         {
             matNode->SetMaterial(unumMat.str()); 
-        } else {
+        } 
+        else 
+        {
             matNode->SetMaterial(jerseyMaterial); 
         }
     }
