@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gyrorateperceptor.h,v 1.1 2007/05/01 16:54:23 jboedeck Exp $
+   $Id: gyrorateperceptor.h,v 1.2 2007/05/30 18:40:49 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #define GYRORATEPERCEPTOR_H
 
 #include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/physicsserver/body.h>
 
 class GyroRatePerceptor : public oxygen::Perceptor
 {
@@ -34,7 +35,13 @@ public:
     //! \return true, if valid data is available and false otherwise.
     bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
+    virtual void OnLink();
+    virtual void OnUnlink();
+
 private:
+
+    //! reference to the body of which the perceptor is measuring the angle change rate    
+    boost::shared_ptr<oxygen::Body> mBody;
 };
 
 DECLARE_CLASS(GyroRatePerceptor);

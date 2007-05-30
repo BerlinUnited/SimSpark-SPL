@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gyrorateperceptor.cpp,v 1.4 2007/05/29 21:11:54 hedayat Exp $
+   $Id: gyrorateperceptor.cpp,v 1.5 2007/05/30 18:40:49 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,22 @@ GyroRatePerceptor::~GyroRatePerceptor()
 {
 }
 
+void 
+GyroRatePerceptor::OnLink()
+{
+    shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+        (FindParentSupportingClass<Transform>().lock());
+
+    mBody = shared_static_cast<Body>
+        (transformParent->GetChildOfClass("Body"));     
+}
+
+void 
+GyroRatePerceptor::OnUnlink()
+{
+    mBody.reset();
+}
+
 bool
 GyroRatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
@@ -48,15 +64,9 @@ GyroRatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     
     ParameterList & nameElement = predicate.parameter.AddList();
     nameElement.AddValue(std::string("name"));
-    nameElement.AddValue(GetName());
+    nameElement.AddValue(GetName());       
 
-    shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-        (GetParentSupportingClass("Transform").lock());
-
-    shared_ptr<Body> body = shared_static_cast<Body>
-        (transformParent->GetChildOfClass("Body"));    
-
-    Vector3f rate = body->GetAngularVelocity();
+    Vector3f rate = mBody->GetAngularVelocity();
 
     ParameterList & ratesElement = predicate.parameter.AddList();    
     ratesElement.AddValue(std::string("rt"));
@@ -65,7 +75,7 @@ GyroRatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     ratesElement.AddValue(gRadToDeg(rate.z()));
 
    // What should be done when yrotate is around 90? in that case, the parameters of the atan2 are 0!
-//    const dReal* q = dBodyGetQuaternion(body->GetODEBody());
+//    const dReal* q = dBodyGetQuaternion(mBody->GetODEBody());
 //    float xrotate = gArcTan2(2*(q[0]*q[1]+q[2]*q[3]), 1-2*(q[1]*q[1]+q[2]*q[2]));
 //    float yrotate = gArcSin(2*(q[0]*q[2] - q[3]*q[1]));
 //    float zrotate = gArcTan2(2*(q[0]*q[3] + q[1]*q[2]), 1-2*(q[2]*q[2]+q[3]*q[3]));
