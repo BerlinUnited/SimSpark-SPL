@@ -66,10 +66,15 @@ material.setDiffuse(0.0,0.75,1.0,1.0)
 material = new('kerosin/MaterialSolid', $serverPath+'material/matMagenta');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 
-material = new('kerosin/Material2DTexture', $serverPath+'material/cube_Cube.tga');
-material.setDiffuseTexture('/home/joschka/RoboCup/rcssserver3D/app/simspark/cube_Cube.tga')
-#material.setNormalTexture('/home/joschka/RoboCup/rcssserver3D/app/simspark/cube_Cube.tga')
-#material.setSpecularTexture('/home/joschka/RoboCup/rcssserver3D/app/simspark/cube_Cube.tga')
+material = new('kerosin/Material2DTexture', $serverPath+'material/matBall');
+material.setDiffuse(1.0,1.0,1.0,1.0)
+material.setAmbient(0.5,0.5,0.5,1.0)
+material.setDiffuseTexture('./soccerball.tga')
+
+material = new('kerosin/Material2DTexture', $serverPath+'material/matGrass');
+material.setDiffuse(1.0,1.0,1.0,1.0)
+material.setAmbient(0.5,0.5,0.5,1.0)
+material.setDiffuseTexture('./grass.tga')
 
 #
 # uncomment for logging setup (see spark.rb for reference)

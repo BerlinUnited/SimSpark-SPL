@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.10 2007/02/15 21:32:27 rollmark Exp $
+   $Id: space.cpp,v 1.11 2007/05/30 13:04:48 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 using namespace boost;
 using namespace oxygen;
 
-static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
+void Space::collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
 {
     Space *space = (Space*)data;
     space->HandleCollide(obj1, obj2);
@@ -70,9 +70,36 @@ void Space::Collide()
     dSpaceCollide(mODESpace, this, collisionNearCallback);
 }
 
+void Space::HandleSpaceCollide(dGeomID obj1, dGeomID obj2)
+{
+    // collide all geoms internal to the space(s)
+    dSpaceCollide2 (obj1,obj2,this,&collisionNearCallback);
+
+    if (dGeomIsSpace (obj1))
+        {
+            dSpaceCollide ((dSpaceID)(obj1),this,&collisionNearCallback);
+        }
+
+    if (dGeomIsSpace (obj2))
+        {
+            dSpaceCollide ((dSpaceID)(obj2),this,&collisionNearCallback);
+        }
+}
+
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
-    // reject collisions between bodies that are connected with joints
+    if (
+        (dGeomIsSpace (obj1)) ||
+        (dGeomIsSpace (obj2))
+        )
+        {
+            // colliding a space with something
+            HandleSpaceCollide(obj1, obj2);
+            return;
+        }
+
+    // colliding two non-space geoms; reject collisions
+    // between bodies that are connected with joints
     const dBodyID b1 = dGeomGetBody(obj1);
     const dBodyID b2 = dGeomGetBody(obj2);
 
@@ -118,20 +145,54 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         }
 }
 
+void Space::OnLink()
+{
+    ODEObject::OnLink();
+
+    dSpaceID space = FindSpaceID();
+    if (
+        (space) &&
+        (space != mODESpace) &&
+        (! dSpaceQuery(space, (dGeomID)mODESpace))
+        )
+        {
+            dSpaceAdd(space, (dGeomID)mODESpace);
+        }
+}
+
+dSpaceID Space::GetParentSpaceID()
+{
+    if (mODESpace == 0)
+        {
+            return 0;
+        }
+
+    return dGeomGetSpace((dGeomID)mODESpace);
+}
+
+bool Space::IsGlobalSpace()
+{
+    return
+        (
+        (mODESpace != 0) &&
+        (GetParentSpaceID() == 0)
+        );
+}
+
 bool Space::ConstructInternal()
 {
-  // create the ode space, 0 indicates that this space should
-  // not be inserted into another space, i.e. we always create a
-  // toplevel space object
-  mODESpace = dHashSpaceCreate(0);
+    // create the ode space, 0 indicates that this space should
+    // not be inserted into another space, i.e. we always create a
+    // toplevel space object
+    mODESpace = dHashSpaceCreate(0);
 
-  // create a joint group for the contacts
-  mODEContactGroup = dJointGroupCreate(0);
+    // create a joint group for the contacts
+    mODEContactGroup = dJointGroupCreate(0);
 
-  return (
-          (mODESpace != 0) &&
-          (mODEContactGroup != 0)
-          );
+    return (
+            (mODESpace != 0) &&
+            (mODEContactGroup != 0)
+            );
 }
 
 void Space::PostPhysicsUpdateInternal()

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.11 2004/04/15 14:19:04 rollmark Exp $
+   $Id: collider.cpp,v 1.12 2007/05/30 13:04:48 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,13 +47,26 @@ void Collider::OnLink()
 {
     ODEObject::OnLink();
 
-    if (mODEGeom == 0)
+
+// JAN: taken from simspark
+    weak_ptr<Node> parent = GetParent();
+    if (
+        (mODEGeom == 0) ||
+        (parent.expired())
+        )
         {
             return;
         }
 
+
+
+//    if (mODEGeom == 0)
+  //      {
+    //        return;
+      //  }
+
     // if we have a space add the geom to it
-    dSpaceID space = GetSpaceID();
+    dSpaceID space = FindSpaceID();
     if (
         (space) &&
         (! dSpaceQuery(space, mODEGeom))
@@ -65,7 +78,7 @@ void Collider::OnLink()
 
     // if there is a Body below our parent, link to it
     shared_ptr<Body> body = shared_static_cast<Body>
-        (make_shared(GetParent())->GetChildOfClass("Body"));
+        (parent.lock()->GetChildOfClass("Body"));
 
     if (body.get() != 0)
         {
@@ -84,7 +97,7 @@ void Collider::OnUnlink()
     ODEObject::OnUnlink();
 
     // remove collision geometry from space
-    dSpaceID space = GetSpaceID();
+    dSpaceID space = GetParentSpaceID();
 
     if (
         (mODEGeom == 0) ||
@@ -94,13 +107,10 @@ void Collider::OnUnlink()
             return;
         }
 
-    if (
-        (space) &&
-        (dSpaceQuery(space, mODEGeom))
-        )
-        {
-            dSpaceRemove(space, mODEGeom);
-        }
+    if (space)
+    {
+        dSpaceRemove(space, mODEGeom);
+    }
 }
 
 void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
@@ -208,6 +218,16 @@ void Collider::SetPosition(const Vector3f& pos)
 {
     Vector3f globalPos(GetWorldTransform() * pos);
     dGeomSetPosition (mODEGeom, globalPos[0], globalPos[1], globalPos[2]);
+}
+
+dSpaceID Collider::GetParentSpaceID()
+{
+    if (mODEGeom == 0)
+        {
+            return 0;
+        }
+
+    return dGeomGetSpace(mODEGeom);
 }
 
 bool Collider::Intersects(boost::shared_ptr<Collider> collider)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.cpp,v 1.6 2004/04/15 14:14:26 rollmark Exp $
+   $Id: odeobject.cpp,v 1.7 2007/05/30 13:04:48 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,14 @@ shared_ptr<World> ODEObject::GetWorld()
 
 shared_ptr<Space> ODEObject::GetSpace()
 {
+    // try to find the nearest parent space object
+    weak_ptr<Space> parentSpace = FindParentSupportingClass<Space>();
+    if (! parentSpace.expired())
+        {
+            return parentSpace.lock();
+        }
+
+    // return the global space instance
     shared_ptr<Scene> scene = GetScene();
     if (scene.get() == 0)
         {
@@ -85,7 +93,7 @@ dWorldID ODEObject::GetWorldID()
     return worldId;
 }
 
-dSpaceID ODEObject::GetSpaceID()
+dSpaceID ODEObject::FindSpaceID()
 {
     shared_ptr<Space> space = GetSpace();
     if (space.get() == 0)
@@ -104,6 +112,11 @@ dSpaceID ODEObject::GetSpaceID()
     return spaceId;
 }
 
+dSpaceID ODEObject::GetParentSpaceID()
+{
+    return 0;
+}
+
 void ODEObject::ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix)
 {
     matrix[0] = rot.m[0];
@@ -119,5 +132,3 @@ void ODEObject::ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix)
     matrix[10] = rot.m[10];
     matrix[11] = 0;
 }
-
-

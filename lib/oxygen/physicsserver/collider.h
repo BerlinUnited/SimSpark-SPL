@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.10 2004/04/15 14:19:04 rollmark Exp $
+   $Id: collider.h,v 1.11 2007/05/30 13:04:48 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -111,6 +111,9 @@ public:
         Collider intersects with the geom managed by the given collider
      */
     bool Intersects(boost::shared_ptr<Collider> collider);
+
+    /** returns the ODE handle ID of the containing parent space */
+    virtual dSpaceID GetParentSpaceID();
 
 protected:
     /** registers the managed geom to the Space of the Scene and to
