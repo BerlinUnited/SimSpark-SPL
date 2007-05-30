@@ -1,4 +1,51 @@
+2007-05-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* lib/kerosin/renderserver/renderserver.cpp:
+	- replaced calls to GetChildrenSupportingClass with calls to
+	  ListChildrenSupportingClass
+
+	* lib/oxygen/physicsserver/collider.cpp:
+	- replaced call to GetChildSupportingClass with call to
+	  FindChildSupportingClass
+
+	* plugin/collisionperceptor/perceptorhandler.cpp,
+	* plugin/collisionperceptor/perceptorhandler.h:
+	- caching reference to the collision perceptor now
+	- replaced call to GetParentSupportingClass with call to
+	  FindParentSupportingClass
+
+	* plugin/gyrorateperceptor/gyrorateperceptor.cpp,
+	* plugin/gyrorateperceptor/gyrorateperceptor.h:
+	- caching reference to the body now
+	- replaced call to GetParentSupportingClass with call to
+	  FindParentSupportingClass
+
+	* plugin/soccer/beameffector/beameffector.cpp:
+	- replaced call to GetChildrenSupportingClass with call to
+	  ListChildrenSupportingClass
+
+	* plugin/soccer/initeffector/initeffector.cpp:
+	- replaced call to GetChildrenSupportingClass with call to
+	  ListChildrenSupportingClass
+
+	* plugin/soccer/initeffector/singlematiniteffector.cpp:
+	- replaced call to GetChildSupportingClass with call to
+	  FindChildSupportingClass
+	- whitespace
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- replaced call to GetChildSupportingClass with call to
+	  FindChildSupportingClass
+
 2007-05-30  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* lib/oxygen/physicsserver/space.h, 
+	* lib/oxygen/physicsserver/space.cpp, 
+	* lib/oxygen/physicsserver/odeobject.h,
+	* lib/oxygen/physicsserver/odeobject.cpp, 
+	* lib/oxygen/physicsserver/collider.h, 
+	* lib/oxygen/physicsserver/collider.cpp:
+	- merged ODE_SUBSPACES branch with main branch
 
 	* lib/kerosin/sceneserver/cylinder.cpp,
 	* lib/kerosin/sceneserver/cylinder.h
