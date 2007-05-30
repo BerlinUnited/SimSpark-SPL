@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.6 2007/05/16 14:22:05 jboedeck Exp $
+   $Id: initeffector.cpp,v 1.7 2007/05/30 09:09:22 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,15 +83,15 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
     // request an initial position for the agent and move it there
     Vector3f pos = mGameState->RequestInitPosition(team);
 
-    // get parent of the agent aspect
+    // agents are now encapsulated in their own collision spaces, so we need
+    // to get the parent of the parent of the agent aspect
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-        (mAgentAspect->GetParent().lock());
+        ((mAgentAspect->GetParent().lock())->GetParent().lock());
 
     if (parent.get() == 0)
 	{
             GetLog()->Error()
-                << "ERROR: (InitEffector) agent aspect doesn't have "
-                << "children of type Body\n";
+                << "ERROR: (InitEffector) can not get parent of current agent aspect\n";
 
     	    return false;
 	}
