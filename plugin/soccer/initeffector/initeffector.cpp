@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.8 2007/05/30 13:17:13 jamu Exp $
+   $Id: initeffector.cpp,v 1.9 2007/05/30 18:40:22 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     // search for the AgentState
     shared_ptr<AgentState> state = shared_static_cast<AgentState>
-        (mAgentAspect->GetChildOfClass("AgentState",true));
+        (mAgentAspect->GetChildOfClass("AgentState", true));
 
     if (state.get() == 0)
     {
@@ -104,7 +104,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
     Vector3f bodyPos = mAgentAspect->GetWorldTransform().Pos();
 
     // get all the bodies below the parent of the agent aspect
-    parent->GetChildrenSupportingClass("Body", leafList, true);
+    parent->ListChildrenSupportingClass<Body>(leafList, true);
 
     if (leafList.size() == 0)
         {
