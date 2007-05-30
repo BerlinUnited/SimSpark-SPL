@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.12 2007/05/30 13:04:48 jboedeck Exp $
+   $Id: collider.cpp,v 1.13 2007/05/30 18:41:21 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "collider.h"
 #include "space.h"
 #include "body.h"
+#include <zeitgeist/leaf.h>
 #include "collisionhandler.h"
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
@@ -115,7 +116,7 @@ void Collider::OnUnlink()
 
 void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-    if (GetChildSupportingClass("CollisionHandler").get() == 0)
+    if (FindChildSupportingClass<CollisionHandler>(false).get() == 0)
         {
             // for convenience we add a ContactJointHandler if no
             // other handler is registered. This behaviour covers the
