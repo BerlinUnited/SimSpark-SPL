@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptorhandler.h,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: perceptorhandler.h,v 1.3 2007/05/30 18:41:09 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 #define PERCEPTORHANDLER_H
 
 #include <oxygen/physicsserver/collisionhandler.h>
+
+class CollisionPerceptor;
 
 /** \class PerceptorHandler is a CollisionHandler that passes
     collision information on to a CollisionPerceptor.
@@ -45,6 +47,16 @@ class PerceptorHandler : public oxygen::CollisionHandler
   */
   virtual void HandleCollision
   (boost::shared_ptr<oxygen::Collider> collidee, dContact& contact);
+
+protected:
+
+    virtual void OnLink();
+    virtual void OnUnlink();
+
+protected:
+
+    //! reference to the collision perecptor
+    boost::shared_ptr<CollisionPerceptor> mColPercept;
 };
 
 DECLARE_CLASS(PerceptorHandler);

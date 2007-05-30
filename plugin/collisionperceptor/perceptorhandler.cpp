@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptorhandler.cpp,v 1.3 2007/05/16 14:24:30 jboedeck Exp $
+   $Id: perceptorhandler.cpp,v 1.4 2007/05/30 18:41:09 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,13 +27,12 @@
 using namespace oxygen;
 using namespace boost;
 
-void
-PerceptorHandler::HandleCollision
-(boost::shared_ptr<Collider> collidee, dContact& /*contact*/)
+void 
+PerceptorHandler::OnLink()
 {
-  // find the first CollisionPerceptor below our closest Transform node
+// find the first CollisionPerceptor below our closest Transform node
   shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-    (make_shared(GetParentSupportingClass("Transform")));
+    (FindParentSupportingClass<Transform>().lock());
 
   if (transformParent.get() == 0)
     {
@@ -44,19 +43,32 @@ PerceptorHandler::HandleCollision
   //  shared_static_cast<CollisionPerceptor>
   //  (transformParent->GetChildOfClass("CollisionPerceptor", true));
 
-  shared_ptr<CollisionPerceptor> perceptor =
-    shared_static_cast<CollisionPerceptor>
-    (transformParent->GetChildSupportingClass("CollisionPerceptor", true));
+  mColPercept = shared_dynamic_cast<CollisionPerceptor>
+      (transformParent->GetChildSupportingClass("CollisionPerceptor", true));
 
-  if (perceptor.get() == 0)
+  if (mColPercept.get() == 0)
     {
         GetLog()->Error() << "PerceptorHandler: no suitable child node found!\n";
-      return;
+        return;
     }
+}
+
+void
+PerceptorHandler::OnUnlink()
+{
+    mColPercept.reset();
+}
+
+void
+PerceptorHandler::HandleCollision
+(boost::shared_ptr<Collider> collidee, dContact& /*contact*/)
+{
+    if (mColPercept.get() == 0)
+        return;
 
   // now find the closest Transform node above the collidee
   shared_ptr<Transform> colTransformParent = shared_static_cast<Transform>
-    (make_shared(collidee->GetParentSupportingClass("Transform")));
+    (collidee->FindParentSupportingClass<Transform>().lock());
 
   if (colTransformParent.get() == 0)
     {
@@ -64,5 +76,5 @@ PerceptorHandler::HandleCollision
     }
 
   // notify the CollisionPerceptor
-  perceptor->AddCollidee(colTransformParent);
+  mColPercept->AddCollidee(colTransformParent);
 }
