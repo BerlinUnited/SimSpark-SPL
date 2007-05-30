@@ -159,7 +159,7 @@
 
 	; add gyro rate sensor
 	(nd GyroRatePerceptor
-	      (setName torsogyro)
+	      (setName torso)
 	      )
 
 	(nd VisionPerceptor
@@ -260,12 +260,12 @@
 
             ; install a perceptor
             (nd UniversalJointPerceptor
-                (setName larm_joint_1_2)
+                (setName laj1_2)
             )
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector
-                (setName larm_eff_1_2)
+                (setName lae1_2)
             )
         )
     )
@@ -290,12 +290,12 @@
 
 ;                ; install a perceptor
                 (nd UniversalJointPerceptor
-                    (setName rarm_joint_1_2)
+                    (setName raj1_2)
 		)
 
                 ; install an effector to control the joint motors
                 (nd UniversalJointEffector
-                    (setName rarm_eff_1_2)
+                    (setName rae1_2)
                 )
             )
     )
@@ -327,12 +327,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName larm_joint_3)
+                (setName laj3)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName larm_eff_3)
+                (setName lae3)
             )
         )
 
@@ -365,12 +365,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName rarm_joint_3)
+                (setName raj3)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName rarm_eff_3)
+                (setName rae3)
             )
         )
 
@@ -420,12 +420,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName larm_joint_4)
+                (setName laj4)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName larm_eff_4)
+                (setName lae4)
             )
         )
 
@@ -482,12 +482,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName rarm_joint_4)
+                (setName raj4)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName rarm_eff_4)
+                (setName rae4)
             )
         )
 
@@ -560,12 +560,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName lleg_joint_1)
+                (setName llj1)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName lleg_eff_1)
+                (setName lle1)
             )
         )
     )
@@ -587,12 +587,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName rleg_joint_1)
+                (setName rlj1)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName rleg_eff_1)
+                (setName rle1)
             )
         )
     )
@@ -624,12 +624,12 @@
 
 ;            ; install a perceptor
             (nd UniversalJointPerceptor
-                (setName lleg_joint_2_3)
+                (setName llj2_3)
             )
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector
-                (setName lleg_eff_2_3)
+                (setName lle2_3)
             )
         )
     )
@@ -653,12 +653,12 @@
 
 ;            ; install a perceptor
             (nd UniversalJointPerceptor
-                (setName rleg_joint_2_3)
+                (setName rlj2_3)
             )
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector
-                (setName rleg_eff_2_3)
+                (setName rle2_3)
             )
         )
     )
@@ -688,12 +688,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName lleg_joint_4)
+                (setName llj4)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName lleg_eff_4)
+                (setName lle4)
             )
         )
     )
@@ -715,12 +715,12 @@
 
 ;            ; install a perceptor
             (nd HingePerceptor
-                (setName rleg_joint_4)
+                (setName rlj4)
             )
 
             ; install an effector to control the joint motors
             (nd HingeEffector
-                (setName rleg_eff_4)
+                (setName rle4)
             )
         )
     )
@@ -736,7 +736,7 @@
 
 	; install touch perceptor
 	(nd TouchPerceptor
-	      (setName footleft)
+	      (setName lf)
 	)
 
         ; install hinge joint to connect to the shank
@@ -752,12 +752,12 @@
 
 ;            ; install a perceptor
           (nd UniversalJointPerceptor
-              (setName lleg_joint_5_6)
+              (setName llj5_6)
          )
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector
-                (setName lleg_eff_5_6)
+                (setName lle5_6)
             )
         )
 
@@ -785,7 +785,7 @@
 					
         ; install touch perceptor
 	(nd TouchPerceptor
-	      (setName footright)
+	      (setName rf)
 	)
 	
 
@@ -802,12 +802,12 @@
 
 ;            ; install a perceptor
             (nd UniversalJointPerceptor
-                (setName rleg_joint_5_6)
+                (setName rlj5_6)
             )
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector
-                (setName rleg_eff_5_6)
+                (setName rle5_6)
             )
 
 	    
