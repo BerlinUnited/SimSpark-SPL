@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.h,v 1.7 2007/02/12 19:22:02 rollmark Exp $
+   $Id: contactjointhandler.h,v 1.8 2007/05/31 14:43:37 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ public:
     /** returns the surface parameters for the contact joints taht the
         CollisionHandler creates
     */
-    const dSurfaceParameters& SetSurfaceParameter() const;
+    const dSurfaceParameters& GetSurfaceParameter() const;
 
     /** sets or resets a contact mode flag in the surface parameter*/
     void SetContactMode(int mode, bool set);
