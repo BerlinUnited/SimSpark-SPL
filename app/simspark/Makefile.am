@@ -41,7 +41,7 @@ dist_pkgdata_DATA = \
 	rsg/agent/flag.rsg \
 	rsg/agent/flag_no_viz.rsg \
 	rsg/agent/flag_left.rsg \
-	rsg/agent_flag_right.rsg \
+	rsg/agent/flag_right.rsg \
 	rsg/agent/simspark.rsg \
 	rsg/agent/ball.rsg \
 	rsg/boxspheres/staticsphere.rsg \
