@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.4 2007/05/31 14:48:58 hedayat Exp $
+   $Id: touchperceptorhandler.h,v 1.1 2007/05/31 14:48:58 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,16 +20,21 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "collisionperceptor.h"
-#include "perceptorhandler.h"
-#include "touchperceptor.h"
-#include "touchperceptorhandler.h"
-#include "extendedtouchperceptor.h"
+#ifndef TOUCHPERCEPTORHANDLER_H_
+#define TOUCHPERCEPTORHANDLER_H_
 
-ZEITGEIST_EXPORT_BEGIN()
-    ZEITGEIST_EXPORT(CollisionPerceptor);
-    ZEITGEIST_EXPORT(PerceptorHandler);
-    ZEITGEIST_EXPORT(TouchPerceptor);
-    ZEITGEIST_EXPORT(TouchPerceptorHandler);
-    ZEITGEIST_EXPORT(ExtendedTouchPerceptor);
-ZEITGEIST_EXPORT_END()
+#include <oxygen/physicsserver/contactjointhandler.h>
+
+/** \class TouchPerceptorHandler is a ContactJointHandler that provides
+ * enough information for the ExtendedTouchPerceptor
+ */
+class TouchPerceptorHandler : public oxygen::ContactJointHandler
+{
+public:
+    virtual void HandleCollision
+    (boost::shared_ptr<oxygen::Collider> collidee, dContact& contact);
+};
+
+DECLARE_CLASS(TouchPerceptorHandler);
+
+#endif /*TOUCHPERCEPTORHANDLER_H_*/

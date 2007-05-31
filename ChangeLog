@@ -1,3 +1,20 @@
+2007-05-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/collisionperceptor/extendedtouchperceptor.h: 
+	* plugin/collisionperceptor/extendedtouchperceptor.cpp: 
+	* plugin/collisionperceptor/extendedtouchperceptor_c.cpp:
+	- added ExtendedTouchPerceptor files. 
+	
+	* plugin/collisionperceptor/touchperceptorhandler.h:
+	* plugin/collisionperceptor/touchperceptorhandler.cpp:
+	* plugin/collisionperceptor/touchperceptorhandler_c.cpp:
+	- added TouchPerceptorHandler files (a very simple extension 
+	  to the ContactJointHandler class)
+	
+	* lib/oxygen/physicsserver/contactjointhandler.h, 
+	* lib/oxygen/physicsserver/contactjointhandler.cpp:
+	- corrected the name of the getter function: GetSurfaceParameter
+
 2007-05-31  Jan Murray  <murray@uni-koblenz.de>
 
 	* plugin/collisionperceptor/touchperceptor.cpp,

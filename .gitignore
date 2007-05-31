@@ -573,3 +573,4 @@ utility/rcssnet/librcssnet3D.la
 utility/sfsexp/.deps
 utility/sfsexp/Makefile
 utility/sfsexp/Makefile.in
+utility/sfsexp/*.a
