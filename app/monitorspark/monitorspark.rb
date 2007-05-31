@@ -32,8 +32,8 @@ run "bindings.rb"
 #
 # setup materials 
 # material setup is not sent via the monitor protocol (yet)
-
-run "../simspark/materials.rb"
+# change materials.rb to materials-textures.rb if you want to use textured materials
+run "materials.rb"
 
 
 #
