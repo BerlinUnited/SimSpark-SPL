@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gyrorateperceptor.cpp,v 1.5 2007/05/30 18:40:49 jboedeck Exp $
+   $Id: gyrorateperceptor.cpp,v 1.6 2007/05/31 09:54:22 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ GyroRatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     predicate.parameter.Clear();
     
     ParameterList & nameElement = predicate.parameter.AddList();
-    nameElement.AddValue(std::string("name"));
+    nameElement.AddValue(std::string("n"));
     nameElement.AddValue(GetName());       
 
     Vector3f rate = mBody->GetAngularVelocity();

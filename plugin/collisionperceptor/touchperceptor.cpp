@@ -34,7 +34,7 @@ TouchPerceptor::Percept(shared_ptr<PredicateList> predList)
     predicate.parameter.Clear();
 
     ParameterList& nameElement = predicate.parameter.AddList();
-    nameElement.AddValue(std::string("name"));
+    nameElement.AddValue(std::string("n"));
     nameElement.AddValue(GetName());
 
     std::string val;

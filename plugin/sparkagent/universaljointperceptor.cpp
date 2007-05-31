@@ -92,7 +92,7 @@ bool UniversalJointPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> p
     predicate.parameter.Clear();
 
     ParameterList& nameElement = predicate.parameter.AddList();
-    nameElement.AddValue(string("name"));
+    nameElement.AddValue(string("n"));
     nameElement.AddValue(GetName());
 
     InsertAxisAngle(predicate, Joint::AI_FIRST);

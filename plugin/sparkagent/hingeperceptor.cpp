@@ -76,7 +76,7 @@ bool HingePerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
     predicate.parameter.Clear();
 
     ParameterList& nameElement = predicate.parameter.AddList();
-    nameElement.AddValue(string("name"));
+    nameElement.AddValue(string("n"));
     nameElement.AddValue(GetName());
 
     InsertAxisAngle(predicate);
