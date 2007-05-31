@@ -1,3 +1,59 @@
+2007-05-31  Joschka Boedecker  <joschka@joschka-laptop>
+
+	* app/simspark/Makefile.am:
+	- include materials.rb, flag_left.rsg, and flag_right.rsg
+	  for distribution
+
+	* app/simspark/materials.rb: 
+	- all the material definitions are collected in
+	  this file now
+
+	* app/simspark/simspark.rb: 
+	- load all the materials from materials.rb now
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- load the new textured soccer ball as a StaticMesh
+
+	* app/simspark/rsg/agent/flag_left.rsg,
+	* app/simspark/rsg/agent/flag_left.rsg:
+	- added flags that use colored cylinders as visualization
+	  (similar to what is used in the RoboCup Humanoid League)
+
+	* app/simspark/rsg/agent/soccer.rsg: 
+	- setup and named extra collision space for the right goal
+	  (just like for the left goal)
+	- commented out the lines since we use a texture with lines
+	  on the field now
+	- use field_left.rsg and field_right.rsg for the corner flags now
+	- fixed setup of goal flags (thanks Carlos)
+
+	* app/simspark/rsg/agent/soccerbot.rsg: 
+	- the biggest of the boxes that make up the hand has a
+	  Collider now
+	- setup the TouchPerceptor before the box with handler gets
+	  installed, otherwise the OnLink for the PerceptorHandler
+	  will fail
+
+	* lib/oxygen/physicsserver/balljoint.cpp,
+	* lib/oxygen/physicsserver/hinge2joint.cpp,
+	* lib/oxygen/physicsserver/hingejoint.cpp,
+	* lib/oxygen/physicsserver/universaljoint.cpp:
+	- insert break statements into swith-cases (thanks Shivaram)
+
+	* plugin/collisionperceptor/perceptorhandler.cpp: 
+	- whitespace
+
+	* plugin/soccer/initeffector/singlematiniteffector.cpp: 
+	- using a shared_static_cast for the result of
+	  FindChildSupportingClass (thanks Markus)
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- using a shared_static_cast for the result of
+	  FindChildSupportingClass (thanks Markus)	
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	- fixed paths for left and right goal recorder
+
 2007-05-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* lib/kerosin/renderserver/renderserver.cpp:
