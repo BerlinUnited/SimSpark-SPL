@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.cpp,v 1.6 2007/02/12 19:13:43 rollmark Exp $
+   $Id: universaljoint.cpp,v 1.7 2007/05/31 08:06:31 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
         dReal anchor[3];
         dJointGetUniversalAnchor (mODEJoint, anchor);
         pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+        break;
     }
 
     case BI_SECOND:
@@ -69,6 +70,7 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
         dReal anchor[3];
         dJointGetUniversalAnchor2(mODEJoint, anchor);
         pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+        break;
     }
 
     default:
@@ -101,6 +103,7 @@ Vector3f UniversalJoint::GetAxis(EAxisIndex idx)
         dReal axis[3];
         dJointGetUniversalAxis1(mODEJoint, axis);
         vec = Vector3f(axis[0],axis[1],axis[2]);
+        break;
     }
 
     case AI_SECOND:
@@ -108,6 +111,7 @@ Vector3f UniversalJoint::GetAxis(EAxisIndex idx)
         dReal axis[3];
         dJointGetUniversalAxis2(mODEJoint, axis);
         vec = Vector3f(axis[0],axis[1],axis[2]);
+        break;
     }
 
     default:

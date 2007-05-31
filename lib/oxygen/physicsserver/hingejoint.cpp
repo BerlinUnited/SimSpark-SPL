@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.cpp,v 1.7 2007/02/12 19:14:58 rollmark Exp $
+   $Id: hingejoint.cpp,v 1.8 2007/05/31 08:06:31 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
                 dReal anchor[3];
                 dJointGetHingeAnchor (mODEJoint, anchor);
                 pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                break;
             }
 
         case BI_SECOND:
@@ -68,6 +69,7 @@ Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
                 dReal anchor[3];
                 dJointGetHingeAnchor2(mODEJoint, anchor);
                 pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                break;
             }
 
         default:
