@@ -438,7 +438,23 @@
 	     (nd Box
 		   (setMaterial matGrey)
 		   (setExtents $HandBox1Length $HandBox1Width $HandBox1Height)
-	     )	     
+	     )
+	     (nd BoxCollider
+		 (setBoxLengths $HandBox1Length $HandBox1Width $HandBox1Height)
+		 (nd ContactJointHandler
+		     (setContactBounceMode false)
+
+		     (setContactSlipMode true)
+		     (setContactSlip 0.1 0.1)
+
+		     (setContactSoftERPMode true)
+		     (setContactSoftERP 0.2)
+
+		     (setContactSoftCFM true)
+		     (setContactSoftCFM 0.01)
+
+		     )
+		 )
         )
 	
 	(nd Transform
@@ -503,7 +519,23 @@
 		    (nd Box
 			  (setMaterial matGrey)
 			  (setExtents $HandBox1Length $HandBox1Width $HandBox1Height)
-		    )	     
+		    )
+		    (nd BoxCollider
+			(setBoxLengths $HandBox1Length $HandBox1Width $HandBox1Height)
+			(nd ContactJointHandler
+			    (setContactBounceMode false)
+
+			    (setContactSlipMode true)
+			    (setContactSlip 0.1 0.1)
+
+			    (setContactSoftERPMode true)
+			    (setContactSoftERP 0.2)
+
+			    (setContactSoftCFM true)
+			    (setContactSoftCFM 0.01)
+
+			    )
+			)
 	       )
 	
 	      (nd Transform
@@ -732,13 +764,13 @@
 		     $LeftShankPosY
 		     (eval $LeftShankPosZ - (eval $ShankHeight / 2.0) - (eval $FootHeight / 2.0) - 0.05)
 	 )
-	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
-
 	; install touch perceptor
 	(nd TouchPerceptor
 	      (setName lf)
 	)
 
+	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
+	
         ; install hinge joint to connect to the shank
         (nd UniversalJoint
             (attach ../boxBody ../../leftshank/boxBody)
@@ -781,13 +813,13 @@
 		     $RightShankPosY
 		     (eval $RightShankPosZ - (eval $ShankHeight / 2.0) - (eval $FootHeight / 2.0) - 0.05)
 	 )
-        (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
-					
-        ; install touch perceptor
+
+	; install touch perceptor
 	(nd TouchPerceptor
 	      (setName rf)
 	)
-	
+
+        (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)	
 
         ; install hinge joint to connect to the shank
         (nd UniversalJoint
