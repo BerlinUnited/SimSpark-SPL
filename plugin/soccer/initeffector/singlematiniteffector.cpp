@@ -108,7 +108,7 @@ SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     for (it = jersey.begin(); it != jersey.end(); ++it)
     {
-        matNode = shared_dynamic_cast<SingleMatNode>
+        matNode = shared_static_cast<SingleMatNode>
             (parent->GetChild((*it),true)->FindChildSupportingClass<SingleMatNode>(true));
 
         if (matNode.get() == 0)

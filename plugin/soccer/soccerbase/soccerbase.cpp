@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.13 2007/05/30 18:39:50 jboedeck Exp $
+   $Id: soccerbase.cpp,v 1.14 2007/05/31 08:02:36 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
                           shared_ptr<Body>& agent_body)
 
 {
-    agent_body = shared_dynamic_cast<Body>
+    agent_body = shared_static_cast<Body>
         (transform->FindChildSupportingClass<Body>(true));
 
     if (agent_body.get() == 0)
