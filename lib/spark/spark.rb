@@ -114,7 +114,8 @@ def sparkSetupServer
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-  simulationServer.initControlNode('oxygen/AgentControl','AgentControl')  
+  simulationServer.setMultiThreads(true);
+  simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
   # set port and socket type for agent control
   agentControl = get($serverPath+'simulation/AgentControl');
