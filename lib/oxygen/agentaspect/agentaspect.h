@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.9 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: agentaspect.h,v 1.9.2.1 2007/05/31 14:17:03 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,6 +70,9 @@ protected:
     TEffectorMap mEffectorMap;
 
 private:
+    /** indicates how many times the QueryPerceptors be called */
+    unsigned int mPerceptorCycle;
+
 };
 
 DECLARE_CLASS(AgentAspect);

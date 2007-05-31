@@ -4,7 +4,7 @@
    Mon May 9 2005
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: pantilteffector.h,v 1.1 2006/03/10 13:46:47 fruit Exp $
+   $Id: pantilteffector.h,v 1.1.6.1 2007/05/31 14:17:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,9 +32,6 @@ class PanTiltEffector : public oxygen::Effector
 public:
     PanTiltEffector();
     virtual ~PanTiltEffector();
-
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
 
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "pantilt"; }
@@ -70,6 +67,9 @@ protected:
 
     /** remove the reference to the agents body node */
     virtual void OnUnlink();
+
+    /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 protected:
     typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;

@@ -35,28 +35,28 @@ UniversalJointEffector::~UniversalJointEffector()
 {
 }
 
-bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
+void UniversalJointEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-    if (mJoint.get() == 0)
+    if (mAction.get() == 0 || mJoint.get() == 0)
         {
-            return false;
+            return;
         }
 
     shared_ptr<UniversalJointAction> universalAction =
-        shared_dynamic_cast<UniversalJointAction>(action);
+        shared_dynamic_cast<UniversalJointAction>(mAction);
+    mAction.reset();
 
     if (universalAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (UniversalJointtEffector) cannot realize an "
             << "unknown ActionObject\n";
-        return false;
+        return;
     }
 
     mJoint->SetParameter(dParamVel, universalAction->GetMotorVelocity(Joint::AI_FIRST));
     mJoint->SetParameter(dParamVel2, universalAction->GetMotorVelocity(Joint::AI_SECOND));
 
-    return true;
 }
 
 shared_ptr<ActionObject> UniversalJointEffector::GetActionObject(const Predicate& predicate)

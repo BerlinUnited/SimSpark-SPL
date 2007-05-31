@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.11 2007/05/30 18:40:34 jboedeck Exp $
+   $Id: beameffector.cpp,v 1.11.2.1 2007/05/31 14:17:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,26 +46,27 @@ isfinite( float f )
 }
 #endif
 
-bool
-BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     if (
+        (mAction.get() == 0) ||
         (mBody.get() == 0) ||
         (mGameState.get() == 0) ||
         (mAgentState.get() == 0)
         )
     {
-        return false;
+        return;
     }
 
     shared_ptr<BeamAction> beamAction =
-        shared_dynamic_cast<BeamAction>(action);
-
+        shared_dynamic_cast<BeamAction>(mAction);
+   mAction.reset();
     if (beamAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (BeamEffector) cannot realize an unknown ActionObject\n";
-        return false;
+        return;
     }
 
     // the beam effector only has an effect in PM_BeforeKickOff
@@ -80,7 +81,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
             (! isfinite(pos[2]))
             )
             {
-                return false;
+                return;
             }
 
         // an agent can only beam within it's own field half
@@ -116,7 +117,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
 
 	if (parent.get()==0)
 	{
-    	    return false;
+    	    return;
 	}
 
         Leaf::TLeafList leafList;
@@ -130,7 +131,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
                 << "ERROR: (BeamEffector) agent aspect doesn't have "
                 << "children of type Body\n";
 
-            return false;
+            return;
         }
 
         Leaf::TLeafList::iterator iter = leafList.begin();
@@ -151,8 +152,6 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
     	    childBody->SetAngularVelocity(Vector3f(0,0,0));
     	}
     }
-    
-    return true;
 }
 
 shared_ptr<ActionObject>

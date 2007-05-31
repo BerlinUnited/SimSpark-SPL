@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.h,v 1.3 2006/01/02 17:55:45 rollmark Exp $
+   $Id: hinge2effector.h,v 1.3.6.1 2007/05/31 14:17:05 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,9 +31,6 @@ public:
     Hinge2Effector();
     virtual ~Hinge2Effector();
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
-
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return GetName(); }
 
@@ -47,6 +44,9 @@ protected:
 
     /** remove the reference to the Hinge2Joint parent node */
     virtual void OnUnlink();
+
+    /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 protected:
     /** cached reference to the monitor joint */

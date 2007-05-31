@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.h,v 1.3 2004/02/12 14:07:25 fruit Exp $
+   $Id: createeffector.h,v 1.3.12.1 2007/05/31 14:17:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,15 +30,16 @@ class CreateEffector : public oxygen::Effector
     CreateEffector();
     virtual ~CreateEffector() {};
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
-
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "create"; }
 
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
+
+protected:
+    /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 };
 
 DECLARE_CLASS(CreateEffector);

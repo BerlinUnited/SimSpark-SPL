@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.4 2004/12/31 11:02:13 rollmark Exp $
+   $Id: inputcontrol.cpp,v 1.4.6.1 2007/05/31 14:17:03 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -313,4 +313,39 @@ bool InputControl::RegisterInputItem(const string& inputItemName, const string& 
                       << inputItemName << "'\n";
 
     return true;
+}
+
+void InputControl::Run()
+{
+    InitSimulation();
+    boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
+    const int simStep = int(ss->GetSimStep()*100);
+    while ( !ss->isExit() )
+    {
+        boost::mutex::scoped_lock lock(mMutex);
+        while( !ss->isExit() && int(ss->GetSumDeltaTime()*100) >= simStep )
+        {
+            //std::cout<<GetName()<<' '<<__FUNCTION__<<" wait "<<ss->GetSumDeltaTime()<<' '<<mTime<<std::endl;
+            mCond.wait(lock);
+        }
+        
+        StartCycle();
+        SenseAgent();
+        ActAgent();
+        EndCycle();
+        //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<ss->GetSumDeltaTime()<<std::endl;
+        mCond.notify_one();
+    }
+    
+    DoneSimulation();
+}
+
+void InputControl::Wait(boost::mutex::scoped_lock& lock)
+{
+    boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
+    while ( !ss->isExit() && int(ss->GetSumDeltaTime()*100) < int(ss->GetSimStep()*100) )
+    {
+        //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<GetTime()<<std::endl;
+        mCond.wait(lock);
+    }
 }

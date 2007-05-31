@@ -9,7 +9,7 @@
 #
 # (AgentControl) constants
 #
-
+$agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
 
@@ -17,7 +17,9 @@ $agentPort = 3100
 # 
 
 # define the monitor update interval in cycles
+$renderStep = 0.04
 $monitorInterval = 2;
+$monitorStep = 0.04
 $serverType = 'tcp'
 $serverPort = 3200
 
@@ -62,7 +64,7 @@ def sparkSetupMonitorLogPlayer
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-
+  simulationServer.setMultiThreads(false);
   monitorClient = new('SparkMonitorLogFileServer', 
 		      $serverPath+'simulation/SparkMonitorLogFileServer')
   monitorClient.setFileName($logPlayerFile)
@@ -117,6 +119,7 @@ def sparkSetupServer
   # set port and socket type for agent control
   agentControl = get($serverPath+'simulation/AgentControl');
   agentControl.setServerPort($agentPort)
+  agentControl.setStep($agentStep)
 
   if ($agentType == 'udp') 
 	agentControl.setServerTypeUDP()
@@ -132,6 +135,7 @@ def sparkSetupServer
   monitorControl = new('oxygen/MonitorControl',
 		       $serverPath+'simulation/MonitorControl')
   monitorControl.setMonitorInterval($monitorInterval)
+  monitorControl.setStep($monitorStep)
   monitorControl.setServerPort($serverPort)
 
   if ($serverType == 'udp')
@@ -180,6 +184,8 @@ def sparkSetupRendering
   # register render control node to the simulation server
   simulationServer = get($serverPath+'simulation');
   simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
+  renderControl = get($serverPath+'simulation/RenderControl')
+  renderControl.setStep($renderStep)
 end
 
 def sparkSetupInput()

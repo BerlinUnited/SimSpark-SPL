@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.cpp,v 1.6 2004/03/23 09:28:57 rollmark Exp $
+   $Id: forceeffector.cpp,v 1.6.12.1 2007/05/31 14:17:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,27 +37,26 @@ ForceEffector::~ForceEffector()
 {
 }
 
-bool ForceEffector::Realize(boost::shared_ptr<ActionObject> action)
+void ForceEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-  if (mBody.get() == 0)
+  if (mAction.get() == 0 || mBody.get() == 0)
     {
-      return false;
+      return;
     }
 
   shared_ptr<ForceAction> forceAction =
-    shared_dynamic_cast<ForceAction>(action);
-
+    shared_dynamic_cast<ForceAction>(mAction);
+    mAction.reset();
   if (forceAction.get() == 0)
     {
       GetLog()->Error()
         << "ERROR: (ForceEffector) cannot realize an unknown ActionObject\n";
-      return false;
+      return;
     }
 
   const Vector3f& force = forceAction->GetForce();
   mBody->AddForce(Vector3f(force[0],force[1],force[2]));
 
-  return true;
 }
 
 shared_ptr<ActionObject>

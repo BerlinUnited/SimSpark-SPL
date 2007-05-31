@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.h,v 1.2 2004/02/12 14:07:25 fruit Exp $
+   $Id: beameffector.h,v 1.2.12.1 2007/05/31 14:17:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,9 +32,6 @@ public:
     BeamEffector();
     virtual ~BeamEffector();
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
-
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "beam"; }
 
@@ -48,6 +45,9 @@ protected:
 
     /** remove the reference to the agents body node */
     virtual void OnUnlink();
+
+    /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 protected:
     /** the reference to the parents body node */

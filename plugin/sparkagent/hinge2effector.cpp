@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.cpp,v 1.2 2004/05/17 09:13:30 rollmark Exp $
+   $Id: hinge2effector.cpp,v 1.2.8.1 2007/05/31 14:17:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,28 +36,28 @@ Hinge2Effector::~Hinge2Effector()
 {
 }
 
-bool Hinge2Effector::Realize(boost::shared_ptr<ActionObject> action)
+void Hinge2Effector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-    if (mJoint.get() == 0)
+    if (mAction.get() == 0 || mJoint.get() == 0)
         {
-            return false;
+            return;
         }
 
     shared_ptr<Hinge2Action> hinge2Action =
-        shared_dynamic_cast<Hinge2Action>(action);
+        shared_dynamic_cast<Hinge2Action>(mAction);
+    mAction.reset();
 
     if (hinge2Action.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (Hinge2Effector) cannot realize an "
             << "unknown ActionObject\n";
-        return false;
+        return;
     }
 
     mJoint->SetAngularMotorVelocity
         (Joint::AI_SECOND, hinge2Action->GetMotorVelocity());
 
-    return true;
 }
 
 shared_ptr<ActionObject> Hinge2Effector::GetActionObject(const Predicate& predicate)

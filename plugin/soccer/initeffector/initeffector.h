@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.h,v 1.4 2007/05/30 13:17:13 jamu Exp $
+   $Id: initeffector.h,v 1.4.2.1 2007/05/31 14:17:04 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,9 +37,6 @@ public:
     InitEffector();
     virtual ~InitEffector();
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
-
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "init"; }
 
@@ -53,6 +50,9 @@ protected:
 
     /** reset the reference to the GameStateAspect */
     virtual void OnUnlink();
+
+    /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 protected:
     /** reference to the GameStateAspect */

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.18 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: sceneserver.cpp,v 1.18.2.1 2007/05/31 14:17:03 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -192,6 +192,48 @@ void SceneServer::Update(float deltaTime)
     mActiveScene->UpdateHierarchy();
 }
 
+void SceneServer::PrePhysicsUpdate(float deltaTime)
+{
+    if (
+        (deltaTime == 0.0f) ||
+        (mActiveScene.get() == 0)
+        )
+        {
+            return;
+        }
+
+    UpdateCache();
+    ++mTransformMark;
+
+    mActiveScene->PrePhysicsUpdate(deltaTime);
+}
+
+void SceneServer::PhysicsUpdate(float deltaTime)
+{
+    boost::recursive_mutex::scoped_lock lock(mMutex);
+    // determine collisions
+    if (mActiveSpace.get() != 0)
+        {
+            mActiveSpace->Collide();
+        }
+
+    // do physics
+    if (mActiveWorld.get() != 0)
+        {
+            mActiveWorld->Step(deltaTime);
+        }
+}
+
+void SceneServer::PostPhysicsUpdate()
+{
+    if ( mActiveScene.get() == 0  )
+        {
+            return;
+        }
+    mActiveScene->PostPhysicsUpdate();
+    mActiveScene->UpdateHierarchy();
+}
+
 bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                               shared_ptr<ParameterList> parameter)
 {
@@ -234,6 +276,9 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
             GetLog()->Error()
                 << "(SceneServer) Warning: no SceneImporter registered\n";
         }
+    // because the importer will create ODE objects,
+    // so we have to lock the ODE
+    boost::recursive_mutex::scoped_lock lock(mMutex);
 
     for (
          TLeafList::iterator iter = importer.begin();
