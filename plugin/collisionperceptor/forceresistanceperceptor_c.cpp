@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: extendedtouchperceptor_c.cpp,v 1.1 2007/05/31 14:48:58 hedayat Exp $
+   $Id: forceresistanceperceptor_c.cpp,v 1.1 2007/05/31 17:39:53 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "extendedtouchperceptor.h"
+#include "forceresistanceperceptor.h"
 
 using namespace boost;
 using namespace oxygen;
 
-void CLASS(ExtendedTouchPerceptor)::DefineClass()
+void CLASS(ForceResistancePerceptor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Perceptor);
 }

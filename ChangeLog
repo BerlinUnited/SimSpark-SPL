@@ -1,5 +1,10 @@
 2007-05-31  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* plugin/collisionperceptor/forceresistanceperceptor.h: 
+	* plugin/collisionperceptor/forceresistanceperceptor.cpp: 
+	* plugin/collisionperceptor/forceresistanceperceptor_c.cpp:
+	- ExtendedTouchPerceptor renamed to ForceResistancePerceptor
+	
 	* plugin/collisionperceptor/extendedtouchperceptor.h: 
 	* plugin/collisionperceptor/extendedtouchperceptor.cpp: 
 	* plugin/collisionperceptor/extendedtouchperceptor_c.cpp:

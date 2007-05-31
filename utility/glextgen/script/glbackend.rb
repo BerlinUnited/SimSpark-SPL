@@ -32,16 +32,16 @@ module GLExtGen
 	end
 	
 	def writeExternFunctionPointers(frontEnd, file, array)
-	    array.each { |item|
-		if item[1].functionList.size != 0
-            file.print "#line 37 \"utility/glextgen/script/glbackend.rb\"\n"
-		    file.print "#ifdef ", item[0], "\n"
-		    item[1].functionList.each { |function|
-			file.print "extern ", frontEnd.procize(function), " ", function, ";\n"
-		    }
-		    file.print "#endif //", item[0], "\n\n"
-		end
-	    }
+#	    array.each { |item|
+#		if item[1].functionList.size != 0
+#            file.print "#line 37 \"utility/glextgen/script/glbackend.rb\"\n"
+#		    file.print "#ifdef ", item[0], "\n"
+#		    item[1].functionList.each { |function|
+#			file.print "extern ", frontEnd.procize(function), " ", function, ";\n"
+#		    }
+#		    file.print "#endif //", item[0], "\n\n"
+#		end
+#	    }
 	end
 	
 	def	writeStructFunctionPointers(frontEnd, file, array)

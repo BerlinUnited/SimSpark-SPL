@@ -9,6 +9,8 @@
 /Makefile
 /Makefile.in
 /stamp-h1
+/.project
+/.cproject
 app/Makefile
 app/Makefile.in
 app/agentspark/.deps

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: touchperceptorhandler.cpp,v 1.1 2007/05/31 14:48:58 hedayat Exp $
+   $Id: touchperceptorhandler.cpp,v 1.2 2007/05/31 17:39:53 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,10 +25,38 @@
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
-#include "extendedtouchperceptor.h"
+#include "forceresistanceperceptor.h"
 
 using namespace oxygen;
 using namespace boost;
+
+void TouchPerceptorHandler::OnLink()
+{
+	ContactJointHandler::OnLink();
+    // find the first CollisionPerceptor below our closest Transform node
+    shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+        (FindParentSupportingClass<Transform>().lock());    
+
+    if (transformParent.get() == 0)
+      {
+        return;
+      }
+
+    mForceResistancePercept = shared_dynamic_cast<ForceResistancePerceptor>
+        (transformParent->GetChildSupportingClass("ForceResistancePerceptor", true));
+
+    if (mForceResistancePercept.get() == 0)
+      {
+          GetLog()->Error() << "TouchPerceptorHandler: no suitable child node found!\n";
+        return;
+      }
+}
+
+void TouchPerceptorHandler::OnUnlink()
+{
+	ContactJointHandler::OnUnlink();
+	mForceResistancePercept.reset();
+}
 
 void TouchPerceptorHandler::HandleCollision
 (boost::shared_ptr<Collider> collidee, dContact& contact)
@@ -70,28 +98,9 @@ void TouchPerceptorHandler::HandleCollision
 
     dJointAttach (joint, myBody, collideeBody);
 
-
-    // find the first CollisionPerceptor below our closest Transform node
-    shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-      (make_shared(GetParentSupportingClass("Transform")));
-
-    if (transformParent.get() == 0)
-      {
-        return;
-      }
-
-    shared_ptr<ExtendedTouchPerceptor> perceptor =
-      shared_static_cast<ExtendedTouchPerceptor>
-      (transformParent->GetChildSupportingClass("ExtendedTouchPerceptor", true));
-
-    if (perceptor.get() == 0)
-      {
-          GetLog()->Error() << "TouchPerceptorHandler: no suitable child node found!\n";
-        return;
-      }
-
     // Can we avoid dynamic allocation to increase performance?!
     dJointSetFeedback(joint, new dJointFeedback());
     
-    perceptor->AddTouchInfo(contact, joint);
+    if (mForceResistancePercept.get() != 0)
+    	mForceResistancePercept->AddTouchInfo(contact, joint);
 }

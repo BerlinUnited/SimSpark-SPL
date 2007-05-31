@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: extendedtouchperceptor.cpp,v 1.1 2007/05/31 14:48:58 hedayat Exp $
+   $Id: forceresistanceperceptor.cpp,v 1.1 2007/05/31 17:39:54 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "extendedtouchperceptor.h"
+#include "forceresistanceperceptor.h"
 #include <oxygen/physicsserver/odewrapper.h>
 
 using namespace std;
@@ -28,12 +28,12 @@ using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
 
-void ExtendedTouchPerceptor::AddTouchInfo(dContact &contact, dJointID contactJointID)
+void ForceResistancePerceptor::AddTouchInfo(dContact &contact, dJointID contactJointID)
 {
 	mContactList.push_front(make_pair(contact, contactJointID));
 }
 
-bool ExtendedTouchPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
+bool ForceResistancePerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
 {
     if (mContactList.empty())
     {
@@ -41,11 +41,11 @@ bool ExtendedTouchPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> pr
     }
 
     Predicate& predicate = predList->AddPredicate();
-    predicate.name = "ETCH";
+    predicate.name = "FRP";
     predicate.parameter.Clear();
     
     ParameterList& nameElement = predicate.parameter.AddList();
-    nameElement.AddValue(std::string("name"));
+    nameElement.AddValue(std::string("n"));
     nameElement.AddValue(GetName());
 
      for (
@@ -81,7 +81,7 @@ bool ExtendedTouchPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> pr
     return true;
 }
 
-void ExtendedTouchPerceptor::PrePhysicsUpdateInternal(float deltaTime)
+void ForceResistancePerceptor::PrePhysicsUpdateInternal(float deltaTime)
 {
 	mContactList.clear();
 }
