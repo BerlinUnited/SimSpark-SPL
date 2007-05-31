@@ -31,6 +31,7 @@ simspark_SOURCES = \
 dist_pkgdata_DATA = \
 	simspark.rb \
 	bindings.rb \
+	materials.rb \
 	soccersim.rb \
 	rsg/agent/soccerplayer.rsg \
 	rsg/agent/leggedsphere.rsg \
@@ -39,6 +40,8 @@ dist_pkgdata_DATA = \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
 	rsg/agent/flag_no_viz.rsg \
+	rsg/agent/flag_left.rsg \
+	rsg/agent_flag_right.rsg \
 	rsg/agent/simspark.rsg \
 	rsg/agent/ball.rsg \
 	rsg/boxspheres/staticsphere.rsg \
