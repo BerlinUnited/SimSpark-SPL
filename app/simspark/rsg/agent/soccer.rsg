@@ -194,19 +194,21 @@
 ) ;; of Space
 
 ; create the right goal
- (nd Transform
-       (setName GoalBoxR)
-       (setLocalPos (eval $FieldHalfLength + $GoalHalfDepth) 0 $GoalHalfHeight)
-       (nd BoxCollider
-       	     (setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
-	     (nd ContactJointHandler
-		    (setContactBounceMode false)
-	            )
-	     )
-       (nd RecorderHandler 
+(nd Space
+    (setName RightGoalSpace)
+    (nd Transform
+	(setName GoalBoxR)
+	(setLocalPos (eval $FieldHalfLength + $GoalHalfDepth) 0 $GoalHalfHeight)
+	(nd BoxCollider
+	    (setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
+	    (nd ContactJointHandler
+		(setContactBounceMode false)
+		)
+	    )
+	(nd RecorderHandler 
              (setName recorder)
 	     )  
-       )
+	)
        
 ; create the goal bar on top of the goal (right goal)
 ; (nd Transform
@@ -272,7 +274,7 @@
 	     )
        
        )
-
+) ;; of space
 
 ; create left side
  (nd Transform
@@ -325,51 +327,51 @@
        )
 
 ; create middle line
- (nd Transform
-       (setLocalPos 0 0 $LineBase)
-       (nd Box
-	     (setExtents $LineHeight $LineWidth $LineHeight)
-	     (setMaterial $LineMaterial)
-	     )
-       )
+; (nd Transform
+;       (setLocalPos 0 0 $LineBase)
+;       (nd Box
+;	     (setExtents $LineHeight $LineWidth $LineHeight)
+;	     (setMaterial $LineMaterial)
+;	     )
+;       )
 
 ; create front line
- (nd Transform
-       (setLocalPos 0 (eval -1 * $FieldHalfWidth) $LineBase)
-       (nd Box
-	     (setExtents $FieldLength $LineHeight $LineHeight)
-	     (setMaterial $LineMaterial)
-	     )
-       )
+; (nd Transform
+;       (setLocalPos 0 (eval -1 * $FieldHalfWidth) $LineBase)
+;       (nd Box
+;	     (setExtents $FieldLength $LineHeight $LineHeight)
+;	     (setMaterial $LineMaterial)
+;	     )
+;       )
 
 ; create back line
- (nd Transform
-       (setLocalPos 0 $FieldHalfWidth $LineBase)
-       (nd Box
-	     (setExtents $FieldLength $LineHeight $LineHeight)
-	     (setMaterial $LineMaterial)
-	     )
-       )
+; (nd Transform
+;       (setLocalPos 0 $FieldHalfWidth $LineBase)
+;       (nd Box
+;	     (setExtents $FieldLength $LineHeight $LineHeight)
+;	     (setMaterial $LineMaterial)
+;	     )
+;       )
 
 ; create left line
- (nd Transform
-       (setLocalPos (eval -1 * $FieldHalfLength) 0 $LineBase)
-       (nd Box
-	     (setExtents $LineHeight $LineWidth $LineHeight)
-	     (setMaterial $LineMaterial)
-	     )
-       )
+; (nd Transform
+;       (setLocalPos (eval -1 * $FieldHalfLength) 0 $LineBase)
+;       (nd Box
+;	     (setExtents $LineHeight $LineWidth $LineHeight)
+;	     (setMaterial $LineMaterial)
+;	     )
+;       )
 
 ; create right line
- (nd Transform
-       (setLocalPos $FieldHalfLength 0 $LineBase)
-       (nd Box
-	     (setExtents $LineHeight $LineWidth $LineHeight)
-	     (setMaterial $LineMaterial)
-	     )
-       )
+; (nd Transform
+;       (setLocalPos $FieldHalfLength 0 $LineBase)
+;       (nd Box
+;	     (setExtents $LineHeight $LineWidth $LineHeight)
+;	     (setMaterial $LineMaterial)
+;	     )
+;       )
 
-; create left outer field
+ ;create left outer field
  (nd Transform
        (setLocalPos (eval -1 * $BorderLength) 0 $FieldBase)
        (nd Box
@@ -378,7 +380,7 @@
 	     )
        )
 
-; create right outer field
+ ;create right outer field
  (nd Transform
        (setLocalPos $BorderLength 0 $FieldBase)
        (nd Box
@@ -410,47 +412,59 @@
 ;; add flags
 ;;
 
-; mark the soccer field with 4 field flags (no visualization)
- (importScene rsg/agent/flag_no_viz.rsg 
+; mark the soccer field with 4 field flags
+ (importScene rsg/agent/flag_right.rsg 
 	      (eval -1 * $FieldHalfLength)  
 	      $FieldHalfWidth
-	      0 
+	      0.375 
 	      F1L
+	      0.5
+	      0.5
+	      0.75
 	      )
 
- (importScene rsg/agent/flag_no_viz.rsg 
+ (importScene rsg/agent/flag_right.rsg 
 	      (eval -1 * $FieldHalfLength) 
 	      (eval -1 * $FieldHalfWidth)
-	      0
+	      0.375
 	      F2L
+	      0.5
+	      0.5
+	      0.75
 	      )
 
- (importScene rsg/agent/flag_no_viz.rsg 
+ (importScene rsg/agent/flag_left.rsg 
 	      $FieldHalfLength 
 	      $FieldHalfWidth 
-	      0 
+	      0.375 
 	      F1R
+	      0.5
+	      0.5
+	      0.75
 	      )
 
- (importScene rsg/agent/flag_no_viz.rsg 
+ (importScene rsg/agent/flag_left.rsg 
 	      $FieldHalfLength 
 	      (eval -1 * $FieldHalfWidth) 
-	      0 
+	      0.375 
 	      F2R
+	      0.5
+	      0.5
+	      0.75
 	      )
 	      
 	      
   ; mark the left goal (no visualization)
  (importScene rsg/agent/flag_no_viz.rsg
 	      (eval -1 * $FieldHalfLength)
-	      (eval -1 * $GoalHalfWidth)
+	      $GoalHalfWidth
 	      0
 	      G1L
 	      )
 
  (importScene rsg/agent/flag_no_viz.rsg
 	      (eval -1 * $FieldHalfLength)
-	      $GoalHalfWidth
+	      (eval -1 * $GoalHalfWidth)
 	      0
 	      G2L
 	      )
@@ -458,14 +472,14 @@
  ; mark the right goal (no visualization)
  (importScene rsg/agent/flag_no_viz.rsg
 	      $FieldHalfLength
-	      (eval -1 * $GoalHalfWidth)
+	      $GoalHalfWidth
 	      0
 	      G1R
 	      )
 
  (importScene rsg/agent/flag_no_viz.rsg
 	      $FieldHalfLength
-	      $GoalHalfWidth
+	      (eval -1 * $GoalHalfWidth)
 	      0
 	      G2R
 	      )	      
