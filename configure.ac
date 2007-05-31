@@ -207,6 +207,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/rcsoccersim3D \
 		 app/simulator/Makefile \
 		 app/simspark/Makefile \
+		 app/simspark/materials-textures.rb \
 		 app/monitorspark/Makefile \
 		 app/agentspark/Makefile \
 		 app/spadestest/Makefile \
