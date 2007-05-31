@@ -81,7 +81,7 @@ void SoccerbotBehavior::ParseHingeJointInfo(const oxygen::Predicate& predicate)
     string name;
     Predicate::Iterator iter(predicate);
 
-    if (! predicate.GetValue(iter, "name", name))
+    if (! predicate.GetValue(iter, "n", name))
     {
         return;
     }
@@ -113,7 +113,7 @@ void SoccerbotBehavior::ParseUniversalJointInfo(const oxygen::Predicate& predica
     string name;
     Predicate::Iterator iter(predicate);
 
-    if (! predicate.GetValue(iter, "name", name))
+    if (! predicate.GetValue(iter, "n", name))
     {
         return;
     }
