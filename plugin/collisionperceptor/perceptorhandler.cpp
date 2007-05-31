@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptorhandler.cpp,v 1.4 2007/05/30 18:41:09 jboedeck Exp $
+   $Id: perceptorhandler.cpp,v 1.5 2007/05/31 08:04:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ using namespace boost;
 void 
 PerceptorHandler::OnLink()
 {
-// find the first CollisionPerceptor below our closest Transform node
-  shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-    (FindParentSupportingClass<Transform>().lock());
+    // find the first CollisionPerceptor below our closest Transform node
+    shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+        (FindParentSupportingClass<Transform>().lock());    
 
   if (transformParent.get() == 0)
     {
