@@ -3,23 +3,23 @@
 (RSG 0 1)
 (
  (def $Radius (eval Soccer.BallRadius))
- (def $Radius .35)
  (def $Material matOrange)
  (def $Mass (eval Soccer.BallMass))
 
  (pwd)
  (nd Ball
-       (setLocalPos 0.0 0.0 0.5)
+       (setLocalPos 0.0 0.0 $Radius)
        (setName Ball)
 
-       (nd Sphere
-	     (setRadius $Radius)
-	     (setMaterial $Material)
+       (nd StaticMesh
+	     (load './soccerball.obj')
+	     (setScale $Radius $Radius $Radius))
 	     )
 
        (nd Body
 	     (setName physics)
-	     (setSphereTotal $Mass $Radius)
+
+	     (setSphereTotal $Mass $Radius)	     
 	     (nd DragController
 		   (setAngularDrag 0.2)
 		   (setLinearDrag 0.4)
@@ -29,7 +29,7 @@
        (nd SphereCollider
 	     (setName geometry)
 	     (setRadius $Radius)
-
+	     
 	     (nd RecorderHandler
 		   (setName recorder)
 		   )
