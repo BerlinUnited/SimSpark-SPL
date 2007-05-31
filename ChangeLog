@@ -1,3 +1,12 @@
+2007-05-31  Jan Murray  <murray@uni-koblenz.de>
+
+	* plugin/collisionperceptor/touchperceptor.cpp,
+	* plugin/gyrorateperceptor/gyrorateperceptor.cpp,
+	* plugin/sparkagent/hingeperceptor.cpp,
+	* plugin/sparkagent/universaljointperceptor.cpp:
+	  changed "name" to "n" in sexp,
+	  e.g. (TCH (name lf) (val 1)) -> (TCH (n lf) (val 1))
+
 2007-05-31  Joschka Boedecker  <joschka@joschka-laptop>
 
 	* app/simspark/Makefile.am:
@@ -93,6 +102,16 @@
 	- replaced call to GetChildSupportingClass with call to
 	  FindChildSupportingClass
 
+2007-05-30  Jan Murray  <murray@uni-koblenz.de>
+
+	* initeffector/singlematiniteffector.cpp,
+	* initeffector/initeffector.h,
+	* initeffector/initeffector.cpp:
+	  - initeffector works with and without collision spaces
+	  - singlematiniteffector sets the shoulders and shanks in
+	    mat{Left|Right}. The torso box is set in mat{Left|Right}<unum>,
+	    e.g. "matLeft3"
+	
 2007-05-30  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* lib/oxygen/physicsserver/space.h, 
