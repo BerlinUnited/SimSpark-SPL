@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.5.6.1 2007/05/31 14:17:03 jboedeck Exp $
+   $Id: simulationserver.cpp,v 1.5.6.2 2007/06/01 15:38:10 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -227,6 +227,7 @@ void SimulationServer::Step()
 
 void SimulationServer::ControlEvent(EControlEvent event)
 {
+    int time = int(mSimTime*100);
     for (
          TLeafList::iterator iter=begin();
          iter != end();
@@ -240,6 +241,8 @@ void SimulationServer::ControlEvent(EControlEvent event)
                 {
                     continue;
                 }
+
+            if ( int(ctrNode->GetTime()*100) > time  ) continue;
 
             switch (event)
                 {
@@ -265,6 +268,7 @@ void SimulationServer::ControlEvent(EControlEvent event)
 
                 case CE_EndCycle :
                     ctrNode->EndCycle();
+                    ctrNode->SetSimTime(mSimTime);
                     break;
 
                 default:
@@ -402,7 +406,7 @@ void SimulationServer::Loops()
        	mSceneServer->PostPhysicsUpdate();
 		mGameControlServer->Update(mSimStep);
 		mSumDeltaTime -= mSimStep;
-             mSimTime += mSimStep;
+        mSimTime += mSimStep;
              	isStep = false;
        }
 

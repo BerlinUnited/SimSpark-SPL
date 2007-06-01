@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.cpp,v 1.2.6.1 2007/05/31 14:17:03 jboedeck Exp $
+   $Id: simcontrolnode.cpp,v 1.2.6.2 2007/06/01 15:38:10 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ void SimControlNode::Run()
         SenseAgent();
         ActAgent();
         EndCycle();
-        mTime = ss->GetTime()+mStep;
+        SetSimTime( ss->GetTime() );
         mCond.notify_one();
     }
     
@@ -75,4 +75,9 @@ void SimControlNode::Wait(boost::mutex::scoped_lock& lock)
         //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<GetTime()<<std::endl;
         mCond.wait(lock);
     }
+}
+
+void SimControlNode::SetSimTime( float now )
+{
+    mTime = now + mStep;
 }
