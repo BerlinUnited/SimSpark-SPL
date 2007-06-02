@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.27 2007/02/27 04:01:55 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.27.8.1 2007/06/02 14:36:30 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,15 +71,18 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
 void
 SoccerRuleAspect::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
 {
+#if 0
     agent_body->SetPosition(pos);
     agent_body->SetVelocity(Vector3f(0,0,0));
     agent_body->SetAngularVelocity(Vector3f(0,0,0));
+#endif
 }
 
 void
 SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
                                float min_dist, TTeamIndex idx)
 {
+#if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
@@ -120,12 +123,14 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
             MoveAgent(agent_body, new_pos);
         }
     }
+#endif
 }
 
 void
 SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
                                float min_dist, TTeamIndex idx)
 {
+#if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
@@ -156,6 +161,7 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
             MoveAgent(agent_body, new_pos);
         }
     }
+#endif
 }
 
 void
@@ -184,8 +190,12 @@ SoccerRuleAspect::DropBall(Vector3f pos)
     }
 
     MoveBall(pos);
+
+#if 0
     ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_LEFT);
     ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_RIGHT);
+#endif
+
     mGameState->SetPlayMode(PM_PlayOn);
 }
 
@@ -209,14 +219,18 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     // the playing field
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
+
+#if 0
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
+#endif
 
+#if 0
     //
     // TODO: this has to be tested (compiles and no crashes at least)
     mInOffsideLeftPlayers.clear();
     mInOffsideRightPlayers.clear();
-
+#endif
 
     if (mAutomaticKickOff && mGameState->GetModeTime() > mWaitBeforeKickOff)
     {
@@ -227,6 +241,7 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
+#if 0
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
     ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,
@@ -254,11 +269,13 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     {
         mGameState->SetPlayMode(PM_PlayOn);
     }
+#endif
 }
 
 void
 SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
 {
+#if 0
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -299,11 +316,13 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
         // field
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 void
 SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
 {
+#if 0
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -355,11 +374,13 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
         // move the ball back on the free kick position
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 void
 SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
 {
+#if 0
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -398,6 +419,7 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
         // field
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 bool
@@ -528,11 +550,13 @@ SoccerRuleAspect::UpdatePlayOn()
         return;
     }
 
+#if 0
     // check if the players are in offside
     if (mUseOffside && CheckOffside())
     {
         return;
     }
+#endif
 
     // other checks go here...
 }
@@ -762,6 +786,7 @@ void
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
+#if 0
     TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
     {
@@ -833,11 +858,13 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             (*it)->AddMessage(message, direction, false);
         }
     }
+#endif
 }
 
 bool
 SoccerRuleAspect::CheckOffside()
 {
+#if 0
     shared_ptr<AgentAspect> collidingAgent;
     shared_ptr<AgentAspect> kickingAgent;
     shared_ptr<AgentAspect> agent;
@@ -1062,11 +1089,13 @@ SoccerRuleAspect::CheckOffside()
     }
 
     return true;
+#endif
 }
 
 void
 SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
 {
+#if 0
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -1117,6 +1146,7 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
         // move the ball back on the free kick position
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 void
@@ -1124,6 +1154,7 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                                float radius, float min_dist, TTeamIndex idx,
                                shared_ptr<AgentState> agentState)
 {
+#if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
@@ -1167,4 +1198,5 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
             MoveAgent(agent_body, new_pos);
         }
     }
+#endif
 }
