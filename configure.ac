@@ -208,6 +208,8 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/Makefile \
 		 app/simspark/Makefile \
 		 app/simspark/materials-textures.rb \
+		 app/simspark/rsg/agent/soccerbottorso.rsg \
+		 app/simspark/rsg/agent/ball.rsg \
 		 app/monitorspark/Makefile \
 		 app/agentspark/Makefile \
 		 app/spadestest/Makefile \
