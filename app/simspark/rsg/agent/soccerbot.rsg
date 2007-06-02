@@ -133,15 +133,9 @@
     (nd AgentAspect
         (setName body)
         (setLocalPos $TorsoPosX $TorsoPosY $TorsoPosZ)
-        (importScene rsg/boxspheres/box.rsg $TorsoBox1Length $TorsoBox1Width $TorsoBox1Height $TorsoBox1Mass matDarkGrey)
-
-	;(nd Transform
-	 ;     (setLocalPos 0 (eval -0.5 * $TorsoBox1Width - 0.004) 0)
-	  ;    (nd Box
-	;	    (setExtents (eval 0.5 * $TorsoBox1Length) 0.0 (eval 0.5 * $TorsoBox1Height))
-	;	    (setMaterial matLeft2)
-	;      )
-	;)
+        ; (importScene rsg/boxspheres/box.rsg $TorsoBox1Length $TorsoBox1Width $TorsoBox1Height $TorsoBox1Mass matDarkGrey)
+	(importScene rsg/agent/soccerbottorso.rsg $TorsoBox1Length $TorsoBox1Width $TorsoBox1Height $TorsoBox1Mass)
+	
 	; we want to initialize
 	;(nd InitEffector)
 	(nd SingleMatInitEffector)
