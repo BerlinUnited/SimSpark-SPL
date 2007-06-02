@@ -1,3 +1,54 @@
+2007-06-02  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* configure.ac:
+	- added rules to make ball.rsg and soccerbottorso.rsg
+
+	* app/agentspark/soccerbotbehavior.cpp:
+	- added a test for the updated BeamEffector (commented out)
+
+	* app/simspark/Makefile.am:
+	- added soccerbottorso.rsg for distribution
+
+	* app/simspark/materials-textures.rb.in:
+	- changed file names to load the new jersey textures
+
+	* app/simspark/rsg/agent/ball.rsg: 
+	- use a SingleMatNode instead of a StaticMesh for the ball
+
+	* app/simspark/rsg/agent/ball.rsg.in: 
+	- create the file ball.rsg with correct path for the
+	  soccerball.obj model
+
+	* app/simspark/rsg/agent/soccerbot.rsg: 
+	- removed commented out matLeft2 test
+	- using the new soccerbottorso now
+
+	* app/simspark/rsg/agent/soccerbottorso.rsg.in,
+	* app/simspark/rsg/agent/soccerbottorso.rsg: 
+	- added a new torso for the soccerbot agent with correct
+	  uv coords for the jerseys (soccerbottorso.obj is need 
+	  in the models folder of the install dir!)
+
+	* plugin/soccer/beameffector/beameffector.cpp:
+	- using the new methods of the BeamAction class
+	- rotate all of the agents bodies according to
+	  the given angle in the x-y-plane
+
+	* plugin/soccer/beameffector/beamaction.h:
+	- BeamAction is now constructed with 3 parameters:
+	  x coord and y coord of the position to beam to,
+	  as well as the angle in the x-y-plane (DEG) of
+	  the agent at this position
+	- removed GetPosition
+	- added GetPosX, GetPosY, and GetXYAngle
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- added error log message for GetBody if no transform parent
+	  was found
+
+	* utility/Makefile.am:
+	- removed entry for glextgen
+
 2007-05-31  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/collisionperceptor/forceresistanceperceptor.h: 
@@ -29,7 +80,7 @@
 	  changed "name" to "n" in sexp,
 	  e.g. (TCH (name lf) (val 1)) -> (TCH (n lf) (val 1))
 
-2007-05-31  Joschka Boedecker  <joschka@joschka-laptop>
+2007-05-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/simspark/Makefile.am:
 	- include materials.rb, flag_left.rsg, and flag_right.rsg
