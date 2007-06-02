@@ -73,6 +73,7 @@ EXTRA_DIST = \
 	rsg/agent/leggedsphere.rsg \
 	rsg/agent/hoap2.rsg \
 	rsg/agent/soccerbot.rsg \
+	rsg/agent/soccerbottorso.rsg \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
 	rsg/agent/flag_no_viz.rsg \
