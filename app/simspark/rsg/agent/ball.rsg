@@ -11,8 +11,8 @@
      (setLocalPos 0.0 0.0 $Radius)
      (setName Ball)
      
-     (nd StaticMesh
-	 (load './soccerball.obj')
+     (nd SingleMatNode
+	 (load '/usr/local/share/rcssserver3d/models/soccerball.obj')
 	 (setScale $Radius $Radius $Radius)
      )
 					 
