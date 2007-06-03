@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.2 2004/12/31 11:32:04 rollmark Exp $
+   $Id: export.cpp,v 1.3 2007/06/03 14:51:35 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,10 +24,12 @@
 #include "soccermonitor.h"
 #include "soccerrender.h"
 #include "soccerinput.h"
+#include "soccerinputlogplayer.h"
 
 ZEITGEIST_EXPORT_BEGIN()
     ZEITGEIST_EXPORT(SoccerMonitor);
     ZEITGEIST_EXPORT(SoccerRender);
     ZEITGEIST_EXPORT(SoccerInput);
+    ZEITGEIST_EXPORT(SoccerInputLogPlayer);
 ZEITGEIST_EXPORT_END()
 
