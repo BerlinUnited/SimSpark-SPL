@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: touchperceptorhandler.h,v 1.2 2007/05/31 17:39:54 hedayat Exp $
+   $Id: touchperceptorhandler.h,v 1.3 2007/06/03 22:12:58 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ class ForceResistancePerceptor;
 class TouchPerceptorHandler : public oxygen::ContactJointHandler
 {
 public:
-    virtual void HandleCollision
-    (boost::shared_ptr<oxygen::Collider> collidee, dContact& contact);
+    virtual void HandleCollision(boost::shared_ptr<oxygen::Collider> collidee,
+            dContact& contact);
 
 protected:
     virtual void OnLink();

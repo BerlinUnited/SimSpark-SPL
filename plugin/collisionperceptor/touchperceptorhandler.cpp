@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: touchperceptorhandler.cpp,v 1.2 2007/05/31 17:39:53 hedayat Exp $
+   $Id: touchperceptorhandler.cpp,v 1.3 2007/06/03 22:12:58 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,23 +33,22 @@ using namespace boost;
 void TouchPerceptorHandler::OnLink()
 {
 	ContactJointHandler::OnLink();
+	
     // find the first CollisionPerceptor below our closest Transform node
     shared_ptr<Transform> transformParent = shared_static_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());    
 
     if (transformParent.get() == 0)
-      {
+    {
         return;
-      }
+    }
 
-    mForceResistancePercept = shared_dynamic_cast<ForceResistancePerceptor>
-        (transformParent->GetChildSupportingClass("ForceResistancePerceptor", true));
+    mForceResistancePercept
+            = shared_dynamic_cast<ForceResistancePerceptor>(transformParent->GetChildSupportingClass(
+                    "ForceResistancePerceptor", true));
 
     if (mForceResistancePercept.get() == 0)
-      {
-          GetLog()->Error() << "TouchPerceptorHandler: no suitable child node found!\n";
-        return;
-      }
+        GetLog()->Error() << "TouchPerceptorHandler: no suitable child node found!\n";
 }
 
 void TouchPerceptorHandler::OnUnlink()
@@ -58,43 +57,30 @@ void TouchPerceptorHandler::OnUnlink()
 	mForceResistancePercept.reset();
 }
 
-void TouchPerceptorHandler::HandleCollision
-(boost::shared_ptr<Collider> collidee, dContact& contact)
+void TouchPerceptorHandler::HandleCollision(
+        boost::shared_ptr<Collider> collidee, dContact& contact)
 {
-    if (
-        (mCollider.get() == 0) ||
-        (mWorld.get() == 0) ||
-        (mSpace.get() == 0)
-        )
-        {
-            return;
-        }
+    if (mCollider.get() == 0 || mWorld.get() == 0 || mSpace.get() == 0)
+        return;
 
     // to create a contact joint it we must have at least one body to
     // attach it to.
     dBodyID myBody = dGeomGetBody(mCollider->GetODEGeom());
     dBodyID collideeBody = dGeomGetBody(collidee->GetODEGeom());
 
-    if (
-        (myBody == 0) &&
-        (collideeBody == 0)
-        )
-        {
-            return;
-        }
+    if (myBody == 0 && collideeBody == 0)
+        return;
 
     shared_ptr<ContactJointHandler> handler =
         collidee->FindChildSupportingClass<ContactJointHandler>();
 
     if (handler.get() == 0)
-        {
-            return;
-        }
+        return;
 
     CalcSurfaceParam(contact.surface,handler->GetSurfaceParameter());
 
-    dJointID joint = dJointCreateContact
-        (mWorld->GetODEWorld(), mSpace->GetODEJointGroup(), &contact);
+    dJointID joint = dJointCreateContact(mWorld->GetODEWorld(),
+            mSpace->GetODEJointGroup(), &contact);
 
     dJointAttach (joint, myBody, collideeBody);
 
