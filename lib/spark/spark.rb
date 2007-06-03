@@ -66,6 +66,7 @@ def sparkSetupMonitorLogPlayer
   monitorClient = new('SparkMonitorLogFileServer', 
 		      $serverPath+'simulation/SparkMonitorLogFileServer')
   monitorClient.setFileName($logPlayerFile)
+  monitorClient.setStepDelay(33000)
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
   rubySceneImporter.setUnlinkOnCompleteScenes(true);
