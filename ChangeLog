@@ -1,3 +1,37 @@
+2007-06-03  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp,
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.h,
+	* plugin/sparkmonitor/sparkmonitorlogfileserver_c.cpp: 
+	- added support for pause, step backward, step forward,
+	  and toggle for forward/backward playback
+
+	* plugin/soccermonitor/Makefile.am,
+	* plugin/soccermonitor/export.cpp:
+	- added Hesham's soccerinputloglayer files
+
+	* plugin/soccermonitor/soccerinputlogplayer.cpp,
+	* plugin/soccermonitor/soccerinputlogplayer.h,
+	* plugin/soccermonitor/soccerinputlogplayer_c.cpp:
+	- added files for custom input handling when in logplayer
+	  mode
+
+	* lib/spark/spark.rb:
+	- added setup of the step time for the logplayer
+
+	* app/simspark/soccersim.rb:
+	- added SoccerVars SingleHalftime (default: false)
+	  and UseOffside (default: false)
+
+	* app/monitorspark/soccersim.rb:
+	- if in logplayer mode, load new custom
+	  SoccerInputLogPlayer class to handle input
+
+	* app/monitorspark/soccerbindings.rb:
+	- new bindings for the logplayer: p - pause,
+	  f - step forward, b - step backward, l - toggle
+	  forward/backward playback
+
 2007-06-02  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* configure.ac:
