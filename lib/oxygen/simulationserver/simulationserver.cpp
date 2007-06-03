@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.5.6.2 2007/06/01 15:38:10 yxu Exp $
+   $Id: simulationserver.cpp,v 1.5.6.3 2007/06/03 07:44:44 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -264,11 +264,11 @@ void SimulationServer::ControlEvent(EControlEvent event)
 
                 case CE_ActAgent :
                     ctrNode->ActAgent();
+                    ctrNode->SetSimTime(mSimTime);
                     break;
 
                 case CE_EndCycle :
                     ctrNode->EndCycle();
-                    ctrNode->SetSimTime(mSimTime);
                     break;
 
                 default:
