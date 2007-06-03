@@ -29,6 +29,7 @@
 #include <oxygen/sceneserver/sceneimporter.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <fstream>
+#include <stack>
 
 class SparkMonitorLogFileServer : public oxygen::SimControlNode
 {
@@ -46,7 +47,23 @@ public:
         simulation is stepped */
     virtual void StartCycle();
 
+    /** set the log file name */
     void SetFileName(std::string fileName){ mLogfileName = fileName; }
+
+    /** pause the log player */
+    void Pause(){ mPause = !mPause; }
+
+    /** go to the next step */
+    void ForwardStep(){ mForwardStep = true; }
+
+    /** go to the previous step */
+    void BackwardStep();
+
+    /** backward play the log file back */
+    void BackwardPlayback();
+
+    /** set the length of delay between steps */
+    void SetStepDelay(int delay){ mStepDelay = delay; }
 
 protected:
     /** parses a received message */
@@ -81,6 +98,22 @@ protected:
     /** the logfile */
     std::ifstream mLog;
 
+    /** the pause state of the log player */
+    bool mPause;
+
+    /** go to the next step in the log file */
+    bool mForwardStep;
+
+    /** line numbers storage */
+    std::stack<unsigned> linePositions;
+
+    /** the length of delay between seteps */
+    int mStepDelay;
+
+    bool mBackwardPlayback;
+
+    /** cached reference to the script server */
+    boost::shared_ptr<zeitgeist::ScriptServer> mScriptServer;
 };
 
 DECLARE_CLASS(SparkMonitorLogFileServer);
