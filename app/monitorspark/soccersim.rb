@@ -14,11 +14,15 @@ sparkRegisterCustomMonitor 'SoccerMonitor'
 # screen
 sparkRegisterCustomRender  'SoccerRender'
 
-if ($logPlayerMode == false)
+if ($logPlayerMode == true)
+  # register the soccer input logplayer plugin for playback
+  # specific keys
+  sparkRegisterCustomInput 'SoccerInputLogPlayer'
+else
   # register the soccer input plugin to process soccer specific key
   # presses
   sparkRegisterCustomInput 'SoccerInput'
-
+end
   # bind keys to soccer commands
   run "soccerbindings.rb"
-end
+
