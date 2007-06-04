@@ -210,7 +210,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
     // add faces (only 1 material allowed right now!)
     triMesh->AddFace(indeces, materials[0]);    
         
-    triMesh->SetPos(posArray, faces.size() * 9);               
+    triMesh->SetPos(posArray, faces.size() * 3);               
     triMesh->SetTexCoords(texArray);                
     triMesh->SetNormals(normArray);
 
