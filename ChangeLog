@@ -1,3 +1,21 @@
+2007-06-05  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* NEWS:
+	- added news for the 0.5.5 release
+
+	* README:
+	- updated release number
+
+	* RELEASE:
+	- updated release notes
+
+	* THANKS:
+	- added several people who helped with patches and/or
+	  bug/reports and/or useful comments
+
+	* configure.ac:
+	- increased version number for the 0.5.5 release
+
 2007-06-04  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt: 
