@@ -162,8 +162,6 @@ AM_CONDITIONAL(BUILD_SPADES_MODULES, test $rcss_build_spades = yes)
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
 		 utility/Makefile \
-		 utility/glextgen/Makefile \
-		 utility/glextgen/glextgen.rb \
 		 utility/libobj/Makefile \
 		 utility/sfsexp/Makefile \
 		 utility/rcssnet/Makefile \
