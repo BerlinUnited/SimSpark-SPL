@@ -1,9 +1,18 @@
 2007-06-04  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt: 
+	- added documentation for the ForceResistance Perceptor
+	 
+	* plugin/collisionperceptor/touchperceptorhandler.h: 
+	* plugin/collisionperceptor/touchperceptorhandler.cpp:
+	- corrected to comply with the coding style
+	 
 	* plugin/collisionperceptor/forceresistanceperceptor.h: 
 	* plugin/collisionperceptor/forceresistanceperceptor.cpp:
 	- corrected the FRP to provide one position (in local coordiantes)
 	  and one force vector instead of every contact point.
+	- storing dContactGeom objects rather than dContact objects
+	- changed ContactListType to TContactList following project's coding style.
 
 2007-06-03  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 

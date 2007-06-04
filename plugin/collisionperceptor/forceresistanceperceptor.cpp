@@ -4,7 +4,7 @@
  Fri May 9 2003
  Copyright (C) 2002,2003 Koblenz University
  Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
- $Id: forceresistanceperceptor.cpp,v 1.2 2007/06/03 22:12:58 hedayat Exp $
+ $Id: forceresistanceperceptor.cpp,v 1.3 2007/06/04 08:33:42 hedayat Exp $
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ bool ForceResistancePerceptor::Percept(
     Vector3f force(0,0,0);
     Vector3f pos(0,0,0);
     float sumLength = 0;
-    for (ContactListType::const_iterator i = mContactList.begin();
+    for (TContactList::const_iterator i = mContactList.begin();
          i!= mContactList.end();
          ++i)
     {

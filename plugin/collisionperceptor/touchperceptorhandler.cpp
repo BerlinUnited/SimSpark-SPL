@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: touchperceptorhandler.cpp,v 1.3 2007/06/03 22:12:58 hedayat Exp $
+   $Id: touchperceptorhandler.cpp,v 1.4 2007/06/04 08:33:42 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,9 +43,9 @@ void TouchPerceptorHandler::OnLink()
         return;
     }
 
-    mForceResistancePercept
-            = shared_dynamic_cast<ForceResistancePerceptor>(transformParent->GetChildSupportingClass(
-                    "ForceResistancePerceptor", true));
+    mForceResistancePercept = shared_dynamic_cast<ForceResistancePerceptor>(
+            transformParent->GetChildSupportingClass("ForceResistancePerceptor",
+                    true));
 
     if (mForceResistancePercept.get() == 0)
         GetLog()->Error() << "TouchPerceptorHandler: no suitable child node found!\n";
