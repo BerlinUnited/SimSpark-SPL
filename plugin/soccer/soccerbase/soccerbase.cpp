@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.14 2007/05/31 08:02:36 jboedeck Exp $
+   $Id: soccerbase.cpp,v 1.14.4.1 2007/06/08 00:11:21 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/physicsserver/spherecollider.h>
 #include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
@@ -77,7 +78,7 @@ SoccerBase::GetAgentState(const shared_ptr<Transform> transform,
                           shared_ptr<AgentState>& agent_state)
 {
     agent_state =
-        shared_dynamic_cast<AgentState>(transform->GetChild("AgentState"));
+        shared_dynamic_cast<AgentState>(transform->GetChild("AgentState", true));
 
     if (agent_state.get() == 0)
     {
@@ -92,8 +93,10 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
                           shared_ptr<Body>& agent_body)
 
 {
+//    agent_body = shared_static_cast<Body>
+//        (transform->FindChildSupportingClass<Body>(true));
     agent_body = shared_static_cast<Body>
-        (transform->FindChildSupportingClass<Body>(true));
+        (transform->GetChildOfClass("Body",  true));
 
     if (agent_body.get() == 0)
     {
@@ -236,6 +239,56 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
 }
 
 bool
+SoccerBase::GetAgentAspects(const zeitgeist::Leaf& base,
+               TAgentAspectList& agentAspects,
+               TTeamIndex idx)
+{
+    // get the active scene
+    shared_ptr<Scene> activeScene;
+
+    if (GetActiveScene(base, activeScene))
+    {
+        Leaf::TLeafList leafList;
+
+        // get a list of all the agent aspects
+        activeScene->GetChildrenOfClass("AgentAspect", leafList);
+
+        if (leafList.size() == 0)
+        {
+            base.GetLog()->Error()
+                << "ERROR: (SoccerBase) active scene doesn't have "
+                << "children of type AgentAspect\n";
+
+            return false;
+        }
+
+        shared_ptr<AgentState> agentState;
+        Leaf::TLeafList::iterator iter = leafList.begin();
+        // search through the list to find an agent state
+        // with matching team index
+        for (iter;
+             iter != leafList.end();
+             ++iter
+            )
+        {
+            shared_ptr<AgentAspect> agentAspect =
+                shared_dynamic_cast<AgentAspect>(*iter);
+
+            if (agentAspect.get() == 0) continue;
+
+            if (GetAgentState(agentAspect, agentState) &&
+                ((agentState->GetTeamIndex() == idx) ||
+                 (idx == TI_NONE)))
+            {
+                agentAspects.push_back(agentAspect);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool
 SoccerBase::GetGameState(const Leaf& base,
                          shared_ptr<GameStateAspect>& game_state)
 {
@@ -298,6 +351,8 @@ SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
     shared_ptr<Transform> parent;
     if (! GetTransformParent(base,parent))
     {
+        base.GetLog()->Error() << "(SoccerBase) ERROR: no transform parent "
+                          << "found in GetBody()\n";
         return false;
     }
 

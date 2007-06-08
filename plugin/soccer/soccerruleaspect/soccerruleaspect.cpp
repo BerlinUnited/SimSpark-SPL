@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.27.8.1 2007/06/02 14:36:30 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.27.8.2 2007/06/08 00:11:21 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -130,6 +130,34 @@ void
 SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
                                float min_dist, TTeamIndex idx)
 {
+    if (idx == TI_NONE || mBallState.get() == 0) return;
+    std::list<boost::shared_ptr<AgentAspect> > agent_aspects;
+    if (! SoccerBase::GetAgentAspects(*mBallState, agent_aspects, idx))
+        return;
+
+    boost::shared_ptr<oxygen::Body> agent_body;
+
+    std::list<boost::shared_ptr<AgentAspect> >::const_iterator i;
+    for (i = agent_aspects.begin(); i != agent_aspects.end(); ++i)
+    {
+        // call GetAgentBody with matching AgentAspect
+        SoccerBase::GetAgentBody(*i, agent_body);
+        // if agent is too close, move it away
+        Vector3f new_pos = agent_body->GetPosition();
+        if (box.Contains(Vector2f(new_pos[0], new_pos[1])))
+        {
+            if (idx == TI_LEFT)
+            {
+                new_pos[0] = box.minVec[0] -
+                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+            } else {
+                new_pos[0] = box.maxVec[0] +
+                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+            }
+            new_pos[2] = 1.0;
+            MoveAgent(agent_body, new_pos);
+        }
+    }
 #if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
@@ -208,19 +236,20 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 
     if (game_control.get() == 0)
     {
-        GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer\n.";
+        GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer.\n";
         return;
     }
-
+    
     // if no players are connected, just return
     if (! game_control->GetAgentCount()) return;
+
 
     // before the game starts the ball should stay in the middle of
     // the playing field
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
 
-#if 0
+#if 1
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
 #endif
@@ -747,7 +776,6 @@ SoccerRuleAspect::OnUnlink()
     mBallState.reset();
     mBallBody.reset();
 }
-
 
 void
 SoccerRuleAspect::UpdateCachedInternal()
