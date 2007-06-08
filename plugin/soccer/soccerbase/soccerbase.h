@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.7.8.1 2007/06/08 00:11:21 hedayat Exp $
+   $Id: soccerbase.h,v 1.7.8.2 2007/06/08 13:15:48 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,7 +59,6 @@ class SoccerBase
 {
 public:
     typedef std::list<boost::shared_ptr<AgentState> > TAgentStateList;
-    typedef std::list<boost::shared_ptr<oxygen::AgentAspect> > TAgentAspectList;
 
 public:
     SoccerBase() {}
@@ -115,11 +114,6 @@ public:
     static bool
     GetAgentStates(const zeitgeist::Leaf& base,
                    TAgentStateList& agentStates,
-                   TTeamIndex idx = TI_NONE);
-
-    static bool
-    GetAgentAspects(const zeitgeist::Leaf& base,
-                   TAgentAspectList& agentAspects,
                    TTeamIndex idx = TI_NONE);
 
     /** return a reference to the GameStateAspect node */
