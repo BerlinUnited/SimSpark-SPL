@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.10 2007/02/12 19:08:11 rollmark Exp $
+   $Id: rubysceneimporter.h,v 1.10.8.1 2007/06/08 00:07:35 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,6 +56,9 @@ protected:
 
     typedef std::list<ParamEnv> TParameterStack;
 
+    //! mapping from abbreviations to key words
+    typedef std::map<std::string, std::string> TTranslationTable;
+
 public:
     RubySceneImporter();
     virtual ~RubySceneImporter();
@@ -102,6 +105,11 @@ protected:
     void PopParameter();
     ParamEnv& GetParamEnv();
 
+    void InitTranslationTable();
+
+    std::string Lookup(const std::string& key);
+    
+    
 protected:
     /** true if a scene is automatically unlinked before a new scene
         is imported */
@@ -121,6 +129,9 @@ protected:
 
     /** a stack of parameter environments */
     TParameterStack mParameterStack;
+
+    /** the abbreviaton table */
+    TTranslationTable mTranslationTable;
 };
 
 DECLARE_CLASS(RubySceneImporter);

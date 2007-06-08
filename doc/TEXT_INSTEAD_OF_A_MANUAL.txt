@@ -28,6 +28,7 @@ Contents
 2.3.12 Hear Perceptor
 2.3.13 GyroRate Perceptor
 2.3.14 Touch Perceptor
+2.3.15 ForceResistance Perceptor
 
 3. Monitor and Trainer Protocol
 
@@ -512,7 +513,7 @@ corresponding to change rates of angles around the X, Y, and Z axis respectively
 
 Message format:
 
-(GYR (name <nodename>) (<x> <y> <z>))
+(GYR (name <nodename>) (rt <x> <y> <z>))
 
 <nodename> can be set arbitrarily
 
@@ -520,7 +521,7 @@ Message format:
 
 Example output:
 
-(GYR (name torsogyro) (0.00 0.00 -0.00))
+(GYR (name torsogyro) (rt 0.00 0.00 -0.00))
 
 2.3.14 Touch Perceptor
 ----------------------
@@ -541,6 +542,35 @@ detected
 Example output:
 
 (TCH (name footleft) (val 1))
+
+2.3.15 ForceResistance Perceptor
+--------------------------------
+
+The ForceResistance perceptor provides information about the force applied to
+the collider below it's parent node when a collision occures. It also provides
+an average point (in local coordinates relative to the collider) as the force
+concentration point.
+ 
+When two surfaces are completely in touch, there are many contact points. As 
+it is not practical to provide complete information about such a collision,
+the FRP provides only one contact point (the weighted average of all points to
+which a force is applied) and a force vector (total force applied to all of
+the contact points). So, the output is just an approximation about the applied
+force.  
+
+Message format:
+
+(FRP (n <nodename>) (c <px> <py> <pz>) (f <fx> <fy> <fz>))
+
+<nodename> can be set arbitrarily
+
+<px> <py> <pz> are the local coordinates of the force concentration point
+
+<fx> <fy> <fz> are components of the total force vector
+
+Example output:
+
+(FRP (n fl) (c 0.03 -0.13 0.00) (f 0.20 0.10 3.22))
 
 
 3. Monitor and Trainer Protocol

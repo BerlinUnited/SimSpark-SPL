@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([rcssserver3d], 0.5.4, [sserver-admin@lists.sf.net])
+AC_INIT([rcssserver3d], 0.5.5, [sserver-admin@lists.sf.net])
 AC_CONFIG_SRCDIR([lib/salt/salt.h])
 AC_CONFIG_HEADER([sparkconfig.h])
 AC_CONFIG_AUX_DIR([config.aux])
@@ -13,8 +13,8 @@ AM_ENABLE_STATIC(no)
 ## immediately before a release of the package. See libtool manual for details.
 RCSS_LIBRARY_VERSION_INFO(salt_version_info,salt_version,'3:1:3')
 RCSS_LIBRARY_VERSION_INFO(zeitgeist_version_info,zeitgeist_version,'3:1:0')
-RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'5:1:2')
-RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'1:0:0')
+RCSS_LIBRARY_VERSION_INFO(oxygen_version_info,oxygen_version,'5:2:2')
+RCSS_LIBRARY_VERSION_INFO(kerosin_version_info,kerosin_version,'1:1:0')
 RCSS_LIBRARY_VERSION_INFO(spark_version_info,spark_version,'0:0:0')
 RCSS_LIBRARY_VERSION_INFO(rcssmonitor3D_version_info,rcssmonitor3D_version,'2:0:1')
 RCSS_LIBRARY_VERSION_INFO(rcssnet3D_version_info,rcssnet3D_version,'0:0:0')
@@ -162,8 +162,6 @@ AM_CONDITIONAL(BUILD_SPADES_MODULES, test $rcss_build_spades = yes)
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
 		 utility/Makefile \
-		 utility/glextgen/Makefile \
-		 utility/glextgen/glextgen.rb \
 		 utility/libobj/Makefile \
 		 utility/sfsexp/Makefile \
 		 utility/rcssnet/Makefile \
@@ -207,6 +205,9 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/rcsoccersim3D \
 		 app/simulator/Makefile \
 		 app/simspark/Makefile \
+		 app/simspark/materials-textures.rb \
+		 app/simspark/rsg/agent/soccerbottorso.rsg \
+		 app/simspark/rsg/agent/ball.rsg \
 		 app/monitorspark/Makefile \
 		 app/agentspark/Makefile \
 		 app/spadestest/Makefile \

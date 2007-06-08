@@ -1,3 +1,38 @@
+[0.5.5]
+The simulator has been ported to MacOS, the network messages were shortened,
+we did some performance tuning, improved the log player, added a new perceptor,
+and fixed some bugs.
+
+* Important fixes:
+
+simspark:
+- fixed setup of goal flags (thanks Carlos)
+- several files were missing break statments in the physicsserver directory
+  (thanks Shivaram)
+
+gyrorateperceptor:
+- "rt" keyword was added to enable correct parsing of the perceptor values
+
+* Features:
+
+- MacOS compatibility (please see README.MacOS file for comments)
+- individual ODE CollisionSpaces are used to encapsulate each agent and 
+  each goal now
+- the protocols for the monitor and the agents have been shortened
+- new basic importer for Wavefront OBJ files
+- textures can be enabled for the ball, the field, and the agent torso
+  (player numbers :-) )
+- several computationally expensive function calls have been replaced
+  with calls to more efficient versions
+- the log player now plays logfiles in forward and backward mode, and 
+  supports pause, and forward/backward stepping
+- a new perceptor (ForceResistancePerceptor) was implemented that gives 
+  feedback about position and resulting force due to a collision of the 
+  body the perceptor is attached to   (see doc/TEXT_INSTEAD_OF_A_MANUAL.txt 
+  for details)
+- BeamEffector now takes 3 arguments: position (x and y) and angle in the
+  x-y-plane (rotation around z-axis) at the beam position (DEG)
+
 [0.5.4] 
 This release contains fixes for known problems (e.g. in the
 visionperceptor or the spark sample agent), updates of old plug-ins

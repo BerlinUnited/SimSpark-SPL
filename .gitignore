@@ -9,6 +9,8 @@
 /Makefile
 /Makefile.in
 /stamp-h1
+/.project
+/.cproject
 app/Makefile
 app/Makefile.in
 app/agentspark/.deps
@@ -88,6 +90,7 @@ app/simspark/Logfiles
 app/simspark/Makefile
 app/simspark/Makefile.in
 app/simspark/simspark
+app/simspark/materials-textures.rb
 app/simulator/.deps
 app/simulator/.libs
 app/simulator/Logfiles

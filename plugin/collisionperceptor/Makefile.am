@@ -13,9 +13,9 @@ collisionperceptor_la_SOURCES = export.cpp \
 				touchperceptorhandler.h \
 				touchperceptorhandler.cpp \
 				touchperceptorhandler_c.cpp \
-				extendedtouchperceptor.h \
-				extendedtouchperceptor.cpp \
-				extendedtouchperceptor_c.cpp
+				forceresistanceperceptor.h \
+				forceresistanceperceptor.cpp \
+				forceresistanceperceptor_c.cpp
 
 # -module tells automake we're not building a library but a loadable module
 # so we don't need the "lib" prefix in the module name

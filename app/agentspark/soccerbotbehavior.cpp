@@ -162,7 +162,12 @@ string SoccerbotBehavior::Think(const std::string& message)
     //sleep(1);
 
     //bow before me
-//    return "(rleg_eff_2_3 -1 0)(lleg_eff_2_3 2 0)";
+    //return "(rleg_eff_2_3 -1 0)(lleg_eff_2_3 2 0)";
+
+    //testing the beam effector with rotation
+    //position (x,y) and angle in the x-y-plane (DEG)
+    //cout << "Beaming..." << endl;
+    //return "(beam -10.0 -10.0 45.0)";
 
     static const float gain = 0.1;
     static BehaviorState leftstate = ARM_UP;

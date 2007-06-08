@@ -6,6 +6,8 @@
 # general colored materials
 #----------------------------------------------------------------
 
+$texturedir="@prefix@/share/@PACKAGE@/textures/"
+
 # rainbow color
 material = new('kerosin/MaterialSolid', $serverPath+'material/matYellow');
 material.setDiffuse(1.0,1.0,0.0,1.0)
@@ -52,20 +54,31 @@ material.setDiffuse(0.05,0.05,0.05,1.0)
 
 
 # ball
-material = new('kerosin/MaterialSolid', $serverPath+'material/matBall');
-material.setDiffuse(1.0,0.3,0.0,1.0)
-material.setAmbient(0.2,0.06,0.0,1.0)
+material = new('kerosin/Material2DTexture', $serverPath+'material/matBall');
+material.setDiffuse(1.0,1.0,1.0,1.0)
+material.setAmbient(0.5,0.5,0.5,1.0)
+material.setDiffuseTexture($texturedir+'soccerball.tga')
+
 
 # running track around the field
 material = new('kerosin/MaterialSolid', $serverPath+'material/matTrack');
 material.setDiffuse(1.0,0.64,0.4,1.0)
 material.setAmbient(0.2,0.01,0.0,1.0)
 
-# grass
-material = new('kerosin/MaterialSolid', $serverPath+'material/matGrass');
-material.setDiffuse(0.1,0.6,0.1,1.0)
-material.setAmbient(0.1,0.3,0.1,1.0)
 
+# grass
+
+# without lines
+# material = new('kerosin/Material2DTexture', $serverPath+'material/matGrass');
+# material.setDiffuse(0.1,0.6,0.1,1.0)
+# material.setAmbient(0.1,0.3,0.1,1.0)
+# material.setDiffuseTexture($texturedir+'grass.png');
+
+# with lines 
+material = new('kerosin/Material2DTexture', $serverPath+'material/matGrass');
+material.setDiffuse(1.0,1.0,1.0,1.0)
+material.setAmbient(0.5,0.5,0.5,1.0)
+material.setDiffuseTexture($texturedir+'grass-w-lines.tga')
 
 #----------------------------------------------------------------
 # left team
@@ -78,49 +91,60 @@ material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
 
 # material with unums
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft1');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft1');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-01.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft2');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft2');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-02.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft3');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft3');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-03.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft4');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft4');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-04.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft5');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft5');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-05.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft6');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft6');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-06.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft7');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft7');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-07.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft8');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft8');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-08.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft9');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft9');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-09.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft10');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft10');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-10.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matLeft11');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matLeft11');
 material.setDiffuse(0.0,0.75,1.0,1.0)
 material.setAmbient(0.0,0.2,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-left-11.png')
 
 #----------------------------------------------------------------
 # right team
@@ -132,47 +156,58 @@ material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
 
 # material with unums
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight1');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight1');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-01.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight2');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight2');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-02.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight3');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight3');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-03.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight4');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight4');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-04.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight5');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight5');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-05.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight6');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight6');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-06.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight7');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight7');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-07.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight8');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight8');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-08.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight9');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight9');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-09.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight10');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight10');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-10.png')
 
-material = new('kerosin/MaterialSolid', $serverPath+'material/matRight11');
+material = new('kerosin/Material2DTexture', $serverPath+'material/matRight11');
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
+material.setDiffuseTexture($texturedir+'torso-right-11.png')
 

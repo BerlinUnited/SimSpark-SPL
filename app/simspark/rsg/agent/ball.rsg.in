@@ -12,7 +12,7 @@
      (setName Ball)
      
      (nd SingleMatNode
-	 (load '/usr/local/share/rcssserver3d/models/soccerball.obj')
+	 (load '@prefix@/share/@PACKAGE@/models/soccerball.obj')
 	 (setScale $Radius $Radius $Radius)
      )
 					 

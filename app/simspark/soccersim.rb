@@ -51,7 +51,7 @@ addSoccerVar('RuleKickInPauseTime',1.0)
 addSoccerVar('RuleHalfTime',5.0 * 60)
 addSoccerVar('RuleDropBallTime',30)
 addSoccerVar('SingleHalfTime',false)
-addSoccerVar('UseOffside', false)
+addSoccerVar('UseOffside',false)
 
 scene = get($scenePath)
 scene.importScene('rsg/agent/soccer.rsg')

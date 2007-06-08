@@ -21,6 +21,7 @@
 #include "sparkmonitorlogfileserver.h"
 #include <oxygen/monitorserver/custommonitor.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
 #include <netinet/in.h>
 #include <rcssnet/exception.hpp>
 #include <cerrno>
@@ -34,6 +35,10 @@ using namespace std;
 
 SparkMonitorLogFileServer::SparkMonitorLogFileServer() : SimControlNode()
 {
+    mPause = false;
+    mForwardStep = false;
+    mStepDelay = 0;
+    mBackwardPlayback = false;
 }
 
 SparkMonitorLogFileServer::~SparkMonitorLogFileServer()
@@ -42,6 +47,8 @@ SparkMonitorLogFileServer::~SparkMonitorLogFileServer()
 
 void SparkMonitorLogFileServer::OnLink()
 {
+    mScriptServer = GetCore()->GetScriptServer();
+
     // setup SceneServer reference
     mSceneServer = shared_dynamic_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
@@ -99,8 +106,25 @@ void SparkMonitorLogFileServer::DoneSimulation()
 void SparkMonitorLogFileServer::StartCycle()
 {
 
+    if (mPause && !mForwardStep)
+        {
+            return;
+        }
+
+    if (mBackwardPlayback)
+        {
+            if (linePositions.size() < 3)
+                return;
+
+            linePositions.pop();
+            linePositions.pop();
+
+            mLog.seekg( linePositions.top() );
+        }
+
     string msg;
 
+    linePositions.push( mLog.tellg() );
     std::getline(mLog,msg);
 
     if (msg.size() != 0)
@@ -108,7 +132,9 @@ void SparkMonitorLogFileServer::StartCycle()
             ParseMessage(msg);
         }
 
-    usleep(33000);
+    usleep(mStepDelay);
+
+    mForwardStep = false;
 }
 
 void SparkMonitorLogFileServer::ParseCustomPredicates(sexp_t* sexp, PredicateList& pList)
@@ -236,4 +262,25 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
 
     destroy_sexp(sexp_custom);
     destroy_continuation(pcont);
+}
+
+void
+SparkMonitorLogFileServer::BackwardStep()
+{
+    if (linePositions.size() < 3)
+        return;
+
+    linePositions.pop();
+    linePositions.pop();
+
+    mLog.seekg( linePositions.top() );
+
+    mForwardStep = true;
+}
+
+void
+SparkMonitorLogFileServer::BackwardPlayback()
+{
+    mBackwardPlayback = !mBackwardPlayback;
+    mPause = false;
 }

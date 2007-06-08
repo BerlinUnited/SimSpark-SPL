@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.2.8.1 2007/06/08 00:07:35 hedayat Exp $
+   $Id: soccerinputlogplayer_c.cpp,v 1.1.2.2 2007/06/08 00:07:35 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,16 +20,10 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <zeitgeist/zeitgeist.h>
-#include "soccermonitor.h"
-#include "soccerrender.h"
-#include "soccerinput.h"
 #include "soccerinputlogplayer.h"
 
-ZEITGEIST_EXPORT_BEGIN()
-    ZEITGEIST_EXPORT(SoccerMonitor);
-    ZEITGEIST_EXPORT(SoccerRender);
-    ZEITGEIST_EXPORT(SoccerInput);
-    ZEITGEIST_EXPORT(SoccerInputLogPlayer);
-ZEITGEIST_EXPORT_END()
+void CLASS(SoccerInputLogPlayer)::DefineClass()
+{
+    DEFINE_BASECLASS(kerosin/InputItem);
+}
 

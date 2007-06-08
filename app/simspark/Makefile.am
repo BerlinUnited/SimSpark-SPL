@@ -23,20 +23,57 @@ endif
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility \
               @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@ @SDL_CPPFLAGS@
 
-AM_LDFLAGS  = @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
+AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
+
 
 simspark_SOURCES = \
 	main.cpp 
 
+# Original
+#dist_pkgdata_DATA = \
+#	simspark.rb \
+#	bindings.rb \
+#	materials.rb \
+#	soccersim.rb \
+#	rsg/agent/soccerplayer.rsg \
+#	rsg/agent/leggedsphere.rsg \
+#	rsg/agent/hoap2.rsg \
+#	rsg/agent/soccerbot.rsg \
+#	rsg/agent/soccer.rsg \
+#	rsg/agent/flag.rsg \
+#	rsg/agent/flag_no_viz.rsg \
+#	rsg/agent/flag_left.rsg \
+#	rsg/agent/flag_right.rsg \
+#	rsg/agent/simspark.rsg \
+#	rsg/agent/ball.rsg \
+#	rsg/boxspheres/staticsphere.rsg \
+#	rsg/boxspheres/staticccylinder.rsg \
+#	rsg/boxspheres/sphere.rsg \
+#	rsg/boxspheres/simspark.rsg \
+#	rsg/boxspheres/arena.rsg \
+#	rsg/boxspheres/box.rsg \
+#	rsg/boxspheres/box_with_handler.rsg
+
+# JAN
 dist_pkgdata_DATA = \
 	simspark.rb \
 	bindings.rb \
 	materials.rb \
-	soccersim.rb \
+	materials-textures.rb \
+	soccersim.rb 
+
+install-data-local: $(srcdir)/rsg/agent/ball.rsg
+	rm -rf $(DESTDIR)$(pkgdatadir)/rsg
+	mkdir -p $(DESTDIR)$(pkgdatadir)/
+	cp -r $(srcdir)/rsg $(DESTDIR)$(pkgdatadir)/
+	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/rsg
+
+EXTRA_DIST = \
 	rsg/agent/soccerplayer.rsg \
 	rsg/agent/leggedsphere.rsg \
 	rsg/agent/hoap2.rsg \
 	rsg/agent/soccerbot.rsg \
+	rsg/agent/soccerbottorso.rsg \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
 	rsg/agent/flag_no_viz.rsg \

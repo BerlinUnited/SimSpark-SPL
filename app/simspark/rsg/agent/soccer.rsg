@@ -26,7 +26,7 @@
  (def $LineHeight 0.2)
 
  (def $FieldMaterial matGrass)
- (def $BorderMaterial matYellow)
+ (def $BorderMaterial matTrack)
  (def $SideMaterial matGrey)
  (def $LineMaterial matWhite)
  (def $GoalMaterial matWhite)
