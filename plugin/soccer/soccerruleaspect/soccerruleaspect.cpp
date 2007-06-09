@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.27.8.3 2007/06/08 13:15:48 hedayat Exp $
+   $Id: soccerruleaspect.cpp,v 1.27.8.4 2007/06/09 20:11:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -1250,6 +1250,45 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                                float radius, float min_dist, TTeamIndex idx,
                                shared_ptr<AgentState> agentState)
 {
+    if (idx == TI_NONE || mBallState.get() == 0) return;
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+        return;
+
+    salt::BoundingSphere sphere(pos, radius);
+    boost::shared_ptr<oxygen::Body> agent_body;
+    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    for (i = agent_states.begin(); i != agent_states.end(); ++i)
+    {
+        if (agentState == (*i))
+            continue;
+
+        SoccerBase::GetBody(**i, agent_body);
+        // if agent is too close, move it away
+        Vector3f new_pos = agent_body->GetPosition();
+        if (sphere.Contains(new_pos))
+        {
+            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+
+            if (idx == TI_LEFT)
+            {
+                if (pos[0] - dist < -mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] - dist;
+                }
+            } else {
+                if (pos[0] + dist > mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] + dist;
+                }
+            }
+            MoveAgent(agent_body, new_pos);
+        }
+    }
 #if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;

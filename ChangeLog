@@ -2,7 +2,8 @@
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
 	- wrote new MoveAgent function (stolen code from BeamEffector!)
-	- fixed ClearPlayers for the new agent
+	- fixed ClearPlayers for the new agent (GetAgentBody doesn't work)
+	- fixed ClearPlayersWithException!
 
 2007-06-05  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
