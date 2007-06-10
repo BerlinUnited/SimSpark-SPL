@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: recorderhandler.h,v 1.2 2004/02/12 14:07:23 fruit Exp $
+   $Id: recorderhandler.h,v 1.2.14.1 2007/06/10 05:19:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,11 @@
 #define OXYGEN_COLLISIONRECORDER_H
 
 #include "collisionhandler.h"
+#include "collider.h"
 #include <set>
 
 namespace oxygen
-{
+{    
 /** \class RecorderHandler is a CollisionHandler that accumulates
      collision information of the Collider it belongs to. It is the
      resonsibility of the user to reset the recorder.
@@ -65,6 +66,40 @@ public:
         \param list is the list that receives the parent nodes
      */
     void GetParentsSupportingClass(const std::string &name, TParentList &list);
+    
+    /** same functionality as GetParentsSupportingClass, but using the
+        C++ type system instead of string comparisons for improved
+        performance
+
+        \param CLASS is the template parameter for the name of the class 
+        the parent nodes must support
+
+        \param list is the list that receives the parent nodes
+     */
+    template <class CLASS>
+    void FindParentsSupportingClass(TParentList &list)
+    {
+        for (
+            RecorderHandler::TCollisionSet::const_iterator iter = mCollisionSet.begin();
+            iter != mCollisionSet.end();
+            ++iter
+            )
+        {
+            boost::shared_ptr<oxygen::Collider> collidee = (*iter).lock();
+            if (collidee.get() == 0)
+                {
+                    continue;
+                }
+
+            boost::weak_ptr<zeitgeist::Node> parent =
+                collidee->FindParentSupportingClass<CLASS>();
+
+            if (! parent.expired())
+                {
+                    list.push_back(parent);
+                }
+        }
+    }
 
 protected:
     TCollisionSet mCollisionSet;
