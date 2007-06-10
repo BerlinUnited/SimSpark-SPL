@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.6 2006/06/03 14:03:52 jboedeck Exp $
+   $Id: ballstateaspect.cpp,v 1.6.8.1 2007/06/10 05:19:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -70,12 +70,13 @@ void BallStateAspect::UpdateLastCollidingAgent()
     // update of the recorder and remember the first returned node as
     // the last agent that collided with the ball.
     RecorderHandler::TParentList agents;
-    mBallRecorder->GetParentsSupportingClass("AgentAspect",agents);
+    mBallRecorder->FindParentsSupportingClass<AgentAspect>(agents);
 
     if (agents.size() > 0)
         {
             mLastCollidingAgent = shared_static_cast<AgentAspect>
-                (make_shared(agents.front()));
+                (agents.front().lock());
+            
             mLastAgentCollisionTime = mGameState->GetTime();
         }
 
@@ -101,7 +102,7 @@ void BallStateAspect::UpdateBallOnField()
 {
     // get a list of Ball nodes that collided with the field
     RecorderHandler::TParentList ball;
-    mFieldRecorder->GetParentsSupportingClass("Ball",ball);
+    mFieldRecorder->FindParentsSupportingClass<Ball>(ball);
 
     // the ball is on or above the playing field iff it collided with
     // the box collider around the playing field
@@ -125,14 +126,14 @@ void BallStateAspect::UpdateGoalState()
 {
     // check both goal box collider
     RecorderHandler::TParentList ball;
-    mLeftGoalRecorder->GetParentsSupportingClass("Ball",ball);
+    mLeftGoalRecorder->FindParentsSupportingClass<Ball>(ball);
 
     if (! ball.empty())
         {
             mGoalState = TI_LEFT;
         } else
             {
-                mRightGoalRecorder->GetParentsSupportingClass("Ball",ball);
+                mRightGoalRecorder->FindParentsSupportingClass<Ball>(ball);
 
                 if (! ball.empty())
                     {
@@ -206,4 +207,3 @@ salt::Vector3f BallStateAspect::GetLastValidBallPosition()
 {
     return mLastValidBallPos;
 }
-
