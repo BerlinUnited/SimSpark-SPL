@@ -736,9 +736,9 @@ Supported expressions are:
   Example: (playMode corner_kick_left).
 
 
-- (agent (team [Right,Left])(unum <n>)(pos <x y z>)(vel <vx vy vz)):
+- (agent (team [Right,Left])(unum <n>)(pos <x y z>)):
   Set the position and velocity of the given player on the field.
-  Example: (agent (team L)(unum 1)(pos -52.0 0.0 0.3)(vel 0.0 0.0 0.0))
+  Example: (agent (team Left)(unum 1)(pos -52.0 0.0 0.3))
 
  
 - (ball (pos <x y z>)):
