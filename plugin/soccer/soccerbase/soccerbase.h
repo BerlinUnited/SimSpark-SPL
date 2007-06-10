@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.7.8.2 2007/06/08 13:15:48 hedayat Exp $
+   $Id: soccerbase.h,v 1.7.8.3 2007/06/10 05:20:37 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <boost/shared_ptr.hpp>
+//#include <map>
 
 //namespace zeitgeist
 //{
@@ -43,6 +44,7 @@ namespace oxygen
     class SphereCollider;
     class ControlAspect;
     class AgentAspect;
+    class GameControlServer;
 }
 
 namespace salt
@@ -59,6 +61,7 @@ class SoccerBase
 {
 public:
     typedef std::list<boost::shared_ptr<AgentState> > TAgentStateList;
+    typedef std::map<int, boost::shared_ptr<AgentState> > TAgentStateMap;
 
 public:
     SoccerBase() {}
@@ -125,6 +128,11 @@ public:
     static bool
     GetSoccerRuleAspect(const zeitgeist::Leaf& base,
                         boost::shared_ptr<SoccerRuleAspect>& soccer_rule_aspect);
+    
+    /** return a reference to the GameControlServer */
+    static bool
+    GetGameControlServer(const zeitgeist::Leaf& base,
+                         boost::shared_ptr<oxygen::GameControlServer>& game_control_server);
 
     /** returns a reference to the active scene from the SceneServer */
     static bool
@@ -178,6 +186,18 @@ public:
 
     /** returns a string representing a play mode */
     static std::string PlayMode2Str(const TPlayMode mode);
+    
+    /* move an agent including all its connected bodies */
+    static bool
+    MoveAgent(boost::shared_ptr<oxygen::Body> agent_body, const salt::Vector3f& pos);
+
+    /* move an agent including all its connected bodies and rotate
+       specified angle (DEG) around the z-axis 
+    */
+    static bool
+    MoveAndRotateAgent(boost::shared_ptr<oxygen::Body> agent_body, 
+                       const salt::Vector3f& pos, 
+                       float angle);
 };
 
 #endif
