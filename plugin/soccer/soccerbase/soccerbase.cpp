@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.14.4.2 2007/06/08 13:15:48 hedayat Exp $
+   $Id: soccerbase.cpp,v 1.14.4.3 2007/06/10 05:21:09 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/controlaspect/controlaspect.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <soccer/gamestateaspect/gamestateaspect.h>
 #include <soccer/soccerruleaspect/soccerruleaspect.h>
 #include <soccer/agentstate/agentstate.h>
@@ -37,6 +38,7 @@ using namespace boost;
 using namespace zeitgeist;
 using namespace oxygen;
 using namespace std;
+using namespace salt;
 
 bool
 SoccerBase::GetSceneServer(const Leaf& base,
@@ -61,7 +63,7 @@ SoccerBase::GetTransformParent(const Leaf& base,
                                shared_ptr<Transform>& transform_parent)
 {
     transform_parent = shared_dynamic_cast<Transform>
-        (make_shared(base.GetParentSupportingClass("Transform")));
+        ((base.FindParentSupportingClass<Transform>()).lock());
 
     if (transform_parent.get() == 0)
     {
@@ -93,15 +95,15 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
                           shared_ptr<Body>& agent_body)
 
 {
-    agent_body = transform->FindChildSupportingClass<Body>(true);
-//    agent_body = shared_static_cast<Body>
-//        (transform->GetChildOfClass("Body",  true));
+    //agent_body = transform->FindChildSupportingClass<oxygen::Body>(true);
+    agent_body = shared_static_cast<Body>
+        (transform->GetChildOfClass("Body",  true));
 
     if (agent_body.get() == 0)
     {
         transform->GetLog()->Error()
             << "(SoccerBase) ERROR: " << transform->GetName()
-            << ") node has no Body child\n";
+            << " node has no Body child\n";
         return false;
     }
 
@@ -143,47 +145,94 @@ SoccerBase::GetAgentState(const Leaf& base,
 bool
 SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
                           int unum, shared_ptr<AgentState>& agentState)
-{
-    // get the active scene
-    shared_ptr<Scene> activeScene;
-
-    if (GetActiveScene(base, activeScene))
-    {
-        Leaf::TLeafList leafList;
-
-        // get a list of all the agent aspects
-        activeScene->GetChildrenOfClass("AgentAspect", leafList);
-
-        if (leafList.size() == 0)
+{   
+    static TAgentStateMap mAgentStateMapLeft;
+    static TAgentStateMap mAgentStateMapRight;
+     
+    if (idx == TI_NONE)
+        return false;
+    
+    // do we have a cached reference?
+    if (
+        idx == TI_LEFT &&
+        !mAgentStateMapLeft.empty()
+        )
         {
-            base.GetLog()->Error()
-                << "ERROR: (SoccerBase) active scene doesn't have "
-                << "children of type AgentAspect\n";
+            TAgentStateMap::iterator iter = mAgentStateMapLeft.find(unum);
 
-            return false;
+            if (iter != mAgentStateMapLeft.end())
+                {
+                    // is the pointer to the parent (AgentAspect) still valid 
+                    // (maybe the agent disconnected)?
+                    if (!(iter->second)->GetParent().lock().get())
+                        {
+                            base.GetLog()->Error() << "(SoccerBase) WARNING: "
+                                                   << "AgentState has invalid parent! "
+                                                   << "The agent probably disconnected, removing from map."
+                                                   << "\n";
+
+                            mAgentStateMapLeft.erase(iter);
+                        }
+                    else
+                        {
+                            agentState = (*iter).second;
+                            return true;
+                        }
+                }
         }
-
-        Leaf::TLeafList::iterator iter = leafList.begin();
-
-        // search through the list to find an agent state
-        // with matching team index and unum
-        for (
-              iter;
-              iter != leafList.end();
-              ++iter
+    else if (
+             idx == TI_RIGHT &&
+             !mAgentStateMapRight.empty()  
              )
         {
-            shared_ptr<Transform> agentAspect =
-             shared_dynamic_cast<Transform>(*iter);
+            TAgentStateMap::iterator iter = mAgentStateMapRight.find(unum);
 
-            if (GetAgentState(agentAspect, agentState) &&
-                (agentState->GetTeamIndex() == idx) &&
-                (agentState->GetUniformNumber() == unum))
+            if (iter != mAgentStateMapRight.end())
+                {
+                    // is the pointer to the parent (AgentAspect) still valid 
+                    // (maybe the agent disconnected)?
+                    if ((iter->second)->GetParent().lock().get() == 0)
+                        {
+                            base.GetLog()->Error() << "(SoccerBase) WARNING: "
+                                                   << "AgentState has invalid parent! "
+                                                   << "The agent probably disconnected, removing from map."
+                                                   << "\n";
+
+                            mAgentStateMapRight.erase(iter);
+                        }
+                    else
+                        {
+                            agentState = (*iter).second;
+                            return true;
+                        }
+                }
+        }
+
+    // we have to get all agent states for this team
+    TAgentStateList agentStates;
+    GetAgentStates(base, agentStates, idx);
+
+    for (TAgentStateList::iterator iter = agentStates.begin();
+         iter != agentStates.end();
+         ++iter)
+        {
+            if ((*iter)->GetUniformNumber() == unum)
             {
+                agentState = *iter;
+
+                if (idx == TI_LEFT)
+                    {
+                        mAgentStateMapLeft[unum] = agentState;
+                    }
+                else
+                    {
+                        mAgentStateMapRight[unum] = agentState;
+                    }
+
                 return true;
             }
-        }
-    }
+        }   
+
     return false;
 }
 
@@ -192,49 +241,47 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
                            TAgentStateList& agentStates,
                            TTeamIndex idx)
 {
-    // get the active scene
-    shared_ptr<Scene> activeScene;
-
-    if (GetActiveScene(base, activeScene))
+    static shared_ptr<GameControlServer> gameCtrl;
+    
+    if (gameCtrl.get() == 0)
     {
-        Leaf::TLeafList leafList;
-
-        // get a list of all the agent aspects
-        activeScene->GetChildrenOfClass("AgentAspect", leafList);
-
-        if (leafList.size() == 0)
+        GetGameControlServer(base, gameCtrl);
+    
+        if (gameCtrl.get() == 0)
         {
-            base.GetLog()->Error()
-                << "ERROR: (SoccerBase) active scene doesn't have "
-                << "children of type AgentAspect\n";
-
+            base.GetLog()->Error() << "(SoccerBase) ERROR: can't get "
+                                   << "GameControlServer\n";
             return false;
         }
-
-        shared_ptr<AgentState> agentState;
-        Leaf::TLeafList::iterator iter = leafList.begin();
-        // search through the list to find an agent state
-        // with matching team index
-        for (iter;
-             iter != leafList.end();
-             ++iter
-            )
-        {
-            shared_ptr<Transform> agentAspect =
-                shared_dynamic_cast<Transform>(*iter);
-
-            if (agentAspect.get() == 0) continue;
-
-            if (GetAgentState(agentAspect, agentState) &&
-                ((agentState->GetTeamIndex() == idx) ||
-                 (idx == TI_NONE)))
-            {
-                agentStates.push_back(agentState);
-            }
-        }
-        return true;
     }
-    return false;
+
+    GameControlServer::TAgentAspectList aspectList;
+    gameCtrl->GetAgentAspectList(aspectList);
+        
+    GameControlServer::TAgentAspectList::iterator iter;
+    shared_ptr<AgentState> agentState;
+        
+    for (
+         iter = aspectList.begin();
+         iter != aspectList.end();
+         ++iter
+         )
+        {
+            shared_ptr<Transform> trf = shared_dynamic_cast<Transform>(*iter);
+            
+            if (
+                GetAgentState(trf, agentState) &&
+                (
+                 agentState->GetTeamIndex() == idx ||
+                 idx == TI_NONE
+                 )
+                )
+                {
+                    agentStates.push_back(agentState);
+                }       
+        }
+    
+    return true;
 }
 
 bool
@@ -257,7 +304,7 @@ SoccerBase::GetGameState(const Leaf& base,
 
 bool
 SoccerBase::GetSoccerRuleAspect(const Leaf& base,
-                                shared_ptr<SoccerRuleAspect>& soccer_rule_aspect)
+                                shared_ptr<SoccerRuleAspect> & soccer_rule_aspect)
 {
     soccer_rule_aspect = shared_dynamic_cast<SoccerRuleAspect>
         (base.GetCore()->Get("/sys/server/gamecontrol/SoccerRuleAspect"));
@@ -266,7 +313,27 @@ SoccerBase::GetSoccerRuleAspect(const Leaf& base,
     {
         base.GetLog()->Error()
             << "Error: (SoccerBase: " << base.GetName()
-            << ") found no SoccerRuleAspect\n";
+            << " found no SoccerRuleAspect\n";
+
+        return false;
+    }
+
+    return true;
+}
+
+bool
+SoccerBase::GetGameControlServer(const Leaf& base,
+                                shared_ptr<GameControlServer> & game_control_server)
+{
+    game_control_server = shared_dynamic_cast<GameControlServer>
+        (base.GetCore()->Get("/sys/server/gamecontrol"));
+
+    if (game_control_server.get() == 0)
+    {
+        base.GetLog()->Error()
+            << "Error: (SoccerBase: " << base.GetName()
+            << " found no GameControlServer\n";
+
         return false;
     }
 
@@ -277,20 +344,31 @@ bool
 SoccerBase::GetActiveScene(const Leaf& base,
                            shared_ptr<Scene>& active_scene)
 {
-    shared_ptr<SceneServer> sceneServer;
-    if (! GetSceneServer(base,sceneServer))
+    static shared_ptr<SceneServer> sceneServer;
+    
+    if (sceneServer.get() == 0)
+    {
+        if (! GetSceneServer(base,sceneServer))
         {
+            base.GetLog()->Error()
+                << "(SoccerBase) ERROR: " << base.GetName()
+                << ", could not get SceneServer\n";
+            
             return false;
         }
+    }
 
     active_scene = sceneServer->GetActiveScene();
+    
     if (active_scene.get() == 0)
     {
         base.GetLog()->Error()
             << "ERROR: (SoccerBase: " << base.GetName()
-            << ") SceneServer reports no active scene\n";
+            << ", SceneServer reports no active scene\n";
+        
         return false;
     }
+    
     return true;
 }
 
@@ -301,18 +379,20 @@ SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
     if (! GetTransformParent(base,parent))
     {
         base.GetLog()->Error() << "(SoccerBase) ERROR: no transform parent "
-                          << "found in GetBody()\n";
+                               << "found in GetBody()\n";
+        
         return false;
     }
 
-  body = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
+  body = shared_dynamic_cast<Body>(parent->FindChildSupportingClass<Body>());
 
   if (body.get() == 0)
     {
-      base.GetLog()->Error()
-          << "ERROR: (SoccerBase: " << base.GetName()
-          << ") parent node has no Body child.";
-      return false;
+        base.GetLog()->Error()
+            << "ERROR: (SoccerBase: " << base.GetName()
+            << ") parent node has no Body child.";
+        
+        return false;
     }
 
   return true;
@@ -321,22 +401,37 @@ SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
 bool
 SoccerBase::GetBall(const Leaf& base, shared_ptr<Ball>& ball)
 {
-    shared_ptr<Scene> scene;
-    if (! GetActiveScene(base,scene))
-        {
-            return false;
-        }
-
-    ball = shared_dynamic_cast<Ball>
-        (base.GetCore()->Get(scene->GetFullPath() + "Ball"));
-
-    if (ball.get() == 0)
+    static shared_ptr<Scene> scene;
+    static shared_ptr<Ball> ballRef;
+    
+    if (scene.get() == 0)
+    {
+        if (! GetActiveScene(base,scene))
         {
             base.GetLog()->Error()
-                << "ERROR: (SoccerBase: " << base.GetName()
-                << ") found no ball node\n";
+                << "(SoccerBase) ERROR: " << base.GetName()
+                << ", could not get active scene.\n";        
+
             return false;
         }
+    }   
+    
+    if (ballRef.get() == 0)
+    {
+        ballRef = shared_dynamic_cast<Ball>
+            (base.GetCore()->Get(scene->GetFullPath() + "Ball"));
+        
+        if (ballRef.get() == 0)
+        {
+            base.GetLog()->Error()
+                << "(SoccerBase) ERROR: " << base.GetName()
+                << ", found no ball node\n";
+            
+            return false;
+        }
+    }
+        
+    ball = ballRef;
 
     return true;
 }
@@ -344,46 +439,76 @@ SoccerBase::GetBall(const Leaf& base, shared_ptr<Ball>& ball)
 bool
 SoccerBase::GetBallBody(const Leaf& base, shared_ptr<Body>& body)
 {
-    shared_ptr<Scene> scene;
-    if (! GetActiveScene(base,scene))
+    static shared_ptr<Scene> scene;
+    static shared_ptr<Body> bodyRef;
+    
+    if (scene.get() == 0)
+    {
+        if (! GetActiveScene(base,scene))
         {
+            base.GetLog()->Error()
+                << "(SoccerBase) ERROR: " << base.GetName()
+                << ", could not get active scene.\n";        
+
             return false;
         }
+    } 
 
-   body = shared_dynamic_cast<Body>
-        (base.GetCore()->Get(scene->GetFullPath() + "Ball/physics"));
-
-   if (body.get() == 0)
-       {
+    if (bodyRef.get() == 0)
+    {
+        bodyRef = shared_dynamic_cast<Body>
+            (base.GetCore()->Get(scene->GetFullPath() + "Ball/physics"));
+        
+        if (bodyRef.get() == 0)
+        {
             base.GetLog()->Error()
-                << "ERROR: (SoccerBase: " << base.GetName()
-                << ") found no ball body node\n";
+                << "(SoccerBase) ERROR: " << base.GetName()
+                << ", found no ball body node\n";        
+        
             return false;
-       }
+        }
+    }
+    
+    body = bodyRef;    
 
-   return true;
+    return true;
 }
 
 bool
 SoccerBase::GetBallCollider(const zeitgeist::Leaf& base,
                 boost::shared_ptr<oxygen::SphereCollider>& sphere)
 {
-    shared_ptr<Scene> scene;
-    if (! GetActiveScene(base,scene))
+    static shared_ptr<Scene> scene;
+    static shared_ptr<SphereCollider> sphereRef;
+    
+    if (scene.get() == 0)
+    {
+        if (! GetActiveScene(base,scene))
         {
+            base.GetLog()->Error()
+                << "(SoccerBase) ERROR: " << base.GetName()
+                << ", could not get active scene.\n";        
+
             return false;
         }
+    }
 
-   sphere = shared_dynamic_cast<SphereCollider>
-        (base.GetCore()->Get(scene->GetFullPath() + "Ball/geometry"));
-
-   if (sphere.get() == 0)
-       {
+    if (sphereRef.get() == 0)
+    {
+        sphereRef = shared_dynamic_cast<SphereCollider>
+            (base.GetCore()->Get(scene->GetFullPath() + "Ball/geometry"));
+        
+        if (sphereRef.get() == 0)
+        {
             base.GetLog()->Error()
-                << "ERROR: (SoccerBase: " << base.GetName()
-                << ") Ball got no SphereCollider node\n";
+                << "(SoccerBase) ERROR:" << base.GetName()
+                << ", Ball got no SphereCollider node\n";
+            
             return false;
-       }
+        }
+    }
+    
+   sphere = sphereRef;   
 
    return true;
 }
@@ -500,4 +625,96 @@ SoccerBase::GetControlAspect(const zeitgeist::Leaf& base,const string& name)
   return aspect;
 }
 
+bool
+SoccerBase::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
+{
+    Vector3f bodyPos = agent_body->GetPosition();
+    
+    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+            (agent_body->GetParent().lock()->FindParentSupportingClass<Transform>().lock());
 
+    if (parent.get() == 0)
+    {
+        agent_body->GetLog()->Error() << "(MoveAgent) ERROR: can't get parent node.\n";
+        return false;
+    }
+
+    Leaf::TLeafList leafList;
+
+    parent->ListChildrenSupportingClass<Body>(leafList, true);
+
+    if (leafList.size() == 0)
+    {
+        agent_body->GetLog()->Error()
+            << "(MoveAgent) ERROR: agent aspect doesn't have "
+            << "children of type Body\n";
+
+        return false;
+    }
+
+    Leaf::TLeafList::iterator iter = leafList.begin();
+
+    // move all child bodies 
+    for (iter; iter != leafList.end(); ++iter)
+    {            
+        shared_ptr<Body> childBody = 
+            shared_dynamic_cast<Body>(*iter);
+
+        Vector3f childPos = childBody->GetPosition();
+
+        childBody->SetPosition(pos + (childPos-bodyPos));
+        childBody->SetVelocity(Vector3f(0,0,0));
+        childBody->SetAngularVelocity(Vector3f(0,0,0));
+    }
+}
+
+bool
+SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos, float angle)
+{
+    Vector3f bodyPos = agent_body->GetPosition();
+    
+    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+            (agent_body->GetParent().lock()->FindParentSupportingClass<Transform>().lock());
+
+    if (parent.get() == 0)
+    {
+        agent_body->GetLog()->Error() << "(MoveAgent) ERROR: can't get parent node.\n";
+        return false;
+    }
+
+    Leaf::TLeafList leafList;
+
+    parent->ListChildrenSupportingClass<Body>(leafList, true);
+
+    if (leafList.size() == 0)
+    {
+        agent_body->GetLog()->Error()
+            << "(MoveAgent) ERROR: agent aspect doesn't have "
+            << "children of type Body\n";
+
+        return false;
+    }    
+
+    Matrix mat;
+    mat.RotationZ(gDegToRad(angle));        
+
+    Leaf::TLeafList::iterator iter = leafList.begin();
+       
+    // move all child bodies 
+    for (iter;
+         iter != leafList.end();
+         ++iter
+         )
+        {            
+	    shared_ptr<Body> childBody = 
+                shared_dynamic_cast<Body>(*iter);
+	    
+    	    Vector3f childPos = childBody->GetPosition();
+
+    	    childBody->SetPosition(pos + mat.Rotate(childPos-bodyPos));
+    	    childBody->SetVelocity(Vector3f(0,0,0));
+    	    childBody->SetAngularVelocity(Vector3f(0,0,0));
+
+            childBody->SetRotation(mat);            
+    	}
+}
