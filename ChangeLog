@@ -1,3 +1,70 @@
+2007-06-10  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp: 
+	- changed code to find correct AgentState
+	- use MoveAgent of SoccerBase to move the agent (works for the
+	  SoccerBot agent now)
+	- removed parsing and execution of "vel" parameter since it
+	  doesn't seem to make sense for an agent with several bodies
+	- cleaned up code to set AgentState parameters (existing iterator
+	  can be used to access the AgentState instead of searching for
+	  it several times)
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- replaced code in MoveAgent method with a call to 
+	  MoveAgent of SoccerBase
+	- enabled UpdateKickOff
+
+	* plugin/soccer/soccerbase/soccerbase.cpp: 
+	- had to revert back to using GetChildOfClass instead of
+	  FindChildSupportingClass in GetAgentBody since it never found
+	  the right node (not sure why...)
+	- implemented a cache for AgentStates in GetAgentState when called
+	  team index and uniform number (also checks for validity since
+	  agents may disconnect)
+	- using the GameControlServer's new GetAgentAspectList in several
+	  places now to avoid having to search the whole scene for
+	  AgentAspects
+	- caching references where ever possible
+	- implemented methods GetGameControlServer, MoveAgent, and
+	  MoveAndRotateAgent	
+
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	- added new type TAgentStateMap
+	- added new method GetGameControlServer to get a reference
+	  to the GameControlServer
+	- added method MoveAgent that moves an agent to a certain 
+	  position on the field
+	- added method MoveAndRotateAgent that does the same as MoveAgent
+	  but also rotates the agent a specified angle around the z-axis
+	  (still buggy, work in progress)
+
+	* plugin/soccer/beameffector/beameffector.cpp: 
+	- replaced moving and rotating the agent with a call
+	  to the method MoveAndRotateAgent of the SoccerBase
+	  class which implements this functionality now
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp: 
+	- using the new FindParentsSupportingClass method of the
+	  RecorderHandler instead of GetParentsSupportingClass
+
+	* lib/oxygen/physicsserver/recorderhandler.h,
+	* lib/oxygen/physicsserver/recorderhandler.cpp: 
+	- implemented method FindParentsSupportingClass that has the
+	  same functionality as GetParentsSupportingClass but uses the
+	  C++ type system instead of string comparisons (should be faster :-)
+
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp,
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.h: 
+	- added method GetAgentAspectList that returns a list of
+	  shared pointers to the AgentAspects currently registered
+	  with the GameControlServer
+
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- updated description for the agent command of the
+	  trainer protocol (vel is not allowed anymore since it
+	  doesn't make sense for an agent with more than one body)
+
 2007-06-08  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
