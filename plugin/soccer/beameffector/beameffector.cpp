@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.11.4.1 2007/06/08 00:07:36 hedayat Exp $
+   $Id: beameffector.cpp,v 1.11.4.2 2007/06/10 05:20:19 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -108,61 +108,8 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
                 mAgentState->GetTeamIndex()
                 );
 
-	Vector3f bodyPos = mBody->GetPosition();
-
-	shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-	    (((GetParent().lock())->GetParent().lock())->GetParent().lock());
-	        
-	if (parent.get()==0)
-            {
-                GetLog()->Error() << "(BeamEffector) ERROR: can't get "
-                                  << "parent node.\n";
-                return false;
-            }
-
-        Leaf::TLeafList leafList;
-
-        // get a list of all child body nodes
-        parent->ListChildrenSupportingClass<Body>(leafList, true);
-
-        if (leafList.size() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (BeamEffector) agent aspect doesn't have "
-                << "children of type Body\n";
-
+        if (!SoccerBase::MoveAndRotateAgent(mBody, pos, angle))
             return false;
-        }
-
-        Matrix mat;
-        mat.RotationZ(gDegToRad(angle));        
-
-        Leaf::TLeafList::iterator iter = leafList.begin();
-       
-        // move all child bodies 
-        for (iter;
-             iter != leafList.end();
-             ++iter
-            )
-        {            
-	    shared_ptr<Body> childBody = 
-                shared_dynamic_cast<Body>(*iter);
-	    
-    	    Vector3f childPos = childBody->GetPosition();
-
-    	    childBody->SetPosition(pos + (childPos-bodyPos));
-    	    childBody->SetVelocity(Vector3f(0,0,0));
-    	    childBody->SetAngularVelocity(Vector3f(0,0,0));
-
-            // EXPERIMENTAL
-            // We are setting an absolute rotation here! This will reset
-            // any orientation to the current rotation matrix which only has
-            // entries for a rotation around Z, which means that any other
-            // rotation will be lost. I assume this is okay, since we probably
-            // don't care about any current pose of the robot if we use beam...
-            childBody->SetRotation(mat);
-            
-    	}
     }
     
     return true;
