@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.27.8.4 2007/06/09 20:11:18 hedayat Exp $
+   $Id: soccerruleaspect.cpp,v 1.27.8.5 2007/06/10 05:21:27 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,44 +71,7 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
 void
 SoccerRuleAspect::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
 {
-    Vector3f bodyPos = agent_body->GetPosition();
-
-    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-        (((agent_body->GetParent().lock())->GetParent().lock())->GetParent().lock());
-
-    if (parent.get()==0)
-    {
-        GetLog()->Error() << "(MoveAgent) ERROR: can't get parent node.\n";
-        return;
-    }
-
-    Leaf::TLeafList leafList;
-
-    parent->ListChildrenSupportingClass<Body>(leafList, true);
-
-    if (leafList.size() == 0)
-    {
-        GetLog()->Error()
-            << "ERROR: (MoveAgent) agent aspect doesn't have "
-            << "children of type Body\n";
-
-        return;
-    }
-
-    Leaf::TLeafList::iterator iter = leafList.begin();
-
-    // move all child bodies 
-    for (iter; iter != leafList.end(); ++iter)
-    {            
-        shared_ptr<Body> childBody = 
-            shared_dynamic_cast<Body>(*iter);
-
-        Vector3f childPos = childBody->GetPosition();
-
-        childBody->SetPosition(pos + (childPos-bodyPos));
-        childBody->SetVelocity(Vector3f(0,0,0));
-        childBody->SetAngularVelocity(Vector3f(0,0,0));
-    }
+    SoccerBase::MoveAgent(agent_body, pos);
 }
 
 void
@@ -338,7 +301,7 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
-#if 0
+#if 1
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
     ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,
