@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.cpp,v 1.7 2004/04/18 16:24:21 rollmark Exp $
+   $Id: imageserver.cpp,v 1.8 2007/06/11 09:35:02 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -132,12 +132,14 @@ boost::shared_ptr<Image> ImageServer::Load(const string& inName, ILenum inType)
 
     // load the image
     ilLoad(inType, (ILstring)inName.c_str());
-
+    
+    std::cerr << "ImageServer: " << inName << "\n";
+    
     // set the file server to 0 again
     gFileServer.reset();
 
     // check for errors
-    if(HandleErrors() == true)
+    if(HandleErrors(inName) == true)
         {
             // release the image and return
             return boost::shared_ptr<Image>();
@@ -173,7 +175,7 @@ bool ImageServer::Save(const boost::shared_ptr<Image> &inImage, const string& in
 //      This routine checks for DevIL errors and logs them. The function returns
 //      'true' if an error has occured and 'false' if not.
 //
-bool ImageServer::HandleErrors()
+bool ImageServer::HandleErrors(const std::string& context)
 {
     bool ret = false;
     ILenum error;
@@ -224,7 +226,8 @@ bool ImageServer::HandleErrors()
                     break;
 
                 case IL_COULD_NOT_OPEN_FILE :
-                    msg = "could not open file";
+                    msg = "could not open file '"+context+"'";
+                    //msg = "could not open file";
                     break;
 
                 case IL_INVALID_EXTENSION :
