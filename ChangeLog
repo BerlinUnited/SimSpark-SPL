@@ -1,3 +1,9 @@
+2007-06-11  Jan Murray  <murray@uni-koblenz.de>
+
+	* imageserver.h, imageserver.cpp:
+	- Added context parameter to HandleError
+	- Used this to pass the file name from Load to HandleError
+	
 2007-06-05  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* NEWS:
@@ -65,6 +71,16 @@
 	- new bindings for the logplayer: p - pause,
 	  f - step forward, b - step backward, l - toggle
 	  forward/backward playback
+
+2007-06-02  Jan Murray  <murray@uni-koblenz.de>
+
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+	  changed setLocalTransform to SLT
+
+	* plugin/rubysceneimporter/rubysceneimporter.h,
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	  - added translation table for rsg-keywords
+	  - reverted default keywords to originals
 
 2007-06-02  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
