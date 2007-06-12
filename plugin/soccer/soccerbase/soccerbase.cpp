@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.14.4.3 2007/06/10 05:21:09 jboedeck Exp $
+   $Id: soccerbase.cpp,v 1.14.4.4 2007/06/12 00:17:09 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,8 @@
 #include <soccer/soccerruleaspect/soccerruleaspect.h>
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/ball/ball.h>
+#include <oxygen/physicsserver/space.h>
+#include <zeitgeist/leaf.h>
 
 using namespace boost;
 using namespace zeitgeist;
@@ -95,9 +97,7 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
                           shared_ptr<Body>& agent_body)
 
 {
-    //agent_body = transform->FindChildSupportingClass<oxygen::Body>(true);
-    agent_body = shared_static_cast<Body>
-        (transform->GetChildOfClass("Body",  true));
+    agent_body = transform->FindChildSupportingClass<Body>(true);
 
     if (agent_body.get() == 0)
     {
@@ -678,7 +678,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos,
 
     if (parent.get() == 0)
     {
-        agent_body->GetLog()->Error() << "(MoveAgent) ERROR: can't get parent node.\n";
+        agent_body->GetLog()->Error() << "(MoveAndRotateAgent) ERROR: can't get parent node.\n";
         return false;
     }
 
@@ -689,7 +689,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos,
     if (leafList.size() == 0)
     {
         agent_body->GetLog()->Error()
-            << "(MoveAgent) ERROR: agent aspect doesn't have "
+            << "(MoveAndRotateAgent) ERROR: agent aspect doesn't have "
             << "children of type Body\n";
 
         return false;
@@ -717,4 +717,43 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos,
 
             childBody->SetRotation(mat);            
     	}
+}
+
+salt::AABB3 SoccerBase::GetAgentBoundingBox(const zeitgeist::Leaf& base)
+{
+    salt::AABB3 boundingBox;
+    shared_ptr<Space>
+            parent = make_shared(base.FindParentSupportingClass<Space>());
+
+    if (!parent)
+    {
+        base.GetLog()->Error()
+                << "(GetAgentBoundingBox) ERROR: can't get parent node.\n";
+        return boundingBox;
+    }
+    
+    /* We can't simply use the GetWorldBoundingBox of the space node, becuase 
+     * (at least currently) it'll return a wrong answer. Currently, the space
+     * object is always at (0,0,0) which is encapsulated in the result of it's
+     * GetWorldBoundingBox method call.
+     */
+        
+    Leaf::TLeafList baseNodes;
+    parent->ListChildrenSupportingClass<BaseNode>(baseNodes);
+
+    if (baseNodes.empty())
+        base.GetLog()->Error()
+                << "(GetAgentBoundingBox) ERROR: space object doesn't have any"
+                << " children of type BaseNode.\n";
+    else
+        boundingBox = 
+            shared_static_cast<BaseNode>(*baseNodes.begin())->GetWorldBoundingBox();
+
+    for (Leaf::TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
+    {
+        shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
+        boundingBox.Encapsulate(node->GetWorldBoundingBox());
+    }
+
+    return boundingBox;
 }

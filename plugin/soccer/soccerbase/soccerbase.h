@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.7.8.3 2007/06/10 05:20:37 jboedeck Exp $
+   $Id: soccerbase.h,v 1.7.8.4 2007/06/12 00:17:09 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ namespace oxygen
 namespace salt
 {
     class Vector3f;
+    class AABB3;
 }
 
 class AgentState;
@@ -198,6 +199,10 @@ public:
     MoveAndRotateAgent(boost::shared_ptr<oxygen::Body> agent_body, 
                        const salt::Vector3f& pos, 
                        float angle);
+
+    /** returns the bounding box around the agent below the closest Space parent */
+    static salt::AABB3
+    GetAgentBoundingBox(const zeitgeist::Leaf& base);
 };
 
 #endif

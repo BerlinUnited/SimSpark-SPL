@@ -1,3 +1,15 @@
+2007-06-12  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/soccerbase/soccerbase.h: 
+	- added new method GetAgentBoundingBox
+	
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- used FindChildSupportingClass function in GetAgentBody again!
+	- implemented method GetAgentBoundingBox
+	 
+	* lib/zeitgeist/leaf.h:
+	- fixed the FindChildSupportingClass function to recurse through all children. 
+
 2007-06-10  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* plugin/soccer/trainercommandparser/trainercommandparser.cpp: 
