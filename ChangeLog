@@ -1,3 +1,12 @@
+2007-06-13  Jan Murray  <murray@uni-koblenz.de>
+
+	* Makefile.am, export.cpp:
+	  added GameTimePerceptor
+
+	* gametimeperceptor_c.cpp, gametimeperceptor.h, gametimeperceptor.cpp:
+	  added GameTimePerceptor, which senses the game time instead of
+	  the simulation time
+
 2007-06-11  Jan Murray  <murray@uni-koblenz.de>
 
 	* imageserver.h, imageserver.cpp:
