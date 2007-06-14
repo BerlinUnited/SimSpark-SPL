@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.27.8.5 2007/06/10 05:21:27 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.27.8.6 2007/06/14 18:05:02 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetBody(**i, agent_body);
-        
+
         // if agent is too close, move it away
         Vector3f new_pos = agent_body->GetPosition();
         if (sphere.Contains(new_pos))
@@ -250,10 +250,8 @@ SoccerRuleAspect::DropBall(Vector3f pos)
 
     MoveBall(pos);
 
-#if 1
     ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_LEFT);
     ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_RIGHT);
-#endif
 
     mGameState->SetPlayMode(PM_PlayOn);
 }
@@ -280,10 +278,8 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
 
-#if 1
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
-#endif
 
 #if 0
     //
@@ -301,7 +297,6 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
-#if 1
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
     ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,
@@ -329,13 +324,12 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     {
         mGameState->SetPlayMode(PM_PlayOn);
     }
-#endif
 }
 
 void
 SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
 {
-#if 0
+#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -382,7 +376,7 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
 void
 SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
 {
-#if 0
+#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -440,7 +434,7 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
 void
 SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
 {
-#if 0
+#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
