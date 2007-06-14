@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.2.6.1 2007/06/14 16:26:57 jboedeck Exp $
+   $Id: touchperceptorhandler.h,v 1.3.4.2 2007/06/14 16:26:56 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,16 +20,31 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <zeitgeist/zeitgeist.h>
-#include "soccermonitor.h"
-#include "soccerrender.h"
-#include "soccerinput.h"
-#include "soccerinputlogplayer.h"
+#ifndef TOUCHPERCEPTORHANDLER_H_
+#define TOUCHPERCEPTORHANDLER_H_
 
-ZEITGEIST_EXPORT_BEGIN()
-    ZEITGEIST_EXPORT(SoccerMonitor);
-    ZEITGEIST_EXPORT(SoccerRender);
-    ZEITGEIST_EXPORT(SoccerInput);
-    ZEITGEIST_EXPORT(SoccerInputLogPlayer);
-ZEITGEIST_EXPORT_END()
+#include <oxygen/physicsserver/contactjointhandler.h>
 
+class ForceResistancePerceptor;
+
+/** \class TouchPerceptorHandler is a ContactJointHandler that provides
+ * enough information for the ForceResistancePerceptor
+ */
+class TouchPerceptorHandler : public oxygen::ContactJointHandler
+{
+public:
+    virtual void HandleCollision(boost::shared_ptr<oxygen::Collider> collidee,
+            dContact& contact);
+
+protected:
+    virtual void OnLink();
+    virtual void OnUnlink();
+
+protected:
+    //! reference to the collision perecptor
+    boost::shared_ptr<ForceResistancePerceptor> mForceResistancePercept;
+};
+
+DECLARE_CLASS(TouchPerceptorHandler);
+
+#endif /*TOUCHPERCEPTORHANDLER_H_*/

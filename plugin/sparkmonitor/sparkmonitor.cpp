@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.9 2007/05/29 21:27:42 jamu Exp $
+   $Id: sparkmonitor.cpp,v 1.9.2.1 2007/06/14 16:26:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -189,7 +189,8 @@ void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> tra
 
     if (update)
         {
-            ss << " (setLocalTransform ";
+            //ss << " (setLocalTransform ";
+            ss << " (SLT ";
 
             for (int i=0;i<16;++i)
                 {

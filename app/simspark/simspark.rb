@@ -31,7 +31,10 @@ sparkAddFPSCamera(
 run "bindings.rb"
 
 # setup materials
+
+# change "materials.rb" to "materials-textures.rb" if you want to use textured materials
 run "materials.rb"
+
 
 #
 # uncomment for logging setup (see spark.rb for reference)

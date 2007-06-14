@@ -8,54 +8,49 @@ RELEASE News for different forums                        -*- outline -*-
 
 ** [Soccer Lists]
 
-We have just released version 0.5.4 of rcssserver3D. This release
-contains fixes for known problems (e.g. in the visionperceptor or the
-spark sample agent), updates of old plug-ins for the new simulation
-(beameffector, initeffector), and new features like a log player, and
-new perceptors. 
+We have just released version 0.5.5 of rcssserver3D. The simulator has
+been ported to MacOS, the network messages were shortened, we did some
+performance tuning, improved the log player, added a new perceptor,
+and fixed some bugs.
 
 * Important fixes:
 
-visionperceptor: 
-- patch (vision6) by Yuan to fix problems related to the local 
-  reference frame of the robot
+simspark: 
+- fixed setup of goal flags (thanks Carlos) 
+- several files were missing break statments in the physicsserver
+  directory (thanks Shivaram)
 
-soccerbot:
-- anchor of the ankle joint was set higher to avoid foot penetration
-  when doing large steps (thanks Guangbin Cui)
-
-beameffector:
-- all the bodies below the parent of the effector are moved now 
-  instead of only one (thanks Amin)
-
-initeffector:
-- move all the bodies below the parent of the effector to the initial position
-
-simspark:
-- increased goal height
-- reduced ball size and mass
-- internal rendering can be switched off without affecting timing now
-- support for ODE collision spaces was implemented by Markus
-- a 64-Bit compile issue was fixed (thanks Sander van Dijk)
-
-agentspark:
-- patch by snow to fix problems in the GetMessage function
-- sending init message in the SoccerBotBehavior
+gyrorateperceptor:
+- "rt" keyword was added to enable correct parsing of the perceptor
+  values
 
 * Features:
 
-- simspark now uses the new SingleMatInitEffector to initialize 
-  agents based on their teamname (different initial position and 
-  different uniform color)
-- simspark can record logfiles (thanks Hesham & Amin)
-- monitorspark can playback the recorded logfiles (thanks Hesham & Amin)
-- new gyro rate perceptor (thanks Hedayat)
-- new binary touch sensor
+- MacOS compatibility (please see README.MacOS file for comments)
+- individual ODE CollisionSpaces are used to encapsulate each agent and 
+  each goal now
+- the protocols for the monitor and the agents have been shortened
+- new basic importer for Wavefront OBJ files
+- textures can be enabled for the ball, the field, and the agent torso
+  (player numbers :-) )
+- several computationally expensive function calls have been replaced
+  with calls to more efficient versions
+- the log player now plays logfiles in forward and backward mode, and 
+  supports pause, and forward/backward stepping
+- a new perceptor (ForceResistancePerceptor) was implemented that gives 
+  feedback about position and resulting force due to a collision of the 
+  body the perceptor is attached to (see doc/TEXT_INSTEAD_OF_A_MANUAL.txt 
+  for details)
+- BeamEffector now takes 3 arguments: position (x and y) and angle in the
+  x-y-plane (rotation around z-axis) at the beam position (DEG)
 
-You can find the package at the usual place [1].
+You can find the package at the usual place [1]. 
 
-Please note that you should update the rcssserver3D.rb file in your
-~/.rcssserver3d/ directory manually (again).
+Please note that you will also need an additional package containing
+data files (models, textures) that is available at the same
+location. This package should be extracted in the installation
+directory of rcssserver3D (/usr/local/share/rcssserver3d if the
+default prefix has not been changed).
 
 Cheers
 Joschka (for the maintenance comittee)
@@ -66,7 +61,7 @@ Joschka (for the maintenance comittee)
 
 ** [General (SF Project News etc)]
 
-We have just released rcssserver3D-0.5.4. 
+We have just released rcssserver3D-0.5.5. 
 
 rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
@@ -76,18 +71,29 @@ in the RoboCup 3D Soccer Simulation League.
 
 Important fixes and new features:
 
-- issues concerning the local reference frame of the robot's vision
-  perceptor have been fixed
+- MacOS port has been completed
 
-- issues in the sample agent concerning message retrieval from the
-  network socket have been fixed
+- individual ODE CollisionSpaces are used to encapsulate each agent and 
+  each goal now
 
-- several effectors have been updated to be compatible with the new
-  simspark simulation
+- the protocols for the monitor and the agents have been shortened
 
-- new perceptors have been implemented (gyro rate, touch)
+- new basic importer for Wavefront OBJ files
 
-- log file recording & playback was implemented 
+- textures can be enabled for the ball, the field, and the agent torso
+  (player numbers :-) )
+
+- overall performance has been increased
+
+- the log player now plays logfiles in forward and backward mode, and 
+  supports pause, and forward/backward stepping
+
+- a new perceptor (ForceResistancePerceptor) was implemented that gives 
+  feedback about position and resulting force due to a collision of the 
+  body the perceptor is attached to
+
+- BeamEffector now takes 3 arguments: position (x and y) and angle in the
+  x-y-plane (rotation around z-axis) at the beam position (DEG)
 
 For details have a look into the ChangeLog coming with the package.
 

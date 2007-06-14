@@ -1,10 +1,10 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+/* -*- mode: c++; c-basic-indent: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.2.6.1 2007/06/14 16:26:57 jboedeck Exp $
+   $Id: gametimeperceptor_c.cpp,v 1.1.2.2 2007/06/14 16:26:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,16 +20,13 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <zeitgeist/zeitgeist.h>
-#include "soccermonitor.h"
-#include "soccerrender.h"
-#include "soccerinput.h"
-#include "soccerinputlogplayer.h"
+#include "gametimeperceptor.h"
 
-ZEITGEIST_EXPORT_BEGIN()
-    ZEITGEIST_EXPORT(SoccerMonitor);
-    ZEITGEIST_EXPORT(SoccerRender);
-    ZEITGEIST_EXPORT(SoccerInput);
-    ZEITGEIST_EXPORT(SoccerInputLogPlayer);
-ZEITGEIST_EXPORT_END()
+using namespace boost;
+using namespace oxygen;
 
+void
+CLASS(GameTimePerceptor)::DefineClass()
+{
+  DEFINE_BASECLASS(oxygen/Perceptor);
+}

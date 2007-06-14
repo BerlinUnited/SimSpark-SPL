@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.14 2007/05/31 08:02:36 jboedeck Exp $
+   $Id: soccerbase.cpp,v 1.14.2.1 2007/06/14 16:26:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -298,6 +298,8 @@ SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
     shared_ptr<Transform> parent;
     if (! GetTransformParent(base,parent))
     {
+        base.GetLog()->Error() << "(SoccerBase) ERROR: no transform parent "
+                          << "found in GetBody()\n";
         return false;
     }
 

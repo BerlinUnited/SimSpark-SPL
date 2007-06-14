@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorlogfileserver_c.cpp,v 1.1 2007/04/26 14:36:38 jboedeck Exp $
+   $Id: sparkmonitorlogfileserver_c.cpp,v 1.1.6.1 2007/06/14 16:26:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,10 +40,74 @@ FUNCTION(SparkMonitorLogFileServer, setFileName)
     return true;
 }
 
+FUNCTION(SparkMonitorLogFileServer, setStepDelay)
+{
+    int inDelay;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inDelay))
+        )
+        {
+            return false;
+        }
+
+    obj->SetStepDelay(inDelay);
+    return true;
+}
+
+FUNCTION(SparkMonitorLogFileServer, pauseMode)
+{
+    if (in.GetSize() != 0) 
+        {
+            return false;
+        }
+
+    obj->Pause();
+    return true;
+}
+
+FUNCTION(SparkMonitorLogFileServer, stepForward)
+{
+    if (in.GetSize() != 0) 
+        {
+            return false;
+        }
+
+    obj->ForwardStep();
+    return true;
+}
+
+FUNCTION(SparkMonitorLogFileServer, stepBackward)
+{
+    if (in.GetSize() != 0) 
+        {
+            return false;
+        }
+
+    obj->BackwardStep();
+    return true;
+}
+
+FUNCTION(SparkMonitorLogFileServer, playBackward)
+{
+    if (in.GetSize() != 0) 
+        {
+            return false;
+        }
+
+    obj->BackwardPlayback();
+    return true;
+}
 
 void
 CLASS(SparkMonitorLogFileServer)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/SimControlNode);
     DEFINE_FUNCTION(setFileName);
+    DEFINE_FUNCTION(pauseMode);
+    DEFINE_FUNCTION(stepForward);
+    DEFINE_FUNCTION(stepBackward);
+    DEFINE_FUNCTION(playBackward);
+    DEFINE_FUNCTION(setStepDelay);
 }

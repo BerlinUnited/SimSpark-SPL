@@ -22,21 +22,21 @@
     (def $AnkleBoxHeight 0.476)
 
     ; shanks
-    (def $ShankLength 0.56)
-    (def $ShankWidth 0.56)
+    (def $ShankLength 0.52)
+    (def $ShankWidth 0.45)
     (def $ShankHeight 0.964)
     (def $ShankMass 0.25)
 
     ; thighs
     (def $ThighLength 0.56)
-    (def $ThighWidth 0.56)
+    (def $ThighWidth 0.45)
     (def $ThighHeight 1.3)
     (def $ThighMass 0.25)
 
     ; hips
     (def $HipLength 0.273)
     (def $HipWidth 0.273)
-    (def $HipHeight 0.2)
+    (def $HipHeight 0.3)
     (def $HipMass 0.1)
 
     ; hand1
@@ -46,7 +46,7 @@
 
     ; hand2
     (def $HandBox2Length 0.242)
-    (def $HandBox2Width 0.272)
+    (def $HandBox2Width 0.265)
     (def $HandBox2Height 0.164)
 
     ; hand3
@@ -81,169 +81,207 @@
     (def $HeadRadius 0.39)
     (def $HeadMass 0.3)
 
-    ; neck
-    (def $NeckLength 0.2)
-    (def $NeckWidth 0.2)
-    (def $NeckHeight 0.4)
-    (def $NeckMass 0.1)
+    (def $UpperTorsoLength 1.37)
+    (def $UpperTorsoWidth  0.96)
+    (def $UpperTorsoHeight 1.00)
+    (def $UpperTorsoMass   1.2)
 
-    ; torso1
-    (def $TorsoBox1Length 1.37)
-    (def $TorsoBox1Width 0.96)
-    (def $TorsoBox1Height 1.41)
-    (def $TorsoBox1Mass 1.8)
-
-    ; torso2
-    (def $TorsoBox2Length 1.37)
-    (def $TorsoBox2Width 0.54)
-    (def $TorsoBox2Height 1.81)
-    (def $TorsoBox2Mass 1.8)
+    (def $LowerTorsoLength 1.32)
+    (def $LowerTorsoWidth  0.55)
+    (def $LowerTorsoHeight 0.55)
+    (def $LowerTorsoMass   0.60)
 
     (def $TorsoCylinderDirection 1)   ; oriented along x-axis
     (def $TorsoCylinderRadius 0.1)
     (def $TorsoCylinderLength 0.3)
 
+    ; 
+    ; define joint stops
+    ;
+
+    (def $Rle1Min -90)       
+    (def $Rle1Max 60)
+    (def $Rle2Min -45)
+    (def $Rle2Max 120)
+    (def $Rle3Min -75)
+    (def $Rle3Max 45)
+    (def $Rle4Min -160)
+    (def $Rle4Max 0)
+    (def $Rle5Min -90)
+    (def $Rle5Max 90)
+    (def $Rle6Min -45)
+    (def $Rle6Max 45)
+
+    (def $Lle1Min -60)
+    (def $Lle1Max 90)
+    (def $Lle2Min -45)
+    (def $Lle2Max 120)
+    (def $Lle3Min -45)
+    (def $Lle3Max 75)
+    (def $Lle4Min -160)
+    (def $Lle4Max 0)
+    (def $Lle5Min -90)
+    (def $Lle5Max 90)
+    (def $Lle6Min -45)
+    (def $Lle6Max 45)
+
+    (def $Rae1Min -90)
+    (def $Rae1Max 180)
+    (def $Rae2Min -180)
+    (def $Rae2Max 0)
+    (def $Rae3Min -135)
+    (def $Rae3Max 135)
+    (def $Rae4Min -10)
+    (def $Rae4Max 130)
+
+    (def $Lae1Min -90)
+    (def $Lae1Max 180)
+    (def $Lae2Min 0)
+    (def $Lae2Max 180)
+    (def $Lae3Min -135)
+    (def $Lae3Max 135)
+    (def $Lae4Min -10)
+    (def $Lae4Max 130)
+
     ;
     ; assemble the robot
     ;
 
-    ; torso position (absolute)
-    (def $TorsoPosX 5)
-    (def $TorsoPosY 5)
-    (def $TorsoPosZ 3.5)
-
-    ; calculate offset of the battery pack
-    (def $offsetTorsoBox2X 0.0)
-    (def $offsetTorsoBox2Y (eval -1 * (eval (eval $TorsoBox1Width / 2.0) + (eval $TorsoBox2Width / 2.0))))
-    (def $offsetTorsoBox2Z (eval -1 * (eval (eval $TorsoBox1Height / 2.0) - (eval $TorsoBox2Height / 2.0))))
+    (def $UpperTorsoPosX 5)
+    (def $UpperTorsoPosY 5)
+    (def $UpperTorsoPosZ 3.75)
 
     ; calculate offset for the left shoulder cylinder
-    (def $offsetLeftShoulderCylX (eval -1 * (eval $TorsoBox1Length / 2.0)))
+    (def $offsetLeftShoulderCylX (eval -1 * (eval $UpperTorsoLength / 2.0)))
     (def $offsetLeftShoulderCylY 0.0)
-    (def $offsetLeftShoulderCylZ (eval (eval $TorsoBox1Height / 2.0) - (eval $ShoulderHeight / 2.0)))
+    (def $offsetLeftShoulderCylZ (eval (eval $UpperTorsoHeight / 2.0) - (eval $ShoulderHeight / 2.0)))
  
     ; calculate offset for the right shoulder cylinder
-    (def $offsetRightShoulderCylX (eval $TorsoBox1Length / 2.0))
+    (def $offsetRightShoulderCylX (eval $UpperTorsoLength / 2.0))
     (def $offsetRightShoulderCylY 0.0)
-    (def $offsetRightShoulderCylZ (eval (eval $TorsoBox1Height / 2.0) - (eval $ShoulderHeight / 2.0)))
+    (def $offsetRightShoulderCylZ (eval (eval $UpperTorsoHeight / 2.0) - (eval $ShoulderHeight / 2.0)))
 
     (nd Space
 	(setName spaceman)
-					; create the torso
+
+    ; assemble the upper torso ... 
     (nd AgentAspect
+	; basics
         (setName body)
-        (setLocalPos $TorsoPosX $TorsoPosY $TorsoPosZ)
-        (importScene rsg/boxspheres/box.rsg $TorsoBox1Length $TorsoBox1Width $TorsoBox1Height $TorsoBox1Mass matDarkGrey)
+        (setLocalPos $UpperTorsoPosX $UpperTorsoPosY $UpperTorsoPosZ)
+	;(importScene rsg/boxspheres/box.rsg $UpperTorsoLength $UpperTorsoWidth $UpperTorsoHeight $UpperTorsoMass matRed)
+	(importScene rsg/agent/soccerbottorso.rsg $UpperTorsoLength $UpperTorsoWidth $UpperTorsoHeight $UpperTorsoMass)
 
-	;(nd Transform
-	 ;     (setLocalPos 0 (eval -0.5 * $TorsoBox1Width - 0.004) 0)
-	  ;    (nd Box
-	;	    (setExtents (eval 0.5 * $TorsoBox1Length) 0.0 (eval 0.5 * $TorsoBox1Height))
-	;	    (setMaterial matLeft2)
-	;      )
-	;)
 	; we want to initialize
-	;(nd InitEffector)
 	(nd SingleMatInitEffector)
-
 	;add a time perceptor
 	(nd TimePerceptor)
-
 	; install a node holding agent state data
-        (nd AgentState
-	     (setName AgentState)
-	)
-
+        (nd AgentState (setName AgentState) )
 	; add beam effector
 	(nd BeamEffector)
-
 	; add gyro rate sensor
-	(nd GyroRatePerceptor
-	      (setName torso)
-	      )
-
+	(nd GyroRatePerceptor (setName torso) )
+	; add vision sensor
 	(nd VisionPerceptor
-	     (setInterval 2)
 	     (setSenseMyPos false)
 	     (setStaticSenseAxis false)
 	     (addNoise false)
 	     )
 
-	; static cylinders for the shoulders
+	; attach left shoulder cylinder (virtual)
 	(nd Transform
-	     (setLocalPos $offsetLeftShoulderCylX $offsetLeftShoulderCylY $offsetLeftShoulderCylZ)
-	     (setLocalRotation 0 90 0)
-	     (nd CCylinder
-		   (setName leftshoulderpin)
-		   (setMaterial matDarkGrey)
-		   (setParams $TorsoCylinderRadius $TorsoCylinderLength)
-	     )
-	)
-	
+	    (setLocalPos $offsetLeftShoulderCylX $offsetLeftShoulderCylY $offsetLeftShoulderCylZ)
+	    (setLocalRotation 0 90 0)
+	    (nd CCylinder
+		(setName leftshoulderpin)
+		(setMaterial matDarkGrey)
+		(setParams $TorsoCylinderRadius $TorsoCylinderLength)
+		)
+	    )
+	; attach right shoulder cylinder (virtual)
 	(nd Transform
-	     (setLocalPos $offsetRightShoulderCylX $offsetRightShoulderCylY $offsetRightShoulderCylZ)
-	     (setLocalRotation 0 90 0)
-	     (nd CCylinder
-		   (setName rightshoulderpin)
-		   (setMaterial matDarkGrey)
-		   (setParams $TorsoCylinderRadius $TorsoCylinderLength)
-	     )
-	)
-    )
-;) ;xxx	
-    ;;; DEBUG
-    ;(nd FixedJoint
-;	  (attach ../body/boxBody 0) ; attach to the static environment
-;	  (setFixed)
-;    )
+	    (setLocalPos $offsetRightShoulderCylX $offsetRightShoulderCylY $offsetRightShoulderCylZ)
+	    (setLocalRotation 0 90 0)
+	    (nd CCylinder
+		(setName rightshoulderpin)
+		(setMaterial matDarkGrey)
+		(setParams $TorsoCylinderRadius $TorsoCylinderLength)
+		)
+	    )
+      
+	) ; done upper torso ...
+
+    (def $LowerTorsoPosX $UpperTorsoPosX)
+    (def $LowerTorsoPosY $UpperTorsoPosY)
+    (def $LowerTorsoPosZ (eval $UpperTorsoPosZ 
+				  - (eval $UpperTorsoHeight / 2.0) 
+				  - (eval $LowerTorsoHeight / 2.0) 
+				  + 0.25))
+    
+    ; assemble the lower torso ...
+    (nd Transform
+	  ; basics
+	  (setName lowerTorso)
+	  (setLocalRotation 45 0 0)
+	  (setLocalPos $LowerTorsoPosX $LowerTorsoPosY $LowerTorsoPosZ)
+	  (importScene rsg/boxspheres/box.rsg $LowerTorsoLength $LowerTorsoWidth $LowerTorsoHeight $LowerTorsoMass matGrey)
+	  
+	  (nd HingeJoint
+		(attach ../boxBody ../../body/boxBody)
+		(setAnchor 0.0 0.0 0.0)
+		(setAxis 2)
+		(setLowStopDeg 0 0.01)
+		(setHighStopDeg 0 0.01)
+		)
+	  )
 
     ;;; -------------------------------------
     ;;; HEAD
     ;;; -------------------------------------
     
+    (def $HeadPosX $UpperTorsoPosX)
+    (def $HeadPosY $UpperTorsoPosY + 0.05)
+    (def $HeadPosZ (eval $UpperTorsoPosZ + (eval $UpperTorsoHeight / 2.0 ) + 0.1 + (eval $HeadRadius / 2.0)))
+
     ; attach head
     (nd Transform
-        (setName head)
-        (setLocalPos (eval $TorsoPosX)
-		     (eval $TorsoPosY + 0.05) 
-		     (eval $TorsoPosZ + 0.1 + (eval $TorsoBox1Height / 2.0) + (eval $HeadRadius / 2.0)))
-        (importScene rsg/boxspheres/sphere.rsg $HeadRadius $HeadMass matGrey)
+	  ; basics
+	  (setName head)
+	  (setLocalPos $HeadPosX $HeadPosY $HeadPosZ )
+	  (importScene rsg/boxspheres/sphere.rsg $HeadRadius $HeadMass matDarkGrey)
 
-        ; install hinge joint to connect to the neck
-        (nd FixedJoint
-            (attach ../sphereBody ../../body/boxBody)
-	    (setFixed)
-        )
-    )
+	  ; install hinge joint to connect to the neck
+	  (nd FixedJoint
+		(attach ../sphereBody ../../body/boxBody)
+		(setFixed)
+		)
+	  )
 
     ;;; -------------------------------------
     ;;; ARMS
     ;;; -------------------------------------
 
-    (def $LeftShoulderPosX (eval $TorsoPosX - 
-				    (eval $TorsoBox1Length / 2.0) - 
-				    (eval $ShoulderLength / 2.0) - 
-				    (eval $TorsoCylinderLength / 2.0)
-			       )
-    )
-    (def $LeftShoulderPosY $TorsoPosY)
-    (def $LeftShoulderPosZ (eval $TorsoPosZ + 
-				    (eval $TorsoBox1Height / 2.0) -
-				    (eval $ShoulderHeight / 2.0)
-			       )
-    )
-
-    (def $RightShoulderPosX (eval $TorsoPosX +
-				    (eval $TorsoBox1Length / 2.0) + 
-				    (eval $ShoulderLength / 2.0) + 
-				    (eval $TorsoCylinderLength / 2.0)
-			       )
-    )
-    (def $RightShoulderPosY $TorsoPosY)
-    (def $RightShoulderPosZ $LeftShoulderPosZ)
  
-    ; left shoulder
+    ; {{{ BEGIN --- Left Shoulder (Solid Part) --- ;
+
+    ; (1) Define Position
+    (def $LeftShoulderPosX (eval $UpperTorsoPosX - 
+				 (eval $UpperTorsoLength / 2.0) - 
+				 (eval $ShoulderLength / 2.0) - 
+				 (eval $TorsoCylinderLength / 2.0)
+				 )
+	 )
+    (def $LeftShoulderPosY $UpperTorsoPosY)
+    (def $LeftShoulderPosZ (eval $UpperTorsoPosZ + 
+				 (eval $UpperTorsoHeight / 2.0) -
+				 (eval $ShoulderHeight / 2.0)
+				 )
+	 )
+
+    ; (2) Attach Left Shoulder
     (nd Transform
+	; basics
         (setName leftshoulder)
         (setLocalPos $LeftShoulderPosX $LeftShoulderPosY $LeftShoulderPosZ)
         (importScene rsg/boxspheres/box.rsg $ShoulderLength $ShoulderWidth $ShoulderHeight $ShoulderMass matDarkGrey)
@@ -254,64 +292,82 @@
             (setAnchor 0.0 0.0 0.0)   
             (setAxis1 1.0 0.0 0.0) ; move around the x-axis
             (setAxis2 0.0 1.0 0.0) ; move around the y-axis
-
-            ; enable the joint motors
+	    
+	    ; enable the joint motors
             (setMaxMotorForce 0 100)
             (setMaxMotorForce 1 100)           
 
-            ; install a perceptor
-            (nd UniversalJointPerceptor
-                (setName laj1_2)
-            )
+	    ; install a perceptor
+            (nd UniversalJointPerceptor (setName laj1_2) )
 
             ; install an effector to control the joint motors
-            (nd UniversalJointEffector
-                (setName lae1_2)
-            )
-        )
-    )
+            (nd UniversalJointEffector (setName lae1_2) )
 
-    ; right shoulder
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lae1Min)
+	    (setHighStopDeg 0 $Lae1Max)
+	    (setLowStopDeg 1 $Lae2Min)
+	    (setHighStopDeg 1 $Lae2Max)
+	    )
+	)
+
+    ; }}} END
+
+    ; {{{ BEGIN --- Left Shoulder (Solid Part) --- ;
+
+    (def $RightShoulderPosX (eval $UpperTorsoPosX +
+				  (eval $UpperTorsoLength / 2.0) + 
+				  (eval $ShoulderLength / 2.0) + 
+				  (eval $TorsoCylinderLength / 2.0)
+				  )
+	 )
+    (def $RightShoulderPosY $UpperTorsoPosY)
+    (def $RightShoulderPosZ $LeftShoulderPosZ)
+    
+    ; (2) Attach Right Shoulder
     (nd Transform
+	; basics
         (setName rightshoulder)
         (setLocalPos $RightShoulderPosX $RightShoulderPosY $RightShoulderPosZ)
         (importScene rsg/boxspheres/box.rsg $ShoulderLength $ShoulderWidth $ShoulderHeight $ShoulderMass matDarkGrey)
-        (setLocalRotation 0 0 180)
+        ;(setLocalRotation 0 0 180)
 
-            ; install universal joint to connect to the torso
-	    (nd UniversalJoint		
-                (attach ../boxBody ../../body/boxBody)
-		(setAnchor 0.0 0.0 0.0)  
-		(setAxis1 1.0 0.0 0.0) ; move around the x-axis
-		(setAxis2 0.0 1.0 0.0) ; move around the y-axis
+        ; install universal joint to connect to the torso
+	(nd UniversalJoint		
+	    (attach ../boxBody ../../body/boxBody)
+	    (setAnchor 0.0 0.0 0.0)  
+	    (setAxis1 1.0 0.0 0.0) ; move around the x-axis
+	    (setAxis2 0.0 1.0 0.0) ; move around the y-axis
 
-                ; enable the joint motors
-		(setMaxMotorForce 0 100)
-		(setMaxMotorForce 1 100)           
+	    ; enable the joint motors
+	    (setMaxMotorForce 0 100)
+	    (setMaxMotorForce 1 100)           
 
-;                ; install a perceptor
-                (nd UniversalJointPerceptor
-                    (setName raj1_2)
-		)
+            ; install a perceptor
+	    (nd UniversalJointPerceptor (setName raj1_2) )
 
-                ; install an effector to control the joint motors
-                (nd UniversalJointEffector
-                    (setName rae1_2)
-                )
+            ; install an effector to control the joint motors
+	    (nd UniversalJointEffector (setName rae1_2) )
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rae1Min)
+	    (setHighStopDeg 0 $Rae1Max)
+	    (setLowStopDeg 1 $Rae2Min)
+	    (setHighStopDeg 1 $Rae2Max)
             )
-    )
+	)
+    
+    ; }}} END 
 
+
+    ; {{{ BEGIN --- Left Upper Arm --- ;
+
+    ; (1) Define Position
     (def $LeftUpperArmPosX $LeftShoulderPosX)
-    ;(def $LeftUpperArmPosY (eval $LeftShoulderPosY + (eval $UpperarmWidth / 2.0)))
     (def $LeftUpperArmPosY (eval $LeftShoulderPosY))
     (def $LeftUpperArmPosZ (eval $LeftShoulderPosZ - (eval $ShoulderHeight / 2.0) - (eval $UpperarmHeight / 2.0)))
-
-    (def $RightUpperArmPosX $RightShoulderPosX)
-    ;(def $RightUpperArmPosY (eval $RightShoulderPosY + (eval $UpperarmWidth / 2.0)))
-    (def $RightUpperArmPosY (eval $RightShoulderPosY))
-    (def $RightUpperArmPosZ (eval $RightShoulderPosZ - (eval $ShoulderHeight / 2.0) - (eval $UpperarmHeight / 2.0)))
     
-    ; left upper arm
+    ; (2) Attach Left Upper Arm
     (nd Transform
         (setName leftupperarm)
         (setLocalPos $LeftUpperArmPosX $LeftUpperArmPosY $LeftUpperArmPosZ)
@@ -326,34 +382,42 @@
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName laj3)
-            )
+            ; install a perceptor
+            (nd HingePerceptor (setName laj3) )
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName lae3)
-            )
-        )
+            (nd HingeEffector (setName lae3) )
+	    
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lae3Min)
+	    (setHighStopDeg 0 $Lae3Max)
+	    )
 
 	; static cylinder for the elbow
 	(nd Transform
-	     (setLocalPos 0 0 (eval -1 * (eval (eval $UpperarmHeight / 2.0) + (eval $ElbowRadius / 2.0))))
-	     (setLocalRotation 0 90 0)
-	     (nd CCylinder
-		   (setMaterial matGrey)
-		   (setParams $ElbowRadius $ElbowLength)
-	     )
+	    (setLocalPos 0 0 (eval -1 * (eval (eval $UpperarmHeight / 2.0) + (eval $ElbowRadius / 2.0))))
+	    (setLocalRotation 0 90 0)
+	    (nd CCylinder	
+		(setMaterial matGrey)
+		(setParams $ElbowRadius $ElbowLength)
+		)
+	    )
 	)
-    )
 
-    ; right upper arm
+    ; }}} END
+
+    ; {{{ BEGIN --- Right Upper Arm --- ;
+
+    ; (1) Define Position
+    (def $RightUpperArmPosX $RightShoulderPosX)
+    (def $RightUpperArmPosY (eval $RightShoulderPosY))
+    (def $RightUpperArmPosZ (eval $RightShoulderPosZ - (eval $ShoulderHeight / 2.0) - (eval $UpperarmHeight / 2.0)))
+
+    ; (2) Attach Right Upper Arm
     (nd Transform
         (setName rightupperarm)
         (setLocalPos $RightUpperArmPosX $RightUpperArmPosY $RightUpperArmPosZ)
         (importScene rsg/boxspheres/box.rsg $UpperarmLength $UpperarmWidth $UpperarmHeight $UpperarmMass matGrey)
-	;(setLocalRotation 180 0 0)
 
         ; install hinge joint to connect to the shoulder
         (nd HingeJoint
@@ -364,28 +428,34 @@
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName raj3)
-            )
+            ; install a perceptor
+            (nd HingePerceptor (setName raj3) )
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName rae3)
-            )
+            (nd HingeEffector (setName rae3) )
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rae3Min)
+	    (setHighStopDeg 0 $Rae3Max)
         )
 
 	; static cylinder for the elbow
 	(nd Transform
-	     (setLocalPos 0 0 (eval -1 * (eval (eval $UpperarmHeight / 2.0) + (eval $ElbowRadius / 2.0))))
-	     (setLocalRotation 0 90 0)
-	     (nd CCylinder
-		   (setMaterial matGrey)
-		   (setParams $ElbowRadius $ElbowLength)
-	     )
+	    (setLocalPos 0 0 (eval -1 * (eval (eval $UpperarmHeight / 2.0) + (eval $ElbowRadius / 2.0))))
+	    (setLocalRotation 0 90 0)
+	    (nd CCylinder
+		(setMaterial matGrey)
+		(setParams $ElbowRadius $ElbowLength)
+		)
+	    )
 	)
-    )
 
+    ; }}} END
+
+
+    ; {{{ BEGIN --- Left Lower Arm --- ;
+
+    ; (1) Define Position 
     (def $LeftLowerArmPosX $LeftUpperArmPosX)
     (def $LeftLowerArmPosY $LeftUpperArmPosY)
     (def $LeftLowerArmPosZ (eval $LeftUpperArmPosZ -
@@ -395,18 +465,11 @@
 			       )
      )
 
-    (def $RightLowerArmPosX $RightUpperArmPosX)
-    (def $RightLowerArmPosY $RightUpperArmPosY)
-    (def $RightLowerArmPosZ (eval $RightUpperArmPosZ -
-				    (eval $UpperarmHeight / 2.0) -
-				    $ElbowRadius -
-				    (eval $LowerarmHeight / 2.0)
-			       )
-     )
-
-    ; left lower arm
+    ; (2) Attach Left Lower Arm
     (nd Transform
-        (setName leftlowerarm)
+
+	; basic configuration
+	(setName leftlowerarm)
         (setLocalPos $LeftLowerArmPosX $LeftLowerArmPosY $LeftLowerArmPosZ)
         (importScene rsg/boxspheres/box.rsg $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass matDarkGrey)
 
@@ -419,31 +482,20 @@
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName laj4)
-            )
+            ; install a perceptor
+            (nd HingePerceptor (setName laj4))
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName lae4)
-            )
+            (nd HingeEffector (setName lae4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lae4Min)
+	    (setHighStopDeg 0 $Lae4Max)
         )
 
-	; static hand
+	; attach virtual hand part
 	(nd Transform
-	     (setLocalPos (eval -1 * (eval (eval $LowerarmLength / 2.0) - (eval $HandBox1Length / 2.0) - 0.06))
-			  0.0
-			  (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox1Height / 2.0)))
-	      )
-	     (nd Box
-		   (setMaterial matGrey)
-		   (setExtents $HandBox1Length $HandBox1Width $HandBox1Height)
-	     )	     
-        )
-	
-	(nd Transform
-	     (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox2Length / 2.0) - 0.06)
+	     (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox2Length / 2.0) - 0.1)
 			  0.0
 			  (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox2Height / 2.0)))
 	      )
@@ -452,24 +504,69 @@
 		   (setExtents $HandBox2Length $HandBox2Width $HandBox2Height)
 	     )
 	)
+     )
 
-	(nd Transform
-	     (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox3Length / 2.0) - 0.06)
-			  0.0
-			  (eval -1 * (eval (eval $LowerarmHeight / 2.0) + $HandBox2Height + (eval $HandBox3Height / 2.0)))
-	      )
-	     (nd Box
-		   (setMaterial matGrey)
-		   (setExtents $HandBox3Length $HandBox3Width $HandBox3Width)
-	     )
-	)
-    )
+    ; }}} END
 
-    ; right lower arm
+
+     ; {{{ BEGIN --- Left Hand --- ;
+
+     ; (1) define hand1 position
+     (def $LeftHand1PosX (eval $LeftLowerArmPosX - (eval $LowerarmWidth / 2.0)))
+     (def $LeftHand1PosY $LeftLowerArmPosY )
+     (def $LeftHand1PosZ (eval (eval
+                             (eval $LeftLowerArmPosZ - (eval $LowerarmHeight / 2.0) ) 
+                             - (eval $HandBox1Height / 2.0) ) - 0.04 ) )
+     ; (1) define hand3 position
+     (def $LeftHand3PosX (eval $LeftLowerArmPosX + (eval $LowerarmWidth / 2.0)))
+     (def $LeftHand3PosY $LeftLowerArmPosY)
+     (def $LeftHand3PosZ (eval (eval
+                             (eval $LeftLowerArmPosZ - (eval $LowerarmHeight / 2.0) ) 
+                             - (eval $HandBox3Height / 2.0) ) - 0.04 ) )
+
+     ; (2) attach hand, part 1
+     (nd Transform
+      (setName lefthand1)
+      (setLocalPos $LeftHand1PosX $LeftHand1PosY $LeftHand1PosZ)
+      (importScene rsg/boxspheres/box.rsg $HandBox1Length $HandBox1Width $HandBox1Height 0.075 matGrey)
+
+      (nd FixedJoint
+            (attach ../boxBody ../../leftlowerarm/boxBody)
+	    (setFixed)       
+       )
+      )
+
+     ; (2) attach hand, part 2 
+     (nd Transform
+      (setName lefthand3)
+      (setLocalPos $LeftHand3PosX $LeftHand3PosY $LeftHand3PosZ)
+      (importScene rsg/boxspheres/box.rsg $HandBox3Length $HandBox3Width $HandBox3Height 0.05 matGrey)
+
+      (nd FixedJoint
+            (attach ../boxBody ../../leftlowerarm/boxBody)
+	    (setFixed)       
+       )
+      )
+
+    ; }}} END 
+
+
+    ; {{{ BEGIN --- Right Lower Arm --- ;
+
+    ; (1) Define Position
+    (def $RightLowerArmPosX $RightUpperArmPosX)
+    (def $RightLowerArmPosY $RightUpperArmPosY)
+    (def $RightLowerArmPosZ (eval $RightUpperArmPosZ -
+				    (eval $UpperarmHeight / 2.0) -
+				    $ElbowRadius -
+				    (eval $LowerarmHeight / 2.0)
+			       )
+     )
+
+    ; (2) Attach Right Lower Arm
     (nd Transform
         (setName rightlowerarm)
         (setLocalPos $RightLowerArmPosX $RightLowerArmPosY $RightLowerArmPosZ)
-	;(setLocalRotation 0 0 180)
         (importScene rsg/boxspheres/box.rsg $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass matDarkGrey)
 
         ; install hinge joint to connect to the upper arm
@@ -481,34 +578,23 @@
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName raj4)
-            )
+            ; install a perceptor
+            (nd HingePerceptor (setName raj4))
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName rae4)
-            )
+            (nd HingeEffector (setName rae4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rae4Min)
+	    (setHighStopDeg 0 $Rae4Max)
         )
 
 	; static hand
 	(nd Transform
 	      (setLocalRotation 0 0 180)
-
-	      (nd Transform
-		    (setLocalPos (eval -1 * (eval (eval $LowerarmLength / 2.0) - (eval $HandBox1Length / 2.0) - 0.06))
-				 0.0
-				 (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox1Height / 2.0)))
-		    )
-		    (nd Box
-			  (setMaterial matGrey)
-			  (setExtents $HandBox1Length $HandBox1Width $HandBox1Height)
-		    )	     
-	       )
 	
 	      (nd Transform
-		    (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox2Length / 2.0) - 0.06)
+		    (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox2Length / 2.0) - 0.1)
 				 0.0
 				 (eval -1 * (eval (eval $LowerarmHeight / 2.0) + (eval $HandBox2Height / 2.0)))
 	            )
@@ -517,32 +603,67 @@
 			  (setExtents $HandBox2Length $HandBox2Width $HandBox2Height)
 	            )
 	      )
-
-	      (nd Transform
-		    (setLocalPos (eval (eval $LowerarmLength / 2.0) - (eval $HandBox3Length / 2.0) - 0.06)
-				 0.0
-				 (eval -1 * (eval (eval $LowerarmHeight / 2.0) + $HandBox2Height + (eval $HandBox3Height / 2.0)))
-	            )
-		    (nd Box
-			  (setMaterial matGrey)
-			  (setExtents $HandBox3Length $HandBox3Width $HandBox3Width)
-	            )
-	      )
 	 )
-    )
+     )
+
+     ; }}} END
+
+
+     ; {{{ BEGIN --- Right Hand --- ;
+
+     ; (1) define hand1 position
+     (def $RightHand1PosX (eval $RightLowerArmPosX + (eval $LowerarmWidth / 2.0)))
+     (def $RightHand1PosY $RightLowerArmPosY )
+     (def $RightHand1PosZ (eval (eval
+                             (eval $RightLowerArmPosZ - (eval $LowerarmHeight / 2.0) ) 
+                             - (eval $HandBox1Height / 2.0) ) - 0.04 ) )
+     ; (1) define hand3 position
+     (def $RightHand3PosX (eval $RightLowerArmPosX - (eval $LowerarmWidth / 2.0)))
+     (def $RightHand3PosY $RightLowerArmPosY)
+     (def $RightHand3PosZ (eval (eval
+                             (eval $RightLowerArmPosZ - (eval $LowerarmHeight / 2.0) ) 
+                             - (eval $HandBox3Height / 2.0) ) - 0.04 ) )
+
+     ; (2) attach hand, part 1
+     (nd Transform
+      (setName righthand1)
+      (setLocalPos $RightHand1PosX $RightHand1PosY $RightHand1PosZ)
+      (importScene rsg/boxspheres/box.rsg $HandBox1Length $HandBox1Width $HandBox1Height 0.075 matGrey)
+
+      (nd FixedJoint
+            (attach ../boxBody ../../rightlowerarm/boxBody)
+	    (setFixed)       
+       )
+      )
+
+     ; (2) attach hand, part 2 
+     (nd Transform
+      (setName righthand3)
+      (setLocalPos $RightHand3PosX $RightHand3PosY $RightHand3PosZ)
+      (importScene rsg/boxspheres/box.rsg $HandBox3Length $HandBox3Width $HandBox3Height 0.05 matGrey)
+
+      (nd FixedJoint
+            (attach ../boxBody ../../rightlowerarm/boxBody)
+	    (setFixed)       
+       )
+      )
+
+     ; }}} END 
+
+
+
 
     ;;; -------------------------------------
     ;;; LEGS
     ;;; -------------------------------------
     
-    (def $LeftHipPosX (eval $TorsoPosX - (eval $TorsoBox1Length / 4.0) - 0.06))
-    (def $LeftHipPosY $TorsoPosY)
-    (def $LeftHipPosZ (eval $TorsoPosZ - (eval $TorsoBox1Height / 2.0) - (eval $HipHeight / 2.0)))
+    (def $LeftHipPosX (eval $LowerTorsoPosX - (eval $LowerTorsoLength / 4.0) - 0.06))
+    (def $LeftHipPosY $LowerTorsoPosY)
+    (def $LeftHipPosZ (eval $LowerTorsoPosZ - (eval $LowerTorsoHeight / 2.0 ) - (eval $HipHeight / 2.0)))
 
-    (def $RightHipPosX (eval $TorsoPosX + (eval $TorsoBox1Length / 4.0) + 0.06))
-    (def $RightHipPosY $TorsoPosY)
-    (def $RightHipPosZ (eval $TorsoPosZ - (eval $TorsoBox1Height / 2.0) - (eval $HipHeight / 2.0)))
-
+    (def $RightHipPosX (eval $LowerTorsoPosX + (eval $LowerTorsoLength / 4.0) + 0.06))
+    (def $RightHipPosY $LowerTorsoPosY)
+    (def $RightHipPosZ (eval $LowerTorsoPosZ - (eval $LowerTorsoHeight / 2.0) - (eval $HipHeight / 2.0 )))
 
     ; left hip
     (nd Transform
@@ -552,22 +673,22 @@
 
         ; install hinge joint to connect to the torso
         (nd HingeJoint
-            (attach ../boxBody ../../body/boxBody)
-            (setAnchor 0 0 (eval $HipHeight / 2.0))   
+            (attach ../boxBody ../../lowerTorso/boxBody)
+            (setAnchor 0 0 (eval $HipHeight * 0.5))   
             (setAxis 2) ; move around z-axis
             
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName llj1)
-            )
+            ; install a perceptor
+            (nd HingePerceptor (setName llj1))
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName lle1)
-            )
+            (nd HingeEffector (setName lle1))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle1Min)
+	    (setHighStopDeg 0 $Lle1Max)
         )
     )
 
@@ -579,38 +700,38 @@
 
         ; install hinge joint to connect to the torso
         (nd HingeJoint
-            (attach ../boxBody ../../body/boxBody)
-            (setAnchor 0 0 (eval $HipHeight / 2.0))   
+            (attach ../boxBody ../../lowerTorso/boxBody)
+            (setAnchor 0 0 (eval $HipHeight * 0.5))   
             (setAxis 2) ; move around z-axis
             
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName rlj1)
-            )
+            ; install a perceptor
+            (nd HingePerceptor (setName rlj1))
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName rle1)
-            )
+            (nd HingeEffector (setName rle1))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle1Min)
+	    (setHighStopDeg 0 $Rle1Max)
         )
     )
 
     (def $LeftThighPosX $LeftHipPosX)
     (def $LeftThighPosY $LeftHipPosY)
-    (def $LeftThighPosZ (eval $LeftHipPosZ - (eval $HipHeight / 2.0) - (eval $ThighHeight / 2.0)))
+    (def $LeftThighPosZ (eval $LeftHipPosZ - (eval $HipHeight / 2.0) - (eval $ThighHeight / 2.0) ))
 
     (def $RightThighPosX $RightHipPosX)
     (def $RightThighPosY $RightHipPosY)
-    (def $RightThighPosZ (eval $RightHipPosZ - (eval $HipHeight / 2.0) - (eval $ThighHeight / 2.0)))
+    (def $RightThighPosZ (eval $RightHipPosZ - (eval $HipHeight / 2.0) - (eval $ThighHeight / 2.0) ))
 
     ; left thigh
     (nd Transform
         (setName leftthigh)
         (setLocalPos $LeftThighPosX $LeftThighPosY $LeftThighPosZ)
-        (importScene rsg/boxspheres/box.rsg $ThighLength $ThighWidth $ThighHeight $ThighMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $ThighLength $ThighWidth $ThighHeight $ThighMass matDarkGrey)
 
         ; install hinge joint to connect to the torso
         (nd UniversalJoint
@@ -623,23 +744,36 @@
             (setMaxMotorForce 0 100)
             (setMaxMotorForce 1 100)           
 
-;            ; install a perceptor
-            (nd UniversalJointPerceptor
-                (setName llj2_3)
-            )
+            ; install a perceptor
+            (nd UniversalJointPerceptor (setName llj2_3))
 
             ; install an effector to control the joint motors
-            (nd UniversalJointEffector
-                (setName lle2_3)
-            )
+            (nd UniversalJointEffector (setName lle2_3))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle2Min)
+	    (setHighStopDeg 0 $Lle2Max)
+	    (setLowStopDeg 1 $Lle3Min)
+	    (setHighStopDeg 1 $Lle3Max)
         )
+
+        ; attach left knee cylinder (virtual)
+	(nd Transform
+	      (setLocalPos 0 0 (eval (eval $ThighHeight * -0.5) - 0.025))
+	      (setLocalRotation 0 90 0)
+	      (nd CCylinder
+		    (setMaterial matRed)
+		    (setParams 0.1 (eval $ThighLength - 0.2))
+		    )
+	      )
     )
+
 
     ; right thigh
     (nd Transform
         (setName rightthigh)
         (setLocalPos $RightThighPosX $RightThighPosY $RightThighPosZ)
-        (importScene rsg/boxspheres/box.rsg $ThighLength $ThighWidth $ThighHeight $ThighMass matGrey)
+        (importScene rsg/boxspheres/box.rsg $ThighLength $ThighWidth $ThighHeight $ThighMass matDarkGrey)
 
         ; install hinge joint to connect to the torso
         (nd UniversalJoint
@@ -652,15 +786,27 @@
             (setMaxMotorForce 0 100)
             (setMaxMotorForce 1 100)           
 
-;            ; install a perceptor
-            (nd UniversalJointPerceptor
-                (setName rlj2_3)
-            )
+            ; install a perceptor
+            (nd UniversalJointPerceptor (setName rlj2_3))
 
             ; install an effector to control the joint motors
-            (nd UniversalJointEffector
-                (setName rle2_3)
-            )
+            (nd UniversalJointEffector (setName rle2_3))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle2Min)
+	    (setHighStopDeg 0 $Rle2Max)
+	    (setLowStopDeg 1 $Rle3Min)
+	    (setHighStopDeg 1 $Rle3Max)
+
+        ; attach left knee cylinder (virtual)
+	(nd Transform
+	      (setLocalPos 0 0 (eval (eval $ThighHeight * -0.5) - 0.025))
+	      (setLocalRotation 0 90 0)
+	      (nd CCylinder
+		    (setMaterial matRed)
+		    (setParams 0.1 (eval $ThighLength - 0.2))
+		    )
+	      )
         )
     )
 
@@ -687,15 +833,16 @@
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName llj4)
+            ; install a perceptor
+            (nd HingePerceptor (setName llj4)
             )
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName lle4)
-            )
+            (nd HingeEffector (setName lle4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle4Min)
+	    (setHighStopDeg 0 $Lle4Max)
         )
     )
 
@@ -714,15 +861,15 @@
             ; enable the joint motors
             (setMaxMotorForce 0 100)
 
-;            ; install a perceptor
-            (nd HingePerceptor
-                (setName rlj4)
-            )
+            ; install a perceptor
+            (nd HingePerceptor (setName rlj4))
 
             ; install an effector to control the joint motors
-            (nd HingeEffector
-                (setName rle4)
-            )
+            (nd HingeEffector (setName rle4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle4Min)
+	    (setHighStopDeg 0 $Rle4Max)
         )
     )
 
@@ -733,33 +880,39 @@
 		     $LeftShankPosY
 		     (eval $LeftShankPosZ - (eval $ShankHeight / 2.0) - (eval $FootHeight / 2.0) - 0.05)
 	 )
-	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
 
 	; install touch perceptor
-	(nd TouchPerceptor
-	      (setName lf)
+	;(nd TouchPerceptor (setName lf))
+
+	; install FRP
+	(nd ForceResistancePerceptor
+		(setName lf)
 	)
+
+	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
 
         ; install hinge joint to connect to the shank
         (nd UniversalJoint
-            (attach ../boxBody ../../leftshank/boxBody)
-            (setAnchor 0.0 0.0 (eval $FootHeight * 3.0))   
-            (setAxis1 1.0 0.0 0.0) ; move around the x-axis
-            (setAxis2 0.0 1.0 0.0) ; move around the y-axis
+           (attach ../boxBody ../../leftshank/boxBody)
+           (setAnchor 0.0 0.0 (eval $FootHeight * 3.0))   
+           (setAxis1 1.0 0.0 0.0) ; move around the x-axis
+           (setAxis2 0.0 1.0 0.0) ; move around the y-axis
 
-            ; enable the joint motors
+           ; enable the joint motors
            (setMaxMotorForce 0 100)
            (setMaxMotorForce 1 100)           
 
-;            ; install a perceptor
-          (nd UniversalJointPerceptor
-              (setName llj5_6)
-         )
+            ; install a perceptor
+            (nd UniversalJointPerceptor (setName llj5_6))
 
             ; install an effector to control the joint motors
-            (nd UniversalJointEffector
-                (setName lle5_6)
-            )
+            (nd UniversalJointEffector (setName lle5_6))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle5Min)
+	    (setHighStopDeg 0 $Lle5Max)
+	    (setLowStopDeg 1 $Lle6Min)
+	    (setHighStopDeg 1 $Lle6Max)
         )
 
 	; static box at the back of the foot
@@ -782,14 +935,17 @@
 		     $RightShankPosY
 		     (eval $RightShankPosZ - (eval $ShankHeight / 2.0) - (eval $FootHeight / 2.0) - 0.05)
 	 )
-        (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
-					
-        ; install touch perceptor
-	(nd TouchPerceptor
-	      (setName rf)
-	)
-	
 
+        ; install touch perceptor
+	;(nd TouchPerceptor (setName rf))
+
+	; install FRP
+	(nd ForceResistancePerceptor
+		(setName lf)
+	)
+
+        (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
+						
         ; install hinge joint to connect to the shank
         (nd UniversalJoint
             (attach ../boxBody ../../rightshank/boxBody)
@@ -801,17 +957,17 @@
             (setMaxMotorForce 0 100)
             (setMaxMotorForce 1 100)           
 
-;            ; install a perceptor
-            (nd UniversalJointPerceptor
-                (setName rlj5_6)
-            )
+            ; install a perceptor
+            (nd UniversalJointPerceptor (setName rlj5_6))
 
             ; install an effector to control the joint motors
-            (nd UniversalJointEffector
-                (setName rle5_6)
-            )
+            (nd UniversalJointEffector (setName rle5_6))
 
-	    
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle5Min)
+	    (setHighStopDeg 0 $Rle5Max)
+	    (setLowStopDeg 1 $Rle6Min)
+	    (setHighStopDeg 1 $Rle6Max)
         )
 
 	; static box at the back of the foot
@@ -826,5 +982,6 @@
 	     )
 	)
     )
+
 ) ; of space
 ) ; EOF

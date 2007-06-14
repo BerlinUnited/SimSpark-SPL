@@ -68,6 +68,7 @@ def sparkSetupMonitorLogPlayer
   monitorClient = new('SparkMonitorLogFileServer', 
 		      $serverPath+'simulation/SparkMonitorLogFileServer')
   monitorClient.setFileName($logPlayerFile)
+  monitorClient.setStepDelay(33000)
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
   rubySceneImporter.setUnlinkOnCompleteScenes(true);
@@ -114,7 +115,7 @@ def sparkSetupServer
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-  simulationServer.setMultiThreads(true);
+  simulationServer.setMultiThreads(false);
   simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
   # set port and socket type for agent control

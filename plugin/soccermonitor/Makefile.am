@@ -8,12 +8,15 @@ soccermonitor_la_SOURCES = export.cpp \
 	soccerrender.cpp \
 	soccerrender_c.cpp \
 	soccerinput.cpp \
-	soccerinput_c.cpp
+	soccerinput_c.cpp \
+    soccerinputlogplayer.cpp \
+    soccerinputlogplayer_c.cpp
 
 nobase_libpkginclude_HEADERS = \
 	soccermonitor.h \
 	soccerrender.h \
-	soccerinput.h
+	soccerinput.h \
+    soccerinputlogplayer.h
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/soccermonitor

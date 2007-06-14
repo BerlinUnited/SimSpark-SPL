@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.h,v 1.9 2004/04/18 16:24:21 rollmark Exp $
+   $Id: imageserver.h,v 1.9.10.1 2007/06/14 16:26:55 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ public:
 
 private:
     /** some internal error checking */
-    bool    HandleErrors();
+    bool    HandleErrors(const std::string& context="");
 };
 
 DECLARE_CLASS(ImageServer);

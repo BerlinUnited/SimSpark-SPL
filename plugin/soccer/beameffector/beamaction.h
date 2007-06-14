@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beamaction.h,v 1.2 2004/02/12 14:07:25 fruit Exp $
+   $Id: beamaction.h,v 1.2.12.1 2007/06/14 16:26:56 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,16 +28,28 @@
 class BeamAction : public oxygen::ActionObject
 {
 public:
-    BeamAction(const std::string& predicate, salt::Vector3f pos)
-        : ActionObject(predicate), mPos(pos) {}
+    BeamAction(const std::string& predicate, float posX, float posY, float xyangle)
+        : ActionObject(predicate), mPosX(posX), mPosY(posY), mXYAngle(xyangle) {}
     virtual ~BeamAction() {}
 
-    /** returns the stored positin */
-    const salt::Vector3f& GetPosition() { return mPos; }
+    /** returns x coord of the position the agent wants to beam to */
+    const float GetPosX() { return mPosX; }
+
+    /** returns x coord of the position the agent wants to beam to */
+    const float GetPosY() { return mPosY; }
+
+    /** returns the stored angle in the x-y-plane */
+    const float GetXYAngle() { return mXYAngle; }
 
 protected:
-    /** the position to beam the agent to */
-    salt::Vector3f mPos;
+    /** the x coord of the position to beam the agent to */
+    float mPosX;
+
+    /** the y coord of the position to beam the agent to */
+    float mPosY;
+
+    /** the angle in the x-y-plane at the position to beam the agent to */
+    float mXYAngle;
 };
 
 #endif // BEAMACTION_H

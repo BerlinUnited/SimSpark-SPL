@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.17 2005/10/14 11:04:01 jamu Exp $
+   $Id: leaf.h,v 1.17.6.1 2007/06/14 16:26:56 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -113,19 +113,22 @@ public:
     {
         TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
         for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
+        {
+            // check if we have found a match and return it
+            boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+            if (child.get() != 0)
             {
-                // check if we have found a match and return it
-                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
-                if (child.get() != 0)
-                    {
-                        return child;
-                    }
-
-                if (recursive)
-                    {
-                        return (*i)->FindChildSupportingClass<CLASS>(recursive);
-                    }
+                return child;
             }
+
+            if (recursive)
+            {
+                boost::shared_ptr<CLASS> result = 
+                    (*i)->FindChildSupportingClass<CLASS>(recursive);
+                if (result)
+                    return result;                
+            }
+        }
 
         return boost::shared_ptr<CLASS>();
     }

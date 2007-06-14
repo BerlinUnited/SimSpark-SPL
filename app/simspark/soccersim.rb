@@ -43,13 +43,15 @@ addSoccerVar('AgentMaxSpeed', 10.0)
 # ball parameters
 addSoccerVar('BallRadius', 0.4)
 #addSoccerVar('BallDensity',2)
-addSoccerVar('BallMass',0.2) # FIFA: 410-450 g
+addSoccerVar('BallMass',0.43) # FIFA: 410-450 g
 
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
 addSoccerVar('RuleKickInPauseTime',1.0)
 addSoccerVar('RuleHalfTime',5.0 * 60)
 addSoccerVar('RuleDropBallTime',30)
+addSoccerVar('SingleHalfTime', false)
+addSoccerVar('UseOffside',false)
 
 scene = get($scenePath)
 scene.importScene('rsg/agent/soccer.rsg')
@@ -58,7 +60,7 @@ scene.importScene('rsg/agent/soccer.rsg')
 gameControlServer = get($serverPath+'gamecontrol')
 gameControlServer.initControlAspect('GameStateAspect')
 gameControlServer.initControlAspect('BallStateAspect')
-# gameControlServer.initControlAspect('SoccerRuleAspect')
+#gameControlServer.initControlAspect('SoccerRuleAspect')
 
 # init monitorItems to transmit game state information
 monitorServer = get($serverPath+'monitor')
