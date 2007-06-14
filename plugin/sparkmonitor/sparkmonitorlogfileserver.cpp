@@ -173,6 +173,7 @@ void SparkMonitorLogFileServer::ParseCustomPredicates(sexp_t* sexp)
     // get list of registered CustomMonitor objects
     TLeafList customList;
     ListChildrenSupportingClass<CustomMonitor>(customList);
+    customList.push_back(GetCore()->Get("/sys/server/simulation/SparkMonitorClient/SoccerMonitor"));
 
     if (customList.empty())
         {
