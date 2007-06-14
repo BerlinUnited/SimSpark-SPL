@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceeffector.h,v 1.4 2004/02/12 14:07:24 fruit Exp $
+   $Id: forceeffector.h,v 1.5 2007/06/14 17:55:18 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,9 +34,6 @@ public:
     ForceEffector();
     virtual ~ForceEffector();
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
-
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "force"; }
 
@@ -49,6 +46,10 @@ public:
 
     /** remove the reference to the agents body node */
     virtual void OnUnlink();
+
+protected:
+    /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 protected:
     /** the reference to the parents body node */

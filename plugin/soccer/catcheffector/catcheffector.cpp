@@ -56,14 +56,14 @@ CatchEffector::MoveBall(const Vector3f& pos)
     mBallBody->SetAngularVelocity(Vector3f(0,0,0));
 }
 
-bool
-CatchEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+CatchEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // this should also include the case when there is no ball
     // (because then there will be no body, neither).
-    if (mBallBody.get() == 0)
+    if (mAction.get() ==0 || mBallBody.get() == 0)
     {
-        return false;
+        return;
     }
 
     if (mAgent.get() == 0)
@@ -71,7 +71,7 @@ CatchEffector::Realize(boost::shared_ptr<ActionObject> action)
         GetLog()->Error()
             << "ERROR: (CatchEffector) parent node is not derived "
             << "from BaseNode\n";
-        return false;
+        return;
     }
 
     if (mAgentState.get() == 0)
@@ -79,23 +79,23 @@ CatchEffector::Realize(boost::shared_ptr<ActionObject> action)
         GetLog()->Error()
             << "ERROR: (CatchEffector) parent node is not derived "
             << "from BaseNode\n";
-        return false;
+        return;
     }
 
     shared_ptr<CatchAction> catchAction =
-        shared_dynamic_cast<CatchAction>(action);
-
+        shared_dynamic_cast<CatchAction>(mAction);
+    mAction.reset();
     if (catchAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (CatchEffector) cannot realize an unknown "
             << "ActionObject\n";
-        return false;
+        return;
     }
 
     if (mAgentState->GetUniformNumber() != 1)
     {
-        return true;
+        return;
     }
 
     Vector3f pos = mBallBody->GetWorldTransform().Pos();
@@ -103,14 +103,14 @@ CatchEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         if (! mLeftPenaltyArea.Contains(Vector2f(pos[0], pos[1])))
         {
-            return true;
+            return;
         }
     }
     else
     {
         if (! mRightPenaltyArea.Contains(Vector2f(pos[0], pos[1])))
         {
-            return true;
+            return;
         }
     }
 
@@ -126,7 +126,7 @@ CatchEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         // ball is out of reach, or player is in the air:
         // catch has no effect
-        return true;
+        return;
     }
 
     Vector3f ballPos = mAgent->GetWorldTransform().Pos();
@@ -146,8 +146,6 @@ CatchEffector::Realize(boost::shared_ptr<ActionObject> action)
         2.0, 5.0, TI_RIGHT, mAgentState);
 
     MoveBall(ballPos);
-
-    return true;
 }
 
 shared_ptr<ActionObject>

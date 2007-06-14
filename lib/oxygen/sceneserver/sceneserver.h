@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.h,v 1.9 2004/04/30 09:32:30 rollmark Exp $
+   $Id: sceneserver.h,v 1.10 2007/06/14 17:55:19 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include <boost/thread/recursive_mutex.hpp>
 
 namespace oxygen
 {
@@ -76,6 +77,12 @@ public:
     /** updates the state of the current active scene (deltaTime is in
         seconds) */
     void Update(float deltaTime);
+
+    void PrePhysicsUpdate(float deltaTime);
+
+    void PhysicsUpdate(float deltaTime);
+
+    void PostPhysicsUpdate();
 
     /** imports a scene from a file below the given BaseNode */
     bool ImportScene(const std::string& fileName,
@@ -129,6 +136,9 @@ private:
         value is incremented each cycle to avoid a resetting
      */
     static int mTransformMark;
+
+    // mutex of the ODE
+    boost::recursive_mutex mMutex;
 };
 
 DECLARE_CLASS(SceneServer);

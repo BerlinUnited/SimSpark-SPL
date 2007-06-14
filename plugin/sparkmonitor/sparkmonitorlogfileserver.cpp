@@ -131,10 +131,11 @@ void SparkMonitorLogFileServer::StartCycle()
         {
             ParseMessage(msg);
         }
-
+    
     usleep(mStepDelay);
 
     mForwardStep = false;
+
 }
 
 void SparkMonitorLogFileServer::ParseCustomPredicates(sexp_t* sexp, PredicateList& pList)

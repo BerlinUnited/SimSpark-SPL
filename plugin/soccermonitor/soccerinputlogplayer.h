@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinputlogplayer.h,v 1.1 2007/06/03 14:51:52 jboedeck Exp $
+   $Id: soccerinputlogplayer.h,v 1.2 2007/06/14 17:55:18 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

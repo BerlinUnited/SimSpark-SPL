@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.3 2004/12/22 15:58:26 rollmark Exp $
+   $Id: simulationserver.h,v 1.4 2007/06/14 17:55:19 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -118,6 +118,13 @@ public:
     /** returns the current simulation cycle */
     int GetCycle();
 
+    bool isExit() const { return mExit; }
+
+    float GetSumDeltaTime() const { return mSumDeltaTime; }
+
+    /** set the simulation run in multi-threads or in a signal thread */
+    void SetMultiThreads(bool isMThreas);
+
 protected:
     virtual void OnLink();
     virtual void OnUnlink();
@@ -135,6 +142,8 @@ protected:
 
     /** SIGINT handler used to catch ctrl-C */
     static void CatchSignal(int sig_num);
+    
+    void Loops();
 
 protected:
     /** the argc parameter passed to Run() */
@@ -173,6 +182,9 @@ protected:
 
     /** a cached reference to the SceneServer */
     boost::shared_ptr<SceneServer> mSceneServer;
+
+    /** indicates the simulation run in multi-threads or single thread */
+    bool mMultiThreads;
 };
 
 DECLARE_CLASS(SimulationServer);

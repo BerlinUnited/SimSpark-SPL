@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.12 2007/06/02 10:20:38 jboedeck Exp $
+   $Id: beameffector.cpp,v 1.13 2007/06/14 17:55:18 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,26 +46,27 @@ isfinite( float f )
 }
 #endif
 
-bool
-BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     if (
+        (mAction.get() == 0) ||
         (mBody.get() == 0) ||
         (mGameState.get() == 0) ||
         (mAgentState.get() == 0)
         )
     {
-        return false;
+        return;
     }
 
     shared_ptr<BeamAction> beamAction =
-        shared_dynamic_cast<BeamAction>(action);
-
+        shared_dynamic_cast<BeamAction>(mAction);
+   mAction.reset();
     if (beamAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (BeamEffector) cannot realize an unknown ActionObject\n";
-        return false;
+        return;
     }
 
     // the beam effector only has an effect in PM_BeforeKickOff
@@ -83,7 +84,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
             (! isfinite(pos[1]))
             )
             {
-                return false;
+                return;
             }
 
         // an agent can only beam within it's own field half
@@ -117,7 +118,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
             {
                 GetLog()->Error() << "(BeamEffector) ERROR: can't get "
                                   << "parent node.\n";
-                return false;
+                return;
             }
 
         Leaf::TLeafList leafList;
@@ -131,7 +132,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
                 << "ERROR: (BeamEffector) agent aspect doesn't have "
                 << "children of type Body\n";
 
-            return false;
+            return;
         }
 
         Matrix mat;
@@ -150,7 +151,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
 	    
     	    Vector3f childPos = childBody->GetPosition();
 
-    	    childBody->SetPosition(pos + (childPos-bodyPos));
+    	    childBody->SetPosition(pos + mat.Rotate(childPos-bodyPos));
     	    childBody->SetVelocity(Vector3f(0,0,0));
     	    childBody->SetAngularVelocity(Vector3f(0,0,0));
 
@@ -164,8 +165,6 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
             
     	}
     }
-    
-    return true;
 }
 
 shared_ptr<ActionObject>

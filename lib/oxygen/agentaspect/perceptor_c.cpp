@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptor_c.cpp,v 1.5 2004/04/11 11:42:39 fruit Exp $
+   $Id: perceptor_c.cpp,v 1.6 2007/06/14 17:55:19 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,9 +41,26 @@ FUNCTION(Perceptor,setPredicateName)
     return true;
 }
 
+FUNCTION(Perceptor, setInterval)
+{
+    unsigned int inInterval;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inInterval))
+         )
+    {
+        return false;
+    }
+
+    obj->SetInterval(inInterval);
+    return true;
+}
+
 void
 CLASS(Perceptor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
     DEFINE_FUNCTION(setPredicateName);
+    DEFINE_FUNCTION(setInterval);
 }

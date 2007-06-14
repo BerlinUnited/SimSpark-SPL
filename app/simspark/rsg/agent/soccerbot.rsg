@@ -882,7 +882,12 @@
 	 )
 
 	; install touch perceptor
-	(nd TouchPerceptor (setName lf))
+	;(nd TouchPerceptor (setName lf))
+
+	; install FRP
+	(nd ForceResistancePerceptor
+		(setName lf)
+	)
 
 	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
 
@@ -932,7 +937,12 @@
 	 )
 
         ; install touch perceptor
-	(nd TouchPerceptor (setName rf))
+	;(nd TouchPerceptor (setName rf))
+
+	; install FRP
+	(nd ForceResistancePerceptor
+		(setName rf)
+	)
 
         (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
 						

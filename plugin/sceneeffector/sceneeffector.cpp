@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: sceneeffector.cpp,v 1.2 2006/12/11 10:45:37 jboedeck Exp $
+$Id: sceneeffector.cpp,v 1.3 2007/06/14 17:55:18 jboedeck Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,17 +39,21 @@ SceneEffector::~SceneEffector()
 {
 }
 
-bool SceneEffector::Realize(boost::shared_ptr<ActionObject> action)
+void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
+    if ( mAction.get() == 0 )
+        return;
+
     shared_ptr<SceneAction> sceneAction =
-        shared_dynamic_cast<SceneAction>(action);
+        shared_dynamic_cast<SceneAction>(mAction);
+    mAction.reset();
 
     if (sceneAction.get() == 0)
         {
             GetLog()->Error()
                 << "(SceneEffector) ERROR: cannot realize "
                 << "an unknown ActionObject\n";
-            return false;
+            return;
         }
 
     shared_ptr<AgentAspect> aspect =GetAgentAspect();
@@ -58,13 +62,13 @@ bool SceneEffector::Realize(boost::shared_ptr<ActionObject> action)
         {
             GetLog()->Error()
                 << "(SceneEffector) ERROR: cannot get AgentAspect\n";
-            return false;
+            return;
         }
 
     shared_ptr<ParameterList> parameter(new ParameterList());
 
     aspect->ImportScene(sceneAction->GetScene(), parameter);
-    return true;
+
 }
 
 shared_ptr<ActionObject>

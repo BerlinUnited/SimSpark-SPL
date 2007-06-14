@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.9 2007/05/30 18:40:22 jboedeck Exp $
+   $Id: initeffector.cpp,v 1.10 2007/06/14 17:55:18 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,25 +43,26 @@ InitEffector::~InitEffector()
 {
 }
 
-bool
-InitEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-    if (
+    if ( ( mAction.get() == 0 ) ||
         (mGameState.get() == 0) ||
         (mAgentAspect.get() == 0)
         )
         {
-            return false;
+            return;
         }
 
     shared_ptr<InitAction> initAction =
-        shared_dynamic_cast<InitAction>(action);
+        shared_dynamic_cast<InitAction>(mAction);
+    mAction.reset();
 
     if (initAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (InitEffector) cannot realize an unknown ActionObject\n";
-        return false;
+        return;
     }
 
     // search for the AgentState
@@ -72,7 +73,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         GetLog()->Error()
             << "ERROR: (InitEffector) cannot find AgentState\n";
-        return false;
+        return;
     }
 
     // register the uniform number and team index to the GameStateAspect
@@ -95,7 +96,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
             GetLog()->Error()
                 << "ERROR: (InitEffector) can not get parent of current agent aspect\n";
 
-    	    return false;
+    	    return;
 	}
 
     Leaf::TLeafList leafList;  
@@ -112,7 +113,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
                 << "ERROR: (InitEffector) agent aspect doesn't have "
                 << "children of type Body \n";
 
-            return false;
+            return;
         }
 
     Leaf::TLeafList::iterator iter = leafList.begin();
@@ -133,8 +134,7 @@ InitEffector::Realize(boost::shared_ptr<ActionObject> action)
             childBody->SetVelocity(Vector3f(0,0,0));
             childBody->SetAngularVelocity(Vector3f(0,0,0));
         }
-       
-    return true;
+
 }
 
 shared_ptr<ActionObject>

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentcontrol.cpp,v 1.2 2004/05/06 09:37:39 rollmark Exp $
+   $Id: agentcontrol.cpp,v 1.3 2007/06/14 17:55:19 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ void AgentControl::ClientDisconnect(shared_ptr<Client> client)
             return;
         }
 
-    mGameControlServer->AgentDisappear(client->id);
+    mGameControlServer->pushDisappearedAgent(client->id);
 }
 
 void AgentControl::StartCycle()

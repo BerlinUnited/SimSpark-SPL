@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.h,v 1.2 2004/12/22 15:54:42 rollmark Exp $
+   $Id: simcontrolnode.h,v 1.3 2007/06/14 17:55:19 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define OXYGEN_SIMCONTROLNODE_H
 
 #include <zeitgeist/node.h>
+#include <boost/thread/thread.hpp>
 
 namespace oxygen
 {
@@ -62,10 +63,31 @@ public:
 
     /** called when the current simulation cycle ends */
     virtual void EndCycle() {};
+    
+    virtual void Run();
+    
+    boost::mutex mMutex;
+    
+    float GetTime() const { return mTime; }
+    
+    void SetStep(float step) { mStep = step; }
+    void SetTime(float time) { mTime = time; }
+
+    void SetSimTime(float now);
+
+    virtual void Wait(boost::mutex::scoped_lock& lock);
+    
+    void NotifyOne() { mCond.notify_one(); }
 
 protected:
     /** returns a reference to the SimulationServer */
     boost::shared_ptr<SimulationServer> GetSimulationServer();
+    
+    float mTime;
+    
+    float mStep;
+    
+    boost::condition mCond;
 };
 
 DECLARE_CLASS(SimControlNode);

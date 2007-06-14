@@ -166,25 +166,8 @@ string SoccerbotBehavior::Think(const std::string& message)
 
     //testing the beam effector with rotation
     //position (x,y) and angle in the x-y-plane (DEG)
-    //static int rot = 0;
-    //static int unsigned count = 0;
-
-    //if (rot > 360) rot = 0;
-
-    //stringstream test("");
-    
-    //if (count == 500) 
-    //    {
-    //        test << "(beam -10.0 -10.0 " << rot << ")";
-    //        cout << count << endl;
-    //        cout << "Beaming to " << test.str() << endl;
-    //        rot += 90;
-    //        count = 0;
-    //    }
-    
-    //++count;
-    
-    //return test.str();
+    //cout << "Beaming..." << endl;
+    //return "(beam -10.0 -10.0 45.0)";
 
     static const float gain = 0.1;
     static BehaviorState leftstate = ARM_UP;
