@@ -55,6 +55,7 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
     jersey.push_back("rightshoulder");
     jersey.push_back("leftshank");
     jersey.push_back("rightshank");
+    jersey.push_back("lowerTorso");
     
     // search for the AgentState
     shared_ptr<AgentState> state = shared_static_cast<AgentState>
