@@ -107,8 +107,8 @@
     (def $Rle3Max 45)
     (def $Rle4Min -160)
     (def $Rle4Max 0)
-    (def $Rle5Min -60)
-    (def $Rle5Max 60)
+    (def $Rle5Min -90)
+    (def $Rle5Max 90)
     (def $Rle6Min -45)
     (def $Rle6Max 45)
 
@@ -120,8 +120,8 @@
     (def $Lle3Max 75)
     (def $Lle4Min -160)
     (def $Lle4Max 0)
-    (def $Lle5Min -60)
-    (def $Lle5Max 60)
+    (def $Lle5Min -90)
+    (def $Lle5Max 90)
     (def $Lle6Min -45)
     (def $Lle6Max 45)
 
