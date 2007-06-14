@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.14.4.4 2007/06/12 00:17:09 hedayat Exp $
+   $Id: soccerbase.cpp,v 1.14.4.5 2007/06/14 18:04:23 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -722,8 +722,8 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos,
 salt::AABB3 SoccerBase::GetAgentBoundingBox(const zeitgeist::Leaf& base)
 {
     salt::AABB3 boundingBox;
-    shared_ptr<Space>
-            parent = make_shared(base.FindParentSupportingClass<Space>());
+
+    shared_ptr<Space> parent = base.FindParentSupportingClass<Space>().lock();
 
     if (!parent)
     {
