@@ -166,8 +166,25 @@ string SoccerbotBehavior::Think(const std::string& message)
 
     //testing the beam effector with rotation
     //position (x,y) and angle in the x-y-plane (DEG)
-    //cout << "Beaming..." << endl;
-    //return "(beam -10.0 -10.0 45.0)";
+    //static int rot = 0;
+    //static int unsigned count = 0;
+
+    //if (rot > 360) rot = 0;
+
+    //stringstream test("");
+    
+    //if (count == 500) 
+    //    {
+    //        test << "(beam -10.0 -10.0 " << rot << ")";
+    //        cout << count << endl;
+    //        cout << "Beaming to " << test.str() << endl;
+    //        rot += 90;
+    //        count = 0;
+    //    }
+    
+    //++count;
+    
+    //return test.str();
 
     static const float gain = 0.1;
     static BehaviorState leftstate = ARM_UP;
@@ -217,9 +234,9 @@ string SoccerbotBehavior::Think(const std::string& message)
     {
         case ARM_UP:
             curAngle = mUniversalJointSenseMap[JID_RARM_1_2].angle2;
-            if (curAngle < 90.0)
+            if (curAngle > -90.0)
             {
-                newAngle = gain * (90.0 - curAngle);
+                newAngle = gain * (-90.0 - curAngle);
                 ss << "(rae1_2 0.0 " << newAngle << ")";
             }
             else
