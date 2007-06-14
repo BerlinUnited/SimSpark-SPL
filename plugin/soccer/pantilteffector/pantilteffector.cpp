@@ -4,7 +4,7 @@
    Mon May 9 2005
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: pantilteffector.cpp,v 1.3 2007/02/04 01:24:48 fruit Exp $
+   $Id: pantilteffector.cpp,v 1.3.8.1 2007/06/14 23:20:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,12 +41,12 @@ PanTiltEffector::~PanTiltEffector()
 {
 }
 
-bool
-PanTiltEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-    if (mBody.get() == 0)
+    if (mAction.get() == 0 || mBody.get() == 0)
     {
-        return false;
+        return;
     }
 
     shared_ptr<BaseNode> parent =
@@ -56,17 +56,18 @@ PanTiltEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         GetLog()->Error() << "ERROR: (PanTiltEffector) "
                           << "parent node is not derived from BaseNode\n";
-        return false;
+        return;
     }
 
     shared_ptr<PanTiltAction> panTiltAction =
-        shared_dynamic_cast<PanTiltAction>(action);
+        shared_dynamic_cast<PanTiltAction>(mAction);
+    mAction.reset();
 
     if (panTiltAction.get() == 0)
     {
         GetLog()->Error() << "ERROR: (PanTiltEffector) "
                           << "cannot realize an unknown ActionObject\n";
-        return false;
+        return;
     }
 
     float pan = panTiltAction->GetPanAngle();
@@ -74,7 +75,7 @@ PanTiltEffector::Realize(boost::shared_ptr<ActionObject> action)
     // check for NAN
     if (std::isnan(pan))
     {
-        return true;
+        return;
     }
 
     // cut down the pan angle if necessary
@@ -88,7 +89,7 @@ PanTiltEffector::Realize(boost::shared_ptr<ActionObject> action)
     // check for NAN
     if (std::isnan(tilt))
     {
-        return true;
+        return;
     }
 
     // cut down the tilt angle if necessary
@@ -111,11 +112,11 @@ PanTiltEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         GetLog()->Error() << "ERROR: (PanTiltEffector) "
                           << "cannot find RestrictedVisionPerceptor instance\n";
-        return false;
+        return;
     }
 
     rvp->ChangePanTilt(pan,tilt);
-    return true;
+
 }
 
 shared_ptr<ActionObject>

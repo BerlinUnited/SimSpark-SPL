@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: perceptor.h,v 1.7 2004/04/11 11:41:20 fruit Exp $
+   $Id: perceptor.h,v 1.7.12.1 2007/06/14 23:20:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@ namespace oxygen
 class Perceptor : public oxygen::BaseNode
 {
 public:
+
+    Perceptor();
+
     /*!  This is called by agents to trigger the percept event
       implemented by this perceptor. The perceptor can return data
       through the PredicateList which is passed as a parameter.
@@ -41,9 +44,18 @@ public:
     //! set / change predicate name (for example for debugging purposes)
     void SetPredicateName(const std::string& my_name);
 
+    /** get the interval cycle of the perceptor */
+    unsigned int GetInterval() const;
+
+    /** set the interval cycle of the perceptor */
+    void SetInterval(unsigned int i);
+
 protected:
     //! the predicate name
     std::string mPredicateName;
+
+    //! the interval cycle of the perceptor
+    unsigned int mInterval;
 };
 
 DECLARE_ABSTRACTCLASS(Perceptor);

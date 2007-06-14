@@ -35,27 +35,27 @@ HingeEffector::~HingeEffector()
 {
 }
 
-bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
+void HingeEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-    if (mJoint.get() == 0)
+    if (mAction.get() == 0 || mJoint.get() == 0)
         {
-            return false;
+            return;
         }
 
     shared_ptr<HingeAction> hingeAction =
-        shared_dynamic_cast<HingeAction>(action);
+        shared_dynamic_cast<HingeAction>(mAction);
+    mAction.reset();
 
     if (hingeAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (HingeEffector) cannot realize an "
             << "unknown ActionObject\n";
-        return false;
+        return;
     }
 
     mJoint->SetParameter(dParamVel, hingeAction->GetMotorVelocity());
 
-    return true;
 }
 
 shared_ptr<ActionObject> HingeEffector::GetActionObject(const Predicate& predicate)

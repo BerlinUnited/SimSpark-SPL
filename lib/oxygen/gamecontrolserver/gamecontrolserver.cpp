@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.20.8.1 2007/06/10 05:18:04 jboedeck Exp $
+   $Id: gamecontrolserver.cpp,v 1.20.8.2 2007/06/14 23:20:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -321,6 +321,18 @@ GameControlServer::GetAgentAspectList(TAgentAspectList & list)
 void
 GameControlServer::Update(float deltaTime)
 {
+    // remove disappeared agent
+    for(
+        vector<int>::iterator iter = mDisappearedAgent.begin();
+        iter != mDisappearedAgent.end();
+        ++iter
+        )
+    {
+        AgentDisappear(*iter);
+    }
+
+    mDisappearedAgent.clear();
+
     // build list of ControlAspects, NOT searching recursively
     TLeafList control;
     ListChildrenSupportingClass<ControlAspect>(control,false);
@@ -349,4 +361,10 @@ bool
 GameControlServer::IsFinished() const
 {
     return mExit;
+}
+
+void
+GameControlServer::pushDisappearedAgent(int id)
+{
+    mDisappearedAgent.push_back(id);
 }

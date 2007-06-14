@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.5 2007/02/21 20:14:34 rollmark Exp $
+   $Id: simulationserver.cpp,v 1.5.8.1 2007/06/14 23:20:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <signal.h>
+#include <boost/bind.hpp>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -54,6 +55,7 @@ SimulationServer::SimulationServer() : Node()
     mSumDeltaTime = 0;
     mArgC = 0;
     mArgV = 0;
+    mMultiThreads = true;
 
     signal(SIGINT, CatchSignal);
 }
@@ -206,7 +208,7 @@ void SimulationServer::Step()
     if (mSimStep > 0)
         {
             // world is stepped in discrete steps
-            while (mSumDeltaTime >= mSimStep)
+            while (int(mSumDeltaTime*100) >= int(mSimStep*100))
                 {
                     mSceneServer->Update(mSimStep);
                     mGameControlServer->Update(mSimStep);
@@ -225,6 +227,7 @@ void SimulationServer::Step()
 
 void SimulationServer::ControlEvent(EControlEvent event)
 {
+    int time = int(mSimTime*100);
     for (
          TLeafList::iterator iter=begin();
          iter != end();
@@ -238,6 +241,8 @@ void SimulationServer::ControlEvent(EControlEvent event)
                 {
                     continue;
                 }
+
+            if ( int(ctrNode->GetTime()*100) > time  ) continue;
 
             switch (event)
                 {
@@ -259,6 +264,7 @@ void SimulationServer::ControlEvent(EControlEvent event)
 
                 case CE_ActAgent :
                     ctrNode->ActAgent();
+                    ctrNode->SetSimTime(mSimTime);
                     break;
 
                 case CE_EndCycle :
@@ -283,26 +289,63 @@ void SimulationServer::Run(int argc, char** argv)
     mArgC = argc;
     mArgV = argv;
 
-    ControlEvent(CE_Init);
+    if ( mMultiThreads )
+    {
+        GetLog()->Normal()<< "(SimulationServer) running in multi-threads\n";
+        boost::thread_group ctrThrdGroup;
 
-    while (! mExit)
+        // create new threads for each SimControlNodes
+        for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
         {
-            ++mCycle;
+            shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+            if (ctrNode.get() == 0) continue;
+            ctrThrdGroup.create_thread(boost::bind(&SimControlNode::Run, ctrNode.get()));
+        }
 
-            ControlEvent(CE_StartCycle);
-            ControlEvent(CE_SenseAgent);
-            ControlEvent(CE_ActAgent);
+        // run the physics and game control loop
+        Loops();
 
-            if (mAutoTime)
+        // wait for threads
+        ctrThrdGroup.join_all();
+    }
+    else
+    {
+        GetLog()->Normal()<< "(SimulationServer) running in single thread\n";
+        ControlEvent(CE_Init);
+        shared_ptr<SimControlNode> inputCtr = GetControlNode("InputControl");
+        if ( !mAutoTime && inputCtr.get() == 0 )
+        {
+            GetLog()->Error()<< "(SimulationServer) ERROR: can not get InputControl\n";
+        }
+        else
+        {
+            while (! mExit)
+            {
+                ++mCycle;
+
+                ControlEvent(CE_StartCycle);
+                ControlEvent(CE_SenseAgent);
+                ControlEvent(CE_ActAgent);
+
+                if (mAutoTime)
                 {
                     AdvanceTime(mSimStep);
                 }
-            Step();
+                else
+                {
+                    while (int(mSumDeltaTime*100) < int(mSimStep*100))
+                    {
+                        inputCtr->StartCycle();// advance the time
+                    }
+                }
+                Step();
 
-            ControlEvent(CE_EndCycle);
+                ControlEvent(CE_EndCycle);
+            }
         }
 
-    ControlEvent(CE_Done);
+        ControlEvent(CE_Done);
+    }
 
     mArgC = 0;
     mArgV = 0;
@@ -327,4 +370,63 @@ shared_ptr<SceneServer> SimulationServer::GetSceneServer()
     return mSceneServer;
 }
 
+void SimulationServer::Loops()
+{  
+    if (
+        (mSceneServer.get() == 0) ||
+        (mGameControlServer.get() == 0)
+        )
+        {
+            return;
+        }
 
+    bool isStep = false;
+    while (! mExit)
+    {
+          if( isStep)
+            {
+              mSceneServer->PhysicsUpdate(mSimStep);
+            }
+        
+	// lock all SimControlNode threads
+        vector< boost::shared_ptr<boost::mutex::scoped_lock> > locks;
+        for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
+        {
+            shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+            if (ctrNode.get() == 0) continue;
+            boost::shared_ptr<boost::mutex::scoped_lock> lp(new boost::mutex::scoped_lock(ctrNode->mMutex));
+            locks.push_back(lp);
+            ctrNode->Wait(*lp);
+        }
+
+       ++mCycle;
+
+       if ( isStep )
+       {
+       	mSceneServer->PostPhysicsUpdate();
+		mGameControlServer->Update(mSimStep);
+		mSumDeltaTime -= mSimStep;
+        mSimTime += mSimStep;
+             	isStep = false;
+       }
+
+	if( int(mSumDeltaTime*100) >= int(mSimStep*100) )
+	{
+		mSceneServer->PrePhysicsUpdate(mSimStep);
+		isStep = true;
+	}
+
+	// notify all SimControlNode threads
+        for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
+        {
+            shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+            if (ctrNode.get() == 0) continue;
+            ctrNode->NotifyOne();
+        }
+    }
+}
+
+void SimulationServer::SetMultiThreads(bool isMThreas)
+{
+    mMultiThreads = isMThreas;
+}

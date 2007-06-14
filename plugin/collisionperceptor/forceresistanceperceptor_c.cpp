@@ -4,8 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceresistanceperceptor_c.cpp,v 1.1.2.2 2007/06/08 00:07:36 hedayat Exp $
-
+   $Id: forceresistanceperceptor_c.cpp,v 1.1.2.3 2007/06/14 23:20:58 jboedeck Exp $
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.

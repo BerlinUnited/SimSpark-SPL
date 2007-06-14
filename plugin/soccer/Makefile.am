@@ -49,7 +49,9 @@ soccerruleaspect/soccerruleaspect_c.cpp \
 trainercommandparser/trainercommandparser.cpp \
 trainercommandparser/trainercommandparser_c.cpp \
 visionperceptor/visionperceptor.cpp \
-visionperceptor/visionperceptor_c.cpp 
+visionperceptor/visionperceptor_c.cpp \
+gametimeperceptor/gametimeperceptor.cpp \
+gametimeperceptor/gametimeperceptor_c.cpp 
 
 nobase_libpkginclude_HEADERS = \
 soccertypes.h \
@@ -86,6 +88,7 @@ soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.h \
 soccerruleaspect/soccerruleaspect.h \
 trainercommandparser/trainercommandparser.h \
+gametimeperceptor/gametimeperceptor.cpp \
 visionperceptor/visionperceptor.h 
 
 ## define include directory local to the pkgincludedir

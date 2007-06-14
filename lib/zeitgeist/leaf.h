@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.17.8.1 2007/06/11 20:25:13 hedayat Exp $
+   $Id: leaf.h,v 1.17.8.2 2007/06/14 23:20:58 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@ public:
                 boost::shared_ptr<CLASS> result = 
                     (*i)->FindChildSupportingClass<CLASS>(recursive);
                 if (result)
-                    return result;
+                    return result;                
             }
         }
 

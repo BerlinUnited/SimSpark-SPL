@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.3 2004/02/12 14:07:25 fruit Exp $
+   $Id: createeffector.cpp,v 1.3.14.1 2007/06/14 23:20:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,16 +35,20 @@ CreateEffector::CreateEffector() : Effector()
 {
 }
 
-bool CreateEffector::Realize(shared_ptr<ActionObject> action)
+void CreateEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-  shared_ptr<CreateAction> createAction =
-    shared_dynamic_cast<CreateAction>(action);
 
+    if ( mAction.get() == 0 )
+        return;
+
+  shared_ptr<CreateAction> createAction =
+    shared_dynamic_cast<CreateAction>(mAction);
+    mAction.reset();
   if (createAction.get() == 0)
     {
       GetLog()->Error()
         << "ERROR: (CreateEffector) cannot realize an unknown ActionObject\n";
-      return false;
+      return;
     }
 
   shared_ptr<AgentAspect> aspect = GetAgentAspect();
@@ -52,7 +56,7 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
     {
       GetLog()->Error()
         << "ERROR: (CreateEffector) cannot find the AgentAspect\n";
-      return false;
+      return;
     }
 
   // call the ruby addAgent function that has to be defined in the
@@ -62,7 +66,6 @@ bool CreateEffector::Realize(shared_ptr<ActionObject> action)
   string cmd = "addAgent('" + aspect->GetFullPath() + "')";
   GetCore()->GetScriptServer()->Eval(cmd);
 
-  return true;
 }
 
 shared_ptr<ActionObject>

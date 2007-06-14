@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver_c.cpp,v 1.2 2004/12/22 15:58:26 rollmark Exp $
+   $Id: simulationserver_c.cpp,v 1.2.8.1 2007/06/14 23:20:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,6 +97,22 @@ FUNCTION(SimulationServer, getAutoTimeMode)
     return obj->GetAutoTimeMode();
 }
 
+FUNCTION(SimulationServer, setMultiThreads)
+{
+    bool inSet;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inSet))
+        )
+        {
+            return false;
+        }
+
+    obj->SetMultiThreads(inSet);
+    return true;
+}
+
 void CLASS(SimulationServer)::DefineClass()
 {
     DEFINE_BASECLASS(zeitgeist/Node);
@@ -107,4 +123,5 @@ void CLASS(SimulationServer)::DefineClass()
     DEFINE_FUNCTION(getSimStep);
     DEFINE_FUNCTION(setAutoTimeMode);
     DEFINE_FUNCTION(getAutoTimeMode);
+    DEFINE_FUNCTION(setMultiThreads);
 }

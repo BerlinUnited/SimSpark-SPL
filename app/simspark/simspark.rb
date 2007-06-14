@@ -31,8 +31,6 @@ sparkAddFPSCamera(
 run "bindings.rb"
 
 
-# setup materials
-
 # change "materials.rb" to "materials-textures.rb" if you want to use textured materials
 run "materials.rb"
 
@@ -61,6 +59,20 @@ sparkLogAllToCerr()
 # source soccersim.rb to run the soccer simulation
 run "soccersim.rb"
 
+#sparkSetupMonitor()
 
+#
+# prepare the soccer monitor
+#importBundle 'soccermonitor'
 
+# load a font for the HUD
+#fontServer = get($serverPath+'font')
+#fontServer.getFont('VeraMono.ttf')
 
+# register the soccer monitor plugin to parse the soccer game
+# state
+#sparkRegisterCustomMonitor 'SoccerMonitor'
+
+# register the soccer render plugin to draw the game state on the
+# screen
+#sparkRegisterCustomRender  'SoccerRender'

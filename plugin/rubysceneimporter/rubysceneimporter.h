@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.10.8.1 2007/06/08 00:07:35 hedayat Exp $
+   $Id: rubysceneimporter.h,v 1.10.8.2 2007/06/14 23:20:58 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

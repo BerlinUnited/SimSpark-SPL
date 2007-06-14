@@ -217,9 +217,9 @@ string SoccerbotBehavior::Think(const std::string& message)
     {
         case ARM_UP:
             curAngle = mUniversalJointSenseMap[JID_RARM_1_2].angle2;
-            if (curAngle < 90.0)
+            if (curAngle > -90.0)
             {
-                newAngle = gain * (90.0 - curAngle);
+                newAngle = gain * (-90.0 - curAngle);
                 ss << "(rae1_2 0.0 " << newAngle << ")";
             }
             else

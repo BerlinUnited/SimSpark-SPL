@@ -43,10 +43,10 @@ SingleMatInitEffector::~SingleMatInitEffector()
 {
 }
 
-bool
-SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
 {
-    InitEffector::Realize(action);
+    InitEffector::PrePhysicsUpdateInternal(deltaTime);
 
     // body parts that should be colored in team colors
     std::vector<std::string> jersey;
@@ -65,7 +65,7 @@ SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
         GetLog()->Error()
             << "ERROR: (SingleMatInitEffector) cannot find AgentState\n";
 
-        return false;
+        return;
     }
 
     TTeamIndex team = state->GetTeamIndex();
@@ -82,7 +82,7 @@ SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
         jerseyMaterial = "matRight";
     } else {
         GetLog()->Error() << "ERROR: (SingleMatInitEffector) Found no team\n";
-        return false;   
+        return;
     }
     
     int unum = state->GetUniformNumber();
@@ -99,7 +99,7 @@ SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
             GetLog()->Error()
                 << "ERROR: (SingleMatInitEffector) cannot find parent of agent aspect\n";
             
-            return false;
+            return;
         }
 
     shared_ptr<SingleMatNode> matNode;
@@ -116,7 +116,7 @@ SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
             GetLog()->Error()
                 << "ERROR: (SingleMatInitEffector) cannot find SingleMatNode of " 
                 << (*it) << "\n";
-            return false;   
+            return;
         }
         if ((*it) == "body")
         {
@@ -128,6 +128,5 @@ SingleMatInitEffector::Realize(boost::shared_ptr<ActionObject> action)
         }
     }
 
-    return true;
 }
 

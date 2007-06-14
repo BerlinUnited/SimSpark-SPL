@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.11.4.2 2007/06/10 05:20:19 jboedeck Exp $
+   $Id: beameffector.cpp,v 1.11.4.3 2007/06/14 23:20:58 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,26 +46,27 @@ isfinite( float f )
 }
 #endif
 
-bool
-BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     if (
+        (mAction.get() == 0) ||
         (mBody.get() == 0) ||
         (mGameState.get() == 0) ||
         (mAgentState.get() == 0)
         )
     {
-        return false;
+        return;
     }
 
     shared_ptr<BeamAction> beamAction =
-        shared_dynamic_cast<BeamAction>(action);
-
+        shared_dynamic_cast<BeamAction>(mAction);
+   mAction.reset();
     if (beamAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (BeamEffector) cannot realize an unknown ActionObject\n";
-        return false;
+        return;
     }
 
     // the beam effector only has an effect in PM_BeforeKickOff
@@ -83,7 +84,7 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
             (! isfinite(pos[1]))
             )
             {
-                return false;
+                return;
             }
 
         // an agent can only beam within it's own field half
@@ -109,10 +110,8 @@ BeamEffector::Realize(boost::shared_ptr<ActionObject> action)
                 );
 
         if (!SoccerBase::MoveAndRotateAgent(mBody, pos, angle))
-            return false;
+            return;
     }
-    
-    return true;
 }
 
 shared_ptr<ActionObject>

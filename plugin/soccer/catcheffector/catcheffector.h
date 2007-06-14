@@ -47,9 +47,6 @@ public:
     CatchEffector();
     virtual ~CatchEffector();
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
-
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "catch"; }
 
@@ -71,6 +68,9 @@ protected:
     void MoveBall(const salt::Vector3f& pos);
     /** reference to the soccer rule aspect */
     boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
+
+     /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 protected:
     /** reference to the body node of the ball */

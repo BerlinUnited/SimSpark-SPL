@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.cpp,v 1.2 2004/12/22 15:55:41 rollmark Exp $
+   $Id: simcontrolnode.cpp,v 1.2.8.1 2007/06/14 23:20:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ using namespace salt;
 using namespace std;
 using namespace boost;
 
-SimControlNode::SimControlNode() : Node()
+SimControlNode::SimControlNode() : Node(),mTime(0),mStep(0.02)
 {
 }
 
@@ -40,4 +40,44 @@ shared_ptr<SimulationServer> SimControlNode::GetSimulationServer()
 {
     return shared_static_cast<SimulationServer>
         (make_shared(GetParent()));
+}
+
+void SimControlNode::Run()
+{
+    InitSimulation();
+    boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
+    
+    while ( !ss->isExit() )
+    {
+        boost::mutex::scoped_lock lock(mMutex);
+        while( !ss->isExit() && int(ss->GetTime()*100) < int(mTime*100) )
+        {
+            //std::cout<<GetName()<<' '<<__FUNCTION__<<" wait "<<ss->GetTime()<<' '<<mTime<<std::endl;
+            mCond.wait(lock);
+        }
+        //std::cout<<GetName()<<' '<<__FUNCTION__<<std::endl;
+        StartCycle();
+        SenseAgent();
+        ActAgent();
+        EndCycle();
+        SetSimTime( ss->GetTime() );
+        mCond.notify_one();
+    }
+    
+    DoneSimulation();
+}
+
+void SimControlNode::Wait(boost::mutex::scoped_lock& lock)
+{
+    boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
+    while ( !ss->isExit() && int(ss->GetTime()*100) >= int(GetTime()*100) )
+    {
+        //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<GetTime()<<std::endl;
+        mCond.wait(lock);
+    }
+}
+
+void SimControlNode::SetSimTime( float now )
+{
+    mTime = now + mStep;
 }

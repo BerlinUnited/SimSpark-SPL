@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.h,v 1.4.4.1 2007/06/14 23:20:57 jboedeck Exp $
+   $Id: gametimeperceptor.h,v 1.2.2.2 2007/06/14 23:20:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,49 +19,41 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef INITEFFECTOR_H
-#define INITEFFECTOR_H
+#ifndef GAMETIMEPERCEPTOR_H
+#define GAMETIMEPERCEPTOR_H
 
-#include <oxygen/agentaspect/effector.h>
+#include <oxygen/agentaspect/perceptor.h>
+#include <soccer/soccertypes.h>
 
 class GameStateAspect;
-class Space;
+//class AgentState;
 
-
-class InitEffector : public oxygen::Effector
+namespace oxygen
 {
-    //
-    // functions
-    //
+    class Predicate;
+}
+
+class GameTimePerceptor : public oxygen::Perceptor
+{
 public:
-    InitEffector();
-    virtual ~InitEffector();
+    GameTimePerceptor();
+    virtual ~GameTimePerceptor();
 
-    /** returns the name of the predicate this effector implements. */
-    virtual std::string GetPredicate() { return "init"; }
-
-    /** constructs an Actionobject, describing a predicate */
-    virtual boost::shared_ptr<oxygen::ActionObject>
-    GetActionObject(const oxygen::Predicate& predicate);
+    //! \return true, if valid data is available and false otherwise.
+    virtual bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
 protected:
-    /** set up the reference GameStateAspect */
+    /** sets up the reference to the GameStateAspect */
     virtual void OnLink();
 
-    /** reset the reference to the GameStateAspect */
+    /** resets the reference to the GameStateAspect */
     virtual void OnUnlink();
 
-    /** realizes the action described by the ActionObject */
-    virtual void PrePhysicsUpdateInternal(float deltaTime);
-
 protected:
-    /** reference to the GameStateAspect */
+    //! a reference to the game state
     boost::shared_ptr<GameStateAspect> mGameState;
-
-    /** reference to the AgentAspect */
-    boost::shared_ptr<oxygen::AgentAspect> mAgentAspect;
 };
 
-DECLARE_CLASS(InitEffector);
+DECLARE_CLASS(GameTimePerceptor);
 
-#endif // INITEFFECTOR_H
+#endif // GAMESTATEPERCEPTOR_H

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.11.8.1 2007/06/10 05:18:04 jboedeck Exp $
+   $Id: gamecontrolserver.h,v 1.11.8.2 2007/06/14 23:20:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -131,6 +131,9 @@ public:
     /** This method is used to set the simulation into the 'finished' state. */
     void Quit();
 
+    /** put the agent id into the disconnected vector */
+    void pushDisappearedAgent(int id);
+
 protected:
     /** helper method that queries the SceneServer for the currently
         active Scene
@@ -152,6 +155,9 @@ protected:
 
     /** flag if the simulation is over */
     bool mExit;
+
+    /** vector of disappeared agents, they will be removed in next Update */
+    std::vector<int> mDisappearedAgent;
 };
 
 DECLARE_CLASS(GameControlServer);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.cpp,v 1.13 2006/06/03 14:03:52 jboedeck Exp $
+   $Id: kickeffector.cpp,v 1.13.8.1 2007/06/14 23:20:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,35 +46,36 @@ KickEffector::~KickEffector()
 {
 }
 
-bool
-KickEffector::Realize(boost::shared_ptr<ActionObject> action)
+void
+KickEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // this should also include the case when there is no ball
     // (because then there will be no body, neither).
-    if (mBallBody.get() == 0)
+    if (mAction.get() == 0 || mBallBody.get() == 0)
     {
-        return false;
+        return;
     }
 
     if (mAgent.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (KickEffector) parent node is not derived from BaseNode\n";
-        return false;
+        return;
     }
 
     shared_ptr<KickAction> kickAction =
-        shared_dynamic_cast<KickAction>(action);
+        shared_dynamic_cast<KickAction>(mAction);
+    mAction.reset();
 
     if (kickAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (KickEffector) cannot realize an unknown ActionObject\n";
-        return false;
+        return;
     }
 
     // if the agent doesn't have a body, we're done (this should never happen)
-    if (mBall.get() == 0) return true;
+    if (mBall.get() == 0) return;
 
     Vector3f force =
         mBallBody->GetWorldTransform().Pos() -
@@ -88,7 +89,7 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
     {
         // ball is out of reach, or player is in the air:
         // kick has no effect
-        return true;
+        return;
     }
 
     // get the kick angle in the horizontal plane
@@ -133,7 +134,6 @@ KickEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     mBallStateAspect->UpdateLastKickingAgent(mAgent);
 
-    return true;
 }
 
 shared_ptr<ActionObject>

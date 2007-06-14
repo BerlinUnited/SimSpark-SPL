@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: effector.h,v 1.7 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: effector.h,v 1.7.4.1 2007/06/14 23:20:59 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ public:
     Effector() : BaseNode() {};
     virtual ~Effector() {};
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<ActionObject> action) = 0;
+    /** save the ActionObject */
+    virtual bool Realize(boost::shared_ptr<ActionObject> action) ;
 
     /** returns the name of the predicate this effector implements */
     virtual std::string GetPredicate() = 0;
@@ -49,6 +49,9 @@ public:
 protected:
     /** Returns the AgentAspect this Effector belongs to */
     boost::shared_ptr<AgentAspect> GetAgentAspect();
+
+    /** cache the action here, and then realize it in PrePhysicsUpdateInternal */
+    boost::shared_ptr<ActionObject> mAction;
 };
 
 DECLARE_ABSTRACTCLASS(Effector);

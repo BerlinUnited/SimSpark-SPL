@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kickeffector.h,v 1.6 2006/06/03 14:03:52 jboedeck Exp $
+   $Id: kickeffector.h,v 1.6.8.1 2007/06/14 23:20:57 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,9 +36,6 @@ class KickEffector : public oxygen::Effector
 public:
     KickEffector();
     virtual ~KickEffector();
-
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
 
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "kick"; }
@@ -98,6 +95,10 @@ public:
      * min has to be smaller than max.
      */
     void SetAngleRange(float min, float max);
+
+protected:
+    /** realizes the action described by the ActionObject */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 protected:
     typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;
