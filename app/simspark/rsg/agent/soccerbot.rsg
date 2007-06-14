@@ -177,7 +177,11 @@
 	;add a time perceptor
 	(nd TimePerceptor)
 	; install a node holding agent state data
-        (nd AgentState (setName AgentState) )
+        (nd AgentState
+	    (setName AgentState)
+	    ; add a gamestateperceptor
+	    (nd GameStatePerceptor)
+	)
 	; add beam effector
 	(nd BeamEffector)
 	; add gyro rate sensor
@@ -985,3 +989,4 @@
 
 ) ; of space
 ) ; EOF
+
