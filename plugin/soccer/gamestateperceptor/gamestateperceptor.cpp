@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateperceptor.cpp,v 1.5 2004/06/09 09:22:27 fruit Exp $
+   $Id: gamestateperceptor.cpp,v 1.6 2007/06/14 22:35:54 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -82,22 +82,22 @@ GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
 
     // soccer variables
     // field geometry parameter
-    InsertSoccerParam(predicate,"FieldLength");
-    InsertSoccerParam(predicate,"FieldWidth");
-    InsertSoccerParam(predicate,"FieldHeight");
-    InsertSoccerParam(predicate,"GoalWidth");
-    InsertSoccerParam(predicate,"GoalDepth");
-    InsertSoccerParam(predicate,"GoalHeight");
-    InsertSoccerParam(predicate,"BorderSize");
+//     InsertSoccerParam(predicate,"FieldLength");
+//     InsertSoccerParam(predicate,"FieldWidth");
+//     InsertSoccerParam(predicate,"FieldHeight");
+//     InsertSoccerParam(predicate,"GoalWidth");
+//     InsertSoccerParam(predicate,"GoalDepth");
+//     InsertSoccerParam(predicate,"GoalHeight");
+//     InsertSoccerParam(predicate,"BorderSize");
 
-    // agent parameter
-    InsertSoccerParam(predicate,"AgentMass");
-    InsertSoccerParam(predicate,"AgentRadius");
-    InsertSoccerParam(predicate,"AgentMaxSpeed");
+//     // agent parameter
+//     InsertSoccerParam(predicate,"AgentMass");
+//     InsertSoccerParam(predicate,"AgentRadius");
+//     InsertSoccerParam(predicate,"AgentMaxSpeed");
 
-    // ball parameter
-    InsertSoccerParam(predicate,"BallRadius");
-    InsertSoccerParam(predicate,"BallMass");
+//     // ball parameter
+//     InsertSoccerParam(predicate,"BallRadius");
+//     InsertSoccerParam(predicate,"BallMass");
 }
 
 bool
@@ -112,7 +112,7 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     }
 
     Predicate& predicate = predList->AddPredicate();
-    predicate.name = "GameState";
+    predicate.name = "GS";
     predicate.parameter.Clear();
 
     // with the first GameState percept after the player is assigned
@@ -129,12 +129,12 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 
     // time
     ParameterList& timeElement = predicate.parameter.AddList();
-    timeElement.AddValue(string("time"));
+    timeElement.AddValue(string("t"));
     timeElement.AddValue(mGameState->GetTime());
 
     // playmode
     ParameterList& pmElement = predicate.parameter.AddList();
-    pmElement.AddValue(string("playmode"));
+    pmElement.AddValue(string("pm"));
     pmElement.AddValue(SoccerBase::PlayMode2Str(mGameState->GetPlayMode()));
 
     return true;
