@@ -95,11 +95,57 @@
     (def $TorsoCylinderRadius 0.1)
     (def $TorsoCylinderLength 0.3)
 
+    ; 
+    ; define joint stops
+    ;
+
+    (def $Rle1Min -90)       
+    (def $Rle1Max 60)
+    (def $Rle2Min -45)
+    (def $Rle2Max 120)
+    (def $Rle3Min -75)
+    (def $Rle3Max 45)
+    (def $Rle4Min -160)
+    (def $Rle4Max 0)
+    (def $Rle5Min -60)
+    (def $Rle5Max 60)
+    (def $Rle6Min -45)
+    (def $Rle6Max 45)
+
+    (def $Lle1Min -60)
+    (def $Lle1Max 90)
+    (def $Lle2Min -45)
+    (def $Lle2Max 120)
+    (def $Lle3Min -45)
+    (def $Lle3Max 75)
+    (def $Lle4Min -160)
+    (def $Lle4Max 0)
+    (def $Lle5Min -60)
+    (def $Lle5Max 60)
+    (def $Lle6Min -45)
+    (def $Lle6Max 45)
+
+    (def $Rae1Min -90)
+    (def $Rae1Max 180)
+    (def $Rae2Min -180)
+    (def $Rae2Max 0)
+    (def $Rae3Min -135)
+    (def $Rae3Max 135)
+    (def $Rae4Min -10)
+    (def $Rae4Max 130)
+
+    (def $Lae1Min -90)
+    (def $Lae1Max 180)
+    (def $Lae2Min 0)
+    (def $Lae2Max 180)
+    (def $Lae3Min -135)
+    (def $Lae3Max 135)
+    (def $Lae4Min -10)
+    (def $Lae4Max 130)
 
     ;
     ; assemble the robot
     ;
-
 
     (def $UpperTorsoPosX 5)
     (def $UpperTorsoPosY 5)
@@ -256,6 +302,12 @@
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector (setName lae1_2) )
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lae1Min)
+	    (setHighStopDeg 0 $Lae1Max)
+	    (setLowStopDeg 1 $Lae2Min)
+	    (setHighStopDeg 1 $Lae2Max)
 	    )
 	)
 
@@ -296,6 +348,12 @@
 
             ; install an effector to control the joint motors
 	    (nd UniversalJointEffector (setName rae1_2) )
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rae1Min)
+	    (setHighStopDeg 0 $Rae1Max)
+	    (setLowStopDeg 1 $Rae2Min)
+	    (setHighStopDeg 1 $Rae2Max)
             )
 	)
     
@@ -329,6 +387,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName lae3) )
+	    
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lae3Min)
+	    (setHighStopDeg 0 $Lae3Max)
 	    )
 
 	; static cylinder for the elbow
@@ -371,6 +433,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName rae3) )
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rae3Min)
+	    (setHighStopDeg 0 $Rae3Max)
         )
 
 	; static cylinder for the elbow
@@ -421,6 +487,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName lae4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lae4Min)
+	    (setHighStopDeg 0 $Lae4Max)
         )
 
 	; attach virtual hand part
@@ -513,6 +583,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName rae4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rae4Min)
+	    (setHighStopDeg 0 $Rae4Max)
         )
 
 	; static hand
@@ -611,6 +685,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName lle1))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle1Min)
+	    (setHighStopDeg 0 $Lle1Max)
         )
     )
 
@@ -634,6 +712,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName rle1))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle1Min)
+	    (setHighStopDeg 0 $Rle1Max)
         )
     )
 
@@ -667,6 +749,12 @@
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector (setName lle2_3))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle2Min)
+	    (setHighStopDeg 0 $Lle2Max)
+	    (setLowStopDeg 1 $Lle3Min)
+	    (setHighStopDeg 1 $Lle3Max)
         )
 
         ; attach left knee cylinder (virtual)
@@ -703,6 +791,12 @@
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector (setName rle2_3))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle2Min)
+	    (setHighStopDeg 0 $Rle2Max)
+	    (setLowStopDeg 1 $Rle3Min)
+	    (setHighStopDeg 1 $Rle3Max)
 
         ; attach left knee cylinder (virtual)
 	(nd Transform
@@ -745,6 +839,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName lle4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle4Min)
+	    (setHighStopDeg 0 $Lle4Max)
         )
     )
 
@@ -768,6 +866,10 @@
 
             ; install an effector to control the joint motors
             (nd HingeEffector (setName rle4))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle4Min)
+	    (setHighStopDeg 0 $Rle4Max)
         )
     )
 
@@ -800,6 +902,12 @@
 
             ; install an effector to control the joint motors
             (nd UniversalJointEffector (setName lle5_6))
+
+	    ; set joint stops
+	    (setLowStopDeg 0 $Lle5Min)
+	    (setHighStopDeg 0 $Lle5Max)
+	    (setLowStopDeg 1 $Lle6Min)
+	    (setHighStopDeg 1 $Lle6Max)
         )
 
 	; static box at the back of the foot
@@ -845,6 +953,11 @@
             ; install an effector to control the joint motors
             (nd UniversalJointEffector (setName rle5_6))
 
+	    ; set joint stops
+	    (setLowStopDeg 0 $Rle5Min)
+	    (setHighStopDeg 0 $Rle5Max)
+	    (setLowStopDeg 1 $Rle6Min)
+	    (setHighStopDeg 1 $Rle6Max)
         )
 
 	; static box at the back of the foot
