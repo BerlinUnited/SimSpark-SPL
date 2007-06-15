@@ -173,7 +173,9 @@
 	(importScene rsg/agent/soccerbottorso.rsg $UpperTorsoLength $UpperTorsoWidth $UpperTorsoHeight $UpperTorsoMass)
 
 	; we want to initialize
-	(nd SingleMatInitEffector)	
+	(nd SingleMatInitEffector)
+	;add a time perceptor
+        (nd TimePerceptor)
 	; install a node holding agent state data
         (nd AgentState
 	    (setName AgentState)
