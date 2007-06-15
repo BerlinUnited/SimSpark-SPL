@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.9.4.1 2007/06/14 23:20:57 jboedeck Exp $
+   $Id: initeffector.cpp,v 1.9.4.2 2007/06/15 05:18:14 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

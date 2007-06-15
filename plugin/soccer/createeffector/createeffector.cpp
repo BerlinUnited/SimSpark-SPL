@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: createeffector.cpp,v 1.3.14.1 2007/06/14 23:20:57 jboedeck Exp $
+   $Id: createeffector.cpp,v 1.3.14.2 2007/06/15 05:18:14 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
