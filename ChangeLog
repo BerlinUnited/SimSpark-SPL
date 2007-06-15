@@ -1,3 +1,8 @@
+2007-06-15  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/spark/spark.rb: 
+	- fixed sparkSetupMonitor so that it'll run in single threaded mode
+
 2007-06-15  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* .cvsignore,
