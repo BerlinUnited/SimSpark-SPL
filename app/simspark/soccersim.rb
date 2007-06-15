@@ -60,7 +60,7 @@ scene.importScene('rsg/agent/soccer.rsg')
 gameControlServer = get($serverPath+'gamecontrol')
 gameControlServer.initControlAspect('GameStateAspect')
 gameControlServer.initControlAspect('BallStateAspect')
-#gameControlServer.initControlAspect('SoccerRuleAspect')
+gameControlServer.initControlAspect('SoccerRuleAspect')
 
 # init monitorItems to transmit game state information
 monitorServer = get($serverPath+'monitor')

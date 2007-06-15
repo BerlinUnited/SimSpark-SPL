@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.21 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: gamecontrolserver.cpp,v 1.22 2007/06/15 09:47:29 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -303,6 +303,19 @@ GameControlServer::GetAgentAspect(int id)
     }
 
     return (*iter).second;
+}
+
+void 
+GameControlServer::GetAgentAspectList(TAgentAspectList & list)
+{
+    for (
+         TAgentMap::iterator iter = mAgentMap.begin();
+         iter != mAgentMap.end();
+         ++iter
+         )
+        {
+            list.push_back(iter->second);
+        }
 }
 
 void

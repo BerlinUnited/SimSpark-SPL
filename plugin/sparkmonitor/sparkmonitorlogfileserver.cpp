@@ -135,7 +135,6 @@ void SparkMonitorLogFileServer::StartCycle()
     usleep(mStepDelay);
 
     mForwardStep = false;
-
 }
 
 void SparkMonitorLogFileServer::ParseCustomPredicates(sexp_t* sexp, PredicateList& pList)

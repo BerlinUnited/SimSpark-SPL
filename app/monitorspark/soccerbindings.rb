@@ -16,5 +16,6 @@ else
     inputServer.bindCommand('l',      Command.BPlayback);
   else
     inputServer.bindCommand('k',      Command.KickOff);
+    inputServer.bindCommand('b',      Command.DropBall);
   end
 end

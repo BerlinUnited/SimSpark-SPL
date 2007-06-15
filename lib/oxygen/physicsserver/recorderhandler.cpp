@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: recorderhandler.cpp,v 1.2 2004/02/12 14:07:23 fruit Exp $
+   $Id: recorderhandler.cpp,v 1.3 2007/06/15 09:47:29 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "recorderhandler.h"
-#include "collider.h"
 
 using namespace oxygen;
 using namespace boost;
@@ -48,7 +47,7 @@ RecorderHandler::GetParentsSupportingClass
          ++iter
          )
         {
-            shared_ptr<Collider> collidee = make_shared(*iter);
+            shared_ptr<Collider> collidee = (*iter).lock();
             if (collidee.get() == 0)
                 {
                     continue;
@@ -63,6 +62,3 @@ RecorderHandler::GetParentsSupportingClass
                 }
         }
 }
-
-
-

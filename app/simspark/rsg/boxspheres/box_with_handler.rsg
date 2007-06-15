@@ -20,7 +20,7 @@
 
  (nd BoxCollider
        (setBoxLengths $lenX $lenY $lenZ)
-       (nd ContactJointHandler
+       (nd TouchPerceptorHandler
 	     (setContactBounceMode false)
 
 	     (setContactSlipMode true)

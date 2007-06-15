@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.h,v 1.12 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: gamecontrolserver.h,v 1.13 2007/06/15 09:47:29 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,10 @@ class Scene;
 
 class GameControlServer : public zeitgeist::Node
 {
+public:
+
+    typedef std::list<boost::shared_ptr<AgentAspect> > TAgentAspectList;
+
 public:
     GameControlServer();
     ~GameControlServer();
@@ -107,6 +111,9 @@ public:
 
     /** returns the AgentAspect for the given \param id */
     boost::shared_ptr<AgentAspect> GetAgentAspect(int id);
+
+    /** get a list with shared pointers to all the AgentAspects */
+    void GetAgentAspectList(TAgentAspectList & list);
 
     /** This method is used to notify the GameControlServer that the game
         has advanced deltaTime seconds. The GameControlServer will in turn

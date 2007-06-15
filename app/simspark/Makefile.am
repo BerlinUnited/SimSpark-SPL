@@ -25,7 +25,9 @@ endif
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility \
               @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@ @SDL_CPPFLAGS@
 
-AM_LDFLAGS  = @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
+AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
+
+
 
 
 simspark_SOURCES = \

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.27 2007/02/27 04:01:55 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.28 2007/06/15 09:47:29 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,15 +71,51 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
 void
 SoccerRuleAspect::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
 {
-    agent_body->SetPosition(pos);
-    agent_body->SetVelocity(Vector3f(0,0,0));
-    agent_body->SetAngularVelocity(Vector3f(0,0,0));
+    SoccerBase::MoveAgent(agent_body, pos);
 }
 
 void
 SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
                                float min_dist, TTeamIndex idx)
 {
+    if (idx == TI_NONE || mBallState.get() == 0) return;
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+        return;
+
+    salt::BoundingSphere sphere(pos, radius);
+    boost::shared_ptr<oxygen::Body> agent_body;
+    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    for (i = agent_states.begin(); i != agent_states.end(); ++i)
+    {
+        SoccerBase::GetBody(**i, agent_body);
+
+        // if agent is too close, move it away
+        Vector3f new_pos = agent_body->GetPosition();
+        if (sphere.Contains(new_pos))
+        {
+            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+
+            if (idx == TI_LEFT)
+            {
+                if (pos[0] - dist < -mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] - dist;
+                }
+            } else {
+                if (pos[0] + dist > mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] + dist;
+                }
+            }
+            MoveAgent(agent_body, new_pos);
+        }
+    }
+#if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
@@ -120,12 +156,40 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
             MoveAgent(agent_body, new_pos);
         }
     }
+#endif
 }
 
 void
 SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
                                float min_dist, TTeamIndex idx)
 {
+    if (idx == TI_NONE || mBallState.get() == 0) return;
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+        return;
+
+    boost::shared_ptr<oxygen::Body> agent_body;
+    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    for (i = agent_states.begin(); i != agent_states.end(); ++i)
+    {
+        SoccerBase::GetBody(**i, agent_body);
+
+        // if agent is too close, move it away
+        Vector3f new_pos = agent_body->GetPosition();
+        if (box.Contains(Vector2f(new_pos[0], new_pos[1])))
+        {
+            if (idx == TI_LEFT)
+            {
+                new_pos[0] = box.minVec[0] -
+                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+            } else {
+                new_pos[0] = box.maxVec[0] +
+                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+            }
+            MoveAgent(agent_body, new_pos);
+        }
+    }
+#if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
@@ -156,6 +220,7 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
             MoveAgent(agent_body, new_pos);
         }
     }
+#endif
 }
 
 void
@@ -184,8 +249,10 @@ SoccerRuleAspect::DropBall(Vector3f pos)
     }
 
     MoveBall(pos);
+
     ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_LEFT);
     ClearPlayers(pos, mFreeKickDist, mFreeKickMoveDist, TI_RIGHT);
+
     mGameState->SetPlayMode(PM_PlayOn);
 }
 
@@ -198,25 +265,28 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 
     if (game_control.get() == 0)
     {
-        GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer\n.";
+        GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer.\n";
         return;
     }
-
+    
     // if no players are connected, just return
     if (! game_control->GetAgentCount()) return;
+
 
     // before the game starts the ball should stay in the middle of
     // the playing field
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
+
     ClearPlayers(mRightHalf, 1.0, TI_LEFT);
     ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
 
+#if 0
     //
     // TODO: this has to be tested (compiles and no crashes at least)
     mInOffsideLeftPlayers.clear();
     mInOffsideRightPlayers.clear();
-
+#endif
 
     if (mAutomaticKickOff && mGameState->GetModeTime() > mWaitBeforeKickOff)
     {
@@ -259,6 +329,7 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 void
 SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
 {
+#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -299,11 +370,13 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
         // field
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 void
 SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
 {
+#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -355,11 +428,13 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
         // move the ball back on the free kick position
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 void
 SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
 {
+#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -398,6 +473,7 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
         // field
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 bool
@@ -528,11 +604,13 @@ SoccerRuleAspect::UpdatePlayOn()
         return;
     }
 
+#if 0
     // check if the players are in offside
     if (mUseOffside && CheckOffside())
     {
         return;
     }
+#endif
 
     // other checks go here...
 }
@@ -724,7 +802,6 @@ SoccerRuleAspect::OnUnlink()
     mBallBody.reset();
 }
 
-
 void
 SoccerRuleAspect::UpdateCachedInternal()
 {
@@ -762,6 +839,7 @@ void
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
+#if 0
     TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
     {
@@ -833,11 +911,13 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             (*it)->AddMessage(message, direction, false);
         }
     }
+#endif
 }
 
 bool
 SoccerRuleAspect::CheckOffside()
 {
+#if 0
     shared_ptr<AgentAspect> collidingAgent;
     shared_ptr<AgentAspect> kickingAgent;
     shared_ptr<AgentAspect> agent;
@@ -1062,11 +1142,13 @@ SoccerRuleAspect::CheckOffside()
     }
 
     return true;
+#endif
 }
 
 void
 SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
 {
+#if 0
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -1117,6 +1199,7 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
         // move the ball back on the free kick position
         MoveBall(mFreeKickPos);
     }
+#endif
 }
 
 void
@@ -1124,6 +1207,46 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                                float radius, float min_dist, TTeamIndex idx,
                                shared_ptr<AgentState> agentState)
 {
+    if (idx == TI_NONE || mBallState.get() == 0) return;
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+        return;
+
+    salt::BoundingSphere sphere(pos, radius);
+    boost::shared_ptr<oxygen::Body> agent_body;
+    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    for (i = agent_states.begin(); i != agent_states.end(); ++i)
+    {
+        if (agentState == (*i))
+            continue;
+
+        SoccerBase::GetBody(**i, agent_body);
+        // if agent is too close, move it away
+        Vector3f new_pos = agent_body->GetPosition();
+        if (sphere.Contains(new_pos))
+        {
+            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+
+            if (idx == TI_LEFT)
+            {
+                if (pos[0] - dist < -mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] - dist;
+                }
+            } else {
+                if (pos[0] + dist > mFieldLength/2.0)
+                {
+                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
+                } else {
+                    new_pos[0] = pos[0] + dist;
+                }
+            }
+            MoveAgent(agent_body, new_pos);
+        }
+    }
+#if 0
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
@@ -1167,4 +1290,5 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
             MoveAgent(agent_body, new_pos);
         }
     }
+#endif
 }

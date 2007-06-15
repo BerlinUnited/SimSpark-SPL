@@ -24,6 +24,7 @@
 */
 
 #include <oxygen/physicsserver/body.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <soccerbase/soccerbase.h>
 #include <agentstate/agentstate.h>
 #include <soccertypes.h>
@@ -167,6 +168,8 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         ParsePlayModeCommand(predicate);
         break;
     case CT_DROP_BALL:
+        // DEBUG
+        GetLog()->Error() << "(TrainerCommandParser) Dropping ball.\n";
         mSoccerRule->DropBall();
         break;
     case CT_KICK_OFF:
@@ -194,8 +197,7 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
 }
 
 void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicate)
-{
-
+{    
     Predicate::Iterator unumParam(predicate);
     int                 unum;
 
@@ -209,8 +211,8 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
     }
 
-    string              team;
-    TTeamIndex          idx;
+    string team;
+    TTeamIndex idx;
     Predicate::Iterator teamParam(predicate);
 
     // extract side
@@ -223,7 +225,29 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
 
         idx = mTeamIndexMap[team];
-    }
+    }    
+
+    
+    SoccerBase::TAgentStateList agentStates;
+    SoccerBase::GetAgentStates(*this, agentStates, idx); 
+    SoccerBase::TAgentStateList::iterator iter = agentStates.begin();
+    bool found = false;
+
+    while (iter != agentStates.end() && !found)
+        {   
+            if ((*iter)->GetUniformNumber() == unum)                
+                {
+                    found = true;                     
+                }
+            else
+                ++iter;
+        }
+
+    if (!found)
+        {
+           GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get correct AgentState\n";
+           return; 
+        }
 
     Predicate::Iterator posParam(predicate);
 
@@ -240,10 +264,10 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
 
         shared_ptr<Body> body;
 
-        if (SoccerBase::GetAgentBody(*this, idx, unum, body))
+        if (SoccerBase::GetBody(*(*iter), body))
         {
-            // set new velocity in the body
-            body->SetPosition(pos);
+            // move all the bodies belonging to this agent
+            SoccerBase::MoveAgent(body, pos);
         }
         else
         {
@@ -252,33 +276,8 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
     }
 
-    Predicate::Iterator velParam(predicate);
-
-    if (predicate.FindParameter(velParam, "vel"))
-    {
-        salt::Vector3f vel;
-
-        // extract velocity vector
-        if (! predicate.GetValue(velParam, vel))
-        {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent vel\n";
-            return;
-        }
-
-        shared_ptr<Body> body;
-
-        if (SoccerBase::GetAgentBody(*this, idx, unum, body))
-        {
-            // set new velocity in the body
-            body->SetVelocity(vel);
-            body->SetAngularVelocity(salt::Vector3f(0.0f,0.0f,0.0f));
-        }
-        else
-        {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent body\n";
-            return;
-        }
-    }
+    // Joschka: I removed the part to set a velocity because it doesn't really  
+    // seem to have a meaning for agents that have more than just a single body
 
     Predicate::Iterator batParam(predicate);
 
@@ -291,21 +290,11 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get battery value\n";
             return;
-        }
+        }      
 
-        shared_ptr<AgentState> agentState;
-
-        // get agent state
-        if (SoccerBase::GetAgentState(*this, idx, unum, agentState))
-        {
-            // set new battery
-            agentState->SetBattery(battery);
-        }
-        else
-        {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent state\n";
-            return;
-        }
+        // set new battery
+        (*iter)->SetBattery(battery);
+        
     }
 
     Predicate::Iterator tempParam(predicate);
@@ -320,27 +309,17 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get temperatur value\n";
             return;
         }
-
-        shared_ptr<AgentState> agentState;
-
-        // get agent state
-        if (SoccerBase::GetAgentState(*this, idx, unum, agentState))
-        {
-            // set new temperature
-            agentState->SetBattery(temperature);
-        }
-        else
-        {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent state\n";
-            return;
-        }
+       
+         // set new temperature
+        (*iter)->SetBattery(temperature);
+        
     }
 }
 
 void
 TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
 {
-    Predicate::Iterator posParam(predicate);
+    Predicate::Iterator posParam(predicate);    
 
     if (predicate.FindParameter(posParam, "pos"))
     {
@@ -351,7 +330,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
         {
             GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get ball pos\n";
             return;
-        }
+        }         
 
         shared_ptr<Body> body;
 

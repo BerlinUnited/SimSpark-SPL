@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.2 2007/02/27 03:40:37 jboedeck Exp $
+   $Id: soccerinput.cpp,v 1.3 2007/06/15 09:47:29 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ void SoccerInput::OnLink()
 {
     shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
     scriptServer->CreateVariable("Command.KickOff", CmdKickOff);
+    scriptServer->CreateVariable("Command.MoveAgent", CmdMoveAgent);
+    scriptServer->CreateVariable("Command.DropBall", CmdDropBall);
 
     mMonitorClient = shared_dynamic_cast<NetClient>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient"));
@@ -75,6 +77,18 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
             if (input.KeyPress())
                 {
                     SendCommand("(kickOff Left)");
+                }
+            break;
+        case CmdMoveAgent:
+            if (input.KeyPress())
+                {
+                    SendCommand("(agent (team Left)(unum 1)(pos -4.0 1.0 3.5))");
+                }
+            break;    
+        case CmdDropBall:
+            if (input.KeyPress())
+                {
+                    SendCommand("(dropBall)");
                 }
             break;
         };
