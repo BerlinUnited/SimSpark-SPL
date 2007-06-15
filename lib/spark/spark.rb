@@ -38,7 +38,7 @@ def sparkSetupMonitor
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-
+  simulationServer.setMultiThreads(false);
   monitorClient = new('SparkMonitorClient', 
 		      $serverPath+'simulation/SparkMonitorClient')
   monitorClient.setServer($monitorServer)
