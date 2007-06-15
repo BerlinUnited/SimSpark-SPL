@@ -173,11 +173,13 @@
 	(importScene rsg/agent/soccerbottorso.rsg $UpperTorsoLength $UpperTorsoWidth $UpperTorsoHeight $UpperTorsoMass)
 
 	; we want to initialize
-	(nd SingleMatInitEffector)
-	;add a time perceptor
-	(nd TimePerceptor)
+	(nd SingleMatInitEffector)	
 	; install a node holding agent state data
-        (nd AgentState (setName AgentState) )
+        (nd AgentState
+	    (setName AgentState)
+	    ; add a gamestateperceptor
+	    (nd GameStatePerceptor)
+	)
 	; add beam effector
 	(nd BeamEffector)
 	; add gyro rate sensor
@@ -330,6 +332,7 @@
         (setName rightshoulder)
         (setLocalPos $RightShoulderPosX $RightShoulderPosY $RightShoulderPosZ)
         (importScene rsg/boxspheres/box.rsg $ShoulderLength $ShoulderWidth $ShoulderHeight $ShoulderMass matDarkGrey)
+
         ;(setLocalRotation 0 0 180)
 
         ; install universal joint to connect to the torso
@@ -508,7 +511,6 @@
 
     ; }}} END
 
-
      ; {{{ BEGIN --- Left Hand --- ;
 
      ; (1) define hand1 position
@@ -549,7 +551,6 @@
       )
 
     ; }}} END 
-
 
     ; {{{ BEGIN --- Right Lower Arm --- ;
 
