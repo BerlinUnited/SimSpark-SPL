@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.6 2005/07/10 05:28:11 fruit Exp $
+   $Id: monitorserver.cpp,v 1.7 2007/06/16 15:06:18 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -123,8 +123,10 @@ boost::shared_ptr<MonitorSystem> MonitorServer::GetMonitorSystem()
 void
 MonitorServer::CollectItemPredicates(bool initial, PredicateList& pList)
 {
-    Leaf::TLeafList itemList;
-    ListChildrenSupportingClass<MonitorItem>(itemList);
+    static Leaf::TLeafList itemList;
+
+    if (! itemList.size())
+        ListChildrenSupportingClass<MonitorItem>(itemList);
 
     for (
         Leaf::TLeafList::const_iterator iter = itemList.begin();
