@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.17 2007/06/16 10:57:09 yxu Exp $
+   $Id: soccerbase.cpp,v 1.18 2007/06/16 15:09:08 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -257,7 +257,7 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
 
     GameControlServer::TAgentAspectList aspectList;
     gameCtrl->GetAgentAspectList(aspectList);
-        
+
     GameControlServer::TAgentAspectList::iterator iter;
     shared_ptr<AgentState> agentState;
         
@@ -267,10 +267,10 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
          ++iter
          )
         {
-            shared_ptr<Transform> trf = shared_dynamic_cast<Transform>(*iter);
+            agentState = shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
             
-            if (
-                GetAgentState(trf, agentState) &&
+            if (                
+                agentState.get() != 0 &&                
                 (
                  agentState->GetTeamIndex() == idx ||
                  idx == TI_NONE
@@ -625,16 +625,16 @@ SoccerBase::GetControlAspect(const zeitgeist::Leaf& base,const string& name)
 }
 
 bool
-SoccerBase::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
+SoccerBase::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
 {
-    Vector3f bodyPos = agent_body->GetPosition();
+    Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
     
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-            (agent_body->GetParent().lock()->FindParentSupportingClass<Transform>().lock());
+            (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
     if (parent.get() == 0)
     {
-        agent_body->GetLog()->Error() << "(MoveAgent) ERROR: can't get parent node.\n";
+        agent_aspect->GetLog()->Error() << "(MoveAgent) ERROR: can't get parent node.\n";
         return false;
     }
 
@@ -644,7 +644,7 @@ SoccerBase::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
 
     if (leafList.size() == 0)
     {
-        agent_body->GetLog()->Error()
+        agent_aspect->GetLog()->Error()
             << "(MoveAgent) ERROR: agent aspect doesn't have "
             << "children of type Body\n";
 
@@ -661,23 +661,23 @@ SoccerBase::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
 
         Vector3f childPos = childBody->GetPosition();
 
-        childBody->SetPosition(pos + (childPos-bodyPos));
+        childBody->SetPosition(pos + (childPos-agentPos));
         childBody->SetVelocity(Vector3f(0,0,0));
         childBody->SetAngularVelocity(Vector3f(0,0,0));
     }
 }
 
 bool
-SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos, float angle)
+SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos, float angle)
 {
-    Vector3f bodyPos = agent_body->GetPosition();
+    Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
     
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-            (agent_body->GetParent().lock()->FindParentSupportingClass<Transform>().lock());
+            (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
     if (parent.get() == 0)
     {
-        agent_body->GetLog()->Error() << "(MoveAndRotateAgent) ERROR: can't get parent node.\n";
+        agent_aspect->GetLog()->Error() << "(MoveAndRotateAgent) ERROR: can't get parent node.\n";
         return false;
     }
 
@@ -687,7 +687,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos,
 
     if (leafList.size() == 0)
     {
-        agent_body->GetLog()->Error()
+        agent_aspect->GetLog()->Error()
             << "(MoveAndRotateAgent) ERROR: agent aspect doesn't have "
             << "children of type Body\n";
 
@@ -711,10 +711,9 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Body> agent_body, const Vector3f& pos,
     	    Vector3f childPos = childBody->GetPosition();
             Matrix childR = childBody->GetRotation();
             childR = mat*childR;
-    	    childBody->SetPosition(pos + mat.Rotate(childPos-bodyPos));
+    	    childBody->SetPosition(pos + mat.Rotate(childPos-agentPos));
     	    childBody->SetVelocity(Vector3f(0,0,0));
     	    childBody->SetAngularVelocity(Vector3f(0,0,0));
-
             childBody->SetRotation(childR);            
     	}
 }

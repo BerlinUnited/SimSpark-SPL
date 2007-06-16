@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.h,v 1.8 2007/06/15 09:47:29 jboedeck Exp $
+   $Id: soccerbase.h,v 1.9 2007/06/16 15:08:31 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -190,13 +190,13 @@ public:
     
     /* move an agent including all its connected bodies */
     static bool
-    MoveAgent(boost::shared_ptr<oxygen::Body> agent_body, const salt::Vector3f& pos);
+    MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos);
 
     /* move an agent including all its connected bodies and rotate
        specified angle (DEG) around the z-axis 
     */
     static bool
-    MoveAndRotateAgent(boost::shared_ptr<oxygen::Body> agent_body, 
+    MoveAndRotateAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, 
                        const salt::Vector3f& pos, 
                        float angle);
 
