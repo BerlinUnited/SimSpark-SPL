@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.11 2007/06/16 10:48:55 yxu Exp $
+   $Id: initeffector.cpp,v 1.12 2007/06/16 15:07:23 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -87,6 +87,9 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
      // request the initial orientation for the agent and turn
     float angle = mGameState->RequestInitOrientation(team);
 
+    SoccerBase::MoveAndRotateAgent(mAgentAspect, pos, angle);
+
+#if 0
     Matrix mat;
     mat.RotationZ(gDegToRad(angle));
 
@@ -142,7 +145,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             childBody->SetVelocity(Vector3f(0,0,0));
             childBody->SetAngularVelocity(Vector3f(0,0,0));
         }
-
+#endif
 }
 
 shared_ptr<ActionObject>
