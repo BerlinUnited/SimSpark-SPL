@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.12 2006/06/10 16:38:06 jboedeck Exp $
+   $Id: soccerruleaspect.h,v 1.13 2007/06/16 15:09:20 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ namespace oxygen
 {
     class Body;
     class AgentAspect;
+    class Transform;
 }
 
 class SoccerRuleAspect : public SoccerControlAspect
@@ -149,7 +150,7 @@ protected:
      *  \param agent_body a reference to the agent body
      *  \param pos the position where the agent should be
      */
-    void MoveAgent(boost::shared_ptr<oxygen::Body> agent_body,
+    void MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect,
                    const salt::Vector3f& pos);
 
     /** Move all the players from a team which are too close to pos away
