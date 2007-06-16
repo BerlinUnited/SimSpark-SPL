@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.15 2007/02/12 19:25:49 rollmark Exp $
+   $Id: body.h,v 1.16 2007/06/16 11:01:35 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -153,6 +153,9 @@ public:
 
     /** sets the roation of this body */
     void SetRotation(const salt::Matrix& rot);
+
+    /** gets the rotation of this body */
+    salt::Matrix GetRotation() const;
 
     /** returns the current angular velocity of this body */
     salt::Vector3f GetAngularVelocity() const;

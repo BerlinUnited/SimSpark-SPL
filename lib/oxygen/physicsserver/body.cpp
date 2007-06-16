@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.20 2007/02/12 19:25:49 rollmark Exp $
+   $Id: body.cpp,v 1.21 2007/06/16 11:01:35 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -242,6 +242,15 @@ Body::SetRotation(const Matrix& rot)
     dMatrix3 m;
     ConvertRotationMatrix(rot,m);
     dBodySetRotation(mODEBody,m);
+}
+
+salt::Matrix
+Body::GetRotation() const
+{
+    const dReal* m = dBodyGetRotation(mODEBody);
+    salt::Matrix rot;
+    ConvertRotationMatrix(m,rot);
+    return rot;
 }
 
 Vector3f
