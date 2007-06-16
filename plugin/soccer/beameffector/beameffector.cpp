@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.14 2007/06/15 09:47:29 jboedeck Exp $
+   $Id: beameffector.cpp,v 1.15 2007/06/16 15:07:06 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -109,7 +109,10 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
                 mAgentState->GetTeamIndex()
                 );
 
-        if (!SoccerBase::MoveAndRotateAgent(mBody, pos, angle))
+        shared_ptr<Transform> agent_aspect;
+        SoccerBase::GetTransformParent(*this, agent_aspect);
+
+        if (!SoccerBase::MoveAndRotateAgent(agent_aspect, pos, angle))
             return;
     }
 }

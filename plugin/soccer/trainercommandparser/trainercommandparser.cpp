@@ -262,12 +262,12 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
             return;
         }
 
-        shared_ptr<Body> body;
+        shared_ptr<Transform> agent_aspect;
 
-        if (SoccerBase::GetBody(*(*iter), body))
+        if (SoccerBase::GetTransformParent(*(*iter), agent_aspect))
         {
             // move all the bodies belonging to this agent
-            SoccerBase::MoveAgent(body, pos);
+            SoccerBase::MoveAgent(agent_aspect, pos);
         }
         else
         {
