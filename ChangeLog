@@ -1,3 +1,39 @@
+2007-06-17  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp:
+	- adapted call to MoveAndRotateAgent of the SoccerBase
+
+	* plugin/soccer/beameffector/beameffector.cpp:
+	- adapted call to MoveAndRotateAgent of the SoccerBase
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- adapted code to use MoveAgent function correctly
+	- project the agent's position to the same height as the
+	  position to test in ClearPlayers and ClearPlayersWithException
+	- added error messages in OnLink
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- MoveAgent takes a Transform instead of a Body
+	  as parameter
+
+	* plugin/soccer/soccerbase/soccerbase.h,
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- MoveAgent and MoveAndRotateAgent now take a Transform
+	  instead of a Body as parameter
+
+	* plugin/soccer/initeffector/initeffector.cpp:
+	- MoveAndRotateAgent of the SoccerBase is now used
+	  (old code is still there but commented out)
+
+	* lib/oxygen/physicsserver/collider.cpp:
+	- removed superfluous allocation of CollisionHandler
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	- caching MonitorItems
+
+	* lib/oxygen/controlaspect/controlaspect.cpp:
+	- caching references to the SceneServer and the active scene
+
 2007-06-15  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/spark/spark.rb: 
