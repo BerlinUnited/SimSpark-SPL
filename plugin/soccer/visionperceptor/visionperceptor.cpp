@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.19 2007/06/16 10:59:10 yxu Exp $
+   $Id: visionperceptor.cpp,v 1.20 2007/06/16 12:46:11 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -128,6 +128,7 @@ VisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
     mActiveScene->ListChildrenSupportingClass<ObjectState>(objectList, true);
 
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
+    TTeamIndex  ti          = mAgentState->GetTeamIndex();
 
     for (TLeafList::iterator i = objectList.begin();
          i != objectList.end(); ++i)
@@ -149,7 +150,8 @@ VisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
                     continue; // this should never happen
                 }
 
-            od.mRelPos = j->GetWorldTransform().Pos() - myPos;
+            od.mRelPos = SoccerBase::FlipView(j->GetWorldTransform().Pos(), ti);
+            od.mRelPos -=  myPos;
             od.mDist   = od.mRelPos.Length();
 
             visibleObjects.push_back(od);
@@ -282,8 +284,6 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
     predicate.name       = mPredicateName;
     predicate.parameter.Clear();
 
-    TTeamIndex  ti          = mAgentState->GetTeamIndex();
-
 	// get the transformation matrix describing the current orientation
     const Matrix& mat = mTransformParent->GetWorldTransform();
 
@@ -295,7 +295,6 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
     {
         ObjectData& od = (*i);
 
-        od.mRelPos = SoccerBase::FlipView(od.mRelPos, ti);
         if (mAddNoise)
             {
                 od.mRelPos += mError;
@@ -314,7 +313,7 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
         // theta is the angle in horizontal plane, with fwAngle as 0 degree
         od.mTheta = gNormalizeDeg (gRadToDeg(gNormalizeRad(
                               gArcTan2(localRelPos[1],localRelPos[0])
-                              )) + (ti==TI_LEFT?-90:90) );
+                              )) -90 );
 
         // latitude with fwPhi as 0 degreee
         od.mPhi = gRadToDeg(gNormalizeRad(
@@ -330,6 +329,7 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
 
     if (mSenseMyPos)
     {
+        TTeamIndex  ti          = mAgentState->GetTeamIndex();
         salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
         Vector3f sensedMyPos = SoccerBase::FlipView(myPos, ti);
 
