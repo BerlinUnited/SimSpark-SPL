@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: initeffector.cpp,v 1.10 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: initeffector.cpp,v 1.11 2007/06/16 10:48:55 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,11 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
     // request an initial position for the agent and move it there
     Vector3f pos = mGameState->RequestInitPosition(team);
+     // request the initial orientation for the agent and turn
+    float angle = mGameState->RequestInitOrientation(team);
+
+    Matrix mat;
+    mat.RotationZ(gDegToRad(angle));
 
     // agents may be encapsulated in their own collision spaces, so we need
     // to get the parent of the parent of the agent aspect in this case
@@ -128,9 +133,12 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
                 shared_dynamic_cast<Body>(*iter);
                 
             Vector3f childPos = childBody->GetPosition();
-            Vector3f newPos   = pos + (childPos-bodyPos);            
+            Matrix childR = childBody->GetRotation();
+            childR = mat*childR;
+            Vector3f newPos   = pos + (mat.Rotate(childPos-bodyPos));
 
             childBody->SetPosition(newPos);
+            childBody->SetRotation(childR);
             childBody->SetVelocity(Vector3f(0,0,0));
             childBody->SetAngularVelocity(Vector3f(0,0,0));
         }
