@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.28 2007/06/15 09:47:29 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.29 2007/06/16 15:10:14 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,9 +69,9 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
 }
 
 void
-SoccerRuleAspect::MoveAgent(shared_ptr<Body> agent_body, const Vector3f& pos)
+SoccerRuleAspect::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
 {
-    SoccerBase::MoveAgent(agent_body, pos);
+    SoccerBase::MoveAgent(agent_aspect, pos);
 }
 
 void
@@ -79,20 +79,28 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
                                float min_dist, TTeamIndex idx)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
+
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
         return;
 
     salt::BoundingSphere sphere(pos, radius);
-    boost::shared_ptr<oxygen::Body> agent_body;
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
     std::list<boost::shared_ptr<AgentState> >::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
-        SoccerBase::GetBody(**i, agent_body);
+        SoccerBase::GetTransformParent(**i, agent_aspect);
 
         // if agent is too close, move it away
-        Vector3f new_pos = agent_body->GetPosition();
-        if (sphere.Contains(new_pos))
+        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+
+        Vector3f test_pos = new_pos;
+        test_pos[2] = pos[2];   
+    
+        // DEBUG
+        //cerr << "testing position (" << test_pos[0] << "," << test_pos[1] << ")" << endl;    
+
+        if (sphere.Contains(test_pos))
         {
             float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
 
@@ -112,7 +120,7 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
                     new_pos[0] = pos[0] + dist;
                 }
             }
-            MoveAgent(agent_body, new_pos);
+            MoveAgent(agent_aspect, new_pos);
         }
     }
 #if 0
@@ -168,14 +176,15 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
         return;
 
-    boost::shared_ptr<oxygen::Body> agent_body;
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
     std::list<boost::shared_ptr<AgentState> >::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
-        SoccerBase::GetBody(**i, agent_body);
+        SoccerBase::GetTransformParent(**i, agent_aspect);
 
         // if agent is too close, move it away
-        Vector3f new_pos = agent_body->GetPosition();
+        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+
         if (box.Contains(Vector2f(new_pos[0], new_pos[1])))
         {
             if (idx == TI_LEFT)
@@ -186,7 +195,7 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
                 new_pos[0] = box.maxVec[0] +
                     salt::UniformRNG<>(min_dist, min_dist + 2.0)();
             }
-            MoveAgent(agent_body, new_pos);
+            MoveAgent(agent_aspect, new_pos);
         }
     }
 #if 0
@@ -786,8 +795,18 @@ SoccerRuleAspect::OnLink()
     mGameState = shared_dynamic_cast<GameStateAspect>
         (GetControlAspect("GameStateAspect"));
 
+    if (mGameState.get() == NULL)
+    {
+        GetLog()->Error() << "(SoccerRuleAspect) ERROR: could not get GameStateAspect\n";
+    }
+
     mBallState = shared_dynamic_cast<BallStateAspect>
         (GetControlAspect("BallStateAspect"));
+
+    if (mBallState.get() == NULL)
+    {
+        GetLog()->Error() << "(SoccerRuleAspect) ERROR: could not get BallStateAspect\n";
+    }
 
     SoccerBase::GetBallBody(*this,mBallBody);
 }
@@ -1213,17 +1232,21 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
         return;
 
     salt::BoundingSphere sphere(pos, radius);
-    boost::shared_ptr<oxygen::Body> agent_body;
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
     std::list<boost::shared_ptr<AgentState> >::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         if (agentState == (*i))
             continue;
 
-        SoccerBase::GetBody(**i, agent_body);
+        SoccerBase::GetTransformParent(**i, agent_aspect);
         // if agent is too close, move it away
-        Vector3f new_pos = agent_body->GetPosition();
-        if (sphere.Contains(new_pos))
+        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+
+        Vector3f test_pos = new_pos;
+        test_pos[2] = pos[2];
+
+        if (sphere.Contains(test_pos))
         {
             float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
 
@@ -1243,7 +1266,7 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                     new_pos[0] = pos[0] + dist;
                 }
             }
-            MoveAgent(agent_body, new_pos);
+            MoveAgent(agent_aspect, new_pos);
         }
     }
 #if 0
