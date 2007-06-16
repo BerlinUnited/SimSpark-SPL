@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.13 2007/05/30 18:41:21 jboedeck Exp $
+   $Id: collider.cpp,v 1.14 2007/06/16 15:06:40 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -133,8 +133,6 @@ dGeomID Collider::GetODEGeom()
 
 bool Collider::AddCollisionHandler(const std::string& handlerName)
 {
-    GetCore()->New(handlerName);
-
     shared_ptr<CollisionHandler> handler =
         shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
 
