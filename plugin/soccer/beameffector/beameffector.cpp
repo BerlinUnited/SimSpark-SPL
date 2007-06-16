@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.15 2007/06/16 15:07:06 jboedeck Exp $
+   $Id: beameffector.cpp,v 1.16 2007/06/16 17:40:44 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/agentstate/agentstate.h>
 #include <cmath>
+#include <oxygen/agentaspect/agentaspect.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -109,10 +110,34 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
                 mAgentState->GetTeamIndex()
                 );
 
-        shared_ptr<Transform> agent_aspect;
-        SoccerBase::GetTransformParent(*this, agent_aspect);
+        shared_ptr<GameStateAspect> gameState = shared_dynamic_cast<GameStateAspect>
+            (SoccerBase::GetControlAspect(*this,"GameStateAspect"));
+         if (gameState.get() == 0)
+        {
+            GetLog()->Error()
+            << "ERROR: (BeamEffector) cannot get GameStateAspect\n";
+            return;
+        }
+        shared_ptr<AgentAspect> agentAspect = GetAgentAspect();
+        if (agentAspect.get() == 0)
+        {
+            GetLog()->Error()
+            << "ERROR: (BeamEffector) cannot get AgentAspect\n";
+            return;
+        }
+        // search for the AgentState
+        shared_ptr<AgentState> state = shared_static_cast<AgentState>
+            (agentAspect->GetChildOfClass("AgentState", true));
+        if (state.get() == 0)
+        {
+            GetLog()->Error()
+            << "ERROR: (BeamEffector) cannot find AgentState\n";
+            return;
+        }
+        TTeamIndex team = state->GetTeamIndex();
+        angle += mGameState->RequestInitOrientation(team);
 
-        if (!SoccerBase::MoveAndRotateAgent(agent_aspect, pos, angle))
+        if (!SoccerBase::MoveAndRotateAgent(mBody, pos, angle))
             return;
     }
 }
