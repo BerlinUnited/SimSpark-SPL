@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.8 2006/05/23 14:41:42 jamu Exp $
+   $Id: gamestateaspect.h,v 1.9 2007/06/16 10:52:39 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,6 +92,10 @@ public:
     /** called from the InitEffector to request an initial position
         for an agent */
     salt::Vector3f RequestInitPosition(const TTeamIndex ti);
+
+    /** called from the InitEffector to request an initial orientation
+        for an agent */
+    float RequestInitOrientation(TTeamIndex ti) const;
 
     /** increments the score of a team */
     void ScoreTeam(TTeamIndex idx);

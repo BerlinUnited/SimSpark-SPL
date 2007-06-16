@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.12 2007/05/16 14:22:31 jboedeck Exp $
+   $Id: gamestateaspect.cpp,v 1.13 2007/06/16 10:52:39 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -398,6 +398,19 @@ GameStateAspect::RequestInitPosition(const TTeamIndex ti)
         }
 
     return pos;
+}
+
+float
+GameStateAspect::RequestInitOrientation(const TTeamIndex ti) const
+{
+    switch ( ti )
+    {
+        case TI_LEFT: return -90;
+        break;
+        case TI_RIGHT: return 90;
+        break;
+    }
+    return 0;
 }
 
 void
