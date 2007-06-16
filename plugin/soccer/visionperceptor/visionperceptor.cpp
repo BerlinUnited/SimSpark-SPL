@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.18 2007/05/16 14:45:17 jboedeck Exp $
+   $Id: visionperceptor.cpp,v 1.19 2007/06/16 10:59:10 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -314,7 +314,7 @@ VisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> predList)
         // theta is the angle in horizontal plane, with fwAngle as 0 degree
         od.mTheta = gNormalizeDeg (gRadToDeg(gNormalizeRad(
                               gArcTan2(localRelPos[1],localRelPos[0])
-                              )) -90 );
+                              )) + (ti==TI_LEFT?-90:90) );
 
         // latitude with fwPhi as 0 degreee
         od.mPhi = gRadToDeg(gNormalizeRad(
