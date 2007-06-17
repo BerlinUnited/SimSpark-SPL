@@ -446,6 +446,10 @@ plugin/soccer/gamestateperceptor/.dirstamp
 plugin/soccer/gamestateperceptor/.libs
 plugin/soccer/gamestateperceptor/Makefile
 plugin/soccer/gamestateperceptor/Makefile.in
+plugin/soccer/gametimeperceptor/*.lo
+plugin/soccer/gametimeperceptor/*.dirstamp
+plugin/soccer/gametimeperceptor/.deps
+plugin/soccer/gametimeperceptor/.libs
 plugin/soccer/hearperceptor/*.la
 plugin/soccer/hearperceptor/*.lo
 plugin/soccer/hearperceptor/.deps

@@ -1,3 +1,16 @@
+2007-06-18  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/gyrorateperceptor/gyrorateperceptor.cpp:
+	- rates should be in local coordinates now 
+
+2007-06-17  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* app/simspark/rsg/boxspheres/box_with_handler.rsg:
+	- commented out the PerceptorHandler, it is only needed by the TouchPerceptor
+	
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	- maybe a small performance gain in FlipFlagNameForRightTeam 
+
 2007-06-17  Jan Murray  <murray@aeonflux>
 
 	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
