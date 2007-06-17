@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.14 2007/02/18 13:05:28 rollmark Exp $
+   $Id: staticmesh.cpp,v 1.15 2007/06/17 10:49:54 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -160,25 +160,35 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
     mMaterials.clear();
     CalcBoundingBox();
 
-    shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
-        (GetCore()->Get("/sys/server/geometry"));
+    static shared_ptr<GeometryServer> geometryServer;
 
     if (geometryServer.get() == 0)
+    {
+        geometryServer= shared_dynamic_cast<GeometryServer>
+            (GetCore()->Get("/sys/server/geometry"));
+
+        if (geometryServer.get() == 0)
         {
             GetLog()->Error()
                 << "(StaticMesh) ERROR: cannot get GeometryServer\n";
             return false;
         }
+    }
 
-    shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
-        (GetCore()->Get("/sys/server/material"));
+    static shared_ptr<MaterialServer> materialServer;
 
     if (materialServer.get() == 0)
+    { 
+        materialServer = shared_dynamic_cast<MaterialServer>
+            (GetCore()->Get("/sys/server/material"));
+
+        if (materialServer.get() == 0)
         {
             GetLog()->Error()
                 << "(StaticMesh) ERROR: cannot get MaterialServer\n";
             return false;
         }
+    }
 
     mMesh = geometryServer->GetMesh(name,parameter);
 
