@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.17 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: rubysceneimporter.cpp,v 1.18 2007/06/17 10:49:12 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -508,15 +508,20 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
 
 void RubySceneImporter::PushInvocation(const MethodInvocation& invoc)
 {
-    shared_ptr<Class> baseNodeClass =
-        shared_dynamic_cast<Class>(GetCore()->Get("/classes/oxygen/Transform"));
-
+    static shared_ptr<Class> baseNodeClass;
+    
     if (baseNodeClass.get() == 0)
+    { 
+        baseNodeClass = shared_dynamic_cast<Class>
+            (GetCore()->Get("/classes/oxygen/Transform"));
+
+        if (baseNodeClass.get() == 0)
         {
             GetLog()->Error()
                 << "(RubySceneImporter) ERROR: failed to get class object for Transform\n";
             return;
         }
+    }
 
     if (baseNodeClass->SupportsCommand(invoc.method))
         {
