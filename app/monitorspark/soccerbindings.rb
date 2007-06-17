@@ -17,5 +17,8 @@ else
   else
     inputServer.bindCommand('k',      Command.KickOff);
     inputServer.bindCommand('b',      Command.DropBall);
+    inputServer.bindCommand('m',      Command.MoveAgent);
+    inputServer.bindCommand('n',      Command.ShootBall);
+    inputServer.bindCommand('x',      Command.MoveBall);
   end
 end

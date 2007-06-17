@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.3 2007/06/15 09:47:29 jboedeck Exp $
+   $Id: soccerinput.cpp,v 1.4 2007/06/17 02:20:15 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@ void SoccerInput::OnLink()
     scriptServer->CreateVariable("Command.KickOff", CmdKickOff);
     scriptServer->CreateVariable("Command.MoveAgent", CmdMoveAgent);
     scriptServer->CreateVariable("Command.DropBall", CmdDropBall);
+    scriptServer->CreateVariable("Command.ShootBall", CmdShootBall);
+    scriptServer->CreateVariable("Command.MoveBall", CmdMoveBall);    
 
     mMonitorClient = shared_dynamic_cast<NetClient>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient"));
@@ -82,13 +84,25 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
         case CmdMoveAgent:
             if (input.KeyPress())
                 {
-                    SendCommand("(agent (team Left)(unum 1)(pos -4.0 1.0 3.5))");
+                    SendCommand("(agent (team Left)(unum 1)(pos -2.0 1.0 3.5))");
                 }
             break;    
         case CmdDropBall:
             if (input.KeyPress())
                 {
                     SendCommand("(dropBall)");
+                }
+            break;
+        case CmdShootBall:
+            if (input.KeyPress())
+                {
+                    SendCommand("(ball (vel -4.0 0.0 2.0))");
+                }
+            break;
+        case CmdMoveBall:
+            if (input.KeyPress())
+                {
+                    SendCommand("(ball (pos -42.0 0.0 0.3))");
                 }
             break;
         };

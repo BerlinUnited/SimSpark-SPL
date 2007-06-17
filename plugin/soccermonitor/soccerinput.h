@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.h,v 1.2 2007/06/15 09:47:29 jboedeck Exp $
+   $Id: soccerinput.h,v 1.3 2007/06/17 02:20:15 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,9 @@ public:
             CmdUser      = kerosin::InputControl::CmdUser,
             CmdKickOff   = CmdUser + 1,
             CmdMoveAgent = CmdKickOff + 1,
-            CmdDropBall  = CmdMoveAgent + 1
+            CmdDropBall  = CmdMoveAgent + 1,
+            CmdShootBall = CmdDropBall + 1,
+            CmdMoveBall  = CmdShootBall + 1
         };
 
 public:
