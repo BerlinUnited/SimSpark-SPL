@@ -1,5 +1,27 @@
 2007-06-17  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- some changes to make it compile again (we don't have an
+	  agent_body parameter anymore, so we need to get the body first)
+	- includes Yuan's changes to rotate the agent at a global angle
+	- beaming will now also cause the agent to get up again ;-)
+
+	* plugin/soccer/beameffector/beameffector.cpp:
+	- made it compliant with the changed interface of the
+	  SoccerBase MoveAndRotateAgent
+
+	* app/monitorspark/soccerbindings.rb,
+	* plugin/soccermonitor/soccerinput.cpp,
+	* plugin/soccermonitor/soccerinput.h:
+	- added some key bindings with trainer commands for
+	  testing (should be removed again later!)
+
+	* app/agentspark/soccerbotbehavior.cpp:
+	- added a test for the beameffector with rotation
+	  (commented out)
+
+2007-06-17  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
 	* plugin/soccer/trainercommandparser/trainercommandparser.cpp:
 	- adapted call to MoveAndRotateAgent of the SoccerBase
 
