@@ -1,5 +1,9 @@
 2007-06-17  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
+	* app/simspark/rsg/agent/soccerbot.rsg:
+	- changed max angle values for Rle4 and Lle4 from
+	  0 to 1 to avoid jumps and ODE hickups
+
 	* plugin/soccer/soccerbase/soccerbase.cpp:
 	- some changes to make it compile again (we don't have an
 	  agent_body parameter anymore, so we need to get the body first)
