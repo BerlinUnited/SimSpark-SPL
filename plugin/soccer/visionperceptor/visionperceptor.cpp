@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.21 2007/06/17 03:03:02 yxu Exp $
+   $Id: visionperceptor.cpp,v 1.22 2007/06/17 09:50:20 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -158,11 +158,14 @@ VisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
 
 void VisionPerceptor::AddSense(oxygen::Predicate& predicate, ObjectData& od) const
 {
+    TTeamIndex  ti       = mAgentState->GetTeamIndex();
     ParameterList& element = predicate.parameter.AddList();
-    element.AddValue(od.mObj->GetPerceptName());
+    std::string perceptName = od.mObj->GetPerceptName();
+    if ( TI_RIGHT == ti ) perceptName = FlipFlagNameForRightTeam(perceptName);
+    element.AddValue(perceptName);
 
 //    if(od.mObj->GetPerceptName() == "Player")
-    if(od.mObj->GetPerceptName() == "P")
+    if(perceptName == "P")
         {
             ParameterList player;
             player.AddValue(std::string("team"));
@@ -401,4 +404,19 @@ void
 VisionPerceptor::SetSenseMyPos(bool sense)
 {
     mSenseMyPos = sense;
+}
+
+std::string
+VisionPerceptor::FlipFlagNameForRightTeam(const std::string& oName) const
+{
+    if ( "F1L" == oName ) return "F2R";
+    if ( "F2L" == oName ) return "F1R";
+    if ( "F1R" == oName ) return "F2L";
+    if ( "F2R" == oName ) return "F1L";
+
+    if ( "G1L" == oName ) return "G2R";
+    if ( "G2L" == oName ) return "G1R";
+    if ( "G1R" == oName ) return "G2L";
+    if ( "G2R" == oName ) return "G1L";
+    return oName;
 }
