@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh_c.cpp,v 1.7 2004/05/02 09:49:05 rollmark Exp $
+   $Id: staticmesh_c.cpp,v 1.8 2007/06/17 13:47:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,8 +53,8 @@ FUNCTION(StaticMesh,setScale)
     Vector3f inScale;
 
     if (
-        (in.GetSize() == 0) ||
-        (! in.GetValue(in[0], inScale))
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in.begin(), inScale))
         )
         {
             return false;
