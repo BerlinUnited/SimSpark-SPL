@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.29 2007/06/16 15:10:14 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.30 2007/06/17 10:48:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -269,13 +269,18 @@ void
 SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // get game control server to check agent count
-    shared_ptr<GameControlServer> game_control = shared_dynamic_cast<GameControlServer>
-        (GetCore()->Get("/sys/server/gamecontrol"));
+    static shared_ptr<GameControlServer> game_control;
 
-    if (game_control.get() == 0)
+    if  (game_control.get() == 0)
     {
-        GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer.\n";
-        return;
+        game_control = shared_dynamic_cast<GameControlServer>
+            (GetCore()->Get("/sys/server/gamecontrol"));
+
+        if (game_control.get() == 0)
+        {
+            GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer.\n";
+            return;
+        }
     }
     
     // if no players are connected, just return
