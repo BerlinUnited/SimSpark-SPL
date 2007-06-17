@@ -1,3 +1,26 @@
+2007-06-17  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- caching reference to the GameControlServer in UpdateBeforeKickOff
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- caching reference to the GameControlServer
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	- caching reference to the "/classes/oxygen/Transform" node
+
+	* lib/zeitgeist/class.cpp:
+	- caching reference to the "/classes" node
+
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	- removed caching of the MonitorItems again
+
+	* lib/kerosin/sceneserver/staticmesh.cpp:
+	- caching references to the GeometryServer and the MaterialServer
+
+	* lib/kerosin/sceneserver/singlematnode.cpp:
+	- caching reference to the MaterialServer
+
 2007-06-17  Xu Yuan  <xuyuan.cn@gmail.com>
 
     * plugin/soccer/visionperceptor/visionperceptor.h:
