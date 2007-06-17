@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.19 2007/06/16 17:41:16 yxu Exp $
+   $Id: soccerbase.cpp,v 1.20 2007/06/17 02:20:55 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -694,7 +694,10 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
         return false;
     }    
 
-    Matrix bodyR = agent_body->GetRotation();
+    shared_ptr<Body> body;
+    GetAgentBody(agent_aspect, body);
+
+    Matrix bodyR = body->GetRotation();
     bodyR.InvertRotationMatrix();
     Matrix mat;
     mat.RotationZ(gDegToRad(angle));
@@ -708,7 +711,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
          ++iter
          )
         {            
-	    shared_ptr<Body> childBody = 
+	       shared_ptr<Body> childBody = 
                 shared_dynamic_cast<Body>(*iter);
 	    
     	    Vector3f childPos = childBody->GetPosition();
