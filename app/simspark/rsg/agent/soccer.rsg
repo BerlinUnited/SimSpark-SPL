@@ -118,32 +118,18 @@
 	     (setName GoalBoxL)
 	     (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth)) 0 $GoalHalfHeight)
 	     (nd BoxCollider
-		   (setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
-		   (nd ContactJointHandler
-			 (setContactBounceMode false)
-		   )
-	     )
-	     (nd RecorderHandler 
+		(setName GoalColliderL)
+		(setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
+;		   (nd ContactJointHandler
+;			 (setContactBounceMode false)
+;					)
+		(nd RecorderHandler 
 		   (setName recorder)
- 	     )  
+		)
+             )  
        )
 
-; create the goal bar on top of the goal (left goal)
-; (nd Transform
-;       (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
-;                               0
-;			       (eval $GoalHeight + $BarRadius)
-;			       )
-;       (nd Box
-;       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-;	     (setMaterial $GoalMaterial)
-;	     )
-;	(nd BoxCollider
-;       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-;	     )     
-;       
-;       )   
-       
+
 ; create the left goal post (left goal)
  (nd Transform
        (setLocalPos (eval -1 * (eval $FieldHalfLength + $GoalHalfDepth) + $LineHeight) 
@@ -200,31 +186,16 @@
 	(setName GoalBoxR)
 	(setLocalPos (eval $FieldHalfLength + $GoalHalfDepth) 0 $GoalHalfHeight)
 	(nd BoxCollider
+	    (setName GoalColliderR)
 	    (setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
-	    (nd ContactJointHandler
-		(setContactBounceMode false)
-		)
+;	    (nd ContactJointHandler
+;		(setContactBounceMode false)
+;		)
+	    (nd RecorderHandler 
+                (setName recorder)
 	    )
-	(nd RecorderHandler 
-             (setName recorder)
-	     )  
 	)
-       
-; create the goal bar on top of the goal (right goal)
-; (nd Transform
-;       (setLocalPos (eval (eval $FieldHalfLength + $GoalHalfDepth) - $LineHeight) 
-;                               0
-;			       (eval $GoalHeight + $BarRadius)
-;			       )
-;       (nd Box
-;       	     (setExtents $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-;	     (setMaterial $GoalMaterial)
-;	     )
-;	(nd BoxCollider
-;       	     (setBoxLengths $GoalDepth (eval $GoalWidth - 0.1) $BarDiameter)
-;	     )
-;       
-;       )   
+    )
        
 ; create the left goal post (right goal)
  (nd Transform
