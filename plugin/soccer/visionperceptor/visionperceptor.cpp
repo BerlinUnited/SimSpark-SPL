@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.22 2007/06/17 09:50:20 yxu Exp $
+   $Id: visionperceptor.cpp,v 1.23 2007/06/17 22:54:21 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -409,14 +409,27 @@ VisionPerceptor::SetSenseMyPos(bool sense)
 std::string
 VisionPerceptor::FlipFlagNameForRightTeam(const std::string& oName) const
 {
-    if ( "F1L" == oName ) return "F2R";
-    if ( "F2L" == oName ) return "F1R";
-    if ( "F1R" == oName ) return "F2L";
-    if ( "F2R" == oName ) return "F1L";
-
-    if ( "G1L" == oName ) return "G2R";
-    if ( "G2L" == oName ) return "G1R";
-    if ( "G1R" == oName ) return "G2L";
-    if ( "G2R" == oName ) return "G1L";
+//    if ( "F1L" == oName ) return "F2R";
+//    if ( "F2L" == oName ) return "F1R";
+//    if ( "F1R" == oName ) return "F2L";
+//    if ( "F2R" == oName ) return "F1L";
+//
+//    if ( "G1L" == oName ) return "G2R";
+//    if ( "G2L" == oName ) return "G1R";
+//    if ( "G1R" == oName ) return "G2L";
+//    if ( "G2R" == oName ) return "G1L";
+	if (oName.size() != 3)
+		return oName;
+	
+	if (oName[0] == 'F' || oName[0] == 'G')
+	{
+		assert((oName[1]=='1' || oName[1]=='2') && 
+		       (oName[2]=='L' || oName[2]=='R'));
+		std::string newName = oName;
+		newName[1] = ( oName[1] == '1' ) ? '2' : '1';
+		newName[2] = ( oName[2] == 'L' ) ? 'R' : 'L';
+		return newName;
+	}
+	
     return oName;
 }
