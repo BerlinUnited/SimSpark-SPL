@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccercontrolaspect.cpp,v 1.3 2007/05/31 08:00:31 jboedeck Exp $
+   $Id: soccercontrolaspect.cpp,v 1.4 2007/06/17 13:20:09 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetFieldRecorder()
 shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
 {
     shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
-        (GetCore()->Get(mScenePath + "LeftGoalSpace/GoalBoxL/recorder"));
+        (GetCore()->Get(mScenePath + "LeftGoalSpace/GoalBoxL/GoalColliderL/recorder"));
 
     if (node.get() == 0)
         {
@@ -98,7 +98,7 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
 shared_ptr<RecorderHandler> SoccerControlAspect::GetRightGoalRecorder()
 {
     shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
-        (GetCore()->Get(mScenePath + "RightGoalSpace/GoalBoxR/recorder"));
+        (GetCore()->Get(mScenePath + "RightGoalSpace/GoalBoxR/GoalColliderR/recorder"));
 
     if (node.get() == 0)
         {
