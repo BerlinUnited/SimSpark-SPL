@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.16 2007/06/16 17:40:44 yxu Exp $
+   $Id: beameffector.cpp,v 1.17 2007/06/17 02:20:42 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,7 +62,9 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
     shared_ptr<BeamAction> beamAction =
         shared_dynamic_cast<BeamAction>(mAction);
+
    mAction.reset();
+
     if (beamAction.get() == 0)
     {
         GetLog()->Error()
@@ -104,40 +106,21 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         // swap x and y coordinates accordingly for the current
         // team; after the flip pos is global and not independent
         // on the team
-        pos = SoccerBase::FlipView
-            (
-                pos,
-                mAgentState->GetTeamIndex()
-                );
+        pos = SoccerBase::FlipView(pos, mAgentState->GetTeamIndex());     
 
-        shared_ptr<GameStateAspect> gameState = shared_dynamic_cast<GameStateAspect>
-            (SoccerBase::GetControlAspect(*this,"GameStateAspect"));
-         if (gameState.get() == 0)
-        {
-            GetLog()->Error()
-            << "ERROR: (BeamEffector) cannot get GameStateAspect\n";
-            return;
-        }
-        shared_ptr<AgentAspect> agentAspect = GetAgentAspect();
+        shared_ptr<Transform> agentAspect;
+        SoccerBase::GetTransformParent(*this, agentAspect);
         if (agentAspect.get() == 0)
         {
             GetLog()->Error()
             << "ERROR: (BeamEffector) cannot get AgentAspect\n";
             return;
         }
-        // search for the AgentState
-        shared_ptr<AgentState> state = shared_static_cast<AgentState>
-            (agentAspect->GetChildOfClass("AgentState", true));
-        if (state.get() == 0)
-        {
-            GetLog()->Error()
-            << "ERROR: (BeamEffector) cannot find AgentState\n";
-            return;
-        }
-        TTeamIndex team = state->GetTeamIndex();
+        
+        TTeamIndex team = mAgentState->GetTeamIndex();
         angle += mGameState->RequestInitOrientation(team);
 
-        if (!SoccerBase::MoveAndRotateAgent(mBody, pos, angle))
+        if (!SoccerBase::MoveAndRotateAgent(agentAspect, pos, angle))
             return;
     }
 }
