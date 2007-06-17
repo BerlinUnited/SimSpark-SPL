@@ -161,13 +161,28 @@ string SoccerbotBehavior::Think(const std::string& message)
 
     //sleep(1);
 
+    stringstream ss("");
+
     //bow before me
     //return "(rleg_eff_2_3 -1 0)(lleg_eff_2_3 2 0)";
 
     //testing the beam effector with rotation
     //position (x,y) and angle in the x-y-plane (DEG)
-    //cout << "Beaming..." << endl;
-    //return "(beam -10.0 -10.0 45.0)";
+    //static int count = 0;
+    //static float angle = 0.0;
+
+    //if (count == 200)
+    //{
+    //    count = 0;
+    //    cout << "Beaming at angle " << angle << endl;
+    //    ss << "(beam -10.0 -10.0 " << angle << ")"; 
+    //    angle += 45.0;
+    //    if (angle >= 360) angle = 0;       
+    //}
+
+    //++count;
+    
+    //return ss.str();
 
     static const float gain = 0.1;
     static BehaviorState leftstate = ARM_UP;
@@ -210,7 +225,7 @@ string SoccerbotBehavior::Think(const std::string& message)
     float newAngle = 0;
  
     // string stream for the server commands
-    stringstream ss("");
+    //stringstream ss("");
     
 #if 1
     switch(rightstate)
