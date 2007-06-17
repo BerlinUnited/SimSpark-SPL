@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.20 2007/06/17 02:20:55 jboedeck Exp $
+   $Id: soccerbase.cpp,v 1.21 2007/06/17 10:48:49 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -325,17 +325,24 @@ bool
 SoccerBase::GetGameControlServer(const Leaf& base,
                                 shared_ptr<GameControlServer> & game_control_server)
 {
-    game_control_server = shared_dynamic_cast<GameControlServer>
-        (base.GetCore()->Get("/sys/server/gamecontrol"));
+    static shared_ptr<GameControlServer> gameControlServer;
 
-    if (game_control_server.get() == 0)
+    if (gameControlServer.get() == 0)
     {
-        base.GetLog()->Error()
-            << "Error: (SoccerBase: " << base.GetName()
-            << " found no GameControlServer\n";
+        gameControlServer = shared_dynamic_cast<GameControlServer>
+            (base.GetCore()->Get("/sys/server/gamecontrol"));
 
-        return false;
+        if (gameControlServer.get() == 0)
+        {
+            base.GetLog()->Error()
+                << "Error: (SoccerBase: " << base.GetName()
+                << " found no GameControlServer\n";
+
+            return false;
+        }
     }
+
+    game_control_server = gameControlServer;
 
     return true;
 }
