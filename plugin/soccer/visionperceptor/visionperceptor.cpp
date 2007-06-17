@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.20 2007/06/16 12:46:11 yxu Exp $
+   $Id: visionperceptor.cpp,v 1.21 2007/06/17 03:03:02 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -128,7 +128,6 @@ VisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
     mActiveScene->ListChildrenSupportingClass<ObjectState>(objectList, true);
 
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
-    TTeamIndex  ti          = mAgentState->GetTeamIndex();
 
     for (TLeafList::iterator i = objectList.begin();
          i != objectList.end(); ++i)
@@ -150,8 +149,7 @@ VisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
                     continue; // this should never happen
                 }
 
-            od.mRelPos = SoccerBase::FlipView(j->GetWorldTransform().Pos(), ti);
-            od.mRelPos -=  myPos;
+            od.mRelPos = j->GetWorldTransform().Pos() - myPos;
             od.mDist   = od.mRelPos.Length();
 
             visibleObjects.push_back(od);
