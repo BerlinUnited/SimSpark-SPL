@@ -1,3 +1,9 @@
+2007-06-17  Xu Yuan  <xuyuan.cn@gmail.com>
+
+    * plugin/soccer/visionperceptor/visionperceptor.h:
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	- flip the flag names for the right team
+
 2007-06-17  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/simspark/rsg/agent/soccerbot.rsg:
