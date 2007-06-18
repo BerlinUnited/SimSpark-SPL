@@ -1,3 +1,9 @@
+2007-06-19  Xu Yuan  <xuyuan.cn@gmail.com>
+
+    * plugin/soccer/visionperceptor/visionperceptor.h:
+    * plugin/soccer/visionperceptor/visionperceptor.cpp:
+    - remove flipping flag names
+
 2007-06-18  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/gyrorateperceptor/gyrorateperceptor.cpp:
