@@ -128,7 +128,7 @@
     (def $Rae1Min -90)
     (def $Rae1Max 180)
     (def $Rae2Min -180)
-    (def $Rae2Max 0)
+    (def $Rae2Max 1)
     (def $Rae3Min -135)
     (def $Rae3Max 135)
     (def $Rae4Min -10)
@@ -136,7 +136,7 @@
 
     (def $Lae1Min -90)
     (def $Lae1Max 180)
-    (def $Lae2Min 0)
+    (def $Lae2Min 1)
     (def $Lae2Max 180)
     (def $Lae3Min -135)
     (def $Lae3Max 135)
