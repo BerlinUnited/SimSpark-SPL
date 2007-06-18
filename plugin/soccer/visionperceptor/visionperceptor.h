@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.h,v 1.8 2007/06/17 09:50:20 yxu Exp $
+   $Id: visionperceptor.h,v 1.9 2007/06/18 14:15:30 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -124,9 +124,6 @@ protected:
 
     /** applies noise to the setup ObjectData */
     void ApplyNoise(ObjectData& od) const;
-
-     /** flip the flag name for the right team */
-    std::string FlipFlagNameForRightTeam(const std::string& oName) const;
 
     virtual void OnLink();
     virtual void OnUnlink();
