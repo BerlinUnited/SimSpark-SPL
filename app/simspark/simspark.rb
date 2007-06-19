@@ -60,20 +60,6 @@ sparkLogAllToCerr()
 # source soccersim.rb to run the soccer simulation
 run "soccersim.rb"
 
-#sparkSetupMonitor()
-
-#
-# prepare the soccer monitor
-#importBundle 'soccermonitor'
-
-# load a font for the HUD
-#fontServer = get($serverPath+'font')
-#fontServer.getFont('VeraMono.ttf')
-
-# register the soccer monitor plugin to parse the soccer game
-# state
-#sparkRegisterCustomMonitor 'SoccerMonitor'
-
-# register the soccer render plugin to draw the game state on the
-# screen
-#sparkRegisterCustomRender  'SoccerRender'
+# setup game state info rendering for the internal monitor
+# source soccersim.rb to run the soccer simulation
+run "internalsoccermonitor.rb"
