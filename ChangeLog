@@ -1,3 +1,19 @@
+2007-06-20  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* app/simspark/soccersim.rb:
+	- changed field size to 45mx30m
+	- changed goal size to 9mx4m
+
+	* app/simspark/rsg/agent/flag_left1.rsg, 
+	* app/simspark/rsg/agent/flag_left2.rsg, 
+	* app/simspark/rsg/agent/flag_right1.rsg, 
+	* app/simspark/rsg/agent/flag_right2.rsg:
+	- new corner cylinder visualization (moved back a little)
+
+	* app/simspark/rsg/agent/soccer.rsg:
+	- using flag_left1.rsg, flag_left2.rsg, flag_right1.rsg, and
+	  flag_right2.rsg for visualization of the corner cylinders now
+
 2007-06-19  Jan Murray  <murray@uni-koblenz.de>
 
 	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
@@ -10,11 +26,37 @@
 	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
 	int -> GLint to compile on Mac
 
-2007-06-19 Xu Yuan <xuyuan.cn@gmail.com>
+2007-06-19  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
-    * plugin/soccer/visionperceptor/visionperceptor.h:
-    * plugin/soccer/visionperceptor/visionperceptor.cpp:
-    - remove flipping flag names
+	* lib/kerosin/kerosin.rb:
+	- set default screen size to 800x600 and application title to SimSpark
+
+	* plugin/soccer/internalsoccermonitor/.cvsignore,
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender.h,
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp,
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender_c.cpp:
+	- render game state info in the internal monitor (work in progress)
+
+	* plugin/soccer/export.cpp: 
+	- added files for the internal soccer render
+	
+	* plugin/soccer/Makefile.am:
+	- added files for the internal soccer render
+
+	* plugin/Makefile.am:
+	- ws only
+
+	* app/simspark/internalsoccermonitor.rb:
+	- setup font rendering stuff for the internal monitor
+
+	* app/simspark/simspark.rb:
+	- sourcing the new internalsoccermonitor.rb file	
+
+2007-06-19  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* plugin/soccer/visionperceptor/visionperceptor.h,
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	- remove flipping flag names
 
 2007-06-18  Hedayat Vatankhah  <hedayat@grad.com>
 
@@ -67,7 +109,7 @@
 
 2007-06-17  Xu Yuan  <xuyuan.cn@gmail.com>
 
-    * plugin/soccer/visionperceptor/visionperceptor.h:
+	* plugin/soccer/visionperceptor/visionperceptor.h,
 	* plugin/soccer/visionperceptor/visionperceptor.cpp:
 	- flip the flag names for the right team
 
