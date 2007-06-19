@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid.h,v 1.3 2004/04/18 16:30:29 rollmark Exp $
+   $Id: materialsolid.h,v 1.4 2007/06/19 23:59:57 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,25 +43,25 @@ public:
     void SetAmbient(const RGBA& ambient);
 
     /** returns the ambient material reflectance */
-    const RGBA& GetAmbient();
+    const RGBA& GetAmbient() const;
 
     /** sets the diffuse material reflectance */
     void SetDiffuse(const RGBA& diffuse);
 
     /** returns the diffuse material reflectancee */
-    const RGBA& GetDiffuse();
+    const RGBA& GetDiffuse() const;
 
     /** sets the specular material reflectance */
     void SetSpecular(const RGBA& specular);
 
     /** returns the specular material reflectance */
-    const RGBA& GetSpecular();
+    const RGBA& GetSpecular() const;
 
     /** sets the light emission */
     void SetEmission(const RGBA& emission);
 
     /** returns the light emission */
-    const RGBA& GetEmission();
+    const RGBA& GetEmission() const;
 
 protected:
     /** sets up all lighting material properties */
