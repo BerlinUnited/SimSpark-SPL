@@ -384,7 +384,7 @@
 ;;
 
 ; mark the soccer field with 4 field flags
- (importScene rsg/agent/flag_right.rsg 
+ (importScene rsg/agent/flag_left1.rsg 
 	      (eval -1 * $FieldHalfLength)  
 	      $FieldHalfWidth
 	      0.375 
@@ -394,7 +394,7 @@
 	      0.75
 	      )
 
- (importScene rsg/agent/flag_right.rsg 
+ (importScene rsg/agent/flag_left2.rsg 
 	      (eval -1 * $FieldHalfLength) 
 	      (eval -1 * $FieldHalfWidth)
 	      0.375
@@ -404,7 +404,7 @@
 	      0.75
 	      )
 
- (importScene rsg/agent/flag_left.rsg 
+ (importScene rsg/agent/flag_right1.rsg 
 	      $FieldHalfLength 
 	      $FieldHalfWidth 
 	      0.375 
@@ -414,7 +414,7 @@
 	      0.75
 	      )
 
- (importScene rsg/agent/flag_left.rsg 
+ (importScene rsg/agent/flag_right2.rsg 
 	      $FieldHalfLength 
 	      (eval -1 * $FieldHalfWidth) 
 	      0.375 
