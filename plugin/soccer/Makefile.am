@@ -41,6 +41,8 @@ sayeffector/sayeffector.cpp \
 sayeffector/sayeffector_c.cpp \
 sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor_c.cpp \
+internalsoccermonitor/internalsoccerrender.cpp \
+internalsoccermonitor/internalsoccerrender_c.cpp \
 soccerbase/soccerbase.cpp \
 soccercontrolaspect/soccercontrolaspect.cpp \
 soccercontrolaspect/soccercontrolaspect_c.cpp \
@@ -84,6 +86,7 @@ restrictedvisionperceptor/restrictedvisionperceptor.h \
 sayeffector/sayaction.h \
 sayeffector/sayeffector.h \
 sexpmonitor/sexpmonitor.h \
+internalsoccermonitor/internalsoccerrender.h \
 soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.h \
 soccerruleaspect/soccerruleaspect.h \
@@ -98,4 +101,5 @@ libpkgincludedir = $(includedir)/@PACKAGE@/soccer
 # so we don't need the "lib" prefix in the module name
 soccer_la_LDFLAGS = -module -version-info 1:0:0
 
-AM_CPPFLAGS = -I${top_srcdir}/lib @RUBY_CPPFLAGS@ -I${top_srcdir}/plugin
+AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin \
+	          @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
