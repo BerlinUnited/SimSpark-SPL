@@ -92,7 +92,7 @@ void InternalSoccerRender::OnUnlink()
 
 void InternalSoccerRender::glEnable2D()
 {
-   int vPort[4];
+    GLint vPort[4];
 
    glGetIntegerv(GL_VIEWPORT, vPort);
 
