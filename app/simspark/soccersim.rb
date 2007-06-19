@@ -24,12 +24,17 @@ randomServer = get($serverPath+'random')
 randomServer.seed(0)
 
 # the soccer field dimensions in meters
-addSoccerVar('FieldLength', randomServer.uniformRND(100.0,110.9).floor().to_f())
-addSoccerVar('FieldWidth', randomServer.uniformRND(64.0,75.9).floor().to_f())
+#addSoccerVar('FieldLength', randomServer.uniformRND(100.0,110.9).floor().to_f())
+#addSoccerVar('FieldWidth', randomServer.uniformRND(64.0,75.9).floor().to_f())
+# Joschka: settings for Atlanta
+addSoccerVar('FieldLength', 45.0)
+addSoccerVar('FieldWidth', 30.0)
 addSoccerVar('FieldHeight', 40.0)
-addSoccerVar('GoalWidth', 7.32)
+#addSoccerVar('GoalWidth', 7.32)
+addSoccerVar('GoalWidth', 9.0)
 addSoccerVar('GoalDepth', 2.0)
-addSoccerVar('GoalHeight', 2.44) # FIFA: 2.44 
+#addSoccerVar('GoalHeight', 2.44) # FIFA: 2.44 
+addSoccerVar('GoalHeight', 4.0) 
 addSoccerVar('BorderSize', 10.0)
 addSoccerVar('FreeKickDistance', 9.15)
 addSoccerVar('AutomaticKickOff', false)
