@@ -12,7 +12,7 @@
 # This section contains information about the application being executed.
 #
 
-createVariable('Application.Title', 'Kerosin');
+createVariable('Application.Title', 'SimSpark');
 
 
 ####
@@ -32,8 +32,8 @@ createVariable('System.FontPath', 'data/fonts');
 # to the application window.
 #
 
-createVariable('Viewport.XRes', 640);           # width
-createVariable('Viewport.YRes', 480);	        # height
+createVariable('Viewport.XRes', 800);           # width
+createVariable('Viewport.YRes', 600);	        # height
 createVariable('Viewport.FullScreen',   false);	# run in fullscreen?
 createVariable('Viewport.DoubleBuffer', true);  # use double buffering?
 
