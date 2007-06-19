@@ -10,12 +10,12 @@ SUBDIRS = \
 	  collisionperceptor \
 	  sexpparser \
 	  soccer \
+	  rubysceneimporter\
+	  voidmeshimporter\
+	  sparkmonitor\
+	  sparkagent\
+	  sceneeffector\
 	  soccermonitor \
-          rubysceneimporter\
-          voidmeshimporter\
-          sparkmonitor\
-          sparkagent\
-          sceneeffector\
 	  soundsystemfmod
 
 # filesystemrar 
