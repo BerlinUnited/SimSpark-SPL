@@ -71,7 +71,7 @@ void InternalSoccerRender::OnLink()
         {
             GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get TextureServer\n";
         }
-    
+
     // get the GameStateAspect
     mGameState = shared_dynamic_cast<GameStateAspect>
         (SoccerBase::GetControlAspect(*this, "GameStateAspect"));
@@ -136,10 +136,12 @@ void InternalSoccerRender::Render()
             return;
         }
 
-    stringstream ss;
-    ss.precision(2);
+    stringstream ss_l, ss_c, ss_r;
     
-    ss << mGameState->GetScore(TI_LEFT) << " ";
+    ss_c.setf(ios_base::fixed,ios_base::floatfield);
+    ss_c.precision(2);
+    
+    ss_l << mGameState->GetScore(TI_LEFT) << " ";
 
     string nameleft = mGameState->GetTeamName(TI_LEFT);
 
@@ -148,19 +150,19 @@ void InternalSoccerRender::Render()
         nameleft = "<Left>";
     }
    
-    ss << nameleft;
+    ss_l << nameleft;
 
     if (static_cast<int>(mGameState->GetGameHalf()) == 1)
     {
-        ss << " (first half) ";
+        ss_c << " (1st half) ";
     }
     else
     {
-        ss << " (second half) ";
+        ss_c << " (2nd half) ";
     }
 
-    ss << SoccerBase::PlayMode2Str(mGameState->GetPlayMode());
-    ss << " t=" << mGameState->GetTime() << " ";
+    ss_c << SoccerBase::PlayMode2Str(mGameState->GetPlayMode());
+    ss_c << " t=" << mGameState->GetTime() << " ";
 
     string nameright = mGameState->GetTeamName(TI_RIGHT);
 
@@ -169,12 +171,30 @@ void InternalSoccerRender::Render()
         nameright = "<Right>";
     }
    
-    ss << nameright;    
-    ss << " " << mGameState->GetScore(TI_RIGHT);
+    ss_r << nameright;    
+    ss_r << " " << mGameState->GetScore(TI_RIGHT);
 
+    int xPos;
+     
     mFontServer->Begin();
     mFont->Bind();
-    mFont->DrawString(0, 0, ss.str().c_str());
+    
+    // draw left team info left justified
+    mFont->DrawString(10, 0, ss_l.str().c_str());
+
+    // draw right team info right justified
+    // Window Width is mapped to 1024
+    // use 1014 as base to keep a small right margin
+    // FIXME: remove the magic numbers.
+    xPos = int(1014-(mFont->GetStringWidth(ss_r.str().c_str())));
+    mFont->DrawString(xPos, 0, ss_r.str().c_str());
+
+    // draw game state info centered
+    // Window Width is mapped to 1024
+    // FIXME: remove the magic number.
+    xPos = int((1024-(mFont->GetStringWidth(ss_c.str().c_str())))/2);
+    mFont->DrawString(xPos, 0, ss_c.str().c_str());
+    
     mFontServer->End();
 
 #if 0
