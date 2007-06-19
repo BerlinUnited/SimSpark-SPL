@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: font.cpp,v 1.5 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: font.cpp,v 1.6 2007/06/19 23:56:12 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,11 +28,16 @@
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include "fontserver.h"
 
-using namespace kerosin;
+#if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__)
+#define WIN32_LEAN_AND_MEAN 1
+#include <windows.h>
+#endif
+
+
 using namespace salt;
 
 kerosin::Font::Font(FontServer &fontServer)
-    : mTexID(0), mRowHeight(0), mSize(0), mFontServer(fontServer)
+  : mTexID(0), mRowHeight(0), mSize(0), mFontServer(fontServer)
 {
 }
 
@@ -45,7 +50,6 @@ kerosin::Font::Init(const std::string &name, unsigned int size, FT_Face face)
 {
     mName = name;
     mSize = size;
-
     if (mTexID != 0)
     {
         glDeleteTextures(1, &mTexID);
@@ -134,11 +138,11 @@ kerosin::Font::Init(const std::string &name, unsigned int size, FT_Face face)
 
     // setup image buffer now we create a texture that is big enough for
     // this data
-    boost::scoped_array<unsigned char> imageBuffer
-        (new unsigned char[256*requiredHeight]);
+    const unsigned int bufferSize = 256*requiredHeight;
+    boost::scoped_array<unsigned char> imageBuffer(new unsigned char[bufferSize]);
 
     // clear the image
-    memset(imageBuffer.get(), 0x00, 256*requiredHeight*sizeof(unsigned char));
+    memset(imageBuffer.get(), 0x00, bufferSize*sizeof(unsigned char));
 
     // copy glyphs to the imageBuffer
     x=0;
@@ -170,7 +174,20 @@ kerosin::Font::Init(const std::string &name, unsigned int size, FT_Face face)
             {
                 for (unsigned int copyX = 0; copyX < glyph.mByteWidth; ++copyX)
                 {
-                    imageBuffer[(y+1+copyY)*256 + x+1+copyX] = glyph.mData[copyY*glyph.mByteWidth + copyX];
+                    unsigned int cto = (y+1+copyY)*256 + x+1+copyX;
+                    if (cto < bufferSize)
+                    {
+                        imageBuffer[(y+1+copyY)*256 + x+1+copyX] = glyph.mData[copyY*glyph.mByteWidth + copyX];
+                    }
+                    else
+                    {
+                        static int warning = 0;
+                        if (i != warning)
+                        {
+                            warning = i;
+                            mFontServer.GetLog()->Warning() << "(Font) WARNING: Init font: skipping character no. " << i << "\n";
+                        }
+                    }
                 }
             }
             mMetrics[i-32].mByteWidth     = glyph.mByteWidth;
@@ -181,6 +198,7 @@ kerosin::Font::Init(const std::string &name, unsigned int size, FT_Face face)
             mMetrics[i-32].mTC1.Set((x+0.5f)/256.0f, (y+0.5f)/(float)requiredHeight);
             mMetrics[i-32].mTC2.Set((x+1.5f+glyph.mByteWidth)/256.0f, (y+1.5f+glyph.mByteHeight)/(float)requiredHeight);
         }
+
         x += glyph.mByteWidth+1;
     }
 
