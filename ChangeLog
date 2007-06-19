@@ -1,4 +1,9 @@
-2007-06-19  Xu Yuan  <xuyuan.cn@gmail.com>
+2007-06-19  Oliver Obst  <fruit@users.sourceforge.net>
+
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
+	int -> GLint to compile on Mac
+
+2007-06-19 Xu Yuan <xuyuan.cn@gmail.com>
 
     * plugin/soccer/visionperceptor/visionperceptor.h:
     * plugin/soccer/visionperceptor/visionperceptor.cpp:
@@ -8,6 +13,11 @@
 
 	* plugin/gyrorateperceptor/gyrorateperceptor.cpp:
 	- rates should be in local coordinates now 
+
+2007-06-17  Oliver Obst  <fruit@kudamono>
+
+	* lib/kerosin/sceneserver/staticmesh_c.cpp: 
+	fixed bug with setScale
 
 2007-06-17  Hedayat Vatankhah  <hedayat@grad.com>
 
