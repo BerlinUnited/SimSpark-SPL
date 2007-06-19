@@ -1,3 +1,10 @@
+2007-06-19  Jan Murray  <murray@uni-koblenz.de>
+
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
+	- beautified the info line. Infos about left/right team are printed
+	  left/right justified. Playmode, half and time get centered.
+	- fixed precision setting of time field
+
 2007-06-19  Oliver Obst  <fruit@users.sourceforge.net>
 
 	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
