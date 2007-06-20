@@ -7,14 +7,14 @@ LDADD = \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
         ${top_srcdir}/lib/salt/libsalt_debug.la \
-	-l@BOOST_THREADS_LIB@
+	@BOOST_THREADS_LIB@
 rcssserver3D_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = \
 	${top_srcdir}/lib/oxygen/liboxygen.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
         ${top_srcdir}/lib/salt/libsalt.la \
-	-l@BOOST_THREADS_LIB@
+	@BOOST_THREADS_LIB@
 rcssserver3D_CXXFLAGS = -O2
 endif
 
