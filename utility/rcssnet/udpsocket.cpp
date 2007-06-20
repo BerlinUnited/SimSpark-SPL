@@ -1,7 +1,7 @@
 // -*-c++-*-
 
 /***************************************************************************
-                          updsocket.cpp  -  A simple upd socket class
+                          udpsocket.cpp  -  A simple udp socket class
                              -------------------
     begin                : 08-JAN-2003
     copyright            : (C) 2003 by The RoboCup Soccer Server 
@@ -19,12 +19,25 @@
  ***************************************************************************/
 
 #include "udpsocket.hpp"
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <cerrno>
-#include "exception.hpp"
-#include <netinet/in.h>
 
+#if HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+
+#include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#include <cerrno>
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+
+#ifdef HAVE_WINSOCK2_H
+#include "Winsock2.h"
+#endif
+
+#include <iostream>
 
 namespace rcss
 {
@@ -35,6 +48,10 @@ namespace rcss
             open();
         }
 
+        UDPSocket::UDPSocket( SocketDesc& s )
+            : Socket( s )
+        {}
+
         UDPSocket::UDPSocket( const Addr& addr )
         {
             open();
@@ -44,17 +61,16 @@ namespace rcss
         UDPSocket::UDPSocket( const Addr& addr, const Addr& dest )
         {
             open();
-            bind( addr );
+			bind( addr );
             connect( dest );
         }
         
-        void
-        UDPSocket::doOpen( int& fd )
+        bool
+        UDPSocket::doOpen( SocketDesc& fd )
         {
             close();
             fd = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP );
-            if( fd < 0 )
-                throw OpenErr( errno );
+            return fd >= 0;
         }
     }
 }

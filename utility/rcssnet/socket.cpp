@@ -18,195 +18,304 @@
 
 #include "socket.hpp"
 
-#ifdef HAVE_CONFIG_H
+#if HAVE_CONFIG_H
 #include <sparkconfig.h>
 #endif
 
 #include <sys/types.h>
+
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
+#endif
+#ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
+#endif
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <cerrno>
 #if defined (HAVE_POLL_H)
 #include <poll.h>
 #endif
-#include "exception.hpp"
 
 #ifndef HAVE_SOCKLEN_T
 typedef int socklen_t;
 #endif
 
+#ifdef HAVE_WINSOCK2_H
+#include "Winsock2.h"
+#endif
+
+#include "handler.hpp"
+#include "tcpsocket.hpp"
+
+#include <iostream>
 
 namespace rcss
 {
     namespace net
     {
+
+
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(CYGWIN)
+                const Socket::SocketDesc Socket::INVALIDSOCKET = INVALID_SOCKET;
+#else
+                const Socket::SocketDesc Socket::INVALIDSOCKET = -1;
+#endif
+
+
+        void
+        Socket::closeFD( SocketDesc* s )
+        {
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+            ::closesocket( *s );
+#else
+            ::close( *s );
+#endif
+            delete s;
+        }
+
         Socket::Socket()
-            : m_socket( 0 ),
-              m_open( false ),
-              m_connected( false )
+                        : m_handler( &Handler::instance() )
         {}
+
+        Socket::Socket( SocketDesc s )
+                        : m_handler( &Handler::instance() )
+        {
+            m_handle = boost::shared_ptr< SocketDesc >( new SocketDesc( s ),
+                                                        Socket::closeFD );
+        }
+
 
         Socket::~Socket()
         { close(); }
 
-        void
+        bool
         Socket::open()
         {
-            doOpen( m_socket );
-            m_open = true;
+            SocketDesc s;
+            if( !doOpen( s ) )
+                return false;
+
+            m_handle = boost::shared_ptr< SocketDesc >( new SocketDesc( s ),
+                                                        Socket::closeFD );
+#if !defined(_WIN32) && !defined(__WIN32__) && !defined(WIN32)
             int err = setCloseOnExec();
             if( err < 0 )
             {
                 err = errno;
                 close();
-                throw OpenErr( err );
+                return false;
             }
+#endif
+            return true;
         }
 
-        void
+        bool
         Socket::bind( const Addr& addr )
         {
-            int err = ::bind( m_socket,
-                              (struct sockaddr *)&( addr.getAddr() ),
-                              sizeof( addr.getAddr() ) );
-            if( err < 0 )
-                throw BindErr( errno );
-        }
-
-        void
-        Socket::listen( int backlog )
-        {
-            int err = ::listen( m_socket, backlog );
-            if (err < 0 )
-              throw ListenErr( errno );
-        }
-
-        Socket* Socket::accept(Addr& addr)
-        {
-            throw AcceptErr( EOPNOTSUPP );
-            return 0;
+            if( isOpen() )
+            {
+                int err = ::bind( getFD(),
+                                  (struct sockaddr *)&( addr.getAddr() ),
+                                  sizeof( addr.getAddr() ) );
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                if( err == SOCKET_ERROR )
+                    return false;
+#else
+                if( err < 0 )
+                    return false;
+#endif
+                return true;
+            }
+            return false;
         }
 
         Addr
         Socket::getName() const
         {
-            Addr::AddrType name;
-            socklen_t from_len = sizeof( name );
-            int err = ::getsockname( m_socket,
-                                     (struct sockaddr *)&name,
-                                     &from_len );
-            if( err < 0 )
-                throw GetNameErr( errno );
-
-            return Addr( name );
+            if( isOpen() )
+            {
+                Addr::AddrType name;
+                socklen_t from_len = sizeof( name );
+                int err = ::getsockname( getFD(),
+                                         (struct sockaddr *)&name,
+                                         &from_len );
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(CYGWIN)
+                if( err == SOCKET_ERROR )
+                {
+                    err = WSAGetLastError();
+                    return Addr();
+                }
+#else
+                if( err < 0 )
+                    return Addr();
+#endif
+                return Addr( name );
+            }
+            else
+                return Addr();
         }
 
-        void
+        bool
         Socket::connect( const Addr& addr )
         {
-            int err = ::connect( m_socket,
-                                 (const struct sockaddr *)&( addr.getAddr() ),
-                                 sizeof( addr.getAddr() ) );
-            if ( err < 0 )
-                throw ConnectErr( errno );
+            if( isOpen() )
+            {
+                int err = ::connect( getFD(),
+                                     (const struct sockaddr *)&( addr.getAddr() ),
+                                     sizeof( addr.getAddr() ) );
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(CYGWIN)
+                if( err == SOCKET_ERROR )
+                    return false;
+#else
+                if( err < 0 )
+                    return false;
+#endif
 
-            m_connected = true;
+                return true;
+            }
+            else
+                return false;
         }
 
         Addr
         Socket::getPeer() const
         {
-            Addr::AddrType name;
-            socklen_t from_len = sizeof( name );
-            int err = ::getpeername( m_socket,
-                                     (struct sockaddr *)&name,
-                                     &from_len );
-            if( err < 0 )
-                throw GetNameErr( errno );
-
-            return Addr( name );
+            if( isOpen() )
+            {
+                Addr::AddrType name;
+                socklen_t from_len = sizeof( name );
+                int err = ::getpeername( getFD(),
+                                         (struct sockaddr *)&name,
+                                         &from_len );
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(CYGWIN)
+                if( err == SOCKET_ERROR )
+                {
+                    return Addr();
+                }
+#else
+                if( err < 0 )
+                    return Addr();
+#endif
+                return Addr( name );
+            }
+            else
+                return Addr();
         }
 
         void
         Socket::close()
         {
-            if( m_open )
-            {
-                m_open = false;
-                ::close( m_socket );
-                m_socket = 0;
-            }
-            m_connected = false;
+            m_handle.reset();
         }
 
         int
         Socket::setCloseOnExec( bool on )
         {
-            return fcntl( m_socket, F_SETFD,
-                          ( on ? FD_CLOEXEC : ~FD_CLOEXEC ) );
+            if( isOpen() )
+            {
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                errno = EPERM;
+                return -1;
+#else
+                return fcntl( getFD(), F_SETFD,
+                              ( on ? FD_CLOEXEC : ~FD_CLOEXEC ) );
+#endif
+            }
+            else
+            {
+                errno = EPERM;
+                return -1;
+            }
         }
 
         int
         Socket::setNonBlocking( bool on )
         {
-            int flags = fcntl( m_socket, F_GETFL, 0 );
-            if( flags == -1 )
-                return flags;
+            if( isOpen() )
+            {
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                u_long tmp = on;
+                return ioctlsocket( getFD(), FIONBIO, &tmp );
+#else
+                int flags = fcntl( getFD(), F_GETFL, 0 );
+                if( flags == -1 )
+                    return flags;
 
-            if( on )
-                return fcntl( m_socket, F_SETFL,
-                              O_NONBLOCK | flags );
+                if( on )
+                    return fcntl( getFD(), F_SETFL,
+                                  O_NONBLOCK | flags );
+                else
+                    return fcntl( getFD(), F_SETFL,
+                                  ~O_NONBLOCK & flags );
+#endif
+            }
             else
-                return fcntl( m_socket, F_SETFL,
-                              ~O_NONBLOCK & flags );
+            {
+                errno = EPERM;
+                return -1;
+            }
         }
 
         int
         Socket::setAsync( bool on )
         {
 #ifdef O_ASYNC
-            int flags = fcntl( m_socket, F_GETFL, 0 );
+            if( isOpen() )
+            {
+                int flags = fcntl( getFD(), F_GETFL, 0 );
 
-            if ( on )
-                return fcntl ( m_socket, F_SETFL,
+                if ( on )
+                    return fcntl ( getFD(), F_SETFL,
                                    O_ASYNC | flags );
-            else
-                return fcntl ( m_socket, F_SETFL,
-                               ~O_ASYNC & flags );
-#else
+                else
+                    return fcntl ( getFD(), F_SETFL,
+                                   ~O_ASYNC & flags );
+            }
+#endif
             errno = EPERM;
             return -1;
-#endif
+
         }
 
         int
         Socket::setBroadcast( bool on )
         {
 #ifdef SO_BROADCAST
-            int ison = on;
-            return setsockopt( m_socket, SOL_SOCKET,
-                               SO_BROADCAST, (void*)&ison, sizeof( int ) );
+            if( isOpen() )
+            {
+                int ison = on;
+                return setsockopt( getFD(), SOL_SOCKET,
+                                   SO_BROADCAST,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                   (const char*)&ison,
 #else
+                                   (void*)&ison,
+#endif
+                                   sizeof( int ) );
+            }
+#endif
             errno = EPERM;
             return -1;
-#endif
         }
 
-        int
+                Socket::SocketDesc
         Socket::getFD() const
-        { return m_socket; }
+        { return ( isOpen() ? *(m_handle.get()) : Socket::INVALIDSOCKET ); }
 
         bool
         Socket::isOpen() const
-        { return m_open; }
+        { return m_handle.get() != NULL; }
 
         bool
         Socket::isConnected() const
         {
-            return m_connected;
+            return getPeer() != Addr();
         }
 
         Addr
@@ -222,7 +331,13 @@ namespace rcss
         {
             if( check == DONT_CHECK )
             {
-                return ::sendto( m_socket, msg, len, flags,
+                return ::sendto( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                                (int)len,
+#else
+                                                                len,
+#endif
+                                                                flags,
                                  (struct sockaddr *)&( dest.getAddr() ),
                                  sizeof( dest.getAddr() ) );
             }
@@ -230,12 +345,23 @@ namespace rcss
             {
                 for(;;)
                 {
-                    int sent = ::sendto( m_socket, msg, len, flags,
+                    int sent = ::sendto( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                                                 (int)len,
+#else
+                                                                                 len,
+#endif
+                                                                                 flags,
                                          (struct sockaddr *)&( dest.getAddr() ),
                                          sizeof( dest.getAddr() ) );
                     if( sent != -1
                         || ( errno != EINTR
-                             && errno != EWOULDBLOCK ) )
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                     && errno != WSAEWOULDBLOCK
+#else
+                                                     && errno != EWOULDBLOCK
+#endif
+                                                        ) )
                         return sent;
                 }
             }
@@ -249,16 +375,33 @@ namespace rcss
         {
             if( check == DONT_CHECK )
             {
-                return ::send( m_socket, msg, len, flags );
+                return ::send( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                           (int)len,
+#else
+                                                           len,
+#endif
+                                                           flags );
             }
             else
             {
                 for(;;)
                 {
-                    int sent = ::send( m_socket, msg, len, flags );
+                    int sent = ::send( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                           (int)len,
+#else
+                                                           len,
+#endif
+                                                           flags );
                     if( sent != -1
                         || ( errno != EINTR
-                             && errno != EWOULDBLOCK ) )
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                     && errno != WSAEWOULDBLOCK
+#else
+                                                     && errno != EWOULDBLOCK
+#endif
+                                                        ) )
                         return sent;
                 }
             }
@@ -275,7 +418,13 @@ namespace rcss
             {
                 Addr::AddrType addr;
                 socklen_t from_len = sizeof( addr );
-                int rval = ::recvfrom( m_socket, msg, len, flags,
+                int rval = ::recvfrom( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                                           (int)len,
+#else
+                                                                           len,
+#endif
+                                                                           flags,
                                        (struct sockaddr *)&addr, &from_len );
                 from = Addr( addr );
                 return rval;
@@ -286,7 +435,13 @@ namespace rcss
                 {
                     Addr::AddrType addr;
                     socklen_t from_len = sizeof( addr );
-                    int received = ::recvfrom( m_socket, msg, len, flags,
+                    int received = ::recvfrom( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                                                  (int)len,
+#else
+                                                                                   len,
+#endif
+                                                                                   flags,
                                                (struct sockaddr *)&addr,
                                                &from_len );
                     from = Addr( addr );
@@ -304,17 +459,61 @@ namespace rcss
                       CheckingType check )
         {
             if( check == DONT_CHECK )
-                return ::recv( m_socket, msg, len, flags );
+                return ::recv( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                      (int)len,
+#else
+                                                          len,
+#endif
+                                                          flags );
             else
             {
                 for(;;)
                 {
-                    int received = ::recv( m_socket, msg, len, flags );
+                    int received = ::recv( getFD(), msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                                               (int)len,
+#else
+                                                                               len,
+#endif
+                                                                               flags );
                     if( received != -1
                         || errno != EINTR )
                         return received;
                 }
             }
+        }
+
+        bool
+        Socket::listen( int backlog )
+        {
+            return ::listen( getFD(), backlog ) == 0;
+        }
+
+        bool
+        Socket::accept( Socket& sock )
+        {
+            SocketDesc fd = ::accept( getFD(), NULL, 0 );
+            if( fd == INVALIDSOCKET )
+                return false;
+            sock = TCPSocket( fd );
+            return true;
+        }
+        
+        Socket* Socket::accept(Addr& addr)
+        {
+            socklen_t len = sizeof(struct sockaddr);
+            SocketDesc fd = ::accept( getFD(), 
+                                      (struct sockaddr *)&( addr.getAddr() ),
+                                      &len
+                                      );
+
+            if (fd == INVALIDSOCKET )
+                {
+                    return 0;
+                }
+
+            return new TCPSocket(fd);
         }
 
         int
@@ -325,7 +524,7 @@ namespace rcss
                       int flags )
         {
 #if defined (HAVE_POLL_H)
-            pollfd fd = { m_socket, POLLIN | POLLPRI, 0 };
+            pollfd fd = { getFD(), POLLIN | POLLPRI, 0 };
             int res = poll( &fd, 1, timeout );
             if( res == 0 )
             {
@@ -334,7 +533,13 @@ namespace rcss
             }
             else if( res == 1 )
             {
-                return recv( msg, len, from, flags );
+                return recv( msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                         (int)len,
+#else
+                                                         len,
+#endif
+                                                         from, flags );
             }
             else
             {
@@ -353,7 +558,7 @@ namespace rcss
                       int flags )
         {
 #if defined (HAVE_POLL_H)
-            pollfd fd = { m_socket, POLLIN | POLLPRI, 0 };
+            pollfd fd = { getFD(), POLLIN | POLLPRI, 0 };
             int res = poll( &fd, 1, timeout );
             if( res == 0 )
             {
@@ -362,7 +567,13 @@ namespace rcss
             }
             else if( res == 1 )
             {
-                return recv( msg, len, flags );
+                return recv( msg,
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+                                                         (int)len,
+#else
+                                                         len,
+#endif
+                                                         flags );
             }
             else
             {

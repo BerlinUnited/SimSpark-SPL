@@ -1,29 +1,43 @@
-/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+// -*-c++-*-
 
-   this file is part of rcssserver3D
-   Fri May 9 2003
-   Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tcpsocket.cpp,v 1.2 2004/04/25 19:24:04 rollmark Exp $
+/***************************************************************************
+                          tcpsocket.cpp  -  A simple tcp socket class
+                             -------------------
+    begin                : 08-JAN-2003
+    copyright            : (C) 2003 by The RoboCup Soccer Server
+                           Maintenance Group.
+    email                : sserver-admin@lists.sourceforge.net
+ ***************************************************************************/
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; version 2 of the License.
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU LGPL as published by the Free Software  *
+ *   Foundation; either version 2 of the License, or (at your option) any  *
+ *   later version.                                                        *
+ *                                                                         *
+ ***************************************************************************/
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 #include "tcpsocket.hpp"
-#include "exception.hpp"
+
+#if HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+
 #include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
+#endif
 #include <cerrno>
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif
+
+#ifdef HAVE_WINSOCK2_H
+#include "Winsock2.h"
+#endif
+
+#include <iostream>
 
 namespace rcss
 {
@@ -34,6 +48,10 @@ namespace rcss
             open();
         }
 
+        TCPSocket::TCPSocket( SocketDesc& s )
+            : Socket( s )
+        {}
+
         TCPSocket::TCPSocket( const Addr& addr )
         {
             open();
@@ -43,43 +61,16 @@ namespace rcss
         TCPSocket::TCPSocket( const Addr& addr, const Addr& dest )
         {
             open();
-            bind( addr );
+                        bind( addr );
             connect( dest );
         }
 
-        TCPSocket::TCPSocket( int socket )
-        {
-            m_open      = true;
-            m_connected = true;
-            m_socket    = socket;
-        }
-
-        void
-        TCPSocket::doOpen( int& fd )
+        bool
+        TCPSocket::doOpen( SocketDesc& fd )
         {
             close();
-            fd = ::socket(AF_INET, SOCK_STREAM, 0 );
-            if( fd < 0 )
-                throw OpenErr( errno );
+            fd = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP );
+            return fd >= 0;
         }
-
-
-        Socket* TCPSocket::accept(Addr& addr)
-        {
-            socklen_t len = sizeof(struct sockaddr);
-            int fd = ::accept(
-                              m_socket,
-                              (struct sockaddr *)&( addr.getAddr() ),
-                              &len
-                              );
-
-            if (fd < 0)
-                {
-                    throw AcceptErr( errno );
-                }
-
-            return new TCPSocket(fd);
-        }
-
     }
 }

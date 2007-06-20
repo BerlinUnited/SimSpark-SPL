@@ -21,38 +21,59 @@
 #ifndef RCSS_NET_SOCKET_HPP
 #define RCSS_NET_SOCKET_HPP
 
+#if HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+
 #include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
 #include "addr.hpp"
+
+#ifdef HAVE_WINSOCK2_H
+#include "Winsock2.h"
+#endif
 
 namespace rcss
 {
     namespace net
     {
+                class Handler;
+
         class Socket
         {
         public:
+#ifdef HAVE_SOCKETTYPE
+                        typedef SOCKET SocketDesc;
+#else
+                        typedef int SocketDesc;
+#endif
+
+                        static const SocketDesc INVALIDSOCKET;
+
             enum CheckingType { CHECK, DONT_CHECK };
 
+                public:
+            static
+            void
+            closeFD( SocketDesc* s );
+
             Socket();
+
+            Socket( SocketDesc s );
 
             virtual
             ~Socket();
 
-            void
+            bool
             open();
 
-            void
+            bool
             bind( const Addr& addr );
-
-            void
-            listen( int backlog );
-
-            virtual Socket* accept(Addr& addr);
 
             Addr
             getName() const;
 
-            void
+            bool
             connect( const Addr& addr );
 
             Addr
@@ -73,7 +94,7 @@ namespace rcss
             int
             setBroadcast( bool on = true );
 
-            int
+            SocketDesc
             getFD() const;
 
             bool
@@ -111,6 +132,14 @@ namespace rcss
                   int flags = 0,
                   CheckingType check = CHECK );
 
+            bool
+            accept( Socket& sock );
+            
+            Socket* accept(Addr& addr);
+
+            bool
+            listen( int backlog );
+
     // The following two methods allow a timeout to be specified.
     // Overall, it's slower than the untimed varients so if you do
     // need to specify a timeout and you just want it the recv to
@@ -130,19 +159,14 @@ namespace rcss
                   size_t len,
                   int flags = 0 );
 
-        protected:
+        private:
             virtual
-            void
-            doOpen( int& fd ) = 0;
+            bool
+            doOpen( SocketDesc& fd ) = 0;
 
-            // not used
-            Socket( const Socket& );
-            Socket& operator=( const Socket& );
-
-        protected:
-            int  m_socket;
-            bool m_open;
-            bool m_connected;
+        private:
+                        Handler* m_handler;
+            boost::shared_ptr< SocketDesc > m_handle;
         };
     }
 }

@@ -3,6 +3,7 @@ pkglib_LTLIBRARIES = librcssnet3D.la
 librcssnet3D_la_SOURCES = \
 addr.cpp  \
 exception.cpp  \
+handler.cpp \
 socket.cpp  \
 tcpsocket.cpp  \
 udpsocket.cpp
@@ -10,6 +11,7 @@ udpsocket.cpp
 libpkginclude_HEADERS = \
 addr.hpp \
 exception.hpp \
+handler.hpp \
 iosocketstream.hpp \
 isocketstream.hpp \
 osocketstream.hpp \

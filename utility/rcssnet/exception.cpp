@@ -18,14 +18,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifdef HAVE_CONFIG_H
+#if HAVE_CONFIG_H
 #include <sparkconfig.h>
 #endif
 
 #include "exception.hpp"
 #include <cstring>
+
+#ifdef WIN32
+#include <winsock2.h>
+#else
 #include <sys/types.h>
 #include <netinet/in.h>
+#endif
 
 #ifdef HAVE_ARPA_NAMESER_H
 #include <arpa/nameser.h>
@@ -56,7 +61,7 @@ namespace rcss
 #if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
         return "Network error";
 #else
-            return hstrerror( m_err );
+            return std::strerror( m_err );
 #endif
         }
 

@@ -4,7 +4,7 @@
                           addr.hpp  - A network address class
                              -------------------
     begin                : 07-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server
+    copyright            : (C) 2003 by The RoboCup Soccer Server 
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -32,7 +32,7 @@ namespace rcss
     namespace net
     {
         class AddrImpl;
-
+        
         class Addr
         {
         public:
@@ -40,40 +40,55 @@ namespace rcss
             typedef boost::uint32_t HostType;
             typedef struct sockaddr_in AddrType;
 
+            enum Error { eADDR_OK, eSERV_NOT_FOUND, eHOST_NOT_FOUND };
+
             static const HostType BROADCAST;
             static const HostType ANY;
-
-            Addr();
-            Addr( const AddrType& addr );
-            Addr( PortType port );
-            Addr( PortType port, HostType host );
+            
+            Addr( PortType port = 0, HostType host = Addr::ANY );
             Addr( PortType port, const std::string& host );
+            Addr( const AddrType& addr );
+            
+			bool setPort( PortType port = 0 );
+			bool setPort( const std::string& port, 
+                          const std::string& proto = "" );
 
+            bool setHost( HostType host = Addr::ANY );
+            bool setHost( const std::string& host );
+           
             const AddrType&
             getAddr() const;
-
+            
             PortType
             getPort() const;
-
-            void
-            setPort(PortType port);
-
+            
             HostType
             getHost() const;
-
+            
             std::string
             getHostStr() const;
 
-            bool operator == ( const Addr& addr ) const;
-            bool operator < (const Addr& addr ) const;
-
-        private:
+			std::string
+			getPortStr( const std::string& proto = "" ) const;
+			
+		private:
             boost::shared_ptr< AddrImpl > m_impl;
         };
+        
+        bool 
+        operator ==( const Addr& a,
+                    const Addr& b );
+        
+		bool 
+        operator !=( const Addr& a,
+                    const Addr& b );
 
-        std::ostream&
+        bool 
+        operator < ( const Addr& a,
+                    const Addr& b );
+					
+		std::ostream&
         operator<<( std::ostream& o, const Addr& addr );
-
     }
 }
 

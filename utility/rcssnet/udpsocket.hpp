@@ -1,10 +1,10 @@
 // -*-c++-*-
 
 /***************************************************************************
-                          updsocket.hpp  -  A simple upd socket class
+                          udpsocket.hpp  -  A simple udp socket class
                              -------------------
     begin                : 08-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server
+    copyright            : (C) 2003 by The RoboCup Soccer Server 
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -33,11 +33,13 @@ namespace rcss
         {
         public:
             UDPSocket();
+            UDPSocket( SocketDesc& s );
             UDPSocket( const Addr& addr );
             UDPSocket( const Addr& addr, const Addr& dest );
 
-        protected:
-            virtual void doOpen( int& fd );
+        private:
+            bool
+            doOpen( SocketDesc& fd );
         };
     }
 }
