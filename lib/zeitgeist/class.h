@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.h,v 1.14 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: class.h,v 1.15 2007/06/20 00:54:52 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,12 +35,7 @@
 #include <sparkconfig.h>
 #endif
 
-#ifdef HAVE_HASH_MAP
-#include <hash_map>
-#else
 #include <map>
-#endif
-
 #include <string>
 #include <vector>
 #include <list>
@@ -152,11 +147,7 @@ public:
     typedef std::list<std::string> TStringList;
 
     /** defines a mapping from member names to command procedures */
-#ifdef HAVE_HASH_MAP
-    typedef std::hash_map<std::string, TCmdProc> TCommandMap;
-#else
     typedef std::map<std::string, TCmdProc> TCommandMap;
-#endif
 
 private:
     /** defines a list of pointers to object instances */
