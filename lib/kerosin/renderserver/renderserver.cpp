@@ -1,29 +1,30 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-this file is part of rcssserver3D
-Fri May 9 2003
-Copyright (C) 2002,2003 Koblenz University
-Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: renderserver.cpp,v 1.21 2007/05/30 18:41:40 jboedeck Exp $
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: renderserver.cpp,v 1.22 2007/06/20 00:41:32 fruit Exp $
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; version 2 of the License.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
 #include "renderserver.h"
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/camera.h>
+#include <oxygen/physicsserver/spherecollider.h>
+#include <kerosin/openglserver/openglwrapper.h>
 #include <kerosin/openglserver/openglserver.h>
 #include <kerosin/sceneserver/staticmesh.h>
 #include <kerosin/sceneserver/light.h>
