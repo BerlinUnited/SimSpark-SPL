@@ -9,7 +9,7 @@ LDADD = -lpthread  \
 	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
         ${top_srcdir}/lib/salt/libsalt_debug.la \
-	-l@BOOST_THREADS_LIB@
+	@BOOST_THREADS_LIB@
 simspark_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = -lpthread  \
@@ -18,15 +18,18 @@ LDADD = -lpthread  \
 	${top_srcdir}/lib/oxygen/liboxygen.la \
 	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
         ${top_srcdir}/lib/salt/libsalt.la \
-	-l@BOOST_THREADS_LIB@
+	@BOOST_THREADS_LIB@
 simspark_CXXFLAGS = -O2
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility \
               @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@ @SDL_CPPFLAGS@
 
+if BUNDLE_SUPPORT
+AM_LDFLAGS  = @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
+else
 AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
-
+endif
 
 
 
