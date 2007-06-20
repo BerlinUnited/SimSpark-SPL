@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
    
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fileclasses.cpp,v 1.5 2003/09/10 00:30:10 tomhoward Exp $
+   $Id: fileclasses.cpp,v 1.6 2007/06/20 01:07:19 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,14 @@
 #include "fileclasses.h"
 #include <cstring>
 
+#if HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+
+#if HAVE_COREFOUNDATION_COREFOUNDATION_H
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 namespace salt
 {
 /*static long fsize(FILE *f)
@@ -39,6 +47,44 @@ namespace salt
 
 using namespace salt;
 
+std::string
+RFile::Sep()
+{
+#ifdef WIN32
+    return "\\";
+#else
+    return "/";
+#endif
+}
+
+std::string
+RFile::BundlePath()
+{
+#if HAVE_COREFOUNDATION_COREFOUNDATION_H
+    char path[1024];
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    assert(mainBundle);
+
+    CFURLRef mainBundleURL = CFBundleCopyBundleURL(mainBundle);
+    assert(mainBundleURL);
+
+    CFStringRef cfStringRef = CFURLCopyFileSystemPath( mainBundleURL, kCFURLPOSIXPathStyle);
+    assert(cfStringRef);
+
+    CFStringGetCString(cfStringRef, path, 1024, kCFStringEncodingASCII);
+
+    CFRelease(mainBundleURL);
+    CFRelease(cfStringRef);
+
+    return std::string(path) + Sep();    
+#else
+# ifdef PREFIX
+    return PREFIX + Sep() + "share" + Sep() + PACKAGE_NAME;
+# else
+    return "." + Sep();
+# endif
+#endif
+}
 
 //------------------------------------------------------------------------------------------------
 // MemFile
@@ -209,7 +255,7 @@ size_t MemFile::Read(void *buffer, size_t size, size_t count)
 {
 	long oldPos = mPosition;
 
-	mPosition += (size*count);
+	mPosition += static_cast<long>(size*count);
 	if(mPosition >= mSize)
 	{
 		memcpy(buffer, &mCharHandle[oldPos], (mSize-oldPos));
@@ -293,10 +339,10 @@ long StdFile::Size()
   fseek((FILE*)mHandle,0,SEEK_END);
   long size = ftell((FILE*)mHandle);
   fseek((FILE*)mHandle,pos,SEEK_SET);
-return size;
+  return size;
 }
 
-int StdFile::GetPos(long*/* pos*/)
+int StdFile::GetPos(long* /*pos*/)
 {
   return ftell((FILE*)mHandle);
 }
