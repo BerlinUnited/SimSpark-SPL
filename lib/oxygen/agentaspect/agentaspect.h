@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.h,v 1.10 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: agentaspect.h,v 1.11 2007/06/20 00:50:53 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,11 +41,12 @@ public:
     virtual ~AgentAspect();
 
     /** Initializes the AgentAspect. Called immediately after the
-        AgentAspect is created by the GameControlServer. \param
-        createEffector is the name of the initial effector class that
-        the agent uses to construct all remaining parts
+        AgentAspect is created by the GameControlServer.
+       \param createEffector is the name of the initial effector class that
+              the agent uses to construct all remaining parts
+       \param id a unique ID to set
      */
-    virtual bool Init(const std::string& createEffector);
+    virtual bool Init(const std::string& createEffector, int id);
 
     /** RealizeActions realizes the actions described by \param
         actions using the corresponding effectors
@@ -63,6 +64,9 @@ public:
     /** looks up the effector corresponding to a predicate */
     virtual boost::shared_ptr<Effector> GetEffector(const std::string predicate) const;
 
+    //! @return the unique ID for the agent aspect
+    inline int ID() const { return mID; }
+
 protected:
     typedef std::map<std::string, boost::shared_ptr<Effector> > TEffectorMap;
 
@@ -70,6 +74,7 @@ protected:
     TEffectorMap mEffectorMap;
 
 private:
+    int mID;
     /** indicates how many times the QueryPerceptors be called */
     unsigned int mPerceptorCycle;
 
