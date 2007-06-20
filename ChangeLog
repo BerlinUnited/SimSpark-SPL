@@ -1,62 +1,82 @@
-2007-06-20  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+2007-06-20  Oliver Obst  <fruit@kudamono>
 
-	* app/simspark/soccersim.rb:
-	- changed field size to 45mx30m
-	- changed goal size to 9mx4m
+	* configure.ac: 
+	check for additional headers used in the simulator
 
-	* app/simspark/rsg/agent/flag_left1.rsg, 
-	* app/simspark/rsg/agent/flag_left2.rsg, 
-	* app/simspark/rsg/agent/flag_right1.rsg, 
-	* app/simspark/rsg/agent/flag_right2.rsg:
-	- new corner cylinder visualization (moved back a little)
+	* acinclude.m4: 
+	fixed boost_thread lib check
 
-	* app/simspark/rsg/agent/soccer.rsg:
-	- using flag_left1.rsg, flag_left2.rsg, flag_right1.rsg, and
-	  flag_right2.rsg for visualization of the corner cylinders now
+	* plugin/openglsyssdl/export.cpp: 
+	* plugin/openglsyssdl/openglsystemsdl_c.cpp:
+	* plugin/openglsyssdl/openglsystemsdl.cpp: 
+	* plugin/openglsyssdl/openglsystemsdl.h: 
+	* plugin/openglsyssdl/Makefile.am: 
+	- added openglsyssdl (from simspark CVS)
+	
+	* app/simspark/Makefile.am: 
+	- changed BOOST_THREADS_LIB meta variable 
+	- rpath linker flags not working for macos
 
-2007-06-19  Jan Murray  <murray@uni-koblenz.de>
+	* lib/spark/spark.rb: 
+	initialise OpenGL subsystem
 
-	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
-	- beautified the info line. Infos about left/right team are printed
-	  left/right justified. Playmode, half and time get centered.
-	- fixed precision setting of time field
+	* lib/salt/fileclasses.cpp: 
+	* lib/salt/fileclasses.h: 
+	- added a static method Sep() delivering the platform dependent path separator (Slash is a Sepp ;-) 
+	- added a platform dependent BundlePath (also a static method), a directory where package files might be found
 
-2007-06-19  Oliver Obst  <fruit@users.sourceforge.net>
+	* lib/salt/gmath.h: 
+	defined M_PI and M_PI_2 (if previously undefined)
+	
+	* lib/salt/Makefile.am: 
+	added sharedlibrary.cpp (instead of gcc/sharedlibrary); from simspark cvs
+
+	* lib/salt/sharedlibrary.h: 
+	* lib/salt/sharedlibrary.cpp:
+	library manages its name (from simspark CVS (?))
+	
+	* lib/zeitgeist/scriptserver/rubywrapper.h: 
+	added more undefs
+
+	* lib/zeitgeist/class.h: 
+	removed ifdefs for HASH_MAP (from simspark CVS)... use map only
+	* lib/oxygen/agentaspect/agentaspect.cpp: 
+	* lib/oxygen/agentaspect/agentaspect.h: 
+	AgentAspect manages agent ID (from simspark CVS)
+	
+	* lib/oxygen/gamecontrolserver/gamecontrolserver.cpp: 
+	- calling AgentAspect->Init(...) with agent id as argument
+	
+	* lib/kerosin/textureserver/textureserver.h: 
+	include openglserver and imageserver
+	
+	* lib/kerosin/openglserver/openglsystem_c.cpp: 
+	* lib/kerosin/openglserver/openglsystem.h: 
+	* lib/kerosin/openglserver/openglserver_c.cpp: 
+	* lib/kerosin/openglserver/openglserver.cpp: 
+	* lib/kerosin/openglserver/openglserver.h: 
+	- changes from simspark CVS (OpenGLServer using a GL subsystem)
+	
+	* lib/kerosin/materialserver/materialsolid.cpp:
+	* lib/kerosin/materialserver/materialsolid.h: 
+	made Get... methods const
+	
+	* lib/kerosin/fontserver/font.cpp: 
+	- include windows.h for windows compiles (from simspark CVS) 
+	- added a check for buffer overruns (and a warning message)
+	  (that's a weak fix only... the buffer should be allocated big
+	  enough in the first place).
+
+2007-06-19 Oliver Obst <fruit@users.sourceforge.net>
 
 	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
 	int -> GLint to compile on Mac
 
-2007-06-19  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+2007-06-19 Xu Yuan <xuyuan.cn@gmail.com>
 
-	* lib/kerosin/kerosin.rb:
-	- set default screen size to 800x600 and application title to SimSpark
-
-	* plugin/soccer/internalsoccermonitor/.cvsignore,
-	* plugin/soccer/internalsoccermonitor/internalsoccerrender.h,
-	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp,
-	* plugin/soccer/internalsoccermonitor/internalsoccerrender_c.cpp:
-	- render game state info in the internal monitor (work in progress)
-
-	* plugin/soccer/export.cpp: 
-	- added files for the internal soccer render
-	
-	* plugin/soccer/Makefile.am:
-	- added files for the internal soccer render
-
-	* plugin/Makefile.am:
-	- ws only
-
-	* app/simspark/internalsoccermonitor.rb:
-	- setup font rendering stuff for the internal monitor
-
-	* app/simspark/simspark.rb:
-	- sourcing the new internalsoccermonitor.rb file	
-
-2007-06-19  Xu Yuan  <xuyuan.cn@gmail.com>
-
-	* plugin/soccer/visionperceptor/visionperceptor.h,
-	* plugin/soccer/visionperceptor/visionperceptor.cpp:
-	- remove flipping flag names
+    * plugin/soccer/visionperceptor/visionperceptor.h:
+    * plugin/soccer/visionperceptor/visionperceptor.cpp:
+    - remove flipping flag names
 
 2007-06-18  Hedayat Vatankhah  <hedayat@grad.com>
 
@@ -109,7 +129,7 @@
 
 2007-06-17  Xu Yuan  <xuyuan.cn@gmail.com>
 
-	* plugin/soccer/visionperceptor/visionperceptor.h,
+    * plugin/soccer/visionperceptor/visionperceptor.h:
 	* plugin/soccer/visionperceptor/visionperceptor.cpp:
 	- flip the flag names for the right team
 
