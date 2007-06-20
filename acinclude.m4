@@ -17,7 +17,7 @@ AC_DEFUN([RCSS_PATH_RUBY], [
 	)
         AC_PATH_PROGS(RUBY,[$ruby ruby],no)
 	# Test ruby interpreter	
-	if test $ruby = no; then
+	if test $RUBY = no; then
 		AC_MSG_ERROR(Could not find Ruby Interpreter.  Please use --with-ruby option.)
 	fi
 
@@ -85,28 +85,6 @@ AC_DEFUN([RCSS_CHECK_RUBY_VERSION], [
 	fi
 ]) # RCSS_CHECK_RUBY_VERSION
 
-# RCSS_CHECK_RCSSBASE
-#-----------------------------------------------------------------------------
-AC_DEFUN([RCSS_CHECK_RCSSBASE], [
-	AC_ARG_VAR(RCSSBASE, [location of rcssbase installation])
-	if test $RCSSBASE; then
-	   CPPFLAGS="$CPPFLAGS -I$RCSSBASE/include"
-	   LDFLAGS="$LDFLAGS -L$RCSSBASE/lib"
-	fi
-
-	AC_CHECK_HEADERS([rcssbase/net/udpsocket.hpp],,[
-        		 AC_MSG_ERROR([The rcssbase headers (e.g. rcssbase/net/udpsocket.hpp) cannot be found. Please specify the location of the rcssbase installation, by using the RCSSBASE environment variable (e.g. ./configure RCSSBASE=$HOME/rcssbase)])])
-
-	AC_MSG_CHECKING([for the rcssnet library])
-	rcss_tmp="$LDFLAGS"
-	LDFLAGS="$LDFLAGS -lrcssnet"
- 	AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
-		       [AC_MSG_RESULT([yes])],
-		       [AC_MSG_RESULT([no])
-		        AC_MSG_ERROR([The rcssnet library (librcssnet.a or librcssnet.so) cannot be found. Please specify the location of the rcssbase installation using the RCSSBASE environment variable (e.g. ./configure RCSSBASE=$HOME/rcssbase)])])
-	LDFLAGS="$rcss_tmp"
-]) # RCSS_CHECK_RCSSBASE
-
 # RCSS_CHECK_ODE
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_ODE], [
@@ -167,11 +145,12 @@ AC_DEFUN([RCSS_PATH_FREETYPE], [
 #                    @GL_LDFLAGS@ with linker flags for libraries linking libgl
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_GL], [
-    AC_CHECK_HEADERS([OpenGL/gl.h GLUT/glut.h],
-                     [iamamac=yes 
-		      AC_MSG_NOTICE([I am a Mac])],
-		     [iamamac=no])
+    AC_CHECK_HEADERS([OpenGL/gl.h GLUT/glut.h], [iamamac=yes], [iamamac=no])
+    AC_MSG_CHECKING([if I am a Mac])
+    AM_CONDITIONAL(BUNDLE_SUPPORT, test x$iamamac = xyes)
+    AC_SUBST(bundle_support, $iamamac)
     if test "$iamamac" = yes; then
+       AC_MSG_RESULT([yes])
        RCSS_KEROSIN_IF_ELSE([
 	# subst'ing the directory where the prepocessor finds gl.h
 	# JAN: the awk command may have to be state more precisely, if problems with distris occur
@@ -203,7 +182,8 @@ AC_DEFUN([RCSS_CHECK_GL], [
 		])
     ])
     else	
-	RCSS_KEROSIN_IF_ELSE([
+       AC_MSG_RESULT([sorry])
+       RCSS_KEROSIN_IF_ELSE([
 	# check for OpenGL location and used extensions
     		AC_CHECK_HEADERS([GL/gl.h GL/glut.h],,
                                 RCSS_BUILD_KEROSIN_ERROR([not all required OpenGL headers could not be found. Please specify the location  of the OpenGL header directory using the CPPFLAGS environment variable]))
@@ -458,29 +438,59 @@ AC_DEFUN([RCSS_KEROSIN_IF_ELSE], [
 	fi
 ]) # RCSS_KEROSIN_IF_ELSE
 
-# AC_LIB_SPADES([ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ---------------------------------------------------------
+# RCSS_BUILD_SPADES_SERVER
+# 	set rcss_build_spades to 'yes'
+#-----------------------------------------------------------------------------
+AC_DEFUN([RCSS_BUILD_SPADES_SERVER], [
+	AC_ARG_VAR(SPADES, [location of the SPADES library])
+	# --enable-spades
+	AC_ARG_ENABLE(spades,
+		AC_HELP_STRING([--enable-spades=@<:@yes|no@:>@],       
+	 		       [whether to compile the spades simulation engine server (default is no)]),
+		    [rcss_build_spades="$enableval"],
+		    [rcss_build_spades=no]
+	)
+	if test "$rcss_build_spades" = yes; then
+		AC_MSG_NOTICE([Checking prerequisites for building the spades server...])
+		RCSS_LIB_SPADES
+	else
+		AC_MSG_NOTICE([======================================================])
+		AC_MSG_NOTICE([You have chosen not to build the SPADES Server module.])
+	fi
+	if test "$rcss_build_spades" = no; then
+		AC_MSG_WARN([The SPADES server will not be build. To build this module,]) 
+		AC_MSG_WARN([you have to configure again using the --enable-spades option.])
+	fi
+	AM_CONDITIONAL(BUILD_SPADES_SERVER, test x$rcss_build_spades = xyes)
+]) # RCSS_BUILD_SPADES_SERVER
+
+# RCSS_LIB_SPADES
 # Checks for the spades library
-AC_DEFUN([AC_LIB_SPADES],
-[AS_VAR_PUSHDEF([ac_lib_spades], [ac_cv_lib_spades])dnl
-AC_CACHE_CHECK(whether the spades library is available, ac_cv_lib_spades,
+# ---------------------------------------------------------
+AC_DEFUN([RCSS_LIB_SPADES],
+       [AS_VAR_PUSHDEF([rcss_lib_spades], [rcss_cv_lib_spades])dnl
+	if test "$SPADES"; then
+	    PATH="$PATH:$SPADES/bin"
+	    LDFLAGS="$LDFLAGS -L$SPADES/lib"
+	    CPPFLAGS="$CPPFLAGS -I$SPADES/include"
+	fi
+	AC_CACHE_CHECK(whether the spades library is available, rcss_cv_lib_spades,
                [AC_LANG_PUSH(C++)
                 OLD_LDFLAGS="$LDFLAGS"
                 LDFLAGS="$LDFLAGS -lspades"
                 AC_LINK_IFELSE([@%:@include <spades/enginemain.hpp>
-                                int main(int argc, char **argv)
+                                int main()
                                 {
                                     spades::SimulationEngineMain( 0, NULL, NULL );
                                     return 0;
                                 }],
-                                [AS_VAR_SET(ac_lib_spades, yes)], 
-                                [AS_VAR_SET(ac_lib_spades, no)])
+                                [AS_VAR_SET(rcss_lib_spades, yes)], 
+                                [AS_VAR_SET(rcss_lib_spades, no)])
                 LDFLAGS="$OLD_LDFLAGS"
                 AC_LANG_POP(C++)
                 ])
-AS_IF([test AS_VAR_GET(ac_lib_spades) = yes], [$1], [$2])
-AS_VAR_POPDEF([ac_lib_spades])dnl
-])# AC_LIB_SPADES
+AS_VAR_POPDEF([rcss_lib_spades])dnl
+])# RCSS_LIB_SPADES
 
 # RCSS_LIBRARY_VERSION_INFO
 #	define two variables for the library versions
@@ -518,16 +528,16 @@ AS_VAR_POPDEF([rcss_boost_regex])dnl
 AC_DEFUN([RCSS_BOOST_THREADS_LIB], [
   AC_MSG_CHECKING(boost thread library)
   AC_LANG_PUSH(C++)
-  OLD_LDFLAGS="$LDFLAGS"
+  OLDLDFLAGS="$LDFLAGS"
   LDFLAGS="$OLDLDFLAGS -lboost_thread"
   AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
-                 [rcss_boost_threads_lib=boost_thread], 
+                 [rcss_boost_threads_lib=-lboost_thread], 
                  [LDFLAGS="$OLDLDFLAGS -lboost_thread-mt"
       AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
-                   [rcss_boost_threads_lib=boost_thread-mt], 
+                   [rcss_boost_threads_lib=-lboost_thread-mt], 
                    [  LDFLAGS="$OLDLDFLAGS -lboost_thread-gcc-mt"
           AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
-                       [rcss_boost_threads_lib=boost_thread-gcc-mt], 
+                       [rcss_boost_threads_lib=-lboost_thread-gcc-mt], 
                        [rcss_boost_threads_lib=])
                     ])
                 ])
