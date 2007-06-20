@@ -2,6 +2,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/fileserver/fileserver.h>
 #include <kerosin/openglserver/openglserver.h>
+#include <kerosin/openglserver/openglwrapper.h>
 
 using namespace boost;
 using namespace oxygen;
