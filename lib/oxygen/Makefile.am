@@ -27,7 +27,7 @@ dist_pkgdata_DATA = oxygen.rb
 
 bin_SCRIPTS = oxygen-config
 
-if BUILD_SPADES_MODULES
+if BUILD_SPADES_SERVER
 spades_sources = \
 spadesserver/spadesserver.cpp \
 spadesserver/spadesserver_c.cpp \
