@@ -47,9 +47,11 @@ LIBS=$TMP_LIBS
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([poll.h])
-AC_CHECK_HEADERS([arpa/nameser.h])
-AC_CHECK_HEADERS([resolv.h netdb.h])
+AC_CHECK_HEADERS([arpa/nameser.h arpa/inet.h])
+AC_CHECK_HEADERS([resolv.h netdb.h sys/socket.h netinet/in.h Winsock2.h])
 AC_CHECK_HEADERS([float.h limits.h malloc.h memory.h stdlib.h string.h])
+AC_CHECK_HEADERS([execinfo.h])
+AC_CHECK_HEADERS([CoreFoundation/CoreFoundation.h])
 
 AC_CHECK_HEADER([boost/version.hpp],,
 	AC_MSG_ERROR([boost library not found. Please specify the location 
@@ -120,44 +122,12 @@ RCSS_BUILD_SOUNDSYSTEMFMOD
 RCSS_PATH_RUBY
 RCSS_CHECK_RUBY_VERSION(1,8,0)
 RCSS_CHECK_ODE
+RCSS_BUILD_SPADES_SERVER
 
-AC_ARG_VAR(SPADES, [prefix of SPADES installation])
-AC_ARG_WITH([spades],
-	    [AC_HELP_STRING([--with-spades],
-	 	 	    [whether to support SPADES-SIM (default is no)])],
-	    [rcss_with_spades=$withval],
-	    [rcss_with_spades=no])
-
-if test "$rcss_with_spades" = yes; then
-	if test "$SPADES"; then
-	  if test -z "$PATH"; then
-	    PATH="$SPADES/bin"
-	  else
-	    PATH="$PATH:$SPADES/bin"
-	  fi
-	  if test -z "$LDFLAGS"; then
-	    LDFLAGS="-L$SPADES/lib"
-	  else
-	    LDFLAGS="$LDFLAGS -L$SPADES/lib"
-	  fi
-	  if test -z "$CPPFLAGS"; then
-	    CPPFLAGS="-I$SPADES/include"
-	  else
-	    CPPFLAGS="$CPPFLAGS -I$SPADES/include"
-	  fi
-	fi
-	AC_LIB_SPADES([rcss_build_spades=yes
-	 	       AC_DEFINE([HAVE_SPADES_HEADERS], 1, 
-			 	 [Define to 1 if you have the SPADES header files])],
-                      [AC_MSG_ERROR([the SPADES library (http://spades-sim.sourceforge.net) cannot be found. Please specify the prefix used when installing SPADES with the SPADES enviroment variable.])])
-else
-	rcss_build_spades=no
-	AC_MSG_NOTICE([SpadesServer will not be build])
-fi
-AM_CONDITIONAL(BUILD_SPADES_MODULES, test $rcss_build_spades = yes)
-
-
-
+WX_CPPFLAGS="`wx-config --cppflags`"
+WX_LDFLAGS="`wx-config --libs` `wx-config --gl-libs`"
+AC_SUBST(WX_CPPFLAGS)
+AC_SUBST(WX_LDFLAGS)
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
@@ -192,6 +162,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/rubysceneimporter/Makefile \
 		 plugin/voidmeshimporter/Makefile \
 		 plugin/objimporter/Makefile \
+		 plugin/openglsyssdl/Makefile \
 		 plugin/sparkmonitor/Makefile \
 		 plugin/sparkagent/Makefile \
 		 app/Makefile \
