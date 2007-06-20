@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileclasses.h,v 1.7 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: fileclasses.h,v 1.8 2007/06/20 01:06:15 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,11 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <string>
+
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
 
 namespace salt
 {
@@ -44,6 +49,15 @@ class RFile
 {
 public:
     virtual ~RFile() {};
+
+    /** The separator for path names (depends on the platform)
+     * @return path separator
+     */
+    static std::string Sep();
+    /** A (platform specific) "bundle path", i.e. a hint where files of the package might be found.
+     * @return the bundle path name with a trailing path separator
+     */
+    static std::string BundlePath();
 
     // a bunch of pure virtual functions which a file must implement
 
