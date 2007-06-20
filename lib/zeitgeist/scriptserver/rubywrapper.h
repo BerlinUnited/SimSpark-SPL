@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubywrapper.h,v 1.4 2004/03/22 18:11:08 fruit Exp $
+   $Id: rubywrapper.h,v 1.5 2007/06/20 00:55:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,25 +28,35 @@
 // are #undef'ed in this wrapper
 //
 
+#undef EXTERN
+#undef HAVE_VPRINTF
+#undef PACKAGE
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
+#undef PREFIX
+#undef VERSION
 
 #ifndef __GNUC__
 #define EXTERN extern __declspec(dllimport)
 #endif
 #include <ruby.h>
-#undef EXTERN
 
+#undef EXTERN
+#undef HAVE_VPRINTF
+#undef PACKAGE
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
+#undef PREFIX
+#undef VERSION
 
 #include <iostream>
+#include <sparkconfig.h>
 
 namespace zeitgeist
 {
