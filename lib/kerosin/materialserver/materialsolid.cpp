@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid.cpp,v 1.3 2004/04/18 16:30:29 rollmark Exp $
+   $Id: materialsolid.cpp,v 1.4 2007/06/20 00:24:15 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "materialsolid.h"
+#include <kerosin/openglserver/openglwrapper.h>
 #include <kerosin/openglserver/openglserver.h>
 
 using namespace kerosin;
@@ -69,7 +70,7 @@ void MaterialSolid::SetAmbient(const RGBA& ambient)
     mAmbient = ambient;
 }
 
-const RGBA& MaterialSolid::GetAmbient()
+const RGBA& MaterialSolid::GetAmbient() const
 {
     return mAmbient;
 }
@@ -79,7 +80,7 @@ void MaterialSolid::SetDiffuse(const RGBA& diffuse)
     mDiffuse = diffuse;
 }
 
-const RGBA& MaterialSolid::GetDiffuse()
+const RGBA& MaterialSolid::GetDiffuse() const
 {
     return mDiffuse;
 }
@@ -89,7 +90,7 @@ void MaterialSolid::SetSpecular(const RGBA& specular)
     mSpecular = specular;
 }
 
-const RGBA& MaterialSolid::GetSpecular()
+const RGBA& MaterialSolid::GetSpecular() const
 {
     return mSpecular;
 }
@@ -99,7 +100,8 @@ void MaterialSolid::SetEmission(const RGBA& emission)
     mEmission = emission;
 }
 
-const RGBA& MaterialSolid::GetEmission()
+const RGBA& 
+MaterialSolid::GetEmission() const
 {
     return mEmission;
 }
