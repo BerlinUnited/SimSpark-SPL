@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamecontrolserver.cpp,v 1.22 2007/06/15 09:47:29 jboedeck Exp $
+   $Id: gamecontrolserver.cpp,v 1.23 2007/06/20 00:48:48 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -160,7 +160,7 @@ GameControlServer::AgentConnect(int id)
     // mark the scene as modified
     scene->SetModified(true);
 
-    return aspect->Init(mCreateEffector);
+    return aspect->Init(mCreateEffector,id);
 }
 
 bool GameControlServer::AgentDisappear(int id)
