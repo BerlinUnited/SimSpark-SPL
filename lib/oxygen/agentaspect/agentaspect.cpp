@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentaspect.cpp,v 1.8 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: agentaspect.cpp,v 1.9 2007/06/20 00:51:42 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ using namespace std;
 AgentAspect::AgentAspect() : Transform()
 {
     SetName("agentAspect");
+    mID = -1;
     mPerceptorCycle = 0;
 }
 
@@ -133,8 +134,10 @@ AgentAspect::UpdateEffectorMap()
 }
 
 bool
-AgentAspect::Init(const string& createEffector)
+AgentAspect::Init(const string& createEffector, int id)
 {
+    mID = id;
+
     shared_ptr<Effector> create = shared_dynamic_cast<Effector>
         (GetCore()->New(createEffector));
 
