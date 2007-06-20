@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: light.cpp,v 1.7 2007/02/12 19:45:38 rollmark Exp $
+   $Id: light.cpp,v 1.8 2007/06/20 00:39:36 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,15 +24,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "light.h"
-#include <kerosin/renderserver/renderserver.h>
-#include <kerosin/openglserver/openglserver.h>
 #include <zeitgeist/logserver/logserver.h>
-
-/*
-// define the symbol BOOL to prevent opcode.h to typedef BOOL
-#define BOOL BOOL
-#include <opcode/Opcode.h>
-*/
+#include <kerosin/openglserver/openglwrapper.h>
+#include <kerosin/openglserver/openglserver.h>
 
 using namespace boost;
 using namespace kerosin;
@@ -158,7 +152,7 @@ void Light::RenderLitMesh(boost::shared_ptr<StaticMesh> /*mesh*/)
 
 void Light::FlushCache()
 {
-    const unsigned int n 
+    const unsigned int n
         = static_cast<unsigned int>(mCachedIndices.size());
 
     for (unsigned int i=0; i<n; ++i)
