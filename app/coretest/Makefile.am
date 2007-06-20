@@ -2,9 +2,9 @@ noinst_PROGRAMS = coretest
 
 if BUILD_KEROSIN
 if DEBUG
-my_ldadd=${top_srcdir}/lib/kerosin/libkerosin_debug.la
+my_ldadd=${top_builddir}/lib/kerosin/libkerosin_debug.la
 else
-my_ldadd=${top_srcdir}/lib/kerosin/libkerosin.la
+my_ldadd=${top_builddir}/lib/kerosin/libkerosin.la
 endif
 else
 my_ldadd= 
@@ -13,22 +13,22 @@ endif
 
 if DEBUG
 LDADD = ${my_ldadd} \
-	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
-        ${top_srcdir}/lib/salt/libsalt_debug.la \
+	${top_builddir}/lib/oxygen/liboxygen_debug.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist_debug.la \
+        ${top_builddir}/lib/salt/libsalt_debug.la \
 	@BOOST_THREADS_LIB@
 coretest_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = ${my_ldadd} \
-	${top_srcdir}/lib/oxygen/liboxygen.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
-        ${top_srcdir}/lib/salt/libsalt.la \
+	${top_builddir}/lib/oxygen/liboxygen.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist.la \
+        ${top_builddir}/lib/salt/libsalt.la \
 	@BOOST_THREADS_LIB@
 coretest_CXXFLAGS = -O2
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
-AM_LDFLAGS = @FREETYPE_LIBADD@ @SDL_LIBADD@ @IL_LIBADD@ @GL_LIBADD@ ${BUNDLES}
+AM_LDFLAGS = @FREETYPE_LIBADD@ @SDL_LIBADD@ @SDL_LDFLAGS@ @IL_LIBADD@ @GL_LIBADD@ ${BUNDLES}
 
 coretest_SOURCES = main.cpp 
 EXTRA_DIST = data/monkey.wav
