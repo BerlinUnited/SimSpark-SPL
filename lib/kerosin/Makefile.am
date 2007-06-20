@@ -3,14 +3,14 @@ if DEBUG
 pkglib_LTLIBRARIES = libkerosin_debug.la
 libkerosin_debug_la_SOURCES = $(sources) 
 libkerosin_debug_la_CXXFLAGS = -O -g -W -Wall
-libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ @SDL_LIBADD@ @IL_LIBADD@ @GL_LIBADD@
-libkerosin_debug_la_LDFLAGS = -version-info @kerosin_version_info@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
+libkerosin_debug_la_LIBADD = @FREETYPE_LIBADD@ @SDL_LIBADD@ @IL_LIBADD@ @GL_LIBADD@ 
+libkerosin_debug_la_LDFLAGS = -version-info @kerosin_version_info@ 
 else
 pkglib_LTLIBRARIES = libkerosin.la
 libkerosin_la_SOURCES = $(sources) 
 libkerosin_la_CXXFLAGS = -O2
 libkerosin_la_LIBADD = @FREETYPE_LIBADD@ @SDL_LIBADD@ @IL_LIBADD@ @GL_LIBADD@
-libkerosin_la_LDFLAGS = -version-info @kerosin_version_info@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@
+libkerosin_la_LDFLAGS = -version-info @kerosin_version_info@
 endif
 
 bin_SCRIPTS = kerosin-config
@@ -25,8 +25,7 @@ libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
 ## architecture independent data (scripts) to be installed and distributed
 dist_pkgdata_DATA = \
 	kerosin.rb \
-	inputserver/german.scan.rb \
-	openglserver/glbase.h
+	inputserver/german.scan.rb 
 
 sources = \
 fontserver/font.cpp \
@@ -82,6 +81,7 @@ textureserver/textureserver.cpp \
 textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
+openglserver/openglsystem_c.cpp \
 renderserver/renderserver.cpp \
 renderserver/renderserver_c.cpp \
 renderserver/rendernode.cpp \
@@ -129,8 +129,10 @@ soundserver/soundsystem.h \
 textureserver/texture.h \
 textureserver/texture2d.h \
 textureserver/textureserver.h \
-openglserver/openglserver.h \
 openglserver/openglwrapper.h \
+openglserver/openglsystem.h \
+openglserver/openglserver.h \
+openglserver/glbase.h \
 renderserver/renderserver.h \
 renderserver/rendernode.h \
 renderserver/rendercontrol.h \
