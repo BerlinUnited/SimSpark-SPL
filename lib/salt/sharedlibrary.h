@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sharedlibrary.h,v 1.6 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: sharedlibrary.h,v 1.7 2007/06/20 00:58:33 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,10 +28,6 @@
 */
 #ifndef SALT_SHAREDLIBRARY_H
 #define SALT_SHAREDLIBRARY_H
-
-#ifdef HAVE_CONFIG_H
-#include <sparkconfig.h>
-#endif
 
 #include "defines.h"
 #include <string>
@@ -77,12 +73,18 @@ public:
     /** releases a previously opened library */
     void    Close();
 
+    /** returns the name of the library */
+    const std::string& GetName() const;
+
     //
     // members
     //
 private:
     /** a platform dependent handle to the managed library */
-    void    *mLibHandle;
+    void *mLibHandle;
+
+    /** the name of the library */
+    std::string mName;
 };
 
 } //namespace salt
