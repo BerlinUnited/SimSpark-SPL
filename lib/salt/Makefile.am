@@ -24,7 +24,7 @@ frustum.cpp  \
 matrix.cpp  \
 path.cpp  \
 plane.cpp \
-gcc/sharedlibrary.cpp
+sharedlibrary.cpp
 
 libpkginclude_HEADERS = \
 bounds.h   \
