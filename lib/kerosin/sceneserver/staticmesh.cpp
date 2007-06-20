@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.15 2007/06/17 10:49:54 jboedeck Exp $
+   $Id: staticmesh.cpp,v 1.16 2007/06/20 00:40:35 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 */
 #include "staticmesh.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <kerosin/openglserver/openglserver.h>
+#include <kerosin/openglserver/openglwrapper.h>
 #include <kerosin/materialserver/material.h>
 #include <kerosin/materialserver/materialserver.h>
 
