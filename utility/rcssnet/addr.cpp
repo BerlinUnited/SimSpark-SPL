@@ -22,8 +22,6 @@
 
 #if HAVE_CONFIG_H
 #include <sparkconfig.h>
-#else
-#warning "don't have sparkconfig.h"
 #endif
 
 #ifdef HAVE_NETDB_H
@@ -37,9 +35,6 @@
 #endif
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
-#warning "have netinet/in.h"
-#else
-#warning "don't have netinet/in.h"
 #endif
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
