@@ -5,19 +5,19 @@ endif
 
 if DEBUG
 LDADD = \
-	${top_srcdir}/lib/kerosin/libkerosin_debug.la \
-	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
-        ${top_srcdir}/lib/salt/libsalt_debug.la @FREETYPE_LIBADD@ @SDL_LDFLAGS@ @IL_LIBADD@ @GL_LIBADD@ \
+	${top_builddir}/lib/kerosin/libkerosin_debug.la \
+	${top_builddir}/lib/oxygen/liboxygen_debug.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist_debug.la \
+        ${top_builddir}/lib/salt/libsalt_debug.la @FREETYPE_LIBADD@ @SDL_LDFLAGS@ @IL_LIBADD@ @GL_LIBADD@ \
 	@BOOST_THREADS_LIB@
 
 fonttest_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = \
-	${top_srcdir}/lib/kerosin/libkerosin.la \
-	${top_srcdir}/lib/oxygen/liboxygen.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
-        ${top_srcdir}/lib/salt/libsalt.la @FREETYPE_LIBADD@ @SDL_LDFLAGS@ @IL_LIBADD@ @GL_LIBADD@ \
+	${top_builddir}/lib/kerosin/libkerosin.la \
+	${top_builddir}/lib/oxygen/liboxygen.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist.la \
+        ${top_builddir}/lib/salt/libsalt.la @FREETYPE_LIBADD@ @SDL_LDFLAGS@ @IL_LIBADD@ @GL_LIBADD@ \
 	@BOOST_THREADS_LIB@
 
 fonttest_CXXFLAGS = -O2

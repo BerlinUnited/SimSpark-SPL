@@ -5,7 +5,7 @@ liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall -Woverloaded-virtual -Wno-deprecate
 liboxygen_debug_la_LIBADD = -lode ${spades_libs}
 liboxygen_debug_la_LDFLAGS = \
 	-version-info @oxygen_version_info@ \
-	${top_srcdir}/utility/rcssnet/librcssnet3D.la
+	${top_builddir}/utility/rcssnet/librcssnet3D.la
 
 else
 pkglib_LTLIBRARIES = liboxygen.la
@@ -14,7 +14,7 @@ liboxygen_la_CXXFLAGS = -O2 -Wno-deprecated
 liboxygen_la_LIBADD = -lode $(spades_libs) 
 liboxygen_la_LDFLAGS = \
 	-version-info @oxygen_version_info@ \
-	${top_srcdir}/utility/rcssnet/librcssnet3D.la
+	${top_builddir}/utility/rcssnet/librcssnet3D.la
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility @RUBY_CPPFLAGS@

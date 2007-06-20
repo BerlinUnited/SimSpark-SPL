@@ -4,16 +4,16 @@ noinst_SCRIPTS = createagentdb.sh
 
 if DEBUG
 LDADD = \
-	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
-        ${top_srcdir}/lib/salt/libsalt_debug.la \
+	${top_builddir}/lib/oxygen/liboxygen_debug.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist_debug.la \
+        ${top_builddir}/lib/salt/libsalt_debug.la \
 	@BOOST_THREADS_LIB@
 rcssserver3D_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = \
-	${top_srcdir}/lib/oxygen/liboxygen.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
-        ${top_srcdir}/lib/salt/libsalt.la \
+	${top_builddir}/lib/oxygen/liboxygen.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist.la \
+        ${top_builddir}/lib/salt/libsalt.la \
 	@BOOST_THREADS_LIB@
 rcssserver3D_CXXFLAGS = -O2
 endif
@@ -27,5 +27,5 @@ EXTRA_DIST = agentdb.xml
 
 install-data-local: createagentdb.sh
 	rm -f ${pkgdatadir}/agentdb.list
-	${srcdir}/createagentdb.sh > ${pkgdatadir}/agentdb.xml
+	${top_builddir}/${subdir}/createagentdb.sh > ${pkgdatadir}/agentdb.xml
 	chmod 644 ${pkgdatadir}/agentdb.xml

@@ -101,5 +101,5 @@ libpkgincludedir = $(includedir)/@PACKAGE@/soccer
 # so we don't need the "lib" prefix in the module name
 soccer_la_LDFLAGS = -module -version-info 1:0:0
 
-AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin \
+AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/plugin -I${top_srcdir} \
 	          @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@

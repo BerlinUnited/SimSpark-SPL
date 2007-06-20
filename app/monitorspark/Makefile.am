@@ -4,21 +4,21 @@ endif
 
 if DEBUG
 LDADD = -lpthread  \
-	${top_srcdir}/lib/spark/libspark_debug.la \
-	${top_srcdir}/lib/kerosin/libkerosin_debug.la \
-	${top_srcdir}/lib/oxygen/liboxygen_debug.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist_debug.la \
-        ${top_srcdir}/lib/salt/libsalt_debug.la \
-	${top_srcdir}/utility/rcssnet/librcssnet3D.la \
+	${top_builddir}/lib/spark/libspark_debug.la \
+	${top_builddir}/lib/kerosin/libkerosin_debug.la \
+	${top_builddir}/lib/oxygen/liboxygen_debug.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist_debug.la \
+        ${top_builddir}/lib/salt/libsalt_debug.la \
+	${top_builddir}/utility/rcssnet/librcssnet3D.la \
 	@BOOST_THREADS_LIB@
 monitorspark_CXXFLAGS = -O -g -W -Wall
 else
 LDADD = -lpthread  \
-	${top_srcdir}/lib/spark/libspark.la \
-	${top_srcdir}/lib/kerosin/libkerosin.la \
-	${top_srcdir}/lib/oxygen/liboxygen.la \
-	${top_srcdir}/lib/zeitgeist/libzeitgeist.la \
-        ${top_srcdir}/lib/salt/libsalt.la \
+	${top_builddir}/lib/spark/libspark.la \
+	${top_builddir}/lib/kerosin/libkerosin.la \
+	${top_builddir}/lib/oxygen/liboxygen.la \
+	${top_builddir}/lib/zeitgeist/libzeitgeist.la \
+        ${top_builddir}/lib/salt/libsalt.la \
 	@BOOST_THREADS_LIB@
 monitorspark_CXXFLAGS = -O2
 endif

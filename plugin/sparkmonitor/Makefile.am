@@ -12,7 +12,7 @@ sparkmonitor_la_SOURCES = \
 	sparkmonitorlogfileserver.cpp \
 	sparkmonitorlogfileserver_c.cpp
 
-sparkmonitor_la_LDFLAGS = -module -version-info 0:0:0 -L${top_srcdir}/utility/sfsexp/
+sparkmonitor_la_LDFLAGS = -module -version-info 0:0:0 -L${top_builddir}/utility/sfsexp/
 sparkmonitor_la_LIBADD = -lsexp
 
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility @RUBY_CPPFLAGS@
