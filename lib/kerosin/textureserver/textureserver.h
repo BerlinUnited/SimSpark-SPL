@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: textureserver.h,v 1.8 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: textureserver.h,v 1.9 2007/06/20 00:35:09 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <kerosin/openglserver/openglserver.h>
+#include <kerosin/imageserver/imageserver.h>
 
 #if HAVE_HASH_MAP
 #include <hash_map>
@@ -49,8 +51,6 @@ namespace kerosin
 }
 #endif
 
-class OpenGLServer;
-class ImageServer;
 class Texture;
 
 class TextureServer : public zeitgeist::Leaf
