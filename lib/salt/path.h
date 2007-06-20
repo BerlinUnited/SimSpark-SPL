@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: path.h,v 1.7 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: path.h,v 1.8 2007/06/20 01:02:20 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,16 @@
 #define SALT_PATH_H
 
 #ifdef HAVE_CONFIG_H
+# undef EXTERN
+# undef HAVE_VPRINTF
+# undef PACKAGE
+# undef PACKAGE_BUGREPORT
+# undef PACKAGE_NAME
+# undef PACKAGE_STRING
+# undef PACKAGE_TARNAME
+# undef PACKAGE_VERSION
+# undef PREFIX
+# undef VERSION
 #include <sparkconfig.h>
 #endif
 
