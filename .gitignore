@@ -474,6 +474,7 @@ plugin/soccer/internalsoccermonitor/Makefile
 plugin/soccer/internalsoccermonitor/Makefile.in
 plugin/soccer/internalsoccermonitor/*.la
 plugin/soccer/internalsoccermonitor/*.lo
+plugin/soccer/internalsoccermonitor/.dirstamp
 plugin/soccer/kickeffector/*.la
 plugin/soccer/kickeffector/*.lo
 plugin/soccer/kickeffector/.deps

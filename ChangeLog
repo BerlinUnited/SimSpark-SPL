@@ -1,3 +1,14 @@
+2007-06-20  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/kerosin/openglserver/openglserver.cpp (OpenGLServer::GetExtension): 
+	- cast the return value to be able to compile
+	
+	* app/gendot/Makefile.am:
+	* app/coretest/Makefile.am:
+	- added SDL_LDFLAGS
+	- using top_builddir instead of top_srcdir. should be done everywhere to enable
+	  having a separate build dir
+
 2007-06-20  Oliver Obst  <fruit@kudamono>
 
 	* configure.ac: 
