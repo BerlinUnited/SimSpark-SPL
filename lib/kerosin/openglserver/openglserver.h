@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.h,v 1.10 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: openglserver.h,v 1.11 2007/06/20 00:28:57 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@
 #ifndef KEROSIN_OPENGLSERVER_H
 #define KEROSIN_OPENGLSERVER_H
 
+#include <string>
+#include <set>
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
-#include <set>
-#include <kerosin/openglserver/openglwrapper.h>
 
 namespace kerosin
 {
@@ -34,6 +34,7 @@ namespace kerosin
 #endif
 
 class MapHolder;
+class OpenGLSystem;
 
 class OpenGLServer : public zeitgeist::Leaf
 {
@@ -48,30 +49,24 @@ public:
     OpenGLServer();
     ~OpenGLServer();
 
-    //    boost::shared_ptr<GLExtensionReg> GetExtensionReg() const;
+    /** Initializes the OpenGLServer and sets up the OpenGLSystem with
+        the given class name. Passing an empty string for
+        openGLSysName is correct. In this case OpenGLServer assumes,
+        that the OpenGL context is already setup
+    */
+    bool Init(const std::string& openGLSysName);
+
     //! if this is called, the application will 'want to quit'
     void Quit();
 
     //! true if somebody called 'Quit'
     bool WantsToQuit() const;
 
-    //! pump SDL event loop
+    //! pump event loop of OpenGLSubSystem
     void Update();
 
     //! swap opengl buffer
     void SwapBuffers() const;
-
-    //! vertex and fragment program loading
-    unsigned int LoadARBProgram(GLenum target, const char* fileName);
-
-    //! vertex and fragment program loading
-    unsigned int LoadARBVertexProgram(const char* fileName);
-
-    //! vertex and fragment program loading
-    unsigned int LoadARBFragmentProgram(const char* fileName);
-
-    bool SupportsFancyLighting() const { return mSupportsFancyLighting; }
-    void ToggleFancyLighting();
 
     /** returns the next availble GL light constant or -1 if no more
         lights are available
@@ -80,6 +75,15 @@ public:
 
     /** marks the GL light constant as available */
     void PutLight(int l);
+
+    /** returns the address of an OpenGL extension by name */
+    static void* GetExtension(const char* name);
+
+    /** looks up and calls glActiveTextureARB extension if available */
+    static void glActiveTextureARB(unsigned int texture);
+
+    //! return the main window handle from the gl subsystem
+    long int GetWindowHandle() const;
 
 protected:
     //! set up opengl viewport
@@ -100,6 +104,9 @@ protected:
 
     //! the set of available OpenGL light constants
     TLightSet mAvailableLights;
+
+    //! the OpenGL subsystem used
+    boost::shared_ptr<OpenGLSystem> mGLSystem;
 };
 
 DECLARE_CLASS(OpenGLServer);
