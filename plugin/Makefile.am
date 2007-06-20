@@ -6,6 +6,7 @@ SUBDIRS = \
 	  inputsdl \
 	  monitortest \
 	  objimporter \
+	  openglsyssdl \
 	  perfectvisionperceptor \
 	  collisionperceptor \
 	  sexpparser \
