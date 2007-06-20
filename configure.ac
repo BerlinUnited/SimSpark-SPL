@@ -142,6 +142,7 @@ AC_CONFIG_FILES([Makefile \
 		 lib/zeitgeist/zeitgeist-config \
 		 lib/kerosin/Makefile \
 		 lib/kerosin/kerosin-config \
+		 lib/kerosin/kerosin.rb \
 		 lib/oxygen/Makefile \
 		 lib/oxygen/oxygen-config \
 		 lib/spark/Makefile \

@@ -22,7 +22,7 @@ createVariable('Application.Title', 'SimSpark');
 # executed in, such as font paths.
 #
 
-createVariable('System.FontPath', 'data/fonts');
+createVariable('System.FontPath', '@prefix@/share/@PACKAGE@/');
 
 
 ####
