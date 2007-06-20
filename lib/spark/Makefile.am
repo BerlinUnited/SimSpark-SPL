@@ -30,5 +30,3 @@ spark.cpp
 
 nobase_libpkginclude_HEADERS = \
 spark.h
-
-
