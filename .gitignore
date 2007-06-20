@@ -350,6 +350,12 @@ plugin/objimporter/Makefile
 plugin/objimporter/Makefile.in
 plugin/objimporter/*.la
 plugin/objimporter/*.lo
+plugin/openglsyssdl/.deps
+plugin/openglsyssdl/.libs
+plugin/openglsyssdl/Makefile
+plugin/openglsyssdl/Makefile.in
+plugin/openglsyssdl/*.la
+plugin/openglsyssdl/*.lo
 plugin/perfectvisionperceptor/*.la
 plugin/perfectvisionperceptor/*.lo
 plugin/perfectvisionperceptor/.deps
