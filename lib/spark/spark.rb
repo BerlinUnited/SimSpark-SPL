@@ -13,6 +13,8 @@ $agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
 
+print "(spark.rb) setup\n"
+
 # (MonitorControl) constants
 # 
 
@@ -164,6 +166,7 @@ end
 
 def sparkSetupRendering
   print "(spark.rb) sparkSetupRendering\n"
+  print "(spark.rb) using OpenGLSystem 'openglsyssdl'\n"
   #
   # setup the GeometryServer
   #geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
@@ -172,15 +175,16 @@ def sparkSetupRendering
   
   #
   # setup the kerosin render framework
-  new('kerosin/OpenGLServer', $serverPath+'opengl');
+  openGLServer = new('kerosin/OpenGLServer', $serverPath+'opengl');
+  importBundle 'openglsyssdl'
+
   new('kerosin/RenderServer', $serverPath+'render');
   new('kerosin/ImageServer', $serverPath+'image');
   new('kerosin/TextureServer', $serverPath+'texture');
+  openGLServer.init('OpenGLSystemSDL')
 
   # setup the FontServer
   new('kerosin/FontServer', $serverPath+'font');
-
-  
 
   # 
   # register render control node to the simulation server
