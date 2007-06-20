@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gmath.h,v 1.12 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: gmath.h,v 1.13 2007/06/20 01:03:23 fruit Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,14 @@ namespace salt
 {
 #if 0
 }
+#endif
+
+#ifndef M_PI
+    #define M_PI 3.1415926535897932384626433832795
+#endif
+
+#ifndef M_PI_2 
+    #define M_PI_2 1.57079632679489661923132169164 /* pi/2 */
 #endif
 
 // better directly use the cmath constants
@@ -167,14 +175,14 @@ template <class TYPE>
 f_inline double gNormalizeDeg(TYPE angle)
 {
     while (angle > 180)
-        {
-            angle -= 360;
-        }
+    {
+        angle -= 360;
+    }
 
     while (angle < -180)
-        {
-            angle += 360;
-        }
+    {
+        angle += 360;
+    }
 
     return angle;
 }
