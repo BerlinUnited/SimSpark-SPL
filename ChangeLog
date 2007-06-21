@@ -19,6 +19,15 @@
 	- added SDL_LDFLAGS
 	- using top_builddir instead of top_srcdir. should be done everywhere to enable
 	  having a separate build dir
+	  
+	* lib/kerosin/kerosin.rb.in:
+	- replaced kerosin.rb, it'll set the correct font path
+	
+	* configure.ac:
+	- added rule to make kerosin.rb 
+
+	* app/simspark/Makefile.am:
+	- added internalsoccermonitor.rb for distribution
 
 2007-06-20  Oliver Obst  <fruit@kudamono>
 
