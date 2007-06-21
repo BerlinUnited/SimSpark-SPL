@@ -1,3 +1,14 @@
+2007-06-21  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* app/simspark/rsg/agent/flag_right1.rsg,
+	* app/simspark/rsg/agent/flag_right2.rsg:
+	- fixed indentation
+
+	* app/simspark/rsg/agent/flag_left1.rsg,
+	* app/simspark/rsg/agent/flag_left2.rsg:
+	- fixed position of the flags (should be at the field corners)
+	- fixed indentation
+
 2007-06-20  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/kerosin/openglserver/openglserver.cpp (OpenGLServer::GetExtension): 
