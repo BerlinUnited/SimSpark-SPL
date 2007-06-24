@@ -20,5 +20,12 @@ else
     inputServer.bindCommand('m',      Command.MoveAgent);
     inputServer.bindCommand('n',      Command.ShootBall);
     inputServer.bindCommand('x',      Command.MoveBall);
+    inputServer.bindCommand('1',      Command.CameraLeftGoal);
+    inputServer.bindCommand('2',      Command.CameraLeftCorner);
+    inputServer.bindCommand('3',      Command.CameraMiddleLeft);
+    inputServer.bindCommand('4',      Command.CameraMiddleRight);
+    inputServer.bindCommand('5',      Command.CameraMiddle);
+    inputServer.bindCommand('6',      Command.CameraRightCorner);
+    inputServer.bindCommand('7',      Command.CameraRightGoal);
   end
 end
