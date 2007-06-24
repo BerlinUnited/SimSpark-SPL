@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.5 2007/06/24 13:16:21 jboedeck Exp $
+   $Id: soccerinput.cpp,v 1.6 2007/06/24 17:23:54 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,6 +86,8 @@ void SoccerInput::OnLink()
 void SoccerInput::OnUnlink()
 {
     mMonitorClient.reset();
+    mCameraBody.reset();
+    mFPS.reset();
 }
 
 void SoccerInput::SendCommand(const std::string& cmd)
