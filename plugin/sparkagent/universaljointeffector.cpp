@@ -54,9 +54,32 @@ void UniversalJointEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
     }
 
-    mJoint->SetParameter(dParamVel, universalAction->GetMotorVelocity(Joint::AI_FIRST));
-    mJoint->SetParameter(dParamVel2, universalAction->GetMotorVelocity(Joint::AI_SECOND));
+    // check if the angle out of range
+    float minAng = mJoint->GetLowStopDeg(Joint::AI_FIRST);
+    float maxAng = mJoint->GetHighStopDeg(Joint::AI_FIRST);
+    float currentAng = mJoint->GetAngle(Joint::AI_FIRST);
+    float vel = universalAction->GetMotorVelocity(Joint::AI_FIRST);
+    if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
+    {
+        mJoint->SetParameter(dParamVel, vel);
+    }
+    else
+    {
+        mJoint->SetParameter(dParamVel, 0);
+    }
 
+    minAng = mJoint->GetLowStopDeg(Joint::AI_SECOND);
+    maxAng = mJoint->GetHighStopDeg(Joint::AI_SECOND);
+    currentAng = mJoint->GetAngle(Joint::AI_SECOND);
+     vel = universalAction->GetMotorVelocity(Joint::AI_SECOND);
+    if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
+    {
+        mJoint->SetParameter(dParamVel2, vel );
+    }
+    else
+    {
+        mJoint->SetParameter(dParamVel2, 0);
+    }
 }
 
 shared_ptr<ActionObject> UniversalJointEffector::GetActionObject(const Predicate& predicate)
@@ -108,6 +131,9 @@ void UniversalJointEffector::OnLink()
         {
             GetLog()->Error()
                 << "(UniversalJointEffector) ERROR: found no UniversalJoint parent\n";
+        } else {
+            mJoint->SetParameter(dParamFudgeFactor, 0.8);
+            mJoint->SetParameter(dParamFudgeFactor2, 0.8);
         }
 }
 
