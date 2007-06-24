@@ -1,7 +1,25 @@
+2007-06-24  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* app/monitorspark/soccerbindings.rb:
+	- key bindings (1-7) for camera positions
+
+	* app/simspark/rsg/agent/soccerbot.rsg:
+	- Rle4Max 1 => 10 
+	- Lle4Max 1 => 10
+	- Rae2Max 1 => 10
+	- Lae2Min 1 => -10 (!)
+
+	* lib/kerosin/openglserver/openglserver.cpp:
+	- glXGetProcAddressARB => glXGetProcAddress
+
+	* plugin/soccermonitor/soccerinput.cpp,
+	* plugin/soccermonitor/soccerinput.h:
+	- implemented different camera positions for keys 1-7
+
 2007-06-24  Xu Yuan  <xuyuan.cn@gmail.com>
 
-	* plugin/sparkagent/hingeeffector.cpp:
-	* plugin/sparkagent/universaljointeffector.cpp
+	* plugin/sparkagent/hingeeffector.cpp,
+	* plugin/sparkagent/universaljointeffector.cpp:
 	- add checking the range of joint angle and joint velocity
 	- set the dParamFudgeFactor to 0.8
 
