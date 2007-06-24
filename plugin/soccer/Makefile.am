@@ -43,6 +43,8 @@ sexpmonitor/sexpmonitor.cpp \
 sexpmonitor/sexpmonitor_c.cpp \
 internalsoccermonitor/internalsoccerrender.cpp \
 internalsoccermonitor/internalsoccerrender_c.cpp \
+internalsoccermonitor/internalsoccerinput.cpp \
+internalsoccermonitor/internalsoccerinput_c.cpp \
 soccerbase/soccerbase.cpp \
 soccercontrolaspect/soccercontrolaspect.cpp \
 soccercontrolaspect/soccercontrolaspect_c.cpp \
@@ -87,6 +89,7 @@ sayeffector/sayaction.h \
 sayeffector/sayeffector.h \
 sexpmonitor/sexpmonitor.h \
 internalsoccermonitor/internalsoccerrender.h \
+internalsoccermonitor/internalsoccerinput.h \
 soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.h \
 soccerruleaspect/soccerruleaspect.h \

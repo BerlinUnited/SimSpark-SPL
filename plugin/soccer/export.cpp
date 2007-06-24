@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.12 2007/06/19 07:25:25 jboedeck Exp $
+   $Id: export.cpp,v 1.13 2007/06/24 17:26:55 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@
 #include "agentstate/agentstate.h"
 #include "sexpmonitor/sexpmonitor.h"
 #include "internalsoccermonitor/internalsoccerrender.h"
+#include "internalsoccermonitor/internalsoccerinput.h"
 #include "trainercommandparser/trainercommandparser.h"
 #include "fieldflag/fieldflag.h"
 #include "ball/ball.h"
@@ -67,7 +68,8 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(AgentState);
         ZEITGEIST_EXPORT(TrainerCommandParser);
         ZEITGEIST_EXPORT(SexpMonitor);        
-        ZEITGEIST_EXPORT(InternalSoccerRender);        
+        ZEITGEIST_EXPORT(InternalSoccerRender);       
+        ZEITGEIST_EXPORT(InternalSoccerInput);
         ZEITGEIST_EXPORT(FieldFlag);
         ZEITGEIST_EXPORT(Ball);
         ZEITGEIST_EXPORT(AgentStatePerceptor);
