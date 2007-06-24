@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccermonitor.cpp,v 1.2 2004/12/30 15:56:22 rollmark Exp $
+   $Id: soccermonitor.cpp,v 1.3 2007/06/24 16:25:24 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,7 +85,30 @@ void SoccerMonitor::ParsePredicates(const PredicateList& pList)
                             pred.GetValue(pred.begin(),mHalf);
                         }
                     break;
-
+                case P_LEFTTEAM:
+                    if (pred.parameter.GetSize() == 1)
+                        {
+                            pred.GetValue(pred.begin(),mTeamNameLeft);
+                        }                    
+                    break;
+                case P_RIGHTTEAM:
+                    if (pred.parameter.GetSize() == 1)
+                        {
+                            pred.GetValue(pred.begin(),mTeamNameRight);
+                        }                   
+                    break;
+                case P_LEFTSCORE:
+                    if (pred.parameter.GetSize() == 1)
+                        {
+                            pred.GetValue(pred.begin(),mScoreLeft);
+                        }                    
+                    break;
+                case P_RIGHTSCORE:
+                    if (pred.parameter.GetSize() == 1)
+                        {
+                            pred.GetValue(pred.begin(),mScoreRight);
+                        }                    
+                    break;
                 default:
                     break;
                 }
@@ -112,10 +135,14 @@ void SoccerMonitor::ParsePlayModes(const Predicate& pred)
 void SoccerMonitor::SetupPredicateMap()
 {
     mPredMap.clear();
-    mPredMap["play_modes"] = P_PLAYMODES;
-    mPredMap["time"]       = P_TIME;
-    mPredMap["play_mode"]  = P_PLAYMODE;
-    mPredMap["half"]       = P_HALF;
+    mPredMap["play_modes"]  = P_PLAYMODES;
+    mPredMap["time"]        = P_TIME;
+    mPredMap["play_mode"]   = P_PLAYMODE;
+    mPredMap["half"]        = P_HALF;
+    mPredMap["team_left"]   = P_LEFTTEAM;
+    mPredMap["team_right"]  = P_RIGHTTEAM;
+    mPredMap["score_left"]  = P_LEFTSCORE;
+    mPredMap["score_right"] = P_RIGHTSCORE;
 }
 
 TTime SoccerMonitor::GetTime() const
@@ -154,9 +181,29 @@ string SoccerMonitor::GetGameHalfString() const
             return "unknown half";
 
         case 1:
-            return "first half";
+            return "1st half";
 
         case 2:
-            return "second half";
+            return "2nd half";
         }
+}
+
+std::string SoccerMonitor::GetTeamNameLeft() const
+{
+    return mTeamNameLeft;
+}
+
+std::string SoccerMonitor::GetTeamNameRight() const
+{
+    return mTeamNameRight;
+}
+
+int SoccerMonitor::GetScoreLeft() const
+{
+    return mScoreLeft;
+}
+
+int SoccerMonitor::GetScoreRight() const
+{
+    return mScoreLeft;
 }

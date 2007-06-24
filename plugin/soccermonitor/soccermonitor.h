@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccermonitor.h,v 1.2 2004/12/30 15:56:22 rollmark Exp $
+   $Id: soccermonitor.h,v 1.3 2007/06/24 16:25:24 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +35,11 @@ public:
             P_PLAYMODES, //! list of play mode strings
             P_TIME,      //! game time update
             P_PLAYMODE,  //! play mode update
-            P_HALF       //! game half update
+            P_HALF,      //! game half update
+            P_LEFTTEAM,  //! left team name update
+            P_RIGHTTEAM, //! right team name update
+            P_LEFTSCORE,  //! score update
+            P_RIGHTSCORE,  //! score update
         };
 
     typedef std::map<std::string, EPredicate> TPredicateMap;
@@ -58,6 +62,12 @@ public:
     TGameHalf GetGameHalf() const;
     std::string GetGameHalfString() const;
 
+    std::string GetTeamNameLeft() const;
+    std::string GetTeamNameRight() const;
+
+    int GetScoreLeft() const;
+    int GetScoreRight() const;
+
 protected:
     void ParsePredicates(const oxygen::PredicateList& pList);
     void ParsePlayModes(const oxygen::Predicate& pred);
@@ -73,6 +83,12 @@ protected:
     int mHalf;
 
     std::vector<std::string> mPlayModes;
+
+    std::string mTeamNameLeft;
+    std::string mTeamNameRight;
+
+    int mScoreLeft;
+    int mScoreRight;
 };
 
 DECLARE_CLASS(SoccerMonitor);
