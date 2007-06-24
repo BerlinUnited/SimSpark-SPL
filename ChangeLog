@@ -1,5 +1,22 @@
 2007-06-25  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
+	* app/simspark/Makefile.am:
+	- including internalsoccerbindings.rb for distribution
+
+	* app/simspark/internalsoccerbindings.rb:
+	- key bindings for the internal soccer input plug-in
+
+	* app/simspark/internalsoccermonitor.rb:
+	- setting up the internal soccer input plug-in
+
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.h,
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp,
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput_c.cpp,
+	* plugin/soccer/export.cpp,
+	* plugin/soccer/Makefile.am:
+	- added an input plugin for soccer specific commands for the
+	  internal monitor
+
 	* plugin/soccermonitor/soccerrender.cpp:
 	- adjusted rendering of game state info
 	  (same as in the internal soccer render plugin)
