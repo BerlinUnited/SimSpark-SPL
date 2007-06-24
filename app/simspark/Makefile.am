@@ -68,7 +68,8 @@ dist_pkgdata_DATA = \
 	materials.rb \
 	materials-textures.rb \
 	soccersim.rb \
-	internalsoccermonitor.rb
+	internalsoccermonitor.rb \
+	internalsoccerbindings.rb
 
 install-data-local: $(top_builddir)/$(subdir)/rsg/agent/ball.rsg
 	rm -rf $(DESTDIR)$(pkgdatadir)/rsg
