@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.h,v 1.3 2007/06/17 02:20:15 jboedeck Exp $
+   $Id: soccerinput.h,v 1.4 2007/06/24 13:16:21 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,17 +24,30 @@
 #include <kerosin/inputserver/inputcontrol.h>
 #include <oxygen/simulationserver/netclient.h>
 
+namespace oxygen
+{
+    class FPSController;
+    class Body;
+}
+
 class SoccerInput : public kerosin::InputItem
 {
 public:
     enum ECmds
         {
-            CmdUser      = kerosin::InputControl::CmdUser,
-            CmdKickOff   = CmdUser + 1,
-            CmdMoveAgent = CmdKickOff + 1,
-            CmdDropBall  = CmdMoveAgent + 1,
-            CmdShootBall = CmdDropBall + 1,
-            CmdMoveBall  = CmdShootBall + 1
+            CmdUser              = kerosin::InputControl::CmdUser,
+            CmdKickOff           = CmdUser + 1,
+            CmdMoveAgent         = CmdKickOff + 1,
+            CmdDropBall          = CmdMoveAgent + 1,
+            CmdShootBall         = CmdDropBall + 1,
+            CmdMoveBall          = CmdShootBall + 1,
+            CmdCameraLeftGoal    = CmdMoveBall + 1,
+            CmdCameraLeftCorner  = CmdCameraLeftGoal + 1,
+            CmdCameraMiddleLeft  = CmdCameraLeftCorner + 1,
+            CmdCameraMiddleRight = CmdCameraMiddleLeft + 1,
+            CmdCameraMiddle      = CmdCameraMiddleRight + 1,
+            CmdCameraRightCorner = CmdCameraMiddle + 1,
+            CmdCameraRightGoal   = CmdCameraRightCorner + 1
         };
 
 public:
@@ -60,6 +73,11 @@ protected:
 protected:
     /** cached reference to the monitor client */
     boost::shared_ptr<oxygen::NetClient> mMonitorClient;
+
+    /** cached reference to the camera body */
+    boost::shared_ptr<oxygen::Body> mCameraBody;
+
+    boost::shared_ptr<oxygen::FPSController> mFPS;
 };
 
 DECLARE_CLASS(SoccerInput);
