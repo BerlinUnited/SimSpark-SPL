@@ -3,7 +3,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerrender.cpp,v 1.2 2004/12/30 15:57:40 rollmark Exp $
+   $Id: soccerrender.cpp,v 1.3 2007/06/24 16:25:37 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ void SoccerRender::OnLink()
         } else
         {
             string font = "VeraMono.ttf";
-            int fontSize = 24;
+            int fontSize = 16;
             mFont = mFontServer->GetFont(font, fontSize);
 
             if (mFont.get() == 0)
@@ -90,14 +90,56 @@ void SoccerRender::Render()
             return;
         }
 
-    stringstream ss;
-    ss << "(" << mMonitor->GetGameHalfString() << ") ";
-    ss << mMonitor->GetPlayModeString();
-    ss << " t=" << mMonitor->GetTime();
+    stringstream ss_l, ss_c, ss_r;
+    
+    ss_c.setf(ios_base::fixed,ios_base::floatfield);
+    ss_c.precision(2);
+    
+    ss_l << mMonitor->GetScoreLeft() << " ";
 
+    string nameleft = mMonitor->GetTeamNameRight();
+
+    if ( nameleft == "" )
+    {
+        nameleft = "<Left>";
+    }
+   
+    ss_l << nameleft;
+
+    ss_c << " (" << mMonitor->GetGameHalfString() << ") ";    
+    ss_c << mMonitor->GetPlayModeString();
+    ss_c << " t=" << mMonitor->GetTime() << " ";
+
+    string nameright = mMonitor->GetTeamNameRight();
+
+    if ( nameright == "" )
+    {
+        nameright = "<Right>";
+    }
+   
+    ss_r << nameright;    
+    ss_r << " " << mMonitor->GetScoreRight();
+
+    int xPos;
+     
     mFontServer->Begin();
     mFont->Bind();
-    glColor3f(1,1,1);
-    mFont->DrawString(0, 0, ss.str().c_str());
+    
+    // draw left team info left justified
+    mFont->DrawString(10, 0, ss_l.str().c_str());
+
+    // draw right team info right justified
+    // Window Width is mapped to 1024
+    // use 1014 as base to keep a small right margin
+    // FIXME: remove the magic numbers.
+    xPos = int(1014-(mFont->GetStringWidth(ss_r.str().c_str())));
+    mFont->DrawString(xPos, 0, ss_r.str().c_str());
+
+    // draw game state info centered
+    // Window Width is mapped to 1024
+    // FIXME: remove the magic number.
+    xPos = int((1024-(mFont->GetStringWidth(ss_c.str().c_str())))/2);
+    mFont->DrawString(xPos, 0, ss_c.str().c_str());
+    
     mFontServer->End();
 }
