@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.cpp,v 1.18 2007/06/20 06:57:49 hedayat Exp $
+   $Id: openglserver.cpp,v 1.19 2007/06/24 13:16:39 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ void* OpenGLServer::GetExtension(const char* name)
 #elif defined(__APPLE__)
     return NSGLGetProcAddress(name);
 #else
-    return reinterpret_cast<void*>(glXGetProcAddressARB((unsigned char*)name));
+    return reinterpret_cast<void*>(glXGetProcAddress((unsigned char*)name));
 #endif
 }
 
