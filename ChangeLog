@@ -1,3 +1,14 @@
+2007-06-25  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/soccermonitor/soccerrender.cpp:
+	- adjusted rendering of game state info
+	  (same as in the internal soccer render plugin)
+
+	* plugin/soccermonitor/soccermonitor.cpp,
+	* plugin/soccermonitor/soccermonitor.h:
+	- implemented methods GetTeamNameLeft, GetTeamNameRight,
+	  GetScoreLeft, GetScoreRight
+
 2007-06-24  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/monitorspark/soccerbindings.rb:
