@@ -1,3 +1,10 @@
+2007-06-24  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* plugin/sparkagent/hingeeffector.cpp:
+	* plugin/sparkagent/universaljointeffector.cpp
+	- add checking the range of joint angle and joint velocity
+	- set the dParamFudgeFactor to 0.8
+
 2007-06-21  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/simspark/rsg/agent/flag_right1.rsg,
