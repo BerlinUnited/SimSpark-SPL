@@ -10,11 +10,13 @@ else
   print "(soccerbindings.rb) setting up bindings\n";
 
   if ($logPlayerMode == true)
+    print "setting bindings for logplayer\n\n";
     inputServer.bindCommand('p',      Command.Pause);
     inputServer.bindCommand('f',      Command.StepForward);
     inputServer.bindCommand('b',      Command.StepBackward);
     inputServer.bindCommand('l',      Command.BPlayback);
   else
+    print "setting bindings for online monitor\n\n";
     inputServer.bindCommand('k',      Command.KickOff);
     inputServer.bindCommand('b',      Command.DropBall);
     inputServer.bindCommand('m',      Command.MoveAgent);
@@ -27,5 +29,7 @@ else
     inputServer.bindCommand('5',      Command.CameraMiddle);
     inputServer.bindCommand('6',      Command.CameraRightCorner);
     inputServer.bindCommand('7',      Command.CameraRightGoal);
+    inputServer.bindCommand('l',      Command.FreeKickLeft);
+    inputServer.bindCommand('r',      Command.FreeKickRight);
   end
 end
