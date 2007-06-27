@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.10 2007/06/02 21:28:14 jamu Exp $
+   $Id: sparkmonitor.cpp,v 1.11 2007/06/27 22:31:48 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> tra
 
     if (mFullState)
         {
-            ss << "(nd Transform";
+            ss << "(nd TRF";
         } else
             {
                 ss << "(nd";
@@ -208,7 +208,7 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
 
     if (singleMat.get() != 0)
         {
-            ss << "(nd SingleMatNode";
+            ss << "(nd SMN";
         } else
             {
                 ss << "(nd StaticMesh";
@@ -232,7 +232,7 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
 
     const Vector3f& scale = mesh->GetScale();
 
-    ss << " (setScale "
+    ss << " (sSc "
        << scale[0] << " "
        << scale[1] << " "
        << scale[2] << ")";
@@ -242,7 +242,7 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
             shared_ptr<Material> mat = singleMat->GetMaterial();
             if (mat.get() != 0)
                 {
-                    ss << " (setMaterial " << mat->GetName() << ")";
+                    ss << " (sMat " << mat->GetName() << ")";
                 }
         }
 }
@@ -285,7 +285,7 @@ void SparkMonitor::DescribeNode(stringstream& ss, shared_ptr<BaseNode> node)
     if (mFullState)
         {
             // default to BaseNode
-            ss << "(nd BaseNode";
+            ss << "(nd BN";
         } else
             {
                 ss << "(nd";
