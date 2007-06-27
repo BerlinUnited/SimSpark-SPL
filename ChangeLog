@@ -1,3 +1,30 @@
+2007-06-28  Jan Murray  <murray@aeonflux>
+
+	* app/simspark/internalsoccerbindings.rb,
+	* app/monitorspark/soccerbindings.rb:
+	added key bindings 'l'/'r' for assigning free kick left/right
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h, 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	added free kick
+
+	* plugin/soccermonitor/soccermonitor.cpp:
+	score is initialized to 0-0 
+
+	* plugin/soccermonitor/soccerinput.cpp,
+	* plugin/soccermonitor/soccerinput.h: 
+	added commands for assigning free kicks,
+	
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+	abbreviations for Transform, BaseNode, SetScale, SetMaterial, SingleMatNode
+
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp,
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.h: 
+	added commands for assigning free kicks
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	added some abbreviations to the translation table
+
 2007-06-25  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/simspark/Makefile.am:
