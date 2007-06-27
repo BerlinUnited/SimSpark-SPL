@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.6 2007/06/24 17:23:54 jboedeck Exp $
+   $Id: soccerinput.cpp,v 1.7 2007/06/27 22:35:28 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,6 +52,9 @@ void SoccerInput::OnLink()
     scriptServer->CreateVariable("Command.CameraMiddle", CmdCameraMiddle);
     scriptServer->CreateVariable("Command.CameraRightCorner", CmdCameraRightCorner);
     scriptServer->CreateVariable("Command.CameraRightGoal", CmdCameraRightGoal);
+    //JAN
+    scriptServer->CreateVariable("Command.FreeKickLeft", CmdFreeKickLeft);
+    scriptServer->CreateVariable("Command.FreeKickRight", CmdFreeKickRight);
 
     mMonitorClient = shared_dynamic_cast<NetClient>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient"));
@@ -200,5 +203,17 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                     mFPS->SetVAngle(salt::gRadToDeg(1.05));
                 }
             break;
+        case CmdFreeKickLeft:
+            if (input.KeyPress())
+                {
+                    SendCommand("(playMode free_kick_left)");
+                }
+            break;    
+        case CmdFreeKickRight:
+            if (input.KeyPress())
+                {
+                    SendCommand("(playMode free_kick_right)");
+                }
+            break;    
         };
 }
