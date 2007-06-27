@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.18 2007/06/17 10:49:12 jboedeck Exp $
+   $Id: rubysceneimporter.cpp,v 1.19 2007/06/27 22:25:03 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -111,6 +111,11 @@ void RubySceneImporter::InitTranslationTable()
     mTranslationTable["RDS"]   = S_DELTASCENE;
     mTranslationTable["RSG"]   = S_SCENEGRAPH;
     mTranslationTable["SLT"]   = "setLocalTransform";
+    mTranslationTable["sSc"]   = "setScale";
+    mTranslationTable["sMat"]   = "setMaterial";
+    mTranslationTable["BN"]   = "BaseNode";
+    mTranslationTable["SMN"]   = "SingleMatNode";
+    mTranslationTable["TRF"]   = "Transform";
 }
 
 
