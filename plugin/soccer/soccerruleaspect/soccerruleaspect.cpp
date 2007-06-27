@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.30 2007/06/17 10:48:39 jboedeck Exp $
+   $Id: soccerruleaspect.cpp,v 1.31 2007/06/27 23:13:08 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,6 +54,8 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mNotOffside(false),
     mLastModeWasPlayOn(false)
 {
+    mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
+    
 }
 
 SoccerRuleAspect::~SoccerRuleAspect()
@@ -387,6 +389,82 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
 #endif
 }
 
+
+//-----------------------------------
+
+
+void
+SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
+{
+#if 1
+    // do nothing for the duration of mKickInPauseTime
+    if (mGameState->GetModeTime() < mKickInPauseTime)
+    {
+        return;
+    }
+//---------------
+
+    salt::Vector2f ball_pos(mFreeKickPos.x(), mFreeKickPos.y());
+    // we do not drop the ball within the penalty area
+    if (mLeftPenaltyArea.Contains(ball_pos))
+    {
+        mFreeKickPos[0] = mLeftPenaltyArea.maxVec[0];
+        mFreeKickPos[1] = mFreeKickPos.y() < 0 ?
+            mLeftPenaltyArea.minVec[1] : mLeftPenaltyArea.maxVec[1];
+    }
+    else if (mRightPenaltyArea.Contains(ball_pos))
+    {
+        mFreeKickPos[0] = mRightPenaltyArea.minVec[0];
+        mFreeKickPos[1] = mFreeKickPos.y() < 0 ?
+            mRightPenaltyArea.minVec[1] : mRightPenaltyArea.maxVec[1];
+    }
+
+    MoveBall(mFreeKickPos);
+//--------------------------
+    
+    // move away opponent team
+    
+    ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
+                 SoccerBase::OpponentTeam(idx));
+
+    // if no player touched the ball for mDropBallTime, we move away
+    // all players and set the play mode to play on
+    if (mDropBallTime > 0 &&
+        mGameState->GetModeTime() > mDropBallTime)
+    {
+        DropBall(mFreeKickPos);
+        return;
+    }
+
+    // after the first agent touches the ball move to PM_PLAY_ON. the
+    // time when the agent last touches the ball must be after the
+    // change to the KickIn mode
+    shared_ptr<AgentAspect> agent;
+    TTime time;
+    if (! mBallState->GetLastCollidingAgent(agent,time))
+    {
+        GetLog()->Error() << "ERROR: (SoccerRuleAspect) " << "no agent collided yet\n";
+        return;
+    }
+
+    TTime lastChange = mGameState->GetLastModeChange();
+    if (time > lastChange)
+    {
+        mGameState->SetPlayMode(PM_PlayOn);
+        GetLog()->Error() << "ERROR: (SoccerRuleAspect) " << "Set Playmode to playon\n";
+    } else
+    {
+        // move the ball back on the ground where it left the playing
+        // field
+        MoveBall(mFreeKickPos);
+    }
+#endif
+}
+
+//-----------------------------------
+
+
+
 void
 SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
 {
@@ -493,8 +571,12 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
 bool
 SoccerRuleAspect::CheckBallLeftField()
 {
+//     cerr << "CheckBallLeftField\n";
     if (mBallState->GetBallOnField())
     {
+        // update freekickpos
+        mFreeKickPos = mBallState->GetLastValidBallPosition();
+
         return false;
     }
 
@@ -746,6 +828,13 @@ SoccerRuleAspect::Update(float deltaTime)
         UpdateKickOff(TI_RIGHT);
         break;
 
+    case PM_FREE_KICK_LEFT:
+        UpdateFreeKick(TI_LEFT);
+        break;
+    case PM_FREE_KICK_RIGHT:
+        UpdateFreeKick(TI_RIGHT);
+        break;
+
     case PM_KickIn_Left:
         UpdateKickIn(TI_LEFT);
         break;
@@ -853,10 +942,10 @@ SoccerRuleAspect::UpdateCachedInternal()
                             Vector2f(-mFieldLength/2.0 - 10, mFieldWidth/2.0 + 10.0));
 
     // the penalty areas (exact sizes)
-    mRightPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - 16.5, -16.5 - mGoalWidth/2.0),
-                                    Vector2f(mFieldLength/2.0 , 16.5 + mGoalWidth/2.0));
-    mLeftPenaltyArea = salt::AABB2(Vector2f(-mFieldLength/2.0 + 16.5, -16.5 - mGoalWidth/2.0),
-                                   Vector2f(-mFieldLength/2.0, 16.5 + mGoalWidth/2.0));
+    mRightPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - 8, -5.25 - mGoalWidth/2.0),
+                                    Vector2f(mFieldLength/2.0 , 5.25 + mGoalWidth/2.0));
+    mLeftPenaltyArea = salt::AABB2(Vector2f(-mFieldLength/2.0 + 8, -5.25 - mGoalWidth/2.0),
+                                   Vector2f(-mFieldLength/2.0, 5.25 + mGoalWidth/2.0));
 }
 
 void

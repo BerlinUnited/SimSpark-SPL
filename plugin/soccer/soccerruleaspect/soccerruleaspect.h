@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.13 2007/06/16 15:09:20 jboedeck Exp $
+   $Id: soccerruleaspect.h,v 1.14 2007/06/27 23:13:08 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -109,6 +109,9 @@ protected:
 
     /** updates the RuleAspect during KickIn mode */
     void UpdateKickIn(TTeamIndex ti = TI_NONE);
+
+    /** updates the RuleAspect during FreeKick mode */
+    void UpdateFreeKick(TTeamIndex ti = TI_NONE);
 
     /** updates the RuleAspect during Goal Kick mode */
     void UpdateGoalKick(TTeamIndex ti = TI_NONE);
