@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.cpp,v 1.1 2007/06/24 17:25:40 jboedeck Exp $
+   $Id: internalsoccerinput.cpp,v 1.2 2007/06/27 22:29:52 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,6 +53,9 @@ void InternalSoccerInput::OnLink()
     scriptServer->CreateVariable("Command.CameraMiddle", CmdCameraMiddle);
     scriptServer->CreateVariable("Command.CameraRightCorner", CmdCameraRightCorner);
     scriptServer->CreateVariable("Command.CameraRightGoal", CmdCameraRightGoal);
+    //JAN
+    scriptServer->CreateVariable("Command.FreeKickLeft", CmdFreeKickLeft);
+    scriptServer->CreateVariable("Command.FreeKickRight", CmdFreeKickRight);
 
     // get the GameStateAspect
     mGameState = shared_dynamic_cast<GameStateAspect>
@@ -210,5 +213,18 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                     mFPS->SetVAngle(salt::gRadToDeg(1.05));
                 }
             break;
+        case CmdFreeKickLeft:
+            if (input.KeyPress())
+                {
+                    mGameState->SetPlayMode(PM_FREE_KICK_LEFT);
+                }
+            break;    
+        case CmdFreeKickRight:
+            if (input.KeyPress())
+                {
+                    mGameState->SetPlayMode(PM_FREE_KICK_RIGHT);
+
+                }
+            break;    
         };
 }
