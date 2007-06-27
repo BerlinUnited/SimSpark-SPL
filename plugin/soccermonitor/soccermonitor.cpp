@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccermonitor.cpp,v 1.3 2007/06/24 16:25:24 jboedeck Exp $
+   $Id: soccermonitor.cpp,v 1.4 2007/06/27 22:35:50 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,9 @@ SoccerMonitor::SoccerMonitor() : CustomMonitor()
     mTime     = 0.0;
     mPlayMode = PM_NONE;
     mHalf     = 0;
-
+    mScoreLeft = 0;
+    mScoreRight = 0;
+    
     SetupPredicateMap();
 }
 
