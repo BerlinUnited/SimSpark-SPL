@@ -55,13 +55,13 @@ void HingeEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     // check if the angle out of range
-    float minAng = mJoint->GetLowStopDeg(Joint::AI_FIRST);
-    float maxAng = mJoint->GetHighStopDeg(Joint::AI_FIRST);
-    float currentAng = mJoint->GetAngle();
+    //float minAng = mJoint->GetLowStopDeg(Joint::AI_FIRST);
+    //float maxAng = mJoint->GetHighStopDeg(Joint::AI_FIRST);
+    //float currentAng = mJoint->GetAngle();
     float vel = hingeAction->GetMotorVelocity();
-    if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
-    {
-       
+    //if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
+    if ( gInRange(vel, -9000.0f, 9000.0f) )
+    {       
         mJoint->SetParameter(dParamVel, vel );
     }
     else
@@ -112,10 +112,10 @@ void HingeEffector::OnLink()
             GetLog()->Error()
                 << "(HingeEffector) ERROR: found no HingeJoint parent\n";
         }
-    else
-    {
-        mJoint->SetParameter(dParamFudgeFactor, 0.8);
-    }
+    //else
+    //{
+    //    mJoint->SetParameter(dParamFudgeFactor, 0.8);
+    //}
 }
 
 void HingeEffector::OnUnlink()

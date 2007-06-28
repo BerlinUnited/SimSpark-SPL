@@ -55,11 +55,12 @@ void UniversalJointEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     // check if the angle out of range
-    float minAng = mJoint->GetLowStopDeg(Joint::AI_FIRST);
-    float maxAng = mJoint->GetHighStopDeg(Joint::AI_FIRST);
-    float currentAng = mJoint->GetAngle(Joint::AI_FIRST);
+    //float minAng = mJoint->GetLowStopDeg(Joint::AI_FIRST);
+    //float maxAng = mJoint->GetHighStopDeg(Joint::AI_FIRST);
+    //float currentAng = mJoint->GetAngle(Joint::AI_FIRST);
     float vel = universalAction->GetMotorVelocity(Joint::AI_FIRST);
-    if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
+    //if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
+    if ( gInRange(vel,-9000.0f,9000.0f) )
     {
         mJoint->SetParameter(dParamVel, vel);
     }
@@ -68,11 +69,12 @@ void UniversalJointEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         mJoint->SetParameter(dParamVel, 0);
     }
 
-    minAng = mJoint->GetLowStopDeg(Joint::AI_SECOND);
-    maxAng = mJoint->GetHighStopDeg(Joint::AI_SECOND);
-    currentAng = mJoint->GetAngle(Joint::AI_SECOND);
+    //minAng = mJoint->GetLowStopDeg(Joint::AI_SECOND);
+    //maxAng = mJoint->GetHighStopDeg(Joint::AI_SECOND);
+    //currentAng = mJoint->GetAngle(Joint::AI_SECOND);
      vel = universalAction->GetMotorVelocity(Joint::AI_SECOND);
-    if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
+     //if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
+     if ( gInRange(vel,-9000.0f,9000.0f) )
     {
         mJoint->SetParameter(dParamVel2, vel );
     }
@@ -128,13 +130,15 @@ void UniversalJointEffector::OnLink()
     mJoint = make_shared(FindParentSupportingClass<UniversalJoint>());
 
     if (mJoint.get() == 0)
-        {
-            GetLog()->Error()
-                << "(UniversalJointEffector) ERROR: found no UniversalJoint parent\n";
-        } else {
-            mJoint->SetParameter(dParamFudgeFactor, 0.8);
-            mJoint->SetParameter(dParamFudgeFactor2, 0.8);
-        }
+    {
+        GetLog()->Error()
+            << "(UniversalJointEffector) ERROR: found no UniversalJoint parent\n";
+    } 
+    //else 
+    //{
+    //    mJoint->SetParameter(dParamFudgeFactor, 0.8);
+    //    mJoint->SetParameter(dParamFudgeFactor2, 0.8);
+    //}
 }
 
 void UniversalJointEffector::OnUnlink()
