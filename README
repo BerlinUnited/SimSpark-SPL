@@ -1,4 +1,10 @@
-rcssserver3D-0.5.5 README
+rcssserver3d-0.5.6 README
+
+*Note* The README is somewhat outdated and should be fixed after the
+ competition in Atlanta. The main difference is that the SimSpark
+ (app/simspark) simulator is now used for the official competitions. Also,
+ SPADES is currently not used anymore. The general directory structure and
+ concepts are still applicable though.
 
 General Information
 
