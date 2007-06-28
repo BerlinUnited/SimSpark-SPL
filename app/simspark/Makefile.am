@@ -82,13 +82,18 @@ EXTRA_DIST = \
 	rsg/agent/soccerplayer.rsg \
 	rsg/agent/leggedsphere.rsg \
 	rsg/agent/hoap2.rsg \
-	rsg/agent/soccerbot.rsg \
+	rsg/agent/soccerbot055.rsg \
+	rsg/agent/soccerbot056.rsg \
 	rsg/agent/soccerbottorso.rsg \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
 	rsg/agent/flag_no_viz.rsg \
 	rsg/agent/flag_left.rsg \
+	rsg/agent/flag_left1.rsg \
+	rsg/agent/flag_left2.rsg \
 	rsg/agent/flag_right.rsg \
+	rsg/agent/flag_right1.rsg \
+	rsg/agent/flag_right2.rsg \
 	rsg/agent/simspark.rsg \
 	rsg/agent/ball.rsg \
 	rsg/boxspheres/staticsphere.rsg \
