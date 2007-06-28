@@ -70,7 +70,7 @@ string SoccerbotBehavior::Init()
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
     return
-        "(scene rsg/agent/soccerbot.rsg)";
+        "(scene rsg/agent/soccerbot056.rsg)";
 }
 
 void SoccerbotBehavior::ParseHingeJointInfo(const oxygen::Predicate& predicate)
