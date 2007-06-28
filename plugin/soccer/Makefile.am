@@ -94,7 +94,7 @@ soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.h \
 soccerruleaspect/soccerruleaspect.h \
 trainercommandparser/trainercommandparser.h \
-gametimeperceptor/gametimeperceptor.cpp \
+gametimeperceptor/gametimeperceptor.h \
 visionperceptor/visionperceptor.h 
 
 ## define include directory local to the pkgincludedir
