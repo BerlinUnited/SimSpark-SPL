@@ -109,15 +109,20 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
 
     for (it = jersey.begin(); it != jersey.end(); ++it)
     {
-        matNode = shared_static_cast<SingleMatNode>
-            (parent->GetChild((*it),true)->FindChildSupportingClass<SingleMatNode>(true));
+        shared_ptr<Leaf> child = parent->GetChild((*it),true);
 
-        if (matNode.get() == 0)
+        if (child.get() != 0)
         {
-            GetLog()->Error()
-                << "ERROR: (SingleMatInitEffector) cannot find SingleMatNode of " 
-                << (*it) << "\n";
-            return;
+            matNode = shared_static_cast<SingleMatNode>
+                (child->FindChildSupportingClass<SingleMatNode>(true));
+
+            if (matNode.get() == 0)
+            {
+                GetLog()->Error()
+                    << "ERROR: (SingleMatInitEffector) cannot find SingleMatNode of " 
+                    << (*it) << "\n";
+                return;
+            }
         }
         if ((*it) == "body")
         {
