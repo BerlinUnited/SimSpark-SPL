@@ -124,10 +124,10 @@ RCSS_CHECK_RUBY_VERSION(1,8,0)
 RCSS_CHECK_ODE
 RCSS_BUILD_SPADES_SERVER
 
-WX_CPPFLAGS="`wx-config --cppflags`"
-WX_LDFLAGS="`wx-config --libs` `wx-config --gl-libs`"
-AC_SUBST(WX_CPPFLAGS)
-AC_SUBST(WX_LDFLAGS)
+# WX_CPPFLAGS="`wx-config --cppflags`"
+# WX_LDFLAGS="`wx-config --libs` `wx-config --gl-libs`"
+# AC_SUBST(WX_CPPFLAGS)
+# AC_SUBST(WX_LDFLAGS)
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
