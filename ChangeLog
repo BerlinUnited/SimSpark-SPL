@@ -1,3 +1,41 @@
+2007-06-28  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/sparkagent/hingeeffector.cpp,
+	* plugin/sparkagent/universaljointeffector.cpp:
+	- commented out the joint range checks and the setting of the
+	  fudge factor (should be re-activated and fixed after Atlanta)
+
+	* plugin/soccer/initeffector/singlematiniteffector.cpp:
+	- fixed a bug that would let the server crash when the
+	  soccerbot055.rsg was used (shared_ptr was 0 for "lower_torso" node)
+
+	* app/simspark/Makefile.am:
+	- removed soccerbot.rsg
+	- added soccerbot055.rsg and soccerbot056.rsg
+	- included flag_left1/2.rsg and flag_right1/2.rsg for distribution
+
+	* app/agentspark/soccerbotbehavior.cpp:
+	- loading the soccerbot056.rsg by default
+
+	* app/simspark/rsg/agent/soccerbot055.rsg,
+	* app/simspark/rsg/agent/soccerbot056.rsg:
+	- added the 0.5.5 and 0.5.6 soccerbot for Atlanta
+
+	* app/simspark/rsg/agent/soccerbot.rsg:
+	- removed
+
+	* configure.ac:
+	- increased version number for the 0.5.6 release
+
+	* RELEASE:
+	- added release notes for the 0.5.6 release
+
+	* README:
+	- increased version number and added a comment
+
+	* NEWS:
+	- added news for the 0.5.6 release
+
 2007-06-28  Jan Murray  <murray@aeonflux>
 
 	* app/simspark/internalsoccerbindings.rb,
@@ -183,11 +221,11 @@
 	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
 	int -> GLint to compile on Mac
 
-2007-06-19 Xu Yuan <xuyuan.cn@gmail.com>
+2007-06-19  Xu Yuan  <xuyuan.cn@gmail.com>
 
-    * plugin/soccer/visionperceptor/visionperceptor.h:
-    * plugin/soccer/visionperceptor/visionperceptor.cpp:
-    - remove flipping flag names
+	* plugin/soccer/visionperceptor/visionperceptor.h,
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	- remove flipping flag names
 
 2007-06-18  Hedayat Vatankhah  <hedayat@grad.com>
 
@@ -240,7 +278,7 @@
 
 2007-06-17  Xu Yuan  <xuyuan.cn@gmail.com>
 
-    * plugin/soccer/visionperceptor/visionperceptor.h:
+	* plugin/soccer/visionperceptor/visionperceptor.h,
 	* plugin/soccer/visionperceptor/visionperceptor.cpp:
 	- flip the flag names for the right team
 
