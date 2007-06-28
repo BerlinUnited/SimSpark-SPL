@@ -1,3 +1,46 @@
+[0.5.6]
+This is the final release for the competition in Atlanta, GA. The simulator
+now contains the new timer running in single-threaded mode by default. We also
+fixed the soccer rules plug-in (communication and offside not supported
+yet). Furthermore, we completed the game state info display in both the
+internal and external monitors, and fixed the trainer command parser to work
+with the new agents. The SoccerBot model was modified, the performance was
+slightly improved, and several bugs were fixed.
+
+* Important fixes:
+
+beameffector & singlematiniteffector:
+- fixed beaming with rotation
+
+gyrorateperceptor:
+- output is now in the local coordinate system of the robot
+
+trainercommandparser:
+- fixed several methods to work with the new agent
+
+* Features:
+
+- new GameTimePerceptor added which senses game time instead of sim time (not
+  used in Atlanta)
+- GameStatePerceptor added which provides the agent with information about the
+  current game state (play mode, game time, unum, and side)
+- play modes and rules re-integrated (no communication and no offside yet)
+- slight performance improvement by caching references to important classes
+- game state info display fixed in the internal and external monitors
+- key bindings for 7 different camera positions, kick off, and drop ball
+- the SoccerBot was modified to have a two-part torso to facilitate stand-up
+  motions, it got colliders (and very small masses) at the hands, it uses the
+  ForceResistanceReceptor instead of the TouchPerceptor
+- the hinge joint and universal joint effectors will not set any velocity if a
+  joint stop is reached to prevent large forces and instabilities (not used in Atlanta)
+- the maximum joint velocity that can be requested was restricted to 9000
+  deg/sec (for stability reasons)
+- Field size was reduced to 50m x 32m, penalty area reduced to 8m x 19.5m
+- Goal size was increased to 9m width and 4m height
+- The ball model was improved according to suggestions from wjq and Tobias Warden
+- The visualization of the corner flags was moved back to allow proper corner kicks
+
+
 [0.5.5]
 The simulator has been ported to MacOS, the network messages were shortened,
 we did some performance tuning, improved the log player, added a new perceptor,
