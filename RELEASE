@@ -8,49 +8,55 @@ RELEASE News for different forums                        -*- outline -*-
 
 ** [Soccer Lists]
 
-We have just released version 0.5.5 of rcssserver3D. The simulator has
-been ported to MacOS, the network messages were shortened, we did some
-performance tuning, improved the log player, added a new perceptor,
-and fixed some bugs.
+We have just released version 0.5.6 of rcssserver3D. This is the final release
+for the competition in Atlanta, GA. The simulator now contains the new timer
+running in single-threaded mode by default. We also re-integrated the soccer rules
+plug-in (communication and offside not supported yet). Furthermore, we
+completed the game state info display in both the internal and external
+monitors, and fixed the trainer command parser to work with the new
+agents. The SoccerBot model was modified, the performance was slightly
+improved, and several bugs were fixed.
 
 * Important fixes:
 
-simspark: 
-- fixed setup of goal flags (thanks Carlos) 
-- several files were missing break statments in the physicsserver
-  directory (thanks Shivaram)
+beameffector & singlematiniteffector:
+- fixed beaming with rotation
 
 gyrorateperceptor:
-- "rt" keyword was added to enable correct parsing of the perceptor
-  values
+- output is now in the local coordinate system of the robot
+
+trainercommandparser:
+- fixed several methods to work with the new agent
 
 * Features:
 
-- MacOS compatibility (please see README.MacOS file for comments)
-- individual ODE CollisionSpaces are used to encapsulate each agent and 
-  each goal now
-- the protocols for the monitor and the agents have been shortened
-- new basic importer for Wavefront OBJ files
-- textures can be enabled for the ball, the field, and the agent torso
-  (player numbers :-) )
-- several computationally expensive function calls have been replaced
-  with calls to more efficient versions
-- the log player now plays logfiles in forward and backward mode, and 
-  supports pause, and forward/backward stepping
-- a new perceptor (ForceResistancePerceptor) was implemented that gives 
-  feedback about position and resulting force due to a collision of the 
-  body the perceptor is attached to (see doc/TEXT_INSTEAD_OF_A_MANUAL.txt 
-  for details)
-- BeamEffector now takes 3 arguments: position (x and y) and angle in the
-  x-y-plane (rotation around z-axis) at the beam position (DEG)
+- new GameTimePerceptor added which senses game time instead of sim time (not
+  used in Atlanta)
+- GameStatePerceptor added which provides the agent with information about the
+  current game state (play mode, game time, unum, and side)
+- play modes and rules re-integrated (no communication and no offside yet)
+- slight performance improvement by caching references to important classes
+- game state info display fixed in the internal and external monitors
+- key bindings for 7 different camera positions, kick off, and drop ball
+- the SoccerBot was modified to have a two-part torso to facilitate stand-up
+  motions, it got colliders (and very small masses) at the hands, it uses the
+  ForceResistanceReceptor instead of the TouchPerceptor
+- the hinge joint and universal joint effectors will not set any velocity if a
+  joint stop is reached to prevent large forces and instabilities (not used in Atlanta)
+- the maximum joint velocity that can be requested was restricted to 9000
+  deg/sec (for stability reasons)
+- Field size was reduced to 50m x 32m, penalty area reduced to 8m x 19.5m
+- Goal size was increased to 9m width and 4m height
+- The ball model was improved according to suggestions from wjq and Tobias Warden
+- The visualization of the corner flags was moved back to allow proper corner kicks
 
 You can find the package at the usual place [1]. 
 
-Please note that you will also need an additional package containing
-data files (models, textures) that is available at the same
-location. This package should be extracted in the installation
-directory of rcssserver3D (/usr/local/share/rcssserver3d if the
-default prefix has not been changed).
+Please note that you will also need an additional package
+(rcssserver3d-0.5.5-data.tar.gz, no change from the last release) containing
+data files (models, textures) that is available at the same location. This
+package should be extracted in the installation directory of rcssserver3D
+(/usr/local/share/rcssserver3d if the default prefix has not been changed).
 
 Cheers
 Joschka (for the maintenance comittee)
@@ -61,7 +67,7 @@ Joschka (for the maintenance comittee)
 
 ** [General (SF Project News etc)]
 
-We have just released rcssserver3D-0.5.5. 
+We have just released rcssserver3d-0.5.6. 
 
 rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
@@ -71,29 +77,34 @@ in the RoboCup 3D Soccer Simulation League.
 
 Important fixes and new features:
 
-- MacOS port has been completed
+- new GameTimePerceptor added which senses game time instead of sim time
 
-- individual ODE CollisionSpaces are used to encapsulate each agent and 
-  each goal now
+- play modes and rules re-integrated (no communication and no offside yet)
 
-- the protocols for the monitor and the agents have been shortened
+- slight performance improvement by caching references to important classes
 
-- new basic importer for Wavefront OBJ files
+- game state info display fixed in the internal and external monitors
 
-- textures can be enabled for the ball, the field, and the agent torso
-  (player numbers :-) )
+- key bindings for 7 different camera positions, kick off, and drop ball
 
-- overall performance has been increased
+- the SoccerBot was modified to have a two-part torso to facilitate stand-up
+  motions, it got colliders (and very small masses) at the hands, it uses the
+  ForceResistanceReceptor instead of the TouchPerceptor, and it uses joint
+  stops to eliminate "unrealistic" movements
 
-- the log player now plays logfiles in forward and backward mode, and 
-  supports pause, and forward/backward stepping
+- the hinge joint and universal joint effectors will not set any velocity if a
+  joint stop is reached to prevent large forces and instabilities
 
-- a new perceptor (ForceResistancePerceptor) was implemented that gives 
-  feedback about position and resulting force due to a collision of the 
-  body the perceptor is attached to
+- the maximum joint velocity that can be requested was restricted to 9000
+  deg/sec (for stability reasons also)
 
-- BeamEffector now takes 3 arguments: position (x and y) and angle in the
-  x-y-plane (rotation around z-axis) at the beam position (DEG)
+- Field size was reduced to 45m x 30m
+
+- Goal size was increased to 9m width and 4m height
+
+- The ball model was improved according to suggestions from the community
+
+- The visualization of the corner flags was moved back to allow proper corner kicks
 
 For details have a look into the ChangeLog coming with the package.
 
