@@ -32,7 +32,7 @@ monitorspark_SOURCES = \
 
 dist_pkgdata_DATA = \
 	bindings.rb \
-	soccersim.rb \
+	soccersim-monitor.rb \
 	monitorspark.rb \
 	soccerbindings.rb \
 	VeraMono.ttf

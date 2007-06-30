@@ -43,5 +43,5 @@ run "materials.rb"
 # sparkLogAllToFile('./spark.txt')
 # sparkLogDebugToCerr()
 
-# source soccersim.rb to build a soccer monitor
-run "soccersim.rb"
+# source soccersim-monitor.rb to build a soccer monitor
+run "soccersim-monitor.rb"
