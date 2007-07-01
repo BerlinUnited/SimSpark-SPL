@@ -1,3 +1,15 @@
+2007-06-30  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* app/monitorspark/soccersim-monitor.rb:
+	- added instead of soccersim.rb to avoid name conflict with app/simspark/soccersim.rb
+
+	* app/monitorspark/soccersim.rb:
+	- removed
+	
+	* app/monitorspark/monitorspark.rb:
+	* app/monitorspark/Makefile.am:
+	- renamed soccersim.rb to soccersim-monitor.rb
+
 2007-06-28  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* plugin/sparkagent/hingeeffector.cpp,
