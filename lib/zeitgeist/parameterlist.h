@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.h,v 1.5 2004/12/19 14:06:42 rollmark Exp $
+   $Id: parameterlist.h,v 1.6 2007/08/16 19:09:56 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -227,6 +227,11 @@ protected:
     template<typename TYPE> f_inline bool
     ConvertStringValue(TVector::const_iterator& iter, TYPE& value) const
     {
+        if (iter == mList.end())
+        {
+            return false;
+        }
+
         const boost::any& param = (*iter);
 
         try
@@ -262,6 +267,11 @@ protected:
     template<typename TFrom, typename TTo> f_inline bool
     GetValueInternal(TVector::const_iterator& iter, TTo& value) const
     {
+        if (iter == mList.end())
+        {
+            return false;
+        }
+
         const boost::any& param = (*iter);
 
         if (param.type() != typeid(TFrom))
