@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: tvector.h,v 1.11 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: tvector.h,v 1.12 2007/08/16 19:07:25 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -423,7 +423,7 @@ template <typename DATATYPE, int ELEMENTS, typename TYPE>
 f_inline TYPE& TVector<DATATYPE, ELEMENTS, TYPE>::operator/=(const DATATYPE& v)
 {
     for (int c=0; c<ELEMENTS; c++)
-        mData[c] *= v;
+        mData[c] /= v;
     return *static_cast<TYPE*>(this);
 }
 
