@@ -82,7 +82,8 @@ public:
         ARM_UP = 0,
         ARM_ROTATE = 1,
         ARM_WAVE_1 = 2,
-        ARM_WAVE_2 = 3
+        ARM_WAVE_2 = 3,
+        ARM_WAIT   = 4
     };
 
 public:
@@ -95,6 +96,7 @@ protected:
     void SetupJointIDMap();
     void ParseHingeJointInfo(const oxygen::Predicate& predicate);
     void ParseUniversalJointInfo(const oxygen::Predicate& predicate);
+    void ParseHearInfo(const oxygen::Predicate& predicate);
 
 protected:
     zeitgeist::Zeitgeist mZG;
@@ -114,6 +116,10 @@ protected:
 
     // flag whether we sent the init message yet
     bool mInit;
+
+    // flag whether to wait or act
+    bool mWait;
+    
 };
 
 #endif // SOCCERBOTBEHAVIOR_H

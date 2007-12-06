@@ -150,6 +150,50 @@ void SoccerbotBehavior::ParseUniversalJointInfo(const oxygen::Predicate& predica
 }
 
 
+// This is just a demo implementation. Message is printed and discarded
+
+void SoccerbotBehavior::ParseHearInfo(const oxygen::Predicate& predicate)
+{
+    double heartime;
+    string sender;
+    string message;
+    
+    Predicate::Iterator iter(predicate);
+
+    if (! predicate.AdvanceValue(iter, heartime))
+    {
+        cerr << "could not get hear time \n";
+        return;
+    }
+
+    
+    if (! predicate.AdvanceValue(iter, sender))
+    {
+        cerr << "could not get sender \n";
+        return;
+    }
+
+
+    if (! predicate.GetValue(iter, message))
+    {
+        cerr << "could not get message \n";
+        return;
+    }
+
+    if (sender == "self")
+    {
+        cout << "I said " << message << " at " << heartime << endl;
+
+    } else {
+        cout << "Someone "
+             << (abs(atof(sender.c_str()))<90?"in front of":"behind")
+             << " me said " << message << " at " << heartime << endl;
+    }
+    return;
+    
+}
+
+
 
 string SoccerbotBehavior::Think(const std::string& message)
 {
@@ -159,7 +203,6 @@ string SoccerbotBehavior::Think(const std::string& message)
         return "(init (unum 0)(teamname RoboLog))";
     }
 
-    //sleep(1);
 
     stringstream ss("");
 
@@ -215,6 +258,9 @@ string SoccerbotBehavior::Think(const std::string& message)
             case 'U': // universal joint (UJ)
                 ParseUniversalJointInfo(predicate);
                 break;
+            case 'h': // hear
+                ParseHearInfo(predicate);
+                break;
             default:
                 break;
             }
@@ -265,6 +311,7 @@ string SoccerbotBehavior::Think(const std::string& message)
             }
             else
             {
+                ss << "(say woohoo)";
                 rightstate = ARM_WAVE_2;
             }
             break;
@@ -294,6 +341,8 @@ string SoccerbotBehavior::Think(const std::string& message)
             {
                 newAngle = gain * (90.0 - curAngle);
                 ss << "(lae1_2 0.0 " << newAngle << ")";
+                //cout << "curang = " << curAngle << " / newang = " << newAngle << "\n";
+                
             }
             else
             {
