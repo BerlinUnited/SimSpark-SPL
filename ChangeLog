@@ -1,3 +1,20 @@
+2007-12-06  Jan Murray  <murray@aeonflux>
+
+	* app/agentspark/soccerbotbehavior.h:
+	added ParseHearInfo
+
+	* app/agentspark/soccerbotbehavior.cpp:
+	added tests for say and hear. Hear info is parsed, printed and discarded.
+
+	* app/agentspark/main.cpp:
+	corrected output of error message
+
+	* app/simspark/rsg/agent/soccerbot056.rsg:
+	added SayEffector and HearPerceptor
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	re-enabled communication.
+
 2007-06-30  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* app/monitorspark/soccersim-monitor.rb:
