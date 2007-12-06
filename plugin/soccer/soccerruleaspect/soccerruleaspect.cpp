@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.31 2007/06/27 23:13:08 jamu Exp $
+   $Id: soccerruleaspect.cpp,v 1.32 2007/12/06 21:24:52 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -952,7 +952,6 @@ void
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
-#if 0
     TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
     {
@@ -1024,7 +1023,6 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             (*it)->AddMessage(message, direction, false);
         }
     }
-#endif
 }
 
 bool
