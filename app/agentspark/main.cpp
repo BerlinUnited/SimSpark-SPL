@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.11 2007/05/16 14:29:02 jboedeck Exp $
+   $Id: main.cpp,v 1.12 2007/12/06 22:54:01 jamu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -202,7 +202,7 @@ bool GetMessage(string& msg)
     unsigned int msgLen = ntohl(*(unsigned int*)buffer);
     // cerr << "GM 6 / " << msgLen << " (bytesRead " << bytesRead << ")\n";
     if(sizeof(unsigned int) + msgLen > sizeof(buffer)) {
-        cerr << "too long message; aborting" << endl;
+        cerr << "message too long; aborting" << endl;
         abort();
     }
 
