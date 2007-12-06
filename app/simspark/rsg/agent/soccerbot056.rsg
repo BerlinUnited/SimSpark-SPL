@@ -181,6 +181,8 @@
 	    (setName AgentState)
 	    ; add a gamestateperceptor
 	    (nd GameStatePerceptor)
+	    ; add hear perceptor
+	    (nd HearPerceptor)
 	)
 	; add beam effector
 	(nd BeamEffector)
@@ -192,7 +194,8 @@
 	     (setStaticSenseAxis false)
 	     (addNoise false)
 	     )
-
+        ; add say effector
+        (nd SayEffector)
 	; attach left shoulder cylinder (virtual)
 	(nd Transform
 	    (setLocalPos $offsetLeftShoulderCylX $offsetLeftShoulderCylY $offsetLeftShoulderCylZ)
