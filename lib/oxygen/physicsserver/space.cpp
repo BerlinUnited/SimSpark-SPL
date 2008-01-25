@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.11 2007/05/30 13:04:48 jboedeck Exp $
+   $Id: space.cpp,v 1.12 2008/01/25 16:46:25 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -150,14 +150,15 @@ void Space::OnLink()
     ODEObject::OnLink();
 
     dSpaceID space = FindSpaceID();
-    if (
-        (space) &&
-        (space != mODESpace) &&
-        (! dSpaceQuery(space, (dGeomID)mODESpace))
-        )
-        {
-            dSpaceAdd(space, (dGeomID)mODESpace);
-        }
+    mODESpace = dHashSpaceCreate(space);
+//    if (
+//        (space) &&
+//        (space != mODESpace) &&
+//        (! dSpaceQuery(space, (dGeomID)mODESpace))
+//        )
+//        {
+//            dSpaceAdd(space, (dGeomID)mODESpace);
+//        }
 }
 
 dSpaceID Space::GetParentSpaceID()
@@ -184,13 +185,13 @@ bool Space::ConstructInternal()
     // create the ode space, 0 indicates that this space should
     // not be inserted into another space, i.e. we always create a
     // toplevel space object
-    mODESpace = dHashSpaceCreate(0);
+//    mODESpace = dHashSpaceCreate(0);
 
     // create a joint group for the contacts
     mODEContactGroup = dJointGroupCreate(0);
 
     return (
-            (mODESpace != 0) &&
+//            (mODESpace != 0) &&
             (mODEContactGroup != 0)
             );
 }
