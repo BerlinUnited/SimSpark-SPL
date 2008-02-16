@@ -16,7 +16,7 @@ $agentPort = 3100
 print "(spark.rb) setup\n"
 
 # (MonitorControl) constants
-# 
+#
 
 # define the monitor update interval in cycles
 $renderStep = 0.04
@@ -27,7 +27,7 @@ $serverPort = 3200
 
 
 # (SparkMonitorClient) constants
-# 
+#
 $monitorServer = '127.0.0.1'
 $monitorPort = 3200
 $monitorType = 'tcp'
@@ -41,11 +41,11 @@ def sparkSetupMonitor
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
   simulationServer.setMultiThreads(false);
-  monitorClient = new('SparkMonitorClient', 
+  monitorClient = new('SparkMonitorClient',
 		      $serverPath+'simulation/SparkMonitorClient')
   monitorClient.setServer($monitorServer)
   monitorClient.setPort($monitorPort)
-  
+
   if ($monitorType == 'udp')
     monitorClient.setClientTypeUDP()
   else if ($monitorType == 'tcp')
@@ -67,7 +67,7 @@ def sparkSetupMonitorLogPlayer
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
   simulationServer.setMultiThreads(false);
-  monitorClient = new('SparkMonitorLogFileServer', 
+  monitorClient = new('SparkMonitorLogFileServer',
 		      $serverPath+'simulation/SparkMonitorLogFileServer')
   monitorClient.setFileName($logPlayerFile)
   monitorClient.setStepDelay(33000)
@@ -79,7 +79,7 @@ end
 #
 # install a class below the SparkMonitorClient that implementes the
 # simulation specific monitor processing
-# 
+#
 def sparkRegisterCustomMonitor(className)
   print "(spark.rb) sparkRegisterCustomMonitor " + className + "\n"
   new(className, $serverPath+'simulation/SparkMonitorClient/'+className)
@@ -111,7 +111,7 @@ def sparkRegisterMonitorCmdParser(className)
   print "(spark.rb) sparkRegisterMonitorCmdParser " + className + "\n"
   new(className, $serverPath+'monitor/SparkMonitor/'+className)
 end
-  
+
 def sparkSetupServer
   print "(spark.rb) sparkSetupServer\n"
 
@@ -120,12 +120,17 @@ def sparkSetupServer
   simulationServer.setMultiThreads(false);
   simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
+  # set auto speed adjust mode.
+  # a smaller value for MaxStepsPerCycle is recommended specially for slow systems
+  simulationServer.setAdjustSpeed(true)
+  simulationServer.setMaxStepsPerCyle(3)
+
   # set port and socket type for agent control
   agentControl = get($serverPath+'simulation/AgentControl');
   agentControl.setServerPort($agentPort)
   agentControl.setStep($agentStep)
 
-  if ($agentType == 'udp') 
+  if ($agentType == 'udp')
 	agentControl.setServerTypeUDP()
   else if ($agentType == 'tcp')
 	agentControl.setServerTypeTCP()
@@ -172,7 +177,7 @@ def sparkSetupRendering
   #geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
   #importBundle 'voidmeshimporter'
   #geometryServer.initMeshImporter("VoidMeshImporter");
-  
+
   #
   # setup the kerosin render framework
   openGLServer = new('kerosin/OpenGLServer', $serverPath+'opengl');
@@ -186,7 +191,7 @@ def sparkSetupRendering
   # setup the FontServer
   new('kerosin/FontServer', $serverPath+'font');
 
-  # 
+  #
   # register render control node to the simulation server
   simulationServer = get($serverPath+'simulation');
   simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
@@ -211,7 +216,7 @@ def sparkSetupInput()
   inputServer.createDevice('Keyboard')
   inputServer.createDevice('Mouse')
 
-  # 
+  #
   # register input control node to the simulation server
   simulationServer = get($serverPath+'simulation');
 
@@ -263,7 +268,7 @@ def sparkAddFPSCamera(
   if addCollider
     # add an Collider that allows the camera to push objects
     collider = new('oxygen/SphereCollider', path+'/geometry')
-    collider.setRadius(colliderRadius)    
+    collider.setRadius(colliderRadius)
 
     handler = new('oxygen/ContactJointHandler', path+'geometry/contact')
     handler.setContactBounceMode true

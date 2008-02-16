@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.4 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: simulationserver.h,v 1.5 2008/02/16 16:48:09 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,6 +125,9 @@ public:
     /** set the simulation run in multi-threads or in a signal thread */
     void SetMultiThreads(bool isMThreas);
 
+    void SetAdjustSpeed(bool adjustSpeed);
+    void SetMaxStepsPerCycle(int max);
+
 protected:
     virtual void OnLink();
     virtual void OnUnlink();
@@ -142,7 +145,7 @@ protected:
 
     /** SIGINT handler used to catch ctrl-C */
     static void CatchSignal(int sig_num);
-    
+
     void Loops();
 
 protected:
@@ -185,6 +188,12 @@ protected:
 
     /** indicates the simulation run in multi-threads or single thread */
     bool mMultiThreads;
+
+    /** skips physical simulation for some time to catch up real time */
+    bool mAdjustSpeed;
+
+    /** determines the number of allowed steps per cycle when mAdjustSpeed is true */
+    int mMaxStepsPerCycle;
 };
 
 DECLARE_CLASS(SimulationServer);

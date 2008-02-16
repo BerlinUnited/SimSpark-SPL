@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.6 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: simulationserver.cpp,v 1.7 2008/02/16 16:48:09 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ void SimulationServer::CatchSignal(int sig_num)
         }
 }
 
-SimulationServer::SimulationServer() : Node()
+SimulationServer::SimulationServer() : Node(), mAdjustSpeed(false), mMaxStepsPerCycle(3)
 {
     mSimTime      = 0.0f;
     mSimStep      = 0.2f;
@@ -212,8 +212,15 @@ void SimulationServer::Step()
                 {
                     mSceneServer->Update(mSimStep);
                     mGameControlServer->Update(mSimStep);
-                    mSumDeltaTime -= mSimStep;
                     mSimTime += mSimStep;
+                    if (mAdjustSpeed && mSumDeltaTime > mMaxStepsPerCycle * mSimStep)
+                    {
+                        GetLog()->Error() << "Skipping remaining time: "
+                                << mSumDeltaTime << '\n';
+                    	mSumDeltaTime = 0;
+                    }
+                    else
+                    	mSumDeltaTime -= mSimStep;
                 }
         } else
             {
@@ -371,7 +378,7 @@ shared_ptr<SceneServer> SimulationServer::GetSceneServer()
 }
 
 void SimulationServer::Loops()
-{  
+{
     if (
         (mSceneServer.get() == 0) ||
         (mGameControlServer.get() == 0)
@@ -387,7 +394,7 @@ void SimulationServer::Loops()
             {
               mSceneServer->PhysicsUpdate(mSimStep);
             }
-        
+
 	// lock all SimControlNode threads
         vector< boost::shared_ptr<boost::mutex::scoped_lock> > locks;
         for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
@@ -429,4 +436,14 @@ void SimulationServer::Loops()
 void SimulationServer::SetMultiThreads(bool isMThreas)
 {
     mMultiThreads = isMThreas;
+}
+
+void SimulationServer::SetAdjustSpeed(bool adjustSpeed)
+{
+	mAdjustSpeed = adjustSpeed;
+}
+
+void SimulationServer::SetMaxStepsPerCycle(int max)
+{
+	mMaxStepsPerCycle = max;
 }

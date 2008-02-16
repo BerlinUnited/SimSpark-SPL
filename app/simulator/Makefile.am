@@ -26,6 +26,6 @@ dist_pkgdata_DATA = rcssserver3D.rb
 EXTRA_DIST = agentdb.xml
 
 install-data-local: createagentdb.sh
-	rm -f ${pkgdatadir}/agentdb.list
-	${top_builddir}/${subdir}/createagentdb.sh > ${pkgdatadir}/agentdb.xml
-	chmod 644 ${pkgdatadir}/agentdb.xml
+	rm -f $(DESTDIR)${pkgdatadir}/agentdb.list
+	${top_builddir}/${subdir}/createagentdb.sh > $(DESTDIR)${pkgdatadir}/agentdb.xml
+	chmod 644 $(DESTDIR)${pkgdatadir}/agentdb.xml
