@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialserver_c.cpp,v 1.2 2004/03/20 12:49:53 rollmark Exp $
+   $Id: materialserver_c.cpp,v 1.3 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,8 +25,39 @@
 using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
+using namespace std;
+
+FUNCTION(MaterialServer,initMaterialExporter)
+{
+    string inExporterName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inExporterName))
+        )
+    {
+        return false;
+    }
+
+    return obj->InitMaterialExporter(inExporterName);
+}
+
+FUNCTION(MaterialServer,exportAllMaterial)
+{
+    if (
+        (in.GetSize() != 0)
+        )
+    {
+        return false;
+    }
+
+    obj->ExportAllMaterial();
+    return true;
+}
 
 void CLASS(MaterialServer)::DefineClass()
 {
         DEFINE_BASECLASS(zeitgeist/Node);
+        DEFINE_FUNCTION(initMaterialExporter);
+        DEFINE_FUNCTION(exportAllMaterial);
 }

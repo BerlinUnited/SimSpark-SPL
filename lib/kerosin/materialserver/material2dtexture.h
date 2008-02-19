@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture.h,v 1.2 2004/04/18 16:32:36 rollmark Exp $
+   $Id: material2dtexture.h,v 1.3 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,11 +40,29 @@ public:
     /** loads the diffuse texture */
     bool SetDiffuseTexture(const std::string& texName);
 
+    //! @return the name of the set diffuse texture
+    const std::string& GetDiffuseTextureName() const;
+
+    //! @return true if there is a diffuse texture name and a texture
+    bool HasDiffuseTexture() const;
+
     /** loads the normal texture */
     bool SetNormalTexture(const std::string& texName);
 
+    //! @return the name of the set normal texture
+    const std::string& GetNormalTextureName() const;
+
+    //! @return true if there is a normal texture name and a texture
+    bool HasNormalTexture() const;
+
     /** loads the specular texture */
     bool SetSpecularTexture(const std::string& texName);
+
+    //! @return the name of the set specular texture
+    const std::string& GetSpecularTextureName() const;
+
+    //! @return true if there is a specular texture name and a texture
+    bool HasSpecularTexture() const;
 
     /** binds the managed material, i.e. sets all necessary OpenGL
         states */
@@ -59,11 +77,20 @@ protected:
     // Members
     //
 protected:
+    //! the diffuse texture name
+    std::string mTexDiffuseName;
+
     /** the diffuse texture */
     boost::shared_ptr<Texture> mTexDiffuse;
 
+    //! the normal texture name
+    std::string mTexNormalName;
+
     /** the normal texture */
     boost::shared_ptr<Texture> mTexNormal;
+
+    //! the specular texture name
+    std::string mTexSpecularName;
 
     /** the specular texture */
     boost::shared_ptr<Texture> mTexSpecular;

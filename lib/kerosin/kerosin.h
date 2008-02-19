@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kerosin.h,v 1.16 2007/05/30 09:10:44 jboedeck Exp $
+   $Id: kerosin.h,v 1.17 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,16 +29,22 @@
 #ifndef KEROSIN_KEROSIN_H
 #define KEROSIN_KEROSIN_H
 
-#include "soundserver/soundserver.h"
+
 #include "inputserver/inputserver.h"
+#ifndef WIN32
+#include "soundserver/soundserver.h"
+#include "imageserver/imageserver.h"
+#include "fontserver/fontserver.h"
+#include "fontserver/font.h"
+#endif
+
 #include "inputserver/inputsystem.h"
 #include "inputserver/inputdevice.h"
 #include "inputserver/inputcontrol.h"
 #include "inputserver/inputitem.h"
-#include "imageserver/imageserver.h"
-#include "fontserver/fontserver.h"
-#include "fontserver/font.h"
+
 #include "openglserver/openglserver.h"
+#include "openglserver/openglsystem.h"
 #include "renderserver/renderserver.h"
 #include "renderserver/rendercontrol.h"
 #include "renderserver/rendernode.h"
@@ -47,7 +53,9 @@
 #include "materialserver/materialserver.h"
 #include "materialserver/material.h"
 #include "materialserver/material2dtexture.h"
+#include "materialserver/materialexternal.h"
 #include "materialserver/materialsolid.h"
+#include "materialserver/materialexporter.h"
 
 // scene graph
 #include "sceneserver/singlematnode.h"

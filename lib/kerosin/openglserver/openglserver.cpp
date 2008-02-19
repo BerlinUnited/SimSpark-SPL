@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglserver.cpp,v 1.19 2007/06/24 13:16:39 jboedeck Exp $
+   $Id: openglserver.cpp,v 1.20 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ using namespace boost;
 using namespace kerosin;
 using namespace zeitgeist;
 
-OpenGLServer::OpenGLServer() : Leaf(), 
+OpenGLServer::OpenGLServer() : Leaf(),
                                mWantsToQuit(false), mHolder( new MapHolder() )
 {
 }
@@ -81,13 +81,13 @@ void OpenGLServer::Quit()
     mWantsToQuit = true;
 }
 
-bool 
+bool
 OpenGLServer::WantsToQuit() const
 {
     return mWantsToQuit;
 }
 
-void 
+void
 OpenGLServer::Update()
 {
     if (mGLSystem.get() == 0)
@@ -98,7 +98,7 @@ OpenGLServer::Update()
     mGLSystem->Update();
 }
 
-void 
+void
 OpenGLServer::SwapBuffers() const
 {
     if (mGLSystem.get() == 0)
@@ -109,7 +109,7 @@ OpenGLServer::SwapBuffers() const
     mGLSystem->SwapBuffers();
 }
 
-bool 
+bool
 OpenGLServer::Init(const string& openGLSysName)
 {
     GetLog()->Normal() << "(OpenGLServer) Init " << openGLSysName << "\n";
@@ -194,7 +194,7 @@ void* OpenGLServer::GetExtension(const char* name)
 #define PROC_ADDRESS(_ptr, _function)\
     static _ptr proc = (_ptr) GetExtension(#_function);
 
-void 
+void
 OpenGLServer::glActiveTextureARB(unsigned int texture)
 {
 #ifdef __APPLE__
@@ -220,4 +220,14 @@ OpenGLServer::GetWindowHandle() const
         return 0;
     }
     return mGLSystem->GetWindowHandle();
+}
+
+bool
+OpenGLServer::IsGLLocked() const
+{
+    if (mGLSystem.get() == 0)
+    {
+        return true;
+    }
+    return mGLSystem->IsGLLocked();
 }

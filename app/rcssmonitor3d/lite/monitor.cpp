@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.28 2007/05/29 09:45:39 jboedeck Exp $
+   $Id: monitor.cpp,v 1.29 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <types.h>
 #include <unistd.h>
 #include <kerosin/openglserver/openglwrapper.h>
+#include <GL/glut.h>
 #include <queue>
 void
 display()
@@ -161,7 +162,7 @@ Monitor::Monitor(std::string rel_path_prefix)
     mRealTime = true;
     mDiffTime = 0;
     mSecondHalfKickOff = CommServerBase::eRandom;
-    
+
     FlagInfo fi;
     fi.mOffset = Vector3f(0,0,0);
     fi.mRadius = 0.1;
@@ -315,7 +316,7 @@ Monitor::Copyleft()
               << "Copyright (C) 2003 Universitaet Koblenz, Germany.\n"
               << "Copyright (C) 2004-2007 The RoboCup Soccer Server Maintenance Group.\n\n"
               << "Special additions by Tobias Warden from TZI Bremen/virtual werder.\n\n";
-    
+
 }
 
 void
@@ -405,7 +406,7 @@ Monitor::InitInternal(int argc, char* argv[])
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
     glutSetCursor(GLUT_CURSOR_NONE);
-    
+
 
     // setup the GLserver with camera coordinates
     // and texture
@@ -415,7 +416,7 @@ Monitor::InitInternal(int argc, char* argv[])
     mGLServer = GLServer(mWidth, mHeight, pos, lookAt, up, false);
 
     mGLServer.InitTexture(mTextureFile);
-    
+
     mGLServer.InitGL();
 
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
@@ -556,8 +557,8 @@ Monitor::DrawStatusText()
         {
             mSecondHalfKickOff=mKickOff;    //store who will kickoff at 2nd half
         }
-        
-        
+
+
         break;
     case PM_BeforeKickOff:
         if (mGameState.GetHalf() == GH_SECOND)
@@ -625,7 +626,7 @@ void
 Monitor::DrawStatusLine()
 {
     float aspect = float(mGLServer.GetWidth())/mGLServer.GetHeight();
-    
+
     glColor4fv(sTeamColorLeft);
     mGLServer.DrawSphere(Vector3f(-0.97*aspect,0.93,0.0), 0.025, 25);
     glColor4fv(sTeamColorRight);
@@ -659,7 +660,7 @@ Vector3f Monitor::Get2DPos(const Vector3f& pos)
 {
     float aspect = float(mGLServer.GetWidth())/mGLServer.GetHeight();
     //cout << "(get2dpos) aspect = " << aspect << endl;
-    
+
     return Vector3f
         (
             aspect*(-1.0) + s2DLowX + s2DScale * (pos[0] + mGameState.GetFieldLength()/2),
@@ -712,7 +713,7 @@ Monitor::DrawOverview()
     glVertex3fv(Get2DPos(Vector3f(fl/2,fw/2,0)).GetData());
     glEnd();
     glDisable(GL_BLEND);                // Turn Blending Off
-        
+
     glColor4fv(sLineColor);
     glBegin(GL_LINE_LOOP);
     glVertex3fv(Get2DPos(Vector3f(-fl/2,-fw/2,0)).GetData());
@@ -893,7 +894,7 @@ Monitor::DrawOverview()
     glEnable(GL_LINE_SMOOTH);
 
     glEnable(GL_LIGHTING);
-    
+
 }
 
 void
@@ -1086,7 +1087,7 @@ Monitor::Display()
 //    glDisable(GL_TEXTURE_2D);
     }
 
-        
+
     // ground
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sGroundColor);
     //glColor4fv(sGroundColor);
@@ -1100,7 +1101,7 @@ Monitor::Display()
 
     mGLServer.DrawGroundRectangle(Vector3f(-fl/2 + lw, -fw/2 + lw, 0),
                                   fl/2 - lw - lw/2, fw - 2*lw, 0);
-    
+
 
     // right half
     mGLServer.DrawGroundRectangle(Vector3f(lw/2, -fw/2 + lw, 0),
@@ -1124,11 +1125,11 @@ Monitor::Display()
 //     glPopMatrix();
 
     //--------------------------------------------------------------
-    
+
     // border
     glColor4fv(sBorderColor);
 
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sBorderColor);    
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sBorderColor);
     mGLServer.DrawGroundRectangle(Vector3f(-fl/2-bs,-fw/2-bs,-0.01), fl + 2*bs, fw+2*bs,-0.01);
 
     glDisable (GL_DEPTH_TEST);
@@ -1157,7 +1158,7 @@ Monitor::Display()
     mGLServer.DrawArbitraryLine(Vector3f(-fl/2, fw/2,0.01),Vector3f(fl/2,fw/2,0.02));
 
     mGLServer.DrawArbitraryLine(Vector3f(0,-fw/2,0.01),Vector3f(0,fw/2,0.02));
-    
+
     // goal box area right side
     mGLServer.DrawArbitraryLine(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.02),
                                 Vector3f(fl/2, -gw/2 - sGoalBoxLength, 0.02));
@@ -1165,7 +1166,7 @@ Monitor::Display()
                                 Vector3f(fl/2, gw/2 + sGoalBoxLength, 0.02));
     mGLServer.DrawArbitraryLine(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.02),
                                 Vector3f(fl/2 - sGoalBoxLength, gw/2 + sGoalBoxLength, 0.02) );
-    
+
     //mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), lw, gw + 11, 0);
     //mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, -gw/2 - sGoalBoxLength, 0.05), sGoalBoxLength, lw, 0);
     //mGLServer.DrawGroundRectangle(Vector3f(fl/2 - sGoalBoxLength, gw/2 + sGoalBoxLength, 0.05), sGoalBoxLength, lw, 0);
@@ -1257,7 +1258,7 @@ Monitor::Display()
     glLoadIdentity();
 
     float aspect = float(mGLServer.GetWidth())/mGLServer.GetHeight();
-    
+
     gluOrtho2D(-1.0*aspect, 1.0*aspect, -1.0,  1.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -1284,7 +1285,7 @@ Monitor::Display()
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     // (end 2D Elements)
-		
+
 		checkAndShow();
 
     glutSwapBuffers();
@@ -1511,7 +1512,7 @@ Monitor::Keyboard(unsigned char key, int /*x*/, int /*y*/)
     case 'Z':
         glutFullScreen();
         glutPositionWindow(0,0);
-        
+
         //    mDrawVelocity = !mDrawVelocity;
         //mCommServer->SendToWorldModel("(ball (pos 49 20 1) (vel 6.0 0.0 0.1))");
         break;
@@ -1639,7 +1640,7 @@ Monitor::Idle()
             mFlagInfo[GameState::eGOAL_1_R].mOffset[2] = mGameState.GetGoalHeight();
             mFlagInfo[GameState::eGOAL_2_R].mOffset[2] = mGameState.GetGoalHeight();
         }
-        
+
         first_time = false;
     }
 
@@ -1731,7 +1732,7 @@ Monitor::KickGoalies()
 
 //     glEnable(GL_BLEND);         // Turn Blending On
 //     glColor4fv(sReportColor);
-//     mGLServer.DrawGroundRectangle( Vector3f( -0.5, -0.7, 0 ), 1.0, 1.4, 0); 
+//     mGLServer.DrawGroundRectangle( Vector3f( -0.5, -0.7, 0 ), 1.0, 1.4, 0);
 //     glColor3f(1.0, 1.0, 1.0);
 
 //     mGLServer.DrawTextPix("--   rcssmonitor3D Game Report   --",
@@ -1754,11 +1755,11 @@ void
 Monitor::checkAndShow()
 {
     if (! mShowSecondView) return;
-    
+
     Vector3f pos;
     float size;
     mGameState.GetBall(pos, size);
-    
+
     if (pos[0] > 35)
         drawSecondView(20, 30, Vector3f(48.0f,-10.0f,5.0f), Vector3f(50.0f,18.0f,-15.0f) );
     else if (pos[0] < -35)
@@ -1778,7 +1779,7 @@ Monitor::drawSecondView( int sx, int sy, Vector3f campos, Vector3f lookat )
 
 		Vector3f look = mGLServer.GetLookAtPos();
 		Vector3f pos = mGLServer.GetCameraPos();
-		
+
     mGLServer.SetCameraPos( campos );
     mGLServer.SetLookAtPos( lookat );
 		mGLServer.ApplyCamera();

@@ -1,3 +1,56 @@
+2008-02-20  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/kerosin/materialserver/materialexporter.h:
+	* lib/kerosin/materialserver/materialexporter_c.cpp:
+	* lib/kerosin/materialserver/materialexternal.cpp:
+	* lib/kerosin/materialserver/materialexternal.h:
+	* lib/kerosin/materialserver/materialexternal_c.cpp:
+	- added files from simspark
+
+	* lib/oxygen/sceneserver/camera.cpp:
+	* lib/oxygen/sceneserver/camera.h:
+	* lib/oxygen/physicsserver/bodycontroller.cpp:
+	* lib/oxygen/physicsserver/bodycontroller.h:
+	* lib/kerosin/Makefile.am:
+	* lib/kerosin/kerosin.h:
+	* lib/kerosin/kerosin.cpp:
+	* lib/kerosin/kerosin-config.in:
+	* lib/kerosin/materialserver/material2dtexture.cpp:
+	* lib/kerosin/materialserver/material2dtexture.h:
+	* lib/kerosin/materialserver/materialsolid.h:
+	* lib/kerosin/materialserver/materialsolid.cpp:
+	* lib/kerosin/materialserver/materialsolid_c.cpp:
+	* lib/kerosin/materialserver/materialserver.cpp:
+	* lib/kerosin/materialserver/materialserver.h:
+	* lib/kerosin/materialserver/materialserver_c.cpp:
+	* lib/kerosin/openglserver/openglwrapper.h:
+	* lib/kerosin/openglserver/openglsystem.h:
+	* lib/kerosin/openglserver/openglserver.h:
+	* lib/kerosin/openglserver/openglserver.cpp:
+	- applied changes from simspark
+
+	* app/rcssmonitor3d/lite/monitor.cpp:
+	* app/rcssmonitor3d/lite/glserver.cpp:
+	- added glut.h because it is no longer in openglwrapper.h
+
+2008-02-19  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/salt/matrix.h:
+	* lib/salt/matrix.cpp:
+	- applied changes from simspark
+
+	* lib/oxygen/simulationserver/simulationserver_c.cpp:
+	- fixed setMaxStepsPerCyle() to read int value!
+
+	* lib/oxygen/simulationserver/simulationserver.h:
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- implemented new multi-threaded implementation.
+
+	* lib/kerosin/inputserver/inputcontrol.cpp:
+	* lib/oxygen/simulationserver/simcontrolnode.cpp:
+	- removed InitSimulation() and DoneSimulation() calls from Run since they
+	  will be called in the main thread.
+
 2008-02-16  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* acinclude.m4:

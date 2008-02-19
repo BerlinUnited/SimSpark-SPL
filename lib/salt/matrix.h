@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: matrix.h,v 1.8 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: matrix.h,v 1.9 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -135,6 +135,9 @@ public:
 
     /** inverts a matrix, spezialized for rotation matrices only */
     f_inline void               InvertRotationMatrix();
+
+    /** inverts a matrix */
+    void InvertMatrix();
 
     /** multiplies the matrix with inVector */
     f_inline Vector3f   Transform(const Vector3f & inVector) const;

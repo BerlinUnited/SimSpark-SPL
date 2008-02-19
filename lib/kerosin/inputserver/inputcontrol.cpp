@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.5 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: inputcontrol.cpp,v 1.6 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -317,7 +317,6 @@ bool InputControl::RegisterInputItem(const string& inputItemName, const string& 
 
 void InputControl::Run()
 {
-    InitSimulation();
     boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
     const int simStep = int(ss->GetSimStep()*100);
     while ( !ss->isExit() )
@@ -328,7 +327,7 @@ void InputControl::Run()
             //std::cout<<GetName()<<' '<<__FUNCTION__<<" wait "<<ss->GetSumDeltaTime()<<' '<<mTime<<std::endl;
             mCond.wait(lock);
         }
-        
+
         StartCycle();
         SenseAgent();
         ActAgent();
@@ -336,8 +335,6 @@ void InputControl::Run()
         //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<ss->GetSumDeltaTime()<<std::endl;
         mCond.notify_one();
     }
-    
-    DoneSimulation();
 }
 
 void InputControl::Wait(boost::mutex::scoped_lock& lock)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.5 2008/02/16 16:48:09 hedayat Exp $
+   $Id: simulationserver.h,v 1.6 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define OXYGEN_SIMULATIONSERVER_H
 
 #include <zeitgeist/node.h>
+#include <boost/thread/barrier.hpp>
 
 namespace oxygen
 {
@@ -125,7 +126,11 @@ public:
     /** set the simulation run in multi-threads or in a signal thread */
     void SetMultiThreads(bool isMThreas);
 
+    /** if set to true, the simulation speed will be adjusted according
+     * to the system speed */
     void SetAdjustSpeed(bool adjustSpeed);
+
+    /** set the maximum allowed steps per simulation cycle */
     void SetMaxStepsPerCycle(int max);
 
 protected:
@@ -147,6 +152,13 @@ protected:
     static void CatchSignal(int sig_num);
 
     void Loops();
+
+    /** the multi-threaded runloop of the simulation */
+    void RunMultiThreaded();
+
+    /** the thread function which controls a single SimControlNode in
+     *  multi-threaded mode. */
+    void SimControlThread(boost::shared_ptr<SimControlNode> controlNode);
 
 protected:
     /** the argc parameter passed to Run() */
@@ -194,6 +206,9 @@ protected:
 
     /** determines the number of allowed steps per cycle when mAdjustSpeed is true */
     int mMaxStepsPerCycle;
+
+    /** barrier object for synchronizing threads in multi-threaded mode */
+    boost::barrier *mThreadBarrier;
 };
 
 DECLARE_CLASS(SimulationServer);

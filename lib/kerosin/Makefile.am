@@ -25,7 +25,8 @@ libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
 ## architecture independent data (scripts) to be installed and distributed
 dist_pkgdata_DATA = \
 	kerosin.rb \
-	inputserver/german.scan.rb 
+	inputserver/german.scan.rb \
+	openglserver/glbase.h 
 
 sources = \
 fontserver/font.cpp \
@@ -51,10 +52,13 @@ materialserver/material.cpp \
 materialserver/material_c.cpp \
 materialserver/material2dtexture.cpp \
 materialserver/material2dtexture_c.cpp \
+materialserver/materialexternal.cpp \
+materialserver/materialexternal_c.cpp \
 materialserver/materialsolid.cpp \
 materialserver/materialsolid_c.cpp \
 materialserver/materialserver.cpp \
 materialserver/materialserver_c.cpp \
+materialserver/materialexporter_c.cpp \
 sceneserver/axis.cpp \
 sceneserver/axis_c.cpp \
 sceneserver/helper/NVMeshMender.cpp \
@@ -112,7 +116,9 @@ sceneserver/helper/nv_math/nv_algebra.h \
 sceneserver/helper/nv_math/nv_math.h \
 sceneserver/helper/nv_math/nv_mathdecl.h \
 materialserver/material2dtexture.h \
+materialserver/materialexternal.h \
 materialserver/materialsolid.h \
+materialserver/materialexporter.h \
 sceneserver/singlematnode.h \
 sceneserver/light.h \
 sceneserver/sphere.h \

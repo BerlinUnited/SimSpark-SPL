@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglwrapper.h,v 1.2 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: openglwrapper.h,v 1.3 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,17 +32,16 @@
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
-#include <GLUT/glut.h>
 #else
 #include <GL/gl.h>
 #include <GL/glext.h>
-#include <GL/glut.h>
+#include <GL/glu.h>
 #endif
 
 #if defined(WIN32)
 #include <GL/wglext.h>
 #elif defined(__APPLE__)
-/* nothing here */
+#include <OpenGL/glu.h>
 #else
 #include <GL/glx.h>
 #include <GL/glxext.h>

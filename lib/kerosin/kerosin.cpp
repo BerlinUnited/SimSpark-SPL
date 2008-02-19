@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kerosin.cpp,v 1.17 2007/05/30 09:10:44 jboedeck Exp $
+   $Id: kerosin.cpp,v 1.18 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,15 +27,21 @@ using namespace zeitgeist;
 
 Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
 {
+#ifndef WIN32
     zg.GetCore()->RegisterClassObject(new CLASS(SoundServer), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ImageServer), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(FontServer), "kerosin/");
+#endif
+
     zg.GetCore()->RegisterClassObject(new CLASS(InputServer), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(InputSystem), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(InputItem),   "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(InputDevice), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(InputControl), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ImageServer), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(FontServer), "kerosin/");
+
     zg.GetCore()->RegisterClassObject(new CLASS(OpenGLServer), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(OpenGLSystem), "kerosin/");
+//    zg.GetCore()->RegisterClassObject(new CLASS(BaseRenderServer), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(RenderServer), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(RenderControl), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(RenderNode), "kerosin/");
@@ -44,7 +50,9 @@ Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
     zg.GetCore()->RegisterClassObject(new CLASS(MaterialServer), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(Material), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(Material2DTexture), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(MaterialExternal), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(MaterialSolid), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(MaterialExporter), "kerosin/");
 
     // scene graph
     zg.GetCore()->RegisterClassObject(new CLASS(SingleMatNode), "kerosin/");

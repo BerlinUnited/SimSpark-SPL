@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid.h,v 1.4 2007/06/19 23:59:57 fruit Exp $
+   $Id: materialsolid.h,v 1.5 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,6 +63,27 @@ public:
     /** returns the light emission */
     const RGBA& GetEmission() const;
 
+    /** a hint for the graphics engine if the depth-buffer should be checked
+        for this material or not.
+        @returns true if the depth-check should be enabled for this material
+    */
+    bool DepthCheck() const;
+
+    //! set the flag if the depth-buffer should be checked.
+    void SetDepthCheck(bool depthCheck);
+
+    /** Set the shininess of the material.
+        When specular light is reflected, this value determines the size of
+        the region that appears shiny.
+        @param val
+    */
+    void SetShininess(float val);
+
+    /** get the shininess of the material.
+        @return a value representing the shininess.
+    */
+    float GetShininess() const;
+
 protected:
     /** sets up all lighting material properties */
     void SetupMaterial();
@@ -82,6 +103,12 @@ protected:
 
     /** the emitted light intensity of the material */
     RGBA mEmission;
+
+    //! flag if depth-buffer should be checked
+    bool mDepthCheck;
+
+    //! value for the size of the reflecting region
+    float mShininess;
 };
 
 DECLARE_CLASS(MaterialSolid);

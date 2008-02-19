@@ -1,10 +1,10 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-   this file is part of rcssserver3D
+   this file is part of simspark
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bodycontroller.cpp,v 1.2 2008/02/19 22:49:23 hedayat Exp $
+   $Id: materialexternal.h,v 1.1 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,34 +19,39 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "bodycontroller.h"
-#include "body.h"
-#include <zeitgeist/logserver/logserver.h>
+#ifndef KEROSIN_MATERIALEXTERNAL_H
+#define KEROSIN_MATERIALEXTERNAL_H
 
-using namespace oxygen;
-using namespace zeitgeist;
-using namespace boost;
+#include "materialsolid.h"
 
-void BodyController::OnLink()
+namespace kerosin
 {
-    UpdateCached();
-}
-
-void BodyController::OnUnlink()
+class MaterialExternal : public MaterialSolid
 {
-    mBody.reset();
-}
+    // Functions
+public:
+    MaterialExternal();
+    virtual ~MaterialExternal();
 
-void BodyController::UpdateCached()
-{
-    mBody.reset();
+    virtual void Bind();
 
-    mBody = shared_dynamic_cast<Body>
-        (make_shared(GetParentSupportingClass("Body")));
+    //! @return the name of the reference
+    const std::string& GetReference() const;
 
-    if (mBody.get() == 0)
-    {
-        GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
-        return;
-    }
-}
+    //! Set the name of the reference
+    void SetReference(const std::string& name);
+
+protected:
+    /** sets up all lighting material properties */
+    void SetupMaterial();
+
+    // Members
+protected:
+    /** the external file reference */
+    std::string mName;
+};
+
+DECLARE_CLASS(MaterialExternal);
+};
+
+#endif // KEROSIN_MATERIALEXTERNAL_H

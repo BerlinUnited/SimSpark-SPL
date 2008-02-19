@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialsolid.cpp,v 1.4 2007/06/20 00:24:15 fruit Exp $
+   $Id: materialsolid.cpp,v 1.5 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,9 @@ MaterialSolid::MaterialSolid()
       mAmbient(0.2f,0.2f,0.2f,1.0f),
       mDiffuse(1.0f,1.0f,1.0f,1.0f),
       mSpecular(0.0f,0.0f,0.0f,1.0f),
-      mEmission(0.0f,0.0f,0.0f,1.0f)
+      mEmission(0.0f,0.0f,0.0f,1.0f),
+      mDepthCheck(true),
+      mShininess(128.0f)
 {
 }
 
@@ -100,11 +102,33 @@ void MaterialSolid::SetEmission(const RGBA& emission)
     mEmission = emission;
 }
 
-const RGBA& 
+const RGBA&
 MaterialSolid::GetEmission() const
 {
     return mEmission;
 }
 
 
+bool
+MaterialSolid::DepthCheck() const
+{
+    return mDepthCheck;
+}
 
+void
+MaterialSolid::SetDepthCheck(bool depthCheck)
+{
+    mDepthCheck = depthCheck;
+}
+
+void
+MaterialSolid::SetShininess(float val)
+{
+    mShininess = val;
+}
+
+float
+MaterialSolid::GetShininess() const
+{
+    return mShininess;
+}

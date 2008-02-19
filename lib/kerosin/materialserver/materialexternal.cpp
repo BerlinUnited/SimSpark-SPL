@@ -1,10 +1,10 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-   this file is part of rcssserver3D
-   Fri May 9 2003
+   this file is part of simspark
+   Wed May 9 2007
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bodycontroller.cpp,v 1.2 2008/02/19 22:49:23 hedayat Exp $
+   $Id: materialexternal.cpp,v 1.1 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,34 +19,44 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "bodycontroller.h"
-#include "body.h"
-#include <zeitgeist/logserver/logserver.h>
+#include "materialexternal.h"
 
-using namespace oxygen;
-using namespace zeitgeist;
-using namespace boost;
+using namespace kerosin;
 
-void BodyController::OnLink()
+MaterialExternal::MaterialExternal()
+    : MaterialSolid(),
+      mName("")
 {
-    UpdateCached();
 }
 
-void BodyController::OnUnlink()
+MaterialExternal::~MaterialExternal()
 {
-    mBody.reset();
 }
 
-void BodyController::UpdateCached()
+void 
+MaterialExternal::SetupMaterial()
 {
-    mBody.reset();
+  /* We don't do anything here. This overwrites the original SetupMaterial from 
+     MaterialSolid, which calles OpenGl functions.
+  */
+}
 
-    mBody = shared_dynamic_cast<Body>
-        (make_shared(GetParentSupportingClass("Body")));
+void 
+MaterialExternal::Bind()
+{
+  /* We don't do anything here. This overwrites the original Bind from 
+     MaterialSolid, which calles OpenGl functions.
+  */
+}
 
-    if (mBody.get() == 0)
-    {
-        GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
-        return;
-    }
+const std::string& 
+MaterialExternal::GetReference() const
+{
+    return mName;
+}
+
+void 
+MaterialExternal::SetReference(const std::string& name)
+{
+    mName = name;
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bodycontroller.h,v 1.1 2004/04/05 08:44:37 rollmark Exp $
+   $Id: bodycontroller.h,v 1.2 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ class BodyController : public BaseNode
 public:
     BodyController() : BaseNode() {}
     virtual ~BodyController() {}
+
+    /** update variables from a script */
+    virtual void UpdateCached();
 
 protected:
     /** sets up the reference to the controlled body */

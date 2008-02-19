@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: glserver.cpp,v 1.12 2007/01/02 13:56:55 jamu Exp $
+   $Id: glserver.cpp,v 1.13 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "glserver.h"
 #include <iostream>
 #include <string>
+#include <GL/glut.h>
 
 using namespace salt;
 
@@ -47,7 +48,7 @@ GLServer::GLServer(int width, int height,
 //     mCamModeIcon[][][][eFree]
 //     mCamModeIcon[][][][eFollowBall]
 //     mCamModeIcon[][][][eCenterBall]
-        
+
 //         }
 
 // void
@@ -60,14 +61,14 @@ GLServer::GLServer(int width, int height,
 //         mTextureHeight = 128;
 
 //         cout << "Texture: Loading " << tFile << " failed, using random image.\n";
-    
+
 //         int c;
 
-//         for (int i = 0;i <  mTextureHeight; i++) {        
-//             for (int j = 0;j <  mTextureWidth; j++) { 
-                
-//                 c = ((((i&0x10)==0)^((j&0x10))==0))*15;      
-            
+//         for (int i = 0;i <  mTextureHeight; i++) {
+//             for (int j = 0;j <  mTextureWidth; j++) {
+
+//                 c = ((((i&0x10)==0)^((j&0x10))==0))*15;
+
 //                 mTexture[i][j][0] = (GLubyte) 55+c;
 //                 mTexture[i][j][1] = (GLubyte) 156+c;
 //                 mTexture[i][j][2] = (GLubyte) 55+c;
@@ -87,13 +88,13 @@ GLServer::GLServer(int width, int height,
 
 //     // absolute path to texturefile
 //     string absTFile = "";
-    
+
 //     if (tFile[0] == '/')
 //     {
 //         // absolute path
 //         absTFile = tFile;
-        
-//         texturefile.open(absTFile.c_str()); 
+
+//         texturefile.open(absTFile.c_str());
 //     }
 //     else
 //     {
@@ -105,7 +106,7 @@ GLServer::GLServer(int width, int height,
 //         if (home)
 //         {
 //             absTFile = string(home)+"/.rcssserver3d/"+tFile;
-//             texturefile.open(absTFile.c_str()); 
+//             texturefile.open(absTFile.c_str());
 //         }
 
 //         if (!texturefile)
@@ -113,41 +114,41 @@ GLServer::GLServer(int width, int height,
 //             // some macro magic (not at all)
 //             absTFile = PREFIX "/share/" PACKAGE_NAME "/"+tFile;
 
-//             texturefile.open(absTFile.c_str()); 
+//             texturefile.open(absTFile.c_str());
 //         }
 //     }
-    
-//     if (!texturefile) 
+
+//     if (!texturefile)
 //     {
 //         cout << "Texture: could not open texture file" << endl;
 //         return false;
 //     }
 
 //     string line;
-    
+
 //     //read magic no.
 //     texturefile >> line;
-    
+
 //     if (line != "P6")
 //     {
 //         cout << "Texture: wrong magic number. No raw PPM" << endl;
 //         return false;
 //     }
-    
+
 //     // comment by gimp
 //     texturefile >> line;
 //     texturefile.ignore(INT_MAX, '\n');
-    
+
 //     // read the size
 //     texturefile >> mTextureWidth >> mTextureHeight;
-    
+
 //     if ((mTextureWidth != 128) || (mTextureHeight > 128))
 //     {
 //         // texture has the wrong size
 //         cout << "Texture: Wrong Size" << endl;
 //         return false;
-//     }       
-    
+//     }
+
 //     int numcolors;
 //     texturefile >> numcolors;
 //     if (numcolors > 255)
@@ -155,15 +156,15 @@ GLServer::GLServer(int width, int height,
 //         cout << "Texture: too many colors (" << numcolors << ")" << endl;
 //         return false;
 //     }
-    
+
 //     GLubyte r,g,b;
-    
+
 //     for (int i = 0;i <  mTextureHeight; i++)
-//     {        
+//     {
 //         for (int j = 0;j <  mTextureWidth; j++)
-//         { 
+//         {
 //             texturefile >> r >> g >> b;
-            
+
 //             mTexture[i][j][0] = (GLubyte) r;
 //             mTexture[i][j][1] = (GLubyte) g;
 //             mTexture[i][j][2] = (GLubyte) b;
@@ -171,9 +172,9 @@ GLServer::GLServer(int width, int height,
 //         }
 //     }
 //     texturefile.close();
-    
+
 //     return true;
-    
+
 // }
 
 
@@ -209,8 +210,8 @@ void GLServer::ApplyCamera()
 
 void GLServer::InitGL (void)
 {
-    glDisable(GL_LIGHTING);     
-        
+    glDisable(GL_LIGHTING);
+
     //JAN
     /*glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &mTexNames);
@@ -220,11 +221,11 @@ void GLServer::InitGL (void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mTextureWidth, mTextureHeight,
-                 0, GL_RGBA, GL_UNSIGNED_BYTE, mTexture); 
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, mTexture);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-  
+
  	// 2d texture, 3 colors, width, height, RGB in that order, byte data, and the data.
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, mTextureWidth, mTextureHeight, GL_RGBA, GL_UNSIGNED_BYTE, mTexture);*/         
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, mTextureWidth, mTextureHeight, GL_RGBA, GL_UNSIGNED_BYTE, mTexture);*/
 }
 
 void GLServer::DrawTextPix(const char* text, Vector2f pix, ETextAlign ta)
@@ -335,7 +336,7 @@ void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
     // store the sizes of our faces
 //     GLfloat deltaX = szX/faceNum;
 //     GLfloat deltaY = szY/faceNum;
-    
+
     GLfloat x=0.0;
     GLfloat y=0.0;
 
@@ -344,7 +345,7 @@ void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
     glVertex3f(x,y,height);
     glTexCoord2f(0.0, 10.0);
     glVertex3f(x,y+szY,height);
-    
+
     glTexCoord2f(0.0, 0.0);
     glVertex3f(x+szX,y+szY,height);
     glTexCoord2f(10.0, 0.0);
@@ -373,8 +374,8 @@ void GLServer::DrawGroundRectangle(Vector3f pos, float szX, float szY,
 
 
 //     glDisable(GL_LIGHTING);
-    
-        
+
+
 //     for (int i=0; i<faceNum; i++)
 //         {
 //             y = i*deltaY;
@@ -519,10 +520,10 @@ void GLServer::DrawSphere(Vector3f spherePos,float radius, int res, bool wirefra
 
     glPushMatrix();
     glTranslatef(spherePos[0],spherePos[1], spherePos[2]);
-    //if(!mWireframe) 
+    //if(!mWireframe)
     if(!wireframe){
         glutSolidSphere(radius, res, res); // WAS res
-    }else{ 
+    }else{
         glutWireSphere(radius, 8, 8); //WAS res
     }
     glPopMatrix();
@@ -555,7 +556,7 @@ void GLServer::DrawShadowOfSphere(Vector3f spherePos,float radius)
 //-----------------------------------------------------------------------------
 // work in n progress
 //-----------------------------------------------------------------------------
-// quick and dirty bitmap loader...for 24 bit bitmaps with 1 plane only.  
+// quick and dirty bitmap loader...for 24 bit bitmaps with 1 plane only.
 // See http://www.dcs.ed.ac.uk/~mxr/gfx/2d/BMP.txt for more info.
 // if mesa ever gets glaux, let me know.
 bool
@@ -563,7 +564,7 @@ GLServer::BMPImageLoad(const char *filename, Image *image) {
     FILE *file;
     unsigned long size;                 // size of the image in bytes.
     unsigned long i;                    // standard counter.
-    unsigned short int planes;          // number of planes in image (must be 1) 
+    unsigned short int planes;          // number of planes in image (must be 1)
     unsigned short int bpp;             // number of bits per pixel (must be 24)
     char temp;                          // used to convert bgr to rgb color.
 
@@ -574,10 +575,10 @@ GLServer::BMPImageLoad(const char *filename, Image *image) {
         printf("\nIf you don't have the texture files, please download them at\n");
         printf("http://www.uni-koblenz.de/~murray/robocup/rcssmonitor-lite-textures.tgz\n");
         printf("and unpack them to your $HOME/.rcssserver3d directory.\n\n");
-        
+
 	return 0;
     }
-    
+
     // seek through the bmp header, up to the width/height:
     fseek(file, 18, SEEK_CUR);
 
@@ -586,13 +587,13 @@ GLServer::BMPImageLoad(const char *filename, Image *image) {
 	printf("Error reading width from %s.\n", filename);
 	return 0;
     }
-        
-    // read the height 
+
+    // read the height
     if ((i = fread(&image->sizeY, 4, 1, file)) != 1) {
 	printf("Error reading height from %s.\n", filename);
 	return 0;
     }
-        
+
     // calculate the size (assuming 24 bits or 3 bytes per pixel).
     size = image->sizeX * image->sizeY * 3;
 
@@ -615,15 +616,15 @@ GLServer::BMPImageLoad(const char *filename, Image *image) {
 	printf("Bpp from %s is not 24: %u\n", filename, bpp);
 	return 0;
     }
-	
+
     // seek past the rest of the bitmap header.
     fseek(file, 24, SEEK_CUR);
 
-    // read the data. 
+    // read the data.
     image->data = (char *) malloc(size);
     if (image->data == NULL) {
 	printf("Error allocating memory for color-corrected image data");
-	return 0;	
+	return 0;
     }
 
     if ((i = fread(image->data, size, 1, file)) != 1) {
@@ -642,15 +643,15 @@ GLServer::BMPImageLoad(const char *filename, Image *image) {
 }
 
 // Load Bitmaps And Convert To Textures
-GLvoid 
+GLvoid
 GLServer::InitTexture(const string &tFile)
 {
     // Load Texture
     Image *image1;
 
     string pkgname("." PACKAGE_NAME);
-    string path = string(getenv("HOME")) + "/" + pkgname + "/"; 
-    
+    string path = string(getenv("HOME")) + "/" + pkgname + "/";
+
     // allocate space for texture
     image1 = (Image *) malloc(sizeof(Image));
     if (image1 == NULL) {
@@ -659,13 +660,13 @@ GLServer::InitTexture(const string &tFile)
     }
 
     if (!BMPImageLoad((path + string("grass.bmp")).c_str(), image1)) {
-        
+
         exit(1);
-    }        
+    }
 
 	// Load skymap
     Image *skytex[6];
-    
+
     // allocate space for texture
     for(int i = 0; i < 6 ; i++)
 	{
@@ -681,46 +682,46 @@ GLServer::InitTexture(const string &tFile)
 	!BMPImageLoad((path + string("left.bmp")).c_str(), skytex[2])   ||
 	!BMPImageLoad((path + string("right.bmp")).c_str(), skytex[3])  ||
 	!BMPImageLoad((path + string("front.bmp")).c_str(), skytex[4])  ||
-	!BMPImageLoad((path + string("back.bmp")).c_str(), skytex[5])) 
+	!BMPImageLoad((path + string("back.bmp")).c_str(), skytex[5]))
     {
        	exit(1);
-    } 
-       
-    // Create Textures	
+    }
+
+    // Create Textures
     glGenTextures(7, &mTexNames[0]);
 
     // texture 1 (poor quality scaling)
     glBindTexture(GL_TEXTURE_2D, mTexNames[0]);   // 2d texture (x and y size)
 
     // cheap scaling when image bigger than texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_NEAREST); 
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_NEAREST);
     // cheap scaling when image smalled than texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST); 
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, image1->data);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, image1->sizeX, image1->sizeY, GL_RGB, GL_UNSIGNED_BYTE, image1->data); 
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, image1->sizeX, image1->sizeY, GL_RGB, GL_UNSIGNED_BYTE, image1->data);
 
 	for(int i = 0; i < 6; i++)
 	{
             // texture 2 (mipmapped scaling)
             glBindTexture(GL_TEXTURE_2D, mTexNames[i+1]);   // 2d texture (x and y size)
             // scale linearly when image bigger than texture
-            //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_NEAREST); 
-            //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST); 
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE); 
+            //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+            //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
             //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
             // scale linearly + mipmap when image smalled than texture
             glTexImage2D(GL_TEXTURE_2D, 0, 3, skytex[i]->sizeX, skytex[i]->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex[i]->data);
 
             // 2d texture, 3 colors, width, height, RGB in that order, byte data, and the data.
-            gluBuild2DMipmaps(GL_TEXTURE_2D, 3, skytex[i]->sizeX, skytex[i]->sizeY, GL_RGB, GL_UNSIGNED_BYTE, skytex[i]->data); 
+            gluBuild2DMipmaps(GL_TEXTURE_2D, 3, skytex[i]->sizeX, skytex[i]->sizeY, GL_RGB, GL_UNSIGNED_BYTE, skytex[i]->data);
 	}
 }
 
-void 
+void
 GLServer::DrawSkyBackground(float x, float y, float z, float width, float height, float length)
 {
-	x = x - width  / 2;  
+	x = x - width  / 2;
 	y = y - height / 2;
 	z = z - length / 2;
 
@@ -729,52 +730,52 @@ GLServer::DrawSkyBackground(float x, float y, float z, float width, float height
 	glDepthMask(GL_FALSE);
 
 	glBindTexture(GL_TEXTURE_2D, mTexNames[1]);
-	glBegin(GL_TRIANGLE_STRIP);                                   
+	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,y,z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,z);
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,y + height, z);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z); 
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, mTexNames[2]);
-	glBegin(GL_TRIANGLE_STRIP);                   
+	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,y,z + length);
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,y + height, z + length);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z + length);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);        
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, mTexNames[3]);
-	glBegin(GL_TRIANGLE_STRIP);                           
+	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,y,z);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,y,       z + length);
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,z);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,z + length);  
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,z + length);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, mTexNames[4]);
-	glBegin(GL_TRIANGLE_STRIP);                                   
+	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(0.0f, 0.0f); glVertex3f(x,y + height,z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);        
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
 	glEnd();
 
 
 	glBindTexture(GL_TEXTURE_2D, mTexNames[5]);
-	glBegin(GL_TRIANGLE_STRIP);                           
+	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y, z + length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length); 
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, mTexNames[6]);
-	glBegin(GL_TRIANGLE_STRIP);                           
+	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(1.0f, -1.0f); glVertex3f(x + width, y, z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, z + length);
 		glTexCoord2f(0.0f, -1.0f); glVertex3f(x + width, y + height, z);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length); 
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
 	glEnd();
 
 	glDepthMask(GL_TRUE);

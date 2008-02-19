@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.h,v 1.6 2004/02/12 14:07:23 fruit Exp $
+   $Id: camera.h,v 1.7 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -88,6 +88,11 @@ public:
     /** fills in a frustum object with the correct parameters for this
         camera */
     void DescribeFrustum(salt::Frustum& frustum) const;
+
+    /** turn the camera so that it looks to a given point.
+     *  @param toPoint the point to look at
+     */
+    void LookAt(const salt::Vector3f& toPoint);
 
     /** sets the view transform to be the inverted WorldTransform and
         sets up the projection transform matrix

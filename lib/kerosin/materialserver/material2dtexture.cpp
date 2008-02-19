@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture.cpp,v 1.3 2007/06/20 00:26:17 fruit Exp $
+   $Id: material2dtexture.cpp,v 1.4 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,10 @@ using namespace kerosin;
 using namespace boost;
 using namespace std;
 
-Material2DTexture::Material2DTexture() : MaterialSolid()
+Material2DTexture::Material2DTexture() :
+    MaterialSolid(), mTexDiffuseName(""), mTexNormalName(""),
+            mTexSpecularName("")
+
 {
 }
 
@@ -61,41 +64,94 @@ bool Material2DTexture::LoadTexture(const std::string& texName, shared_ptr<Textu
 
 bool Material2DTexture::SetDiffuseTexture(const std::string& texName)
 {
+    mTexDiffuseName = texName;
     return LoadTexture(texName,mTexDiffuse);
+}
+
+const std::string&
+Material2DTexture::GetDiffuseTextureName() const
+{
+    return mTexDiffuseName;
+}
+
+bool
+Material2DTexture::HasDiffuseTexture() const
+{
+    return (!mTexDiffuseName.empty() && mTexDiffuse.get() != 0);
 }
 
 bool Material2DTexture::SetNormalTexture(const std::string& texName)
 {
+    mTexNormalName = texName;
     return LoadTexture(texName,mTexNormal);
+}
+
+const std::string&
+Material2DTexture::GetNormalTextureName() const
+{
+    return mTexNormalName;
+}
+
+bool
+Material2DTexture::HasNormalTexture() const
+{
+    return (!mTexNormalName.empty() && mTexNormal.get() != 0);
 }
 
 bool Material2DTexture::SetSpecularTexture(const std::string& texName)
 {
+    mTexSpecularName = texName;
     return LoadTexture(texName,mTexSpecular);
+}
+
+const std::string&
+Material2DTexture::GetSpecularTextureName() const
+{
+    return mTexSpecularName;
+}
+
+bool
+Material2DTexture::HasSpecularTexture() const
+{
+    return (!mTexSpecularName.empty() && mTexSpecular.get() != 0);
 }
 
 void Material2DTexture::Bind()
 {
+    shared_ptr<OpenGLServer> openGLServer =
+        shared_dynamic_cast<OpenGLServer>(GetCore()->Get("/sys/server/opengl"));
+
+    bool use_gl = ((openGLServer.get() != 0) && (!openGLServer->IsGLLocked()));
+
     SetupMaterial();
 
     if (mTexDiffuse.get() != 0)
+    {
+        if (use_gl)
         {
-            glActiveTextureARB(GL_TEXTURE0_ARB);
+            OpenGLServer::glActiveTextureARB(GL_TEXTURE0_ARB);
             glEnable(GL_TEXTURE_2D);
-            mTexDiffuse->Bind();
         }
+        mTexDiffuse->Bind();
+    }
 
     if (mTexNormal.get() != 0)
+    {
+        if (use_gl)
         {
-            glActiveTextureARB(GL_TEXTURE1_ARB);
+            OpenGLServer::glActiveTextureARB(GL_TEXTURE1_ARB);
             glEnable(GL_TEXTURE_2D);
-            mTexNormal->Bind();
         }
+        mTexNormal->Bind();
+    }
 
     if (mTexSpecular.get() != 0)
+    {
+        if (use_gl)
         {
-            glActiveTextureARB(GL_TEXTURE2_ARB);
+            OpenGLServer::glActiveTextureARB(GL_TEXTURE2_ARB);
             glEnable(GL_TEXTURE_2D);
-            mTexSpecular->Bind();
         }
+        mTexSpecular->Bind();
+    }
 }

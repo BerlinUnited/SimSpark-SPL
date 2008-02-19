@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialserver.cpp,v 1.7 2007/06/20 00:25:22 fruit Exp $
+   $Id: materialserver.cpp,v 1.8 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include "material.h"
 #include "materialsolid.h"
+#include "materialexporter.h"
 
 using namespace boost;
 using namespace kerosin;
@@ -35,6 +36,32 @@ MaterialServer::MaterialServer() : Node()
 
 MaterialServer::~MaterialServer()
 {
+}
+
+void MaterialServer::RegisterMaterial(shared_ptr<Material> material)
+{
+    if (material.get() == 0)
+    {
+        return;
+    }
+
+    // remove any previous material with the same name
+    shared_ptr<Material> previous =
+        shared_dynamic_cast<Material>(GetChild(material->GetName()));
+
+    if (previous.get() != 0)
+    {
+        GetLog()->Debug() << "(MaterialServer) removing material "
+                          << material->GetName() << "\n";
+        RemoveChildReference(previous);
+    }
+
+    // register new material
+    AddChildReference(material);
+
+    GetLog()->Debug() << "(MaterialServer) registered material "
+                      << material->GetName() << "\n";
+
 }
 
 shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
@@ -51,7 +78,7 @@ shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
     return material;
 }
 
-void 
+void
 MaterialServer::OnLink()
 {
     // create the default material
@@ -59,4 +86,53 @@ MaterialServer::OnLink()
         (GetCore()->New("kerosin/MaterialSolid"));
     defMat->SetName("default");
     AddChildReference(defMat);
+}
+
+bool
+MaterialServer::InitMaterialExporter(const std::string& name)
+{
+    shared_ptr<MaterialExporter> exporter
+        = shared_dynamic_cast<MaterialExporter>(GetCore()->New(name));
+
+    if (exporter.get() == 0)
+    {
+        GetLog()->Error() << "(MaterialServer) ERROR: "
+                          << "unable to create MaterialExporter '" << name << "'\n";
+        return false;
+    }
+
+    exporter->SetName(name);
+    AddChildReference(exporter);
+
+    GetLog()->Normal() << "(MaterialServer) MaterialExporter '" << name << "' registered\n";
+
+    return true;
+}
+
+void
+MaterialServer::ExportAllMaterial()
+{
+    GetLog()->Debug() << "(MaterialServer) ExportAllMaterial\n";
+    TLeafList materials;
+    ListChildrenSupportingClass<Material>(materials);
+
+    for (TLeafList::const_iterator mi = materials.begin(); mi != materials.end(); ++mi)
+    {
+        shared_ptr<Material> m = shared_static_cast<Material>(*mi);
+        ExportMaterial(m);
+    }
+    GetLog()->Debug() << "(MaterialServer) ExportAllMaterial done\n";
+}
+
+void
+MaterialServer::ExportMaterial(shared_ptr<Material> material)
+{
+    TLeafList exporters;
+    ListChildrenSupportingClass<MaterialExporter>(exporters);
+
+    for (TLeafList::const_iterator bi = exporters.begin(); bi != exporters.end(); ++bi)
+    {
+        shared_ptr<MaterialExporter> mb = shared_static_cast<MaterialExporter>(*bi);
+        mb->RegisterMaterial(material);
+    }
 }

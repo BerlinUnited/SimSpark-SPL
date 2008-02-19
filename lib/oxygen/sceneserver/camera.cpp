@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.cpp,v 1.7 2004/04/12 17:18:41 rollmark Exp $
+   $Id: camera.cpp,v 1.8 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -210,4 +210,16 @@ const salt::Matrix& Camera::GetViewTransform() const
 const salt::Matrix& Camera::GetProjectionTransform() const
 {
     return mProjectionTransform;
+}
+
+void
+Camera::LookAt(const salt::Vector3f& toPoint)
+{
+    Matrix m;
+    salt::Vector3f fromPoint;
+    fromPoint = GetWorldTransform().Pos();
+    //    std::cerr << "Camera: look from " << fromPoint << " at " << toPoint << "\n";
+    salt::Vector3f up(0,0,1);
+    m.LookAt(fromPoint, toPoint, up);
+    SetWorldTransform(m);
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver_c.cpp,v 1.5 2008/02/16 16:48:09 hedayat Exp $
+   $Id: simulationserver_c.cpp,v 1.6 2008/02/19 22:49:23 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -115,33 +115,33 @@ FUNCTION(SimulationServer, setMultiThreads)
 
 FUNCTION(SimulationServer, setAdjustSpeed)
 {
-    bool inSet;
+    bool adjustSpeed;
 
     if (
         (in.GetSize() != 1) ||
-        (! in.GetValue(in[0], inSet))
+        (! in.GetValue(in[0], adjustSpeed))
         )
         {
             return false;
         }
 
-    obj->SetAdjustSpeed(inSet);
+    obj->SetAdjustSpeed(adjustSpeed);
     return true;
 }
 
 FUNCTION(SimulationServer, setMaxStepsPerCyle)
 {
-    bool inSet;
+    int maxSteps;
 
     if (
         (in.GetSize() != 1) ||
-        (! in.GetValue(in[0], inSet))
+        (! in.GetValue(in[0], maxSteps))
         )
         {
             return false;
         }
 
-    obj->SetMaxStepsPerCycle(inSet);
+    obj->SetMaxStepsPerCycle(maxSteps);
     return true;
 }
 
