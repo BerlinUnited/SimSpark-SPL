@@ -31,12 +31,21 @@ version available from LANL.
  ***/
 
 #include <fcntl.h>
+
+#ifndef WIN32
 #include <unistd.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "sexp.h"
 #include <assert.h>
+
+#ifdef WIN32
+#include <io.h>
+#define read _read
+#endif
 
 /**
  * initialize an io-wrapper

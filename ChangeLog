@@ -1,5 +1,39 @@
 2008-02-20  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* utility/sfsexp/sexp_ops.c:
+	* utility/sfsexp/sexp.h:
+	* utility/sfsexp/sexp.c:
+	* utility/sfsexp/parser.c:
+	* utility/sfsexp/malloc_util.c:
+	* utility/sfsexp/Makefile.am:
+	* utility/sfsexp/io.c:
+	* app/coretest/main.cpp:
+	* lib/salt/random.h:
+	* lib/zeitgeist/scriptserver/scriptserver_c.cpp:
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: Run() will check BundlePath()
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	* lib/zeitgeist/scriptserver/rubywrapper.cpp:
+	* lib/zeitgeist/scriptserver/rubywrapper.h:
+	* lib/zeitgeist/scriptserver/gcvalue.cpp:
+	* lib/zeitgeist/scriptserver/gcvalue.h:
+	* lib/zeitgeist/randomserver/randomserver.cpp:
+	* lib/zeitgeist/randomserver/randomserver.h:
+	* lib/zeitgeist/zeitgeist.vcproj:
+	* lib/zeitgeist/zeitgeist-config.in:
+	* lib/zeitgeist/node.cpp:
+	* lib/zeitgeist/node.h:
+	* lib/zeitgeist/node_c.cpp:
+	* lib/zeitgeist/leaf.cpp:
+	* lib/zeitgeist/leaf.h: fixed an extra qualification compile error
+	* lib/zeitgeist/corecontext.h:
+	* lib/zeitgeist/class.cpp:
+	* lib/zeitgeist/core.h:
+	* lib/zeitgeist/core.cpp:
+	- ported from simspark (porting zeitgeist,salt,sfsexp finished)
+
+	* lib/salt/fileclasses.cpp:
+	- added a separator after BundlePath() when PREFIX is defined
+
 	* app/simspark/rsg/boxspheres/box_with_handler055.rsg: New file.
 	* app/simspark/rsg/boxspheres/box_with_handler056.rsg: New file.
 	* app/simspark/internalsoccerbindings.rb:

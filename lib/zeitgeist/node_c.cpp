@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node_c.cpp,v 1.3 2004/03/22 10:41:56 rollmark Exp $
+   $Id: node_c.cpp,v 1.4 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,14 @@
 
 using namespace zeitgeist;
 
+FUNCTION(Node,unlinkChildren)
+{
+    obj->UnlinkChildren();
+    return true;
+}
+
 void CLASS(Node)::DefineClass()
 {
+    DEFINE_FUNCTION(unlinkChildren);
     DEFINE_BASECLASS(zeitgeist/Leaf);
 }

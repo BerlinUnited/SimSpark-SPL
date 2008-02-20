@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.cpp,v 1.9 2004/04/30 09:25:01 rollmark Exp $
+   $Id: leaf.cpp,v 1.10 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "class.h"
 #include "node.h"
 #include <iostream>
+#include <sstream>
 
 using namespace boost;
 using namespace std;
@@ -111,6 +112,12 @@ Leaf::GetParentSupportingClass(const std::string &name) const
   return weak_ptr<Node>(node);
 }
 
+int
+Leaf::GetNumberOfChildren() const
+{
+    return 0;
+}
+
 bool Leaf::IsLeaf() const
 {
     return true;
@@ -167,10 +174,11 @@ const std::string& Leaf::GetFullPath() const
     return *mCachedFullPath;
 }
 
-void Leaf::ClearCachedData() const
+void Leaf::ClearCachedData()
 {
     delete mCachedFullPath;
     mCachedFullPath = NULL;
+    mCachedPaths.clear();
 }
 
 Leaf::TLeafList gFakeChildren;
@@ -197,13 +205,12 @@ Leaf::TLeafList::const_iterator Leaf::end() const
 
 void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
 {
-    shared_ptr<Node> oldParent = make_shared(GetParent());
+    shared_ptr<Node> oldParent = GetParent().lock();
+    shared_ptr<Leaf> self = shared_static_cast<Leaf>(GetSelf().lock());
+
     if (oldParent.get() != 0)
         {
             // we have a parent, so update our state
-            shared_ptr<Leaf> self
-                = shared_static_cast<Leaf>(make_shared(GetSelf()));
-
             // here reference count should be > 1 (at least one in the
             // parent, and one in this routine)
             assert(self.use_count() > 1);
@@ -227,11 +234,23 @@ void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
         }
 
     mParent = newParent;
-    if (! mParent.expired())
+    if (newParent.get() == 0)
         {
-            // we have been linked, so now we can do something :)
-            OnLink();
+            return;
         }
+
+    // assure a unique name among our siblings
+    shared_ptr<Leaf> sibling = newParent->GetChild(mName);
+
+    if (sibling != self)
+        {
+            stringstream ss;
+            ss << mName << "_" << newParent->GetNumberOfChildren() << ">";
+            mName = ss.str().c_str();
+        }
+
+    // we have been linked, so now we can do something :)
+    OnLink();
 }
 
 void Leaf::OnLink()
@@ -240,4 +259,29 @@ void Leaf::OnLink()
 
 void Leaf::OnUnlink()
 {
+}
+
+void Leaf::UpdateCached()
+{
+    shared_ptr<Core> core(GetCore());
+
+    for (
+         TCachedPathSet::iterator iter = mCachedPaths.begin();
+         iter != mCachedPaths.end();
+         ++iter
+         )
+        {
+            (*iter)->Update(core);
+        }
+}
+
+void Leaf::RegisterCachedPath(Core::CachedLeafPath& path, const std::string& pathStr)
+{
+    path.Cache(GetCore(), pathStr);
+    mCachedPaths.insert(&path);
+}
+
+void Leaf::RegisterCachedPath(Core::CachedLeafPath& path)
+{
+    mCachedPaths.insert(&path);
 }

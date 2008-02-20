@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: corecontext.h,v 1.5 2004/04/08 13:38:32 rollmark Exp $
+   $Id: corecontext.h,v 1.6 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ public:
     bool Test(const std::string& pathStr);
 
     /** returns the currently selected object */
-    boost::shared_ptr<Leaf> GetObject() const { return mObject; }
+    boost::shared_ptr<Leaf> GetSelection() const { return mObject; }
 
     /** returns the core this context belongs to */
     boost::shared_ptr<Core> GetCore() const { return mCore; }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.cpp,v 1.13 2004/05/14 12:33:43 fruit Exp $
+   $Id: node.cpp,v 1.14 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -183,6 +183,12 @@ Node::GetChildrenSupportingClass(const std::string& name, TLeafList& baseList, b
     }
 }
 
+int
+Node::GetNumberOfChildren() const
+{
+    return static_cast<int>(mChildren.size());
+}
+
 bool
 Node::IsLeaf() const
 {
@@ -198,21 +204,9 @@ Node::RemoveChildReference(const boost::shared_ptr<Leaf>& leaf)
 void
 Node::UnlinkChildren()
 {
-    string cname;
-    if (GetClass().get() != 0)
-    {
-        cname = GetClass()->GetName();
-    }
-
     while (! mChildren.empty())
     {
         shared_ptr<Leaf> node = mChildren.front();
-
-        string className;
-        if (node->GetClass().get()!= 0)
-        {
-            className=node->GetClass()->GetName();
-        }
         node->UnlinkChildren();
         node->Unlink();
     }
@@ -284,6 +278,8 @@ Node::end() const
 void
 Node::UpdateCached()
 {
+    Leaf::UpdateCached();
+
     // update all Leaves found
     for (TLeafList::iterator iter = begin();
          iter != end();

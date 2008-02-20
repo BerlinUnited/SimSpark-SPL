@@ -37,6 +37,10 @@ version available from LANL.
 #include "sexp.h"
 #include "faststack.h"
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
 /**
  * Recursively walk an s-expression and free it.
  */
@@ -91,6 +95,7 @@ print_sexp (char *buf, int size, sexp_t * sx)
   fakehead->ty = sx->ty;
   fakehead->next = NULL; /* this is the important part of fakehead */
   fakehead->aty = sx->aty;
+  fakehead->line = 0;
 
   if (fakehead->ty == SEXP_VALUE) {
     assert(sx->val != NULL);
@@ -106,7 +111,7 @@ print_sexp (char *buf, int size, sexp_t * sx)
   if (size < 1)
     {
       fprintf (stderr,
-	       "Warning: print_sexp not provided sufficient space.\n");
+           "Warning: print_sexp not provided sufficient space.\n");
       return -1;
     }
 
@@ -120,55 +125,55 @@ print_sexp (char *buf, int size, sexp_t * sx)
       tdata = (sexp_t *) top->data;
 
       if (tdata == NULL)
-	{
-	  pop (stack);
+    {
+      pop (stack);
 
-	  if (depth > 0)
-	    {
-	      b[0] = ')';
-	      b++;
-	      left--;
-	      depth--;
-	      if (left == 0)
-		{
-		  fprintf (stderr,
-			   "Warning: print_sexp out of buffer space.\n");
-		  break;
-		}
-	    }
+      if (depth > 0)
+        {
+          b[0] = ')';
+          b++;
+          left--;
+          depth--;
+          if (left == 0)
+        {
+          fprintf (stderr,
+               "Warning: print_sexp out of buffer space.\n");
+          break;
+        }
+        }
 
-	  if (stack->top == NULL)
-	    break;
+      if (stack->top == NULL)
+        break;
 
-	  top = stack->top;
-	  top->data = ((sexp_t *) top->data)->next;
-	  if (top->data != NULL)
-	    {
-	      b[0] = ' ';
-	      b++;
-	      left--;
-	      if (left == 0)
-		{
-		  fprintf (stderr,
-			   "Warning: print_sexp out of buffer space.\n");
-		  break;
-		}
-	    }
-	}
+      top = stack->top;
+      top->data = ((sexp_t *) top->data)->next;
+      if (top->data != NULL)
+        {
+          b[0] = ' ';
+          b++;
+          left--;
+          if (left == 0)
+        {
+          fprintf (stderr,
+               "Warning: print_sexp out of buffer space.\n");
+          break;
+        }
+        }
+    }
       else if (tdata->ty == SEXP_VALUE)
-	{
-	  if (tdata->aty == SEXP_DQUOTE)
-	    {
-	      b[0] = '\"';
-	      b++;
-	      left--;
-	    }
-	  else if (tdata->aty == SEXP_SQUOTE)
-	    {
-	      b[0] = '\'';
-	      b++;
-	      left--;
-	    }
+    {
+      if (tdata->aty == SEXP_DQUOTE)
+        {
+          b[0] = '\"';
+          b++;
+          left--;
+        }
+      else if (tdata->aty == SEXP_SQUOTE)
+        {
+          b[0] = '\'';
+          b++;
+          left--;
+        }
 
           if (tdata->aty != SEXP_BINARY) {
             assert(tdata->val != NULL);
@@ -185,7 +190,7 @@ print_sexp (char *buf, int size, sexp_t * sx)
                     left--;
                     if (left == 0) break;
                   }
-                
+
                 b[0] = tc[0];
                 b++;
                 tc++;
@@ -205,7 +210,7 @@ print_sexp (char *buf, int size, sexp_t * sx)
               }
               b += sz;
               left -= sz;
-              
+
               if (left < tdata->binlength) {
                 left = 0;
                 break;
@@ -217,61 +222,61 @@ print_sexp (char *buf, int size, sexp_t * sx)
               left--;
 
             } else {
-              left = 0; 
+              left = 0;
               break;
             }
           }
 
-	  if (tdata->aty == SEXP_DQUOTE && left > 0)
-	    {
-	      b[0] = '\"';
-	      b++;
-	      left--;
-	    }
+      if (tdata->aty == SEXP_DQUOTE && left > 0)
+        {
+          b[0] = '\"';
+          b++;
+          left--;
+        }
 
-	  if (left < 0)
-	    left = 0;
-	  if (left == 0)
-	    {
-	      fprintf (stderr, "Warning: print_sexp out of buffer space.\n");
-	      break;
-	    }
+      if (left < 0)
+        left = 0;
+      if (left == 0)
+        {
+          fprintf (stderr, "Warning: print_sexp out of buffer space.\n");
+          break;
+        }
 
-	  top->data = ((sexp_t *) top->data)->next;
+      top->data = ((sexp_t *) top->data)->next;
 
-	  if (top->data != NULL)
-	    {
-	      b[0] = ' ';
-	      b++;
-	      left--;
-	      if (left == 0)
-		{
-		  fprintf (stderr,
-			   "Warning: print_sexp out of buffer space.\n");
-		  break;
-		}
-	    }
-	}
+      if (top->data != NULL)
+        {
+          b[0] = ' ';
+          b++;
+          left--;
+          if (left == 0)
+        {
+          fprintf (stderr,
+               "Warning: print_sexp out of buffer space.\n");
+          break;
+        }
+        }
+    }
       else if (tdata->ty == SEXP_LIST)
-	{
-	  depth++;
-	  b[0] = '(';
-	  b++;
-	  left--;
-	  if (left == 0)
-	    {
-	      fprintf (stderr, "Warning: print_sexp out of buffer space.\n");
-	      break;
-	    }
+    {
+      depth++;
+      b[0] = '(';
+      b++;
+      left--;
+      if (left == 0)
+        {
+          fprintf (stderr, "Warning: print_sexp out of buffer space.\n");
+          break;
+        }
 
-	  push (stack, tdata->list);
-	}
+      push (stack, tdata->list);
+    }
       else
-	{
-	  fprintf (stderr, "ERROR: Unknown type in sexp_t.\n");
-	  fflush (stderr);
-	  return -1;
-	}
+    {
+      fprintf (stderr, "ERROR: Unknown type in sexp_t.\n");
+      fflush (stderr);
+      return -1;
+    }
 
     }
   while (depth != 0)
@@ -281,10 +286,10 @@ print_sexp (char *buf, int size, sexp_t * sx)
       left--;
       depth--;
       if (left == 0)
-	{
-	  fprintf (stderr, "Warning: print_sexp out of buffer space.\n");
-	  break;
-	}
+    {
+      fprintf (stderr, "Warning: print_sexp out of buffer space.\n");
+      break;
+    }
     }
 
   if (left != 0) {
@@ -340,7 +345,7 @@ print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
 
   if (fakehead->ty == SEXP_VALUE) {
     assert(sx->val != NULL);
-    
+
     /* duplicate the value of the head into the fake head */
     fakehead->val = (char *)malloc(sizeof(char)*sx->val_used);
     assert(fakehead->val != NULL);
@@ -359,35 +364,35 @@ print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
       tdata = (sexp_t *) top->data;
 
       if (tdata == NULL)
-	{
-	  pop (stack);
+    {
+      pop (stack);
 
-	  if (depth > 0)
-	    {
-	      _s = saddch(_s, ')');
-	      depth--;
-	    }
+      if (depth > 0)
+        {
+          _s = saddch(_s, ')');
+          depth--;
+        }
 
-	  if (stack->top == NULL)
-	    break;
+      if (stack->top == NULL)
+        break;
 
-	  top = stack->top;
-	  top->data = ((sexp_t *) top->data)->next;
-	  if (top->data != NULL)
-	    {
-	      _s = saddch(_s, ' ');
-	    }
-	}
+      top = stack->top;
+      top->data = ((sexp_t *) top->data)->next;
+      if (top->data != NULL)
+        {
+          _s = saddch(_s, ' ');
+        }
+    }
       else if (tdata->ty == SEXP_VALUE)
-	{
-	  if (tdata->aty == SEXP_DQUOTE)
-	    {
-	      _s = saddch(_s,'\"');
-	    }
-	  else if (tdata->aty == SEXP_SQUOTE)
-	    {
-	      _s = saddch(_s,'\'');
-	    }
+    {
+      if (tdata->aty == SEXP_DQUOTE)
+        {
+          _s = saddch(_s,'\"');
+        }
+      else if (tdata->aty == SEXP_SQUOTE)
+        {
+          _s = saddch(_s,'\'');
+        }
 
           if (tdata->aty == SEXP_BINARY) {
             assert(tdata->bindata != NULL);
@@ -400,7 +405,7 @@ print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
           } else {
             assert(tdata->val != NULL);
             tc = tdata->val;
-            
+
             /* copy value into string */
             while (tc[0] != 0)
               {
@@ -410,36 +415,36 @@ print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
                   {
                     _s = saddch(_s,'\\');
                   }
-                
+
                 _s = saddch(_s,tc[0]);
                 tc++;
               }
           }
 
-	  if (tdata->aty == SEXP_DQUOTE)
-	    {
-	      _s = saddch(_s,'\"');
-	    }
+      if (tdata->aty == SEXP_DQUOTE)
+        {
+          _s = saddch(_s,'\"');
+        }
 
-	  top->data = ((sexp_t *) top->data)->next;
+      top->data = ((sexp_t *) top->data)->next;
 
-	  if (top->data != NULL)
-	    {
-	      _s = saddch(_s,' ');
-	    }
-	}
+      if (top->data != NULL)
+        {
+          _s = saddch(_s,' ');
+        }
+    }
       else if (tdata->ty == SEXP_LIST)
-	{
-	  depth++;
-	  _s = saddch(_s,'(');
-	  push (stack, tdata->list);
-	}
+    {
+      depth++;
+      _s = saddch(_s,'(');
+      push (stack, tdata->list);
+    }
       else
-	{
-	  fprintf (stderr, "ERROR: Unknown type in sexp_t.\n");
-	  fflush (stderr);
-	  return -1;
-	}
+    {
+      fprintf (stderr, "ERROR: Unknown type in sexp_t.\n");
+      fflush (stderr);
+      return -1;
+    }
 
     }
   while (depth != 0)
@@ -475,7 +480,7 @@ sexp_t *new_sexp_list(sexp_t *l) {
 }
 
 /**
- * allocate a new sexp_t element representing a value 
+ * allocate a new sexp_t element representing a value
  */
 sexp_t *new_sexp_atom(char *buf, int bs) {
   sexp_t *sx = sexp_t_allocate();
@@ -490,6 +495,8 @@ sexp_t *new_sexp_atom(char *buf, int bs) {
   strcpy(sx->val,buf);
 
   sx->list = sx->next = NULL;
+
+  sx->line = 0;
 
   return sx;
 }

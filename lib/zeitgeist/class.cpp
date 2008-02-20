@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: class.cpp,v 1.11 2007/06/17 10:49:26 jboedeck Exp $
+   $Id: class.cpp,v 1.12 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -147,12 +147,7 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName) const
 
     // ok, we don't have the requested function, so we'll try the base
     // class objects
-    static shared_ptr<Leaf> classDir;
-
-    if (classDir.get() == 0)
-    {
-        classDir = GetCore()->Get("/classes");
-    }
+    shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
 
     for (
          TStringList::const_iterator baseClass = mBaseClasses.begin();

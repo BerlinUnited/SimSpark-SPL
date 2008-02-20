@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: randomserver.h,v 1.2 2004/02/12 14:07:24 fruit Exp $
+   $Id: randomserver.h,v 1.3 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 
 #include <salt/random.h>
 #include <zeitgeist/node.h>
-#include <sys/time.h>
 
 namespace zeitgeist
 {
@@ -43,16 +42,7 @@ public:
     virtual ~RandomServer()  {}
 
     /** set a random seed */
-    void Seed(salt::RandomEngine::result_type seed)
-    {
-        if (seed == 0)
-        {
-            timeval tv;
-            gettimeofday(&tv,0);
-            seed = tv.tv_usec;
-        }
-        salt::RandomEngine::instance(seed);
-    }
+    void Seed(salt::RandomEngine::result_type seed);
 
     /** get a uniformly distributed random number */
     template<class RealType>

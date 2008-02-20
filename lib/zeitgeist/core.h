@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.h,v 1.8 2005/12/04 17:50:36 rollmark Exp $
+   $Id: core.h,v 1.9 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <set>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -54,7 +55,7 @@ class RandomServer;
  */
 class Core
 {
-protected:
+public:
     //
     // types
     //
@@ -72,15 +73,127 @@ protected:
         std::string path;
 
     public:
-        CacheKey(boost::weak_ptr<Leaf> r, const std::string& p) : root(r), path(p) {};
+        CacheKey()
+        {}
+
+        CacheKey(boost::weak_ptr<Leaf> r, const std::string& p) : root(r), path(p)
+        {};
+
         bool operator == (const CacheKey& key) const;
         bool operator < (const CacheKey& key) const;
     };
 
+    /** CachedLeafPath defines a pair of path key and it's
+        corresponding weak reference. It acts like a smart pointer
+        that is able to update the keep the managed reference up to
+        date with the help of the core and the CacheKey
+    */
+    struct CachedLeafPath
+    {
+    protected:
+        CacheKey key;
+        boost::weak_ptr<Leaf> leaf;
+
+    public:
+        // need to have virtual destructor
+        virtual ~CachedLeafPath() {}
+
+        const CacheKey& GetKey()
+        { return key; }
+
+        void SetKey(const CacheKey& k)
+        { key = k; }
+
+        boost::weak_ptr<Leaf>& GetLeaf()
+        { return leaf; }
+
+        virtual void Cache(boost::shared_ptr<Core> core, const std::string& pathStr) = 0;
+        virtual void Update(boost::shared_ptr<Core> core) = 0;
+
+        bool operator == (const CachedLeafPath& p)
+        {
+            return (key == p.key);
+        }
+
+        bool operator < (const CachedLeafPath& p)
+        {
+            return (key < p.key);
+        }
+
+        bool expired()
+        {
+            return leaf.expired();
+        }
+
+        void reset()
+        {
+            leaf.reset();
+        }
+    };
+
+    template<typename _CLASS>
+    struct CachedPath : public CachedLeafPath
+    {
+    public:
+        CachedPath() : CachedLeafPath()
+        {}
+
+        CachedPath(const CacheKey& k, const boost::weak_ptr<_CLASS> &l)
+            : CachedLeafPath(k,l)
+        {}
+
+        virtual void Cache(boost::shared_ptr<Core> core, const std::string& pathStr)
+        {
+            if (core.get() == NULL)
+                {
+                    leaf.reset();
+                    return;
+                }
+
+            key = CacheKey(core->mRoot, pathStr);
+            Update(core);
+        }
+
+        virtual void Update(boost::shared_ptr<Core> core)
+        {
+            if (core.get() == NULL)
+                {
+                    leaf.reset();
+                    return;
+                }
+
+            // lookup the path in the internal core cache
+            boost::weak_ptr<Leaf> lookup = core->GetCachedInternal(key);
+            if (! lookup.expired())
+                {
+                    leaf = boost::shared_dynamic_cast<_CLASS>(lookup.lock());
+                    return;
+                }
+
+            leaf = boost::shared_dynamic_cast<_CLASS>
+                (core->GetUncachedInternal(key));
+        }
+
+        boost::shared_ptr<_CLASS> get()
+        {
+            return boost::shared_static_cast<_CLASS>(leaf.lock());
+        }
+
+        _CLASS* operator -> ()
+        {
+            return boost::shared_static_cast<_CLASS>(leaf.lock()).get();
+        }
+    };
+
+protected:
     /** TPathCache defines a mapping from a CacheKey to a weak
         reference of the corresponding Leaf
     */
     typedef std::map<CacheKey, boost::weak_ptr<Leaf> > TPathCache;
+
+    /** TBundleMap defines a registry of loaded bundles */
+    typedef std::pair<std::string, boost::shared_ptr<salt::SharedLibrary> > TBundlePair;
+    typedef std::map<std::string, boost::shared_ptr<salt::SharedLibrary> > TBundleMap;
 
     //
     // functions
@@ -140,7 +253,9 @@ public:
     /** returns a reference to the root node */
     boost::shared_ptr<Leaf> GetRoot() const { return mRoot;  }
 
-    /** returns a reference to the object denoted by the path expression 'pathStr'. */
+    /** returns a reference to the object denoted by the path
+        expression 'pathStr'.
+    */
     boost::shared_ptr<Leaf> Get(const std::string &pathStr);
 
     /** returns a reference to the object denoted by the path
@@ -174,11 +289,32 @@ public:
     void GarbageCollectBundles();
 
 protected:
+    /** returns a cached reference to the Leaf corresponding to the
+        given key. If the cached reference expired the entry is
+        removed from the cache
+    */
+    boost::weak_ptr<Leaf> GetCachedInternal(const CacheKey& key);
+
+    /** returns a reference to the object denoted by the path
+        expression 'pathStr', relative to the node base. This method
+        does not lookup for a cached reference but does update the
+        cache accordingly
+    */
+    boost::shared_ptr<Leaf> GetUncachedInternal(const CacheKey& key);
+
+    /** checks that the leaf reference isn't expired and inserts the
+        given key,leaf pair into the cache
+    */
+    void PutCachedInternal(const CacheKey& key, const boost::weak_ptr<Leaf>& leaf);
+
     /** returns a reference to the object denoted by the path
         expression 'pathStr', relative to the node base.
     */
     boost::shared_ptr<Leaf> GetInternal(const std::string &pathStr,
                                         const boost::shared_ptr<Leaf>& base);
+
+    /** signal handler */
+    static void CatchSignal(int sig_num);
 
     //
     // members
@@ -209,11 +345,10 @@ private:
     /** a reference to the core, a smart this pointer */
     boost::weak_ptr<Core>                   mSelf;
 
-    /** a list of all registered bundles. Whenever we load a
-        bundle, we add it to this list. This is necessary, because
-        we have to keep the connection to each bundle open, until
-        all the class objects belonging to it are completely
-        destructed.
+    /** a registry of all registered bundles. Whenever we load a
+        bundle, we add it to this map. This is necessary, because we
+        have to keep the connection to each bundle open, until all the
+        class objects belonging to it are completely destructed.
 
         This workaround is very ugly ... it cost me about 3-4
         hours of debugging to get this to work. Somehow, when I
@@ -235,7 +370,7 @@ private:
         WARNING: Just making this global is (apparently) not
         enough.
     */
-    std::list<boost::shared_ptr<salt::SharedLibrary> >      mBundles;
+    TBundleMap mBundles;
 
     //! the internal node lookup cache
     TPathCache mPathCache;

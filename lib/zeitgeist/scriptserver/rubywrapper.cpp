@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubywrapper.cpp,v 1.2 2004/02/20 12:22:24 rollmark Exp $
+   $Id: rubywrapper.cpp,v 1.3 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 VALUE zeitgeist::RbFuncallWrap(VALUE arg)
 {
     RbArguments &a = *reinterpret_cast<RbArguments*>(arg);
-    return rb_funcall2(a.recv, a.id, a.n, a.argv);
+    return rb_funcall2(a.receiver, a.id, a.n, a.argv);
 }
 
 VALUE zeitgeist::RbEvalStringWrap(const std::string& str, int& error)
@@ -55,9 +55,6 @@ std::string zeitgeist::RbGetError()
 
 void zeitgeist::RbPrintError()
 {
-  std::cout << RbGetError() << std::endl;
+  std::cout << RbGetError().c_str() << std::endl;
   rb_backtrace();
 }
-
-
-

@@ -1,19 +1,19 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
-   
+
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fileclasses.cpp,v 1.6 2007/06/20 01:07:19 fruit Exp $
+   $Id: fileclasses.cpp,v 1.7 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 of the License.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -35,12 +35,12 @@ namespace salt
 /*static long fsize(FILE *f)
 {
 	long savepos, end;
-	
+
 	savepos = ftell(f);
 	fseek(f, 0, SEEK_END);
 	end = ftell(f);
 	fseek(f, savepos, SEEK_SET);
-	
+
 	return end;
 }*/
 }
@@ -76,10 +76,10 @@ RFile::BundlePath()
     CFRelease(mainBundleURL);
     CFRelease(cfStringRef);
 
-    return std::string(path) + Sep();    
+    return std::string(path) + Sep();
 #else
 # ifdef PREFIX
-    return PREFIX + Sep() + "share" + Sep() + PACKAGE_NAME;
+    return PREFIX + Sep() + "share" + Sep() + PACKAGE_NAME + Sep();
 # else
     return "." + Sep();
 # endif
@@ -380,7 +380,7 @@ int StdFile::Seek(long offset, int origin)
 size_t StdFile::Read(void *buffer,size_t mSize,size_t count)
 {
 	return fread(buffer, mSize, count, (FILE*)mHandle);
-} 
+}
 
 size_t StdFile::Write(void *buffer,size_t mSize,size_t count)
 {

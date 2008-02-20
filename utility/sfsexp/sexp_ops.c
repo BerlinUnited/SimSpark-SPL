@@ -32,7 +32,7 @@ version available from LANL.
 #include "sexp_ops.h"
 
 /**
- * Given an s-expression, find the atom inside of it with the 
+ * Given an s-expression, find the atom inside of it with the
  * value matchine name, and return a reference to it.  If the atom
  * doesn't occur inside start, return NULL.
  */
@@ -48,20 +48,20 @@ find_sexp (char *name, sexp_t * start)
     {
       temp = find_sexp (name, start->list);
       if (temp == NULL)
-	return find_sexp (name, start->next);
+    return find_sexp (name, start->next);
       else
-	return temp;
+    return temp;
     }
   else
     {
       assert(start->val != NULL);
       if (strcmp (start->val, name) == 0)
-	return start;
+    return start;
       else
-	return find_sexp (name, start->next);
+    return find_sexp (name, start->next);
     }
 
-  return NULL;			/* shouldn't get here */
+  return NULL;          /* shouldn't get here */
 }
 
 /**
@@ -71,16 +71,16 @@ find_sexp (char *name, sexp_t * start)
 sexp_t *bfs_find_sexp(char *str, sexp_t *sx) {
   sexp_t *t = sx;
   sexp_t *rt;
-  
+
   if (sx == NULL) return NULL;
 
   while (t != NULL) {
     if (t->ty == SEXP_VALUE) {
       assert(t->val != NULL);
       if (strcmp(t->val,str) == 0) {
-	return t;
+    return t;
       }
-    } 
+    }
 
     t = t->next;
   }
@@ -91,7 +91,7 @@ sexp_t *bfs_find_sexp(char *str, sexp_t *sx) {
       rt = bfs_find_sexp(str,t->list);
       if (rt != NULL) return rt;
     }
-    
+
     t = t->next;
   }
 
@@ -110,7 +110,7 @@ int sexp_list_length(sexp_t *sx) {
   if (sx->ty == SEXP_VALUE) return 1;
 
   t = sx->list;
-  
+
   while (t != NULL) {
     len++;
     t = t->next;
@@ -145,7 +145,8 @@ sexp_t *copy_sexp(sexp_t *s) {
   } else {
     snew->list = copy_sexp(s->list);
   }
-  
+
+  snew->line = s->line;
   snew->next = copy_sexp(s->next);
 
   return snew;
@@ -190,72 +191,73 @@ sexp_t *cons_sexp(sexp_t *r, sexp_t *l) {
  * car: similar to head, except this is a copy and not just a reference.
  */
 sexp_t *car_sexp(sexp_t *s) {
-	sexp_t *cr, *ocr;
+    sexp_t *cr, *ocr;
 
-	/* really dumb - calling on null */
-	if (s == NULL) {
-		fprintf(stderr,"car called on null sexpr.\n");
-		return NULL;
-	}
+    /* really dumb - calling on null */
+    if (s == NULL) {
+        fprintf(stderr,"car called on null sexpr.\n");
+        return NULL;
+    }
 
-	/* less dumb - calling on an atom */
-	if (s->ty == SEXP_VALUE) {
-		fprintf(stderr,"car called on an atom.\n");
-		return NULL;
-	}
+    /* less dumb - calling on an atom */
+    if (s->ty == SEXP_VALUE) {
+        fprintf(stderr,"car called on an atom.\n");
+        return NULL;
+    }
 
-        /*	ocr = (sexp_t *)malloc(sizeof(sexp_t));*/
+        /*  ocr = (sexp_t *)malloc(sizeof(sexp_t));*/
         ocr = sexp_t_allocate();
-	assert(ocr != NULL);
-	ocr->ty = SEXP_LIST;
-	ocr->next = NULL;
+    assert(ocr != NULL);
+    ocr->ty = SEXP_LIST;
+    ocr->next = NULL;
 
-	/* allocate the new sexp_t */
-	/* cr = (sexp_t *)malloc(sizeof(sexp_t)); */
+    /* allocate the new sexp_t */
+    /* cr = (sexp_t *)malloc(sizeof(sexp_t)); */
         cr = sexp_t_allocate();
-	assert(cr != NULL);
-	ocr->list = cr;
+    assert(cr != NULL);
+    ocr->list = cr;
 
-	/* copy the head of the sexpr */
-	if (s->list->ty == SEXP_VALUE) {
-		cr->ty = SEXP_VALUE;
+    /* copy the head of the sexpr */
+    if (s->list->ty == SEXP_VALUE) {
+        cr->ty = SEXP_VALUE;
                 assert(s->list->val != NULL);
-		strcpy(cr->val,s->list->val);
-		cr->next = cr->list = NULL;
-	} else {
-		cr->ty = SEXP_LIST;
-		cr->next = NULL;
-		cr->list = copy_sexp(s->list->list);
-	}
+        strcpy(cr->val,s->list->val);
+        cr->next = cr->list = NULL;
+    } else {
+        cr->ty = SEXP_LIST;
+        cr->next = NULL;
+        cr->list = copy_sexp(s->list->list);
+    }
 
-	return ocr;
+    return ocr;
 }
 
 /**
  * cdr: similar to tail, except this is a copy and not just a reference.
  */
 sexp_t *cdr_sexp(sexp_t *s) {
-	sexp_t *cd;
+    sexp_t *cd;
 
-	/* really dumb */
-	if (s == NULL) {
-		fprintf(stderr,"cdr called on null.\n");
-		return NULL;
-	}
+    /* really dumb */
+    if (s == NULL) {
+        fprintf(stderr,"cdr called on null.\n");
+        return NULL;
+    }
 
-	/* less dumb */
-	if (s->ty != SEXP_LIST) {
-		fprintf(stderr,"cdr called on atom.\n");
-		return NULL;
-	}
+    /* less dumb */
+    if (s->ty != SEXP_LIST) {
+        fprintf(stderr,"cdr called on atom.\n");
+        return NULL;
+    }
 
-	/* cd = (sexp_t *)malloc(sizeof(sexp_t)); */
+    /* cd = (sexp_t *)malloc(sizeof(sexp_t)); */
         cd = sexp_t_allocate();
-	assert(cd != NULL);
+    assert(cd != NULL);
 
-	cd->ty = SEXP_LIST;
-	cd->next = NULL;
-	cd->list = copy_sexp(s->list->next);
-	return cd;
+    cd->ty = SEXP_LIST;
+    cd->next = NULL;
+    cd->list = copy_sexp(s->list->next);
+    cd->line = s->line;
+    return cd;
 }
 

@@ -49,7 +49,7 @@ static int sexp_val_grow_size  = 64;
 void set_parser_buffer_params(int ss, int gs) {
   if (ss > 0)
     sexp_val_start_size = ss;
-  else 
+  else
     fprintf(stderr,"%s: Cannot set buffer start size to value<1.\n",__FILE__);
 
   if (gs > 0)
@@ -74,14 +74,14 @@ parse_data_t;
  */
 faststack_t *pd_cache;
 
-/** 
+/**
  * The global <I>sexp_t_cache</I> is a faststack implementing a cache of
- * pre-alloced s-expression element entities.  Odds are a user should never 
- * touch this.  If you do, you're on your own.  This is used internally by 
+ * pre-alloced s-expression element entities.  Odds are a user should never
+ * touch this.  If you do, you're on your own.  This is used internally by
  * the parser and related code to store unused but allocated sexp_t elements.
  * This should be left alone and manipulated only by the sexp_t_allocate and
- * sexp_t_deallocate functions.  Touching the stack is bad.  
- */ 
+ * sexp_t_deallocate functions.  Touching the stack is bad.
+ */
 faststack_t *sexp_t_cache;
 
 /**
@@ -229,12 +229,12 @@ destroy_continuation (pcont_t * pc)
 
   if (pc->stack != NULL) {
     lvl = pc->stack->top;
-    
+
     /*
      * note that destroy_stack() does not free the data hanging off of the
-     * stack.  we have to walk down the stack and do that here. 
+     * stack.  we have to walk down the stack and do that here.
      */
-    
+
     while (lvl != NULL) {
       lvl_data = (parse_data_t *)lvl->data;
 
@@ -254,7 +254,7 @@ destroy_continuation (pcont_t * pc)
 
       lvl = lvl->below;
     }
-    
+
     /*
      * stack has no data on it anymore, so we can free it.
      */
@@ -277,7 +277,7 @@ destroy_continuation (pcont_t * pc)
   free (pc);
 }
 
-/* 
+/*
  * wrapper around cparse_sexp.  assumes s contains a single, complete,
  * null terminated s-expression.  partial sexps or strings containing more
  * than one will act up.
@@ -288,7 +288,7 @@ parse_sexp (char *s, int len)
   pcont_t *pc = NULL;
   sexp_t *sx = NULL;
 
-  if (len < 1 || s == NULL) return NULL; /* empty string - return */  
+  if (len < 1 || s == NULL) return NULL; /* empty string - return */
 
   pc = cparse_sexp (s, len, pc);
   sx = pc->last_sexp;
@@ -299,17 +299,17 @@ parse_sexp (char *s, int len)
 }
 
 pcont_t *
-init_continuation(char *str) 
+init_continuation(char *str)
 {
   pcont_t *cc;
   /* new continuation... */
   cc = (pcont_t *)malloc(sizeof(pcont_t));
   assert(cc != NULL);
-  
+
   /* allocate atom buffer */
   cc->val = (char *)malloc(sizeof(char)*sexp_val_start_size);
   assert(cc->val != NULL);
-  
+
   /* by default we assume a normal parser */
   cc->mode = PARSER_NORMAL;
 
@@ -329,6 +329,7 @@ init_continuation(char *str)
   cc->depth = 0;
   cc->qdepth = 0;
   cc->squoted = 0;
+  cc->line = 1;
 
   return cc;
 }
@@ -345,23 +346,23 @@ sexp_t *
 iparse_sexp (char *s, int len, pcont_t *cc) {
   pcont_t *pc;
   sexp_t *sx = NULL;
-  
-  /* 
+
+  /*
    * sanity check.
    */
   if (cc == NULL) {
     fprintf(stderr,"iparse_sexp called with null continuation!\n");
     return NULL;
   }
-  
+
   /* call the parser */
   pc = cparse_sexp(s,len,cc);
-  
+
   if (cc->last_sexp != NULL) {
     sx = cc->last_sexp;
     cc->last_sexp = NULL;
   }
-  
+
   return sx;
 }
 
@@ -379,7 +380,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
 {
   char *t, *s;
   register unsigned int binexpected = 0;
-  register unsigned int binread = 0; 
+  register unsigned int binread = 0;
   register unsigned int mode = PARSER_NORMAL;
   register unsigned int val_allocated = 0;
   register unsigned int squoted = 0;
@@ -407,7 +408,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
     fprintf(stderr,"cparse_sexp: called with null string.\n");
     return lc;
   }
-  
+
   /* first, if we have a non null continuation passed in, restore state. */
   if (lc != NULL) {
     cc = lc;
@@ -436,18 +437,18 @@ cparse_sexp (char *str, int len, pcont_t *lc)
     /* new continuation... */
     cc = (pcont_t *)malloc(sizeof(pcont_t));
     assert(cc != NULL);
-    
+
     cc->mode = mode;
 
     /* allocate atom buffer */
     cc->val = val = (char *)malloc(sizeof(char)*sexp_val_start_size);
     assert(val != NULL);
-    
+
     cc->val_used = val_used = 0;
     cc->val_allocated = val_allocated = sexp_val_start_size;
 
     vcur = val;
-    
+
     /* allocate stack */
     cc->stack = stack = make_stack();
     cc->bindata = NULL;
@@ -457,8 +458,10 @@ cparse_sexp (char *str, int len, pcont_t *lc)
     s = str;
     t = s;
     cc->sbuffer = str;
+
+    cc->line = 1;
   }
-  
+
   bufEnd = cc->sbuffer+len;
 
   /* guard for loop - see end of loop for info.  Put it out here in the
@@ -480,48 +483,52 @@ cparse_sexp (char *str, int len, pcont_t *lc)
 
       /* based on the current state in the FSM, do something */
       switch (state)
-	{
-	case 1:
-	  switch (t[0])
-	    {
-	      /* space,tab,CR,LF considered white space */
-	    case '\n':
-	    case ' ':
-	    case '\t':
-	    case '\r':             
-	      t++;
-	      break;
+    {
+    case 1:
+      switch (t[0])
+        {
+          /* space,tab,CR,LF considered white space */
+        case '\n':
+          cc->line++;
+          t++;
+          break;
+
+        case ' ':
+        case '\t':
+        case '\r':
+          t++;
+          break;
               /* semicolon starts a comment that extends until a \n is
                  encountered. */
             case ';':
               t++;
               state = 11;
               break;
-	      /* enter state 2 for open paren */
-	    case '(':
-	      state = 2;
-	      t++;
-	      break;
-	      /* enter state 3 for close paran */
-	    case ')':
-	      state = 3;
-	      break;
-	      /* begin quoted string - enter state 5 */
-	    case '\"':
-	      state = 5;
-	      /* set cur pointer to beginning of val buffer */
-	      vcur = val;
-	      t++;
-	      break;
-	      /* single quote - enter state 7 */
-	    case '\'':
-	      state = 7;
-	      t++;
-	      break;
-	      /* other characters are assumed to be atom parts */
-	    default:
-	      /* set cur pointer to beginning of val buffer */
-	      vcur = val;
+          /* enter state 2 for open paren */
+        case '(':
+          state = 2;
+          t++;
+          break;
+          /* enter state 3 for close paran */
+        case ')':
+          state = 3;
+          break;
+          /* begin quoted string - enter state 5 */
+        case '\"':
+          state = 5;
+          /* set cur pointer to beginning of val buffer */
+          vcur = val;
+          t++;
+          break;
+          /* single quote - enter state 7 */
+        case '\'':
+          state = 7;
+          t++;
+          break;
+          /* other characters are assumed to be atom parts */
+        default:
+          /* set cur pointer to beginning of val buffer */
+          vcur = val;
 
               /** NOTE: the following code originally required a transition
                   to state 4 before processing the first atom character --
@@ -529,9 +536,9 @@ cparse_sexp (char *str, int len, pcont_t *lc)
                   of each atom.  merging this into here allows us to process
                   what we already know to be a valid atom character before
                   entering state 4. **/
-	      vcur[0] = t[0];
-	      if (t[0] == '\\') esc = 1;
-	      else esc = 0;
+          vcur[0] = t[0];
+          if (t[0] == '\\') esc = 1;
+          else esc = 0;
               val_used++;
 
               if (val_used == val_allocated) {
@@ -553,65 +560,66 @@ cparse_sexp (char *str, int len, pcont_t *lc)
               }
 
               t++;
-	      break;
-	    }
-	  break;
-	case 2:
-	  /* open paren */
-	  depth++;
+          break;
+        }
+      break;
+    case 2:
+      /* open paren */
+      depth++;
 
           sx = sexp_t_allocate();
-	  assert(sx!=NULL);
-	  elts++;
-	  sx->ty = SEXP_LIST;
-	  sx->next = NULL;
-	  sx->list = NULL;
-	  
-	  if (stack->height < 1)
-	    {
+      assert(sx!=NULL);
+      elts++;
+      sx->ty = SEXP_LIST;
+      sx->next = NULL;
+      sx->list = NULL;
+      sx->line = cc->line;
+
+      if (stack->height < 1)
+        {
               data = pd_allocate();
-	      assert(data!=NULL);
-	      data->fst = data->lst = sx;
-	      push (stack, data);
-	    }
-	  else
-	    {
-	      data = (parse_data_t *) top_data (stack);
-	      if (data->lst != NULL)
-		data->lst->next = sx;
-	      else
-		data->fst = sx;
-	      data->lst = sx;
-	    }
-	  
+          assert(data!=NULL);
+          data->fst = data->lst = sx;
+          push (stack, data);
+        }
+      else
+        {
+          data = (parse_data_t *) top_data (stack);
+          if (data->lst != NULL)
+        data->lst->next = sx;
+          else
+        data->fst = sx;
+          data->lst = sx;
+        }
+
           data = pd_allocate();
-	  assert(data!=NULL);
-	  data->fst = data->lst = NULL;
-	  push (stack, data);
-	  
-	  state = 1;
-	  break;
-	case 3:
-	  /** close paren **/
-#ifdef _DEBUG_    
+      assert(data!=NULL);
+      data->fst = data->lst = NULL;
+      push (stack, data);
+
+      state = 1;
+      break;
+    case 3:
+      /** close paren **/
+#ifdef _DEBUG_
           if (depth > maxdepth) maxdepth = depth;
 #endif /* _DEBUG_ */
 
           /* check for close parens that were never opened. */
           if (depth == 0) {
             fprintf(stderr,"Badly formed s-expression.  Parser exiting.\n");
-	    cc->val = val;
+        cc->val = val;
             cc->mode = mode;
             cc->val_used = val_used;
             cc->val_allocated = val_allocated;
-	    cc->vcur = vcur;
-	    cc->lastPos = t;
-	    cc->depth = depth;
-	    cc->qdepth = qdepth;
-	    cc->state = 1;
-	    cc->stack = stack;
-	    cc->esc = 0;
-	    cc->last_sexp = NULL;
+        cc->vcur = vcur;
+        cc->lastPos = t;
+        cc->depth = depth;
+        cc->qdepth = qdepth;
+        cc->state = 1;
+        cc->stack = stack;
+        cc->esc = 0;
+        cc->last_sexp = NULL;
             cc->error = 1;
 
 #ifdef _DEBUG_
@@ -619,94 +627,96 @@ cparse_sexp (char *str, int len, pcont_t *lc)
                     fsm_iterations,maxdepth);
 #endif /* debug */
 
-	    return cc;
+        return cc;
           }
 
-	  t++;
-	  depth--;
+      t++;
+      depth--;
 
-	  lvl = pop (stack);
-	  data = (parse_data_t *) lvl->data;
-	  sx = data->fst;
-	  /* free (data); */
+      lvl = pop (stack);
+      data = (parse_data_t *) lvl->data;
+      sx = data->fst;
+      /* free (data); */
           pd_deallocate(data);
           lvl->data = NULL;
 
-	  if (stack->top != NULL)
-	    {
-	      data = (parse_data_t *) top_data (stack);
-	      data->lst->list = sx;
-	    }
-	  else
-	    {
-	      fprintf (stderr, "Hmmm. Stack->top is null.\n");
-	    }
+      if (stack->top != NULL)
+        {
+          data = (parse_data_t *) top_data (stack);
+          data->lst->list = sx;
+        }
+      else
+        {
+          fprintf (stderr, "Hmmm. Stack->top is null.\n");
+        }
 
-	  state = 1;
+      state = 1;
 
-	  /** if depth = 0 then we finished a sexpr, and we return **/
-	  if (depth == 0) {
+      /** if depth = 0 then we finished a sexpr, and we return **/
+      if (depth == 0) {
             cc->error = 0;
             cc->mode = mode;
-	    cc->val = val;
+        cc->val = val;
             cc->val_allocated = val_allocated;
             cc->val_used = val_used;
-	    cc->vcur = vcur;
-	    cc->lastPos = t;
-	    cc->depth = depth;
-	    cc->qdepth = qdepth;
-	    cc->state = 1;
-	    cc->stack = stack;
-	    cc->esc = 0;
-	    while (stack->top != NULL)
-	      {
-		lvl = pop (stack);
-		data = (parse_data_t *) lvl->data;
-		sx = data->fst;
-		/* free (data); */
+        cc->vcur = vcur;
+        cc->lastPos = t;
+        cc->depth = depth;
+        cc->qdepth = qdepth;
+        cc->state = 1;
+        cc->stack = stack;
+        cc->esc = 0;
+        while (stack->top != NULL)
+          {
+        lvl = pop (stack);
+        data = (parse_data_t *) lvl->data;
+        sx = data->fst;
+        /* free (data); */
                 pd_deallocate(data);
                 lvl->data = NULL;
-	      }
-	    cc->last_sexp = sx;
+          }
+        cc->last_sexp = sx;
 
 #ifdef _DEBUG_
             fprintf(stderr,"State Machine Iterations: %d\nMaxdepth: %d\n",
                     fsm_iterations,maxdepth);
 #endif /* debug */
 
-	    return cc;
-	  }
-	  break;
-	case 4: /** parsing atom **/
-	  if (esc == 1 && (t[0] == '\"' || t[0] == '(' ||
-			   t[0] == ')' || t[0] == '\'' ||
-			   t[0] == '\\')) {
-	    vcur--; /* back up to overwrite the \ */
-	    vcur[0] = t[0];
-	    vcur++;
-	    t++;
-	    esc = 0;
-	    break;
-	  }
+        return cc;
+      }
+      break;
+    case 4: /** parsing atom **/
+      if (esc == 1 && (t[0] == '\"' || t[0] == '(' ||
+               t[0] == ')' || t[0] == '\'' ||
+               t[0] == '\\')) {
+        vcur--; /* back up to overwrite the \ */
+        vcur[0] = t[0];
+        vcur++;
+        t++;
+        esc = 0;
+        break;
+      }
 
-	  /* look at an ascii table - these ranges are the non-whitespace, non
-	     paren and quote characters that are legal in atoms */
-	  if (!((t[0] >= '*' && t[0] <= '~') ||
-		((unsigned char)(t[0]) > 127) || 
-		(t[0] == '!') ||
-		(t[0] >= '#' && t[0] <= '&')))
-	    {
-	      vcur[0] = '\0';
+      /* look at an ascii table - these ranges are the non-whitespace, non
+         paren and quote characters that are legal in atoms */
+      if (!((t[0] >= '*' && t[0] <= '~') ||
+        ((unsigned char)(t[0]) > 127) ||
+        (t[0] == '!') ||
+        (t[0] >= '#' && t[0] <= '&')))
+        {
+          vcur[0] = '\0';
               val_used++;
 
               sx = sexp_t_allocate();
-	      assert(sx!=NULL);
-	      elts++;
-	      sx->ty = SEXP_VALUE;
+          assert(sx!=NULL);
+          elts++;
+          sx->ty = SEXP_VALUE;
               sx->val = val;
               sx->val_allocated = val_allocated;
               sx->val_used = val_used;
-	      sx->next = NULL;
+              sx->next = NULL;
+              sx->line = cc->line;
+
               if (squoted != 0)
                 sx->aty = SEXP_SQUOTE;
               else
@@ -717,22 +727,22 @@ cparse_sexp (char *str, int len, pcont_t *lc)
               val_allocated = sexp_val_start_size;
               val_used = 0;
               vcur = val;
-	      
-	      if (!empty_stack (stack))
-		{
-		  data = (parse_data_t *) top_data (stack);
-		  if (data->fst == NULL)
-		    {
-		      data->fst = data->lst = sx;
-		    }
-		  else
-		    {
-		      data->lst->next = sx;
-		      data->lst = sx;
-		    }
-		}
-	      else
-		{
+
+          if (!empty_stack (stack))
+        {
+          data = (parse_data_t *) top_data (stack);
+          if (data->fst == NULL)
+            {
+              data->fst = data->lst = sx;
+            }
+          else
+            {
+              data->lst->next = sx;
+              data->lst = sx;
+            }
+        }
+          else
+        {
                   /* looks like this expression was just a basic atom - so
                      return it. */
                   cc->mode = mode;
@@ -756,9 +766,9 @@ cparse_sexp (char *str, int len, pcont_t *lc)
 #endif /* _DEBUG_ */
 
                   return cc;
-		}
+        }
 
-	      switch (t[0]) {
+          switch (t[0]) {
               case ' ':
               case '\t':
               case '\n':
@@ -778,12 +788,12 @@ cparse_sexp (char *str, int len, pcont_t *lc)
                 squoted = 0;
                 state = 1;
               }
-	    }
-	  else
-	    {
-	      vcur[0] = t[0];
-	      if (t[0] == '\\') esc = 1;
-	      else esc = 0;
+        }
+      else
+        {
+          vcur[0] = t[0];
+          if (t[0] == '\\') esc = 1;
+          else esc = 0;
               val_used++;
 
               if (val_used == val_allocated) {
@@ -793,31 +803,31 @@ cparse_sexp (char *str, int len, pcont_t *lc)
                 val_allocated += sexp_val_grow_size;
               } else vcur++;
 
-	      t++;
-	    }
-	  break;
-	case 5:
-	  if (esc == 1 && (t[0] == '\"' ||
-			   t[0] == '\'' ||
-			   t[0] == '(' ||
-			   t[0] == ')' ||
-			   t[0] == '\\')) {
-	    vcur--;
-	    vcur[0] = t[0];
-	    vcur++;
+          t++;
+        }
+      break;
+    case 5:
+      if (esc == 1 && (t[0] == '\"' ||
+               t[0] == '\'' ||
+               t[0] == '(' ||
+               t[0] == ')' ||
+               t[0] == '\\')) {
+        vcur--;
+        vcur[0] = t[0];
+        vcur++;
             /** NO NEED TO UPDATE VAL COUNTS **/
-	    t++;
-	    esc = 0;
-	  }
+        t++;
+        esc = 0;
+      }
 
-	  if (t[0] == '\"')
-	    {
-	      state = 6;
+      if (t[0] == '\"')
+        {
+          state = 6;
 
               if (squoted == 1) {
                 vcur[0] = '\"';
                 val_used++;
-                
+
                 if (val_used == val_allocated) {
                   val = (char *)realloc(val,val_allocated+sexp_val_grow_size);
                   assert(val != NULL);
@@ -830,13 +840,14 @@ cparse_sexp (char *str, int len, pcont_t *lc)
 
               val_used++;
               sx = sexp_t_allocate();
-	      assert(sx!=NULL);
-	      elts++;
-	      sx->ty = SEXP_VALUE;
+          assert(sx!=NULL);
+          elts++;
+          sx->ty = SEXP_VALUE;
               sx->val = val;
               sx->val_used = val_used;
               sx->val_allocated = val_allocated;
-	      sx->next = NULL;
+              sx->next = NULL;
+              sx->line = cc->line;
 
               if (squoted == 1) {
                 sx->aty = SEXP_SQUOTE;
@@ -849,22 +860,22 @@ cparse_sexp (char *str, int len, pcont_t *lc)
               val_allocated = sexp_val_start_size;
               val_used = 0;
               vcur = val;
-	      
-	      if (!empty_stack (stack))
-		{
-		  data = (parse_data_t *) top_data (stack);
-		  if (data->fst == NULL)
-		    {
-		      data->fst = data->lst = sx;
-		    }
-		  else
-		    {
-		      data->lst->next = sx;
-		      data->lst = sx;
-		    }
-		}
-	      else
-		{
+
+          if (!empty_stack (stack))
+        {
+          data = (parse_data_t *) top_data (stack);
+          if (data->fst == NULL)
+            {
+              data->fst = data->lst = sx;
+            }
+          else
+            {
+              data->lst->next = sx;
+              data->lst = sx;
+            }
+        }
+          else
+        {
                   /* looks like this expression was just a basic double
                      quoted atom - so return it. */
                   t++; /* spin past the quote */
@@ -886,11 +897,11 @@ cparse_sexp (char *str, int len, pcont_t *lc)
                   assert(sx != NULL);
 
                   return cc;
-		}
-	    }
-	  else
-	    {
-	      vcur[0] = t[0];
+        }
+        }
+      else
+        {
+          vcur[0] = t[0];
               val_used++;
 
               if (val_used == val_allocated) {
@@ -900,70 +911,70 @@ cparse_sexp (char *str, int len, pcont_t *lc)
                 val_allocated += sexp_val_grow_size;
               } else vcur++;
 
-	      if (t[0] == '\\') { 
-                esc = 1;  
-	      } else 
+          if (t[0] == '\\') {
+                esc = 1;
+          } else
                 esc = 0;
-	    }
+        }
 
-	  t++;
-	  break;
-	case 6:
-	  vcur = val;
-	  state = 1;
-	  break;
-	case 7:
-	  if (t[0] == '\"')
-	    {
-	      state = 5;
-	      vcur = val;
+      t++;
+      break;
+    case 6:
+      vcur = val;
+      state = 1;
+      break;
+    case 7:
+      if (t[0] == '\"')
+        {
+          state = 5;
+          vcur = val;
               t++;
 
               vcur[0] = '\"';
               val_used++;
-              
+
               if (val_used == val_allocated) {
                 val = (char *)realloc(val,val_allocated+sexp_val_grow_size);
                 assert(val != NULL);
                 vcur = val + val_used;
                 val_allocated += sexp_val_grow_size;
               } else vcur++;
-              
+
               squoted = 1;
-	    }
-	  else if (t[0] == '(')
-	    {
-	      vcur = val;
-	      state = 8;
-	    }
-	  else
-	    {
-	      vcur = val;
-	      state = 4;
+        }
+      else if (t[0] == '(')
+        {
+          vcur = val;
+          state = 8;
+        }
+      else
+        {
+          vcur = val;
+          state = 4;
               squoted = 1;
-	    }
-	  break;
-	case 8:
-	  if (esc == 0) {
-	    if (t[0] == '(')
-	      {
-		qdepth++;
-	      }
-	    else if (t[0] == ')')
-	      {
-		qdepth--;
-		state = 9;
-	      }
+        }
+      break;
+    case 8:
+      if (esc == 0) {
+        if (t[0] == '(')
+          {
+        qdepth++;
+          }
+        else if (t[0] == ')')
+          {
+        qdepth--;
+        state = 9;
+          }
             else if (t[0] == '\"')
               {
                 state = 10;
               }
-	  } else {
-	    esc = 0;
-	  }
-	  vcur[0] = t[0];
-	  if (t[0] == '\\') esc = 1;
-	  else esc = 0;
+      } else {
+        esc = 0;
+      }
+      vcur[0] = t[0];
+      if (t[0] == '\\') esc = 1;
+      else esc = 0;
           val_used++;
 
           if (val_used == val_allocated) {
@@ -973,47 +984,48 @@ cparse_sexp (char *str, int len, pcont_t *lc)
             val_allocated += sexp_val_grow_size;
           } else vcur++;
 
-	  t++;
+      t++;
           /* let it fall through to state 9 if we know we're transitioning
              into that state */
           if (state != 9)
             break;
-	case 9:
-	  if (qdepth == 0)
-	    {
-	      state = 1;
-	      vcur[0] = '\0';
+    case 9:
+      if (qdepth == 0)
+        {
+          state = 1;
+          vcur[0] = '\0';
               sx = sexp_t_allocate();
-	      assert(sx!=NULL);
-	      elts++;
-	      sx->ty = SEXP_VALUE;
+          assert(sx!=NULL);
+          elts++;
+          sx->ty = SEXP_VALUE;
               sx->val = val;
               sx->val_allocated = val_allocated;
               sx->val_used = val_used;
-	      sx->next = NULL;
-	      sx->aty = SEXP_SQUOTE;
+          sx->next = NULL;
+          sx->aty = SEXP_SQUOTE;
+              sx->line = cc->line;
 
               val = (char *)malloc(sizeof(char)*sexp_val_start_size);
               assert(val != NULL);
               val_allocated = sexp_val_start_size;
               val_used = 0;
               vcur = val;
-	      
-	      if (!empty_stack (stack))
-		{
-		  data = (parse_data_t *) top_data (stack);
-		  if (data->fst == NULL)
-		    {
-		      data->fst = data->lst = sx;
-		    }
-		  else
-		    {
-		      data->lst->next = sx;
-		      data->lst = sx;
-		    }
-		}
-	      else
-		{
+
+          if (!empty_stack (stack))
+        {
+          data = (parse_data_t *) top_data (stack);
+          if (data->fst == NULL)
+            {
+              data->fst = data->lst = sx;
+            }
+          else
+            {
+              data->lst->next = sx;
+              data->lst = sx;
+            }
+        }
+          else
+        {
                   /* looks like the whole expression was a single
                      quoted value!  So return it. */
                   cc->mode = mode;
@@ -1033,11 +1045,11 @@ cparse_sexp (char *str, int len, pcont_t *lc)
                   assert(sx != NULL);
 
                   return cc;
-		}
-	    }
-	  else
-	    state = 8;
-	  break;
+        }
+        }
+      else
+        state = 8;
+      break;
         case 10:
           if (t[0] == '\"' && esc == 0)
             {
@@ -1059,6 +1071,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
           break;
         case 11:
           if (t[0] == '\n') {
+            cc->line++;
             state = 1;
           }
           t++;
@@ -1068,14 +1081,14 @@ cparse_sexp (char *str, int len, pcont_t *lc)
           if (t[0] == '\\') esc = 1;
           else esc = 0;
           val_used++;
-          
+
           if (val_used == val_allocated) {
             val = (char *)realloc(val,val_allocated+sexp_val_grow_size);
             assert(val != NULL);
             vcur = val + val_used;
             val_allocated += sexp_val_grow_size;
           } else vcur++;
-          
+
           if (t[0] == 'b') {
             state = 13; /* so far, #b */
           } else {
@@ -1089,14 +1102,14 @@ cparse_sexp (char *str, int len, pcont_t *lc)
           if (t[0] == '\\') esc = 1;
           else esc = 0;
           val_used++;
-          
+
           if (val_used == val_allocated) {
             val = (char *)realloc(val,val_allocated+sexp_val_grow_size);
             assert(val != NULL);
             vcur = val + val_used;
             val_allocated += sexp_val_grow_size;
           } else vcur++;
-          
+
           if (t[0] == '#') {
             state = 14; /* so far, #b# - we're definitely in binary
                            land now. */
@@ -1108,7 +1121,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
           }
           t++;
           break;
-          
+
         case 14:
           /**
            * so far we've read #b#.  Now, the steps of the process become:
@@ -1132,7 +1145,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
             if (t[0] == '\\') esc = 1;
             else esc = 0;
             val_used++;
-            
+
             if (val_used == val_allocated) {
               val = (char *)realloc(val,val_allocated+sexp_val_grow_size);
               assert(val != NULL);
@@ -1160,15 +1173,16 @@ cparse_sexp (char *str, int len, pcont_t *lc)
             sx->binlength = binread;
             sx->next = NULL;
             sx->aty = SEXP_BINARY;
+            sx->line = cc->line;
 
             bindata = NULL;
             binread = binexpected = 0;
-            
+
             state = 1;
 
             val_used = 0;
             vcur = val;
-	      
+
             if (!empty_stack (stack))
               {
                 data = (parse_data_t *) top_data (stack);
@@ -1187,15 +1201,15 @@ cparse_sexp (char *str, int len, pcont_t *lc)
 
           break;
 
-	default:
-	  fprintf (stderr, "Unknown parser state %d.\n", state);
-	  break;
-	}
+    default:
+      fprintf (stderr, "Unknown parser state %d.\n", state);
+      break;
+    }
 
       /* the null check used to be part of the guard on the while loop.
          unfortunately, if we're in state 15, null is considered a
          perfectly valid byte.  This means the length passed in better
-         be accurate for the parser to not walk off the end of the 
+         be accurate for the parser to not walk off the end of the
          string! */
       if (state != 15 && t[0] == '\0') keepgoing = 0;
     }
@@ -1248,6 +1262,6 @@ cparse_sexp (char *str, int len, pcont_t *lc)
     cc->last_sexp = NULL;
     cc->error = 0;
   }
-  
+
   return cc;
 }

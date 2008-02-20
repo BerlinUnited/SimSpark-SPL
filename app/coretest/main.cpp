@@ -34,7 +34,7 @@ int main()
     {
         std::string command = "";
 
-        boost::shared_ptr<Leaf> selectedObject = scriptServer->GetContext()->GetObject();
+        boost::shared_ptr<Leaf> selectedObject = scriptServer->GetContext()->GetSelection();
 
         cout << endl << selectedObject->GetFullPath() << "> ";
         getline(cin, command,'\n');

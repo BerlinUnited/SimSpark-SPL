@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gcvalue.cpp,v 1.5 2004/12/19 14:08:03 rollmark Exp $
+   $Id: gcvalue.cpp,v 1.6 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "gcvalue.h"
+#include "rubywrapper.h"
 #include <sstream>
 
 using namespace zeitgeist;

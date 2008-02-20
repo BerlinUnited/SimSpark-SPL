@@ -102,6 +102,9 @@ if test "$echo_libtool" = "yes" ; then
  else
   convlib="libzeitgeist.la"
  fi
+ if test `uname -s` = "Darwin"; then
+   convlib="$convlib -framework Carbon"
+ fi
  echo @libdir@/rcssserver3d/$convlib
 fi
 

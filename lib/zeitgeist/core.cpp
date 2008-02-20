@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.17 2005/12/04 17:50:36 rollmark Exp $
+   $Id: core.cpp,v 1.18 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,7 +34,17 @@
 
 #include <salt/path.h>
 #include <salt/sharedlibrary.h>
+#include <signal.h>
 #include <iostream>
+#include <sstream>
+
+#if HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+
+#ifdef HAVE_EXECINFO_H
+#include <execinfo.h>
+#endif
 
 using namespace boost;
 using namespace salt;
@@ -145,6 +155,60 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
     // create the random server
     mRandomServer = shared_static_cast<RandomServer>
         (context->New("zeitgeist/RandomServer", "/sys/server/random"));
+
+    // install fault handler
+    signal(SIGSEGV, CatchSignal);
+}
+
+void Core::CatchSignal(int sig_num)
+{
+    if (sig_num != SIGSEGV)
+    {
+        return;
+    }
+
+    cerr << "(Core) caught signal " << sig_num << endl;
+
+#ifdef __linux__
+    // retrieve the name of our executable without access to argc and
+    // argv (this works only with linux)
+
+    const int exeNameSz = 4096;
+    char exeName[exeNameSz];
+    readlink("/proc/self/exe",exeName,exeNameSz);
+
+    // print stack trace
+
+    const int arSize = 200;
+    void *addresses[arSize];
+
+    int depth = backtrace (addresses, arSize);
+    char **strings = backtrace_symbols (addresses, depth);
+
+    cerr << "(Core) dumping " << depth << " stack frames.\n";
+
+    for (int i=0; i<depth; ++i)
+        {
+            cerr << "[" << i << "] " << strings[i] << "\n";
+
+            // use the addr2line tool from binutils to retrieve the
+            // source line from the frame adress
+            // -C : decode, demangle low-level symbol names
+            // -e : specify executable name
+            // -f : display function names, as well as file and line number info
+
+            stringstream ss;
+            ss << "addr2line -C -f -e \"" << exeName << "\" " << addresses[i];
+            system(ss.str().c_str());
+
+            cerr << "\n";
+        }
+
+    free (strings);
+#endif
+
+    cerr << "(Core) exit" << endl;
+    exit(1);
 }
 
 void Core::Desctruct()
@@ -211,8 +275,14 @@ bool Core::RegisterClassObject(Class *classObject, const std::string &subDir)
 
 bool Core::ImportBundle(const std::string& bundleName)
 {
-    shared_ptr<SharedLibrary> bundle(new SharedLibrary());
+    TBundleMap::const_iterator iter = mBundles.find(bundleName);
+    if (iter != mBundles.end())
+        {
+            // already imported
+            return true;
+        }
 
+    shared_ptr<SharedLibrary> bundle(new SharedLibrary());
     if (!bundle->Open(bundleName))
         {
             mLogServer->Error() << "(Core) ERROR: Could not open '"
@@ -237,7 +307,6 @@ bool Core::ImportBundle(const std::string& bundleName)
     bool usingClass = false;
     while(!classes.empty())
         {
-            //shared_ptr<Class> theClass(classes.back());
             if (RegisterClassObject(classes.back(), ""))
                 {
                     classes.back()->SetBundle(bundle);
@@ -247,9 +316,10 @@ bool Core::ImportBundle(const std::string& bundleName)
             classes.pop_back();
         }
 
-    // we only add the bundle, if it contained a class which was registered
+    // we only add the bundle, if it contained a class which was
+    // registered
     if (usingClass)
-        mBundles.push_back(bundle);
+        mBundles[bundleName] = bundle;
 
     return true;
 }
@@ -269,38 +339,53 @@ const boost::shared_ptr<ScriptServer>& Core::GetScriptServer() const
     return mScriptServer;
 }
 
-boost::shared_ptr<Leaf> Core::GetInternal(const std::string &pathStr,
-                                          const boost::shared_ptr<Leaf>& leaf)
+boost::weak_ptr<Leaf> Core::GetCachedInternal(const CacheKey& key)
 {
-    // lookup the path in the internal cache
-    CacheKey key(leaf, pathStr);
-
+    // lookup the key in the internal cache
     TPathCache::iterator iter = mPathCache.find(key);
     if (iter != mPathCache.end())
         {
             boost::weak_ptr<Leaf>& entry = (*iter).second;
             if (! entry.expired())
                 {
-                    return entry.lock();
+                    return entry;
                 }
 
             // remove entry as it points to an expired node
             mPathCache.erase(key);
         }
 
+    return shared_ptr<Leaf>();
+}
+
+void Core::PutCachedInternal(const CacheKey& key, const boost::weak_ptr<Leaf>& leaf)
+{
+    // update cache; note that we can't cache the fact, that a node is
+    // not present as it may be created later on
+
+    if (leaf.expired())
+        {
+            return;
+        }
+
+    mPathCache[key] = leaf;
+}
+
+boost::shared_ptr<Leaf> Core::GetUncachedInternal(const CacheKey& key)
+{
     // walk the hierarchy
-    Path path(pathStr);
-    boost::shared_ptr<Leaf> current;
+    shared_ptr<Leaf> current;
+    Path path(key.path);
 
     if (
         (path.IsAbsolute()) ||
-        (leaf.get() == NULL)
+        (key.root.expired())
         )
         {
-            current= mRoot;
+            current = mRoot;
         } else
             {
-                current = leaf;
+                current = key.root.lock();
             }
 
     while (
@@ -313,14 +398,25 @@ boost::shared_ptr<Leaf> Core::GetInternal(const std::string &pathStr,
             path.PopFront();
         }
 
-    // update cache; note that we can't cache the fact, that a node is
-    // not present as it may be created later on
-    if (current.get() != 0)
-        {
-            mPathCache[key] = current;
-        }
+    // update cache
+    PutCachedInternal(key, current);
 
     return current;
+}
+
+boost::shared_ptr<Leaf> Core::GetInternal(const std::string &pathStr,
+                                          const boost::shared_ptr<Leaf>& leaf)
+{
+    // lookup the path in the internal cache
+    CacheKey key(leaf, pathStr);
+
+    boost::weak_ptr<Leaf> cached(GetCachedInternal(key));
+    if (! cached.expired())
+        {
+            return cached.lock();
+        }
+
+    return GetUncachedInternal(key);
 }
 
 boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr)
@@ -381,24 +477,31 @@ boost::shared_ptr<Leaf> Core::GetChild(const boost::shared_ptr<Leaf> &parent,
 
 void Core::BindClass(const boost::shared_ptr<Class> &newClass) const
 {
-    if (newClass != mClassClass)
-        {
-            newClass->Construct(newClass, mClassClass);
-            newClass->AttachTo(mSelf);
-        }
+    /* The following condition (true || ...) is always true.
+     * The condition right of the || was the original condition, but I had to
+     * change it since this caused ClassClass to have no core attached on my system
+     * (which in turn made the program crash) -- oliver */
+    if (true || newClass != mClassClass)
+    {
+        newClass->Construct(newClass, mClassClass);
+        newClass->AttachTo(mSelf);
+    }
 }
-
-template <class T>
-struct isUnique: public unary_function<T, bool>
-{
-    bool operator()(const T& x){ return x.unique(); }
-};
 
 void Core::GarbageCollectBundles()
 {
-    // don't you just love the STL ;-)
-    mBundles.erase(remove_if(
-                             mBundles.begin(), mBundles.end(),
-                             isUnique<shared_ptr<SharedLibrary> >()
-                             ), mBundles.end());
+    TBundleMap::iterator iter = mBundles.begin();
+
+    while (iter != mBundles.end())
+        {
+            const TBundlePair& entry = (*iter);
+            if (entry.second.unique())
+                {
+                    mBundles.erase(iter);
+                    iter = mBundles.begin();
+                    continue;
+                }
+
+            ++iter;
+        }
 }

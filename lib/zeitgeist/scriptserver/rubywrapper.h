@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubywrapper.h,v 1.5 2007/06/20 00:55:35 fruit Exp $
+   $Id: rubywrapper.h,v 1.6 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,41 +28,54 @@
 // are #undef'ed in this wrapper
 //
 
-#undef EXTERN
-#undef HAVE_VPRINTF
-#undef PACKAGE
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
-#undef PREFIX
-#undef VERSION
 
 #ifndef __GNUC__
 #define EXTERN extern __declspec(dllimport)
 #endif
+
+#ifdef WIN32
+#include <winsock2.h>
+
+// disable compiler warning about type cast from VALUE to RBasic*
+#pragma warning (disable : 4312)
+#endif
+
 #include <ruby.h>
 
+#ifdef WIN32
+#undef bind
+#undef listen
+#undef accept
+#undef connect
+#undef close
+#undef recv
+#undef socket
+#undef send
+
+// reenable compiler warning
+#pragma warning (default : 4312)
+#endif
+
 #undef EXTERN
-#undef HAVE_VPRINTF
-#undef PACKAGE
+
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
-#undef PREFIX
-#undef VERSION
 
 #include <iostream>
-#include <sparkconfig.h>
 
 namespace zeitgeist
 {
     /** RbArguments is a structure that describes a ruby function
         call.
-        \param recv is the ruby object that receives the function call
+        \param receiver is the ruby object that receives the function call
         \param id is the ruby id of the receiver member function
         \param n is the number of parameters passed
         \param *argv is a pointer to an array containnig the function
@@ -70,13 +83,13 @@ namespace zeitgeist
     */
     struct RbArguments
     {
-        VALUE recv;
+        VALUE receiver;
         ID id;
         int n;
         VALUE *argv;
 
-        RbArguments(VALUE recv, ID id, int n, VALUE *argv) :
-            recv(recv), id(id), n(n), argv(argv) {};
+        RbArguments(VALUE r, ID id, int n, VALUE *argv) :
+            receiver(r), id(id), n(n), argv(argv) {};
     };
 
     /** a functor for the rb_protect function, used to safely excecute

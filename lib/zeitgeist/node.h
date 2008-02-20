@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: node.h,v 1.12 2005/10/14 11:04:01 jamu Exp $
+   $Id: node.h,v 1.13 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -82,6 +82,9 @@ public:
     /** returns false to indicate that this node isn't a lead */
     virtual bool IsLeaf() const;
 
+    /** returns the total number of children */
+    virtual int GetNumberOfChildren() const;
+
     /** update variables from a script */
     virtual void UpdateCached();
 
@@ -130,22 +133,22 @@ Leaf::FindParentSupportingClass() const
 {
     boost::shared_ptr<Node> node
         = boost::shared_static_cast<Node>(make_shared(GetParent()));
-    
+
     while (node.get() != 0)
     {
         boost::shared_ptr<CLASS> test =
             boost::shared_dynamic_cast<CLASS>(node);
-        
+
         if (test.get() != 0)
         {
             return test;
         }
-        
+
         //node = boost::shared_static_cast<Node>(make_shared(node->GetParent()));
         node = boost::shared_static_cast<Node>(node->GetParent().lock());
-        
+
     }
-    
+
     return boost::shared_ptr<CLASS>();
 }
 

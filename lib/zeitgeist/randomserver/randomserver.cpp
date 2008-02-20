@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: randomserver.cpp,v 1.3 2004/05/01 17:16:08 fruit Exp $
+   $Id: randomserver.cpp,v 1.4 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,12 +21,30 @@
 
 */
 #include "randomserver.h"
-#include <cmath>
 
-#if 0
+#ifdef WIN32
+#include <windows.h>
+#else
+#include <sys/time.h>
+#endif
+
+using namespace zeitgeist;
+
 void
 RandomServer::Seed(salt::RandomEngine::result_type seed)
 {
-    salt::RandomEngine.instance(seed);
-}
+    if (seed == 0)
+        {
+#ifdef WIN32
+            SYSTEMTIME time;
+            GetSystemTime(&time);
+            seed = time.wMilliseconds;
+#else
+            timeval tv;
+            gettimeofday(&tv,0);
+            seed = tv.tv_usec;
 #endif
+        }
+
+    salt::RandomEngine::instance(seed);
+}

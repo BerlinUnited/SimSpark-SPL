@@ -14,5 +14,3 @@ sexp.c \
 sexp.h \
 sexp_ops.c \
 sexp_ops.h
-
-EXTRA_DIST = README

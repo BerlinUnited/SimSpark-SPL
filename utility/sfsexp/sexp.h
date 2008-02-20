@@ -48,12 +48,12 @@ version available from LANL.
  * \mainpage A small and quick S-expression parsing library.
  *
  * \section intro Intro
- * 
+ *
  * This library was created to provide s-expression parsing and manipulation
- * facilities to C and C++ programs.  The primary goals were speed and 
+ * facilities to C and C++ programs.  The primary goals were speed and
  * efficiency - low memory impact, and the highest speed we could achieve in
- * parsing.  Suprisingly, no other libraries on the net were found that 
- * were not bloated with features or involved embedding a full-fledged 
+ * parsing.  Suprisingly, no other libraries on the net were found that
+ * were not bloated with features or involved embedding a full-fledged
  * LISP or Scheme interpreter into our programs.  So, this library evolved
  * to fill this gap.  As such, it does not guarantee that every valid LISP
  * expression is parseable (although every parseable expression is valid LISP),
@@ -82,7 +82,7 @@ version available from LANL.
  * a large s-expression via STDIN, and parses, unparses, and destroys it
  * 1,000 times.  The following numbers reflect tests done on a
  * representative expression from Supermon, the tool that this code was
- * created for.  
+ * created for.
  *
  * - <B>v0.1.1</B> : 1.61s
  * - <B>v0.1.2</B> : 1.12s
@@ -93,7 +93,7 @@ version available from LANL.
  * - <B>v0.3.0</B> : 0.42s
  * - <B>v0.3.1</B> : ?.??s
  * - <B>v0.3.2</B> : ?.??s
- * 
+ *
  * \section license License Information
  *
  * This software and ancillary information (herein called "SOFTWARE")
@@ -119,7 +119,7 @@ version available from LANL.
  *
  * This software is licensed under the GNU Public License, which
  * is included as LICENSE_GPL in this source distribution.
- * 
+ *
  * This library is part of the Supermon project, hence the name
  * "Supermon" above.  See http://www.acl.lanl.gov/supermon/ for details on
  * that project.
@@ -144,7 +144,7 @@ version available from LANL.
  * represents an s-expression, and the element contains a pointer to
  * the head element of the associated s-expression.
  */
-typedef enum { 
+typedef enum {
   /**
    * An atom of some type.  See atom type (aty) field of element structure
    * for details as to which atom type this is.
@@ -156,7 +156,7 @@ typedef enum {
    * head of a list.
    */
   SEXP_LIST
-} elt_t; 
+} elt_t;
 
 /**
  * For an element that represents a value, the value can be interpreted
@@ -171,17 +171,17 @@ typedef enum {
  * is similar to the meaning of a tick mark in the Scheme or LISP family
  * of programming languages.
  */
-typedef enum { 
+typedef enum {
   /**
    * Basic, unquoted value.
    */
-  SEXP_BASIC, 
+  SEXP_BASIC,
 
   /**
    * Single quote (tick-mark) value - contains a string representing
    * a non-parsed portion of the s-expression.
    */
-  SEXP_SQUOTE, 
+  SEXP_SQUOTE,
 
   /**
    * Double-quoted string.  Similar to a basic value, but potentially
@@ -226,14 +226,14 @@ typedef enum {
  * the head of the appropriate s-expression.  Details regarding these fields
  * and their values given with the fields themselves.  Notice that a single
  * quote can appear directly before an s-expression or atom, similar to the
- * use in LISP.  
+ * use in LISP.
  */
 typedef struct elt {
   /**
    * The element has a type that determines how the structure is used.  If
    * the type is <B>SEXP_VALUE</B>, then a programmer knows that the val field
    * is meaningful and contains the data associated with this element of the
-   * s-expression.  If the type is <B>SEXP_LIST</B>, then the list field 
+   * s-expression.  If the type is <B>SEXP_LIST</B>, then the list field
    * contains a pointer to the s-expression element representing the head of
    * the list.  For each case, the field for the opposite case contains no
    * meaningful data and using them in any way is likely to cause an error.
@@ -250,12 +250,12 @@ typedef struct elt {
    * Number of bytes allocated for val.
    */
   int   val_allocated;
-  
+
   /**
    * Number of bytes used in val (<= val_allocated).
    */
   int   val_used;
-  
+
   /**
    * If the type of the element is <B>SEXP_LIST</B>, this field will contain
    * a pointer to the head element of the list.
@@ -282,14 +282,19 @@ typedef struct elt {
    * For elements that represent <i>binary</I> blobs, this field will
    * point to a memory location where the data resides.  The length
    * of this memory blob is the next field.  char* implies byte sized
-   * elements.  
+   * elements.
    */
   char *bindata;
 
-  /** 
+  /**
    * The length of the data pointed at by bindata in bytes.
    */
   unsigned int binlength;
+
+  /**
+   * The line number of the element start
+   */
+  unsigned int line;
 } sexp_t;
 
 /**
@@ -317,7 +322,7 @@ typedef enum {
  * return all s-expressions at once without knowing how many there are in
  * advance (this would require more memory management than we want...).
  * So, by using a continuation-based parser, we can call it with this string
- * and have it return a continuation when it has parsed the first 
+ * and have it return a continuation when it has parsed the first
  * s-expression.  Once we have processed the s-expression (accessible
  * through the <i>last_sexpr</i> field of the continuation), we can call
  * the parser again with the same string and continuation, and it will be
@@ -456,11 +461,16 @@ typedef struct pcont {
    * Number of bytes of the binary blob that have already been read in.
    */
   unsigned int binread;
-  
+
   /**
    * Pointer to the memory containing the binary data being read in.
    */
   char *bindata;
+
+  /**
+   * The current line number, i.e. the number of \n seen
+   */
+  unsigned int line;
 } pcont_t;
 
 /**
@@ -486,7 +496,7 @@ typedef struct sexp_iowrap {
    * Buffer to read data into before parsing.
    */
   char buf[BUFSIZ];
-  
+
   /**
    * Byte count for last read.  If it is -1, there was an error.  Otherwise,
    * it will be a value from 0 to BUFSIZ.
@@ -536,7 +546,7 @@ extern "C" {
    * return an allocated sexp_t.  This structure may be an already allocated
    * one from the stack or a new one if none are available.  Use this instead
    * of manually mallocing if you want to avoid excessive mallocs.  <I>Note:
-   * Mallocing your own expressions is fine - you can even use 
+   * Mallocing your own expressions is fine - you can even use
    * sexp_t_deallocate to deallocate them and put them in the pool.</I>
    * Also, if the stack has not been initialized yet, this does so.
    */
@@ -548,7 +558,7 @@ extern "C" {
    * allocated already.
    */
   void sexp_t_deallocate(sexp_t *s);
-  
+
   /**
    * In the event that someone wants us to release ALL of the memory used
    * between calls by the library, they can free it.  If you don't call
@@ -579,14 +589,14 @@ extern "C" {
    * Allocate a new sexp_t element representing a list.
    */
   sexp_t *new_sexp_list(sexp_t *l);
-  
+
   /**
-   * allocate a new sexp_t element representing a value 
+   * allocate a new sexp_t element representing a value
    */
   sexp_t *new_sexp_atom(char *buf, int bs);
-    
-  /** 
-   * create an initial continuation for parsing the given string 
+
+  /**
+   * create an initial continuation for parsing the given string
    */
   pcont_t *init_continuation(char *str);
 
@@ -613,24 +623,24 @@ extern "C" {
    * returning null implies no s-expression was able to be read.
    */
   sexp_t *read_one_sexp(sexp_iowrap_t *iow);
-  
-  /** 
-   * wrapper around parser for compatibility. 
+
+  /**
+   * wrapper around parser for compatibility.
    */
   sexp_t *parse_sexp(char *s, int len);
 
-  /** 
-   * wrapper around parser for friendlier continuation use 
-   * pre-condition : continuation (cc) is NON-NULL! 
+  /**
+   * wrapper around parser for friendlier continuation use
+   * pre-condition : continuation (cc) is NON-NULL!
    */
   sexp_t *iparse_sexp(char *s, int len, pcont_t *cc);
-  
+
   /**
    * given a LISP style s-expression string, parse it into a set of
-   * connected sexp_t structures. 
+   * connected sexp_t structures.
    */
   pcont_t *cparse_sexp(char *s, int len, pcont_t *pc);
-  
+
   /**
    * given a sexp_t structure, free the memory it uses (and recursively free
    * the memory used by all sexp_t structures that it references).  Note

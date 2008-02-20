@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.18 2007/06/14 15:52:26 jboedeck Exp $
+   $Id: leaf.h,v 1.19 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@
 #ifndef ZEITGEIST_LEAF_H
 #define ZEITGEIST_LEAF_H
 
-#include <list>
+#include <set>
 #include <string>
 #include "object.h"
 
@@ -54,7 +54,13 @@ class Leaf : public Object
     // types
     //
 public:
+    template <typename _CLASS>
+    struct CachedPath : public Core::CachedPath<_CLASS>
+    {
+    };
+
     typedef std::list< boost::shared_ptr<Leaf> > TLeafList;
+    typedef std::set<Core::CachedLeafPath*> TCachedPathSet;
 
     //
     // functions
@@ -113,22 +119,23 @@ public:
     {
         TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
         for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
-        {
-            // check if we have found a match and return it
-            boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
-            if (child.get() != 0)
             {
-                return child;
-            }
+                // check if we have found a match and return it
+                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                if (child.get() != 0)
+                    {
+                        return child;
+                    }
 
-            if (recursive)
-            {
-                boost::shared_ptr<CLASS> result = 
-                    (*i)->FindChildSupportingClass<CLASS>(recursive);
-                if (result)
-                    return result;                
+                if (recursive)
+                    {
+                        child = (*i)->FindChildSupportingClass<CLASS>(recursive);
+                        if (child.get() != 0)
+                        {
+                            return child;
+                        }
+                    }
             }
-        }
 
         return boost::shared_ptr<CLASS>();
     }
@@ -216,6 +223,9 @@ public:
         the TLeaf class will return true */
     virtual bool IsLeaf() const;
 
+    /** returns the total number of children */
+    virtual int GetNumberOfChildren() const;
+
     /** removes base from the set of children. */
     virtual void RemoveChildReference(const boost::shared_ptr<Leaf> &base);
 
@@ -231,8 +241,14 @@ public:
     /** writes debug data to stdout */
     virtual void Dump() const;
 
+    /** update and register a path reference */
+    void RegisterCachedPath(Core::CachedLeafPath& path, const std::string& pathStr);
+
+    /** register a path reference */
+    void RegisterCachedPath(Core::CachedLeafPath& path);
+
     /** update variables from a script */
-    virtual void UpdateCached() {}
+    virtual void UpdateCached();
 
     /** constructs the full path of this node by walking up the
         tree. Cosecutive calls return a cached copy of the full
@@ -241,7 +257,7 @@ public:
 
     /** clears any cached data (e.g. the cached full path and
         forces the node to recalculate all values */
-    void ClearCachedData() const;
+    void ClearCachedData();
 
     /** sets the name of this node */
     void        SetName(const std::string &name)
@@ -292,7 +308,7 @@ protected:
         has to be at least a Node, as that is the first class,
         which can hold children.  We use a weak pointer to break
         the cyclic dependency. */
-    boost::weak_ptr<Node>       mParent;
+    boost::weak_ptr<Node> mParent;
 
 private:
     /** the name of the node */
@@ -300,6 +316,9 @@ private:
 
     /** temporary cached full path of this node in the hierarchy */
     mutable std::string *mCachedFullPath;
+
+    /** list of cached path references to other nodes */
+    TCachedPathSet mCachedPaths;
 };
 
 /** the class object declaration for Leaf has been moved to class.h to break

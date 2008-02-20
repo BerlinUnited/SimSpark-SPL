@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.h,v 1.22 2007/03/20 13:20:55 jamu Exp $
+   $Id: scriptserver.h,v 1.23 2008/02/20 17:16:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public:
         eUninit,   // not initialized
         eOK,       // no errors
         eNotFound, // could not find script
-        eError     // some error occured while executing the script
+        eError    // some error occured while executing the script
     };
 
 
@@ -112,6 +112,7 @@ public:
         value receives the result value if any */
     bool Eval(const std::string &command, GCValue& value);
 
+    /** notify all nodes to update their cached references */
     void UpdateCachedAllNodes();
 
     // script variable functions
