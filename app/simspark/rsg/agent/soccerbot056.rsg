@@ -895,7 +895,7 @@
 		(setName lf)
 	)
 
-	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
+	(importScene rsg/boxspheres/box_with_handler056.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
 
         ; install hinge joint to connect to the shank
         (nd UniversalJoint
@@ -950,7 +950,7 @@
 		(setName rf)
 	)
 
-        (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
+        (importScene rsg/boxspheres/box_with_handler056.rsg $FootLength $FootWidth $FootHeight $FootMass matDarkGrey)
 						
         ; install hinge joint to connect to the shank
         (nd UniversalJoint

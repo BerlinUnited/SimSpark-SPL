@@ -40,7 +40,7 @@ addSoccerVar('GoalDepth', 2.0)
 #addSoccerVar('GoalHeight', 2.44) # FIFA: 2.44 
 addSoccerVar('GoalHeight', 4.0) 
 addSoccerVar('BorderSize', 10.0)
-addSoccerVar('FreeKickDistance', 9.15)
+addSoccerVar('FreeKickDistance', 4.5)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
 
@@ -57,9 +57,9 @@ addSoccerVar('BallMass',0.43) # FIFA: 410-450 g
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
 addSoccerVar('RuleKickInPauseTime',1.0)
-addSoccerVar('RuleHalfTime',5.0 * 60)
+addSoccerVar('RuleHalfTime',8.0 * 60)
 addSoccerVar('RuleDropBallTime',30)
-addSoccerVar('SingleHalfTime', false)
+addSoccerVar('SingleHalfTime', true)
 addSoccerVar('UseOffside',false)
 
 scene = get($scenePath)

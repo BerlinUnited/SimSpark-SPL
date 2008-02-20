@@ -1,5 +1,24 @@
 2008-02-20  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* app/simspark/rsg/boxspheres/box_with_handler055.rsg: New file.
+	* app/simspark/rsg/boxspheres/box_with_handler056.rsg: New file.
+	* app/simspark/internalsoccerbindings.rb:
+	* app/simspark/rsg/agent/soccerbot055.rsg:
+	* app/simspark/rsg/agent/soccerbot056.rsg:
+	* app/simspark/simspark.rb:
+	* app/simspark/soccersim.rb:
+	* plugin/soccer/beameffector/beameffector.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.h:
+	- applied Atlanta 2007 server changes:
+		- 'm' and 'c' for killing agents
+		- two robot models with different facilities
+		- using materials with textures
+		- free kick distance changed to 4.5
+		- one half time (8 mins)
+		- agents can beam in Goal_Left or Goal_Right play modes
+		- no longer possible to move agents by pressing m
+
 	* lib/kerosin/materialserver/materialexporter.h:
 	* lib/kerosin/materialserver/materialexporter_c.cpp:
 	* lib/kerosin/materialserver/materialexternal.cpp:

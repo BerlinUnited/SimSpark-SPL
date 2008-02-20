@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.17 2007/06/17 02:20:42 jboedeck Exp $
+   $Id: beameffector.cpp,v 1.18 2008/02/20 11:17:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -73,7 +73,9 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     // the beam effector only has an effect in PM_BeforeKickOff
-    if (mGameState->GetPlayMode() == PM_BeforeKickOff)
+    if (mGameState->GetPlayMode() == PM_BeforeKickOff
+        || mGameState->GetPlayMode() == PM_Goal_Left
+        || mGameState->GetPlayMode() == PM_Goal_Right)
     {
         Vector3f pos;
         pos[0] = beamAction->GetPosX();

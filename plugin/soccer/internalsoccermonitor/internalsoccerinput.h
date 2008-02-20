@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.h,v 1.2 2007/06/27 22:29:52 jamu Exp $
+   $Id: internalsoccerinput.h,v 1.3 2008/02/20 11:17:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ namespace oxygen
 {
     class FPSController;
     class Body;
+    class GameControlServer;
 }
 
 class GameStateAspect;
@@ -53,7 +54,9 @@ public:
             CmdCameraRightGoal   = CmdCameraRightCorner + 1,
             //JAN
             CmdFreeKickLeft      = CmdCameraRightGoal + 1,
-            CmdFreeKickRight   = CmdFreeKickLeft + 1   
+            CmdFreeKickRight     = CmdFreeKickLeft + 1,
+            CmdKillAgentLeft     = CmdFreeKickRight + 1,
+            CmdKillAgentRight    = CmdKillAgentLeft + 1
         };
 
 public:
@@ -85,6 +88,9 @@ protected:
 
     /** cached reference to the camera body */
     boost::shared_ptr<oxygen::FPSController> mFPS;
+
+    /** cached reference to the game control server */
+    boost::shared_ptr<oxygen::GameControlServer> mGameControl;
     
     TTeamIndex mLastKickOff;
 };

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.cpp,v 1.2 2007/06/27 22:29:52 jamu Exp $
+   $Id: internalsoccerinput.cpp,v 1.3 2008/02/20 11:17:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,9 @@
 #include <soccer/soccerruleaspect/soccerruleaspect.h>
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/sceneserver/fpscontroller.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/agentaspect/agentaspect.h>
+#include <soccer/agentstate/agentstate.h>
 
 using namespace boost;
 using namespace zeitgeist;
@@ -42,7 +45,8 @@ void InternalSoccerInput::OnLink()
 {
     shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
     scriptServer->CreateVariable("Command.KickOff", CmdKickOff);
-    scriptServer->CreateVariable("Command.MoveAgent", CmdMoveAgent);
+    scriptServer->CreateVariable("Command.KillAgentLeft", CmdKillAgentLeft);
+    scriptServer->CreateVariable("Command.KillAgentRight", CmdKillAgentRight);
     scriptServer->CreateVariable("Command.DropBall", CmdDropBall);
     scriptServer->CreateVariable("Command.ShootBall", CmdShootBall);
     scriptServer->CreateVariable("Command.MoveBall", CmdMoveBall);
@@ -75,6 +79,15 @@ void InternalSoccerInput::OnLink()
             GetLog()->Error() << "ERROR: (InternalSoccerInput) Unable to get SoccerRuleAspect\n";
         }
 
+    // get the GameControlServer
+    mGameControl = shared_dynamic_cast<GameControlServer>
+        (GetCore()->Get("/sys/server/gamecontrol"));
+
+    if (mGameControl.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (InternalSoccerInput) Unable to get GameControlServer\n";
+        }
+
     // get camera body
     mCameraBody = shared_dynamic_cast<Body>
         (GetCore()->Get("/usr/scene/camera/physics"));
@@ -100,6 +113,7 @@ void InternalSoccerInput::OnUnlink()
 {
     mGameState.reset();
     mSoccerRule.reset();
+    mGameControl.reset();
     mCameraBody.reset();
     mFPS.reset();
 }
@@ -125,13 +139,7 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                         mLastKickOff = TI_RIGHT;
                     }
                 }
-            break;
-        case CmdMoveAgent:
-            if (input.KeyPress())
-                {
-                    //SendCommand("(agent (team Left)(unum 1)(pos -2.0 1.0 3.5))");
-                }
-            break;    
+            break;           
         case CmdDropBall:
             if (input.KeyPress())
                 {
@@ -225,6 +233,75 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                     mGameState->SetPlayMode(PM_FREE_KICK_RIGHT);
 
                 }
-            break;    
-        };
+            break; 
+        case CmdKillAgentLeft:
+            if (input.KeyPress())
+            {
+                    // get list of agent aspects
+                    GameControlServer::TAgentAspectList agentAspects;
+                    mGameControl->GetAgentAspectList(agentAspects);
+                    
+                    GameControlServer::TAgentAspectList::iterator iter;
+                    for (
+                          iter = agentAspects.begin();
+                          iter != agentAspects.end();
+                          ++iter
+                        )
+                    {
+                        // search for the first agent of the left/right side
+                        shared_ptr<AgentState> agentState =
+                            shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
+
+                        if (agentState.get() == 0)
+                        {
+                            GetLog()->Error() << "ERROR: (InternalSoccerInput) can't get AgentState\n";
+                            continue;
+                        }
+
+                        if (agentState->GetTeamIndex() == TI_LEFT)
+                        {                        
+                            mGameControl->pushDisappearedAgent((*iter)->ID());
+                                
+                            GetLog()->Error() << "(InternalSoccerInput) killed agent of team left.\n";
+
+                            break;                            
+                        }
+                    }
+            }
+            break;
+            case CmdKillAgentRight:
+            if (input.KeyPress())
+            {
+                    // get list of agent aspects
+                    GameControlServer::TAgentAspectList agentAspects;
+                    mGameControl->GetAgentAspectList(agentAspects);
+                    
+                    GameControlServer::TAgentAspectList::iterator iter;
+                    for (
+                          iter = agentAspects.begin();
+                          iter != agentAspects.end();
+                          ++iter
+                        )
+                    {
+                        // search for the first agent of the left/right side
+                        shared_ptr<AgentState> agentState =
+                            shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
+
+                        if (agentState.get() == 0)
+                        {
+                            GetLog()->Error() << "ERROR: (InternalSoccerInput) can't get AgentState\n";
+                            continue;
+                        }
+
+                        if (agentState->GetTeamIndex() == TI_RIGHT)
+                        {                        
+                            mGameControl->pushDisappearedAgent((*iter)->ID());
+                                
+                            GetLog()->Error() << "(InternalSoccerInput) killed agent of team left.\n";
+
+                            break;                            
+                        }
+                    }
+            }
+      };
 }

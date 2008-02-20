@@ -146,6 +146,8 @@
 	; install a node holding agent state data
         (nd AgentState
 	     (setName AgentState)
+	    ; add a gamestateperceptor
+	    (nd GameStatePerceptor)
 	)
 
 	; add beam effector
@@ -763,7 +765,7 @@
 	      (setName lf)
 	)
 
-	(importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
+	(importScene rsg/boxspheres/box_with_handler055.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)
 	
         ; install hinge joint to connect to the shank
         (nd UniversalJoint
@@ -813,7 +815,7 @@
 	      (setName rf)
 	)
 
-        (importScene rsg/boxspheres/box_with_handler.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)	
+        (importScene rsg/boxspheres/box_with_handler055.rsg $FootLength $FootWidth $FootHeight $FootMass matGrey)	
 
         ; install hinge joint to connect to the shank
         (nd UniversalJoint
