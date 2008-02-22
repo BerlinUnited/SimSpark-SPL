@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.cpp,v 1.4 2005/12/13 20:50:13 rollmark Exp $
+   $Id: agentstate.cpp,v 1.5 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "agentstate.h"
-#include <soccer/soccerbase/soccerbase.h>
-#include <oxygen/physicsserver/body.h>
+#include <soccer/soccertypes.h>
 #include <sstream>
 
 using namespace oxygen;
@@ -108,7 +107,7 @@ AgentState::SetTemperature(float temperature)
 }
 
 bool
-AgentState::ReduceBattery(double consumption)
+AgentState::ReduceBattery(float consumption)
 {
     if (mBattery - consumption >= 0.0)
     {
@@ -133,7 +132,7 @@ AgentState::AddMessage(const string& msg, float direction, bool teamMate)
         mMateMsg = msg;
         mMateMsgDir = direction;
         mIfMateMsg = true;
-    } 
+    }
     else
     {
         if (mHearOppCap < mHearDecay)
@@ -175,7 +174,7 @@ AgentState::GetMessage(string& msg, float& direction, bool teamMate)
         direction = mMateMsgDir;
         mIfMateMsg = false;
         return true;
-    } 
+    }
     else
     {
         if (mHearOppCap < mHearMax)

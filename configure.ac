@@ -135,6 +135,7 @@ AC_CONFIG_FILES([Makefile \
 		 utility/libobj/Makefile \
 		 utility/sfsexp/Makefile \
 		 utility/rcssnet/Makefile \
+		 utility/tinyxml/Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/salt/salt-config \
@@ -161,6 +162,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/soundsystemfmod/Makefile \
 		 plugin/collisionperceptor/Makefile \
 		 plugin/rubysceneimporter/Makefile \
+		 plugin/rosimporter/Makefile \
 		 plugin/voidmeshimporter/Makefile \
 		 plugin/objimporter/Makefile \
 		 plugin/openglsyssdl/Makefile \

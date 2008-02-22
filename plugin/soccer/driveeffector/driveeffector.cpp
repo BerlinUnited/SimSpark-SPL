@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: driveeffector.cpp,v 1.6 2004/06/19 11:42:33 fruit Exp $
+   $Id: driveeffector.cpp,v 1.7 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/physicsserver/spherecollider.h>
 #include <soccer/soccerbase/soccerbase.h>
+#include <oxygen/sceneserver/transform.h>
 
 using namespace boost;
 using namespace oxygen;

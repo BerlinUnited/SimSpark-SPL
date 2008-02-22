@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinputlogplayer.h,v 1.2 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: soccerinputlogplayer.h,v 1.3 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public:
     /** this method is called every time an input unknown to the
         parent InputControl node is received
     */
-    virtual void ProcessInput(const kerosin::InputServer::Input& input);
+    virtual void ProcessInput(const kerosin::Input& input);
 
     /** registers the soccermonitor command constants and cache
         SparkMonitorClient reference

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.16 2007/06/20 00:40:35 fruit Exp $
+   $Id: staticmesh.cpp,v 1.17 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,7 +32,11 @@ using namespace std;
 using namespace zeitgeist;
 using namespace oxygen;
 
-StaticMesh::StaticMesh() : mScale(1.0f,1.0f,1.0f)
+StaticMesh::StaticMesh() : mScale(1.0f,1.0f,1.0f),
+                           mCastShadows(true),
+                           mUseExternalMesh(false),
+                           mExternalMeshName(""),
+                           mExternalMeshScale(1.0f,1.0f,1.0f)
 {
 }
 
@@ -160,35 +164,25 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
     mMaterials.clear();
     CalcBoundingBox();
 
-    static shared_ptr<GeometryServer> geometryServer;
+    shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
+        (GetCore()->Get("/sys/server/geometry"));
 
     if (geometryServer.get() == 0)
-    {
-        geometryServer= shared_dynamic_cast<GeometryServer>
-            (GetCore()->Get("/sys/server/geometry"));
-
-        if (geometryServer.get() == 0)
         {
             GetLog()->Error()
                 << "(StaticMesh) ERROR: cannot get GeometryServer\n";
             return false;
         }
-    }
 
-    static shared_ptr<MaterialServer> materialServer;
+    shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+        (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
-    { 
-        materialServer = shared_dynamic_cast<MaterialServer>
-            (GetCore()->Get("/sys/server/material"));
-
-        if (materialServer.get() == 0)
         {
             GetLog()->Error()
                 << "(StaticMesh) ERROR: cannot get MaterialServer\n";
             return false;
         }
-    }
 
     mMesh = geometryServer->GetMesh(name,parameter);
 
@@ -237,3 +231,58 @@ const ParameterList& StaticMesh::GetMeshParameter()
     return mMeshParameter;
 }
 
+
+/** returns the materials used to render the mesh */
+const StaticMesh::TMaterialList&
+StaticMesh::GetMaterials() const
+{
+    return mMaterials;
+}
+
+bool
+StaticMesh::CastShadows() const
+{
+    return mCastShadows;
+}
+
+void
+StaticMesh::SetCastShadows(bool shadows)
+{
+    mCastShadows = shadows;
+}
+
+void
+StaticMesh::SetUseExternalMesh(bool external)
+{
+    mUseExternalMesh = external;
+}
+
+bool
+StaticMesh::UseExternalMesh() const
+{
+    return mUseExternalMesh;
+}
+
+void
+StaticMesh::SetExternalMeshName(const std::string& name)
+{
+    mExternalMeshName = name;
+}
+
+const std::string&
+StaticMesh::GetExternalMeshName() const
+{
+    return mExternalMeshName;
+}
+
+void
+StaticMesh::SetExternalMeshScale(const salt::Vector3f& scale)
+{
+    mExternalMeshScale = scale;
+}
+
+const salt::Vector3f&
+StaticMesh::ExternalMeshScale() const
+{
+    return mExternalMeshScale;
+}

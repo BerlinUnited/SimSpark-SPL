@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputitem.h,v 1.1 2004/12/31 11:00:35 rollmark Exp $
+   $Id: inputitem.h,v 1.2 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public:
     /** this method is called every time an input unknown to the
         parent InputControl node is received
     */
-    virtual void ProcessInput(const InputServer::Input& input) = 0;
+    virtual void ProcessInput(const Input& input) = 0;
 };
 
 DECLARE_ABSTRACTCLASS(InputItem);

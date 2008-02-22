@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystem.cpp,v 1.7 2004/04/23 21:11:04 fruit Exp $
+   $Id: inputsystem.cpp,v 1.8 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,13 +41,13 @@ InputSystem::Init(kerosin::InputServer* inputServer)
 }
 
 void
-InputSystem::AddInput(InputServer::Input& input)
+InputSystem::AddInput(const Input& input)
 {
     AddInputInternal(input);
 }
 
 bool
-InputSystem::GetInput(InputServer::Input& input)
+InputSystem::GetInput(Input& input)
 {
     static bool hasDoneTimer = false;
     if (mInputQueue.size() > 0)
@@ -70,13 +70,13 @@ InputSystem::GetInput(InputServer::Input& input)
 }
 
 void
-InputSystem::AddInputInternal(InputServer::Input& input)
+InputSystem::AddInputInternal(const Input& input)
 {
     mInputQueue.push_back(input);
 }
 
 bool
-InputSystem::UpdateTimerInput(InputServer::Input &/*input*/)
+InputSystem::UpdateTimerInput(Input &/*input*/)
 {
     return false;
 }

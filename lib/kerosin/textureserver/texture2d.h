@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: texture2d.h,v 1.3 2003/11/14 14:05:52 fruit Exp $
+   $Id: texture2d.h,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,15 +35,25 @@ class Texture2D : public Texture
     // functions
     //
 public:
-    Texture2D(const boost::shared_ptr<TextureServer> &textureServer);
+    Texture2D(bool use_gl = false);
     ~Texture2D();
 
-    //! bind the texture contained in this object to the corresponding target (user code is responsible for setting correct enables and tex units)
+    /** bind the texture contained in this object to the corresponding
+        target (user code is responsible for setting correct enables
+        and tex units)
+    */
     virtual void Bind() const;
-    //! enable the target associated with a texture type (e.g. GL_TEXTURE_2D)
+
+    /** enable the target associated with a texture type
+        (e.g. GL_TEXTURE_2D)
+    */
     virtual void Enable() const;
-    //! disable the target associated with a texture type (e.g. GL_TEXTURE_2D)
+
+    /** disable the target associated with a texture type
+        (e.g. GL_TEXTURE_2D)
+    */
     virtual void Disable() const;
+
     virtual void Clamp() const;
     virtual void ClampToEdge() const;
     virtual void Repeat() const;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2perceptor.cpp,v 1.2 2007/02/25 18:01:02 jamu Exp $
+   $Id: hinge2perceptor.cpp,v 1.3 2008/02/22 16:48:17 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,29 +27,13 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-Hinge2Perceptor::Hinge2Perceptor() : Perceptor()
+Hinge2Perceptor::Hinge2Perceptor()
+    : JointPerceptor<Hinge2Joint>::JointPerceptor()
 {
 }
 
 Hinge2Perceptor::~Hinge2Perceptor()
 {
-}
-
-void Hinge2Perceptor::OnLink()
-{
-    mJoint = make_shared(FindParentSupportingClass<Hinge2Joint>());
-
-    if (mJoint.get() == 0)
-        {
-            GetLog()->Error()
-                << "(Hinge2Perceptor) ERROR: found no Hinge2Joint parent\n";
-        }
-
-}
-
-void Hinge2Perceptor::OnUnlink()
-{
-    mJoint.reset();
 }
 
 void Hinge2Perceptor::InsertAxisAngle(Predicate& predicate, Joint::EAxisIndex idx)
@@ -80,7 +64,7 @@ bool Hinge2Perceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
     predicate.parameter.Clear();
 
     ParameterList& nameElement = predicate.parameter.AddList();
-    nameElement.AddValue(string("name"));
+    nameElement.AddValue(string("n"));
     nameElement.AddValue(GetName());
 
     InsertAxisAngle(predicate,Joint::AI_FIRST);
@@ -88,5 +72,3 @@ bool Hinge2Perceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
 
     return true;
 }
-
-

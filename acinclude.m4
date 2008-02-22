@@ -241,6 +241,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 #	be disabled.
 #	Substitutes: @IL_LIBADD@ with linker options for libraries linking libIL
 #                    @IL_LDFLAGS@ with linker flags for libraries linking libIL
+# Defines: HAVE_IL_IL_H if the IL/il.h header file is present
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_DEVIL], [
 	rcss_IL_LIBADD=""
@@ -251,7 +252,7 @@ AC_DEFUN([RCSS_CHECK_DEVIL], [
 		LDFLAGS="$LDFLAGS -L$DEVIL/lib"
 	fi
 	RCSS_KEROSIN_IF_ELSE([
-                              AC_CHECK_HEADER([IL/il.h],,
+                              AC_CHECK_HEADERS([IL/il.h],,
                               RCSS_BUILD_KEROSIN_ERROR([DevIL headers not found.
 Please set CPPFLAGS appropriately or you can specify the location of the DevIL installation using the DEVIL environment variable (e.g. ./configure DEVIL=$HOME/DevIL)]))
                               ])
@@ -376,7 +377,7 @@ AC_DEFUN([RCSS_BUILD_SOUNDSYSTEMFMOD], [
 
 
 # RCSS_BUILD_KEROSIN_INTERNAL
-# 	defines preprocessor symbol HAVE_KEROSIN_H if kerosin can be build
+# 	defines preprocessor symbol HAVE_KEROSIN_KEROSIN_H if kerosin can be build
 #       set automake conditional BUILD_KEROSIN to true if kerosin can be build
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_BUILD_KEROSIN_INTERNAL], [
@@ -387,7 +388,7 @@ AC_DEFUN([RCSS_BUILD_KEROSIN_INTERNAL], [
 	RCSS_CHECK_SLANG
     	AC_MSG_CHECKING([if libkerosin will be build])
  	AC_MSG_RESULT([$rcss_build_kerosin])
-	RCSS_KEROSIN_IF_ELSE([AC_DEFINE(HAVE_KEROSIN_H, 1, [Define to 1 if using the kerosin header])],[
+	RCSS_KEROSIN_IF_ELSE([AC_DEFINE(HAVE_KEROSIN_KEROSIN_H, 1, [Define to 1 if using the kerosin header])],[
  		AC_MSG_ERROR([libkerosin cannot be build without all required libraries.])
     		AC_MSG_ERROR([the list of libraries required for kerosin can be found in the documentation])
  	])

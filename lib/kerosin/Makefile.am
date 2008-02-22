@@ -36,6 +36,7 @@ fontserver/glyph.cpp \
 imageserver/image.cpp \
 imageserver/imageserver.cpp \
 imageserver/imageserver_c.cpp \
+inputserver/input.cpp \
 inputserver/inputdevice.cpp \
 inputserver/inputdevice_c.cpp \
 inputserver/inputserver.cpp \
@@ -86,6 +87,8 @@ textureserver/textureserver_c.cpp \
 openglserver/openglserver.cpp \
 openglserver/openglserver_c.cpp \
 openglserver/openglsystem_c.cpp \
+renderserver/baserenderserver.cpp \
+renderserver/baserenderserver_c.cpp \
 renderserver/renderserver.cpp \
 renderserver/renderserver_c.cpp \
 renderserver/rendernode.cpp \
@@ -107,6 +110,7 @@ inputserver/inputsystem.h \
 inputserver/scancodemap.h \
 inputserver/inputcontrol.h \
 inputserver/inputitem.h \
+inputserver/input.h \
 kerosin.h \
 materialserver/material.h \
 materialserver/materialserver.h \
@@ -139,6 +143,7 @@ openglserver/openglwrapper.h \
 openglserver/openglsystem.h \
 openglserver/openglserver.h \
 openglserver/glbase.h \
+renderserver/baserenderserver.h \
 renderserver/renderserver.h \
 renderserver/rendernode.h \
 renderserver/rendercontrol.h \

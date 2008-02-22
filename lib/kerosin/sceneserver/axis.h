@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: axis.h,v 1.5 2007/02/12 19:44:34 rollmark Exp $
+   $Id: axis.h,v 1.6 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,8 @@ public:
 
     /** computes the local bounding box of the node */
     virtual void ComputeBoundingBox();
+
+    static void RenderAxis(float size);
 
 protected:
     virtual void RenderInternal();

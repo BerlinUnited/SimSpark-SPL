@@ -20,10 +20,10 @@
 #ifndef HINGEPERCEPTOR_H
 #define HINGEPERCEPTOR_H
 
-#include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/agentaspect/jointperceptor.h>
 #include <oxygen/physicsserver/hingejoint.h>
 
-class HingePerceptor : public oxygen::Perceptor
+class HingePerceptor : public oxygen::JointPerceptor<oxygen::HingeJoint>
 {
 public:
     HingePerceptor();
@@ -33,15 +33,8 @@ public:
     bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
 protected:
-    virtual void OnLink();
-    virtual void OnUnlink();
-
     void InsertAxisAngle(oxygen::Predicate& predicate);
     void InsertAxisRate(oxygen::Predicate& predicate);
-
-protected:
-    /** cached reference to the monitor joint */
-    boost::shared_ptr<oxygen::HingeJoint> mJoint;
 };
 
 DECLARE_CLASS(HingePerceptor);

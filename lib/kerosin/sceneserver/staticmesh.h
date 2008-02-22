@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.13 2004/05/01 13:46:53 rollmark Exp $
+   $Id: staticmesh.h,v 1.14 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ class StaticMesh : public RenderNode
     //
 public:
     typedef std::vector<oxygen::IndexBuffer> TIndexBuffers;
-
+    typedef std::vector<boost::shared_ptr<Material> > TMaterialList;
     //
     // Function
     //
@@ -82,6 +82,46 @@ public:
     /** returns the parameter list of the loaded mesh */
     const zeitgeist::ParameterList& GetMeshParameter();
 
+    /** returns the materials used to render the mesh */
+    const TMaterialList& GetMaterials() const;
+
+    /** a hint for the graphics engine if the mesh casts shadows or now.
+        By default, StaticMeshes cast shadows. The respective graphics engine
+        might ignore this flag if the GE cannot cast shadows.
+    */
+    bool CastShadows() const;
+
+    /** set the flag if the mesh should cast shadows or not.
+        The actual graphics engine might ignore this flag if it cannot render
+        shadows or disables shadows globally.
+    */
+    void SetCastShadows(bool shadows);
+
+    /** Set the flag if the GE should use an external mesh for rendering.
+        By default, using external meshes is switched off. For this to work,
+        the external mesh name has to be set.
+    */
+    void SetUseExternalMesh(bool external = true);
+    /** Get the flag if the GE should use an external mesh for rendering.
+        If set to true, the GE can use a different (possibly more advanced)
+        mesh. The hint for the kind of external mesh should be given by the
+        Get/SetExternalMeshName() methods of this class.
+    */
+    bool UseExternalMesh() const;
+    /** Set the name of the external mesh.
+        \string name the external mesh name
+    */
+    void SetExternalMeshName(const std::string& name);
+    /** Get the name of the external mesh to use.
+        \return the name
+    */
+    const std::string& GetExternalMeshName() const;
+    //! Set an additional scale for the external mesh
+    void SetExternalMeshScale(const salt::Vector3f& scale);
+    /** Get the external mesh scale.
+        @return the external mesh scale */
+    const salt::Vector3f& ExternalMeshScale() const;
+
     //
     // Members
     //
@@ -93,13 +133,23 @@ protected:
     boost::shared_ptr<oxygen::TriMesh> mMesh;
 
     /** the materials used to render the mesh */
-    std::vector<boost::shared_ptr<Material> > mMaterials;
+    TMaterialList mMaterials;
 
     /** the name of the loaded mesh */
     std::string mMeshName;
 
     /** the list of parameters the mesh was loaded with */
     zeitgeist::ParameterList mMeshParameter;
+
+    //! the flag if the mesh should cast shadows
+    bool mCastShadows;
+
+    //! the flag if the GE can use an external mesh
+    bool mUseExternalMesh;
+    //! the external mesh name
+    std::string mExternalMeshName;
+    //! additional scale factors along each axis for external meshes
+    salt::Vector3f mExternalMeshScale;
 };
 
 DECLARE_CLASS(StaticMesh);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.8 2008/02/19 22:49:23 hedayat Exp $
+   $Id: simulationserver.cpp,v 1.9 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,9 +21,6 @@
 */
 #include "simulationserver.h"
 #include "simcontrolnode.h"
-#include <oxygen/monitorserver/monitorserver.h>
-#include <oxygen/sceneserver/sceneserver.h>
-#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <signal.h>
 #include <algorithm>
@@ -68,28 +65,24 @@ SimulationServer::~SimulationServer()
 
 void SimulationServer::OnLink()
 {
-    mMonitorServer = shared_dynamic_cast<MonitorServer>
-        (GetCore()->Get("/sys/server/monitor"));
+    RegisterCachedPath(mMonitorServer, "/sys/server/monitor");
 
-    if (mMonitorServer.get() == 0)
+    if (mMonitorServer.expired())
     {
         GetLog()->Error()
             << "(SimulationServer) ERROR: MonitorServer not found.\n";
     }
 
-    mGameControlServer = shared_dynamic_cast<GameControlServer>
-        (GetCore()->Get("/sys/server/gamecontrol"));
+    RegisterCachedPath(mGameControlServer, "/sys/server/gamecontrol");
 
-    if (mGameControlServer.get() == 0)
+    if (mGameControlServer.expired())
     {
         GetLog()->Error()
             << "(SimulationServer) ERROR: GameControlServer not found.\n";
     }
 
-    mSceneServer = shared_dynamic_cast<SceneServer>
-        (GetCore()->Get("/sys/server/scene"));
-
-    if (mSceneServer.get() == 0)
+    RegisterCachedPath(mSceneServer, "/sys/server/scene");
+    if (mSceneServer.expired())
     {
         GetLog()->Error()
             << "(SimulationServer) ERROR: SceneServer not found.\n";
@@ -97,16 +90,14 @@ void SimulationServer::OnLink()
 }
 
 
-void SimulationServer::OnUnlink()
-{
-    mMonitorServer.reset();
-    mGameControlServer.reset();
-    mSceneServer.reset();
-}
-
 void SimulationServer::Quit()
 {
     mExit = true;
+}
+
+bool SimulationServer::WantsToQuit()
+{
+    return mExit;
 }
 
 int SimulationServer::GetArgC()
@@ -122,6 +113,11 @@ char** SimulationServer::GetArgV()
 float SimulationServer::GetTime()
 {
     return mSimTime;
+}
+
+void SimulationServer::ResetTime()
+{
+    mSimTime = 0.0f;
 }
 
 float SimulationServer::GetSimStep()
@@ -156,18 +152,18 @@ int SimulationServer::GetCycle()
 
 bool SimulationServer::InitControlNode(const std::string& className, const std::string& name)
 {
-    shared_ptr<SimControlNode> importer
+    shared_ptr<SimControlNode> control
         = shared_dynamic_cast<SimControlNode>(GetCore()->New(className));
 
-    if (importer.get() == 0)
+    if (control.get() == 0)
         {
             GetLog()->Error() << "(SimulationServer) ERROR: "
                               << "Unable to create '" << className << "'\n";
             return false;
         }
 
-    importer->SetName(name);
-    AddChildReference(importer);
+    control->SetName(name);
+    AddChildReference(control);
 
     GetLog()->Normal()
         << "(SimulationServer) SimControlNode '"
@@ -200,8 +196,8 @@ void SimulationServer::AdvanceTime(float deltaTime)
 void SimulationServer::Step()
 {
     if (
-        (mSceneServer.get() == 0) ||
-        (mGameControlServer.get() == 0)
+        mSceneServer.expired() ||
+        mGameControlServer.expired()
         )
         {
             return;
@@ -289,9 +285,10 @@ void SimulationServer::ControlEvent(EControlEvent event)
         }
 }
 
-void SimulationServer::Run(int argc, char** argv)
+void SimulationServer::Init(int argc, char** argv)
 {
-    GetLog()->Normal() << "(SimulationServer) entering runloop\n";
+    GetLog()->Normal() << "(SimulationServer) init\n";
+    mExit = false;
 
     // cache argc and argv, to make it accessible for registerd
     // SimControlNodes
@@ -299,6 +296,13 @@ void SimulationServer::Run(int argc, char** argv)
     mArgV = argv;
 
     ControlEvent(CE_Init);
+}
+
+void SimulationServer::Run(int argc, char** argv)
+{
+    Init(argc, argv);
+    GetLog()->Normal() << "(SimulationServer) entering runloop\n";
+
     if ( mMultiThreads )
     {
         GetLog()->Normal()<< "(SimulationServer) running in multi-threads\n";
@@ -316,29 +320,40 @@ void SimulationServer::Run(int argc, char** argv)
         {
             while (! mExit)
             {
-                ++mCycle;
-
-                ControlEvent(CE_StartCycle);
-                ControlEvent(CE_SenseAgent);
-                ControlEvent(CE_ActAgent);
-
-                if (mAutoTime)
-                {
-                    AdvanceTime(mSimStep);
-                }
-                else
-                {
-                    while (int(mSumDeltaTime*100) < int(mSimStep*100))
-                    {
-                        inputCtr->StartCycle();// advance the time
-                    }
-                }
-                Step();
-
-                ControlEvent(CE_EndCycle);
+                Cycle(inputCtr);
             }
         }
     }
+
+    Done();
+}
+
+void SimulationServer::Cycle(shared_ptr<SimControlNode> &inputCtr)
+{
+    ++mCycle;
+
+    ControlEvent(CE_StartCycle);
+    ControlEvent(CE_SenseAgent);
+    ControlEvent(CE_ActAgent);
+
+    if (mAutoTime)
+    {
+        AdvanceTime(mSimStep);
+    }
+    else
+    {
+        while (int(mSumDeltaTime*100) < int(mSimStep*100))
+        {
+            inputCtr->StartCycle();// advance the time
+        }
+    }
+    Step();
+
+    ControlEvent(CE_EndCycle);
+}
+
+void SimulationServer::Done()
+{
     ControlEvent(CE_Done);
 
     mArgC = 0;
@@ -351,17 +366,17 @@ void SimulationServer::Run(int argc, char** argv)
 
 shared_ptr<GameControlServer> SimulationServer::GetGameControlServer()
 {
-    return mGameControlServer;
+    return mGameControlServer.get();
 }
 
 shared_ptr<MonitorServer> SimulationServer::GetMonitorServer()
 {
-    return mMonitorServer;
+    return mMonitorServer.get();
 }
 
 shared_ptr<SceneServer> SimulationServer::GetSceneServer()
 {
-    return mSceneServer;
+    return mSceneServer.get();
 }
 
 void SimulationServer::Loops()

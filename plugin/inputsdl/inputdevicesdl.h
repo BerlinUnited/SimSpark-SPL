@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputdevicesdl.h,v 1.6 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: inputdevicesdl.h,v 1.7 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 #include <kerosin/inputserver/inputdevice.h>
 #include <kerosin/inputserver/inputserver.h>
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 /**     \class InputDeviceSDL
         This class introduces SDL-specific callback functions for the event filtering.

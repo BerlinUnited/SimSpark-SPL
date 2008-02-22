@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.cpp,v 1.3 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: hinge2effector.cpp,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,37 +27,37 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-Hinge2Effector::Hinge2Effector() : Effector()
+Hinge2Effector::Hinge2Effector()
+    : JointEffector<Hinge2Joint>::JointEffector("hinge2")
 {
-    SetName("hinge2");
 }
 
 Hinge2Effector::~Hinge2Effector()
 {
 }
 
-void Hinge2Effector::PrePhysicsUpdateInternal(float /*deltaTime*/)
+bool Hinge2Effector::Realize(boost::shared_ptr<ActionObject> action)
 {
-    if (mAction.get() == 0 || mJoint.get() == 0)
+    if (mJoint.get() == 0)
         {
-            return;
+            return false;
         }
 
     shared_ptr<Hinge2Action> hinge2Action =
-        shared_dynamic_cast<Hinge2Action>(mAction);
-    mAction.reset();
+        shared_dynamic_cast<Hinge2Action>(action);
 
     if (hinge2Action.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (Hinge2Effector) cannot realize an "
             << "unknown ActionObject\n";
-        return;
+        return false;
     }
 
     mJoint->SetAngularMotorVelocity
         (Joint::AI_SECOND, hinge2Action->GetMotorVelocity());
 
+    return true;
 }
 
 shared_ptr<ActionObject> Hinge2Effector::GetActionObject(const Predicate& predicate)
@@ -91,21 +91,4 @@ shared_ptr<ActionObject> Hinge2Effector::GetActionObject(const Predicate& predic
         }
 
     return shared_ptr<ActionObject>();
-}
-
-void Hinge2Effector::OnLink()
-{
-    mJoint = make_shared(FindParentSupportingClass<Hinge2Joint>());
-
-    if (mJoint.get() == 0)
-        {
-            GetLog()->Error()
-                << "(Hinge2Effector) ERROR: found no Hinge2Joint parent\n";
-        }
-
-}
-
-void Hinge2Effector::OnUnlink()
-{
-    mJoint.reset();
 }

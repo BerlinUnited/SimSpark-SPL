@@ -48,6 +48,8 @@ internalsoccermonitor/internalsoccerinput_c.cpp \
 soccerbase/soccerbase.cpp \
 soccercontrolaspect/soccercontrolaspect.cpp \
 soccercontrolaspect/soccercontrolaspect_c.cpp \
+soccernode/soccernode.cpp \
+soccernode/soccernode_c.cpp \
 soccerruleaspect/soccerruleaspect.cpp \
 soccerruleaspect/soccerruleaspect_c.cpp \
 trainercommandparser/trainercommandparser.cpp \
@@ -92,6 +94,7 @@ internalsoccermonitor/internalsoccerrender.h \
 internalsoccermonitor/internalsoccerinput.h \
 soccerbase/soccerbase.h \
 soccercontrolaspect/soccercontrolaspect.h \
+soccernode/soccernode.h \
 soccerruleaspect/soccerruleaspect.h \
 trainercommandparser/trainercommandparser.h \
 gametimeperceptor/gametimeperceptor.h \

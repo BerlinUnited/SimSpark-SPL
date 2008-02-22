@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate.h,v 1.3 2004/04/08 14:31:45 markelic Exp $
+   $Id: objectstate.h,v 1.4 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,17 +22,16 @@
 #ifndef OBJECTSTATE_H
 #define OBJECTSTATE_H
 
-#include <oxygen/sceneserver/basenode.h>
-#include <oxygen/sceneserver/transform.h>
+#include <soccer/soccernode/soccernode.h>
 
-class ObjectState : public oxygen::BaseNode
+class ObjectState : public SoccerNode
 {
 public:
     typedef enum TPerceptType
     {
         PT_Default,
         PT_TooFar,
-	PT_Player
+        PT_Player
     };
 
 public:
@@ -42,11 +41,11 @@ public:
     /** set the object name for perceptors */
     virtual void SetPerceptName(const std::string& name,
                                 TPerceptType pt = PT_Default);
-				
+
      /** set the object name for perceptors */
     virtual void SetPerceptName(const std::string& name,
-                                TPerceptType pt ,
-                                TPerceptType pt );
+                                TPerceptType pt1 ,
+                                TPerceptType pt2 );
 
     /** returns the object name for perceptors */
     virtual std::string GetPerceptName(TPerceptType pt = PT_Default) const;
@@ -57,23 +56,14 @@ public:
     /** returns the object id */
     virtual std::string GetID(TPerceptType pt = PT_Default) const;
 
-    boost::shared_ptr<oxygen::Transform> GetTransformParent() const;
-
 protected:
     typedef std::map<TPerceptType, std::string> TPerceptStringMap;
-
-    virtual void OnLink();
-
-    virtual void OnUnlink();
 
     /** object names */
     TPerceptStringMap mPerceptNames;
 
     /** object ids */
     TPerceptStringMap mIDs;
-
-    /** reference to the parent transform node*/
-    boost::shared_ptr<oxygen::Transform> mTransformParent;
 };
 
 DECLARE_CLASS(ObjectState);

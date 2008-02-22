@@ -84,10 +84,10 @@ static float processInput()
 
         shared_ptr<FPSController> fpsController = shared_static_cast<FPSController>(gContext->Get("/usr/scene1/camera0/_body/fps"));
     // Process incoming input
-        InputServer::Input input;
+        Input input;
         while (inputServer->GetInput(input))
         {
-                switch (input.id)
+                switch (input.mId)
                 {
                         case gCmdQuit:
                                 {
@@ -96,18 +96,18 @@ static float processInput()
                                 }
                                 break;
                         case gCmdTimer:
-                                deltaTime = (float) input.data.l/1000.0f;
+                                deltaTime = (float) input.mData.l/1000.0f;
                                 break;
                         case gCmdMouseX:
                                 if (fpsController.get())
                                 {
-                                        fpsController->AdjustHAngle(0.3f*(float)input.data.l);
+                                        fpsController->AdjustHAngle(0.3f*(float)input.mData.l);
                                 }
                                 break;
                         case gCmdMouseY:
                                 if (fpsController.get())
                                 {
-                                        fpsController->AdjustVAngle(0.3f*(float)input.data.l);
+                                        fpsController->AdjustVAngle(0.3f*(float)input.mData.l);
                                 }
                                 break;
                         case gCmdMouseLeft:
@@ -115,25 +115,25 @@ static float processInput()
                         case gCmdLeft:
                                 if (fpsController.get())
                                 {
-                                        fpsController->StrafeLeft(input.data.l!=0);
+                                        fpsController->StrafeLeft(input.mData.l!=0);
                                 }
                                 break;
                         case gCmdRight:
                                 if (fpsController.get())
                                 {
-                                        fpsController->StrafeRight(input.data.l!=0);
+                                        fpsController->StrafeRight(input.mData.l!=0);
                                 }
                                 break;
                         case gCmdForward:
                                 if (fpsController.get())
                                 {
-                                        fpsController->Forward(input.data.l!=0);
+                                        fpsController->Forward(input.mData.l!=0);
                                 }
                                 break;
                         case gCmdBackward:
                                 if (fpsController.get())
                                 {
-                                        fpsController->Backward(input.data.l!=0);
+                                        fpsController->Backward(input.mData.l!=0);
                                 }
                                 break;
                 }

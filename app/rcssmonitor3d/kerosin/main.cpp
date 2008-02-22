@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.12 2004/05/10 14:10:45 fruit Exp $
+   $Id: main.cpp,v 1.13 2008/02/22 16:48:21 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 #include <monitorlib.h>
 #include <types.h>
 #include <commserver.h>
+#include <oxygen/simulationserver/simulationserver.h>
+#include <kerosin/renderserver/rendercontrol.h>
 #include "monitorinputcontrol.h"
 #include "monitorclientcontrol.h"
 
@@ -72,7 +74,7 @@ void MonitorSpark::PrintGreeting()
     GetLog()->Normal()
         << "rcssmonitor3D-kerosin version 0.2\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
-        << "Universität Koblenz.\n"
+        << "Universitï¿½t Koblenz.\n"
         << "Copyright (C) 2004, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
         << "\nType '--help' for further information\n\n";

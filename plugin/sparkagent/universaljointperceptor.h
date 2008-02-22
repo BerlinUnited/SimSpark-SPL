@@ -20,10 +20,10 @@
 #ifndef UNIVERSALJOINTPERCEPTOR_H
 #define UNIVERSALJOINTPERCEPTOR_H
 
-#include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/agentaspect/jointperceptor.h>
 #include <oxygen/physicsserver/universaljoint.h>
 
-class UniversalJointPerceptor : public oxygen::Perceptor
+class UniversalJointPerceptor : public oxygen::JointPerceptor<oxygen::UniversalJoint>
 {
 public:
     UniversalJointPerceptor();
@@ -33,15 +33,8 @@ public:
     bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
 protected:
-    virtual void OnLink();
-    virtual void OnUnlink();
-
     void InsertAxisAngle(oxygen::Predicate& predicate, oxygen::Joint::EAxisIndex idx);
     void InsertAxisRate(oxygen::Predicate& predicate, oxygen::Joint::EAxisIndex idx);
-
-protected:
-    /** cached reference to the monitor joint */
-    boost::shared_ptr<oxygen::UniversalJoint> mJoint;
 };
 
 DECLARE_CLASS(UniversalJointPerceptor);

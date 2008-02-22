@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.cpp,v 1.5 2008/02/22 07:52:15 hedayat Exp $
+   $Id: monitorcontrol.cpp,v 1.6 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "simulationserver.h"
 #include "netmessage.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <oxygen/monitorserver/monitorserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 
@@ -43,21 +42,14 @@ MonitorControl::~MonitorControl()
 void MonitorControl::OnLink()
 {
     NetControl::OnLink();
-    shared_ptr<SimulationServer> sim = GetSimulationServer();
-    if (sim.get() == 0)
+    RegisterCachedPath(mMonitorServer, "/sys/server/monitor");
+
+    if (mMonitorServer.expired())
         {
             GetLog()->Error()
-                << "(MonitorControl) ERROR: SimulationServer not found\n";
+                << "(MonitorControl) ERROR: MonitorServer not found\n";
             return;
         }
-
-    mMonitorServer = sim->GetMonitorServer();
-}
-
-void MonitorControl::OnUnlink()
-{
-    NetControl::OnUnlink();
-    mMonitorServer.reset();
 }
 
 void MonitorControl::ClientConnect(shared_ptr<Client> client)
@@ -72,7 +64,7 @@ void MonitorControl::ClientConnect(shared_ptr<Client> client)
 
     string header = mMonitorServer->GetMonitorHeaderInfo();
     mNetMessage->PrepareToSend(header);
-    SendMessage(client->addr,header);
+    SendClientMessage(client->addr,header);
 }
 
 void MonitorControl::EndCycle()
@@ -104,7 +96,7 @@ void MonitorControl::EndCycle()
          ++iter
          )
         {
-            SendMessage((*iter).second,info);
+            SendClientMessage((*iter).second,info);
         }
 
     // reset the modified flag for the active scene

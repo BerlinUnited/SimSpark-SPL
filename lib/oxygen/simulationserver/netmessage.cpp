@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netmessage.cpp,v 1.3 2007/02/27 03:44:50 jboedeck Exp $
+   $Id: netmessage.cpp,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,11 @@
 */
 #include "netmessage.h"
 #include "netbuffer.h"
+#include <rcssnet/socket.hpp>
+
+#ifndef WIN32
 #include <netinet/in.h>
+#endif
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -37,20 +41,20 @@ NetMessage::~NetMessage()
 void NetMessage::PrepareToSend(std::string& msg)
 {
     // prefix the message with it's payload length
-    unsigned int len = htonl(msg.size());
+    unsigned int len = htonl(static_cast<u_long>(msg.size()));
     string prefix((const char*)&len,sizeof(unsigned int));
     msg = prefix + msg;
 }
 
 bool NetMessage::Extract(shared_ptr<NetBuffer> buffer, std::string& msg)
 {
-    // a message is prefixed with it's payload length
-    const unsigned int preSz = sizeof(unsigned int);
-
     if (buffer.get() == 0)
     {
         return false;
     }
+
+    // a message is prefixed with it's payload length
+    const unsigned int preSz = sizeof(unsigned int);
 
     string& data = buffer->GetData();
 

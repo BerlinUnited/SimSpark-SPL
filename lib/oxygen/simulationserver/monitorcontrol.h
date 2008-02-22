@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.h,v 1.3 2004/04/30 10:01:22 rollmark Exp $
+   $Id: monitorcontrol.h,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@
 #define OXYGEN_MONITORCONTROL_H
 
 #include "netcontrol.h"
+#include <oxygen/monitorserver/monitorserver.h>
 
 namespace oxygen
 {
-class MonitorServer;
 
 /** \class MonitorConrol is a NetControl node that manages the
     communication with monitors in cooperation with the
@@ -55,11 +55,10 @@ public:
 
 protected:
     virtual void OnLink();
-    virtual void OnUnlink();
 
 protected:
     /** cached reference to the MonitorServer */
-    boost::shared_ptr<MonitorServer> mMonitorServer;
+    CachedPath<MonitorServer> mMonitorServer;
 
     /** the update interval for the connected monitors in cycles */
     int mMonitorInterval;

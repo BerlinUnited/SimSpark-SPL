@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.cpp,v 1.5 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: spark.cpp,v 1.6 2008/02/22 16:48:17 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,20 +20,30 @@
 
 #include "spark.h"
 #include <zeitgeist/zeitgeist.h>
+#include <oxygen/oxygen.h>
+
+#if HAVE_KEROSIN_KEROSIN_H
+#include <kerosin/kerosin.h>
+#include <kerosin/renderserver/rendercontrol.h>
+#include <kerosin/inputserver/inputserver.h>
+#include <kerosin/inputserver/inputcontrol.h>
+
+using namespace kerosin;
+#endif
 
 using namespace spark;
-using namespace kerosin;
 using namespace oxygen;
 using namespace zeitgeist;
 using namespace salt;
 using namespace std;
 using namespace boost;
 
-
 Spark::Spark(const string& relPathPrefix) :
-    mZeitgeist("." PACKAGE_NAME, relPathPrefix),
-    mOxygen(mZeitgeist),
-    mKerosin(mZeitgeist)
+    mZeitgeist(new Zeitgeist("." PACKAGE_NAME, relPathPrefix)),
+    mOxygen(new Oxygen(*mZeitgeist))
+#if HAVE_KEROSIN_KEROSIN_H
+    , mKerosin(new Kerosin(*mZeitgeist))
+#endif
 {
 }
 
@@ -41,126 +51,158 @@ Spark::~Spark()
 {
     // reset shared ptr to objects in the zeitgeist hierarchy before
     // the zeitgeist core is shutdown
+    ResetCached();
+}
+
+void Spark::ResetCached()
+{
     mLogServer.reset();
     mScriptServer.reset();
     mSceneServer.reset();
     mSimulationServer.reset();
 }
 
-bool Spark::Init(int argc, char** argv)
+bool Spark::UpdateCached()
 {
-    mLogServer = mZeitgeist.GetCore()->GetLogServer();
+    bool ok = true;
+
+    mLogServer = mZeitgeist->GetCore()->GetLogServer();
     if (mLogServer.get() == 0)
-        {
-            cout << "(Spark) ERROR: LogServer not found\n";
-            return false;
-        }
+    {
+        cerr << "(Spark) ERROR: LogServer not found\n";
+        ok = false;
+    }
 
-    mScriptServer = mZeitgeist.GetCore()->GetScriptServer();
+    mScriptServer = mZeitgeist->GetCore()->GetScriptServer();
     if (mScriptServer.get() == 0)
-        {
-            mLogServer->Error()
-                << "(Spark) ERROR: ScriptServer not found\n";
-            return false;
-        }
+    {
+        mLogServer->Error() << "(Spark) ERROR: ScriptServer not found\n";
+        ok = false;
+    }
 
+    mSceneServer = shared_dynamic_cast<SceneServer>
+        (mZeitgeist->GetCore()->Get("/sys/server/scene"));
+
+    if (mSceneServer.get() == 0)
+    {
+        mLogServer->Error() << "(Spark) ERROR: SceneServer not found\n";
+        ok = false;
+    }
+
+    mSimulationServer = shared_dynamic_cast<SimulationServer>
+        (mZeitgeist->GetCore()->Get("/sys/server/simulation"));
+
+    if (mSimulationServer.get() == 0)
+    {
+        mLogServer->Error() << "(Spark) ERROR: SimulationServer not found\n";
+        ok = false;
+    }
+
+    return ok;
+}
+
+bool
+Spark::Init(int argc, char** argv)
+{
     // run the spark init script
-    mZeitgeist.GetCore()->GetRoot()->GetScript()->RunInitScript
+    mZeitgeist->GetCore()->GetScriptServer()->RunInitScript
         (
          "spark.rb",
          "lib/spark",
          ScriptServer::IS_COMMON
          );
 
-    mSceneServer = shared_dynamic_cast<SceneServer>
-        (mZeitgeist.GetCore()->Get("/sys/server/scene"));
-
-    if (mSceneServer.get() == 0)
-        {
-            mLogServer->Error() << "(Spark) ERROR: SceneServer not found\n";
-            return false;
-        }
-
-    mSimulationServer = shared_dynamic_cast<SimulationServer>
-        (mZeitgeist.GetCore()->Get("/sys/server/simulation"));
-
-    if (mSimulationServer.get() == 0)
-        {
-            mLogServer->Error() << "(Spark) ERROR: SimulationServer not found\n";
-            return false;
-        }
+    UpdateCached();
 
     // run the app defined init
     return InitApp(argc,argv);
 }
 
-bool Spark::InitApp(int /*argc*/, char** /*argv*/)
+bool
+Spark::InitApp(int /*argc*/, char** /*argv*/)
 {
     return true;
 }
 
-Zeitgeist& Spark::GetZeitgeist()
+Zeitgeist&
+Spark::GetZeitgeist()
 {
-    return mZeitgeist;
+    return (*mZeitgeist);
 }
 
-shared_ptr<Core> Spark::GetCore()
+shared_ptr<Core>
+Spark::GetCore()
 {
-    return mZeitgeist.GetCore();
+    return mZeitgeist->GetCore();
 }
 
-shared_ptr<zeitgeist::LogServer> Spark::GetLog()
+shared_ptr<zeitgeist::LogServer>
+Spark::GetLog()
 {
-    return mZeitgeist.GetCore()->GetLogServer();
+    return mZeitgeist->GetCore()->GetLogServer();
 }
 
-shared_ptr<SceneServer> Spark::GetSceneServer()
+shared_ptr<SceneServer>
+Spark::GetSceneServer()
 {
     return mSceneServer;
 }
 
-shared_ptr<SimulationServer> Spark::GetSimulationServer()
+shared_ptr<SimulationServer>
+Spark::GetSimulationServer()
 {
     return mSimulationServer;
 }
 
-shared_ptr<InputControl> Spark::GetInputControl()
+#if HAVE_KEROSIN_KEROSIN_H
+shared_ptr<InputControl>
+Spark::GetInputControl()
 {
     if (mSimulationServer.get() == 0)
-        {
-            return shared_ptr<InputControl>();
-        }
+    {
+        return shared_ptr<InputControl>();
+    }
 
     return shared_dynamic_cast<InputControl>
         (mSimulationServer->GetControlNode("InputControl"));
 }
 
-shared_ptr<RenderControl> Spark::GetRenderControl()
+shared_ptr<InputServer>
+Spark::GetInputServer()
+{
+    return shared_dynamic_cast<kerosin::InputServer>
+        (mZeitgeist->GetCore()->Get("/sys/server/input"));
+}
+
+shared_ptr<RenderControl>
+Spark::GetRenderControl()
 {
     if (mSimulationServer.get() == 0)
-        {
-            return shared_ptr<RenderControl>();
-        }
+    {
+        return shared_ptr<RenderControl>();
+    }
 
     return shared_dynamic_cast<RenderControl>
         (mSimulationServer->GetControlNode("RenderControl"));
 }
+#endif // HAVE_KEROSIN_KEROSIN_H
 
-
-shared_ptr<ScriptServer> Spark::GetScriptServer()
+shared_ptr<ScriptServer>
+Spark::GetScriptServer()
 {
     return mScriptServer;
 }
 
-shared_ptr<Scene> Spark::GetActiveScene()
+shared_ptr<Scene>
+Spark::GetActiveScene()
 {
     shared_ptr<Scene> scene = mSceneServer->GetActiveScene();
 
     if (scene.get() == 0)
-        {
-            mLogServer->Warning()
-                << "(Spark) Warning: no active scene registered\n";
-        }
+    {
+        mLogServer->Warning()
+            << "(Spark) Warning: no active scene registered\n";
+    }
 
     return scene;
 }

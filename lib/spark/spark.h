@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: spark.h,v 1.4 2004/12/31 11:27:04 rollmark Exp $
+   $Id: spark.h,v 1.5 2008/02/22 16:48:17 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,11 +20,38 @@
 #ifndef SPARK_SPARK_H
 #define SPARK_SPARK_H
 
-#include <zeitgeist/zeitgeist.h>
-#include <kerosin/kerosin.h>
-#include <oxygen/oxygen.h>
-#include <kerosin/renderserver/rendercontrol.h>
-#include <kerosin/inputserver/inputcontrol.h>
+#if HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+
+#include <string>
+#include <boost/shared_ptr.hpp>
+
+namespace zeitgeist
+{
+    class Zeitgeist;
+    class LogServer;
+    class ScriptServer;
+    class Core;
+}
+
+namespace oxygen
+{
+    class Oxygen;
+    class SceneServer;
+    class SimulationServer;
+    class Scene;
+}
+
+#if HAVE_KEROSIN_KEROSIN_H
+namespace kerosin
+{
+    class Kerosin;
+    class InputControl;
+    class RenderControl;
+    class InputServer;
+}
+#endif
 
 namespace spark
 {
@@ -43,6 +70,12 @@ public:
     /** inits the Spark lib, returns true on success, has to be called once
         before any other spark methods */
     bool Init(int argc, char** argv);
+
+    /** resets all cached object references */
+    void ResetCached();
+
+    /** updated all cached object references */
+    bool UpdateCached();
 
     //
     // user callbacks
@@ -74,11 +107,18 @@ public:
     /** returns the SimulationServer */
     boost::shared_ptr<oxygen::SimulationServer> GetSimulationServer();
 
+#if HAVE_KEROSIN_KEROSIN_H
+    /** returns the InputServer */
+    boost::shared_ptr<kerosin::InputServer> GetInputServer();
+
     /** returns the input control node */
     boost::shared_ptr<kerosin::InputControl> GetInputControl();
 
     /** returns the render control node */
     boost::shared_ptr<kerosin::RenderControl> GetRenderControl();
+#else
+    #warning "Compiling spark with no I/O"
+#endif
 
 protected:
     boost::shared_ptr<zeitgeist::LogServer> mLogServer;
@@ -86,9 +126,11 @@ protected:
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
     boost::shared_ptr<oxygen::SimulationServer> mSimulationServer;
 
-    zeitgeist::Zeitgeist mZeitgeist;
-    oxygen::Oxygen mOxygen;
-    kerosin::Kerosin mKerosin;
+    boost::shared_ptr<zeitgeist::Zeitgeist> mZeitgeist;
+    boost::shared_ptr<oxygen::Oxygen> mOxygen;
+#if HAVE_KEROSIN_KEROSIN_H
+    boost::shared_ptr<kerosin::Kerosin> mKerosin;
+#endif
 };
 
 } // namespace kerosin

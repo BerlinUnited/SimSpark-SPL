@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter_c.cpp,v 1.2 2004/05/05 09:08:53 rollmark Exp $
+   $Id: rubysceneimporter_c.cpp,v 1.3 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,22 @@
 */
 
 #include "rubysceneimporter.h"
+
+FUNCTION(RubySceneImporter,enableSceneDictionary)
+{
+    bool enable;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], enable))
+        )
+        {
+            return false;
+        }
+
+    obj->EnableSceneDictionary(enable);
+    return true;
+}
 
 FUNCTION(RubySceneImporter,setUnlinkOnCompleteScenes)
 {
@@ -42,6 +58,5 @@ void CLASS(RubySceneImporter)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/SceneImporter);
     DEFINE_FUNCTION(setUnlinkOnCompleteScenes);
+    DEFINE_FUNCTION(enableSceneDictionary);
 }
-
-

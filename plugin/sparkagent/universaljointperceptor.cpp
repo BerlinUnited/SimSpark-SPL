@@ -25,29 +25,13 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-UniversalJointPerceptor::UniversalJointPerceptor() : Perceptor()
+UniversalJointPerceptor::UniversalJointPerceptor()
+    : JointPerceptor<UniversalJoint>::JointPerceptor()
 {
 }
 
 UniversalJointPerceptor::~UniversalJointPerceptor()
 {
-}
-
-void UniversalJointPerceptor::OnLink()
-{
-    mJoint = make_shared(FindParentSupportingClass<UniversalJoint>());
-
-    if (mJoint.get() == 0)
-        {
-            GetLog()->Error()
-                << "(UniversalJointPerceptor) ERROR: found no UniversalJoint parent\n";
-        }
-
-}
-
-void UniversalJointPerceptor::OnUnlink()
-{
-    mJoint.reset();
 }
 
 void UniversalJointPerceptor::InsertAxisAngle(Predicate& predicate, Joint::EAxisIndex idx)
@@ -102,5 +86,3 @@ bool UniversalJointPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> p
 
     return true;
 }
-
-

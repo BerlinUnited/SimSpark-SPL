@@ -1,5 +1,95 @@
 2008-02-22  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* plugin/soccer/Makefile.am:
+	* plugin/soccer/export.cpp:
+	- added SoccerNode related material
+
+	* plugin/soccer/driveeffector/driveeffector.cpp:
+	- added transform.h header
+
+	* plugin/soccer/objectstate/objectstate_c.cpp:
+	* plugin/soccer/objectstate/objectstate.cpp:
+	* plugin/soccer/objectstate/objectstate.h:
+	* plugin/soccer/agentstate/agentstate.h:
+	* plugin/soccer/agentstate/agentstate.cpp: battery status is float in simspark (?!)
+	* lib/spark/spark.cpp:
+	* lib/spark/spark.h:
+	* plugin/sparkagent/universaljointeffector.h:
+	* plugin/sparkagent/universaljointeffector.cpp:
+	* plugin/sparkagent/universaljointperceptor.h:
+	* plugin/sparkagent/universaljointperceptor.cpp: replaced name with n
+	* plugin/sparkagent/hingeeffector.cpp:
+	* plugin/sparkagent/hingeeffector.h:
+	* plugin/sparkagent/hingeperceptor.cpp: replaced name with n
+	* plugin/sparkagent/hingeperceptor.h:
+	* plugin/sparkagent/hinge2perceptor.cpp: replaced name with n
+	* plugin/sparkagent/hinge2perceptor.h:
+	* plugin/sparkagent/hinge2effector.h:
+	* plugin/sparkagent/hinge2effector.cpp:
+	* plugin/sexpparser/sexpparser.cpp:
+	(SexpParser::ListToString): set output precision to 2 as before
+	* plugin/sceneeffector/sceneeffector.cpp:
+	* plugin/sceneeffector/sceneeffector.h:
+	* plugin/rubysceneimporter/rubysceneimporter.h:
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	* plugin/rubysceneimporter/rubysceneimporter_c.cpp:
+	* plugin/openglsyssdl/openglsystemsdl.cpp:
+	* lib/kerosin/kerosin.h:
+	* lib/kerosin/textureserver/textureserver.h:
+	* lib/kerosin/textureserver/textureserver.cpp:
+	* lib/kerosin/textureserver/texture.h:
+	* lib/kerosin/textureserver/texture.cpp:
+	* lib/kerosin/textureserver/texture2d.cpp:
+	* lib/kerosin/textureserver/texture2d.h:
+	* lib/kerosin/sceneserver/staticmesh.h:
+	* lib/kerosin/sceneserver/staticmesh.cpp:
+	* lib/kerosin/sceneserver/staticmesh_c.cpp:
+	* lib/kerosin/sceneserver/singlematnode.cpp:
+	* lib/kerosin/sceneserver/light.cpp:
+	* lib/kerosin/sceneserver/light.h:
+	* lib/kerosin/sceneserver/axis.h:
+	* lib/kerosin/sceneserver/axis.cpp:
+	* lib/kerosin/kerosin.cpp:
+	* lib/kerosin/renderserver/renderserver.h:
+	* lib/kerosin/renderserver/renderserver.cpp:
+	* lib/kerosin/renderserver/renderserver_c.cpp:
+	* lib/kerosin/renderserver/rendercontrol.h:
+	* lib/kerosin/renderserver/rendercontrol.cpp:
+	* lib/kerosin/renderserver/rendercontrol_c.cpp:
+	* lib/kerosin/imageserver/imageserver.h:
+	* lib/kerosin/imageserver/imageserver.cpp:
+	* lib/kerosin/imageserver/imageserver_c.cpp:
+	* lib/kerosin/imageserver/image.h:
+	* lib/kerosin/imageserver/image.cpp:
+	* lib/kerosin/Makefile.am:
+	* plugin/inputsdl/timersdl.h:
+	* plugin/inputsdl/timersdl.cpp:
+	* plugin/inputsdl/mousesdl.cpp:
+	* plugin/inputsdl/keyboardsdl.cpp:
+	* plugin/inputsdl/inputsystemsdl.h:
+	* plugin/inputsdl/inputsystemsdl.cpp:
+	(InputSystemSDL::Init): added timer initialization, removed grab input for now
+	* plugin/inputsdl/inputdevicesdl.h:
+	* lib/kerosin/inputserver/scancodemap.h:
+	* lib/kerosin/inputserver/scancodemap.cpp:
+	* lib/kerosin/inputserver/inputsystem.cpp:
+	* lib/kerosin/inputserver/inputsystem.h:
+	* lib/kerosin/inputserver/inputserver.h:
+	* lib/kerosin/inputserver/inputserver.cpp:
+	* lib/kerosin/inputserver/inputcontrol.h:
+	* lib/kerosin/inputserver/inputcontrol.cpp:
+	* lib/oxygen/oxygen.cpp:
+	* lib/oxygen/oxygen.h:
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	* lib/oxygen/simulationserver/simulationserver.h:
+	* lib/oxygen/simulationserver/simulationserver_c.cpp:
+	* lib/oxygen/simulationserver/netmessage.cpp:
+	* lib/oxygen/simulationserver/netcontrol.h:
+	* lib/oxygen/simulationserver/netcontrol.cpp:
+	* lib/oxygen/simulationserver/netclient.cpp:
+	* lib/oxygen/simulationserver/monitorcontrol.h:
+	* lib/oxygen/simulationserver/agentcontrol.h:
+	* lib/oxygen/simulationserver/agentcontrol.cpp:
 	* lib/oxygen/sceneserver/sceneserver.cpp:
 	* lib/oxygen/sceneserver/transform.h:
 	* lib/oxygen/sceneserver/sceneserver.h:
@@ -25,15 +115,61 @@
 	* lib/oxygen/geometryserver/geometryserver.cpp:
 	* lib/oxygen/geometryserver/geometryserver_c.cpp:
 	* lib/oxygen/controlaspect/controlaspect.cpp:
-	- ported from simspark
+	- ported from simspark (oxygen,kerosin,general plugins,soccer plugins completed)
+
+	* acinclude.m4:
+	- changed to define HAVE_IL_IL_H when IL is present
+	- changed HAVE_KEROSIN_H to HAVE_KEROSIN_KEROSIN_H
+
+	* app/rcssmonitor3d/kerosin/main.cpp:
+	* app/simspark/main.cpp:
+	* app/monitorspark/main.cpp:
+	- added required includes because of the new spark.h
+
+	* plugin/rosimporter/Makefile.am:
+	- fixed LDFLAGS to use top_builddir
+
+	* plugin/rosimporter/rosimporter.cpp:
+	* plugin/rosimporter/rosimporter_c.cpp:
+	* plugin/rosimporter/roselements.cpp:
+	* plugin/rosimporter/export.cpp:
+	* plugin/rosimporter/roselements.h:
+	* plugin/rosimporter/rosimporter.h:
+	- added rosimporter from simspark
+	(RosImporter): fixed extra qualification errors
+
+	* utility/tinyxml/tinyxml.h:
+	* utility/tinyxml/tinyxmlerror.cpp:
+	* utility/tinyxml/tinyxmlparser.cpp:
+	* utility/tinyxml/tinystr.h:
+	* utility/tinyxml/xmlfunctions.h:
+	* utility/tinyxml/tinyxml.cpp:
+	* utility/tinyxml/tinystr.cpp:
+	* utility/tinyxml/xmlfunctions.cpp:
+	* utility/tinyxml/Makefile.am:
+	- added tinyxml used by rosimporter
 
 	* plugin/soccermonitor/soccerinput.cpp:
 	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp:
 	- fixed errors resulted from porting FPSController changes from simspark
 
+	* plugin/soccermonitor/soccerinput.h:
+	* plugin/soccermonitor/soccerinput.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.h:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp:
+	* app/inputtest/main.cpp:
+	* app/fonttest/main.cpp:
+	* app/scenetest/main.cpp (processInput):
+	* app/rcssmonitor3d/kerosin/monitorinputcontrol.cpp:
+	* app/rcssmonitor3d/kerosin/monitorinputcontrol.h:
+	* plugin/soccermonitor/soccerinputlogplayer.cpp:
+	* plugin/soccermonitor/soccerinputlogplayer.h:
+	- fixed errors because of Input class outside InputServer
+
 	* lib/spark/spark.rb:
 	- set autoDisableFlag of the world to false. (it was always off because of
 	  a bug in world_c.cpp). oxygen/physicsserver finished!
+	- applied simspark changes
 
 2008-02-21  Hedayat Vatankhah  <hedayat@grad.com>
 

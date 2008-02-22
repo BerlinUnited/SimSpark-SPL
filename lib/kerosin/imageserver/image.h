@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: image.h,v 1.7 2003/11/14 14:05:51 fruit Exp $
+   $Id: image.h,v 1.8 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,28 +23,20 @@
 #define KEROSIN_IMAGE_H
 
 /*      Image - A Wrapper for the DevIL Library
+                (or loading images by anything else)
 
-        NOTE:
-
-        HISTORY:
-                11.07.01 - MK
-                        - Initial version
-                28.08.01 - MK
-                        - Added support for a palette
-                29.08.01 - MK
-                        - Rewrite for DevIL
-                03.09.01 - MK
-                        - OpenGL texture support
-
+        NOTE: Initial version by MK (11.07.01)
         TODO:
                 - add RGB access
                 - image creation
 
-
-        TOFIX:
 */
-
+#ifdef HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+#ifdef HAVE_IL_IL_H
 #include <IL/il.h>
+#endif
 
 namespace kerosin
 {
@@ -52,48 +44,48 @@ namespace kerosin
 class Image
 {
 public:
-    // constructor/destructor
+#ifdef HAVE_IL_IL_H
+    typedef ILuint TImgUInt;
+    typedef ILubyte TImgUChar;
+#else
+    typedef unsigned int TImgUInt;
+    typedef unsigned char TImgUChar;
+#endif
+
+public:
     Image();
     virtual ~Image();
 
-    // this makes the image active
-    void    Bind();
+    //! this makes the image active
+    void Bind() const;
 
     // image information
-    ILuint  Width();                // width
-    ILuint  Height();               // height
-    ILuint  Depth();                // depth (==1 for 2d images, >1 for 3d images)
-
-    ILuint  BitsPP();               // bits per pixel
-    ILuint  BytesPP();              // bytes per pixel
-
-    ILuint  Type();                 // format of pixels
-    ILuint  Format();               // byte format of image
-
-    ILubyte*Data();
-
-    bool    HasAlpha();             // does the format have an alpha channel
-    bool    Create(int w, int h, int b, void *data = NULL);
-
-    // the interface functions ... these *have* to be implemented by derived classes
-    //virtual bool Create() = 0;
-    //virtual void SetPixel(int x, int y, long color) const = 0;
-    //virtual long GetPixel(int x, int y) const = 0;
-
-    /*
-      virtual long MakeCol(int a, int r, int g, int b) const = 0;
-      virtual void GetCol(long col, int& a, int& r, int& g, int& b) const = 0;
-      virtual int      GetA(long col) const = 0;
-      virtual int      GetR(long col) const = 0;
-      virtual int      GetG(long col) const = 0;
-      virtual int      GetB(long col) const = 0;
-
-      // accessors
-      f_inline void SetWidth (int inWidth)    {       mWidth  = inWidth;      }
-      f_inline void SetHeight(int inHeight)   {       mHeight = inHeight;     }
+    //! @return the image width
+    TImgUInt Width() const;
+    //! @return the image height
+    TImgUInt Height() const;
+    /** Image depth information.
+       @return 1 for 2d images, >1 for 3d images
     */
+    TImgUInt Depth() const;
+    //! @return bits per pixel
+    TImgUInt BitsPP() const;
+    //! @return bytes per pixel
+    TImgUInt BytesPP() const;
+    //! @return format of pixels
+    TImgUInt Type() const;
+    //! @return byte format of image
+    TImgUInt Format() const;
+
+    TImgUChar* Data();
+
+    //! @return true if the format has an alpha channel
+    bool HasAlpha() const;
+    bool Create(int w, int h, int b, void* data = 0);
+
 protected:
-    ILuint          mId;                    // the DevIL ID which this image is bound to
+    //! the (DevIL) ID which this image is bound to
+    TImgUInt mId;
 };
 
 } // namespace kerosin

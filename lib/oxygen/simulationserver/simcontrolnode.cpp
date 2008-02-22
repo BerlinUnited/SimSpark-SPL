@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.cpp,v 1.4 2008/02/19 22:49:23 hedayat Exp $
+   $Id: simcontrolnode.cpp,v 1.5 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,10 +46,10 @@ void SimControlNode::Run()
 {
     boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
 
-    while ( !ss->isExit() )
+    while ( !ss->WantsToQuit() )
     {
         boost::mutex::scoped_lock lock(mMutex);
-        while( !ss->isExit() && int(ss->GetTime()*100) < int(mTime*100) )
+        while( !ss->WantsToQuit() && int(ss->GetTime()*100) < int(mTime*100) )
         {
             //std::cout<<GetName()<<' '<<__FUNCTION__<<" wait "<<ss->GetTime()<<' '<<mTime<<std::endl;
             mCond.wait(lock);
@@ -67,7 +67,7 @@ void SimControlNode::Run()
 void SimControlNode::Wait(boost::mutex::scoped_lock& lock)
 {
     boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
-    while ( !ss->isExit() && int(ss->GetTime()*100) >= int(GetTime()*100) )
+    while ( !ss->WantsToQuit() && int(ss->GetTime()*100) >= int(GetTime()*100) )
     {
         //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<GetTime()<<std::endl;
         mCond.wait(lock);

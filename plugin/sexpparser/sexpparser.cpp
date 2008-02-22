@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpparser.cpp,v 1.6 2007/02/25 17:35:19 jamu Exp $
+   $Id: sexpparser.cpp,v 1.7 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,13 +40,13 @@ SexpParser::Parse(const std::string& input)
 
     char* c = const_cast<char*>(input.c_str());
     pcont_t* pcont = init_continuation(c);
-    sexp_t* sexp = iparse_sexp(c,input.size(),pcont);
+    sexp_t* sexp = iparse_sexp(c,static_cast<int>(input.size()),pcont);
 
     while (sexp != 0)
     {
         SexpToPredicate(predList,sexp);
         destroy_sexp(sexp);
-        sexp = iparse_sexp(c,input.size(),pcont);
+        sexp = iparse_sexp(c,static_cast<int>(input.size()),pcont);
     }
 
     destroy_continuation(pcont);

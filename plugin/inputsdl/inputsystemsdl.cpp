@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystemsdl.cpp,v 1.9 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: inputsystemsdl.cpp,v 1.10 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,11 +19,13 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include "inputsystemsdl.h"
 #include "inputdevicesdl.h"
 #include <kerosin/inputserver/inputserver.h>
 #include <zeitgeist/logserver/logserver.h>
-#include <SDL_thread.h>
+#include <SDL/SDL_thread.h>
+#include <SDL/SDL_syswm.h>
 #include "timersdl.h"
 
 using namespace boost;
@@ -77,17 +79,39 @@ bool InputSystemSDL::Init(InputServer *inputServer)
 
     // here we check whether SDL has been initialized prior to adding this
     // input is part of the video subsystem (because of event loops, etc..)
-    if (!(
-          SDL_WasInit(SDL_INIT_VIDEO) ||
-          SDL_WasInit(SDL_INIT_TIMER)
-          )
-        )
+    if (!SDL_WasInit(SDL_INIT_VIDEO))
+    {
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) < 0)
         {
-            GetLog()->Error()
-                << "ERROR: (InputSystemSDL) SDL not initialized!"
-                << std::endl;
+            GetLog()->Error() << "ERROR: (InputSystemSDL) SDL not initialized!\n";
             return false;
         }
+        SDL_SetVideoMode(0,0,0,0);
+        static SDL_SysWMinfo pInfo;
+        SDL_VERSION(&pInfo.version);
+        SDL_GetWMInfo(&pInfo);
+
+   // Also, SDL keeps an internal record of the window size
+   //  and position. Because SDL does not own the window, it
+   //  missed the WM_POSCHANGED message and has no record of
+   //  either size or position. It defaults to {0, 0, 0, 0},
+   //  which is then used to trap the mouse "inside the
+   //  window". We have to fake a window-move to allow SDL
+   //  to catch up, after which we can safely grab input.
+//         RECT r;
+//         GetWindowRect(pInfo.window, &r);
+//         SetWindowPos(pInfo.window, 0, r.left, r.top, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+//        SDL_WM_GrabInput(SDL_GRAB_ON);
+    }
+
+    if (!SDL_WasInit(SDL_INIT_TIMER))
+    {
+        if (SDL_Init(SDL_INIT_TIMER) < 0)
+        {
+            GetLog()->Error() << "ERROR: (InputSystemSDL) SDL Timer not initialized!\n";
+            return false;
+        }
+    }
 
     // we need a mutex object
     mMutex = SDL_CreateMutex();
@@ -167,23 +191,22 @@ int InputSystemSDL::EventFilter(const SDL_Event *event)
     return ret;
 }
 
-void InputSystemSDL::AddInput(kerosin::InputServer::Input &input)
+void InputSystemSDL::AddInput(const Input &input)
 {
     SDL_LockMutex(mMutex);
     InputSystem::AddInput(input);
     SDL_UnlockMutex(mMutex);
 }
 
-bool InputSystemSDL::GetInput(kerosin::InputServer::Input &input)
+bool InputSystemSDL::GetInput(Input &input)
 {
     SDL_LockMutex(mMutex);
     bool ret = InputSystem::GetInput(input);
     SDL_UnlockMutex(mMutex);
-
     return ret;
 }
 
-bool InputSystemSDL::UpdateTimerInput(InputServer::Input &input)
+bool InputSystemSDL::UpdateTimerInput(Input &input)
 {
     if (mTimer.get() == NULL)
         {

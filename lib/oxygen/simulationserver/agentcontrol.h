@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentcontrol.h,v 1.2 2004/05/06 09:37:39 rollmark Exp $
+   $Id: agentcontrol.h,v 1.3 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,11 +21,10 @@
 #define OXYGEN_AGENTCONTROL_H
 
 #include "netcontrol.h"
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 
 namespace oxygen
 {
-class GameControlServer;
-
 /** \class AgentControl is a NetControl node that manages the
     communication with agents in cooperation with the
     GameControlServer.
@@ -52,11 +51,10 @@ public:
 
 protected:
     virtual void OnLink();
-    virtual void OnUnlink();
 
 protected:
     /** cached reference to the GameControlServer */
-    boost::shared_ptr<GameControlServer> mGameControlServer;
+    CachedPath<GameControlServer> mGameControlServer;
 };
 
 DECLARE_CLASS(AgentControl);

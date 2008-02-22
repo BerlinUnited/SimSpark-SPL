@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.h,v 1.4 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: inputcontrol.h,v 1.5 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #define KEROSIN_INPUTCONTROL_H
 
 #include <oxygen/simulationserver/simcontrolnode.h>
+#include <oxygen/sceneserver/fpscontroller.h>
 #include <kerosin/inputserver/inputserver.h>
 
 namespace oxygen
@@ -68,8 +69,8 @@ public:
     /** sets the location of the FPS Controller to be used */
     bool SetFPSController(const std::string& path);
 
-    /** sets the FPSController to be used */
-    void SetFPSController(boost::shared_ptr<oxygen::FPSController> controller);
+    /** returns the cached location of the FPS controller */
+    boost::shared_ptr<oxygen::FPSController> GetFPSController();
 
     /** sets the horizontal mouse sensitivity */
     void SetHorizontalSensitivity(float s);
@@ -111,7 +112,7 @@ public:
     bool RegisterInputItem(const std::string& inputItem, const std::string& name);
 
     virtual void Run();
-    
+
     virtual void Wait(boost::mutex::scoped_lock& lock);
 
 protected:
@@ -120,10 +121,10 @@ protected:
 
 protected:
     /** the controlled FPSController */
-    boost::shared_ptr<oxygen::FPSController> mFPSController;
+    CachedPath<oxygen::FPSController> mFPSController;
 
     /** cached reference to the InputServer */
-    boost::shared_ptr<kerosin::InputServer> mInputServer;
+    CachedPath<kerosin::InputServer> mInputServer;
 
     /** the size of the last time step */
     float mDeltaTime;

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneeffector.h,v 1.2 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: sceneeffector.h,v 1.3 2008/02/22 16:48:21 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,16 +33,15 @@ public:
     SceneEffector();
     virtual ~SceneEffector();
 
+    /** realizes the action described by the ActionObject */
+    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
+
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return "scene"; }
 
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
-
-protected:
-    /** realizes the action described by the ActionObject */
-    virtual void PrePhysicsUpdateInternal(float deltaTime);
 };
 
 DECLARE_CLASS(SceneEffector);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timersdl.cpp,v 1.4 2004/04/23 20:53:23 fruit Exp $
+   $Id: timersdl.cpp,v 1.5 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,14 +52,14 @@ TimerSDL::EventFilter(const SDL_Event* event)
 }
 
 void
-TimerSDL::GetInput(kerosin::InputServer::Input& input)
+TimerSDL::GetInput(Input& input)
 {
-    input.type      = InputServer::eAxis;
-    input.code      = mInputSystem->GetInputServer()->IC_AXIST;
+    input.mType = Input::eAxis;
+    input.mCode = Input::IC_AXIST;
 
     unsigned int ticks = SDL_GetTicks();
 
     // FIXME: ticks might wrap
-    input.data.l = ticks - mLastTicks;
+    input.mData.l = ticks - mLastTicks;
     mLastTicks = ticks;
 }

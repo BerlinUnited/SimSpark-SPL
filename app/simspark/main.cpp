@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.5 2007/05/29 09:45:39 jboedeck Exp $
+   $Id: main.cpp,v 1.6 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,6 +19,10 @@
 */
 
 #include <spark/spark.h>
+#include <zeitgeist/zeitgeist.h>
+#include <oxygen/simulationserver/simulationserver.h>
+#include <kerosin/renderserver/rendercontrol.h>
+#include <kerosin/inputserver/inputcontrol.h>
 #include <SDL.h>
 
 using namespace spark;
@@ -54,7 +58,7 @@ void SimSpark::PrintGreeting()
     GetLog()->Normal()
         << "simspark, a monolithic simulator 0.1\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
-        << "Universität Koblenz.\n"
+        << "Universitï¿½t Koblenz.\n"
         << "Copyright (C) 2004, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
         << "\nType '--help' for further information\n\n";

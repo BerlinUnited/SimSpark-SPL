@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.cpp,v 1.5 2004/12/21 23:04:46 tomhoward Exp $
+   $Id: netcontrol.cpp,v 1.6 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,12 +20,15 @@
 #include "netcontrol.h"
 #include "netmessage.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <netinet/in.h>
 #include <rcssnet/exception.hpp>
 #include <rcssnet/tcpsocket.hpp>
 #include <rcssnet/udpsocket.hpp>
 #include <sstream>
 #include <cerrno>
+
+#ifndef WIN32
+#include <netinet/in.h>
+#endif
 
 using namespace rcss::net;
 using namespace oxygen;
@@ -208,14 +211,10 @@ void NetControl::DoneSimulation()
     mNetMessage.reset();
 
     // close all client connections
-    for (
-         TAddrMap::iterator iter = mClients.begin();
-         iter != mClients.end();
-         ++iter
-         )
-        {
-            RemoveClient((*iter).second->addr);
-        }
+    while (! mClients.empty())
+    {
+        RemoveClient(mClients.begin());
+    }
 
     // shutdown the server socket
     mSocket->close();
@@ -223,7 +222,6 @@ void NetControl::DoneSimulation()
                        << "' closed server socket "
                        << DescribeSocketType() << std::endl;
     mSocket.reset();
-
     mClients.clear();
 }
 
@@ -244,6 +242,28 @@ void NetControl::AddClient(const Addr& from, shared_ptr<Socket> socket)
     ClientConnect(client);
 }
 
+void NetControl::RemoveClient(TAddrMap::iterator iter)
+{
+    shared_ptr<Client> client = (*iter).second;
+    ClientDisconnect(client);
+
+    shared_ptr<Socket> socket = client->socket;
+
+    GetLog()->Normal()
+        << "(NetControl) '" << GetName() << "' closing a "
+        << ((socket.get() != 0) ? "TCP" : "UDP")
+        << " connection from '"
+        << client->addr.getHostStr() << ":" << client->addr.getPort()
+        << "' id " << client->id << endl;
+
+    if (socket.get() != 0)
+        {
+            socket->close();
+        }
+
+    mClients.erase(iter);
+}
+
 void NetControl::RemoveClient(const Addr& from)
 {
     TAddrMap::iterator mapIter = mClients.find(from);
@@ -256,24 +276,7 @@ void NetControl::RemoveClient(const Addr& from)
             return;
         }
 
-    shared_ptr<Client> client = (*mapIter).second;
-    ClientDisconnect(client);
-
-    shared_ptr<Socket> socket = client->socket;
-
-    GetLog()->Normal()
-        << "(NetControl) '" << GetName() << "' closing a "
-        << ((socket.get() != 0) ? "TCP" : "UDP")
-        << " connection from '"
-        << from.getHostStr() << ":" << from.getPort()
-        << "' id " << client->id << endl;
-
-    if (socket.get() != 0)
-        {
-            socket->close();
-        }
-
-    mClients.erase(mapIter);
+    RemoveClient(mapIter);
 }
 
 void NetControl::ClientConnect(shared_ptr<Client> /*client*/)
@@ -286,7 +289,7 @@ void NetControl::ClientDisconnect(shared_ptr<Client> /*client*/)
     // empty callback, implemented in derived classes
 }
 
-void NetControl::SendMessage(shared_ptr<Client> client, const string& msg)
+void NetControl::SendClientMessage(shared_ptr<Client> client, const string& msg)
 {
     if (client.get() == 0)
         {
@@ -318,7 +321,7 @@ void NetControl::SendMessage(shared_ptr<Client> client, const string& msg)
         }
 }
 
-void NetControl::SendMessage(const Addr& addr, const string& msg)
+void NetControl::SendClientMessage(const Addr& addr, const string& msg)
 {
     TAddrMap::iterator iter = mClients.find(addr);
 
@@ -330,7 +333,7 @@ void NetControl::SendMessage(const Addr& addr, const string& msg)
             return;
         }
 
-    SendMessage((*iter).second,msg);
+    SendClientMessage((*iter).second,msg);
 }
 
 void NetControl::AcceptTCPConnections()
@@ -343,7 +346,7 @@ void NetControl::AcceptTCPConnections()
             return;
         }
 
-    int fd = mSocket->getFD();
+    Socket::SocketDesc fd = mSocket->getFD();
 
     fd_set readfds;
     FD_ZERO(&readfds);
@@ -355,7 +358,14 @@ void NetControl::AcceptTCPConnections()
 
     for(;;)
         {
-            int ret = select(fd+1, &readfds, 0, 0, &time);
+#ifdef WIN32
+            // maxFd is ignored on Win32 and is present just for api compatibility
+            int maxFd = 0;
+#else
+            int maxFd = fd + 1;
+#endif
+
+            int ret = select(maxFd, &readfds, 0, 0, &time);
 
             if (ret == 0)
                 {
@@ -382,6 +392,11 @@ void NetControl::AcceptTCPConnections()
                 {
                     Addr addr;
                     shared_ptr<Socket> socket(mSocket->accept(addr));
+
+                    if (socket.get() == 0)
+                    {
+                        return;
+                    }
 
                     int ret = socket->setNonBlocking(true);
 
@@ -477,7 +492,7 @@ void NetControl::ReadUDPMessages()
             return;
         }
 
-    int fd = mSocket->getFD();
+    Socket::SocketDesc fd = mSocket->getFD();
 
     fd_set readfds;
     FD_ZERO(&readfds);
@@ -489,7 +504,14 @@ void NetControl::ReadUDPMessages()
 
     for(;;)
         {
-            int ret = select(fd+1, &readfds, 0, 0, &time);
+#ifdef WIN32
+            // maxFd is ignored on Win32 and is present just for api compatibility
+            int maxFd = 0;
+#else
+            int maxFd = fd + 1;
+#endif
+
+            int ret = select(maxFd, &readfds, 0, 0, &time);
 
             if (ret == 0)
                 {
@@ -533,6 +555,11 @@ void NetControl::ReadUDPMessages()
 
 void NetControl::ReadTCPMessages()
 {
+    if (mClients.empty())
+    {
+        return;
+    }
+
     // generate a set of client socket fds
     fd_set client_fds;
     FD_ZERO(&client_fds);
@@ -545,8 +572,13 @@ void NetControl::ReadTCPMessages()
          ++iter
          )
         {
-            const int fd = (*iter).second->socket->getFD();
+            const Socket::SocketDesc fd = (*iter).second->socket->getFD();
+#ifdef WIN32
+            // maxFd is ignored for Win32
+            maxFd = 0;
+#else
             maxFd = std::max<int>(fd,maxFd);
+#endif
             FD_SET(fd,&client_fds);
         }
 
@@ -583,7 +615,7 @@ void NetControl::ReadTCPMessages()
                  ++iter
                  )
                 {
-                    const int fd = (*iter).second->socket->getFD();
+                    const Socket::SocketDesc fd = (*iter).second->socket->getFD();
                     if (! FD_ISSET(fd, &test_fds))
                         {
                             continue;
@@ -598,17 +630,13 @@ void NetControl::ReadTCPMessages()
                             StoreFragment(client->addr,rval);
                         } else
                             {
-                                if (rval < 0)
+                                if (rval <= 0)
                                     {
                                         GetLog()->Error()
                                             << "(NetControl) ERROR: '" << GetName()
                                             << "' recv returned error on a client socket '"
                                             << strerror(errno) << "' " << endl;
-                                        continue;
                                     }
-
-                                // (rval==0) indicates a close() on
-                                // the client side
 
                                 // mark the client connection to be
                                 // closed and exclude it from further
@@ -619,4 +647,3 @@ void NetControl::ReadTCPMessages()
                 }
         }
 }
-

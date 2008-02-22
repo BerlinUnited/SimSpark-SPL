@@ -4,7 +4,7 @@ this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2002,2003 Koblenz University
 Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-$Id: sceneeffector.cpp,v 1.3 2007/06/14 17:55:18 jboedeck Exp $
+$Id: sceneeffector.cpp,v 1.4 2008/02/22 16:48:21 hedayat Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,21 +39,17 @@ SceneEffector::~SceneEffector()
 {
 }
 
-void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
+bool SceneEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
-    if ( mAction.get() == 0 )
-        return;
-
     shared_ptr<SceneAction> sceneAction =
-        shared_dynamic_cast<SceneAction>(mAction);
-    mAction.reset();
+        shared_dynamic_cast<SceneAction>(action);
 
     if (sceneAction.get() == 0)
         {
             GetLog()->Error()
                 << "(SceneEffector) ERROR: cannot realize "
                 << "an unknown ActionObject\n";
-            return;
+            return false;
         }
 
     shared_ptr<AgentAspect> aspect =GetAgentAspect();
@@ -62,13 +58,13 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         {
             GetLog()->Error()
                 << "(SceneEffector) ERROR: cannot get AgentAspect\n";
-            return;
+            return false;
         }
 
     shared_ptr<ParameterList> parameter(new ParameterList());
 
     aspect->ImportScene(sceneAction->GetScene(), parameter);
-
+    return true;
 }
 
 shared_ptr<ActionObject>
@@ -91,5 +87,4 @@ SceneEffector::GetActionObject(const Predicate& predicate)
 
     return shared_ptr<ActionObject>(new SceneAction(GetPredicate(),scene));
 }
-
 

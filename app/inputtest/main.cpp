@@ -25,10 +25,10 @@ static void update()
         if (!inputServer) return;
 
     // Process incoming input
-        InputServer::Input input;
+        Input input;
         while (inputServer->GetInput(input))
         {
-                switch (input.id)
+                switch (input.mId)
                 {
                         case gCmdQuit:
                                 {

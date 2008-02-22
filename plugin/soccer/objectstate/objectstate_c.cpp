@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate_c.cpp,v 1.4 2004/03/22 11:20:59 rollmark Exp $
+   $Id: objectstate_c.cpp,v 1.5 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ FUNCTION(ObjectState,setID)
 void
 CLASS(ObjectState)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/BaseNode);
+    DEFINE_BASECLASS(SoccerNode);
     DEFINE_FUNCTION(setPerceptName);
     DEFINE_FUNCTION(setID);
 }

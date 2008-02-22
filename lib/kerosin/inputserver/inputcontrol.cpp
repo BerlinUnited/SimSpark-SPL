@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.6 2008/02/19 22:49:23 hedayat Exp $
+   $Id: inputcontrol.cpp,v 1.7 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 #include "inputcontrol.h"
 #include "inputitem.h"
 #include <oxygen/simulationserver/simulationserver.h>
-#include <oxygen/sceneserver/fpscontroller.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 
@@ -33,8 +32,8 @@ using namespace std;
 InputControl::InputControl()
 {
     mDeltaTime = 0;
-    mHorSens = 0.3;
-    mVertSens = 0.3;
+    mHorSens = 0.3f;
+    mVertSens = 0.3f;
     mAdvanceTime = true;
     mMouseLook = false;
 }
@@ -45,33 +44,7 @@ InputControl::~InputControl()
 
 bool InputControl::SetFPSController(const std::string& path)
 {
-    if (path.empty())
-        {
-            mFPSController.reset();
-            return true;
-        }
-
-    shared_ptr<Leaf> leaf = GetCore()->Get(path);
-
-    if (leaf.get() == 0)
-        {
-            GetLog()->Error()
-                << "(InputControl) ERROR: invalid path "
-                << path << "'\n";
-            return false;
-        }
-
-    mFPSController = shared_dynamic_cast<FPSController>
-        (GetCore()->Get(path));
-
-    if (mFPSController.get() == 0)
-        {
-            // the path is valid but doesn't point to an FPSController;
-            // for convenience search below for a controller
-            mFPSController  =
-                leaf->FindChildSupportingClass<FPSController>(true);
-        }
-
+    RegisterCachedPath(mFPSController, path);
     if (mFPSController.get() == 0)
         {
             GetLog()->Error()
@@ -83,9 +56,9 @@ bool InputControl::SetFPSController(const std::string& path)
     return true;
 }
 
-void InputControl::SetFPSController(shared_ptr<FPSController> controller)
+shared_ptr<FPSController> InputControl::GetFPSController()
 {
-    mFPSController = controller;
+    return mFPSController.get();
 }
 
 void InputControl::OnLink()
@@ -105,8 +78,7 @@ void InputControl::OnLink()
     scriptServer->CreateVariable("Command.Down",     CmdDown);
     scriptServer->CreateVariable("Command.Mouselook", CmdMouseLook);
 
-    mInputServer = shared_dynamic_cast<InputServer>
-        (GetCore()->Get("/sys/server/input"));
+    RegisterCachedPath(mInputServer, "/sys/server/input");
 
     if (mInputServer.get() == 0)
         {
@@ -158,22 +130,22 @@ void InputControl::StartCycle()
 {
     // Process incoming input
     mDeltaTime = 0.0f;
-    static InputServer::Input input;
+    static Input input;
 
     while (mInputServer->GetInput(input))
         {
-            switch (input.id)
+            switch (input.mId)
                 {
                 case CmdQuit:
                     GetSimulationServer()->Quit();
                     break;
 
                 case CmdMouseLook:
-                    mMouseLook = (input.data.l == 1);
+                    mMouseLook = (input.mData.l == 1);
                     break;
 
                 case CmdTimer:
-                    mDeltaTime = (float) input.data.l/1000.0f;
+                    mDeltaTime = (float) input.mData.l/1000.0f;
                     break;
 
                 case CmdMouseX:
@@ -182,7 +154,7 @@ void InputControl::StartCycle()
                         (mFPSController.get() != 0)
                         )
                         {
-                            mFPSController->AdjustHAngle(mHorSens*(float)input.data.l);
+                            mFPSController->AdjustHAngle(mHorSens*(float)input.mData.l);
                         }
                     break;
 
@@ -192,49 +164,49 @@ void InputControl::StartCycle()
                         (mFPSController.get() != 0)
                         )
                         {
-                            mFPSController->AdjustVAngle(mVertSens*(float)input.data.l);
+                            mFPSController->AdjustVAngle(mVertSens*(float)input.mData.l);
                         }
                     break;
 
                 case CmdUp:
                     if (mFPSController.get() != 0)
                         {
-                            mFPSController->Up(input.data.l!=0);
+                            mFPSController->Up(input.mData.l!=0);
                         }
                     break;
 
                 case CmdDown:
                     if (mFPSController.get() != 0)
                         {
-                            mFPSController->Down(input.data.l!=0);
+                            mFPSController->Down(input.mData.l!=0);
                         }
                     break;
 
                 case CmdLeft:
                     if (mFPSController.get() != 0)
                         {
-                            mFPSController->StrafeLeft(input.data.l!=0);
+                            mFPSController->StrafeLeft(input.mData.l!=0);
                         }
                     break;
 
                 case CmdRight:
                     if (mFPSController.get() != 0)
                         {
-                            mFPSController->StrafeRight(input.data.l!=0);
+                            mFPSController->StrafeRight(input.mData.l!=0);
                         }
                     break;
 
                 case CmdForward:
                     if (mFPSController.get() != 0)
                         {
-                            mFPSController->Forward(input.data.l!=0);
+                            mFPSController->Forward(input.mData.l!=0);
                         }
                     break;
 
                 case CmdBackward:
                     if (mFPSController.get() != 0)
                         {
-                            mFPSController->Backward(input.data.l!=0);
+                            mFPSController->Backward(input.mData.l!=0);
                         }
                     break;
 
@@ -257,28 +229,32 @@ void InputControl::StartCycle()
         }
 
     if (mAdvanceTime)
-        {
-            // pass the delta time on to the SimulationServer
-            GetSimulationServer()->AdvanceTime(mDeltaTime);
-        }
+    {
+        // pass the delta time on to the SimulationServer
+        GetSimulationServer()->AdvanceTime(mDeltaTime);
+    }
 }
 
-float InputControl::GetDeltaTime()
+float
+InputControl::GetDeltaTime()
 {
     return mDeltaTime;
 }
 
-void InputControl::SetAdvanceTime(bool advance)
+void
+InputControl::SetAdvanceTime(bool advance)
 {
     mAdvanceTime = advance;
 }
 
-bool InputControl::GetAdvanceTime()
+bool
+InputControl::GetAdvanceTime()
 {
     return mAdvanceTime;
 }
 
-bool InputControl::RegisterInputItem(const string& inputItemName, const string& name)
+bool
+InputControl::RegisterInputItem(const string& inputItemName, const string& name)
 {
     // check if a input item of the requested type was already created
     shared_ptr<InputItem> inputItem =
@@ -303,11 +279,11 @@ bool InputControl::RegisterInputItem(const string& inputItemName, const string& 
     inputItem->SetName(name);
 
     if (! AddChildReference(inputItem))
-        {
-            GetLog()->Error() << "ERROR: (InputControl) Cannot link the input item '"
-                              << inputItemName << "' to the hierarchy\n";
-            return false;
-        }
+    {
+        GetLog()->Error() << "ERROR: (InputControl) Cannot link the input item '"
+                          << inputItemName << "' to the hierarchy\n";
+        return false;
+    }
 
     GetLog()->Debug() << "(InputControl) Registered input item '"
                       << inputItemName << "'\n";
@@ -319,10 +295,10 @@ void InputControl::Run()
 {
     boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
     const int simStep = int(ss->GetSimStep()*100);
-    while ( !ss->isExit() )
+    while ( !ss->WantsToQuit() )
     {
         boost::mutex::scoped_lock lock(mMutex);
-        while( !ss->isExit() && int(ss->GetSumDeltaTime()*100) >= simStep )
+        while( !ss->WantsToQuit() && int(ss->GetSumDeltaTime()*100) >= simStep )
         {
             //std::cout<<GetName()<<' '<<__FUNCTION__<<" wait "<<ss->GetSumDeltaTime()<<' '<<mTime<<std::endl;
             mCond.wait(lock);
@@ -340,7 +316,7 @@ void InputControl::Run()
 void InputControl::Wait(boost::mutex::scoped_lock& lock)
 {
     boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
-    while ( !ss->isExit() && int(ss->GetSumDeltaTime()*100) < int(ss->GetSimStep()*100) )
+    while ( !ss->WantsToQuit() && int(ss->GetSumDeltaTime()*100) < int(ss->GetSimStep()*100) )
     {
         //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<GetTime()<<std::endl;
         mCond.wait(lock);

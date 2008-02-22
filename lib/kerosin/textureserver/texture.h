@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: texture.h,v 1.4 2007/05/29 09:45:38 jboedeck Exp $
+   $Id: texture.h,v 1.5 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,17 +31,25 @@ namespace kerosin
 
 class TextureServer;
 
-/* \class Texture
+/*      \class Texture
 
-   This is the base class of all OpenGL based textures. In OpenGL a
-   texture is represented by a so-called texture ID. This is a simple
-   handle. The basic operations for creating/deleting this handle are
-   contained in this class.
+        This is the base class of all OpenGL based textures. In OpenGL a texture
+        is represented by a so-called texture ID. This is a simple handle. The
+        basic operations for creating/deleting this handle are contained in this
+        class.
 
-   Usually, textures are created via the texture server.
+        Usually, textures are created via the texture server.
 
-   HISTORY: 14.10.02 - MK  - Initial version
-   TODO:    - support mipmap building (currently done only when SGIS_generate_mipmap is supported)
+        NOTE:
+
+        HISTORY:
+                14.10.02 - MK
+                        - Initial version
+
+        TODO:
+                - support mipmap building (currently done only when SGIS_generate_mipmap is supported)
+
+        TOFIX:
 */
 class Texture
 {
@@ -49,7 +57,7 @@ class Texture
     // functions
     //
 public:
-    Texture(const boost::shared_ptr<TextureServer> &textureServer);
+    Texture(bool use_gl = false);
     virtual ~Texture();
 
     //! release the associated OpenGL texture
@@ -58,12 +66,22 @@ public:
     //! acquire an OpenGL texture handle (texture not loaded)
     void Acquire();
 
-    //! bind the texture contained in this object to the corresponding target (user code is responsible for setting correct enables and tex units)
+    /** bind the texture contained in this object to the corresponding
+        target (user code is responsible for setting correct enables
+        and tex units)
+    */
     virtual void Bind() const = 0;
-    //! enable the target associated with a texture type (e.g. GL_TEXTURE_2D)
+
+    /** enable the target associated with a texture type
+        (e.g. GL_TEXTURE_2D)
+    */
     virtual void Enable() const = 0;
-    //! disable the target associated with a texture type (e.g. GL_TEXTURE_2D)
+
+    /** disable the target associated with a texture type
+        (e.g. GL_TEXTURE_2D)
+    */
     virtual void Disable() const = 0;
+
     virtual void Clamp() const = 0;
     virtual void ClampToEdge() const = 0;
     virtual void Repeat() const = 0;
@@ -72,19 +90,18 @@ public:
     unsigned int GetWidth() const;
     unsigned int GetHeight() const;
 
-    boost::shared_ptr<TextureServer>    GetTextureServer() const;
     //
     // members
     //
 protected:
-    //! OpenGL texture handle (initialized to 0)
+    //! OpenGL texture handle
     GLuint mTexID;
     //! width of texture
-    unsigned int mWidth;                         
+    unsigned int mWidth;
     //! height of texture
     unsigned int mHeight;
-private:
-    boost::weak_ptr<TextureServer>      mTextureServer;         // texture server, which created this object
+    //! flag if we want to access OpenGL
+    bool mUseGL;
 };
 
 }

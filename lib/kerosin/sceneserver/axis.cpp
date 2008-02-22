@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: axis.cpp,v 1.6 2007/06/20 00:38:24 fruit Exp $
+   $Id: axis.cpp,v 1.7 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ Axis::Axis() : mSize(10.0f)
 {
 }
 
-void Axis::RenderInternal()
+void Axis::RenderAxis(float size)
 {
     RGBA colX(1,0,0,1);
     RGBA colY(0,1,0,1);
@@ -40,7 +40,7 @@ void Axis::RenderInternal()
     glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,colX);
     glBegin(GL_LINE_LOOP);
     glVertex3f(0,0,0);
-    glVertex3f(mSize,0,0);
+    glVertex3f(size,0,0);
     glEnd();
 
     // Y
@@ -48,7 +48,7 @@ void Axis::RenderInternal()
     glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,colY);
     glBegin(GL_LINE_LOOP);
     glVertex3f(0,0,0);
-    glVertex3f(0,mSize,0);
+    glVertex3f(0,size,0);
     glEnd();
 
     // Z
@@ -57,8 +57,13 @@ void Axis::RenderInternal()
     glColor3f(0, 0, 1);
     glBegin(GL_LINE_LOOP);
     glVertex3f(0,0,0);
-    glVertex3f(0,0,mSize);
+    glVertex3f(0,0,size);
     glEnd();
+}
+
+void Axis::RenderInternal()
+{
+    RenderAxis(mSize);
 }
 
 float Axis::GetSize()

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorinputcontrol.h,v 1.1 2004/04/25 17:14:09 rollmark Exp $
+   $Id: monitorinputcontrol.h,v 1.2 2008/02/22 16:48:21 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ public:
 
 public:
     /** handle user defined input constants */
-    virtual void ProcessInput(kerosin::InputServer::Input& input);
+    virtual void ProcessInput(kerosin::Input& input);
 
 protected:
     virtual void OnLink();

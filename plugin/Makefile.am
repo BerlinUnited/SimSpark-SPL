@@ -11,6 +11,7 @@ SUBDIRS = \
 	  collisionperceptor \
 	  sexpparser \
 	  soccer \
+	  rosimporter \
 	  rubysceneimporter\
 	  voidmeshimporter\
 	  sparkmonitor\

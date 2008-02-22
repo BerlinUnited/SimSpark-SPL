@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.10 2006/06/10 16:36:15 jboedeck Exp $
+   $Id: renderserver.h,v 1.11 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,33 +38,39 @@
 #ifndef KEROSIN_RENDERSERVER_H
 #define KEROSIN_RENDERSERVER_H
 
-#include <salt/frustum.h>
-#include <zeitgeist/class.h>
-#include <zeitgeist/leaf.h>
+#include "baserenderserver.h"
 
-namespace oxygen
-{
-    class Scene;
-    class SceneServer;
-    class Camera;
-    class BaseNode;
-}
+#include <salt/frustum.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <kerosin/openglserver/glbase.h>
+#include <kerosin/openglserver/openglwrapper.h>
 
 namespace kerosin
 {
     class OpenGLServer;
+    class RenderNode;
 
-class RenderServer : public zeitgeist::Leaf
+class RenderServer : public BaseRenderServer
 {
     //
     // Functions
     //
 public:
+    typedef std::map<GLuint, boost::weak_ptr<kerosin::RenderNode> > TGLNameMap;
+
+public:
     RenderServer();
-    ~RenderServer();
+    virtual ~RenderServer() {}
 
     //! display the current active scene
-    void Render();
+    virtual void Render();
+
+    //! @return the width of the current view
+    virtual int Width() const;
+    //! @return the width of the height view
+    virtual int Height() const;
+    //! Read the current screen content into a buffer
+    bool CopyFrame(char* buffer) const;
 
     //! render the scene with fancy lighting
     void RenderFancyLighting(const salt::Frustum& frustum,
@@ -72,16 +78,22 @@ public:
                              TLeafList& myLights, TLeafList& allMeshes,
                              TLeafList& visibleMeshes);
 
+    /** sets the ambient color of the scene */
+    void SetAmbientColor(const RGBA& ambient);
+
+    /** update variables from a script */
+    virtual void UpdateCached();
+
+    /** If enabled the next render pass is used to pick an object */
+    void EnablePicking(bool enable, const salt::Vector2f& pickAt, const double pickRange);
+
+    /** Disables object picking for the next render pass */
+    void DisablePicking();
+
+    /** Returns the last picked node */
+    boost::weak_ptr<RenderNode> GetPickedNode() const;
+
 protected:
-    /** get the active scene node from the sceneServer */
-    bool GetActiveScene();
-
-    /** set up SceneServer reference */
-    virtual void OnLink();
-
-    /** reset SceneServer reference */
-    virtual void OnUnlink();
-
     /** render a scene recursively.
         \param node the scene base node
     */
@@ -91,20 +103,39 @@ protected:
      */
     void BindCamera(boost::shared_ptr<oxygen::Camera>& camera);
 
+    /** clears last intermediate picking state and prepares OpenGL
+        picking
+    */
+    void PreparePicking();
+
+    /** processes the collected picking information */
+    void ProcessPicks();
+
     //
     // Members
     //
 protected:
-    /** reference to the current active scene */
-    boost::shared_ptr<oxygen::Scene> mActiveScene;
-
     /** reference to the SceneServer */
-    boost::shared_ptr<oxygen::SceneServer> mSceneServer;
+    CachedPath<oxygen::SceneServer> mSceneServer;
 
-    /** reference to the OpenGLServer */
-    boost::shared_ptr<kerosin::OpenGLServer> mOpenGLServer;
+    /** the OpenGL ambient clear color */
+    RGBA mAmbientColor;
 
-    unsigned int mAmbientVP;
+    /** OpenGL name to RenderNode map for object picking */
+    TGLNameMap mNameMap;
+
+    /** counter to assign OpenGL names to RenderNodes while picking */
+    GLuint mNextName;
+
+    /** true, iff picking is enabled */
+    bool mEnablePicking;
+
+    /** the picking position in OpenGL window coordinates */
+    salt::Vector2f mPickAt;
+    /** the pick radius around mPickAt */
+    double mPickRange;
+    /** the picked result node */
+    boost::weak_ptr<RenderNode> mPickedNode;
 };
 
 DECLARE_CLASS(RenderServer);

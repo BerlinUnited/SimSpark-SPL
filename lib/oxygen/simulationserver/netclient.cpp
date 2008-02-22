@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: netclient.cpp,v 1.3 2005/12/08 10:26:19 jamu Exp $
+   $Id: netclient.cpp,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,9 +21,12 @@
 */
 #include "netclient.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <netinet/in.h>
 #include <rcssnet/exception.hpp>
 #include <cerrno>
+
+#ifndef WIN32
+#include <netinet/in.h>
+#endif
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -203,7 +206,7 @@ void NetClient::ReadFragments()
     for (;;)
         {
             // test for available data
-            int fd = mSocket->getFD();
+            Socket::SocketDesc fd = mSocket->getFD();
 
             fd_set readfds;
             FD_ZERO(&readfds);
@@ -213,7 +216,13 @@ void NetClient::ReadFragments()
             time.tv_sec = 0;
             time.tv_usec = 0;
 
-            int rval = select(fd+1, &readfds, 0, 0, &time );
+#ifdef WIN32
+            int maxFd = 0;
+#else
+            int maxFd = fd + 1;
+#endif
+
+            int rval = select(maxFd, &readfds, 0, 0, &time );
 
             if (rval == 0)
                 {

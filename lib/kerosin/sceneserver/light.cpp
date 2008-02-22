@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: light.cpp,v 1.8 2007/06/20 00:39:36 fruit Exp $
+   $Id: light.cpp,v 1.9 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include "light.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <kerosin/openglserver/openglwrapper.h>
-#include <kerosin/openglserver/openglserver.h>
 
 using namespace boost;
 using namespace kerosin;
@@ -170,47 +169,28 @@ void Light::ComputeBoundingBox()
 
 void Light::OnLink()
 {
-    mOpenGLServer = shared_dynamic_cast<OpenGLServer>
-        (GetCore()->Get("sys/server/opengl"));
+    RegisterCachedPath(mOpenGLServer, "sys/server/opengl");
 
-    if (mOpenGLServer.get() == 0)
+    if (mOpenGLServer.expired())
         {
             GetLog()->Error()
                 << "(Light) ERROR: OpenGLServer not found\n";
-        } else
-            {
-                mGLLight = mOpenGLServer->AllocLight();
+            return;
+        }
 
-                if (mGLLight < 0)
-                    {
-                        GetLog()->Error()
-                            << "(Light) ERROR: No more OpenGL lights available\n";
-                    }
+    mGLLight = mOpenGLServer->AllocLight();
 
-#if 0
-                mVP = mOpenGLServer->LoadARBVertexProgram("sys/program/omnilight.vp");
-                if (mVP == 0)
-                    {
-                        GetLog()->Error()
-                            << "(Light) ERROR: Could not load vertex program\n";
-                    }
-
-                mFP = mOpenGLServer->LoadARBFragmentProgram("sys/program/omnilight.fp");
-                if (mFP == 0)
-                    {
-                        GetLog()->Error()
-                            << "(Light) ERROR: Could not load fragment program\n";
-                    }
-#endif
-
-            }
-
+    if (mGLLight < 0)
+        {
+            GetLog()->Error()
+                << "(Light) ERROR: No more OpenGL lights available\n";
+        }
 }
 
 void Light::OnUnlink()
 {
     if (
-        (mOpenGLServer.get() != 0) &&
+        (! mOpenGLServer.expired()) &&
         (mGLLight >= 0)
         )
         {
@@ -218,7 +198,7 @@ void Light::OnUnlink()
             mGLLight = -1;
         }
 
-    mOpenGLServer.reset();
+    BaseNode::OnUnlink();
 }
 
 void Light::DeterminePotentiallyLitTriangles(boost::shared_ptr<StaticMesh>& /*mesh*/, std::vector<unsigned int>& /*triangles*/)

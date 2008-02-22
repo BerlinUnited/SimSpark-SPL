@@ -6,6 +6,24 @@
 # define constants used to setup spark
 #
 
+# (Inputsystem)
+#
+
+# the default InputSystem used to read keyboard, mouse and timer input
+$defaultInputSystem = 'InputSystemSDL'
+
+# the name of the default bundle that contains the default InputSystem
+$defaultInputSystemBundle = 'inputsdl'
+
+# (OpenGL rendering)
+#
+
+# the default OpenGLSystem used for rendering
+$defaultOpenGLSystem = 'OpenGLSystemSDL'
+
+# the name of the bundle that contains the default OpenGLSystem
+$defaultOpenGLBundle = 'openglsyssdl'
+
 #
 # (AgentControl) constants
 #
@@ -20,7 +38,7 @@ print "(spark.rb) setup\n"
 
 # define the monitor update interval in cycles
 $renderStep = 0.04
-$monitorInterval = 2;
+$monitorInterval = 10;
 $monitorStep = 0.04
 $serverType = 'tcp'
 $serverPort = 3200
@@ -30,17 +48,52 @@ $serverPort = 3200
 #
 $monitorServer = '127.0.0.1'
 $monitorPort = 3200
+# socket type ('tcp' or 'udp')
 $monitorType = 'tcp'
+
+# (Global Physics / World) constants
+#
+$physicsGlobalCFM = 0.001
+$physicsGlobalGravity = -9.81
 
 #
 # below is a set of utility functions for the user app
 #
+
+# rebuild scene and update all cached references
+def sparkResetScene
+  scene = get($scenePath)
+  scene.unlinkChildren()
+
+  # (re-)create world and space aspects
+  world = new('oxygen/World', $scenePath+'world')
+  world.setGravity(0.0, 0.0, $physicsGlobalGravity)
+  world.setCFM($physicsGlobalCFM)
+  world.setAutoDisableFlag(false)            #not in simspark
+  world.setContactSurfaceLayer(0.001)	     #not in simspark
+  new('oxygen/Space', $scenePath+'space')
+
+
+  # invalidate all cached references
+  scriptServer = get($serverPath+'script')
+  scriptServer.updateCachedAllNodes()
+
+  # force update references to scene objects (world, space etc.)
+  sceneServer = get($serverPath+'scene')
+  sceneServer.setActiveScene($scenePath)
+
+  # reset simulation time
+  simulationServer = get($serverPath+'simulation');
+  simulationServer.resetTime()
+end
+
 def sparkSetupMonitor
   print "(spark.rb) sparkSetupMonitor\n"
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
   simulationServer.setMultiThreads(false);
+
   monitorClient = new('SparkMonitorClient',
 		      $serverPath+'simulation/SparkMonitorClient')
   monitorClient.setServer($monitorServer)
@@ -169,9 +222,10 @@ def sparkSetupServer
   end
 end
 
-def sparkSetupRendering
+def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem)
   print "(spark.rb) sparkSetupRendering\n"
-  print "(spark.rb) using OpenGLSystem 'openglsyssdl'\n"
+  print "(spark.rb) using OpenGLSystem '" + openGLSystem + "'\n"
+
   #
   # setup the GeometryServer
   #geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
@@ -180,13 +234,25 @@ def sparkSetupRendering
 
   #
   # setup the kerosin render framework
+
   openGLServer = new('kerosin/OpenGLServer', $serverPath+'opengl');
-  importBundle 'openglsyssdl'
+
+  if (openGLSystem == $defaultOpenGLSystem)
+    importBundle($defaultOpenGLBundle)
+  end
+
+  openGLServer.init(openGLSystem)
 
   new('kerosin/RenderServer', $serverPath+'render');
   new('kerosin/ImageServer', $serverPath+'image');
   new('kerosin/TextureServer', $serverPath+'texture');
-  openGLServer.init('OpenGLSystemSDL')
+
+  #
+  # setup the InputServer
+
+  # create the InputServer and use a german keyboard layout
+  inputServer = new('kerosin/InputServer', $serverPath+'input')
+  inputServer.setScanCodeMapping('german.scan.rb');
 
   # setup the FontServer
   new('kerosin/FontServer', $serverPath+'font');
@@ -199,17 +265,17 @@ def sparkSetupRendering
   renderControl.setStep($renderStep)
 end
 
-def sparkSetupInput()
+def sparkSetupInput(inputSystem = $defaultInputSystem)
   print "(spark.rb) sparkSetupInput\n"
+  print "(spark.rb) using InputSystem '" + inputSystem + "'\n"
 
-  #
-  # setup the InputServer
+  # setup the SDL input system
+  if (inputSystem == $defaultInputSystem)
+    importBundle($defaultInputSystemBundle)
+  end
 
-  # use the SDL input system and use a german keyboard layout
-  importBundle 'inputsdl';
-  inputServer = new('kerosin/InputServer', $serverPath+'input')
-  inputServer.setScanCodeMapping('german.scan.rb');
-  inputServer.init('InputSystemSDL')
+  inputServer = get($serverPath+'input');
+  inputServer.init(inputSystem)
 
   # add devices
   inputServer.createDevice('Timer')
@@ -231,13 +297,13 @@ def sparkAddFPSCamera(
 		      vAngle = 45.0,
                       hAngle = 10.0,
 		      maxSpeed = 15.0,
-		      accel = 30.0,
+		      accel = 40.0,
 		      drag = 4,
 		      addCollider = false,
 		      colliderRadius = 2.0
 		      )
 
-  print "(spark.rb) sparkAddFPSCamera\n"
+  print "(spark.rb) sparkAddFPSCamera at " + path + "\n"
 
   # add a camera. The camera movement is controlled using an
   # FPSController.
@@ -333,7 +399,8 @@ $serverPath = '/sys/server/'
 
 #
 # set up logging
-sparkLogErrorToCerr()
+logServer = get($serverPath+'log')
+logServer.addStream(':cerr', 'eError')
 
 #
 # setup the PhysicsServer
@@ -356,14 +423,12 @@ geometryServer.initMeshImporter("ObjImporter");
 importBundle 'rubysceneimporter'
 sceneServer.initSceneImporter("RubySceneImporter");
 
-# create world and space aspects
-world = new('oxygen/World', $scenePath+'world')
-world.setGravity(0.0, 0.0, -9.81)
-world.setCFM(0.001)
-world.setAutoDisableFlag(false)
-world.setContactSurfaceLayer(0.001)
+# use the ros scene importer to import scenes
+importBundle 'rosimporter'
+sceneServer.initSceneImporter("RosImporter");
 
-new('oxygen/Space', $scenePath+'space')
+# prepare scene
+sparkResetScene()
 
 #
 # setup the MaterialServer
@@ -402,13 +467,3 @@ importBundle "gyrorateperceptor"
 
 #
 importBundle "collisionperceptor"
-
-
-
-
-
-
-
-
-
-

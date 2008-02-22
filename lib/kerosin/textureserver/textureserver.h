@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: textureserver.h,v 1.9 2007/06/20 00:35:09 fruit Exp $
+   $Id: textureserver.h,v 1.10 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,14 +23,11 @@
 #define KEROSIN_TEXTURESERVER_H
 
 #ifdef HAVE_CONFIG_H
-#undef PACKAGE
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
-#undef PREFIX
-#undef VERSION
 #include <sparkconfig.h>
 #endif
 
@@ -71,11 +68,6 @@ public:
     TextureServer();
     virtual ~TextureServer();
 
-    /** retrieve pointer to the OpenGL server ... used by Textures to
-        check extensions
-     */
-    boost::shared_ptr<OpenGLServer> GetOpenGLServer() const;
-
     /** load (or returned cached) texture  */
     boost::shared_ptr<Texture> GetTexture(const std::string &name);
 
@@ -83,19 +75,14 @@ protected:
     /** set up the OpenGLServer and ImageServer reference */
     virtual void OnLink();
 
-    /** reset OpenGLServer and ImageServer reference */
-    virtual void OnUnlink();
-
     //
     // members
     //
 private:
-    /** reference to the OpenGLServer */
-    boost::shared_ptr<OpenGLServer> mOpenGLServer;
-
     /** reference to the ImageServer */
-    boost::shared_ptr<ImageServer> mImageServer;
-
+    CachedPath<ImageServer> mImageServer;
+    /** reference to the OpenGLServer */
+    CachedPath<OpenGLServer> mOpenGLServer;
     /** registry of cached textures */
     TTextureCache mTextureCache;
 };

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentcontrol.cpp,v 1.3 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: agentcontrol.cpp,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "simulationserver.h"
 #include "netmessage.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
 
 using namespace oxygen;
@@ -41,21 +40,13 @@ AgentControl::~AgentControl()
 void AgentControl::OnLink()
 {
     NetControl::OnLink();
-    shared_ptr<SimulationServer> sim = GetSimulationServer();
-    if (sim.get() == 0)
-        {
-            GetLog()->Error()
-                << "(AgentControl) ERROR: SimulationServer not found\n";
-            return;
-        }
+    RegisterCachedPath(mGameControlServer, "/sys/server/gamecontrol");
 
-    mGameControlServer = sim->GetGameControlServer();
-}
-
-void AgentControl::OnUnlink()
-{
-    NetControl::OnUnlink();
-    mGameControlServer.reset();
+    if (mGameControlServer.expired())
+    {
+        GetLog()->Error()
+            << "(AgentControl) ERROR: GameControlServer not found.\n";
+    }
 }
 
 void AgentControl::ClientConnect(shared_ptr<Client> client)
@@ -180,7 +171,7 @@ void AgentControl::EndCycle()
                 }
 
             mNetMessage->PrepareToSend(senses);
-            SendMessage(client,senses);
+            SendClientMessage(client,senses);
         }
 }
 

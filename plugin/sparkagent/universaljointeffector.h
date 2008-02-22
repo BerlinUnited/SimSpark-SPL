@@ -20,14 +20,17 @@
 #ifndef UNIVERSALJOINTEFFECTOR_H
 #define UNIVERSALJOINTEFFECTOR_H
 
-#include <oxygen/agentaspect/effector.h>
+#include <oxygen/agentaspect/jointeffector.h>
 #include <oxygen/physicsserver/universaljoint.h>
 
-class UniversalJointEffector : public oxygen::Effector
+class UniversalJointEffector : public oxygen::JointEffector<oxygen::UniversalJoint>
 {
 public:
     UniversalJointEffector();
     virtual ~UniversalJointEffector();
+
+    /** realizes the action described by the ActionObject */
+    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
 
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return GetName(); }
@@ -35,21 +38,6 @@ public:
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
-
-protected:
-    /** setup the reference to the HingeJoint parent node */
-    virtual void OnLink();
-
-    /** remove the reference to the HingeJoint parent node */
-    virtual void OnUnlink();
-
-    /** realizes the action described by the ActionObject */
-    virtual void PrePhysicsUpdateInternal(float deltaTime);
-
-protected:
-    /** cached reference to the monitor joint */
-    boost::shared_ptr<oxygen::UniversalJoint> mJoint;
-
 };
 
 DECLARE_CLASS(UniversalJointEffector);

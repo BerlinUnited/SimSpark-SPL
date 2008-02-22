@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.h,v 1.3 2008/02/20 11:17:18 hedayat Exp $
+   $Id: internalsoccerinput.h,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public:
     /** this method is called every time an input unknown to the
         parent InputControl node is received
     */
-    virtual void ProcessInput(const kerosin::InputServer::Input& input);
+    virtual void ProcessInput(const kerosin::Input& input);
 
     /** registers the soccermonitor command constants and cache
         references
@@ -79,9 +79,9 @@ public:
 protected:
     /** cached reference to the monitor client */
     boost::shared_ptr<GameStateAspect> mGameState;
-    
+
     /** cached reference to the soccer rule aspect */
-    boost::shared_ptr<SoccerRuleAspect> mSoccerRule; 
+    boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
 
     /** cached reference to the camera body */
     boost::shared_ptr<oxygen::Body> mCameraBody;
@@ -91,7 +91,7 @@ protected:
 
     /** cached reference to the game control server */
     boost::shared_ptr<oxygen::GameControlServer> mGameControl;
-    
+
     TTeamIndex mLastKickOff;
 };
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2perceptor.h,v 1.1 2004/05/07 12:14:51 rollmark Exp $
+   $Id: hinge2perceptor.h,v 1.2 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@
 #ifndef HINGE2PERCEPTOR_H
 #define HINGE2PERCEPTOR_H
 
-#include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/agentaspect/jointperceptor.h>
 #include <oxygen/physicsserver/hinge2joint.h>
 
-class Hinge2Perceptor : public oxygen::Perceptor
+class Hinge2Perceptor : public oxygen::JointPerceptor<oxygen::Hinge2Joint>
 {
 public:
     Hinge2Perceptor();
@@ -35,16 +35,8 @@ public:
     bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
 protected:
-    virtual void OnLink();
-    virtual void OnUnlink();
-
     void InsertAxisAngle(oxygen::Predicate& predicate, oxygen::Joint::EAxisIndex idx);
     void InsertAxisRate(oxygen::Predicate& predicate, oxygen::Joint::EAxisIndex idx);
-
-
-protected:
-    /** cached reference to the monitor joint */
-    boost::shared_ptr<oxygen::Hinge2Joint> mJoint;
 };
 
 DECLARE_CLASS(Hinge2Perceptor);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.19 2007/06/27 22:25:03 jamu Exp $
+   $Id: rubysceneimporter.cpp,v 1.20 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/sceneserver/scenedict.h>
 #include <boost/scoped_array.hpp>
 
 using namespace zeitgeist;
@@ -55,8 +56,6 @@ using namespace std;
         )
 */
 
-// JAN: original definitions
-// see also plugin/sparkmonitor/sparkmonitor.cpp
 #define S_NODE     "node"
 #define S_SELECT   "select"
 #define S_PWD      "pwd"
@@ -66,15 +65,6 @@ using namespace std;
 
 #define S_DELTASCENE "RubyDeltaScene"
 #define S_SCENEGRAPH "RubySceneGraph"
-// #define S_NODE     "nd"
-// #define S_SELECT   "sel"
-// #define S_PWD      "pwd"
-// #define S_TEMPLATE "templ"
-// #define S_DEFINE   "def"
-// #define S_ATTACH   "attach"
-
-// #define S_DELTASCENE "RDS"
-// #define S_SCENEGRAPH "RSG"
 
 #define S_FROMSTRING "<from string>";
 
@@ -84,6 +74,7 @@ RubySceneImporter::RubySceneImporter() : SceneImporter()
     mVersionMinor = 0;
     mDeltaScene = false;
     mAutoUnlink = false;
+    mUpdateSceneDict = false;
 
     InitTranslationTable();
 }
@@ -97,11 +88,12 @@ void RubySceneImporter::SetUnlinkOnCompleteScenes(bool unlink)
     mAutoUnlink = unlink;
 }
 
-void RubySceneImporter::InitTranslationTable()
+void
+RubySceneImporter::InitTranslationTable()
 {
     mTranslationTable.clear();
 
-    // 
+    //
     mTranslationTable["nd"]    = S_NODE;
     mTranslationTable["sel"]   = S_SELECT;
     mTranslationTable["pwd"]   = S_PWD;
@@ -111,11 +103,6 @@ void RubySceneImporter::InitTranslationTable()
     mTranslationTable["RDS"]   = S_DELTASCENE;
     mTranslationTable["RSG"]   = S_SCENEGRAPH;
     mTranslationTable["SLT"]   = "setLocalTransform";
-    mTranslationTable["sSc"]   = "setScale";
-    mTranslationTable["sMat"]   = "setMaterial";
-    mTranslationTable["BN"]   = "BaseNode";
-    mTranslationTable["SMN"]   = "SingleMatNode";
-    mTranslationTable["TRF"]   = "Transform";
 }
 
 
@@ -133,6 +120,12 @@ string RubySceneImporter::Lookup(const std::string& key)
 }
 
 
+void
+RubySceneImporter::EnableSceneDictionary(bool enable)
+{
+    mUpdateSceneDict = enable;
+}
+
 bool RubySceneImporter::ImportScene(const std::string& fileName,
                                     shared_ptr<BaseNode> root,
                                     shared_ptr<ParameterList> parameter)
@@ -147,6 +140,7 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
             return false;
         }
 
+    std::string oldFileName = mFileName;
     mFileName = fileName;
 
     // read entire file into a temporary buffer
@@ -154,7 +148,10 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
     file->Read(buffer.get(), file->Size());
     buffer[file->Size()] = 0;
 
-    return ParseScene(buffer.get(), file->Size(), root, parameter);
+    bool ok = ParseScene(buffer.get(), file->Size(), root, parameter);
+    mFileName = oldFileName;
+
+    return ok;
 }
 
 bool RubySceneImporter::ParseScene(const std::string& scene,
@@ -162,7 +159,7 @@ bool RubySceneImporter::ParseScene(const std::string& scene,
                                    shared_ptr<ParameterList> parameter)
 {
     mFileName = S_FROMSTRING;
-    return ParseScene(scene.c_str(),scene.size(),root,parameter);
+    return ParseScene(scene.c_str(),static_cast<int>(scene.size()),root,parameter);
 }
 
 bool RubySceneImporter::ParseScene(const char* scene, int size,
@@ -191,6 +188,16 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
 
     destroy_sexp(sexp);
     sexp = iparse_sexp(const_cast<char*>(scene),size,pcont);
+
+    if (sexp == 0)
+    {
+        GetLog()->Error()
+            << "(RubySceneImporter) ERROR: failed to parse S-Expressions. "
+            << "Last read line was " << pcont->line << "\n";
+        root->UnlinkChildren();
+        return false;
+
+    }
 
     if (
         (! mDeltaScene) &&
@@ -262,9 +269,9 @@ bool RubySceneImporter::ReadHeader(sexp_t* sexp)
         {
             return false;
         }
-    
+
     string val = Lookup(string(sexp->val));
-    
+
     mDeltaScene = false;
     if (val == S_DELTASCENE)
         {
@@ -370,6 +377,15 @@ RubySceneImporter::CreateNode(sexp_t* sexp)
         return shared_ptr<BaseNode>();
     }
 
+    if (
+        (mUpdateSceneDict) &&
+        (mSceneDict != 0)
+        )
+    {
+        mSceneDict->Insert
+            (node, SceneDict::FileRef(mFileName,sexp->line));
+    }
+
     return node;
 }
 
@@ -434,7 +450,7 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
             return false;
         }
 
-    if (sexp->ty != SEXP_VALUE) 
+    if (sexp->ty != SEXP_VALUE)
         {
             return false;
         }
@@ -455,7 +471,7 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
         {
             string atom;
 
-            if (sexp->ty == SEXP_VALUE) 
+            if (sexp->ty == SEXP_VALUE)
                 {
                     atom = sexp->val; //todo: use TranslationTable here?
                     if (
@@ -513,20 +529,15 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
 
 void RubySceneImporter::PushInvocation(const MethodInvocation& invoc)
 {
-    static shared_ptr<Class> baseNodeClass;
-    
-    if (baseNodeClass.get() == 0)
-    { 
-        baseNodeClass = shared_dynamic_cast<Class>
-            (GetCore()->Get("/classes/oxygen/Transform"));
+    shared_ptr<Class> baseNodeClass =
+        shared_dynamic_cast<Class>(GetCore()->Get("/classes/oxygen/Transform"));
 
-        if (baseNodeClass.get() == 0)
+    if (baseNodeClass.get() == 0)
         {
             GetLog()->Error()
                 << "(RubySceneImporter) ERROR: failed to get class object for Transform\n";
             return;
         }
-    }
 
     if (baseNodeClass->SupportsCommand(invoc.method))
         {
@@ -725,7 +736,7 @@ bool RubySceneImporter::ParseTemplate(sexp_t* sexp)
 
     while (
            (sexp != 0) &&
-           (sexp->ty == SEXP_VALUE) 
+           (sexp->ty == SEXP_VALUE)
            )
         {
             string param = sexp->val; //todo: use abbrevTable here?
@@ -758,7 +769,7 @@ bool RubySceneImporter::ParseTemplate(sexp_t* sexp)
                     return false;
                 }
 
-            int idx = env.parameterMap.size();
+            int idx = static_cast<int>(env.parameterMap.size());
             env.parameterMap[param] = idx;
             sexp = sexp->next;
         }
@@ -779,8 +790,8 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
         case SEXP_VALUE:
             {
 
-                string name = Lookup(string(sexp->val)); 
-                
+                string name = Lookup(string(sexp->val));
+
                 if (name == S_NODE)
                 {
                     while (
@@ -805,11 +816,11 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 
                     if (
                         (sub->ty == SEXP_VALUE) &&
-                        (Lookup(string(sub->val)) == S_NODE) 
+                        (Lookup(string(sub->val)) == S_NODE)
                         )
                     {
                         node = shared_dynamic_cast<BaseNode>(*iter);
-                        if (iter != root->end())
+                        if (iter != node->end())
                         {
                             ++iter;
                         }
@@ -842,9 +853,9 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
         {
         case SEXP_VALUE:
             {
-                
-                string name = Lookup(string(sexp->val)); 
-                
+
+                string name = Lookup(string(sexp->val));
+
                 if (name == S_NODE)
                 {
                     sexp = sexp->next;
@@ -906,7 +917,3 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
     }
     return true;
 }
-
-
-
-

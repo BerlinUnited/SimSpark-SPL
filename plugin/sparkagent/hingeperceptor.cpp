@@ -25,29 +25,13 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-HingePerceptor::HingePerceptor() : Perceptor()
+HingePerceptor::HingePerceptor()
+    : JointPerceptor<HingeJoint>::JointPerceptor()
 {
 }
 
 HingePerceptor::~HingePerceptor()
 {
-}
-
-void HingePerceptor::OnLink()
-{
-    mJoint = make_shared(FindParentSupportingClass<HingeJoint>());
-
-    if (mJoint.get() == 0)
-        {
-            GetLog()->Error()
-                << "(HingePerceptor) ERROR: found no HingeJoint parent\n";
-        }
-
-}
-
-void HingePerceptor::OnUnlink()
-{
-    mJoint.reset();
 }
 
 void HingePerceptor::InsertAxisAngle(Predicate& predicate)
@@ -84,5 +68,3 @@ bool HingePerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
 
     return true;
 }
-
-

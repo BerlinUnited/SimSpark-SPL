@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: rendercontrol_c.cpp,v 1.1 2004/04/25 16:57:34 rollmark Exp $
+   $Id: rendercontrol_c.cpp,v 1.2 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "rendercontrol.h"
+#include <oxygen/sceneserver/sceneserver.h>
 
 using namespace kerosin;
 using namespace std;

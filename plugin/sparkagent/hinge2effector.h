@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.h,v 1.4 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: hinge2effector.h,v 1.5 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,14 +22,17 @@
 #ifndef HINGE2EFFECTOR_H
 #define HINGE2EFFECTOR_H
 
-#include <oxygen/agentaspect/effector.h>
+#include <oxygen/agentaspect/jointeffector.h>
 #include <oxygen/physicsserver/hinge2joint.h>
 
-class Hinge2Effector : public oxygen::Effector
+class Hinge2Effector : public oxygen::JointEffector<oxygen::Hinge2Joint>
 {
 public:
     Hinge2Effector();
     virtual ~Hinge2Effector();
+
+    /** realizes the action described by the ActionObject */
+    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
 
     /** returns the name of the predicate this effector implements. */
     virtual std::string GetPredicate() { return GetName(); }
@@ -37,21 +40,6 @@ public:
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
-
-protected:
-    /** setup the reference to the Hinge2Joint parent node */
-    virtual void OnLink();
-
-    /** remove the reference to the Hinge2Joint parent node */
-    virtual void OnUnlink();
-
-    /** realizes the action described by the ActionObject */
-    virtual void PrePhysicsUpdateInternal(float deltaTime);
-
-protected:
-    /** cached reference to the monitor joint */
-    boost::shared_ptr<oxygen::Hinge2Joint> mJoint;
-
 };
 
 DECLARE_CLASS(Hinge2Effector);

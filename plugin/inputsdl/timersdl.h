@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timersdl.h,v 1.4 2004/04/23 20:52:10 fruit Exp $
+   $Id: timersdl.h,v 1.5 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ public:
     virtual int EventFilter(const SDL_Event* event);
 
     //! return an Input
-    void GetInput(kerosin::InputServer::Input &input);
+    void GetInput(kerosin::Input &input);
 
 protected:
     unsigned long mLastTicks;

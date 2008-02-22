@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: rendercontrol.h,v 1.2 2004/12/22 16:05:30 rollmark Exp $
+   $Id: rendercontrol.h,v 1.3 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,12 +21,11 @@
 #define KEROSIN_RENDERCONTROL_H
 
 #include <oxygen/simulationserver/simcontrolnode.h>
+#include <kerosin/renderserver/baserenderserver.h>
+#include <kerosin/openglserver/openglserver.h>
 
 namespace kerosin
 {
-    class RenderServer;
-    class OpenGLServer;
-
 /** \class RenderControl is a SimControlNode that renders the current
     scene and pumps the SDL event loop at the end of each simulation
     cycle, counting the total number of frames rendered
@@ -38,23 +37,21 @@ public:
     virtual ~RenderControl();
 
     /** returns the total number of rendered frames */
-    int GetFramesRendered();
+    int GetFramesRendered() const;
 
     /** renders the scene at the end of each simulation cycle */
     virtual void EndCycle();
 
 protected:
     virtual void OnLink();
-    virtual void OnUnlink();
-
     void RenderCustom();
 
 protected:
     /** cached reference to the RenderServer */
-    boost::shared_ptr<kerosin::RenderServer> mRenderServer;
+    CachedPath<kerosin::BaseRenderServer> mRenderServer;
 
     /** cached reference to the OpenGLServer */
-    boost::shared_ptr<kerosin::OpenGLServer> mOpenGLServer;
+    CachedPath<kerosin::OpenGLServer> mOpenGLServer;
 
     /** total frames rendered */
     int mFramesRendered;

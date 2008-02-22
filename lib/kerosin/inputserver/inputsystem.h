@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystem.h,v 1.6 2004/04/23 20:19:42 fruit Exp $
+   $Id: inputsystem.h,v 1.7 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,20 +66,20 @@ public:
         mutex and use the definitely unwrapped addition via
         AddInputInternal().
     */
-    virtual void AddInput(InputServer::Input& input);
+    virtual void AddInput(const Input& input);
 
     /** this is the actual addition of input to the queue. It should
         only be used by InputDevices!
      */
-    void AddInputInternal(InputServer::Input& input);
+    void AddInputInternal(const Input& input);
 
     //! retrieve an input from the queue
-    virtual bool GetInput(InputServer::Input& input);
+    virtual bool GetInput(Input& input);
 
     InputServer* GetInputServer() { return mInputServer; }
 
 protected:
-    virtual bool UpdateTimerInput(InputServer::Input &input);
+    virtual bool UpdateTimerInput(Input &input);
 
     //
     // members
@@ -88,7 +88,7 @@ protected:
     InputServer* mInputServer;
 
 private:
-    std::deque<InputServer::Input>  mInputQueue;
+    std::deque<Input>  mInputQueue;
 };
 
 DECLARE_ABSTRACTCLASS(InputSystem);

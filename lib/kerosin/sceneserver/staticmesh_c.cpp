@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh_c.cpp,v 1.8 2007/06/17 13:47:35 fruit Exp $
+   $Id: staticmesh_c.cpp,v 1.9 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,11 +56,76 @@ FUNCTION(StaticMesh,setScale)
         (in.GetSize() != 3) ||
         (! in.GetValue(in.begin(), inScale))
         )
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     obj->SetScale(inScale);
+    return true;
+}
+
+FUNCTION(StaticMesh,setCastShadows)
+{
+    bool shadows;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], shadows))
+        )
+    {
+        return false;
+    }
+
+    obj->SetCastShadows(shadows);
+    return true;
+}
+
+FUNCTION(StaticMesh,setUseExternalMesh)
+{
+    bool external;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], external))
+        )
+    {
+        return false;
+    }
+
+    obj->SetUseExternalMesh(external);
+    return true;
+}
+
+
+FUNCTION(StaticMesh,setExternalMeshName)
+{
+    std::string name;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], name))
+        )
+    {
+        return false;
+    }
+    obj->SetExternalMeshName(name);
+    return true;
+}
+
+FUNCTION(StaticMesh,setExternalMeshScale)
+{
+    Vector3f inScale;
+    std::cerr << "*********************************************************************************\n";
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in.begin(), inScale))
+        )
+    {
+        return false;
+    }
+    std::cerr << "setting External Mesh scale to " << inScale << "\n*********************************************************************************\n";
+
+    obj->SetExternalMeshScale(inScale);
     return true;
 }
 
@@ -69,4 +134,8 @@ void CLASS(StaticMesh)::DefineClass()
     DEFINE_BASECLASS(oxygen/BaseNode);
     DEFINE_FUNCTION(load);
     DEFINE_FUNCTION(setScale);
+    DEFINE_FUNCTION(setCastShadows)
+    DEFINE_FUNCTION(setUseExternalMesh)
+    DEFINE_FUNCTION(setExternalMeshName)
+    DEFINE_FUNCTION(setExternalMeshScale)
 }

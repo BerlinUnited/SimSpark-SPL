@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: texture.cpp,v 1.2 2007/06/20 00:36:57 fruit Exp $
+   $Id: texture.cpp,v 1.3 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,42 +24,43 @@
 using namespace boost;
 using namespace kerosin;
 
-Texture::Texture(const boost::shared_ptr<TextureServer> &textureServer) :
-mTexID(0), mWidth(0), mHeight(0), mTextureServer(textureServer)
+Texture::Texture(bool use_gl)
+    : mTexID(0), mWidth(0), mHeight(0), mUseGL(use_gl)
 {
 }
 
 Texture::~Texture()
 {
-	Reset();
+    Reset();
 }
 
-void Texture::Reset()
+void
+Texture::Reset()
 {
-	if (mTexID)
-	{
-		glDeleteTextures(1, &mTexID);
-		mTexID = 0;
-	}
+    if (! mTexID)
+    {
+        return;
+    }
+
+    if (mUseGL) glDeleteTextures(1, &mTexID);
+    mTexID = 0;
 }
 
-void Texture::Acquire()
+void
+Texture::Acquire()
 {
     Reset();
-    glGenTextures(1, &mTexID);
+    if (mUseGL) glGenTextures(1, &mTexID);
 }
 
-unsigned int Texture::GetWidth() const
+unsigned int
+Texture::GetWidth() const
 {
     return mWidth;
 }
 
-unsigned int Texture::GetHeight() const
+unsigned int
+Texture::GetHeight() const
 {
-	return mHeight;
-}
-
-boost::shared_ptr<TextureServer> Texture::GetTextureServer() const
-{
-	return make_shared(mTextureServer);
+    return mHeight;
 }

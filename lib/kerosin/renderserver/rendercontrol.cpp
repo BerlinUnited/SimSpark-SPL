@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: rendercontrol.cpp,v 1.3 2004/12/22 16:29:23 rollmark Exp $
+   $Id: rendercontrol.cpp,v 1.4 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 #include "rendercontrol.h"
 #include "customrender.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <kerosin/renderserver/renderserver.h>
-#include <kerosin/openglserver/openglserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
 
 using namespace kerosin;
 using namespace oxygen;
@@ -40,32 +39,25 @@ RenderControl::~RenderControl()
 
 void RenderControl::OnLink()
 {
-    mRenderServer = shared_dynamic_cast<RenderServer>
-        (GetCore()->Get("/sys/server/render"));
+    RegisterCachedPath(mRenderServer, "/sys/server/render");
 
-    if (mRenderServer.get() == 0)
+    if (mRenderServer.expired())
         {
             GetLog()->Error()
                 << "(RenderControl) ERROR: RenderServer not found\n";
         }
 
-    mOpenGLServer =  shared_dynamic_cast<OpenGLServer>
-        (GetCore()->Get("/sys/server/opengl"));
+    RegisterCachedPath(mOpenGLServer,"/sys/server/opengl");
 
-    if (mOpenGLServer.get() == 0)
+    if (mOpenGLServer.expired())
         {
             GetLog()->Error()
                 << "(RenderControl) ERROR: OpenGLServer not found\n";
         }
 }
 
-void RenderControl::OnUnlink()
-{
-    mRenderServer.reset();
-    mOpenGLServer.reset();
-}
-
-void RenderControl::RenderCustom()
+void
+RenderControl::RenderCustom()
 {
     // get list of registered CustomMonitor objects
     TLeafList customList;
@@ -76,14 +68,21 @@ void RenderControl::RenderCustom()
          iter != customList.end();
          ++iter
          )
-        {
-            shared_static_cast<CustomRender>((*iter))
-                ->Render();
-        }
+    {
+        shared_static_cast<CustomRender>((*iter))->Render();
+    }
 }
 
 void RenderControl::EndCycle()
 {
+    if (
+        (mOpenGLServer.expired()) ||
+        (mRenderServer.expired())
+        )
+    {
+        return;
+    }
+
     // update the window (pumps event loop, etc..) and render the
     // current frame
     mOpenGLServer->Update();
@@ -93,12 +92,8 @@ void RenderControl::EndCycle()
     ++mFramesRendered;
 }
 
-int RenderControl::GetFramesRendered()
+int
+RenderControl::GetFramesRendered() const
 {
     return mFramesRendered;
 }
-
-
-
-
-

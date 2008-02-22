@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: light.h,v 1.8 2004/04/22 17:57:13 rollmark Exp $
+   $Id: light.h,v 1.9 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define KEROSIN_LIGHT_H
 
 #include <kerosin/openglserver/glbase.h>
+#include <kerosin/openglserver/openglserver.h>
 #include "staticmesh.h"
 #include "oxygen/geometryserver/indexbuffer.h"
 #include "oxygen/sceneserver/basenode.h"
@@ -120,8 +121,8 @@ protected:
     // per-material cached indices
     std::vector<oxygen::IndexBuffer> mCachedIndices;
 
-    /** reference to the RenderServer */
-    boost::shared_ptr<OpenGLServer> mOpenGLServer;
+    /** reference to the OpenGLServer */
+    CachedPath<OpenGLServer> mOpenGLServer;
 };
 
 DECLARE_CLASS(Light);

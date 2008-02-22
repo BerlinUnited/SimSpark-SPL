@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorinputcontrol.cpp,v 1.2 2004/05/10 14:10:45 fruit Exp $
+   $Id: monitorinputcontrol.cpp,v 1.3 2008/02/22 16:48:21 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,14 +42,14 @@ void MonitorInputControl::OnLink()
     script->CreateVariable("Command.KickOff", CmdKickOff);
 }
 
-void MonitorInputControl::ProcessInput(kerosin::InputServer::Input& input)
+void MonitorInputControl::ProcessInput(kerosin::Input& input)
 {
     if (mCommServer.get() == 0)
         {
             return;
         }
 
-    switch (input.id)
+    switch (input.mId)
         {
         case CmdKickOff:
             // kick off

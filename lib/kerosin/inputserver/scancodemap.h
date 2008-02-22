@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scancodemap.h,v 1.4 2003/11/14 14:05:51 fruit Exp $
+   $Id: scancodemap.h,v 1.5 2008/02/22 16:48:19 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #define KEROSIN_SCANCODEMAP_H
 
 /*      \class ScanCodeMap
-        $Id: scancodemap.h,v 1.4 2003/11/14 14:05:51 fruit Exp $
+        $Id: scancodemap.h,v 1.5 2008/02/22 16:48:19 hedayat Exp $
 
         ScanCodeMap
 
@@ -57,8 +57,8 @@ public:
     // the altModifier is only really used on German keyboards
     struct TScanCodeEntry
     {
-        std::string name;                       // name of the key
-        char            noModifier;             // no modifiers         '<'
+        std::string name;               // name of the key
+        char            noModifier;     // no modifiers         '<'
         char            shiftModifier;  // shift modifier       '>'
         char            altModifier;    // alt modifier         '|'
 
@@ -71,7 +71,7 @@ public:
         }
     };
 protected:
-    typedef std::map<kerosin::InputServer::TInputCode, TScanCodeEntry*>     TScanCodeEntryMap;
+    typedef std::map<Input::TInputCode, TScanCodeEntry*> TScanCodeEntryMap;
     //
     // functions
     //
@@ -79,11 +79,11 @@ public:
     ScanCodeMap();
     ~ScanCodeMap();
 
-    InputServer::TInputCode GetCode(const std::string &name) const;
-    bool                                    TranslateCode(InputServer::TInputCode code, unsigned long state, char &ch) const;
+    Input::TInputCode GetCode(const std::string &name) const;
+    bool TranslateCode(Input::TInputCode code, unsigned long state, char &ch) const;
 
-    void                                    Reset();
-    void                                    AddCode(InputServer::TInputCode ic, const std::string &name, char noMod, char shiftMod, char altMod);
+    void Reset();
+    void AddCode(Input::TInputCode ic, const std::string &name, char noMod, char shiftMod, char altMod);
 protected:
     //! this is the map which the translation process is based on
     TScanCodeEntryMap       mScanCodes;

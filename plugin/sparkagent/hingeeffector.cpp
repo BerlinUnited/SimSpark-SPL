@@ -26,48 +26,36 @@ using namespace salt;
 using namespace boost;
 using namespace std;
 
-HingeEffector::HingeEffector() : Effector()
+HingeEffector::HingeEffector()
+    : JointEffector<HingeJoint>::JointEffector("hinge")
 {
-    SetName("hinge");
 }
 
 HingeEffector::~HingeEffector()
 {
 }
 
-void HingeEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
+bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
-    if (mAction.get() == 0 || mJoint.get() == 0)
+    if (mJoint.get() == 0)
         {
-            return;
+            return false;
         }
 
     shared_ptr<HingeAction> hingeAction =
-        shared_dynamic_cast<HingeAction>(mAction);
-    mAction.reset();
+        shared_dynamic_cast<HingeAction>(action);
 
     if (hingeAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (HingeEffector) cannot realize an "
             << "unknown ActionObject\n";
-        return;
+        return false;
     }
 
-    // check if the angle out of range
-    //float minAng = mJoint->GetLowStopDeg(Joint::AI_FIRST);
-    //float maxAng = mJoint->GetHighStopDeg(Joint::AI_FIRST);
-    //float currentAng = mJoint->GetAngle();
-    float vel = hingeAction->GetMotorVelocity();
-    //if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
-    if ( gInRange(vel, -9000.0f, 9000.0f) )
-    {       
-        mJoint->SetParameter(dParamVel, vel );
-    }
-    else
-    {
-        mJoint->SetParameter(dParamVel, 0);
-    }
+    mJoint->SetParameter(dParamVel, hingeAction->GetMotorVelocity());
+
+    return true;
 }
 
 shared_ptr<ActionObject> HingeEffector::GetActionObject(const Predicate& predicate)
@@ -101,24 +89,4 @@ shared_ptr<ActionObject> HingeEffector::GetActionObject(const Predicate& predica
         }
 
     return shared_ptr<ActionObject>();
-}
-
-void HingeEffector::OnLink()
-{
-    mJoint = make_shared(FindParentSupportingClass<HingeJoint>());
-
-    if (mJoint.get() == 0)
-        {
-            GetLog()->Error()
-                << "(HingeEffector) ERROR: found no HingeJoint parent\n";
-        }
-    //else
-    //{
-    //    mJoint->SetParameter(dParamFudgeFactor, 0.8);
-    //}
-}
-
-void HingeEffector::OnUnlink()
-{
-    mJoint.reset();
 }

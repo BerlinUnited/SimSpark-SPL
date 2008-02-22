@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinputlogplayer.cpp,v 1.2 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: soccerinputlogplayer.cpp,v 1.3 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,16 +65,16 @@ void SoccerInputLogPlayer::SendCommand(const std::string& cmd)
         }
 */}
 
-void SoccerInputLogPlayer::ProcessInput(const InputServer::Input& input)
+void SoccerInputLogPlayer::ProcessInput(const Input& input)
 {
 
-    switch (input.id)
+    switch (input.mId)
         {
         default:
             return;
 
         case CmdPause:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     mScriptServer->Eval("monitorLogServer = get($serverPath+ \
                                     'simulation/SparkMonitorLogFileServer')");
@@ -83,7 +83,7 @@ void SoccerInputLogPlayer::ProcessInput(const InputServer::Input& input)
             break;
 
         case CmdStepForward:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     mScriptServer->Eval("monitorLogServer = get($serverPath+ \
                                     'simulation/SparkMonitorLogFileServer')");
@@ -92,7 +92,7 @@ void SoccerInputLogPlayer::ProcessInput(const InputServer::Input& input)
             break;
 
         case CmdStepBackward:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     mScriptServer->Eval("monitorLogServer = get($serverPath+ \
                                     'simulation/SparkMonitorLogFileServer')");
@@ -101,7 +101,7 @@ void SoccerInputLogPlayer::ProcessInput(const InputServer::Input& input)
             break;
 
         case CmdBPlayback:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     mScriptServer->Eval("monitorLogServer = get($serverPath+ \
                                     'simulation/SparkMonitorLogFileServer')");

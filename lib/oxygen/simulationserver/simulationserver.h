@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.6 2008/02/19 22:49:23 hedayat Exp $
+   $Id: simulationserver.h,v 1.7 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,13 @@
 #define OXYGEN_SIMULATIONSERVER_H
 
 #include <zeitgeist/node.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/monitorserver/monitorserver.h>
 #include <boost/thread/barrier.hpp>
 
 namespace oxygen
 {
-class GameControlServer;
-class MonitorServer;
-class SceneServer;
 class SimControlNode;
 
 class SimulationServer : public zeitgeist::Node
@@ -61,8 +61,14 @@ public:
     /** exits the simulation on the next simulation step */
     static void Quit();
 
+    /** returns true if Quit() was called previously */
+    static bool WantsToQuit();
+
     /** returns the current simulation time */
     virtual float GetTime();
+
+    /** resets the simulation time */
+    virtual void ResetTime();
 
     /** sets the simulation time step */
     virtual void SetSimStep(float deltaTime);
@@ -104,7 +110,18 @@ public:
     /** returns the cached argv */
     char** GetArgV();
 
-    /** the runloop of the simulation */
+    /** init the runloop and all registered control nodes */
+    virtual void Init(int argc = 0, char** argv = 0);
+
+    /** go through on cycle of the runloop, i.e. sense, act, step */
+    virtual void Cycle(boost::shared_ptr<SimControlNode> &inputCtr);
+
+    /** shutdown server and all registered control nodes */
+    virtual void Done();
+
+    /** the runloop of the simulation, i.e. init(), cycle() until
+        exit, done()
+    */
     virtual void Run(int argc = 0, char** argv = 0);
 
     /** returns the cached MonitorServer reference */
@@ -118,8 +135,6 @@ public:
 
     /** returns the current simulation cycle */
     int GetCycle();
-
-    bool isExit() const { return mExit; }
 
     float GetSumDeltaTime() const { return mSumDeltaTime; }
 
@@ -135,7 +150,6 @@ public:
 
 protected:
     virtual void OnLink();
-    virtual void OnUnlink();
 
     /** advances the simulation mSumDeltaTime seconds. If mSimStep is
         nonzero this is done in discrete steps */
@@ -190,13 +204,13 @@ protected:
     int mCycle;
 
     /** a cached reference to the monitor server */
-    boost::shared_ptr<MonitorServer> mMonitorServer;
+    CachedPath<MonitorServer> mMonitorServer;
 
     /** a cached reference to the GameControlServer */
-    boost::shared_ptr<GameControlServer> mGameControlServer;
+    CachedPath<GameControlServer> mGameControlServer;
 
     /** a cached reference to the SceneServer */
-    boost::shared_ptr<SceneServer> mSceneServer;
+    CachedPath<SceneServer> mSceneServer;
 
     /** indicates the simulation run in multi-threads or single thread */
     bool mMultiThreads;

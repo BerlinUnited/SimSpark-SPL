@@ -362,6 +362,13 @@ plugin/perfectvisionperceptor/.deps
 plugin/perfectvisionperceptor/.libs
 plugin/perfectvisionperceptor/Makefile
 plugin/perfectvisionperceptor/Makefile.in
+plugin/rosimporter/*.la
+plugin/rosimporter/*.lo
+plugin/rosimporter/.deps
+plugin/rosimporter/.dirstamp
+plugin/rosimporter/.libs
+plugin/rosimporter/Makefile
+plugin/rosimporter/Makefile.in
 plugin/rubysceneimporter/*.la
 plugin/rubysceneimporter/*.lo
 plugin/rubysceneimporter/.deps
@@ -595,3 +602,10 @@ utility/sfsexp/.deps
 utility/sfsexp/Makefile
 utility/sfsexp/Makefile.in
 utility/sfsexp/*.a
+utility/tinyxml/*.la
+utility/tinyxml/*.lo
+utility/tinyxml/.deps
+utility/tinyxml/.dirstamp
+utility/tinyxml/.libs
+utility/tinyxml/Makefile
+utility/tinyxml/Makefile.in

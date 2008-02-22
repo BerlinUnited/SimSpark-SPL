@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.8 2008/02/22 07:52:15 hedayat Exp $
+   $Id: soccerinput.cpp,v 1.9 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -103,45 +103,45 @@ void SoccerInput::SendCommand(const std::string& cmd)
     mMonitorClient->SendMessage(cmd);
 }
 
-void SoccerInput::ProcessInput(const InputServer::Input& input)
+void SoccerInput::ProcessInput(const Input& input)
 {
-    switch (input.id)
+    switch (input.mId)
         {
         default:
             return;
 
         case CmdKickOff:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     SendCommand("(kickOff Left)");
                 }
             break;
         case CmdMoveAgent:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     //SendCommand("(agent (team Left)(unum 1)(pos -2.0 1.0 3.5))");
                 }
             break;
         case CmdDropBall:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     SendCommand("(dropBall)");
                 }
             break;
         case CmdShootBall:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     //SendCommand("(ball (vel -4.0 0.0 2.0))");
                 }
             break;
         case CmdMoveBall:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     //SendCommand("(ball (pos -42.0 0.0 0.3))");
                 }
             break;
         case CmdCameraLeftGoal:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     salt::Vector3f pos(-40.0, 0.0, 21.5);
                     mCameraBody->SetPosition(pos);
@@ -150,7 +150,7 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                 }
             break;
         case CmdCameraLeftCorner:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     salt::Vector3f pos(-40.0, -30.5, 20.0);
                     mCameraBody->SetPosition(pos);
@@ -159,7 +159,7 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                 }
             break;
         case CmdCameraMiddleLeft:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     salt::Vector3f pos(6.0, -29.0, 20.0);
                     mCameraBody->SetPosition(pos);
@@ -168,7 +168,7 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                 }
             break;
         case CmdCameraMiddleRight:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     salt::Vector3f pos(-6.0, -29.0, 20.0);
                     mCameraBody->SetPosition(pos);
@@ -177,7 +177,7 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                 }
             break;
         case CmdCameraMiddle:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     salt::Vector3f pos(0.0, -43.5, 39.5);
                     mCameraBody->SetPosition(pos);
@@ -186,7 +186,7 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                 }
             break;
         case CmdCameraRightCorner:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     salt::Vector3f pos(40.0, -30.5, 20.0);
                     mCameraBody->SetPosition(pos);
@@ -195,7 +195,7 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                 }
             break;
         case CmdCameraRightGoal:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     salt::Vector3f pos(40.0, 0.0, 21.5);
                     mCameraBody->SetPosition(pos);
@@ -204,13 +204,13 @@ void SoccerInput::ProcessInput(const InputServer::Input& input)
                 }
             break;
         case CmdFreeKickLeft:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     SendCommand("(playMode free_kick_left)");
                 }
             break;
         case CmdFreeKickRight:
-            if (input.KeyPress())
+            if (input.GetKeyPress())
                 {
                     SendCommand("(playMode free_kick_right)");
                 }

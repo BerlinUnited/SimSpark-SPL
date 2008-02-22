@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.h,v 1.4 2006/05/23 14:41:42 jamu Exp $
+   $Id: netcontrol.h,v 1.5 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -112,12 +112,12 @@ public:
     ESocketType GetServerType();
 
     /** sends a message to the given client */
-    void SendMessage(boost::shared_ptr<Client> client,
-                     const std::string& msg);
+    void SendClientMessage(boost::shared_ptr<Client> client,
+                           const std::string& msg);
 
     /** sends a message to the client with the given address */
-    void SendMessage(const rcss::net::Addr& addr,
-                             const std::string& msg);
+    void SendClientMessage(const rcss::net::Addr& addr,
+                           const std::string& msg);
 
     /** create a socket according to the given ESocketType */
     static boost::shared_ptr<rcss::net::Socket>
@@ -160,6 +160,9 @@ protected:
         \param from is the remote adress of the client.
     */
     void RemoveClient(const rcss::net::Addr& from);
+
+    /** removes a client entry and closes the associated socket. */
+    void RemoveClient(TAddrMap::iterator iter);
 
     /** removes all clients marked in the mCloseClients list */
     void CloseDeadConnections();

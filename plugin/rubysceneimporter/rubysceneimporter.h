@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.11 2007/06/02 21:25:39 jamu Exp $
+   $Id: rubysceneimporter.h,v 1.12 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,6 +78,9 @@ public:
      */
     void SetUnlinkOnCompleteScenes(bool unlink);
 
+    /** registers all created nodes in the RubySceneDict */
+    void EnableSceneDictionary(bool enable);
+
 protected:
     virtual bool ParseScene(const char* scene, int size,
                              boost::shared_ptr<oxygen::BaseNode> root,
@@ -108,8 +111,8 @@ protected:
     void InitTranslationTable();
 
     std::string Lookup(const std::string& key);
-    
-    
+
+
 protected:
     /** true if a scene is automatically unlinked before a new scene
         is imported */
@@ -118,11 +121,14 @@ protected:
     /** true, if a delta scene is applied */
     bool mDeltaScene;
 
+    /** true, if all created nodes are registered in the RubySceneDict */
+    bool mUpdateSceneDict;
+
     /** the major version of the scen graph file */
-    float mVersionMajor;
+    int mVersionMajor;
 
     /** the minor version of the scen graph file */
-    float mVersionMinor;
+    int mVersionMinor;
 
     /** the last supplied fileName */
     std::string mFileName;

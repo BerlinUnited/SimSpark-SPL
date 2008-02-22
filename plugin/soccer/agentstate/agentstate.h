@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstate.h,v 1.4 2005/12/13 20:50:13 rollmark Exp $
+   $Id: agentstate.h,v 1.5 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 #ifndef AGENTSTATE_H
 #define AGENTSTATE_H
 
-#include <soccer/objectstate/objectstate.h>
 #include <soccer/soccertypes.h>
+#include <soccer/objectstate/objectstate.h>
 
 namespace oxygen
 {
@@ -81,7 +81,7 @@ public:
      *  \param consumption the amount by which the battery is reduced if possible
      *  \return true if the battery if good enough for the given consumption
      */
-    bool ReduceBattery(double consumption);
+    bool ReduceBattery(float consumption);
 
     /** Add a new message to the list */
     void AddMessage(const std::string& msg, float direction, bool teamMate);
@@ -102,7 +102,7 @@ protected:
     float mTemperature;
 
     /** battery state */
-    double mBattery;
+    float mBattery;
 
     /** self message */
     std::string mSelfMsg;

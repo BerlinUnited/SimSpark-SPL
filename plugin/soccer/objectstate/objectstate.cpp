@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate.cpp,v 1.4 2007/02/25 18:02:37 jamu Exp $
+   $Id: objectstate.cpp,v 1.5 2008/02/22 16:48:20 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,11 +20,10 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "objectstate.h"
-#include <soccer/soccerbase/soccerbase.h>
 
 using namespace oxygen;
 
-ObjectState::ObjectState() : BaseNode()
+ObjectState::ObjectState() : SoccerNode()
 {
 }
 
@@ -44,10 +43,8 @@ ObjectState::SetPerceptName(const std::string& name, TPerceptType pt1, TPerceptT
 //    mPerceptNames[pt1] = "Player";
     mPerceptNames[pt1] = "P";
     mPerceptNames[pt2] = name;
- 
+
 }
-
-
 
 std::string
 ObjectState::GetPerceptName(TPerceptType pt) const
@@ -73,24 +70,4 @@ ObjectState::GetID(TPerceptType pt) const
         return std::string();
 
     return i->second;
-}
-
-boost::shared_ptr<oxygen::Transform>
-ObjectState::GetTransformParent() const
-{
-    return mTransformParent;
-}
-
-void
-ObjectState::OnLink()
-{
-    BaseNode::OnLink();
-    SoccerBase::GetTransformParent(*this,mTransformParent);
-}
-
-void
-ObjectState::OnUnlink()
-{
-    BaseNode::OnUnlink();
-    mTransformParent.reset();
 }

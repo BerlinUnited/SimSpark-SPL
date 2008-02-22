@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.h,v 1.10 2007/06/11 09:35:02 jamu Exp $
+   $Id: imageserver.h,v 1.11 2008/02/22 16:48:18 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,13 @@
 #ifndef KEROSIN_IMAGESERVER_H
 #define KEROSIN_IMAGESERVER_H
 
+#ifdef HAVE_CONFIG_H
+#include <sparkconfig.h>
+#endif
+#ifdef HAVE_IL_IL_H
 #include <IL/il.h>
+#endif
+
 #include <zeitgeist/class.h>
 
 namespace kerosin
@@ -38,49 +44,102 @@ class Image;
   - Create images with different formats
   - Conversion between formats
 
-  NOTE:
+  NOTE: Initial version 14.07.01 - MK
 
-  HISTORY:
-                14.07.01 - MK
-                        - Initial version
-                29.07.01 - MK
-                        - Uses classserver
-                29.08.01 - MK
-                        - Doesn't use classserver anymore :(
-                        - Switched to DevIL for image loading needs, since the task of supporting
-                          all major formats would have been too time consuming
-                        - Cleaned up the interface of the imageserver quite a bit
-                11.10.01 - MK
-                        - Made singleton functionality more secure
-                02.10.02 - MK
-                        - Moved to Kerosin
-
-        TODO:
-                - Image creation
-                - Image conversion
-                - Pixel-level access
-
-        TOFIX:
+  TODO:
+  - Image creation
+  - Image conversion
+  - Pixel-level access
 */
 
 class ImageServer : public zeitgeist::Leaf
 {
 public:
+#ifdef HAVE_IL_IL_H
+    enum EImgType
+    {
+        eTYPE_UNKNOWN = IL_TYPE_UNKNOWN,
+        eBMP = IL_BMP,
+        eCUT = IL_CUT,
+        eDOOM = IL_DOOM,
+        eDOOM_FLAT = IL_DOOM_FLAT,
+        eICO = IL_ICO,
+        eJPG = IL_JPG,
+        eJFIF = IL_JFIF,
+        eLBM = IL_LBM,
+        ePCD = IL_PCD,
+        ePCX = IL_PCX,
+        ePIC = IL_PIC,
+        ePNG = IL_PNG,
+        ePNM = IL_PNM,
+        eSGI = IL_SGI,
+        eTGA = IL_TGA,
+        eTIF = IL_TIF,
+        eCHEAD = IL_CHEAD,
+        eRAW = IL_RAW,
+        eMDL = IL_MDL,
+        eWAL = IL_WAL,
+        eLIF = IL_LIF,
+        eMNG = IL_MNG,
+        eJNG = IL_JNG,
+        eGIF = IL_GIF,
+        eDDS = IL_DDS,
+        eDCX = IL_DCX,
+        ePSD = IL_PSD,
+        eEXIF = IL_EXIF,
+        ePSP = IL_PSP,
+        ePIX = IL_PIX,
+        ePXR = IL_PXR,
+        eXPM = IL_XPM,
+        eHDR = IL_HDR,
+        eJASC_PAL = IL_JASC_PAL
+    };
+#else
+    enum EImgType
+    {
+        eTYPE_UNKNOWN, eBMP,          eCUT,          eDOOM,
+        eDOOM_FLAT,    eICO,          eJPG,          eJFIF,
+        eLBM,          ePCD,          ePCX,          ePIC,
+        ePNG,          ePNM,          eSGI,          eTGA,
+        eTIF,          eCHEAD,        eRAW,          eMDL,
+        eWAL,          eLIF,          eMNG,          eJNG,
+        eGIF,          eDDS,          eDCX,          ePSD,
+        eEXIF,         ePSP,          ePIX,          ePXR,
+        eXPM,          eHDR,          eJASC_PAL
+    };
+#endif
+public:
     ImageServer();
 
     // load/save
 
-    /** interpret the file with the filter associated with inExt */
+    /** Load the file with the filter associated with the given type.
+        If inType is eTYPE_UNKNOWN, then Load try to find a handler by the
+        file extension provided. If using DevIL, this behavior is done
+        automatically by the library (Without DevIL, loading and saving
+        is disabled at the moment).
+       @param inName the file name of the image
+       @param inType hint for the file type
+       @return a shared_ptr to the Image (handle)
+    */
     boost::shared_ptr<Image> Load(const std::string& inName,
-                                  ILenum inType = IL_TYPE_UNKNOWN);
+                                  EImgType inType = eTYPE_UNKNOWN) const;
 
-    /** interpret the file with the filter associated with inExt */
-    bool Save(const boost::shared_ptr<Image> &inImage, const std::string& inName,
-              ILenum inType = IL_TYPE_UNKNOWN);
+    /** Save the file with the filter associated with the given type.
+       @param inImage a shared_ptr to the image (handle)
+       @param inName the name of the file for the image
+       @param inType a hint for the file type
+       @return true if successful
+    */
+    bool Save(boost::shared_ptr<Image> inImage, const std::string& inName,
+              EImgType inType = eTYPE_UNKNOWN) const;
 
 private:
-    /** some internal error checking */
-    bool    HandleErrors(const std::string& context="");
+    /** Some internal error checking.
+        This routine checks for DevIL errors and logs them.
+       @returns true if an error has occured and false if not.
+    */
+    bool HandleErrors() const;
 };
 
 DECLARE_CLASS(ImageServer);

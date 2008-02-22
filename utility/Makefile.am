@@ -1,3 +1,4 @@
 SUBDIRS = libobj \
 	  rcssnet \
-	  sfsexp
+	  sfsexp \
+	  tinyxml

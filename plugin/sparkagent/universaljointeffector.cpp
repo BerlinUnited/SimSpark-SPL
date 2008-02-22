@@ -26,62 +26,37 @@ using namespace salt;
 using namespace boost;
 using namespace std;
 
-UniversalJointEffector::UniversalJointEffector() : Effector()
+UniversalJointEffector::UniversalJointEffector()
+    : JointEffector<UniversalJoint>::JointEffector("universaljoint")
 {
-    SetName("universaljoint");
 }
 
 UniversalJointEffector::~UniversalJointEffector()
 {
 }
 
-void UniversalJointEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
+bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
 {
-    if (mAction.get() == 0 || mJoint.get() == 0)
+    if (mJoint.get() == 0)
         {
-            return;
+            return false;
         }
 
     shared_ptr<UniversalJointAction> universalAction =
-        shared_dynamic_cast<UniversalJointAction>(mAction);
-    mAction.reset();
+        shared_dynamic_cast<UniversalJointAction>(action);
 
     if (universalAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (UniversalJointtEffector) cannot realize an "
             << "unknown ActionObject\n";
-        return;
+        return false;
     }
 
-    // check if the angle out of range
-    //float minAng = mJoint->GetLowStopDeg(Joint::AI_FIRST);
-    //float maxAng = mJoint->GetHighStopDeg(Joint::AI_FIRST);
-    //float currentAng = mJoint->GetAngle(Joint::AI_FIRST);
-    float vel = universalAction->GetMotorVelocity(Joint::AI_FIRST);
-    //if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
-    if ( gInRange(vel,-9000.0f,9000.0f) )
-    {
-        mJoint->SetParameter(dParamVel, vel);
-    }
-    else
-    {
-        mJoint->SetParameter(dParamVel, 0);
-    }
+    mJoint->SetParameter(dParamVel, universalAction->GetMotorVelocity(Joint::AI_FIRST));
+    mJoint->SetParameter(dParamVel2, universalAction->GetMotorVelocity(Joint::AI_SECOND));
 
-    //minAng = mJoint->GetLowStopDeg(Joint::AI_SECOND);
-    //maxAng = mJoint->GetHighStopDeg(Joint::AI_SECOND);
-    //currentAng = mJoint->GetAngle(Joint::AI_SECOND);
-     vel = universalAction->GetMotorVelocity(Joint::AI_SECOND);
-     //if ( gInRange(currentAng, minAng, maxAng) && gInRange(vel,-9000.0f,9000.0f) )
-     if ( gInRange(vel,-9000.0f,9000.0f) )
-    {
-        mJoint->SetParameter(dParamVel2, vel );
-    }
-    else
-    {
-        mJoint->SetParameter(dParamVel2, 0);
-    }
+    return true;
 }
 
 shared_ptr<ActionObject> UniversalJointEffector::GetActionObject(const Predicate& predicate)
@@ -123,25 +98,4 @@ shared_ptr<ActionObject> UniversalJointEffector::GetActionObject(const Predicate
         }
 
     return shared_ptr<ActionObject>();
-}
-
-void UniversalJointEffector::OnLink()
-{
-    mJoint = make_shared(FindParentSupportingClass<UniversalJoint>());
-
-    if (mJoint.get() == 0)
-    {
-        GetLog()->Error()
-            << "(UniversalJointEffector) ERROR: found no UniversalJoint parent\n";
-    } 
-    //else 
-    //{
-    //    mJoint->SetParameter(dParamFudgeFactor, 0.8);
-    //    mJoint->SetParameter(dParamFudgeFactor2, 0.8);
-    //}
-}
-
-void UniversalJointEffector::OnUnlink()
-{
-    mJoint.reset();
 }
