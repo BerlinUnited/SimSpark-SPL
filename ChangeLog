@@ -1,5 +1,10 @@
 2008-02-22  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* linux/rcssserver3d.spec:
+	* linux/rcssserver3d-data.spec:
+	- added simple spec files which can be used to create RPM packages for the
+	  rcssserver3d and rcssserver3d-data packages. only tested in Fedora
+
 	* plugin/soccer/Makefile.am:
 	* plugin/soccer/export.cpp:
 	- added SoccerNode related material
