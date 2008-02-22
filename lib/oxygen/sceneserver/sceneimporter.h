@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneimporter.h,v 1.4 2004/04/28 14:40:19 rollmark Exp $
+   $Id: sceneimporter.h,v 1.5 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,11 +29,12 @@
 namespace oxygen
 {
 class BaseNode;
+class SceneDict;
 
 class SceneImporter : public zeitgeist::Leaf
 {
 public:
-    SceneImporter() : zeitgeist::Leaf() {}
+    SceneImporter() : zeitgeist::Leaf(), mSceneDict(0) {}
     virtual ~SceneImporter() {};
 
     /** import a scene from a file */
@@ -45,6 +46,13 @@ public:
     virtual bool ParseScene(const std::string& scene,
                             boost::shared_ptr<BaseNode> root,
                             boost::shared_ptr<zeitgeist::ParameterList> parameter) = 0;
+
+
+    /** sets up the reference to the SceneDict instance */
+    void SetSceneDict(SceneDict* dict) { mSceneDict = dict; }
+
+protected:
+    SceneDict* mSceneDict;
 };
 
 DECLARE_ABSTRACTCLASS(SceneImporter);

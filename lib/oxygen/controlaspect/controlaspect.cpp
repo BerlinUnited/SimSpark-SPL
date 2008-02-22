@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.cpp,v 1.5 2007/06/16 15:06:04 jboedeck Exp $
+   $Id: controlaspect.cpp,v 1.6 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,30 +32,21 @@ using namespace zeitgeist;
 shared_ptr<Scene>
 ControlAspect::GetActiveScene()
 {
-    static shared_ptr<SceneServer> sceneServer;
+    shared_ptr<SceneServer> sceneServer =
+        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
     {
-        sceneServer = shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
-
-        if (sceneServer.get() == 0)
-        {
-            GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
-            return shared_ptr<Scene>();
-        }
+        GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
+        return shared_ptr<Scene>();
     }
 
-    static shared_ptr<Scene> activeScene;
+    shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
 
     if (activeScene.get() == 0)
     {
-        activeScene = sceneServer->GetActiveScene();
-
-        if (activeScene.get() == 0)
-        {
-            GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
-            return shared_ptr<Scene>();
-        }
+        GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
+        return shared_ptr<Scene>();
     }
 
     return activeScene;
@@ -67,14 +58,12 @@ ControlAspect::GetControlAspect(const string& name)
     static const string gcsPath = "/sys/server/gamecontrol/";
 
     shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
-            (GetCore()->Get(gcsPath + name));
+        (GetCore()->Get(gcsPath + name));
 
     if (aspect.get() == 0)
     {
         GetLog()->Error() << "(ControlAspect) found no " << name << "\n";
     }
-    
+
     return aspect;
 }
-
-

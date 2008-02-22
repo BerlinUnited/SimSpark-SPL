@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fpscontroller.h,v 1.9 2007/04/07 13:12:06 jamu Exp $
+   $Id: fpscontroller.h,v 1.10 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,18 +43,17 @@ public:
     FPSController();
     virtual ~FPSController();
 
-
-    /** sets the applied horizontal angle */
-    void SetHAngle(const float angle);
-
-    /** sets the applied vertical angle */
-    void SetVAngle(const float angle);
-
     /** adds a delta increment to the current horizontal angle */
     void AdjustHAngle(const float delta);
 
     /** adds a delta increment to the current vertical angle */
     void AdjustVAngle(const float delta);
+
+    /** sets the current horizontal angle */
+    void SetHAngleDeg(const float angleDeg);
+
+    /** sets the current vertical angle */
+    void SetVAngleDeg(const float angleDeg);
 
     /** enables or disables forward movement */
     void Forward(const bool state);
@@ -80,7 +79,23 @@ public:
     /** returns the applied acceleration */
     float GetAcceleration() const;
 
+    /** updates the managed body statically, i.e. without using the
+        dynamics engine; this is useful to move an associated camera
+        when the simulation is paused
+    */
+    void UpdateStatic(float deltaTime);
+
+    /** returns true if a call to UpdateStatic will alter the state of
+        the managed body
+    */
+    bool NeedStaticUpdate() const;
+
 protected:
+    /** sets up the rotation matrix and directio vector used to update
+        the managed body
+    */
+    void PrepareUpdate(salt::Matrix& matrix, salt::Matrix& fwd, salt::Vector3f& vec);
+
     /** calculates and applies the force needed to perfom the
      * activated movements */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
@@ -92,11 +107,17 @@ protected:
     /** the acceleration of the controller */
     float   mAcceleration;
 
-    /** the current horizontal angle */
+    /** the current horizontal angle in degrees*/
     float   mHAngle;
 
-    /** the current vertical angle */
+    /** applied horizontal delta since last update */
+    float   mHAngleDelta;
+
+    /** the current vertical angle in degrees */
     float   mVAngle;
+
+    /** applied horizontal delta since last update */
+    float   mVAngleDelta;
 
     // event states
 

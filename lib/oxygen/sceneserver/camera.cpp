@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.cpp,v 1.8 2008/02/19 22:49:23 hedayat Exp $
+   $Id: camera.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ Camera::Camera() : BaseNode()
     mViewTransform.Identity();
     mFOV    = 60.0f;
     mZNear  = 1.0f;
-    mZFar   = 2000.0f;
+    mZFar   = 100000.0f;
     mX      = 0;
     mY      = 0;
     mWidth  = 640;
@@ -48,7 +48,8 @@ Camera::~Camera()
     seems.  The code extracts a frustum given the projection and view
     transforms.  It is really fast and very generic because of that.
 */
-void Camera::DescribeFrustum(Frustum& frustum) const
+void
+Camera::DescribeFrustum(Frustum& frustum) const
 {
     // concatenate projection and view transform
     Matrix frustumMatrix = mProjectionTransform * mViewTransform;
@@ -90,7 +91,8 @@ void Camera::DescribeFrustum(Frustum& frustum) const
     frustum.mBasePos = GetWorldTransform().Pos();
 }
 
-void Camera::Bind()
+void
+Camera::Bind()
 {
     mViewTransform = GetWorldTransform();
     mViewTransform.RotateX(90);
@@ -105,7 +107,8 @@ void Camera::Bind()
                                              mZNear);
 }
 
-void Camera::OnLink()
+void
+Camera::OnLink()
 {
     bool gotSetup =
         (
@@ -120,7 +123,8 @@ void Camera::OnLink()
         }
 }
 
-void Camera::UpdateHierarchyInternal()
+void
+Camera::UpdateHierarchyInternal()
 {
     // make sure values are within bounds
     gClamp(mFOV, 10.0f, 170.0f);
@@ -129,7 +133,8 @@ void Camera::UpdateHierarchyInternal()
     mHalfWorldHeight = mHalfWorldWidth * (mHeight/(float)mWidth);
 }
 
-void Camera::SetViewport(int x, int y, int width, int height)
+void
+Camera::SetViewport(int x, int y, int width, int height)
 {
     mX = x;
     mY = y;
@@ -137,77 +142,92 @@ void Camera::SetViewport(int x, int y, int width, int height)
     mHeight = height;
 }
 
-int Camera::GetViewportX()
+int
+Camera::GetViewportX() const
 {
     return mX;
 }
 
-int Camera::GetViewportY()
+int
+Camera::GetViewportY() const
 {
     return mY;
 }
 
-int Camera::GetViewportWidth()
+int
+Camera::GetViewportWidth() const
 {
     return mWidth;
 }
 
-int Camera::GetViewportHeight()
+int
+Camera::GetViewportHeight() const
 {
     return mHeight;
 }
 
-void Camera::SetFOV(const float fov)
+void
+Camera::SetFOV(float fov)
 {
     mFOV = fov;
 }
 
-void Camera::SetZNear(const float zNear)
+void
+Camera::SetZNear(float zNear)
 {
     mZNear = zNear;
 }
 
-void Camera::SetZFar(const float zFar)
+void
+Camera::SetZFar(float zFar)
 {
     mZFar = zFar;
 }
 
-void Camera::AdjustFOV(const float fov)
+void
+Camera::AdjustFOV(float fov)
 {
     mFOV+=fov;
 }
 
-void Camera::AdjustZNear(const float zNear)
+void
+Camera::AdjustZNear(float zNear)
 {
     mZNear+=zNear;
 }
 
-void Camera::AdjustZFar(const float zFar)
+void
+Camera::AdjustZFar(float zFar)
 {
     mZFar+=zFar;
 }
 
-float Camera::GetFOV() const
+float
+Camera::GetFOV() const
 {
     return mFOV;
 }
 
-float Camera::GetZNear() const
+float
+Camera::GetZNear() const
 {
     return mZNear;
 }
 
-float Camera::GetZFar()const
+float
+Camera::GetZFar() const
 {
     return mZFar;
 }
 
-const salt::Matrix& Camera::GetViewTransform() const
+const salt::Matrix&
+Camera::GetViewTransform() const
 {
     return mViewTransform;
 }
 
-const salt::Matrix& Camera::GetProjectionTransform() const
+const salt::Matrix&
+Camera::GetProjectionTransform() const
 {
     return mProjectionTransform;
 }

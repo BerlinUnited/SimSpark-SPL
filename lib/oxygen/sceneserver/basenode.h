@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.h,v 1.11 2004/04/27 09:58:57 rollmark Exp $
+   $Id: basenode.h,v 1.12 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ public:
 protected:
     /** returns the corresponding local coordinates to the given world
         coordinates */
-    salt::Vector3f GetLocalPos(const salt::Vector3f& worldPos);
+    salt::Vector3f GetLocalPos(const salt::Vector3f& worldPos) const;
 
     /** updates internal state before physics calculation */
     virtual void PrePhysicsUpdateInternal(float deltaTime);

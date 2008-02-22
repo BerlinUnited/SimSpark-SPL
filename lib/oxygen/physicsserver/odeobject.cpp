@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.cpp,v 1.8 2007/06/16 11:01:35 yxu Exp $
+   $Id: odeobject.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,19 @@
 
 using namespace oxygen;
 using namespace boost;
+
+ODEObject::ODEObject() : BaseNode()
+{
+}
+
+ODEObject::~ODEObject()
+{
+}
+
+void ODEObject::OnUnlink()
+{
+    DestroyODEObject();
+}
 
 /** returns the world node */
 shared_ptr<World> ODEObject::GetWorld()

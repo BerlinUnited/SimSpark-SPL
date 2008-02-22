@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionhandler.cpp,v 1.2 2004/02/12 14:07:22 fruit Exp $
+   $Id: collisionhandler.cpp,v 1.3 2008/02/22 07:52:14 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,8 +32,28 @@ using namespace boost;
 void
 CollisionHandler::OnLink()
 {
+    UpdateCached();
+}
+
+void
+CollisionHandler::ResetCache()
+{
+    mCollider.reset();
+    mWorld.reset();
+    mSpace.reset();
+}
+
+void
+CollisionHandler::UpdateCached()
+{
     // setup the scene, world, space and collider references
     shared_ptr<Scene> scene = GetScene();
+
+    ResetCache();
+    if (scene.get() == 0)
+        {
+            return;
+        }
 
     mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
     if (mWorld.get() == 0)
@@ -60,8 +80,6 @@ CollisionHandler::OnLink()
 void
 CollisionHandler::OnUnlink()
 {
-    mCollider.reset();
-    mWorld.reset();
-    mSpace.reset();
+    BaseNode::OnUnlink();
+    ResetCache();
 }
-

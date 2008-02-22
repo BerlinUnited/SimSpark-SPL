@@ -1,5 +1,73 @@
+2008-02-22  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/sceneserver/sceneserver.cpp:
+	* lib/oxygen/sceneserver/transform.h:
+	* lib/oxygen/sceneserver/sceneserver.h:
+	* lib/oxygen/sceneserver/transform.cpp:
+	* lib/oxygen/sceneserver/sceneimporter.h:
+	* lib/oxygen/sceneserver/scenedict.cpp:
+	* lib/oxygen/sceneserver/scenedict.h:
+	* lib/oxygen/sceneserver/fpscontroller.h:
+	* lib/oxygen/sceneserver/fpscontroller.cpp:
+	* lib/oxygen/sceneserver/fpscontroller_c.cpp:
+	* lib/oxygen/sceneserver/camera.h:
+	* lib/oxygen/sceneserver/camera.cpp:
+	* lib/oxygen/sceneserver/camera_c.cpp:
+	* lib/oxygen/spadesserver/spadesserver.cpp:
+	* lib/oxygen/simulationserver/monitorlogger.cpp:
+	* lib/oxygen/simulationserver/monitorcontrol.cpp:
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	* lib/oxygen/monitorserver/monitorserver.h:
+	* lib/oxygen/Makefile.am:
+	* lib/oxygen/geometryserver/meshexporter.h:
+	* lib/oxygen/geometryserver/meshexporter_c.cpp:
+	* lib/oxygen/geometryserver/geometryserver.h:
+	* lib/oxygen/geometryserver/geometryserver.cpp:
+	* lib/oxygen/geometryserver/geometryserver_c.cpp:
+	* lib/oxygen/controlaspect/controlaspect.cpp:
+	- ported from simspark
+
+	* plugin/soccermonitor/soccerinput.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp:
+	- fixed errors resulted from porting FPSController changes from simspark
+
+	* lib/spark/spark.rb:
+	- set autoDisableFlag of the world to false. (it was always off because of
+	  a bug in world_c.cpp). oxygen/physicsserver finished!
+
+2008-02-21  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/agentaspect/jointeffector.h:
+	* lib/oxygen/agentaspect/jointperceptor.h:
+	* lib/oxygen/Makefile.am:
+	- port from simspark
+
 2008-02-20  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* lib/oxygen/sceneserver/basenode.cpp:
+	* lib/oxygen/sceneserver/basenode.h:
+	* lib/oxygen/physicsserver/odeobject.h:
+	* lib/oxygen/physicsserver/odeobject.cpp:
+	* lib/oxygen/physicsserver/joint.h:
+	* lib/oxygen/physicsserver/joint.cpp:
+	* lib/oxygen/physicsserver/hingejoint.h:
+	* lib/oxygen/physicsserver/hingejoint.cpp:
+	* lib/oxygen/physicsserver/collisionhandler.h:
+	* lib/oxygen/physicsserver/collisionhandler.cpp:
+	* lib/oxygen/physicsserver/collider.h:
+	* lib/oxygen/physicsserver/collider.cpp:
+	* lib/oxygen/physicsserver/space.cpp:
+	* lib/oxygen/physicsserver/space.h:
+	* lib/oxygen/physicsserver/transformcollider_c.cpp:
+	* lib/oxygen/physicsserver/transformcollider.cpp:
+	* lib/oxygen/physicsserver/transformcollider.h:
+	* lib/oxygen/physicsserver/universaljoint.cpp:
+	* lib/oxygen/physicsserver/universaljoint.h:
+	* lib/oxygen/physicsserver/world_c.cpp:
+	* lib/oxygen/physicsserver/world.cpp:
+	* lib/oxygen/physicsserver/world.h:
+	* lib/oxygen/physicsserver/body.h:
+	* lib/oxygen/physicsserver/body.cpp:
 	* utility/sfsexp/sexp_ops.c:
 	* utility/sfsexp/sexp.h:
 	* utility/sfsexp/sexp.c:

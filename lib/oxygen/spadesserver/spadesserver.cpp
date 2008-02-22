@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: spadesserver.cpp,v 1.16 2004/06/19 13:30:38 fruit Exp $
+   $Id: spadesserver.cpp,v 1.17 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -317,7 +317,7 @@ SpadesServer::getMonitorInfo(SimTime /*time*/)
         return DataArray();
     }
 
-    return DataArray(mMonitorServer->GetMonitorInfo());
+    return DataArray(mMonitorServer->GetMonitorData());
 }
 
 void

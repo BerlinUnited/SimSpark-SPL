@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collisionhandler.h,v 1.3 2007/02/12 22:10:33 jamu Exp $
+   $Id: collisionhandler.h,v 1.4 2008/02/22 07:52:14 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 #define OXYGEN_COLLISIONHANDLER_H
 
 #include <oxygen/sceneserver/basenode.h>
-//#include <ode/ode.h>
 #include "odewrapper.h"
 
 namespace oxygen
@@ -49,6 +48,9 @@ class CollisionHandler : public BaseNode
 public:
     CollisionHandler() : BaseNode() {};
     virtual ~CollisionHandler() {};
+
+    /** update variables from a script */
+    virtual void UpdateCached();
 
     /** HandleCollision is called from the Collider to which this
         CollisionHandler is registered to. Derived classes implement
@@ -99,6 +101,8 @@ public:
 protected:
     virtual void OnLink();
     virtual void OnUnlink();
+
+    void ResetCache();
 
     //
     // Members

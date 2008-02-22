@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.8 2007/06/17 10:49:40 jboedeck Exp $
+   $Id: monitorserver.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -161,7 +161,7 @@ string MonitorServer::GetMonitorHeaderInfo()
     return monitorSystem->GetMonitorHeaderInfo(pList);
 }
 
-string MonitorServer::GetMonitorInfo()
+string MonitorServer::GetMonitorData()
 {
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 

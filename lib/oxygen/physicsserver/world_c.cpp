@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: world_c.cpp,v 1.8 2006/12/13 11:00:16 jboedeck Exp $
+$Id: world_c.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ FUNCTION(World,getCFM)
 
 FUNCTION(World,setAutoDisableFlag)
 {
-    float inFlag;
+    bool inFlag;
 
     if (
         (in.GetSize() != 1) ||

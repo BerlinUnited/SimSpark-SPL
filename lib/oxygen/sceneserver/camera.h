@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: camera.h,v 1.7 2008/02/19 22:49:23 hedayat Exp $
+   $Id: camera.h,v 1.8 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,30 +45,31 @@ public:
 
     /** sets viewpoint properties */
     void SetViewport(int x, int y, int width, int height);
-    int GetViewportX();
-    int GetViewportY();
-    int GetViewportWidth();
-    int GetViewportHeight();
+
+    int GetViewportX() const;
+    int GetViewportY() const;
+    int GetViewportWidth() const;
+    int GetViewportHeight() const;
 
     /** sets the field of view (FOV) */
-    void SetFOV(const float fov);
+    void SetFOV(float fov);
 
     /** sets the distance of the Z near plane */
-    void SetZNear(const float zNear);
+    void SetZNear(float zNear);
 
     /** sets the distance of the Z far plane */
-    void SetZFar(const float zFar);
+    void SetZFar(float zFar);
 
     /** adjusts the current FOV, i.e. adds a delta increment */
-    void AdjustFOV(const float fov);
+    void AdjustFOV(float fov);
 
     /** adjusts the distance of the Z near plane, i.e adds a delta
         increment */
-    void AdjustZNear(const float zNear);
+    void AdjustZNear(float zNear);
 
     /** adjusts the distance of the Z far plane, i.e adds a delta
         increment */
-    void AdjustZFar(const float zFar);
+    void AdjustZFar(float zFar);
 
     /** returns the field of View */
     float GetFOV() const;

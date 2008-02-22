@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.7 2007/02/12 19:16:51 rollmark Exp $
+   $Id: joint.cpp,v 1.8 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,12 +32,6 @@ Joint::Joint() : ODEObject(), mODEJoint(0)
 
 Joint::~Joint()
 {
-    EnableFeedback(false);
-    if (mODEJoint)
-        {
-            dJointDestroy(mODEJoint);
-            mODEJoint = 0;
-        }
 }
 
 void Joint::OnLink()
@@ -423,7 +417,14 @@ float Joint::GetMaxMotorForce(EAxisIndex idx) const
     return GetParameter(dParamFMax + (idx * dParamGroup));
 }
 
+void Joint::DestroyODEObject()
+{
+    if (! mODEJoint)
+        {
+            return;
+        }
 
-
-
-
+    EnableFeedback(false);
+    dJointDestroy(mODEJoint);
+    mODEJoint = 0;
+}

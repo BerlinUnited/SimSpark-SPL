@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.11 2007/05/30 13:04:48 jboedeck Exp $
+   $Id: collider.h,v 1.12 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,6 +101,9 @@ public:
     */
     virtual void SetPosition(const salt::Vector3f& pos);
 
+    /** returns the absolute position of the managed geom */
+    salt::Vector3f GetPosition() const;
+
     /** sets the relative orientation of the managed geom directly. If
         the geom is connected to a body, the orientation of the body
         will also be changed
@@ -130,6 +133,9 @@ protected:
         registered
     */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
+
+    /** destroy the managed ODE object */
+    virtual void DestroyODEObject();
 
     //
     // Members

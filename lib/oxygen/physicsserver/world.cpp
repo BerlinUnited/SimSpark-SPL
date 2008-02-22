@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: world.cpp,v 1.8 2007/02/15 21:32:52 rollmark Exp $
+   $Id: world.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,10 @@
 */
 
 #include "world.h"
+#include "space.h"
+#include <oxygen/sceneserver/scene.h>
 
+using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
@@ -30,12 +33,6 @@ World::World() : ODEObject(), mODEWorld(0)
 
 World::~World()
 {
-  // release the ODE world
-  if (mODEWorld)
-    {
-      dWorldDestroy(mODEWorld);
-      mODEWorld = 0;
-    }
 }
 
 dWorldID World::GetODEWorld() const
@@ -81,8 +78,6 @@ float World::GetCFM() const
 
 void World::Step(float deltaTime)
 {
-  //printf("step: deltaTime was %.4f\n", deltaTime);
-
   dWorldStep(mODEWorld, deltaTime);
 }
 
@@ -112,4 +107,32 @@ bool World::ConstructInternal()
   mODEWorld = dWorldCreate();
 
   return (mODEWorld != 0);
+}
+
+void World::DestroyODEObject()
+{
+  static bool recurseLock = false;
+  if (recurseLock)
+    {
+      return;
+    }
+
+  recurseLock = true;
+
+  shared_ptr<Space> space = GetSpace();
+  if (space.get() != 0)
+    {
+      space->DestroyODEObject();
+    }
+
+  if (mODEWorld == 0)
+    {
+      return;
+    }
+
+  // release the ODE world
+  dWorldDestroy(mODEWorld);
+  mODEWorld = 0;
+
+  recurseLock = false;
 }

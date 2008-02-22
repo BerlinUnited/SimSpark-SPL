@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.7 2007/05/30 13:04:48 jboedeck Exp $
+   $Id: space.h,v 1.8 2008/02/22 07:52:14 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,6 +58,9 @@ public:
     */
     void Collide();
 
+    /** destroy the managed ODE object */
+    virtual void DestroyODEObject();
+
     /** returns the ODE handle ID of the containing parent space */
     virtual dSpaceID GetParentSpaceID();
 
@@ -86,6 +89,11 @@ protected:
 
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal();
+
+    /** destroys the ODE bodies managed by all Body objects that are
+        registered to this Space
+    */
+    void DestroySpaceObjects();
 
     //
     // Members

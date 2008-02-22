@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.8 2007/02/12 19:16:51 rollmark Exp $
+   $Id: joint.h,v 1.9 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -64,6 +64,9 @@ public:
 
     Joint();
     virtual ~Joint();
+
+    /** destroy the managed ODE object */
+    virtual void DestroyODEObject();
 
     /** attaches the joint to some new bodies. If the joint is already
         attached, it will be detached from the old bodies first. To
@@ -238,18 +241,18 @@ public:
     */
     float GetMaxMotorForce(EAxisIndex idx) const;
 
+    /** sets a joint parameter value */
+    virtual void SetParameter(int parameter, float value) = 0;
+
+    /** returns a joint parameter value */
+    virtual float GetParameter(int parameter) const = 0;
+
 protected:
     /** associated the created ODE joint with this node */
     virtual void OnLink();
 
     /** get the node at 'path' and tries a cast to Body */
     boost::shared_ptr<Body> GetBody(const std::string& path);
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value) = 0;
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const = 0;
 
 protected:
     /** the managed ODE joint */

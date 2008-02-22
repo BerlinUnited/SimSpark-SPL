@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.h,v 1.10 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: sceneserver.h,v 1.11 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 #include <boost/thread/recursive_mutex.hpp>
+#include "scene.h"
 
 namespace oxygen
 {
@@ -66,13 +67,13 @@ public:
 
     /** creates a new scene hierarchy at a specific location, new
         hierarchy is also made current */
-    boost::shared_ptr<Scene> CreateScene(const std::string &location);
+    bool CreateScene(const std::string &location);
 
     /** sets the active scene */
     bool SetActiveScene(const std::string &location);
 
     /** returns a reference to the current active scene */
-    boost::shared_ptr<Scene> GetActiveScene() { return mActiveScene; }
+    boost::shared_ptr<Scene> GetActiveScene() { return mActiveScene.get(); }
 
     /** updates the state of the current active scene (deltaTime is in
         seconds) */
@@ -124,7 +125,7 @@ protected:
 
 private:
     /** the current active scene */
-    boost::shared_ptr<Scene> mActiveScene;
+    CachedPath<Scene> mActiveScene;
 
     /** cached reference to the Space node below the active scene */
     boost::shared_ptr<Space> mActiveSpace;

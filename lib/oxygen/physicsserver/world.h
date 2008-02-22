@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: world.h,v 1.8 2007/02/12 19:12:59 rollmark Exp $
+   $Id: world.h,v 1.9 2008/02/22 07:52:14 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -96,10 +96,13 @@ public:
         the given depth before coming to rest. The default value is
         zero. Increasing this to some small value (e.g. 0.001) can help
         prevent jittering problems due to contacts being repeatedly made
-        and broken. 
+        and broken.
     */
-    void SetContactSurfaceLayer(float depth); 
+    void SetContactSurfaceLayer(float depth);
     float GetContactSurfaceLayer() const;
+
+    /** destroy the managed ODE object */
+    virtual void DestroyODEObject();
 
 protected:
     /** creates them managed ODE world */

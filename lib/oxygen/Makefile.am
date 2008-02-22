@@ -68,6 +68,8 @@ physicsserver/body.cpp \
 physicsserver/body_c.cpp \
 physicsserver/bodycontroller.cpp \
 physicsserver/bodycontroller_c.cpp \
+physicsserver/transformcollider.cpp \
+physicsserver/transformcollider_c.cpp \
 physicsserver/boxcollider.cpp \
 physicsserver/boxcollider_c.cpp \
 physicsserver/ccylindercollider.cpp \
@@ -127,6 +129,7 @@ sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
 sceneserver/camera.cpp \
 sceneserver/camera_c.cpp \
+sceneserver/scenedict.cpp \
 simulationserver/simulationserver.h \
 simulationserver/simulationserver.cpp \
 simulationserver/simulationserver_c.cpp \
@@ -148,6 +151,7 @@ simulationserver/netbuffer.cpp \
 geometryserver/geometryserver.h \
 geometryserver/geometryserver.cpp \
 geometryserver/geometryserver_c.cpp \
+geometryserver/meshexporter_c.cpp \
 geometryserver/meshimporter.cpp \
 geometryserver/meshimporter_c.cpp \
 geometryserver/stdmeshimporter.cpp \
@@ -167,6 +171,8 @@ monitorserver/monitorcmdparser_c.cpp
 nobase_libpkginclude_HEADERS = \
 agentaspect/agentaspect.h \
 agentaspect/effector.h \
+agentaspect/jointeffector.h \
+agentaspect/jointperceptor.h \
 agentaspect/perceptor.h \
 agentaspect/createaction.h \
 controlaspect/controlaspect.h \
@@ -190,6 +196,7 @@ physicsserver/raycollider.h \
 physicsserver/recorderhandler.h \
 physicsserver/space.h \
 physicsserver/spherecollider.h \
+physicsserver/transformcollider.h \
 physicsserver/world.h \
 physicsserver/dragcontroller.h \
 physicsserver/velocitycontroller.h \
@@ -219,6 +226,7 @@ simulationserver/netclient.h \
 simulationserver/netmessage.h \
 simulationserver/netbuffer.h \
 geometryserver/geometryserver.h \
+geometryserver/meshexporter.h \
 geometryserver/meshimporter.h \
 geometryserver/stdmeshimporter.h \
 geometryserver/trimesh.h \

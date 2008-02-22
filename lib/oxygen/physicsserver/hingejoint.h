@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hingejoint.h,v 1.7 2007/02/12 19:14:58 rollmark Exp $
+   $Id: hingejoint.h,v 1.8 2008/02/22 07:52:14 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,10 +62,10 @@ public:
     /** returns the hinge angle in degrees, measured between the two
         bodies, or between the body and the static environment.
     */
-    float GetAngle();
+    float GetAngle() const;
 
     /** returns the time derivate of the hinge angle */
-    float GetAngleRate();
+    float GetAngleRate() const;
 
     /** sets a joint parameter value */
     virtual void SetParameter(int parameter, float value);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h,v 1.10 2007/06/16 11:01:35 yxu Exp $
+   $Id: odeobject.h,v 1.11 2008/02/22 07:52:14 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 #define OXYGEN_ODEOBJECT_H
 
 #include <oxygen/sceneserver/basenode.h>
-//#include <ode/ode.h>
 #include "odewrapper.h"
 
 namespace oxygen
@@ -39,14 +38,26 @@ public:
     //
     // Functions
     //
-    ODEObject() : BaseNode() {};
-    virtual ~ODEObject() {};
-    
+    ODEObject();
+    virtual ~ODEObject();
+
+    /** This rountine is called, before the hierarchy object is
+        removed from the parent. It can be overridden to support
+        custom 'unlink' behavior.
+    */
+    virtual void OnUnlink();
+
+    /** returns the ODE world handle */
+    dWorldID GetWorldID();
+
     /** returns the nearest parent space ODE handle */
     dSpaceID FindSpaceID();
 
     /** returns the ODE handle ID of the containing parent space */
     virtual dSpaceID GetParentSpaceID();
+
+    /** destroy the managed ODE object */
+    virtual void DestroyODEObject() = 0;
 
 protected:
     /** returns the world node */
@@ -54,9 +65,6 @@ protected:
 
     /** finds the nearest parent space node */
     boost::shared_ptr<Space> GetSpace();
-
-    /** returns the ODE world handle */
-    dWorldID GetWorldID();
 
     /** converts the rotation part of a salt::Matrix to an ODE
         dMatrix3 */

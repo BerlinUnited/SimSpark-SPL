@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera_c.cpp,v 1.5 2004/03/22 11:01:03 rollmark Exp $
+   $Id: camera_c.cpp,v 1.6 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -162,6 +162,26 @@ FUNCTION(Camera,getZFar)
     return obj->GetZFar();
 }
 
+FUNCTION(Camera,lookAt)
+{
+    int inX;
+    int inY;
+    int inZ;
+
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in[0],inX)) ||
+        (! in.GetValue(in[1],inY)) ||
+        (! in.GetValue(in[2],inZ))
+        )
+        {
+            return false;
+        }
+
+    obj->LookAt(salt::Vector3f(inX,inY,inZ));
+    return true;
+}
+
 void CLASS(Camera)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
@@ -178,4 +198,5 @@ void CLASS(Camera)::DefineClass()
     DEFINE_FUNCTION(setZFar);
     DEFINE_FUNCTION(adjustZFar);
     DEFINE_FUNCTION(getZFar);
+    DEFINE_FUNCTION(lookAt);
 }

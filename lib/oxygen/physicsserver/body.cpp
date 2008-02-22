@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.21 2007/06/16 11:01:35 yxu Exp $
+   $Id: body.cpp,v 1.22 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,11 +34,6 @@ Body::Body() : ODEObject(), mODEBody(0)
 
 Body::~Body()
 {
-    if (mODEBody)
-        {
-            dBodyDestroy(mODEBody);
-            mODEBody = 0;
-        }
 }
 
 dBodyID Body::GetODEBody() const
@@ -105,6 +100,17 @@ bool Body::CreateBody()
     return true;
 }
 
+void Body::DestroyODEObject()
+{
+    if (mODEBody == 0)
+        {
+            return;
+        }
+
+    dBodyDestroy(mODEBody);
+    mODEBody = 0;
+}
+
 void Body::OnLink()
 {
     ODEObject::OnLink();
@@ -152,77 +158,188 @@ void Body::SetMassParameters(const dMass& mass)
     dBodySetMass(mODEBody, &mass);
 }
 
+void Body::PrepareSphere(dMass& mass, float density, float radius) const
+{
+    dMassSetSphere(&mass, density, radius);
+}
+
 void Body::SetSphere(float density, float radius)
 {
     dMass ODEMass;
-    dMassSetSphere(&ODEMass, density, radius);
+    PrepareSphere(ODEMass, density, radius);
     dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::Addphere(float density, float radius, const Matrix& matrix)
+{
+    dMass ODEMass;
+    PrepareSphere(ODEMass, density, radius);
+    AddMass(ODEMass, matrix);
+}
+
+void Body::PrepareSphereTotal(dMass& mass, float total_mass, float radius) const
+{
+    dMassSetSphereTotal(&mass, total_mass, radius);
 }
 
 void Body::SetSphereTotal(float total_mass, float radius)
 {
     dMass ODEMass;
-    dMassSetSphereTotal(&ODEMass, total_mass, radius);
+    PrepareSphereTotal(ODEMass, total_mass, radius);
     dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::AddSphereTotal(float total_mass, float radius, const Matrix& matrix)
+{
+    dMass ODEMass;
+    PrepareSphereTotal(ODEMass, total_mass, radius);
+    AddMass(ODEMass, matrix);
+}
+
+void Body::PrepareBox(dMass& mass, float density, const Vector3f& size) const
+{
+    dMassSetBox(&mass, density, size[0], size[1], size[2]);
 }
 
 void Body::SetBox(float density, const Vector3f& size)
 {
     dMass ODEMass;
-    dMassSetBox(&ODEMass, density, size[0], size[1], size[2]);
+    PrepareBox(ODEMass, density, size);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::SetBoxTotal(float total_mass, const salt::Vector3f& size)
+void Body::AddBox(float density, const Vector3f& size, const Matrix& matrix)
 {
     dMass ODEMass;
-    dMassSetBoxTotal(&ODEMass, total_mass, size[0], size[1], size[2]);
+    PrepareBox(ODEMass, density, size);
+    AddMass(ODEMass, matrix);
+}
+
+void Body::PrepareBoxTotal(dMass& mass, float total_mass, const Vector3f& size) const
+{
+    dMassSetBoxTotal(&mass, total_mass, size[0], size[1], size[2]);
+}
+
+void Body::SetBoxTotal(float total_mass, const Vector3f& size)
+{
+    dMass ODEMass;
+    PrepareBoxTotal(ODEMass, total_mass, size);
     dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::AddBoxTotal(float total_mass, const Vector3f& size, const Matrix& matrix)
+{
+    dMass ODEMass;
+    PrepareBoxTotal(ODEMass, total_mass, size);
+    AddMass(ODEMass, matrix);
+}
+
+void Body::AddMass(const dMass& mass, const Matrix& matrix)
+{
+    dMass transMass(mass);
+
+    dMatrix3 rot;
+    ConvertRotationMatrix(matrix, rot);
+    dMassRotate(&transMass,rot);
+
+    dMass bodyMass;
+    dBodyGetMass(mODEBody, &bodyMass);
+    dMassAdd(&bodyMass, &transMass);
+    dBodySetMass(mODEBody, (const dMass*)&bodyMass);
+
+    /** ODE currently requires that the center mass is always in the
+        origin of the body
+    */
+    const Vector3f& trans(matrix.Pos());
+    dMassTranslate(&transMass,trans[0],trans[1],trans[2]);
+}
+
+void Body::PrepareCylinder (dMass& mass, float density, float radius, float length) const
+{
+    // direction: (1=x, 2=y, 3=z)
+    int direction = 3;
+
+    dMassSetCylinder (&mass, density, direction, radius, length);
 }
 
 void Body::SetCylinder (float density, float radius, float length)
 {
     dMass ODEMass;
+    PrepareCylinder(ODEMass, density, radius, length);
+    dBodySetMass(mODEBody, &ODEMass);
+}
 
+void Body::AddCylinder (float density, float radius, float length, const Matrix& matrix)
+{
+    dMass ODEMass;
+    PrepareCylinder(ODEMass, density, radius, length);
+    AddMass(ODEMass, matrix);
+}
+
+void Body::PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
+{
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
 
-    dMassSetCylinder (&ODEMass, density, direction, radius, length);
-    dBodySetMass(mODEBody, &ODEMass);
+    dMassSetCylinderTotal(&mass, total_mass, direction, radius, length);
 }
 
 void Body::SetCylinderTotal(float total_mass, float radius, float length)
 {
     dMass ODEMass;
+    PrepareCylinderTotal(ODEMass, total_mass, radius, length);
+    dBodySetMass(mODEBody, &ODEMass);
+}
 
+void Body::AddCylinderTotal(float total_mass, float radius, float length, const Matrix& matrix)
+{
+    dMass ODEMass;
+    PrepareCylinderTotal(ODEMass, total_mass, radius, length);
+    AddMass(ODEMass, matrix);
+}
+
+void Body::PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const
+{
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
 
-    dMassSetCylinderTotal(&ODEMass, total_mass, direction, radius, length);
-    dBodySetMass(mODEBody, &ODEMass);
+    dMassSetCappedCylinder (&mass, density, direction, radius, length);
 }
 
 void Body::SetCappedCylinder (float density, float radius, float length)
 {
     dMass ODEMass;
+    PrepareCappedCylinder(ODEMass, density, radius, length);
+    dBodySetMass(mODEBody, &ODEMass);
+}
 
+void Body::AddCappedCylinder (float density, float radius, float length, const Matrix& matrix)
+{
+    dMass ODEMass;
+    PrepareCappedCylinder(ODEMass, density, radius, length);
+    AddMass(ODEMass, matrix);
+}
+
+void Body::PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
+{
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
 
-    dMassSetCappedCylinder (&ODEMass, density, direction, radius, length);
-    dBodySetMass(mODEBody, &ODEMass);
+    dMassSetCappedCylinderTotal(&mass, total_mass, direction, radius, length);
 }
 
 void Body::SetCappedCylinderTotal(float total_mass, float radius, float length)
 {
     dMass ODEMass;
-
-    // direction: (1=x, 2=y, 3=z)
-    int direction = 3;
-
-    dMassSetCappedCylinderTotal(&ODEMass, total_mass,
-                                direction, radius, length);
+    PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
+}
+
+void Body::AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
+{
+    dMass ODEMass;
+    PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
+    AddMass(ODEMass, matrix);
 }
 
 Vector3f Body::GetVelocity() const
@@ -266,10 +383,8 @@ Body::SetAngularVelocity(const Vector3f& vel)
     dBodySetAngularVel(mODEBody, vel[0], vel[1], vel[2]);
 }
 
-void Body::PostPhysicsUpdateInternal()
+void Body::SynchronizeParent() const
 {
-    // synchronize parent node with the bodies position and
-    // orientation
     const dReal* pos = dBodyGetPosition(mODEBody);
     const dReal* rot = dBodyGetRotation(mODEBody);
 
@@ -295,6 +410,11 @@ void Body::PostPhysicsUpdateInternal()
     mat.m[15] = 1;
 
     baseNode->SetWorldTransform(mat);
+}
+
+void Body::PostPhysicsUpdateInternal()
+{
+    SynchronizeParent();
 }
 
 shared_ptr<Body> Body::GetBody(dBodyID id)
@@ -354,7 +474,7 @@ Body::GetPosition() const
     return Vector3f(pos[0], pos[1], pos[2]);
 }
 
-void Body::TranslateMass(const salt::Vector3f& v)
+void Body::TranslateMass(const Vector3f& v)
 {
     dMass m;
     dBodyGetMass(mODEBody, &m);

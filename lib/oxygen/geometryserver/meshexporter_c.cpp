@@ -1,10 +1,10 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-   this file is part of rcssserver3D
-   Fri May 9 2003
+   this file is part of simspark
+   Tue May 9 2006
    Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bodycontroller.cpp,v 1.3 2008/02/22 07:52:15 hedayat Exp $
+   Copyright (C) 2007 RoboCup Soccer Server 3D Maintenance Group
+   $Id: meshexporter_c.cpp,v 1.1 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,36 +18,22 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   MeshExporter
+
+   NOTE: This class serves as an (abstract) exporter, to register 
+         meshes with other graphic engines (possibly also for exporting)
+
+   HISTORY:
+       30/03/07 - OO  - Initial version
+
 */
-#include "bodycontroller.h"
-#include "body.h"
-#include <zeitgeist/logserver/logserver.h>
+#include "meshexporter.h"
 
 using namespace oxygen;
-using namespace zeitgeist;
-using namespace boost;
 
-void BodyController::OnLink()
+void 
+CLASS(MeshExporter)::DefineClass()
 {
-    UpdateCached();
-}
-
-void BodyController::OnUnlink()
-{
-    BaseNode::OnUnlink();
-    mBody.reset();
-}
-
-void BodyController::UpdateCached()
-{
-    mBody.reset();
-
-    mBody = shared_dynamic_cast<Body>
-        (make_shared(GetParentSupportingClass("Body")));
-
-    if (mBody.get() == 0)
-    {
-        GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
-        return;
-    }
+    DEFINE_BASECLASS(zeitgeist/Leaf);
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bodycontroller.cpp,v 1.3 2008/02/22 07:52:15 hedayat Exp $
+   $Id: transformcollider.cpp,v 1.1 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,35 +19,38 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "bodycontroller.h"
-#include "body.h"
-#include <zeitgeist/logserver/logserver.h>
+
+#include "transformcollider.h"
 
 using namespace oxygen;
-using namespace zeitgeist;
-using namespace boost;
+using namespace salt;
 
-void BodyController::OnLink()
+TransformCollider::TransformCollider() : Collider()
 {
-    UpdateCached();
 }
 
-void BodyController::OnUnlink()
+bool TransformCollider::ConstructInternal()
 {
-    BaseNode::OnUnlink();
-    mBody.reset();
+    if (! Collider::ConstructInternal())
+        {
+            return false;
+        }
+
+    mODEGeom = dCreateGeomTransform(0);
+
+    if (mODEGeom == 0)
+        {
+            return false;
+        }
+
+    //! do not automatically destroy encapsulated geoms
+    dGeomTransformSetCleanup(mODEGeom, 0);
+
+    /** report the transform geom in collisions instead of the
+        encapsulated geoms
+    */
+    dGeomTransformSetInfo(mODEGeom, 1);
+
+    return true;
 }
 
-void BodyController::UpdateCached()
-{
-    mBody.reset();
-
-    mBody = shared_dynamic_cast<Body>
-        (make_shared(GetParentSupportingClass("Body")));
-
-    if (mBody.get() == 0)
-    {
-        GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
-        return;
-    }
-}

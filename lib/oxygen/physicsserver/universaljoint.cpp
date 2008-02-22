@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.cpp,v 1.7 2007/05/31 08:06:31 jboedeck Exp $
+   $Id: universaljoint.cpp,v 1.8 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -80,19 +80,19 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
     return GetLocalPos(pos);
 }
 
-void UniversalJoint::SetAxis1(Vector3f & axis)
+void UniversalJoint::SetAxis1(const Vector3f & axis)
 {
     Vector3f first(GetWorldTransform().Rotate(axis));
     dJointSetUniversalAxis1(mODEJoint,first[0],first[1],first[2]);
 }
 
-void UniversalJoint::SetAxis2(Vector3f & axis)
+void UniversalJoint::SetAxis2(const Vector3f & axis)
 {
     Vector3f second(GetWorldTransform().Rotate(axis));
     dJointSetUniversalAxis2(mODEJoint,second[0],second[1],second[2]);
 }
 
-Vector3f UniversalJoint::GetAxis(EAxisIndex idx)
+Vector3f UniversalJoint::GetAxis(EAxisIndex idx) const
 {
     Vector3f vec(0,0,0);
 
@@ -121,7 +121,7 @@ Vector3f UniversalJoint::GetAxis(EAxisIndex idx)
     return GetLocalPos(vec);
 }
 
-float UniversalJoint::GetAngle(EAxisIndex idx)
+float UniversalJoint::GetAngle(EAxisIndex idx) const
 {
     switch (idx)
     {
@@ -136,7 +136,7 @@ float UniversalJoint::GetAngle(EAxisIndex idx)
     }
 }
 
-float UniversalJoint::GetAngleRate(EAxisIndex idx)
+float UniversalJoint::GetAngleRate(EAxisIndex idx) const
 {
     switch (idx)
         {
@@ -160,11 +160,3 @@ float UniversalJoint::GetParameter(int parameter) const
 {
     return dJointGetUniversalParam(mODEJoint, parameter);
 }
-
-
-
-
-
-
-
-

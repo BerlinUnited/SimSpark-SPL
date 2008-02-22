@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: universaljoint.h,v 1.6 2007/02/12 19:13:43 rollmark Exp $
+   $Id: universaljoint.h,v 1.7 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,27 +47,27 @@ public:
     /** This function sets up the first axis of the joint
         \param axis a vector describing the axis in relative coordinates
     */
-    void SetAxis1(salt::Vector3f & axis);
+    void SetAxis1(const salt::Vector3f & axis);
 
     /** This function sets up the second axis of the joint
         \param axis a vector describing the axis in local coordinates
     */
-    void SetAxis2(salt::Vector3f & axis);
+    void SetAxis2(const salt::Vector3f & axis);
 
     /** returns the vector describing one of the two axis
         (in local coordinates)
         \param idx index of the desired axis
     */
-    salt::Vector3f GetAxis(EAxisIndex idx);
+    salt::Vector3f GetAxis(EAxisIndex idx) const;
 
     /** returns one of the axis angles in degrees, measured between
         the two bodies, or between the body and the static
         environment.
     */
-    float GetAngle(EAxisIndex idx);
+    float GetAngle(EAxisIndex idx) const;
 
     /** returns the time derivate of one of the hinge angles */
-    float GetAngleRate(EAxisIndex idx);
+    float GetAngleRate(EAxisIndex idx) const;
 
     /** sets a joint parameter value */
     virtual void SetParameter(int parameter, float value);

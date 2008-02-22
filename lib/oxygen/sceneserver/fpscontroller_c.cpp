@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: fpscontroller_c.cpp,v 1.9 2007/04/07 13:12:06 jamu Exp $
+$Id: fpscontroller_c.cpp,v 1.10 2008/02/22 07:52:15 hedayat Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,38 +24,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 using namespace boost;
 using namespace oxygen;
 
-FUNCTION(FPSController,setVAngle)
-{
-    float inAngle;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(),inAngle))
-        )
-        {
-            return false;
-        }
-
-    obj->SetVAngle(inAngle);
-    return true;
-}
-
-FUNCTION(FPSController,setHAngle)
-{
-    float inAngle;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(),inAngle))
-        )
-        {
-            return false;
-        }
-
-    obj->SetHAngle(inAngle);
-    return true;
-}
-
 FUNCTION(FPSController,setAcceleration)
 {
     float inAccel;
@@ -72,6 +40,38 @@ FUNCTION(FPSController,setAcceleration)
     return true;
 }
 
+FUNCTION(FPSController,setHAngle)
+{
+    float inAngleDeg;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inAngleDeg))
+        )
+        {
+            return false;
+        }
+
+    obj->SetHAngleDeg(inAngleDeg);
+    return true;
+}
+
+FUNCTION(FPSController,setVAngle)
+{
+    float inAngleDeg;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inAngleDeg))
+        )
+        {
+            return false;
+        }
+
+    obj->SetVAngleDeg(inAngleDeg);
+    return true;
+}
+
 FUNCTION(FPSController,getAcceleration)
 {
     return obj->GetAcceleration();
@@ -80,8 +80,8 @@ FUNCTION(FPSController,getAcceleration)
 void CLASS(FPSController)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BodyController);
-    DEFINE_FUNCTION(setHAngle);
-    DEFINE_FUNCTION(setVAngle);
     DEFINE_FUNCTION(setAcceleration);
     DEFINE_FUNCTION(getAcceleration);
+    DEFINE_FUNCTION(setHAngle);
+    DEFINE_FUNCTION(setVAngle);
 }

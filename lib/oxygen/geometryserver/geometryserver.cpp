@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: geometryserver.cpp,v 1.2 2007/05/28 16:13:39 jboedeck Exp $
+   $Id: geometryserver.cpp,v 1.3 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 #include "geometryserver.h"
 #include "meshimporter.h"
+#include "meshexporter.h"
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -37,25 +38,27 @@ GeometryServer::~GeometryServer()
 {
 }
 
-void GeometryServer::OnLink()
+void
+GeometryServer::OnLink()
 {
     if (mChildren.size() == 0)
-        {
-            InitMeshImporter("oxygen/StdMeshImporter");
-        }
+    {
+        InitMeshImporter("oxygen/StdMeshImporter");
+    }
 }
 
-bool GeometryServer::InitMeshImporter(const string& importerName)
+bool
+GeometryServer::InitMeshImporter(const string& importerName)
 {
     shared_ptr<MeshImporter> importer
         = shared_dynamic_cast<MeshImporter>(GetCore()->New(importerName));
 
     if (importer.get() == 0)
-        {
-            GetLog()->Error() << "(GeometryServer) ERROR: "
-                              << "unable to create '" << importerName << "'\n";
-            return false;
-        }
+    {
+        GetLog()->Error() << "(GeometryServer) ERROR: "
+                          << "unable to create '" << importerName << "'\n";
+        return false;
+    }
 
     importer->SetName(importerName);
     AddChildReference(importer);
@@ -66,28 +69,28 @@ bool GeometryServer::InitMeshImporter(const string& importerName)
     return true;
 }
 
-shared_ptr<TriMesh> GeometryServer::GetMesh
-(const string& name, const::ParameterList& parameter)
+shared_ptr<TriMesh>
+GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
 {
     // try a direct match
     string meshName = name;
-    TMeshMap::iterator meshIter = mMeshMap.find(meshName);
+    TMeshMap::const_iterator meshIter = mMeshMap.find(meshName);
 
     if (meshIter != mMeshMap.end())
-        {
-            return (*meshIter).second;
-        }
+    {
+        return (*meshIter).second;
+    }
 
     TLeafList importer;
     ListChildrenSupportingClass<MeshImporter>(importer);
 
     if (importer.size() == 0)
-        {
-            GetLog()->Error()
-                << "(GeometryServer) Warning: no MeshImporter registered\n";
+    {
+        GetLog()->Error()
+            << "(GeometryServer) Warning: no MeshImporter registered\n";
 
-            return shared_ptr<TriMesh>();
-        }
+        return shared_ptr<TriMesh>();
+    }
 
     // try to mangle the name
     for (
@@ -95,22 +98,22 @@ shared_ptr<TriMesh> GeometryServer::GetMesh
          iter != importer.end();
          ++iter
          )
+    {
+        shared_ptr<MeshImporter> importer =
+            shared_static_cast<MeshImporter>(*iter);
+
+        string str = importer->MangleName(name, parameter);
+
+        if (str != meshName)
         {
-            shared_ptr<MeshImporter> importer =
-                shared_static_cast<MeshImporter>(*iter);
-
-            string str = importer->MangleName(name, parameter);
-
-            if (str != meshName)
-                {
-                    meshName = str;
-                    meshIter = mMeshMap.find(meshName);
-                    if (meshIter != mMeshMap.end())
-                        {
-                            return (*meshIter).second;
-                        }
-                }
+            meshName = str;
+            meshIter = mMeshMap.find(meshName);
+            if (meshIter != mMeshMap.end())
+            {
+                return (*meshIter).second;
+            }
         }
+    }
 
     // try to import the mesh
     for (
@@ -118,32 +121,36 @@ shared_ptr<TriMesh> GeometryServer::GetMesh
          iter != importer.end();
          ++iter
          )
+    {
+        shared_ptr<MeshImporter> importer =
+            shared_static_cast<MeshImporter>(*iter);
+
+        shared_ptr<TriMesh> mesh = importer->ImportMesh(name,parameter);
+
+        if (mesh.get() == 0)
         {
-            shared_ptr<MeshImporter> importer =
-                shared_static_cast<MeshImporter>(*iter);
-
-            shared_ptr<TriMesh> mesh = importer->ImportMesh(name,parameter);
-
-            if (mesh.get() == 0 || mesh->GetVertexCount() == 0)
-                {
-                    continue;
-                }
-
-            string meshName = mesh->GetName();
-            if (meshName == "")
-                {
-                    mesh->SetName(name);
-                    meshName = name;
-                }
-
-            GetLog()->Normal()
-                << "(GeometryServer) imported mesh '"
-                << meshName << " with '"
-                << importer->GetName() << "'\n";
-
-            mMeshMap[meshName] = mesh;
-            return mesh;
+            continue;
         }
+
+        string meshName = mesh->GetName();
+        if (meshName.empty())
+        {
+            meshName = name;
+            mesh->SetName(name);
+        }
+
+        GetLog()->Normal() << "(GeometryServer) imported mesh '" << meshName
+                           << " with '" << importer->GetName() << "'\n";
+
+        if (mesh.get() == 0 || mesh->GetVertexCount() == 0)
+        {
+            continue;
+        }
+
+        RegisterMesh(mesh);
+
+        return mesh;
+    }
 
     GetLog()->Error() << "(GeometryServer) ERROR: cannot import mesh '"
                       << name << "'\n";
@@ -151,3 +158,62 @@ shared_ptr<TriMesh> GeometryServer::GetMesh
     return shared_ptr<TriMesh>();
 }
 
+void
+GeometryServer::RegisterMesh(shared_ptr<TriMesh> mesh)
+{
+    if (mesh.get() == 0)
+    {
+        GetLog()->Debug()
+            << "(GeometryServer) RegisterMesh called with NULL mesh\n";
+        return;
+    }
+
+    std::string name = mesh->GetName();
+    if (name.empty())
+    {
+        GetLog()->Error()
+            << "(GeometryServer) Cannot register a mesh without a name\n";
+        return;
+    }
+
+    TMeshMap::const_iterator iter = mMeshMap.find(name);
+    if (iter != mMeshMap.end())
+    {
+        GetLog()->Debug() << "(GeometryServer) replacing mesh " << name << "\n";
+    }
+
+    mMeshMap[name] = mesh;
+    GetLog()->Normal() << "(GeometryServer) mesh " << name << " registered\n";
+
+    TLeafList exporters;
+    ListChildrenSupportingClass<MeshExporter>(exporters);
+
+    for (TLeafList::const_iterator bi = exporters.begin(); bi != exporters.end(); ++bi)
+    {
+        GetLog()->Normal() << "(GeometryServer) additionally registered mesh "
+                           << name << " via MeshExporter '" << (*bi)->GetName() << "'\n";
+        shared_ptr<MeshExporter> mb = shared_static_cast<MeshExporter>(*bi);
+        mb->RegisterMesh(mesh);
+    }
+}
+
+bool
+GeometryServer::InitMeshExporter(const string& name)
+{
+    shared_ptr<MeshExporter> exporter
+        = shared_dynamic_cast<MeshExporter>(GetCore()->New(name));
+
+    if (exporter.get() == 0)
+    {
+        GetLog()->Error() << "(GeometryServer) ERROR: "
+                          << "unable to create MeshExporter '" << name << "'\n";
+        return false;
+    }
+
+    exporter->SetName(name);
+    AddChildReference(exporter);
+
+    GetLog()->Normal() << "(GeometryServer) MeshExporter '" << name << "' registered\n";
+
+    return true;
+}

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.19 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: sceneserver.cpp,v 1.20 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,12 +29,9 @@
 #include "transform.h"
 #include "scene.h"
 #include "sceneimporter.h"
+#include "scenedict.h"
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
-
-#undef PREFIX
-#undef PACKAGE_NAME
-#include <sparkconfig.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -52,40 +49,27 @@ SceneServer::~SceneServer()
 {
 }
 
-boost::shared_ptr<Scene> SceneServer::CreateScene(const std::string &location)
+bool SceneServer::CreateScene(const std::string &location)
 {
     shared_ptr<CoreContext> context = GetCore()->CreateContext();
 
     shared_ptr<Scene> scene = shared_static_cast<Scene>
         (context->New("oxygen/Scene", location));
 
-    if (scene.get() != 0)
-        {
-            ResetCache();
-            mActiveScene = scene;
-        }
-
-    return scene;
+    ResetCache();
+    RegisterCachedPath(mActiveScene, location);
+    return (scene.get() != 0);
 }
 
 bool SceneServer::SetActiveScene(const std::string &location)
 {
-    shared_ptr<Scene> scene =
-        shared_dynamic_cast<Scene>(GetCore()->Get(location));
-
-    if (scene.get() != 0)
-        {
-            ResetCache();
-            mActiveScene = scene;
-            return true;
-        }
-
-    return false;
+    ResetCache();
+    RegisterCachedPath(mActiveScene, location);
+    return (mActiveScene.get() != 0);
 }
 
 void SceneServer::ResetCache()
 {
-    mActiveScene.reset();
     mActiveSpace.reset();
     mActiveWorld.reset();
 }
@@ -238,8 +222,7 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                               shared_ptr<ParameterList> parameter)
 {
 
-        string pkgdatadir = PREFIX "/share/" PACKAGE_NAME;
-        string globalfile = pkgdatadir + "/" + fileName;
+        string globalfile = salt::RFile::BundlePath() + fileName;
         string file = fileName;
 
         if (! GetFile()->Exist(fileName))
@@ -288,6 +271,8 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
         {
             shared_ptr<SceneImporter> importer =
                 shared_static_cast<SceneImporter>(*iter);
+
+            importer->SetSceneDict(&SceneDict::GetInstance());
 
             GetLog()->Debug()
                 << "(SceneServer) trying importer " << importer->GetName() << std::endl;

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.cpp,v 1.13 2007/02/12 19:12:07 rollmark Exp $
+   $Id: basenode.cpp,v 1.14 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -200,12 +200,9 @@ bool BaseNode::ImportScene(const string& fileName, shared_ptr<ParameterList> par
     return sceneServer->ImportScene(fileName,node,parameter);
 }
 
-salt::Vector3f BaseNode::GetLocalPos(const salt::Vector3f& worldPos)
+salt::Vector3f BaseNode::GetLocalPos(const salt::Vector3f& worldPos) const
 {
     Matrix invWorld = GetWorldTransform();
     invWorld.InvertRotationMatrix();
     return invWorld.Transform(worldPos);
 }
-
-
-

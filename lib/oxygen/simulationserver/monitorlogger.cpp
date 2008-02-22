@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorlogger.cpp,v 1.1 2007/04/26 14:38:47 jboedeck Exp $
+   $Id: monitorlogger.cpp,v 1.2 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ void MonitorLogger::EndCycle()
         }
 
     // log updates
-    string info = mMonitorServer->GetMonitorInfo();
+    string info = mMonitorServer->GetMonitorData();
 
     logFile << info;
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bodycontroller.cpp,v 1.3 2008/02/22 07:52:15 hedayat Exp $
+   $Id: scenedict.cpp,v 1.1 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,35 +19,49 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "bodycontroller.h"
-#include "body.h"
-#include <zeitgeist/logserver/logserver.h>
+#include <oxygen/sceneserver/scenedict.h>
 
+using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
-using namespace boost;
 
-void BodyController::OnLink()
+SceneDict::SceneDict()
 {
-    UpdateCached();
 }
 
-void BodyController::OnUnlink()
+SceneDict& SceneDict::GetInstance()
 {
-    BaseNode::OnUnlink();
-    mBody.reset();
+    static SceneDict theInstance;
+    return theInstance;
 }
 
-void BodyController::UpdateCached()
+const SceneDict::FileRef* SceneDict::Lookup(boost::weak_ptr<zeitgeist::Leaf> leaf)
 {
-    mBody.reset();
+    if (leaf.expired())
+        {
+            return 0;
+        }
 
-    mBody = shared_dynamic_cast<Body>
-        (make_shared(GetParentSupportingClass("Body")));
+    TDictionary::const_iterator iter = mDictionary.find(leaf);
+    if (iter == mDictionary.end())
+        {
+            return 0;
+        }
 
-    if (mBody.get() == 0)
-    {
-        GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
-        return;
-    }
+    return &((*iter).second);
+}
+
+void SceneDict::Insert(boost::weak_ptr<zeitgeist::Leaf> leaf, const FileRef& ref)
+{
+    if (leaf.expired())
+        {
+            return;
+        }
+
+    mDictionary[leaf] = ref;
+}
+
+void SceneDict::Clear()
+{
+    mDictionary.clear();
 }

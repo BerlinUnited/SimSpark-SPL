@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.cpp,v 1.10 2007/02/12 19:10:14 rollmark Exp $
+   $Id: transform.cpp,v 1.11 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,8 +84,9 @@ void Transform::SetWorldTransform(const salt::Matrix &transform)
     mChangedMark = SceneServer::GetTransformMark();
     mOldLocalTransform = mLocalTransform;
 
-    mLocalTransform = transform;
-    parent->SetWorldTransform(mIdentityMatrix);
+    mLocalTransform = (parent->GetWorldTransform());
+    mLocalTransform.InvertMatrix();
+    mLocalTransform = mLocalTransform * transform;
 }
 
 void Transform::SetLocalPos(const salt::Vector3f &pos)
@@ -95,6 +96,11 @@ void Transform::SetLocalPos(const salt::Vector3f &pos)
 
     mLocalTransform.Pos() = pos;
     UpdateHierarchyInternal();
+}
+
+const salt::Vector3f& Transform::GetLocalPos()
+{
+    return mLocalTransform.Pos();
 }
 
 void Transform::SetLocalRotationRad(const salt::Vector3f &rot)

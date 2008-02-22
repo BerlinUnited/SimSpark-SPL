@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.14 2007/06/16 15:06:40 jboedeck Exp $
+   $Id: collider.cpp,v 1.15 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "collisionhandler.h"
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
+#include "transformcollider.h"
 
 using namespace oxygen;
 using namespace salt;
@@ -37,11 +38,6 @@ Collider::Collider() : ODEObject(), mODEGeom(0)
 
 Collider::~Collider()
 {
-    if (mODEGeom)
-        {
-            dGeomDestroy(mODEGeom);
-            mODEGeom = 0;
-        }
 }
 
 void Collider::OnLink()
@@ -49,7 +45,6 @@ void Collider::OnLink()
     ODEObject::OnLink();
 
 
-// JAN: taken from simspark
     weak_ptr<Node> parent = GetParent();
     if (
         (mODEGeom == 0) ||
@@ -59,12 +54,19 @@ void Collider::OnLink()
             return;
         }
 
+    shared_ptr<TransformCollider> tcParent =
+        shared_dynamic_cast<TransformCollider>(parent.lock());
 
+    if (tcParent.get() != 0)
+        {
+            // our parent is an ODE transform geom that encapsulates
+            // this geom, so register ourself to it. This geom must
+            // not directly register to a space or a body.
+            dGeomTransformSetGeom(tcParent->GetODEGeom(), mODEGeom);
+            return;
+        }
 
-//    if (mODEGeom == 0)
-  //      {
-    //        return;
-      //  }
+    // this geom is independent, so register to space and body
 
     // if we have a space add the geom to it
     dSpaceID space = FindSpaceID();
@@ -219,6 +221,12 @@ void Collider::SetPosition(const Vector3f& pos)
     dGeomSetPosition (mODEGeom, globalPos[0], globalPos[1], globalPos[2]);
 }
 
+Vector3f Collider::GetPosition() const
+{
+    const dReal* pos = dGeomGetPosition(mODEGeom);
+    return Vector3f(pos[0],pos[1],pos[2]);
+}
+
 dSpaceID Collider::GetParentSpaceID()
 {
     if (mODEGeom == 0)
@@ -251,3 +259,13 @@ bool Collider::Intersects(boost::shared_ptr<Collider> collider)
          ) > 0;
 }
 
+void Collider::DestroyODEObject()
+{
+    if (! mODEGeom)
+        {
+            return;
+        }
+
+    dGeomDestroy(mODEGeom);
+    mODEGeom = 0;
+}

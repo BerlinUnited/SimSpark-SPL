@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.cpp,v 1.3 2008/02/20 11:17:18 hedayat Exp $
+   $Id: internalsoccerinput.cpp,v 1.4 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                         mLastKickOff = TI_RIGHT;
                     }
                 }
-            break;           
+            break;
         case CmdDropBall:
             if (input.KeyPress())
                 {
@@ -163,8 +163,8 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     salt::Vector3f pos(-40.0, 0.0, 21.5);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngle(salt::gRadToDeg(1.55));
-                    mFPS->SetVAngle(salt::gRadToDeg(1.05));
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(1.55));
+                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.05));
                 }
             break;
         case CmdCameraLeftCorner:
@@ -172,8 +172,8 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     salt::Vector3f pos(-40.0, -30.5, 20.0);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngle(salt::gRadToDeg(0.855));
-                    mFPS->SetVAngle(salt::gRadToDeg(0.88));
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.855));
+                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.88));
                 }
             break;
         case CmdCameraMiddleLeft:
@@ -181,8 +181,8 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     salt::Vector3f pos(6.0, -29.0, 20.0);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngle(salt::gRadToDeg(-0.625));
-                    mFPS->SetVAngle(salt::gRadToDeg(0.965));
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(-0.625));
+                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.965));
                 }
             break;
         case CmdCameraMiddleRight:
@@ -190,8 +190,8 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     salt::Vector3f pos(-6.0, -29.0, 20.0);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngle(salt::gRadToDeg(0.625));
-                    mFPS->SetVAngle(salt::gRadToDeg(0.965));
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.625));
+                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.965));
                 }
             break;
         case CmdCameraMiddle:
@@ -199,8 +199,8 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     salt::Vector3f pos(0.0, -43.5, 39.5);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngle(salt::gRadToDeg(0.002));
-                    mFPS->SetVAngle(salt::gRadToDeg(1.16));
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.002));
+                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.16));
                 }
             break;
         case CmdCameraRightCorner:
@@ -208,8 +208,8 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     salt::Vector3f pos(40.0, -30.5, 20.0);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngle(salt::gRadToDeg(-0.855));
-                    mFPS->SetVAngle(salt::gRadToDeg(0.88));
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(-0.855));
+                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.88));
                 }
             break;
         case CmdCameraRightGoal:
@@ -217,8 +217,8 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     salt::Vector3f pos(40.0, 0.0, 21.5);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngle(salt::gRadToDeg(-1.55));
-                    mFPS->SetVAngle(salt::gRadToDeg(1.05));
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(-1.55));
+                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.05));
                 }
             break;
         case CmdFreeKickLeft:
@@ -226,21 +226,21 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                 {
                     mGameState->SetPlayMode(PM_FREE_KICK_LEFT);
                 }
-            break;    
+            break;
         case CmdFreeKickRight:
             if (input.KeyPress())
                 {
                     mGameState->SetPlayMode(PM_FREE_KICK_RIGHT);
 
                 }
-            break; 
+            break;
         case CmdKillAgentLeft:
             if (input.KeyPress())
             {
                     // get list of agent aspects
                     GameControlServer::TAgentAspectList agentAspects;
                     mGameControl->GetAgentAspectList(agentAspects);
-                    
+
                     GameControlServer::TAgentAspectList::iterator iter;
                     for (
                           iter = agentAspects.begin();
@@ -259,12 +259,12 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                         }
 
                         if (agentState->GetTeamIndex() == TI_LEFT)
-                        {                        
+                        {
                             mGameControl->pushDisappearedAgent((*iter)->ID());
-                                
+
                             GetLog()->Error() << "(InternalSoccerInput) killed agent of team left.\n";
 
-                            break;                            
+                            break;
                         }
                     }
             }
@@ -275,7 +275,7 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                     // get list of agent aspects
                     GameControlServer::TAgentAspectList agentAspects;
                     mGameControl->GetAgentAspectList(agentAspects);
-                    
+
                     GameControlServer::TAgentAspectList::iterator iter;
                     for (
                           iter = agentAspects.begin();
@@ -294,12 +294,12 @@ void InternalSoccerInput::ProcessInput(const InputServer::Input& input)
                         }
 
                         if (agentState->GetTeamIndex() == TI_RIGHT)
-                        {                        
+                        {
                             mGameControl->pushDisappearedAgent((*iter)->ID());
-                                
+
                             GetLog()->Error() << "(InternalSoccerInput) killed agent of team left.\n";
 
-                            break;                            
+                            break;
                         }
                     }
             }

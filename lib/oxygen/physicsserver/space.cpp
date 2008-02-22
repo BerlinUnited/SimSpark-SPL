@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.12 2008/01/25 16:46:25 hedayat Exp $
+   $Id: space.cpp,v 1.13 2008/02/22 07:52:14 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,13 +44,6 @@ Space::~Space()
     {
       dJointGroupDestroy(mODEContactGroup);
       mODEContactGroup = 0;
-    }
-
-  // release the ODE space
-  if (mODESpace)
-    {
-      dSpaceDestroy(mODESpace);
-      mODESpace = 0;
     }
 }
 
@@ -151,14 +144,6 @@ void Space::OnLink()
 
     dSpaceID space = FindSpaceID();
     mODESpace = dHashSpaceCreate(space);
-//    if (
-//        (space) &&
-//        (space != mODESpace) &&
-//        (! dSpaceQuery(space, (dGeomID)mODESpace))
-//        )
-//        {
-//            dSpaceAdd(space, (dGeomID)mODESpace);
-//        }
 }
 
 dSpaceID Space::GetParentSpaceID()
@@ -182,18 +167,10 @@ bool Space::IsGlobalSpace()
 
 bool Space::ConstructInternal()
 {
-    // create the ode space, 0 indicates that this space should
-    // not be inserted into another space, i.e. we always create a
-    // toplevel space object
-//    mODESpace = dHashSpaceCreate(0);
-
     // create a joint group for the contacts
     mODEContactGroup = dJointGroupCreate(0);
 
-    return (
-//            (mODESpace != 0) &&
-            (mODEContactGroup != 0)
-            );
+    return (mODEContactGroup != 0);
 }
 
 void Space::PostPhysicsUpdateInternal()
@@ -202,3 +179,63 @@ void Space::PostPhysicsUpdateInternal()
     dJointGroupEmpty (mODEContactGroup);
 }
 
+void
+Space::DestroySpaceObjects()
+{
+    shared_ptr<Scene> scene = GetScene();
+    if (scene.get() == 0)
+        {
+            return;
+        }
+
+    TLeafList objects;
+    const bool recursive = true;
+    scene->ListChildrenSupportingClass<ODEObject>(objects, recursive);
+
+    bool globalSpace = IsGlobalSpace();
+    shared_ptr<Space> self = shared_static_cast<Space>(GetSelf().lock());
+
+    for (
+         TLeafList::iterator iter = objects.begin();
+         iter != objects.end();
+         ++iter
+         )
+        {
+            shared_ptr<ODEObject> object = shared_static_cast<ODEObject>(*iter);
+            if (object == self)
+            {
+                continue;
+            }
+
+            // destroy objects registered to this space; the top level
+            // space object also destroy any other ODE object
+            const dSpaceID parentSpace = object->GetParentSpaceID();
+            if (
+                (
+                 (globalSpace) &&
+                 (parentSpace == 0)
+                 ) ||
+                (parentSpace == mODESpace)
+                )
+                {
+                    object->DestroyODEObject();
+                }
+        }
+}
+
+void
+Space::DestroyODEObject()
+{
+    if (! mODESpace)
+        {
+            return;
+        }
+
+    // make sure that all objects registered to this space are destroyed
+    // before this space. Any other order provokes a segfault in ODE.
+    DestroySpaceObjects();
+
+    // release the ODE space
+    dSpaceDestroy(mODESpace);
+    mODESpace = 0;
+}

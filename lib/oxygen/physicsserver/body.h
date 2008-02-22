@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.16 2007/06/16 11:01:35 yxu Exp $
+   $Id: body.h,v 1.17 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -90,11 +90,22 @@ public:
     */
     void SetSphere(float density, float radius);
 
+    /** adds a mass representing a sphere of the given radius and
+        density, with the matrix determining its center and
+        orientation
+    */
+    void Addphere(float density, float radius, const salt::Matrix& matrix);
+
     /** sets the mass parameters to represent a sphere of the given
         radius and total mass, with the center of mass at (0,0,0)
         relative to the body.
     */
     void SetSphereTotal(float total_mass, float radius);
+
+    /** add a mass representing a sphere of the given radius and total
+        mass, with the matrix determining its center and orientation
+    */
+    void AddSphereTotal(float total_mass, float radius, const salt::Matrix& matrix);
 
     /** Set the mass parameters to represent a box of the given
         dimensions and density, with the center of mass at (0,0,0)
@@ -102,11 +113,23 @@ public:
     */
     void SetBox(float density, const salt::Vector3f& size);
 
+    /** Add a mass representing a box of the given dimensions and
+        density, with the matrix determining its center and
+        orientation
+    */
+    void AddBox(float density, const salt::Vector3f& size, const salt::Matrix& matrix);
+
     /** Set the mass parameters to represent a box of the given
         dimensions and total mass, with the center of mass at (0,0,0)
         relative to the body.
     */
     void SetBoxTotal(float total_mass, const salt::Vector3f& size);
+
+    /** Add a mass representing a box of the given dimensions and
+        total mass, with the matrix determining its center and
+        orientation
+    */
+    void AddBoxTotal(float total_mass, const salt::Vector3f& size, const salt::Matrix& matrix);
 
     /** Set the mass parameters to represent a flat-ended cylinder of
         the given parameters and density, with the center of mass at
@@ -114,7 +137,13 @@ public:
         radius. The length of the cylinder is length. The cylinder's
         long axis is oriented along the body's z axis.
      */
-    void SetCylinder (float density, float radius, float length);
+    void SetCylinder(float density, float radius, float length);
+
+    /** Add a mass representing a flat-ended cylinder of the given
+        parameters and density, with the matrix determining its center
+        and orientation
+     */
+    void AddCylinder(float density, float radius, float length, const salt::Matrix& matrix);
 
     /** Set the mass parameters to represent a flat-ended cylinder of
         the given parameters and total mass, with the center of mass
@@ -123,6 +152,12 @@ public:
         long axis is oriented along the body's z axis.
      */
     void SetCylinderTotal(float total_mass, float radius, float length);
+
+    /** Add a mass representing a flat-ended cylinder of the given
+        parameters and total mass, with the matrix determining its
+        center and orientation
+     */
+    void AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
 
     /* Set the mass parameters to represent a capped cylinder of the
        given parameters and density, with the center of mass at
@@ -133,6 +168,12 @@ public:
     */
     void SetCappedCylinder (float density, float radius, float length);
 
+    /* Add a mass representing a capped cylinder of the given
+       parameters and density, with the matrix determining its center
+       and orientation
+    */
+    void AddCappedCylinder (float density, float radius, float length, const salt::Matrix& matrix);
+
     /* Set the mass parameters to represent a capped cylinder of the
        given parameters and total mass, with the center of mass at
        (0,0,0) relative to the body. The radius of the cylinder (and
@@ -141,6 +182,12 @@ public:
        is oriented along the body's z axis.
     */
     void SetCappedCylinderTotal(float total_mass, float radius, float length);
+
+    /* Add a mass representing a capped cylinder of the given
+       parameters and total mass, with the matrix determining its
+       center and orientation
+    */
+    void AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
 
     /** displace the mass center relative to the body frame */
     void TranslateMass(const salt::Vector3f& v);
@@ -178,6 +225,21 @@ public:
     /** returns the current poosition of this body */
     salt::Vector3f GetPosition() const;
 
+    /** destroy the managed ODE object */
+    virtual void DestroyODEObject();
+
+    /** synchronize parent node with the bodies position and
+        orientation
+    */
+    void SynchronizeParent() const;
+
+    /** adds the given ode mass to this body. The given matrix is
+        applied to the mass center
+    */
+    void AddMass(const dMass& mass, const salt::Matrix& matrix);
+
+    salt::Vector3f GetMassCenter() const;
+
 protected:
     /** creates the managed ODE body and moves it to the position of
         it's scene-graph parent
@@ -186,6 +248,60 @@ protected:
 
     /** create the managed ODE body; returns true on success */
     bool CreateBody();
+
+    /** sets up an ode mass struct representing a box of the given
+        size and total_mass
+    */
+    void PrepareBoxTotal(dMass& mass, float total_mass, const salt::Vector3f& size) const;
+
+    /** sets up an ode mass struct representing a box of the given
+        density and size
+    */
+    void PrepareBox(dMass& mass, float density, const salt::Vector3f& size) const;
+
+    /** sets up an ode mass struct representing a sphere of the given
+        density and radius
+    */
+    void PrepareSphere(dMass& mass, float density, float radius) const;
+
+    /** sets up an ode mass struct representing a sphere of the given
+        radius and total_mass
+    */
+    void PrepareSphereTotal(dMass& mass, float total_mass, float radius) const;
+
+    /** sets up an ode mass struct representing a flat-ended cylinder
+        of the given parameters and density, with the center of mass
+        at (0,0,0) relative to the body. The radius of the cylinder is
+        radius. The length of the cylinder is length. The cylinder's
+        long axis is oriented along the body's z axis.
+     */
+    void PrepareCylinder (dMass& mass, float density, float radius, float length) const;
+
+    /** sets up an ode mass struct representing a flat-ended cylinder
+        of the given parameters and total mass, with the center of
+        mass at (0,0,0) relative to the body. The radius of the
+        cylinder is radius. The length of the cylinder is length. The
+        cylinder's long axis is oriented along the body's z axis.
+     */
+    void PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
+
+    /* sets up an ode mass struct representing a capped cylinder of
+       the given parameters and density, with the center of mass at
+       (0,0,0) relative to the body. The radius of the cylinder (and
+       the spherical cap) is radius. The length of the cylinder (not
+       counting the spherical cap) is length. The cylinder's long axis
+       is oriented along the body's z axis.
+    */
+    void PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const;
+
+    /* sets up an ode mass struct representing a capped cylinder of
+       the given parameters and total mass, with the center of mass at
+       (0,0,0) relative to the body. The radius of the cylinder (and
+       the spherical cap) is radius. The length of the cylinder (not
+       counting the spherical cap) is length. The cylinder's long axis
+       is oriented along the body's z axis.
+    */
+    void PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
 
 private:
     /** updates the the internal state after physics calculation,

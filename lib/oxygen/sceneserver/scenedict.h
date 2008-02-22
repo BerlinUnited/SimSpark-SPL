@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: bodycontroller.cpp,v 1.3 2008/02/22 07:52:15 hedayat Exp $
+   $Id: scenedict.h,v 1.1 2008/02/22 07:52:15 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,35 +19,47 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "bodycontroller.h"
-#include "body.h"
-#include <zeitgeist/logserver/logserver.h>
+#ifndef OXYGEN_SCENEDICT_H
+#define OXYGEN_SCENEDICT_H
 
-using namespace oxygen;
-using namespace zeitgeist;
-using namespace boost;
+#include <zeitgeist/leaf.h>
+#include <map>
 
-void BodyController::OnLink()
+namespace oxygen
 {
-    UpdateCached();
-}
 
-void BodyController::OnUnlink()
+class SceneDict
 {
-    BaseNode::OnUnlink();
-    mBody.reset();
-}
-
-void BodyController::UpdateCached()
-{
-    mBody.reset();
-
-    mBody = shared_dynamic_cast<Body>
-        (make_shared(GetParentSupportingClass("Body")));
-
-    if (mBody.get() == 0)
+public:
+    struct FileRef
     {
-        GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
-        return;
-    }
-}
+    public:
+        std::string fname;
+        unsigned int line;
+
+    public:
+        FileRef(const std::string& f = std::string(), unsigned int l = 0)
+            : fname(f), line(l)
+        {
+        }
+    };
+
+    typedef std::map<boost::weak_ptr<zeitgeist::Leaf>, FileRef> TDictionary;
+
+public:
+    static SceneDict& GetInstance();
+
+    const FileRef* Lookup(boost::weak_ptr<zeitgeist::Leaf> leaf);
+    void Insert(boost::weak_ptr<zeitgeist::Leaf> leaf, const FileRef& ref);
+    void Clear();
+
+private:
+    SceneDict();
+
+protected:
+    TDictionary mDictionary;
+};
+
+} // namespace oxygen
+
+#endif // OXYGEN_SCENEDICT_H
