@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.20 2008/02/22 16:48:18 hedayat Exp $
+   $Id: rubysceneimporter.cpp,v 1.21 2008/02/23 15:53:26 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,7 +66,14 @@ using namespace std;
 #define S_DELTASCENE "RubyDeltaScene"
 #define S_SCENEGRAPH "RubySceneGraph"
 
-#define S_FROMSTRING "<from string>";
+#define S_SETLOCALTRANSFORM "setLocalTransform"
+#define S_SETSCALE "setScale"
+#define S_SETMATERIAL "setMaterial"
+#define S_BASENODE "BaseNode"
+#define S_SINGLEMATNODE "SingleMatNode"
+#define S_TRANSFORM "SingleMatNode";
+
+#define S_FROMSTRING "<from string>"
 
 RubySceneImporter::RubySceneImporter() : SceneImporter()
 {
@@ -93,7 +100,6 @@ RubySceneImporter::InitTranslationTable()
 {
     mTranslationTable.clear();
 
-    //
     mTranslationTable["nd"]    = S_NODE;
     mTranslationTable["sel"]   = S_SELECT;
     mTranslationTable["pwd"]   = S_PWD;
@@ -102,9 +108,13 @@ RubySceneImporter::InitTranslationTable()
     mTranslationTable["att"]   = S_ATTACH;
     mTranslationTable["RDS"]   = S_DELTASCENE;
     mTranslationTable["RSG"]   = S_SCENEGRAPH;
-    mTranslationTable["SLT"]   = "setLocalTransform";
+    mTranslationTable["SLT"]   = S_SETLOCALTRANSFORM;
+    mTranslationTable["sSc"]   = S_SETSCALE;
+    mTranslationTable["sMat"]  = S_SETMATERIAL;
+    mTranslationTable["BN"]    = S_BASENODE;
+    mTranslationTable["SMN"]   = S_SINGLEMATNODE;
+    mTranslationTable["TRF"]   = S_TRANSFORM;
 }
-
 
 string RubySceneImporter::Lookup(const std::string& key)
 {
