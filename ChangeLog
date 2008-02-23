@@ -1,3 +1,52 @@
+2008-02-23  Markus Rollmann  <rollmark@users.sourceforge.net>
+
+	* app/monitorspark/monitorspark.rb, app/simspark/simspark.rb:
+	- reset logging prior to setting up application specific loggin
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- removed std::cerr output as the default LogServer config shows these
+	  messages now
+	- repeated name a finished script on a separate line as scripts can be
+	  nested and produce their own output
+
+	* lib/zeitgeist/core.cpp:
+	- modify the initial logging setup to be useful during early init time.
+	  Normal, Warning and Error messages are now visible to stderr and stdout.
+	  Application specific scripts can change the defaults later on.
+
+	* lib/spark/spark.rb:
+	- added utility function sparkResetLogging() that deregisters all streams
+	  from the LogServer. This is useful in order to get to a known state before
+	  setting up a logging configuration
+
+	* lib/zeitgeist/logserver/logserver.cpp,
+	lib/zeitgeist/logserver/logserver.h,
+	lib/zeitgeist/logserver/logserver_c.cpp,
+	lib/zeitgeist/logserver/logserverstreambuf.cpp,
+	lib/zeitgeist/logserver/logserverstreambuf.h:
+	- added method RemoveAllStreams that deregisters all streams from the
+	  LogServer
+
+	* lib/zeitgeist/logserver/logserverstreambuf.cpp:
+	- added missing gpl header, ws changes
+
+	* app/simspark/internalsoccermonitor.rb, app/simspark/soccersim.rb, lib/spark/spark.rb:
+	- check returned object references (i.e. compare to nil) before using them
+
+	* lib/oxygen/physicsserver/space.cpp:
+	- use GetSpace() instead of FindSpaceId(). Using FindSpaceID() prints an
+	  error message if no parent space is found. It is ok for the global space
+	  to have no parent space.
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- removed left over debug cerrs
+	- added missing cerrs (missing new lines)
+
+2008-02-23  Markus Rollmann  <rollmark@users.sourceforge.net>
+
+	* lib/kerosin/imageserver/imageserver.cpp, lib/kerosin/imageserver/imageserver.h:
+	- add image filename to error message
+
 2008-02-23  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
 	* lib/oxygen/physicsserver/odeobject.cpp 
