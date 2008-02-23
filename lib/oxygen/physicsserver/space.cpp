@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.13 2008/02/22 07:52:14 hedayat Exp $
+   $Id: space.cpp,v 1.14 2008/02/23 11:00:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -142,8 +142,15 @@ void Space::OnLink()
 {
     ODEObject::OnLink();
 
-    dSpaceID space = FindSpaceID();
-    mODESpace = dHashSpaceCreate(space);
+    shared_ptr<Space> space = GetSpace();
+    dSpaceID spaceId = 0;
+
+    if (space.get() != 0)
+        {
+            spaceId = space->GetODESpace();
+        }
+
+    mODESpace = dHashSpaceCreate(spaceId);
 }
 
 dSpaceID Space::GetParentSpaceID()
