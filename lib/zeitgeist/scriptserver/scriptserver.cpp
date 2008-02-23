@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.27 2008/02/20 17:16:29 hedayat Exp $
+   $Id: scriptserver.cpp,v 1.28 2008/02/23 10:46:24 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -272,12 +272,10 @@ ScriptServer::Run(shared_ptr<salt::RFile> file)
     boost::scoped_array<char> buffer(new char[file->Size() + 1]);
     file->Read(buffer.get(), file->Size());
     buffer[file->Size()] = 0;
-    std::cerr << "Created buffer\n";
 
     bool ok = Eval(buffer.get());
-    std::cerr << "Eval'd buffer\n";
     UpdateCachedAllNodes();
-    std::cerr << "Updated cached nodes\n";
+
     return ok;
 }
 
@@ -496,10 +494,12 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
     } else if (! Run(file))
     {
         GetLog()->Debug() << "failed (error in script)" << endl;
+        std::cerr << "failed (error in script)" << endl;
         return eError;
     } else
     {
         GetLog()->Debug() << "ok" << endl;
+        std::cerr << "ok" << endl;
     }
 
     // copy it to the destDir
