@@ -40,6 +40,8 @@ run "materials.rb"
 # uncomment for logging setup (see spark.rb for reference)
 #
 
+sparkResetLogging()
+sparkLogAllToCerr()
 # sparkLogAllToFile('./spark.txt')
 # sparkLogDebugToCerr()
 
