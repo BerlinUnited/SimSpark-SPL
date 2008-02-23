@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.21 2008/02/23 15:53:26 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.22 2008/02/23 16:10:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ using namespace std;
 #define S_SETMATERIAL "setMaterial"
 #define S_BASENODE "BaseNode"
 #define S_SINGLEMATNODE "SingleMatNode"
-#define S_TRANSFORM "SingleMatNode";
+#define S_TRANSFORM "Transform";
 
 #define S_FROMSTRING "<from string>"
 
