@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.19 2008/02/23 12:43:48 rollmark Exp $
+   $Id: core.cpp,v 1.20 2008/02/23 15:20:05 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 #include "fileserver/fileserver.h"
 #include "fileserver/filesystem.h"
 #include "logserver/logserver.h"
-// #include "telnetserver/telnetserver.h"
 #include "scriptserver/scriptserver.h"
 #include "randomserver/randomserver.h"
 
@@ -170,12 +169,12 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
 
 void Core::CatchSignal(int sig_num)
 {
+    cerr << "(Core) caught signal " << sig_num << endl;
+
     if (sig_num != SIGSEGV)
     {
         return;
     }
-
-    cerr << "(Core) caught signal " << sig_num << endl;
 
 #ifdef __linux__
     // retrieve the name of our executable without access to argc and
@@ -183,15 +182,17 @@ void Core::CatchSignal(int sig_num)
 
     const int exeNameSz = 4096;
     char exeName[exeNameSz];
+    memset(exeName, 0, sizeof(exeName));
+
     readlink("/proc/self/exe",exeName,exeNameSz);
 
     // print stack trace
-
     const int arSize = 200;
     void *addresses[arSize];
+    memset(addresses, 0, sizeof(addresses));
 
     int depth = backtrace (addresses, arSize);
-    char **strings = backtrace_symbols (addresses, depth);
+    char** strings = backtrace_symbols (addresses, depth);
 
     cerr << "(Core) dumping " << depth << " stack frames.\n";
 
