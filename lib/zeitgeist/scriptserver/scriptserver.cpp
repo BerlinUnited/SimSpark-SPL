@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scriptserver.cpp,v 1.28 2008/02/23 10:46:24 rollmark Exp $
+   $Id: scriptserver.cpp,v 1.29 2008/02/23 12:46:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -258,7 +258,7 @@ ScriptServer::~ScriptServer()
 void
 ScriptServer::UpdateCachedAllNodes()
 {
-    GetLog()->Debug() << "(ScriptServer) updating cached script variables\n";
+    GetLog()->Normal() << "(ScriptServer) updating cached script variables\n";
     GetCore()->GetRoot()->UpdateCached();
 }
 
@@ -295,7 +295,7 @@ ScriptServer::Run(const string &fileName)
         }
     }
 
-    GetLog()->Debug() << "(ScriptServer) Running " << fileName << endl;
+    GetLog()->Normal() << "(ScriptServer) Running " << fileName << endl;
 
     return Run(file);
 }
@@ -482,24 +482,20 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
 {
     // run the init script in the sourceDir
     string sourcePath = sourceDir + salt::RFile::Sep() + name;
-    GetLog()->Debug() << "(ScriptServer) Running " << sourcePath << "... ";
-    std::cerr << "(ScriptServer) Running " << sourcePath << "... ";
+    GetLog()->Normal() << "(ScriptServer) Running " << sourcePath << "... " << endl;
 
     shared_ptr<salt::StdFile> file(new(salt::StdFile));
     if (! file->Open(sourcePath.c_str()))
     {
-        GetLog()->Debug() << "failed (script not found)" << endl;
-        std::cerr << "failed (script not found)" << endl;
+        GetLog()->Error() << "(ScriptServer) Script not found " << sourcePath << endl;
         return eNotFound;
     } else if (! Run(file))
     {
-        GetLog()->Debug() << "failed (error in script)" << endl;
-        std::cerr << "failed (error in script)" << endl;
+        GetLog()->Error() << "(ScriptServer) Error in script " << sourcePath << endl;
         return eError;
     } else
     {
-        GetLog()->Debug() << "ok" << endl;
-        std::cerr << "ok" << endl;
+        GetLog()->Normal() << "(ScriptServer) Script ended OK " << sourcePath << endl;
     }
 
     // copy it to the destDir
@@ -659,13 +655,11 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     result = RunInitScriptInternal(mRelPathPrefix+relPath, fileName, validDotDir, dotDir);
     if (result == eNotFound)
     {
-        std::cerr << "init script not found at " << mRelPathPrefix+relPath << "\n";
         GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate init script '"
                           << fileName << "'\n";
     }
     else if (result == eError)
     {
-        std::cerr << "error in init script found at " << mRelPathPrefix+relPath << "\n";
         GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
                           << mRelPathPrefix+relPath << salt::RFile::Sep() << fileName << "'\n";
     }
