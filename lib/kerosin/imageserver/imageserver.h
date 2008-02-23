@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.h,v 1.11 2008/02/22 16:48:18 hedayat Exp $
+   $Id: imageserver.h,v 1.12 2008/02/23 10:25:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ private:
         This routine checks for DevIL errors and logs them.
        @returns true if an error has occured and false if not.
     */
-    bool HandleErrors() const;
+    bool HandleErrors(const std::string& fileName) const;
 };
 
 DECLARE_CLASS(ImageServer);

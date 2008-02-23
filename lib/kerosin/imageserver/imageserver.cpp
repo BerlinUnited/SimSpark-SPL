@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.cpp,v 1.9 2008/02/22 16:48:18 hedayat Exp $
+   $Id: imageserver.cpp,v 1.10 2008/02/23 10:25:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
     gFileServer.reset();
 
     // check for errors
-    if (HandleErrors() == true)
+    if (HandleErrors(inName) == true)
     {
         // release the image and return
         return boost::shared_ptr<Image>();
@@ -185,7 +185,7 @@ ImageServer::Save(boost::shared_ptr<Image> inImage, const string& inName,
     gFileServer.reset();
 
     // check for errors
-    if (HandleErrors() == true)
+    if (HandleErrors(inName) == true)
     {
         return false;
     }
@@ -196,7 +196,7 @@ ImageServer::Save(boost::shared_ptr<Image> inImage, const string& inName,
 // This routine checks for DevIL errors and logs them. The function returns
 // 'true' if an error has occured and 'false' if not.
 bool
-ImageServer::HandleErrors() const
+ImageServer::HandleErrors(const string& fileName) const
 {
 #if HAVE_IL_IL_H
     bool ret = false;
@@ -308,6 +308,11 @@ ImageServer::HandleErrors() const
             msg = "unknown IL error";
             break;
         }
+
+        if (! fileName.empty())
+            {
+                msg = fileName + ": " + msg;
+            }
 
         GetLog()->Error() << "(ImageServer) ERROR: DevIL returned error "
                           << error << " (" << msg << ")\n";
