@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccermonitor.cpp,v 1.4 2007/06/27 22:35:50 jamu Exp $
+   $Id: soccermonitor.cpp,v 1.5 2008/02/23 10:18:33 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -207,5 +207,5 @@ int SoccerMonitor::GetScoreLeft() const
 
 int SoccerMonitor::GetScoreRight() const
 {
-    return mScoreLeft;
+    return mScoreRight;
 }
