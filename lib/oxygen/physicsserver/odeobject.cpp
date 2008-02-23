@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
+   $Id: odeobject.cpp,v 1.10 2008/02/23 10:05:12 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -160,4 +160,8 @@ void ODEObject::ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) co
     rot.m[6] = matrix[9];
     rot.m[10] = matrix[10] ;
     rot.m[14] = matrix[11];
+    rot.m[3] = 0.0;
+    rot.m[7] = 0.0;
+    rot.m[11] = 0.0;
+    rot.m[15] = 1.0;
 }
