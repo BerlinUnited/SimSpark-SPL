@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserver_c.cpp,v 1.3 2004/06/13 05:40:37 fruit Exp $
+   $Id: logserver_c.cpp,v 1.4 2008/02/23 12:36:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,8 +100,15 @@ FUNCTION(LogServer,addStream)
     return true;
 }
 
+FUNCTION(LogServer,removeAllStreams)
+{
+    obj->RemoveAllStreams();
+    return true;
+}
+
 void CLASS(LogServer)::DefineClass()
 {
     DEFINE_BASECLASS(zeitgeist/Node);
     DEFINE_FUNCTION(addStream);
+    DEFINE_FUNCTION(removeAllStreams);
 }

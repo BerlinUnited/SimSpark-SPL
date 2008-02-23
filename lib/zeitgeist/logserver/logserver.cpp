@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserver.cpp,v 1.3 2004/06/13 06:35:54 fruit Exp $
+   $Id: logserver.cpp,v 1.4 2008/02/23 12:36:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,6 +47,11 @@ void LogServer::AddStream(std::ostream* stream, unsigned int mask)
 bool LogServer::RemoveStream(const std::ostream* stream)
 {
     return GetStreamBuf().RemoveStream(stream);
+}
+
+void LogServer::RemoveAllStreams()
+{
+    return GetStreamBuf().RemoveAllStreams();
 }
 
 unsigned int LogServer::GetPriorityMask(const std::ostream* stream) const

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserverstreambuf.h,v 1.4 2005/05/18 14:55:21 jamu Exp $
+   $Id: logserverstreambuf.h,v 1.5 2008/02/23 12:36:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #define ZEITGEIST_LOGSERVERSTREAMBUF_H
 
 /*! \class LogServerStreamBuf
-  $Id: logserverstreambuf.h,v 1.4 2005/05/18 14:55:21 jamu Exp $
+  $Id: logserverstreambuf.h,v 1.5 2008/02/23 12:36:31 rollmark Exp $
 
   ForwarderStreamBuf
 
@@ -80,17 +80,23 @@ public:
         @param mask     the (new) priority mask for the stream
     */
     void AddStream(std::ostream *stream, unsigned int mask);
+
     /*! Remove a stream from the list of streams.
         @param stream   the stream to remove
         @return         true if the stream was found (and thus removed)
     */
     bool RemoveStream(const std::ostream *stream);
+
+    /*! Remove all streams from the list of streams */
+    void RemoveAllStreams();
+
     /*! Set priority mask of a stream in the list.
         @param stream   the stream for which we want to set the priority mask
         @param mask     the new priority mask
         @return         true if the stream was found
     */
     bool SetPriorityMask(const std::ostream *stream, unsigned int mask);
+
     /*! Get priority mask of a stream in the list.
         @param stream   the stream for which we want to set the priority mask
         @return         the priority mask; 0 if stream was not found

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserver.h,v 1.5 2004/05/14 16:02:01 fruit Exp $
+   $Id: logserver.h,v 1.6 2008/02/23 12:36:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,6 +83,10 @@ public:
         @return         true if the stream was found (and thus removed)
     */
     bool RemoveStream(const std::ostream *stream);
+
+
+    /** removes all streams from the list of streams */
+    void RemoveAllStreams();
 
     /** sets the priority mask of a stream in the list.
 
