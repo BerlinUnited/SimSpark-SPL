@@ -3,7 +3,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerrender.cpp,v 1.3 2007/06/24 16:25:37 jboedeck Exp $
+   $Id: soccerrender.cpp,v 1.4 2008/02/23 10:19:07 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ void SoccerRender::Render()
     
     ss_l << mMonitor->GetScoreLeft() << " ";
 
-    string nameleft = mMonitor->GetTeamNameRight();
+    string nameleft = mMonitor->GetTeamNameLeft();
 
     if ( nameleft == "" )
     {
