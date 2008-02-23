@@ -1,6 +1,9 @@
 # load a font for the HUD
 fontServer = get($serverPath+'font')
-fontServer.getFont('VeraMono.ttf')
+
+if (fontServer != nil)
+  fontServer.getFont('VeraMono.ttf')
+end
 
 # register the internal soccer render plugin to draw the game state on the
 # screen

@@ -21,7 +21,9 @@ end
 
 # set a random seed (a seed of 0 means: use a random random seed)
 randomServer = get($serverPath+'random')
-randomServer.seed(0)
+if (randomServer != nil)
+  randomServer.seed(0)
+end
 
 # the soccer field dimensions in meters
 #addSoccerVar('FieldLength', randomServer.uniformRND(100.0,110.9).floor().to_f())
@@ -63,17 +65,23 @@ addSoccerVar('SingleHalfTime', true)
 addSoccerVar('UseOffside',false)
 
 scene = get($scenePath)
-scene.importScene('rsg/agent/soccer.rsg')
+if (scene != nil)
+  scene.importScene('rsg/agent/soccer.rsg')
+end
 
 # setup the GameControlServer
 gameControlServer = get($serverPath+'gamecontrol')
-gameControlServer.initControlAspect('GameStateAspect')
-gameControlServer.initControlAspect('BallStateAspect')
-gameControlServer.initControlAspect('SoccerRuleAspect')
-
+if (gameControlServer != nil)
+  gameControlServer.initControlAspect('GameStateAspect')
+  gameControlServer.initControlAspect('BallStateAspect')
+  gameControlServer.initControlAspect('SoccerRuleAspect')
+end
+  
 # init monitorItems to transmit game state information
 monitorServer = get($serverPath+'monitor')
-monitorServer.registerMonitorItem('GameStateItem')
+if (monitorServer != nil)
+  monitorServer.registerMonitorItem('GameStateItem')
+end
 
 # install the TrainerCommandParser to parse commands received from a
 # monitor client
