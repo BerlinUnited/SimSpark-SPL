@@ -63,7 +63,9 @@ $physicsGlobalGravity = -9.81
 # rebuild scene and update all cached references
 def sparkResetScene
   scene = get($scenePath)
-  scene.unlinkChildren()
+  if (scene != nil)
+    scene.unlinkChildren()
+  end
 
   # (re-)create world and space aspects
   world = new('oxygen/World', $scenePath+'world')
@@ -71,20 +73,26 @@ def sparkResetScene
   world.setCFM($physicsGlobalCFM)
   world.setAutoDisableFlag(false)            #not in simspark
   world.setContactSurfaceLayer(0.001)	     #not in simspark
-  new('oxygen/Space', $scenePath+'space')
 
+  new('oxygen/Space', $scenePath+'space')
 
   # invalidate all cached references
   scriptServer = get($serverPath+'script')
-  scriptServer.updateCachedAllNodes()
+  if (scriptServer != nil)
+    scriptServer.updateCachedAllNodes()
+  end
 
   # force update references to scene objects (world, space etc.)
   sceneServer = get($serverPath+'scene')
-  sceneServer.setActiveScene($scenePath)
+  if (sceneServer != nil)
+    sceneServer.setActiveScene($scenePath)
+  end
 
   # reset simulation time
   simulationServer = get($serverPath+'simulation');
-  simulationServer.resetTime()
+  if (simulationServer != nil)
+    simulationServer.resetTime()
+  end
 end
 
 def sparkSetupMonitor
@@ -92,7 +100,9 @@ def sparkSetupMonitor
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-  simulationServer.setMultiThreads(false);
+  if (simulationServer != nil)
+    simulationServer.setMultiThreads(false);
+  end
 
   monitorClient = new('SparkMonitorClient',
 		      $serverPath+'simulation/SparkMonitorClient')
@@ -111,7 +121,9 @@ def sparkSetupMonitor
   end
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
-  rubySceneImporter.setUnlinkOnCompleteScenes(true);
+  if (rubySceneImporter != nil)
+    rubySceneImporter.setUnlinkOnCompleteScenes(true);
+  end
 end
 
 def sparkSetupMonitorLogPlayer
@@ -119,14 +131,19 @@ def sparkSetupMonitorLogPlayer
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-  simulationServer.setMultiThreads(false);
+  if (simulationServer != nil)
+    simulationServer.setMultiThreads(false);
+  end
+
   monitorClient = new('SparkMonitorLogFileServer',
 		      $serverPath+'simulation/SparkMonitorLogFileServer')
   monitorClient.setFileName($logPlayerFile)
   monitorClient.setStepDelay(33000)
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
-  rubySceneImporter.setUnlinkOnCompleteScenes(true);
+  if (rubySceneImporter != nil)
+    rubySceneImporter.setUnlinkOnCompleteScenes(true);
+  end
 end
 
 #
@@ -170,18 +187,23 @@ def sparkSetupServer
 
   # add the agent control node
   simulationServer = get($serverPath+'simulation');
-  simulationServer.setMultiThreads(false);
-  simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
+  if (simulationServer != nil)
+    simulationServer.setMultiThreads(false);
+    simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
-  # set auto speed adjust mode.
-  # a smaller value for MaxStepsPerCycle is recommended specially for slow systems
-  simulationServer.setAdjustSpeed(true)
-  simulationServer.setMaxStepsPerCyle(3)
+    # set auto speed adjust mode.
+    # a smaller value for MaxStepsPerCycle is recommended specially for slow systems
+    simulationServer.setAdjustSpeed(true)
+    simulationServer.setMaxStepsPerCyle(3)
+  end
 
   # set port and socket type for agent control
   agentControl = get($serverPath+'simulation/AgentControl');
-  agentControl.setServerPort($agentPort)
-  agentControl.setStep($agentStep)
+
+  if (agentControl != nil)
+    agentControl.setServerPort($agentPort)
+    agentControl.setStep($agentStep)
+  end
 
   if ($agentType == 'udp')
 	agentControl.setServerTypeUDP()
@@ -260,9 +282,15 @@ def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem)
   #
   # register render control node to the simulation server
   simulationServer = get($serverPath+'simulation');
-  simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
+
+  if (simulationServer != nil)
+    simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
+  end
+
   renderControl = get($serverPath+'simulation/RenderControl')
-  renderControl.setStep($renderStep)
+  if (renderControl != nil)
+    renderControl.setStep($renderStep)
+  end
 end
 
 def sparkSetupInput(inputSystem = $defaultInputSystem)
@@ -275,19 +303,23 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
   end
 
   inputServer = get($serverPath+'input');
-  inputServer.init(inputSystem)
+  if (inputServer != nil)
+    inputServer.init(inputSystem)
 
-  # add devices
-  inputServer.createDevice('Timer')
-  inputServer.createDevice('Keyboard')
-  inputServer.createDevice('Mouse')
+    # add devices
+    inputServer.createDevice('Timer')
+    inputServer.createDevice('Keyboard')
+    inputServer.createDevice('Mouse')
+  end
 
   #
   # register input control node to the simulation server
-  simulationServer = get($serverPath+'simulation');
 
-  # add the input control node
-  simulationServer.initControlNode('kerosin/InputControl','InputControl')
+  simulationServer = get($serverPath+'simulation');
+  if (simulationServer != nil)
+    # add the input control node
+    simulationServer.initControlNode('kerosin/InputControl','InputControl')
+  end
 end
 
 # add a camera with an FPS Controller to the scene at path
@@ -324,8 +356,11 @@ def sparkAddFPSCamera(
   fpsController.setAcceleration(accel)
   fpsController.setVAngle(vAngle)
   fpsController.setHAngle(hAngle)
+
   inputControl = get($serverPath+'simulation/InputControl')
-  inputControl.setFPSController(path+'/physics/controller')
+  if (inputControl != nil)
+    inputControl.setFPSController(path+'/physics/controller')
+  end
 
   # add an DragController to work against the camera acceleration
   dragController = new('oxygen/DragController',path+'/physics/drag')
@@ -355,7 +390,9 @@ def sparkEnableLog(logTarget, logType)
   print "(spark.rb) sparkEnableLog logTarget="+logTarget+" logType="+logType+"\n"
 
   logServer = get($serverPath+'log')
-  logServer.addStream(logTarget, logType)
+  if (logServer != nil)
+    logServer.addStream(logTarget, logType)
+  end
 end
 
 # logs all error output to cerr
@@ -400,7 +437,10 @@ $serverPath = '/sys/server/'
 #
 # set up logging
 logServer = get($serverPath+'log')
-logServer.addStream(':cerr', 'eError')
+
+if (logServer != nil)
+  logServer.addStream(':cerr', 'eError')
+end
 
 #
 # setup the PhysicsServer
