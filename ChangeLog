@@ -1,3 +1,16 @@
+2008-02-23  Xu Yuan  <xuyuan.cn@gmail.com.cn>
+
+	* lib/oxygen/physicsserver/odeobject.cpp 
+	Bugfix: (thanks goto Ben from team Apollo) the salt::Matrix was
+	not fully assigned in ConvertRotationMatrix,it cause problem while
+	this matrix multiply another matrix
+
+	* plugin/soccermonitor/soccermonitor.cpp
+	bugfix GetScoreRight()
+
+	* plugin/soccermonitor/soccerrender.cpp
+	bugfix calling GetTeamNameXXX()
+
 2008-02-22  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* linux/rcssserver3d.spec:
