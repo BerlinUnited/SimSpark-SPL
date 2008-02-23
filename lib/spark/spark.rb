@@ -395,6 +395,17 @@ def sparkEnableLog(logTarget, logType)
   end
 end
 
+# deregisters all output stream
+def sparkResetLogging()
+  print "(spark.rb) sparkResetLogging removing all log targets\n";
+
+  logServer = get($serverPath+'log')
+  if (logServer != nil)
+    logServer.removeAllStreams()
+  end
+end
+
+
 # logs all error output to cerr
 def sparkLogErrorToCerr()
   sparkEnableLog(':cerr', 'eError')
