@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.9 2008/02/22 16:48:20 hedayat Exp $
+   $Id: soccerinput.cpp,v 1.10 2008/02/24 10:18:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ using namespace oxygen;
 using namespace kerosin;
 
 SoccerInput::SoccerInput()
+    : InputItem()
 {
 }
 

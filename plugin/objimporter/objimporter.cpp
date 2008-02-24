@@ -32,6 +32,7 @@ using namespace std;
 using namespace boost;
 
 ObjImporter::ObjImporter()
+    : MeshImporter()
 {
 }
 
@@ -51,11 +52,11 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
             GetLog()->Error()
                 << "(ObjImporter) ERROR: cannot open file '" << name << "'\n";
             return shared_ptr<TriMesh>();
-        }   
+        }
 
     // buffers to hold lines from the file
     string buffer, templine;
-    
+
     // skip first 2 lines (comment)
     getline(ifs, buffer);
     getline(ifs, buffer);
@@ -66,26 +67,26 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
     // skip object name
     getline(ifs, buffer);
 
-    // we need to store vertices, texture coords, vertex normals, 
+    // we need to store vertices, texture coords, vertex normals,
     // and material (texture) names
     vector<Vector3f> pos, tex, norm;
-    vector<string> materials;  
+    vector<string> materials;
     TFaceIndexList faces;
 
     GetLog()->Normal() << "(ObjImporter) Loading " << name << "\n";
-    
+
     float x,y,z;
     string mat, f1, f2, f3;
     VTNIndex idx1, idx2, idx3;
     FaceIndex tempFace;
-    
+
     while(! ifs.eof())
-        {            
+        {
             getline(ifs, templine);
-            
+
             stringstream str(templine);
 
-            str >> buffer;            
+            str >> buffer;
 
             if (buffer == "v") // vertex pos
                 {
@@ -96,16 +97,16 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
                 {
                     str >> x >> y;
                     tex.push_back(Vector3f(x, y, 0.0));
-                    
+
                 }
             else if (buffer == "vn") // vertex normal
                 {
-                    str >> x >> y >> z;                    
+                    str >> x >> y >> z;
                     norm.push_back(Vector3f(x, y, z));
                 }
             else if (buffer == "usemtl") // material
                 {
-                    str >> mat;                    
+                    str >> mat;
 
                     // cut away the 'Material_' part
                     mat = mat.substr(9, mat.length() - 9);
@@ -113,19 +114,19 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
                 }
             else if (buffer == "f") // face
                 {
-                    // three indeces for each face: 
+                    // three indeces for each face:
                     // vertex pos / texture coord / normal
-                    str >> f1 >> f2 >> f3;                    
+                    str >> f1 >> f2 >> f3;
 
                     string del("/");
                     vector<string> exploded;
-                    ExplodeString(f1, exploded, del);                    
+                    ExplodeString(f1, exploded, del);
 
                     idx1.v  = atoi(exploded[0].c_str());
                     idx1.vt = atoi(exploded[1].c_str());
                     idx1.vn = atoi(exploded[2].c_str());
 
-                    exploded.clear();                    
+                    exploded.clear();
                     ExplodeString(f2, exploded, del);
 
                     idx2.v  = atoi(exploded[0].c_str());
@@ -146,7 +147,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
                     tempFace.vertex[2] = idx3;
 
                     faces.push_back(tempFace);
-                }            
+                }
         }
 
     // close the file
@@ -161,13 +162,13 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
     shared_array<float> posArray(new float[faces.size() * 9]);
     shared_array<float> texArray(new float[faces.size() * 9]);
     shared_array<float> normArray(new float[faces.size() * 9]);
-   
+
     // store the vertex indices in an IndexBuffer
     shared_ptr<IndexBuffer> indeces(new IndexBuffer());
     indeces->EnsureFit(faces.size() * 3);
-   
+
     shared_ptr<TriMesh> triMesh(new TriMesh());
-    
+
     unsigned int faceCount = 0;
 
     // loop over the face list and setup the new arrays
@@ -186,7 +187,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
                     posArray[faceCount * 9 + i * 3]      = pos[j].x();
                     posArray[faceCount * 9 + i * 3 + 1]  = pos[j].y();
                     posArray[faceCount * 9 + i * 3 + 2]  = pos[j].z();
-                    
+
                     // cache vertex index
                     indeces->Cache(faceCount * 3 + i);
 
@@ -194,29 +195,29 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
 
                     texArray[faceCount * 9 + i * 3]      = tex[j].x();
                     texArray[faceCount * 9 + i * 3 + 1]  = tex[j].y();
-                    texArray[faceCount * 9 + i * 3 + 2]  = tex[j].z();                    
+                    texArray[faceCount * 9 + i * 3 + 2]  = tex[j].z();
 
                     j = iter->vertex[i].vn - 1;
 
                     normArray[faceCount * 9 + i * 3]     = norm[j].x();
                     normArray[faceCount * 9 + i * 3 + 1] = norm[j].y();
                     normArray[faceCount * 9 + i * 3 + 2] = norm[j].z();
-                }                              
+                }
 
             // increase counter
             ++faceCount;
         }
 
     // add faces (only 1 material allowed right now!)
-    triMesh->AddFace(indeces, materials[0]);    
-        
-    triMesh->SetPos(posArray, faces.size() * 3);               
-    triMesh->SetTexCoords(texArray);                
+    triMesh->AddFace(indeces, materials[0]);
+
+    triMesh->SetPos(posArray, faces.size() * 3);
+    triMesh->SetTexCoords(texArray);
     triMesh->SetNormals(normArray);
 
     GetLog()->Normal() << "(ObjImporter) Done importing .obj file "
                        << name << "\n";
-      
+
     return triMesh;
 }
 
@@ -224,13 +225,13 @@ void ObjImporter::ExplodeString(string & input, vector<string> & output, string 
 {
     size_t pos1 = 0;
     size_t pos2 = 0;
-    
+
     while ((pos2 = input.find(del, pos1)) != string::npos)
         {
             output.push_back(input.substr(pos1, pos2 - pos1));
             pos1 = pos2 + 1;
-            pos2 = input.find(del, pos1);            
+            pos2 = input.find(del, pos1);
         }
-    
+
     output.push_back(input.substr(pos1, input.length() - pos1));
 }

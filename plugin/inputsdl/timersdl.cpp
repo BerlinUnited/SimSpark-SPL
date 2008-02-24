@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: timersdl.cpp,v 1.5 2008/02/22 16:48:19 hedayat Exp $
+   $Id: timersdl.cpp,v 1.6 2008/02/24 10:18:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,8 @@
 
 using namespace kerosin;
 
-TimerSDL::TimerSDL() : mLastTicks(0)
+TimerSDL::TimerSDL()
+    : InputDeviceSDL(), mLastTicks(0)
 {
 }
 

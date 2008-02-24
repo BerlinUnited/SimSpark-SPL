@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.cpp,v 1.5 2008/02/22 16:48:18 hedayat Exp $
+   $Id: internalsoccerinput.cpp,v 1.6 2008/02/24 10:18:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ using namespace zeitgeist;
 using namespace oxygen;
 using namespace kerosin;
 
-InternalSoccerInput::InternalSoccerInput() : mLastKickOff(TI_NONE)
+InternalSoccerInput::InternalSoccerInput()
+    : InputItem(), mLastKickOff(TI_NONE)
 {
 }
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.32 2007/12/06 21:24:52 jamu Exp $
+   $Id: soccerruleaspect.cpp,v 1.33 2008/02/24 10:18:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ using salt::Vector2f;
 using salt::Vector3f;
 
 SoccerRuleAspect::SoccerRuleAspect() :
+    SoccerControlAspect(),
     mBallRadius(0.111),
     mGoalPauseTime(3),
     mKickInPauseTime(1),
@@ -55,7 +56,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mLastModeWasPlayOn(false)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
-    
+
 }
 
 SoccerRuleAspect::~SoccerRuleAspect()
@@ -97,10 +98,10 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
         Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
 
         Vector3f test_pos = new_pos;
-        test_pos[2] = pos[2];   
-    
+        test_pos[2] = pos[2];
+
         // DEBUG
-        //cerr << "testing position (" << test_pos[0] << "," << test_pos[1] << ")" << endl;    
+        //cerr << "testing position (" << test_pos[0] << "," << test_pos[1] << ")" << endl;
 
         if (sphere.Contains(test_pos))
         {
@@ -284,7 +285,7 @@ SoccerRuleAspect::UpdateBeforeKickOff()
             return;
         }
     }
-    
+
     // if no players are connected, just return
     if (! game_control->GetAgentCount()) return;
 
@@ -421,9 +422,9 @@ SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
 
     MoveBall(mFreeKickPos);
 //--------------------------
-    
+
     // move away opponent team
-    
+
     ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
                  SoccerBase::OpponentTeam(idx));
 

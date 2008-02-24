@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: filesystemzip.cpp,v 1.4 2004/04/18 16:21:56 rollmark Exp $
+   $Id: filesystemzip.cpp,v 1.5 2008/02/24 10:18:09 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ using namespace std;
 using namespace boost;
 
 FileSystemZIP::FileSystemZIP()
+    : FileSystem()
 {
 }
 
