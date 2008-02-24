@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.12 2008/02/22 07:52:15 hedayat Exp $
+   $Id: collider.h,v 1.13 2008/02/24 13:55:16 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,6 +100,11 @@ public:
         also be changed
     */
     virtual void SetPosition(const salt::Vector3f& pos);
+
+    /** sets the relative position of the managed geom to the body's center.
+        Only use for colliders encapsulated in a TransformCollider!
+    */
+    virtual void SetLocalPosition(const salt::Vector3f& pos);
 
     /** returns the absolute position of the managed geom */
     salt::Vector3f GetPosition() const;

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.15 2008/02/22 07:52:15 hedayat Exp $
+   $Id: collider.cpp,v 1.16 2008/02/24 13:55:16 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -219,6 +219,11 @@ void Collider::SetPosition(const Vector3f& pos)
 {
     Vector3f globalPos(GetWorldTransform() * pos);
     dGeomSetPosition (mODEGeom, globalPos[0], globalPos[1], globalPos[2]);
+}
+
+void Collider::SetLocalPosition(const Vector3f& pos)
+{
+    dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
 }
 
 Vector3f Collider::GetPosition() const
