@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.cpp,v 1.9 2007/08/16 19:09:56 rollmark Exp $
+   $Id: parameterlist.cpp,v 1.10 2008/02/24 13:59:25 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,10 +20,12 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "parameterlist.h"
+#include <salt/gmath.h>
 #include <sstream>
 
 using namespace boost;
 using namespace zeitgeist;
+using namespace salt;
 using namespace std;
 
 ParameterList::ParameterList()
@@ -276,6 +278,60 @@ bool
 ParameterList::AdvanceValue(TVector::const_iterator& iter, salt::Vector2f& value) const
 {
     return GetVectorValue(iter, value);
+}
+
+bool
+ParameterList::AdvanceValue(TVector::const_iterator& iter, Matrix& value) const
+{
+    // try to cast to Vector from a single value
+    if (GetValueInternal<Matrix,Matrix>(iter,value))
+    {
+        return true;
+    }
+    
+    // a direct cast faild. try to construct a matrix from
+    // 16 consecutive values
+    TVector::const_iterator test = iter;
+    float m[16];
+    int i=0;
+
+    while (
+            (i<16) &&
+            (test != mList.end())
+            )
+    {
+        if (! AdvanceValue(test,m[i]))
+            {
+                break;
+            }
+        ++i;
+        // iterator test is incremented within the
+        // call to GetValue()
+    }
+    
+    if (i == 16)
+    {
+        value = Matrix(m);
+        iter = test;
+        return true;
+    }
+    
+    // constructing matrix from 16 values failed.
+    // try to construct a matrix from position and rotation vectors
+    test = iter;
+    Vector3f pos, rot;
+    if (AdvanceValue(test, pos) && AdvanceValue(test, rot))
+    {
+        value = Matrix();
+        value.RotationX(gDegToRad(rot[0]));
+        value.RotateY(gDegToRad(rot[1]));
+        value.RotateZ(gDegToRad(rot[2]));
+        value.Pos() = pos;
+        iter = test;
+        return true;
+    }
+    
+    return false;
 }
 
 /*

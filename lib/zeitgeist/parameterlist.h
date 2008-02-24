@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: parameterlist.h,v 1.6 2007/08/16 19:09:56 rollmark Exp $
+   $Id: parameterlist.h,v 1.7 2008/02/24 13:59:25 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <vector>
 #include <string>
 #include <salt/vector.h>
+#include <salt/matrix.h>
 
 namespace zeitgeist
 {
@@ -154,6 +155,7 @@ public:
     bool AdvanceValue(TVector::const_iterator& iter, unsigned int& value) const;
     bool AdvanceValue(TVector::const_iterator& iter, salt::Vector3f& value) const;
     bool AdvanceValue(TVector::const_iterator& iter, salt::Vector2f& value) const;
+    bool AdvanceValue(TVector::const_iterator& iter, salt::Matrix& value) const;
 
 protected:
     /** This is a specialized GetValue helper to read any
