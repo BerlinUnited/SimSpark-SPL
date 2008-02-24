@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.17 2008/02/22 07:52:15 hedayat Exp $
+   $Id: body.h,v 1.17.2.1 2008/02/24 14:31:10 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ public:
         density, with the matrix determining its center and
         orientation
     */
-    void Addphere(float density, float radius, const salt::Matrix& matrix);
+    void AddSphere(float density, float radius, const salt::Matrix& matrix);
 
     /** sets the mass parameters to represent a sphere of the given
         radius and total mass, with the center of mass at (0,0,0)
@@ -316,6 +316,9 @@ private:
 protected:
     /** the managed ode body */
     dBodyID mODEBody;
+    
+    /** the total mass translation */
+    salt::Vector3f mMassTrans;
 };
 
 DECLARE_CLASS(Body);

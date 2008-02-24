@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.10 2008/02/24 10:18:09 rollmark Exp $
+   $Id: soccerinput.cpp,v 1.9.2.1 2008/02/24 14:31:15 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

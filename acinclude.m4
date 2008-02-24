@@ -219,8 +219,9 @@ AC_DEFUN([RCSS_PATH_RUBY], [
         # set ruby ldflags
 	AC_MSG_CHECKING(ruby library directory)
 	ruby_libdir=`$RUBY -rrbconfig -e "print Config::CONFIG[['archdir']]"`
+	ruby_lib=`$RUBY -rrbconfig -e "print Config::CONFIG[['LIBRUBYARG']]"`
 	AC_MSG_RESULT($ruby_libdir)
-	RUBY_LDFLAGS="-L$ruby_libdir -lruby"
+	RUBY_LDFLAGS="-L$ruby_libdir $ruby_lib"
 
 	# set ruby additional libraries
 	AC_MSG_CHECKING(libraries ruby depends on)

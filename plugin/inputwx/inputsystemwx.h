@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rendernode.cpp,v 1.1.16.1 2008/02/24 14:31:09 sgvandijk Exp $
+   $Id: inputsystemwx.h,v 1.1.2.2 2008/02/24 14:31:13 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,17 +19,39 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   RenderNode
+   InputSystemWX
+
+   HISTORY: 25.12.05 - MR - Initial version
 */
-#include "rendernode.h"
+#ifndef INPUTSYSTEMWX_H__
+#define INPUTSYSTEMWX_H__
 
-using namespace kerosin;
+#include <deque>
+#include <kerosin/inputserver/inputsystem.h>
+#include <kerosin/inputserver/inputserver.h>
 
-RenderNode::RenderNode()
-    : BaseNode()
+class InputSystemWX : public kerosin::InputSystem
 {
-}
+    //
+    // functions
+    //
+public:
+    InputSystemWX();
+    virtual ~InputSystemWX();
 
-RenderNode::~RenderNode()
-{
-}
+    virtual bool Init(kerosin::InputServer* inputServer);
+    virtual bool CreateDevice(const std::string& deviceName);
+
+protected:
+
+    virtual bool UpdateTimerInput(kerosin::Input& input);
+
+    //
+    // members
+    //
+protected:
+};
+
+DECLARE_CLASS(InputSystemWX);
+
+#endif //INPUTSYSTEMWX_H__

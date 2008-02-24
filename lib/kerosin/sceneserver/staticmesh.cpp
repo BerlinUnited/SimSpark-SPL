@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.18 2008/02/24 10:17:31 rollmark Exp $
+   $Id: staticmesh.cpp,v 1.17.2.1 2008/02/24 14:31:09 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

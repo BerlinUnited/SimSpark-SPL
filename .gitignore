@@ -338,6 +338,12 @@ plugin/inputsdl/Makefile
 plugin/inputsdl/Makefile.in
 plugin/inputsdl/*.la
 plugin/inputsdl/*.lo
+plugin/inputwx/.deps
+plugin/inputwx/.libs
+plugin/inputwx/Makefile
+plugin/inputwx/Makefile.in
+plugin/inputwx/*.la
+plugin/inputwx/*.lo
 plugin/monitortest/.deps
 plugin/monitortest/.libs
 plugin/monitortest/Makefile

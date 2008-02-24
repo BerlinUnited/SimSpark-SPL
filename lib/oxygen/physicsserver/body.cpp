@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.22 2008/02/22 07:52:15 hedayat Exp $
+   $Id: body.cpp,v 1.22.2.1 2008/02/24 14:31:10 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-Body::Body() : ODEObject(), mODEBody(0)
+Body::Body() : ODEObject(), mODEBody(0), mMassTrans(0,0,0)
 {
 }
 
@@ -170,7 +170,7 @@ void Body::SetSphere(float density, float radius)
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::Addphere(float density, float radius, const Matrix& matrix)
+void Body::AddSphere(float density, float radius, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareSphere(ODEMass, density, radius);
@@ -233,7 +233,26 @@ void Body::AddBoxTotal(float total_mass, const Vector3f& size, const Matrix& mat
     PrepareBoxTotal(ODEMass, total_mass, size);
     AddMass(ODEMass, matrix);
 }
-
+/*
+    dMass ODEMass;
+    dBodyGetMass(mODEBody, &ODEMass);
+    Vector3f trans(ODEMass.c[0], ODEMass.c[1], ODEMass.c[2]);
+    
+    if (trans.SquareLength() > 0)
+    {
+        mOrigin = mOrigin - trans;
+        GetLog()->Warning() << "(Body::CenterMass) New origin: " << mOrigin << "\n";
+        
+        dMassTranslate(&ODEMass, -trans[0], -trans[1], -trans[2]);
+        dBodySetMass(mODEBody, &ODEMass);
+        
+        Vector3f position = GetPosition();
+        position = position + trans;
+        SetPosition(position);
+    
+        mCOMShifted = true;
+    }
+*/
 void Body::AddMass(const dMass& mass, const Matrix& matrix)
 {
     dMass transMass(mass);
@@ -242,16 +261,26 @@ void Body::AddMass(const dMass& mass, const Matrix& matrix)
     ConvertRotationMatrix(matrix, rot);
     dMassRotate(&transMass,rot);
 
+    const Vector3f& trans(matrix.Pos());
+    dMassTranslate(&transMass,trans[0],trans[1],trans[2]);
+
+    dMassTranslate(&transMass,mMassTrans[0],mMassTrans[1],mMassTrans[2]);
+    
     dMass bodyMass;
     dBodyGetMass(mODEBody, &bodyMass);
     dMassAdd(&bodyMass, &transMass);
-    dBodySetMass(mODEBody, (const dMass*)&bodyMass);
 
     /** ODE currently requires that the center mass is always in the
         origin of the body
     */
-    const Vector3f& trans(matrix.Pos());
-    dMassTranslate(&transMass,trans[0],trans[1],trans[2]);
+    mMassTrans[0] -= bodyMass.c[0]; 
+    mMassTrans[1] -= bodyMass.c[1]; 
+    mMassTrans[2] -= bodyMass.c[2]; 
+    
+    GetLog()->Warning() << "(Body::AddMass) TRANS: " << mMassTrans << "\n";
+    dMassTranslate(&bodyMass, -bodyMass.c[0], -bodyMass.c[1], -bodyMass.c[2]);
+    
+    dBodySetMass(mODEBody, (const dMass*)&bodyMass);
 }
 
 void Body::PrepareCylinder (dMass& mass, float density, float radius, float length) const

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.8 2008/02/24 10:17:30 rollmark Exp $
+   $Id: inputcontrol.cpp,v 1.7.2.1 2008/02/24 14:31:08 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.15 2008/02/24 09:40:22 rollmark Exp $
+   $Id: space.cpp,v 1.14.2.1 2008/02/24 14:31:11 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

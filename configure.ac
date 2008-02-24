@@ -124,10 +124,9 @@ RCSS_CHECK_RUBY_VERSION(1,8,0)
 RCSS_CHECK_ODE
 RCSS_BUILD_SPADES_SERVER
 
-# WX_CPPFLAGS="`wx-config --cppflags`"
-# WX_LDFLAGS="`wx-config --libs` `wx-config --gl-libs`"
-# AC_SUBST(WX_CPPFLAGS)
-# AC_SUBST(WX_LDFLAGS)
+RCSS_OPTIONS_WXCONFIG
+RCSS_CHECK_WXWIDGETS([2.8.2], HAVE_WXWIDGETS=yes, HAVE_WXWIDGETS=no)
+AM_CONDITIONAL(BUILD_WXWIDGETS, test x$HAVE_WXWIDGETS = xyes)
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
@@ -153,6 +152,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/forceeffector/Makefile \
 		 plugin/sceneeffector/Makefile \
 		 plugin/inputsdl/Makefile \
+		 plugin/inputwx/Makefile \
 		 plugin/monitortest/Makefile \
 		 plugin/perfectvisionperceptor/Makefile \
 		 plugin/gyrorateperceptor/Makefile \

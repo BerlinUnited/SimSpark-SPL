@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: collider_c.cpp,v 1.7 2004/03/22 10:57:43 rollmark Exp $
+$Id: collider_c.cpp,v 1.7.18.1 2008/02/24 14:31:11 sgvandijk Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,6 +42,34 @@ FUNCTION(Collider,setPosition)
     return true;
 }
 
+FUNCTION(Collider,setLocalPosition)
+{
+    Vector3f inPos;
+
+    if (
+        (in.GetSize() == 0) ||
+        (! in.GetValue(in.begin(),inPos))
+        )
+        {
+            return false;
+        }
+
+    obj->SetLocalPosition(inPos);
+    return true;
+}
+
+FUNCTION(Collider,setRotation)
+{
+    Matrix inRot;
+    if (!in.GetValue(in.begin(),inRot))
+    {
+        return false;
+    }
+    
+    obj->SetRotation(inRot);
+    return true;
+}
+
 FUNCTION(Collider,addCollisionHandler)
 {
     string inHandlerName;
@@ -60,6 +88,8 @@ FUNCTION(Collider,addCollisionHandler)
 void CLASS(Collider)::DefineClass()
 {
     DEFINE_FUNCTION(setPosition);
+    DEFINE_FUNCTION(setLocalPosition);
+    DEFINE_FUNCTION(setRotation);
     DEFINE_FUNCTION(addCollisionHandler);
     DEFINE_BASECLASS(oxygen/ODEObject);
 }

@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.10 2007/02/12 19:25:51 rollmark Exp $
+   $Id: body_c.cpp,v 1.10.12.1 2008/02/24 14:31:10 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -143,6 +143,29 @@ FUNCTION(Body,setSphere)
     return true;
 }
 
+FUNCTION(Body,addSphere)
+{
+    float inDensity;
+    float inRadius;
+    
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() < 2) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inRadius))
+       )
+    {
+        return false;
+    }
+
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[2],inMat);
+    
+    obj->AddSphere(inDensity,inRadius,inMat);
+    return true;
+}
+
 FUNCTION(Body,setSphereTotal)
 {
     float inMassTotal;
@@ -158,6 +181,29 @@ FUNCTION(Body,setSphereTotal)
         }
 
     obj->SetSphereTotal(inMassTotal,inRadius);
+    return true;
+}
+
+FUNCTION(Body,addSphereTotal)
+{
+    float inMassTotal;
+    float inRadius;
+    
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() < 2) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inRadius))
+       )
+    {
+        return false;
+    }
+
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[2],inMat);
+    
+    obj->AddSphereTotal(inMassTotal,inRadius,inMat);
     return true;
 }
 
@@ -179,6 +225,29 @@ FUNCTION(Body,setBox)
     return true;
 }
 
+FUNCTION(Body,addBox)
+{
+    float inDensity;
+    Vector3f inSize;
+
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() <= 1) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inSize))
+        )
+        {
+            return false;
+        }
+
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[4],inMat);
+
+    obj->AddBox(inDensity,inSize,inMat);
+    return true;
+}
+
 FUNCTION(Body,setBoxTotal)
 {
     float inMassTotal;
@@ -194,6 +263,29 @@ FUNCTION(Body,setBoxTotal)
         }
 
     obj->SetBoxTotal(inMassTotal,inSize);
+    return true;
+}
+
+FUNCTION(Body,addBoxTotal)
+{
+    float inMassTotal;
+    Vector3f inSize;
+
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() <= 1) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inSize))
+        )
+        {
+            return false;
+        }
+
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[4],inMat);
+
+    obj->AddBoxTotal(inMassTotal,inSize,inMat);
     return true;
 }
 
@@ -217,6 +309,31 @@ FUNCTION(Body,setCylinder)
     return true;
 }
 
+FUNCTION(Body,addCylinder)
+{
+    float inDensity;
+    float inRadius;
+    float inLength;
+
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() < 3) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[3],inMat);
+    
+    obj->AddCylinder(inDensity,inRadius,inLength,inMat);
+    return true;
+}
+
 FUNCTION(Body,setCylinderTotal)
 {
     float inMassTotal;
@@ -234,6 +351,31 @@ FUNCTION(Body,setCylinderTotal)
         }
 
     obj->SetCylinderTotal(inMassTotal,inRadius,inLength);
+    return true;
+}
+
+FUNCTION(Body,addCylinderTotal)
+{
+    float inMassTotal;
+    float inRadius;
+    float inLength;
+
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() < 3) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[3],inMat);
+    
+    obj->AddCylinderTotal(inMassTotal,inRadius,inLength,inMat);
     return true;
 }
 
@@ -257,6 +399,32 @@ FUNCTION(Body,setCappedCylinder)
     return true;
 }
 
+FUNCTION(Body,addCappedCylinder)
+{
+    float inDensity;
+    float inRadius;
+    float inLength;
+
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() < 3) ||
+        (! in.GetValue(in[0],inDensity)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[3],inMat);
+    
+    obj->AddCappedCylinder(inDensity,inRadius,inLength,inMat);
+    return true;
+}
+
 FUNCTION(Body,setCappedCylinderTotal)
 {
     float inMassTotal;
@@ -277,6 +445,30 @@ FUNCTION(Body,setCappedCylinderTotal)
     return true;
 }
 
+FUNCTION(Body,addCappedCylinderTotal)
+{
+    float inMassTotal;
+    float inRadius;
+    float inLength;
+
+    Matrix inMat;
+    
+    if (
+        (in.GetSize() != 3) ||
+        (! in.GetValue(in[0],inMassTotal)) ||
+        (! in.GetValue(in[1],inRadius)) ||
+        (! in.GetValue(in[2],inLength))
+        )
+        {
+            return false;
+        }
+
+    // Matrix is allowed to be missing, defaults to identity
+    in.GetValue(in[3],inMat);
+    
+    obj->AddCappedCylinderTotal(inMassTotal,inRadius,inLength,inMat);
+    return true;
+}
 
 FUNCTION(Body,setVelocity)
 {
@@ -382,13 +574,21 @@ void CLASS(Body)::DefineClass()
         DEFINE_FUNCTION(isEnabled);
         DEFINE_FUNCTION(useGravity);
         DEFINE_FUNCTION(setSphere);
+        DEFINE_FUNCTION(addSphere);
         DEFINE_FUNCTION(setSphereTotal);
+        DEFINE_FUNCTION(addSphereTotal);
         DEFINE_FUNCTION(setBox);
+        DEFINE_FUNCTION(addBox);
         DEFINE_FUNCTION(setBoxTotal);
+        DEFINE_FUNCTION(addBoxTotal);
         DEFINE_FUNCTION(setCylinder);
+        DEFINE_FUNCTION(addCylinder);
         DEFINE_FUNCTION(setCylinderTotal);
+        DEFINE_FUNCTION(addCylinderTotal);
         DEFINE_FUNCTION(setCappedCylinder);
+        DEFINE_FUNCTION(addCappedCylinder);
         DEFINE_FUNCTION(setCappedCylinderTotal);
+        DEFINE_FUNCTION(addCappedCylinderTotal);
         DEFINE_FUNCTION(setMass);
         DEFINE_FUNCTION(getMass);
         DEFINE_FUNCTION(setVelocity);
