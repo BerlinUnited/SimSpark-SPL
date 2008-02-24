@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.9 2008/02/22 16:48:18 hedayat Exp $
+   $Id: simulationserver.cpp,v 1.10 2008/02/24 16:00:04 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -342,9 +342,12 @@ void SimulationServer::Cycle(shared_ptr<SimControlNode> &inputCtr)
     }
     else
     {
-        while (int(mSumDeltaTime*100) < int(mSimStep*100))
+        if (inputCtr.get() != 0)
         {
-            inputCtr->StartCycle();// advance the time
+            while (int(mSumDeltaTime*100) < int(mSimStep*100))
+            {
+                inputCtr->StartCycle();// advance the time
+            }
         }
     }
     Step();
