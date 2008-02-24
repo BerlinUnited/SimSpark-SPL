@@ -615,3 +615,10 @@ utility/tinyxml/.dirstamp
 utility/tinyxml/.libs
 utility/tinyxml/Makefile
 utility/tinyxml/Makefile.in
+utility/wxutil/*.la
+utility/wxutil/*.lo
+utility/wxutil/.deps
+utility/wxutil/.dirstamp
+utility/wxutil/.libs
+utility/wxutil/Makefile
+utility/wxutil/Makefile.in
