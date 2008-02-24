@@ -79,6 +79,12 @@ app/rcssmonitor3d/lite/.libs
 app/rcssmonitor3d/lite/Makefile
 app/rcssmonitor3d/lite/Makefile.in
 app/rcssmonitor3d/lite/rcssmonitor3D-lite
+app/rsgedit/.deps
+app/rsgedit/.libs
+app/rsgedit/Logfiles
+app/rsgedit/Makefile
+app/rsgedit/Makefile.in
+app/rsgedit/rsgedit
 app/scenetest/.deps
 app/scenetest/.libs
 app/scenetest/Makefile
