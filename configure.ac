@@ -135,6 +135,7 @@ AC_CONFIG_FILES([Makefile \
 		 utility/sfsexp/Makefile \
 		 utility/rcssnet/Makefile \
 		 utility/tinyxml/Makefile \
+		 utility/wxutil/Makefile \
 		 lib/Makefile \
 		 lib/salt/Makefile \
 		 lib/salt/salt-config \
@@ -190,6 +191,7 @@ AC_CONFIG_FILES([Makefile \
 		 app/rcssmonitor3d/lite/Makefile \
 		 app/rcssmonitor3d/kerosin/Makefile \
 		 app/zeitgeisttest/Makefile \
+		 app/rsgedit/Makefile \
                  doc/Makefile \
 		 doc/Doxyfile \
                  doc/manual/Makefile \
