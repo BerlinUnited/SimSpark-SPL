@@ -18,7 +18,8 @@ SUBDIRS = \
 	  sparkagent\
 	  sceneeffector\
 	  soccermonitor \
-	  soundsystemfmod
+	  soundsystemfmod \
+	  inputwx
 
 # filesystemrar 
 # soundsystembass
