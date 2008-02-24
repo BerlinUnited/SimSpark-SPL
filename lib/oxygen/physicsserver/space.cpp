@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.14 2008/02/23 11:00:48 rollmark Exp $
+   $Id: space.cpp,v 1.15 2008/02/24 09:40:22 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,11 +40,6 @@ Space::Space() : ODEObject(), mODESpace(0), mODEContactGroup(0)
 
 Space::~Space()
 {
-  if (mODEContactGroup)
-    {
-      dJointGroupDestroy(mODEContactGroup);
-      mODEContactGroup = 0;
-    }
 }
 
 dSpaceID Space::GetODESpace() const
@@ -241,6 +236,12 @@ Space::DestroyODEObject()
     // make sure that all objects registered to this space are destroyed
     // before this space. Any other order provokes a segfault in ODE.
     DestroySpaceObjects();
+
+    if (mODEContactGroup)
+        {
+            dJointGroupDestroy(mODEContactGroup);
+            mODEContactGroup = 0;
+        }
 
     // release the ODE space
     dSpaceDestroy(mODESpace);
