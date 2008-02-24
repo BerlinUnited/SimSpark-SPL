@@ -11,5 +11,6 @@ SUBDIRS = \
 	  scenetest \
 	  simulator \
 	  spadestest \
-	  zeitgeisttest 
+	  zeitgeisttest \
+	  rsgedit 
 
