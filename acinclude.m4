@@ -107,8 +107,8 @@ AC_DEFUN([RCSS_CHECK_WXWIDGETS],
     if test "x$wx_ver_ok" = x ; then
       no_wx=yes
     else
-      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs`
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs`
+      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs gl std`
+      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs gl std`
 
       dnl starting with version 2.2.6 wx-config has --cppflags argument
       wx_has_cppflags=""
