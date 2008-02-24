@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: rendercontrol.cpp,v 1.4 2008/02/22 16:48:18 hedayat Exp $
+   $Id: rendercontrol.cpp,v 1.5 2008/02/24 10:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ using namespace boost;
 using namespace std;
 
 RenderControl::RenderControl()
+    : SimControlNode()
 {
     mFramesRendered = 0;
 }

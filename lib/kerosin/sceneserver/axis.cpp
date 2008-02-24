@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: axis.cpp,v 1.7 2008/02/22 16:48:18 hedayat Exp $
+   $Id: axis.cpp,v 1.8 2008/02/24 10:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@
 
 using namespace kerosin;
 
-Axis::Axis() : mSize(10.0f)
+Axis::Axis()
+    : BaseNode(), mSize(10.0f)
 {
 }
 

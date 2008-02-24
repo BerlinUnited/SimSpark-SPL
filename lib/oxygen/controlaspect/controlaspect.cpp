@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.cpp,v 1.6 2008/02/22 07:52:15 hedayat Exp $
+   $Id: controlaspect.cpp,v 1.7 2008/02/24 10:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,15 @@ using namespace std;
 using namespace boost;
 using namespace oxygen;
 using namespace zeitgeist;
+
+ControlAspect::ControlAspect()
+  : BaseNode()
+{
+}
+
+ControlAspect::~ControlAspect()
+{
+}
 
 shared_ptr<Scene>
 ControlAspect::GetActiveScene()

@@ -1,9 +1,9 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: physicsserver.cpp,v 1.5 2007/02/12 22:10:33 jamu Exp $
+   $Id: physicsserver.cpp,v 1.6 2008/02/24 10:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
 */
 
 #include "physicsserver.h"
-//#include <ode/ode.h>
 
 using namespace oxygen;
 
 PhysicsServer::PhysicsServer()
+    : Leaf()
 {
 }
 

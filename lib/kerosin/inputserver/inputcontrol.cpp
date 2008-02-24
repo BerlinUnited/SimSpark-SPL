@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.cpp,v 1.7 2008/02/22 16:48:19 hedayat Exp $
+   $Id: inputcontrol.cpp,v 1.8 2008/02/24 10:17:30 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ using namespace boost;
 using namespace std;
 
 InputControl::InputControl()
+    : SimControlNode()
 {
     mDeltaTime = 0;
     mHorSens = 0.3f;

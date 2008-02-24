@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystem.cpp,v 1.8 2008/02/22 16:48:19 hedayat Exp $
+   $Id: inputsystem.cpp,v 1.9 2008/02/24 10:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,8 @@
 using namespace kerosin;
 using namespace zeitgeist;
 
-InputSystem::InputSystem() : mInputServer(NULL)
+InputSystem::InputSystem()
+    : Node(), mInputServer(NULL)
 {
 }
 

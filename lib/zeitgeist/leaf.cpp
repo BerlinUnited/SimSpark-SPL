@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.cpp,v 1.10 2008/02/20 17:16:29 hedayat Exp $
+   $Id: leaf.cpp,v 1.11 2008/02/24 10:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ using namespace boost;
 using namespace std;
 using namespace zeitgeist;
 
-Leaf::Leaf(const std::string &name) : mName(name), mCachedFullPath(NULL)
+Leaf::Leaf(const std::string &name)
+    : Object(), mName(name), mCachedFullPath(NULL)
 {
 }
 

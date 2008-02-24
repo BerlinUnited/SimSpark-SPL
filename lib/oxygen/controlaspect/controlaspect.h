@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.h,v 1.10 2004/06/11 07:52:16 fruit Exp $
+   $Id: controlaspect.h,v 1.11 2008/02/24 10:17:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ class Scene;
 class ControlAspect : public BaseNode
 {
 public:
-    ControlAspect() {};
-    virtual ~ControlAspect() {};
+    ControlAspect();
+    virtual ~ControlAspect();
 
     /** called during the update of the GameControlServer to allow the
         ControlAspect to perform any necessary checks.
