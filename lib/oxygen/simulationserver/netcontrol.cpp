@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netcontrol.cpp,v 1.6 2008/02/22 16:48:18 hedayat Exp $
+   $Id: netcontrol.cpp,v 1.7 2008/02/25 12:58:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -217,10 +217,14 @@ void NetControl::DoneSimulation()
     }
 
     // shutdown the server socket
-    mSocket->close();
-    GetLog()->Normal() << "(NetControl) '" << GetName()
-                       << "' closed server socket "
-                       << DescribeSocketType() << std::endl;
+    if (mSocket.get() != 0)
+        {
+            mSocket->close();
+            GetLog()->Normal() << "(NetControl) '" << GetName()
+                               << "' closed server socket "
+                               << DescribeSocketType() << std::endl;
+        }
+
     mSocket.reset();
     mClients.clear();
 }
