@@ -36,6 +36,7 @@ endif
 rsgedit_SOURCES = \
 	aboutDlg.cpp \
 	inputwx.cpp \
+	platform.cpp \
 	mainframe.cpp \
 	propertylist.cpp \
 	sparkcontextevent.cpp \

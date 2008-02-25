@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: mainframe.cpp,v 1.2 2008/02/25 12:56:22 rollmark Exp $
+   $Id: mainframe.cpp,v 1.3 2008/02/25 14:56:52 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "kinematicframe.h"
 #include "agentframe.h"
 #include "sparkedit.h"
+#include "platform.h"
 
 #include <wx/filename.h>
 #include <wx/mimetype.h>
@@ -1137,14 +1138,13 @@ void mainframe::OnFileNew(wxCommandEvent& /*event*/)
 void mainframe::OnFileOpen(wxCommandEvent& /*event*/)
 {
     wxString message(wxT("Choose a file to open"));
-    wxString default_path(wxT("./rsg"));
     wxString default_filename(wxT(""));
     wxString default_extension(wxT(""));
     wxString wildcard(wxT("simspark files (*.rsg, *.rb)|*.rb;*.rsg"));
     int flags = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
 
-    wxString filename = wxFileSelector(message, default_path, default_filename,
-                                       default_extension, wildcard, flags);
+    wxString filename = wxFileSelector(message, Platform::GetDefaultFileOpenPath(),
+                                       default_filename, default_extension, wildcard, flags);
     if (filename.empty() )
     {
         return;
@@ -1198,12 +1198,13 @@ void mainframe::OnHelpAbout(wxCommandEvent& /*event*/)
 void mainframe::OnAgentOpen(wxCommandEvent& /*event*/)
 {
     wxString message(wxT("Choose an agent executable to run"));
-    wxString default_path(wxT("."));
     wxString default_filename(wxT(""));
     wxString default_extension(wxT(""));
     wxString wildcard(wxT("agent executables (*.exe)|*.exe"));
 
-    wxString filename = wxFileSelector(message, default_path, default_filename, default_extension, wildcard);
+    wxString filename = wxFileSelector(message, Platform::GetDefaultAgentOpenPath(),
+                                       default_filename, default_extension,
+                                       Platform::GetDefaultAgentOpenWildcard());
     if (filename.empty() )
         {
             return;
