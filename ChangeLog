@@ -1,3 +1,70 @@
+2008-02-25  rollmark  <rollmark@ubuntu>
+
+	* lib/oxygen/sceneserver/transform.cpp, lib/oxygen/sceneserver/transform.h:
+	- removed member mOldLocalTransform
+	- removed function GetOldLocalTransform()
+	- the only user of this was the SparkMonitor that now implements
+	  a local cache
+
+	* plugin/sparkmonitor/sparkmonitor.cpp, plugin/sparkmonitor/sparkmonitor.h:
+	- implemented a node cache that stores the type and last state of each node
+	  that was send to the client. This solves two issues:
+
+	- The previous implementation depended on the 'old' transformation matrix
+	  that was stored in the Transform nodes itself. It was updated every cycle.
+	  The monitor however was updated with a lower frequency and therefore could
+	  miss some changes as the current and old transform matrix was identical
+	  (due to the higher update frequency). This bug was reported by the Apollo
+	  3D Team.
+
+	- The second issue was that invisible scene graph nodes could safely be
+	  removed from the monitor update (thanks to Carlos Bustamante from
+	  Borregos3D), thus saving bandwidth. The problem here were repeated type
+	  checks (dynamic casts) to test for node types that can be skipped. This is
+	  also solved through the node cache now as it stores the type of each node.
+
+2008-02-24  Markus Rollmann  <rollmark@users.sourceforge.net>
+
+	* app/Makefile.am: 
+	- added rsgedit directory
+
+	* configure.ac: 
+	- added wxutil lib and rsgedit app
+
+	* app/rsgedit
+	- ported rsgedit from the simspark repository. This version
+	compiles and works but still has some quirks
+
+	* utility/wxutil/
+        - added wxutil library that contains non standard wxWidgets
+	classes.  Currently wxScintilla, a wxWidgets wrapper for the
+	Scintilla and wxFlatNotebook
+
+	* plugin/Makefile.am: 
+	- added inputwx directory
+
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- allow Cycle() to be called without an InputControlNode
+
+	* acinclude.m4: 
+	 - include opengl libraries in wxWidgets dependencies
+
+	* configure.ac:
+	- test for the presence of wxWidgets and set BUILD_WXWIDGETS accordingly
+	- added plugin/inputwx directory
+
+	* plugin/inputwx/
+	- added class InputSystemWx and InputWx. This implements an
+	inputsystem that tranlaster gui events of the wxWidgets library to
+	input events for the InputServer
+
+	* acinclude.m4:
+	- added macros RCSS_OPTIONS_WXCONFIG and RCSS_CHECK_WXWIDGETS to check for
+	  the presence of the wxWidgets library
+
+	* lib/oxygen/physicsserver/space.cpp:
+	- destroy the ode contact group from within DestroyODEObject()
+
 2008-02-23  Markus Rollmann  <rollmark@users.sourceforge.net>
 
 	* app/monitorspark/monitorspark.rb, app/simspark/simspark.rb:
