@@ -1,4 +1,34 @@
-2008-02-25  rollmark  <rollmark@ubuntu>
+2008-02-25  Markus Rollmann  <rollmark@users.sourceforge.net>
+  
+  	* app/rsgedit/Makefile.am, app/rsgedit/mainframe.cpp, app/rsgedit/platform.cpp, app/rsgedit/platform.h:
+  	- move some platform specific details into class Platform
+  
+  	* app/rsgedit/rsgedit.rb, app/rsgedit/simspark.cpp:
+  	- no need to log to cerr when we have a nice gui log window
+  
+  	* app/rsgedit/simspark.cpp, app/rsgedit/simspark.h:
+  	- the LogServer takes ownership of the registered stream
+  
+  	* lib/zeitgeist/logserver/logserverstreambuf.cpp:
+  	- all streams other than cout and cerr are in fact delete. remove a
+  	lying comment
+  
+  	* lib/zeitgeist/core.cpp:
+  	- handle SIGABRT. This produces a stack trace when an assertion aborts
+  	the server
+  
+  	* lib/oxygen/simulationserver/netcontrol.cpp:
+  	- check for valid socket ptr
+  
+  	* app/rsgedit/agentframe.cpp: - compile fixes (unused paremter...)
+  
+  	* app/rsgedit/mainframe.cpp:
+  	- added sanity checks for valid SimulationServer ptrs
+  
+  	* app/rsgedit/propertylist.cpp: 
+  	- compile fix
+
+2008-02-25  Markus Rollmann  <rollmark@users.sourceforge.net>
 
 	* lib/oxygen/sceneserver/transform.cpp, lib/oxygen/sceneserver/transform.h:
 	- removed member mOldLocalTransform
