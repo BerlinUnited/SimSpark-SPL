@@ -33,6 +33,8 @@ else
 AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) @RUBY_LDFLAGS@ @WX_LIBS@ @IL_LDFLAGS@ @GL_LDFLAGS@
 endif
 
+dist_pkgdata_DATA = rsgedit.rb
+
 rsgedit_SOURCES = \
 	aboutDlg.cpp \
 	inputwx.cpp \

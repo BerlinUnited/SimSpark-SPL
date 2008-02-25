@@ -1,31 +1,39 @@
+2008-02-26  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* app/rsgedit/Makefile.am:
+	- added rsgedit.rb as package data file to be installed.
+
+	* utility/Makefile.am:
+	- added wxutil directory (fix a compile error)
+
 2008-02-25  Markus Rollmann  <rollmark@users.sourceforge.net>
-  
+
   	* app/rsgedit/Makefile.am, app/rsgedit/mainframe.cpp, app/rsgedit/platform.cpp, app/rsgedit/platform.h:
   	- move some platform specific details into class Platform
-  
+
   	* app/rsgedit/rsgedit.rb, app/rsgedit/simspark.cpp:
   	- no need to log to cerr when we have a nice gui log window
-  
+
   	* app/rsgedit/simspark.cpp, app/rsgedit/simspark.h:
   	- the LogServer takes ownership of the registered stream
-  
+
   	* lib/zeitgeist/logserver/logserverstreambuf.cpp:
   	- all streams other than cout and cerr are in fact delete. remove a
   	lying comment
-  
+
   	* lib/zeitgeist/core.cpp:
   	- handle SIGABRT. This produces a stack trace when an assertion aborts
   	the server
-  
+
   	* lib/oxygen/simulationserver/netcontrol.cpp:
   	- check for valid socket ptr
-  
+
   	* app/rsgedit/agentframe.cpp: - compile fixes (unused paremter...)
-  
+
   	* app/rsgedit/mainframe.cpp:
   	- added sanity checks for valid SimulationServer ptrs
-  
-  	* app/rsgedit/propertylist.cpp: 
+
+  	* app/rsgedit/propertylist.cpp:
   	- compile fix
 
 2008-02-25  Markus Rollmann  <rollmark@users.sourceforge.net>
@@ -55,10 +63,10 @@
 
 2008-02-24  Markus Rollmann  <rollmark@users.sourceforge.net>
 
-	* app/Makefile.am: 
+	* app/Makefile.am:
 	- added rsgedit directory
 
-	* configure.ac: 
+	* configure.ac:
 	- added wxutil lib and rsgedit app
 
 	* app/rsgedit
@@ -70,13 +78,13 @@
 	classes.  Currently wxScintilla, a wxWidgets wrapper for the
 	Scintilla and wxFlatNotebook
 
-	* plugin/Makefile.am: 
+	* plugin/Makefile.am:
 	- added inputwx directory
 
 	* lib/oxygen/simulationserver/simulationserver.cpp:
 	- allow Cycle() to be called without an InputControlNode
 
-	* acinclude.m4: 
+	* acinclude.m4:
 	 - include opengl libraries in wxWidgets dependencies
 
 	* configure.ac:
@@ -146,7 +154,7 @@
 
 2008-02-23  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
-	* lib/oxygen/physicsserver/odeobject.cpp 
+	* lib/oxygen/physicsserver/odeobject.cpp
 	Bugfix: (thanks goto Ben from team Apollo) the salt::Matrix was
 	not fully assigned in ConvertRotationMatrix,it cause problem while
 	this matrix multiply another matrix

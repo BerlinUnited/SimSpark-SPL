@@ -1,4 +1,5 @@
 SUBDIRS = libobj \
 	  rcssnet \
 	  sfsexp \
-	  tinyxml
+	  tinyxml \
+	  wxutil
