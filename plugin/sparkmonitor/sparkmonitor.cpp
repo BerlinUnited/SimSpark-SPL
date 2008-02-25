@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.11 2007/06/27 22:31:48 jamu Exp $
+   $Id: sparkmonitor.cpp,v 1.12 2008/02/25 11:23:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,6 +43,17 @@ SparkMonitor::~SparkMonitor()
 {
 }
 
+void SparkMonitor::ClearNodeCache()
+{
+    mNodeCache.clear();
+}
+
+void SparkMonitor::UpdateCached()
+{
+    MonitorSystem::UpdateCached();
+    ClearNodeCache();
+}
+
 void SparkMonitor::OnLink()
 {
     // setup SceneServer reference
@@ -60,6 +71,7 @@ void SparkMonitor::OnUnlink()
 {
     mSceneServer.reset();
     mActiveScene.reset();
+    ClearNodeCache();
 }
 
 void SparkMonitor::ParseMonitorMessage(const std::string& data)
@@ -85,6 +97,7 @@ string SparkMonitor::GetMonitorInfo(const PredicateList& pList)
     mFullState = false;
     DescribeCustomPredicates(ss,pList);
     DescribeActiveScene(ss);
+
     return ss.str();
 }
 
@@ -92,8 +105,10 @@ string SparkMonitor::GetMonitorHeaderInfo(const PredicateList& pList)
 {
     stringstream ss;
     mFullState = true;
+    ClearNodeCache();
     DescribeCustomPredicates(ss,pList);
     DescribeActiveScene(ss);
+
     return ss.str();
 }
 
@@ -131,8 +146,24 @@ void SparkMonitor::DescribeCustomPredicates(stringstream& ss,const PredicateList
     ss << ")";
 }
 
+void SparkMonitor::DescribeBaseNode(stringstream& ss)
+{
+    if (mFullState)
+        {
+            ss << "(nd BN";
+        } else
+            {
+                ss << "(nd";
+            }
+}
+
 void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)
 {
+    if (! mFullState)
+        {
+            return DescribeBaseNode(ss);
+        }
+
     ss << "(nd Light ";
 
     const RGBA& diff = light->GetDiffuse();
@@ -148,11 +179,8 @@ void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)
        << spec.b() << " " << spec.a() << ")";
 }
 
-void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> transform)
+void SparkMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, shared_ptr<Transform> transform)
 {
-    const float precision = 0.005;
-    const Matrix& mat = transform->GetLocalTransform();
-
     if (mFullState)
         {
             ss << "(nd TRF";
@@ -163,33 +191,32 @@ void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> tra
 
     // include transform data only for fullstate or a modified
     // transform node
+    const float precision = 0.005;
+    const Matrix& mat = transform->GetLocalTransform();
+
     bool update = false;
+
     if (mFullState)
         {
             update = true;
         } else
             {
-                if (SceneServer::GetTransformMark() == transform->GetChangedMark())
-                {
-                    const salt::Matrix& current = transform->GetLocalTransform();
-                    const salt::Matrix& old = transform->GetOldLocalTransform();
-                    for (int i=0;i<16;++i)
-                        {
-                            const float d = fabs(current.m[i] - old.m[i]);
+                const salt::Matrix& old = entry.transform;
 
-                            if (d > precision)
-                                {
-                                    update = true;
-                                    break;
-                                }
-                        }
-                }
+                for (int i=0;i<16;++i)
+                    {
+                        const float d = fabs(old.m[i] - mat.m[i]);
+
+                        if (d > precision)
+                            {
+                                update = true;
+                                break;
+                            }
+                    }
             }
-
 
     if (update)
         {
-            //ss << " (setLocalTransform ";
             ss << " (SLT ";
 
             for (int i=0;i<16;++i)
@@ -198,11 +225,19 @@ void SparkMonitor::DescribeTransform(stringstream& ss, shared_ptr<Transform> tra
                 }
 
             ss << ")";
+
+            // update cache
+            entry.transform = mat;
         }
 }
 
 void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> mesh)
 {
+    if (! mFullState)
+        {
+            return DescribeBaseNode(ss);
+        }
+
     shared_ptr<SingleMatNode> singleMat =
         shared_dynamic_cast<SingleMatNode>(mesh);
 
@@ -247,49 +282,88 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
         }
 }
 
-void SparkMonitor::DescribeNode(stringstream& ss, shared_ptr<BaseNode> node)
+SparkMonitor::NodeCache* SparkMonitor::LookupNode(shared_ptr<BaseNode> node)
 {
-    // Transform node
-    shared_ptr<Transform> transform =
-        shared_dynamic_cast<Transform>(node);
+    if (node.get() == 0)
+        {
+            assert(false);
+            return 0;
+        }
+
+    TNodeCacheMap::iterator iter = mNodeCache.find(node);
+    if (iter != mNodeCache.end())
+        {
+            return &((*iter).second);
+        }
+
+    shared_ptr<Transform> transform
+        = shared_dynamic_cast<Transform>(node);
 
     if (transform.get() != 0)
         {
-            DescribeTransform(ss,transform);
-            return;
+            mNodeCache[node]
+                = NodeCache(NT_TRANSFORM, transform->GetLocalTransform());
+
+            return &(mNodeCache[node]);
         }
 
-    if (mFullState)
+    shared_ptr<StaticMesh> mesh
+        = shared_dynamic_cast<StaticMesh>(node);
+    if (mesh.get() != 0)
         {
-            // StaticMesh node
-            shared_ptr<StaticMesh> mesh =
-                shared_dynamic_cast<StaticMesh>(node);
-
-            if (mesh.get() != 0)
-                {
-                    DescribeMesh(ss,mesh);
-                    return;
-                }
-
-            // Light node
-            shared_ptr<Light> light =
-                shared_dynamic_cast<Light>(node);
-
-            if (light.get() != 0)
-                {
-                    DescribeLight(ss,light);
-                    return;
-                }
+            mNodeCache[node] = NodeCache(NT_STATICMESH);
+            return &(mNodeCache[node]);
         }
 
-    if (mFullState)
+    shared_ptr<Light> light
+        = shared_dynamic_cast<Light>(node);
+    if (light.get() != 0)
         {
-            // default to BaseNode
-            ss << "(nd BN";
-        } else
-            {
-                ss << "(nd";
-            }
+            mNodeCache[node] = NodeCache(NT_LIGHT);
+            return &(mNodeCache[node]);
+        }
+
+    // treat every other node type as a BaseNode
+    mNodeCache[node] = NodeCache(NT_BASE);
+
+    return &(mNodeCache[node]);
+}
+
+bool SparkMonitor::DescribeNode(stringstream& ss, shared_ptr<BaseNode> node)
+{
+    NodeCache* entry = LookupNode(node);
+    if (entry == 0)
+        {
+            // skip node
+            assert(false);
+            return false;
+        }
+
+    switch (entry->type)
+        {
+        default:
+            assert(false);
+            // fall through
+
+        case NT_BASE:
+            // skip node
+            return false;
+
+        case NT_TRANSFORM:
+            DescribeTransform
+                (ss, (*entry), shared_static_cast<Transform>(node));
+            return true;
+
+        case NT_STATICMESH:
+            DescribeMesh
+                (ss, shared_static_cast<StaticMesh>(node));
+            return true;
+
+        case NT_LIGHT:
+            DescribeLight
+                (ss, shared_static_cast<Light>(node));
+            return true;
+        }
 }
 
 void SparkMonitor::DescribeActiveScene(stringstream& ss)
@@ -319,7 +393,9 @@ void SparkMonitor::DescribeActiveScene(stringstream& ss)
                         ss << "(RDS 0 1)";
                     }
 
+            ss << "(";
             DescribeScene(ss,mActiveScene);
+            ss << ")";
         }
 
     ss << endl;
@@ -327,7 +403,7 @@ void SparkMonitor::DescribeActiveScene(stringstream& ss)
 
 void SparkMonitor::DescribeScene(stringstream& ss, shared_ptr<BaseNode> node)
 {
-    DescribeNode(ss, node);
+    bool closeParen = DescribeNode(ss, node);
 
     for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
         {
@@ -340,6 +416,8 @@ void SparkMonitor::DescribeScene(stringstream& ss, shared_ptr<BaseNode> node)
             DescribeScene(ss,baseNode);
         }
 
-    ss << ")";
+    if (closeParen)
+        {
+            ss << ")";
+        }
 }
-

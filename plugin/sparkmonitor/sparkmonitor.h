@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.h,v 1.4 2004/12/22 16:10:49 rollmark Exp $
+   $Id: sparkmonitor.h,v 1.5 2008/02/25 11:23:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,6 +32,37 @@
 
 class SparkMonitor : public oxygen::MonitorSystem
 {
+public:
+    enum ENodeType
+        {
+            NT_BASE = 0,
+            NT_TRANSFORM,
+            NT_STATICMESH,
+            NT_LIGHT
+        };
+
+    struct NodeCache
+    {
+    public:
+        ENodeType type;
+
+        /** the last local transform matrix sent to the client */
+        salt::Matrix transform;
+
+    public:
+        NodeCache(ENodeType nt = NT_BASE)
+            : type(nt)
+        {
+        }
+
+        NodeCache(ENodeType nt, const salt::Matrix& t)
+            : type(nt), transform(t)
+        {
+        }
+    };
+
+    typedef std::map<boost::shared_ptr<oxygen::BaseNode>, NodeCache> TNodeCacheMap;
+
 public:
     SparkMonitor();
     virtual ~SparkMonitor();
@@ -61,18 +92,34 @@ public:
      */
     virtual std::string GetMonitorHeaderInfo(const oxygen::PredicateList& pList);
 
+    /** update variables from a script */
+    virtual void UpdateCached();
+
 protected:
     virtual void OnLink();
     virtual void OnUnlink();
+
+    void ClearNodeCache();
+
+    /** This function looks the cached node entry in the node
+        cache. The entry is added to the cache if it does not exist
+    */
+    NodeCache* LookupNode(boost::shared_ptr<oxygen::BaseNode> node);
 
     void DescribeCustomPredicates(std::stringstream& ss,const oxygen::PredicateList& pList);
     void DescribeActiveScene(std::stringstream& ss);
     void DescribeScene(std::stringstream& ss,
                        boost::shared_ptr<oxygen::BaseNode> node);
 
-    void DescribeNode(std::stringstream& ss,
+    /** This function writes the s-expression for the given node to
+        the given strinstream, omitting the closing parentheses. It
+        returns false if the node is skipped and no description is
+        created. Skipped nodes are invisible scene graph nodes.
+    */
+    bool DescribeNode(std::stringstream& ss,
                       boost::shared_ptr<oxygen::BaseNode> node);
-    void DescribeTransform(std::stringstream& ss,
+    void DescribeBaseNode(std::stringstream& ss);
+    void DescribeTransform(std::stringstream& ss, NodeCache& entry,
                            boost::shared_ptr<oxygen::Transform> transform);
     void DescribeMesh(std::stringstream& ss,
                       boost::shared_ptr<kerosin::StaticMesh> mesh);
@@ -88,6 +135,9 @@ protected:
 
     /** true, if the full state is generated */
     bool mFullState;
+
+    /** cached node type and state */
+    TNodeCacheMap mNodeCache;
 };
 
 DECLARE_CLASS(SparkMonitor);
