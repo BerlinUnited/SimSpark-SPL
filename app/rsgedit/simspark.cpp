@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: simspark.cpp,v 1.1 2008/02/24 16:20:23 rollmark Exp $
+   $Id: simspark.cpp,v 1.2 2008/02/25 14:14:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ using namespace zeitgeist;
 using namespace oxygen;
 using namespace spark;
 
-ostringstream SimSpark::mLogStream;
+std::ostringstream* SimSpark::mLogStream = 0;
 
 SimSpark::SimSpark(const string& relPathPrefix) :
     Spark(relPathPrefix)
@@ -37,9 +37,16 @@ SimSpark::SimSpark(const string& relPathPrefix) :
     mState = S_PAUSED;
 }
 
+SimSpark::~SimSpark()
+{
+    // the stream is owned by the logserver
+    mLogStream = 0;
+}
+
 bool SimSpark::InitApp(int argc, char** argv)
 {
-    GetLog()->AddStream(&mLogStream, LogServer::eAll);
+    mLogStream = new ostringstream;
+    GetLog()->AddStream(mLogStream, LogServer::eAll);
     PrintGreeting();
 
     // process command line
@@ -56,12 +63,18 @@ bool SimSpark::InitApp(int argc, char** argv)
 
 unsigned int SimSpark::GetLogPriority()
 {
-    return GetLog()->GetPriorityMask(&mLogStream);
+    return GetLog()->GetPriorityMask(mLogStream);
 }
 
 void SimSpark::SetLogPriority(unsigned int mask)
 {
-    GetLog()->SetPriorityMask(&mLogStream, mask);
+    if (mLogStream == 0)
+        {
+            assert(false);
+            return;
+        }
+
+    GetLog()->SetPriorityMask(mLogStream, mask);
 }
 
 void SimSpark::ResetSimulation()
@@ -101,15 +114,33 @@ void SimSpark::SetSimState(ESimState state)
 
 wxString SimSpark::GetLogBuffer()
 {
-    return wxString(mLogStream.str().c_str(), wxConvUTF8);
+    if (mLogStream == 0)
+        {
+            assert(false);
+            return wxString();
+        }
+
+    return wxString(mLogStream->str().c_str(), wxConvUTF8);
 }
 
 void SimSpark::ClearLogBuffer()
 {
-    mLogStream.str(string());
+    if (mLogStream == 0)
+        {
+            assert(false);
+            return;
+        }
+
+    mLogStream->str(string());
 }
 
 bool SimSpark::HasLogContents()
 {
-    return (! mLogStream.str().empty());
+    if (mLogStream == 0)
+        {
+            assert(false);
+            return false;
+        }
+
+    return (! mLogStream->str().empty());
 }

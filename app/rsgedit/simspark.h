@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: simspark.h,v 1.1 2008/02/24 16:20:23 rollmark Exp $
+   $Id: simspark.h,v 1.2 2008/02/25 14:14:48 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ class SimSpark : public spark::Spark
 {
 public:
     SimSpark(const std::string& relPathPrefix);
+    ~SimSpark();
 
     /** called once after Spark finished it's init */
     virtual bool InitApp(int argc, char** argv);
@@ -71,7 +72,7 @@ protected:
     ESimState mState;
 
     //! log buffer
-    static std::ostringstream mLogStream;
+    static std::ostringstream* mLogStream;
 };
 
 #endif // SIMSPARK_H__
