@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: simspark.cpp,v 1.2 2008/02/25 14:14:48 rollmark Exp $
+   $Id: simspark.cpp,v 1.3 2008/02/25 14:21:41 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,10 +45,6 @@ SimSpark::~SimSpark()
 
 bool SimSpark::InitApp(int argc, char** argv)
 {
-    mLogStream = new ostringstream;
-    GetLog()->AddStream(mLogStream, LogServer::eAll);
-    PrintGreeting();
-
     // process command line
     if (! ProcessCmdLine(argc, argv))
         {
@@ -57,6 +53,10 @@ bool SimSpark::InitApp(int argc, char** argv)
 
     // run initialization scripts
     GetScriptServer()->Run("rsgedit.rb");
+
+    mLogStream = new ostringstream;
+    GetLog()->AddStream(mLogStream, LogServer::eAll);
+    PrintGreeting();
 
     return true;
 }

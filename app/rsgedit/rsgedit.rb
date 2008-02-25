@@ -17,6 +17,7 @@ def rsgeditResetScene
 end
 
 # sparkLogAllToCerr()
+sparkResetLogging()
 sparkSetupServer()
 
 # setup rendering using no OpenGLSystem- the wxWidgets GL canvas takes
