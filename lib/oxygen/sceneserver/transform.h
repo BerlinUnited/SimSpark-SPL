@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.h,v 1.10 2008/02/22 07:52:15 hedayat Exp $
+   $Id: transform.h,v 1.11 2008/02/25 11:26:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,9 +52,6 @@ public:
 
     // transformation related
 
-    /** returns the old local transform of this node */
-    const salt::Matrix&     GetOldLocalTransform()     const;
-
     /** returns the local transform of this node */
     virtual const salt::Matrix&     GetLocalTransform()     const;
 
@@ -101,9 +98,6 @@ private:
         with the the current value if the local transform matrix is
         modified */
     int mChangedMark;
-
-    /** the previous transformation relative to the parent */
-    salt::Matrix   mOldLocalTransform;
 };
 
 DECLARE_CLASS(Transform);

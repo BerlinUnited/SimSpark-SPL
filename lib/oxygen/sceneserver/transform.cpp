@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: transform.cpp,v 1.12 2008/02/24 10:17:31 rollmark Exp $
+   $Id: transform.cpp,v 1.13 2008/02/25 11:26:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ Transform::Transform()
 {
     mChangedMark = -1;
     mLocalTransform.Identity();
-    mOldLocalTransform.Identity();
     mWorldTransform.Identity();
 
     SetName("transform");
@@ -53,11 +52,6 @@ const salt::Matrix& Transform::GetLocalTransform() const
     return mLocalTransform;
 }
 
-const salt::Matrix& Transform::GetOldLocalTransform() const
-{
-    return mOldLocalTransform;
-}
-
 const salt::Matrix& Transform::GetWorldTransform() const
 {
     return mWorldTransform;
@@ -66,8 +60,6 @@ const salt::Matrix& Transform::GetWorldTransform() const
 void Transform::SetLocalTransform(const salt::Matrix &transform)
 {
     mChangedMark = SceneServer::GetTransformMark();
-    mOldLocalTransform = mLocalTransform;
-
     mLocalTransform = transform;
 }
 
@@ -82,8 +74,6 @@ void Transform::SetWorldTransform(const salt::Matrix &transform)
         }
 
     mChangedMark = SceneServer::GetTransformMark();
-    mOldLocalTransform = mLocalTransform;
-
     mLocalTransform = (parent->GetWorldTransform());
     mLocalTransform.InvertMatrix();
     mLocalTransform = mLocalTransform * transform;
@@ -92,7 +82,6 @@ void Transform::SetWorldTransform(const salt::Matrix &transform)
 void Transform::SetLocalPos(const salt::Vector3f &pos)
 {
     mChangedMark = SceneServer::GetTransformMark();
-    mOldLocalTransform = mLocalTransform;
 
     mLocalTransform.Pos() = pos;
     UpdateHierarchyInternal();
@@ -106,7 +95,6 @@ const salt::Vector3f& Transform::GetLocalPos()
 void Transform::SetLocalRotationRad(const salt::Vector3f &rot)
 {
     mChangedMark = SceneServer::GetTransformMark();
-    mOldLocalTransform = mLocalTransform;
 
     Vector3f pos = mLocalTransform.Pos();
     mLocalTransform.RotationX(rot[0]);
