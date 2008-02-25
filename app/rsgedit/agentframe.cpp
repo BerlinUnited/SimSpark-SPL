@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentframe.cpp,v 1.1 2008/02/24 16:20:21 rollmark Exp $
+   $Id: agentframe.cpp,v 1.2 2008/02/25 12:57:20 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ BEGIN_EVENT_TABLE(agentframe, wxFrame)
 
 END_EVENT_TABLE()
 
-agentframe::agentframe(wxWindow* parent, int id, const wxString& title, const wxPoint& pos, const wxSize& size, long style):
+    agentframe::agentframe(wxWindow* parent, int id, const wxString& title, const wxPoint& pos, const wxSize& size, long /*style*/):
     wxFrame(parent, id, title, pos, size, wxCAPTION|wxCLOSE_BOX|wxSYSTEM_MENU|wxRESIZE_BORDER|wxFRAME_TOOL_WINDOW|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT|wxCLIP_CHILDREN),
     mTimer(this,1),mProcess(0),mPid(0)
 {
@@ -91,7 +91,7 @@ void agentframe::Output(const wxString& str)
     mCtrLog->AppendText(str);
 }
 
-void 
+void
 agentframe::Output(const char* str)
 {
     mCtrLog->AppendText((const wxChar *) str);
@@ -193,7 +193,7 @@ bool agentframe::StartAgent(const wxString& cmd)
     return StartAgent();
 }
 
-void agentframe::OnLogTimer(wxTimerEvent& event)
+void agentframe::OnLogTimer(wxTimerEvent& /*event*/)
 {
     if (mProcess == 0)
         {
@@ -219,7 +219,7 @@ void agentframe::OnClose(wxCloseEvent& event)
     event.Skip();
 }
 
-void agentframe::OnEndProcess(wxProcessEvent& event)
+void agentframe::OnEndProcess(wxProcessEvent& /*event*/)
 {
     Output("(agentframe::OnEndProcess) agent died");
     mTimer.Stop();
