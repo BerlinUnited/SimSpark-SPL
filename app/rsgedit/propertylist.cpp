@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: propertylist.cpp,v 1.1 2008/02/24 16:20:23 rollmark Exp $
+   $Id: propertylist.cpp,v 1.2 2008/02/25 12:52:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ void PropertyList::Refresh(const Property::TEntryList& entries)
     mCtrList->Freeze();
 
     bool valRefresh =
-        (mCtrList->GetItemCount() == entries.size());
+        (mCtrList->GetItemCount() == static_cast<int>(entries.size()));
 
     if (! valRefresh)
         {
