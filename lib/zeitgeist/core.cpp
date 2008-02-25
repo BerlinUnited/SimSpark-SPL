@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.20 2008/02/23 15:20:05 rollmark Exp $
+   $Id: core.cpp,v 1.21 2008/02/25 12:59:31 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -165,16 +165,12 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
 
     // install fault handler
     signal(SIGSEGV, CatchSignal);
+    signal(SIGABRT, CatchSignal);
 }
 
 void Core::CatchSignal(int sig_num)
 {
     cerr << "(Core) caught signal " << sig_num << endl;
-
-    if (sig_num != SIGSEGV)
-    {
-        return;
-    }
 
 #ifdef __linux__
     // retrieve the name of our executable without access to argc and
