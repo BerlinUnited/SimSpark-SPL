@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserverstreambuf.cpp,v 1.5 2008/02/23 12:36:31 rollmark Exp $
+   $Id: logserverstreambuf.cpp,v 1.6 2008/02/25 14:13:46 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,11 +48,17 @@ LogServerStreamBuf::~LogServerStreamBuf()
     // flush buffer
     sync();
 
-    // delete mask-stream elements. The streams will not be deleted.
-    while (mStreams.size() != 0)
+    // delete streams
+    while (! mStreams.empty())
     {
-                if (mStreams.back().second != &std::cout && mStreams.back().second != &std::cerr)
-                        delete mStreams.back().second;
+        if (
+            (mStreams.back().second != &std::cout) &&
+            (mStreams.back().second != &std::cerr)
+            )
+            {
+                delete mStreams.back().second;
+            }
+
         mStreams.pop_back();
     }
 
