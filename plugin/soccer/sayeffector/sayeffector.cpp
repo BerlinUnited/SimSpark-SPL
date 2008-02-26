@@ -43,6 +43,13 @@ SayEffector::~SayEffector()
 bool
 SayEffector::Realize(shared_ptr<ActionObject> action)
 {
+    if (mSoccerRule.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (SayEffector) Got no soccer rule aspect\n";
+        return false;
+    }
+
     if (mAgent.get() == 0)
     {
         GetLog()->Error()
@@ -80,7 +87,6 @@ SayEffector::Realize(shared_ptr<ActionObject> action)
 
         return false;
     }
-    
 
     mSoccerRule->Broadcast(mMessage, mAgent->GetWorldTransform().Pos(),
         mAgentState->GetUniformNumber(), mAgentState->GetTeamIndex());
