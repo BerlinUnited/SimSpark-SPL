@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentframe.cpp,v 1.2 2008/02/25 12:57:20 rollmark Exp $
+   $Id: agentframe.cpp,v 1.3 2008/02/26 09:49:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,24 +91,22 @@ void agentframe::Output(const wxString& str)
     mCtrLog->AppendText(str);
 }
 
-void
-agentframe::Output(const char* str)
-{
-    mCtrLog->AppendText((const wxChar *) str);
-}
-
 void agentframe::Output(wxInputStream* istream)
 {
     if (istream == 0)
         {
+            assert(false);
             return;
         }
 
+    static char buffer[4096];
+
     while (istream->CanRead())
         {
-            static wxChar buffer[4096];
-            buffer[istream->Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = _T('\0');
-            Output(buffer);
+            istream->Read(buffer, sizeof(buffer) - 1);
+            buffer[istream->LastRead()] = 0;
+
+            Output(wxString(buffer, wxConvUTF8));
         }
 }
 
@@ -119,7 +117,7 @@ void agentframe::KillAgent()
             return;
         }
 
-    Output("(agentframe::KillAgent) killing agent\n");
+    Output(wxT("(agentframe::KillAgent) killing agent\n"));
 
     mProcess->Detach();
     wxKillError error = wxProcess::Kill(mPid,wxSIGKILL);
@@ -130,19 +128,19 @@ void agentframe::KillAgent()
             break;
 
         case wxKILL_BAD_SIGNAL:
-            Output("(agentframe::KillAgent) no such signal");
+            Output(wxT("(agentframe::KillAgent) no such signal"));
             break;
 
         case wxKILL_ACCESS_DENIED:
-            Output("(agentframe::KillAgent) permission denied");
+            Output(wxT("(agentframe::KillAgent) permission denied"));
             break;
 
         case wxKILL_NO_PROCESS:
-            Output("(agentframe::KillAgent) no such process");
+            Output(wxT("(agentframe::KillAgent) no such process"));
             break;
 
         case wxKILL_ERROR:
-            Output("(agentframe::KillAgent) error killing process");
+            Output(wxT("(agentframe::KillAgent) error killing process"));
             break;
         }
 
@@ -154,7 +152,10 @@ void agentframe::KillAgent()
 
 bool agentframe::StartAgent()
 {
-    Output((const wxChar*)("(agentframe::StartAgent) starting agent '") + mCmd + (const wxChar*)("'\n"));
+    wxString msg("(agentframe::StartAgent) starting agent '", wxConvUTF8);
+    msg += mCmd;
+    msg += wxString("'\n", wxConvUTF8);
+    Output(msg);
 
     mProcess = new wxProcess(this, 1);
     mProcess->Redirect();
@@ -175,7 +176,11 @@ bool agentframe::StartAgent()
 
     if (mPid == 0)
         {
-            Output((const wxChar*)("(agentframe::StartAgent) failed to start '")+ mCmd+ (const wxChar*)("' \n"));
+            wxString msg("(agentframe::StartAgent) failed to start '", wxConvUTF8);
+            msg += mCmd;
+            msg += wxString("' \n", wxConvUTF8);
+            Output(msg);
+
             mProcess = 0;
             return false;
         }
@@ -221,7 +226,7 @@ void agentframe::OnClose(wxCloseEvent& event)
 
 void agentframe::OnEndProcess(wxProcessEvent& /*event*/)
 {
-    Output("(agentframe::OnEndProcess) agent died");
+    Output(wxT("(agentframe::OnEndProcess) agent process died"));
     mTimer.Stop();
     mProcess->Detach();
     mProcess = 0;

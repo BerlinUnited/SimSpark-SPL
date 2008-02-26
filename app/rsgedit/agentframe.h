@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: agentframe.h,v 1.1 2008/02/24 16:20:21 rollmark Exp $
+   $Id: agentframe.h,v 1.2 2008/02/26 09:49:55 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,7 +54,6 @@ private:
     // end wxGlade
 
     void Output(const wxString& str);
-    void Output(const char* str);
     void Output(wxInputStream* istream);
 
     void OnLogTimer(wxTimerEvent& event);
