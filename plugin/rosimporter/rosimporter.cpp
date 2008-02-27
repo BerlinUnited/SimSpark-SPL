@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rosimporter.cpp,v 1.1 2008/02/22 16:48:19 hedayat Exp $
+   $Id: rosimporter.cpp,v 1.2 2008/02/27 18:06:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ bool RosImporter::ImportScene(const string& fileName,
                               shared_ptr<ParameterList> parameter)
 {
     // try to open the file
-    shared_ptr<salt::RFile> file = GetFile()->Open(fileName);
+    shared_ptr<salt::RFile> file = GetFile()->OpenResource(fileName);
 
     if (file.get() == 0)
         {
