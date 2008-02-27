@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.20 2008/02/22 07:52:15 hedayat Exp $
+   $Id: sceneserver.cpp,v 1.21 2008/02/27 17:51:51 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -221,22 +221,21 @@ void SceneServer::PostPhysicsUpdate()
 bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                               shared_ptr<ParameterList> parameter)
 {
+    string globalfile = salt::RFile::BundlePath() + fileName;
+    string file = fileName;
 
-        string globalfile = salt::RFile::BundlePath() + fileName;
-        string file = fileName;
-
-        if (! GetFile()->Exist(fileName))
+    if (! GetFile()->Exist(fileName))
         {
             GetLog()->Debug() << "(ScriptServer) Cannot locate file '"
                               << fileName << "', trying " << globalfile << "\n";
 
             if (! GetFile()->Exist(globalfile))
-            {
-                GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
-                                  << fileName << "'\n";
+                {
+                    GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
+                                      << fileName << "'\n";
 
-                return false;
-            }
+                    return false;
+                }
 
             file = globalfile;
         }
@@ -363,18 +362,18 @@ void SceneServer::RemoveTransformPaths(shared_ptr<Leaf> root)
                 {
                     tChildOnly = false;
                 } else
-                    {
-                        if (tChild->begin() == tChild->end())
-                            {
-                                // remove a transform node without
-                                // children
-                                tChild->Unlink();
+                {
+                    if (tChild->begin() == tChild->end())
+                        {
+                            // remove a transform node without
+                            // children
+                            tChild->Unlink();
 
-                                // restart as iter is now invalidated
-                                iter = root->begin();
-                                continue;
-                            }
-                    }
+                            // restart as iter is now invalidated
+                            iter = root->begin();
+                            continue;
+                        }
+                }
 
             ++iter;
         }
