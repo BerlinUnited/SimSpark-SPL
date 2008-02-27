@@ -30,11 +30,8 @@ sparkAddFPSCamera(
 # setup default input bindings
 run "bindings.rb"
 
-# setup materials
-
-# change "materials.rb" to "materials-textures.rb" if you want to use textured materials
-run "materials-textures.rb"
-
+# setup default materials common to all simulations
+run "materials-default.rb"
 
 #
 # uncomment for logging setup (see spark.rb for reference)

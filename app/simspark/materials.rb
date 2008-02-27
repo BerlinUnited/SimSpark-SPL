@@ -2,8 +2,6 @@
 # materials.rb -- create custom materials for simspark
 #
 
-run "materials-default.rb"
-
 #----------------------------------------------------------------
 # special purpose materials
 #----------------------------------------------------------------

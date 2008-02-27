@@ -2,6 +2,9 @@
 # prepare soccer simulation
 #
 
+# setup soccer specific materials
+run "materials-textures.rb"
+
 importBundle "soccer"
 
 # soccer namespace
