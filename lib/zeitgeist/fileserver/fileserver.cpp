@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.cpp,v 1.8 2008/02/27 17:18:07 rollmark Exp $
+   $Id: fileserver.cpp,v 1.9 2008/02/27 17:56:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,28 +37,43 @@ FileServer::~FileServer()
 {
 }
 
-shared_ptr<salt::RFile> FileServer::OpenResource(const std::string& inName)
+bool FileServer::LocateResource(const std::string& inName, std::string& outName)
 {
-    shared_ptr<salt::RFile> file = Open(inName);
-
-    if (file.get() != 0)
+    if (Exist(inName))
         {
-            return file;
+            outName = inName;
+            return true;
         }
 
     string fname = salt::RFile::BundlePath() + inName;
-    GetLog()->Debug() << "(FileServer::OpenResource) expanded filename to '"
-                      << fname << "'";
 
-    file = Open(fname);
+    if (Exist(fname))
+        {
+            GetLog()->Debug() << "(FileServer::LocateResource) expanded filename to '"
+                              << fname << "'";
 
-    if (file.get() == 0)
+            outName = fname;
+            return true;
+        }
+
+    GetLog()->Debug()
+        << "FileServer::LocateResource) unable to locate resource '"
+        << inName << "'\n";
+
+    return false;
+}
+
+shared_ptr<salt::RFile> FileServer::OpenResource(const std::string& inName)
+{
+    string fname;
+    if (! LocateResource(inName, fname))
         {
             GetLog()->Error() << "(FileServer::OpenResource) Cannot locate file '"
                               << inName << "'\n";
+            return shared_ptr<salt::RFile>();
         }
 
-    return file;
+    return Open(fname);
 }
 
 shared_ptr<salt::RFile> FileServer::Open(const string& inName)

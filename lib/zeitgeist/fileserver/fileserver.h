@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.h,v 1.8 2008/02/27 17:18:07 rollmark Exp $
+   $Id: fileserver.h,v 1.9 2008/02/27 17:56:13 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,8 +94,14 @@ public:
     FileServer();
     ~FileServer();
 
+    /** tests for the existance of the given file at well known
+        locations. On success the function returns true. In this case
+        outName is set to the full path to the file.
+    */
+    bool LocateResource(const std::string& inName, std::string& outName);
+
     /** searches each registered file system for a file with this name
-        and well known resource locations if that fails
+        and tries well known resource locations if that fails
     */
     boost::shared_ptr<salt::RFile> OpenResource(const std::string& inName);
 
