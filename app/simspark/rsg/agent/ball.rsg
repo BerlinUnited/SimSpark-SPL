@@ -6,7 +6,6 @@
  (def $Material matOrange)
  (def $Mass (eval Soccer.BallMass))
 
- (pwd)
  (nd Ball
      (setLocalPos 0.0 0.0 $Radius)
      (setName Ball)
