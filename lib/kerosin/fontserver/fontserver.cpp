@@ -1,3 +1,24 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: fontserver.cpp,v 1.6 2008/02/27 17:25:57 rollmark Exp $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
 #include "fontserver.h"
 #include "font.h"
 #include <boost/scoped_array.hpp>
@@ -13,124 +34,124 @@ using namespace boost;
 
 FontServer::FontServer()
 {
-  FT_Init_FreeType(&mFreeTypeLib);
+    FT_Init_FreeType(&mFreeTypeLib);
 }
 
 FontServer::~FontServer()
 {
-  mFonts.clear();
+    mFonts.clear();
 }
 
 shared_ptr<kerosin::Font> FontServer::GetFont(const string &name, unsigned int size)
 {
-  shared_ptr<kerosin::Font> theFont = FindFont(name, size);
+    shared_ptr<kerosin::Font> theFont = FindFont(name, size);
 
-  if(theFont.get() != 0)
-    {
-      return theFont;
-    }
+    if(theFont.get() != 0)
+        {
+            return theFont;
+        }
 
-  // we don't have a cached entry, so we have to create
-  // a new font object and insert it into our registry
-  theFont.reset(new Font(*this));
+    // we don't have a cached entry, so we have to create
+    // a new font object and insert it into our registry
+    theFont.reset(new Font(*this));
 
-  if(! LoadFont(name, size, theFont))
-    {
-      return shared_ptr<kerosin::Font>();
-    }
+    if(! LoadFont(name, size, theFont))
+        {
+            return shared_ptr<kerosin::Font>();
+        }
 
-  // insert the value in our registry
-  mFonts.push_back(theFont);
-  return theFont;
+    // insert the value in our registry
+    mFonts.push_back(theFont);
+    return theFont;
 }
 
 shared_ptr<kerosin::Font> FontServer::FindFont(const string &name,
                                                unsigned int size) const
 {
-  for (TFontList::const_iterator i = mFonts.begin(); i != mFonts.end(); ++i)
-    {
-      if (
-          ((*i)->GetName().compare(name) == 0) &&
-          ((*i)->GetSize() == size)
-          )
+    for (TFontList::const_iterator i = mFonts.begin(); i != mFonts.end(); ++i)
         {
-          return (*i);
+            if (
+                ((*i)->GetName().compare(name) == 0) &&
+                ((*i)->GetSize() == size)
+                )
+                {
+                    return (*i);
+                }
         }
-    }
 
-  return shared_ptr<kerosin::Font>();
+    return shared_ptr<kerosin::Font>();
 }
 
 bool FontServer::LoadFont(const string &name, unsigned int size,
                           shared_ptr<kerosin::Font> &font)
 {
-  shared_ptr<salt::RFile> file = GetFile()->Open(name.c_str());
+    shared_ptr<salt::RFile> file = GetFile()->Open(name.c_str());
 
-  if (file.get() == 0)
-    {
-      // try with prefixed fontPath
-      string fontPath;
-      if(GetScript()->GetVariable("System.FontPath", fontPath))
+    if (file.get() == 0)
         {
-          file = GetFile()->Open((fontPath+name).c_str());
+            // try with prefixed fontPath
+            string fontPath;
+            if(GetScript()->GetVariable("System.FontPath", fontPath))
+                {
+                    file = GetFile()->Open((fontPath+name).c_str());
+                }
         }
-    }
 
-  if (file.get() == 0)
-    {
-      GetLog()->Error() << "(FontServer) ERROR: font file '"
-                        << name << "' not found\n";
-      return false;
-    }
+    if (file.get() == 0)
+        {
+            GetLog()->Error() << "(FontServer) ERROR: font file '"
+                              << name << "' not found\n";
+            return false;
+        }
 
-  unsigned int fileSize = file->Size();
-  scoped_array<unsigned char> buffer(new unsigned char[fileSize]);
-  file->Read(buffer.get(), fileSize);
+    unsigned int fileSize = file->Size();
+    scoped_array<unsigned char> buffer(new unsigned char[fileSize]);
+    file->Read(buffer.get(), fileSize);
 
-  FT_Face face;
-  int error = FT_New_Memory_Face(mFreeTypeLib, buffer.get(), fileSize,
-                                 0, &face);
+    FT_Face face;
+    int error = FT_New_Memory_Face(mFreeTypeLib, buffer.get(), fileSize,
+                                   0, &face);
 
-  if (error == FT_Err_Unknown_File_Format)
-    {
-      GetLog()->Error() << "(FontServer) ERROR: Unknown file format\n";
-    }
-  else if (error)
-    {
-      GetLog()->Error() << "(FontServer) ERROR: Could not create face\n";
-    }
+    if (error == FT_Err_Unknown_File_Format)
+        {
+            GetLog()->Error() << "(FontServer) ERROR: Unknown file format\n";
+        }
+    else if (error)
+        {
+            GetLog()->Error() << "(FontServer) ERROR: Could not create face\n";
+        }
 
-  if (error)
-    {
-      FT_Done_Face(face);
-      return false;
-    }
+    if (error)
+        {
+            FT_Done_Face(face);
+            return false;
+        }
 
-  bool ok = font->Init(name, size, face);
-  FT_Done_Face(face);
+    bool ok = font->Init(name, size, face);
+    FT_Done_Face(face);
 
-  return ok;
+    return ok;
 }
 
 void FontServer::Begin()
 {
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glDisable(GL_DEPTH_TEST);
-  glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
-  glTranslatef(0,0,-1);
-  glColor4f(1,1,1,1);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glTranslatef(0,0,-1);
+    glColor4f(1,1,1,1);
 }
 
 void FontServer::End()
 {
-  glDisable(GL_BLEND);
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
+    glDisable(GL_BLEND);
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 }
