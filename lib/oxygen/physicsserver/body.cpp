@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.22.2.1 2008/02/24 14:31:10 sgvandijk Exp $
+   $Id: body.cpp,v 1.22.2.2 2008/02/27 14:08:48 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #include "world.h"
 #include "../sceneserver/scene.h"
 #include "zeitgeist/logserver/logserver.h"
+#include "../sceneserver/transform.h"
+#include "transformcollider.h"
 
 using namespace boost;
 using namespace oxygen;
@@ -233,26 +235,7 @@ void Body::AddBoxTotal(float total_mass, const Vector3f& size, const Matrix& mat
     PrepareBoxTotal(ODEMass, total_mass, size);
     AddMass(ODEMass, matrix);
 }
-/*
-    dMass ODEMass;
-    dBodyGetMass(mODEBody, &ODEMass);
-    Vector3f trans(ODEMass.c[0], ODEMass.c[1], ODEMass.c[2]);
-    
-    if (trans.SquareLength() > 0)
-    {
-        mOrigin = mOrigin - trans;
-        GetLog()->Warning() << "(Body::CenterMass) New origin: " << mOrigin << "\n";
-        
-        dMassTranslate(&ODEMass, -trans[0], -trans[1], -trans[2]);
-        dBodySetMass(mODEBody, &ODEMass);
-        
-        Vector3f position = GetPosition();
-        position = position + trans;
-        SetPosition(position);
-    
-        mCOMShifted = true;
-    }
-*/
+
 void Body::AddMass(const dMass& mass, const Matrix& matrix)
 {
     dMass transMass(mass);
@@ -273,14 +256,16 @@ void Body::AddMass(const dMass& mass, const Matrix& matrix)
     /** ODE currently requires that the center mass is always in the
         origin of the body
     */
-    mMassTrans[0] -= bodyMass.c[0]; 
-    mMassTrans[1] -= bodyMass.c[1]; 
-    mMassTrans[2] -= bodyMass.c[2]; 
-    
-    GetLog()->Warning() << "(Body::AddMass) TRANS: " << mMassTrans << "\n";
-    dMassTranslate(&bodyMass, -bodyMass.c[0], -bodyMass.c[1], -bodyMass.c[2]);
-    
+    Vector3f trans2(bodyMass.c[0], bodyMass.c[1], bodyMass.c[2]);
+
+    dMassTranslate(&bodyMass, -trans2[0], -trans2[1], -trans2[2]);
     dBodySetMass(mODEBody, (const dMass*)&bodyMass);
+
+    // Move body so mass is at right position again
+    SetPosition(GetPosition() + trans2);
+    
+    // Keep track of total translation of mass
+    mMassTrans = mMassTrans - trans2;
 }
 
 void Body::PrepareCylinder (dMass& mass, float density, float radius, float length) const
@@ -420,6 +405,7 @@ void Body::SynchronizeParent() const
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (make_shared(GetParent()));
 
+    
     Matrix mat;
     mat.m[0] = rot[0];
     mat.m[1] = rot[4];
@@ -440,6 +426,46 @@ void Body::SynchronizeParent() const
 
     baseNode->SetWorldTransform(mat);
 }
+
+/** updates internal state before physics calculation */
+void Body::PrePhysicsUpdateInternal(float deltaTime)
+{
+    // Check whether mass/body has been translated
+    if (mMassTrans.Length() > 0)
+    {
+        weak_ptr<Node> parent = GetParent();
+
+        // Update colliders
+        TLeafList colliders;
+        parent.lock()->ListChildrenSupportingClass<Collider>(colliders, true);
+
+        for (TLeafList::iterator iter = colliders.begin(); iter != colliders.end(); ++iter)
+        {
+            shared_ptr<TransformCollider> tCollider = shared_dynamic_cast<TransformCollider>(*iter);
+            if (tCollider.get() == 0)
+            {
+                shared_ptr<Collider> collider = shared_dynamic_cast<Collider>(*iter);
+                Vector3f pos = collider->GetPosition();
+                pos = pos + mMassTrans;
+                collider->SetLocalPosition(pos);
+            }
+        }
+
+        // Update visuals (or other transforms in the tree
+        TLeafList transforms;
+        parent.lock()->ListChildrenSupportingClass<Transform>(transforms);
+        for (TLeafList::iterator iter = transforms.begin(); iter != transforms.end(); ++iter)
+        {
+            shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
+            Matrix worldTransform = transform->GetWorldTransform();
+            worldTransform.Pos() = worldTransform.Pos() + mMassTrans;
+            transform->SetWorldTransform(worldTransform);
+        }
+        
+        mMassTrans = Vector3f(0,0,0);
+    }
+}
+
 
 void Body::PostPhysicsUpdateInternal()
 {
