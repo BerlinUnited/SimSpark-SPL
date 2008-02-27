@@ -47,12 +47,13 @@ dist_pkgdata_DATA = \
 	internalsoccerbindings.rb
 
 install-data-local: $(top_builddir)/$(subdir)/rsg/agent/ball.rsg
-	rm -rf $(DESTDIR)$(pkgdatadir)/rsg
 	mkdir -p $(DESTDIR)$(pkgdatadir)/
-	cp -r $(srcdir)/rsg $(DESTDIR)$(pkgdatadir)/
-	cp -r $(top_builddir)/$(subdir)/rsg $(DESTDIR)$(pkgdatadir)/
-	cp -r $(top_builddir)/$(subdir)/fonts $(DESTDIR)$(pkgdatadir)/
-	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/rsg
+	for res in rsg fonts scripts;\
+	do \
+	rm -rf $(DESTDIR)$(pkgdatadir)/$$res;\
+	cp -r $(srcdir)/$$res $(DESTDIR)$(pkgdatadir)/;\
+	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/$$res;\
+	done
 
 EXTRA_DIST = \
 	rsg/agent/soccerplayer.rsg \
