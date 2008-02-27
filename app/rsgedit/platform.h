@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: platform.h,v 1.1 2008/02/25 14:56:52 rollmark Exp $
+   $Id: platform.h,v 1.2 2008/02/27 09:22:39 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #define RSGEDIT_PLATFORM_H
 
 #include <wx/string.h>
+#include <wx/font.h>
 
 class Platform
 {
