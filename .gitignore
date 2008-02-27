@@ -34,7 +34,6 @@ app/fonttest/.deps
 app/fonttest/.libs
 app/fonttest/Makefile
 app/fonttest/Makefile.in
-app/fonttest/data/font/VeraMono.ttf
 app/gendot/.deps
 app/gendot/.libs
 app/gendot/Makefile
