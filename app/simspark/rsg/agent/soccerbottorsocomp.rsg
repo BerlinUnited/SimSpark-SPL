@@ -17,17 +17,17 @@
  (nd Body
        (setName boxBody)
        ; Upper torso mass
-       (setBoxTotal $upperMass $upperLenX $upperLenY $upperLenZ)
+       (setBox $upperMass $upperLenX $upperLenY $upperLenZ)
        ; Lower torso mass
-       (addBoxTotal $lowerMass
-                    $lowerLenX $lowerLenY $lowerLenZ
-                    $LowerTorsoPosX $LowerTorsoPosY $LowerTorsoPosZ
-                    45 0 0
+       (addBox $lowerMass
+               $lowerLenX $lowerLenY $lowerLenZ
+               $LowerTorsoPosX $LowerTorsoPosY $LowerTorsoPosZ
+               45 0 0
        )
        ; Head mass
-       (addSphereTotal $headMass $headRadius
-                       $HeadPosX $HeadPosY $HeadPosZ
-                       0 0 0
+       (addSphere $headMass $headRadius
+                  $HeadPosX $HeadPosY $HeadPosZ
+                  0 0 0
        )
        (nd DragController
 	     (setAngularDrag 0.01)

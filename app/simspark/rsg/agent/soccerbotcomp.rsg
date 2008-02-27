@@ -440,7 +440,7 @@
 	(setName leftlowerarm)
         (setLocalPos $LeftLowerArmPosX $LeftLowerArmPosY $LeftLowerArmPosZ)
         
-        (importScene rsg/agent/soccerbotlowerarmcomp.rsg matDarkGrey matGrey)
+        (importScene rsg/agent/soccerbotleftlowerarmcomp.rsg matDarkGrey matGrey)
     
         (nd HingeJoint
             (attach ../boxBody ../../leftupperarm/boxBody)
@@ -480,7 +480,7 @@
         (setName rightlowerarm)
         (setLocalPos $RightLowerArmPosX $RightLowerArmPosY $RightLowerArmPosZ)
 
-        (importScene rsg/agent/soccerbotlowerarmcomp.rsg matDarkGrey matGrey)
+        (importScene rsg/agent/soccerbotrightlowerarmcomp.rsg matDarkGrey matGrey)
 
         ; install hinge joint to connect to the upper arm
         (nd HingeJoint
