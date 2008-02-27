@@ -3,7 +3,6 @@
 #
 
 def rsgeditResetScene
-  sparkResetSimulationServer()
   sparkSetupServer()
   sparkSetupInput('InputSystemWX')
 
