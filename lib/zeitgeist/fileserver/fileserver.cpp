@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.cpp,v 1.9 2008/02/27 17:56:13 rollmark Exp $
+   $Id: fileserver.cpp,v 1.10 2008/02/27 18:16:54 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ bool FileServer::LocateResource(const std::string& inName, std::string& outName)
     if (Exist(fname))
         {
             GetLog()->Debug() << "(FileServer::LocateResource) expanded filename to '"
-                              << fname << "'";
+                              << fname << "'\n";
 
             outName = fname;
             return true;
