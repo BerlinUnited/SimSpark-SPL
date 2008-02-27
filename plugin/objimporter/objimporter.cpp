@@ -20,6 +20,7 @@
 */
 #include "objimporter.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/fileserver/fileserver.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -44,9 +45,18 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
 (const string& name, const ParameterList& parameter)
 {
     // open file
-    ifstream ifs;
+    string fileName;
 
-    ifs.open(name.c_str());
+    if (! GetFile()->LocateResource(name, fileName))
+        {
+            GetLog()->Error()
+                << "(ObjImporter) ERROR: cannot locate file '" << name << "'\n";
+            return shared_ptr<TriMesh>();
+        }
+
+    ifstream ifs;
+    ifs.open(fileName.c_str());
+
     if (! ifs)
         {
             GetLog()->Error()
