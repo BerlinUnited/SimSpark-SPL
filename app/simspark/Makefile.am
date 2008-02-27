@@ -39,9 +39,6 @@ simspark_SOURCES = \
 dist_pkgdata_DATA = \
 	simspark.rb \
 	bindings.rb \
-	materials-default.rb \
-	materials.rb \
-	materials-textures.rb \
 	soccersim.rb \
 	internalsoccermonitor.rb \
 	internalsoccerbindings.rb
