@@ -31,7 +31,7 @@ sparkAddFPSCamera(
 run "bindings.rb"
 
 # setup default materials common to all simulations
-run "materials-default.rb"
+run "scripts/materials.rb"
 
 #
 # uncomment for logging setup (see spark.rb for reference)
