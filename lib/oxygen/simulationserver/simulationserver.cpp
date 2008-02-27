@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.10 2008/02/24 16:00:04 rollmark Exp $
+   $Id: simulationserver.cpp,v 1.11 2008/02/27 08:27:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ void SimulationServer::CatchSignal(int sig_num)
 }
 
 SimulationServer::SimulationServer() :
-	Node(), mAdjustSpeed(false), mMaxStepsPerCycle(3), mThreadBarrier(0)
+    Node(), mAdjustSpeed(false), mMaxStepsPerCycle(3), mThreadBarrier(0)
 {
     mSimTime      = 0.0f;
     mSimStep      = 0.2f;
@@ -68,25 +68,25 @@ void SimulationServer::OnLink()
     RegisterCachedPath(mMonitorServer, "/sys/server/monitor");
 
     if (mMonitorServer.expired())
-    {
-        GetLog()->Error()
-            << "(SimulationServer) ERROR: MonitorServer not found.\n";
-    }
+        {
+            GetLog()->Error()
+                << "(SimulationServer) ERROR: MonitorServer not found.\n";
+        }
 
     RegisterCachedPath(mGameControlServer, "/sys/server/gamecontrol");
 
     if (mGameControlServer.expired())
-    {
-        GetLog()->Error()
-            << "(SimulationServer) ERROR: GameControlServer not found.\n";
-    }
+        {
+            GetLog()->Error()
+                << "(SimulationServer) ERROR: GameControlServer not found.\n";
+        }
 
     RegisterCachedPath(mSceneServer, "/sys/server/scene");
     if (mSceneServer.expired())
-    {
-        GetLog()->Error()
-            << "(SimulationServer) ERROR: SceneServer not found.\n";
-    }
+        {
+            GetLog()->Error()
+                << "(SimulationServer) ERROR: SceneServer not found.\n";
+        }
 }
 
 
@@ -212,22 +212,22 @@ void SimulationServer::Step()
                     mGameControlServer->Update(mSimStep);
                     mSimTime += mSimStep;
                     if (mAdjustSpeed && mSumDeltaTime > mMaxStepsPerCycle * mSimStep)
-                    {
-                        GetLog()->Error() << "Skipping remaining time: "
-                                << mSumDeltaTime << '\n';
-                        mSumDeltaTime = 0;
-                    }
+                        {
+                            GetLog()->Error() << "Skipping remaining time: "
+                                              << mSumDeltaTime << '\n';
+                            mSumDeltaTime = 0;
+                        }
                     else
                         mSumDeltaTime -= mSimStep;
                 }
         } else
-            {
-                // simulate passed time in one single step
-                mSceneServer->Update(mSumDeltaTime);
-                mGameControlServer->Update(mSumDeltaTime);
-                mSimTime += mSumDeltaTime;
-                mSumDeltaTime = 0;
-            }
+        {
+            // simulate passed time in one single step
+            mSceneServer->Update(mSumDeltaTime);
+            mGameControlServer->Update(mSumDeltaTime);
+            mSimTime += mSumDeltaTime;
+            mSumDeltaTime = 0;
+        }
 }
 
 void SimulationServer::ControlEvent(EControlEvent event)
@@ -304,26 +304,26 @@ void SimulationServer::Run(int argc, char** argv)
     GetLog()->Normal() << "(SimulationServer) entering runloop\n";
 
     if ( mMultiThreads )
-    {
-        GetLog()->Normal()<< "(SimulationServer) running in multi-threads\n";
-        RunMultiThreaded();
-    }
+        {
+            GetLog()->Normal()<< "(SimulationServer) running in multi-threads\n";
+            RunMultiThreaded();
+        }
     else
-    {
-        GetLog()->Normal()<< "(SimulationServer) running in single thread\n";
-        shared_ptr<SimControlNode> inputCtr = GetControlNode("InputControl");
-        if ( !mAutoTime && inputCtr.get() == 0 )
         {
-            GetLog()->Error()<< "(SimulationServer) ERROR: can not get InputControl\n";
+            GetLog()->Normal()<< "(SimulationServer) running in single thread\n";
+            shared_ptr<SimControlNode> inputCtr = GetControlNode("InputControl");
+            if ( !mAutoTime && inputCtr.get() == 0 )
+                {
+                    GetLog()->Error()<< "(SimulationServer) ERROR: can not get InputControl\n";
+                }
+            else
+                {
+                    while (! mExit)
+                        {
+                            Cycle(inputCtr);
+                        }
+                }
         }
-        else
-        {
-            while (! mExit)
-            {
-                Cycle(inputCtr);
-            }
-        }
-    }
 
     Done();
 }
@@ -337,19 +337,19 @@ void SimulationServer::Cycle(shared_ptr<SimControlNode> &inputCtr)
     ControlEvent(CE_ActAgent);
 
     if (mAutoTime)
-    {
-        AdvanceTime(mSimStep);
-    }
-    else
-    {
-        if (inputCtr.get() != 0)
         {
-            while (int(mSumDeltaTime*100) < int(mSimStep*100))
-            {
-                inputCtr->StartCycle();// advance the time
-            }
+            AdvanceTime(mSimStep);
         }
-    }
+    else
+        {
+            if (inputCtr.get() != 0)
+                {
+                    while (int(mSumDeltaTime*100) < int(mSimStep*100))
+                        {
+                            inputCtr->StartCycle();// advance the time
+                        }
+                }
+        }
     Step();
 
     ControlEvent(CE_EndCycle);
@@ -394,48 +394,48 @@ void SimulationServer::Loops()
 
     bool isStep = false;
     while (! mExit)
-    {
-          if( isStep)
-            {
-              mSceneServer->PhysicsUpdate(mSimStep);
-            }
-
-	// lock all SimControlNode threads
-        vector< boost::shared_ptr<boost::mutex::scoped_lock> > locks;
-        for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
         {
-            shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
-            if (ctrNode.get() == 0) continue;
-            boost::shared_ptr<boost::mutex::scoped_lock> lp(new boost::mutex::scoped_lock(ctrNode->mMutex));
-            locks.push_back(lp);
-            ctrNode->Wait(*lp);
+            if( isStep)
+                {
+                    mSceneServer->PhysicsUpdate(mSimStep);
+                }
+
+            // lock all SimControlNode threads
+            vector< boost::shared_ptr<boost::mutex::scoped_lock> > locks;
+            for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
+                {
+                    shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+                    if (ctrNode.get() == 0) continue;
+                    boost::shared_ptr<boost::mutex::scoped_lock> lp(new boost::mutex::scoped_lock(ctrNode->mMutex));
+                    locks.push_back(lp);
+                    ctrNode->Wait(*lp);
+                }
+
+            ++mCycle;
+
+            if ( isStep )
+                {
+                    mSceneServer->PostPhysicsUpdate();
+                    mGameControlServer->Update(mSimStep);
+                    mSumDeltaTime -= mSimStep;
+                    mSimTime += mSimStep;
+                    isStep = false;
+                }
+
+            if( int(mSumDeltaTime*100) >= int(mSimStep*100) )
+                {
+                    mSceneServer->PrePhysicsUpdate(mSimStep);
+                    isStep = true;
+                }
+
+            // notify all SimControlNode threads
+            for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
+                {
+                    shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+                    if (ctrNode.get() == 0) continue;
+                    ctrNode->NotifyOne();
+                }
         }
-
-       ++mCycle;
-
-       if ( isStep )
-       {
-       	mSceneServer->PostPhysicsUpdate();
-		mGameControlServer->Update(mSimStep);
-		mSumDeltaTime -= mSimStep;
-        mSimTime += mSimStep;
-             	isStep = false;
-       }
-
-	if( int(mSumDeltaTime*100) >= int(mSimStep*100) )
-	{
-		mSceneServer->PrePhysicsUpdate(mSimStep);
-		isStep = true;
-	}
-
-	// notify all SimControlNode threads
-        for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
-        {
-            shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
-            if (ctrNode.get() == 0) continue;
-            ctrNode->NotifyOne();
-        }
-    }
 }
 
 void SimulationServer::RunMultiThreaded()
@@ -445,43 +445,43 @@ void SimulationServer::RunMultiThreaded()
     // count valid SimControlNodes.
     int count = 1;
     for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
-    {
-        if (shared_dynamic_cast<SimControlNode>(*iter))
-            count++;
-    }
+        {
+            if (shared_dynamic_cast<SimControlNode>(*iter))
+                count++;
+        }
     mThreadBarrier = new barrier(count);
 
     // create new threads for each SimControlNodes
     for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
-    {
-        shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
-        if (ctrNode.get() == 0) continue;
-//        ctrThrdGroup.create_thread(boost::bind(&SimControlNode::Run, ctrNode.get()));
-        ctrThrdGroup.create_thread(boost::bind(&SimulationServer::SimControlThread,
-                this, ctrNode));
-    }
+        {
+            shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+            if (ctrNode.get() == 0) continue;
+            //        ctrThrdGroup.create_thread(boost::bind(&SimControlNode::Run, ctrNode.get()));
+            ctrThrdGroup.create_thread(boost::bind(&SimulationServer::SimControlThread,
+                                                   this, ctrNode));
+        }
     // Loops();
 
     while (true)
-    {
-        ++mCycle;
-        mSceneServer->PrePhysicsUpdate(mSimStep); // NOTICE: mSimStep should be non zero
-        mSceneServer->PhysicsUpdate(mSimStep);
-        if (mAutoTime)
-            AdvanceTime(mSimStep);
+        {
+            ++mCycle;
+            mSceneServer->PrePhysicsUpdate(mSimStep); // NOTICE: mSimStep should be non zero
+            mSceneServer->PhysicsUpdate(mSimStep);
+            if (mAutoTime)
+                AdvanceTime(mSimStep);
 
-        mThreadBarrier->wait();
+            mThreadBarrier->wait();
 
-        if (mExit) // this check should be here so that all threads will quit
-            break;
-		mSceneServer->PostPhysicsUpdate();
-        mGameControlServer->Update(mSimStep);
-        mSimTime += mSimStep;
-        mSumDeltaTime -= mSimStep;
-        Step();
-        ControlEvent(CE_EndCycle);
-        mThreadBarrier->wait();
-    }
+            if (mExit) // this check should be here so that all threads will quit
+                break;
+            mSceneServer->PostPhysicsUpdate();
+            mGameControlServer->Update(mSimStep);
+            mSimTime += mSimStep;
+            mSumDeltaTime -= mSimStep;
+            Step();
+            ControlEvent(CE_EndCycle);
+            mThreadBarrier->wait();
+        }
 
     // wait for threads
     ctrThrdGroup.join_all();
@@ -490,35 +490,35 @@ void SimulationServer::RunMultiThreaded()
 void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
 {
     if (!mThreadBarrier)
-    {
-        GetLog()->Error()
+        {
+            GetLog()->Error()
                 << "(SimulationServer) mThreadBarrier is not initialized.\n";
-        return;
-    }
+            return;
+        }
 
     bool isInputControl = (controlNode->GetName() == "InputControl");
 
     while ( true )
-    {
-        if (int(controlNode->GetTime()*100) < int(mSimTime*100))
         {
-            controlNode->StartCycle();
-            controlNode->SenseAgent();
-            controlNode->ActAgent();
-            controlNode->SetSimTime(mSimTime);
+            if (int(controlNode->GetTime()*100) < int(mSimTime*100))
+                {
+                    controlNode->StartCycle();
+                    controlNode->SenseAgent();
+                    controlNode->ActAgent();
+                    controlNode->SetSimTime(mSimTime);
+                }
+            if (isInputControl)
+                {
+                    while (int(mSumDeltaTime*100) < int(mSimStep*100))
+                        controlNode->StartCycle(); // advance the time
+                }
+            mThreadBarrier->wait();
+            if (mExit)
+                break;
+            // wait for physics update
+            mThreadBarrier->wait();
+            //        EndCycle();
         }
-    	if (isInputControl)
-    	{
-            while (int(mSumDeltaTime*100) < int(mSimStep*100))
-                controlNode->StartCycle(); // advance the time
-    	}
-        mThreadBarrier->wait();
-        if (mExit)
-            break;
-        // wait for physics update
-        mThreadBarrier->wait();
-//        EndCycle();
-    }
 }
 
 void SimulationServer::SetMultiThreads(bool isMThreas)
