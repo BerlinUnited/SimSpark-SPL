@@ -364,8 +364,10 @@ AC_DEFUN([RCSS_CHECK_GL], [
        AC_MSG_RESULT([sorry])
        RCSS_KEROSIN_IF_ELSE([
 	# check for OpenGL location and used extensions
-    		AC_CHECK_HEADERS([GL/gl.h GL/glut.h],,
+    		AC_CHECK_HEADERS([GL/gl.h GL/glu.h],,
                                 RCSS_BUILD_KEROSIN_ERROR([not all required OpenGL headers could not be found. Please specify the location  of the OpenGL header directory using the CPPFLAGS environment variable]))
+    		AC_CHECK_HEADERS([GL/glut.h],[have_glut=yes],[have_glut=no])
+    		AM_CONDITIONAL(BUILD_GLUT, test x$have_glut = xyes)
 		RCSS_KEROSIN_IF_ELSE([
 			AC_CHECK_HEADERS([GL/glx.h], AC_SUBST([GLTARGET], [x]),
                         		 AC_CHECK_HEADERS([GL/wglext.h],
@@ -394,18 +396,32 @@ AC_DEFUN([RCSS_CHECK_GL], [
 				[AC_MSG_RESULT([no])
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
 		LDFLAGS="$rcss_tmp"
-		AC_MSG_CHECKING([if linking against libglut succeeds])
-		rcss_GL_LIBADD="-lGL -lGLU -lglut"
+
+		AC_MSG_CHECKING([if linking against libGLU succeeds])
+		rcss_GL_LIBADD="-lGL -lGLU"
 		rcss_GL_LDFLAGS=""
 		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
- 		AC_LINK_IFELSE([#include <GL/glut.h>
-				int main(int argc, char **argv) { glutMainLoop(); }],
+ 		AC_LINK_IFELSE([#include <GL/glu.h>
+				int main(int argc, char **argv) { gluPickMatrix(0,0,0,0,0); }],
 				[AC_MSG_RESULT([yes])],
 				[AC_MSG_RESULT([no])
-				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libglut or can be found])
-				 ])
+				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGLU can be found])])
 		LDFLAGS="$rcss_tmp"
-		])
+
+		if test "$have_glut" = yes; then
+			AC_MSG_CHECKING([if linking against libglut succeeds])
+			rcss_GL_LIBADD="-lGL -lGLU -lglut"
+			rcss_GL_LDFLAGS=""
+			LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
+	 		AC_LINK_IFELSE([#include <GL/glut.h>
+					int main(int argc, char **argv) { glutMainLoop(); }],
+					[AC_MSG_RESULT([yes])],
+					[AC_MSG_RESULT([no])
+					 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libglut or can be found])
+					 ])
+			LDFLAGS="$rcss_tmp"
+			])
+		fi
     ])
   ])
   fi

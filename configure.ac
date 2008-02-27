@@ -54,7 +54,7 @@ AC_CHECK_HEADERS([execinfo.h])
 AC_CHECK_HEADERS([CoreFoundation/CoreFoundation.h])
 
 AC_CHECK_HEADER([boost/version.hpp],,
-	AC_MSG_ERROR([boost library not found. Please specify the location 
+	AC_MSG_ERROR([boost library not found. Please specify the location
 of the boost header directory using the CPPFLAGS environment variable]))
 AC_CHECK_HEADERS([hash_map],,
 	AC_MSG_NOTICE(['hash_map' will be substituted by 'map'. If you need hash_map install stlport]))
@@ -143,7 +143,6 @@ AC_CONFIG_FILES([Makefile \
 		 lib/zeitgeist/zeitgeist-config \
 		 lib/kerosin/Makefile \
 		 lib/kerosin/kerosin-config \
-		 lib/kerosin/kerosin.rb \
 		 lib/oxygen/Makefile \
 		 lib/oxygen/oxygen-config \
 		 lib/spark/Makefile \
@@ -180,9 +179,6 @@ AC_CONFIG_FILES([Makefile \
 		 app/simulator/rcsoccersim3D \
 		 app/simulator/Makefile \
 		 app/simspark/Makefile \
-		 app/simspark/materials-textures.rb \
-		 app/simspark/rsg/agent/soccerbottorso.rsg \
-		 app/simspark/rsg/agent/ball.rsg \
 		 app/monitorspark/Makefile \
 		 app/agentspark/Makefile \
 		 app/spadestest/Makefile \

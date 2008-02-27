@@ -1,3 +1,11 @@
+2008-02-27  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* acinclude.m4:
+	* app/rcssmonitor3d/lite/Makefile.am:
+	- glut is not a requirement now. when not found, rcssmonitor3d-lite won't be
+	  built. (for non-macs)
+	- added check for GLU (for non-macs)
+
 2008-02-26  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* app/rsgedit/Makefile.am:

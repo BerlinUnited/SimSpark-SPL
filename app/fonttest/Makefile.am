@@ -42,5 +42,6 @@ script/german.scan.rb \
 script/init.rb \
 script/us.scan.rb
 
-data/font/VeraMono.ttf: data/font/VeraMono.ttf.gz
-	gunzip -c data/font/VeraMono.ttf.gz > data/font/VeraMono.ttf
+data/font/VeraMono.ttf: ${srcdir}/data/font/VeraMono.ttf.gz
+	mkdir -p data/font
+	gunzip -c ${srcdir}/data/font/VeraMono.ttf.gz > data/font/VeraMono.ttf

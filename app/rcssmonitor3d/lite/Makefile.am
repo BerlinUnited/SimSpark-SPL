@@ -1,4 +1,6 @@
+if BUILD_GLUT
 bin_PROGRAMS = rcssmonitor3D-lite
+endif
 
 if DEBUG
 LDADD = -lpthread  \

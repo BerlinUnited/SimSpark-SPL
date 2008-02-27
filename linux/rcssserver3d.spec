@@ -9,8 +9,8 @@ URL:            http://sourceforge.net/projects/sserver/
 Source0:        rcssserver3d-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  ruby-devel ode-devel freeglut-devel mesa-libGL-devel DevIL-devel SDL-devel freetype-devel
-Requires:       ruby ode freeglut mesa-libGL DevIL SDL freetype rcssserver3d-data >= 0.5.6
+BuildRequires:  ruby-devel ode-devel mesa-libGL-devel DevIL-devel SDL-devel freetype-devel
+Requires:       ruby ode mesa-libGL DevIL SDL freetype rcssserver3d-data >= 0.5.6
 
 %description
 This is the simulation server used in Robocup 3D Soccer Simulation contests.
@@ -44,5 +44,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 27 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.7pre-1
+- removed freeglut as a requirement since it is needed for rcssmonitor3d-lite only
+
 * Thu Feb 14 2008 - Hedayat Vatankhah <hedayat@grad.com>
-  -Initial version
+- Initial version
