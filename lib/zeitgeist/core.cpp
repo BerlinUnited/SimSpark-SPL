@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.21 2008/02/25 12:59:31 rollmark Exp $
+   $Id: core.cpp,v 1.22 2008/02/27 07:18:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -436,7 +436,7 @@ boost::shared_ptr<Leaf> Core::Get(const std::string &pathStr,
 
     if (current.get() == NULL)
         {
-            mLogServer->Error() << "(Core::Get) ERROR: Could not find object '"
+            mLogServer->Debug() << "(Core::Get) Could not find object '"
                                 << pathStr << "'" << std::endl;
         }
 
