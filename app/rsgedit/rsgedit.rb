@@ -3,6 +3,20 @@
 #
 
 def rsgeditResetScene
+  sparkResetSimulationServer()
+  sparkSetupServer()
+  sparkSetupInput('InputSystemWX')
+
+  # setup rendering using no OpenGLSystem- the wxWidgets GL canvas takes
+  # care of OpenGL setup
+  sparkSetupRendering('')
+
+  sparkResetScene()
+
+  # log from which rsg file nodes were created
+  rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
+  rubySceneImporter.enableSceneDictionary(true);
+
   # let spark create a default camera
   sparkAddFPSCamera(
 		    $scenePath+'camera', 
@@ -16,27 +30,17 @@ def rsgeditResetScene
 		    )
 end
 
-# sparkLogAllToCerr()
-sparkResetLogging()
-sparkSetupServer()
-
-# setup rendering using no OpenGLSystem- the wxWidgets GL canvas takes
-# care of OpenGL setup
-sparkSetupRendering('')
-
-# setup input using the InputSystemWX
+# import required bundles
 importBundle('inputwx')
-sparkSetupInput('InputSystemWX')
+
+# reset any all logging (output via gui)
+sparkResetLogging()
 
 # prepare a default scene
 rsgeditResetScene()
 
 # setup default input bindings
 run "bindings.rb"
-
-# register from which rsg file nodes were created
-rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
-rubySceneImporter.enableSceneDictionary(true);
 
 # create custom materials
 material = new('kerosin/MaterialSolid', $serverPath+'material/matYellow');
