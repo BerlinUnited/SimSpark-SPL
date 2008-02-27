@@ -1,8 +1,8 @@
 # load a font for the HUD
-fontServer = get($serverPath+'font')
+fontServer = SparkGetFontServer()
 
 if (fontServer != nil)
-  fontServer.getFont('VeraMono.ttf')
+  fontServer.getFont('fonts/VeraMono.ttf')
 end
 
 # register the internal soccer render plugin to draw the game state on the
