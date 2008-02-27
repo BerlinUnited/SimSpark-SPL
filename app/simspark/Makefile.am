@@ -45,7 +45,7 @@ dist_pkgdata_DATA = \
 
 install-data-local: $(top_builddir)/$(subdir)/rsg/agent/ball.rsg
 	mkdir -p $(DESTDIR)$(pkgdatadir)/
-	for res in rsg fonts scripts models;\
+	for res in rsg fonts scripts models textures;\
 	do \
 	rm -rf $(DESTDIR)$(pkgdatadir)/$$res;\
 	cp -r $(srcdir)/$$res $(DESTDIR)$(pkgdatadir)/;\
