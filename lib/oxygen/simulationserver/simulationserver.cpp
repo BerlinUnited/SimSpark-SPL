@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.11 2008/02/27 08:27:42 rollmark Exp $
+   $Id: simulationserver.cpp,v 1.12 2008/02/27 08:29:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,6 +152,16 @@ int SimulationServer::GetCycle()
 
 bool SimulationServer::InitControlNode(const std::string& className, const std::string& name)
 {
+    shared_ptr<Leaf> prevCtrNode = GetChild(name);
+    if (prevCtrNode.get() != 0)
+        {
+            RemoveChildReference(prevCtrNode);
+
+            GetLog()->Debug()
+                << "(SimulationServer) removing previous SimControlNode instance "
+                << name << "'\n";
+        }
+
     shared_ptr<SimControlNode> control
         = shared_dynamic_cast<SimControlNode>(GetCore()->New(className));
 
