@@ -4,7 +4,7 @@ importBundle 'soccermonitor'
 
 # load a font for the HUD
 fontServer = get($serverPath+'font')
-fontServer.getFont('VeraMono.ttf')
+fontServer.getFont('fonts/VeraMono.ttf')
 
 # register the soccer monitor plugin to parse the soccer game
 # state
