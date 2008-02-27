@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: simspark.cpp,v 1.3 2008/02/25 14:21:41 rollmark Exp $
+   $Id: simspark.cpp,v 1.4 2008/02/27 08:40:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,9 +79,6 @@ void SimSpark::SetLogPriority(unsigned int mask)
 
 void SimSpark::ResetSimulation()
 {
-    // recreat scene along with world and space nodes
-    GetScriptServer()->Eval("sparkResetScene()");
-
     // recreate a default empty scene with a camera node
     GetScriptServer()->Eval("rsgeditResetScene()");
 
