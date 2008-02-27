@@ -36,35 +36,10 @@ endif
 simspark_SOURCES = \
 	main.cpp 
 
-# Original
-#dist_pkgdata_DATA = \
-#	simspark.rb \
-#	bindings.rb \
-#	materials.rb \
-#	soccersim.rb \
-#	rsg/agent/soccerplayer.rsg \
-#	rsg/agent/leggedsphere.rsg \
-#	rsg/agent/hoap2.rsg \
-#	rsg/agent/soccerbot.rsg \
-#	rsg/agent/soccer.rsg \
-#	rsg/agent/flag.rsg \
-#	rsg/agent/flag_no_viz.rsg \
-#	rsg/agent/flag_left.rsg \
-#	rsg/agent/flag_right.rsg \
-#	rsg/agent/simspark.rsg \
-#	rsg/agent/ball.rsg \
-#	rsg/boxspheres/staticsphere.rsg \
-#	rsg/boxspheres/staticccylinder.rsg \
-#	rsg/boxspheres/sphere.rsg \
-#	rsg/boxspheres/simspark.rsg \
-#	rsg/boxspheres/arena.rsg \
-#	rsg/boxspheres/box.rsg \
-#	rsg/boxspheres/box_with_handler.rsg
-
-# JAN
 dist_pkgdata_DATA = \
 	simspark.rb \
 	bindings.rb \
+	materials-default.rb \
 	materials.rb \
 	materials-textures.rb \
 	soccersim.rb \

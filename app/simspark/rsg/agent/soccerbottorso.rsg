@@ -5,7 +5,7 @@
  (templ $lenX $lenY $lenZ $totalMass)
  
  (nd SingleMatNode
-     (load '/usr/local/share/rcssserver3d/models/soccerbottorso.obj')
+     (load '/home/markus/share/rcssserver3d/models/soccerbottorso.obj')
      (setScale (eval 0.5 * $lenX) (eval 0.5 * $lenY) (eval 0.5 * $lenZ))
      ;(setScale 1.0 1.0 1.0)
      )
