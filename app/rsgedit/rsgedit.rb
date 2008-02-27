@@ -13,7 +13,7 @@ def rsgeditResetScene
   sparkResetScene()
 
   # setup common materials
-  run "materials-default.rb"
+  run "scripts/materials.rb"
 
   # log from which rsg file nodes were created
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
@@ -43,5 +43,6 @@ rsgeditResetScene()
 
 # setup default input bindings
 run "bindings.rb"
+
 
 
