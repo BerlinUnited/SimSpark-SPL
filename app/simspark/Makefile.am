@@ -51,6 +51,7 @@ install-data-local: $(top_builddir)/$(subdir)/rsg/agent/ball.rsg
 	mkdir -p $(DESTDIR)$(pkgdatadir)/
 	cp -r $(srcdir)/rsg $(DESTDIR)$(pkgdatadir)/
 	cp -r $(top_builddir)/$(subdir)/rsg $(DESTDIR)$(pkgdatadir)/
+	cp -r $(top_builddir)/$(subdir)/fonts $(DESTDIR)$(pkgdatadir)/
 	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/rsg
 
 EXTRA_DIST = \
