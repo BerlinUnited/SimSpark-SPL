@@ -6,6 +6,10 @@
 # define constants used to setup spark
 #
 
+# scene and server path
+$scenePath = '/usr/scene/'
+$serverPath = '/sys/server/'
+
 # (Inputsystem)
 #
 
@@ -31,8 +35,6 @@ $agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
 
-print "(spark.rb) setup\n"
-
 # (MonitorControl) constants
 #
 
@@ -42,7 +44,6 @@ $monitorInterval = 10;
 $monitorStep = 0.04
 $serverType = 'tcp'
 $serverPort = 3200
-
 
 # (SparkMonitorClient) constants
 #
@@ -59,6 +60,63 @@ $physicsGlobalGravity = -9.81
 #
 # below is a set of utility functions for the user app
 #
+
+# return the existing instance or create a new one
+def sparkGetOrCreate(className, path)
+  obj = get(path)
+
+  if (obj != nil)
+    return obj
+  end
+
+  print "(spark.rb) creating "
+  print className
+  print " instance at "
+  print path
+  print "\n"
+
+  return new(className, path)
+end
+
+def sparkGetMonitorServer
+  return sparkGetOrCreate('oxygen/MonitorServer', $serverPath+'monitor')
+end
+
+def sparkGetPhysicsServer
+  return sparkGetOrCreate('oxygen/PhysicsServer', $serverPath+'physics')
+end
+
+def sparkGetSceneServer
+  return sparkGetOrCreate('oxygen/SceneServer', $serverPath+'scene')
+end
+
+def sparkGetGameControlServer
+  return sparkGetOrCreate('oxygen/GameControlServer', $serverPath+'gamecontrol')
+end
+
+def sparkGetSimulationServer
+  return sparkGetOrCreate('oxygen/SimulationServer', $serverPath+'simulation')
+end
+
+def sparkGetGeometryServer
+  return sparkGetOrCreate('oxygen/GeometryServer', $serverPath+'geometry')
+end
+
+def sparkGetMaterialServer
+  return sparkGetOrCreate('kerosin/MaterialServer', $serverPath+'material')
+end
+
+def sparkGetOpenGLServer
+  return sparkGetOrCreate('kerosin/OpenGLServer', $serverPath+'opengl')
+end
+
+def sparkGetInputServer
+  return sparkGetOrCreate('kerosin/InputServer', $serverPath+'input')
+end
+
+def sparkGetFontServer
+  return sparkGetOrCreate('kerosin/FontServer', $serverPath+'font')
+end
 
 # rebuild scene and update all cached references
 def sparkResetScene
@@ -83,13 +141,13 @@ def sparkResetScene
   end
 
   # force update references to scene objects (world, space etc.)
-  sceneServer = get($serverPath+'scene')
+  sceneServer = sparkGetSceneServer()
   if (sceneServer != nil)
     sceneServer.setActiveScene($scenePath)
   end
 
   # reset simulation time
-  simulationServer = get($serverPath+'simulation');
+  simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
     simulationServer.resetTime()
   end
@@ -99,9 +157,9 @@ def sparkSetupMonitor
   print "(spark.rb) sparkSetupMonitor\n"
 
   # add the agent control node
-  simulationServer = get($serverPath+'simulation');
+  simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(false);
+    simulationServer.setMultiThreads(false)
   end
 
   monitorClient = new('SparkMonitorClient',
@@ -129,16 +187,16 @@ end
 def sparkSetupMonitorLogPlayer
   print "(spark.rb) sparkSetupMonitorLogPlayer\n"
 
-  # add the agent control node
-  simulationServer = get($serverPath+'simulation');
+  simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
     simulationServer.setMultiThreads(false);
-  end
 
-  monitorClient = new('SparkMonitorLogFileServer',
-		      $serverPath+'simulation/SparkMonitorLogFileServer')
-  monitorClient.setFileName($logPlayerFile)
-  monitorClient.setStepDelay(33000)
+    monitorClient = new('SparkMonitorLogFileServer',
+			$serverPath+'simulation/SparkMonitorLogFileServer')
+
+    monitorClient.setFileName($logPlayerFile)
+    monitorClient.setStepDelay(33000)
+  end
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
   if (rubySceneImporter != nil)
@@ -152,6 +210,7 @@ end
 #
 def sparkRegisterCustomMonitor(className)
   print "(spark.rb) sparkRegisterCustomMonitor " + className + "\n"
+  sparkGetSimulationServer()
   new(className, $serverPath+'simulation/SparkMonitorClient/'+className)
 end
 
@@ -161,6 +220,7 @@ end
 #
 def sparkRegisterCustomRender(className)
   print "(spark.rb) sparkRegisterCustomRender " + className + "\n"
+  sparkGetSimulationServer()
   new(className, $serverPath+'simulation/RenderControl/'+className)
 end
 
@@ -170,6 +230,7 @@ end
 #
 def sparkRegisterCustomInput(className)
   print "(spark.rb) sparkRegisterCustomInput " + className + "\n"
+  sparkGetSimulationServer()
   new(className, $serverPath+'simulation/InputControl/'+className)
 end
 
@@ -179,6 +240,7 @@ end
 #
 def sparkRegisterMonitorCmdParser(className)
   print "(spark.rb) sparkRegisterMonitorCmdParser " + className + "\n"
+  sparkGetMonitorServer()
   new(className, $serverPath+'monitor/SparkMonitor/'+className)
 end
 
@@ -186,7 +248,8 @@ def sparkSetupServer
   print "(spark.rb) sparkSetupServer\n"
 
   # add the agent control node
-  simulationServer = get($serverPath+'simulation');
+  simulationServer = sparkGetSimulationServer()
+
   if (simulationServer != nil)
     simulationServer.setMultiThreads(false);
     simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
@@ -249,15 +312,9 @@ def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem)
   print "(spark.rb) using OpenGLSystem '" + openGLSystem + "'\n"
 
   #
-  # setup the GeometryServer
-  #geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
-  #importBundle 'voidmeshimporter'
-  #geometryServer.initMeshImporter("VoidMeshImporter");
-
-  #
   # setup the kerosin render framework
 
-  openGLServer = new('kerosin/OpenGLServer', $serverPath+'opengl');
+  openGLServer = sparkGetOpenGLServer()
 
   if (openGLSystem == $defaultOpenGLSystem)
     importBundle($defaultOpenGLBundle)
@@ -273,15 +330,15 @@ def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem)
   # setup the InputServer
 
   # create the InputServer and use a german keyboard layout
-  inputServer = new('kerosin/InputServer', $serverPath+'input')
+  inputServer = sparkGetInputServer()
   inputServer.setScanCodeMapping('german.scan.rb');
 
   # setup the FontServer
-  new('kerosin/FontServer', $serverPath+'font');
+  sparkGetFontServer()
 
   #
   # register render control node to the simulation server
-  simulationServer = get($serverPath+'simulation');
+  simulationServer = sparkGetSimulationServer()
 
   if (simulationServer != nil)
     simulationServer.initControlNode('kerosin/RenderControl','RenderControl')
@@ -302,7 +359,7 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
     importBundle($defaultInputSystemBundle)
   end
 
-  inputServer = get($serverPath+'input');
+  inputServer = sparkGetInputServer()
   if (inputServer != nil)
     inputServer.init(inputSystem)
 
@@ -315,7 +372,7 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
   #
   # register input control node to the simulation server
 
-  simulationServer = get($serverPath+'simulation');
+  simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
     # add the input control node
     simulationServer.initControlNode('kerosin/InputControl','InputControl')
@@ -440,10 +497,7 @@ end
 # setup spark
 #
 
-#
-# scene and server path
-$scenePath = '/usr/scene/'
-$serverPath = '/sys/server/'
+print "(spark.rb) setup\n"
 
 #
 # set up logging
@@ -455,19 +509,20 @@ end
 
 #
 # setup the PhysicsServer
-new('oxygen/PhysicsServer', $serverPath+'physics')
+sparkGetPhysicsServer()
 
 #
 # setup the SceneServer
-sceneServer = new('oxygen/SceneServer', $serverPath+'scene')
+sceneServer = sparkGetSceneServer()
 sceneServer.createScene($scenePath)
 
 #
 # setup the GeometryServer
-geometryServer = new('oxygen/GeometryServer', $serverPath+'geometry')
 importBundle 'voidmeshimporter'
-geometryServer.initMeshImporter("VoidMeshImporter");
 importBundle 'objimporter'
+
+geometryServer = sparkGetGeometryServer()
+geometryServer.initMeshImporter("VoidMeshImporter");
 geometryServer.initMeshImporter("ObjImporter");
 
 # use the ruby scene importer to import scenes
@@ -483,11 +538,11 @@ sparkResetScene()
 
 #
 # setup the MaterialServer
-new('kerosin/MaterialServer', $serverPath+'material');
+sparkGetMaterialServer()
 
 #
 # setup the MonitorServer
-monitorServer = new('oxygen/MonitorServer', $serverPath+'monitor')
+monitorServer = sparkGetMonitorServer()
 
 # register the SparkMonitor system
 importBundle 'sparkmonitor'
@@ -495,7 +550,7 @@ monitorServer.registerMonitorSystem('SparkMonitor')
 
 #
 # setup the GameControlServer
-gameControlServer = new('oxygen/GameControlServer', $serverPath+'gamecontrol')
+gameControlServer = sparkGetGameControlServer()
 
 # register the s-expression parser to the GameControlServer
 importBundle "sexpparser"
@@ -507,7 +562,7 @@ gameControlServer.initEffector('SceneEffector')
 
 #
 # setup the SimulationServer
-simulationServer = new('oxygen/SimulationServer', $serverPath+'simulation')
+sparkGetSimulationServer()
 
 #
 # import the spark perceptors and effector set
