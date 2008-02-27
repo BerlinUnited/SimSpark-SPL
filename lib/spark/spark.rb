@@ -78,6 +78,19 @@ def sparkGetOrCreate(className, path)
   return new(className, path)
 end
 
+# delete any existing instance and create a new one
+def sparkCreate(className, path)
+  delete(path)
+
+  print "(spark.rb) creating "
+  print className
+  print " instance at "
+  print path
+  print "\n"
+
+  return new(className, path)
+end
+
 def sparkGetMonitorServer
   return sparkGetOrCreate('oxygen/MonitorServer', $serverPath+'monitor')
 end
@@ -117,6 +130,19 @@ end
 def sparkGetFontServer
   return sparkGetOrCreate('kerosin/FontServer', $serverPath+'font')
 end
+
+def sparkGetRenderServer
+  return sparkGetOrCreate('kerosin/RenderServer', $serverPath+'render')
+end
+
+def sparkGetImageServer
+  return sparkGetOrCreate('kerosin/ImageServer', $serverPath+'image')
+end
+
+def sparkGetTextureServer
+  return sparkGetOrCreate('kerosin/TextureServer', $serverPath+'texture')
+end
+
 
 # rebuild scene and update all cached references
 def sparkResetScene
@@ -162,8 +188,7 @@ def sparkSetupMonitor
     simulationServer.setMultiThreads(false)
   end
 
-  monitorClient = new('SparkMonitorClient',
-		      $serverPath+'simulation/SparkMonitorClient')
+  monitorClient = sparkCreate('SparkMonitorClient', $serverPath+'simulation/SparkMonitorClient')
   monitorClient.setServer($monitorServer)
   monitorClient.setPort($monitorPort)
 
@@ -189,10 +214,9 @@ def sparkSetupMonitorLogPlayer
 
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(false);
+    simulationServer.setMultiThreads(false)
 
-    monitorClient = new('SparkMonitorLogFileServer',
-			$serverPath+'simulation/SparkMonitorLogFileServer')
+    monitorClient = sparkCreate('SparkMonitorLogFileServer', $serverPath+'simulation/SparkMonitorLogFileServer')
 
     monitorClient.setFileName($logPlayerFile)
     monitorClient.setStepDelay(33000)
@@ -211,7 +235,7 @@ end
 def sparkRegisterCustomMonitor(className)
   print "(spark.rb) sparkRegisterCustomMonitor " + className + "\n"
   sparkGetSimulationServer()
-  new(className, $serverPath+'simulation/SparkMonitorClient/'+className)
+  sparkCreate(className, $serverPath+'simulation/SparkMonitorClient/'+className)
 end
 
 #
@@ -221,7 +245,7 @@ end
 def sparkRegisterCustomRender(className)
   print "(spark.rb) sparkRegisterCustomRender " + className + "\n"
   sparkGetSimulationServer()
-  new(className, $serverPath+'simulation/RenderControl/'+className)
+  sparkCreate(className, $serverPath+'simulation/RenderControl/'+className)
 end
 
 #
@@ -231,7 +255,7 @@ end
 def sparkRegisterCustomInput(className)
   print "(spark.rb) sparkRegisterCustomInput " + className + "\n"
   sparkGetSimulationServer()
-  new(className, $serverPath+'simulation/InputControl/'+className)
+  sparkCreate(className, $serverPath+'simulation/InputControl/'+className)
 end
 
 #
@@ -241,7 +265,7 @@ end
 def sparkRegisterMonitorCmdParser(className)
   print "(spark.rb) sparkRegisterMonitorCmdParser " + className + "\n"
   sparkGetMonitorServer()
-  new(className, $serverPath+'monitor/SparkMonitor/'+className)
+  sparkCreate(className, $serverPath+'monitor/SparkMonitor/'+className)
 end
 
 def sparkSetupServer
@@ -279,8 +303,7 @@ def sparkSetupServer
        end
   end
 
-  monitorControl = new('oxygen/MonitorControl',
-		       $serverPath+'simulation/MonitorControl')
+  monitorControl = sparkCreate('oxygen/MonitorControl',$serverPath+'simulation/MonitorControl')
   monitorControl.setMonitorInterval($monitorInterval)
   monitorControl.setStep($monitorStep)
   monitorControl.setServerPort($serverPort)
@@ -301,8 +324,7 @@ def sparkSetupServer
 
   if ($recordLogfile == true)
     print "(spark.rb) recording Logfile as 'sparkmonitor.log'\n"
-    monitorLogger = new('oxygen/MonitorLogger',
-	  	       $serverPath+'simulation/MonitorLogger')
+    monitorLogger = sparkCreate('oxygen/MonitorLogger', $serverPath+'simulation/MonitorLogger')
     monitorLogger.setMonitorLoggerInterval($monitorInterval)
   end
 end
@@ -322,9 +344,9 @@ def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem)
 
   openGLServer.init(openGLSystem)
 
-  new('kerosin/RenderServer', $serverPath+'render');
-  new('kerosin/ImageServer', $serverPath+'image');
-  new('kerosin/TextureServer', $serverPath+'texture');
+  sparkGetRenderServer()
+  sparkGetImageServer()
+  sparkGetTextureServer()
 
   #
   # setup the InputServer
@@ -396,7 +418,7 @@ def sparkAddFPSCamera(
 
   # add a camera. The camera movement is controlled using an
   # FPSController.
-  cameraTransform = new('oxygen/Transform',path)
+  cameraTransform = sparkCreate('oxygen/Transform',path)
   cameraTransform.setLocalPos(x,y,z)
   new('oxygen/Camera',path+'/camera')
 
@@ -533,9 +555,6 @@ sceneServer.initSceneImporter("RubySceneImporter");
 importBundle 'rosimporter'
 sceneServer.initSceneImporter("RosImporter");
 
-# prepare scene
-sparkResetScene()
-
 #
 # setup the MaterialServer
 sparkGetMaterialServer()
@@ -560,9 +579,8 @@ gameControlServer.initParser('SexpParser')
 importBundle "sceneeffector"
 gameControlServer.initEffector('SceneEffector')
 
-#
-# setup the SimulationServer
-sparkGetSimulationServer()
+# prepare scene
+sparkResetScene()
 
 #
 # import the spark perceptors and effector set
