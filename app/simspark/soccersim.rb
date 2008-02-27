@@ -3,7 +3,8 @@
 #
 
 # setup soccer specific materials
-run "materials-textures.rb"
+# run "scripts/rcs-materials.rb"
+run "scripts/rcs-materials-textures.rb"
 
 importBundle "soccer"
 
