@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sceneserver.cpp,v 1.21 2008/02/27 17:51:51 rollmark Exp $
+   $Id: sceneserver.cpp,v 1.22 2008/02/27 17:57:16 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -221,23 +221,13 @@ void SceneServer::PostPhysicsUpdate()
 bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                               shared_ptr<ParameterList> parameter)
 {
-    string globalfile = salt::RFile::BundlePath() + fileName;
-    string file = fileName;
-
-    if (! GetFile()->Exist(fileName))
+    string file;
+    if (! GetFile()->LocateResource(fileName, file))
         {
-            GetLog()->Debug() << "(ScriptServer) Cannot locate file '"
-                              << fileName << "', trying " << globalfile << "\n";
+            GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
+                              << fileName << "'\n";
 
-            if (! GetFile()->Exist(globalfile))
-                {
-                    GetLog()->Error() << "(SceneServer) ERROR: cannot locate file '"
-                                      << fileName << "'\n";
-
-                    return false;
-                }
-
-            file = globalfile;
+            return false;
         }
 
     if (root.get() == 0)
@@ -253,11 +243,12 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
     TLeafList importer;
     ListChildrenSupportingClass<SceneImporter>(importer);
 
-    if (importer.size() == 0)
+    if (importer.empty())
         {
             GetLog()->Error()
                 << "(SceneServer) Warning: no SceneImporter registered\n";
         }
+
     // because the importer will create ODE objects,
     // so we have to lock the ODE
     boost::recursive_mutex::scoped_lock lock(mMutex);
