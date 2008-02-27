@@ -1,4 +1,7 @@
-#
+# load soccer specific material
+# run "scripts/rcs-materials.rb"
+run "scripts/rcs-materials-textures.rb"
+
 # prepare the soccer monitor
 importBundle 'soccermonitor'
 

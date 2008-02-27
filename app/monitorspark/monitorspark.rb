@@ -29,11 +29,8 @@ sparkAddFPSCamera(
 # setup default input bindings
 run "bindings.rb"
 
-#
-# setup materials 
-# material setup is not sent via the monitor protocol (yet)
-# change materials.rb to materials-textures.rb if you want to use textured materials
-run "materials.rb"
+# setup default materials common to all simulations
+run "scripts/materials.rb"
 
 # source soccersim-monitor.rb to build a soccer monitor
 run "soccersim-monitor.rb"
