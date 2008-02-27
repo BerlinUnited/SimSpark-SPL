@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.22 2008/02/23 16:10:30 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.23 2008/02/27 17:37:32 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
                                     shared_ptr<ParameterList> parameter)
 {
     // try to open the file
-    shared_ptr<salt::RFile> file = GetFile()->Open(fileName);
+    shared_ptr<salt::RFile> file = GetFile()->OpenResource(fileName);
 
     if (file.get() == 0)
         {
