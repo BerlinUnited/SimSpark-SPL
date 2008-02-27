@@ -15,6 +15,9 @@ def rsgeditResetScene
   # setup common materials
   run "scripts/materials.rb"
 
+  # setup rsgedit specific materials
+  run "scripts/rsgedit-materials.rb"
+
   # log from which rsg file nodes were created
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
   rubySceneImporter.enableSceneDictionary(true);
