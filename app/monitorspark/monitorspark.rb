@@ -35,6 +35,8 @@ run "bindings.rb"
 # change materials.rb to materials-textures.rb if you want to use textured materials
 run "materials.rb"
 
+# source soccersim-monitor.rb to build a soccer monitor
+run "soccersim-monitor.rb"
 
 #
 # uncomment for logging setup (see spark.rb for reference)
@@ -45,5 +47,3 @@ sparkLogAllToCerr()
 # sparkLogAllToFile('./spark.txt')
 # sparkLogDebugToCerr()
 
-# source soccersim-monitor.rb to build a soccer monitor
-run "soccersim-monitor.rb"
