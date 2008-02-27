@@ -15,7 +15,7 @@ material.setDiffuseTexture('textures/rcs-soccerball.tga')
 
 
 # running track around the field
-material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/rcs-matTrack');
+material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matTrack');
 material.setDiffuse(1.0,0.64,0.4,1.0)
 material.setAmbient(0.2,0.01,0.0,1.0)
 
