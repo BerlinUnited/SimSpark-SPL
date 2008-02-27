@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.cpp,v 1.7 2004/04/18 16:19:47 rollmark Exp $
+   $Id: fileserver.cpp,v 1.8 2008/02/27 17:18:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,6 +35,30 @@ FileServer::FileServer() : Node(), mNextHandle(1)
 
 FileServer::~FileServer()
 {
+}
+
+shared_ptr<salt::RFile> FileServer::OpenResource(const std::string& inName)
+{
+    shared_ptr<salt::RFile> file = Open(inName);
+
+    if (file.get() != 0)
+        {
+            return file;
+        }
+
+    string fname = salt::RFile::BundlePath() + inName;
+    GetLog()->Debug() << "(FileServer::OpenResource) expanded filename to '"
+                      << fname << "'";
+
+    file = Open(fname);
+
+    if (file.get() == 0)
+        {
+            GetLog()->Error() << "(FileServer::OpenResource) Cannot locate file '"
+                              << inName << "'\n";
+        }
+
+    return file;
 }
 
 shared_ptr<salt::RFile> FileServer::Open(const string& inName)
@@ -221,4 +245,3 @@ int FileServer::ForEachFile(const string& /*directory*/, const string& /*name*/,
 
   return count;
 }
-

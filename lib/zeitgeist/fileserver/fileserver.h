@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fileserver.h,v 1.7 2007/02/26 08:43:56 rollmark Exp $
+   $Id: fileserver.h,v 1.8 2008/02/27 17:18:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -93,6 +93,11 @@ public:
     /** constructs the fileserver */
     FileServer();
     ~FileServer();
+
+    /** searches each registered file system for a file with this name
+        and well known resource locations if that fails
+    */
+    boost::shared_ptr<salt::RFile> OpenResource(const std::string& inName);
 
     /** searchs each registered file system for a file with this
         name. Filesystems are searched in the inverse order in
