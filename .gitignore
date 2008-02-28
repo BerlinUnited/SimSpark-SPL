@@ -367,6 +367,12 @@ plugin/openglsyssdl/Makefile
 plugin/openglsyssdl/Makefile.in
 plugin/openglsyssdl/*.la
 plugin/openglsyssdl/*.lo
+plugin/openglsyswx/.deps
+plugin/openglsyswx/.libs
+plugin/openglsyswx/Makefile
+plugin/openglsyswx/Makefile.in
+plugin/openglsyswx/*.la
+plugin/openglsyswx/*.lo
 plugin/perfectvisionperceptor/*.la
 plugin/perfectvisionperceptor/*.lo
 plugin/perfectvisionperceptor/.deps

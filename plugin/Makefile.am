@@ -19,7 +19,8 @@ SUBDIRS = \
 	  sceneeffector\
 	  soccermonitor \
 	  soundsystemfmod \
-	  inputwx
+	  inputwx \
+	  openglsyswx
 
 # filesystemrar 
 # soundsystembass
