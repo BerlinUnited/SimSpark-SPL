@@ -166,6 +166,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/voidmeshimporter/Makefile \
 		 plugin/objimporter/Makefile \
 		 plugin/openglsyssdl/Makefile \
+		 plugin/openglsyswx/Makefile \
 		 plugin/sparkmonitor/Makefile \
 		 plugin/sparkagent/Makefile \
 		 app/Makefile \
