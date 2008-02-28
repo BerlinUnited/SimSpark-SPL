@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.1 2008/02/24 16:20:22 rollmark Exp $
+   $Id: main.cpp,v 1.2 2008/02/28 10:37:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@
 #include "property.h"
 
 #include <rsgedit/res/xpm_sparklogo.xpm>
+#include <rsgedit/res/xpm_spark.xpm>
 
 IMPLEMENT_APP(RsgEditApp)
 
@@ -75,6 +76,10 @@ bool RsgEditApp::OnInit()
 #ifdef __WXMSW__
     frame->SetIcon(wxIcon("Spark", wxBITMAP_TYPE_ICO_RESOURCE));
     ::wxHandleFatalExceptions(true);
+#else
+    wxIcon icon;
+    icon.CopyFromBitmap(wxBitmap(xpm_spark));
+    frame->SetIcon(icon);
 #endif
 
     // Show the frame
