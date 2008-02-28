@@ -1,5 +1,5 @@
 # load a font for the HUD
-fontServer = SparkGetFontServer()
+fontServer = sparkGetFontServer()
 
 if (fontServer != nil)
   fontServer.getFont('fonts/VeraMono.ttf')
