@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.cpp,v 1.3 2006/03/14 12:14:51 fruit Exp $
+   $Id: restrictedvisionperceptor.cpp,v 1.4 2008/02/28 08:09:18 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -91,15 +91,15 @@ RestrictedVisionPerceptor::SetPanRange(int lower, int upper)
      *   the pan angles should be *either* smaller than 180 and > lower, *or*
      *   they should be greater than -180 and < upper.
      */
-    mPanLower = gNormalizeDeg(lower);
-    mPanUpper = gNormalizeDeg(upper);
+    mPanLower = static_cast<int>(gNormalizeDeg(lower));
+    mPanUpper = static_cast<int>(gNormalizeDeg(upper));
 }
 
 void
 RestrictedVisionPerceptor::SetTiltRange(int lower, int upper)
 {
-    mTiltLower = gNormalizeDeg(lower);
-    mTiltUpper = gNormalizeDeg(upper);
+    mTiltLower = static_cast<int>(gNormalizeDeg(lower));
+    mTiltUpper = static_cast<int>(gNormalizeDeg(upper));
 }
 
 // this should really go to gmath.h for the full release
