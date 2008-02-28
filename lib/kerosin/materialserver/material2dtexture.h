@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture.h,v 1.3 2008/02/19 22:49:23 hedayat Exp $
+   $Id: material2dtexture.h,v 1.4 2008/02/28 08:39:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 namespace kerosin
 {
 class Texture;
+class OpenGLServer;
 
 class Material2DTexture : public MaterialSolid
 {
@@ -36,6 +37,8 @@ class Material2DTexture : public MaterialSolid
 public:
     Material2DTexture();
     virtual ~Material2DTexture();
+
+    virtual void OnLink();
 
     /** loads the diffuse texture */
     bool SetDiffuseTexture(const std::string& texName);
@@ -94,6 +97,9 @@ protected:
 
     /** the specular texture */
     boost::shared_ptr<Texture> mTexSpecular;
+
+    /** a cached reference to the OpenGLServer */
+    CachedPath<kerosin::OpenGLServer> mOpenGLServer;
 };
 
 DECLARE_CLASS(Material2DTexture);

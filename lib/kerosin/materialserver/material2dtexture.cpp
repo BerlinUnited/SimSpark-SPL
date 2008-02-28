@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture.cpp,v 1.4 2008/02/19 22:49:23 hedayat Exp $
+   $Id: material2dtexture.cpp,v 1.5 2008/02/28 08:39:40 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,6 +41,18 @@ Material2DTexture::Material2DTexture() :
 
 Material2DTexture::~Material2DTexture()
 {
+}
+
+void Material2DTexture::OnLink()
+{
+    MaterialSolid::OnLink();
+    RegisterCachedPath(mOpenGLServer, "/sys/server/opengl");
+
+    if (mOpenGLServer.expired())
+        {
+            GetLog()->Error()
+                << "(Material2DTexture) ERROR: OpenGLServer not found.\n";
+        }
 }
 
 bool Material2DTexture::LoadTexture(const std::string& texName, shared_ptr<Texture>& store)
@@ -118,10 +130,11 @@ Material2DTexture::HasSpecularTexture() const
 
 void Material2DTexture::Bind()
 {
-    shared_ptr<OpenGLServer> openGLServer =
-        shared_dynamic_cast<OpenGLServer>(GetCore()->Get("/sys/server/opengl"));
-
-    bool use_gl = ((openGLServer.get() != 0) && (!openGLServer->IsGLLocked()));
+    bool use_gl =
+        (
+         (! mOpenGLServer.expired()) &&
+         (! mOpenGLServer->IsGLLocked())
+         );
 
     SetupMaterial();
 
@@ -155,3 +168,4 @@ void Material2DTexture::Bind()
         mTexSpecular->Bind();
     }
 }
+
