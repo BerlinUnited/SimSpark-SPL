@@ -1,5 +1,8 @@
 2008-02-28  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp (InternalSoccerRender::OnLink):
+	- added fonts/ directory so that it can find VeraMono.ttf
+
 	* app/fonttest/Makefile.am:
 	- removed rules for extracting VeraMono.ttf.gz as it doesn't exist anymore
 

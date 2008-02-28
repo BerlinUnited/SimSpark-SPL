@@ -53,7 +53,7 @@ void InternalSoccerRender::OnLink()
             GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get FontServer\n";
         } else
         {
-            string font = "VeraMono.ttf";
+            string font = "fonts/VeraMono.ttf";
             int fontSize = 16;
             mFont = mFontServer->GetFont(font, fontSize);
 
@@ -120,9 +120,9 @@ void InternalSoccerRender::glDisable2D()
    glDisable(GL_BLEND);
    glPopAttrib();
    glMatrixMode(GL_PROJECTION);
-   glPopMatrix();   
+   glPopMatrix();
    glMatrixMode(GL_MODELVIEW);
-   glPopMatrix();       
+   glPopMatrix();
 }
 
 void InternalSoccerRender::Render()
@@ -137,10 +137,10 @@ void InternalSoccerRender::Render()
         }
 
     stringstream ss_l, ss_c, ss_r;
-    
+
     ss_c.setf(ios_base::fixed,ios_base::floatfield);
     ss_c.precision(2);
-    
+
     ss_l << mGameState->GetScore(TI_LEFT) << " ";
 
     string nameleft = mGameState->GetTeamName(TI_LEFT);
@@ -149,7 +149,7 @@ void InternalSoccerRender::Render()
     {
         nameleft = "<Left>";
     }
-   
+
     ss_l << nameleft;
 
     if (static_cast<int>(mGameState->GetGameHalf()) == 1)
@@ -170,15 +170,15 @@ void InternalSoccerRender::Render()
     {
         nameright = "<Right>";
     }
-   
-    ss_r << nameright;    
+
+    ss_r << nameright;
     ss_r << " " << mGameState->GetScore(TI_RIGHT);
 
     int xPos;
-     
+
     mFontServer->Begin();
     mFont->Bind();
-    
+
     // draw left team info left justified
     mFont->DrawString(10, 0, ss_l.str().c_str());
 
@@ -194,26 +194,26 @@ void InternalSoccerRender::Render()
     // FIXME: remove the magic number.
     xPos = int((1024-(mFont->GetStringWidth(ss_c.str().c_str())))/2);
     mFont->DrawString(xPos, 0, ss_c.str().c_str());
-    
+
     mFontServer->End();
 
 #if 0
     // get texture -- has to be square and power of 2 in size!!!
     shared_ptr<Texture2D> tex = shared_static_cast<Texture2D>
                                     (mTextureServer->GetTexture("test.tga"));
-    
+
     glEnable2D();
 
     // draw some 2D elements
     tex->Enable();
-    tex->Bind();    
+    tex->Bind();
 
     glColor4f(1.0f,1.0f,1.0f,0.8f);
     glTranslatef(720.0, 16.0, 0.0);
 
     glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0f, 0.0f);  
-        glTexCoord2f(1.0f, 0.0f); glVertex2f(64.0f, 0.0f);  
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0f, 0.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f(64.0f, 0.0f);
         glTexCoord2f(1.0f, 1.0f); glVertex2f(64.0f, 64.0f);
         glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f,  64.0f);
     glEnd();
