@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.22.2.2 2008/02/27 14:08:48 sgvandijk Exp $
+   $Id: body.cpp,v 1.22.2.3 2008/02/28 17:15:09 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -427,31 +427,30 @@ void Body::SynchronizeParent() const
     baseNode->SetWorldTransform(mat);
 }
 
-/** updates internal state before physics calculation */
-void Body::PrePhysicsUpdateInternal(float deltaTime)
+void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // Check whether mass/body has been translated
     if (mMassTrans.Length() > 0)
     {
         weak_ptr<Node> parent = GetParent();
 
-        // Update colliders
-        TLeafList colliders;
-        parent.lock()->ListChildrenSupportingClass<Collider>(colliders, true);
+        // Update colliders (only those encapsulated in transform colliders)
+        TLeafList transformColliders;
+        parent.lock()->ListChildrenSupportingClass<TransformCollider>(transformColliders);
 
-        for (TLeafList::iterator iter = colliders.begin(); iter != colliders.end(); ++iter)
+        for (TLeafList::iterator iter = transformColliders.begin(); iter != transformColliders.end(); ++iter)
         {
-            shared_ptr<TransformCollider> tCollider = shared_dynamic_cast<TransformCollider>(*iter);
-            if (tCollider.get() == 0)
+            // Only move non-transform colliders
+            shared_ptr<Collider> collider = shared_static_cast<TransformCollider>(*iter)->FindChildSupportingClass<Collider>();
+            if (collider.get())
             {
-                shared_ptr<Collider> collider = shared_dynamic_cast<Collider>(*iter);
                 Vector3f pos = collider->GetPosition();
                 pos = pos + mMassTrans;
                 collider->SetLocalPosition(pos);
             }
         }
 
-        // Update visuals (or other transforms in the tree
+        // Update visuals (or other transforms in the tree)
         TLeafList transforms;
         parent.lock()->ListChildrenSupportingClass<Transform>(transforms);
         for (TLeafList::iterator iter = transforms.begin(); iter != transforms.end(); ++iter)
