@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: fontserver.cpp,v 1.8 2008/02/28 15:23:59 hedayat Exp $
+   $Id: fontserver.cpp,v 1.9 2008/02/28 19:52:11 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,15 +86,6 @@ bool FontServer::LoadFont(const string &name, unsigned int size,
                           shared_ptr<kerosin::Font> &font)
 {
     shared_ptr<salt::RFile> file = GetFile()->OpenResource(name);
-
-    if (file.get() == 0)
-        {
-            string fontPath;
-            if(GetScript()->GetVariable("System.FontPath", fontPath))
-              {
-                file = GetFile()->OpenResource(fontPath+name);
-              }
-        }
 
     if (file.get() == 0)
         {

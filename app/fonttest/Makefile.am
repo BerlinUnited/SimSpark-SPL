@@ -34,14 +34,9 @@ endif
 fonttest_SOURCES = main.cpp 
 
 EXTRA_DIST = \
-data/font/VeraMono.ttf.gz \
 data/image/jpg.jpg \
 script/default.rb \
 script/fonttest.rb \
 script/german.scan.rb \
 script/init.rb \
 script/us.scan.rb
-
-data/font/VeraMono.ttf: ${srcdir}/data/font/VeraMono.ttf.gz
-	mkdir -p data/font
-	gunzip -c ${srcdir}/data/font/VeraMono.ttf.gz > data/font/VeraMono.ttf

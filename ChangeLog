@@ -1,13 +1,13 @@
 2008-02-28  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* app/fonttest/Makefile.am:
+	- removed rules for extracting VeraMono.ttf.gz as it doesn't exist anymore
+
 	* app/simspark/internalsoccermonitor.rb:
 	- SparkGetFontServer() -> sparkGetFontServer()
 
 	* app/simspark/simspark.rb:
 	- soccersim.rb should be called before internalsoccermonitor.rb
-
-	* lib/kerosin/fontserver/fontserver.cpp (FontServer::LoadFont):
-	- check FontPath directory too
 
 	* lib/kerosin/kerosin.rb:
 	- font path is fonts/
