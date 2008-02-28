@@ -1,3 +1,200 @@
+2008-02-28  Markus Rollmann  <rollmark@users.sourceforge.net>
+
+	* app/rsgedit/rsgedit.rb: - use the OpenGLSystemWX
+
+	* configure.ac: - added plugin/openglsyswx
+
+	* plugin/Makefile.am, plugin/openglsyswx/.cvsignore,
+	plugin/openglsyswx/Makefile.am, plugin/openglsyswx/export.cpp,
+	plugin/openglsyswx/openglsystemwx.cpp,
+	plugin/openglsyswx/openglsystemwx.h,
+	plugin/openglsyswx/openglsystemwx_c.cpp:
+	- added dummy OpenGLSystemWX class. This is needed to enable proper texturing in
+	  the OpenGLServer
+
+	* lib/spark/spark.rb: - reset registered materials in sparkResetScene
+
+	* lib/kerosin/materialserver/materialserver.cpp,
+	lib/kerosin/materialserver/materialserver.h,
+	lib/kerosin/materialserver/materialserver_c.cpp:
+	- added method ResetMaterials that remove all registered materials and
+	  (re-)creates the default material
+
+	* lib/kerosin/materialserver/material2dtexture.cpp, lib/kerosin/materialserver/material2dtexture.h:
+	- cache the OpenGLServer reference (it was lookup up again each frame)
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	- compile fix: make cast from double to int explicit
+
+	* app/simspark/Makefile.am: - add resources to EXTRA_DIST
+
+	* app/simspark/scripts/rcs-materials-textures.rb: - fix a type
+
+	* app/simspark/scripts/rcs-materials-textures.rb:
+	- use rcs- prefix for soccer texture names
+
+	* app/simspark/Makefile.am: - install textures
+
+	* app/simspark/Makefile.am: - install model files
+
+	* lib/kerosin/imageserver/imageserver.cpp:
+	- use FileServer::LocateResource to expand the given image name
+
+	* app/simspark/scripts/rcs-materials-textures.rb:
+	- use canonical texture names
+
+	* app/rsgedit/rsgedit.rb:
+	- restore rsgedit specific materials when resetting the scene
+
+	* app/simspark/scripts/rsgedit-materials.rb:
+	- added rsgedit specific materials
+
+	* app/rsgedit/materials-default.rb, app/rsgedit/rsgedit.rb:
+	- use installed default materials
+
+	* app/monitorspark/monitorspark.rb, app/monitorspark/soccersim-monitor.rb:
+	- use installed material scripts
+
+	* app/simspark/Makefile.am:
+	- remove local materials from dist_pkgdata_DATA
+
+	* app/simspark/internalsoccermonitor.rb, app/simspark/simspark.rb:
+	- use canonical font location
+
+	* app/simspark/materials.rb, app/simspark/soccersim.rb:
+	- use installed soccer simulation materials
+
+	* app/simspark/scripts/rcs-materials-textures.rb, app/simspark/scripts/rcs-materials.rb:
+	- added soccersim specific material scripts
+
+	* app/simspark/materials-default.rb, app/simspark/simspark.rb:
+	- removed local materials-default.rb
+	- use canonical scripts/materials.rb to setup common materials
+
+	* app/simspark/Makefile.am: - refactored installation of resource file
+	- install scripts/ directory
+
+	* app/simspark/scripts/materials.rb:
+	- added default material setup file
+
+	* app/monitorspark/Makefile.am, app/monitorspark/VeraMono.ttf:
+	- removed local VeraMono font copy
+
+	* app/monitorspark/soccersim-monitor.rb, plugin/soccermonitor/soccerrender.cpp, app/fonttest/main.cpp:
+	- use canonical font name
+
+	* app/simspark/Makefile.am, app/simspark/fonts/VeraMono.ttf:
+	- added font VeraMono.ttf
+	- modified Makefile.am to install the font directory
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- remove left over debug output 'pwd'
+
+	* app/simspark/rsg/agent/soccerbottorso.rsg:
+	- remove hardcorded path to model. The FileServer expands the path
+	with the install prefix.
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- remove hardcorded path to soccerball object. The FileServer expands
+	the path with the install prefix.
+
+	* lib/zeitgeist/fileserver/fileserver.cpp: - added missing newline
+
+	* plugin/objimporter/objimporter.cpp:
+	- use FileServer::LocateResource() to expand the filename
+
+	* plugin/rosimporter/rosimporter.cpp:
+	- use FileServer::OpenResource() to open the .ros file
+
+	* lib/oxygen/sceneserver/sceneserver.cpp:
+	- use FileServer::LocateResource() to figure out the full path to the scene
+	  file
+
+	* lib/zeitgeist/fileserver/fileserver.cpp, lib/zeitgeist/fileserver/fileserver.h:
+	- added method LocateResource() that expands the given resource name to the
+	  full path
+
+	* lib/oxygen/sceneserver/sceneserver.cpp: - ws changes
+
+	* plugin/rubysceneimporter/rubysceneimporter.cpp:
+	- use FileServer::OpenResource to locate the referenced scene
+
+	* lib/kerosin/fontserver/fontserver.cpp:
+	- use FileServer::OpenResource() to open the font file
+
+	* lib/kerosin/fontserver/fontserver.cpp: - added copyleft
+	- ws changes
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- use FileServer::OpenResource() to locate the script file
+
+	* lib/zeitgeist/fileserver/fileserver.cpp, lib/zeitgeist/fileserver/fileserver.h:
+	- added function OpenResource that expands the given filename to well know
+	  resource locations (currently the install prefix only). This method is
+	  refactored from ScriptServer::Run() method
+
+	* app/simspark/rsg/agent/ball.rsg, app/simspark/rsg/agent/soccerbottorso.rsg:
+	- revert to /usr/local
+
+	* app/rsgedit/simspark.cpp: - disable debug channel by default
+
+	* app/simspark/materials.rb, app/simspark/simspark.rb, app/simspark/soccersim.rb:
+	- setup materials commom to all simulation from the simspark.rb script
+	- setup soccer specific materials from soccersim.rb
+
+	* app/rsgedit/materials-default.rb, app/rsgedit/platform.h, app/rsgedit/rsgedit.rb:
+	- moved material setup to materials-default.rb (currently a copy of
+	  app/simspark/materials-default.rb)
+	- restore default material definitions when resetting the scene
+
+	* app/simspark/materials-default.rb, app/simspark/materials.rb:
+	- use 'sparkCreate' instead of 'new' to install materials. This allow us to
+	  run the material scripts multiple times without creating duplicate
+	  material instances
+
+	* app/simspark/Makefile.am, app/simspark/materials-default.rb,
+	app/simspark/materials.rb, app/simspark/rsg/agent/ball.rsg,
+	app/simspark/rsg/agent/soccerbottorso.rsg:
+	- move common default materials to materials-default.rb and load them from
+	  materials.rb and materials-textures.rb
+	- update Makefile.am
+
+	* app/rsgedit/rsgedit.rb:
+	- remove call to sparkResetSimulationServer (not existing)
+
+	* app/rsgedit/simspark.cpp:
+	- sparkResetScene() now called from within the simspark.rb script
+
+	* app/rsgedit/rsgedit.rb:
+	- re-init spark completely from when resetting a scene (this removes any
+	  custom control node etc.)
+
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- remove previous instances when registering a SimControlNode
+
+	* lib/oxygen/simulationserver/simulationserver.cpp: - ws changes
+
+	* lib/spark/spark.rb:
+	- added function sparkCreate() that installs a new object instance and
+	removes any previous instance at the same location
+	- replaced 'new' with 'sparkCreate'
+	- added function sparkGetRenderServer, sparkGetImageServer,
+	sparkGetTextureServer
+
+	* app/monitorspark/monitorspark.rb:
+	- move setup logging setup after monitor setup is complete
+
+	* lib/spark/spark.rb:
+	- added function sparkGetOrCreate that checks for an existing object instance
+	  or creates a new one if that fails
+	- added functions sparkGetXXXServer that create server instances on demand
+	- changed sparkSetupXXX functions to use sparkGetXXXServer. This allows it
+	  to call them in abitrary order
+
+	* lib/zeitgeist/core.cpp:
+	- changed failed Get() to from Error to Warning
+
+
 2008-02-27  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* acinclude.m4:
