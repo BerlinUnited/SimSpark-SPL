@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialserver_c.cpp,v 1.3 2008/02/19 22:49:23 hedayat Exp $
+   $Id: materialserver_c.cpp,v 1.4 2008/02/28 08:56:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -55,9 +55,16 @@ FUNCTION(MaterialServer,exportAllMaterial)
     return true;
 }
 
+FUNCTION(MaterialServer, resetMaterials)
+{
+    obj->ResetMaterials();
+    return true;
+}
+
 void CLASS(MaterialServer)::DefineClass()
 {
         DEFINE_BASECLASS(zeitgeist/Node);
         DEFINE_FUNCTION(initMaterialExporter);
         DEFINE_FUNCTION(exportAllMaterial);
+        DEFINE_FUNCTION(resetMaterials);
 }

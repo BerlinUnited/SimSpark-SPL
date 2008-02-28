@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: materialserver.cpp,v 1.8 2008/02/19 22:49:23 hedayat Exp $
+   $Id: materialserver.cpp,v 1.9 2008/02/28 08:56:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -79,13 +79,24 @@ shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
 }
 
 void
-MaterialServer::OnLink()
+MaterialServer::ResetMaterials()
 {
-    // create the default material
+    // drop all previous materials
+    UnlinkChildren();
+
+    // (re)create the default material
     shared_ptr<MaterialSolid> defMat = shared_dynamic_cast<MaterialSolid>
         (GetCore()->New("kerosin/MaterialSolid"));
+
     defMat->SetName("default");
     AddChildReference(defMat);
+}
+
+void
+MaterialServer::OnLink()
+{
+    Node::OnLink();
+    ResetMaterials();
 }
 
 bool
