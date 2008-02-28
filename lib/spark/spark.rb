@@ -172,6 +172,10 @@ def sparkResetScene
     sceneServer.setActiveScene($scenePath)
   end
 
+  # reset material definitions
+  materialServer = sparkGetMaterialServer()
+  materialServer.resetMaterials()  
+
   # reset simulation time
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
