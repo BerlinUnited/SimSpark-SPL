@@ -5,11 +5,7 @@
 def rsgeditResetScene
   sparkSetupServer()
   sparkSetupInput('InputSystemWX')
-
-  # setup rendering using no OpenGLSystem- the wxWidgets GL canvas takes
-  # care of OpenGL setup
-  sparkSetupRendering('')
-
+  sparkSetupRendering('OpenGLSystemWX')
   sparkResetScene()
 
   # setup common materials
@@ -37,6 +33,7 @@ end
 
 # import required bundles
 importBundle('inputwx')
+importBundle('openglsyswx')
 
 # reset any all logging (output via gui)
 sparkResetLogging()
@@ -46,6 +43,7 @@ rsgeditResetScene()
 
 # setup default input bindings
 run "bindings.rb"
+
 
 
 
