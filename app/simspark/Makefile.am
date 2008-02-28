@@ -76,4 +76,40 @@ EXTRA_DIST = \
 	rsg/boxspheres/simspark.rsg \
 	rsg/boxspheres/arena.rsg \
 	rsg/boxspheres/box.rsg \
-	rsg/boxspheres/box_with_handler.rsg
+	rsg/boxspheres/box_with_handler.rsg \
+	fonts/VeraMono.ttf\
+	scripts/materials.rb\
+	scripts/rcs-materials.rb\
+	scripts/rcs-materials-textures.rb\
+	scripts/rsgedit-materials.rb\
+	models/soccerball.obj\
+	models/soccerbottorso.obj\
+	textures/rcs-grass-w-lines.tga\
+	textures/rcs-grass.png\
+	textures/rcs-grass3.png\
+	textures/rcs-soccerball.tga\
+	textures/rcs-torso-01.png\
+	textures/rcs-torso-02.png\
+	textures/rcs-torso-03.png\
+	textures/rcs-torso-04.png\
+	textures/rcs-torso-05.png\
+	textures/rcs-torso-06.png\
+	textures/rcs-torso-07.png\
+	textures/rcs-torso-08.png\
+	textures/rcs-torso-09.png\
+	textures/rcs-torso-10.png\
+	textures/rcs-torso-11.png\
+	textures/rcs-unum01.png\
+	textures/rcs-unum02.png\
+	textures/rcs-unum03.png\
+	textures/rcs-unum04.png\
+	textures/rcs-unum05.png\
+	textures/rcs-unum06.png\
+	textures/rcs-unum07.png\
+	textures/rcs-unum08.png\
+	textures/rcs-unum09.png\
+	textures/rcs-unum10.png\
+	textures/rcs-unum11.png
+
+
+
