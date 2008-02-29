@@ -339,6 +339,7 @@ AC_DEFUN([RCSS_CHECK_GL], [
 	rcss_GL_LIBADD=""
 	rcss_GL_LDFLAGS="-framework GLUT -framework OpenGL"
 	# checking if linking against libGL succeeds
+	AM_CONDITIONAL(BUILD_GLUT, test x$have_glut = xyes)
 	RCSS_KEROSIN_IF_ELSE([
 		AC_MSG_CHECKING([if linking against libGL succeeds])
 		rcss_tmp="$LDFLAGS"
@@ -734,7 +735,11 @@ AC_DEFUN([RCSS_BOOST_THREADS_LIB], [
                    [  LDFLAGS="$OLDLDFLAGS -lboost_thread-gcc-mt"
           AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
                        [rcss_boost_threads_lib=-lboost_thread-gcc-mt],
-                       [rcss_boost_threads_lib=])
+		       [  LDFLAGS="$OLDLDFLAGS -lboost_thread-gcc"
+              AC_LINK_IFELSE([int main(int argc, char **argv) { return 0; }],
+                           [rcss_boost_threads_lib=-lboost_thread-gcc],
+                           [rcss_boost_threads_lib=])
+		        ])
                     ])
                 ])
   LDFLAGS="$OLD_LDFLAGS"
