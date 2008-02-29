@@ -1,3 +1,14 @@
+2008-02-29  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* acinclude.m4: 
+	- added BUILD_GLUT conditional for the mac part also,
+	  extended check for boost threads lib to try
+	  -lboost_thread-gcc
+
+	* lib/oxygen/Makefile.am: 
+	- added @BOOST_THREADS_LIB@ to LIBADD for oxygen
+	  to fix unresolved references during runtime (on the mac)
+
 2008-02-28  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp (InternalSoccerRender::OnLink):
