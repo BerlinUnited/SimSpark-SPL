@@ -324,7 +324,7 @@ AC_DEFUN([RCSS_PATH_FREETYPE], [
 #                    @GL_LDFLAGS@ with linker flags for libraries linking libgl
 #-----------------------------------------------------------------------------
 AC_DEFUN([RCSS_CHECK_GL], [
-    AC_CHECK_HEADERS([OpenGL/gl.h GLUT/glut.h], [iamamac=yes], [iamamac=no])
+    AC_CHECK_HEADERS([OpenGL/gl.h OpenGL/glu.h], [iamamac=yes], [iamamac=no])
     AC_MSG_CHECKING([if I am a Mac])
     AM_CONDITIONAL(BUNDLE_SUPPORT, test x$iamamac = xyes)
     AC_SUBST(bundle_support, $iamamac)
@@ -338,8 +338,9 @@ AC_DEFUN([RCSS_CHECK_GL], [
         AC_SUBST([GLDIR], [$GLDIR])
 	rcss_GL_LIBADD=""
 	rcss_GL_LDFLAGS="-framework GLUT -framework OpenGL"
-	# checking if linking against libGL succeeds
+	AC_CHECK_HEADERS([GLUT/glut.h],[have_glut=yes],[have_glut=no])
 	AM_CONDITIONAL(BUILD_GLUT, test x$have_glut = xyes)
+	# checking if linking against libGL succeeds
 	RCSS_KEROSIN_IF_ELSE([
 		AC_MSG_CHECKING([if linking against libGL succeeds])
 		rcss_tmp="$LDFLAGS"
@@ -350,16 +351,18 @@ AC_DEFUN([RCSS_CHECK_GL], [
 				[AC_MSG_RESULT([no])
 				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libGL can be found])])
 		LDFLAGS="$rcss_tmp"
-		AC_MSG_CHECKING([if linking against libglut succeeds])
-		LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
- 		AC_LINK_IFELSE([#include <GLUT/glut.h>
-				int main(int argc, char **argv) { glutMainLoop(); }],
-				[AC_MSG_RESULT([yes])],
-				[AC_MSG_RESULT([no])
-				 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libglut or can be found])
-				 ])
-		LDFLAGS="$rcss_tmp"
-		])
+		if test "$have_glut" = yes; then
+			AC_MSG_CHECKING([if linking against libglut succeeds])
+			LDFLAGS="$LDFLAGS $rcss_GL_LIBADD $rcss_GL_LDFLAGS"
+	 		AC_LINK_IFELSE([#include <GLUT/glut.h>
+					int main(int argc, char **argv) { glutMainLoop(); }],
+					[AC_MSG_RESULT([yes])],
+					[AC_MSG_RESULT([no])
+					 RCSS_BUILD_KEROSIN_ERROR([to build libkerosin, set LDFLAGS so that libglut or can be found])
+					 ])
+			LDFLAGS="$rcss_tmp"
+			])
+		fi
     ])
     else
        AC_MSG_RESULT([sorry])
