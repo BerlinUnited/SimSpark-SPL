@@ -4,7 +4,7 @@
  Fri May 9 2003
  Copyright (C) 2002,2003 Koblenz University
  Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
- $Id: forceresistanceperceptor.cpp,v 1.4 2007/06/14 17:55:19 jboedeck Exp $
+ $Id: forceresistanceperceptor.cpp,v 1.5 2008/02/29 22:36:20 hedayat Exp $
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -84,21 +84,23 @@ bool ForceResistancePerceptor::Percept(
             pos += Vector3f(i->first.pos[0], i->first.pos[1], i->first.pos[2])
                     * forceVec.Length();
             sumLength += forceVec.Length();
-            
-            // Sometimes the Percept function is called more than once in a 
+
+            // Sometimes the Percept function is called more than once in a
             // time step. Double freeing is avoided using this line!
             dJointSetFeedback(i->second, 0);
             delete feedback;
         }
     }
-    
+
     // It should be always true, except when feedback == NULL
     if (sumLength > 0.001)
     {
-        mLastPoint = (pos / sumLength ) - mBody->GetLocalTransform().Pos();
-        mLastForce = force;
+        Matrix invRot = mBody->GetLocalTransform();
+        invRot.InvertRotationMatrix();
+        mLastPoint = invRot * (pos / sumLength);
+        mLastForce = invRot.Rotate(force);
     }
-    
+
     ParameterList& posElement = predicate.parameter.AddList();
     posElement.AddValue(std::string("c"));
     posElement.AddValue(mLastPoint.x());

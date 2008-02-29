@@ -1,3 +1,10 @@
+2008-03-01  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/collisionperceptor/forceresistanceperceptor.cpp
+	 (ForceResistancePerceptor::Percept):
+	 - bugfix: while the vectors were translated, they were not rotated. they
+	   are in correct local coordinates now (hopefully!).
+
 2008-02-29  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* acinclude.m4:
