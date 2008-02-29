@@ -1,6 +1,5 @@
 if BUILD_KEROSIN
 noinst_PROGRAMS = fonttest
-all-local: data/font/VeraMono.ttf
 endif
 
 if DEBUG
