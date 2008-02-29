@@ -2,7 +2,7 @@ if BUILD_WXWIDGETS
 pkglib_LTLIBRARIES = libwxutil.la
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/utility/wxutil/include @WX_CPPFLAGS@ -D __WX__
+AM_CPPFLAGS = -I${top_srcdir}/utility/wxutil/include @WX_CPPFLAGS@ -D __WX__ -D LINK_LEXERS -D SCI_LEXER
 
 libwxutil_la_SOURCES = \
 	src/wxflatnotebook/fnb_resources.cpp \
