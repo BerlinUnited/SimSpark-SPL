@@ -1,9 +1,27 @@
+2008-03-02  Markus Rollmann  <rollmark@users.sourceforge.net>
+
+	* app/rsgedit/mainframe.cpp:
+	- use wxString::fn_str() to convert to ascii (fix problems with non unicode builds)
+
+
 2008-03-01  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/collisionperceptor/forceresistanceperceptor.cpp
 	 (ForceResistancePerceptor::Percept):
 	 - bugfix: while the vectors were translated, they were not rotated. they
 	   are in correct local coordinates now (hopefully!).
+
+
+2008-02-29  Markus Rollmann  <rollmark@users.sourceforge.net>
+
+	* doc/rsgedit.txt: - added a very rough rsgedit guide
+
+	* utility/wxutil/Makefile.am:
+	- enable Scintilla lexer support to enable syntax highlighting in editor
+
+2008-02-29  Markus Rollmann  <rollmark@users.sourceforge.net>
+
+	* app/fonttest/Makefile.am: - remove font from 'all-local:
 
 2008-02-29  Hedayat Vatankhah  <hedayat@grad.com>
 
