@@ -1,3 +1,11 @@
+2008-03-03  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/sceneeffector/sceneeffector.h:
+	* plugin/sceneeffector/sceneeffector.cpp:
+	- reverted the changed which have been made when porting simspark to
+	  sserver3d. it uses PrePhysicsUpdateInternal instead of Realize function so
+	  that it won't generate errors in multi-threaded mode
+
 2008-03-02  Markus Rollmann  <rollmark@users.sourceforge.net>
 
 	* app/rsgedit/mainframe.cpp:
