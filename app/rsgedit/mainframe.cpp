@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: mainframe.cpp,v 1.3 2008/02/25 14:56:52 rollmark Exp $
+   $Id: mainframe.cpp,v 1.4 2008/03/02 13:57:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -640,7 +640,7 @@ void mainframe::InitSimulation(shared_ptr<SimulationServer>& sim)
     shared_ptr<InputControl> inputCtr = spark->GetInputControl();
     if (inputCtr.get() != 0)
         {
-            inputCtr->SetFPSController(MAINFRAME_FPS_CONTROLLER.ToAscii().data());
+            inputCtr->SetFPSController(std::string(MAINFRAME_FPS_CONTROLLER.fn_str()));
             inputCtr->SetAdvanceTime(false);
         }
 
@@ -1011,7 +1011,7 @@ bool mainframe::OpenSimulation(const wxString& fname)
         }
 
     spark->GetLog()->Normal() << "(RsgEdit) reading " << fname << "\n";
-    if (! spark->GetScriptServer()->Run(fname.ToAscii().data()))
+    if (! spark->GetScriptServer()->Run(std::string(fname.fn_str())))
     {
         return false;
     }
