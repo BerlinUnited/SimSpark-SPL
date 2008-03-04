@@ -1,5 +1,7 @@
 if BUILD_KEROSIN
+if BUILD_WXWIDGETS
 pkglib_LTLIBRARIES = openglsyswx.la
+endif
 endif
 
 openglsyswx_la_SOURCES = \

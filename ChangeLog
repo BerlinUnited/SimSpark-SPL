@@ -1,3 +1,8 @@
+2008-03-04  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/openglsyswx/Makefile.am:
+	- added check for BUILD_WXWIDGETS
+
 2008-03-03  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/sceneeffector/sceneeffector.h:
