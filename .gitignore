@@ -162,6 +162,8 @@ doc/users/auto
 doc/users/manual.aux
 doc/users/manual.log
 doc/users/manual.pdf
+doc/users/user-manual.pdf
+doc/users/user-manual.out
 lib/Makefile
 lib/Makefile.in
 lib/kerosin/.deps

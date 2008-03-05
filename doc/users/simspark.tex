@@ -1,10 +1,35 @@
 \chapter{Simspark}
 
+\begin{tabular}{|l|l|l|l|}
+%\label perceptorNamesTable
+%\title{Perceptor and effector names}
+\hline
+{\bf Connection between}  & {\bf Joint type} & {\bf Perceptor name}& {\bf
+Effector name} \\
+\hline
+%Klaus: how do I get underscore character?
+Shoulder - body  & Universal joint & laj12  raj12 & lae12   rae12 \\
+\hline
+Upper arm - shoulder  & Hinge joint & laj3  raj3 & lae3   rae3 \\
+\hline
+Forearm - upper arm  & Hinge joint & laj4  raj4 & lae4   rae4 \\
+\hline
+Hip - body  & Hinge joint & llj1  rlj1 & lle1   rle1 \\
+\hline
+Upper leg - hip & Universal joint & llj23  rlj23 & lle23   rle23 \\
+\hline
+Lower leg - upper leg & Hinge joint & llj4  rlj4 & lle4   rle4 \\
+\hline
+foot - lower leg & Universal joint & llj56  rlj56 & lle56   rle56 \\
+\hline
+\end{tabular}
+
 \section{Perceptors}
 
 % Describe in detail, also the message format, see TEXT_INSTEAD... and Oliver's hope-1.pdf manual
 
 % Explain that these perceptors available to all simulations
+% Klaus:do we have noise in perceptors?
 
 \subsection{GyroRate Perceptor}
 
@@ -15,7 +40,7 @@
 \subsection{UniversalJoint Perceptor} 
 
 % Explain that these perceptors are specific to the soccer simulation
-
+%Klaus: should we make different subsections then for this?
 \subsection{Vision Perceptor}
 
 % What about the Restricted Vision Perceptor?
@@ -32,7 +57,9 @@
 
 % Describe in detail, also the message format, see TEXT_INSTEAD...
 
-\section{Create Eﬀector}
+% Klaus: do we have noise in effectors?
+
+\subsection{Create Effector}
 
 When an agent initially connects to the server it is invisible and
 cannot take affect a simulation in any meaningful way. It only
@@ -41,7 +68,9 @@ possesses a so called CreateEffector.
 An agent uses this effector to advice the server to construct it
 according to a scene description file it passes as a parameter. This
 file is used to construct the physical representation and all further
-effectors and preceptors.
+effectors and preceptors.\newline \newline 
+Message format: (scene  $\langle$ filename$\rangle$)\newline
+Example message: (scene rsg/agent/soccerbot056.rsg)
 
 After the agent representation is constructed in the server the agent
 should do further simulation specific setup. For example in the soccer
@@ -52,6 +81,12 @@ the SoccerInitEffector is used.
 % Explain that these effectors are available to all simulations
 
 \subsection{HingeJoint Effector}
+Effector for all axis with a single degree of freedom.
+The first parameter is the name of the axis. Table ??? shows a list of all
+available hinge joints. The second parameter contains the change in angle of
+the joint.\newline \newline
+Message format: (<name> <ax>)\newline
+Example message: (lae3 5.3)
 
 \subsection{Hinge2Joint Effector}
 
@@ -59,21 +94,43 @@ the SoccerInitEffector is used.
 
 % Explain that these effectors are soccer specific, and some only in deprecated versions
 
-\subsection{Init Eﬀector}
-\subsection{Beam Eﬀector}
-\subsection{Drive Eﬀector}
+\subsection{Init Effector}
+The init command is sent once for each agent after the create effector sent the
+scene command. It registers this agent as a member of the passed team with the passed number.
+All players of one team have to use the same teamname and different numbers.
+If an agent sends 0 as playernumber, the number is assigned automatically by
+the server to the next free number. The maximum amount of teams is two, the
+maximal amount of players is currently four.
+The side on which a team starts to play depends on which team connected
+first.\newline\newline 
+Message format: (init (unum <playernumber>)(teamname<yourteamname>))\newline
+Example message: (init (unum 1)(teamname FHO))
+
+\subsection{Beam Effector}
+The beam effector allows a player to position itself on the field before the
+game starts. The x and y coordinates define the position on the field with
+respect to the coordinate system of figure ???. The rot value allows to define
+the rotation angle of the player. Zero degrees points to positive x axis, 90
+degrees to positive y axis.
+
+Message format: (beam <x> <y>)
+<rot>) Example message: (beam 10.0 -10.0 0.0)
+
+\subsection{Drive Effector}
+
+% Only used in rcssserver3D
+%Klaus: I suggest to put all of these effectors into one subsection old
+% effectors
+
+\subsection{Kick Effector}
 
 % Only used in rcssserver3D
 
-\subsection{Kick Eﬀector}
+\subsection{Catch Effector}
 
 % Only used in rcssserver3D
 
-\subsection{Catch Eﬀector}
-
-% Only used in rcssserver3D
-
-\subsection{Say Eﬀector}
+\subsection{Say Effector}
 
 \section{Simulation Update Loop}
 
