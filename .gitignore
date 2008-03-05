@@ -128,6 +128,8 @@ doc/Doxyfile
 doc/Makefile
 doc/Makefile.in
 doc/api
+doc/.project
+doc/.texlipse
 doc/devel/Makefile
 doc/devel/Makefile.in
 doc/devel/auto
