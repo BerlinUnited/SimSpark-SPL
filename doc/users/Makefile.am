@@ -7,13 +7,13 @@ if COND_PDFLATEX
 	pdflatex $<
 
 all-local:
-	@if test -f manual.tex; then \
-	  $(MAKE) $(AM_MAKEFLAGS) manual.pdf ; \
+	@if test -f user-manual.tex; then \
+	  $(MAKE) $(AM_MAKEFLAGS) user-manual.pdf ; \
 	else \
 	  echo "***" ;\
 	  echo "*** There is no users manual yet. Please consider contributing to it." ; \
 	  echo "***" ; \
 	fi
 
-CLEANFILES = manual.log manual.pdf manual.aux manual.toc
+CLEANFILES = user-manual.log user-manual.pdf user-manual.aux user-manual.toc
 endif
