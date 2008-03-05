@@ -1,0 +1,125 @@
+ \chapter{Getting Started}
+
+\section{Download and Installation Instructions}
+
+%Currently the soccer3d CVS builds only for Linux (the Win32 build system is not yet ported/tested, so we should focus on *nix systems.
+
+This chapter explains how to install SimSpark on an Ubuntu Linux
+system\footnote{This guide is adapted from the guide created by the
+  Little Green Bats Team at
+  \url{http://www.littlegreenbats.nl/?q=node/70}}. It should work with
+slight modifications on other distributions like Fedora, Suse and
+especially Debian.
+
+\begin{enumerate}
+
+\item Depending on the distribution version you are using you might need
+to enable additional repositories in order to install all required
+packages (Please refer to your system specific documentation). In
+Ubuntu these repositories are called 'Universe' and 'Multiverse'.
+
+To enable them you have to edit the /etc/apt/sources.list file and
+update the local package database.
+
+\$ sudo gedit /etc/apt/sources.list
+\$ sudo apt-get update
+
+\item Install dependencies:
+
+SimSpark builds and depends upon the work of other software
+projects.
+
+We use the gnu autotools to configure and build SimSpark. Therefore
+these packages are required:
+
+autoconf
+automake
+libtool
+
+Further required, i.e. non optional packages are
+
+Ruby
+The Open Dynamics Engine (ODE)
+The boost C++ libraries
+S-Lang (libslang)
+
+The rendering of SimSpark can be omitted from the build process
+therefore these packages are optional
+
+OpenGL
+FreeGlut
+SDL
+Freetype
+Developer Image Library (DevIL)
+Tiff library libtiff
+
+In order to build the SimSpark documentation you need a Latex
+installation (e.g. tetex).
+
+In order to build the rsgedit gui you need to install wxWidgets.
+
+\$ sudo apt-get install g++ ruby1.9 ruby1.9-dev libode0-dev\
+libboost-dev libsdl-dev libfreetype6-dev libdevil-dev autoconf\
+automake1.9 libtool freeglut3-dev tetex-extra cvs xlibs-dev\
+libtiff4-dev libslang1-dev
+
+\$ sudo rm /usr/bin/ruby
+\$ sudo ln -s /usr/bin/ruby1.9 /usr/bin/ruby
+\$ sudo ln -s /usr/lib/libruby1.9.so /usr/lib/libruby.so
+
+\item Check out the source from the source forge CVS repository:
+
+\$ cvs -d:pserver:anonymous@sserver.cvs.sourceforge.net:/cvsroot/sserver login
+[ when asked for a password, just press enter]
+
+\$ cvs -z3 -d:pserver:anonymous@sserver.cvs.sourceforge.net:/cvsroot/sserver co -P rcsoccersim/rcssserver3D
+
+\item Build and install the soccer server
+
+The configure script accepts a number of options that you can add to
+it's command line.
+
+
+--help lists all available configure options
+
+--enable-debug=no builds an optimized version of SimSpark.
+
+--enable-kerosin=no builds SimSpark without rendering support
+
+--prefix=/some/path defines the path where the 'make install' will install the SimSpark executable, plugins and resources.
+
+If omitted it defaults to /usr/local
+
+\$ cd rcsoccersim/rcssserver3D/
+\$ ./bootstrap
+\$ ./configure
+\$ make
+\$ sudo make install
+
+\item Make sure the linker can find your shared libraries if you changed
+the install prefix as described above with the --prefix option.
+
+\$ sudo gedit /etc/ld.so.conf
+[add your install prefix if it isn't already there, save and close]
+\$ sudo ldconfig
+
+\item run the simulation
+\$ cd
+\$ simspark
+
+\end{enumerate}
+
+\section{How to Start a Simulation}
+
+\section{How to Stop a Simulation}
+
+\section{An Example of a Simulation Run}
+
+%Take the user through the steps of running the soccer simulation and show what to expect (screen shots)
+
+%I think for the initial outline of the manual it's easier to just focus on either app/simpark app/monitorspark  or rsgedit.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 

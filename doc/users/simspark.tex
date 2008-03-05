@@ -1,0 +1,144 @@
+\chapter{Simspark}
+
+\section{Perceptors}
+
+% Describe in detail, also the message format, see TEXT_INSTEAD... and Oliver's hope-1.pdf manual
+
+% Explain that these perceptors available to all simulations
+
+\subsection{GyroRate Perceptor}
+
+\subsection{HingeJoint Perceptor}
+
+\subsection{Hinge2Joint Perceptor}
+
+\subsection{UniversalJoint Perceptor} 
+
+% Explain that these perceptors are specific to the soccer simulation
+
+\subsection{Vision Perceptor}
+
+% What about the Restricted Vision Perceptor?
+
+% The current soccer bot seems not to use it, still experimental/unsupported?
+
+\subsection{GameState Perceptor}
+\subsection{AgentState Perceptor}
+\subsection{Hear Perceptor}
+\subsection{Touch Perceptor}
+\subsection{ForceResistance Perceptor}
+
+\section{Effectors/Actuators}
+
+% Describe in detail, also the message format, see TEXT_INSTEAD...
+
+\section{Create Eﬀector}
+
+When an agent initially connects to the server it is invisible and
+cannot take affect a simulation in any meaningful way. It only
+possesses a so called CreateEffector.
+
+An agent uses this effector to advice the server to construct it
+according to a scene description file it passes as a parameter. This
+file is used to construct the physical representation and all further
+effectors and preceptors.
+
+After the agent representation is constructed in the server the agent
+should do further simulation specific setup. For example in the soccer
+simulation each agent is required to register to a team and acquire a
+unique player number. For these tasks usually a special effector like
+the SoccerInitEffector is used.
+
+% Explain that these effectors are available to all simulations
+
+\subsection{HingeJoint Effector}
+
+\subsection{Hinge2Joint Effector}
+
+\subsection{UniversalJoint Effector}
+
+% Explain that these effectors are soccer specific, and some only in deprecated versions
+
+\subsection{Init Eﬀector}
+\subsection{Beam Eﬀector}
+\subsection{Drive Eﬀector}
+
+% Only used in rcssserver3D
+
+\subsection{Kick Eﬀector}
+
+% Only used in rcssserver3D
+
+\subsection{Catch Eﬀector}
+
+% Only used in rcssserver3D
+
+\subsection{Say Eﬀector}
+
+\section{Simulation Update Loop}
+
+% I think people want to know how this works, maybe we can give an overview here and go into more detail in the developer manual? What do you think?
+
+SimSpark implements a simple internal event model that immediately
+executes every action received from an agent. It does not try to
+compensate any network latency or compensate for different computing
+resources available to the connected agents.
+
+A consequence is that SimSpark currently does not guarantee that
+events are reproducible. This means repeated simulations may have a
+different outcome, depending on network delays or load variations on
+the machines hosting the agents and the server.
+
+A benefit of the simple structure however are speed gains that make it
+interesting for machine learning tasks as in these setups an often
+large number of different agent and simulation configurations are
+repeatedly tested.
+
+Further the SimSpark main loop is highly customizable as it is
+entirely build upon plugins we call simcontrol nodes. Simcontrol nodes
+are registered to the simulation server. They act in response to
+control events. The simulation server repeatedly generates these as it
+executes an abstracted the main loop.
+
+The event types are an 'init' event once when the simulation server
+starts and a 'done' event on shutdown. The main then loop cycles
+repeatedly through the 'start cycle', 'sense agent', 'act agent' and
+'end cycle' events.
+
+Apart from generating control events the simulation server advances
+the simulation time passed in the last cycle. Depending on its
+configuration it either does this in discrete time quanta or in one
+single step.
+
+A simcontrol node further can take responsibility for the time
+measurement, for example to synchronize the simulation time with the
+real time used to render the scene.  Otherwise the simulation is
+stepped a fixed time step as often as possible.
+
+In this way all management tasks are implemented as plugins to the
+simulation server. This involves the agent management, monitor
+management, rendering, mouse and keyboard input and network code.
+
+This setup allows us to configure the simulation at runtime as either
+a monolithic application that does both simulation and rendering or as
+a dedicated simulation server that defers rendering to a remote
+monitor application.
+
+% Single vs. Multithreaded Runloop (how to setup)
+
+% Yuan agreed to write the next two parts :-)
+
+\subsection{Single-threaded Timer}
+
+\subsection{Multi-threaded Timer}
+
+\section{Setup Scripts}
+
+% describe purpose of scripts in ~/.rcssserver3d/]
+
+% kerosin.rb for rendering configuration of simspark
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 

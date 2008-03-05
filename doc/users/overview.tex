@@ -1,0 +1,66 @@
+ \chapter{System Overview}
+
+%Briefly introduce the system and its components. Later chapters go into more detail.
+
+
+SimSpark is built upon an application framework called Zeitgeist. This
+framework provides basic OS abstractions like file and archive
+support, logging, shared libraries etc.), a scripting interface to
+Ruby and a powerful plugin mechanism coupled with a object hierary
+that provides a unified namespace. This library is the backbone of the
+system.
+
+Zeitgeist allows us to load new classes at runtime from plugins and
+install instances in the object hierarchy. We can locate these
+instances via path expression like files in a file system. At various
+well known locations are objects that provide services to other parts
+of the system (e.g. the ScriptServer at /sys/server/script).
+
+Built as part of this object hierarchy is a scene graph that is the in
+system representation of the simulated world. The scene graph and
+related concepts are modeled within the next layer of the system,
+called oxygen. It provides classes that encapsulate concepts like
+transformations, geometric object, physical bodies and collision
+primitives and interfaces them to a rigid body simulation.
+
+The oxygen library further implements basic simulation services like
+agent management, a monitor framework and basic effector/robot/eceptor
+classes. Further a customizable run loop is implemented that can be
+extended as needed.
+
+Visualization and input handling is provided by the kerosin
+library. It provides the infrastructure for rendering and device
+management. Concrete implementations are provided by plugins. A
+default set of plugins utilizes OpenGL and the SDL library.
+
+
+\section{The Server}
+
+%Describe what the server does: physics, agent management, world modeling, ...
+
+\section{The Monitor and Logplayer}
+
+%Generic monitor, can be customized with plug-ins to display simulation specific stuff, internal & external version, log playing, ...
+
+\section{The Sample Client}
+
+%Demo client, demonstrates interaction with the server, how to read perceptor values, how to send effector values, can load different behaviors
+
+%Provide links to a reositoriy of clients / papers from previous competitions?
+
+
+\section{Available Simulations}
+
+\section{Available Robot Models}
+
+%NEC Papero Roboter  Joschka
+%Fabio Della Libera models the VStone VisiON 4g
+%CITIZEN Eco-B!
+%HOAP-2
+%'Vierbeiner' von Oli
+%Aibo via RosImporter ;)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 
