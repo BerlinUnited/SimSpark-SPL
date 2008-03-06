@@ -43,9 +43,39 @@ and the SDL library.
 
 %Describe what the server does: physics, agent management, world modeling, ...
 
+%scene graph, object aspects (physical, geometric, visual) 
+%at simulation start physics simulation is setup from scene graph state
+
+%running the simulation means 
+% - collecting and applying forces (from agents, or game rule aspects) 
+% - stepping the physics simulation and synchronizing the scene graph
+
+%agent management 
+%(connect/disconnect, sense, act
+% sense reads from the scene 
+% act modifies the scene (e.g applies forces)
+
+%(optional) monitor management 
+%(connect/disconnect, monitor update)
+% pluggable server side monitor implementation; 
+% scene specific protocols ; useful for every simulation; only concerned with scene
+% simulation specific protocol addons; generate list of name/value pairs (predicates); transfer games state
+
+%(optional) rendering
+%no network overhead between server/monitor
+%useful if on same machine, debugging purposes
+
+%run loop
+%is customized to update the different active server parts in a correct order
+
 \section{The Monitor and Logplayer}
 
-%Generic monitor, can be customized with plug-ins to display simulation specific stuff, internal & external version, log playing, ...
+%Generic monitor that displays only scene
+% customized with plugins
+% plugins parse game specific data
+% plugins render scene overly to display game state
+% (internal version is described in server section)
+% log playing
 
 \section{The Sample Client}
 
@@ -53,8 +83,9 @@ and the SDL library.
 
 %Provide links to a reositoriy of clients / papers from previous competitions?
 
-
 \section{Available Simulations}
+
+% soccer in previous version (spheres and articulated robots)
 
 \section{Available Robot Models}
 
