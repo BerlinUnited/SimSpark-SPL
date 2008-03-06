@@ -2,37 +2,42 @@
 
 %Briefly introduce the system and its components. Later chapters go into more detail.
 
-
-SimSpark is built upon an application framework called Zeitgeist. This
+SimSpark is built upon an application framework called zeitgeist. This
 framework provides basic OS abstractions like file and archive
 support, logging, shared libraries etc.), a scripting interface to
-Ruby and a powerful plugin mechanism coupled with a object hierary
+Ruby and a powerful plugin mechanism coupled with an object hierary
 that provides a unified namespace. This library is the backbone of the
 system.
 
 Zeitgeist allows us to load new classes at runtime from plugins and
-install instances in the object hierarchy. We can locate these
-instances via path expression like files in a file system. At various
-well known locations are objects that provide services to other parts
-of the system (e.g. the ScriptServer at /sys/server/script).
+install object instances in a hierarchy. We can locate these instances
+via path expression just like files in a file system. At various well
+known locations are objects called servers that provide services to
+other parts of the system. The script server that provides an
+interface to the Ruby ist installed at \texttt{/sys/server/script}.
 
-Built as part of this object hierarchy is a scene graph that is the in
-system representation of the simulated world. The scene graph and
-related concepts are modeled within the next layer of the system,
-called oxygen. It provides classes that encapsulate concepts like
-transformations, geometric object, physical bodies and collision
-primitives and interfaces them to a rigid body simulation.
+Built as part of this object hierarchy is a scene graph that the
+system uses to represent the simulated world. This scene graph and
+related concepts are managed within the next layer of the system, that
+we call oxygen. It provides classes that encapsulate concepts like
+transformations, basic geometric primitives, physical bodies and
+collision primitives. It further provides access to a rigid body
+physical simulation.
 
 The oxygen library further implements basic simulation services like
-agent management, a monitor framework and basic effector/robot/eceptor
-classes. Further a customizable run loop is implemented that can be
-extended as needed.
+agent management and a monitor framework. It is responsible to keep
+track and to update connected agents and monitor processes. Last but
+not least it provides a customizable run loop service. This service is
+implemented as an abstract run loop that is extended with plugins as
+needed. In parts of the system can be replaced or left out easily as
+for example rendering or monitor support.
 
-Visualization and input handling is provided by the kerosin
-library. It provides the infrastructure for rendering and device
-management. Concrete implementations are provided by plugins. A
-default set of plugins utilizes OpenGL and the SDL library.
-
+The Visualization of the scene and input event processing services are
+provided by the kerosin library. It implements the infrastructure for
+rendering and device management. Concrete implementations are again
+provided by plugins. This allows the simulation to use different back
+ends or graphic engine. A default set of plugins utilizes plain OpenGL
+and the SDL library.
 
 \section{The Server}
 
