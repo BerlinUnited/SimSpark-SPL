@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.22.2.3 2008/02/28 17:15:09 sgvandijk Exp $
+   $Id: body.cpp,v 1.22.2.4 2008/03/06 11:42:01 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-Body::Body() : ODEObject(), mODEBody(0), mMassTrans(0,0,0)
+Body::Body() : ODEObject(), mODEBody(0), mMassTrans(0,0,0), mMassTransformed(false)
 {
 }
 
@@ -266,6 +266,8 @@ void Body::AddMass(const dMass& mass, const Matrix& matrix)
     
     // Keep track of total translation of mass
     mMassTrans = mMassTrans - trans2;
+    
+    mMassTransformed = true;
 }
 
 void Body::PrepareCylinder (dMass& mass, float density, float radius, float length) const
@@ -430,7 +432,7 @@ void Body::SynchronizeParent() const
 void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // Check whether mass/body has been translated
-    if (mMassTrans.Length() > 0)
+    if (mMassTransformed)
     {
         weak_ptr<Node> parent = GetParent();
 
@@ -452,7 +454,7 @@ void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
         // Update visuals (or other transforms in the tree)
         TLeafList transforms;
-        parent.lock()->ListChildrenSupportingClass<Transform>(transforms);
+        parent.lock()->ListChildrenSupportingClass<Transform>(transforms, true, true);
         for (TLeafList::iterator iter = transforms.begin(); iter != transforms.end(); ++iter)
         {
             shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
@@ -462,6 +464,7 @@ void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
         }
         
         mMassTrans = Vector3f(0,0,0);
+        mMassTransformed = false;
     }
 }
 
