@@ -1,33 +1,5 @@
 \chapter{Simspark}
 
-\begin{table}
-\label {table:perceptorNames}
-\caption{Perceptor and effector names}
-\begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-{\bf Connection between}  & {\bf Joint type} & {\bf Perceptor name}& {\bf
-Effector name} \\
-\hline
-%Klaus: how do I get underscore character?
-Shoulder - body  & Universal joint & laj1\_2  raj1\_2 & lae1\_2   rae1\_2 \\
-\hline
-Upper arm - shoulder  & Hinge joint & laj3  raj3 & lae3   rae3 \\
-\hline
-Forearm - upper arm  & Hinge joint & laj4  raj4 & lae4   rae4 \\
-\hline
-Hip - body  & Hinge joint & llj1  rlj1 & lle1   rle1 \\
-\hline
-Upper leg - hip & Universal joint & llj2\_3  rlj2\_3 & lle2\_3   rle2\_3 \\
-\hline
-Lower leg - upper leg & Hinge joint & llj4  rlj4 & lle4   rle4 \\
-\hline
-foot - lower leg & Universal joint & llj5\_6  rlj5\_6 & lle5\_6   rle5\_6 \\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
-
 In this section you find information about the messages that are sent from the
 server to the agent (perceptors) and vice versa (effectors). A description of
 the perceptors and effectors can also be found in \cite{SchillingJ} (German) and \cite{Lekavy} (Slovak).
@@ -149,7 +121,7 @@ Possible objects are:
 \begin{itemize}
 	\item[Flags:] The marker flags on the field corners F1L, F1R, F2L, F2R
 	\item[Goalposts:] The goal posts of both goals G1L, G1R, G2L, G2R. Goals and
-	flags are located as shown in \ref{??}.
+	flags are located as shown in \ref{fig:pitch}.
 	\item[Ball:] The ball B 
 	\item[Players:] Players P with additional information \texttt{(team <teamname>)
 	(id <playerID>)}
@@ -451,13 +423,66 @@ a monolithic application that does both simulation and rendering or as
 a dedicated simulation server that defers rendering to a remote
 monitor application.
 
-% Single vs. Multithreaded Runloop (how to setup)
-
-% Yuan agreed to write the next two parts :-)
-
 \subsection{Single-threaded Timer}
 
+In the singled-threaded mode, the main loop cycles repeatedly through
+the `start cycle', `sense agent', `act agent' and `end cycle' events(
+see \autoref{fig:single-thread-sd}). There are two noticeable details:
+\begin{itemize}
+\item Each cycle duration is 20ms, if the simulation is fast than real
+  time, it will wait; otherwise, if the simulation is very slow, it
+  will run many physics updates once without interaction with agents.
+  If the simulation is very slow, it will give up to catch up the real
+  time and print warning. So you may have problem while the computer
+  is not fast enough.
+\item The `act agent' event is followed after `sense agent', the
+  action which the agent send according to $n^{th}$ cycle will be
+  realized in the $(n+1)^{th}$ cycle, i.e. the action has been delayed
+  one cycle. See for \autoref{fig:synchronization} explanation.
+\end{itemize}
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[height=0.6\textheight]{fig/serverSingleThreadLoop}
+  \caption{Single-threaded loop UML sequence diagram}
+  \label{fig:single-thread-sd}
+\end{figure}
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{fig/synchronization}
+  \caption{Synchronization between SimSpark and agent}
+  \label{fig:synchronization}
+\end{figure}
+
 \subsection{Multi-threaded Timer}
+In modern time, computers have more than one CPU or dual cores in one
+CPU. This improve the performance greatly, but only the multi-threaded
+program can benefit. SimSpark has an experimental multi-threaded
+running loop, it can be switched on simply by change the
+\texttt{simulationServer.setMultiThreads(false)} to
+\texttt{simulationServer.setMultiThreads(true)} in the
+\texttt{spark.rb} file.
+
+The implementation of multi-threaded loop is based on two conditions.
+First, every SimControlNode response for different parts of the
+simulation, they perform one by one in the singled-threaded mode, but
+they can run in parallel. Second, there is a active scene which stores
+the whole simulation data in a tree. The physics engine and
+SimControlNode interact through the active scene. As we know, the
+physics computation is the most time-consuming, and the physics engine
+does not need to access the active scene during physics computation.
+So the physics computation and SimControlNodes can run in parallel. At
+last, we get the multi-threaded simulation loop as
+\autoref{fig:multi-thread-sd}. Note that the agent's action are also
+delayed one cycle in the multi-threaded loop.
+\begin{figure}[htp]
+  \centering
+  \includegraphics[height=0.5\textheight]{fig/serverMultiThreadLoop}
+  \caption{Multi-threaded loop UML sequence diagram, note that
+    each SimControlNode runs in separated thread.}
+  \label{fig:multi-thread-sd}
+\end{figure}
 
 %----------------------------------------------------------------------
 \section{Setup Scripts}
