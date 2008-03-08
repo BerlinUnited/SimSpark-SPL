@@ -12,6 +12,29 @@ information about the environment and the agent itself. There are perceptors
 that are available to all kinds of simulations and soccer specific perceptors.
 
 % Describe in detail, also the message format, see TEXT_INSTEAD... and Oliver's hope-1.pdf manual
+
+\subsection{General message format}
+
+Messages from and to the server use S-expressions (short for symbolic
+expressions) as their basic data structure. The basic idea of
+S-expressions is very simple: they are either strings, or lists of
+simpler S-expressions.  They are probably best known for their use in
+the Lisp family of programming languages where they are used for both
+code and data.
+
+An advantage of using S-expressions over other data formats is that it
+provides an easy to parse and compact syntax that is to some extent
+still readable by humans for debug purposes. It is further easy to add
+new sensors to the messages as the parser on the client side can
+easily ignore unknown parts.
+
+Messages exchanged between client and server use the default ASCII
+character set, i.e. one character is encoded in a single byte. Further
+each individual message is prefixed with the length of the payload
+message. The length prefix is a 32 bit unsigned integer in network
+order, i.e. big endian notation with the most significant bits
+transferred first.
+
 % Klaus:do we have noise in perceptors?
 \subsection{General Perceptors}
 The perceptors described in this subsection are available to all types of
