@@ -41,51 +41,80 @@ and the SDL library.
 
 \section{The Server}
 
-%Describe what the server does: physics, agent management, world modeling, ...
+The SimSpark server hosts the simulation process that manages the
+simulation. It is responsible to advance the simulation, i.e. modify
+the simulation state in a continuous run loop.
 
-%scene graph, object aspects (physical, geometric, visual) 
-%at simulation start physics simulation is setup from scene graph state
+Objects in the scene change their state, i.e. one ore more of their
+properties like position, speed or angular velocity changes due to
+several influences. They are under the control of a rigid body
+physical simulation, that resolves collisions, applies drag, gravity
+etc. Agents that take part in the simulation also modify objects with
+the help of their effectors.
 
-%running the simulation means 
-% - collecting and applying forces (from agents, or game rule aspects) 
-% - stepping the physics simulation and synchronizing the scene graph
+Another responsibility of the server is to keep track of connected
+agent processes. Each simulation cycle the server collects and reports
+sensor information for each of the sensors of all connected agents. It
+further carries out received action sequences that an agent triggers
+using its available effectors.
 
-%agent management 
-%(connect/disconnect, sense, act
-% sense reads from the scene 
-% act modifies the scene (e.g applies forces)
-
-%(optional) monitor management 
-%(connect/disconnect, monitor update)
-% pluggable server side monitor implementation; 
-% scene specific protocols ; useful for every simulation; only concerned with scene
-% simulation specific protocol addons; generate list of name/value pairs (predicates); transfer games state
-
-%(optional) rendering
-%no network overhead between server/monitor
-%useful if on same machine, debugging purposes
-
-%run loop
-%is customized to update the different active server parts in a correct order
+Depending on the setup of the server it renders the simulation itself,
+i.e. it implements an internal monitor that omits the network overhead
+or it manages and updates remote monitor processes. In the latter
+configuration the rendering of the scene is deferred to remote
+processes.
 
 \section{The Monitor and Logplayer}
 
-%Generic monitor that displays only scene
-% customized with plugins
-% plugins parse game specific data
-% plugins render scene overly to display game state
-% (internal version is described in server section)
-% log playing
+The SimSpark monitor is responsible to render the current
+simulation. It connects to a runing server instance from which it
+continuously receives a stream of update data that describes the
+simulation states either in full or as incremental updates relative to
+the preceding state.
+
+The format of the data stream that the server sends to the monitor is
+called \texttt{monitor format}. It is a customizable language used to
+describe the simulation state. 
+
+Apart from describing the pure simulation state each monitor format
+may provide a mechanism to transfer additional game specific
+state. For the soccer simulation this means for example current play
+mode and goals scored so far.
+
+The monitor client itself only renders the pure scene and defers the
+rendering of the game state to plugins. These plugins are intended to
+parse the game state and display it as an overlay, e.g. print out
+playmode and scores on screen.
+
+The monitor can further be configured to read a protocol of scene
+updates from a file and act as a \texttt{logplayer}. In this mode it
+does not connect to a server instance but replays an recorded
+game. The format of the logfile is identical to the monitor protocol
+used on the network.
 
 \section{The Sample Client}
 
-%Demo client, demonstrates interaction with the server, how to read perceptor values, how to send effector values, can load different behaviors
-
-%Provide links to a reositoriy of clients / papers from previous competitions?
+SimSpark provides a simple agent implementation that demonstrate how
+to interact with the server. It demonstrates how to connect to the
+server, how to read perceptor values and how to use effectors. The
+demo behaviour of the agent is implemented as a plugin that can be
+replaced in order to customize it for different
+simulations. \footnote{A repository of agent implementations from
+previous Robocups is available at
+\url{http://www.uni-koblenz.de/~murray/robocup/rc07/Binaries/binaries_3D.html}}
 
 \section{Available Simulations}
 
-% soccer in previous version (spheres and articulated robots)
+SimSpark currently provides two version of robotic soccer. There is a
+sphere based older version that is available up to version
+\texttt{rcssserver3d-0.5.2}. In this soccer version the agents on the
+soccer field were simple rolling spheres. 
+
+This soccer simulation was the first step away from its two
+dimensional predecessor simulation into a three dimensional
+world. Since then SimSpark progressed to a more realistic form of the
+soccer game. In recent versions players possess articulated bodies
+that resemble humanoid robots.
 
 \section{Available Robot Models}
 
