@@ -164,6 +164,11 @@ doc/users/manual.log
 doc/users/manual.pdf
 doc/users/user-manual.pdf
 doc/users/user-manual.out
+doc/users/user-manual.aux
+doc/users/definitions.aux
+doc/users/user-manual.toc
+doc/users/user-manual.bbl
+doc/users/user-manual.blg
 lib/Makefile
 lib/Makefile.in
 lib/kerosin/.deps

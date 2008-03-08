@@ -1,8 +1,10 @@
 \chapter{Simspark}
 
+\begin{table}
+\label {table:perceptorNames}
+\caption{Perceptor and effector names}
+\begin{center}
 \begin{tabular}{|l|l|l|l|}
-%\label perceptorNamesTable
-%\title{Perceptor and effector names}
 \hline
 {\bf Connection between}  & {\bf Joint type} & {\bf Perceptor name}& {\bf
 Effector name} \\
@@ -23,6 +25,12 @@ Lower leg - upper leg & Hinge joint & llj4  rlj4 & lle4   rle4 \\
 foot - lower leg & Universal joint & llj5\_6  rlj5\_6 & lle5\_6   rle5\_6 \\
 \hline
 \end{tabular}
+\end{center}
+\end{table}
+
+In this section you find information about the messages that are sent from the
+server to the agent (perceptors) and vice versa (effectors). A description of
+the perceptors and effectors can also be found in \cite{SchillingJ} (German) and \cite{Lekavy} (Slovak).
 
 %-------------------------------------------------------------------
 \section{Perceptors}
@@ -42,8 +50,7 @@ The gyro rate perceptor delivers information about the orientation of a body.
 Currently only the upper torso contains a gyro perceptor.
 The message contains the GYR identifier, the name of the body to which the gyro
 perceptor belongs and three rotation angles. These angles describe the
-orientation of the body with respect to the coordinate system shown in
-\ref{???}.\newline \newline
+orientation of the body with respect to the global coordinate system.
 \begin{itemize}
 	\item[Message format:] \texttt{(GYR (n <name>) (rt <x> <y> <z>))}
 	\item[Example message:] \texttt{(GYR (n torso) (rt 0.01 0.07 0.46))}
@@ -54,25 +61,36 @@ orientation of the body with respect to the coordinate system shown in
 \subsubsection{HingeJoint Perceptor}
 A hinge joint perceptor receives information about the angle of the
 correponding single axis hinge joint. It contains the identifier HJ, the name
-of the perceptor (see table \ref{??}) and the position angle of the axis. Zero
-degrees corresponds to straightly allinged bodies.
+of the perceptor (see table \ref{table:perceptorNames}) and the position angle of the axis. Zero
+degrees corresponds to straightly allinged bodies. A hinge joint is displayed
+in figure \ref{ode:hingejoint}. 
+
+\begin{figure}[htbp]
+  \begin{center}
+	\includegraphics[scale=0.6]{fig/HingeJoint.png}
+    \caption{Hinge Joint (\cite{ODEManual})}
+    \label{ode:hingejoint}
+  \end{center}
+\end{figure}
 %klaus: What is the zero degree position, is the above correct?
 \begin{itemize}
 	\item[Message format:] \texttt{(HJ (n <name>) (ax <ax>))}
 	\item[Example message:] \texttt{(HJ (n laj3) (ax -1.02))}
 \end{itemize}
 
-\subsubsection{Hinge2Joint Perceptor}
-\begin{itemize}
-	\item[Message format:] \texttt{}
-	\item[Example message:] \texttt{}
-\end{itemize}
-
 \subsubsection{UniversalJoint Perceptor}
 A universal joint perceptor receives information about the two angles of the
 correponding two axis universal joint. It contains the identifier UJ, the name
-of the perceptor (see table \ref{??}) and the position angles of the two axis.
-Zero degrees corresponds to straightly allinged bodies.
+of the perceptor (see table \ref{table:perceptorNames}) and the position angles of the two axis.
+Zero degrees corresponds to straightly allinged bodies. A universal joint is
+displayed in figure \ref{ode:universaljoint}. 
+\begin{figure}[htbp]
+  \begin{center}
+	\includegraphics[scale=0.6]{fig/UniversalJoint.png}
+    \caption{Universal Joint (\cite{ODEManual})}
+    \label{ode:universaljoint}
+  \end{center}
+\end{figure}
  
 \begin{itemize}
 	\item[Message format:] \texttt{(UJ (n <name>) (ax1 <ax1>) (ax2 <ax2>))}
@@ -169,19 +187,22 @@ up to date list of all playmodes refer to (./plugin/soccer/soccertypes.h)
 \end{itemize}
 
 \subsubsection{AgentState Perceptor}
-%klaus: is this old version only?
+%klaus: is this old version only? if not is TEXT_INSTEAD_OF_A_MANUAL still
+% correct?
 \begin{itemize}
 	\item[Message format:] \texttt{}
 	\item[Example message:] \texttt{}
 \end{itemize}
 \subsubsection{Hear Perceptor}
-%klaus: is this old version only?
+%klaus: is this old version only? if not is TEXT_INSTEAD_OF_A_MANUAL still
+% correct?
 \begin{itemize}
 	\item[Message format:] \texttt{}
 	\item[Example message:] \texttt{}
 \end{itemize}
 \subsubsection{Touch Perceptor}
-%klaus: is this old version only?
+%klaus: is this old version only? if not is TEXT_INSTEAD_OF_A_MANUAL still
+% correct?
 \begin{itemize}
 	\item[Message format:] \texttt{}
 	\item[Example message:] \texttt{}
@@ -205,7 +226,9 @@ point on the body to which the force applies and the force vector itself.
 Effectors are used to act within the simulation. They are sent to the server
 to change the game state accordingly. There are effectors that are available to
 all kinds of simulations and soccer specific effectors.
-% Klaus: do we have noise in effectors?
+%Klaus: do we have noise in effectors?
+%Klaus: What are the minimal/maximal values to pass? What happens in case of
+% errors
 
 \subsection{General Effectors}
 The effectors described in this subsection are available to all types of
@@ -243,8 +266,6 @@ the joint.
 	\item[Message format:] \texttt{(<name> <ax>)}
 	\item[Example message:] \texttt{(lae3 5.3)}
 \end{itemize}
-
-\subsubsection{Hinge2Joint Effector}
 
 \subsubsection{UniversalJoint Effector}
 Effector for all axis with a two degrees of freedom.
