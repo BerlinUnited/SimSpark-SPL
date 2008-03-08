@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceresistanceperceptor.h,v 1.4 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: forceresistanceperceptor.h,v 1.5 2008/03/08 17:48:38 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,12 +33,14 @@
 class ForceResistancePerceptor : public oxygen::Perceptor
 {
 protected:
-    typedef std::list<std::pair<dContactGeom, dJointID> > TContactList;
+    typedef std::list<std::pair<dContactGeom, dJointFeedback> > TContactList;
 
 public:
-    /** adds new touch information
+    /** adds new contact information and allocates memory for storing its
+     * feedback information.
+     * \return the address of allocated memory
      */
-    void AddTouchInfo(dContact &contact, dJointID contactJointID);
+    dJointFeedback *AddTouchInfo(dContact &contact);
 
     /** adds touch information to predList
         \return true if data is available
@@ -54,18 +56,9 @@ protected:
 
 protected:
     TContactList mContactList;
-    
+
     //! reference to the parent Transform node
     boost::shared_ptr<oxygen::Transform> mBody;
-
-    // These are required while the Percept function can be called more than
-    // once in a time step!
-    
-    //! last calculated point
-    salt::Vector3f mLastPoint;
-
-    //! last calculated force
-    salt::Vector3f mLastForce;
 };
 
 DECLARE_CLASS(ForceResistancePerceptor);

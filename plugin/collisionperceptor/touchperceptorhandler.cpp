@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: touchperceptorhandler.cpp,v 1.5 2007/06/14 17:55:19 jboedeck Exp $
+   $Id: touchperceptorhandler.cpp,v 1.6 2008/03/08 17:48:38 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@ using namespace boost;
 void TouchPerceptorHandler::OnLink()
 {
 	ContactJointHandler::OnLink();
-	
+
     // find the first CollisionPerceptor below our closest Transform node
     shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-        (FindParentSupportingClass<Transform>().lock());    
+        (FindParentSupportingClass<Transform>().lock());
 
     if (transformParent.get() == 0)
     {
@@ -84,9 +84,10 @@ void TouchPerceptorHandler::HandleCollision(
 
     dJointAttach (joint, myBody, collideeBody);
 
-    // Can we avoid dynamic allocation to increase performance?!
-    dJointSetFeedback(joint, new dJointFeedback());
-    
     if (mForceResistancePercept.get() != 0)
-    	mForceResistancePercept->AddTouchInfo(contact, joint);
+        {
+            dJointFeedback *feedback =
+                    mForceResistancePercept->AddTouchInfo(contact);
+            dJointSetFeedback(joint, feedback);
+        }
 }

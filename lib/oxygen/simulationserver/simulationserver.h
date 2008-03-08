@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.7 2008/02/22 16:48:18 hedayat Exp $
+   $Id: simulationserver.h,v 1.8 2008/03/08 17:48:38 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -173,6 +173,9 @@ protected:
     /** the thread function which controls a single SimControlNode in
      *  multi-threaded mode. */
     void SimControlThread(boost::shared_ptr<SimControlNode> controlNode);
+
+    /** updates mSumDeltaTime after a step in descreet simulations */
+    void UpdateDeltaTimeAfterStep();
 
 protected:
     /** the argc parameter passed to Run() */

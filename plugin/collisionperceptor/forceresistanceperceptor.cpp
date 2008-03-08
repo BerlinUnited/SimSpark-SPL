@@ -4,7 +4,7 @@
  Fri May 9 2003
  Copyright (C) 2002,2003 Koblenz University
  Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
- $Id: forceresistanceperceptor.cpp,v 1.5 2008/02/29 22:36:20 hedayat Exp $
+ $Id: forceresistanceperceptor.cpp,v 1.6 2008/03/08 17:48:38 hedayat Exp $
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ void ForceResistancePerceptor::OnLink()
 
     if (mBody.get() == 0)
         GetLog()->Error()
-                << "ForceResistancePerceptor: no suitable parent node found!\n";
+                << "(ForceResistancePerceptor) ERROR: no suitable parent node found!\n";
 }
 
 void ForceResistancePerceptor::OnUnlink()
@@ -47,10 +47,10 @@ void ForceResistancePerceptor::OnUnlink()
     mBody.reset();
 }
 
-void ForceResistancePerceptor::AddTouchInfo(dContact &contact,
-        dJointID contactJointID)
+dJointFeedback *ForceResistancePerceptor::AddTouchInfo(dContact &contact)
 {
-    mContactList.push_front(make_pair(contact.geom, contactJointID));
+    mContactList.push_front(make_pair(contact.geom, dJointFeedback()));
+    return &mContactList.front().second;
 }
 
 bool ForceResistancePerceptor::Percept(
@@ -70,48 +70,37 @@ bool ForceResistancePerceptor::Percept(
     nameElement.AddValue(GetName());
 
     Vector3f force(0,0,0);
-    Vector3f pos(0,0,0);
+    Vector3f center(0,0,0);
     float sumLength = 0;
     for (TContactList::const_iterator i = mContactList.begin();
          i!= mContactList.end();
          ++i)
-    {
-        dJointFeedback *feedback = dJointGetFeedback(i->second);
-        if (feedback)
         {
-            Vector3f forceVec(feedback->f1[0], feedback->f1[1], feedback->f1[2]);
+            Vector3f forceVec(i->second.f1[0], i->second.f1[1], i->second.f1[2]);
             force += forceVec;
-            pos += Vector3f(i->first.pos[0], i->first.pos[1], i->first.pos[2])
-                    * forceVec.Length();
-            sumLength += forceVec.Length();
 
-            // Sometimes the Percept function is called more than once in a
-            // time step. Double freeing is avoided using this line!
-            dJointSetFeedback(i->second, 0);
-            delete feedback;
+            float forcevalue = forceVec.Length();
+            center += Vector3f(i->first.pos[0], i->first.pos[1], i->first.pos[2])
+                    * forcevalue;
+            sumLength += forcevalue;
         }
-    }
 
-    // It should be always true, except when feedback == NULL
-    if (sumLength > 0.001)
-    {
-        Matrix invRot = mBody->GetLocalTransform();
-        invRot.InvertRotationMatrix();
-        mLastPoint = invRot * (pos / sumLength);
-        mLastForce = invRot.Rotate(force);
-    }
+    Matrix invRot = mBody->GetLocalTransform();
+    invRot.InvertRotationMatrix();
+    center = invRot * (center / sumLength);
+    force = invRot.Rotate(force);
 
     ParameterList& posElement = predicate.parameter.AddList();
     posElement.AddValue(std::string("c"));
-    posElement.AddValue(mLastPoint.x());
-    posElement.AddValue(mLastPoint.y());
-    posElement.AddValue(mLastPoint.z());
+    posElement.AddValue(center.x());
+    posElement.AddValue(center.y());
+    posElement.AddValue(center.z());
 
     ParameterList& forceElement = predicate.parameter.AddList();
     forceElement.AddValue(std::string("f"));
-    forceElement.AddValue(mLastForce.x());
-    forceElement.AddValue(mLastForce.y());
-    forceElement.AddValue(mLastForce.z());
+    forceElement.AddValue(force.x());
+    forceElement.AddValue(force.y());
+    forceElement.AddValue(force.z());
 
     return true;
 }
