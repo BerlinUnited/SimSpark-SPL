@@ -8,7 +8,7 @@
 Effector name} \\
 \hline
 %Klaus: how do I get underscore character?
-Shoulder - body  & Universal joint & laj12  raj12 & lae12   rae12 \\
+Shoulder - body  & Universal joint & laj1\_2  raj1\_2 & lae1\_2   rae1\_2 \\
 \hline
 Upper arm - shoulder  & Hinge joint & laj3  raj3 & lae3   rae3 \\
 \hline
@@ -16,50 +16,202 @@ Forearm - upper arm  & Hinge joint & laj4  raj4 & lae4   rae4 \\
 \hline
 Hip - body  & Hinge joint & llj1  rlj1 & lle1   rle1 \\
 \hline
-Upper leg - hip & Universal joint & llj23  rlj23 & lle23   rle23 \\
+Upper leg - hip & Universal joint & llj2\_3  rlj2\_3 & lle2\_3   rle2\_3 \\
 \hline
 Lower leg - upper leg & Hinge joint & llj4  rlj4 & lle4   rle4 \\
 \hline
-foot - lower leg & Universal joint & llj56  rlj56 & lle56   rle56 \\
+foot - lower leg & Universal joint & llj5\_6  rlj5\_6 & lle5\_6   rle5\_6 \\
 \hline
 \end{tabular}
 
+%-------------------------------------------------------------------
 \section{Perceptors}
+Perceptors are used to sense the environment of the agent. They are sent from
+the server to each agent and contain agent specific and perceptor specific
+information about the environment and the agent itself. There are perceptors
+that are available to all kinds of simulations and soccer specific perceptors.
 
 % Describe in detail, also the message format, see TEXT_INSTEAD... and Oliver's hope-1.pdf manual
-
-% Explain that these perceptors available to all simulations
 % Klaus:do we have noise in perceptors?
+\subsection{General Perceptors}
+The perceptors described in this subsection are available to all types of
+simulation. In other words they are not specific to the soccer environment.
 
-\subsection{GyroRate Perceptor}
+\subsubsection{GyroRate Perceptor}
+The gyro rate perceptor delivers information about the orientation of a body.
+Currently only the upper torso contains a gyro perceptor.
+The message contains the GYR identifier, the name of the body to which the gyro
+perceptor belongs and three rotation angles. These angles describe the
+orientation of the body with respect to the coordinate system shown in
+\ref{???}.\newline \newline
+\begin{itemize}
+	\item[Message format:] \texttt{(GYR (n <name>) (rt <x> <y> <z>))}
+	\item[Example message:] \texttt{(GYR (n torso) (rt 0.01 0.07 0.46))}
+\end{itemize}
 
-\subsection{HingeJoint Perceptor}
+%Klaus: To me it is not quite clear what the reference coordinate system is
 
-\subsection{Hinge2Joint Perceptor}
+\subsubsection{HingeJoint Perceptor}
+A hinge joint perceptor receives information about the angle of the
+correponding single axis hinge joint. It contains the identifier HJ, the name
+of the perceptor (see table \ref{??}) and the position angle of the axis. Zero
+degrees corresponds to straightly allinged bodies.
+%klaus: What is the zero degree position, is the above correct?
+\begin{itemize}
+	\item[Message format:] \texttt{(HJ (n <name>) (ax <ax>))}
+	\item[Example message:] \texttt{(HJ (n laj3) (ax -1.02))}
+\end{itemize}
 
-\subsection{UniversalJoint Perceptor} 
+\subsubsection{Hinge2Joint Perceptor}
+\begin{itemize}
+	\item[Message format:] \texttt{}
+	\item[Example message:] \texttt{}
+\end{itemize}
 
-% Explain that these perceptors are specific to the soccer simulation
-%Klaus: should we make different subsections then for this?
-\subsection{Vision Perceptor}
+\subsubsection{UniversalJoint Perceptor}
+A universal joint perceptor receives information about the two angles of the
+correponding two axis universal joint. It contains the identifier UJ, the name
+of the perceptor (see table \ref{??}) and the position angles of the two axis.
+Zero degrees corresponds to straightly allinged bodies.
+ 
+\begin{itemize}
+	\item[Message format:] \texttt{(UJ (n <name>) (ax1 <ax1>) (ax2 <ax2>))}
+	\item[Example message:] \texttt{(UJ (n laj1\_2) (ax1 -1.32) (ax2 2.00))}
+\end{itemize}
 
+\subsection{Soccer Perceptors}
+The following perceptors are soccer specific and only available in the soccer
+simulation.
+
+\subsubsection{Vision Perceptor}
+Your robots possess a special omnicam with some smart image processing
+software attached :). If using the regular visionperceptor, Robots
+have a 360 degrees view. With the RestrictedVisionPerceptor (which
+became the default in version 0.5), the view field of the robot is
+restricted to 90 degrees (this is of course configurable in
+rcssserver3D.rb). The direction of the view (pan and tilt) can be
+changed with the pantilt effector. The camera can pan to any angle
+(the initial 0 degrees pan direction is the direction towards the
+opponent side), and tilt around the horizontal plane.
+
+The VisionPerceptor delivers lists of seen objects, where objects are
+either others robots, the ball, or markers on the field. Currently
+there are 8 markers on the field: one at each corner point of the
+field and one at each goal post.
+
+With each sensed object you get:
+
+\begin{itemize}
+  \item The distance between the player and the object.
+  \item The angle in the horizontal plane. Zero degree always points to the
+opponent goal.
+  \item The latitudal angle. Here zero degree means horizontal. 
+\end{itemize}
+
+Contrary to 2D soccer simulation, the vision system does not deliver
+object velocities. Objects can be occluded by other objects (this is
+not completely implemented yet). All distances and angles are given
+relative to the camera position. The camera is currently located at
+the center of the robot.
+% Klaus: where is it in humanoid league
+
+The noise parameters of the vision system are as follows:
+\begin{itemize}
+  \item A small calibration error is added to the camera position. For each
+  axis, the error is uniformly distributed between -0.005 m and 0.005 m. The
+  error is calculated once and remains constant during the complete match.
+  \item Dynamic noise normally distributed around 0.0
+  + distance error:  sigma = 0.0965
+  + angle error (x-y plane): sigma = 0.1225
+  + angle error (latitudal): sigma = 0.1480
+\end{itemize}
+
+A vision message is started with See followed by the visible objects.
+Possible objects are:
+\begin{itemize}
+	\item[Flags:] The marker flags on the field corners F1L, F1R, F2L, F2R
+	\item[Goalposts:] The goal posts of both goals G1L, G1R, G2L, G2R. Goals and
+	flags are located as shown in \ref{??}.
+	\item[Ball:] The ball B 
+	\item[Players:] Players P with additional information \texttt{(team <teamname>)
+	(id <playerID>)}
+\end{itemize}
+\begin{itemize}
+	\item[Message format:] \texttt{(See (<name> (pol <distance> <angle1>
+	<angle2>)) (P (team <teamname>) (id <playerID>) (pol <distance> <angle1> <angle2>)))}
+	\item[Example message:] \texttt{(See (F1L (pol 19.11 111.69 -9.57)) (F2L (pol 
+	16.41 -115.88 -11.15)) (F1R (pol 46.53 22.04 -3.92)) (F2R (pol 45.49 -18.74
+	-4.00)) (G1L (pol 9.88 139.29 -21.07)) (G2L (pol 8.40 -156.91 -25.00)) (G1R
+	(pol 43.56 7.84 -4.68)) (G2R (pol 43.25 -4.10 -4.71)) (B (pol 18.34 4.66
+	-9.90)) (P (team RoboLog) (id 1) (pol 37.50 16.15 -0.00)))}
+\end{itemize}
 % What about the Restricted Vision Perceptor?
-
 % The current soccer bot seems not to use it, still experimental/unsupported?
 
-\subsection{GameState Perceptor}
-\subsection{AgentState Perceptor}
-\subsection{Hear Perceptor}
-\subsection{Touch Perceptor}
-\subsection{ForceResistance Perceptor}
+\subsubsection{GameState Perceptor}
+The GameStatePerceptor contains information of the current play time which
+starts from zero at kickoff of either half. It also contains the current game status.
+The first percept you get from this perceptor additionally tells you about some
+of the game variables, like ball weight and field size.
 
+All other percepts start with GS and contain the current simulation time as a
+float value passed in seconds and the playmode. Possible
+playmodes are "BeforeKickOff", "KickOff\_Left", "KickOff\_Right",
+"PlayOn", "KickIn\_Left", "KickIn\_Right", "corner\_kick\_left",
+"corner\_kick\_right", "goal\_kick\_left", "goal\_kick\_right",
+"offside\_left", "offside\_right", "GameOver", "Goal\_Left",
+"Goal\_Right", "free\_kick\_left", "free\_kick\_right", "unknown". For an
+up to date list of all playmodes refer to (./plugin/soccer/soccertypes.h)
+
+\begin{itemize}
+	\item[Message format:] \texttt{(GS (t <time>) (pm <playmode>))}
+	\item[Example message:] \texttt{(GS (t 0.00) (pm BeforeKickOff))}
+\end{itemize}
+
+\subsubsection{AgentState Perceptor}
+%klaus: is this old version only?
+\begin{itemize}
+	\item[Message format:] \texttt{}
+	\item[Example message:] \texttt{}
+\end{itemize}
+\subsubsection{Hear Perceptor}
+%klaus: is this old version only?
+\begin{itemize}
+	\item[Message format:] \texttt{}
+	\item[Example message:] \texttt{}
+\end{itemize}
+\subsubsection{Touch Perceptor}
+%klaus: is this old version only?
+\begin{itemize}
+	\item[Message format:] \texttt{}
+	\item[Example message:] \texttt{}
+\end{itemize}
+\subsubsection{ForceResistance Perceptor}
+This perceptor informs about the force that acts on a body. Currently, it is
+available for the left and the right foot (lf, rf).
+After FRP and the name of the body it contains two vectors that indicate the
+point on the body to which the force applies and the force vector itself.
+%klaus: how exactly does this work, what is the unit?
+%klaus: is this general or soccer specific?
+\begin{itemize}
+	\item[Message format:] \texttt{(FRP (n <name>) (c <px> <py> <pz>) (f <fx> <fy>
+	<fz>))}
+	\item[Example message:] \texttt{(FRP (n lf) (c -0.14 0.08 -0.05) (f 1.12 -0.26
+	13.07))}
+\end{itemize}
+
+%-------------------------------------------------------------------
 \section{Effectors/Actuators}
-
-% Describe in detail, also the message format, see TEXT_INSTEAD...
-
+Effectors are used to act within the simulation. They are sent to the server
+to change the game state accordingly. There are effectors that are available to
+all kinds of simulations and soccer specific effectors.
 % Klaus: do we have noise in effectors?
 
-\subsection{Create Effector}
+\subsection{General Effectors}
+The effectors described in this subsection are available to all types of
+simulation. In other words they are not specific to the soccer environment.
+
+\subsubsection{Create Effector}
 
 When an agent initially connects to the server it is invisible and
 cannot take affect a simulation in any meaningful way. It only
@@ -68,9 +220,11 @@ possesses a so called CreateEffector.
 An agent uses this effector to advice the server to construct it
 according to a scene description file it passes as a parameter. This
 file is used to construct the physical representation and all further
-effectors and preceptors.\newline \newline 
-Message format: (scene  $\langle$ filename$\rangle$)\newline
-Example message: (scene rsg/agent/soccerbot056.rsg)
+effectors and preceptors.
+\begin{itemize}
+	\item[Message format:] \texttt{(scene  <filename>)}
+	\item[Example message:] \texttt{(scene rsg/agent/soccerbot056.rsg)}
+\end{itemize}
 
 After the agent representation is constructed in the server the agent
 should do further simulation specific setup. For example in the soccer
@@ -80,21 +234,34 @@ the SoccerInitEffector is used.
 
 % Explain that these effectors are available to all simulations
 
-\subsection{HingeJoint Effector}
+\subsubsection{HingeJoint Effector}
 Effector for all axis with a single degree of freedom.
 The first parameter is the name of the axis. Table ??? shows a list of all
 available hinge joints. The second parameter contains the change in angle of
-the joint.\newline \newline
-Message format: (<name> <ax>)\newline
-Example message: (lae3 5.3)
+the joint.
+\begin{itemize}
+	\item[Message format:] \texttt{(<name> <ax>)}
+	\item[Example message:] \texttt{(lae3 5.3)}
+\end{itemize}
 
-\subsection{Hinge2Joint Effector}
+\subsubsection{Hinge2Joint Effector}
 
-\subsection{UniversalJoint Effector}
+\subsubsection{UniversalJoint Effector}
+Effector for all axis with a two degrees of freedom.
+The first parameter is the name of the axis. Table ??? shows a list of all
+available hinge joints
+The second and third parameter contain the change in angle of the two joints.
+The order of the joints is the same as in the name.
+\begin{itemize}
+	\item[Message format:] \texttt{(<name> <ax1> <ax2>)}
+	\item[Example message:] \texttt{(lae1\_2 -2.3 1.2)}
+\end{itemize}
 
-% Explain that these effectors are soccer specific, and some only in deprecated versions
+\subsection{Soccer Effectors}
+The following effectors are soccer specific and only available in the soccer
+simulation.
 
-\subsection{Init Effector}
+\subsubsection{Init Effector}
 The init command is sent once for each agent after the create effector sent the
 scene command. It registers this agent as a member of the passed team with the passed number.
 All players of one team have to use the same teamname and different numbers.
@@ -102,36 +269,118 @@ If an agent sends 0 as playernumber, the number is assigned automatically by
 the server to the next free number. The maximum amount of teams is two, the
 maximal amount of players is currently four.
 The side on which a team starts to play depends on which team connected
-first.\newline\newline 
-Message format: (init (unum <playernumber>)(teamname<yourteamname>))\newline
-Example message: (init (unum 1)(teamname FHO))
+first.
+\begin{itemize}
+	\item[Message format:] \texttt{(init (unum <playernumber>)(teamname
+	<yourteamname>))}
+	\item[Example message:] \texttt{(init (unum 1)(teamname FHO))}
+\end{itemize}
 
-\subsection{Beam Effector}
+\subsubsection{Beam Effector}
 The beam effector allows a player to position itself on the field before the
 game starts. The x and y coordinates define the position on the field with
 respect to the coordinate system of figure ???. The rot value allows to define
 the rotation angle of the player. Zero degrees points to positive x axis, 90
 degrees to positive y axis.
+\begin{itemize}
+	\item[Message format:] \texttt{(beam <x> <y> <rot>)}
+	\item[Example message:] \texttt{(beam 10.0 -10.0 0.0)}
+\end{itemize}
 
-Message format: (beam <x> <y>)
-<rot>) Example message: (beam 10.0 -10.0 0.0)
+\subsubsection{Say Effector}
+%klaus: is this old version only?
 
-\subsection{Drive Effector}
+\subsection{Older Version Effectors}
+The effectors in this subsection have been available in older versions of the
+simulation and are now no longer available
 
-% Only used in rcssserver3D
-%Klaus: I suggest to put all of these effectors into one subsection old
-% effectors
+\subsubsection{Drive Effector}
+To use the omnidrive of the agent, you have to use the so called
+"DriveEffector", which takes a cartesian vector (x y z) with a maximum
+length of 100 units. The x-coordinate points towards the opponents
+team side of the field, z points up. With the DriveEffector, you set a
+kind of motor force, i.e. if you want to drive full speed for a while,
+it is sufficient to use the DriveEffector *once*. The force you set is
+applied at each simulator step until you change it again. The
+DriveEffector works reliable, there is a small error for forces along
+each axis (each up to 2\% of the applied force). The error is normally
+distributed around 0.0.
 
-\subsection{Kick Effector}
+Using the omnidrive consumes battery. You get to know of battery
+states by reading the AgentStatePerceptor. If the battery is empty,
+the omnidrive will stop working. It is also possible to push away
+other robots. Using this feature to push away opponents is discouraged
+:).
 
-% Only used in rcssserver3D
+\begin{itemize}
+	\item[Message format:] \texttt{(drive <x> <y> <z>)}
+	\item[Example message:] \texttt{(drive 20.0 50.0 0.0)}
+\end{itemize}
 
-\subsection{Catch Effector}
 
-% Only used in rcssserver3D
+\subsubsection{Kick Effector}
+To move the ball, you have the option of simply using the robots to
+push the ball into a desired direction, or you can use the
+kickeffector to kick the ball. Originally, we did not intend to create
+an artificial kickeffector. However, to make use of the 3rd dimension,
+this was the easiest way. It is intended to remove this kind of kick
+effector in future versions (not this years' competition) in favor of
+a real physical device.
 
-\subsection{Say Effector}
+The kickeffector can accelerate the ball radially away from the robot
+body. The kickeffector takes an angle as first argument. This is the
+latitudal angle (in degrees) for accelerating the ball. It is
+restricted to a number between 0 and 50. The second argument indicates
+the kicking power and this is a number between 0 and 100. It is
+interpreted as the percentile of the maximum available power. The
+kickeffector adds a force and a torque to the ball. This happens over
+a fixed number of simulation steps. Currently 10 cycles are used. This
+corresponds to 1/10s simulation time. To kick the ball, the ball has
+to be very close to the robot, i.e. it has to be within the so called
+kickable margin of the player. Currently 0.04m are configured.
 
+You cannot change the kicking angle in the horizontal plane. This
+means that you have to move the robot so that it can kick into the
+desired direction. Right now, the kickeffector is not very strong,
+because something like an offside rule is missing. It should also not
+be possible to move other robots by kicking the ball against them
+anymore. (at least not very much :) Like the DriveEffector, the
+kickeffector does only work if the robot touches the soccer field.
+
+The kickeffector noise has the following parameters: 
+\begin{itemize}
+\item The angle error in the x-y plane is quite low and normally distributed
+around 0.0 with sigma = 0.02.
+\item The latitudal angle error is normally distributed around 0.0. This
+angle error is low with sigma = 0.9 at both extreme positions, i.e. 0
+and at 50 degrees. Towards the middle of the range the angle error
+gets higher with sigma up to 4.5.
+\item The kick power error is normally distributed around 0.0 with sigma =
+0.4
+\end{itemize}
+
+\begin{itemize}
+	\item[Message format:] \texttt{(kick <angle> <power>)}
+	\item[Example message:] \texttt{(kick 20.0 80.0)}
+\end{itemize}
+
+\subsubsection{Catch Effector}
+The goalie (agent number 1) is the only player with the ability to
+catch a ball. The goalie can catch the ball in play mode 'playe\_on',
+if the ball is inside the penalty area and close to the robot, i.e. it
+has to be within the so called catch margin of the player. The current
+value of catch margin is 2 meters.
+
+The catcheffector puts the ball in front of the goalie on the ground
+and moves players away that are closer than 2 meters to the goalie by
+5 meters.
+
+\begin{itemize}
+	\item[Message format:] \texttt{(catch)}
+	\item[Example message:] \texttt{(catch)}
+\end{itemize}
+
+%----------------------------------------------------------------------
 \section{Simulation Update Loop}
 
 % I think people want to know how this works, maybe we can give an overview here and go into more detail in the developer manual? What do you think?
@@ -189,6 +438,7 @@ monitor application.
 
 \subsection{Multi-threaded Timer}
 
+%----------------------------------------------------------------------
 \section{Setup Scripts}
 
 % describe purpose of scripts in ~/.rcssserver3d/]
