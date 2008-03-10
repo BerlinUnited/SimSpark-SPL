@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h,v 1.18 2008/02/24 13:55:16 sgvandijk Exp $
+   $Id: body.h,v 1.19 2008/03/10 23:57:07 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -304,6 +304,9 @@ protected:
     void PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
 
 private:
+    /** updates internal state before physics calculation */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
+
     /** updates the the internal state after physics calculation,
         i.e. synchronises this scene graph node and the corresponding
         ODE body.
@@ -319,6 +322,9 @@ protected:
     
     /** the total mass translation */
     salt::Vector3f mMassTrans;
+    
+    /** flag whether mass has been transformed */
+    bool mMassTransformed;
 };
 
 DECLARE_CLASS(Body);

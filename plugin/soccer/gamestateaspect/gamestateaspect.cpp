@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.13 2007/06/16 10:52:39 yxu Exp $
+   $Id: gamestateaspect.cpp,v 1.14 2008/03/10 23:57:07 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,8 +40,6 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mGameHalf = GH_FIRST;
     mScore[0] = 0;
     mScore[1] = 0;
-    mMaxUnum[0] = 0;
-    mMaxUnum[1] = 0;
     mLastKickOff = TI_NONE;
     //mSecondHalfKickOff = TI_NONE;
     mLeftInit = Vector3f(0,0,0);
@@ -273,7 +271,37 @@ GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
     }
 
     set.insert(unum);
-    mMaxUnum[i] = std::max<int>(unum, mMaxUnum[i]);
+
+    return true;
+}
+
+bool
+GameStateAspect::EraseUnum(TTeamIndex idx, int unum)
+{
+    int i;
+
+    switch (idx)
+    {
+    case TI_LEFT:
+        i = 0;
+        break;
+    case TI_RIGHT:
+        i = 1;
+        break;
+    default:
+        return false;
+    }
+
+    TUnumSet& set = mUnumSet[i];
+
+    if (
+        (set.find(unum) == set.end())
+        )
+    {
+        return false;
+    }
+
+    set.erase(unum);
 
     return true;
 }
@@ -321,6 +349,18 @@ GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
                        << unum << " for team " << teamName << "\n";
 
     return true;
+}
+
+bool
+GameStateAspect::ReturnUniform(TTeamIndex ti, unsigned int unum)
+{
+    if (! EraseUnum(ti,unum))
+    {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::ReturnUniform) cannot erase uniform"
+            " number " << unum << " from team " << ti << "\n";
+        return false;
+    }
 }
 
 void
@@ -444,15 +484,22 @@ GameStateAspect::OnLink()
 int
 GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
 {
+    int idx;
     switch (ti)
     {
     case TI_LEFT:
-        return mMaxUnum[0] + 1;
+        idx = 0;
+        break;
     case TI_RIGHT:
-        return mMaxUnum[1] + 1;
+        idx = 1;
+        break;
     default:
         return 0;
     }
+    
+    for (int i = 1; i <=11; ++i)
+      if (mUnumSet[idx].find(i) == mUnumSet[idx].end())
+        return i;
 }
 
 

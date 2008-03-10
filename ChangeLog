@@ -1,3 +1,24 @@
+2008-03-11  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * acinclude.m4
+  - improved ruby library detection through ruby configuration
+  
+  * lib/zeitgeist/leaf.h
+  - added (Leaf::ListShallowChildrenSupportingClass)
+  
+  * lib/oxygen/physicsserver/body.h
+  * lib/oxygen/physicsserver/body.cpp
+  - composite bodies' mass is positioned correctly in (Body::AddMass), their
+    colliders and sibling/descendant transforms are positioned correctly in
+    (Body::PrePhysicsUpdateInternal)
+  
+  * plugin/soccer/agentstate/agentstate.cpp
+  * plugin/soccer/agentstate/agentstate.h
+  * plugin/soccer/gamestateaspect/gamestateaspect.cpp
+  * plugin/soccer/gamestateaspect/gamestateaspect.h
+  - when agent disconnects, his uniform number is freed so it can be used again
+    by a new agent
+    
 2008-03-08  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/collisionperceptor/forceresistanceperceptor.h:

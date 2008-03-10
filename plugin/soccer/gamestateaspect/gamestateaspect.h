@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.9 2007/06/16 10:52:39 yxu Exp $
+   $Id: gamestateaspect.h,v 1.10 2008/03/10 23:57:07 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -86,6 +86,9 @@ public:
     bool RequestUniform(boost::shared_ptr<AgentState> agentState,
                         std::string teamName, unsigned int unum);
 
+    /** notifies that a uniform number is free again */
+    bool ReturnUniform(TTeamIndex ti, unsigned int unum);
+    
     /** returns the next uniform number not taken for the given team */
     int RequestUniformNumber(TTeamIndex ti) const;
 
@@ -114,6 +117,10 @@ protected:
         contains a uniform number unum and inserts it. */
     bool InsertUnum(TTeamIndex idx, int unum);
 
+    /** checks if the set of uniform numbers of given team does
+        contain a uniform number unum and erases it. */
+    bool EraseUnum(TTeamIndex idx, int unum);
+    
     /** returns the team index corresponding to the given teamName. If
         the teamname does not exist and less than two teams are
         registered, the given team name is registered.
@@ -150,9 +157,6 @@ protected:
 
     /** the set of uniform number for each team */
     TUnumSet mUnumSet[2];
-
-    /** the maximal uniform number handed out for each team */
-    int mMaxUnum[2];
 
     /** the scores of two teams */
     int mScore[2];

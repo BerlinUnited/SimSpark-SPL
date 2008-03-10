@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.23 2008/02/24 13:55:16 sgvandijk Exp $
+   $Id: body.cpp,v 1.24 2008/03/10 23:57:07 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,13 +22,15 @@
 #include "world.h"
 #include "../sceneserver/scene.h"
 #include "zeitgeist/logserver/logserver.h"
+#include "../sceneserver/transform.h"
+#include "transformcollider.h"
 
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-Body::Body() : ODEObject(), mODEBody(0), mMassTrans(0,0,0)
+Body::Body() : ODEObject(), mODEBody(0), mMassTrans(0,0,0), mMassTransformed(false)
 {
 }
 
@@ -273,14 +275,18 @@ void Body::AddMass(const dMass& mass, const Matrix& matrix)
     /** ODE currently requires that the center mass is always in the
         origin of the body
     */
-    mMassTrans[0] -= bodyMass.c[0]; 
-    mMassTrans[1] -= bodyMass.c[1]; 
-    mMassTrans[2] -= bodyMass.c[2]; 
-    
-    GetLog()->Warning() << "(Body::AddMass) TRANS: " << mMassTrans << "\n";
-    dMassTranslate(&bodyMass, -bodyMass.c[0], -bodyMass.c[1], -bodyMass.c[2]);
-    
+    Vector3f trans2(bodyMass.c[0], bodyMass.c[1], bodyMass.c[2]);
+
+    dMassTranslate(&bodyMass, -trans2[0], -trans2[1], -trans2[2]);
     dBodySetMass(mODEBody, (const dMass*)&bodyMass);
+
+    // Move body so mass is at right position again
+    SetPosition(GetPosition() + trans2);
+    
+    // Keep track of total translation of mass
+    mMassTrans = mMassTrans - trans2;
+    
+    mMassTransformed = true;
 }
 
 void Body::PrepareCylinder (dMass& mass, float density, float radius, float length) const
@@ -420,6 +426,7 @@ void Body::SynchronizeParent() const
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (make_shared(GetParent()));
 
+    
     Matrix mat;
     mat.m[0] = rot[0];
     mat.m[1] = rot[4];
@@ -440,6 +447,46 @@ void Body::SynchronizeParent() const
 
     baseNode->SetWorldTransform(mat);
 }
+
+void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
+{
+    // Check whether mass/body has been translated
+    if (mMassTransformed)
+    {
+        weak_ptr<Node> parent = GetParent();
+
+        // Update colliders (only those encapsulated in transform colliders)
+        TLeafList transformColliders;
+        parent.lock()->ListChildrenSupportingClass<TransformCollider>(transformColliders);
+
+        for (TLeafList::iterator iter = transformColliders.begin(); iter != transformColliders.end(); ++iter)
+        {
+            // Only move non-transform colliders
+            shared_ptr<Collider> collider = shared_static_cast<TransformCollider>(*iter)->FindChildSupportingClass<Collider>();
+            if (collider.get())
+            {
+                Vector3f pos = collider->GetPosition();
+                pos = pos + mMassTrans;
+                collider->SetLocalPosition(pos);
+            }
+        }
+
+        // Update visuals (or other transforms in the tree)
+        TLeafList transforms;
+        parent.lock()->ListShallowChildrenSupportingClass<Transform>(transforms);
+        for (TLeafList::iterator iter = transforms.begin(); iter != transforms.end(); ++iter)
+        {
+            shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
+            Matrix worldTransform = transform->GetWorldTransform();
+            worldTransform.Pos() = worldTransform.Pos() + mMassTrans;
+            transform->SetWorldTransform(worldTransform);
+        }
+        
+        mMassTrans = Vector3f(0,0,0);
+        mMassTransformed = false;
+    }
+}
+
 
 void Body::PostPhysicsUpdateInternal()
 {
