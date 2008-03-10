@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: leaf.h,v 1.19.2.1 2008/03/06 11:42:01 sgvandijk Exp $
+   $Id: leaf.h,v 1.19.2.2 2008/03/10 21:00:13 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -162,27 +162,24 @@ public:
         typeid system.
     */
     template<class CLASS>
-    void ListChildrenSupportingClass(TLeafList& list, bool recursive = false, bool pruneOnMatch = false)
+    void ListChildrenSupportingClass(TLeafList& list, bool recursive = false)
     {
-        TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
-        for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
-            {
-                // check if we have found a match and add it
-                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
-                if (child.get() != 0)
-                    {
-                        list.push_back(child);
-                        if (pruneOnMatch)
-                            recursive = false;
-                    }
-
-                if (recursive)
-                    {
-                        (*i)->ListChildrenSupportingClass<CLASS>(list,recursive, pruneOnMatch);
-                    }
-            }
+        ListChildrenSupportingClass<CLASS>(list, recursive, false);
     }
-
+    
+    /** constructs a list of all children supporting a class 'name'
+        i.e. they are an instance of that class or are derived from
+        it by doing a recursive search, backtracking when a child is
+        found. This implementation of GetChildrenSupportingClass does not
+        rely on the associated zeitgeist class name but uses the c++
+        typeid system. 
+    */
+    template<class CLASS>
+    void ListShallowChildrenSupportingClass(TLeafList& list)
+    {
+        ListChildrenSupportingClass<CLASS>(list, true, true);
+    }
+    
     /** defines an interface to get the first parent node on the way
         up the hierarchy that supports a class 'name', i.e. is an
         instance of that class or is derived from it.
@@ -297,6 +294,34 @@ protected:
         custom 'unlink' behavior.
     */
     virtual void OnUnlink();
+
+    /** constructs a list of all children supporting a class 'name'
+        i.e. they are an instance of that class or are derived from
+        it. This implementation of GetChildrenSupportingClass does not
+        rely on the associated zeitgeist class name but uses the c++
+        typeid system.
+    */
+    template<class CLASS>
+    void ListChildrenSupportingClass(TLeafList& list, bool recursive, bool shallow)
+    {
+        TLeafList::iterator lstEnd = end(); // avoid repeated virtual calls
+        for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
+            {
+                // check if we have found a match and add it
+                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                if (child.get() != 0)
+                    {
+                        list.push_back(child);
+                        if (shallow)
+                            recursive = false;
+                    }
+
+                if (recursive)
+                    {
+                        (*i)->ListChildrenSupportingClass<CLASS>(list,recursive, shallow);
+                    }
+            }
+    }
 
 private:
     Leaf(const Leaf &obj);

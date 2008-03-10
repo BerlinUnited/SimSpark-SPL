@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.22.2.4 2008/03/06 11:42:01 sgvandijk Exp $
+   $Id: body.cpp,v 1.22.2.5 2008/03/10 21:00:13 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -454,7 +454,7 @@ void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
         // Update visuals (or other transforms in the tree)
         TLeafList transforms;
-        parent.lock()->ListChildrenSupportingClass<Transform>(transforms, true, true);
+        parent.lock()->ListShallowChildrenSupportingClass<Transform>(transforms);
         for (TLeafList::iterator iter = transforms.begin(); iter != transforms.end(); ++iter)
         {
             shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
