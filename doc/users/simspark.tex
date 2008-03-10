@@ -92,6 +92,34 @@ displayed in figure \ref{ode:universaljoint}.
 	\item[Example message:] \texttt{(UJ (n laj1\_2) (ax1 -1.32) (ax2 2.00))}
 \end{itemize}
 
+\subsubsection{Touch Perceptor}
+
+This perceptor works like a bumper that is triggered if the agent part
+to which it is mounted collides with another simulation object. The
+perceptor always reports its own unique name. This allows the use of
+more than one touchperceptor per agent. Further the value 0 meaning no
+collision detected or 1 meaning collision detected is given.
+
+\begin{itemize}
+	\item[Message format:] \texttt{(TCH n <name> val 0|1)}
+	\item[Example message:] \texttt{(TCH n bumper val 1)}
+\end{itemize}
+
+
+\subsubsection{ForceResistance Perceptor}
+This perceptor informs about the force that acts on a body. Currently, it is
+available for the left and the right foot (lf, rf).
+After FRP and the name of the body it contains two vectors that indicate the
+point on the body to which the force applies and the force vector itself.
+%klaus: how exactly does this work, what is the unit?
+%klaus: is this general or soccer specific?
+\begin{itemize}
+	\item[Message format:] \texttt{(FRP (n <name>) (c <px> <py> <pz>) (f <fx> <fy>
+	<fz>))}
+	\item[Example message:] \texttt{(FRP (n lf) (c -0.14 0.08 -0.05) (f 1.12 -0.26
+	13.07))}
+\end{itemize}
+
 \subsection{Soccer Perceptors}
 The following perceptors are soccer specific and only available in the soccer
 simulation.
@@ -182,38 +210,29 @@ up to date list of all playmodes refer to (./plugin/soccer/soccertypes.h)
 \end{itemize}
 
 \subsubsection{AgentState Perceptor}
-%klaus: is this old version only? if not is TEXT_INSTEAD_OF_A_MANUAL still
-% correct?
+
+The AgentState perceptor gives information about the internal state of
+the agent. It reports information about the current battery status and
+the temperature of the agent.
+
 \begin{itemize}
-	\item[Message format:] \texttt{}
-	\item[Example message:] \texttt{}
+	\item[Message format:] \texttt{(AgentState (temp <degree>) (battery <percentile>))}
+	\item[Example message:] \texttt{(AgentState (temp 48) (battery 75))}
 \end{itemize}
+
 \subsubsection{Hear Perceptor}
-%klaus: is this old version only? if not is TEXT_INSTEAD_OF_A_MANUAL still
-% correct?
+
+The hear perceptor picks up messages that other agents and the agent
+itself said using their respective say effector. In addition to the
+message string itself information about the sender is included. If the
+agent hears its own message the source is the string literal
+\texttt{self}, otherwise the direction of the source in degrees 
+relative to the agent is given.
+
 \begin{itemize}
-	\item[Message format:] \texttt{}
-	\item[Example message:] \texttt{}
-\end{itemize}
-\subsubsection{Touch Perceptor}
-%klaus: is this old version only? if not is TEXT_INSTEAD_OF_A_MANUAL still
-% correct?
-\begin{itemize}
-	\item[Message format:] \texttt{}
-	\item[Example message:] \texttt{}
-\end{itemize}
-\subsubsection{ForceResistance Perceptor}
-This perceptor informs about the force that acts on a body. Currently, it is
-available for the left and the right foot (lf, rf).
-After FRP and the name of the body it contains two vectors that indicate the
-point on the body to which the force applies and the force vector itself.
-%klaus: how exactly does this work, what is the unit?
-%klaus: is this general or soccer specific?
-\begin{itemize}
-	\item[Message format:] \texttt{(FRP (n <name>) (c <px> <py> <pz>) (f <fx> <fy>
-	<fz>))}
-	\item[Example message:] \texttt{(FRP (n lf) (c -0.14 0.08 -0.05) (f 1.12 -0.26
-	13.07))}
+	\item[Message format:] \texttt{(hear <time>
+	'self'|<direction> <message>)} \item[Example message:]
+	\texttt{(hear 12.3 self ``hello word'')}
 \end{itemize}
 
 %-------------------------------------------------------------------
