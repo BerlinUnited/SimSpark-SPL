@@ -13,7 +13,7 @@ all-local:
 	  $(MAKE) $(AM_MAKEFLAGS) manual.pdf ; \
 	else \
 	  echo "***" ;\
-	  echo "*** The sources for the developers manual are in the CVS version only." ; \
+	  echo "*** There is no developers manual yet. Please consider contributing to it." ; \
 	  echo "***" ; \
 	fi
 
