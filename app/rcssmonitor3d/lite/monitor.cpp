@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitor.cpp,v 1.29 2008/02/19 22:49:23 hedayat Exp $
+   $Id: monitor.cpp,v 1.30 2008/03/11 12:29:49 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,8 +28,14 @@
 #include <types.h>
 #include <unistd.h>
 #include <kerosin/openglserver/openglwrapper.h>
-#include <GL/glut.h>
 #include <queue>
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
 void
 display()
 {
