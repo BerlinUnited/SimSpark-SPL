@@ -1,19 +1,21 @@
 \chapter{Simspark}
+\label{cha:simspark}
 
 In this section you find information about the messages that are sent from the
 server to the agent (perceptors) and vice versa (effectors). A description of
-the perceptors and effectors can also be found in \cite{SchillingJ} (German) and \cite{Lekavy} (Slovak).
+the perceptors and effectors can also be found in \cite{SchillingJ} (German), \cite{Lekavy} (Slovak), and to some part in \cite{Vorst06} (concerns the older "spheres" simulation though, so some information is outdated).
 
 %-------------------------------------------------------------------
 \section{Perceptors}
+\label{sec:perceptors}
+
 Perceptors are used to sense the environment of the agent. They are sent from
 the server to each agent and contain agent specific and perceptor specific
 information about the environment and the agent itself. There are perceptors
 that are available to all kinds of simulations and soccer specific perceptors.
 
-% Describe in detail, also the message format, see TEXT_INSTEAD... and Oliver's hope-1.pdf manual
-
 \subsection{General message format}
+\label{sec:msgformat}
 
 Messages from and to the server use S-expressions (short for symbolic
 expressions) as their basic data structure. The basic idea of
@@ -36,11 +38,15 @@ order, i.e. big endian notation with the most significant bits
 transferred first.
 
 % Klaus:do we have noise in perceptors?
+% Joschka: only in some so far (e.g. vision); the joint perceptors, gyro, and touch perceptors don't have noise yet (should be on the ToDo list)
 \subsection{General Perceptors}
+\label{sec:generalperceptors}
+
 The perceptors described in this subsection are available to all types of
 simulation. In other words they are not specific to the soccer environment.
 
 \subsubsection{GyroRate Perceptor}
+\label{sec:GYR}
 The gyro rate perceptor delivers information about the orientation of a body.
 Currently only the upper torso contains a gyro perceptor.
 The message contains the GYR identifier, the name of the body to which the gyro
@@ -52,8 +58,10 @@ orientation of the body with respect to the global coordinate system.
 \end{itemize}
 
 %Klaus: To me it is not quite clear what the reference coordinate system is
+%Joschka: The coordinate system should be the local coordinate system of the body that the perceptor is attached to. 
 
 \subsubsection{HingeJoint Perceptor}
+\label{sec:HJP}
 A hinge joint perceptor receives information about the angle of the
 correponding single axis hinge joint. It contains the identifier HJ, the name
 of the perceptor (see table \ref{table:perceptorNames}) and the position angle of the axis. Zero
@@ -67,13 +75,18 @@ in figure \ref{ode:hingejoint}.
     \label{ode:hingejoint}
   \end{center}
 \end{figure}
+
 %klaus: What is the zero degree position, is the above correct?
+%Joschka: I don't think this is necessarily correct; to my knowledge, the zero position is determined by the orientation and position of the bodies at the time the joint is attached. Is this right?
+
 \begin{itemize}
 	\item[Message format:] \texttt{(HJ (n <name>) (ax <ax>))}
 	\item[Example message:] \texttt{(HJ (n laj3) (ax -1.02))}
 \end{itemize}
 
 \subsubsection{UniversalJoint Perceptor}
+\label{sec:UJP}
+
 A universal joint perceptor receives information about the two angles of the
 correponding two axis universal joint. It contains the identifier UJ, the name
 of the perceptor (see table \ref{table:perceptorNames}) and the position angles of the two axis.
@@ -93,6 +106,7 @@ displayed in figure \ref{ode:universaljoint}.
 \end{itemize}
 
 \subsubsection{Touch Perceptor}
+\label{sec:touchperceptor}
 
 This perceptor works like a bumper that is triggered if the agent part
 to which it is mounted collides with another simulation object. The
@@ -107,12 +121,19 @@ collision detected or 1 meaning collision detected is given.
 
 
 \subsubsection{ForceResistance Perceptor}
+\label{sec:FRP}
+
 This perceptor informs about the force that acts on a body. Currently, it is
 available for the left and the right foot (lf, rf).
 After FRP and the name of the body it contains two vectors that indicate the
 point on the body to which the force applies and the force vector itself.
+
 %klaus: how exactly does this work, what is the unit?
+%Joschka: I think Hedayat uses ODE dJointFeedback to get information about the force vector at different contact points and calculates a weighted average of these positions to get the center (weighted by the amount of force at the respective point). The value of the reported force is the total sum of all the force vectors (see also TEXT_INSTEAD_OF_A_MANUAL.txt). I don't know what unit is used though...
+
 %klaus: is this general or soccer specific?
+%Joschka: it is a general perceptor
+
 \begin{itemize}
 	\item[Message format:] \texttt{(FRP (n <name>) (c <px> <py> <pz>) (f <fx> <fy>
 	<fz>))}
@@ -121,10 +142,14 @@ point on the body to which the force applies and the force vector itself.
 \end{itemize}
 
 \subsection{Soccer Perceptors}
+\label{sec:soccerperceptors}
+
 The following perceptors are soccer specific and only available in the soccer
 simulation.
 
 \subsubsection{Vision Perceptor}
+\label{sec:visionperceptor}
+
 Your robots possess a special omnicam with some smart image processing
 software attached :). If using the regular visionperceptor, Robots
 have a 360 degrees view. With the RestrictedVisionPerceptor (which
@@ -153,8 +178,10 @@ Contrary to 2D soccer simulation, the vision system does not deliver
 object velocities. Objects can be occluded by other objects (this is
 not completely implemented yet). All distances and angles are given
 relative to the camera position. The camera is currently located at
-the center of the robot.
+the center of the robot's torso.
+
 % Klaus: where is it in humanoid league
+% Joschka: in the head for most of them, although some robots have an additional camera on the torso pointing down to be able to see the ball if it's right in front of their feet.
 
 The noise parameters of the vision system are as follows:
 \begin{itemize}
@@ -186,10 +213,15 @@ Possible objects are:
 	(pol 43.56 7.84 -4.68)) (G2R (pol 43.25 -4.10 -4.71)) (B (pol 18.34 4.66
 	-9.90)) (P (team RoboLog) (id 1) (pol 37.50 16.15 -0.00)))}
 \end{itemize}
+
 % What about the Restricted Vision Perceptor?
 % The current soccer bot seems not to use it, still experimental/unsupported?
 
+% Joschka: I'm not sure either. Oliver worked on that, and Yuan had several patches for it last year. Maybe Yuan has the best overview right now? The current Soccerbot doesn't use it.
+
 \subsubsection{GameState Perceptor}
+\label{sec:gamestateperceptor}
+
 The GameStatePerceptor contains information of the current play time which
 starts from zero at kickoff of either half. It also contains the current game status.
 The first percept you get from this perceptor additionally tells you about some
@@ -210,6 +242,7 @@ up to date list of all playmodes refer to (./plugin/soccer/soccertypes.h)
 \end{itemize}
 
 \subsubsection{AgentState Perceptor}
+\label{sec:agentstateperceptor}
 
 The AgentState perceptor gives information about the internal state of
 the agent. It reports information about the current battery status and
@@ -221,6 +254,7 @@ the temperature of the agent.
 \end{itemize}
 
 \subsubsection{Hear Perceptor}
+\label{sec:hearperceptor}
 
 The hear perceptor picks up messages that other agents and the agent
 itself said using their respective say effector. In addition to the
@@ -237,18 +271,27 @@ relative to the agent is given.
 
 %-------------------------------------------------------------------
 \section{Effectors/Actuators}
+\label{sec:effectors}
+
 Effectors are used to act within the simulation. They are sent to the server
 to change the game state accordingly. There are effectors that are available to
 all kinds of simulations and soccer specific effectors.
+
 %Klaus: do we have noise in effectors?
+% Joschka: only in the old kick effector (we need noise models though, should be a ToDo)
+
 %Klaus: What are the minimal/maximal values to pass? What happens in case of
 % errors
+% Joschka: Good question ;-) For the joint effectors, you supply angles in degrees, there should be no problem. For anything else, I'm not sure.
 
 \subsection{General Effectors}
+\label{sec:generaleffectors}
+
 The effectors described in this subsection are available to all types of
 simulation. In other words they are not specific to the soccer environment.
 
 \subsubsection{Create Effector}
+\label{sec:createeffector}
 
 When an agent initially connects to the server it is invisible and
 cannot take affect a simulation in any meaningful way. It only
@@ -269,9 +312,9 @@ simulation each agent is required to register to a team and acquire a
 unique player number. For these tasks usually a special effector like
 the SoccerInitEffector is used.
 
-% Explain that these effectors are available to all simulations
-
 \subsubsection{HingeJoint Effector}
+\label{sec:HJE}
+
 Effector for all axis with a single degree of freedom.
 The first parameter is the name of the axis. Table ??? shows a list of all
 available hinge joints. The second parameter contains the change in angle of
@@ -282,6 +325,8 @@ the joint.
 \end{itemize}
 
 \subsubsection{UniversalJoint Effector}
+\label{sec:UJE}
+
 Effector for all axis with a two degrees of freedom.
 The first parameter is the name of the axis. Table ??? shows a list of all
 available hinge joints
@@ -293,10 +338,14 @@ The order of the joints is the same as in the name.
 \end{itemize}
 
 \subsection{Soccer Effectors}
+\label{sec:soccereffectors}
+
 The following effectors are soccer specific and only available in the soccer
 simulation.
 
 \subsubsection{Init Effector}
+\label{sec:initeffector}
+
 The init command is sent once for each agent after the create effector sent the
 scene command. It registers this agent as a member of the passed team with the passed number.
 All players of one team have to use the same teamname and different numbers.
@@ -312,6 +361,8 @@ first.
 \end{itemize}
 
 \subsubsection{Beam Effector}
+\label{sec:beameffector}
+
 The beam effector allows a player to position itself on the field before the
 game starts. The x and y coordinates define the position on the field with
 respect to the coordinate system of figure ???. The rot value allows to define
@@ -323,13 +374,21 @@ degrees to positive y axis.
 \end{itemize}
 
 \subsubsection{Say Effector}
+\label{sec:sayeffector}
+
 %klaus: is this old version only?
+%Joschka: no, the Soccerbot has a say effector in the current version. It is restricted to 8 bytes msgs.
+%description in TEXT_INSTEAD_... and Philipp Vorst's thesis
 
 \subsection{Older Version Effectors}
+\label{sec:olderversioneffectors}
+
 The effectors in this subsection have been available in older versions of the
 simulation and are now no longer available
 
 \subsubsection{Drive Effector}
+\label{sec:driveeffector}
+
 To use the omnidrive of the agent, you have to use the so called
 "DriveEffector", which takes a cartesian vector (x y z) with a maximum
 length of 100 units. The x-coordinate points towards the opponents
@@ -352,8 +411,9 @@ other robots. Using this feature to push away opponents is discouraged
 	\item[Example message:] \texttt{(drive 20.0 50.0 0.0)}
 \end{itemize}
 
-
 \subsubsection{Kick Effector}
+\label{sec:kickeffector}
+
 To move the ball, you have the option of simply using the robots to
 push the ball into a desired direction, or you can use the
 kickeffector to kick the ball. Originally, we did not intend to create
@@ -399,7 +459,11 @@ gets higher with sigma up to 4.5.
 	\item[Example message:] \texttt{(kick 20.0 80.0)}
 \end{itemize}
 
+% illustration from Philipp's thesis here?
+
 \subsubsection{Catch Effector}
+\label{sec:catcheffector}
+
 The goalie (agent number 1) is the only player with the ability to
 catch a ball. The goalie can catch the ball in play mode 'playe\_on',
 if the ball is inside the penalty area and close to the robot, i.e. it
@@ -415,10 +479,10 @@ and moves players away that are closer than 2 meters to the goalie by
 	\item[Example message:] \texttt{(catch)}
 \end{itemize}
 
+% illustration from Philipp's thesis here?
+
 %----------------------------------------------------------------------
 \section{Simulation Update Loop}
-
-% I think people want to know how this works, maybe we can give an overview here and go into more detail in the developer manual? What do you think?
 
 SimSpark implements a simple internal event model that immediately
 executes every action received from an agent. It does not try to
@@ -529,9 +593,12 @@ delayed one cycle in the multi-threaded loop.
 %----------------------------------------------------------------------
 \section{Setup Scripts}
 
-% describe purpose of scripts in ~/.rcssserver3d/]
+\textbf{TODO:}
 
-% kerosin.rb for rendering configuration of simspark
+\begin{itemize}
+\item describe purpose of scripts in \~/.rcssserver3d/
+\item kerosin.rb for rendering configuration of simspark
+\end{itemize}
 
 %%% Local Variables: 
 %%% mode: latex
