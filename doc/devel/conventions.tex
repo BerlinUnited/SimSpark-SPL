@@ -1,0 +1,30 @@
+\chapter{Development Conventions}
+
+We agreed on a set of conventions that you should apply to when you
+contribute to the development.
+
+\begin{itemize}
+
+\item{CVS tagging}
+
+Developing and testing an new feature of Simspark is usually done on a
+separate CVS branch. We implemented the following convention to tag
+the branch and trunk before and after merging and branching takes
+place:
+
+Before branching off the trunk is tagged \texttt{BRANCHNAME\_base} in
+order to mark the last CVS state before the branch is started.
+
+Each time before a branch is merged back to the trunk the trunk ist tagged 
+\texttt{BRANCHNAME\_premergeN}. The value \texttt{N} increases with each separate merge. 
+After the branch is merged the trunk is tagged
+\texttt{BRANCHNAME\_postmergeN} and the merged branched is tagged
+\texttt{BRANCHNAME\_mergedN}
+
+\end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 
