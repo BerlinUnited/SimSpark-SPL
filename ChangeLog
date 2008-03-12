@@ -1,3 +1,12 @@
+2008-03-11  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* app/simspark/rsg/agent/soccerbottorsocomp.rsg:
+	- removed absolute address
+
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- check to see if renderControl is valid
+	- moved PostPhysicsUpdate() out of while loop in Step()
+
 2008-03-11  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/agentspark/soccerbotbehavior.cpp:
@@ -14,23 +23,23 @@
 
 	* acinclude.m4
 	- improved ruby library detection through ruby configuration
-  
+
 	* lib/zeitgeist/leaf.h
 	- added (Leaf::ListShallowChildrenSupportingClass)
-  
+
 	* lib/oxygen/physicsserver/body.h
 	* lib/oxygen/physicsserver/body.cpp
 	- composite bodies' mass is positioned correctly in (Body::AddMass), their
 	  colliders and sibling/descendant transforms are positioned correctly in
 	  (Body::PrePhysicsUpdateInternal)
-  
+
 	* plugin/soccer/agentstate/agentstate.cpp
 	* plugin/soccer/agentstate/agentstate.h
 	* plugin/soccer/gamestateaspect/gamestateaspect.cpp
 	* plugin/soccer/gamestateaspect/gamestateaspect.h
 	- when agent disconnects, his uniform number is freed so it can be used again
 	  by a new agent
-    
+
 2008-03-08  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/collisionperceptor/forceresistanceperceptor.h:

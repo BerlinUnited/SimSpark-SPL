@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.13 2008/03/08 17:48:38 hedayat Exp $
+   $Id: simulationserver.cpp,v 1.14 2008/03/12 18:40:32 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -217,13 +217,18 @@ void SimulationServer::Step()
     if (mSimStep > 0)
         {
             // world is stepped in discrete steps
+            float finalStep = 0;
             while (int(mSumDeltaTime*100) >= int(mSimStep*100))
                 {
-                    mSceneServer->Update(mSimStep);
-                    mGameControlServer->Update(mSimStep);
+                    mSceneServer->PrePhysicsUpdate(mSimStep);
+                    mSceneServer->PhysicsUpdate(mSimStep);
                     UpdateDeltaTimeAfterStep();
-                    mSimTime += mSimStep;
+                    finalStep += mSimStep;
                 }
+            mSceneServer->PostPhysicsUpdate();
+            mGameControlServer->Update(finalStep);
+            mSimTime += finalStep;
+
         } else
         {
             // simulate passed time in one single step
@@ -448,6 +453,7 @@ void SimulationServer::RunMultiThreaded()
         {
             GetLog()->Error() << "(SimulationServer) ERROR: multi-threaded "
                     << "mode supports descreet simulations only.\n";
+            return;
         }
 
     boost::thread_group ctrThrdGroup;
@@ -501,7 +507,8 @@ void SimulationServer::RunMultiThreaded()
             mSceneServer->PostPhysicsUpdate();
             mGameControlServer->Update(finalStep);
             mSimTime += finalStep;
-            renderControl->EndCycle();
+            if (renderControl)
+                renderControl->EndCycle();
             mThreadBarrier->wait();
         }
 

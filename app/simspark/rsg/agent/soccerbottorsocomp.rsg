@@ -5,7 +5,7 @@
  (templ $upperLenX $upperLenY $upperLenZ $upperMass
         $lowerLenX $lowerLenY $lowerLenZ $lowerMass
         $headRadius $headMass)
- 
+
  (def $LowerTorsoPosX 0)
  (def $LowerTorsoPosY 0)
  (def $LowerTorsoPosZ (eval -0.5 * $upperLenZ))
@@ -54,7 +54,7 @@
             )
            )
  )
- 
+
  ; Lower torso collider
  (nd TransformCollider
        (nd BoxCollider
@@ -76,7 +76,7 @@
 
        )
  )
- 
+
  ; Head collider
  (nd TransformCollider
        (nd SphereCollider
@@ -97,14 +97,14 @@
 	     (setContactSoftCFM 0.01)
 	     )
  )
- 
+
  ; Upper torso visual
  (nd Transform
      (setName chest)
      (setLocalPos 0 0 0)
-     
+
      (nd SingleMatNode
-         (load '/usr/local/share/rcssserver3d/models/soccerbottorso.obj')
+         (load 'models/soccerbottorso.obj')
          (setScale (eval 0.5 * $upperLenX) (eval 0.5 * $upperLenY) (eval 0.5 * $upperLenZ))
          ;(setScale 1.0 1.0 1.0)
      )
@@ -121,7 +121,7 @@
        (setMaterial matGrey)
     )
  )
- 
+
  ; Head visual
  (nd Transform
      ; basics
