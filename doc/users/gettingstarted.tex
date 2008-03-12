@@ -2,6 +2,7 @@
  \chapter{Getting Started}
 
 \section{Download and Installation Instructions}
+\label{section:install}
 
 %Currently the soccer3d CVS builds only for Linux (the Win32 build system is not yet ported/tested, so we should focus on *nix systems.
 
@@ -165,6 +166,84 @@ Add your install prefix if it isn't already there, save and close.
 
 \section{An Example of a Simulation Run}
 
+This chapter gives shows how to start a simulation and connect an
+agent. The soccer simulation is used to illustrate this. We assume
+that you have already compiled and installed the simulator successfully
+as described in chapter \ref{section:install}. 
+
+To follow the example run given here it is best to work with several
+console windows where you start and control the server monitor and
+agent separately.
+
+\begin{itemize}
+\item{Start the Server}
+
+The first step is to start the simulation server. To do this type
+\texttt{simspark} on the console. The server is by default configured
+to run without internal monitor support and to start the soccer
+simulation. 
+
+You should now see several diagnostic messages fly by, starting with
+the following greeting:
+
+\begin{verbatim}
+
+simspark, a monolithic simulator 0.1
+Copyright (C) 2004 Markus Rollmann,
+Universit�t Koblenz.
+Copyright (C) 2004, The RoboCup Soccer Server Maintenance Group.
+
+Type '--help' for further information
+
+\end{verbatim}
+
+The output ends with the confirmation that the server now listens on
+the default port \texttt{3100} for agents and \texttt{3200} for
+external monitors.
+
+\begin{verbatim}
+(NetControl) 'AgentControl' setting up a server on TCP:3100
+(NetControl) 'MonitorControl' setting up a server on TCP:3200
+(SimulationServer) entering runloop
+(SimulationServer) running in single thread
+\end{verbatim}
+
+We are now ready to connect a monitor to the simulator.
+
+
+\item{Start the Monitor}
+
+The monitor is a separate application that connects to the server and
+displays the simulated scene. To start the default monitor type
+\texttt{monitorspark}. By default the monitor is configured to connect to a simulation 
+on the local machine. You can however run the server and monitor on
+different machines.
+
+When the monitor starts up you should again see some diagnostic
+messages fly by. The output ends with the confirmation that the
+monitor tries to connect to the server. If successful it will then open
+a separate window and display the simulated scene, please see figure
+\ref{fig:startup}.
+
+\begin{verbatim}
+(SimulationServer) init
+(NetClient) 'SparkMonitorClient'connecting to TCP 127.0.0.1:3200
+(NetClient::SendMessage) ERROR: send returned error 'Broken pipe'
+(SimulationServer) entering runloop
+(SimulationServer) running in single thread
+\end{verbatim}
+
+After the monitor started you are able to use the mouse and keyboard
+to navigate the scene. Please refer to chapter
+\ref{chapter:monitorspark} for a complete list of the available key bindings. 
+
+You can use the numbers of the keypad to navigate to different
+positions on the playing field. The view after pressing \texttt{3} is
+given in figure \ref{fig:press3}. The movement of the camera is
+controlled with the arrow keys, PgUp and PgDown. Press the left mouse
+button and move the mouse to change the camera view.
+
+
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{fig/startup}
@@ -180,6 +259,16 @@ Add your install prefix if it isn't already there, save and close.
 \label{fig:press3}
 \end{center}
 \end{figure}
+
+
+\item{Connect an agent}
+
+The next step is to connect one or more agents to the simulation. To
+do this please change to a separate console window and type \texttt{agentspark}.
+This starts the example agent that is included with SimSpark. 
+
+You should now see a humanoid robot appear on the field, as in figure
+\ref{fig:agentconnect}. This default agent does nothing useful but waving his arms.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -197,6 +286,14 @@ Add your install prefix if it isn't already there, save and close.
 \end{center}
 \end{figure}
 
+
+\item{Start the simulation}
+
+The next step is to start the soccer game. To do this please change
+back to the monitor window and press \texttt{'k'}. The simulation time
+now start running and the game state changes to
+\texttt{BeforeKickOff}, please compare to figure \ref{fig:presskickoff}.
+
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.8\textwidth]{fig/presskickoff}
@@ -204,6 +301,8 @@ Add your install prefix if it isn't already there, save and close.
 \label{fig:presskickoff}
 \end{center}
 \end{figure}
+
+\end{itemize}
 
 
 %I think for the initial outline of the manual it's easier to just focus on either app/simpark app/monitorspark  or rsgedit.
