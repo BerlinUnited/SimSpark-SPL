@@ -1,13 +1,55 @@
 \chapter{The Robot Models}
+\label{cha:robots}
+
+%Later: HOAP-2, NEC Papero (I already did a model in Blender), CITIZEN Eco-Be!, VisiON 4g (Fabio Dalla Libera is working on that), AIBO via RoSIML importer
+
+Below, we only describe the most advanced robot model that comes with the simulation package at this point in time: the Soccerbot. There are some other models which you can find in the directory \texttt{app/simspark/rsg/agent/}, e.g., the soccerplayer.rsg, or the hoap2.rsg files. These are currently not in use in any simulation, and considered experimental.
+
+Besides that, work is in progress on other robot models and will be described here when usable. We plan to integrate an improved model of the HOAP-2 robot from Fujitsu Automation, and models of the VisiON 4g robot, and the Sony AIBO. For help on how to model new robots for your simulation, please have a look at tutorials in the SimSpark Wiki at \\
+
+\url{http://simspark.sourceforge.net/wiki/}.
 
 \section{Soccerbot}
 
+This is the robot currently used in the competitions of the 3D Soccer Simulation League at RoboCup. It is a humanoid robot with 20 degrees of freedom (DOF) as depicted in figure \ref{fig:soccerbotdof}. Its current dimensions are quite unrealistic for a real humanoid robot (see table \ref{table:dimensions} which is due to instabilities in the physics simulation at the time the robot was first modeled. This is a serious shortcoming of this robot model and should be changed. Another open issue is that the joint ranges are not limited in the current model. This allows for very unrealistic movements which can be fun to watch, but can lead to unfair behavior in a competition.
+
+\begin{figure}[htp]\begin{minipage}[b]{0.5\linewidth} \centering\includegraphics[width=6cm]{fig/soccerbotfront}\caption{Frontal view of the Soccerbot in the simulation}\end{minipage}\hspace{0.5cm}\begin{minipage}[b]{0.5\linewidth}\centering\includegraphics[width=6cm]{fig/soccerbotside}\caption{Side view of the Soccerbot in the simulation}\end{minipage}\end{figure}
+
 \begin{figure}[htp]
   \centering
-  \includegraphics[height=0.7\textwidth]{fig/soccerbot056}
+  \includegraphics[height=0.6\textwidth]{fig/soccerbot056}
   \caption{Overview of the degrees of freedom of the Soccerbot}
   \label{fig:soccerbotdof}
 \end{figure}
+
+\begin{table}
+\centering
+\begin{tabular}[htbp]{|l|c|c|c|c|}
+  \hline
+  Name & Width & Depth & Height & Mass \\
+  \hline\hline
+  head & \multicolumn{3}{|c|}{0.39m (radius)} & 0.1kg\\ \hline
+  torso & 1.37m & 0.96m & 1.41m & 2.0kg \\ \hline
+  left\_shoulder & 0.445m & 1.017m & 0.536m & 0.1kg \\ \hline
+  right\_shoulder & 0.445m & 1.017m & 0.536m & 0.1kg \\ \hline
+  left\_upper\_arm & 0.445m & 0.398m & 0.506m & 0.07kg \\ \hline
+  right\_upper\_arm & 0.445m & 0.398m & 0.506m & 0.07kg \\ \hline
+  left\_lower\_arm & 0.445m & 0.316m & 0.6m & 0.075kg \\ \hline
+  left\_hip & 0.273m & 0.273m & 0.2m & 0.06kg \\ \hline
+  right\_hip & 0.273m & 0.273m & 0.2m & 0.06kg \\ \hline
+  left\_thigh & 0.662m & 0.6m & 1.3m & 0.1kg \\ \hline
+  right\_thigh & 0.662m & 0.6m & 1.3m & 0.1kg \\ \hline
+  left\_shank & 0.662m & 0.6m & 0.964m & 0.16kg \\ \hline
+  right\_shank & 0.662m & 0.6m & 0.964m & 0.16kg \\ \hline
+  left\_foot & 0.61m & 0.956m & 0.095m & 0.1kg \\ \hline
+  right\_foot & 0.61m & 0.956m & 0.095m & 0.1kg \\
+  \hline
+\end{tabular}
+\caption{Physical properties of the Soccerbot.}
+\label{table:dimensions}
+\end{table}%
+
+The Soccerbot has several kinds of sensors available. It uses a (omni-directional) vision sensor (see section \ref{sec:visionperceptor}) to get information about objects in its environment\footnote{It is currently located in the center of the torso, which should be changed to be in the head.}. In order to detect the contact with the ground and the resulting force at the feet, it is equipped with a Force Resistance Perceptor (see section \ref{sec:FRP}) in each foot. It can sense the current simulation time with a GameState Perceptor (see section \ref{sec:gamestateperceptor}) and the change in orientation of its torso with a GyroRate Perceptor (see section \ref{sec:GYR}). Furthermore, it has proprioceptive sensors that allow to sense the angle of each joint (see sections \ref{sec:HJP} and \ref{sec:UJP} for HingeJoint Perceptor and UniversalJoint Perceptor descriptions, respectively). An overview over the joint perceptors and effectors is given in table \ref{table:perceptorNames}.
 
 \begin{table}
 \label {table:perceptorNames}
@@ -18,7 +60,6 @@
 {\bf Connection between}  & {\bf Joint type} & {\bf Perceptor name}& {\bf
 Effector name} \\
 \hline
-%Klaus: how do I get underscore character?
 Shoulder - body  & Universal joint & laj1\_2  raj1\_2 & lae1\_2   rae1\_2 \\
 \hline
 Upper arm - shoulder  & Hinge joint & laj3  raj3 & lae3   rae3 \\
@@ -37,8 +78,18 @@ foot - lower leg & Universal joint & llj5\_6  rlj5\_6 & lle5\_6   rle5\_6 \\
 \end{center}
 \end{table}
 
+In figure \ref{fig:examplemsg} shows an example message which the agent receives from the server in a single simulation cycle including sense information from all the perceptors of the agent.
 
-%Later: HOAP-2, NEC Papero (I already did a model in Blender), CITIZEN Eco-Be!, VisiON 4g (Fabio Dalla Libera is working on that), AIBO via RoSIML importer
+\begin{figure}[htb]
+\centering
+\parbox{\textwidth}{
+\texttt{
+(time (now 19.60))(GYR (n torso) (rt -0.02 -0.01 -0.00))(See (F1L (pol 10.34 45.02 -16.70)) (F2L (pol 68.43 174.14 -2.56)) (F1R (pol 103.28 -86.10 -1.66)) (F2R (pol 123.46 -123.42 -1.43)) (G1L (pol 27.94 165.40 -6.96)) (G2L (pol 35.03 168.43 -5.56)) (G1R (pol 106.49 -104.59 -1.83)) (G2R (pol 108.57 -108.33 -1.80)) (B (pol 56.95 -122.42 -3.02)) (P (team RoboLog) (id 2) (pol 10.50 -179.98 -0.07)))(UJ (n laj1\_2) (ax1 0.00) (ax2 90.63))(UJ (n raj1\_2) (ax1 -0.00) (ax2 90.63))(HJ (n laj3) (ax 90.77))(HJ (n raj3) (ax -90.77))(HJ (n laj4) (ax 87.96))(HJ (n raj4) (ax 88.40))(HJ (n llj1) (ax 0.03))(HJ (n rlj1) (ax -0.02))(UJ (n llj2\_3) (ax1 -0.03) (ax2 0.02))(UJ (n rlj2\_3) (ax1 -0.02) (ax2 0.01))(HJ (n llj4) (ax 0.05))(HJ (n rlj4) (ax 0.04))(TCH (n lf) (val 1))(UJ (n llj5\_6) (ax1 0.05) (ax2 -0.01))(TCH (n rf) (val 1))(UJ (n rlj5\_6) (ax1 0.04) (ax2 -0.00))}
+}
+\caption{An example message from the server to the Soccerbot including information from all the sensors.}
+\label{fig:examplemsg}
+\end{figure}
+
 
 %%% Local Variables: 
 %%% mode: latex
