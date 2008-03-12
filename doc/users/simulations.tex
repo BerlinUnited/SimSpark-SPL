@@ -1,6 +1,8 @@
 \chapter{Simulations}
+\label{cha:simulations}
 
 \section{The Soccer Simulation}
+\label{sec:soccersimulation}
 
 \subsection{Overview}
 
@@ -15,10 +17,10 @@ landmarks, called \texttt{flags} on the playing field. These flags
 mark corner and goal spots of the playing field. Further the relative
 location of other players and the ball are perceived.
 
-If an agents knows where it is and where it wants to be in the near
+If an agent knows where it is and where it wants to be in the near
 future the next challenge is to walk there. The structure of the
 humanoids are sufficiently realistic to make this non trivial. Further
-the agent has to recover and get up if he fell over.
+the agent has to recover and get up if fallen over.
 
 Another challenge is kicking the ball. As trivial this sounds to a
 human it is far from trivial for a robot to keep its dynamic balance
@@ -32,9 +34,11 @@ Most rules of the soccer game are judged by an automatic rule set that
 enforces the basic soccer rule set. However more involved situations
 like detection unfair behavior still require a human referee.
 
+This soccer simulation is also used as the official competition environment for the 3D Soccer Simulation League at RoboCup\footnote{For more information on RoboCup, see also \url{http://www.robocup.org/}} \cite{KAK+97}\cite{KA00}\cite{BMO+05}\cite{MBS+07}. The robots used in the simulation at the competitions is the Soccerbot as described in chapter \ref{cha:robots}.
+
 \begin{figure}[htp]
   \centering
-  \includegraphics[width=0.8\textwidth]{fig/soccersim}
+  \includegraphics[width=\textwidth]{fig/soccersim}
   \caption{A screen shot of the soccer simulation with 5 vs 5 robots}
   \label{fig:soccersim}
 \end{figure}
@@ -48,17 +52,17 @@ meters in each direction. Space outside this border area is not
 reachable by an agent. The soccer ball has a radius of 0.4 meter and a
 mass of 430 gram.
 
-At each corner of the soccer field and at the goal posts a distinctive
+At each corner of the soccer field, and at the goal posts, a distinctive
 flag is placed. The positions of these flags are fixed and known to
-each agent. Agents percept their relative position to a subset of
-these flags and are therefore able to localize them self on the soccer
+each agent. Agents perceive the relative position of a subset of
+these flags and are therefore able to localize themselves on the soccer
 field. The corner flags are color coded in the visualization. Agents
-distinguis flags through their code name as shown in figure
+distinguish flags through their code name as shown in figure
 \ref{fig:pitch}.
 
 \begin{figure}[htp]
   \centering
-  \includegraphics[width=0.9\textwidth]{fig/pitch}
+  \includegraphics[width=\textwidth]{fig/pitch}
   \caption{The dimensions of the soccer pitch and the object markers on the field as perceived by an agent}
   \label{fig:pitch}
 \end{figure}
@@ -89,6 +93,7 @@ game. He is further able to command a \texttt{free kick} where one
 player is able to shoot from a short distance to the goal.
 
 \subsection{Setup Script}
+
 
 %%% Local Variables: 
 %%% mode: latex
