@@ -52,7 +52,7 @@ This is the robot currently used in the competitions of the 3D Soccer Simulation
 The Soccerbot has several kinds of sensors available. It uses a (omni-directional) vision sensor (see section \ref{sec:visionperceptor}) to get information about objects in its environment\footnote{It is currently located in the center of the torso, which should be changed to be in the head.}. In order to detect the contact with the ground and the resulting force at the feet, it is equipped with a Force Resistance Perceptor (see section \ref{sec:FRP}) in each foot. It can sense the current simulation time with a GameState Perceptor (see section \ref{sec:gamestateperceptor}) and the change in orientation of its torso with a GyroRate Perceptor (see section \ref{sec:GYR}). Furthermore, it has proprioceptive sensors that allow to sense the angle of each joint (see sections \ref{sec:HJP} and \ref{sec:UJP} for HingeJoint Perceptor and UniversalJoint Perceptor descriptions, respectively). An overview over the joint perceptors and effectors is given in table \ref{table:perceptorNames}.
 
 \begin{table}
-\label {table:perceptorNames}
+\label{table:perceptorNames}
 \caption{Perceptor and effector names}
 \begin{center}
 \begin{tabular}{|l|l|l|l|}

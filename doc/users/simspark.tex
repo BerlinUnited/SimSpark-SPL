@@ -64,8 +64,8 @@ orientation of the body with respect to the global coordinate system.
 \label{sec:HJP}
 A hinge joint perceptor receives information about the angle of the
 correponding single axis hinge joint. It contains the identifier HJ, the name
-of the perceptor (see table \ref{table:perceptorNames}) and the position angle of the axis. Zero
-degrees corresponds to straightly allinged bodies. A hinge joint is displayed
+of the perceptor (see table~\ref{table:perceptorNames}) and
+the position angle of the axis. Zero degrees corresponds to straightly allinged bodies. A hinge joint is displayed
 in figure \ref{ode:hingejoint}. 
 
 \begin{figure}[htbp]
@@ -89,8 +89,8 @@ in figure \ref{ode:hingejoint}.
 
 A universal joint perceptor receives information about the two angles of the
 correponding two axis universal joint. It contains the identifier UJ, the name
-of the perceptor (see table \ref{table:perceptorNames}) and the position angles of the two axis.
-Zero degrees corresponds to straightly allinged bodies. A universal joint is
+of the perceptor (see table~\ref{table:perceptorNames}) and the position angles
+of the two axis. Zero degrees corresponds to straightly allinged bodies. A universal joint is
 displayed in figure \ref{ode:universaljoint}. 
 \begin{figure}[htbp]
   \begin{center}
@@ -165,7 +165,7 @@ either others robots, the ball, or markers on the field. Currently
 there are 8 markers on the field: one at each corner point of the
 field and one at each goal post.
 
-With each sensed object you get:
+With each sensed object you get (see figure \ref{fig:polarcoordinates}):
 
 \begin{itemize}
   \item The distance between the player and the object.
@@ -173,6 +173,13 @@ With each sensed object you get:
 opponent goal.
   \item The latitudal angle. Here zero degree means horizontal. 
 \end{itemize}
+
+\begin{figure}[htp]
+  \centering
+  \includegraphics[scale=0.4]{fig/polar_conversion}
+  \caption{Polar coordinates as supplied by the 3D Soccer Server \cite{Vorst06}}
+  \label{fig:polarcoordinates}
+\end{figure}
 
 Contrary to 2D soccer simulation, the vision system does not deliver
 object velocities. Objects can be occluded by other objects (this is
@@ -255,19 +262,40 @@ the temperature of the agent.
 
 \subsubsection{Hear Perceptor}
 \label{sec:hearperceptor}
-
-The hear perceptor picks up messages that other agents and the agent
-itself said using their respective say effector. In addition to the
-message string itself information about the sender is included. If the
-agent hears its own message the source is the string literal
-\texttt{self}, otherwise the direction of the source in degrees 
-relative to the agent is given.
-
+Agent processes are not allowed to communicate with each other directly, but
+agents may exchange messages via the simulation server. For this purpose
+agents are equipped with the so-called \emph{hear perceptor}, which serves as
+an aural sensor and receives messages shouted by other players. Actually the
+underlying model stems from the 2D Soccer Simulation and has been integrated 
+in the 3D~simulator since server version~0.4. Percepts have the following format:
 \begin{itemize}
-	\item[Message format:] \texttt{(hear <time>
-	'self'|<direction> <message>)} \item[Example message:]
-	\texttt{(hear 12.3 self ``hello word'')}
+	\item[Message format:] \texttt{(hear <time>	'self'|<direction> <message>)} 
+	\item[Example message:]	\texttt{(hear 12.3 self ``helloworld'')}
 \end{itemize}
+The value of $time$ is a real number and reflects the time when the given
+message was heard. ${S}ource$ is either the relative direction in degrees
+where the sound was located, or {\tt self} if the player has a statement by
+his own. $Message$ may consist of characters from the ASCII printing character
+subset \mbox{$[{\tt 0x20}, {\tt 0x7E]}$}, among which the alphanumerical
+symbols and mathematical operators can be found for example. Three characters
+from this range are, however, excluded: the {\it white space} character
+($\sqcup$) and the normal brackets {\tt(} and {\tt )}.
+
+The hear perceptor comes up with some restrictions:
+\begin{enumerate}
+	\item Messages are restricted to a \emph{maximal length} (currently 8 bytes).
+	\item Messages shouted from beyond a \emph{maximal distance} (currently $50.0$ meters) cannot be heard.
+	\item The \emph{number of messages} which can be heard at the same time is
+	bounded: Each player has the maximal capacity of one heard message by a
+	specific team every two sensor cycles (thus every $0.4$ seconds per team).
+	There are separately tracked capacities for both teams, because teams should
+	not be able to block the hear perceptors of their opponents by shouting
+	permanently. If more messages from players of one team arrive, they are
+	processed in the order of arrival; the remaining messages are simply not
+	heard.\\ Messages shouted by oneself, though, can always be noticed
+	\cite{Vorst06}.
+\end{enumerate}
+
 
 %-------------------------------------------------------------------
 \section{Effectors/Actuators}
@@ -379,6 +407,17 @@ degrees to positive y axis.
 %klaus: is this old version only?
 %Joschka: no, the Soccerbot has a say effector in the current version. It is restricted to 8 bytes msgs.
 %description in TEXT_INSTEAD_... and Philipp Vorst's thesis
+The \emph{say effector} permits communication among agents by broadcasting
+messages. In order to say something, the following command has to be employed:
+\begin{itemize}
+	\item[Message format:] \texttt{(say <message>)}
+	\item[Example message:] \texttt{(say ``helloworld'')}
+\end{itemize}
+$Message$ may consist of 8 characters, which may be taken from the ASCII 
+printing character subset $[{\tt 0x20}, {\tt 0x7E]}$ except the {\it white
+space}  character ($\sqcup$) and the normal brackets {\tt(} and {\tt )}. 
+For details and restrictions please see Section~\ref{sec:hearperceptor}, about
+the \emph{hear perceptor}, the dual sensor to this actuator.
 
 \subsection{Older Version Effectors}
 \label{sec:olderversioneffectors}
