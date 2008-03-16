@@ -1,6 +1,7 @@
 \chapter{Zeitgeist application framework}
 
 \section{Writing a class object for a C++ class}
+\label{sec:classobj}
 
 This topic is fundamental in the understanding of how the class object
 and the object hierarchy framework interact with each other. Let's say
@@ -118,7 +119,123 @@ object. In the above example, it just resolves to
 identify the base class of the class described by this class
 object. This can appear multiple times to allow for multiple
 inheritance. We now have a working class object. In order to use it it
-must be registered to the zeitgeist framework.
+must be registered to the zeitgeist framework. This process is
+described in section \ref{sec:regobj}.
+
+\section{Registering a Class Object}
+\label{sec:regobj}
+
+In section \ref{sec:classobj} we created a class object for the C++
+class \texttt{Simple}. Before this class object can be used by the
+zeitgeist framework it must be registered with a
+\texttt{zeitgeist::Core} object. 
+
+The Core is the object hierarchy, which is basically a virtual file
+system where instances of classes represent the directories and
+'files'. Therefore, each class instance can be identified by a
+path. The Core has a function called \texttt{RegisterClassObject()}
+which inserts the class object into the object hierarchy. Class
+objects are located under the \texttt{'/classes/'} branch of the
+hierarchy. We have two major scenarios of how a class object can be
+registered: Directly or indirectly!
+
+\subsection{Direct Registration}
+
+This scenario is used in the case of static libraries and executables,
+which want to expose custom classes to the object hierarchy. An
+example of a library, which does this is Kerosin. This way of
+registering is pretty straight forward and involves an initialization
+function which has a means to access the \texttt{zeitgeist::Core}
+instance where the class objects are to be registered. Then it
+(directly) calls the \texttt{RegisterClassObject()}-method to
+successively add class objects. Here's a short snippet from the
+Kerosin library:
+
+\begin{verbatim}
+#include "kerosin.h"
+#include <zeitgeist/scriptserver/scriptserver.h>
+
+using namespace kerosin;
+using namespace zeitgeist;
+
+Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
+{
+  zg.GetCore()->RegisterClassObject(new CLASS(SoundServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(InputServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(ImageServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(FontServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(OpenGLServer), "kerosin/");
+\end{verbatim}
+
+The Kerosin library is initialized by creating an instance of the
+Kerosin class. The constructor needs a reference to the Zeitgeist
+object (which represents the Zeitgeist library), so it can get access
+to the Core. The class objects are all added to the object hierarchy
+under the \texttt{'/classes/'} branch. 
+
+The second parameter of \texttt{RegisterClassObject()} allows to
+specify an additional sub path. So, the class object for the
+SoundServer (for example) will be located at
+\texttt{'/classes/kerosin/SoundServer'}. In in a way, this allows to create a
+form of namespaces among the class objects. As we can see, it is
+possible to add a class object directly at any time during the
+execution of the program.
+
+\subsection{Indirect Registration}
+
+The second scenario involves packaging a bunch of class objects into a
+shared library. On Unix platform these files are called \texttt{.so}
+files. In the Windows world thees files are \texttt{.DLLs}. The shared
+library is used as a class library, containing a collection of classes
+to be added to the object hierarchy. This kind of library is referred
+to as a \texttt{Bundle}. 
+
+The Bundle contains a well defined entry point function, which
+registers its contents with the calling Core. This is simplified
+through the use of several macros. First, we have to create a shared
+library project, containing a bunch of classes and their corresponding
+class objects. This process is described in section
+\ref{sec:classobj}. Then, we create an additional \texttt{.CPP} file. By convention
+this file is called \texttt{export.cpp}. Let's say we have two classes
+in our bundle, \texttt{Simple} and \texttt{Complex}. The corresponding
+\texttt{export.cpp} would look like this:
+
+\begin{verbatim}
+#include "simple.h"
+#include "complex.h"
+#include <zeitgeist/zeitgeist.h>
+
+ZEITGEIST_EXPORT_BEGIN()
+  ZEITGEIST_EXPORT(Simple);
+  ZEITGEIST_EXPORT(Complex);
+ZEITGEIST_EXPORT_END()
+\end{verbatim}
+
+
+Thanks to the macros, this is again a quite compact notation. We just
+include the header files of all classes we want to expose. These
+should also incorporate the correct class object declarations. Then we
+include the zeitgeist framework. The following macros implement the
+entry point function. \texttt{ZEITGEIST\_EXPORT\_BEGIN()} implements
+the beginning of the function. Then we use
+\texttt{ZEITGEIST\_EXPORT()} for every class we want to export, and
+finally \texttt{ZEITGEIST\_EXPORT\_END()} to 'terminate' the
+function. The compiled library is then a Zeitgeist-capable Bundle. The
+\texttt{ZEITGEIST\_EXPORT\_EX()} macro can be used to specify a subpath as above
+with \texttt{RegisterClassObject()}.
+
+
+To indirectly register the classes contained in a Bundle, you just
+import the bundle into the Core. This is done with the
+\texttt{ImportBundle()}-member function. This function opens the shared
+library. Gets the entry point function and calls it with an STL
+list. The class objects are added to this list within the entry point
+function. After returning, all class objects contained in this list
+are added to the object hierarchy.
 
 %%% Local Variables: 
 %%% mode: latex
