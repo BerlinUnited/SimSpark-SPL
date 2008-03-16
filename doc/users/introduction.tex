@@ -63,57 +63,65 @@ details contained in a set of plugins (see \cite{OR05}).
 This manual describes the SimSpark simulator. Like the simulator
 itself it is subject to constant change in an ongoing development
 effort. It assumes that you are familiar with the basic concepts of
-multiagent simulations.
+multi agent simulations.
 
 It aims to be a guide on how to develop your own RoboCup agents,
 construct new robot models, build your own custom monitor or use the
 trainer command protocol to test your agents.
 
-If there are errors, inconsistencies, or oddities, please notify
-<EMail Address> with the location of the error and a suggestion of how
-it should be corrected. We are always looking for anyone who has an
-idea on how to improve the manual, as well as proofread or rewrite a
-section of the manual.
+If there are errors, inconsistencies, or oddities, please send a
+message to the SimSpark developer mailing list
+\footnote{simspark-devel@lists.sourceforge.net} (please see chapter
+\ref{cha:resources} for details) with the location of the error and a
+suggestion of how it should be corrected. We are always looking for
+anyone who has an idea on how to improve the manual, as well as
+proofread or rewrite a section of the manual.
 
-The latest manual can be downloaded at <URL>.
+The latest manual can be downloaded at the SimSpark project homepage
+\footnote{\url{http://simspark.sourceforge.net/}}.
 
 \section{Reader's Guide to the Manual}
 
-% \ref{cha:overview}
+This section gives a rough overview about the contents of this manual.
 
-% short introduction to the system and its components; 
-% software architecture view:different libraries take take care of different aspects of the simulator
-% component view: server, monitor, logplayer, agent, available simulations and robot models
+In chapter \ref{cha:overview} we give a short overview introduction
+and to the system and its defining components. This overview is given
+both from a component view that distinguishes the server, the monitor
+the logplayer etc. and from a software architecture point of view. In
+the latter we describe the different software modules, their purpose
+and responsibility.
 
+In chapter \ref{cha:getstarted} you will find instructions howto build
+SimSpark from source and how to install it into your system. Further
+an illustrated example run of a simulation is given as a first guide
+to get the you started.
 
-% \ref{cha:getstarted}
-% helps to get the user started; guide through a typcial install process; 
-% gives an example simulation run
+The following chapter \ref{cha:simspark} is a reference gives you
+detailed information about the messages that are sent from the server
+to the agent and vice versa. These messages contain information about
+agent percepts and agent command strings.
 
+In chapter \ref{cha:monitorspark} we give an overview about the
+available monitor and log player setups. Their configuration and usage
+is described in detail there.
 
-% \ref{cha:simspark}
-% detailed information about the messages that are sent from the
-% server to the agent (perceptors) and vice versa (effectors)
+The following chapter \ref{cha:agentspark} explains the
+\texttt{agentspark} demo agent. This agent is a reference implementation and 
+a basis to start your own agent implementation work. We explain how
+to configure the agent to use custom behavior implementations.
 
+In chapter \ref{cha:simulations} we introduce simulations that are
+currently available for SimSpark. In particular the soccer simulation
+is described in detail here.
 
-% \ref{cha:monitorspark}
-% an overview about the available monitor and log
-% player setups available  their configuration and usage
+The robot models, and in particular our Soccerbot is described in
+chapter \ref{cha:robots}.
 
+In the resources chapter \ref{cha:resources} we point you to further
+papers and thesis works related to SimSpark. In addition mailing
+lists, web sites and IRC channels are given that allow you to
+participate in the project and to reach the SimSpark developers.
 
-% \ref{cha:agentspark}
-% explain demo agent; how to configure different behaviors
-
-
-% \ref{cha:simulations}
-% introduce available simulations for SimSpark; describe soccer simulation in more detail
-
-
-% \ref{cha:robots}
-% describe available robot models that are available for SimSpark; describe the currenr SoccerBot in more detail
-
-
-% \ref{cha:resources}
 % where to download the server, how to contact the developer community and report bugs; 
 % links to papers and thesis works related to SimSpark
 
