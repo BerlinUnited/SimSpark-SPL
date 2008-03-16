@@ -1,0 +1,126 @@
+\chapter{Zeitgeist application framework}
+
+\section{Writing a class object for a C++ class}
+
+This topic is fundamental in the understanding of how the class object
+and the object hierarchy framework interact with each other. Let's say
+we have a simple class:
+
+\begin{verbatim}
+
+class Simple
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+
+\end{verbatim}
+
+Now, in order to write a class object for this class we must do two
+things: First, the class must derive from the
+\texttt{zeitgeist::Object} class or one of its descendants,
+especially \texttt{Leaf} and \texttt{Node} if instances of this class
+are to live in the object hierarchy. In addition to this, a class
+object must be declared and defined, which serves as a factory for
+instances of this class.
+
+The first step is performed easily:
+
+\begin{verbatim}
+#include <zeitgeist/leaf.h>
+
+class Simple : public zeitgeist::Leaf
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+\end{verbatim}
+
+Now, we just have to write a class object for this class. As this is a
+pretty repetitive procedure, several helper-macros exist to make this
+as painless as possible. First, we declare the class object. This is
+done in the header file with the \texttt{DECLARE\_CLASS()}-macro:
+
+\begin{verbatim}
+#include <zeitgeist/leaf.h>
+
+class Simple : public zeitgeist::Leaf
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+
+DECLARE_CLASS(Simple);
+\end{verbatim}
+
+With this macro, we declare the class object. If \texttt{Simple} would
+have been an abstract base class (containing one or more pure virtual
+functions) we would have needed to use the
+\texttt{DECLARE\_ABSTRACTCLASS()}-macro instead. 
+
+Both of these macros create a new class with the mangled name
+\texttt{Class\_XXXX}, where \texttt{XXXX} is the name of the class. 
+In our case this would be \texttt{Class\_Simple}. This class is derived
+from \texttt{zeitgeist::Class}. In the case of
+\texttt{DECLARE\_CLASS()} the macro also provides a \texttt{CreateInstance()}
+function, which creates an instance of the Simple class. 
+
+The \texttt{DECLARE\_ABSTRACTCLASS()} macro does not do this, as it is
+impossible to create an instance of an abstract class. It inherits the
+base behavior from zeitgeist::Class, which just returns
+\texttt{NULL}. 
+
+In addition to this, both macros declare a \texttt{DefineClass()}
+member function, which needs to be implemented to define the class
+object fully. This is done in an additional \texttt{CPP} file. If the
+class above was implemented in the files \texttt{simple.h} and
+\texttt{simple.cpp}, the accompanying class object should be placed in
+the file \texttt{simple\_c.cpp}. This naming convention has been found
+useful during development and should be adopted. A minimal
+\texttt{simple\_c.cpp} should look like this:
+
+\begin{verbatim}
+#include "simple.h"
+
+using namespace zeitgeist;
+
+void CLASS(Simple)::DefineClass()
+{
+  DEFINE_BASECLASS(zeitgeist/Leaf);
+}
+\end{verbatim}
+
+
+The \texttt{CLASS()}-macro is used to identify the name of the class
+object. In the above example, it just resolves to
+\texttt{Class\_Simple}. The \texttt{DEFINE\_BASECLASS()} macro is used to 
+identify the base class of the class described by this class
+object. This can appear multiple times to allow for multiple
+inheritance. We now have a working class object. In order to use it it
+must be registered to the zeitgeist framework.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 
