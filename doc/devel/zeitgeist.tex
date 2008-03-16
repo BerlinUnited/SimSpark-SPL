@@ -237,6 +237,129 @@ list. The class objects are added to this list within the entry point
 function. After returning, all class objects contained in this list
 are added to the object hierarchy.
 
+\section{Exposing C++ functions to Ruby Scripts}
+
+As we want to expose much functionality to the script side, we also
+want to be able to call C++ functions from Ruby. In order to do this,
+we intercept unknown function calls on the Ruby side. The parameters
+are converted on the C++ side. There we know the name of the function
+to call, the object to call them on, and the parameters. 
+
+But, how do we actually call the correct C++ function. The answer lies
+in the class object. The class object will contain the necessary
+meta-data to reroute the function call to the correct C++
+function. The class object defines the interface of the class to the
+script side. This is done in the same file as the class definition was
+performed, i.e. the additional CPP file as described in section.
+\ref{sec:classobj}. Let's go back to the \texttt{Simple} class from earlier:
+
+\begin{verbatim}
+#include <zeitgeist/leaf.h>
+
+class Simple : public zeitgeist::Leaf
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+
+DECLARE_CLASS(Simple);
+\end{verbatim}
+
+In order to to expose the \texttt{DoSomething()} method the
+\texttt{simple\_c.cpp} would look like this:
+
+\begin{verbatim}
+#include "simple.h"
+
+using namespace zeitgeist;
+
+FUNCTION(doSomething)
+{
+  if (in.size() == 0)
+  {
+    Simple *simple = static_cast<Simple*>(obj);
+    simple->DoSomething();
+  }
+}
+
+void CLASS(Simple)::DefineClass()
+{
+  DEFINE_BASECLASS(zeitgeist/Leaf);
+  DEFINE_FUNCTION(doSomething);
+}
+\end{verbatim}
+
+
+Every function is declared using the \texttt{FUNCTION()}-macro. As a
+parameter it takes the name of the function. By convention Ruby-side
+functions start with a lower-case letter and C++-side functions with a
+capital letter. 
+
+The function macro just declares a function, which takes two
+parameters: \texttt{obj} and \texttt{in}. \texttt{obj} is the object
+we are calling the function on, i.e. basically, the \texttt{this} or
+\texttt{self} pointer. \texttt{in} a reference to a \texttt{ParameterList} 
+instance. Basically the \texttt{Parameterlist} class manages a list of
+\texttt{boost::any} values and provides helper to iterate the list and cast 
+values to the desired type.
+
+In \texttt{DefineClass()} we also have to define the function using
+the \texttt{DEFINE\_FUNCTION()} macro. After this has been done and
+after the class object is registered with the Core, we can execute the
+following script-code:
+
+\begin{verbatim}
+mySimpleObj = new ('Simple', 'test')
+mySimpleObj.doSomething
+\end{verbatim}
+
+This ruby code would then call the C++ member function
+\texttt{DoSomething()}. Now, how about passing some parameters. Let's marshall
+the PrintInt() function:
+
+\begin{verbatim}
+#include "simple.h"
+
+using namespace zeitgeist;
+using namespace boost;
+
+FUNCTION(printInt)
+{
+  if (in.GetSize() != 1)
+  {
+      return false;
+  }
+
+  int value;
+  in.GetValue(in[0]);
+
+  obj->PrintInt(value);
+  return true;
+}
+\end{verbatim}
+
+The above function obviously also would need to be defined in
+\texttt{DefineClass()}. Now we see that the first given value 
+is automatically cast to \texttt{int} using the \texttt{GetValue()}
+function on the \texttt{ParameterList}. The \texttt{obj} contains the
+reference to our \texttt{Simple} class instance. Using this reference
+we call the C++ \texttt{PrintInt()} function.
+
+The rest of the code is concerned with error checking as
+\texttt{GetSize()} is used to check the number of the given parameters. 
+In the current implementation every C++ function that is exposed to
+ruby needs to return a value, so we just return a boolean value
+here. The return type is not fixed but marshalled using a
+\texttt{boost::any} container. It is therefore possible to return
+different types.
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "user-manual"
