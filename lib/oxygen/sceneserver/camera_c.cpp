@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera_c.cpp,v 1.6 2008/02/22 07:52:15 hedayat Exp $
+   $Id: camera_c.cpp,v 1.7 2008/03/17 18:15:36 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -164,9 +164,9 @@ FUNCTION(Camera,getZFar)
 
 FUNCTION(Camera,lookAt)
 {
-    int inX;
-    int inY;
-    int inZ;
+    float inX;
+    float inY;
+    float inZ;
 
     if (
         (in.GetSize() != 3) ||
