@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: logserverstreambuf.cpp,v 1.6 2008/02/25 14:13:46 rollmark Exp $
+   $Id: logserverstreambuf.cpp,v 1.7 2008/03/17 07:27:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <iostream>
+#include <algorithm>
 #include "logserverstreambuf.h"
 
 using namespace std;
