@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: material2dtexture.h,v 1.4 2008/02/28 08:39:40 rollmark Exp $
+   $Id: material2dtexture.h,v 1.5 2008/03/17 19:24:28 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define KEROSIN_MATERIAL2DTEXTURE_H
 
 #include "materialsolid.h"
+#include <kerosin/openglserver/openglserver.h>
 
 namespace kerosin
 {
