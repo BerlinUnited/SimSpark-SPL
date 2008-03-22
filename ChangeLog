@@ -1,3 +1,9 @@
+2008-03-23  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::SimControlThread):
+	- Added a check so that EndCycle() is called only when enough time has been
+	  passed. (Thanks Ben)
+
 2008-03-22  Xu Yuan  <xuyuan.cn@gmail.com>
 	* NEWS
 	* README
@@ -7,7 +13,7 @@
 
 	* app/rsgedit/Makefile.am
 	- change the LDADD
-	
+
 2008-03-11  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* app/simspark/rsg/agent/soccerbottorsocomp.rsg:

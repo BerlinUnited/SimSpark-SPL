@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.14 2008/03/12 18:40:32 hedayat Exp $
+   $Id: simulationserver.cpp,v 1.15 2008/03/22 20:58:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -527,14 +527,17 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
 
     bool isInputControl = (controlNode->GetName() == "InputControl");
     bool isRenderControl = (controlNode->GetName() == "RenderControl");
+    bool newCycle = false;
 
     while ( true )
         {
 //            mThreadBarrier->wait();
             // wait for PrePhysicsUpdate()
 //            mThreadBarrier->wait();
+            newCycle = false;
             if (int(controlNode->GetTime()*100) < int(mSimTime*100))
                 {
+                    newCycle = true;
                     controlNode->StartCycle();
                     controlNode->SenseAgent();
                     controlNode->ActAgent();
@@ -550,7 +553,7 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
                 break;
             // wait for physics update
             mThreadBarrier->wait();
-            if (!isRenderControl)
+            if (!isRenderControl && newCycle)
                 controlNode->EndCycle();
         }
 }
