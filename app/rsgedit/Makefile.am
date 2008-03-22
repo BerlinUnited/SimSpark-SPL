@@ -33,24 +33,45 @@ else
 AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) @RUBY_LDFLAGS@ @WX_LIBS@ @IL_LDFLAGS@ @GL_LDFLAGS@
 endif
 
-dist_pkgdata_DATA = rsgedit.rb
+dist_pkgdata_DATA = rsgedit.rb \
+	res/xpm_open.xpm \
+	res/xpm_rsg.xpm \
+	res/xpm_step.xpm \
+	res/xpm_agent.xpm \
+	res/xpm_paste.xpm \
+	res/xpm_ruby.xpm \
+	res/xpm_stop.xpm \
+	res/xpm_copy.xpm \
+	res/xpm_pause.xpm \
+	res/xpm_save.xpm \
+	res/xpm_undo.xpm \
+	res/xpm_cut.xpm \
+	res/xpm_play.xpm \
+	res/xpm_slider.xpm \
+	res/xpm_universal.xpm \
+	res/xpm_hinge.xpm \
+	res/xpm_redo.xpm \
+	res/xpm_sparklogo.xpm \
+	res/xpm_new.xpm \
+	res/xpm_reload.xpm \
+	res/xpm_spark.xpm
 
 rsgedit_SOURCES = \
-	aboutDlg.cpp \
-	inputwx.cpp \
-	platform.cpp \
-	mainframe.cpp \
-	propertylist.cpp \
-	sparkcontextevent.cpp \
-	sparkglrender.cpp \
-	agentframe.cpp \
-	kinematicframe.cpp \
-	property.cpp \
-	simspark.cpp \
-	sparkedit.cpp \
-	sparktree.cpp \
-	constants.cpp \
-	main.cpp \
-	propertyframe.cpp \
-	sparkcontext.cpp \
-	sparkglcanvas.cpp
+	aboutDlg.h aboutDlg.cpp \
+	inputwx.h inputwx.cpp \
+	platform.h platform.cpp \
+	mainframe.h mainframe.cpp \
+	propertylist.h propertylist.cpp \
+	sparkcontextevent.h sparkcontextevent.cpp \
+	sparkglrender.h sparkglrender.cpp \
+	agentframe.h agentframe.cpp \
+	kinematicframe.h kinematicframe.cpp \
+	property.h property.cpp \
+	simspark.h simspark.cpp \
+	sparkedit.h sparkedit.cpp \
+	sparktree.h sparktree.cpp \
+	constants.h constants.cpp \
+	main.h main.cpp \
+	propertyframe.h propertyframe.cpp \
+	sparkcontext.h sparkcontext.cpp \
+	sparkglcanvas.h sparkglcanvas.cpp

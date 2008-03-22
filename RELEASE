@@ -66,7 +66,7 @@ Springer (2006)
 
 ** [General (SF Project News etc)]
 
-We have just released rcssserver3d-0.5.6. 
+We have just released rcssserver3d-0.5.7. 
 
 rcssserver3D is a multi-agent simulation system for physical agents in
 three-dimensional environments. It features a flexible application
@@ -107,6 +107,4 @@ For details have a look into the ChangeLog coming with the package.
 You can get the package on the Soccer Simulator page on SourceForge
 at http://sourceforge.net/projects/sserver/
 
-Cheers
-Joschka Boedecker
 

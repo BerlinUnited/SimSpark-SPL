@@ -3,6 +3,48 @@ pkglib_LTLIBRARIES = libwxutil.la
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/utility/wxutil/include @WX_CPPFLAGS@ -D __WX__ -D LINK_LEXERS -D SCI_LEXER
+libwxutil_ladir = ${top_srcdir}/utility/wxutil
+
+libwxutil_la_HEADERS= \
+	include/wx/wxscintilla.h \
+	include/wx/wxflatnotebook/popup_dlg.h \
+	include/wx/wxflatnotebook/singleton.h \
+	include/wx/wxflatnotebook/wxflatnotebook.h \
+	include/wx/wxflatnotebook/fnb_resources.h \
+	include/wx/wxflatnotebook/renderer.h \
+	include/wx/wxflatnotebook/smart_ptr.h \
+	include/wx/wxflatnotebook/wxfnbdroptarget.h \
+	src/wxscintilla/src/Accessor.h \
+	src/wxscintilla/src/Editor.h \
+	src/wxscintilla/src/PropSet.h \
+	src/wxscintilla/src/StyleContext.h \
+	src/wxscintilla/src/AutoComplete.h \
+	src/wxscintilla/src/ExternalLexer.h \
+	src/wxscintilla/src/RESearch.h \
+	src/wxscintilla/src/Style.h \
+	src/wxscintilla/src/CallTip.h \
+	src/wxscintilla/src/Indicator.h \
+	src/wxscintilla/src/SciLexer.h \
+	src/wxscintilla/src/SVector.h \
+	src/wxscintilla/src/CellBuffer.h \
+	src/wxscintilla/src/KeyMap.h \
+	src/wxscintilla/src/ScintillaBase.h \
+	src/wxscintilla/src/UniConversion.h \
+	src/wxscintilla/src/CharClassify.h \
+	src/wxscintilla/src/KeyWords.h \
+	src/wxscintilla/src/Scintilla.h \
+	src/wxscintilla/src/ViewStyle.h \
+	src/wxscintilla/src/ContractionState.h \
+	src/wxscintilla/src/LineMarker.h \
+	src/wxscintilla/src/ScintillaWidget.h \
+	src/wxscintilla/src/WindowAccessor.h \
+	src/wxscintilla/src/DocumentAccessor.h \
+	src/wxscintilla/src/Platform.h \
+	src/wxscintilla/src/ScintillaWX.h \
+	src/wxscintilla/src/XPM.h \
+	src/wxscintilla/src/Document.h \
+	src/wxscintilla/src/PlatWX.h \
+	src/wxscintilla/src/SString.h
 
 libwxutil_la_SOURCES = \
 	src/wxflatnotebook/fnb_resources.cpp \

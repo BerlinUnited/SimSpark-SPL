@@ -129,6 +129,7 @@ sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
 sceneserver/camera.cpp \
 sceneserver/camera_c.cpp \
+sceneserver/scenedict.h \
 sceneserver/scenedict.cpp \
 simulationserver/simulationserver.h \
 simulationserver/simulationserver.cpp \

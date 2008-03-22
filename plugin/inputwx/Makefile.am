@@ -4,8 +4,10 @@ endif
 
 inputwx_la_SOURCES = \
 	export.cpp \
+	inputsystemwx.h \
 	inputsystemwx.cpp \
 	inputsystemwx_c.cpp \
+	inputwx.h \
 	inputwx.cpp
 
 # -module tells automake we're not building a library but a loadable module

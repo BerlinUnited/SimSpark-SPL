@@ -59,6 +59,10 @@ EXTRA_DIST = \
 	rsg/agent/soccerbot055.rsg \
 	rsg/agent/soccerbot056.rsg \
 	rsg/agent/soccerbottorso.rsg \
+	rsg/agent/soccerbotcomp.rsg \
+	rsg/agent/soccerbotleftlowerarmcomp.rsg \
+	rsg/agent/soccerbotrightlowerarmcomp.rsg \
+	rsg/agent/soccerbottorsocomp.rsg \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
 	rsg/agent/flag_no_viz.rsg \
