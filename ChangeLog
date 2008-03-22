@@ -1,3 +1,13 @@
+2008-03-22  Xu Yuan  <xuyuan.cn@gmail.com>
+	* NEWS
+	* README
+	* RELEASE
+	* configure.ac
+	- ready for releasing 0.5.7
+
+	* app/rsgedit/Makefile.am
+	- change the LDADD
+	
 2008-03-11  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* app/simspark/rsg/agent/soccerbottorsocomp.rsg:
