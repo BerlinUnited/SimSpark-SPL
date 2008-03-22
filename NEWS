@@ -1,3 +1,60 @@
+[0.5.7] 
+ This is the first release after the competition in Atlanta.
+ The simulator now contains the auto-adjust speed mode(by default),the
+ server will run slower when needed, and print warning. We also
+ applied changes what be made in Atlanta, and re-enabled the
+ communication between robots. Furthermore, we imported some new
+ features from SimSpark Project, including rsgedit, rosimporter, and
+ etc. Although they are optional, you may want to try the rsgedit,
+ please install the wxWidgets[1] firstly and take a look at the 'Quick
+ start to RsgEdit' in the doc directory. Finally, there is a new robot
+ model which is built with composite bodies for better performance.
+ The monitor logger was also bug-fixed and improved. With the help of
+ the community, the documents about the server are available now.
+
+* Documents:
+ - the user's manual in doc/user
+ - the server developer's manual in doc/devel
+ - there are also some useful information at SimSpark Wiki[1]
+
+* Important fixes:
+ - mointor logger:
+  - fixed methods to work properly.
+  - solve the update problem (reported by team Apollo).
+  - remove invisible nodes to save  bandwidth(thanks to Carlos
+    Bustamante from Borregos3D).
+
+* Features:
+- applied Atlanta 2007 server changes:
+               - 'm' and 'c' for killing agents
+               - two robot models with different facilities
+               - using materials with textures
+               - free kick distance changed to 4.5
+               - one half time (8 mins)
+               - agents can beam in Goal_Left or Goal_Right play modes
+               - no longer possible to move agents by pressing m
+- re-enabled communication, the soccerbot056 has SayEffector and
+ HearPerceptor
+- add AdjustSpeed mode (It is enabled by default). In this mode, the
+ server will run slower when needed.
+- new multi-threaded implementation
+- rosimporter, model importer for RoSiML[2] modeling language
+- rsgedit, a cool simspark simulator with graphic user interface.
+- soccerbotcomp, the new robot mode which is built with composite
+ bodies, it can advance the simulation speed.
+- include some useful utilities: tinyxml, wxflatnotebook and wxscintilla
+
+For details have a look into the ChangeLog coming with the package.
+
+[1] http://simspark.sourceforge.net/wiki/
+
+[2] www.wxwidgets.org
+
+[3] Laue, T., Spiess, K., Refer, T.: Simrobot - a general physical
+robot simulator and its application in robocup. In: RoboCup 2005:
+Robot Soccer World Cup IX. Lecture Notes in Artiﬁcial Intelligence,
+Springer (2006)
+
 [0.5.6]
 This is the final release for the competition in Atlanta, GA. The simulator
 now contains the new timer running in single-threaded mode by default. We also

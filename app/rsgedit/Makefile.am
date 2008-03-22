@@ -3,24 +3,24 @@ bin_PROGRAMS = rsgedit
 endif
 
 if DEBUG
-LDADD = -lpthread  \
+rsgedit_LDADD = -lpthread  \
 	${top_builddir}/lib/spark/libspark_debug.la \
 	${top_builddir}/lib/kerosin/libkerosin_debug.la \
 	${top_builddir}/lib/oxygen/liboxygen_debug.la \
 	${top_builddir}/lib/zeitgeist/libzeitgeist_debug.la \
         ${top_builddir}/lib/salt/libsalt_debug.la \
         ${top_builddir}/utility/wxutil/libwxutil.la \
-	@BOOST_THREADS_LIB@
+	@BOOST_THREADS_LIB@ @WX_LIBS@
 rsgedit_CXXFLAGS = -O -g -W -Wall
 else
-LDADD = -lpthread  \
+rsgedit_LDADD = -lpthread  \
 	${top_builddir}/lib/spark/libspark.la \
 	${top_builddir}/lib/kerosin/libkerosin.la \
 	${top_builddir}/lib/oxygen/liboxygen.la \
 	${top_builddir}/lib/zeitgeist/libzeitgeist.la \
         ${top_builddir}/lib/salt/libsalt.la \
         ${top_builddir}/utility/wxutil/libwxutil.la \
-	@BOOST_THREADS_LIB@
+	@BOOST_THREADS_LIB@ @WX_LIBS@
 rsgedit_CXXFLAGS = -O2
 endif
 

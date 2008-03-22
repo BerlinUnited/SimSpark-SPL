@@ -7,63 +7,62 @@ RELEASE News for different forums                        -*- outline -*-
 * Content
 
 ** [Soccer Lists]
+ We have just released rcssserver3d-0.5.7. This is the first release
+ after the competition in Atlanta. The simulator now contains the
+ auto-adjust speed mode(by default),the server will run slower when
+ needed, and print warning. We also applied changes what be made in
+ Atlanta, and re-enabled the communication between robots.
+ Furthermore, we imported some new features from SimSpark Project,
+ including rsgedit, rosimporter, and etc. Although they are optional,
+ you may want to try the rsgedit, please install the wxWidgets[1]
+ firstly and take a look at the 'Quick start to RsgEdit' in the doc
+ directory. Finally, there is a new robot model which is built with
+ composite bodies for better performance. The monitor logger was also
+ bug-fixed and improved. With the help of the community, the documents
+ about the server are available now.
 
-We have just released version 0.5.6 of rcssserver3D. This is the final release
-for the competition in Atlanta, GA. The simulator now contains the new timer
-running in single-threaded mode by default. We also re-integrated the soccer rules
-plug-in (communication and offside not supported yet). Furthermore, we
-completed the game state info display in both the internal and external
-monitors, and fixed the trainer command parser to work with the new
-agents. The SoccerBot model was modified, the performance was slightly
-improved, and several bugs were fixed.
+* Documents:
+ - the user's manual in doc/user
+ - the server developer's manual in doc/devel
+ - there are also some useful information at SimSpark Wiki[1]
 
 * Important fixes:
-
-beameffector & singlematiniteffector:
-- fixed beaming with rotation
-
-gyrorateperceptor:
-- output is now in the local coordinate system of the robot
-
-trainercommandparser:
-- fixed several methods to work with the new agent
+ - mointor logger:
+  - fixed methods to work properly.
+  - solve the update problem (reported by team Apollo).
+  - remove invisible nodes to save  bandwidth(thanks to Carlos
+    Bustamante from Borregos3D).
 
 * Features:
+- applied Atlanta 2007 server changes:
+               - 'm' and 'c' for killing agents
+               - two robot models with different facilities
+               - using materials with textures
+               - free kick distance changed to 4.5
+               - one half time (8 mins)
+               - agents can beam in Goal_Left or Goal_Right play modes
+               - no longer possible to move agents by pressing m
+- re-enabled communication, the soccerbot056 has SayEffector and
+ HearPerceptor
+- add AdjustSpeed mode (It is enabled by default). In this mode, the
+ server will run slower when needed.
+- new multi-threaded implementation
+- rosimporter, model importer for RoSiML[2] modeling language
+- rsgedit, a cool simspark simulator with graphic user interface.
+- soccerbotcomp, the new robot mode which is built with composite
+ bodies, it can advance the simulation speed.
+- include some useful utilities: tinyxml, wxflatnotebook and wxscintilla
 
-- new GameTimePerceptor added which senses game time instead of sim time (not
-  used in Atlanta)
-- GameStatePerceptor added which provides the agent with information about the
-  current game state (play mode, game time, unum, and side)
-- play modes and rules re-integrated (no communication and no offside yet)
-- slight performance improvement by caching references to important classes
-- game state info display fixed in the internal and external monitors
-- key bindings for 7 different camera positions, kick off, and drop ball
-- the SoccerBot was modified to have a two-part torso to facilitate stand-up
-  motions, it got colliders (and very small masses) at the hands, it uses the
-  ForceResistanceReceptor instead of the TouchPerceptor
-- the hinge joint and universal joint effectors will not set any velocity if a
-  joint stop is reached to prevent large forces and instabilities (not used in Atlanta)
-- the maximum joint velocity that can be requested was restricted to 9000
-  deg/sec (for stability reasons)
-- Field size was reduced to 50m x 32m, penalty area reduced to 8m x 19.5m
-- Goal size was increased to 9m width and 4m height
-- The ball model was improved according to suggestions from wjq and Tobias Warden
-- The visualization of the corner flags was moved back to allow proper corner kicks
+For details have a look into the ChangeLog coming with the package.
 
-You can find the package at the usual place [1]. 
+[1] http://simspark.sourceforge.net/wiki/
 
-Please note that you will also need an additional package
-(rcssserver3d-0.5.5-data.tar.gz, no change from the last release) containing
-data files (models, textures) that is available at the same location. This
-package should be extracted in the installation directory of rcssserver3D
-(/usr/local/share/rcssserver3d if the default prefix has not been changed).
+[2] www.wxwidgets.org
 
-Cheers
-Joschka (for the maintenance comittee)
-
-
-[1] http://sourceforge.net/projects/sserver/
-
+[3] Laue, T., Spiess, K., Refer, T.: Simrobot - a general physical
+robot simulator and its application in robocup. In: RoboCup 2005:
+Robot Soccer World Cup IX. Lecture Notes in Artiﬁcial Intelligence,
+Springer (2006)
 
 ** [General (SF Project News etc)]
 
@@ -75,36 +74,33 @@ framework and a scene description language for setting up different
 kinds of simulations. The soccer simulation built on top of this is used
 in the RoboCup 3D Soccer Simulation League.
 
-Important fixes and new features:
-
-- new GameTimePerceptor added which senses game time instead of sim time
-
-- play modes and rules re-integrated (no communication and no offside yet)
-
-- slight performance improvement by caching references to important classes
-
-- game state info display fixed in the internal and external monitors
-
-- key bindings for 7 different camera positions, kick off, and drop ball
-
-- the SoccerBot was modified to have a two-part torso to facilitate stand-up
-  motions, it got colliders (and very small masses) at the hands, it uses the
-  ForceResistanceReceptor instead of the TouchPerceptor, and it uses joint
-  stops to eliminate "unrealistic" movements
-
-- the hinge joint and universal joint effectors will not set any velocity if a
-  joint stop is reached to prevent large forces and instabilities
-
-- the maximum joint velocity that can be requested was restricted to 9000
-  deg/sec (for stability reasons also)
-
-- Field size was reduced to 45m x 30m
-
-- Goal size was increased to 9m width and 4m height
-
-- The ball model was improved according to suggestions from the community
-
-- The visualization of the corner flags was moved back to allow proper corner kicks
+Documents, important fixes and new features:
+ - the user's manual in doc/user
+ - the server developer's manual in doc/devel
+ - there are also some useful information at SimSpark Wiki[1]
+ - fix mointor logger:
+  - fixed methods to work properly.
+  - solve the update problem (reported by team Apollo).
+  - remove invisible nodes to save  bandwidth(thanks to Carlos
+    Bustamante from Borregos3D).
+- applied Atlanta 2007 server changes:
+               - 'm' and 'c' for killing agents
+               - two robot models with different facilities
+               - using materials with textures
+               - free kick distance changed to 4.5
+               - one half time (8 mins)
+               - agents can beam in Goal_Left or Goal_Right play modes
+               - no longer possible to move agents by pressing m
+- re-enabled communication, the soccerbot056 has SayEffector and
+ HearPerceptor
+- add AdjustSpeed mode (It is enabled by default). In this mode, the
+ server will run slower when needed.
+- new multi-threaded implementation
+- rosimporter, model importer for RoSiML modeling language
+- rsgedit, a cool simspark simulator with graphic user interface.
+- soccerbotcomp, the new robot mode which is built with composite
+ bodies, it can advance the simulation speed.
+- include some useful utilities: tinyxml, wxflatnotebook and wxscintilla
 
 For details have a look into the ChangeLog coming with the package.
 
