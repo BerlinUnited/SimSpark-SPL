@@ -21,4 +21,4 @@ maintainer-clean-local:
 	rm -rf api
 	rm -rf *~
 
-EXTRA_DIST = TEXT_INSTEAD_OF_A_MANUAL.txt
+EXTRA_DIST = TEXT_INSTEAD_OF_A_MANUAL.txt rsgedit.txt
