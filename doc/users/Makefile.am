@@ -15,5 +15,6 @@ all-local:
 	  echo "***" ; \
 	fi
 
+EXTRA_DIST = user-manual.pdf
 CLEANFILES = user-manual.log user-manual.pdf user-manual.aux user-manual.toc
 endif
