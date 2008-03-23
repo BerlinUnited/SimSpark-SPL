@@ -22,7 +22,7 @@ RELEASE News for different forums                        -*- outline -*-
  about the server are available now.
 
 * Documents:
- - the user's manual in doc/user
+ - the user's manual in doc/users
  - the server developer's manual in doc/devel
  - there are also some useful information at SimSpark Wiki[1]
 
@@ -75,7 +75,7 @@ kinds of simulations. The soccer simulation built on top of this is used
 in the RoboCup 3D Soccer Simulation League.
 
 Documents, important fixes and new features:
- - the user's manual in doc/user
+ - the user's manual in doc/users
  - the server developer's manual in doc/devel
  - there are also some useful information at SimSpark Wiki[1]
  - fix mointor logger:
