@@ -1,3 +1,18 @@
+2008-03-23  Xu Yuan  <xuyuan.cn@gmail.com>
+	* NEWS
+	* README
+	* RELEASE
+	- correct the manual's path
+
+	* doc/Makefile.am
+	- include rsgedit.txt
+
+	* doc/users/Makefile.am
+	- include user-manual.pdf
+
+	* doc/devel/Makefile.am
+	- include manual.pdf
+
 2008-03-23  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::SimControlThread):
@@ -13,6 +28,15 @@
 
 	* app/rsgedit/Makefile.am
 	- change the LDADD
+	- include resourse files
+
+	* lib/oxygen/Makefile.am
+	* utility/wxutil/Makefile.am
+	* plugin/inputwx/Makefile.am
+	- include missing header files
+
+	* app/simspark/Makefile.am
+	- include soccerbotcomp rsg files
 
 2008-03-11  Hedayat Vatankhah  <hedayat@grad.com>
 
