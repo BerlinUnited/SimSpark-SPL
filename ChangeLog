@@ -9,6 +9,10 @@
 	* doc/users/Makefile.am:
 	- changed comment (we have a manual now ;-) )
 
+	* lib/oxygen/physicsserver/body.cpp:
+	- set center of body mass explicitly to 0.0 after translation
+	  to prevent rounding errors and ODE complaints (thanks Sander!)
+
 2008-03-23  Xu Yuan  <xuyuan.cn@gmail.com>
 	* NEWS
 	* README
