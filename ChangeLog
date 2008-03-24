@@ -1,3 +1,14 @@
+2008-03-24  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* lib/oxygen/simulationserver/netmessage.cpp:
+	- added Apple specific include for missing types
+
+	* Makefile.am:
+	- added macosX directory to EXTRA_DIST
+
+	* doc/users/Makefile.am:
+	- changed comment (we have a manual now ;-) )
+
 2008-03-23  Xu Yuan  <xuyuan.cn@gmail.com>
 	* NEWS
 	* README
