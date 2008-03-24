@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: netmessage.cpp,v 1.4 2008/02/22 16:48:18 hedayat Exp $
+   $Id: netmessage.cpp,v 1.5 2008/03/24 14:17:02 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@
 #include <rcssnet/socket.hpp>
 
 #ifndef WIN32
+#ifdef __APPLE__
+#include <sys/types.h>
+#endif
 #include <netinet/in.h>
 #endif
 
