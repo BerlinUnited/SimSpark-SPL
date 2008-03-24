@@ -11,7 +11,7 @@ all-local:
 	  $(MAKE) $(AM_MAKEFLAGS) user-manual.pdf ; \
 	else \
 	  echo "***" ;\
-	  echo "*** There is no users manual yet. Please consider contributing to it." ; \
+	  echo "*** The user's manual (PDF) can be found in doc/users." ; \
 	  echo "***" ; \
 	fi
 
