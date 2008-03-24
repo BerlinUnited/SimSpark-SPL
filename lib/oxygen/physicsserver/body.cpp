@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body.cpp,v 1.24 2008/03/10 23:57:07 sgvandijk Exp $
+   $Id: body.cpp,v 1.25 2008/03/24 17:21:08 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -278,6 +278,7 @@ void Body::AddMass(const dMass& mass, const Matrix& matrix)
     Vector3f trans2(bodyMass.c[0], bodyMass.c[1], bodyMass.c[2]);
 
     dMassTranslate(&bodyMass, -trans2[0], -trans2[1], -trans2[2]);
+    bodyMass.c[0] = bodyMass.c[1] = bodyMass.c[2] = 0.0f;
     dBodySetMass(mODEBody, (const dMass*)&bodyMass);
 
     // Move body so mass is at right position again
