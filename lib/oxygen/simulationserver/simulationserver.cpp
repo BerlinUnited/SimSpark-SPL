@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.16 2008/03/24 08:07:07 yxu Exp $
+   $Id: simulationserver.cpp,v 1.17 2008/03/25 10:13:29 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -483,9 +483,9 @@ void SimulationServer::RunMultiThreaded()
     while (true)
         {
             ++mCycle;
-//            mThreadBarrier->wait();
+            mThreadBarrier->wait();
             mSceneServer->PrePhysicsUpdate(mSimStep);
-//            mThreadBarrier->wait();
+            mThreadBarrier->wait();
             mSceneServer->PhysicsUpdate(mSimStep);
             if (mAutoTime)
                 AdvanceTime(mSimStep);
@@ -532,9 +532,9 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
 
     while ( true )
         {
-//            mThreadBarrier->wait();
+            mThreadBarrier->wait();
             // wait for PrePhysicsUpdate()
-//            mThreadBarrier->wait();
+            mThreadBarrier->wait();
             newCycle = false;
             if (int(controlNode->GetTime()*100) < int(mSimTime*100))
                 {
