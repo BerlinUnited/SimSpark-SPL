@@ -3,7 +3,7 @@ pkglib_LTLIBRARIES = libwxutil.la
 endif
 
 AM_CPPFLAGS = -I${top_srcdir}/utility/wxutil/include @WX_CPPFLAGS@ -D __WX__ -D LINK_LEXERS -D SCI_LEXER
-libwxutil_ladir = ${top_srcdir}/utility/wxutil
+libwxutil_ladir = $(includedir)/@PACKAGE@/wxutil
 
 libwxutil_la_HEADERS= \
 	include/wx/wxscintilla.h \

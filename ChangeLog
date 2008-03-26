@@ -1,8 +1,21 @@
+2008-03-26  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* utility/wxutil/Makefile.am:
+	- fixed the headers' installation path. (are they really intended to be installed?!)
+
+	* lib/spark/spark.rb:
+	- enabled auto disable flag by default
+
+	* plugin/sparkagent/hinge2effector.cpp:
+	* plugin/sparkagent/hingeeffector.cpp:
+	* plugin/sparkagent/universaljointeffector.cpp:
+	- added enabling disabled bodies.
+
 2008-03-25  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::SimControlThread):
 	(SimulationServer::RunMultiThreaded):
-	- Enabled protection for PrePhysicsUpdate()
+	- enabled protection for PrePhysicsUpdate()
 
 2008-03-24  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 

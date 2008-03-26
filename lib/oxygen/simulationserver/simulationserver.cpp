@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.17 2008/03/25 10:13:29 hedayat Exp $
+   $Id: simulationserver.cpp,v 1.18 2008/03/26 10:31:00 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include <signal.h>
 #include <algorithm>
 #include <boost/bind.hpp>
-#include <limits>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -449,7 +448,7 @@ void SimulationServer::Loops()
 
 void SimulationServer::RunMultiThreaded()
 {
-    if (mSimStep < numeric_limits<float>::epsilon())
+    if (mSimStep == 0)
         {
             GetLog()->Error() << "(SimulationServer) ERROR: multi-threaded "
                     << "mode supports descreet simulations only.\n";

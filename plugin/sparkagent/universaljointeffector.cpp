@@ -19,6 +19,7 @@
 */
 #include "universaljointeffector.h"
 #include "universaljointaction.h"
+#include <oxygen/physicsserver/body.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -55,6 +56,16 @@ bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
 
     mJoint->SetParameter(dParamVel, universalAction->GetMotorVelocity(Joint::AI_FIRST));
     mJoint->SetParameter(dParamVel2, universalAction->GetMotorVelocity(Joint::AI_SECOND));
+
+    if (universalAction->GetMotorVelocity(Joint::AI_FIRST)
+            || universalAction->GetMotorVelocity(Joint::AI_SECOND))
+        {
+            shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
+            if (body && !body->IsEnabled())
+                {
+                    body->Enable();
+                }
+        }
 
     return true;
 }

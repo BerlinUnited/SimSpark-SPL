@@ -19,6 +19,7 @@
 */
 #include "hingeeffector.h"
 #include "hingeaction.h"
+#include <oxygen/physicsserver/body.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -54,6 +55,15 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
     mJoint->SetParameter(dParamVel, hingeAction->GetMotorVelocity());
+
+    if (hingeAction->GetMotorVelocity())
+        {
+            shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
+            if (body && !body->IsEnabled())
+                {
+                    body->Enable();
+                }
+        }
 
     return true;
 }

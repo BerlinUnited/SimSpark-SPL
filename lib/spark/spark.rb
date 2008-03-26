@@ -155,7 +155,7 @@ def sparkResetScene
   world = new('oxygen/World', $scenePath+'world')
   world.setGravity(0.0, 0.0, $physicsGlobalGravity)
   world.setCFM($physicsGlobalCFM)
-  world.setAutoDisableFlag(false)            #not in simspark
+  world.setAutoDisableFlag(true)             #not in simspark
   world.setContactSurfaceLayer(0.001)	     #not in simspark
 
   new('oxygen/Space', $scenePath+'space')
@@ -174,7 +174,7 @@ def sparkResetScene
 
   # reset material definitions
   materialServer = sparkGetMaterialServer()
-  materialServer.resetMaterials()  
+  materialServer.resetMaterials()
 
   # reset simulation time
   simulationServer = sparkGetSimulationServer()
