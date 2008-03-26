@@ -19,7 +19,7 @@ RELEASE News for different forums                        -*- outline -*-
  directory. Finally, there is a new robot model which is built with
  composite bodies for better performance. The monitor logger was also
  bug-fixed and improved. With the help of the community, the documents
- about the server are available now.
+ about the server are available now, but they are still in progress.
 
 * Documents:
  - the user's manual in doc/users

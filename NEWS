@@ -10,7 +10,8 @@
  start to RsgEdit' in the doc directory. Finally, there is a new robot
  model which is built with composite bodies for better performance.
  The monitor logger was also bug-fixed and improved. With the help of
- the community, the documents about the server are available now.
+ the community, the documents about the server are available now, but
+ they are still in progress.
 
 * Documents:
  - the user's manual in doc/users
@@ -52,7 +53,7 @@ For details have a look into the ChangeLog coming with the package.
 
 [3] Laue, T., Spiess, K., Refer, T.: Simrobot - a general physical
 robot simulator and its application in robocup. In: RoboCup 2005:
-Robot Soccer World Cup IX. Lecture Notes in ArtiÔ¨Åcial Intelligence,
+Robot Soccer World Cup IX. Lecture Notes in ArtiˆÄÅé‡§èÅcial Intelligence,
 Springer (2006)
 
 [0.5.6]
@@ -445,7 +446,7 @@ simulator, they are located in the soccer bundle in plugin/soccer/.
   the ball and goals.
 - Soccer Plugins
   Here is the really big part of the changes. Agents have an (omni-)drive and 
-  a kicker now, they can perceive the environment with a kind of 360∞ omnicam
+  a kicker now, they can perceive the environment with a kind of 360‡§ì omnicam
   and they get updates about the game state and things like the battery state.
   Using the omnidrive, agents can do 100m in something about 13s or 14s.
 

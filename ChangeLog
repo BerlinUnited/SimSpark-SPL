@@ -1,3 +1,11 @@
+2008-03-23  Xu Yuan  <xuyuan.cn@gmail.com>
+	* NEWS
+	* RELEASE
+	- the documents are still in progress
+
+	* doc/users/robots.tex
+	- fix the parameters of soccerbot table according to soccerbot055.rsg
+
 2008-03-26  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* lib/oxygen/physicsserver/odewrapper.h:
