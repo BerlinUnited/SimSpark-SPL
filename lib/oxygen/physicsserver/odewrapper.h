@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odewrapper.h,v 1.3 2007/06/20 00:46:22 fruit Exp $
+   $Id: odewrapper.h,v 1.4 2008/03/26 13:00:42 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -45,7 +45,22 @@
 
 #endif // WIN32
 
+#ifdef __APPLE__
+
+// there is a conflicting type in a system header (Leopard)
+// so we define a dummy here
+#define uint32 dummy
+
+#endif
+
 #include <ode/ode.h>
+
+#ifdef __APPLE__
+
+// undefine the dummy
+#undef uint32
+
+#endif
 
 #undef EXTERN
 #undef HAVE_VPRINTF
