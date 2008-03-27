@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: kerosin.cpp,v 1.19 2008/02/22 16:48:19 hedayat Exp $
+   $Id: kerosin.cpp,v 1.20 2008/03/27 19:56:47 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,11 +27,9 @@ using namespace zeitgeist;
 
 Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
 {
-#ifndef WIN32
     zg.GetCore()->RegisterClassObject(new CLASS(SoundServer), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(ImageServer), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(FontServer), "kerosin/");
-#endif
 
     zg.GetCore()->RegisterClassObject(new CLASS(InputServer), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(InputSystem), "kerosin/");
