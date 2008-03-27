@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitorclient.cpp,v 1.9 2007/02/27 03:37:20 jboedeck Exp $
+   $Id: sparkmonitorclient.cpp,v 1.10 2008/03/27 20:00:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,9 +22,12 @@
 #include "sparkmonitorclient.h"
 #include <oxygen/monitorserver/custommonitor.h>
 #include <zeitgeist/logserver/logserver.h>
-#include <netinet/in.h>
 #include <rcssnet/exception.hpp>
 #include <cerrno>
+
+#ifndef WIN32
+#include <netinet/in.h>
+#endif
 
 using namespace oxygen;
 using namespace zeitgeist;

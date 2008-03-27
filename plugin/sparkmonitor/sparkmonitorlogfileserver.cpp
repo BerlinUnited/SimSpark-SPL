@@ -22,9 +22,14 @@
 #include <oxygen/monitorserver/custommonitor.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
-#include <netinet/in.h>
 #include <rcssnet/exception.hpp>
 #include <cerrno>
+
+#ifdef WIN32
+#include <windows.h>
+#else
+#include <netinet/in.h>
+#endif
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -132,7 +137,11 @@ void SparkMonitorLogFileServer::StartCycle()
             ParseMessage(msg);
         }
     
+#ifdef WIN32
+    Sleep(mStepDelay / 1000);
+#else
     usleep(mStepDelay);
+#endif
 
     mForwardStep = false;
 }

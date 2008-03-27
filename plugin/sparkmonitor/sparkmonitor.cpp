@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.15 2008/03/24 13:17:35 yxu Exp $
+   $Id: sparkmonitor.cpp,v 1.16 2008/03/27 20:00:27 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -191,7 +191,7 @@ void SparkMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, shared_
 
     // include transform data only for fullstate or a modified
     // transform node
-    const float precision = 0.005;
+    const float precision = 0.005f;
     const Matrix& mat = transform->GetLocalTransform();
 
     bool update = false;
