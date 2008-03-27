@@ -56,7 +56,7 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     mJoint->SetParameter(dParamVel, hingeAction->GetMotorVelocity());
 
-    if (hingeAction->GetMotorVelocity())
+    if (hingeAction->GetMotorVelocity() != 0)
         {
             shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hinge2effector.cpp,v 1.5 2008/03/26 10:30:54 hedayat Exp $
+   $Id: hinge2effector.cpp,v 1.6 2008/03/27 03:01:27 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ bool Hinge2Effector::Realize(boost::shared_ptr<ActionObject> action)
     mJoint->SetAngularMotorVelocity
         (Joint::AI_SECOND, hinge2Action->GetMotorVelocity());
 
-    if (hinge2Action->GetMotorVelocity())
+    if (hinge2Action->GetMotorVelocity() != 0)
         {
             shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())

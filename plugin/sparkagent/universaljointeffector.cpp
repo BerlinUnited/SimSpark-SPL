@@ -57,8 +57,8 @@ bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
     mJoint->SetParameter(dParamVel, universalAction->GetMotorVelocity(Joint::AI_FIRST));
     mJoint->SetParameter(dParamVel2, universalAction->GetMotorVelocity(Joint::AI_SECOND));
 
-    if (universalAction->GetMotorVelocity(Joint::AI_FIRST)
-            || universalAction->GetMotorVelocity(Joint::AI_SECOND))
+    if (universalAction->GetMotorVelocity(Joint::AI_FIRST) != 0
+            || universalAction->GetMotorVelocity(Joint::AI_SECOND) != 0)
         {
             shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
