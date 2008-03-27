@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: textureserver.cpp,v 1.5 2008/02/22 16:48:18 hedayat Exp $
+   $Id: textureserver.cpp,v 1.6 2008/03/27 19:55:59 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,10 +24,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include "../openglserver/openglserver.h"
 #include "texture2d.h"
-
-#ifndef WIN32
 #include "../imageserver/imageserver.h"
-#endif
 
 using namespace boost;
 using namespace kerosin;
@@ -43,7 +40,6 @@ TextureServer::~TextureServer()
 
 void TextureServer::OnLink()
 {
-#ifndef WIN32
     // setup ImageServer reference
     RegisterCachedPath(mImageServer, "/sys/server/image");
 
@@ -52,7 +48,7 @@ void TextureServer::OnLink()
             GetLog()->Error()
                 << "(TextureServer) ERROR: ImageServer not found\n";
         }
-#endif
+
     // setup OpenGLServer reference
     RegisterCachedPath(mOpenGLServer, "/sys/server/opengl");
 }
@@ -72,9 +68,6 @@ boost::shared_ptr<Texture> TextureServer::GetTexture(const std::string &name)
         return shared_ptr<Texture>();
     }
 
-#ifdef WIN32
-    return shared_ptr<Texture>();
-#else
     // no match for that name, so we have to load it
     shared_ptr<Image> image = mImageServer->Load(name.c_str());
 
@@ -97,5 +90,4 @@ boost::shared_ptr<Texture> TextureServer::GetTexture(const std::string &name)
     mTextureCache[name] = texture;
 
     return texture;
-#endif
 }
