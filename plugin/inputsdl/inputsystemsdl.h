@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: inputsystemsdl.h,v 1.6 2008/02/22 16:48:19 hedayat Exp $
+   $Id: inputsystemsdl.h,v 1.7 2008/03/27 19:58:11 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,9 +53,9 @@ public:
     int EventFilter(const SDL_Event* event);
 
     //! add the input to the queue
-    virtual void AddInput(const kerosin::Input::Input& input);
+    virtual void AddInput(const kerosin::Input& input);
     //! retrieve an input from the queue
-    virtual bool GetInput(kerosin::Input::Input& input);
+    virtual bool GetInput(kerosin::Input& input);
 
 protected:
     virtual bool UpdateTimerInput(kerosin::Input& input);
