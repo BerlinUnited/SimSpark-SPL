@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: carbehavior.cpp,v 1.1 2004/05/07 12:23:19 rollmark Exp $
+   $Id: carbehavior.cpp,v 1.2 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "carbehavior.h"
-#include <iostream.h>
+#include <iostream>
 #include <sstream>
 
 using namespace std;

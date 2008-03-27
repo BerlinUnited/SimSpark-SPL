@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.6 2008/02/22 16:48:19 hedayat Exp $
+   $Id: main.cpp,v 1.7 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 #include <oxygen/simulationserver/simulationserver.h>
 #include <kerosin/renderserver/rendercontrol.h>
 #include <kerosin/inputserver/inputcontrol.h>
-#include <SDL.h>
 
 using namespace spark;
 using namespace kerosin;
@@ -89,7 +88,7 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 
 bool SimSpark::InitApp(int argc, char** argv)
 {
-    GetSimulationServer()->SetSimStep(0.02);
+    GetSimulationServer()->SetSimStep(0.02f);
     PrintGreeting();
 
     // process command line

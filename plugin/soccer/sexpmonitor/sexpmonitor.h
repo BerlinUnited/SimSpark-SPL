@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.h,v 1.11 2005/06/29 08:39:59 fruit Exp $
+   $Id: sexpmonitor.h,v 1.12 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 
 #include <string>
 #include <oxygen/monitorserver/monitorsystem.h>
-#include <plugin/soccer/trainercommandparser/trainercommandparser.h>
+#include <soccer/trainercommandparser/trainercommandparser.h>
 
 class GameStateAspect;
 class BallStateAspect;

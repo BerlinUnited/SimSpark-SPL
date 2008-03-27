@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.12 2007/12/06 22:54:01 jamu Exp $
+   $Id: main.cpp,v 1.13 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,8 +25,7 @@
 #include <rcssnet/tcpsocket.hpp>
 //#include <rcssnet/udpsocket.hpp>
 #include <rcssnet/exception.hpp>
-#include <netinet/in.h>
-#include <behavior.h>
+#include "behavior.h"
 #include <boost/scoped_ptr.hpp>
 //#include "soccerbehavior.h"
 #include "soccerbotbehavior.h"
@@ -174,7 +173,7 @@ void PutMessage(const string& msg)
     unsigned int len = htonl(msg.size());
     string prefix((const char*)&len,sizeof(unsigned int));
     string str = prefix + msg;
-    write(gSocket.getFD(), str.data(), str.size());
+    gSocket.send(str.data(),str.size());
 }
 
 bool GetMessage(string& msg)
@@ -185,7 +184,7 @@ bool GetMessage(string& msg)
     while(bytesRead < sizeof(unsigned int))
     {
         SelectInput();
-        int readResult = read(gSocket.getFD(), buffer + bytesRead, sizeof(unsigned int) - bytesRead);
+        int readResult = gSocket.recv(buffer + bytesRead, sizeof(unsigned int) - bytesRead);
         if(readResult < 0)
             continue;
         bytesRead += readResult;
@@ -224,7 +223,7 @@ bool GetMessage(string& msg)
         if(readLen > msgLen - msgRead)
             readLen = msgLen - msgRead;
  
-        int readResult = read(gSocket.getFD(), offset, readLen);
+        int readResult = gSocket.recv(offset, readLen);
         if(readResult < 0)
             continue;
         msgRead += readResult;

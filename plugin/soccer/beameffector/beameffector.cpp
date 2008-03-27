@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: beameffector.cpp,v 1.18 2008/02/20 11:17:20 hedayat Exp $
+   $Id: beameffector.cpp,v 1.19 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,8 +85,8 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
         // reject nan or infinite numbers in the beam position
         if (
-            (! isfinite(pos[0])) ||
-            (! isfinite(pos[1]))
+            (! gIsFinite(pos[0])) ||
+            (! gIsFinite(pos[1]))
             )
             {
                 return;
@@ -173,13 +173,13 @@ BeamEffector::OnLink()
     SoccerBase::GetGameState(*this, mGameState);
     SoccerBase::GetAgentState(*this,mAgentState);
 
-    mFieldWidth = 64.0;
+    mFieldWidth = 64.0f;
     SoccerBase::GetSoccerVar(*this,"FieldWidth",mFieldWidth);
 
-    mFieldLength = 100.0;
+    mFieldLength = 100.0f;
     SoccerBase::GetSoccerVar(*this,"FieldLength",mFieldLength);
 
-    mAgentRadius = 0.22;
+    mAgentRadius = 0.22f;
     SoccerBase::GetSoccerVar(*this,"AgentRadius",mAgentRadius);
 }
 

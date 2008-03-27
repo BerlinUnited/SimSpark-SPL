@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbehavior.cpp,v 1.5 2005/12/31 13:51:52 jboedeck Exp $
+   $Id: soccerbehavior.cpp,v 1.6 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -92,13 +92,13 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
                 }
 
             // try to lookup the VisionObject
-            TVisionObjectMap::iterator iter = mVisionObjectMap.find(name);
-            if (iter == mVisionObjectMap.end())
+            TVisionObjectMap::iterator visiter = mVisionObjectMap.find(name);
+            if (visiter == mVisionObjectMap.end())
                 {
                     continue;
                 }
 
-            VisionObject vo = (*iter).second;
+            VisionObject vo = (*visiter).second;
 
             // find the 'pol' entry in the object's section
             Predicate::Iterator polIter = paramIter;

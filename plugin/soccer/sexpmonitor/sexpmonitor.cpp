@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sexpmonitor.cpp,v 1.17 2006/06/10 16:39:00 jboedeck Exp $
+   $Id: sexpmonitor.cpp,v 1.18 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,8 +35,11 @@
 #include <soccer/ballstateaspect/ballstateaspect.h>
 #include <soccer/agentstate/agentstate.h>
 #include <soccer/fieldflag/fieldflag.h>
-#include <netinet/in.h>
 #include <soccer/sayeffector/sayeffector.h>
+
+#ifndef WIN32
+#include <netinet/in.h>
+#endif
 
 using namespace oxygen;
 using namespace zeitgeist;

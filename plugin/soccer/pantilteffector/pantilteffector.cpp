@@ -4,7 +4,7 @@
    Mon May 9 2005
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: pantilteffector.cpp,v 1.4 2007/06/14 17:55:18 jboedeck Exp $
+   $Id: pantilteffector.cpp,v 1.5 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     float pan = panTiltAction->GetPanAngle();
 
     // check for NAN
-    if (std::isnan(pan))
+    if (gIsNan(pan))
     {
         return;
     }
@@ -87,7 +87,7 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     float tilt = panTiltAction->GetTiltAngle();
 
     // check for NAN
-    if (std::isnan(tilt))
+    if (gIsNan(tilt))
     {
         return;
     }

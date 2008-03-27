@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.24 2007/06/18 14:15:30 yxu Exp $
+   $Id: visionperceptor.cpp,v 1.25 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ VisionPerceptor::VisionPerceptor() : Perceptor(),
     // set predicate name
     SetPredicateName("See");
     // set some default noise values
-    SetNoiseParams(0.0965, 0.1225, 0.1480, 0.005);
+    SetNoiseParams(0.0965f, 0.1225f, 0.1480f, 0.005f);
 }
 
 VisionPerceptor::~VisionPerceptor()

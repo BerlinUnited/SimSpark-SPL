@@ -35,7 +35,8 @@ using namespace oxygen;
 using namespace salt;
 using namespace kerosin;
 
-SingleMatInitEffector::SingleMatInitEffector() : InitEffector::InitEffector()
+SingleMatInitEffector::SingleMatInitEffector() 
+    : InitEffector()
 {
 }
 

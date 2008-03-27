@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: agentstateperceptor.cpp,v 1.5 2006/03/13 23:22:42 fruit Exp $
+   $Id: agentstateperceptor.cpp,v 1.6 2008/03/27 21:11:53 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/restrictedvisionperceptor/restrictedvisionperceptor.h>
 
+using namespace salt;
 using namespace oxygen;
 using namespace zeitgeist;
 using namespace boost;
@@ -77,8 +78,8 @@ AgentStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
             // pan tilt information
             ParameterList& pantiltElement = predicate.parameter.AddList();
             pantiltElement.AddValue(std::string("pan_tilt"));
-            pantiltElement.AddValue(static_cast<int>(roundf(rvp->GetPan())));
-            pantiltElement.AddValue(static_cast<int>(roundf(rvp->GetTilt())));
+            pantiltElement.AddValue(gRound(rvp->GetPan()));
+            pantiltElement.AddValue(gRound(rvp->GetTilt()));
         }
     }
 
