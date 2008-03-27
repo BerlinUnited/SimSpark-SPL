@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gmath.h,v 1.13 2007/06/20 01:03:23 fruit Exp $
+   $Id: gmath.h,v 1.14 2008/03/27 19:53:42 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,11 @@
 
 #include "defines.h"
 #include <cmath>
+
+#ifdef WIN32
+#include <float.h>
+#include <limits>
+#endif
 
 namespace salt
 {
@@ -203,6 +208,43 @@ f_inline double gNormalizeRad(TYPE angle)
     return angle;
 }
 
+template <class TYPE>
+f_inline bool gIsNan(TYPE f)
+{
+#ifdef WIN32
+    return _isnan(static_cast<double>(f)) != 0;
+#else
+    return std::isnan<TYPE>(f);
+#endif
+}
+
+template <class TYPE>
+f_inline bool gIsFinite(TYPE f)
+{
+#ifdef WIN32
+    // isfinite is part of C99 but not available in Visual C++
+    assert(std::numeric_limits<TYPE>::has_infinity);
+    return (std::numeric_limits<double>::infinity() != f);
+#else
+    return isfinite(f);
+#endif
+}
+
+f_inline int gRound(float f)
+{
+#ifdef WIN32
+    // Uses the FloatToInt functionality
+    int a;
+    int *int_pointer = &a;
+
+    __asm  fld  f
+    __asm  mov  edx,int_pointer
+    __asm  FRNDINT
+    __asm  fistp dword ptr [edx];
+#else
+    return static_cast<int>(roundf(f));
+#endif
+}
 
 } //namespace salt
 
