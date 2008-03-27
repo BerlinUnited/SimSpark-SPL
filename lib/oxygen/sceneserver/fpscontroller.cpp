@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: fpscontroller.cpp,v 1.13 2008/02/22 07:52:15 hedayat Exp $
+   $Id: fpscontroller.cpp,v 1.14 2008/03/27 19:54:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ using namespace salt;
 // (while the simulation is paused). These should be made
 // configurable.n
 static const float STATIC_MIN_ANGLE_DELTA = 0.1f;
-static const float STATIC_MIN_VELOCITY = 1e-3;
+static const float STATIC_MIN_VELOCITY = 1e-3f;
 static const float STATIC_VELOCITY_DECAY = 0.8f;
 static const float STATIC_ACCELERATION = 0.01f;
 
