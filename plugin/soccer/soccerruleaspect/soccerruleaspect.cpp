@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.34 2008/03/27 21:11:53 rollmark Exp $
+   $Id: soccerruleaspect.cpp,v 1.35 2008/03/28 16:36:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,8 +34,7 @@
 using namespace oxygen;
 using namespace boost;
 using namespace std;
-using salt::Vector2f;
-using salt::Vector3f;
+using namespace salt;
 
 SoccerRuleAspect::SoccerRuleAspect() :
     SoccerControlAspect(),
@@ -72,19 +71,13 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
 }
 
 void
-SoccerRuleAspect::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
-{
-    SoccerBase::MoveAgent(agent_aspect, pos);
-}
-
-void
 SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
                                float min_dist, TTeamIndex idx)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
 
     std::list<boost::shared_ptr<AgentState> > agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
     salt::BoundingSphere sphere(pos, radius);
@@ -96,14 +89,9 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
 
         // if agent is too close, move it away
         Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+        AABB3 agentAABB = SoccerBase::GetAgentBoundingBox(*agent_aspect);
 
-        Vector3f test_pos = new_pos;
-        test_pos[2] = pos[2];
-
-        // DEBUG
-        //cerr << "testing position (" << test_pos[0] << "," << test_pos[1] << ")" << endl;
-
-        if (sphere.Contains(test_pos))
+        if (sphere.Intersects(agentAABB))
         {
             float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
 
@@ -123,51 +111,9 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
                     new_pos[0] = pos[0] + dist;
                 }
             }
-            MoveAgent(agent_aspect, new_pos);
+            SoccerBase::MoveAgent(agent_aspect, new_pos);
         }
     }
-#if 0
-    if (idx == TI_NONE || mBallState.get() == 0) return;
-    std::list<boost::shared_ptr<AgentState> > agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
-        return;
-
-    salt::BoundingSphere sphere(pos, radius);
-    boost::shared_ptr<oxygen::Transform> transform_parent;
-    boost::shared_ptr<oxygen::Body> agent_body;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
-    for (i = agent_states.begin(); i != agent_states.end(); ++i)
-    {
-        SoccerBase::GetTransformParent(*(*i), transform_parent);
-        // call GetAgentBody with matching AgentAspect
-        SoccerBase::GetAgentBody(transform_parent, agent_body);
-        // if agent is too close, move it away
-        Vector3f new_pos = agent_body->GetPosition();
-        if (sphere.Contains(new_pos))
-        {
-            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
-
-            if (idx == TI_LEFT)
-            {
-                if (pos[0] - dist < -mFieldLength/2.0)
-                {
-                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
-                } else {
-                    new_pos[0] = pos[0] - dist;
-                }
-            } else {
-                if (pos[0] + dist > mFieldLength/2.0)
-                {
-                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
-                } else {
-                    new_pos[0] = pos[0] + dist;
-                }
-            }
-            new_pos[2] = 1.0;
-            MoveAgent(agent_body, new_pos);
-        }
-    }
-#endif
 }
 
 void
@@ -176,7 +122,7 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
     boost::shared_ptr<oxygen::Transform> agent_aspect;
@@ -187,8 +133,9 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
 
         // if agent is too close, move it away
         Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+        AABB2 agentAABB2 = SoccerBase::GetAgentBoundingRect(*agent_aspect);
 
-        if (box.Contains(Vector2f(new_pos[0], new_pos[1])))
+        if (box.Intersects(agentAABB2))
         {
             if (idx == TI_LEFT)
             {
@@ -198,41 +145,9 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
                 new_pos[0] = box.maxVec[0] +
                     salt::UniformRNG<>(min_dist, min_dist + 2.0)();
             }
-            MoveAgent(agent_aspect, new_pos);
+            SoccerBase::MoveAgent(agent_aspect, new_pos);
         }
     }
-#if 0
-    if (idx == TI_NONE || mBallState.get() == 0) return;
-    std::list<boost::shared_ptr<AgentState> > agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
-        return;
-
-    boost::shared_ptr<oxygen::Transform> transform_parent;
-    boost::shared_ptr<oxygen::Body> agent_body;
-
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
-    for (i = agent_states.begin(); i != agent_states.end(); ++i)
-    {
-        SoccerBase::GetTransformParent(*(*i), transform_parent);
-        // call GetAgentBody with matching AgentAspect
-        SoccerBase::GetAgentBody(transform_parent, agent_body);
-        // if agent is too close, move it away
-        Vector3f new_pos = agent_body->GetPosition();
-        if (box.Contains(Vector2f(new_pos[0], new_pos[1])))
-        {
-            if (idx == TI_LEFT)
-            {
-                new_pos[0] = box.minVec[0] -
-                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
-            } else {
-                new_pos[0] = box.maxVec[0] +
-                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
-            }
-            new_pos[2] = 1.0;
-            MoveAgent(agent_body, new_pos);
-        }
-    }
-#endif
 }
 
 void
@@ -346,7 +261,6 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 void
 SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
 {
-#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -387,7 +301,6 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
         // field
         MoveBall(mFreeKickPos);
     }
-#endif
 }
 
 
@@ -397,7 +310,6 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
 void
 SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
 {
-#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -459,7 +371,6 @@ SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
         // field
         MoveBall(mFreeKickPos);
     }
-#endif
 }
 
 //-----------------------------------
@@ -469,7 +380,6 @@ SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
 void
 SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
 {
-#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -521,13 +431,11 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
         // move the ball back on the free kick position
         MoveBall(mFreeKickPos);
     }
-#endif
 }
 
 void
 SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
 {
-#if 1
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
@@ -566,7 +474,6 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
         // field
         MoveBall(mFreeKickPos);
     }
-#endif
 }
 
 bool
@@ -887,21 +794,21 @@ SoccerRuleAspect::OnLink()
 {
     SoccerControlAspect::OnLink();
 
-    mGameState = shared_dynamic_cast<GameStateAspect>
-        (GetControlAspect("GameStateAspect"));
+    GetControlAspect(mGameState, "GameStateAspect");
 
-    if (mGameState.get() == NULL)
-    {
-        GetLog()->Error() << "(SoccerRuleAspect) ERROR: could not get GameStateAspect\n";
-    }
+    if (mGameState.expired())
+        {
+            GetLog()->Error()
+                    << "(SoccerRuleAspect) ERROR: could not get GameStateAspect\n";
+        }
 
-    mBallState = shared_dynamic_cast<BallStateAspect>
-        (GetControlAspect("BallStateAspect"));
+    GetControlAspect(mBallState, "BallStateAspect");
 
-    if (mBallState.get() == NULL)
-    {
-        GetLog()->Error() << "(SoccerRuleAspect) ERROR: could not get BallStateAspect\n";
-    }
+    if (mBallState.expired())
+        {
+            GetLog()->Error()
+                    << "(SoccerRuleAspect) ERROR: could not get BallStateAspect\n";
+        }
 
     SoccerBase::GetBallBody(*this,mBallBody);
 }
@@ -954,13 +861,13 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
     TAgentStateList agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
     {
         return;
     }
 
     TAgentStateList opponent_agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, opponent_agent_states,
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), opponent_agent_states,
                                      SoccerBase::OpponentTeam(idx)))
     {
         return;
@@ -1323,7 +1230,7 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
     salt::BoundingSphere sphere(pos, radius);
@@ -1337,11 +1244,9 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
         SoccerBase::GetTransformParent(**i, agent_aspect);
         // if agent is too close, move it away
         Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+        AABB3 agentAABB = SoccerBase::GetAgentBoundingBox(*agent_aspect);
 
-        Vector3f test_pos = new_pos;
-        test_pos[2] = pos[2];
-
-        if (sphere.Contains(test_pos))
+        if (sphere.Intersects(agentAABB))
         {
             float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
 
@@ -1361,52 +1266,7 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                     new_pos[0] = pos[0] + dist;
                 }
             }
-            MoveAgent(agent_aspect, new_pos);
+            SoccerBase::MoveAgent(agent_aspect, new_pos);
         }
     }
-#if 0
-    if (idx == TI_NONE || mBallState.get() == 0) return;
-    std::list<boost::shared_ptr<AgentState> > agent_states;
-    if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
-        return;
-
-    salt::BoundingSphere sphere(pos, radius);
-    boost::shared_ptr<oxygen::Transform> transform_parent;
-    boost::shared_ptr<oxygen::Body> agent_body;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
-    for (i = agent_states.begin(); i != agent_states.end(); ++i)
-    {
-        if (agentState == (*i))
-            continue;
-
-        SoccerBase::GetTransformParent(*(*i), transform_parent);
-        // call GetAgentBody with matching AgentAspect
-        SoccerBase::GetAgentBody(transform_parent, agent_body);
-        // if agent is too close, move it away
-        Vector3f new_pos = agent_body->GetPosition();
-        if (sphere.Contains(new_pos))
-        {
-            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
-
-            if (idx == TI_LEFT)
-            {
-                if (pos[0] - dist < -mFieldLength/2.0)
-                {
-                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
-                } else {
-                    new_pos[0] = pos[0] - dist;
-                }
-            } else {
-                if (pos[0] + dist > mFieldLength/2.0)
-                {
-                    new_pos[1] = pos[1] < 0 ? pos[1] + dist : pos[1] - dist;
-                } else {
-                    new_pos[0] = pos[0] + dist;
-                }
-            }
-            new_pos[2] = 1.0;
-            MoveAgent(agent_body, new_pos);
-        }
-    }
-#endif
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.h,v 1.11 2008/02/24 10:17:31 rollmark Exp $
+   $Id: controlaspect.h,v 1.12 2008/03/28 16:36:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public:
 
     /** returns a reference to a ControlAspect registered to the
         GameControlServer */
-    boost::shared_ptr<ControlAspect> GetControlAspect(const std::string& name);
+    void GetControlAspect(zeitgeist::Core::CachedLeafPath& aspect, const std::string& name);
 };
 
 DECLARE_ABSTRACTCLASS(ControlAspect);

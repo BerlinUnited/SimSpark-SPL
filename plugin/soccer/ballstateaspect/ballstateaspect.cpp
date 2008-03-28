@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.7 2007/06/15 09:47:29 jboedeck Exp $
+   $Id: ballstateaspect.cpp,v 1.8 2008/03/28 16:36:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ void BallStateAspect::UpdateLastCollidingAgent()
         {
             mLastCollidingAgent = shared_static_cast<AgentAspect>
                 (agents.front().lock());
-            
+
             mLastAgentCollisionTime = mGameState->GetTime();
         }
 
@@ -182,8 +182,7 @@ void BallStateAspect::OnLink()
     mLeftGoalRecorder = GetLeftGoalRecorder();
     mRightGoalRecorder = GetRightGoalRecorder();
 
-    mGameState = shared_dynamic_cast<GameStateAspect>
-        (GetControlAspect("GameStateAspect"));
+    GetControlAspect(mGameState, "GameStateAspect");
 }
 
 void BallStateAspect::OnUnlink()

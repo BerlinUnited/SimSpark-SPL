@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: controlaspect.cpp,v 1.7 2008/02/24 10:17:31 rollmark Exp $
+   $Id: controlaspect.cpp,v 1.8 2008/03/28 16:36:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,18 +61,15 @@ ControlAspect::GetActiveScene()
     return activeScene;
 }
 
-shared_ptr<ControlAspect>
-ControlAspect::GetControlAspect(const string& name)
+void
+ControlAspect::GetControlAspect(Core::CachedLeafPath& aspect, const string& name)
 {
     static const string gcsPath = "/sys/server/gamecontrol/";
 
-    shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
-        (GetCore()->Get(gcsPath + name));
+    RegisterCachedPath(aspect, gcsPath + name);
 
-    if (aspect.get() == 0)
+    if (aspect.expired())
     {
         GetLog()->Error() << "(ControlAspect) found no " << name << "\n";
     }
-
-    return aspect;
 }

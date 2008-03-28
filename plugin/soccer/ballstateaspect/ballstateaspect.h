@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.4 2006/06/03 14:03:52 jboedeck Exp $
+   $Id: ballstateaspect.h,v 1.5 2008/03/28 16:36:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ protected:
     boost::shared_ptr<oxygen::AgentAspect> mLastKickingAgent;
 
     /** holds a reference to the GameStateAspect */
-    boost::shared_ptr<GameStateAspect> mGameState;
+    CachedPath<GameStateAspect> mGameState;
 
     /** then time when the last agent collided with the ball */
     TTime mLastAgentCollisionTime;

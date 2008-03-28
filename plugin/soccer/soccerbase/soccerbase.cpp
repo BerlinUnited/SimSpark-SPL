@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.21 2007/06/17 10:48:49 jboedeck Exp $
+   $Id: soccerbase.cpp,v 1.22 2008/03/28 16:36:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -145,13 +145,13 @@ SoccerBase::GetAgentState(const Leaf& base,
 bool
 SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
                           int unum, shared_ptr<AgentState>& agentState)
-{   
+{
     static TAgentStateMap mAgentStateMapLeft;
     static TAgentStateMap mAgentStateMapRight;
-     
+
     if (idx == TI_NONE)
         return false;
-    
+
     // do we have a cached reference?
     if (
         idx == TI_LEFT &&
@@ -162,7 +162,7 @@ SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
 
             if (iter != mAgentStateMapLeft.end())
                 {
-                    // is the pointer to the parent (AgentAspect) still valid 
+                    // is the pointer to the parent (AgentAspect) still valid
                     // (maybe the agent disconnected)?
                     if (!(iter->second)->GetParent().lock().get())
                         {
@@ -182,14 +182,14 @@ SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
         }
     else if (
              idx == TI_RIGHT &&
-             !mAgentStateMapRight.empty()  
+             !mAgentStateMapRight.empty()
              )
         {
             TAgentStateMap::iterator iter = mAgentStateMapRight.find(unum);
 
             if (iter != mAgentStateMapRight.end())
                 {
-                    // is the pointer to the parent (AgentAspect) still valid 
+                    // is the pointer to the parent (AgentAspect) still valid
                     // (maybe the agent disconnected)?
                     if ((iter->second)->GetParent().lock().get() == 0)
                         {
@@ -231,7 +231,7 @@ SoccerBase::GetAgentState(const Leaf& base, TTeamIndex idx,
 
                 return true;
             }
-        }   
+        }
 
     return false;
 }
@@ -242,11 +242,11 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
                            TTeamIndex idx)
 {
     static shared_ptr<GameControlServer> gameCtrl;
-    
+
     if (gameCtrl.get() == 0)
     {
         GetGameControlServer(base, gameCtrl);
-    
+
         if (gameCtrl.get() == 0)
         {
             base.GetLog()->Error() << "(SoccerBase) ERROR: can't get "
@@ -260,7 +260,7 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
 
     GameControlServer::TAgentAspectList::iterator iter;
     shared_ptr<AgentState> agentState;
-        
+
     for (
          iter = aspectList.begin();
          iter != aspectList.end();
@@ -268,9 +268,9 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
          )
         {
             agentState = shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
-            
-            if (                
-                agentState.get() != 0 &&                
+
+            if (
+                agentState.get() != 0 &&
                 (
                  agentState->GetTeamIndex() == idx ||
                  idx == TI_NONE
@@ -278,9 +278,9 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
                 )
                 {
                     agentStates.push_back(agentState);
-                }       
+                }
         }
-    
+
     return true;
 }
 
@@ -352,7 +352,7 @@ SoccerBase::GetActiveScene(const Leaf& base,
                            shared_ptr<Scene>& active_scene)
 {
     static shared_ptr<SceneServer> sceneServer;
-    
+
     if (sceneServer.get() == 0)
     {
         if (! GetSceneServer(base,sceneServer))
@@ -360,22 +360,22 @@ SoccerBase::GetActiveScene(const Leaf& base,
             base.GetLog()->Error()
                 << "(SoccerBase) ERROR: " << base.GetName()
                 << ", could not get SceneServer\n";
-            
+
             return false;
         }
     }
 
     active_scene = sceneServer->GetActiveScene();
-    
+
     if (active_scene.get() == 0)
     {
         base.GetLog()->Error()
             << "ERROR: (SoccerBase: " << base.GetName()
             << ", SceneServer reports no active scene\n";
-        
+
         return false;
     }
-    
+
     return true;
 }
 
@@ -397,7 +397,7 @@ SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
         base.GetLog()->Error()
             << "ERROR: (SoccerBase: " << base.GetName()
             << ") parent node has no Body child.";
-        
+
         return false;
     }
 
@@ -409,34 +409,34 @@ SoccerBase::GetBall(const Leaf& base, shared_ptr<Ball>& ball)
 {
     static shared_ptr<Scene> scene;
     static shared_ptr<Ball> ballRef;
-    
+
     if (scene.get() == 0)
     {
         if (! GetActiveScene(base,scene))
         {
             base.GetLog()->Error()
                 << "(SoccerBase) ERROR: " << base.GetName()
-                << ", could not get active scene.\n";        
+                << ", could not get active scene.\n";
 
             return false;
         }
-    }   
-    
+    }
+
     if (ballRef.get() == 0)
     {
         ballRef = shared_dynamic_cast<Ball>
             (base.GetCore()->Get(scene->GetFullPath() + "Ball"));
-        
+
         if (ballRef.get() == 0)
         {
             base.GetLog()->Error()
                 << "(SoccerBase) ERROR: " << base.GetName()
                 << ", found no ball node\n";
-            
+
             return false;
         }
     }
-        
+
     ball = ballRef;
 
     return true;
@@ -447,35 +447,35 @@ SoccerBase::GetBallBody(const Leaf& base, shared_ptr<Body>& body)
 {
     static shared_ptr<Scene> scene;
     static shared_ptr<Body> bodyRef;
-    
+
     if (scene.get() == 0)
     {
         if (! GetActiveScene(base,scene))
         {
             base.GetLog()->Error()
                 << "(SoccerBase) ERROR: " << base.GetName()
-                << ", could not get active scene.\n";        
+                << ", could not get active scene.\n";
 
             return false;
         }
-    } 
+    }
 
     if (bodyRef.get() == 0)
     {
         bodyRef = shared_dynamic_cast<Body>
             (base.GetCore()->Get(scene->GetFullPath() + "Ball/physics"));
-        
+
         if (bodyRef.get() == 0)
         {
             base.GetLog()->Error()
                 << "(SoccerBase) ERROR: " << base.GetName()
-                << ", found no ball body node\n";        
-        
+                << ", found no ball body node\n";
+
             return false;
         }
     }
-    
-    body = bodyRef;    
+
+    body = bodyRef;
 
     return true;
 }
@@ -486,14 +486,14 @@ SoccerBase::GetBallCollider(const zeitgeist::Leaf& base,
 {
     static shared_ptr<Scene> scene;
     static shared_ptr<SphereCollider> sphereRef;
-    
+
     if (scene.get() == 0)
     {
         if (! GetActiveScene(base,scene))
         {
             base.GetLog()->Error()
                 << "(SoccerBase) ERROR: " << base.GetName()
-                << ", could not get active scene.\n";        
+                << ", could not get active scene.\n";
 
             return false;
         }
@@ -503,18 +503,18 @@ SoccerBase::GetBallCollider(const zeitgeist::Leaf& base,
     {
         sphereRef = shared_dynamic_cast<SphereCollider>
             (base.GetCore()->Get(scene->GetFullPath() + "Ball/geometry"));
-        
+
         if (sphereRef.get() == 0)
         {
             base.GetLog()->Error()
                 << "(SoccerBase) ERROR:" << base.GetName()
                 << ", Ball got no SphereCollider node\n";
-            
+
             return false;
         }
     }
-    
-   sphere = sphereRef;   
+
+   sphere = sphereRef;
 
    return true;
 }
@@ -635,7 +635,7 @@ bool
 SoccerBase::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
 {
     Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
-    
+
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
             (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
@@ -660,10 +660,10 @@ SoccerBase::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
 
     Leaf::TLeafList::iterator iter = leafList.begin();
 
-    // move all child bodies 
+    // move all child bodies
     for (iter; iter != leafList.end(); ++iter)
-    {            
-        shared_ptr<Body> childBody = 
+    {
+        shared_ptr<Body> childBody =
             shared_dynamic_cast<Body>(*iter);
 
         Vector3f childPos = childBody->GetPosition();
@@ -678,7 +678,7 @@ bool
 SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos, float angle)
 {
     Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
-    
+
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
             (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
@@ -699,7 +699,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
             << "children of type Body\n";
 
         return false;
-    }    
+    }
 
     shared_ptr<Body> body;
     GetAgentBody(agent_aspect, body);
@@ -711,29 +711,29 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
     mat *= bodyR;
 
     Leaf::TLeafList::iterator iter = leafList.begin();
-       
-    // move all child bodies 
+
+    // move all child bodies
     for (iter;
          iter != leafList.end();
          ++iter
          )
-        {            
-	       shared_ptr<Body> childBody = 
+        {
+	       shared_ptr<Body> childBody =
                 shared_dynamic_cast<Body>(*iter);
-	    
+
     	    Vector3f childPos = childBody->GetPosition();
             Matrix childR = childBody->GetRotation();
             childR = mat*childR;
     	    childBody->SetPosition(pos + mat.Rotate(childPos-agentPos));
     	    childBody->SetVelocity(Vector3f(0,0,0));
     	    childBody->SetAngularVelocity(Vector3f(0,0,0));
-            childBody->SetRotation(childR);            
+            childBody->SetRotation(childR);
     	}
 }
 
-salt::AABB3 SoccerBase::GetAgentBoundingBox(const zeitgeist::Leaf& base)
+AABB3 SoccerBase::GetAgentBoundingBox(const Leaf& base)
 {
-    salt::AABB3 boundingBox;
+    AABB3 boundingBox;
 
     shared_ptr<Space> parent = base.FindParentSupportingClass<Space>().lock();
 
@@ -743,23 +743,22 @@ salt::AABB3 SoccerBase::GetAgentBoundingBox(const zeitgeist::Leaf& base)
                 << "(GetAgentBoundingBox) ERROR: can't get parent node.\n";
         return boundingBox;
     }
-    
-    /* We can't simply use the GetWorldBoundingBox of the space node, becuase 
+
+    /* We can't simply use the GetWorldBoundingBox of the space node, becuase
      * (at least currently) it'll return a wrong answer. Currently, the space
      * object is always at (0,0,0) which is encapsulated in the result of it's
      * GetWorldBoundingBox method call.
      */
-        
+
     Leaf::TLeafList baseNodes;
     parent->ListChildrenSupportingClass<BaseNode>(baseNodes);
 
     if (baseNodes.empty())
-        base.GetLog()->Error()
-                << "(GetAgentBoundingBox) ERROR: space object doesn't have any"
-                << " children of type BaseNode.\n";
-    else
-        boundingBox = 
-            shared_static_cast<BaseNode>(*baseNodes.begin())->GetWorldBoundingBox();
+        {
+            base.GetLog()->Error()
+                    << "(GetAgentBoundingBox) ERROR: space object doesn't have any"
+                    << " children of type BaseNode.\n";
+        }
 
     for (Leaf::TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
     {
@@ -768,4 +767,44 @@ salt::AABB3 SoccerBase::GetAgentBoundingBox(const zeitgeist::Leaf& base)
     }
 
     return boundingBox;
+}
+
+AABB2 SoccerBase::GetAgentBoundingRect(const Leaf& base)
+{
+    AABB2 boundingRect;
+
+    shared_ptr<Space> parent = base.FindParentSupportingClass<Space>().lock();
+
+    if (!parent)
+    {
+        base.GetLog()->Error()
+                << "(GetAgentBoundingBox) ERROR: can't get parent node.\n";
+        return boundingRect;
+    }
+
+    /* We can't simply use the GetWorldBoundingBox of the space node, becuase
+     * (at least currently) it'll return a wrong answer. Currently, the space
+     * object is always at (0,0,0) which is encapsulated in the result of it's
+     * GetWorldBoundingBox method call.
+     */
+
+    Leaf::TLeafList baseNodes;
+    parent->ListChildrenSupportingClass<BaseNode>(baseNodes);
+
+    if (baseNodes.empty())
+        {
+            base.GetLog()->Error()
+                    << "(GetAgentBoundingBox) ERROR: space object doesn't have any"
+                    << " children of type BaseNode.\n";
+        }
+
+    for (Leaf::TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
+    {
+        shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
+        const AABB3 &box = node->GetWorldBoundingBox();
+        boundingRect.Encapsulate(box.minVec.x(), box.minVec.y());
+        boundingRect.Encapsulate(box.maxVec.x(), box.maxVec.y());
+    }
+
+    return boundingRect;
 }

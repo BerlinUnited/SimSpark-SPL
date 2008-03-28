@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.14 2007/06/27 23:13:08 jamu Exp $
+   $Id: soccerruleaspect.h,v 1.15 2008/03/28 16:36:55 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ public:
         side of the field. If they would leave the playing field, they are moved
         towards the X axis (the line from the left goal to the right goal).
     */
-    void ClearPlayersWithException(const salt::Vector3f& pos, float radius, float min_dist, 
+    void ClearPlayersWithException(const salt::Vector3f& pos, float radius, float min_dist,
                       TTeamIndex idx, boost::shared_ptr<AgentState> agentState);
 
 protected:
@@ -149,13 +149,6 @@ protected:
     /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
 
-    /** Moves an agent to pos setting its linear and angular velocity to 0.
-     *  \param agent_body a reference to the agent body
-     *  \param pos the position where the agent should be
-     */
-    void MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect,
-                   const salt::Vector3f& pos);
-
     /** Move all the players from a team which are too close to pos away
         from pos.
         \param pos the center of the area to be checked
@@ -185,10 +178,10 @@ protected:
     boost::shared_ptr<oxygen::Body> mBallBody;
 
     /** reference to the GameStateAspect */
-    boost::shared_ptr<GameStateAspect> mGameState;
+    CachedPath<GameStateAspect> mGameState;
 
     /** reference to the BallStateAspect */
-    boost::shared_ptr<BallStateAspect> mBallState;
+    CachedPath<BallStateAspect> mBallState;
 
     /** the radius of the Ball */
     float mBallRadius;

@@ -1,3 +1,26 @@
+2008-03-28  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/ballstateaspect/ballstateaspect.h:
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	- using new CachedPath object for mGameState
+
+	* lib/oxygen/controlaspect/controlaspect.h:
+	* lib/oxygen/controlaspect/controlaspect.cpp:
+	- using new CachedPath class in GetControlAspect()
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- removed MoveAgent method and directly call SoccerBase::MoveAgent
+	- implemented testing agent's bounding box instead of its COM
+	- some code cleanup
+
+	* plugin/soccer/soccerbase/soccerbase.h:
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- added new method GetAgentBoundingRect
+
+	* lib/salt/bounds.h (AABB2.Encapsulate):
+	- added new method which receives x and y directly
+
 2008-03-23  Xu Yuan  <xuyuan.cn@gmail.com>
 	* NEWS
 	* RELEASE
