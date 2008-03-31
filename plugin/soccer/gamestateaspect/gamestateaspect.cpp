@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.14 2008/03/10 23:57:07 sgvandijk Exp $
+   $Id: gamestateaspect.cpp,v 1.15 2008/03/31 20:22:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -361,6 +361,8 @@ GameStateAspect::ReturnUniform(TTeamIndex ti, unsigned int unum)
             " number " << unum << " from team " << ti << "\n";
         return false;
     }
+
+    return true;
 }
 
 void
@@ -500,6 +502,8 @@ GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
     for (int i = 1; i <=11; ++i)
       if (mUnumSet[idx].find(i) == mUnumSet[idx].end())
         return i;
+
+    return 0;
 }
 
 

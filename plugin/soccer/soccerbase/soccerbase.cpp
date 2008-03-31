@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.22 2008/03/28 16:36:55 hedayat Exp $
+   $Id: soccerbase.cpp,v 1.23 2008/03/31 20:22:08 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -672,6 +672,8 @@ SoccerBase::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
         childBody->SetVelocity(Vector3f(0,0,0));
         childBody->SetAngularVelocity(Vector3f(0,0,0));
     }
+
+    return true;
 }
 
 bool
@@ -729,6 +731,8 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
     	    childBody->SetAngularVelocity(Vector3f(0,0,0));
             childBody->SetRotation(childR);
     	}
+
+    return true;
 }
 
 AABB3 SoccerBase::GetAgentBoundingBox(const Leaf& base)

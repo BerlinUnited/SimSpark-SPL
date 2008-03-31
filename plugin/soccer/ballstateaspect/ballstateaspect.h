@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.5 2008/03/28 16:36:55 hedayat Exp $
+   $Id: ballstateaspect.h,v 1.6 2008/03/31 20:22:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define BALLLSTATEASPECT_H
 
 #include <soccer/soccercontrolaspect/soccercontrolaspect.h>
+#include <soccer/gamestateaspect/gamestateaspect.h>
 
 /** BallStateAspect is a ControlAspect that holds information about
     the current state of the ball in the simulation.

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.15 2008/03/28 16:36:55 hedayat Exp $
+   $Id: soccerruleaspect.h,v 1.16 2008/03/31 20:22:10 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,9 +24,9 @@
 
 #include <soccer/soccercontrolaspect/soccercontrolaspect.h>
 #include <soccer/soccertypes.h>
+#include <soccer/ballstateaspect/ballstateaspect.h>
+#include <soccer/gamestateaspect/gamestateaspect.h>
 
-class GameStateAspect;
-class BallStateAspect;
 class AgentState;
 
 namespace salt
