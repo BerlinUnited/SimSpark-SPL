@@ -1,3 +1,49 @@
+2008-03-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* plugin/objimporter/objimporter.cpp:
+	* plugin/objimporter/objimporter.h:
+	- Extended OBJ importer to handle material library files
+	  that are created on export by Blender. When importing
+	  the OBJ meshes, care should be taken to rotate them correctly
+	  since the Blender coordinate system is different from SimSpark's
+	  (e.g. SetLocalRotation 90 180 0, see soccerbottorsocomp.rsg).
+	  Another important point when exporting a mesh from Blender is that 
+	  normals have to be exported, and the mesh should be triangulated. 
+	  Everything else can be left as default values in the OBJ exporter
+	  of Blender (I'll try to do a tutorial in the Wiki soon).
+
+	* app/simspark/rsg/agent/soccerbottorsocomp.rsg:
+	- rotate the torso mesh so that the unum is on the back
+
+	* app/simspark/textures/rcs-torso-01.png: 
+	* app/simspark/textures/rcs-torso-02.png: 
+	* app/simspark/textures/rcs-torso-03.png: 
+	* app/simspark/textures/rcs-torso-04.png: 
+	* app/simspark/textures/rcs-torso-05.png: 
+	* app/simspark/textures/rcs-torso-06.png: 
+	* app/simspark/textures/rcs-torso-07.png: 
+	* app/simspark/textures/rcs-torso-08.png: 
+	* app/simspark/textures/rcs-torso-09.png: 
+	* app/simspark/textures/rcs-torso-10.png: 
+	* app/simspark/textures/rcs-torso-11.png: 
+	- updated textures (corresponsing to the updated torso model)
+
+	* app/simspark/textures/rcs-soccerball.png:
+	- added PNG texture for the soccerball
+
+	* app/simspark/materials/soccerball.mtl: 
+	* app/simspark/materials/soccerbottorso.mtl: 
+	- added material definitions exported by Blender
+
+	* app/simspark/models/soccerbottorso.obj:
+	- updated model and material lib
+
+	* app/simspark/models/soccerball.obj:
+	- updated model and material lib
+
+	* app/agentspark/main.cpp:
+	- added conditional includes for the network stuff	
+
 2008-03-28  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/soccer/ballstateaspect/ballstateaspect.h:
