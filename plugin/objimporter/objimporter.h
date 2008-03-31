@@ -23,6 +23,18 @@
 
 #include <oxygen/geometryserver/meshimporter.h>
 
+// MaterialOBJ struct
+struct ObjMatValues
+{
+    std::string name;
+    float ambient[3];
+    float diffuse[3];
+    float specular[3];
+    float shininess;
+    float alpha;
+    std::string diffuseTexture;
+};
+
 struct VTNIndex
 {
     unsigned int v;  // vertex index
@@ -35,13 +47,16 @@ struct FaceIndex
     VTNIndex vertex[3];
 };
 
+typedef std::vector<ObjMatValues> TObjMatValueVector;
 typedef std::list<FaceIndex> TFaceIndexList;
+typedef std::map<std::string, TFaceIndexList> TMatNameFaceIndexListMap;
 
 /** \class ObjImporter is a MeshImporter the reads the Wavefront .obj format.
 
      This is a _very_ simple implementation that only reads the vertices, the
      texture coordinates, the vertex normals, and the texture information.
-     Everything else is ignored for now.
+     It also reads the materials in a mtllib file and sets them up with the
+	 MaterialServer.
  */
 class ObjImporter : public oxygen::MeshImporter
 {
@@ -57,6 +72,9 @@ protected:
     void ExplodeString(std::string & input, 
                        std::vector<std::string> & output, 
                        std::string & del);
+
+    bool SetupMaterials(std::string & matLibName, 
+                        TObjMatValueVector & matVector); 
 };
 
 DECLARE_CLASS(ObjImporter);
