@@ -88,10 +88,13 @@ EXTRA_DIST = \
 	scripts/rsgedit-materials.rb\
 	models/soccerball.obj\
 	models/soccerbottorso.obj\
+	materials/soccerball.mtl\
+	materials/soccerbottorso.mtl\
 	textures/rcs-grass-w-lines.tga\
 	textures/rcs-grass.png\
 	textures/rcs-grass3.png\
 	textures/rcs-soccerball.tga\
+	textures/rcs-soccerball.png\
 	textures/rcs-torso-01.png\
 	textures/rcs-torso-02.png\
 	textures/rcs-torso-03.png\
