@@ -102,6 +102,7 @@
  (nd Transform
      (setName chest)
      (setLocalPos 0 0 0)
+     (setLocalRotation 90 180 0)
 
      (nd SingleMatNode
          (load 'models/soccerbottorso.obj')
