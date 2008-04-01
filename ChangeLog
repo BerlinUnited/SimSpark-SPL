@@ -1,4 +1,9 @@
 2008-04-01  Xu Yuan  <xuyuan.cn@gmail.com.cn>
+
+	* utility/rcssnet/socket.cpp:
+	- fix bug when the socket can not send too long message (11584B in
+	my system) once
+
 	* lib/oxygen/monitorserver/monitorserver.h:
 	* lib/oxygen/monitorserver/monitorserver.cpp:
 	- cache the current scene data (described string), then different
