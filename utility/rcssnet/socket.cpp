@@ -385,25 +385,31 @@ namespace rcss
             }
             else
             {
-                for(;;)
+                int s, sent;
+                for(sent = 0; sent<len; )
                 {
-                    int sent = ::send( getFD(), msg,
+                    s = ::send( getFD(), msg+sent,
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
-                                                           (int)len,
+                                (int)(len-sent),
 #else
-                                                           len,
+                                len-sent,
 #endif
-                                                           flags );
-                    if( sent != -1
-                        || ( errno != EINTR
+                                flags );
+                    if( s == -1
+                          && ( errno != EINTR
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
                                                      && errno != WSAEWOULDBLOCK
 #else
                                                      && errno != EWOULDBLOCK
 #endif
-                                                        ) )
-                        return sent;
+                            ) ){
+                        return s;
+                    }
+
+                    if ( s > 0 )
+                        sent+=s;
                 }
+                return sent;
             }
         }
 
