@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.cpp,v 1.6 2008/02/22 16:48:18 hedayat Exp $
+   $Id: monitorcontrol.cpp,v 1.7 2008/04/01 14:31:51 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -71,46 +71,58 @@ void MonitorControl::EndCycle()
 {
     NetControl::EndCycle();
 
-    const int cycle = GetSimulationServer()->GetCycle();
-    if (cycle % mMonitorInterval)
+    bool fullState = false;
+    shared_ptr<SceneServer> sceneServer =
+        GetSimulationServer()->GetSceneServer();
+
+    if (sceneServer.get() ==0)
+    {
+        GetLog()->Error()
+            << "(MonitorControl) ERROR: SceneServer not found\n";
+        return;
+    }
+
+    shared_ptr<Scene> scene = sceneServer->GetActiveScene();
+    if (scene.get() != 0)
+    {
+        if ( scene->GetModified() )
+        {
+            fullState = true;
+        }
+    }
+
+    if ( !fullState )
+    {
+        const int cycle = GetSimulationServer()->GetCycle();
+        if ( cycle % mMonitorInterval)
         {
             return;
         }
-
+    }
+    
     if (
         (mMonitorServer.get() == 0) ||
-        (mNetMessage.get() == 0) ||
-        (mClients.size() == 0)
+        (mNetMessage.get() == 0)
         )
         {
             return;
         }
 
     // send updates to all connected monitors
-    string info = mMonitorServer->GetMonitorData();
-    mNetMessage->PrepareToSend(info);
+    if ( !mClients.empty() )
+    {
+        string info = mMonitorServer->GetMonitorData();
+        mNetMessage->PrepareToSend(info);
 
-    for (
-         TAddrMap::iterator iter = mClients.begin();
-         iter != mClients.end();
-         ++iter
-         )
+        for (
+            TAddrMap::iterator iter = mClients.begin();
+            iter != mClients.end();
+            ++iter
+            )
         {
             SendClientMessage((*iter).second,info);
         }
-
-    // reset the modified flag for the active scene
-    shared_ptr<SceneServer> sceneServer =
-        GetSimulationServer()->GetSceneServer();
-
-    if (sceneServer.get() !=0)
-        {
-            shared_ptr<Scene> scene = sceneServer->GetActiveScene();
-            if (scene.get() != 0)
-                {
-                    scene->SetModified(false);
-                }
-        }
+    }
 }
 
 void MonitorControl::StartCycle()
