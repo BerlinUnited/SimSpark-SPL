@@ -1,5 +1,25 @@
-2008-03-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+2008-04-01  Xu Yuan  <xuyuan.cn@gmail.com.cn>
+	* lib/oxygen/monitorserver/monitorserver.h:
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	- cache the current scene data (described string), then different
+	monitor can use it again (include external monitor andmonitor
+	logger)
 
+	* lib/oxygen/simulationserver/monitorcontrol.cpp:
+	- send the full state while active scene is modified
+
+	* lib/oxygen/simulationserver/monitorlogger.cpp:
+	- log the header information at the first cycle
+	- log the information while the	active scene is modified
+
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- move Step() calling (in singled-thread ) for making sure the
+	sense timing
+	- fix the rounding errors in time comparsion
+	- set the active sence's modified flag to false in Cycle()
+
+
+2008-03-31  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 	* plugin/objimporter/objimporter.cpp:
 	* plugin/objimporter/objimporter.h:
 	- Extended OBJ importer to handle material library files
