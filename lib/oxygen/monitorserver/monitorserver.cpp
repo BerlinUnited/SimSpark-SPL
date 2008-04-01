@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
+   $Id: monitorserver.cpp,v 1.10 2008/04/01 14:39:24 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 */
 
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/simulationserver/simulationserver.h>
 #include "monitorserver.h"
 #include "monitoritem.h"
 
@@ -34,6 +35,17 @@ MonitorServer::MonitorServer() : Node()
 
 MonitorServer::~MonitorServer()
 {
+}
+
+void MonitorServer::OnLink()
+{
+    RegisterCachedPath(mSimulationServer, "/sys/server/simulation");
+
+    if (mSimulationServer.expired())
+    {
+        GetLog()->Error()
+            << "(MonitorServer) ERROR: SimulationServer not found.\n";
+    }
 }
 
 bool
@@ -163,6 +175,11 @@ string MonitorServer::GetMonitorHeaderInfo()
 
 string MonitorServer::GetMonitorData()
 {
+    int cycle = mSimulationServer->GetCycle();
+    if ( cycle == mDataCycle ){
+        return mData;
+    }
+    
     shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
     if (monitorSystem.get() == 0)
@@ -172,7 +189,9 @@ string MonitorServer::GetMonitorData()
 
     PredicateList pList;
     CollectItemPredicates(false,pList);
-    return monitorSystem->GetMonitorInfo(pList);
+    mData = monitorSystem->GetMonitorInfo(pList);
+    mDataCycle = cycle;
+    return mData;
 }
 
 void MonitorServer::ParseMonitorMessage(const string& data)

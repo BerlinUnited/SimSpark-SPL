@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver.h,v 1.5 2008/02/22 07:52:15 hedayat Exp $
+   $Id: monitorserver.h,v 1.6 2008/04/01 14:39:24 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@
 
 namespace oxygen
 {
-
+class SimulationServer;
+    
 class MonitorServer : public zeitgeist::Node
 {
 public:
@@ -77,8 +78,17 @@ protected:
     /** collects a list of predicates from all registered MonitorItems */
     void CollectItemPredicates(bool initial, PredicateList& pList);
 
-
+    virtual void OnLink();
+    
 private:
+    /** a cached reference to the SimulationServer */
+    CachedPath<SimulationServer> mSimulationServer;
+
+    /** a cached data about current state */
+    std::string mData;
+
+    /** the cycle of cacahed data */
+    int mDataCycle;
 };
 
 DECLARE_CLASS(MonitorServer);
