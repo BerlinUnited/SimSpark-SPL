@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorlogger.cpp,v 1.2 2008/02/22 07:52:15 hedayat Exp $
+   $Id: monitorlogger.cpp,v 1.3 2008/04/01 14:25:03 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,34 +65,46 @@ void MonitorLogger::EndCycle()
     SimControlNode::EndCycle();
 
     const int cycle = GetSimulationServer()->GetCycle();
-    if (cycle % mMonitorLoggerInterval)
+    if ( cycle == 1 ){
+        string header = mMonitorServer->GetMonitorHeaderInfo();
+        logFile << header;
+        return;
+    }
+    
+    bool fullState = false;
+    shared_ptr<SceneServer> sceneServer =
+        GetSimulationServer()->GetSceneServer();
+    
+    if (sceneServer.get() ==0)
         {
+            GetLog()->Error()
+                << "(MonitorLogger) ERROR: SceneServer not found\n";
             return;
         }
 
-    if ( mMonitorServer.get() == 0 ) 
+    shared_ptr<Scene> scene = sceneServer->GetActiveScene();
+    if (scene.get() != 0)
+    {
+        if ( scene->GetModified() )
         {
-            return;
+            fullState = true;
         }
+    }
+
+    if ( !fullState && (cycle % mMonitorLoggerInterval) )
+    {
+        return;
+    }
+
+    if ( mMonitorServer.get() == 0 ) 
+    {
+        return;
+    }
 
     // log updates
     string info = mMonitorServer->GetMonitorData();
 
     logFile << info;
-
-    // reset the modified flag for the active scene
-    shared_ptr<SceneServer> sceneServer =
-        GetSimulationServer()->GetSceneServer();
-
-    if (sceneServer.get() !=0)
-        {
-            shared_ptr<Scene> scene = sceneServer->GetActiveScene();
-            if (scene.get() != 0)
-                {
-                    scene->SetModified(false);
-                }
-        }
-
 }
 
 int MonitorLogger::GetMonitorLoggerInterval()
