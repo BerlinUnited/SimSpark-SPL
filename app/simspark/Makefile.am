@@ -63,6 +63,12 @@ EXTRA_DIST = \
 	rsg/agent/soccerbotleftlowerarmcomp.rsg \
 	rsg/agent/soccerbotrightlowerarmcomp.rsg \
 	rsg/agent/soccerbottorsocomp.rsg \
+	rsg/boxspheres/box_with_handler055.rsg \
+	rsg/boxspheres/box_with_handler056.rsg \
+	rsg/boxspheres/ccylinder.rsg \
+	rsg/boxspheres/layer.rsg \
+	rsg/boxspheres/row.rsg \
+	rsg/boxspheres/staticbox.rsg \
 	rsg/agent/soccer.rsg \
 	rsg/agent/flag.rsg \
 	rsg/agent/flag_no_viz.rsg \

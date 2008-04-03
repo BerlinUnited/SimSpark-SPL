@@ -1,3 +1,8 @@
+2008-04-03  Xu Yuan  <xuyuan.cn@gmail.com.cn>
+
+	* app/simspark/Makefile.am:
+	- add missing rsg files
+
 2008-04-01  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
 	* utility/rcssnet/socket.cpp:
