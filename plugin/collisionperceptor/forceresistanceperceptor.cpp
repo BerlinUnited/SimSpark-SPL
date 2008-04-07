@@ -4,7 +4,7 @@
  Fri May 9 2003
  Copyright (C) 2002,2003 Koblenz University
  Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
- $Id: forceresistanceperceptor.cpp,v 1.6 2008/03/08 17:48:38 hedayat Exp $
+ $Id: forceresistanceperceptor.cpp,v 1.7 2008/04/07 21:37:44 hedayat Exp $
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -84,6 +84,9 @@ bool ForceResistancePerceptor::Percept(
                     * forcevalue;
             sumLength += forcevalue;
         }
+
+    if (sumLength == 0)
+        return false;
 
     Matrix invRot = mBody->GetLocalTransform();
     invRot.InvertRotationMatrix();

@@ -1,9 +1,22 @@
+2008-04-08  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::SimControlThread):
+	- added the fix for rounding errors in time comparsion here too.
+
+	* plugin/collisionperceptor/forceresistanceperceptor.cpp
+	 (ForceResistancePerceptor::Percept):
+	- added testing to see if force is not zero.
+
+	* app/simspark/Makefile.am:
+	- added materials to the list of directories to be copied to installation
+	  path
+
 2008-04-07  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* /app/simspark/Makefile.am:
 	- add nao/*.rsg
 	- It is a new model!
 	  Nao robot is used for "Standard Platform" which is a brand new
-	  league for this year. 
+	  league for this year.
 	  See:
 	  http://www.aldebaran-robotics.com/eng/index.php
 	  http://www.robocup-cn.org/en/league_sub.php?subleague=2-Legged%20Robot
@@ -14,12 +27,12 @@
 	* /lib/oxygen/physicsserver/joint.h:
 	* /lib/oxygen/physicsserver/joint.cpp:
 	* /lib/oxygen/physicsserver/joint_c.cpp:
-	- add function: SetFudgeFactor()       
-	- add function: GetFudgeFactor()       
+	- add function: SetFudgeFactor()
+	- add function: GetFudgeFactor()
 
 	* /lib/oxygen/physicsserver/hingejoint_c.cpp:
-	- modified FUNCTION(HingeJoint,setAxis) 
-	- can accept 3 parameters now. 
+	- modified FUNCTION(HingeJoint,setAxis)
+	- can accept 3 parameters now.
 
 2008-04-03  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
@@ -60,32 +73,32 @@
 	  the OBJ meshes, care should be taken to rotate them correctly
 	  since the Blender coordinate system is different from SimSpark's
 	  (e.g. SetLocalRotation 90 180 0, see soccerbottorsocomp.rsg).
-	  Another important point when exporting a mesh from Blender is that 
-	  normals have to be exported, and the mesh should be triangulated. 
+	  Another important point when exporting a mesh from Blender is that
+	  normals have to be exported, and the mesh should be triangulated.
 	  Everything else can be left as default values in the OBJ exporter
 	  of Blender (I'll try to do a tutorial in the Wiki soon).
 
 	* app/simspark/rsg/agent/soccerbottorsocomp.rsg:
 	- rotate the torso mesh so that the unum is on the back
 
-	* app/simspark/textures/rcs-torso-01.png: 
-	* app/simspark/textures/rcs-torso-02.png: 
-	* app/simspark/textures/rcs-torso-03.png: 
-	* app/simspark/textures/rcs-torso-04.png: 
-	* app/simspark/textures/rcs-torso-05.png: 
-	* app/simspark/textures/rcs-torso-06.png: 
-	* app/simspark/textures/rcs-torso-07.png: 
-	* app/simspark/textures/rcs-torso-08.png: 
-	* app/simspark/textures/rcs-torso-09.png: 
-	* app/simspark/textures/rcs-torso-10.png: 
-	* app/simspark/textures/rcs-torso-11.png: 
+	* app/simspark/textures/rcs-torso-01.png:
+	* app/simspark/textures/rcs-torso-02.png:
+	* app/simspark/textures/rcs-torso-03.png:
+	* app/simspark/textures/rcs-torso-04.png:
+	* app/simspark/textures/rcs-torso-05.png:
+	* app/simspark/textures/rcs-torso-06.png:
+	* app/simspark/textures/rcs-torso-07.png:
+	* app/simspark/textures/rcs-torso-08.png:
+	* app/simspark/textures/rcs-torso-09.png:
+	* app/simspark/textures/rcs-torso-10.png:
+	* app/simspark/textures/rcs-torso-11.png:
 	- updated textures (corresponsing to the updated torso model)
 
 	* app/simspark/textures/rcs-soccerball.png:
 	- added PNG texture for the soccerball
 
-	* app/simspark/materials/soccerball.mtl: 
-	* app/simspark/materials/soccerbottorso.mtl: 
+	* app/simspark/materials/soccerball.mtl:
+	* app/simspark/materials/soccerbottorso.mtl:
 	- added material definitions exported by Blender
 
 	* app/simspark/models/soccerbottorso.obj:
@@ -95,7 +108,7 @@
 	- updated model and material lib
 
 	* app/agentspark/main.cpp:
-	- added conditional includes for the network stuff	
+	- added conditional includes for the network stuff
 
 2008-03-28  Hedayat Vatankhah  <hedayat@grad.com>
 
