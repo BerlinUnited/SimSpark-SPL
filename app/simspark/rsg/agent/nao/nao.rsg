@@ -1,0 +1,120 @@
+; -*- mode: lisp; -*-
+
+;
+; nao robot description file.
+;
+
+(RSG 0 1)
+(
+
+;
+; The torso parameters
+;
+
+(def $TorsoLength  0.1)
+(def $TorsoWidth   0.1)
+(def $TorsoHeight  0.18)
+(def $TorsoMass    1.2)
+
+(def $TorsoInitX   0)
+(def $TorsoInitY   2)
+(def $TorsoInitZ   1)
+
+
+;
+;Begin Construct of Nao
+;
+(nd Space
+    (setName spaceman)
+    
+    ;
+    ;The torso part
+    ;
+    (nd AgentAspect
+        (setName body)
+        (setLocalPos $TorsoInitX $TorsoInitY $TorsoInitZ)
+        
+        (importScene rsg/agent/nao/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
+        (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
+    
+        ;
+        ;Install Effector
+        ;
+        ;(nd SingleMatInitEffector)
+        (nd BeamEffector)
+        (nd SayEffector)
+        
+        ;
+        ;Install Perceptor
+        ;
+        (nd TimePerceptor)
+        
+        (nd AgentState
+            (setName AgentState)
+            (nd GameStatePerceptor)
+            (nd HearPerceptor)
+        )
+        
+        (nd GyroRatePerceptor (setName torso))
+
+    );end of AgentAspect
+    
+    
+    ;
+    ;The neck and head part
+    ;
+    (importScene rsg/agent/nao/naoneckhead.rsg $TorsoInitX $TorsoInitY $TorsoInitZ)
+    
+
+    ;
+    ;The Right Arm
+    ;
+    (importScene rsg/agent/nao/naoarm.rsg
+              1 
+              $TorsoInitX $TorsoInitY $TorsoInitZ
+              raj1 rae1
+              raj2 rae2
+              raj3 rae3
+              raj4 rae4)
+
+    ;
+    ;The Left Arm
+    ;
+    (importScene rsg/agent/nao/naoarm.rsg
+              -1 
+              $TorsoInitX $TorsoInitY $TorsoInitZ
+              laj1 lae1
+              laj2 lae2
+              laj3 lae3
+              laj4 lae4)
+    
+    ;
+    ;The Right Leg
+    ;
+    (importScene rsg/agent/nao/naoleg.rsg
+              1
+              $TorsoInitX $TorsoInitY $TorsoInitZ
+              llj1 lle1
+              llj2 lle2
+              llj3 lle3
+              llj4 lle4
+              llj5 lle5
+              llj6 lle6)
+              
+    
+    ;
+    ;
+    ;The Left Leg
+    (importScene rsg/agent/nao/naoleg.rsg
+              -1
+              $TorsoInitX $TorsoInitY $TorsoInitZ
+              rlj1 rle1
+              rlj2 rle2
+              rlj3 rle3
+              rlj4 rle4
+              rlj5 rle5
+              rlj6 rle6)
+    
+);end of nd Space
+
+);end of RSG 0 1

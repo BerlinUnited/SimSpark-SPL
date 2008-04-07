@@ -1,0 +1,42 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+    (templ  $PerName     $EffName   
+            $Path_Child  $Path_Parent
+            $Anchor_X    $Anchor_Y   $Anchor_Z
+            $Axis_X      $Axis_Y     $Axis_Z
+            $Min         $Max
+    )
+
+    (def $PI 3.14159265)
+    (def $MinDeg (eval $Min * (eval 180.0 / $PI)))
+    (def $MaxDeg (eval $Max * (eval 180.0 / $PI)))
+    
+    ;
+    ;Hinge Joint Parameters
+    ;
+    (def $FMax          10)
+    (def $CFM           1e-8)
+    (def $Stop_CFM      1e-8)
+    (def $Stop_ERP      0.1)
+    (def $FudgeFactor   1e-8)
+    (def $Bounce        1e-3)
+    
+    (nd HingeJoint
+            (attach             $Path_Child  $Path_Parent)
+            (setAnchor          $Anchor_X    $Anchor_Y  $Anchor_Z)
+            (setAxis            $Axis_X) ;Currenly, just use the first as the axis, 0:X, 1:Y, 2:Z
+            (setMaxMotorForce   0  $FMax)
+            (setCFM             0  $CFM)
+            (setStopCFM         0  $Stop_CFM)
+            (setStopERP         0  $Stop_ERP)
+            (setFudgeFactor     0  $FudgeFactor)
+            (setBounce          0  $Bounce)
+            (setLowStopDeg      0  $MinDeg)
+            (setHighStopDeg     0  $MaxDeg)
+            
+            (nd HingePerceptor (setName $PerName))
+            (nd HingeEffector  (setName $EffName))
+     )
+)

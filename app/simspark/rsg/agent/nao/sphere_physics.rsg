@@ -1,0 +1,32 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+    (templ $radius $totalMass)
+
+    (nd Body
+        (setName sphereBody)
+        (setSphereTotal $totalMass $radius)
+        (nd DragController
+            (setAngularDrag 0.01)
+            (setLinearDrag 0.01)
+        )
+    )
+
+    (nd SphereCollider
+        (setRadius $radius)
+
+        (nd ContactJointHandler
+            (setContactBounceMode false)
+
+            (setContactSlipMode true)
+            (setContactSlip 0.1 0.1)
+
+            (setContactSoftERPMode true)
+            (setContactSoftERP 0.2)
+
+            (setContactSoftCFMMode false)
+            (setContactSoftCFM 0.01)
+        )
+    )
+ )
