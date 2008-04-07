@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint_c.cpp,v 1.5 2004/05/02 11:44:41 rollmark Exp $
+   $Id: joint_c.cpp,v 1.6 2008/04/07 09:33:11 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -186,6 +186,34 @@ FUNCTION(Joint,getHighStopPos)
     }
 
     return obj->GetHighStopPos(static_cast<Joint::EAxisIndex>(inAxis));
+}
+
+FUNCTION(Joint, setFudgeFactor)
+{
+    int in_axis;
+    float fudge_factor;
+   
+    if (in.GetSize() != 2 ||
+        ! in.GetValue(in[0], in_axis) ||
+        ! in.GetValue(in[1], fudge_factor))
+    {
+        return false;
+    }
+    
+    obj->SetFudgeFactor(static_cast<Joint::EAxisIndex>(in_axis), fudge_factor);
+    return true; 
+}
+
+FUNCTION(Joint, getFudgeFactor)
+{
+    int in_axis;
+    if (in.GetSize() != 1 ||
+        ! in.GetValue(in[0], in_axis))
+    {
+        return false;
+    }
+
+    return obj->GetFudgeFactor(static_cast<Joint::EAxisIndex>(in_axis));
 }
 
 FUNCTION(Joint,setBounce)
@@ -492,6 +520,8 @@ void CLASS(Joint)::DefineClass()
     DEFINE_FUNCTION(getHighStopPos);
     DEFINE_FUNCTION(setLowStopPos);
     DEFINE_FUNCTION(getLowStopPos);
+    DEFINE_FUNCTION(setFudgeFactor);
+    DEFINE_FUNCTION(getFudgeFactor);
     DEFINE_FUNCTION(getBounce);
     DEFINE_FUNCTION(setBounce);
     DEFINE_FUNCTION(getCFM);

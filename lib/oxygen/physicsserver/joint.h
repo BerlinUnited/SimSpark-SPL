@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.9 2008/02/22 07:52:15 hedayat Exp $
+   $Id: joint.h,v 1.10 2008/04/07 09:33:11 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -134,6 +134,15 @@ public:
         to it during the last timestep.
     */
     salt::Vector3f GetFeedbackTorque(EBodyIndex idx) const;
+
+    /** sets the fudgefactor parameter, making this value too small can
+        prevent the motor from being able to move the joint away from 
+        a stop 
+    */
+    void SetFudgeFactor(EAxisIndex idx, float fudge_factor); 
+
+    /** returns the fudgefactor paramter */
+    float GetFudgeFactor(EAxisIndex idx) const;
 
     /** sets the bouncyness of the stops. This is a restitution
         parameter in the range 0..1. 0 means the stops are not bouncy

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: hingejoint_c.cpp,v 1.4 2005/12/31 13:53:56 jboedeck Exp $
+   $Id: hingejoint_c.cpp,v 1.5 2008/04/07 09:33:11 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,20 +54,39 @@ FUNCTION(HingeJoint,getAngleRate)
 
 FUNCTION(HingeJoint,setAxis)
 {
-    // 0 = x-axis, 1 = y-axis, 2 = z-axis
-    int inAxis;
+    if (in.GetSize() == 1)
+    {
+        // 0 = x-axis, 1 = y-axis, 2 = z-axis
+        int inAxis;
 
-    // test if we got a parameter and get the value
-    if (
-        (in.GetSize() == 0) ||
-        (! in.GetValue(in.begin(), inAxis))
-        )
+        // test if we got a parameter and get the value
+        if (
+            /*(in.GetSize() == 0) ||*/
+            (! in.GetValue(in.begin(), inAxis))
+            )
+            {
+                return false;
+            }
+
+        obj->SetAxis(static_cast<Joint::EAxisIndex>(inAxis));
+    	
+        return true;
+    }
+    else if (in.GetSize() == 3)
+    {
+        Vector3f axis;
+        if (! in.GetValue(in[0], axis.x()) ||
+            ! in.GetValue(in[1], axis.y()) ||
+            ! in.GetValue(in[2], axis.z()))
         {
             return false;
         }
-
-    obj->SetAxis(static_cast<Joint::EAxisIndex>(inAxis));
-    return true;
+        
+        obj->SetAxis(axis);      
+ 
+        return true;
+    }
+    else return false;
 }
 
 void CLASS(HingeJoint)::DefineClass()

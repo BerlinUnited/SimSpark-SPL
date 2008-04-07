@@ -122,7 +122,17 @@ EXTRA_DIST = \
 	textures/rcs-unum08.png\
 	textures/rcs-unum09.png\
 	textures/rcs-unum10.png\
-	textures/rcs-unum11.png
-
+	textures/rcs-unum11.png\
+	rsg/agent/nao/box_appearance.rsg\
+	rsg/agent/nao/box_physics.rsg\
+	rsg/agent/nao/ccylinder_appearance.rsg\
+	rsg/agent/nao/ccylinder_physics.rsg\
+	rsg/agent/nao/hingejoint.rsg\
+	rsg/agent/nao/nao.rsg\
+	rsg/agent/nao/naoarm.rsg\
+	rsg/agent/nao/naoleg.rsg\
+	rsg/agent/nao/naoneckhead.rsg\
+	rsg/agent/nao/sphere_appearance.rsg\
+	rsg/agent/nao/sphere_physics.rsg
 
 

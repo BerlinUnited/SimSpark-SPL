@@ -1,3 +1,26 @@
+2008-04-07  Feng Xue  <henry519@mail.ustc.edu.cn>
+	* /app/simspark/Makefile.am:
+	- add nao/*.rsg
+	- It is a new model!
+	  Nao robot is used for "Standard Platform" which is a brand new
+	  league for this year. 
+	  See:
+	  http://www.aldebaran-robotics.com/eng/index.php
+	  http://www.robocup-cn.org/en/league_sub.php?subleague=2-Legged%20Robot
+
+	* /app/simspark/rsg/agent:
+	- add nao directory and rsg files, the detail rsg files, draft only :-)
+
+	* /lib/oxygen/physicsserver/joint.h:
+	* /lib/oxygen/physicsserver/joint.cpp:
+	* /lib/oxygen/physicsserver/joint_c.cpp:
+	- add function: SetFudgeFactor()       
+	- add function: GetFudgeFactor()       
+
+	* /lib/oxygen/physicsserver/hingejoint_c.cpp:
+	- modified FUNCTION(HingeJoint,setAxis) 
+	- can accept 3 parameters now. 
+
 2008-04-03  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
 	* app/simspark/Makefile.am:

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.8 2008/02/22 07:52:15 hedayat Exp $
+   $Id: joint.cpp,v 1.9 2008/04/07 09:33:11 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -286,6 +286,17 @@ Vector3f Joint::GetFeedbackTorque(EBodyIndex idx) const
             return Vector3f(0,0,0);
         }
 }
+    
+void Joint::SetFudgeFactor(EAxisIndex idx, float fudge_factor)
+{
+    SetParameter(dParamFudgeFactor + (idx * dParamGroup), fudge_factor);
+}
+
+float Joint::GetFudgeFactor(EAxisIndex idx) const
+{
+    return GetParameter(dParamFudgeFactor + (idx * dParamGroup));
+}
+
 
 void Joint::SetBounce(EAxisIndex idx, float bounce)
 {
