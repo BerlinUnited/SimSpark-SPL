@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: forceresistanceperceptor.h,v 1.5 2008/03/08 17:48:38 hedayat Exp $
+   $Id: forceresistanceperceptor.h,v 1.6 2008/04/08 19:57:46 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ protected:
     typedef std::list<std::pair<dContactGeom, dJointFeedback> > TContactList;
 
 public:
+    ForceResistancePerceptor();
+
     /** adds new contact information and allocates memory for storing its
      * feedback information.
      * \return the address of allocated memory
@@ -59,6 +61,12 @@ protected:
 
     //! reference to the parent Transform node
     boost::shared_ptr<oxygen::Transform> mBody;
+
+    //! last calculated force vector (to be used when body is disabled)
+    salt::Vector3f mLastForce;
+
+    //! last calculated center (to be used when body is disabled)
+    salt::Vector3f mLastCenter;
 };
 
 DECLARE_CLASS(ForceResistancePerceptor);

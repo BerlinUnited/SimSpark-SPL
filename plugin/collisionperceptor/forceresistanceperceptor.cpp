@@ -4,7 +4,7 @@
  Fri May 9 2003
  Copyright (C) 2002,2003 Koblenz University
  Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
- $Id: forceresistanceperceptor.cpp,v 1.8 2008/04/08 07:28:48 yxu Exp $
+ $Id: forceresistanceperceptor.cpp,v 1.9 2008/04/08 19:57:46 hedayat Exp $
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,11 @@ using namespace boost;
 using namespace salt;
 using namespace oxygen;
 using namespace zeitgeist;
+
+ForceResistancePerceptor::ForceResistancePerceptor() :
+    mLastForce(0, 0, 0), mLastCenter(0, 0, 0)
+{
+}
 
 void ForceResistancePerceptor::OnLink()
 {
@@ -58,6 +63,8 @@ bool ForceResistancePerceptor::Percept(
 {
     if (mContactList.empty())
     {
+        mLastForce.Zero();
+        mLastCenter.Zero();
         return false;
     }
 
@@ -77,8 +84,13 @@ bool ForceResistancePerceptor::Percept(
             sumLength += forcevalue;
         }
 
-    if (sumLength == 0)
-        return false;
+    if (sumLength != 0) // sumLength will be zero when the body is disabled
+        {
+            Matrix invRot = mBody->GetLocalTransform();
+            invRot.InvertRotationMatrix();
+            mLastCenter = invRot * (center / sumLength);
+            mLastForce = invRot.Rotate(force);
+        }
 
     Predicate& predicate = predList->AddPredicate();
     predicate.name = "FRP";
@@ -88,22 +100,17 @@ bool ForceResistancePerceptor::Percept(
     nameElement.AddValue(std::string("n"));
     nameElement.AddValue(GetName());
 
-    Matrix invRot = mBody->GetLocalTransform();
-    invRot.InvertRotationMatrix();
-    center = invRot * (center / sumLength);
-    force = invRot.Rotate(force);
-
     ParameterList& posElement = predicate.parameter.AddList();
     posElement.AddValue(std::string("c"));
-    posElement.AddValue(center.x());
-    posElement.AddValue(center.y());
-    posElement.AddValue(center.z());
+    posElement.AddValue(mLastCenter.x());
+    posElement.AddValue(mLastCenter.y());
+    posElement.AddValue(mLastCenter.z());
 
     ParameterList& forceElement = predicate.parameter.AddList();
     forceElement.AddValue(std::string("f"));
-    forceElement.AddValue(force.x());
-    forceElement.AddValue(force.y());
-    forceElement.AddValue(force.z());
+    forceElement.AddValue(mLastForce.x());
+    forceElement.AddValue(mLastForce.y());
+    forceElement.AddValue(mLastForce.z());
 
     return true;
 }

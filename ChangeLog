@@ -1,10 +1,19 @@
+2008-04-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/collisionperceptor/forceresistanceperceptor.h:
+	* plugin/collisionperceptor/forceresistanceperceptor.cpp
+	 (ForceResistancePerceptor::Percept):
+	- added storing the last calculated force and center values since ODE sets
+	  them to zero when a contacting body is disabled. FRP reports the last
+	  calculated values in such situations now.
+
 2008-04-08  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* app/simspark/Makefile.am:
 	- add universaljoint.rsg
 
 	* app/simspark/rsg/agent/*.rsg:
 	- fixed some bugs
-	- merge leg joint1 and joint2 to joint1_2 via universal joint 
+	- merge leg joint1 and joint2 to joint1_2 via universal joint
 
 2008-04-08  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
