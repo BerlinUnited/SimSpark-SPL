@@ -1,5 +1,8 @@
 2008-04-08  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
+	* plugin/collisionperceptor/forceresistanceperceptor.cpp:
+	- do not send anything when the force is zero
+
 	* lib/oxygen/simulationserver/simulationserver.cpp:
 	* lib/oxygen/simulationserver/simcontrolnode.h:
 	* lib/oxygen/simulationserver/simcontrolnode.cpp:
