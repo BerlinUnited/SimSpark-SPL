@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.h,v 1.8 2008/03/08 17:48:38 hedayat Exp $
+   $Id: simulationserver.h,v 1.9 2008/04/08 06:55:09 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -164,8 +164,6 @@ protected:
 
     /** SIGINT handler used to catch ctrl-C */
     static void CatchSignal(int sig_num);
-
-    void Loops();
 
     /** the multi-threaded runloop of the simulation */
     void RunMultiThreaded();

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: inputcontrol.h,v 1.5 2008/02/22 16:48:19 hedayat Exp $
+   $Id: inputcontrol.h,v 1.6 2008/04/08 06:55:09 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -110,10 +110,6 @@ public:
         adds it as a child node below this control node
      */
     bool RegisterInputItem(const std::string& inputItem, const std::string& name);
-
-    virtual void Run();
-
-    virtual void Wait(boost::mutex::scoped_lock& lock);
 
 protected:
     virtual void OnLink();

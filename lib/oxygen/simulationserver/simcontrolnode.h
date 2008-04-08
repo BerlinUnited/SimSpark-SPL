@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.h,v 1.4 2008/03/17 19:25:04 rollmark Exp $
+   $Id: simcontrolnode.h,v 1.5 2008/04/08 06:55:09 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,20 +65,12 @@ public:
     /** called when the current simulation cycle ends */
     virtual void EndCycle() {};
     
-    virtual void Run();
-    
-    boost::mutex mMutex;
-    
     float GetTime() const { return mTime; }
     
     void SetStep(float step) { mStep = step; }
     void SetTime(float time) { mTime = time; }
 
     void SetSimTime(float now);
-
-    virtual void Wait(boost::mutex::scoped_lock& lock);
-    
-    void NotifyOne() { mCond.notify_one(); }
 
 protected:
     /** returns a reference to the SimulationServer */

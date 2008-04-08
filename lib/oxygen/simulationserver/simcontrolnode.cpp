@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.cpp,v 1.6 2008/03/27 19:54:57 rollmark Exp $
+   $Id: simcontrolnode.cpp,v 1.7 2008/04/08 06:55:09 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,38 +41,6 @@ shared_ptr<SimulationServer> SimControlNode::GetSimulationServer()
 {
     return shared_static_cast<SimulationServer>
         (make_shared(GetParent()));
-}
-
-void SimControlNode::Run()
-{
-    boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
-
-    while ( !ss->WantsToQuit() )
-    {
-        boost::mutex::scoped_lock lock(mMutex);
-        while( !ss->WantsToQuit() && int(ss->GetTime()*100) < int(mTime*100) )
-        {
-            //std::cout<<GetName()<<' '<<__FUNCTION__<<" wait "<<ss->GetTime()<<' '<<mTime<<std::endl;
-            mCond.wait(lock);
-        }
-        //std::cout<<GetName()<<' '<<__FUNCTION__<<std::endl;
-        StartCycle();
-        SenseAgent();
-        ActAgent();
-        EndCycle();
-        SetSimTime( ss->GetTime() );
-        mCond.notify_one();
-    }
-}
-
-void SimControlNode::Wait(boost::mutex::scoped_lock& lock)
-{
-    boost::shared_ptr<SimulationServer> ss = GetSimulationServer();
-    while ( !ss->WantsToQuit() && int(ss->GetTime()*100) >= int(GetTime()*100) )
-    {
-        //std::cout<<GetName()<<' '<<__FUNCTION__<<' '<<GetTime()<<std::endl;
-        mCond.wait(lock);
-    }
 }
 
 void SimControlNode::SetSimTime( float now )

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.20 2008/04/07 21:37:44 hedayat Exp $
+   $Id: simulationserver.cpp,v 1.21 2008/04/08 06:55:09 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -240,7 +240,6 @@ void SimulationServer::Step()
 
 void SimulationServer::ControlEvent(EControlEvent event)
 {
-    int time = int(mSimTime*100);
     for (
          TLeafList::iterator iter=begin();
          iter != end();
@@ -255,7 +254,7 @@ void SimulationServer::ControlEvent(EControlEvent event)
                     continue;
                 }
 
-            if ( int(ctrNode->GetTime()*100) - time > 5 ) continue;
+            if ( ctrNode->GetTime() - mSimTime > 0.005f ) continue;
 
             switch (event)
                 {
@@ -396,62 +395,6 @@ shared_ptr<SceneServer> SimulationServer::GetSceneServer()
     return mSceneServer.get();
 }
 
-void SimulationServer::Loops()
-{
-    if (
-        (mSceneServer.get() == 0) ||
-        (mGameControlServer.get() == 0)
-        )
-        {
-            return;
-        }
-
-    bool isStep = false;
-    while (! mExit)
-        {
-            if( isStep)
-                {
-                    mSceneServer->PhysicsUpdate(mSimStep);
-                }
-
-            // lock all SimControlNode threads
-            vector< boost::shared_ptr<boost::mutex::scoped_lock> > locks;
-            for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
-                {
-                    shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
-                    if (ctrNode.get() == 0) continue;
-                    boost::shared_ptr<boost::mutex::scoped_lock> lp(new boost::mutex::scoped_lock(ctrNode->mMutex));
-                    locks.push_back(lp);
-                    ctrNode->Wait(*lp);
-                }
-
-            ++mCycle;
-
-            if ( isStep )
-                {
-                    mSceneServer->PostPhysicsUpdate();
-                    mGameControlServer->Update(mSimStep);
-                    mSumDeltaTime -= mSimStep;
-                    mSimTime += mSimStep;
-                    isStep = false;
-                }
-
-            if( int(mSumDeltaTime*100) >= int(mSimStep*100) )
-                {
-                    mSceneServer->PrePhysicsUpdate(mSimStep);
-                    isStep = true;
-                }
-
-            // notify all SimControlNode threads
-            for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
-                {
-                    shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
-                    if (ctrNode.get() == 0) continue;
-                    ctrNode->NotifyOne();
-                }
-        }
-}
-
 void SimulationServer::RunMultiThreaded()
 {
     if (mSimStep == 0)
@@ -477,11 +420,10 @@ void SimulationServer::RunMultiThreaded()
         {
             shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
             if (ctrNode.get() == 0) continue;
-//            ctrThrdGroup.create_thread(boost::bind(&SimControlNode::Run, ctrNode.get()));
+
             ctrThrdGroup.create_thread(boost::bind(&SimulationServer::SimControlThread,
                                                    this, ctrNode));
         }
-    // Loops();
 
     shared_ptr<SimControlNode> renderControl = GetControlNode("RenderControl");
 
@@ -513,7 +455,7 @@ void SimulationServer::RunMultiThreaded()
             mGameControlServer->Update(finalStep);
             mSimTime += finalStep;
             if (renderControl
-                && int(renderControl->GetTime()*100) < int(mSimTime*100))
+                && renderControl->GetTime() - mSimTime < 0.005f )
                 renderControl->EndCycle();
             mThreadBarrier->wait();
         }
@@ -541,8 +483,9 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
             // wait for PrePhysicsUpdate()
             mThreadBarrier->wait();
             newCycle = false;
-            if (int(controlNode->GetTime()*100) <= int(mSimTime*100) + 5)
+            if ( controlNode->GetTime() - mSimTime <= 0.005f )
                 {
+                    cout<<controlNode->GetName()<<mSimTime<<endl;
                     newCycle = true;
                     controlNode->StartCycle();
                     controlNode->SenseAgent();
