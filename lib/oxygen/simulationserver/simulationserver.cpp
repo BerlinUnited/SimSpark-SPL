@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.21 2008/04/08 06:55:09 yxu Exp $
+   $Id: simulationserver.cpp,v 1.22 2008/04/08 07:04:38 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -485,7 +485,6 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
             newCycle = false;
             if ( controlNode->GetTime() - mSimTime <= 0.005f )
                 {
-                    cout<<controlNode->GetName()<<mSimTime<<endl;
                     newCycle = true;
                     controlNode->StartCycle();
                     controlNode->SenseAgent();
