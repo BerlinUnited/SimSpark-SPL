@@ -1,3 +1,13 @@
+2008-04-08  Xu Yuan  <xuyuan.cn@gmail.com.cn>
+
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	* lib/oxygen/simulationserver/simcontrolnode.h:
+	* lib/oxygen/simulationserver/simcontrolnode.cpp:
+	* lib/kerosin/inputserver/inputcontrol.h:
+	* lib/kerosin/inputserver/inputcontrol.cpp:
+	- remove old multi-threaded code
+	- fix bug in fixing for rounding errors in time comparsion
+
 2008-04-08  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::SimControlThread):
