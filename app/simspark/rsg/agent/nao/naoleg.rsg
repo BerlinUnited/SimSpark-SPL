@@ -8,8 +8,7 @@
     ;    
     (templ  $LRFactor 
             $Torso_X $Torso_Y $Torso_Z
-            $Joint1PerName $Joint1EffName
-            $Joint2PerName $Joint2EffName
+            $Joint1_2PerName $Joint1_2EffName
             $Joint3PerName $Joint3EffName
             $Joint4PerName $Joint4EffName
             $Joint5PerName $Joint5EffName
@@ -20,17 +19,13 @@
     ;
     ;Position Parameters
     ;
-    (def $Hip1RelTorso_X (eval $LRFactor * -0.055))
-    (def $Hip1RelTorso_Y -0.01)
-    (def $Hip1RelTorso_Z -0.115)
+    (def $HipRelTorso_X (eval $LRFactor * 0.055))
+    (def $HipRelTorso_Y -0.01)
+    (def $HipRelTorso_Z -0.115)
     
-    (def $Hip2RelHip1_X 0)
-    (def $Hip2RelHip1_Y 0)
-    (def $Hip2RelHip1_Z 0)
-    
-    (def $ThighRelHip2_X 0)
-    (def $ThighRelHip2_Y 0.01)
-    (def $ThighRelHip2_Z -0.04)
+    (def $ThighRelHip_X 0)
+    (def $ThighRelHip_Y 0.01)
+    (def $ThighRelHip_Z -0.04)
     
     (def $ShankRelThigh_X 0)
     (def $ShankRelThigh_Y 0.005)
@@ -41,20 +36,16 @@
     (def $AnkleRelShank_Z -0.055)
     
     (def $FootRelAnkle_X 0)
-    (def $FootRelAnkle_Y 0)
-    (def $FootRelAnkle_Z 0)
+    (def $FootRelAnkle_Y 0.03)
+    (def $FootRelAnkle_Z -0.035)
     
-    (def $Hip1_X (eval $Torso_X + $Hip1RelTorso_X))
-    (def $Hip1_Y (eval $Torso_Y + $Hip1RelTorso_Y))
-    (def $Hip1_Z (eval $Torso_Z + $Hip1RelTorso_Z))
+    (def $Hip_X (eval $Torso_X + $HipRelTorso_X))
+    (def $Hip_Y (eval $Torso_Y + $HipRelTorso_Y))
+    (def $Hip_Z (eval $Torso_Z + $HipRelTorso_Z))
     
-    (def $Hip2_X (eval $Hip1_X + $Hip2RelHip1_X))
-    (def $Hip2_Y (eval $Hip1_Y + $Hip2RelHip1_Y))
-    (def $Hip2_Z (eval $Hip1_Z + $Hip2RelHip1_Z))
-    
-    (def $Thigh_X (eval $Hip2_X + $ThighRelHip2_X))
-    (def $Thigh_Y (eval $Hip2_Y + $ThighRelHip2_Y))
-    (def $Thigh_Z (eval $Hip2_Z + $ThighRelHip2_Z))
+    (def $Thigh_X (eval $Hip_X + $ThighRelHip_X))
+    (def $Thigh_Y (eval $Hip_Y + $ThighRelHip_Y))
+    (def $Thigh_Z (eval $Hip_Z + $ThighRelHip_Z))
     
     (def $Shank_X (eval $Thigh_X + $ShankRelThigh_X))
     (def $Shank_Y (eval $Thigh_Y + $ShankRelThigh_Y))
@@ -71,11 +62,8 @@
     ;
     ;Size and Mass Parameters
     ;
-    (def $Hip1Radius 0.01)
-    (def $Hip1Mass   0.09)
-    
-    (def $Hip2Radius 0.01)
-    (def $Hip2Mass   0.125)
+    (def $HipRadius 0.01)
+    (def $HipMass   0.215)
     
     (def $ThighSizeX 0.07)
     (def $ThighSizeY 0.07)
@@ -99,11 +87,11 @@
     ;
     ;Joint Parameters
     ;
-    (def $lj1_min       -1.5708)
-    (def $lj1_max       0.1745)
+    (def $lj1_2_min0    -1.5708)
+    (def $lj1_2_max0    0.1745)
     
-    (def $lj2_min       -0.4363)
-    (def $lj2_max       1.5708)
+    (def $lj1_2_min1    -0.4363)
+    (def $lj1_2_max1    1.5708)
     
     (def $right_lj3_min -0.7845)
     (def $left_lj3_min  -0.3491)
@@ -135,68 +123,52 @@
     (def $lj6_max_c2    (eval (eval $right_lj6_max - $left_lj6_max) * 0.5))
     (def $lj6_max       (eval $lj6_max_c1 + (eval $LRFactor * $lj6_max_c2)))
     
-    (def $lj1_axis_x     -0.7071)
-    (def $lj1_axis_y    (eval $LRFactor * 0.7071))
-    (def $lj1_axis_z    0)
+    ;(def $lj1_2_axis0_x   -0.7071)
+    ;(def $lj1_2_axis0_y   (eval $LRFactor * 0.7071))
+    ;(def $lj1_2_axis0_z   0)
 
-    (def $lj3_Anchor_X  (eval -1 * $ThighRelHip2_X))
-    (def $lj3_Anchor_Y  (eval -1 * $ThighRelHip2_Y))
-    (def $lj3_Anchor_Z  (eval -1 * $ThighRelHip2_Z))
+    (def $lj3_Anchor_X  (eval -1 * $ThighRelHip_X))
+    (def $lj3_Anchor_Y  (eval -1 * $ThighRelHip_Y))
+    (def $lj3_Anchor_Z  (eval -1 * $ThighRelHip_Z))
     
     ;
-    ;Construct Hip1
+    ;Construct Hip
     ;
     (nd Transform
-        (setName hip1)
-        (setLocalPos $Hip1_X $Hip1_Y $Hip1_Z)
+        (setName hip)
+        (setLocalPos $Hip_X $Hip_Y $Hip_Z)
 
-        (importScene rsg/agent/nao/sphere_appearance.rsg $Hip1Radius matYellow)
-        (importScene rsg/agent/nao/sphere_physics.rsg    $Hip1Radius $Hip1Mass)
+        (importScene rsg/agent/nao/sphere_appearance.rsg $HipRadius matYellow)
+        (importScene rsg/agent/nao/sphere_physics.rsg    $HipRadius $HipMass)
         
-        (importScene rsg/agent/nao/hingejoint.rsg
-                              $Joint1PerName $Joint1EffName
-                              ../sphereBody ../../body/boxBody 
-                              0 0 0
-                              $lj1_axis_x $lj1_axis_y $lj1_axis_z 
-                              $lj1_min $lj1_max)
+        (importScene rsg/agent/nao/universaljoint.rsg
+                              $Joint1_2PerName $Joint1_2EffName
+                              ../../body/boxBody ../sphereBody 
+                              0 0 0  ;anchor
+                              0 0 1  ;axis1
+                              1 0 0  ;axis2
+                              $lj1_2_min0 $lj1_2_max0 
+                              $lj1_2_min1 $lj1_2_max1)
     )
     
+     
     ;
-    ;Construct Hip2
+    ;Construct Thigh
     ;
     (nd Transform
-        (setName hip2)
-        (setLocalPos $Hip2_X $Hip2_Y $Hip2_Z)
+       (setName thigh)
+       (setLocalPos $Thigh_X $Thigh_Y $Thigh_Z)
+       ;(setLocalRotation 8.594 0 0)
         
-        (importScene rsg/agent/nao/sphere_appearance.rsg $Hip2Radius matRed)
-        (importScene rsg/agent/nao/sphere_physics.rsg    $Hip2Radius $Hip2Mass)
+       (importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
+       (importScene rsg/agent/nao/box_physics.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
         
-        (importScene rsg/agent/nao/hingejoint.rsg
-                              $Joint2PerName $Joint2EffName
-                              ../sphereBody ../../hip1/sphereBody 
-                              0 0 0
-                              1 0 0 ;0 -1 -1
-                              $lj2_min $lj2_max)
-        
-     )
-     
-     ;
-     ;Construct Thigh
-     ;
-     (nd Transform
-        (setName thigh)
-        (setLocalPos $Thigh_X $Thigh_Y $Thigh_Z)
-        (setLocalRotation 8.594 0 0)
-        
-        (importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
-        (importScene rsg/agent/nao/box_physics.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
-        
-        (importScene rsg/agent/nao/hingejoint.rsg
-                                $Joint3PerName $Joint3EffName
-                                ../boxBody ../../hip2/sphereBody
-                                $lj3_Anchor_X $lj3_Anchor_Y $lj3_Anchor_Z
-                                0 1 0 ;1 -1 -1
-                                $lj3_min $lj3_max)
+       (importScene rsg/agent/nao/hingejoint.rsg
+                               $Joint3PerName $Joint3EffName
+                               ../boxBody ../../hip/sphereBody
+                               $lj3_Anchor_X $lj3_Anchor_Y $lj3_Anchor_Z
+                               0 1 0 ;1 -1 -1
+                               $lj3_min $lj3_max)
         
     )
     
@@ -206,7 +178,7 @@
     (nd Transform
         (setName shank)
         (setLocalPos $Shank_X $Shank_Y $Shank_Z)
-        (setLocalRotation -8.594 0 0)
+        ;(setLocalRotation -8.594 0 0)
         
         (importScene rsg/agent/nao/box_appearance.rsg $ShankSizeX $ShankSizeY $ShankSizeZ matGrey)
         (importScene rsg/agent/nao/box_physics.rsg    $ShankSizeX $ShankSizeY $ShankSizeZ $ShankMass)

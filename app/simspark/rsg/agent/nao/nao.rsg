@@ -41,7 +41,7 @@
         ;Install Effector
         ;
         ;(nd SingleMatInitEffector)
-        (nd BeamEffector)
+        ;(nd BeamEffector)
         (nd SayEffector)
         
         ;
@@ -94,8 +94,7 @@
     (importScene rsg/agent/nao/naoleg.rsg
               1
               $TorsoInitX $TorsoInitY $TorsoInitZ
-              llj1 lle1
-              llj2 lle2
+              llj1_2 lle1_2
               llj3 lle3
               llj4 lle4
               llj5 lle5
@@ -108,8 +107,7 @@
     (importScene rsg/agent/nao/naoleg.rsg
               -1
               $TorsoInitX $TorsoInitY $TorsoInitZ
-              rlj1 rle1
-              rlj2 rle2
+              rlj1_2 rle1_2
               rlj3 rle3
               rlj4 rle4
               rlj5 rle5

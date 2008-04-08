@@ -1,3 +1,11 @@
+2008-04-08  Feng Xue  <henry519@mail.ustc.edu.cn>
+	* app/simspark/Makefile.am:
+	- add universaljoint.rsg
+
+	* app/simspark/rsg/agent/*.rsg:
+	- fixed some bugs
+	- merge leg joint1 and joint2 to joint1_2 via universal joint 
+
 2008-04-08  Xu Yuan  <xuyuan.cn@gmail.com.cn>
 
 	* plugin/collisionperceptor/forceresistanceperceptor.cpp:

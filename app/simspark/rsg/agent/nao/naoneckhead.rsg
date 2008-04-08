@@ -20,7 +20,7 @@
     ;
     (def $Head_X        $Neck_X)
     (def $Head_Y        $Neck_Y)
-    (def $Head_Z        (eval $Neck_Z + 0.06))
+    (def $Head_Z        (eval $Neck_Z + 0.065))
     (def $Head_Radius   0.065)
     (def $Head_Mass     0.350)
     
@@ -46,7 +46,7 @@
         (setLocalPos $Neck_X $Neck_Y $Neck_Z)
         
         (importScene rsg/agent/nao/ccylinder_appearance.rsg $Neck_Radius $Neck_Length matDarkGrey)
-        (importScene rsg/agent/nao/ccylinder_physics.rsg    $Neck_Radius $Neck_Length Neck_Mass)
+        (importScene rsg/agent/nao/ccylinder_physics.rsg    $Neck_Radius $Neck_Length $Neck_Mass)
         
         (importScene rsg/agent/nao/hingejoint.rsg 
                             hj1 he1

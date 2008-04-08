@@ -26,7 +26,7 @@
     (nd HingeJoint
             (attach             $Path_Child  $Path_Parent)
             (setAnchor          $Anchor_X    $Anchor_Y  $Anchor_Z)
-            (setAxis            $Axis_X) ;Currenly, just use the first as the axis, 0:X, 1:Y, 2:Z
+            (setAxis            $Axis_X      $Axis_Y    $Axis_Z)
             (setMaxMotorForce   0  $FMax)
             (setCFM             0  $CFM)
             (setStopCFM         0  $Stop_CFM)

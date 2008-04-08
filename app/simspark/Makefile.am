@@ -128,6 +128,7 @@ EXTRA_DIST = \
 	rsg/agent/nao/ccylinder_appearance.rsg\
 	rsg/agent/nao/ccylinder_physics.rsg\
 	rsg/agent/nao/hingejoint.rsg\
+	rsg/agent/nao/universaljoint.rsg\
 	rsg/agent/nao/nao.rsg\
 	rsg/agent/nao/naoarm.rsg\
 	rsg/agent/nao/naoleg.rsg\

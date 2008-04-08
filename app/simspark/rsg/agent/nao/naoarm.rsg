@@ -158,7 +158,7 @@
         (importScene rsg/agent/nao/sphere_physics.rsg    $ElbowRadius $ElbowMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
-                                $Joint3PerName $Joint2EffName
+                                $Joint3PerName $Joint3EffName
                                 ../sphereBody ../../upperarm/boxBody
                                 0 0 0
                                 0 1 0 ;1 -1 -1
