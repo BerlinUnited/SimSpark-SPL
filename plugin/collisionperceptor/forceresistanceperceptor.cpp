@@ -4,7 +4,7 @@
  Fri May 9 2003
  Copyright (C) 2002,2003 Koblenz University
  Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
- $Id: forceresistanceperceptor.cpp,v 1.7 2008/04/07 21:37:44 hedayat Exp $
+ $Id: forceresistanceperceptor.cpp,v 1.8 2008/04/08 07:28:48 yxu Exp $
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -61,14 +61,6 @@ bool ForceResistancePerceptor::Percept(
         return false;
     }
 
-    Predicate& predicate = predList->AddPredicate();
-    predicate.name = "FRP";
-    predicate.parameter.Clear();
-
-    ParameterList& nameElement = predicate.parameter.AddList();
-    nameElement.AddValue(std::string("n"));
-    nameElement.AddValue(GetName());
-
     Vector3f force(0,0,0);
     Vector3f center(0,0,0);
     float sumLength = 0;
@@ -87,6 +79,14 @@ bool ForceResistancePerceptor::Percept(
 
     if (sumLength == 0)
         return false;
+
+    Predicate& predicate = predList->AddPredicate();
+    predicate.name = "FRP";
+    predicate.parameter.Clear();
+
+    ParameterList& nameElement = predicate.parameter.AddList();
+    nameElement.AddValue(std::string("n"));
+    nameElement.AddValue(GetName());
 
     Matrix invRot = mBody->GetLocalTransform();
     invRot.InvertRotationMatrix();
