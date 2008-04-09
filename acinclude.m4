@@ -197,7 +197,13 @@ AC_DEFUN([RCSS_PATH_RUBY], [
         AC_PATH_PROGS(RUBY,[$ruby ruby],no)
 	# Test ruby interpreter
 	if test $RUBY = no; then
-		AC_MSG_ERROR(Could not find Ruby Interpreter.  Please use --with-ruby option.)
+	   AC_PATH_PROGS(RUBY,[$ruby ruby1.9],no)
+	   if test $RUBY = no; then
+	      AC_PATH_PROGS(RUBY,[$ruby ruby1.8],no)
+	      if test $RUBY = no; then
+	      	 AC_MSG_ERROR(Could not find Ruby Interpreter.  Please use --with-ruby option.)
+	      fi
+	   fi
 	fi
 
 	# check ruby headers
@@ -208,13 +214,11 @@ AC_DEFUN([RCSS_PATH_RUBY], [
                          ruby_includedir=`$RUBY -rrbconfig -e "print Config::CONFIG[['archdir']]"`
                          AC_MSG_NOTICE(trying again in $ruby_includedir)
 		         RUBY_CPPFLAGS="-I$ruby_includedir"
-                         CPPFLAGS="$CPPFLAGS $RUBY_CPPFLAGS"
-                         AC_CHECK_HEADER(ruby.h, [],
-                                         [AC_MSG_ERROR(check your ruby installation)]
-                         )
+                         CPPFLAGS="$ruby_tmp $RUBY_CPPFLAGS"
+                         AC_CHECK_HEADER(ruby.h, [], [AC_MSG_ERROR(check your ruby installation)])
                          CPPFLAGS=$ruby_tmp
                         ]
-        )
+        		)
 
         # set ruby ldflags
 	AC_MSG_CHECKING(ruby library directory)
