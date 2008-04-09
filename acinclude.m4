@@ -36,6 +36,13 @@ dnl Get the cflags and libraries from the wx-config script
 dnl
 AC_DEFUN([RCSS_CHECK_WXWIDGETS],
 [
+  # --with-wxWidgets
+  AC_ARG_WITH(wxWidgets, AC_HELP_STRING([--with-wxWidgets=@<:@yes|no@:>@],
+	 		       [whether to use wxWidgets (default is yes)]),
+	 		       [], [with_wxWidgets=yes] )
+
+  if test x$with_wxWidgets != xno; then
+
   dnl do we have wx-config name: it can be wx-config or wxd-config or ...
   if test x${WX_CONFIG_NAME+set} != xset ; then
      WX_CONFIG_NAME=wx-config
@@ -166,7 +173,9 @@ AC_DEFUN([RCSS_CHECK_WXWIDGETS],
        ifelse([$3], , :, [$3])
     fi
   fi
-
+  else
+    AC_MSG_NOTICE(do not use wxWidgets)
+  fi
   AC_SUBST(WX_CPPFLAGS)
   AC_SUBST(WX_CFLAGS)
   AC_SUBST(WX_CXXFLAGS)

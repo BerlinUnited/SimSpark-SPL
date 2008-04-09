@@ -21,9 +21,8 @@ This is the simulation server used in Robocup 3D Soccer Simulation contests.
 
 %build
 #./bootstrap
-%configure --prefix=%{_prefix} --enable-debug=no
+%configure --prefix=%{_prefix} --enable-debug=no %{?_without_wxWidgets}
 make %{?_smp_mflags}
-
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -45,6 +44,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Apr 9 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.7-1
+- added without-wxWidgets option to configure if availabe
+
 * Thu Feb 28 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.7-1
 - removed rcssserver3d-data as a requirement since the files are in the
   distribution now

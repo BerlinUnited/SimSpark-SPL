@@ -1,5 +1,8 @@
 2008-04-09  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* acinclude.m4:
+	- added --with-wxWidgets (and --without-wxWidgets) options to configure
+
 	* plugin/collisionperceptor/forceresistanceperceptor.h:
 	* plugin/collisionperceptor/forceresistanceperceptor.cpp
 	 (ForceResistancePerceptor::Percept):
