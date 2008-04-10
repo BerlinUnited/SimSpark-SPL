@@ -17,14 +17,14 @@
 (def $TorsoMass    1.2)
 
 (def $TorsoInitX  0)
-(def $TorsoInitY  -1)
+(def $TorsoInitY  5)
 (def $TorsoInitZ  1.5)
 
 ;
 ;Begin Construct of Nao
 ;
 (nd Space
-    (setName spaceman)
+    (setName spacenao)
     
     ;
     ;The torso part

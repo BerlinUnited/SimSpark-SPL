@@ -16,7 +16,7 @@
     ;
     ;Hinge Joint Parameters
     ;
-    (def $FMax          100)
+    (def $FMax          200)
     (def $CFM           1e-8)
     (def $Stop_CFM      1e-8)
     (def $Stop_ERP      0.1)
