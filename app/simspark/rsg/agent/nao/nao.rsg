@@ -17,7 +17,7 @@
 (def $TorsoMass    1.2)
 
 (def $TorsoInitX  0)
-(def $TorsoInitY  5)
+(def $TorsoInitY  1)
 (def $TorsoInitZ  1.5)
 
 ;
@@ -41,7 +41,6 @@
         ;
         (nd SingleMatInitEffector)
         (nd BeamEffector)
-        (nd SayEffector)
         
         ;
         ;Install Perceptor
@@ -53,6 +52,8 @@
             (nd GameStatePerceptor)
             (nd HearPerceptor)
         )
+
+        (nd SayEffector)
         
         (nd GyroRatePerceptor (setName torso))
 

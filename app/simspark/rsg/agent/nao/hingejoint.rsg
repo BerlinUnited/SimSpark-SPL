@@ -16,12 +16,12 @@
     ;
     ;Hinge Joint Parameters
     ;
-    (def $FMax          200)
+    (def $FMax          50)
     (def $CFM           1e-8)
     (def $Stop_CFM      1e-8)
-    (def $Stop_ERP      0.1)
-    (def $FudgeFactor   1e-3)
-    (def $Bounce        1e-3)
+    (def $Stop_ERP      0.4)
+    (def $FudgeFactor   0.1)  ;1e-8)
+    (def $Bounce        1e-8)
     
     (nd HingeJoint
             (attach             $Path_Body1  $Path_Body2)

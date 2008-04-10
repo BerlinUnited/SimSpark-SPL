@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.14 2008/03/31 09:04:46 jboedeck Exp $
+   $Id: main.cpp,v 1.15 2008/04/10 14:20:19 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 //#include "carbehavior.h"
 //#include "leggedspherebehavior.h"
 //#include "hoap2behavior.h"
+#include "naobehavior.h"
 
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
@@ -253,11 +254,12 @@ bool GetMessage(string& msg)
 
 void Run()
 {    
-    scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
+    //scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
     //scoped_ptr<Behavior> behavior(new SoccerBehavior());
     //scoped_ptr<Behavior> behavior(new CarBehavior());
     //scoped_ptr<Behavior> behavior(new LeggedSphereBehavior());
     //scoped_ptr<Behavior> behavior(new Hoap2Behavior());
+    scoped_ptr<Behavior> behavior(new NaoBehavior());
 
     PutMessage(behavior->Init());
 

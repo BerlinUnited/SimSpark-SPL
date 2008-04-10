@@ -16,12 +16,12 @@
     (def $ShoulderName (join $LeftOrRight shoulder))
     (def $UpperarmName (join $LeftOrRight upperarm))
     (def $ElbowName    (join $LeftOrRight elbow))
-    (def $Lowerarmname (join $LeftOrRight lowerarm))
+    (def $LowerarmName (join $LeftOrRight lowerarm))
 
     (def $ShoulderBodyPath (join ../../ $ShoulderName /sphereBody))
     (def $UpperarmBodyPath (join ../../ $UpperarmName /boxBody))
     (def $ElbowBodyPath    (join ../../ $ElbowName    /sphereBody))
-    (def $LowerarmBodyPath (join ../../ $Lowerarmname /boxBody))
+    (def $LowerarmBodyPath (join ../../ $LowerarmName /boxBody))
    
     (def $Joint1PerName (join $LeftOrRight aj1))
     (def $Joint2PerName (join $LeftOrRight aj2))
@@ -109,14 +109,14 @@
     (def $aj3_min           -1.5708)
     (def $aj3_max           1.5708)
     
-    (def $right_aj4_min     0)
+    (def $right_aj4_min     -0.01)
     (def $left_aj4_min      -1.6581)
     (def $aj4_min_c1        (eval (eval $right_aj4_min + $left_aj4_min) * 0.5))
     (def $aj4_min_c2        (eval (eval $right_aj4_min - $left_aj4_min) * 0.5))
     (def $aj4_min           (eval $aj4_min_c1 + (eval $LRFactor * $aj4_min_c2)))
 
     (def $right_aj4_max     1.6581)
-    (def $left_aj4_max      0)
+    (def $left_aj4_max      0.01)
     (def $aj4_max_c1        (eval (eval $right_aj4_max + $left_aj4_max) * 0.5))
     (def $aj4_max_c2        (eval (eval $right_aj4_max - $left_aj4_max) * 0.5))
     (def $aj4_max           (eval $aj4_max_c1 + (eval $LRFactor * $aj4_max_c2)))
@@ -188,7 +188,7 @@
     ;Construct LowerArm
     ;
     (nd Transform
-        (setName $Lowerarmname)
+        (setName $LowerarmName)
         (setLocalPos $LowerArm_X $LowerArm_Y $LowerArm_Z)
 
         (importScene rsg/agent/nao/box_appearance.rsg $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ matRed)
