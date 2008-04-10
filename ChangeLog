@@ -1,4 +1,11 @@
 2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
+	* /app/simspark/rsg/agent/nao/*.rsg:
+	- Instead the universal joint of two hinge joints for 
+	  the universal joint is hard to do the joint limits.
+	- Fixed some bugs.
+
+
+2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /plugin/rubysceneimporter.cpp:
 	- Boost up rsg fetures: add string 
 	  The syntax is like this
