@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.23 2008/02/27 17:37:32 rollmark Exp $
+   $Id: rubysceneimporter.cpp,v 1.24 2008/04/10 06:51:25 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/sceneserver/scenedict.h>
 #include <boost/scoped_array.hpp>
+#include <sstream>
 
 using namespace zeitgeist;
 using namespace oxygen;
@@ -466,6 +467,46 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
         }
 
     string pred = Lookup(sexp->val);
+
+
+    //Simply For String Link By Feng Xue
+    //Begin
+    {
+        if (pred == "join")
+        {
+            stringstream ss;
+            sexp = sexp->next;
+            while (sexp != 0)
+            {
+                string atom;
+
+                if (sexp->ty == SEXP_VALUE)
+                {
+                    atom = sexp->val; //todo: use TranslationTable here?
+                    if ((atom[0] == '$') &&
+                        (! ReplaceVariable(atom)))
+                    {
+                        return false;
+                    }
+                } 
+                else
+                {
+                    if (! EvalParameter(sexp->list, atom))
+                    {
+                        return false;
+                    }
+                }
+
+                ss << atom;
+                sexp = sexp->next;
+            }
+
+            value = ss.str();
+            return true;
+        }
+    }
+    //End
+
     if (pred != "eval")
         {
             GetLog()->Error()
