@@ -1,4 +1,20 @@
 2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
+	* /app/simspark/rsg/agent/nao/nao.rsg:
+	- replace space name from "spaceman" to "spacenao"
+
+	* /lib/oxygen/physicsserver/odeobject.h:
+	- make GetSpace() public for call in space.cpp
+
+	* /lib/oxygen/physicsserver/space.cpp:
+	- In HandleCollide() function: removed internal collide
+	  of robot.
+	  This is done by simply check the nearest space of the collider(e),
+	  If they are the same space and their space names are both "spacenao", 
+	  then no collide happens. Hope it will work.
+
+
+
+2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /app/simspark/rsg/agent/nao/*.rsg:
 	- Instead the universal joint of two hinge joints for 
 	  the universal joint is hard to do the joint limits.
