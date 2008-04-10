@@ -16,10 +16,9 @@
 (def $TorsoHeight  0.18)
 (def $TorsoMass    1.2)
 
-(def $TorsoInitX   0)
-(def $TorsoInitY   2)
-(def $TorsoInitZ   1)
-
+(def $TorsoInitX  0)
+(def $TorsoInitY  -1)
+(def $TorsoInitZ  1.5)
 
 ;
 ;Begin Construct of Nao
@@ -40,8 +39,8 @@
         ;
         ;Install Effector
         ;
-        ;(nd SingleMatInitEffector)
-        ;(nd BeamEffector)
+        (nd SingleMatInitEffector)
+        (nd BeamEffector)
         (nd SayEffector)
         
         ;
@@ -70,49 +69,30 @@
     ;The Right Arm
     ;
     (importScene rsg/agent/nao/naoarm.rsg
-              1 
-              $TorsoInitX $TorsoInitY $TorsoInitZ
-              raj1 rae1
-              raj2 rae2
-              raj3 rae3
-              raj4 rae4)
+              1 r
+              $TorsoInitX $TorsoInitY $TorsoInitZ)
 
     ;
     ;The Left Arm
     ;
     (importScene rsg/agent/nao/naoarm.rsg
-              -1 
-              $TorsoInitX $TorsoInitY $TorsoInitZ
-              laj1 lae1
-              laj2 lae2
-              laj3 lae3
-              laj4 lae4)
+              -1 l
+              $TorsoInitX $TorsoInitY $TorsoInitZ)
     
     ;
     ;The Right Leg
     ;
     (importScene rsg/agent/nao/naoleg.rsg
-              1
-              $TorsoInitX $TorsoInitY $TorsoInitZ
-              llj1_2 lle1_2
-              llj3 lle3
-              llj4 lle4
-              llj5 lle5
-              llj6 lle6)
-              
+              1 r
+              $TorsoInitX $TorsoInitY $TorsoInitZ)
     
-    ;
     ;
     ;The Left Leg
+    ;
     (importScene rsg/agent/nao/naoleg.rsg
-              -1
-              $TorsoInitX $TorsoInitY $TorsoInitZ
-              rlj1_2 rle1_2
-              rlj3 rle3
-              rlj4 rle4
-              rlj5 rle5
-              rlj6 rle6)
-    
+              -1 l
+              $TorsoInitX $TorsoInitY $TorsoInitZ)
+
 );end of nd Space
 
 );end of RSG 0 1

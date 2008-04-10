@@ -21,7 +21,8 @@
     (def $Head_X        $Neck_X)
     (def $Head_Y        $Neck_Y)
     (def $Head_Z        (eval $Neck_Z + 0.065))
-    (def $Head_Radius   0.065)
+    ;(def $Head_Radius   0.065)
+    (def $Head_Radius   0.045) ;The origin version is too too big 
     (def $Head_Mass     0.350)
     
     ;
@@ -62,14 +63,19 @@
     (nd Transform
         (setName head)
         (setLocalPos $Head_X $Head_Y $Head_Z)
-        
-        (importScene rsg/agent/nao/sphere_appearance.rsg $Head_Radius matGrey)
+         
+        (nd SingleMatNode
+	    (load 'models/soccerball.obj')
+	    (setScale $Head_Radius $Head_Radius $Head_Radius)
+        )
+	
+        ;(importScene rsg/agent/nao/sphere_appearance.rsg $Head_Radius matRed)
         (importScene rsg/agent/nao/sphere_physics.rsg $Head_Radius $Head_Mass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
                               hj2 he2
                               ../sphereBody ../../neck/ccylinderBody 
-                              0 0 0
+                              0 0 -0.005
                               1 0 0 ;0 -1 -1
                               $he2_min $he2_max)
     )

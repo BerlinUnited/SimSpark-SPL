@@ -3,7 +3,7 @@
 (RSG 0 1)
 (
     (templ  $PerName     $EffName   
-            $Path_Child  $Path_Parent
+            $Path_Body1  $Path_Body2
             $Anchor_X    $Anchor_Y   $Anchor_Z
             $Axis_X      $Axis_Y     $Axis_Z
             $Min         $Max
@@ -16,15 +16,15 @@
     ;
     ;Hinge Joint Parameters
     ;
-    (def $FMax          10)
+    (def $FMax          100)
     (def $CFM           1e-8)
     (def $Stop_CFM      1e-8)
     (def $Stop_ERP      0.1)
-    (def $FudgeFactor   1e-8)
+    (def $FudgeFactor   1e-3)
     (def $Bounce        1e-3)
     
     (nd HingeJoint
-            (attach             $Path_Child  $Path_Parent)
+            (attach             $Path_Body1  $Path_Body2)
             (setAnchor          $Anchor_X    $Anchor_Y  $Anchor_Z)
             (setAxis            $Axis_X      $Axis_Y    $Axis_Z)
             (setMaxMotorForce   0  $FMax)
