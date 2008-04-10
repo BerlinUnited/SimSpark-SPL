@@ -1,4 +1,12 @@
 2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
+	* /app/agentspark/:
+	- Add a sample nao actions, see naobehavior.cpp
+
+	* /app/simspark/rsg/agent/nao/*.rsg:
+	- Fixed some bugs
+
+
+2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /app/simspark/rsg/agent/nao/nao.rsg:
 	- replace space name from "spaceman" to "spacenao"
 
