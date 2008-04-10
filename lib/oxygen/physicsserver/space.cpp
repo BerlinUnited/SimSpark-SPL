@@ -3,7 +3,8 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.15 2008/02/24 09:40:22 rollmark Exp $
+   $Id: space.cpp,v 1.16 2008/04/10 11:34:33 fengxue Exp $
+   $Id: space.cpp,v 1.16 2008/04/10 11:34:33 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,6 +96,23 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         {
             return;
         }
+
+    //If obj1 and obj2 are in a robot space, no collide
+    boost::shared_ptr<Collider> c1 = Collider::GetCollider(obj1);
+    boost::shared_ptr<Collider> c2 = Collider::GetCollider(obj2);
+    if (b1 && b2 && c1.get() && c2.get())
+    {
+        shared_ptr<Space> s1 = c1->GetSpace();
+        shared_ptr<Space> s2 = c2->GetSpace();
+
+        if (s1.get() && s2.get() && (s1.get() == s2.get()))
+        {
+            if (s1->GetName() == "spacenao" && s2->GetName() == "spacenao") 
+            {
+                return;
+            }
+        }
+    }
 
     // dSpaceCollide(), is guaranteed to pass all potentially
     // intersecting geom pairs to the callback function, but depending
