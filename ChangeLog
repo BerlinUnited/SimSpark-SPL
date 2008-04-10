@@ -1,3 +1,13 @@
+2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
+	* /plugin/rubysceneimporter.cpp:
+	- Boost up rsg fetures: add string 
+	  The syntax is like this
+	  (def $Feng Feng)
+	  (def $Xue  Xue)
+	  (def $XueFeng (join My Name is $Feng $Xue))
+
+
+
 2008-04-09  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* acinclude.m4:
