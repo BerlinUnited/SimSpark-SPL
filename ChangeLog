@@ -1,3 +1,18 @@
+2008-04-11  Feng Xue <henry519@mail.ustc.edu.cn>
+	* /lib/oxygen/physicsserver/space.h(cpp):
+	- Removed the original "disable inner collision" code and add
+	  a generic code(not a hack) proposed by Markus Rollmann, hope it will work.
+	- Add function: void DisableInnerCollision() to set the tag.
+	- Add function: void IsDisableInnerCollision() to get the tag.
+	
+	* /lib/oxygen/physicsserer/space_c.cpp:
+	- Add functio: disableInnerCollision to call in the rsg files.
+
+	* /app/simspark/rsg/agent/nao/nao.rsg:
+	- add the script code (disableInnerCollision true) to disable the inner 
+	  collision of nao.
+
+
 2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /app/agentspark/:
 	- Add a sample nao actions, see naobehavior.cpp
