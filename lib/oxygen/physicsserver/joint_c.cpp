@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint_c.cpp,v 1.6 2008/04/07 09:33:11 fengxue Exp $
+   $Id: joint_c.cpp,v 1.7 2008/04/11 09:46:16 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -263,7 +263,8 @@ FUNCTION(Joint, setCFM)
             return false;
         }
 
-    return obj->GetCFM(static_cast<Joint::EAxisIndex>(inAxis));
+    obj->SetCFM(static_cast<Joint::EAxisIndex>(inAxis), inCFM);
+    return true;
 }
 
 FUNCTION(Joint, getCFM)
@@ -295,7 +296,8 @@ FUNCTION(Joint, setStopCFM)
             return false;
         }
 
-    return obj->GetStopCFM(static_cast<Joint::EAxisIndex>(inAxis));
+    obj->SetStopCFM(static_cast<Joint::EAxisIndex>(inAxis), inStopCFM);
+    return true;
 }
 
 FUNCTION(Joint, getStopCFM)
@@ -327,7 +329,8 @@ FUNCTION(Joint, setStopERP)
             return false;
         }
 
-    return obj->GetStopERP(static_cast<Joint::EAxisIndex>(inAxis));
+    obj->SetStopERP(static_cast<Joint::EAxisIndex>(inAxis), inStopERP);
+    return true;
 }
 
 FUNCTION(Joint, getStopERP)
@@ -359,7 +362,8 @@ FUNCTION(Joint, setSuspensionERP)
             return false;
         }
 
-    return obj->GetSuspensionERP(static_cast<Joint::EAxisIndex>(inAxis));
+    obj->SetSuspensionERP(static_cast<Joint::EAxisIndex>(inAxis), inSuspensionERP);
+    return true;
 }
 
 FUNCTION(Joint, getSuspensionERP)
@@ -391,7 +395,8 @@ FUNCTION(Joint, setSuspensionCFM)
             return false;
         }
 
-    return obj->GetSuspensionCFM(static_cast<Joint::EAxisIndex>(inAxis));
+    obj->SetSuspensionCFM(static_cast<Joint::EAxisIndex>(inAxis), inSuspensionCFM);
+    return true;
 }
 
 FUNCTION(Joint, getSuspensionCFM)
