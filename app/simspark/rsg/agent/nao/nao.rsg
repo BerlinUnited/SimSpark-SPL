@@ -25,6 +25,7 @@
 ;
 (nd Space
     (setName spacenao)
+    (disableInnerCollision true)
     
     ;
     ;The torso part
@@ -36,15 +37,9 @@
         (importScene rsg/agent/nao/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
         (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
     
-        ;
-        ;Install Effector
-        ;
         (nd SingleMatInitEffector)
         (nd BeamEffector)
         
-        ;
-        ;Install Perceptor
-        ;
         (nd TimePerceptor)
         
         (nd AgentState

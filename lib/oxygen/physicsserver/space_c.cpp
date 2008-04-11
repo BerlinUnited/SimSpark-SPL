@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space_c.cpp,v 1.5 2004/02/21 15:30:44 fruit Exp $
+   $Id: space_c.cpp,v 1.6 2008/04/11 02:36:56 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,21 @@
 
 using namespace oxygen;
 
+FUNCTION(Space,disableInnerCollision)
+{
+    bool inSet;
+    if ((in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inSet)))
+    {
+        return false;
+    }
+
+    obj->DisableInnerCollision(inSet);
+    return true;
+}
+
 void CLASS(Space)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_FUNCTION(disableInnerCollision);
 }

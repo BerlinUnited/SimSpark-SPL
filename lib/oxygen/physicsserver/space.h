@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.8 2008/02/22 07:52:14 hedayat Exp $
+   $Id: space.h,v 1.9 2008/04/11 02:36:56 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -67,6 +67,12 @@ public:
     /** returns true if this is the top global, i.e. top level space object */
     bool IsGlobalSpace();
 
+    /** enable/disable inner collision */
+    void DisableInnerCollision(bool is_disable);
+ 
+    /** get the tag whether disable inner collision */
+    bool IsDisableInnerCollision() const;
+
 protected:
     static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
 
@@ -104,6 +110,10 @@ private:
 
     /** the ODE group for all created contact joints */
     dJointGroupID mODEContactGroup;
+
+private:
+    /** the tag whether disable inner collision */
+    bool mIsDisableInnerCollision;
 };
 
 DECLARE_CLASS(Space);

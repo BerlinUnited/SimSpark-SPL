@@ -3,8 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.16 2008/04/10 11:34:33 fengxue Exp $
-   $Id: space.cpp,v 1.16 2008/04/10 11:34:33 fengxue Exp $
+   $Id: space.cpp,v 1.17 2008/04/11 02:36:56 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,7 +34,7 @@ void Space::collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
     space->HandleCollide(obj1, obj2);
 }
 
-Space::Space() : ODEObject(), mODESpace(0), mODEContactGroup(0)
+Space::Space() : ODEObject(), mODESpace(0), mODEContactGroup(0), mIsDisableInnerCollision(false)
 {
 }
 
@@ -97,7 +96,7 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
             return;
         }
 
-    //If obj1 and obj2 are in a robot space, no collide
+    //If obj1 and obj2 are in a space that disabled inner collision, no collide
     boost::shared_ptr<Collider> c1 = Collider::GetCollider(obj1);
     boost::shared_ptr<Collider> c2 = Collider::GetCollider(obj2);
     if (b1 && b2 && c1.get() && c2.get())
@@ -107,7 +106,7 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 
         if (s1.get() && s2.get() && (s1.get() == s2.get()))
         {
-            if (s1->GetName() == "spacenao" && s2->GetName() == "spacenao") 
+            if (s1->IsDisableInnerCollision() && s2->IsDisableInnerCollision()) 
             {
                 return;
             }
@@ -265,3 +264,16 @@ Space::DestroyODEObject()
     dSpaceDestroy(mODESpace);
     mODESpace = 0;
 }
+
+
+void Space::DisableInnerCollision(bool is_disable)
+{
+    this->mIsDisableInnerCollision = is_disable;
+}
+
+
+bool Space::IsDisableInnerCollision() const
+{
+    return this->mIsDisableInnerCollision;
+}
+
