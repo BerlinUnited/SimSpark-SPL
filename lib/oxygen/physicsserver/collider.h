@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.13 2008/02/24 13:55:16 sgvandijk Exp $
+   $Id: collider.h,v 1.14 2008/04/12 05:07:23 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -123,6 +123,9 @@ public:
     /** returns the ODE handle ID of the containing parent space */
     virtual dSpaceID GetParentSpaceID();
 
+    /** Get the saved parent space */
+    boost::shared_ptr<Space> GetSavedParentSpace();
+
 protected:
     /** registers the managed geom to the Space of the Scene and to
         the associated ODE body
@@ -148,6 +151,10 @@ protected:
 protected:
     /** the ode collision geometry */
     dGeomID mODEGeom;
+
+protected:
+    boost::shared_ptr<Space> mSavedParentSpace;
+
 };
 
 DECLARE_CLASS(Collider);

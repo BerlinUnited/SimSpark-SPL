@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.17 2008/04/11 02:36:56 fengxue Exp $
+   $Id: space.cpp,v 1.18 2008/04/12 05:07:23 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -101,15 +101,14 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
     boost::shared_ptr<Collider> c2 = Collider::GetCollider(obj2);
     if (b1 && b2 && c1.get() && c2.get())
     {
-        shared_ptr<Space> s1 = c1->GetSpace();
-        shared_ptr<Space> s2 = c2->GetSpace();
+        shared_ptr<Space> s1 = c1->GetSavedParentSpace();
+        shared_ptr<Space> s2 = c2->GetSavedParentSpace();
 
-        if (s1.get() && s2.get() && (s1.get() == s2.get()))
+        if (s1.get() && 
+            s1.get() == s2.get() &&
+            s1->IsDisableInnerCollision())
         {
-            if (s1->IsDisableInnerCollision() && s2->IsDisableInnerCollision()) 
-            {
-                return;
-            }
+            return;
         }
     }
 
@@ -265,12 +264,10 @@ Space::DestroyODEObject()
     mODESpace = 0;
 }
 
-
 void Space::DisableInnerCollision(bool is_disable)
 {
     this->mIsDisableInnerCollision = is_disable;
 }
-
 
 bool Space::IsDisableInnerCollision() const
 {
