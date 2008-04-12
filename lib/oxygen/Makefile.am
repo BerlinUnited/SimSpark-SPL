@@ -63,6 +63,8 @@ gamecontrolserver/baseparser_c.cpp \
 gamecontrolserver/gamecontrolserver.cpp \
 gamecontrolserver/gamecontrolserver_c.cpp \
 gamecontrolserver/predicate.cpp \
+gamecontrolserver/behavior.cpp \
+gamecontrolserver/behavior_c.cpp \
 oxygen.cpp \
 physicsserver/body.cpp \
 physicsserver/body_c.cpp \
@@ -149,6 +151,8 @@ simulationserver/netclient_c.cpp \
 simulationserver/netmessage.cpp \
 simulationserver/netmessage_c.cpp \
 simulationserver/netbuffer.cpp \
+simulationserver/traincontrol.cpp \
+simulationserver/traincontrol_c.cpp \
 geometryserver/geometryserver.h \
 geometryserver/geometryserver.cpp \
 geometryserver/geometryserver_c.cpp \
@@ -181,6 +185,7 @@ gamecontrolserver/predicate.h \
 gamecontrolserver/gamecontrolserver.h \
 gamecontrolserver/baseparser.h \
 gamecontrolserver/actionobject.h \
+gamecontrolserver/behavior.h \
 oxygen.h \
 physicsserver/body.h \
 physicsserver/bodycontroller.h \
@@ -226,6 +231,7 @@ simulationserver/netcontrol.h \
 simulationserver/netclient.h \
 simulationserver/netmessage.h \
 simulationserver/netbuffer.h \
+simulationserver/traincontrol.h \
 geometryserver/geometryserver.h \
 geometryserver/meshexporter.h \
 geometryserver/meshimporter.h \

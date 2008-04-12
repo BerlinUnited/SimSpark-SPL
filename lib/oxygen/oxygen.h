@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: oxygen.h,v 1.20 2008/02/22 16:48:21 hedayat Exp $
+   $Id: oxygen.h,v 1.21 2008/04/12 22:07:29 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "gamecontrolserver/baseparser.h"
 #include "gamecontrolserver/gamecontrolserver.h"
 #include "gamecontrolserver/actionobject.h"
+#include "gamecontrolserver/behavior.h"
 
 #include "physicsserver/body.h"
 #include "physicsserver/bodycontroller.h"
@@ -73,6 +74,7 @@
 #include "simulationserver/agentcontrol.h"
 #include "simulationserver/monitorcontrol.h"
 #include "simulationserver/monitorlogger.h"
+#include "simulationserver/traincontrol.h"
 
 #include "geometryserver/geometryserver.h"
 #include "geometryserver/meshexporter.h"
