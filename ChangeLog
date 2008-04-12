@@ -1,3 +1,20 @@
+2008-04-12  Feng Xue <henry519@mail.ustc.edu.cn>
+	* /lib/oxygen/physicsserver/odeobject.h:
+	- revert GetSpace to the protected scope
+
+	* /lib/oxygen/physicsserver/collider.h(cpp):
+	- add a space member to store the parent space
+
+	* /lib/oxygen/physicsserver/space.cpp:
+	- instead GetSpace() call of GetSavedParentSpace() to improve 
+	  ode performance
+
+	* Summary:
+	- Thanks for Markus's suggestions, criticism makes things go ahead.
+	- Now the system is very stable, I hope a 5 vs 5 match in RoboCup2008!  
+
+
+
 2008-04-11  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /lib/oxygen/physicsserver/space.h(cpp):
 	- Removed the original "disable inner collision" code and add
