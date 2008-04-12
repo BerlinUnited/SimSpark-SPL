@@ -419,6 +419,13 @@ plugin/soccer/Makefile
 plugin/soccer/Makefile.in
 plugin/soccer/*.la
 plugin/soccer/*.lo
+plugin/soccer/agentintegration/*.la
+plugin/soccer/agentintegration/*.lo
+plugin/soccer/agentintegration/.deps
+plugin/soccer/agentintegration/.dirstamp
+plugin/soccer/agentintegration/.libs
+plugin/soccer/agentintegration/Makefile
+plugin/soccer/agentintegration/Makefile.in
 plugin/soccer/agentstate/*.lo
 plugin/soccer/agentstate/.deps
 plugin/soccer/agentstate/.dirstamp
