@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.17 2008/04/12 05:07:23 fengxue Exp $
+   $Id: collider.cpp,v 1.18 2008/04/13 09:40:37 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,20 +68,15 @@ void Collider::OnLink()
 
     // this geom is independent, so register to space and body
     // if we have a space add the geom to it
-    shared_ptr<Space> space = GetSpace();
-    if (space.get() != 0)
-    {
-        dSpaceID spaceid = space->GetODESpace();
-        if (spaceid && (! dSpaceQuery(spaceid, mODEGeom)))
+    dSpaceID space = FindSpaceID();
+    if (
+        (space) &&
+        (! dSpaceQuery(space, mODEGeom))
+        )
         {
             dGeomSetData(mODEGeom, this);
-            dSpaceAdd(spaceid, mODEGeom);
+            dSpaceAdd(space, mODEGeom);
         }
-    }
-
-    //Save the space ptr for future use in space.cpp
-    mSavedParentSpace = space;
-
     // if there is a Body below our parent, link to it
     shared_ptr<Body> body = shared_static_cast<Body>
         (parent.lock()->GetChildOfClass("Body"));
@@ -276,11 +271,4 @@ void Collider::DestroyODEObject()
 
     dGeomDestroy(mODEGeom);
     mODEGeom = 0;
-}
-
-
-
-boost::shared_ptr<Space> Collider::GetSavedParentSpace()
-{
-    return mSavedParentSpace;
 }
