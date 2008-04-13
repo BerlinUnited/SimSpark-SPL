@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol_c.cpp,v 1.3 2004/04/30 12:15:29 rollmark Exp $
+   $Id: monitorcontrol_c.cpp,v 1.4 2008/04/13 08:26:58 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include "oxygen/simulationserver/simulationserver.h"
 #include "monitorcontrol.h"
 
 using namespace oxygen;

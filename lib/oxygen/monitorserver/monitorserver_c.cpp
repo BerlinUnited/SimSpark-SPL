@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: monitorserver_c.cpp,v 1.4 2004/12/21 19:39:33 rollmark Exp $
+   $Id: monitorserver_c.cpp,v 1.5 2008/04/13 08:26:57 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <oxygen/simulationserver/simulationserver.h>
 #include "monitorserver.h"
 
 using namespace oxygen;
