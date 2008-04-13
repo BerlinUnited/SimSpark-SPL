@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.18 2008/04/12 05:07:23 fengxue Exp $
+   $Id: space.cpp,v 1.19 2008/04/13 09:42:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,13 +28,16 @@
 using namespace boost;
 using namespace oxygen;
 
+/** set of spaces with disabled inner collision */
+Space::TSpaceIdSet Space::gDisabledInnerCollisionSet;
+
 void Space::collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
 {
     Space *space = (Space*)data;
     space->HandleCollide(obj1, obj2);
 }
 
-Space::Space() : ODEObject(), mODESpace(0), mODEContactGroup(0), mIsDisableInnerCollision(false)
+Space::Space() : ODEObject(), mODESpace(0), mODEContactGroup(0)
 {
 }
 
@@ -91,26 +94,26 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
     const dBodyID b1 = dGeomGetBody(obj1);
     const dBodyID b2 = dGeomGetBody(obj2);
 
-    if ((b1) && (b2) && (dAreConnectedExcluding(b1,b2,dJointTypeContact)))
+    if (
+        (b1) && (b2) &&
+        (dAreConnectedExcluding(b1,b2,dJointTypeContact))
+        )
         {
             return;
         }
 
-    //If obj1 and obj2 are in a space that disabled inner collision, no collide
-    boost::shared_ptr<Collider> c1 = Collider::GetCollider(obj1);
-    boost::shared_ptr<Collider> c2 = Collider::GetCollider(obj2);
-    if (b1 && b2 && c1.get() && c2.get())
-    {
-        shared_ptr<Space> s1 = c1->GetSavedParentSpace();
-        shared_ptr<Space> s2 = c2->GetSavedParentSpace();
+    // if obj1 and obj2 are in a space that disabled inner collision,
+    // reject the collision
+    const dSpaceID s1 = dGeomGetSpace(obj1);
+    const dSpaceID s2 = dGeomGetSpace(obj2);
 
-        if (s1.get() && 
-            s1.get() == s2.get() &&
-            s1->IsDisableInnerCollision())
+    if (
+        (s1 == s2) &&
+        (gDisabledInnerCollisionSet.find(s1) != gDisabledInnerCollisionSet.end())
+        )
         {
             return;
         }
-    }
 
     // dSpaceCollide(), is guaranteed to pass all potentially
     // intersecting geom pairs to the callback function, but depending
@@ -266,11 +269,20 @@ Space::DestroyODEObject()
 
 void Space::DisableInnerCollision(bool is_disable)
 {
-    this->mIsDisableInnerCollision = is_disable;
+    if (mODESpace == 0)
+        {
+            assert(false);
+            return;
+        }
+
+    gDisabledInnerCollisionSet.insert(mODESpace);
 }
 
-bool Space::IsDisableInnerCollision() const
+bool Space::GetDisableInnerCollision() const
 {
-    return this->mIsDisableInnerCollision;
+    TSpaceIdSet::const_iterator iter
+        = gDisabledInnerCollisionSet.find(mODESpace);
+
+    return (iter != gDisabledInnerCollisionSet.end());
 }
 

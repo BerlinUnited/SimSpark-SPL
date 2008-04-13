@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.9 2008/04/11 02:36:56 fengxue Exp $
+   $Id: space.h,v 1.10 2008/04/13 09:42:34 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #define OXYGEN_SPACE_H
 
 #include "odeobject.h"
+#include <set>
 
 namespace oxygen
 {
@@ -37,9 +38,9 @@ class Collider;
 */
 class Space : public ODEObject
 {
-    //
-    // Functions
-    //
+public:
+    typedef std::set<dSpaceID> TSpaceIdSet;
+
 public:
     Space();
     virtual ~Space();
@@ -69,9 +70,9 @@ public:
 
     /** enable/disable inner collision */
     void DisableInnerCollision(bool is_disable);
- 
-    /** get the tag whether disable inner collision */
-    bool IsDisableInnerCollision() const;
+
+    /** query disabled inner collision flag */
+    bool GetDisableInnerCollision() const;
 
 protected:
     static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
@@ -112,8 +113,8 @@ private:
     dJointGroupID mODEContactGroup;
 
 private:
-    /** the tag whether disable inner collision */
-    bool mIsDisableInnerCollision;
+    /** set of spaces with disabled inner collision */
+    static TSpaceIdSet gDisabledInnerCollisionSet;
 };
 
 DECLARE_CLASS(Space);
