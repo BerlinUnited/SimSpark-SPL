@@ -189,6 +189,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\app\agentspark\naobehavior.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\app\agentspark\soccerbehavior.cpp"
 				>
 			</File>
@@ -219,6 +223,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\app\agentspark\naobehavior.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\app\agentspark\soccerbehavior.h"
 				>
 			</File>
@@ -233,6 +241,14 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<File
+			RelativePath="..\..\..\app\agentspark\Makefile.am"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\app\agentspark\naobehavior.cpp.TestJoints"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

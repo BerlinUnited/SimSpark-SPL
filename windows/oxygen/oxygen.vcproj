@@ -235,6 +235,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\lib\oxygen\gamecontrolserver\behavior.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\oxygen\gamecontrolserver\behavior.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\oxygen\gamecontrolserver\behavior_c.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\lib\oxygen\gamecontrolserver\gamecontrolserver.cpp"
 				>
 			</File>
@@ -788,6 +800,18 @@
 			</File>
 			<File
 				RelativePath="..\..\lib\oxygen\simulationserver\simulationserver_c.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\oxygen\simulationserver\traincontrol.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\oxygen\simulationserver\traincontrol.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\lib\oxygen\simulationserver\traincontrol_c.cpp"
 				>
 			</File>
 		</Filter>

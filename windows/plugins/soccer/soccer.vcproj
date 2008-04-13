@@ -496,6 +496,18 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\plugin\soccer\agentintegration\soccerbotbehavior.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\plugin\soccer\agentintegration\soccerbotbehavior.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\plugin\soccer\agentintegration\soccerbotbehavior_c.cpp"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\plugin\soccer\soccercontrolaspect\soccercontrolaspect.cpp"
 			>
 		</File>
