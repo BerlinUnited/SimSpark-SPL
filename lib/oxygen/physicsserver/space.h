@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h,v 1.10 2008/04/13 09:42:34 rollmark Exp $
+   $Id: space.h,v 1.11 2008/04/13 09:52:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -69,13 +69,16 @@ public:
     bool IsGlobalSpace();
 
     /** enable/disable inner collision */
-    void DisableInnerCollision(bool is_disable);
+    void DisableInnerCollision(bool disable);
 
     /** query disabled inner collision flag */
     bool GetDisableInnerCollision() const;
 
 protected:
     static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
+
+    /** unregisters the managed Space of the Scene. */
+    virtual void OnUnlink();
 
     /** registers the managed space to the containing parent space */
     virtual void OnLink();

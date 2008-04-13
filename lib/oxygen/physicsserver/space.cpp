@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.19 2008/04/13 09:42:34 rollmark Exp $
+   $Id: space.cpp,v 1.20 2008/04/13 09:52:00 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,6 +152,12 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         }
 }
 
+void Space::OnUnlink()
+{
+    ODEObject::OnUnlink();
+    DisableInnerCollision(false);
+}
+
 void Space::OnLink()
 {
     ODEObject::OnLink();
@@ -267,7 +273,7 @@ Space::DestroyODEObject()
     mODESpace = 0;
 }
 
-void Space::DisableInnerCollision(bool is_disable)
+void Space::DisableInnerCollision(bool disable)
 {
     if (mODESpace == 0)
         {
@@ -275,7 +281,19 @@ void Space::DisableInnerCollision(bool is_disable)
             return;
         }
 
-    gDisabledInnerCollisionSet.insert(mODESpace);
+    if (disable)
+        {
+            gDisabledInnerCollisionSet.insert(mODESpace);
+            return;
+        }
+
+    TSpaceIdSet::iterator iter = gDisabledInnerCollisionSet.find(mODESpace);
+    if (iter == gDisabledInnerCollisionSet.end())
+        {
+            return;
+        }
+
+    gDisabledInnerCollisionSet.erase(iter);
 }
 
 bool Space::GetDisableInnerCollision() const
