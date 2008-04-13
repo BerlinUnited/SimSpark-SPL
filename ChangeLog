@@ -1,3 +1,13 @@
+2008-04-13  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/physicsserver/space.cpp (Space::OnUnlink):
+	- DisableInnerCollision() should be called first since the second call
+	  will destroy mODESpace
+
+	* plugin/inputsdl/inputsystemsdl.cpp (InputSystemSDL::Init):
+	- do not set video mode here. it's up to OpenGLSystem.
+
+
 2008-04-12  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /lib/oxygen/physicsserver/odeobject.h:
 	- revert GetSpace to the protected scope
@@ -6,12 +16,12 @@
 	- add a space member to store the parent space
 
 	* /lib/oxygen/physicsserver/space.cpp:
-	- instead GetSpace() call of GetSavedParentSpace() to improve 
+	- instead GetSpace() call of GetSavedParentSpace() to improve
 	  ode performance
 
 	* Summary:
 	- Thanks for Markus's suggestions, criticism makes things go ahead.
-	- Now the system is very stable, I hope a 5 vs 5 match in RoboCup2008!  
+	- Now the system is very stable, I hope a 5 vs 5 match in RoboCup2008!
 
 
 
@@ -21,12 +31,12 @@
 	  a generic code(not a hack) proposed by Markus Rollmann, hope it will work.
 	- Add function: void DisableInnerCollision() to set the tag.
 	- Add function: void IsDisableInnerCollision() to get the tag.
-	
+
 	* /lib/oxygen/physicsserer/space_c.cpp:
 	- Add functio: disableInnerCollision to call in the rsg files.
 
 	* /app/simspark/rsg/agent/nao/nao.rsg:
-	- add the script code (disableInnerCollision true) to disable the inner 
+	- add the script code (disableInnerCollision true) to disable the inner
 	  collision of nao.
 
 
@@ -49,21 +59,21 @@
 	- In HandleCollide() function: removed internal collide
 	  of robot.
 	  This is done by simply check the nearest space of the collider(e),
-	  If they are the same space and their space names are both "spacenao", 
+	  If they are the same space and their space names are both "spacenao",
 	  then no collide happens. Hope it will work.
 
 
 
 2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /app/simspark/rsg/agent/nao/*.rsg:
-	- Instead the universal joint of two hinge joints for 
+	- Instead the universal joint of two hinge joints for
 	  the universal joint is hard to do the joint limits.
 	- Fixed some bugs.
 
 
 2008-04-10  Feng Xue <henry519@mail.ustc.edu.cn>
 	* /plugin/rubysceneimporter.cpp:
-	- Boost up rsg fetures: add string 
+	- Boost up rsg fetures: add string
 	  The syntax is like this
 	  (def $Feng Feng)
 	  (def $Xue  Xue)

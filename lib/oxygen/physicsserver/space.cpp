@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.20 2008/04/13 09:52:00 rollmark Exp $
+   $Id: space.cpp,v 1.21 2008/04/13 14:25:11 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -154,8 +154,8 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 
 void Space::OnUnlink()
 {
-    ODEObject::OnUnlink();
     DisableInnerCollision(false);
+    ODEObject::OnUnlink();
 }
 
 void Space::OnLink()

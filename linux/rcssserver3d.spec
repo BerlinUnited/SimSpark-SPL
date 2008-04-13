@@ -55,7 +55,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/[^r]*
 %{_bindir}/rc*
 %dir %{_libdir}/%{name}
-%{_libdir}/%{name}/[a-hj-kmnp-z]*
+%{_libdir}/%{name}/[^ilo]*
 %{_libdir}/%{name}/inputsdl*
 %{_libdir}/%{name}/openglsyssdl*
 %{_libdir}/%{name}/ob*
@@ -75,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sun Apr 13 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.7-2
+- updated an ugly wildcard! a little better.
+
 * Fri Apr 11 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.7-2
 - added ldconfig config file
 - run ldconfig after install/uninstall
