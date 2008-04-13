@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: body_c.cpp,v 1.11 2008/02/24 13:55:16 sgvandijk Exp $
+   $Id: body_c.cpp,v 1.12 2008/04/13 09:41:36 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -530,7 +530,7 @@ FUNCTION(Body,addTorque)
             return false;
         }
 
-    obj->AddForce(inTorque);
+    obj->AddTorque(inTorque);
     return true;
 }
 
@@ -546,7 +546,7 @@ FUNCTION(Body,setPosition)
             return false;
         }
 
-    obj->AddForce(inPos);
+    obj->SetPosition(inPos);
     return true;
 }
 
