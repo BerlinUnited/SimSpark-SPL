@@ -4,6 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
+   $Id: singlematiniteffector.cpp,v 1.9 2008/04/14 13:44:28 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +23,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
 //#include <oxygen/gamecontrolserver/predicate.h>
+#include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/physicsserver/body.h>
 #include <soccer/soccerbase/soccerbase.h>
 #include <soccer/agentstate/agentstate.h>
@@ -47,8 +49,15 @@ SingleMatInitEffector::~SingleMatInitEffector()
 void
 SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
 {
+    if ( ( mAction.get() == 0 ) ||
+         (mGameState.get() == 0) ||
+         (mAgentAspect.get() == 0)
+        )
+    {
+        return;
+    }
     InitEffector::PrePhysicsUpdateInternal(deltaTime);
-
+    
     // body parts that should be colored in team colors
     std::vector<std::string> jersey;
     jersey.push_back("body");
@@ -127,6 +136,7 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
         }
         if ((*it) == "body")
         {
+            std::cout<<"SingleMatInitEffector Body "<<unumMat.str()<<std::endl;
             matNode->SetMaterial(unumMat.str()); 
         } 
         else 
@@ -135,5 +145,24 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
         }
     }
 
+    // set the scene modified, the monitor will update
+    shared_ptr<SceneServer> sceneServer =
+        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+
+    if (sceneServer.get() ==0)
+    {
+        GetLog()->Error()
+            << "(SingleMatInitEffector) ERROR: SceneServer not found\n";
+        return;
+    }
+
+    shared_ptr<Scene> scene = sceneServer->GetActiveScene();
+    if (scene.get() == 0)
+    {
+        GetLog()->Error()
+            << "(SingleMatInitEffector) ERROR: Scene not found\n";
+        return;
+    }
+    scene->SetModified(true);
 }
 
