@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: scene.h,v 1.6 2004/05/05 09:02:24 rollmark Exp $
+   $Id: scene.h,v 1.7 2008/04/14 12:51:38 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,9 +65,15 @@ public:
     /** returns true iff the scene is marked modified */
     bool GetModified();
 
+    /** return how many times the scene was modified */
+    int GetModifiedNum();
+
 protected:
     /** true, if the scene is modified */
     bool mModified;
+
+    /** how many times the scene was modified */ 
+    int mModifiedNum;
 };
 
 DECLARE_CLASS(Scene);
