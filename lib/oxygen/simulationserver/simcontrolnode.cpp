@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.cpp,v 1.7 2008/04/08 06:55:09 yxu Exp $
+   $Id: simcontrolnode.cpp,v 1.8 2008/04/14 13:30:54 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -46,4 +46,19 @@ shared_ptr<SimulationServer> SimControlNode::GetSimulationServer()
 void SimControlNode::SetSimTime( float now )
 {
     mTime = now + mStep;
+}
+
+shared_ptr<Scene> SimControlNode::GetActiveScene()
+{
+    shared_ptr<SceneServer> sceneServer =
+        GetSimulationServer()->GetSceneServer();
+
+    if (sceneServer.get() ==0)
+    {
+        GetLog()->Error()
+            << "(SimControlNode) ERROR: SceneServer not found\n";
+        return shared_ptr<Scene>();
+    }
+
+    return sceneServer->GetActiveScene();
 }

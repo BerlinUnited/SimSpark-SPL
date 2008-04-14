@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simcontrolnode.h,v 1.5 2008/04/08 06:55:09 yxu Exp $
+   $Id: simcontrolnode.h,v 1.6 2008/04/14 13:30:54 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <zeitgeist/node.h>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition.hpp>
+#include <oxygen/sceneserver/scene.h>
 
 namespace oxygen
 {
@@ -75,6 +76,9 @@ public:
 protected:
     /** returns a reference to the SimulationServer */
     boost::shared_ptr<SimulationServer> GetSimulationServer();
+
+    /** returns a reference to the active scene */
+    boost::shared_ptr<Scene> GetActiveScene();
     
     float mTime;
     
