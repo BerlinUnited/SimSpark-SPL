@@ -4,6 +4,49 @@
 	- using c++filt to demangle function names. (addr2line doesn't work
 	  when debugging symbols are not available)
 
+2008-04-14  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+	- do not include the std::endl in scene description
+	- do not need to judge whether full state in SceneDescribe
+
+	* plugin/soccer/initeffector/singlematiniteffector.cpp:
+	- set the scene modified when perform the init action, so the
+	monitor will be updated fully
+
+	* lib/spark/spark.rb:
+	- use monitorLoggerStep(in seconds) instead monitorLoggerInterval (in cycle)
+
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- do not need to call Scene::SetModified(false) every cycle
+
+	* lib/oxygen/simulationserver/simcontrolnode.cpp:
+	* lib/oxygen/simulationserver/simcontrolnode.h:
+	- add function GetActiveScene()
+
+	* lib/oxygen/simulationserver/monitorlogger.cpp:
+	* lib/oxygen/simulationserver/monitorlogger.h:
+	* lib/oxygen/simulationserver/monitorlogger_c.cpp:
+	* lib/oxygen/simulationserver/monitorcontrol.cpp:
+	* lib/oxygen/simulationserver/monitorcontrol.h:
+	* lib/oxygen/simulationserver/monitorcontrol_c.cpp:
+	- remove mMonitorInterval, the interval is controled by mStep(in
+	SimControlNode)
+	- log the full state when secen's modified number is greater than
+	mFullStateLogged
+	- log std::endl in file logger only
+
+	* lib/oxygen/sceneserver/scene.cpp:
+	* lib/oxygen/sceneserver/scene.h:
+	- add mModifiedNum to indicate whether the monitor need full update
+
+	* lib/kerosin/sceneserver/singlematnode.cpp
+	(SingleMatNode::SetMaterial):
+	- check if the material is null
+
+	* app/simspark/simspark.rb:
+	- add enableInteralMonitor to toggle the interal monitor
+
 2008-04-13  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/physicsserver/space.cpp (Space::OnUnlink):
