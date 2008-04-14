@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: core.cpp,v 1.22 2008/02/27 07:18:47 rollmark Exp $
+   $Id: core.cpp,v 1.23 2008/04/14 14:26:09 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -194,7 +194,8 @@ void Core::CatchSignal(int sig_num)
 
     for (int i=0; i<depth; ++i)
         {
-            cerr << "[" << i << "] " << strings[i] << "\n";
+            stringstream ss;
+            ss << "echo \"[" << i << "] " << strings[i] << "\" | c++filt;";
 
             // use the addr2line tool from binutils to retrieve the
             // source line from the frame adress
@@ -202,7 +203,6 @@ void Core::CatchSignal(int sig_num)
             // -e : specify executable name
             // -f : display function names, as well as file and line number info
 
-            stringstream ss;
             ss << "addr2line -C -f -e \"" << exeName << "\" " << addresses[i];
             system(ss.str().c_str());
 

@@ -1,3 +1,9 @@
+2008-04-14  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/zeitgeist/core.cpp (Core::CatchSignal):
+	- using c++filt to demangle function names. (addr2line doesn't work
+	  when debugging symbols are not available)
+
 2008-04-13  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/physicsserver/space.cpp (Space::OnUnlink):
