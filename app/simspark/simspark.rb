@@ -5,27 +5,34 @@
 # toggle log file recording
 $recordLogfile = false
 
+# toggle the internal monitor
+$enableInternalMonitor = true
+
 sparkSetupServer()
-sparkSetupRendering()
+if ($enableInternalMonitor)
+  sparkSetupRendering()
+end
 sparkSetupInput()
 
 # sparkAddFPSCamera($scenePath+'camera',
 #                   -10,-10,5,15,248,4,false,2,10,10)
 
 # let spark create a default camera
-sparkAddFPSCamera(
- 		  $scenePath+'camera',
- 		  x = -5,
- 		  y = -40,
- 		  z = 2,
-                  vAngle = 10.0,
-                  hAngle = 10.0,
-                  maxSpeed = 15.0,
- 		  accel = 400.0,
- 		  drag = 4,
- 		  addCollider = false,
-                  colliderRadius = 2.0
- 		  )
+if ($enableInternalMonitor)
+  sparkAddFPSCamera(
+                    $scenePath+'camera',
+                    x = -5,
+                    y = -40,
+                    z = 2,
+                    vAngle = 10.0,
+                    hAngle = 10.0,
+                    maxSpeed = 15.0,
+                    accel = 400.0,
+                    drag = 4,
+                    addCollider = false,
+                    colliderRadius = 2.0
+                    )
+end
 
 # setup default input bindings
 run "bindings.rb"
@@ -59,4 +66,6 @@ run "soccersim.rb"
 
 # setup game state info rendering for the internal monitor
 # source soccersim.rb to run the soccer simulation
-run "internalsoccermonitor.rb"
+if ($enableInternalMonitor)
+  run "internalsoccermonitor.rb"
+end
