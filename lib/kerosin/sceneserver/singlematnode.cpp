@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematnode.cpp,v 1.6 2008/02/22 16:48:18 hedayat Exp $
+   $Id: singlematnode.cpp,v 1.7 2008/04/14 12:48:50 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,6 +53,8 @@ bool SingleMatNode::SetMaterial(const std::string& name)
 
     if (material.get() == 0)
         {
+            GetLog()->Error()
+                << "(SingleMatNode) ERROR: Cannot find Material "<<name<<"\n";
             return false;
         }
 
