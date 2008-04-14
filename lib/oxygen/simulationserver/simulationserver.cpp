@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: simulationserver.cpp,v 1.22 2008/04/08 07:04:38 yxu Exp $
+   $Id: simulationserver.cpp,v 1.23 2008/04/14 13:33:22 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -338,12 +338,6 @@ void SimulationServer::Run(int argc, char** argv)
 void SimulationServer::Cycle(shared_ptr<SimControlNode> &inputCtr)
 {
     ++mCycle;
-
-    shared_ptr<Scene> scene = mSceneServer->GetActiveScene();
-    if (scene.get() != 0)
-    {
-        scene->SetModified(false);
-    }
 
     ControlEvent(CE_StartCycle);
     ControlEvent(CE_SenseAgent);
