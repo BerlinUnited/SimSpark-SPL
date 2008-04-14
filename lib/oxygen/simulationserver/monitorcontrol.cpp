@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.cpp,v 1.7 2008/04/01 14:31:51 yxu Exp $
+   $Id: monitorcontrol.cpp,v 1.8 2008/04/14 13:28:14 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,10 +29,9 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-MonitorControl::MonitorControl() : NetControl()
+MonitorControl::MonitorControl() : NetControl(), mFullStateLogged(0)
 {
     mLocalAddr.setPort(3200);
-    mMonitorInterval = 30;
 }
 
 MonitorControl::~MonitorControl()
@@ -65,53 +64,42 @@ void MonitorControl::ClientConnect(shared_ptr<Client> client)
     string header = mMonitorServer->GetMonitorHeaderInfo();
     mNetMessage->PrepareToSend(header);
     SendClientMessage(client->addr,header);
+    
+    shared_ptr<Scene> scene = GetActiveScene();
+    if (scene.get() != 0)
+    {
+        mFullStateLogged = scene->GetModifiedNum();
+    }
 }
 
 void MonitorControl::EndCycle()
 {
     NetControl::EndCycle();
 
-    bool fullState = false;
-    shared_ptr<SceneServer> sceneServer =
-        GetSimulationServer()->GetSceneServer();
-
-    if (sceneServer.get() ==0)
-    {
-        GetLog()->Error()
-            << "(MonitorControl) ERROR: SceneServer not found\n";
-        return;
-    }
-
-    shared_ptr<Scene> scene = sceneServer->GetActiveScene();
-    if (scene.get() != 0)
-    {
-        if ( scene->GetModified() )
-        {
-            fullState = true;
-        }
-    }
-
-    if ( !fullState )
-    {
-        const int cycle = GetSimulationServer()->GetCycle();
-        if ( cycle % mMonitorInterval)
-        {
-            return;
-        }
-    }
-    
     if (
         (mMonitorServer.get() == 0) ||
         (mNetMessage.get() == 0)
         )
-        {
-            return;
-        }
-
+    {
+        return;
+    }
+    
     // send updates to all connected monitors
     if ( !mClients.empty() )
     {
-        string info = mMonitorServer->GetMonitorData();
+        string info;
+        shared_ptr<Scene> scene = GetActiveScene();
+        if (scene.get() != 0
+            && scene->GetModifiedNum() > mFullStateLogged )
+        {
+            mFullStateLogged = scene->GetModifiedNum();
+            info = mMonitorServer->GetMonitorHeaderInfo();
+        }
+        else
+        {
+            info = mMonitorServer->GetMonitorData();
+        }
+        
         mNetMessage->PrepareToSend(info);
 
         for (
@@ -159,16 +147,6 @@ void MonitorControl::StartCycle()
                     mMonitorServer->ParseMonitorMessage(message);
                 }
         }
-}
-
-int MonitorControl::GetMonitorInterval()
-{
-    return mMonitorInterval;
-}
-
-void MonitorControl::SetMonitorInterval(int i)
-{
-    mMonitorInterval = i;
 }
 
 

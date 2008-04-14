@@ -2,6 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
+   $Id: monitorlogger_c.cpp,v 1.2 2008/04/14 13:28:14 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,25 +22,7 @@
 using namespace oxygen;
 using namespace std;
 
-
-FUNCTION(MonitorLogger, setMonitorLoggerInterval)
-{
-    int inInterval;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(), inInterval))
-         )
-    {
-        return false;
-    }
-
-    obj->SetMonitorLoggerInterval(inInterval);
-    return true;
-}
-
 void CLASS(MonitorLogger)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/SimControlNode);
-    DEFINE_FUNCTION(setMonitorLoggerInterval);
 }

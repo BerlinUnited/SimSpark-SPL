@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.h,v 1.4 2008/02/22 16:48:18 hedayat Exp $
+   $Id: monitorcontrol.h,v 1.5 2008/04/14 13:28:14 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -60,8 +60,8 @@ protected:
     /** cached reference to the MonitorServer */
     CachedPath<MonitorServer> mMonitorServer;
 
-    /** the update interval for the connected monitors in cycles */
-    int mMonitorInterval;
+    /** number of full state logged */
+    int mFullStateLogged;
 };
 
 DECLARE_CLASS(MonitorControl);

@@ -1,8 +1,9 @@
+
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorlogger.h,v 1.1 2007/04/26 14:38:47 jboedeck Exp $
+   $Id: monitorlogger.h,v 1.2 2008/04/14 13:28:14 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,11 +55,11 @@ protected:
     /** cached reference to the MonitorServer */
     boost::shared_ptr<MonitorServer> mMonitorServer;
 
-    /** the update interval for the monitor logger in cycles */
-    int mMonitorLoggerInterval;
-
     /** ofstream object to log monitor messages */
-    std::ofstream logFile;
+    std::ofstream mLogFile;
+    
+    /** number of full state logged */
+    int mFullStateLogged;
 };
 
 DECLARE_CLASS(MonitorLogger);

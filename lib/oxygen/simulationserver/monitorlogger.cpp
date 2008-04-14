@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorlogger.cpp,v 1.3 2008/04/01 14:25:03 yxu Exp $
+   $Id: monitorlogger.cpp,v 1.4 2008/04/14 13:28:14 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,9 +29,8 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-MonitorLogger::MonitorLogger() : SimControlNode()
+MonitorLogger::MonitorLogger() : SimControlNode(), mFullStateLogged(0)
 {
-    mMonitorLoggerInterval = 30;
 }
 
 MonitorLogger::~MonitorLogger()
@@ -50,8 +49,13 @@ void MonitorLogger::OnLink()
         }
 
     mMonitorServer = sim->GetMonitorServer();
+    if ( 0 == mMonitorServer.get() ){
+        GetLog()->Error()
+                << "(MonitorControl) ERROR: MonitorServer not found\n";
+        return;
+    }
 
-    logFile.open("sparkmonitor.log");
+    mLogFile.open("sparkmonitor.log");
 }
 
 void MonitorLogger::OnUnlink()
@@ -64,55 +68,19 @@ void MonitorLogger::EndCycle()
 {
     SimControlNode::EndCycle();
 
-    const int cycle = GetSimulationServer()->GetCycle();
-    if ( cycle == 1 ){
-        string header = mMonitorServer->GetMonitorHeaderInfo();
-        logFile << header;
-        return;
-    }
-    
-    bool fullState = false;
-    shared_ptr<SceneServer> sceneServer =
-        GetSimulationServer()->GetSceneServer();
-    
-    if (sceneServer.get() ==0)
-        {
-            GetLog()->Error()
-                << "(MonitorLogger) ERROR: SceneServer not found\n";
-            return;
-        }
-
-    shared_ptr<Scene> scene = sceneServer->GetActiveScene();
-    if (scene.get() != 0)
+    string info;
+    shared_ptr<Scene> scene = GetActiveScene();
+    if (scene.get() != 0
+        && scene->GetModifiedNum() > mFullStateLogged )
     {
-        if ( scene->GetModified() )
-        {
-            fullState = true;
-        }
+        mFullStateLogged = scene->GetModifiedNum();
+        info = mMonitorServer->GetMonitorHeaderInfo();
     }
-
-    if ( !fullState && (cycle % mMonitorLoggerInterval) )
+    else
     {
-        return;
-    }
-
-    if ( mMonitorServer.get() == 0 ) 
-    {
-        return;
+        info = mMonitorServer->GetMonitorData();
     }
 
     // log updates
-    string info = mMonitorServer->GetMonitorData();
-
-    logFile << info;
-}
-
-int MonitorLogger::GetMonitorLoggerInterval()
-{
-    return mMonitorLoggerInterval;
-}
-
-void MonitorLogger::SetMonitorLoggerInterval(int i)
-{
-    mMonitorLoggerInterval = i;
+    mLogFile << info << std::endl;
 }
