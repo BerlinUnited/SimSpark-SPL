@@ -40,7 +40,7 @@ $agentPort = 3100
 
 # define the monitor update interval in cycles
 $renderStep = 0.04
-$monitorInterval = 10;
+$monitorLoggerStep = 0.2;
 $monitorStep = 0.04
 $serverType = 'tcp'
 $serverPort = 3200
@@ -308,7 +308,6 @@ def sparkSetupServer
   end
 
   monitorControl = sparkCreate('oxygen/MonitorControl',$serverPath+'simulation/MonitorControl')
-  monitorControl.setMonitorInterval($monitorInterval)
   monitorControl.setStep($monitorStep)
   monitorControl.setServerPort($serverPort)
 
@@ -329,7 +328,7 @@ def sparkSetupServer
   if ($recordLogfile == true)
     print "(spark.rb) recording Logfile as 'sparkmonitor.log'\n"
     monitorLogger = sparkCreate('oxygen/MonitorLogger', $serverPath+'simulation/MonitorLogger')
-    monitorLogger.setMonitorLoggerInterval($monitorInterval)
+    monitorLogger.setStep($monitorLoggerStep)
   end
 end
 
