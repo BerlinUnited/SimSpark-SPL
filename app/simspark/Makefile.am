@@ -125,8 +125,13 @@ EXTRA_DIST = \
 	textures/rcs-unum11.png\
 	rsg/agent/nao/box_appearance.rsg\
 	rsg/agent/nao/box_physics.rsg\
+	rsg/agent/nao/box_physics_with_handler.rsg\
+	rsg/agent/nao/box_physics_nocollider.rsg\
 	rsg/agent/nao/ccylinder_appearance.rsg\
 	rsg/agent/nao/ccylinder_physics.rsg\
+	rsg/agent/nao/ccylinder_physics_nocollider.rsg\
+        rsg/agent/nao/contactjointhandler.rsg\
+	rsg/agent/nao/dragcontroller.rsg\
 	rsg/agent/nao/hingejoint.rsg\
 	rsg/agent/nao/universaljoint.rsg\
 	rsg/agent/nao/nao.rsg\
@@ -134,6 +139,7 @@ EXTRA_DIST = \
 	rsg/agent/nao/naoleg.rsg\
 	rsg/agent/nao/naoneckhead.rsg\
 	rsg/agent/nao/sphere_appearance.rsg\
-	rsg/agent/nao/sphere_physics.rsg
-
+	rsg/agent/nao/sphere_physics.rsg\
+	rsg/agent/nao/sphere_physics_nocollider.rsg\
+        rsg/agent/nao/touchperceptorhandler.rsg
 

@@ -1,3 +1,12 @@
+2008-04-15  Feng Xue  <henry519@mail.ustc.edu.cn>
+	* app/simspark/Makefile.am:
+	- Add dependency of the new files in app/simspark/rsg/agent/nao
+	
+	* app/simspark/rsg/agent/nao:
+	- Installed visionperceptor and frp
+	  Fixed the bug of beamperceptor
+
+
 2008-04-14  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/zeitgeist/core.cpp (Core::CatchSignal):
