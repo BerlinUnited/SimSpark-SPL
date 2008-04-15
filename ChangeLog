@@ -1,3 +1,10 @@
+
+2008-04-15  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* utility/sfsexp/Makefile.am:
+	- complie fixing for x86_64: add AM_CFLAGS = -fPIC
+
+
 2008-04-15  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* app/simspark/Makefile.am:
 	- Add dependency of the new files in app/simspark/rsg/agent/nao
@@ -5,6 +12,7 @@
 	* app/simspark/rsg/agent/nao:
 	- Installed visionperceptor and frp
 	  Fixed the bug of beamperceptor
+
 
 
 2008-04-14  Hedayat Vatankhah  <hedayat@grad.com>

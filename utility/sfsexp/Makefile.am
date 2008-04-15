@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libsexp.a
 
 AM_CPPFLAG = -fPIC
+AM_CFLAGS = -fPIC
 
 libsexp_a_SOURCES = \
 cstring.c \
