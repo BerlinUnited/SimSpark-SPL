@@ -9,18 +9,20 @@
             $Min         $Max
     )
 
-    (def $PI 3.14159265)
-    (def $MinDeg (eval $Min * (eval 180.0 / $PI)))
-    (def $MaxDeg (eval $Max * (eval 180.0 / $PI)))
-    
+    ;(def $PI 3.14159265)
+    ;(def $MinDeg (eval $Min * (eval 180.0 / $PI)))
+    ;(def $MaxDeg (eval $Max * (eval 180.0 / $PI)))
+    (def $MinDeg $Min)
+    (def $MaxDeg $Max)
+        
     ;
     ;Hinge Joint Parameters
     ;
-    (def $FMax          50)
+    (def $FMax          100)
     (def $CFM           1e-8)
     (def $Stop_CFM      1e-8)
-    (def $Stop_ERP      0.4)
-    (def $FudgeFactor   0.1)  ;1e-8)
+    (def $Stop_ERP      0.2)
+    (def $FudgeFactor   0.02)
     (def $Bounce        1e-8)
     
     (nd HingeJoint

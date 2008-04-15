@@ -41,6 +41,7 @@
     (def $Joint5EffName   (join $LeftOrRight le5))
     (def $Joint6EffName   (join $LeftOrRight le6))
 
+    (def $FRPName (join $LeftOrRight f))
 
     ;
     ;Position Parameters
@@ -124,38 +125,38 @@
     ;
     ;Joint Parameters
     ;
-    (def $lj1_min    -1.5708)
-    (def $lj1_max    0.1745)
+    (def $lj1_min    -90)
+    (def $lj1_max    1)
     
-    (def $lj2_min    -0.4363)
-    (def $lj2_max    1.5708)
+    (def $lj2_min    -25)
+    (def $lj2_max    100)
 
-    (def $right_lj3_min -0.7845)
-    (def $left_lj3_min  -0.3491)
+    (def $right_lj3_min -45)
+    (def $left_lj3_min  -25)
     (def $lj3_min_c1    (eval (eval $right_lj3_min + $left_lj3_min) * 0.5))
     (def $lj3_min_c2    (eval (eval $right_lj3_min - $left_lj3_min) * 0.5))
     (def $lj3_min       (eval $lj3_min_c1 + (eval $LRFactor * $lj3_min_c2)))
     
-    (def $right_lj3_max 0.3491)
-    (def $left_lj3_max  0.7845)
+    (def $right_lj3_max 25)
+    (def $left_lj3_max  45)
     (def $lj3_max_c1    (eval (eval $right_lj3_max + $left_lj3_max) * 0.5))
     (def $lj3_max_c2    (eval (eval $right_lj3_max - $left_lj3_max) * 0.5))
     (def $lj3_max       (eval $lj3_max_c1 + (eval $LRFactor * $lj3_max_c2)))
     
-    (def $lj4_min       -2.2689)
-    (def $lj4_max       0.01)
+    (def $lj4_min       -130)
+    (def $lj4_max       1)
     
-    (def $lj5_min       -0.5236)
-    (def $lj5_max       1.3963)
+    (def $lj5_min       -45)
+    (def $lj5_max       75)
     
-    (def $right_lj6_min -0.3491)
-    (def $left_lj6_min  -0.7854)
+    (def $right_lj6_min -25)
+    (def $left_lj6_min  -45)
     (def $lj6_min_c1    (eval (eval $right_lj6_min + $left_lj6_min) * 0.5))
     (def $lj6_min_c2    (eval (eval $right_lj6_min - $left_lj6_min) * 0.5))
     (def $lj6_min       (eval $lj6_min_c1 + (eval $LRFactor * $lj6_min_c2)))
     
-    (def $right_lj6_max  0.7854)
-    (def $left_lj6_max   0.3491)
+    (def $right_lj6_max  45)
+    (def $left_lj6_max   25)
     (def $lj6_max_c1    (eval (eval $right_lj6_max + $left_lj6_max) * 0.5))
     (def $lj6_max_c2    (eval (eval $right_lj6_max - $left_lj6_max) * 0.5))
     (def $lj6_max       (eval $lj6_max_c1 + (eval $LRFactor * $lj6_max_c2)))
@@ -176,7 +177,9 @@
         (setLocalPos $Hip1_X $Hip1_Y $Hip1_Z)
 
         (importScene rsg/agent/nao/sphere_appearance.rsg $Hip1Radius matYellow)
-        (importScene rsg/agent/nao/sphere_physics.rsg    $Hip1Radius $Hip1Mass)
+        ;(importScene rsg/agent/nao/sphere_physics $Hip1Radius $Hip1Mass)
+        (importScene rsg/agent/nao/sphere_physics_nocollider.rsg $Hip1Radius $Hip1Mass)
+        
         
         (importScene rsg/agent/nao/hingejoint.rsg
                               $Joint1PerName $Joint1EffName
@@ -194,7 +197,8 @@
         (setLocalPos $Hip2_X $Hip2_Y $Hip2_Z)
 
         (importScene rsg/agent/nao/sphere_appearance.rsg $Hip2Radius matYellow)
-        (importScene rsg/agent/nao/sphere_physics.rsg    $Hip2Radius $Hip2Mass)
+        ;(importScene rsg/agent/nao/sphere_physics.rsg $Hip2Radius $Hip2Mass)
+        (importScene rsg/agent/nao/sphere_physics_nocollider.rsg $Hip2Radius $Hip2Mass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
                               $Joint2PerName $Joint2EffName
@@ -210,7 +214,6 @@
     (nd Transform
        (setName $ThighName)
        (setLocalPos $Thigh_X $Thigh_Y $Thigh_Z)
-       ;(setLocalRotation 8.594 0 0)
         
        (importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
        (importScene rsg/agent/nao/box_physics.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
@@ -230,7 +233,6 @@
     (nd Transform
         (setName $ShankName)
         (setLocalPos $Shank_X $Shank_Y $Shank_Z)
-        ;(setLocalRotation -8.594 0 0)
         
         (importScene rsg/agent/nao/box_appearance.rsg $ShankSizeX $ShankSizeY $ShankSizeZ matGrey)
         (importScene rsg/agent/nao/box_physics.rsg    $ShankSizeX $ShankSizeY $ShankSizeZ $ShankMass)
@@ -252,7 +254,8 @@
         (setLocalPos $Ankle_X $Ankle_Y $Ankle_Z)
         
         (importScene rsg/agent/nao/sphere_appearance.rsg $AnkleRadius matRed)
-        (importScene rsg/agent/nao/sphere_physics.rsg    $AnkleRadius $AnkleMass)
+        ;(importScene rsg/agent/nao/sphere_physics.rsg $AnkleRadius $AnkleMass)
+        (importScene rsg/agent/nao/sphere_physics_nocollider.rsg $AnkleRadius $AnkleMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
                               $Joint5PerName $Joint5EffName
@@ -269,9 +272,13 @@
     (nd Transform
         (setName $FootName)
         (setLocalPos $Foot_X $Foot_Y $Foot_Z)
-        
+         
+        (nd ForceResistancePerceptor
+	    (setName $FRPName)
+        )
+  
         (importScene rsg/agent/nao/box_appearance.rsg $FootSizeX $FootSizeY $FootSizeZ matBlue)
-        (importScene rsg/agent/nao/box_physics.rsg    $FootSizeX $FootSizeY $FootSizeZ $FootMass)
+        (importScene rsg/agent/nao/box_physics_with_handler.rsg    $FootSizeX $FootSizeY $FootSizeZ $FootMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
                                 $Joint6PerName $Joint6EffName
@@ -280,5 +287,6 @@
                                 0 1 0 ;1 -1 -1
                                 $lj6_min $lj6_max)
         
+         
     )
 )

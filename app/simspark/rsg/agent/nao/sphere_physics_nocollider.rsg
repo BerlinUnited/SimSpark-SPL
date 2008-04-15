@@ -10,10 +10,4 @@
 
         (importScene rsg/agent/nao/dragcontroller.rsg)
     )
-
-    (nd SphereCollider
-        (setRadius $radius)
-
-        (importScene rsg/agent/nao/contactjointhandler.rsg)
-    )
  )

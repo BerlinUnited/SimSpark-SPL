@@ -1,0 +1,19 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+    (nd ContactJointHandler
+        (setContactBounceMode true)
+        (setContactBounceValue 0.001)
+        (setMinBounceVel 10)
+
+        (setContactSoftERPMode true)
+        (setContactSoftERP 0.6)
+
+        (setContactSoftCFMMode true)
+        (setContactSoftCFM 1e-4)
+
+        (setContactSlipMode false)
+        (setContactSlip 0.1 0.1)
+    )
+)

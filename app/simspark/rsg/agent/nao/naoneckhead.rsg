@@ -22,22 +22,19 @@
     (def $Head_Y        $Neck_Y)
     (def $Head_Z        (eval $Neck_Z + 0.065))
     (def $Head_Radius   0.065)
-    ;(def $Head_Radius   0.045) ;The origin version is too too big 
     (def $Head_Mass     0.350)
     
     ;
     ;Head effector 1 parameter
     ;
-    (def $he1_min -1.0472)
-    (def $he1_max 1.0472)
-    (def $he1_max_force 100)
+    (def $he1_min -120)
+    (def $he1_max 120)
     
     ;
     ;Head effector 2 parameter
     ;
-    (def $he2_min -0.7854)
-    (def $he2_max 0.7854)
-    (def $he2_max_force 100)
+    (def $he2_min -45)
+    (def $he2_max 45)
     
     ;
     ;Begin construct neck
@@ -53,9 +50,9 @@
                             hj1 he1
                             ../ccylinderBody ../../body/boxBody
                             0 0 0
-                            0 0 1 ;2 -1 -1
+                            0 0 1
                             $he1_min $he1_max)
-     )
+    )
 
     ;
     ;Begin construct head
@@ -63,7 +60,8 @@
     (nd Transform
         (setName head)
         (setLocalPos $Head_X $Head_Y $Head_Z)
-         
+
+
         (nd SingleMatNode
 	    (load 'models/soccerball.obj')
 	    (setScale $Head_Radius $Head_Radius $Head_Radius)
@@ -75,8 +73,9 @@
         (importScene rsg/agent/nao/hingejoint.rsg
                               hj2 he2
                               ../sphereBody ../../neck/ccylinderBody 
+                              ;../boxBody ../../body/boxBody
                               0 0 -0.005
-                              1 0 0 ;0 -1 -1
+                              1 0 0
                               $he2_min $he2_max)
     )
 )

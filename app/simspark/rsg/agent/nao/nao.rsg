@@ -17,7 +17,7 @@
 (def $TorsoMass    1.2)
 
 (def $TorsoInitX  0)
-(def $TorsoInitY  1)
+(def $TorsoInitY  -1)
 (def $TorsoInitZ  1.5)
 
 ;
@@ -38,7 +38,6 @@
         (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
     
         (nd SingleMatInitEffector)
-        (nd BeamEffector)
         
         (nd TimePerceptor)
         
@@ -47,10 +46,18 @@
             (nd GameStatePerceptor)
             (nd HearPerceptor)
         )
+             
+        (nd VisionPerceptor
+            (setSenseMyPos false)
+	    (setStaticSenseAxis false)
+        )
+
+        (nd BeamEffector)
 
         (nd SayEffector)
         
         (nd GyroRatePerceptor (setName torso))
+
 
     );end of AgentAspect
     

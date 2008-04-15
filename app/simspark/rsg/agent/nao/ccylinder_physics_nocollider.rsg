@@ -10,10 +10,4 @@
 
         (importScene rsg/agent/nao/dragcontroller.rsg)
     )
-
-    (nd CCylinderCollider
-        (setParams $radius $length)
-
-        (importScene rsg/agent/nao/contactjointhandler.rsg)
-    )
- )
+)
