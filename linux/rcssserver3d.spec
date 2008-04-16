@@ -54,7 +54,7 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/
 echo %{_libdir}/%{name} > $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/%{name}.conf
-%if 0%{!?_with_wxWidgets: 1}
+%if 0%{!?_with_wxWidgets:1}
 rm -rf $RPM_BUILD_ROOT/%{_includedir}/%{name}/wxutil
 %endif
 
