@@ -18,7 +18,7 @@
 
 (def $TorsoInitX  0)
 (def $TorsoInitY  -1)
-(def $TorsoInitZ  1.5)
+(def $TorsoInitZ  1)
 
 ;
 ;Begin Construct of Nao

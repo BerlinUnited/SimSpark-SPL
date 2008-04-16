@@ -1,3 +1,7 @@
+2008-04-16  Feng Xue <henry519@mail.ustc.edu.cn>
+	* app/simspark/rsg/agent/nao:
+	- Fixed the joint issue. We now have a version 1.0 Nao model :)
+
 
 2008-04-15  Xu Yuan  <xuyuan.cn@gmail.com>
 
@@ -11,7 +15,7 @@
 	
 	* app/simspark/rsg/agent/nao:
 	- Installed visionperceptor and frp
-	  Fixed the bug of beamperceptor
+	  Fixed the bug of beameffector
 
 
 
