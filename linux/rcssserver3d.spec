@@ -29,7 +29,7 @@ Requires:       boost slang ruby libode Mesa libdevil SDL freetype2
 %description
 This is the simulation server used in Robocup 3D Soccer Simulation contests.
 
-%if 0%{?_with_wxWidgets: 1}
+%if 0%{?_with_wxWidgets:1}
 %package        rsgedit
 Summary:        RsgEditor and wxWidgets related libraries
 Group:          Applications/Engineering
@@ -81,7 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/%{name}/[^w]*
 %{_sysconfdir}/ld.so.conf.d/%{name}.conf
 
-%if 0%{?_with_wxWidgets: 1}
+%if 0%{?_with_wxWidgets:1}
 %files rsgedit
 %defattr(-,root,root,-)
 %{_bindir}/rsgedit
