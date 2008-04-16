@@ -9,14 +9,27 @@ URL:            http://sourceforge.net/projects/sserver/
 Source0:        rcssserver3d-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  ruby-devel ode-devel mesa-libGL-devel DevIL-devel SDL-devel
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  gcc-c++ boost-devel slang-devel ruby ruby-devel
+BuildRequires:  ode-devel mesa-libGL-devel DevIL-devel SDL-devel
 BuildRequires:  freetype-devel mesa-libGLU-devel
-Requires:       ruby ode mesa-libGL DevIL SDL freetype mesa-libGLU
+
+Requires:       boost slang ruby ode mesa-libGL DevIL SDL freetype
+Requires:       mesa-libGLU
+%endif
+
+%if 0%{?suse_version} || 0%{?sles_version}
+BuildRequires:  gcc-c++ boost-devel slang-devel ruby ruby-devel
+BuildRequires:  libode-devel Mesa-devel libdevil-devel SDL-devel
+BuildRequires:  freetype2-devel
+
+Requires:       boost slang ruby libode Mesa libdevil SDL freetype2
+%endif
 
 %description
 This is the simulation server used in Robocup 3D Soccer Simulation contests.
 
-%if %{?!_with_wxWidgets: 0} %{?_with_wxWidgets: 1}
+%if 0%{?_with_wxWidgets: 1}
 %package        rsgedit
 Summary:        RsgEditor and wxWidgets related libraries
 Group:          Applications/Engineering
@@ -41,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/
 echo %{_libdir}/%{name} > $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/%{name}.conf
+%if 0%{!?_with_wxWidgets: 1}
+rm -rf $RPM_BUILD_ROOT/%{_includedir}/%{name}/wxutil
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -51,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS INSTALL NEWS ChangeLog COPYING README README.MacOSX README-soccer RELEASE THANKS TODO doc/TEXT_INSTEAD_OF_A_MANUAL.txt
+%doc AUTHORS INSTALL NEWS ChangeLog COPYING README README.MacOSX README-soccer THANKS TODO doc/TEXT_INSTEAD_OF_A_MANUAL.txt
 %{_bindir}/[^r]*
 %{_bindir}/rc*
 %dir %{_libdir}/%{name}
@@ -65,7 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/%{name}/[^w]*
 %{_sysconfdir}/ld.so.conf.d/%{name}.conf
 
-%if %{?!_with_wxWidgets: 0} %{?_with_wxWidgets: 1}
+%if 0%{?_with_wxWidgets: 1}
 %files rsgedit
 %defattr(-,root,root,-)
 %{_bindir}/rsgedit
@@ -75,6 +91,13 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Thu Apr 17 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.7-2
+- added some missing dependencies
+- some cleanup
+- changed to be more general. now it supports OpenSuse too (however it needs
+  3rd party DevIL packages)
+- removed RELEASE from doc files since it is not available in released versions
+
 * Sun Apr 13 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.7-2
 - updated an ugly wildcard! a little better.
 
