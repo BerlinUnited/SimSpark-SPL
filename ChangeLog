@@ -1,4 +1,9 @@
 2008-04-21  Feng Xue <henry519@mail.ustc.edu.cn>
+	* app/simspark/rsg/agent/nao/naoleg.rsg:
+	- Fixed the bug of joint1 axis. Thanks wjq from Apollo.
+
+
+2008-04-21  Feng Xue <henry519@mail.ustc.edu.cn>
 	* app/simspark/rsg/agent/nao/nao.rsg:
 	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
 	- Move VisionPerceptor to Head, hope it will work.
