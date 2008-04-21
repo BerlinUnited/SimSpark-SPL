@@ -162,8 +162,8 @@
     (def $lj6_max       (eval $lj6_max_c1 + (eval $LRFactor * $lj6_max_c2)))
     
     (def $lj1_axis_x   -0.7071)
-    (def $lj1_axis_y   (eval $LRFactor * 0.7071))
-    (def $lj1_axis_z   0)
+    (def $lj1_axis_y   0)
+    (def $lj1_axis_z   (eval $LRFactor * 0.7071))
 
     (def $lj3_Anchor_X  (eval -1 * $ThighRelHip2_X))
     (def $lj3_Anchor_Y  (eval -1 * $ThighRelHip2_Y))
