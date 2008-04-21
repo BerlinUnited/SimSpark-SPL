@@ -1,3 +1,9 @@
+2008-04-21  Feng Xue <henry519@mail.ustc.edu.cn>
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
+	- Move VisionPerceptor to Head, hope it will work.
+
+
 2008-04-16  Feng Xue <henry519@mail.ustc.edu.cn>
 	* app/simspark/rsg/agent/nao:
 	- Fixed the joint issue. We now have a version 1.0 Nao model :)
