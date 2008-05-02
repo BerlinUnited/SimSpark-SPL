@@ -1,3 +1,18 @@
+2008-05-02  Sander van Dijk <sgvandijk@gmail.com>
+	* app/simspark/internalsoccerbindings.rb
+	* lib/oxygen/sceneserver/camera.cpp
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.h
+	* lib/kerosin/renderserver/renderserver.cpp
+	* lib/kerosin/renderserver/renderserver.h
+	- Added possibility to rotate through cameras to RenderServer and soccer input
+	- Fixed deg/rad bug in Camera::Bind (and changed camera angles accordingly)
+
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg
+	* app/simspark/rsg/agent/soccerbot056.rsg
+	- Added cameras to soccerbot and nao models
+	
+	
 2008-04-21  Feng Xue <henry519@mail.ustc.edu.cn>
 	* app/simspark/rsg/agent/nao/naoleg.rsg:
 	- Fixed the bug of joint1 axis. Thanks wjq from Apollo.
