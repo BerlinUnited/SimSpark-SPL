@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.cpp,v 1.6 2008/02/24 10:18:09 rollmark Exp $
+   $Id: internalsoccerinput.cpp,v 1.7 2008/05/02 19:21:05 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -62,6 +62,9 @@ void InternalSoccerInput::OnLink()
     scriptServer->CreateVariable("Command.FreeKickLeft", CmdFreeKickLeft);
     scriptServer->CreateVariable("Command.FreeKickRight", CmdFreeKickRight);
 
+    scriptServer->CreateVariable("Command.NextCamera", CmdNextCamera);
+    scriptServer->CreateVariable("Command.PreviousCamera", CmdPreviousCamera);
+    
     // get the GameStateAspect
     mGameState = shared_dynamic_cast<GameStateAspect>
         (GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
@@ -107,6 +110,16 @@ void InternalSoccerInput::OnLink()
     {
         GetLog()->Error()
             << "ERROR: (InternalSoccerInput) Unable to get FPS controller\n";
+    }
+    
+    // get render server
+    mRenderServer = shared_dynamic_cast<RenderServer>
+        (GetCore()->Get("/sys/server/render"));
+
+    if (mRenderServer.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (InternalSoccerInput) Unable to get RenderServer\n";
     }
 }
 
@@ -164,8 +177,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                 {
                     salt::Vector3f pos(-40.0, 0.0, 21.5);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(1.55));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.05));
+                    mFPS->SetHAngleDeg(90);
+                    mFPS->SetVAngleDeg(35);
                 }
             break;
         case CmdCameraLeftCorner:
@@ -173,8 +186,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                 {
                     salt::Vector3f pos(-40.0, -30.5, 20.0);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.855));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.88));
+                    mFPS->SetHAngleDeg(50);
+                    mFPS->SetVAngleDeg(30);
                 }
             break;
         case CmdCameraMiddleLeft:
@@ -183,7 +196,7 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                     salt::Vector3f pos(6.0, -29.0, 20.0);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(salt::gRadToDeg(-0.625));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.965));
+                    mFPS->SetVAngleDeg(40);
                 }
             break;
         case CmdCameraMiddleRight:
@@ -192,7 +205,7 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                     salt::Vector3f pos(-6.0, -29.0, 20.0);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(salt::gRadToDeg(0.625));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.965));
+                    mFPS->SetVAngleDeg(40);
                 }
             break;
         case CmdCameraMiddle:
@@ -200,8 +213,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                 {
                     salt::Vector3f pos(0.0, -43.5, 39.5);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.002));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.16));
+                    mFPS->SetHAngleDeg(0);
+                    mFPS->SetVAngleDeg(45);
                 }
             break;
         case CmdCameraRightCorner:
@@ -209,8 +222,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                 {
                     salt::Vector3f pos(40.0, -30.5, 20.0);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(-0.855));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.88));
+                    mFPS->SetHAngleDeg(-50);
+                    mFPS->SetVAngleDeg(30);
                 }
             break;
         case CmdCameraRightGoal:
@@ -218,8 +231,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                 {
                     salt::Vector3f pos(40.0, 0.0, 21.5);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(-1.55));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.05));
+                    mFPS->SetHAngleDeg(-90);
+                    mFPS->SetVAngleDeg(35);
                 }
             break;
         case CmdFreeKickLeft:
@@ -304,5 +317,17 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                         }
                     }
             }
+            break;
+            
+            case CmdNextCamera:
+            if (input.GetKeyPress())
+                mRenderServer->NextCamera();
+            break;
+            
+            case CmdPreviousCamera:
+            if (input.GetKeyPress())
+                mRenderServer->PreviousCamera();
+            break;
+            
       };
 }

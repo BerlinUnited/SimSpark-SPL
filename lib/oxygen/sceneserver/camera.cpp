@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: camera.cpp,v 1.9 2008/02/22 07:52:15 hedayat Exp $
+   $Id: camera.cpp,v 1.10 2008/05/02 19:21:05 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ void
 Camera::Bind()
 {
     mViewTransform = GetWorldTransform();
-    mViewTransform.RotateX(90);
+    mViewTransform.RotateX(M_PI / 2);
     mViewTransform.InvertRotationMatrix();
 
     // setup the projection matrix

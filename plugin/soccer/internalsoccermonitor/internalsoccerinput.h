@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.h,v 1.4 2008/02/22 16:48:18 hedayat Exp $
+   $Id: internalsoccerinput.h,v 1.5 2008/05/02 19:21:05 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include <kerosin/inputserver/inputitem.h>
 #include <kerosin/inputserver/inputcontrol.h>
+#include <kerosin/renderserver/renderserver.h>
 #include <soccer/soccertypes.h>
 
 namespace oxygen
@@ -56,7 +57,10 @@ public:
             CmdFreeKickLeft      = CmdCameraRightGoal + 1,
             CmdFreeKickRight     = CmdFreeKickLeft + 1,
             CmdKillAgentLeft     = CmdFreeKickRight + 1,
-            CmdKillAgentRight    = CmdKillAgentLeft + 1
+            CmdKillAgentRight    = CmdKillAgentLeft + 1,
+            
+            CmdNextCamera        = CmdKillAgentRight + 1,
+            CmdPreviousCamera    = CmdNextCamera + 1
         };
 
 public:
@@ -92,6 +96,9 @@ protected:
     /** cached reference to the game control server */
     boost::shared_ptr<oxygen::GameControlServer> mGameControl;
 
+    /** cached reference to the render server */
+    boost::shared_ptr<kerosin::RenderServer> mRenderServer;
+    
     TTeamIndex mLastKickOff;
 };
 

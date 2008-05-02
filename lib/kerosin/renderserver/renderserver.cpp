@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.23 2008/02/22 16:48:19 hedayat Exp $
+   $Id: renderserver.cpp,v 1.24 2008/05/02 19:21:05 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -66,11 +66,14 @@ RenderServer::Render()
         return;
     }
 
-    // get a camera to render with
-    shared_ptr<Camera> camera =
-        shared_static_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
-
-    if (camera.get() == 0)
+    // if no camera is selected yet, select the first one
+    if (mCamera.get() == 0)
+    {
+      GetLog()->Warning() << "No camera\n";
+      mCamera = shared_static_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
+    }
+    
+    if (mCamera.get() == 0)
     {
         GetLog()->Error()
             << "(RenderServer) ERROR: found no camera node in the active scene\n";
@@ -88,7 +91,7 @@ RenderServer::Render()
     glColor3f(1,1,1);
 
     // set the view transformation
-    BindCamera(camera);
+    BindCamera(mCamera);
 
     // actual rendering
 
@@ -140,17 +143,13 @@ RenderServer::Width() const
 {
     if (mActiveScene.get() == 0) return 0;
 
-    // get camera
-    shared_ptr<Camera> camera =
-        shared_static_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
-
-    if (camera.get() == 0)
+    if (mCamera.get() == 0)
     {
         GetLog()->Error()
             << "(RenderServer) ERROR: found no camera node in the active scene\n";
         return 0;
     }
-    return camera->GetViewportWidth();
+    return mCamera->GetViewportWidth();
 }
 
 int
@@ -158,17 +157,13 @@ RenderServer::Height() const
 {
     if (mActiveScene.get() == 0) return 0;
 
-    // get camera
-    shared_ptr<Camera> camera =
-        shared_static_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
-
-    if (camera.get() == 0)
+    if (mCamera.get() == 0)
     {
         GetLog()->Error()
             << "(RenderServer) ERROR: found no camera node in the active scene\n";
         return 0;
     }
-    return camera->GetViewportHeight();
+    return mCamera->GetViewportHeight();
 }
 
 bool
@@ -380,3 +375,29 @@ weak_ptr<RenderNode> RenderServer::GetPickedNode() const
 {
     return mPickedNode;
 }
+
+void RenderServer::NextCamera()
+{
+    TLeafList cameras;
+    mActiveScene->GetChildrenOfClass("Camera", cameras, true);
+    for (TLeafList::iterator iter = cameras.begin(); iter != cameras.end(); ++iter)
+        if (*iter == mCamera)
+        {
+            ++iter;
+            mCamera = iter != cameras.end() ? shared_static_cast<Camera>(*iter) : shared_static_cast<Camera>(cameras.front());
+            break;
+        }
+}
+
+void RenderServer::PreviousCamera()
+{
+    TLeafList cameras;
+    mActiveScene->GetChildrenOfClass("Camera", cameras, true);
+    for (TLeafList::iterator iter = cameras.begin(); iter != cameras.end(); ++iter)
+        if (*iter == mCamera)
+        {
+            mCamera = iter != cameras.begin() ? shared_static_cast<Camera>(*(--iter)) : shared_static_cast<Camera>(cameras.back());
+            break;
+        }
+}
+

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.h,v 1.11 2008/02/22 16:48:19 hedayat Exp $
+   $Id: renderserver.h,v 1.12 2008/05/02 19:21:05 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <kerosin/openglserver/glbase.h>
 #include <kerosin/openglserver/openglwrapper.h>
+#include <oxygen/sceneserver/camera.h>
 
 namespace kerosin
 {
@@ -93,6 +94,12 @@ public:
     /** Returns the last picked node */
     boost::weak_ptr<RenderNode> GetPickedNode() const;
 
+    /** Select next camera */
+    void NextCamera();
+    
+    /** Select previous camera */
+    void PreviousCamera();
+    
 protected:
     /** render a scene recursively.
         \param node the scene base node
@@ -136,6 +143,9 @@ protected:
     double mPickRange;
     /** the picked result node */
     boost::weak_ptr<RenderNode> mPickedNode;
+    
+    /** the currently selected camera */
+    boost::shared_ptr<oxygen::Camera> mCamera;
 };
 
 DECLARE_CLASS(RenderServer);

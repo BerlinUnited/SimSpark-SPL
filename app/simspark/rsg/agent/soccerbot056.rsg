@@ -188,6 +188,10 @@
 	(nd BeamEffector)
 	; add gyro rate sensor
 	(nd GyroRatePerceptor (setName torso) )
+	(nd Camera
+	  
+	)
+	
 	; add vision sensor
 	(nd VisionPerceptor
 	     (setSenseMyPos false)

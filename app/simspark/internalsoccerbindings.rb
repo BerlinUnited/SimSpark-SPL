@@ -30,5 +30,8 @@ else
     inputServer.bindCommand('7',      Command.CameraRightGoal);
     inputServer.bindCommand('l',      Command.FreeKickLeft);
     inputServer.bindCommand('r',      Command.FreeKickRight);
+    
+    inputServer.bindCommand(',',      Command.NextCamera);
+    inputServer.bindCommand('.',      Command.PreviousCamera);
   end
 end
