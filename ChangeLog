@@ -1,5 +1,23 @@
 2008-05-03  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* app/simspark/Makefile.am:
+	* app/simspark/rsg/agent/nao/goal.rsg:
+	* app/simspark/rsg/agent/nao/soccer.rsg:
+	* app/simspark/textures/rcs-naofield.png:
+	- the soccer field for Nao
+
+	* app/simspark/soccersim.rb:
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- use soccer variables which defined in script instead of static
+	variables which defined in the C++ code
+
+	* app/simspark/simspark.rb:
+	- modify for Nao simulation
+
+	* app/simspark/naosoccersim.rb:
+	- soccer simulation for Nao
+
 	* app/simspark/materials/lfoot.mtl:
 	* app/simspark/materials/llowerarm.mtl:
 	* app/simspark/materials/lshank.mtl:
