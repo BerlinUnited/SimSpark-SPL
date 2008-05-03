@@ -62,7 +62,7 @@ sparkLogAllToCerr()
 # scene.importScene('rsg/jointtest/simspark.rsg')
 
 # source soccersim.rb to run the soccer simulation
-run "soccersim.rb"
+#run "soccersim.rb"
 run "naosoccersim.rb"
 
 # setup game state info rendering for the internal monitor
