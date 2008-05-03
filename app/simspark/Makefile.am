@@ -40,6 +40,7 @@ dist_pkgdata_DATA = \
 	simspark.rb \
 	bindings.rb \
 	soccersim.rb \
+	naosoccersim.rb \
 	internalsoccermonitor.rb \
 	internalsoccerbindings.rb
 
@@ -123,6 +124,7 @@ EXTRA_DIST = \
 	textures/rcs-unum09.png\
 	textures/rcs-unum10.png\
 	textures/rcs-unum11.png\
+	textures/rcs-naofield.png\
 	rsg/agent/nao/box_appearance.rsg\
 	rsg/agent/nao/box_physics.rsg\
 	rsg/agent/nao/box_physics_with_handler.rsg\
@@ -141,5 +143,7 @@ EXTRA_DIST = \
 	rsg/agent/nao/sphere_appearance.rsg\
 	rsg/agent/nao/sphere_physics.rsg\
 	rsg/agent/nao/sphere_physics_nocollider.rsg\
-        rsg/agent/nao/touchperceptorhandler.rsg
+        rsg/agent/nao/touchperceptorhandler.rsg\
+	rsg/agent/nao/soccer.rsg\
+	rsg/agent/nao/goal.rsg
 
