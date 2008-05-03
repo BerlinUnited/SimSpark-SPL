@@ -131,6 +131,12 @@
     (def $aj4_Anchor_Z      (eval -1 * $LowerarmRelElbow_Z))
     
     ;
+    ;Models obj
+    ;
+    (def $UpperArmObj (join models/ $LeftOrRight upperarm.obj))
+    (def $LowerArmObj (join models/ $LeftOrRight lowerarm.obj))
+
+    ;
     ;Construct Shoulder
     ;
     (nd Transform
@@ -156,7 +162,9 @@
         (setName $UpperarmName)
         (setLocalPos $Upperarm_X $Upperarm_Y $Upperarm_Z)
         
-        (importScene rsg/agent/nao/box_appearance.rsg $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ matBlue)
+        (nd SingleMatNode (load $UpperArmObj) (setScale $UpperArmSizeX $UpperArmSizeX $UpperArmSizeX))
+
+        ;(importScene rsg/agent/nao/box_appearance.rsg $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ matBlue)
         (importScene rsg/agent/nao/box_physics.rsg    $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ $UpperArmMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
@@ -174,6 +182,7 @@
         (setName $ElbowName)
         (setLocalPos $Elbow_X $Elbow_Y $Elbow_Z)
         
+
         (importScene rsg/agent/nao/sphere_appearance.rsg $ElbowRadius matYellow)
         ;(importScene rsg/agent/nao/sphere_physics.rsg $ElbowRadius $ElbowMass)
         (importScene rsg/agent/nao/sphere_physics_nocollider.rsg $ElbowRadius $ElbowMass)
@@ -193,7 +202,9 @@
         (setName $LowerarmName)
         (setLocalPos $LowerArm_X $LowerArm_Y $LowerArm_Z)
 
-        (importScene rsg/agent/nao/box_appearance.rsg $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ matRed)
+        (nd SingleMatNode (load $LowerArmObj) (setScale $LowerArmSizeX $LowerArmSizeX $LowerArmSizeX))
+
+        ;(importScene rsg/agent/nao/box_appearance.rsg $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ matRed)
         (importScene rsg/agent/nao/box_physics.rsg    $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ $LowerArmMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg

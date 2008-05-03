@@ -170,6 +170,13 @@
     (def $lj3_Anchor_Z  (eval -1 * $ThighRelHip2_Z))
     
     ;
+    ;Models obj
+    ;
+    (def $ThighObj (join models/ $LeftOrRight thigh.obj))
+    (def $ShankObj (join models/ $LeftOrRight shank.obj))
+    (def $FootObj (join models/ $LeftOrRight foot.obj))
+
+    ;
     ;Construct Hip1
     ;
     (nd Transform
@@ -215,7 +222,9 @@
        (setName $ThighName)
        (setLocalPos $Thigh_X $Thigh_Y $Thigh_Z)
         
-       (importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
+       (nd SingleMatNode (load $ThighObj) (setScale $ThighSizeX $ThighSizeX $ThighSizeX))
+
+       ;(importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
        (importScene rsg/agent/nao/box_physics.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
         
        (importScene rsg/agent/nao/hingejoint.rsg
@@ -234,7 +243,9 @@
         (setName $ShankName)
         (setLocalPos $Shank_X $Shank_Y $Shank_Z)
         
-        (importScene rsg/agent/nao/box_appearance.rsg $ShankSizeX $ShankSizeY $ShankSizeZ matGrey)
+        (nd SingleMatNode (load $ShankObj) (setScale $ShankSizeX $ShankSizeX $ShankSizeX))
+
+        ;(importScene rsg/agent/nao/box_appearance.rsg $ShankSizeX $ShankSizeY $ShankSizeZ matGrey)
         (importScene rsg/agent/nao/box_physics.rsg    $ShankSizeX $ShankSizeY $ShankSizeZ $ShankMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
@@ -277,7 +288,9 @@
 	    (setName $FRPName)
         )
   
-        (importScene rsg/agent/nao/box_appearance.rsg $FootSizeX $FootSizeY $FootSizeZ matBlue)
+        (nd SingleMatNode (load $FootObj) (setScale $FootSizeX $FootSizeX $FootSizeX))
+
+        ;(importScene rsg/agent/nao/box_appearance.rsg $FootSizeX $FootSizeY $FootSizeZ matBlue)
         (importScene rsg/agent/nao/box_physics_with_handler.rsg    $FootSizeX $FootSizeY $FootSizeZ $FootMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg

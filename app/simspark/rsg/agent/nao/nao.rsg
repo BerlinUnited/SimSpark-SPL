@@ -18,7 +18,7 @@
 
 (def $TorsoInitX  0)
 (def $TorsoInitY  -1)
-(def $TorsoInitZ  1)
+(def $TorsoInitZ  1.5)
 
 ;
 ;Begin Construct of Nao
@@ -26,28 +26,56 @@
 (nd Space
     (setName spacenao)
     (disableInnerCollision true)
-   
+    
     ;
     ;The torso part
     ;
-    (nd Transform
+    (nd AgentAspect
         (setName body)
         (setLocalPos $TorsoInitX $TorsoInitY $TorsoInitZ)
 
-        (importScene rsg/agent/nao/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
+	(nd Transform
+		(setLocalRotation -90 0 180)
+		(nd SingleMatNode
+            	(load 'models/naobody.obj')
+            	(setScale $TorsoLength $TorsoLength $TorsoLength)
+        	)
+	)
+        
+        ;(importScene rsg/agent/nao/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
         (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
+    
+        (nd InitEffector)
+        
+        (nd TimePerceptor)
+        
+        (nd AgentState
+            (setName AgentState)
+            (nd GameStatePerceptor)
+            (nd HearPerceptor)
+        )
+             
+        (nd VisionPerceptor
+            (setSenseMyPos false)
+	    (setStaticSenseAxis false)
+        )
 
+        (nd BeamEffector)
+
+        (nd SayEffector)
+        
         (nd GyroRatePerceptor (setName torso))
 
-    );end of torso
- 
 
+    );end of AgentAspect
+    
+    
     ;
     ;The neck and head part
     ;
     (importScene rsg/agent/nao/naoneckhead.rsg $TorsoInitX $TorsoInitY $TorsoInitZ)
-   
-   
+    
+
     ;
     ;The Right Arm
     ;

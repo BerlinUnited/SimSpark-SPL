@@ -61,16 +61,16 @@
         (setName head)
         (setLocalPos $Head_X $Head_Y $Head_Z)
 
-
+    (nd Transform
+        (setLocalRotation -90 0 180)
         (nd SingleMatNode
-	    (load 'models/soccerball.obj')
-	    (setScale $Head_Radius $Head_Radius $Head_Radius)
+	    (load 'models/naohead.obj')
+	    (setScale 0.1 0.1 0.1)
         )
+    )
 	
         ;(importScene rsg/agent/nao/sphere_appearance.rsg $Head_Radius matRed)
         (importScene rsg/agent/nao/sphere_physics.rsg $Head_Radius $Head_Mass)
-        
-        (nd Camera)
         
         (importScene rsg/agent/nao/hingejoint.rsg
                               hj2 he2

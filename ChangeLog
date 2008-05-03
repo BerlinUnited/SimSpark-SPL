@@ -1,3 +1,36 @@
+2008-05-03  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/materials/lfoot.mtl:
+	* app/simspark/materials/llowerarm.mtl:
+	* app/simspark/materials/lshank.mtl:
+	* app/simspark/materials/lthigh.mtl:
+	* app/simspark/materials/lupperarm.mtl:
+	* app/simspark/materials/naobody.mtl:
+	* app/simspark/materials/naohead.mtl:
+	* app/simspark/materials/rfoot.mtl:
+	* app/simspark/materials/rlowerarm.mtl:
+	* app/simspark/materials/rshank.mtl:
+	* app/simspark/materials/rthigh.mtl:
+	* app/simspark/materials/rupperarm.mtl:
+	* app/simspark/models/lfoot.obj:
+	* app/simspark/models/llowerarm.obj:
+	* app/simspark/models/lshank.obj:
+	* app/simspark/models/lthigh.obj:
+	* app/simspark/models/lupperarm.obj:
+	* app/simspark/models/naobody.obj:
+	* app/simspark/models/naohead.obj:
+	* app/simspark/models/rfoot.obj:
+	* app/simspark/models/rlowerarm.obj:
+	* app/simspark/models/rshank.obj:
+	* app/simspark/models/rthigh.obj:
+	* app/simspark/models/rupperarm.obj:
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	* app/simspark/rsg/agent/nao/naoarm.rsg:
+	* app/simspark/rsg/agent/nao/naoleg.rsg:
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
+	- add models and materials for the Nao robot, it looks like the
+	real robot now
+
 2008-05-02  Sander van Dijk <sgvandijk@gmail.com>
 	* app/simspark/internalsoccerbindings.rb
 	* lib/oxygen/sceneserver/camera.cpp
