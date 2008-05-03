@@ -21,13 +21,13 @@ sparkSetupInput()
 if ($enableInternalMonitor)
   sparkAddFPSCamera(
                     $scenePath+'camera',
-                    x = -5,
-                    y = -40,
-                    z = 2,
+                    x = 0,
+                    y = -4,
+                    z = 0.6,
                     vAngle = 10.0,
                     hAngle = 10.0,
-                    maxSpeed = 15.0,
-                    accel = 400.0,
+                    maxSpeed = 1.5,
+                    accel = 40.0,
                     drag = 4,
                     addCollider = false,
                     colliderRadius = 2.0
@@ -63,6 +63,7 @@ sparkLogAllToCerr()
 
 # source soccersim.rb to run the soccer simulation
 run "soccersim.rb"
+run "naosoccersim.rb"
 
 # setup game state info rendering for the internal monitor
 # source soccersim.rb to run the soccer simulation
