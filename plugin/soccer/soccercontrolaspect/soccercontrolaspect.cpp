@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccercontrolaspect.cpp,v 1.4 2007/06/17 13:20:09 jamu Exp $
+   $Id: soccercontrolaspect.cpp,v 1.5 2008/05/03 14:58:48 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <oxygen/physicsserver/recorderhandler.h>
 #include <oxygen/physicsserver/body.h>
 #include <soccer/ball/ball.h>
+#include <soccer/soccerbase/soccerbase.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -55,8 +56,10 @@ void SoccerControlAspect::OnLink()
 
 shared_ptr<RecorderHandler> SoccerControlAspect::GetBallRecorder()
 {
+    string ballRecorder;
+    SoccerBase::GetSoccerVar(*this,"BallRecorder",ballRecorder);
     shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
-        (GetCore()->Get(mScenePath + "Ball/geometry/recorder"));
+        (GetCore()->Get(mScenePath + ballRecorder));
 
     if (node.get() == 0)
         {
@@ -83,13 +86,15 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetFieldRecorder()
 
 shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
 {
+    string goalRecorder;
+    SoccerBase::GetSoccerVar(*this,"LeftGoalRecorder",goalRecorder);
     shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
-        (GetCore()->Get(mScenePath + "LeftGoalSpace/GoalBoxL/GoalColliderL/recorder"));
+        (GetCore()->Get(mScenePath + goalRecorder));
 
     if (node.get() == 0)
         {
             GetLog()->Error()
-                << "(SoccerControlAspect) found no left goal collision recorder\n";
+                << "(SoccerControlAspect) found no left goal collision recorder in path: "<<goalRecorder<<'\n';
         }
 
     return node;
@@ -97,13 +102,15 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
 
 shared_ptr<RecorderHandler> SoccerControlAspect::GetRightGoalRecorder()
 {
+    string goalRecorder;
+    SoccerBase::GetSoccerVar(*this,"RightGoalRecorder",goalRecorder);
     shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
-        (GetCore()->Get(mScenePath + "RightGoalSpace/GoalBoxR/GoalColliderR/recorder"));
+        (GetCore()->Get(mScenePath + goalRecorder));
 
     if (node.get() == 0)
         {
             GetLog()->Error()
-                << "(SoccerControlAspect) found no right goal collision recorder\n";
+                << "(SoccerControlAspect) found no right goal collision recorder in path: "<<goalRecorder<<'\n';
         }
 
     return node;

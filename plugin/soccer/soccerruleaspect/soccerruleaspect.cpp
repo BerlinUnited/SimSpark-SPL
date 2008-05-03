@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.35 2008/03/28 16:36:55 hedayat Exp $
+   $Id: soccerruleaspect.cpp,v 1.36 2008/05/03 14:58:48 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -839,6 +839,9 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
     SoccerBase::GetSoccerVar(*this,"UseOffside",mUseOffside);
+    float penaltyLength, penaltyWidth;
+    SoccerBase::GetSoccerVar(*this,"PenaltyLength",penaltyLength);
+    SoccerBase::GetSoccerVar(*this,"PenaltyWidth",penaltyWidth);
 
     // set up bounding boxes for halfs and goal areas
 
@@ -850,10 +853,14 @@ SoccerRuleAspect::UpdateCachedInternal()
                             Vector2f(-mFieldLength/2.0 - 10, mFieldWidth/2.0 + 10.0));
 
     // the penalty areas (exact sizes)
-    mRightPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - 8, -5.25 - mGoalWidth/2.0),
-                                    Vector2f(mFieldLength/2.0 , 5.25 + mGoalWidth/2.0));
-    mLeftPenaltyArea = salt::AABB2(Vector2f(-mFieldLength/2.0 + 8, -5.25 - mGoalWidth/2.0),
-                                   Vector2f(-mFieldLength/2.0, 5.25 + mGoalWidth/2.0));
+    mRightPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - penaltyLength,
+                                             -(penaltyWidth + mGoalWidth)/2.0),
+                                    Vector2f(mFieldLength/2.0,
+                                             (penaltyWidth + mGoalWidth)/2.0));
+    mLeftPenaltyArea = salt::AABB2(Vector2f(-mFieldLength/2.0 + penaltyLength,
+                                            -(penaltyWidth + mGoalWidth)/2.0),
+                                   Vector2f(-mFieldLength/2.0,
+                                            (penaltyWidth + mGoalWidth)/2.0));
 }
 
 void
