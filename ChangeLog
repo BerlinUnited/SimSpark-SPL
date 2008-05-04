@@ -1,3 +1,9 @@
+2008-05-04  Feng Xue  <henry519@mail.ustc.edu.cn>
+	* app/simspark/models/lfoot.obj:
+	* app/simspark/models/rfoot.obj:
+	- The original foot model is too thick. Thanks devilxjk@mail.ustc.edu.cn!
+
+
 2008-05-03  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* app/simspark/Makefile.am:
