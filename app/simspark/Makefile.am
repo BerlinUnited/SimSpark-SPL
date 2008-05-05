@@ -145,5 +145,16 @@ EXTRA_DIST = \
 	rsg/agent/nao/sphere_physics_nocollider.rsg\
         rsg/agent/nao/touchperceptorhandler.rsg\
 	rsg/agent/nao/soccer.rsg\
-	rsg/agent/nao/goal.rsg
+	rsg/agent/nao/goal.rsg\
+	rsg/agent/soccerbot058/box.rsg\
+	rsg/agent/soccerbot058/box_with_uj.rsg\
+	rsg/agent/soccerbot058/lowerarm_body.rsg\
+	rsg/agent/soccerbot058/box_with_handler.rsg\
+	rsg/agent/soccerbot058/contactjointhandler.rsg\
+	rsg/agent/soccerbot058/lowerarm.rsg\
+	rsg/agent/soccerbot058/box_with_hj.rsg\
+	rsg/agent/soccerbot058/soccerbot.rsg\
+	rsg/agent/soccerbot058/box_with_hj_with_ccylinder.rsg\
+	rsg/agent/soccerbot058/foot.rsg\
+	rsg/agent/soccerbot058/soccerbottorso.rsg
 

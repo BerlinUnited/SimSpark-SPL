@@ -1,3 +1,20 @@
+2008-05-05  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/Makefile.am:
+	* app/simspark/rsg/agent/soccerbot058/box.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_handler.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_hj.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_hj_with_ccylinder.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_uj.rsg:
+	* app/simspark/rsg/agent/soccerbot058/contactjointhandler.rsg:
+	* app/simspark/rsg/agent/soccerbot058/foot.rsg:
+	* app/simspark/rsg/agent/soccerbot058/lowerarm.rsg:
+	* app/simspark/rsg/agent/soccerbot058/lowerarm_body.rsg:
+	* app/simspark/rsg/agent/soccerbot058/soccerbot.rsg:
+	* app/simspark/rsg/agent/soccerbot058/soccerbottorso.rsg:
+	- soccerbot058 based on soccerbotcomp, its size can be scaled by a
+	variable(default is 0.1)
+
 2008-05-04  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* app/simspark/models/lfoot.obj:
 	* app/simspark/models/rfoot.obj:
