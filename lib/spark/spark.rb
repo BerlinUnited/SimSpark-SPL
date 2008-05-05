@@ -404,6 +404,18 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
   end
 end
 
+def sparkSetupTrain()
+  print "(spark.rb) sparkSetupTrain\n"
+  #
+  # register train control node to the simulation server
+
+  simulationServer = sparkGetSimulationServer()
+  if (simulationServer != nil)
+    # add the train control node
+    simulationServer.initControlNode('oxygen/TrainControl','TrainControl')
+  end
+end
+
 # add a camera with an FPS Controller to the scene at path
 def sparkAddFPSCamera(
 		      path,
@@ -518,6 +530,11 @@ end
 # logs all output to 'fileName'
 def sparkLogAllToFile(fileName)
   sparkEnableLog(fileName, 'eAll')
+end
+
+# register an integrated agent
+def addIntegratedAgent(agentType, number)
+  sparkGetOrCreate(agentType, "/usr/agent/behavior#{number}")
 end
 
 #

@@ -65,6 +65,10 @@ sparkLogAllToCerr()
 #run "soccersim.rb"
 run "naosoccersim.rb"
 
+# setup the integrated agent
+#sparkSetupTrain()
+#addIntegratedAgent('SoccerbotBehavior',1)
+
 # setup game state info rendering for the internal monitor
 # source soccersim.rb to run the soccer simulation
 if ($enableInternalMonitor)
