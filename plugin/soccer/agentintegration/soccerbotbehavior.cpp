@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbotbehavior.cpp,v 1.1 2008/04/12 22:14:11 benpwd Exp $
+   $Id: soccerbotbehavior.cpp,v 1.2 2008/05/05 13:58:29 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ using namespace salt;
 using namespace zeitgeist;
 using namespace oxygen;
 
-SoccerbotBehavior::SoccerbotBehavior() : mInit(false)
+SoccerbotBehavior::SoccerbotBehavior() : mCycle(0)
 {
 }
 
@@ -78,7 +78,7 @@ string SoccerbotBehavior::Init()
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
     return
-        "(scene rsg/agent/soccerbot056.rsg)";
+        "(scene rsg/agent/soccerbot058/soccerbot.rsg)";
 }
 
 void SoccerbotBehavior::ParseHingeJointInfo(const oxygen::Predicate& predicate)
@@ -200,12 +200,17 @@ void SoccerbotBehavior::ParseHearInfo(const oxygen::Predicate& predicate)
 void SoccerbotBehavior::Think(boost::shared_ptr<oxygen::PredicateList> senselist)
 {
     mCommand.clear();
-
-    if (!mInit)
+    mCycle++;
+    
+    if ( 1 == mCycle)
     {
-        mInit = true;
         mCommand = Init();
-        return ;
+        return;
+    }
+
+    if ( 2 == mCycle ){
+        mCommand = "(init (unum 0)(teamname IntegratedAgent))";
+        return;
     }
 
     shared_ptr<PredicateList> predList = senselist;
