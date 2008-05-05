@@ -414,7 +414,8 @@ def sparkAddFPSCamera(
 		      accel = 40.0,
 		      drag = 4,
 		      addCollider = false,
-		      colliderRadius = 2.0
+		      colliderRadius = 2.0,
+                      znear = 0.1
 		      )
 
   print "(spark.rb) sparkAddFPSCamera at " + path + "\n"
@@ -423,7 +424,8 @@ def sparkAddFPSCamera(
   # FPSController.
   cameraTransform = sparkCreate('oxygen/Transform',path)
   cameraTransform.setLocalPos(x,y,z)
-  new('oxygen/Camera',path+'/camera')
+  camera = new('oxygen/Camera',path+'/camera')
+  camera.setZNear(znear)
 
   # the camera is not affected by gravity but restricted to a maximum
   # speed
