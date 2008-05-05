@@ -8,7 +8,7 @@
  - Nao: robot from Aldebaran Robotics, see rsg/agent/nao/nao.rsg. The
  robot looks great with textures.
  - soccerbot058: robot based on soccerbotcomp with joint limits, and
-   its size are scaled ( default 0.1 ), see
+   its size is scaled ( default 0.1 ), see
    rsg/agent/soccerbot058/soccerbot.rsg.
  
 * New Nao Soccer Simulation:
