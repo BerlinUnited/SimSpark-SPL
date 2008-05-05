@@ -18,7 +18,7 @@
  you can switch between naosoccersim and soccersim in simspark.rb.
 
 * New Feature:
- - Integrated Feature: The agent can run internally now, in this case
+ - Integrated Agent: The agent can run internally now, in this case
  it is easier to debug the skill that you have designed, since it can
  get the simulation information directly. Note that the action is
  performed with a delay of one cycle (This is just like external
