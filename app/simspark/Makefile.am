@@ -95,8 +95,34 @@ EXTRA_DIST = \
 	scripts/rsgedit-materials.rb\
 	models/soccerball.obj\
 	models/soccerbottorso.obj\
+	models/naosoccerfield.obj\
+	models/lthigh.obj\
+	models/rthigh.obj\
+	models/lfoot.obj\
+	models/lupperarm.obj\
+	models/rfoot.obj\
+	models/rupperarm.obj\
+	models/llowerarm.obj\
+	models/naobody.obj\
+	models/rlowerarm.obj\
+	models/lshank.obj\
+	models/naohead.obj\
+	models/rshank.obj\
 	materials/soccerball.mtl\
 	materials/soccerbottorso.mtl\
+	materials/naosoccerfield.mtl\
+	materials/lthigh.mtl\
+	materials/rthigh.mtl\
+	materials/lfoot.mtl\
+	materials/lupperarm.mtl\
+	materials/rfoot.mtl\
+	materials/rupperarm.mtl\
+	materials/llowerarm.mtl\
+	materials/naobody.mtl\
+	materials/rlowerarm.mtl\
+	materials/lshank.mtl\
+	materials/naohead.mtl\
+	materials/rshank.mtl\
 	textures/rcs-grass-w-lines.tga\
 	textures/rcs-grass.png\
 	textures/rcs-grass3.png\
