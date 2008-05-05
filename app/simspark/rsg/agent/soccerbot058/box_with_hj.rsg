@@ -32,8 +32,8 @@
 	 (nd HingeEffector (setName $effectorName) )
 
 	 ;; set joint stops
-         ;(setLowStopDeg 0 $minDeg)
-         ;(setHighStopDeg 0 $maxDeg)
+         (setLowStopDeg 0 $minDeg)
+         (setHighStopDeg 0 $maxDeg)
 	 )
      )
  )

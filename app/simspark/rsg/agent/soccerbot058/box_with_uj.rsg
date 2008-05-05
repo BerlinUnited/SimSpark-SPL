@@ -34,10 +34,10 @@
             (nd UniversalJointEffector (setName $effectorName) )
 
             ;; set joint stops
-            ;(setLowStopDeg 0 $minDeg1)
-            ;(setHighStopDeg 0 $maxDeg1)
-            ;(setLowStopDeg 1 $minDeg2)
-            ;(setHighStopDeg 1 $maxDeg2)
+            (setLowStopDeg 0 $minDeg1)
+            (setHighStopDeg 0 $maxDeg1)
+            (setLowStopDeg 1 $minDeg2)
+            (setHighStopDeg 1 $maxDeg2)
             )
         )
 )
