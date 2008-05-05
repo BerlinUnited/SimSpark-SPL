@@ -1,3 +1,41 @@
+[0.5.8]
+ In this release, we have a simulator which is much more like the
+ RoboCup Humanoid League: The smaller size, the smaller robot and
+ ball. The integrated agent is added as a new feature. Furthermore,
+ the external monitor works now.
+
+* New Robot Models:
+ - Nao: robot from Aldebaran Robotics, see rsg/agent/nao/nao.rsg. The
+ robot looks great with textures.
+ - soccerbot058: robot based on soccerbotcomp with joint limits, and
+   its size are scaled ( default 0.1 ), see
+   rsg/agent/soccerbot058/soccerbot.rsg.
+ 
+* New Nao Soccer Simulation:
+ The simulator start naosoccersim.rb in default now, the new field
+ size is the same as RoboCup Standard Platform League, please see
+ naosoccersim.rb for details. The old soccersim.rb are still there,
+ you can switch between naosoccersim and soccersim in simspark.rb.
+
+* New Feature:
+ - Integrated Feature: The agent can run internally now, in this case
+ it is easier to debug the skill that you have designed, since it can
+ get the simulation information directly. Note that the action is
+ performed with a delay of one cycle (This is just like external
+ agent). There is an example in plugin/soccer/integration. To run the
+ demo just enable two lines in the simspark.rb:
+ sparkSetupTrain()
+ addIntegratedAgent('SoccerbotBehavior',1)
+
+* Important Fixes:
+ - the external monitor works now, you can run to monitor remotely(set
+ $monitorServer in spark.rb). And also, the internal monitor can be
+ disabled by setting $enableInternalMonitor to false in simspark.rb.
+ - the OBJ importer is extended, we have really good 3D graphics now.
+ - joint limits: the simulation runs stably with joint limits.
+
+For details have a look into the ChangeLog coming with the package.
+
 [0.5.7] 
  This is the first release after the competition in Atlanta.
  The simulator now contains the auto-adjust speed mode(by default),the
@@ -53,7 +91,7 @@ For details have a look into the ChangeLog coming with the package.
 
 [3] Laue, T., Spiess, K., Refer, T.: Simrobot - a general physical
 robot simulator and its application in robocup. In: RoboCup 2005:
-Robot Soccer World Cup IX. Lecture Notes in ArtiˆÄÅé‡§èÅcial Intelligence,
+Robot Soccer World Cup IX. Lecture Notes in Artificial Intelligence,
 Springer (2006)
 
 [0.5.6]

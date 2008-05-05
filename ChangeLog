@@ -1,5 +1,29 @@
 2008-05-05  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* NEWS:
+	* README:
+	* configure.ac:
+	- ready for releasing rcssserver3d-0.5.8
+
+	* plugin/soccer/agentintegration/soccerbotbehavior.cpp:
+	* plugin/soccer/agentintegration/soccerbotbehavior.h:
+	- use mCycle instead of mInit, and send init command in the second
+	cycle
+
+	* app/simspark/simspark.rb:
+	* lib/spark/spark.rb:
+	- add addIntegratedAgent and sparkSetupTrain to help using the
+	integrated agent (from Ben)
+
+	* app/simspark/materials/naosoccerfield.mtl:
+	* app/simspark/models/naosoccerfield.obj:
+	* app/simspark/rsg/agent/nao/soccer.rsg:
+	- use the plane model instead of box for the soccer field
+
+	* lib/spark/spark.rb:
+	- set the camera's ZNear parameters ( default 0.1 ), since we need
+	to see the robot closely
+
 	* app/simspark/Makefile.am:
 	* app/simspark/rsg/agent/soccerbot058/box.rsg:
 	* app/simspark/rsg/agent/soccerbot058/box_with_handler.rsg:
@@ -14,6 +38,7 @@
 	* app/simspark/rsg/agent/soccerbot058/soccerbottorso.rsg:
 	- soccerbot058 based on soccerbotcomp, its size can be scaled by a
 	variable(default is 0.1)
+	- the joint limits are enabled
 
 2008-05-04  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* app/simspark/models/lfoot.obj:
