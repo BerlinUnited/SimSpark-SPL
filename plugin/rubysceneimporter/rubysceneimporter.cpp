@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.25 2008/05/06 12:23:41 benpwd Exp $
+   $Id: rubysceneimporter.cpp,v 1.26 2008/05/06 14:48:54 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -508,10 +508,10 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
     }
     //End
 
-    if (pred == "switch")
-    {
-        return ParseSwitch(sexp->next, value);
-    }
+    // if (pred == "switch")
+    // {
+    //     return ParseSwitch(sexp->next, value);
+    // }
 
     if (pred != "eval")
         {
@@ -834,7 +834,8 @@ bool RubySceneImporter::ParseTemplate(sexp_t* sexp)
     return true;
 }
 
-bool RubySceneImporter::ParseSwitch(sexp_t* sexp, string& value)
+// bool RubySceneImporter::ParseSwitch(sexp_t* sexp, string& value)
+bool RubySceneImporter::ParseSwitch(sexp_t* sexp, boost::shared_ptr<oxygen::BaseNode> root)
 {
     if (sexp == 0)
     {
@@ -869,10 +870,11 @@ bool RubySceneImporter::ParseSwitch(sexp_t* sexp, string& value)
         GetLog()->Debug()
             << "(RubySceneImporter) ERROR: in file '" << mFileName
             << "': no case sentences of switch '" << varname << "'\n";
-        return false;
+        return true;
     }
 
     sexp_t* tmp;
+    string value;
     // find the sub list whose header is equal to 'varname',
     // then it's that case.
     while (sexp != 0)
@@ -919,16 +921,18 @@ bool RubySceneImporter::ParseSwitch(sexp_t* sexp, string& value)
     }
     else
     {
-        // get the value of this case
         tmp = tmp->next;
         if (tmp != 0)
         {
             if (tmp->ty == SEXP_LIST)
             {
-                if (! EvalParameter(tmp->list,value))
-                    {
-                        return false;
-                    }
+                // get the value of this case
+                // if (! EvalParameter(tmp->list,value))
+                //     {
+                //         return false;
+                //     }
+
+                ReadGraph(tmp->list, root);
             }
             else
             {
@@ -1075,6 +1079,11 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                 {
                     sexp = sexp->next;
                     return ParseDefine(sexp);
+                }
+                else if (name == S_SWITCH)
+                {
+                    sexp = sexp->next;
+                    return ParseSwitch(sexp, root);
                 } else {
                     return ReadMethodCall(sexp, root);
                 }
