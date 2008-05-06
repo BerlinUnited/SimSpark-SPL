@@ -20,6 +20,7 @@
 (def $TorsoInitY  -1)
 (def $TorsoInitZ  1.5)
 
+(def $loadObj true)
 ;
 ;Begin Construct of Nao
 ;
@@ -34,15 +35,21 @@
         (setName body)
         (setLocalPos $TorsoInitX $TorsoInitY $TorsoInitZ)
 
-	(nd Transform
+        (switch $loadObj
+          (true
+	    (nd Transform
 		(setLocalRotation -90 0 180)
 		(nd SingleMatNode
             	(load 'models/naobody.obj')
             	(setScale $TorsoLength $TorsoLength $TorsoLength)
         	)
-	)
+	    )
+          )
         
-        ;(importScene rsg/agent/nao/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
+          (false
+            (importScene rsg/agent/nao/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
+          )
+        )
         (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
     
         (nd InitEffector)
@@ -73,7 +80,7 @@
     ;
     ;The neck and head part
     ;
-    (importScene rsg/agent/nao/naoneckhead.rsg $TorsoInitX $TorsoInitY $TorsoInitZ)
+    (importScene rsg/agent/nao/naoneckhead.rsg $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
     
 
     ;
@@ -81,28 +88,28 @@
     ;
     (importScene rsg/agent/nao/naoarm.rsg
               1 r
-              $TorsoInitX $TorsoInitY $TorsoInitZ)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
 
     ;
     ;The Left Arm
     ;
     (importScene rsg/agent/nao/naoarm.rsg
               -1 l
-              $TorsoInitX $TorsoInitY $TorsoInitZ)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
     
     ;
     ;The Right Leg
     ;
     (importScene rsg/agent/nao/naoleg.rsg
               1 r
-              $TorsoInitX $TorsoInitY $TorsoInitZ)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
     
     ;
     ;The Left Leg
     ;
     (importScene rsg/agent/nao/naoleg.rsg
               -1 l
-              $TorsoInitX $TorsoInitY $TorsoInitZ)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
 
 );end of nd Space
 

@@ -7,7 +7,7 @@
     ;@param LRFactor is (left_leg ? -1 : 1)
     ;    
     (templ  $LRFactor $LeftOrRight
-            $Torso_X $Torso_Y $Torso_Z
+            $Torso_X $Torso_Y $Torso_Z $loadObj
     )
     
     ;
@@ -222,9 +222,15 @@
        (setName $ThighName)
        (setLocalPos $Thigh_X $Thigh_Y $Thigh_Z)
         
-       (nd SingleMatNode (load $ThighObj) (setScale $ThighSizeX $ThighSizeX $ThighSizeX))
+       (switch $loadObj
+         (true
+           (nd SingleMatNode (load $ThighObj) (setScale $ThighSizeX $ThighSizeX $ThighSizeX))
+         )
+         (false
+           (importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
+         )
+       )
 
-       ;(importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
        (importScene rsg/agent/nao/box_physics.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
         
        (importScene rsg/agent/nao/hingejoint.rsg
@@ -243,9 +249,15 @@
         (setName $ShankName)
         (setLocalPos $Shank_X $Shank_Y $Shank_Z)
         
-        (nd SingleMatNode (load $ShankObj) (setScale $ShankSizeX $ShankSizeX $ShankSizeX))
+        (switch $loadObj
+          (true
+            (nd SingleMatNode (load $ShankObj) (setScale $ShankSizeX $ShankSizeX $ShankSizeX))
+          )
+          (false
+            (importScene rsg/agent/nao/box_appearance.rsg $ShankSizeX $ShankSizeY $ShankSizeZ matGrey)
+          )
+        )
 
-        ;(importScene rsg/agent/nao/box_appearance.rsg $ShankSizeX $ShankSizeY $ShankSizeZ matGrey)
         (importScene rsg/agent/nao/box_physics.rsg    $ShankSizeX $ShankSizeY $ShankSizeZ $ShankMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
@@ -288,9 +300,15 @@
 	    (setName $FRPName)
         )
   
-        (nd SingleMatNode (load $FootObj) (setScale $FootSizeX $FootSizeX $FootSizeX))
+        (switch $loadObj
+          (true
+            (nd SingleMatNode (load $FootObj) (setScale $FootSizeX $FootSizeX $FootSizeX))
+          )
+          (false
+            (importScene rsg/agent/nao/box_appearance.rsg $FootSizeX $FootSizeY $FootSizeZ matBlue)
+          )
+        )
 
-        ;(importScene rsg/agent/nao/box_appearance.rsg $FootSizeX $FootSizeY $FootSizeZ matBlue)
         (importScene rsg/agent/nao/box_physics_with_handler.rsg    $FootSizeX $FootSizeY $FootSizeZ $FootMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg

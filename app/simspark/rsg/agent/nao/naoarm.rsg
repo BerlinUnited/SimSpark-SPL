@@ -7,7 +7,7 @@
     ;@param LRFactor is (left_leg ? -1 : 1)
     ;    
     (templ  $LRFactor $LeftOrRight
-            $Torso_X $Torso_Y $Torso_Z
+            $Torso_X $Torso_Y $Torso_Z $loadObj
     )
     
     ;
@@ -162,9 +162,16 @@
         (setName $UpperarmName)
         (setLocalPos $Upperarm_X $Upperarm_Y $Upperarm_Z)
         
-        (nd SingleMatNode (load $UpperArmObj) (setScale $UpperArmSizeX $UpperArmSizeX $UpperArmSizeX))
+        (switch $loadObj
+          (true
+            (nd SingleMatNode (load $UpperArmObj) (setScale $UpperArmSizeX $UpperArmSizeX $UpperArmSizeX))
+          )
 
-        ;(importScene rsg/agent/nao/box_appearance.rsg $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ matBlue)
+          (false
+            (importScene rsg/agent/nao/box_appearance.rsg $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ matBlue)
+          )
+        )
+
         (importScene rsg/agent/nao/box_physics.rsg    $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ $UpperArmMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
@@ -202,9 +209,15 @@
         (setName $LowerarmName)
         (setLocalPos $LowerArm_X $LowerArm_Y $LowerArm_Z)
 
-        (nd SingleMatNode (load $LowerArmObj) (setScale $LowerArmSizeX $LowerArmSizeX $LowerArmSizeX))
+        (switch $loadObj
+          (true
+            (nd SingleMatNode (load $LowerArmObj) (setScale $LowerArmSizeX $LowerArmSizeX $LowerArmSizeX))
+          )
+          (false
+            (importScene rsg/agent/nao/box_appearance.rsg $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ matRed)
+          )
+        )
 
-        ;(importScene rsg/agent/nao/box_appearance.rsg $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ matRed)
         (importScene rsg/agent/nao/box_physics.rsg    $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ $LowerArmMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
