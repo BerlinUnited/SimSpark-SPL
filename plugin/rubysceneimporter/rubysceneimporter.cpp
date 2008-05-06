@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.24 2008/04/10 06:51:25 fengxue Exp $
+   $Id: rubysceneimporter.cpp,v 1.25 2008/05/06 12:23:41 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -63,6 +63,7 @@ using namespace std;
 #define S_TEMPLATE "template"
 #define S_DEFINE   "define"
 #define S_ATTACH   "attach"
+#define S_SWITCH   "switch"
 
 #define S_DELTASCENE "RubyDeltaScene"
 #define S_SCENEGRAPH "RubySceneGraph"
@@ -507,6 +508,11 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
     }
     //End
 
+    if (pred == "switch")
+    {
+        return ParseSwitch(sexp->next, value);
+    }
+
     if (pred != "eval")
         {
             GetLog()->Error()
@@ -824,6 +830,127 @@ bool RubySceneImporter::ParseTemplate(sexp_t* sexp)
             env.parameterMap[param] = idx;
             sexp = sexp->next;
         }
+
+    return true;
+}
+
+bool RubySceneImporter::ParseSwitch(sexp_t* sexp, string& value)
+{
+    if (sexp == 0)
+    {
+        return false;
+    }
+
+    string varname;
+
+    if (sexp->ty == SEXP_LIST)
+    {
+        // if the switch after is a list, it should be evaled.
+        if (! EvalParameter(sexp->list,varname))
+            {
+                return false;
+            }
+    }
+    else
+    {
+        varname = sexp->val;
+        if (
+            (varname[0] == '$') &&
+            (! ReplaceVariable(varname))
+            )
+        {
+            return false;
+        }
+    }
+
+    sexp = sexp->next;
+    if (sexp == 0)
+    {
+        GetLog()->Debug()
+            << "(RubySceneImporter) ERROR: in file '" << mFileName
+            << "': no case sentences of switch '" << varname << "'\n";
+        return false;
+    }
+
+    sexp_t* tmp;
+    // find the sub list whose header is equal to 'varname',
+    // then it's that case.
+    while (sexp != 0)
+    {
+        if (sexp->ty == SEXP_LIST)
+        {
+            tmp = sexp->list;
+            if (tmp == 0) break;
+
+            if (tmp->ty == SEXP_LIST)
+            {
+                // if the case header is a list, it should be evaled.
+                if (! EvalParameter(tmp->list,value))
+                    {
+                        return false;
+                    }
+            }
+            else
+            {
+                value = tmp->val;
+                if (
+                    (value[0] == '$') &&
+                    (! ReplaceVariable(value))
+                    )
+                {
+                    return false;
+                }
+            }
+
+            // the first case is here, then find is over
+            if (value == varname) break;
+        }
+
+        sexp = sexp->next;
+    }
+
+    if (value != varname)
+    {
+        // default case
+        GetLog()->Debug()
+            << "(RubySceneImporter) ERROR: in file '" << mFileName
+            << "': no switch case equal to '" << varname << "'\n";
+        return false;
+    }
+    else
+    {
+        // get the value of this case
+        tmp = tmp->next;
+        if (tmp != 0)
+        {
+            if (tmp->ty == SEXP_LIST)
+            {
+                if (! EvalParameter(tmp->list,value))
+                    {
+                        return false;
+                    }
+            }
+            else
+            {
+                value = tmp->val;
+
+                if (
+                    (value[0] == '$') &&
+                    (! ReplaceVariable(value))
+                    )
+                {
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            GetLog()->Debug()
+                << "(RubySceneImporter) ERROR: in file '" << mFileName
+                << "': no execute sentences in case '" << value << "'\n";
+            return false;
+        }
+    }
 
     return true;
 }

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.h,v 1.12 2008/02/22 16:48:18 hedayat Exp $
+   $Id: rubysceneimporter.h,v 1.13 2008/05/06 12:23:41 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -103,6 +103,7 @@ protected:
     boost::shared_ptr<oxygen::BaseNode> CreateNode(sexp_t* sexp);
     bool ParseTemplate(sexp_t* sexp);
     bool ParseDefine(sexp_t* sexp);
+    bool ParseSwitch(sexp_t* sexp, std::string& value);
 
     void PushParameter(boost::shared_ptr<zeitgeist::ParameterList> parameter);
     void PopParameter();
