@@ -64,8 +64,8 @@ addSoccerVar('UseOffside',false)
 
 # recorders
 addSoccerVar('BallRecorder',"Ball/geometry/recorder")
-addSoccerVar('LeftGoalRecorder',"GL/GoalBox/BoxCollider/recorder")
-addSoccerVar('RightGoalRecorder',"GR/GoalBox/BoxCollider/recorder")
+addSoccerVar('LeftGoalRecorder',"leftgoal/GoalBox/BoxCollider/recorder")
+addSoccerVar('RightGoalRecorder',"rightgoal/GoalBox/BoxCollider/recorder")
 
 scene = get($scenePath)
 if (scene != nil)

@@ -2,7 +2,9 @@
 
 (RSG 0 1)
 (
- (templ $name $x $y $theta $material)
+ (templ $name $x $y $theta
+	$LeftFlagName $RightFlagName
+	$material)
 
  (def $GoalWidth   (eval Soccer.GoalWidth))
  (def $GoalDepth   (eval Soccer.GoalDepth))
@@ -67,7 +69,6 @@
 	     )
 
 	 ;; mark the goal (no visualization)
-	 (def $LeftFlagName (join $name 1))
 	 (importScene rsg/agent/flag_no_viz.rsg
 		      (eval $GoalHalfDepth )
 		      $GoalHalfWidth
@@ -75,7 +76,6 @@
 		      $LeftFlagName
 		      )
 
-	 (def $RightFlagName (join $name 2))
 	 (importScene rsg/agent/flag_no_viz.rsg
 		      (eval $GoalHalfDepth )
 		      (eval -1 * $GoalHalfWidth)
