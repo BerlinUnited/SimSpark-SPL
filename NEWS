@@ -18,12 +18,12 @@
  you can switch between naosoccersim and soccersim in simspark.rb.
 
 * New Feature:
- - Integrated Agent: The agent can run internally now, in this case
- it is easier to debug the skill that you have designed, since it can
- get the simulation information directly. Note that the action is
+ - Integrated Agent: The agent can run internally now, in this case it
+ is easier to debug the skill that you have designed, since it can get
+ the simulation information directly. Note that the action is
  performed with a delay of one cycle (This is just like external
- agent). There is an example in plugin/soccer/integration. To run the
- demo just enable two lines in the simspark.rb:
+ agent). There is an example in plugin/soccer/agentintegration. To run
+ the demo just enable two lines in the simspark.rb:
  sparkSetupTrain()
  addIntegratedAgent('SoccerbotBehavior',1)
 
