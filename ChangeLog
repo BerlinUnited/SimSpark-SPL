@@ -1,3 +1,11 @@
+2008-05-07  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* NEWS:
+	- correct the directory of integrated agent (thanks Ben)
+
+	* app/simspark/rsg/agent/nao/goal.rsg:
+	- fix bug (thanks Feng)
+
 2008-05-05  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* NEWS:
