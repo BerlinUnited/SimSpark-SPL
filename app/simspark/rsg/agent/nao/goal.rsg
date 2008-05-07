@@ -58,11 +58,11 @@
 	 (nd Transform
 	     (setLocalPos (eval -1 * $GoalHalfDepth) 0 0)
 	     (nd Box
-		 (setExtents $BarRadius $GoalWidth $GoalHeight)
+		 (setExtents $BarDiameter $GoalWidth $GoalHeight)
 		 (setMaterial $material)
 		 )
 	     (nd BoxCollider
-		 (setBoxLengths $LineHeight $GoalWidth $GoalHeight)
+		 (setBoxLengths $BarDiameter $GoalWidth $GoalHeight)
 		 )
 	     )
 
