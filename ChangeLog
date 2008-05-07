@@ -1,5 +1,10 @@
 2008-05-07  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* app/simspark/naosoccersim.rb:
+	* app/simspark/rsg/agent/nao/goal.rsg:
+	* app/simspark/rsg/agent/nao/soccer.rsg:
+	- correct the goal name in vision as before (thanks Feng)
+
 	* NEWS:
 	- correct the directory of integrated agent (thanks Ben)
 
