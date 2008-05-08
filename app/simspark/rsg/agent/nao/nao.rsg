@@ -20,7 +20,7 @@
 (def $TorsoInitY  -1)
 (def $TorsoInitZ  1.5)
 
-(def $loadObj true)
+(def $loadObj (eval Nao.UseTexture))
 ;
 ;Begin Construct of Nao
 ;

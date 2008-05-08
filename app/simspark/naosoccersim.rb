@@ -67,6 +67,9 @@ addSoccerVar('BallRecorder',"Ball/geometry/recorder")
 addSoccerVar('LeftGoalRecorder',"leftgoal/GoalBox/BoxCollider/recorder")
 addSoccerVar('RightGoalRecorder',"rightgoal/GoalBox/BoxCollider/recorder")
 
+# textures
+createVariable('Nao', 'UseTexture', 'true')
+
 scene = get($scenePath)
 if (scene != nil)
   scene.importScene('rsg/agent/nao/soccer.rsg')
