@@ -88,7 +88,10 @@
     
         ;Install effectors and perceptors
         (nd SingleMatInitEffector)
-        
+        ;(nd InitEffector)
+ 
+        (nd Camera)
+       
         (nd TimePerceptor)
         
         (nd AgentState

@@ -1,3 +1,9 @@
+2008-05-10  Feng Xue  <henry519@mail.ustc.edu.cn>
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
+	- Fixed the bug: perceptor installed twice on the torso.
+
+
 2008-05-07  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* app/simspark/naosoccersim.rb:

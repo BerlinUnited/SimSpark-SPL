@@ -31,7 +31,7 @@
     ;
     ;The torso part
     ;
-    (nd AgentAspect
+    (nd Transform
         (setName body)
         (setLocalPos $TorsoInitX $TorsoInitY $TorsoInitZ)
 
@@ -52,24 +52,6 @@
         )
         (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
     
-        (nd InitEffector)
-        
-        (nd TimePerceptor)
-        
-        (nd AgentState
-            (setName AgentState)
-            (nd GameStatePerceptor)
-            (nd HearPerceptor)
-        )
-             
-        (nd VisionPerceptor
-            (setSenseMyPos false)
-	    (setStaticSenseAxis false)
-        )
-
-        (nd BeamEffector)
-
-        (nd SayEffector)
         
         (nd GyroRatePerceptor (setName torso))
 
