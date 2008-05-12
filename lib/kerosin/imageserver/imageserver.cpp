@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.cpp,v 1.12 2008/02/27 20:13:33 rollmark Exp $
+   $Id: imageserver.cpp,v 1.13 2008/05/12 09:05:06 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <boost/scoped_ptr.hpp>
+#include <boost/scoped_array.hpp>
 
 using namespace boost;
 using namespace kerosin;
@@ -33,75 +34,6 @@ using namespace zeitgeist;
 using namespace std;
 
 shared_ptr<FileServer> gFileServer;
-
-#if HAVE_IL_IL_H
-//-----------------------------------------------------------------------------
-// FileServer hooks for DevIL
-//-----------------------------------------------------------------------------
-
-ILHANDLE
-ILAPIENTRY FSOpen(const ILstring inName)
-{
-    string fname;
-    if (! gFileServer->LocateResource(inName, fname))
-        {
-            return 0;
-        }
-
-    return (ILHANDLE)(gFileServer->Register(fname));
-}
-
-ILvoid
-ILAPIENTRY FSClose(ILHANDLE handle)
-{
-    gFileServer->Close((FileServer::THandle)handle);
-}
-
-ILboolean
-ILAPIENTRY FSEof(ILHANDLE handle)
-{
-    shared_ptr<salt::RFile> file =
-        gFileServer->Get((FileServer::THandle)handle);
-
-    return file->Eof();
-}
-
-ILint
-ILAPIENTRY FSGetc(ILHANDLE handle)
-{
-    shared_ptr<salt::RFile> file =
-        gFileServer->Get((FileServer::THandle)handle);
-
-    return file->Getc();
-}
-
-ILint
-ILAPIENTRY FSRead(void *buffer, ILuint size, ILuint count, ILHANDLE handle)
-{
-    shared_ptr<salt::RFile> file =
-        gFileServer->Get((FileServer::THandle)handle);
-
-    return file->Read(buffer, size, count);
-}
-
-ILint
-ILAPIENTRY FSSeek(ILHANDLE handle, ILint offset, ILint origin)
-{
-    shared_ptr<salt::RFile> file =
-        gFileServer->Get((FileServer::THandle)handle);
-
-    return file->Seek(offset, origin);
-}
-
-ILint
-ILAPIENTRY FSTell(ILHANDLE handle)
-{
-    shared_ptr<salt::RFile> file =
-        gFileServer->Get((FileServer::THandle)handle);
-
-    return file->Tell();
-}
-#endif // HAVE_IL_IL_H
 
 //------------------------------------------------------------------------------------------------
 // ImageServer implementation
@@ -120,9 +52,6 @@ ImageServer::ImageServer()
     ilEnable(IL_FILE_OVERWRITE);
     ilEnable(IL_ORIGIN_SET);
     ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
-
-    // register FileServer hooks for DevIL
-    ilSetRead(FSOpen, FSClose, FSEof, FSGetc, FSRead, FSSeek, FSTell);
 #else
 #warning ======================================================================
 #warning The ImageServer is will not work properly without using DevIL
@@ -138,25 +67,26 @@ ImageServer::ImageServer()
 boost::shared_ptr<Image>
 ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
 {
+    // lookup the file server
+    shared_ptr<FileServer> fileServer 
+        = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
+
+    if (fileServer.get() == 0)
+    {
+        return shared_ptr<Image>();
+    }
+
     // create a new image
     boost::shared_ptr<Image> image(new Image());
 
     // make it active with DevIL
     image->Bind();
 
-    // set the file server
-    gFileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-#if HAVE_IL_IL_H
-    // load the image
-    ilLoad(inType, (ILstring)inName.c_str());
-#else
-    GetLog()->Error() << "(ImageServer) ERROR: Sorry, SPARK was compiled "
-                      << "without image support.\n"
-                      << "                     To support loading images, "
-                      << "install DevIL (http://openil.sf.net/) and recompile SPARK.\n";
-#endif
-    // set the file server to 0 again
-    gFileServer.reset();
+    shared_ptr<RFile> rfile = fileServer->Open(inName);
+
+    scoped_array<unsigned char> buffer(new unsigned char[rfile->Size()]);
+    rfile->Read(buffer.get(), rfile->Size());
+    ilLoadL(inType, buffer.get(), rfile->Size());
 
     // check for errors
     if (HandleErrors(inName) == true)
@@ -166,38 +96,6 @@ ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
     }
 
     return image;
-}
-
-bool
-ImageServer::Save(boost::shared_ptr<Image> inImage, const string& inName,
-                  ImageServer::EImgType inType) const
-{
-    // make the image active
-    inImage->Bind();
-
-    // set the file server
-    gFileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-
-#if HAVE_IL_IL_H
-    // save the image
-    ilSave(inType, (ILstring)inName.c_str());
-#else
-    GetLog()->Error() << "(ImageServer) ERROR: Sorry, SPARK was compiled "
-                      << "without image support.\n"
-                      << "                     To support loading images, "
-                      << "install DevIL (http://openil.sf.net/) and recompile SPARK.\n";
-#endif
-
-    // set the file server to 0 again
-    gFileServer.reset();
-
-    // check for errors
-    if (HandleErrors(inName) == true)
-    {
-        return false;
-    }
-
-    return true;
 }
 
 // This routine checks for DevIL errors and logs them. The function returns

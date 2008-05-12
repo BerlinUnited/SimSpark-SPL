@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.h,v 1.12 2008/02/23 10:25:18 rollmark Exp $
+   $Id: imageserver.h,v 1.13 2008/05/12 09:05:07 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -124,15 +124,6 @@ public:
     */
     boost::shared_ptr<Image> Load(const std::string& inName,
                                   EImgType inType = eTYPE_UNKNOWN) const;
-
-    /** Save the file with the filter associated with the given type.
-       @param inImage a shared_ptr to the image (handle)
-       @param inName the name of the file for the image
-       @param inType a hint for the file type
-       @return true if successful
-    */
-    bool Save(boost::shared_ptr<Image> inImage, const std::string& inName,
-              EImgType inType = eTYPE_UNKNOWN) const;
 
 private:
     /** Some internal error checking.
