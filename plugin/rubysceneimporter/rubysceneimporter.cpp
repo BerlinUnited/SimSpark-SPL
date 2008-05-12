@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubysceneimporter.cpp,v 1.26 2008/05/06 14:48:54 benpwd Exp $
+   $Id: rubysceneimporter.cpp,v 1.27 2008/05/12 09:39:14 rollmark Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -1002,7 +1002,7 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                         )
                     {
                         node = shared_dynamic_cast<BaseNode>(*iter);
-                        if (iter != node->end())
+                        if (iter != root->end())
                         {
                             ++iter;
                         }
