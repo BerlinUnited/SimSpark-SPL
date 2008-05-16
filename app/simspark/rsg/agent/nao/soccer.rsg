@@ -12,11 +12,10 @@
  (def $GoalDepth   (eval Soccer.GoalDepth))
 
  ;; height of the field ground plane
- (def $FieldBaseHeight 0.04)
  (def $FieldMaterial matGrass)
 
  ;; calc some helper vars
- (def $FieldBase (eval -1 * $FieldBaseHeight / 2.0))
+ (def $FieldBase 0)
  (def $FieldHalfLength (eval $FieldLength / 2.0))
  (def $FieldHalfHeight (eval $FieldHeight / 2.0))
  (def $FieldHalfWidth  (eval $FieldWidth / 2.0))

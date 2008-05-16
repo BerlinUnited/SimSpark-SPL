@@ -1,4 +1,3 @@
-
 2008-05-16  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/kerosin/imageserver/imageserver.cpp (ImageServer::Load):
@@ -19,6 +18,9 @@
 
 
 2008-05-16  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/rsg/agent/nao/soccer.rsg:
+	- fix bug in soccer field base position value
 
 	* app/simspark/rsg/agent/ball.rsg:
 	* app/simspark/models/soccerball.obj:
