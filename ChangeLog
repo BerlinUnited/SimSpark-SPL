@@ -1,3 +1,9 @@
+2008-05-16  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* doc/users/definitions.tex:
+	* doc/users/robots.tex:
+	- add table of Nao's configuration
+
 2008-05-10  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* app/simspark/rsg/agent/nao/nao.rsg:
 	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
