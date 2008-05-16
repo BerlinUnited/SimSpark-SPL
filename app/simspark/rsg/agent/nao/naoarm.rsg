@@ -36,7 +36,7 @@
     ;
     ;Position Parameters
     ;
-    (def $ShoulderRelTorso_X (eval $LRFactor * 0.085))
+    (def $ShoulderRelTorso_X (eval $LRFactor * 0.098))
     (def $ShoulderRelTorso_Y 0)
     (def $ShoulderRelTorso_Z 0.075)
     

@@ -14,7 +14,7 @@
 (def $TorsoLength  0.1)
 (def $TorsoWidth   0.1)
 (def $TorsoHeight  0.18)
-(def $TorsoMass    1.2)
+(def $TorsoMass    1.2171)
 
 (def $TorsoInitX  0)
 (def $TorsoInitY  -1)

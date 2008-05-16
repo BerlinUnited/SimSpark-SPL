@@ -1,3 +1,16 @@
+2008--5-16  Feng Xue   <henry519@mail.ustc.edu.cn>
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	* app/simspark/rsg/agent/nao/naoarm.rsg:
+	* app/simspark/rsg/agent/nao/naoleg.rsg:
+	- Taking the real Nao as a reference:
+	  1. Change the parameters a tiny little
+	  2. Switch joint2 and joint3 in the leg
+
+	* app/agentspark/naobehavior.cpp:
+	- Change lle2 rle2 command to lle3 rle3 for the switch of 
+	  joint2 and joint3.
+
+
 2008-05-16  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* app/simspark/models/soccerball.obj:

@@ -46,7 +46,7 @@
     ;
     ;Position Parameters
     ;
-    (def $Hip1RelTorso_X (eval $LRFactor * 0.055))
+    (def $Hip1RelTorso_X (eval $LRFactor * 0.050))
     (def $Hip1RelTorso_Y -0.01)
     (def $Hip1RelTorso_Z -0.115)
 
@@ -116,7 +116,7 @@
     (def $AnkleRadius 0.01)
     (def $AnkleMass   0.125)
     
-    (def $FootSizeX   0.08)
+    (def $FootSizeX   0.102)
     (def $FootSizeY   0.16)
     (def $FootSizeZ   0.03)
     (def $FootMass    0.2)
@@ -127,21 +127,21 @@
     ;
     (def $lj1_min    -90)
     (def $lj1_max    1)
-    
-    (def $lj2_min    -25)
-    (def $lj2_max    100)
 
-    (def $right_lj3_min -45)
-    (def $left_lj3_min  -25)
-    (def $lj3_min_c1    (eval (eval $right_lj3_min + $left_lj3_min) * 0.5))
-    (def $lj3_min_c2    (eval (eval $right_lj3_min - $left_lj3_min) * 0.5))
-    (def $lj3_min       (eval $lj3_min_c1 + (eval $LRFactor * $lj3_min_c2)))
+    (def $right_lj2_min -45)
+    (def $left_lj2_min  -25)
+    (def $lj2_min_c1    (eval (eval $right_lj2_min + $left_lj2_min) * 0.5))
+    (def $lj2_min_c2    (eval (eval $right_lj2_min - $left_lj2_min) * 0.5))
+    (def $lj2_min       (eval $lj2_min_c1 + (eval $LRFactor * $lj2_min_c2)))
     
-    (def $right_lj3_max 25)
-    (def $left_lj3_max  45)
-    (def $lj3_max_c1    (eval (eval $right_lj3_max + $left_lj3_max) * 0.5))
-    (def $lj3_max_c2    (eval (eval $right_lj3_max - $left_lj3_max) * 0.5))
-    (def $lj3_max       (eval $lj3_max_c1 + (eval $LRFactor * $lj3_max_c2)))
+    (def $right_lj2_max 25)
+    (def $left_lj2_max  45)
+    (def $lj2_max_c1    (eval (eval $right_lj2_max + $left_lj2_max) * 0.5))
+    (def $lj2_max_c2    (eval (eval $right_lj2_max - $left_lj2_max) * 0.5))
+    (def $lj2_max       (eval $lj2_max_c1 + (eval $LRFactor * $lj2_max_c2)))
+    
+    (def $lj3_min    -25)
+    (def $lj3_max    100)
     
     (def $lj4_min       -130)
     (def $lj4_max       1)
@@ -211,7 +211,7 @@
                               $Joint2PerName $Joint2EffName
                               ../sphereBody $Hip1BodyPath
                               0 0 0  ;anchor
-                              1 0 0  ;axis
+                              0 1 0  ;axis
                               $lj2_min $lj2_max)
     )
          
@@ -237,7 +237,7 @@
                                $Joint3PerName $Joint3EffName
                                ../boxBody $Hip2BodyPath
                                $lj3_Anchor_X $lj3_Anchor_Y $lj3_Anchor_Z
-                               0 1 0 ;1 -1 -1
+                               1 0 0 ;1 -1 -1
                                $lj3_min $lj3_max)
         
     )
