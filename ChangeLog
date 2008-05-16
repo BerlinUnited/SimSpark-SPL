@@ -1,5 +1,8 @@
 2008-05-16  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* app/simspark/models/soccerball.obj:
+	- increase the model size to match the geometry
+
 	* doc/users/definitions.tex:
 	* doc/users/robots.tex:
 	- add table of Nao's configuration
