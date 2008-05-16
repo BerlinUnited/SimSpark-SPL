@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: imageserver.cpp,v 1.13 2008/05/12 09:05:06 rollmark Exp $
+   $Id: imageserver.cpp,v 1.14 2008/05/16 13:08:52 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ boost::shared_ptr<Image>
 ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
 {
     // lookup the file server
-    shared_ptr<FileServer> fileServer 
+    shared_ptr<FileServer> fileServer
         = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
 
     if (fileServer.get() == 0)
@@ -82,7 +82,7 @@ ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
     // make it active with DevIL
     image->Bind();
 
-    shared_ptr<RFile> rfile = fileServer->Open(inName);
+    shared_ptr<RFile> rfile = fileServer->OpenResource(inName);
 
     scoped_array<unsigned char> buffer(new unsigned char[rfile->Size()]);
     rfile->Read(buffer.get(), rfile->Size());

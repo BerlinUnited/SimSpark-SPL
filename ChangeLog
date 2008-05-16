@@ -1,4 +1,10 @@
-2008--5-16  Feng Xue   <henry519@mail.ustc.edu.cn>
+2008-05-16  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/kerosin/imageserver/imageserver.cpp (ImageServer::Load):
+	- Using OpenResource to load images (so that it'll search for textures
+	  in the install path.
+
+2008-05-16  Feng Xue   <henry519@mail.ustc.edu.cn>
 	* app/simspark/rsg/agent/nao/nao.rsg:
 	* app/simspark/rsg/agent/nao/naoarm.rsg:
 	* app/simspark/rsg/agent/nao/naoleg.rsg:
@@ -7,7 +13,7 @@
 	  2. Switch joint2 and joint3 in the leg
 
 	* app/agentspark/naobehavior.cpp:
-	- Change lle2 rle2 command to lle3 rle3 for the switch of 
+	- Change lle2 rle2 command to lle3 rle3 for the switch of
 	  joint2 and joint3.
 
 
@@ -151,8 +157,8 @@
 	* app/simspark/rsg/agent/nao/naoneckhead.rsg
 	* app/simspark/rsg/agent/soccerbot056.rsg
 	- Added cameras to soccerbot and nao models
-	
-	
+
+
 2008-04-21  Feng Xue <henry519@mail.ustc.edu.cn>
 	* app/simspark/rsg/agent/nao/naoleg.rsg:
 	- Fixed the bug of joint1 axis. Thanks wjq from Apollo.
@@ -178,7 +184,7 @@
 2008-04-15  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* app/simspark/Makefile.am:
 	- Add dependency of the new files in app/simspark/rsg/agent/nao
-	
+
 	* app/simspark/rsg/agent/nao:
 	- Installed visionperceptor and frp
 	  Fixed the bug of beameffector

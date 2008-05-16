@@ -9,21 +9,22 @@ URL:            http://sourceforge.net/projects/sserver/
 Source0:        rcssserver3d-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+BuildRequires:  gcc-c++ boost-devel slang-devel ruby ruby-devel SDL-devel
+
+Requires:       boost slang ruby SDL
+
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
-BuildRequires:  gcc-c++ boost-devel slang-devel ruby ruby-devel
-BuildRequires:  ode-devel mesa-libGL-devel DevIL-devel SDL-devel
+BuildRequires:  ode-devel mesa-libGL-devel DevIL-devel
 BuildRequires:  freetype-devel mesa-libGLU-devel
 
-Requires:       boost slang ruby ode mesa-libGL DevIL SDL freetype
-Requires:       mesa-libGLU
+Requires:       ode mesa-libGL DevIL freetype mesa-libGLU
 %endif
 
 %if 0%{?suse_version} || 0%{?sles_version}
-BuildRequires:  gcc-c++ boost-devel slang-devel ruby ruby-devel
-BuildRequires:  libode-devel Mesa-devel libdevil-devel SDL-devel
+BuildRequires:  libode-devel Mesa-devel libdevil-devel
 BuildRequires:  freetype2-devel
 
-Requires:       boost slang ruby libode Mesa libdevil SDL freetype2
+Requires:       libode Mesa libdevil freetype2
 %endif
 
 %description
