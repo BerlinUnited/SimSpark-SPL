@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: joint.cpp,v 1.9 2008/04/07 09:33:11 fengxue Exp $
+   $Id: joint.cpp,v 1.10 2008/05/17 13:38:09 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,10 @@ using namespace boost;
 using namespace std;
 using namespace salt;
 
-Joint::Joint() : ODEObject(), mODEJoint(0)
+Joint::Joint() : 
+ODEObject(), mODEJoint(0), 
+mJointMaxSpeed1(0), mJointMaxSpeed2(0), 
+mIsLimitJointMaxSpeed1(false), mIsLimitJointMaxSpeed2(false)
 {
 }
 
@@ -438,4 +441,36 @@ void Joint::DestroyODEObject()
     EnableFeedback(false);
     dJointDestroy(mODEJoint);
     mODEJoint = 0;
+}
+
+void Joint::SetJointMaxSpeed1(float rad)
+{
+    mJointMaxSpeed1 = fabs(rad);
+    mIsLimitJointMaxSpeed1 = true;
+}
+
+void Joint::SetJointMaxSpeed2(float rad)
+{
+    mJointMaxSpeed2 = fabs(rad);
+    mIsLimitJointMaxSpeed2 = true;
+}
+
+float Joint::GetJointMaxSpeed1() const
+{
+    return mJointMaxSpeed1;
+}
+
+float Joint::GetJointMaxSpeed2() const
+{
+    return mJointMaxSpeed2;
+}
+
+bool Joint::IsLimitJointMaxSpeed1() const
+{
+    return mIsLimitJointMaxSpeed1;
+}
+
+bool Joint::IsLimitJointMaxSpeed2() const
+{
+    return mIsLimitJointMaxSpeed2;
 }

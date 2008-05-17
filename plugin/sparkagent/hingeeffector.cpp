@@ -54,7 +54,17 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    mJoint->SetParameter(dParamVel, hingeAction->GetMotorVelocity());
+    float finalMotorVel = hingeAction->GetMotorVelocity();
+
+    if (mJoint->IsLimitJointMaxSpeed1())
+    {
+        finalMotorVel = (finalMotorVel > 0) ? 
+                        gMin(finalMotorVel, mJoint->GetJointMaxSpeed1()) 
+                        : 
+                        gMax(finalMotorVel, - mJoint->GetJointMaxSpeed1());
+    }
+
+    mJoint->SetParameter(dParamVel, finalMotorVel);
 
     if (hingeAction->GetMotorVelocity() != 0)
         {

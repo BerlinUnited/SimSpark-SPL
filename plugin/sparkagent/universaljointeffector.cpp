@@ -54,8 +54,27 @@ bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
         return false;
     }
 
-    mJoint->SetParameter(dParamVel, universalAction->GetMotorVelocity(Joint::AI_FIRST));
-    mJoint->SetParameter(dParamVel2, universalAction->GetMotorVelocity(Joint::AI_SECOND));
+    float finalMotorVel1 = universalAction->GetMotorVelocity(Joint::AI_FIRST);
+    float finalMotorVel2 = universalAction->GetMotorVelocity(Joint::AI_SECOND);
+
+    if (mJoint->IsLimitJointMaxSpeed1())
+    {
+        finalMotorVel1 = (finalMotorVel1 > 0) ? 
+                        gMin(finalMotorVel1, mJoint->GetJointMaxSpeed1()) 
+                        : 
+                        gMax(finalMotorVel1, - mJoint->GetJointMaxSpeed1());
+    }
+
+    if (mJoint->IsLimitJointMaxSpeed2())
+    {
+        finalMotorVel2 = (finalMotorVel2 > 0) ? 
+                        gMin(finalMotorVel2, mJoint->GetJointMaxSpeed2()) 
+                        : 
+                        gMax(finalMotorVel2, - mJoint->GetJointMaxSpeed2());
+    }
+
+    mJoint->SetParameter(dParamVel, finalMotorVel1);
+    mJoint->SetParameter(dParamVel2, finalMotorVel2);
 
     if (universalAction->GetMotorVelocity(Joint::AI_FIRST) != 0
             || universalAction->GetMotorVelocity(Joint::AI_SECOND) != 0)

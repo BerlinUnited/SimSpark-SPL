@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h,v 1.10 2008/04/07 09:33:11 fengxue Exp $
+   $Id: joint.h,v 1.11 2008/05/17 13:38:09 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -256,6 +256,24 @@ public:
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const = 0;
 
+    /** Set the maximum joint speed1, valid for both hingejoint and universaljoint */
+    virtual void SetJointMaxSpeed1(float rad);
+
+    /** Set the maximum joint speed2, valid for only universaljoint */
+    virtual void SetJointMaxSpeed2(float rad);
+
+    /** Get the maximum joint speed1, valid for both hingejoint and universaljoint */
+    virtual float GetJointMaxSpeed1() const;
+
+    /** Get the maximum joint speed2, valid for only universaljoint */
+    virtual float GetJointMaxSpeed2() const;
+
+    /** Whether limit jointMaxSpeed1 */
+    bool IsLimitJointMaxSpeed1() const;
+
+    /** Whether limit jointMaxSpeed2 */
+    bool IsLimitJointMaxSpeed2() const;
+
 protected:
     /** associated the created ODE joint with this node */
     virtual void OnLink();
@@ -269,6 +287,15 @@ protected:
 
     /** the allocated joint feedback structure */
     boost::shared_ptr<dJointFeedback> mFeedback;
+
+protected:
+    /** The maximum joint speed in rad, valid for both hingejoint and universaljoint */
+    float mJointMaxSpeed1;
+    bool mIsLimitJointMaxSpeed1;
+
+    /** The maximum joint speed in rad, valid only for universaljoint */
+    float mJointMaxSpeed2;
+    bool mIsLimitJointMaxSpeed2;
 };
 
 DECLARE_ABSTRACTCLASS(Joint);

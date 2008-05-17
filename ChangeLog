@@ -1,3 +1,16 @@
+2008-05-17  Feng Xue  <henry519@mail.ustc.edu.cn>:
+	* lib/oxygen/physicsserver/joint.h:
+	* lib/oxygen/physicsserver/joint.cpp:
+	* lib/oxygen/physicsserver/joint_c.cpp:
+	* plugin/sparkagent/hingeeffector.cpp:
+	* plugin/sparkagent/universaljointeffector.cpp:
+	- Add max joint speed limit for hingejoint and universaljoint
+
+	* app/simspark/rsg/agent/nao/hingejoint.rsg:
+	- Respect to the real nao, set the max abs joint speed of all 
+	  the hingejoint to 351.77 deg/s
+
+
 2008-05-16  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/kerosin/imageserver/imageserver.cpp (ImageServer::Load):

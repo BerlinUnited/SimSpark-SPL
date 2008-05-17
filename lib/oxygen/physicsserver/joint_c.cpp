@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint_c.cpp,v 1.7 2008/04/11 09:46:16 fengxue Exp $
+   $Id: joint_c.cpp,v 1.8 2008/05/17 13:38:09 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -513,6 +513,38 @@ FUNCTION(Joint, getMaxMotorForce)
     return obj->GetMaxMotorForce(static_cast<Joint::EAxisIndex>(inAxis));
 }
 
+FUNCTION(Joint, setJointMaxSpeed1)
+{
+    float inRad;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inRad))
+        )
+        {
+            return false;
+        }
+
+    obj->SetJointMaxSpeed1(inRad);
+    return true;
+}
+
+FUNCTION(Joint, setJointMaxSpeed2)
+{
+    float inRad;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], inRad))
+        )
+        {
+            return false;
+        }
+
+    obj->SetJointMaxSpeed2(inRad);
+    return true;
+}
+
 void CLASS(Joint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/ODEObject);
@@ -545,5 +577,7 @@ void CLASS(Joint)::DefineClass()
     DEFINE_FUNCTION(getAngularMotorVelocity);
     DEFINE_FUNCTION(setMaxMotorForce);
     DEFINE_FUNCTION(getMaxMotorForce);
+    DEFINE_FUNCTION(setJointMaxSpeed1);
+    DEFINE_FUNCTION(setJointMaxSpeed2);
 }
 
