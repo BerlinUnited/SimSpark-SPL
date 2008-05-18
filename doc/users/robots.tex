@@ -112,9 +112,9 @@ In figure \ref{fig:examplemsg} shows an example message which the agent receives
     head & neck & 0&0&0.065& & 0.35 & Sphere 0.065 & HJ2 & 0&0&-0.005 &
     1&0&0& & -45 & 45\\
     \hline
-    shoulder & torso & 0.085&0&0.075&(r)  & 0.07 & Sphere 0.01& AJ1 &
+    shoulder & torso & 0.098&0&0.075&(r)  & 0.07 & Sphere 0.01& AJ1 &
     0&0&0 & 1&0&0& & -120 & 120 \\
-    & & -0.085 & 0 & 0.075&(l) & & & & \threegrid{} & \fourgrid{} & & \\
+    & & -0.098 & 0 & 0.075&(l) & & & & \threegrid{} & \fourgrid{} & & \\
     \hline
     upperarm & shoulder & 0.01&0.02&0&(r) & 0.150 &
     Box & AJ2 & \threegrid{-Translation} & 0&0&1& & -95(r) & 1(r)  \\
@@ -128,16 +128,16 @@ In figure \ref{fig:examplemsg} shows an example message which the agent receives
     \threegrid{-Translation} & 0&0&1& & -1(r) & 90(r) \\
     & & \fourgrid{} & & 0.05, 0.11, 0.05 & & \threegrid{} & \fourgrid{} & -90(l) & 1(l) \\
     \hline
-    hip1 & torso & 0.055&-0.01&-0.115&(r) &
+    hip1 & torso & 0.050&-0.01&-0.115&(r) &
     0.09 & Sphere 0.01 & LJ1 & 0&0&0 & -0.7071&0&0.7071&(r)  & -90 & 1 \\
-    & & -0.055 & -0.01 & -0.115&(l) & & & & \threegrid{} & -0.7071&0&-0.7071&(l) & &\\
+    & & -0.050 & -0.01 & -0.115&(l) & & & & \threegrid{} & -0.7071&0&-0.7071&(l) & &\\
     \hline
-    hip2 & hip1 & 0&0&0& & 0.125 & Sphere 0.01 & LJ2 & 0&0&0 & 1&0&0& &
-    -25 & 100\\
+    hip2 & hip1 & 0&0&0& & 0.125 & Sphere 0.01 & LJ2 & 0&1&0 & 1&0&0& &
+    -45(r) & 25(r)\\
+    & & \fourgrid{} & & 0.07, 0.07, 0.14 & & \threegrid{} & \fourgrid{} & -25(l) & 45(l) \\
     \hline
     thigh & hip2 & 0&0.01&-0.04& & 0.275 & Box & LJ3 &
-    \threegrid{-Translation} & 0&1&0& & -45(r) & 25(r) \\
-    & & \fourgrid{} & & 0.07, 0.07, 0.14 & & \threegrid{} & \fourgrid{} & -25(l) & 45(l) \\
+    \threegrid{-Translation} & 1&0&0& &  -25 & 100\\
     \hline
     shank & thigh & 0&0.005&-0.125& & 0.225 & Box  & LJ4
     & 0&-0.01&0.045 & 1&0&0& & -130 & 1\\
@@ -147,9 +147,9 @@ In figure \ref{fig:examplemsg} shows an example message which the agent receives
     & 1&0&0& & -45 & 75\\
     \hline
     foot & ankle & 0&0.03&-0.035& & 0.2 & Box & LJ6 & 0&-0.03&0.035 & 0&1&0& & -25(r) & 45(r)\\
-    & & \fourgrid{} & & 0.08, 0.16, 0.03 & & \threegrid{} & \fourgrid{} & -45(l) & 25(l)\\
+    & & \fourgrid{} & & 0.102, 0.16, 0.03 & & \threegrid{} & \fourgrid{} & -45(l) & 25(l)\\
     \hline
-    Torso &  & \fourgrid{} & 1.200 & Box & & \threegrid{} & \fourgrid{} & &\\
+    Torso &  & \fourgrid{} & 1.2171 & Box & & \threegrid{} & \fourgrid{} & &\\
     & & \fourgrid{} & & 0.1, 0.1, 0.18 & & \threegrid{} & \fourgrid{} & &\\
     \hline
   \end{tabular}

@@ -1,3 +1,8 @@
+2008-05-18  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* doc/users/robots.tex:
+	- change configuration table of Nao according Feng's modification
+
 2008-05-17  Feng Xue  <henry519@mail.ustc.edu.cn>:
 	* lib/oxygen/physicsserver/joint.h:
 	* lib/oxygen/physicsserver/joint.cpp:
