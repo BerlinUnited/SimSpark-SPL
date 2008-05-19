@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh_c.cpp,v 1.9 2008/02/22 16:48:18 hedayat Exp $
+   $Id: staticmesh_c.cpp,v 1.10 2008/05/19 06:34:55 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -129,6 +129,21 @@ FUNCTION(StaticMesh,setExternalMeshScale)
     return true;
 }
 
+FUNCTION(StaticMesh,resetMaterials)
+{
+    std::vector<std::string> names;
+    for (ParameterList::TVector::const_iterator iter = in.begin();
+         in.end() != iter; ++iter){
+        string v;
+        if (!in.GetValue(iter,v)){
+            return false;
+        }
+        names.push_back(v);
+    }
+    obj->ResetMaterials(names);
+    return true;
+}
+
 void CLASS(StaticMesh)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
@@ -138,4 +153,5 @@ void CLASS(StaticMesh)::DefineClass()
     DEFINE_FUNCTION(setUseExternalMesh)
     DEFINE_FUNCTION(setExternalMeshName)
     DEFINE_FUNCTION(setExternalMeshScale)
+    DEFINE_FUNCTION(resetMaterials)
 }

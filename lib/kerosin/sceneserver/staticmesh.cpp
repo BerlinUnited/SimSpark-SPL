@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.21 2008/05/19 05:23:39 yxu Exp $
+   $Id: staticmesh.cpp,v 1.22 2008/05/19 06:34:55 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -323,5 +323,45 @@ void StaticMesh::ChangeMaterial(const std::string& oldMat,
             *iter = material;
         }
         ++iter;
+    }
+}
+
+std::vector<std::string> StaticMesh::GetMaterialNames() const
+{
+    std::vector<std::string> names;
+    for(TMaterialList::const_iterator iter = mMaterials.begin();
+        mMaterials.end() != iter; ++iter){
+        names.push_back( (*iter)->GetName() );
+    }
+    return names;
+}
+
+void StaticMesh::ResetMaterials(const std::vector<std::string>& names)
+{
+    shared_ptr<MaterialServer> materialServer =
+        shared_dynamic_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
+    if (materialServer.get() == 0)
+    {
+        GetLog()->Error()
+            << "(StaticMesh) ERROR: Cannot find MaterialServer\n";
+        return;
+    }
+    
+    mMaterials.clear();
+    // load corresponding materials
+    for (std::vector<std::string>::const_iterator iter = names.begin();
+         names.end() != iter; ++iter){
+
+        shared_ptr<Material> material = materialServer->GetMaterial(*iter);
+
+        if (material.get() == 0)
+        {
+            GetLog()->Error()
+                << "(StaticMesh) ERROR: Cannot find Material "<<*iter
+                <<", use default instead.";
+            material = materialServer->GetMaterial("default");
+        }
+
+        mMaterials.push_back(material);
     }
 }

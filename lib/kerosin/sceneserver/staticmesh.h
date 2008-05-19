@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.16 2008/05/19 05:23:39 yxu Exp $
+   $Id: staticmesh.h,v 1.17 2008/05/19 06:34:55 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -130,6 +130,18 @@ public:
      * 
      */
     void ChangeMaterial(const std::string& oldMat,const std::string& newMat);
+
+    /** 
+     * @return the names of materials, separated by space
+     */
+    std::vector<std::string> GetMaterialNames() const;
+
+    /** 
+     * reset the materials according to the names
+     * 
+     * @param names a vector of material names
+     */
+    void ResetMaterials(const std::vector<std::string>& names);
     
     //
     // Members
