@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: sparkmonitor.cpp,v 1.17 2008/04/14 13:47:46 yxu Exp $
+   $Id: sparkmonitor.cpp,v 1.18 2008/05/19 06:44:05 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -271,7 +271,7 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
        << scale[0] << " "
        << scale[1] << " "
        << scale[2] << ")";
-
+    
     if (singleMat.get() != 0)
         {
             shared_ptr<Material> mat = singleMat->GetMaterial();
@@ -280,6 +280,17 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
                     ss << " (sMat " << mat->GetName() << ")";
                 }
         }
+    else{
+        std::vector<std::string> mats = mesh->GetMaterialNames();
+        if ( !mats.empty() ){
+            ss<<"(resetMaterials";
+            for(std::vector<std::string>::const_iterator iter = mats.begin();
+                mats.end() != iter; ++iter){
+                ss<<' '<<*iter;
+            }
+            ss<<')';
+        }
+    }
 }
 
 SparkMonitor::NodeCache* SparkMonitor::LookupNode(shared_ptr<BaseNode> node)
