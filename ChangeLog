@@ -1,5 +1,33 @@
 2008-05-19  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* app/simspark/Makefile.am:
+	* app/simspark/materials/nao.mtl:
+	* app/simspark/models/naobody.obj:
+	* app/simspark/models/rthigh.obj:
+	- modify for using number textures
+
+	* app/simspark/textures/num1.png:
+	* app/simspark/textures/num10.png:
+	* app/simspark/textures/num11.png:
+	* app/simspark/textures/num2.png:
+	* app/simspark/textures/num3.png:
+	* app/simspark/textures/num4.png:
+	* app/simspark/textures/num5.png:
+	* app/simspark/textures/num6.png:
+	* app/simspark/textures/num7.png:
+	* app/simspark/textures/num8.png:
+	* app/simspark/textures/num9.png:
+	- player number textures ( in Arial Black Font)
+
+	* plugin/sparkmonitor/sparkmonitor.cpp:
+	- describe the materials of StaticMesh
+
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	* app/simspark/rsg/agent/nao/naoarm.rsg:
+	* app/simspark/rsg/agent/nao/naoleg.rsg:
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
+	- use StaticMesh instead SingleMatNode
+
 	* app/simspark/materials/lfoot.mtl:
 	* app/simspark/materials/llowerarm.mtl:
 	* app/simspark/materials/lshank.mtl:
@@ -12,7 +40,7 @@
 	* app/simspark/materials/rshank.mtl:
 	* app/simspark/materials/rthigh.mtl:
 	* app/simspark/materials/rupperarm.mtl:
-	- these file are no need, sice the whole nao robto use material
+	- these file are no need, since the whole nao robto use material
 	defined in nao.mtl
 
 	* app/simspark/Makefile.am:
@@ -32,10 +60,12 @@
 	- modify the obj file manually for setting team material
 	- use only one .mtl file for the whole nao robot
 
+	* lib/kerosin/sceneserver/staticmesh_c.cpp
 	* lib/kerosin/sceneserver/staticmesh.cpp:
 	* lib/kerosin/sceneserver/staticmesh.h:
-	- add a vector to store name of materials
 	- add ChangeMaterial to changle material by given name
+	- add GetMaterialNames to get a vector of material names
+	- add ResetMaterials to reset all the materials
 
 	* plugin/soccer/Makefile.am:
 	* plugin/soccer/export.cpp:
@@ -45,6 +75,7 @@
 	- new StaticMeshInitEffector which change 'matTeam' material of
 	static mesh of agent to 'matLeft' or 'matRight' according to team
 	side
+	- change 'matNum' to 'matNum*' according to player's number
 
 	* app/simspark/naosoccersim.rb:
 	- change the AgentRadius, since the AgentAspect is moved
