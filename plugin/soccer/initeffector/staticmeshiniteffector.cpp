@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004-2008 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmeshiniteffector.cpp,v 1.1 2008/05/19 02:57:06 yxu Exp $
+   $Id: staticmeshiniteffector.cpp,v 1.2 2008/05/19 11:51:49 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <kerosin/sceneserver/staticmesh.h>
 #include <sstream>
 #include <string>
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 using namespace boost;
@@ -82,8 +83,7 @@ StaticMeshInitEffector::PrePhysicsUpdateInternal(float deltaTime)
     }
     
     int unum = state->GetUniformNumber();
-    //std::ostringstream unumMat;
-    //unumMat << unum;
+    string unumMat = "matNum" + lexical_cast<string>(unum);
     
     // get parent of the agent aspect
     shared_ptr<Node> parent = shared_dynamic_cast<Node>
@@ -109,6 +109,7 @@ StaticMeshInitEffector::PrePhysicsUpdateInternal(float deltaTime)
     {
         shared_ptr<StaticMesh> m = shared_static_cast<StaticMesh>(*iter);
         m->ChangeMaterial("matTeam",teamMat);
+        m->ChangeMaterial("matNum",unumMat);
     }
     
     // set the scene modified, the monitor will update
