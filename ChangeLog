@@ -1,3 +1,59 @@
+2008-05-19  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/materials/lfoot.mtl:
+	* app/simspark/materials/llowerarm.mtl:
+	* app/simspark/materials/lshank.mtl:
+	* app/simspark/materials/lthigh.mtl:
+	* app/simspark/materials/lupperarm.mtl:
+	* app/simspark/materials/naobody.mtl:
+	* app/simspark/materials/naohead.mtl:
+	* app/simspark/materials/rfoot.mtl:
+	* app/simspark/materials/rlowerarm.mtl:
+	* app/simspark/materials/rshank.mtl:
+	* app/simspark/materials/rthigh.mtl:
+	* app/simspark/materials/rupperarm.mtl:
+	- these file are no need, sice the whole nao robto use material
+	defined in nao.mtl
+
+	* app/simspark/Makefile.am:
+	* app/simspark/materials/nao.mtl:
+	* app/simspark/models/lfoot.obj:
+	* app/simspark/models/llowerarm.obj:
+	* app/simspark/models/lshank.obj:
+	* app/simspark/models/lthigh.obj:
+	* app/simspark/models/lupperarm.obj:
+	* app/simspark/models/naobody.obj:
+	* app/simspark/models/naohead.obj:
+	* app/simspark/models/rfoot.obj:
+	* app/simspark/models/rlowerarm.obj:
+	* app/simspark/models/rshank.obj:
+	* app/simspark/models/rthigh.obj:
+	* app/simspark/models/rupperarm.obj:
+	- modify the obj file manually for setting team material
+	- use only one .mtl file for the whole nao robot
+
+	* lib/kerosin/sceneserver/staticmesh.cpp:
+	* lib/kerosin/sceneserver/staticmesh.h:
+	- add a vector to store name of materials
+	- add ChangeMaterial to changle material by given name
+
+	* plugin/soccer/Makefile.am:
+	* plugin/soccer/export.cpp:
+	* plugin/soccer/initeffector/staticmeshiniteffector.cpp:
+	* plugin/soccer/initeffector/staticmeshiniteffector.h:
+	* plugin/soccer/initeffector/staticmeshiniteffector_c.cpp:
+	- new StaticMeshInitEffector which change 'matTeam' material of
+	static mesh of agent to 'matLeft' or 'matRight' according to team
+	side
+
+	* app/simspark/naosoccersim.rb:
+	- change the AgentRadius, since the AgentAspect is moved
+
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
+	- move AgentAspect to torso, so that the robot will be seen at the
+	torso
+
 2008-05-18  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* doc/users/robots.tex:
