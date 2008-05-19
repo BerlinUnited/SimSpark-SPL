@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: export.cpp,v 1.15 2008/04/12 22:14:11 benpwd Exp $
+   $Id: export.cpp,v 1.16 2008/05/19 02:57:06 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include "driveeffector/driveeffector.h"
 #include "initeffector/initeffector.h"
 #include "initeffector/singlematiniteffector.h"
+#include "initeffector/staticmeshiniteffector.h"
 #include "kickeffector/kickeffector.h"
 #include "pantilteffector/pantilteffector.h"
 #include "sayeffector/sayeffector.h"
@@ -63,6 +64,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(DriveEffector);
         ZEITGEIST_EXPORT(InitEffector);
         ZEITGEIST_EXPORT(SingleMatInitEffector);
+        ZEITGEIST_EXPORT(StaticMeshInitEffector);
         ZEITGEIST_EXPORT(KickEffector);
         ZEITGEIST_EXPORT(PanTiltEffector);
         ZEITGEIST_EXPORT(SayEffector);
