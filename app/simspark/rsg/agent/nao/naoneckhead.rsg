@@ -57,7 +57,7 @@
     ;
     ;Begin construct head
     ;     
-    (nd AgentAspect
+    (nd Transform
         (setName head)
         (setLocalPos $Head_X $Head_Y $Head_Z)
 
@@ -85,29 +85,13 @@
                               0 0 -0.005
                               1 0 0
                               $he2_min $he2_max)
-    
-        ;Install effectors and perceptors
-        (nd SingleMatInitEffector)
-        ;(nd InitEffector)
  
         (nd Camera)
-       
-        (nd TimePerceptor)
-        
-        (nd AgentState
-            (setName AgentState)
-            (nd GameStatePerceptor)
-            (nd HearPerceptor)
-        )
-             
+
         (nd VisionPerceptor
             (setSenseMyPos false)
 	    (setStaticSenseAxis false)
             (addNoise true)
         )
-
-        (nd BeamEffector)
-
-        (nd SayEffector)
     )
 )

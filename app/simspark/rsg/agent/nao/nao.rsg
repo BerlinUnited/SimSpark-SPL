@@ -31,7 +31,7 @@
     ;
     ;The torso part
     ;
-    (nd Transform
+    (nd AgentAspect
         (setName body)
         (setLocalPos $TorsoInitX $TorsoInitY $TorsoInitZ)
 
@@ -51,10 +51,23 @@
           )
         )
         (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
-    
+
+	;Install effectors and perceptors
+        (nd StaticMeshInitEffector)
+
+	(nd TimePerceptor)
         
+        (nd AgentState
+            (setName AgentState)
+            (nd GameStatePerceptor)
+            (nd HearPerceptor)
+        )
+
         (nd GyroRatePerceptor (setName torso))
 
+	(nd BeamEffector)
+
+        (nd SayEffector)
 
     );end of AgentAspect
     
