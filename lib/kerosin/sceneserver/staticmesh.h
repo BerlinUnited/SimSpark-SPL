@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.h,v 1.14 2008/02/22 16:48:18 hedayat Exp $
+   $Id: staticmesh.h,v 1.15 2008/05/19 02:58:42 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -122,6 +122,16 @@ public:
         @return the external mesh scale */
     const salt::Vector3f& ExternalMeshScale() const;
 
+    /** 
+     * change the material of the mesh
+     * 
+     * @param oldMat the name of old material
+     * @param newMat the name of new materila
+     * 
+     * @return 
+     */
+    bool ChangeMaterial(const std::string& oldMat,const std::string& newMat);
+    
     //
     // Members
     //
@@ -134,6 +144,9 @@ protected:
 
     /** the materials used to render the mesh */
     TMaterialList mMaterials;
+
+    /** the material names used to change the material */
+    std::vector<std::string> mMaterialNames;
 
     /** the name of the loaded mesh */
     std::string mMeshName;

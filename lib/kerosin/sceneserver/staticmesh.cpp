@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.19 2008/05/12 09:01:04 rollmark Exp $
+   $Id: staticmesh.cpp,v 1.20 2008/05/19 02:58:42 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -168,6 +168,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
     mMeshParameter = parameter;
     mMesh.reset();
     mMaterials.clear();
+    mMaterialNames.clear();
     CalcBoundingBox();
 
     shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
@@ -217,6 +218,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
                 }
 
             mMaterials.push_back(material);
+            mMaterialNames.push_back(face.material);
         }
 
     return true;
@@ -291,4 +293,47 @@ const salt::Vector3f&
 StaticMesh::ExternalMeshScale() const
 {
     return mExternalMeshScale;
+}
+
+bool StaticMesh::ChangeMaterial(const std::string& oldMat,
+                                const std::string& newMat)
+{
+    // find the old material
+    TMaterialList::iterator iter = mMaterials.begin();
+    vector<string>::iterator nameIter = mMaterialNames.begin();
+    while(mMaterials.end() != iter && mMaterialNames.end() != nameIter)
+    {
+        if ( oldMat == *nameIter ){
+            break;
+        }
+        ++iter;
+        ++nameIter;
+    }
+
+    // check if this mesh have the old material
+    if ( mMaterials.end() == iter || mMaterialNames.end() == nameIter )
+        return false;
+
+    shared_ptr<MaterialServer> materialServer =
+        shared_dynamic_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
+
+    if (materialServer.get() == 0)
+    {
+        GetLog()->Error()
+            << "(StaticMesh) ERROR: Cannot find MaterialServer\n";
+        return false;
+    }
+
+    shared_ptr<Material> material = materialServer->GetMaterial(newMat);
+
+    if (material.get() == 0)
+    {
+        GetLog()->Error()
+            << "(StaticMesh) ERROR: Cannot find Material "<<newMat<<"\n";
+        return false;
+    }
+
+    *iter = material;
+    *nameIter = newMat;
+    return true;
 }
