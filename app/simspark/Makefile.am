@@ -140,6 +140,17 @@ EXTRA_DIST = \
 	textures/rcs-unum10.png\
 	textures/rcs-unum11.png\
 	textures/rcs-naofield.png\
+	textures/num1.png\
+	textures/num2.png\
+	textures/num3.png\
+	textures/num4.png\
+	textures/num5.png\
+	textures/num6.png\
+	textures/num7.png\
+	textures/num8.png\
+	textures/num9.png\
+	textures/num10.png\
+	textures/num11.png\
 	rsg/agent/nao/box_appearance.rsg\
 	rsg/agent/nao/box_physics.rsg\
 	rsg/agent/nao/box_physics_with_handler.rsg\
