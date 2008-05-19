@@ -48,7 +48,7 @@ addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
 
 # agent parameters
-addSoccerVar('AgentRadius',  0.6)
+addSoccerVar('AgentRadius',  0.4)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.042)
