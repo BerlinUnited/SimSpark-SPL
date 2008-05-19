@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.cpp,v 1.4 2008/02/28 08:09:18 rollmark Exp $
+   $Id: restrictedvisionperceptor.cpp,v 1.5 2008/05/19 22:43:42 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/agentaspect/agentaspect.h>
 #include <soccer/soccerbase/soccerbase.h>
 #include <salt/gmath.h>
 
@@ -37,9 +38,9 @@ RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mStaticSenseAxis(true)
 {
     // set predicate name
-    SetPredicateName("Vision");
+    SetPredicateName("See");
     // set some default noise values
-    SetNoiseParams(0.0965, 0.1225, 0.1480, 0.005);
+    SetNoiseParams(0.0965f, 0.1225f, 0.1480f, 0.005f);
     SetViewCones(90,90);
     SetPanRange(-90,90);
     SetTiltRange(-20,20);
@@ -194,7 +195,7 @@ RestrictedVisionPerceptor::ConstructInternal()
 }
 
 void
-RestrictedVisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
+RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 {
     TLeafList objectList;
     mActiveScene->ListChildrenSupportingClass<ObjectState>(objectList, true);
@@ -202,59 +203,134 @@ RestrictedVisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
     for (TLeafList::iterator i = objectList.begin();
-         i != objectList.end(); ++i)
+        i != objectList.end(); ++i)
+    {
+        ObjectData od;
+
+        od.mObj = shared_static_cast<ObjectState>(*i);
+
+        shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(mActiveScene);
+        shared_ptr<AgentAspect> agent_aspect = make_shared(
+                od.mObj->FindParentSupportingClass<AgentAspect>()
+            );
+        if (agent_aspect != 0)
         {
-            ObjectData od;
-            od.mObj = shared_static_cast<ObjectState>(*i);
-
-            if (od.mObj.get() == 0)
-                {
-                    GetLog()->Error() << "Error: (RestrictedVisionPerceptor) skipped: "
-                                      << (*i)->GetName() << "\n";
-                    continue; // this should never happen
-                }
-
-            shared_ptr<Transform> j = od.mObj->GetTransformParent();
-
-            if (j.get() == 0)
-                {
-                    continue; // this should never happen
-                }
-
-            od.mRelPos = j->GetWorldTransform().Pos() - myPos;
-            od.mDist   = od.mRelPos.Length();
-
-            visibleObjects.push_back(od);
+            // GetLog()->Normal()
+            //    << "skipping agentAspect " << agent_aspect->GetFullPath() << std::endl;
+            node = shared_dynamic_cast<BaseNode>(agent_aspect);
         }
+
+        if (od.mObj.get() == 0)
+        {
+            GetLog()->Error() << "Error: (RestrictedVisionPerceptor) skipped: "
+                << (*i)->GetName() << "\n";
+            continue; // this should never happen
+        }
+
+        shared_ptr<Transform> j = od.mObj->GetTransformParent();
+        
+        if (j.get() == 0)
+        {
+            continue; // this should never happen
+        }
+
+        od.mRelPos = j->GetWorldTransform().Pos() - myPos;
+        od.mDist   = od.mRelPos.Length();
+        
+        visibleNodes[node].push_back(od);
+	}
 }
 
 void
-RestrictedVisionPerceptor::AddSense(Predicate& predicate, ObjectData& od) const
+RestrictedVisionPerceptor::AddSense(Predicate& predicate,
+                                    shared_ptr<BaseNode> node,
+                                    TObjectList& objectList) const
 {
-    ParameterList& element = predicate.parameter.AddList();
-    element.AddValue(od.mObj->GetPerceptName());
-
-    if(od.mObj->GetPerceptName() == "Player")
+    if (objectList.empty())
     {
-        ParameterList player;
-        player.AddValue(std::string("team"));
-        player.AddValue(od.mObj->GetPerceptName(ObjectState::PT_Player));
-        element.AddValue(player);
+        return;
     }
 
-    if (!od.mObj->GetID().empty())
+    shared_ptr<AgentAspect> agent_aspect =
+        shared_dynamic_cast<AgentAspect>(node);
+    if (agent_aspect != 0)
     {
-        ParameterList id;
-        id.AddValue(std::string("id"));
-        id.AddValue(od.mObj->GetID());
-        element.AddValue(id);
-    }
+        TObjectList::iterator top = objectList.end();
+        for (TObjectList::iterator i = objectList.begin();
+            i != objectList.end(); ++i)
+        {
+            ObjectData& od = (*i);
+            if (od.mObj->GetPerceptName() == "P")
+            {
+                top = i;
+                break;
+            }
+        }
 
-    ParameterList& position = element.AddList();
-    position.AddValue(std::string("pol"));
-    position.AddValue(od.mDist);
-    position.AddValue(od.mTheta);
-    position.AddValue(od.mPhi);
+        if (top != objectList.end())
+        {
+            ObjectData& od = (*top);
+            ParameterList& element = predicate.parameter.AddList();
+            element.AddValue(od.mObj->GetPerceptName());
+
+            ParameterList player;
+            player.AddValue(std::string("team"));
+            player.AddValue
+                (std::string
+                    (od.mObj->GetPerceptName(ObjectState::PT_Player)
+                    )
+                );
+            element.AddValue(player);
+
+            if (!od.mObj->GetID().empty())
+            {
+                ParameterList id;
+                id.AddValue(std::string("id"));
+                id.AddValue(od.mObj->GetID());
+                element.AddValue(id);
+            }
+
+            for (TObjectList::iterator j = objectList.begin();
+                j != objectList.end(); ++j)
+            {
+                if (j == top)
+                    continue;
+
+                ObjectData& od = (*j);
+
+                if (!od.mObj->GetID().empty())
+                {
+                    ParameterList id;
+                    id.AddValue(od.mObj->GetID());
+
+                    ParameterList position;
+                    position.AddValue(std::string("pol"));
+                    position.AddValue(od.mDist);
+                    position.AddValue(od.mTheta);
+                    position.AddValue(od.mPhi);
+                    id.AddValue(position);
+
+                    element.AddValue(id);
+                }
+            }
+        }
+    }
+    else
+    {
+        for (TObjectList::iterator j = objectList.begin();
+            j != objectList.end(); ++j)
+        {
+            ObjectData& od = (*j);
+            ParameterList& element = predicate.parameter.AddList();
+            element.AddValue(od.mObj->GetPerceptName());
+
+            ParameterList& position = element.AddList();
+            position.AddValue(std::string("pol"));
+            position.AddValue(od.mDist);
+            position.AddValue(od.mTheta);
+            position.AddValue(od.mPhi);
+        }
+    }
 }
 
 void
@@ -268,7 +344,6 @@ RestrictedVisionPerceptor::ApplyNoise(ObjectData& od) const
     }
 }
 
-
 bool
 RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> predList)
 {
@@ -279,47 +354,47 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
     TTeamIndex  ti       = mAgentState->GetTeamIndex();
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
-    TObjectList visibleObjects;
-    SetupVisibleObjects(visibleObjects);
-
-    for (std::list<ObjectData>::iterator i = visibleObjects.begin();
-         i != visibleObjects.end(); ++i)
-    {
-        ObjectData& od = (*i);
-
-        od.mRelPos = SoccerBase::FlipView(od.mRelPos, ti);
-        if (mAddNoise)
-        {
-            od.mRelPos += mError;
-        }
-
-        if (
-            (od.mRelPos.Length() <= 0.1) ||
-            (CheckOcclusion(myPos,od))
-            )
-        {
-            // object is occluded or too close
-            continue;
-        }
-
-        // theta is the angle in the X-Y (horizontal) plane
-        assert(gAbs(GetPan()) <= 360);
-        od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0])) - GetPan();
-        od.mTheta = gNormalizeDeg(od.mTheta);
-        // latitude
-        assert(gAbs(GetTilt()) <= 360);
-        od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[2]/od.mDist)) - GetTilt();
-        od.mPhi = gNormalizeDeg(od.mPhi);
-
-        // make some noise
-        ApplyNoise(od);
-        // check if the object is in the current field of view
-        if (gAbs(od.mTheta) > mHViewCone) continue;
-        if (gAbs(od.mPhi) > mVViewCone) continue;
-
-        // generate a sense entry
-        AddSense(predicate,od);
-    }
+//     TObjectList visibleObjects;
+//     SetupVisibleObjects(visibleObjects);
+// 
+//     for (std::list<ObjectData>::iterator i = visibleObjects.begin();
+//          i != visibleObjects.end(); ++i)
+//     {
+//         ObjectData& od = (*i);
+// 
+//         od.mRelPos = SoccerBase::FlipView(od.mRelPos, ti);
+//         if (mAddNoise)
+//         {
+//             od.mRelPos += mError;
+//         }
+// 
+//         if (
+//             (od.mRelPos.Length() <= 0.1) ||
+//             (CheckOcclusion(myPos,od))
+//             )
+//         {
+//             // object is occluded or too close
+//             continue;
+//         }
+// 
+//         // theta is the angle in the X-Y (horizontal) plane
+//         assert(gAbs(GetPan()) <= 360);
+//         od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0])) - GetPan();
+//         od.mTheta = gNormalizeDeg(od.mTheta);
+//         // latitude
+//         assert(gAbs(GetTilt()) <= 360);
+//         od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[2]/od.mDist)) - GetTilt();
+//         od.mPhi = gNormalizeDeg(od.mPhi);
+// 
+//         // make some noise
+//         ApplyNoise(od);
+//         // check if the object is in the current field of view
+//         if (gAbs(od.mTheta) > mHViewCone) continue;
+//         if (gAbs(od.mPhi) > mVViewCone) continue;
+// 
+//         // generate a sense entry
+//         AddSense(predicate,od);
+//     }
 
     if (mSenseMyPos)
     {
@@ -342,102 +417,85 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
     predicate.name       = mPredicateName;
     predicate.parameter.Clear();
 
-    const int hAngle_2 = mHViewCone>>1;
-    const int vAngle_2 = mVViewCone>>1;
+    const int hAngle_2 = mHViewCone >> 1;
+    const int vAngle_2 = mVViewCone >> 1;
 
-    TTeamIndex  ti = mAgentState->GetTeamIndex();
+    // get the transformation matrix describing the current orientation
+    const Matrix& mat = mTransformParent->GetWorldTransform();
 
-    const Vector3f& up = mTransformParent->GetWorldTransform().Up();
+    TNodeObjectsMap visibleNodes;
+    SetupVisibleNodes(visibleNodes);
 
-    // calc the percptors angle in the horizontal plane
-    double fwTheta = gNormalizeRad(Vector2f(up[0],up[1]).GetAngleRad());
-
-    // calc the perceptors angle in the vertical plane
-    // for this the vector has to rotated, i.e. you cannot just use x and z component
-    //double fwPhi = gNormalizeRad(Vector2f(Vector2f(up[0],up[1]).Length(),up[2]).GetAngleRad());
-
-    // assume that perceptor is always horizontal.
-    // FIXME: this is magic
-    double fwPhi = 0.0;
-
-
-    TObjectList visibleObjects;
-    SetupVisibleObjects(visibleObjects);
-
-    // log for 7th agent of the first team
-    if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
-        GetLog()->Debug() << "percept: " << visibleObjects.size() << " objects. :::"
-                          << up << " theta " << gRadToDeg(fwTheta)
-                          << " phi " << gRadToDeg(fwPhi) << "\n";
-
-    for (std::list<ObjectData>::iterator i = visibleObjects.begin();
-         i != visibleObjects.end(); ++i)
+    for (TNodeObjectsMap::iterator i = visibleNodes.begin();
+        i != visibleNodes.end(); ++i)
     {
-        ObjectData& od = (*i);
+        shared_ptr<BaseNode> node   = (*i).first;
+        TObjectList& visibleObjects = (*i).second;
 
-
-        od.mRelPos = SoccerBase::FlipView(od.mRelPos, ti);
-        if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
-            GetLog()->Debug() << "object " << od.mObj->GetPerceptName()
-                              << " at : " << od.mRelPos << "\n";
-
-        if (mAddNoise)
+        for (TObjectList::iterator j = visibleObjects.begin();
+            j != visibleObjects.end();)
         {
-            od.mRelPos += mError;
+            ObjectData& od = (*j);
+
+            if (mAddNoise)
+            {
+                od.mRelPos += mError;
+            }
+
+            if (od.mRelPos.Length() <= 0.1)
+            {
+                // object is too close
+                j = visibleObjects.erase(j);
+                continue;
+            }
+
+            // determine position relative to the local reference frame
+            Vector3f localRelPos = mat.InverseRotate(od.mRelPos);
+
+            // theta is the angle in horizontal plane, with fwAngle as 0 degree
+            od.mTheta = gNormalizeDeg (gRadToDeg(gNormalizeRad(
+                gArcTan2(localRelPos[1],localRelPos[0])
+                )) -90 );
+
+            if (gAbs(od.mTheta) > hAngle_2)
+            {
+                // object is out of view range
+                // GetLog()->Debug() << "(RestrictedVisionPerceptor) Omitting "
+                //     << od.mObj->GetPerceptName() << od.mObj->GetID()
+                //     << ": h-angle = " << od.mTheta << ".\n" ;
+                j = visibleObjects.erase(j);
+                continue;
+            }
+
+            // latitude with fwPhi as 0 degreee
+            od.mPhi = gRadToDeg(gNormalizeRad(
+                            gArcTan2(localRelPos[2],
+                                     Vector2f(localRelPos[0], localRelPos[1]).Length()
+                                    )
+                            )
+                      );
+
+            if (gAbs(od.mPhi) > vAngle_2)
+            {
+                j = visibleObjects.erase(j);
+                continue;
+            }
+
+            // make some noise
+            ApplyNoise(od);
+
+            ++j;
         }
-
-        if (od.mRelPos.Length() <= 0.1)
-        {
-            // object is too close
-            continue;
-        }
-
-        // theta is the angle in horizontal plane, with fwAngle as 0 degree
-        od.mTheta = gRadToDeg(gNormalizeRad(
-                                  Vector2f(od.mRelPos[0],od.mRelPos[1]).GetAngleRad() -
-                                  fwTheta
-                                  ));
-        // flags are always visible
-        if ((gAbs(od.mTheta) > hAngle_2) && (od.mObj->GetPerceptName() != "Flag"))
-        {
-            // object is out of view range
-//                                 GetLog()->Debug() << "(RestrictedVisionPerceptor) Omitting "
-//                               << od.mObj->GetPerceptName() << od.mObj->GetID()
-//                               << ": h-angle = " << od.mTheta << ".\n" ;
-            continue;
-        }
-
-
-        // latitude with fwPhi as 0 degreee
-        od.mPhi = gRadToDeg(gNormalizeRad(
-                                Vector2f(
-                                    Vector2f(od.mRelPos[0],od.mRelPos[1]).Length(),
-                                    od.mRelPos[2]).GetAngleRad() - fwPhi
-                                ));
-
-
-        if ((gAbs(od.mPhi) > vAngle_2) && (od.mObj->GetPerceptName() != "Flag"))
-            continue;
-
-        // log for 7th agent of the first team
-        if ((mAgentState->GetTeamIndex() == 1) && (mAgentState->GetUniformNumber() ==7))
-            GetLog()->Debug() << "percept: " << "adding object: "
-                              << gAbs(od.mPhi) << ":" << vAngle_2 << "\n";
-
-        // make some noise
-        ApplyNoise(od);
 
         // generate a sense entry
-        AddSense(predicate,od);
-
+        AddSense(predicate, node, visibleObjects);
     }
 
     if (mSenseMyPos)
     {
+        TTeamIndex  ti       = mAgentState->GetTeamIndex();
         salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
-
-        Vector3f sensedMyPos = myPos;
-        SoccerBase::FlipView(sensedMyPos, ti);
+        Vector3f sensedMyPos = SoccerBase::FlipView(myPos, ti);
 
         ParameterList& element = predicate.parameter.AddList();
         element.AddValue(std::string("mypos"));
@@ -445,6 +503,7 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         element.AddValue(sensedMyPos[1]);
         element.AddValue(sensedMyPos[2]);
     }
+
     return true;
 }
 
@@ -459,13 +518,10 @@ RestrictedVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     {
         return false;
     }
-#if 1
-    return StaticAxisPercept(predList);
-#else
+
     return mStaticSenseAxis ?
         StaticAxisPercept(predList) :
         DynamicAxisPercept(predList);
-#endif
 }
 
 bool RestrictedVisionPerceptor::CheckOcclusion(const Vector3f& my_pos, const ObjectData& od) const

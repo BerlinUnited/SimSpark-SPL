@@ -1,3 +1,10 @@
+2008-05-19  Ben  <benpwd@users.sourceforge.net>
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	* - use a map (from nodes to object list) to integrate information of
+	robot part (such as head, foot) into a player predicate
+
 2008-05-19  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* app/simspark/Makefile.am:

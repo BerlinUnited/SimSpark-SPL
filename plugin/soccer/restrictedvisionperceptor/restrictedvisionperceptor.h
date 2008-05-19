@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.h,v 1.3 2006/05/23 14:41:42 jamu Exp $
+   $Id: restrictedvisionperceptor.h,v 1.4 2008/05/19 22:43:42 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -61,6 +61,8 @@ protected:
     };
 
     typedef std::list<ObjectData> TObjectList;
+
+    typedef std::map<boost::shared_ptr<oxygen::BaseNode>, TObjectList> TNodeObjectsMap;
 
 public:
     RestrictedVisionPerceptor();
@@ -146,8 +148,8 @@ protected:
     /** constructs the internal ray collider */
     virtual bool ConstructInternal();
 
-    /** prepares a list of visible objects */
-    void SetupVisibleObjects(TObjectList& visibleObjects);
+    /** prepares a list of visible nodes */
+    void SetupVisibleNodes(TNodeObjectsMap& visibleNodes);
 
     /** Percept implementation for a static relative axis */
     bool StaticAxisPercept(boost::shared_ptr<oxygen::PredicateList> predList);
@@ -160,9 +162,12 @@ protected:
     /** Checks if the given object is occluded, seen from from my_pos */
     bool CheckOcclusion(const salt::Vector3f& my_pos, const ObjectData& od) const;
 
-    /** constructs a sense entry for the given object in the given
-        predicate*/
-    void AddSense(oxygen::Predicate& predicate, ObjectData& od) const;
+    /** constructs a sense entry for the given node with objects
+        in the given predicate
+    */
+    void AddSense(oxygen::Predicate& predicate,
+                  boost::shared_ptr<BaseNode> node,
+                  TObjectList& objectList) const;
 
     /** applies noise to the setup ObjectData */
     void ApplyNoise(ObjectData& od) const;
