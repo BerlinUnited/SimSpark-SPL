@@ -111,18 +111,7 @@ EXTRA_DIST = \
 	materials/soccerball.mtl\
 	materials/soccerbottorso.mtl\
 	materials/naosoccerfield.mtl\
-	materials/lthigh.mtl\
-	materials/rthigh.mtl\
-	materials/lfoot.mtl\
-	materials/lupperarm.mtl\
-	materials/rfoot.mtl\
-	materials/rupperarm.mtl\
-	materials/llowerarm.mtl\
-	materials/naobody.mtl\
-	materials/rlowerarm.mtl\
-	materials/lshank.mtl\
-	materials/naohead.mtl\
-	materials/rshank.mtl\
+	materials/nao.mtl\
 	textures/rcs-grass-w-lines.tga\
 	textures/rcs-grass.png\
 	textures/rcs-grass3.png\

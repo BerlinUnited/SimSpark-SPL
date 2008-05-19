@@ -1,6 +1,6 @@
 # Blender3D v245 OBJ File: naohead.blend
 # www.blender3d.org
-mtllib naohead.mtl
+mtllib nao.mtl
 o Sphere
 v 0.555741 0.033182 0.357639
 v -0.555741 0.033182 0.357639
@@ -2994,7 +2994,7 @@ f 533//66 616//62 591//2
 f 592//1 617//58 534//64
 f 616//62 531//61 591//2
 f 592//1 532//55 617//58
-usemtl naoblue
+usemtl matTeam
 f 624//622 703//623 626//624
 f 627//625 704//626 625//627
 f 628//628 630//629 705//630
