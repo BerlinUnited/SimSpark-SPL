@@ -1,6 +1,6 @@
 # Blender3D v245 OBJ File: lshank.blend
 # www.blender3d.org
-mtllib lshank.mtl
+mtllib nao.mtl
 o shank.001_Circle.002
 v -0.062438 -0.259177 0.701438
 v -0.122493 -0.239455 0.726317
