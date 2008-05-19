@@ -224,7 +224,7 @@
         
        (switch $loadObj
          (true
-           (nd SingleMatNode (load $ThighObj) (setScale $ThighSizeX $ThighSizeX $ThighSizeX))
+           (nd StaticMesh (load $ThighObj) (setScale $ThighSizeX $ThighSizeX $ThighSizeX))
          )
          (false
            (importScene rsg/agent/nao/box_appearance.rsg $ThighSizeX $ThighSizeY $ThighSizeZ matBlue)
@@ -251,7 +251,7 @@
         
         (switch $loadObj
           (true
-            (nd SingleMatNode (load $ShankObj) (setScale $ShankSizeX $ShankSizeX $ShankSizeX))
+            (nd StaticMesh (load $ShankObj) (setScale $ShankSizeX $ShankSizeX $ShankSizeX))
           )
           (false
             (importScene rsg/agent/nao/box_appearance.rsg $ShankSizeX $ShankSizeY $ShankSizeZ matGrey)
@@ -302,7 +302,7 @@
   
         (switch $loadObj
           (true
-            (nd SingleMatNode (load $FootObj) (setScale $FootSizeX $FootSizeX $FootSizeX))
+            (nd StaticMesh (load $FootObj) (setScale $FootSizeX $FootSizeX $FootSizeX))
           )
           (false
             (importScene rsg/agent/nao/box_appearance.rsg $FootSizeX $FootSizeY $FootSizeZ matBlue)

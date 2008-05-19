@@ -164,7 +164,7 @@
         
         (switch $loadObj
           (true
-            (nd SingleMatNode (load $UpperArmObj) (setScale $UpperArmSizeX $UpperArmSizeX $UpperArmSizeX))
+            (nd StaticMesh (load $UpperArmObj) (setScale $UpperArmSizeX $UpperArmSizeX $UpperArmSizeX))
           )
 
           (false
@@ -211,7 +211,7 @@
 
         (switch $loadObj
           (true
-            (nd SingleMatNode (load $LowerArmObj) (setScale $LowerArmSizeX $LowerArmSizeX $LowerArmSizeX))
+            (nd StaticMesh (load $LowerArmObj) (setScale $LowerArmSizeX $LowerArmSizeX $LowerArmSizeX))
           )
           (false
             (importScene rsg/agent/nao/box_appearance.rsg $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ matRed)

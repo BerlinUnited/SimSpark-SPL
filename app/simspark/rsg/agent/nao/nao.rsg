@@ -39,7 +39,7 @@
           (true
 	    (nd Transform
 		(setLocalRotation -90 0 180)
-		(nd SingleMatNode
+		(nd StaticMesh
             	(load 'models/naobody.obj')
             	(setScale $TorsoLength $TorsoLength $TorsoLength)
         	)

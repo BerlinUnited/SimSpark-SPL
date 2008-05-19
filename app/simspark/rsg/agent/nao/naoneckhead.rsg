@@ -65,7 +65,7 @@
            (true
              (nd Transform
                (setLocalRotation -90 0 180)
-               (nd SingleMatNode
+               (nd StaticMesh
 	          (load 'models/naohead.obj')
 	          (setScale 0.1 0.1 0.1)
                )
