@@ -6,7 +6,7 @@
 
     (nd Body
         (setName ccylinderBody)
-        (setCappedCylinderTotal $totalMass $radius)
+        (setCappedCylinderTotal $totalMass $radius $length)
 
         (importScene rsg/agent/nao/dragcontroller.rsg)
     )
