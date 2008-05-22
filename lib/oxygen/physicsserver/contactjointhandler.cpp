@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: contactjointhandler.cpp,v 1.10 2007/05/31 14:43:38 hedayat Exp $
+   $Id: contactjointhandler.cpp,v 1.11 2008/05/22 10:56:18 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,12 @@ ContactJointHandler::ContactJointHandler() : CollisionHandler()
     mSurfaceParameter.mu = dInfinity;
     mSurfaceParameter.bounce = 0.8f;
     mSurfaceParameter.bounce_vel = 2.0f;
+
+    // In contactjointhandler_c.cpp, setContactSlip function, only
+    // accept one parameter, so two parameter is a mistake, and then 
+    // these two value will be not initialized, but slipe mode is open
+    mSurfaceParameter.slip1 = 5e-3;
+    mSurfaceParameter.slip2 = 5e-3;
 }
 
 ContactJointHandler::~ContactJointHandler()
@@ -115,6 +121,32 @@ ContactJointHandler::CalcSurfaceParam(dSurfaceParameters& surface,
                 (mSurfaceParameter.bounce_vel, collideeParam.bounce_vel, nBounce);
 
             surface.mode |= dContactBounce;
+        }
+
+    // slip1
+    const int nSlip1 = 
+        ((mSurfaceParameter.mode & dContactSlip1) ? 1 : 0) +
+        ((collideeParam.mode & dContactSlip1) ? 2 : 0);
+
+    if (nSlip1 > 0)
+        {
+            surface.slip1 = MixValues
+                (mSurfaceParameter.slip1, collideeParam.slip1, nSlip1);
+
+            surface.mode |= dContactSlip1;
+        }
+
+    // slip2
+    const int nSlip2 = 
+        ((mSurfaceParameter.mode & dContactSlip2) ? 1 : 0) +
+        ((collideeParam.mode & dContactSlip2) ? 2 : 0);
+
+    if (nSlip2 > 0)
+        {
+            surface.slip2 = MixValues
+                (mSurfaceParameter.slip2, collideeParam.slip2, nSlip2);
+
+            surface.mode |= dContactSlip2;
         }
 }
 
