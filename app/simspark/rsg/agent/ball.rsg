@@ -18,10 +18,10 @@
      (nd Body
 	 (setName physics)
 	 
-	 (setSphereTotal $Mass $Radius)	     
+	 (setSphereTotal $Mass $Radius)
 	 (nd DragController
-	     (setAngularDrag 0.1)
-	     (setLinearDrag 0.1)
+	     (setAngularDrag 0.001)
+	     (setLinearDrag 0.001)
 	 )
      )
      
@@ -36,15 +36,16 @@
 	 (nd ContactJointHandler
 	     (setContactBounceMode true)
 	     (setContactBounceValue 0.8)
+	     (setMinBounceVel 1)
 
 	     (setContactSlipMode true)
-	     (setContactSlip 0.1 0.1)
+	     (setContactSlip 0.3)
 	     
 	     (setContactSoftERPMode true)
 	     (setContactSoftERP 0.5)
 	     
-	     (setContactSoftCFM true)
-	     (setContactSoftCFM 0.3)
+	     (setContactSoftCFMMode true)
+	     (setContactSoftCFM 0.1)
 	 )
      )
 
