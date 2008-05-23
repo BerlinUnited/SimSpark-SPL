@@ -1,3 +1,10 @@
+2008-05-23  Ben  <benpwd@users.sourceforge.net>
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	* - correct player information according to 'AgentState', 'AgentAspect'
+	is doublely checked to make sure it can be installed anywhere.
+
 2008-05-22  FengXue <henry519@mail.ustc.edu.cn>
 	* lib/oxygen/physicsserver/contactjointhandler.cpp:
 	- Add the slip value check

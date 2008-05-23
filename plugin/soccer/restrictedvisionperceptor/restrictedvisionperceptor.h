@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.h,v 1.4 2008/05/19 22:43:42 benpwd Exp $
+   $Id: restrictedvisionperceptor.h,v 1.5 2008/05/23 03:45:16 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <oxygen/physicsserver/raycollider.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/transform.h>
+#include <oxygen/agentaspect/agentaspect.h>
 #include <soccer/agentstate/agentstate.h>
 
 class RestrictedVisionPerceptor : public oxygen::Perceptor
@@ -230,6 +231,8 @@ protected:
     boost::shared_ptr<oxygen::Transform> mTransformParent;
     //! a reference to the scene server
     boost::shared_ptr<oxygen::SceneServer> mSceneServer;
+    //! a reference to the agent aspect
+    boost::shared_ptr<oxygen::AgentAspect> mAgentAspect;
     //! a reference to the agent state
     boost::shared_ptr<AgentState> mAgentState;
 };

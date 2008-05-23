@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.cpp,v 1.5 2008/05/19 22:43:42 benpwd Exp $
+   $Id: restrictedvisionperceptor.cpp,v 1.6 2008/05/23 03:45:16 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
-#include <oxygen/agentaspect/agentaspect.h>
 #include <soccer/soccerbase/soccerbase.h>
 #include <salt/gmath.h>
 
@@ -152,8 +151,33 @@ void
 RestrictedVisionPerceptor::OnLink()
 {
     SoccerBase::GetTransformParent(*this,mTransformParent);
-    SoccerBase::GetAgentState(*this, mAgentState);
+//     SoccerBase::GetAgentState(*this, mAgentState);
     SoccerBase::GetActiveScene(*this,mActiveScene);
+    
+    shared_ptr<AgentAspect> agent_aspect =
+        make_shared(FindParentSupportingClass<AgentAspect>());
+    if (agent_aspect == 0)
+    {
+        GetLog()->Error()
+            << "Error: (RestrictedVisionPerceptor) cannot find AgentAspect.\n";
+    }
+    else
+    {
+        mAgentAspect = agent_aspect;
+        agent_aspect = make_shared(agent_aspect->FindParentSupportingClass<AgentAspect>());
+        if (agent_aspect != 0)
+        {
+            mAgentAspect = agent_aspect;
+        }
+        
+        mAgentState = shared_static_cast<AgentState>
+            (mAgentAspect->GetChildOfClass("AgentState",true));
+        if (mAgentState == 0)
+        {
+            GetLog()->Error()
+                << "Error: (RestrictedVisionPerceptor) cannot find AgentState.\n";
+        }
+    }
 }
 
 void
@@ -163,6 +187,7 @@ RestrictedVisionPerceptor::OnUnlink()
     mPhiRng.reset();
     mThetaRng.reset();
     mTransformParent.reset();
+    mAgentAspect.reset();
     mAgentState.reset();
     mActiveScene.reset();
 }
@@ -198,7 +223,8 @@ void
 RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 {
     TLeafList objectList;
-    mActiveScene->ListChildrenSupportingClass<ObjectState>(objectList, true);
+    //mActiveScene->ListChildrenSupportingClass<ObjectState>(objectList, true);
+    mActiveScene->GetChildrenOfClass("ObjectState", objectList, true);
 
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
@@ -211,10 +237,15 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 
         shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(mActiveScene);
         shared_ptr<AgentAspect> agent_aspect = make_shared(
-                od.mObj->FindParentSupportingClass<AgentAspect>()
-            );
+                od.mObj->FindParentSupportingClass<AgentAspect>());
         if (agent_aspect != 0)
         {
+            shared_ptr<AgentAspect> aspect = make_shared(
+                agent_aspect->FindParentSupportingClass<AgentAspect>());
+            if (aspect != 0)
+            {
+                agent_aspect = aspect;
+            }
             // GetLog()->Normal()
             //    << "skipping agentAspect " << agent_aspect->GetFullPath() << std::endl;
             node = shared_dynamic_cast<BaseNode>(agent_aspect);
@@ -254,64 +285,64 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
     shared_ptr<AgentAspect> agent_aspect =
         shared_dynamic_cast<AgentAspect>(node);
     if (agent_aspect != 0)
-    {
-        TObjectList::iterator top = objectList.end();
-        for (TObjectList::iterator i = objectList.begin();
-            i != objectList.end(); ++i)
+    {        
+        shared_ptr<AgentAspect> aspect =
+            make_shared(agent_aspect->FindParentSupportingClass<AgentAspect>());
+        if (aspect != 0)
         {
-            ObjectData& od = (*i);
-            if (od.mObj->GetPerceptName() == "P")
-            {
-                top = i;
-                break;
-            }
+            agent_aspect = aspect;
+        }
+        
+        if (agent_aspect == mAgentAspect) // exclude node of self
+        {
+            return;
+        }
+        
+        shared_ptr<AgentState> agent_state = shared_static_cast<AgentState>
+            (agent_aspect->GetChildOfClass("AgentState",true));
+        if (agent_state.get() == 0)
+        {
+            return;
+        }
+        
+        ParameterList& element = predicate.parameter.AddList();
+        element.AddValue(std::string("P"));
+
+        ParameterList player;
+        player.AddValue(std::string("team"));
+        player.AddValue
+            (std::string
+                (agent_state->GetPerceptName(ObjectState::PT_Player)
+                )
+            );
+        element.AddValue(player);
+
+        if (! agent_state->GetID().empty())
+        {
+            ParameterList id;
+            id.AddValue(std::string("id"));
+            id.AddValue(agent_state->GetID());
+            element.AddValue(id);
         }
 
-        if (top != objectList.end())
+        for (TObjectList::iterator j = objectList.begin();
+            j != objectList.end(); ++j)
         {
-            ObjectData& od = (*top);
-            ParameterList& element = predicate.parameter.AddList();
-            element.AddValue(od.mObj->GetPerceptName());
-
-            ParameterList player;
-            player.AddValue(std::string("team"));
-            player.AddValue
-                (std::string
-                    (od.mObj->GetPerceptName(ObjectState::PT_Player)
-                    )
-                );
-            element.AddValue(player);
+            ObjectData& od = (*j);
 
             if (!od.mObj->GetID().empty())
             {
                 ParameterList id;
-                id.AddValue(std::string("id"));
                 id.AddValue(od.mObj->GetID());
+
+                ParameterList position;
+                position.AddValue(std::string("pol"));
+                position.AddValue(od.mDist);
+                position.AddValue(od.mTheta);
+                position.AddValue(od.mPhi);
+                id.AddValue(position);
+
                 element.AddValue(id);
-            }
-
-            for (TObjectList::iterator j = objectList.begin();
-                j != objectList.end(); ++j)
-            {
-                if (j == top)
-                    continue;
-
-                ObjectData& od = (*j);
-
-                if (!od.mObj->GetID().empty())
-                {
-                    ParameterList id;
-                    id.AddValue(od.mObj->GetID());
-
-                    ParameterList position;
-                    position.AddValue(std::string("pol"));
-                    position.AddValue(od.mDist);
-                    position.AddValue(od.mTheta);
-                    position.AddValue(od.mPhi);
-                    id.AddValue(position);
-
-                    element.AddValue(id);
-                }
             }
         }
     }
@@ -513,6 +544,7 @@ RestrictedVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     if (
         (mTransformParent.get() == 0) ||
         (mActiveScene.get() == 0) ||
+        (mAgentAspect.get() == 0) ||
         (mAgentState.get() == 0)
         )
     {
