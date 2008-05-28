@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccercontrolaspect.cpp,v 1.5 2008/05/03 14:58:48 yxu Exp $
+   $Id: soccercontrolaspect.cpp,v 1.6 2008/05/28 15:51:06 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,20 +65,6 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetBallRecorder()
         {
             GetLog()->Error()
                 << "(SoccerControlAspect) found no ball collision recorder\n";
-        }
-
-    return node;
-}
-
-shared_ptr<RecorderHandler> SoccerControlAspect::GetFieldRecorder()
-{
-    shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
-        (GetCore()->Get(mScenePath + "FieldBox/recorder"));
-
-    if (node.get() == 0)
-        {
-            GetLog()->Error()
-                << "(SoccerControlAspect) found no field collision recorder\n";
         }
 
     return node;
