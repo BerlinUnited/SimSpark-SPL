@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.h,v 1.6 2008/03/31 20:22:07 rollmark Exp $
+   $Id: ballstateaspect.h,v 1.7 2008/05/28 15:48:43 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -109,9 +109,6 @@ protected:
     /** reference to the Ball collision recorder */
     boost::shared_ptr<oxygen::RecorderHandler> mBallRecorder;
 
-    /** reference to the field collider */
-    boost::shared_ptr<oxygen::RecorderHandler> mFieldRecorder;
-
     /** reference to the left goal recorder */
     boost::shared_ptr<oxygen::RecorderHandler> mLeftGoalRecorder;
 
@@ -143,6 +140,12 @@ protected:
 
     /** indicates in which goal the ball is, TI_NONE otherwise */
     TTeamIndex mGoalState;
+
+    /** the cached field length */
+    float mHalfFieldLength;
+
+    /** the cached field width */
+    float mHalfFieldWidth;
 };
 
 DECLARE_CLASS(BallStateAspect);

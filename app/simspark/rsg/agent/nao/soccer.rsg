@@ -76,16 +76,6 @@
 	     )
        )
 
-; create box collider around playing field
- (nd BoxCollider
-       (setName FieldBox)
-       (setPosition 0 0 $FieldHalfHeight)
-       (setBoxLengths $FieldLength $FieldWidth $FieldHeight)
-       (nd RecorderHandler 
-	     (setName recorder)
-	     )
-       )
-
  ;; create the left goal
  (def $LeftGoalX (eval -1* (eval $FieldHalfLength + $GoalHalfDepth)))
  (importScene rsg/agent/nao/goal.rsg

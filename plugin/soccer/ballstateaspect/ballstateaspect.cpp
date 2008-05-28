@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ballstateaspect.cpp,v 1.8 2008/03/28 16:36:55 hedayat Exp $
+   $Id: ballstateaspect.cpp,v 1.9 2008/05/28 15:48:43 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -100,16 +100,9 @@ BallStateAspect::UpdateLastKickingAgent(boost::shared_ptr<AgentAspect> agent)
 
 void BallStateAspect::UpdateBallOnField()
 {
-    // get a list of Ball nodes that collided with the field
-    RecorderHandler::TParentList ball;
-    mFieldRecorder->FindParentsSupportingClass<Ball>(ball);
-
-    // the ball is on or above the playing field iff it collided with
-    // the box collider around the playing field
-    mBallOnField = (ball.size() > 0);
-
-    // empty the recorder buffer
-    mFieldRecorder->Clear();
+    const Vector3f& posBall = mBall->GetWorldTransform().Pos();
+    mBallOnField = ( gAbs(posBall.x()) < mHalfFieldLength )
+        && ( gAbs(posBall.y()) < mHalfFieldWidth );
 }
 
 void BallStateAspect::UpdateLastValidBallPos()
@@ -156,7 +149,6 @@ TTeamIndex BallStateAspect::GetGoalState()
 void BallStateAspect::Update(float deltaTime)
 {
     if (
-        (mFieldRecorder.get() == 0) ||
         (mBall.get() == 0) ||
         (mBallRecorder.get() == 0) ||
         (mLeftGoalRecorder.get() == 0) ||
@@ -175,14 +167,21 @@ void BallStateAspect::Update(float deltaTime)
 void BallStateAspect::OnLink()
 {
     SoccerControlAspect::OnLink();
-
-    mFieldRecorder = GetFieldRecorder();
+    
     SoccerBase::GetBall(*this,mBall);
     mBallRecorder = GetBallRecorder();
     mLeftGoalRecorder = GetLeftGoalRecorder();
     mRightGoalRecorder = GetRightGoalRecorder();
 
     GetControlAspect(mGameState, "GameStateAspect");
+
+    float fieldWidth = 64.0f;
+    SoccerBase::GetSoccerVar(*this,"FieldWidth",fieldWidth);
+    mHalfFieldWidth = fieldWidth * 0.5f;
+
+    float fieldLength = 100.0f;
+    SoccerBase::GetSoccerVar(*this,"FieldLength",fieldLength);
+    mHalfFieldLength = fieldLength * 0.5f;
 }
 
 void BallStateAspect::OnUnlink()
@@ -190,7 +189,6 @@ void BallStateAspect::OnUnlink()
     SoccerControlAspect::OnUnlink();
 
     mBallRecorder.reset();
-    mFieldRecorder.reset();
     mLastCollidingAgent.reset();
     mLeftGoalRecorder.reset();
     mRightGoalRecorder.reset();

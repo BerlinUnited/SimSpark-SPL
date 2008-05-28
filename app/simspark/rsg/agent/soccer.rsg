@@ -101,16 +101,6 @@
 	     )
        )
 
-; create box collider around playing field
- (nd BoxCollider
-       (setName FieldBox)
-       (setPosition 0 0 20)
-       (setBoxLengths $FieldLength $FieldWidth 40)
-       (nd RecorderHandler 
-	     (setName recorder)
-	     )  
-       )
-
 ; create the left goal
  (nd Space
        (setName LeftGoalSpace)
