@@ -88,10 +88,15 @@
  
         (nd Camera)
 
-        (nd VisionPerceptor
+        (nd RestrictedVisionPerceptor
+            (setViewCones 120 120)
             (setSenseMyPos false)
 	    (setStaticSenseAxis false)
             (addNoise true)
+        )
+
+        (nd ObjectState
+            (setID head)
         )
     )
 )

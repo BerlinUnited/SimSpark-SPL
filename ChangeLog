@@ -1,5 +1,13 @@
 2008-05-28  Ben  <benpwd@users.sourceforge.net>
 
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg
+	* app/simspark/rsg/agent/nao/naoleg.rsg
+	* app/simspark/rsg/agent/nao/naoarm.rsg
+	- make 'RestrictedVisionPerceptor' as default vision perceptor,
+	the view range is set to 120(horizontal), 120(latitude)
+
+2008-05-28  Ben  <benpwd@users.sourceforge.net>
+
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
 	- do not exclude visible node of oneself. for example, 
 	the robot can see its own foot

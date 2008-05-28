@@ -317,6 +317,10 @@
                                 0 -0.03 0.035
                                 0 1 0 ;1 -1 -1
                                 $lj6_min $lj6_max)
+
+        (nd ObjectState
+            (setID $FootName)
+            )
         
          
     )
