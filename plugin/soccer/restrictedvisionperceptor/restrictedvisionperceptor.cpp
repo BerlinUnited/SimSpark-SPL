@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.cpp,v 1.6 2008/05/23 03:45:16 benpwd Exp $
+   $Id: restrictedvisionperceptor.cpp,v 1.7 2008/05/28 14:56:41 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -246,6 +246,12 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
             {
                 agent_aspect = aspect;
             }
+
+            // if (agent_aspect == mAgentAspect) // exclude node of self
+            // {
+            //     continue;
+            // }
+
             // GetLog()->Normal()
             //    << "skipping agentAspect " << agent_aspect->GetFullPath() << std::endl;
             node = shared_dynamic_cast<BaseNode>(agent_aspect);
@@ -291,11 +297,6 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
         if (aspect != 0)
         {
             agent_aspect = aspect;
-        }
-        
-        if (agent_aspect == mAgentAspect) // exclude node of self
-        {
-            return;
         }
         
         shared_ptr<AgentState> agent_state = shared_static_cast<AgentState>
@@ -385,47 +386,60 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
     TTeamIndex  ti       = mAgentState->GetTeamIndex();
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
-//     TObjectList visibleObjects;
-//     SetupVisibleObjects(visibleObjects);
-// 
-//     for (std::list<ObjectData>::iterator i = visibleObjects.begin();
-//          i != visibleObjects.end(); ++i)
-//     {
-//         ObjectData& od = (*i);
-// 
-//         od.mRelPos = SoccerBase::FlipView(od.mRelPos, ti);
-//         if (mAddNoise)
-//         {
-//             od.mRelPos += mError;
-//         }
-// 
-//         if (
-//             (od.mRelPos.Length() <= 0.1) ||
-//             (CheckOcclusion(myPos,od))
-//             )
-//         {
-//             // object is occluded or too close
-//             continue;
-//         }
-// 
-//         // theta is the angle in the X-Y (horizontal) plane
-//         assert(gAbs(GetPan()) <= 360);
-//         od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0])) - GetPan();
-//         od.mTheta = gNormalizeDeg(od.mTheta);
-//         // latitude
-//         assert(gAbs(GetTilt()) <= 360);
-//         od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[2]/od.mDist)) - GetTilt();
-//         od.mPhi = gNormalizeDeg(od.mPhi);
-// 
-//         // make some noise
-//         ApplyNoise(od);
-//         // check if the object is in the current field of view
-//         if (gAbs(od.mTheta) > mHViewCone) continue;
-//         if (gAbs(od.mPhi) > mVViewCone) continue;
-// 
-//         // generate a sense entry
-//         AddSense(predicate,od);
-//     }
+    TNodeObjectsMap visibleNodes;
+    SetupVisibleNodes(visibleNodes);
+
+    for (TNodeObjectsMap::iterator i = visibleNodes.begin();
+        i != visibleNodes.end(); ++i)
+    {
+        shared_ptr<BaseNode> node   = (*i).first;
+        TObjectList& visibleObjects = (*i).second;
+
+        for (TObjectList::iterator j = visibleObjects.begin();
+            j != visibleObjects.end();)
+        {
+            ObjectData& od = (*j);
+
+            if (mAddNoise)
+            {
+                od.mRelPos += mError;
+            }
+
+            if (od.mRelPos.Length() <= 0.1 ||
+                (CheckOcclusion(myPos,od))
+               )
+            {
+                // object is too close
+                j = visibleObjects.erase(j);
+                continue;
+            }
+
+            // theta is the angle in the X-Y (horizontal) plane
+            assert(gAbs(GetPan()) <= 360);
+            od.mTheta = salt::gRadToDeg(salt::gArcTan2(od.mRelPos[1], od.mRelPos[0])) - GetPan();
+            od.mTheta = gNormalizeDeg(od.mTheta);
+            // latitude
+            assert(gAbs(GetTilt()) <= 360);
+            od.mPhi = 90.0 - salt::gRadToDeg(salt::gArcCos(od.mRelPos[2]/od.mDist)) - GetTilt();
+            od.mPhi = gNormalizeDeg(od.mPhi);
+
+            if (gAbs(od.mTheta) > mHViewCone ||
+                gAbs(od.mPhi) > mVViewCone
+               )
+            {
+                j = visibleObjects.erase(j);
+                continue;
+            }
+
+            // make some noise
+            ApplyNoise(od);
+
+            ++j;
+        }
+
+        // generate a sense entry
+        AddSense(predicate, node, visibleObjects);
+    }
 
     if (mSenseMyPos)
     {

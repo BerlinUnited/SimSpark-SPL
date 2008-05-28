@@ -1,3 +1,9 @@
+2008-05-28  Ben  <benpwd@users.sourceforge.net>
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	- do not exclude visible node of oneself. for example, 
+	the robot can see its own foot
+
 2008-05-28  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* lib/oxygen/sceneserver/basenode.cpp:
