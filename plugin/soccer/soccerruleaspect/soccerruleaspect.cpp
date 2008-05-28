@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.36 2008/05/03 14:58:48 yxu Exp $
+   $Id: soccerruleaspect.cpp,v 1.37 2008/05/28 09:40:18 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -134,16 +134,16 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
         // if agent is too close, move it away
         Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
         AABB2 agentAABB2 = SoccerBase::GetAgentBoundingRect(*agent_aspect);
-
+        
         if (box.Intersects(agentAABB2))
         {
             if (idx == TI_LEFT)
             {
                 new_pos[0] = box.minVec[0] -
-                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+                    salt::UniformRNG<>(min_dist, min_dist * 2.0)();
             } else {
                 new_pos[0] = box.maxVec[0] +
-                    salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+                    salt::UniformRNG<>(min_dist, min_dist * 2.0)();
             }
             SoccerBase::MoveAgent(agent_aspect, new_pos);
         }
@@ -210,8 +210,8 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
 
-    ClearPlayers(mRightHalf, 1.0, TI_LEFT);
-    ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
+    ClearPlayers(mRightHalf, mFreeKickMoveDist, TI_LEFT);
+    ClearPlayers(mLeftHalf, mFreeKickMoveDist, TI_RIGHT);
 
 #if 0
     //
@@ -229,8 +229,8 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
-    ClearPlayers(mRightHalf, 1.0, TI_LEFT);
-    ClearPlayers(mLeftHalf, 1.0, TI_RIGHT);
+    ClearPlayers(mRightHalf, mFreeKickMoveDist, TI_LEFT);
+    ClearPlayers(mLeftHalf, mFreeKickMoveDist, TI_RIGHT);
     ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,
                  SoccerBase::OpponentTeam(idx));
 
@@ -387,7 +387,7 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
     }
     // move away opponent team
     ClearPlayers(idx == TI_LEFT ? mLeftPenaltyArea : mRightPenaltyArea,
-                 1.0, SoccerBase::OpponentTeam(idx));
+                 mFreeKickMoveDist, SoccerBase::OpponentTeam(idx));
 
     // if no player touched the ball for mDropBallTime, we move away
     // all players and set the play mode to play on
@@ -835,6 +835,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"FieldWidth",mFieldWidth);
     SoccerBase::GetSoccerVar(*this,"GoalWidth",mGoalWidth);
     SoccerBase::GetSoccerVar(*this,"FreeKickDistance",mFreeKickDist);
+    SoccerBase::GetSoccerVar(*this,"FreeKickMoveDist",mFreeKickMoveDist);
     SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);

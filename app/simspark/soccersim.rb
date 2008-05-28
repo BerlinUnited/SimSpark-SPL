@@ -49,6 +49,7 @@ addSoccerVar('PenaltyLength',8)
 addSoccerVar('PenaltyWidth',10.5)
 addSoccerVar('BorderSize', 10.0)
 addSoccerVar('FreeKickDistance', 4.5)
+addSoccerVar('FreeKickMoveDist', 9.0)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
 
