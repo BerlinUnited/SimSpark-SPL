@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerbase.cpp,v 1.23 2008/03/31 20:22:08 rollmark Exp $
+   $Id: soccerbase.cpp,v 1.24 2008/05/28 09:45:10 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -793,7 +793,7 @@ AABB2 SoccerBase::GetAgentBoundingRect(const Leaf& base)
      */
 
     Leaf::TLeafList baseNodes;
-    parent->ListChildrenSupportingClass<BaseNode>(baseNodes);
+    parent->ListChildrenSupportingClass<Collider>(baseNodes,true);
 
     if (baseNodes.empty())
         {
