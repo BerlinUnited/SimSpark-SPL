@@ -6,13 +6,25 @@
 	- make 'RestrictedVisionPerceptor' as default vision perceptor,
 	the view range is set to 120(horizontal), 120(latitude)
 
-2008-05-28  Ben  <benpwd@users.sourceforge.net>
-
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
-	- do not exclude visible node of oneself. for example, 
+	- do not exclude visible node of oneself. for example,
 	the robot can see its own foot
 
 2008-05-28  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- adjust the drag parameters of ball, otherwise the ball is too fast
+
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.h:
+	- remove function SoccerControlAspect::GetFieldRecorder()
+
+	* app/simspark/rsg/agent/soccer.rsg:
+	* app/simspark/rsg/agent/nao/soccer.rsg:
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	* plugin/soccer/ballstateaspect/ballstateaspect.h:
+	- remove the field box, which is used to check whether the ball is
+	on the field, however, it collides every geometries in the field!
 
 	* lib/oxygen/sceneserver/basenode.cpp:
 	- do not see the mLocalBoundingBox the same value time by time
