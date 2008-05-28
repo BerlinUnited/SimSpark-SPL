@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: basenode.cpp,v 1.14 2008/02/22 07:52:15 hedayat Exp $
+   $Id: basenode.cpp,v 1.15 2008/05/28 14:22:01 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@ const salt::Matrix BaseNode::mIdentityMatrix(salt::Matrix::GetIdentity());
 BaseNode::BaseNode() :
     zeitgeist::Node(), mDebugMode(false)
 {
+    mLocalBoundingBox.minVec.Set(0,0,0);
+    mLocalBoundingBox.maxVec.Set(0,0,0);
 }
 
 BaseNode::~BaseNode()
@@ -80,8 +82,6 @@ void BaseNode::SetWorldTransform(const salt::Matrix& transform)
 // Note that this is always called from Compute().
 void BaseNode::ComputeBoundingBox()
 {
-    mLocalBoundingBox.minVec.Set(0,0,0);
-    mLocalBoundingBox.maxVec.Set(0,0,0);
 }
 
 void BaseNode::PrePhysicsUpdate(float deltaTime)
