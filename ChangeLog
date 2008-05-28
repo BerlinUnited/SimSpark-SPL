@@ -1,3 +1,18 @@
+2008-05-28  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* lib/oxygen/sceneserver/basenode.cpp:
+	- do not see the mLocalBoundingBox the same value time by time
+
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	- make the agent bounding box only encapsulates Collider, to fix
+	bug that the agent is moved by mistake
+
+	* app/simspark/naosoccersim.rb:
+	* app/simspark/soccersim.rb:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- use mFreeKickMoveDist (instead 1.0 meters) as the moved distance
+	when agent fouls
+
 2008-05-23  Ben  <benpwd@users.sourceforge.net>
 
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
