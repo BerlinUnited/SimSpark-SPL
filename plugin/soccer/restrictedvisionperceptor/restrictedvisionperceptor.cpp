@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: restrictedvisionperceptor.cpp,v 1.7 2008/05/28 14:56:41 benpwd Exp $
+   $Id: restrictedvisionperceptor.cpp,v 1.8 2008/05/29 20:12:57 benpwd Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -301,7 +301,9 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
         
         shared_ptr<AgentState> agent_state = shared_static_cast<AgentState>
             (agent_aspect->GetChildOfClass("AgentState",true));
-        if (agent_state.get() == 0)
+        if (agent_state.get() == 0 ||
+            (agent_state->GetPerceptName(ObjectState::PT_Player).empty())
+           )
         {
             return;
         }
