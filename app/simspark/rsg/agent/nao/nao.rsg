@@ -26,7 +26,7 @@
 ;
 (nd Space
     (setName spacenao)
-    (disableInnerCollision true)
+    (disableInnerCollision false)
     
     ;
     ;The torso part
@@ -50,7 +50,14 @@
             (importScene rsg/agent/nao/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
           )
         )
-        (importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
+
+        ;(importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
+        (importScene rsg/agent/nao/box_physics_nocollider.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
+        (nd BoxCollider
+            (setName TorsoCollider)
+            (setBoxLengths $TorsoLength $TorsoWidth $TorsoHeight)
+            (importScene rsg/agent/nao/contactjointhandler.rsg)
+        )
 
 	;Install effectors and perceptors
         (nd StaticMeshInitEffector)

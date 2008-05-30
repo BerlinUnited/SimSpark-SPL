@@ -46,7 +46,7 @@
     ;
     ;Position Parameters
     ;
-    (def $Hip1RelTorso_X (eval $LRFactor * 0.050))
+    (def $Hip1RelTorso_X (eval $LRFactor * 0.055))
     (def $Hip1RelTorso_Y -0.01)
     (def $Hip1RelTorso_Z -0.115)
 
@@ -116,7 +116,7 @@
     (def $AnkleRadius 0.01)
     (def $AnkleMass   0.125)
     
-    (def $FootSizeX   0.102)
+    (def $FootSizeX   0.08)
     (def $FootSizeY   0.16)
     (def $FootSizeZ   0.03)
     (def $FootMass    0.2)
@@ -231,8 +231,17 @@
          )
        )
 
-       (importScene rsg/agent/nao/box_physics.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
-        
+       ;(importScene rsg/agent/nao/box_physics.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
+       (importScene rsg/agent/nao/box_physics_nocollider.rsg    $ThighSizeX $ThighSizeY $ThighSizeZ $ThighMass)
+       
+       (nd BoxCollider
+            (setName (join $LeftOrRight ThighCollider))
+            (addNotCollideWithColliderName TorsoCollider true)
+            (setBoxLengths $ThighSizeX $ThighSizeY $ThighSizeZ)
+            (importScene rsg/agent/nao/contactjointhandler.rsg)
+       )        
+
+
        (importScene rsg/agent/nao/hingejoint.rsg
                                $Joint3PerName $Joint3EffName
                                ../boxBody $Hip2BodyPath
@@ -258,7 +267,14 @@
           )
         )
 
-        (importScene rsg/agent/nao/box_physics.rsg    $ShankSizeX $ShankSizeY $ShankSizeZ $ShankMass)
+        ;(importScene rsg/agent/nao/box_physics.rsg    $ShankSizeX $ShankSizeY $ShankSizeZ $ShankMass)
+        (importScene rsg/agent/nao/box_physics_nocollider.rsg    $ShankSizeX $ShankSizeY $ShankSizeZ $ShankMass)
+        
+        (nd BoxCollider
+            (setName (join $LeftOrRight ShankCollider))
+            (setBoxLengths $ShankSizeX $ShankSizeY $ShankSizeZ)
+            (importScene rsg/agent/nao/contactjointhandler.rsg)
+        )
         
         (importScene rsg/agent/nao/hingejoint.rsg
                                 $Joint4PerName $Joint4EffName
@@ -309,7 +325,15 @@
           )
         )
 
-        (importScene rsg/agent/nao/box_physics_with_handler.rsg    $FootSizeX $FootSizeY $FootSizeZ $FootMass)
+        ;(importScene rsg/agent/nao/box_physics_with_handler.rsg    $FootSizeX $FootSizeY $FootSizeZ $FootMass)
+        (importScene rsg/agent/nao/box_physics_nocollider.rsg    $FootSizeX $FootSizeY $FootSizeZ $FootMass)
+        
+        (nd BoxCollider
+            (setName (join $LeftOrRight FootCollider))
+            (addNotCollideWithColliderName (join $LeftOrRight ShankCollider) true)
+            (setBoxLengths $FootSizeX $FootSizeY $FootSizeZ)
+            (importScene rsg/agent/nao/touchperceptorhandler.rsg)
+        )
         
         (importScene rsg/agent/nao/hingejoint.rsg
                                 $Joint6PerName $Joint6EffName

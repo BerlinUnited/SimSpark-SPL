@@ -54,7 +54,7 @@ $monitorType = 'tcp'
 
 # (Global Physics / World) constants
 #
-$physicsGlobalCFM = 0.001
+$physicsGlobalCFM = 0.00001
 $physicsGlobalGravity = -9.81
 
 #

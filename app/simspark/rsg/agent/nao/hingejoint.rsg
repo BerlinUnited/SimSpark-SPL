@@ -28,10 +28,10 @@
     ;
     ;Hinge Joint Parameters
     ;
-    (def $FMax          100)
+    (def $FMax          10)
     (def $CFM           1e-8)
     (def $Stop_CFM      1e-8)
-    (def $Stop_ERP      0.2)
+    (def $Stop_ERP      0.8)
     (def $FudgeFactor   1e-5)
     (def $Bounce        1)
     

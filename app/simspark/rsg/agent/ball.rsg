@@ -20,8 +20,8 @@
 	 
 	 (setSphereTotal $Mass $Radius)
 	 (nd DragController
-	     (setAngularDrag 0.05)
-	     (setLinearDrag 0.05)
+	     (setAngularDrag 0.0005)
+	     (setLinearDrag 0.01)
 	 )
      )
      
@@ -36,16 +36,16 @@
 	 (nd ContactJointHandler
 	     (setContactBounceMode true)
 	     (setContactBounceValue 0.8)
-	     (setMinBounceVel 1)
+	     (setMinBounceVel 0.8)
 
 	     (setContactSlipMode true)
-	     (setContactSlip 0.3)
+	     (setContactSlip 0.6)
 	     
 	     (setContactSoftERPMode true)
 	     (setContactSoftERP 0.5)
 	     
 	     (setContactSoftCFMMode true)
-	     (setContactSoftCFM 0.1)
+	     (setContactSoftCFM 0.05)
 	 )
      )
 
