@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.h,v 1.5 2008/05/02 19:21:05 sgvandijk Exp $
+   $Id: internalsoccerinput.h,v 1.6 2008/05/30 11:21:22 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ public:
             CmdCameraLeftGoal    = CmdMoveBall + 1,
             CmdCameraLeftCorner  = CmdCameraLeftGoal + 1,
             CmdCameraMiddleLeft  = CmdCameraLeftCorner + 1,
-            CmdCameraMiddleRight = CmdCameraMiddleLeft + 1,
-            CmdCameraMiddle      = CmdCameraMiddleRight + 1,
-            CmdCameraRightCorner = CmdCameraMiddle + 1,
+            CmdCameraMiddle      = CmdCameraMiddleLeft + 1,
+            CmdCameraMiddleRight = CmdCameraMiddle + 1,
+            CmdCameraRightCorner = CmdCameraMiddleRight + 1,
             CmdCameraRightGoal   = CmdCameraRightCorner + 1,
             //JAN
             CmdFreeKickLeft      = CmdCameraRightGoal + 1,

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.16 2008/03/31 20:22:10 rollmark Exp $
+   $Id: soccerruleaspect.h,v 1.17 2008/05/30 11:21:21 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -88,6 +88,14 @@ public:
     void ClearPlayersWithException(const salt::Vector3f& pos, float radius, float min_dist,
                       TTeamIndex idx, boost::shared_ptr<AgentState> agentState);
 
+    /** 
+     * get the size of field, i.e. length and width
+     * 
+     * 
+     * @return the length and width
+     */
+    salt::Vector2f GetFieldSize() const;
+    
 protected:
     /** rereads the current soccer script values */
     virtual void UpdateCachedInternal();

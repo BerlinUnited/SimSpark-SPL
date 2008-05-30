@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccermonitor.cpp,v 1.5 2008/02/23 10:18:33 yxu Exp $
+   $Id: soccermonitor.cpp,v 1.6 2008/05/30 11:21:21 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -111,6 +111,16 @@ void SoccerMonitor::ParsePredicates(const PredicateList& pList)
                             pred.GetValue(pred.begin(),mScoreRight);
                         }                    
                     break;
+                case P_FIELD_LENGTH:
+                    if (pred.parameter.GetSize() == 1){
+                        pred.GetValue(pred.begin(),mFieldLength);
+                    }
+                    break;
+                case P_FIELD_WIDTH:
+                    if (pred.parameter.GetSize() == 1){
+                        pred.GetValue(pred.begin(),mFieldWidth);
+                    }
+                    break;
                 default:
                     break;
                 }
@@ -145,6 +155,8 @@ void SoccerMonitor::SetupPredicateMap()
     mPredMap["team_right"]  = P_RIGHTTEAM;
     mPredMap["score_left"]  = P_LEFTSCORE;
     mPredMap["score_right"] = P_RIGHTSCORE;
+    mPredMap["FieldLength"] = P_FIELD_LENGTH;
+    mPredMap["FieldWidth"] = P_FIELD_WIDTH;
 }
 
 TTime SoccerMonitor::GetTime() const
@@ -208,4 +220,9 @@ int SoccerMonitor::GetScoreLeft() const
 int SoccerMonitor::GetScoreRight() const
 {
     return mScoreRight;
+}
+
+salt::Vector2f SoccerMonitor::GetFieldSize() const
+{
+    return salt::Vector2f(mFieldLength,mFieldWidth);
 }

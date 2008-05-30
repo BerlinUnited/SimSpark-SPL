@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: internalsoccerinput.cpp,v 1.7 2008/05/02 19:21:05 sgvandijk Exp $
+   $Id: internalsoccerinput.cpp,v 1.8 2008/05/30 11:21:22 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -175,7 +175,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
         case CmdCameraLeftGoal:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(-40.0, 0.0, 21.5);
+                    salt::Vector2f fieldSize = mSoccerRule->GetFieldSize();
+                    salt::Vector3f pos(-fieldSize.x()*0.8, 0.0, fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(90);
                     mFPS->SetVAngleDeg(35);
@@ -184,7 +185,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
         case CmdCameraLeftCorner:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(-40.0, -30.5, 20.0);
+                    salt::Vector2f fieldSize = mSoccerRule->GetFieldSize();
+                    salt::Vector3f pos(-fieldSize.x()*0.8, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(50);
                     mFPS->SetVAngleDeg(30);
@@ -193,7 +195,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
         case CmdCameraMiddleLeft:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(6.0, -29.0, 20.0);
+                    salt::Vector2f fieldSize = mSoccerRule->GetFieldSize();
+                    salt::Vector3f pos(0, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(salt::gRadToDeg(-0.625));
                     mFPS->SetVAngleDeg(40);
@@ -202,7 +205,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
         case CmdCameraMiddleRight:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(-6.0, -29.0, 20.0);
+                    salt::Vector2f fieldSize = mSoccerRule->GetFieldSize();
+                    salt::Vector3f pos(0, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(salt::gRadToDeg(0.625));
                     mFPS->SetVAngleDeg(40);
@@ -211,7 +215,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
         case CmdCameraMiddle:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(0.0, -43.5, 39.5);
+                    salt::Vector2f fieldSize = mSoccerRule->GetFieldSize();
+                    salt::Vector3f pos(0, -fieldSize.y()*1.1, fieldSize.x()*0.6);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(0);
                     mFPS->SetVAngleDeg(45);
@@ -220,7 +225,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
         case CmdCameraRightCorner:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(40.0, -30.5, 20.0);
+                    salt::Vector2f fieldSize = mSoccerRule->GetFieldSize();
+                    salt::Vector3f pos(fieldSize.x()*0.8, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(-50);
                     mFPS->SetVAngleDeg(30);
@@ -229,7 +235,8 @@ void InternalSoccerInput::ProcessInput(const Input& input)
         case CmdCameraRightGoal:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(40.0, 0.0, 21.5);
+                    salt::Vector2f fieldSize = mSoccerRule->GetFieldSize();
+                    salt::Vector3f pos(fieldSize.x()*0.8, 0.0, fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(-90);
                     mFPS->SetVAngleDeg(35);

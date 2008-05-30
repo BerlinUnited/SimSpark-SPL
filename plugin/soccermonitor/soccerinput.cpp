@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerinput.cpp,v 1.10 2008/02/24 10:18:09 rollmark Exp $
+   $Id: soccerinput.cpp,v 1.11 2008/05/30 11:21:21 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #include "soccerinput.h"
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/logserver/logserver.h>
-//#include <oxygen/sceneserver/transform.h>
+#include "soccermonitor.h"
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/sceneserver/fpscontroller.h>
 
@@ -106,6 +106,20 @@ void SoccerInput::SendCommand(const std::string& cmd)
 
 void SoccerInput::ProcessInput(const Input& input)
 {
+    // get list of registered SoccerMonitor objects
+    TLeafList soccerMonitorList;
+    mMonitorClient->ListChildrenSupportingClass<SoccerMonitor>(soccerMonitorList);
+
+    if (soccerMonitorList.empty())
+    {
+        GetLog()->Error()
+            << "ERROR: (SoccerInput) Unable to get SoccerMonitor\n";
+        return;
+    }
+
+    shared_ptr<SoccerMonitor> soccerMonitor =
+        shared_static_cast<SoccerMonitor>(soccerMonitorList.front());
+    
     switch (input.mId)
         {
         default:
@@ -144,64 +158,71 @@ void SoccerInput::ProcessInput(const Input& input)
         case CmdCameraLeftGoal:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(-40.0, 0.0, 21.5);
+                    salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
+                    salt::Vector3f pos(-fieldSize.x()*0.8, 0.0, fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(1.55));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.05));
+                    mFPS->SetHAngleDeg(90);
+                    mFPS->SetVAngleDeg(35);
                 }
             break;
         case CmdCameraLeftCorner:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(-40.0, -30.5, 20.0);
+                    salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
+                    salt::Vector3f pos(-fieldSize.x()*0.8, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.855));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.88));
+                    mFPS->SetHAngleDeg(50);
+                    mFPS->SetVAngleDeg(30);
                 }
             break;
         case CmdCameraMiddleLeft:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(6.0, -29.0, 20.0);
+                    salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
+                    salt::Vector3f pos(0, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(salt::gRadToDeg(-0.625));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.965));
+                    mFPS->SetVAngleDeg(40);
                 }
             break;
         case CmdCameraMiddleRight:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(-6.0, -29.0, 20.0);
+                    salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
+                    salt::Vector3f pos(0, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
                     mFPS->SetHAngleDeg(salt::gRadToDeg(0.625));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.965));
+                    mFPS->SetVAngleDeg(40);
                 }
             break;
         case CmdCameraMiddle:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(0.0, -43.5, 39.5);
+                    salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
+                    salt::Vector3f pos(0, -fieldSize.y()*1.1, fieldSize.x()*0.6);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.002));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.16));
+                    mFPS->SetHAngleDeg(0);
+                    mFPS->SetVAngleDeg(45);
                 }
             break;
         case CmdCameraRightCorner:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(40.0, -30.5, 20.0);
+                    salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
+                    salt::Vector3f pos(fieldSize.x()*0.8, -fieldSize.y(), fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(-0.855));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(0.88));
+                    mFPS->SetHAngleDeg(-50);
+                    mFPS->SetVAngleDeg(30);
                 }
             break;
         case CmdCameraRightGoal:
             if (input.GetKeyPress())
                 {
-                    salt::Vector3f pos(40.0, 0.0, 21.5);
+                    salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
+                    salt::Vector3f pos(fieldSize.x()*0.8, 0.0, fieldSize.x()*0.4);
                     mCameraBody->SetPosition(pos);
-                    mFPS->SetHAngleDeg(salt::gRadToDeg(-1.55));
-                    mFPS->SetVAngleDeg(salt::gRadToDeg(1.05));
+                    mFPS->SetHAngleDeg(-90);
+                    mFPS->SetVAngleDeg(35);
                 }
             break;
         case CmdFreeKickLeft:

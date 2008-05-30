@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccermonitor.h,v 1.3 2007/06/24 16:25:24 jboedeck Exp $
+   $Id: soccermonitor.h,v 1.4 2008/05/30 11:21:21 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@ public:
             P_RIGHTTEAM, //! right team name update
             P_LEFTSCORE,  //! score update
             P_RIGHTSCORE,  //! score update
+            P_FIELD_LENGTH,     /**< the length of the field */
+            P_FIELD_WIDTH       /**< the width of the field */
         };
 
     typedef std::map<std::string, EPredicate> TPredicateMap;
@@ -68,6 +70,14 @@ public:
     int GetScoreLeft() const;
     int GetScoreRight() const;
 
+    /** 
+     * get the size of field
+     * 
+     * 
+     * @return the length and width of field
+     */
+    salt::Vector2f GetFieldSize() const;
+
 protected:
     void ParsePredicates(const oxygen::PredicateList& pList);
     void ParsePlayModes(const oxygen::Predicate& pred);
@@ -89,6 +99,10 @@ protected:
 
     int mScoreLeft;
     int mScoreRight;
+
+    /// the field size
+    float mFieldLength;
+    float mFieldWidth;
 };
 
 DECLARE_CLASS(SoccerMonitor);
