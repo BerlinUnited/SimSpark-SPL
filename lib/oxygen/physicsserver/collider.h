@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: collider.h,v 1.15 2008/04/13 09:40:37 rollmark Exp $
+   $Id: collider.h,v 1.16 2008/05/30 01:41:42 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include "odeobject.h"
 #include <string>
+#include <set>
 
 namespace oxygen
 {
@@ -57,6 +58,9 @@ public:
          /** the symmetric pair to the pair reported from ODE */
          CT_SYMMETRIC
      };
+
+    /** TColliderNameSet is a set that store the collider name */
+    typedef std::set<std::string> TColliderNameSet;
 
 public:
     Collider();
@@ -123,6 +127,12 @@ public:
     /** returns the ODE handle ID of the containing parent space */
     virtual dSpaceID GetParentSpaceID();
 
+    /** Add/Reomve a collider name that not collide with */
+    void AddNotCollideWithColliderName(const std::string & colliderName, bool isAdd);
+
+    /** Get the not collide with collider set */
+    const TColliderNameSet & GetNotCollideWithSet() const;
+
 protected:
     /** registers the managed geom to the Space of the Scene and to
         the associated ODE body
@@ -148,6 +158,12 @@ protected:
 protected:
     /** the ode collision geometry */
     dGeomID mODEGeom;
+
+protected:
+    /** a set that store the colliders that I never collide with
+        Note: they are should in the same space, orelse this is ignored
+     */
+    TColliderNameSet mNotCollideWithSet;
 };
 
 DECLARE_CLASS(Collider);

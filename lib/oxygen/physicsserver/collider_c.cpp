@@ -3,7 +3,7 @@
 this file is part of rcssserver3D
 Fri May 9 2003
 Copyright (C) 2003 Koblenz University
-$Id: collider_c.cpp,v 1.8 2008/02/24 13:55:16 sgvandijk Exp $
+$Id: collider_c.cpp,v 1.9 2008/05/30 01:41:42 fengxue Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -85,11 +85,29 @@ FUNCTION(Collider,addCollisionHandler)
     return obj->AddCollisionHandler(inHandlerName);
 }
 
+FUNCTION(Collider,addNotCollideWithColliderName)
+{
+    string inName;
+    bool inIsAdd;
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], inName)) ||
+        (! in.GetValue(in[1], inIsAdd))
+        )
+        {
+            return false;
+        }
+    
+    obj->AddNotCollideWithColliderName(inName, inIsAdd);
+    return true;
+}
+
 void CLASS(Collider)::DefineClass()
 {
     DEFINE_FUNCTION(setPosition);
     DEFINE_FUNCTION(setLocalPosition);
     DEFINE_FUNCTION(setRotation);
     DEFINE_FUNCTION(addCollisionHandler);
+    DEFINE_FUNCTION(addNotCollideWithColliderName);
     DEFINE_BASECLASS(oxygen/ODEObject);
 }

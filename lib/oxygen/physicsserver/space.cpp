@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: space.cpp,v 1.21 2008/04/13 14:25:11 hedayat Exp $
+   $Id: space.cpp,v 1.22 2008/05/30 01:41:42 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -115,6 +115,36 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
             return;
         }
 
+    
+    // if obj1 and obj2 are in the same space, and 
+    // obj1 is in obj2's "mNotCollideWithSet" or ojb2 is in obj1's
+    // reject the collision
+
+    // get shared pointers to the two corresponding Collider nodes first
+    shared_ptr<Collider> collider = Collider::GetCollider(obj1);
+    shared_ptr<Collider> collidee = Collider::GetCollider(obj2);
+
+    if (
+        (collider.get() == 0) ||
+        (collidee.get() == 0)
+        )
+      {
+        return;
+      }
+
+    if (s1 == s2)
+    {
+        const oxygen::Collider::TColliderNameSet & collider_set = collider->GetNotCollideWithSet();
+        const oxygen::Collider::TColliderNameSet & collidee_set = collidee->GetNotCollideWithSet();
+        if (
+            (collider_set.find(collidee->GetName()) != collider_set.end()) ||
+            (collidee_set.find(collider->GetName()) != collidee_set.end())
+            )
+            {
+                return;
+            }
+    }
+
     // dSpaceCollide(), is guaranteed to pass all potentially
     // intersecting geom pairs to the callback function, but depending
     // on the internal algorithms used by the space it may also make
@@ -132,17 +162,6 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
         return;
     }
 
-    // get shared pointers to the two corresponding Collider nodes
-    shared_ptr<Collider> collider = Collider::GetCollider(obj1);
-    shared_ptr<Collider> collidee = Collider::GetCollider(obj2);
-
-    if (
-        (collider.get() == 0) ||
-        (collidee.get() == 0)
-        )
-      {
-        return;
-      }
 
     for (int i=0;i<n;++i)
         {

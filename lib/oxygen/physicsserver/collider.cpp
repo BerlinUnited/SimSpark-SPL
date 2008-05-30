@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: collider.cpp,v 1.18 2008/04/13 09:40:37 rollmark Exp $
+   $Id: collider.cpp,v 1.19 2008/05/30 01:41:42 fengxue Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -271,4 +271,31 @@ void Collider::DestroyODEObject()
 
     dGeomDestroy(mODEGeom);
     mODEGeom = 0;
+}
+
+void Collider::AddNotCollideWithColliderName(const std::string & colliderName, bool isAdd)
+{
+    TColliderNameSet::iterator it = mNotCollideWithSet.find(colliderName);
+
+    if (isAdd)
+    {
+        if (it == mNotCollideWithSet.end())
+        {
+            //I'm not have this one
+            mNotCollideWithSet.insert(colliderName);
+        }
+    }
+    else
+    {
+        if (it != mNotCollideWithSet.end())
+        {
+            //Remove
+            mNotCollideWithSet.erase(it);
+        }
+    }
+}
+
+const Collider::TColliderNameSet & Collider::GetNotCollideWithSet() const
+{
+    return mNotCollideWithSet;
 }
