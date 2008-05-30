@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: main.cpp,v 1.6 2008/05/12 09:39:38 rollmark Exp $
+   $Id: main.cpp,v 1.7 2008/05/30 07:54:51 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@ using namespace salt;
 using namespace std;
 using namespace boost;
 
-class SimSpark : public Spark
+class MonitorSpark : public Spark
 {
 public:
-    SimSpark(const std::string& relPathPrefix) :
+    MonitorSpark(const std::string& relPathPrefix) :
         Spark(relPathPrefix)
     {};
 
@@ -52,7 +52,7 @@ public:
     bool ProcessCmdLine(int argc, char* argv[]);
 };
 
-void SimSpark::PrintGreeting()
+void MonitorSpark::PrintGreeting()
 {
     GetLog()->Normal()
         << "monitorspark, 0.1\n"
@@ -62,7 +62,7 @@ void SimSpark::PrintGreeting()
         << "\nType '--help' for further information\n\n";
 }
 
-void SimSpark::PrintHelp()
+void MonitorSpark::PrintHelp()
 {
     GetLog()->Normal()
         << "\nusage: monitorspark [options]\n"
@@ -72,7 +72,7 @@ void SimSpark::PrintHelp()
          << "\n";
 }
 
-bool SimSpark::ProcessCmdLine(int argc, char* argv[])
+bool MonitorSpark::ProcessCmdLine(int argc, char* argv[])
 {
   for( int i = 0; i < argc; i++)
     {
@@ -91,7 +91,7 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
   return true;
 }
 
-bool SimSpark::InitApp(int argc, char** argv)
+bool MonitorSpark::InitApp(int argc, char** argv)
 {
     GetSimulationServer()->SetSimStep(0.02);
     PrintGreeting();
@@ -130,7 +130,7 @@ bool SimSpark::InitApp(int argc, char** argv)
 int main(int argc, char** argv)
 {
     // the spark app framework instance
-    SimSpark spark("../../");
+    MonitorSpark spark("../../");
 
     if (! spark.Init(argc, argv))
         {
