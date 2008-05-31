@@ -1,5 +1,19 @@
 2008-05-31  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* NEWS:
+	* README:
+	* RELEASE:
+	* configure.ac:
+	- ready for rcssserver3d-0.5.9
+
+	* app/simspark/simspark.rb:
+	* lib/kerosin/renderserver/renderserver.cpp:
+	* lib/spark/spark.rb:
+	* plugin/openglsyssdl/openglsystemsdl.cpp:
+	* plugin/soccer/initeffector/singlematiniteffector.cpp:
+	* plugin/voidmeshimporter/voidmeshimporter.cpp:
+	- remove verbose print
+
 	* app/simspark/Makefile.am:
 	* app/simspark/rsg/agent/soccerbot058/box.rsg:
 	* app/simspark/rsg/agent/soccerbot058/box_with_handler.rsg:
