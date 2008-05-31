@@ -6,7 +6,8 @@
 	$x $y $z
 	$lenX $lenY $lenZ
 	$anchorX $anchorY $anchorZ
-	$axis $minDeg $maxDeg
+	$axisX $axisY $axisZ
+	$minDeg $maxDeg
 	$totalMass $material)
 
  (nd Transform
@@ -17,23 +18,11 @@
 		  $totalMass $material)
 
      ;; install hinge joint
-     (nd HingeJoint
-	 (attach ../boxBody $attach)
-	 (setAnchor $anchorX $anchorY $anchorZ)
-	 (setAxis $axis)
-
-	 ;; enable the joint motors
-	 (setMaxMotorForce 0 100)
-
-	 ;; install a perceptor
-	 (nd HingePerceptor (setName $perceptorName) )
-
-	 ;; install an effector to control the joint motors
-	 (nd HingeEffector (setName $effectorName) )
-
-	 ;; set joint stops
-         (setLowStopDeg 0 $minDeg)
-         (setHighStopDeg 0 $maxDeg)
-	 )
+     (importScene rsg/agent/nao/hingejoint.rsg
+		  $perceptorName $effectorName
+		  ../boxBody $attach
+		  $anchorX    $anchorY   $anchorZ
+		  $axisX      $axisY     $axisZ
+		  $minDeg $maxDeg)
      )
  )

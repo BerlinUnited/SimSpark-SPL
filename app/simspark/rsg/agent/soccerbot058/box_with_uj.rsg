@@ -18,26 +18,13 @@
 		     $totalMass $material)
 
         ;; install universal joint
-        (nd UniversalJoint
-            (attach ../boxBody $attach)
-            (setAnchor $anchorX $anchorY $anchorZ)
-            (setAxis1 $axis1X $axis1Y $aixs1Z)
-            (setAxis2 $axis2X $axis2Y $aixs2Z)
-
-            ;; enable the joint motors
-            (setMaxMotorForce 0 100)
-            (setMaxMotorForce 1 100)
-	    ;; install a perceptor
-            (nd UniversalJointPerceptor (setName $perceptorName) )
-
-            ;; install an effector to control the joint motors
-            (nd UniversalJointEffector (setName $effectorName) )
-
-            ;; set joint stops
-            (setLowStopDeg 0 $minDeg1)
-            (setHighStopDeg 0 $maxDeg1)
-            (setLowStopDeg 1 $minDeg2)
-            (setHighStopDeg 1 $maxDeg2)
-            )
+	(importScene rsg/agent/nao/universaljoint.rsg
+		     $perceptorName $effectorName
+		     ../boxBody  $attach
+		     $anchorX    $anchorY   $anchorZ
+		     $axis1X     $axis1Y    $axis1Z
+		     $axis2X     $axis2Y    $axis2Z
+		     $minDeg1    $maxDeg1
+		     $minDeg2    $maxDeg2)
         )
 )

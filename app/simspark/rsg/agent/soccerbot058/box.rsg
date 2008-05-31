@@ -19,6 +19,6 @@
 
  (nd BoxCollider
      (setBoxLengths $lenX $lenY $lenZ)
-     (importScene rsg/agent/soccerbot058/contactjointhandler.rsg)
+     (importScene rsg/agent/nao/contactjointhandler.rsg)
      )
  )

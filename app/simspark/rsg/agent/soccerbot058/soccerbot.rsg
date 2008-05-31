@@ -103,6 +103,10 @@
  ;; 
  ;; define joint stops
  ;;
+ (def $H1Min -120)
+ (def $H1Max 120)
+ (def $H2Min -45)
+ (def $H2Max 45)
 
  (def $Rle1Min -90)       
  (def $Rle1Max 60)
@@ -172,7 +176,7 @@
      (setName spaceman)
      ;;(disableInnerCollision true)
 
-     ;; assemble the upper torso ... 
+     ;; assemble the torso
      (nd AgentAspect
 	 (setName body)
 	 (setLocalPos $UpperTorsoPosX $UpperTorsoPosY $UpperTorsoPosZ)
@@ -181,7 +185,7 @@
 		      $UpperTorsoMass
 		      $LowerTorsoLength $LowerTorsoWidth $LowerTorsoHeight
 		      $LowerTorsoMass
-		      $HeadRadius $HeadMass $scale)
+		      $scale)
 
        
 	 (nd SingleMatInitEffector) ;; we want to initialize
@@ -198,12 +202,6 @@
 	 (nd BeamEffector) ;; add beam effector
 					
 	 (nd GyroRatePerceptor (setName torso) ) ;; add gyro rate sensor
-
-	 (nd VisionPerceptor ;; add vision sensor
-	     (setSenseMyPos false)
-	     (setStaticSenseAxis false)
-	     (addNoise false)
-	     )
 
 	 (nd SayEffector) ;; add say effector
 
@@ -233,7 +231,7 @@
 	     )
       
 	 )				
-     ;; done upper torso ...
+     ;; done upper torso
 
      (def $LowerTorsoPosX $UpperTorsoPosX)
      (def $LowerTorsoPosY $UpperTorsoPosY)
@@ -241,7 +239,21 @@
 				- (eval $UpperTorsoHeight / 2.0) 
 				- (eval $LowerTorsoHeight / 2.0) 
 				+ (eval 0.25 * $scale)))
-    
+
+;;; -------------------------------------
+;;; HEAD
+;;; -------------------------------------
+     (def $HeadPosX $UpperTorsoPosX)
+     (def $HeadPosY (eval $UpperTorsoPosY + (eval 0.05 * $scale)))
+     (def $HeadPosZ (eval $UpperTorsoPosZ +
+			  (eval (eval (eval 0.5 * $UpperTorsoHeight)
+				      + (eval 0.1 * $scale))
+				+ (eval $HeadRadius / 2.0))))
+     (importScene rsg/agent/soccerbot058/head.rsg
+		  $HeadPosX $HeadPosY $HeadPosZ
+		  $HeadRadius $HeadMass
+		  $H1Min $H1Max $H2Min $H2Max)
+
 ;;; -------------------------------------
 ;;; ARMS
 ;;; -------------------------------------
@@ -295,7 +307,8 @@
 		  $LeftUpperArmPosX $LeftUpperArmPosY $LeftUpperArmPosZ
 		  $UpperarmLength $UpperarmWidth $UpperarmHeight
 		  0.0 0.0 (eval $UpperarmHeight / 2.0) ;; anchor
-		  2 $Lae3Min $Lae3Max		       ;; z-axis
+		  0 0 1				       ;; z-axis
+		  $Lae3Min $Lae3Max
 		  $UpperarmMass matGrey)
 
      (def $RightUpperArmPosX $RightShoulderPosX)
@@ -306,7 +319,8 @@
 		  $RightUpperArmPosX $RightUpperArmPosY $RightUpperArmPosZ
 		  $UpperarmLength $UpperarmWidth $UpperarmHeight
 		  0.0 0.0 (eval $UpperarmHeight / 2.0) ;; anchor
-		  2 $Rae3Min $Rae3Max		       ;; z-axis
+		  0 0 1				       ;; z-axis
+		  $Rae3Min $Rae3Max
 		  $UpperarmMass matGrey)
 
      ;; Lower Arm
@@ -318,28 +332,30 @@
 				  - (eval $LowerarmHeight / 2.0)))
     
      (importScene rsg/agent/soccerbot058/lowerarm.rsg
-		  leftlowerarm laj4 lae4 ../../leftupperarm/boxBody
+		  lhand laj4 lae4 ../../leftupperarm/boxBody
 		  $LeftLowerArmPosX $LeftLowerArmPosY $LeftLowerArmPosZ
 		  $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass
 		  $HandBox1Length $HandBox1Width $HandBox1Height $HandBox1Mass
 		  $HandBox2Length $HandBox2Width $HandBox2Height
 		  $HandBox3Length $HandBox3Width $HandBox3Height $HandBox3Mass
 		  0 0 (eval $LowerarmHeight / 2.0) ;; anchor
-		  0 $Lae4Min $Lae4Max		   ;; x-axis
+		  1 0 0				   ;; x-axis
+		  $Lae4Min $Lae4Max
 		  $ElbowRadius $ElbowLength matDarkGrey matGrey 1 $scale)
 
      (def $RightLowerArmPosX $RightUpperArmPosX)
      (def $RightLowerArmPosY $RightUpperArmPosY)
      (def $RightLowerArmPosZ $LeftLowerArmPosZ)
      (importScene rsg/agent/soccerbot058/lowerarm.rsg
-		  rightlowerarm raj4 rae4 ../../rightupperarm/boxBody
+		  rhand raj4 rae4 ../../rightupperarm/boxBody
 		  $RightLowerArmPosX $RightLowerArmPosY $RightLowerArmPosZ
 		  $LowerarmLength $LowerarmWidth $LowerarmHeight $LowerarmMass
 		  $HandBox1Length $HandBox1Width $HandBox1Height $HandBox1Mass
 		  $HandBox2Length $HandBox2Width $HandBox2Height
 		  $HandBox3Length $HandBox3Width $HandBox3Height $HandBox3Mass
 		  0 0 (eval $LowerarmHeight / 2.0) ;; anchor
-		  0 $Rae4Min $Rae4Max		   ;; x-axis
+		  1 0 0				   ;; x-axis
+		  $Rae4Min $Rae4Max
 		  $ElbowRadius $ElbowLength matDarkGrey matGrey -1 $scale)
 
 ;;; -------------------------------------
@@ -358,8 +374,9 @@
 		  lefthip llj1 lle1 ../../body/boxBody
 		  $LeftHipPosX $LeftHipPosY $LeftHipPosZ
 		  $HipLength $HipWidth $HipHeight
-		  0 0 $HipAnchorZ     ;; anchor
-		  2 $Lle1Min $Lle1Max ;; z-axis
+		  0 0 $HipAnchorZ ;; anchor
+		  0 0 1		  ;; z-axis
+		  $Lle1Min $Lle1Max
 		  $HipMass matDarkGrey)
 
      (def $RightHipPosX
@@ -372,7 +389,8 @@
 		  $RightHipPosX $RightHipPosY $RightHipPosZ
 		  $HipLength $HipWidth $HipHeight
 		  0 0 $HipAnchorZ     ;; anchor
-		  2 $Rle1Min $Rle1Max ;; z-axis
+		  0 0 1		      ;; z-axis
+		  $Rle1Min $Rle1Max
 		  $HipMass matDarkGrey)
 
      ;; thigh
@@ -416,7 +434,8 @@
 		  $LeftShankPosX $LeftShankPosY $LeftShankPosZ
 		  $ShankLength $ShankWidth $ShankHeight
 		  0 0 $ShankAnchorZ   ;; anchor
-		  0 $Lle4Min $Lle4Max ;; x-axis
+		  1 0 0		      ;; x-axis
+		  $Lle4Min $Lle4Max
 		  $ShankMass matDarkGrey $ElbowRadius $ElbowLength)
     
 
@@ -428,7 +447,8 @@
 		  $RightShankPosX $RightShankPosY $RightShankPosZ
 		  $ShankLength $ShankWidth $ShankHeight
 		  0 0 $ShankAnchorZ   ;; anchor
-		  0 $Rle4Min $Rle4Max ;; x-axis
+		  1 0 0		      ;; x-axis
+		  $Rle4Min $Rle4Max
 		  $ShankMass matDarkGrey $ElbowRadius $ElbowLength)
 
      ;; foot
@@ -440,7 +460,7 @@
 			      - (eval 0.05 * $scale)))
      (def $FootAnchorZ (eval $FootHeight * 3.0))
      (importScene rsg/agent/soccerbot058/foot.rsg
-		  leftfoot llj5_6 lle5_6 lf ../../leftshank/boxBody
+		  lfoot llj5_6 lle5_6 lf ../../leftshank/boxBody
 		  $LeftFootPosX $LeftFootPosY $LeftFootPosZ
 		  $FootLength $FootWidth $FootHeight
 		  0.0 0.0 $FootAnchorZ		;; anchor
@@ -453,7 +473,7 @@
      (def $RightFootPosY $RightShankPosY)
      (def $RightFootPosZ $LeftFootPosZ)
      (importScene rsg/agent/soccerbot058/foot.rsg
-		  rightfoot rlj5_6 rle5_6 rf ../../rightshank/boxBody
+		  rfoot rlj5_6 rle5_6 rf ../../rightshank/boxBody
 		  $RightFootPosX $RightFootPosY $RightFootPosZ
 		  $FootLength $FootWidth $FootHeight
 		  0.0 0.0 $FootAnchorZ		;; anchor

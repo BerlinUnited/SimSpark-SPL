@@ -9,7 +9,7 @@
 	$HandBox2Length $HandBox2Width $HandBox2Height
 	$HandBox3Length $HandBox3Width $HandBox3Height $HandBox3Mass
 	$anchorX $anchorY $anchorZ
-	$axis $minDeg $maxDeg
+	$axisX $axisY $axisZ $minDeg $maxDeg
 	$ElbowRadius $ElbowLen $armMat $handMat $side $scale)
 
  (nd Transform
@@ -22,24 +22,17 @@
 		  $HandBox3Length $HandBox3Width $HandBox3Height $HandBox3Mass
 		  $armMat $handMat $side $scale)
 
-     (nd HingeJoint
-	 (attach ../boxBody $attach)
-	 (setAnchor $anchorX $anchorY $anchorZ)
-	 (setAxis $axis)
+     ;; install hinge joint
+     (importScene rsg/agent/nao/hingejoint.rsg
+		  $perceptorName $effectorName
+		  ../boxBody $attach
+		  $anchorX    $anchorY   $anchorZ
+		  $axisX      $axisY     $axisZ
+		  $minDeg $maxDeg)
 
-	 ;; enable the joint motors
-	 (setMaxMotorForce 0 100)
-
-	 ;; install a perceptor
-	 (nd HingePerceptor (setName $perceptorName))
-
-	 ;; install an effector to control the joint motors
-	 (nd HingeEffector (setName $effectorName))
-
-	 ;; set joint stops
-	 (setLowStopDeg 0 $minDeg)
-	 (setHighStopDeg 0 $maxDeg)
-	 )
+     (nd ObjectState
+	 (setID $name)
+     )
 
      ;; static cylinder for the elbow
      (nd Transform
