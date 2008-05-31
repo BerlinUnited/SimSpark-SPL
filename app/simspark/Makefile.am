@@ -176,7 +176,6 @@ EXTRA_DIST = \
 	rsg/agent/soccerbot058/box_with_uj.rsg\
 	rsg/agent/soccerbot058/lowerarm_body.rsg\
 	rsg/agent/soccerbot058/box_with_handler.rsg\
-	rsg/agent/soccerbot058/contactjointhandler.rsg\
 	rsg/agent/soccerbot058/lowerarm.rsg\
 	rsg/agent/soccerbot058/box_with_hj.rsg\
 	rsg/agent/soccerbot058/soccerbot.rsg\
