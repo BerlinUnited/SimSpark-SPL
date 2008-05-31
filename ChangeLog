@@ -1,3 +1,26 @@
+2008-05-31  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- allow the kick off agent enter the center circle
+
+2008-05-30  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/monitorspark/soccerbindings.rb:
+	* app/simspark/internalsoccerbindings.rb:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.h:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	* plugin/soccermonitor/soccerinput.cpp:
+	* plugin/soccermonitor/soccermonitor.cpp:
+	* plugin/soccermonitor/soccermonitor.h:
+	- set the camera position according to the field size
+
+	* app/monitorspark/main.cpp:
+	- rename the class name to distinguish it with SimSpark
+
+
 2008-05-30  FengXue  <henry519@mail.ustc.edu.cn>
 	* lib\oxygen\physicsserver\collider.h:
 	* lib\oxygen\physicsserver\collider.cpp:
@@ -11,13 +34,13 @@
 	- Enable the inner collision
 	- Torso will not collide with the two thighs
 	- Foot and shank in the same leg will not collide with each other
-	- Change the foot size and hip drift size to the original value. 
-	  The old value is not good, thanks Ben! 
+	- Change the foot size and hip drift size to the original value.
+	  The old value is not good, thanks Ben!
 
 	* lib\spark\spark.rb:
 	- Set the global cfm to 1e-5, the old value is 1e-3.
 	  This solves two problems:
-	  1. The extra error when doing forward kinematics 
+	  1. The extra error when doing forward kinematics
 	  2. The drift of joint stops when pushed by a large force.
 
 	* app\simspark\rsg\agent\nao\hingejoint.rsg:
@@ -25,6 +48,7 @@
 
 	* app\simspark\rsg\agent\ball.rsg:
 	- Refined the ball parameters
+
 
 2008-05-28  Ben  <benpwd@users.sourceforge.net>
 
@@ -55,7 +79,7 @@
 	on the field, however, it collides every geometries in the field!
 
 	* lib/oxygen/sceneserver/basenode.cpp:
-	- do not see the mLocalBoundingBox the same value time by time
+	- do not set the mLocalBoundingBox the same value time by time
 
 	* plugin/soccer/soccerbase/soccerbase.cpp:
 	- make the agent bounding box only encapsulates Collider, to fix
