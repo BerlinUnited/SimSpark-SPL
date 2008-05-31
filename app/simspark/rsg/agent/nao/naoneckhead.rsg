@@ -86,7 +86,7 @@
                               1 0 0
                               $he2_min $he2_max)
  
-        (nd Camera)
+        ;(nd Camera)
 
         (nd RestrictedVisionPerceptor
             (setViewCones 120 120)
