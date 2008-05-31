@@ -6,8 +6,8 @@
 	 $x $y $z
 	 $lenX $lenY $lenZ
 	 $anchorX $anchorY $anchorZ
-	 $axis1X $axis1Y $aixs1Z $minDeg1 $maxDeg1
-	 $axis2X $axis2Y $aixs2Z $minDeg2 $maxDeg2
+	 $axis1X $axis1Y $axis1Z $minDeg1 $maxDeg1
+	 $axis2X $axis2Y $axis2Z $minDeg2 $maxDeg2
 	 $totalMass $material)
 
   (nd Transform
