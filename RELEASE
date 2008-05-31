@@ -1,106 +1,47 @@
-RELEASE News for different forums                        -*- outline -*-
+RELEASE News of rcssserver3d-0.5.9
 
-* Overview
- ** [Soccer Lists]
- ** [General (SF Project News etc)]
+This release is the candidate of RoboCup 2008. There are some
+important improvements. Firstly, the physics parameters are well
+adjust to make the simulation more real and stable. Secondly, the
+restrict vision perceptor is used, which the vision range is limited,
+but more details will be seen, i.e. the head, hands and feet of robots
+can be seen. Furthermore, the some soccer rule and visual features are
+improved.
 
-* Content
+* Physics Parameters:
+ Some physics parameters are adjusted to make the simulation more real
+ and stable.
+ - Joint parameters: the max force and max speed of the joint are
+ restricted, and some other parameters are modified.
+ - Ball parameters: the parameters of drag are modified.
 
-** [Soccer Lists]
- We have just released rcssserver3d-0.5.7. This is the first release
- after the competition in Atlanta. The simulator now contains the
- auto-adjust speed mode(by default),the server will run slower when
- needed, and print warning. We also applied changes what be made in
- Atlanta, and re-enabled the communication between robots.
- Furthermore, we imported some new features from SimSpark Project,
- including rsgedit, rosimporter, and etc. Although they are optional,
- you may want to try the rsgedit, please install the wxWidgets[1]
- firstly and take a look at the 'Quick start to RsgEdit' in the doc
- directory. Finally, there is a new robot model which is built with
- composite bodies for better performance. The monitor logger was also
- bug-fixed and improved. With the help of the community, the documents
- about the server are available now, but they are still in progress.
+* Restrict Vision: 
+ The restrict vision perceptor is installed both in nao and
+ soccerbot058. This perceptor have some restriction compared with
+ original vision perceptor. Firstly, the robots can only see object in
+ the limited angle range (both horizontal and vertical angle ranges
+ are [-60, 60] in degree). Secondly, the frequent is restricted, the
+ robot can get one vision message every 3 cycles. Furthermore, note
+ that the noise is added to the vision information.
 
-* Documents:
- - the user's manual in doc/users
- - the server developer's manual in doc/devel
- - there are also some useful information at SimSpark Wiki[1]
+ However, the information is richer: the robot's torso, head, hands
+ and feet can be seen. The flags placed in the field can also be seen
+ (They are no visual in the screen now, but the robot can see them).
+ Four flags are placed at the field corners (the height is 0), and the
+ four flags are placed at the goal posts (the corner of the goal).
 
-* Important fixes:
- - mointor logger:
-  - fixed methods to work properly.
-  - solve the update problem (reported by team Apollo).
-  - remove invisible nodes to save  bandwidth(thanks to Carlos
-    Bustamante from Borregos3D).
+* Visual:
+ - The Nao robot can be identified by team colors and numbers. You can
+ play a match with Nao robots ;-)
+ - the monitor camera can be controlled by number keys (from 1 to 7)
 
-* Features:
-- applied Atlanta 2007 server changes:
-               - 'm' and 'c' for killing agents
-               - two robot models with different facilities
-               - using materials with textures
-               - free kick distance changed to 4.5
-               - one half time (8 mins)
-               - agents can beam in Goal_Left or Goal_Right play modes
-               - no longer possible to move agents by pressing m
-- re-enabled communication, the soccerbot056 has SayEffector and
- HearPerceptor
-- add AdjustSpeed mode (It is enabled by default). In this mode, the
- server will run slower when needed.
-- new multi-threaded implementation
-- rosimporter, model importer for RoSiML[2] modeling language
-- rsgedit, a cool simspark simulator with graphic user interface.
-- soccerbotcomp, the new robot mode which is built with composite
- bodies, it can advance the simulation speed.
-- include some useful utilities: tinyxml, wxflatnotebook and wxscintilla
+* Soccer Rule:
+ - Field Size: the field size is 12mx8m, the center circle radius is
+1.3m, the penalty size is 1.2mx4m. More information please see
+naosoccersim.rb.
+ - Kick Off: the kick off team can enter the center circle, and the
+   opponents will be moved away from the center circle.
 
-For details have a look into the ChangeLog coming with the package.
-
-[1] http://simspark.sourceforge.net/wiki/
-
-[2] www.wxwidgets.org
-
-[3] Laue, T., Spiess, K., Refer, T.: Simrobot - a general physical
-robot simulator and its application in robocup. In: RoboCup 2005:
-Robot Soccer World Cup IX. Lecture Notes in Artiﬁcial Intelligence,
-Springer (2006)
-
-** [General (SF Project News etc)]
-
-We have just released rcssserver3d-0.5.7. 
-
-rcssserver3D is a multi-agent simulation system for physical agents in
-three-dimensional environments. It features a flexible application
-framework and a scene description language for setting up different
-kinds of simulations. The soccer simulation built on top of this is used
-in the RoboCup 3D Soccer Simulation League.
-
-Documents, important fixes and new features:
- - the user's manual in doc/users
- - the server developer's manual in doc/devel
- - there are also some useful information at SimSpark Wiki[1]
- - fix mointor logger:
-  - fixed methods to work properly.
-  - solve the update problem (reported by team Apollo).
-  - remove invisible nodes to save  bandwidth(thanks to Carlos
-    Bustamante from Borregos3D).
-- applied Atlanta 2007 server changes:
-               - 'm' and 'c' for killing agents
-               - two robot models with different facilities
-               - using materials with textures
-               - free kick distance changed to 4.5
-               - one half time (8 mins)
-               - agents can beam in Goal_Left or Goal_Right play modes
-               - no longer possible to move agents by pressing m
-- re-enabled communication, the soccerbot056 has SayEffector and
- HearPerceptor
-- add AdjustSpeed mode (It is enabled by default). In this mode, the
- server will run slower when needed.
-- new multi-threaded implementation
-- rosimporter, model importer for RoSiML modeling language
-- rsgedit, a cool simspark simulator with graphic user interface.
-- soccerbotcomp, the new robot mode which is built with composite
- bodies, it can advance the simulation speed.
-- include some useful utilities: tinyxml, wxflatnotebook and wxscintilla
 
 For details have a look into the ChangeLog coming with the package.
 
