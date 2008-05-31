@@ -35,16 +35,16 @@ if (randomServer != nil)
 end
 
 # the soccer field dimensions in meters
-addSoccerVar('FieldLength', 6.0)
-addSoccerVar('FieldWidth', 4.0)
+addSoccerVar('FieldLength', 12.0)
+addSoccerVar('FieldWidth', 8.0)
 addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 1.4)
 addSoccerVar('GoalDepth', 0.4)
 addSoccerVar('GoalHeight', 0.8)
 addSoccerVar('PenaltyLength',0.6)
 addSoccerVar('PenaltyWidth',2.0)
-addSoccerVar('FreeKickDistance', 0.13)
-addSoccerVar('FreeKickMoveDist', 0.26)
+addSoccerVar('FreeKickDistance', 1.3)
+addSoccerVar('FreeKickMoveDist', 1.5)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
 
