@@ -72,14 +72,14 @@
 	 (importScene rsg/agent/flag_no_viz.rsg
 		      (eval $GoalHalfDepth )
 		      $GoalHalfWidth
-		      0
+		      $GoalHalfHeight
 		      $LeftFlagName
 		      )
 
 	 (importScene rsg/agent/flag_no_viz.rsg
 		      (eval $GoalHalfDepth )
 		      (eval -1 * $GoalHalfWidth)
-		      0
+		      $GoalHalfHeight
 		      $RightFlagName
 		      )
 
