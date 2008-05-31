@@ -2,15 +2,15 @@ RELEASE News of rcssserver3d-0.5.9
 
 This release is the candidate of RoboCup 2008. There are some
 important improvements. Firstly, the physics parameters are well
-adjust to make the simulation more real and stable. Secondly, the
-restrict vision perceptor is used, which the vision range is limited,
-but more details will be seen, i.e. the head, hands and feet of robots
-can be seen. Furthermore, the some soccer rule and visual features are
-improved.
+adjusted to make the simulation more real and stabler. Secondly, the
+restrict vision perceptor is used, with which the vision range is
+limited, but more details will be seen, i.e. the head, hands and feet
+of robots can be seen. Furthermore, the soccer rule and visual
+features are improved.
 
 * Physics Parameters:
  Some physics parameters are adjusted to make the simulation more real
- and stable.
+ and stabler.
  - Joint parameters: the max force and max speed of the joint are
  restricted, and some other parameters are modified.
  - Ball parameters: the parameters of drag are modified.
@@ -39,7 +39,7 @@ improved.
  - Field Size: the field size is 12mx8m, the center circle radius is
 1.3m, the penalty size is 1.2mx4m. More information please see
 naosoccersim.rb.
- - Kick Off: the kick off team can enter the center circle, and the
+ - Kick Off: the kicking off team can enter the center circle, and the
    opponents will be moved away from the center circle.
 
 
