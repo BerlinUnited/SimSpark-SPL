@@ -1,5 +1,31 @@
 2008-05-31  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* app/simspark/Makefile.am:
+	* app/simspark/rsg/agent/soccerbot058/box.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_handler.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_hj.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_hj_with_ccylinder.rsg:
+	* app/simspark/rsg/agent/soccerbot058/box_with_uj.rsg:
+	* app/simspark/rsg/agent/soccerbot058/contactjointhandler.rsg:
+	* app/simspark/rsg/agent/soccerbot058/foot.rsg:
+	* app/simspark/rsg/agent/soccerbot058/head.rsg:
+	* app/simspark/rsg/agent/soccerbot058/lowerarm.rsg:
+	* app/simspark/rsg/agent/soccerbot058/soccerbot.rsg:
+	* app/simspark/rsg/agent/soccerbot058/soccerbottorso.rsg:
+	- add head with universal joint
+	- use restrict vision perceptor
+	- use configuration the same as nao (import rsg files from nao directly)
+
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
+	- comment out the camera, it is not useful currently
+
+	* app/simspark/rsg/agent/nao/goal.rsg:
+	- move the OjectState to the corner of goal(this is just like the
+	server with sphere agent)
+
+	* app/simspark/naosoccersim.rb:
+	- change the field size to 12mx8m
+
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
 	- allow the kick off agent enter the center circle
