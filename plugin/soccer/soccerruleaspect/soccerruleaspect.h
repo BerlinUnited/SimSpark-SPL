@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.17 2008/05/30 11:21:21 yxu Exp $
+   $Id: soccerruleaspect.h,v 1.18 2008/05/31 02:44:28 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -180,6 +180,16 @@ protected:
         side of the field.
     */
     void ClearPlayers(const salt::AABB2& box, float min_dist, TTeamIndex idx);
+
+    /** 
+     * clear the player before kick off, if the team is the kick off
+     * side, the robots can be on his own half and the center circle,
+     * otherwise the robots can only be on his own half except the
+     * center circle
+     *
+     * @param idx the team which kick off
+     */
+    void ClearPlayersBeforeKickOff(TTeamIndex idx);
 
 protected:
     /** reference to the body node of the Ball */

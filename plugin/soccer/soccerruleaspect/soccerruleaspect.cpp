@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.38 2008/05/30 11:21:21 yxu Exp $
+   $Id: soccerruleaspect.cpp,v 1.39 2008/05/31 02:44:28 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -150,6 +150,65 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
     }
 }
 
+void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
+{
+    if (idx == TI_NONE || mBallState.get() == 0) return;
+    
+    // move the non-kick off team to own half field except the center
+    // circle
+    TTeamIndex opp = SoccerBase::OpponentTeam(idx);
+    if ( TI_RIGHT == opp ){
+        ClearPlayers(mLeftHalf, mFreeKickMoveDist, opp);
+    }
+    else {
+        ClearPlayers(mRightHalf, mFreeKickMoveDist, opp);
+    }
+    ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,opp);
+
+    // move the kick off team to own half field and the center circle
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
+        return;
+    
+    salt::AABB2 box;
+    if ( TI_RIGHT == idx ){
+        box = mLeftHalf;
+    }
+    else{
+        box = mRightHalf;
+    }
+        
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    float freeKickDist2 = mFreeKickDist*mFreeKickDist;
+    for (i = agent_states.begin(); i != agent_states.end(); ++i)
+    {
+        SoccerBase::GetTransformParent(**i, agent_aspect);
+        // if agent is on opponent half field, move it away
+        AABB2 agentAABB2 = SoccerBase::GetAgentBoundingRect(*agent_aspect);
+        if (box.Intersects(agentAABB2))
+        {
+            Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+            // if agent is in the center circle, do not move it
+            if ( agentAABB2.minVec.SquareLength() < freeKickDist2
+                 && agentAABB2.maxVec.SquareLength() < freeKickDist2
+                 && Vector2f(agentAABB2.minVec.x(),agentAABB2.maxVec.y()).SquareLength() < freeKickDist2
+                 && Vector2f(agentAABB2.maxVec.x(),agentAABB2.minVec.y()).SquareLength() < freeKickDist2)
+                continue;
+            
+            if (idx == TI_LEFT)
+            {
+                new_pos[0] = box.minVec[0] -
+                    salt::UniformRNG<>(mFreeKickMoveDist, mFreeKickMoveDist * 2.0)();
+            } else {
+                new_pos[0] = box.maxVec[0] +
+                    salt::UniformRNG<>(mFreeKickMoveDist, mFreeKickMoveDist * 2.0)();
+            }
+            SoccerBase::MoveAgent(agent_aspect, new_pos);
+        }
+    }
+}
+
 void
 SoccerRuleAspect::DropBall()
 {
@@ -229,10 +288,7 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
-    ClearPlayers(mRightHalf, mFreeKickMoveDist, TI_LEFT);
-    ClearPlayers(mLeftHalf, mFreeKickMoveDist, TI_RIGHT);
-    ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,
-                 SoccerBase::OpponentTeam(idx));
+    ClearPlayersBeforeKickOff(idx);
 
     // if no player touched the ball for mDropBallTime, we move away
     // all players and set the play mode to play on
