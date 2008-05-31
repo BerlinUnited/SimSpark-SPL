@@ -69,11 +69,11 @@ def sparkGetOrCreate(className, path)
     return obj
   end
 
-  print "(spark.rb) creating "
-  print className
-  print " instance at "
-  print path
-  print "\n"
+  #print "(spark.rb) creating "
+  #print className
+  #print " instance at "
+  #print path
+  #print "\n"
 
   return new(className, path)
 end
@@ -82,11 +82,11 @@ end
 def sparkCreate(className, path)
   delete(path)
 
-  print "(spark.rb) creating "
-  print className
-  print " instance at "
-  print path
-  print "\n"
+  #print "(spark.rb) creating "
+  #print className
+  #print " instance at "
+  #print path
+  #print "\n"
 
   return new(className, path)
 end

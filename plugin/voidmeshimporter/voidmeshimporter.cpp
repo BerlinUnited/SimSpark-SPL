@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: voidmeshimporter.cpp,v 1.3 2008/02/24 10:18:09 rollmark Exp $
+   $Id: voidmeshimporter.cpp,v 1.4 2008/05/31 13:27:10 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ shared_ptr<TriMesh> VoidMeshImporter::ImportMesh
             return shared_ptr<TriMesh>();
         }
 
-    shared_ptr<salt::RFile> file = fileServer->Open(name);
+    shared_ptr<salt::RFile> file = fileServer->OpenResource(name);
 
     if (file.get() == 0)
         {
@@ -74,27 +74,27 @@ shared_ptr<TriMesh> VoidMeshImporter::ImportMesh
     string tempBuffer(buffer);
     if (tempBuffer.find("TotalTriCount") == string::npos)
         {
-            GetLog()->Normal() << "(VoidMeshImporter) not a .void mesh, aborting.\n";
+            GetLog()->Debug() << "(VoidMeshImporter) not a .void mesh, aborting.\n";
 
             return shared_ptr<TriMesh>();
         }
 
-    GetLog()->Normal() << "(VoidMeshImporter) Loading " << name << "\n";
+    GetLog()->Debug() << "(VoidMeshImporter) Loading " << name << "\n";
     file->Gets(buffer, 1024);
     sscanf(buffer, "TotalTriCount: %d", &temp);
-    GetLog()->Normal() << "(VoidMeshImporter) TotalTriCount: "
+    GetLog()->Debug() << "(VoidMeshImporter) TotalTriCount: "
                        << temp << "\n";
 
     int vertexCount;
     file->Gets(buffer, 1024);
     sscanf(buffer, "VertexCount:   %d", &vertexCount);
-    GetLog()->Normal() << "(VoidMeshImporter) VertexCount:   "
+    GetLog()->Debug() << "(VoidMeshImporter) VertexCount:   "
                        << vertexCount << "\n";
 
     int meshCount;
     file->Gets(buffer, 1024);
     sscanf(buffer, "MeshCount:     %d", &meshCount);
-    GetLog()->Normal() << "(VoidMeshImporter) MeshCount:     "
+    GetLog()->Debug() << "(VoidMeshImporter) MeshCount:     "
                        << meshCount << "\n";
     file->Gets(buffer, 1024);
 
@@ -185,7 +185,7 @@ shared_ptr<TriMesh> VoidMeshImporter::ImportMesh
                     char matName[256];
                     int dummy;
                     sscanf(buffer, "Material %d: %s", &dummy, matName);
-                    GetLog()->Normal() << "(VoidMeshImporter) Material '"
+                    GetLog()->Debug() << "(VoidMeshImporter) Material '"
                                        << matName << "'\n";
                     materials.push_back(matName);
                 }

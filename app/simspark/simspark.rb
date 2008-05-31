@@ -45,7 +45,8 @@ run "scripts/materials.rb"
 #
 
 sparkResetLogging()
-sparkLogAllToCerr()
+sparkLogErrorToCerr()
+#sparkLogAllToCerr()
 #sparkLogAllToFile('spark.txt')
 #sparkLogDebugToCerr()
 

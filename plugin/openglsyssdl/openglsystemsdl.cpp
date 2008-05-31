@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: openglsystemsdl.cpp,v 1.2 2008/02/22 16:48:21 hedayat Exp $
+   $Id: openglsystemsdl.cpp,v 1.3 2008/05/31 13:27:10 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -105,23 +105,23 @@ bool OpenGLSystemSDL::Init()
             return false;
         }
 
-    GetLog()->Normal() << "(OpenGLSystemSDL) bits per channel (RGB): "
+    GetLog()->Debug() << "(OpenGLSystemSDL) bits per channel (RGB): "
                        << redBits << " "
                        << greenBits << " "
                        << blueBits << "\n";
 
-    GetLog()->Normal() << "(OpenGLSystemSDL)"
+    GetLog()->Debug() << "(OpenGLSystemSDL)"
                        << " depth bits= " << depthBits
                        << " alpha depth= " << alphaBits
                        << " stencil depth= " << stencilBits
                        << "\n";
 
-    GetLog()->Normal() << "(OpenGLSystemSDL)"
+    GetLog()->Debug() << "(OpenGLSystemSDL)"
                        << " doubleBuffer= " << doubleBuffer
                        << " fullScreen= " << fullScreen
                        << "\n";
 
-    GetLog()->Normal() << "(OpenGLSystemSDL)"
+    GetLog()->Debug() << "(OpenGLSystemSDL)"
                        << " xRes = " << xRes
                        << " yRes = " << yRes
                        << "\n";
@@ -161,10 +161,10 @@ bool OpenGLSystemSDL::Init()
     const unsigned char* glVersion = glGetString(GL_VERSION);
     const unsigned char* glExtensions = glGetString(GL_EXTENSIONS);
 
-    GetLog()->Normal() << "(OpenGLSystemSDL) GL_RENDERER:   " << glRenderer   << "\n";
-    GetLog()->Normal() << "(OpenGLSystemSDL) GL_VERSION:    " << glVersion    << "\n";
-    GetLog()->Normal() << "(OpenGLSystemSDL) GL_EXTENSIONS: " << glExtensions << "\n";
-    GetLog()->Normal() << "(OpenGLSystemSDL) GL_MAX_LIGHTS: " << GL_MAX_LIGHTS << "\n";
+    GetLog()->Debug() << "(OpenGLSystemSDL) GL_RENDERER:   " << glRenderer   << "\n";
+    GetLog()->Debug() << "(OpenGLSystemSDL) GL_VERSION:    " << glVersion    << "\n";
+    GetLog()->Debug() << "(OpenGLSystemSDL) GL_EXTENSIONS: " << glExtensions << "\n";
+    GetLog()->Debug() << "(OpenGLSystemSDL) GL_MAX_LIGHTS: " << GL_MAX_LIGHTS << "\n";
 
     return true;
 }

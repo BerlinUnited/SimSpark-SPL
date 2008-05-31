@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: singlematiniteffector.cpp,v 1.9 2008/04/14 13:44:28 yxu Exp $
+   $Id: singlematiniteffector.cpp,v 1.10 2008/05/31 13:27:10 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
         }
         if ((*it) == "body")
         {
-            std::cout<<"SingleMatInitEffector Body "<<unumMat.str()<<std::endl;
+            GetLog()->Debug()<<"SingleMatInitEffector Body "<<unumMat.str()<<std::endl;
             matNode->SetMaterial(unumMat.str()); 
         } 
         else 
