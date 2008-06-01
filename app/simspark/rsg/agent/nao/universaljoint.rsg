@@ -18,15 +18,16 @@
     (def $Max1Deg (eval $Max1 * (eval 180.0 / $PI)))
  
     ;
-    ;Hinge Joint Parameters
+    ;Universal Joint Parameters
     ;
-    (def $FMax          100)
+    (def $FMax          10)
     (def $CFM           1e-8)
     (def $Stop_CFM      1e-8)
-    (def $Stop_ERP      0.2)
+    (def $Stop_ERP      0.8)
     (def $FudgeFactor   1e-5)
     (def $Bounce        1)
-    
+    (def $MaxAbsSpeed (eval $PI * (eval 351.77 / 180.0)))
+
     (nd UniversalJoint
             (attach             $Path_Body1  $Path_Body2)
             (setAnchor          $Anchor_X    $Anchor_Y  $Anchor_Z)
@@ -39,11 +40,15 @@
             (setStopCFM         0  $Stop_CFM)
             (setStopERP         0  $Stop_ERP)
             (setFudgeFactor     0  $FudgeFactor)
+            (setFudgeFactor     1  $FudgeFactor)
             (setBounce          0  $Bounce)
+            (setBounce          1  $Bounce)
             (setLowStopDeg      0  $Min0Deg)
             (setHighStopDeg     0  $Max0Deg)
             (setLowStopDeg      1  $Min1Deg)
             (setHighStopDeg     1  $Max1Deg)
+	    (setJointMaxSpeed1  $MaxAbsSpeed)
+	    (setJointMaxSpeed2  $MaxAbsSpeed)
             
             (nd UniversalJointPerceptor (setName $PerName))
             (nd UniversalJointEffector  (setName $EffName))
