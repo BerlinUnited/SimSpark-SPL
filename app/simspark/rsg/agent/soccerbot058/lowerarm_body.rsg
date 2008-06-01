@@ -27,7 +27,7 @@
  (def $Hand3PosX (eval $side * (eval $LowerarmWidth / 2.0)))
  (def $Hand3PosY 0)
  (def $Hand3PosZ (eval (eval
-                        (eval $LowerarmHeight / - 2.0)
+                        (eval $LowerarmHeight / -2.0)
                         - (eval $HandBox3Height / 2.0) )
 		       - (eval 0.04 * $scale)))
 
