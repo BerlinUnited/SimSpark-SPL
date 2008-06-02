@@ -92,11 +92,42 @@ In figure \ref{fig:examplemsg} shows an example message which the agent receives
 \end{figure}
 
 \section{Nao}
+\label{sec;nao}
+The Nao humanoid robot manufactured by Aldebaran Robotics. Its height
+is about 57cm and its weight is around 4.5Kg. Its biped architecture
+with 22 degrees of freedom allows Nao to have great mobility. The
+rcssserver3D can simulate the Nao robot nicely, see \autoref{fig:nao}.
+\begin{figure}[htp]
+  \centering
+  \def\mheight{5cm}
+  \subfigure[real robot]{
+    \includegraphics[height=\mheight]{fig/realNao}
+  }
+  \subfigure[virtual robot]{
+    \includegraphics[height=\mheight]{fig/virtualNao}
+  }
+  \caption{The Nao humanoid robot}
+  \label{fig:nao}
+\end{figure}
+
+\subsection{Parameters}
+This section is quite important to the agent development for the
+parameters used to construct the robot are showed in this section.
+Firstly, \autoref{fig:naojoints} is a picture shows how the joints
+move. Second, \autoref{tab:nao-conf} shows the detailed parameters.
+\begin{figure}[htp]
+  \centering
+  \includegraphics[width=0.618\textwidth]{fig/naojoints}
+  \caption{The joints of Nao robot}
+  \label{fig:naojoints}
+\end{figure}
+
 \begin{landscape}
 \begin{table}
   \centering
-  \label{table:nao-conf}
-  \caption{Configuration of Nao}
+  \label{tab:nao-conf}
+  \caption{Configuration of Nao (see the text for the meaning of each
+    column)}
   \newcommand{\threegrid}[1]{\multicolumn{3}{c|}{#1}}
   \newcommand{\fourgrid}[1]{\multicolumn{4}{c|}{#1}}
   \begin{tabular}{|l|l|r@{,}r@{,}r@{}c|l|l|l|r@{,}r@{,}r|r@{,}r@{,}r@{}c|l|l|}
@@ -128,9 +159,9 @@ In figure \ref{fig:examplemsg} shows an example message which the agent receives
     \threegrid{-Translation} & 0&0&1& & -1(r) & 90(r) \\
     & & \fourgrid{} & & 0.05, 0.11, 0.05 & & \threegrid{} & \fourgrid{} & -90(l) & 1(l) \\
     \hline
-    hip1 & torso & 0.050&-0.01&-0.115&(r) &
+    hip1 & torso & 0.055&-0.01&-0.115&(r) &
     0.09 & Sphere 0.01 & LJ1 & 0&0&0 & -0.7071&0&0.7071&(r)  & -90 & 1 \\
-    & & -0.050 & -0.01 & -0.115&(l) & & & & \threegrid{} & -0.7071&0&-0.7071&(l) & &\\
+    & & -0.055 & -0.01 & -0.115&(l) & & & & \threegrid{} & -0.7071&0&-0.7071&(l) & &\\
     \hline
     hip2 & hip1 & 0&0&0& & 0.125 & Sphere 0.01 & LJ2 & 0&1&0 & 1&0&0& &
     -45(r) & 25(r)\\
@@ -147,7 +178,7 @@ In figure \ref{fig:examplemsg} shows an example message which the agent receives
     & 1&0&0& & -45 & 75\\
     \hline
     foot & ankle & 0&0.03&-0.035& & 0.2 & Box & LJ6 & 0&-0.03&0.035 & 0&1&0& & -25(r) & 45(r)\\
-    & & \fourgrid{} & & 0.102, 0.16, 0.03 & & \threegrid{} & \fourgrid{} & -45(l) & 25(l)\\
+    & & \fourgrid{} & & 0.08, 0.16, 0.03 & & \threegrid{} & \fourgrid{} & -45(l) & 25(l)\\
     \hline
     Torso &  & \fourgrid{} & 1.2171 & Box & & \threegrid{} & \fourgrid{} & &\\
     & & \fourgrid{} & & 0.1, 0.1, 0.18 & & \threegrid{} & \fourgrid{} & &\\
@@ -155,6 +186,59 @@ In figure \ref{fig:examplemsg} shows an example message which the agent receives
   \end{tabular}
 \end{table}
 \end{landscape}
+Meaning of each column from left to right in \autoref{tab:nao-conf}
+are explained as follow:
+\begin{description}
+\item[Name] the body part name of Nao
+\item[Parent]  the parent of the body
+\item[Translation] the offset relative to its parent
+\item[Mass] the mass of this body
+\item[Geometry] the size of its geometry representation
+\item[Name] the joint name installed on this body
+\item[Anchor] the offset of the joint anchor relative to the body that
+  installed on
+\item[Axis] the joint axis relative to the body that installed on
+\item[Min] the min angle that the joint can reach
+\item[Max] the max angle that the joint can reach
+\end{description}
+
+\subsection{Implementation}
+The Nao robot model is implemented in the rsg files under
+\texttt{app/simspark/rsg/agent/nao}, see \autoref{tab:nao-implement}
+for details. This section goes much deeper and is a little boring.
+\begin{table}[htp]
+  \centering
+  \caption{The rsg files of Nao robot}
+  \label{tab:nao-implement}
+  \begin{tabular}{lp{0.6\textwidth}}
+    \hline
+    {\bf File Name}             & {\bf Description} \\
+    \hline
+    box\_appearance.rsg         & Install a box which is for the GL
+    render. \\
+    box\_physics.rsg            & Install a box that has physics
+    effect(ODE related) \\
+    box\_physics\_nocollider.rsg & Install a box that only has dynamics
+    effect (mass, linear velocity, etc). But it can never collide to
+    the others. \\
+    box\_physics\_with\_handler.rsg & Not only do the job as file
+    “box\_physics.rsg”, but also install a touchperceptorhandler under
+    the BoxCollider Node. \\
+    ccylinder\_appearance.rsg   & Install a capped cylinder which is
+    for the GL render. \\
+    ccylinder\_physics.rsg      & Install a capped cylinder that has
+    physics effect(ODE related) \\
+    ccylinder\_physics\_nocollider.rsg & Install a capped cylinder that
+    only has dynamics effect (mass, linear velocity, etc). But it can
+    never collide to the others. \\
+    contactjointhandler.rsg    & Install a contactjointhandler to
+    handle the collisions. \\
+    dragcontroller.rsg         & Install a DragController. \\
+    goal.rsg                   & Install the goal. \\
+    hingejoint.rsg             & Install a hingejoint. \\
+    \hline
+  \end{tabular}
+\end{table}
 
 %%% Local Variables: 
 %%% mode: latex
