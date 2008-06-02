@@ -1,3 +1,21 @@
+2008-06-02  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* doc/users/definitions.tex:
+	* doc/users/robots.tex:
+	* doc/users/user-manual.tex:
+	* doc/users/fig/naojoints.png:
+	* doc/users/fig/realNao.png:
+	* doc/users/fig/virtualNao.png:
+	- add contents about Nao from Feng
+
+2008-06-01  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/rsg/agent/soccerbot058/lowerarm_body.rsg:
+	- fix bug in setting value
+
+	* app/simspark/rsg/agent/soccerbot058/head.rsg:
+	- fix bug in setting the anchor of head
+
 2008-05-31  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* NEWS:
