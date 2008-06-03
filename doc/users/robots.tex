@@ -130,13 +130,13 @@ move. Second, \autoref{tab:nao-conf} shows the detailed parameters.
     column)}
   \newcommand{\threegrid}[1]{\multicolumn{3}{c|}{#1}}
   \newcommand{\fourgrid}[1]{\multicolumn{4}{c|}{#1}}
-  \begin{tabular}{|l|l|r@{,}r@{,}r@{}c|l|l|l|r@{,}r@{,}r|r@{,}r@{,}r@{}c|l|l|}
+  \begin{tabular}{|l|l|r@{,}r@{,}r@{}c|l|l|l|r@{,}r@{,}r|r@{,}r@{,}l@{}c|l|l|}
     \hline
     {\bf Name} & {\bf Parent} & \fourgrid{\bf Translation} &
     {\bf Mass} & {\bf Geometry} & {\bf Name} & \threegrid{\bf
       Anchor} & \fourgrid{\bf Axis} & {\bf Min} & {\bf Max} \\
     \hline
-    neck & torso & 0&0&0.09& & 0.05 & Cylinder & Hj1 & 0&0&0 & 0&0&1& &
+    neck & torso & 0&0&0.09& & 0.05 & Cylinder & HJ1 & 0&0&0 & 0&0&1& &
     -120 & 120\\
     & & \fourgrid{} & & L: 0.08 R: 0.015 & & \threegrid{} & \fourgrid{} & &\\
     \hline
@@ -163,12 +163,13 @@ move. Second, \autoref{tab:nao-conf} shows the detailed parameters.
     0.09 & Sphere 0.01 & LJ1 & 0&0&0 & -0.7071&0&0.7071&(r)  & -90 & 1 \\
     & & -0.055 & -0.01 & -0.115&(l) & & & & \threegrid{} & -0.7071&0&-0.7071&(l) & &\\
     \hline
-    hip2 & hip1 & 0&0&0& & 0.125 & Sphere 0.01 & LJ2 & 0&1&0 & 1&0&0& &
+    hip2 & hip1 & 0&0&0& & 0.125 & Sphere 0.01 & LJ2 & 0&0&0 & 0&1&0& &
     -45(r) & 25(r)\\
-    & & \fourgrid{} & & 0.07, 0.07, 0.14 & & \threegrid{} & \fourgrid{} & -25(l) & 45(l) \\
+    & & \fourgrid{} & & & & \threegrid{} & \fourgrid{} & -25(l) & 45(l) \\
     \hline
     thigh & hip2 & 0&0.01&-0.04& & 0.275 & Box & LJ3 &
     \threegrid{-Translation} & 1&0&0& &  -25 & 100\\
+    & & \fourgrid{} & & 0.07, 0.07, 0.14 & & \threegrid{} & \fourgrid{} & & \\
     \hline
     shank & thigh & 0&0.005&-0.125& & 0.225 & Box  & LJ4
     & 0&-0.01&0.045 & 1&0&0& & -130 & 1\\
