@@ -1,3 +1,20 @@
+2008-06-05  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* configure.ac:
+	- gcc 4.3 compile fix: do not use hash_map when backward/hash_map exists. (Not a
+	  good solution. the better solution is to try to compile using std::hash_map
+	  to see if it works. or even better is to trying to use tr1/unordered_map (?!)
+	  gcc's hash_map is not in std namespace, so backward/hash_map cannot be used
+	  (which is in gcc 4.3's default include path)
+
+2008-06-04  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* app/rcssmonitor3d/lib/communit.cpp:
+	- gcc 4.3 compile fix: added cstring inclusion for strerror.
+
+	* utility/rcssnet/addr.cpp:
+	- gcc 4.3 compile fix: added cstring inclusion for memset.
+
 2008-06-03  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* doc/users/robots.tex:
@@ -284,7 +301,7 @@
 	- Add max joint speed limit for hingejoint and universaljoint
 
 	* app/simspark/rsg/agent/nao/hingejoint.rsg:
-	- Respect to the real nao, set the max abs joint speed of all 
+	- Respect to the real nao, set the max abs joint speed of all
 	  the hingejoint to 351.77 deg/s
 
 

@@ -56,7 +56,7 @@ AC_CHECK_HEADERS([CoreFoundation/CoreFoundation.h])
 AC_CHECK_HEADER([boost/version.hpp],,
 	AC_MSG_ERROR([boost library not found. Please specify the location
 of the boost header directory using the CPPFLAGS environment variable]))
-AC_CHECK_HEADERS([hash_map],,
+AC_CHECK_HEADERS([backward/hash_map hash_map],break,
 	AC_MSG_NOTICE(['hash_map' will be substituted by 'map'. If you need hash_map install stlport]))
 
 # Checks for typedefs, structures, and compiler characteristics.

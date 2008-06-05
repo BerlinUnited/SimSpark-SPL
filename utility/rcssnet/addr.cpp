@@ -4,7 +4,7 @@
                           addr.cpp  - A network address class
                              -------------------
     begin                : 07-JAN-2003
-    copyright            : (C) 2003 by The RoboCup Soccer Server 
+    copyright            : (C) 2003 by The RoboCup Soccer Server
                            Maintenance Group.
     email                : sserver-admin@lists.sourceforge.net
  ***************************************************************************/
@@ -47,6 +47,7 @@
 #include "handler.hpp"
 #include "exception.hpp"
 #include <iostream>
+#include <cstring>
 #include <errno.h>
 
 namespace rcss
@@ -67,7 +68,7 @@ namespace rcss
 		    m_addr.sin_addr.s_addr = host;
 		    m_addr.sin_port = port;
 		}
-	    
+
 
             bool
             setPortRaw( Addr::PortType port )
@@ -93,7 +94,7 @@ namespace rcss
             {
                 setAddr( htons( port ), htonl( host ) );
             }
-            
+
             AddrImpl( Addr::PortType port, const std::string& host )
                 : m_handler( Handler::instance() ), m_host_name( host )
             {
@@ -109,16 +110,16 @@ namespace rcss
                 m_addr.sin_port = htons( port );
             }
 
- 
+
             bool
             setPort( Addr::PortType port )
 		{
 		    m_port_name = std::string();
 		    return setPortRaw( htons( port ) );
 		}
-                       
+
             bool
-            setPort( const std::string& port, 
+            setPort( const std::string& port,
                      const std::string& proto = "" )
             {
 				if( port.empty() )
@@ -129,8 +130,8 @@ namespace rcss
 					errno = HOST_NOT_FOUND;
 #endif
                     return false;
-				} 
-                struct servent* serv_ent 
+				}
+                struct servent* serv_ent
                     = (struct servent*)getservbyname( port.c_str(),
 													  ( proto.empty()
 													    ? NULL
@@ -142,14 +143,14 @@ namespace rcss
                 m_port_name = port;
 				return setPortRaw( serv_ent->s_port );
             }
-            
+
             bool
             setHost( Addr::HostType host )
             {
                 m_host_name = std::string();
                 return setHostRaw( htonl( host ) );
             }
-                        
+
             bool
             setHost( const std::string& host )
             {
@@ -162,7 +163,7 @@ namespace rcss
 #endif
 				    return false;
 				}
-                struct hostent* host_ent 
+                struct hostent* host_ent
                     = (struct hostent*)gethostbyname( host.c_str() );
                 if( host_ent == NULL )
 				{
@@ -184,7 +185,7 @@ namespace rcss
             Addr::PortType
             getPort() const
             { return ntohs( m_addr.sin_port );  }
-            
+
             Addr::HostType
             getHost() const
             { return htonl( m_addr.sin_addr.s_addr ); }
@@ -228,7 +229,7 @@ namespace rcss
         Addr::Addr( PortType port, HostType host )
             : m_impl( new AddrImpl( port, host ) )
         {}
-        
+
         Addr::Addr( const AddrType& addr )
             : m_impl( new AddrImpl( addr ) )
         {}
@@ -240,12 +241,12 @@ namespace rcss
         }
 
         bool
-        Addr::setPort( const std::string& port, 
+        Addr::setPort( const std::string& port,
                        const std::string& proto )
         {
             return m_impl->setPort( port, proto );
         }
-        
+
         bool
         Addr::setHost( HostType host )
         {
@@ -283,16 +284,16 @@ namespace rcss
 		Addr::getPortStr( const std::string& proto ) const
         { return m_impl->getPortStr( proto ); }
 
-        bool 
+        bool
         operator==( const Addr& a,
                     const Addr& b )
         {
             return ( a.getAddr().sin_port == b.getAddr().sin_port
-                     && ( a.getAddr().sin_addr.s_addr 
+                     && ( a.getAddr().sin_addr.s_addr
                           == b.getAddr().sin_addr.s_addr ) );
         }
 
-        bool 
+        bool
         operator!=( const Addr& a,
                     const Addr& b )
 		{
@@ -317,6 +318,6 @@ namespace rcss
         std::ostream&
         operator<<( std::ostream& o, const rcss::net::Addr& addr )
         { return o << '(' << addr.getPort() << ':' << addr.getHostStr() << ')'; }
-       
+
     }
 }
