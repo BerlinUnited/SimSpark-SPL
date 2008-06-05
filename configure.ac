@@ -109,6 +109,12 @@ AC_ARG_ENABLE([debug],
 AC_SUBST(debug, [$debug])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
 
+# check if we want to build without hardcoding library path using rpath
+AC_ARG_ENABLE([rpath],
+     AC_HELP_STRING([--disable-rpath], [disable using --rpath to hardcode library path in the executables]),
+     [],[enable_rpath=yes])
+AM_CONDITIONAL(NO_RPATH, test x$enable_rpath = xno)
+
 # This test is required here because of the soccer monitor.
 # It can be dropped as soon as the monitor uses libkerosin.
 rcss_build_kerosin=yes

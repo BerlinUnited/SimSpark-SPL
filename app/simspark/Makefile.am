@@ -25,7 +25,7 @@ endif
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility \
               @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@ @SDL_CPPFLAGS@
 
-if BUNDLE_SUPPORT
+if NO_RPATH
 AM_LDFLAGS  = @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
 else
 AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) @RUBY_LDFLAGS@ @SDL_LDFLAGS@ @IL_LDFLAGS@ @GL_LDFLAGS@ 
@@ -50,6 +50,7 @@ install-data-local: $(top_builddir)/$(subdir)/rsg/agent/ball.rsg
 	do \
 	rm -rf $(DESTDIR)$(pkgdatadir)/$$res;\
 	cp -r $(srcdir)/$$res $(DESTDIR)$(pkgdatadir)/;\
+	chmod -R a-x $(DESTDIR)$(pkgdatadir)/$$res;\
 	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/$$res;\
 	done
 

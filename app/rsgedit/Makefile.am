@@ -27,7 +27,7 @@ endif
 AM_CPPFLAGS = -I${top_srcdir}/lib -I${top_srcdir}/utility -I${top_srcdir}/app \
               @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@ @WX_CPPFLAGS@ -I${top_srcdir}/utility/wxutil/include
 
-if BUNDLE_SUPPORT
+if NO_RPATH
 AM_LDFLAGS  = @RUBY_LDFLAGS@ @WX_LIBS@ @IL_LDFLAGS@ @GL_LDFLAGS@ -L${top_builddir}/utility/wxutil
 else
 AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) @RUBY_LDFLAGS@ @WX_LIBS@ @IL_LDFLAGS@ @GL_LDFLAGS@

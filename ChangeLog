@@ -1,11 +1,23 @@
 2008-06-05  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* app/rsgedit/Makefile.am:
+	- checking NO_RPATH instead of BUNDLE_SUPPORT
+
+	* acinclude.m4:
+	- set NO_RPATH on mac to disable using rpath
+
+	* app/simspark/Makefile.am:
+	- remove executable flag from installed data files
+	- checking NO_RPATH instead of BUNDLE_SUPPORT
+
 	* configure.ac:
 	- gcc 4.3 compile fix: do not use hash_map when backward/hash_map exists. (Not a
 	  good solution. the better solution is to try to compile using std::hash_map
 	  to see if it works. or even better is to trying to use tr1/unordered_map (?!)
 	  gcc's hash_map is not in std namespace, so backward/hash_map cannot be used
 	  (which is in gcc 4.3's default include path)
+	- added --disable-rpath option to disable using rpath to hardcode library
+	  paths into executables
 
 2008-06-04  Hedayat Vatankhah  <hedayat@grad.com>
 
