@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=RCSSServer3D
+Comment=Robocup Soccer Simulation Server 3D
+Exec=simspark
+Icon=rcssserver3d
+Terminal=false
+Type=Application
+Categories=Development
+

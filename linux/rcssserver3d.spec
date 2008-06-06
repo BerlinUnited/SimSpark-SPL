@@ -6,10 +6,15 @@ Summary:        Robocup 3D Soccer Simulation Server
 Group:          Applications/System
 License:        GPLv2
 URL:            http://sourceforge.net/projects/sserver/
-Source0:        rcssserver3d-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source1:        %{name}.png
+Source2:        %{name}.desktop
+Source3:        %{name}-rsgedit.desktop
+Patch0:         rcssserver3d-0.5.9-gcc43_rpath_fix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  gcc-c++ boost-devel slang-devel ruby ruby-devel SDL-devel
+BuildRequires:  automake autoconf gcc-c++ boost-devel slang-devel
+BuildRequires:  ruby ruby-devel SDL-devel desktop-file-utils
 
 Requires:       boost slang ruby SDL
 
@@ -18,11 +23,13 @@ BuildRequires:  libode-devel Mesa-devel libdevil-devel
 BuildRequires:  freetype2-devel
 
 Requires:       libode Mesa libdevil freetype2
+%define         vendor suse
 %else
 BuildRequires:  ode-devel mesa-libGL-devel DevIL-devel
 BuildRequires:  freetype-devel mesa-libGLU-devel
 
 Requires:       ode mesa-libGL DevIL freetype mesa-libGLU
+%define         vendor fedora
 %endif
 
 %description
@@ -59,6 +66,7 @@ This package contains rsgedit and %{name} plugins which use wxWidgets libraries.
 Summary:        wxWidgets related header files and libraries for %{name}
 Group:          Development/Libraries
 Requires:       %{name}-devel = %{version}-%{release}
+Requires:       %{name}-rsgedit = %{version}-%{release}
 Requires:       wxGTK-devel
 
 %description    wxGTK-devel
@@ -69,9 +77,10 @@ you will need to install %{name}-wxGTK-devel.
 
 %prep
 %setup -q
+%patch0 -p1 -b .gcc43_rpath_fix
 
 %build
-#./bootstrap # should be active when building from CVS
+autoreconf --install
 %configure --enable-debug=no --disable-rpath %{?_without_wxWidgets: --without-wxWidgets}
 make %{?_smp_mflags}
 chmod a-x app/simspark/rsg/agent/nao/*
@@ -85,7 +94,14 @@ echo %{_libdir}/%{name} > $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/%{name}.co
 %if 0%{?_without_wxWidgets:1}
 rm -rf $RPM_BUILD_ROOT/%{_includedir}/%{name}/wxutil
 %endif
-rm -rf $RPM_BUILD_ROOT/usr/bin/{rcsoccersim3D,rcssmonitor3D-kerosin,rcssserver3D}
+rm -rf $RPM_BUILD_ROOT/usr/bin/{rcsoccersim3D,rcssmonitor3D-kerosin,rcssserver3D,agenttest}
+
+mkdir $RPM_BUILD_ROOT/%{_datadir}/pixmaps/
+cp %{SOURCE1} $RPM_BUILD_ROOT/%{_datadir}/pixmaps/
+desktop-file-install --vendor="%{vendor}"                    \
+  --dir=${RPM_BUILD_ROOT}%{_datadir}/applications         \
+  --add-category X-Red-Hat-Base                           \
+  %{SOURCE2} %{SOURCE3}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -99,7 +115,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS  NEWS ChangeLog COPYING README README-soccer THANKS TODO
 %doc doc/TEXT_INSTEAD_OF_A_MANUAL.txt
 %{_bindir}/*spark*
-%{_bindir}/agenttest
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/[^ilo]*.so.*
 %{_libdir}/%{name}/inputsdl*.so.*
@@ -109,6 +124,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/[^x]*
 %{_sysconfdir}/ld.so.conf.d/%{name}.conf
+%{_datadir}/applications/%{vendor}-%{name}.desktop
+%{_datadir}/pixmaps/*
 
 %files devel
 %defattr(-,root,root,-)
@@ -132,6 +149,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/*wx*.so.*
 #%{_datadir}/%{name}/rsgedit.rb
 %{_datadir}/%{name}/xpm*
+%doc doc/rsgedit.txt
+%{_datadir}/applications/%{vendor}-%{name}-rsgedit.desktop
 
 %files wxGTK-devel
 %defattr(-,root,root,-)
@@ -140,6 +159,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Jun 6 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.9-1
+- added a patch to fix gcc43 compile errors and add --disable-rpath
+  configure option. this patch is created using upstream CVS tree.s
+
 * Thu Jun 5 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.9-1
 - updated for 0.5.9 release
 - preparing according to Fedora packaging guidelines:

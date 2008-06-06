@@ -46,11 +46,11 @@ dist_pkgdata_DATA = \
 
 install-data-local: $(top_builddir)/$(subdir)/rsg/agent/ball.rsg
 	mkdir -p $(DESTDIR)$(pkgdatadir)/
+	find -type f -exec chmod a-x {} \;
 	for res in rsg fonts scripts models textures materials;\
 	do \
 	rm -rf $(DESTDIR)$(pkgdatadir)/$$res;\
 	cp -r $(srcdir)/$$res $(DESTDIR)$(pkgdatadir)/;\
-	chmod -R a-x $(DESTDIR)$(pkgdatadir)/$$res;\
 	chmod -R a+rX $(DESTDIR)$(pkgdatadir)/$$res;\
 	done
 

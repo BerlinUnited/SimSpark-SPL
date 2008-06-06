@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=RsgEdit
+Comment=RSG File Editor
+Exec=rsgedit
+Icon=rcssserver3d
+Terminal=false
+Type=Application
+Categories=Development
+
