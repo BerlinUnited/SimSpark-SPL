@@ -1,3 +1,9 @@
+2008-06-06  Sander van Dijk <sgvandijk@gmail.com>
+
+	* plugin/soccer/visionperceptor/visionperceptor.h
+	* plugin/soccer/visionperceptor/visionperceptor.cpp
+	- port RestrictedVisionPerceptor changes to VisionPerceptor so it can also be installed anywhere
+	
 2008-06-05  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* app/rsgedit/Makefile.am:

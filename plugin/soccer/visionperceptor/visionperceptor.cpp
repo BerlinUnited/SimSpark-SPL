@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: visionperceptor.cpp,v 1.25 2008/03/27 21:11:53 rollmark Exp $
+   $Id: visionperceptor.cpp,v 1.26 2008/06/06 07:56:16 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -73,8 +73,33 @@ void
 VisionPerceptor::OnLink()
 {
     SoccerBase::GetTransformParent(*this,mTransformParent);
-    SoccerBase::GetAgentState(*this, mAgentState);
+//     SoccerBase::GetAgentState(*this, mAgentState);
     SoccerBase::GetActiveScene(*this,mActiveScene);
+    
+    shared_ptr<AgentAspect> agent_aspect =
+        make_shared(FindParentSupportingClass<AgentAspect>());
+    if (agent_aspect == 0)
+    {
+        GetLog()->Error()
+            << "Error: (RestrictedVisionPerceptor) cannot find AgentAspect.\n";
+    }
+    else
+    {
+        mAgentAspect = agent_aspect;
+        agent_aspect = make_shared(agent_aspect->FindParentSupportingClass<AgentAspect>());
+        if (agent_aspect != 0)
+        {
+            mAgentAspect = agent_aspect;
+        }
+        
+        mAgentState = shared_static_cast<AgentState>
+            (mAgentAspect->GetChildOfClass("AgentState",true));
+        if (mAgentState == 0)
+        {
+            GetLog()->Error()
+                << "Error: (RestrictedVisionPerceptor) cannot find AgentState.\n";
+        }
+    }
 }
 
 void
@@ -84,6 +109,7 @@ VisionPerceptor::OnUnlink()
     mPhiRng.reset();
     mThetaRng.reset();
     mTransformParent.reset();
+    mAgentAspect.reset();
     mAgentState.reset();
     mActiveScene.reset();
 }
