@@ -1,5 +1,10 @@
 2008-06-06  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* TODO:
+	* README:
+	* AUTHORS:
+	- converted to UTF-8
+
 	* linux/rcssserver3d.desktop:
 	* linux/rcssserver3d-rsgedit.desktop:
 	* linux/rcssserver3d.png:
@@ -13,7 +18,7 @@
 	* plugin/soccer/visionperceptor/visionperceptor.h
 	* plugin/soccer/visionperceptor/visionperceptor.cpp
 	- port RestrictedVisionPerceptor changes to VisionPerceptor so it can also be installed anywhere
-	
+
 2008-06-05  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* app/rsgedit/Makefile.am:

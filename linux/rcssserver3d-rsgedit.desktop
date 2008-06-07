@@ -6,5 +6,5 @@ Exec=rsgedit
 Icon=rcssserver3d
 Terminal=false
 Type=Application
-Categories=Development
+Categories=Education;Science;Robotics
 

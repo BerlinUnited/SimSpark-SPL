@@ -50,6 +50,8 @@ This package contains the header files and libraries
 for %{name}. If you like to develop programs using %{name},
 you will need to install %{name}-devel.
 
+%define _without_wxWidgets 1
+
 %if 0%{!?_without_wxWidgets:1}
 %package        rsgedit
 Summary:        RsgEditor and wxWidgets related libraries
@@ -86,25 +88,30 @@ make %{?_smp_mflags}
 chmod a-x app/simspark/rsg/agent/nao/*
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
-rm -rf $RPM_BUILD_ROOT/%{_libdir}/%{name}/*.la
-mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/
-echo %{_libdir}/%{name} > $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/%{name}.conf
-%if 0%{?_without_wxWidgets:1}
-rm -rf $RPM_BUILD_ROOT/%{_includedir}/%{name}/wxutil
-%endif
-rm -rf $RPM_BUILD_ROOT/usr/bin/{rcsoccersim3D,rcssmonitor3D-kerosin,rcssserver3D,agenttest}
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot}
 
-mkdir $RPM_BUILD_ROOT/%{_datadir}/pixmaps/
-cp %{SOURCE1} $RPM_BUILD_ROOT/%{_datadir}/pixmaps/
-desktop-file-install --vendor="%{vendor}"                    \
+mkdir -p %{buildroot}/%{_sysconfdir}/ld.so.conf.d/
+echo %{_libdir}/%{name} > %{buildroot}/%{_sysconfdir}/ld.so.conf.d/%{name}.conf
+
+mkdir %{buildroot}/%{_datadir}/pixmaps/
+cp %{SOURCE1} %{buildroot}/%{_datadir}/pixmaps/
+desktop-file-install --vendor="%{vendor}"                 \
   --dir=${RPM_BUILD_ROOT}%{_datadir}/applications         \
   --add-category X-Red-Hat-Base                           \
   %{SOURCE2} %{SOURCE3}
 
+rm -rf %{buildroot}/%{_libdir}/%{name}/*.la
+rm -rf %{buildroot}/usr/bin/{rcsoccersim3D,rcssmonitor3D-kerosin,rcssserver3D,agenttest}
+rm -rf %{buildroot}/%{_datadir}/%{name}/*.h
+%if 0%{?_without_wxWidgets:1}
+rm -rf %{buildroot}/%{_includedir}/%{name}/wxutil
+rm -rf %{buildroot}/%{_datadir}/%{name}/xpm*
+rm -rf %{buildroot}/%{_datadir}/applications/%{vendor}-%{name}-rsgedit.desktop
+%endif
+
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post -p /sbin/ldconfig
 
@@ -116,9 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/TEXT_INSTEAD_OF_A_MANUAL.txt
 %{_bindir}/*spark*
 %dir %{_libdir}/%{name}
-%{_libdir}/%{name}/[^ilo]*.so.*
-%{_libdir}/%{name}/inputsdl*.so.*
-%{_libdir}/%{name}/openglsyssdl*.so.*
+# Notice: the package needs .so files for running so
+# they can't be moved to -devel package
+%{_libdir}/%{name}/[^ilo]*.so*
+%{_libdir}/%{name}/inputsdl*.so*
+%{_libdir}/%{name}/openglsyssdl*.so*
 %{_libdir}/%{name}/ob*.so
 %{_libdir}/%{name}/lib[^w]*.so.*
 %dir %{_datadir}/%{name}
@@ -132,9 +141,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*-config
 %dir %{_includedir}/%{name}
 %{_includedir}/%{name}/[^w]*
-%{_libdir}/%{name}/[^ilo]*.so
-%{_libdir}/%{name}/inputsdl*.so
-%{_libdir}/%{name}/openglsyssdl*.so
+#%{_libdir}/%{name}/[^ilo]*.so
+#%{_libdir}/%{name}/inputsdl*.so
+#%{_libdir}/%{name}/openglsyssdl*.so
 %{_libdir}/%{name}/lib[^w]*.so
 
 
