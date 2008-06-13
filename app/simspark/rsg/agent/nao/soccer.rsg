@@ -68,13 +68,26 @@
 		   (setContactSlip 0.1 0.1)
 
 		   (setContactSoftERPMode true)
-		   (setContactSoftERP 0.2)
+		   (setContactSykoftERP 0.2)
 
 		   (setContactSoftCFM true)
 		   (setContactSoftCFM 0.01)
 		   )
 	     )
        )
+
+; create skybox
+(nd Transform
+       (setLocalPos 0 0 0)
+
+	(setLocalRotation 90 180 0)
+	(nd StaticMesh
+          	(load 'models/skybox.obj')
+		(setScale 10
+			  10
+			  10)
+	    )
+	)
 
  ;; create the left goal
  (def $LeftGoalX (eval -1* (eval $FieldHalfLength + $GoalHalfDepth)))
@@ -91,6 +104,46 @@
 	      $RightGoalX 0 180
 	      G2R G1R
 	      matBlue)
+
+; create left side wall
+ (nd Transform
+       (setLocalPos (eval -1 * 10.0) 0 0)
+       (nd Box
+	     (setMaterial matGrey)
+	     (setExtents 1.0 20.0 1.0)
+	     ) 
+       
+       )
+
+; create right side wall
+ (nd Transform
+       (setLocalPos (eval 1 * 10.0) 0 0)
+       (nd Box
+	     (setMaterial matGrey)
+	     (setExtents 1.0 20.0 1.0)
+	     ) 
+       
+       )
+
+; create back side wall
+ (nd Transform
+       (setLocalPos 0 (eval 1 * 10.0) 0)
+       (nd Box
+	     (setMaterial matGrey)
+	     (setExtents 21.0 1.0 1.0)
+	     ) 
+       
+       )
+
+; create front side wall
+ (nd Transform
+       (setLocalPos 0 (eval 1 * -10.0) 0)
+       (nd Box
+	     (setMaterial matGrey)
+	     (setExtents 21.0 1.0 1.0)
+	     ) 
+       
+       )
 
  ;;
  ;; add flags
