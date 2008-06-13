@@ -1,3 +1,12 @@
+2008-06-13  Feng Xue  <henry519@mail.ustc.edu.cn>
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
+	* app/simspark/rsg/agent/nao/naoarm.rsg:
+	* app/simspark/rsg/agent/nao/naoleg.rsg:
+	- disabled inner collision of Nao
+	- move restricted vision perceptor, add 
+	  vision perceptor of Atlanta.
+
 2008-06-13  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* app/simspark/materials/skybox.mtl:
