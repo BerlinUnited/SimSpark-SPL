@@ -68,7 +68,7 @@
 		   (setContactSlip 0.1 0.1)
 
 		   (setContactSoftERPMode true)
-		   (setContactSykoftERP 0.2)
+		   (setContactSoftERP 0.2)
 
 		   (setContactSoftCFM true)
 		   (setContactSoftCFM 0.01)
