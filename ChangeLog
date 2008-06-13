@@ -1,3 +1,16 @@
+2008-06-13  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/materials/skybox.mtl:
+	* app/simspark/models/skybox.obj:
+	* app/simspark/rsg/agent/nao/soccer.rsg:
+	* app/simspark/textures/skyrender0001.jpg:
+	* app/simspark/textures/skyrender0002.jpg:
+	* app/simspark/textures/skyrender0003.jpg:
+	* app/simspark/textures/skyrender0004.jpg:
+	* app/simspark/textures/skyrender0005.jpg:
+	* app/simspark/textures/skyrender0006.jpg:
+	- add skybox for the soccer field
+
 2008-06-06  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* TODO:
