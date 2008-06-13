@@ -26,7 +26,7 @@
 ;
 (nd Space
     (setName spacenao)
-    (disableInnerCollision false)
+    (disableInnerCollision true)
     
     ;
     ;The torso part
@@ -75,6 +75,12 @@
 	(nd BeamEffector)
 
         (nd SayEffector)
+
+        (nd VisionPerceptor
+            (setSenseMyPos false)
+            (setStaticSenseAxis false)
+            (addNoise false)
+        )
 
     );end of AgentAspect
     
