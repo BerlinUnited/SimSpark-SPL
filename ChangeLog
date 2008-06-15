@@ -1,3 +1,27 @@
+2008-06-15  Joschka Boedecker  <jboedeck@uni-koblenz.de>
+
+	* app/simspark/textures/naogoalnet.png:
+	- added texture for the goal net
+
+	* app/simspark/materials/leftgoal.mtl: 
+	* app/simspark/materials/rightgoal.mtl: 
+	- added materials for the goals
+	
+	* app/simspark/models/leftgoal.obj:
+	* app/simspark/models/rightgoal.obj:
+	- added 3D models for the goals
+
+	* plugin/objimporter/objimporter.cpp:
+	- fixed a small bug related to importing values for material shininess
+
+	* lib/kerosin/sceneserver/staticmesh.cpp:
+	- enabled alpha blending for textures with transparency; not sure
+	whether this is the best way though, might need to be reviewed later
+
+	* app/simspark/rsg/agent/nao/goal.rsg:
+	- loading new goal models; colliders for the goal posts, vertical
+	bar, and back of the goal still need to be adjusted!
+
 2008-06-13  Feng Xue  <henry519@mail.ustc.edu.cn>
 	* app/simspark/rsg/agent/nao/nao.rsg:
 	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
