@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: staticmesh.cpp,v 1.22 2008/05/19 06:34:55 yxu Exp $
+   $Id: staticmesh.cpp,v 1.23 2008/06/15 07:17:37 jboedeck Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -115,6 +115,9 @@ void StaticMesh::RenderInternal()
     glEnable(GL_CULL_FACE);
     glScalef(mScale[0],mScale[1],mScale[2]);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     const TriMesh::TFaces& faces = mMesh->GetFaces();
     TriMesh::TFaces::const_iterator iter = faces.begin();
     TMaterialList::const_iterator miter = mMaterials.begin();
@@ -140,6 +143,8 @@ void StaticMesh::RenderInternal()
             ++iter;
             ++miter;
         }
+
+    glDisable(GL_BLEND);
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY );
