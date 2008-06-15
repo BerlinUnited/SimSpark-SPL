@@ -414,7 +414,7 @@ bool ObjImporter::SetupMaterials(string & matLibName, TObjMatValueVector & matVe
                     currentMat->specular[1] = x2;
                     currentMat->specular[2] = x3;
                 }
-            else if (buffer == "Ni")
+            else if (buffer == "Ns")
                 {
                     str >> x1;
                     currentMat->shininess = x1;
