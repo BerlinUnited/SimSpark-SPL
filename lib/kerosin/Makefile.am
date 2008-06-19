@@ -17,7 +17,7 @@ bin_SCRIPTS = kerosin-config
 
 endif
 
-AM_CPPFLAGS = -I${top_srcdir}/lib -I$(top_srcdir)/lib/kerosin/sceneserver/helper @SDL_CPPFLAGS@ @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
+AM_CPPFLAGS = -I${top_srcdir}/lib @SDL_CPPFLAGS@ @FREETYPE_CPPFLAGS@ @RUBY_CPPFLAGS@
 
 ## define include directory local to the pkgincludedir
 libpkgincludedir = $(includedir)/@PACKAGE@/kerosin
@@ -62,8 +62,6 @@ materialserver/materialserver_c.cpp \
 materialserver/materialexporter_c.cpp \
 sceneserver/axis.cpp \
 sceneserver/axis_c.cpp \
-sceneserver/helper/NVMeshMender.cpp \
-sceneserver/helper/nv_algebra.cpp \
 sceneserver/light.cpp \
 sceneserver/light_c.cpp \
 sceneserver/singlematnode.cpp \
@@ -115,10 +113,6 @@ kerosin.h \
 materialserver/material.h \
 materialserver/materialserver.h \
 sceneserver/axis.h \
-sceneserver/helper/NVMeshMender.h \
-sceneserver/helper/nv_math/nv_algebra.h \
-sceneserver/helper/nv_math/nv_math.h \
-sceneserver/helper/nv_math/nv_mathdecl.h \
 materialserver/material2dtexture.h \
 materialserver/materialexternal.h \
 materialserver/materialsolid.h \

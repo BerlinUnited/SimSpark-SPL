@@ -1,6 +1,6 @@
 Name:           rcssserver3d
-Version:        0.5.9
-Release:        1%{?dist}
+Version:        0.6
+Release:        0.1.20080620cvs%{?dist}
 Summary:        Robocup 3D Soccer Simulation Server
 
 Group:          Applications/System
@@ -10,13 +10,11 @@ Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.
 Source1:        %{name}.png
 Source2:        %{name}.desktop
 Source3:        %{name}-rsgedit.desktop
-Patch0:         rcssserver3d-0.5.9-gcc43_rpath_fix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  automake autoconf gcc-c++ boost-devel slang-devel
-BuildRequires:  ruby ruby-devel SDL-devel desktop-file-utils
-
-Requires:       boost slang ruby SDL
+BuildRequires:  ruby ruby-devel SDL-devel desktop-file-utils libtool
+Requires:       ruby
 
 %if 0%{?suse_version} || 0%{?sles_version}
 BuildRequires:  libode-devel Mesa-devel libdevil-devel
@@ -27,8 +25,6 @@ Requires:       libode Mesa libdevil freetype2
 %else
 BuildRequires:  ode-devel mesa-libGL-devel DevIL-devel
 BuildRequires:  freetype-devel mesa-libGLU-devel
-
-Requires:       ode mesa-libGL DevIL freetype mesa-libGLU
 %define         vendor fedora
 %endif
 
@@ -49,6 +45,16 @@ Requires:       %{name} = %{version}-%{release}
 This package contains the header files and libraries
 for %{name}. If you like to develop programs using %{name},
 you will need to install %{name}-devel.
+
+%package        doc
+Summary:        Users manual for %{name}
+Group:          Documentation
+Version:        1.1
+
+%description    doc
+This package contains the user documentation
+for %{name}. If you like to develop agents for %{name},
+you will find %{name}-doc package useful.
 
 %define _without_wxWidgets 1
 
@@ -79,13 +85,14 @@ you will need to install %{name}-wxGTK-devel.
 
 %prep
 %setup -q
-%patch0 -p1 -b .gcc43_rpath_fix
 
 %build
 autoreconf --install
 %configure --enable-debug=no --disable-rpath %{?_without_wxWidgets: --without-wxWidgets}
 make %{?_smp_mflags}
 chmod a-x app/simspark/rsg/agent/nao/*
+find -name "*.cpp" -exec chmod a-x {} \;
+find -name "*.h" -exec chmod a-x {} \;
 
 %install
 rm -rf %{buildroot}
@@ -96,13 +103,19 @@ echo %{_libdir}/%{name} > %{buildroot}/%{_sysconfdir}/ld.so.conf.d/%{name}.conf
 
 mkdir %{buildroot}/%{_datadir}/pixmaps/
 cp %{SOURCE1} %{buildroot}/%{_datadir}/pixmaps/
+
+%if 0%{?suse_version} || 0%{?sles_version}
 desktop-file-install --vendor="%{vendor}"                 \
-  --dir=${RPM_BUILD_ROOT}%{_datadir}/applications         \
+  --dir=%{buildroot}/%{_datadir}/applications %{SOURCE2} %{SOURCE3}
+%else
+desktop-file-install --vendor="%{vendor}"                 \
+  --dir=%{buildroot}/%{_datadir}/applications             \
   --add-category X-Red-Hat-Base                           \
   %{SOURCE2} %{SOURCE3}
+%endif
 
 rm -rf %{buildroot}/%{_libdir}/%{name}/*.la
-rm -rf %{buildroot}/usr/bin/{rcsoccersim3D,rcssmonitor3D-kerosin,rcssserver3D,agenttest}
+rm -rf %{buildroot}/usr/bin/{rcsoccersim3D,rcssmonitor3D-*,rcssserver3D,agenttest}
 rm -rf %{buildroot}/%{_datadir}/%{name}/*.h
 %if 0%{?_without_wxWidgets:1}
 rm -rf %{buildroot}/%{_includedir}/%{name}/wxutil
@@ -145,6 +158,11 @@ rm -rf %{buildroot}
 #%{_libdir}/%{name}/inputsdl*.so
 #%{_libdir}/%{name}/openglsyssdl*.so
 %{_libdir}/%{name}/lib[^w]*.so
+%doc TODO doc/devel/howtos doc/devel/manual.pdf
+
+%files doc
+%defattr(-,root,root,-)
+%doc doc/users/user-manual.pdf doc/manual/manual.pdf
 
 
 %if 0%{!?_without_wxWidgets:1}
@@ -168,6 +186,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Fri Jun 20 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-0.1.20080620cvs
+- preparing for 0.6 release
+
+* Thu Jun 12 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.9-1.20080611cvs
+- removing rcssmonitor3D-lite
+- update the package to use CVS version which contains Fedora packaging fixes
+- added -doc subpackage
+- added some documentation to -devel package
+
 * Fri Jun 6 2008 Hedayat Vatankhah <hedayat@grad.com> 0.5.9-1
 - added a patch to fix gcc43 compile errors and add --disable-rpath
   configure option. this patch is created using upstream CVS tree.s

@@ -13,7 +13,6 @@ SUBDIRS = \
 	  soccer \
 	  rosimporter \
 	  rubysceneimporter\
-	  voidmeshimporter\
 	  sparkmonitor\
 	  sparkagent\
 	  sceneeffector\

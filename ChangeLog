@@ -1,12 +1,20 @@
+2008-06-20  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/Makefile.am:
+	- removed voidmeshimporter
+
+	* lib/kerosin/Makefile.am:
+	- removed helper/ subdirectory files
+
 2008-06-15  Joschka Boedecker  <jboedeck@uni-koblenz.de>
 
 	* app/simspark/textures/naogoalnet.png:
 	- added texture for the goal net
 
-	* app/simspark/materials/leftgoal.mtl: 
-	* app/simspark/materials/rightgoal.mtl: 
+	* app/simspark/materials/leftgoal.mtl:
+	* app/simspark/materials/rightgoal.mtl:
 	- added materials for the goals
-	
+
 	* app/simspark/models/leftgoal.obj:
 	* app/simspark/models/rightgoal.obj:
 	- added 3D models for the goals
@@ -28,7 +36,7 @@
 	* app/simspark/rsg/agent/nao/naoarm.rsg:
 	* app/simspark/rsg/agent/nao/naoleg.rsg:
 	- disabled inner collision of Nao
-	- move restricted vision perceptor, add 
+	- move restricted vision perceptor, add
 	  vision perceptor of Atlanta.
 
 2008-06-13  Xu Yuan  <xuyuan.cn@gmail.com>

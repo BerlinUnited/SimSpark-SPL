@@ -208,10 +208,6 @@ lib/kerosin/sceneserver/*.lo
 lib/kerosin/sceneserver/.deps
 lib/kerosin/sceneserver/.dirstamp
 lib/kerosin/sceneserver/.libs
-lib/kerosin/sceneserver/helper/*.lo
-lib/kerosin/sceneserver/helper/.deps
-lib/kerosin/sceneserver/helper/.dirstamp
-lib/kerosin/sceneserver/helper/.libs
 lib/kerosin/soundserver/*.lo
 lib/kerosin/soundserver/.deps
 lib/kerosin/soundserver/.dirstamp
@@ -606,12 +602,6 @@ plugin/sparkmonitor/.deps
 plugin/sparkmonitor/.libs
 plugin/sparkmonitor/Makefile
 plugin/sparkmonitor/Makefile.in
-plugin/voidmeshimporter/*.la
-plugin/voidmeshimporter/*.lo
-plugin/voidmeshimporter/.deps
-plugin/voidmeshimporter/.libs
-plugin/voidmeshimporter/Makefile
-plugin/voidmeshimporter/Makefile.in
 utility/Makefile.in
 utility/Makefile
 utility/glextgen/Makefile
