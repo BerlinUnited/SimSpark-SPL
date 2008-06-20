@@ -109,10 +109,16 @@ EXTRA_DIST = \
 	models/lshank.obj\
 	models/naohead.obj\
 	models/rshank.obj\
+	models/skybox.obj\
+	models/leftgoal.obj\
+	models/rightgoal.obj\
 	materials/soccerball.mtl\
 	materials/soccerbottorso.mtl\
 	materials/naosoccerfield.mtl\
 	materials/nao.mtl\
+	materials/skybox.mtl\
+	materials/leftgoal.mtl\
+	materials/rightgoal.mtl\
 	textures/rcs-grass-w-lines.tga\
 	textures/rcs-grass.png\
 	textures/rcs-grass3.png\
@@ -152,6 +158,13 @@ EXTRA_DIST = \
 	textures/num9.png\
 	textures/num10.png\
 	textures/num11.png\
+	textures/skyrender0001.jpg\
+	textures/skyrender0002.jpg\
+	textures/skyrender0003.jpg\
+	textures/skyrender0004.jpg\
+	textures/skyrender0005.jpg\
+	textures/skyrender0006.jpg\
+	textures/naogoalnet.png\
 	rsg/agent/nao/box_appearance.rsg\
 	rsg/agent/nao/box_physics.rsg\
 	rsg/agent/nao/box_physics_with_handler.rsg\

@@ -1,46 +1,26 @@
-RELEASE News of rcssserver3d-0.5.9
+RELEASE News of rcssserver3d-0.6
 
-This release is the candidate of RoboCup 2008. There are some
-important improvements. Firstly, the physics parameters are well
-adjusted to make the simulation more real and stabler. Secondly, the
-restrict vision perceptor is used, with which the vision range is
-limited, but more details will be seen, i.e. the head, hands and feet
-of robots can be seen. Furthermore, the soccer rule and visual
-features are improved.
+This release is the final version for RoboCup 2008 in Suzhou China. It
+is little different from version 0.5.9 in simulation, excepting some
+changes for the rule of RoboCup 2008, including the vision perceptor.
+And also, the eye-catching sky and goal are added. The monitor
+protocol is improved due to the team requirement.
 
-* Physics Parameters:
- Some physics parameters are adjusted to make the simulation more real
- and stabler.
- - Joint parameters: the max force and max speed of the joint are
- restricted, and some other parameters are modified.
- - Ball parameters: the parameters of drag are modified.
+* Vision perceptor:
+ The old vision perceptor (just the same as last year) is used for
+ both Nao and soccerbot058.
 
-* Restrict Vision: 
- The restrict vision perceptor is installed both in nao and
- soccerbot058. This perceptor have some restriction compared with
- original vision perceptor. Firstly, the robots can only see object in
- the limited angle range (both horizontal and vertical angle ranges
- are [-60, 60] in degree). Secondly, the frequent is restricted, the
- robot can get one vision message every 3 cycles. Furthermore, note
- that the noise is added to the vision information.
+* Eye-Catcher:
+ - the sky box is added
+ - the goal with net is added
 
- However, the information is richer: the robot's torso, head, hands
- and feet can be seen. The flags placed in the field can also be seen
- (They are no visual in the screen now, but the robot can see them).
- Four flags are placed at the field corners (the height is 0), and the
- four flags are placed at the goal posts (the corner of the goal).
-
-* Visual:
- - The Nao robot can be identified by team colors and numbers. You can
- play a match with Nao robots ;-)
- - the monitor camera can be controlled by number keys (from 1 to 7)
-
-* Soccer Rule:
- - Field Size: the field size is 12mx8m, the center circle radius is
-1.3m, the penalty size is 1.2mx4m. More information please see
-naosoccersim.rb.
- - Kick Off: the kicking off team can enter the center circle, and the
-   opponents will be moved away from the center circle.
+* Monitor Protocol ( Thanks Carlos from Borregos3D):
+ - Add 'move' command for setting the agent's position and rotation.
+   The whole command may like this:
+   (agent (team $teamname)(unum $id)(move $x $y $z $dir))
+   where, ($x, $y, $z) is the desired position, and $dir is the
+   desired face direction of the robot. 
+ - Fix bug in set ball command.
 
 
 For details have a look into the ChangeLog coming with the package.

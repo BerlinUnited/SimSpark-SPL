@@ -1,5 +1,28 @@
-[0.5.9]
+[0.6]
+This release is the final version for RoboCup 2008 in Suzhou China. It
+is little different from version 0.5.9 in simulation, excepting some
+changes for the rule of RoboCup 2008, including the vision perceptor.
+And also, the eye-catching sky and goal are added. The monitor
+protocol is improved due to the team requirement.
 
+* Vision perceptor:
+ The old vision perceptor (just the same as last year) is used for
+ both Nao and soccerbot058.
+
+* Eye-Catcher:
+ - the sky box is added
+ - the goal with net is added
+
+* Monitor Protocol ( Thanks Carlos from Borregos3D):
+ - Add 'move' command for setting the agent's position and rotation.
+   The whole command may like this:
+   (agent (team $teamname)(unum $id)(move $x $y $z $dir))
+   where, ($x, $y, $z) is the desired position, and $dir is the
+   desired face direction of the robot. 
+ - Fix bug in set ball command.
+
+
+[0.5.9]
 This release is the candidate of RoboCup 2008. There are some
 important improvements. Firstly, the physics parameters are well
 adjusted to make the simulation more real and stabler. Secondly, the
