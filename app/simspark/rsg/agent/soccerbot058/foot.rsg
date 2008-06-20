@@ -34,9 +34,9 @@
 		     $minDeg1    $maxDeg1
 		     $minDeg2    $maxDeg2)
 
-	(nd ObjectState
-            (setID $name)
-            )
+;;; 	(nd ObjectState
+;;;             (setID $name)
+;;;             )
 
 	;; static box at the back of the foot
         (nd Transform

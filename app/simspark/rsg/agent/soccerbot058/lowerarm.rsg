@@ -30,8 +30,8 @@
 		  $axisX      $axisY     $axisZ
 		  $minDeg $maxDeg)
 
-     (nd ObjectState
-	 (setID $name)
+;;;      (nd ObjectState
+;;; 	 (setID $name)
      )
 
      ;; static cylinder for the elbow

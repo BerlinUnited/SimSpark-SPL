@@ -205,6 +205,11 @@
 
 	 (nd SayEffector) ;; add say effector
 
+	 (nd VisionPerceptor
+	     (setSenseMyPos false)
+	     (setStaticSenseAxis false)
+	     (addNoise false))
+
 	 ;; attach left shoulder cylinder (virtual)
 	 (nd Transform
 	     (setLocalPos $offsetLeftShoulderCylX
