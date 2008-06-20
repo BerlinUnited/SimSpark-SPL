@@ -1,5 +1,9 @@
 2008-06-20  Xu Yuan  <xuyuan.cn@gmail.com>
 
+	* app/simspark/rsg/agent/nao/goal.rsg:
+	- add collider for the goal
+	- scale the goal mesh a little to match the collider of goal
+
 	* app/simspark/Makefile.am:
 	* configure.ac:
 	* RELEASE:
