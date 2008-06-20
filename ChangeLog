@@ -1,3 +1,26 @@
+2008-06-20  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* app/simspark/Makefile.am:
+	* configure.ac:
+	* RELEASE:
+	* README:
+	* NEWS:
+	- ready for release 0.6
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp:
+	- add move command for the agent training
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- enable the ball's body after set its position, otherwise it
+	holds on the sky
+
+	* app/simspark/rsg/agent/soccerbot058/soccerbot.rsg:
+	* app/simspark/rsg/agent/soccerbot058/lowerarm.rsg: 
+	* app/simspark/rsg/agent/soccerbot058/head.rsg: 
+	* app/simspark/rsg/agent/soccerbot058/foot.rsg: 
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg: 
+	* app/simspark/rsg/agent/nao/nao.rsg:
+	- make sure the Vision perceptor behavior as last year
+
 2008-06-20  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/Makefile.am:
