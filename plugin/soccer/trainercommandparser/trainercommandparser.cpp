@@ -276,6 +276,39 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
     }
 
+    Predicate::Iterator moveParam(predicate);
+    if (predicate.FindParameter(moveParam, "move"))
+    {
+        salt::Vector3f pos;
+        float ang;
+
+        // extract position vector
+        if (! predicate.GetValue(moveParam, pos))
+        {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent rot\n";
+            return;
+        }
+        // extract direction
+        if (! predicate.GetValue(moveParam, ang))
+        {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent ang\n";
+            return;
+        }
+
+        shared_ptr<Transform> agent_aspect;
+
+        if (SoccerBase::GetTransformParent(*(*iter), agent_aspect))
+        {
+            // move all the bodies belonging to this agent
+            SoccerBase::MoveAndRotateAgent(agent_aspect, pos, ang);
+        }
+        else
+        {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent body\n";
+            return;
+        }
+    }
+
     // Joschka: I removed the part to set a velocity because it doesn't really  
     // seem to have a meaning for agents that have more than just a single body
 
