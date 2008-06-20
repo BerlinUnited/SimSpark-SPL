@@ -338,6 +338,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
         {
             // set new position in the body
             body->SetPosition(pos);
+            body->Enable();
         }
         else
         {
@@ -367,6 +368,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
             // set new velocity in the body
             body->SetVelocity(vel);
             body->SetAngularVelocity(salt::Vector3f(0.0f,0.0f,0.0f));
+            body->Enable();
         }
         else
         {

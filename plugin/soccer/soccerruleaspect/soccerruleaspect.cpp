@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.39 2008/05/31 02:44:28 yxu Exp $
+   $Id: soccerruleaspect.cpp,v 1.40 2008/06/20 07:18:01 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
     mBallBody->SetPosition(pos);
     mBallBody->SetVelocity(Vector3f(0,0,0));
     mBallBody->SetAngularVelocity(Vector3f(0,0,0));
+    mBallBody->Enable();
 }
 
 void
