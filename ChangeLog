@@ -1,3 +1,14 @@
+2008-06-22  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* lib/kerosin/renderserver/renderserver.cpp
+	- remove No camera warning
+	
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h
+	* app/simspark/naosoccersim.rb
+	- Added GoalKickDist soccer variable and set to realistic value
+	- Fixed penalty area size to match field teture
+	
 2008-06-20  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* app/simspark/rsg/agent/nao/goal.rsg:

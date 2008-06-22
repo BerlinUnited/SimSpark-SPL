@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.h,v 1.18 2008/05/31 02:44:28 yxu Exp $
+   $Id: soccerruleaspect.h,v 1.19 2008/06/22 12:12:58 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -233,6 +233,8 @@ protected:
     /** the (least) distance opponents will be moved away if they are to close
         during a free kick, kick in and situations like that. */
     float mFreeKickMoveDist;
+    /** the distance from the back line the ball should be placed at for a goal kick */
+    float mGoalKickDist;
     /** flag if the simulator should do the kick off automatically after the agent */
     bool mAutomaticKickOff;
     /** time to wait until we kick off automatically */

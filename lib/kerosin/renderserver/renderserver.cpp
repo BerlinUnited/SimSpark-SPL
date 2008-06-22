@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: renderserver.cpp,v 1.25 2008/05/31 13:27:10 yxu Exp $
+   $Id: renderserver.cpp,v 1.26 2008/06/22 12:12:58 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -68,10 +68,7 @@ RenderServer::Render()
 
     // if no camera is selected yet, select the first one
     if (mCamera.get() == 0)
-    {
-        //GetLog()->Warning() << "No camera\n";
       mCamera = shared_static_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
-    }
     
     if (mCamera.get() == 0)
     {

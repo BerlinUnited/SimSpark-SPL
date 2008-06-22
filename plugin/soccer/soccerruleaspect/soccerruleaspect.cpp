@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.40 2008/06/20 07:18:01 yxu Exp $
+   $Id: soccerruleaspect.cpp,v 1.41 2008/06/22 12:12:58 sgvandijk Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mHalfTime(2.25 * 60),
     mFreeKickDist(9.15),
     mFreeKickMoveDist(15.15),
+    mGoalKickDist(1.0),
     mAutomaticKickOff(false),
     mWaitBeforeKickOff(1.0),
     mSingleHalfTime(false),
@@ -578,7 +579,7 @@ SoccerRuleAspect::CheckBallLeftField()
             // check goal kick right team
             if (last_touch_left && !ball_left)
             {
-                mFreeKickPos[0] = mFieldLength / 2 - 5.0;
+                mFreeKickPos[0] = mFieldLength / 2 - mGoalKickDist;
                 mFreeKickPos[1] = 0.0;
                 mFreeKickPos[2] = mBallRadius;
                 mGameState->SetPlayMode(PM_GOAL_KICK_RIGHT);
@@ -586,7 +587,7 @@ SoccerRuleAspect::CheckBallLeftField()
             // check goal kick left team
             else if (!last_touch_left && ball_left)
             {
-                mFreeKickPos[0] = -mFieldLength / 2 + 5.0;
+                mFreeKickPos[0] = -mFieldLength / 2 + mGoalKickDist;
                 mFreeKickPos[1] = 0.0;
                 mFreeKickPos[2] = mBallRadius;
                 mGameState->SetPlayMode(PM_GOAL_KICK_LEFT);
@@ -893,6 +894,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"GoalWidth",mGoalWidth);
     SoccerBase::GetSoccerVar(*this,"FreeKickDistance",mFreeKickDist);
     SoccerBase::GetSoccerVar(*this,"FreeKickMoveDist",mFreeKickMoveDist);
+    SoccerBase::GetSoccerVar(*this,"GoalKickDist",mGoalKickDist);
     SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
