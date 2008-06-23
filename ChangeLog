@@ -1,3 +1,15 @@
+2008-06-23  Xu Yuan  <xuyuan.cn@gmail.com>
+
+	* RELEASE:
+	* NEWS:
+	- release version 0.6
+
+	* app/simspark/rsg/agent/ball.rsg:
+	- change ball's angular drag to 0.00005
+
+	* app/simspark/Makefile.am:
+	- add missing rsg file
+
 2008-06-22  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* lib/kerosin/renderserver/renderserver.cpp
