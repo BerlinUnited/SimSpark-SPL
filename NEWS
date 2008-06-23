@@ -5,6 +5,9 @@ changes for the rule of RoboCup 2008, including the vision perceptor.
 And also, the eye-catching sky and goal are added. The monitor
 protocol is improved due to the team requirement.
 
+* Physics:
+ - set ball angluar drag to 0.00005
+
 * Vision perceptor:
  The old vision perceptor (just the same as last year) is used for
  both Nao and soccerbot058.
@@ -21,6 +24,9 @@ protocol is improved due to the team requirement.
    desired face direction of the robot. 
  - Fix bug in set ball command.
 
+* Rule bug fix:
+ - fix bug of the goal kick position
+ - fix bug of the size of penalty
 
 [0.5.9]
 This release is the candidate of RoboCup 2008. There are some
