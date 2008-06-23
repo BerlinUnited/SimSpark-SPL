@@ -20,7 +20,7 @@
 	 
 	 (setSphereTotal $Mass $Radius)
 	 (nd DragController
-	     (setAngularDrag 0.0005)
+	     (setAngularDrag 0.00005)
 	     (setLinearDrag 0.01)
 	 )
      )
