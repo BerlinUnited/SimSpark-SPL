@@ -1,3 +1,8 @@
+2008-06-24  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* app/simspark/rsg/agent/nao/soccer.rsg:
+	- field border has colliders and adjusts to field size
+	
 2008-06-23  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* RELEASE:
@@ -12,12 +17,12 @@
 
 2008-06-22  Sander van Dijk  <sgvandijk@gmail.com>
 
-	* lib/kerosin/renderserver/renderserver.cpp
+	* lib/kerosin/renderserver/renderserver.cpp:
 	- remove No camera warning
 	
-	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
-	* plugin/soccer/soccerruleaspect/soccerruleaspect.h
-	* app/simspark/naosoccersim.rb
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	* app/simspark/naosoccersim.rb:
 	- Added GoalKickDist soccer variable and set to realistic value
 	- Fixed penalty area size to match field teture
 	
@@ -119,8 +124,8 @@
 
 2008-06-06  Sander van Dijk <sgvandijk@gmail.com>
 
-	* plugin/soccer/visionperceptor/visionperceptor.h
-	* plugin/soccer/visionperceptor/visionperceptor.cpp
+	* plugin/soccer/visionperceptor/visionperceptor.h:
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
 	- port RestrictedVisionPerceptor changes to VisionPerceptor so it can also be installed anywhere
 
 2008-06-05  Hedayat Vatankhah  <hedayat@grad.com>

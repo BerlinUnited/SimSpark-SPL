@@ -20,8 +20,13 @@
  (def $FieldHalfHeight (eval $FieldHeight / 2.0))
  (def $FieldHalfWidth  (eval $FieldWidth / 2.0))
  (def $GoalHalfDepth   (eval $GoalDepth / 2.0))
- (def $FieldTextureSize (eval $FieldLength / 12.0 ))
+ (def $FieldLengthTextureSize (eval $FieldLength / 12.0 ))
+ (def $FieldWidthTextureSize (eval $FieldWidth / 8.0 ))
 
+ (def $BorderLength (eval $FieldLength * 0.333))
+ (def $BorderWidth   (eval $FieldWidth * 0.75))
+ (def $SideExt 1)
+ 
  ;;
  ;; construct playing field
  ;;
@@ -54,9 +59,9 @@
 	(setLocalRotation 90 180 0)
 	(nd StaticMesh
           	(load 'models/naosoccerfield.obj')
-		(setScale $FieldTextureSize
-			  $FieldTextureSize
-			  $FieldTextureSize)
+		(setScale $FieldLengthTextureSize
+			  1
+			  $FieldWidthTextureSize)
       	)
 
        (nd PlaneCollider
@@ -105,44 +110,55 @@
 	      G2R G1R
 	      matBlue)
 
+ (def $SideLength (eval $SideExt + (eval $FieldLength + (eval 2 * $BorderLength))))
+ (def $SideWidth (eval $SideExt + (eval $FieldWidth + (eval 2 * $BorderWidth))))
+ 
 ; create left side wall
  (nd Transform
-       (setLocalPos (eval -1 * 10.0) 0 0)
+       (setLocalPos (eval -1 * (eval $FieldHalfLength + $BorderLength)) 0 0)
        (nd Box
 	     (setMaterial matGrey)
-	     (setExtents 1.0 20.0 1.0)
+	     (setExtents $SideExt $SideWidth $SideExt)
 	     ) 
-       
+       (nd BoxCollider
+        (setBoxLengths $SideExt $SideWidth $SideExt)
+       )
        )
 
 ; create right side wall
  (nd Transform
-       (setLocalPos (eval 1 * 10.0) 0 0)
+       (setLocalPos (eval 1 * (eval $FieldHalfLength + $BorderLength)) 0 0)
        (nd Box
 	     (setMaterial matGrey)
-	     (setExtents 1.0 20.0 1.0)
+	     (setExtents $SideExt $SideWidth $SideExt)
 	     ) 
-       
+       (nd BoxCollider
+        (setBoxLengths $SideExt $SideWidth $SideExt)
+       )
        )
 
 ; create back side wall
  (nd Transform
-       (setLocalPos 0 (eval 1 * 10.0) 0)
+       (setLocalPos 0 (eval 1 * (eval $FieldHalfWidth + $BorderWidth)) 0)
        (nd Box
 	     (setMaterial matGrey)
-	     (setExtents 21.0 1.0 1.0)
+	     (setExtents $SideLength $SideExt $SideExt)
 	     ) 
-       
+       (nd BoxCollider
+        (setBoxLengths $SideLength $SideExt $SideExt)
+       )
        )
 
 ; create front side wall
  (nd Transform
-       (setLocalPos 0 (eval 1 * -10.0) 0)
+       (setLocalPos 0 (eval -1 * (eval $FieldHalfWidth + $BorderWidth)) 0)
        (nd Box
 	     (setMaterial matGrey)
-	     (setExtents 21.0 1.0 1.0)
+	     (setExtents $SideLength $SideExt $SideExt)
 	     ) 
-       
+       (nd BoxCollider
+        (setBoxLengths $SideLength $SideExt $SideExt)
+       )
        )
 
  ;;
