@@ -1,6 +1,6 @@
 Name:           rcssserver3d
 Version:        0.6
-Release:        0.1.20080620cvs%{?dist}
+Release:        2%{?dist}
 Summary:        Robocup 3D Soccer Simulation Server
 
 Group:          Applications/System
@@ -12,7 +12,7 @@ Source2:        %{name}.desktop
 Source3:        %{name}-rsgedit.desktop
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  automake autoconf gcc-c++ boost-devel slang-devel
+BuildRequires:  automake autoconf gcc-c++ boost-devel slang-devel tinyxml-devel
 BuildRequires:  ruby ruby-devel SDL-devel desktop-file-utils libtool
 Requires:       ruby
 
@@ -21,11 +21,12 @@ BuildRequires:  libode-devel Mesa-devel libdevil-devel
 BuildRequires:  freetype2-devel
 
 Requires:       libode Mesa libdevil freetype2
-%define         vendor suse
+%define         linvendor suse
 %else
-BuildRequires:  ode-devel mesa-libGL-devel DevIL-devel
-BuildRequires:  freetype-devel mesa-libGLU-devel
-%define         vendor fedora
+BuildRequires:  ode-devel libGL-devel DevIL-devel
+BuildRequires:  freetype-devel libGLU-devel
+Requires:       ruby(abi) = 1.8
+%define         linvendor fedora
 %endif
 
 %description
@@ -40,6 +41,8 @@ This package contains the 3D version of the simulator.
 Summary:        Header files and libraries for %{name}
 Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
+Requires:       boost-devel ruby-devel ode-devel DevIL-devel
+Requires:       libGL-devel libGLU-devel
 
 %description    devel
 This package contains the header files and libraries
@@ -49,7 +52,6 @@ you will need to install %{name}-devel.
 %package        doc
 Summary:        Users manual for %{name}
 Group:          Documentation
-Version:        1.1
 
 %description    doc
 This package contains the user documentation
@@ -85,50 +87,37 @@ you will need to install %{name}-wxGTK-devel.
 
 %prep
 %setup -q
-
-%build
 autoreconf --install
-%configure --enable-debug=no --disable-rpath %{?_without_wxWidgets: --without-wxWidgets}
-make %{?_smp_mflags}
 chmod a-x app/simspark/rsg/agent/nao/*
 find -name "*.cpp" -exec chmod a-x {} \;
 find -name "*.h" -exec chmod a-x {} \;
 
+%build
+%configure --enable-debug=no %{?_without_wxWidgets: --without-wxWidgets}
+make %{?_smp_mflags}
+
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
-
-mkdir -p %{buildroot}/%{_sysconfdir}/ld.so.conf.d/
-echo %{_libdir}/%{name} > %{buildroot}/%{_sysconfdir}/ld.so.conf.d/%{name}.conf
+make install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
 
 mkdir %{buildroot}/%{_datadir}/pixmaps/
-cp %{SOURCE1} %{buildroot}/%{_datadir}/pixmaps/
+cp -p %{SOURCE1} %{buildroot}/%{_datadir}/pixmaps/
 
-%if 0%{?suse_version} || 0%{?sles_version}
-desktop-file-install --vendor="%{vendor}"                 \
+desktop-file-install --vendor="%{linvendor}"                 \
   --dir=%{buildroot}/%{_datadir}/applications %{SOURCE2} %{SOURCE3}
-%else
-desktop-file-install --vendor="%{vendor}"                 \
-  --dir=%{buildroot}/%{_datadir}/applications             \
-  --add-category X-Red-Hat-Base                           \
-  %{SOURCE2} %{SOURCE3}
-%endif
 
 rm -rf %{buildroot}/%{_libdir}/%{name}/*.la
 rm -rf %{buildroot}/usr/bin/{rcsoccersim3D,rcssmonitor3D-*,rcssserver3D,agenttest}
 rm -rf %{buildroot}/%{_datadir}/%{name}/*.h
+rm -rf %{buildroot}/%{_libdir}/%{name}/libtinyxml*
 %if 0%{?_without_wxWidgets:1}
 rm -rf %{buildroot}/%{_includedir}/%{name}/wxutil
 rm -rf %{buildroot}/%{_datadir}/%{name}/xpm*
-rm -rf %{buildroot}/%{_datadir}/applications/%{vendor}-%{name}-rsgedit.desktop
+rm -rf %{buildroot}/%{_datadir}/applications/%{linvendor}-%{name}-rsgedit.desktop
 %endif
 
 %clean
 rm -rf %{buildroot}
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
@@ -145,8 +134,7 @@ rm -rf %{buildroot}
 %{_libdir}/%{name}/lib[^w]*.so.*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/[^x]*
-%{_sysconfdir}/ld.so.conf.d/%{name}.conf
-%{_datadir}/applications/%{vendor}-%{name}.desktop
+%{_datadir}/applications/%{linvendor}-%{name}.desktop
 %{_datadir}/pixmaps/*
 
 %files devel
@@ -166,10 +154,6 @@ rm -rf %{buildroot}
 
 
 %if 0%{!?_without_wxWidgets:1}
-%post rsgedit -p /sbin/ldconfig
-
-%postun rsgedit -p /sbin/ldconfig
-
 %files rsgedit
 %defattr(-,root,root,-)
 %{_bindir}/rsgedit
@@ -177,7 +161,7 @@ rm -rf %{buildroot}
 #%{_datadir}/%{name}/rsgedit.rb
 %{_datadir}/%{name}/xpm*
 %doc doc/rsgedit.txt
-%{_datadir}/applications/%{vendor}-%{name}-rsgedit.desktop
+%{_datadir}/applications/%{linvendor}-%{name}-rsgedit.desktop
 
 %files wxGTK-devel
 %defattr(-,root,root,-)
@@ -186,6 +170,18 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Jun 25 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-2
+- Added missing dependencies for -devel subpackage
+
+* Tue Jun 24 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-1
+- fixed according to the Fedora package review process:
+  - changed some requirements
+  - removed -doc version
+  - removed ld.so.conf.d/rcssserver3d.conf file in favour of rpath!!
+
+* Mon Jun 23 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-1
+- updated for 0.6 release
+
 * Fri Jun 20 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-0.1.20080620cvs
 - preparing for 0.6 release
 

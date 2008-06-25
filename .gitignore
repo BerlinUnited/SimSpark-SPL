@@ -304,6 +304,7 @@ lib/zeitgeist/scriptserver/*.la
 lib/zeitgeist/scriptserver/*.lo
 lib/zeitgeist/telnetserver/.deps
 lib/zeitgeist/telnetserver/.dirstamp
+linux/fedora-rcssserver3d.spec
 plugin/Makefile
 plugin/Makefile.in
 plugin/collisionperceptor/*.la

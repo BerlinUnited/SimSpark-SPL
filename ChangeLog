@@ -1,8 +1,13 @@
+2008-06-25  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* app/simspark/Makefile.am:
+	- find command fixed so that it works in mac osx too. (Thanks Ian Fasel)
+
 2008-06-24  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* app/simspark/rsg/agent/nao/soccer.rsg:
 	- field border has colliders and adjusts to field size
-	
+
 2008-06-23  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* RELEASE:
@@ -19,13 +24,13 @@
 
 	* lib/kerosin/renderserver/renderserver.cpp:
 	- remove No camera warning
-	
+
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
 	* app/simspark/naosoccersim.rb:
 	- Added GoalKickDist soccer variable and set to realistic value
 	- Fixed penalty area size to match field teture
-	
+
 2008-06-20  Xu Yuan  <xuyuan.cn@gmail.com>
 
 	* app/simspark/rsg/agent/nao/goal.rsg:
@@ -46,10 +51,10 @@
 	holds on the sky
 
 	* app/simspark/rsg/agent/soccerbot058/soccerbot.rsg:
-	* app/simspark/rsg/agent/soccerbot058/lowerarm.rsg: 
-	* app/simspark/rsg/agent/soccerbot058/head.rsg: 
-	* app/simspark/rsg/agent/soccerbot058/foot.rsg: 
-	* app/simspark/rsg/agent/nao/naoneckhead.rsg: 
+	* app/simspark/rsg/agent/soccerbot058/lowerarm.rsg:
+	* app/simspark/rsg/agent/soccerbot058/head.rsg:
+	* app/simspark/rsg/agent/soccerbot058/foot.rsg:
+	* app/simspark/rsg/agent/nao/naoneckhead.rsg:
 	* app/simspark/rsg/agent/nao/nao.rsg:
 	- make sure the Vision perceptor behavior as last year
 
