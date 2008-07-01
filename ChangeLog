@@ -1,3 +1,8 @@
+2008-07-01  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp
+	- enable the ball's body after set its position and/or velocity
+
 2008-06-25  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* app/simspark/Makefile.am:
