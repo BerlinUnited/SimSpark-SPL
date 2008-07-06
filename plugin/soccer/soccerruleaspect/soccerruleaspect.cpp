@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.41 2008/06/22 12:12:58 sgvandijk Exp $
+   $Id: soccerruleaspect.cpp,v 1.42 2008/07/06 03:02:43 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -595,7 +595,7 @@ SoccerRuleAspect::CheckBallLeftField()
             // check corner kick right team
             else if (last_touch_left && ball_left)
             {
-                mFreeKickPos[0] = -mFieldLength / 2 + 0.05;
+                mFreeKickPos[0] = -mFieldLength / 2 + mBallRadius;
                 mFreeKickPos[1] = ball_pos[1] > 0 ?
                     mFieldWidth / 2 - 0.05 : -mFieldWidth / 2 + 0.05;
                 mFreeKickPos[2] = mBallRadius;
@@ -604,9 +604,9 @@ SoccerRuleAspect::CheckBallLeftField()
             // check corner kick left team
             else
             {
-                mFreeKickPos[0] = mFieldLength / 2 - 0.05;
+                mFreeKickPos[0] = mFieldLength / 2 - mBallRadius;
                 mFreeKickPos[1] = ball_pos[1] > 0 ?
-                    mFieldWidth / 2 - 0.05 : -mFieldWidth / 2 + 0.05;
+                    mFieldWidth / 2 - mBallRadius : -mFieldWidth / 2 + mBallRadius;
                 mFreeKickPos[2] = mBallRadius;
                 mGameState->SetPlayMode(PM_CORNER_KICK_LEFT);
             }
@@ -616,7 +616,7 @@ SoccerRuleAspect::CheckBallLeftField()
         {
             mFreeKickPos = mBallState->GetLastValidBallPosition();
             mFreeKickPos[1] = mFreeKickPos[1] > 0 ?
-                mFieldWidth / 2 : -mFieldWidth / 2;
+                mFieldWidth / 2 - mBallRadius : -mFieldWidth / 2 ＋ mBallRadius;
             mFreeKickPos[2] = mBallRadius;
             mGameState->SetPlayMode((agentState->GetTeamIndex() == TI_LEFT) ?
                                     PM_KickIn_Right : PM_KickIn_Left);
