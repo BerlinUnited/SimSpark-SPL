@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.42 2008/07/06 03:02:43 yxu Exp $
+   $Id: soccerruleaspect.cpp,v 1.43 2008/07/06 03:04:34 yxu Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -616,7 +616,7 @@ SoccerRuleAspect::CheckBallLeftField()
         {
             mFreeKickPos = mBallState->GetLastValidBallPosition();
             mFreeKickPos[1] = mFreeKickPos[1] > 0 ?
-                mFieldWidth / 2 - mBallRadius : -mFieldWidth / 2 ＋ mBallRadius;
+                mFieldWidth / 2 - mBallRadius : -mFieldWidth / 2 + mBallRadius;
             mFreeKickPos[2] = mBallRadius;
             mGameState->SetPlayMode((agentState->GetTeamIndex() == TI_LEFT) ?
                                     PM_KickIn_Right : PM_KickIn_Left);
