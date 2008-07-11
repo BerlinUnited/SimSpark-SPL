@@ -1,3 +1,17 @@
+2008-07-11  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	* plugin/soccer/gamestateaspect/gamestateaspect_c.cpp:
+	- added new functions SetTime & SetScores which can be useful if we want to
+	  start a game in the middle
+	 
+	* plugin/soccer/objectstate/objectstate.h (ObjectState): 
+	- removed extra "typedef" keyword
+	
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::DropBall): 
+	- do not drop the ball outside the field
+
 2008-07-01  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* plugin/soccer/trainercommandparser/trainercommandparser.cpp

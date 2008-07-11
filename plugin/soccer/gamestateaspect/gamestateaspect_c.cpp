@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect_c.cpp,v 1.3 2004/03/24 16:15:08 rollmark Exp $
+   $Id: gamestateaspect_c.cpp,v 1.4 2008/07/11 12:34:12 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,8 +30,44 @@ FUNCTION(GameStateAspect,kickOff)
     return true;
 }
 
+FUNCTION(GameStateAspect,setTime)
+{
+    float inNewTime;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inNewTime))
+        )
+        {
+            return false;
+        }
+
+   obj->SetTime(inNewTime);
+   return true;
+}
+
+FUNCTION(GameStateAspect,setScores)
+{
+    int inScoreLeft;
+    int inScoreRight;
+
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0],inScoreLeft) ||
+        (! in.GetValue(in[1],inScoreRight)))
+        )
+        {
+            return false;
+        }
+
+   obj->SetScores(inScoreLeft, inScoreRight);
+   return true;
+}
+
 void CLASS(GameStateAspect)::DefineClass()
 {
     DEFINE_BASECLASS(SoccerControlAspect);
     DEFINE_FUNCTION(kickOff);
+    DEFINE_FUNCTION(setTime);
+    DEFINE_FUNCTION(setScores);
 }

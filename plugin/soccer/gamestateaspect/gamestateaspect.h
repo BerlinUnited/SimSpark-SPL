@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.h,v 1.10 2008/03/10 23:57:07 sgvandijk Exp $
+   $Id: gamestateaspect.h,v 1.11 2008/07/11 12:34:12 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ public:
 
     /** notifies that a uniform number is free again */
     bool ReturnUniform(TTeamIndex ti, unsigned int unum);
-    
+
     /** returns the next uniform number not taken for the given team */
     int RequestUniformNumber(TTeamIndex ti) const;
 
@@ -106,6 +106,12 @@ public:
     /** returns the score of a team */
     int GetScore(TTeamIndex idx) const;
 
+    /** sets the current game time. useful if you start a game in the middle */
+    void SetTime(float time);
+
+    /** sets the current game scores. useful if you start a game in the middle */
+    void SetScores(int scoreLeft, int scoreRight);
+
 protected:
     /** setup the init positions for the agents */
     virtual void OnLink();
@@ -120,7 +126,7 @@ protected:
     /** checks if the set of uniform numbers of given team does
         contain a uniform number unum and erases it. */
     bool EraseUnum(TTeamIndex idx, int unum);
-    
+
     /** returns the team index corresponding to the given teamName. If
         the teamname does not exist and less than two teams are
         registered, the given team name is registered.

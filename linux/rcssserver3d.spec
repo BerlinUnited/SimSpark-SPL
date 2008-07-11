@@ -1,18 +1,21 @@
 Name:           rcssserver3d
 Version:        0.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Robocup 3D Soccer Simulation Server
 
 Group:          Applications/System
 License:        GPLv2
 URL:            http://sourceforge.net/projects/sserver/
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/sserver/%{name}-%{version}.tar.gz
+
+# Source 2 & 3 are created by myslef. Source1 is created by me using the photo in the user-manual.pdf
 Source1:        %{name}.png
 Source2:        %{name}.desktop
 Source3:        %{name}-rsgedit.desktop
+Patch0:         %{name}-0.6-libnamefix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  automake autoconf gcc-c++ boost-devel slang-devel tinyxml-devel
+BuildRequires:  automake autoconf gcc-c++ boost-devel slang-devel
 BuildRequires:  ruby ruby-devel SDL-devel desktop-file-utils libtool
 Requires:       ruby
 
@@ -87,10 +90,12 @@ you will need to install %{name}-wxGTK-devel.
 
 %prep
 %setup -q
+%patch0 -p1 -b .libnamefix
 autoreconf --install
 chmod a-x app/simspark/rsg/agent/nao/*
 find -name "*.cpp" -exec chmod a-x {} \;
 find -name "*.h" -exec chmod a-x {} \;
+sed -i.stamp -e 's|cp -r|cp -pr|' app/simspark/Makefile.{am,in}
 
 %build
 %configure --enable-debug=no %{?_without_wxWidgets: --without-wxWidgets}
@@ -107,9 +112,8 @@ desktop-file-install --vendor="%{linvendor}"                 \
   --dir=%{buildroot}/%{_datadir}/applications %{SOURCE2} %{SOURCE3}
 
 rm -rf %{buildroot}/%{_libdir}/%{name}/*.la
-rm -rf %{buildroot}/usr/bin/{rcsoccersim3D,rcssmonitor3D-*,rcssserver3D,agenttest}
+rm -rf %{buildroot}/%{_bindir}/{rcsoccersim3D,rcssmonitor3D-*,rcssserver3D,agenttest}
 rm -rf %{buildroot}/%{_datadir}/%{name}/*.h
-rm -rf %{buildroot}/%{_libdir}/%{name}/libtinyxml*
 %if 0%{?_without_wxWidgets:1}
 rm -rf %{buildroot}/%{_includedir}/%{name}/wxutil
 rm -rf %{buildroot}/%{_datadir}/%{name}/xpm*
@@ -170,6 +174,15 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Wed Jul 02 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-3
+- Added a patch to rename libtinyxml to libtinyxml_ex since it differs from libtinyxml
+
+* Sat Jun 28 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-3
+- Fixed Source0 URL
+- Added a comment about Source1/2/3
+- Replaced an incorrect path (/usr/bin) with the correct macro
+- Changing "cp -r" commands in simspark makefiles with cp -pr
+
 * Wed Jun 25 2008 Hedayat Vatankhah <hedayat@grad.com> 0.6-2
 - Added missing dependencies for -devel subpackage
 

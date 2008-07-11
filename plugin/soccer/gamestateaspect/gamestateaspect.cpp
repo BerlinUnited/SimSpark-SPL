@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: gamestateaspect.cpp,v 1.15 2008/03/31 20:22:08 rollmark Exp $
+   $Id: gamestateaspect.cpp,v 1.16 2008/07/11 12:34:12 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ GameStateAspect::SetPlayMode(TPlayMode mode)
 }
 
 
-// let the monitor handle who kicks off in 2nd half. 
+// let the monitor handle who kicks off in 2nd half.
 void
 GameStateAspect::KickOff(TTeamIndex ti)
 {
@@ -106,9 +106,9 @@ GameStateAspect::KickOff(TTeamIndex ti)
     {
         ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
     }
-    
+
     SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
-    
+
     if (mLastKickOff == TI_NONE)
         mLastKickOff = ti;
 }
@@ -156,7 +156,7 @@ GameStateAspect::KickOff(TTeamIndex ti)
 //         {
 //             //clog << "setting mSecondHalfKickOff\n";
 
-//             mSecondHalfKickOff = 
+//             mSecondHalfKickOff =
 //                  (mLastKickOff == TI_LEFT) ? TI_RIGHT : TI_LEFT;
 //         }
 //     }
@@ -429,10 +429,10 @@ GameStateAspect::RequestInitPosition(const TTeamIndex ti)
 
     Vector3f pos = init;
     init[1] -= mAgentRadius * 3;
-    
+
     float fieldWidth;
-    SoccerBase::GetSoccerVar(*this,"FieldWidth",fieldWidth);    
-        
+    SoccerBase::GetSoccerVar(*this,"FieldWidth",fieldWidth);
+
     if (init[1] < -fieldWidth/2.0)
         {
             init[1] = fieldWidth/2 - mAgentRadius*2;
@@ -498,7 +498,7 @@ GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
     default:
         return 0;
     }
-    
+
     for (int i = 1; i <=11; ++i)
       if (mUnumSet[idx].find(i) == mUnumSet[idx].end())
         return i;
@@ -506,8 +506,13 @@ GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
     return 0;
 }
 
+void GameStateAspect::SetTime(float time)
+{
+    mTime = time;
+}
 
-
-
-
-
+void GameStateAspect::SetScores(int scoreLeft, int scoreRight)
+{
+    mScore[0] = scoreLeft;
+    mScore[1] = scoreRight;
+}

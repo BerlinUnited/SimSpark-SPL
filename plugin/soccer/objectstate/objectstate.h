@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id: objectstate.h,v 1.4 2008/02/22 16:48:20 hedayat Exp $
+   $Id: objectstate.h,v 1.5 2008/07/11 12:34:12 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 class ObjectState : public SoccerNode
 {
 public:
-    typedef enum TPerceptType
+    enum TPerceptType
     {
         PT_Default,
         PT_TooFar,

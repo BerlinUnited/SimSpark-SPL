@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soccerruleaspect.cpp,v 1.43 2008/07/06 03:04:34 yxu Exp $
+   $Id: soccerruleaspect.cpp,v 1.44 2008/07/11 12:34:12 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
         // if agent is too close, move it away
         Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
         AABB2 agentAABB2 = SoccerBase::GetAgentBoundingRect(*agent_aspect);
-        
+
         if (box.Intersects(agentAABB2))
         {
             if (idx == TI_LEFT)
@@ -155,7 +155,7 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
 void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
-    
+
     // move the non-kick off team to own half field except the center
     // circle
     TTeamIndex opp = SoccerBase::OpponentTeam(idx);
@@ -171,7 +171,7 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
-    
+
     salt::AABB2 box;
     if ( TI_RIGHT == idx ){
         box = mLeftHalf;
@@ -179,7 +179,7 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
     else{
         box = mRightHalf;
     }
-        
+
     boost::shared_ptr<oxygen::Transform> agent_aspect;
     std::list<boost::shared_ptr<AgentState> >::const_iterator i;
     float freeKickDist2 = mFreeKickDist*mFreeKickDist;
@@ -197,7 +197,7 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
                  && Vector2f(agentAABB2.minVec.x(),agentAABB2.maxVec.y()).SquareLength() < freeKickDist2
                  && Vector2f(agentAABB2.maxVec.x(),agentAABB2.minVec.y()).SquareLength() < freeKickDist2)
                 continue;
-            
+
             if (idx == TI_LEFT)
             {
                 new_pos[0] = box.minVec[0] -
@@ -234,6 +234,16 @@ SoccerRuleAspect::DropBall(Vector3f pos)
         pos[0] = mRightPenaltyArea.minVec[0];
         pos[1] = pos.y() < 0 ?
             mRightPenaltyArea.minVec[1] : mRightPenaltyArea.maxVec[1];
+    }
+
+    // do not drop the ball outside the field
+    if (pos.y() <= -mFieldWidth / 2)
+    {
+        pos.y() = -mFieldWidth / 2 + mBallRadius;
+    }
+    else if (pos.y() >= mFieldWidth / 2)
+    {
+        pos.y() = mFieldWidth / 2 - mBallRadius;
     }
 
     MoveBall(pos);

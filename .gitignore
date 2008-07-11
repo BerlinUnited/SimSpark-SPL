@@ -12,6 +12,7 @@
 /.project
 /.cproject
 /.settings
+/.cdtconfigure.Build?(GNU)
 app/Makefile
 app/Makefile.in
 app/agentspark/.deps
