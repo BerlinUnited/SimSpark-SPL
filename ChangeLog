@@ -1,3 +1,12 @@
+2008-09-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/physicsserver/physicsserver.cpp (PhysicsServer::PhysicsServer):
+	- Added dInitODE() which is required by ode-0.10
+	 
+	* plugin/rosimporter/Makefile.am: 
+	* utility/tinyxml/Makefile.am: 
+	- Renamed tinyxml library to tinyxml_ex to avoid conflicting with tinyxml
+
 2008-07-14  Sander van Dijk <sgvandijk@gmail.com>
 
 	* lib/kerosin/sceneserver/staticmesh.cpp

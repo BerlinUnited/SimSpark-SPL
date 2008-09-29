@@ -1,6 +1,6 @@
-pkglib_LTLIBRARIES = libtinyxml.la
+pkglib_LTLIBRARIES = libtinyxml_ex.la
 
-libtinyxml_la_SOURCES = \
+libtinyxml_ex_la_SOURCES = \
 	tinystr.cpp \
 	tinyxml.cpp \
 	tinyxmlerror.cpp \

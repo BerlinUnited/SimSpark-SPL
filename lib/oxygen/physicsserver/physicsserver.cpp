@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: physicsserver.cpp,v 1.6 2008/02/24 10:17:31 rollmark Exp $
+   $Id: physicsserver.cpp,v 1.7 2008/09/29 20:11:09 hedayat Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ using namespace oxygen;
 PhysicsServer::PhysicsServer()
     : Leaf()
 {
+    dInitODE();
 }
 
 PhysicsServer::~PhysicsServer()
