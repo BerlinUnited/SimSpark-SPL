@@ -1,4 +1,4 @@
-2008-10-24  Marian Buchta  <marian.buchta@gmail.com>
+2008-10-29  Marian Buchta  <marian.buchta@gmail.com>
 	* windows/SimSpark.sln
 	* lib/spark/spark.rb
 	- remove voidmeshimporter
