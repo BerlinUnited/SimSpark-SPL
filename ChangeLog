@@ -1,3 +1,23 @@
+2008-10-24  Marian Buchta  <marian.buchta@gmail.com>
+	* windows/SimSpark.sln
+	* lib/spark/spark.rb
+	- remove voidmeshimporter
+
+	* windows/kerosin/kerosin.vcproj
+	- remove kerosin->sceneserver->helper.
+
+	* windows/plugins/soccer/soccer.vcproj
+	- created project structure like in directory structure
+
+	* app/fonttest/script/us.scan.rb
+	- cosmetic changes. corrected comment.
+	
+ 	* lib/zeitgeist/scriptserver/rubywrapper.h
+	- compilation error under Windows fixed. Add undef read and write marco.
+	
+	* windows/make.cmd
+	- Added script. Create package, which copy all necessary files (binary-compiled, textures, ruby etc) into one structure directory. For help, use "make -h"
+
 2008-09-29  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/physicsserver/physicsserver.cpp (PhysicsServer::PhysicsServer):
