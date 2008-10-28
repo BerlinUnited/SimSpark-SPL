@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: rubywrapper.h,v 1.6 2008/02/20 17:16:29 hedayat Exp $
+   $Id: rubywrapper.h,v 1.7 2008/10/28 22:58:21 marianbuchta Exp $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,6 +56,8 @@
 #undef recv
 #undef socket
 #undef send
+#undef read
+#undef write
 
 // reenable compiler warning
 #pragma warning (default : 4312)
