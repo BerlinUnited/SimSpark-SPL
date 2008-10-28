@@ -562,11 +562,11 @@ sceneServer.createScene($scenePath)
 
 #
 # setup the GeometryServer
-importBundle 'voidmeshimporter'
+#importBundle 'voidmeshimporter'
 importBundle 'objimporter'
 
 geometryServer = sparkGetGeometryServer()
-geometryServer.initMeshImporter("VoidMeshImporter");
+#geometryServer.initMeshImporter("VoidMeshImporter");
 geometryServer.initMeshImporter("ObjImporter");
 
 # use the ruby scene importer to import scenes

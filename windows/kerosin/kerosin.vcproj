@@ -560,34 +560,6 @@
 				RelativePath="..\..\lib\kerosin\sceneserver\staticmesh_c.cpp"
 				>
 			</File>
-			<Filter
-				Name="helper"
-				>
-				<File
-					RelativePath="..\..\lib\kerosin\sceneserver\helper\nv_algebra.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\lib\kerosin\sceneserver\helper\nv_math\nv_algebra.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\lib\kerosin\sceneserver\helper\nv_math\nv_math.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\lib\kerosin\sceneserver\helper\nv_math\nv_mathdecl.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\lib\kerosin\sceneserver\helper\NVMeshMender.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\lib\kerosin\sceneserver\helper\NVMeshMender.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="textureserver"
