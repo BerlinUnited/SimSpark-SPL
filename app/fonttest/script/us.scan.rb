@@ -1,4 +1,4 @@
-# ScanCode translation for a German keyboard
+# ScanCode translation for an US keyboard
 
 theInputSystem = get('/sys/server/input');
 
