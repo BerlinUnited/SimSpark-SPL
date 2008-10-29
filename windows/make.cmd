@@ -122,6 +122,11 @@ ECHO.
 xcopy /I /V ..\app\simspark\rsg\jointtest\*.* %directory%\rsg\jointtest
 
 ECHO.
+ECHO copy other rsg files (22):
+ECHO.
+xcopy /I /V ..\app\simspark\rsg\agent\*.* %directory%\rsg\agent
+
+ECHO.
 ECHO copy font (1):
 ECHO.
 xcopy /I /V ..\app\simspark\fonts\*.* %directory%\fonts
