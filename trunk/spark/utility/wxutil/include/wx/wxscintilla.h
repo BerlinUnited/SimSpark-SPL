@@ -12,7 +12,7 @@
 // Author:      Robin Dunn
 //
 // Created:     13-Jan-2000
-// RCS-ID:      $Id: wxscintilla.h,v 1.1 2008/02/24 16:17:56 rollmark Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2004 wxCode
 // Licence:     wxWindows
 /////////////////////////////////////////////////////////////////////////////

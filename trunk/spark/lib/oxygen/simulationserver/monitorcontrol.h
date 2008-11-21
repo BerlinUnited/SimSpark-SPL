@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: monitorcontrol.h,v 1.5 2008/04/14 13:28:14 yxu Exp $
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: hinge2joint.cpp,v 1.5 2007/05/31 08:06:31 jboedeck Exp $
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

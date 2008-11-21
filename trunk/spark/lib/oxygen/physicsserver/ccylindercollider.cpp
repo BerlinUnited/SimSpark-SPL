@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: ccylindercollider.cpp,v 1.7 2004/04/16 06:45:45 rollmark Exp $
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

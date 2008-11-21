@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Sat April 12 2008
    Copyright (C) 2008 RoboCup Soccer Server 3D Maintenance Group
-   $Id: behavior.cpp,v 1.2 2008/05/05 11:56:17 benpwd Exp $
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

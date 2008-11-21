@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: angularmotor.cpp,v 1.3 2007/02/12 19:24:00 rollmark Exp $
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

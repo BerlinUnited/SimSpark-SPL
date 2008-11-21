@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: soundserver.h,v 1.6 2004/03/22 11:18:03 rollmark Exp $
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #ifndef KEROSIN_SOUNDSERVER_H
 #define KEROSIN_SOUNDSERVER_H
 
-/*      $Id: soundserver.h,v 1.6 2004/03/22 11:18:03 rollmark Exp $
+/*      $Id$
 
         SoundServer
 
