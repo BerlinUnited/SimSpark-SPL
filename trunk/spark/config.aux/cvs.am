@@ -1,0 +1,128 @@
+CLEANFILES += \
+*.tmp 
+
+
+
+branch-major: commit
+	@ver=`echo "@VERSION@" | sed s/\\\\.[0-9][0-9]*\\\\.[0-9][0-9]*$$//`; \
+	tag=`echo "@PACKAGE@-$$ver"`; \
+	echo ""; \
+	echo "Creating major brach: $$tag"; \
+	cvs tag -b "$$tag"; \
+	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; \
+	echo ""; \
+	$(AWK) -f @srcdir@/config.aux/rel.awk -v change=1 @srcdir@/configure.ac > configure.tmp; \
+	touch @srcdir@/commitlog
+	if test "$$USERNAME" = ""; then \
+	    USERNAME="$$USER"; fi; \
+	if test "$$USEREMAIL" = ""; then \
+	    USEREMAIL="sserver-admin@lists.sf.net"; fi; \
+	DATE=`date +"%Y-%m-%d"`; \
+	LOGHEADER=`echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n"`; \
+	echo -e "$$LOGHEADER\n\n\t* ./configure.ac\n\tCreated major branch: $$tag\n\tUse 'cvs co -r $$tag @PACKAGE@' to access the branch" \
+	| cat - @srcdir@/commitlog > commitlog.tmp
+	@mv commitlog.tmp @srcdir@/commitlog
+	@mv configure.tmp @srcdir@/configure.ac
+	@$(MAKE) $(AM_MAKEFLAGS) commit
+
+branch-minor: commit
+	@ver=`echo "@VERSION@" | sed s/\\\\.[0-9][0-9]*$$//`; \
+	tag=`echo "@PACKAGE@-$$ver" | sed s/\\\\./_/g`; \
+	echo ""; \
+	echo "Creating minor brach: $$tag"; \
+	cvs tag -b "$$tag"; \
+	echo "Use 'cvs co -r $$tag @PACKAGE@' to access the branch"; \
+	echo ""; \
+	$(AWK) -f @srcdir@/config.aux/rel.awk -v change=2 @srcdir@/configure.ac > configure.tmp; \
+	touch @srcdir@/commitlog
+	if test "$$USERNAME" = ""; then \
+	    USERNAME="$$USER"; fi; \
+	if test "$$USEREMAIL" = ""; then \
+	    USEREMAIL="sserver-admin@lists.sf.net"; fi; \
+	DATE=`date +"%Y-%m-%d"`; \
+	LOGHEADER=`echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n"`; \
+	echo -e "$$LOGHEADER\n\n\t* ./configure.ac\n\tCreated minor branch: $$tag\n\tUse 'cvs co -r $$tag @PACKAGE@' to access the branch" \
+	| cat - @srcdir@/commitlog > commitlog.tmp
+	@mv commitlog.tmp @srcdir@/commitlog
+	@mv configure.tmp @srcdir@/configure.ac
+	@$(MAKE) $(AM_MAKEFLAGS) commit
+
+release: update distcheck add_rel commit tag
+
+quick-release:	update add_rel commit tag
+
+tag: do_tag inc_rel
+
+do_tag:
+	@tag=`echo @PACKAGE@-@VERSION@ | sed s/\\\\./_/g`; \
+	echo "tagging release with $$tag"; \
+	echo `cvs tag $$tag`;	\
+	echo "You can access this release by running:"; \
+	echo "    cvs co -r $$tag -d @PACKAGE@-@VERSION@ @PACKAGE@"; \
+	echo "The release will then be available in the @PACKAGE@-@VERSION@ directory";
+
+add_rel:
+	touch @srcdir@/commitlog
+	if test "$$USERNAME" = ""; then \
+	    USERNAME="$$USER"; fi; \
+	if test "$$USEREMAIL" = ""; then \
+	    USEREMAIL="sserver-admin@lists.sf.net"; fi; \
+	DATE=`date +"%Y-%m-%d"`; \
+	LOGHEADER=`echo -e "$$DATE\t$$USERNAME\t<$$USEREMAIL>\n"`; \
+	echo -e "$$LOGHEADER\n\n\t* ./configure.ac\n\tReleased @PACKAGE@-@VERSION@\n\tYou can access this release by running:\n\t\tcvs co -r $$tag -d @PACKAGE@-@VERSION@ @PACKAGE@\n\tThe release will then be available in the @PACKAGE@-@VERSION@ directory" \
+	| cat - @srcdir@/commitlog > commitlog.tmp
+	mv commitlog.tmp @srcdir@/commitlog
+
+inc_rel:
+	$(AWK) -f @srcdir@/config.aux/rel.awk -v change=3 @srcdir@/configure.ac > configure.tmp;
+	mv configure.tmp @srcdir@/configure.ac
+	$(MAKE) $(AM_MAKEFLAGS) commit
+
+
+update:
+	@cvs -z9 update
+
+commit: update commitlog
+	@cat @srcdir@/commitlog @srcdir@/ChangeLog > ChangeLog.tmp
+	@mv ChangeLog.tmp @srcdir@/ChangeLog
+	@cvs -z9 commit -F commitlog
+	@rm -f commitlog
+
+commitlog: $(DISTFILES)
+	@if test "$$USERNAME" = ""; then \
+	    USERNAME="$$USER"; \
+	fi; \
+	if test "$$USEREMAIL" = ""; then \
+	    USEREMAIL="sserver-admin@lists.sf.net"; \
+	fi; \
+	DATE=`date +"%Y-%m-%d"`; \
+	cvs -z9 diff -u --brief 2>&1 | $(AWK) \
+	-v title="/* -*-change-log-*- */\n$$DATE\t$$USERNAME\t<$$USEREMAIL>\n" \
+	'BEGIN { print title; } \
+	/^Index/ { print "\t* ./" $$2 } \
+	/^cvs server: .* is a new entry/ { print "\t* ./" $$3 } \
+	END { print ""; }' \
+	> commitlog.tmp
+	@if test -s commitlog.tmp; then \
+		if test -f @srcdir@/commitlog; then \
+			cat @srcdir@/commitlog >> commitlog.tmp; \
+		fi; \
+		mv commitlog.tmp @srcdir@/commitlog; \
+		if test -n "$(CVSEDITOR)"; then $(CVSEDITOR) @srcdir@/commitlog; \
+		elif test -n "$(VISUAL)"; then $(VISUAL) @srcdir@/commitlog; \
+		elif test -n "$(EDITOR)"; then $(EDITOR) @srcdir@/commitlog; \
+		else \
+			EDITOR=`which vi`; \
+			if test -n "$$EDITOR" && test -x "$$EDITOR"; then \
+				$$EDITOR @srcdir@/commitlog; \
+			else \
+				echo ""; \
+				echo "Cannot find an editor."; \
+				echo "Please edit @srcdir@/commitlog manually\n"; \
+				exit 1; \
+			fi; \
+		fi; \
+		$(AWK) 'BEGIN { first=1; } /\/\* -\*-change-log-\*- \*\// { $$0 = ""; } // { if( first==1 && $$0 == "" ) { first=0; } else { print; } }' @srcdir@/commitlog > commitlog.tmp; \
+		mv commitlog.tmp @srcdir@/commitlog; \
+	fi
+
