@@ -1,0 +1,8 @@
+2008-11-21  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* Makefile.am: 
+	- README, NEWS and some other files will be installed with make install
+	
+	* configure.ac: 
+	- fixed an issue with out of source builds, now it is possible to build
+	  simspark in a separate directory.

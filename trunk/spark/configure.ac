@@ -81,6 +81,12 @@ AC_FUNC_SETVBUF_REVERSED
 AC_FUNC_VPRINTF
 AC_CONFIG_LIBOBJ_DIR(utility/libobj/)
 AC_REPLACE_FUNCS([_vsnprintf])
+if ! test -d utility/libobj; then
+	mkdir -p utility/libobj
+fi
+if ! test -f utility/libobj/_vsnprintf.c; then
+	cp $srcdir/utility/libobj/_vsnprintf.c utility/libobj
+fi
 AC_CHECK_FUNCS([atexit floor gethostname inet_ntoa memset pow socket sqrt strchr strrchr strstr strupr])
 
 AC_SUBST(NET_LIBS)

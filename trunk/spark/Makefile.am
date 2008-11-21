@@ -11,8 +11,9 @@ doc-recursive:
 CLEANFILES = 
 
 DISTCLEANFILES = $(top_builddir)/macosX/SDLMain.o $(top_builddir)/macosX/libSDLmain.a
-EXTRA_DIST = README macosX  \
+EXTRA_DIST = macosX  \
             windows/sparkconfig.h windows/simspark.iss windows/spark.ico
+dist_doc_DATA = AUTHORS ChangeLog COPYING NEWS README THANKS
 
 EXTRA_SRC_DISTS =
 EXTRA_BIN_DISTS =
