@@ -1,3 +1,15 @@
+2008-11-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* configure.ac: 
+	- removed NO_RPATH option.
+	- using AS_HELP_STRING instead of AC_HELP_STRING
+	
+	* acinclude.m4: 
+	- removed NO_RPATH option.
+	
+	* doc/Doxyfile.in: 
+	- added spark/ to the input directories
+
 2008-11-21  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* Makefile.am: 

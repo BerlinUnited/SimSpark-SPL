@@ -343,7 +343,6 @@ AC_DEFUN([RCSS_CHECK_GL], [
     AM_CONDITIONAL(BUNDLE_SUPPORT, test x$iamamac = xyes)
     AC_SUBST(bundle_support, $iamamac)
     if test "$iamamac" = yes; then
-       AM_CONDITIONAL(NO_RPATH, true)
        AC_MSG_RESULT([yes])
        RCSS_KEROSIN_IF_ELSE([
 	# subst'ing the directory where the prepocessor finds gl.h

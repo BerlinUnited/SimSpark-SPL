@@ -31,7 +31,7 @@ AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 AC_PROG_AWK
 AC_CHECK_PROG([DOXYGEN], [doxygen], [yes], [no])
-AC_CHECK_PROG([PDFLATEX], [pdflatex])
+AC_CHECK_PROG([PDFLATEX], [pdflatex], [yes])
 AM_CONDITIONAL(DOXYGEN, test x$DOXYGEN = xyes )
 AM_CONDITIONAL(COND_PDFLATEX, test x$PDFLATEX != x)
 AC_CHECK_PROG([HAVE_DOT], [dot], [YES], [NO])
@@ -105,7 +105,7 @@ RCSS_BOOST_THREADS_LIB
 
 # check if we want to build the debug version
 AC_ARG_ENABLE([debug],
-     AC_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
+     AS_HELP_STRING([--enable-debug], [Turn on debugging (default is YES)]),
      [case "${enableval}" in
        yes) debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ;;
        no)  debug=false ;;
@@ -113,12 +113,6 @@ AC_ARG_ENABLE([debug],
      esac],[debug=true && AC_DEFINE(RCSS_DEBUG, 1, [Define to 1 if we are building a debug version]) ])
 AC_SUBST(debug, [$debug])
 AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
-
-# check if we want to build without hardcoding library path using rpath
-AC_ARG_ENABLE([rpath],
-     AC_HELP_STRING([--disable-rpath], [disable using --rpath to hardcode library path in the executables]),
-     [],[enable_rpath=yes])
-AM_CONDITIONAL(NO_RPATH, test x$enable_rpath = xno)
 
 # This test is required here because of the soccer monitor.
 # It can be dropped as soon as the monitor uses libkerosin.
@@ -183,12 +177,12 @@ AC_CONFIG_FILES([Makefile \
 		 test/inputtest/Makefile \
 		 test/scenetest/Makefile \
 		 test/zeitgeisttest/Makefile \
-                 data/Makefile \
+		 data/Makefile \
 		 doc/Makefile \
 		 doc/Doxyfile \
-                 doc/devel/Makefile \
-                 doc/devel/howtos/Makefile ],
-	        [test -f lib/salt/salt-config && chmod a+x lib/salt/salt-config && \
+		 doc/devel/Makefile \
+		 doc/devel/howtos/Makefile ],
+		 [test -f lib/salt/salt-config && chmod a+x lib/salt/salt-config && \
 		 test -f lib/zeitgeist/zeitgeist-config && chmod a+x lib/zeitgeist/zeitgeist-config && \
 		 test -f spark/spark-config && chmod a+x spark/spark-config && \
 		 test -f lib/oxygen/oxygen-config && chmod a+x lib/oxygen/oxygen-config && \
