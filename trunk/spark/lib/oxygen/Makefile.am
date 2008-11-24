@@ -131,9 +131,7 @@ sceneserver/transform.cpp \
 sceneserver/transform_c.cpp \
 sceneserver/camera.cpp \
 sceneserver/camera_c.cpp \
-sceneserver/scenedict.h \
 sceneserver/scenedict.cpp \
-simulationserver/simulationserver.h \
 simulationserver/simulationserver.cpp \
 simulationserver/simulationserver_c.cpp \
 simulationserver/simcontrolnode.cpp \
@@ -222,6 +220,7 @@ sceneserver/sceneserver.h \
 sceneserver/sceneimporter.h \
 sceneserver/transform.h \
 sceneserver/camera.h \
+sceneserver/scenedict.h \
 simulationserver/simulationserver.h \
 simulationserver/simcontrolnode.h \
 simulationserver/agentcontrol.h \

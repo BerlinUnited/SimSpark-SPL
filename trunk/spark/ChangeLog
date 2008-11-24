@@ -1,3 +1,9 @@
+2008-11-25  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/Makefile.am: 
+	- added scenedict.h to includes section
+	- removed simulationserver.h from sources section
+
 2008-11-24  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* configure.ac: 
