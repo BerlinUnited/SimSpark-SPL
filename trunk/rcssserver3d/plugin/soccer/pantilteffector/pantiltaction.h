@@ -4,7 +4,7 @@
    Mon May 9 2005
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: pantiltaction.h,v 1.1 2006/03/10 13:46:47 fruit Exp $
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
