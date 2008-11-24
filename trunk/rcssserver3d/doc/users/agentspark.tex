@@ -1,0 +1,47 @@
+\chapter{Agentspark}
+\label{cha:agentspark}
+
+This chapter introduces AgentSpark, the demo agent implementation
+available for SimSpark.
+
+\section{Behaviors}
+
+AgentSpark is a demo agent implementation for use with the SimSpark
+server. It serves as a testbed for agent implementation. It implements
+all low level details of connecting and communicating with the
+server. It further implements an abstract run loop. The behavior of
+this agent skeleton is implemented using plugins. On of these plugins
+is configured and installed at run time.
+
+\subsection{SoccerbotBehavior}
+
+The \texttt{SoccerbotBehavior} is a minimal example of an agent that
+acts on a soccer field and controls our current humanoid soccer bot
+model. It demonstrates reading preceptor values and controlling the
+robot with the installed effectors in a control loop. The implemented
+behavior resembles the classic \texttt{hello world} program in a
+way. It moves up the arms of the robot and repeatedly waves hello.
+
+\section{How to change Behaviors?}
+
+The different Behaviors of AgentSpark are encapsulated in classes
+that derive from the \texttt{Behavior} class. Classes of this type
+implement an interface with two functions that each return a command
+string that is then send to the SimSpark server.
+
+The first implemented function is \texttt{Init}. This function is
+called once when the agent initially connected to the server. It is
+typically used to construct the agent representation in the server
+with the help of the \texttt{scene} effector and to move the agent to
+a suitable start position in the simulation.
+
+The second implemented function is called \texttt{Think}. This
+function is called every simulation cycle. As a parameter it receives
+the sensor data as reported from the server in the last cycle. This
+function should implements the main behavior run loop of each
+agent.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 

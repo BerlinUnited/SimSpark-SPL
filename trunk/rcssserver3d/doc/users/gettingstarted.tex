@@ -1,0 +1,314 @@
+
+ \chapter{Getting Started}
+\label{cha:getstarted}
+
+\section{Download and Installation Instructions}
+\label{section:install}
+
+%Currently the soccer3d CVS builds only for Linux (the Win32 build system is not yet ported/tested, so we should focus on *nix systems.
+
+This chapter explains how to install SimSpark on an Ubuntu Linux
+system\footnote{This guide is adapted from the guide created by the
+Little Green Bats Team at
+\url{http://www.littlegreenbats.nl/?q=node/70}}. It should work with
+slight modifications on other distributions like Fedora, Suse and
+especially Debian.
+
+\begin{enumerate}
+
+\item Enable additional repositories
+
+Depending on the distribution version you are using you might need to
+enable additional repositories in order to install all required
+packages. Please refer to your system specific documentation for
+details. In Ubuntu Linux these repositories are called
+\texttt{Universe} and
+\texttt{Multiverse}
+
+To enable them you have to edit the \texttt{/etc/apt/sources.list}
+file and update the local package database.
+
+\texttt{\$ sudo gedit /etc/apt/sources.list}
+
+
+\texttt{\$ sudo apt-get update}
+
+
+In RPM based distributions you may need to enable further download
+locations or download and install RPM packets manually. There are
+specialized search engines for RPM packages available like 
+
+\begin{enumerate}
+\item\url{http://packman.links2linux.de/} and
+\item\url{http://rpmfind.net/}
+\end{enumerate}
+
+\item Install dependencies
+
+SimSpark builds and depends upon the work of other software
+projects. We use the Gnu autotools to configure and build
+SimSpark. Therefore these packages are required:
+
+\begin{enumerate}
+\item autoconf
+\item automake
+\item libtool
+\end{enumerate}
+
+Further required packages are:
+
+\begin{enumerate}
+\item Ruby
+\item The Open Dynamics Engine (ODE)
+\item The boost C++ libraries
+\item S-Lang (libslang)
+\end{enumerate}
+
+The rendering of SimSpark can be omitted from the build process
+therefore these packages are optional:
+
+\begin{enumerate}
+\item OpenGL
+\item FreeGlut
+\item SDL
+\item Freetype
+\item Developer Image Library (DevIL)
+\item Tiff library (libtiff)
+\end{enumerate}
+
+In order to build the SimSpark documentation you need a Latex
+installation (e.g. \texttt{tetex}).
+
+If you want to build the rsgedit gui you need to install
+\texttt{wxWidgets}. The following commands download and installed the required packages:
+
+\texttt{\$ sudo apt-get install g++ ruby1.9 ruby1.9-dev libode0-dev\
+libboost-dev libsdl-dev libfreetype6-dev libdevil-dev autoconf\
+automake1.9 libtool freeglut3-dev tetex-extra cvs xlibs-dev\
+libtiff4-dev libslang1-dev}
+
+\texttt{\$ sudo rm /usr/bin/ruby}
+
+
+\texttt{\$ sudo ln -s /usr/bin/ruby1.9 /usr/bin/ruby}
+
+
+\texttt{\$ sudo ln -s /usr/lib/libruby1.9.so /usr/lib/libruby.so}
+
+\item Check out the source from the source forge CVS repository
+
+The SimSpark source is hosted in a CVS repository at
+sourceforge.net. In order to build the source first download the
+current version, this is called \texttt{check out} in CVS terminology:
+
+\texttt{\$ cvs -d:pserver:anonymous@sserver.cvs.sourceforge.net:/cvsroot/sserver login}
+
+
+When you get asked for a password, just press enter.
+
+
+\texttt{\$ cvs -z3 -d:pserver:anonymous@sserver.cvs.sourceforge.net:/cvsroot/sserver co -P rcsoccersim/rcssserver3D}
+
+
+\item Build and install the soccer server
+
+The automake build tools use a \texttt{configure} script that adapts
+the build process to your system allows you to customize it. The
+configure script accepts a number of options that you can add to it's
+command line:
+
+\begin{enumerate}
+
+\item \texttt{--help} lists all available configure options. There are some more available 
+that would exceed the scope of this manual
+
+\item \texttt{--enable-debug=no} builds an optimized version of SimSpark 
+that contains no debug symbols
+
+\item \texttt{--enable-kerosin=no} builds SimSpark without rendering support
+
+\item \texttt{--prefix=/some/path} defines the path where the \texttt{make install} will later 
+install the SimSpark executable, plugins and resources into your
+system. If omitted it defaults to /usr/local
+
+\end{enumerate}
+
+Change in to the top level source directory call the bootstrap script
+that invokes the autotools, run configure with your custom options,
+start the build process and install the server into your system.
+
+\texttt{\$ cd rcsoccersim/rcssserver3D/}
+
+\texttt{\$ ./bootstrap}
+
+\texttt{\$ ./configure}
+
+\texttt{\$ make}
+
+\texttt{\$ sudo make install}
+
+\item Make sure the linker can find your shared libraries if you changed
+the install prefix as described above with the \texttt{--prefix}
+option.
+
+\texttt{\$ sudo gedit /etc/ld.so.conf}
+
+Add your install prefix if it isn't already there, save and close.
+
+\texttt{\$ sudo ldconfig}
+
+\item run the simulation
+
+{\texttt{\$ cd}}
+
+{\texttt{\$ simspark}}
+
+\end{enumerate}
+
+\section{An Example of a Simulation Run}
+
+This chapter gives shows how to start a simulation and connect an
+agent. The soccer simulation is used to illustrate this. We assume
+that you have already compiled and installed the simulator successfully
+as described in chapter \ref{section:install}. 
+
+To follow the example run given here it is best to work with several
+console windows where you start and control the server monitor and
+agent separately.
+
+\begin{itemize}
+\item{Start the Server}
+
+The first step is to start the simulation server. To do this type
+\texttt{simspark} on the console. The server is by default configured
+to run without internal monitor support and to start the soccer
+simulation. 
+
+You should now see several diagnostic messages fly by, starting with
+the following greeting:
+
+\begin{verbatim}
+
+simspark, a monolithic simulator 0.1
+Copyright (C) 2004 Markus Rollmann,
+Universit�t Koblenz.
+Copyright (C) 2004, The RoboCup Soccer Server Maintenance Group.
+
+Type '--help' for further information
+
+\end{verbatim}
+
+The output ends with the confirmation that the server now listens on
+the default port \texttt{3100} for agents and \texttt{3200} for
+external monitors.
+
+\begin{verbatim}
+(NetControl) 'AgentControl' setting up a server on TCP:3100
+(NetControl) 'MonitorControl' setting up a server on TCP:3200
+(SimulationServer) entering runloop
+(SimulationServer) running in single thread
+\end{verbatim}
+
+We are now ready to connect a monitor to the simulator.
+
+
+\item{Start the Monitor}
+
+The monitor is a separate application that connects to the server and
+displays the simulated scene. To start the default monitor type
+\texttt{monitorspark}. By default the monitor is configured to connect to a simulation 
+on the local machine. You can however run the server and monitor on
+different machines.
+
+When the monitor starts up you should again see some diagnostic
+messages fly by. The output ends with the confirmation that the
+monitor tries to connect to the server. If successful it will then open
+a separate window and display the simulated scene, please see figure
+\ref{fig:startup}.
+
+\begin{verbatim}
+(SimulationServer) init
+(NetClient) 'SparkMonitorClient'connecting to TCP 127.0.0.1:3200
+(NetClient::SendMessage) ERROR: send returned error 'Broken pipe'
+(SimulationServer) entering runloop
+(SimulationServer) running in single thread
+\end{verbatim}
+
+After the monitor started you are able to use the mouse and keyboard
+to navigate the scene. Please refer to chapter
+\ref{cha:monitorspark} for a complete list of the available key bindings. 
+
+You can use the numbers of the keypad to navigate to different
+positions on the playing field. The view after pressing \texttt{3} is
+given in figure \ref{fig:press3}. The movement of the camera is
+controlled with the arrow keys, PgUp and PgDown. Press the left mouse
+button and move the mouse to change the camera view.
+
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/startup}
+\caption{View of the soccer simulation after the simulator has just been started.}
+\label{fig:startup}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/press3}
+\caption{Change the view by pressing '3' on the keyboard.}
+\label{fig:press3}
+\end{center}
+\end{figure}
+
+
+\item{Connect an agent}
+
+The next step is to connect one or more agents to the simulation. To
+do this please change to a separate console window and type \texttt{agentspark}.
+This starts the example agent that is included with SimSpark. 
+
+You should now see a humanoid robot appear on the field, as in figure
+\ref{fig:agentconnect}. This default agent does nothing useful but waving his arms.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/agentconnect}
+\caption{An agent connected to the server.}
+\label{fig:agentconnect}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/movearound}
+\caption{Moving around on the field using the arrow keys, PgUp, PgDown, and the mouse (with left mouse button pressed).}
+\label{fig:movearound}
+\end{center}
+\end{figure}
+
+
+\item{Start the simulation}
+
+The next step is to start the soccer game. To do this please change
+back to the monitor window and press \texttt{'k'}. The simulation time
+now start running and the game state changes to
+\texttt{BeforeKickOff}, please compare to figure \ref{fig:presskickoff}.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{fig/presskickoff}
+\caption{Press 'k' to start the game. The play mode will switch to 'KickOff' and the time will advance.}
+\label{fig:presskickoff}
+\end{center}
+\end{figure}
+
+\end{itemize}
+
+
+%I think for the initial outline of the manual it's easier to just focus on either app/simpark app/monitorspark  or rsgedit.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 
