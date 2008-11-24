@@ -46,7 +46,6 @@ AC_C_INLINE
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
-RCSS_BOOST_THREADS_LIB
 
 ## checks for system services
 
@@ -67,11 +66,7 @@ AC_ARG_ENABLE([rpath],
      [],[enable_rpath=yes])
 AM_CONDITIONAL(NO_RPATH, test x$enable_rpath = xno)
 
-RCSS_CHECK_GL
 RCSS_PATH_FREETYPE
-RCSS_CHECK_SDL
-RCSS_PATH_RUBY
-RCSS_CHECK_RUBY_VERSION(1,8,0)
 
 # create Makefiles and other configuration files
 AC_CONFIG_FILES([Makefile \
