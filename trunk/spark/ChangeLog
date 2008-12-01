@@ -1,3 +1,15 @@
+2008-12-01  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soundsystemfmod/CMakeLists.txt: 
+	- fixed FMOD support
+	
+	* cmake/FindFMOD.cmake: 
+	- added to the project
+	
+	* CMakeLists.txt: 
+	- added initial cpack support
+	- added check for FMOD
+
 2008-11-25  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/Makefile.am: 
