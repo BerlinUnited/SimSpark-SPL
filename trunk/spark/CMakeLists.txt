@@ -38,14 +38,49 @@ set(HAVE_KEROSIN_KEROSIN_H 1)
 
 ########## check types/functions ##########
 include(CheckFunctionExists)
-check_function_exists(strupr HAVE_STRUPR)
 include(CheckTypeSize)
+check_function_exists(strupr HAVE_STRUPR)
 set(CMAKE_REQUIRED_FLAGS "-include sys/socket.h")
 check_type_size(socklen_t SOCKLEN_T)
+set(CMAKE_REQUIRED_FLAGS "")
 
+########## check for required libraries ##########
+include(CheckLibraryExists)
+check_function_exists(socket FUNC_SOCKET_EXISTS)
+if (NOT FUNC_SOCKET_EXISTS)
+  check_library_exists(socket socket "" SOCKET_LIB_REQ)
+  if (SOCKET_LIB_REQ)
+    set(NET_LIBS ${NET_LIBS} socket)
+  endif (SOCKET_LIB_REQ)
+endif (NOT FUNC_SOCKET_EXISTS)
+
+check_function_exists(gethostbyname FUNC_GETHOSTBYNAME_EXISTS)
+if (NOT FUNC_GETHOSTBYNAME_EXISTS)
+  check_library_exists(nsl gethostbyname "" NSL_LIB_REQ)
+  if (NSL_LIB_REQ)
+    set(NET_LIBS ${NET_LIBS} nsl)
+  endif (NSL_LIB_REQ)
+endif (NOT FUNC_GETHOSTBYNAME_EXISTS)
+
+check_function_exists(hstrerror FUNC_HSTRERROR_EXISTS)
+if (NOT FUNC_HSTRERROR_EXISTS)
+  check_library_exists(resolv hstrerror "" RESOLV_LIB_REQ)
+  if (RESOLV_LIB_REQ)
+    set(NET_LIBS ${NET_LIBS} resolv)
+  endif (RESOLV_LIB_REQ)
+endif (NOT FUNC_HSTRERROR_EXISTS)
+
+ 
 ########## add extra flags ########## 
+set(CMAKE_BUILD_TYPE Debug)
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR})
+if (UNIX)
+  set(CMAKE_CXX_FLAGS "-Wno-deprecated")
+  set(CMAKE_CXX_FLAGS_DEBUG "-g -W -Wall -Woverloaded-virtual")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+endif (UNIX)
+
 set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH
     "The directory to install binaries into.")
 set(LIBDIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH
@@ -98,7 +133,7 @@ add_subdirectory(utility)
 add_subdirectory(lib)
 add_subdirectory(plugin)
 add_subdirectory(test)
-#add_subdirectory(doc)
+add_subdirectory(doc)
 add_subdirectory(spark)
 add_subdirectory(data)
 

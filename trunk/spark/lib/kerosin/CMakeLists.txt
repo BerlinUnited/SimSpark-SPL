@@ -1,3 +1,52 @@
+########### target ###############
+set(kerosin_LIB_HDRS
+    fontserver/font.h
+    fontserver/fontserver.h
+    fontserver/glyph.h
+    imageserver/image.h
+    imageserver/imageserver.h
+    inputserver/inputdevice.h
+    inputserver/inputserver.h
+    inputserver/inputsystem.h
+    inputserver/scancodemap.h
+    inputserver/inputcontrol.h
+    inputserver/inputitem.h
+    inputserver/input.h
+    kerosin.h
+    materialserver/material.h
+    materialserver/materialserver.h
+    sceneserver/axis.h
+    materialserver/material2dtexture.h
+    materialserver/materialexternal.h
+    materialserver/materialsolid.h
+    materialserver/materialexporter.h
+    sceneserver/singlematnode.h
+    sceneserver/light.h
+    sceneserver/sphere.h
+    sceneserver/box.h
+    sceneserver/ccylinder.h
+    sceneserver/cylinder.h
+    sceneserver/staticmesh.h
+    soundserver/soundeffect.h
+    soundserver/soundmodule.h
+    soundserver/soundobject.h
+    soundserver/soundserver.h
+    soundserver/soundstream.h
+    soundserver/soundsystem.h
+    textureserver/texture.h
+    textureserver/texture2d.h
+    textureserver/textureserver.h
+    openglserver/openglwrapper.h
+    openglserver/openglsystem.h
+    openglserver/openglserver.h
+    openglserver/glbase.h
+    renderserver/baserenderserver.h
+    renderserver/renderserver.h
+    renderserver/rendernode.h
+    renderserver/rendercontrol.h
+    renderserver/customrender.h
+)
+
 set(kerosin_LIB_SRCS
     fontserver/font.cpp
     fontserver/fontserver.cpp
@@ -70,9 +119,7 @@ set(kerosin_LIB_SRCS
 include_directories(${CMAKE_SOURCE_DIR}/lib ${FREETYPE_INCLUDE_DIRS}
     ${DevIL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
-########### target ###############
-
-add_library(kerosin SHARED ${kerosin_LIB_SRCS})
+add_library(kerosin SHARED ${kerosin_LIB_SRCS} ${kerosin_LIB_HDRS})
 
 target_link_libraries(kerosin ${FREETYPE_LIBRARIES} ${DevIL_LIBRARIES}
     ${SDL_LIBRARY} ${OPENGL_LIBRARIES})
@@ -93,53 +140,3 @@ install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/kerosin-config DESTINATION
         GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
 install(DIRECTORY ./ DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME}/kerosin
         FILES_MATCHING PATTERN "*.h")
-
-#original Makefile.am contents follow:
-
-#nobase_libpkginclude_HEADERS = \
-#fontserver/font.h \
-#fontserver/fontserver.h \
-#fontserver/glyph.h \
-#imageserver/image.h \
-#imageserver/imageserver.h \
-#inputserver/inputdevice.h \
-#inputserver/inputserver.h \
-#inputserver/inputsystem.h \
-#inputserver/scancodemap.h \
-#inputserver/inputcontrol.h \
-#inputserver/inputitem.h \
-#inputserver/input.h \
-#kerosin.h \
-#materialserver/material.h \
-#materialserver/materialserver.h \
-#sceneserver/axis.h \
-#materialserver/material2dtexture.h \
-#materialserver/materialexternal.h \
-#materialserver/materialsolid.h \
-#materialserver/materialexporter.h \
-#sceneserver/singlematnode.h \
-#sceneserver/light.h \
-#sceneserver/sphere.h \
-#sceneserver/box.h \
-#sceneserver/ccylinder.h \
-#sceneserver/cylinder.h \
-#sceneserver/staticmesh.h \
-#soundserver/soundeffect.h \
-#soundserver/soundmodule.h \
-#soundserver/soundobject.h \
-#soundserver/soundserver.h \
-#soundserver/soundstream.h \
-#soundserver/soundsystem.h \
-#textureserver/texture.h \
-#textureserver/texture2d.h \
-#textureserver/textureserver.h \
-#openglserver/openglwrapper.h \
-#openglserver/openglsystem.h \
-#openglserver/openglserver.h \
-#openglserver/glbase.h \
-#renderserver/baserenderserver.h \
-#renderserver/renderserver.h \
-#renderserver/rendernode.h \
-#renderserver/rendercontrol.h \
-#renderserver/customrender.h
-#
