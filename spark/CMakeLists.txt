@@ -32,6 +32,7 @@ find_package(wxWidgets COMPONENTS gl base core)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
+find_package(FMOD)
 set(HAVE_IL_IL_H 1)
 set(HAVE_KEROSIN_KEROSIN_H 1)
 
@@ -54,6 +55,8 @@ set(DATADIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH
 set(INCLUDEDIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH
     "The directory to install includes into.")
 set(CMAKE_SHARED_MODULE_PREFIX "")
+
+mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
 
 ########## library version numbers  ##########
 set(SALT_SO_VERSION 3)
@@ -106,7 +109,15 @@ install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS DESTINATION
 install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h DESTINATION
     ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
+########### CPack section #############
+set(CPACK_SOURCE_GENERATOR TGZ)
+set(CPACK_SOURCE_IGNORE_FILES
+    /CVS/ /[.]svn/ /.*[.]o /autom4te[.]cache/ /[.].*)
+set(CPACK_PACKAGE_VERSION "0.1")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME
+    ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
 
+include(CPack)
 
 #original Makefile.am contents follow:
 

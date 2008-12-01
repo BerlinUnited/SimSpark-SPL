@@ -15,9 +15,12 @@ set(soundsystemfmod_LIB_SRCS
 )
 
 if (FMOD_FOUND)
+  include_directories(${FMOD_INCLUDE_DIRS})
+  link_directories(${FMOD_LIBRARY_DIRS})
+
   add_library(soundsystemfmod MODULE ${soundsystemfmod_LIB_SRCS})
 
-  target_link_libraries(soundsystemfmod fmod)
+  target_link_libraries(soundsystemfmod ${FMOD_LIBRARIES})
 
   set_target_properties(soundsystemfmod PROPERTIES VERSION 0.0.0 SOVERSION 0)
   install(TARGETS soundsystemfmod DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
