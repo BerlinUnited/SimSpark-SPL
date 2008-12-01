@@ -1,3 +1,18 @@
+2008-12-02  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* utility/libobj/CMakeLists.txt: 
+	* spark/CMakeLists.txt: 
+	* lib/zeitgeist/CMakeLists.txt: 
+	* lib/salt/CMakeLists.txt: 
+	* lib/kerosin/CMakeLists.txt: 
+	* lib/oxygen/CMakeLists.txt: 
+	* utility/rcssnet/CMakeLists.txt: 
+	- some cleanup
+	- added header files to target's sources (will be added to VS projects)
+	
+	* configure.ac: 
+	- removed wxutil makefile generation
+
 2008-12-01  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/soundsystemfmod/CMakeLists.txt: 

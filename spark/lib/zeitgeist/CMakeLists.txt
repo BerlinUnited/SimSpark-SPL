@@ -1,3 +1,28 @@
+########### target ###############
+set(zeitgeist_LIB_HDRS
+    class.h
+    core.h
+    corecontext.h
+    leaf.h
+    parameterlist.h
+    node.h
+    object.h
+    object_c.h
+    zeitgeist.h
+    fileserver/fileserver.h
+    fileserver/filesystem.h
+    logserver/logserver.h
+    logserver/logserverstreambuf.h
+    randomserver/randomserver.h
+    scriptserver/gcvalue.h
+    scriptserver/scriptserver.h
+    scriptserver/rubywrapper.h 
+    
+    #telnetserver/telnetdaemon.h
+    #telnetserver/telnetserver.h
+    #telnetserver/telnetsession.h
+)
+    
 set(zeitgeist_LIB_SRCS
     class.cpp
     class_c.cpp
@@ -31,8 +56,7 @@ set(zeitgeist_LIB_SRCS
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${RUBY_INCLUDE_PATH})
 
-########### target ###############
-add_library(zeitgeist SHARED ${zeitgeist_LIB_SRCS})
+add_library(zeitgeist SHARED ${zeitgeist_LIB_SRCS} ${zeitgeist_LIB_HDRS})
 
 target_link_libraries(zeitgeist ${RUBY_LIBRARY})
 
@@ -53,27 +77,3 @@ install(DIRECTORY ./ DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME}/zeitgeist
           FILES_MATCHING PATTERN "*.h")
 
 
-#original Makefile.am contents follow:
-
-#nobase_libpkginclude_HEADERS = \
-#class.h \
-#core.h \
-#corecontext.h \
-#leaf.h \
-#parameterlist.h \
-#node.h \
-#object.h \
-#object_c.h \
-#zeitgeist.h \
-#fileserver/fileserver.h \
-#fileserver/filesystem.h \
-#logserver/logserver.h \
-#logserver/logserverstreambuf.h \
-#randomserver/randomserver.h \
-#scriptserver/gcvalue.h \
-#scriptserver/scriptserver.h \
-#scriptserver/rubywrapper.h 
-#
-##telnetserver/telnetdaemon.h \
-##telnetserver/telnetserver.h \
-##telnetserver/telnetsession.h

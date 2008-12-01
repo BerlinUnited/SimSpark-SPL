@@ -1,3 +1,87 @@
+########### next target ###############
+set(oxygen_LIB_HDRS
+    agentaspect/agentaspect.h
+    agentaspect/effector.h
+    agentaspect/jointeffector.h
+    agentaspect/jointperceptor.h
+    agentaspect/perceptor.h
+    agentaspect/createaction.h
+    controlaspect/controlaspect.h
+    gamecontrolserver/predicate.h
+    gamecontrolserver/gamecontrolserver.h
+    gamecontrolserver/baseparser.h
+    gamecontrolserver/actionobject.h
+    gamecontrolserver/behavior.h
+    oxygen.h
+    physicsserver/body.h
+    physicsserver/bodycontroller.h
+    physicsserver/boxcollider.h
+    physicsserver/ccylindercollider.h
+    physicsserver/collider.h
+    physicsserver/collisionhandler.h
+    physicsserver/contactjointhandler.h
+    physicsserver/odeobject.h
+    physicsserver/odewrapper.h
+    physicsserver/physicsserver.h
+    physicsserver/planecollider.h
+    physicsserver/raycollider.h
+    physicsserver/recorderhandler.h
+    physicsserver/space.h
+    physicsserver/spherecollider.h
+    physicsserver/transformcollider.h
+    physicsserver/world.h
+    physicsserver/dragcontroller.h
+    physicsserver/velocitycontroller.h
+    physicsserver/joint.h
+    physicsserver/balljoint.h
+    physicsserver/hingejoint.h
+    physicsserver/fixedjoint.h
+    physicsserver/sliderjoint.h
+    physicsserver/universaljoint.h
+    physicsserver/hinge2joint.h
+    physicsserver/angularmotor.h
+    sceneserver/sceneimporter.h
+    sceneserver/basenode.h
+    sceneserver/fpscontroller.h
+    sceneserver/scene.h
+    sceneserver/sceneserver.h
+    sceneserver/sceneimporter.h
+    sceneserver/transform.h
+    sceneserver/camera.h
+    sceneserver/scenedict.h
+    simulationserver/simulationserver.h
+    simulationserver/simcontrolnode.h
+    simulationserver/agentcontrol.h
+    simulationserver/monitorcontrol.h
+    simulationserver/monitorlogger.h
+    simulationserver/netcontrol.h
+    simulationserver/netclient.h
+    simulationserver/netmessage.h
+    simulationserver/netbuffer.h
+    simulationserver/traincontrol.h
+    geometryserver/geometryserver.h
+    geometryserver/meshexporter.h
+    geometryserver/meshimporter.h
+    geometryserver/stdmeshimporter.h
+    geometryserver/trimesh.h
+    geometryserver/indexbuffer.h
+    monitorserver/monitorserver.h
+    monitorserver/monitorsystem.h
+    monitorserver/monitoritem.h
+    monitorserver/custommonitor.h
+    monitorserver/monitorcmdparser.h
+)
+if(SPADES_FOUND)
+   set(oxygen_LIB_HDRS
+       ${oxygen_LIB_HDRS}
+       spadesserver/spadesserver.h
+       spadesserver/paramreader.h
+       spadesserver/paramstorer.h
+       spadesserver/spadescreatesenseevent.h
+       spadesserver/spadesactevent.h
+   )
+endif(SPADES_FOUND)
+
 set(oxygen_LIB_SRCS
     agentaspect/agentaspect.cpp
     agentaspect/agentaspect_c.cpp
@@ -135,9 +219,7 @@ endif(SPADES_FOUND)
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility/)
 
-########### next target ###############
-
-add_library(oxygen SHARED ${oxygen_LIB_SRCS})
+add_library(oxygen SHARED ${oxygen_LIB_SRCS} ${oxygen_LIB_HDRS})
 
 target_link_libraries(oxygen rcssnet3D ${Boost_LIBRARIES} ${ODE_LIBRARY})
 
@@ -157,86 +239,3 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/oxygen-config DESTINATION ${BINDIR}
 install(DIRECTORY ./ DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME}/oxygen
           FILES_MATCHING PATTERN "*.h")
 
-
-#original Makefile.am contents follow:
-
-#if DEBUG
-#liboxygen_debug_la_CXXFLAGS = -O -g -W -Wall -Woverloaded-virtual -Wno-deprecated 
-#else
-#liboxygen_la_CXXFLAGS = -O2 -Wno-deprecated 
-#liboxygen_la_LIBADD = -lode $(spades_libs) @BOOST_THREADS_LIB@
-#
-
-#nobase_libpkginclude_HEADERS = \
-#agentaspect/agentaspect.h \
-#agentaspect/effector.h \
-#agentaspect/jointeffector.h \
-#agentaspect/jointperceptor.h \
-#agentaspect/perceptor.h \
-#agentaspect/createaction.h \
-#controlaspect/controlaspect.h \
-#gamecontrolserver/predicate.h \
-#gamecontrolserver/gamecontrolserver.h \
-#gamecontrolserver/baseparser.h \
-#gamecontrolserver/actionobject.h \
-#gamecontrolserver/behavior.h \
-#oxygen.h \
-#physicsserver/body.h \
-#physicsserver/bodycontroller.h \
-#physicsserver/boxcollider.h \
-#physicsserver/ccylindercollider.h \
-#physicsserver/collider.h \
-#physicsserver/collisionhandler.h \
-#physicsserver/contactjointhandler.h \
-#physicsserver/odeobject.h \
-#physicsserver/odewrapper.h \
-#physicsserver/physicsserver.h \
-#physicsserver/planecollider.h \
-#physicsserver/raycollider.h \
-#physicsserver/recorderhandler.h \
-#physicsserver/space.h \
-#physicsserver/spherecollider.h \
-#physicsserver/transformcollider.h \
-#physicsserver/world.h \
-#physicsserver/dragcontroller.h \
-#physicsserver/velocitycontroller.h \
-#physicsserver/joint.h \
-#physicsserver/balljoint.h \
-#physicsserver/hingejoint.h \
-#physicsserver/fixedjoint.h \
-#physicsserver/sliderjoint.h \
-#physicsserver/universaljoint.h \
-#physicsserver/hinge2joint.h \
-#physicsserver/angularmotor.h \
-#sceneserver/sceneimporter.h \
-#sceneserver/basenode.h \
-#sceneserver/fpscontroller.h \
-#sceneserver/scene.h \
-#sceneserver/sceneserver.h \
-#sceneserver/sceneimporter.h \
-#sceneserver/transform.h \
-#sceneserver/camera.h \
-#sceneserver/scenedict.h \
-#simulationserver/simulationserver.h \
-#simulationserver/simcontrolnode.h \
-#simulationserver/agentcontrol.h \
-#simulationserver/monitorcontrol.h \
-#simulationserver/monitorlogger.h \
-#simulationserver/netcontrol.h \
-#simulationserver/netclient.h \
-#simulationserver/netmessage.h \
-#simulationserver/netbuffer.h \
-#simulationserver/traincontrol.h \
-#geometryserver/geometryserver.h \
-#geometryserver/meshexporter.h \
-#geometryserver/meshimporter.h \
-#geometryserver/stdmeshimporter.h \
-#geometryserver/trimesh.h \
-#geometryserver/indexbuffer.h \
-#monitorserver/monitorserver.h \
-#monitorserver/monitorsystem.h \
-#monitorserver/monitoritem.h \
-#monitorserver/custommonitor.h \
-#monitorserver/monitorcmdparser.h \
-#$(spades_headers)
-#
