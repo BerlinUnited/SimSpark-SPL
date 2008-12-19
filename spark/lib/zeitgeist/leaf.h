@@ -199,7 +199,7 @@ public:
     FindParentSupportingClass() const;
 //     {
 //         boost::shared_ptr<Node> node
-//             = boost::shared_static_cast<Node>(make_shared(GetParent()));
+//             = boost::shared_static_cast<Node>(GetParent().lock());
 
 //         while (node.get() != 0)
 //         {
@@ -211,7 +211,7 @@ public:
 //                 return test;
 //             }
 
-//             node = boost::shared_static_cast<Node>(make_shared(node->GetParent()));
+//             node = boost::shared_static_cast<Node>(node->GetParent().lock());
 //         }
 
 //         return boost::shared_ptr<CLASS>();

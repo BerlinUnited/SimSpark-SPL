@@ -71,7 +71,7 @@ PerfectVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 
     // we want positions relative to the closest parent transform node
     shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
-        (make_shared(FindParentSupportingClass<Transform>()));
+        (FindParentSupportingClass<Transform>().lock());
 
     salt::Vector3f myPos(0,0,0);
     if (parent.get() == 0)

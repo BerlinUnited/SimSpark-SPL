@@ -194,7 +194,7 @@ shared_ptr<Collider> Collider::GetCollider(dGeomID id)
         }
 
     shared_ptr<Collider> collider = shared_static_cast<Collider>
-        (make_shared(collPtr->GetSelf()));
+        (collPtr->GetSelf().lock());
 
     if (collider.get() == 0)
         {

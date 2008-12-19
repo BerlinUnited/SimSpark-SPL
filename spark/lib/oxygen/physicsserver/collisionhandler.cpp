@@ -69,7 +69,7 @@ CollisionHandler::UpdateCached()
                 << "(CollisionHandler) found no Space node\n";
         }
 
-    mCollider = shared_static_cast<Collider>(make_shared(GetParent()));
+    mCollider = shared_static_cast<Collider>(GetParent().lock());
     if (mCollider.get() == 0)
         {
             GetLog()->Debug()

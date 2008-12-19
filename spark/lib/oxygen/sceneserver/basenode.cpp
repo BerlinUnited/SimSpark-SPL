@@ -153,7 +153,7 @@ shared_ptr<Scene> BaseNode::GetScene()
         }
 
     // move up the hierarchy until we find a scene node
-    return make_shared(FindParentSupportingClass<Scene>());
+    return FindParentSupportingClass<Scene>().lock();
 }
 
 void BaseNode::EnableDebugMode()

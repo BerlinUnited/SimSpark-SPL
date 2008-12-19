@@ -232,7 +232,7 @@ void Core::Desctruct()
 
 boost::shared_ptr<CoreContext> Core::CreateContext()
 {
-    return shared_ptr<CoreContext>(new CoreContext(make_shared(mSelf), GetRoot()));
+    return shared_ptr<CoreContext>(new CoreContext(mSelf.lock(), GetRoot()));
 }
 
 boost::shared_ptr<Object>

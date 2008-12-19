@@ -161,7 +161,7 @@ void FPSController::UpdateStatic(float deltaTime)
     mBody->SetVelocity(velocity);
 
     shared_ptr<BaseNode> bodyParent = shared_static_cast<BaseNode>
-        (make_shared(mBody->GetParent()));
+        (mBody->GetParent().lock());
 
     if (bodyParent.get() != 0)
         {

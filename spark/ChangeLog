@@ -1,3 +1,28 @@
+2008-12-19  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/agentaspect/effector.cpp: 
+	* lib/oxygen/agentaspect/jointeffector.h: 
+	* lib/oxygen/agentaspect/jointperceptor.h: 
+	* lib/oxygen/physicsserver/bodycontroller.cpp: 
+	* lib/oxygen/physicsserver/collider.cpp: 
+	* lib/oxygen/physicsserver/collisionhandler.cpp: 
+	* lib/oxygen/physicsserver/joint.cpp: 
+	* lib/oxygen/sceneserver/basenode.cpp: 
+	* lib/oxygen/sceneserver/fpscontroller.cpp: 
+	* lib/oxygen/simulationserver/simcontrolnode.cpp: 
+	* lib/oxygen/sceneserver/transform.cpp: 
+	* lib/oxygen/sceneserver/sceneserver.cpp: 
+	* lib/oxygen/physicsserver/body.cpp: 
+	* lib/zeitgeist/class.cpp: 
+	* lib/zeitgeist/core.cpp: 
+	* lib/zeitgeist/leaf.cpp: 
+	* lib/zeitgeist/leaf.h: 
+	* lib/zeitgeist/node.cpp: 
+	* lib/zeitgeist/node.h: 
+	* plugin/forceeffector/forceeffector.cpp: 
+	* plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
+	- Replaced make_shared() with .lock() function call. 
+
 2008-12-02  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* utility/libobj/CMakeLists.txt: 

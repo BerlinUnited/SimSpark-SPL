@@ -30,7 +30,7 @@ shared_ptr<AgentAspect>
 Effector::GetAgentAspect()
 {
   return shared_static_cast<AgentAspect>
-    (make_shared(GetParentSupportingClass("AgentAspect")));
+    (GetParentSupportingClass("AgentAspect").lock());
 }
 
 bool Effector::Realize(boost::shared_ptr<ActionObject> action)
