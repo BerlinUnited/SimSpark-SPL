@@ -61,7 +61,7 @@ AgentStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     predicate.parameter.Clear();
 
     shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+        shared_dynamic_cast<BaseNode>(GetParent().lock());
 
     if (parent.get() == 0)
     {

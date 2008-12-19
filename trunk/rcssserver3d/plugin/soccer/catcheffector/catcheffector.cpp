@@ -177,7 +177,7 @@ CatchEffector::OnLink()
 
     SoccerBase::GetSoccerRuleAspect(*this,mSoccerRule);
 
-    mAgent = shared_dynamic_cast<AgentAspect>(make_shared(GetParent()));
+    mAgent = shared_dynamic_cast<AgentAspect>(GetParent().lock());
 
     if (mAgent.get() == 0)
     {

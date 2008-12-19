@@ -77,7 +77,7 @@ VisionPerceptor::OnLink()
     SoccerBase::GetActiveScene(*this,mActiveScene);
     
     shared_ptr<AgentAspect> agent_aspect =
-        make_shared(FindParentSupportingClass<AgentAspect>());
+        FindParentSupportingClass<AgentAspect>().lock();
     if (agent_aspect == 0)
     {
         GetLog()->Error()
@@ -86,7 +86,7 @@ VisionPerceptor::OnLink()
     else
     {
         mAgentAspect = agent_aspect;
-        agent_aspect = make_shared(agent_aspect->FindParentSupportingClass<AgentAspect>());
+        agent_aspect = agent_aspect->FindParentSupportingClass<AgentAspect>().lock();
         if (agent_aspect != 0)
         {
             mAgentAspect = agent_aspect;

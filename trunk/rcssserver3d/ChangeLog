@@ -1,0 +1,12 @@
+2008-12-19  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	* plugin/soccer/driveeffector/driveeffector.cpp: 
+	* plugin/soccer/catcheffector/catcheffector.cpp: 
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	* plugin/soccer/sayeffector/sayeffector.cpp: 
+	* plugin/soccer/pantilteffector/pantilteffector.cpp: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
+	- Replaced make_shared() with .lock() function call.(fixed compilation
+	error with recent boost versions.) 

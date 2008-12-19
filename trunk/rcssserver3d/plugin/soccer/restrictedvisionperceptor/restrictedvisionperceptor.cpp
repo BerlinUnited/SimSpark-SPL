@@ -155,7 +155,7 @@ RestrictedVisionPerceptor::OnLink()
     SoccerBase::GetActiveScene(*this,mActiveScene);
     
     shared_ptr<AgentAspect> agent_aspect =
-        make_shared(FindParentSupportingClass<AgentAspect>());
+        FindParentSupportingClass<AgentAspect>().lock();
     if (agent_aspect == 0)
     {
         GetLog()->Error()
@@ -164,7 +164,7 @@ RestrictedVisionPerceptor::OnLink()
     else
     {
         mAgentAspect = agent_aspect;
-        agent_aspect = make_shared(agent_aspect->FindParentSupportingClass<AgentAspect>());
+        agent_aspect = agent_aspect->FindParentSupportingClass<AgentAspect>().lock();
         if (agent_aspect != 0)
         {
             mAgentAspect = agent_aspect;
@@ -236,12 +236,12 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
         od.mObj = shared_static_cast<ObjectState>(*i);
 
         shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(mActiveScene);
-        shared_ptr<AgentAspect> agent_aspect = make_shared(
-                od.mObj->FindParentSupportingClass<AgentAspect>());
+        shared_ptr<AgentAspect> agent_aspect =
+                od.mObj->FindParentSupportingClass<AgentAspect>().lock();
         if (agent_aspect != 0)
         {
-            shared_ptr<AgentAspect> aspect = make_shared(
-                agent_aspect->FindParentSupportingClass<AgentAspect>());
+            shared_ptr<AgentAspect> aspect =
+                agent_aspect->FindParentSupportingClass<AgentAspect>().lock();
             if (aspect != 0)
             {
                 agent_aspect = aspect;
@@ -293,7 +293,7 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
     if (agent_aspect != 0)
     {        
         shared_ptr<AgentAspect> aspect =
-            make_shared(agent_aspect->FindParentSupportingClass<AgentAspect>());
+            agent_aspect->FindParentSupportingClass<AgentAspect>().lock();
         if (aspect != 0)
         {
             agent_aspect = aspect;
