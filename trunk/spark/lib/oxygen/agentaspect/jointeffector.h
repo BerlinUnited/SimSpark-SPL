@@ -42,7 +42,7 @@ public:
     virtual void UpdateCached()
     {
         Effector::UpdateCached();
-        mJoint = make_shared(FindParentSupportingClass<_JOINT>());
+        mJoint = FindParentSupportingClass<_JOINT>().lock();
 
         if (mJoint.get() == 0)
         {

@@ -40,7 +40,7 @@ SimControlNode::~SimControlNode()
 shared_ptr<SimulationServer> SimControlNode::GetSimulationServer()
 {
     return shared_static_cast<SimulationServer>
-        (make_shared(GetParent()));
+        (GetParent().lock());
 }
 
 void SimControlNode::SetSimTime( float now )

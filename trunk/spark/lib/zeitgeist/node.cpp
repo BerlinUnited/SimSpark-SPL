@@ -232,7 +232,7 @@ Node::AddChildReference(const boost::shared_ptr<Leaf>& leaf)
     }
 
     mChildren.push_back(leaf);
-    leaf->SetParent(shared_static_cast<Node>(make_shared(GetSelf())));
+    leaf->SetParent(shared_static_cast<Node>(GetSelf().lock()));
     return true;
 }
 

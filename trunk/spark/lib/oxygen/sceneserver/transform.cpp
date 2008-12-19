@@ -66,7 +66,7 @@ void Transform::SetLocalTransform(const salt::Matrix &transform)
 void Transform::SetWorldTransform(const salt::Matrix &transform)
 {
     shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>
-        (make_shared(mParent));
+        (mParent.lock());
 
     if (parent.get() == 0)
         {
@@ -122,7 +122,7 @@ void Transform::OnLink()
 
 void Transform::UpdateHierarchyInternal()
 {
-    shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(make_shared(mParent));
+    shared_ptr<BaseNode> parent = shared_static_cast<BaseNode>(mParent.lock());
 
     // no parent, return local transform
     if (parent.get() == NULL)

@@ -62,7 +62,7 @@ boost::shared_ptr<Object> Class::Create()
     if (obj.get())
     {
         if (obj->Construct(obj, shared_static_cast<Class>
-                           (make_shared(GetSelf()))) == true)
+                           (GetSelf().lock())) == true)
         {
             // successfully constructed
             AttachInstance(obj);
@@ -85,7 +85,7 @@ boost::shared_ptr<Core> Class::GetCore() const
 
         }
 
-    return make_shared(mCore);
+    return mCore.lock();
 }
 
 void Class::AttachInstance(const boost::weak_ptr<Object> &instance)

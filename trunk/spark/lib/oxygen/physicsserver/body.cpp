@@ -126,7 +126,7 @@ void Body::OnLink()
     dBodySetData(mODEBody, this);
 
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
-        (make_shared(GetParent()));
+        (GetParent().lock());
 
     const Matrix& mat = baseNode->GetWorldTransform();
     SetRotation(mat);
@@ -425,7 +425,7 @@ void Body::SynchronizeParent() const
     const dReal* rot = dBodyGetRotation(mODEBody);
 
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
-        (make_shared(GetParent()));
+        (GetParent().lock());
 
     
     Matrix mat;
@@ -513,7 +513,7 @@ shared_ptr<Body> Body::GetBody(dBodyID id)
         }
 
     shared_ptr<Body> body = shared_static_cast<Body>
-        (make_shared(bodyPtr->GetSelf()));
+        (bodyPtr->GetSelf().lock());
 
     if (body.get() == 0)
         {

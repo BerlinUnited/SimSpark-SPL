@@ -297,7 +297,7 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
 void SceneServer::ReparentTransformChildren(shared_ptr<Transform> node)
 {
     shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(make_shared(node->GetParent()));
+        shared_dynamic_cast<BaseNode>(node->GetParent().lock());
 
     // while not empty
     while (node->begin() != node->end())

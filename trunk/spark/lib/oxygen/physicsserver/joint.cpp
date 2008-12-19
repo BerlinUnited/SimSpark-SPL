@@ -66,7 +66,7 @@ shared_ptr<Joint> Joint::GetJoint(dJointID id)
         }
 
     shared_ptr<Joint> joint = shared_static_cast<Joint>
-        (make_shared(jointPtr->GetSelf()));
+        (jointPtr->GetSelf().lock());
 
     if (joint.get() == 0)
         {
@@ -126,7 +126,7 @@ shared_ptr<Body> Joint::GetBody(const std::string& path)
         }
 
     shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
-        (make_shared(GetSelf()));
+        (GetSelf().lock());
 
     shared_ptr<Leaf> leaf = GetCore()->Get(path,mySelf);
 

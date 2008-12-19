@@ -43,7 +43,7 @@ void BodyController::UpdateCached()
     mBody.reset();
 
     mBody = shared_dynamic_cast<Body>
-        (make_shared(GetParentSupportingClass("Body")));
+        (GetParentSupportingClass("Body").lock());
 
     if (mBody.get() == 0)
     {

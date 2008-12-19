@@ -40,7 +40,7 @@ public:
     virtual void UpdateCached()
     {
         Perceptor::UpdateCached();
-        mJoint = make_shared(FindParentSupportingClass<_JOINT>());
+        mJoint = FindParentSupportingClass<_JOINT>().lock();
 
         if (mJoint.get() == 0)
             {

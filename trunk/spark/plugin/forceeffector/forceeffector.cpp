@@ -83,7 +83,7 @@ ForceEffector::GetActionObject(const Predicate& predicate)
 void ForceEffector::OnLink()
 {
   shared_ptr<BaseNode> parent =
-    shared_dynamic_cast<BaseNode>(make_shared(GetParent()));
+    shared_dynamic_cast<BaseNode>(GetParent().lock());
 
   if (parent.get() == 0)
     {
