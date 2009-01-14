@@ -23,7 +23,7 @@
 #define SOCCERCONTROLASPECT_H
 
 #include <oxygen/controlaspect/controlaspect.h>
-#include <soccer/soccertypes.h>
+#include <soccertypes.h>
 
 class GameStateAspect;
 class BallStateAspect;

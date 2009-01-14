@@ -23,8 +23,8 @@
 #include "pantilteffector.h"
 #include <salt/gmath.h>
 #include <zeitgeist/logserver/logserver.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/restrictedvisionperceptor/restrictedvisionperceptor.h>
+#include <soccerbase/soccerbase.h>
+#include <restrictedvisionperceptor/restrictedvisionperceptor.h>
 
 using namespace boost;
 using namespace oxygen;

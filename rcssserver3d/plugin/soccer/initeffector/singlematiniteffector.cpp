@@ -25,8 +25,8 @@
 //#include <oxygen/gamecontrolserver/predicate.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/physicsserver/body.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/agentstate/agentstate.h>
+#include <soccerbase/soccerbase.h>
+#include <agentstate/agentstate.h>
 //#include <soccer/gamestateaspect/gamestateaspect.h>
 #include <kerosin/sceneserver/singlematnode.h>
 #include <sstream>

@@ -24,7 +24,7 @@
 #include <salt/gmath.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/physicsserver/spherecollider.h>
-#include <soccer/soccerbase/soccerbase.h>
+#include <soccerbase/soccerbase.h>
 #include <oxygen/sceneserver/transform.h>
 
 using namespace boost;

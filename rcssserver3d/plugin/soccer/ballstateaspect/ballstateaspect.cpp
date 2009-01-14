@@ -25,9 +25,9 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/physicsserver/recorderhandler.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/ball/ball.h>
+#include <gamestateaspect/gamestateaspect.h>
+#include <soccerbase/soccerbase.h>
+#include <ball/ball.h>
 
 using namespace oxygen;
 using namespace boost;

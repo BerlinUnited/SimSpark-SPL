@@ -23,7 +23,7 @@
 #define GAMETIMEPERCEPTOR_H
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <soccer/soccertypes.h>
+#include <soccertypes.h>
 
 class GameStateAspect;
 //class AgentState;

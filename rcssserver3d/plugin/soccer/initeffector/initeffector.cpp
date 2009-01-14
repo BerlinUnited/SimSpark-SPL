@@ -26,9 +26,9 @@
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/physicsserver/space.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/agentstate/agentstate.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
+#include <soccerbase/soccerbase.h>
+#include <agentstate/agentstate.h>
+#include <gamestateaspect/gamestateaspect.h>
 #include <sstream>
 
 using namespace boost;

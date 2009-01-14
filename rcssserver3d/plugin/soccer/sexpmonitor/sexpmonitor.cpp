@@ -27,15 +27,15 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/agentaspect/agentaspect.h>
-#include <soccer/soccertypes.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/ball/ball.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
-#include <soccer/ballstateaspect/ballstateaspect.h>
-#include <soccer/agentstate/agentstate.h>
-#include <soccer/fieldflag/fieldflag.h>
-#include <soccer/sayeffector/sayeffector.h>
+#include <soccertypes.h>
+#include <soccerbase/soccerbase.h>
+#include <soccerbase/soccerbase.h>
+#include <ball/ball.h>
+#include <gamestateaspect/gamestateaspect.h>
+#include <ballstateaspect/ballstateaspect.h>
+#include <agentstate/agentstate.h>
+#include <fieldflag/fieldflag.h>
+#include <sayeffector/sayeffector.h>
 
 #ifndef WIN32
 #include <netinet/in.h>

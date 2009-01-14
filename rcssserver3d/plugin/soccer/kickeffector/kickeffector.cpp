@@ -25,7 +25,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/physicsserver/spherecollider.h>
-#include <soccer/soccerbase/soccerbase.h>
+#include <soccerbase/soccerbase.h>
 
 using namespace boost;
 using namespace oxygen;

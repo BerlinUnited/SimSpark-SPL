@@ -35,3 +35,5 @@
 #cmakedefine HAVE_KEROSIN_KEROSIN_H 1
 
 #define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
+
+#define PREFIX "${prefix}"

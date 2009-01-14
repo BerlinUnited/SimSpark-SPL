@@ -21,7 +21,7 @@
 */
 #include "gamestateitem.h"
 #include "gamestateaspect.h"
-#include <soccer/soccerbase/soccerbase.h>
+#include <soccerbase/soccerbase.h>
 
 using namespace oxygen;
 using namespace std;

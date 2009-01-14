@@ -22,7 +22,7 @@
 #ifndef OBJECTSTATE_H
 #define OBJECTSTATE_H
 
-#include <soccer/soccernode/soccernode.h>
+#include <soccernode/soccernode.h>
 
 class ObjectState : public SoccerNode
 {

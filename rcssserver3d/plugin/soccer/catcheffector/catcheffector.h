@@ -23,8 +23,8 @@
 
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/body.h>
-#include <soccer/ball/ball.h>
-#include <soccer/ballstateaspect/ballstateaspect.h>
+#include <ball/ball.h>
+#include <ballstateaspect/ballstateaspect.h>
 
 namespace salt
 {

@@ -28,7 +28,7 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/agentaspect/agentaspect.h>
-#include <soccer/agentstate/agentstate.h>
+#include <agentstate/agentstate.h>
 
 class VisionPerceptor : public oxygen::Perceptor
 {

@@ -26,7 +26,7 @@
 
 #include <string>
 #include <oxygen/monitorserver/monitorsystem.h>
-#include <soccer/trainercommandparser/trainercommandparser.h>
+#include <trainercommandparser/trainercommandparser.h>
 
 class GameStateAspect;
 class BallStateAspect;

@@ -22,10 +22,10 @@
 #ifndef SOCCERRULEASPECT_H
 #define SOCCERRULEASPECT_H
 
-#include <soccer/soccercontrolaspect/soccercontrolaspect.h>
-#include <soccer/soccertypes.h>
-#include <soccer/ballstateaspect/ballstateaspect.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
+#include <soccercontrolaspect/soccercontrolaspect.h>
+#include <soccertypes.h>
+#include <ballstateaspect/ballstateaspect.h>
+#include <gamestateaspect/gamestateaspect.h>
 
 class AgentState;
 

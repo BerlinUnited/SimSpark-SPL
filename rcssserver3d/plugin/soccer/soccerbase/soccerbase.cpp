@@ -29,10 +29,10 @@
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/controlaspect/controlaspect.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
-#include <soccer/soccerruleaspect/soccerruleaspect.h>
-#include <soccer/agentstate/agentstate.h>
-#include <soccer/ball/ball.h>
+#include <gamestateaspect/gamestateaspect.h>
+#include <soccerruleaspect/soccerruleaspect.h>
+#include <agentstate/agentstate.h>
+#include <ball/ball.h>
 #include <oxygen/physicsserver/space.h>
 #include <zeitgeist/leaf.h>
 

@@ -20,13 +20,13 @@
 #include "internalsoccerinput.h"
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/logserver/logserver.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
-#include <soccer/soccerruleaspect/soccerruleaspect.h>
+#include <gamestateaspect/gamestateaspect.h>
+#include <soccerruleaspect/soccerruleaspect.h>
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/sceneserver/fpscontroller.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
-#include <soccer/agentstate/agentstate.h>
+#include <agentstate/agentstate.h>
 
 using namespace boost;
 using namespace zeitgeist;

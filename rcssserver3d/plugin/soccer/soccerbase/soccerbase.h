@@ -22,7 +22,7 @@
 #ifndef SOCCERBASE_H
 #define SOCCERBASE_H
 
-#include <soccer/soccertypes.h>
+#include <soccertypes.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/logserver/logserver.h>
