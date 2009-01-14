@@ -23,7 +23,7 @@
 #define GAMESTATEITEM_H
 
 #include <oxygen/monitorserver/monitoritem.h>
-#include <soccer/soccerbase/soccerbase.h>
+#include <soccerbase/soccerbase.h>
 
 class GameStateAspect;
 

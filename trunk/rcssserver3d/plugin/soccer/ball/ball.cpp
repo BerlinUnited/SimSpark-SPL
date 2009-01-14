@@ -21,7 +21,7 @@
 */
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/physicsserver/body.h>
-#include <soccer/ballstateaspect/ballstateaspect.h>
+#include <ballstateaspect/ballstateaspect.h>
 #include "ball.h"
 
 using namespace boost;

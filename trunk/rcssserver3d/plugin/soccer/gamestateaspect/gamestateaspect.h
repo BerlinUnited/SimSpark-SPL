@@ -22,7 +22,7 @@
 #ifndef GAMESTATEASPECT_H
 #define GAMESTATEASPECT_H
 
-#include <soccer/soccercontrolaspect/soccercontrolaspect.h>
+#include <soccercontrolaspect/soccercontrolaspect.h>
 #include <set>
 
 class AgentState;

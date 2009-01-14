@@ -21,8 +21,8 @@
 */
 #include "beamaction.h"
 #include "beameffector.h"
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/agentstate/agentstate.h>
+#include <soccerbase/soccerbase.h>
+#include <agentstate/agentstate.h>
 #include <cmath>
 #include <oxygen/agentaspect/agentaspect.h>
 

@@ -26,10 +26,10 @@
 #include <oxygen/physicsserver/body.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
-#include <soccer/ballstateaspect/ballstateaspect.h>
-#include <soccer/agentstate/agentstate.h>
+#include <soccerbase/soccerbase.h>
+#include <gamestateaspect/gamestateaspect.h>
+#include <ballstateaspect/ballstateaspect.h>
+#include <agentstate/agentstate.h>
 
 using namespace oxygen;
 using namespace boost;

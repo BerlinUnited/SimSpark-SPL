@@ -208,7 +208,7 @@ bool GetMessage(string& msg)
     //printf ("xxx-%s\n", buffer+5);
 
     // msg is prefixed with it's total length
-    unsigned int msgLen = ntohl(*(unsigned int*)buffer);
+    int msgLen = ntohl(*(unsigned int*)buffer);
     // cerr << "GM 6 / " << msgLen << " (bytesRead " << bytesRead << ")\n";
     if(sizeof(unsigned int) + msgLen > sizeof(buffer)) {
         cerr << "message too long; aborting" << endl;
@@ -216,7 +216,7 @@ bool GetMessage(string& msg)
     }
 
     // read remaining message segments
-    unsigned int msgRead = bytesRead - sizeof(unsigned int);
+    int msgRead = bytesRead - sizeof(unsigned int);
 
     //cerr << "msgRead = |" << msgRead << "|\n";
 

@@ -23,7 +23,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
-#include <soccer/soccerbase/soccerbase.h>
+#include <soccerbase/soccerbase.h>
 #include <salt/gmath.h>
 
 using namespace zeitgeist;

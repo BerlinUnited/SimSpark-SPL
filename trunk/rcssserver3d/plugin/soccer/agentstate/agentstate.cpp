@@ -20,9 +20,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "agentstate.h"
-#include <soccer/soccertypes.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
+#include <soccertypes.h>
+#include <soccerbase/soccerbase.h>
+#include <gamestateaspect/gamestateaspect.h>
 #include <sstream>
 
 using namespace oxygen;

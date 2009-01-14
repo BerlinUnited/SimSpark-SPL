@@ -22,8 +22,8 @@
 #ifndef BALLLSTATEASPECT_H
 #define BALLLSTATEASPECT_H
 
-#include <soccer/soccercontrolaspect/soccercontrolaspect.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
+#include <soccercontrolaspect/soccercontrolaspect.h>
+#include <gamestateaspect/gamestateaspect.h>
 
 /** BallStateAspect is a ControlAspect that holds information about
     the current state of the ball in the simulation.

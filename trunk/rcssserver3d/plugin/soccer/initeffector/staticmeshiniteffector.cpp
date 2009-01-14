@@ -23,8 +23,8 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/physicsserver/body.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/agentstate/agentstate.h>
+#include <soccerbase/soccerbase.h>
+#include <agentstate/agentstate.h>
 #include <kerosin/sceneserver/staticmesh.h>
 #include <sstream>
 #include <string>

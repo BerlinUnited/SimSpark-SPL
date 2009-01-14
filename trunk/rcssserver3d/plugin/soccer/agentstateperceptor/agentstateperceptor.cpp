@@ -20,9 +20,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "agentstateperceptor.h"
-#include <soccer/agentstate/agentstate.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/restrictedvisionperceptor/restrictedvisionperceptor.h>
+#include <agentstate/agentstate.h>
+#include <soccerbase/soccerbase.h>
+#include <restrictedvisionperceptor/restrictedvisionperceptor.h>
 
 using namespace salt;
 using namespace oxygen;

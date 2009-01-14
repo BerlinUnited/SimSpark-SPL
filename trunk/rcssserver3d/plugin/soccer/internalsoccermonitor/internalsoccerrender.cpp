@@ -27,8 +27,8 @@
 #include <kerosin/textureserver/texture2d.h>
 #include <kerosin/fontserver/fontserver.h>
 #include <kerosin/fontserver/font.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
-#include <soccer/soccerbase/soccerbase.h>
+#include <gamestateaspect/gamestateaspect.h>
+#include <soccerbase/soccerbase.h>
 
 using namespace kerosin;
 using namespace boost;

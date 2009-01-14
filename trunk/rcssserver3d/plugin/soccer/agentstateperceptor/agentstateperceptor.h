@@ -23,7 +23,7 @@
 #define AGENTSTATEPERCEPTOR_H
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <soccer/soccertypes.h>
+#include <soccertypes.h>
 
 class AgentState;
 

@@ -21,8 +21,8 @@
 */
 #include "gamestateaspect.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/agentstate/agentstate.h>
+#include <soccerbase/soccerbase.h>
+#include <agentstate/agentstate.h>
 #include <salt/random.h>
 
 using namespace oxygen;

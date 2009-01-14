@@ -30,8 +30,8 @@
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <oxygen/gamecontrolserver/baseparser.h>
 #include <salt/vector.h>
-#include <soccer/soccertypes.h>
-#include <soccer/soccerruleaspect/soccerruleaspect.h>
+#include <soccertypes.h>
+#include <soccerruleaspect/soccerruleaspect.h>
 
 class TrainerCommandParser : public oxygen::MonitorCmdParser
 {

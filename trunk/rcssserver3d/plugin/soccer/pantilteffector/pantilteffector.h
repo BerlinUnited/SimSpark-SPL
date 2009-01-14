@@ -25,7 +25,7 @@
 #include <salt/random.h>
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/body.h>
-#include <soccer/agentstate/agentstate.h>
+#include <agentstate/agentstate.h>
 
 class PanTiltEffector : public oxygen::Effector
 {

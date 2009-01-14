@@ -25,8 +25,8 @@
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/physicsserver/recorderhandler.h>
 #include <oxygen/physicsserver/body.h>
-#include <soccer/ball/ball.h>
-#include <soccer/soccerbase/soccerbase.h>
+#include <ball/ball.h>
+#include <soccerbase/soccerbase.h>
 
 using namespace oxygen;
 using namespace boost;

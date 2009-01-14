@@ -24,7 +24,7 @@
 
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/body.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
+#include <gamestateaspect/gamestateaspect.h>
 
 class BeamEffector : public oxygen::Effector
 {

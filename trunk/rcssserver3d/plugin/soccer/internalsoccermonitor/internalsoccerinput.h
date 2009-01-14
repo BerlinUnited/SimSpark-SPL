@@ -23,7 +23,7 @@
 #include <kerosin/inputserver/inputitem.h>
 #include <kerosin/inputserver/inputcontrol.h>
 #include <kerosin/renderserver/renderserver.h>
-#include <soccer/soccertypes.h>
+#include <soccertypes.h>
 
 namespace oxygen
 {

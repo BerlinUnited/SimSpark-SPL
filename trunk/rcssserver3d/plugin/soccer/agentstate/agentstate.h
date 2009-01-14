@@ -22,8 +22,8 @@
 #ifndef AGENTSTATE_H
 #define AGENTSTATE_H
 
-#include <soccer/soccertypes.h>
-#include <soccer/objectstate/objectstate.h>
+#include <soccertypes.h>
+#include <objectstate/objectstate.h>
 
 namespace oxygen
 {

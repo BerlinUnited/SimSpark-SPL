@@ -22,7 +22,7 @@
 #include "gametimeperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
 //#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/gamestateaspect/gamestateaspect.h>
+#include <gamestateaspect/gamestateaspect.h>
 
 using namespace zeitgeist;
 using namespace oxygen;

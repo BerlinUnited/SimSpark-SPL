@@ -22,9 +22,9 @@
 #include "sayeffector.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
-#include <soccer/agentstate/agentstate.h>
-#include <soccer/soccerbase/soccerbase.h>
-#include <soccer/soccerruleaspect/soccerruleaspect.h>
+#include <agentstate/agentstate.h>
+#include <soccerbase/soccerbase.h>
+#include <soccerruleaspect/soccerruleaspect.h>
 
 using namespace boost;
 using namespace oxygen;
