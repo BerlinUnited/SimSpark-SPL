@@ -90,7 +90,7 @@ RFile::BundlePath()
 // MemFile
 //------------------------------------------------------------------------------------------------
 
-MemFile::MemFile(const char *fn, char *mode)
+MemFile::MemFile(const char *fn, const char *mode)
 {
 	if(fn==NULL)
 	{
@@ -132,7 +132,7 @@ MemFile::~MemFile()
 		Destroy();
 }
 
-bool MemFile::Open(const char *fn, char *mode)
+bool MemFile::Open(const char *fn, const char *mode)
 {
 	if(fn==NULL)
 		return false;
@@ -280,7 +280,7 @@ StdFile::StdFile(FILE* h)
 	mHandle=h;
 }
 
-StdFile::StdFile(const char* fn,char* mode)
+StdFile::StdFile(const char* fn,const char* mode)
 {
 	mHandle=NULL;
 	//open file
@@ -308,7 +308,7 @@ void StdFile::Close()
 	mHandle = NULL;
 }
 
-bool StdFile::Open(const char* fileName,char* mode)
+bool StdFile::Open(const char* fileName,const char* mode)
 {
 	//Open fn with mode mode
 	if(fileName==NULL)

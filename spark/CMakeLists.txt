@@ -72,7 +72,7 @@ endif (NOT FUNC_HSTRERROR_EXISTS)
 
  
 ########## add extra flags ########## 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "Release or Debug build type")
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR})
 if (UNIX)
