@@ -20,9 +20,15 @@
 
 #include <spark/spark.h>
 #include <zeitgeist/zeitgeist.h>
+#include <zeitgeist/fileserver/fileserver.h>
 #include <oxygen/simulationserver/simulationserver.h>
 #include <kerosin/renderserver/rendercontrol.h>
 #include <kerosin/inputserver/inputcontrol.h>
+
+#ifdef HAVE_CONFIG_H
+#undef PACKAGE_NAME
+#include <rcssserver3d_config.h>
+#endif
 
 using namespace spark;
 using namespace kerosin;
@@ -88,6 +94,7 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 
 bool SimSpark::InitApp(int argc, char** argv)
 {
+    GetCore()->GetFileServer()->AddResourceLocation(RCSS_BUNDLE_PATH);
     GetSimulationServer()->SetSimStep(0.02f);
     PrintGreeting();
 

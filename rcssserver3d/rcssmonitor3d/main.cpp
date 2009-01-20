@@ -20,9 +20,15 @@
 
 #include <spark/spark.h>
 #include <zeitgeist/zeitgeist.h>
+#include <zeitgeist/fileserver/fileserver.h>
 #include <oxygen/simulationserver/simulationserver.h>
 #include <kerosin/renderserver/rendercontrol.h>
 #include <kerosin/inputserver/inputcontrol.h>
+
+#ifdef HAVE_CONFIG_H
+#undef PACKAGE_NAME
+#include <rcssserver3d_config.h>
+#endif
 
 using namespace spark;
 using namespace kerosin;
@@ -93,6 +99,7 @@ bool MonitorSpark::ProcessCmdLine(int argc, char* argv[])
 
 bool MonitorSpark::InitApp(int argc, char** argv)
 {
+    GetCore()->GetFileServer()->AddResourceLocation(RCSS_BUNDLE_PATH);
     GetSimulationServer()->SetSimStep(0.02);
     PrintGreeting();
 
@@ -115,7 +122,7 @@ bool MonitorSpark::InitApp(int argc, char** argv)
             GetScriptServer()->Eval(fileStr);
         }
 
-     GetScriptServer()->Run("monitorspark.rb");
+     GetScriptServer()->Run("rcssmonitor3d.rb");
 
     // tell the inputControl node the loaction of our camera
     shared_ptr<InputControl> inputCtr = GetInputControl();

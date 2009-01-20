@@ -35,7 +35,7 @@ if ($enableInternalMonitor)
 end
 
 # setup default input bindings
-run "bindings.rb"
+run "scripts/bindings.rb"
 
 # setup default materials common to all simulations
 run "scripts/materials.rb"
