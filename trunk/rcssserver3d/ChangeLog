@@ -1,3 +1,19 @@
+2009-01-20  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssmonitor3d/Makefile.am: 
+	- added rpath
+	
+	* rcssmonitor3d/rcssmonitor3d.rb: 
+	- changed monitorspark.rb to rcssmonitor3d.rb
+	
+	* rcssmonitor3d/main.cpp (MonitorSpark::InitApp): 
+	* simspark/main.cpp (SimSpark::InitApp): 
+	- adding rcss3d's installation directory to the list of resource locations.
+	
+	* windows/rcssserver3d_config.h: 
+	* configure.ac: 
+	- added new define: RCSS_BUNDLE_PATH to store rcss3d's data directory.
+
 2008-12-19  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/soccer/kickeffector/kickeffector.cpp: 
