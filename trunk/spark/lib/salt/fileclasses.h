@@ -64,7 +64,7 @@ public:
     /** opens the file fn in the specified mode. The implementation of
      *     the namespace and mode semantics ist up to derived classes
      */
-    virtual bool    Open(const char*fn=NULL, char*mode="rb") = 0;
+    virtual bool    Open(const char* fn=NULL, const char* mode="rb") = 0;
 
     /** closes a previously opened file */
     virtual void    Close() = 0;
@@ -181,12 +181,12 @@ public:
 class MemFile : public RFile
 {
 public:
-    MemFile(const char*fn=NULL, char*mode="rb");
+    MemFile(const char*fn=NULL, const char*mode="rb");
     MemFile(FILE*f);
     MemFile(RFile *f);
     ~MemFile();
 
-    bool    Open(const char*fn=NULL, char*mode="rb");
+    bool    Open(const char* fn=NULL, const char* mode="rb");
     bool    Open(void*buffer, long s);
     void    Close();
     void    Destroy();
@@ -310,10 +310,10 @@ class StdFile : public WFile
 {
 public:
     StdFile(FILE*f);
-    StdFile(const char*fn=NULL, char*mode="rb");
+    StdFile(const char* fn = NULL, const char* mode = "rb");
     virtual ~StdFile();
 
-    bool    Open(const char*fn=NULL, char*mode="rb");
+    bool    Open(const char*fn=NULL, const char* mode="rb");
     void    Close();
     void    Destroy();
 

@@ -31,10 +31,16 @@ using namespace std;
 
 FileServer::FileServer() : Node(), mNextHandle(1)
 {
+    mResourceLocations.push_back(salt::RFile::BundlePath());
 }
 
 FileServer::~FileServer()
 {
+}
+
+void FileServer::AddResourceLocation(const std::string& path)
+{
+    mResourceLocations.push_back(path + salt::RFile::Sep());
 }
 
 bool FileServer::LocateResource(const std::string& inName, std::string& outName)
@@ -45,16 +51,19 @@ bool FileServer::LocateResource(const std::string& inName, std::string& outName)
             return true;
         }
 
-    string fname = salt::RFile::BundlePath() + inName;
+    for (unsigned i = 0; i < mResourceLocations.size(); ++i)
+    {
+        string fname = mResourceLocations[i] + inName;
 
-    if (Exist(fname))
-        {
-            GetLog()->Debug() << "(FileServer::LocateResource) expanded filename to '"
-                              << fname << "'\n";
+        if (Exist(fname))
+            {
+                GetLog()->Debug() << "(FileServer::LocateResource) expanded filename to '"
+                                  << fname << "'\n";
 
-            outName = fname;
-            return true;
-        }
+                outName = fname;
+                return true;
+            }
+    }
 
     GetLog()->Debug()
         << "FileServer::LocateResource) unable to locate resource '"

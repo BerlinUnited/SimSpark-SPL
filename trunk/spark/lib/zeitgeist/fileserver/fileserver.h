@@ -52,7 +52,7 @@
 #ifndef ZEITGEIST_FILESERVER_H
 #define ZEITGEIST_FILESERVER_H
 
-#include <list>
+#include <vector>
 #include <zeitgeist/node.h>
 #include "filesystem.h"
 
@@ -94,7 +94,12 @@ public:
     FileServer();
     ~FileServer();
 
-    /** tests for the existance of the given file at well known
+    /**
+     * adds a new location to the list of resource locations
+     */
+    void AddResourceLocation(const std::string& path);
+
+    /** tests for the existence of the given file at well known
         locations. On success the function returns true. In this case
         outName is set to the full path to the file.
     */
@@ -152,7 +157,7 @@ public:
 
     /** iterates through files. 'directory', 'name' and
      * 'extension' give directory, name and extension a file must
-     * match.  directory,name and extension may be NULL, in wich
+     * match.  directory,name and extension may be NULL, in which
      * case every directory,extension and/or name matches. For
      * each match the function callback is called with the name
      * of the matched file and the additional user parameter
@@ -179,6 +184,9 @@ protected:
 
     /** the next free handle */
     THandle mNextHandle;
+
+    /** list of resource locations */
+    std::vector<std::string> mResourceLocations;
 };
 
 DECLARE_CLASS(FileServer)

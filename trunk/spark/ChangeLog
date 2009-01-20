@@ -1,3 +1,20 @@
+2009-01-20  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/zeitgeist/fileserver/fileserver.h: 
+	* lib/zeitgeist/fileserver/fileserver.cpp:
+	- added new function: AddResourceLocation to support many resource
+	 locations
+	- some spell corrections 
+
+2009-01-19  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	- fixed selecting build type from cmake command line
+	
+	* lib/salt/fileclasses.h: 
+	* lib/salt/fileclasses.cpp:
+	- remove some warnings using const char* variables 
+
 2008-12-19  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/agentaspect/effector.cpp: 
