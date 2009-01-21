@@ -1,32 +1,10 @@
-add_subdirectory(howtos)
+find_package(LATEX)
 
+if (PDFLATEX_COMPILER AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/manual.tex)
+  include(../../cmake/UseLATEX.cmake)
+  add_latex_document(manual.tex INPUTS conventions.tex  introduction.tex
+      rsg.tex  definitions.tex  manual.tex zeitgeist.tex DEFAULT_PDF)
+endif (PDFLATEX_COMPILER AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/manual.tex)
 
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = howtos
-#
-#if COND_PDFLATEX
-#%.toc: %.tex
-#	touch $@
-#	pdflatex $<
-#
-#%.pdf: %.tex %.toc 
-#	pdflatex $<
-#
-#all-local:
-#	@if test -f manual.tex; then \
-#	  $(MAKE) $(AM_MAKEFLAGS) manual.pdf ; \
-#	else \
-#	  echo "***" ;\
-#	  echo "*** There is no developers manual yet. Please consider contributing to it." ; \
-#	  echo "***" ; \
-#	fi
-#
-#EXTRA_DIST = manual.pdf
-#CLEANFILES = manual.log manual.pdf manual.aux manual.toc
-#endif
+set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES
+      "definitions.aux;manual.log;manual.pdf;manual.aux;manual.out;manual.toc")

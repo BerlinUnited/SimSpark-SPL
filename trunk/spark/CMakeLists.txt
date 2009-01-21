@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(simspark CXX C)
+set(PACKAGE_VERSION "0.1")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -147,8 +148,9 @@ install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h DESTINATION
 ########### CPack section #############
 set(CPACK_SOURCE_GENERATOR TGZ)
 set(CPACK_SOURCE_IGNORE_FILES
-    /CVS/ /[.]svn/ /.*[.]o /autom4te[.]cache/ /[.].*)
-set(CPACK_PACKAGE_VERSION "0.1")
+    /CVS/ /[.]svn/ /.*[.]o /autom4te[.]cache/ /[.].* /bootstrap /RELEASE
+    /styles/ /papers/ /rpm.am /msi.am /codingstyle.txt)
+set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
 
@@ -156,26 +158,10 @@ include(CPack)
 
 #original Makefile.am contents follow:
 
-#### utility subdir has to be made first
-#SUBDIRS = utility lib plugin test doc spark data
-#
 #pkginclude_HEADERS = \
 #sparkconfig.h
 #
-#doc:	doc-recursive
-#doc-recursive:	
-#	cd doc && $(MAKE) $(AM_MAKEFLAGS) doc
-#
-#CLEANFILES = 
-#
 #DISTCLEANFILES = $(top_builddir)/macosX/SDLMain.o $(top_builddir)/macosX/libSDLmain.a
-#EXTRA_DIST = macosX  \
-#            windows/sparkconfig.h windows/simspark.iss windows/spark.ico
-#dist_doc_DATA = AUTHORS ChangeLog COPYING NEWS README THANKS
-#
-#EXTRA_SRC_DISTS =
-#EXTRA_BIN_DISTS =
-#include $(top_srcdir)/config.aux/dist.am
 #
 #UPLOAD_BIN =
 #UPLOAD_SRC = upload-gzip upload-bzip2 upload-zip
@@ -185,11 +171,4 @@ include(CPack)
 #{zip=>@PACKAGE@-@VERSION@.zip}
 #include $(top_srcdir)/config.aux/sf.am
 #
-#
 #include $(top_srcdir)/config.aux/cvs.am
-#
-##MSI_SETUP_FILE=Setup/Release/@PACKAGE_NAME@Setup.msi
-##include $(top_srcdir)/config.aux/msi.am
-#
-##include $(top_srcdir)/config.aux/rpm.am
-#
