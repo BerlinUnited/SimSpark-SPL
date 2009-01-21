@@ -78,31 +78,27 @@ add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR})
 if (UNIX)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated")
-  set(CMAKE_CXX_FLAGS_DEBUG "-g -W -Wall -Woverloaded-virtual")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
 endif (UNIX)
 
-set(BINDIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH
-    "The directory to install binaries into.")
-set(LIBDIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH
-    "The directory to install libraries into.")
-set(DATADIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH
-    "The directory to install data files into.")
-set(INCLUDEDIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH
-    "The directory to install includes into.")
+set(BINDIR "bin" CACHE PATH "The directory to install binaries into.")
+set(LIBDIR "lib" CACHE PATH "The directory to install libraries into.")
+set(DATADIR "share" CACHE PATH "The directory to install data files into.")
+set(INCLUDEDIR "include" CACHE PATH "The directory to install includes into.")
 set(CMAKE_SHARED_MODULE_PREFIX "")
 
 mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
 
 ########## library version numbers  ##########
-set(SALT_SO_VERSION 3)
-set(SALT_VERSION ${SALT_SO_VERSION}.1.3)
+set(SALT_SO_VERSION 0)
+set(SALT_VERSION ${SALT_SO_VERSION}.3.1)
 set(ZEITGEIST_SO_VERSION 3)
-set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.1.0)
-set(OXYGEN_SO_VERSION 5)
-set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.3.2)
+set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.0.1)
+set(OXYGEN_SO_VERSION 3)
+set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.2.3)
 set(KEROSIN_SO_VERSION 1)
-set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.1.0)
+set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.0.1)
 set(SPARK_SO_VERSION 0)
 set(SPARK_VERSION ${SPARK_SO_VERSION}.0.0)
 set(RCSSNET_SO_VERSION 0)
@@ -127,7 +123,7 @@ endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 ########## generate configuration file ##########
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/sparkconfig.h.cmake
-${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h)
+    ${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h)
 
 ########## add subdirectories ############
 add_subdirectory(utility)
@@ -158,9 +154,6 @@ include(CPack)
 
 #original Makefile.am contents follow:
 
-#pkginclude_HEADERS = \
-#sparkconfig.h
-#
 #DISTCLEANFILES = $(top_builddir)/macosX/SDLMain.o $(top_builddir)/macosX/libSDLmain.a
 #
 #UPLOAD_BIN =

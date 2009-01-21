@@ -5,6 +5,7 @@
 	  files like CMakeLists.txt files; so, using 'make package_source' is
 	  preferred to 'make dist' now.
 	- some cleanup
+	- fixed library version numbers
 	
 	* lib/salt/CMakeLists.txt: 
 	* lib/oxygen/CMakeLists.txt: 
