@@ -1,3 +1,26 @@
+2009-01-21  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	- make cpack support more like 'make dist'. It includes some additional
+	  files like CMakeLists.txt files; so, using 'make package_source' is
+	  preferred to 'make dist' now.
+	- some cleanup
+	
+	* lib/salt/CMakeLists.txt: 
+	* lib/oxygen/CMakeLists.txt: 
+	* lib/kerosin/CMakeLists.txt: 
+	* lib/zeitgeist/CMakeLists.txt: 
+	* utility/rcssnet/CMakeLists.txt: 
+	- don't install .svn directories!
+	
+	* doc/Doxyfile.in:
+	- generate documents inside build directory instead of source directory
+	 
+	* doc/devel/CMakeLists.txt: 
+	* doc/CMakeLists.txt: 
+	* cmake/UseLATEX.cmake: 
+	- add cmake support for generating documents
+
 2009-01-20  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/zeitgeist/fileserver/fileserver.h: 

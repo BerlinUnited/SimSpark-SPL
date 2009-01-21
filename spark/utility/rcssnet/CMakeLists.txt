@@ -33,4 +33,4 @@ install(TARGETS rcssnet3D DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 ########### install files ###############
 
 install(DIRECTORY ./ DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME}/rcssnet
-          FILES_MATCHING PATTERN "*.hpp")
+          FILES_MATCHING PATTERN "*.hpp" PATTERN ".svn" EXCLUDE)
