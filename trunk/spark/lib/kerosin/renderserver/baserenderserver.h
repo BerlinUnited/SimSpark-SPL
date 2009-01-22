@@ -59,6 +59,16 @@ public:
     //! get a shot of the current frame
     virtual bool CopyFrame(char* /* buffer */) const { return false; }
 
+    void SetCamera( boost::shared_ptr<oxygen::Camera> c ) 
+        {
+            mCamera = c;
+        }
+
+    boost::shared_ptr<oxygen::Camera> GetCamera()
+        {
+            return mCamera;
+        }
+
 protected:
     /** get the active scene node from the sceneServer */
     virtual bool GetActiveScene();
@@ -81,6 +91,9 @@ protected:
 
     /** reference to the SceneServer */
     CachedPath<oxygen::SceneServer> mSceneServer;
+
+    /** the currently selected camera */
+    boost::shared_ptr<oxygen::Camera> mCamera;
 };
 
 DECLARE_ABSTRACTCLASS(BaseRenderServer);

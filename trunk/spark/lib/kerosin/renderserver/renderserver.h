@@ -123,7 +123,7 @@ protected:
     //
 protected:
     /** reference to the SceneServer */
-    CachedPath<oxygen::SceneServer> mSceneServer;
+    //CachedPath<oxygen::SceneServer> mSceneServer;
 
     /** the OpenGL ambient clear color */
     RGBA mAmbientColor;
@@ -143,9 +143,6 @@ protected:
     double mPickRange;
     /** the picked result node */
     boost::weak_ptr<RenderNode> mPickedNode;
-    
-    /** the currently selected camera */
-    boost::shared_ptr<oxygen::Camera> mCamera;
 };
 
 DECLARE_CLASS(RenderServer);

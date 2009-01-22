@@ -170,6 +170,7 @@ AC_CONFIG_FILES([Makefile \
 		 plugin/openglsyswx/Makefile \
 		 plugin/sparkmonitor/Makefile \
 		 plugin/sparkagent/Makefile \
+		 plugin/imageperceptor/Makefile \
 		 test/Makefile \
 		 test/coretest/Makefile \
 		 test/fonttest/Makefile \
