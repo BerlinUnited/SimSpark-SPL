@@ -311,6 +311,10 @@ spark/plugin/gyrorateperceptor/.deps
 spark/plugin/gyrorateperceptor/.libs
 spark/plugin/gyrorateperceptor/Makefile
 spark/plugin/gyrorateperceptor/Makefile.in
+spark/plugin/imageperceptor/.deps
+spark/plugin/imageperceptor/.libs
+spark/plugin/imageperceptor/Makefile
+spark/plugin/imageperceptor/Makefile.in
 spark/plugin/inputsdl/.deps
 spark/plugin/inputsdl/.libs
 spark/plugin/inputsdl/Makefile
