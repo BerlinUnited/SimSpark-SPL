@@ -16,7 +16,8 @@ SUBDIRS = \
 	  sceneeffector\
 	  soundsystemfmod \
 	  inputwx \
-	  openglsyswx
+	  openglsyswx \
+	  imageperceptor
 
 # filesystemrar 
 # soundsystembass
