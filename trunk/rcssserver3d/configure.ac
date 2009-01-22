@@ -40,7 +40,7 @@ of the boost header directory using the CPPFLAGS environment variable]))
 AC_CHECK_HEADERS([backward/hash_map hash_map],break,
 	AC_MSG_NOTICE(['hash_map' will be substituted by 'map'. If you need hash_map install stlport]))
 
-AC_DEFINE_UNQUOTED(RCSS_BUNDLE_PATH,["$prefix/share/"PACKAGE_NAME],["Data dir"])
+AC_DEFINE_UNQUOTED(RCSS_BUNDLE_PATH,[PREFIX"/share/"PACKAGE_NAME],["Data dir"])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
