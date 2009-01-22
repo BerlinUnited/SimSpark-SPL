@@ -21,18 +21,3 @@ install(TARGETS rcssmonitor3d DESTINATION ${BINDIR})
 
 install(FILES  soccersim-monitor.rb rcssmonitor3d.rb soccerbindings.rb
         DESTINATION ${DATADIR}/${CMAKE_PROJECT_NAME})
-
-
-
-#original Makefile.am contents follow:
-
-#LDADD = -lpthread
-#if NO_RPATH
-#AM_LDFLAGS  = @SALT_LDFLAGS@ \
-#                  @SPARK_LDFLAGS@ @ZEITGEIST_LDFLAGS@ \
-#                  @OXYGEN_LDFLAGS@ @KEROSIN_LDFLAGS@
-#else
-#AM_LDFLAGS  = -Wl,--rpath,$(DESTDIR)$(pkglibdir) \
-#                  @SALT_LDFLAGS@ @SPARK_LDFLAGS@ @ZEITGEIST_LDFLAGS@ \
-#                  @OXYGEN_LDFLAGS@ @KEROSIN_LDFLAGS@
-#endif
