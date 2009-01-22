@@ -20,8 +20,14 @@
 #include "simspark.h"
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <zeitgeist/fileserver/fileserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/simulationserver/simulationserver.h>
+
+#ifdef HAVE_CONFIG_H
+#undef PACKAGE_NAME
+#include <rsgedit_config.h>
+#endif
 
 using namespace std;
 using namespace boost;
@@ -45,6 +51,8 @@ SimSpark::~SimSpark()
 
 bool SimSpark::InitApp(int argc, char** argv)
 {
+    GetCore()->GetFileServer()->AddResourceLocation(RSGEDIT_BUNDLE_PATH);
+
     // process command line
     if (! ProcessCmdLine(argc, argv))
         {
