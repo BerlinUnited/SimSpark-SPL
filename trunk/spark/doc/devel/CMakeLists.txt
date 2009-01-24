@@ -8,3 +8,7 @@ endif (PDFLATEX_COMPILER AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/manual.tex)
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES
       "definitions.aux;manual.log;manual.pdf;manual.aux;manual.out;manual.toc")
+
+add_custom_target(pdfcomment ALL echo '***'
+  COMMAND echo '*** To \(re-\)build the developers manual, use \"make pdf\"'
+  COMMAND echo '***')

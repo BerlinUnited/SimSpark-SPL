@@ -1,3 +1,14 @@
+2009-01-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	* cmake_uninstall.cmake.in: 
+	- added 'make uninstall' support
+	
+	* doc/users/CMakeLists.txt: 
+	* cmake/UseLATEX.cmake: 
+	- do not build users-manual.pdf by default. can be built using 'make pdf'
+	- add an output to tell the user how it can build the manual
+
 2009-01-20  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* rcssmonitor3d/Makefile.am: 

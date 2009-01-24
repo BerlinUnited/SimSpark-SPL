@@ -681,7 +681,7 @@ MACRO(ADD_LATEX_TARGETS)
 
   IF (PDFLATEX_COMPILER)
     IF (LATEX_DEFAULT_PDF)
-      ADD_CUSTOM_TARGET(${pdf_target} ALL ${make_pdf_command}
+      ADD_CUSTOM_TARGET(${pdf_target} ${make_pdf_command}
         DEPENDS ${make_pdf_depends})
     ELSE (LATEX_DEFAULT_PDF)
       ADD_CUSTOM_TARGET(${pdf_target} ${make_pdf_command}

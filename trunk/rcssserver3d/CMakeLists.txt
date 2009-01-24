@@ -62,6 +62,15 @@ install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS TODO
 install(FILES  ${CMAKE_BINARY_DIR}/rcssserver3d_config.h 
        DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
+########### uninstall support ############
+CONFIGURE_FILE(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+
+ADD_CUSTOM_TARGET(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
 ########### CPack section #############
 set(CPACK_SOURCE_GENERATOR TGZ)
 set(CPACK_SOURCE_IGNORE_FILES
