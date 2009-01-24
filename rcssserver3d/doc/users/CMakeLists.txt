@@ -8,6 +8,9 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/user-manual.tex)
         overview.tex simulations.tex definitions.tex resources.tex user-manual.tex
         BIBFILES references.bib IMAGE_DIRS fig DEFAULT_PDF)
     endif (PDFLATEX_COMPILER)
+    add_custom_target(pdfcomment ALL echo '***'
+      COMMAND echo '*** To \(re-\)build the users manual, use \"make pdf\"'
+      COMMAND echo '***')
 else (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/user-manual.tex)
     add_custom_target(comment2 ALL echo '***'
       COMMAND echo '*** The users manual \(PDF\) can be found in doc/users.'

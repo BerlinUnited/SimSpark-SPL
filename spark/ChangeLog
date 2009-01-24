@@ -1,3 +1,14 @@
+2009-01-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* cmake_uninstall.cmake.in: 
+	* CMakeLists.txt: 
+	- added 'make uninstall' support
+	
+	* cmake/UseLATEX.cmake: 
+	* doc/devel/CMakeLists.txt: 
+	- do not build manual.pdf by default. can be built using 'make pdf'
+	- add an output to tell the user how it can build the manual
+
 2009-01-21  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* CMakeLists.txt: 
