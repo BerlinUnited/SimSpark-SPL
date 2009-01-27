@@ -296,7 +296,7 @@ void Space::DisableInnerCollision(bool disable)
 {
     if (mODESpace == 0)
         {
-            assert(false);
+            //assert(false);
             return;
         }
 
