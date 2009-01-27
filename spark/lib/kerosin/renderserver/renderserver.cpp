@@ -354,6 +354,7 @@ RenderServer::SetAmbientColor(const RGBA& ambient)
 void RenderServer::UpdateCached()
 {
     mActiveScene.reset();
+    mCamera.reset();
 }
 
 void RenderServer::DisablePicking()
