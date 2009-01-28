@@ -88,16 +88,16 @@
  
         ;(nd Camera)
 
-        ;(nd RestrictedVisionPerceptor
-        ;    (setViewCones 120 120)
-        ;    (setSenseMyPos false)
-	;    (setStaticSenseAxis false)
-        ;    (addNoise true)
-	;    (setInterval 3)
-        ;)
+        (nd RestrictedVisionPerceptor
+            (setViewCones 120 120)
+            (setSenseMyPos false)
+	        (setStaticSenseAxis false)
+            (addNoise true)
+	        (setInterval 3)
+        )
 
-        ;(nd ObjectState
-        ;    (setID head)
-        ;)
+        (nd ObjectState
+            (setID head)
+        )
     )
 )

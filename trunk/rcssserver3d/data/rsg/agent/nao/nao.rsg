@@ -76,10 +76,10 @@
 
         (nd SayEffector)
 
-	(nd VisionPerceptor
-            (setSenseMyPos false)
-            (setStaticSenseAxis false)
-            (addNoise false))
+	;(nd VisionPerceptor
+    ;        (setSenseMyPos false)
+    ;        (setStaticSenseAxis false)
+    ;        (addNoise false))
 
     );end of AgentAspect
     

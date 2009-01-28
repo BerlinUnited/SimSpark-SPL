@@ -1,3 +1,12 @@
+2009-01-28  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* INSTALL: 
+	- added new installation instructions (cmake oriented)
+	
+	* spark/spark.rb: 
+	- set MaxStepsPerCycle to 1. SimulationServer will not simulate more than
+	one simulation cycle regardless of simulation speed.
+
 2009-01-24  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* cmake_uninstall.cmake.in: 
