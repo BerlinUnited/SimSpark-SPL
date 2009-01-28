@@ -227,9 +227,9 @@
                                 0 0 1 ;2 -1 -1
                                 $aj4_min $aj4_max)
 
-        ;(nd ObjectState
-        ;     (setID $LowerarmName)
-        ;     )
+        (nd ObjectState
+             (setID $LowerarmName)
+             )
         
     )
 )

@@ -342,9 +342,9 @@
                                 0 1 0 ;1 -1 -1
                                 $lj6_min $lj6_max)
 
-        ;(nd ObjectState
-        ;    (setID $FootName)
-        ;    )
+        (nd ObjectState
+            (setID $FootName)
+            )
         
          
     )

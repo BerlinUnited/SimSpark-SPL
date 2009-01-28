@@ -1,3 +1,4 @@
+/.project
 rcssserver3d/.cdtconfigure.Build[!!-~](GNU)
 rcssserver3d/.cproject
 rcssserver3d/.project
@@ -6,13 +7,6 @@ rcssserver3d/Makefile
 rcssserver3d/Makefile.in
 rcssserver3d/aclocal.m4
 rcssserver3d/autom4te.cache
-rcssserver3d/config.aux/compile
-rcssserver3d/config.aux/config.guess
-rcssserver3d/config.aux/config.sub
-rcssserver3d/config.aux/depcomp
-rcssserver3d/config.aux/install-sh
-rcssserver3d/config.aux/ltmain.sh
-rcssserver3d/config.aux/missing
 rcssserver3d/config.status
 rcssserver3d/configure
 rcssserver3d/data/Makefile
@@ -143,13 +137,6 @@ rsgedit/Makefile
 rsgedit/Makefile.in
 rsgedit/aclocal.m4
 rsgedit/autom4te.cache
-rsgedit/config.aux/compile
-rsgedit/config.aux/config.guess
-rsgedit/config.aux/config.sub
-rsgedit/config.aux/depcomp
-rsgedit/config.aux/install-sh
-rsgedit/config.aux/ltmain.sh
-rsgedit/config.aux/missing
 rsgedit/config.status
 rsgedit/configure
 rsgedit/libtool
@@ -180,13 +167,6 @@ spark/Makefile
 spark/Makefile.in
 spark/aclocal.m4
 spark/autom4te.cache
-spark/config.aux/compile
-spark/config.aux/config.guess
-spark/config.aux/config.sub
-spark/config.aux/depcomp
-spark/config.aux/install-sh
-spark/config.aux/ltmain.sh
-spark/config.aux/missing
 spark/config.status
 spark/configure
 spark/data/Makefile

@@ -285,7 +285,7 @@ def sparkSetupServer
     # set auto speed adjust mode.
     # a smaller value for MaxStepsPerCycle is recommended specially for slow systems
     simulationServer.setAdjustSpeed(true)
-    simulationServer.setMaxStepsPerCyle(3)
+    simulationServer.setMaxStepsPerCyle(1)
   end
 
   # set port and socket type for agent control
