@@ -1,3 +1,11 @@
+2009-01-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* INSTALL: 
+	- added requirements
+	
+	* README: 
+	- updated with the recent changes
+
 2009-01-28  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* INSTALL: 
@@ -9,7 +17,8 @@
 	* data/rsg/agent/nao/naoneckhead.rsg: 
 	* data/rsg/agent/nao/naoleg.rsg: 
 	* data/rsg/agent/nao/naoarm.rsg:
-	- enabled RestrictedVisionPerceptor and ObjectState nodes 
+	- enabled RestrictedVisionPerceptor and ObjectState nodes
+	- some whitespace fix 
 
 2009-01-24  Hedayat Vatankhah  <hedayat@grad.com>
 

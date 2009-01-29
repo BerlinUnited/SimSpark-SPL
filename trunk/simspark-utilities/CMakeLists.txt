@@ -9,12 +9,14 @@ find_package(Spark REQUIRED)
 find_package(Boost REQUIRED)
 
 ########## add extra flags ########## 
-set(CMAKE_BUILD_TYPE Debug CACHE STRING "Release or Debug build type")
 add_definitions(-DHAVE_CONFIG_H)
 if (UNIX)
-  set(CMAKE_CXX_FLAGS "-Wno-deprecated")
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
+  set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE
+        STRING "Common C++ compiler flags" FORCE)
+  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual" CACHE
+        STRING "C++ compiler flags for Debug builds" FORCE)
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE
+        STRING "C++ compiler flags for Release builds" FORCE)
 endif (UNIX)
 
 set(BINDIR "bin" CACHE PATH "The directory to install binaries into.")

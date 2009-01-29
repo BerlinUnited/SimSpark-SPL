@@ -6,6 +6,24 @@ native build files for your system (e.g. Unix Makefiles, Eclipse CDT 4.0 project
 files, Visual Studio project files). You can generate build files using CMake
 command-line or GUI interfaces.
 
+Requirements
+============
+CMake version 2.6 or higher
+Ruby 1.8
+Boost C++ Libraries
+Open Dynamics Engine (ODE)
+FreeType
+Developer Image Library (DevIL)
+OpenGL
+SDL
+
+The following packages are optional:
+wxWidgets: for inputwx plugin (e.g. required if you want to build rsgedit)
+FMOD: to buid fmod sound system plugin
+Latex (pdflatex): to generate developers manual
+Doxygen: to generate API documentation
+
+
 Basic Installation Using CMake Command-line Interface
 =====================================================
 1. Unpack the distribution and change directory to the top level source tree.
