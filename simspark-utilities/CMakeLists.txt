@@ -51,7 +51,7 @@ ADD_CUSTOM_TARGET(uninstall
 
 ########### CPack section #############
 set(CPACK_SOURCE_GENERATOR TGZ)
-set(CPACK_SOURCE_IGNORE_FILES /CVS/ /[.]svn/ /.*[.]o /[.].*)
+set(CPACK_SOURCE_IGNORE_FILES /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /[.].*)
 set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
