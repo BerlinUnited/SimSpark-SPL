@@ -1,0 +1,18 @@
+RELEASE News of simspark-0.1
+
+This is the first release of the simulator after RoboCup 2008 competitions,
+and the first release of simspark core simulation package as a separate
+package.
+In this release, MaxStepsPerCycle have been reduced to 1, so the simulation
+time spent in each cycle is fixed. As a result, the performance of the agents
+should not depend on the simulator speed, and they should be able to sense/act
+in fixed simulation time steps.
+This package provides a generic simulation framework and does not contain any
+soccer features. To use the soccer simulator, you should install rcssserver3d
+package which depends on this package. 
+Also, we do not use autotools for our build system anymore. You should use
+CMake (version 2.6) to build the package. See INSTALL for further installation
+instructions.
+
+You can get the package on the Simspark page on SourceForge
+at http://sourceforge.net/projects/simspark/
