@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
-set(PACKAGE_VERSION "0.6")
+set(PACKAGE_VERSION "0.6.1")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 

@@ -1,3 +1,23 @@
+[0.6.1]
+This is the first release of the simulator after RoboCup 2008 competitions,
+and the first release of rcssserver3d package as a separate package which 
+uses simspark package to implement a hunamoid soccer simulation environment.
+In this version of the simulator, restricted vision perceptor is enabled again,
+and is going to be used in 2009 competitions. You can read more about this
+perceptor in 0.5.9 NEWS section.
+Finally, we do not use autotools for our build system anymore. You should use
+CMake (version 2.6) to build the package. See INSTALL for further installation
+instructions.
+
+* Restricted Vision: 
+  - restricted vision perceptor is installed on Nao.
+
+* New requirements for building the pacakge:
+  - You'll need CMake 2.6 to configure and build the package
+  - this package depends on simspark package, so you should install it first
+
+* Some small enhancements and bug fixes 
+
 [0.6]
 This release is the final version for RoboCup 2008 in Suzhou China. It
 is little different from version 0.5.9 in simulation, excepting some
