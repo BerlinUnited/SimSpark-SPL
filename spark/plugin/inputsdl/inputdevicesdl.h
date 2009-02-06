@@ -29,7 +29,12 @@
 
 #include <kerosin/inputserver/inputdevice.h>
 #include <kerosin/inputserver/inputserver.h>
+
+#ifndef WIN32
 #include <SDL/SDL.h>
+#else
+#include <include/SDL.h>
+#endif
 
 /**     \class InputDeviceSDL
         This class introduces SDL-specific callback functions for the event filtering.

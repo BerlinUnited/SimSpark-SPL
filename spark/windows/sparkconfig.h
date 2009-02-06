@@ -8,3 +8,4 @@
 #define HAVE_WINSOCK2_H 1
 #define HAVE_SOCKET 1
 #define HAVE_SOCKETTYPE 1
+#define HAVE_IL_IL_H 1

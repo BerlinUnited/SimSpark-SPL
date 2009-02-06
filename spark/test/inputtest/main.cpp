@@ -1,6 +1,10 @@
 #include <zeitgeist/zeitgeist.h>
 #include <kerosin/kerosin.h>
-#include <SDL.h>
+#ifndef WIN32
+#include <SDL/SDL.h>
+#else
+#include <include/SDL.h>
+#endif
 #ifdef _WIN32
 #include <windows.h>
 #endif
