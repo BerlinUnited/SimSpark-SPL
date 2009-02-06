@@ -31,6 +31,9 @@ SET(DevIL_POSSIBLE_ROOT_PATHS
   /usr/
   /opt/net/gcc41/DevIL
   /opt/net/gcc33/DevIL
+  C:/library/DevIL
+  "C:/Program Files/DevIL"
+  C:/DevIL
   )
 
 # appended
@@ -40,7 +43,7 @@ SET(DevIL_POSSIBLE_INCDIR_SUFFIXES
 SET(DevIL_POSSIBLE_LIBDIR_SUFFIXES 
   lib 
   lib64
-  DevIL/lib )
+  )
 
 
 

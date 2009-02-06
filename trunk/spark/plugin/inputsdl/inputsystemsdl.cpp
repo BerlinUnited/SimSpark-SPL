@@ -24,8 +24,14 @@
 #include "inputdevicesdl.h"
 #include <kerosin/inputserver/inputserver.h>
 #include <zeitgeist/logserver/logserver.h>
+#ifndef WIN32
 #include <SDL/SDL_thread.h>
 #include <SDL/SDL_syswm.h>
+#else
+#include <include/SDL_thread.h>
+#include <include/SDL_syswm.h>
+#endif
+
 #include "timersdl.h"
 
 using namespace boost;

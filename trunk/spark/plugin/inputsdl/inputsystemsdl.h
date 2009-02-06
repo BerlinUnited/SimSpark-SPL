@@ -30,7 +30,12 @@
 #include <kerosin/inputserver/inputsystem.h>
 #include <kerosin/inputserver/inputserver.h>
 #include <kerosin/openglserver/openglserver.h>
+
+#ifndef WIN32
 #include <SDL/SDL.h>
+#else
+#include <include/SDL.h>
+#endif
 
 struct SDL_mutex;
 

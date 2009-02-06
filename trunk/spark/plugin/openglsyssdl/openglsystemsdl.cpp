@@ -24,7 +24,11 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <kerosin/openglserver/openglwrapper.h>
+#ifndef WIN32
 #include <SDL/SDL.h>
+#else
+#include <include/SDL.h>
+#endif
 
 using namespace std;
 using namespace boost;

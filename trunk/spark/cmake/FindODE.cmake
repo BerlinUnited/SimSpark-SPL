@@ -12,6 +12,9 @@ IF (NOT ODE_FOUND)
     /usr/local/include
     $ENV{OGRE_HOME}/include # OGRE SDK on WIN32
     $ENV{INCLUDE}
+    C:/library/ode/include
+    "C:/Program Files/ode/include"
+    C:/ode/include
   )
   FIND_LIBRARY(ODE_LIBRARY
     NAMES ode
@@ -20,6 +23,9 @@ IF (NOT ODE_FOUND)
     /usr/lib64
     /usr/local/lib
     $ENV{OGRE_HOME}/lib # OGRE SDK on WIN32
+    C:/library/ode/lib/releaselib
+    "C:/Program Files/ode/lib/releaselib"
+    C:/ode/lib/releaselib
   )
 
   IF(ODE_INCLUDE_DIR)
