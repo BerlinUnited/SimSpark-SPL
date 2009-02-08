@@ -5,14 +5,12 @@
 \section{Download and Installation Instructions}
 \label{section:install}
 
-%Currently the soccer3d CVS builds only for Linux (the Win32 build system is not yet ported/tested, so we should focus on *nix systems.
+%Currently the simspark SVN builds only for Linux (the Win32 build system is not yet ported/tested, so we should focus on *nix systems.
 
-This chapter explains how to install SimSpark on an Ubuntu Linux
-system\footnote{This guide is adapted from the guide created by the
-Little Green Bats Team at
-\url{http://www.littlegreenbats.nl/?q=node/70}}. It should work with
+This chapter explains how to install SimSpark on an Ubuntu Linux. It should work with
 slight modifications on other distributions like Fedora, Suse and
-especially Debian.
+especially Debian system\footnote{For more guides please visit Simspark Wiki:
+\url{http://simspark.sourceforge.net/wiki/index.php/Installation_on_Linux}}.
 
 \begin{enumerate}
 
@@ -22,8 +20,7 @@ Depending on the distribution version you are using you might need to
 enable additional repositories in order to install all required
 packages. Please refer to your system specific documentation for
 details. In Ubuntu Linux these repositories are called
-\texttt{Universe} and
-\texttt{Multiverse}
+\texttt{Universe} and \texttt{Multiverse}.
 
 To enable them you have to edit the \texttt{/etc/apt/sources.list}
 file and update the local package database.
@@ -46,15 +43,8 @@ specialized search engines for RPM packages available like
 \item Install dependencies
 
 SimSpark builds and depends upon the work of other software
-projects. We use the Gnu autotools to configure and build
-SimSpark. Therefore these packages are required:
-
-\begin{enumerate}
-\item autoconf
-\item automake
-\item libtool
-\end{enumerate}
-
+projects. We use the CMake to configure and build
+SimSpark.
 Further required packages are:
 
 \begin{enumerate}
@@ -76,79 +66,77 @@ therefore these packages are optional:
 \item Tiff library (libtiff)
 \end{enumerate}
 
-In order to build the SimSpark documentation you need a Latex
-installation (e.g. \texttt{tetex}).
+\texttt{\$ sudo apt-get install g++ subversion cmake libfreetype6-dev libode0-dev libsdl-dev ruby1.8 ruby1.8-dev libdevil-dev libboost-dev libboost-thread-dev libboost-regex-dev}
 
-If you want to build the rsgedit gui you need to install
-\texttt{wxWidgets}. The following commands download and installed the required packages:
+\item Check out the source from the source forge SVN repository
 
-\texttt{\$ sudo apt-get install g++ ruby1.9 ruby1.9-dev libode0-dev\
-libboost-dev libsdl-dev libfreetype6-dev libdevil-dev autoconf\
-automake1.9 libtool freeglut3-dev tetex-extra cvs xlibs-dev\
-libtiff4-dev libslang1-dev}
-
-\texttt{\$ sudo rm /usr/bin/ruby}
-
-
-\texttt{\$ sudo ln -s /usr/bin/ruby1.9 /usr/bin/ruby}
-
-
-\texttt{\$ sudo ln -s /usr/lib/libruby1.9.so /usr/lib/libruby.so}
-
-\item Check out the source from the source forge CVS repository
-
-The SimSpark source is hosted in a CVS repository at
+The SimSpark source is hosted in a SVN repository at
 sourceforge.net. In order to build the source first download the
-current version, this is called \texttt{check out} in CVS terminology:
+current version, this is called \texttt{check out} in SVN terminology:
 
-\texttt{\$ cvs -d:pserver:anonymous@sserver.cvs.sourceforge.net:/cvsroot/sserver login}
+\texttt{\$ svn co https://simspark.svn.sourceforge.net/svnroot/simspark sserver}
 
+Downloaded package contains following packages:
+\begin{itemize}
+\item Simspark: this package contains the core simulation engine and
+can be used to create different kinds of simulation. It is not soccer
+specific
+\item Rcssserver3D: implements soccer simulation 3d on top of simspark
+engine. This package depends on simspark package
+\item Rsgedit: simspark simulator with graphics user interface
+\item Simspark utilities: it'll contain some additional tools for
+simspark core package like:
+\begin{itemize}
+\item Gendot: generates a graphviz dot file showing the zeitgeist class hierarchy, including all classes that are visible at runtime
+\item Monitorspark: external monitor implementation. Please refer to chapter \ref{cha:monitorspark}
+\item Sampleagent: sample of simple behaviour implementation
+\item Samplesim: sample of simple simulation
+\end{itemize}
+\end{itemize}
 
-When you get asked for a password, just press enter.
+\item Configure, generate build files and install the soccer server
 
+You can build this packages using CMake build system (version 2.6 or higher
+should be installed on your system). CMake can generate different kinds of
+native build files for your system (e.g. Unix Makefiles, Eclipse CDT 4.0 project
+files, Visual Studio project files). You can generate build files using CMake
+command-line or GUI interfaces.
 
-\texttt{\$ cvs -z3 -d:pserver:anonymous@sserver.cvs.sourceforge.net:/cvsroot/sserver co -P rcsoccersim/rcssserver3D}
-
-
-\item Build and install the soccer server
-
-The automake build tools use a \texttt{configure} script that adapts
-the build process to your system allows you to customize it. The
-configure script accepts a number of options that you can add to it's
+The configure \texttt{cmake} accepts a number of options that you can add to it's
 command line:
 
 \begin{enumerate}
 
 \item \texttt{--help} lists all available configure options. There are some more available 
-that would exceed the scope of this manual
+that would exceed the scope of this manual. Note: The list of all available generator for your OS platform are at the end of printout.
 
-\item \texttt{--enable-debug=no} builds an optimized version of SimSpark 
-that contains no debug symbols
+\item \texttt{--G <generator-name>} specify a makefile generator.
 
-\item \texttt{--enable-kerosin=no} builds SimSpark without rendering support
-
-\item \texttt{--prefix=/some/path} defines the path where the \texttt{make install} will later 
-install the SimSpark executable, plugins and resources into your
-system. If omitted it defaults to /usr/local
+\item \texttt{-DCMAKE\_INSTALL\_PREFIX:PATH=/some/path}
+defines the path where the \texttt{make install} will later install the SimSpark executable and resources into your system. If omitted it defaults to /usr/local/lib
 
 \end{enumerate}
 
-Change in to the top level source directory call the bootstrap script
-that invokes the autotools, run configure with your custom options,
-start the build process and install the server into your system.
+Every package has the same installation procedure. Change in to the top level package directory (spark, rcssserver3D etc.). We recommend to create a directory to hold your build files. Change directory to the directory you created in the previous, run cmake build system, start the build process and install the server into your system.
 
-\texttt{\$ cd rcsoccersim/rcssserver3D/}
+For soccer simulation, you'll need at least simspark (build at first) and rcssserver3d packages. Other packages are optional (Rsgedit and Simspark-utilities). 
 
-\texttt{\$ ./bootstrap}
+\texttt{\$ cd sserver/trunk/spark/}
 
-\texttt{\$ ./configure}
+\texttt{\$ mkdir build}
+
+\texttt{\$ cd build}
+
+\texttt{\$ cmake ..}
+
+Note: Optionally, now you can run \texttt{ccmake .} to edit the build settings (for example the installation directory).
 
 \texttt{\$ make}
 
 \texttt{\$ sudo make install}
 
 \item Make sure the linker can find your shared libraries if you changed
-the install prefix as described above with the \texttt{--prefix}
+the install prefix as described above with the \texttt{-DCMAKE\_INSTALL\_PREFIX:PATH}
 option.
 
 \texttt{\$ sudo gedit /etc/ld.so.conf}
@@ -157,12 +145,43 @@ Add your install prefix if it isn't already there, save and close.
 
 \texttt{\$ sudo ldconfig}
 
-\item run the simulation
+\item Run the simulation
 
-{\texttt{\$ cd}}
+\texttt{\$ simspark}
 
-{\texttt{\$ simspark}}
+\item Optionally
 
+\begin{itemize}
+\item Documentation
+
+After creating build files, there will be two extra targets (if you have their requirements): doc and pdf. If you want to create API documentation (using doxygen) you can run \texttt{make doc} .
+
+\texttt{\$ sudo apt-get install doxygen}
+\texttt{\$ sudo ldconfig}
+
+\texttt{\$ make doc}
+
+To create PDF documentation, run \texttt{make pdf}.
+
+\texttt{\$ sudo apt-get install tetex-extra latex2html imagemagick}
+\texttt{\$ sudo ldconfig}
+
+\texttt{\$ make pdf}
+
+\item Rsgedit
+
+Before build the rsgedit gui you need to install \texttt{wxWidgets} with OpenGL support. The following commands download and installed the required packages:
+
+\texttt{\$ sudo apt-get install libwxgtk2.8-dev}
+\texttt{\$ sudo ldconfig}
+
+Build rsgedit with steps describe in step 4.
+
+\item Simspark utilities
+
+Simspark utilities require Boost and Simspark library. Build with steps describe in step 4.
+
+\end{itemize}
 \end{enumerate}
 
 \section{An Example of a Simulation Run}
@@ -265,7 +284,7 @@ button and move the mouse to change the camera view.
 \item{Connect an agent}
 
 The next step is to connect one or more agents to the simulation. To
-do this please change to a separate console window and type \texttt{agentspark}.
+do this please change to a separate console window and type \texttt{rcssagent3d}.
 This starts the example agent that is included with SimSpark. 
 
 You should now see a humanoid robot appear on the field, as in figure
