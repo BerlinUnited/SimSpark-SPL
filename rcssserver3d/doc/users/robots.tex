@@ -3,7 +3,7 @@
 
 %Later: HOAP-2, NEC Papero (I already did a model in Blender), CITIZEN Eco-Be!, VisiON 4g (Fabio Dalla Libera is working on that), AIBO via RoSIML importer
 
-Below, we only describe the most advanced robot model that comes with the simulation package at this point in time: the Soccerbot. There are some other models which you can find in the directory \texttt{app/simspark/rsg/agent/}, e.g., the soccerplayer.rsg, or the hoap2.rsg files. These are currently not in use in any simulation, and considered experimental.
+Below, we only describe the most advanced robot model that comes with the simulation package at this point in time: the Soccerbot. There are some other models which you can find in the directory \texttt{rcssserver3d/data/rsg/agent/}, e.g., the soccerplayer.rsg, or the hoap2.rsg files. These are currently not in use in any simulation, and considered experimental.
 
 Besides that, work is in progress on other robot models and will be described here when usable. We plan to integrate an improved model of the HOAP-2 robot from Fujitsu Automation, and models of the VisiON 4g robot, and the Sony AIBO. For help on how to model new robots for your simulation, please have a look at tutorials in the SimSpark Wiki at \\
 
@@ -13,7 +13,19 @@ Besides that, work is in progress on other robot models and will be described he
 
 This is the robot currently used in the competitions of the 3D Soccer Simulation League at RoboCup. It is a humanoid robot with 20 degrees of freedom (DOF) as depicted in figure \ref{fig:soccerbotdof}. Its current dimensions are quite unrealistic for a real humanoid robot (see table \ref{table:dimensions} which is due to instabilities in the physics simulation at the time the robot was first modeled. This is a serious shortcoming of this robot model and should be changed. Another open issue is that the joint ranges are not limited in the current model. This allows for very unrealistic movements which can be fun to watch, but can lead to unfair behavior in a competition.
 
-\begin{figure}[htp]\begin{minipage}[b]{0.5\linewidth} \centering\includegraphics[width=6cm]{fig/soccerbotfront}\caption{Frontal view of the Soccerbot in the simulation}\end{minipage}\hspace{0.5cm}\begin{minipage}[b]{0.5\linewidth}\centering\includegraphics[width=6cm]{fig/soccerbotside}\caption{Side view of the Soccerbot in the simulation}\end{minipage}\end{figure}
+\begin{figure}[htp]
+\begin{minipage}[b]{0.5\linewidth} 
+\centering
+\includegraphics[width=6cm]{fig/soccerbotfront}
+\caption{Frontal view of the Soccerbot in the simulation}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\centering
+\includegraphics[width=6cm]{fig/soccerbotside}
+\caption{Side view of the Soccerbot in the simulation}
+\end{minipage}
+\end{figure}
 
 \begin{figure}[htp]
   \centering
@@ -205,7 +217,7 @@ are explained as follow:
 
 \subsection{Implementation}
 The Nao robot model is implemented in the rsg files under
-\texttt{app/simspark/rsg/agent/nao}, see \autoref{tab:nao-implement}
+\texttt{rcssserver3d/data/rsg/agent/nao}, see \autoref{tab:nao-implement}
 for details. This section goes much deeper and is a little boring.
 \begin{table}[htp]
   \centering
