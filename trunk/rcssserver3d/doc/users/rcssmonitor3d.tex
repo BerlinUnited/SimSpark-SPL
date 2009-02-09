@@ -1,5 +1,5 @@
-\chapter{Monitorspark}
-\label{cha:monitorspark}
+\chapter{Rcssmonitor3d}
+\label{cha:rcssmonitor3d}
 
 This chapter gives an overview about the available monitor and log
 player setups available in SimSpark, their configuration and usage.
@@ -15,7 +15,7 @@ the lines \texttt{sparkSetupRendering()} and
 \section{External Monitor}
 
 The external monitor implementation is called
-\texttt{monitorspark}. It either connects to a running SimSpark
+\texttt{rcssmonitor3d}. It either connects to a running SimSpark
 instance or replays a simulation run from a log file.
 
 \section{Playing Log files}
@@ -32,8 +32,8 @@ back to the server to control the simulation. The soccer simulation
 uses these commands to implement the controls for the human referee.
 
 \begin{table}
-\label {table:monitorspark}
-\caption{Key assignments for monitorspark}
+\label {table:rcssmonitor3d}
+\caption{Key assignments for rcssmonitor3d}
 \begin{center}
 \begin{tabular}{|l|l|}
 {\bf key} & {\bf function} \\
@@ -81,7 +81,7 @@ l & playback the log file \\
 \end{table}
 
 The list of accepted default command short cuts is given in table
-\ref{table:monitorspark}. These short cuts are configured in the two setup
+\ref{table:rcssmonitor3d}. These short cuts are configured in the two setup
 scripts \texttt{bindings.rb} and \texttt{soccerbindings.rb} that the
 SimSpark monitor reads on start up.
 

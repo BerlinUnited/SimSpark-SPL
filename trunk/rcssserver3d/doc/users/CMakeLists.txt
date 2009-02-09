@@ -4,7 +4,7 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/user-manual.tex)
     if (PDFLATEX_COMPILER)
       include(../../cmake/UseLATEX.cmake)
       add_latex_document(user-manual.tex INPUTS rcssagent3d.tex gettingstarted.tex
-        robots.tex introduction.tex monitorspark.tex simspark.tex license.tex
+        robots.tex introduction.tex rcssmonitor3d.tex simspark.tex license.tex
         overview.tex simulations.tex definitions.tex resources.tex user-manual.tex
         BIBFILES references.bib IMAGE_DIRS fig DEFAULT_PDF)
     endif (PDFLATEX_COMPILER)

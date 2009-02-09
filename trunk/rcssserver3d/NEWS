@@ -16,6 +16,10 @@ instructions.
   - You'll need CMake 2.6 to configure and build the package
   - this package depends on simspark package, so you should install it first
 
+* New program names:
+  - agentspark is now called rcssagent3d
+  - monitorspark is now called rcssmonitor3d
+
 * Some small enhancements and bug fixes 
 
 [0.6]

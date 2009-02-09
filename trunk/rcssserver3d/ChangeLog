@@ -1,3 +1,17 @@
+2009-02-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* doc/users/user-manual.tex: 
+	* doc/users/simspark.tex: 
+	* doc/users/rcssmonitor3d.tex: 
+	* doc/users/introduction.tex: 
+	* doc/users/gettingstarted.tex: 
+	* doc/users/definitions.tex: 
+	* doc/users/CMakeLists.txt: 
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- monitorspark -> rcssmonitor3d
+	- Say effector message lenght limit is 20 characters now
+	- Updated some info about RestrictedVisionPerceptor
+
 2009-01-29  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* INSTALL: 
