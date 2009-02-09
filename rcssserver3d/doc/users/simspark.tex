@@ -154,8 +154,7 @@ Your robots possess a special omnicam with some smart image processing
 software attached :). If using the regular visionperceptor, Robots
 have a 360 degrees view. With the RestrictedVisionPerceptor (which
 became the default in version 0.5), the view field of the robot is
-restricted to 90 degrees (this is of course configurable in
-rcssserver3D.rb). The direction of the view (pan and tilt) can be
+restricted to 120 degrees (for Nao robot). The direction of the view (pan and tilt) can be
 changed with the pantilt effector. The camera can pan to any angle
 (the initial 0 degrees pan direction is the direction towards the
 opponent side), and tilt around the horizontal plane.
@@ -196,9 +195,9 @@ The noise parameters of the vision system are as follows:
   axis, the error is uniformly distributed between -0.005 m and 0.005 m. The
   error is calculated once and remains constant during the complete match.
   \item Dynamic noise normally distributed around 0.0
-  + distance error:  sigma = 0.0965
-  + angle error (x-y plane): sigma = 0.1225
-  + angle error (latitudal): sigma = 0.1480
+  \subitem + distance error:  sigma = 0.0965 (also, distance error is multiplied by distance/100)
+  \subitem + angle error (x-y plane): sigma = 0.1225
+  \subitem + angle error (latitudal): sigma = 0.1480
 \end{itemize}
 
 A vision message is started with See followed by the visible objects.
@@ -225,6 +224,7 @@ Possible objects are:
 % The current soccer bot seems not to use it, still experimental/unsupported?
 
 % Joschka: I'm not sure either. Oliver worked on that, and Yuan had several patches for it last year. Maybe Yuan has the best overview right now? The current Soccerbot doesn't use it.
+% Hedayat: Currently Nao robot uses this perceptor.
 
 \subsubsection{GameState Perceptor}
 \label{sec:gamestateperceptor}
@@ -405,7 +405,7 @@ degrees to positive y axis.
 \label{sec:sayeffector}
 
 %klaus: is this old version only?
-%Joschka: no, the Soccerbot has a say effector in the current version. It is restricted to 8 bytes msgs.
+%Joschka: no, the Soccerbot has a say effector in the current version. It is restricted to 20 bytes msgs.
 %description in TEXT_INSTEAD_... and Philipp Vorst's thesis
 The \emph{say effector} permits communication among agents by broadcasting
 messages. In order to say something, the following command has to be employed:
@@ -413,7 +413,7 @@ messages. In order to say something, the following command has to be employed:
 	\item[Message format:] \texttt{(say <message>)}
 	\item[Example message:] \texttt{(say ``helloworld'')}
 \end{itemize}
-$Message$ may consist of 8 characters, which may be taken from the ASCII 
+$Message$ may consist of 20 characters, which may be taken from the ASCII 
 printing character subset $[{\tt 0x20}, {\tt 0x7E]}$ except the {\it white
 space}  character ($\sqcup$) and the normal brackets {\tt(} and {\tt )}. 
 For details and restrictions please see Section~\ref{sec:hearperceptor}, about

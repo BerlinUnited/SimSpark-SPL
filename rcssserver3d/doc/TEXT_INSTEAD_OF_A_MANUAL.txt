@@ -310,7 +310,7 @@ and moves players away that are closer than 2 meters to the goalie by
 -------------------
 
 To broadcast messages to other players, you have to use the
-SayEffector. Messages can be sayMsgSize(for now 512) characters long,
+SayEffector. Messages can be sayMsgSize(for now 20) characters long,
 where valid characters for say messages are the printing characters*
 except space and (). Messages players say can be heard within a
 distance of audioCutDist(for now 50 meters) by members of both
@@ -344,8 +344,7 @@ Your robots possess a special omnicam with some smart image processing
 software attached :). If using the regular visionperceptor, Robots
 have a 360 degrees view. With the RestrictedVisionPerceptor (which
 became the default in version 0.5), the view field of the robot is
-restricted to 90 degrees (this is of course configurable in
-rcssserver3D.rb). The direction of the view (pan and tilt) can be
+restricted to 120 degrees (for Nao). The direction of the view (pan and tilt) can be
 changed with the pantilt effector. The camera can pan to any angle
 (the initial 0 degrees pan direction is the direction towards the
 opponent side), and tilt around the horizontal plane.
@@ -376,7 +375,7 @@ axis, the error is uniformly distributed between -0.005m and
 complete match.
 
 - Dynamic noise normally distributed around 0.0
-  + distance error:  sigma = 0.0965
+  + distance error:  sigma = 0.0965  (also, distance error is multiplied by distance/100)
   + angle error (x-y plane): sigma = 0.1225
   + angle error (latitudal): sigma = 0.1480
 
