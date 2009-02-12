@@ -17,6 +17,31 @@ FOREACH(file ${files})
     ENDIF(NOT "${rm_retval}" STREQUAL 0)
   ELSE(EXISTS "$ENV{DESTDIR}${file}")
     MESSAGE(STATUS "File \"$ENV{DESTDIR}${file}\" does not exist.")
+    # But it might be an invalid symbolic link; so, it might be still there!
+    EXEC_PROGRAM(
+      "@CMAKE_COMMAND@" ARGS "-E remove \"$ENV{DESTDIR}${file}\""
+      OUTPUT_VARIABLE rm_out
+      RETURN_VALUE rm_retval
+      )
   ENDIF(EXISTS "$ENV{DESTDIR}${file}")
 ENDFOREACH(file)
 
+SET(directories "@DATADIR@/@CMAKE_PROJECT_NAME@"
+                "@DATADIR@/doc/@CMAKE_PROJECT_NAME@"
+)
+
+FOREACH(dir ${directories})
+  MESSAGE(STATUS "Uninstalling \"$ENV{DESTDIR}@CMAKE_INSTALL_PREFIX@/${dir}\"")
+  IF(EXISTS "$ENV{DESTDIR}@CMAKE_INSTALL_PREFIX@/${dir}")
+    EXEC_PROGRAM(
+      "@CMAKE_COMMAND@" ARGS "-E remove_directory \"$ENV{DESTDIR}@CMAKE_INSTALL_PREFIX@/${dir}\""
+      OUTPUT_VARIABLE rm_out
+      RETURN_VALUE rm_retval
+      )
+    IF(NOT "${rm_retval}" STREQUAL 0)
+      MESSAGE(FATAL_ERROR "Problem when removing \"$ENV{DESTDIR}@CMAKE_INSTALL_PREFIX@/${dir}\"")
+    ENDIF(NOT "${rm_retval}" STREQUAL 0)
+  ELSE(EXISTS "$ENV{DESTDIR}@CMAKE_INSTALL_PREFIX@/${dir}")
+    MESSAGE(STATUS "Directory \"$ENV{DESTDIR}@CMAKE_INSTALL_PREFIX@/${dir}\" does not exist.")
+  ENDIF(EXISTS "$ENV{DESTDIR}@CMAKE_INSTALL_PREFIX@/${dir}")
+ENDFOREACH(dir)
