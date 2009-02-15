@@ -450,7 +450,11 @@ void MD5Mesh::RenderInternal()
         if (mMeshes!=0)
         {
                 const salt::Matrix &mat = GetWorldTransform();
+
+#ifndef WIN32
 #warning "Commented out calls to glProgramLocalParameter4fARB"
+#endif
+
 #if 0
 
                 glProgramLocalParameter4fARB(GL_VERTEX_PROGRAM_ARB, 0, mat(0,0), mat(0,1), mat(0,2), mat(0,3));

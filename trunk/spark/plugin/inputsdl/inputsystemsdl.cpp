@@ -28,8 +28,8 @@
 #include <SDL/SDL_thread.h>
 #include <SDL/SDL_syswm.h>
 #else
-#include <include/SDL_thread.h>
-#include <include/SDL_syswm.h>
+#include <SDL_thread.h>
+#include <SDL_syswm.h>
 #endif
 
 #include "timersdl.h"
