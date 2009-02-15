@@ -25,6 +25,10 @@ check_include_file("CoreFoundation/CoreFoundation.h"
                    HAVE_COREFOUNDATION_COREFOUNDATION_H)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
+if(WIN32)
+	find_package(zlib REQUIRED)
+	set(Boost_USE_STATIC_LIBS ON)
+endif(WIN32)
 find_package(Ruby REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(DevIL REQUIRED)

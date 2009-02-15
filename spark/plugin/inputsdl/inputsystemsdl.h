@@ -34,7 +34,7 @@
 #ifndef WIN32
 #include <SDL/SDL.h>
 #else
-#include <include/SDL.h>
+#include <SDL.h>
 #endif
 
 struct SDL_mutex;

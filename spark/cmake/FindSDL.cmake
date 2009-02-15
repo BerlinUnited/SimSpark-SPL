@@ -120,9 +120,9 @@ IF(NOT SDL_BUILDING_LIBRARY)
       /opt/local
       /opt/csw
       /opt
-      C:/library/SDL
-      "C:/Program Files/SDL"
-      C:/SDL
+      C:/library/SDL/lib
+      "C:/Program Files/SDL/lib"
+      C:/SDL/lib
     )
   ENDIF(NOT ${SDL_INCLUDE_DIR} MATCHES ".framework")
 ENDIF(NOT SDL_BUILDING_LIBRARY)

@@ -1,3 +1,36 @@
+2009-02-15  Marian Buchta  <marian.buchta@gmail.com>
+
+	* CMakeLists.txt
+	- add macro for finding boost static library (Windows platform)
+	- add macro for finding zlib library
+
+	* cmake/FindBoost.cmake
+	- add new version of findboost from cmake2.7,which fixed boost library path issue in Windows (find 2 components but add path only one of them)
+
+	* cmake/FindSDL.cmake
+	- fixed library path
+
+	* cmake/FindZLIB.cmake
+	- add macro for finding ZLIB library
+	
+	* lib/zeitgeist/CMakeLists.txt
+	- fixed missing correct extension (from #telnetserver/telnetsession.c to #telnetserver/telnetsession.cpp)
+	
+	* plugin/imageperceptor/imageperceptor.cpp
+	- add include files only for Windows platform
+	
+	* plugin/inputsdl/inputdevicesdl.h
+	* plugin/inputsdl/inputsystemsdl.cpp
+	* plugin/inputsdl/inputsystemsdl.h
+	* plugin/openglsyssdl/openglsystemsdl.cpp
+	* test/fonttest/main.cpp
+	* test/inputtest/main.cpp
+	* test/scenetest/main.cpp
+	- change include path for SDL header files because of FindSDL.cmake script
+
+	* test/scenetest/md5mesh.cpp
+	- fixed fatal error C1021 - invalid preprocessor command (Windows platform)
+
 2009-01-29  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* README: 

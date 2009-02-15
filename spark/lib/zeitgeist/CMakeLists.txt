@@ -51,7 +51,7 @@ set(zeitgeist_LIB_SRCS
     #telnetserver/telnetdaemon.cpp
     #telnetserver/telnetserver.cpp
     #telnetserver/telnetserver_c.cpp
-    #telnetserver/telnetsession.c
+    #telnetserver/telnetsession.cpp
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${RUBY_INCLUDE_PATH})

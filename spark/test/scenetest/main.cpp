@@ -4,7 +4,7 @@
 #ifndef WIN32
 #include <SDL/SDL.h>
 #else
-#include <include/SDL.h>
+#include <SDL.h>
 #endif
 #include <zeitgeist/fileserver/fileserver.h>
 
