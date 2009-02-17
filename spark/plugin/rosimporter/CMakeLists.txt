@@ -9,6 +9,10 @@ set(rosimporter_LIB_SRCS
    rosimporter_c.cpp
 )
 
+if(WIN32)
+	include_directories(${CMAKE_SOURCE_DIR}/windows/include) 
+endif(WIN32)
+
 add_library(rosimporter MODULE ${rosimporter_LIB_SRCS})
 
 target_link_libraries(rosimporter tinyxml_ex)

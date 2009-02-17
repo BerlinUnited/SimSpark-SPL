@@ -23,7 +23,11 @@ set(rcssnet3D_LIB_SRCS
 
 add_library(rcssnet3D SHARED ${rcssnet3D_LIB_SRCS} ${rcssnet3D_LIB_HDRS})
 
-target_link_libraries(rcssnet3D ${NET_LIBS})
+if(WIN32)
+	target_link_libraries(rcssnet3D ${NET_LIBS} WS2_32.lib)
+else(WIN32)
+	target_link_libraries(rcssnet3D ${NET_LIBS})
+endif(WIN32)
 
 set_target_properties(rcssnet3D PROPERTIES VERSION ${RCSSNET_VERSION}
     SOVERSION ${RCSSNET_SO_VERSION})

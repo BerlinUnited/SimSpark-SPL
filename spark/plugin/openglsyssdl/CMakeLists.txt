@@ -8,6 +8,10 @@ set(openglsyssdl_LIB_SRCS
    openglsystemsdl_c.cpp
 )
 
+if(WIN32)
+	include_directories(${CMAKE_SOURCE_DIR}/windows/include ${SDL_INCLUDE_DIR})
+endif(WIN32)
+
 add_library(openglsyssdl MODULE ${openglsyssdl_LIB_SRCS})
 
 target_link_libraries(openglsyssdl)

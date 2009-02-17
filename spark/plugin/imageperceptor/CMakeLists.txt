@@ -8,6 +8,10 @@ set(imageperceptor_LIB_SRCS
    imageperceptor_c.cpp
 )
 
+if(WIN32)
+	include_directories(${CMAKE_SOURCE_DIR}/windows/include) 
+endif(WIN32)
+
 add_library(imageperceptor MODULE ${imageperceptor_LIB_SRCS})
 
 target_link_libraries(imageperceptor)

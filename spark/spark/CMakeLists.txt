@@ -5,8 +5,11 @@ set(spark_LIB_SRCS
    spark.h
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility
-    ${FREETYPE_INCLUDE_DIRS})
+if(WIN32)
+	include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility ${FREETYPE_INCLUDE_DIRS} ${DevIL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/windows/include)
+else(WIN32)
+	include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility ${FREETYPE_INCLUDE_DIRS})
+endif(WIN32)
 
 add_library(spark SHARED ${spark_LIB_SRCS})
 
