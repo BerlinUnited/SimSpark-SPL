@@ -96,6 +96,11 @@ set(CMAKE_SHARED_MODULE_PREFIX "")
 
 mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
 
+if(WIN32)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+	include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
+endif(WIN32)
+
 ########## library version numbers  ##########
 set(SALT_SO_VERSION 0)
 set(SALT_VERSION ${SALT_SO_VERSION}.3.1)

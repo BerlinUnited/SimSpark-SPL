@@ -1,3 +1,26 @@
+2009-02-17  Marian Buchta  <marian.buchta@gmail.com>
+
+	* CMakeLists.txt
+	- add CRT_SECURE_NO_WARNINGS
+	- add include directories for Windows platform
+		
+	* lib/kerosin/CMakeLists.txt
+	* plugin/filesystemzip/CMakeLists.txt
+	* plugin/imageperceptor/CMakeLists.txt
+	* plugin/openglsyssdl/CMakeLists.txt
+	* plugin/rosimporter/CMakeLists.txt
+	* spark/CMakeLists.txt
+	* test/fonttest/CMakeLists.txt
+	* test/inputtest/CMakeLists.txt
+	* test/scenetest/CMakeLists.txt
+	* utility/rcssnet/CMakeLists.txt
+	- add include directories for Windows platform
+	
+	* windows/include/GL/glext.h
+	* windows/include/GL/glxext.h
+	* windows/include/GL/wglext.h
+	- add missing headers files (OpenGL Extension Registry)
+
 2009-02-15  Marian Buchta  <marian.buchta@gmail.com>
 
 	* CMakeLists.txt

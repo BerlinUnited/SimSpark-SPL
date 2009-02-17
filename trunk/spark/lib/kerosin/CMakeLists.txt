@@ -116,8 +116,11 @@ set(kerosin_LIB_SRCS
     renderserver/customrender_c.cpp
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${FREETYPE_INCLUDE_DIRS}
-    ${DevIL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+if(WIN32)
+	include_directories(${CMAKE_SOURCE_DIR}/lib ${FREETYPE_INCLUDE_DIRS} ${DevIL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/windows/include)
+else(WIN32)
+	include_directories(${CMAKE_SOURCE_DIR}/lib ${FREETYPE_INCLUDE_DIRS} ${DevIL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+endif(WIN32)
 
 add_library(kerosin SHARED ${kerosin_LIB_SRCS} ${kerosin_LIB_HDRS})
 
