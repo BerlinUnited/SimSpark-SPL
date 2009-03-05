@@ -21,8 +21,20 @@ check_include_file("stdlib.h" HAVE_STDLIB_H)
 check_include_file("execinfo.h" HAVE_EXECINFO_H)
 check_include_file("unistd.h" HAVE_UNISTD_H)
 check_include_file("poll.h" HAVE_POLL_H)
+
 check_include_file("CoreFoundation/CoreFoundation.h"
-                   HAVE_COREFOUNDATION_COREFOUNDATION_H)
+	           HAVE_COREFOUNDATION_COREFOUNDATION_H)
+
+if (USE_COREFOUNDATION STREQUAL "OFF")
+else (USE_COREFOUNDATION STREQUAL "OFF")
+   if (HAVE_COREFOUNDATION_COREFOUNDATION_H)
+      set(USE_COREFOUNDATION ON)		
+      message("USE_COREFOUNDATION ON")		
+   else (HAVE_COREFOUNDATION_COREFOUNDATION_H)
+      set(USE_COREFOUNDATION OFF)		
+      message("USE_COREFOUNDATION OFF")		
+   endif (HAVE_COREFOUNDATION_COREFOUNDATION_H)
+endif (USE_COREFOUNDATION STREQUAL "OFF")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 if(WIN32)
@@ -185,3 +197,5 @@ include(CPack)
 #include $(top_srcdir)/config.aux/sf.am
 #
 #include $(top_srcdir)/config.aux/cvs.am
+
+

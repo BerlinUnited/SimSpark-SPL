@@ -16,7 +16,7 @@ set(soundsystembass_LIB_SRCS
 
 add_library(soundsystembass MODULE ${soundsystembass_LIB_SRCS})
 
-target_link_libraries(soundsystembass)
+target_link_libraries(soundsystembass ${spark_libs})
 
 set_target_properties(soundsystembass PROPERTIES VERSION 0.0.0 SOVERSION 0)
 install(TARGETS soundsystembass DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})

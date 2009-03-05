@@ -26,8 +26,10 @@
 #include <sparkconfig.h>
 #endif
 
+#if USE_COREFOUNDATION
 #if HAVE_COREFOUNDATION_COREFOUNDATION_H
 #include <CoreFoundation/CoreFoundation.h>
+#endif
 #endif
 
 namespace salt
@@ -60,6 +62,7 @@ RFile::Sep()
 std::string
 RFile::BundlePath()
 {
+#if USE_COREFOUNDATION
 #if HAVE_COREFOUNDATION_COREFOUNDATION_H
     char path[1024];
     CFBundleRef mainBundle = CFBundleGetMainBundle();
@@ -77,6 +80,7 @@ RFile::BundlePath()
     CFRelease(cfStringRef);
 
     return std::string(path) + Sep();
+#endif
 #else
 # ifdef PREFIX
     return PREFIX + Sep() + "share" + Sep() + PACKAGE_NAME + Sep();

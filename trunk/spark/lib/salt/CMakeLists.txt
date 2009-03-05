@@ -28,7 +28,7 @@ set(salt_LIB_SRCS
 
 add_library(salt SHARED ${salt_LIB_SRCS} ${salt_LIB_HDRS})
 
-target_link_libraries(salt libobject)
+target_link_libraries(salt libobject ${salt_require_libs})
 
 set_target_properties(salt PROPERTIES VERSION ${SALT_VERSION}
     SOVERSION ${SALT_SO_VERSION} DEBUG_POSTFIX _debug)

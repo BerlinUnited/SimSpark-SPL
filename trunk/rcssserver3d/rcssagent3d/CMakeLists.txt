@@ -18,9 +18,15 @@ include_directories(${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR}
 
 add_executable(rcssagent3d ${rcssagent3d_SRCS})
 
-target_link_libraries(rcssagent3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
-  ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES})
-
+if (APPLE)
+   target_link_libraries(rcssagent3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
+   				     ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
+				     ${RCSSNET3D_LIBRARIES})
+else (APPLE)
+   target_link_libraries(rcssagent3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
+   				     ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES})
+endif (APPLE)
+  
 set_target_properties(rcssagent3d PROPERTIES 
     INSTALL_RPATH "${RPATH_DIRECTORIES}")
 install(TARGETS rcssagent3d DESTINATION ${BINDIR})

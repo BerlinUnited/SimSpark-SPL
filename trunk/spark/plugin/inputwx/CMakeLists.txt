@@ -15,7 +15,7 @@ if (wxWidgets_FOUND)
   add_definitions(${wxWidgets_DEFINITIONS})
   add_library(inputwx MODULE ${inputwx_LIB_SRCS})
 
-  target_link_libraries(inputwx)
+  target_link_libraries(inputwx ${wxWidgets_LIBRARIES} ${spark_libs})
 
   set_target_properties(inputwx PROPERTIES COMPILE_FLAGS ${wxWidgets_CXX_FLAGS})
   set_target_properties(inputwx PROPERTIES VERSION 0.0.0 SOVERSION 0)

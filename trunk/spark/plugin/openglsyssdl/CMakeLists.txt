@@ -14,7 +14,7 @@ endif(WIN32)
 
 add_library(openglsyssdl MODULE ${openglsyssdl_LIB_SRCS})
 
-target_link_libraries(openglsyssdl)
+target_link_libraries(openglsyssdl ${spark_libs})
 
 set_target_properties(openglsyssdl PROPERTIES VERSION 0.0.0 SOVERSION 0)
 install(TARGETS openglsyssdl DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
