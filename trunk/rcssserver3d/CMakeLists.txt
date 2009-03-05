@@ -17,6 +17,10 @@ find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
 
 ########## add extra flags ########## 
+if(NOT CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS})
 if (UNIX)

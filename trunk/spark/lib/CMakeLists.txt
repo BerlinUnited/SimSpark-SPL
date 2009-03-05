@@ -1,4 +1,5 @@
-include_directories(${CMAKE_SOURCE_DIR}/utility ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/utility ${Boost_INCLUDE_DIRS}
+    ${ODE_INCLUDE_DIR})
 
 if (USE_COREFOUNDATION)
    add_definitions(-DUSE_COREFOUNDATION)

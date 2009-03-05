@@ -8,11 +8,8 @@ set(scenetest_SRCS
    md5mesh_c.cpp
 )
 
-if(WIN32)
-	include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${DevIL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/windows/include)
-else(WIN32)
-	include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})
-endif(WIN32)
+include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS}
+    ${DevIL_INCLUDE_DIR})
 
 add_executable(scenetest ${scenetest_SRCS})
 

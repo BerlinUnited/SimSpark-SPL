@@ -25,8 +25,7 @@ check_include_file("poll.h" HAVE_POLL_H)
 check_include_file("CoreFoundation/CoreFoundation.h"
 	           HAVE_COREFOUNDATION_COREFOUNDATION_H)
 
-if (USE_COREFOUNDATION STREQUAL "OFF")
-else (USE_COREFOUNDATION STREQUAL "OFF")
+if (NOT USE_COREFOUNDATION STREQUAL "OFF")
    if (HAVE_COREFOUNDATION_COREFOUNDATION_H)
       set(USE_COREFOUNDATION ON)		
       message("USE_COREFOUNDATION ON")		
@@ -34,7 +33,7 @@ else (USE_COREFOUNDATION STREQUAL "OFF")
       set(USE_COREFOUNDATION OFF)		
       message("USE_COREFOUNDATION OFF")		
    endif (HAVE_COREFOUNDATION_COREFOUNDATION_H)
-endif (USE_COREFOUNDATION STREQUAL "OFF")
+endif (NOT USE_COREFOUNDATION STREQUAL "OFF")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 if(WIN32)
@@ -89,6 +88,10 @@ endif (NOT FUNC_HSTRERROR_EXISTS)
 
  
 ########## add extra flags ########## 
+if(NOT CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR})
 if (UNIX)
@@ -110,7 +113,8 @@ mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
 
 if(WIN32)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-	include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
+	include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
+	    ${CMAKE_SOURCE_DIR}/windows/include)
 endif(WIN32)
 
 ########## library version numbers  ##########

@@ -9,6 +9,10 @@ find_package(Spark REQUIRED)
 find_package(wxWidgets REQUIRED gl base core adv)
 
 ########## add extra flags ########## 
+if(NOT CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR})
 if (UNIX)
