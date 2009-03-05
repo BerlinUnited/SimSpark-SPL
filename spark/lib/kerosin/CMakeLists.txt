@@ -125,7 +125,7 @@ endif(WIN32)
 add_library(kerosin SHARED ${kerosin_LIB_SRCS} ${kerosin_LIB_HDRS})
 
 target_link_libraries(kerosin ${FREETYPE_LIBRARIES} ${DevIL_LIBRARIES}
-    ${SDL_LIBRARY} ${OPENGL_LIBRARIES})
+    ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${kerosin_require_libs})
 
 set_target_properties(kerosin PROPERTIES VERSION ${KEROSIN_VERSION}
     SOVERSION ${KEROSIN_SO_VERSION} DEBUG_POSTFIX _debug)

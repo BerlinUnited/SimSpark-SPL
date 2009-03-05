@@ -10,7 +10,7 @@ set(filesystemstd_LIB_SRCS
 
 add_library(filesystemstd MODULE ${filesystemstd_LIB_SRCS})
 
-target_link_libraries(filesystemstd)
+target_link_libraries(filesystemstd ${spark_libs})
 
 set_target_properties(filesystemstd PROPERTIES VERSION 0.0.0 SOVERSION 0)
 install(TARGETS filesystemstd DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})

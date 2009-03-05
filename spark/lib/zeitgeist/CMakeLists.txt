@@ -58,7 +58,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${RUBY_INCLUDE_PATH})
 
 add_library(zeitgeist SHARED ${zeitgeist_LIB_SRCS} ${zeitgeist_LIB_HDRS})
 
-target_link_libraries(zeitgeist ${RUBY_LIBRARY})
+target_link_libraries(zeitgeist ${RUBY_LIBRARY} ${zeitgeist_require_libs})
 
 set_target_properties(zeitgeist PROPERTIES VERSION ${ZEITGEIST_VERSION}
     SOVERSION ${ZEITGEIST_SO_VERSION} DEBUG_POSTFIX _debug)

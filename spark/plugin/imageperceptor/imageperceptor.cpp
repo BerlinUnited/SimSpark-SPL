@@ -22,7 +22,11 @@
 // #include <IL/ilu.h>
 // #include <sstream>
 #ifndef WIN32
+#if __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #else
 #include <windows.h>
 #include <GL/gl.h>

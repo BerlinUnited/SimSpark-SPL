@@ -15,7 +15,7 @@ if (Boost_REGEX_FOUND)
 		include_directories(${ZLIB_INCLUDE_DIR})
 	endif(WIN32)
 
-  target_link_libraries(filesystemzip ${Boost_REGEX_LIBRARY})
+  target_link_libraries(filesystemzip ${Boost_REGEX_LIBRARY} ${spark_libs} z)
 
   set_target_properties(filesystemzip PROPERTIES VERSION 0.0.0 SOVERSION 0)
   install(TARGETS filesystemzip DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})

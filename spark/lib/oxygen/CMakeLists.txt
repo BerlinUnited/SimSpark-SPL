@@ -221,7 +221,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility/)
 
 add_library(oxygen SHARED ${oxygen_LIB_SRCS} ${oxygen_LIB_HDRS})
 
-target_link_libraries(oxygen rcssnet3D ${Boost_LIBRARIES} ${ODE_LIBRARY})
+target_link_libraries(oxygen rcssnet3D ${Boost_LIBRARIES} ${ODE_LIBRARY} ${oxygen_require_libs})
 
 set_target_properties(oxygen PROPERTIES VERSION ${OXYGEN_VERSION}
     SOVERSION ${OXYGEN_SO_VERSION} DEBUG_POSTFIX _debug)

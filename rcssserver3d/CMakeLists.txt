@@ -12,10 +12,13 @@ check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)
+find_package(Boost REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(SDL REQUIRED)
 
 ########## add extra flags ########## 
 add_definitions(-DHAVE_CONFIG_H)
-include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS})
 if (UNIX)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE
         STRING "Common C++ compiler flags" FORCE)

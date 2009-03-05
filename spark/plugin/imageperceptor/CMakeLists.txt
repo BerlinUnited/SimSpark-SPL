@@ -14,7 +14,9 @@ endif(WIN32)
 
 add_library(imageperceptor MODULE ${imageperceptor_LIB_SRCS})
 
-target_link_libraries(imageperceptor)
+target_link_libraries(imageperceptor ${spark_libs})
 
 set_target_properties(imageperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
-install(TARGETS imageperceptor DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
+if (NOT APPLE)
+   install(TARGETS imageperceptor DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
+endif (NOT APPLE)

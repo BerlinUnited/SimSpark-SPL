@@ -13,7 +13,7 @@ if (wxWidgets_FOUND)
   add_definitions(${wxWidgets_DEFINITIONS})
   add_library(openglsyswx MODULE ${openglsyswx_LIB_SRCS})
 
-  target_link_libraries(openglsyswx)
+  target_link_libraries(openglsyswx ${wxWidgets_LIBRARIES} ${spark_libs})
 
   set_target_properties(openglsyswx PROPERTIES VERSION 0.0.0 SOVERSION 0)
   set_target_properties(inputwx PROPERTIES COMPILE_FLAGS ${wxWidgets_CXX_FLAGS})

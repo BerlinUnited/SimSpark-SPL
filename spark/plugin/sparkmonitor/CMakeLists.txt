@@ -15,7 +15,7 @@ set(sparkmonitor_LIB_SRCS
 
 add_library(sparkmonitor MODULE ${sparkmonitor_LIB_SRCS})
 
-target_link_libraries(sparkmonitor sexp)
+target_link_libraries(sparkmonitor sexp ${spark_libs})
 
 set_target_properties(sparkmonitor PROPERTIES VERSION 0.0.0 SOVERSION 0)
 install(TARGETS sparkmonitor DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
