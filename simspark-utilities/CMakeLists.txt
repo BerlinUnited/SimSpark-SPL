@@ -9,6 +9,10 @@ find_package(Spark REQUIRED)
 find_package(Boost REQUIRED)
 
 ########## add extra flags ########## 
+if(NOT CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+
 add_definitions(-DHAVE_CONFIG_H)
 if (UNIX)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE

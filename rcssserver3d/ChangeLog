@@ -1,3 +1,14 @@
+2009-03-05  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* linux/rcssserver3d.desktop:
+	- updated the icon name
+	 
+	* data/logos/simspark.png:
+	* data/logos/simsparklogo.png:
+	* data/logos/simsparklogo2.png:
+	- added simspark logos created by Joschka, and a 48x48 version of
+	  simsparklogo.png which can be used as an icon
+
 2009-02-09  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* doc/users/user-manual.tex: 

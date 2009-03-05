@@ -115,13 +115,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${SPARK_INCLUDE_DIR}
 
 add_library(soccer MODULE ${soccer_LIB_SRCS} ${soccer_LIB_HDRS})
 
-if (APPLE)
-   target_link_libraries(soccer ${SALT_LIBRARIES} ${OXYGEN_LIBRARIES}
-   				${ZEITGEIST_LIBRARIES} ${KEROSIN_LIBRARIES}
-				${OPENGL_gl_LIBRARY})
-else (APPLE)
-   target_link_libraries(soccer)
-endif (APPLE)
+target_link_libraries(soccer ${SALT_LIBRARIES} ${OXYGEN_LIBRARIES}
+   	${ZEITGEIST_LIBRARIES} ${KEROSIN_LIBRARIES}
+    ${OPENGL_gl_LIBRARY})
 
 set_target_properties(soccer PROPERTIES VERSION 1.0.0 SOVERSION 1)
 install(TARGETS soccer DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
@@ -131,4 +127,3 @@ install(TARGETS soccer DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 
 install(DIRECTORY ./ DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME}/soccer
           FILES_MATCHING PATTERN "*.h" PATTERN ".svn" EXCLUDE)
-        
