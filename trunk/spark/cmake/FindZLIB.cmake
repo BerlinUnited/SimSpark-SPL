@@ -12,15 +12,20 @@ IF (ZLIB_INCLUDE_DIR)
 ENDIF (ZLIB_INCLUDE_DIR)
 
 FIND_PATH(ZLIB_INCLUDE_DIR zlib.h
-	C:/library/zlib123
-	C:/zlib123
-	"C:/Program Files/zlib123"
+	$ENV{ZLIB_DIR}
+	C:/library/
+	C:/
+	"C:/Program Files/"
+	PATH_SUFFIXES zlib123
 )
 
-FIND_LIBRARY(ZLIB_LIBRARY zlib1.lib 
-	C:/library/zlib123/projects/visualc6/Win32_DLL_Release
-	C:/zlib123/projects/visualc6/Win32_DLL_Release
-	"C:/Program Files/zlib123/projects/visualc6/Win32_DLL_Release"
+SET(ZLIB_NAMES z zlib zdll zlib1)
+FIND_LIBRARY(ZLIB_LIBRARY NAMES ${ZLIB_NAMES}
+	$ENV{ZLIB_DIR}
+	C:/library/zlib123/
+	C:/zlib123/
+	"C:/Program Files/zlib123/"
+	PATH_SUFFIXES projects/visualc6/Win32_DLL_Release
 )
 
 # handle the QUIETLY and REQUIRED arguments and set ZLIB_FOUND to TRUE if 
