@@ -1,3 +1,29 @@
+2009-03-07  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* test/scenetest/CMakeLists.txt: 
+	- exclude from build in Windows
+	
+	* test/CMakeLists.txt: 
+	* plugin/CMakeLists.txt: 
+	- fixed for Windows compatibility
+	- add Boost library dir to link directories
+	
+	* cmake/FindODE.cmake: 
+	- add search paths for latest ode release (ode-0.11)
+	
+	* plugin/filesystemzip/CMakeLists.txt: 
+	- build only if zlib is available
+	
+	* spark/CMakeLists.txt: 
+	* lib/zeitgeist/CMakeLists.txt: 
+	* lib/salt/CMakeLists.txt: 
+	* lib/oxygen/CMakeLists.txt: 
+	* lib/kerosin/CMakeLists.txt: 
+	* utility/tinyxml/CMakeLists.txt: 
+	* utility/rcssnet/CMakeLists.txt: 
+	* CMakeLists.txt: 
+	- Do not build shared libraries on windows for now
+
 2009-02-17  Marian Buchta  <marian.buchta@gmail.com>
 
 	* CMakeLists.txt

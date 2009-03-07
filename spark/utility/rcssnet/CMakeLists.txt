@@ -21,7 +21,7 @@ set(rcssnet3D_LIB_SRCS
     udpsocket.cpp
 )
 
-add_library(rcssnet3D SHARED ${rcssnet3D_LIB_SRCS} ${rcssnet3D_LIB_HDRS})
+add_library(rcssnet3D ${rcssnet3D_LIB_SRCS} ${rcssnet3D_LIB_HDRS})
 
 if(WIN32)
 	target_link_libraries(rcssnet3D ${NET_LIBS} WS2_32.lib)

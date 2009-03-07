@@ -17,15 +17,19 @@ IF (NOT ODE_FOUND)
     C:/ode/include
   )
   FIND_LIBRARY(ODE_LIBRARY
-    NAMES ode
+    NAMES ode ode_double ode_single
     PATHS
     /usr/lib
     /usr/lib64
     /usr/local/lib
     $ENV{OGRE_HOME}/lib # OGRE SDK on WIN32
-    C:/library/ode/lib/releaselib
-    "C:/Program Files/ode/lib/releaselib"
-    C:/ode/lib/releaselib
+    C:/library/ode/lib/
+    "C:/Program Files/ode/lib/"
+    C:/ode/lib/
+	PATH_SUFFIXES
+	releaselib
+	ReleaseDoubleDLL ReleaseDoubleLib 
+	ReleaseSingleDLL ReleaseSingleLib
   )
 
   IF(ODE_INCLUDE_DIR)

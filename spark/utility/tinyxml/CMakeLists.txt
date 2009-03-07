@@ -11,7 +11,7 @@ set(tinyxml_ex_LIB_SRCS
    xmlfunctions.h
 )
 
-add_library(tinyxml_ex SHARED ${tinyxml_ex_LIB_SRCS})
+add_library(tinyxml_ex ${tinyxml_ex_LIB_SRCS})
 
 target_link_libraries(tinyxml_ex)
 

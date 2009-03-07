@@ -36,8 +36,9 @@ if (NOT USE_COREFOUNDATION STREQUAL "OFF")
 endif (NOT USE_COREFOUNDATION STREQUAL "OFF")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
+set(ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" C:/SDL/)
+
 if(WIN32)
-	find_package(zlib REQUIRED)
 	set(Boost_USE_STATIC_LIBS ON)
 endif(WIN32)
 find_package(Ruby REQUIRED)
@@ -49,6 +50,7 @@ find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
 find_package(FMOD)
+find_package(ZLIB)
 set(HAVE_IL_IL_H 1)
 set(HAVE_KEROSIN_KEROSIN_H 1)
 
@@ -115,6 +117,9 @@ if(WIN32)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 	include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
 	    ${CMAKE_SOURCE_DIR}/windows/include)
+	set(BUILD_SHARED_LIBS FALSE)
+else(WIN32)
+    set(BUILD_SHARED_LIBS TRUE)
 endif(WIN32)
 
 ########## library version numbers  ##########
