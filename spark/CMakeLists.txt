@@ -36,7 +36,7 @@ if (NOT USE_COREFOUNDATION STREQUAL "OFF")
 endif (NOT USE_COREFOUNDATION STREQUAL "OFF")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
-set(ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" C:/SDL/)
+set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" C:/SDL/)
 
 if(WIN32)
 	set(Boost_USE_STATIC_LIBS ON)
