@@ -1,13 +1,11 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility
-		    ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+    ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
 
-if (APPLE)
-   if (USE_COREFOUNDATION)
-      set(spark_libs kerosin oxygen zeitgeist salt /System/Library/Frameworks/CoreFoundation.framework)
-   else	(USE_COREFOUNDATION)     
-      set(spark_libs kerosin oxygen zeitgeist salt)
-   endif (USE_COREFOUNDATION)
-endif (APPLE)
+set(spark_libs kerosin oxygen zeitgeist salt)
+if (APPLE AND USE_COREFOUNDATION)
+      set(spark_libs ${spark_libs} /System/Library/Frameworks/CoreFoundation.framework)
+endif (APPLE AND USE_COREFOUNDATION) 
 
 add_subdirectory(filesystemstd)
 add_subdirectory(filesystemzip)

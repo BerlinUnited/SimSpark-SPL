@@ -26,7 +26,7 @@ set(salt_LIB_SRCS
     sharedlibrary.cpp
 )
 
-add_library(salt SHARED ${salt_LIB_SRCS} ${salt_LIB_HDRS})
+add_library(salt ${salt_LIB_SRCS} ${salt_LIB_HDRS})
 
 target_link_libraries(salt libobject ${salt_require_libs})
 

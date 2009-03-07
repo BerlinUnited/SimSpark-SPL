@@ -11,9 +11,10 @@ set(scenetest_SRCS
 include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS}
     ${DevIL_INCLUDE_DIR})
 
-add_executable(scenetest ${scenetest_SRCS})
-
-target_link_libraries(scenetest salt zeitgeist oxygen kerosin)
+if (NOT WIN32)
+  add_executable(scenetest ${scenetest_SRCS})
+  target_link_libraries(scenetest salt zeitgeist oxygen kerosin)
+endif (NOT WIN32)
 
 
 ########### install files ###############

@@ -10,7 +10,7 @@ set(imageperceptor_LIB_SRCS
 
 add_library(imageperceptor MODULE ${imageperceptor_LIB_SRCS})
 
-target_link_libraries(imageperceptor ${spark_libs})
+target_link_libraries(imageperceptor ${spark_libs} ${Boost_LIBRARIES})
 
 set_target_properties(imageperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
 if (NOT APPLE)
