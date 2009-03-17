@@ -37,7 +37,7 @@
 namespace salt
 {
 
-class Vector2f : public TVector2<float, Vector2f>
+class SALT_API Vector2f : public TVector2<float, Vector2f>
 {
     //
     // Methods
@@ -74,7 +74,7 @@ public:
     }
 };
 
-class Vector3f : public TVector3<float, Vector3f>
+class SALT_API Vector3f : public TVector3<float, Vector3f>
 {
     //
     // Methods

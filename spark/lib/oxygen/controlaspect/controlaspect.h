@@ -22,13 +22,14 @@
 #ifndef OXYGEN_CONTROLASPECT_H
 #define OXYGEN_CONTROLASPECT_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 class Scene;
 
-class ControlAspect : public BaseNode
+class OXYGEN_API ControlAspect : public BaseNode
 {
 public:
     ControlAspect();

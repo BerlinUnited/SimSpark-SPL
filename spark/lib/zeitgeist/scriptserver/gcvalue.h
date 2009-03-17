@@ -27,6 +27,7 @@ typedef unsigned long VALUE;
 typedef unsigned long ID;
 
 #include <string>
+#include <zeitgeist/zeitgeist_defines.h>
 
 namespace zeitgeist
 {
@@ -40,7 +41,7 @@ namespace zeitgeist
     wrapper also provides some helpers to access and convert the
     stored value.
 */
-class GCValue
+class ZEITGEIST_API GCValue
 {
 public:
     GCValue();

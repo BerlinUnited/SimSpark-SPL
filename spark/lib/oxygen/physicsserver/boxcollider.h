@@ -22,6 +22,7 @@
 #ifndef OXYGEN_BOXCOLLIDER_H
 #define OXYGEN_BOXCOLLIDER_H
 
+#include <oxygen/oxygen_defines.h>
 #include "collider.h"
 
 namespace oxygen
@@ -29,7 +30,7 @@ namespace oxygen
 
 /** BoxCollider encapsulates an ODE box geometry object.
  */
-class BoxCollider : public Collider
+class OXYGEN_API BoxCollider : public Collider
 {
     //
     // Functions

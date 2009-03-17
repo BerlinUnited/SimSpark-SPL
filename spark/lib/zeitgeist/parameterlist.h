@@ -27,6 +27,7 @@
 #include <string>
 #include <salt/vector.h>
 #include <salt/matrix.h>
+#include "zeitgeist_defines.h"
 
 namespace zeitgeist
 {
@@ -36,7 +37,7 @@ class ParameterList;
     as a typesafe container to realize a sequence of values of
     arbitrary types.
 */
-class ParameterList
+class ZEITGEIST_API ParameterList
 {
 public:
     typedef std::vector<boost::any> TVector;

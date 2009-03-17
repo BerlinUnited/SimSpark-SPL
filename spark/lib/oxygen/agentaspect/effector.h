@@ -22,6 +22,7 @@
 #ifndef OXYGEN_EFFECTOR_H
 #define OXYGEN_EFFECTOR_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
 #include <oxygen/gamecontrolserver/baseparser.h>
 
@@ -30,7 +31,7 @@ namespace oxygen
 class ActionObject;
 class AgentAspect;
 
-class Effector : public BaseNode
+class OXYGEN_API Effector : public BaseNode
 {
 public:
     Effector() : BaseNode() {};

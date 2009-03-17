@@ -20,13 +20,14 @@
 #ifndef OXYGEN_BALLJOINT_H
 #define OXYGEN_BALLJOINT_H
 
+#include <oxygen/oxygen_defines.h>
 #include "joint.h"
 
 namespace oxygen
 {
 class Body;
 
-class BallJoint : public Joint
+class OXYGEN_API BallJoint : public Joint
 {
 public:
     BallJoint();

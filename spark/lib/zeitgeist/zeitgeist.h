@@ -21,6 +21,7 @@
 #ifndef ZEITGEIST_ZEITGEIST_H
 #define ZEITGEIST_ZEITGEIST_H
 
+#include "zeitgeist_defines.h"
 #include "core.h"
 #include "corecontext.h"
 #include "scriptserver/scriptserver.h"
@@ -33,7 +34,7 @@ namespace zeitgeist
     Zeitgeist framework, manages the core and the main core
     context. It is the basic interface to the client code.
 */
-class Zeitgeist
+class ZEITGEIST_API Zeitgeist
 {
     //
     // functions

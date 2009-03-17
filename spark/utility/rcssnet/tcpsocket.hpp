@@ -28,7 +28,7 @@ namespace rcss
 {
     namespace net
     {
-        class TCPSocket
+        class RCSSNET3D_API TCPSocket
             : public Socket
         {
         public:

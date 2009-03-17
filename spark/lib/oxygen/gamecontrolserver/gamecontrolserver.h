@@ -24,6 +24,7 @@
 
 #include "actionobject.h"
 #include "baseparser.h"
+#include <oxygen/oxygen_defines.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 
@@ -33,7 +34,7 @@ class AgentAspect;
 class Effector;
 class Scene;
 
-class GameControlServer : public zeitgeist::Node
+class OXYGEN_API GameControlServer : public zeitgeist::Node
 {
 public:
 

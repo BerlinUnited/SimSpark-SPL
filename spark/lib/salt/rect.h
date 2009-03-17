@@ -22,13 +22,13 @@
 #ifndef SALT_RECT_H
 #define SALT_RECT_H
 
-#include "defines.h"
+#include "salt_defines.h"
 
 namespace salt
 {
 
 /** this class provides rectangle in two dimensional space */
-class Rect
+class SALT_API Rect
 {
 public:
     /** constucts undefined Rect for performance reasons */

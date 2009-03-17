@@ -24,6 +24,7 @@
 
 #include <boost/random.hpp>
 #include <boost/version.hpp>
+#include "salt_defines.h"
 
 namespace salt
 {

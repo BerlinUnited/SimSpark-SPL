@@ -29,7 +29,7 @@
 #ifndef SALT_SHAREDLIBRARY_H
 #define SALT_SHAREDLIBRARY_H
 
-#include "defines.h"
+#include "salt_defines.h"
 #include <string>
 #include <cstdio>
 
@@ -42,7 +42,7 @@ namespace salt
  *  Windows using the Visual C++ Compiler and Linux using the gcc
  *  compiler are available.
  */
-class SharedLibrary
+class SALT_API SharedLibrary
 {
     //
     // types

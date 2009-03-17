@@ -27,6 +27,9 @@
 #endif
 #ifdef HAVE_IL_IL_H
 #include <IL/il.h>
+#ifndef IL_ILBM
+#define IL_ILBM IL_LBM
+#endif
 #endif
 
 #include <zeitgeist/class.h>
@@ -66,7 +69,7 @@ public:
         eICO = IL_ICO,
         eJPG = IL_JPG,
         eJFIF = IL_JFIF,
-        eLBM = IL_LBM,
+        eLBM = IL_ILBM,
         ePCD = IL_PCD,
         ePCX = IL_PCX,
         ePIC = IL_PIC,

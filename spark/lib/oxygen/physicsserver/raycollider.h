@@ -22,6 +22,7 @@
 #ifndef OXYGEN_RAYCOLLIDER_H
 #define OXYGEN_RAYCOLLIDER_H
 
+#include <oxygen/oxygen_defines.h>
 #include "collider.h"
 
 namespace oxygen
@@ -34,7 +35,7 @@ namespace oxygen
  * from the geom's position and extends in the direction of the geom's
  * local Z-axis.
  */
-class RayCollider : public Collider
+class OXYGEN_API RayCollider : public Collider
 {
     //
     // Functions

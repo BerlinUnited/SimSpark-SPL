@@ -1,9 +1,7 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
-   Fri May 9 2003
-   Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   Copyright (C) 2009 RoboCup Soccer Server 3D Maintenance Group
    $Id$
 
    This program is free software; you can redistribute it and/or modify
@@ -19,31 +17,16 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_PHYSICSSERVER_H
-#define OXYGEN_PHYSICSSERVER_H
 
-#include <zeitgeist/class.h>
-#include <zeitgeist/leaf.h>
-#include <oxygen/oxygen_defines.h>
-#include "odewrapper.h"
+#ifndef KEROSIN_KEROSIN_DEFINES_H
+#define KEROSIN_KEROSIN_DEFINES_H
 
-namespace oxygen
-{
-class Body;
-class Collider;
+#include <salt/defines.h>
 
-class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
-{
-    //
-    // Functions
-    //
-public:
-    PhysicsServer();
-    ~PhysicsServer();
-};
+#ifdef kerosin_EXPORTS
+#define KEROSIN_API API_EXPORT
+#else
+#define KEROSIN_API API_IMPORT
+#endif
 
-DECLARE_CLASS(PhysicsServer);
-
-} //namespace oxygen
-
-#endif //OXYGEN_PHYSICSSERVER_H
+#endif //KEROSIN_KEROSIN_DEFINES_H

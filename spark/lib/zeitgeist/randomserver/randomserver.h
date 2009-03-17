@@ -33,7 +33,7 @@ namespace zeitgeist
  *  zeitgeist framework. Additionally, it provides interfaces to set a seed
  *  and access some distributions.
  */
-class RandomServer : public Node
+class ZEITGEIST_API RandomServer : public Node
 {
 public:
     /** constructs a RandomServer */

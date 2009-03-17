@@ -22,6 +22,7 @@
 #ifndef OXYGEN_MESHIMPORTER_H
 #define OXYGEN_MESHIMPORTER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 #include "trimesh.h"
@@ -33,7 +34,7 @@ namespace oxygen
     or generate trimeshes. MeshImporter classes are registered to the
     GeometryServer
 */
-class MeshImporter : public zeitgeist::Leaf
+class OXYGEN_API MeshImporter : public zeitgeist::Leaf
 {
 public:
     MeshImporter() : Leaf() {};

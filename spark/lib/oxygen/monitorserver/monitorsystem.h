@@ -24,12 +24,13 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 
 namespace oxygen
 {
 
-class MonitorSystem : public zeitgeist::Node
+class OXYGEN_API MonitorSystem : public zeitgeist::Node
 {
 public:
     MonitorSystem();

@@ -22,6 +22,7 @@
 #ifndef OXYGEN_BODY_H
 #define OXYGEN_BODY_H
 
+#include <oxygen/oxygen_defines.h>
 #include "odeobject.h"
 
 namespace oxygen
@@ -35,7 +36,7 @@ class World;
     usually constant over time: Mass, Center of mass and Inertia
     matrix (mass distribution matrix)
  */
-class Body : public ODEObject
+class OXYGEN_API Body : public ODEObject
 {
     //
     // Functions
@@ -319,10 +320,10 @@ private:
 protected:
     /** the managed ode body */
     dBodyID mODEBody;
-    
+
     /** the total mass translation */
     salt::Vector3f mMassTrans;
-    
+
     /** flag whether mass has been transformed */
     bool mMassTransformed;
 };

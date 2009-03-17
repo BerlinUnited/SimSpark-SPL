@@ -22,6 +22,7 @@
 #ifndef OXYGEN_PLANECOLLIDER_H
 #define OXYGEN_PLANECOLLIDER_H
 
+#include <oxygen/oxygen_defines.h>
 #include "collider.h"
 
 namespace oxygen
@@ -34,7 +35,7 @@ namespace oxygen
     words it is assumed that the plane is always part of the static
     environment and not tied to any movable object.
 */
-class PlaneCollider : public Collider
+class OXYGEN_API PlaneCollider : public Collider
 {
     //
     // Functions

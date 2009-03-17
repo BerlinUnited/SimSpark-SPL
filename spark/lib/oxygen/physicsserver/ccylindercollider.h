@@ -22,6 +22,7 @@
 #ifndef OXYGEN_CCYLINDERCOLLIDER_H
 #define OXYGEN_CCYLINDERCOLLIDER_H
 
+#include <oxygen/oxygen_defines.h>
 #include "collider.h"
 
 namespace oxygen
@@ -32,7 +33,7 @@ namespace oxygen
     half-sphere caps at its ends. This feature makes the internal
     collision detection code particularly fast and accurate.
  */
-class CCylinderCollider : public Collider
+class OXYGEN_API CCylinderCollider : public Collider
 {
     //
     // Functions

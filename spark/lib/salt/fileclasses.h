@@ -34,6 +34,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include "salt_defines.h"
 
 #ifndef PATH_MAX
 #define PATH_MAX 4096
@@ -45,7 +46,7 @@ namespace salt
 /** RFile defines an interface and some basic support functions for
   * classes providing read only file services
   */
-class RFile
+class SALT_API RFile
 {
 public:
     virtual ~RFile() {};
@@ -178,7 +179,7 @@ public:
  *     buffer. On open() a file is completely read into the buffer and
  *     from there on served from memory.
  */
-class MemFile : public RFile
+class SALT_API MemFile : public RFile
 {
 public:
     MemFile(const char*fn=NULL, const char*mode="rb");
@@ -223,7 +224,7 @@ private:
 /** WFile extends the RFile interface with methods for writing to a
  * file and related support funtions
  */
-class WFile : public RFile
+class SALT_API WFile : public RFile
 {
 public:
     virtual ~WFile() {};
@@ -306,7 +307,7 @@ public:
 };
 
 /** StdFile implements the WFile interface using the standard file system */
-class StdFile : public WFile
+class SALT_API StdFile : public WFile
 {
 public:
     StdFile(FILE*f);

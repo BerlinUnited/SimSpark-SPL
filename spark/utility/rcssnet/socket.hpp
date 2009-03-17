@@ -27,6 +27,7 @@
 
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
+#include "rcssnet3D_defines.h"
 #include "addr.hpp"
 
 #ifdef HAVE_WINSOCK2_H
@@ -39,7 +40,7 @@ namespace rcss
     {
                 class Handler;
 
-        class Socket
+        class RCSSNET3D_API Socket
         {
         public:
 #ifdef HAVE_SOCKETTYPE

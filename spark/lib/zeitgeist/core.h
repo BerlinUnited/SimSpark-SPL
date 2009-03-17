@@ -28,6 +28,7 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include "zeitgeist_defines.h"
 
 namespace salt
 {
@@ -53,7 +54,7 @@ class RandomServer;
     bundles- plugins containg new classes, that can be registered to
     the framework at runtime.
  */
-class Core
+class ZEITGEIST_API Core
 {
 public:
     //

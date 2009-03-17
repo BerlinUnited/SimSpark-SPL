@@ -29,6 +29,7 @@
 #ifndef KEROSIN_KEROSIN_H
 #define KEROSIN_KEROSIN_H
 
+#include "kerosin_defines.h"
 #include "soundserver/soundserver.h"
 #include "imageserver/imageserver.h"
 #include "fontserver/fontserver.h"
@@ -74,7 +75,7 @@ namespace kerosin
  * registers all internal classes and automatically runs the default init
  * script 'sys/script/default.rb' if it exists.
 */
-class Kerosin
+class KEROSIN_API Kerosin
 {
     //
     // types

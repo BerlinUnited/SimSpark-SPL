@@ -22,6 +22,7 @@
 #define OXYGEN_BEHAVIOR_H
 
 #include <string>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <oxygen/simulationserver/traincontrol.h>
 
@@ -32,7 +33,7 @@ namespace oxygen
     derivated from this class, and overload 'Init' & 'Think'
     to implement its special behavior.
  */
-class Behavior : public zeitgeist::Leaf
+class OXYGEN_API Behavior : public zeitgeist::Leaf
 {
 public:
     /** called once when the initially connected to the server */

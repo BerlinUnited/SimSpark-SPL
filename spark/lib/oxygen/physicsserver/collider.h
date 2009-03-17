@@ -25,6 +25,7 @@
 #include "odeobject.h"
 #include <string>
 #include <set>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -41,7 +42,7 @@ class World;
     bodies. A body and a geom together represent all the properties of
     the simulated object.
 */
-class Collider : public ODEObject
+class OXYGEN_API Collider : public ODEObject
 {
     //
     // Functions

@@ -22,6 +22,7 @@
 #ifndef OXYGEN_INDEXBUFFER_H
 #define OXYGEN_INDEXBUFFER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <boost/shared_array.hpp>
 
 namespace oxygen
@@ -31,7 +32,7 @@ namespace oxygen
     vertexbuffer to describe a set of triangles. It is used together
     with the StaticMesh class
  */
-class IndexBuffer
+class OXYGEN_API IndexBuffer
 {
 public:
     IndexBuffer();

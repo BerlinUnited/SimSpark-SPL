@@ -20,6 +20,7 @@
 #ifndef OXYGEN_DRAGCONTROLLER_H
 #define OXYGEN_DRAGCONTROLLER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/bodycontroller.h>
 
 namespace oxygen
@@ -28,7 +29,7 @@ namespace oxygen
 /** \class DragController is a BodyController that applies a linear
     and angular drag the controlled body.
  */
-class DragController : public BodyController
+class OXYGEN_API DragController : public BodyController
 {
     //
     // Functions

@@ -42,7 +42,7 @@ namespace zeitgeist
 /** Node makes up the hierarchy. A Node object can reside within the
     hierarchy and have children
 */
-class Node : public Leaf
+class ZEITGEIST_API Node : public Leaf
 {
     //
     // functions

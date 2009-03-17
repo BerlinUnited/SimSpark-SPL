@@ -44,6 +44,7 @@
 #include <sparkconfig.h>
 #endif
 
+#include "salt_defines.h"
 #include <string>
 #include <list>
 
@@ -54,7 +55,7 @@ namespace salt
   *     hierarchy. It is capable of cleaning paths and separating a path
   *     into path components.
   */
-class Path
+class SALT_API Path
 {
     //
     // types

@@ -22,6 +22,7 @@
 #ifndef OXYGEN_CONTACTJOINTHANDLER_H
 #define OXYGEN_CONTACTJOINTHANDLER_H
 
+#include <oxygen/oxygen_defines.h>
 #include "collisionhandler.h"
 
 namespace oxygen
@@ -31,7 +32,7 @@ namespace oxygen
     ODE contact joint between the two bodies associated with the two
     affected collision geoms.
  */
-class ContactJointHandler : public CollisionHandler
+class OXYGEN_API ContactJointHandler : public CollisionHandler
 {
 public:
     ContactJointHandler();

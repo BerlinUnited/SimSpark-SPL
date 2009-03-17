@@ -50,7 +50,7 @@ VALUE zeitgeist::RbEvalStringWrap(const std::string& str)
 std::string zeitgeist::RbGetError()
 {
   VALUE mes = rb_inspect(rb_gv_get("$!"));
-  return RSTRING(mes)->ptr;
+  return RSTRING_PTR(mes);
 }
 
 void zeitgeist::RbPrintError()

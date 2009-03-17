@@ -22,6 +22,7 @@
 #ifndef OXYGEN_SPHERECOLLIDER_H
 #define OXYGEN_SPHERECOLLIDER_H
 
+#include <oxygen/oxygen_defines.h>
 #include "collider.h"
 
 namespace oxygen
@@ -29,7 +30,7 @@ namespace oxygen
 
 /** SphereCollider encapsulates an ODE sphere geometry object.
  */
-class SphereCollider : public Collider
+class OXYGEN_API SphereCollider : public Collider
 {
     //
     // Functions

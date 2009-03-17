@@ -22,6 +22,7 @@
 #ifndef OXYGEN_MONITORSERVER_H
 #define OXYGEN_MONITORSERVER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 #include "monitorsystem.h"
@@ -29,8 +30,8 @@
 namespace oxygen
 {
 class SimulationServer;
-    
-class MonitorServer : public zeitgeist::Node
+
+class OXYGEN_API MonitorServer : public zeitgeist::Node
 {
 public:
     MonitorServer();
@@ -79,7 +80,7 @@ protected:
     void CollectItemPredicates(bool initial, PredicateList& pList);
 
     virtual void OnLink();
-    
+
 private:
     /** a cached reference to the SimulationServer */
     CachedPath<SimulationServer> mSimulationServer;

@@ -22,7 +22,7 @@
 #ifndef SALT_MATRIX_H
 #define SALT_MATRIX_H
 
-#include "defines.h"
+#include "salt_defines.h"
 #include "vector.h"
 #include <memory.h>
 
@@ -35,7 +35,7 @@ namespace salt
 /** Matrix provides a 4x4 float Matrix along with methods to set
   *     up and manipulate it.
   */
-class Matrix
+class SALT_API Matrix
 {
 public:
     /** the values of the matrix */

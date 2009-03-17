@@ -23,12 +23,13 @@
 #define OXYGEN_CUSTOMMONITOR_H
 
 #include <zeitgeist/leaf.h>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 
 namespace oxygen
 {
 
-class CustomMonitor : public zeitgeist::Leaf
+class OXYGEN_API CustomMonitor : public zeitgeist::Leaf
 {
 public:
     CustomMonitor();

@@ -22,6 +22,7 @@
 #ifndef OXYGEN_TRANSFORMCOLLIDER_H
 #define OXYGEN_TRANSFORMCOLLIDER_H
 
+#include <oxygen/oxygen_defines.h>
 #include "collider.h"
 
 namespace oxygen
@@ -43,7 +44,7 @@ namespace oxygen
     they allow multiple displaced geoms to be connected to one body.
 */
 
-class TransformCollider : public Collider
+class OXYGEN_API TransformCollider : public Collider
 {
     //
     // Functions

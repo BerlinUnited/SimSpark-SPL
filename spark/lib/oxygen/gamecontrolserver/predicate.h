@@ -28,6 +28,7 @@
 #include <boost/any.hpp>
 #include <salt/vector.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -46,7 +47,7 @@ namespace oxygen
     agent. Again, the Perceptor is independent from the format used to
     transmit its data to the agent.
 */
-class Predicate
+class OXYGEN_API Predicate
 {
  public:
     /** \class Iterator encapsulates a

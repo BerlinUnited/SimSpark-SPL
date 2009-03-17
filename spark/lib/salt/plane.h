@@ -32,7 +32,7 @@
 #ifndef SALT_PLANE_H
 #define SALT_PLANE_H
 
-#include "defines.h"
+#include "salt_defines.h"
 #include "vector.h"
 #include "bounds.h"
 
@@ -68,7 +68,7 @@ enum EPlane
   *     vector formed by the coefficients <A,B,C> is the normal vector to
   *     the plane.
   */
-class Plane
+class SALT_API Plane
 {
 // Members
 public:

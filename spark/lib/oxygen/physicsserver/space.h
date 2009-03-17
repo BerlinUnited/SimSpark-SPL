@@ -24,6 +24,7 @@
 
 #include "odeobject.h"
 #include <set>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -36,7 +37,7 @@ class Collider;
     similar to the rigid body concept of the `world', except that it
     applies to collision instead of dynamics.
 */
-class Space : public ODEObject
+class OXYGEN_API Space : public ODEObject
 {
 public:
     typedef std::set<dSpaceID> TSpaceIdSet;

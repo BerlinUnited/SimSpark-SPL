@@ -24,13 +24,14 @@
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(CYGWIN)
 #include "Winsock2.h"
 #endif
+#include "rcssnet3D_defines.h"
 
 
 namespace rcss
 {
     namespace net
     {
-		class Handler
+		class RCSSNET3D_API Handler
 		{
 		public:
 			static

@@ -22,6 +22,7 @@
 #ifndef OXYGEN_WORLD_H
 #define OXYGEN_WORLD_H
 
+#include <oxygen/oxygen_defines.h>
 #include "odeobject.h"
 
 namespace oxygen
@@ -34,7 +35,7 @@ namespace oxygen
     time, thus one reason to use separate worlds is to simulate
     systems at different rates.
 */
-class World : public ODEObject
+class OXYGEN_API World : public ODEObject
 {
     //
     // Functions
