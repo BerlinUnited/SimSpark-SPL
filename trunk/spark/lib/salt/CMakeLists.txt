@@ -14,6 +14,7 @@ set(salt_LIB_HDRS
     rect.h
     sharedlibrary.h
     vector.h
+    salt_defines.h
 )
 
 set(salt_LIB_SRCS

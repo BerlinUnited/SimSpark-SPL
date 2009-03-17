@@ -1,3 +1,11 @@
+2009-03-17  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/kerosin/imageserver/imageserver.h (ImageServer): 
+	- added a fix for the latest DevIL package
+	
+	* lib/zeitgeist/scriptserver/rubywrapper.cpp: 
+	- improved ruby 1.9 compatibility
+
 2009-03-07  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* test/scenetest/CMakeLists.txt: 

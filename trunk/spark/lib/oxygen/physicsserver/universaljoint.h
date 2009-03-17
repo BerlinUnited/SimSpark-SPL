@@ -20,13 +20,14 @@
 #ifndef OXYGEN_UNIVERSALJOINT_H
 #define OXYGEN_UNIVERSALJOINT_H
 
+#include <oxygen/oxygen_defines.h>
 #include "joint.h"
 
 namespace oxygen
 {
 class Body;
 
-class UniversalJoint : public Joint
+class OXYGEN_API UniversalJoint : public Joint
 {
 public:
     UniversalJoint();

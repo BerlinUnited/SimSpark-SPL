@@ -13,6 +13,7 @@ set(kerosin_LIB_HDRS
     inputserver/inputitem.h
     inputserver/input.h
     kerosin.h
+    kerosin_defines.h
     materialserver/material.h
     materialserver/materialserver.h
     sceneserver/axis.h
@@ -116,7 +117,8 @@ set(kerosin_LIB_SRCS
     renderserver/customrender_c.cpp
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/lib ${FREETYPE_INCLUDE_DIRS} ${DevIL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/lib ${FREETYPE_INCLUDE_DIRS}
+  ${DevIL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
 add_library(kerosin ${kerosin_LIB_SRCS} ${kerosin_LIB_HDRS})
 

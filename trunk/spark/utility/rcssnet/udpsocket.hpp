@@ -28,7 +28,7 @@ namespace rcss
 {
     namespace net
     {
-        class UDPSocket
+        class RCSSNET3D_API UDPSocket
             : public Socket
         {
         public:

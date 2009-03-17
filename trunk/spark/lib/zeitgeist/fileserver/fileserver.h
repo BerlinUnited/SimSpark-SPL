@@ -78,7 +78,7 @@ namespace zeitgeist
     opened file wins. This allows for some nice effects. File systems
     are associated with id strings like 'STD' or 'ZIP'.
   */
-class FileServer : public Node
+class ZEITGEIST_API FileServer : public Node
 {
     //
     // functions

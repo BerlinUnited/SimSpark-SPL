@@ -20,6 +20,7 @@
 #ifndef OXYGEN_VELOCITYCONTROLLER_H
 #define OXYGEN_VELOCITYCONTROLLER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/bodycontroller.h>
 
 namespace oxygen
@@ -28,7 +29,7 @@ namespace oxygen
 /** \class VelocityController is a BodyController that restricts the
     maximum velocity a body can attain
  */
-class VelocityController : public BodyController
+class OXYGEN_API VelocityController : public BodyController
 {
     //
     // Functions

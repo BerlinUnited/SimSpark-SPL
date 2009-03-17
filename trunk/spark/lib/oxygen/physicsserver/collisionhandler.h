@@ -23,6 +23,7 @@
 #define OXYGEN_COLLISIONHANDLER_H
 
 #include <oxygen/sceneserver/basenode.h>
+#include <oxygen/oxygen_defines.h>
 #include "odewrapper.h"
 
 namespace oxygen
@@ -40,7 +41,7 @@ class Space;
     an ODE contact joint, covering the most common response to a
     collision.
  */
-class CollisionHandler : public BaseNode
+class OXYGEN_API CollisionHandler : public BaseNode
 {
   //
   // Functions

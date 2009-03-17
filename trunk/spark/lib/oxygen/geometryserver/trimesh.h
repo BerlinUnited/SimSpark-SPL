@@ -27,6 +27,7 @@
 #include <boost/shared_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <string>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -41,7 +42,7 @@ namespace oxygen
     vector. Indeces are stored using the IndexBuffer class as as list
     of unsigned int values.
  */
-class TriMesh
+class OXYGEN_API TriMesh
 {
 public:
     struct Face

@@ -20,13 +20,14 @@
 #ifndef OXYGEN_HINGEJOINT_H
 #define OXYGEN_HINGEJOINT_H
 
+#include <oxygen/oxygen_defines.h>
 #include "joint.h"
 
 namespace oxygen
 {
 class Body;
 
-class HingeJoint : public Joint
+class OXYGEN_API HingeJoint : public Joint
 {
 public:
     HingeJoint();

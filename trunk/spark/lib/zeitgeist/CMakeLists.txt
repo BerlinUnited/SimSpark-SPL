@@ -9,6 +9,7 @@ set(zeitgeist_LIB_HDRS
     object.h
     object_c.h
     zeitgeist.h
+    zeitgeist_defines.h
     fileserver/fileserver.h
     fileserver/filesystem.h
     logserver/logserver.h

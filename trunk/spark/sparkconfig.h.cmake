@@ -34,6 +34,8 @@
 
 #cmakedefine HAVE_KEROSIN_KEROSIN_H 1
 
+#cmakedefine SHARED_LIB_COMPILE 1
+
 #define PACKAGE_NAME "${CMAKE_PROJECT_NAME}"
 
 #define PREFIX "${prefix}"

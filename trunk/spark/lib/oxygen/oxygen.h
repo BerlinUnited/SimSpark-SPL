@@ -22,6 +22,7 @@
 #ifndef OXYGEN_OXYGEN_H
 #define OXYGEN_OXYGEN_H
 
+#include "oxygen_defines.h"
 #include "agentaspect/agentaspect.h"
 #include "agentaspect/effector.h"
 #include "agentaspect/perceptor.h"
@@ -101,7 +102,7 @@ namespace oxygen
 /** This is the main class, which initializes the Oxygen framework. It
      registers all internal classes.
 */
-class Oxygen
+class OXYGEN_API Oxygen
 {
 public:
     /** initializes the oxygen framework \param zg is a reference to

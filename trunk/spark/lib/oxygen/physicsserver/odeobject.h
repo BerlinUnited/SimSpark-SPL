@@ -23,6 +23,7 @@
 #ifndef OXYGEN_ODEOBJECT_H
 #define OXYGEN_ODEOBJECT_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
 #include "odewrapper.h"
 
@@ -33,7 +34,7 @@ class World;
 
 /** ODEObject is the base of all classes encapsulating ODE concepts
  */
-class ODEObject : public BaseNode
+class OXYGEN_API ODEObject : public BaseNode
 {
 public:
     //

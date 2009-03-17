@@ -22,7 +22,7 @@
 #ifndef SALT_BOUNDS_H
 #define SALT_BOUNDS_H
 
-#include "defines.h"
+#include "salt_defines.h"
 #include "matrix.h"
 #include "vector.h"
 
@@ -32,7 +32,7 @@ namespace salt
 {
 
 /** AABB3 provides an axis aligned three dimensional bounding box */
-class AABB3
+class SALT_API AABB3
 {
 public:
     // constructors
@@ -142,7 +142,7 @@ public:
 };
 
 /** AABB2 provides an axis aligned two dimensional bounding box */
-class AABB2
+class SALT_API AABB2
 {
 public:
     // constructors
@@ -234,7 +234,7 @@ public:
 
 
 /** BoundingSphere provides a three dimensional sphere */
-class BoundingSphere
+class SALT_API BoundingSphere
 {
 public:
     // constructors

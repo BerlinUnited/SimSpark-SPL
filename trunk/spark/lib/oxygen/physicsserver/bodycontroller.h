@@ -22,6 +22,7 @@
 #ifndef OXYGEN_BODYCONTROLLER_H
 #define OXYGEN_BODYCONTROLLER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
@@ -31,7 +32,7 @@ class Body;
 /** \class BodyController is a baseclass for nodes that control the
     motion of an associated body.
 */
-class BodyController : public BaseNode
+class OXYGEN_API BodyController : public BaseNode
 {
 public:
     BodyController() : BaseNode() {}

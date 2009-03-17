@@ -22,6 +22,7 @@
 #ifndef OXYGEN_STDMESHIMPORTER
 #define OXYGEN_STDMESHIMPORTER
 
+#include <oxygen/oxygen_defines.h>
 #include "meshimporter.h"
 
 namespace oxygen
@@ -29,7 +30,7 @@ namespace oxygen
 /** \class StdMeshImporter is a MeshImporter that generates a standard
      set of meshes. These are spheres, boxes and capped cylinders.
 */
-class StdMeshImporter : public MeshImporter
+class OXYGEN_API StdMeshImporter : public MeshImporter
 {
 public:
     StdMeshImporter();
@@ -56,7 +57,7 @@ protected:
     /** constructs a unit capped cylinder */
     boost::shared_ptr<TriMesh> UnitCCylinder
     (const zeitgeist::ParameterList& parameter);
-    
+
     /** constructs a flat unit cylinder */
     boost::shared_ptr<TriMesh> UnitCylinder();
 };

@@ -25,14 +25,15 @@
 #include "collisionhandler.h"
 #include "collider.h"
 #include <set>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
-{    
+{
 /** \class RecorderHandler is a CollisionHandler that accumulates
      collision information of the Collider it belongs to. It is the
      resonsibility of the user to reset the recorder.
 */
-class RecorderHandler : public CollisionHandler
+class OXYGEN_API RecorderHandler : public CollisionHandler
 {
 public:
     typedef std::set<boost::weak_ptr<Collider> > TCollisionSet;
@@ -66,12 +67,12 @@ public:
         \param list is the list that receives the parent nodes
      */
     void GetParentsSupportingClass(const std::string &name, TParentList &list);
-    
+
     /** same functionality as GetParentsSupportingClass, but using the
         C++ type system instead of string comparisons for improved
         performance
 
-        \param CLASS is the template parameter for the name of the class 
+        \param CLASS is the template parameter for the name of the class
         the parent nodes must support
 
         \param list is the list that receives the parent nodes

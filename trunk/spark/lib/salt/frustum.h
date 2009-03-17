@@ -36,7 +36,7 @@
 #ifndef SALT_FRUSTUM_H
 #define SALT_FRUSTUM_H
 
-#include "defines.h"
+#include "salt_defines.h"
 #include "plane.h"
 #include "bounds.h"
 
@@ -47,7 +47,7 @@ namespace salt
   *  space (possibly infinite) defined by a set of planes. This class
   *  also provides some 'special' frustra construction methods.
   */
-class Frustum
+class SALT_API Frustum
 {
 // Members
 public:

@@ -22,12 +22,13 @@
 #define RCSS_NET_EXCEPTION_HPP
 
 #include <exception>
+#include "rcssnet3D_defines.h"
 
 namespace rcss
 {
     namespace net
     {
-        class HostNotFound
+        class RCSSNET3D_API HostNotFound
             : public std::exception
         {
         public:
@@ -42,7 +43,7 @@ namespace rcss
             int m_err;
         };
 
-        class OpenErr
+        class RCSSNET3D_API OpenErr
             : public std::exception
         {
         public:
@@ -57,7 +58,7 @@ namespace rcss
             int m_err;
         };
 
-        class BindErr
+        class RCSSNET3D_API BindErr
             : public std::exception
         {
         public:
@@ -72,7 +73,7 @@ namespace rcss
             int m_err;
         };
 
-        class ListenErr
+        class RCSSNET3D_API ListenErr
             : public std::exception
         {
         public:
@@ -87,7 +88,7 @@ namespace rcss
             int m_err;
         };
 
-        class AcceptErr
+        class RCSSNET3D_API AcceptErr
             : public std::exception
         {
         public:
@@ -102,7 +103,7 @@ namespace rcss
             int m_err;
         };
 
-        class GetNameErr
+        class RCSSNET3D_API GetNameErr
             : public std::exception
         {
         public:
@@ -117,7 +118,7 @@ namespace rcss
             int m_err;
         };
 
-        class ConnectErr
+        class RCSSNET3D_API ConnectErr
             : public std::exception
         {
         public:

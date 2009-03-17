@@ -22,6 +22,7 @@
 #ifndef OXYGEN_JOINT_H
 #define OXYGEN_JOINT_H
 
+#include <oxygen/oxygen_defines.h>
 #include "odeobject.h"
 
 namespace oxygen
@@ -46,7 +47,7 @@ class Body;
     rates) directly, instead you must set the corresponding body
     positions and velocities.
  */
-class Joint : public ODEObject
+class OXYGEN_API Joint : public ODEObject
 {
 public:
     enum EBodyIndex
@@ -136,10 +137,10 @@ public:
     salt::Vector3f GetFeedbackTorque(EBodyIndex idx) const;
 
     /** sets the fudgefactor parameter, making this value too small can
-        prevent the motor from being able to move the joint away from 
-        a stop 
+        prevent the motor from being able to move the joint away from
+        a stop
     */
-    void SetFudgeFactor(EAxisIndex idx, float fudge_factor); 
+    void SetFudgeFactor(EAxisIndex idx, float fudge_factor);
 
     /** returns the fudgefactor paramter */
     float GetFudgeFactor(EAxisIndex idx) const;

@@ -22,13 +22,14 @@
 #ifndef OXYGEN_PERCEPTOR_H
 #define OXYGEN_PERCEPTOR_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
 #include <oxygen/gamecontrolserver/baseparser.h>
 
 namespace oxygen
 {
 
-class Perceptor : public oxygen::BaseNode
+class OXYGEN_API Perceptor : public oxygen::BaseNode
 {
 public:
 

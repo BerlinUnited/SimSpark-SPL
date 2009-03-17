@@ -20,13 +20,14 @@
 #ifndef OXYGEN_SLIDERJOINT_H
 #define OXYGEN_SLIDERJOINT_H
 
+#include <oxygen/oxygen_defines.h>
 #include "joint.h"
 
 namespace oxygen
 {
 class Body;
 
-class SliderJoint : public Joint
+class OXYGEN_API SliderJoint : public Joint
 {
 public:
     SliderJoint();

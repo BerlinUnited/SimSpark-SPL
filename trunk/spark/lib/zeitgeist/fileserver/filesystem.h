@@ -39,7 +39,7 @@ namespace zeitgeist
   /** this class defines the interface which derived filesystems must
       implement in order to be used with the fileserver.
    */
-class FileSystem : public Leaf
+class ZEITGEIST_API FileSystem : public Leaf
 {
     //
     // types

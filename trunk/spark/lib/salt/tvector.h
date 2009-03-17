@@ -33,7 +33,7 @@
 #ifndef SALT_TVECTOR_H
 #define SALT_TVECTOR_H
 
-#include "defines.h"
+#include "salt_defines.h"
 #include "gmath.h"
 #include <iostream>
 

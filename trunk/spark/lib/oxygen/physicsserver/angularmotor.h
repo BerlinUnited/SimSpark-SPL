@@ -20,6 +20,7 @@
 #ifndef OXYGEN_ANGULARMOTOR_H
 #define OXYGEN_ANGULARMOTOR_H
 
+#include <oxygen/oxygen_defines.h>
 #include "joint.h"
 
 namespace oxygen
@@ -31,7 +32,7 @@ class Body;
     up to three axes, allowing torque motors and stops to be set for
     rotation about those axes.
 */
-class AngularMotor : public Joint
+class OXYGEN_API AngularMotor : public Joint
 {
 public:
     enum EMotorMode

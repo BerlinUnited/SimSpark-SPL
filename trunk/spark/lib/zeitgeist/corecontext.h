@@ -34,6 +34,7 @@
 #include <list>
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include "zeitgeist_defines.h"
 
 namespace zeitgeist
 {
@@ -51,7 +52,7 @@ class Leaf;
  *      browsing the same object hierarchy. Therefore it was necessary to
  *      place the current browsing context into a distinct object.
  */
-class CoreContext
+class ZEITGEIST_API CoreContext
 {
     //
     // types

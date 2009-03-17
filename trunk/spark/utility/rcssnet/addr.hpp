@@ -26,6 +26,7 @@ struct sockaddr_in;
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
+#include "rcssnet3D_defines.h"
 
 namespace rcss
 {
@@ -33,7 +34,7 @@ namespace rcss
     {
         class AddrImpl;
         
-        class Addr
+        class RCSSNET3D_API Addr
         {
         public:
             typedef boost::uint16_t PortType;
@@ -75,19 +76,19 @@ namespace rcss
             boost::shared_ptr< AddrImpl > m_impl;
         };
         
-        bool 
+		RCSSNET3D_API bool 
         operator ==( const Addr& a,
                     const Addr& b );
         
-		bool 
+		RCSSNET3D_API bool 
         operator !=( const Addr& a,
                     const Addr& b );
 
-        bool 
+        RCSSNET3D_API bool 
         operator < ( const Addr& a,
                     const Addr& b );
 					
-		std::ostream&
+		RCSSNET3D_API std::ostream&
         operator<<( std::ostream& o, const Addr& addr );
     }
 }

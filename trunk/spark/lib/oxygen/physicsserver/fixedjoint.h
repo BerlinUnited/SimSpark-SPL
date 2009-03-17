@@ -20,6 +20,7 @@
 #ifndef OXYGEN_FIXEDJOINT_H
 #define OXYGEN_FIXEDJOINT_H
 
+#include <oxygen/oxygen_defines.h>
 #include "joint.h"
 
 namespace oxygen
@@ -28,14 +29,14 @@ namespace oxygen
     orientation between two bodies, or between a body and the static
     environment.
 */
-class FixedJoint : public Joint
+class OXYGEN_API FixedJoint : public Joint
 {
 public:
     FixedJoint();
     virtual ~FixedJoint();
 
-    /** Call this on the fixed joint after it has been attached to remember 
-        the current desired relative offset and desired relative rotation 
+    /** Call this on the fixed joint after it has been attached to remember
+        the current desired relative offset and desired relative rotation
         between the bodies. */
     void SetFixed();
 

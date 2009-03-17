@@ -9,7 +9,8 @@ set(rcssnet3D_LIB_HDRS
     socket.hpp
     socketstreambuf.hpp
     tcpsocket.hpp
-    udpsocket.hpp 
+    udpsocket.hpp
+    rcssnet3D_defines.h 
 )
 
 set(rcssnet3D_LIB_SRCS
@@ -23,11 +24,7 @@ set(rcssnet3D_LIB_SRCS
 
 add_library(rcssnet3D ${rcssnet3D_LIB_SRCS} ${rcssnet3D_LIB_HDRS})
 
-if(WIN32)
-	target_link_libraries(rcssnet3D ${NET_LIBS} WS2_32.lib)
-else(WIN32)
-	target_link_libraries(rcssnet3D ${NET_LIBS})
-endif(WIN32)
+target_link_libraries(rcssnet3D ${NET_LIBS})
 
 set_target_properties(rcssnet3D PROPERTIES VERSION ${RCSSNET_VERSION}
     SOVERSION ${RCSSNET_SO_VERSION})

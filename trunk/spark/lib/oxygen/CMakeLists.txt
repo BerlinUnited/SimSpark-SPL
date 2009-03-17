@@ -13,6 +13,7 @@ set(oxygen_LIB_HDRS
     gamecontrolserver/actionobject.h
     gamecontrolserver/behavior.h
     oxygen.h
+    oxygen_defines.h
     physicsserver/body.h
     physicsserver/bodycontroller.h
     physicsserver/boxcollider.h

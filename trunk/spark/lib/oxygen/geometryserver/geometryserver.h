@@ -22,6 +22,7 @@
 #ifndef OXYGEN_GEOMETRYSERVER_H
 #define OXYGEN_GEOMETRYSERVER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 #include "meshexporter.h"
@@ -34,7 +35,7 @@ namespace oxygen
     of plugins to import or generate them. Triangle meshes are used
     for collision detection and rendering.
  */
-class GeometryServer : public zeitgeist::Node
+class OXYGEN_API GeometryServer : public zeitgeist::Node
 {
 protected:
     typedef std::map<std::string, boost::shared_ptr<TriMesh> > TMeshMap;

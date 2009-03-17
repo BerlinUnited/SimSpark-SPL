@@ -127,7 +127,7 @@ class Core;
  * through a unified interface, therefore enabling Class objects to be
  * added at runtime to the Core.
 */
-class Class : public Leaf
+class ZEITGEIST_API Class : public Leaf
 {
     // friends
     friend class Object;

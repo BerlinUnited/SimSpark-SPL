@@ -42,7 +42,7 @@ class LogServerStreamBuf;
     which data can be streamed to. It is THE logging facility used
     within zeitgeist.
 */
-class LogServer : public Node , public std::ostream
+class ZEITGEIST_API LogServer : public Node , public std::ostream
 {
     // types
     //

@@ -23,12 +23,13 @@
 #define OXYGEN_MONITORCMDPARSER_H
 
 #include <zeitgeist/leaf.h>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 
 namespace oxygen
 {
 
-class MonitorCmdParser : public zeitgeist::Leaf
+class OXYGEN_API MonitorCmdParser : public zeitgeist::Leaf
 {
 public:
     MonitorCmdParser();

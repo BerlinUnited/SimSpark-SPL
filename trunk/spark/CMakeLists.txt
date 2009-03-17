@@ -38,9 +38,6 @@ endif (NOT USE_COREFOUNDATION STREQUAL "OFF")
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" C:/SDL/)
 
-if(WIN32)
-	set(Boost_USE_STATIC_LIBS ON)
-endif(WIN32)
 find_package(Ruby REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(DevIL REQUIRED)
@@ -88,6 +85,9 @@ if (NOT FUNC_HSTRERROR_EXISTS)
   endif (RESOLV_LIB_REQ)
 endif (NOT FUNC_HSTRERROR_EXISTS)
 
+if (WIN32)
+ set(NET_LIBS ${NET_LIBS} WS2_32.lib)
+endif (WIN32)
  
 ########## add extra flags ########## 
 if(NOT CMAKE_BUILD_TYPE)
@@ -97,8 +97,10 @@ endif(NOT CMAKE_BUILD_TYPE)
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR})
 if (UNIX)
-  set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE
+  set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} CACHE
         STRING "Common C++ compiler flags" FORCE)
+  set(CMAKE_C_FLAGS $ENV{CFLAGS} CACHE
+        STRING "Common C compiler flags" FORCE)
   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual" CACHE
         STRING "C++ compiler flags for Debug builds" FORCE)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE
@@ -112,14 +114,18 @@ set(INCLUDEDIR "include" CACHE PATH "The directory to install includes into.")
 set(CMAKE_SHARED_MODULE_PREFIX "")
 
 mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
+set(BUILD_SHARED_LIBS TRUE)
+if (BUILD_SHARED_LIBS)
+  set(SHARED_LIB_COMPILE 1)
+endif(BUILD_SHARED_LIBS)
 
 if(WIN32)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-	include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
-	    ${CMAKE_SOURCE_DIR}/windows/include)
-	set(BUILD_SHARED_LIBS FALSE)
-else(WIN32)
-    set(BUILD_SHARED_LIBS TRUE)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
+    include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
+        ${CMAKE_SOURCE_DIR}/windows/include)
+    if(MSVC)
+      add_definitions(/Gm /Zi /GL)
+    endif(MSVC)
 endif(WIN32)
 
 ########## library version numbers  ##########
@@ -190,6 +196,18 @@ set(CPACK_SOURCE_IGNORE_FILES
 set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
+	
+set(CPACK_PACKAGE_VENDOR "RoboCup Soccer Server 3D Maintenance Group")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A generic physical simulation system")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "simspark")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
+set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
+set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
+set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "RequestExecutionLevel user")
+
 
 include(CPack)
 

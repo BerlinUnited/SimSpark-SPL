@@ -22,6 +22,7 @@
 #ifndef OXYGEN_AGENTASPECT_H
 #define OXYGEN_AGENTASPECT_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
 #include <oxygen/gamecontrolserver/baseparser.h>
@@ -34,7 +35,7 @@ namespace oxygen
 }
 #endif
 
-class AgentAspect : public Transform
+class OXYGEN_API AgentAspect : public Transform
 {
 public:
     AgentAspect();

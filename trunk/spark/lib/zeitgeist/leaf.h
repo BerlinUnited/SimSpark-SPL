@@ -47,7 +47,7 @@ namespace zeitgeist
 /** Leaf defines the beginning of the hierarchy. A Leaf object can
     reside within the hierarchy, but cannot have children!
 */
-class Leaf : public Object
+class ZEITGEIST_API Leaf : public Object
 {
     friend class Node;
     //

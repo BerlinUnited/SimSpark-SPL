@@ -47,7 +47,7 @@ class ScriptServer;
  *  which created it.
 */
 
-class Object
+class ZEITGEIST_API Object
 {
     //
     // functions

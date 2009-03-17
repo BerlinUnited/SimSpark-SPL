@@ -45,7 +45,7 @@ class CoreContext;
     ScritpServer could easily be extended to support other script
     languages.
 */
-class ScriptServer : public Leaf
+class ZEITGEIST_API ScriptServer : public Leaf
 {
     //
     // types
