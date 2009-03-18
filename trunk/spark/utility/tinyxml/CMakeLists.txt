@@ -1,13 +1,14 @@
 ########### next target ###############
 
 set(tinyxml_ex_LIB_SRCS
-   tinystr.cpp
+#   tinystr.cpp
    tinyxml.cpp
    tinyxmlerror.cpp
    tinyxmlparser.cpp
    xmlfunctions.cpp
    tinystr.h
    tinyxml.h
+   tinyxml_defines.h
    xmlfunctions.h
 )
 

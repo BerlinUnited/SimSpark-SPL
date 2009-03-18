@@ -24,11 +24,12 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 #include <string>
 
 namespace kerosin
 {
-class Material : public zeitgeist::Leaf
+class KEROSIN_API Material : public zeitgeist::Leaf
 {
     //
     // Functions

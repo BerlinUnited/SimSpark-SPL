@@ -37,11 +37,12 @@
 #ifdef HAVE_IL_IL_H
 #include <IL/il.h>
 #endif
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
 
-class Image
+class KEROSIN_API Image
 {
 public:
 #ifdef HAVE_IL_IL_H

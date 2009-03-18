@@ -26,6 +26,7 @@
 #include <spades/SimEngine.hpp>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include <oxygen/oxygen_defines.h>
 #include "paramreader.h"
 #include <queue>
 
@@ -37,7 +38,7 @@ class SceneServer;
 
 /*! The SpadesServer serves as an interface between the SceneServer and the agents
  */
-class SpadesServer :
+class OXYGEN_API SpadesServer :
         public zeitgeist::Node,
         public spades::WorldModel
 {

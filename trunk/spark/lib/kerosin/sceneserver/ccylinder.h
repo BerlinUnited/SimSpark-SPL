@@ -22,6 +22,7 @@
 #ifndef KEROSIN_CCYLINDER_H
 #define KEROSIN_CCYLINDER_H
 
+#include <kerosin/kerosin_defines.h>
 #include "singlematnode.h"
 
 namespace kerosin
@@ -31,7 +32,7 @@ class Material;
 /** CCylinder is a SingleMatNode that creates and renders a capped
     cylinder mesh with the given length and radius
  */
-class CCylinder : public SingleMatNode
+class KEROSIN_API CCylinder : public SingleMatNode
 {
     //
     // Function

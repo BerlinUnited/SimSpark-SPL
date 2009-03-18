@@ -24,7 +24,10 @@ IF(RUBY_EXECUTABLE  AND NOT  RUBY_ARCH_DIR)
    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print Config::CONFIG['archdir']"
       OUTPUT_VARIABLE RUBY_ARCH_DIR)
 
-   EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print Config::CONFIG['libdir']"
+   EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print Config::CONFIG['rubyhdrdir']"
+      OUTPUT_VARIABLE RUBY_HDR_DIR)
+
+	  EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print Config::CONFIG['libdir']"
       OUTPUT_VARIABLE RUBY_POSSIBLE_LIB_DIR)
 
    EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print Config::CONFIG['rubylibdir']"
@@ -51,6 +54,7 @@ IF(RUBY_EXECUTABLE  AND NOT  RUBY_ARCH_DIR)
 
    # save the results in the cache so we don't have to run ruby the next time again
    SET(RUBY_ARCH_DIR         ${RUBY_ARCH_DIR}         CACHE PATH "The Ruby arch dir")
+   SET(RUBY_HDR_DIR          ${RUBY_HDR_DIR}          CACHE PATH "The Ruby header dir")
    SET(RUBY_POSSIBLE_LIB_DIR ${RUBY_POSSIBLE_LIB_DIR} CACHE PATH "The Ruby lib dir")
    SET(RUBY_RUBY_LIB_DIR     ${RUBY_RUBY_LIB_DIR}     CACHE PATH "The Ruby ruby-lib dir")
    SET(RUBY_SITEARCH_DIR     ${RUBY_SITEARCH_DIR}     CACHE PATH "The Ruby site arch dir")
@@ -70,36 +74,23 @@ FIND_PATH(RUBY_INCLUDE_PATH
    NAMES ruby.h
    PATHS
    ${RUBY_ARCH_DIR}
-  /usr/lib/ruby/1.8/i586-linux-gnu/
-  # for ruby 1.8
-  c:/library/ruby/lib/ruby/1.8/i386-mswin32
-  "c:/Program Files/ruby/lib/ruby/1.8/i386-mswin32"
-  c:/ruby/lib/ruby/1.8/i386-mswin32
-  
-  # for ruby 1.9
-  c:/library/ruby/include/ruby-1.9.1
-  "c:/Program Files/ruby/include/ruby-1.9.1"
-  c:/ruby/include/ruby-1.9.1
-	c:/library/ruby/include/ruby-1.9.1/i386-mswin32
-	"c:/Program Files/ruby/include/ruby-1.9.1/i386-mswin32"
-	c:/ruby/include/ruby-1.9.1/i386-mswin32
-
- )
+   ${RUBY_HDR_DIR}
+  /usr/lib/ruby/1.8/i586-linux-gnu/ )
 
 # search the ruby library, the version for MSVC can have the "msvc" prefix and the "static" suffix
 FIND_LIBRARY(RUBY_LIBRARY
   NAMES ruby ruby1.8 ruby1.9
         msvcrt-ruby18 msvcrt-ruby19 msvcrt-ruby18-static msvcrt-ruby19-static
   PATHS ${RUBY_POSSIBLE_LIB_DIR}
-  c:/library/ruby/lib/
-  "c:/Program Files/ruby/lib/"
-  c:/ruby/lib/
   )
+  
+set(RUBY_INCLUDE_PATH ${RUBY_INCLUDE_PATH} ${RUBY_ARCH_DIR} "${RUBY_INCLUDE_PATH}/i386-mswin32")
 
 MARK_AS_ADVANCED(
   RUBY_EXECUTABLE
   RUBY_LIBRARY
   RUBY_INCLUDE_PATH
+  RUBY_HDR_DIR
   RUBY_ARCH_DIR
   RUBY_POSSIBLE_LIB_DIR
   RUBY_RUBY_LIB_DIR

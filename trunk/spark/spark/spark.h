@@ -26,6 +26,14 @@
 
 #include <string>
 #include <boost/shared_ptr.hpp>
+#include <salt/defines.h>
+
+#ifdef spark_EXPORTS
+#define SPARK_API API_EXPORT
+#else
+#define SPARK_API API_IMPORT
+#endif
+
 
 namespace zeitgeist
 {
@@ -61,7 +69,7 @@ namespace spark
     access to all relevant classes. Applications that want to use
     spark should subclass it and override the given callbacks.
  */
-class Spark
+class SPARK_API Spark
 {
 public:
     Spark(const std::string& relPathPrefix);

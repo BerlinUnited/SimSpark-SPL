@@ -27,11 +27,12 @@
 #include FT_FREETYPE_H
 
 #include <boost/shared_array.hpp>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
 
-class Glyph
+class KEROSIN_API Glyph
 {
 public:
     Glyph();

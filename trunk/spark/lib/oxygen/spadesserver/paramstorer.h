@@ -23,6 +23,7 @@
 #define OXYGEN_PARAMSTORER_H__
 
 #include "paramreader.h"
+#include <oxygen/oxygen_defines.h>
 #include <spades/ParamReader.hpp>
 
 namespace oxygen
@@ -48,7 +49,7 @@ namespace oxygen
     Zeitgeist::object. In order to access the ScriptServer this class
     uses the ParamReader instance.
 */
-class ParamStorer : public spades::ParamReader::ParamStorer
+class OXYGEN_API ParamStorer : public spades::ParamReader::ParamStorer
 {
 public:
     ParamStorer(oxygen::ParamReader* paramReader) :

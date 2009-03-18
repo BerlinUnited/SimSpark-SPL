@@ -24,6 +24,7 @@
 #include "netbuffer.h"
 #include <rcssnet/socket.hpp>
 #include <boost/shared_array.hpp>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -42,7 +43,7 @@ class NetMessage;
     MetaProtocol, i.e. it adds and removes any additional message
     framing and type information.
  */
-class NetControl : public SimControlNode
+class OXYGEN_API NetControl : public SimControlNode
 {
 public:
     enum ESocketType

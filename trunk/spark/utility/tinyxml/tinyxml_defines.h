@@ -1,8 +1,7 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
    this file is part of rcssserver3D
-   Fri May 9 2003
-   Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   Copyright (C) 2009 RoboCup Soccer Server 3D Maintenance Group
    $Id$
 
    This program is free software; you can redistribute it and/or modify
@@ -17,35 +16,17 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   RenderNode
 */
-#ifndef KEROSIN_RENDERNODE_H
-#define KEROSIN_RENDERNODE_H
 
-#include <oxygen/sceneserver/basenode.h>
-#include <kerosin/kerosin_defines.h>
+#ifndef TINYXML_TINYXML_DEFINES_H
+#define TINYXML_TINYXML_DEFINES_H
 
-namespace kerosin
-{
-/** RenderNode is the base class for all nodes which are part of the
-    scene hierarchy and are able to render itself.
-*/
-class KEROSIN_API RenderNode : public oxygen::BaseNode
-{
-    //
-    // Functions
-    //
-public:
-    RenderNode();
-    virtual ~RenderNode();
+#include <salt/defines.h>
 
-    /** renders the node */
-    virtual void RenderInternal() = 0;
-};
+#ifdef tinyxml_ex_EXPORTS
+#define TINYXML_API API_EXPORT
+#else
+#define TINYXML_API API_IMPORT
+#endif
 
-DECLARE_ABSTRACTCLASS(RenderNode);
-
-} //namespace kerosin
-
-#endif //KEROSIN_RENDERNODE_H
+#endif //TINYXML_TINYXML_DEFINES_H

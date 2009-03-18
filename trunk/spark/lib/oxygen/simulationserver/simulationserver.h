@@ -23,6 +23,7 @@
 #define OXYGEN_SIMULATIONSERVER_H
 
 #include <zeitgeist/node.h>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/monitorserver/monitorserver.h>
@@ -32,7 +33,7 @@ namespace oxygen
 {
 class SimControlNode;
 
-class SimulationServer : public zeitgeist::Node
+class OXYGEN_API SimulationServer : public zeitgeist::Node
 {
 /** \class SimulationServer manages the runloop of a simulation,
     i.e. it is responsible to manage the simulation time and advance

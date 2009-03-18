@@ -18,9 +18,13 @@ include_directories(${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR}
 
 add_executable(rcssagent3d ${rcssagent3d_SRCS})
 
+if (WIN32)
+ set(NET_LIBS WS2_32.lib)
+endif (WIN32)
+
 target_link_libraries(rcssagent3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
    	${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
-    ${RCSSNET3D_LIBRARIES})
+    ${RCSSNET3D_LIBRARIES} ${NET_LIBS})
   
 set_target_properties(rcssagent3d PROPERTIES 
     INSTALL_RPATH "${RPATH_DIRECTORIES}")

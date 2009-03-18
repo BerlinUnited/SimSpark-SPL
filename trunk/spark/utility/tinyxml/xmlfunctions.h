@@ -23,31 +23,40 @@
 #define XMLFUNCTIONS_H
 
 #include <string>
+#include "tinyxml_defines.h"
 
 class TiXmlElement;
 class TiXmlNode;
 
-extern void SetXMLAttribute(TiXmlElement& element, const std::string& name, const std::string& value);
-extern void SetXMLAttribute(TiXmlElement& element, const std::string& name, int value);
-extern void SetXMLDoubleAttribute(TiXmlElement& element, const std::string& name, double value);
+extern TINYXML_API void SetXMLAttribute(TiXmlElement& element,
+										const std::string& name,
+										const std::string& value);
+extern TINYXML_API void SetXMLAttribute(TiXmlElement& element,
+										const std::string& name, int value);
+extern TINYXML_API void SetXMLDoubleAttribute(TiXmlElement& element,
+											  const std::string& name,
+											  double value);
 
-extern bool GetXMLAttribute(const TiXmlElement* element,
-                            const std::string& attrName, std::string& str);
+extern TINYXML_API bool GetXMLAttribute(const TiXmlElement* element,
+										const std::string& attrName,
+										std::string& str);
 
-extern bool GetXMLAttribute(const TiXmlElement* element,
-                            const std::string& attrName, int& i);
+extern TINYXML_API bool GetXMLAttribute(const TiXmlElement* element,
+                                        const std::string& attrName, int& i);
 
-extern bool GetXMLAttribute(const TiXmlElement* element,
-                            const std::string& attrName, double& d);
+extern TINYXML_API bool GetXMLAttribute(const TiXmlElement* element,
+										const std::string& attrName, double& d);
 
-extern bool GetXMLAttribute(const TiXmlElement* element,
-                            const std::string& attrName, float& f);
+extern TINYXML_API bool GetXMLAttribute(const TiXmlElement* element,
+										const std::string& attrName, float& f);
 
-extern std::string GetXMLValue(const TiXmlNode* node);
+extern TINYXML_API std::string GetXMLValue(const TiXmlNode* node);
 
-extern TiXmlElement* GetFirstChild(TiXmlNode* node, const std::string& type);
-extern TiXmlElement* IterateChildren(TiXmlNode* node, const std::string& type);
+extern TINYXML_API TiXmlElement* GetFirstChild(TiXmlNode* node,
+											   const std::string& type);
+extern TINYXML_API TiXmlElement* IterateChildren(TiXmlNode* node,
+												 const std::string& type);
 
-extern std::string GetXMLPath(TiXmlNode* node);
+extern TINYXML_API std::string GetXMLPath(TiXmlNode* node);
 
 #endif // XMLFUNCTIONS_H

@@ -25,6 +25,7 @@
 #include <zeitgeist/node.h>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition.hpp>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/scene.h>
 
 namespace oxygen
@@ -40,7 +41,7 @@ class SimulationServer;
     reading of mouse and keyboard input, writing a simulation log,
     rendering etc.
  */
-class SimControlNode : public zeitgeist::Node
+class OXYGEN_API SimControlNode : public zeitgeist::Node
 {
 public:
     SimControlNode();
@@ -65,9 +66,9 @@ public:
 
     /** called when the current simulation cycle ends */
     virtual void EndCycle() {};
-    
+
     float GetTime() const { return mTime; }
-    
+
     void SetStep(float step) { mStep = step; }
     void SetTime(float time) { mTime = time; }
 
@@ -79,11 +80,11 @@ protected:
 
     /** returns a reference to the active scene */
     boost::shared_ptr<Scene> GetActiveScene();
-    
+
     float mTime;
-    
+
     float mStep;
-    
+
     boost::condition mCond;
 };
 

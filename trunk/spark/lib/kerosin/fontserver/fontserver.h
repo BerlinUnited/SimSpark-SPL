@@ -24,6 +24,7 @@
 
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/class.h>
+#include <kerosin/kerosin_defines.h>
 // strange as this may seem
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -48,7 +49,7 @@ class Font;
 
         TOFIX:
 */
-class FontServer : public zeitgeist::Leaf
+class KEROSIN_API FontServer : public zeitgeist::Leaf
 {
 public:
     FontServer();

@@ -24,6 +24,7 @@
 
 #include <string>
 #include <salt/vector.h>
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/openglwrapper.h>
 #include "glyph.h"
 
@@ -61,7 +62,7 @@ class FontServer;
                 - ImageServer activation hack (see FIXME in cpp file)
 
  */
-class Font
+class KEROSIN_API Font
 {
 private:
     struct GlyphMetric

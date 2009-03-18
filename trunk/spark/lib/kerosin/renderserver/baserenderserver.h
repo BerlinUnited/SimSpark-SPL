@@ -32,6 +32,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace oxygen
 {
@@ -44,7 +45,7 @@ namespace oxygen
 namespace kerosin
 {
 
-class BaseRenderServer : public zeitgeist::Leaf
+class KEROSIN_API BaseRenderServer : public zeitgeist::Leaf
 {
 public:
     virtual ~BaseRenderServer() {}
@@ -59,7 +60,7 @@ public:
     //! get a shot of the current frame
     virtual bool CopyFrame(char* /* buffer */) const { return false; }
 
-    void SetCamera( boost::shared_ptr<oxygen::Camera> c ) 
+    void SetCamera( boost::shared_ptr<oxygen::Camera> c )
         {
             mCamera = c;
         }

@@ -22,6 +22,7 @@
 #ifndef OXYGEN_FPSCONTROLLER_H
 #define OXYGEN_FPSCONTROLLER_H
 
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/bodycontroller.h>
 
 namespace oxygen
@@ -34,7 +35,7 @@ namespace oxygen
  * functions. As long as a state is activated the node performs the
  * associated action during each time step.
  */
-class FPSController : public BodyController
+class OXYGEN_API FPSController : public BodyController
 {
     //
     // Functions

@@ -22,11 +22,12 @@
 #ifndef KEROSIN_MATERIALEXTERNAL_H
 #define KEROSIN_MATERIALEXTERNAL_H
 
+#include <kerosin/kerosin_defines.h>
 #include "materialsolid.h"
 
 namespace kerosin
 {
-class MaterialExternal : public MaterialSolid
+class KEROSIN_API MaterialExternal : public MaterialSolid
 {
     // Functions
 public:

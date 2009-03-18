@@ -24,6 +24,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <oxygen/oxygen_defines.h>
 #include <spades/EngineParam.hpp>
 
 namespace oxygen
@@ -31,7 +32,7 @@ namespace oxygen
 
 /*!
  */
-class ParamReader :
+class OXYGEN_API ParamReader :
         public zeitgeist::Leaf,
         public spades::EngineParam
 {

@@ -22,12 +22,13 @@
 #ifndef KEROSIN_AXIS_H
 #define KEROSIN_AXIS_H
 
+#include <kerosin/kerosin_defines.h>
 #include <oxygen/sceneserver/basenode.h>
 
 namespace kerosin
 {
 
-class Axis : public oxygen::BaseNode
+class KEROSIN_API Axis : public oxygen::BaseNode
 {
     //
     // Functions

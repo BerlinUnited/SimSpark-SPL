@@ -23,6 +23,7 @@
 #define OXYGEN_SPADESACTEVENT_H
 
 #include <spades/ActEvent.hpp>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/actionobject.h>
 
 namespace oxygen
@@ -31,7 +32,7 @@ namespace oxygen
 }
 #endif
 
-class SpadesActEvent : public spades::ActEvent
+class OXYGEN_API SpadesActEvent : public spades::ActEvent
 {
  public:
 

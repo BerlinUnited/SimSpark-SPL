@@ -22,6 +22,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -37,7 +38,7 @@ class NetBuffer;
         prefixed protocol, i.e. it adds the payload length to a string
         sent over the network.
      */
-class NetMessage : public zeitgeist::Leaf
+class OXYGEN_API NetMessage : public zeitgeist::Leaf
 {
 public:
     NetMessage();

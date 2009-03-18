@@ -24,6 +24,7 @@
 
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/openglwrapper.h>
 
 namespace kerosin
@@ -51,7 +52,7 @@ class TextureServer;
 
         TOFIX:
 */
-class Texture
+class KEROSIN_API Texture
 {
     //
     // functions

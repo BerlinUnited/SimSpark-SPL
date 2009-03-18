@@ -24,6 +24,7 @@
 
 #include "basenode.h"
 #include <salt/frustum.h>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -32,7 +33,7 @@ namespace oxygen
  * which a scene is rendered. The active camera is responsible to
  * construct a frustum needed to render the scene.
  */
-class Camera : public BaseNode
+class OXYGEN_API Camera : public BaseNode
 {
     //
     // Functions

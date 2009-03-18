@@ -36,6 +36,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include <oxygen/oxygen_defines.h>
 #include <boost/thread/recursive_mutex.hpp>
 #include "scene.h"
 
@@ -56,7 +57,7 @@ class Transform;
    which scene node is currently active and updates that node (and its
    corresponding subtree).
  */
-class SceneServer : public zeitgeist::Node
+class OXYGEN_API SceneServer : public zeitgeist::Node
 {
     //
     // Functions

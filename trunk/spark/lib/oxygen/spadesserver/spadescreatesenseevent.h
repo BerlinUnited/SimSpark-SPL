@@ -23,6 +23,7 @@
 #define OXYGEN_SPADESCREATESENSEEVENT_H
 
 #include <spades/CreateSenseEvent.hpp>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -44,7 +45,7 @@ namespace oxygen
     a registered ParamStorer instance using delete without notifying
     the shared pointers. This would result in dangling references.
 */
-class SpadesCreateSenseEvent : public spades::CreateSenseEvent
+class OXYGEN_API SpadesCreateSenseEvent : public spades::CreateSenseEvent
 {
  public:
   SpadesCreateSenseEvent (spades::SimTime t, spades::AgentID a)

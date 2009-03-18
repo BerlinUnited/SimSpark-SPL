@@ -22,13 +22,14 @@
 #ifndef OXYGEN_SCENEDICT_H
 #define OXYGEN_SCENEDICT_H
 
+#include <oxygen/oxygen_defines.h>
 #include <zeitgeist/leaf.h>
 #include <map>
 
 namespace oxygen
 {
 
-class SceneDict
+class OXYGEN_API SceneDict
 {
 public:
     struct FileRef

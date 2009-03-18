@@ -22,6 +22,7 @@
 #ifndef KEROSIN_SPHERE_H
 #define KEROSIN_SPHERE_H
 
+#include <kerosin/kerosin_defines.h>
 #include "singlematnode.h"
 
 namespace kerosin
@@ -32,7 +33,7 @@ class Material;
      renders a sphere mesh. It exports functions to scale the unit
      sphere to different sizes.
 */
-class Sphere : public SingleMatNode
+class KEROSIN_API Sphere : public SingleMatNode
 {
     //
     // Function

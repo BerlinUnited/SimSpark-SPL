@@ -63,7 +63,7 @@ class OXYGEN_API Predicate
         end of a TParameterList is reached without knowing the list an
         iterator belongs to.
      */
-    struct Iterator
+    struct OXYGEN_API Iterator
     {
     public:
         /** constructs an Iterator pointing to element i of list l */
@@ -244,7 +244,7 @@ public:
     bool operator()(const boost::any& param, const std::string& pred) const;
 };
 
-class PredicateList
+class OXYGEN_API PredicateList
 {
 public:
     typedef std::list<Predicate> TList;

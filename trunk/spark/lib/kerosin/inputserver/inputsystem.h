@@ -40,11 +40,12 @@
 
 #include <deque>
 #include <zeitgeist/node.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
 
-class InputSystem : public zeitgeist::Node
+class KEROSIN_API InputSystem : public zeitgeist::Node
 {
     //
     // functions

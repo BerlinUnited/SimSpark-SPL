@@ -23,6 +23,7 @@
 #include <oxygen/simulationserver/simcontrolnode.h>
 #include <kerosin/renderserver/baserenderserver.h>
 #include <kerosin/openglserver/openglserver.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
@@ -30,7 +31,7 @@ namespace kerosin
     scene and pumps the SDL event loop at the end of each simulation
     cycle, counting the total number of frames rendered
 */
-class RenderControl : public oxygen::SimControlNode
+class KEROSIN_API RenderControl : public oxygen::SimControlNode
 {
 public:
     RenderControl();

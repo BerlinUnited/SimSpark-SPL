@@ -36,12 +36,13 @@
 #define OXYGEN_TRANSFORM_H
 
 #include "basenode.h"
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
 
 /** Transform is used to do local transforms relative to a parent node. */
-class Transform : public BaseNode
+class OXYGEN_API Transform : public BaseNode
 {
     //
     // Functions
