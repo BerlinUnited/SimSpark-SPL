@@ -40,12 +40,13 @@
 */
 
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 #include "inputsystem.h"
 
 namespace kerosin
 {
 
-class InputDevice : public zeitgeist::Leaf
+class KEROSIN_API InputDevice : public zeitgeist::Leaf
 {
     //
     // functions

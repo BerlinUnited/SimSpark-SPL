@@ -33,6 +33,7 @@
 #endif
 
 #include <zeitgeist/class.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
@@ -55,7 +56,7 @@ class Image;
   - Pixel-level access
 */
 
-class ImageServer : public zeitgeist::Leaf
+class KEROSIN_API ImageServer : public zeitgeist::Leaf
 {
 public:
 #ifdef HAVE_IL_IL_H

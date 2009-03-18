@@ -96,6 +96,8 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
+
 if (UNIX)
   set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} CACHE
         STRING "Common C++ compiler flags" FORCE)
@@ -206,7 +208,6 @@ set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
 set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
 set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
-set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "RequestExecutionLevel user")
 
 
 include(CPack)

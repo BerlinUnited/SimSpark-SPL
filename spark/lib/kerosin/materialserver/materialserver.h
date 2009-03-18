@@ -24,12 +24,13 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
 class Material;
 
-class MaterialServer : public zeitgeist::Node
+class KEROSIN_API MaterialServer : public zeitgeist::Node
 {
     //
     // types

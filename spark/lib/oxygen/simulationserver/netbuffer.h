@@ -21,6 +21,7 @@
 #define OXYGEN_NETBUFFER_H
 
 #include <rcssnet/addr.hpp>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -29,7 +30,7 @@ namespace oxygen
     stream of data. The NetMessage class is responsible to extract
     meaningful messages.
 */
-class NetBuffer
+class OXYGEN_API NetBuffer
 {
 public:
     NetBuffer() {};

@@ -35,6 +35,7 @@
 #ifndef OXYGEN_SCENE_H
 #define OXYGEN_SCENE_H
 
+#include <oxygen/oxygen_defines.h>
 #include "basenode.h"
 
 namespace oxygen
@@ -43,7 +44,7 @@ namespace oxygen
 /** Scene is the root node of a simulatable/displayable hierarchy. It is
     usually created via the scene server.
 */
-class Scene : public BaseNode
+class OXYGEN_API Scene : public BaseNode
 {
 public:
     Scene();
@@ -72,7 +73,7 @@ protected:
     /** true, if the scene is modified */
     bool mModified;
 
-    /** how many times the scene was modified */ 
+    /** how many times the scene was modified */
     int mModifiedNum;
 };
 

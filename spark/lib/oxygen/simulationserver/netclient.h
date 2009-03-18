@@ -23,6 +23,7 @@
 #define SPARK_NETCLIENT_H
 
 #include <zeitgeist/class.h>
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/simulationserver/simcontrolnode.h>
 #include <oxygen/simulationserver/netcontrol.h>
 #include <oxygen/simulationserver/netmessage.h>
@@ -33,7 +34,7 @@
 namespace oxygen
 {
 
-class NetClient : public oxygen::SimControlNode
+class OXYGEN_API NetClient : public oxygen::SimControlNode
 {
 public:
     NetClient();

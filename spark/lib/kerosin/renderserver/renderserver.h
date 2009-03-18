@@ -42,6 +42,7 @@
 
 #include <salt/frustum.h>
 #include <oxygen/sceneserver/sceneserver.h>
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/glbase.h>
 #include <kerosin/openglserver/openglwrapper.h>
 #include <oxygen/sceneserver/camera.h>
@@ -51,7 +52,7 @@ namespace kerosin
     class OpenGLServer;
     class RenderNode;
 
-class RenderServer : public BaseRenderServer
+class KEROSIN_API RenderServer : public BaseRenderServer
 {
     //
     // Functions
@@ -96,10 +97,10 @@ public:
 
     /** Select next camera */
     void NextCamera();
-    
+
     /** Select previous camera */
     void PreviousCamera();
-    
+
 protected:
     /** render a scene recursively.
         \param node the scene base node

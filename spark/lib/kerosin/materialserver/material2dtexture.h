@@ -23,6 +23,7 @@
 #define KEROSIN_MATERIAL2DTEXTURE_H
 
 #include "materialsolid.h"
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/openglserver.h>
 
 namespace kerosin
@@ -30,7 +31,7 @@ namespace kerosin
 class Texture;
 class OpenGLServer;
 
-class Material2DTexture : public MaterialSolid
+class KEROSIN_API Material2DTexture : public MaterialSolid
 {
     //
     // Functions

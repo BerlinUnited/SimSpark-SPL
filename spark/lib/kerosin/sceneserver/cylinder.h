@@ -20,6 +20,7 @@
 #ifndef KEROSIN_CYLINDER_H
 #define KEROSIN_CYLINDER_H
 
+#include <kerosin/kerosin_defines.h>
 #include "singlematnode.h"
 
 namespace kerosin
@@ -29,7 +30,7 @@ class Material;
 /** Cylinder is a SingleMatNode that creates and renders a flat
     cylinder mesh with the given length and radius
  */
-class Cylinder : public SingleMatNode
+class KEROSIN_API Cylinder : public SingleMatNode
 {
     //
     // Function

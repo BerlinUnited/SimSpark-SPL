@@ -23,6 +23,7 @@
 #define KEROSIN_INPUTSERVER_H
 
 #include <zeitgeist/node.h>
+#include <kerosin/kerosin_defines.h>
 #include "input.h"
 
 namespace kerosin
@@ -58,7 +59,7 @@ class ScanCodeMap;
 
         TOFIX:
 */
-class InputServer : public zeitgeist::Node
+class KEROSIN_API InputServer : public zeitgeist::Node
 {
     //
     // Types

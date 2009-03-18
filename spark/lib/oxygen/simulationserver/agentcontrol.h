@@ -21,6 +21,7 @@
 #define OXYGEN_AGENTCONTROL_H
 
 #include "netcontrol.h"
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 
 namespace oxygen
@@ -30,7 +31,7 @@ namespace oxygen
     GameControlServer.
  */
 
-class AgentControl : public NetControl
+class OXYGEN_API AgentControl : public NetControl
 {
 public:
     AgentControl();

@@ -23,6 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include "inputserver.h"
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
@@ -31,7 +32,7 @@ namespace kerosin
     Spark InputControl node. This serves as a hook mechanism to
     register custom command ids to the InputServer and to process them
 */
-class InputItem : public zeitgeist::Leaf
+class KEROSIN_API InputItem : public zeitgeist::Leaf
 {
 public:
     InputItem();

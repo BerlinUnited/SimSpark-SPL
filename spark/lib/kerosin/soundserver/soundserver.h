@@ -51,6 +51,7 @@
 #include <list>
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
@@ -63,7 +64,7 @@ class SoundStream;
 class SoundModule;
 class SystemWindow;
 
-class SoundServer : public zeitgeist::Leaf
+class KEROSIN_API SoundServer : public zeitgeist::Leaf
 {
     //
     // Types

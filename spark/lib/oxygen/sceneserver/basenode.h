@@ -37,6 +37,7 @@
 #include <salt/matrix.h>
 #include <salt/bounds.h>
 #include <zeitgeist/node.h>
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
@@ -49,7 +50,7 @@ class Scene;
     local and world transform.
 */
 
-class BaseNode : public zeitgeist::Node
+class OXYGEN_API BaseNode : public zeitgeist::Node
 {
     //
     // Functions

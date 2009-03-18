@@ -25,6 +25,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
@@ -32,7 +33,7 @@ namespace kerosin
     Spark RenderControl node. This serves as a hook mechanism to
     render objects or overlays that are not part of the scene graph
 */
-class CustomRender : public zeitgeist::Leaf
+class KEROSIN_API CustomRender : public zeitgeist::Leaf
 {
     //
     // Functions

@@ -43,11 +43,12 @@
 
 #include <map>
 #include "inputserver.h"
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
 
-class ScanCodeMap
+class KEROSIN_API ScanCodeMap
 {
     //
     // types

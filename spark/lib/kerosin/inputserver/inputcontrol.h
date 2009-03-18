@@ -22,6 +22,7 @@
 
 #include <oxygen/simulationserver/simcontrolnode.h>
 #include <oxygen/sceneserver/fpscontroller.h>
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/inputserver/inputserver.h>
 
 namespace oxygen
@@ -40,7 +41,7 @@ namespace kerosin
     SimulationServer and steps the simulation using the real time
     passed.
  */
-class InputControl : public oxygen::SimControlNode
+class KEROSIN_API InputControl : public oxygen::SimControlNode
 {
 public:
     // define common input constants

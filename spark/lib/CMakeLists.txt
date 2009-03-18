@@ -1,7 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/utility ${Boost_INCLUDE_DIRS}
     ${ODE_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
-
 
 if (USE_COREFOUNDATION)
    add_definitions(-DUSE_COREFOUNDATION)

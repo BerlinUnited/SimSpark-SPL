@@ -22,6 +22,7 @@
 #ifndef KEROSIN_TEXTURE2D_H
 #define KEROSIN_TEXTURE2D_H
 
+#include <kerosin/kerosin_defines.h>
 #include "texture.h"
 
 namespace kerosin
@@ -29,7 +30,7 @@ namespace kerosin
 
 class Image;
 
-class Texture2D : public Texture
+class KEROSIN_API Texture2D : public Texture
 {
     //
     // functions

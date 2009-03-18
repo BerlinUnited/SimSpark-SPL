@@ -22,6 +22,7 @@
 #ifndef KEROSIN_STATICMESH_H
 #define KEROSIN_STATICMESH_H
 
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/renderserver/rendernode.h>
 #include <oxygen/geometryserver/geometryserver.h>
 
@@ -34,7 +35,7 @@ class Material;
     imported using the GeometryServer and all referenced materials are
     automatically loaded using the MaterialServer.
  */
-class StaticMesh : public RenderNode
+class KEROSIN_API StaticMesh : public RenderNode
 {
     //
     // Types
@@ -122,27 +123,27 @@ public:
         @return the external mesh scale */
     const salt::Vector3f& ExternalMeshScale() const;
 
-    /** 
+    /**
      * change the material of the mesh
-     * 
+     *
      * @param oldMat the name of old material
      * @param newMat the name of new materila
-     * 
+     *
      */
     void ChangeMaterial(const std::string& oldMat,const std::string& newMat);
 
-    /** 
+    /**
      * @return the names of materials, separated by space
      */
     std::vector<std::string> GetMaterialNames() const;
 
-    /** 
+    /**
      * reset the materials according to the names
-     * 
+     *
      * @param names a vector of material names
      */
     void ResetMaterials(const std::vector<std::string>& names);
-    
+
     //
     // Members
     //

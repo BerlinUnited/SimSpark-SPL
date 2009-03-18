@@ -22,6 +22,7 @@
 #define OXYGEN_MONITORLOGGER_H
 
 #include "simcontrolnode.h"
+#include <oxygen/oxygen_defines.h>
 #include <fstream>
 
 namespace oxygen
@@ -32,7 +33,7 @@ class MonitorServer;
     the sent messages to monitors in cooperation with the
     MonitorServer.
 */
-class MonitorLogger : public SimControlNode
+class OXYGEN_API MonitorLogger : public SimControlNode
 {
 public:
     MonitorLogger();
@@ -57,7 +58,7 @@ protected:
 
     /** ofstream object to log monitor messages */
     std::ofstream mLogFile;
-    
+
     /** number of full state logged */
     int mFullStateLogged;
 };

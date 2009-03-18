@@ -10,11 +10,16 @@ check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
 check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
+set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" C:/SDL/)
+
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Boost REQUIRED)
-find_package(OpenGL REQUIRED)
 find_package(SDL REQUIRED)
+find_package(DevIL REQUIRED)
+find_package(ODE REQUIRED)
+find_package(OpenGL REQUIRED)
+
 
 ########## add extra flags ########## 
 if(NOT CMAKE_BUILD_TYPE)
@@ -23,6 +28,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS})
 if (UNIX)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE
         STRING "Common C++ compiler flags" FORCE)
@@ -31,6 +37,14 @@ if (UNIX)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE
         STRING "C++ compiler flags for Release builds" FORCE)
 endif (UNIX)
+if(WIN32)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
+  include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/windows/include)
+    if(MSVC)
+      add_definitions(/Gm /Zi /GL)
+    endif(MSVC)
+endif(WIN32)
 
 set(BINDIR "bin" CACHE PATH "The directory to install binaries into.")
 set(LIBDIR "lib" CACHE PATH "The directory to install libraries into.")
@@ -49,7 +63,7 @@ if (APPLE)
 elseif (UNIX)
   set(BUNDLE_PATH ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME})
 else (APPLE)
-  set(BUNDLE_PATH .)
+  set(BUNDLE_PATH ../share/${CMAKE_PROJECT_NAME})
 endif (APPLE)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rcssserver3d_config.h.cmake
@@ -81,6 +95,7 @@ ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 ########### CPack section #############
+include(InstallRequiredSystemLibraries)
 set(CPACK_SOURCE_GENERATOR TGZ)
 set(CPACK_SOURCE_IGNORE_FILES
     /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /autom4te[.]cache/ /[.].* /bootstrap
@@ -88,6 +103,15 @@ set(CPACK_SOURCE_IGNORE_FILES
 set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
+
+set(CPACK_PACKAGE_VENDOR "RoboCup Soccer Server 3D Maintenance Group")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "RoboCup Soccer Simulation Server 3D")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
+set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
+set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
+set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
 
 include(CPack)
 

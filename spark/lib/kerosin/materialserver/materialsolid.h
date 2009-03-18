@@ -23,12 +23,13 @@
 #define KEROSIN_MATERIALSOLID_H
 
 #include "material.h"
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/glbase.h>
 #include <salt/vector.h>
 
 namespace kerosin
 {
-class MaterialSolid : public Material
+class KEROSIN_API MaterialSolid : public Material
 {
     //
     // Functions

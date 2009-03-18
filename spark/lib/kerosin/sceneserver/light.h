@@ -22,17 +22,18 @@
 #ifndef KEROSIN_LIGHT_H
 #define KEROSIN_LIGHT_H
 
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/glbase.h>
 #include <kerosin/openglserver/openglserver.h>
 #include "staticmesh.h"
-#include "oxygen/geometryserver/indexbuffer.h"
-#include "oxygen/sceneserver/basenode.h"
+#include <oxygen/geometryserver/indexbuffer.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace kerosin
 {
 class OpenGLServer;
 
-class Light : public oxygen::BaseNode
+class KEROSIN_API Light : public oxygen::BaseNode
 {
     //
     // Function

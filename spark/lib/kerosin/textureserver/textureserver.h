@@ -33,6 +33,7 @@
 
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/openglserver.h>
 #include <kerosin/imageserver/imageserver.h>
 
@@ -50,7 +51,7 @@ namespace kerosin
 
 class Texture;
 
-class TextureServer : public zeitgeist::Leaf
+class KEROSIN_API TextureServer : public zeitgeist::Leaf
 {
     //
     // types

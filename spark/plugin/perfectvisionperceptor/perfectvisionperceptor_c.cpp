@@ -42,6 +42,7 @@ FUNCTION(PerfectVisionPerceptor,setInversion)
         }
 
     obj->SetInversion(inInvertX,inInvertY,inInvertZ);
+	return true;
 }
 
 void

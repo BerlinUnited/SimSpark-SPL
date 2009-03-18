@@ -26,6 +26,7 @@
 #include <set>
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
+#include <kerosin/kerosin_defines.h>
 
 namespace kerosin
 {
@@ -36,7 +37,7 @@ namespace kerosin
 class MapHolder;
 class OpenGLSystem;
 
-class OpenGLServer : public zeitgeist::Leaf
+class KEROSIN_API OpenGLServer : public zeitgeist::Leaf
 {
 protected:
     //! set of OpenGL light constants

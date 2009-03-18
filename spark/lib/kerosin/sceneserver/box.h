@@ -22,6 +22,7 @@
 #ifndef KEROSIN_BOX_H
 #define KEROSIN_BOX_H
 
+#include <kerosin/kerosin_defines.h>
 #include "singlematnode.h"
 
 namespace kerosin
@@ -31,7 +32,7 @@ class Material;
 /** Box is a SingleMatNode that automatically loads and renders a box
     mesh that is scaled to the given extents.
  */
-class Box : public SingleMatNode
+class KEROSIN_API Box : public SingleMatNode
 {
     //
     // Function

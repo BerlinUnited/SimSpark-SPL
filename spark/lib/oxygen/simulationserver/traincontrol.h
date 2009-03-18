@@ -22,6 +22,7 @@
 #define OXYGEN_TRAINCONTROL_H
 
 #include "simcontrolnode.h"
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 
@@ -33,7 +34,7 @@ class Behavior;
     to AgentControl except that the network part is omited.
     An integrated agent can be registered with its behavior.
  */
-class TrainControl : public oxygen::SimControlNode
+class OXYGEN_API TrainControl : public oxygen::SimControlNode
 {
 public:
     struct Client

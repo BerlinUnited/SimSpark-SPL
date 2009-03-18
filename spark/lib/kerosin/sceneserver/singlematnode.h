@@ -22,6 +22,7 @@
 #ifndef KEROSIN_SINGLEMATNODE_H
 #define KEROSIN_SINGLEMATNODE_H
 
+#include <kerosin/kerosin_defines.h>
 #include "staticmesh.h"
 
 namespace kerosin
@@ -31,7 +32,7 @@ class Material;
 /** \class SingleMatNode is a BaseNode that renders itself using a
     single material. It provides methods to manage this material.
  */
-class SingleMatNode : public StaticMesh
+class KEROSIN_API SingleMatNode : public StaticMesh
 {
     //
     // Function

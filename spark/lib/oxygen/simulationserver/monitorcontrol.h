@@ -21,6 +21,7 @@
 #define OXYGEN_MONITORCONTROL_H
 
 #include "netcontrol.h"
+#include <oxygen/oxygen_defines.h>
 #include <oxygen/monitorserver/monitorserver.h>
 
 namespace oxygen
@@ -30,7 +31,7 @@ namespace oxygen
     communication with monitors in cooperation with the
     MonitorServer.
 */
-class MonitorControl : public NetControl
+class OXYGEN_API MonitorControl : public NetControl
 {
 public:
     MonitorControl();
