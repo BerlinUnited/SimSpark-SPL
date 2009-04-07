@@ -218,6 +218,7 @@ if(SPADES_FOUND)
    )
 endif(SPADES_FOUND)
 
+add_definitions(${ODE_CFLAGS})
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility/)
 
 add_library(oxygen ${oxygen_LIB_SRCS} ${oxygen_LIB_HDRS})

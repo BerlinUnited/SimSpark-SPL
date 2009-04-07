@@ -59,9 +59,9 @@ addSoccerVar('BallMass',0.026)
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
 addSoccerVar('RuleKickInPauseTime',1.0)
-addSoccerVar('RuleHalfTime',8.0 * 60)
+addSoccerVar('RuleHalfTime',5.0 * 60)
 addSoccerVar('RuleDropBallTime',30)
-addSoccerVar('SingleHalfTime', true)
+addSoccerVar('SingleHalfTime', false)
 addSoccerVar('UseOffside',false)
 
 # recorders
@@ -83,6 +83,11 @@ if (gameControlServer != nil)
   gameControlServer.initControlAspect('GameStateAspect')
   gameControlServer.initControlAspect('BallStateAspect')
   gameControlServer.initControlAspect('SoccerRuleAspect')
+  obj = get('/sys/server/gamecontrol/GameStateAspect')
+  if (obj != nil)
+	  obj.setTime(0)
+	  obj.setScores(0,0)
+  end
 end
 
 # init monitorItems to transmit game state information
