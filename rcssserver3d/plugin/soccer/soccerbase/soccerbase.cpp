@@ -661,7 +661,7 @@ SoccerBase::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
     Leaf::TLeafList::iterator iter = leafList.begin();
 
     // move all child bodies
-    for (iter; iter != leafList.end(); ++iter)
+    for (; iter != leafList.end(); ++iter)
     {
         shared_ptr<Body> childBody =
             shared_dynamic_cast<Body>(*iter);
@@ -715,7 +715,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
     Leaf::TLeafList::iterator iter = leafList.begin();
 
     // move all child bodies
-    for (iter;
+    for (;
          iter != leafList.end();
          ++iter
          )

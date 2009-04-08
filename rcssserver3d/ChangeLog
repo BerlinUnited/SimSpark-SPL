@@ -1,3 +1,19 @@
+2009-04-08  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/beameffector/beamaction.h (BeamAction): 
+	- fixed const function declaration
+	
+	* plugin/soccer/soccerbase/soccerbase.cpp (SoccerBase::MoveAgent): 
+	- removed useless statements
+	
+	* plugin/soccer/kickeffector/kickaction.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- fixed variables order in ctor
+	 
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	- added missing return statement 
+
 2009-03-05  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* linux/rcssserver3d.desktop:

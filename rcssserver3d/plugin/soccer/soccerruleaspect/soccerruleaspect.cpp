@@ -50,10 +50,10 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mSingleHalfTime(false),
     mSayMsgSize(20),
     mAudioCutDist(50.0),
-    mUseOffside(true),
     mFirstCollidingAgent(true),
     mNotOffside(false),
-    mLastModeWasPlayOn(false)
+    mLastModeWasPlayOn(false),
+    mUseOffside(true)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
 
