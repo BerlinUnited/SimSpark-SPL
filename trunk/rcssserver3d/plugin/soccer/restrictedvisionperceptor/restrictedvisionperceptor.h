@@ -53,6 +53,8 @@ protected:
             mTheta   = rhs.mTheta;
             mPhi     = rhs.mPhi;
             mDist    = rhs.mDist;
+
+            return *this;
         }
 
         int operator==(const ObjectData& rhs) const

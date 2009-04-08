@@ -29,7 +29,7 @@ class KickAction : public oxygen::ActionObject
 {
 public:
     KickAction(const std::string& predicate, float phi, float power)
-        : ActionObject(predicate), mKickAngle(phi),mPower(power) {}
+        : ActionObject(predicate), mPower(power), mKickAngle(phi) {}
 
     virtual ~KickAction() {}
 

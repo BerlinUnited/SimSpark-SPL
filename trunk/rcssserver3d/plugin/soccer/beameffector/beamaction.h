@@ -33,13 +33,13 @@ public:
     virtual ~BeamAction() {}
 
     /** returns x coord of the position the agent wants to beam to */
-    const float GetPosX() { return mPosX; }
+    float GetPosX() const { return mPosX; }
 
     /** returns x coord of the position the agent wants to beam to */
-    const float GetPosY() { return mPosY; }
+    float GetPosY() const { return mPosY; }
 
     /** returns the stored angle in the x-y-plane */
-    const float GetXYAngle() { return mXYAngle; }
+    float GetXYAngle() const { return mXYAngle; }
 
 protected:
     /** the x coord of the position to beam the agent to */
