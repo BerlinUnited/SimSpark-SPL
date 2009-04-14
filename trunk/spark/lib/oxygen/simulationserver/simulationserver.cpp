@@ -520,8 +520,8 @@ inline void SimulationServer::UpdateDeltaTimeAfterStep()
     if (mAdjustSpeed && mSumDeltaTime > mMaxStepsPerCycle
             * mSimStep)
         {
-            GetLog()->Error()
-                    << "(SimulationServer) ERROR: Skipping remaining time: "
+            GetLog()->Debug()
+                    << "(SimulationServer) Warning: Skipping remaining time: "
                     << mSumDeltaTime - mSimStep << '\n';
             mSumDeltaTime = 0;
         }
