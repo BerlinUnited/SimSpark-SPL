@@ -1,3 +1,11 @@
+2009-04-15  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/CMakeLists.txt: 
+	- don't link plugins to spark libraries to prevent segfault on Linux
+	
+	* lib/oxygen/simulationserver/simulationserver.cpp (UpdateDeltaTimeAfterStep):
+	- Skipping remaining time error is now a debug warning message 
+
 2009-03-17  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/kerosin/imageserver/imageserver.h (ImageServer): 
