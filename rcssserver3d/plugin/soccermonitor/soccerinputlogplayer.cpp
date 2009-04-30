@@ -20,6 +20,7 @@
 #include "soccerinputlogplayer.h"
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/physicsserver/body.h>
 
 using namespace boost;
 using namespace zeitgeist;
@@ -42,6 +43,14 @@ void SoccerInputLogPlayer::OnLink()
     mScriptServer->CreateVariable("Command.StepBackward", CmdStepBackward);
     mScriptServer->CreateVariable("Command.BPlayback", CmdBPlayback);
 
+    mScriptServer->CreateVariable("Command.CameraLeftGoal", CmdCameraLeftGoal);
+    mScriptServer->CreateVariable("Command.CameraLeftCorner", CmdCameraLeftCorner);
+    mScriptServer->CreateVariable("Command.CameraMiddleLeft", CmdCameraMiddleLeft);
+    mScriptServer->CreateVariable("Command.CameraMiddleRight", CmdCameraMiddleRight);
+    mScriptServer->CreateVariable("Command.CameraMiddle", CmdCameraMiddle);
+    mScriptServer->CreateVariable("Command.CameraRightCorner", CmdCameraRightCorner);
+    mScriptServer->CreateVariable("Command.CameraRightGoal", CmdCameraRightGoal);
+
     mMonitorClient = shared_dynamic_cast<SimControlNode>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorLogFileServer"));
 
@@ -50,6 +59,26 @@ void SoccerInputLogPlayer::OnLink()
             GetLog()->Error()
                 << "ERROR: (SoccerInput) Unable to get SparkMonitorClient\n";
         }
+
+    // get fps controller
+    mFPS = shared_dynamic_cast<FPSController>
+        (GetCore()->Get("/usr/scene/camera/physics/controller"));
+
+    if (mFPS.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (InternalSoccerInput) Unable to get FPS controller\n";
+    }
+
+    // get camera body
+    mCameraBody = shared_dynamic_cast<Body>
+        (GetCore()->Get("/usr/scene/camera/physics"));
+
+    if (mCameraBody.get() == 0)
+    {
+        GetLog()->Error()
+            << "ERROR: (SoccerInput) Unable to get camera body\n";
+    }
 
 }
 
@@ -106,6 +135,69 @@ void SoccerInputLogPlayer::ProcessInput(const Input& input)
                     mScriptServer->Eval("monitorLogServer = get($serverPath+ \
                                     'simulation/SparkMonitorLogFileServer')");
                     mScriptServer->Eval("monitorLogServer.playBackward()");
+                }
+            break;
+        case CmdCameraLeftGoal:
+            if (input.GetKeyPress())
+                {
+                    salt::Vector3f pos(-12*0.8, 0.0, 12*0.4);
+                    mCameraBody->SetPosition(pos);
+                    mFPS->SetHAngleDeg(90);
+                    mFPS->SetVAngleDeg(35);
+                }
+            break;
+        case CmdCameraLeftCorner:
+            if (input.GetKeyPress())
+                {
+                    salt::Vector3f pos(-12*0.8, -8, 12*0.4);
+                    mCameraBody->SetPosition(pos);
+                    mFPS->SetHAngleDeg(50);
+                    mFPS->SetVAngleDeg(30);
+                }
+            break;
+        case CmdCameraMiddleLeft:
+            if (input.GetKeyPress())
+                {
+                    salt::Vector3f pos(0, -8, 12*0.4);
+                    mCameraBody->SetPosition(pos);
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(-0.625));
+                    mFPS->SetVAngleDeg(40);
+                }
+            break;
+        case CmdCameraMiddleRight:
+            if (input.GetKeyPress())
+                {
+                    salt::Vector3f pos(0, -8, 12*0.4);
+                    mCameraBody->SetPosition(pos);
+                    mFPS->SetHAngleDeg(salt::gRadToDeg(0.625));
+                    mFPS->SetVAngleDeg(40);
+                }
+            break;
+        case CmdCameraMiddle:
+            if (input.GetKeyPress())
+                {
+                    salt::Vector3f pos(0, -8*1.1, 12*0.6);
+                    mCameraBody->SetPosition(pos);
+                    mFPS->SetHAngleDeg(0);
+                    mFPS->SetVAngleDeg(45);
+                }
+            break;
+        case CmdCameraRightCorner:
+            if (input.GetKeyPress())
+                {
+                    salt::Vector3f pos(12*0.8, -8, 12*0.4);
+                    mCameraBody->SetPosition(pos);
+                    mFPS->SetHAngleDeg(-50);
+                    mFPS->SetVAngleDeg(30);
+                }
+            break;
+        case CmdCameraRightGoal:
+            if (input.GetKeyPress())
+                {
+                    salt::Vector3f pos(12*0.8, 0.0, 12*0.4);
+                    mCameraBody->SetPosition(pos);
+                    mFPS->SetHAngleDeg(-90);
+                    mFPS->SetVAngleDeg(35);
                 }
             break;
         };

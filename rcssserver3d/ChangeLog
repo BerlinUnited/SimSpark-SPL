@@ -1,3 +1,13 @@
+2009-04-30  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* rcssmonitor3d/rcssmonitor3d.rb
+	- set camera parameters to those used in internal monitor
+	
+	* plugin/soccermonitor/soccerinputlogplayer.h
+	* plugin/soccermonitor/soccerinputlogplayer.cpp
+	* rcssmonitor3d/soccerbindings.rb
+	- add camera controls to external monitor
+
 2009-04-08  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/soccer/beameffector/beamaction.h (BeamAction): 
