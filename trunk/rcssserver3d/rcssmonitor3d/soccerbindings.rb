@@ -15,6 +15,13 @@ else
     inputServer.bindCommand('f',      Command.StepForward);
     inputServer.bindCommand('b',      Command.StepBackward);
     inputServer.bindCommand('l',      Command.BPlayback);
+    inputServer.bindCommand('1',      Command.CameraLeftGoal);
+    inputServer.bindCommand('2',      Command.CameraLeftCorner);
+    inputServer.bindCommand('3',      Command.CameraMiddleLeft);
+    inputServer.bindCommand('4',      Command.CameraMiddle);
+    inputServer.bindCommand('5',      Command.CameraMiddleRight);
+    inputServer.bindCommand('6',      Command.CameraRightCorner);
+    inputServer.bindCommand('7',      Command.CameraRightGoal);
   else
     print "setting bindings for online monitor\n\n";
     inputServer.bindCommand('k',      Command.KickOff);

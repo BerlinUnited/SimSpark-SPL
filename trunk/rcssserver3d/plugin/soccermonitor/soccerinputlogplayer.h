@@ -24,6 +24,7 @@
 #include <kerosin/inputserver/inputcontrol.h>
 #include <oxygen/simulationserver/simcontrolnode.h>
 
+
 class SoccerInputLogPlayer : public kerosin::InputItem
 {
 public:
@@ -33,7 +34,14 @@ public:
             CmdPause   = CmdUser + 1,
             CmdStepForward   = CmdUser + 2,
             CmdStepBackward  = CmdUser + 3,
-            CmdBPlayback     = CmdUser + 4
+            CmdBPlayback     = CmdUser + 4,
+            CmdCameraLeftGoal    = CmdBPlayback + 1,
+            CmdCameraLeftCorner  = CmdCameraLeftGoal + 1,
+            CmdCameraMiddleLeft  = CmdCameraLeftCorner + 1,
+            CmdCameraMiddle      = CmdCameraMiddleLeft + 1,
+            CmdCameraMiddleRight = CmdCameraMiddle + 1,
+            CmdCameraRightCorner = CmdCameraMiddleRight + 1,
+            CmdCameraRightGoal   = CmdCameraRightCorner + 1
         };
 
 public:
@@ -62,6 +70,12 @@ protected:
 
     /** cached reference to the script server */
     boost::shared_ptr<zeitgeist::ScriptServer> mScriptServer;
+
+    /** cached reference to the camera body */
+    boost::shared_ptr<oxygen::Body> mCameraBody;
+
+    /** cached reference to the camera body */
+    boost::shared_ptr<oxygen::FPSController> mFPS;
 };
 
 DECLARE_CLASS(SoccerInputLogPlayer);
