@@ -30,6 +30,10 @@
 #include <rcssserver3d_config.h>
 #endif
 
+#if __APPLE__
+#include <SDL.h>
+#endif
+
 using namespace spark;
 using namespace kerosin;
 using namespace oxygen;
