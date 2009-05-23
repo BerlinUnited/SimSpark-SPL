@@ -25,6 +25,9 @@ add_library(inputsdl MODULE ${inputsdl_LIB_SRCS})
 
 target_link_libraries(inputsdl ${spark_libs})
 
-set_target_properties(inputsdl PROPERTIES VERSION 0.0.0 SOVERSION 0)
+if (NOT APPLE)
+   set_target_properties(inputsdl PROPERTIES VERSION 0.0.0 SOVERSION 0)
+endif (NOT APPLE)
+
 install(TARGETS inputsdl DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 

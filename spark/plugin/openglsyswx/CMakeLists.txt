@@ -15,7 +15,10 @@ if (wxWidgets_FOUND)
 
   target_link_libraries(openglsyswx ${wxWidgets_LIBRARIES} ${spark_libs})
 
-  set_target_properties(openglsyswx PROPERTIES VERSION 0.0.0 SOVERSION 0)
+  if (NOT APPLE)
+     set_target_properties(openglsyswx PROPERTIES VERSION 0.0.0 SOVERSION 0)
+  endif (NOT APPLE)
+
   set_target_properties(inputwx PROPERTIES COMPILE_FLAGS ${wxWidgets_CXX_FLAGS})
   
   install(TARGETS openglsyswx DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})

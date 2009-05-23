@@ -28,7 +28,10 @@ add_library(soccermonitor MODULE ${soccermonitor_LIB_SRCS}
 target_link_libraries(soccermonitor ${SALT_LIBRARIES} ${OXYGEN_LIBRARIES}
    	${ZEITGEIST_LIBRARIES} ${KEROSIN_LIBRARIES})
 
-set_target_properties(soccermonitor PROPERTIES VERSION 1.0.0 SOVERSION 1)
+if (NOT APPLE)
+   set_target_properties(soccermonitor PROPERTIES VERSION 1.0.0 SOVERSION 1)
+endif (NOT APPLE)
+
 install(TARGETS soccermonitor DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 
 
