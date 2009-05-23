@@ -22,6 +22,9 @@ if (FMOD_FOUND)
 
   target_link_libraries(soundsystemfmod ${FMOD_LIBRARIES} ${spark_libs})
 
-  set_target_properties(soundsystemfmod PROPERTIES VERSION 0.0.0 SOVERSION 0)
+  if (NOT APPLE)
+     set_target_properties(soundsystemfmod PROPERTIES VERSION 0.0.0 SOVERSION 0)
+  endif (NOT APPLE)
+
   install(TARGETS soundsystemfmod DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 endif (FMOD_FOUND)

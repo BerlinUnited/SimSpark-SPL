@@ -14,5 +14,8 @@ add_library(openglsyssdl MODULE ${openglsyssdl_LIB_SRCS})
 
 target_link_libraries(openglsyssdl ${spark_libs})
 
-set_target_properties(openglsyssdl PROPERTIES VERSION 0.0.0 SOVERSION 0)
+if (NOT APPLE)
+   set_target_properties(openglsyssdl PROPERTIES VERSION 0.0.0 SOVERSION 0)
+endif (NOT APPLE)
+
 install(TARGETS openglsyssdl DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})

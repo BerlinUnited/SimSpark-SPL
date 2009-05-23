@@ -119,7 +119,10 @@ target_link_libraries(soccer ${SALT_LIBRARIES} ${OXYGEN_LIBRARIES}
    	${ZEITGEIST_LIBRARIES} ${KEROSIN_LIBRARIES}
     ${OPENGL_gl_LIBRARY})
 
-set_target_properties(soccer PROPERTIES VERSION 1.0.0 SOVERSION 1)
+if (NOT APPLE)
+   set_target_properties(soccer PROPERTIES VERSION 1.0.0 SOVERSION 1)
+endif (NOT APPLE)
+
 install(TARGETS soccer DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 
 

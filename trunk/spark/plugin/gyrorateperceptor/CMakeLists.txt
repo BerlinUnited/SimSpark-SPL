@@ -12,5 +12,8 @@ add_library(gyrorateperceptor MODULE ${gyrorateperceptor_LIB_SRCS})
 
 target_link_libraries(gyrorateperceptor ${spark_libs})
 
-set_target_properties(gyrorateperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
+if (NOT APPLE)
+   set_target_properties(gyrorateperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
+endif (NOT APPLE)
+
 install(TARGETS gyrorateperceptor DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})

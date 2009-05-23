@@ -16,6 +16,9 @@ if (Boost_REGEX_FOUND AND ZLIB_FOUND)
   target_link_libraries(filesystemzip ${Boost_REGEX_LIBRARY}
     ${spark_libs} ${ZLIB_LIBRARIES})
 
-  set_target_properties(filesystemzip PROPERTIES VERSION 0.0.0 SOVERSION 0)
+  if (NOT APPLE)
+     set_target_properties(filesystemzip PROPERTIES VERSION 0.0.0 SOVERSION 0)
+  endif (NOT APPLE)
+
   install(TARGETS filesystemzip DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 endif (Boost_REGEX_FOUND AND ZLIB_FOUND)

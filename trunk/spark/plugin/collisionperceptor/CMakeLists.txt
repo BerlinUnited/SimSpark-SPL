@@ -24,5 +24,8 @@ add_library(collisionperceptor MODULE ${collisionperceptor_LIB_SRCS})
 
 target_link_libraries(collisionperceptor ${spark_libs})
 
-set_target_properties(collisionperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
+if (NOT APPLE)
+   set_target_properties(collisionperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
+endif (NOT APPLE)
+
 install(TARGETS collisionperceptor DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})

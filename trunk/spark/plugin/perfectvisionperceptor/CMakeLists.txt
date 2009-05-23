@@ -12,6 +12,9 @@ add_library(perfectvisionperceptor MODULE ${perfectvisionperceptor_LIB_SRCS})
 
 target_link_libraries(perfectvisionperceptor ${spark_libs})
 
-set_target_properties(perfectvisionperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
+if (NOT APPLE)
+   set_target_properties(perfectvisionperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
+endif (NOT APPLE)
+
 install(TARGETS perfectvisionperceptor DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 
