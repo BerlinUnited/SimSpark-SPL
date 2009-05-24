@@ -4,8 +4,11 @@ project(rsgedit CXX C)
 set(PACKAGE_VERSION "0.1")
 
 ########## check for headerfiles/libraries ##########
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/ ${CMAKE_SOURCE_DIR}/../spark/cmake/)
 find_package(Spark REQUIRED)
+find_package(Boost REQUIRED)
+find_package(ODE REQUIRED)
+find_package(OpenGL REQUIRED)
 find_package(wxWidgets REQUIRED gl base core adv)
 
 ########## add extra flags ########## 

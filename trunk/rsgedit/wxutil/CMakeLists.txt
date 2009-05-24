@@ -137,7 +137,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
     ${wxWidgets_INCLUDE_DIRS})
 add_library(wxutil SHARED ${wxutil_LIB_SRCS} ${wxutil_LIB_HDRS})
 
-target_link_libraries(wxutil)
+target_link_libraries(wxutil ${wxWidgets_LIBRARIES})
 
 set_target_properties(wxutil PROPERTIES COMPILE_FLAGS ${wxWidgets_CXX_FLAGS})
 set_target_properties(wxutil PROPERTIES VERSION 4.2.0 SOVERSION 4)
