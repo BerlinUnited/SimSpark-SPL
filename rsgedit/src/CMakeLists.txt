@@ -42,7 +42,8 @@ add_definitions(${wxWidgets_DEFINITIONS})
 include_directories(${CMAKE_SOURCE_DIR}/wxutil/include 
     ${CMAKE_SOURCE_DIR}
     ${wxWidgets_INCLUDE_DIRS} ${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR}
-    ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR})
+    ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
 
 add_executable(rsgedit ${rsgedit_SRCS})
 
@@ -51,7 +52,7 @@ set_target_properties(rsgedit PROPERTIES INSTALL_RPATH "${RPATH_DIRECTORIES}")
 
 target_link_libraries(rsgedit pthread wxutil ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
   ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
-   ${wxWidgets_LIBRARIES})
+   ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES}) 
 
 install(TARGETS rsgedit DESTINATION ${BINDIR})
 
