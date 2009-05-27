@@ -117,7 +117,7 @@ add_library(soccer MODULE ${soccer_LIB_SRCS} ${soccer_LIB_HDRS})
 
 target_link_libraries(soccer ${SALT_LIBRARIES} ${OXYGEN_LIBRARIES}
    	${ZEITGEIST_LIBRARIES} ${KEROSIN_LIBRARIES}
-    ${OPENGL_gl_LIBRARY})
+    ${OPENGL_gl_LIBRARY} ${RCSSNET3D_LIBRARY})
 
 if (NOT APPLE)
    set_target_properties(soccer PROPERTIES VERSION 1.0.0 SOVERSION 1)
