@@ -16,7 +16,7 @@ add_executable(rcssmonitor3d ${rcssmonitor3d_SRCS})
 
 target_link_libraries(rcssmonitor3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
   ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
-  ${SDL_LINK_LIBS})
+  ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY})
 
 set_target_properties(rcssmonitor3d PROPERTIES 
     INSTALL_RPATH "${RPATH_DIRECTORIES}")
