@@ -1,3 +1,8 @@
+2009-06-15  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * lib/oxygen/simulationserver/netcontrol.cpp
+  - Make reading client messages a bit more fail-safe by making sure the full message is read
+  
 2009-04-15  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/CMakeLists.txt: 
