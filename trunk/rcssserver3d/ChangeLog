@@ -1,3 +1,11 @@
+2009-06-15  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * plugin/soccer/ballstateaspect/ballstateaspect.h
+  * plugin/soccer/ballstateaspect/ballstateaspect.cpp
+  * data/rsg/agent/nao/goal.rsg
+  - change goal and out-of-field checks to only accept when ball is
+  completely over the line
+  
 2009-04-30  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* rcssmonitor3d/rcssmonitor3d.rb

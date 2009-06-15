@@ -101,8 +101,8 @@ BallStateAspect::UpdateLastKickingAgent(boost::shared_ptr<AgentAspect> agent)
 void BallStateAspect::UpdateBallOnField()
 {
     const Vector3f& posBall = mBall->GetWorldTransform().Pos();
-    mBallOnField = ( gAbs(posBall.x()) < mHalfFieldLength )
-        && ( gAbs(posBall.y()) < mHalfFieldWidth );
+    mBallOnField = ( gAbs(posBall.x()) < mHalfFieldLength + mBallRadius + 0.001 )
+        && ( gAbs(posBall.y()) < mHalfFieldWidth + mBallRadius + 0.001 );
 }
 
 void BallStateAspect::UpdateLastValidBallPos()
@@ -182,6 +182,8 @@ void BallStateAspect::OnLink()
     float fieldLength = 100.0f;
     SoccerBase::GetSoccerVar(*this,"FieldLength",fieldLength);
     mHalfFieldLength = fieldLength * 0.5f;
+    
+    SoccerBase::GetSoccerVar(*this,"BallRadius",mBallRadius);
 }
 
 void BallStateAspect::OnUnlink()
