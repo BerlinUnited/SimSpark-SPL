@@ -9,11 +9,18 @@
  (def $GoalWidth   (eval Soccer.GoalWidth))
  (def $GoalDepth   (eval Soccer.GoalDepth))
  (def $GoalHeight  (eval Soccer.GoalHeight))
-
+ (def $BallRadius  (eval Soccer.BallRadius))
+ 
  (def $GoalHalfWidth   (eval $GoalWidth / 2.0))
  (def $GoalHalfHeight  (eval $GoalHeight / 2.0))
  (def $GoalHalfDepth   (eval $GoalDepth / 2.0))
 
+ (def $BallDiameter  (eval $BallRadius * 2.0))
+ 
+ (def $GoalColliderWidth   (eval $GoalWidth - $BallDiameter))
+ (def $GoalColliderDepth   (eval $GoalDepth - $BallDiameter))
+ (def $GoalColliderHeight  (eval $GoalHeight))
+   
  (def $BarDiameter     0.04)
  (def $BarRadius       (eval $BarDiameter / 2.0))
 
@@ -29,7 +36,7 @@
 	 (setLocalRotation 0 0 $theta)
 	 (nd BoxCollider
 	     (setName BoxCollider)
-	     (setBoxLengths $GoalDepth $GoalWidth $GoalHeight)
+	     (setBoxLengths $GoalColliderDepth $GoalColliderWidth $GoalColliderHeight)
 	     (nd RecorderHandler
 		 (setName recorder)
 		 )

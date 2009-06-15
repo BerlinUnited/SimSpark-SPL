@@ -141,6 +141,9 @@ protected:
     /** indicates in which goal the ball is, TI_NONE otherwise */
     TTeamIndex mGoalState;
 
+    /** the cached ball radius */
+    float mBallRadius;
+    
     /** the cached field length */
     float mHalfFieldLength;
 
