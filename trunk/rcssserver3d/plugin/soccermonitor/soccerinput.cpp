@@ -42,6 +42,7 @@ void SoccerInput::OnLink()
 {
     shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
     scriptServer->CreateVariable("Command.KickOff", CmdKickOff);
+    scriptServer->CreateVariable("Command.KickOffRight", CmdKickOffRight);
     scriptServer->CreateVariable("Command.MoveAgent", CmdMoveAgent);
     scriptServer->CreateVariable("Command.DropBall", CmdDropBall);
     scriptServer->CreateVariable("Command.ShootBall", CmdShootBall);
@@ -131,6 +132,13 @@ void SoccerInput::ProcessInput(const Input& input)
                     SendCommand("(kickOff Left)");
                 }
             break;
+        case CmdKickOffRight:
+            if (input.GetKeyPress())
+                {
+                    SendCommand("(kickOff Right)");
+                }
+            break;
+           
         case CmdMoveAgent:
             if (input.GetKeyPress())
                 {
