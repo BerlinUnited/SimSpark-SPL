@@ -37,7 +37,8 @@ public:
         {
             CmdUser              = kerosin::InputControl::CmdUser,
             CmdKickOff           = CmdUser + 1,
-            CmdMoveAgent         = CmdKickOff + 1,
+            CmdKickOffRight      = CmdKickOff + 1,
+            CmdMoveAgent         = CmdKickOffRight + 1,
             CmdDropBall          = CmdMoveAgent + 1,
             CmdShootBall         = CmdDropBall + 1,
             CmdMoveBall          = CmdShootBall + 1,

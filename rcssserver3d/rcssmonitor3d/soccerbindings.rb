@@ -25,6 +25,7 @@ else
   else
     print "setting bindings for online monitor\n\n";
     inputServer.bindCommand('k',      Command.KickOff);
+    inputServer.bindCommand('j',      Command.KickOffRight);
     inputServer.bindCommand('b',      Command.DropBall);
     inputServer.bindCommand('m',      Command.MoveAgent);
     inputServer.bindCommand('n',      Command.ShootBall);

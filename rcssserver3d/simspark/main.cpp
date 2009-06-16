@@ -46,7 +46,8 @@ class SimSpark : public Spark
 {
 public:
     SimSpark(const std::string& relPathPrefix) :
-        Spark(relPathPrefix)
+        Spark(relPathPrefix),
+        mScriptPath("simspark.rb")
     {};
 
     /** called once after Spark finished it's init */
@@ -60,15 +61,18 @@ public:
 
     /** process command line options */
     bool ProcessCmdLine(int argc, char* argv[]);
+
+private:
+    std::string     mScriptPath;
 };
 
 void SimSpark::PrintGreeting()
 {
     GetLog()->Normal()
-        << "simspark, a monolithic simulator 0.1\n"
+        << "simspark, a monolithic simulator 0.6.1\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
-        << "Universit�t Koblenz.\n"
-        << "Copyright (C) 2004, "
+        << "Universität Koblenz.\n"
+        << "Copyright (C) 2004-2009, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
         << "\nType '--help' for further information\n\n";
 }
@@ -76,24 +80,26 @@ void SimSpark::PrintGreeting()
 void SimSpark::PrintHelp()
 {
     GetLog()->Normal()
-        << "\nusage: simspark [options]\n"
-         << "\noptions:\n"
-         << " --help\t print this message.\n"
-         << "\n";
+        << "\nusage: simspark [options] [script]\n"
+        << "\noptions:\n"
+        << " --help\t print this message.\n"
+        << "\n";
 }
 
 bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 {
-  for( int i = 0; i < argc; i++)
+    if(argc == 1)
+	return true;
+
+    if(argc > 2 || strcmp( argv[0], "--help" ) == 0)
     {
-      if( strcmp( argv[i], "--help" ) == 0 )
-        {
-          PrintHelp();
-          return false;
-        }
+        PrintHelp();
+        return false;
     }
 
-  return true;
+    mScriptPath = argv[1];
+
+    return true;
 }
 
 bool SimSpark::InitApp(int argc, char** argv)
@@ -104,19 +110,19 @@ bool SimSpark::InitApp(int argc, char** argv)
 
     // process command line
     if (! ProcessCmdLine(argc, argv))
-        {
-            return false;
-        }
+    {
+        return false;
+    }
 
     // run initialization scripts
-    GetScriptServer()->Run("simspark.rb");
+    GetScriptServer()->Run(mScriptPath);
 
     // tell the inputControl node the loaction of our camera
     shared_ptr<InputControl> inputCtr = GetInputControl();
     if (inputCtr.get() != 0)
-        {
-            inputCtr->SetFPSController("/usr/scene/camera/physics/controller");
-        }
+    {
+        inputCtr->SetFPSController("/usr/scene/camera/physics/controller");
+    }
 
     return true;
 }
@@ -127,21 +133,21 @@ int main(int argc, char** argv)
     SimSpark spark("../../");
 
     if (! spark.Init(argc, argv))
-        {
-            return 1;
-        }
+    {
+        return 1;
+    }
 
     spark.GetSimulationServer()->Run(argc,argv);
 
     shared_ptr<RenderControl> renderCtr = spark.GetRenderControl();
     if (renderCtr.get() != 0)
-        {
-            spark.GetLog()->Normal()
-                << "Average FPS: "
-                << renderCtr->GetFramesRendered() /
-                   spark.GetSimulationServer()->GetTime()
-                << "\n";
-        }
+    {
+        spark.GetLog()->Normal()
+            << "Average FPS: "
+            << renderCtr->GetFramesRendered() /
+            spark.GetSimulationServer()->GetTime()
+            << "\n";
+    }
 
     return 0;
 }

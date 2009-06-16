@@ -1,3 +1,15 @@
+2009-06-16  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * simspark/main.cpp
+  - simspark can take command line argument specifying the rb script to run
+  (Simon Raffeiner)
+  
+  * plugin/soccermonitor/soccerinput.cpp
+  * plugin/soccermonitor/soccerinput.h
+  * rcssmonitor3d/soccerbindings.rb
+  - new soccer input command to give kick-off to the team on the right (bound
+  to 'j') (Simon Raffeiner)
+  
 2009-06-15  Sander van Dijk  <sgvandijk@gmail.com>
 
   * plugin/soccer/ballstateaspect/ballstateaspect.h
