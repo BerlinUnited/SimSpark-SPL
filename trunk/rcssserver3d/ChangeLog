@@ -1,3 +1,9 @@
+2009-06-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* simspark/main.cpp: 
+	- simspark.rb path should be given using "--script-path" option.
+	- add the new option to --help output
+
 2009-06-16  Sander van Dijk  <sgvandijk@gmail.com>
 
   * simspark/main.cpp
