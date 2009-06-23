@@ -1,3 +1,9 @@
+2009-06-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/agentcontrol.cpp: 
+	- Sending senses to agents after generating all senses, to be (hopefully!) a
+	bit more fare to agents.
+
 2009-06-15  Sander van Dijk  <sgvandijk@gmail.com>
 
   * lib/oxygen/simulationserver/netcontrol.cpp

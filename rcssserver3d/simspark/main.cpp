@@ -82,22 +82,32 @@ void SimSpark::PrintHelp()
     GetLog()->Normal()
         << "\nusage: simspark [options] [script]\n"
         << "\noptions:\n"
-        << " --help\t print this message.\n"
+        << " --help\t\t\t print this message.\n"
+        << " --script-path PATH\t set the script path (simspark.rb path).\n"
         << "\n";
 }
 
 bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 {
-    if(argc == 1)
-	return true;
-
-    if(argc > 2 || strcmp( argv[0], "--help" ) == 0)
-    {
-        PrintHelp();
-        return false;
-    }
-
-    mScriptPath = argv[1];
+    for( int i = 1; i < argc; i++)
+      {
+        if(strcmp( argv[1], "--help" ) == 0)
+        {
+          PrintHelp();
+          return false;
+        }
+        else if(strcmp(argv[i], "--script-path") == 0)
+        {
+          i++;
+          if (i < argc)
+            mScriptPath = argv[i];
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
+      }
 
     return true;
 }

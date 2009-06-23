@@ -148,10 +148,12 @@ void AgentControl::EndCycle()
 
     // generate senses for all agents and send them to the
     // corresponding net clients
+    int idx = 0;
+    vector<string> sensesArray(mClients.size());
     for (
          TAddrMap::iterator iter = mClients.begin();
          iter != mClients.end();
-         ++iter
+         ++iter, idx++
          )
         {
             shared_ptr<Client>& client = (*iter).second;
@@ -164,14 +166,29 @@ void AgentControl::EndCycle()
                 }
 
             shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
-            string senses = parser->Generate(senseList);
-            if (senses.empty())
+            sensesArray[idx] = parser->Generate(senseList);
+            if (sensesArray[idx].empty())
                 {
                     continue;
                 }
 
-            mNetMessage->PrepareToSend(senses);
-            SendClientMessage(client,senses);
+            mNetMessage->PrepareToSend(sensesArray[idx]);
+        }
+
+    // sending the senses
+    idx = 0;
+    for (
+         TAddrMap::iterator iter = mClients.begin();
+         iter != mClients.end();
+         ++iter, idx++
+         )
+        {
+            if (sensesArray[idx].empty())
+                {
+                    continue;
+                }
+
+            SendClientMessage(iter->second,sensesArray[idx]);
         }
 }
 
