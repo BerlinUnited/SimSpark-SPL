@@ -1,31 +1,15 @@
-RELEASE News of rcssserver3d-0.6.1
+RELEASE News of rcssserver3d-0.6.2
 
-This is the first release of the simulator after RoboCup 2008 competitions,
-and the first release of rcssserver3d package as a separate package which 
-uses simspark package to implement a hunamoid soccer simulation environment.
-In this version of the simulator, restricted vision perceptor is enabled again,
-and is going to be used in 2009 competitions. You can read more about this
-perceptor in 0.5.9 NEWS section.
-Finally, we do not use autotools for our build system anymore. You should use
-CMake (version 2.6) to build the package. See INSTALL for further installation
-instructions.
+This release is mainly a bug-fix release, and is the last release before
+RoboCup 2009 competitions.
 
-* Restricted Vision: 
-  - restricted vision perceptor is installed on Nao.
-
-* New requirements for building the pacakge:
-  - You'll need CMake 2.6 to configure and build the package
-  - this package depends on simspark package, so you should install it first
-
-* New program names:
-  - agentspark is now called rcssagent3d
-  - monitorspark is now called rcssmonitor3d
-
-* Some small enhancements and bug fixes 
-
-For details have a look into the ChangeLog coming with the package. (But some
-changes are not documented in the new ChangeLog file, you can investigate the
-old ChangeLog file in sserver CVS repository for more information).
+* Some improvements:
+ - improved Windows and MacOSX support
+ - improved external monitor
+ - fixed a bug in rcssserver3d's goal counting
+ - added right kick-off key to the monitor (Simon Raffeiner)
+ - simspark can take command line argument specifying the rb script to run
+   (using --script-path command line option)
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/

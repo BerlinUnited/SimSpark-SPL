@@ -1,5 +1,9 @@
 2009-06-24  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* NEWS: 
+	* RELEASE:
+	- prepared for 0.6.2 release
+	 
 	* simspark/main.cpp: 
 	- simspark.rb path should be given using "--script-path" option.
 	- add the new option to --help output
