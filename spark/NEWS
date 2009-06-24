@@ -1,3 +1,11 @@
+[0.1.1]
+This release is mainly a bug-fix release, and is the last release before
+RoboCup 2009 competitions. It is not much different from version 0.1.
+Main changes are:
+ - improved MacOSX and Windows support
+ - compilation fixes for latest library versions
+ - more reliable and a bit more fair network communication with the agents
+
 [0.1]
 This is the first release of the simulator after RoboCup 2008 competitions,
 and the first release of simspark core simulation package as a separate
