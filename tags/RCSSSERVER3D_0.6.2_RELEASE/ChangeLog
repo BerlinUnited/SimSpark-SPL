@@ -1,0 +1,142 @@
+2009-06-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* NEWS: 
+	* RELEASE:
+	- prepared for 0.6.2 release
+	 
+	* simspark/main.cpp: 
+	- simspark.rb path should be given using "--script-path" option.
+	- add the new option to --help output
+
+2009-06-16  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * simspark/main.cpp
+  - simspark can take command line argument specifying the rb script to run
+  (Simon Raffeiner)
+  
+  * plugin/soccermonitor/soccerinput.cpp
+  * plugin/soccermonitor/soccerinput.h
+  * rcssmonitor3d/soccerbindings.rb
+  - new soccer input command to give kick-off to the team on the right (bound
+  to 'j') (Simon Raffeiner)
+  
+2009-06-15  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * plugin/soccer/ballstateaspect/ballstateaspect.h
+  * plugin/soccer/ballstateaspect/ballstateaspect.cpp
+  * data/rsg/agent/nao/goal.rsg
+  - change goal and out-of-field checks to only accept when ball is
+  completely over the line
+  
+2009-04-30  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* rcssmonitor3d/rcssmonitor3d.rb
+	- set camera parameters to those used in internal monitor
+	
+	* plugin/soccermonitor/soccerinputlogplayer.h
+	* plugin/soccermonitor/soccerinputlogplayer.cpp
+	* rcssmonitor3d/soccerbindings.rb
+	- add camera controls to external monitor
+
+2009-04-08  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/beameffector/beamaction.h (BeamAction): 
+	- fixed const function declaration
+	
+	* plugin/soccer/soccerbase/soccerbase.cpp (SoccerBase::MoveAgent): 
+	- removed useless statements
+	
+	* plugin/soccer/kickeffector/kickaction.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- fixed variables order in ctor
+	 
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	- added missing return statement 
+
+2009-03-05  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* linux/rcssserver3d.desktop:
+	- updated the icon name
+	 
+	* data/logos/simspark.png:
+	* data/logos/simsparklogo.png:
+	* data/logos/simsparklogo2.png:
+	- added simspark logos created by Joschka, and a 48x48 version of
+	  simsparklogo.png which can be used as an icon
+
+2009-02-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* doc/users/user-manual.tex: 
+	* doc/users/simspark.tex: 
+	* doc/users/rcssmonitor3d.tex: 
+	* doc/users/introduction.tex: 
+	* doc/users/gettingstarted.tex: 
+	* doc/users/definitions.tex: 
+	* doc/users/CMakeLists.txt: 
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- monitorspark -> rcssmonitor3d
+	- Say effector message lenght limit is 20 characters now
+	- Updated some info about RestrictedVisionPerceptor
+
+2009-01-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* INSTALL: 
+	- added requirements
+	
+	* README: 
+	- updated with the recent changes
+
+2009-01-28  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* INSTALL: 
+	- added new installation instructions (cmake oriented)
+	
+	* data/rsg/agent/nao/nao.rsg: 
+	- disable VisionPerceptor
+	
+	* data/rsg/agent/nao/naoneckhead.rsg: 
+	* data/rsg/agent/nao/naoleg.rsg: 
+	* data/rsg/agent/nao/naoarm.rsg:
+	- enabled RestrictedVisionPerceptor and ObjectState nodes
+	- some whitespace fix 
+
+2009-01-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	* cmake_uninstall.cmake.in: 
+	- added 'make uninstall' support
+	
+	* doc/users/CMakeLists.txt: 
+	* cmake/UseLATEX.cmake: 
+	- do not build users-manual.pdf by default. can be built using 'make pdf'
+	- add an output to tell the user how it can build the manual
+
+2009-01-20  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssmonitor3d/Makefile.am: 
+	- added rpath
+	
+	* rcssmonitor3d/rcssmonitor3d.rb: 
+	- changed monitorspark.rb to rcssmonitor3d.rb
+	
+	* rcssmonitor3d/main.cpp (MonitorSpark::InitApp): 
+	* simspark/main.cpp (SimSpark::InitApp): 
+	- adding rcss3d's installation directory to the list of resource locations.
+	
+	* windows/rcssserver3d_config.h: 
+	* configure.ac: 
+	- added new define: RCSS_BUNDLE_PATH to store rcss3d's data directory.
+
+2008-12-19  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	* plugin/soccer/driveeffector/driveeffector.cpp: 
+	* plugin/soccer/catcheffector/catcheffector.cpp: 
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	* plugin/soccer/sayeffector/sayeffector.cpp: 
+	* plugin/soccer/pantilteffector/pantilteffector.cpp: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
+	- Replaced make_shared() with .lock() function call.(fixed compilation
+	error with recent boost versions.) 
