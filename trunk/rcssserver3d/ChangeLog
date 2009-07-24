@@ -1,3 +1,9 @@
+2009-07-24  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake
+	* cmake/FindFreetype.cmake
+	- add missing macros (Windows needed)
+
 2009-06-24  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* NEWS: 
