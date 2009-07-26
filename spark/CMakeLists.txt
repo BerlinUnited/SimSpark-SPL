@@ -208,6 +208,10 @@ set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
 set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
 set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
+#set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "Push \$INSTDIR\\\\lib\\\\${CMAKE_PROJECT_NAME}\nCall AddToPath")
+#set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "Push \$INSTDIR\\\\lib\\\\${CMAKE_PROJECT_NAME}\nCall un.RemoveFromPath")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "WriteRegExpandStr HKLM 'SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\' 'SPARK_DIR' '\$INSTDIR'")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "DeleteRegValue HKLM 'SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\' 'SPARK_DIR'")
 
 
 include(CPack)

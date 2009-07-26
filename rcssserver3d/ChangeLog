@@ -1,3 +1,11 @@
+2009-07-26  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	- try to find and copy all thirdparty dlls in the binary package's bin/ 
+	  directory.
+	- set RCSSSERVER3D_DIR environment variable when using NSIS installer
+	- creating simspark.bat file in windows (by the installer)
+
 2009-07-24  Marian Buchta  <marian.buchta@gmail.com>
 
 	* cmake/FindBoost.cmake

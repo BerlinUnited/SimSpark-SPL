@@ -85,6 +85,28 @@ install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS TODO
 install(FILES  ${CMAKE_BINARY_DIR}/rcssserver3d_config.h 
        DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
+if (WIN32)
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
+       if (EXISTS ${ODEDLL})
+              install(PROGRAMS ${ODEDLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${ODEDLL})
+
+       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${BINDIR}
+             FILES_MATCHING PATTERN "*.dll")
+
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
+       if (EXISTS ${DevIL_DLL})
+              install(PROGRAMS ${DevIL_DLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${DevIL_DLL})
+
+       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/" DESTINATION ${BINDIR}
+             FILES_MATCHING PATTERN "*.dll")
+
+       set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
+       if (EXISTS ${SDL_DLL})
+              install(PROGRAMS ${SDL_DLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${SDL_DLL})
+endif (WIN32)
 ########### uninstall support ############
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
@@ -112,6 +134,11 @@ set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
 set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
 set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
+set(CREATE_BATCH_FILES "ClearErrors\nFileOpen \$0
+\$INSTDIR\\\\bin\\\\simspark.bat w\nFileWrite \$0
+'PATH=%PATH%;%SPARK_DIR%\\\\lib\\\\simspark;%RCSSSERVER3D_DIR%\\\\lib\\\\rcssserver3d\$\\\\nsimspark.exe'\nFileClose \$0")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "WriteRegExpandStr HKLM 'SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\' 'RCSSSERVER3D_DIR' '\$INSTDIR'\n${CREATE_BATCH_FILES}")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "Delete '\$INSTDIR\\\\bin\\\\simspark.bat'\nDeleteRegValue HKLM 'SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\' 'RCSSSERVER3D_DIR'")
 
 include(CPack)
 

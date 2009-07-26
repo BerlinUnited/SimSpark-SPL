@@ -43,13 +43,6 @@ IF (NOT ODE_FOUND)
       ENDIF("${ODE_CONFIG_RESULT}" MATCHES "^0$")
   ENDIF(ODE_CONFIG)
   
-    IF (ODE_EXTRA_CFLAGS)
-      SET(ODE_CFLAGS ${ODE_EXTRA_CFLAGS} CACHE STRING "Additional ODE flags")
-      MESSAGE(STATUS "Found additional flags for ODE: ${ODE_CFLAGS}")
-    ELSE (ODE_EXTRA_CFLAGS)
-      SET(ODE_CFLAGS CACHE STRING "Additional ODE flags")
-    ENDIF (ODE_EXTRA_CFLAGS)
-
   FIND_PATH(ODE_INCLUDE_DIR ode/ode.h
     /usr/include
     /usr/local/include
@@ -69,11 +62,24 @@ IF (NOT ODE_FOUND)
     C:/library/ode/lib/
     "C:/Program Files/ode/lib/"
     C:/ode/lib/
-	PATH_SUFFIXES
-	releaselib
-	ReleaseDoubleDLL ReleaseDoubleLib 
-	ReleaseSingleDLL ReleaseSingleLib
+    PATH_SUFFIXES
+      releaselib
+      ReleaseDoubleDLL ReleaseDoubleLib 
+      ReleaseSingleDLL ReleaseSingleLib
   )
+
+  IF(WIN32 AND "${ODE_LIBRARY}" MATCHES ".*double.*")
+    SET(ODE_EXTRA_CFLAGS "-DdDOUBLE")
+  ELSE(WIN32 AND "${ODE_LIBRARY}" MATCHES ".*double.*")
+    SET(ODE_EXTRA_CFLAGS "-DdSINGLE")
+  ENDIF(WIN32 AND "${ODE_LIBRARY}" MATCHES ".*double.*")
+
+  IF (ODE_EXTRA_CFLAGS)
+    SET(ODE_CFLAGS ${ODE_EXTRA_CFLAGS} CACHE STRING "Additional ODE flags")
+    MESSAGE(STATUS "Found additional flags for ODE: ${ODE_CFLAGS}")
+  ELSE (ODE_EXTRA_CFLAGS)
+    SET(ODE_CFLAGS CACHE STRING "Additional ODE flags")
+  ENDIF (ODE_EXTRA_CFLAGS)
 
   IF(ODE_INCLUDE_DIR)
     MESSAGE(STATUS "Found ODE include dir: ${ODE_INCLUDE_DIR}")
