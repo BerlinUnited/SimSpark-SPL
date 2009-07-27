@@ -21,6 +21,7 @@
 
 #include "fileclasses.h"
 #include <cstring>
+#include <cstdlib>
 
 #if HAVE_CONFIG_H
 #include <sparkconfig.h>
@@ -82,6 +83,11 @@ RFile::BundlePath()
     return std::string(path) + Sep();
 #endif
 #else
+    const char *envPrefix = getenv("SPARK_DIR");
+    if (envPrefix)
+        {
+            return envPrefix + Sep() + "share" + Sep() + PACKAGE_NAME + Sep();
+        }
 # ifdef PREFIX
     return PREFIX + Sep() + "share" + Sep() + PACKAGE_NAME + Sep();
 # else
