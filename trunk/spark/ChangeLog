@@ -1,5 +1,8 @@
 2009-07-27  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	- improve ruby 1.9.x compatibility (using RARRAY_LEN() instead of RARRAY()->len)
+	
 	* lib/salt/fileclasses.cpp (RFile::BundlePath): 
 	- use SPARK_DIR environment variable for BundlePath if available
 

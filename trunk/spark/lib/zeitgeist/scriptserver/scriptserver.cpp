@@ -44,7 +44,7 @@ boost::shared_ptr<CoreContext> gMyPrivateContext;
 void
 getParameterList(VALUE args, ParameterList& params)
 {
-    int argc = RARRAY(args)->len;
+    int argc = RARRAY_LEN(args);
 
     for (int i = 0; i<argc; ++i)
     {
