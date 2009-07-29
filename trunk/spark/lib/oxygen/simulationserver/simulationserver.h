@@ -174,7 +174,7 @@ protected:
     void SimControlThread(boost::shared_ptr<SimControlNode> controlNode);
 
     /** updates mSumDeltaTime after a step in descreet simulations */
-    void UpdateDeltaTimeAfterStep();
+    void UpdateDeltaTimeAfterStep(float &deltaTime);
 
 protected:
     /** the argc parameter passed to Run() */

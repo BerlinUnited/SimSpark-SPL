@@ -221,7 +221,7 @@ void SimulationServer::Step()
                 {
                     mSceneServer->PrePhysicsUpdate(mSimStep);
                     mSceneServer->PhysicsUpdate(mSimStep);
-                    UpdateDeltaTimeAfterStep();
+                    UpdateDeltaTimeAfterStep(mSumDeltaTime);
                     finalStep += mSimStep;
                 }
             mSceneServer->PostPhysicsUpdate();
@@ -421,28 +421,30 @@ void SimulationServer::RunMultiThreaded()
 
     shared_ptr<SimControlNode> renderControl = GetControlNode("RenderControl");
 
+    float initDelta, finalDelta;
     while (true)
         {
             ++mCycle;
             mThreadBarrier->wait();
             mSceneServer->PrePhysicsUpdate(mSimStep);
             mThreadBarrier->wait();
-            mSceneServer->PhysicsUpdate(mSimStep);
-            if (mAutoTime)
-                AdvanceTime(mSimStep);
-
             mThreadBarrier->wait();
 
             if (mExit) // this check should be here so that all threads will quit
                 break;
+            finalDelta = initDelta = mSumDeltaTime;
 
-            UpdateDeltaTimeAfterStep();
+            mSceneServer->PhysicsUpdate(mSimStep);
+            if (mAutoTime)
+                AdvanceTime(mSimStep);
+
+            UpdateDeltaTimeAfterStep(finalDelta);
 
             float finalStep = mSimStep;
-            while (int(mSumDeltaTime*100) >= int(mSimStep*100))
+            while (int(finalDelta*100) >= int(mSimStep*100))
                 {
                     mSceneServer->PhysicsUpdate(mSimStep);
-                    UpdateDeltaTimeAfterStep();
+                    UpdateDeltaTimeAfterStep(finalDelta);
                     finalStep += mSimStep;
                 }
             mSceneServer->PostPhysicsUpdate();
@@ -452,6 +454,7 @@ void SimulationServer::RunMultiThreaded()
                 && renderControl->GetTime() - mSimTime < 0.005f )
                 renderControl->EndCycle();
             mThreadBarrier->wait();
+            mSumDeltaTime -= initDelta - finalDelta;
         }
 
     // wait for threads
@@ -485,14 +488,16 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
                     controlNode->ActAgent();
                     controlNode->SetSimTime(mSimTime);
                 }
+            mThreadBarrier->wait();
+            if (mExit)
+                break;
+
             if (isInputControl)
                 {
                     while (int(mSumDeltaTime*100) < int(mSimStep*100))
                         controlNode->StartCycle(); // advance the time
                 }
-            mThreadBarrier->wait();
-            if (mExit)
-                break;
+
             // wait for physics update
             mThreadBarrier->wait();
             if (!isRenderControl && newCycle)
@@ -515,16 +520,16 @@ void SimulationServer::SetMaxStepsPerCycle(int max)
     mMaxStepsPerCycle = max;
 }
 
-inline void SimulationServer::UpdateDeltaTimeAfterStep()
+inline void SimulationServer::UpdateDeltaTimeAfterStep(float &deltaTime)
 {
-    if (mAdjustSpeed && mSumDeltaTime > mMaxStepsPerCycle
+    if (mAdjustSpeed && deltaTime > mMaxStepsPerCycle
             * mSimStep)
         {
             GetLog()->Debug()
                     << "(SimulationServer) Warning: Skipping remaining time: "
-                    << mSumDeltaTime - mSimStep << '\n';
-            mSumDeltaTime = 0;
+                    << deltaTime - mSimStep << '\n';
+            deltaTime = 0;
         }
     else
-        mSumDeltaTime -= mSimStep;
+        deltaTime -= mSimStep;
 }
