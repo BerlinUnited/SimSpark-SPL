@@ -279,7 +279,7 @@ def sparkSetupServer
   simulationServer = sparkGetSimulationServer()
 
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(false);
+    simulationServer.setMultiThreads(true);
     simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
     # set auto speed adjust mode.

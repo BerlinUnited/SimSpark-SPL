@@ -1,3 +1,12 @@
+2009-07-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/simulationserver.h: 
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- fixed some issues in multi-threaded code
+	 
+	* spark/spark.rb: 
+	- making multi-threaded mode the default mode for running server
+
 2009-07-27  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
