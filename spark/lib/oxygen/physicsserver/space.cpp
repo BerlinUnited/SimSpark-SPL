@@ -58,7 +58,15 @@ dJointGroupID Space::GetODEJointGroup() const
 void Space::Collide()
 {
     // bind collision callback function to this object
-    dSpaceCollide(mODESpace, this, collisionNearCallback);
+    Collide(mODESpace);
+}
+
+void Space::Collide(dSpaceID space)
+{
+    if (gDisabledInnerCollisionSet.find(space) == gDisabledInnerCollisionSet.end())
+    {
+        dSpaceCollide(space, this, collisionNearCallback);
+    }
 }
 
 void Space::HandleSpaceCollide(dGeomID obj1, dGeomID obj2)
@@ -68,12 +76,12 @@ void Space::HandleSpaceCollide(dGeomID obj1, dGeomID obj2)
 
     if (dGeomIsSpace (obj1))
         {
-            dSpaceCollide ((dSpaceID)(obj1),this,&collisionNearCallback);
+            Collide((dSpaceID)obj1);
         }
 
     if (dGeomIsSpace (obj2))
         {
-            dSpaceCollide ((dSpaceID)(obj2),this,&collisionNearCallback);
+            Collide((dSpaceID)obj2);
         }
 }
 
@@ -107,16 +115,17 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
     const dSpaceID s1 = dGeomGetSpace(obj1);
     const dSpaceID s2 = dGeomGetSpace(obj2);
 
-    if (
-        (s1 == s2) &&
-        (gDisabledInnerCollisionSet.find(s1) != gDisabledInnerCollisionSet.end())
-        )
-        {
-            return;
-        }
+    // NOTICE: this should not happen since it is checked in Collide(dSpaceID)
+//    if (
+//        (s1 == s2) &&
+//        (gDisabledInnerCollisionSet.find(s1) != gDisabledInnerCollisionSet.end())
+//        )
+//        {
+//            return;
+//        }
 
-    
-    // if obj1 and obj2 are in the same space, and 
+
+    // if obj1 and obj2 are in the same space, and
     // obj1 is in obj2's "mNotCollideWithSet" or ojb2 is in obj1's
     // reject the collision
 

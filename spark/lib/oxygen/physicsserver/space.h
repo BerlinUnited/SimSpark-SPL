@@ -84,6 +84,11 @@ protected:
     /** registers the managed space to the containing parent space */
     virtual void OnLink();
 
+    /** calls ODE's collision detection for this space if internal collision
+     * detection is enabled for this space.
+     */
+    void Collide(dSpaceID space);
+
     /** callback to handle a potential collision between two contained
         geoms. It will look up and notify the corresponding colliders
         for a potential collision.
