@@ -1,3 +1,15 @@
+2009-07-30  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/physicsserver/space.h (Space): 
+	* lib/oxygen/physicsserver/space.cpp (Space::Collide):
+	- performance improvement: do not call dSpaceCollide() for spaces with
+	  disabled internal collision.
+	 
+	* lib/oxygen/simulationserver/simulationserver.cpp: 
+	- do not output too small skipped times
+	- move PrePhysicsUpdate() call just before PhysicsUpdate() call in
+	  RunMultiThreaded() function => 1 less wait() call with no speed loss.
+
 2009-07-29  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/simulationserver/simulationserver.h: 
