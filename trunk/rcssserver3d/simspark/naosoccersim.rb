@@ -4,12 +4,14 @@
 
 # setup soccer specific materials
 # run "scripts/rcs-materials.rb"
-run "scripts/rcs-materials-textures.rb"
-
-material = sparkCreate('kerosin/Material2DTexture', $serverPath+'material/matGrass');
-material.setDiffuse(1.0,1.0,1.0,1.0)
-material.setAmbient(0.5,0.5,0.5,1.0)
-material.setDiffuseTexture('textures/rcs-naofield.png')
+if ($enableInternalMonitor)
+    run "scripts/rcs-materials-textures.rb"
+    
+    material = sparkCreate('kerosin/Material2DTexture', $serverPath+'material/matGrass');
+    material.setDiffuse(1.0,1.0,1.0,1.0)
+    material.setAmbient(0.5,0.5,0.5,1.0)
+    material.setDiffuseTexture('textures/rcs-naofield.png')
+end
 
 importBundle "soccer"
 

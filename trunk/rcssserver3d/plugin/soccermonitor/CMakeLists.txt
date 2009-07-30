@@ -25,9 +25,7 @@ include_directories(${CMAKE_SOURCE_DIR}/plugin ${SPARK_INCLUDE_DIR}
 add_library(soccermonitor MODULE ${soccermonitor_LIB_SRCS}
    ${soccermonitor_LIB_HDRS})
 
-target_link_libraries(soccermonitor ${SALT_LIBRARIES} ${OXYGEN_LIBRARIES}
-   	${ZEITGEIST_LIBRARIES} ${KEROSIN_LIBRARIES}
-	${RCSSNET3D_LIBRARY})
+target_link_libraries(soccermonitor ${spark_libs})
 
 if (NOT APPLE)
    set_target_properties(soccermonitor PROPERTIES VERSION 1.0.0 SOVERSION 1)
