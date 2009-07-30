@@ -1,3 +1,17 @@
+2009-07-30  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/CMakeLists.txt: 
+	* plugin/soccer/CMakeLists.txt: 
+	* plugin/soccermonitor/CMakeLists.txt:
+	- do not link plugins with spark libraries. prevents segfault for
+	  rcssmonitor3d on exit. 
+	
+	* simspark/naosoccersim.rb: 
+	- do not setup materials when internal monitor doesn't run
+	
+	* simspark/simspark.rb: 
+	- disable internal monitor by default
+
 2009-07-27  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* CMakeLists.txt: 
