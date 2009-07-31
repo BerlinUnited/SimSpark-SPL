@@ -1,3 +1,11 @@
+2009-07-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/agentcontrol.cpp: 
+	- a small cleanup
+	
+	* lib/oxygen/simulationserver/netcontrol.cpp (NetControl::ReadTCPMessages): 
+	- reverting to the old behaviour; the intended logic is already implemented.
+
 2009-07-30  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/physicsserver/space.h (Space): 

@@ -183,12 +183,10 @@ void AgentControl::EndCycle()
          ++iter, idx++
          )
         {
-            if (sensesArray[idx].empty())
+            if (!sensesArray[idx].empty())
                 {
-                    continue;
+                    SendClientMessage(iter->second, sensesArray[idx]);
                 }
 
-            SendClientMessage(iter->second,sensesArray[idx]);
         }
 }
-

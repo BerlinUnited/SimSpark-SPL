@@ -627,30 +627,14 @@ void NetControl::ReadTCPMessages()
 
                     // read a fragment
                     shared_ptr<Client>& client = (*iter).second;
-                    
-                    const unsigned int preSz = sizeof(unsigned int);
-                    int nRead = 0;
-                    int retval = 1;
-                    while (nRead < preSz && retval > 0)
-                    {
-                      retval = client->socket->recv(mBuffer.get() + nRead, preSz - nRead);
-                      nRead += retval;
-                    }
-                    
-                    unsigned int len = ntohl(reinterpret_cast<unsigned int*>(mBuffer.get())[0]);
+                    int rval = client->socket->recv(mBuffer.get(), mBufferSize);
 
-                    while (nRead < preSz + len && retval > 0)
-                    {
-                      retval = client->socket->recv(mBuffer.get() + nRead, preSz + len - nRead);
-                      nRead += retval;
-                    }
-                    
-                    if (retval > 0)
+                    if (rval > 0)
                         {
-                            StoreFragment(client->addr,nRead);
+                            StoreFragment(client->addr,rval);
                         } else
                             {
-                                if (retval <= 0)
+                                if (rval <= 0)
                                     {
                                         GetLog()->Error()
                                             << "(NetControl) ERROR: '" << GetName()

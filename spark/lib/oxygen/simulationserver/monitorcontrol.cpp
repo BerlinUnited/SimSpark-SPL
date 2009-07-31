@@ -64,7 +64,7 @@ void MonitorControl::ClientConnect(shared_ptr<Client> client)
     string header = mMonitorServer->GetMonitorHeaderInfo();
     mNetMessage->PrepareToSend(header);
     SendClientMessage(client->addr,header);
-    
+
     shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() != 0)
     {
@@ -83,7 +83,7 @@ void MonitorControl::EndCycle()
     {
         return;
     }
-    
+
     // send updates to all connected monitors
     if ( !mClients.empty() )
     {
@@ -99,7 +99,7 @@ void MonitorControl::EndCycle()
         {
             info = mMonitorServer->GetMonitorData();
         }
-        
+
         mNetMessage->PrepareToSend(info);
 
         for (
@@ -148,5 +148,3 @@ void MonitorControl::StartCycle()
                 }
         }
 }
-
-
