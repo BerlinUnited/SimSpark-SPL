@@ -41,6 +41,10 @@ set(soccer_LIB_HDRS
    gametimeperceptor/gametimeperceptor.h
    visionperceptor/visionperceptor.h
    agentintegration/soccerbotbehavior.h
+   hmdp_effector/hmdpaction.h
+   hmdp_effector/hmdpeffector.h
+   hmdp_effector/hmdpperceptor.h
+   hmdp_effector/naospecific.h        
 )
 
 set(soccer_LIB_SRCS
@@ -107,6 +111,12 @@ set(soccer_LIB_SRCS
    gametimeperceptor/gametimeperceptor_c.cpp
    agentintegration/soccerbotbehavior.cpp
    agentintegration/soccerbotbehavior_c.cpp
+   hmdp_effector/hmdpeffector_c.cpp
+   hmdp_effector/hmdpeffector.cpp
+   hmdp_effector/hmdpperceptor_c.cpp
+   hmdp_effector/hmdpperceptor.cpp
+   hmdp_effector/hmdpwrapper.cpp
+   hmdp_effector/naospecific.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${SPARK_INCLUDE_DIR} 
