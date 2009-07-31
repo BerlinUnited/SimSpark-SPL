@@ -51,6 +51,8 @@
 #include "hearperceptor/hearperceptor.h"
 #include "gametimeperceptor/gametimeperceptor.h"
 #include "agentintegration/soccerbotbehavior.h"
+#include "hmdp_effector/hmdpeffector.h"
+#include "hmdp_effector/hmdpperceptor.h"
 
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerControlAspect);
@@ -84,5 +86,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(VisionPerceptor);
         ZEITGEIST_EXPORT(GameTimePerceptor);
         ZEITGEIST_EXPORT(SoccerbotBehavior);
+        ZEITGEIST_EXPORT(HMDPPerceptor);
+        ZEITGEIST_EXPORT(HMDPEffector);
 ZEITGEIST_EXPORT_END()
 
