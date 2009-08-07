@@ -4,10 +4,18 @@ project(simspark-utilities CXX C)
 set(PACKAGE_VERSION "0.1")
 
 ########## check for headerfiles/libraries ##########
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/ ${CMAKE_SOURCE_DIR}/../spark/cmake/)
 find_package(Spark REQUIRED)
 find_package(Boost REQUIRED)
 
+find_package(ODE REQUIRED)
+find_package(Freetype REQUIRED)
+find_package(SDL REQUIRED)
+find_package(DevIL REQUIRED)
+
+if (WIN32)
+ set(NET_LIBS WS2_32.lib)
+endif (WIN32)
 ########## add extra flags ########## 
 if(NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
@@ -32,6 +40,14 @@ set(CMAKE_SHARED_MODULE_PREFIX "")
 
 mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
  
+if(WIN32)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
+  include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
+  link_directories(${Boost_LIBRARY_DIRS})
+    if(MSVC)
+      add_definitions(/Gm /Zi /GL)
+    endif(MSVC)
+endif(WIN32)
 ########## add subdirectories ############
 add_subdirectory(data)
 add_subdirectory(gendot)
@@ -44,6 +60,28 @@ add_subdirectory(sampleagent)
 install(FILES  AUTHORS ChangeLog COPYING README 
        DESTINATION ${DATADIR}/doc/${CMAKE_PROJECT_NAME})
 
+if (WIN32)
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
+       if (EXISTS ${ODEDLL})
+              install(PROGRAMS ${ODEDLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${ODEDLL})
+
+       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${BINDIR}
+             FILES_MATCHING PATTERN "*.dll")
+
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
+       if (EXISTS ${DevIL_DLL})
+              install(PROGRAMS ${DevIL_DLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${DevIL_DLL})
+
+       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/" DESTINATION ${BINDIR}
+             FILES_MATCHING PATTERN "*.dll")
+
+       set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
+       if (EXISTS ${SDL_DLL})
+              install(PROGRAMS ${SDL_DLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${SDL_DLL})
+endif (WIN32)
 ########### uninstall support ############
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
@@ -55,7 +93,9 @@ ADD_CUSTOM_TARGET(uninstall
 
 ########### CPack section #############
 set(CPACK_SOURCE_GENERATOR TGZ)
-set(CPACK_SOURCE_IGNORE_FILES /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /[.].*)
+set(CPACK_SOURCE_IGNORE_FILES
+    /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /autom4te[.]cache/ /[.].* /bootstrap
+    /RELEASE /rpm.am /msi.am)
 set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
