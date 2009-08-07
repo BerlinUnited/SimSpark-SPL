@@ -1,0 +1,10 @@
+2009-08-07  Marian Buchta  <marian.buchta@gmail.com>
+
+	* CMakeLists.txt
+	- try to find and copy all thirdparty dlls in the binary package's bin/ directory. 
+
+	* cmake/FindSpark.cmake
+	- Update script from rcssserver3d\cmake\FindSpark.cmake
+	
+	* sampleagent/CMakeLists.txt
+	- add RCSSNET3D_LIBRARIES and NET_LIBS - fixed linking error in VS2008
