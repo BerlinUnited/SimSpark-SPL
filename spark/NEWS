@@ -1,3 +1,15 @@
+[0.1.2]
+This release brings some bugfixes, better performance and also better Windows
+support. A Windows installer will be available too. This is the first version 
+which runs in multi-threaded mode by default. The multi-threaded mode is still
+in early stages, and it can be improved cosiderably in future.
+
+Main changes of this release are:
+ - improved Windows support, including Windows Installer. 
+ - Multi-threaded mode now works, and is the default mode when running simspark
+ - Performance improvements
+ - Fixed a bug in networking code, which were introduced in 0.1.1
+
 [0.1.1]
 This release is mainly a bug-fix release, and is the last release before
 RoboCup 2009 competitions. It is not much different from version 0.1.
