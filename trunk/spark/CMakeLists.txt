@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(simspark CXX C)
-set(PACKAGE_VERSION "0.1.1")
+set(PACKAGE_VERSION "0.1.2")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -132,13 +132,13 @@ endif(WIN32)
 
 ########## library version numbers  ##########
 set(SALT_SO_VERSION 0)
-set(SALT_VERSION ${SALT_SO_VERSION}.3.1)
+set(SALT_VERSION ${SALT_SO_VERSION}.3.2)
 set(ZEITGEIST_SO_VERSION 3)
-set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.0.1)
+set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.0.2)
 set(OXYGEN_SO_VERSION 3)
-set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.2.3)
+set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.2.4)
 set(KEROSIN_SO_VERSION 1)
-set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.0.1)
+set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.0.2)
 set(SPARK_SO_VERSION 0)
 set(SPARK_VERSION ${SPARK_SO_VERSION}.0.0)
 set(RCSSNET_SO_VERSION 0)
@@ -208,11 +208,8 @@ set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
 set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
 set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
-#set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "Push \$INSTDIR\\\\lib\\\\${CMAKE_PROJECT_NAME}\nCall AddToPath")
-#set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "Push \$INSTDIR\\\\lib\\\\${CMAKE_PROJECT_NAME}\nCall un.RemoveFromPath")
-set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "WriteRegExpandStr HKLM 'SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\' 'SPARK_DIR' '\$INSTDIR'")
-set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "DeleteRegValue HKLM 'SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\\\\' 'SPARK_DIR'")
-
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "  !include ${CMAKE_SOURCE_DIR}\\\\windows\\\\install_extra.nsi")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "  !include ${CMAKE_SOURCE_DIR}\\\\windows\\\\uninstall_extra.nsi")
 
 include(CPack)
 
@@ -229,5 +226,3 @@ include(CPack)
 #include $(top_srcdir)/config.aux/sf.am
 #
 #include $(top_srcdir)/config.aux/cvs.am
-
-

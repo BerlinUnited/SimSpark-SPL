@@ -32,7 +32,7 @@ int sendByte(int data)
         hmdpEffectorHandle->sendMessage(messageToSend); //! after a carriage return or line feed is emmitted from the  motor controller
         messageToSend = "";
     }
-
+    return 0;
 }
 
 //! reads the current servo positions (needed by the motorcontroller)
@@ -119,7 +119,7 @@ void clearBuffer()
 
 int sendBytetoMo(int data)
 {
-
+    return 0;
 }
 
 //!currently max 7 character (+\0) per servo for the name
