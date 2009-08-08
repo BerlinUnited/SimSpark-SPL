@@ -630,7 +630,6 @@ int parse_one_line()
         main_eval(base_data->buff); // see base.c
         clearBuffer();
     };
-
+    return 0;
 }
-;
 

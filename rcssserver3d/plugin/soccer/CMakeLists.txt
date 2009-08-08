@@ -128,7 +128,7 @@ add_library(soccer MODULE ${soccer_LIB_SRCS} ${soccer_LIB_HDRS})
 target_link_libraries(soccer ${spark_libs} ${OPENGL_gl_LIBRARY})
 
 if (NOT APPLE)
-   set_target_properties(soccer PROPERTIES VERSION 1.0.0 SOVERSION 1)
+   set_target_properties(soccer PROPERTIES VERSION 1.1.0 SOVERSION 1)
 endif (NOT APPLE)
 
 install(TARGETS soccer DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
