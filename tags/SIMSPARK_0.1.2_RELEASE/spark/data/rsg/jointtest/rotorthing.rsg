@@ -1,0 +1,25 @@
+; -*- mode: lisp; -*-
+(RSG 0 1)
+(
+ (template $size $velocity $force)	
+ (nd Transform	
+       (setName blue)
+       (importScene rsg/boxspheres/box.rsg $size 1 1 2 matBlue)
+       )
+
+ (nd Transform
+       (setName red)
+       (importScene rsg/boxspheres/box.rsg 1 $size 1 2 matRed)
+       )
+
+ (nd FixedJoint
+       (attach ../blue/boxBody ../red/boxBody)
+       )
+
+ (nd HingeJoint
+       (attach ../blue/boxBody)
+       (setAnchor 0 0 0)
+       (setAngularMotorVelocity 0 $velocity)
+       (setMaxMotorForce 0 $force)
+       )
+ )

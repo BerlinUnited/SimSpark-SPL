@@ -1,0 +1,29 @@
+Authors of simspark:
+
+Marco Kögler <koegler@uni-koblenz.de>
+Markus Rollmann <rollmark@uni-koblenz.de>
+Oliver Obst <fruit@users.sf.net>
+Pat Riley <pfr@cs.cmu.edu>
+Tom Howard <tomhoward@users.sf.net>
+Heni Ben Amor <amor@uni-koblenz.de>
+Irene Markelic <irene@markelic.de>
+Jan Murray <murray@uni-koblenz.de>
+Joschka Bödecker <jboedeck@uni-koblenz.de>
+Christoph Ringelstein <cringel@uni-koblenz.de>
+Hesham Ebrahimi <heshamebrahimi@gmail.com>
+
+Also see files ChangeLog and THANKS.
+
+
+If you refer to rcssserver3D, please cite the following publications:
+
+Oliver Obst and Markus Rollmann
+SPARK - A Generic Simulator for Physical Multiagent Simulations
+Computer Systems Science and Engineering, no. 5, vol. 20, pp. 347-356, Sep. 2005
+
+Marco Koegler and Oliver Obst.
+Simulation League: The Next Generation
+In Daniel Polani, Andrea Bonarini, Brett Browning, and Kazuo Yoshida, editors,
+RoboCup 2003: Robot Soccer World Cup VII, pp. 458-469, 
+Lecture Notes in Artificial Intelligence 3020, Springer, Berlin, 2004
+
