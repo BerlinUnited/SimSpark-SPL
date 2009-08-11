@@ -1,3 +1,8 @@
+2009-08-11  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* cmake/FindODE.cmake: 
+	- do not check for ODe library name under Linux
+
 2009-08-09  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* windows/install_extra.nsi: 
