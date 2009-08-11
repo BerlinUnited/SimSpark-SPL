@@ -68,11 +68,13 @@ IF (NOT ODE_FOUND)
       ReleaseSingleDLL ReleaseSingleLib
   )
 
-  IF(WIN32 AND "${ODE_LIBRARY}" MATCHES ".*double.*")
-    SET(ODE_EXTRA_CFLAGS "-DdDOUBLE")
-  ELSE(WIN32 AND "${ODE_LIBRARY}" MATCHES ".*double.*")
-    SET(ODE_EXTRA_CFLAGS "-DdSINGLE")
-  ENDIF(WIN32 AND "${ODE_LIBRARY}" MATCHES ".*double.*")
+  IF (WIN32)
+    IF("${ODE_LIBRARY}" MATCHES ".*double.*")
+      SET(ODE_EXTRA_CFLAGS "-DdDOUBLE")
+    ELSE("${ODE_LIBRARY}" MATCHES ".*double.*")
+      SET(ODE_EXTRA_CFLAGS "-DdSINGLE")
+    ENDIF("${ODE_LIBRARY}" MATCHES ".*double.*")
+  ENDIF (WIN32)
 
   IF (ODE_EXTRA_CFLAGS)
     SET(ODE_CFLAGS ${ODE_EXTRA_CFLAGS} CACHE STRING "Additional ODE flags")
