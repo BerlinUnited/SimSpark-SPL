@@ -4,9 +4,6 @@ set(gendot_SRCS
    main.cpp
 )
 
-include_directories(${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR}
-  ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR})
-
 add_executable(gendot ${gendot_SRCS})
 
 target_link_libraries(gendot ${SPARK_LIBRARIES} ${SALT_LIBRARIES}

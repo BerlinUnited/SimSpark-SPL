@@ -1,5 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility
-    ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+    ${OPENGL_INCLUDE_DIR})
 
 # It is problematic under Linux! Will cause segfaults on simspark exit.
 if (WIN32 OR APPLE)

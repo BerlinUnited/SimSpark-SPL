@@ -8,9 +8,7 @@ if (APPLE)
   set(SDL_LINK_LIBS ${SDLMAIN_LIBRARY} ${SDL_LIBRARY_TEMP}) 
 endif (APPLE)
 
-include_directories(${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR}
-  ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR}
-  ${SDL_INCLUDE_DIR})
+include_directories(${SDL_INCLUDE_DIR})
 
 add_executable(rcssmonitor3d ${rcssmonitor3d_SRCS})
 

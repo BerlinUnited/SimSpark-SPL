@@ -13,9 +13,6 @@ set(rcssagent3d_SRCS
    naobehavior.cpp
 )
 
-include_directories(${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR}
-  ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR})
-
 add_executable(rcssagent3d ${rcssagent3d_SRCS})
 
 if (WIN32)

@@ -47,7 +47,6 @@ IF (WIN32) #Windows
 	FIND_LIBRARY(FMOD_LIBRARIES debug fmodexp optimized fmodex PATHS ${FMOD_LIBRARY_SEARCH_DIRS})
 	
 ELSE (WIN32) #Unix
-	CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0 FATAL_ERROR)
 	FIND_PACKAGE(PkgConfig)
 	IF(PKG_CONFIG_FOUND)
 		# TODO i don't know how this would be registered in pkg-config

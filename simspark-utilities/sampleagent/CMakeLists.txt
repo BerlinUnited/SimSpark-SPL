@@ -9,7 +9,6 @@ set(sampleagent_SRCS
    leggedspherebehavior.cpp
 )
 
-include_directories(${SPARK_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 add_executable(sampleagent ${sampleagent_SRCS})
 
 target_link_libraries(sampleagent ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
