@@ -26,9 +26,12 @@ if(NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
 
-add_definitions(-DHAVE_CONFIG_H)
-include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS})
+add_definitions(-DHAVE_CONFIG_H ${ODE_CFLAGS})
+include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
+  ${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR} ${ZEITGEIST_INCLUDE_DIR}
+  ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
+
 if (UNIX)
   set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} CACHE
         STRING "Common C++ compiler flags" FORCE)
@@ -37,10 +40,10 @@ if (UNIX)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE
         STRING "C++ compiler flags for Release builds" FORCE)
 endif (UNIX)
+
 if(WIN32)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
-  include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
-    ${CMAKE_SOURCE_DIR}/windows/include)
+  include_directories(${CMAKE_SOURCE_DIR}/windows/include)
     if(MSVC)
       add_definitions(/Gm /Zi /GL)
     endif(MSVC)
@@ -58,7 +61,6 @@ mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
  
 ########## generate configuration file ##########
 if (APPLE)
-  # TODO: it probably doesn't work on Mac OSX. Please fix it!
   set(BUNDLE_PATH ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME})
 elseif (UNIX)
   set(BUNDLE_PATH ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME})
@@ -85,7 +87,7 @@ install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS TODO
 install(FILES  ${CMAKE_BINARY_DIR}/rcssserver3d_config.h 
        DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
-if (WIN32)
+if (WIN32) # try to find and install third-party .dlls to bin/ directory
        string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
        if (EXISTS ${ODEDLL})
               install(PROGRAMS ${ODEDLL} DESTINATION ${BINDIR})
@@ -107,6 +109,7 @@ if (WIN32)
               install(PROGRAMS ${SDL_DLL} DESTINATION ${BINDIR})
        endif (EXISTS ${SDL_DLL})
 endif (WIN32)
+
 ########### uninstall support ############
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"

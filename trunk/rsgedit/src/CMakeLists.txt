@@ -38,7 +38,6 @@ set(rsgedit_SRCS
    sparkglcanvas.cpp
 )
 
-add_definitions(${wxWidgets_DEFINITIONS})
 include_directories(${CMAKE_SOURCE_DIR}/wxutil/include 
     ${CMAKE_SOURCE_DIR}
     ${wxWidgets_INCLUDE_DIRS} ${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR}

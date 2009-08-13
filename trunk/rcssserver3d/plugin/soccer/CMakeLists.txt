@@ -119,9 +119,8 @@ set(soccer_LIB_SRCS
    hmdp_effector/naospecific.cpp
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${SPARK_INCLUDE_DIR} 
-  ${SALT_INCLUDE_DIR} ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR}
-  ${KEROSIN_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${DevIL_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${FREETYPE_INCLUDE_DIRS}
+  ${DevIL_INCLUDE_DIR})
 
 add_library(soccer MODULE ${soccer_LIB_SRCS} ${soccer_LIB_HDRS})
 

@@ -18,9 +18,8 @@ set(soccermonitor_LIB_SRCS
    soccerinputlogplayer_c.cpp
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/plugin ${SPARK_INCLUDE_DIR} 
-  ${SALT_INCLUDE_DIR} ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR}
-  ${KEROSIN_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${DevIL_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/plugin ${FREETYPE_INCLUDE_DIRS}
+  ${DevIL_INCLUDE_DIR})
 
 add_library(soccermonitor MODULE ${soccermonitor_LIB_SRCS}
    ${soccermonitor_LIB_HDRS})

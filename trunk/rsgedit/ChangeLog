@@ -1,0 +1,7 @@
+2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* src/CMakeLists.txt: 
+	* wxutil/CMakeLists.txt: 
+	* CMakeLists.txt: 
+	- add wxWidgets definitions to toplevel compiler flags and remove from 
+	  other files

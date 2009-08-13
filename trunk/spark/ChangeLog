@@ -1,7 +1,23 @@
+2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* spark/CMakeLists.txt: 
+	* test/CMakeLists.txt: 
+	* utility/CMakeLists.txt:
+	* lib/oxygen/CMakeLists.txt: 
+	- remove duplicate compiler flags
+	 
+	* CMakeLists.txt: 
+	- always add boost and ode include directories, not just in windows
+	- added a small guideline about changing library version numbers
+	- add ode compiler flags instead of providing it only for oxygen
+	
+	* cmake/FindFMOD.cmake: 
+	- do not check for 2.6 version here, it's done before
+
 2009-08-11  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* cmake/FindODE.cmake: 
-	- do not check for ODe library name under Linux
+	- do not check for ODE library name under Linux
 
 2009-08-09  Hedayat Vatankhah  <hedayat@grad.com>
 

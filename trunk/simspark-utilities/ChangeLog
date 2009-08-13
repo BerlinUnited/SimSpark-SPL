@@ -1,3 +1,14 @@
+2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	- add common include directories
+	
+	* gendot/CMakeLists.txt: 
+	* monitorspark/CMakeLists.txt: 
+	* sampleagent/CMakeLists.txt: 
+	* samplesim/CMakeLists.txt: 
+	- remove duplicate include directories 
+
 2009-08-07  Marian Buchta  <marian.buchta@gmail.com>
 
 	* CMakeLists.txt

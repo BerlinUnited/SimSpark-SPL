@@ -16,7 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
 
-add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DHAVE_CONFIG_H ${wxWidgets_DEFINITIONS})
 include_directories(${CMAKE_BINARY_DIR})
 if (UNIX)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE

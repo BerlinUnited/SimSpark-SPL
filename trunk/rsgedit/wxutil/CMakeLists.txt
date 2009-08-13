@@ -132,7 +132,7 @@ set(wxutil_LIB_SRCS
    src/wxscintilla/src/XPM.cxx
 )
 
-add_definitions(${wxWidgets_DEFINITIONS} -D __WX__ -D LINK_LEXERS -D SCI_LEXER)
+add_definitions(-D __WX__ -D LINK_LEXERS -D SCI_LEXER)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
     ${wxWidgets_INCLUDE_DIRS})
 add_library(wxutil SHARED ${wxutil_LIB_SRCS} ${wxutil_LIB_HDRS})

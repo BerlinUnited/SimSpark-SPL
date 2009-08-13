@@ -22,6 +22,11 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 add_definitions(-DHAVE_CONFIG_H)
+include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR} ${SPARK_INCLUDE_DIR}
+  ${SALT_INCLUDE_DIR} ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR}
+  ${KEROSIN_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
+
 if (UNIX)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE
         STRING "Common C++ compiler flags" FORCE)
@@ -42,8 +47,6 @@ mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
  
 if(WIN32)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
-  include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
-  link_directories(${Boost_LIBRARY_DIRS})
     if(MSVC)
       add_definitions(/Gm /Zi /GL)
     endif(MSVC)

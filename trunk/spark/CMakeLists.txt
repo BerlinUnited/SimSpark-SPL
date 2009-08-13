@@ -28,10 +28,10 @@ check_include_file("CoreFoundation/CoreFoundation.h"
 if (NOT USE_COREFOUNDATION STREQUAL "OFF")
    if (HAVE_COREFOUNDATION_COREFOUNDATION_H)
       set(USE_COREFOUNDATION ON)		
-      message("USE_COREFOUNDATION ON")		
+      message(STATUS "  USE_COREFOUNDATION ON")		
    else (HAVE_COREFOUNDATION_COREFOUNDATION_H)
       set(USE_COREFOUNDATION OFF)		
-      message("USE_COREFOUNDATION OFF")		
+      message(STATUS "  USE_COREFOUNDATION OFF")		
    endif (HAVE_COREFOUNDATION_COREFOUNDATION_H)
 endif (NOT USE_COREFOUNDATION STREQUAL "OFF")
 
@@ -94,8 +94,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
 
-add_definitions(-DHAVE_CONFIG_H)
-include_directories(${CMAKE_BINARY_DIR})
+add_definitions(-DHAVE_CONFIG_H ${ODE_CFLAGS})
+include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 
 if (UNIX)
@@ -123,14 +123,23 @@ endif(BUILD_SHARED_LIBS)
 
 if(WIN32)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
-    include_directories(${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
-        ${CMAKE_SOURCE_DIR}/windows/include)
+    include_directories(${CMAKE_SOURCE_DIR}/windows/include)
     if(MSVC)
       add_definitions(/Gm /Zi /GL)
     endif(MSVC)
 endif(WIN32)
 
 ########## library version numbers  ##########
+# Version numbers: .so version, major version, and minor version
+# example: libspark.so.SO_VERSION.MAJOR_VERSION.MINOR_VERSION
+# Each of these version numbers should be increased on different situations:
+# 1. So version: when the library breaks compatibility like removing an interface
+#    or changing data types. Reste major & minor versions to 0.
+# 2. Major version: when library provides new features (e.g. new interface) but
+#    doesn't break compatibility. Reset minor version to 0 when incremented.
+# 3. Minor version: library changed but without any new interfaces or breaking 
+#    compatibility
+
 set(SALT_SO_VERSION 0)
 set(SALT_VERSION ${SALT_SO_VERSION}.3.2)
 set(ZEITGEIST_SO_VERSION 3)

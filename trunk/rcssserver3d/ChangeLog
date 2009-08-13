@@ -1,3 +1,20 @@
+2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* simspark/CMakeLists.txt: 
+	* rcssmonitor3d/CMakeLists.txt: 
+	* rcssagent3d/CMakeLists.txt: 
+	* plugin/soccermonitor/CMakeLists.txt: 
+	* plugin/soccer/CMakeLists.txt: 
+	- removing duplicate include dirs
+	
+	* cmake/FindODE.cmake: 
+	- updated with spark FindODE.cmake module which adds proper compiler flags
+	  for possible ode usage
+	
+	* CMakeLists.txt: 
+	- add ode flags and include dir to compiler flags
+	- add common include directories to compiler flags
+
 2009-08-09  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/soccer/CMakeLists.txt: 
