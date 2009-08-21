@@ -358,6 +358,7 @@ ELSE (_boost_IN_CACHE)
     "$ENV{ProgramFiles}/boost"
     C:/library/boost
     "C:/Program Files/boost"
+    "C:/Program Files (x86)/boost"
     /sw/local/include
   )
 
@@ -619,6 +620,7 @@ ELSE (_boost_IN_CACHE)
     "$ENV{ProgramFiles}/boost"
     C:/library/boost/stage/lib
     "C:/Program Files/boost/stage/lib"
+    "C:/Program Files (x86)/boost/stage/lib"
     C:/boost/lib
     /sw/local/lib
   )

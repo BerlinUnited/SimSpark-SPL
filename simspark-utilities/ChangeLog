@@ -1,3 +1,8 @@
+2009-08-21  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindSpark.cmake:
+	- add search path when using 32bit library in 64bit Windows
+
 2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* CMakeLists.txt: 

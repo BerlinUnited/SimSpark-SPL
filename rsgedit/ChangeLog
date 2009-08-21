@@ -1,3 +1,9 @@
+2009-08-21  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindSpark.cmake:
+	- update file from rcssserver3d
+	- add search paths when using 32bit libraries in 64bit Windows
+	
 2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* src/CMakeLists.txt: 
