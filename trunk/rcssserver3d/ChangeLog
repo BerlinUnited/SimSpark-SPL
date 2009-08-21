@@ -1,3 +1,12 @@
+2009-08-21  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake:
+	* cmake/FindDevIL.cmake:
+	* cmake/FindFreetype.cmake:
+	* cmake/FindODE.cmake:
+	* cmake/FindSpark.cmake:
+	- add search paths when using 32bit libraries in 64bit Windows
+
 2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* simspark/CMakeLists.txt: 

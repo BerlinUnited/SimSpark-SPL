@@ -27,7 +27,7 @@ IF (SPARK_INCLUDE_DIR)
   SET(SPARK_FIND_QUIETLY TRUE)
 ENDIF (SPARK_INCLUDE_DIR)
 
-SET(SPARK_DIR $ENV{SPARK_DIR} "C:/Program Files/simspark" "C:/Library/simspark")
+SET(SPARK_DIR $ENV{SPARK_DIR} "C:/Program Files/simspark" "C:/Program Files (x86)/simspark" "C:/library/simspark")
 
 FIND_PATH(SPARK_INCLUDE_DIR spark/spark.h
   PATHS ${SPARK_DIR}

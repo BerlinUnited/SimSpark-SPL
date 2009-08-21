@@ -16,6 +16,7 @@ FIND_PATH(ZLIB_INCLUDE_DIR zlib.h
 	C:/library/
 	C:/
 	"C:/Program Files/"
+	"C:/Program Files (x86)/"
 	PATH_SUFFIXES zlib123
 )
 
@@ -25,6 +26,7 @@ FIND_LIBRARY(ZLIB_LIBRARY NAMES ${ZLIB_NAMES}
 	C:/library/zlib123/
 	C:/zlib123/
 	"C:/Program Files/zlib123/"
+	"C:/Program Files (x86)/zlib123/"
 	PATH_SUFFIXES projects/visualc6/Win32_DLL_Release
 )
 

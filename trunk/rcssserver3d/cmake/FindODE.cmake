@@ -50,6 +50,7 @@ IF (NOT ODE_FOUND)
     $ENV{INCLUDE}
     C:/library/ode/include
     "C:/Program Files/ode/include"
+    "C:/Program Files (x86)/ode/include"
     C:/ode/include
   )
   FIND_LIBRARY(ODE_LIBRARY
@@ -61,6 +62,7 @@ IF (NOT ODE_FOUND)
     $ENV{OGRE_HOME}/lib # OGRE SDK on WIN32
     C:/library/ode/lib/
     "C:/Program Files/ode/lib/"
+    "C:/Program Files (x86)/ode/lib/"
     C:/ode/lib/
     PATH_SUFFIXES
       releaselib

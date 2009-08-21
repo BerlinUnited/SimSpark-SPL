@@ -33,6 +33,7 @@ SET(DevIL_POSSIBLE_ROOT_PATHS
   /opt/net/gcc33/DevIL
   C:/library/DevIL
   "C:/Program Files/DevIL"
+  "C:/Program Files (x86)/DevIL"
   C:/DevIL
   )
 

@@ -41,6 +41,7 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_ft2build ft2build.h
   /usr/freeware/include
   C:/library/GnuWin32/include
   "C:/Program Files/GnuWin32/include"
+  "C:/Program Files (x86)/GnuWin32/include"
   C:/GnuWin32/include
 )
 
@@ -56,6 +57,7 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h
   /usr/freeware/include
   C:/library/GnuWin32/include/freetype2
   "C:/Program Files/GnuWin32/include/freetype2"
+  "C:/Program Files (x86)/GnuWin32/include/freetype2"
   C:/GnuWin32/include/freetype2
   PATH_SUFFIXES freetype2
 )
@@ -73,6 +75,7 @@ FIND_LIBRARY(FREETYPE_LIBRARY
   /usr/freeware
   C:/library/GnuWin32/lib
   "C:/Program Files/GnuWin32/lib"
+  "C:/Program Files (x86)/GnuWin32/lib"
   C:/GnuWin32/lib
 )
 
