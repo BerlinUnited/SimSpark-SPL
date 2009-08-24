@@ -4,9 +4,9 @@ project(rsgedit CXX C)
 set(PACKAGE_VERSION "0.1")
 
 ########## check for headerfiles/libraries ##########
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/ ${CMAKE_SOURCE_DIR}/../spark/cmake/)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 find_package(Spark REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED thread COMPONENTS date_time)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(wxWidgets REQUIRED gl base core adv)
@@ -26,6 +26,14 @@ if (UNIX)
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE
         STRING "C++ compiler flags for Release builds" FORCE)
 endif (UNIX)
+
+if(WIN32)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
+    include_directories(${CMAKE_SOURCE_DIR}/windows/include)
+    if(MSVC)
+      add_definitions(/Gm /Zi /GL)
+    endif(MSVC)
+endif(WIN32)
 
 set(BINDIR "bin" CACHE PATH "The directory to install binaries into.")
 set(LIBDIR "lib" CACHE PATH "The directory to install libraries into.")
@@ -63,6 +71,24 @@ install(FILES  doc/rsgedit.txt AUTHORS ChangeLog COPYING NEWS README TODO
 install(FILES  ${CMAKE_BINARY_DIR}/rsgedit_config.h
         DESTINATION  ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
+if (WIN32) # try to find and install third-party .dlls to bin/ directory
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
+       if (EXISTS ${ODEDLL})
+              install(PROGRAMS ${ODEDLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${ODEDLL})
+
+       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${BINDIR}
+             FILES_MATCHING PATTERN "*.dll")
+
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
+       if (EXISTS ${DevIL_DLL})
+              install(PROGRAMS ${DevIL_DLL} DESTINATION ${BINDIR})
+       endif (EXISTS ${DevIL_DLL})
+
+       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/" DESTINATION ${BINDIR}
+             FILES_MATCHING PATTERN "*.dll")
+endif (WIN32)
+
 ########### uninstall support ############
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
@@ -73,6 +99,7 @@ ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 ########### CPack section #############
+include(InstallRequiredSystemLibraries)
 set(CPACK_SOURCE_GENERATOR TGZ)
 set(CPACK_SOURCE_IGNORE_FILES
     /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /autom4te[.]cache/ /[.].* /bootstrap 
@@ -81,4 +108,11 @@ set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
 
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
+set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
+set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
+set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "  !include ${CMAKE_SOURCE_DIR}\\\\windows\\\\install_extra.nsi")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "  !include ${CMAKE_SOURCE_DIR}\\\\windows\\\\uninstall_extra.nsi")
 include(CPack)

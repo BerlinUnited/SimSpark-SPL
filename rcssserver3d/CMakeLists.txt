@@ -10,7 +10,7 @@ check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
 check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
-set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" C:/SDL/)
+set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" "C:/Program Files (x86)/SDL/" C:/SDL/)
 
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)
@@ -19,7 +19,6 @@ find_package(SDL REQUIRED)
 find_package(DevIL REQUIRED)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
-
 
 ########## add extra flags ########## 
 if(NOT CMAKE_BUILD_TYPE)
