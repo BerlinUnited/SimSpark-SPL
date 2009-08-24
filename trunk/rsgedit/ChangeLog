@@ -1,3 +1,28 @@
+2009-08-24  Marian Buchta  <marian.buchta@gmail.com>
+
+	* src/CMakeLists.txt:
+	- change from Console to Window subsystem in VS2008
+	
+	* windows/include/GL/glext.h:
+	* windows/include/GL/wglext.h:
+	- add header files because Rsgedit is independent project like rcssserver3d.
+	
+	* windows/install_extra.nsi:
+	* windows/uninstall_extra.nsi:
+	- add extra install/uninstall commands for NSIS installer
+	
+	* cmake/FindBoost.cmake:
+	* cmake/FindODE.cmake:
+	- add finding macros because Rsgedit is independent project like rcssserver3d.
+	
+	* wxutil/CMakeLists.txt:
+	- fixed CMake configuration error in Windows
+	
+	* CMakeLists.txt:
+	- add thread and date_time components in Boost
+	- try to find and copy all thirdparty dlls in the binary package's bin/ directory include system libraries.
+	- add definitions and include directory into VS2008
+
 2009-08-21  Marian Buchta  <marian.buchta@gmail.com>
 
 	* cmake/FindSpark.cmake:

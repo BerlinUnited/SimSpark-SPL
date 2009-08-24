@@ -78,10 +78,10 @@ FIND_PATH(RUBY_INCLUDE_PATH
   /usr/lib/ruby/1.8/i586-linux-gnu/
   C:/library/ruby/lib/ruby/1.8/i386-mswin32/
   C:/Program Files/ruby/lib/ruby/1.8/i386-mswin32/
-  C:/Program Files (x86)/ruby/lib/ruby/1.8/i386-mswin32/
+  "C:/Program Files (x86)/ruby/lib/ruby/1.8/i386-mswin32/"
   C:/library/ruby/include/ruby-1.9.1/
   C:/Program Files/ruby/include/ruby-1.9.1/
-  C:/Program Files (x86)/ruby/include/ruby-1.9.1/
+  "C:/Program Files (x86)/ruby/include/ruby-1.9.1/"
   )
 
 # search the ruby library, the version for MSVC can have the "msvc" prefix and the "static" suffix
@@ -91,7 +91,7 @@ FIND_LIBRARY(RUBY_LIBRARY
   PATHS ${RUBY_POSSIBLE_LIB_DIR}
   C:/library/ruby/lib/
   C:/Program Files/ruby/lib/
-  C:/Program Files (x86)/ruby/lib/
+  "C:/Program Files (x86)/ruby/lib/"
   )
   
 set(RUBY_INCLUDE_PATH ${RUBY_INCLUDE_PATH} ${RUBY_ARCH_DIR} "${RUBY_INCLUDE_PATH}/i386-mswin32")

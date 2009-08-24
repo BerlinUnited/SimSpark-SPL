@@ -44,14 +44,20 @@ include_directories(${CMAKE_SOURCE_DIR}/wxutil/include
     ${ZEITGEIST_INCLUDE_DIR} ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR})
 
-add_executable(rsgedit ${rsgedit_SRCS})
+add_executable(rsgedit WIN32 ${rsgedit_SRCS})
 
-set_target_properties(rsgedit PROPERTIES COMPILE_FLAGS ${wxWidgets_CXX_FLAGS})
+set_target_properties(rsgedit PROPERTIES COMPILE_FLAGS "${wxWidgets_CXX_FLAGS}")
 set_target_properties(rsgedit PROPERTIES INSTALL_RPATH "${RPATH_DIRECTORIES}")
 
-target_link_libraries(rsgedit pthread wxutil ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
+if(WIN32)
+    target_link_libraries(rsgedit wxutil ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
+   ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
+   ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES}) 
+else(WIN32)
+    target_link_libraries(rsgedit pthread wxutil ${SPARK_LIBRARIES} ${SALT_LIBRARIES} 
   ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
    ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES}) 
+endif(WIN32)
 
 install(TARGETS rsgedit DESTINATION ${BINDIR})
 
