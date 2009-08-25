@@ -103,4 +103,11 @@ set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
 
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
+set(CPACK_NSIS_HELP_LINK "TODO:simspark wiki link")
+set(CPACK_NSIS_URL_INFO_ABOUT "http://simspark.sourceforge.net")
+set(CPACK_NSIS_CONTACT "simspark-devel@lists.sourceforge.net")
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "  !include ${CMAKE_SOURCE_DIR}\\\\windows\\\\install_extra.nsi")
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "  !include ${CMAKE_SOURCE_DIR}\\\\windows\\\\uninstall_extra.nsi")
 include(CPack)

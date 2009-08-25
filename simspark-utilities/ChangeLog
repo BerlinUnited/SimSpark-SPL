@@ -1,3 +1,10 @@
+2009-08-25  Marian Buchta  <marian.buchta@gmail.com>
+
+	* windows/install_extra.nsi:
+	* windows/uninstall_extra.nsi:
+	* CMakeLists.txt
+	- add extra install/uninstall commands for NSIS installer
+
 2009-08-21  Marian Buchta  <marian.buchta@gmail.com>
 
 	* cmake/FindSpark.cmake:
