@@ -1,3 +1,8 @@
+2009-08-25  Marian Buchta  <marian.buchta@gmail.com>
+
+	* CMakeLists.txt:
+	- forgot remove lines (from previous revision) to find Ruby,Freetype and DevIL libraries and add dlls into package via NSIS installer (Windows).
+
 2009-08-24  Marian Buchta  <marian.buchta@gmail.com>
 
 	* src/CMakeLists.txt:

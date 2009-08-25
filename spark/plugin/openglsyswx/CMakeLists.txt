@@ -19,7 +19,7 @@ if (wxWidgets_FOUND)
      set_target_properties(openglsyswx PROPERTIES VERSION 0.0.0 SOVERSION 0)
   endif (NOT APPLE)
 
-  set_target_properties(inputwx PROPERTIES COMPILE_FLAGS ${wxWidgets_CXX_FLAGS})
+  set_target_properties(inputwx PROPERTIES COMPILE_FLAGS "${wxWidgets_CXX_FLAGS}")
   
   install(TARGETS openglsyswx DESTINATION ${LIBDIR}/${CMAKE_PROJECT_NAME})
 endif (wxWidgets_FOUND)
