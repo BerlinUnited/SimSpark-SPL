@@ -79,14 +79,6 @@ if (WIN32) # try to find and install third-party .dlls to bin/ directory
 
        install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${BINDIR}
              FILES_MATCHING PATTERN "*.dll")
-
-       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
-       if (EXISTS ${DevIL_DLL})
-              install(PROGRAMS ${DevIL_DLL} DESTINATION ${BINDIR})
-       endif (EXISTS ${DevIL_DLL})
-
-       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/" DESTINATION ${BINDIR}
-             FILES_MATCHING PATTERN "*.dll")
 endif (WIN32)
 
 ########### uninstall support ############

@@ -1,3 +1,9 @@
+2009-08-25  Marian Buchta  <marian.buchta@gmail.com>
+
+	* plugin/openglsyswx/CMakeLists.txt:
+	* plugin/inputwx/CMakeLists.txt:
+	- fixed CMake configuration error on Windows when wxWidgets is available
+
 2009-08-24  Marian Buchta  <marian.buchta@gmail.com>
 
 	* cmake/FindRuby.cmake:
