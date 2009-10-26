@@ -1,0 +1,3 @@
+Material.Diffuse	= "texture/pinky_d.tga";
+Material.Normal		= "texture/pinky_local.tga";
+Material.Specular	= "texture/pinky_s.tga";
