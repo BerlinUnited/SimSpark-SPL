@@ -45,7 +45,8 @@ void SimulationServer::CatchSignal(int sig_num)
 }
 
 SimulationServer::SimulationServer() :
-    Node(), mAdjustSpeed(false), mMaxStepsPerCycle(3), mThreadBarrier(0)
+    Node(), mAdjustSpeed(false), mExitThreads(false), mMaxStepsPerCycle(3),
+    mThreadBarrier(0)
 {
     mSimTime      = 0.0f;
     mSimStep      = 0.2f;
@@ -422,14 +423,15 @@ void SimulationServer::RunMultiThreaded()
     shared_ptr<SimControlNode> renderControl = GetControlNode("RenderControl");
 
     float initDelta, finalDelta;
-    while (true)
+    while (!mExitThreads)
         {
             ++mCycle;
             mThreadBarrier->wait();
+            if (mExit)
+                mExitThreads = true;
+            // Wait for SimControlNodes' acts at the begining of a cycle
             mThreadBarrier->wait();
 
-            if (mExit) // this check should be here so that all threads will quit
-                break;
             finalDelta = initDelta = mSumDeltaTime;
 
             mSceneServer->PrePhysicsUpdate(mSimStep);
@@ -452,6 +454,7 @@ void SimulationServer::RunMultiThreaded()
             if (renderControl
                 && renderControl->GetTime() - mSimTime < 0.005f )
                 renderControl->EndCycle();
+
             mThreadBarrier->wait();
             mSumDeltaTime -= initDelta - finalDelta;
         }
@@ -473,7 +476,7 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
     bool isRenderControl = (controlNode->GetName() == "RenderControl");
     bool newCycle = false;
 
-    while ( true )
+    while (!mExitThreads)
         {
             mThreadBarrier->wait();
             newCycle = false;
@@ -486,8 +489,6 @@ void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
                     controlNode->SetSimTime(mSimTime);
                 }
             mThreadBarrier->wait();
-            if (mExit)
-                break;
 
             if (isInputControl)
                 {

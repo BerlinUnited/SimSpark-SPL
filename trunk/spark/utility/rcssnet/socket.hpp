@@ -95,6 +95,9 @@ namespace rcss
             int
             setBroadcast( bool on = true );
 
+            int
+            setReuseAddr( bool on = true );
+
             SocketDesc
             getFD() const;
 

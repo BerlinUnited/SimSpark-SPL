@@ -304,7 +304,22 @@ namespace rcss
             return -1;
         }
 
-                Socket::SocketDesc
+        int
+        Socket::setReuseAddr( bool on )
+        {
+            if( isOpen() )
+            {
+                int doreuse = on;
+                return setsockopt( getFD(), SOL_SOCKET,
+                                   SO_REUSEADDR,
+                                   (const char*)&doreuse,
+                                   sizeof( int ) );
+            }
+            errno = EPERM;
+            return -1;
+        }
+
+        Socket::SocketDesc
         Socket::getFD() const
         { return ( isOpen() ? *(m_handle.get()) : Socket::INVALIDSOCKET ); }
 

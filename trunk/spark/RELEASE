@@ -1,15 +1,17 @@
-RELEASE News of simspark-0.1.2
+RELEASE News of simspark-0.1.3 (in progress)
 
-This release brings some bugfixes, better performance and also better Windows
-support. A Windows installer will be available too. This is the first version 
-which runs in multi-threaded mode by default. The multi-threaded mode is still
-in early stages, and it can be improved cosiderably in future.
+SOME INTERESTING COMMENTS!
 
 Main changes of this release are:
- - improved Windows support, including Windows Installer. 
- - Multi-threaded mode now works, and is the default mode when running simspark
- - Performance improvements
- - Fixed a bug in networking code, which were introduced in 0.1.1
+ - Compilation fixes
+ - Improved Windows support
+ - Simspark should always accept connections. No more "Connection refused"
+   messages and the need to wait for simspark's network port to be freed!
+ - Simspark will now collect received commands right before sending
+   sense data of the last cycle. So, any commands which is sent by agents
+   after receiving new sense data will be executed in the next cycle, not the 
+   current one. This results in a more deterministic behavior, and agents' 
+   efficiency should not change between remote and local runs considerably.   
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/
