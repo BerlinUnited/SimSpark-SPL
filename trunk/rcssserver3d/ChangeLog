@@ -1,3 +1,8 @@
+2009-10-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* RELEASE: 
+	- write about changes sine 0.6.2, initial draft.
+
 2009-08-24  Marian Buchta  <marian.buchta@gmail.com>
 
 	* CMakeLists.txt:
