@@ -1,3 +1,24 @@
+2009-10-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/simulationserver.h: 
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- prevent a deadlock case (on exit) in multi-threaded mode
+	 
+	* lib/oxygen/simulationserver/agentcontrol.h: 
+	* lib/oxygen/simulationserver/agentcontrol.cpp:
+	- send senses in SenseAgent method, so that they'll be sent after receiving
+	  commands from the agents. this will ensure that any commands sent after
+	  sending senses will be executed in the next cycle, which results in a
+	  more deterministic behaviour 
+
+2009-10-30  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/netcontrol.cpp (NetControl::InitSimulation): 
+	- try to set REUSEADDR flag to reuse local addresses. 
+	
+	* utility/rcssnet/socket.cpp (Socket::setReuseAddr): 
+	- added the new function 
+
 2009-08-25  Marian Buchta  <marian.buchta@gmail.com>
 
 	* plugin/openglsyswx/CMakeLists.txt:
