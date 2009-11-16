@@ -334,47 +334,47 @@ void Body::AddCylinderTotal(float total_mass, float radius, float length, const 
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const
+void Body::PrepareCapsule (dMass& mass, float density, float radius, float length) const
 {
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
 
-    dMassSetCappedCylinder (&mass, density, direction, radius, length);
+    dMassSetCapsule (&mass, density, direction, radius, length);
 }
 
-void Body::SetCappedCylinder (float density, float radius, float length)
+void Body::SetCapsule (float density, float radius, float length)
 {
     dMass ODEMass;
-    PrepareCappedCylinder(ODEMass, density, radius, length);
+    PrepareCapsule(ODEMass, density, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddCappedCylinder (float density, float radius, float length, const Matrix& matrix)
+void Body::AddCapsule (float density, float radius, float length, const Matrix& matrix)
 {
     dMass ODEMass;
-    PrepareCappedCylinder(ODEMass, density, radius, length);
+    PrepareCapsule(ODEMass, density, radius, length);
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
+void Body::PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const
 {
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
 
-    dMassSetCappedCylinderTotal(&mass, total_mass, direction, radius, length);
+    dMassSetCapsuleTotal(&mass, total_mass, direction, radius, length);
 }
 
-void Body::SetCappedCylinderTotal(float total_mass, float radius, float length)
+void Body::SetCapsuleTotal(float total_mass, float radius, float length)
 {
     dMass ODEMass;
-    PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
+    PrepareCapsuleTotal(ODEMass, total_mass, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
+void Body::AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
 {
     dMass ODEMass;
-    PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
+    PrepareCapsuleTotal(ODEMass, total_mass, radius, length);
     AddMass(ODEMass, matrix);
 }
 

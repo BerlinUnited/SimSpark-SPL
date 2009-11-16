@@ -14,33 +14,38 @@ set(oxygen_LIB_HDRS
     gamecontrolserver/behavior.h
     oxygen.h
     oxygen_defines.h
+    
+    #abstract physics
+    physicsserver/physicsserver.h
+    physicsserver/physicsobject.h
     physicsserver/body.h
-    physicsserver/bodycontroller.h
+    physicsserver/collider.h
     physicsserver/boxcollider.h
     physicsserver/ccylindercollider.h
-    physicsserver/collider.h
-    physicsserver/collisionhandler.h
-    physicsserver/contactjointhandler.h
-    physicsserver/odeobject.h
-    physicsserver/odewrapper.h
-    physicsserver/physicsserver.h
     physicsserver/planecollider.h
-    physicsserver/raycollider.h
-    physicsserver/recorderhandler.h
-    physicsserver/space.h
     physicsserver/spherecollider.h
-    physicsserver/transformcollider.h
-    physicsserver/world.h
-    physicsserver/dragcontroller.h
-    physicsserver/velocitycontroller.h
     physicsserver/joint.h
     physicsserver/balljoint.h
     physicsserver/hingejoint.h
+    physicsserver/hinge2joint.h
     physicsserver/fixedjoint.h
     physicsserver/sliderjoint.h
     physicsserver/universaljoint.h
-    physicsserver/hinge2joint.h
-    physicsserver/angularmotor.h
+    physicsserver/space.h
+    physicsserver/world.h
+    physicsserver/bodycontroller.h
+    physicsserver/collisionhandler.h
+    physicsserver/contactjointhandler.h
+    physicsserver/dragcontroller.h
+    physicsserver/raycollider.h
+    physicsserver/recorderhandler.h
+    physicsserver/transformcollider.h
+    physicsserver/velocitycontroller.h
+    
+    #ODE-specific physics
+    physicsserver/odewrapper.h
+    physicsserver/odeobject.h
+    
     sceneserver/sceneimporter.h
     sceneserver/basenode.h
     sceneserver/fpscontroller.h
@@ -100,58 +105,62 @@ set(oxygen_LIB_SRCS
     gamecontrolserver/behavior.cpp
     gamecontrolserver/behavior_c.cpp
     oxygen.cpp
+    
+    #abstract physics NOTE: Should only be *_c.cpp files in the end
+    physicsserver/physicsserver.cpp
+    physicsserver/physicsserver_c.cpp
+    physicsserver/physicsobject_c.cpp
     physicsserver/body.cpp
     physicsserver/body_c.cpp
-    physicsserver/bodycontroller.cpp
-    physicsserver/bodycontroller_c.cpp
-    physicsserver/transformcollider.cpp
-    physicsserver/transformcollider_c.cpp
+    physicsserver/collider.cpp
+    physicsserver/collider_c.cpp
     physicsserver/boxcollider.cpp
     physicsserver/boxcollider_c.cpp
     physicsserver/ccylindercollider.cpp
     physicsserver/ccylindercollider_c.cpp
-    physicsserver/collider.cpp
-    physicsserver/collider_c.cpp
-    physicsserver/collisionhandler.cpp
-    physicsserver/collisionhandler_c.cpp
-    physicsserver/contactjointhandler.cpp
-    physicsserver/contactjointhandler_c.cpp
-    physicsserver/odeobject.cpp
-    physicsserver/odeobject_c.cpp
-    physicsserver/physicsserver.cpp
-    physicsserver/physicsserver_c.cpp
     physicsserver/planecollider.cpp
     physicsserver/planecollider_c.cpp
-    physicsserver/raycollider.cpp
-    physicsserver/raycollider_c.cpp
-    physicsserver/recorderhandler.cpp
-    physicsserver/recorderhandler_c.cpp
-    physicsserver/space.cpp
-    physicsserver/space_c.cpp
     physicsserver/spherecollider.cpp
     physicsserver/spherecollider_c.cpp
-    physicsserver/world.cpp
-    physicsserver/world_c.cpp
-    physicsserver/dragcontroller.cpp
-    physicsserver/dragcontroller_c.cpp
-    physicsserver/velocitycontroller.cpp
-    physicsserver/velocitycontroller_c.cpp
     physicsserver/joint.cpp
     physicsserver/joint_c.cpp
     physicsserver/balljoint.cpp
     physicsserver/balljoint_c.cpp
     physicsserver/hingejoint.cpp
     physicsserver/hingejoint_c.cpp
+    physicsserver/hinge2joint.cpp
+    physicsserver/hinge2joint_c.cpp
     physicsserver/fixedjoint.cpp
     physicsserver/fixedjoint_c.cpp
     physicsserver/sliderjoint.cpp
     physicsserver/sliderjoint_c.cpp
     physicsserver/universaljoint.cpp
     physicsserver/universaljoint_c.cpp
-    physicsserver/hinge2joint.cpp
-    physicsserver/hinge2joint_c.cpp
-    physicsserver/angularmotor.cpp
-    physicsserver/angularmotor_c.cpp
+    physicsserver/space.cpp
+    physicsserver/space_c.cpp
+    physicsserver/world.cpp
+    physicsserver/world_c.cpp
+    physicsserver/bodycontroller.cpp
+    physicsserver/bodycontroller_c.cpp
+    physicsserver/collisionhandler.cpp
+    physicsserver/collisionhandler_c.cpp
+    physicsserver/contactjointhandler.cpp
+    physicsserver/contactjointhandler_c.cpp
+    physicsserver/dragcontroller.cpp
+    physicsserver/dragcontroller_c.cpp
+    physicsserver/raycollider.cpp
+    physicsserver/raycollider_c.cpp
+    physicsserver/recorderhandler.cpp
+    physicsserver/recorderhandler_c.cpp
+    physicsserver/transformcollider.cpp
+    physicsserver/transformcollider_c.cpp
+    physicsserver/velocitycontroller.cpp
+    physicsserver/velocitycontroller_c.cpp
+    
+    #ODE-specific physics
+    physicsserver/odeobject.cpp
+    physicsserver/odeobject_c.cpp
+        
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp
     sceneserver/fpscontroller.cpp
