@@ -19,16 +19,19 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "world.h"
-#include "space.h"
+#include <oxygen/physicsserver/ode/odeworld.h>
+#include <oxygen/physicsserver/world.h>
+#include <oxygen/physicsserver/space.h>
 #include <oxygen/sceneserver/scene.h>
 
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-World::World() : ODEObject(), mODEWorld(0)
+World::World() : ODEObject()
 {
+    shared_ptr<ODEWorld> odeworld(new ODEWorld());
+    mWorldImp = (shared_dynamic_cast<WorldImp>(odeworld));
 }
 
 World::~World()
@@ -37,102 +40,70 @@ World::~World()
 
 dWorldID World::GetODEWorld() const
 {
-  return mODEWorld;
+  return mWorldImp->GetODEWorldImp();
 }
 
 void World::SetGravity(const Vector3f& gravity)
 {
-  dWorldSetGravity(mODEWorld,
-                   gravity.x(),
-                   gravity.y(),
-                   gravity.z()
-                   );
+  mWorldImp->SetGravityImp(gravity);
 }
 
 salt::Vector3f World::GetGravity() const
 {
-  dVector3 dGravity;
-  dWorldGetGravity(mODEWorld,dGravity);
-  return Vector3f(dGravity[0],dGravity[1],dGravity[2]);
+  return mWorldImp->GetGravityImp();
 }
 
 void World::SetERP(float erp)
 {
-  dWorldSetERP(mODEWorld, erp);
+  mWorldImp->SetERPImp(erp);
 }
 
 float World::GetERP() const
 {
-  return dWorldGetERP(mODEWorld);
+  return mWorldImp->GetERPImp();
 }
 
 void World::SetCFM(float cfm)
 {
-  dWorldSetCFM(mODEWorld, cfm);
+  mWorldImp->SetCFMImp(cfm);
 }
 
 float World::GetCFM() const
 {
-  return dWorldGetCFM(mODEWorld);
+  return mWorldImp->GetCFMImp();
 }
 
 void World::Step(float deltaTime)
 {
-  dWorldStep(mODEWorld, deltaTime);
+  mWorldImp->StepImp(deltaTime);
 }
 
 bool World::GetAutoDisableFlag() const
 {
-  return (dWorldGetAutoDisableFlag(mODEWorld) == 1);
+  return mWorldImp->GetAutoDisableFlagImp();
 }
 
 void World::SetAutoDisableFlag(bool flag)
 {
-  dWorldSetAutoDisableFlag(mODEWorld, static_cast<int>(flag));
+  mWorldImp->SetAutoDisableFlagImp(flag);
 }
 
 void World::SetContactSurfaceLayer(float depth)
 {
-  dWorldSetContactSurfaceLayer(mODEWorld, depth);
+  mWorldImp->SetContactSurfaceLayerImp(depth);
 }
 
 float World::GetContactSurfaceLayer() const
 {
-  return dWorldGetContactSurfaceLayer(mODEWorld);
+  return mWorldImp->GetContactSurfaceLayerImp();
 }
 
 bool World::ConstructInternal()
 {
-  // create an ode world
-  mODEWorld = dWorldCreate();
-
-  return (mODEWorld != 0);
+  return mWorldImp->ConstructInternalImp();
 }
 
 void World::DestroyODEObject()
 {
-  static bool recurseLock = false;
-  if (recurseLock)
-    {
-      return;
-    }
-
-  recurseLock = true;
-
-  shared_ptr<Space> space = GetSpace();
-  if (space.get() != 0)
-    {
-      space->DestroyODEObject();
-    }
-
-  if (mODEWorld == 0)
-    {
-      return;
-    }
-
-  // release the ODE world
-  dWorldDestroy(mODEWorld);
-  mODEWorld = 0;
-
-  recurseLock = false;
+  mWorldImp->DestroyODEObjectImp();
 }

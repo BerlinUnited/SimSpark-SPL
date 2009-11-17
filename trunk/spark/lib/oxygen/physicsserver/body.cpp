@@ -339,7 +339,7 @@ void Body::PrepareCappedCylinder (dMass& mass, float density, float radius, floa
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
 
-    dMassSetCappedCylinder (&mass, density, direction, radius, length);
+    dMassSetCapsule (&mass, density, direction, radius, length);
 }
 
 void Body::SetCappedCylinder (float density, float radius, float length)
@@ -361,7 +361,7 @@ void Body::PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radiu
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
 
-    dMassSetCappedCylinderTotal(&mass, total_mass, direction, radius, length);
+    dMassSetCapsuleTotal(&mass, total_mass, direction, radius, length);
 }
 
 void Body::SetCappedCylinderTotal(float total_mass, float radius, float length)

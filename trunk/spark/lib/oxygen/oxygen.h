@@ -34,6 +34,7 @@
 #include "gamecontrolserver/actionobject.h"
 #include "gamecontrolserver/behavior.h"
 
+//abstract physics classes
 #include "physicsserver/body.h"
 #include "physicsserver/bodycontroller.h"
 #include "physicsserver/dragcontroller.h"
@@ -42,7 +43,6 @@
 #include "physicsserver/boxcollider.h"
 #include "physicsserver/ccylindercollider.h"
 #include "physicsserver/collider.h"
-#include "physicsserver/odeobject.h"
 #include "physicsserver/physicsserver.h"
 #include "physicsserver/planecollider.h"
 #include "physicsserver/raycollider.h"
@@ -59,6 +59,13 @@
 #include "physicsserver/sliderjoint.h"
 #include "physicsserver/universaljoint.h"
 #include "physicsserver/hinge2joint.h"
+
+//physics interfaces
+#include "physicsserver/imp/worldimp.h"
+
+//ode-specific includes
+#include <oxygen/physicsserver/ode/odeobject.h>
+#include <oxygen/physicsserver/ode/odeworld.h>
 
 #include "sceneserver/basenode.h"
 #include "sceneserver/camera.h"
