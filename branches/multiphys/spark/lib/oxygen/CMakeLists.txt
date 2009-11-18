@@ -22,6 +22,10 @@ set(oxygen_LIB_HDRS
     physicsserver/collider.h
     physicsserver/boxcollider.h
     physicsserver/ccylindercollider.h
+    physicsserver/collider.h
+    physicsserver/collisionhandler.h
+    physicsserver/contactjointhandler.h
+    physicsserver/physicsserver.h
     physicsserver/planecollider.h
     physicsserver/spherecollider.h
     physicsserver/joint.h
@@ -45,6 +49,15 @@ set(oxygen_LIB_HDRS
     #ODE-specific physics
     physicsserver/odewrapper.h
     physicsserver/odeobject.h
+    
+    
+    #interfaces
+    physicsserver/imp/worldimp.h
+    
+    #ode-specific files
+    physicsserver/ode/odeobject.h
+    physicsserver/ode/odeworld.h
+    physicsserver/ode/odewrapper.h
     
     sceneserver/sceneimporter.h
     sceneserver/basenode.h
@@ -118,6 +131,14 @@ set(oxygen_LIB_SRCS
     physicsserver/boxcollider_c.cpp
     physicsserver/ccylindercollider.cpp
     physicsserver/ccylindercollider_c.cpp
+    physicsserver/collider.cpp
+    physicsserver/collider_c.cpp
+    physicsserver/collisionhandler.cpp
+    physicsserver/collisionhandler_c.cpp
+    physicsserver/contactjointhandler.cpp
+    physicsserver/contactjointhandler_c.cpp
+    physicsserver/physicsserver.cpp
+    physicsserver/physicsserver_c.cpp
     physicsserver/planecollider.cpp
     physicsserver/planecollider_c.cpp
     physicsserver/spherecollider.cpp
@@ -161,6 +182,16 @@ set(oxygen_LIB_SRCS
     physicsserver/odeobject.cpp
     physicsserver/odeobject_c.cpp
         
+    
+    #interfaces
+    physicsserver/imp/worldimp_c.cpp
+    
+    #ODE-specific files
+    physicsserver/ode/odeworld.cpp
+    physicsserver/ode/odeworld_c.cpp
+    physicsserver/ode/odeobject.cpp
+    physicsserver/ode/odeobject_c.cpp
+    
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp
     sceneserver/fpscontroller.cpp
