@@ -4,8 +4,8 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h 56 2009-03-17 18:03:47Z hedayat $
-   $Id: odeobject.h 56 2009-03-17 18:03:47Z hedayat $
+   $Id$
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
+#include "odewrapper.h"
 
 namespace oxygen
 {
@@ -59,7 +59,7 @@ public:
     virtual dSpaceID GetParentSpaceID();
 
     /** destroy the managed ODE object */
-    virtual void DestroyODEObject(){};
+    virtual void DestroyODEObject() = 0;
 
 protected:
     /** returns the world node */

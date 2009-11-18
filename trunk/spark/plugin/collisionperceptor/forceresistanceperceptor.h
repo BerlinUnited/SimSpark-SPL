@@ -24,7 +24,7 @@
 #define FORCERESISTANCEPERCEPTOR_H_
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
+#include <oxygen/physicsserver/odewrapper.h>
 #include <oxygen/sceneserver/transform.h>
 #include <salt/vector.h>
 #include <list>

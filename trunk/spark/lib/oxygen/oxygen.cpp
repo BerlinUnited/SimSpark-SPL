@@ -57,9 +57,9 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(BodyController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(DragController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(VelocityController), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Space), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(World), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(WorldImp), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Joint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BallJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(HingeJoint), "oxygen/");
@@ -86,11 +86,6 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Effector), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Perceptor), "oxygen/");
-    
-    //ODE-specific classes
-    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ODEWorld), "oxygen/");
-    
 
 #ifdef HAVE_SPADES_HEADERS
     // spades
