@@ -1036,7 +1036,7 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
-            body->SetCapsuleTotal(physical.mass, radius, height);
+            body->SetCappedCylinderTotal(physical.mass, radius, height);
             GetContext().AddMass(physical.mass, Trans());
         }
 
@@ -1055,7 +1055,7 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
             collider->AddChildReference(handler);
         }
 
-    GetLog()->Debug() << "(RosImporter) created capsule " << name << "\n";
+    GetLog()->Debug() << "(RosImporter) created capped cylinder " << name << "\n";
     return ReadChildElements(transform, element);
 }
 
@@ -2014,7 +2014,7 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
     shared_ptr<Body> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
-            body->AddCapsuleTotal(physical.mass, radius, height, trans.matrix);
+            body->AddCappedCylinderTotal(physical.mass, radius, height, trans.matrix);
             GetContext().AddMass(physical.mass, trans);
         }
 

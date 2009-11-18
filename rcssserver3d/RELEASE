@@ -1,15 +1,10 @@
-RELEASE News of rcssserver3d-0.6.2
+RELEASE News of rcssserver3d-0.6.3 (In progress)
 
-This release is mainly a bug-fix release, and is the last release before
-RoboCup 2009 competitions.
-
-* Some improvements:
- - improved Windows and MacOSX support
- - improved external monitor
- - fixed a bug in rcssserver3d's goal counting
- - added right kick-off key to the monitor (Simon Raffeiner)
- - simspark can take command line argument specifying the rb script to run
-   (using --script-path command line option)
-
+* Most notable changes:
+ - No internal monitor by default. Run rcssmonitor3d separately to see the game. 
+ - Added HMDP effector/perceptor
+ - Some compilation fixes
+ - Improved Windows support 
+ 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/

@@ -19,11 +19,11 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/ode/odeobject.h>
 
 using namespace oxygen;
 
-void CLASS(PhysicsObject)::DefineClass()
+void CLASS(ODEObject)::DefineClass()
 {
         DEFINE_BASECLASS(oxygen/BaseNode);
 }

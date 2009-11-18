@@ -47,7 +47,10 @@ public:
         GameControlServer */
     virtual void StartCycle();
 
-    /** generates and sends sense updates to all connected agents */
+    /** sends sense updates to all connected agents */
+    virtual void SenseAgent();
+
+    /** generates sense updates for all connected agents */
     virtual void EndCycle();
 
 protected:
@@ -56,6 +59,8 @@ protected:
 protected:
     /** cached reference to the GameControlServer */
     CachedPath<GameControlServer> mGameControlServer;
+
+    std::vector<std::string> mClientSenses;
 };
 
 DECLARE_CLASS(AgentControl);
