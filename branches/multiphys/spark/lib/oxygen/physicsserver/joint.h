@@ -23,7 +23,7 @@
 #define OXYGEN_JOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "odeobject.h"
+#include <oxygen/physicsserver/ode/odeobject.h>
 
 namespace oxygen
 {
