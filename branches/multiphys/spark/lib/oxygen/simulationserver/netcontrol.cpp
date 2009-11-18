@@ -159,15 +159,6 @@ void NetControl::InitSimulation()
           return;
       }
 
-  ret = mSocket->setReuseAddr(true);
-
-  if (ret < 0)
-      {
-          GetLog()->Warning()
-              << "(NetControl) failed to enable reuse of server socket "
-              << "with '" << strerror(errno) << "'\n";
-      }
-
   try
       {
           mSocket->bind(mLocalAddr);

@@ -23,13 +23,10 @@
 #define OXYGEN_WORLD_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include "odeobject.h"
 
 namespace oxygen
 {
-
-class WorldImp;
-class ODEWorld;
 
 /** World encapsulates an ODE world object. It is a container for
     rigid bodies and joints. Objects in different worlds can not
@@ -116,11 +113,12 @@ protected:
     // Members
     //
 private:
-    boost::shared_ptr<WorldImp> mWorldImp;
+    /** the dynamics world represented by this object */
+    dWorldID mODEWorld;
 };
 
 DECLARE_CLASS(World);
 
-}
+};
 
 #endif //OXYGEN_WORLD_H

@@ -53,44 +53,39 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
 
     // physics
     zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServer), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsObject), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Body), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BodyController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(DragController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(VelocityController), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Space), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(World), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(WorldImp), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Joint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BallJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(HingeJoint), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Hinge2Joint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(FixedJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(SliderJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(UniversalJoint), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Space), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(World), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(BodyController), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Hinge2Joint), "oxygen/");
+
+    // collider
+    zg.GetCore()->RegisterClassObject(new CLASS(Collider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(TransformCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(BoxCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(CCylinderCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(PlaneCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(RayCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(SphereCollider), "oxygen/");
+
+    // collision handler
     zg.GetCore()->RegisterClassObject(new CLASS(CollisionHandler), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(ContactJointHandler), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(DragController), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(RayCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(RecorderHandler), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(TransformCollider), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(VelocityController), "oxygen/");
-    
-    //ODE-specific physics
-    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "oxygen/");
-    
+
     // agentaspect
     zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Effector), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Perceptor), "oxygen/");
-    
-    //ODE-specific classes
-    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ODEWorld), "oxygen/");
-    
 
 #ifdef HAVE_SPADES_HEADERS
     // spades

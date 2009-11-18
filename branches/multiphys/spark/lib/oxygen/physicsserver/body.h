@@ -23,7 +23,7 @@
 #define OXYGEN_BODY_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include "odeobject.h"
 
 namespace oxygen
 {
@@ -167,13 +167,13 @@ public:
        counting the spherical cap) is length. The cylinder's long axis
        is oriented along the body's z axis.
     */
-    void SetCapsule (float density, float radius, float length);
+    void SetCappedCylinder (float density, float radius, float length);
 
     /* Add a mass representing a capped cylinder of the given
        parameters and density, with the matrix determining its center
        and orientation
     */
-    void AddCapsule (float density, float radius, float length, const salt::Matrix& matrix);
+    void AddCappedCylinder (float density, float radius, float length, const salt::Matrix& matrix);
 
     /* Set the mass parameters to represent a capped cylinder of the
        given parameters and total mass, with the center of mass at
@@ -182,13 +182,13 @@ public:
        counting the spherical cap) is length. The cylinder's long axis
        is oriented along the body's z axis.
     */
-    void SetCapsuleTotal(float total_mass, float radius, float length);
+    void SetCappedCylinderTotal(float total_mass, float radius, float length);
 
     /* Add a mass representing a capped cylinder of the given
        parameters and total mass, with the matrix determining its
        center and orientation
     */
-    void AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
+    void AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
 
     /** displace the mass center relative to the body frame */
     void TranslateMass(const salt::Vector3f& v);
@@ -293,7 +293,7 @@ protected:
        counting the spherical cap) is length. The cylinder's long axis
        is oriented along the body's z axis.
     */
-    void PrepareCapsule (dMass& mass, float density, float radius, float length) const;
+    void PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const;
 
     /* sets up an ode mass struct representing a capped cylinder of
        the given parameters and total mass, with the center of mass at
@@ -302,7 +302,7 @@ protected:
        counting the spherical cap) is length. The cylinder's long axis
        is oriented along the body's z axis.
     */
-    void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const;
+    void PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
 
 private:
     /** updates internal state before physics calculation */

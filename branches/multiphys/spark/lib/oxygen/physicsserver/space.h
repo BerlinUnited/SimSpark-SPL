@@ -22,7 +22,7 @@
 #ifndef OXYGEN_SPACE_H
 #define OXYGEN_SPACE_H
 
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include "odeobject.h"
 #include <set>
 #include <oxygen/oxygen_defines.h>
 

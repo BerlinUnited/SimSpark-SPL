@@ -51,10 +51,6 @@ void AgentControl::OnLink()
 
 void AgentControl::ClientConnect(shared_ptr<Client> client)
 {
-    // Make sure that there is enough space in sense message cache vector
-    if (client->id >= mClientSenses.size())
-        mClientSenses.resize(client->id+1);
-
     if (mGameControlServer.get() == 0)
         {
             return;
@@ -65,8 +61,6 @@ void AgentControl::ClientConnect(shared_ptr<Client> client)
 
 void AgentControl::ClientDisconnect(shared_ptr<Client> client)
 {
-    mClientSenses[client->id].clear();
-
     if (mGameControlServer.get() == 0)
         {
             return;
@@ -130,23 +124,6 @@ void AgentControl::StartCycle()
         }
 }
 
-void AgentControl::SenseAgent()
-{
-    int clientID;
-    for (
-         TAddrMap::iterator iter = mClients.begin();
-         iter != mClients.end();
-         ++iter
-         )
-        {
-            clientID = iter->second->id;
-            if (!mClientSenses[clientID].empty())
-                {
-                    SendClientMessage(iter->second, mClientSenses[clientID]);
-                }
-        }
-}
-
 void AgentControl::EndCycle()
 {
     NetControl::EndCycle();
@@ -169,14 +146,17 @@ void AgentControl::EndCycle()
             return;
         }
 
-    // generate senses for all agents
+    // generate senses for all agents and send them to the
+    // corresponding net clients
+    int idx = 0;
+    vector<string> sensesArray(mClients.size());
     for (
          TAddrMap::iterator iter = mClients.begin();
          iter != mClients.end();
-         ++iter
+         ++iter, idx++
          )
         {
-            const shared_ptr<Client> &client = (*iter).second;
+            shared_ptr<Client>& client = (*iter).second;
 
             shared_ptr<AgentAspect> agent =
                 mGameControlServer->GetAgentAspect(client->id);
@@ -186,12 +166,27 @@ void AgentControl::EndCycle()
                 }
 
             shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
-            mClientSenses[client->id] = parser->Generate(senseList);
-            if (mClientSenses[client->id].empty())
+            sensesArray[idx] = parser->Generate(senseList);
+            if (sensesArray[idx].empty())
                 {
                     continue;
                 }
 
-            mNetMessage->PrepareToSend(mClientSenses[client->id]);
+            mNetMessage->PrepareToSend(sensesArray[idx]);
+        }
+
+    // sending the senses
+    idx = 0;
+    for (
+         TAddrMap::iterator iter = mClients.begin();
+         iter != mClients.end();
+         ++iter, idx++
+         )
+        {
+            if (!sensesArray[idx].empty())
+                {
+                    SendClientMessage(iter->second, sensesArray[idx]);
+                }
+
         }
 }

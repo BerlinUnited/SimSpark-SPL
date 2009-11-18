@@ -23,7 +23,7 @@
 #define OXYGEN_BOXCOLLIDER_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/collider.h>
+#include "collider.h"
 
 namespace oxygen
 {

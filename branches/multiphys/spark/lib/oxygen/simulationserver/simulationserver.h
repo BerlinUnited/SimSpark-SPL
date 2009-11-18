@@ -220,11 +220,6 @@ protected:
     /** skips physical simulation for some time to catch up real time */
     bool mAdjustSpeed;
 
-    /** in multi-threaded mode, this indicates that all threads should be
-     * terminated.
-     */
-    bool mExitThreads;
-
     /** determines the number of allowed steps per cycle when mAdjustSpeed is true */
     int mMaxStepsPerCycle;
 

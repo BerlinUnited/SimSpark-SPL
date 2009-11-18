@@ -379,7 +379,7 @@ FUNCTION(Body,addCylinderTotal)
     return true;
 }
 
-FUNCTION(Body,setCapsule)
+FUNCTION(Body,setCappedCylinder)
 {
     float inDensity;
     float inRadius;
@@ -395,11 +395,11 @@ FUNCTION(Body,setCapsule)
             return false;
         }
 
-    obj->SetCapsule(inDensity,inRadius,inLength);
+    obj->SetCappedCylinder(inDensity,inRadius,inLength);
     return true;
 }
 
-FUNCTION(Body,addCapsule)
+FUNCTION(Body,addCappedCylinder)
 {
     float inDensity;
     float inRadius;
@@ -421,11 +421,11 @@ FUNCTION(Body,addCapsule)
     // Matrix is allowed to be missing, defaults to identity
     in.GetValue(in[3],inMat);
     
-    obj->AddCapsule(inDensity,inRadius,inLength,inMat);
+    obj->AddCappedCylinder(inDensity,inRadius,inLength,inMat);
     return true;
 }
 
-FUNCTION(Body,setCapsuleTotal)
+FUNCTION(Body,setCappedCylinderTotal)
 {
     float inMassTotal;
     float inRadius;
@@ -441,11 +441,11 @@ FUNCTION(Body,setCapsuleTotal)
             return false;
         }
 
-    obj->SetCapsuleTotal(inMassTotal,inRadius,inLength);
+    obj->SetCappedCylinderTotal(inMassTotal,inRadius,inLength);
     return true;
 }
 
-FUNCTION(Body,addCapsuleTotal)
+FUNCTION(Body,addCappedCylinderTotal)
 {
     float inMassTotal;
     float inRadius;
@@ -466,7 +466,7 @@ FUNCTION(Body,addCapsuleTotal)
     // Matrix is allowed to be missing, defaults to identity
     in.GetValue(in[3],inMat);
     
-    obj->AddCapsuleTotal(inMassTotal,inRadius,inLength,inMat);
+    obj->AddCappedCylinderTotal(inMassTotal,inRadius,inLength,inMat);
     return true;
 }
 
@@ -585,10 +585,10 @@ void CLASS(Body)::DefineClass()
         DEFINE_FUNCTION(addCylinder);
         DEFINE_FUNCTION(setCylinderTotal);
         DEFINE_FUNCTION(addCylinderTotal);
-        DEFINE_FUNCTION(setCapsule);
-        DEFINE_FUNCTION(addCapsule);
-        DEFINE_FUNCTION(setCapsuleTotal);
-        DEFINE_FUNCTION(addCapsuleTotal);
+        DEFINE_FUNCTION(setCappedCylinder);
+        DEFINE_FUNCTION(addCappedCylinder);
+        DEFINE_FUNCTION(setCappedCylinderTotal);
+        DEFINE_FUNCTION(addCappedCylinderTotal);
         DEFINE_FUNCTION(setMass);
         DEFINE_FUNCTION(getMass);
         DEFINE_FUNCTION(setVelocity);
