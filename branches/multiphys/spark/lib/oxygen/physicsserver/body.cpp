@@ -30,7 +30,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-Body::Body() : ODEObject(), mODEBody(0), mMassTrans(0,0,0), mMassTransformed(false)
+Body::Body() : PhysicsObject(), mODEBody(0), mMassTrans(0,0,0), mMassTransformed(false)
 {
 }
 
@@ -115,7 +115,7 @@ void Body::DestroyODEObject()
 
 void Body::OnLink()
 {
-    ODEObject::OnLink();
+    PhysicsObject::OnLink();
 
     if (! CreateBody())
         {

@@ -21,7 +21,7 @@
 #define OXYGEN_ANGULARMOTOR_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/joint.h>
 
 namespace oxygen
 {

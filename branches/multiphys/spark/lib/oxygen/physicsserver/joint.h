@@ -23,7 +23,7 @@
 #define OXYGEN_JOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 
 namespace oxygen
 {
@@ -47,7 +47,7 @@ class Body;
     rates) directly, instead you must set the corresponding body
     positions and velocities.
  */
-class OXYGEN_API Joint : public ODEObject
+class OXYGEN_API Joint : public PhysicsObject
 {
 public:
     enum EBodyIndex
@@ -67,7 +67,7 @@ public:
     virtual ~Joint();
 
     /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    virtual void DestroyPhysicsObject();
 
     /** attaches the joint to some new bodies. If the joint is already
         attached, it will be detached from the old bodies first. To

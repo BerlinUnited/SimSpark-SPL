@@ -14,6 +14,7 @@ set(oxygen_LIB_HDRS
     gamecontrolserver/behavior.h
     oxygen.h
     oxygen_defines.h
+    physicsserver/physicsobject.h
     physicsserver/body.h
     physicsserver/bodycontroller.h
     physicsserver/boxcollider.h
@@ -44,7 +45,6 @@ set(oxygen_LIB_HDRS
     physicsserver/int/worldint.h
     
     #ode-specific files
-    physicsserver/ode/odeobject.h
     physicsserver/ode/odeworld.h
     physicsserver/ode/odewrapper.h
     
@@ -107,6 +107,8 @@ set(oxygen_LIB_SRCS
     gamecontrolserver/behavior.cpp
     gamecontrolserver/behavior_c.cpp
     oxygen.cpp
+    physicsserver/physicsobject.cpp
+    physicsserver/physicsobject_c.cpp
     physicsserver/body.cpp
     physicsserver/body_c.cpp
     physicsserver/bodycontroller.cpp
@@ -167,8 +169,6 @@ set(oxygen_LIB_SRCS
     physicsserver/ode/odespace_c.cpp
     physicsserver/ode/odeworld.cpp
     physicsserver/ode/odeworld_c.cpp
-    physicsserver/ode/odeobject.cpp
-    physicsserver/ode/odeobject_c.cpp
     
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp

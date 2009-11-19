@@ -127,7 +127,7 @@ FUNCTION(World,getContactSurfaceLayer)
 
 void CLASS(World)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_BASECLASS(oxygen/PhysicsObject);
     DEFINE_FUNCTION(setGravity);
     DEFINE_FUNCTION(setERP);
     DEFINE_FUNCTION(getERP);

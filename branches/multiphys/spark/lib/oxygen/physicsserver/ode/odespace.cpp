@@ -184,12 +184,12 @@ void ODESpace::HandleCollide(dGeomID obj1, dGeomID obj2)
 void ODESpace::OnUnlink()
 {
     DisableInnerCollision(false);
-    ODEObject::OnUnlink();
+    PhysicsObject::OnUnlink();
 }
 
 void ODESpace::OnLink()
 {
-    ODEObject::OnLink();
+    PhysicsObject::OnLink();
 
     shared_ptr<Space> space = GetSpace();
     dSpaceID spaceId = 0;
@@ -237,7 +237,6 @@ void ODESpace::PostPhysicsUpdateInternal()
 
 void ODESpace::DestroySpaceObjects()
 {
-    shared_ptr<Scene> scene = GetScene();
     if (scene.get() == 0)
         {
             return;
@@ -245,7 +244,7 @@ void ODESpace::DestroySpaceObjects()
 
     TLeafList objects;
     const bool recursive = true;
-    scene->ListChildrenSupportingClass<ODEObject>(objects, recursive);
+    scene->ListChildrenSupportingClass<PhysicsObject>(objects, recursive);
 
     bool globalSpace = IsGlobalSpace();
     shared_ptr<Space> self = shared_static_cast<Space>(GetSelf().lock());
@@ -256,7 +255,7 @@ void ODESpace::DestroySpaceObjects()
          ++iter
          )
         {
-            shared_ptr<ODEObject> object = shared_static_cast<ODEObject>(*iter);
+            shared_ptr<PhysicsObject> object = shared_static_cast<PhysicsObject>(*iter);
             if (object == self)
             {
                 continue;
@@ -273,12 +272,12 @@ void ODESpace::DestroySpaceObjects()
                 (parentSpace == mODESpace)
                 )
                 {
-                    object->DestroyODEObject();
+                    object->DestroyPhysicsObject();
                 }
         }
 }
 
-void ODESpace::DestroyODEObject()
+void ODESpace::DestroyPhysicsObject()
 {
     if (! mODESpace)
         {

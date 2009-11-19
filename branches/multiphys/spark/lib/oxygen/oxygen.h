@@ -35,6 +35,7 @@
 #include "gamecontrolserver/behavior.h"
 
 //abstract physics classes
+#include <oxygen/physicsserver/physicsobject.h>
 #include "physicsserver/body.h"
 #include "physicsserver/bodycontroller.h"
 #include "physicsserver/dragcontroller.h"
@@ -59,9 +60,6 @@
 #include "physicsserver/sliderjoint.h"
 #include "physicsserver/universaljoint.h"
 #include "physicsserver/hinge2joint.h"
-
-//ode-specific includes
-#include <oxygen/physicsserver/ode/odeobject.h>
 
 #include "sceneserver/basenode.h"
 #include "sceneserver/camera.h"

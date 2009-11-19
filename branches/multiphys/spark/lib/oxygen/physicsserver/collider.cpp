@@ -32,7 +32,7 @@ using namespace salt;
 using namespace boost;
 using namespace std;
 
-Collider::Collider() : ODEObject(), mODEGeom(0)
+Collider::Collider() : PhysicsObject(), mODEGeom(0)
 {
 }
 
@@ -42,7 +42,7 @@ Collider::~Collider()
 
 void Collider::OnLink()
 {
-    ODEObject::OnLink();
+    PhysicsObject::OnLink();
 
 
     weak_ptr<Node> parent = GetParent();
@@ -95,7 +95,7 @@ void Collider::OnLink()
 
 void Collider::OnUnlink()
 {
-    ODEObject::OnUnlink();
+    PhysicsObject::OnUnlink();
 
     // remove collision geometry from space
     dSpaceID space = GetParentSpaceID();
