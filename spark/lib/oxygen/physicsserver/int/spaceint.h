@@ -23,7 +23,7 @@
 #ifndef OXYGEN_SPACEINT_H
 #define OXYGEN_SPACEINT_H
 
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 #include <set>
 #include <oxygen/oxygen_defines.h>
 
@@ -33,20 +33,20 @@ class Transform;
 class Body;
 class Collider;
 
-class OXYGEN_API SpaceInt : public ODEObject
+class OXYGEN_API SpaceInt : public PhysicsObject
 {
 
 public:
     typedef std::set<dSpaceID> TSpaceIdSet;
     
-    SpaceInt() : ODEObject(){};
+    SpaceInt() : PhysicsObject(){};
     virtual ~SpaceInt(){};
     
     //virtual void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2) = 0;
     virtual dSpaceID GetODESpace() const = 0;
     virtual dJointGroupID GetODEJointGroup() const = 0;
     virtual void Collide() = 0;
-    virtual void DestroyODEObject() = 0;
+    virtual void DestroyPhysicsObject() = 0;
     virtual dSpaceID GetParentSpaceID() = 0;
     virtual bool IsGlobalSpace() = 0;
     virtual void DisableInnerCollision(bool disable) = 0;
@@ -59,6 +59,8 @@ public:
     virtual bool ConstructInternal() = 0;
     virtual void PostPhysicsUpdateInternal() = 0;
     virtual void DestroySpaceObjects() = 0;
+    
+    boost::shared_ptr<Scene> scene;
 };
 
 DECLARE_ABSTRACTCLASS(SpaceInt);

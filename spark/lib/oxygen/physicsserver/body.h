@@ -23,7 +23,7 @@
 #define OXYGEN_BODY_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 
 namespace oxygen
 {
@@ -36,7 +36,7 @@ class World;
     usually constant over time: Mass, Center of mass and Inertia
     matrix (mass distribution matrix)
  */
-class OXYGEN_API Body : public ODEObject
+class OXYGEN_API Body : public PhysicsObject
 {
     //
     // Functions

@@ -27,7 +27,7 @@ using namespace std;
 using namespace salt;
 
 Joint::Joint() : 
-ODEObject(), mODEJoint(0), 
+PhysicsObject(), mODEJoint(0), 
 mJointMaxSpeed1(0), mJointMaxSpeed2(0), 
 mIsLimitJointMaxSpeed1(false), mIsLimitJointMaxSpeed2(false)
 {
@@ -431,7 +431,7 @@ float Joint::GetMaxMotorForce(EAxisIndex idx) const
     return GetParameter(dParamFMax + (idx * dParamGroup));
 }
 
-void Joint::DestroyODEObject()
+void Joint::DestroyPhysicsObject()
 {
     if (! mODEJoint)
         {

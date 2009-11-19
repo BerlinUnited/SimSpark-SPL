@@ -41,7 +41,7 @@ public:
     dSpaceID GetODESpace() const;
     dJointGroupID GetODEJointGroup() const;
     void Collide();
-    virtual void DestroyODEObject();
+    virtual void DestroyPhysicsObject();
     virtual dSpaceID GetParentSpaceID();
     bool IsGlobalSpace();
     void DisableInnerCollision(bool disable);

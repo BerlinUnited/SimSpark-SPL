@@ -23,7 +23,7 @@
 #define OXYGEN_WORLD_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 
 namespace oxygen
 {
@@ -38,7 +38,7 @@ class ODEWorld;
     time, thus one reason to use separate worlds is to simulate
     systems at different rates.
 */
-class OXYGEN_API World : public ODEObject
+class OXYGEN_API World : public PhysicsObject
 {
     //
     // Functions

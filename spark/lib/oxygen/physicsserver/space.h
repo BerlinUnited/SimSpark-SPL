@@ -22,7 +22,7 @@
 #ifndef OXYGEN_SPACE_H
 #define OXYGEN_SPACE_H
 
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 #include <set>
 #include <oxygen/oxygen_defines.h>
 
@@ -31,13 +31,14 @@ namespace oxygen
 class Transform;
 class Body;
 class Collider;
+class SpaceInt;
 
 /** Space encapsulates an ODE space object. A space is a non-placeable
     geometry object ('geom') that can contain other geoms. It is
     similar to the rigid body concept of the `world', except that it
     applies to collision instead of dynamics.
 */
-class OXYGEN_API Space : public ODEObject
+class OXYGEN_API Space : public PhysicsObject
 {
 public:
     typedef std::set<dSpaceID> TSpaceIdSet;
@@ -61,7 +62,7 @@ public:
     void Collide();
 
     /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    virtual void DestroyPhysicsObject();
 
     /** returns the ODE handle ID of the containing parent space */
     virtual dSpaceID GetParentSpaceID();
@@ -115,11 +116,10 @@ protected:
     // Members
     //
 private:
+    boost::shared_ptr<SpaceInt> mSpaceImp;
+
     /** the managed ODE space */
     dSpaceID mODESpace;
-
-    /** the ODE group for all created contact joints */
-    dJointGroupID mODEContactGroup;
 
 private:
     /** set of spaces with disabled inner collision */

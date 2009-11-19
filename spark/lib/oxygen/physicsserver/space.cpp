@@ -19,9 +19,10 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "space.h"
-#include "world.h"
-#include "collider.h"
+#include <oxygen/physicsserver/space.h>
+#include <oxygen/physicsserver/ode/odespace.h>
+#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/world.h>
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
 
@@ -37,8 +38,9 @@ void Space::collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
     space->HandleCollide(obj1, obj2);
 }
 
-Space::Space() : ODEObject(), mODESpace(0), mODEContactGroup(0)
+Space::Space() : PhysicsObject(), mODESpace(0)
 {
+    mSpaceImp = shared_ptr<ODESpace>(new ODESpace());
 }
 
 Space::~Space()
@@ -47,12 +49,12 @@ Space::~Space()
 
 dSpaceID Space::GetODESpace() const
 {
-  return mODESpace;
+    return mSpaceImp->GetODESpace();
 }
 
 dJointGroupID Space::GetODEJointGroup() const
 {
-  return mODEContactGroup;
+    return mSpaceImp->GetODEJointGroup();
 }
 
 void Space::Collide()
@@ -182,13 +184,13 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 
 void Space::OnUnlink()
 {
-    DisableInnerCollision(false);
-    ODEObject::OnUnlink();
+    mSpaceImp->DisableInnerCollision(false);
+    PhysicsObject::OnUnlink();
 }
 
 void Space::OnLink()
 {
-    ODEObject::OnLink();
+    PhysicsObject::OnLink();
 
     shared_ptr<Space> space = GetSpace();
     dSpaceID spaceId = 0;
@@ -199,136 +201,49 @@ void Space::OnLink()
         }
 
     mODESpace = dHashSpaceCreate(spaceId);
+    
+    shared_ptr<ODESpace> odespace = shared_static_cast<ODESpace>(mSpaceImp);
+    odespace->mODESpace = mODESpace;
 }
 
 dSpaceID Space::GetParentSpaceID()
 {
-    if (mODESpace == 0)
-        {
-            return 0;
-        }
-
-    return dGeomGetSpace((dGeomID)mODESpace);
+    return mSpaceImp->GetParentSpaceID();
 }
 
 bool Space::IsGlobalSpace()
 {
-    return
-        (
-        (mODESpace != 0) &&
-        (GetParentSpaceID() == 0)
-        );
+    return mSpaceImp->IsGlobalSpace();
 }
 
 bool Space::ConstructInternal()
 {
-    // create a joint group for the contacts
-    mODEContactGroup = dJointGroupCreate(0);
-
-    return (mODEContactGroup != 0);
+    return mSpaceImp->ConstructInternal();
 }
 
 void Space::PostPhysicsUpdateInternal()
 {
-    // remove all contact joints
-    dJointGroupEmpty (mODEContactGroup);
+    mSpaceImp->PostPhysicsUpdateInternal();
 }
 
-void
-Space::DestroySpaceObjects()
+void Space::DestroySpaceObjects()
 {
-    shared_ptr<Scene> scene = GetScene();
-    if (scene.get() == 0)
-        {
-            return;
-        }
-
-    TLeafList objects;
-    const bool recursive = true;
-    scene->ListChildrenSupportingClass<ODEObject>(objects, recursive);
-
-    bool globalSpace = IsGlobalSpace();
-    shared_ptr<Space> self = shared_static_cast<Space>(GetSelf().lock());
-
-    for (
-         TLeafList::iterator iter = objects.begin();
-         iter != objects.end();
-         ++iter
-         )
-        {
-            shared_ptr<ODEObject> object = shared_static_cast<ODEObject>(*iter);
-            if (object == self)
-            {
-                continue;
-            }
-
-            // destroy objects registered to this space; the top level
-            // space object also destroy any other ODE object
-            const dSpaceID parentSpace = object->GetParentSpaceID();
-            if (
-                (
-                 (globalSpace) &&
-                 (parentSpace == 0)
-                 ) ||
-                (parentSpace == mODESpace)
-                )
-                {
-                    object->DestroyODEObject();
-                }
-        }
+    mSpaceImp->scene = GetScene();
+    
+    mSpaceImp->DestroySpaceObjects();
 }
 
-void
-Space::DestroyODEObject()
+void Space::DestroyPhysicsObject()
 {
-    if (! mODESpace)
-        {
-            return;
-        }
-
-    // make sure that all objects registered to this space are destroyed
-    // before this space. Any other order provokes a segfault in ODE.
-    DestroySpaceObjects();
-
-    if (mODEContactGroup)
-        {
-            dJointGroupDestroy(mODEContactGroup);
-            mODEContactGroup = 0;
-        }
-
-    // release the ODE space
-    dSpaceDestroy(mODESpace);
-    mODESpace = 0;
+    mSpaceImp->DestroyPhysicsObject();
 }
 
 void Space::DisableInnerCollision(bool disable)
 {
-    if (mODESpace == 0)
-        {
-            //assert(false);
-            return;
-        }
-
-    if (disable)
-        {
-            gDisabledInnerCollisionSet.insert(mODESpace);
-            return;
-        }
-
-    TSpaceIdSet::iterator iter = gDisabledInnerCollisionSet.find(mODESpace);
-    if (iter == gDisabledInnerCollisionSet.end())
-        {
-            return;
-        }
-
-    gDisabledInnerCollisionSet.erase(iter);
+    mSpaceImp->DisableInnerCollision(disable);
 }
 
 bool Space::GetDisableInnerCollision() const
 {
-    TSpaceIdSet::const_iterator iter
-        = gDisabledInnerCollisionSet.find(mODESpace);
-
-    return (iter != gDisabledInnerCollisionSet.end());
+    return mSpaceImp->GetDisableInnerCollision();
 }
-

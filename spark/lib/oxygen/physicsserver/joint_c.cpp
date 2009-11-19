@@ -547,7 +547,7 @@ FUNCTION(Joint, setJointMaxSpeed2)
 
 void CLASS(Joint)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_BASECLASS(oxygen/PhysicsObject);
     DEFINE_FUNCTION(attach);
     DEFINE_FUNCTION(setHighStopDeg);
     DEFINE_FUNCTION(getHighStopDeg);

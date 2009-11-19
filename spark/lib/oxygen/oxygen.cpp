@@ -53,6 +53,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
 
     // physics
     zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServer), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsObject), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Body), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BodyController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(DragController), "oxygen/");
@@ -85,10 +86,6 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Effector), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Perceptor), "oxygen/");
-    
-    //ODE-specific classes
-    zg.GetCore()->RegisterClassObject(new CLASS(ODEObject), "oxygen/");
-    
 
 #ifdef HAVE_SPADES_HEADERS
     // spades

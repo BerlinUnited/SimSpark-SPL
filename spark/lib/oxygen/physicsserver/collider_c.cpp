@@ -104,10 +104,10 @@ FUNCTION(Collider,addNotCollideWithColliderName)
 
 void CLASS(Collider)::DefineClass()
 {
+    DEFINE_BASECLASS(oxygen/PhysicsObject);
     DEFINE_FUNCTION(setPosition);
     DEFINE_FUNCTION(setLocalPosition);
     DEFINE_FUNCTION(setRotation);
     DEFINE_FUNCTION(addCollisionHandler);
     DEFINE_FUNCTION(addNotCollideWithColliderName);
-    DEFINE_BASECLASS(oxygen/ODEObject);
 }

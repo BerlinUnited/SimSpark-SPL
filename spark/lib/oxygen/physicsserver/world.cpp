@@ -28,7 +28,7 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-World::World() : ODEObject()
+World::World() : PhysicsObject()
 {
     mWorldImp = shared_ptr<ODEWorld>(new ODEWorld());
 }

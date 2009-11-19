@@ -122,7 +122,7 @@ void ODEWorld::DestroyODEObject()
   shared_ptr<Space> space = GetSpace();
   if (space.get() != 0)
     {
-      space->DestroyODEObject();
+      space->DestroyPhysicsObject();
     }
 
   if (mODEWorld == 0)

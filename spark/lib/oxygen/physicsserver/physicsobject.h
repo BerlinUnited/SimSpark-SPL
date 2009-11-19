@@ -20,8 +20,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODEOBJECT_H
-#define OXYGEN_ODEOBJECT_H
+#ifndef OXYGEN_PHYSICSOBJECT_H
+#define OXYGEN_PHYSICSOBJECT_H
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
@@ -34,39 +34,39 @@ class World;
 
 /** ODEObject is the base of all classes encapsulating ODE concepts
  */
-class OXYGEN_API ODEObject : public BaseNode
+class OXYGEN_API PhysicsObject : public BaseNode
 {
 public:
     //
     // Functions
     //
-    ODEObject(){};
-    virtual ~ODEObject(){};
+    PhysicsObject();
+    virtual ~PhysicsObject();
 
     /** This rountine is called, before the hierarchy object is
         removed from the parent. It can be overridden to support
         custom 'unlink' behavior.
     */
-    virtual void OnUnlink(){};
+    virtual void OnUnlink();
 
     /** returns the ODE world handle */
-    dWorldID GetWorldID(){};
+    dWorldID GetWorldID();
 
     /** returns the nearest parent space ODE handle */
-    dSpaceID FindSpaceID(){};
+    dSpaceID FindSpaceID();
 
     /** returns the ODE handle ID of the containing parent space */
-    virtual dSpaceID GetParentSpaceID(){};
+    virtual dSpaceID GetParentSpaceID();
 
     /** destroy the managed ODE object */
-    virtual void DestroyODEObject(){};
+    virtual void DestroyPhysicsObject(){};
 
 protected:
     /** returns the world node */
     boost::shared_ptr<World> GetWorld();
 
     /** finds the nearest parent space node */
-    boost::shared_ptr<Space> GetSpace(){};
+    boost::shared_ptr<Space> GetSpace();
 
     /** converts the rotation part of a salt::Matrix to an ODE
         dMatrix3 */
@@ -76,8 +76,8 @@ protected:
     void ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const;
 };
 
-DECLARE_ABSTRACTCLASS(ODEObject);
+DECLARE_ABSTRACTCLASS(PhysicsObject);
 
 } //namespace oxygen
 
-#endif //OXYGEN_ODEOBJECT_H
+#endif //OXYGEN_PHYSICSOBJECT_H

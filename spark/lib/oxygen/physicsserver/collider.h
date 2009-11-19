@@ -22,7 +22,7 @@
 #ifndef OXYGEN_COLLIDER_H
 #define OXYGEN_COLLIDER_H
 
-#include <oxygen/physicsserver/ode/odeobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 #include <string>
 #include <set>
 #include <oxygen/oxygen_defines.h>
@@ -42,7 +42,7 @@ class World;
     bodies. A body and a geom together represent all the properties of
     the simulated object.
 */
-class OXYGEN_API Collider : public ODEObject
+class OXYGEN_API Collider : public PhysicsObject
 {
     //
     // Functions

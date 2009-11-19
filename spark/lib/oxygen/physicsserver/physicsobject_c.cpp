@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: odeobject_c.cpp 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,25 +19,11 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "space.h"
+#include <oxygen/physicsserver/physicsobject.h>
 
 using namespace oxygen;
 
-FUNCTION(Space,disableInnerCollision)
+void CLASS(PhysicsObject)::DefineClass()
 {
-    bool inSet;
-    if ((in.GetSize() != 1) ||
-        (! in.GetValue(in[0],inSet)))
-    {
-        return false;
-    }
-
-    obj->DisableInnerCollision(inSet);
-    return true;
-}
-
-void CLASS(Space)::DefineClass()
-{
-    DEFINE_BASECLASS(oxygen/PhysicsObject);
-    DEFINE_FUNCTION(disableInnerCollision);
+        DEFINE_BASECLASS(oxygen/BaseNode);
 }

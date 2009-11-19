@@ -568,7 +568,7 @@ FUNCTION(Body,translateMass)
 
 void CLASS(Body)::DefineClass()
 {
-        DEFINE_BASECLASS(oxygen/ODEObject);
+        DEFINE_BASECLASS(oxygen/PhysicsObject);
         DEFINE_FUNCTION(enable);
         DEFINE_FUNCTION(disable);
         DEFINE_FUNCTION(isEnabled);
