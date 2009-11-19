@@ -19,45 +19,40 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODEWORLD_H
-#define OXYGEN_ODEWORLD_H
+#ifndef OXYGEN_WORLDINT_H
+#define OXYGEN_WORLDINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/int/worldint.h>
+#include <oxygen/physicsserver/ode/odeobject.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEWorld : public WorldInt
+class OXYGEN_API WorldInt : public ODEObject
 {
-
+    
 public:
-    ODEWorld();
-    virtual ~ODEWorld();
+    WorldInt() : ODEObject(){};
+    virtual ~WorldInt(){};
 
-    dWorldID GetODEWorld() const;
-    void SetGravity(const salt::Vector3f& gravity);
-    salt::Vector3f GetGravity() const;
-    void SetERP(float erp);
-    float GetERP() const;
-    void SetCFM(float cfm);
-    float GetCFM() const;
-    void Step(float deltaTime);
-    bool GetAutoDisableFlag() const;
-    void SetAutoDisableFlag(bool flag);
-    void SetContactSurfaceLayer(float depth);
-    float GetContactSurfaceLayer() const;
-    virtual void DestroyODEObject();
-
-protected:
-    virtual bool ConstructInternal();
-
-private:
-    dWorldID mODEWorld;
+    virtual dWorldID GetODEWorld() const = 0;
+    virtual void SetGravity(const salt::Vector3f& gravity) = 0;
+    virtual salt::Vector3f GetGravity() const = 0;
+    virtual void SetERP(float erp) = 0;
+    virtual float GetERP() const = 0;
+    virtual void SetCFM(float cfm) = 0;
+    virtual float GetCFM() const = 0;
+    virtual void Step(float deltaTime) = 0;
+    virtual bool GetAutoDisableFlag() const = 0;
+    virtual void SetAutoDisableFlag(bool flag) = 0;
+    virtual void SetContactSurfaceLayer(float depth) = 0;
+    virtual float GetContactSurfaceLayer() const = 0;
+    virtual void DestroyODEObject() = 0;
+    virtual bool ConstructInternal() = 0;
 };
 
-DECLARE_CLASS(ODEWorld);
+DECLARE_ABSTRACTCLASS(WorldInt);
 
 }
 
-#endif //OXYGEN_ODEWORLD_H
+#endif //OXYGEN_WORLDINT_H

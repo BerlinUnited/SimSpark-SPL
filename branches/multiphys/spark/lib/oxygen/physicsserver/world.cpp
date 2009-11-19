@@ -30,8 +30,7 @@ using namespace salt;
 
 World::World() : ODEObject()
 {
-    shared_ptr<ODEWorld> odeworld(new ODEWorld());
-    mWorldImp = (shared_dynamic_cast<WorldImp>(odeworld));
+    mWorldImp = shared_ptr<ODEWorld>(new ODEWorld());
 }
 
 World::~World()
@@ -40,70 +39,70 @@ World::~World()
 
 dWorldID World::GetODEWorld() const
 {
-  return mWorldImp->GetODEWorldImp();
+  return mWorldImp->GetODEWorld();
 }
 
 void World::SetGravity(const Vector3f& gravity)
 {
-  mWorldImp->SetGravityImp(gravity);
+  mWorldImp->SetGravity(gravity);
 }
 
 salt::Vector3f World::GetGravity() const
 {
-  return mWorldImp->GetGravityImp();
+  return mWorldImp->GetGravity();
 }
 
 void World::SetERP(float erp)
 {
-  mWorldImp->SetERPImp(erp);
+  mWorldImp->SetERP(erp);
 }
 
 float World::GetERP() const
 {
-  return mWorldImp->GetERPImp();
+  return mWorldImp->GetERP();
 }
 
 void World::SetCFM(float cfm)
 {
-  mWorldImp->SetCFMImp(cfm);
+  mWorldImp->SetCFM(cfm);
 }
 
 float World::GetCFM() const
 {
-  return mWorldImp->GetCFMImp();
+  return mWorldImp->GetCFM();
 }
 
 void World::Step(float deltaTime)
 {
-  mWorldImp->StepImp(deltaTime);
+  mWorldImp->Step(deltaTime);
 }
 
 bool World::GetAutoDisableFlag() const
 {
-  return mWorldImp->GetAutoDisableFlagImp();
+  return mWorldImp->GetAutoDisableFlag();
 }
 
 void World::SetAutoDisableFlag(bool flag)
 {
-  mWorldImp->SetAutoDisableFlagImp(flag);
+  mWorldImp->SetAutoDisableFlag(flag);
 }
 
 void World::SetContactSurfaceLayer(float depth)
 {
-  mWorldImp->SetContactSurfaceLayerImp(depth);
+  mWorldImp->SetContactSurfaceLayer(depth);
 }
 
 float World::GetContactSurfaceLayer() const
 {
-  return mWorldImp->GetContactSurfaceLayerImp();
+  return mWorldImp->GetContactSurfaceLayer();
 }
 
 bool World::ConstructInternal()
 {
-  return mWorldImp->ConstructInternalImp();
+  return mWorldImp->ConstructInternal();
 }
 
 void World::DestroyODEObject()
 {
-  mWorldImp->DestroyODEObjectImp();
+  mWorldImp->DestroyODEObject();
 }

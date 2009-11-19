@@ -19,45 +19,56 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODEWORLD_H
-#define OXYGEN_ODEWORLD_H
+#ifndef OXYGEN_ODESPACE_H
+#define OXYGEN_ODESPACE_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/int/worldint.h>
+#include <oxygen/physicsserver/int/spaceint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEWorld : public WorldInt
+class OXYGEN_API ODESpace : public SpaceInt
 {
 
 public:
-    ODEWorld();
-    virtual ~ODEWorld();
+    typedef std::set<dSpaceID> TSpaceIdSet;
 
-    dWorldID GetODEWorld() const;
-    void SetGravity(const salt::Vector3f& gravity);
-    salt::Vector3f GetGravity() const;
-    void SetERP(float erp);
-    float GetERP() const;
-    void SetCFM(float cfm);
-    float GetCFM() const;
-    void Step(float deltaTime);
-    bool GetAutoDisableFlag() const;
-    void SetAutoDisableFlag(bool flag);
-    void SetContactSurfaceLayer(float depth);
-    float GetContactSurfaceLayer() const;
+public:
+    ODESpace();
+    virtual ~ODESpace();
+
+    dSpaceID GetODESpace() const;
+    dJointGroupID GetODEJointGroup() const;
+    void Collide();
     virtual void DestroyODEObject();
+    virtual dSpaceID GetParentSpaceID();
+    bool IsGlobalSpace();
+    void DisableInnerCollision(bool disable);
+    bool GetDisableInnerCollision() const;
+    
+    dSpaceID mODESpace;
 
 protected:
+    //void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
+    virtual void OnUnlink();
+    virtual void OnLink();
+    void Collide(dSpaceID space);
+    void HandleCollide(dGeomID obj1, dGeomID obj2);
+    void HandleSpaceCollide(dGeomID obj1, dGeomID obj2);
     virtual bool ConstructInternal();
+    virtual void PostPhysicsUpdateInternal();
+    void DestroySpaceObjects();
 
 private:
-    dWorldID mODEWorld;
+    dJointGroupID mODEContactGroup;
+
+private:
+    static TSpaceIdSet gDisabledInnerCollisionSet;
 };
 
-DECLARE_CLASS(ODEWorld);
+DECLARE_CLASS(ODESpace);
 
 }
 
-#endif //OXYGEN_ODEWORLD_H
+#endif //OXYGEN_ODESPACE_H
