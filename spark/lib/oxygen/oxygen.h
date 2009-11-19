@@ -60,12 +60,8 @@
 #include "physicsserver/universaljoint.h"
 #include "physicsserver/hinge2joint.h"
 
-//physics interfaces
-#include "physicsserver/imp/worldimp.h"
-
 //ode-specific includes
 #include <oxygen/physicsserver/ode/odeobject.h>
-#include <oxygen/physicsserver/ode/odeworld.h>
 
 #include "sceneserver/basenode.h"
 #include "sceneserver/camera.h"

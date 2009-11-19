@@ -41,7 +41,7 @@ set(oxygen_LIB_HDRS
     physicsserver/angularmotor.h
     
     #interfaces
-    physicsserver/imp/worldimp.h
+    physicsserver/int/worldint.h
     
     #ode-specific files
     physicsserver/ode/odeobject.h
@@ -159,9 +159,12 @@ set(oxygen_LIB_SRCS
     physicsserver/angularmotor_c.cpp
     
     #interfaces
-    physicsserver/imp/worldimp_c.cpp
+    physicsserver/int/worldint_c.cpp
+    physicsserver/int/spaceint_c.cpp
     
     #ODE-specific files
+    physicsserver/ode/odespace.cpp
+    physicsserver/ode/odespace_c.cpp
     physicsserver/ode/odeworld.cpp
     physicsserver/ode/odeworld_c.cpp
     physicsserver/ode/odeobject.cpp

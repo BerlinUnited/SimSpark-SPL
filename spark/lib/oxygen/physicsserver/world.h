@@ -28,7 +28,7 @@
 namespace oxygen
 {
 
-class WorldImp;
+class WorldInt;
 class ODEWorld;
 
 /** World encapsulates an ODE world object. It is a container for
@@ -116,7 +116,7 @@ protected:
     // Members
     //
 private:
-    boost::shared_ptr<WorldImp> mWorldImp;
+    boost::shared_ptr<WorldInt> mWorldImp;
 };
 
 DECLARE_CLASS(World);

@@ -19,11 +19,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/imp/worldimp.h>
+#include <oxygen/physicsserver/int/worldint.h>
 
 using namespace oxygen;
 
-void CLASS(WorldImp)::DefineClass()
+void CLASS(WorldInt)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/ODEObject);
 }

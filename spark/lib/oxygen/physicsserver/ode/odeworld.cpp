@@ -27,7 +27,7 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-ODEWorld::ODEWorld() : WorldImp(), mODEWorld(0)
+ODEWorld::ODEWorld() : WorldInt(), mODEWorld(0)
 {
 }
 
@@ -35,12 +35,12 @@ ODEWorld::~ODEWorld()
 {
 }
 
-dWorldID ODEWorld::GetODEWorldImp() const
+dWorldID ODEWorld::GetODEWorld() const
 {
   return mODEWorld;
 }
 
-void ODEWorld::SetGravityImp(const Vector3f& gravity)
+void ODEWorld::SetGravity(const Vector3f& gravity)
 {
   dWorldSetGravity(mODEWorld,
                    gravity.x(),
@@ -49,59 +49,59 @@ void ODEWorld::SetGravityImp(const Vector3f& gravity)
                    );
 }
 
-salt::Vector3f ODEWorld::GetGravityImp() const
+salt::Vector3f ODEWorld::GetGravity() const
 {
   dVector3 dGravity;
   dWorldGetGravity(mODEWorld,dGravity);
   return Vector3f(dGravity[0],dGravity[1],dGravity[2]);
 }
 
-void ODEWorld::SetERPImp(float erp)
+void ODEWorld::SetERP(float erp)
 {
   dWorldSetERP(mODEWorld, erp);
 }
 
-float ODEWorld::GetERPImp() const
+float ODEWorld::GetERP() const
 {
   return dWorldGetERP(mODEWorld);
 }
 
-void ODEWorld::SetCFMImp(float cfm)
+void ODEWorld::SetCFM(float cfm)
 {
   dWorldSetCFM(mODEWorld, cfm);
 }
 
-float ODEWorld::GetCFMImp() const
+float ODEWorld::GetCFM() const
 {
   return dWorldGetCFM(mODEWorld);
 }
 
-void ODEWorld::StepImp(float deltaTime)
+void ODEWorld::Step(float deltaTime)
 {
   dWorldStep(mODEWorld, deltaTime);
 }
 
-bool ODEWorld::GetAutoDisableFlagImp() const
+bool ODEWorld::GetAutoDisableFlag() const
 {
   return (dWorldGetAutoDisableFlag(mODEWorld) == 1);
 }
 
-void ODEWorld::SetAutoDisableFlagImp(bool flag)
+void ODEWorld::SetAutoDisableFlag(bool flag)
 {
   dWorldSetAutoDisableFlag(mODEWorld, static_cast<int>(flag));
 }
 
-void ODEWorld::SetContactSurfaceLayerImp(float depth)
+void ODEWorld::SetContactSurfaceLayer(float depth)
 {
   dWorldSetContactSurfaceLayer(mODEWorld, depth);
 }
 
-float ODEWorld::GetContactSurfaceLayerImp() const
+float ODEWorld::GetContactSurfaceLayer() const
 {
   return dWorldGetContactSurfaceLayer(mODEWorld);
 }
 
-bool ODEWorld::ConstructInternalImp()
+bool ODEWorld::ConstructInternal()
 {
   // create an ode world
   mODEWorld = dWorldCreate();
@@ -109,7 +109,7 @@ bool ODEWorld::ConstructInternalImp()
   return (mODEWorld != 0);
 }
 
-void ODEWorld::DestroyODEObjectImp()
+void ODEWorld::DestroyODEObject()
 {
   static bool recurseLock = false;
   if (recurseLock)
