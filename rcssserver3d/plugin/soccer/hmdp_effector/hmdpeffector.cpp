@@ -141,7 +141,7 @@ void HMDPEffector::OnLink()
 
     // parent should be a transform, or some other node, which has a
     // Body-child
-    mBody = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
+    mBody = shared_dynamic_cast<RigidBody>(parent->GetChildOfClass("RigidBody"));
 
     if (mBody.get() == 0)
     {
@@ -268,7 +268,7 @@ void HMDPEffector::controlPosServo() // for controlling servos
 
         if (abs(err) > 0.00001)
         {
-            shared_ptr<Body> body = joint->GetBody(Joint::BI_FIRST);
+            shared_ptr<RigidBody> body = joint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
             {
                 body->Enable();

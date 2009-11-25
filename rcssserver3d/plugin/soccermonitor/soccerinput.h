@@ -27,7 +27,7 @@
 namespace oxygen
 {
     class FPSController;
-    class Body;
+    class RigidBody;
 }
 
 class SoccerInput : public kerosin::InputItem
@@ -79,7 +79,7 @@ protected:
     boost::shared_ptr<oxygen::NetClient> mMonitorClient;
 
     /** cached reference to the camera body */
-    boost::shared_ptr<oxygen::Body> mCameraBody;
+    boost::shared_ptr<oxygen::RigidBody> mCameraBody;
 
     boost::shared_ptr<oxygen::FPSController> mFPS;
 };

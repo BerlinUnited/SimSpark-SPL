@@ -25,7 +25,7 @@
 
 namespace oxygen
 {
-class Body;
+class RigidBody;
 
 class OXYGEN_API SliderJoint : public Joint
 {
@@ -45,8 +45,8 @@ public:
 
 protected:
     /** attaches the joint to some new bodies */
-    virtual void Attach(boost::shared_ptr<Body> body1,
-                        boost::shared_ptr<Body> body2);
+    virtual void Attach(boost::shared_ptr<RigidBody> body1,
+                        boost::shared_ptr<RigidBody> body2);
 
     /** creates a new slider joint */
     virtual void OnLink();

@@ -94,7 +94,7 @@ void ForceEffector::OnLink()
 
   // parent should be a transform, or some other node, which has a
   // Body-child
-  mBody = shared_dynamic_cast<Body>(parent->GetChildOfClass("Body"));
+  mBody = shared_dynamic_cast<RigidBody>(parent->GetChildOfClass("RigidBody"));
 
   if (mBody.get() == 0)
     {

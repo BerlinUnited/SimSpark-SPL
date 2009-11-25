@@ -22,7 +22,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <gamestateaspect/gamestateaspect.h>
 #include <soccerruleaspect/soccerruleaspect.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/sceneserver/fpscontroller.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
@@ -93,7 +93,7 @@ void InternalSoccerInput::OnLink()
         }
 
     // get camera body
-    mCameraBody = shared_dynamic_cast<Body>
+    mCameraBody = shared_dynamic_cast<RigidBody>
         (GetCore()->Get("/usr/scene/camera/physics"));
 
     if (mCameraBody.get() == 0)

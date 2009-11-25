@@ -20,7 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "soccerbase.h"
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/spherecollider.h>
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/agentaspect/agentaspect.h>
@@ -94,10 +94,10 @@ SoccerBase::GetAgentState(const shared_ptr<Transform> transform,
 
 bool
 SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
-                          shared_ptr<Body>& agent_body)
+                          shared_ptr<RigidBody>& agent_body)
 
 {
-    agent_body = transform->FindChildSupportingClass<Body>(true);
+    agent_body = transform->FindChildSupportingClass<RigidBody>(true);
 
     if (agent_body.get() == 0)
     {
@@ -112,7 +112,7 @@ SoccerBase::GetAgentBody(const shared_ptr<Transform> transform,
 
 bool
 SoccerBase::GetAgentBody(const Leaf& base, TTeamIndex idx,
-                         int unum, shared_ptr<Body>& agent_body)
+                         int unum, shared_ptr<RigidBody>& agent_body)
 {
     shared_ptr<AgentState> agentState;
     shared_ptr<Transform>  parent;
@@ -380,7 +380,7 @@ SoccerBase::GetActiveScene(const Leaf& base,
 }
 
 bool
-SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
+SoccerBase::GetBody(const Leaf& base, shared_ptr<RigidBody>& body)
 {
     shared_ptr<Transform> parent;
     if (! GetTransformParent(base,parent))
@@ -390,7 +390,7 @@ SoccerBase::GetBody(const Leaf& base, shared_ptr<Body>& body)
         return false;
     }
 
-  body = shared_dynamic_cast<Body>(parent->FindChildSupportingClass<Body>());
+  body = shared_dynamic_cast<RigidBody>(parent->FindChildSupportingClass<RigidBody>());
 
   if (body.get() == 0)
     {
@@ -443,10 +443,10 @@ SoccerBase::GetBall(const Leaf& base, shared_ptr<Ball>& ball)
 }
 
 bool
-SoccerBase::GetBallBody(const Leaf& base, shared_ptr<Body>& body)
+SoccerBase::GetBallBody(const Leaf& base, shared_ptr<RigidBody>& body)
 {
     static shared_ptr<Scene> scene;
-    static shared_ptr<Body> bodyRef;
+    static shared_ptr<RigidBody> bodyRef;
 
     if (scene.get() == 0)
     {
@@ -462,7 +462,7 @@ SoccerBase::GetBallBody(const Leaf& base, shared_ptr<Body>& body)
 
     if (bodyRef.get() == 0)
     {
-        bodyRef = shared_dynamic_cast<Body>
+        bodyRef = shared_dynamic_cast<RigidBody>
             (base.GetCore()->Get(scene->GetFullPath() + "Ball/physics"));
 
         if (bodyRef.get() == 0)
@@ -647,7 +647,7 @@ SoccerBase::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
 
     Leaf::TLeafList leafList;
 
-    parent->ListChildrenSupportingClass<Body>(leafList, true);
+    parent->ListChildrenSupportingClass<RigidBody>(leafList, true);
 
     if (leafList.size() == 0)
     {
@@ -663,8 +663,8 @@ SoccerBase::MoveAgent(shared_ptr<Transform> agent_aspect, const Vector3f& pos)
     // move all child bodies
     for (; iter != leafList.end(); ++iter)
     {
-        shared_ptr<Body> childBody =
-            shared_dynamic_cast<Body>(*iter);
+        shared_ptr<RigidBody> childBody =
+            shared_dynamic_cast<RigidBody>(*iter);
 
         Vector3f childPos = childBody->GetPosition();
 
@@ -692,7 +692,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
 
     Leaf::TLeafList leafList;
 
-    parent->ListChildrenSupportingClass<Body>(leafList, true);
+    parent->ListChildrenSupportingClass<RigidBody>(leafList, true);
 
     if (leafList.size() == 0)
     {
@@ -703,7 +703,7 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
         return false;
     }
 
-    shared_ptr<Body> body;
+    shared_ptr<RigidBody> body;
     GetAgentBody(agent_aspect, body);
 
     Matrix bodyR = body->GetRotation();
@@ -720,8 +720,8 @@ SoccerBase::MoveAndRotateAgent(shared_ptr<Transform> agent_aspect, const Vector3
          ++iter
          )
         {
-	       shared_ptr<Body> childBody =
-                shared_dynamic_cast<Body>(*iter);
+	       shared_ptr<RigidBody> childBody =
+                shared_dynamic_cast<RigidBody>(*iter);
 
     	    Vector3f childPos = childBody->GetPosition();
             Matrix childR = childBody->GetRotation();

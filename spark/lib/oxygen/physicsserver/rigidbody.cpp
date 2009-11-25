@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: body.cpp 106 2009-11-19 10:10:50Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,47 +18,47 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "body.h"
-#include "world.h"
-#include "../sceneserver/scene.h"
+#include <oxygen/physicsserver/rigidbody.h>
+#include <oxygen/physicsserver/transformcollider.h>
+#include <oxygen/physicsserver/world.h>
+#include <oxygen/sceneserver/scene.h>
 #include "zeitgeist/logserver/logserver.h"
-#include "../sceneserver/transform.h"
-#include "transformcollider.h"
+#include <oxygen/sceneserver/transform.h>
 
 using namespace boost;
 using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-Body::Body() : PhysicsObject(), mODEBody(0), mMassTrans(0,0,0), mMassTransformed(false)
+RigidBody::RigidBody() : Body(), mODEBody(0), mMassTrans(0,0,0), mMassTransformed(false)
 {
 }
 
-Body::~Body()
+RigidBody::~RigidBody()
 {
 }
 
-dBodyID Body::GetODEBody() const
+dBodyID RigidBody::GetODEBody() const
 {
     return mODEBody;
 }
 
-void Body::Enable()
+void RigidBody::Enable()
 {
     dBodyEnable(mODEBody);
 }
 
-void Body::Disable()
+void RigidBody::Disable()
 {
     dBodyDisable(mODEBody);
 }
 
-bool Body::IsEnabled() const
+bool RigidBody::IsEnabled() const
 {
     return (dBodyIsEnabled(mODEBody) != 0);
 }
 
-void Body::UseGravity(bool f)
+void RigidBody::UseGravity(bool f)
 {
     if (f == true)
         {
@@ -72,12 +72,12 @@ void Body::UseGravity(bool f)
         }
 }
 
-bool Body::UsesGravity() const
+bool RigidBody::UsesGravity() const
 {
     return (dBodyGetGravityMode(mODEBody) != 0);
 }
 
-bool Body::CreateBody()
+bool RigidBody::CreateBody()
 {
     if (mODEBody != 0)
         {
@@ -102,7 +102,7 @@ bool Body::CreateBody()
     return true;
 }
 
-void Body::DestroyODEObject()
+void RigidBody::DestroyODEObject()
 {
     if (mODEBody == 0)
         {
@@ -113,7 +113,7 @@ void Body::DestroyODEObject()
     mODEBody = 0;
 }
 
-void Body::OnLink()
+void RigidBody::OnLink()
 {
     PhysicsObject::OnLink();
 
@@ -133,8 +133,7 @@ void Body::OnLink()
     SetPosition(mat.Pos());
 }
 
-void
-Body::SetMass(float mass)
+void RigidBody::SetMass(float mass)
 {
     dMass ODEMass;
     dBodyGetMass(mODEBody, &ODEMass);
@@ -142,120 +141,100 @@ Body::SetMass(float mass)
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-float
-Body::GetMass() const
+float RigidBody::GetMass() const
 {
     dMass m;
     dBodyGetMass(mODEBody, &m);
     return m.mass;
 }
 
-void Body::GetMassParameters(dMass& mass) const
+void RigidBody::GetMassParameters(dMass& mass) const
 {
     dBodyGetMass(mODEBody, &mass);
 }
 
-void Body::SetMassParameters(const dMass& mass)
+void RigidBody::SetMassParameters(const dMass& mass)
 {
     dBodySetMass(mODEBody, &mass);
 }
 
-void Body::PrepareSphere(dMass& mass, float density, float radius) const
+void RigidBody::PrepareSphere(dMass& mass, float density, float radius) const
 {
     dMassSetSphere(&mass, density, radius);
 }
 
-void Body::SetSphere(float density, float radius)
+void RigidBody::SetSphere(float density, float radius)
 {
     dMass ODEMass;
     PrepareSphere(ODEMass, density, radius);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddSphere(float density, float radius, const Matrix& matrix)
+void RigidBody::AddSphere(float density, float radius, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareSphere(ODEMass, density, radius);
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareSphereTotal(dMass& mass, float total_mass, float radius) const
+void RigidBody::PrepareSphereTotal(dMass& mass, float total_mass, float radius) const
 {
     dMassSetSphereTotal(&mass, total_mass, radius);
 }
 
-void Body::SetSphereTotal(float total_mass, float radius)
+void RigidBody::SetSphereTotal(float total_mass, float radius)
 {
     dMass ODEMass;
     PrepareSphereTotal(ODEMass, total_mass, radius);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddSphereTotal(float total_mass, float radius, const Matrix& matrix)
+void RigidBody::AddSphereTotal(float total_mass, float radius, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareSphereTotal(ODEMass, total_mass, radius);
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareBox(dMass& mass, float density, const Vector3f& size) const
+void RigidBody::PrepareBox(dMass& mass, float density, const Vector3f& size) const
 {
     dMassSetBox(&mass, density, size[0], size[1], size[2]);
 }
 
-void Body::SetBox(float density, const Vector3f& size)
+void RigidBody::SetBox(float density, const Vector3f& size)
 {
     dMass ODEMass;
     PrepareBox(ODEMass, density, size);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddBox(float density, const Vector3f& size, const Matrix& matrix)
+void RigidBody::AddBox(float density, const Vector3f& size, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareBox(ODEMass, density, size);
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareBoxTotal(dMass& mass, float total_mass, const Vector3f& size) const
+void RigidBody::PrepareBoxTotal(dMass& mass, float total_mass, const Vector3f& size) const
 {
     dMassSetBoxTotal(&mass, total_mass, size[0], size[1], size[2]);
 }
 
-void Body::SetBoxTotal(float total_mass, const Vector3f& size)
+void RigidBody::SetBoxTotal(float total_mass, const Vector3f& size)
 {
     dMass ODEMass;
     PrepareBoxTotal(ODEMass, total_mass, size);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddBoxTotal(float total_mass, const Vector3f& size, const Matrix& matrix)
+void RigidBody::AddBoxTotal(float total_mass, const Vector3f& size, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareBoxTotal(ODEMass, total_mass, size);
     AddMass(ODEMass, matrix);
 }
-/*
-    dMass ODEMass;
-    dBodyGetMass(mODEBody, &ODEMass);
-    Vector3f trans(ODEMass.c[0], ODEMass.c[1], ODEMass.c[2]);
-    
-    if (trans.SquareLength() > 0)
-    {
-        mOrigin = mOrigin - trans;
-        GetLog()->Warning() << "(Body::CenterMass) New origin: " << mOrigin << "\n";
-        
-        dMassTranslate(&ODEMass, -trans[0], -trans[1], -trans[2]);
-        dBodySetMass(mODEBody, &ODEMass);
-        
-        Vector3f position = GetPosition();
-        position = position + trans;
-        SetPosition(position);
-    
-        mCOMShifted = true;
-    }
-*/
-void Body::AddMass(const dMass& mass, const Matrix& matrix)
+
+void RigidBody::AddMass(const dMass& mass, const Matrix& matrix)
 {
     dMass transMass(mass);
 
@@ -290,7 +269,7 @@ void Body::AddMass(const dMass& mass, const Matrix& matrix)
     mMassTransformed = true;
 }
 
-void Body::PrepareCylinder (dMass& mass, float density, float radius, float length) const
+void RigidBody::PrepareCylinder (dMass& mass, float density, float radius, float length) const
 {
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
@@ -298,21 +277,21 @@ void Body::PrepareCylinder (dMass& mass, float density, float radius, float leng
     dMassSetCylinder (&mass, density, direction, radius, length);
 }
 
-void Body::SetCylinder (float density, float radius, float length)
+void RigidBody::SetCylinder (float density, float radius, float length)
 {
     dMass ODEMass;
     PrepareCylinder(ODEMass, density, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddCylinder (float density, float radius, float length, const Matrix& matrix)
+void RigidBody::AddCylinder (float density, float radius, float length, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareCylinder(ODEMass, density, radius, length);
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
+void RigidBody::PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
 {
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
@@ -320,21 +299,21 @@ void Body::PrepareCylinderTotal(dMass& mass, float total_mass, float radius, flo
     dMassSetCylinderTotal(&mass, total_mass, direction, radius, length);
 }
 
-void Body::SetCylinderTotal(float total_mass, float radius, float length)
+void RigidBody::SetCylinderTotal(float total_mass, float radius, float length)
 {
     dMass ODEMass;
     PrepareCylinderTotal(ODEMass, total_mass, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddCylinderTotal(float total_mass, float radius, float length, const Matrix& matrix)
+void RigidBody::AddCylinderTotal(float total_mass, float radius, float length, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareCylinderTotal(ODEMass, total_mass, radius, length);
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const
+void RigidBody::PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const
 {
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
@@ -342,21 +321,21 @@ void Body::PrepareCappedCylinder (dMass& mass, float density, float radius, floa
     dMassSetCapsule (&mass, density, direction, radius, length);
 }
 
-void Body::SetCappedCylinder (float density, float radius, float length)
+void RigidBody::SetCappedCylinder (float density, float radius, float length)
 {
     dMass ODEMass;
     PrepareCappedCylinder(ODEMass, density, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddCappedCylinder (float density, float radius, float length, const Matrix& matrix)
+void RigidBody::AddCappedCylinder (float density, float radius, float length, const Matrix& matrix)
 {
     dMass ODEMass;
     PrepareCappedCylinder(ODEMass, density, radius, length);
     AddMass(ODEMass, matrix);
 }
 
-void Body::PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
+void RigidBody::PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
 {
     // direction: (1=x, 2=y, 3=z)
     int direction = 3;
@@ -364,41 +343,39 @@ void Body::PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radiu
     dMassSetCapsuleTotal(&mass, total_mass, direction, radius, length);
 }
 
-void Body::SetCappedCylinderTotal(float total_mass, float radius, float length)
+void RigidBody::SetCappedCylinderTotal(float total_mass, float radius, float length)
 {
     dMass ODEMass;
     PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
     dBodySetMass(mODEBody, &ODEMass);
 }
 
-void Body::AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
+void RigidBody::AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
 {
     dMass ODEMass;
     PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
     AddMass(ODEMass, matrix);
 }
 
-Vector3f Body::GetVelocity() const
+Vector3f RigidBody::GetVelocity() const
 {
     const dReal* vel = dBodyGetLinearVel(mODEBody);
     return Vector3f(vel[0], vel[1], vel[2]);
 }
 
-void Body::SetVelocity(const Vector3f& vel)
+void RigidBody::SetVelocity(const Vector3f& vel)
 {
     dBodySetLinearVel(mODEBody, vel[0], vel[1], vel[2]);
 }
 
-void
-Body::SetRotation(const Matrix& rot)
+void RigidBody::SetRotation(const Matrix& rot)
 {
     dMatrix3 m;
     ConvertRotationMatrix(rot,m);
     dBodySetRotation(mODEBody,m);
 }
 
-salt::Matrix
-Body::GetRotation() const
+salt::Matrix RigidBody::GetRotation() const
 {
     const dReal* m = dBodyGetRotation(mODEBody);
     salt::Matrix rot;
@@ -406,20 +383,18 @@ Body::GetRotation() const
     return rot;
 }
 
-Vector3f
-Body::GetAngularVelocity() const
+Vector3f RigidBody::GetAngularVelocity() const
 {
     const dReal* vel = dBodyGetAngularVel(mODEBody);
     return Vector3f(vel[0], vel[1], vel[2]);
 }
 
-void
-Body::SetAngularVelocity(const Vector3f& vel)
+void RigidBody::SetAngularVelocity(const Vector3f& vel)
 {
     dBodySetAngularVel(mODEBody, vel[0], vel[1], vel[2]);
 }
 
-void Body::SynchronizeParent() const
+void RigidBody::SynchronizeParent() const
 {
     const dReal* pos = dBodyGetPosition(mODEBody);
     const dReal* rot = dBodyGetRotation(mODEBody);
@@ -449,7 +424,7 @@ void Body::SynchronizeParent() const
     baseNode->SetWorldTransform(mat);
 }
 
-void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
+void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // Check whether mass/body has been translated
     if (mMassTransformed)
@@ -489,69 +464,65 @@ void Body::PrePhysicsUpdateInternal(float /*deltaTime*/)
 }
 
 
-void Body::PostPhysicsUpdateInternal()
+void RigidBody::PostPhysicsUpdateInternal()
 {
     SynchronizeParent();
 }
 
-shared_ptr<Body> Body::GetBody(dBodyID id)
+shared_ptr<RigidBody> RigidBody::GetBody(dBodyID id)
 {
     if (id == 0)
         {
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
-    Body* bodyPtr =
-        static_cast<Body*>(dBodyGetData(id));
+    RigidBody* bodyPtr =
+        static_cast<RigidBody*>(dBodyGetData(id));
 
     if (bodyPtr == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (Body) no body found for dBodyID "
+            cerr << "ERROR: (RigidBody) no body found for dBodyID "
                  << id << "\n";
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
-    shared_ptr<Body> body = shared_static_cast<Body>
+    shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
         (bodyPtr->GetSelf().lock());
 
     if (body.get() == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (Body) got no shared_ptr for dBodyID "
+            cerr << "ERROR: (RigidBody) got no shared_ptr for dBodyID "
                  << id << "\n";
         }
 
     return body;
 }
 
-void
-Body::AddForce(const Vector3f& force)
+void RigidBody::AddForce(const Vector3f& force)
 {
     dBodyAddForce(mODEBody, force.x(), force.y(), force.z());
 }
 
-void
-Body::AddTorque(const Vector3f& torque)
+void RigidBody::AddTorque(const Vector3f& torque)
 {
     dBodyAddTorque(mODEBody, torque.x(), torque.y(), torque.z());
 }
 
-void
-Body::SetPosition(const Vector3f& pos)
+void RigidBody::SetPosition(const Vector3f& pos)
 {
     dBodySetPosition(mODEBody, pos.x(), pos.y(), pos.z());
     // the parent node will be updated in the next physics cycle
 }
 
-Vector3f
-Body::GetPosition() const
+Vector3f RigidBody::GetPosition() const
 {
     const dReal* pos = dBodyGetPosition(mODEBody);
     return Vector3f(pos[0], pos[1], pos[2]);
 }
 
-void Body::TranslateMass(const Vector3f& v)
+void RigidBody::TranslateMass(const Vector3f& v)
 {
     dMass m;
     dBodyGetMass(mODEBody, &m);

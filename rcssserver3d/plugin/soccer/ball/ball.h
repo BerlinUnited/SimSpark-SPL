@@ -23,7 +23,7 @@
 #define BALL_H
 
 #include <oxygen/sceneserver/transform.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <salt/vector.h>
 
 class BallStateAspect;
@@ -65,7 +65,7 @@ private:
 
     salt::Vector3f mForce;
     salt::Vector3f mTorque;
-    boost::shared_ptr<oxygen::Body> mBody;
+    boost::shared_ptr<oxygen::RigidBody> mBody;
     boost::shared_ptr<oxygen::AgentAspect> mKickedLast;
     boost::shared_ptr<BallStateAspect> mBallStateAspect;
 };

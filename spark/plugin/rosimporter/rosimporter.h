@@ -36,7 +36,7 @@ namespace oxygen
     class Transform;
     class TransformCollider;
     class ContactJointHandler;
-    class Body;
+    class RigidBody;
     class Transform;
     class Joint;
 }
@@ -93,8 +93,8 @@ public:
     {
     public:
         boost::shared_ptr<oxygen::Joint> joint;
-        boost::shared_ptr<oxygen::Body> body1;
-        boost::shared_ptr<oxygen::Body> body2;
+        boost::shared_ptr<oxygen::RigidBody> body1;
+        boost::shared_ptr<oxygen::RigidBody> body2;
         JointAxis axis1;
         JointAxis axis2;
 
@@ -113,7 +113,7 @@ public:
     {
     public:
         boost::shared_ptr<oxygen::Transform> transform;
-        boost::shared_ptr<oxygen::Body> body;
+        boost::shared_ptr<oxygen::RigidBody> body;
         bool adjustedPos;
         salt::Vector3f massCenter;
         double totalMass;
@@ -143,7 +143,7 @@ public:
     */
     struct RosJointContext
     {
-        boost::shared_ptr<oxygen::Body> body;
+        boost::shared_ptr<oxygen::RigidBody> body;
     };
 
     /** declare a stack of RosContext nodes */
@@ -270,8 +270,8 @@ protected:
     RosJointContext& GetJointContext();
     boost::shared_ptr<oxygen::Transform> GetContextTransform(boost::shared_ptr<oxygen::BaseNode> parent, const Trans& trans);
     boost::shared_ptr<oxygen::Transform> CreateTransform(boost::shared_ptr<oxygen::BaseNode> parent, const Trans& trans);
-    boost::shared_ptr<oxygen::Body> GetContextBody(boost::shared_ptr<oxygen::BaseNode> parent);
-    void SetJointBody(boost::shared_ptr<oxygen::Body> body);
+    boost::shared_ptr<oxygen::RigidBody> GetContextBody(boost::shared_ptr<oxygen::BaseNode> parent);
+    void SetJointBody(boost::shared_ptr<oxygen::RigidBody> body);
 
     virtual bool ParseScene(const char* scene, int size,
                             boost::shared_ptr<oxygen::BaseNode> parent,
@@ -328,8 +328,8 @@ protected:
     bool ReadAnchorPoint(TiXmlElement* element, salt::Vector3f& anchor);
     bool ReadAxis(TiXmlElement* element, RosElements::ERosElement type, JointAxis& axis);
 
-    boost::shared_ptr<oxygen::Body> GetJointParentBody();
-    boost::shared_ptr<oxygen::Body> GetJointChildBody(boost::shared_ptr<oxygen::BaseNode> parent);
+    boost::shared_ptr<oxygen::RigidBody> GetJointParentBody();
+    boost::shared_ptr<oxygen::RigidBody> GetJointChildBody(boost::shared_ptr<oxygen::BaseNode> parent);
 
     bool ReadHinge(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
     bool ReadSlider(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
@@ -348,7 +348,7 @@ protected:
     bool ReadSimpleSphere(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
     bool ReadSimpleCappedCylinder(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
 
-    void Attach(boost::shared_ptr<oxygen::Joint> joint, boost::shared_ptr<oxygen::Body> body1, boost::shared_ptr<oxygen::Body> body2,
+    void Attach(boost::shared_ptr<oxygen::Joint> joint, boost::shared_ptr<oxygen::RigidBody> body1, boost::shared_ptr<oxygen::RigidBody> body2,
                 const JointAxis& axis1, const JointAxis& axis2 = JointAxis());
     void AttachJoint(const JointAttach& ja);
 

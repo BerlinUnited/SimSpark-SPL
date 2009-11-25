@@ -441,7 +441,7 @@ def sparkAddFPSCamera(
 
   # the camera is not affected by gravity but restricted to a maximum
   # speed
-  body = new('oxygen/Body',path+'/physics')
+  body = new('oxygen/RigidBody',path+'/physics')
   body.useGravity(false);
   velCtr = new('oxygen/VelocityController',path+'/physics/velctr')
   velCtr.setMaxVelocity(maxSpeed)

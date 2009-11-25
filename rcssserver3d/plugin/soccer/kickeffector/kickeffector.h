@@ -25,7 +25,7 @@
 #include <salt/random.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/agentaspect/effector.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <ball/ball.h>
 #include <ballstateaspect/ballstateaspect.h>
 
@@ -104,7 +104,7 @@ protected:
     typedef boost::shared_ptr<salt::NormalRNG<> > NormalRngPtr;
 
     /** reference to the body node of the ball */
-    boost::shared_ptr<oxygen::Body> mBallBody;
+    boost::shared_ptr<oxygen::RigidBody> mBallBody;
     /** reference to the body node of the ball */
     boost::shared_ptr<Ball> mBall;
     /** reference to the agent aspect */

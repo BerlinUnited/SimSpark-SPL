@@ -23,7 +23,7 @@
 #include <salt/random.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <soccerbase/soccerbase.h>
@@ -958,7 +958,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     salt::BoundingSphere sphere(pos, mAudioCutDist);
 
     shared_ptr<Transform> transform_parent;
-    shared_ptr<Body> agent_body;
+    shared_ptr<RigidBody> agent_body;
 
     for (
         TAgentStateList::const_iterator it = agent_states.begin();
@@ -1104,7 +1104,7 @@ SoccerRuleAspect::CheckOffside()
     opp_defender_pos   = 0.0;
 
     shared_ptr<Transform> transform_parent;
-    shared_ptr<Body> agent_body;
+    shared_ptr<RigidBody> agent_body;
 
     list<shared_ptr<AgentState> >::const_iterator it;
     for (it = opp_agent_states.begin(); it != opp_agent_states.end(); it++)

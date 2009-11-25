@@ -16,6 +16,7 @@ set(oxygen_LIB_HDRS
     oxygen_defines.h
     physicsserver/physicsobject.h
     physicsserver/body.h
+    physicsserver/rigidbody.h
     physicsserver/bodycontroller.h
     physicsserver/boxcollider.h
     physicsserver/ccylindercollider.h
@@ -109,8 +110,9 @@ set(oxygen_LIB_SRCS
     oxygen.cpp
     physicsserver/physicsobject.cpp
     physicsserver/physicsobject_c.cpp
-    physicsserver/body.cpp
     physicsserver/body_c.cpp
+    physicsserver/rigidbody.cpp
+    physicsserver/rigidbody_c.cpp
     physicsserver/bodycontroller.cpp
     physicsserver/bodycontroller_c.cpp
     physicsserver/transformcollider.cpp

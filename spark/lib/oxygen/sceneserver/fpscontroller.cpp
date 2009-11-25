@@ -18,8 +18,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "fpscontroller.h"
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/sceneserver/fpscontroller.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;

@@ -18,8 +18,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <zeitgeist/logserver/logserver.h>
-#include "joint.h"
-#include "body.h"
+#include <oxygen/physicsserver/joint.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -78,7 +78,7 @@ shared_ptr<Joint> Joint::GetJoint(dJointID id)
     return joint;
 }
 
-void Joint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
+void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
 {
     if (mODEJoint == 0)
         {
@@ -118,11 +118,11 @@ void Joint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
     dJointAttach(mODEJoint, id1, id2);
 }
 
-shared_ptr<Body> Joint::GetBody(const std::string& path)
+shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
 {
     if (path.empty())
         {
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
     shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
@@ -135,10 +135,10 @@ shared_ptr<Body> Joint::GetBody(const std::string& path)
             GetLog()->Error()
                 << "(Joint) ERROR: cannot find node '"
                 << path << "'\n";
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
-    shared_ptr<Body> body = shared_dynamic_cast<Body>(leaf);
+    shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(leaf);
 
     if (body.get() == 0)
         {
@@ -152,8 +152,8 @@ shared_ptr<Body> Joint::GetBody(const std::string& path)
 
 void Joint::Attach(const std::string& path1, const std::string& path2)
 {
-    shared_ptr<Body> body1 = GetBody(path1);
-    shared_ptr<Body> body2 = GetBody(path2);
+    shared_ptr<RigidBody> body1 = GetBody(path1);
+    shared_ptr<RigidBody> body2 = GetBody(path2);
 
     Attach(body1,body2);
 }
@@ -163,12 +163,12 @@ int Joint::GetType() const
     return dJointGetType(mODEJoint);
 }
 
-boost::shared_ptr<Body> Joint::GetBody(EBodyIndex idx)
+boost::shared_ptr<RigidBody> Joint::GetBody(EBodyIndex idx)
 {
-    return Body::GetBody(dJointGetBody(mODEJoint, idx));
+    return RigidBody::GetBody(dJointGetBody(mODEJoint, idx));
 }
 
-bool Joint::AreConnected (shared_ptr<Body> body1, shared_ptr<Body> body2)
+bool Joint::AreConnected (shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
 {
     if (
         (body1.get() == 0) ||
@@ -185,8 +185,8 @@ bool Joint::AreConnected (shared_ptr<Body> body1, shared_ptr<Body> body2)
     return connected;
 }
 
-bool Joint::AreConnectedExcluding (shared_ptr<Body> body1,
-                                   shared_ptr<Body> body2,
+bool Joint::AreConnectedExcluding (shared_ptr<RigidBody> body1,
+                                   shared_ptr<RigidBody> body2,
                                    int joint_type)
 {
     if (

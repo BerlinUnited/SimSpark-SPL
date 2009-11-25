@@ -30,7 +30,7 @@
 namespace oxygen
 {
 class Transform;
-class Body;
+class RigidBody;
 class Collider;
 
 class OXYGEN_API SpaceInt : public PhysicsObject

@@ -19,7 +19,7 @@
 */
 #include "hingeeffector.h"
 #include "hingeaction.h"
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -68,7 +68,7 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     if (hingeAction->GetMotorVelocity() != 0)
         {
-            shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
+            shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
                 {
                     body->Enable();

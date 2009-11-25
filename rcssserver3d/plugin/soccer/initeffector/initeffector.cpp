@@ -24,7 +24,7 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/gamecontrolserver/predicate.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/space.h>
 #include <soccerbase/soccerbase.h>
 #include <agentstate/agentstate.h>

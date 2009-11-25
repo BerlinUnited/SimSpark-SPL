@@ -27,7 +27,7 @@
 
 namespace oxygen
 {
-class Body;
+class RigidBody;
 
 /** \class Joint encapsulates an ODE joint object. A joint is a
     relationship (a constraint) that is enforced between two bodies so
@@ -76,8 +76,8 @@ public:
         both bodies to zero puts the joint into "limbo", i.e. it will
         have no effect on the simulation.
     */
-    virtual void Attach(boost::shared_ptr<Body> body1,
-                        boost::shared_ptr<Body> body2);
+    virtual void Attach(boost::shared_ptr<RigidBody> body1,
+                        boost::shared_ptr<RigidBody> body2);
 
     /** attaches the joint to some new bodies, that are given as path
         expressions. These path expressions are allowed to be relative
@@ -88,7 +88,7 @@ public:
     /** returns one of the bodies that this joint connects, according
         to the given EBodyIndex
     */
-    boost::shared_ptr<Body> GetBody(EBodyIndex idx);
+    boost::shared_ptr<RigidBody> GetBody(EBodyIndex idx);
 
     /** returns the Joint node corresponding to the given ODE joint */
     static boost::shared_ptr<Joint> GetJoint(dJointID id);
@@ -102,15 +102,15 @@ public:
 
     /** returns true if the two given bodies are connected by a
         joint */
-    static bool AreConnected (boost::shared_ptr<Body> body1,
-                              boost::shared_ptr<Body> body2);
+    static bool AreConnected (boost::shared_ptr<RigidBody> body1,
+                              boost::shared_ptr<RigidBody> body2);
 
     /** returns true if the two given bodies are connected together by
         a joint that does not have the given joint type. For possible
         joint type constants see GetType()
      */
-    static bool AreConnectedExcluding (boost::shared_ptr<Body> body1,
-                                       boost::shared_ptr<Body> body2,
+    static bool AreConnectedExcluding (boost::shared_ptr<RigidBody> body1,
+                                       boost::shared_ptr<RigidBody> body2,
                                        int joint_type);
 
     /** during the world time step, the forces that are applied by
@@ -280,7 +280,7 @@ protected:
     virtual void OnLink();
 
     /** get the node at 'path' and tries a cast to Body */
-    boost::shared_ptr<Body> GetBody(const std::string& path);
+    boost::shared_ptr<RigidBody> GetBody(const std::string& path);
 
 protected:
     /** the managed ODE joint */

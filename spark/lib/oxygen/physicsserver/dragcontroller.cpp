@@ -17,8 +17,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "dragcontroller.h"
-#include "body.h"
+#include <oxygen/physicsserver/dragcontroller.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 using namespace oxygen;
 using namespace salt;

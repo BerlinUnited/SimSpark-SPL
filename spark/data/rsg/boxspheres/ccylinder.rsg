@@ -9,7 +9,7 @@
        (setMaterial $material)
        )
        
- (nd Body
+ (nd RigidBody
        (setName ccylinderBody)
        ;(setCappedCylinderTotal $totalMass $radius $length)
        (setCappedCylinder $totalMass $radius $length)

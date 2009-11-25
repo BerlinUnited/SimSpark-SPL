@@ -25,7 +25,7 @@
 
 namespace oxygen
 {
-class Body;
+class RigidBody;
 
 class OXYGEN_API Hinge2Joint : public Joint
 {

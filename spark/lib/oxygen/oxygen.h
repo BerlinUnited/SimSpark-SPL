@@ -37,6 +37,7 @@
 //abstract physics classes
 #include <oxygen/physicsserver/physicsobject.h>
 #include "physicsserver/body.h"
+#include "physicsserver/rigidbody.h"
 #include "physicsserver/bodycontroller.h"
 #include "physicsserver/dragcontroller.h"
 #include "physicsserver/velocitycontroller.h"
