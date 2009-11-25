@@ -24,7 +24,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-SliderJoint::SliderJoint() : Joint()
+SliderJoint::SliderJoint() : Generic6DOFJoint()
 {
 }
 

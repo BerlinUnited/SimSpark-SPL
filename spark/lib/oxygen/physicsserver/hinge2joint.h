@@ -21,13 +21,12 @@
 #define OXYGEN_HINGE2JOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
-class RigidBody;
 
-class OXYGEN_API Hinge2Joint : public Joint
+class OXYGEN_API Hinge2Joint : public Generic6DOFJoint
 {
 public:
     Hinge2Joint();

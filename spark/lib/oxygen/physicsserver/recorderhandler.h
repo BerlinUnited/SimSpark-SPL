@@ -22,10 +22,10 @@
 #ifndef OXYGEN_RECORDERHANDLER_H
 #define OXYGEN_COLLISIONRECORDER_H
 
-#include "collisionhandler.h"
-#include "collider.h"
-#include <set>
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/collisionhandler.h>
+#include <oxygen/physicsserver/collider.h>
+#include <set>
 
 namespace oxygen
 {

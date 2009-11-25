@@ -20,12 +20,12 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "boxcollider.h"
+#include <oxygen/physicsserver/boxcollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
-BoxCollider::BoxCollider() : Collider()
+BoxCollider::BoxCollider() : ConvexCollider()
 {
 }
 

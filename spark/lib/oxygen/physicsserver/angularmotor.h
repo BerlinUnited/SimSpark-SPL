@@ -25,7 +25,6 @@
 
 namespace oxygen
 {
-class RigidBody;
 
 /** An angular motor allows the relative angular velocities of two
     bodies to be controlled. The angular velocity can be controlled on

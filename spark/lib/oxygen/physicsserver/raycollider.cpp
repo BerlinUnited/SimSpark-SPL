@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "raycollider.h"
+#include <oxygen/physicsserver/raycollider.h>
 
 using namespace oxygen;
 

@@ -23,7 +23,7 @@
 #define OXYGEN_CONTACTJOINTHANDLER_H
 
 #include <oxygen/oxygen_defines.h>
-#include "collisionhandler.h"
+#include <oxygen/physicsserver/collisionhandler.h>
 
 namespace oxygen
 {
@@ -152,6 +152,5 @@ protected:
 DECLARE_CLASS(ContactJointHandler);
 
 } //namespace oxygen
-
 
 #endif // OXYGEN_CONTACTJOINTHANDLER_H

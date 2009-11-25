@@ -19,12 +19,12 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "spherecollider.h"
+#include <oxygen/physicsserver/spherecollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
-SphereCollider::SphereCollider() : Collider()
+SphereCollider::SphereCollider() : ConvexCollider()
 {
 }
 

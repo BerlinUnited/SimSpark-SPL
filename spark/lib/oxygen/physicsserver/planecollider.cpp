@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "planecollider.h"
+#include <oxygen/physicsserver/planecollider.h>
 
 using namespace oxygen;
 using namespace salt;

@@ -23,14 +23,14 @@
 #define OXYGEN_BOXCOLLIDER_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/convexcollider.h>
 
 namespace oxygen
 {
 
 /** BoxCollider encapsulates an ODE box geometry object.
  */
-class OXYGEN_API BoxCollider : public Collider
+class OXYGEN_API BoxCollider : public ConvexCollider
 {
     //
     // Functions

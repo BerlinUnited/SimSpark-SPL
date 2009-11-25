@@ -17,12 +17,21 @@ set(oxygen_LIB_HDRS
     physicsserver/physicsobject.h
     physicsserver/body.h
     physicsserver/rigidbody.h
+    physicsserver/staticbody.h
+    physicsserver/dynamicbody.h
+    physicsserver/softbody.h
     physicsserver/bodycontroller.h
     physicsserver/boxcollider.h
     physicsserver/ccylindercollider.h
+    physicsserver/cylindercollider.h
     physicsserver/collider.h
+    physicsserver/compoundcollider.h
+    physicsserver/concavecollider.h
+    physicsserver/conecollider.h
+    physicsserver/convexcollider.h
     physicsserver/collisionhandler.h
     physicsserver/contactjointhandler.h
+    physicsserver/emptycollider.h
     physicsserver/physicsserver.h
     physicsserver/planecollider.h
     physicsserver/raycollider.h
@@ -34,7 +43,9 @@ set(oxygen_LIB_HDRS
     physicsserver/dragcontroller.h
     physicsserver/velocitycontroller.h
     physicsserver/joint.h
+    physicsserver/generic6dofjoint.h
     physicsserver/balljoint.h
+    physicsserver/conetwistjoint.h
     physicsserver/hingejoint.h
     physicsserver/fixedjoint.h
     physicsserver/sliderjoint.h
@@ -113,6 +124,9 @@ set(oxygen_LIB_SRCS
     physicsserver/body_c.cpp
     physicsserver/rigidbody.cpp
     physicsserver/rigidbody_c.cpp
+    physicsserver/staticbody_c.cpp
+    physicsserver/dynamicbody_c.cpp
+    physicsserver/softbody_c.cpp
     physicsserver/bodycontroller.cpp
     physicsserver/bodycontroller_c.cpp
     physicsserver/transformcollider.cpp
@@ -121,12 +135,18 @@ set(oxygen_LIB_SRCS
     physicsserver/boxcollider_c.cpp
     physicsserver/ccylindercollider.cpp
     physicsserver/ccylindercollider_c.cpp
+    physicsserver/cylindercollider_c.cpp
     physicsserver/collider.cpp
     physicsserver/collider_c.cpp
+    physicsserver/compoundcollider_c.cpp
+    physicsserver/concavecollider_c.cpp
+    physicsserver/conecollider_c.cpp
+    physicsserver/convexcollider_c.cpp
     physicsserver/collisionhandler.cpp
     physicsserver/collisionhandler_c.cpp
     physicsserver/contactjointhandler.cpp
     physicsserver/contactjointhandler_c.cpp
+    physicsserver/emptycollider_c.cpp
     physicsserver/physicsserver.cpp
     physicsserver/physicsserver_c.cpp
     physicsserver/planecollider.cpp
@@ -147,8 +167,10 @@ set(oxygen_LIB_SRCS
     physicsserver/velocitycontroller_c.cpp
     physicsserver/joint.cpp
     physicsserver/joint_c.cpp
+    physicsserver/generic6dofjoint_c.cpp
     physicsserver/balljoint.cpp
     physicsserver/balljoint_c.cpp
+    physicsserver/conetwistjoint_c.cpp
     physicsserver/hingejoint.cpp
     physicsserver/hingejoint_c.cpp
     physicsserver/fixedjoint.cpp

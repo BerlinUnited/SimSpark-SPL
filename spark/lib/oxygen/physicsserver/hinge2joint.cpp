@@ -17,14 +17,14 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "hinge2joint.h"
+#include <oxygen/physicsserver/hinge2joint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-Hinge2Joint::Hinge2Joint() : Joint()
+Hinge2Joint::Hinge2Joint() : Generic6DOFJoint()
 {
 }
 

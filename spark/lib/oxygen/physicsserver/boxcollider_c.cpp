@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "boxcollider.h"
+#include <oxygen/physicsserver/boxcollider.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -73,7 +73,7 @@ FUNCTION(BoxCollider,getPointDepth)
 
 void CLASS(BoxCollider)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/Collider);
+    DEFINE_BASECLASS(oxygen/ConvexCollider);
     DEFINE_FUNCTION(setBoxLengths);
     DEFINE_FUNCTION(getBoxLength);
     DEFINE_FUNCTION(getPointDepth);

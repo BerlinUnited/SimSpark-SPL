@@ -23,14 +23,14 @@
 #define OXYGEN_SPHERECOLLIDER_H
 
 #include <oxygen/oxygen_defines.h>
-#include "collider.h"
+#include <oxygen/physicsserver/convexcollider.h>
 
 namespace oxygen
 {
 
 /** SphereCollider encapsulates an ODE sphere geometry object.
  */
-class OXYGEN_API SphereCollider : public Collider
+class OXYGEN_API SphereCollider : public ConvexCollider
 {
     //
     // Functions

@@ -20,7 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "transformcollider.h"
+#include <oxygen/physicsserver/transformcollider.h>
 
 using namespace oxygen;
 using namespace salt;

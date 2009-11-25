@@ -21,13 +21,12 @@
 #define OXYGEN_BALLJOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
-class RigidBody;
 
-class OXYGEN_API BallJoint : public Joint
+class OXYGEN_API BallJoint : public Generic6DOFJoint
 {
 public:
     BallJoint();
