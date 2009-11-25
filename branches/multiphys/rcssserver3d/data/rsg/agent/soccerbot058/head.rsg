@@ -9,7 +9,7 @@
      (setName head)
      (setLocalPos $HeadPosX $HeadPosY $HeadPosZ)
 
-     (nd Body
+     (nd RigidBody
 	 (setName sphereBody)
 	 (setSphereTotal $headMass $headRadius
 			 $HeadPosX $HeadPosY $HeadPosZ

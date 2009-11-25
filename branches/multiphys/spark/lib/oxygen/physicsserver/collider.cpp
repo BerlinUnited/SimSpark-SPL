@@ -20,7 +20,7 @@
 */
 #include "collider.h"
 #include "space.h"
-#include "body.h"
+#include "rigidbody.h"
 #include <zeitgeist/leaf.h>
 #include "collisionhandler.h"
 #include <oxygen/sceneserver/scene.h>
@@ -78,8 +78,8 @@ void Collider::OnLink()
             dSpaceAdd(space, mODEGeom);
         }
     // if there is a Body below our parent, link to it
-    shared_ptr<Body> body = shared_static_cast<Body>
-        (parent.lock()->GetChildOfClass("Body"));
+    shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
+        (parent.lock()->GetChildOfClass("RigidBody"));
 
     if (body.get() != 0)
         {

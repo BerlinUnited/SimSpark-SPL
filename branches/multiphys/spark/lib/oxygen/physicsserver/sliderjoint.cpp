@@ -17,7 +17,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "sliderjoint.h"
+#include <oxygen/physicsserver/sliderjoint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -43,7 +43,7 @@ void SliderJoint::OnLink()
     mODEJoint = dJointCreateSlider(world, 0);
 }
 
-void SliderJoint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
+void SliderJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
 {
     Joint::Attach(body1,body2);
 

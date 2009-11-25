@@ -14,7 +14,7 @@
  (def $HeadPosY 0.05)
  (def $HeadPosZ (eval (eval (eval 0.5 * $upperLenZ) + 0.1) + (eval $headRadius / 2.0)))
 
- (nd Body
+ (nd RigidBody
        (setName boxBody)
        ; Upper torso mass
        (setBox $upperMass $upperLenX $upperLenY $upperLenZ)

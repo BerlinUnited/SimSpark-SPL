@@ -4,7 +4,7 @@
 (
     (templ $lenX $lenY $lenZ $totalMass)
 
-    (nd Body
+    (nd RigidBody
         (setName boxBody)
         (setBoxTotal $totalMass $lenX $lenY $lenZ)
 

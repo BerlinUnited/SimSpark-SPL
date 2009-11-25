@@ -30,7 +30,7 @@
 #include <oxygen/physicsserver/spherecollider.h>
 #include <oxygen/physicsserver/ccylindercollider.h>
 #include <oxygen/physicsserver/contactjointhandler.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/hingejoint.h>
 #include <oxygen/physicsserver/sliderjoint.h>
 #include <oxygen/physicsserver/universaljoint.h>
@@ -335,7 +335,7 @@ shared_ptr<Transform> RosImporter::GetContextTransform(shared_ptr<BaseNode> pare
     return context.transform;
 }
 
-void RosImporter::SetJointBody(shared_ptr<Body> body)
+void RosImporter::SetJointBody(shared_ptr<RigidBody> body)
 {
     if (mJointStack.empty())
         {
@@ -349,7 +349,7 @@ void RosImporter::SetJointBody(shared_ptr<Body> body)
         }
 }
 
-shared_ptr<Body> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
+shared_ptr<RigidBody> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
 {
     RosContext& context = GetContext();
     if (
@@ -357,7 +357,7 @@ shared_ptr<Body> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
         (parent.get() == 0)
         )
         {
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
     if (context.body.get() != 0)
@@ -368,11 +368,11 @@ shared_ptr<Body> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
     if (context.transform.get() == 0)
         {
             assert(false);
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
-    context.body = shared_dynamic_cast<Body>
-        (GetCore()->New("/oxygen/Body"));
+    context.body = shared_dynamic_cast<RigidBody>
+        (GetCore()->New("/oxygen/RigidBody"));
 
 
     SetJointBody(context.body);
@@ -1032,7 +1032,7 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
     ccylinder->SetMaterial(appear.ref);
 
     // physical
-    shared_ptr<Body> body = GetContextBody(transform);
+    shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1092,7 +1092,7 @@ bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
     sphere->SetRadius(radius);
     sphere->SetMaterial(appear.ref);
 
-    shared_ptr<Body> body = GetContextBody(transform);
+    shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1156,7 +1156,7 @@ bool RosImporter::ReadBox(shared_ptr<BaseNode> parent, TiXmlElement* element)
     box->SetExtents(boxDim);
     box->SetMaterial(appear.ref);
 
-    shared_ptr<Body> body = GetContextBody(transform);
+    shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1235,13 +1235,13 @@ bool RosImporter::ReadAxis(TiXmlElement* element, RosElements::ERosElement type,
     return true;
 }
 
-shared_ptr<Body> RosImporter::GetJointParentBody()
+shared_ptr<RigidBody> RosImporter::GetJointParentBody()
 {
     if (mStack.size() < 2)
         {
             GetLog()->Debug() << "RosImporter::GetJointParentBody cannot get joint parent body with stack size of "
                               << mStack.size() << "\n";
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
     TRosStack::reverse_iterator iter = mStack.rbegin();
@@ -1253,7 +1253,7 @@ shared_ptr<Body> RosImporter::GetJointParentBody()
          )
         {
             RosContext& context = (*iter);
-            shared_ptr<Body> body = context.body;
+            shared_ptr<RigidBody> body = context.body;
 
             if (body.get() != 0)
                 {
@@ -1264,19 +1264,19 @@ shared_ptr<Body> RosImporter::GetJointParentBody()
 
 
     GetLog()->Debug() << "RosImporter::GetJointParentBody not found\n";
-    return shared_ptr<Body>();
+    return shared_ptr<RigidBody>();
 }
 
-shared_ptr<Body> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent)
+shared_ptr<RigidBody> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent)
 {
     if (parent.get() == 0)
         {
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
     for (Leaf::TLeafList::iterator iter = parent->begin();iter != parent->end();++iter)
         {
-            shared_ptr<Body> body = shared_dynamic_cast<Body>(*iter);
+            shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(*iter);
             if (body.get() == 0)
                 {
                     continue;
@@ -1294,14 +1294,14 @@ shared_ptr<Body> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent)
                     continue;
                 }
 
-            shared_ptr<Body> body = GetJointChildBody(node);
+            shared_ptr<RigidBody> body = GetJointChildBody(node);
             if (body.get() != 0)
                 {
                     return body;
                 }
         }
 
-    return shared_ptr<Body>();
+    return shared_ptr<RigidBody>();
 }
 
 bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* element)
@@ -1340,8 +1340,8 @@ bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* eleme
             return false;
         }
 
-    shared_ptr<Body> body1 = GetJointParentBody();
-    shared_ptr<Body> body2 = GetJointContext().body;
+    shared_ptr<RigidBody> body1 = GetJointParentBody();
+    shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) ||
@@ -1392,8 +1392,8 @@ bool RosImporter::ReadHinge(shared_ptr<BaseNode> parent, TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<Body> body1 = GetJointParentBody();
-    shared_ptr<Body> body2 = GetJointContext().body;
+    shared_ptr<RigidBody> body1 = GetJointParentBody();
+    shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) ||
@@ -1439,8 +1439,8 @@ bool RosImporter::ReadSlider(shared_ptr<BaseNode> parent, TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<Body> body1 = GetJointParentBody();
-    shared_ptr<Body> body2 = GetJointContext().body;
+    shared_ptr<RigidBody> body1 = GetJointParentBody();
+    shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) &&
@@ -1910,7 +1910,7 @@ bool RosImporter::ReadSimpleBox(shared_ptr<oxygen::BaseNode> parent, TiXmlElemen
     shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
     Vector3f boxDim = Vector3f(length, width, height);
 
-    shared_ptr<Body> body = GetContextBody(contextTransform);
+    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddBoxTotal(physical.mass, boxDim, trans.matrix);
@@ -1960,7 +1960,7 @@ bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlEle
     // transform
     shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
 
-    shared_ptr<Body> body = GetContextBody(contextTransform);
+    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddSphereTotal(physical.mass, radius, trans.matrix);
@@ -2011,7 +2011,7 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
     // transform
     shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
 
-    shared_ptr<Body> body = GetContextBody(contextTransform);
+    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddCappedCylinderTotal(physical.mass, radius, height, trans.matrix);
@@ -2041,7 +2041,7 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
     return true;
 }
 
-void RosImporter::Attach(shared_ptr<Joint> joint, shared_ptr<Body> body1, shared_ptr<Body> body2,
+void RosImporter::Attach(shared_ptr<Joint> joint, shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2,
                          const JointAxis& axis1, const JointAxis& axis2)
 {
     if (joint.get() == 0)

@@ -27,7 +27,7 @@
 
 namespace oxygen
 {
-class Body;
+class RigidBody;
 
 /** \class BodyController is a baseclass for nodes that control the
     motion of an associated body.
@@ -50,7 +50,7 @@ protected:
 
 protected:
     /** the reference to the controlled body */
-    boost::shared_ptr<Body> mBody;
+    boost::shared_ptr<RigidBody> mBody;
 };
 
 DECLARE_CLASS(BodyController);

@@ -27,7 +27,7 @@
 
 namespace oxygen
 {
-    class Body;
+    class RigidBody;
 }
 
 class AgentState : public ObjectState

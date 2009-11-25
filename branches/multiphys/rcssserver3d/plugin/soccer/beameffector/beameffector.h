@@ -23,7 +23,7 @@
 #define BEAMEFFECTOR_H
 
 #include <oxygen/agentaspect/effector.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <gamestateaspect/gamestateaspect.h>
 
 class BeamEffector : public oxygen::Effector
@@ -51,7 +51,7 @@ protected:
 
 protected:
     /** the reference to the parents body node */
-    boost::shared_ptr<oxygen::Body> mBody;
+    boost::shared_ptr<oxygen::RigidBody> mBody;
 
     /** the reference to the GameState */
     boost::shared_ptr<GameStateAspect> mGameState;

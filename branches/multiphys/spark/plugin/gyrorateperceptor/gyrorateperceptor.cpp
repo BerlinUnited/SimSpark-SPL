@@ -45,8 +45,8 @@ GyroRatePerceptor::OnLink()
     shared_ptr<Transform> transformParent = shared_static_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());
 
-    mBody = shared_static_cast<Body>
-        (transformParent->GetChildOfClass("Body"));     
+    mBody = shared_static_cast<RigidBody>
+        (transformParent->GetChildOfClass("RigidBody"));     
 }
 
 void 

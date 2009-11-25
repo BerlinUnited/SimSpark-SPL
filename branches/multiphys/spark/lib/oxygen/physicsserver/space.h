@@ -29,7 +29,7 @@
 namespace oxygen
 {
 class Transform;
-class Body;
+class RigidBody;
 class Collider;
 class SpaceInt;
 

@@ -4,7 +4,7 @@
 (
     (templ $radius $length $totalMass)
 
-    (nd Body
+    (nd RigidBody
         (setName ccylinderBody)
         (setCappedCylinderTotal $totalMass $radius)
 

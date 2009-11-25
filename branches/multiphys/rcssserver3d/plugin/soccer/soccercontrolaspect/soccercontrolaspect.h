@@ -32,7 +32,7 @@ class Ball;
 namespace oxygen
 {
     class RecorderHandler;
-    class Body;
+    class RigidBody;
 }
 
 /** \class SoccerControlAspect is the base class for all

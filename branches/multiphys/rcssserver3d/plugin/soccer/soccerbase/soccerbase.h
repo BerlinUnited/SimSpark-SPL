@@ -40,7 +40,7 @@ namespace oxygen
     class Scene;
     class Transform;
     class Perceptor;
-    class Body;
+    class RigidBody;
     class SphereCollider;
     class ControlAspect;
     class AgentAspect;
@@ -84,19 +84,19 @@ public:
     /** returns a reference to the Body node below the closest
         transform parent */
     static bool
-    GetBody(const zeitgeist::Leaf& base, boost::shared_ptr<oxygen::Body>& body);
+    GetBody(const zeitgeist::Leaf& base, boost::shared_ptr<oxygen::RigidBody>& body);
 
     /** returns a reference to the Body node below the given Transform
         node */
     static bool
     GetAgentBody(const boost::shared_ptr<oxygen::Transform> transform,
-                 boost::shared_ptr<oxygen::Body>& agent_body);
+                 boost::shared_ptr<oxygen::RigidBody>& agent_body);
 
     /** returns a reference to the Body node below the given Transform
         node based on parameters team index and uniform number */
     static bool
     GetAgentBody(const zeitgeist::Leaf& base, TTeamIndex idx,
-                 int unum, boost::shared_ptr<oxygen::Body>& agent_body);
+                 int unum, boost::shared_ptr<oxygen::RigidBody>& agent_body);
 
     /** returns a reference to the AgentState node below the closest
         Transform parent */
@@ -148,7 +148,7 @@ public:
     /** returns a reference to the Body node below the Ball */
     static bool
     GetBallBody(const zeitgeist::Leaf& base,
-                boost::shared_ptr<oxygen::Body>& body);
+                boost::shared_ptr<oxygen::RigidBody>& body);
 
     /** returns a reference to the Body SphereCollider node below the Ball */
     static bool

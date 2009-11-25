@@ -55,6 +55,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServer), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(PhysicsObject), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Body), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(RigidBody), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BodyController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(DragController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(VelocityController), "oxygen/");
