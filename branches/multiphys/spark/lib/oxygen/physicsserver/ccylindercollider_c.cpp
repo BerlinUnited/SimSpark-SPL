@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "ccylindercollider.h"
+#include <oxygen/physicsserver/ccylindercollider.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -102,7 +102,7 @@ FUNCTION(CCylinderCollider,getPointDepth)
 
 void CLASS(CCylinderCollider)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/Collider);
+    DEFINE_BASECLASS(oxygen/ConvexCollider);
     DEFINE_FUNCTION(setParams);
     DEFINE_FUNCTION(setRadius);
     DEFINE_FUNCTION(setLength);

@@ -17,7 +17,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "angularmotor.h"
+#include <oxygen/physicsserver/angularmotor.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;

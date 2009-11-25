@@ -23,14 +23,12 @@
 #define OXYGEN_COLLIDER_H
 
 #include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/oxygen_defines.h>
 #include <string>
 #include <set>
-#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
-class Space;
-class World;
 
 /** \class Collider encapsulates an ODE geometry object- geom for
     short. Geoms are the fundamental objects in the collision

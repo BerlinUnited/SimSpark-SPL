@@ -19,12 +19,12 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "collisionhandler.h"
-#include "world.h"
-#include "space.h"
-#include "collider.h"
-#include <zeitgeist/logserver/logserver.h>
+#include <oxygen/physicsserver/collisionhandler.h>
+#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/world.h>
+#include <oxygen/physicsserver/space.h>
 #include <oxygen/sceneserver/scene.h>
+#include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;

@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "sliderjoint.h"
+#include <oxygen/physicsserver/sliderjoint.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -37,7 +37,7 @@ FUNCTION(SliderJoint,getPositionRate)
 
 void CLASS(SliderJoint)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/Joint);
+    DEFINE_BASECLASS(oxygen/Generic6DOFJoint);
     DEFINE_FUNCTION(getPosition);
     DEFINE_FUNCTION(getPositionRate);
 }

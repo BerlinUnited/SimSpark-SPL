@@ -21,7 +21,7 @@
 #define OXYGEN_FIXEDJOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
@@ -29,7 +29,7 @@ namespace oxygen
     orientation between two bodies, or between a body and the static
     environment.
 */
-class OXYGEN_API FixedJoint : public Joint
+class OXYGEN_API FixedJoint : public Generic6DOFJoint
 {
 public:
     FixedJoint();

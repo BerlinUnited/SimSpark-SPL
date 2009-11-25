@@ -19,11 +19,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "contactjointhandler.h"
-#include "collider.h"
-#include "world.h"
-#include "space.h"
-
+#include <oxygen/physicsserver/contactjointhandler.h>
+#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/space.h>
+#include <oxygen/physicsserver/world.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;

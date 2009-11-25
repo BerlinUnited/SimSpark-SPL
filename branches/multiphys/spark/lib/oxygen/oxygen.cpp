@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "oxygen.h"
+#include <oxygen/oxygen.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -56,13 +56,18 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(PhysicsObject), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Body), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(RigidBody), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(StaticBody), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(DynamicBody), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(SoftBody), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BodyController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(DragController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(VelocityController), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Space), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(World), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Joint), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Generic6DOFJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BallJoint), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ConeTwistJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(HingeJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(FixedJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(SliderJoint), "oxygen/");
@@ -71,9 +76,15 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
 
     // collider
     zg.GetCore()->RegisterClassObject(new CLASS(Collider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(CompoundCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ConcaveCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ConeCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(ConvexCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(EmptyCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(TransformCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BoxCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(CCylinderCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(CylinderCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(PlaneCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(RayCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(SphereCollider), "oxygen/");

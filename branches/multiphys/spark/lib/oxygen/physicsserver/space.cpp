@@ -73,8 +73,10 @@ void Space::Collide(dSpaceID space)
 
 void Space::HandleSpaceCollide(dGeomID obj1, dGeomID obj2)
 {
-    // collide all geoms internal to the space(s)
+   // collide all geoms internal to the space(s)
     dSpaceCollide2 (obj1,obj2,this,&collisionNearCallback);
+    
+    //mSpaceImp->HandleSpaceCollide(obj1, obj2);
 
     if (dGeomIsSpace (obj1))
         {
@@ -89,6 +91,8 @@ void Space::HandleSpaceCollide(dGeomID obj1, dGeomID obj2)
 
 void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 {
+    //mSpaceImp->HandleCollide(obj1, obj2);
+  
     if (
         (dGeomIsSpace (obj1)) ||
         (dGeomIsSpace (obj2))

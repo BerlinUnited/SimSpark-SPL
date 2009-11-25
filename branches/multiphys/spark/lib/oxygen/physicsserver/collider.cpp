@@ -18,14 +18,14 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "collider.h"
-#include "space.h"
-#include "rigidbody.h"
-#include <zeitgeist/leaf.h>
-#include "collisionhandler.h"
+#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/collisionhandler.h>
+#include <oxygen/physicsserver/space.h>
+#include <oxygen/physicsserver/transformcollider.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/sceneserver/scene.h>
+#include <zeitgeist/leaf.h>
 #include <zeitgeist/logserver/logserver.h>
-#include "transformcollider.h"
 
 using namespace oxygen;
 using namespace salt;

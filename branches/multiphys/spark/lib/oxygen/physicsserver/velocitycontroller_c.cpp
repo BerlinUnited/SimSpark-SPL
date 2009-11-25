@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "velocitycontroller.h"
+#include <oxygen/physicsserver/velocitycontroller.h>
 
 using namespace oxygen;
 

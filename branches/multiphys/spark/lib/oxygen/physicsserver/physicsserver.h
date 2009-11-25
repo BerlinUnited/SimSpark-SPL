@@ -29,8 +29,6 @@
 
 namespace oxygen
 {
-class RigidBody;
-class Collider;
 
 class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
 {

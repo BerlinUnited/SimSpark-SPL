@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "dragcontroller.h"
+#include <oxygen/physicsserver/dragcontroller.h>
 
 using namespace oxygen;
 

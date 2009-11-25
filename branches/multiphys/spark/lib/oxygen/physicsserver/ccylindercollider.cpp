@@ -19,12 +19,12 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "ccylindercollider.h"
+#include <oxygen/physicsserver/ccylindercollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
-CCylinderCollider::CCylinderCollider() : Collider()
+CCylinderCollider::CCylinderCollider() : ConvexCollider()
 {
 }
 
