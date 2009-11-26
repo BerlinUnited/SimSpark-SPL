@@ -102,7 +102,7 @@ bool World::ConstructInternal()
   return mWorldImp->ConstructInternal();
 }
 
-void World::DestroyODEObject()
+void World::DestroyPhysicsObject()
 {
-  mWorldImp->DestroyODEObject();
+  mWorldImp->DestroyPhysicsObject();
 }

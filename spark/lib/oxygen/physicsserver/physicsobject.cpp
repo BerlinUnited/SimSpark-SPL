@@ -19,9 +19,11 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
 #include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
+#include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
 
@@ -30,6 +32,7 @@ using namespace boost;
 
 PhysicsObject::PhysicsObject() : BaseNode()
 {
+    mPhysicsObjectImp = shared_ptr<ODEPhysicsObject>(new ODEPhysicsObject());
 }
 
 PhysicsObject::~PhysicsObject()
@@ -38,7 +41,7 @@ PhysicsObject::~PhysicsObject()
 
 void PhysicsObject::OnUnlink()
 {
-    DestroyPhysicsObject();
+    mPhysicsObjectImp->DestroyPhysicsObject();
 }
 
 /** returns the world node */
@@ -90,7 +93,11 @@ shared_ptr<Space> PhysicsObject::GetSpace()
 
 dWorldID PhysicsObject::GetWorldID()
 {
+    mPhysicsObjectImp->world = GetWorld();
+    
     shared_ptr<World> world = GetWorld();
+    
+    //mPhysicsObjectImp->GetWorld();
     if (world.get() == 0)
         {
             return 0;
@@ -108,60 +115,22 @@ dWorldID PhysicsObject::GetWorldID()
 
 dSpaceID PhysicsObject::FindSpaceID()
 {
-    shared_ptr<Space> space = GetSpace();
-    if (space.get() == 0)
-        {
-            return 0;
-        }
-
-    dSpaceID spaceId = space->GetODESpace();
-
-    if (spaceId == 0)
-        {
-            GetLog()->Error()
-                << "(ODEObject) ERROR: Space returned empty ODE handle\n";
-        }
-
-    return spaceId;
+    mPhysicsObjectImp->space = GetSpace();
+    
+    return mPhysicsObjectImp->FindSpaceID();
 }
 
 dSpaceID PhysicsObject::GetParentSpaceID()
 {
-    return 0;
+    return mPhysicsObjectImp->GetParentSpaceID();
 }
 
 void PhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix)
 {
-    matrix[0] = rot.m[0];
-    matrix[1] = rot.m[4];
-    matrix[2] = rot.m[8];
-    matrix[3] = 0;
-    matrix[4] = rot.m[1];
-    matrix[5] = rot.m[5];
-    matrix[6] = rot.m[9];
-    matrix[7] = 0;
-    matrix[8] = rot.m[2];
-    matrix[9] = rot.m[6];
-    matrix[10] = rot.m[10];
-    matrix[11] = 0;
+    mPhysicsObjectImp->ConvertRotationMatrix(rot, matrix);
 }
 
 void PhysicsObject::ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const
 {
-    rot.m[0] = matrix[0] ;
-    rot.m[4] = matrix[1] ;
-    rot.m[8] = matrix[2];
-    rot.m[12] = matrix[3];
-    rot.m[1] = matrix[4];
-    rot.m[5] = matrix[5];
-    rot.m[9] = matrix[6];
-    rot.m[13] = matrix[7];
-    rot.m[2] = matrix[8];
-    rot.m[6] = matrix[9];
-    rot.m[10] = matrix[10] ;
-    rot.m[14] = matrix[11];
-    rot.m[3] = 0.0;
-    rot.m[7] = 0.0;
-    rot.m[11] = 0.0;
-    rot.m[15] = 1.0;
+    mPhysicsObjectImp->ConvertRotationMatrix(matrix, rot);
 }

@@ -47,7 +47,7 @@ public:
     void SetAutoDisableFlag(bool flag);
     void SetContactSurfaceLayer(float depth);
     float GetContactSurfaceLayer() const;
-    virtual void DestroyODEObject();
+    virtual void DestroyPhysicsObject();
 
 protected:
     virtual bool ConstructInternal();
@@ -55,8 +55,6 @@ protected:
 private:
     dWorldID mODEWorld;
 };
-
-DECLARE_CLASS(ODEWorld);
 
 }
 

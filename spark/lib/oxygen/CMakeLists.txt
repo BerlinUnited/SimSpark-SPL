@@ -54,9 +54,15 @@ set(oxygen_LIB_HDRS
     physicsserver/angularmotor.h
     
     #interfaces
+    physicsserver/int/physicsobjectint.h
+    physicsserver/int/physicsserverint.h
+    physicsserver/int/spaceint.h
     physicsserver/int/worldint.h
     
     #ode-specific files
+    physicsserver/ode/odephysicsobject.h
+    physicsserver/ode/odephysicsserver.h
+    physicsserver/ode/odespace.h
     physicsserver/ode/odeworld.h
     physicsserver/ode/odewrapper.h
     
@@ -184,15 +190,11 @@ set(oxygen_LIB_SRCS
     physicsserver/angularmotor.cpp
     physicsserver/angularmotor_c.cpp
     
-    #interfaces
-    physicsserver/int/worldint_c.cpp
-    physicsserver/int/spaceint_c.cpp
-    
     #ODE-specific files
+    physicsserver/ode/odephysicsobject.cpp
+    physicsserver/ode/odephysicsserver.cpp
     physicsserver/ode/odespace.cpp
-    physicsserver/ode/odespace_c.cpp
     physicsserver/ode/odeworld.cpp
-    physicsserver/ode/odeworld_c.cpp
     
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp

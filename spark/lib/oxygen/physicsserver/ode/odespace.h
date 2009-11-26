@@ -67,8 +67,6 @@ private:
     static TSpaceIdSet gDisabledInnerCollisionSet;
 };
 
-DECLARE_CLASS(ODESpace);
-
 }
 
 #endif //OXYGEN_ODESPACE_H

@@ -2,8 +2,10 @@
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id$
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: odeobject.h 56 2009-03-17 18:03:47Z hedayat $
+   $Id: odeobject.h 56 2009-03-17 18:03:47Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,13 +20,22 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef OXYGEN_ODEPHYSICSSERVER_H
+#define OXYGEN_ODEPHYSICSSERVER_H
 
-#include <oxygen/physicsserver/physicsserver.h>
-#include <oxygen/physicsserver/ode/odephysicsserver.h>
+#include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/int/physicsserverint.h>
 
-using namespace oxygen;
-
-PhysicsServer::PhysicsServer() : Leaf()
+namespace oxygen
 {
-    mPhysicsServerImp = boost::shared_ptr<ODEPhysicsServer>(new ODEPhysicsServer());
-}
+
+class OXYGEN_API ODEPhysicsServer : public PhysicsServerInt
+{
+public:
+    ODEPhysicsServer();
+    virtual ~ODEPhysicsServer();
+};
+
+} //namespace oxygen
+
+#endif //OXYGEN_ODEPHYSICSSERVER_H

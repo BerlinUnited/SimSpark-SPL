@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: world.h 56 2009-03-17 18:03:47Z hedayat $
+   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,38 +19,39 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_WORLDINT_H
-#define OXYGEN_WORLDINT_H
 
+#ifndef OXYGEN_PHYSICSOBJECTINT_H
+#define OXYGEN_PHYSICSOBJECTINT_H
+
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <oxygen/physicsserver/ode/odewrapper.h>
+#include <oxygen/sceneserver/basenode.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
 
 namespace oxygen
 {
+class World;
+class Space;
 
-class OXYGEN_API WorldInt : public ODEPhysicsObject
+class OXYGEN_API PhysicsObjectInt : public BaseNode
 {
-    
-public:
-    WorldInt() : ODEPhysicsObject(){};
-    virtual ~WorldInt(){};
 
-    virtual dWorldID GetODEWorld() const = 0;
-    virtual void SetGravity(const salt::Vector3f& gravity) = 0;
-    virtual salt::Vector3f GetGravity() const = 0;
-    virtual void SetERP(float erp) = 0;
-    virtual float GetERP() const = 0;
-    virtual void SetCFM(float cfm) = 0;
-    virtual float GetCFM() const = 0;
-    virtual void Step(float deltaTime) = 0;
-    virtual bool GetAutoDisableFlag() const = 0;
-    virtual void SetAutoDisableFlag(bool flag) = 0;
-    virtual void SetContactSurfaceLayer(float depth) = 0;
-    virtual float GetContactSurfaceLayer() const = 0;
+public:
+    PhysicsObjectInt(){};
+    virtual ~PhysicsObjectInt(){};
+    
+    virtual dWorldID GetWorldID() = 0;
+    virtual dSpaceID FindSpaceID() = 0;
+    virtual dSpaceID GetParentSpaceID() = 0;
+    virtual void ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix) = 0;
+    virtual void ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const = 0;
     virtual void DestroyPhysicsObject() = 0;
-    virtual bool ConstructInternal() = 0;
+    
+    boost::shared_ptr<Scene> scene;
+    boost::shared_ptr<Space> space;
+    boost::shared_ptr<World> world;
 };
 
-}
+} //namespace oxygen
 
-#endif //OXYGEN_WORLDINT_H
+#endif //OXYGEN_PHYSICSOBJECTINT_H

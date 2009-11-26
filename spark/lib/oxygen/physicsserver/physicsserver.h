@@ -29,6 +29,7 @@
 
 namespace oxygen
 {
+class PhysicsServerInt;
 
 class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
 {
@@ -37,7 +38,10 @@ class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
     //
 public:
     PhysicsServer();
-    ~PhysicsServer();
+    virtual ~PhysicsServer(){};
+    
+private:
+    boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;
 };
 
 DECLARE_CLASS(PhysicsServer);

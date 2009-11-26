@@ -184,14 +184,14 @@ void ODESpace::HandleCollide(dGeomID obj1, dGeomID obj2)
 void ODESpace::OnUnlink()
 {
     DisableInnerCollision(false);
-    PhysicsObject::OnUnlink();
+    ODEPhysicsObject::OnUnlink();
 }
 
 void ODESpace::OnLink()
 {
-    PhysicsObject::OnLink();
+    ODEPhysicsObject::OnLink();
 
-    shared_ptr<Space> space = GetSpace();
+    //shared_ptr<Space> space = GetSpace();
     dSpaceID spaceId = 0;
 
     if (space.get() != 0)

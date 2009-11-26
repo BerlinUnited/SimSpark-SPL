@@ -1,9 +1,10 @@
-/* -*- mode: c++ -*-
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id: odeobject_c.cpp 3 2008-11-21 02:38:08Z hedayat $
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,11 +20,22 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/ode/odeobject.h>
+#ifndef OXYGEN_PHYSICSSERVERINT_H
+#define OXYGEN_PHYSICSSERVERINT_H
 
-using namespace oxygen;
+#include <oxygen/oxygen_defines.h>
 
-void CLASS(ODEObject)::DefineClass()
+namespace oxygen
 {
-        DEFINE_BASECLASS(oxygen/BaseNode);
-}
+
+class OXYGEN_API PhysicsServerInt
+{
+
+public:
+    PhysicsServerInt(){};
+    virtual ~PhysicsServerInt(){};
+};
+
+} //namespace oxygen
+
+#endif //OXYGEN_PHYSICSSERVERINT_H

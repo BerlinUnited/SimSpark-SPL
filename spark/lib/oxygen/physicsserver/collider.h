@@ -148,8 +148,8 @@ protected:
     */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
 
-    /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    /** destroy the managed physicsobject */
+    virtual void DestroyPhysicsObject();
 
     //
     // Members
