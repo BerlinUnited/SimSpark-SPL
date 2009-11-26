@@ -31,6 +31,7 @@ namespace oxygen
 {
 class Space;
 class World;
+class PhysicsObjectInt;
 
 /** ODEObject is the base of all classes encapsulating ODE concepts
  */
@@ -57,8 +58,12 @@ public:
 
     /** returns the ODE handle ID of the containing parent space */
     virtual dSpaceID GetParentSpaceID();
-
-    /** destroy the managed ODE object */
+    
+    /** this method is not implemented here because PhysicsObject is an 
+        abstract class. However, it is declared here so that it can be
+        called as a member of this class, which is necessary in some
+        cases (like destroying all objects in a space, where bodies, 
+        colliders and joints have to be treated in one go).*/ 
     virtual void DestroyPhysicsObject(){};
 
 protected:
@@ -74,6 +79,9 @@ protected:
 
     /** coverts the ODE dMatrix3 to the rotation part of a salt::Matrix */
     void ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const;
+    
+private:
+    boost::shared_ptr<PhysicsObjectInt> mPhysicsObjectImp;
 };
 
 DECLARE_ABSTRACTCLASS(PhysicsObject);

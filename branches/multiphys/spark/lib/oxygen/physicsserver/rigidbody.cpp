@@ -102,7 +102,7 @@ bool RigidBody::CreateBody()
     return true;
 }
 
-void RigidBody::DestroyODEObject()
+void RigidBody::DestroyPhysicsObject()
 {
     if (mODEBody == 0)
         {

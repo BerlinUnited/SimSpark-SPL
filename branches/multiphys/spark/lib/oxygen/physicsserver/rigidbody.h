@@ -226,8 +226,8 @@ public:
     /** returns the current poosition of this body */
     salt::Vector3f GetPosition() const;
 
-    /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    /** destroy the managed physicsobject */
+    virtual void DestroyPhysicsObject();
 
     /** synchronize parent node with the bodies position and
         orientation

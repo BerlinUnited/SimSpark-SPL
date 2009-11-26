@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: space.cpp 80 2009-07-30 17:25:42Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,12 +19,15 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/physicsserver.h>
+#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/ode/odephysicsserver.h>
 
 using namespace oxygen;
 
-PhysicsServer::PhysicsServer() : Leaf()
-{
-    mPhysicsServerImp = boost::shared_ptr<ODEPhysicsServer>(new ODEPhysicsServer());
+ODEPhysicsServer::ODEPhysicsServer(){
+    dInitODE();
+}
+
+ODEPhysicsServer::~ODEPhysicsServer(){
+    dCloseODE();
 }

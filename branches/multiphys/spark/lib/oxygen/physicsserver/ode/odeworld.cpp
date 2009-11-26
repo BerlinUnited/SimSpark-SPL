@@ -109,7 +109,7 @@ bool ODEWorld::ConstructInternal()
   return (mODEWorld != 0);
 }
 
-void ODEWorld::DestroyODEObject()
+void ODEWorld::DestroyPhysicsObject()
 {
   static bool recurseLock = false;
   if (recurseLock)
@@ -119,7 +119,7 @@ void ODEWorld::DestroyODEObject()
 
   recurseLock = true;
 
-  shared_ptr<Space> space = GetSpace();
+  //shared_ptr<Space> space = GetSpace();
   if (space.get() != 0)
     {
       space->DestroyPhysicsObject();

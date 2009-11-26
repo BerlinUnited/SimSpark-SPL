@@ -262,7 +262,7 @@ bool Collider::Intersects(boost::shared_ptr<Collider> collider)
          ) > 0;
 }
 
-void Collider::DestroyODEObject()
+void Collider::DestroyPhysicsObject()
 {
     if (! mODEGeom)
         {

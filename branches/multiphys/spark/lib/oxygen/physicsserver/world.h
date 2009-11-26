@@ -106,7 +106,7 @@ public:
     float GetContactSurfaceLayer() const;
 
     /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    virtual void DestroyPhysicsObject();
 
 protected:
     /** creates them managed ODE world */
