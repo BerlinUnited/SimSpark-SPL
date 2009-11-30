@@ -28,6 +28,7 @@
 namespace oxygen
 {
 class World;
+class RigidBodyInt;
 
 /** Body encapsulates an ODE rigid body object. A rigid body has
     various properties from the point of view of the simulation. Some
@@ -318,6 +319,8 @@ private:
     // Members
     //
 protected:
+    boost::shared_ptr<RigidBodyInt> mRigidBodyImp;
+
     /** the managed ode body */
     dBodyID mODEBody;
 

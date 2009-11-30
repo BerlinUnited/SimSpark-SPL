@@ -19,33 +19,15 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_SOFTBODY_H
-#define OXYGEN_SOFTBODY_H
+#include <oxygen/physicsserver/softbody.h>
+#include <oxygen/physicsserver/ode/odesoftbody.h>
 
-#include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/body.h>
+using namespace oxygen;
 
-namespace oxygen
-{
-class SoftBodyInt;
-/**
-    SoftBody is not yet implemented.
-*/
+SoftBody::SoftBody() : Body(){
+    mSoftBodyImp = boost::shared_ptr<ODESoftBody>(new ODESoftBody());
+}
 
-class OXYGEN_API SoftBody : public Body
-{
-    //
-    // Functions
-    //
-public:
-    SoftBody();
-    virtual ~SoftBody();
-    
-    boost::shared_ptr<SoftBodyInt> mSoftBodyImp;
-};
+SoftBody::~SoftBody(){
 
-DECLARE_CLASS(SoftBody);
-
-} //namespace oxygen
-
-#endif //OXYGEN_SOFTBODY_H
+}

@@ -27,6 +27,7 @@
 
 namespace oxygen
 {
+class StaticBodyInt;
 /**
     StaticBody is not yet implemented.
 */
@@ -37,8 +38,10 @@ class OXYGEN_API StaticBody : public Body
     // Functions
     //
 public:
-    StaticBody() : Body(){};
-    virtual ~StaticBody(){};
+    StaticBody();
+    virtual ~StaticBody();
+    
+    boost::shared_ptr<StaticBodyInt> mStaticBodyImp;
 };
 
 DECLARE_CLASS(StaticBody);

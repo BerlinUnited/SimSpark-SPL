@@ -26,6 +26,8 @@
 
 namespace oxygen
 {
+class BodyInt;
+
 /** This is currently a placeholder class to comply with the 
     inheritance tree. Once a Body class other than RigidBody has
     been implemented, common functionality should be moved to this
@@ -35,8 +37,10 @@ namespace oxygen
 class OXYGEN_API Body : public PhysicsObject
 {
 public:
-    Body() : PhysicsObject(){};
-    virtual ~Body (){};
+    Body();
+    virtual ~Body();
+    
+    boost::shared_ptr<BodyInt> mBodyImp;
 };
 
 DECLARE_CLASS(Body);

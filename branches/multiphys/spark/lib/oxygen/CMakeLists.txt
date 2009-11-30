@@ -54,15 +54,25 @@ set(oxygen_LIB_HDRS
     physicsserver/angularmotor.h
     
     #interfaces
+    physicsserver/int/bodyint.h
+    physicsserver/int/dynamicbodyint.h
     physicsserver/int/physicsobjectint.h
     physicsserver/int/physicsserverint.h
+    physicsserver/int/rigidbodyint.h
+    physicsserver/int/softbodyint.h
     physicsserver/int/spaceint.h
+    physicsserver/int/staticbodyint.h
     physicsserver/int/worldint.h
     
     #ode-specific files
+    physicsserver/ode/odebody.h
+    physicsserver/ode/odedynamicbody.h
     physicsserver/ode/odephysicsobject.h
     physicsserver/ode/odephysicsserver.h
+    physicsserver/ode/oderigidbody.h
+    physicsserver/ode/odesoftbody.h
     physicsserver/ode/odespace.h
+    physicsserver/ode/odestaticbody.h
     physicsserver/ode/odeworld.h
     physicsserver/ode/odewrapper.h
     
@@ -127,11 +137,15 @@ set(oxygen_LIB_SRCS
     oxygen.cpp
     physicsserver/physicsobject.cpp
     physicsserver/physicsobject_c.cpp
+    physicsserver/body.cpp
     physicsserver/body_c.cpp
     physicsserver/rigidbody.cpp
     physicsserver/rigidbody_c.cpp
+    physicsserver/staticbody.cpp
     physicsserver/staticbody_c.cpp
+    physicsserver/dynamicbody.cpp
     physicsserver/dynamicbody_c.cpp
+    physicsserver/softbody.cpp
     physicsserver/softbody_c.cpp
     physicsserver/bodycontroller.cpp
     physicsserver/bodycontroller_c.cpp
@@ -191,9 +205,14 @@ set(oxygen_LIB_SRCS
     physicsserver/angularmotor_c.cpp
     
     #ODE-specific files
+    physicsserver/ode/odebody.cpp
+    physicsserver/ode/odedynamicbody.cpp
     physicsserver/ode/odephysicsobject.cpp
     physicsserver/ode/odephysicsserver.cpp
+    physicsserver/ode/oderigidbody.cpp
+    physicsserver/ode/odesoftbody.cpp
     physicsserver/ode/odespace.cpp
+    physicsserver/ode/odestaticbody.cpp
     physicsserver/ode/odeworld.cpp
     
     sceneserver/basenode.cpp

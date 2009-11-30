@@ -27,6 +27,7 @@
 
 namespace oxygen
 {
+class DynamicBodyInt;
 /**
     DynamicBody is not yet implemented.
 */
@@ -37,8 +38,10 @@ class OXYGEN_API DynamicBody : public Body
     // Functions
     //
 public:
-    DynamicBody() : Body(){};
-    virtual ~DynamicBody(){};
+    DynamicBody();
+    virtual ~DynamicBody();
+    
+    boost::shared_ptr<DynamicBodyInt> mDynamicBodyImp;
 };
 
 DECLARE_CLASS(DynamicBody);
