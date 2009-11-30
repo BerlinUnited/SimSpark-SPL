@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: body.h 106 2009-11-19 10:10:50Z a-held $
+   $Id: odeobject.cpp 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,33 +19,21 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_SOFTBODY_H
-#define OXYGEN_SOFTBODY_H
+#ifndef OXYGEN_ODEBODY_H
+#define OXYGEN_ODEBODY_H
 
-#include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/int/bodyint.h>
 
 namespace oxygen
 {
-class SoftBodyInt;
-/**
-    SoftBody is not yet implemented.
-*/
 
-class OXYGEN_API SoftBody : public Body
+class OXYGEN_API ODEBody : public BodyInt
 {
-    //
-    // Functions
-    //
 public:
-    SoftBody();
-    virtual ~SoftBody();
-    
-    boost::shared_ptr<SoftBodyInt> mSoftBodyImp;
+    ODEBody();
+    virtual ~ODEBody();
 };
-
-DECLARE_CLASS(SoftBody);
 
 } //namespace oxygen
 
-#endif //OXYGEN_SOFTBODY_H
+#endif //OXYGEN_ODEBODY_H
