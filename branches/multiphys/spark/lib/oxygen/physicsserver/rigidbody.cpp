@@ -41,59 +41,54 @@ RigidBody::~RigidBody()
 
 dBodyID RigidBody::GetODEBody() const
 {
-    return mODEBody;
+    return (dBodyID) mRigidBodyImp->mBodyID;
 }
 
 void RigidBody::Enable()
 {
-    dBodyEnable(mODEBody);
+    mRigidBodyImp->Enable();
 }
 
 void RigidBody::Disable()
 {
-    dBodyDisable(mODEBody);
+    mRigidBodyImp->Disable();
 }
 
 bool RigidBody::IsEnabled() const
 {
-    return (dBodyIsEnabled(mODEBody) != 0);
+    return mRigidBodyImp->IsEnabled();
 }
 
 void RigidBody::UseGravity(bool f)
 {
-    if (f == true)
-        {
-            // body is affected by gravity
-            dBodySetGravityMode(mODEBody, 1);
-        }
-    else
-        {
-            // body is not affected by gravity
-            dBodySetGravityMode(mODEBody, 0);
-        }
+    mRigidBodyImp->UseGravity(f);
 }
 
 bool RigidBody::UsesGravity() const
 {
-    return (dBodyGetGravityMode(mODEBody) != 0);
+    return mRigidBodyImp->UsesGravity();
 }
 
 bool RigidBody::CreateBody()
 {
-    if (mODEBody != 0)
+    long bodyID = mRigidBodyImp->mBodyID;
+
+    if (bodyID != 0)
         {
             return true;
         }
 
-    dWorldID world = GetWorldID();
+    long world = (long) GetWorldID();
     if (world == 0)
         {
             return false;
         }
-
-    // create the managed body
-    mODEBody = dBodyCreate(world);
-    if (mODEBody == 0)
+    
+    mRigidBodyImp->CreateBody(world);
+    
+    mODEBody = (dBodyID) mRigidBodyImp->mBodyID;
+    
+    if (mRigidBodyImp->mBodyID == 0)
         {
             GetLog()->Error()
                 << "(Body) ERROR: could not create new ODE body\n";
@@ -105,13 +100,7 @@ bool RigidBody::CreateBody()
 
 void RigidBody::DestroyPhysicsObject()
 {
-    if (mODEBody == 0)
-        {
-            return;
-        }
-
-    dBodyDestroy(mODEBody);
-    mODEBody = 0;
+    mRigidBodyImp->DestroyPhysicsObject();
 }
 
 void RigidBody::OnLink()
@@ -124,29 +113,29 @@ void RigidBody::OnLink()
         }
 
     // let the body, take on the world space position of the parent
-    dBodySetData(mODEBody, this);
+    mRigidBodyImp->BodySetData(this);
 
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (GetParent().lock());
 
     const Matrix& mat = baseNode->GetWorldTransform();
-    SetRotation(mat);
-    SetPosition(mat.Pos());
+    mRigidBodyImp->SetRotation(mat);
+    mRigidBodyImp->SetPosition(mat.Pos());
 }
 
 void RigidBody::SetMass(float mass)
 {
-    dMass ODEMass;
-    dBodyGetMass(mODEBody, &ODEMass);
-    dMassAdjust(&ODEMass, mass);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetMass(mass);
 }
 
 float RigidBody::GetMass() const
 {
-    dMass m;
-    dBodyGetMass(mODEBody, &m);
-    return m.mass;
+    return mRigidBodyImp->GetMass();
+}
+
+void RigidBody::AddMass(const dMass& mass, const Matrix& matrix)
+{
+    mRigidBodyImp->AddMass(mass, matrix);
 }
 
 void RigidBody::GetMassParameters(dMass& mass) const
@@ -159,268 +148,122 @@ void RigidBody::SetMassParameters(const dMass& mass)
     dBodySetMass(mODEBody, &mass);
 }
 
-void RigidBody::PrepareSphere(dMass& mass, float density, float radius) const
-{
-    dMassSetSphere(&mass, density, radius);
-}
-
 void RigidBody::SetSphere(float density, float radius)
 {
-    dMass ODEMass;
-    PrepareSphere(ODEMass, density, radius);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetSphere(density, radius);
 }
 
 void RigidBody::AddSphere(float density, float radius, const Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareSphere(ODEMass, density, radius);
-    AddMass(ODEMass, matrix);
-}
-
-void RigidBody::PrepareSphereTotal(dMass& mass, float total_mass, float radius) const
-{
-    dMassSetSphereTotal(&mass, total_mass, radius);
+    mRigidBodyImp->AddSphere(density, radius, matrix);
 }
 
 void RigidBody::SetSphereTotal(float total_mass, float radius)
 {
-    dMass ODEMass;
-    PrepareSphereTotal(ODEMass, total_mass, radius);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetSphereTotal(total_mass, radius);
 }
 
 void RigidBody::AddSphereTotal(float total_mass, float radius, const Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareSphereTotal(ODEMass, total_mass, radius);
-    AddMass(ODEMass, matrix);
-}
-
-void RigidBody::PrepareBox(dMass& mass, float density, const Vector3f& size) const
-{
-    dMassSetBox(&mass, density, size[0], size[1], size[2]);
+    mRigidBodyImp->AddSphereTotal(total_mass, radius, matrix);
 }
 
 void RigidBody::SetBox(float density, const Vector3f& size)
 {
-    dMass ODEMass;
-    PrepareBox(ODEMass, density, size);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetBox(density, size);
 }
 
 void RigidBody::AddBox(float density, const Vector3f& size, const Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareBox(ODEMass, density, size);
-    AddMass(ODEMass, matrix);
-}
-
-void RigidBody::PrepareBoxTotal(dMass& mass, float total_mass, const Vector3f& size) const
-{
-    dMassSetBoxTotal(&mass, total_mass, size[0], size[1], size[2]);
+    mRigidBodyImp->AddBox(density, size, matrix);
 }
 
 void RigidBody::SetBoxTotal(float total_mass, const Vector3f& size)
 {
-    dMass ODEMass;
-    PrepareBoxTotal(ODEMass, total_mass, size);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetBoxTotal(total_mass, size);
 }
 
 void RigidBody::AddBoxTotal(float total_mass, const Vector3f& size, const Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareBoxTotal(ODEMass, total_mass, size);
-    AddMass(ODEMass, matrix);
-}
-
-void RigidBody::AddMass(const dMass& mass, const Matrix& matrix)
-{
-    dMass transMass(mass);
-
-    dMatrix3 rot;
-    ConvertRotationMatrix(matrix, rot);
-    dMassRotate(&transMass,rot);
-
-    const Vector3f& trans(matrix.Pos());
-    dMassTranslate(&transMass,trans[0],trans[1],trans[2]);
-
-    dMassTranslate(&transMass,mMassTrans[0],mMassTrans[1],mMassTrans[2]);
-    
-    dMass bodyMass;
-    dBodyGetMass(mODEBody, &bodyMass);
-    dMassAdd(&bodyMass, &transMass);
-
-    /** ODE currently requires that the center mass is always in the
-        origin of the body
-    */
-    Vector3f trans2(bodyMass.c[0], bodyMass.c[1], bodyMass.c[2]);
-
-    dMassTranslate(&bodyMass, -trans2[0], -trans2[1], -trans2[2]);
-    bodyMass.c[0] = bodyMass.c[1] = bodyMass.c[2] = 0.0f;
-    dBodySetMass(mODEBody, (const dMass*)&bodyMass);
-
-    // Move body so mass is at right position again
-    SetPosition(GetPosition() + trans2);
-    
-    // Keep track of total translation of mass
-    mMassTrans = mMassTrans - trans2;
-    
-    mMassTransformed = true;
-}
-
-void RigidBody::PrepareCylinder (dMass& mass, float density, float radius, float length) const
-{
-    // direction: (1=x, 2=y, 3=z)
-    int direction = 3;
-
-    dMassSetCylinder (&mass, density, direction, radius, length);
+    mRigidBodyImp->AddBoxTotal(total_mass, size, matrix);
 }
 
 void RigidBody::SetCylinder (float density, float radius, float length)
 {
-    dMass ODEMass;
-    PrepareCylinder(ODEMass, density, radius, length);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetCylinder(density, radius, length);
 }
 
 void RigidBody::AddCylinder (float density, float radius, float length, const Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareCylinder(ODEMass, density, radius, length);
-    AddMass(ODEMass, matrix);
-}
-
-void RigidBody::PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
-{
-    // direction: (1=x, 2=y, 3=z)
-    int direction = 3;
-
-    dMassSetCylinderTotal(&mass, total_mass, direction, radius, length);
+    mRigidBodyImp->AddCylinder(density, radius, length, matrix);
 }
 
 void RigidBody::SetCylinderTotal(float total_mass, float radius, float length)
 {
-    dMass ODEMass;
-    PrepareCylinderTotal(ODEMass, total_mass, radius, length);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetCylinderTotal(total_mass, radius, length);
 }
 
 void RigidBody::AddCylinderTotal(float total_mass, float radius, float length, const Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareCylinderTotal(ODEMass, total_mass, radius, length);
-    AddMass(ODEMass, matrix);
-}
-
-void RigidBody::PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const
-{
-    // direction: (1=x, 2=y, 3=z)
-    int direction = 3;
-
-    dMassSetCapsule (&mass, density, direction, radius, length);
+    mRigidBodyImp->AddCylinderTotal(total_mass, radius, length, matrix);
 }
 
 void RigidBody::SetCappedCylinder (float density, float radius, float length)
 {
-    dMass ODEMass;
-    PrepareCappedCylinder(ODEMass, density, radius, length);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetCapsule(density, radius, length);
 }
 
 void RigidBody::AddCappedCylinder (float density, float radius, float length, const Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareCappedCylinder(ODEMass, density, radius, length);
-    AddMass(ODEMass, matrix);
-}
-
-void RigidBody::PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const
-{
-    // direction: (1=x, 2=y, 3=z)
-    int direction = 3;
-
-    dMassSetCapsuleTotal(&mass, total_mass, direction, radius, length);
+    mRigidBodyImp->AddCapsule(density, radius, length, matrix);
 }
 
 void RigidBody::SetCappedCylinderTotal(float total_mass, float radius, float length)
 {
-    dMass ODEMass;
-    PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
-    dBodySetMass(mODEBody, &ODEMass);
+    mRigidBodyImp->SetCapsuleTotal(total_mass, radius, length);
 }
 
 void RigidBody::AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
 {
-    dMass ODEMass;
-    PrepareCappedCylinderTotal(ODEMass, total_mass, radius, length);
-    AddMass(ODEMass, matrix);
+    mRigidBodyImp->AddCapsuleTotal(total_mass, radius, length, matrix);
 }
 
 Vector3f RigidBody::GetVelocity() const
 {
-    const dReal* vel = dBodyGetLinearVel(mODEBody);
-    return Vector3f(vel[0], vel[1], vel[2]);
+    return mRigidBodyImp->GetVelocity();
 }
 
 void RigidBody::SetVelocity(const Vector3f& vel)
 {
-    dBodySetLinearVel(mODEBody, vel[0], vel[1], vel[2]);
+    mRigidBodyImp->SetVelocity(vel);
 }
 
 void RigidBody::SetRotation(const Matrix& rot)
 {
-    dMatrix3 m;
-    ConvertRotationMatrix(rot,m);
-    dBodySetRotation(mODEBody,m);
+    mRigidBodyImp->SetRotation(rot);
 }
 
 salt::Matrix RigidBody::GetRotation() const
 {
-    const dReal* m = dBodyGetRotation(mODEBody);
-    salt::Matrix rot;
-    ConvertRotationMatrix(m,rot);
-    return rot;
+    return mRigidBodyImp->GetRotation();
 }
 
 Vector3f RigidBody::GetAngularVelocity() const
 {
-    const dReal* vel = dBodyGetAngularVel(mODEBody);
-    return Vector3f(vel[0], vel[1], vel[2]);
+    return mRigidBodyImp->GetAngularVelocity();
 }
 
 void RigidBody::SetAngularVelocity(const Vector3f& vel)
 {
-    dBodySetAngularVel(mODEBody, vel[0], vel[1], vel[2]);
+    mRigidBodyImp->SetAngularVelocity(vel);
 }
 
 void RigidBody::SynchronizeParent() const
 {
-    const dReal* pos = dBodyGetPosition(mODEBody);
-    const dReal* rot = dBodyGetRotation(mODEBody);
-
     shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (GetParent().lock());
-
     
-    Matrix mat;
-    mat.m[0] = rot[0];
-    mat.m[1] = rot[4];
-    mat.m[2] = rot[8];
-    mat.m[3] = 0;
-    mat.m[4] = rot[1];
-    mat.m[5] = rot[5];
-    mat.m[6] = rot[9];
-    mat.m[7] = 0;
-    mat.m[8] = rot[2];
-    mat.m[9] = rot[6];
-    mat.m[10] = rot[10];
-    mat.m[11] = 0;
-    mat.m[12] = pos[0];
-    mat.m[13] = pos[1];
-    mat.m[14] = pos[2];
-    mat.m[15] = 1;
+    Matrix mat = mRigidBodyImp->GetSynchronisationMatrix();
 
     baseNode->SetWorldTransform(mat);
 }
@@ -428,7 +271,7 @@ void RigidBody::SynchronizeParent() const
 void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // Check whether mass/body has been translated
-    if (mMassTransformed)
+    if (mRigidBodyImp->mMassTransformed)
     {
         weak_ptr<Node> parent = GetParent();
 
@@ -459,8 +302,8 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
             transform->SetWorldTransform(worldTransform);
         }
         
-        mMassTrans = Vector3f(0,0,0);
-        mMassTransformed = false;
+        mRigidBodyImp->mMassTrans = Vector3f(0,0,0);
+        mRigidBodyImp->mMassTransformed = false;
     }
 }
 
@@ -472,18 +315,19 @@ void RigidBody::PostPhysicsUpdateInternal()
 
 shared_ptr<RigidBody> RigidBody::GetBody(dBodyID id)
 {
-    if (id == 0)
+    long bodyID = (long) id;
+    if (bodyID == 0)
         {
             return shared_ptr<RigidBody>();
         }
 
     RigidBody* bodyPtr =
-        static_cast<RigidBody*>(dBodyGetData(id));
+        static_cast<RigidBody*>(dBodyGetData( (dBodyID) bodyID));
 
     if (bodyPtr == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (RigidBody) no body found for dBodyID "
+            cerr << "ERROR: (RigidBody) no body found for BodyID "
                  << id << "\n";
             return shared_ptr<RigidBody>();
         }
@@ -503,29 +347,25 @@ shared_ptr<RigidBody> RigidBody::GetBody(dBodyID id)
 
 void RigidBody::AddForce(const Vector3f& force)
 {
-    dBodyAddForce(mODEBody, force.x(), force.y(), force.z());
+    mRigidBodyImp->AddForce(force);
 }
 
 void RigidBody::AddTorque(const Vector3f& torque)
 {
-    dBodyAddTorque(mODEBody, torque.x(), torque.y(), torque.z());
+    mRigidBodyImp->AddTorque(torque);
 }
 
 void RigidBody::SetPosition(const Vector3f& pos)
 {
-    dBodySetPosition(mODEBody, pos.x(), pos.y(), pos.z());
-    // the parent node will be updated in the next physics cycle
+    mRigidBodyImp->SetPosition(pos);
 }
 
 Vector3f RigidBody::GetPosition() const
 {
-    const dReal* pos = dBodyGetPosition(mODEBody);
-    return Vector3f(pos[0], pos[1], pos[2]);
+    return mRigidBodyImp->GetPosition();
 }
 
 void RigidBody::TranslateMass(const Vector3f& v)
 {
-    dMass m;
-    dBodyGetMass(mODEBody, &m);
-    dMassTranslate(&m,v[0],v[1],v[2]);
+    mRigidBodyImp->TranslateMass(v);
 }

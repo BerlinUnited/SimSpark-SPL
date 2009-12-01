@@ -85,6 +85,11 @@ public:
 
     /** returns the ODE mass parameters of this body */
     void GetMassParameters(dMass& mass) const;
+    
+    /** adds the given ode mass to this body. The given matrix is
+        applied to the mass center
+    */
+    void AddMass(const dMass& mass, const salt::Matrix& matrix);
 
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)
@@ -235,11 +240,6 @@ public:
     */
     void SynchronizeParent() const;
 
-    /** adds the given ode mass to this body. The given matrix is
-        applied to the mass center
-    */
-    void AddMass(const dMass& mass, const salt::Matrix& matrix);
-
     salt::Vector3f GetMassCenter() const;
 
 protected:
@@ -250,60 +250,6 @@ protected:
 
     /** create the managed ODE body; returns true on success */
     bool CreateBody();
-
-    /** sets up an ode mass struct representing a box of the given
-        size and total_mass
-    */
-    void PrepareBoxTotal(dMass& mass, float total_mass, const salt::Vector3f& size) const;
-
-    /** sets up an ode mass struct representing a box of the given
-        density and size
-    */
-    void PrepareBox(dMass& mass, float density, const salt::Vector3f& size) const;
-
-    /** sets up an ode mass struct representing a sphere of the given
-        density and radius
-    */
-    void PrepareSphere(dMass& mass, float density, float radius) const;
-
-    /** sets up an ode mass struct representing a sphere of the given
-        radius and total_mass
-    */
-    void PrepareSphereTotal(dMass& mass, float total_mass, float radius) const;
-
-    /** sets up an ode mass struct representing a flat-ended cylinder
-        of the given parameters and density, with the center of mass
-        at (0,0,0) relative to the body. The radius of the cylinder is
-        radius. The length of the cylinder is length. The cylinder's
-        long axis is oriented along the body's z axis.
-     */
-    void PrepareCylinder (dMass& mass, float density, float radius, float length) const;
-
-    /** sets up an ode mass struct representing a flat-ended cylinder
-        of the given parameters and total mass, with the center of
-        mass at (0,0,0) relative to the body. The radius of the
-        cylinder is radius. The length of the cylinder is length. The
-        cylinder's long axis is oriented along the body's z axis.
-     */
-    void PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
-
-    /* sets up an ode mass struct representing a capped cylinder of
-       the given parameters and density, with the center of mass at
-       (0,0,0) relative to the body. The radius of the cylinder (and
-       the spherical cap) is radius. The length of the cylinder (not
-       counting the spherical cap) is length. The cylinder's long axis
-       is oriented along the body's z axis.
-    */
-    void PrepareCappedCylinder (dMass& mass, float density, float radius, float length) const;
-
-    /* sets up an ode mass struct representing a capped cylinder of
-       the given parameters and total mass, with the center of mass at
-       (0,0,0) relative to the body. The radius of the cylinder (and
-       the spherical cap) is radius. The length of the cylinder (not
-       counting the spherical cap) is length. The cylinder's long axis
-       is oriented along the body's z axis.
-    */
-    void PrepareCappedCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
 
 private:
     /** updates internal state before physics calculation */
