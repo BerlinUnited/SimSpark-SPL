@@ -43,6 +43,7 @@ public:
     void SetMassParameters(const dMass& mass);
     float GetMass() const;
     void GetMassParameters(dMass& mass) const;
+    void AddMass(const dMass& mass, const salt::Matrix& matrix);
     void SetSphere(float density, float radius);
     void AddSphere(float density, float radius, const salt::Matrix& matrix);
     void SetSphereTotal(float total_mass, float radius);
@@ -71,14 +72,13 @@ public:
     void SetPosition(const salt::Vector3f& pos);
     salt::Vector3f GetPosition() const;
     void DestroyPhysicsObject();
-    void SynchronizeParent() const;
-    void AddMass(const dMass& mass, const salt::Matrix& matrix);
+    salt::Matrix GetSynchronisationMatrix();
     //salt::Vector3f GetMassCenter() const;
-    boost::shared_ptr<RigidBody> GetBody(dBodyID id); //static in rigidbody.h
+    void BodySetData(RigidBody* rb);
+    RigidBody* BodyGetData(long bodyID);
     
 protected:
-    void OnLink();
-    bool CreateBody();
+    void CreateBody(long world);
     void PrepareBoxTotal(dMass& mass, float total_mass, const salt::Vector3f& size) const;
     void PrepareBox(dMass& mass, float density, const salt::Vector3f& size) const;
     void PrepareSphere(dMass& mass, float density, float radius) const;   
@@ -90,10 +90,8 @@ protected:
     
 private:
     void PrePhysicsUpdateInternal(float deltaTime);
-    void PostPhysicsUpdateInternal();
     
 protected:
-    dBodyID mODEBody;
     salt::Vector3f mMassTrans;
     bool mMassTransformed;
 };

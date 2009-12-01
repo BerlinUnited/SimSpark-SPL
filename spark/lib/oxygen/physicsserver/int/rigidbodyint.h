@@ -25,6 +25,7 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/ode/odebody.h>
+#include <iostream>
 
 namespace oxygen
 {
@@ -42,6 +43,7 @@ public:
     virtual bool IsEnabled() const = 0;
     virtual void UseGravity(bool f) = 0;
     virtual bool UsesGravity() const = 0;
+    virtual void CreateBody(long world) = 0;
     virtual void SetMass(float mass) = 0;
     virtual void SetMassParameters(const dMass& mass) = 0;
     virtual float GetMass() const = 0;
@@ -74,28 +76,72 @@ public:
     virtual void SetPosition(const salt::Vector3f& pos) = 0;
     virtual salt::Vector3f GetPosition() const = 0;
     virtual void DestroyPhysicsObject() = 0;
-    virtual void SynchronizeParent() const = 0;
+    virtual salt::Matrix GetSynchronisationMatrix() = 0;
     virtual void AddMass(const dMass& mass, const salt::Matrix& matrix) = 0;
     //virtual salt::Vector3f GetMassCenter() const = 0;
+    virtual void BodySetData(RigidBody* rb) = 0;
+    virtual RigidBody* BodyGetData(long bodyID) = 0;
     
 protected:
-    virtual void OnLink() = 0;
-    virtual bool CreateBody() = 0;
+    /** sets up an ode mass struct representing a box of the given
+        size and total_mass
+    */
     virtual void PrepareBoxTotal(dMass& mass, float total_mass, const salt::Vector3f& size) const = 0;
+    
+    /** sets up an ode mass struct representing a box of the given
+        density and size
+    */
     virtual void PrepareBox(dMass& mass, float density, const salt::Vector3f& size) const = 0;
+    
+    /** sets up an ode mass struct representing a sphere of the given
+        density and radius
+    */
     virtual void PrepareSphere(dMass& mass, float density, float radius) const = 0;   
+    
+    /** sets up an ode mass struct representing a sphere of the given
+        radius and total_mass
+    */
     virtual void PrepareSphereTotal(dMass& mass, float total_mass, float radius) const = 0;
+    
+    /** sets up an ode mass struct representing a flat-ended cylinder
+        of the given parameters and density, with the center of mass
+        at (0,0,0) relative to the body. The radius of the cylinder is
+        radius. The length of the cylinder is length. The cylinder's
+        long axis is oriented along the body's z axis.
+     */
     virtual void PrepareCylinder(dMass& mass, float density, float radius, float length) const = 0;
+    
+    /** sets up an ode mass struct representing a flat-ended cylinder
+        of the given parameters and total mass, with the center of
+        mass at (0,0,0) relative to the body. The radius of the
+        cylinder is radius. The length of the cylinder is length. The
+        cylinder's long axis is oriented along the body's z axis.
+     */
     virtual void PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const = 0;
+    
+    /* sets up an ode mass struct representing a capsule of
+       the given parameters and density, with the center of mass at
+       (0,0,0) relative to the body. The radius of the capsule (and
+       the spherical cap) is radius. The length of the capsule (not
+       counting the spherical cap) is length. The capsule's long axis
+       is oriented along the body's z axis.
+    */
     virtual void PrepareCapsule(dMass& mass, float density, float radius, float length) const = 0;
+    
+    /* sets up an ode mass struct representing a capsule of
+       the given parameters and total mass, with the center of mass at
+       (0,0,0) relative to the body. The radius of the capsule (and
+       the spherical cap) is radius. The length of the capsule (not
+       counting the spherical cap) is length. The capsule's long axis
+       is oriented along the body's z axis.
+    */
     virtual void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const = 0;
     
 private:
     virtual void PrePhysicsUpdateInternal(float deltaTime) = 0;
-    virtual void PostPhysicsUpdateInternal() = 0;
     
-protected:
-    dBodyID mODEBody;
+public:
+    long mBodyID;
     salt::Vector3f mMassTrans;
     bool mMassTransformed;
 };
