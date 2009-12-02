@@ -23,6 +23,7 @@
 #define OXYGEN_SPACE_H
 
 #include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <set>
 #include <oxygen/oxygen_defines.h>
 
@@ -47,8 +48,8 @@ public:
     Space();
     virtual ~Space();
 
-    /** returns the ID of the managed ODE space */
-    dSpaceID GetODESpace() const;
+    /** returns the ID of the managed space */
+    long GetSpaceID() const;
 
     /** retuns the ID of joint group for all created contact joints */
     dJointGroupID GetODEJointGroup() const;
@@ -65,7 +66,7 @@ public:
     virtual void DestroyPhysicsObject();
 
     /** returns the ODE handle ID of the containing parent space */
-    virtual dSpaceID GetParentSpaceID();
+    virtual long GetParentSpaceID();
 
     /** returns true if this is the top global, i.e. top level space object */
     bool IsGlobalSpace();

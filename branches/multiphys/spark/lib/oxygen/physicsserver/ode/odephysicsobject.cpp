@@ -33,48 +33,6 @@ ODEPhysicsObject::ODEPhysicsObject() : PhysicsObjectInt()
 {
 }
 
-ODEPhysicsObject::~ODEPhysicsObject()
-{
-}
-
-dWorldID ODEPhysicsObject::GetWorldID()
-{
-    if (world.get() == 0)
-        {
-            return 0;
-        }
-
-    dWorldID worldId = world->GetODEWorld();
-    if (worldId == 0)
-        {
-            cerr << "(ODEObject) ERROR: World returned empty ODE handle\n";
-        }
-
-    return worldId;
-}
-
-dSpaceID ODEPhysicsObject::FindSpaceID()
-{
-    if (space.get() == 0)
-        {
-            return 0;
-        }
-
-    dSpaceID spaceId = space->GetODESpace();
-
-    if (spaceId == 0)
-        {
-            cerr << "(ODEObject) ERROR: Space returned empty ODE handle\n";
-        }
-
-    return spaceId;
-}
-
-dSpaceID ODEPhysicsObject::GetParentSpaceID()
-{
-    return 0;
-}
-
 void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix)
 {
     matrix[0] = rot.m[0];

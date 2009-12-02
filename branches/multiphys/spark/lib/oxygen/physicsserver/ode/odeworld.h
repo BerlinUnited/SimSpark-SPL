@@ -33,9 +33,8 @@ class OXYGEN_API ODEWorld : public WorldInt
 
 public:
     ODEWorld();
-    virtual ~ODEWorld();
 
-    dWorldID GetODEWorld() const;
+    long GetWorldID() const;
     void SetGravity(const salt::Vector3f& gravity);
     salt::Vector3f GetGravity() const;
     void SetERP(float erp);
@@ -47,13 +46,8 @@ public:
     void SetAutoDisableFlag(bool flag);
     void SetContactSurfaceLayer(float depth);
     float GetContactSurfaceLayer() const;
-    virtual void DestroyPhysicsObject();
-
-protected:
-    virtual bool ConstructInternal();
-
-private:
-    dWorldID mODEWorld;
+    void CreateWorld();
+    void DestroyWorld();
 };
 
 }

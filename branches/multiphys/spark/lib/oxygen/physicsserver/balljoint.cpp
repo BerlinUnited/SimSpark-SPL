@@ -33,13 +33,13 @@ BallJoint::~BallJoint()
 
 void BallJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateBall(world, 0);
+    mODEJoint = dJointCreateBall((dWorldID) world, 0);
 }
 
 void BallJoint::SetAnchor(const Vector3f& anchor)

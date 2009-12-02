@@ -34,13 +34,13 @@ HingeJoint::~HingeJoint()
 
 void HingeJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateHinge(world, 0);
+    mODEJoint = dJointCreateHinge((dWorldID) world, 0);
 }
 
 void HingeJoint::SetAnchor(const Vector3f& anchor)

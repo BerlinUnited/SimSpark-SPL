@@ -39,9 +39,9 @@ RigidBody::~RigidBody()
 {
 }
 
-dBodyID RigidBody::GetODEBody() const
+long RigidBody::GetBodyID() const
 {
-    return (dBodyID) mRigidBodyImp->mBodyID;
+    return mRigidBodyImp->GetBodyID();
 }
 
 void RigidBody::Enable()
@@ -71,7 +71,7 @@ bool RigidBody::UsesGravity() const
 
 bool RigidBody::CreateBody()
 {
-    long bodyID = mRigidBodyImp->mBodyID;
+    long bodyID = mRigidBodyImp->GetBodyID();
 
     if (bodyID != 0)
         {
@@ -86,9 +86,9 @@ bool RigidBody::CreateBody()
     
     mRigidBodyImp->CreateBody(world);
     
-    mODEBody = (dBodyID) mRigidBodyImp->mBodyID;
+    mODEBody = (dBodyID) mRigidBodyImp->GetBodyID();
     
-    if (mRigidBodyImp->mBodyID == 0)
+    if (mRigidBodyImp->GetBodyID() == 0)
         {
             GetLog()->Error()
                 << "(Body) ERROR: could not create new ODE body\n";
@@ -140,12 +140,12 @@ void RigidBody::AddMass(const dMass& mass, const Matrix& matrix)
 
 void RigidBody::GetMassParameters(dMass& mass) const
 {
-    dBodyGetMass(mODEBody, &mass);
+    mRigidBodyImp->GetMassParameters(mass);
 }
 
 void RigidBody::SetMassParameters(const dMass& mass)
 {
-    dBodySetMass(mODEBody, &mass);
+    mRigidBodyImp->SetMassParameters(mass);
 }
 
 void RigidBody::SetSphere(float density, float radius)
@@ -271,7 +271,7 @@ void RigidBody::SynchronizeParent() const
 void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     // Check whether mass/body has been translated
-    if (mRigidBodyImp->mMassTransformed)
+    if (mRigidBodyImp->GetMassTransformed())
     {
         weak_ptr<Node> parent = GetParent();
 
@@ -302,8 +302,8 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
             transform->SetWorldTransform(worldTransform);
         }
         
-        mRigidBodyImp->mMassTrans = Vector3f(0,0,0);
-        mRigidBodyImp->mMassTransformed = false;
+        mRigidBodyImp->SetMassTrans(Vector3f(0,0,0));
+        mRigidBodyImp->SetMassTransformed(false);
     }
 }
 

@@ -34,13 +34,13 @@ SliderJoint::~SliderJoint()
 
 void SliderJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateSlider(world, 0);
+    mODEJoint = dJointCreateSlider((dWorldID) world, 0);
 }
 
 void SliderJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)

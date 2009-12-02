@@ -29,21 +29,11 @@
 
 namespace oxygen
 {
-class Space;
-class World;
 
 class OXYGEN_API ODEPhysicsObject : public PhysicsObjectInt
 {
 public:
     ODEPhysicsObject();
-    virtual ~ODEPhysicsObject();
-    
-    dWorldID GetWorldID();
-    dSpaceID FindSpaceID();
-    virtual dSpaceID GetParentSpaceID();
-    virtual void DestroyPhysicsObject(){};
-
-protected:
     void ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix);
     void ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const;
 };

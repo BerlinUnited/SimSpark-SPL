@@ -31,7 +31,6 @@ class OXYGEN_API ODEBody : public BodyInt
 {
 public:
     ODEBody();
-    virtual ~ODEBody();
 };
 
 } //namespace oxygen

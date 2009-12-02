@@ -32,9 +32,9 @@ namespace oxygen
 class OXYGEN_API BodyInt : public ODEPhysicsObject
 {
 
-public:
-    BodyInt() : ODEPhysicsObject(){};
-    virtual ~BodyInt(){};
+protected:
+    BodyInt() : ODEPhysicsObject(){
+    };
 };
 
 } //namespace oxygen

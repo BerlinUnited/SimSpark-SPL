@@ -34,10 +34,6 @@ class OXYGEN_API RigidBodyInt : public ODEBody
 {
 
 public:
-    RigidBodyInt() : ODEBody(){};
-    virtual ~RigidBodyInt(){};
-    
-    virtual dBodyID GetODEBody() const = 0;
     virtual void Enable() = 0;
     virtual void Disable() = 0;
     virtual bool IsEnabled() const = 0;
@@ -82,7 +78,16 @@ public:
     virtual void BodySetData(RigidBody* rb) = 0;
     virtual RigidBody* BodyGetData(long bodyID) = 0;
     
+    virtual long GetBodyID() = 0;
+    virtual salt::Vector3f GetMassTrans() = 0;
+    virtual void SetMassTrans(salt::Vector3f massTrans) = 0; 
+    virtual bool GetMassTransformed() = 0;
+    virtual void SetMassTransformed(bool f) = 0;
+    
 protected:
+    RigidBodyInt() : ODEBody(), mBodyID(0), mMassTrans(0,0,0), mMassTransformed(false){
+    };
+
     /** sets up an ode mass struct representing a box of the given
         size and total_mass
     */
@@ -137,10 +142,7 @@ protected:
     */
     virtual void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const = 0;
     
-private:
-    virtual void PrePhysicsUpdateInternal(float deltaTime) = 0;
-    
-public:
+protected:
     long mBodyID;
     salt::Vector3f mMassTrans;
     bool mMassTransformed;

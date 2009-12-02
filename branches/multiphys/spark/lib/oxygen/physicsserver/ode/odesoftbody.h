@@ -31,7 +31,6 @@ class OXYGEN_API ODESoftBody : public SoftBodyInt
 {
 public:
     ODESoftBody();
-    virtual ~ODESoftBody();
 };
 
 } //namespace oxygen

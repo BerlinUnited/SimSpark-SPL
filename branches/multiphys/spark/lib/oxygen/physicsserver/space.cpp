@@ -47,9 +47,9 @@ Space::~Space()
 {
 }
 
-dSpaceID Space::GetODESpace() const
+long Space::GetSpaceID() const
 {
-    return mSpaceImp->GetODESpace();
+    return mSpaceImp->GetSpaceID();
 }
 
 dJointGroupID Space::GetODEJointGroup() const
@@ -197,20 +197,20 @@ void Space::OnLink()
     PhysicsObject::OnLink();
 
     shared_ptr<Space> space = GetSpace();
-    dSpaceID spaceId = 0;
+    long spaceID = 0;
 
     if (space.get() != 0)
         {
-            spaceId = space->GetODESpace();
+            spaceID = space->GetSpaceID();
         }
 
-    mODESpace = dHashSpaceCreate(spaceId);
+    mODESpace = dHashSpaceCreate((dSpaceID) spaceID);
     
     shared_ptr<ODESpace> odespace = shared_static_cast<ODESpace>(mSpaceImp);
     odespace->mODESpace = mODESpace;
 }
 
-dSpaceID Space::GetParentSpaceID()
+long Space::GetParentSpaceID()
 {
     return mSpaceImp->GetParentSpaceID();
 }

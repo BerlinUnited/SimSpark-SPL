@@ -20,8 +20,8 @@
 */
 
 #include <oxygen/physicsserver/ode/odeworld.h>
-#include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
+#include <oxygen/physicsserver/world.h>
 #include <oxygen/sceneserver/scene.h>
 
 using namespace boost;
@@ -37,72 +37,95 @@ World::~World()
 {
 }
 
-dWorldID World::GetODEWorld() const
+long World::GetWorldID() const
 {
-  return mWorldImp->GetODEWorld();
+    return mWorldImp->GetWorldID();
 }
 
 void World::SetGravity(const Vector3f& gravity)
 {
-  mWorldImp->SetGravity(gravity);
+    mWorldImp->SetGravity(gravity);
 }
 
 salt::Vector3f World::GetGravity() const
 {
-  return mWorldImp->GetGravity();
+    return mWorldImp->GetGravity();
 }
 
 void World::SetERP(float erp)
 {
-  mWorldImp->SetERP(erp);
+    mWorldImp->SetERP(erp);
 }
 
 float World::GetERP() const
 {
-  return mWorldImp->GetERP();
+    return mWorldImp->GetERP();
 }
 
 void World::SetCFM(float cfm)
 {
-  mWorldImp->SetCFM(cfm);
+    mWorldImp->SetCFM(cfm);
 }
 
 float World::GetCFM() const
 {
-  return mWorldImp->GetCFM();
+    return mWorldImp->GetCFM();
 }
 
 void World::Step(float deltaTime)
 {
-  mWorldImp->Step(deltaTime);
+    mWorldImp->Step(deltaTime);
 }
 
 bool World::GetAutoDisableFlag() const
 {
-  return mWorldImp->GetAutoDisableFlag();
+    return mWorldImp->GetAutoDisableFlag();
 }
 
 void World::SetAutoDisableFlag(bool flag)
 {
-  mWorldImp->SetAutoDisableFlag(flag);
+    mWorldImp->SetAutoDisableFlag(flag);
 }
 
 void World::SetContactSurfaceLayer(float depth)
 {
-  mWorldImp->SetContactSurfaceLayer(depth);
+    mWorldImp->SetContactSurfaceLayer(depth);
 }
 
 float World::GetContactSurfaceLayer() const
 {
-  return mWorldImp->GetContactSurfaceLayer();
+    return mWorldImp->GetContactSurfaceLayer();
 }
 
 bool World::ConstructInternal()
 {
-  return mWorldImp->ConstructInternal();
+    mWorldImp->CreateWorld();
+
+    return (mWorldImp->GetWorldID() != 0);
 }
 
 void World::DestroyPhysicsObject()
 {
-  mWorldImp->DestroyPhysicsObject();
+    static bool recurseLock = false;
+    if (recurseLock)
+        {
+            return;
+        }
+
+    recurseLock = true;
+
+    shared_ptr<Space> space = GetSpace();
+    if (space.get() != 0)
+        {
+            space->DestroyPhysicsObject();
+        }
+
+    if (mWorldImp->GetWorldID() == 0)
+        {
+            return;
+        }
+
+    mWorldImp->DestroyWorld();
+
+    recurseLock = false;
 }

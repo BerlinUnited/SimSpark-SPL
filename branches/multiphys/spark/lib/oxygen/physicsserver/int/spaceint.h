@@ -39,15 +39,12 @@ class OXYGEN_API SpaceInt : public ODEPhysicsObject
 public:
     typedef std::set<dSpaceID> TSpaceIdSet;
     
-    SpaceInt() : ODEPhysicsObject(){};
-    virtual ~SpaceInt(){};
-    
     //virtual void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2) = 0;
-    virtual dSpaceID GetODESpace() const = 0;
+    virtual long GetSpaceID() const = 0;
     virtual dJointGroupID GetODEJointGroup() const = 0;
     virtual void Collide() = 0;
     virtual void DestroyPhysicsObject() = 0;
-    virtual dSpaceID GetParentSpaceID() = 0;
+    virtual long GetParentSpaceID() = 0;
     virtual bool IsGlobalSpace() = 0;
     virtual void DisableInnerCollision(bool disable) = 0;
     virtual bool GetDisableInnerCollision() const = 0;
@@ -61,6 +58,10 @@ public:
     virtual void DestroySpaceObjects() = 0;
     
     boost::shared_ptr<Scene> scene;
+    
+protected:
+    SpaceInt() : ODEPhysicsObject(){
+    };
 };
 
 } //namespace oxygen

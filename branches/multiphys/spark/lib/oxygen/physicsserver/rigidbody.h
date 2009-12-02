@@ -47,7 +47,7 @@ public:
     virtual ~RigidBody();
 
     /** returns the ID of the mangaged ODE body */
-    dBodyID GetODEBody() const;
+    long GetBodyID() const;
 
     /** enables this body. Each body can be enabled or
         disabled. Disabled bodies are effectively turned off and are

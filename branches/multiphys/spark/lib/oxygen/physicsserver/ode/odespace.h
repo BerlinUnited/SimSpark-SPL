@@ -36,13 +36,12 @@ public:
 
 public:
     ODESpace();
-    virtual ~ODESpace();
 
-    dSpaceID GetODESpace() const;
+    long GetSpaceID() const;
     dJointGroupID GetODEJointGroup() const;
     void Collide();
     virtual void DestroyPhysicsObject();
-    virtual dSpaceID GetParentSpaceID();
+    virtual long GetParentSpaceID();
     bool IsGlobalSpace();
     void DisableInnerCollision(bool disable);
     bool GetDisableInnerCollision() const;
