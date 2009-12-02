@@ -41,7 +41,7 @@ PhysicsObject::~PhysicsObject()
 
 void PhysicsObject::OnUnlink()
 {
-    mPhysicsObjectImp->DestroyPhysicsObject();
+    DestroyPhysicsObject();
 }
 
 /** returns the world node */
@@ -91,38 +91,48 @@ shared_ptr<Space> PhysicsObject::GetSpace()
     return spaceNode;
 }
 
-dWorldID PhysicsObject::GetWorldID()
-{
-    mPhysicsObjectImp->world = GetWorld();
-    
+long PhysicsObject::GetWorldID()
+{    
     shared_ptr<World> world = GetWorld();
     
-    //mPhysicsObjectImp->GetWorld();
     if (world.get() == 0)
         {
             return 0;
         }
 
-    dWorldID worldId = world->GetODEWorld();
-    if (worldId == 0)
+    long worldID = world->GetWorldID();
+    
+    if (worldID == 0)
         {
             GetLog()->Error()
                 << "(ODEObject) ERROR: World returned empty ODE handle\n";
         }
 
-    return worldId;
+    return worldID;
 }
 
-dSpaceID PhysicsObject::FindSpaceID()
+long PhysicsObject::FindSpaceID()
 {
-    mPhysicsObjectImp->space = GetSpace();
-    
-    return mPhysicsObjectImp->FindSpaceID();
+    shared_ptr<Space> space = GetSpace();
+    if (space.get() == 0)
+        {
+            return 0;
+        }
+
+    long spaceID = space->GetSpaceID();
+
+    if (spaceID == 0)
+        {
+            GetLog()->Error()
+                << "(ODEObject) ERROR: Space returned empty ODE handle\n";
+        }
+
+    return spaceID;
 }
 
-dSpaceID PhysicsObject::GetParentSpaceID()
+long PhysicsObject::GetParentSpaceID()
 {
-    return mPhysicsObjectImp->GetParentSpaceID();
+    return 0;
 }
 
 void PhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix)

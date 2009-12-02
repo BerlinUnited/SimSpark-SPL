@@ -34,13 +34,13 @@ AngularMotor::~AngularMotor()
 
 void AngularMotor::OnLink()
 {
-    dWorldID world = GetWorldID();
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateAMotor(world, 0);
+    mODEJoint = dJointCreateAMotor((dWorldID) world, 0);
 }
 
 void AngularMotor::SetMode(EMotorMode mode)

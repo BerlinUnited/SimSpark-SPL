@@ -30,26 +30,17 @@
 
 namespace oxygen
 {
-class World;
-class Space;
 
-class OXYGEN_API PhysicsObjectInt : public BaseNode
+class OXYGEN_API PhysicsObjectInt
 {
 
-public:
-    PhysicsObjectInt(){};
-    virtual ~PhysicsObjectInt(){};
-    
-    virtual dWorldID GetWorldID() = 0;
-    virtual dSpaceID FindSpaceID() = 0;
-    virtual dSpaceID GetParentSpaceID() = 0;
+public:    
     virtual void ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix) = 0;
     virtual void ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const = 0;
-    virtual void DestroyPhysicsObject() = 0;
     
-    boost::shared_ptr<Scene> scene;
-    boost::shared_ptr<Space> space;
-    boost::shared_ptr<World> world;
+protected:
+    PhysicsObjectInt(){
+    };
 };
 
 } //namespace oxygen

@@ -32,17 +32,28 @@ using namespace boost;
 using namespace salt;
 using namespace std;
 
-ODERigidBody::ODERigidBody() : RigidBodyInt(), mMassTrans(0,0,0), mMassTransformed(false){
-    mBodyID = 0;
+ODERigidBody::ODERigidBody() : RigidBodyInt(){
 }
 
-ODERigidBody::~ODERigidBody(){
-
-}
-
-dBodyID ODERigidBody::GetODEBody() const
+long ODERigidBody::GetBodyID()
 {
-    return (dBodyID)mBodyID;
+    return mBodyID;
+}
+
+salt::Vector3f ODERigidBody::GetMassTrans(){
+    return mMassTrans;
+}
+
+void ODERigidBody::SetMassTrans(Vector3f massTrans){
+    mMassTrans = massTrans;
+}
+
+bool ODERigidBody::GetMassTransformed(){
+    return mMassTransformed;
+}
+
+void ODERigidBody::SetMassTransformed(bool f){
+    mMassTransformed = f;
 }
 
 void ODERigidBody::Enable()
@@ -391,45 +402,6 @@ salt::Matrix ODERigidBody::GetSynchronisationMatrix()
     mat.m[15] = 1;
 
     return mat;
-}
-
-void ODERigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
-{
-    // Check whether mass/body has been translated
-    if (mMassTransformed)
-    {
-        weak_ptr<Node> parent = GetParent();
-
-        // Update colliders (only those encapsulated in transform colliders)
-        TLeafList transformColliders;
-        parent.lock()->ListChildrenSupportingClass<TransformCollider>(transformColliders);
-
-        for (TLeafList::iterator iter = transformColliders.begin(); iter != transformColliders.end(); ++iter)
-        {
-            // Only move non-transform colliders
-            shared_ptr<Collider> collider = shared_static_cast<TransformCollider>(*iter)->FindChildSupportingClass<Collider>();
-            if (collider.get())
-            {
-                Vector3f pos = collider->GetPosition();
-                pos = pos + mMassTrans;
-                collider->SetLocalPosition(pos);
-            }
-        }
-
-        // Update visuals (or other transforms in the tree)
-        TLeafList transforms;
-        parent.lock()->ListShallowChildrenSupportingClass<Transform>(transforms);
-        for (TLeafList::iterator iter = transforms.begin(); iter != transforms.end(); ++iter)
-        {
-            shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
-            Matrix worldTransform = transform->GetWorldTransform();
-            worldTransform.Pos() = worldTransform.Pos() + mMassTrans;
-            transform->SetWorldTransform(worldTransform);
-        }
-        
-        mMassTrans = Vector3f(0,0,0);
-        mMassTransformed = false;
-    }
 }
 
 RigidBody* ODERigidBody::BodyGetData(long bodyID)

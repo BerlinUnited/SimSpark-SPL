@@ -34,14 +34,14 @@ UniversalJoint::~UniversalJoint()
 
 void UniversalJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    long world = GetWorldID();
 
     if (world == 0)
     {
         return;
     }
 
-    mODEJoint = dJointCreateUniversal(world, 0);
+    mODEJoint = dJointCreateUniversal((dWorldID) world, 0);
 }
 
 void UniversalJoint::SetAnchor(const Vector3f& anchor)

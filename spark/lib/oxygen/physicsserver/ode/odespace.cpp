@@ -42,13 +42,9 @@ ODESpace::ODESpace() : SpaceInt(), mODESpace(0), mODEContactGroup(0)
 {
 }
 
-ODESpace::~ODESpace()
+long ODESpace::GetSpaceID() const
 {
-}
-
-dSpaceID ODESpace::GetODESpace() const
-{
-  return mODESpace;
+  return (long) mODESpace;
 }
 
 dJointGroupID ODESpace::GetODEJointGroup() const
@@ -184,32 +180,29 @@ void ODESpace::HandleCollide(dGeomID obj1, dGeomID obj2)
 void ODESpace::OnUnlink()
 {
     DisableInnerCollision(false);
-    ODEPhysicsObject::OnUnlink();
 }
 
 void ODESpace::OnLink()
 {
-    ODEPhysicsObject::OnLink();
-
-    //shared_ptr<Space> space = GetSpace();
-    dSpaceID spaceId = 0;
+    /*shared_ptr<Space> space = GetSpace();
+    dSpaceID spaceID = 0;
 
     if (space.get() != 0)
         {
-            spaceId = space->GetODESpace();
+            spaceID = (dSpaceID) space->GetSpaceID();
         }
 
-    mODESpace = dHashSpaceCreate(spaceId);
+    mODESpace = dHashSpaceCreate(spaceID);*/
 }
 
-dSpaceID ODESpace::GetParentSpaceID()
+long ODESpace::GetParentSpaceID()
 {
     if (mODESpace == 0)
         {
             return 0;
         }
 
-    return dGeomGetSpace((dGeomID)mODESpace);
+    return (long) dGeomGetSpace((dGeomID)mODESpace);
 }
 
 bool ODESpace::IsGlobalSpace()
@@ -235,8 +228,8 @@ void ODESpace::PostPhysicsUpdateInternal()
     dJointGroupEmpty (mODEContactGroup);
 }
 
-void ODESpace::DestroySpaceObjects()
-{
+void ODESpace::DestroySpaceObjects(){}
+/*{
     if (scene.get() == 0)
         {
             return;
@@ -263,19 +256,19 @@ void ODESpace::DestroySpaceObjects()
 
             // destroy objects registered to this space; the top level
             // space object also destroy any other ODE object
-            const dSpaceID parentSpace = object->GetParentSpaceID();
+            const long parentSpace = object->GetParentSpaceID();
             if (
                 (
                  (globalSpace) &&
                  (parentSpace == 0)
                  ) ||
-                (parentSpace == mODESpace)
+                (parentSpace == (long) mODESpace)
                 )
                 {
                     object->DestroyPhysicsObject();
                 }
         }
-}
+}*/
 
 void ODESpace::DestroyPhysicsObject()
 {

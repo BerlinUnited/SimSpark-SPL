@@ -31,9 +31,7 @@ class OXYGEN_API ODERigidBody : public RigidBodyInt
 {
 public:
     ODERigidBody();
-    virtual ~ODERigidBody();
     
-    dBodyID GetODEBody() const;
     void Enable();
     void Disable();
     bool IsEnabled() const;
@@ -77,6 +75,12 @@ public:
     void BodySetData(RigidBody* rb);
     RigidBody* BodyGetData(long bodyID);
     
+    long GetBodyID();
+    salt::Vector3f GetMassTrans(); 
+    void SetMassTrans(salt::Vector3f massTrans);
+    bool GetMassTransformed();
+    void SetMassTransformed(bool f);
+    
 protected:
     void CreateBody(long world);
     void PrepareBoxTotal(dMass& mass, float total_mass, const salt::Vector3f& size) const;
@@ -87,13 +91,6 @@ protected:
     void PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
     void PrepareCapsule(dMass& mass, float density, float radius, float length) const;
     void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const;
-    
-private:
-    void PrePhysicsUpdateInternal(float deltaTime);
-    
-protected:
-    salt::Vector3f mMassTrans;
-    bool mMassTransformed;
 };
 
 } //namespace oxygen

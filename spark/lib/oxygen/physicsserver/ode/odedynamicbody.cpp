@@ -26,7 +26,3 @@ using namespace oxygen;
 ODEDynamicBody::ODEDynamicBody() : DynamicBodyInt(){
 
 }
-
-ODEDynamicBody::~ODEDynamicBody(){
-
-}

@@ -22,6 +22,7 @@
 #ifndef OXYGEN_COLLIDER_H
 #define OXYGEN_COLLIDER_H
 
+#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/oxygen_defines.h>
 #include <string>
@@ -124,7 +125,7 @@ public:
     bool Intersects(boost::shared_ptr<Collider> collider);
 
     /** returns the ODE handle ID of the containing parent space */
-    virtual dSpaceID GetParentSpaceID();
+    virtual long GetParentSpaceID();
 
     /** Add/Reomve a collider name that not collide with */
     void AddNotCollideWithColliderName(const std::string & colliderName, bool isAdd);

@@ -51,13 +51,13 @@ public:
     virtual void OnUnlink();
 
     /** returns the ODE world handle */
-    dWorldID GetWorldID();
+    long GetWorldID();
 
     /** returns the nearest parent space ODE handle */
-    dSpaceID FindSpaceID();
+    long FindSpaceID();
 
     /** returns the ODE handle ID of the containing parent space */
-    virtual dSpaceID GetParentSpaceID();
+    virtual long GetParentSpaceID();
     
     /** this method is not implemented here because PhysicsObject is an 
         abstract class. However, it is declared here so that it can be

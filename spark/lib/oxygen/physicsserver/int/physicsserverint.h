@@ -31,9 +31,8 @@ namespace oxygen
 class OXYGEN_API PhysicsServerInt
 {
 
-public:
+protected:
     PhysicsServerInt(){};
-    virtual ~PhysicsServerInt(){};
 };
 
 } //namespace oxygen

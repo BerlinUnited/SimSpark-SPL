@@ -27,22 +27,18 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-ODEWorld::ODEWorld() : WorldInt(), mODEWorld(0)
+ODEWorld::ODEWorld() : WorldInt()
 {
 }
 
-ODEWorld::~ODEWorld()
+long ODEWorld::GetWorldID() const
 {
-}
-
-dWorldID ODEWorld::GetODEWorld() const
-{
-  return mODEWorld;
+  return mWorldID;
 }
 
 void ODEWorld::SetGravity(const Vector3f& gravity)
 {
-  dWorldSetGravity(mODEWorld,
+  dWorldSetGravity((dWorldID) mWorldID,
                    gravity.x(),
                    gravity.y(),
                    gravity.z()
@@ -52,87 +48,62 @@ void ODEWorld::SetGravity(const Vector3f& gravity)
 salt::Vector3f ODEWorld::GetGravity() const
 {
   dVector3 dGravity;
-  dWorldGetGravity(mODEWorld,dGravity);
+  dWorldGetGravity((dWorldID) mWorldID,dGravity);
   return Vector3f(dGravity[0],dGravity[1],dGravity[2]);
 }
 
 void ODEWorld::SetERP(float erp)
 {
-  dWorldSetERP(mODEWorld, erp);
+  dWorldSetERP((dWorldID) mWorldID, erp);
 }
 
 float ODEWorld::GetERP() const
 {
-  return dWorldGetERP(mODEWorld);
+  return dWorldGetERP((dWorldID) mWorldID);
 }
 
 void ODEWorld::SetCFM(float cfm)
 {
-  dWorldSetCFM(mODEWorld, cfm);
+  dWorldSetCFM((dWorldID) mWorldID, cfm);
 }
 
 float ODEWorld::GetCFM() const
 {
-  return dWorldGetCFM(mODEWorld);
+  return dWorldGetCFM((dWorldID) mWorldID);
 }
 
 void ODEWorld::Step(float deltaTime)
 {
-  dWorldStep(mODEWorld, deltaTime);
+  dWorldStep((dWorldID) mWorldID, deltaTime);
 }
 
 bool ODEWorld::GetAutoDisableFlag() const
 {
-  return (dWorldGetAutoDisableFlag(mODEWorld) == 1);
+  return (dWorldGetAutoDisableFlag((dWorldID) mWorldID) == 1);
 }
 
 void ODEWorld::SetAutoDisableFlag(bool flag)
 {
-  dWorldSetAutoDisableFlag(mODEWorld, static_cast<int>(flag));
+  dWorldSetAutoDisableFlag((dWorldID) mWorldID, static_cast<int>(flag));
 }
 
 void ODEWorld::SetContactSurfaceLayer(float depth)
 {
-  dWorldSetContactSurfaceLayer(mODEWorld, depth);
+  dWorldSetContactSurfaceLayer((dWorldID) mWorldID, depth);
 }
 
 float ODEWorld::GetContactSurfaceLayer() const
 {
-  return dWorldGetContactSurfaceLayer(mODEWorld);
+  return dWorldGetContactSurfaceLayer((dWorldID) mWorldID);
 }
 
-bool ODEWorld::ConstructInternal()
+void ODEWorld::CreateWorld()
 {
-  // create an ode world
-  mODEWorld = dWorldCreate();
-
-  return (mODEWorld != 0);
+  mWorldID = (long) dWorldCreate();
 }
 
-void ODEWorld::DestroyPhysicsObject()
+void ODEWorld::DestroyWorld()
 {
-  static bool recurseLock = false;
-  if (recurseLock)
-    {
-      return;
-    }
-
-  recurseLock = true;
-
-  //shared_ptr<Space> space = GetSpace();
-  if (space.get() != 0)
-    {
-      space->DestroyPhysicsObject();
-    }
-
-  if (mODEWorld == 0)
-    {
-      return;
-    }
-
-  // release the ODE world
-  dWorldDestroy(mODEWorld);
-  mODEWorld = 0;
-
-  recurseLock = false;
+  dWorldDestroy((dWorldID) mWorldID);
+  mWorldID = 0;
 }

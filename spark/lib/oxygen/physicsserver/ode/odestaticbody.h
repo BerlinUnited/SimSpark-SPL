@@ -31,7 +31,6 @@ class OXYGEN_API ODEStaticBody : public StaticBodyInt
 {
 public:
     ODEStaticBody();
-    virtual ~ODEStaticBody();
 };
 
 } //namespace oxygen

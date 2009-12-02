@@ -34,13 +34,13 @@ FixedJoint::~FixedJoint()
 
 void FixedJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateFixed(world, 0);
+    mODEJoint = dJointCreateFixed((dWorldID) world, 0);
 }
 
 void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)

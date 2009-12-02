@@ -31,7 +31,6 @@ class OXYGEN_API ODEDynamicBody : public DynamicBodyInt
 {
 public:
     ODEDynamicBody();
-    virtual ~ODEDynamicBody();
 };
 
 } //namespace oxygen

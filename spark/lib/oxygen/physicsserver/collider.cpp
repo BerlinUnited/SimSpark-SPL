@@ -68,14 +68,14 @@ void Collider::OnLink()
 
     // this geom is independent, so register to space and body
     // if we have a space add the geom to it
-    dSpaceID space = FindSpaceID();
+    long spaceID = FindSpaceID();
     if (
-        (space) &&
-        (! dSpaceQuery(space, mODEGeom))
+        (spaceID) &&
+        (! dSpaceQuery((dSpaceID) spaceID, mODEGeom))
         )
         {
             dGeomSetData(mODEGeom, this);
-            dSpaceAdd(space, mODEGeom);
+            dSpaceAdd((dSpaceID) spaceID, mODEGeom);
         }
     // if there is a Body below our parent, link to it
     shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
@@ -83,7 +83,7 @@ void Collider::OnLink()
 
     if (body.get() != 0)
         {
-            dGeomSetBody (mODEGeom, body->GetODEBody());
+            dGeomSetBody (mODEGeom, (dBodyID) body->GetBodyID());
         } else
             {
                 // no body node found, setup initial position and
@@ -98,7 +98,7 @@ void Collider::OnUnlink()
     PhysicsObject::OnUnlink();
 
     // remove collision geometry from space
-    dSpaceID space = GetParentSpaceID();
+    long space = GetParentSpaceID();
 
     if (
         (mODEGeom == 0) ||
@@ -110,7 +110,7 @@ void Collider::OnUnlink()
 
     if (space)
     {
-        dSpaceRemove(space, mODEGeom);
+        dSpaceRemove((dSpaceID) space, mODEGeom);
     }
 }
 
@@ -230,14 +230,14 @@ Vector3f Collider::GetPosition() const
     return Vector3f(pos[0],pos[1],pos[2]);
 }
 
-dSpaceID Collider::GetParentSpaceID()
+long Collider::GetParentSpaceID()
 {
     if (mODEGeom == 0)
         {
             return 0;
         }
 
-    return dGeomGetSpace(mODEGeom);
+    return (long) dGeomGetSpace(mODEGeom);
 }
 
 bool Collider::Intersects(boost::shared_ptr<Collider> collider)

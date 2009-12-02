@@ -79,7 +79,7 @@ void TouchPerceptorHandler::HandleCollision(
 
     CalcSurfaceParam(contact.surface,handler->GetSurfaceParameter());
 
-    dJointID joint = dJointCreateContact(mWorld->GetODEWorld(),
+    dJointID joint = dJointCreateContact((dWorldID) mWorld->GetWorldID(),
             mSpace->GetODEJointGroup(), &contact);
 
     dJointAttach (joint, myBody, collideeBody);

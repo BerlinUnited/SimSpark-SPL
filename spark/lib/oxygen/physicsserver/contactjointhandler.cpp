@@ -188,7 +188,7 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& co
 
     // create the contact joint and attach it to the body
     dJointID joint = dJointCreateContact
-        (mWorld->GetODEWorld(), mSpace->GetODEJointGroup(), &contact);
+        ((dWorldID) mWorld->GetWorldID(), mSpace->GetODEJointGroup(), &contact);
 
     dJointAttach (joint, myBody, collideeBody);
 }

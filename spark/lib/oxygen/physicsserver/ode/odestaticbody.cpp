@@ -26,7 +26,3 @@ using namespace oxygen;
 ODEStaticBody::ODEStaticBody() : StaticBodyInt(){
 
 }
-
-ODEStaticBody::~ODEStaticBody(){
-
-}

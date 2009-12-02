@@ -88,7 +88,7 @@ void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
         }
 
     string path1,path2;
-    dBodyID id1,id2;
+    long id1,id2;
 
     static const char strStaticEnv[] = "<static environment>";
 
@@ -98,7 +98,7 @@ void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
             path1 = strStaticEnv;
         } else
         {
-            id1   = body1->GetODEBody();
+            id1   = body1->GetBodyID();
             path1 = body1->GetFullPath();
         }
 
@@ -108,14 +108,14 @@ void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
             path2 = strStaticEnv;
         } else
         {
-            id2   = body2->GetODEBody();
+            id2   = body2->GetBodyID();
             path2 = body2->GetFullPath();
         }
 
     GetLog()->Debug() << "(Joint) Attaching '" << path1 << "' to '"
                       << path2 << '\n';
 
-    dJointAttach(mODEJoint, id1, id2);
+    dJointAttach(mODEJoint, (dBodyID) id1, (dBodyID) id2);
 }
 
 shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
@@ -179,7 +179,7 @@ bool Joint::AreConnected (shared_ptr<RigidBody> body1, shared_ptr<RigidBody> bod
         }
 
     const bool connected =
-        (dAreConnected(body1->GetODEBody(),body2->GetODEBody())
+        (dAreConnected((dBodyID) body1->GetBodyID(), (dBodyID) body2->GetBodyID())
          == 1);
 
     return connected;
@@ -198,8 +198,8 @@ bool Joint::AreConnectedExcluding (shared_ptr<RigidBody> body1,
         }
 
     const bool connected =
-        (dAreConnectedExcluding(body1->GetODEBody(),
-                                body2->GetODEBody(),
+        (dAreConnectedExcluding((dBodyID) body1->GetBodyID(),
+                                (dBodyID) body2->GetBodyID(),
                                 joint_type
                                 )
          == 1);
