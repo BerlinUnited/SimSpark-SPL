@@ -91,8 +91,8 @@ public:
     */
     boost::shared_ptr<RigidBody> GetBody(EBodyIndex idx);
 
-    /** returns the Joint node corresponding to the given ODE joint */
-    static boost::shared_ptr<Joint> GetJoint(dJointID id);
+    /** returns the Joint node corresponding to the given joint */
+    static boost::shared_ptr<Joint> GetJoint(long jointID);
 
     /** returns the type of the managed ODE joint, possible return
         values are dJointTypeNone, dJointTypeBall, dJointTypeHinge,

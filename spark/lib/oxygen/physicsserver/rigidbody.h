@@ -84,7 +84,7 @@ public:
     float GetMass() const;
 
     /** returns the ODE mass parameters of this body */
-    void GetMassParameters(dMass& mass) const;
+    void GetMassParameters(float& mass) const;
     
     /** adds the given ode mass to this body. The given matrix is
         applied to the mass center
@@ -218,7 +218,7 @@ public:
     void SetAngularVelocity(const salt::Vector3f& vel);
 
     /** returns the Body node corresponding to the given ODE body */
-    static boost::shared_ptr<RigidBody> GetBody(dBodyID id);
+    static boost::shared_ptr<RigidBody> GetBody(long id);
 
     /** applies a force to the managed ODE body */
     void AddForce(const salt::Vector3f& force);
@@ -266,15 +266,6 @@ private:
     //
 protected:
     boost::shared_ptr<RigidBodyInt> mRigidBodyImp;
-
-    /** the managed ode body */
-    dBodyID mODEBody;
-
-    /** the total mass translation */
-    salt::Vector3f mMassTrans;
-
-    /** flag whether mass has been transformed */
-    bool mMassTransformed;
 };
 
 DECLARE_CLASS(RigidBody);

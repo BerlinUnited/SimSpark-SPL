@@ -40,7 +40,7 @@ public:
     void SetMass(float mass);
     void SetMassParameters(const dMass& mass);
     float GetMass() const;
-    void GetMassParameters(dMass& mass) const;
+    void GetMassParameters(float& mass) const;
     void AddMass(const dMass& mass, const salt::Matrix& matrix);
     void SetSphere(float density, float radius);
     void AddSphere(float density, float radius, const salt::Matrix& matrix);

@@ -94,10 +94,10 @@ public:
     bool AddCollisionHandler(const std::string& handlerName);
 
     /** returns the Collider corresponding to the given ODE geom  */
-    static boost::shared_ptr<Collider> GetCollider(dGeomID id);
+    static boost::shared_ptr<Collider> GetCollider(long geomID);
 
     /** returns the ID of managed ODE geom */
-    dGeomID GetODEGeom();
+    long GetGeomID();
 
     /** sets the relative position of the managed geom directly. If
         the geom is connected to a body, the position of the body will

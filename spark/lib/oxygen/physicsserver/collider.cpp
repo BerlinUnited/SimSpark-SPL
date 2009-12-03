@@ -62,7 +62,7 @@ void Collider::OnLink()
             // our parent is an ODE transform geom that encapsulates
             // this geom, so register ourself to it. This geom must
             // not directly register to a space or a body.
-            dGeomTransformSetGeom(tcParent->GetODEGeom(), mODEGeom);
+            dGeomTransformSetGeom((dGeomID) tcParent->GetGeomID(), mODEGeom);
             return;
         }
 
@@ -126,9 +126,9 @@ void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
         }
 }
 
-dGeomID Collider::GetODEGeom()
+long Collider::GetGeomID()
 {
-    return mODEGeom;
+    return (long) mODEGeom;
 }
 
 bool Collider::AddCollisionHandler(const std::string& handlerName)
@@ -175,21 +175,21 @@ void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
         }
 }
 
-shared_ptr<Collider> Collider::GetCollider(dGeomID id)
+shared_ptr<Collider> Collider::GetCollider(long geomID)
 {
-    if (id == 0)
+    if (geomID == 0)
         {
             return shared_ptr<Collider>();
         }
 
     Collider* collPtr =
-        static_cast<Collider*>(dGeomGetData(id));
+        static_cast<Collider*>(dGeomGetData((dGeomID) geomID));
 
     if (collPtr == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (Collider) no Collider found for dGeomID "
-                 << id << "\n";
+            cerr << "ERROR: (Collider) no Collider found for GeomID "
+                 << geomID << "\n";
             return shared_ptr<Collider>();
         }
 
@@ -199,8 +199,8 @@ shared_ptr<Collider> Collider::GetCollider(dGeomID id)
     if (collider.get() == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (Collider) got no shared_ptr for dGeomID "
-                 << id << "\n";
+            cerr << "ERROR: (Collider) got no shared_ptr for GeomID "
+                 << geomID << "\n";
         }
 
     return collider;
@@ -209,7 +209,7 @@ shared_ptr<Collider> Collider::GetCollider(dGeomID id)
 void Collider::SetRotation(const Matrix& rot)
 {
     dMatrix3 m;
-    ConvertRotationMatrix(rot,m);
+    ConvertRotationMatrix(rot,(int&) m);
     dGeomSetRotation(mODEGeom,m);
 }
 
@@ -255,7 +255,7 @@ bool Collider::Intersects(boost::shared_ptr<Collider> collider)
     return dCollide
         (
          mODEGeom,
-         collider->GetODEGeom(),
+         (dGeomID) collider->GetGeomID(),
          1, /* ask for at most one collision point */
          &contact,
          sizeof(contact)

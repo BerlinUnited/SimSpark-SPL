@@ -95,7 +95,7 @@ protected:
         geoms. It will look up and notify the corresponding colliders
         for a potential collision.
     */
-    void HandleCollide(dGeomID obj1, dGeomID obj2);
+    void HandleCollide(long obj1, long obj2);
 
     /** handle the collision between two geoms from which at least one
         is a space geom

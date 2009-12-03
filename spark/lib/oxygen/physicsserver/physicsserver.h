@@ -25,7 +25,6 @@
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
 
 namespace oxygen
 {

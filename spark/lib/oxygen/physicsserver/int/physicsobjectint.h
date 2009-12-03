@@ -35,8 +35,8 @@ class OXYGEN_API PhysicsObjectInt
 {
 
 public:    
-    virtual void ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix) = 0;
-    virtual void ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const = 0;
+    virtual void ConvertRotationMatrix(const salt::Matrix& rot, int& matrix) = 0;
+    virtual void ConvertRotationMatrix(const void* matrix, salt::Matrix& rot) const = 0;
     
 protected:
     PhysicsObjectInt(){

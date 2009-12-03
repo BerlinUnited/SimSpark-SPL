@@ -35,7 +35,7 @@ Space::TSpaceIdSet Space::gDisabledInnerCollisionSet;
 void Space::collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
 {
     Space *space = (Space*)data;
-    space->HandleCollide(obj1, obj2);
+    space->HandleCollide((long) obj1, (long) obj2);
 }
 
 Space::Space() : PhysicsObject(), mODESpace(0)
@@ -89,24 +89,27 @@ void Space::HandleSpaceCollide(dGeomID obj1, dGeomID obj2)
         }
 }
 
-void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
+void Space::HandleCollide(long obj1, long obj2)
 {
     //mSpaceImp->HandleCollide(obj1, obj2);
+    
+    dGeomID geom1 = (dGeomID) obj1;
+    dGeomID geom2 = (dGeomID) obj2; 
   
     if (
-        (dGeomIsSpace (obj1)) ||
-        (dGeomIsSpace (obj2))
+        (dGeomIsSpace (geom1)) ||
+        (dGeomIsSpace (geom2))
         )
         {
             // colliding a space with something
-            HandleSpaceCollide(obj1, obj2);
+            HandleSpaceCollide(geom1, geom2);
             return;
         }
 
     // colliding two non-space geoms; reject collisions
     // between bodies that are connected with joints
-    const dBodyID b1 = dGeomGetBody(obj1);
-    const dBodyID b2 = dGeomGetBody(obj2);
+    const dBodyID b1 = dGeomGetBody(geom1);
+    const dBodyID b2 = dGeomGetBody(geom2);
 
     if (
         (b1) && (b2) &&
@@ -118,22 +121,8 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
 
     // if obj1 and obj2 are in a space that disabled inner collision,
     // reject the collision
-    const dSpaceID s1 = dGeomGetSpace(obj1);
-    const dSpaceID s2 = dGeomGetSpace(obj2);
-
-    // NOTICE: this should not happen since it is checked in Collide(dSpaceID)
-//    if (
-//        (s1 == s2) &&
-//        (gDisabledInnerCollisionSet.find(s1) != gDisabledInnerCollisionSet.end())
-//        )
-//        {
-//            return;
-//        }
-
-
-    // if obj1 and obj2 are in the same space, and
-    // obj1 is in obj2's "mNotCollideWithSet" or ojb2 is in obj1's
-    // reject the collision
+    const dSpaceID s1 = dGeomGetSpace(geom1);
+    const dSpaceID s2 = dGeomGetSpace(geom2);
 
     // get shared pointers to the two corresponding Collider nodes first
     shared_ptr<Collider> collider = Collider::GetCollider(obj1);
@@ -169,7 +158,7 @@ void Space::HandleCollide(dGeomID obj1, dGeomID obj2)
     static const int nContacts = 4;
     static dContact contacts[nContacts];
 
-    int n = dCollide (obj1, obj2, nContacts,
+    int n = dCollide (geom1, geom2, nContacts,
                       &contacts[0].geom, sizeof(dContact));
 
     if (n == 0)
