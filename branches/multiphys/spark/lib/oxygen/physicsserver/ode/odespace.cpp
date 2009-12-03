@@ -112,23 +112,9 @@ void ODESpace::HandleCollide(dGeomID obj1, dGeomID obj2)
     const dSpaceID s1 = dGeomGetSpace(obj1);
     const dSpaceID s2 = dGeomGetSpace(obj2);
 
-    // NOTICE: this should not happen since it is checked in Collide(dSpaceID)
-//    if (
-//        (s1 == s2) &&
-//        (gDisabledInnerCollisionSet.find(s1) != gDisabledInnerCollisionSet.end())
-//        )
-//        {
-//            return;
-//        }
-
-
-    // if obj1 and obj2 are in the same space, and
-    // obj1 is in obj2's "mNotCollideWithSet" or ojb2 is in obj1's
-    // reject the collision
-
     // get shared pointers to the two corresponding Collider nodes first
-    shared_ptr<Collider> collider = Collider::GetCollider(obj1);
-    shared_ptr<Collider> collidee = Collider::GetCollider(obj2);
+    shared_ptr<Collider> collider = Collider::GetCollider((long) obj1);
+    shared_ptr<Collider> collidee = Collider::GetCollider((long) obj2);
 
     if (
         (collider.get() == 0) ||

@@ -25,7 +25,6 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/basenode.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
 
 namespace oxygen
 {
@@ -73,12 +72,15 @@ protected:
     /** finds the nearest parent space node */
     boost::shared_ptr<Space> GetSpace();
 
-    /** converts the rotation part of a salt::Matrix to an ODE
-        dMatrix3 */
-    void ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix);
+    /** converts the rotation part of a salt::Matrix to an
+        engine-specific matrix, currently used for ODE's dMatrix3
+    */
+    void ConvertRotationMatrix(const salt::Matrix& rot, int& matrix);
 
-    /** coverts the ODE dMatrix3 to the rotation part of a salt::Matrix */
-    void ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const;
+    /** coverts an engine-specific to the rotation part of a salt::Matrix, 
+        currently used for ODE's dMatrix3
+    */
+    void ConvertRotationMatrix(const void* matrix, salt::Matrix& rot) const;
     
 private:
     boost::shared_ptr<PhysicsObjectInt> mPhysicsObjectImp;

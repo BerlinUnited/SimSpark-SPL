@@ -43,7 +43,7 @@ public:
     virtual void SetMass(float mass) = 0;
     virtual void SetMassParameters(const dMass& mass) = 0;
     virtual float GetMass() const = 0;
-    virtual void GetMassParameters(dMass& mass) const = 0;
+    virtual void GetMassParameters(float& mass) const = 0;
     virtual void SetSphere(float density, float radius) = 0;
     virtual void AddSphere(float density, float radius, const salt::Matrix& matrix) = 0;
     virtual void SetSphereTotal(float total_mass, float radius) = 0;
@@ -83,6 +83,17 @@ public:
     virtual void SetMassTrans(salt::Vector3f massTrans) = 0; 
     virtual bool GetMassTransformed() = 0;
     virtual void SetMassTransformed(bool f) = 0;
+    
+    /** Here, we have to cheat with the preprocessor, since a static method
+        is required, and the bridge pattern requires member variables to
+        be used (so we cannot use the bridge pattern)
+    */            
+    static RigidBody* GetBodyPointer(long bodyID){
+        //if ODE is used (currently not checked since ODE is the only supported engine)
+        return static_cast<RigidBody*>(dBodyGetData( (dBodyID) bodyID));
+        //if another engine is used
+        //do something else
+    }
     
 protected:
     RigidBodyInt() : ODEBody(), mBodyID(0), mMassTrans(0,0,0), mMassTransformed(false){

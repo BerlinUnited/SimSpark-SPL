@@ -33,36 +33,40 @@ ODEPhysicsObject::ODEPhysicsObject() : PhysicsObjectInt()
 {
 }
 
-void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, dMatrix3& matrix)
+void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, int& matrix)
 {
-    matrix[0] = rot.m[0];
-    matrix[1] = rot.m[4];
-    matrix[2] = rot.m[8];
-    matrix[3] = 0;
-    matrix[4] = rot.m[1];
-    matrix[5] = rot.m[5];
-    matrix[6] = rot.m[9];
-    matrix[7] = 0;
-    matrix[8] = rot.m[2];
-    matrix[9] = rot.m[6];
-    matrix[10] = rot.m[10];
-    matrix[11] = 0;
+    dMatrix3& odeMatrix = (dMatrix3&) matrix;
+    
+    odeMatrix[0] = rot.m[0];
+    odeMatrix[1] = rot.m[4];
+    odeMatrix[2] = rot.m[8];
+    odeMatrix[3] = 0;
+    odeMatrix[4] = rot.m[1];
+    odeMatrix[5] = rot.m[5];
+    odeMatrix[6] = rot.m[9];
+    odeMatrix[7] = 0;
+    odeMatrix[8] = rot.m[2];
+    odeMatrix[9] = rot.m[6];
+    odeMatrix[10] = rot.m[10];
+    odeMatrix[11] = 0;
 }
 
-void ODEPhysicsObject::ConvertRotationMatrix(const dReal* matrix, salt::Matrix& rot) const
+void ODEPhysicsObject::ConvertRotationMatrix(const void* matrix, salt::Matrix& rot) const
 {
-    rot.m[0] = matrix[0] ;
-    rot.m[4] = matrix[1] ;
-    rot.m[8] = matrix[2];
-    rot.m[12] = matrix[3];
-    rot.m[1] = matrix[4];
-    rot.m[5] = matrix[5];
-    rot.m[9] = matrix[6];
-    rot.m[13] = matrix[7];
-    rot.m[2] = matrix[8];
-    rot.m[6] = matrix[9];
-    rot.m[10] = matrix[10] ;
-    rot.m[14] = matrix[11];
+    dReal* odeMatrix = (dReal*) matrix;
+
+    rot.m[0] = odeMatrix[0];
+    rot.m[4] = odeMatrix[1];
+    rot.m[8] = odeMatrix[2];
+    rot.m[12] = odeMatrix[3];
+    rot.m[1] = odeMatrix[4];
+    rot.m[5] = odeMatrix[5];
+    rot.m[9] = odeMatrix[6];
+    rot.m[13] = odeMatrix[7];
+    rot.m[2] = odeMatrix[8];
+    rot.m[6] = odeMatrix[9];
+    rot.m[10] = odeMatrix[10];
+    rot.m[14] = odeMatrix[11];
     rot.m[3] = 0.0;
     rot.m[7] = 0.0;
     rot.m[11] = 0.0;

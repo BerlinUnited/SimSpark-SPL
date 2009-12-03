@@ -65,8 +65,8 @@ void TouchPerceptorHandler::HandleCollision(
 
     // to create a contact joint it we must have at least one body to
     // attach it to.
-    dBodyID myBody = dGeomGetBody(mCollider->GetODEGeom());
-    dBodyID collideeBody = dGeomGetBody(collidee->GetODEGeom());
+    dBodyID myBody = dGeomGetBody((dGeomID) mCollider->GetGeomID());
+    dBodyID collideeBody = dGeomGetBody((dGeomID) collidee->GetGeomID());
 
     if (myBody == 0 && collideeBody == 0)
         return;

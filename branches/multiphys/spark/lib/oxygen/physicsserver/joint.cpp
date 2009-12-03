@@ -47,21 +47,21 @@ void Joint::OnLink()
     dJointSetData(mODEJoint, this);
 }
 
-shared_ptr<Joint> Joint::GetJoint(dJointID id)
+shared_ptr<Joint> Joint::GetJoint(long jointID)
 {
-    if (id == 0)
+    if (jointID == 0)
         {
             return shared_ptr<Joint>();
         }
 
     Joint* jointPtr =
-        static_cast<Joint*>(dJointGetData(id));
+        static_cast<Joint*>(dJointGetData((dJointID) jointID));
 
     if (jointPtr == 0)
         {
             // we cannot use the logserver here
             cerr << "ERROR: (Joint) no joint found for dJointID "
-                 << id << "\n";
+                 << jointID << "\n";
             return shared_ptr<Joint>();
         }
 
@@ -72,7 +72,7 @@ shared_ptr<Joint> Joint::GetJoint(dJointID id)
         {
             // we cannot use the logserver here
             cerr << "ERROR: (Joint) got no shared_ptr for dJointID "
-                 << id << "\n";
+                 << jointID << "\n";
         }
 
     return joint;
@@ -165,7 +165,8 @@ int Joint::GetType() const
 
 boost::shared_ptr<RigidBody> Joint::GetBody(EBodyIndex idx)
 {
-    return RigidBody::GetBody(dJointGetBody(mODEJoint, idx));
+    long bodyID = (long) dJointGetBody(mODEJoint, idx);
+    return RigidBody::GetBody(bodyID);
 }
 
 bool Joint::AreConnected (shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)

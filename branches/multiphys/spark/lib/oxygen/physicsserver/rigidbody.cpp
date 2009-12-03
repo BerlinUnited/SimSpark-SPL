@@ -30,7 +30,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-RigidBody::RigidBody() : Body(), mODEBody(0), mMassTrans(0,0,0), mMassTransformed(false)
+RigidBody::RigidBody() : Body()
 {
     mRigidBodyImp = boost::shared_ptr<ODERigidBody>(new ODERigidBody());
 }
@@ -86,8 +86,6 @@ bool RigidBody::CreateBody()
     
     mRigidBodyImp->CreateBody(world);
     
-    mODEBody = (dBodyID) mRigidBodyImp->GetBodyID();
-    
     if (mRigidBodyImp->GetBodyID() == 0)
         {
             GetLog()->Error()
@@ -138,7 +136,7 @@ void RigidBody::AddMass(const dMass& mass, const Matrix& matrix)
     mRigidBodyImp->AddMass(mass, matrix);
 }
 
-void RigidBody::GetMassParameters(dMass& mass) const
+void RigidBody::GetMassParameters(float& mass) const
 {
     mRigidBodyImp->GetMassParameters(mass);
 }
@@ -273,6 +271,7 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
     // Check whether mass/body has been translated
     if (mRigidBodyImp->GetMassTransformed())
     {
+        Vector3f massTrans = mRigidBodyImp->GetMassTrans();
         weak_ptr<Node> parent = GetParent();
 
         // Update colliders (only those encapsulated in transform colliders)
@@ -286,7 +285,7 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
             if (collider.get())
             {
                 Vector3f pos = collider->GetPosition();
-                pos = pos + mMassTrans;
+                pos = pos + massTrans;
                 collider->SetLocalPosition(pos);
             }
         }
@@ -298,7 +297,7 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
         {
             shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
             Matrix worldTransform = transform->GetWorldTransform();
-            worldTransform.Pos() = worldTransform.Pos() + mMassTrans;
+            worldTransform.Pos() = worldTransform.Pos() + massTrans;
             transform->SetWorldTransform(worldTransform);
         }
         
@@ -313,7 +312,7 @@ void RigidBody::PostPhysicsUpdateInternal()
     SynchronizeParent();
 }
 
-shared_ptr<RigidBody> RigidBody::GetBody(dBodyID id)
+shared_ptr<RigidBody> RigidBody::GetBody(long id)
 {
     long bodyID = (long) id;
     if (bodyID == 0)
@@ -321,8 +320,7 @@ shared_ptr<RigidBody> RigidBody::GetBody(dBodyID id)
             return shared_ptr<RigidBody>();
         }
 
-    RigidBody* bodyPtr =
-        static_cast<RigidBody*>(dBodyGetData( (dBodyID) bodyID));
+    RigidBody* bodyPtr = RigidBodyInt::GetBodyPointer(bodyID);
 
     if (bodyPtr == 0)
         {
