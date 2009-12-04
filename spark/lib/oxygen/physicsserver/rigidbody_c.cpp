@@ -20,6 +20,7 @@
 */
 
 #include <oxygen/physicsserver/rigidbody.h>
+#include <oxygen/physicsserver/ode/odewrapper.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -100,7 +101,8 @@ FUNCTION(RigidBody,setMassParameters)
                 }
         }
 
-    obj->SetMassParameters(mass);
+    float& massRef = (float&) mass;
+    obj->SetMassParameters(massRef);
     return true;
 }
 

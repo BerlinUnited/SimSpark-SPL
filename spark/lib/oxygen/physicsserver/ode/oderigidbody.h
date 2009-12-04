@@ -38,10 +38,10 @@ public:
     void UseGravity(bool f);
     bool UsesGravity() const;
     void SetMass(float mass);
-    void SetMassParameters(const dMass& mass);
+    void SetMassParameters(const float& mass);
     float GetMass() const;
     void GetMassParameters(float& mass) const;
-    void AddMass(const dMass& mass, const salt::Matrix& matrix);
+    void AddMass(const float& mass, const salt::Matrix& matrix);
     void SetSphere(float density, float radius);
     void AddSphere(float density, float radius, const salt::Matrix& matrix);
     void SetSphereTotal(float total_mass, float radius);
@@ -83,14 +83,14 @@ public:
     
 protected:
     void CreateBody(long world);
-    void PrepareBoxTotal(dMass& mass, float total_mass, const salt::Vector3f& size) const;
-    void PrepareBox(dMass& mass, float density, const salt::Vector3f& size) const;
-    void PrepareSphere(dMass& mass, float density, float radius) const;   
-    void PrepareSphereTotal(dMass& mass, float total_mass, float radius) const;
-    void PrepareCylinder(dMass& mass, float density, float radius, float length) const;
-    void PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const;
-    void PrepareCapsule(dMass& mass, float density, float radius, float length) const;
-    void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const;
+    void PrepareBoxTotal(float& mass, float total_mass, const salt::Vector3f& size) const;
+    void PrepareBox(float& mass, float density, const salt::Vector3f& size) const;
+    void PrepareSphere(float& mass, float density, float radius) const;   
+    void PrepareSphereTotal(float& mass, float total_mass, float radius) const;
+    void PrepareCylinder(float& mass, float density, float radius, float length) const;
+    void PrepareCylinderTotal(float& mass, float total_mass, float radius, float length) const;
+    void PrepareCapsule(float& mass, float density, float radius, float length) const;
+    void PrepareCapsuleTotal(float& mass, float total_mass, float radius, float length) const;
 };
 
 } //namespace oxygen

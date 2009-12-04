@@ -23,7 +23,6 @@
 #define OXYGEN_BODY_H
 
 #include <oxygen/physicsserver/physicsobject.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
 
 namespace oxygen
 {

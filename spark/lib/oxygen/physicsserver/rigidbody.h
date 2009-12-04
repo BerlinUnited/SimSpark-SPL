@@ -78,7 +78,7 @@ public:
     void SetMass(float mass);
 
     /** set the ODE mass parameters of this body */
-    void SetMassParameters(const dMass& mass);
+    void SetMassParameters(const float& mass);
 
     /** returns the mass of this body */
     float GetMass() const;
@@ -89,7 +89,7 @@ public:
     /** adds the given ode mass to this body. The given matrix is
         applied to the mass center
     */
-    void AddMass(const dMass& mass, const salt::Matrix& matrix);
+    void AddMass(const float& mass, const salt::Matrix& matrix);
 
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)
