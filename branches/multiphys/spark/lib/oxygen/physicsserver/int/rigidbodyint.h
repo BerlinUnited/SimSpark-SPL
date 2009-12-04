@@ -41,7 +41,7 @@ public:
     virtual bool UsesGravity() const = 0;
     virtual void CreateBody(long world) = 0;
     virtual void SetMass(float mass) = 0;
-    virtual void SetMassParameters(const dMass& mass) = 0;
+    virtual void SetMassParameters(const float& mass) = 0;
     virtual float GetMass() const = 0;
     virtual void GetMassParameters(float& mass) const = 0;
     virtual void SetSphere(float density, float radius) = 0;
@@ -73,7 +73,7 @@ public:
     virtual salt::Vector3f GetPosition() const = 0;
     virtual void DestroyPhysicsObject() = 0;
     virtual salt::Matrix GetSynchronisationMatrix() = 0;
-    virtual void AddMass(const dMass& mass, const salt::Matrix& matrix) = 0;
+    virtual void AddMass(const float& mass, const salt::Matrix& matrix) = 0;
     //virtual salt::Vector3f GetMassCenter() const = 0;
     virtual void BodySetData(RigidBody* rb) = 0;
     virtual RigidBody* BodyGetData(long bodyID) = 0;
@@ -102,22 +102,22 @@ protected:
     /** sets up an ode mass struct representing a box of the given
         size and total_mass
     */
-    virtual void PrepareBoxTotal(dMass& mass, float total_mass, const salt::Vector3f& size) const = 0;
+    virtual void PrepareBoxTotal(float& mass, float total_mass, const salt::Vector3f& size) const = 0;
     
     /** sets up an ode mass struct representing a box of the given
         density and size
     */
-    virtual void PrepareBox(dMass& mass, float density, const salt::Vector3f& size) const = 0;
+    virtual void PrepareBox(float& mass, float density, const salt::Vector3f& size) const = 0;
     
     /** sets up an ode mass struct representing a sphere of the given
         density and radius
     */
-    virtual void PrepareSphere(dMass& mass, float density, float radius) const = 0;   
+    virtual void PrepareSphere(float& mass, float density, float radius) const = 0;   
     
     /** sets up an ode mass struct representing a sphere of the given
         radius and total_mass
     */
-    virtual void PrepareSphereTotal(dMass& mass, float total_mass, float radius) const = 0;
+    virtual void PrepareSphereTotal(float& mass, float total_mass, float radius) const = 0;
     
     /** sets up an ode mass struct representing a flat-ended cylinder
         of the given parameters and density, with the center of mass
@@ -125,7 +125,7 @@ protected:
         radius. The length of the cylinder is length. The cylinder's
         long axis is oriented along the body's z axis.
      */
-    virtual void PrepareCylinder(dMass& mass, float density, float radius, float length) const = 0;
+    virtual void PrepareCylinder(float& mass, float density, float radius, float length) const = 0;
     
     /** sets up an ode mass struct representing a flat-ended cylinder
         of the given parameters and total mass, with the center of
@@ -133,7 +133,7 @@ protected:
         cylinder is radius. The length of the cylinder is length. The
         cylinder's long axis is oriented along the body's z axis.
      */
-    virtual void PrepareCylinderTotal(dMass& mass, float total_mass, float radius, float length) const = 0;
+    virtual void PrepareCylinderTotal(float& mass, float total_mass, float radius, float length) const = 0;
     
     /* sets up an ode mass struct representing a capsule of
        the given parameters and density, with the center of mass at
@@ -142,7 +142,7 @@ protected:
        counting the spherical cap) is length. The capsule's long axis
        is oriented along the body's z axis.
     */
-    virtual void PrepareCapsule(dMass& mass, float density, float radius, float length) const = 0;
+    virtual void PrepareCapsule(float& mass, float density, float radius, float length) const = 0;
     
     /* sets up an ode mass struct representing a capsule of
        the given parameters and total mass, with the center of mass at
@@ -151,7 +151,7 @@ protected:
        counting the spherical cap) is length. The capsule's long axis
        is oriented along the body's z axis.
     */
-    virtual void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const = 0;
+    virtual void PrepareCapsuleTotal(float& mass, float total_mass, float radius, float length) const = 0;
     
 protected:
     long mBodyID;
