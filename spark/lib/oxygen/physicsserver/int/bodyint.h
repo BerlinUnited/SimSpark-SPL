@@ -29,12 +29,9 @@
 namespace oxygen
 {
 
-class OXYGEN_API BodyInt : public ODEPhysicsObject
+class OXYGEN_API BodyInt
 {
 
-protected:
-    BodyInt() : ODEPhysicsObject(){
-    };
 };
 
 } //namespace oxygen

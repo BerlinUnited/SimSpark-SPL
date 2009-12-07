@@ -29,11 +29,9 @@
 namespace oxygen
 {
 
-class OXYGEN_API DynamicBodyInt : public ODEBody
+class OXYGEN_API DynamicBodyInt
 {
 
-protected:
-    DynamicBodyInt() : ODEBody(){};
 };
 
 } //namespace oxygen

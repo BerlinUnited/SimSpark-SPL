@@ -28,7 +28,7 @@
 namespace oxygen
 {
 
-class OXYGEN_API WorldInt : public ODEPhysicsObject
+class OXYGEN_API WorldInt
 {
     
 public:
@@ -48,9 +48,6 @@ public:
     virtual void DestroyWorld() = 0;
 
 protected:
-    WorldInt() : ODEPhysicsObject(), mWorldID(0){
-    };
-
     long mWorldID;
 };
 

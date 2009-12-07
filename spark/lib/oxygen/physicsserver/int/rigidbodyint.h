@@ -30,7 +30,7 @@
 namespace oxygen
 {
 
-class OXYGEN_API RigidBodyInt : public ODEBody
+class OXYGEN_API RigidBodyInt
 {
 
 public:
@@ -43,7 +43,6 @@ public:
     virtual void SetMass(float mass) = 0;
     virtual void SetMassParameters(const float& mass) = 0;
     virtual float GetMass() const = 0;
-    virtual void GetMassParameters(float& mass) const = 0;
     virtual void SetSphere(float density, float radius) = 0;
     virtual void AddSphere(float density, float radius, const salt::Matrix& matrix) = 0;
     virtual void SetSphereTotal(float total_mass, float radius) = 0;
@@ -73,8 +72,6 @@ public:
     virtual salt::Vector3f GetPosition() const = 0;
     virtual void DestroyPhysicsObject() = 0;
     virtual salt::Matrix GetSynchronisationMatrix() = 0;
-    virtual void AddMass(const float& mass, const salt::Matrix& matrix) = 0;
-    //virtual salt::Vector3f GetMassCenter() const = 0;
     virtual void BodySetData(RigidBody* rb) = 0;
     virtual RigidBody* BodyGetData(long bodyID) = 0;
     
@@ -84,77 +81,21 @@ public:
     virtual bool GetMassTransformed() = 0;
     virtual void SetMassTransformed(bool f) = 0;
     
-    /** Here, we have to cheat with the preprocessor, since a static method
-        is required, and the bridge pattern requires member variables to
-        be used (so we cannot use the bridge pattern)
-    */            
+    // Here, we have to cheat with the preprocessor, since a static method
+    // is required, and the bridge pattern requires member variables to
+    // be used (so we cannot use the bridge pattern)            
     static RigidBody* GetBodyPointer(long bodyID){
-        //if ODE is used (currently not checked since ODE is the only supported engine)
+        #ifdef OXYGEN_ODEWRAPPER_H
         return static_cast<RigidBody*>(dBodyGetData( (dBodyID) bodyID));
-        //if another engine is used
-        //do something else
+        #endif
     }
     
 protected:
-    RigidBodyInt() : ODEBody(), mBodyID(0), mMassTrans(0,0,0), mMassTransformed(false){
-    };
-
-    /** sets up an ode mass struct representing a box of the given
-        size and total_mass
+    /** The ID of the managed body. This must be unique within the simulation.
+        It is used externally to reference this partcular body.
     */
-    virtual void PrepareBoxTotal(float& mass, float total_mass, const salt::Vector3f& size) const = 0;
-    
-    /** sets up an ode mass struct representing a box of the given
-        density and size
-    */
-    virtual void PrepareBox(float& mass, float density, const salt::Vector3f& size) const = 0;
-    
-    /** sets up an ode mass struct representing a sphere of the given
-        density and radius
-    */
-    virtual void PrepareSphere(float& mass, float density, float radius) const = 0;   
-    
-    /** sets up an ode mass struct representing a sphere of the given
-        radius and total_mass
-    */
-    virtual void PrepareSphereTotal(float& mass, float total_mass, float radius) const = 0;
-    
-    /** sets up an ode mass struct representing a flat-ended cylinder
-        of the given parameters and density, with the center of mass
-        at (0,0,0) relative to the body. The radius of the cylinder is
-        radius. The length of the cylinder is length. The cylinder's
-        long axis is oriented along the body's z axis.
-     */
-    virtual void PrepareCylinder(float& mass, float density, float radius, float length) const = 0;
-    
-    /** sets up an ode mass struct representing a flat-ended cylinder
-        of the given parameters and total mass, with the center of
-        mass at (0,0,0) relative to the body. The radius of the
-        cylinder is radius. The length of the cylinder is length. The
-        cylinder's long axis is oriented along the body's z axis.
-     */
-    virtual void PrepareCylinderTotal(float& mass, float total_mass, float radius, float length) const = 0;
-    
-    /* sets up an ode mass struct representing a capsule of
-       the given parameters and density, with the center of mass at
-       (0,0,0) relative to the body. The radius of the capsule (and
-       the spherical cap) is radius. The length of the capsule (not
-       counting the spherical cap) is length. The capsule's long axis
-       is oriented along the body's z axis.
-    */
-    virtual void PrepareCapsule(float& mass, float density, float radius, float length) const = 0;
-    
-    /* sets up an ode mass struct representing a capsule of
-       the given parameters and total mass, with the center of mass at
-       (0,0,0) relative to the body. The radius of the capsule (and
-       the spherical cap) is radius. The length of the capsule (not
-       counting the spherical cap) is length. The capsule's long axis
-       is oriented along the body's z axis.
-    */
-    virtual void PrepareCapsuleTotal(float& mass, float total_mass, float radius, float length) const = 0;
-    
-protected:
     long mBodyID;
+    
     salt::Vector3f mMassTrans;
     bool mMassTransformed;
 };

@@ -28,7 +28,7 @@
 namespace oxygen
 {
 
-class OXYGEN_API ODEWorld : public WorldInt
+class OXYGEN_API ODEWorld : public WorldInt, public ODEPhysicsObject
 {
 
 public:
@@ -48,6 +48,9 @@ public:
     float GetContactSurfaceLayer() const;
     void CreateWorld();
     void DestroyWorld();
+    
+private:
+    dWorldID mODEWorld;
 };
 
 }

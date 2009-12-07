@@ -75,7 +75,7 @@ protected:
     /** converts the rotation part of a salt::Matrix to an
         engine-specific matrix, currently used for ODE's dMatrix3
     */
-    void ConvertRotationMatrix(const salt::Matrix& rot, int& matrix);
+    void ConvertRotationMatrix(const salt::Matrix& rot, void* matrix);
 
     /** coverts an engine-specific to the rotation part of a salt::Matrix, 
         currently used for ODE's dMatrix3

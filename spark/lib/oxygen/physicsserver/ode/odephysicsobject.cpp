@@ -29,13 +29,15 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 
-ODEPhysicsObject::ODEPhysicsObject() : PhysicsObjectInt()
-{
+ODEPhysicsObject::ODEPhysicsObject(){
 }
 
-void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, int& matrix)
+void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, void* matrix)
 {
-    dMatrix3& odeMatrix = (dMatrix3&) matrix;
+    // cast to a pointer first because the compiler doesn't want to cast
+    // from a void* directly to a reference  
+    dMatrix3* helpMatrix = (dMatrix3*) matrix;  
+    dMatrix3& odeMatrix = (dMatrix3&) *helpMatrix;
     
     odeMatrix[0] = rot.m[0];
     odeMatrix[1] = rot.m[4];

@@ -33,7 +33,7 @@ class Transform;
 class RigidBody;
 class Collider;
 
-class OXYGEN_API SpaceInt : public ODEPhysicsObject
+class OXYGEN_API SpaceInt
 {
 
 public:
@@ -58,10 +58,6 @@ public:
     virtual void DestroySpaceObjects() = 0;
     
     boost::shared_ptr<Scene> scene;
-    
-protected:
-    SpaceInt() : ODEPhysicsObject(){
-    };
 };
 
 } //namespace oxygen

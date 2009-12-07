@@ -27,7 +27,7 @@
 namespace oxygen
 {
 
-class OXYGEN_API ODEBody : public BodyInt
+class OXYGEN_API ODEBody : public BodyInt, public ODEPhysicsObject
 {
 public:
     ODEBody();

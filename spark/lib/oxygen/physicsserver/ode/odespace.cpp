@@ -38,7 +38,7 @@ ODESpace::TSpaceIdSet ODESpace::gDisabledInnerCollisionSet;
   //  space->HandleCollide(obj1, obj2);
 //}
 
-ODESpace::ODESpace() : SpaceInt(), mODESpace(0), mODEContactGroup(0)
+ODESpace::ODESpace() : ODEPhysicsObject(), mODESpace(0), mODEContactGroup(0)
 {
 }
 

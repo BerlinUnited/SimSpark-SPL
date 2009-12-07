@@ -29,11 +29,9 @@
 namespace oxygen
 {
 
-class OXYGEN_API SoftBodyInt : public ODEBody
+class OXYGEN_API SoftBodyInt
 {
 
-protected:
-    SoftBodyInt() : ODEBody(){};
 };
 
 } //namespace oxygen
