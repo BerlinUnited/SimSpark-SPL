@@ -131,18 +131,7 @@ float RigidBody::GetMass() const
     return mRigidBodyImp->GetMass();
 }
 
-void RigidBody::AddMass(const float& mass, const Matrix& matrix)
-{
-    mRigidBodyImp->AddMass(mass, matrix);
-}
-
-void RigidBody::GetMassParameters(float& mass) const
-{
-    mRigidBodyImp->GetMassParameters(mass);
-}
-
-void RigidBody::SetMassParameters(const float& mass)
-{
+void RigidBody::SetMassParameters(const float& mass){
     mRigidBodyImp->SetMassParameters(mass);
 }
 

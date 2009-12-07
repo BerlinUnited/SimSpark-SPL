@@ -29,11 +29,9 @@
 namespace oxygen
 {
 
-class OXYGEN_API StaticBodyInt : public ODEBody
+class OXYGEN_API StaticBodyInt
 {
 
-protected:
-    StaticBodyInt() : ODEBody(){};
 };
 
 } //namespace oxygen

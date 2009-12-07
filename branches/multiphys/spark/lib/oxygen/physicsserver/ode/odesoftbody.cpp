@@ -23,6 +23,6 @@
 
 using namespace oxygen;
 
-ODESoftBody::ODESoftBody() : SoftBodyInt(){
+ODESoftBody::ODESoftBody() : ODEBody(){
 
 }

@@ -31,8 +31,6 @@ namespace oxygen
 class OXYGEN_API PhysicsServerInt
 {
 
-protected:
-    PhysicsServerInt(){};
 };
 
 } //namespace oxygen

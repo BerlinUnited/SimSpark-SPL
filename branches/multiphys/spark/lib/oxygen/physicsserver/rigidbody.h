@@ -46,7 +46,7 @@ public:
     RigidBody();
     virtual ~RigidBody();
 
-    /** returns the ID of the mangaged ODE body */
+    /** returns the ID of the mangaged body */
     long GetBodyID() const;
 
     /** enables this body. Each body can be enabled or
@@ -77,19 +77,11 @@ public:
     /** sets the mass of this body */
     void SetMass(float mass);
 
-    /** set the ODE mass parameters of this body */
-    void SetMassParameters(const float& mass);
-
     /** returns the mass of this body */
     float GetMass() const;
-
-    /** returns the ODE mass parameters of this body */
-    void GetMassParameters(float& mass) const;
     
-    /** adds the given ode mass to this body. The given matrix is
-        applied to the mass center
-    */
-    void AddMass(const float& mass, const salt::Matrix& matrix);
+    /** Sets the mass parameters of this body */
+    void SetMassParameters(const float& mass);
 
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)
@@ -217,16 +209,16 @@ public:
     /** sets the current angular velocity of this body */
     void SetAngularVelocity(const salt::Vector3f& vel);
 
-    /** returns the Body node corresponding to the given ODE body */
+    /** returns the Body node corresponding to the given body */
     static boost::shared_ptr<RigidBody> GetBody(long id);
 
-    /** applies a force to the managed ODE body */
+    /** applies a force to the managed body */
     void AddForce(const salt::Vector3f& force);
 
-    /** aplies a  force to the managed ODE body */
+    /** aplies a  force to the managed body */
     void AddTorque(const salt::Vector3f& torque);
 
-    /** sets the position of the managed ODE body */
+    /** sets the position of the managed body */
     void SetPosition(const salt::Vector3f& pos);
 
     /** returns the current poosition of this body */
@@ -240,15 +232,13 @@ public:
     */
     void SynchronizeParent() const;
 
-    salt::Vector3f GetMassCenter() const;
-
 protected:
-    /** creates the managed ODE body and moves it to the position of
+    /** creates the managed body and moves it to the position of
         it's scene-graph parent
     */
     virtual void OnLink();
 
-    /** create the managed ODE body; returns true on success */
+    /** create the managed body; returns true on success */
     bool CreateBody();
 
 private:
@@ -257,7 +247,7 @@ private:
 
     /** updates the the internal state after physics calculation,
         i.e. synchronises this scene graph node and the corresponding
-        ODE body.
+        body.
     */
     virtual void PostPhysicsUpdateInternal();
 

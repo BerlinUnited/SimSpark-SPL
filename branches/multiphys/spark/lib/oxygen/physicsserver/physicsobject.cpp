@@ -135,7 +135,7 @@ long PhysicsObject::GetParentSpaceID()
     return 0;
 }
 
-void PhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, int& matrix)
+void PhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, void* matrix)
 {
     mPhysicsObjectImp->ConvertRotationMatrix(rot, matrix);
 }
