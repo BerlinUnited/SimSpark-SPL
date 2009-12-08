@@ -19,21 +19,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODESOFTBODY_H
-#define OXYGEN_ODESOFTBODY_H
+#include <oxygen/physicsserver/ode/odecompoundcollider.h>
 
-#include <oxygen/physicsserver/ode/odebody.h>
-#include <oxygen/physicsserver/int/softbodyint.h>
+using namespace oxygen;
 
-namespace oxygen
-{
+ODECompoundCollider::ODECompoundCollider() : ODECollider(){
 
-class OXYGEN_API ODESoftBody : public SoftBodyInt, public ODEBody
-{
-public:
-    ODESoftBody();
-};
-
-} //namespace oxygen
-
-#endif //OXYGEN_ODESOFTBODY_H
+}

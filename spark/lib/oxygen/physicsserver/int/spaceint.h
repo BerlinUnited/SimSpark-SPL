@@ -23,7 +23,6 @@
 #ifndef OXYGEN_SPACEINT_H
 #define OXYGEN_SPACEINT_H
 
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <set>
 #include <oxygen/oxygen_defines.h>
 
@@ -32,6 +31,7 @@ namespace oxygen
 class Transform;
 class RigidBody;
 class Collider;
+class Scene;
 
 class OXYGEN_API SpaceInt
 {

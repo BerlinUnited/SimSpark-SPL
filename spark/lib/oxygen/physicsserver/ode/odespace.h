@@ -23,6 +23,7 @@
 #define OXYGEN_ODESPACE_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <oxygen/physicsserver/int/spaceint.h>
 
 namespace oxygen

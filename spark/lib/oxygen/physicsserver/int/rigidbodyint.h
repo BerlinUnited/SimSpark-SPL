@@ -24,8 +24,6 @@
 #define OXYGEN_RIGIDBODYINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odebody.h>
-#include <iostream>
 
 namespace oxygen
 {

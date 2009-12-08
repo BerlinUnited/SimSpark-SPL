@@ -27,6 +27,7 @@
 
 namespace oxygen
 {
+class CompoundColliderInt;
 /**
     CompoundCollider is not yet implemented.
 */
@@ -37,8 +38,11 @@ class OXYGEN_API CompoundCollider : public Collider
     // Functions
     //
 public:
-    CompoundCollider() : Collider(){};
-    virtual ~CompoundCollider(){};
+    CompoundCollider();
+    virtual ~CompoundCollider();
+    
+private:
+    boost::shared_ptr<CompoundColliderInt> mCompoundColliderImp;
 };
 
 DECLARE_CLASS(CompoundCollider);

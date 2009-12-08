@@ -46,7 +46,7 @@
 #include <oxygen/physicsserver/velocitycontroller.h>
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/boxcollider.h>
-#include <oxygen/physicsserver/ccylindercollider.h>
+#include <oxygen/physicsserver/capsulecollider.h>
 #include <oxygen/physicsserver/cylindercollider.h>
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/compoundcollider.h>

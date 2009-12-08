@@ -19,21 +19,21 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODESOFTBODY_H
-#define OXYGEN_ODESOFTBODY_H
+#ifndef OXYGEN_ODECONCAVECOLLIDER_H
+#define OXYGEN_ODECONCAVECOLLIDER_H
 
-#include <oxygen/physicsserver/ode/odebody.h>
-#include <oxygen/physicsserver/int/softbodyint.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
+#include <oxygen/physicsserver/int/concavecolliderint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODESoftBody : public SoftBodyInt, public ODEBody
+class OXYGEN_API ODEConcaveCollider : public ConcaveColliderInt, public ODECollider
 {
 public:
-    ODESoftBody();
+    ODEConcaveCollider();
 };
 
 } //namespace oxygen
 
-#endif //OXYGEN_ODESOFTBODY_H
+#endif //OXYGEN_ODECONCAVECOLLIDER_H

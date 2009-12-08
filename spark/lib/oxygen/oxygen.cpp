@@ -83,7 +83,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(EmptyCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(TransformCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(BoxCollider), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(CCylinderCollider), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(CapsuleCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(CylinderCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(PlaneCollider), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(RayCollider), "oxygen/");

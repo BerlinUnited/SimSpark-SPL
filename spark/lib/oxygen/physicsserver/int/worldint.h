@@ -22,8 +22,8 @@
 #ifndef OXYGEN_WORLDINT_H
 #define OXYGEN_WORLDINT_H
 
+#include <salt/salt.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
 
 namespace oxygen
 {

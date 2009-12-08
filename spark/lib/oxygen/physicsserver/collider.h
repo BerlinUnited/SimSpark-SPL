@@ -30,6 +30,7 @@
 
 namespace oxygen
 {
+class ColliderInt;
 
 /** \class Collider encapsulates an ODE geometry object- geom for
     short. Geoms are the fundamental objects in the collision
@@ -158,6 +159,9 @@ protected:
 protected:
     /** the ode collision geometry */
     dGeomID mODEGeom;
+    
+private:
+    boost::shared_ptr<ColliderInt> mColliderImp;
 
 protected:
     /** a set that store the colliders that I never collide with

@@ -27,6 +27,7 @@
 
 namespace oxygen
 {
+class EmptyColliderInt;
 /**
     EmptyCollider is not yet implemented.
 */
@@ -37,8 +38,11 @@ class OXYGEN_API EmptyCollider : public Collider
     // Functions
     //
 public:
-    EmptyCollider() : Collider(){};
-    virtual ~EmptyCollider(){};
+    EmptyCollider();
+    virtual ~EmptyCollider();
+    
+private:
+    boost::shared_ptr<EmptyColliderInt> mEmptyColliderImp;
 };
 
 DECLARE_CLASS(EmptyCollider);

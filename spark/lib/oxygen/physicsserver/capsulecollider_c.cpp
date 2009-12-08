@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: ccylindercollider_c.cpp 108 2009-11-25 10:20:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,13 +19,13 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/ccylindercollider.h>
+#include <oxygen/physicsserver/capsulecollider.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-FUNCTION(CCylinderCollider,setParams)
+FUNCTION(CapsuleCollider,setParams)
 {
     float inRadius;
     float inLength;
@@ -43,7 +43,7 @@ FUNCTION(CCylinderCollider,setParams)
     return true;
 }
 
-FUNCTION(CCylinderCollider,setRadius)
+FUNCTION(CapsuleCollider,setRadius)
 {
     float inRadius;
 
@@ -59,7 +59,7 @@ FUNCTION(CCylinderCollider,setRadius)
     return true;
 }
 
-FUNCTION(CCylinderCollider,setLength)
+FUNCTION(CapsuleCollider,setLength)
 {
     float inLength;
 
@@ -75,17 +75,17 @@ FUNCTION(CCylinderCollider,setLength)
     return true;
 }
 
-FUNCTION(CCylinderCollider,getRadius)
+FUNCTION(CapsuleCollider,getRadius)
 {
     return obj->GetRadius();
 }
 
-FUNCTION(CCylinderCollider,getLength)
+FUNCTION(CapsuleCollider,getLength)
 {
     return obj->GetLength();
 }
 
-FUNCTION(CCylinderCollider,getPointDepth)
+FUNCTION(CapsuleCollider,getPointDepth)
 {
     Vector3f inPos;
 
@@ -100,7 +100,7 @@ FUNCTION(CCylinderCollider,getPointDepth)
     return obj->GetPointDepth(inPos);
 }
 
-void CLASS(CCylinderCollider)::DefineClass()
+void CLASS(CapsuleCollider)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/ConvexCollider);
     DEFINE_FUNCTION(setParams);
