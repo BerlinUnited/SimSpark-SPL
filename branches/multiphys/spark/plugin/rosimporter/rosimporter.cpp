@@ -28,7 +28,7 @@
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/boxcollider.h>
 #include <oxygen/physicsserver/spherecollider.h>
-#include <oxygen/physicsserver/ccylindercollider.h>
+#include <oxygen/physicsserver/capsulecollider.h>
 #include <oxygen/physicsserver/contactjointhandler.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/hingejoint.h>
@@ -1043,7 +1043,7 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
     if (physical.canCollide)
         {
             // geometry
-            shared_ptr<CCylinderCollider> collider = shared_dynamic_cast<CCylinderCollider>
+            shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
                 (GetCore()->New("/oxygen/CCylinderCollider"));
 
             transform->AddChildReference(collider);
@@ -2025,7 +2025,7 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
                 = CreateTransformCollider(body,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            shared_ptr<CCylinderCollider> collider = shared_dynamic_cast<CCylinderCollider>
+            shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
                 (GetCore()->New("/oxygen/CCylinderCollider"));
 
             transCollider->AddChildReference(collider);

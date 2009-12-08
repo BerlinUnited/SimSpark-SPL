@@ -22,7 +22,7 @@ set(oxygen_LIB_HDRS
     physicsserver/softbody.h
     physicsserver/bodycontroller.h
     physicsserver/boxcollider.h
-    physicsserver/ccylindercollider.h
+    physicsserver/capsulecollider.h
     physicsserver/cylindercollider.h
     physicsserver/collider.h
     physicsserver/compoundcollider.h
@@ -55,7 +55,11 @@ set(oxygen_LIB_HDRS
     
     #interfaces
     physicsserver/int/bodyint.h
+    physicsserver/int/colliderint.h
+    physicsserver/int/compoundcolliderint.h
+    physicsserver/int/concavecolliderint.h
     physicsserver/int/dynamicbodyint.h
+    physicsserver/int/emptycolliderint.h
     physicsserver/int/physicsobjectint.h
     physicsserver/int/physicsserverint.h
     physicsserver/int/rigidbodyint.h
@@ -67,6 +71,10 @@ set(oxygen_LIB_HDRS
     #ode-specific files
     physicsserver/ode/odebody.h
     physicsserver/ode/odedynamicbody.h
+    physicsserver/ode/odecollider.h
+    physicsserver/ode/odecompoundcollider.h
+    physicsserver/ode/odeconcavecollider.h
+    physicsserver/ode/odeemptycollider.h
     physicsserver/ode/odephysicsobject.h
     physicsserver/ode/odephysicsserver.h
     physicsserver/ode/oderigidbody.h
@@ -153,12 +161,14 @@ set(oxygen_LIB_SRCS
     physicsserver/transformcollider_c.cpp
     physicsserver/boxcollider.cpp
     physicsserver/boxcollider_c.cpp
-    physicsserver/ccylindercollider.cpp
-    physicsserver/ccylindercollider_c.cpp
+    physicsserver/capsulecollider.cpp
+    physicsserver/capsulecollider_c.cpp
     physicsserver/cylindercollider_c.cpp
     physicsserver/collider.cpp
     physicsserver/collider_c.cpp
+    physicsserver/compoundcollider.cpp
     physicsserver/compoundcollider_c.cpp
+    physicsserver/concavecollider.cpp
     physicsserver/concavecollider_c.cpp
     physicsserver/conecollider_c.cpp
     physicsserver/convexcollider_c.cpp
@@ -166,6 +176,7 @@ set(oxygen_LIB_SRCS
     physicsserver/collisionhandler_c.cpp
     physicsserver/contactjointhandler.cpp
     physicsserver/contactjointhandler_c.cpp
+    physicsserver/emptycollider.cpp
     physicsserver/emptycollider_c.cpp
     physicsserver/physicsserver.cpp
     physicsserver/physicsserver_c.cpp
@@ -206,7 +217,11 @@ set(oxygen_LIB_SRCS
     
     #ODE-specific files
     physicsserver/ode/odebody.cpp
+    physicsserver/ode/odecompoundcollider.cpp
+    physicsserver/ode/odeconcavecollider.cpp
+    physicsserver/ode/odecollider.cpp
     physicsserver/ode/odedynamicbody.cpp
+    physicsserver/ode/odeemptycollider.cpp
     physicsserver/ode/odephysicsobject.cpp
     physicsserver/ode/odephysicsserver.cpp
     physicsserver/ode/oderigidbody.cpp

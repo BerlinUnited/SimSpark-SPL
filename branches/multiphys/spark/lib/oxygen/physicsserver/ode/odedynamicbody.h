@@ -22,6 +22,7 @@
 #ifndef OXYGEN_ODEDYNAMICBODY_H
 #define OXYGEN_ODEDYNAMICBODY_H
 
+#include <oxygen/physicsserver/ode/odebody.h>
 #include <oxygen/physicsserver/int/dynamicbodyint.h>
 
 namespace oxygen

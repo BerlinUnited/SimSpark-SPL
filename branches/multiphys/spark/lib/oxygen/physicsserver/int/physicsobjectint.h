@@ -24,8 +24,7 @@
 #define OXYGEN_PHYSICSOBJECTINT_H
 
 #include <boost/smart_ptr/shared_ptr.hpp>
-#include <oxygen/physicsserver/ode/odewrapper.h>
-#include <oxygen/sceneserver/basenode.h>
+#include <salt/salt.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen

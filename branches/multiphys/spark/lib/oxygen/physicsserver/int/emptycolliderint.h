@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.cpp 3 2008-11-21 02:38:08Z hedayat $
+   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,21 +19,20 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODESOFTBODY_H
-#define OXYGEN_ODESOFTBODY_H
 
-#include <oxygen/physicsserver/ode/odebody.h>
-#include <oxygen/physicsserver/int/softbodyint.h>
+#ifndef OXYGEN_EMPTYCOLLIDERINT_H
+#define OXYGEN_EMPTYCOLLIDERINT_H
+
+#include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODESoftBody : public SoftBodyInt, public ODEBody
+class OXYGEN_API EmptyColliderInt
 {
-public:
-    ODESoftBody();
+
 };
 
 } //namespace oxygen
 
-#endif //OXYGEN_ODESOFTBODY_H
+#endif //OXYGEN_EMPTYCOLLIDERINT_H

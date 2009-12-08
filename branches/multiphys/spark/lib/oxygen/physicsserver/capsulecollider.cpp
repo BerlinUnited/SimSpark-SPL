@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: ccylindercollider.cpp 108 2009-11-25 10:20:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,32 +19,31 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/ccylindercollider.h>
+#include <oxygen/physicsserver/capsulecollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
-CCylinderCollider::CCylinderCollider() : ConvexCollider()
+CapsuleCollider::CapsuleCollider() : ConvexCollider()
 {
 }
 
-void CCylinderCollider::SetParams(float radius, float length)
+void CapsuleCollider::SetParams(float radius, float length)
 {
     dGeomCCylinderSetParams (mODEGeom, radius, length);
 }
 
-void CCylinderCollider::SetRadius(float radius)
+void CapsuleCollider::SetRadius(float radius)
 {
     SetParams(radius,GetLength());
 }
 
-void CCylinderCollider::SetLength(float length)
+void CapsuleCollider::SetLength(float length)
 {
     SetParams(GetRadius(),length);
 }
 
-void
-CCylinderCollider::GetParams(float& radius, float& length)
+void CapsuleCollider::GetParams(float& radius, float& length)
 {
     dReal r,l;
     dGeomCCylinderGetParams(mODEGeom,&r,&l);
@@ -52,8 +51,7 @@ CCylinderCollider::GetParams(float& radius, float& length)
     length = l;
 }
 
-float
-CCylinderCollider::GetRadius()
+float CapsuleCollider::GetRadius()
 {
     float length;
     float radius;
@@ -61,8 +59,7 @@ CCylinderCollider::GetRadius()
     return radius;
 }
 
-float
-CCylinderCollider::GetLength()
+float CapsuleCollider::GetLength()
 {
     float radius;
     float length;
@@ -70,8 +67,7 @@ CCylinderCollider::GetLength()
     return length;
 }
 
-bool
-CCylinderCollider::ConstructInternal()
+bool CapsuleCollider::ConstructInternal()
 {
     if (! Collider::ConstructInternal())
     {
@@ -84,8 +80,7 @@ CCylinderCollider::ConstructInternal()
     return (mODEGeom != 0);
 }
 
-float
-CCylinderCollider::GetPointDepth(const Vector3f& pos)
+float CapsuleCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
     return dGeomCCylinderPointDepth

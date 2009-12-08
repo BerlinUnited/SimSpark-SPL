@@ -27,6 +27,7 @@
 
 namespace oxygen
 {
+class ConcaveColliderInt;
 /**
     ConcaveCollider is not yet implemented.
 */
@@ -37,8 +38,11 @@ class OXYGEN_API ConcaveCollider : public Collider
     // Functions
     //
 public:
-    ConcaveCollider() : Collider(){};
-    virtual ~ConcaveCollider(){};
+    ConcaveCollider();
+    virtual ~ConcaveCollider();
+    
+private:
+    boost::shared_ptr<ConcaveColliderInt> mConcaveColliderImp;
 };
 
 DECLARE_CLASS(ConcaveCollider);

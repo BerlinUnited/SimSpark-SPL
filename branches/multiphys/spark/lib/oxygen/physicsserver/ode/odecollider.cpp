@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: collider.cpp 115 2009-12-07 08:43:40Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,40 +24,41 @@
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/rigidbody.h>
+#include <oxygen/sceneserver/basenode.h>
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/leaf.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace salt;
+using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-Collider::Collider() : PhysicsObject(), mODEGeom(0)
-{
-    mColliderImp = boost::shared_ptr<ODECollider>(new ODECollider());
-}
-
-Collider::~Collider()
+ODECollider::ODECollider() : ODEPhysicsObject(), mODEGeom(0)
 {
 }
 
-void Collider::OnLink()
+ODECollider::~ODECollider()
 {
-    PhysicsObject::OnLink();
+}
+
+void ODECollider::OnLink()
+{/*
+    //PhysicsObject::OnLink();
 
 
-    weak_ptr<Node> parent = GetParent();
+    //weak_ptr<Node> parent = GetParent();
     if (
-        (mODEGeom == 0) ||
-        (parent.expired())
+        (mODEGeom == 0) //||
+        //(parent.expired())
         )
         {
             return;
         }
 
-    shared_ptr<TransformCollider> tcParent =
-        shared_dynamic_cast<TransformCollider>(parent.lock());
+   // shared_ptr<TransformCollider> tcParent =
+   //     shared_dynamic_cast<TransformCollider>(parent.lock());
 
     if (tcParent.get() != 0)
         {
@@ -70,7 +71,7 @@ void Collider::OnLink()
 
     // this geom is independent, so register to space and body
     // if we have a space add the geom to it
-    long spaceID = FindSpaceID();
+    //long spaceID = FindSpaceID();
     if (
         (spaceID) &&
         (! dSpaceQuery((dSpaceID) spaceID, mODEGeom))
@@ -93,11 +94,11 @@ void Collider::OnLink()
                 SetRotation(GetWorldTransform());
                 SetPosition(Vector3f(0,0,0));
             }
-}
+*/}
 
-void Collider::OnUnlink()
+void ODECollider::OnUnlink()
 {
-    PhysicsObject::OnUnlink();
+    //PhysicsObject::OnUnlink();
 
     // remove collision geometry from space
     long space = GetParentSpaceID();
@@ -116,25 +117,25 @@ void Collider::OnUnlink()
     }
 }
 
-void Collider::PrePhysicsUpdateInternal(float /*deltaTime*/)
+void ODECollider::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
-    if (FindChildSupportingClass<CollisionHandler>(false).get() == 0)
-        {
+   // if (FindChildSupportingClass<CollisionHandler>(false).get() == 0)
+   //     {
             // for convenience we add a ContactJointHandler if no
             // other handler is registered. This behaviour covers the
             // majority of all use cases and eases the creation of
             // Colliders.
             AddCollisionHandler("oxygen/ContactJointHandler");
-        }
+    //    }
 }
 
-long Collider::GetGeomID()
+long ODECollider::GetGeomID()
 {
     return (long) mODEGeom;
 }
 
-bool Collider::AddCollisionHandler(const std::string& handlerName)
-{
+bool ODECollider::AddCollisionHandler(const std::string& handlerName)
+{/*
     shared_ptr<CollisionHandler> handler =
         shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
 
@@ -147,12 +148,12 @@ bool Collider::AddCollisionHandler(const std::string& handlerName)
         }
 
     return AddChildReference(handler);
-}
+*/}
 
-void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
+void ODECollider::OnCollision (boost::shared_ptr<Collider> collidee,
                             dContact& contact, ECollisionType type)
 
-{
+{/*
     TLeafList handlers;
     ListChildrenSupportingClass<CollisionHandler>(handlers);
 
@@ -175,9 +176,9 @@ void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
 
             handler->HandleCollision(collidee, contact);
         }
-}
+*/}
 
-shared_ptr<Collider> Collider::GetCollider(long geomID)
+/*shared_ptr<Collider> ODECollider::GetCollider(long geomID)
 {
     if (geomID == 0)
         {
@@ -206,9 +207,9 @@ shared_ptr<Collider> Collider::GetCollider(long geomID)
         }
 
     return collider;
-}
+}*/
 
-void Collider::SetRotation(const Matrix& rot)
+void ODECollider::SetRotation(const Matrix& rot)
 {
     dMatrix3 ODEMatrix;
     void* matrixPtr = (void*) &ODEMatrix; 
@@ -216,24 +217,24 @@ void Collider::SetRotation(const Matrix& rot)
     dGeomSetRotation(mODEGeom, ODEMatrix);
 }
 
-void Collider::SetPosition(const Vector3f& pos)
+void ODECollider::SetPosition(const Vector3f& pos)
 {
-    Vector3f globalPos(GetWorldTransform() * pos);
-    dGeomSetPosition (mODEGeom, globalPos[0], globalPos[1], globalPos[2]);
+    //Vector3f globalPos(GetWorldTransform() * pos);
+    //dGeomSetPosition (mODEGeom, globalPos[0], globalPos[1], globalPos[2]);
 }
 
-void Collider::SetLocalPosition(const Vector3f& pos)
+void ODECollider::SetLocalPosition(const Vector3f& pos)
 {
     dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
 }
 
-Vector3f Collider::GetPosition() const
+Vector3f ODECollider::GetPosition() const
 {
     const dReal* pos = dGeomGetPosition(mODEGeom);
     return Vector3f(pos[0],pos[1],pos[2]);
 }
 
-long Collider::GetParentSpaceID()
+long ODECollider::GetParentSpaceID()
 {
     if (mODEGeom == 0)
         {
@@ -243,7 +244,7 @@ long Collider::GetParentSpaceID()
     return (long) dGeomGetSpace(mODEGeom);
 }
 
-bool Collider::Intersects(boost::shared_ptr<Collider> collider)
+bool ODECollider::Intersects(boost::shared_ptr<Collider> collider)
 {
     if (
         (mODEGeom == 0) ||
@@ -265,7 +266,7 @@ bool Collider::Intersects(boost::shared_ptr<Collider> collider)
          ) > 0;
 }
 
-void Collider::DestroyPhysicsObject()
+void ODECollider::DestroyPhysicsObject()
 {
     if (! mODEGeom)
         {
@@ -276,7 +277,7 @@ void Collider::DestroyPhysicsObject()
     mODEGeom = 0;
 }
 
-void Collider::AddNotCollideWithColliderName(const std::string & colliderName, bool isAdd)
+void ODECollider::AddNotCollideWithColliderName(const std::string & colliderName, bool isAdd)
 {
     TColliderNameSet::iterator it = mNotCollideWithSet.find(colliderName);
 
@@ -298,7 +299,7 @@ void Collider::AddNotCollideWithColliderName(const std::string & colliderName, b
     }
 }
 
-const Collider::TColliderNameSet & Collider::GetNotCollideWithSet() const
+const ODECollider::TColliderNameSet& ODECollider::GetNotCollideWithSet() const
 {
     return mNotCollideWithSet;
 }

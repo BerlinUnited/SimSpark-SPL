@@ -24,7 +24,6 @@
 #define OXYGEN_DYNAMICBODYINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odebody.h>
 
 namespace oxygen
 {

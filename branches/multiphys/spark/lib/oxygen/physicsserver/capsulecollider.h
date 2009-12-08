@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: ccylindercollider.h 108 2009-11-25 10:20:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_CCYLINDERCOLLIDER_H
-#define OXYGEN_CCYLINDERCOLLIDER_H
+#ifndef OXYGEN_CAPSULECOLLIDER_H
+#define OXYGEN_CAPSULECOLLIDER_H
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/convexcollider.h>
@@ -28,56 +28,56 @@
 namespace oxygen
 {
 
-/** CCylinderCollider encapsulates an ODE capped cylinder geometry
-    object. A capped cylinder is like a normal cylinder except it has
+/** CapsuleCollider encapsulates an ODE capsule geometry
+    object. A capsule is like a cylinder except it has
     half-sphere caps at its ends. This feature makes the internal
     collision detection code particularly fast and accurate.
  */
-class OXYGEN_API CCylinderCollider : public ConvexCollider
+class OXYGEN_API CapsuleCollider : public ConvexCollider
 {
     //
     // Functions
     //
 public:
-    CCylinderCollider();
+    CapsuleCollider();
 
-    /** sets the parameters of the capped cylinder.
+    /** sets the parameters of the capsule.
 
        \param radius is the radius of the caps, and of the cylinder itself
        \param length is the height of the cylinder, not counting the caps
     */
     void SetParams(float radius, float length);
 
-    /** sets the radius of the capped cylinder */
+    /** sets the radius of the capsule */
     void SetRadius(float radius);
 
-    /** sets the length of the capped cylinder */
+    /** sets the length of the capsule */
     void SetLength(float length);
 
-    /** gets the radius and the length of the capped cylinder */
+    /** gets the radius and the length of the capsule */
     void GetParams(float& radius, float& length);
 
-    /** returns the radius of the capped cylinder */
+    /** returns the radius of the capsule */
     float GetRadius();
 
-    /** return the length of the capped cylinder */
+    /** return the length of the capsule */
     float GetLength();
 
     /** returns the depth of the given relative position in the
-       managed capped cylinder geom. Points inside the geom will have
+       managed capsule geom. Points inside the geom will have
        positive depth, points outside it will have negative depth, and
        points on the surface will have zero depth.
      */
     float GetPointDepth(const salt::Vector3f& pos);
 
 protected:
-    /** constructs a default capped cylinder with an radius of 1 and a
+    /** constructs a default capsule with an radius of 1 and a
         length of 1 */
     virtual bool ConstructInternal();
 };
 
-DECLARE_CLASS(CCylinderCollider);
+DECLARE_CLASS(CapsuleCollider);
 
 } //namespace oxygen
 
-#endif //OXYGEN_CCYLINDERCOLLIDER_H
+#endif //OXYGEN_CAPSULECOLLIDER_H
