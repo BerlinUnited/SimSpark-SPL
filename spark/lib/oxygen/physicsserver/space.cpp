@@ -138,8 +138,8 @@ void Space::HandleCollide(long obj1, long obj2)
 
     if (s1 == s2)
     {
-        const oxygen::Collider::TColliderNameSet & collider_set = collider->GetNotCollideWithSet();
-        const oxygen::Collider::TColliderNameSet & collidee_set = collidee->GetNotCollideWithSet();
+        const oxygen::Collider::TColliderNameSet& collider_set = collider->GetNotCollideWithSet();
+        const oxygen::Collider::TColliderNameSet& collidee_set = collidee->GetNotCollideWithSet();
         if (
             (collider_set.find(collidee->GetName()) != collider_set.end()) ||
             (collidee_set.find(collider->GetName()) != collidee_set.end())
@@ -170,8 +170,8 @@ void Space::HandleCollide(long obj1, long obj2)
     for (int i=0;i<n;++i)
         {
             // notify the collider nodes
-            collider->OnCollision(collidee,contacts[i],Collider::CT_DIRECT);
-            collidee->OnCollision(collider,contacts[i],Collider::CT_SYMMETRIC);
+            collider->OnCollision(collidee,(void*) &contacts[i],Collider::CT_DIRECT);
+            collidee->OnCollision(collider,(void*) &contacts[i],Collider::CT_SYMMETRIC);
         }
 }
 

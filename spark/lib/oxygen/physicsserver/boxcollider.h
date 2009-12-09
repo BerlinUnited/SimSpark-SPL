@@ -27,6 +27,7 @@
 
 namespace oxygen
 {
+class BoxColliderInt;
 
 /** BoxCollider encapsulates an ODE box geometry object.
  */
@@ -60,6 +61,9 @@ public:
 protected:
     /** constructs a default box with side lengths of 1 */
     virtual bool ConstructInternal();
+    
+private:
+    boost::shared_ptr<BoxColliderInt> mBoxColliderImp;
 };
 
 DECLARE_CLASS(BoxCollider);

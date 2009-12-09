@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: spherecollider.cpp 108 2009-11-25 10:20:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,45 +19,39 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/spherecollider.h>
 #include <oxygen/physicsserver/ode/odespherecollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
-SphereCollider::SphereCollider() : ConvexCollider()
+ODESphereCollider::ODESphereCollider() : ODEConvexCollider()
 {
-    mSphereColliderImp = boost::shared_ptr<ODESphereCollider>(new ODESphereCollider());
+    mODEGeom = 0;
+    mGeomID = 0;
 }
 
-void SphereCollider::SetRadius(float r)
+void ODESphereCollider::SetRadius(float r)
 {
-    mSphereColliderImp->SetRadius(r);
+    dGeomSphereSetRadius(mODEGeom, r);
 }
 
-float SphereCollider::GetRadius() const
+float ODESphereCollider::GetRadius() const
 {
-    return mSphereColliderImp->GetRadius();
+    return dGeomSphereGetRadius(mODEGeom);
 }
 
-bool SphereCollider::ConstructInternal()
+void ODESphereCollider::CreateSphere()
 {
-    if (!Collider::ConstructInternal())
-    {
-        return false;
-    }
-    
-   // mODEGeom = dCreateSphere(0, 1.0f);
-
-    // create a unit sphere
-    mSphereColliderImp->CreateSphere();
-    mODEGeom = (dGeomID) mSphereColliderImp->GetGeomID();
-
-    return (mSphereColliderImp->GetGeomID() != 0);
+    mODEGeom = dCreateSphere(0, 1.0f);
+    mGeomID = (long) mODEGeom;
 }
 
-float SphereCollider::GetPointDepth(const Vector3f& pos)
+float ODESphereCollider::GetPointDepth(const Vector3f& pos)
 {
-  Vector3f worldPos(GetWorldTransform() * pos);
-  return mSphereColliderImp->GetPointDepth(worldPos);
+  return dGeomSpherePointDepth
+    (mODEGeom,pos[0],pos[1],pos[2]);
+}
+
+long ODESphereCollider::GetGeomID(){
+    return mGeomID;
 }

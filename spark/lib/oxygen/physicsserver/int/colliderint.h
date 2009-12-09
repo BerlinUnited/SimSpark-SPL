@@ -63,7 +63,7 @@ public:
     virtual void DestroyPhysicsObject() = 0;
     
 protected:
-    dGeomID mODEGeom;
+    long mGeomID;
     TColliderNameSet mNotCollideWithSet;
 };
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odebody.cpp 3 2008-11-21 02:38:08Z hedayat $
+   $Id: odeobject.h 56 2009-03-17 18:03:47Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,10 +19,28 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odebody.h>
+#ifndef OXYGEN_ODESPHERECOLLIDER_H
+#define OXYGEN_ODESPHERECOLLIDER_H
 
-using namespace oxygen;
+#include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/int/spherecolliderint.h>
+#include <oxygen/physicsserver/ode/odeconvexcollider.h>
 
-ODEBody::ODEBody() : ODEPhysicsObject(){
+namespace oxygen
+{
 
-}
+class OXYGEN_API ODESphereCollider : public SphereColliderInt, public ODEConvexCollider
+{
+public:
+    ODESphereCollider();
+    void SetRadius(float r);
+    float GetRadius() const;
+    float GetPointDepth(const salt::Vector3f& pos);
+    void CreateSphere(); 
+    
+    long GetGeomID();
+};
+
+} //namespace oxygen
+
+#endif //OXYGEN_ODESPHERECOLLIDER_H

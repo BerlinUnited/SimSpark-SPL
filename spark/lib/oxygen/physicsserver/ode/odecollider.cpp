@@ -37,6 +37,7 @@ using namespace std;
 
 ODECollider::ODECollider() : ODEPhysicsObject(), mODEGeom(0)
 {
+    mGeomID = 0;
 }
 
 ODECollider::~ODECollider()

@@ -46,7 +46,6 @@ void Collider::OnLink()
 {
     PhysicsObject::OnLink();
 
-
     weak_ptr<Node> parent = GetParent();
     if (
         (mODEGeom == 0) ||
@@ -150,9 +149,12 @@ bool Collider::AddCollisionHandler(const std::string& handlerName)
 }
 
 void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
-                            dContact& contact, ECollisionType type)
+                            void* contact, ECollisionType type)
 
 {
+    dContact* helpContact = (dContact*) contact;
+    dContact& ODEContact = (dContact&) *helpContact;
+    
     TLeafList handlers;
     ListChildrenSupportingClass<CollisionHandler>(handlers);
 
@@ -173,7 +175,7 @@ void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
                     continue;
                 }
 
-            handler->HandleCollision(collidee, contact);
+            handler->HandleCollision(collidee, ODEContact);
         }
 }
 
@@ -298,7 +300,7 @@ void Collider::AddNotCollideWithColliderName(const std::string & colliderName, b
     }
 }
 
-const Collider::TColliderNameSet & Collider::GetNotCollideWithSet() const
+const Collider::TColliderNameSet& Collider::GetNotCollideWithSet() const
 {
     return mNotCollideWithSet;
 }
