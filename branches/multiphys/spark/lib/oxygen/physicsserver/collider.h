@@ -32,7 +32,7 @@ namespace oxygen
 {
 class ColliderInt;
 
-/** \class Collider encapsulates an ODE geometry object- geom for
+/** \class Collider encapsulates a geometry object- geom for
     short. Geoms are the fundamental objects in the collision
     system. They represent a single rigid shape as for example a
     sphere or a box. A special kind of geom called 'space' can
@@ -49,14 +49,17 @@ class OXYGEN_API Collider : public PhysicsObject
     //
 public:
     /** enumerates the two different collision instances reported to
-        the OnCollision member for each collision reported from ODE.
+        the OnCollision member for each collision reported from the
+        physics engine.
      */
     enum ECollisionType
      {
-         /** the collision pair as reported from ODE */
+         /** the collision pair as reported from the physics engine */
          CT_DIRECT,
 
-         /** the symmetric pair to the pair reported from ODE */
+         /** the symmetric pair to the pair reported from the
+             physics engine
+         */
          CT_SYMMETRIC
      };
 
@@ -80,11 +83,11 @@ public:
        \param holds the contact points between the two affected geoms
        as returned from ODE dCollide function
 
-       \param symmetric indicates tha this collision indicates a
+       \param symmetric indicates that this collision indicates a
        symmetric case
     */
     virtual void OnCollision (boost::shared_ptr<Collider> collidee,
-                              dContact& contact, ECollisionType type);
+                              void* contact, ECollisionType type);
 
     /** registers a new collision handler to this collider. If no
         collision handler is registered until the first call to
@@ -94,10 +97,10 @@ public:
      */
     bool AddCollisionHandler(const std::string& handlerName);
 
-    /** returns the Collider corresponding to the given ODE geom  */
+    /** returns the Collider corresponding to the given geom  */
     static boost::shared_ptr<Collider> GetCollider(long geomID);
 
-    /** returns the ID of managed ODE geom */
+    /** returns the ID of managed geom */
     long GetGeomID();
 
     /** sets the relative position of the managed geom directly. If
@@ -120,23 +123,23 @@ public:
      */
     virtual void SetRotation(const salt::Matrix& rot);
 
-    /** returns true if the ODE geom managed by this
+    /** returns true if the geom managed by this
         Collider intersects with the geom managed by the given collider
      */
     bool Intersects(boost::shared_ptr<Collider> collider);
 
-    /** returns the ODE handle ID of the containing parent space */
+    /** returns the handle ID of the containing parent space */
     virtual long GetParentSpaceID();
 
     /** Add/Reomve a collider name that not collide with */
-    void AddNotCollideWithColliderName(const std::string & colliderName, bool isAdd);
+    void AddNotCollideWithColliderName(const std::string& colliderName, bool isAdd);
 
     /** Get the not collide with collider set */
-    const TColliderNameSet & GetNotCollideWithSet() const;
+    const TColliderNameSet& GetNotCollideWithSet() const;
 
 protected:
     /** registers the managed geom to the Space of the Scene and to
-        the associated ODE body
+        the associated body
     */
     virtual void OnLink();
 
@@ -165,7 +168,7 @@ private:
 
 protected:
     /** a set that store the colliders that I never collide with
-        Note: they are should in the same space, orelse this is ignored
+        Note: they should be in the same space, or else this is ignored
      */
     TColliderNameSet mNotCollideWithSet;
 };

@@ -27,8 +27,9 @@
 
 namespace oxygen
 {
+class SphereColliderInt;
 
-/** SphereCollider encapsulates an ODE sphere geometry object.
+/** SphereCollider encapsulates a sphere geometry object.
  */
 class OXYGEN_API SphereCollider : public ConvexCollider
 {
@@ -38,10 +39,10 @@ class OXYGEN_API SphereCollider : public ConvexCollider
 public:
     SphereCollider();
 
-    /** sets the radius of the managed ODE sphere geom */
+    /** sets the radius of the managed sphere geom */
     void SetRadius(float r);
 
-    /** get the radius back from ODE */
+    /** get the radius back from */
     float GetRadius() const;
 
     /** returns the depth of the given relative position in the
@@ -54,6 +55,9 @@ public:
 protected:
     /** constructs a default sphere with a radius of 1 */
     virtual bool ConstructInternal();
+    
+private:
+    boost::shared_ptr<SphereColliderInt> mSphereColliderImp;
 };
 
 DECLARE_CLASS(SphereCollider);

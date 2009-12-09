@@ -27,15 +27,21 @@
 
 namespace oxygen
 {
+class ConvexColliderInt;
+
 /** ConvexCollider is the common base class of all convex
     geometry objects, such as spheres and boxes. 
 */
 
 class OXYGEN_API ConvexCollider : public Collider
 {
+
 public:
-    ConvexCollider() : Collider(){};
-    virtual ~ConvexCollider(){};
+    ConvexCollider();
+    virtual ~ConvexCollider();
+    
+private:
+    boost::shared_ptr<ConvexColliderInt> mConvexColliderImp;
 };
 
 DECLARE_ABSTRACTCLASS(ConvexCollider);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odebody.cpp 3 2008-11-21 02:38:08Z hedayat $
+   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,10 +19,20 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odebody.h>
 
-using namespace oxygen;
+#ifndef OXYGEN_CYLINDERCOLLIDERINT_H
+#define OXYGEN_CYLINDERCOLLIDERINT_H
 
-ODEBody::ODEBody() : ODEPhysicsObject(){
+#include <oxygen/oxygen_defines.h>
 
-}
+namespace oxygen
+{
+
+class OXYGEN_API CylinderColliderInt
+{
+
+};
+
+} //namespace oxygen
+
+#endif //OXYGEN_CYLINDERCOLLIDERINT_H

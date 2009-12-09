@@ -32,7 +32,7 @@ using namespace boost;
 using namespace salt;
 using namespace std;
 
-ODERigidBody::ODERigidBody() : ODEBody(){
+ODERigidBody::ODERigidBody() : ODEBody(), mODEBody(0){
     mBodyID = 0;
     mMassTrans = Vector3f(0,0,0);
     mMassTransformed = false;

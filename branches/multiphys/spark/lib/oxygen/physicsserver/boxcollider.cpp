@@ -21,27 +21,22 @@
 */
 
 #include <oxygen/physicsserver/boxcollider.h>
+#include <oxygen/physicsserver/ode/odeboxcollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
 BoxCollider::BoxCollider() : ConvexCollider()
 {
+    mBoxColliderImp = boost::shared_ptr<ODEBoxCollider>(new ODEBoxCollider());
 }
 
-void
-BoxCollider::SetBoxLengths(const Vector3f& extents)
+void BoxCollider::SetBoxLengths(const Vector3f& extents)
 {
-    dGeomBoxSetLengths(
-                       mODEGeom,
-                       extents[0],
-                       extents[1],
-                       extents[2]
-                       );
+    mBoxColliderImp->SetBoxLengths(extents);
 }
 
-bool
-BoxCollider::ConstructInternal()
+bool BoxCollider::ConstructInternal()
 {
     if (! Collider::ConstructInternal())
         {
@@ -49,23 +44,18 @@ BoxCollider::ConstructInternal()
         }
 
     // create a unit box
-    mODEGeom = dCreateBox (0, 1.0f, 1.0f, 1.0f);
+    mBoxColliderImp->CreateBox();
+    mODEGeom = (dGeomID) mBoxColliderImp->GetGeomID();
 
-    return (mODEGeom != 0);
+    return (mBoxColliderImp->GetGeomID() != 0);
 }
 
-void
-BoxCollider::GetBoxLengths(Vector3f& extents)
+void BoxCollider::GetBoxLengths(Vector3f& extents)
 {
-    dVector3 lengths;
-    dGeomBoxGetLengths(mODEGeom,lengths);
-    extents[0] = lengths[0];
-    extents[1] = lengths[1];
-    extents[2] = lengths[2];
+    mBoxColliderImp->GetBoxLengths(extents);
 }
 
-float
-BoxCollider::GetBoxLength(int axis)
+float BoxCollider::GetBoxLength(int axis)
 {
     if (
         (axis<0) ||
@@ -80,12 +70,8 @@ BoxCollider::GetBoxLength(int axis)
     return extents[axis];
 }
 
-float
-BoxCollider::GetPointDepth(const Vector3f& pos)
+float BoxCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
-    return dGeomBoxPointDepth
-        (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+    return mBoxColliderImp->GetPointDepth(worldPos);
 }
-
-

@@ -27,6 +27,8 @@
 
 namespace oxygen
 {
+class CylinderColliderInt;
+
 /**
     CylinderCollider is not yet implemented.
 */
@@ -37,8 +39,11 @@ class OXYGEN_API CylinderCollider : public ConvexCollider
     // Functions
     //
 public:
-    CylinderCollider() : ConvexCollider(){};
-    virtual ~CylinderCollider(){};
+    CylinderCollider();
+    virtual ~CylinderCollider();
+    
+private:
+    boost::shared_ptr<CylinderColliderInt> mCylinderColliderImp;
 };
 
 DECLARE_CLASS(CylinderCollider);
