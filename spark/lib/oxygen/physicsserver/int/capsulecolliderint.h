@@ -20,25 +20,30 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef OXYGEN_PHYSICSOBJECTINT_H
-#define OXYGEN_PHYSICSOBJECTINT_H
+#ifndef OXYGEN_CAPSULECOLLIDERINT_H
+#define OXYGEN_CAPSULECOLLIDERINT_H
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-#include <salt/matrix.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/genericphysicsobject.h>
+#include <salt/vector.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API PhysicsObjectInt
+class OXYGEN_API CapsuleColliderInt
 {
-
-public:    
-    virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix) = 0;
-    virtual void ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const = 0;
+public:
+    virtual void SetParams(float radius, float length) = 0;
+    virtual void SetRadius(float radius) = 0;
+    virtual void SetLength(float length) = 0;
+    virtual void GetParams(float& radius, float& length) = 0;
+    virtual float GetRadius() = 0;
+    virtual float GetLength() = 0;
+    virtual float GetPointDepth(const salt::Vector3f& pos) = 0;
+    
+    virtual long GetGeomID() = 0;
+    virtual void CreateCapsule() = 0;
 };
 
 } //namespace oxygen
 
-#endif //OXYGEN_PHYSICSOBJECTINT_H
+#endif //OXYGEN_CAPSULECOLLIDERINT_H

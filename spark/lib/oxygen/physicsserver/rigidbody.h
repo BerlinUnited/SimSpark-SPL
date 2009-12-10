@@ -158,35 +158,35 @@ public:
      */
     void AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
 
-    /* Set the mass parameters to represent a capped cylinder of the
+    /* Set the mass parameters to represent a capsule of the
        given parameters and density, with the center of mass at
        (0,0,0) relative to the body. The radius of the cylinder (and
        the spherical cap) is radius. The length of the cylinder (not
        counting the spherical cap) is length. The cylinder's long axis
        is oriented along the body's z axis.
     */
-    void SetCappedCylinder (float density, float radius, float length);
+    void SetCapsule (float density, float radius, float length);
 
-    /* Add a mass representing a capped cylinder of the given
+    /* Add a mass representing a capsule of the given
        parameters and density, with the matrix determining its center
        and orientation
     */
-    void AddCappedCylinder (float density, float radius, float length, const salt::Matrix& matrix);
+    void AddCapsule (float density, float radius, float length, const salt::Matrix& matrix);
 
-    /* Set the mass parameters to represent a capped cylinder of the
+    /* Set the mass parameters to represent a capsule of the
        given parameters and total mass, with the center of mass at
        (0,0,0) relative to the body. The radius of the cylinder (and
        the spherical cap) is radius. The length of the cylinder (not
        counting the spherical cap) is length. The cylinder's long axis
        is oriented along the body's z axis.
     */
-    void SetCappedCylinderTotal(float total_mass, float radius, float length);
+    void SetCapsuleTotal(float total_mass, float radius, float length);
 
-    /* Add a mass representing a capped cylinder of the given
+    /* Add a mass representing a capsule of the given
        parameters and total mass, with the matrix determining its
        center and orientation
     */
-    void AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
+    void AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
 
     /** displace the mass center relative to the body frame */
     void TranslateMass(const salt::Vector3f& v);

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: odeobject.cpp 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,44 +19,21 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "ccylinder.h"
+#ifndef OXYGEN_ODECONECOLLIDER_H
+#define OXYGEN_ODECONECOLLIDER_H
 
-using namespace boost;
-using namespace kerosin;
-using namespace salt;
+#include <oxygen/physicsserver/ode/odeconvexcollider.h>
+#include <oxygen/physicsserver/int/conecolliderint.h>
 
-FUNCTION(CCylinder,setParams)
+namespace oxygen
 {
-    float inRadius;
-    float inLength;
 
-    if (
-        (in.GetSize() != 2) ||
-        (! in.GetValue(in[0], inRadius)) ||
-        (! in.GetValue(in[1], inLength))
-        )
-        {
-            return false;
-        }
-
-    obj->SetParams(inRadius,inLength);
-    return true;
-}
-
-FUNCTION(CCylinder,getRadius)
+class OXYGEN_API ODEConeCollider : public ConeColliderInt, public ODEConvexCollider
 {
-    return obj->GetRadius();
-}
+public:
+    ODEConeCollider();
+};
 
-FUNCTION(CCylinder,getLength)
-{
-    return obj->GetLength();
-}
+} //namespace oxygen
 
-void CLASS(CCylinder)::DefineClass()
-{
-    DEFINE_BASECLASS(kerosin/SingleMatNode);
-    DEFINE_FUNCTION(setParams);
-    DEFINE_FUNCTION(getRadius);
-    DEFINE_FUNCTION(getLength);
-}
+#endif //OXYGEN_ODECONECOLLIDER_H

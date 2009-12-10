@@ -323,7 +323,7 @@ protected:
     bool ReadBox(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
     bool ReadSphere(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
     bool ReadCylinder(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
-    bool ReadCappedCylinder(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
+    bool ReadCapsule(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
 
     bool ReadAnchorPoint(TiXmlElement* element, salt::Vector3f& anchor);
     bool ReadAxis(TiXmlElement* element, RosElements::ERosElement type, JointAxis& axis);
@@ -346,7 +346,7 @@ protected:
     bool ReadPhysicalRep(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
     bool ReadSimpleBox(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
     bool ReadSimpleSphere(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
-    bool ReadSimpleCappedCylinder(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
+    bool ReadSimpleCapsule(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element);
 
     void Attach(boost::shared_ptr<oxygen::Joint> joint, boost::shared_ptr<oxygen::RigidBody> body1, boost::shared_ptr<oxygen::RigidBody> body2,
                 const JointAxis& axis1, const JointAxis& axis2 = JointAxis());

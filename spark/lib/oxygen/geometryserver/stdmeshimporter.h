@@ -28,7 +28,7 @@
 namespace oxygen
 {
 /** \class StdMeshImporter is a MeshImporter that generates a standard
-     set of meshes. These are spheres, boxes and capped cylinders.
+     set of meshes. These are spheres, boxes and capsule.
 */
 class OXYGEN_API StdMeshImporter : public MeshImporter
 {
@@ -41,7 +41,7 @@ public:
     virtual boost::shared_ptr<TriMesh> ImportMesh
     (const std::string& name,const zeitgeist::ParameterList& parameter);
 
-    /** returns a unique name for each parameterized capped cylinder
+    /** returns a unique name for each parameterized capsule
         mesh, and \param name otherwise
      */
     virtual std::string MangleName
@@ -54,8 +54,8 @@ protected:
     /** constructs a unit box */
     boost::shared_ptr<TriMesh> UnitBoxMesh();
 
-    /** constructs a unit capped cylinder */
-    boost::shared_ptr<TriMesh> UnitCCylinder
+    /** constructs a unit capsule */
+    boost::shared_ptr<TriMesh> UnitCapsule
     (const zeitgeist::ParameterList& parameter);
 
     /** constructs a flat unit cylinder */

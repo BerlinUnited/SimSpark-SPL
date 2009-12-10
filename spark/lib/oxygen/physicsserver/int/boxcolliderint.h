@@ -23,7 +23,7 @@
 #ifndef OXYGEN_BOXCOLLIDERINT_H
 #define OXYGEN_BOXCOLLIDERINT_H
 
-#include <salt/salt.h>
+#include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen

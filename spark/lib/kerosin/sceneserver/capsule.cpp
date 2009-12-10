@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: capsule.cpp 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "ccylinder.h"
+#include "capsule.h"
 #include <kerosin/openglserver/openglserver.h>
 #include <kerosin/materialserver/material.h>
 
@@ -28,38 +28,38 @@ using namespace kerosin;
 using namespace zeitgeist;
 using namespace salt;
 
-CCylinder::CCylinder() : SingleMatNode()
+Capsule::Capsule() : SingleMatNode()
 {
 }
 
-CCylinder::~CCylinder()
+Capsule::~Capsule()
 {
 }
 
-void CCylinder::SetParams(float radius, float length)
+void Capsule::SetParams(float radius, float length)
 {
     ParameterList parameter;
     parameter.AddValue(radius);
     parameter.AddValue(length);
 
-    Load("StdCCylinder",parameter);
+    Load("StdCapsule",parameter);
 
     mRadius = radius;
     mLength = length;
 }
 
-void CCylinder::GetParams(float& radius, float& length) const
+void Capsule::GetParams(float& radius, float& length) const
 {
     radius = mRadius;
     length = mLength;
 }
 
-float CCylinder::GetRadius()
+float Capsule::GetRadius()
 {
     return mRadius;
 }
 
-float CCylinder::GetLength()
+float Capsule::GetLength()
 {
     return mLength;
 }

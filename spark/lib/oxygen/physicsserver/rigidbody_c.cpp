@@ -381,7 +381,7 @@ FUNCTION(RigidBody,addCylinderTotal)
     return true;
 }
 
-FUNCTION(RigidBody,setCappedCylinder)
+FUNCTION(RigidBody,setCapsule)
 {
     float inDensity;
     float inRadius;
@@ -397,11 +397,11 @@ FUNCTION(RigidBody,setCappedCylinder)
             return false;
         }
 
-    obj->SetCappedCylinder(inDensity,inRadius,inLength);
+    obj->SetCapsule(inDensity,inRadius,inLength);
     return true;
 }
 
-FUNCTION(RigidBody,addCappedCylinder)
+FUNCTION(RigidBody,addCapsule)
 {
     float inDensity;
     float inRadius;
@@ -423,11 +423,11 @@ FUNCTION(RigidBody,addCappedCylinder)
     // Matrix is allowed to be missing, defaults to identity
     in.GetValue(in[3],inMat);
     
-    obj->AddCappedCylinder(inDensity,inRadius,inLength,inMat);
+    obj->AddCapsule(inDensity,inRadius,inLength,inMat);
     return true;
 }
 
-FUNCTION(RigidBody,setCappedCylinderTotal)
+FUNCTION(RigidBody,setCapsuleTotal)
 {
     float inMassTotal;
     float inRadius;
@@ -443,11 +443,11 @@ FUNCTION(RigidBody,setCappedCylinderTotal)
             return false;
         }
 
-    obj->SetCappedCylinderTotal(inMassTotal,inRadius,inLength);
+    obj->SetCapsuleTotal(inMassTotal,inRadius,inLength);
     return true;
 }
 
-FUNCTION(RigidBody,addCappedCylinderTotal)
+FUNCTION(RigidBody,addCapsuleTotal)
 {
     float inMassTotal;
     float inRadius;
@@ -468,7 +468,7 @@ FUNCTION(RigidBody,addCappedCylinderTotal)
     // Matrix is allowed to be missing, defaults to identity
     in.GetValue(in[3],inMat);
     
-    obj->AddCappedCylinderTotal(inMassTotal,inRadius,inLength,inMat);
+    obj->AddCapsuleTotal(inMassTotal,inRadius,inLength,inMat);
     return true;
 }
 
@@ -587,10 +587,10 @@ void CLASS(RigidBody)::DefineClass()
         DEFINE_FUNCTION(addCylinder);
         DEFINE_FUNCTION(setCylinderTotal);
         DEFINE_FUNCTION(addCylinderTotal);
-        DEFINE_FUNCTION(setCappedCylinder);
-        DEFINE_FUNCTION(addCappedCylinder);
-        DEFINE_FUNCTION(setCappedCylinderTotal);
-        DEFINE_FUNCTION(addCappedCylinderTotal);
+        DEFINE_FUNCTION(setCapsule);
+        DEFINE_FUNCTION(addCapsule);
+        DEFINE_FUNCTION(setCapsuleTotal);
+        DEFINE_FUNCTION(addCapsuleTotal);
         DEFINE_FUNCTION(setMass);
         DEFINE_FUNCTION(getMass);
         DEFINE_FUNCTION(setVelocity);

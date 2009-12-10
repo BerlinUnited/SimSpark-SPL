@@ -20,25 +20,19 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef OXYGEN_PHYSICSOBJECTINT_H
-#define OXYGEN_PHYSICSOBJECTINT_H
+#ifndef OXYGEN_CONECOLLIDERINT_H
+#define OXYGEN_CONECOLLIDERINT_H
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-#include <salt/matrix.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/genericphysicsobject.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API PhysicsObjectInt
+class OXYGEN_API ConeColliderInt
 {
 
-public:    
-    virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix) = 0;
-    virtual void ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const = 0;
 };
 
 } //namespace oxygen
 
-#endif //OXYGEN_PHYSICSOBJECTINT_H
+#endif //OXYGEN_CONECOLLIDERINT_H

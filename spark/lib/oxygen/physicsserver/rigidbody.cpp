@@ -195,22 +195,22 @@ void RigidBody::AddCylinderTotal(float total_mass, float radius, float length, c
     mRigidBodyImp->AddCylinderTotal(total_mass, radius, length, matrix);
 }
 
-void RigidBody::SetCappedCylinder (float density, float radius, float length)
+void RigidBody::SetCapsule (float density, float radius, float length)
 {
     mRigidBodyImp->SetCapsule(density, radius, length);
 }
 
-void RigidBody::AddCappedCylinder (float density, float radius, float length, const Matrix& matrix)
+void RigidBody::AddCapsule (float density, float radius, float length, const Matrix& matrix)
 {
     mRigidBodyImp->AddCapsule(density, radius, length, matrix);
 }
 
-void RigidBody::SetCappedCylinderTotal(float total_mass, float radius, float length)
+void RigidBody::SetCapsuleTotal(float total_mass, float radius, float length)
 {
     mRigidBodyImp->SetCapsuleTotal(total_mass, radius, length);
 }
 
-void RigidBody::AddCappedCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
+void RigidBody::AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix)
 {
     mRigidBodyImp->AddCapsuleTotal(total_mass, radius, length, matrix);
 }

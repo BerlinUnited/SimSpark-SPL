@@ -4,18 +4,18 @@
 (
  (templ $radius $length $totalMass $material)
 
- (nd CCylinder
+ (nd Capsule
        (setParams $radius $length)
        (setMaterial $material)
        )
        
  (nd RigidBody
-       (setName ccylinderBody)
-       ;(setCappedCylinderTotal $totalMass $radius $length)
-       (setCappedCylinder $totalMass $radius $length)
+       (setName capsuleBody)
+       ;(setCapsuleTotal $totalMass $radius $length)
+       (setCapsule $totalMass $radius $length)
        )
 	     
- (nd CCylinderCollider
+ (nd CapsuleCollider
        (setParams $radius $length)
        (nd ContactJointHandler
 	     (setContactBounceMode false)

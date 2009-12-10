@@ -40,7 +40,7 @@ StdMeshImporter::~StdMeshImporter()
 
 static const string gSphereStr = "StdUnitSphere";
 static const string gBoxStr = "StdUnitBox";
-static const string gCCylinderStr = "StdCCylinder";
+static const string gCapsuleStr = "StdCapsule";
 static const string gCylinderStr = "StdUnitCylinder";
 
 shared_ptr<TriMesh>
@@ -56,9 +56,9 @@ StdMeshImporter::ImportMesh(const std::string& name,const ParameterList& paramet
             return UnitBoxMesh();
         }
 
-    if (name == gCCylinderStr)
+    if (name == gCapsuleStr)
         {
-            return UnitCCylinder(parameter);
+            return UnitCapsule(parameter);
         }
 
     if (name == gCylinderStr)
@@ -253,7 +253,7 @@ shared_ptr<TriMesh> StdMeshImporter::UnitBoxMesh()
 }
 
 //
-// unit capped cylinder
+// unit capsule
 //
 static void AddVertex(float** at, float x, float y, float z)
 {
@@ -265,7 +265,7 @@ static void AddVertex(float** at, float x, float y, float z)
 std::string StdMeshImporter::MangleName (const string& name, const ParameterList& parameter)
 {
     if (
-        (name != gCCylinderStr) ||
+        (name != gCapsuleStr) ||
         (parameter.GetSize() < 2)
         )
         {
@@ -273,7 +273,7 @@ std::string StdMeshImporter::MangleName (const string& name, const ParameterList
         }
 
     stringstream ss;
-    ss << gCCylinderStr;
+    ss << gCapsuleStr;
 
     float radius;
     if (parameter.GetValue(parameter[0],radius))
@@ -290,18 +290,18 @@ std::string StdMeshImporter::MangleName (const string& name, const ParameterList
     return ss.str();
 }
 
-shared_ptr<TriMesh> StdMeshImporter::UnitCCylinder(const ParameterList& parameter)
+shared_ptr<TriMesh> StdMeshImporter::UnitCapsule(const ParameterList& parameter)
 {
     //
     // code adapted from ODE's drawstuff lib
     //
 
-    // generated capped clinder with r=1 and l=1
+    // generated capsule with r=1 and l=1
     float ccRadius = 1;
     float ccLength = 1;
 
     GetLog()->Debug()
-        << "(StdMeshImporter::UnitCCylinder) paramSize="
+        << "(StdMeshImporter::UnitCapsule) paramSize="
         << parameter.GetSize() << "\n";
     if (parameter.GetSize() >= 2)
         {
@@ -310,8 +310,8 @@ shared_ptr<TriMesh> StdMeshImporter::UnitCCylinder(const ParameterList& paramete
         }
 
     // number of sides to the cylinder (divisible by 4):
-    const int capped_cylinder_quality = 3;
-    const int n = capped_cylinder_quality*4;
+    const int capsule_quality = 3;
+    const int n = capsule_quality*4;
 
     int innerLoop = (n+1);
     int numVertices = innerLoop * 2;
@@ -447,7 +447,7 @@ shared_ptr<TriMesh> StdMeshImporter::UnitCCylinder(const ParameterList& paramete
     mesh->SetPos(pos,numVertices);
     mesh->SetNormals(normals);
     mesh->AddFace(idx);
-    mesh->SetName(MangleName(gCCylinderStr,parameter));
+    mesh->SetName(MangleName(gCapsuleStr,parameter));
 
     return mesh;
 }

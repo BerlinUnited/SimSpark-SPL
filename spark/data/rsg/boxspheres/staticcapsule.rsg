@@ -4,12 +4,12 @@
 (
  (templ $radius $length $density $material)
 
- (nd CCylinder
+ (nd Capsule
        (setParams $radius $length)
        (setMaterial $material)
        )
        
- (nd CCylinderCollider
+ (nd CapsuleCollider
        (setParams $radius $length)
        )
  )

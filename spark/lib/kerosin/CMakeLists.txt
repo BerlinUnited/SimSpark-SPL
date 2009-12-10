@@ -25,7 +25,7 @@ set(kerosin_LIB_HDRS
     sceneserver/light.h
     sceneserver/sphere.h
     sceneserver/box.h
-    sceneserver/ccylinder.h
+    sceneserver/capsule.h
     sceneserver/cylinder.h
     sceneserver/staticmesh.h
     soundserver/soundeffect.h
@@ -90,8 +90,8 @@ set(kerosin_LIB_SRCS
     sceneserver/box_c.cpp
     sceneserver/sphere.cpp
     sceneserver/sphere_c.cpp
-    sceneserver/ccylinder.cpp
-    sceneserver/ccylinder_c.cpp
+    sceneserver/capsule.cpp
+    sceneserver/capsule_c.cpp
     sceneserver/cylinder.cpp
     sceneserver/cylinder_c.cpp
     sceneserver/staticmesh.cpp
