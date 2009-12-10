@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: capsule.h 57 2009-03-18 07:26:56Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef KEROSIN_CCYLINDER_H
-#define KEROSIN_CCYLINDER_H
+#ifndef KEROSIN_CAPSULE_H
+#define KEROSIN_CAPSULE_H
 
 #include <kerosin/kerosin_defines.h>
 #include "singlematnode.h"
@@ -29,19 +29,19 @@ namespace kerosin
 {
 class Material;
 
-/** CCylinder is a SingleMatNode that creates and renders a capped
-    cylinder mesh with the given length and radius
+/** Capsule is a SingleMatNode that creates and renders a capsule
+    mesh with the given length and radius
  */
-class KEROSIN_API CCylinder : public SingleMatNode
+class KEROSIN_API Capsule : public SingleMatNode
 {
     //
     // Function
     //
 public:
-    CCylinder();
-    virtual ~CCylinder();
+    Capsule();
+    virtual ~Capsule();
 
-    /** sets the parameters of the capped cylinder.
+    /** sets the parameters of the capsule.
 
        \param radius is the radius of the caps, and of the cylinder
        itself
@@ -51,13 +51,13 @@ public:
     */
     void SetParams(float radius, float length);
 
-    /** returns the parameters of the capped cylinder */
+    /** returns the parameters of the capsule */
     void GetParams(float& radius, float& length) const;
 
-    /** returns the radius of the capped cylinder */
+    /** returns the radius of the capsule */
     float GetRadius();
 
-    /** returns the length of the capped cylinder */
+    /** returns the length of the capsule */
     float GetLength();
 
     //
@@ -71,8 +71,8 @@ protected:
     float mLength;
 };
 
-DECLARE_CLASS(CCylinder);
+DECLARE_CLASS(Capsule);
 
 } //namespace kerosin
 
-#endif //KEROSIN_CCYLINDER_H
+#endif //KEROSIN_CAPSULE_H

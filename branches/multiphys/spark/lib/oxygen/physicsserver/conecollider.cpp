@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
+   $Id: conecollider.cpp
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,26 +19,15 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include <oxygen/physicsserver/conecollider.h>
+#include <oxygen/physicsserver/ode/odeconecollider.h>
 
-#ifndef OXYGEN_PHYSICSOBJECTINT_H
-#define OXYGEN_PHYSICSOBJECTINT_H
+using namespace oxygen;
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-#include <salt/matrix.h>
-#include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/genericphysicsobject.h>
+ConeCollider::ConeCollider() : ConvexCollider(){
+    mConeColliderImp = boost::shared_ptr<ODEConeCollider>(new ODEConeCollider());
+}
 
-namespace oxygen
-{
+ConeCollider::~ConeCollider(){
 
-class OXYGEN_API PhysicsObjectInt
-{
-
-public:    
-    virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix) = 0;
-    virtual void ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const = 0;
-};
-
-} //namespace oxygen
-
-#endif //OXYGEN_PHYSICSOBJECTINT_H
+}

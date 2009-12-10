@@ -213,8 +213,8 @@ shared_ptr<Collider> Collider::GetCollider(long geomID)
 void Collider::SetRotation(const Matrix& rot)
 {
     dMatrix3 ODEMatrix;
-    void* matrixPtr = (void*) &ODEMatrix; 
-    ConvertRotationMatrix(rot, matrixPtr);
+    GenericPhysicsObject& matrixRef = (GenericPhysicsObject&) ODEMatrix; 
+    ConvertRotationMatrix(rot, matrixRef);
     dGeomSetRotation(mODEGeom, ODEMatrix);
 }
 

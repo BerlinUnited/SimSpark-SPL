@@ -213,8 +213,8 @@ void ODECollider::OnCollision (boost::shared_ptr<Collider> collidee,
 void ODECollider::SetRotation(const Matrix& rot)
 {
     dMatrix3 ODEMatrix;
-    void* matrixPtr = (void*) &ODEMatrix; 
-    ConvertRotationMatrix(rot, matrixPtr);
+    GenericPhysicsObject& matrixRef = (GenericPhysicsObject&) ODEMatrix; 
+    ConvertRotationMatrix(rot, matrixRef);
     dGeomSetRotation(mODEGeom, ODEMatrix);
 }
 

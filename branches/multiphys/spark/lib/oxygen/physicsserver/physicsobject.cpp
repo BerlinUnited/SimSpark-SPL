@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <oxygen/physicsserver/genericphysicsobject.h>
 #include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
@@ -135,12 +136,12 @@ long PhysicsObject::GetParentSpaceID()
     return 0;
 }
 
-void PhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, void* matrix)
+void PhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix)
 {
     mPhysicsObjectImp->ConvertRotationMatrix(rot, matrix);
 }
 
-void PhysicsObject::ConvertRotationMatrix(const void* matrix, salt::Matrix& rot) const
+void PhysicsObject::ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const
 {
     mPhysicsObjectImp->ConvertRotationMatrix(matrix, rot);
 }

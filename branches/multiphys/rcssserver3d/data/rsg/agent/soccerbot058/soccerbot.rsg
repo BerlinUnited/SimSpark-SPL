@@ -216,7 +216,7 @@
 			  $offsetLeftShoulderCylY
 			  $offsetLeftShoulderCylZ)
 	     (setLocalRotation 0 90 0)
-	     (nd CCylinder
+	     (nd Capsule
 		 (setName leftshoulderpin)
 		 (setMaterial matDarkGrey)
 		 (setParams $TorsoCylinderRadius $TorsoCylinderLength)
@@ -228,7 +228,7 @@
 			  $offsetRightShoulderCylY
 			  $offsetRightShoulderCylZ)
 	     (setLocalRotation 0 90 0)
-	     (nd CCylinder
+	     (nd Capsule
 		 (setName rightshoulderpin)
 		 (setMaterial matDarkGrey)
 		 (setParams $TorsoCylinderRadius $TorsoCylinderLength)
@@ -434,7 +434,7 @@
 			       - (eval $ShankHeight / 2.0)
 			       - (eval 0.05 * $scale)))
      (def $ShankAnchorZ (eval $ShankHeight * 0.5))
-     (importScene rsg/agent/soccerbot058/box_with_hj_with_ccylinder.rsg
+     (importScene rsg/agent/soccerbot058/box_with_hj_with_capsule.rsg
 		  leftshank llj4 lle4 ../../leftthigh/boxBody
 		  $LeftShankPosX $LeftShankPosY $LeftShankPosZ
 		  $ShankLength $ShankWidth $ShankHeight
@@ -447,7 +447,7 @@
      (def $RightShankPosX $RightThighPosX)
      (def $RightShankPosY $RightThighPosY)
      (def $RightShankPosZ $LeftShankPosZ)
-     (importScene rsg/agent/soccerbot058/box_with_hj_with_ccylinder.rsg
+     (importScene rsg/agent/soccerbot058/box_with_hj_with_capsule.rsg
 		  rightshank rlj4 rle4 ../../rightthigh/boxBody
 		  $RightShankPosX $RightShankPosY $RightShankPosZ
 		  $ShankLength $ShankWidth $ShankHeight

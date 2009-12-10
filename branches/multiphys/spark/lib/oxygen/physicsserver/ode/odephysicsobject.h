@@ -32,10 +32,11 @@ namespace oxygen
 
 class OXYGEN_API ODEPhysicsObject : public PhysicsObjectInt
 {
+
 public:
     ODEPhysicsObject();
-    void ConvertRotationMatrix(const salt::Matrix& rot, void* matrix);
-    void ConvertRotationMatrix(const void* matrix, salt::Matrix& rot) const;
+    void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix);
+    void ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const;
 };
 
 } //namespace oxygen

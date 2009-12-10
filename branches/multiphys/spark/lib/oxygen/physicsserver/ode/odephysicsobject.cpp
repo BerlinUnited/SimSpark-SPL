@@ -32,12 +32,9 @@ using namespace std;
 ODEPhysicsObject::ODEPhysicsObject(){
 }
 
-void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, void* matrix)
+void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix)
 {
-    // cast to a pointer first because the compiler doesn't want to cast
-    // from a void* directly to a reference  
-    dMatrix3* helpMatrix = (dMatrix3*) matrix;  
-    dMatrix3& odeMatrix = (dMatrix3&) *helpMatrix;
+    dMatrix3& odeMatrix = (dMatrix3&) matrix;
     
     odeMatrix[0] = rot.m[0];
     odeMatrix[1] = rot.m[4];
@@ -53,7 +50,7 @@ void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, void* matr
     odeMatrix[11] = 0;
 }
 
-void ODEPhysicsObject::ConvertRotationMatrix(const void* matrix, salt::Matrix& rot) const
+void ODEPhysicsObject::ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const
 {
     dReal* odeMatrix = (dReal*) matrix;
 

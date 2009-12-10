@@ -14,6 +14,7 @@ set(oxygen_LIB_HDRS
     gamecontrolserver/behavior.h
     oxygen.h
     oxygen_defines.h
+    physicsserver/genericphysicsobject.h
     physicsserver/physicsobject.h
     physicsserver/body.h
     physicsserver/rigidbody.h
@@ -56,9 +57,11 @@ set(oxygen_LIB_HDRS
     #interfaces
     physicsserver/int/bodyint.h
     physicsserver/int/boxcolliderint.h
+    physicsserver/int/capsulecolliderint.h
     physicsserver/int/colliderint.h
     physicsserver/int/compoundcolliderint.h
     physicsserver/int/concavecolliderint.h
+    physicsserver/int/conecolliderint.h
     physicsserver/int/convexcolliderint.h
     physicsserver/int/cylindercolliderint.h
     physicsserver/int/dynamicbodyint.h
@@ -76,9 +79,11 @@ set(oxygen_LIB_HDRS
     physicsserver/ode/odebody.h
     physicsserver/ode/odeboxcollider.h
     physicsserver/ode/odedynamicbody.h
+    physicsserver/ode/odecapsulecollider.h
     physicsserver/ode/odecollider.h
     physicsserver/ode/odecompoundcollider.h
     physicsserver/ode/odeconcavecollider.h
+    physicsserver/ode/odeconecollider.h
     physicsserver/ode/odeconvexcollider.h
     physicsserver/ode/odecylindercollider.h
     physicsserver/ode/odeemptycollider.h
@@ -177,6 +182,7 @@ set(oxygen_LIB_SRCS
     physicsserver/compoundcollider_c.cpp
     physicsserver/concavecollider.cpp
     physicsserver/concavecollider_c.cpp
+    physicsserver/conecollider.cpp
     physicsserver/conecollider_c.cpp
     physicsserver/convexcollider.cpp
     physicsserver/convexcollider_c.cpp
@@ -228,9 +234,11 @@ set(oxygen_LIB_SRCS
     #ODE-specific files
     physicsserver/ode/odebody.cpp
     physicsserver/ode/odeboxcollider.cpp
+    physicsserver/ode/odecapsulecollider.cpp
     physicsserver/ode/odecollider.cpp
     physicsserver/ode/odecompoundcollider.cpp
     physicsserver/ode/odeconcavecollider.cpp
+    physicsserver/ode/odeconecollider.cpp
     physicsserver/ode/odeconvexcollider.cpp
     physicsserver/ode/odecylindercollider.cpp
     physicsserver/ode/odedynamicbody.cpp

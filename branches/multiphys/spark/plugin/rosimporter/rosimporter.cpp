@@ -41,7 +41,7 @@
 #include <kerosin/materialserver/materialsolid.h>
 #include <kerosin/sceneserver/box.h>
 #include <kerosin/sceneserver/sphere.h>
-#include <kerosin/sceneserver/ccylinder.h>
+#include <kerosin/sceneserver/capsule.h>
 #include <kerosin/sceneserver/staticmesh.h>
 #include <kerosin/renderserver/renderserver.h>
 #include <boost/scoped_array.hpp>
@@ -754,8 +754,8 @@ bool RosImporter::ReadElements(shared_ptr<BaseNode> parent, TiXmlElement* elemen
                     ok = ReadCylinder(parent,element);
                     break;
 
-                case RosElements::RE_CAPPEDCYLINDER:
-                    ok = ReadCappedCylinder(parent,element);
+                case RosElements::RE_CAPSULE:
+                    ok = ReadCapsule(parent,element);
                     break;
 
                 case RosElements::RE_UNIVERSAL:
@@ -992,11 +992,11 @@ bool RosImporter::ReadPhysical(TiXmlElement* element, Physical& physical)
 
 bool RosImporter::ReadCylinder(shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
-    GetLog()->Debug() << "(RosImporter) cylinder geom unsupported yet. Created a capped cylinder geom\n";
-    return ReadCappedCylinder(parent, element);
+    GetLog()->Debug() << "(RosImporter) cylinder geom unsupported yet. Created a capsule geom\n";
+    return ReadCapsule(parent, element);
 }
 
-bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -1023,20 +1023,20 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
     transform->SetName(name);
 
     // visual
-    shared_ptr<CCylinder> ccylinder = shared_dynamic_cast<CCylinder>
-        (GetCore()->New("/kerosin/CCylinder"));
-    transform->AddChildReference(ccylinder);
+    shared_ptr<Capsule> capsule = shared_dynamic_cast<Capsule>
+        (GetCore()->New("/kerosin/Capsule"));
+    transform->AddChildReference(capsule);
 
-    ccylinder->SetName(S_VISUAL+name);
-    ccylinder->SetParams(radius, height);
-    ccylinder->SetMaterial(appear.ref);
+    capsule->SetName(S_VISUAL+name);
+    capsule->SetParams(radius, height);
+    capsule->SetMaterial(appear.ref);
 
     // physical
     shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
-            body->SetCappedCylinderTotal(physical.mass, radius, height);
+            body->SetCapsuleTotal(physical.mass, radius, height);
             GetContext().AddMass(physical.mass, Trans());
         }
 
@@ -1044,7 +1044,7 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
         {
             // geometry
             shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
-                (GetCore()->New("/oxygen/CCylinderCollider"));
+                (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transform->AddChildReference(collider);
             collider->SetName(S_GEOM+name);
@@ -1055,7 +1055,7 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
             collider->AddChildReference(handler);
         }
 
-    GetLog()->Debug() << "(RosImporter) created capped cylinder " << name << "\n";
+    GetLog()->Debug() << "(RosImporter) created capsule " << name << "\n";
     return ReadChildElements(transform, element);
 }
 
@@ -1871,9 +1871,9 @@ bool RosImporter::ReadPhysicalRep(shared_ptr<BaseNode> parent, TiXmlElement* ele
                     break;
 
                 case RosElements::RE_SIMPLECYLINDER:
-                    //! simulate cylinder with a capped cylinder
-                case RosElements::RE_SIMPLECAPPEDCYLINDER:
-                    if (! ReadSimpleCappedCylinder(parent, element))
+                    //! simulate cylinder with a capsule
+                case RosElements::RE_SIMPLECAPSULE:
+                    if (! ReadSimpleCapsule(parent, element))
                         {
                             return false;
                         }
@@ -1989,7 +1989,7 @@ bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlEle
     return true;
 }
 
-bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadSimpleCapsule(shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -2014,7 +2014,7 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
     shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
-            body->AddCappedCylinderTotal(physical.mass, radius, height, trans.matrix);
+            body->AddCapsuleTotal(physical.mass, radius, height, trans.matrix);
             GetContext().AddMass(physical.mass, trans);
         }
 
@@ -2026,7 +2026,7 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
             transCollider->SetName(S_GEOMTRANS+name);
 
             shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
-                (GetCore()->New("/oxygen/CCylinderCollider"));
+                (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transCollider->AddChildReference(collider);
             collider->SetName(S_GEOM+name);
@@ -2037,7 +2037,7 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
             collider->AddChildReference(handler);
         }
 
-    GetLog()->Debug() << "(RosImporter) created simple capped cylinder " << name << "\n";
+    GetLog()->Debug() << "(RosImporter) created simple capsule " << name << "\n";
     return true;
 }
 

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
+   $Id: capsule_c.cpp 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,26 +19,44 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include "capsule.h"
 
-#ifndef OXYGEN_PHYSICSOBJECTINT_H
-#define OXYGEN_PHYSICSOBJECTINT_H
+using namespace boost;
+using namespace kerosin;
+using namespace salt;
 
-#include <boost/smart_ptr/shared_ptr.hpp>
-#include <salt/matrix.h>
-#include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/genericphysicsobject.h>
-
-namespace oxygen
+FUNCTION(Capsule,setParams)
 {
+    float inRadius;
+    float inLength;
 
-class OXYGEN_API PhysicsObjectInt
+    if (
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], inRadius)) ||
+        (! in.GetValue(in[1], inLength))
+        )
+        {
+            return false;
+        }
+
+    obj->SetParams(inRadius,inLength);
+    return true;
+}
+
+FUNCTION(Capsule,getRadius)
 {
+    return obj->GetRadius();
+}
 
-public:    
-    virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix) = 0;
-    virtual void ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const = 0;
-};
+FUNCTION(Capsule,getLength)
+{
+    return obj->GetLength();
+}
 
-} //namespace oxygen
-
-#endif //OXYGEN_PHYSICSOBJECTINT_H
+void CLASS(Capsule)::DefineClass()
+{
+    DEFINE_BASECLASS(kerosin/SingleMatNode);
+    DEFINE_FUNCTION(setParams);
+    DEFINE_FUNCTION(getRadius);
+    DEFINE_FUNCTION(getLength);
+}

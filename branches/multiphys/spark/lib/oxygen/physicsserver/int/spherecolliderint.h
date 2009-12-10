@@ -23,7 +23,7 @@
 #ifndef OXYGEN_SPHERECOLLIDERINT_H
 #define OXYGEN_SPHERECOLLIDERINT_H
 
-#include <salt/salt.h>
+#include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen

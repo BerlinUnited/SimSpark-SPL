@@ -5,13 +5,13 @@
     (templ $radius $length $totalMass)
 
     (nd RigidBody
-        (setName ccylinderBody)
-        (setCappedCylinderTotal $totalMass $radius $length)
+        (setName capsuleBody)
+        (setCapsuleTotal $totalMass $radius $length)
 
         (importScene rsg/agent/nao/dragcontroller.rsg)
     )
 
-    (nd CCylinderCollider
+    (nd CapsuleCollider
         (setParams $radius $length)
 
         (importScene rsg/agent/nao/contactjointhandler.rsg)

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: ccylindercollider.h 108 2009-11-25 10:20:10Z a-held $
+   $Id: capsulecollider.h 108 2009-11-25 10:20:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,9 @@
 
 namespace oxygen
 {
+class CapsuleColliderInt;
 
-/** CapsuleCollider encapsulates an ODE capsule geometry
+/** CapsuleCollider encapsulates a capsule geometry
     object. A capsule is like a cylinder except it has
     half-sphere caps at its ends. This feature makes the internal
     collision detection code particularly fast and accurate.
@@ -74,6 +75,9 @@ protected:
     /** constructs a default capsule with an radius of 1 and a
         length of 1 */
     virtual bool ConstructInternal();
+    
+private:
+    boost::shared_ptr<CapsuleColliderInt> mCapsuleColliderImp;
 };
 
 DECLARE_CLASS(CapsuleCollider);

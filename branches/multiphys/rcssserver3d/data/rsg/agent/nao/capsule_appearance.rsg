@@ -4,7 +4,7 @@
 (
     (templ $radius $length $material)
 
-    (nd CCylinder
+    (nd Capsule
         (setParams $radius $length)
         (setMaterial $material)
     )
