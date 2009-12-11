@@ -20,12 +20,15 @@
 */
 
 #include <oxygen/physicsserver/planecollider.h>
+#include <oxygen/physicsserver/ode/odeplanecollider.h>
+#include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace salt;
 
 PlaneCollider::PlaneCollider() : Collider()
 {
+    mPlaneColliderImp = boost::shared_ptr<ODEPlaneCollider>(new ODEPlaneCollider());
 }
 
 void PlaneCollider::SetParams(float a, float b, float c, float d)
@@ -40,7 +43,7 @@ void PlaneCollider::SetParams(float a, float b, float c, float d)
             d /= l;
         }
 
-    dGeomPlaneSetParams(mODEGeom, a, b, c, d);
+    mPlaneColliderImp->SetPlaneParams(a, b, c, d);
 }
 
 bool PlaneCollider::ConstructInternal()
@@ -50,39 +53,35 @@ bool PlaneCollider::ConstructInternal()
             return false;
         }
 
-    // a plane with normal pointing up, going through the origin
-    mODEGeom = dCreatePlane(0, 0, 1, 0, 0);
+    //create default plane
+    mPlaneColliderImp->CreatePlane();
+    mODEGeom = (dGeomID) mPlaneColliderImp->GetGeomID();
 
-    return (mODEGeom != 0);
+    return (mPlaneColliderImp->GetGeomID() != 0);
 }
 
-void
-PlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal)
+void PlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal)
 {
     normal.Normalize();
     float d = pos.Dot(normal);
-    dGeomPlaneSetParams(mODEGeom, normal.x(), normal.y(), normal.z(), d);
+    mPlaneColliderImp->SetPlaneParams(normal.x(), normal.y(), normal.z(), d); 
+    //dGeomPlaneSetParams(mODEGeom, normal.x(), normal.y(), normal.z(), d);
 }
 
-void
-PlaneCollider::SetPosition(const salt::Vector3f& /*pos*/)
+void PlaneCollider::SetPosition(const salt::Vector3f& /*pos*/)
 {
-    // planes are non placeable geoms
+    GetLog()->Error()
+      << "(PlaneCollider) WARNING: tried to set the position of a non-placeable geom, ignored\n";
 }
 
-void
-PlaneCollider::SetRotation(const Matrix& /*rot*/)
+void PlaneCollider::SetRotation(const Matrix& /*rot*/)
 {
-    // planes are non placeable geoms
+    GetLog()->Error()
+      << "(PlaneCollider) WARNING: tried to set the rotation of a non-placeable geom, ignored\n";
 }
 
-float
-PlaneCollider::GetPointDepth(const Vector3f& pos)
+float PlaneCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
-    return dGeomPlanePointDepth
-        (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+    return mPlaneColliderImp->GetPointDepth(worldPos);
 }
-
-
-

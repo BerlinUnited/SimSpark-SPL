@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: oderaycollider.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,49 +19,26 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_RAYCOLLIDER_H
-#define OXYGEN_RAYCOLLIDER_H
 
+#ifndef OXYGEN_ODERAYCOLLIDER_H
+#define OXYGEN_ODERAYCOLLIDER_H
+
+#include <oxygen/physicsserver/ode/odecollider.h>
+#include <oxygen/physicsserver/int/raycolliderint.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/collider.h>
 
 namespace oxygen
 {
-class RayColliderInt;
 
-/** RayCollider encapsulates an ODE ray geometry "object".
- *
- * A ray is different from all the other geom classes in that it does not
- * represent a solid object. It is an infinitely thin line that starts
- * from the geom's position and extends in the direction of the geom's
- * local Z-axis.
- */
-class OXYGEN_API RayCollider : public Collider
+class OXYGEN_API ODERayCollider : public RayColliderInt, public ODECollider
 {
-    //
-    // Functions
-    //
 public:
-    RayCollider();
-
-    /** Sets the parameters of the ray.
-     *
-     * \param pos starting position of the ray
-     * \param dir new direction of the ray
-     * \param length length of the ray starting at its position
-    */
+    ODERayCollider();
     void SetParams(salt::Vector3f pos, salt::Vector3f dir, float length);
-
-protected:
-    /** constructs a default ray with a length of 1 */
-    virtual bool ConstructInternal();
-    
-private:
-    boost::shared_ptr<RayColliderInt> mRayColliderImp;
+    void CreateRay();
+    long GetGeomID();
 };
-
-DECLARE_CLASS(RayCollider);
 
 } //namespace oxygen
 
-#endif //OXYGEN_RAYCOLLIDER_H
+#endif //OXYGEN_ODERAYCOLLIDER_H
