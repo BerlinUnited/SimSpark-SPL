@@ -68,6 +68,8 @@ set(oxygen_LIB_HDRS
     physicsserver/int/emptycolliderint.h
     physicsserver/int/physicsobjectint.h
     physicsserver/int/physicsserverint.h
+    physicsserver/int/planecolliderint.h
+    physicsserver/int/raycolliderint.h
     physicsserver/int/rigidbodyint.h
     physicsserver/int/softbodyint.h
     physicsserver/int/spaceint.h
@@ -89,6 +91,8 @@ set(oxygen_LIB_HDRS
     physicsserver/ode/odeemptycollider.h
     physicsserver/ode/odephysicsobject.h
     physicsserver/ode/odephysicsserver.h
+    physicsserver/ode/odeplanecollider.h
+    physicsserver/ode/oderaycollider.h
     physicsserver/ode/oderigidbody.h
     physicsserver/ode/odesoftbody.h
     physicsserver/ode/odespace.h
@@ -245,6 +249,8 @@ set(oxygen_LIB_SRCS
     physicsserver/ode/odeemptycollider.cpp
     physicsserver/ode/odephysicsobject.cpp
     physicsserver/ode/odephysicsserver.cpp
+    physicsserver/ode/odeplanecollider.cpp
+    physicsserver/ode/oderaycollider.cpp
     physicsserver/ode/oderigidbody.cpp
     physicsserver/ode/odesoftbody.cpp
     physicsserver/ode/odespace.cpp

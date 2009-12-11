@@ -3,7 +3,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: raycollider.cpp 108 2009-11-25 10:20:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,31 +20,27 @@
 */
 
 #include <oxygen/physicsserver/ode/oderaycollider.h>
-#include <oxygen/physicsserver/raycollider.h>
 
 using namespace oxygen;
 
-RayCollider::RayCollider() : Collider()
+ODERayCollider::ODERayCollider() : ODECollider()
 {
-    mRayColliderImp = boost::shared_ptr<ODERayCollider>(new ODERayCollider());
+
 }
 
-void RayCollider::SetParams(salt::Vector3f pos,
+void ODERayCollider::SetParams(salt::Vector3f pos,
                             salt::Vector3f dir, float length)
 {
-    mRayColliderImp->SetParams(pos, dir, length);
+    dGeomRaySet(mODEGeom, pos[0], pos[1], pos[2], dir[0], dir[1], dir[2]);
+    dGeomRaySetLength(mODEGeom, length);
 }
 
-bool RayCollider::ConstructInternal()
+void ODERayCollider::CreateRay()
 {
-    if (! Collider::ConstructInternal())
-    {
-        return false;
-    }
+    mODEGeom = dCreateRay(0, 1.0f);
+    mGeomID = (long) mODEGeom;
+}
 
-    // create a unit ray
-    mRayColliderImp->CreateRay();
-    mODEGeom = (dGeomID) mRayColliderImp->GetGeomID();
-
-    return (mRayColliderImp->GetGeomID() != 0);
+long ODERayCollider::GetGeomID(){
+    return mGeomID;
 }
