@@ -170,8 +170,8 @@ void Space::HandleCollide(long obj1, long obj2)
     for (int i=0;i<n;++i)
         {
             // notify the collider nodes
-            collider->OnCollision(collidee,(void*) &contacts[i],Collider::CT_DIRECT);
-            collidee->OnCollision(collider,(void*) &contacts[i],Collider::CT_SYMMETRIC);
+            collider->OnCollision(collidee,(GenericContact&) contacts[i],Collider::CT_DIRECT);
+            collidee->OnCollision(collider,(GenericContact&) contacts[i],Collider::CT_SYMMETRIC);
         }
 }
 

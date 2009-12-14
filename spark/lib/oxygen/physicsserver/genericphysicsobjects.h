@@ -19,32 +19,24 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_GENERICPHYSICSOBJECT_H
-#define OXYGEN_GENERICPHYSICSOBJECT_H
+#ifndef OXYGEN_GENERICPHYSICSOBJECTS_H
+#define OXYGEN_GENERICPHYSICSOBJECTS_H
 
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
-/** GenericPhysicsObject is an empty class that has only supportive 
+/** GenericPhysicsObjects declares empty classes that have supportive 
     purposes. In many cases, it is required to pass a pointer or a
     reference to an engine-specific object on to the abstract layer,
     usually when a method of a different class is called. In that case, 
     the pointer or reference must first be cast to a pointer or reference
-    to this generic class. After the method call has been delegated by 
-    the abstract layer, the callee can then re-cast the pointer or 
-    reference type to the expected engine-specific type.
-    
-    This is done optimistically, i.e. callees trust that callers
-    will not cast a pointer or reference to a wrong engine-specific type 
-    to a GenericPhysicsObject pointer and then commit a prank call.
+    to one of the generic classes defined here.
 */
 
-class OXYGEN_API GenericPhysicsObject
-{
-
-};
+class OXYGEN_API GenericPhysicsMatrix{};
+class OXYGEN_API GenericContact{};
 
 } //namespace oxygen
 
-#endif //OXYGEN_GENERICPHYSICSOBJECT_H
+#endif //OXYGEN_GENERICPHYSICSOBJECTS_H

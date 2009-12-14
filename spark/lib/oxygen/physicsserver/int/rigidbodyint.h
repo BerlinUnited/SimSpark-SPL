@@ -90,7 +90,7 @@ public:
     
 protected:
     /** The ID of the managed body. This must be unique within the simulation.
-        It is used externally to reference this partcular body.
+        It is used externally to reference this particular body.
     */
     long mBodyID;
     

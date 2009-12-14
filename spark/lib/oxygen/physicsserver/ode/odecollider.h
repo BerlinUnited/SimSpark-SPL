@@ -28,6 +28,7 @@
 
 namespace oxygen
 {
+class Collider;
 
 class OXYGEN_API ODECollider : public ColliderInt, public ODEPhysicsObject
 {
@@ -36,25 +37,21 @@ public:
     ODECollider();
     virtual ~ODECollider();
 
-    void OnCollision(boost::shared_ptr<Collider> collidee, dContact& contact, ECollisionType type);
-    bool AddCollisionHandler(const std::string& handlerName);
+    void SetPosition(const salt::Vector3f& globalPos, long geomID);
+    void SetLocalPosition(const salt::Vector3f& pos, long GeomID);
+    salt::Vector3f GetPosition(long geomID) const;
+    void SetRotation(const salt::Matrix& rot, long GeomID);
+    bool Intersect(boost::shared_ptr<Collider> collider, long geomID);
+    long GetParentSpaceID(long geomID);
+    void DestroyGeom(long GeomID);
     long GetGeomID();
-    void SetPosition(const salt::Vector3f& pos);
-    void SetLocalPosition(const salt::Vector3f& pos);
-    salt::Vector3f GetPosition() const;
-    void SetRotation(const salt::Matrix& rot);
-    bool Intersects(boost::shared_ptr<Collider> collider);
-    long GetParentSpaceID();
-    void AddNotCollideWithColliderName(const std::string& colliderName, bool isAdd);
-    const TColliderNameSet& GetNotCollideWithSet() const;
-    void OnLink();
-    void OnUnlink();
-    void PrePhysicsUpdateInternal(float deltaTime);
-    void DestroyPhysicsObject();
+    void TransformSetGeom(long parentGeomID, long geomID);
+    void SetSpace(long spaceID, long geomID, Collider* collider);
+    void SetBody(long bodyID, long geomID);
+    void RemoveFromSpace(long geomID, long spaceID);
     
 protected:
     dGeomID mODEGeom;
-    TColliderNameSet mNotCollideWithSet;
 };
 
 } //namespace oxygen

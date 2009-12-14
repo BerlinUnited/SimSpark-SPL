@@ -26,7 +26,7 @@
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <salt/matrix.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/genericphysicsobject.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
@@ -35,8 +35,8 @@ class OXYGEN_API PhysicsObjectInt
 {
 
 public:    
-    virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix) = 0;
-    virtual void ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const = 0;
+    virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsMatrix& matrix) = 0;
+    virtual void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const = 0;
 };
 
 } //namespace oxygen

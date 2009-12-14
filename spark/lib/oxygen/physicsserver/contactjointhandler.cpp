@@ -150,8 +150,10 @@ ContactJointHandler::CalcSurfaceParam(dSurfaceParameters& surface,
 }
 
 void
-ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& contact)
+ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, GenericContact& contact)
 {
+    dContact& ODEContact = (dContact&) contact;
+
     if (
         (mCollider.get() == 0) ||
         (mWorld.get() == 0) ||
@@ -184,11 +186,11 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, dContact& co
         }
 
     // calculate the resulting surface parameters
-    CalcSurfaceParam(contact.surface,handler->mSurfaceParameter);
+    CalcSurfaceParam(ODEContact.surface,handler->mSurfaceParameter);
 
     // create the contact joint and attach it to the body
     dJointID joint = dJointCreateContact
-        ((dWorldID) mWorld->GetWorldID(), mSpace->GetODEJointGroup(), &contact);
+        ((dWorldID) mWorld->GetWorldID(), mSpace->GetODEJointGroup(), &ODEContact);
 
     dJointAttach (joint, myBody, collideeBody);
 }

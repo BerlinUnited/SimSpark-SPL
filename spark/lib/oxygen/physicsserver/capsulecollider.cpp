@@ -68,9 +68,9 @@ bool CapsuleCollider::ConstructInternal()
     }
 
     mCapsuleColliderImp->CreateCapsule();
-    mODEGeom = (dGeomID) mCapsuleColliderImp->GetGeomID();
+    mGeomID = mCapsuleColliderImp->GetGeomID();
 
-    return (mCapsuleColliderImp->GetGeomID() != 0);
+    return (mGeomID != 0);
 }
 
 float CapsuleCollider::GetPointDepth(const Vector3f& pos)
