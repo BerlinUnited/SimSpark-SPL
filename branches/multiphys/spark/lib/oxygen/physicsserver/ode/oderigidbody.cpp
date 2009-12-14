@@ -133,7 +133,7 @@ void ODERigidBody::AddMass(const dMass& ODEMass, const Matrix& matrix)
     dMass transMass(ODEMass);
 
     dMatrix3 ODEMatrix;
-    GenericPhysicsObject& matrixRef = (GenericPhysicsObject&) ODEMatrix;
+    GenericPhysicsMatrix& matrixRef = (GenericPhysicsMatrix&) ODEMatrix;
     ConvertRotationMatrix(matrix, matrixRef);
     dMassRotate(&transMass, ODEMatrix);
 
@@ -348,7 +348,7 @@ void ODERigidBody::SetVelocity(const Vector3f& vel)
 void ODERigidBody::SetRotation(const Matrix& rot)
 {
     dMatrix3 ODEMatrix;
-    GenericPhysicsObject& matrixRef = (GenericPhysicsObject&) ODEMatrix;
+    GenericPhysicsMatrix& matrixRef = (GenericPhysicsMatrix&) ODEMatrix;
     ConvertRotationMatrix(rot, matrixRef);
     dBodySetRotation(mODEBody, ODEMatrix);
 }
@@ -356,7 +356,7 @@ void ODERigidBody::SetRotation(const Matrix& rot)
 salt::Matrix ODERigidBody::GetRotation() const
 {
     const dReal* ODEMatrix = dBodyGetRotation(mODEBody);
-    GenericPhysicsObject* matrixPtr = (GenericPhysicsObject*) ODEMatrix;
+    GenericPhysicsMatrix* matrixPtr = (GenericPhysicsMatrix*) ODEMatrix;
     salt::Matrix rot;
     ConvertRotationMatrix(matrixPtr,rot);
     return rot;

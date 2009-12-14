@@ -14,7 +14,7 @@ set(oxygen_LIB_HDRS
     gamecontrolserver/behavior.h
     oxygen.h
     oxygen_defines.h
-    physicsserver/genericphysicsobject.h
+    physicsserver/genericphysicsobjects.h
     physicsserver/physicsobject.h
     physicsserver/body.h
     physicsserver/rigidbody.h
@@ -75,6 +75,7 @@ set(oxygen_LIB_HDRS
     physicsserver/int/spaceint.h
     physicsserver/int/spherecolliderint.h
     physicsserver/int/staticbodyint.h
+    physicsserver/int/transformcolliderint.h
     physicsserver/int/worldint.h
     
     #ode-specific files
@@ -98,6 +99,7 @@ set(oxygen_LIB_HDRS
     physicsserver/ode/odespace.h
     physicsserver/ode/odespherecollider.h
     physicsserver/ode/odestaticbody.h
+    physicsserver/ode/odetransformcollider.h
     physicsserver/ode/odeworld.h
     physicsserver/ode/odewrapper.h
     
@@ -256,6 +258,7 @@ set(oxygen_LIB_SRCS
     physicsserver/ode/odespace.cpp
     physicsserver/ode/odespherecollider.cpp
     physicsserver/ode/odestaticbody.cpp
+    physicsserver/ode/odetransformcollider.cpp
     physicsserver/ode/odeworld.cpp
     
     sceneserver/basenode.cpp

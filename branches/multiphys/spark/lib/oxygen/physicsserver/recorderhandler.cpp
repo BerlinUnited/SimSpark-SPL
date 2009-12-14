@@ -26,7 +26,7 @@ using namespace boost;
 
 void
 RecorderHandler::HandleCollision
-(boost::shared_ptr<Collider> collidee, dContact& /*contact*/)
+(boost::shared_ptr<Collider> collidee, GenericContact& /*contact*/)
 {
     mCollisionSet.insert(weak_ptr<Collider>(collidee));
 }

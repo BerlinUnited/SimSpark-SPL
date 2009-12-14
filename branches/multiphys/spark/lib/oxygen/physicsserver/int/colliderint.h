@@ -35,36 +35,32 @@ class Collider;
 class OXYGEN_API ColliderInt
 {
 
-public:    
-    enum ECollisionType
-    {
-         CT_DIRECT,
-         CT_SYMMETRIC
-    };
-     
-    typedef std::set<std::string> TColliderNameSet;
-
-    static boost::shared_ptr<Collider> GetCollider(long GeomID){};
-
-    virtual void OnCollision(boost::shared_ptr<Collider> collidee, dContact& contact, ECollisionType type) = 0;
-    virtual bool AddCollisionHandler(const std::string& handlerName) = 0;
+public:
+    
+    virtual void SetPosition(const salt::Vector3f& globalPos, long geomID) = 0;
+    virtual void SetLocalPosition(const salt::Vector3f& pos, long geomID) = 0;
+    virtual salt::Vector3f GetPosition(long geomID) const = 0;
+    virtual void SetRotation(const salt::Matrix& rot, long geomID) = 0;
+    virtual bool Intersect(boost::shared_ptr<Collider> collider, long geomID) = 0;
+    virtual long GetParentSpaceID(long geomID) = 0;
+    virtual void DestroyGeom(long geomID) = 0;
     virtual long GetGeomID() = 0;
-    virtual void SetPosition(const salt::Vector3f& pos) = 0;
-    virtual void SetLocalPosition(const salt::Vector3f& pos) = 0;
-    virtual salt::Vector3f GetPosition() const = 0;
-    virtual void SetRotation(const salt::Matrix& rot) = 0;
-    virtual bool Intersects(boost::shared_ptr<Collider> collider) = 0;
-    virtual long GetParentSpaceID() = 0;
-    virtual void AddNotCollideWithColliderName(const std::string& colliderName, bool isAdd) = 0;
-    virtual const TColliderNameSet& GetNotCollideWithSet() const = 0;
-    virtual void OnLink() = 0;
-    virtual void OnUnlink() = 0;
-    virtual void PrePhysicsUpdateInternal(float deltaTime) = 0;
-    virtual void DestroyPhysicsObject() = 0;
+    virtual void TransformSetGeom(long parentGeomID, long geomID) = 0;
+    virtual void SetSpace(long spaceID, long geomID, Collider* collider) = 0;
+    virtual void SetBody(long bodyID, long geomID) = 0;
+    virtual void RemoveFromSpace(long geomID, long spaceID) = 0;
+    
+    // Here, we have to cheat with the preprocessor, since a static method
+    // is required, and the bridge pattern requires member variables to
+    // be used (so we cannot use the bridge pattern)            
+    static Collider* GetColliderPointer(long geomID){
+        #ifdef OXYGEN_ODEWRAPPER_H
+        return static_cast<Collider*>(dGeomGetData( (dGeomID) geomID));
+        #endif
+    }
     
 protected:
     long mGeomID;
-    TColliderNameSet mNotCollideWithSet;
 };
 
 } //namespace oxygen

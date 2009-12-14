@@ -55,7 +55,7 @@ bool PlaneCollider::ConstructInternal()
 
     //create default plane
     mPlaneColliderImp->CreatePlane();
-    mODEGeom = (dGeomID) mPlaneColliderImp->GetGeomID();
+    mGeomID = mPlaneColliderImp->GetGeomID();
 
     return (mPlaneColliderImp->GetGeomID() != 0);
 }

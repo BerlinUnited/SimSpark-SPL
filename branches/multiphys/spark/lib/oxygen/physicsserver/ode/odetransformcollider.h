@@ -4,8 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: odeobject.h 56 2009-03-17 18:03:47Z hedayat $
-   $Id: odeobject.h 56 2009-03-17 18:03:47Z hedayat $
+   $Id: odetransformcollider.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,25 +19,26 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODEOBJECT_H
-#define OXYGEN_ODEOBJECT_H
 
-#include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/int/physicsobjectint.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
+#ifndef OXYGEN_ODETRANSFORMCOLLIDER_H
+#define OXYGEN_ODETRANSFORMCOLLIDER_H
+
+#include <oxygen/physicsserver/ode/odecollider.h>
+#include <oxygen/physicsserver/int/transformcolliderint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEPhysicsObject : public PhysicsObjectInt
+class OXYGEN_API ODETransformCollider : public TransformColliderInt, public ODECollider
 {
 
-public:
-    ODEPhysicsObject();
-    void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsMatrix& matrix);
-    void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const;
+public:    
+    ODETransformCollider();
+    void CreateTransformCollider();
+    void SetColliderParameters(int cleanup, int info);
+    long GetGeomID();
 };
 
 } //namespace oxygen
 
-#endif //OXYGEN_ODEPHYSICSOBJECT_H
+#endif //OXYGEN_ODECOLLIDER_H

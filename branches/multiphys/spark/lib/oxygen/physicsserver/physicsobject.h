@@ -31,7 +31,7 @@ namespace oxygen
 class Space;
 class World;
 class PhysicsObjectInt;
-class GenericPhysicsObject;
+class GenericPhysicsMatrix;
 
 /** ODEObject is the base of all classes encapsulating ODE concepts
  */
@@ -76,12 +76,12 @@ protected:
     /** converts the rotation part of a salt::Matrix to an
         engine-specific matrix, currently used for ODE's dMatrix3
     */
-    void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix);
+    void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsMatrix& matrix);
 
     /** coverts an engine-specific to the rotation part of a salt::Matrix, 
         currently used for ODE's dMatrix3
     */
-    void ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const;
+    void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const;
     
 private:
     boost::shared_ptr<PhysicsObjectInt> mPhysicsObjectImp;

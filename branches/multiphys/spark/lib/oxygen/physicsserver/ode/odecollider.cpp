@@ -44,222 +44,47 @@ ODECollider::~ODECollider()
 {
 }
 
-void ODECollider::OnLink()
-{/*
-    //PhysicsObject::OnLink();
-
-
-    //weak_ptr<Node> parent = GetParent();
-    if (
-        (mODEGeom == 0) //||
-        //(parent.expired())
-        )
-        {
-            return;
-        }
-
-   // shared_ptr<TransformCollider> tcParent =
-   //     shared_dynamic_cast<TransformCollider>(parent.lock());
-
-    if (tcParent.get() != 0)
-        {
-            // our parent is an ODE transform geom that encapsulates
-            // this geom, so register ourself to it. This geom must
-            // not directly register to a space or a body.
-            dGeomTransformSetGeom((dGeomID) tcParent->GetGeomID(), mODEGeom);
-            return;
-        }
-
-    // this geom is independent, so register to space and body
-    // if we have a space add the geom to it
-    //long spaceID = FindSpaceID();
-    if (
-        (spaceID) &&
-        (! dSpaceQuery((dSpaceID) spaceID, mODEGeom))
-        )
-        {
-            dGeomSetData(mODEGeom, this);
-            dSpaceAdd((dSpaceID) spaceID, mODEGeom);
-        }
-    // if there is a Body below our parent, link to it
-    shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
-        (parent.lock()->GetChildOfClass("RigidBody"));
-
-    if (body.get() != 0)
-        {
-            dGeomSetBody (mODEGeom, (dBodyID) body->GetBodyID());
-        } else
-            {
-                // no body node found, setup initial position and
-                // orientation identical to the parent node
-                SetRotation(GetWorldTransform());
-                SetPosition(Vector3f(0,0,0));
-            }
-*/}
-
-void ODECollider::OnUnlink()
+void ODECollider::SetRotation(const Matrix& rot, long geomID)
 {
-    //PhysicsObject::OnUnlink();
-
-    // remove collision geometry from space
-    long space = GetParentSpaceID();
-
-    if (
-        (mODEGeom == 0) ||
-        (space == 0)
-        )
-        {
-            return;
-        }
-
-    if (space)
-    {
-        dSpaceRemove((dSpaceID) space, mODEGeom);
-    }
-}
-
-void ODECollider::PrePhysicsUpdateInternal(float /*deltaTime*/)
-{
-   // if (FindChildSupportingClass<CollisionHandler>(false).get() == 0)
-   //     {
-            // for convenience we add a ContactJointHandler if no
-            // other handler is registered. This behaviour covers the
-            // majority of all use cases and eases the creation of
-            // Colliders.
-            AddCollisionHandler("oxygen/ContactJointHandler");
-    //    }
-}
-
-long ODECollider::GetGeomID()
-{
-    return (long) mODEGeom;
-}
-
-bool ODECollider::AddCollisionHandler(const std::string& handlerName)
-{/*
-    shared_ptr<CollisionHandler> handler =
-        shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
-
-    if (handler.get() == 0)
-        {
-            GetLog()->Error()
-                << "ERROR: (Collider) Cannot create CollisionHandler "
-                << handlerName << "\n";
-            return false;
-        }
-
-    return AddChildReference(handler);
-*/}
-
-void ODECollider::OnCollision (boost::shared_ptr<Collider> collidee,
-                            dContact& contact, ECollisionType type)
-
-{/*
-    TLeafList handlers;
-    ListChildrenSupportingClass<CollisionHandler>(handlers);
-
-    for (
-         TLeafList::iterator iter = handlers.begin();
-         iter != handlers.end();
-         ++iter
-         )
-        {
-            shared_ptr<CollisionHandler> handler =
-                shared_static_cast<CollisionHandler>(*iter);
-
-            if (
-                (type == CT_SYMMETRIC) &&
-                (! handler->IsSymmetricHandler())
-                )
-                {
-                    continue;
-                }
-
-            handler->HandleCollision(collidee, contact);
-        }
-*/}
-
-/*shared_ptr<Collider> ODECollider::GetCollider(long geomID)
-{
-    if (geomID == 0)
-        {
-            return shared_ptr<Collider>();
-        }
-
-    Collider* collPtr =
-        static_cast<Collider*>(dGeomGetData((dGeomID) geomID));
-
-    if (collPtr == 0)
-        {
-            // we cannot use the logserver here
-            cerr << "ERROR: (Collider) no Collider found for GeomID "
-                 << geomID << "\n";
-            return shared_ptr<Collider>();
-        }
-
-    shared_ptr<Collider> collider = shared_static_cast<Collider>
-        (collPtr->GetSelf().lock());
-
-    if (collider.get() == 0)
-        {
-            // we cannot use the logserver here
-            cerr << "ERROR: (Collider) got no shared_ptr for GeomID "
-                 << geomID << "\n";
-        }
-
-    return collider;
-}*/
-
-void ODECollider::SetRotation(const Matrix& rot)
-{
+    dGeomID ODEGeom = (dGeomID) geomID;
     dMatrix3 ODEMatrix;
-    GenericPhysicsObject& matrixRef = (GenericPhysicsObject&) ODEMatrix; 
+    GenericPhysicsMatrix& matrixRef = (GenericPhysicsMatrix&) ODEMatrix; 
     ConvertRotationMatrix(rot, matrixRef);
-    dGeomSetRotation(mODEGeom, ODEMatrix);
+    dGeomSetRotation(ODEGeom, ODEMatrix);
 }
 
-void ODECollider::SetPosition(const Vector3f& pos)
+void ODECollider::SetPosition(const Vector3f& globalPos, long geomID)
 {
-    //Vector3f globalPos(GetWorldTransform() * pos);
-    //dGeomSetPosition (mODEGeom, globalPos[0], globalPos[1], globalPos[2]);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomSetPosition (ODEGeom, globalPos[0], globalPos[1], globalPos[2]);
 }
 
-void ODECollider::SetLocalPosition(const Vector3f& pos)
+void ODECollider::SetLocalPosition(const Vector3f& pos, long geomID)
 {
-    dGeomSetPosition (mODEGeom, pos[0], pos[1], pos[2]);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomSetPosition (ODEGeom, pos[0], pos[1], pos[2]);
 }
 
-Vector3f ODECollider::GetPosition() const
+Vector3f ODECollider::GetPosition(long geomID) const
 {
-    const dReal* pos = dGeomGetPosition(mODEGeom);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    const dReal* pos = dGeomGetPosition(ODEGeom);
     return Vector3f(pos[0],pos[1],pos[2]);
 }
 
-long ODECollider::GetParentSpaceID()
+long ODECollider::GetParentSpaceID(long geomID)
 {
-    if (mODEGeom == 0)
-        {
-            return 0;
-        }
-
-    return (long) dGeomGetSpace(mODEGeom);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    return (long) dGeomGetSpace(ODEGeom);
 }
 
-bool ODECollider::Intersects(boost::shared_ptr<Collider> collider)
+bool ODECollider::Intersect(boost::shared_ptr<Collider> collider, long geomID)
 {
-    if (
-        (mODEGeom == 0) ||
-        (collider.get() == 0)
-        )
-        {
-            return false;
-        }
-
+    dGeomID ODEGeom = (dGeomID) geomID;
     dContactGeom contact;
 
     return dCollide
-        (
-         mODEGeom,
+        (ODEGeom,
          (dGeomID) collider->GetGeomID(),
          1, /* ask for at most one collision point */
          &contact,
@@ -267,40 +92,43 @@ bool ODECollider::Intersects(boost::shared_ptr<Collider> collider)
          ) > 0;
 }
 
-void ODECollider::DestroyPhysicsObject()
+void ODECollider::DestroyGeom(long geomID)
 {
-    if (! mODEGeom)
-        {
-            return;
-        }
-
-    dGeomDestroy(mODEGeom);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomDestroy(ODEGeom);
     mODEGeom = 0;
+    mGeomID = 0;
 }
 
-void ODECollider::AddNotCollideWithColliderName(const std::string & colliderName, bool isAdd)
-{
-    TColliderNameSet::iterator it = mNotCollideWithSet.find(colliderName);
-
-    if (isAdd)
-    {
-        if (it == mNotCollideWithSet.end())
-        {
-            //I'm not have this one
-            mNotCollideWithSet.insert(colliderName);
-        }
-    }
-    else
-    {
-        if (it != mNotCollideWithSet.end())
-        {
-            //Remove
-            mNotCollideWithSet.erase(it);
-        }
-    }
+long ODECollider::GetGeomID(){
+    return mGeomID;
 }
 
-const ODECollider::TColliderNameSet& ODECollider::GetNotCollideWithSet() const
-{
-    return mNotCollideWithSet;
+void ODECollider::TransformSetGeom(long parentGeomID, long geomID){
+    dGeomID parentODEGeom = (dGeomID) parentGeomID;
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomTransformSetGeom(parentODEGeom, ODEGeom);
+}
+
+void ODECollider::SetSpace(long spaceID, long geomID, Collider* collider){
+    dSpaceID ODESpace = (dSpaceID) spaceID;
+    dGeomID ODEGeom = (dGeomID) geomID;
+    
+    if (!spaceID) return;
+    if (dSpaceQuery(ODESpace, ODEGeom)) return;
+    
+    dGeomSetData(ODEGeom, collider);
+    dSpaceAdd(ODESpace, ODEGeom);
+}
+
+void ODECollider::SetBody(long bodyID, long geomID){
+    dBodyID ODEBody = (dBodyID) bodyID;
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomSetBody(ODEGeom, ODEBody);
+}
+
+void ODECollider::RemoveFromSpace(long geomID, long spaceID){
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dSpaceID ODESpace = (dSpaceID) spaceID;
+    dSpaceRemove(ODESpace, ODEGeom);
 }

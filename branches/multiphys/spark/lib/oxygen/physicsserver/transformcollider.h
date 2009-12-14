@@ -27,8 +27,9 @@
 
 namespace oxygen
 {
+class TransformColliderInt;
 
-/** TransformCollider encapsulates an ODE transform geometry object
+/** TransformCollider encapsulates a transform geometry object
     that encapsulates another geom. It allows the encapsulated geom to
     be positioned and rotated arbitrarily with respect to its point of
     reference.
@@ -54,6 +55,9 @@ public:
 
 protected:
     virtual bool ConstructInternal();
+    
+private:
+    boost::shared_ptr<TransformColliderInt> mTransformColliderImp;
 };
 
 DECLARE_CLASS(TransformCollider);

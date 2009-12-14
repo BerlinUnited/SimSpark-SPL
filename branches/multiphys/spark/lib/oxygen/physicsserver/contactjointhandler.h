@@ -51,7 +51,7 @@ public:
         as returned from the ODE dCollide function
     */
     virtual void HandleCollision
-    (boost::shared_ptr<Collider> collidee, dContact& contact);
+    (boost::shared_ptr<Collider> collidee, GenericContact& contact);
 
     /** the ContactJointHandler is not a symmetric handler. See
         CollisionHandler::IsSymmetricHandler for an explanation

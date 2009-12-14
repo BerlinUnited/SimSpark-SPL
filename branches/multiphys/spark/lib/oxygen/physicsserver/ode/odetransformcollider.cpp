@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,41 +21,23 @@
 */
 
 #include <oxygen/physicsserver/ode/odetransformcollider.h>
-#include <oxygen/physicsserver/transformcollider.h>
 
 using namespace oxygen;
-using namespace salt;
 
-TransformCollider::TransformCollider() : Collider()
-{
-    mTransformColliderImp = boost::shared_ptr<ODETransformCollider>(new ODETransformCollider());
+ODETransformCollider::ODETransformCollider() : ODECollider(){
+
 }
 
-bool TransformCollider::ConstructInternal()
-{
-    if (! Collider::ConstructInternal())
-        {
-            return false;
-        }
-
-    mTransformColliderImp->CreateTransformCollider();
-    mGeomID = mTransformColliderImp->GetGeomID();
-
-    if (mGeomID == 0)
-        {
-            return false;
-        }
-
-    //! do not automatically destroy encapsulated geoms
-    int cleanupSetting = 0;
-
-    /** report the transform geom in collisions instead of the
-        encapsulated geoms
-    */
-    int infoSetting = 1;
-    
-    mTransformColliderImp->SetColliderParameters(cleanupSetting, infoSetting);
-
-    return true;
+void ODETransformCollider::CreateTransformCollider(){
+    mODEGeom = dCreateGeomTransform(0);
+    mGeomID = (long) mODEGeom;
 }
 
+void ODETransformCollider::SetColliderParameters(int cleanup, int info){
+    dGeomTransformSetCleanup(mODEGeom, cleanup);
+    dGeomTransformSetInfo(mODEGeom, info);
+}
+
+long ODETransformCollider::GetGeomID(){
+    return mGeomID;
+}

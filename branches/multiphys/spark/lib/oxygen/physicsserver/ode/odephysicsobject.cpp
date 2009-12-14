@@ -32,7 +32,7 @@ using namespace std;
 ODEPhysicsObject::ODEPhysicsObject(){
 }
 
-void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsObject& matrix)
+void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsMatrix& matrix)
 {
     dMatrix3& odeMatrix = (dMatrix3&) matrix;
     
@@ -50,7 +50,7 @@ void ODEPhysicsObject::ConvertRotationMatrix(const salt::Matrix& rot, GenericPhy
     odeMatrix[11] = 0;
 }
 
-void ODEPhysicsObject::ConvertRotationMatrix(const GenericPhysicsObject* matrix, salt::Matrix& rot) const
+void ODEPhysicsObject::ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const
 {
     dReal* odeMatrix = (dReal*) matrix;
 

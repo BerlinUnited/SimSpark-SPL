@@ -51,7 +51,7 @@ bool SphereCollider::ConstructInternal()
 
     // create a unit sphere
     mSphereColliderImp->CreateSphere();
-    mODEGeom = (dGeomID) mSphereColliderImp->GetGeomID();
+    mGeomID = mSphereColliderImp->GetGeomID();
 
     return (mSphereColliderImp->GetGeomID() != 0);
 }

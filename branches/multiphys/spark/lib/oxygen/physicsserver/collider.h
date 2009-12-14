@@ -22,7 +22,7 @@
 #ifndef OXYGEN_COLLIDER_H
 #define OXYGEN_COLLIDER_H
 
-#include <oxygen/physicsserver/ode/odewrapper.h>
+//#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/oxygen_defines.h>
 #include <string>
@@ -31,6 +31,7 @@
 namespace oxygen
 {
 class ColliderInt;
+class GenericContact;
 
 /** \class Collider encapsulates a geometry object- geom for
     short. Geoms are the fundamental objects in the collision
@@ -87,7 +88,7 @@ public:
        symmetric case
     */
     virtual void OnCollision (boost::shared_ptr<Collider> collidee,
-                              void* contact, ECollisionType type);
+                              GenericContact& contact, ECollisionType type);
 
     /** registers a new collision handler to this collider. If no
         collision handler is registered until the first call to
@@ -160,8 +161,8 @@ protected:
     // Members
     //
 protected:
-    /** the ode collision geometry */
-    dGeomID mODEGeom;
+    /** the ID of the managed collision geometry */
+    long mGeomID;
     
 private:
     boost::shared_ptr<ColliderInt> mColliderImp;

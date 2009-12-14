@@ -45,9 +45,9 @@ bool BoxCollider::ConstructInternal()
 
     // create a unit box
     mBoxColliderImp->CreateBox();
-    mODEGeom = (dGeomID) mBoxColliderImp->GetGeomID();
+    mGeomID = mBoxColliderImp->GetGeomID();
 
-    return (mBoxColliderImp->GetGeomID() != 0);
+    return (mGeomID != 0);
 }
 
 void BoxCollider::GetBoxLengths(Vector3f& extents)
