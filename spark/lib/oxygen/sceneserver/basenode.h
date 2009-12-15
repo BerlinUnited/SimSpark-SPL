@@ -96,7 +96,7 @@ public:
     void UpdateHierarchy();
 
     /** moves up the hierarchy, until it finds a scene */
-    boost::shared_ptr<Scene> GetScene();
+    boost::shared_ptr<Scene> GetScene() const;
 
     /** enables debug mode controls */
     void EnableDebugMode();

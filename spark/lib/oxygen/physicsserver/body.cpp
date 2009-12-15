@@ -18,6 +18,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "salt/tvector.h"
+
+
 #include "body.h"
 #include "world.h"
 #include "../sceneserver/scene.h"
@@ -413,6 +416,15 @@ Body::GetAngularVelocity() const
     return Vector3f(vel[0], vel[1], vel[2]);
 }
 
+Vector3f
+Body::GetLocalAngularVelocity() const
+{
+    const dReal* vel = dBodyGetAngularVel(mODEBody);
+    Vector3f w;
+    dBodyVectorFromWorld(mODEBody, vel[0], vel[1], vel[2], w.GetData());
+    return w;
+}
+
 void
 Body::SetAngularVelocity(const Vector3f& vel)
 {
@@ -529,6 +541,12 @@ void
 Body::AddForce(const Vector3f& force)
 {
     dBodyAddForce(mODEBody, force.x(), force.y(), force.z());
+}
+
+Vector3f Body::GetForce() const
+{
+    const dReal* f = dBodyGetForce(mODEBody);
+    return Vector3f(f[0], f[1], f[2]);
 }
 
 void
