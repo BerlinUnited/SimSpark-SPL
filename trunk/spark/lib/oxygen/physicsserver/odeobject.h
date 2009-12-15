@@ -61,10 +61,10 @@ public:
     /** destroy the managed ODE object */
     virtual void DestroyODEObject() = 0;
 
-protected:
     /** returns the world node */
-    boost::shared_ptr<World> GetWorld();
+    boost::shared_ptr<World> GetWorld() const;
 
+protected:
     /** finds the nearest parent space node */
     boost::shared_ptr<Space> GetSpace();
 

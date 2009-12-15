@@ -9,6 +9,7 @@ if (APPLE AND USE_COREFOUNDATION)
       set(spark_libs ${spark_libs} /System/Library/Frameworks/CoreFoundation.framework)
 endif (APPLE AND USE_COREFOUNDATION) 
 
+add_subdirectory(accelerometer)
 add_subdirectory(filesystemstd)
 add_subdirectory(filesystemzip)
 add_subdirectory(forceeffector)

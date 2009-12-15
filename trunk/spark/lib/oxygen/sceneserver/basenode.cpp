@@ -141,7 +141,7 @@ void BaseNode::UpdateHierarchy()
         }
 }
 
-shared_ptr<Scene> BaseNode::GetScene()
+shared_ptr<Scene> BaseNode::GetScene() const
 {
     // is this node the scene node ?
     shared_ptr<Scene> self =

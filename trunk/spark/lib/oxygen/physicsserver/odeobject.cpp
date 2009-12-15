@@ -42,7 +42,7 @@ void ODEObject::OnUnlink()
 }
 
 /** returns the world node */
-shared_ptr<World> ODEObject::GetWorld()
+shared_ptr<World> ODEObject::GetWorld() const
 {
     shared_ptr<Scene> scene = GetScene();
     if (scene.get() == 0)
