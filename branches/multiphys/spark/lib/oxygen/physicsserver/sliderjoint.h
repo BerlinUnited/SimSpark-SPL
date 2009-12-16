@@ -26,6 +26,7 @@
 namespace oxygen
 {
 class RigidBody;
+class SliderJointInt;
 
 class OXYGEN_API SliderJoint : public Generic6DOFJoint
 {
@@ -56,6 +57,9 @@ protected:
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+    
+private:
+    boost::shared_ptr<SliderJointInt> mSliderJointImp;
 };
 
 DECLARE_CLASS(SliderJoint);

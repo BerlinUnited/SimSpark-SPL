@@ -22,7 +22,6 @@
 #ifndef OXYGEN_COLLIDER_H
 #define OXYGEN_COLLIDER_H
 
-//#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/oxygen_defines.h>
 #include <string>

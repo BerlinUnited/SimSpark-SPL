@@ -19,34 +19,16 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_GENERIC6DOFJOINT_H
-#define OXYGEN_GENERIC6DOFJOINT_H
 
-#include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/joint.h>
+#include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
 
-namespace oxygen
-{
-class Generic6DOFJointInt;
+using namespace oxygen;
 
-/** Generic6DOFJoint is a placeholder class for "six degrees of 
-    freedom" - joints. They are supported by some 3D modelling tools
-    and simspark shall eventually be able to import models created
-    with these tools. All other joint classes are derived from this one.
-*/
+Generic6DOFJoint::Generic6DOFJoint() : Joint(){
+    mGeneric6DOFJointImp = boost::shared_ptr<ODEGeneric6DOFJoint>(new ODEGeneric6DOFJoint());
+}
 
-class OXYGEN_API Generic6DOFJoint : public Joint
-{
-public:
-    Generic6DOFJoint();
-    virtual ~Generic6DOFJoint();
-    
-private:
-    boost::shared_ptr<Generic6DOFJointInt> mGeneric6DOFJointImp;
-};
+Generic6DOFJoint::~Generic6DOFJoint(){
 
-DECLARE_ABSTRACTCLASS(Generic6DOFJoint);
-
-} //namespace oxygen
-
-#endif //OXYGEN_GENERIC6DOFJOINT_H
+}

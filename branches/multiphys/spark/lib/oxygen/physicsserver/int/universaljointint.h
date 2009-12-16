@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h 107 2009-11-25 06:09:10Z a-held $
+   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,34 +19,36 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_GENERIC6DOFJOINT_H
-#define OXYGEN_GENERIC6DOFJOINT_H
 
+#ifndef OXYGEN_UNIVERSALJOINTINT_H
+#define OXYGEN_UNIVERSALJOINTINT_H
+
+#include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/joint.h>
 
 namespace oxygen
 {
-class Generic6DOFJointInt;
 
-/** Generic6DOFJoint is a placeholder class for "six degrees of 
-    freedom" - joints. They are supported by some 3D modelling tools
-    and simspark shall eventually be able to import models created
-    with these tools. All other joint classes are derived from this one.
-*/
-
-class OXYGEN_API Generic6DOFJoint : public Joint
+class OXYGEN_API UniversalJointInt
 {
-public:
-    Generic6DOFJoint();
-    virtual ~Generic6DOFJoint();
-    
-private:
-    boost::shared_ptr<Generic6DOFJointInt> mGeneric6DOFJointImp;
-};
 
-DECLARE_ABSTRACTCLASS(Generic6DOFJoint);
+public:
+    virtual void CreateUniversalJoint(long world) = 0;
+    virtual void SetAnchor(const salt::Vector3f& anchor) = 0;
+    virtual salt::Vector3f GetAnchor1() = 0;
+    virtual salt::Vector3f GetAnchor2() = 0;
+    virtual void SetAxis1(const salt::Vector3f& axis) = 0;
+    virtual void SetAxis2(const salt::Vector3f& axis) = 0;
+    virtual salt::Vector3f GetAxis1() const = 0;
+    virtual salt::Vector3f GetAxis2() const = 0;
+    virtual float GetAngle1() const = 0;
+    virtual float GetAngle2() const = 0;
+    virtual float GetAngleRate1() const = 0;
+    virtual float GetAngleRate2() const = 0;
+    virtual void SetParameter(int parameter, float value) = 0;
+    virtual float GetParameter(int parameter) const = 0; 
+};
 
 } //namespace oxygen
 
-#endif //OXYGEN_GENERIC6DOFJOINT_H
+#endif //OXYGEN_UNIVERSALJOINTINT_H

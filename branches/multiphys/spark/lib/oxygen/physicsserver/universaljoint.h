@@ -25,6 +25,7 @@
 
 namespace oxygen
 {
+class UniversalJointInt;
 
 class OXYGEN_API UniversalJoint : public Generic6DOFJoint
 {
@@ -78,6 +79,9 @@ public:
 protected:
     /** creates a new universal joint */
     virtual void OnLink();
+    
+private:
+    boost::shared_ptr<UniversalJointInt> mUniversalJointImp;
 };
 
 DECLARE_CLASS(UniversalJoint);

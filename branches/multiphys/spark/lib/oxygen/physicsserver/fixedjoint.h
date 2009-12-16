@@ -25,12 +25,15 @@
 
 namespace oxygen
 {
+class FixedJointInt;
+
 /** The fixed joint maintains a fixed relative position and
     orientation between two bodies, or between a body and the static
     environment.
 */
 class OXYGEN_API FixedJoint : public Generic6DOFJoint
 {
+
 public:
     FixedJoint();
     virtual ~FixedJoint();
@@ -49,6 +52,9 @@ protected:
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+    
+private:
+    boost::shared_ptr<FixedJointInt> mFixedJointImp;
 };
 
 DECLARE_CLASS(FixedJoint);

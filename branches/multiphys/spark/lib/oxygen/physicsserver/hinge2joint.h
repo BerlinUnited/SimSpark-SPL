@@ -25,6 +25,7 @@
 
 namespace oxygen
 {
+class Hinge2JointInt;
 
 class OXYGEN_API Hinge2Joint : public Generic6DOFJoint
 {
@@ -62,6 +63,9 @@ protected:
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+    
+private:
+    boost::shared_ptr<Hinge2JointInt> mHinge2JointImp;
 };
 
 DECLARE_CLASS(Hinge2Joint);

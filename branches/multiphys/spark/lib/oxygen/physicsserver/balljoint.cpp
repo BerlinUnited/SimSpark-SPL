@@ -17,6 +17,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include <oxygen/physicsserver/ode/odeballjoint.h>
 #include <oxygen/physicsserver/balljoint.h>
 
 using namespace oxygen;
@@ -25,6 +26,7 @@ using namespace salt;
 
 BallJoint::BallJoint() : Generic6DOFJoint()
 {
+    mBallJointImp = boost::shared_ptr<ODEBallJoint>(new ODEBallJoint());
 }
 
 BallJoint::~BallJoint()
@@ -88,6 +90,3 @@ float BallJoint::GetParameter(int /*parameter*/) const
     // no ode get param fkt. defined
     return 0;
 }
-
-
-
