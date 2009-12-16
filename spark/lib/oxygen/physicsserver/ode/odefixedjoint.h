@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: fixedjoint.h 108 2009-11-25 10:20:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,44 +17,23 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/fixedjoint.h>
-#include <oxygen/physicsserver/ode/odefixedjoint.h>
-#include <zeitgeist/logserver/logserver.h>
+#ifndef OXYGEN_ODEFIXEDJOINT_H
+#define OXYGEN_ODEFIXEDJOINT_H
 
-using namespace oxygen;
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
+#include <oxygen/physicsserver/int/fixedjointint.h>
+#include <oxygen/oxygen_defines.h>
 
-FixedJoint::FixedJoint() : Generic6DOFJoint()
-{
-    mFixedJointImp = boost::shared_ptr<ODEFixedJoint>(new ODEFixedJoint());
-}
+namespace oxygen{
 
-FixedJoint::~FixedJoint()
-{
-}
+class OXYGEN_API ODEFixedJoint : public FixedJointInt, public ODEGeneric6DOFJoint{
 
-void FixedJoint::OnLink()
-{
-    long world = GetWorldID();
-    if (world == 0)
-        {
-            return;
-        }
+public:
+    ODEFixedJoint();
+    void CreateFixedJoint(long world);
+    void SetFixed();
+};
 
-    mODEJoint = dJointCreateFixed((dWorldID) world, 0);
-}
+} //namespace oxygen
 
-void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
-{
-    // no ode set param fkt. defined
-}
-
-float FixedJoint::GetParameter(int /*parameter*/) const
-{
-    // no ode get param fkt. defined
-    return 0;
-}
-
-void FixedJoint::SetFixed()
-{
-    dJointSetFixed(mODEJoint);
-}
+#endif //OXYGEN_ODEFIXEDJOINT_H

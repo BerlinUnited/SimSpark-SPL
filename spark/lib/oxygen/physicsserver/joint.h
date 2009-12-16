@@ -29,8 +29,9 @@
 namespace oxygen
 {
 class RigidBody;
+class JointInt;
 
-/** \class Joint encapsulates an ODE joint object. A joint is a
+/** \class Joint encapsulates a joint object. A joint is a
     relationship (a constraint) that is enforced between two bodies so
     that they can only have certain positions and orientations
     relative to each other.
@@ -67,7 +68,7 @@ public:
     Joint();
     virtual ~Joint();
 
-    /** destroy the managed ODE object */
+    /** destroy the managed physics object */
     virtual void DestroyPhysicsObject();
 
     /** attaches the joint to some new bodies. If the joint is already
@@ -94,8 +95,8 @@ public:
     /** returns the Joint node corresponding to the given joint */
     static boost::shared_ptr<Joint> GetJoint(long jointID);
 
-    /** returns the type of the managed ODE joint, possible return
-        values are dJointTypeNone, dJointTypeBall, dJointTypeHinge,
+    /** returns the type of the managed joint, possible return
+        values from ODE are dJointTypeNone, dJointTypeBall, dJointTypeHinge,
         dJointTypeSlider, dJointTypeContact, dJointTypeUniversal,
         dJointTypeHinge2, dJointTypeFixed or dJointTypeAMotor.
      */
@@ -243,7 +244,7 @@ public:
     /** sets the maximum force or torque that the motor will use to
         achieve the desired velocity. This must always be greater than
         or equal to zero. Setting this to zero (the default value)
-        turns off the motor
+        turns off the motor.
     */
     void SetMaxMotorForce(EAxisIndex idx, float f);
 
@@ -277,14 +278,14 @@ public:
     bool IsLimitJointMaxSpeed2() const;
 
 protected:
-    /** associated the created ODE joint with this node */
+    /** associates the created joint with this node */
     virtual void OnLink();
 
-    /** get the node at 'path' and tries a cast to Body */
+    /** gets the node at 'path' and tries a cast to Body */
     boost::shared_ptr<RigidBody> GetBody(const std::string& path);
 
 protected:
-    /** the managed ODE joint */
+    /** the ID of the managed joint */
     dJointID mODEJoint;
 
     /** the allocated joint feedback structure */
@@ -298,6 +299,9 @@ protected:
     /** The maximum joint speed in rad, valid only for universaljoint */
     float mJointMaxSpeed2;
     bool mIsLimitJointMaxSpeed2;
+ 
+private:
+    boost::shared_ptr<JointInt> mJointImp;
 };
 
 DECLARE_ABSTRACTCLASS(Joint);

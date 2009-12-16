@@ -26,6 +26,7 @@
 namespace oxygen
 {
 class RigidBody;
+class HingeJointInt;
 
 class OXYGEN_API HingeJoint : public Generic6DOFJoint
 {
@@ -77,6 +78,9 @@ public:
 protected:
     /** creates a new hingejoint joint */
     virtual void OnLink();
+    
+private:
+    boost::shared_ptr<HingeJointInt> mHingeJointImp;
 };
 
 DECLARE_CLASS(HingeJoint);

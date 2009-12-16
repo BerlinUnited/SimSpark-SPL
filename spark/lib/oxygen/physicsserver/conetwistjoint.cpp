@@ -1,8 +1,10 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
    this file is part of rcssserver3D
    Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id$
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
+   $Id: joint.h 107 2009-11-25 06:09:10Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,44 +19,24 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/fixedjoint.h>
-#include <oxygen/physicsserver/ode/odefixedjoint.h>
-#include <zeitgeist/logserver/logserver.h>
+
+#include <oxygen/physicsserver/conetwistjoint.h>
+#include <oxygen/physicsserver/ode/odeconetwistjoint.h>
 
 using namespace oxygen;
 
-FixedJoint::FixedJoint() : Generic6DOFJoint()
-{
-    mFixedJointImp = boost::shared_ptr<ODEFixedJoint>(new ODEFixedJoint());
+ConeTwistJoint::ConeTwistJoint() : Generic6DOFJoint(){
+    mConeTwistJointImp = boost::shared_ptr<ODEConeTwistJoint>(new ODEConeTwistJoint());
 }
 
-FixedJoint::~FixedJoint()
-{
+ConeTwistJoint::~ConeTwistJoint(){
+
 }
 
-void FixedJoint::OnLink()
-{
-    long world = GetWorldID();
-    if (world == 0)
-        {
-            return;
-        }
+void ConeTwistJoint::SetParameter(int parameter, float value){
 
-    mODEJoint = dJointCreateFixed((dWorldID) world, 0);
 }
 
-void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
-{
-    // no ode set param fkt. defined
-}
-
-float FixedJoint::GetParameter(int /*parameter*/) const
-{
-    // no ode get param fkt. defined
-    return 0;
-}
-
-void FixedJoint::SetFixed()
-{
-    dJointSetFixed(mODEJoint);
+float ConeTwistJoint::GetParameter(int parameter) const{
+    return 0.0;
 }

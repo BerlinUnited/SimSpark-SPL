@@ -18,6 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/hingejoint.h>
+#include <oxygen/physicsserver/ode/odehingejoint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -26,6 +27,7 @@ using namespace salt;
 
 HingeJoint::HingeJoint() : Generic6DOFJoint()
 {
+    mHingeJointImp = boost::shared_ptr<ODEHingeJoint>(new ODEHingeJoint());
 }
 
 HingeJoint::~HingeJoint()
@@ -138,9 +140,3 @@ float HingeJoint::GetParameter(int parameter) const
 {
     return dJointGetHingeParam(mODEJoint, parameter);
 }
-
-
-
-
-
-

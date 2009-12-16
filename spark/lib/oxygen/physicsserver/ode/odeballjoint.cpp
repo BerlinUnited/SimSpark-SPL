@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: balljoint.cpp 112 2009-12-02 10:06:02Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,44 +17,41 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/fixedjoint.h>
-#include <oxygen/physicsserver/ode/odefixedjoint.h>
-#include <zeitgeist/logserver/logserver.h>
+#include <oxygen/physicsserver/ode/odeballjoint.h>
+#include <oxygen/physicsserver/balljoint.h>
 
 using namespace oxygen;
+using namespace boost;
+using namespace salt;
 
-FixedJoint::FixedJoint() : Generic6DOFJoint()
-{
-    mFixedJointImp = boost::shared_ptr<ODEFixedJoint>(new ODEFixedJoint());
-}
-
-FixedJoint::~FixedJoint()
+ODEBallJoint::ODEBallJoint() : ODEGeneric6DOFJoint()
 {
 }
 
-void FixedJoint::OnLink()
+void ODEBallJoint::CreateBallJoint(long world)
 {
-    long world = GetWorldID();
-    if (world == 0)
-        {
-            return;
-        }
-
-    mODEJoint = dJointCreateFixed((dWorldID) world, 0);
+    mODEJoint = dJointCreateBall((dWorldID) world, 0);
 }
 
-void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
+void ODEBallJoint::SetAnchor(const Vector3f& gAnchor)
 {
-    // no ode set param fkt. defined
+    dJointSetBallAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 }
 
-float FixedJoint::GetParameter(int /*parameter*/) const
+Vector3f ODEBallJoint::GetAnchor1()
 {
-    // no ode get param fkt. defined
-    return 0;
+    dReal anchor[3];
+    dJointGetBallAnchor (mODEJoint, anchor);
+    Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+    
+    return pos;
 }
 
-void FixedJoint::SetFixed()
+Vector3f ODEBallJoint::GetAnchor2()
 {
-    dJointSetFixed(mODEJoint);
+    dReal anchor[3];
+    dJointGetBallAnchor2(mODEJoint, anchor);
+    Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+    
+    return pos;
 }

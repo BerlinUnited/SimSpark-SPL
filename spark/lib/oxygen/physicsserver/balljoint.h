@@ -25,6 +25,7 @@
 
 namespace oxygen
 {
+class BallJointInt;
 
 class OXYGEN_API BallJoint : public Generic6DOFJoint
 {
@@ -42,7 +43,7 @@ public:
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
-    salt::Vector3f GetAnchor (EBodyIndex idx);
+    salt::Vector3f GetAnchor(EBodyIndex idx);
 
 protected:
     /** creates a new contact joint */
@@ -53,6 +54,9 @@ protected:
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+    
+private:
+    boost::shared_ptr<BallJointInt> mBallJointImp;
 };
 
 DECLARE_CLASS(BallJoint);

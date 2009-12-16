@@ -55,6 +55,7 @@ set(oxygen_LIB_HDRS
     physicsserver/angularmotor.h
     
     #interfaces
+    physicsserver/int/balljointint.h
     physicsserver/int/bodyint.h
     physicsserver/int/boxcolliderint.h
     physicsserver/int/capsulecolliderint.h
@@ -62,23 +63,32 @@ set(oxygen_LIB_HDRS
     physicsserver/int/compoundcolliderint.h
     physicsserver/int/concavecolliderint.h
     physicsserver/int/conecolliderint.h
+    physicsserver/int/conetwistjointint.h
     physicsserver/int/convexcolliderint.h
     physicsserver/int/cylindercolliderint.h
     physicsserver/int/dynamicbodyint.h
     physicsserver/int/emptycolliderint.h
+    physicsserver/int/fixedjointint.h
+    physicsserver/int/generic6dofjointint.h
+    physicsserver/int/hingejointint.h
+    physicsserver/int/hinge2jointint.h
+    physicsserver/int/jointint.h
     physicsserver/int/physicsobjectint.h
     physicsserver/int/physicsserverint.h
     physicsserver/int/planecolliderint.h
     physicsserver/int/raycolliderint.h
     physicsserver/int/rigidbodyint.h
+    physicsserver/int/sliderjointint.h
     physicsserver/int/softbodyint.h
     physicsserver/int/spaceint.h
     physicsserver/int/spherecolliderint.h
     physicsserver/int/staticbodyint.h
     physicsserver/int/transformcolliderint.h
+    physicsserver/int/universaljointint.h
     physicsserver/int/worldint.h
     
     #ode-specific files
+    physicsserver/ode/odeballjoint.h
     physicsserver/ode/odebody.h
     physicsserver/ode/odeboxcollider.h
     physicsserver/ode/odedynamicbody.h
@@ -87,19 +97,27 @@ set(oxygen_LIB_HDRS
     physicsserver/ode/odecompoundcollider.h
     physicsserver/ode/odeconcavecollider.h
     physicsserver/ode/odeconecollider.h
+    physicsserver/ode/odeconetwistjoint.h
     physicsserver/ode/odeconvexcollider.h
     physicsserver/ode/odecylindercollider.h
     physicsserver/ode/odeemptycollider.h
+    physicsserver/ode/odefixedjoint.h
+    physicsserver/ode/odegeneric6dofjoint.h
+    physicsserver/ode/odehingejoint.h
+    physicsserver/ode/odehinge2joint.h
+    physicsserver/ode/odejoint.h
     physicsserver/ode/odephysicsobject.h
     physicsserver/ode/odephysicsserver.h
     physicsserver/ode/odeplanecollider.h
     physicsserver/ode/oderaycollider.h
     physicsserver/ode/oderigidbody.h
+    physicsserver/ode/odesliderjoint.h
     physicsserver/ode/odesoftbody.h
     physicsserver/ode/odespace.h
     physicsserver/ode/odespherecollider.h
     physicsserver/ode/odestaticbody.h
     physicsserver/ode/odetransformcollider.h
+    physicsserver/ode/odeuniversaljoint.h
     physicsserver/ode/odeworld.h
     physicsserver/ode/odewrapper.h
     
@@ -220,9 +238,11 @@ set(oxygen_LIB_SRCS
     physicsserver/velocitycontroller_c.cpp
     physicsserver/joint.cpp
     physicsserver/joint_c.cpp
+    physicsserver/generic6dofjoint.cpp
     physicsserver/generic6dofjoint_c.cpp
     physicsserver/balljoint.cpp
     physicsserver/balljoint_c.cpp
+    physicsserver/conetwistjoint.cpp
     physicsserver/conetwistjoint_c.cpp
     physicsserver/hingejoint.cpp
     physicsserver/hingejoint_c.cpp
@@ -238,6 +258,7 @@ set(oxygen_LIB_SRCS
     physicsserver/angularmotor_c.cpp
     
     #ODE-specific files
+    physicsserver/ode/odeballjoint.cpp
     physicsserver/ode/odebody.cpp
     physicsserver/ode/odeboxcollider.cpp
     physicsserver/ode/odecapsulecollider.cpp
@@ -245,20 +266,28 @@ set(oxygen_LIB_SRCS
     physicsserver/ode/odecompoundcollider.cpp
     physicsserver/ode/odeconcavecollider.cpp
     physicsserver/ode/odeconecollider.cpp
+    physicsserver/ode/odeconetwistjoint.cpp
     physicsserver/ode/odeconvexcollider.cpp
     physicsserver/ode/odecylindercollider.cpp
     physicsserver/ode/odedynamicbody.cpp
     physicsserver/ode/odeemptycollider.cpp
+    physicsserver/ode/odefixedjoint.cpp
+    physicsserver/ode/odegeneric6dofjoint.cpp
+    physicsserver/ode/odehingejoint.cpp
+    physicsserver/ode/odehinge2joint.cpp
+    physicsserver/ode/odejoint.cpp
     physicsserver/ode/odephysicsobject.cpp
     physicsserver/ode/odephysicsserver.cpp
     physicsserver/ode/odeplanecollider.cpp
     physicsserver/ode/oderaycollider.cpp
     physicsserver/ode/oderigidbody.cpp
+    physicsserver/ode/odesliderjoint.cpp
     physicsserver/ode/odesoftbody.cpp
     physicsserver/ode/odespace.cpp
     physicsserver/ode/odespherecollider.cpp
     physicsserver/ode/odestaticbody.cpp
     physicsserver/ode/odetransformcollider.cpp
+    physicsserver/ode/odeuniversaljoint.cpp
     physicsserver/ode/odeworld.cpp
     
     sceneserver/basenode.cpp

@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h 107 2009-11-25 06:09:10Z a-held $
+   $Id: odeobject.cpp 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,34 +19,21 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_GENERIC6DOFJOINT_H
-#define OXYGEN_GENERIC6DOFJOINT_H
+#ifndef OXYGEN_ODEGENERIC6DOFJOINT_H
+#define OXYGEN_ODEGENERIC6DOFJOINT_H
 
-#include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/joint.h>
+#include <oxygen/physicsserver/ode/odejoint.h>
+#include <oxygen/physicsserver/int/generic6dofjointint.h>
 
 namespace oxygen
 {
-class Generic6DOFJointInt;
 
-/** Generic6DOFJoint is a placeholder class for "six degrees of 
-    freedom" - joints. They are supported by some 3D modelling tools
-    and simspark shall eventually be able to import models created
-    with these tools. All other joint classes are derived from this one.
-*/
-
-class OXYGEN_API Generic6DOFJoint : public Joint
+class OXYGEN_API ODEGeneric6DOFJoint : public Generic6DOFJointInt, public ODEJoint
 {
 public:
-    Generic6DOFJoint();
-    virtual ~Generic6DOFJoint();
-    
-private:
-    boost::shared_ptr<Generic6DOFJointInt> mGeneric6DOFJointImp;
+    ODEGeneric6DOFJoint();
 };
-
-DECLARE_ABSTRACTCLASS(Generic6DOFJoint);
 
 } //namespace oxygen
 
-#endif //OXYGEN_GENERIC6DOFJOINT_H
+#endif //OXYGEN_ODEGENERIC6DOFJOINT_H

@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id$
+   $Id: fixedjoint.cpp 112 2009-12-02 10:06:02Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,44 +17,22 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/fixedjoint.h>
+
 #include <oxygen/physicsserver/ode/odefixedjoint.h>
-#include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
+using namespace boost;
 
-FixedJoint::FixedJoint() : Generic6DOFJoint()
-{
-    mFixedJointImp = boost::shared_ptr<ODEFixedJoint>(new ODEFixedJoint());
-}
-
-FixedJoint::~FixedJoint()
+ODEFixedJoint::ODEFixedJoint() : ODEGeneric6DOFJoint()
 {
 }
 
-void FixedJoint::OnLink()
+void ODEFixedJoint::CreateFixedJoint(long world)
 {
-    long world = GetWorldID();
-    if (world == 0)
-        {
-            return;
-        }
-
     mODEJoint = dJointCreateFixed((dWorldID) world, 0);
 }
 
-void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
-{
-    // no ode set param fkt. defined
-}
-
-float FixedJoint::GetParameter(int /*parameter*/) const
-{
-    // no ode get param fkt. defined
-    return 0;
-}
-
-void FixedJoint::SetFixed()
+void ODEFixedJoint::SetFixed()
 {
     dJointSetFixed(mODEJoint);
 }

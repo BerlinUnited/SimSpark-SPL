@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: joint.h 107 2009-11-25 06:09:10Z a-held $
+   $Id: space.h 102 2009-11-18 07:24:29Z a-held $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,34 +19,28 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_GENERIC6DOFJOINT_H
-#define OXYGEN_GENERIC6DOFJOINT_H
 
+#ifndef OXYGEN_SLIDERJOINTINT_H
+#define OXYGEN_SLIDERJOINTINT_H
+
+#include <boost/smart_ptr/shared_ptr.hpp>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/joint.h>
 
 namespace oxygen
 {
-class Generic6DOFJointInt;
+class RigidBody;
 
-/** Generic6DOFJoint is a placeholder class for "six degrees of 
-    freedom" - joints. They are supported by some 3D modelling tools
-    and simspark shall eventually be able to import models created
-    with these tools. All other joint classes are derived from this one.
-*/
-
-class OXYGEN_API Generic6DOFJoint : public Joint
+class OXYGEN_API SliderJointInt
 {
 public:
-    Generic6DOFJoint();
-    virtual ~Generic6DOFJoint();
-    
-private:
-    boost::shared_ptr<Generic6DOFJointInt> mGeneric6DOFJointImp;
+    virtual void CreateSliderJoint(long world) = 0;
+    virtual float GetPosition() = 0;
+    virtual float GetPositionRate() = 0;
+    virtual void SetSliderAxis(salt::Vector3f& up) = 0;
+    virtual void SetParameter(int parameter, float value) = 0;
+    virtual float GetParameter(int parameter) const = 0;
 };
-
-DECLARE_ABSTRACTCLASS(Generic6DOFJoint);
 
 } //namespace oxygen
 
-#endif //OXYGEN_GENERIC6DOFJOINT_H
+#endif //OXYGEN_SLIDERJOINTINT_H
