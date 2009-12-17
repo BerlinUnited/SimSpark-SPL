@@ -42,6 +42,11 @@ public:
 
     /** renders the node */
     virtual void RenderInternal() = 0;
+
+    bool IsTransparent() { return mTransparent; }
+    void SetTransparent();
+private:
+    bool mTransparent;
 };
 
 DECLARE_ABSTRACTCLASS(RenderNode);

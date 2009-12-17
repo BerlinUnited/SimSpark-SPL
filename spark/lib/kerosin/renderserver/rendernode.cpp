@@ -26,10 +26,16 @@
 using namespace kerosin;
 
 RenderNode::RenderNode()
-    : BaseNode()
+    : BaseNode(),
+      mTransparent(false)
 {
 }
 
 RenderNode::~RenderNode()
 {
+}
+
+void RenderNode::SetTransparent()
+{
+  mTransparent = true;
 }
