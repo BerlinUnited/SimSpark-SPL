@@ -29,7 +29,9 @@ ODESliderJoint::ODESliderJoint() : ODEGeneric6DOFJoint()
 
 void ODESliderJoint::CreateSliderJoint(long world)
 {
-    mODEJoint = dJointCreateSlider((dWorldID) world, 0);
+    dWorldID ODEWorld = (dWorldID) world;
+    mODEJoint = dJointCreateSlider(ODEWorld, 0);
+    mJointID = (long) mODEJoint;
 }
 
 void ODESliderJoint::SetSliderAxis(Vector3f& up)
@@ -55,4 +57,8 @@ void ODESliderJoint::SetParameter(int parameter, float value)
 float ODESliderJoint::GetParameter(int parameter) const
 {
     return dJointGetSliderParam(mODEJoint, parameter);
+}
+
+long ODESliderJoint::GetJointID(){
+    return mJointID;
 }

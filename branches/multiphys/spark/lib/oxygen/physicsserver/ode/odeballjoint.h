@@ -38,6 +38,7 @@ public:
     salt::Vector3f GetAnchor1();
     salt::Vector3f GetAnchor2();
     void CreateBallJoint(long world);
+    long GetJointID();
 };
 
 } //namespace oxygen

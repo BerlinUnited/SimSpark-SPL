@@ -41,23 +41,23 @@ void Hinge2Joint::OnLink()
         {
             return;
         }
-
-    mODEJoint = dJointCreateHinge2((dWorldID) world, 0);
+    
+    mHinge2JointImp->CreateHinge2Joint(world);
+    mODEJoint = (dJointID) mHinge2JointImp->GetJointID();
 }
 
 void Hinge2Joint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    dJointSetHinge2Anchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 
     // relative universal hinge2 axis 1 points up
     Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-    dJointSetHinge2Axis1(mODEJoint,up[0],up[1],up[2]);
 
     // relative universal hinge2 axis 2 points right
     Vector3f right(GetWorldTransform().Rotate(Vector3f(1,0,0)));
-    dJointSetHinge2Axis2(mODEJoint,right[0],right[1],right[2]);
+    
+    mHinge2JointImp->SetAnchor(gAnchor, up, right);
 }
 
 Vector3f Hinge2Joint::GetAnchor(EBodyIndex idx)
@@ -68,18 +68,12 @@ Vector3f Hinge2Joint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                dReal anchor[3];
-                dJointGetHinge2Anchor (mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
-                break;
+                pos = mHinge2JointImp->GetAnchor1();
             }
 
         case BI_SECOND:
             {
-                dReal anchor[3];
-                dJointGetHinge2Anchor2(mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
-                break;
+                pos = mHinge2JointImp->GetAnchor2();
             }
 
         default:
@@ -94,11 +88,11 @@ float Hinge2Joint::GetAngle(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return gRadToDeg(dJointGetHinge2Angle1(mODEJoint));
+            return mHinge2JointImp->GetAngle();
 
         case AI_SECOND:
-            // dJointGetHinge2Angle2 is undeclared in ODE 0.039
-            // return dJointGetHinge2Angle2(mODEJoint);
+            GetLog()->Error() <<
+                "(Hinge2Joint) WARNING: GetAngle is undefined for EAxisIndex::AI_SECOND, returned zero\n";
             return 0;
 
         default:
@@ -111,10 +105,10 @@ float Hinge2Joint::GetAngleRate(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return gRadToDeg(dJointGetHinge2Angle1Rate(mODEJoint));
+            return mHinge2JointImp->GetAngleRate1();
 
         case AI_SECOND:
-            return gRadToDeg(dJointGetHinge2Angle2Rate(mODEJoint));
+            return mHinge2JointImp->GetAngleRate2();
 
         default:
             return 0;
@@ -123,10 +117,10 @@ float Hinge2Joint::GetAngleRate(EAxisIndex idx)
 
 void Hinge2Joint::SetParameter(int parameter, float value)
 {
-    dJointSetHinge2Param(mODEJoint, parameter, value);
+    mHinge2JointImp->SetParameter(parameter, value);
 }
 
 float Hinge2Joint::GetParameter(int parameter) const
 {
-    return dJointGetHinge2Param(mODEJoint, parameter);
+    return mHinge2JointImp->GetParameter(parameter);
 }

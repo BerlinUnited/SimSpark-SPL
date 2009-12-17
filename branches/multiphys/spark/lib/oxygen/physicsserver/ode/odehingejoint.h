@@ -40,6 +40,7 @@ public:
     float GetAngleRate() const;
     void SetParameter(int parameter, float value);
     float GetParameter(int parameter) const;
+    long GetJointID();
 };
 
 } //namespace oxygen

@@ -40,21 +40,24 @@ void FixedJoint::OnLink()
             return;
         }
 
-    mODEJoint = dJointCreateFixed((dWorldID) world, 0);
+    mFixedJointImp->CreateFixedJoint(world);
+    mODEJoint = (dJointID) mFixedJointImp->GetJointID();
 }
 
 void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
 {
-    // no ode set param fkt. defined
+    GetLog()->Error() <<
+        "(FixedJoint) WARNING: SetParameter function undefined for FixedJoint, ignored\n";
 }
 
 float FixedJoint::GetParameter(int /*parameter*/) const
 {
-    // no ode get param fkt. defined
+    GetLog()->Error() <<
+        "(FixedJoint) WARNING: GetParameter function undefined for FixedJoint, returned zero\n";
     return 0;
 }
 
 void FixedJoint::SetFixed()
 {
-    dJointSetFixed(mODEJoint);
+    mFixedJointImp->SetFixed();
 }

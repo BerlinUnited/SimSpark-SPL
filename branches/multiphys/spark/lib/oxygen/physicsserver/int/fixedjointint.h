@@ -29,6 +29,7 @@ class OXYGEN_API FixedJointInt{
 public:
     virtual void CreateFixedJoint(long world) = 0;
     virtual void SetFixed() = 0;
+    virtual long GetJointID() = 0;
 };
 
 } //namespace oxygen

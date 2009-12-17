@@ -42,34 +42,34 @@ void SliderJoint::OnLink()
             return;
         }
 
-    mODEJoint = dJointCreateSlider((dWorldID) world, 0);
+    mSliderJointImp->CreateSliderJoint(world); 
+    mODEJoint = (dJointID) mSliderJointImp->GetJointID();
 }
 
 void SliderJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
 {
     Joint::Attach(body1,body2);
 
-    // relative slider axis points up
     Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-    dJointSetSliderAxis(mODEJoint,up[0],up[1],up[2]);
+    mSliderJointImp->SetSliderAxis(up);
 }
 
 float SliderJoint::GetPosition()
 {
-    return dJointGetSliderPosition(mODEJoint);
+    return mSliderJointImp->GetPosition();
 }
 
 float SliderJoint::GetPositionRate()
 {
-    return dJointGetSliderPositionRate(mODEJoint);
+    return mSliderJointImp->GetPositionRate();
 }
 
 void SliderJoint::SetParameter(int parameter, float value)
 {
-    dJointSetSliderParam(mODEJoint, parameter, value);
+    mSliderJointImp->SetParameter(parameter, value);
 }
 
 float SliderJoint::GetParameter(int parameter) const
 {
-    return dJointGetSliderParam(mODEJoint, parameter);
+    return mSliderJointImp->GetParameter(parameter);
 }

@@ -30,7 +30,9 @@ ODEHinge2Joint::ODEHinge2Joint() : ODEGeneric6DOFJoint()
 
 void ODEHinge2Joint::CreateHinge2Joint(long world)
 {
-    mODEJoint = dJointCreateHinge2((dWorldID) world, 0);
+    dWorldID ODEWorld = (dWorldID) world;
+    mODEJoint = dJointCreateHinge2(ODEWorld, 0);
+    mJointID = (long) mODEJoint;
 }
 
 void ODEHinge2Joint::SetAnchor(const Vector3f& gAnchor,
@@ -81,4 +83,8 @@ void ODEHinge2Joint::SetParameter(int parameter, float value)
 float ODEHinge2Joint::GetParameter(int parameter) const
 {
     return dJointGetHinge2Param(mODEJoint, parameter);
+}
+
+long ODEHinge2Joint::GetJointID(){
+    return mJointID;
 }

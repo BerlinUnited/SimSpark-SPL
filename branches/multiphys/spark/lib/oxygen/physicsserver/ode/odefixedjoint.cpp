@@ -29,10 +29,16 @@ ODEFixedJoint::ODEFixedJoint() : ODEGeneric6DOFJoint()
 
 void ODEFixedJoint::CreateFixedJoint(long world)
 {
-    mODEJoint = dJointCreateFixed((dWorldID) world, 0);
+    dWorldID ODEworld = (dWorldID) world;
+    mODEJoint = dJointCreateFixed(ODEworld, 0);
+    mJointID = (long) mODEJoint;
 }
 
 void ODEFixedJoint::SetFixed()
 {
     dJointSetFixed(mODEJoint);
+}
+
+long ODEFixedJoint::GetJointID(){
+    return mJointID;
 }

@@ -30,7 +30,9 @@ ODEBallJoint::ODEBallJoint() : ODEGeneric6DOFJoint()
 
 void ODEBallJoint::CreateBallJoint(long world)
 {
-    mODEJoint = dJointCreateBall((dWorldID) world, 0);
+    dWorldID ODEWorld = (dWorldID) world;
+    mODEJoint = dJointCreateBall(ODEWorld, 0);
+    mJointID = (long) mODEJoint;
 }
 
 void ODEBallJoint::SetAnchor(const Vector3f& gAnchor)
@@ -54,4 +56,8 @@ Vector3f ODEBallJoint::GetAnchor2()
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     
     return pos;
+}
+
+long ODEBallJoint::GetJointID(){
+    return mJointID;
 }
