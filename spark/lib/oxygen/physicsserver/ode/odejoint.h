@@ -80,6 +80,9 @@ public:
     bool IsLimitJointMaxSpeed1() const;
     bool IsLimitJointMaxSpeed2() const;
     void OnLink();
+    
+protected:
+    dJointID mODEJoint;
 };
 
 } //namespace oxygen

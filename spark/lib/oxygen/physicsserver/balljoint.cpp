@@ -19,6 +19,7 @@
 */
 #include <oxygen/physicsserver/ode/odeballjoint.h>
 #include <oxygen/physicsserver/balljoint.h>
+#include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -41,6 +42,7 @@ void BallJoint::OnLink()
             return;
         }
 
+    mBallJointImp->CreateBallJoint(world);
     mODEJoint = dJointCreateBall((dWorldID) world, 0);
 }
 
@@ -48,7 +50,7 @@ void BallJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor = GetWorldTransform() * anchor;
-    dJointSetBallAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    mBallJointImp->SetAnchor(gAnchor);
 }
 
 Vector3f BallJoint::GetAnchor(EBodyIndex idx)
@@ -59,17 +61,13 @@ Vector3f BallJoint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                dReal anchor[3];
-                dJointGetBallAnchor (mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mBallJointImp->GetAnchor1();
                 break;
             }
 
         case BI_SECOND:
             {
-                dReal anchor[3];
-                dJointGetBallAnchor2(mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mBallJointImp->GetAnchor2();
                 break;
             }
 
@@ -82,11 +80,13 @@ Vector3f BallJoint::GetAnchor(EBodyIndex idx)
 
 void BallJoint::SetParameter(int /*parameter*/, float /*value*/)
 {
-    // no ode set param fkt. defined
+    GetLog()->Error() <<
+        "(BallJoint) WARNING: SetParameter function undefined for BallJoint, ignored\n";
 }
 
 float BallJoint::GetParameter(int /*parameter*/) const
 {
-    // no ode get param fkt. defined
+    GetLog()->Error() <<
+        "(BallJoint) WARNING: GetParameter function undefined for BallJoint, returned zero\n";
     return 0;
 }

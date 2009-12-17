@@ -43,14 +43,15 @@ void UniversalJoint::OnLink()
         return;
     }
 
-    mODEJoint = dJointCreateUniversal((dWorldID) world, 0);
+    mUniversalJointImp->CreateUniversalJoint(world);
+    mODEJoint = (dJointID) mUniversalJointImp->GetJointID();
 }
 
 void UniversalJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    dJointSetUniversalAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    mUniversalJointImp->SetAnchor(gAnchor);
 }
 
 Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
@@ -61,17 +62,13 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
     {
     case BI_FIRST:
     {
-        dReal anchor[3];
-        dJointGetUniversalAnchor (mODEJoint, anchor);
-        pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+        pos = mUniversalJointImp->GetAnchor1();
         break;
     }
 
     case BI_SECOND:
     {
-        dReal anchor[3];
-        dJointGetUniversalAnchor2(mODEJoint, anchor);
-        pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+        pos = mUniversalJointImp->GetAnchor2();
         break;
     }
 
@@ -85,13 +82,13 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
 void UniversalJoint::SetAxis1(const Vector3f & axis)
 {
     Vector3f first(GetWorldTransform().Rotate(axis));
-    dJointSetUniversalAxis1(mODEJoint,first[0],first[1],first[2]);
+    mUniversalJointImp->SetAxis1(first);
 }
 
 void UniversalJoint::SetAxis2(const Vector3f & axis)
 {
     Vector3f second(GetWorldTransform().Rotate(axis));
-    dJointSetUniversalAxis2(mODEJoint,second[0],second[1],second[2]);
+    mUniversalJointImp->SetAxis2(second);
 }
 
 Vector3f UniversalJoint::GetAxis(EAxisIndex idx) const
@@ -102,17 +99,13 @@ Vector3f UniversalJoint::GetAxis(EAxisIndex idx) const
     {
     case AI_FIRST:
     {
-        dReal axis[3];
-        dJointGetUniversalAxis1(mODEJoint, axis);
-        vec = Vector3f(axis[0],axis[1],axis[2]);
+        vec = mUniversalJointImp->GetAxis1();
         break;
     }
 
     case AI_SECOND:
     {
-        dReal axis[3];
-        dJointGetUniversalAxis2(mODEJoint, axis);
-        vec = Vector3f(axis[0],axis[1],axis[2]);
+        vec = mUniversalJointImp->GetAxis2();
         break;
     }
 
@@ -128,10 +121,10 @@ float UniversalJoint::GetAngle(EAxisIndex idx) const
     switch (idx)
     {
     case AI_FIRST:
-        return gRadToDeg(dJointGetUniversalAngle1(mODEJoint));
+        return mUniversalJointImp->GetAngle1();
 
     case AI_SECOND:
-        return gRadToDeg(dJointGetUniversalAngle2(mODEJoint));
+        return mUniversalJointImp->GetAngle2();
 
     default:
         return 0;
@@ -143,10 +136,10 @@ float UniversalJoint::GetAngleRate(EAxisIndex idx) const
     switch (idx)
         {
         case AI_FIRST:
-            return gRadToDeg(dJointGetUniversalAngle1Rate(mODEJoint));
+            return mUniversalJointImp->GetAngleRate1();
 
         case AI_SECOND:
-            return gRadToDeg(dJointGetUniversalAngle2Rate(mODEJoint));
+            return mUniversalJointImp->GetAngleRate2();
 
         default:
             return 0;
@@ -155,10 +148,10 @@ float UniversalJoint::GetAngleRate(EAxisIndex idx) const
 
 void UniversalJoint::SetParameter(int parameter, float value)
 {
-    dJointSetUniversalParam(mODEJoint, parameter, value);
+    mUniversalJointImp->SetParameter(parameter, value);
 }
 
 float UniversalJoint::GetParameter(int parameter) const
 {
-    return dJointGetUniversalParam(mODEJoint, parameter);
+    return mUniversalJointImp->GetParameter(parameter);
 }

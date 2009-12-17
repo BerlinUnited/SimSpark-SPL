@@ -42,14 +42,15 @@ void HingeJoint::OnLink()
             return;
         }
 
-    mODEJoint = dJointCreateHinge((dWorldID) world, 0);
+    mHingeJointImp->CreateHingeJoint(world);
+    mODEJoint = (dJointID) mHingeJointImp->GetJointID();
 }
 
 void HingeJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    dJointSetHingeAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    mHingeJointImp->SetAnchor(gAnchor);
 }
 
 Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
@@ -60,17 +61,13 @@ Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                dReal anchor[3];
-                dJointGetHingeAnchor (mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mHingeJointImp->GetAnchor1();
                 break;
             }
 
         case BI_SECOND:
             {
-                dReal anchor[3];
-                dJointGetHingeAnchor2(mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mHingeJointImp->GetAnchor2();
                 break;
             }
 
@@ -111,32 +108,30 @@ void HingeJoint::SetAxis(EAxisIndex idx)
 void HingeJoint::SetAxis(const Vector3f& axis)
 {
     Vector3f absAxis(GetWorldTransform().Rotate(axis));
-    dJointSetHingeAxis(mODEJoint, absAxis[0], absAxis[1], absAxis[2]);
+    mHingeJointImp->SetAxis(absAxis);
 }
 
 Vector3f HingeJoint::GetAxis()
 {
-    dReal axis[3];
-    dJointGetHingeAxis(mODEJoint, axis);
-    return Vector3f (axis[0], axis[1], axis[2]);
+    return mHingeJointImp->GetAxis();
 }
 
 float HingeJoint::GetAngle() const
 {
-    return gRadToDeg(dJointGetHingeAngle(mODEJoint));
+    return mHingeJointImp->GetAngle();
 }
 
 float HingeJoint::GetAngleRate() const
 {
-    return gRadToDeg(dJointGetHingeAngleRate(mODEJoint));
+    return mHingeJointImp->GetAngleRate();
 }
 
 void HingeJoint::SetParameter(int parameter, float value)
 {
-    dJointSetHingeParam(mODEJoint, parameter, value);
+    mHingeJointImp->SetParameter(parameter, value);
 }
 
 float HingeJoint::GetParameter(int parameter) const
 {
-    return dJointGetHingeParam(mODEJoint, parameter);
+    return mHingeJointImp->GetParameter(parameter);
 }

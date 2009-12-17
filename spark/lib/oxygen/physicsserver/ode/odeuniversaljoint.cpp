@@ -28,7 +28,9 @@ ODEUniversalJoint::ODEUniversalJoint() : ODEGeneric6DOFJoint()
 
 void ODEUniversalJoint::CreateUniversalJoint(long world)
 {
-    mODEJoint = dJointCreateUniversal((dWorldID) world, 0);
+    dWorldID ODEWorld = (dWorldID) world;
+    mODEJoint = dJointCreateUniversal(ODEWorld, 0);
+    mJointID = (long) mODEJoint;
 }
 
 void ODEUniversalJoint::SetAnchor(const Vector3f& anchor)
@@ -39,7 +41,7 @@ void ODEUniversalJoint::SetAnchor(const Vector3f& anchor)
 Vector3f ODEUniversalJoint::GetAnchor1()
 {
     dReal anchor[3];
-    dJointGetUniversalAnchor (mODEJoint, anchor);
+    dJointGetUniversalAnchor(mODEJoint, anchor);
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     return pos;
 }
@@ -106,4 +108,8 @@ void ODEUniversalJoint::SetParameter(int parameter, float value)
 float ODEUniversalJoint::GetParameter(int parameter) const
 {
     return dJointGetUniversalParam(mODEJoint, parameter);
+}
+
+long ODEUniversalJoint::GetJointID(){
+    return mJointID;
 }

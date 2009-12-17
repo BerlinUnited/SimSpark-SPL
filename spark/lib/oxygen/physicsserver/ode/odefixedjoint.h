@@ -32,6 +32,7 @@ public:
     ODEFixedJoint();
     void CreateFixedJoint(long world);
     void SetFixed();
+    long GetJointID();
 };
 
 } //namespace oxygen
