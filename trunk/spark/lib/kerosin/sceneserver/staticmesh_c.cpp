@@ -144,6 +144,12 @@ FUNCTION(StaticMesh,resetMaterials)
     return true;
 }
 
+FUNCTION(RenderNode,setTransparent)
+{
+    obj->SetTransparent();
+    return true;
+}
+
 void CLASS(StaticMesh)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
@@ -154,4 +160,5 @@ void CLASS(StaticMesh)::DefineClass()
     DEFINE_FUNCTION(setExternalMeshName)
     DEFINE_FUNCTION(setExternalMeshScale)
     DEFINE_FUNCTION(resetMaterials)
+    DEFINE_FUNCTION(setTransparent);
 }

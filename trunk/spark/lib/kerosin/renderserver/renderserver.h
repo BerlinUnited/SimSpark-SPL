@@ -105,7 +105,7 @@ protected:
     /** render a scene recursively.
         \param node the scene base node
     */
-    void RenderScene(boost::shared_ptr<oxygen::BaseNode> node);
+    void RenderScene(boost::shared_ptr<oxygen::BaseNode> node, unsigned pass);
 
     /** sets the OpenGl view parameters for a camera
      */
