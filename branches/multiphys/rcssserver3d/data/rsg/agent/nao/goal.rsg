@@ -46,8 +46,9 @@
 	     (setLocalPos $GoalHalfDepth 0.0 (eval -1 * $GoalHalfHeight))
 	     (setLocalRotation 90 90 0)
 	     (nd StaticMesh
-		 (load $GoalObj)
-		 (setScale $ObjWidth $ObjWidth $ObjWidth)
+		    (load $GoalObj)
+		    (setScale $ObjWidth $ObjWidth $ObjWidth)
+		    (setTransparent)
 		 )
 	     )
 

@@ -362,6 +362,15 @@ salt::Matrix ODERigidBody::GetRotation() const
     return rot;
 }
 
+Vector3f ODERigidBody::GetLocalAngularVelocity() const
+{
+    const dReal* vel = dBodyGetAngularVel(mODEBody);
+    Vector3f w;
+    dReal* wData = (dReal*) w.GetData();
+    dBodyVectorFromWorld(mODEBody, vel[0], vel[1], vel[2], wData);
+    return w;
+}
+
 Vector3f ODERigidBody::GetAngularVelocity() const
 {
     const dReal* vel = dBodyGetAngularVel(mODEBody);
@@ -411,6 +420,12 @@ RigidBody* ODERigidBody::BodyGetData(long bodyID)
 void ODERigidBody::AddForce(const Vector3f& force)
 {
     dBodyAddForce(mODEBody, force.x(), force.y(), force.z());
+}
+
+Vector3f ODERigidBody::GetForce() const
+{
+    const dReal* f = dBodyGetForce(mODEBody);
+    return Vector3f(f[0], f[1], f[2]);
 }
 
 void ODERigidBody::AddTorque(const Vector3f& torque)

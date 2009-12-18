@@ -63,9 +63,11 @@ public:
     void SetVelocity(const salt::Vector3f& vel);
     void SetRotation(const salt::Matrix& rot);
     salt::Matrix GetRotation() const;
+    salt::Vector3f GetLocalAngularVelocity() const;
     salt::Vector3f GetAngularVelocity() const;
     void SetAngularVelocity(const salt::Vector3f& vel);
     void AddForce(const salt::Vector3f& force);
+    salt::Vector3f GetForce() const;
     void AddTorque(const salt::Vector3f& torque);
     void SetPosition(const salt::Vector3f& pos);
     salt::Vector3f GetPosition() const;

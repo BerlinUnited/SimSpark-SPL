@@ -235,6 +235,11 @@ salt::Matrix RigidBody::GetRotation() const
     return mRigidBodyImp->GetRotation();
 }
 
+Vector3f RigidBody::GetLocalAngularVelocity() const
+{
+    return mRigidBodyImp->GetLocalAngularVelocity();
+}
+
 Vector3f RigidBody::GetAngularVelocity() const
 {
     return mRigidBodyImp->GetAngularVelocity();
@@ -335,6 +340,11 @@ shared_ptr<RigidBody> RigidBody::GetBody(long id)
 void RigidBody::AddForce(const Vector3f& force)
 {
     mRigidBodyImp->AddForce(force);
+}
+
+Vector3f RigidBody::GetForce() const
+{
+    return mRigidBodyImp->GetForce();
 }
 
 void RigidBody::AddTorque(const Vector3f& torque)
