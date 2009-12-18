@@ -23,7 +23,14 @@
 
 using namespace kerosin;
 
+FUNCTION(RenderNode,setTransparent)
+{
+    obj->SetTransparent();
+    return true;
+}
+
 void CLASS(RenderNode)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
+    DEFINE_FUNCTION(setTransparent);
 }

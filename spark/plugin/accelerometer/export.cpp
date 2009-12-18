@@ -1,10 +1,8 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
-   Fri May 9 2003
-   Copyright (C) 2002,2003 Koblenz University
-   Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   Copyright (C) 2008 RoboCup Soccer Server 3D Maintenance Group
+   $Id:$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,24 +16,11 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   RenderNode
 */
-#include "rendernode.h"
 
-using namespace kerosin;
+#include "accelerometer.h"
+#include <zeitgeist/zeitgeist.h>
 
-RenderNode::RenderNode()
-    : BaseNode(),
-      mTransparent(false)
-{
-}
-
-RenderNode::~RenderNode()
-{
-}
-
-void RenderNode::SetTransparent()
-{
-  mTransparent = true;
-}
+ZEITGEIST_EXPORT_BEGIN()
+        ZEITGEIST_EXPORT(Accelerometer);
+ZEITGEIST_EXPORT_END()

@@ -249,6 +249,11 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
                 ss << "(nd StaticMesh";
             }
 
+    if (mesh->IsTransparent())
+        {
+            ss << " (setTransparent)";
+        }
+        
     ss << " (load " << mesh->GetMeshName();
 
     const ParameterList& params = mesh->GetMeshParameter();

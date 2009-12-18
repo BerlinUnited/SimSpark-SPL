@@ -123,7 +123,8 @@ RenderServer::Render()
     }
 
     // standard rendering
-    RenderScene(mActiveScene);
+    RenderScene(mActiveScene, 0);
+    RenderScene(mActiveScene, 1);
 
     // reset GL lights
     glDisable(GL_LIGHTING);
@@ -244,7 +245,7 @@ RenderServer::ProcessPicks()
 }
 
 void
-RenderServer::RenderScene(boost::shared_ptr<BaseNode> node)
+RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
 {
 #if 0
     shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>(node);
@@ -254,7 +255,9 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node)
     }
 #endif
     shared_ptr<RenderNode> renderNode = shared_dynamic_cast<RenderNode>(node);
-    if (renderNode.get() != 0)
+    if (renderNode.get() != 0 &&
+        ((pass == 0 && !renderNode->IsTransparent()) || (pass == 1 && renderNode->IsTransparent()))
+       )
         {
             glPushMatrix();
 
@@ -268,7 +271,7 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node)
 
             glMultMatrixf(node->GetWorldTransform().m);
 
-        renderNode->RenderInternal();
+            renderNode->RenderInternal();
 
             if (mEnablePicking)
                 {
@@ -294,7 +297,7 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node)
             continue;
         }
 
-        RenderScene(node);
+        RenderScene(node, pass);
     }
 }
 

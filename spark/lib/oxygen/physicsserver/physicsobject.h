@@ -66,10 +66,10 @@ public:
         colliders and joints have to be treated in one go).*/ 
     virtual void DestroyPhysicsObject(){};
 
-protected:
     /** returns the world node */
-    boost::shared_ptr<World> GetWorld();
+    boost::shared_ptr<World> GetWorld() const;
 
+protected:
     /** finds the nearest parent space node */
     boost::shared_ptr<Space> GetSpace();
 

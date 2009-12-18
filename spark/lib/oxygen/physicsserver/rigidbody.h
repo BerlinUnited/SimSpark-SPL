@@ -202,6 +202,9 @@ public:
 
     /** gets the rotation of this body */
     salt::Matrix GetRotation() const;
+    
+    /** returns the current angular velocity of this body in local coordinates */
+    salt::Vector3f GetLocalAngularVelocity() const;
 
     /** returns the current angular velocity of this body */
     salt::Vector3f GetAngularVelocity() const;
@@ -214,6 +217,9 @@ public:
 
     /** applies a force to the managed body */
     void AddForce(const salt::Vector3f& force);
+    
+    /** returns the total force applied to this body */
+    salt::Vector3f GetForce() const;
 
     /** aplies a  force to the managed body */
     void AddTorque(const salt::Vector3f& torque);

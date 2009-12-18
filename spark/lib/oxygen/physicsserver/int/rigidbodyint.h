@@ -62,9 +62,11 @@ public:
     virtual void SetVelocity(const salt::Vector3f& vel) = 0;
     virtual void SetRotation(const salt::Matrix& rot) = 0;
     virtual salt::Matrix GetRotation() const = 0;
+    virtual salt::Vector3f GetLocalAngularVelocity() const = 0;
     virtual salt::Vector3f GetAngularVelocity() const = 0;
     virtual void SetAngularVelocity(const salt::Vector3f& vel) = 0;
     virtual void AddForce(const salt::Vector3f& force) = 0;
+    virtual salt::Vector3f GetForce() const = 0;
     virtual void AddTorque(const salt::Vector3f& torque) = 0;
     virtual void SetPosition(const salt::Vector3f& pos) = 0;
     virtual salt::Vector3f GetPosition() const = 0;
