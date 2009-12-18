@@ -420,9 +420,9 @@ Vector3f
 Body::GetLocalAngularVelocity() const
 {
     const dReal* vel = dBodyGetAngularVel(mODEBody);
-    Vector3f w;
-    dBodyVectorFromWorld(mODEBody, vel[0], vel[1], vel[2], w.GetData());
-    return w;
+    dReal w[3];
+    dBodyVectorFromWorld(mODEBody, vel[0], vel[1], vel[2], w);
+    return Vector3f(w[0],w[1],w[2]);
 }
 
 void

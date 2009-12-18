@@ -71,7 +71,7 @@
         )
 
         (nd GyroRatePerceptor (setName torso))
-	;(nd Accelerometer (setName torso))
+	(nd Accelerometer (setName torso))
 
         ;(nd HMDPPerceptor)
         ;(nd HMDPEffector)
