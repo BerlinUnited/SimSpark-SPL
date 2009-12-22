@@ -35,8 +35,7 @@ class OXYGEN_API ODERayCollider : public RayColliderInt, public ODECollider
 public:
     ODERayCollider();
     void SetParams(salt::Vector3f pos, salt::Vector3f dir, float length);
-    void CreateRay();
-    long GetGeomID();
+    long CreateRay();
 };
 
 } //namespace oxygen

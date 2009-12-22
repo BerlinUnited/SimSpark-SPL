@@ -39,7 +39,11 @@ class OXYGEN_API Body : public PhysicsObject
 public:
     Body();
     virtual ~Body();
-    
+
+protected:
+    long mBodyID;
+
+private:
     boost::shared_ptr<BodyInt> mBodyImp;
 };
 

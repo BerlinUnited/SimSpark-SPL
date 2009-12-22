@@ -40,17 +40,17 @@ void AngularMotor::OnLink()
             return;
         }
 
-    mODEJoint = dJointCreateAMotor((dWorldID) world, 0);
+    mJointID = (long) dJointCreateAMotor((dWorldID) world, 0);
 }
 
 void AngularMotor::SetMode(EMotorMode mode)
 {
-    dJointSetAMotorMode(mODEJoint,mode);
+    dJointSetAMotorMode( (dJointID) mJointID,mode);
 }
 
 AngularMotor::EMotorMode AngularMotor::GetMode()
 {
-    return static_cast<EMotorMode>(dJointGetAMotorMode(mODEJoint));
+    return static_cast<EMotorMode>(dJointGetAMotorMode( (dJointID) mJointID));
 }
 
 void AngularMotor::SetNumAxes(int num)
@@ -63,58 +63,55 @@ void AngularMotor::SetNumAxes(int num)
             return;
         }
 
-    dJointSetAMotorNumAxes(mODEJoint, num);
+    dJointSetAMotorNumAxes( (dJointID) mJointID, num);
 }
 
 int AngularMotor::GetNumAxes()
 {
-    return dJointGetAMotorNumAxes(mODEJoint);
+    return dJointGetAMotorNumAxes( (dJointID) mJointID);
 }
 
 void AngularMotor::SetMotorAxis(EAxisIndex idx, EAxisAnchor anchor,
                                 const salt::Vector3f& axis)
 {
     Vector3f globalAxis = GetWorldTransform() * axis;
-    dJointSetAMotorAxis (mODEJoint, idx, anchor,
+    dJointSetAMotorAxis ( (dJointID) mJointID, idx, anchor,
                          globalAxis[0], globalAxis[1], globalAxis[2]);
 }
 
 AngularMotor::EAxisAnchor AngularMotor::GetAxisAnchor(EAxisIndex idx)
 {
-    return static_cast<EAxisAnchor>(dJointGetAMotorAxisRel (mODEJoint, idx));
+    return static_cast<EAxisAnchor>(dJointGetAMotorAxisRel ( (dJointID) mJointID, idx));
 }
 
 Vector3f AngularMotor::GetMotorAxis(EAxisIndex idx)
 {
     dVector3 dAxis;
-    dJointGetAMotorAxis(mODEJoint,idx,dAxis);
+    dJointGetAMotorAxis( (dJointID) mJointID,idx,dAxis);
     return Vector3f(dAxis[0],dAxis[1],dAxis[2]);
 }
 
 void AngularMotor::SetAxisAngle(EAxisIndex idx, float degAngle)
 {
-    dJointSetAMotorAngle(mODEJoint, idx, gDegToRad(degAngle));
+    dJointSetAMotorAngle( (dJointID) mJointID, idx, gDegToRad(degAngle));
 }
 
 float AngularMotor::GetAxisAngle(EAxisIndex idx)
 {
-    return gRadToDeg(dJointGetAMotorAngle(mODEJoint, idx));
+    return gRadToDeg(dJointGetAMotorAngle((dJointID) mJointID, idx));
 }
 
 float AngularMotor::GetAxisAngleRate(EAxisIndex idx)
 {
-    return gRadToDeg(dJointGetAMotorAngleRate(mODEJoint,idx));
+    return gRadToDeg(dJointGetAMotorAngleRate((dJointID) mJointID,idx));
 }
 
 void AngularMotor::SetParameter(int parameter, float value)
 {
-    dJointSetAMotorParam(mODEJoint, parameter, value);
+    dJointSetAMotorParam((dJointID) mJointID, parameter, value);
 }
 
 float AngularMotor::GetParameter(int parameter) const
 {
-    return dJointGetAMotorParam(mODEJoint, parameter);
+    return dJointGetAMotorParam((dJointID) mJointID, parameter);
 }
-
-
-

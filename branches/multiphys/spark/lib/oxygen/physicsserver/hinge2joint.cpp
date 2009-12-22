@@ -42,8 +42,7 @@ void Hinge2Joint::OnLink()
             return;
         }
     
-    mHinge2JointImp->CreateHinge2Joint(world);
-    mODEJoint = (dJointID) mHinge2JointImp->GetJointID();
+    mJointID = mHinge2JointImp->CreateHinge2Joint(world);
 }
 
 void Hinge2Joint::SetAnchor(const Vector3f& anchor)

@@ -37,9 +37,7 @@ public:
     void SetBoxLengths(const salt::Vector3f& extents);
     void GetBoxLengths(salt::Vector3f& extents);
     float GetPointDepth(const salt::Vector3f& pos);
-    void CreateBox();
-    
-    long GetGeomID();
+    long CreateBox();
 };
 
 } //namespace oxygen

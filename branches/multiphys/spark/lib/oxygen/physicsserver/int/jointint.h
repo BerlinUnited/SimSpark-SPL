@@ -114,7 +114,6 @@ public:
     virtual void OnLink() = 0;
     
 protected:
-    long mJointID;
     boost::shared_ptr<dJointFeedback> mFeedback;
     float mJointMaxSpeed1;
     bool mIsLimitJointMaxSpeed1;

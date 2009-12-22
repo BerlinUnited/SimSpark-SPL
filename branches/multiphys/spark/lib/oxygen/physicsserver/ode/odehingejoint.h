@@ -30,7 +30,7 @@ class OXYGEN_API ODEHingeJoint : public HingeJointInt, public ODEGeneric6DOFJoin
 
 public:
     ODEHingeJoint();
-    void CreateHingeJoint(long world);
+    long CreateHingeJoint(long world);
     void SetAnchor(const salt::Vector3f& anchor);
     salt::Vector3f GetAnchor1();
     salt::Vector3f GetAnchor2();
@@ -40,7 +40,6 @@ public:
     float GetAngleRate() const;
     void SetParameter(int parameter, float value);
     float GetParameter(int parameter) const;
-    long GetJointID();
 };
 
 } //namespace oxygen

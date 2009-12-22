@@ -42,8 +42,7 @@ void BallJoint::OnLink()
             return;
         }
 
-    mBallJointImp->CreateBallJoint(world);
-    mODEJoint = dJointCreateBall((dWorldID) world, 0);
+    mJointID = mBallJointImp->CreateBallJoint(world);
 }
 
 void BallJoint::SetAnchor(const Vector3f& anchor)

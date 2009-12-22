@@ -24,6 +24,7 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
@@ -81,7 +82,7 @@ public:
     float GetMass() const;
     
     /** Sets the mass parameters of this body */
-    void SetMassParameters(const float& mass);
+    void SetMassParameters(const GenericMass& mass);
 
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)

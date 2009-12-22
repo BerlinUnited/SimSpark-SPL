@@ -34,9 +34,8 @@ class OXYGEN_API ODETransformCollider : public TransformColliderInt, public ODEC
 
 public:    
     ODETransformCollider();
-    void CreateTransformCollider();
     void SetColliderParameters(int cleanup, int info);
-    long GetGeomID();
+    long CreateTransformCollider();
 };
 
 } //namespace oxygen

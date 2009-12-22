@@ -33,11 +33,11 @@ void ODEPlaneCollider::SetPlaneParams(float a, float b, float c, float d)
     dGeomPlaneSetParams(mODEGeom, a, b, c, d);
 }
 
-void ODEPlaneCollider::CreatePlane()
+long ODEPlaneCollider::CreatePlane()
 {
     // a plane with normal pointing up, going through the origin
     mODEGeom = dCreatePlane(0, 0, 1, 0, 0);
-    mGeomID = (long) mODEGeom;
+   return (long) mODEGeom;
 }
 
 void ODEPlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal)
@@ -51,8 +51,4 @@ float ODEPlaneCollider::GetPointDepth(const Vector3f& pos)
 {
     return dGeomPlanePointDepth
         (mODEGeom,pos[0],pos[1],pos[2]);
-}
-
-long ODEPlaneCollider::GetGeomID(){
-    return mGeomID;
 }

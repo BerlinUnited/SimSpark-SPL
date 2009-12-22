@@ -55,6 +55,7 @@ set(oxygen_LIB_HDRS
     physicsserver/angularmotor.h
     
     #interfaces
+    physicsserver/int/angularmotorint.h
     physicsserver/int/balljointint.h
     physicsserver/int/bodyint.h
     physicsserver/int/boxcolliderint.h

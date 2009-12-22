@@ -50,10 +50,9 @@ bool SphereCollider::ConstructInternal()
    // mODEGeom = dCreateSphere(0, 1.0f);
 
     // create a unit sphere
-    mSphereColliderImp->CreateSphere();
-    mGeomID = mSphereColliderImp->GetGeomID();
+    mGeomID = mSphereColliderImp->CreateSphere();
 
-    return (mSphereColliderImp->GetGeomID() != 0);
+    return (mGeomID != 0);
 }
 
 float SphereCollider::GetPointDepth(const Vector3f& pos)

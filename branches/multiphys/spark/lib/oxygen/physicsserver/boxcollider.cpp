@@ -44,8 +44,7 @@ bool BoxCollider::ConstructInternal()
         }
 
     // create a unit box
-    mBoxColliderImp->CreateBox();
-    mGeomID = mBoxColliderImp->GetGeomID();
+    mGeomID = mBoxColliderImp->CreateBox();
 
     return (mGeomID != 0);
 }

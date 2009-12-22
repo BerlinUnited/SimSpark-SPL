@@ -24,6 +24,7 @@
 #define OXYGEN_RIGIDBODYINT_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
@@ -37,9 +38,9 @@ public:
     virtual bool IsEnabled() const = 0;
     virtual void UseGravity(bool f) = 0;
     virtual bool UsesGravity() const = 0;
-    virtual void CreateBody(long world) = 0;
+    virtual long CreateBody(long world) = 0;
     virtual void SetMass(float mass) = 0;
-    virtual void SetMassParameters(const float& mass) = 0;
+    virtual void SetMassParameters(const GenericMass& mass) = 0;
     virtual float GetMass() const = 0;
     virtual void SetSphere(float density, float radius) = 0;
     virtual void AddSphere(float density, float radius, const salt::Matrix& matrix) = 0;
@@ -74,8 +75,6 @@ public:
     virtual salt::Matrix GetSynchronisationMatrix() = 0;
     virtual void BodySetData(RigidBody* rb) = 0;
     virtual RigidBody* BodyGetData(long bodyID) = 0;
-    
-    virtual long GetBodyID() = 0;
     virtual salt::Vector3f GetMassTrans() = 0;
     virtual void SetMassTrans(salt::Vector3f massTrans) = 0; 
     virtual bool GetMassTransformed() = 0;
@@ -90,12 +89,7 @@ public:
         #endif
     }
     
-protected:
-    /** The ID of the managed body. This must be unique within the simulation.
-        It is used externally to reference this particular body.
-    */
-    long mBodyID;
-    
+protected:    
     salt::Vector3f mMassTrans;
     bool mMassTransformed;
 };

@@ -44,7 +44,6 @@ public:
     virtual bool Intersect(boost::shared_ptr<Collider> collider, long geomID) = 0;
     virtual long GetParentSpaceID(long geomID) = 0;
     virtual void DestroyGeom(long geomID) = 0;
-    virtual long GetGeomID() = 0;
     virtual void TransformSetGeom(long parentGeomID, long geomID) = 0;
     virtual void SetSpace(long spaceID, long geomID, Collider* collider) = 0;
     virtual void SetBody(long bodyID, long geomID) = 0;
@@ -58,9 +57,6 @@ public:
         return static_cast<Collider*>(dGeomGetData( (dGeomID) geomID));
         #endif
     }
-    
-protected:
-    long mGeomID;
 };
 
 } //namespace oxygen

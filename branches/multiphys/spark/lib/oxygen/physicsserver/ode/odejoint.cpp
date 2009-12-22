@@ -28,7 +28,6 @@ using namespace salt;
 
 ODEJoint::ODEJoint() : ODEPhysicsObject(), mODEJoint(0) 
 {
-    mJointID = 0;
     mJointMaxSpeed1 = mJointMaxSpeed2 = 0.0;
     mIsLimitJointMaxSpeed1 = mIsLimitJointMaxSpeed2 = false;
 }

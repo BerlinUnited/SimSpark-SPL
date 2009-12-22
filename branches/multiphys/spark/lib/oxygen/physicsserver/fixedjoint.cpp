@@ -40,8 +40,7 @@ void FixedJoint::OnLink()
             return;
         }
 
-    mFixedJointImp->CreateFixedJoint(world);
-    mODEJoint = (dJointID) mFixedJointImp->GetJointID();
+    mJointID = mFixedJointImp->CreateFixedJoint(world);
 }
 
 void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)

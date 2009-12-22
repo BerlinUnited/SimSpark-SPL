@@ -27,11 +27,11 @@ ODEHingeJoint::ODEHingeJoint() : ODEGeneric6DOFJoint()
 {
 }
 
-void ODEHingeJoint::CreateHingeJoint(long world)
+long ODEHingeJoint::CreateHingeJoint(long world)
 {
     dWorldID ODEWorld = (dWorldID) world;
     mODEJoint = dJointCreateHinge(ODEWorld, 0);
-    mJointID = (long) mODEJoint;
+    return (long) mODEJoint;
 }
 
 void ODEHingeJoint::SetAnchor(const Vector3f& anchor)
@@ -87,8 +87,4 @@ void ODEHingeJoint::SetParameter(int parameter, float value)
 float ODEHingeJoint::GetParameter(int parameter) const
 {
     return dJointGetHingeParam(mODEJoint, parameter);
-}
-
-long ODEHingeJoint::GetJointID(){
-    return mJointID;
 }

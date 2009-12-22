@@ -28,7 +28,7 @@ namespace oxygen{
 class OXYGEN_API HingeJointInt{
 
 public:
-    virtual void CreateHingeJoint(long world) = 0;
+    virtual long CreateHingeJoint(long world) = 0;
     virtual void SetAnchor(const salt::Vector3f& anchor) = 0;
     virtual salt::Vector3f GetAnchor1() = 0;
     virtual salt::Vector3f GetAnchor2() = 0;
@@ -38,7 +38,6 @@ public:
     virtual float GetAngleRate() const = 0;
     virtual void SetParameter(int parameter, float value) = 0;
     virtual float GetParameter(int parameter) const = 0;
-    virtual long GetJointID() = 0;
 };
 
 } //namespace oxygen

@@ -41,7 +41,7 @@ RigidBody::~RigidBody()
 
 long RigidBody::GetBodyID() const
 {
-    return mRigidBodyImp->GetBodyID();
+    return mBodyID;
 }
 
 void RigidBody::Enable()
@@ -71,9 +71,7 @@ bool RigidBody::UsesGravity() const
 
 bool RigidBody::CreateBody()
 {
-    long bodyID = mRigidBodyImp->GetBodyID();
-
-    if (bodyID != 0)
+    if (mBodyID != 0)
         {
             return true;
         }
@@ -84,9 +82,9 @@ bool RigidBody::CreateBody()
             return false;
         }
     
-    mRigidBodyImp->CreateBody(world);
+    mBodyID = mRigidBodyImp->CreateBody(world);
     
-    if (mRigidBodyImp->GetBodyID() == 0)
+    if (mBodyID == 0)
         {
             GetLog()->Error()
                 << "(Body) ERROR: could not create new ODE body\n";
@@ -131,7 +129,7 @@ float RigidBody::GetMass() const
     return mRigidBodyImp->GetMass();
 }
 
-void RigidBody::SetMassParameters(const float& mass){
+void RigidBody::SetMassParameters(const GenericMass& mass){
     mRigidBodyImp->SetMassParameters(mass);
 }
 

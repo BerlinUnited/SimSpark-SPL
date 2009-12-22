@@ -28,7 +28,6 @@ using namespace salt;
 
 ODEBoxCollider::ODEBoxCollider() : ODEConvexCollider()
 {
-
 }
 
 void ODEBoxCollider::SetBoxLengths(const Vector3f& extents)
@@ -41,10 +40,10 @@ void ODEBoxCollider::SetBoxLengths(const Vector3f& extents)
                        );
 }
 
-void ODEBoxCollider::CreateBox()
+long ODEBoxCollider::CreateBox()
 {
     mODEGeom = dCreateBox (0, 1.0f, 1.0f, 1.0f);
-    mGeomID = (long) mODEGeom;
+    return (long) mODEGeom;
 }
 
 void ODEBoxCollider::GetBoxLengths(Vector3f& extents)
@@ -60,8 +59,4 @@ float ODEBoxCollider::GetPointDepth(const Vector3f& pos)
 {
     return dGeomBoxPointDepth
         (mODEGeom,pos[0],pos[1],pos[2]);
-}
-
-long ODEBoxCollider::GetGeomID(){
-    return mGeomID;
 }

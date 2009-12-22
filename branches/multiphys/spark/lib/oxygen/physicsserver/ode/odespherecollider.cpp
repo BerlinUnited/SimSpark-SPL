@@ -26,8 +26,6 @@ using namespace salt;
 
 ODESphereCollider::ODESphereCollider() : ODEConvexCollider()
 {
-    mODEGeom = 0;
-    mGeomID = 0;
 }
 
 void ODESphereCollider::SetRadius(float r)
@@ -40,18 +38,14 @@ float ODESphereCollider::GetRadius() const
     return dGeomSphereGetRadius(mODEGeom);
 }
 
-void ODESphereCollider::CreateSphere()
+long ODESphereCollider::CreateSphere()
 {
     mODEGeom = dCreateSphere(0, 1.0f);
-    mGeomID = (long) mODEGeom;
+    return (long) mODEGeom;
 }
 
 float ODESphereCollider::GetPointDepth(const Vector3f& pos)
 {
   return dGeomSpherePointDepth
     (mODEGeom,pos[0],pos[1],pos[2]);
-}
-
-long ODESphereCollider::GetGeomID(){
-    return mGeomID;
 }

@@ -286,7 +286,7 @@ protected:
 
 protected:
     /** the ID of the managed joint */
-    dJointID mODEJoint;
+    long mJointID;
 
     /** the allocated joint feedback structure */
     boost::shared_ptr<dJointFeedback> mFeedback;

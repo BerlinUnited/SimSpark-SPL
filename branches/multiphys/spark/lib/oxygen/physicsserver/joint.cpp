@@ -28,7 +28,7 @@ using namespace std;
 using namespace salt;
 
 Joint::Joint() : 
-PhysicsObject(), mODEJoint(0), 
+PhysicsObject(), mJointID(0), 
 mJointMaxSpeed1(0), mJointMaxSpeed2(0), 
 mIsLimitJointMaxSpeed1(false), mIsLimitJointMaxSpeed2(false)
 {
@@ -41,12 +41,12 @@ Joint::~Joint()
 
 void Joint::OnLink()
 {
-    if (mODEJoint == 0)
+    if (mJointID == 0)
         {
             return;
         }
 
-    dJointSetData(mODEJoint, this);
+    dJointSetData( (dJointID) mJointID, this);
 }
 
 shared_ptr<Joint> Joint::GetJoint(long jointID)
@@ -82,7 +82,7 @@ shared_ptr<Joint> Joint::GetJoint(long jointID)
 
 void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
 {
-    if (mODEJoint == 0)
+    if (mJointID == 0)
         {
             GetLog()->Error()
                 << "(Joint) ERROR: Attach called with uninitialized ODE joint\n";
@@ -117,7 +117,7 @@ void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
     GetLog()->Debug() << "(Joint) Attaching '" << path1 << "' to '"
                       << path2 << '\n';
 
-    dJointAttach(mODEJoint, (dBodyID) id1, (dBodyID) id2);
+    dJointAttach( (dJointID) mJointID, (dBodyID) id1, (dBodyID) id2);
 }
 
 shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
@@ -162,12 +162,12 @@ void Joint::Attach(const std::string& path1, const std::string& path2)
 
 int Joint::GetType() const
 {
-    return dJointGetType(mODEJoint);
+    return dJointGetType( (dJointID) mJointID);
 }
 
 boost::shared_ptr<RigidBody> Joint::GetBody(EBodyIndex idx)
 {
-    long bodyID = (long) dJointGetBody(mODEJoint, idx);
+    long bodyID = (long) dJointGetBody( (dJointID) mJointID, idx);
     return RigidBody::GetBody(bodyID);
 }
 
@@ -227,12 +227,12 @@ void Joint::EnableFeedback(bool enable)
                     }
             }
 
-    dJointSetFeedback(mODEJoint,mFeedback.get());
+    dJointSetFeedback( (dJointID) mJointID,mFeedback.get());
 }
 
 bool Joint::FeedBackEnabled() const
 {
-    return (dJointGetFeedback(mODEJoint) != 0);
+    return (dJointGetFeedback( (dJointID) mJointID) != 0);
 }
 
 Vector3f Joint::GetFeedbackForce(EBodyIndex idx) const
@@ -436,14 +436,14 @@ float Joint::GetMaxMotorForce(EAxisIndex idx) const
 
 void Joint::DestroyPhysicsObject()
 {
-    if (! mODEJoint)
+    if (!mJointID)
         {
             return;
         }
 
     EnableFeedback(false);
-    dJointDestroy(mODEJoint);
-    mODEJoint = 0;
+    dJointDestroy( (dJointID) mJointID);
+    mJointID = 0;
 }
 
 void Joint::SetJointMaxSpeed1(float rad)

@@ -37,8 +37,7 @@ public:
     virtual void SetAnchor(const salt::Vector3f& anchor) = 0;
     virtual salt::Vector3f GetAnchor1() = 0;
     virtual salt::Vector3f GetAnchor2() = 0;
-    virtual void CreateBallJoint(long world) =  0;
-    virtual long GetJointID() = 0;
+    virtual long CreateBallJoint(long world) =  0;
 };
 
 } //namespace oxygen

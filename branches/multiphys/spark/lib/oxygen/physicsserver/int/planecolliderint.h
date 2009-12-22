@@ -36,9 +36,7 @@ public:
     virtual void SetPlaneParams(float a, float b, float c, float d) = 0;
     virtual void SetParams(const salt::Vector3f& pos, salt::Vector3f normal) = 0;
     virtual float GetPointDepth(const salt::Vector3f& pos) = 0;
-    
-    virtual long GetGeomID() = 0;
-    virtual void CreatePlane() = 0;
+    virtual long CreatePlane() = 0;
 };
 
 } //namespace oxygen
