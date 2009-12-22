@@ -41,9 +41,8 @@ void SliderJoint::OnLink()
         {
             return;
         }
-
-    mSliderJointImp->CreateSliderJoint(world); 
-    mODEJoint = (dJointID) mSliderJointImp->GetJointID();
+ 
+    mJointID = mSliderJointImp->CreateSliderJoint(world);
 }
 
 void SliderJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)

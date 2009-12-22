@@ -33,13 +33,12 @@ class RigidBody;
 class OXYGEN_API SliderJointInt
 {
 public:
-    virtual void CreateSliderJoint(long world) = 0;
+    virtual long CreateSliderJoint(long world) = 0;
     virtual float GetPosition() = 0;
     virtual float GetPositionRate() = 0;
     virtual void SetSliderAxis(salt::Vector3f& up) = 0;
     virtual void SetParameter(int parameter, float value) = 0;
     virtual float GetParameter(int parameter) const = 0;
-    virtual long GetJointID() = 0;
 };
 
 } //namespace oxygen

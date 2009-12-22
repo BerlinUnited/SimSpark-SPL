@@ -38,8 +38,7 @@ bool TransformCollider::ConstructInternal()
             return false;
         }
 
-    mTransformColliderImp->CreateTransformCollider();
-    mGeomID = mTransformColliderImp->GetGeomID();
+    mGeomID = mTransformColliderImp->CreateTransformCollider();
 
     if (mGeomID == 0)
         {

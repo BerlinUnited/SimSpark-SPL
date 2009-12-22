@@ -24,20 +24,16 @@
 
 using namespace oxygen;
 
-ODETransformCollider::ODETransformCollider() : ODECollider(){
-
+ODETransformCollider::ODETransformCollider() : ODECollider()
+{
 }
 
-void ODETransformCollider::CreateTransformCollider(){
+long ODETransformCollider::CreateTransformCollider(){
     mODEGeom = dCreateGeomTransform(0);
-    mGeomID = (long) mODEGeom;
+    return (long) mODEGeom;
 }
 
 void ODETransformCollider::SetColliderParameters(int cleanup, int info){
     dGeomTransformSetCleanup(mODEGeom, cleanup);
     dGeomTransformSetInfo(mODEGeom, info);
-}
-
-long ODETransformCollider::GetGeomID(){
-    return mGeomID;
 }

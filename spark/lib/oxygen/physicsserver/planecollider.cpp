@@ -54,10 +54,9 @@ bool PlaneCollider::ConstructInternal()
         }
 
     //create default plane
-    mPlaneColliderImp->CreatePlane();
-    mGeomID = mPlaneColliderImp->GetGeomID();
+    mGeomID = mPlaneColliderImp->CreatePlane();
 
-    return (mPlaneColliderImp->GetGeomID() != 0);
+    return (mGeomID != 0);
 }
 
 void PlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal)

@@ -67,8 +67,7 @@ bool CapsuleCollider::ConstructInternal()
         return false;
     }
 
-    mCapsuleColliderImp->CreateCapsule();
-    mGeomID = mCapsuleColliderImp->GetGeomID();
+    mGeomID = mCapsuleColliderImp->CreateCapsule();
 
     return (mGeomID != 0);
 }

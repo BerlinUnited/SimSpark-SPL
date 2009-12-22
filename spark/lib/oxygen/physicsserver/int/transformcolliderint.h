@@ -35,9 +35,8 @@ class OXYGEN_API TransformColliderInt
 {
 
 public:    
-    virtual void CreateTransformCollider() = 0;
+    virtual long CreateTransformCollider() = 0;
     virtual void SetColliderParameters(int cleanup, int info) = 0;
-    virtual long GetGeomID() = 0;
 };
 
 } //namespace oxygen

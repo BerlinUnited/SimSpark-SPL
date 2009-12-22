@@ -36,9 +36,7 @@ public:
     void SetRadius(float r);
     float GetRadius() const;
     float GetPointDepth(const salt::Vector3f& pos);
-    void CreateSphere(); 
-    
-    long GetGeomID();
+    long CreateSphere();
 };
 
 } //namespace oxygen

@@ -43,8 +43,7 @@ void UniversalJoint::OnLink()
         return;
     }
 
-    mUniversalJointImp->CreateUniversalJoint(world);
-    mODEJoint = (dJointID) mUniversalJointImp->GetJointID();
+    mJointID = mUniversalJointImp->CreateUniversalJoint(world);
 }
 
 void UniversalJoint::SetAnchor(const Vector3f& anchor)

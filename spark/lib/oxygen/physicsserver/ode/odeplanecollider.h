@@ -37,9 +37,7 @@ public:
     void SetPlaneParams(float a, float b, float c, float d);
     void SetParams(const salt::Vector3f& pos, salt::Vector3f normal);
     float GetPointDepth(const salt::Vector3f& pos);
-    
-    long GetGeomID();
-    void CreatePlane();
+    long CreatePlane();
 };
 
 } //namespace oxygen

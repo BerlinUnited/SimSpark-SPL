@@ -40,7 +40,7 @@ public:
     void UseGravity(bool f);
     bool UsesGravity() const;
     void SetMass(float mass);
-    void SetMassParameters(const float& mass);
+    void SetMassParameters(const GenericMass& mass);
     float GetMass() const;
     void SetSphere(float density, float radius);
     void AddSphere(float density, float radius, const salt::Matrix& matrix);
@@ -83,11 +83,13 @@ public:
     void SetMassTransformed(bool f);
     
 protected:
+    /**These methods are only called internally.
+    */
     void AddMass(const dMass& mass, const salt::Matrix& matrix);
     
     /** creates an ODE body within the given world
     */ 
-    void CreateBody(long world);
+    long CreateBody(long world);
     
     /** sets up an ode mass struct representing a box of the given
         size and total_mass
@@ -142,12 +144,6 @@ protected:
         is oriented along the body's z axis.
     */
     void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const;
-    
-private:
-    /** An ODE-specific body ID. This is used internally to call ODE-
-        specific methods that manipulate this body.
-    */
-    dBodyID mODEBody;
 };
 
 } //namespace oxygen

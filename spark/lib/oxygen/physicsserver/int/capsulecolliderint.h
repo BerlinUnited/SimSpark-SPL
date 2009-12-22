@@ -39,9 +39,7 @@ public:
     virtual float GetRadius() = 0;
     virtual float GetLength() = 0;
     virtual float GetPointDepth(const salt::Vector3f& pos) = 0;
-    
-    virtual long GetGeomID() = 0;
-    virtual void CreateCapsule() = 0;
+    virtual long CreateCapsule() = 0;
 };
 
 } //namespace oxygen

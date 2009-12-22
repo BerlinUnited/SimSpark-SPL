@@ -613,3 +613,6 @@ importBundle "gyrorateperceptor"
 
 #
 importBundle "collisionperceptor"
+
+#
+importBundle "accelerometer"

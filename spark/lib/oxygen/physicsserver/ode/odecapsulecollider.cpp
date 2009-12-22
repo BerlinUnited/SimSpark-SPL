@@ -67,18 +67,14 @@ float ODECapsuleCollider::GetLength()
     return length;
 }
 
-void ODECapsuleCollider::CreateCapsule()
+long ODECapsuleCollider::CreateCapsule()
 {
     mODEGeom = dCreateCapsule(0, 1.0f, 1.0f);
-    mGeomID = (long) mODEGeom;
+    return (long) mODEGeom;
 }
 
 float ODECapsuleCollider::GetPointDepth(const Vector3f& pos)
 {
     return dGeomCapsulePointDepth
         (mODEGeom,pos[0],pos[1],pos[2]);
-}
-
-long ODECapsuleCollider::GetGeomID(){
-    return mGeomID;
 }

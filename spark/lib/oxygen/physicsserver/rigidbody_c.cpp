@@ -101,7 +101,7 @@ FUNCTION(RigidBody,setMassParameters)
                 }
         }
 
-    float& massRef = (float&) mass;
+    GenericMass& massRef = (GenericMass&) mass;
     obj->SetMassParameters(massRef);
     return true;
 }

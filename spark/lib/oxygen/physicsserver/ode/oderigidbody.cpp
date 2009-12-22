@@ -32,15 +32,10 @@ using namespace boost;
 using namespace salt;
 using namespace std;
 
-ODERigidBody::ODERigidBody() : ODEBody(), mODEBody(0){
-    mBodyID = 0;
+ODERigidBody::ODERigidBody() : ODEBody(){
     mMassTrans = Vector3f(0,0,0);
     mMassTransformed = false;
 }
-
-long ODERigidBody::GetBodyID(){
-    return mBodyID;
-}  
 
 salt::Vector3f ODERigidBody::GetMassTrans(){
     return mMassTrans;
@@ -91,21 +86,21 @@ bool ODERigidBody::UsesGravity() const{
     return (dBodyGetGravityMode(mODEBody) != 0);
 }
 
-void ODERigidBody::CreateBody(long world)
+long ODERigidBody::CreateBody(long world)
 {
     // create the managed body
     mODEBody = dBodyCreate((dWorldID) world);
-    mBodyID = (long) mODEBody; 
+   return (long) mODEBody; 
 }
 
 void ODERigidBody::DestroyPhysicsObject(){
-    if (mBodyID == 0)
+    if (mODEBody == 0)
         {
             return;
         }
 
     dBodyDestroy(mODEBody);
-    mBodyID = 0;
+    mODEBody = 0;
 }
 
 void ODERigidBody::BodySetData(RigidBody* rb)
@@ -164,7 +159,7 @@ void ODERigidBody::AddMass(const dMass& ODEMass, const Matrix& matrix)
     mMassTransformed = true;
 }
 
-void ODERigidBody::SetMassParameters(const float& mass)
+void ODERigidBody::SetMassParameters(const GenericMass& mass)
 {
     dMass& ODEMass = (dMass&) mass;
     dBodySetMass(mODEBody, &ODEMass);
@@ -365,10 +360,9 @@ salt::Matrix ODERigidBody::GetRotation() const
 Vector3f ODERigidBody::GetLocalAngularVelocity() const
 {
     const dReal* vel = dBodyGetAngularVel(mODEBody);
-    Vector3f w;
-    dReal* wData = (dReal*) w.GetData();
-    dBodyVectorFromWorld(mODEBody, vel[0], vel[1], vel[2], wData);
-    return w;
+    dReal w[3];
+    dBodyVectorFromWorld(mODEBody, vel[0], vel[1], vel[2], w);
+    return Vector3f(w[0], w[1], w[2]);
 }
 
 Vector3f ODERigidBody::GetAngularVelocity() const

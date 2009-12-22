@@ -42,9 +42,7 @@ public:
     float GetRadius();
     float GetLength();
     float GetPointDepth(const salt::Vector3f& pos);
-    
-    long GetGeomID();
-    void CreateCapsule();
+    long CreateCapsule();
 };
 
 } //namespace oxygen

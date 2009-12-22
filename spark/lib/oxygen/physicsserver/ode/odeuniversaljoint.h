@@ -34,7 +34,7 @@ class OXYGEN_API ODEUniversalJoint : public UniversalJointInt, public ODEGeneric
 
 public:
     ODEUniversalJoint();
-    void CreateUniversalJoint(long world);
+    long CreateUniversalJoint(long world);
     void SetAnchor(const salt::Vector3f& anchor);
     salt::Vector3f GetAnchor1();
     salt::Vector3f GetAnchor2();
@@ -48,7 +48,6 @@ public:
     float GetAngleRate2() const;
     void SetParameter(int parameter, float value);
     float GetParameter(int parameter) const; 
-    long GetJointID();
 };
 
 } //namespace oxygen

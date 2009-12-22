@@ -44,7 +44,6 @@ public:
     bool Intersect(boost::shared_ptr<Collider> collider, long geomID);
     long GetParentSpaceID(long geomID);
     void DestroyGeom(long GeomID);
-    long GetGeomID();
     void TransformSetGeom(long parentGeomID, long geomID);
     void SetSpace(long spaceID, long geomID, Collider* collider);
     void SetBody(long bodyID, long geomID);

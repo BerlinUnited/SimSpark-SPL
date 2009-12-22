@@ -37,7 +37,6 @@ using namespace std;
 
 ODECollider::ODECollider() : ODEPhysicsObject(), mODEGeom(0)
 {
-    mGeomID = 0;
 }
 
 ODECollider::~ODECollider()
@@ -97,11 +96,6 @@ void ODECollider::DestroyGeom(long geomID)
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomDestroy(ODEGeom);
     mODEGeom = 0;
-    mGeomID = 0;
-}
-
-long ODECollider::GetGeomID(){
-    return mGeomID;
 }
 
 void ODECollider::TransformSetGeom(long parentGeomID, long geomID){

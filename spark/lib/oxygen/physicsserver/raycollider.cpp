@@ -43,8 +43,7 @@ bool RayCollider::ConstructInternal()
     }
 
     // create a unit ray
-    mRayColliderImp->CreateRay();
-    mGeomID = mRayColliderImp->GetGeomID();
+    mGeomID = mRayColliderImp->CreateRay();
 
-    return (mRayColliderImp->GetGeomID() != 0);
+    return (mGeomID != 0);
 }
