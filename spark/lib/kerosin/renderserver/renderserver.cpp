@@ -98,6 +98,9 @@ RenderServer::Render()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
+    glAlphaFunc(GL_GREATER, 0.1);
+    glEnable(GL_ALPHA_TEST);
+    
     TLeafList lights;
     mActiveScene->ListChildrenSupportingClass<Light>(lights,true);
 
