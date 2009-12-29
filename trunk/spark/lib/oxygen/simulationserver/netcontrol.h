@@ -124,6 +124,11 @@ public:
     static boost::shared_ptr<rcss::net::Socket>
     CreateSocket(ESocketType type);
 
+    /** if set true, ReadMessages call will not return immediately if there
+     * is no messages to read and it'll wait a little for incomming messages
+     */
+    void BlockOnReadMessages(bool block);
+
 protected:
     /** returns a human readable description of the socket type and
         port*/
@@ -198,6 +203,9 @@ protected:
 
     /** the next available unique client id */
     int mClientId;
+
+    /** indicates how much ReadMessages should wait for new messages */
+    int mReadTimeout;
 };
 
 DECLARE_CLASS(NetControl);

@@ -10,6 +10,7 @@ if (APPLE AND USE_COREFOUNDATION)
 endif (APPLE AND USE_COREFOUNDATION) 
 
 add_subdirectory(accelerometer)
+add_subdirectory(agentsynceffector)
 add_subdirectory(filesystemstd)
 add_subdirectory(filesystemzip)
 add_subdirectory(forceeffector)
