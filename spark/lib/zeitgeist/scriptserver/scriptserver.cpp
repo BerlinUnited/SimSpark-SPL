@@ -445,6 +445,18 @@ ScriptServer::GetContext() const
 }
 
 bool
+ScriptServer::SetupDotDir()
+{
+    string dotDir;
+    if (GetDotDirName(dotDir) && CreateDotDir(dotDir))
+    {
+        GetFile()->AddResourceLocation(dotDir);
+        return true;
+    }
+    return false;
+}
+
+bool
 ScriptServer::ConstructInternal()
 {
     if (! Leaf::ConstructInternal())

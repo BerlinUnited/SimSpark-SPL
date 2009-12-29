@@ -72,6 +72,7 @@ void Zeitgeist::RunInitScript(string dotName)
 
     // setup the dot directory in the script server
     mCore->GetScriptServer()->SetDotName(dotName);
+    mCore->GetScriptServer()->SetupDotDir();
 
     // run the zeitgeist init script
     mCore->GetScriptServer()->RunInitScript

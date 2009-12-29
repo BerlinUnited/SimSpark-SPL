@@ -43,6 +43,7 @@ NetControl::NetControl() : SimControlNode()
     mSocketType = ST_TCP;
     mLocalAddr  = Addr(INADDR_ANY, INADDR_ANY);
     mClientId   = 1;
+    mReadTimeout = 0;
 }
 
 NetControl::~NetControl()
@@ -512,7 +513,7 @@ void NetControl::ReadUDPMessages()
     FD_SET(fd,&readfds);
 
     timeval time;
-    time.tv_sec = 0;
+    time.tv_sec = mReadTimeout;
     time.tv_usec = 0;
 
     for(;;)
@@ -525,6 +526,7 @@ void NetControl::ReadUDPMessages()
 #endif
 
             int ret = select(maxFd, &readfds, 0, 0, &time);
+            time.tv_sec = 0;
 
             if (ret == 0)
                 {
@@ -596,14 +598,16 @@ void NetControl::ReadTCPMessages()
         }
 
     // test for pending fragments
+    int timeout = mReadTimeout;
     for(;;)
         {
             timeval time;
-            time.tv_sec = 0;
+            time.tv_sec = timeout;
             time.tv_usec = 0;
 
             fd_set test_fds = client_fds;
             int ret = select(maxFd+1, &test_fds, 0, 0, &time);
+            timeout = 0;
 
             if (ret == 0)
                 {
@@ -659,4 +663,16 @@ void NetControl::ReadTCPMessages()
                             }
                 }
         }
+}
+
+void NetControl::BlockOnReadMessages(bool block)
+{
+    if (block)
+    {
+        mReadTimeout = 1;
+    }
+    else
+    {
+        mReadTimeout = 0;
+    }
 }

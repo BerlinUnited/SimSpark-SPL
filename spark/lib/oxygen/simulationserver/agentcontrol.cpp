@@ -20,6 +20,7 @@
 #include "agentcontrol.h"
 #include "simulationserver.h"
 #include "netmessage.h"
+#include <set>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/agentaspect/agentaspect.h>
 
@@ -28,7 +29,7 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-AgentControl::AgentControl() : NetControl()
+AgentControl::AgentControl() : NetControl(), mSyncMode(false)
 {
     mLocalAddr.setPort(3100);
 }
@@ -77,57 +78,60 @@ void AgentControl::ClientDisconnect(shared_ptr<Client> client)
 
 void AgentControl::StartCycle()
 {
-    NetControl::StartCycle();
+    do
+    {
+        NetControl::StartCycle();
 
-    if (
-        (mGameControlServer.get() == 0) ||
-        (mNetMessage.get() == 0)
-        )
-        {
-            return;
-        }
+        if (
+            (mGameControlServer.get() == 0) ||
+            (mNetMessage.get() == 0)
+            )
+            {
+                return;
+            }
 
-    // pass all received messages on to the GameControlServer
-    for (
-         TBufferMap::iterator iter = mBuffers.begin();
-         iter != mBuffers.end();
-         ++iter
-         )
-        {
-            shared_ptr<NetBuffer>& netBuff = (*iter).second;
-            if (
-                (netBuff.get() == 0) ||
-                (netBuff->IsEmpty())
-                )
-                {
-                    continue;
-                }
+        // pass all received messages on to the GameControlServer
+        for (
+             TBufferMap::iterator iter = mBuffers.begin();
+             iter != mBuffers.end();
+             ++iter
+             )
+            {
+                shared_ptr<NetBuffer>& netBuff = (*iter).second;
+                if (
+                    (netBuff.get() == 0) ||
+                    (netBuff->IsEmpty())
+                    )
+                    {
+                        continue;
+                    }
 
-            // lookup the client entry corresponding for the buffer
-            // entry
-            TAddrMap::iterator clientIter = mClients.find(netBuff->GetAddr());
-            if (clientIter == mClients.end())
-                {
-                    continue;
-                }
-            shared_ptr<Client>& client = (*clientIter).second;
+                // lookup the client entry corresponding for the buffer
+                // entry
+                TAddrMap::iterator clientIter = mClients.find(netBuff->GetAddr());
+                if (clientIter == mClients.end())
+                    {
+                        continue;
+                    }
+                shared_ptr<Client>& client = (*clientIter).second;
 
-            // lookup the AgentAspect node correspoding to the client
-            shared_ptr<AgentAspect> agent =
-                mGameControlServer->GetAgentAspect(client->id);
-            if (agent.get() == 0)
-                {
-                    continue;
-                }
+                // lookup the AgentAspect node correspoding to the client
+                shared_ptr<AgentAspect> agent =
+                    mGameControlServer->GetAgentAspect(client->id);
+                if (agent.get() == 0)
+                    {
+                        continue;
+                    }
 
-            // parse and immediately realize the action
-            string message;
-            while (mNetMessage->Extract(netBuff,message))
-                {
-                    agent->RealizeActions
-                        (mGameControlServer->Parse(client->id,message));
-                }
-        }
+                // parse and immediately realize the action
+                string message;
+                while (mNetMessage->Extract(netBuff,message))
+                    {
+                        agent->RealizeActions
+                            (mGameControlServer->Parse(client->id,message));
+                    }
+            }
+    } while (!AgentsAreSynced());
 }
 
 void AgentControl::SenseAgent()
@@ -184,6 +188,10 @@ void AgentControl::EndCycle()
                 {
                     continue;
                 }
+            if (mSyncMode)
+                {
+                    agent->SetSynced(false);
+                }
 
             shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
             mClientSenses[client->id] = parser->Generate(senseList);
@@ -194,4 +202,48 @@ void AgentControl::EndCycle()
 
             mNetMessage->PrepareToSend(mClientSenses[client->id]);
         }
+}
+
+void AgentControl::SetSyncMode(bool syncMode)
+{
+    mSyncMode = syncMode;
+    if (mSyncMode)
+    {
+        BlockOnReadMessages(true);
+        GetLog()->Normal()
+            << "(AgentControl) Running in sync mode.\n";
+    }
+    else
+    {
+        BlockOnReadMessages(false);
+        GetLog()->Normal()
+            << "(AgentControl) Running in normal mode.\n";
+    }
+}
+
+bool AgentControl::AgentsAreSynced()
+{
+    if (mSyncMode)
+        {
+            set<rcss::net::Addr> closedClients(mCloseClients.begin(),
+                mCloseClients.end());
+
+            for (
+                 TAddrMap::const_iterator iter = mClients.begin();
+                 iter != mClients.end();
+                 ++iter
+                 )
+                {
+                    if (closedClients.find(iter->first) != closedClients.end())
+                        continue;
+
+                    shared_ptr<AgentAspect> agent =
+                        mGameControlServer->GetAgentAspect(iter->second->id);
+                    if (agent && !agent->IsSynced())
+                    {
+                        return false;
+                    }
+                }
+        }
+    return true;
 }
