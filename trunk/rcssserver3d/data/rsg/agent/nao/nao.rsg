@@ -85,6 +85,8 @@
     ;        (setStaticSenseAxis false)
     ;        (addNoise false))
 
+        (nd AgentSyncEffector)
+
     );end of AgentAspect
     
     
