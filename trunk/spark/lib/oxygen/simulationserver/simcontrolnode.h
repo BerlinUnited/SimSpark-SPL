@@ -84,8 +84,6 @@ protected:
     float mTime;
 
     float mStep;
-
-    boost::condition mCond;
 };
 
 DECLARE_CLASS(SimControlNode);
