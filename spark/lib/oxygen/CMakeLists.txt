@@ -71,6 +71,8 @@ set(oxygen_LIB_HDRS
     monitorserver/monitoritem.h
     monitorserver/custommonitor.h
     monitorserver/monitorcmdparser.h
+    proxyserver/agentproxy.h
+    proxyserver/proxyserver.h
 )
 if(SPADES_FOUND)
    set(oxygen_LIB_HDRS
@@ -204,6 +206,10 @@ set(oxygen_LIB_SRCS
     monitorserver/custommonitor_c.cpp
     monitorserver/monitorcmdparser.cpp
     monitorserver/monitorcmdparser_c.cpp
+    proxyserver/agentproxy.cpp
+    proxyserver/agentproxy_c.cpp
+    proxyserver/proxyserver.cpp
+    proxyserver/proxyserver_c.cpp
 )
 if(SPADES_FOUND)
    set(oxygen_LIB_SRCS

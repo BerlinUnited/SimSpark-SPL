@@ -21,6 +21,8 @@
 #include "zeitgeist.h"
 #include <iostream>
 #include <sstream>
+#include <salt/fileclasses.h>
+#include "fileserver/fileserver.h"
 
 using namespace std;
 using namespace zeitgeist;
@@ -73,6 +75,7 @@ void Zeitgeist::RunInitScript(string dotName)
     // setup the dot directory in the script server
     mCore->GetScriptServer()->SetDotName(dotName);
     mCore->GetScriptServer()->SetupDotDir();
+    mCore->GetFileServer()->AddResourceLocation(salt::RFile::BundlePath());
 
     // run the zeitgeist init script
     mCore->GetScriptServer()->RunInitScript

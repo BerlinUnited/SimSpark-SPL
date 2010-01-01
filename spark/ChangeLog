@@ -1,3 +1,27 @@
+2010-01-01  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/proxyserver/proxyserver.h: 
+	* lib/oxygen/proxyserver/proxyserver.cpp: 
+	* lib/oxygen/proxyserver/proxyserver_c.cpp: 
+	* lib/oxygen/proxyserver/agentproxy.h: 
+	* lib/oxygen/proxyserver/agentproxy.cpp: 
+	* lib/oxygen/proxyserver/agentproxy_c.cpp:
+	- starting the proxy server implementation  
+
+2009-12-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/netmessage.cpp: 
+	- payload length is now always 32bit on all platforms, to make the 
+	  protocol platform independent (fixed 32bit/64bit compatibility issue)
+	
+	* lib/zeitgeist/fileserver/fileserver.cpp: 
+	* lib/zeitgeist/zeitgeist.cpp (Zeitgeist::RunInitScript):
+	- add ~/.simspark as the first resource location, so that it is the first
+	  address examined after the current directory
+	 
+	* lib/oxygen/simulationserver/simcontrolnode.h:
+	- remove unused mCond member variable 
+
 2009-12-29  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/zeitgeist/zeitgeist.cpp (Zeitgeist::RunInitScript): 

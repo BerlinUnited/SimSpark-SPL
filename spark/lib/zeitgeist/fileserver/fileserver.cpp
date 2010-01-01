@@ -31,7 +31,6 @@ using namespace std;
 
 FileServer::FileServer() : Node(), mNextHandle(1)
 {
-    mResourceLocations.push_back(salt::RFile::BundlePath());
 }
 
 FileServer::~FileServer()
