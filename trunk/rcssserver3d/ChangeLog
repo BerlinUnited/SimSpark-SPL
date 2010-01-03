@@ -1,3 +1,16 @@
+2010-01-03  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/models/leftgoal.obj:
+	* data/models/rightgoal.obj:
+	* data/rsg/agent/nao/goal.rsg: 
+	- Fix visual goal object so that it'll follow server dimensions (GoalWidth,
+	  GoalHeight and GoalDepth)
+
+2009-12-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssmonitor3d/main.cpp: 
+	- changed the name printed on execution
+
 2009-12-29  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* data/rsg/agent/nao/nao.rsg: 
