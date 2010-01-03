@@ -65,7 +65,7 @@ public:
 void MonitorSpark::PrintGreeting()
 {
     GetLog()->Normal()
-        << "monitorspark, 0.1\n"
+        << "rcssmonitor3d, 0.2\n"
         << "Koblenz University.\n"
         << "Copyright (C) 2004, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
@@ -75,7 +75,7 @@ void MonitorSpark::PrintGreeting()
 void MonitorSpark::PrintHelp()
 {
     GetLog()->Normal()
-        << "\nusage: monitorspark [options]\n"
+        << "\nusage: rcssmonitor3d [options]\n"
          << "\noptions:\n"
          << " --help\t print this message.\n"
          << " --logfile\t logfilename\t plays the log file.\n"
