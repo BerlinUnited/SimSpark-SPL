@@ -53,14 +53,28 @@ public:
     /** generates sense updates for all connected agents */
     virtual void EndCycle();
 
+    /** sets the AgentControl's sync mode */
+    void SetSyncMode(bool syncMode);
+
 protected:
     virtual void OnLink();
+
+    /** returns if the agents are synced with the srever */
+    bool AgentsAreSynced();
 
 protected:
     /** cached reference to the GameControlServer */
     CachedPath<GameControlServer> mGameControlServer;
 
+    /** stores sense information to be sent to the clients after receiving
+     * their commands
+     */
     std::vector<std::string> mClientSenses;
+
+    /** indicates if we should wait for the agents to let the simulation
+     * proceed to the next cycle
+     */
+    bool mSyncMode;
 };
 
 DECLARE_CLASS(AgentControl);

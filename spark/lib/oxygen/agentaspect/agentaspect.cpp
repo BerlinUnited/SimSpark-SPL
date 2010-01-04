@@ -27,7 +27,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace std;
 
-AgentAspect::AgentAspect() : Transform()
+AgentAspect::AgentAspect() : Transform(), mIsSynced(true)
 {
     SetName("agentAspect");
     mID = -1;
@@ -167,4 +167,9 @@ AgentAspect::Init(const string& createEffector, int id)
             }
 
     return added;
+}
+
+bool AgentAspect::IsSynced() const
+{
+    return mIsSynced || mPerceptorCycle < 5;
 }

@@ -68,6 +68,12 @@ public:
     //! @return the unique ID for the agent aspect
     inline int ID() const { return mID; }
 
+    /** @return if the agent is in sync with the server in Sync mode*/
+    bool IsSynced() const;
+
+    /** sets the synchronization status of the agent */
+    void SetSynced(bool synced) { mIsSynced = synced; }
+
 protected:
     typedef std::map<std::string, boost::shared_ptr<Effector> > TEffectorMap;
 
@@ -76,9 +82,12 @@ protected:
 
 private:
     int mID;
+
     /** indicates how many times the QueryPerceptors be called */
     unsigned int mPerceptorCycle;
 
+    /** show if the agent is in sync with the server (in Sync mode) */
+    bool mIsSynced;
 };
 
 DECLARE_CLASS(AgentAspect);

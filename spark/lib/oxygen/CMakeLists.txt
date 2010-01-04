@@ -122,6 +122,8 @@ set(oxygen_LIB_HDRS
     physicsserver/ode/odeworld.h
     physicsserver/ode/odewrapper.h
     
+    #proxyserver/agentproxy.h
+    #proxyserver/proxyserver.h
     sceneserver/sceneimporter.h
     sceneserver/basenode.h
     sceneserver/fpscontroller.h
@@ -291,6 +293,10 @@ set(oxygen_LIB_SRCS
     physicsserver/ode/odeuniversaljoint.cpp
     physicsserver/ode/odeworld.cpp
     
+    #proxyserver/agentproxy.cpp
+    #proxyserver/proxyserver.cpp
+    #proxyserver/agentproxy_c.cpp
+    #proxyserver/proxyserver_c.cpp
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp
     sceneserver/fpscontroller.cpp

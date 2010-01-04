@@ -1,3 +1,31 @@
+2010-01-03  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/models/leftgoal.obj:
+	* data/models/rightgoal.obj:
+	* data/rsg/agent/nao/goal.rsg: 
+	- Fix visual goal object so that it'll follow server dimensions (GoalWidth,
+	  GoalHeight and GoalDepth)
+
+2009-12-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssmonitor3d/main.cpp: 
+	- changed the name printed on execution
+
+2009-12-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/rsg/agent/nao/nao.rsg: 
+	- added AgentSyncEffector
+	
+	* rcssmonitor3d/main.cpp:
+	- some cleanup 
+	- added a new option to specify the server address: --server
+
+2009-12-28  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* simspark/naosoccersim.rb: 
+	- added new field settings (field height/width, goal width/depth and penalty
+	  area width/length multiplied by 1.5
+
 2009-10-31  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* RELEASE: 
