@@ -1,8 +1,10 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+
    this file is part of rcssserver3D
-   Fri May 9 2003
-   Copyright (C) 2003 Koblenz University
-   $Id$
+   Thu Dec 31 2009
+   Copyright (C) 2002,2003 Koblenz University
+   Copyright (C) 2004-2009 RoboCup Soccer Server 3D Maintenance Group
+   $Id: agentproxy_c.cpp 132 2010-01-01 22:01:05Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,26 +19,12 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "agentcontrol.h"
+#include "agentproxy.h"
 
 using namespace oxygen;
 using namespace std;
 
-FUNCTION(AgentControl, setSyncMode)
+void CLASS(AgentProxy)::DefineClass()
 {
-    bool inSet;
-
-    if ((in.GetSize() != 1) || (!in.GetValue(in[0], inSet)))
-    {
-        return false;
-    }
-
-    obj->SetSyncMode(inSet);
-    return true;
-}
-
-void CLASS(AgentControl)::DefineClass()
-{
-    DEFINE_BASECLASS(oxygen/NetControl);
-    DEFINE_FUNCTION(setSyncMode);
+    DEFINE_BASECLASS(zeitgeist/Node);
 }

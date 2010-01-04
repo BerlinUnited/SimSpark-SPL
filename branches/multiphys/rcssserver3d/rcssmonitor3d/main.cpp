@@ -65,7 +65,7 @@ public:
 void MonitorSpark::PrintGreeting()
 {
     GetLog()->Normal()
-        << "monitorspark, 0.1\n"
+        << "rcssmonitor3d, 0.2\n"
         << "Koblenz University.\n"
         << "Copyright (C) 2004, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
@@ -75,30 +75,55 @@ void MonitorSpark::PrintGreeting()
 void MonitorSpark::PrintHelp()
 {
     GetLog()->Normal()
-        << "\nusage: monitorspark [options]\n"
+        << "\nusage: rcssmonitor3d [options]\n"
          << "\noptions:\n"
          << " --help\t print this message.\n"
          << " --logfile\t logfilename\t plays the log file.\n"
+         << " --server\t server_addr\t connects to the specified server.\n"
          << "\n";
 }
 
 bool MonitorSpark::ProcessCmdLine(int argc, char* argv[])
 {
-  for( int i = 0; i < argc; i++)
+    for (int i = 0; i < argc; i++)
     {
-      if( strcmp( argv[i], "--help" ) == 0 )
+        if (strcmp(argv[i], "--help") == 0)
         {
-          PrintHelp();
-          return false;
+            PrintHelp();
+            return false;
         }
-      else if( strcmp( argv[i], "--logfile" ) == 0 && (i+1 == argc) )
+        else if (strcmp(argv[i], "--logfile") == 0)
         {
-          PrintHelp();
-          return false;
+            if (i + 1 == argc)
+            {
+                PrintHelp();
+                return false;
+            }
+            else
+            {
+                string fileStr = string("$logPlayerFile = \"") + argv[i + 1]
+                        + "\"";
+                GetScriptServer()->Eval("$logPlayerMode = true");
+                GetScriptServer()->Eval(fileStr);
+            }
+        }
+        else if (strcmp(argv[i], "--server") == 0)
+        {
+            if (i + 1 == argc)
+            {
+                PrintHelp();
+                return false;
+            }
+            else
+            {
+                string serverIPStr = string("$monitorServer = \"")
+                        + argv[i + 1] + "\"";
+                GetScriptServer()->Eval(serverIPStr);
+            }
         }
     }
 
-  return true;
+    return true;
 }
 
 bool MonitorSpark::InitApp(int argc, char** argv)
@@ -114,19 +139,7 @@ bool MonitorSpark::InitApp(int argc, char** argv)
         }
 
     // run initialization scripts
-
-    if(argc == 3 && strcmp( argv[1], "--logfile" ) == 0)
-        {
-            GetScriptServer()->Eval("$logPlayerMode = true");
-
-            char fileStr[80];
-            strcpy(fileStr, "$logPlayerFile = \"");
-            strcat(fileStr, argv[2]);
-            strcat(fileStr, "\"");
-            GetScriptServer()->Eval(fileStr);
-        }
-
-     GetScriptServer()->Run("rcssmonitor3d.rb");
+    GetScriptServer()->Run("rcssmonitor3d.rb");
 
     // tell the inputControl node the loaction of our camera
     shared_ptr<InputControl> inputCtr = GetInputControl();

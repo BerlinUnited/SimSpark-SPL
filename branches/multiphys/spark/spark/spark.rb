@@ -19,6 +19,9 @@ $defaultInputSystem = 'InputSystemSDL'
 # the name of the default bundle that contains the default InputSystem
 $defaultInputSystemBundle = 'inputsdl'
 
+# if simulator should run in real time rather than simulation time
+$useRealTime = true
+
 # (OpenGL rendering)
 #
 
@@ -34,6 +37,7 @@ $defaultOpenGLBundle = 'openglsyssdl'
 $agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
+$agentSyncMode = false
 
 # (MonitorControl) constants
 #
@@ -294,6 +298,7 @@ def sparkSetupServer
   if (agentControl != nil)
     agentControl.setServerPort($agentPort)
     agentControl.setStep($agentStep)
+    agentControl.setSyncMode($agentSyncMode)
   end
 
   if ($agentType == 'udp')
@@ -401,6 +406,12 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
   if (simulationServer != nil)
     # add the input control node
     simulationServer.initControlNode('kerosin/InputControl','InputControl')
+  end
+
+  # set timing mode (real time vs simulation time)
+  inputControl = get($serverPath+'simulation/InputControl')
+  if (inputControl != nil)
+    inputControl.setAdvanceTime($useRealTime)
   end
 end
 
@@ -616,3 +627,5 @@ importBundle "collisionperceptor"
 
 #
 importBundle "accelerometer"
+
+importBundle "agentsynceffector"

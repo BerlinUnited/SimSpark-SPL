@@ -71,7 +71,7 @@
         )
 
         (nd GyroRatePerceptor (setName torso))
-        (nd Accelerometer (setName torso))
+	(nd Accelerometer (setName torso))
 
         ;(nd HMDPPerceptor)
         ;(nd HMDPEffector)
@@ -84,6 +84,8 @@
     ;        (setSenseMyPos false)
     ;        (setStaticSenseAxis false)
     ;        (addNoise false))
+
+        (nd AgentSyncEffector)
 
     );end of AgentAspect
     

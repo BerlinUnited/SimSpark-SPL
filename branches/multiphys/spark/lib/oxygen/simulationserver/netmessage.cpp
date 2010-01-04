@@ -19,6 +19,7 @@
 */
 #include "netmessage.h"
 #include "netbuffer.h"
+#include <boost/cstdint.hpp>
 #include <rcssnet/socket.hpp>
 
 #ifndef WIN32
@@ -44,8 +45,8 @@ NetMessage::~NetMessage()
 void NetMessage::PrepareToSend(std::string& msg)
 {
     // prefix the message with it's payload length
-    unsigned int len = htonl(static_cast<u_long>(msg.size()));
-    string prefix((const char*)&len,sizeof(unsigned int));
+    boost::uint32_t len = htonl(static_cast<u_long>(msg.size()));
+    string prefix((const char*) &len, sizeof(len));
     msg = prefix + msg;
 }
 
@@ -57,7 +58,7 @@ bool NetMessage::Extract(shared_ptr<NetBuffer> buffer, std::string& msg)
     }
 
     // a message is prefixed with it's payload length
-    const unsigned int preSz = sizeof(unsigned int);
+    const unsigned int preSz = sizeof(boost::uint32_t);
 
     string& data = buffer->GetData();
 
@@ -66,7 +67,8 @@ bool NetMessage::Extract(shared_ptr<NetBuffer> buffer, std::string& msg)
             return false;
         }
 
-    unsigned int msgLen = ntohl((*(unsigned int*)data.data()));
+    unsigned int msgLen =
+            ntohl((*reinterpret_cast<const boost::uint32_t*>(data.data())));
 
     if (data.size() < (msgLen + preSz))
         {

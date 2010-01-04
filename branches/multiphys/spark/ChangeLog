@@ -1,3 +1,70 @@
+2010-01-01  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/proxyserver/proxyserver.h: 
+	* lib/oxygen/proxyserver/proxyserver.cpp: 
+	* lib/oxygen/proxyserver/proxyserver_c.cpp: 
+	* lib/oxygen/proxyserver/agentproxy.h: 
+	* lib/oxygen/proxyserver/agentproxy.cpp: 
+	* lib/oxygen/proxyserver/agentproxy_c.cpp:
+	- starting the proxy server implementation  
+
+2009-12-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/netmessage.cpp: 
+	- payload length is now always 32bit on all platforms, to make the 
+	  protocol platform independent (fixed 32bit/64bit compatibility issue)
+	
+	* lib/zeitgeist/fileserver/fileserver.cpp: 
+	* lib/zeitgeist/zeitgeist.cpp (Zeitgeist::RunInitScript):
+	- add ~/.simspark as the first resource location, so that it is the first
+	  address examined after the current directory
+	 
+	* lib/oxygen/simulationserver/simcontrolnode.h:
+	- remove unused mCond member variable 
+
+2009-12-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/zeitgeist/zeitgeist.cpp (Zeitgeist::RunInitScript): 
+	- call SetupDotDir() so that ~/.simspark directory will be searched for
+	  resource files (e.g. scripts)
+	
+	* lib/zeitgeist/scriptserver/scriptserver.h:
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	- added SetupDotDir() function to create dot dir and add it to resource
+	  search locations
+	
+	* lib/oxygen/simulationserver/netcontrol.h: 
+	* lib/oxygen/simulationserver/netcontrol.cpp:
+	- added the option to block for awhile (1 second) in ReadMessages if no
+	  messages are available
+	 
+	* spark/spark.rb: 
+	- added new option useRealTime to select between running in real time and
+	  simulation time running modes
+	- added new option agentSyncMode which can be set to run in sync mode
+	- loading agentsynceffector module
+
+	* lib/oxygen/simulationserver/agentcontrol.h: 
+	* lib/oxygen/simulationserver/agentcontrol.cpp: 
+	* lib/oxygen/simulationserver/agentcontrol_c.cpp: 
+	- added "Sync mode" in which agentcontrol will block until all connected
+	  agents tell it to proceed
+	
+	* plugin/agentsynceffector/CMakeLists.txt: 
+	* plugin/agentsynceffector/export.cpp: 
+	* plugin/agentsynceffector/agentsynceffector.h: 
+	* plugin/agentsynceffector/agentsynceffector.cpp: 
+	* plugin/agentsynceffector/agentsynceffector_c.cpp: 
+	* plugin/CMakeLists.txt: 
+	- a new effector: AgentSyncEffector
+	
+	* lib/oxygen/agentaspect/agentaspect.h: 
+	* lib/oxygen/agentaspect/agentaspect.cpp: 
+	- added mIsSynced property to show if the agent is synced with the server
+	
+	* RELEASE: 
+	- some new release notes
+
 2009-10-31  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/simulationserver/simulationserver.h: 

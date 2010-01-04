@@ -144,6 +144,9 @@ public:
     /** returns the context, the ScriptServer operates in */
     boost::shared_ptr<CoreContext> GetContext() const;
 
+    /** creates dot directory and adds it to resource search paths */
+    bool SetupDotDir();
+
     /** constructs the ZeitgeistObject corresponding to a given
         leaf */
     static GCValue GetZeitgeistObject(boost::shared_ptr<Leaf> leaf);
