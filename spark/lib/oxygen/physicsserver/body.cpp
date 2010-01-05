@@ -24,7 +24,9 @@
 
 using namespace oxygen;
 
-Body::Body() : PhysicsObject(), mBodyID(0){
+Body::Body() : PhysicsObject(), mBodyID(0), mMassTransformed(false),
+                                            mMassTrans(0,0,0)
+{
     mBodyImp = boost::shared_ptr<ODEBody>(new ODEBody());
 }
 

@@ -141,6 +141,17 @@ point on the body to which the force applies and the force vector itself.
 	13.07))}
 \end{itemize}
 
+\subsubsection{Accelerometer}
+This perceptor measures the proper acceleration it experiences
+relative to free fall. As a consequence an accelerometer at rest
+relative to the Earth's surface will indicate approximately 1 g
+upwards. To obtain the acceleration due to motion with respect to the
+earth, this ``gravity offset" should be subtracted.
+\begin{itemize}
+	\item[Message format:] \texttt{(ACC (n <name>) (a <x> <y> <z>))}
+	\item[Example message:] \texttt{(ACC (n torso) (a 0.00 0.00 9.81))}
+\end{itemize}
+
 \subsection{Soccer Perceptors}
 \label{sec:soccerperceptors}
 

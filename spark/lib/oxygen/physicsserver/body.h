@@ -42,6 +42,8 @@ public:
 
 protected:
     long mBodyID;
+    bool mMassTransformed;
+    salt::Vector3f mMassTrans;
 
 private:
     boost::shared_ptr<BodyInt> mBodyImp;

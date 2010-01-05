@@ -33,52 +33,47 @@ class OXYGEN_API RigidBodyInt
 {
 
 public:
-    virtual void Enable() = 0;
-    virtual void Disable() = 0;
-    virtual bool IsEnabled() const = 0;
-    virtual void UseGravity(bool f) = 0;
-    virtual bool UsesGravity() const = 0;
-    virtual long CreateBody(long world) = 0;
-    virtual void SetMass(float mass) = 0;
-    virtual void SetMassParameters(const GenericMass& mass) = 0;
-    virtual float GetMass() const = 0;
-    virtual void SetSphere(float density, float radius) = 0;
-    virtual void AddSphere(float density, float radius, const salt::Matrix& matrix) = 0;
-    virtual void SetSphereTotal(float total_mass, float radius) = 0;
-    virtual void AddSphereTotal(float total_mass, float radius, const salt::Matrix& matrix) = 0;
-    virtual void SetBox(float density, const salt::Vector3f& size) = 0;
-    virtual void AddBox(float density, const salt::Vector3f& size, const salt::Matrix& matrix) = 0;
-    virtual void SetBoxTotal(float total_mass, const salt::Vector3f& size) = 0;
-    virtual void AddBoxTotal(float total_mass, const salt::Vector3f& size, const salt::Matrix& matrix) = 0;
-    virtual void SetCylinder(float density, float radius, float length) = 0;
-    virtual void AddCylinder(float density, float radius, float length, const salt::Matrix& matrix) = 0;
-    virtual void SetCylinderTotal(float total_mass, float radius, float length) = 0;
-    virtual void AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix) = 0;
-    virtual void SetCapsule(float density, float radius, float length) = 0;
-    virtual void AddCapsule(float density, float radius, float length, const salt::Matrix& matrix) = 0;
-    virtual void SetCapsuleTotal(float total_mass, float radius, float length) = 0;
-    virtual void AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix) = 0;
-    virtual void TranslateMass(const salt::Vector3f& v) = 0;
-    virtual salt::Vector3f GetVelocity() const = 0;
-    virtual void SetVelocity(const salt::Vector3f& vel) = 0;
-    virtual void SetRotation(const salt::Matrix& rot) = 0;
-    virtual salt::Matrix GetRotation() const = 0;
-    virtual salt::Vector3f GetLocalAngularVelocity() const = 0;
-    virtual salt::Vector3f GetAngularVelocity() const = 0;
-    virtual void SetAngularVelocity(const salt::Vector3f& vel) = 0;
-    virtual void AddForce(const salt::Vector3f& force) = 0;
-    virtual salt::Vector3f GetForce() const = 0;
-    virtual void AddTorque(const salt::Vector3f& torque) = 0;
-    virtual void SetPosition(const salt::Vector3f& pos) = 0;
-    virtual salt::Vector3f GetPosition() const = 0;
-    virtual void DestroyPhysicsObject() = 0;
-    virtual salt::Matrix GetSynchronisationMatrix() = 0;
-    virtual void BodySetData(RigidBody* rb) = 0;
+    virtual void Enable(long bodyID) = 0;
+    virtual void Disable(long bodyID) = 0;
+    virtual bool IsEnabled(long bodyID) const = 0;
+    virtual void UseGravity(bool f, long bodyID) = 0;
+    virtual bool UsesGravity(long bodyID) const = 0;
+    virtual void SetMass(float mass, long bodyID) = 0;
+    virtual void SetMassParameters(const GenericMass& mass, long bodyID) = 0;
+    virtual float GetMass(long bodyID) const = 0;
+    virtual void SetSphere(float density, float radius, long bodyID) = 0;
+    virtual salt::Vector3f AddSphere(float density, float radius, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void SetSphereTotal(float total_mass, float radius, long bodyID) = 0;
+    virtual salt::Vector3f AddSphereTotal(float total_mass, float radius, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void SetBox(float density, const salt::Vector3f& size, long bodyID) = 0;
+    virtual salt::Vector3f AddBox(float density, const salt::Vector3f& size, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void SetBoxTotal(float total_mass, const salt::Vector3f& size, long bodyID) = 0;
+    virtual salt::Vector3f AddBoxTotal(float total_mass, const salt::Vector3f& size, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void SetCylinder(float density, float radius, float length, long bodyID) = 0;
+    virtual salt::Vector3f AddCylinder(float density, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void SetCylinderTotal(float total_mass, float radius, float length, long bodyID) = 0;
+    virtual salt::Vector3f AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void SetCapsule(float density, float radius, float length, long bodyID) = 0;
+    virtual salt::Vector3f AddCapsule(float density, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void SetCapsuleTotal(float total_mass, float radius, float length, long bodyID) = 0;
+    virtual salt::Vector3f AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID) = 0;
+    virtual void TranslateMass(const salt::Vector3f& v, long bodyID) = 0;
+    virtual salt::Vector3f GetVelocity(long bodyID) const = 0;
+    virtual void SetVelocity(const salt::Vector3f& vel, long bodyID) = 0;
+    virtual void SetRotation(const salt::Matrix& rot, long bodyID) = 0;
+    virtual salt::Matrix GetRotation(long bodyID) const = 0;
+    virtual salt::Vector3f GetLocalAngularVelocity(long bodyID) const = 0;
+    virtual salt::Vector3f GetAngularVelocity(long bodyID) const = 0;
+    virtual void SetAngularVelocity(const salt::Vector3f& vel, long bodyID) = 0;
+    virtual void AddForce(const salt::Vector3f& force, long bodyID) = 0;
+    virtual salt::Vector3f GetForce(long bodyID) const = 0;
+    virtual void AddTorque(const salt::Vector3f& torque, long bodyID) = 0;
+    virtual void SetPosition(const salt::Vector3f& pos, long bodyID) = 0;
+    virtual salt::Vector3f GetPosition(long bodyID) const = 0;
+    virtual void DestroyPhysicsObject(long bodyID) = 0;
+    virtual salt::Matrix GetSynchronisationMatrix(long bodyID) = 0;
+    virtual void BodySetData(RigidBody* rb, long bodyID) = 0;
     virtual RigidBody* BodyGetData(long bodyID) = 0;
-    virtual salt::Vector3f GetMassTrans() = 0;
-    virtual void SetMassTrans(salt::Vector3f massTrans) = 0; 
-    virtual bool GetMassTransformed() = 0;
-    virtual void SetMassTransformed(bool f) = 0;
     
     // Here, we have to cheat with the preprocessor, since a static method
     // is required, and the bridge pattern requires member variables to
@@ -89,9 +84,7 @@ public:
         #endif
     }
     
-protected:    
-    salt::Vector3f mMassTrans;
-    bool mMassTransformed;
+    virtual long CreateBody(long world) = 0;
 };
 
 } //namespace oxygen
