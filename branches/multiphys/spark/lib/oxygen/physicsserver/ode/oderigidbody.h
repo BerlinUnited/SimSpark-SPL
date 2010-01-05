@@ -34,62 +34,52 @@ class OXYGEN_API ODERigidBody : public RigidBodyInt, public ODEBody
 public:
     ODERigidBody();
     
-    void Enable();
-    void Disable();
-    bool IsEnabled() const;
-    void UseGravity(bool f);
-    bool UsesGravity() const;
-    void SetMass(float mass);
-    void SetMassParameters(const GenericMass& mass);
-    float GetMass() const;
-    void SetSphere(float density, float radius);
-    void AddSphere(float density, float radius, const salt::Matrix& matrix);
-    void SetSphereTotal(float total_mass, float radius);
-    void AddSphereTotal(float total_mass, float radius, const salt::Matrix& matrix);
-    void SetBox(float density, const salt::Vector3f& size);
-    void AddBox(float density, const salt::Vector3f& size, const salt::Matrix& matrix);
-    void SetBoxTotal(float total_mass, const salt::Vector3f& size);
-    void AddBoxTotal(float total_mass, const salt::Vector3f& size, const salt::Matrix& matrix);
-    void SetCylinder(float density, float radius, float length);
-    void AddCylinder(float density, float radius, float length, const salt::Matrix& matrix);
-    void SetCylinderTotal(float total_mass, float radius, float length);
-    void AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
-    void SetCapsule(float density, float radius, float length);
-    void AddCapsule(float density, float radius, float length, const salt::Matrix& matrix);
-    void SetCapsuleTotal(float total_mass, float radius, float length);
-    void AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
-    void TranslateMass(const salt::Vector3f& v);
-    salt::Vector3f GetVelocity() const;
-    void SetVelocity(const salt::Vector3f& vel);
-    void SetRotation(const salt::Matrix& rot);
-    salt::Matrix GetRotation() const;
-    salt::Vector3f GetLocalAngularVelocity() const;
-    salt::Vector3f GetAngularVelocity() const;
-    void SetAngularVelocity(const salt::Vector3f& vel);
-    void AddForce(const salt::Vector3f& force);
-    salt::Vector3f GetForce() const;
-    void AddTorque(const salt::Vector3f& torque);
-    void SetPosition(const salt::Vector3f& pos);
-    salt::Vector3f GetPosition() const;
-    void DestroyPhysicsObject();
-    salt::Matrix GetSynchronisationMatrix();
-    void BodySetData(RigidBody* rb);
-    RigidBody* BodyGetData(long bodyID);
-    
-    long GetBodyID();
-    salt::Vector3f GetMassTrans(); 
-    void SetMassTrans(salt::Vector3f massTrans);
-    bool GetMassTransformed();
-    void SetMassTransformed(bool f);
+    void Enable(long bodyID);
+    void Disable(long bodyID);
+    bool IsEnabled(long bodyID) const;
+    void UseGravity(bool f, long bodyID);
+    bool UsesGravity(long bodyID) const;
+    void SetMass(float mass, long bodyID);
+    void SetMassParameters(const GenericMass& mass, long bodyID);
+    float GetMass(long bodyID) const;
+    void SetSphere(float density, float radius, long bodyID);
+    salt::Vector3f AddSphere(float density, float radius, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void SetSphereTotal(float total_mass, float radius, long bodyID);
+    salt::Vector3f AddSphereTotal(float total_mass, float radius, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void SetBox(float density, const salt::Vector3f& size, long bodyID);
+    salt::Vector3f AddBox(float density, const salt::Vector3f& size, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void SetBoxTotal(float total_mass, const salt::Vector3f& size, long bodyID);
+    salt::Vector3f AddBoxTotal(float total_mass, const salt::Vector3f& size, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void SetCylinder(float density, float radius, float length, long bodyID);
+    salt::Vector3f AddCylinder(float density, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void SetCylinderTotal(float total_mass, float radius, float length, long bodyID);
+    salt::Vector3f AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void SetCapsule(float density, float radius, float length, long bodyID);
+    salt::Vector3f AddCapsule(float density, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void SetCapsuleTotal(float total_mass, float radius, float length, long bodyID);
+    salt::Vector3f AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    void TranslateMass(const salt::Vector3f& v, long bodyID);
+    salt::Vector3f GetVelocity(long bodyID) const;
+    void SetVelocity(const salt::Vector3f& vel, long bodyID);
+    void SetRotation(const salt::Matrix& rot, long bodyID);
+    salt::Matrix GetRotation(long bodyID) const;
+    salt::Vector3f GetLocalAngularVelocity(long bodyID) const;
+    salt::Vector3f GetAngularVelocity(long bodyID) const;
+    void SetAngularVelocity(const salt::Vector3f& vel, long bodyID);
+    void AddForce(const salt::Vector3f& force, long bodyID);
+    salt::Vector3f GetForce(long bodyID) const;
+    void AddTorque(const salt::Vector3f& torque, long bodyID);
+    void SetPosition(const salt::Vector3f& pos, long bodyID);
+    salt::Vector3f GetPosition(long bodyID) const;
+    void DestroyPhysicsObject(long bodyID);
+    salt::Matrix GetSynchronisationMatrix(long bodyID);
+    void BodySetData(RigidBody* rb, long bodyID);
+    RigidBody* BodyGetData(long bodyID);    
+    long CreateBody(long world);
     
 protected:
-    /**These methods are only called internally.
-    */
-    void AddMass(const dMass& mass, const salt::Matrix& matrix);
-    
-    /** creates an ODE body within the given world
-    */ 
-    long CreateBody(long world);
+    //These methods are only called internally and are not declared in the interface.
+    salt::Vector3f AddMass(const dMass& mass, const salt::Matrix& matrix, salt::Vector3f massTrans, const long ODEBody);
     
     /** sets up an ode mass struct representing a box of the given
         size and total_mass

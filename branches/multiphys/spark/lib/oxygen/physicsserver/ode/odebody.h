@@ -31,9 +31,6 @@ class OXYGEN_API ODEBody : public BodyInt, public ODEPhysicsObject
 {
 public:
     ODEBody();
- 
-protected:
-    dBodyID mODEBody;
 };
 
 } //namespace oxygen

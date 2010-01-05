@@ -23,6 +23,6 @@
 
 using namespace oxygen;
 
-ODEBody::ODEBody() : ODEPhysicsObject(), mODEBody(0){
+ODEBody::ODEBody() : ODEPhysicsObject(){
 
 }
