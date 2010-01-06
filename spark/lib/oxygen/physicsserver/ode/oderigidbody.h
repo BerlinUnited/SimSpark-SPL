@@ -43,21 +43,29 @@ public:
     void SetMassParameters(const GenericMass& mass, long bodyID);
     float GetMass(long bodyID) const;
     void SetSphere(float density, float radius, long bodyID);
-    salt::Vector3f AddSphere(float density, float radius, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddSphere(float density, float radius, const salt::Matrix& matrix,
+                             salt::Vector3f massTrans, long bodyID);
     void SetSphereTotal(float total_mass, float radius, long bodyID);
-    salt::Vector3f AddSphereTotal(float total_mass, float radius, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddSphereTotal(float total_mass, float radius, const salt::Matrix& matrix,
+                                  salt::Vector3f massTrans, long bodyID);
     void SetBox(float density, const salt::Vector3f& size, long bodyID);
-    salt::Vector3f AddBox(float density, const salt::Vector3f& size, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddBox(float density, const salt::Vector3f& size, const salt::Matrix& matrix,
+                          salt::Vector3f massTrans, long bodyID);
     void SetBoxTotal(float total_mass, const salt::Vector3f& size, long bodyID);
-    salt::Vector3f AddBoxTotal(float total_mass, const salt::Vector3f& size, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddBoxTotal(float total_mass, const salt::Vector3f& size, const salt::Matrix& matrix,
+                               salt::Vector3f massTrans, long bodyID);
     void SetCylinder(float density, float radius, float length, long bodyID);
-    salt::Vector3f AddCylinder(float density, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddCylinder(float density, float radius, float length, const salt::Matrix& matrix,
+                               salt::Vector3f massTrans, long bodyID);
     void SetCylinderTotal(float total_mass, float radius, float length, long bodyID);
-    salt::Vector3f AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix,
+                                    salt::Vector3f massTrans, long bodyID);
     void SetCapsule(float density, float radius, float length, long bodyID);
-    salt::Vector3f AddCapsule(float density, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddCapsule(float density, float radius, float length, const salt::Matrix& matrix,
+                              salt::Vector3f massTrans, long bodyID);
     void SetCapsuleTotal(float total_mass, float radius, float length, long bodyID);
-    salt::Vector3f AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix, salt::Vector3f massTrans, long bodyID);
+    salt::Vector3f AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix,
+                                   salt::Vector3f massTrans, long bodyID);
     void TranslateMass(const salt::Vector3f& v, long bodyID);
     salt::Vector3f GetVelocity(long bodyID) const;
     void SetVelocity(const salt::Vector3f& vel, long bodyID);

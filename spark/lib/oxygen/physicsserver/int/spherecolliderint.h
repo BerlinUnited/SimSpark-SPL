@@ -33,9 +33,9 @@ class OXYGEN_API SphereColliderInt
 {
 
 public:    
-    virtual void SetRadius(float r) = 0;
-    virtual float GetRadius() const = 0;
-    virtual float GetPointDepth(const salt::Vector3f& pos) = 0;
+    virtual void SetRadius(float r, long geomID) = 0;
+    virtual float GetRadius(long geomID) const = 0;
+    virtual float GetPointDepth(const salt::Vector3f& pos, long geomID) = 0;
     virtual long CreateSphere() = 0; 
 };
 

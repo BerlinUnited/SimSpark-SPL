@@ -29,83 +29,96 @@ ODEUniversalJoint::ODEUniversalJoint() : ODEGeneric6DOFJoint()
 long ODEUniversalJoint::CreateUniversalJoint(long world)
 {
     dWorldID ODEWorld = (dWorldID) world;
-    mODEJoint = dJointCreateUniversal(ODEWorld, 0);
-    return (long) mODEJoint;
+    dJointID ODEJoint = dJointCreateUniversal(ODEWorld, 0);
+    return (long) ODEJoint;
 }
 
-void ODEUniversalJoint::SetAnchor(const Vector3f& anchor)
+void ODEUniversalJoint::SetAnchor(const Vector3f& anchor, long jointID)
 {
-    dJointSetUniversalAnchor (mODEJoint, anchor[0], anchor[1], anchor[2]);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetUniversalAnchor (ODEJoint, anchor[0], anchor[1], anchor[2]);
 }
 
-Vector3f ODEUniversalJoint::GetAnchor1()
+Vector3f ODEUniversalJoint::GetAnchor1(long jointID)
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
-    dJointGetUniversalAnchor(mODEJoint, anchor);
+    dJointGetUniversalAnchor(ODEJoint, anchor);
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     return pos;
 }
 
-Vector3f ODEUniversalJoint::GetAnchor2()
+Vector3f ODEUniversalJoint::GetAnchor2(long jointID)
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
-    dJointGetUniversalAnchor2(mODEJoint, anchor);
+    dJointGetUniversalAnchor2(ODEJoint, anchor);
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     return pos;
 }
 
-void ODEUniversalJoint::SetAxis1(const Vector3f & axis)
+void ODEUniversalJoint::SetAxis1(const Vector3f & axis, long jointID)
 {
-    dJointSetUniversalAxis1(mODEJoint,axis[0],axis[1],axis[2]);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetUniversalAxis1(ODEJoint,axis[0],axis[1],axis[2]);
 }
 
-void ODEUniversalJoint::SetAxis2(const Vector3f & axis)
+void ODEUniversalJoint::SetAxis2(const Vector3f & axis, long jointID)
 {
-    dJointSetUniversalAxis2(mODEJoint,axis[0],axis[1],axis[2]);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetUniversalAxis2(ODEJoint,axis[0],axis[1],axis[2]);
 }
 
-Vector3f ODEUniversalJoint::GetAxis1() const
+Vector3f ODEUniversalJoint::GetAxis1(long jointID) const
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal axis[3];
-    dJointGetUniversalAxis1(mODEJoint, axis);
+    dJointGetUniversalAxis1(ODEJoint, axis);
     Vector3f vec = Vector3f(axis[0],axis[1],axis[2]);
     return vec;
 }
 
-Vector3f ODEUniversalJoint::GetAxis2() const
+Vector3f ODEUniversalJoint::GetAxis2(long jointID) const
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal axis[3];
-    dJointGetUniversalAxis2(mODEJoint, axis);
+    dJointGetUniversalAxis2(ODEJoint, axis);
     Vector3f vec = Vector3f(axis[0],axis[1],axis[2]);
     return vec;
 }
 
-float ODEUniversalJoint::GetAngle1() const
+float ODEUniversalJoint::GetAngle1(long jointID) const
 {
-    return gRadToDeg(dJointGetUniversalAngle1(mODEJoint));
+    dJointID ODEJoint = (dJointID) jointID;
+    return gRadToDeg(dJointGetUniversalAngle1(ODEJoint));
 }
 
-float ODEUniversalJoint::GetAngle2() const
+float ODEUniversalJoint::GetAngle2(long jointID) const
 {
-    return gRadToDeg(dJointGetUniversalAngle2(mODEJoint));
+    dJointID ODEJoint = (dJointID) jointID;
+    return gRadToDeg(dJointGetUniversalAngle2(ODEJoint));
 }
 
-float ODEUniversalJoint::GetAngleRate1() const
+float ODEUniversalJoint::GetAngleRate1(long jointID) const
 {
-    return gRadToDeg(dJointGetUniversalAngle1Rate(mODEJoint));
+    dJointID ODEJoint = (dJointID) jointID;
+    return gRadToDeg(dJointGetUniversalAngle1Rate(ODEJoint));
 }
 
-float ODEUniversalJoint::GetAngleRate2() const
+float ODEUniversalJoint::GetAngleRate2(long jointID) const
 {
-    return gRadToDeg(dJointGetUniversalAngle2Rate(mODEJoint));
+    dJointID ODEJoint = (dJointID) jointID;
+    return gRadToDeg(dJointGetUniversalAngle2Rate(ODEJoint));
 }
 
-void ODEUniversalJoint::SetParameter(int parameter, float value)
+void ODEUniversalJoint::SetParameter(int parameter, float value, long jointID)
 {
-    dJointSetUniversalParam(mODEJoint, parameter, value);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetUniversalParam(ODEJoint, parameter, value);
 }
 
-float ODEUniversalJoint::GetParameter(int parameter) const
+float ODEUniversalJoint::GetParameter(int parameter, long jointID) const
 {
-    return dJointGetUniversalParam(mODEJoint, parameter);
+    dJointID ODEJoint = (dJointID) jointID;
+    return dJointGetUniversalParam(ODEJoint, parameter);
 }

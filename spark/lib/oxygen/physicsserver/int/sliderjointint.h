@@ -34,11 +34,11 @@ class OXYGEN_API SliderJointInt
 {
 public:
     virtual long CreateSliderJoint(long world) = 0;
-    virtual float GetPosition() = 0;
-    virtual float GetPositionRate() = 0;
-    virtual void SetSliderAxis(salt::Vector3f& up) = 0;
-    virtual void SetParameter(int parameter, float value) = 0;
-    virtual float GetParameter(int parameter) const = 0;
+    virtual float GetPosition(long jointID) = 0;
+    virtual float GetPositionRate(long jointID) = 0;
+    virtual void SetSliderAxis(salt::Vector3f& up, long jointID) = 0;
+    virtual void SetParameter(int parameter, float value, long jointID) = 0;
+    virtual float GetParameter(int parameter, long jointID) const = 0;
 };
 
 } //namespace oxygen

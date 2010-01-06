@@ -28,14 +28,15 @@ ODERayCollider::ODERayCollider() : ODECollider()
 }
 
 void ODERayCollider::SetParams(salt::Vector3f pos,
-                            salt::Vector3f dir, float length)
+                            salt::Vector3f dir, float length, long geomID)
 {
-    dGeomRaySet(mODEGeom, pos[0], pos[1], pos[2], dir[0], dir[1], dir[2]);
-    dGeomRaySetLength(mODEGeom, length);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomRaySet(ODEGeom, pos[0], pos[1], pos[2], dir[0], dir[1], dir[2]);
+    dGeomRaySetLength(ODEGeom, length);
 }
 
 long ODERayCollider::CreateRay()
 {
-    mODEGeom = dCreateRay(0, 1.0f);
-    return (long) mODEGeom;
+    dGeomID ODEGeom = dCreateRay(0, 1.0f);
+    return (long) ODEGeom;
 }

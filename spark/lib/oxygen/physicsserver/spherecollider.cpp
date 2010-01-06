@@ -32,12 +32,12 @@ SphereCollider::SphereCollider() : ConvexCollider()
 
 void SphereCollider::SetRadius(float r)
 {
-    mSphereColliderImp->SetRadius(r);
+    mSphereColliderImp->SetRadius(r, mGeomID);
 }
 
 float SphereCollider::GetRadius() const
 {
-    return mSphereColliderImp->GetRadius();
+    return mSphereColliderImp->GetRadius(mGeomID);
 }
 
 bool SphereCollider::ConstructInternal()
@@ -58,5 +58,5 @@ bool SphereCollider::ConstructInternal()
 float SphereCollider::GetPointDepth(const Vector3f& pos)
 {
   Vector3f worldPos(GetWorldTransform() * pos);
-  return mSphereColliderImp->GetPointDepth(worldPos);
+  return mSphereColliderImp->GetPointDepth(worldPos, mGeomID);
 }

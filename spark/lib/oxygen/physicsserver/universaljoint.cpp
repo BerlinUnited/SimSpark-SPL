@@ -50,7 +50,7 @@ void UniversalJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    mUniversalJointImp->SetAnchor(gAnchor);
+    mUniversalJointImp->SetAnchor(gAnchor, mJointID);
 }
 
 Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
@@ -61,13 +61,13 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
     {
     case BI_FIRST:
     {
-        pos = mUniversalJointImp->GetAnchor1();
+        pos = mUniversalJointImp->GetAnchor1(mJointID);
         break;
     }
 
     case BI_SECOND:
     {
-        pos = mUniversalJointImp->GetAnchor2();
+        pos = mUniversalJointImp->GetAnchor2(mJointID);
         break;
     }
 
@@ -81,13 +81,13 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
 void UniversalJoint::SetAxis1(const Vector3f & axis)
 {
     Vector3f first(GetWorldTransform().Rotate(axis));
-    mUniversalJointImp->SetAxis1(first);
+    mUniversalJointImp->SetAxis1(first, mJointID);
 }
 
 void UniversalJoint::SetAxis2(const Vector3f & axis)
 {
     Vector3f second(GetWorldTransform().Rotate(axis));
-    mUniversalJointImp->SetAxis2(second);
+    mUniversalJointImp->SetAxis2(second, mJointID);
 }
 
 Vector3f UniversalJoint::GetAxis(EAxisIndex idx) const
@@ -98,13 +98,13 @@ Vector3f UniversalJoint::GetAxis(EAxisIndex idx) const
     {
     case AI_FIRST:
     {
-        vec = mUniversalJointImp->GetAxis1();
+        vec = mUniversalJointImp->GetAxis1(mJointID);
         break;
     }
 
     case AI_SECOND:
     {
-        vec = mUniversalJointImp->GetAxis2();
+        vec = mUniversalJointImp->GetAxis2(mJointID);
         break;
     }
 
@@ -120,10 +120,10 @@ float UniversalJoint::GetAngle(EAxisIndex idx) const
     switch (idx)
     {
     case AI_FIRST:
-        return mUniversalJointImp->GetAngle1();
+        return mUniversalJointImp->GetAngle1(mJointID);
 
     case AI_SECOND:
-        return mUniversalJointImp->GetAngle2();
+        return mUniversalJointImp->GetAngle2(mJointID);
 
     default:
         return 0;
@@ -135,10 +135,10 @@ float UniversalJoint::GetAngleRate(EAxisIndex idx) const
     switch (idx)
         {
         case AI_FIRST:
-            return mUniversalJointImp->GetAngleRate1();
+            return mUniversalJointImp->GetAngleRate1(mJointID);
 
         case AI_SECOND:
-            return mUniversalJointImp->GetAngleRate2();
+            return mUniversalJointImp->GetAngleRate2(mJointID);
 
         default:
             return 0;
@@ -147,10 +147,10 @@ float UniversalJoint::GetAngleRate(EAxisIndex idx) const
 
 void UniversalJoint::SetParameter(int parameter, float value)
 {
-    mUniversalJointImp->SetParameter(parameter, value);
+    mUniversalJointImp->SetParameter(parameter, value, mJointID);
 }
 
 float UniversalJoint::GetParameter(int parameter) const
 {
-    return mUniversalJointImp->GetParameter(parameter);
+    return mUniversalJointImp->GetParameter(parameter, mJointID);
 }

@@ -56,7 +56,7 @@ void Hinge2Joint::SetAnchor(const Vector3f& anchor)
     // relative universal hinge2 axis 2 points right
     Vector3f right(GetWorldTransform().Rotate(Vector3f(1,0,0)));
     
-    mHinge2JointImp->SetAnchor(gAnchor, up, right);
+    mHinge2JointImp->SetAnchor(gAnchor, up, right, mJointID);
 }
 
 Vector3f Hinge2Joint::GetAnchor(EBodyIndex idx)
@@ -67,12 +67,12 @@ Vector3f Hinge2Joint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                pos = mHinge2JointImp->GetAnchor1();
+                pos = mHinge2JointImp->GetAnchor1(mJointID);
             }
 
         case BI_SECOND:
             {
-                pos = mHinge2JointImp->GetAnchor2();
+                pos = mHinge2JointImp->GetAnchor2(mJointID);
             }
 
         default:
@@ -87,10 +87,10 @@ float Hinge2Joint::GetAngle(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return mHinge2JointImp->GetAngle();
+            return mHinge2JointImp->GetAngle(mJointID);
 
         case AI_SECOND:
-            GetLog()->Error() <<
+            GetLog()->Warning() <<
                 "(Hinge2Joint) WARNING: GetAngle is undefined for EAxisIndex::AI_SECOND, returned zero\n";
             return 0;
 
@@ -104,10 +104,10 @@ float Hinge2Joint::GetAngleRate(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return mHinge2JointImp->GetAngleRate1();
+            return mHinge2JointImp->GetAngleRate1(mJointID);
 
         case AI_SECOND:
-            return mHinge2JointImp->GetAngleRate2();
+            return mHinge2JointImp->GetAngleRate2(mJointID);
 
         default:
             return 0;
@@ -116,10 +116,10 @@ float Hinge2Joint::GetAngleRate(EAxisIndex idx)
 
 void Hinge2Joint::SetParameter(int parameter, float value)
 {
-    mHinge2JointImp->SetParameter(parameter, value);
+    mHinge2JointImp->SetParameter(parameter, value, mJointID);
 }
 
 float Hinge2Joint::GetParameter(int parameter) const
 {
-    return mHinge2JointImp->GetParameter(parameter);
+    return mHinge2JointImp->GetParameter(parameter, mJointID);
 }

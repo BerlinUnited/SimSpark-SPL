@@ -34,7 +34,8 @@ long ODEFixedJoint::CreateFixedJoint(long world)
     return (long) mODEJoint;
 }
 
-void ODEFixedJoint::SetFixed()
+void ODEFixedJoint::SetFixed(long jointID)
 {
-    dJointSetFixed(mODEJoint);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetFixed(ODEJoint);
 }

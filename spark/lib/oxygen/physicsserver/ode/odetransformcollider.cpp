@@ -29,11 +29,12 @@ ODETransformCollider::ODETransformCollider() : ODECollider()
 }
 
 long ODETransformCollider::CreateTransformCollider(){
-    mODEGeom = dCreateGeomTransform(0);
-    return (long) mODEGeom;
+    dGeomID ODEGeom = dCreateGeomTransform(0);
+    return (long) ODEGeom;
 }
 
-void ODETransformCollider::SetColliderParameters(int cleanup, int info){
-    dGeomTransformSetCleanup(mODEGeom, cleanup);
-    dGeomTransformSetInfo(mODEGeom, info);
+void ODETransformCollider::SetColliderParameters(int cleanup, int info, long geomID){
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomTransformSetCleanup(ODEGeom, cleanup);
+    dGeomTransformSetInfo(ODEGeom, info);
 }

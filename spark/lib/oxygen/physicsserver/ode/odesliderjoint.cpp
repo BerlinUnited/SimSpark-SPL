@@ -30,31 +30,36 @@ ODESliderJoint::ODESliderJoint() : ODEGeneric6DOFJoint()
 long ODESliderJoint::CreateSliderJoint(long world)
 {
     dWorldID ODEWorld = (dWorldID) world;
-    mODEJoint = dJointCreateSlider(ODEWorld, 0);
-    return (long) mODEJoint;
+    dJointID ODEJoint = dJointCreateSlider(ODEWorld, 0);
+    return (long) ODEJoint;
 }
 
-void ODESliderJoint::SetSliderAxis(Vector3f& up)
+void ODESliderJoint::SetSliderAxis(Vector3f& up, long jointID)
 {
-    dJointSetSliderAxis(mODEJoint,up[0],up[1],up[2]);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetSliderAxis(ODEJoint,up[0],up[1],up[2]);
 }
 
-float ODESliderJoint::GetPosition()
+float ODESliderJoint::GetPosition(long jointID)
 {
-    return dJointGetSliderPosition(mODEJoint);
+    dJointID ODEJoint = (dJointID) jointID;
+    return dJointGetSliderPosition(ODEJoint);
 }
 
-float ODESliderJoint::GetPositionRate()
+float ODESliderJoint::GetPositionRate(long jointID)
 {
-    return dJointGetSliderPositionRate(mODEJoint);
+    dJointID ODEJoint = (dJointID) jointID;
+    return dJointGetSliderPositionRate(ODEJoint);
 }
 
-void ODESliderJoint::SetParameter(int parameter, float value)
+void ODESliderJoint::SetParameter(int parameter, float value, long jointID)
 {
-    dJointSetSliderParam(mODEJoint, parameter, value);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetSliderParam(ODEJoint, parameter, value);
 }
 
-float ODESliderJoint::GetParameter(int parameter) const
+float ODESliderJoint::GetParameter(int parameter, long jointID) const
 {
-    return dJointGetSliderParam(mODEJoint, parameter);
+    dJointID ODEJoint = (dJointID) jointID;
+    return dJointGetSliderParam(ODEJoint, parameter);
 }

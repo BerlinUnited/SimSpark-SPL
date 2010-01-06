@@ -49,7 +49,7 @@ void BallJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor = GetWorldTransform() * anchor;
-    mBallJointImp->SetAnchor(gAnchor);
+    mBallJointImp->SetAnchor(gAnchor, mJointID);
 }
 
 Vector3f BallJoint::GetAnchor(EBodyIndex idx)
@@ -60,13 +60,13 @@ Vector3f BallJoint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                pos = mBallJointImp->GetAnchor1();
+                pos = mBallJointImp->GetAnchor1(mJointID);
                 break;
             }
 
         case BI_SECOND:
             {
-                pos = mBallJointImp->GetAnchor2();
+                pos = mBallJointImp->GetAnchor2(mJointID);
                 break;
             }
 

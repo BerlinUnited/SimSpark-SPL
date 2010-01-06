@@ -48,9 +48,6 @@ public:
     void SetSpace(long spaceID, long geomID, Collider* collider);
     void SetBody(long bodyID, long geomID);
     void RemoveFromSpace(long geomID, long spaceID);
-    
-protected:
-    dGeomID mODEGeom;
 };
 
 } //namespace oxygen

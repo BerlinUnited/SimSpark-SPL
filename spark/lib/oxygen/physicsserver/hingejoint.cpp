@@ -49,7 +49,7 @@ void HingeJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    mHingeJointImp->SetAnchor(gAnchor);
+    mHingeJointImp->SetAnchor(gAnchor, mJointID);
 }
 
 Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
@@ -60,13 +60,13 @@ Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                pos = mHingeJointImp->GetAnchor1();
+                pos = mHingeJointImp->GetAnchor1(mJointID);
                 break;
             }
 
         case BI_SECOND:
             {
-                pos = mHingeJointImp->GetAnchor2();
+                pos = mHingeJointImp->GetAnchor2(mJointID);
                 break;
             }
 
@@ -107,30 +107,30 @@ void HingeJoint::SetAxis(EAxisIndex idx)
 void HingeJoint::SetAxis(const Vector3f& axis)
 {
     Vector3f absAxis(GetWorldTransform().Rotate(axis));
-    mHingeJointImp->SetAxis(absAxis);
+    mHingeJointImp->SetAxis(absAxis, mJointID);
 }
 
 Vector3f HingeJoint::GetAxis()
 {
-    return mHingeJointImp->GetAxis();
+    return mHingeJointImp->GetAxis(mJointID);
 }
 
 float HingeJoint::GetAngle() const
 {
-    return mHingeJointImp->GetAngle();
+    return mHingeJointImp->GetAngle(mJointID);
 }
 
 float HingeJoint::GetAngleRate() const
 {
-    return mHingeJointImp->GetAngleRate();
+    return mHingeJointImp->GetAngleRate(mJointID);
 }
 
 void HingeJoint::SetParameter(int parameter, float value)
 {
-    mHingeJointImp->SetParameter(parameter, value);
+    mHingeJointImp->SetParameter(parameter, value, mJointID);
 }
 
 float HingeJoint::GetParameter(int parameter) const
 {
-    return mHingeJointImp->GetParameter(parameter);
+    return mHingeJointImp->GetParameter(parameter, mJointID);
 }

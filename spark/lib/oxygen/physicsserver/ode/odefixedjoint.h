@@ -31,7 +31,7 @@ class OXYGEN_API ODEFixedJoint : public FixedJointInt, public ODEGeneric6DOFJoin
 public:
     ODEFixedJoint();
     long CreateFixedJoint(long world);
-    void SetFixed();
+    void SetFixed(long jointID);
 };
 
 } //namespace oxygen

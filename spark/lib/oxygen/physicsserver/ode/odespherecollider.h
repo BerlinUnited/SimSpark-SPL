@@ -33,9 +33,9 @@ class OXYGEN_API ODESphereCollider : public SphereColliderInt, public ODEConvexC
 {
 public:
     ODESphereCollider();
-    void SetRadius(float r);
-    float GetRadius() const;
-    float GetPointDepth(const salt::Vector3f& pos);
+    void SetRadius(float r, long geomID);
+    float GetRadius(long geomID) const;
+    float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreateSphere();
 };
 

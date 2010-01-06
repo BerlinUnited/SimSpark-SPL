@@ -28,53 +28,56 @@ ODECapsuleCollider::ODECapsuleCollider() : ODEConvexCollider()
 {
 }
 
-void ODECapsuleCollider::SetParams(float radius, float length)
+void ODECapsuleCollider::SetParams(float radius, float length, long geomID)
 {
-    dGeomCapsuleSetParams (mODEGeom, radius, length);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomCapsuleSetParams (ODEGeom, radius, length);
 }
 
-void ODECapsuleCollider::SetRadius(float radius)
+void ODECapsuleCollider::SetRadius(float radius, long geomID)
 {
-    SetParams(radius,GetLength());
+    SetParams(radius, GetLength(geomID), geomID);
 }
 
-void ODECapsuleCollider::SetLength(float length)
+void ODECapsuleCollider::SetLength(float length, long geomID)
 {
-    SetParams(GetRadius(),length);
+    SetParams(GetRadius(geomID), length, geomID);
 }
 
-void ODECapsuleCollider::GetParams(float& radius, float& length)
+void ODECapsuleCollider::GetParams(float& radius, float& length, long geomID)
 {
+    dGeomID ODEGeom = (dGeomID) geomID;
     dReal r,l;
-    dGeomCapsuleGetParams(mODEGeom,&r,&l);
+    dGeomCapsuleGetParams(ODEGeom,&r,&l);
     radius = r;
     length = l;
 }
 
-float ODECapsuleCollider::GetRadius()
+float ODECapsuleCollider::GetRadius(long geomID)
 {
     float length;
     float radius;
-    GetParams(radius,length);
+    GetParams(radius, length, geomID);
     return radius;
 }
 
-float ODECapsuleCollider::GetLength()
+float ODECapsuleCollider::GetLength(long geomID)
 {
     float radius;
     float length;
-    GetParams(radius,length);
+    GetParams(radius, length, geomID);
     return length;
 }
 
 long ODECapsuleCollider::CreateCapsule()
 {
-    mODEGeom = dCreateCapsule(0, 1.0f, 1.0f);
-    return (long) mODEGeom;
+    dGeomID ODEGeom = dCreateCapsule(0, 1.0f, 1.0f);
+    return (long) ODEGeom;
 }
 
-float ODECapsuleCollider::GetPointDepth(const Vector3f& pos)
+float ODECapsuleCollider::GetPointDepth(const Vector3f& pos, long geomID)
 {
+    dGeomID ODEGeom = (dGeomID) geomID;
     return dGeomCapsulePointDepth
-        (mODEGeom,pos[0],pos[1],pos[2]);
+        (ODEGeom,pos[0],pos[1],pos[2]);
 }

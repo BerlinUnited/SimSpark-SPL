@@ -50,25 +50,25 @@ void SliderJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body
     Joint::Attach(body1,body2);
 
     Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-    mSliderJointImp->SetSliderAxis(up);
+    mSliderJointImp->SetSliderAxis(up, mJointID);
 }
 
 float SliderJoint::GetPosition()
 {
-    return mSliderJointImp->GetPosition();
+    return mSliderJointImp->GetPosition(mJointID);
 }
 
 float SliderJoint::GetPositionRate()
 {
-    return mSliderJointImp->GetPositionRate();
+    return mSliderJointImp->GetPositionRate(mJointID);
 }
 
 void SliderJoint::SetParameter(int parameter, float value)
 {
-    mSliderJointImp->SetParameter(parameter, value);
+    mSliderJointImp->SetParameter(parameter, value, mJointID);
 }
 
 float SliderJoint::GetParameter(int parameter) const
 {
-    return mSliderJointImp->GetParameter(parameter);
+    return mSliderJointImp->GetParameter(parameter, mJointID);
 }

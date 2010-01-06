@@ -32,13 +32,13 @@ namespace oxygen
 class OXYGEN_API CapsuleColliderInt
 {
 public:
-    virtual void SetParams(float radius, float length) = 0;
-    virtual void SetRadius(float radius) = 0;
-    virtual void SetLength(float length) = 0;
-    virtual void GetParams(float& radius, float& length) = 0;
-    virtual float GetRadius() = 0;
-    virtual float GetLength() = 0;
-    virtual float GetPointDepth(const salt::Vector3f& pos) = 0;
+    virtual void SetParams(float radius, float length, long geomID) = 0;
+    virtual void SetRadius(float radius, long geomID) = 0;
+    virtual void SetLength(float length, long geomID) = 0;
+    virtual void GetParams(float& radius, float& length, long geomID) = 0;
+    virtual float GetRadius(long geomID) = 0;
+    virtual float GetLength(long geomID) = 0;
+    virtual float GetPointDepth(const salt::Vector3f& pos, long geomID) = 0;
     virtual long CreateCapsule() = 0;
 };
 

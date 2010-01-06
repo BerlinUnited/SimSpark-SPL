@@ -34,9 +34,9 @@ class Joint;
 class OXYGEN_API BallJointInt
 {
 public:    
-    virtual void SetAnchor(const salt::Vector3f& anchor) = 0;
-    virtual salt::Vector3f GetAnchor1() = 0;
-    virtual salt::Vector3f GetAnchor2() = 0;
+    virtual void SetAnchor(const salt::Vector3f& anchor, long jointID) = 0;
+    virtual salt::Vector3f GetAnchor1(long jointID) = 0;
+    virtual salt::Vector3f GetAnchor2(long jointID) = 0;
     virtual long CreateBallJoint(long world) =  0;
 };
 

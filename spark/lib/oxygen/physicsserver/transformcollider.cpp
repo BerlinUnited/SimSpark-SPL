@@ -53,7 +53,7 @@ bool TransformCollider::ConstructInternal()
     */
     int infoSetting = 1;
     
-    mTransformColliderImp->SetColliderParameters(cleanupSetting, infoSetting);
+    mTransformColliderImp->SetColliderParameters(cleanupSetting, infoSetting, mGeomID);
 
     return true;
 }
