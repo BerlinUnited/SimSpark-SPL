@@ -34,9 +34,9 @@ class OXYGEN_API ODEBallJoint : public BallJointInt, public ODEGeneric6DOFJoint
 {
 public:    
     ODEBallJoint();
-    void SetAnchor(const salt::Vector3f& anchor);
-    salt::Vector3f GetAnchor1();
-    salt::Vector3f GetAnchor2();
+    void SetAnchor(const salt::Vector3f& anchor, long jointID);
+    salt::Vector3f GetAnchor1(long jointID);
+    salt::Vector3f GetAnchor2(long jointID);
     long CreateBallJoint(long world);
 };
 

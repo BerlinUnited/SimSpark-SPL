@@ -32,7 +32,7 @@ namespace oxygen
 class OXYGEN_API RayColliderInt
 {
 public:
-    virtual void SetParams(salt::Vector3f pos, salt::Vector3f dir, float length) = 0;
+    virtual void SetParams(salt::Vector3f pos, salt::Vector3f dir, float length, long geomID) = 0;
     virtual long CreateRay() = 0;
 };
 

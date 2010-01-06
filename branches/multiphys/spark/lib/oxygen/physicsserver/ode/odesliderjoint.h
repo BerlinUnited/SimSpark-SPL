@@ -35,11 +35,11 @@ class OXYGEN_API ODESliderJoint : public SliderJointInt, public ODEGeneric6DOFJo
 public:
     ODESliderJoint();
     long CreateSliderJoint(long world);
-    float GetPosition();
-    float GetPositionRate();
-    void SetSliderAxis(salt::Vector3f& up);
-    void SetParameter(int parameter, float value);
-    float GetParameter(int parameter) const;
+    float GetPosition(long jointID);
+    float GetPositionRate(long jointID);
+    void SetSliderAxis(salt::Vector3f& up, long jointID);
+    void SetParameter(int parameter, float value, long jointID);
+    float GetParameter(int parameter, long jointID) const;
 };
 
 } //namespace oxygen

@@ -30,10 +30,11 @@ ODEBoxCollider::ODEBoxCollider() : ODEConvexCollider()
 {
 }
 
-void ODEBoxCollider::SetBoxLengths(const Vector3f& extents)
+void ODEBoxCollider::SetBoxLengths(const Vector3f& extents, long geomID)
 {
+    dGeomID ODEGeom = (dGeomID) geomID;
     dGeomBoxSetLengths(
-                       mODEGeom,
+                       ODEGeom,
                        extents[0],
                        extents[1],
                        extents[2]
@@ -42,21 +43,23 @@ void ODEBoxCollider::SetBoxLengths(const Vector3f& extents)
 
 long ODEBoxCollider::CreateBox()
 {
-    mODEGeom = dCreateBox (0, 1.0f, 1.0f, 1.0f);
-    return (long) mODEGeom;
+    dGeomID ODEGeom = dCreateBox (0, 1.0f, 1.0f, 1.0f);
+    return (long) ODEGeom;
 }
 
-void ODEBoxCollider::GetBoxLengths(Vector3f& extents)
+void ODEBoxCollider::GetBoxLengths(Vector3f& extents, long geomID)
 {
+    dGeomID ODEGeom = (dGeomID) geomID; 
     dVector3 lengths;
-    dGeomBoxGetLengths(mODEGeom,lengths);
+    dGeomBoxGetLengths(ODEGeom,lengths);
     extents[0] = lengths[0];
     extents[1] = lengths[1];
     extents[2] = lengths[2];
 }
 
-float ODEBoxCollider::GetPointDepth(const Vector3f& pos)
+float ODEBoxCollider::GetPointDepth(const Vector3f& pos, long geomID)
 {
+    dGeomID ODEGeom = (dGeomID) geomID;
     return dGeomBoxPointDepth
-        (mODEGeom,pos[0],pos[1],pos[2]);
+        (ODEGeom,pos[0],pos[1],pos[2]);
 }

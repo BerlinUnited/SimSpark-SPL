@@ -33,7 +33,7 @@ BoxCollider::BoxCollider() : ConvexCollider()
 
 void BoxCollider::SetBoxLengths(const Vector3f& extents)
 {
-    mBoxColliderImp->SetBoxLengths(extents);
+    mBoxColliderImp->SetBoxLengths(extents, mGeomID);
 }
 
 bool BoxCollider::ConstructInternal()
@@ -51,7 +51,7 @@ bool BoxCollider::ConstructInternal()
 
 void BoxCollider::GetBoxLengths(Vector3f& extents)
 {
-    mBoxColliderImp->GetBoxLengths(extents);
+    mBoxColliderImp->GetBoxLengths(extents, mGeomID);
 }
 
 float BoxCollider::GetBoxLength(int axis)
@@ -72,5 +72,5 @@ float BoxCollider::GetBoxLength(int axis)
 float BoxCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
-    return mBoxColliderImp->GetPointDepth(worldPos);
+    return mBoxColliderImp->GetPointDepth(worldPos, mGeomID);
 }

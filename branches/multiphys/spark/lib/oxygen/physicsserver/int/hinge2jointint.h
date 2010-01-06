@@ -31,14 +31,15 @@ public:
     virtual long CreateHinge2Joint(long world) = 0;
     virtual void SetAnchor(const salt::Vector3f& anchor,
                            const salt::Vector3f& up,
-                           const salt::Vector3f& right) = 0;
-    virtual salt::Vector3f GetAnchor1() = 0;
-    virtual salt::Vector3f GetAnchor2() = 0;
-    virtual float GetAngle() = 0;
-    virtual float GetAngleRate1() = 0;
-    virtual float GetAngleRate2() = 0;
-    virtual void SetParameter(int parameter, float value) = 0;
-    virtual float GetParameter(int parameter) const = 0;
+                           const salt::Vector3f& right,
+                           long jointID) = 0;
+    virtual salt::Vector3f GetAnchor1(long jointID) = 0;
+    virtual salt::Vector3f GetAnchor2(long jointID) = 0;
+    virtual float GetAngle(long jointID) = 0;
+    virtual float GetAngleRate1(long jointID) = 0;
+    virtual float GetAngleRate2(long jointID) = 0;
+    virtual void SetParameter(int parameter, float value, long jointID) = 0;
+    virtual float GetParameter(int parameter, long jointID) const = 0;
 };
 
 } //namespace oxygen

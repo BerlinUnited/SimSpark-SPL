@@ -43,7 +43,7 @@ void PlaneCollider::SetParams(float a, float b, float c, float d)
             d /= l;
         }
 
-    mPlaneColliderImp->SetPlaneParams(a, b, c, d);
+    mPlaneColliderImp->SetPlaneParams(a, b, c, d, mGeomID);
 }
 
 bool PlaneCollider::ConstructInternal()
@@ -63,24 +63,24 @@ void PlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal)
 {
     normal.Normalize();
     float d = pos.Dot(normal);
-    mPlaneColliderImp->SetPlaneParams(normal.x(), normal.y(), normal.z(), d); 
+    mPlaneColliderImp->SetPlaneParams(normal.x(), normal.y(), normal.z(), d, mGeomID); 
     //dGeomPlaneSetParams(mODEGeom, normal.x(), normal.y(), normal.z(), d);
 }
 
 void PlaneCollider::SetPosition(const salt::Vector3f& /*pos*/)
 {
-    GetLog()->Error()
+    GetLog()->Warning()
       << "(PlaneCollider) WARNING: tried to set the position of a non-placeable geom, ignored\n";
 }
 
 void PlaneCollider::SetRotation(const Matrix& /*rot*/)
 {
-    GetLog()->Error()
+    GetLog()->Warning()
       << "(PlaneCollider) WARNING: tried to set the rotation of a non-placeable geom, ignored\n";
 }
 
 float PlaneCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
-    return mPlaneColliderImp->GetPointDepth(worldPos);
+    return mPlaneColliderImp->GetPointDepth(worldPos, mGeomID);
 }

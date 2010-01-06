@@ -31,28 +31,31 @@ ODEBallJoint::ODEBallJoint() : ODEGeneric6DOFJoint()
 long ODEBallJoint::CreateBallJoint(long world)
 {
     dWorldID ODEWorld = (dWorldID) world;
-    mODEJoint = dJointCreateBall(ODEWorld, 0);
-    return (long) mODEJoint;
+    dJointID ODEJoint = dJointCreateBall(ODEWorld, 0);
+    return (long) ODEJoint;
 }
 
-void ODEBallJoint::SetAnchor(const Vector3f& gAnchor)
+void ODEBallJoint::SetAnchor(const Vector3f& gAnchor, long jointID)
 {
-    dJointSetBallAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetBallAnchor (ODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 }
 
-Vector3f ODEBallJoint::GetAnchor1()
+Vector3f ODEBallJoint::GetAnchor1(long jointID)
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
-    dJointGetBallAnchor (mODEJoint, anchor);
+    dJointGetBallAnchor (ODEJoint, anchor);
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     
     return pos;
 }
 
-Vector3f ODEBallJoint::GetAnchor2()
+Vector3f ODEBallJoint::GetAnchor2(long jointID)
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
-    dJointGetBallAnchor2(mODEJoint, anchor);
+    dJointGetBallAnchor2(ODEJoint, anchor);
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     
     return pos;

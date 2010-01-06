@@ -34,9 +34,9 @@ class OXYGEN_API ODEPlaneCollider : public PlaneColliderInt, public ODECollider
 {
 public:
     ODEPlaneCollider();
-    void SetPlaneParams(float a, float b, float c, float d);
-    void SetParams(const salt::Vector3f& pos, salt::Vector3f normal);
-    float GetPointDepth(const salt::Vector3f& pos);
+    void SetPlaneParams(float a, float b, float c, float d, long geomID);
+    void SetParams(const salt::Vector3f& pos, salt::Vector3f normal, long geomID);
+    float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreatePlane();
 };
 

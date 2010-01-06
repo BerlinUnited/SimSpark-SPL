@@ -35,7 +35,7 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-ODECollider::ODECollider() : ODEPhysicsObject(), mODEGeom(0)
+ODECollider::ODECollider() : ODEPhysicsObject()
 {
 }
 
@@ -95,7 +95,6 @@ void ODECollider::DestroyGeom(long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomDestroy(ODEGeom);
-    mODEGeom = 0;
 }
 
 void ODECollider::TransformSetGeom(long parentGeomID, long geomID){

@@ -34,19 +34,19 @@ class OXYGEN_API UniversalJointInt
 
 public:
     virtual long CreateUniversalJoint(long world) = 0;
-    virtual void SetAnchor(const salt::Vector3f& anchor) = 0;
-    virtual salt::Vector3f GetAnchor1() = 0;
-    virtual salt::Vector3f GetAnchor2() = 0;
-    virtual void SetAxis1(const salt::Vector3f& axis) = 0;
-    virtual void SetAxis2(const salt::Vector3f& axis) = 0;
-    virtual salt::Vector3f GetAxis1() const = 0;
-    virtual salt::Vector3f GetAxis2() const = 0;
-    virtual float GetAngle1() const = 0;
-    virtual float GetAngle2() const = 0;
-    virtual float GetAngleRate1() const = 0;
-    virtual float GetAngleRate2() const = 0;
-    virtual void SetParameter(int parameter, float value) = 0;
-    virtual float GetParameter(int parameter) const = 0; 
+    virtual void SetAnchor(const salt::Vector3f& anchor, long jointID) = 0;
+    virtual salt::Vector3f GetAnchor1(long jointID) = 0;
+    virtual salt::Vector3f GetAnchor2(long jointID) = 0;
+    virtual void SetAxis1(const salt::Vector3f& axis, long jointID) = 0;
+    virtual void SetAxis2(const salt::Vector3f& axis, long jointID) = 0;
+    virtual salt::Vector3f GetAxis1(long jointID) const = 0;
+    virtual salt::Vector3f GetAxis2(long jointID) const = 0;
+    virtual float GetAngle1(long jointID) const = 0;
+    virtual float GetAngle2(long jointID) const = 0;
+    virtual float GetAngleRate1(long jointID) const = 0;
+    virtual float GetAngleRate2(long jointID) const = 0;
+    virtual void SetParameter(int parameter, float value, long jointID) = 0;
+    virtual float GetParameter(int parameter, long jointID) const = 0; 
 };
 
 } //namespace oxygen

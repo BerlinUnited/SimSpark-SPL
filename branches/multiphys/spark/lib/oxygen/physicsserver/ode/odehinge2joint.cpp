@@ -31,56 +31,65 @@ ODEHinge2Joint::ODEHinge2Joint() : ODEGeneric6DOFJoint()
 long ODEHinge2Joint::CreateHinge2Joint(long world)
 {
     dWorldID ODEWorld = (dWorldID) world;
-    mODEJoint = dJointCreateHinge2(ODEWorld, 0);
-    return (long) mODEJoint;
+    dJointID ODEJoint = dJointCreateHinge2(ODEWorld, 0);
+    return (long) ODEJoint;
 }
 
 void ODEHinge2Joint::SetAnchor(const Vector3f& gAnchor,
                             const Vector3f& up,
-                            const Vector3f& right)
+                            const Vector3f& right,
+                            long jointID)
 {
-    dJointSetHinge2Anchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
-    dJointSetHinge2Axis1(mODEJoint,up[0],up[1],up[2]);
-    dJointSetHinge2Axis2(mODEJoint,right[0],right[1],right[2]);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetHinge2Anchor (ODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    dJointSetHinge2Axis1(ODEJoint,up[0],up[1],up[2]);
+    dJointSetHinge2Axis2(ODEJoint,right[0],right[1],right[2]);
 }
 
-Vector3f ODEHinge2Joint::GetAnchor1()
+Vector3f ODEHinge2Joint::GetAnchor1(long jointID)
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
-    dJointGetHinge2Anchor (mODEJoint, anchor);
+    dJointGetHinge2Anchor (ODEJoint, anchor);
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     return pos;
 }
 
-Vector3f ODEHinge2Joint::GetAnchor2()
+Vector3f ODEHinge2Joint::GetAnchor2(long jointID)
 {
+    dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
-    dJointGetHinge2Anchor2(mODEJoint, anchor);
+    dJointGetHinge2Anchor2(ODEJoint, anchor);
     Vector3f pos = Vector3f(anchor[0],anchor[1],anchor[2]);
     return pos;
 }
 
-float ODEHinge2Joint::GetAngle()
+float ODEHinge2Joint::GetAngle(long jointID)
 {
-    return gRadToDeg(dJointGetHinge2Angle1(mODEJoint));
+    dJointID ODEJoint = (dJointID) jointID;
+    return gRadToDeg(dJointGetHinge2Angle1(ODEJoint));
 }
 
-float ODEHinge2Joint::GetAngleRate1()
+float ODEHinge2Joint::GetAngleRate1(long jointID)
 {
-    return gRadToDeg(dJointGetHinge2Angle1Rate(mODEJoint));
+    dJointID ODEJoint = (dJointID) jointID;
+    return gRadToDeg(dJointGetHinge2Angle1Rate(ODEJoint));
 }
 
-float ODEHinge2Joint::GetAngleRate2()
+float ODEHinge2Joint::GetAngleRate2(long jointID)
 {
-    return gRadToDeg(dJointGetHinge2Angle2Rate(mODEJoint));
+    dJointID ODEJoint = (dJointID) jointID;
+    return gRadToDeg(dJointGetHinge2Angle2Rate(ODEJoint));
 }
 
-void ODEHinge2Joint::SetParameter(int parameter, float value)
+void ODEHinge2Joint::SetParameter(int parameter, float value, long jointID)
 {
-    dJointSetHinge2Param(mODEJoint, parameter, value);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetHinge2Param(ODEJoint, parameter, value);
 }
 
-float ODEHinge2Joint::GetParameter(int parameter) const
+float ODEHinge2Joint::GetParameter(int parameter, long jointID) const
 {
-    return dJointGetHinge2Param(mODEJoint, parameter);
+    dJointID ODEJoint = (dJointID) jointID;
+    return dJointGetHinge2Param(ODEJoint, parameter);
 }

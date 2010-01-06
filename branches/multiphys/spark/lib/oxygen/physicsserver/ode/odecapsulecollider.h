@@ -35,13 +35,13 @@ class OXYGEN_API ODECapsuleCollider : public CapsuleColliderInt, public ODEConve
 public:
     ODECapsuleCollider();
 
-    void SetParams(float radius, float length);
-    void SetRadius(float radius);
-    void SetLength(float length);
-    void GetParams(float& radius, float& length);
-    float GetRadius();
-    float GetLength();
-    float GetPointDepth(const salt::Vector3f& pos);
+    void SetParams(float radius, float length, long geomID);
+    void SetRadius(float radius, long geomID);
+    void SetLength(float length, long geomID);
+    void GetParams(float& radius, float& length, long geomID);
+    float GetRadius(long geomID);
+    float GetLength(long geomID);
+    float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreateCapsule();
 };
 

@@ -34,9 +34,9 @@ class OXYGEN_API ODEBoxCollider : public BoxColliderInt, public ODEConvexCollide
 {
 public:
     ODEBoxCollider();
-    void SetBoxLengths(const salt::Vector3f& extents);
-    void GetBoxLengths(salt::Vector3f& extents);
-    float GetPointDepth(const salt::Vector3f& pos);
+    void SetBoxLengths(const salt::Vector3f& extents, long geomID);
+    void GetBoxLengths(salt::Vector3f& extents, long geomID);
+    float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreateBox();
 };
 

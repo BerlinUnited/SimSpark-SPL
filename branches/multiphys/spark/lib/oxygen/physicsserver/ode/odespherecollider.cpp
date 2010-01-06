@@ -28,24 +28,27 @@ ODESphereCollider::ODESphereCollider() : ODEConvexCollider()
 {
 }
 
-void ODESphereCollider::SetRadius(float r)
+void ODESphereCollider::SetRadius(float r, long geomID)
 {
-    dGeomSphereSetRadius(mODEGeom, r);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dGeomSphereSetRadius(ODEGeom, r);
 }
 
-float ODESphereCollider::GetRadius() const
+float ODESphereCollider::GetRadius(long geomID) const
 {
-    return dGeomSphereGetRadius(mODEGeom);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    return dGeomSphereGetRadius(ODEGeom);
 }
 
 long ODESphereCollider::CreateSphere()
 {
-    mODEGeom = dCreateSphere(0, 1.0f);
-    return (long) mODEGeom;
+    dGeomID ODEGeom = dCreateSphere(0, 1.0f);
+    return (long) ODEGeom;
 }
 
-float ODESphereCollider::GetPointDepth(const Vector3f& pos)
+float ODESphereCollider::GetPointDepth(const Vector3f& pos, long geomID)
 {
-  return dGeomSpherePointDepth
-    (mODEGeom,pos[0],pos[1],pos[2]);
+    dGeomID ODEGeom = (dGeomID) geomID;
+    return dGeomSpherePointDepth
+        (ODEGeom,pos[0],pos[1],pos[2]);
 }

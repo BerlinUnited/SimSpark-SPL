@@ -33,9 +33,9 @@ class OXYGEN_API BoxColliderInt
 {
 
 public:    
-    virtual void SetBoxLengths(const salt::Vector3f& extents) = 0;
-    virtual void GetBoxLengths(salt::Vector3f& extents) = 0;
-    virtual float GetPointDepth(const salt::Vector3f& pos) = 0;
+    virtual void SetBoxLengths(const salt::Vector3f& extents, long geomID) = 0;
+    virtual void GetBoxLengths(salt::Vector3f& extents, long geomID) = 0;
+    virtual float GetPointDepth(const salt::Vector3f& pos, long geomID) = 0;
     virtual long CreateBox() = 0;
 };
 

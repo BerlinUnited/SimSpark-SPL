@@ -32,7 +32,7 @@ RayCollider::RayCollider() : Collider()
 void RayCollider::SetParams(salt::Vector3f pos,
                             salt::Vector3f dir, float length)
 {
-    mRayColliderImp->SetParams(pos, dir, length);
+    mRayColliderImp->SetParams(pos, dir, length, mGeomID);
 }
 
 bool RayCollider::ConstructInternal()

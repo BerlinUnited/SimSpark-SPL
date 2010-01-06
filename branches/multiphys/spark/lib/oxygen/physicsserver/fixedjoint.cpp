@@ -45,18 +45,18 @@ void FixedJoint::OnLink()
 
 void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
 {
-    GetLog()->Error() <<
+    GetLog()->Warning() <<
         "(FixedJoint) WARNING: SetParameter function undefined for FixedJoint, ignored\n";
 }
 
 float FixedJoint::GetParameter(int /*parameter*/) const
 {
-    GetLog()->Error() <<
+    GetLog()->Warning() <<
         "(FixedJoint) WARNING: GetParameter function undefined for FixedJoint, returned zero\n";
     return 0;
 }
 
 void FixedJoint::SetFixed()
 {
-    mFixedJointImp->SetFixed();
+    mFixedJointImp->SetFixed(mJointID);
 }

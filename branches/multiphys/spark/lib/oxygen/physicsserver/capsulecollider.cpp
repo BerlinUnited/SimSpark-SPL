@@ -32,32 +32,32 @@ CapsuleCollider::CapsuleCollider() : ConvexCollider()
 
 void CapsuleCollider::SetParams(float radius, float length)
 {
-    mCapsuleColliderImp->SetParams(radius, length);
+    mCapsuleColliderImp->SetParams(radius, length, mGeomID);
 }
 
 void CapsuleCollider::SetRadius(float radius)
 {
-    mCapsuleColliderImp->SetRadius(radius);
+    mCapsuleColliderImp->SetRadius(radius, mGeomID);
 }
 
 void CapsuleCollider::SetLength(float length)
 {
-    mCapsuleColliderImp->SetLength(length);
+    mCapsuleColliderImp->SetLength(length, mGeomID);
 }
 
 void CapsuleCollider::GetParams(float& radius, float& length)
 {
-    mCapsuleColliderImp->GetParams(radius, length);
+    mCapsuleColliderImp->GetParams(radius, length, mGeomID);
 }
 
 float CapsuleCollider::GetRadius()
 {
-    return mCapsuleColliderImp->GetRadius();
+    return mCapsuleColliderImp->GetRadius(mGeomID);
 }
 
 float CapsuleCollider::GetLength()
 {
-    return mCapsuleColliderImp->GetLength();
+    return mCapsuleColliderImp->GetLength(mGeomID);
 }
 
 bool CapsuleCollider::ConstructInternal()
@@ -75,5 +75,5 @@ bool CapsuleCollider::ConstructInternal()
 float CapsuleCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
-    return mCapsuleColliderImp->GetPointDepth(worldPos);
+    return mCapsuleColliderImp->GetPointDepth(worldPos, mGeomID);
 }
