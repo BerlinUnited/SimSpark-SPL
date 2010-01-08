@@ -57,12 +57,6 @@ public:
 protected:
     /** creates a new hinge2 joint */
     virtual void OnLink();
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value);
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
     
 private:
     boost::shared_ptr<Hinge2JointInt> mHinge2JointImp;

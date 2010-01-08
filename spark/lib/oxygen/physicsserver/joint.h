@@ -25,6 +25,7 @@
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
@@ -253,12 +254,6 @@ public:
     */
     float GetMaxMotorForce(EAxisIndex idx) const;
 
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value) = 0;
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const = 0;
-
     /** Set the maximum joint speed1, valid for both hingejoint and universaljoint */
     virtual void SetJointMaxSpeed1(float rad);
 
@@ -288,9 +283,6 @@ protected:
     /** the ID of the managed joint */
     long mJointID;
 
-    /** the allocated joint feedback structure */
-    boost::shared_ptr<dJointFeedback> mFeedback;
-
 protected:
     /** The maximum joint speed in rad, valid for both hingejoint and universaljoint */
     float mJointMaxSpeed1;
@@ -300,7 +292,6 @@ protected:
     float mJointMaxSpeed2;
     bool mIsLimitJointMaxSpeed2;
  
-private:
     boost::shared_ptr<JointInt> mJointImp;
 };
 

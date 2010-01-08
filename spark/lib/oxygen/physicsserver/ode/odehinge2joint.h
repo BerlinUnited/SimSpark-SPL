@@ -40,8 +40,6 @@ public:
     float GetAngle(long jointID);
     float GetAngleRate1(long jointID);
     float GetAngleRate2(long jointID);
-    void SetParameter(int parameter, float value, long jointID);
-    float GetParameter(int parameter, long jointID) const;
 };
 
 } //namespace oxygen

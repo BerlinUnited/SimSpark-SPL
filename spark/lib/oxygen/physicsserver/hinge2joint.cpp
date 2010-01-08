@@ -113,13 +113,3 @@ float Hinge2Joint::GetAngleRate(EAxisIndex idx)
             return 0;
         }
 }
-
-void Hinge2Joint::SetParameter(int parameter, float value)
-{
-    mHinge2JointImp->SetParameter(parameter, value, mJointID);
-}
-
-float Hinge2Joint::GetParameter(int parameter) const
-{
-    return mHinge2JointImp->GetParameter(parameter, mJointID);
-}

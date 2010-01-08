@@ -77,15 +77,12 @@ Vector3f BallJoint::GetAnchor(EBodyIndex idx)
     return GetLocalPos(pos);
 }
 
-void BallJoint::SetParameter(int /*parameter*/, float /*value*/)
-{
-    GetLog()->Error() <<
-        "(BallJoint) WARNING: SetParameter function undefined for BallJoint, ignored\n";
+void BallJoint::SetParameter(int parameter, float value){
+    GetLog()->Warning()
+        << "(BallJoint) WARNING: SetParameter undefined for BallJoint, call ignored";
 }
 
-float BallJoint::GetParameter(int /*parameter*/) const
-{
-    GetLog()->Error() <<
-        "(BallJoint) WARNING: GetParameter function undefined for BallJoint, returned zero\n";
-    return 0;
+float BallJoint::GetParameter(int parameter) const{
+    GetLog()->Warning()
+        << "(BallJoint) WARNING: SetParameter undefined for BallJoint, call ignored";
 }

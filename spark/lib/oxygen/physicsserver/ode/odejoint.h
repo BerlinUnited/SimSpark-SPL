@@ -33,56 +33,50 @@ class OXYGEN_API ODEJoint : public JointInt, public ODEPhysicsObject
 public:
     ODEJoint();
     
-    virtual void DestroyJoint();
-    virtual void Attach(boost::shared_ptr<RigidBody> body1,
-                        boost::shared_ptr<RigidBody> body2);
-    void Attach(const std::string& path1, const std::string& path2);
-    int GetType() const;
-    boost::shared_ptr<RigidBody> GetBody(EBodyIndex idx);
-    void EnableFeedback(bool enable);
-    bool FeedbackEnabled() const;
-    salt::Vector3f GetFeedbackForce(EBodyIndex idx) const;
-    salt::Vector3f GetFeedbackTorque(EBodyIndex idx) const;
-    void SetFudgeFactor(EAxisIndex idx, float fudge_factor);
-    float GetFudgeFactor(EAxisIndex idx) const;
-    void SetBounce(EAxisIndex idx, float bounce);
-    float GetBounce(EAxisIndex idx) const;
-    void SetLowStopDeg(EAxisIndex idx, float deg);
-    float GetLowStopDeg(EAxisIndex idx) const;
-    void SetHighStopDeg(EAxisIndex idx, float deg);
-    float GetHighStopDeg(EAxisIndex idx) const;
-    void SetLowStopPos(EAxisIndex idx, float deg);
-    float GetLowStopPos(EAxisIndex idx) const;
-    void SetHighStopPos(EAxisIndex idx, float deg);
-    float GetHighStopPos(EAxisIndex idx) const;
-    void SetCFM(EAxisIndex idx, float cfm);
-    float GetCFM(EAxisIndex idx) const;
-    void SetStopCFM(EAxisIndex idx, float cfm);
-    float GetStopCFM(EAxisIndex idx) const;
-    void SetStopERP(EAxisIndex idx, float erp);
-    float GetStopERP(EAxisIndex idx) const;
-    void SetSuspensionERP(EAxisIndex idx, float erp);
-    float GetSuspensionERP(EAxisIndex idx) const;
-    void SetSuspensionCFM(EAxisIndex idx, float cfm);
-    float GetSuspensionCFM(EAxisIndex idx) const;
-    void SetLinearMotorVelocity(EAxisIndex idx, float vel);
-    float GetLinearMotorVelocity(EAxisIndex idx) const;
-    void SetAngularMotorVelocity(EAxisIndex idx, float deg);
-    float GetAngularMotorVelocity(EAxisIndex idx) const;
-    void SetMaxMotorForce(EAxisIndex idx, float f);
-    float GetMaxMotorForce(EAxisIndex idx) const;
-    virtual void SetParameter(int parameter, float value){};
-    virtual float GetParameter(int parameter) const;
-    virtual void SetJointMaxSpeed1(float rad);
-    virtual void SetJointMaxSpeed2(float rad);
-    virtual float GetJointMaxSpeed1() const;
-    virtual float GetJointMaxSpeed2() const;
-    bool IsLimitJointMaxSpeed1() const;
-    bool IsLimitJointMaxSpeed2() const;
-    void OnLink();
+    virtual void DestroyJoint(long jointID);
+    virtual void Attach(long bodyID1, long bodiID2, long jointID);
+    int GetType(long jointID) const;
+    long GetBodyID(int idx, long jointID);
+    void EnableFeedback(bool enable, long jointID);
+    bool FeedbackEnabled(long jointID) const;
+    salt::Vector3f GetFeedbackForce(int idx) const;
+    salt::Vector3f GetFeedbackTorque(int idx) const;
+    void SetFudgeFactor(int idx, float fudge_factor, long jointID);
+    float GetFudgeFactor(int idx, long jointID) const;
+    void SetBounce(int idx, float bounce, long jointID);
+    float GetBounce(int idx, long jointID) const;
+    void SetLowStopDeg(int idx, float deg, long jointID);
+    float GetLowStopDeg(int idx, long jointID) const;
+    void SetHighStopDeg(int idx, float deg, long jointID);
+    float GetHighStopDeg(int idx, long jointID) const;
+    void SetLowStopPos(int idx, float deg, long jointID);
+    float GetLowStopPos(int idx, long jointID) const;
+    void SetHighStopPos(int idx, float deg, long jointID);
+    float GetHighStopPos(int idx, long jointID) const;
+    void SetCFM(int idx, float cfm, long jointID);
+    float GetCFM(int idx, long jointID) const;
+    void SetStopCFM(int idx, float cfm, long jointID);
+    float GetStopCFM(int idx, long jointID) const;
+    void SetStopERP(int idx, float erp, long jointID);
+    float GetStopERP(int idx, long jointID) const;
+    void SetSuspensionERP(int idx, float erp, long jointID);
+    float GetSuspensionERP(int idx, long jointID) const;
+    void SetSuspensionCFM(int idx, float cfm, long jointID);
+    float GetSuspensionCFM(int idx, long jointID) const;
+    void SetLinearMotorVelocity(int idx, float vel, long jointID);
+    float GetLinearMotorVelocity(int idx, long jointID) const;
+    void SetAngularMotorVelocity(int idx, float deg, long jointID);
+    float GetAngularMotorVelocity(int idx, long jointID) const;
+    void SetMaxMotorForce(int idx, float f, long jointID);
+    float GetMaxMotorForce(int idx, long jointID) const;
+    virtual void SetParameter(int parameter, float value, long jointID);
+    virtual float GetParameter(int parameter, long jointID) const;
+    void OnLink(long jointID, Joint* joint);
     
 protected:
-    dJointID mODEJoint;
+    //It is encouraged to not store any member variables in the implementation. 
+    //This can cause major problems. However, here, I found no way to avoid it.
+    boost::shared_ptr<dJointFeedback> mFeedback;
 };
 
 } //namespace oxygen

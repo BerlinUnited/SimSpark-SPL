@@ -68,12 +68,9 @@ public:
 
     /** returns the time derivate of the hinge angle */
     float GetAngleRate() const;
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value);
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    
+    /** Sets a parameter value of this joint*/
+    void SetParameter(int parameter, float value);
 
 protected:
     /** creates a new hingejoint joint */

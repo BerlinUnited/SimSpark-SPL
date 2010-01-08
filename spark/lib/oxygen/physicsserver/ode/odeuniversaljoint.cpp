@@ -110,15 +110,3 @@ float ODEUniversalJoint::GetAngleRate2(long jointID) const
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetUniversalAngle2Rate(ODEJoint));
 }
-
-void ODEUniversalJoint::SetParameter(int parameter, float value, long jointID)
-{
-    dJointID ODEJoint = (dJointID) jointID;
-    dJointSetUniversalParam(ODEJoint, parameter, value);
-}
-
-float ODEUniversalJoint::GetParameter(int parameter, long jointID) const
-{
-    dJointID ODEJoint = (dJointID) jointID;
-    return dJointGetUniversalParam(ODEJoint, parameter);
-}

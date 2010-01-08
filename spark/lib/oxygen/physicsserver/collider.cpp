@@ -23,6 +23,7 @@
 #include <oxygen/physicsserver/ode/odecollider.h>
 #include <oxygen/physicsserver/collisionhandler.h>
 #include <oxygen/physicsserver/space.h>
+#include <oxygen/physicsserver/staticphysicsmethods.h>
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/sceneserver/scene.h>
@@ -163,7 +164,7 @@ shared_ptr<Collider> Collider::GetCollider(long geomID)
         }
 
     Collider* collPtr =
-        ColliderInt::GetColliderPointer(geomID);
+        StaticPhysicsMethods::GetColliderPointer(geomID);
 
     if (collPtr == 0)
         {

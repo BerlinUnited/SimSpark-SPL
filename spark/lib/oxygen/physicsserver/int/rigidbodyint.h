@@ -81,17 +81,7 @@ public:
     virtual void DestroyPhysicsObject(long bodyID) = 0;
     virtual salt::Matrix GetSynchronisationMatrix(long bodyID) = 0;
     virtual void BodySetData(RigidBody* rb, long bodyID) = 0;
-    virtual RigidBody* BodyGetData(long bodyID) = 0;
-    
-    // Here, we have to cheat with the preprocessor, since a static method
-    // is required, and the bridge pattern requires member variables to
-    // be used (so we cannot use the bridge pattern)            
-    static RigidBody* GetBodyPointer(long bodyID){
-        #ifdef OXYGEN_ODEWRAPPER_H
-        return static_cast<RigidBody*>(dBodyGetData( (dBodyID) bodyID));
-        #endif
-    }
-    
+    virtual RigidBody* BodyGetData(long bodyID) = 0;    
     virtual long CreateBody(long world) = 0;
 };
 

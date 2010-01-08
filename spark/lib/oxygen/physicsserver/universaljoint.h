@@ -69,12 +69,9 @@ public:
 
     /** returns the time derivate of one of the hinge angles */
     float GetAngleRate(EAxisIndex idx) const;
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value);
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    
+    /** Sets a parameter value of this joint*/
+    void SetParameter(int parameter, float value);
 
 protected:
     /** creates a new universal joint */

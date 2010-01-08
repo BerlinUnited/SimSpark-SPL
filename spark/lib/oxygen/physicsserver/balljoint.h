@@ -44,16 +44,16 @@ public:
         anchor point will be the same for both bodies.
     */
     salt::Vector3f GetAnchor(EBodyIndex idx);
-
-protected:
-    /** creates a new contact joint */
-    virtual void OnLink();
-
+    
     /** sets a joint parameter value */
     virtual void SetParameter(int parameter, float value);
 
     /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    virtual float GetParameter(int parameter) const;    
+
+protected:
+    /** creates a new contact joint */
+    virtual void OnLink();
     
 private:
     boost::shared_ptr<BallJointInt> mBallJointImp;

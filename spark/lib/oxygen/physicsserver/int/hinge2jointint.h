@@ -38,8 +38,6 @@ public:
     virtual float GetAngle(long jointID) = 0;
     virtual float GetAngleRate1(long jointID) = 0;
     virtual float GetAngleRate2(long jointID) = 0;
-    virtual void SetParameter(int parameter, float value, long jointID) = 0;
-    virtual float GetParameter(int parameter, long jointID) const = 0;
 };
 
 } //namespace oxygen

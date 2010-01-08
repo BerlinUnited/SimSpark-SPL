@@ -48,15 +48,6 @@ public:
     virtual void SetSpace(long spaceID, long geomID, Collider* collider) = 0;
     virtual void SetBody(long bodyID, long geomID) = 0;
     virtual void RemoveFromSpace(long geomID, long spaceID) = 0;
-    
-    // Here, we have to cheat with the preprocessor, since a static method
-    // is required, and the bridge pattern requires member variables to
-    // be used (so we cannot use the bridge pattern)            
-    static Collider* GetColliderPointer(long geomID){
-        #ifdef OXYGEN_ODEWRAPPER_H
-        return static_cast<Collider*>(dGeomGetData( (dGeomID) geomID));
-        #endif
-    }
 };
 
 } //namespace oxygen

@@ -125,12 +125,6 @@ float HingeJoint::GetAngleRate() const
     return mHingeJointImp->GetAngleRate(mJointID);
 }
 
-void HingeJoint::SetParameter(int parameter, float value)
-{
-    mHingeJointImp->SetParameter(parameter, value, mJointID);
-}
-
-float HingeJoint::GetParameter(int parameter) const
-{
-    return mHingeJointImp->GetParameter(parameter, mJointID);
+void HingeJoint::SetParameter(int parameter, float value){
+    mJointImp->SetParameter(parameter, value, mJointID);
 }
