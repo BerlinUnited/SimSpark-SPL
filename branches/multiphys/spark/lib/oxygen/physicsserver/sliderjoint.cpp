@@ -62,13 +62,3 @@ float SliderJoint::GetPositionRate()
 {
     return mSliderJointImp->GetPositionRate(mJointID);
 }
-
-void SliderJoint::SetParameter(int parameter, float value)
-{
-    mSliderJointImp->SetParameter(parameter, value, mJointID);
-}
-
-float SliderJoint::GetParameter(int parameter) const
-{
-    return mSliderJointImp->GetParameter(parameter, mJointID);
-}

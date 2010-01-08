@@ -81,15 +81,3 @@ float ODEHinge2Joint::GetAngleRate2(long jointID)
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHinge2Angle2Rate(ODEJoint));
 }
-
-void ODEHinge2Joint::SetParameter(int parameter, float value, long jointID)
-{
-    dJointID ODEJoint = (dJointID) jointID;
-    dJointSetHinge2Param(ODEJoint, parameter, value);
-}
-
-float ODEHinge2Joint::GetParameter(int parameter, long jointID) const
-{
-    dJointID ODEJoint = (dJointID) jointID;
-    return dJointGetHinge2Param(ODEJoint, parameter);
-}

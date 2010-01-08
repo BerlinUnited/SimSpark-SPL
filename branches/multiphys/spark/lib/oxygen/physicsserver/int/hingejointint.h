@@ -36,8 +36,6 @@ public:
     virtual salt::Vector3f GetAxis(long jointID) = 0;
     virtual float GetAngle(long jointID) const = 0;
     virtual float GetAngleRate(long jointID) const = 0;
-    virtual void SetParameter(int parameter, float value, long jointID) = 0;
-    virtual float GetParameter(int parameter, long jointID) const = 0;
 };
 
 } //namespace oxygen

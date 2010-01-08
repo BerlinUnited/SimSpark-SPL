@@ -51,15 +51,3 @@ float ODESliderJoint::GetPositionRate(long jointID)
     dJointID ODEJoint = (dJointID) jointID;
     return dJointGetSliderPositionRate(ODEJoint);
 }
-
-void ODESliderJoint::SetParameter(int parameter, float value, long jointID)
-{
-    dJointID ODEJoint = (dJointID) jointID;
-    dJointSetSliderParam(ODEJoint, parameter, value);
-}
-
-float ODESliderJoint::GetParameter(int parameter, long jointID) const
-{
-    dJointID ODEJoint = (dJointID) jointID;
-    return dJointGetSliderParam(ODEJoint, parameter);
-}

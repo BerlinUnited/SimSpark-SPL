@@ -37,8 +37,6 @@ public:
     virtual float GetPosition(long jointID) = 0;
     virtual float GetPositionRate(long jointID) = 0;
     virtual void SetSliderAxis(salt::Vector3f& up, long jointID) = 0;
-    virtual void SetParameter(int parameter, float value, long jointID) = 0;
-    virtual float GetParameter(int parameter, long jointID) const = 0;
 };
 
 } //namespace oxygen

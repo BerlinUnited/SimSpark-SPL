@@ -39,6 +39,7 @@ set(oxygen_LIB_HDRS
     physicsserver/recorderhandler.h
     physicsserver/space.h
     physicsserver/spherecollider.h
+    physicsserver/staticphysicsmethods.h
     physicsserver/transformcollider.h
     physicsserver/world.h
     physicsserver/dragcontroller.h
@@ -89,6 +90,7 @@ set(oxygen_LIB_HDRS
     physicsserver/int/worldint.h
     
     #ode-specific files
+    physicsserver/staticphysicsmethods_ode.cpp
     physicsserver/ode/odeballjoint.h
     physicsserver/ode/odebody.h
     physicsserver/ode/odeboxcollider.h

@@ -19,6 +19,7 @@
 */
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/transformcollider.h>
+#include <oxygen/physicsserver/staticphysicsmethods.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/ode/oderigidbody.h>
 #include <oxygen/sceneserver/scene.h>
@@ -323,7 +324,7 @@ shared_ptr<RigidBody> RigidBody::GetBody(long id)
             return shared_ptr<RigidBody>();
         }
 
-    RigidBody* bodyPtr = RigidBodyInt::GetBodyPointer(bodyID);
+    RigidBody* bodyPtr = StaticPhysicsMethods::GetBodyPointer(bodyID);
 
     if (bodyPtr == 0)
         {

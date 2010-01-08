@@ -145,12 +145,6 @@ float UniversalJoint::GetAngleRate(EAxisIndex idx) const
         }
 }
 
-void UniversalJoint::SetParameter(int parameter, float value)
-{
-    mUniversalJointImp->SetParameter(parameter, value, mJointID);
-}
-
-float UniversalJoint::GetParameter(int parameter) const
-{
-    return mUniversalJointImp->GetParameter(parameter, mJointID);
+void UniversalJoint::SetParameter(int parameter, float value){
+    mJointImp->SetParameter(parameter, value, mJointID);
 }

@@ -26,72 +26,41 @@ using namespace boost;
 using namespace std;
 using namespace salt;
 
-ODEJoint::ODEJoint() : ODEPhysicsObject(), mODEJoint(0) 
+ODEJoint::ODEJoint() : ODEPhysicsObject() 
 {
-    mJointMaxSpeed1 = mJointMaxSpeed2 = 0.0;
-    mIsLimitJointMaxSpeed1 = mIsLimitJointMaxSpeed2 = false;
 }
 
-void ODEJoint::OnLink()
+void ODEJoint::OnLink(long jointID, Joint* joint)
 {
-    if (mODEJoint == 0)
-        {
-            return;
-        }
-
-    dJointSetData(mODEJoint, this);
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointSetData(ODEJoint, joint);
 }
 
-void ODEJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
+void ODEJoint::Attach(long bodyID1, long bodyID2, long jointID)
 {
-    string path1,path2;
-    long id1,id2;
-
-    static const char strStaticEnv[] = "<static environment>";
-
-    if (body1.get() == 0)
-        {
-            id1   = 0;
-            path1 = strStaticEnv;
-        } else
-        {
-            id1   = body1->GetBodyID();
-            path1 = body1->GetFullPath();
-        }
-
-    if (body2.get() == 0)
-        {
-            id2   = 0;
-            path2 = strStaticEnv;
-        } else
-        {
-            id2   = body2->GetBodyID();
-            path2 = body2->GetFullPath();
-        }
-
-    dJointAttach(mODEJoint, (dBodyID) id1, (dBodyID) id2);
+    dBodyID ODEBody1 = (dBodyID) bodyID1;
+    dBodyID ODEBody2 = (dBodyID) bodyID2;
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointAttach(ODEJoint, ODEBody1, ODEBody2);
 }
 
-void ODEJoint::Attach(const std::string& path1, const std::string& path2)
+int ODEJoint::GetType(long jointID) const
 {
-    shared_ptr<RigidBody> body1;
-    shared_ptr<RigidBody> body2;
-    Attach(body1,body2);
+    dJointID ODEJoint = (dJointID) jointID;
+    return dJointGetType(ODEJoint);
 }
 
-int ODEJoint::GetType() const
+long ODEJoint::GetBodyID(int idx, long jointID)
 {
-    return dJointGetType(mODEJoint);
+    dJointID ODEJoint = (dJointID) jointID;
+    dBodyID ODEBodyID = dJointGetBody(ODEJoint, idx);
+    return (long) ODEBodyID;
 }
 
-boost::shared_ptr<RigidBody> ODEJoint::GetBody(EBodyIndex idx)
+void ODEJoint::EnableFeedback(bool enable, long jointID)
 {
-    long bodyID = (long) dJointGetBody(mODEJoint, idx);
-    return RigidBody::GetBody(bodyID);
-}
-
-void ODEJoint::EnableFeedback(bool enable)
-{
+    dJointID ODEJoint = (dJointID) jointID;
+    
     if (enable)
         {
             if (mFeedback.get() == 0)
@@ -107,15 +76,16 @@ void ODEJoint::EnableFeedback(bool enable)
                     }
             }
 
-    dJointSetFeedback(mODEJoint,mFeedback.get());
+    dJointSetFeedback(ODEJoint,mFeedback.get());
 }
 
-bool ODEJoint::FeedbackEnabled() const
+bool ODEJoint::FeedbackEnabled(long jointID) const
 {
-    return (dJointGetFeedback(mODEJoint) != 0);
+    dJointID ODEJoint = (dJointID) jointID;
+    return (dJointGetFeedback(ODEJoint) != 0);
 }
 
-Vector3f ODEJoint::GetFeedbackForce(EBodyIndex idx) const
+Vector3f ODEJoint::GetFeedbackForce(int idx) const
 {
     dJointFeedback* fb = mFeedback.get();
     if (fb == 0)
@@ -125,14 +95,14 @@ Vector3f ODEJoint::GetFeedbackForce(EBodyIndex idx) const
 
     switch (idx)
         {
-        case BI_FIRST :
+        case 0 :
             return Vector3f(
                             fb->f1[0],
                             fb->f1[1],
                             fb->f1[2]
                             );
 
-        case BI_SECOND :
+        case 1 :
             return Vector3f(
                             fb->f2[0],
                             fb->f2[1],
@@ -144,7 +114,7 @@ Vector3f ODEJoint::GetFeedbackForce(EBodyIndex idx) const
         }
 }
 
-Vector3f ODEJoint::GetFeedbackTorque(EBodyIndex idx) const
+Vector3f ODEJoint::GetFeedbackTorque(int idx) const
 {
     dJointFeedback* fb = mFeedback.get();
     if (fb == 0)
@@ -154,14 +124,14 @@ Vector3f ODEJoint::GetFeedbackTorque(EBodyIndex idx) const
 
     switch (idx)
         {
-        case BI_FIRST :
+        case 0 :
             return Vector3f(
                             fb->t1[0],
                             fb->t1[1],
                             fb->t1[2]
                             );
 
-        case BI_SECOND :
+        case 1 :
             return Vector3f(
                             fb->t2[0],
                             fb->t2[1],
@@ -173,192 +143,181 @@ Vector3f ODEJoint::GetFeedbackTorque(EBodyIndex idx) const
         }
 }
     
-void ODEJoint::SetFudgeFactor(EAxisIndex idx, float fudge_factor)
+void ODEJoint::SetFudgeFactor(int idx, float fudge_factor, long jointID)
 {
-    SetParameter(dParamFudgeFactor + (idx * dParamGroup), fudge_factor);
+    SetParameter(dParamFudgeFactor + (idx * dParamGroup), fudge_factor, jointID);
 }
 
-float ODEJoint::GetFudgeFactor(EAxisIndex idx) const
+float ODEJoint::GetFudgeFactor(int idx, long jointID) const
 {
-    return GetParameter(dParamFudgeFactor + (idx * dParamGroup));
+    return GetParameter(dParamFudgeFactor + (idx * dParamGroup), jointID);
 }
 
-
-void ODEJoint::SetBounce(EAxisIndex idx, float bounce)
+void ODEJoint::SetBounce(int idx, float bounce, long jointID)
 {
-    SetParameter(dParamBounce + (idx * dParamGroup),bounce);
+    SetParameter(dParamBounce + (idx * dParamGroup),bounce, jointID);
 }
 
-float ODEJoint::GetBounce(EAxisIndex idx) const
+float ODEJoint::GetBounce(int idx, long jointID) const
 {
-    return GetParameter(dParamBounce + (idx * dParamGroup));
+    return GetParameter(dParamBounce + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetLowStopPos(EAxisIndex idx, float pos)
+void ODEJoint::SetLowStopPos(int idx, float pos, long jointID)
 {
-    SetParameter(dParamLoStop + (idx * dParamGroup), pos);
+    SetParameter(dParamLoStop + (idx * dParamGroup), pos, jointID);
 }
 
-float ODEJoint::GetLowStopPos(EAxisIndex idx) const
+float ODEJoint::GetLowStopPos(int idx, long jointID) const
 {
-    return GetParameter(dParamLoStop + (idx * dParamGroup));
+    return GetParameter(dParamLoStop + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetHighStopPos(EAxisIndex idx, float pos)
+void ODEJoint::SetHighStopPos(int idx, float pos, long jointID)
 {
-    SetParameter(dParamHiStop + (idx * dParamGroup), pos);
+    SetParameter(dParamHiStop + (idx * dParamGroup), pos, jointID);
 }
 
-float ODEJoint::GetHighStopPos(EAxisIndex idx) const
+float ODEJoint::GetHighStopPos(int idx, long jointID) const
 {
-    return GetParameter(dParamHiStop + (idx * dParamGroup));
+    return GetParameter(dParamHiStop + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetLowStopDeg(EAxisIndex idx, float deg)
+void ODEJoint::SetLowStopDeg(int idx, float deg, long jointID)
 {
-    SetParameter(dParamLoStop + (idx * dParamGroup), gDegToRad(deg));
+    SetParameter(dParamLoStop + (idx * dParamGroup), gDegToRad(deg), jointID);
 }
 
-float ODEJoint::GetLowStopDeg(EAxisIndex idx) const
+float ODEJoint::GetLowStopDeg(int idx, long jointID) const
 {
-    return gRadToDeg(GetParameter(dParamLoStop + (idx * dParamGroup)));
+    return gRadToDeg(GetParameter(dParamLoStop + (idx * dParamGroup), jointID));
 }
 
-void ODEJoint::SetHighStopDeg(EAxisIndex idx, float deg)
+void ODEJoint::SetHighStopDeg(int idx, float deg, long jointID)
 {
-    SetParameter(dParamHiStop + (idx * dParamGroup), gDegToRad(deg));
+    SetParameter(dParamHiStop + (idx * dParamGroup), gDegToRad(deg), jointID);
 }
 
-float ODEJoint::GetHighStopDeg(EAxisIndex idx) const
+float ODEJoint::GetHighStopDeg(int idx, long jointID) const
 {
-    return gRadToDeg(GetParameter(dParamHiStop + (idx * dParamGroup)));
+    return gRadToDeg(GetParameter(dParamHiStop + (idx * dParamGroup), jointID));
 }
 
-void ODEJoint::SetCFM(EAxisIndex idx, float cfm)
+void ODEJoint::SetCFM(int idx, float cfm, long jointID)
 {
-    SetParameter(dParamCFM + (idx * dParamGroup), cfm);
+    SetParameter(dParamCFM + (idx * dParamGroup), cfm, jointID);
 }
 
-float ODEJoint::GetCFM(EAxisIndex idx) const
+float ODEJoint::GetCFM(int idx, long jointID) const
 {
-    return GetParameter(dParamCFM + (idx * dParamGroup));
+    return GetParameter(dParamCFM + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetStopCFM(EAxisIndex idx, float cfm)
+void ODEJoint::SetStopCFM(int idx, float cfm, long jointID)
 {
-    SetParameter(dParamStopCFM + (idx * dParamGroup), cfm);
+    SetParameter(dParamStopCFM + (idx * dParamGroup), cfm, jointID);
 }
 
-float ODEJoint::GetStopCFM(EAxisIndex idx) const
+float ODEJoint::GetStopCFM(int idx, long jointID) const
 {
-    return GetParameter(dParamStopCFM + (idx * dParamGroup));
+    return GetParameter(dParamStopCFM + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetStopERP(EAxisIndex idx, float erp)
+void ODEJoint::SetStopERP(int idx, float erp, long jointID)
 {
-    SetParameter(dParamStopERP + (idx * dParamGroup), erp);
+    SetParameter(dParamStopERP + (idx * dParamGroup), erp, jointID);
 }
 
-float ODEJoint::GetStopERP(EAxisIndex idx) const
+float ODEJoint::GetStopERP(int idx, long jointID) const
 {
-    return GetParameter(dParamStopERP + (idx * dParamGroup));
+    return GetParameter(dParamStopERP + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetSuspensionERP(EAxisIndex idx, float erp)
+void ODEJoint::SetSuspensionERP(int idx, float erp, long jointID)
 {
-    SetParameter(dParamSuspensionERP + (idx * dParamGroup), erp);
+    SetParameter(dParamSuspensionERP + (idx * dParamGroup), erp, jointID);
 }
 
-float ODEJoint::GetSuspensionERP(EAxisIndex idx) const
+float ODEJoint::GetSuspensionERP(int idx, long jointID) const
 {
-    return GetParameter(dParamSuspensionERP + (idx * dParamGroup));
+    return GetParameter(dParamSuspensionERP + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetSuspensionCFM(EAxisIndex idx, float cfm)
+void ODEJoint::SetSuspensionCFM(int idx, float cfm, long jointID)
 {
-    SetParameter(dParamSuspensionCFM + (idx * dParamGroup), cfm);
+    SetParameter(dParamSuspensionCFM + (idx * dParamGroup), cfm, jointID);
 }
 
-float ODEJoint::GetSuspensionCFM(EAxisIndex idx) const
+float ODEJoint::GetSuspensionCFM(int idx, long jointID) const
 {
-    return GetParameter(dParamSuspensionCFM + (idx * dParamGroup));
+    return GetParameter(dParamSuspensionCFM + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetLinearMotorVelocity(EAxisIndex idx, float vel)
+void ODEJoint::SetLinearMotorVelocity(int idx, float vel, long jointID)
 {
-    SetParameter(dParamVel + (idx * dParamGroup), vel);
+    SetParameter(dParamVel + (idx * dParamGroup), vel, jointID);
 }
 
-float ODEJoint::GetLinearMotorVelocity(EAxisIndex idx) const
+float ODEJoint::GetLinearMotorVelocity(int idx, long jointID) const
 {
-    return GetParameter(dParamVel + (idx * dParamGroup));
+    return GetParameter(dParamVel + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::SetAngularMotorVelocity(EAxisIndex idx, float deg)
+void ODEJoint::SetAngularMotorVelocity(int idx, float deg, long jointID)
 {
-    SetParameter(dParamVel + (idx * dParamGroup), gDegToRad(deg));
+    SetParameter(dParamVel + (idx * dParamGroup), gDegToRad(deg), jointID);
 }
 
-float ODEJoint::GetAngularMotorVelocity(EAxisIndex idx) const
+float ODEJoint::GetAngularMotorVelocity(int idx, long jointID) const
 {
-    return gRadToDeg(GetParameter(dParamVel + (idx * dParamGroup)));
+    return gRadToDeg(GetParameter(dParamVel + (idx * dParamGroup), jointID));
 }
 
-void ODEJoint::SetMaxMotorForce(EAxisIndex idx, float f)
+void ODEJoint::SetMaxMotorForce(int idx, float f, long jointID)
 {
-    SetParameter(dParamFMax + (idx * dParamGroup), f);
+    SetParameter(dParamFMax + (idx * dParamGroup), f, jointID);
 }
 
-float ODEJoint::GetMaxMotorForce(EAxisIndex idx) const
+float ODEJoint::GetMaxMotorForce(int idx, long jointID) const
 {
-    return GetParameter(dParamFMax + (idx * dParamGroup));
+    return GetParameter(dParamFMax + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::DestroyJoint()
+void ODEJoint::DestroyJoint(long jointID)
 {
-    if (! mODEJoint)
-        {
-            return;
-        }
-
-    EnableFeedback(false);
-    dJointDestroy(mODEJoint);
-    mODEJoint = 0;
+    dJointID ODEJoint = (dJointID) jointID;
+    EnableFeedback(false, jointID);
+    dJointDestroy(ODEJoint);
 }
 
-void ODEJoint::SetJointMaxSpeed1(float rad)
-{
-    mJointMaxSpeed1 = fabs(rad);
-    mIsLimitJointMaxSpeed1 = true;
+void ODEJoint::SetParameter(int parameter, float value, long jointID){
+    dJointID ODEJoint = (dJointID) jointID;
+    int jointType = dJointGetType(ODEJoint);
+    switch (jointType){
+        case dJointTypeHinge: dJointSetHingeParam(ODEJoint, parameter, value);
+                              break;
+        case dJointTypeHinge2: dJointSetHinge2Param(ODEJoint, parameter, value);
+                               break;
+        case dJointTypeSlider: dJointSetSliderParam(ODEJoint, parameter, value);
+                               break;
+        case dJointTypeUniversal: dJointSetUniversalParam(ODEJoint, parameter, value);
+                                  break;
+        default: return;
+    }
 }
 
-void ODEJoint::SetJointMaxSpeed2(float rad)
-{
-    mJointMaxSpeed2 = fabs(rad);
-    mIsLimitJointMaxSpeed2 = true;
+float ODEJoint::GetParameter(int parameter, long jointID) const{
+    dJointID ODEJoint = (dJointID) jointID;
+    int jointType = dJointGetType(ODEJoint);
+    switch (jointType){
+        case dJointTypeHinge: return dJointGetHingeParam(ODEJoint, parameter);
+                              break;
+        case dJointTypeHinge2: return dJointGetHinge2Param(ODEJoint, parameter);
+                               break;
+        case dJointTypeSlider: return dJointGetSliderParam(ODEJoint, parameter);
+                               break;
+        case dJointTypeUniversal: return dJointGetUniversalParam(ODEJoint, parameter);
+                                  break;
+        default: return 0;
+    }
 }
-
-float ODEJoint::GetJointMaxSpeed1() const
-{
-    return mJointMaxSpeed1;
-}
-
-float ODEJoint::GetJointMaxSpeed2() const
-{
-    return mJointMaxSpeed2;
-}
-
-bool ODEJoint::IsLimitJointMaxSpeed1() const
-{
-    return mIsLimitJointMaxSpeed1;
-}
-
-bool ODEJoint::IsLimitJointMaxSpeed2() const
-{
-    return mIsLimitJointMaxSpeed2;
-}
-
-float ODEJoint::GetParameter(int parameter) const
-{
-    return 0.0;
-} 
