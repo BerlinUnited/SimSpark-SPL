@@ -1,7 +1,10 @@
 RELEASE News of rcssserver3d-0.6.3 (In progress)
 
 * Most notable changes:
- - No internal monitor by default. Run rcssmonitor3d separately to see the game. 
+ - Name change: simspark -> rcssserver3d. To make the functionality more clear.
+ - No internal monitor by default. Run rcssmonitor3d separately to see the game.
+   As another option, you might run rcsoccersim3d which runs both 
+   rcssserver3d (simspark) and rcssmonitor3d on the local machine. 
  - Added HMDP effector/perceptor
  - Some compilation fixes
  - Improved Windows support 

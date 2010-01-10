@@ -69,7 +69,7 @@ private:
 void SimSpark::PrintGreeting()
 {
     GetLog()->Normal()
-        << "simspark, a monolithic simulator 0.6.1\n"
+        << "rcssserver3d (formerly simspark), a monolithic simulator 0.6.1\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
         << "Universität Koblenz.\n"
         << "Copyright (C) 2004-2009, "
@@ -80,7 +80,7 @@ void SimSpark::PrintGreeting()
 void SimSpark::PrintHelp()
 {
     GetLog()->Normal()
-        << "\nusage: simspark [options] [script]\n"
+        << "\nusage: rcssserver3d [options] [script]\n"
         << "\noptions:\n"
         << " --help\t\t\t print this message.\n"
         << " --script-path PATH\t set the script path (simspark.rb path).\n"
