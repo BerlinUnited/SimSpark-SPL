@@ -1,3 +1,9 @@
+2010-01-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/models/leftgoal.obj:
+	* data/models/rightgoal.obj:
+	- fixed net visualization in the new models
+
 2010-01-03  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* data/models/leftgoal.obj:
