@@ -76,7 +76,7 @@ add_subdirectory(doc)
 add_subdirectory(plugin)
 add_subdirectory(rcssagent3d)
 add_subdirectory(rcssmonitor3d)
-add_subdirectory(simspark)
+add_subdirectory(rcssserver3d)
 
 
 ########### install files ###############

@@ -25,6 +25,7 @@
 
 namespace oxygen
 {
+class AngularMotorInt;
 
 /** An angular motor allows the relative angular velocities of two
     bodies to be controlled. The angular velocity can be controlled on
@@ -34,11 +35,6 @@ namespace oxygen
 class OXYGEN_API AngularMotor : public Joint
 {
 public:
-    enum EMotorMode
-        {
-            MM_USER = dAMotorUser,
-            MM_EULER = dAMotorEuler
-        };
 
     enum EAxisAnchor
         {
@@ -57,11 +53,15 @@ public:
         'euler' mode, it computes the euler angles corresponding to
         the relative rotation, allowing euler angle torque motors and
         stops to be set.
+        Pass zero to this function to set the mode to user mode, or
+        a value not equal to zero to set it to Euler mode.
     */
-    void SetMode(EMotorMode mode);
+    void SetMode(int mode);
 
-    /** returns the current motor mode */
-    EMotorMode GetMode();
+    /** returns the current motor mode - zero if motor is in user mode,
+        or one if motor is in euler mode.
+    */
+    int GetMode();
 
     /** sets the number of angular axes that will be controlled by the
         angular motor. \param num can range from 0 which effectively
@@ -123,6 +123,9 @@ protected:
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+    
+private:
+    boost::shared_ptr<AngularMotorInt> mAngularMotorImp;
 };
 
 DECLARE_CLASS(AngularMotor);

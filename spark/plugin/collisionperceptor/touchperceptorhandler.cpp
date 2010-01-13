@@ -22,6 +22,7 @@
 
 #include "touchperceptorhandler.h"
 #include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
@@ -77,7 +78,7 @@ void TouchPerceptorHandler::HandleCollision(
     if (handler.get() == 0)
         return;
 
-    CalcSurfaceParam(contact.surface,handler->GetSurfaceParameter());
+    CalcSurfaceParam(contact.surface, (dSurfaceParameters&) handler->GetSurfaceParameter());
 
     dJointID joint = dJointCreateContact((dWorldID) mWorld->GetWorldID(),
             mSpace->GetODEJointGroup(), &contact);

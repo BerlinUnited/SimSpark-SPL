@@ -66,6 +66,7 @@ set(oxygen_LIB_HDRS
     physicsserver/int/concavecolliderint.h
     physicsserver/int/conecolliderint.h
     physicsserver/int/conetwistjointint.h
+    physicsserver/int/contactjointhandlerint.h
     physicsserver/int/convexcolliderint.h
     physicsserver/int/cylindercolliderint.h
     physicsserver/int/dynamicbodyint.h
@@ -91,6 +92,7 @@ set(oxygen_LIB_HDRS
     
     #ode-specific files
     physicsserver/staticphysicsmethods_ode.cpp
+    physicsserver/ode/odeangularmotor.h
     physicsserver/ode/odeballjoint.h
     physicsserver/ode/odebody.h
     physicsserver/ode/odeboxcollider.h
@@ -101,6 +103,7 @@ set(oxygen_LIB_HDRS
     physicsserver/ode/odeconcavecollider.h
     physicsserver/ode/odeconecollider.h
     physicsserver/ode/odeconetwistjoint.h
+    physicsserver/ode/odecontactjointhandler.h
     physicsserver/ode/odeconvexcollider.h
     physicsserver/ode/odecylindercollider.h
     physicsserver/ode/odeemptycollider.h
@@ -263,6 +266,7 @@ set(oxygen_LIB_SRCS
     physicsserver/angularmotor_c.cpp
     
     #ODE-specific files
+    physicsserver/ode/odeangularmotor.cpp
     physicsserver/ode/odeballjoint.cpp
     physicsserver/ode/odebody.cpp
     physicsserver/ode/odeboxcollider.cpp
@@ -272,6 +276,7 @@ set(oxygen_LIB_SRCS
     physicsserver/ode/odeconcavecollider.cpp
     physicsserver/ode/odeconecollider.cpp
     physicsserver/ode/odeconetwistjoint.cpp
+    physicsserver/ode/odecontactjointhandler.cpp
     physicsserver/ode/odeconvexcollider.cpp
     physicsserver/ode/odecylindercollider.cpp
     physicsserver/ode/odedynamicbody.cpp

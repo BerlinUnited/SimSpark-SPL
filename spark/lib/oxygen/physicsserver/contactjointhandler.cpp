@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/contactjointhandler.h>
+#include <oxygen/physicsserver/ode/odecontactjointhandler.h>
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
@@ -30,6 +31,9 @@ using namespace boost;
 
 ContactJointHandler::ContactJointHandler() : CollisionHandler()
 {
+    mContactJointHandlerImp = boost::shared_ptr<ODEContactJointHandler>(new ODEContactJointHandler());
+    
+    
     // set up default contact surface parameters
     mSurfaceParameter.mode = dContactBounce;
     mSurfaceParameter.mu = dInfinity;
@@ -41,6 +45,9 @@ ContactJointHandler::ContactJointHandler() : CollisionHandler()
     // these two value will be not initialized, but slipe mode is open
     mSurfaceParameter.slip1 = 5e-3;
     mSurfaceParameter.slip2 = 5e-3;
+    
+    
+    //mContactJointHandlerImp->Initialize();
 }
 
 ContactJointHandler::~ContactJointHandler()
@@ -196,15 +203,16 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, GenericConta
 }
 
 void
-ContactJointHandler::SetSurfaceParameter(const dSurfaceParameters& surface)
+ContactJointHandler::SetSurfaceParameter(const GenericSurfaceParameter& surface)
 {
-    mSurfaceParameter = surface;
+    dSurfaceParameters& ODESurface = (dSurfaceParameters&) surface;
+    mSurfaceParameter = ODESurface;
 }
 
-const dSurfaceParameters&
+const GenericSurfaceParameter&
 ContactJointHandler::GetSurfaceParameter() const
 {
-    return mSurfaceParameter;
+    return (GenericSurfaceParameter&) mSurfaceParameter;
 }
 
 void
@@ -324,14 +332,3 @@ float ContactJointHandler::GetContactMu() const
 {
     return mSurfaceParameter.mu;
 }
-
-
-
-
-
-
-
-
-
-
-
