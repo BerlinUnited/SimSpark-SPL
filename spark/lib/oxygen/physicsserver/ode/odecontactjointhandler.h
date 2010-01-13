@@ -32,15 +32,38 @@ class OXYGEN_API ODEContactJointHandler : public ContactJointHandlerInt, public 
 {
 public:
     ODEContactJointHandler();
-    float MixValues(const float v1, const float v2, const int n) const;
     void Initialize();
-        
-protected:
-    /** the ODE surface parameters of the created contact joint */
-    dSurfaceParameters mSurfaceParameter;
+    long RetrieveBody(long geomID);
+    long CreateContactJoint(long worldID, long jointGroupID, GenericContact& contact);
+    void AttachContactJoint(long jointID, long bodyID1, long bodyID2);
+    void CalcSurfaceParam(GenericContact& surface, GenericSurfaceParameter& collideeParam);
     
-    void CalcSurfaceParam(dSurfaceParameters& surface,
-                          const dSurfaceParameters& collideeParam);
+    void SetSurfaceParameter(const GenericSurfaceParameter& surface);
+    GenericSurfaceParameter& GetSurfaceParameter() const;
+    void SetContactMode(int mode, bool set);
+    int GetContactMode() const;
+    void SetContactBounceMode(bool set);
+    void SetBounceValue(float bounce);
+    float GetBounceValue() const;
+    void SetMinBounceVel(float vel);
+    float GetMinBounceVel() const;
+    void SetContactSoftERPMode(bool set);
+    void SetContactSoftERP(float erp);
+    float GetContactSoftERP() const;
+    void SetContactSoftCFMMode(bool set);
+    void SetContactSoftCFM(float cfm);
+    float GetContactSoftCFM() const;
+    void SetContactSlipMode (bool set);
+    void SetContactSlip(float slip);
+    float GetContactSlip1() const;
+    float GetContactSlip2() const;
+    void SetContactMu(float mu);
+    float GetContactMu() const;
+        
+protected:    
+    f_inline float MixValues(const float v1, const float v2, const int n) const;
+    void CalcSurfaceParamInternal(dSurfaceParameters& surface,
+                                  const dSurfaceParameters& collideeParam);
 };
 
 } //namespace oxygen

@@ -22,7 +22,7 @@
 
 #include "touchperceptorhandler.h"
 #include <oxygen/physicsserver/collider.h>
-#include <oxygen/physicsserver/genericphysicsobjects.h>
+#include <oxygen/physicsserver/ode/odecontactjointhandler.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
@@ -59,15 +59,15 @@ void TouchPerceptorHandler::OnUnlink()
 }
 
 void TouchPerceptorHandler::HandleCollision(
-        boost::shared_ptr<Collider> collidee, dContact& contact)
+        boost::shared_ptr<Collider> collidee, GenericContact& contact)
 {
     if (mCollider.get() == 0 || mWorld.get() == 0 || mSpace.get() == 0)
         return;
 
-    // to create a contact joint it we must have at least one body to
+    // to create a contact joint we must have at least one body to
     // attach it to.
-    dBodyID myBody = dGeomGetBody((dGeomID) mCollider->GetGeomID());
-    dBodyID collideeBody = dGeomGetBody((dGeomID) collidee->GetGeomID());
+    long myBody = mContactJointHandlerImp->RetrieveBody(mCollider->GetGeomID());
+    long collideeBody = mContactJointHandlerImp->RetrieveBody(collidee->GetGeomID());
 
     if (myBody == 0 && collideeBody == 0)
         return;
@@ -78,17 +78,19 @@ void TouchPerceptorHandler::HandleCollision(
     if (handler.get() == 0)
         return;
 
-    CalcSurfaceParam(contact.surface, (dSurfaceParameters&) handler->GetSurfaceParameter());
+    mContactJointHandlerImp->CalcSurfaceParam(
+        contact, handler->GetSurfaceParameter());
 
-    dJointID joint = dJointCreateContact((dWorldID) mWorld->GetWorldID(),
-            mSpace->GetODEJointGroup(), &contact);
+    // create the contact joint and attach it to the body
+    long joint = mContactJointHandlerImp->CreateContactJoint(
+        mWorld->GetWorldID(), mSpace->GetODEJointGroup(), contact);
 
-    dJointAttach (joint, myBody, collideeBody);
-
+    mContactJointHandlerImp->AttachContactJoint(joint, myBody, collideeBody);
+    
     if (mForceResistancePercept.get() != 0)
         {
-            dJointFeedback *feedback =
+            GenericJointFeedback* feedback =
                     mForceResistancePercept->AddTouchInfo(contact);
-            dJointSetFeedback(joint, feedback);
+            dJointSetFeedback( (dJointID) joint, (dJointFeedback*) feedback);
         }
 }
