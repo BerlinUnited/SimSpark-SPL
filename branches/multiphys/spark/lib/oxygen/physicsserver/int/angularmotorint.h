@@ -34,7 +34,18 @@ class Joint;
 class OXYGEN_API AngularMotorInt
 {
 public:    
-    virtual long CreateAngularMotor() = 0;
+    virtual long CreateAngularMotor(long worldID) = 0;
+    virtual void SetModeUserMode(long jointID) = 0;
+    virtual void SetModeEulerMode(long jointID) = 0;
+    virtual int GetMode(long jointID) = 0;
+    virtual void SetNumAxes(int num, long jointID) = 0;
+    virtual int GetNumAxes(long jointID) = 0;
+    virtual void SetMotorAxis(int idx, int anchor, salt::Vector3f axis, long jointID) = 0;
+    virtual int GetAxisAnchor(int idx, long jointID) = 0;
+    virtual salt::Vector3f GetMotorAxis(int idx, long jointID) = 0;
+    virtual void SetAxisAngle(int idx, float degAngle, long jointID) = 0;
+    virtual float GetAxisAngle(int idx, long jointID) = 0;
+    virtual float GetAxisAngleRate(int idx, long jointID) = 0;
 };
 
 } //namespace oxygen

@@ -19,21 +19,30 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef OXYGEN_ODEBODY_H
-#define OXYGEN_ODEBODY_H
+#ifndef OXYGEN_ODECONTACTJOINTHANDLER_H
+#define OXYGEN_ODECONTACTJOINTHANDLER_H
 
-#include <oxygen/physicsserver/int/bodyint.h>
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
+#include <oxygen/physicsserver/int/contactjointhandlerint.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEBody : public BodyInt, public ODEPhysicsObject
+class OXYGEN_API ODEContactJointHandler : public ContactJointHandlerInt, public ODECollider
 {
 public:
-    ODEBody();
+    ODEContactJointHandler();
+    float MixValues(const float v1, const float v2, const int n) const;
+    void Initialize();
+        
+protected:
+    /** the ODE surface parameters of the created contact joint */
+    dSurfaceParameters mSurfaceParameter;
+    
+    void CalcSurfaceParam(dSurfaceParameters& surface,
+                          const dSurfaceParameters& collideeParam);
 };
 
 } //namespace oxygen
 
-#endif //OXYGEN_ODEBODY_H
+#endif //OXYGEN_ODECONTACTJOINTHANDLER_H

@@ -18,6 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/angularmotor.h>
+#include <oxygen/physicsserver/ode/odeangularmotor.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -26,6 +27,7 @@ using namespace salt;
 
 AngularMotor::AngularMotor() : Joint()
 {
+    mAngularMotorImp = boost::shared_ptr<ODEAngularMotor>(new ODEAngularMotor());
 }
 
 AngularMotor::~AngularMotor()
@@ -40,17 +42,19 @@ void AngularMotor::OnLink()
             return;
         }
 
-    mJointID = (long) dJointCreateAMotor((dWorldID) world, 0);
+    mJointID = mAngularMotorImp->CreateAngularMotor(world);
 }
 
-void AngularMotor::SetMode(EMotorMode mode)
+void AngularMotor::SetMode(int mode)
 {
-    dJointSetAMotorMode( (dJointID) mJointID,mode);
+    if (mode == 0)
+        mAngularMotorImp->SetModeUserMode(mJointID);
+    else mAngularMotorImp->SetModeEulerMode(mJointID);
 }
 
-AngularMotor::EMotorMode AngularMotor::GetMode()
+int AngularMotor::GetMode()
 {
-    return static_cast<EMotorMode>(dJointGetAMotorMode( (dJointID) mJointID));
+    return mAngularMotorImp->GetMode(mJointID);
 }
 
 void AngularMotor::SetNumAxes(int num)
@@ -63,55 +67,52 @@ void AngularMotor::SetNumAxes(int num)
             return;
         }
 
-    dJointSetAMotorNumAxes( (dJointID) mJointID, num);
+    mAngularMotorImp->SetNumAxes(num, mJointID);
 }
 
 int AngularMotor::GetNumAxes()
 {
-    return dJointGetAMotorNumAxes( (dJointID) mJointID);
+    return mAngularMotorImp->GetNumAxes(mJointID);
 }
 
 void AngularMotor::SetMotorAxis(EAxisIndex idx, EAxisAnchor anchor,
                                 const salt::Vector3f& axis)
 {
     Vector3f globalAxis = GetWorldTransform() * axis;
-    dJointSetAMotorAxis ( (dJointID) mJointID, idx, anchor,
-                         globalAxis[0], globalAxis[1], globalAxis[2]);
+    mAngularMotorImp->SetMotorAxis(idx, anchor, globalAxis, mJointID);
 }
 
 AngularMotor::EAxisAnchor AngularMotor::GetAxisAnchor(EAxisIndex idx)
 {
-    return static_cast<EAxisAnchor>(dJointGetAMotorAxisRel ( (dJointID) mJointID, idx));
+    return static_cast<EAxisAnchor>(mAngularMotorImp->GetAxisAnchor(idx, mJointID));
 }
 
 Vector3f AngularMotor::GetMotorAxis(EAxisIndex idx)
 {
-    dVector3 dAxis;
-    dJointGetAMotorAxis( (dJointID) mJointID,idx,dAxis);
-    return Vector3f(dAxis[0],dAxis[1],dAxis[2]);
+    return mAngularMotorImp->GetMotorAxis(idx, mJointID);
 }
 
 void AngularMotor::SetAxisAngle(EAxisIndex idx, float degAngle)
 {
-    dJointSetAMotorAngle( (dJointID) mJointID, idx, gDegToRad(degAngle));
+    mAngularMotorImp->SetAxisAngle(idx, degAngle, mJointID);
 }
 
 float AngularMotor::GetAxisAngle(EAxisIndex idx)
 {
-    return gRadToDeg(dJointGetAMotorAngle((dJointID) mJointID, idx));
+    return mAngularMotorImp->GetAxisAngle(idx, mJointID);
 }
 
 float AngularMotor::GetAxisAngleRate(EAxisIndex idx)
 {
-    return gRadToDeg(dJointGetAMotorAngleRate((dJointID) mJointID,idx));
+    return mAngularMotorImp->GetAxisAngleRate(idx, mJointID);
 }
 
 void AngularMotor::SetParameter(int parameter, float value)
 {
-    dJointSetAMotorParam((dJointID) mJointID, parameter, value);
+    mJointImp->SetParameter(parameter, value, mJointID);
 }
 
 float AngularMotor::GetParameter(int parameter) const
 {
-    return dJointGetAMotorParam((dJointID) mJointID, parameter);
+    return mJointImp->GetParameter(parameter, mJointID);
 }

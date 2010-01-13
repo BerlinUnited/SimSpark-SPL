@@ -1,3 +1,25 @@
+2010-01-11  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* RELEASE: 
+	- added some notes about the name change and also the new script
+	  (rcsoccersim3d)
+	
+	* CMakeLists.txt: 
+	* rcssserver3d/main.cpp:
+	* rcssserver3d/CMakeLists.txt: 
+	- renamed simspark -> rcssserver3d. creating a simspark symbolic link for
+	  backward compatibility
+	
+	* rcssserver3d/rcsoccersim3d.in: 
+	- added rcsoccersim3d script to run both rcssserver3d (simspark) and 
+	  rcssmonitor3d, and terminate the simulator when the monitor stops
+
+2010-01-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/models/leftgoal.obj:
+	* data/models/rightgoal.obj:
+	- fixed net visualization in the new models
+
 2010-01-03  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* data/models/leftgoal.obj:

@@ -302,6 +302,8 @@ void ODEJoint::SetParameter(int parameter, float value, long jointID){
                                break;
         case dJointTypeUniversal: dJointSetUniversalParam(ODEJoint, parameter, value);
                                   break;
+        case dJointTypeAMotor: dJointSetAMotorParam(ODEJoint, parameter, value);
+                               break; 
         default: return;
     }
 }
@@ -311,13 +313,10 @@ float ODEJoint::GetParameter(int parameter, long jointID) const{
     int jointType = dJointGetType(ODEJoint);
     switch (jointType){
         case dJointTypeHinge: return dJointGetHingeParam(ODEJoint, parameter);
-                              break;
         case dJointTypeHinge2: return dJointGetHinge2Param(ODEJoint, parameter);
-                               break;
         case dJointTypeSlider: return dJointGetSliderParam(ODEJoint, parameter);
-                               break;
         case dJointTypeUniversal: return dJointGetUniversalParam(ODEJoint, parameter);
-                                  break;
+        case dJointTypeAMotor: return dJointGetAMotorParam(ODEJoint, parameter);
         default: return 0;
     }
 }

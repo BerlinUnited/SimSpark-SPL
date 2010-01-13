@@ -15,7 +15,7 @@ Main changes of this release are:
  - An Accelerometer sensor
  - Fixed some rendering bugs (agents not visible through goals)
  - A "Sync Mode" operation is introduced. In this mode, the server will not
-   advance to the next cycle untill all connected agents send a "syn" command
+   advance to the next cycle untill all connected agents send a "(syn)" command
    to the server. You can use this mode by setting "agentSyncMode" to true in
    simspark.rb (or spark.rb)
  - Simulator will run in simulation time mode instead of real time

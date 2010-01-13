@@ -27,13 +27,13 @@ using namespace salt;
 
 FUNCTION(AngularMotor,setUserMode)
 {
-    obj->SetMode(AngularMotor::MM_USER);
+    obj->SetMode(0);
     return true;
 }
 
 FUNCTION(AngularMotor,setEulerMode)
 {
-    obj->SetMode(AngularMotor::MM_EULER);
+    obj->SetMode(1);
     return true;
 }
 

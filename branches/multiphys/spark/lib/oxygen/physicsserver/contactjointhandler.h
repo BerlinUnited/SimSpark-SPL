@@ -24,9 +24,11 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/collisionhandler.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
+class ContactJointHandlerInt;
 
 /** \class ContactJointHandler is a CollisionHandler that creates an
     ODE contact joint between the two bodies associated with the two
@@ -61,12 +63,12 @@ public:
     /** sets the surface parameters for the contact joints that the
         CollisionHandler creates
     */
-    void SetSurfaceParameter(const dSurfaceParameters& surface);
+    void SetSurfaceParameter(const GenericSurfaceParameter& surface);
 
     /** returns the surface parameters for the contact joints taht the
         CollisionHandler creates
     */
-    const dSurfaceParameters& GetSurfaceParameter() const;
+    const GenericSurfaceParameter& GetSurfaceParameter() const;
 
     /** sets or resets a contact mode flag in the surface parameter*/
     void SetContactMode(int mode, bool set);
@@ -143,10 +145,11 @@ protected:
 
     void CalcSurfaceParam(dSurfaceParameters& surface,
                           const dSurfaceParameters& collideeParam);
-
-protected:
-    /** the ODE surface parameters of the created contact joint */
+    
     dSurfaceParameters mSurfaceParameter;
+    
+private:
+    boost::shared_ptr<ContactJointHandlerInt> mContactJointHandlerImp;
 };
 
 DECLARE_CLASS(ContactJointHandler);

@@ -20,19 +20,32 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef OXYGEN_BODYINT_H
-#define OXYGEN_BODYINT_H
+#ifndef OXYGEN_ODEANGULARMOTOR_H
+#define OXYGEN_ODEANGULARMOTOR_H
 
-#include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/int/angularmotorint.h>
+#include <oxygen/physicsserver/ode/odejoint.h>
 
-namespace oxygen
-{
+namespace oxygen{
 
-class OXYGEN_API BodyInt
-{
+class OXYGEN_API ODEAngularMotor : public AngularMotorInt, public ODEJoint{
 
+public:
+    ODEAngularMotor();
+    long CreateAngularMotor(long worldID);
+    void SetModeUserMode(long jointID);
+    void SetModeEulerMode(long jointID);
+    int GetMode(long jointID);
+    void SetNumAxes(int num, long jointID);
+    int GetNumAxes(long jointID);
+    void SetMotorAxis(int idx, int anchor, salt::Vector3f axis, long jointID);
+    int GetAxisAnchor(int idx, long jointID);
+    salt::Vector3f GetMotorAxis(int idx, long jointID);
+    void SetAxisAngle(int idx, float degAngle, long jointID);
+    float GetAxisAngle(int idx, long jointID);
+    float GetAxisAngleRate(int idx, long jointID);
 };
 
 } //namespace oxygen
 
-#endif //OXYGEN_BODYINT_H
+#endif //OXYGEN_ODEANGULARMOTOR_H
