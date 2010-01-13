@@ -52,7 +52,7 @@ public:
     long GetSpaceID() const;
 
     /** retuns the ID of joint group for all created contact joints */
-    dJointGroupID GetODEJointGroup() const;
+    long GetODEJointGroup() const;
 
     /** starts ODE's collision culling system. ODE will quickly
         identify which pairs of geoms are potentially

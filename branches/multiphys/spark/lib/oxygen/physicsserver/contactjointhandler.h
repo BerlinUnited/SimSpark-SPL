@@ -65,10 +65,10 @@ public:
     */
     void SetSurfaceParameter(const GenericSurfaceParameter& surface);
 
-    /** returns the surface parameters for the contact joints taht the
+    /** returns the surface parameters for the contact joints that the
         CollisionHandler creates
     */
-    const GenericSurfaceParameter& GetSurfaceParameter() const;
+    GenericSurfaceParameter& GetSurfaceParameter() const;
 
     /** sets or resets a contact mode flag in the surface parameter*/
     void SetContactMode(int mode, bool set);
@@ -139,16 +139,8 @@ public:
 
     /** returns the Coulomb friction coefficient */
     float GetContactMu() const;
-
+    
 protected:
-    f_inline float MixValues(const float v1, const float v2, const int n) const;
-
-    void CalcSurfaceParam(dSurfaceParameters& surface,
-                          const dSurfaceParameters& collideeParam);
-    
-    dSurfaceParameters mSurfaceParameter;
-    
-private:
     boost::shared_ptr<ContactJointHandlerInt> mContactJointHandlerImp;
 };
 

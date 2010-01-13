@@ -52,9 +52,9 @@ long Space::GetSpaceID() const
     return mSpaceImp->GetSpaceID();
 }
 
-dJointGroupID Space::GetODEJointGroup() const
+long Space::GetODEJointGroup() const
 {
-    return mSpaceImp->GetODEJointGroup();
+    return (long) mSpaceImp->GetODEJointGroup();
 }
 
 void Space::Collide()
