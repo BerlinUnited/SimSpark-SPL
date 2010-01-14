@@ -42,7 +42,7 @@ class SpaceInt;
 class OXYGEN_API Space : public PhysicsObject
 {
 public:
-    typedef std::set<dSpaceID> TSpaceIdSet;
+    typedef std::set<long> TSpaceIdSet;
 
 public:
     Space();
@@ -76,10 +76,14 @@ public:
 
     /** query disabled inner collision flag */
     bool GetDisableInnerCollision() const;
+    
+    /** callback to handle a potential collision between two contained
+        geoms. It will look up and notify the corresponding colliders
+        for a potential collision.
+    */
+    void HandleCollide(long obj1, long obj2);
 
 protected:
-    static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
-
     /** unregisters the managed Space of the Scene. */
     virtual void OnUnlink();
 
@@ -89,18 +93,12 @@ protected:
     /** calls ODE's collision detection for this space if internal collision
      * detection is enabled for this space.
      */
-    void Collide(dSpaceID space);
-
-    /** callback to handle a potential collision between two contained
-        geoms. It will look up and notify the corresponding colliders
-        for a potential collision.
-    */
-    void HandleCollide(long obj1, long obj2);
+    void Collide(long space);
 
     /** handle the collision between two geoms from which at least one
         is a space geom
     */
-    void HandleSpaceCollide(dGeomID obj1, dGeomID obj2);
+    void HandleSpaceCollide(long obj1, long obj2);
 
     /** creates them managed ODE space and a contact joint group */
     virtual bool ConstructInternal();
@@ -116,11 +114,13 @@ protected:
     //
     // Members
     //
-private:
+private:    
     boost::shared_ptr<SpaceInt> mSpaceImp;
 
-    /** the managed ODE space */
-    dSpaceID mODESpace;
+    long mContactGroupID;
+    
+    /** the managed space */
+    long mSpaceID;
 
 private:
     /** set of spaces with disabled inner collision */

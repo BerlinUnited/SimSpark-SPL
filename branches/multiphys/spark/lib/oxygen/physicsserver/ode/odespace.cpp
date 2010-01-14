@@ -24,119 +24,107 @@
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/sceneserver/scene.h>
-#include <zeitgeist/logserver/logserver.h>
 
 using namespace boost;
 using namespace oxygen;
 
-/** set of spaces with disabled inner collision */
-ODESpace::TSpaceIdSet ODESpace::gDisabledInnerCollisionSet;
+void ODESpace::collisionNearCallback(void* data, dGeomID obj1, dGeomID obj2)
+{
+    Space* space = (Space*) data;
+    space->HandleCollide((long) obj1, (long) obj2);
+}
 
-//void ODESpace::collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2)
-//{
- //   Space *space = (Space*)data;
-  //  space->HandleCollide(obj1, obj2);
-//}
-
-ODESpace::ODESpace() : ODEPhysicsObject(), mODESpace(0), mODEContactGroup(0)
+ODESpace::ODESpace() : ODEPhysicsObject()
 {
 }
 
-long ODESpace::GetSpaceID() const
+void ODESpace::Collide(long space, Space* callee)
 {
-  return (long) mODESpace;
+    dSpaceID ODESpace = (dSpaceID) space;
+    dSpaceCollide(ODESpace, callee, collisionNearCallback);
 }
 
-dJointGroupID ODESpace::GetODEJointGroup() const
+void ODESpace::Collide2(long obj1, long obj2, Space* callee)
 {
-  return mODEContactGroup;
+    dGeomID ODEObj1 = (dGeomID) obj1;
+    dGeomID ODEObj2 = (dGeomID) obj2;
+    dSpaceCollide2(ODEObj1, ODEObj2, callee, &collisionNearCallback);
 }
 
-void ODESpace::Collide()
+long ODESpace::GetParentSpaceID(long spaceID)
 {
-    // bind collision callback function to this object
-    Collide(mODESpace);
+    dGeomID ODESpace = (dGeomID) spaceID;
+    dSpaceID parentSpace = dGeomGetSpace(ODESpace);
+    return (long) parentSpace;
 }
 
-void ODESpace::Collide(dSpaceID space)
+long ODESpace::ConstructInternal()
 {
-    if (gDisabledInnerCollisionSet.find(space) == gDisabledInnerCollisionSet.end())
-    {
-        //dSpaceCollide(space, this, Space::collisionNearCallback);
-    }
+    // create a joint group for the contacts
+    dJointGroupID ODEContactGroup = dJointGroupCreate(0);
+
+    return (long) ODEContactGroup;
 }
 
-void ODESpace::HandleSpaceCollide(dGeomID obj1, dGeomID obj2)
+void ODESpace::PostPhysicsUpdateInternal(long contactGroup)
 {
-    // collide all geoms internal to the space(s)
-    //dSpaceCollide2 (obj1,obj2,this,&Space::collisionNearCallback);
+    dJointGroupID ODEContactGroup = (dJointGroupID) contactGroup;
+    // remove all contact joints
+    dJointGroupEmpty(ODEContactGroup);
+}
 
-    if (dGeomIsSpace (obj1))
+long ODESpace::CreateSpace(long spaceID){
+    dSpaceID ODESpace = (dSpaceID) spaceID;
+    dSpaceID CreatedSpace = dHashSpaceCreate(ODESpace);
+    return (long) CreatedSpace;
+}
+
+void ODESpace::DestroySpace(long contactGroup, long spaceID)
+{
+    dJointGroupID ODEContactGroup = (dJointGroupID) contactGroup;
+    dSpaceID ODESpace = (dSpaceID) spaceID;
+
+    if (ODEContactGroup)
         {
-            Collide((dSpaceID)obj1);
+            dJointGroupDestroy(ODEContactGroup);
         }
 
-    if (dGeomIsSpace (obj2))
-        {
-            Collide((dSpaceID)obj2);
-        }
+    // release the ODE space
+    dSpaceDestroy(ODESpace);
 }
 
-void ODESpace::HandleCollide(dGeomID obj1, dGeomID obj2)
+bool ODESpace::ObjectIsSpace(long objectID){
+    dGeomID ODEGeom = (dGeomID) objectID;
+    return dGeomIsSpace(ODEGeom);
+}
+
+long ODESpace::FetchBody(long geomID){
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dBodyID ODEBody = dGeomGetBody(ODEGeom);
+    return (long) ODEBody;
+}
+
+long ODESpace::FetchSpace(long geomID){
+    dGeomID ODEGeom = (dGeomID) geomID;
+    dSpaceID ODESpace = dGeomGetSpace(ODEGeom);
+    return (long) ODESpace;
+}
+
+bool ODESpace::AreConnectedWithJoint(long bodyID1, long bodyID2){
+    if ((!bodyID1) || (!bodyID2))
+        return false;
+
+    dBodyID ODEBody1 = (dBodyID) bodyID1;
+    dBodyID ODEBody2 = (dBodyID) bodyID2;
+    return dAreConnectedExcluding(ODEBody1, ODEBody2, dJointTypeContact);
+}
+
+void ODESpace::CollideInternal(boost::shared_ptr<Collider> collider, 
+                              boost::shared_ptr<Collider> collidee,
+                              long geomID1, long geomID2)
 {
-    if (
-        (dGeomIsSpace (obj1)) ||
-        (dGeomIsSpace (obj2))
-        )
-        {
-            // colliding a space with something
-            HandleSpaceCollide(obj1, obj2);
-            return;
-        }
-
-    // colliding two non-space geoms; reject collisions
-    // between bodies that are connected with joints
-    const dBodyID b1 = dGeomGetBody(obj1);
-    const dBodyID b2 = dGeomGetBody(obj2);
-
-    if (
-        (b1) && (b2) &&
-        (dAreConnectedExcluding(b1,b2,dJointTypeContact))
-        )
-        {
-            return;
-        }
-
-    // if obj1 and obj2 are in a space that disabled inner collision,
-    // reject the collision
-    const dSpaceID s1 = dGeomGetSpace(obj1);
-    const dSpaceID s2 = dGeomGetSpace(obj2);
-
-    // get shared pointers to the two corresponding Collider nodes first
-    shared_ptr<Collider> collider = Collider::GetCollider((long) obj1);
-    shared_ptr<Collider> collidee = Collider::GetCollider((long) obj2);
-
-    if (
-        (collider.get() == 0) ||
-        (collidee.get() == 0)
-        )
-      {
-        return;
-      }
-
-    if (s1 == s2)
-    {
-        const oxygen::Collider::TColliderNameSet & collider_set = collider->GetNotCollideWithSet();
-        const oxygen::Collider::TColliderNameSet & collidee_set = collidee->GetNotCollideWithSet();
-        if (
-            (collider_set.find(collidee->GetName()) != collider_set.end()) ||
-            (collidee_set.find(collider->GetName()) != collidee_set.end())
-            )
-            {
-                return;
-            }
-    }
-
+    dGeomID geom1 = (dGeomID) geomID1;
+    dGeomID geom2 = (dGeomID) geomID2;
     // dSpaceCollide(), is guaranteed to pass all potentially
     // intersecting geom pairs to the callback function, but depending
     // on the internal algorithms used by the space it may also make
@@ -146,8 +134,8 @@ void ODESpace::HandleCollide(dGeomID obj1, dGeomID obj2)
     static const int nContacts = 4;
     static dContact contacts[nContacts];
 
-    int n = dCollide (obj1, obj2, nContacts,
-                      &contacts[0].geom, sizeof(dContact));
+    int n = dCollide (geom1, geom2, nContacts,
+                     &contacts[0].geom, sizeof(dContact));
 
     if (n == 0)
     {
@@ -158,153 +146,7 @@ void ODESpace::HandleCollide(dGeomID obj1, dGeomID obj2)
     for (int i=0;i<n;++i)
         {
             // notify the collider nodes
-            //collider->OnCollision(collidee,contacts[i],Collider::CT_DIRECT);
-            //collidee->OnCollision(collider,contacts[i],Collider::CT_SYMMETRIC);
+            collider->OnCollision(collidee,(GenericContact&) contacts[i],Collider::CT_DIRECT);
+            collidee->OnCollision(collider,(GenericContact&) contacts[i],Collider::CT_SYMMETRIC);
         }
-}
-
-void ODESpace::OnUnlink()
-{
-    DisableInnerCollision(false);
-}
-
-void ODESpace::OnLink()
-{
-    /*shared_ptr<Space> space = GetSpace();
-    dSpaceID spaceID = 0;
-
-    if (space.get() != 0)
-        {
-            spaceID = (dSpaceID) space->GetSpaceID();
-        }
-
-    mODESpace = dHashSpaceCreate(spaceID);*/
-}
-
-long ODESpace::GetParentSpaceID()
-{
-    if (mODESpace == 0)
-        {
-            return 0;
-        }
-
-    return (long) dGeomGetSpace((dGeomID)mODESpace);
-}
-
-bool ODESpace::IsGlobalSpace()
-{
-    return
-        (
-        (mODESpace != 0) &&
-        (GetParentSpaceID() == 0)
-        );
-}
-
-bool ODESpace::ConstructInternal()
-{
-    // create a joint group for the contacts
-    mODEContactGroup = dJointGroupCreate(0);
-
-    return (mODEContactGroup != 0);
-}
-
-void ODESpace::PostPhysicsUpdateInternal()
-{
-    // remove all contact joints
-    dJointGroupEmpty (mODEContactGroup);
-}
-
-void ODESpace::DestroySpaceObjects(){}
-/*{
-    if (scene.get() == 0)
-        {
-            return;
-        }
-
-    TLeafList objects;
-    const bool recursive = true;
-    scene->ListChildrenSupportingClass<PhysicsObject>(objects, recursive);
-
-    bool globalSpace = IsGlobalSpace();
-    shared_ptr<Space> self = shared_static_cast<Space>(GetSelf().lock());
-
-    for (
-         TLeafList::iterator iter = objects.begin();
-         iter != objects.end();
-         ++iter
-         )
-        {
-            shared_ptr<PhysicsObject> object = shared_static_cast<PhysicsObject>(*iter);
-            if (object == self)
-            {
-                continue;
-            }
-
-            // destroy objects registered to this space; the top level
-            // space object also destroy any other ODE object
-            const long parentSpace = object->GetParentSpaceID();
-            if (
-                (
-                 (globalSpace) &&
-                 (parentSpace == 0)
-                 ) ||
-                (parentSpace == (long) mODESpace)
-                )
-                {
-                    object->DestroyPhysicsObject();
-                }
-        }
-}*/
-
-void ODESpace::DestroyPhysicsObject()
-{
-    if (! mODESpace)
-        {
-            return;
-        }
-
-    // make sure that all objects registered to this space are destroyed
-    // before this space. Any other order provokes a segfault in ODE.
-    DestroySpaceObjects();
-
-    if (mODEContactGroup)
-        {
-            dJointGroupDestroy(mODEContactGroup);
-            mODEContactGroup = 0;
-        }
-
-    // release the ODE space
-    dSpaceDestroy(mODESpace);
-    mODESpace = 0;
-}
-
-void ODESpace::DisableInnerCollision(bool disable)
-{
-    if (mODESpace == 0)
-        {
-            //assert(false);
-            return;
-        }
-
-    if (disable)
-        {
-            gDisabledInnerCollisionSet.insert(mODESpace);
-            return;
-        }
-
-    TSpaceIdSet::iterator iter = gDisabledInnerCollisionSet.find(mODESpace);
-    if (iter == gDisabledInnerCollisionSet.end())
-        {
-            return;
-        }
-
-    gDisabledInnerCollisionSet.erase(iter);
-}
-
-bool ODESpace::GetDisableInnerCollision() const
-{
-    TSpaceIdSet::const_iterator iter
-        = gDisabledInnerCollisionSet.find(mODESpace);
-
-    return (iter != gDisabledInnerCollisionSet.end());
 }

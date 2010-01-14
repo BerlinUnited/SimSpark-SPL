@@ -22,6 +22,7 @@
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/joint.h>
 #include <oxygen/physicsserver/rigidbody.h>
+#include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/ode/odewrapper.h>
 
 using namespace oxygen;

@@ -28,43 +28,31 @@
 
 namespace oxygen
 {
+class Space;
 
 class OXYGEN_API ODESpace : public SpaceInt, public ODEPhysicsObject
 {
 
 public:
-    typedef std::set<dSpaceID> TSpaceIdSet;
-
-public:
     ODESpace();
-
-    long GetSpaceID() const;
-    dJointGroupID GetODEJointGroup() const;
-    void Collide();
-    virtual void DestroyPhysicsObject();
-    virtual long GetParentSpaceID();
-    bool IsGlobalSpace();
-    void DisableInnerCollision(bool disable);
-    bool GetDisableInnerCollision() const;
     
-    dSpaceID mODESpace;
-
-protected:
-    //void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
-    virtual void OnUnlink();
-    virtual void OnLink();
-    void Collide(dSpaceID space);
-    void HandleCollide(dGeomID obj1, dGeomID obj2);
-    void HandleSpaceCollide(dGeomID obj1, dGeomID obj2);
-    virtual bool ConstructInternal();
-    virtual void PostPhysicsUpdateInternal();
-    void DestroySpaceObjects();
-
+    long CreateSpace(long spaceID);
+    void DestroySpace(long contactGroup, long spaceID);
+    long GetParentSpaceID(long spaceID);
+    long ConstructInternal();
+    void PostPhysicsUpdateInternal(long contactGroup);
+    void Collide(long spaceID, Space* callee);
+    void Collide2(long obj1, long obj2, Space* callee);
+    bool ObjectIsSpace(long objectID);
+    long FetchBody(long geomID);
+    long FetchSpace(long geomID);
+    bool AreConnectedWithJoint(long bodyID1, long bodyID2);
+    void CollideInternal(boost::shared_ptr<Collider> collider, 
+                        boost::shared_ptr<Collider> collidee,
+                        long geomID1, long geomID2);
+    
 private:
-    dJointGroupID mODEContactGroup;
-
-private:
-    static TSpaceIdSet gDisabledInnerCollisionSet;
+    static void collisionNearCallback(void* data, dGeomID obj1, dGeomID obj2);
 };
 
 }
