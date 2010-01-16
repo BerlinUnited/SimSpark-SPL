@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
-set(PACKAGE_VERSION "0.6.2")
+set(PACKAGE_VERSION "0.6.3")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -85,29 +85,6 @@ install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS TODO
        DESTINATION ${DATADIR}/doc/${CMAKE_PROJECT_NAME})
 install(FILES  ${CMAKE_BINARY_DIR}/rcssserver3d_config.h 
        DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
-
-if (WIN32) # try to find and install third-party .dlls to bin/ directory
-       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
-       if (EXISTS ${ODEDLL})
-              install(PROGRAMS ${ODEDLL} DESTINATION ${BINDIR})
-       endif (EXISTS ${ODEDLL})
-
-       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${BINDIR}
-             FILES_MATCHING PATTERN "*.dll")
-
-       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
-       if (EXISTS ${DevIL_DLL})
-              install(PROGRAMS ${DevIL_DLL} DESTINATION ${BINDIR})
-       endif (EXISTS ${DevIL_DLL})
-
-       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/" DESTINATION ${BINDIR}
-             FILES_MATCHING PATTERN "*.dll")
-
-       set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
-       if (EXISTS ${SDL_DLL})
-              install(PROGRAMS ${SDL_DLL} DESTINATION ${BINDIR})
-       endif (EXISTS ${SDL_DLL})
-endif (WIN32)
 
 ########### uninstall support ############
 CONFIGURE_FILE(
