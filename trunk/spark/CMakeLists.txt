@@ -190,6 +190,35 @@ install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS DESTINATION
 install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h DESTINATION
     ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
+if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directory
+       set(THLIBDIR ${LIBDIR}/thirdparty)
+	   
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
+       if (EXISTS ${ODEDLL})
+              install(PROGRAMS ${ODEDLL} DESTINATION ${THLIBDIR})
+       endif (EXISTS ${ODEDLL})
+
+       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${THLIBDIR}
+             FILES_MATCHING PATTERN "*.dll")
+
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
+       if (EXISTS ${DevIL_DLL})
+              install(PROGRAMS ${DevIL_DLL} DESTINATION ${THLIBDIR})
+       endif (EXISTS ${DevIL_DLL})
+
+       string(REGEX REPLACE "(.*)/ruby.exe" "\\1/" RUBY_BINDIR "${RUBY_EXECUTABLE}")
+       install(DIRECTORY "${RUBY_BINDIR}"
+        	 DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
+
+       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/"
+        	 DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
+
+       set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
+       if (EXISTS ${SDL_DLL})
+              install(PROGRAMS ${SDL_DLL} DESTINATION ${THLIBDIR})
+       endif (EXISTS ${SDL_DLL})
+endif (WIN32)
+
 ########### uninstall support ############
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
