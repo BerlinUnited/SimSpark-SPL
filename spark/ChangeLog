@@ -1,3 +1,13 @@
+2010-01-17  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/proxyserver/agentproxy.cpp: 
+	- added a temporary workaround to allow compilation under windows
+	
+	* CMakeLists.txt: 
+	- add required third party .dlls on windows to simspark rather than
+	  rcssserver3d, which will be installed in lib/thirdparty directory.
+	  ruby dlls will be included too.
+
 2010-01-01  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/proxyserver/proxyserver.h: 
