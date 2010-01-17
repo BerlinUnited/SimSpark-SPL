@@ -1,5 +1,9 @@
 2010-01-17  Hedayat Vatankhah  <hedayat@grad.com>
 
+	* NEWS: 
+	* RELEASE: 
+	- preparing for the new release (0.2)
+	
 	* lib/oxygen/proxyserver/agentproxy.cpp: 
 	- added a temporary workaround to allow compilation under windows
 	
@@ -7,6 +11,8 @@
 	- add required third party .dlls on windows to simspark rather than
 	  rcssserver3d, which will be installed in lib/thirdparty directory.
 	  ruby dlls will be included too.
+	- bumped library major versions: zeitgeist, oxygen and rcssnet
+	- bumped package version to 0.2
 
 2010-01-01  Hedayat Vatankhah  <hedayat@grad.com>
 
