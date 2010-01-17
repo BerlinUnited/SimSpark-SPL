@@ -11,7 +11,7 @@
 	- add required third party .dlls on windows to simspark rather than
 	  rcssserver3d, which will be installed in lib/thirdparty directory.
 	  ruby dlls will be included too.
-	- bumped library major versions: zeitgeist, oxygen and rcssnet
+	- bumped library major versions: zeitgeist, oxygen, kerosin and rcssnet
 	- bumped package version to 0.2
 
 2010-01-01  Hedayat Vatankhah  <hedayat@grad.com>
