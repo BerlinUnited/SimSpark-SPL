@@ -32,23 +32,19 @@ class OXYGEN_API WorldInt
 {
     
 public:
-    virtual long GetWorldID() const = 0;
-    virtual void SetGravity(const salt::Vector3f& gravity) = 0;
-    virtual salt::Vector3f GetGravity() const = 0;
-    virtual void SetERP(float erp) = 0;
-    virtual float GetERP() const = 0;
-    virtual void SetCFM(float cfm) = 0;
-    virtual float GetCFM() const = 0;
-    virtual void Step(float deltaTime) = 0;
-    virtual bool GetAutoDisableFlag() const = 0;
-    virtual void SetAutoDisableFlag(bool flag) = 0;
-    virtual void SetContactSurfaceLayer(float depth) = 0;
-    virtual float GetContactSurfaceLayer() const = 0;
-    virtual void CreateWorld() = 0;
-    virtual void DestroyWorld() = 0;
-
-protected:
-    long mWorldID;
+    virtual void SetGravity(const salt::Vector3f& gravity, long worldID) = 0;
+    virtual salt::Vector3f GetGravity(long worldID) const = 0;
+    virtual void SetERP(float erp, long worldID) = 0;
+    virtual float GetERP(long worldID) const = 0;
+    virtual void SetCFM(float cfm, long worldID) = 0;
+    virtual float GetCFM(long worldID) const = 0;
+    virtual void Step(float deltaTime, long worldID) = 0;
+    virtual bool GetAutoDisableFlag(long worldID) const = 0;
+    virtual void SetAutoDisableFlag(bool flag, long worldID) = 0;
+    virtual void SetContactSurfaceLayer(float depth, long worldID) = 0;
+    virtual float GetContactSurfaceLayer(long worldID) const = 0;
+    virtual long CreateWorld() = 0;
+    virtual void DestroyWorld(long worldID) = 0;
 };
 
 }

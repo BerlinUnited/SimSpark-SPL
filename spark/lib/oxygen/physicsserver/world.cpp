@@ -39,69 +39,69 @@ World::~World()
 
 long World::GetWorldID() const
 {
-    return mWorldImp->GetWorldID();
+    return mWorldID;
 }
 
 void World::SetGravity(const Vector3f& gravity)
 {
-    mWorldImp->SetGravity(gravity);
+    mWorldImp->SetGravity(gravity, mWorldID);
 }
 
 salt::Vector3f World::GetGravity() const
 {
-    return mWorldImp->GetGravity();
+    return mWorldImp->GetGravity(mWorldID);
 }
 
 void World::SetERP(float erp)
 {
-    mWorldImp->SetERP(erp);
+    mWorldImp->SetERP(erp, mWorldID);
 }
 
 float World::GetERP() const
 {
-    return mWorldImp->GetERP();
+    return mWorldImp->GetERP(mWorldID);
 }
 
 void World::SetCFM(float cfm)
 {
-    mWorldImp->SetCFM(cfm);
+    mWorldImp->SetCFM(cfm, mWorldID);
 }
 
 float World::GetCFM() const
 {
-    return mWorldImp->GetCFM();
+    return mWorldImp->GetCFM(mWorldID);
 }
 
 void World::Step(float deltaTime)
 {
-    mWorldImp->Step(deltaTime);
+    mWorldImp->Step(deltaTime, mWorldID);
 }
 
 bool World::GetAutoDisableFlag() const
 {
-    return mWorldImp->GetAutoDisableFlag();
+    return mWorldImp->GetAutoDisableFlag(mWorldID);
 }
 
 void World::SetAutoDisableFlag(bool flag)
 {
-    mWorldImp->SetAutoDisableFlag(flag);
+    mWorldImp->SetAutoDisableFlag(flag, mWorldID);
 }
 
 void World::SetContactSurfaceLayer(float depth)
 {
-    mWorldImp->SetContactSurfaceLayer(depth);
+    mWorldImp->SetContactSurfaceLayer(depth, mWorldID);
 }
 
 float World::GetContactSurfaceLayer() const
 {
-    return mWorldImp->GetContactSurfaceLayer();
+    return mWorldImp->GetContactSurfaceLayer(mWorldID);
 }
 
 bool World::ConstructInternal()
 {
-    mWorldImp->CreateWorld();
+    mWorldID = mWorldImp->CreateWorld();
 
-    return (mWorldImp->GetWorldID() != 0);
+    return (mWorldID != 0);
 }
 
 void World::DestroyPhysicsObject()
@@ -120,12 +120,13 @@ void World::DestroyPhysicsObject()
             space->DestroyPhysicsObject();
         }
 
-    if (mWorldImp->GetWorldID() == 0)
+    if (mWorldID == 0)
         {
             return;
         }
 
-    mWorldImp->DestroyWorld();
+    mWorldImp->DestroyWorld(mWorldID);
 
+    mWorldID = 0;
     recurseLock = false;
 }

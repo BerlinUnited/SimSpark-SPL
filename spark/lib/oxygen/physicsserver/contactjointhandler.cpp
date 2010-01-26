@@ -32,11 +32,12 @@ using namespace boost;
 ContactJointHandler::ContactJointHandler() : CollisionHandler()
 {
     mContactJointHandlerImp = boost::shared_ptr<ODEContactJointHandler>(new ODEContactJointHandler());
-    mContactJointHandlerImp->Initialize();
+    mSurfaceParameter = mContactJointHandlerImp->Initialize();
 }
 
 ContactJointHandler::~ContactJointHandler()
 {
+    delete mSurfaceParameter;
 }
 
 void
@@ -75,7 +76,7 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, GenericConta
 
     // calculate the resulting surface parameters    
     mContactJointHandlerImp->CalcSurfaceParam(
-        contact, handler->GetSurfaceParameter());
+        contact, handler->GetSurfaceParameter(), mSurfaceParameter);
 
     // create the contact joint and attach it to the body
     long joint = mContactJointHandlerImp->CreateContactJoint(
@@ -87,120 +88,115 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, GenericConta
 void
 ContactJointHandler::SetSurfaceParameter(const GenericSurfaceParameter& surface)
 {
-    mContactJointHandlerImp->SetSurfaceParameter(surface);
+    GenericSurfaceParameter* newSurface = (GenericSurfaceParameter*) &surface;
+    mSurfaceParameter = newSurface;
 }
 
 GenericSurfaceParameter&
 ContactJointHandler::GetSurfaceParameter() const
 {
-    return mContactJointHandlerImp->GetSurfaceParameter();
-}
-
-void
-ContactJointHandler::SetContactMode(int mode, bool set)
-{
-    mContactJointHandlerImp->SetContactMode(mode, set);
+    return (GenericSurfaceParameter&) *mSurfaceParameter;
 }
 
 int
 ContactJointHandler::GetContactMode() const
 {
-    return mContactJointHandlerImp->GetContactMode();
+    return mContactJointHandlerImp->GetContactMode(mSurfaceParameter);
 }
 
 void
 ContactJointHandler::SetContactBounceMode(bool set)
 {
-    mContactJointHandlerImp->SetContactBounceMode(set);
+    mContactJointHandlerImp->SetContactBounceMode(set, mSurfaceParameter);
 }
 
 void
 ContactJointHandler::SetMinBounceVel(float vel)
 {
-    mContactJointHandlerImp->SetMinBounceVel(vel);
+    mContactJointHandlerImp->SetMinBounceVel(vel, mSurfaceParameter);
 }
 
 float
 ContactJointHandler::GetMinBounceVel() const
 {
-    return mContactJointHandlerImp->GetMinBounceVel();
+    return mContactJointHandlerImp->GetMinBounceVel(mSurfaceParameter);
 }
 
 void
 ContactJointHandler::SetBounceValue(float bounce)
 {
-    mContactJointHandlerImp->SetBounceValue(bounce);
+    mContactJointHandlerImp->SetBounceValue(bounce, mSurfaceParameter);
 }
 
 float
 ContactJointHandler::GetBounceValue() const
 {
-    return mContactJointHandlerImp->GetBounceValue();
+    return mContactJointHandlerImp->GetBounceValue(mSurfaceParameter);
 }
 
 void
 ContactJointHandler::SetContactSoftERPMode(bool set)
 {
-    mContactJointHandlerImp->SetContactSoftERPMode(set);
+    mContactJointHandlerImp->SetContactSoftERPMode(set, mSurfaceParameter);
 }
 
 void
 ContactJointHandler::SetContactSoftERP(float erp)
 {
-    mContactJointHandlerImp->SetContactSoftERP(erp);
+    mContactJointHandlerImp->SetContactSoftERP(erp, mSurfaceParameter);
 }
 
 float
 ContactJointHandler::GetContactSoftERP() const
 {
-    return mContactJointHandlerImp->GetContactSoftERP();
+    return mContactJointHandlerImp->GetContactSoftERP(mSurfaceParameter);
 }
 
 void
 ContactJointHandler::SetContactSoftCFMMode(bool set)
 {
-    mContactJointHandlerImp->SetContactSoftCFMMode(set);
+    mContactJointHandlerImp->SetContactSoftCFMMode(set, mSurfaceParameter);
 }
 
 void
 ContactJointHandler::SetContactSoftCFM(float cfm)
 {
-    mContactJointHandlerImp->SetContactSoftCFM(cfm);
+    mContactJointHandlerImp->SetContactSoftCFM(cfm, mSurfaceParameter);
 }
 
 float ContactJointHandler::GetContactSoftCFM() const
 {
-    return mContactJointHandlerImp->GetContactSoftCFM();
+    return mContactJointHandlerImp->GetContactSoftCFM(mSurfaceParameter);
 }
 
 void ContactJointHandler::SetContactSlipMode (bool set)
 {
-    mContactJointHandlerImp->SetContactSlipMode(set);
+    mContactJointHandlerImp->SetContactSlipMode(set, mSurfaceParameter);
 }
 
 void ContactJointHandler::SetContactSlip(float slip)
 {
-    mContactJointHandlerImp->SetContactSlip(slip);
+    mContactJointHandlerImp->SetContactSlip(slip, mSurfaceParameter);
 }
 
 float
 ContactJointHandler::GetContactSlip1() const
 {
-    return mContactJointHandlerImp->GetContactSlip1();
+    return mContactJointHandlerImp->GetContactSlip1(mSurfaceParameter);
 }
 
 float
 ContactJointHandler::GetContactSlip2() const
 {
-    return mContactJointHandlerImp->GetContactSlip2();
+    return mContactJointHandlerImp->GetContactSlip2(mSurfaceParameter);
 }
 
 void ContactJointHandler::SetContactMu(float mu)
 {
-    mContactJointHandlerImp->SetContactMu(mu);
+    mContactJointHandlerImp->SetContactMu(mu, mSurfaceParameter);
 }
 
 float ContactJointHandler::GetContactMu() const
 {
-    return mContactJointHandlerImp->GetContactMu();
+    return mContactJointHandlerImp->GetContactMu(mSurfaceParameter);
 }

@@ -70,9 +70,6 @@ public:
     */
     GenericSurfaceParameter& GetSurfaceParameter() const;
 
-    /** sets or resets a contact mode flag in the surface parameter*/
-    void SetContactMode(int mode, bool set);
-
     /** returns the current set of contact mode flags in the surface
         parameter
      */
@@ -142,6 +139,8 @@ public:
     
 protected:
     boost::shared_ptr<ContactJointHandlerInt> mContactJointHandlerImp;
+    
+    GenericSurfaceParameter* mSurfaceParameter;
 };
 
 DECLARE_CLASS(ContactJointHandler);

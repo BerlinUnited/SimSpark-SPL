@@ -122,6 +122,9 @@ private:
         the desired physics engine.
     */
     boost::shared_ptr<WorldInt> mWorldImp;
+    
+    /** The ID of the managed physics world */
+    long mWorldID;
 };
 
 DECLARE_CLASS(World);

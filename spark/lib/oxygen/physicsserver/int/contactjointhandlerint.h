@@ -35,36 +35,31 @@ class OXYGEN_API ContactJointHandlerInt
 {
 public:
     virtual float MixValues(const float v1, const float v2, const int n) const = 0;
-    virtual void Initialize() = 0;
+    virtual GenericSurfaceParameter* Initialize() = 0;
     virtual long RetrieveBody(long geomID) = 0;
     virtual long CreateContactJoint(long worldID, long jointGroupID, GenericContact& contact) = 0;
     virtual void AttachContactJoint(long jointID, long bodyID1, long bodyID2) = 0;
-    virtual void CalcSurfaceParam(GenericContact& surface, GenericSurfaceParameter& collideeParam) = 0;
-    
-    virtual void SetSurfaceParameter(const GenericSurfaceParameter& surface) = 0;
-    virtual GenericSurfaceParameter& GetSurfaceParameter() const = 0;
-    virtual void SetContactMode(int mode, bool set) = 0;
-    virtual int GetContactMode() const = 0;
-    virtual void SetContactBounceMode(bool set) = 0;
-    virtual void SetBounceValue(float bounce) = 0;
-    virtual float GetBounceValue() const = 0;
-    virtual void SetMinBounceVel(float vel) = 0;
-    virtual float GetMinBounceVel() const = 0;
-    virtual void SetContactSoftERPMode(bool set) = 0;
-    virtual void SetContactSoftERP(float erp) = 0;
-    virtual float GetContactSoftERP() const = 0;
-    virtual void SetContactSoftCFMMode(bool set) = 0;
-    virtual void SetContactSoftCFM(float cfm) = 0;
-    virtual float GetContactSoftCFM() const = 0;
-    virtual void SetContactSlipMode (bool set) = 0;
-    virtual void SetContactSlip(float slip) = 0;
-    virtual float GetContactSlip1() const = 0;
-    virtual float GetContactSlip2() const = 0;
-    virtual void SetContactMu(float mu) = 0;
-    virtual float GetContactMu() const = 0;
-    
-    /** the ODE surface parameters of the created contact joint */
-    dSurfaceParameters mSurfaceParameter;
+    virtual void CalcSurfaceParam(GenericContact& surface, 
+                                  GenericSurfaceParameter& collideeParam,
+                                  GenericSurfaceParameter* surfacePtr) = 0;
+    virtual int GetContactMode(GenericSurfaceParameter* surface) const = 0;
+    virtual void SetContactBounceMode(bool set, GenericSurfaceParameter* surface) = 0;
+    virtual void SetBounceValue(float bounce, GenericSurfaceParameter* surface) = 0;
+    virtual float GetBounceValue(GenericSurfaceParameter* surface) const = 0;
+    virtual void SetMinBounceVel(float vel, GenericSurfaceParameter* surface) = 0;
+    virtual float GetMinBounceVel(GenericSurfaceParameter* surface) const = 0;
+    virtual void SetContactSoftERPMode(bool set, GenericSurfaceParameter* surface) = 0;
+    virtual void SetContactSoftERP(float erp, GenericSurfaceParameter* surface) = 0;
+    virtual float GetContactSoftERP(GenericSurfaceParameter* surface) const = 0;
+    virtual void SetContactSoftCFMMode(bool set, GenericSurfaceParameter* surface) = 0;
+    virtual void SetContactSoftCFM(float cfm, GenericSurfaceParameter* surface) = 0;
+    virtual float GetContactSoftCFM(GenericSurfaceParameter* surface) const = 0;
+    virtual void SetContactSlipMode (bool set, GenericSurfaceParameter* surface) = 0;
+    virtual void SetContactSlip(float slip, GenericSurfaceParameter* surface) = 0;
+    virtual float GetContactSlip1(GenericSurfaceParameter* surface) const = 0;
+    virtual float GetContactSlip2(GenericSurfaceParameter* surface) const = 0;
+    virtual void SetContactMu(float mu, GenericSurfaceParameter* surface) = 0;
+    virtual float GetContactMu(GenericSurfaceParameter* surface) const = 0;
 };
 
 } //namespace oxygen

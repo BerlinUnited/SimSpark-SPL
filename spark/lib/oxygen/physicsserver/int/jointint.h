@@ -39,14 +39,18 @@ class OXYGEN_API JointInt
 {
 public:        
     
-    virtual void DestroyJoint(long jointID) = 0;
+    virtual void DestroyJoint(long jointID,
+                              boost::shared_ptr<GenericJointFeedback> feedback) = 0;
     virtual void Attach(long bodyID1, long bodiID2, long jointID) = 0;
     virtual int GetType(long jointID) const = 0;
     virtual long GetBodyID(int idx, long jointID) = 0;
-    virtual void EnableFeedback(bool enable, long jointID) = 0;
+    virtual void EnableFeedback(bool enable, long jointID,
+                                boost::shared_ptr<GenericJointFeedback> feedback) = 0;
     virtual bool FeedbackEnabled(long jointID) const = 0;
-    virtual salt::Vector3f GetFeedbackForce(int idx) const = 0;
-    virtual salt::Vector3f GetFeedbackTorque(int idx) const = 0;
+    virtual salt::Vector3f GetFeedbackForce(int idx,
+                                            boost::shared_ptr<GenericJointFeedback> feedback) const = 0;
+    virtual salt::Vector3f GetFeedbackTorque(int idx,
+                                            boost::shared_ptr<GenericJointFeedback> feedback) const = 0;
     virtual void SetFudgeFactor(int idx, float fudge_factor, long jointID) = 0;
     virtual float GetFudgeFactor(int idx, long jointID) const = 0;
     virtual void SetBounce(int idx, float bounce, long jointID) = 0;

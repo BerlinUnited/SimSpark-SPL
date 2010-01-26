@@ -279,11 +279,15 @@ protected:
     /** gets the node at 'path' and tries a cast to Body */
     boost::shared_ptr<RigidBody> GetBody(const std::string& path);
 
-protected:
+    //
+    // Members
+    //
+    
     /** the ID of the managed joint */
     long mJointID;
+    
+    boost::shared_ptr<GenericJointFeedback> mFeedback;
 
-protected:
     /** The maximum joint speed in rad, valid for both hingejoint and universaljoint */
     float mJointMaxSpeed1;
     bool mIsLimitJointMaxSpeed1;
