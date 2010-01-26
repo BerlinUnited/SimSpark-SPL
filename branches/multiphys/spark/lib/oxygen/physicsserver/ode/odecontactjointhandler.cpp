@@ -25,18 +25,22 @@ ODEContactJointHandler::ODEContactJointHandler() : ODECollider(){
 
 }
 
-void ODEContactJointHandler::Initialize(){
+GenericSurfaceParameter* ODEContactJointHandler::Initialize(){        
+    dSurfaceParameters* ODESurface = new dSurfaceParameters();
+
     // set up default contact surface parameters
-    mSurfaceParameter.mode = dContactBounce;
-    mSurfaceParameter.mu = dInfinity;
-    mSurfaceParameter.bounce = 0.8f;
-    mSurfaceParameter.bounce_vel = 2.0f;
+    ODESurface->mode = dContactBounce;
+    ODESurface->mu = dInfinity;
+    ODESurface->bounce = 0.8f;
+    ODESurface->bounce_vel = 2.0f;
 
     // In contactjointhandler_c.cpp, setContactSlip function, only
     // accept one parameter, so two parameter is a mistake, and then 
     // these two value will be not initialized, but slipe mode is open
-    mSurfaceParameter.slip1 = 5e-3;
-    mSurfaceParameter.slip2 = 5e-3;
+    ODESurface->slip1 = 5e-3;
+    ODESurface->slip2 = 5e-3;
+    
+    return (GenericSurfaceParameter*) ODESurface;
 }
 
 long ODEContactJointHandler::RetrieveBody(long geomID){
@@ -66,11 +70,14 @@ void ODEContactJointHandler::AttachContactJoint(long jointID, long bodyID1, long
 }
 
 void 
-ODEContactJointHandler::CalcSurfaceParam(GenericContact& surface, GenericSurfaceParameter& collideeParam){
+ODEContactJointHandler::CalcSurfaceParam(GenericContact& surface, 
+                                         GenericSurfaceParameter& collideeParam,
+                                         GenericSurfaceParameter* surfacePtr){
     dContact& ODEContact = (dContact&) surface;
     dSurfaceParameters& ODEParams = (dSurfaceParameters&) collideeParam;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surfacePtr;
     
-    CalcSurfaceParamInternal(ODEContact.surface, ODEParams);
+    CalcSurfaceParamInternal(ODEContact.surface, ODEParams, ODESurface);
 }
 
 float
@@ -99,209 +106,215 @@ ODEContactJointHandler::MixValues(const float v1, const float v2, const int n) c
 
 void
 ODEContactJointHandler::CalcSurfaceParamInternal(dSurfaceParameters& surface,
-                                                 const dSurfaceParameters& collideeParam)
+                                                 const dSurfaceParameters& collideeParam,
+                                                 const dSurfaceParameters* surfacePtr)
 {
     // init surface
     surface.mode = 0;
 
     // calculate average mu; mu can be dInfinity, so first multiply with
     // 0.5 and the sum up to avoid a range error
-    surface.mu = mSurfaceParameter.mu*0.5f + collideeParam.mu*0.5f;
+    surface.mu = surfacePtr->mu*0.5f + collideeParam.mu*0.5f;
 
     // soft cfm
     const int nCfm =
-        ((mSurfaceParameter.mode & dContactSoftCFM) ? 1:0) +
+        ((surfacePtr->mode & dContactSoftCFM) ? 1:0) +
         ((collideeParam.mode & dContactSoftCFM) ? 2:0);
 
     if (nCfm>0)
         {
             surface.soft_cfm = MixValues
-                (mSurfaceParameter.soft_cfm, collideeParam.soft_cfm, nCfm);
+                (surfacePtr->soft_cfm, collideeParam.soft_cfm, nCfm);
             surface.mode |= dContactSoftCFM;
         }
 
     // soft_erp
     const int nErp =
-        ((mSurfaceParameter.mode & dContactSoftERP) ? 1:0) +
+        ((surfacePtr->mode & dContactSoftERP) ? 1:0) +
         ((collideeParam.mode & dContactSoftERP) ? 2:0);
 
     if (nErp>0)
         {
             surface.soft_erp = MixValues
-                (mSurfaceParameter.soft_erp, collideeParam.soft_erp, nErp);
+                (surfacePtr->soft_erp, collideeParam.soft_erp, nErp);
             surface.mode |= dContactSoftERP;
         }
 
     // bounce
     const int nBounce =
-        ((mSurfaceParameter.mode & dContactBounce) ? 1:0) +
+        ((surfacePtr->mode & dContactBounce) ? 1:0) +
         ((collideeParam.mode & dContactBounce) ? 2:0);
 
     if (nBounce>0)
         {
             surface.bounce = MixValues
-                (mSurfaceParameter.bounce, collideeParam.bounce, nBounce);
+                (surfacePtr->bounce, collideeParam.bounce, nBounce);
 
             surface.bounce_vel = MixValues
-                (mSurfaceParameter.bounce_vel, collideeParam.bounce_vel, nBounce);
+                (surfacePtr->bounce_vel, collideeParam.bounce_vel, nBounce);
 
             surface.mode |= dContactBounce;
         }
 
     // slip1
     const int nSlip1 = 
-        ((mSurfaceParameter.mode & dContactSlip1) ? 1 : 0) +
+        ((surfacePtr->mode & dContactSlip1) ? 1 : 0) +
         ((collideeParam.mode & dContactSlip1) ? 2 : 0);
 
     if (nSlip1 > 0)
         {
             surface.slip1 = MixValues
-                (mSurfaceParameter.slip1, collideeParam.slip1, nSlip1);
+                (surfacePtr->slip1, collideeParam.slip1, nSlip1);
 
             surface.mode |= dContactSlip1;
         }
 
     // slip2
     const int nSlip2 = 
-        ((mSurfaceParameter.mode & dContactSlip2) ? 1 : 0) +
+        ((surfacePtr->mode & dContactSlip2) ? 1 : 0) +
         ((collideeParam.mode & dContactSlip2) ? 2 : 0);
 
     if (nSlip2 > 0)
         {
             surface.slip2 = MixValues
-                (mSurfaceParameter.slip2, collideeParam.slip2, nSlip2);
+                (surfacePtr->slip2, collideeParam.slip2, nSlip2);
 
             surface.mode |= dContactSlip2;
         }
 }
 
 void
-ODEContactJointHandler::SetSurfaceParameter(const GenericSurfaceParameter& surface)
-{
-    dSurfaceParameters& ODESurface = (dSurfaceParameters&) surface;
-    mSurfaceParameter = ODESurface;
-}
-
-GenericSurfaceParameter&
-ODEContactJointHandler::GetSurfaceParameter() const
-{
-    return (GenericSurfaceParameter&) mSurfaceParameter;
-}
-
-void
-ODEContactJointHandler::SetContactMode(int mode, bool set)
+ODEContactJointHandler::SetContactMode(int mode, bool set, dSurfaceParameters* ODESurface)
 {
     if (set)
         {
-            mSurfaceParameter.mode |= mode;
+            ODESurface->mode |= mode;
         } else
             {
-                mSurfaceParameter.mode &= ~mode;
+                ODESurface->mode &= ~mode;
             }
 }
 
 int
-ODEContactJointHandler::GetContactMode() const
+ODEContactJointHandler::GetContactMode(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.mode;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->mode;
 }
 
 void
-ODEContactJointHandler::SetContactBounceMode(bool set)
+ODEContactJointHandler::SetContactBounceMode(bool set, GenericSurfaceParameter* surface)
 {
-    SetContactMode(dContactBounce,set);
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    SetContactMode(dContactBounce, set, ODESurface);
 }
 
 void
-ODEContactJointHandler::SetMinBounceVel(float vel)
+ODEContactJointHandler::SetMinBounceVel(float vel, GenericSurfaceParameter* surface)
 {
-    mSurfaceParameter.bounce_vel = std::max<float>(0.0f,vel);
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    ODESurface->bounce_vel = std::max<float>(0.0f,vel);
 }
 
 float
-ODEContactJointHandler::GetMinBounceVel() const
+ODEContactJointHandler::GetMinBounceVel(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.bounce_vel;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->bounce_vel;
 }
 
 void
-ODEContactJointHandler::SetBounceValue(float bounce)
+ODEContactJointHandler::SetBounceValue(float bounce, GenericSurfaceParameter* surface)
 {
-    mSurfaceParameter.bounce = std::max<float>(0.0f,bounce);
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    ODESurface->bounce = std::max<float>(0.0f,bounce);
 }
 
 float
-ODEContactJointHandler::GetBounceValue() const
+ODEContactJointHandler::GetBounceValue(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.bounce;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->bounce;
 }
 
 void
-ODEContactJointHandler::SetContactSoftERPMode(bool set)
+ODEContactJointHandler::SetContactSoftERPMode(bool set, GenericSurfaceParameter* surface)
 {
-    SetContactMode(dContactSoftERP,set);
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    SetContactMode(dContactSoftERP, set, ODESurface);
 }
 
 void
-ODEContactJointHandler::SetContactSoftERP(float erp)
-{
+ODEContactJointHandler::SetContactSoftERP(float erp, GenericSurfaceParameter* surface)
+{    
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
     salt::gClamp(erp,0.0f,1.0f);
-    mSurfaceParameter.soft_erp = erp;
+    ODESurface->soft_erp = erp;
 }
 
 float
-ODEContactJointHandler::GetContactSoftERP() const
+ODEContactJointHandler::GetContactSoftERP(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.soft_erp;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->soft_erp;
 }
 
 void
-ODEContactJointHandler::SetContactSoftCFMMode(bool set)
+ODEContactJointHandler::SetContactSoftCFMMode(bool set, GenericSurfaceParameter* surface)
 {
-    SetContactMode(dContactSoftCFM,set);
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    SetContactMode(dContactSoftCFM, set, ODESurface);
 }
 
 void
-ODEContactJointHandler::SetContactSoftCFM(float cfm)
+ODEContactJointHandler::SetContactSoftCFM(float cfm, GenericSurfaceParameter* surface)
 {
-    mSurfaceParameter.soft_cfm = std::max<float>(0.0f,cfm);
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    ODESurface->soft_cfm = std::max<float>(0.0f,cfm);
 }
 
-float ODEContactJointHandler::GetContactSoftCFM() const
+float ODEContactJointHandler::GetContactSoftCFM(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.soft_cfm;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->soft_cfm;
 }
 
-void ODEContactJointHandler::SetContactSlipMode (bool set)
+void ODEContactJointHandler::SetContactSlipMode (bool set, GenericSurfaceParameter* surface)
 {
-    SetContactMode(dContactSlip1,set);
-    SetContactMode(dContactSlip2,set);
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    SetContactMode(dContactSlip1,set,ODESurface);
+    SetContactMode(dContactSlip2,set,ODESurface);
 }
 
-void ODEContactJointHandler::SetContactSlip(float slip)
+void ODEContactJointHandler::SetContactSlip(float slip, GenericSurfaceParameter* surface)
 {
-    mSurfaceParameter.slip1 = slip;
-    mSurfaceParameter.slip2 = slip;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    ODESurface->slip1 = slip;
+    ODESurface->slip2 = slip;
 }
 
 float
-ODEContactJointHandler::GetContactSlip1() const
+ODEContactJointHandler::GetContactSlip1(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.slip1;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->slip1;
 }
 
 float
-ODEContactJointHandler::GetContactSlip2() const
+ODEContactJointHandler::GetContactSlip2(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.slip2;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->slip2;
 }
 
-void ODEContactJointHandler::SetContactMu(float mu)
+void ODEContactJointHandler::SetContactMu(float mu, GenericSurfaceParameter* surface)
 {
-    mSurfaceParameter.mu = mu;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    ODESurface->mu = mu;
 }
 
-float ODEContactJointHandler::GetContactMu() const
+float ODEContactJointHandler::GetContactMu(GenericSurfaceParameter* surface) const
 {
-    return mSurfaceParameter.mu;
+    dSurfaceParameters* ODESurface = (dSurfaceParameters*) surface;
+    return ODESurface->mu;
 }

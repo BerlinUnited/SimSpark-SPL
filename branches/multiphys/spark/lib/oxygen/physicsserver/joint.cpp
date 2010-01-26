@@ -208,7 +208,7 @@ bool Joint::AreConnectedExcluding (shared_ptr<RigidBody> body1,
 
 void Joint::EnableFeedback(bool enable)
 {
-    mJointImp->EnableFeedback(enable, mJointID);
+    mJointImp->EnableFeedback(enable, mJointID, mFeedback);
 }
 
 bool Joint::FeedBackEnabled() const
@@ -218,12 +218,12 @@ bool Joint::FeedBackEnabled() const
 
 Vector3f Joint::GetFeedbackForce(EBodyIndex idx) const
 {
-    return mJointImp->GetFeedbackForce(idx);
+    return mJointImp->GetFeedbackForce(idx, mFeedback);
 }
 
 Vector3f Joint::GetFeedbackTorque(EBodyIndex idx) const
 {
-    return mJointImp->GetFeedbackTorque(idx);
+    return mJointImp->GetFeedbackTorque(idx, mFeedback);
 }
     
 void Joint::SetFudgeFactor(EAxisIndex idx, float fudge_factor)
@@ -374,7 +374,7 @@ void Joint::DestroyPhysicsObject()
         }
 
     EnableFeedback(false);
-    mJointImp->DestroyJoint(mJointID);
+    mJointImp->DestroyJoint(mJointID, mFeedback);
     mJointID = 0;
 }
 

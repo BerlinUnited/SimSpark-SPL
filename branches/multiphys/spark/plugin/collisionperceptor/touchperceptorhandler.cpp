@@ -79,7 +79,7 @@ void TouchPerceptorHandler::HandleCollision(
         return;
 
     mContactJointHandlerImp->CalcSurfaceParam(
-        contact, handler->GetSurfaceParameter());
+        contact, handler->GetSurfaceParameter(), mSurfaceParameter);
 
     // create the contact joint and attach it to the body
     long joint = mContactJointHandlerImp->CreateContactJoint(

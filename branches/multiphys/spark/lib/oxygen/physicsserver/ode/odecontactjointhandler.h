@@ -32,38 +32,38 @@ class OXYGEN_API ODEContactJointHandler : public ContactJointHandlerInt, public 
 {
 public:
     ODEContactJointHandler();
-    void Initialize();
+    GenericSurfaceParameter* Initialize();
     long RetrieveBody(long geomID);
     long CreateContactJoint(long worldID, long jointGroupID, GenericContact& contact);
     void AttachContactJoint(long jointID, long bodyID1, long bodyID2);
-    void CalcSurfaceParam(GenericContact& surface, GenericSurfaceParameter& collideeParam);
-    
-    void SetSurfaceParameter(const GenericSurfaceParameter& surface);
-    GenericSurfaceParameter& GetSurfaceParameter() const;
-    void SetContactMode(int mode, bool set);
-    int GetContactMode() const;
-    void SetContactBounceMode(bool set);
-    void SetBounceValue(float bounce);
-    float GetBounceValue() const;
-    void SetMinBounceVel(float vel);
-    float GetMinBounceVel() const;
-    void SetContactSoftERPMode(bool set);
-    void SetContactSoftERP(float erp);
-    float GetContactSoftERP() const;
-    void SetContactSoftCFMMode(bool set);
-    void SetContactSoftCFM(float cfm);
-    float GetContactSoftCFM() const;
-    void SetContactSlipMode (bool set);
-    void SetContactSlip(float slip);
-    float GetContactSlip1() const;
-    float GetContactSlip2() const;
-    void SetContactMu(float mu);
-    float GetContactMu() const;
+    void CalcSurfaceParam(GenericContact& surface, 
+                          GenericSurfaceParameter& collideeParam,
+                          GenericSurfaceParameter* surfacePtr);
+    int GetContactMode(GenericSurfaceParameter* surface) const;
+    void SetContactBounceMode(bool set, GenericSurfaceParameter* surface);
+    void SetBounceValue(float bounce, GenericSurfaceParameter* surface);
+    float GetBounceValue(GenericSurfaceParameter* surface) const;
+    void SetMinBounceVel(float vel, GenericSurfaceParameter* surface);
+    float GetMinBounceVel(GenericSurfaceParameter* surface) const;
+    void SetContactSoftERPMode(bool set, GenericSurfaceParameter* surface);
+    void SetContactSoftERP(float erp, GenericSurfaceParameter* surface);
+    float GetContactSoftERP(GenericSurfaceParameter* surface) const;
+    void SetContactSoftCFMMode(bool set, GenericSurfaceParameter* surface);
+    void SetContactSoftCFM(float cfm, GenericSurfaceParameter* surface);
+    float GetContactSoftCFM(GenericSurfaceParameter* surface) const;
+    void SetContactSlipMode (bool set, GenericSurfaceParameter* surface);
+    void SetContactSlip(float slip, GenericSurfaceParameter* surface);
+    float GetContactSlip1(GenericSurfaceParameter* surface) const;
+    float GetContactSlip2(GenericSurfaceParameter* surface) const;
+    void SetContactMu(float mu, GenericSurfaceParameter* surface);
+    float GetContactMu(GenericSurfaceParameter* surface) const;
         
 protected:    
     f_inline float MixValues(const float v1, const float v2, const int n) const;
     void CalcSurfaceParamInternal(dSurfaceParameters& surface,
-                                  const dSurfaceParameters& collideeParam);
+                                  const dSurfaceParameters& collideeParam,
+                                  const dSurfaceParameters* ODESurface);
+    void SetContactMode(int mode, bool set, dSurfaceParameters* ODESurface);
 };
 
 } //namespace oxygen

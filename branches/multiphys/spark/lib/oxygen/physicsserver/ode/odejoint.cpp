@@ -57,26 +57,32 @@ long ODEJoint::GetBodyID(int idx, long jointID)
     return (long) ODEBodyID;
 }
 
-void ODEJoint::EnableFeedback(bool enable, long jointID)
+void ODEJoint::EnableFeedback(bool enable, long jointID, 
+                              shared_ptr<GenericJointFeedback> feedback)
 {
     dJointID ODEJoint = (dJointID) jointID;
     
     if (enable)
         {
-            if (mFeedback.get() == 0)
+            if (feedback.get() == 0)
                 {
-                    mFeedback = shared_ptr<dJointFeedback>(new dJointFeedback());
-                    memset(mFeedback.get(),0,sizeof(dJointFeedback));
+                    feedback = shared_ptr<GenericJointFeedback>(
+                        (GenericJointFeedback*) new dJointFeedback());
+                    memset(feedback.get(),0,sizeof(dJointFeedback));
                 }
         } else
             {
-                if (mFeedback.get() != 0)
+                if (feedback.get() != 0)
                     {
-                        mFeedback.reset();
+                        feedback.reset();
                     }
             }
 
-    dJointSetFeedback(ODEJoint,mFeedback.get());
+    cout << "bla";
+    std::cin;
+    dJointFeedback* ODEFeedback = (dJointFeedback*) feedback.get();
+
+    dJointSetFeedback(ODEJoint,ODEFeedback);
 }
 
 bool ODEJoint::FeedbackEnabled(long jointID) const
@@ -85,9 +91,10 @@ bool ODEJoint::FeedbackEnabled(long jointID) const
     return (dJointGetFeedback(ODEJoint) != 0);
 }
 
-Vector3f ODEJoint::GetFeedbackForce(int idx) const
+Vector3f ODEJoint::GetFeedbackForce(int idx, 
+                                    shared_ptr<GenericJointFeedback> feedback) const
 {
-    dJointFeedback* fb = mFeedback.get();
+    dJointFeedback* fb = (dJointFeedback*) feedback.get();
     if (fb == 0)
         {
             return Vector3f(0,0,0);
@@ -114,9 +121,10 @@ Vector3f ODEJoint::GetFeedbackForce(int idx) const
         }
 }
 
-Vector3f ODEJoint::GetFeedbackTorque(int idx) const
+Vector3f ODEJoint::GetFeedbackTorque(int idx,
+                                     shared_ptr<GenericJointFeedback> feedback) const
 {
-    dJointFeedback* fb = mFeedback.get();
+    dJointFeedback* fb = (dJointFeedback*) feedback.get();
     if (fb == 0)
         {
             return Vector3f(0,0,0);
@@ -283,10 +291,11 @@ float ODEJoint::GetMaxMotorForce(int idx, long jointID) const
     return GetParameter(dParamFMax + (idx * dParamGroup), jointID);
 }
 
-void ODEJoint::DestroyJoint(long jointID)
+void ODEJoint::DestroyJoint(long jointID, 
+                            shared_ptr<GenericJointFeedback> feedback)
 {
     dJointID ODEJoint = (dJointID) jointID;
-    EnableFeedback(false, jointID);
+    EnableFeedback(false, jointID, feedback);
     dJointDestroy(ODEJoint);
 }
 

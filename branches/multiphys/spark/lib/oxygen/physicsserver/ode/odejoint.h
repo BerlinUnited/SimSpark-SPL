@@ -22,6 +22,7 @@
 #ifndef OXYGEN_ODEJOINT_H
 #define OXYGEN_ODEJOINT_H
 
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 #include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <oxygen/physicsserver/int/jointint.h>
 
@@ -33,14 +34,18 @@ class OXYGEN_API ODEJoint : public JointInt, public ODEPhysicsObject
 public:
     ODEJoint();
     
-    virtual void DestroyJoint(long jointID);
-    virtual void Attach(long bodyID1, long bodiID2, long jointID);
+    virtual void DestroyJoint(long jointID,
+                              boost::shared_ptr<GenericJointFeedback> feedback);
+    virtual void Attach(long bodyID1, long bodyID2, long jointID);
     int GetType(long jointID) const;
     long GetBodyID(int idx, long jointID);
-    void EnableFeedback(bool enable, long jointID);
+    void EnableFeedback(bool enable, long jointID, 
+                        boost::shared_ptr<GenericJointFeedback> feedback);
     bool FeedbackEnabled(long jointID) const;
-    salt::Vector3f GetFeedbackForce(int idx) const;
-    salt::Vector3f GetFeedbackTorque(int idx) const;
+    salt::Vector3f GetFeedbackForce(int idx,
+                                    boost::shared_ptr<GenericJointFeedback> feedback) const;
+    salt::Vector3f GetFeedbackTorque(int idx,
+                                     boost::shared_ptr<GenericJointFeedback> feedback) const;
     void SetFudgeFactor(int idx, float fudge_factor, long jointID);
     float GetFudgeFactor(int idx, long jointID) const;
     void SetBounce(int idx, float bounce, long jointID);
@@ -69,14 +74,9 @@ public:
     float GetAngularMotorVelocity(int idx, long jointID) const;
     void SetMaxMotorForce(int idx, float f, long jointID);
     float GetMaxMotorForce(int idx, long jointID) const;
-    virtual void SetParameter(int parameter, float value, long jointID);
-    virtual float GetParameter(int parameter, long jointID) const;
+    void SetParameter(int parameter, float value, long jointID);
+    float GetParameter(int parameter, long jointID) const;
     void OnLink(long jointID, Joint* joint);
-    
-protected:
-    //It is encouraged to not store any member variables in the implementation. 
-    //This can cause major problems. However, here, I found no way to avoid it.
-    boost::shared_ptr<dJointFeedback> mFeedback;
 };
 
 } //namespace oxygen
