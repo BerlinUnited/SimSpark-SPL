@@ -93,7 +93,7 @@ set(oxygen_LIB_HDRS
     physicsserver/int/worldint.h
     
     #ode-specific files
-    physicsserver/staticphysicsmethods_ode.cpp
+    physicsserver/ode/staticphysicsmethods_ode.cpp
     physicsserver/ode/odeangularmotor.h
     physicsserver/ode/odeballjoint.h
     physicsserver/ode/odebody.h
