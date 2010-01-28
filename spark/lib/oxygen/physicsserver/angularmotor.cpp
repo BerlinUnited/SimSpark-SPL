@@ -18,7 +18,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/angularmotor.h>
-#include <oxygen/physicsserver/ode/odeangularmotor.h>
+#include <oxygen/physicsserver/int/angularmotorint.h>
+#include <oxygen/physicsserver/int/jointint.h>
+#include <oxygen/physicsserver/impfactory.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -27,7 +29,7 @@ using namespace salt;
 
 AngularMotor::AngularMotor() : Joint()
 {
-    mAngularMotorImp = boost::shared_ptr<ODEAngularMotor>(new ODEAngularMotor());
+    mAngularMotorImp = ImpFactory::GetInstance()->GetAngularMotorImp();
 }
 
 AngularMotor::~AngularMotor()

@@ -15,6 +15,7 @@ set(oxygen_LIB_HDRS
     oxygen.h
     oxygen_defines.h
     physicsserver/genericphysicsobjects.h
+    physicsserver/impfactory.h
     physicsserver/physicsobject.h
     physicsserver/body.h
     physicsserver/rigidbody.h
@@ -75,6 +76,7 @@ set(oxygen_LIB_HDRS
     physicsserver/int/generic6dofjointint.h
     physicsserver/int/hingejointint.h
     physicsserver/int/hinge2jointint.h
+    physicsserver/int/impfactoryint.h
     physicsserver/int/jointint.h
     physicsserver/int/physicsobjectint.h
     physicsserver/int/physicsserverint.h
@@ -111,6 +113,7 @@ set(oxygen_LIB_HDRS
     physicsserver/ode/odegeneric6dofjoint.h
     physicsserver/ode/odehingejoint.h
     physicsserver/ode/odehinge2joint.h
+    physicsserver/ode/odeimpfactory.h
     physicsserver/ode/odejoint.h
     physicsserver/ode/odephysicsobject.h
     physicsserver/ode/odephysicsserver.h
@@ -190,6 +193,7 @@ set(oxygen_LIB_SRCS
     oxygen.cpp
     physicsserver/physicsobject.cpp
     physicsserver/physicsobject_c.cpp
+    physicsserver/impfactory.cpp
     physicsserver/body.cpp
     physicsserver/body_c.cpp
     physicsserver/rigidbody.cpp
@@ -285,6 +289,7 @@ set(oxygen_LIB_SRCS
     physicsserver/ode/odegeneric6dofjoint.cpp
     physicsserver/ode/odehingejoint.cpp
     physicsserver/ode/odehinge2joint.cpp
+    physicsserver/ode/odeimpfactory.cpp
     physicsserver/ode/odejoint.cpp
     physicsserver/ode/odephysicsobject.cpp
     physicsserver/ode/odephysicsserver.cpp

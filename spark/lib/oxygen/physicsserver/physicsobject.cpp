@@ -24,7 +24,8 @@
 #include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
+#include <oxygen/physicsserver/int/physicsobjectint.h>
+#include <oxygen/physicsserver/impfactory.h>
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
 
@@ -33,7 +34,7 @@ using namespace boost;
 
 PhysicsObject::PhysicsObject() : BaseNode()
 {
-    mPhysicsObjectImp = shared_ptr<ODEPhysicsObject>(new ODEPhysicsObject());
+    mPhysicsObjectImp = ImpFactory::GetInstance()->GetPhysicsObjectImp();
 }
 
 PhysicsObject::~PhysicsObject()

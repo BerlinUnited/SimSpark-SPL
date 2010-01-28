@@ -20,7 +20,8 @@
 #include <oxygen/physicsserver/joint.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/staticphysicsmethods.h>
-#include <oxygen/physicsserver/ode/odejoint.h>
+#include <oxygen/physicsserver/impfactory.h>
+#include <oxygen/physicsserver/int/jointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -33,7 +34,7 @@ PhysicsObject(), mJointID(0),
 mJointMaxSpeed1(0), mJointMaxSpeed2(0), 
 mIsLimitJointMaxSpeed1(false), mIsLimitJointMaxSpeed2(false)
 {
-    mJointImp = boost::shared_ptr<ODEJoint>(new ODEJoint());
+    mJointImp = ImpFactory::GetInstance()->GetJointImp();
 }
 
 Joint::~Joint()

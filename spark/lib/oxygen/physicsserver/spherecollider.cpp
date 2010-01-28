@@ -20,14 +20,15 @@
 */
 
 #include <oxygen/physicsserver/spherecollider.h>
-#include <oxygen/physicsserver/ode/odespherecollider.h>
+#include <oxygen/physicsserver/int/spherecolliderint.h>
+#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 using namespace salt;
 
 SphereCollider::SphereCollider() : ConvexCollider()
 {
-    mSphereColliderImp = boost::shared_ptr<ODESphereCollider>(new ODESphereCollider());
+    mSphereColliderImp = ImpFactory::GetInstance()->GetSphereColliderImp();
 }
 
 void SphereCollider::SetRadius(float r)

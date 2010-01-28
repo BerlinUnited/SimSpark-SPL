@@ -20,14 +20,15 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/body.h>
-#include <oxygen/physicsserver/ode/odebody.h>
+#include <oxygen/physicsserver/int/bodyint.h>
+#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 
 Body::Body() : PhysicsObject(), mBodyID(0), mMassTransformed(false),
                                             mMassTrans(0,0,0)
 {
-    mBodyImp = boost::shared_ptr<ODEBody>(new ODEBody());
+    mBodyImp = ImpFactory::GetInstance()->GetBodyImp();
 }
 
 Body::~Body(){

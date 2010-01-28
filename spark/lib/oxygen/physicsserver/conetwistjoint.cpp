@@ -21,12 +21,13 @@
 */
 
 #include <oxygen/physicsserver/conetwistjoint.h>
-#include <oxygen/physicsserver/ode/odeconetwistjoint.h>
+#include <oxygen/physicsserver/int/conetwistjointint.h>
+#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 
 ConeTwistJoint::ConeTwistJoint() : Generic6DOFJoint(){
-    mConeTwistJointImp = boost::shared_ptr<ODEConeTwistJoint>(new ODEConeTwistJoint());
+    mConeTwistJointImp = ImpFactory::GetInstance()->GetConeTwistJointImp();
 }
 
 ConeTwistJoint::~ConeTwistJoint(){

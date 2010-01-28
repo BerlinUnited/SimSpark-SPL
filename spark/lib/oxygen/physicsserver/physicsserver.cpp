@@ -20,11 +20,12 @@
 */
 
 #include <oxygen/physicsserver/physicsserver.h>
-#include <oxygen/physicsserver/ode/odephysicsserver.h>
+#include <oxygen/physicsserver/int/physicsserverint.h>
+#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 
 PhysicsServer::PhysicsServer() : Leaf()
 {
-    mPhysicsServerImp = boost::shared_ptr<ODEPhysicsServer>(new ODEPhysicsServer());
+    mPhysicsServerImp = ImpFactory::GetInstance()->GetPhysicsServerImp();
 }
