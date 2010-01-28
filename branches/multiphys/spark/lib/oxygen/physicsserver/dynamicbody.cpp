@@ -20,12 +20,13 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/dynamicbody.h>
-#include <oxygen/physicsserver/ode/odedynamicbody.h>
+#include <oxygen/physicsserver/int/dynamicbodyint.h>
+#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 
 DynamicBody::DynamicBody() : Body(){
-    mDynamicBodyImp = boost::shared_ptr<ODEDynamicBody>(new ODEDynamicBody());
+    mDynamicBodyImp = ImpFactory::GetInstance()->GetDynamicBodyImp();
 }
 
 DynamicBody::~DynamicBody(){

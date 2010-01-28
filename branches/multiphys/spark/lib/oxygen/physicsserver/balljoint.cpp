@@ -17,8 +17,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odeballjoint.h>
+#include <oxygen/physicsserver/int/balljointint.h>
+#include <oxygen/physicsserver/int/jointint.h>
 #include <oxygen/physicsserver/balljoint.h>
+#include <oxygen/physicsserver/impfactory.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -27,7 +29,7 @@ using namespace salt;
 
 BallJoint::BallJoint() : Generic6DOFJoint()
 {
-    mBallJointImp = boost::shared_ptr<ODEBallJoint>(new ODEBallJoint());
+    mBallJointImp = ImpFactory::GetInstance()->GetBallJointImp();
 }
 
 BallJoint::~BallJoint()

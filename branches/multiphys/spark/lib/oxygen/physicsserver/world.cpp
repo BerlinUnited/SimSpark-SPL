@@ -19,7 +19,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/ode/odeworld.h>
+#include <oxygen/physicsserver/int/worldint.h>
+#include <oxygen/physicsserver/impfactory.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/sceneserver/scene.h>
@@ -30,7 +31,7 @@ using namespace salt;
 
 World::World() : PhysicsObject()
 {
-    mWorldImp = shared_ptr<ODEWorld>(new ODEWorld());
+    mWorldImp = ImpFactory::GetInstance()->GetWorldImp();
 }
 
 World::~World()

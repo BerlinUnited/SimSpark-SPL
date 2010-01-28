@@ -20,12 +20,13 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/emptycollider.h>
-#include <oxygen/physicsserver/ode/odeemptycollider.h>
+#include <oxygen/physicsserver/int/emptycolliderint.h>
+#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 
 EmptyCollider::EmptyCollider() : Collider(){
-    mEmptyColliderImp = boost::shared_ptr<ODEEmptyCollider>(new ODEEmptyCollider());
+    mEmptyColliderImp = ImpFactory::GetInstance()->GetEmptyColliderImp();
 }
 
 EmptyCollider::~EmptyCollider(){

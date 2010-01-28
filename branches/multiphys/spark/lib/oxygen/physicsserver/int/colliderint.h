@@ -25,6 +25,7 @@
 
 #include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/oxygen_defines.h>
+#include <salt/matrix.h>
 #include <set>
 #include <string>
 

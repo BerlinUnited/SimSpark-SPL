@@ -20,12 +20,13 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/concavecollider.h>
-#include <oxygen/physicsserver/ode/odeconcavecollider.h>
+#include <oxygen/physicsserver/int/concavecolliderint.h>
+#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 
 ConcaveCollider::ConcaveCollider() : Collider(){
-    mConcaveColliderImp = boost::shared_ptr<ODEConcaveCollider>(new ODEConcaveCollider());
+    mConcaveColliderImp = ImpFactory::GetInstance()->GetConcaveColliderImp();
 }
 
 ConcaveCollider::~ConcaveCollider(){

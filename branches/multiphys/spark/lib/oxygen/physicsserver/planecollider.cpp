@@ -20,7 +20,8 @@
 */
 
 #include <oxygen/physicsserver/planecollider.h>
-#include <oxygen/physicsserver/ode/odeplanecollider.h>
+#include <oxygen/physicsserver/int/planecolliderint.h>
+#include <oxygen/physicsserver/impfactory.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -28,7 +29,7 @@ using namespace salt;
 
 PlaneCollider::PlaneCollider() : Collider()
 {
-    mPlaneColliderImp = boost::shared_ptr<ODEPlaneCollider>(new ODEPlaneCollider());
+    mPlaneColliderImp = ImpFactory::GetInstance()->GetPlaneColliderImp();
 }
 
 void PlaneCollider::SetParams(float a, float b, float c, float d)
