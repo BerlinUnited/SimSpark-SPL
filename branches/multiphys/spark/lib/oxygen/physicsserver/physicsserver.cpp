@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
+
 PhysicsServer::PhysicsServer() : Leaf()
 {
     mPhysicsServerImp = ImpFactory::GetInstance()->GetPhysicsServerImp();

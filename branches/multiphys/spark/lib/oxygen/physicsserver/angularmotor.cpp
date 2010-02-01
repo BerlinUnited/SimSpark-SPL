@@ -27,6 +27,8 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
+boost::shared_ptr<AngularMotorInt> AngularMotor::mAngularMotorImp;
+
 AngularMotor::AngularMotor() : Joint()
 {
     mAngularMotorImp = ImpFactory::GetInstance()->GetAngularMotorImp();

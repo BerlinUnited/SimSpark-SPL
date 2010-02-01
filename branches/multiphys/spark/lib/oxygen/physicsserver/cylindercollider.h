@@ -43,7 +43,7 @@ public:
     virtual ~CylinderCollider();
     
 private:
-    boost::shared_ptr<CylinderColliderInt> mCylinderColliderImp;
+    static boost::shared_ptr<CylinderColliderInt> mCylinderColliderImp;
 };
 
 DECLARE_CLASS(CylinderCollider);

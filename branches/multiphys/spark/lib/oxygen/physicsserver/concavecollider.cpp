@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<ConcaveColliderInt> ConcaveCollider::mConcaveColliderImp;
+
 ConcaveCollider::ConcaveCollider() : Collider(){
     mConcaveColliderImp = ImpFactory::GetInstance()->GetConcaveColliderImp();
 }

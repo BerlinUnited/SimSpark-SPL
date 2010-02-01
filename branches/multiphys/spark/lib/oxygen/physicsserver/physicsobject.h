@@ -84,7 +84,7 @@ protected:
     void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const;
     
 private:
-    boost::shared_ptr<PhysicsObjectInt> mPhysicsObjectImp;
+    static boost::shared_ptr<PhysicsObjectInt> mPhysicsObjectImp;
 };
 
 DECLARE_ABSTRACTCLASS(PhysicsObject);

@@ -46,7 +46,7 @@ public:
     float GetParameter(int parameter) const;
     
 private:
-    boost::shared_ptr<ConeTwistJointInt> mConeTwistJointImp;
+    static boost::shared_ptr<ConeTwistJointInt> mConeTwistJointImp;
 };
 
 DECLARE_CLASS(ConeTwistJoint);

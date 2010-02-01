@@ -54,7 +54,7 @@ protected:
     virtual float GetParameter(int parameter) const;
     
 private:
-    boost::shared_ptr<FixedJointInt> mFixedJointImp;
+    static boost::shared_ptr<FixedJointInt> mFixedJointImp;
 };
 
 DECLARE_CLASS(FixedJoint);

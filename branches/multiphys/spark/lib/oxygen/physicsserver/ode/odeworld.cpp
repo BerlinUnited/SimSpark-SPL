@@ -18,7 +18,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
+#include <oxygen/physicsserver/ode/oderigidbody.h>
 #include <oxygen/physicsserver/ode/odeworld.h>
 #include <oxygen/physicsserver/space.h>
 
@@ -26,7 +26,7 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-ODEWorld::ODEWorld() : ODEPhysicsObject(){
+ODEWorld::ODEWorld() : PhysicsObject(){
 }
 
 void ODEWorld::SetGravity(const Vector3f& gravity, long worldID)

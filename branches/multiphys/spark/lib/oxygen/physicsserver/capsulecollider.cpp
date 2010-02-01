@@ -26,6 +26,8 @@
 using namespace oxygen;
 using namespace salt;
 
+boost::shared_ptr<CapsuleColliderInt> CapsuleCollider::mCapsuleColliderImp;
+
 CapsuleCollider::CapsuleCollider() : ConvexCollider()
 {
     mCapsuleColliderImp = ImpFactory::GetInstance()->GetCapsuleColliderImp();

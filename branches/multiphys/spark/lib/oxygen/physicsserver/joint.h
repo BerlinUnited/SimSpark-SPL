@@ -296,7 +296,7 @@ protected:
     float mJointMaxSpeed2;
     bool mIsLimitJointMaxSpeed2;
  
-    boost::shared_ptr<JointInt> mJointImp;
+    static boost::shared_ptr<JointInt> mJointImp;
 };
 
 DECLARE_ABSTRACTCLASS(Joint);

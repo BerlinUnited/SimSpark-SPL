@@ -32,6 +32,8 @@
 using namespace oxygen;
 using namespace boost;
 
+boost::shared_ptr<PhysicsObjectInt> PhysicsObject::mPhysicsObjectImp;
+
 PhysicsObject::PhysicsObject() : BaseNode()
 {
     mPhysicsObjectImp = ImpFactory::GetInstance()->GetPhysicsObjectImp();

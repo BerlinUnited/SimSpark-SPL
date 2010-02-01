@@ -42,7 +42,7 @@ public:
     virtual ~ConcaveCollider();
     
 private:
-    boost::shared_ptr<ConcaveColliderInt> mConcaveColliderImp;
+    static boost::shared_ptr<ConcaveColliderInt> mConcaveColliderImp;
 };
 
 DECLARE_CLASS(ConcaveCollider);

@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<CylinderColliderInt> CylinderCollider::mCylinderColliderImp;
+
 CylinderCollider::CylinderCollider() : ConvexCollider(){
     mCylinderColliderImp = ImpFactory::GetInstance()->GetCylinderColliderImp();
 }

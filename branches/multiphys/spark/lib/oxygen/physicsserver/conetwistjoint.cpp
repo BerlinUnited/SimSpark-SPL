@@ -26,6 +26,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<ConeTwistJointInt> ConeTwistJoint::mConeTwistJointImp;
+
 ConeTwistJoint::ConeTwistJoint() : Generic6DOFJoint(){
     mConeTwistJointImp = ImpFactory::GetInstance()->GetConeTwistJointImp();
 }

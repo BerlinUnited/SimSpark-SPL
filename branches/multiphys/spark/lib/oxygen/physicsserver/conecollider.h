@@ -42,7 +42,7 @@ public:
     virtual ~ConeCollider();
     
 private:
-    boost::shared_ptr<ConeColliderInt> mConeColliderImp;
+    static boost::shared_ptr<ConeColliderInt> mConeColliderImp;
 };
 
 DECLARE_CLASS(ConeCollider);

@@ -41,7 +41,7 @@ public:
     virtual ~ConvexCollider();
     
 private:
-    boost::shared_ptr<ConvexColliderInt> mConvexColliderImp;
+    static boost::shared_ptr<ConvexColliderInt> mConvexColliderImp;
 };
 
 DECLARE_ABSTRACTCLASS(ConvexCollider);

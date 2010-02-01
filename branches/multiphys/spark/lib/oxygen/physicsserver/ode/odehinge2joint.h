@@ -21,12 +21,12 @@
 #define OXYGEN_ODEHINGE2JOINT_H
 
 #include <oxygen/physicsserver/int/hinge2jointint.h>
-#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
+#include <oxygen/physicsserver/generic6dofjoint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen{
 
-class OXYGEN_API ODEHinge2Joint : public Hinge2JointInt, public ODEGeneric6DOFJoint{
+class OXYGEN_API ODEHinge2Joint : public Hinge2JointInt, public Generic6DOFJoint{
 
 public:
     ODEHinge2Joint();

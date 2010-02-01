@@ -23,14 +23,14 @@
 #ifndef OXYGEN_ODERAYCOLLIDER_H
 #define OXYGEN_ODERAYCOLLIDER_H
 
-#include <oxygen/physicsserver/ode/odecollider.h>
+#include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/int/raycolliderint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODERayCollider : public RayColliderInt, public ODECollider
+class OXYGEN_API ODERayCollider : public RayColliderInt, public Collider
 {
 public:
     ODERayCollider();

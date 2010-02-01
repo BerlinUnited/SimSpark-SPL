@@ -42,7 +42,7 @@ public:
     virtual ~CompoundCollider();
     
 private:
-    boost::shared_ptr<CompoundColliderInt> mCompoundColliderImp;
+    static boost::shared_ptr<CompoundColliderInt> mCompoundColliderImp;
 };
 
 DECLARE_CLASS(CompoundCollider);

@@ -57,7 +57,7 @@ protected:
     virtual bool ConstructInternal();
     
 private:
-    boost::shared_ptr<RayColliderInt> mRayColliderImp;
+    static boost::shared_ptr<RayColliderInt> mRayColliderImp;
 };
 
 DECLARE_CLASS(RayCollider);

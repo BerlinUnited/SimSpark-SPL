@@ -29,6 +29,8 @@ using namespace boost;
 using namespace std;
 using namespace salt;
 
+boost::shared_ptr<JointInt> Joint::mJointImp;
+
 Joint::Joint() : 
 PhysicsObject(), mJointID(0), 
 mJointMaxSpeed1(0), mJointMaxSpeed2(0), 

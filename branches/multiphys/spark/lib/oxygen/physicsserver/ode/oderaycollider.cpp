@@ -18,12 +18,12 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
+#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/ode/oderaycollider.h>
 
 using namespace oxygen;
 
-ODERayCollider::ODERayCollider() : ODECollider()
+ODERayCollider::ODERayCollider() : Collider()
 {
 }
 

@@ -27,6 +27,8 @@
 using namespace oxygen;
 using namespace salt;
 
+boost::shared_ptr<PlaneColliderInt> PlaneCollider::mPlaneColliderImp;
+
 PlaneCollider::PlaneCollider() : Collider()
 {
     mPlaneColliderImp = ImpFactory::GetInstance()->GetPlaneColliderImp();

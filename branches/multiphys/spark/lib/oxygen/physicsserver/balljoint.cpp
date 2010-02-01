@@ -27,6 +27,8 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
+boost::shared_ptr<BallJointInt> BallJoint::mBallJointImp;
+
 BallJoint::BallJoint() : Generic6DOFJoint()
 {
     mBallJointImp = ImpFactory::GetInstance()->GetBallJointImp();

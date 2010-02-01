@@ -115,7 +115,7 @@ protected:
     // Members
     //
 private:    
-    boost::shared_ptr<SpaceInt> mSpaceImp;
+    static boost::shared_ptr<SpaceInt> mSpaceImp;
 
     long mContactGroupID;
     

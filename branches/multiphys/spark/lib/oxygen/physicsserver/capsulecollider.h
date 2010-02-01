@@ -77,7 +77,7 @@ protected:
     virtual bool ConstructInternal();
     
 private:
-    boost::shared_ptr<CapsuleColliderInt> mCapsuleColliderImp;
+    static boost::shared_ptr<CapsuleColliderInt> mCapsuleColliderImp;
 };
 
 DECLARE_CLASS(CapsuleCollider);

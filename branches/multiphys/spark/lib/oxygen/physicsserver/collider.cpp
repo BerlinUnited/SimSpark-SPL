@@ -36,6 +36,8 @@ using namespace salt;
 using namespace boost;
 using namespace std;
 
+boost::shared_ptr<ColliderInt> Collider::mColliderImp;
+
 Collider::Collider() : PhysicsObject(), mGeomID(0)
 {
     mColliderImp = ImpFactory::GetInstance()->GetColliderImp();

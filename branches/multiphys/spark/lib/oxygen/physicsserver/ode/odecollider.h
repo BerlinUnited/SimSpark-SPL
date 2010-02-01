@@ -23,14 +23,14 @@
 #ifndef OXYGEN_ODECOLLIDER_H
 #define OXYGEN_ODECOLLIDER_H
 
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/int/colliderint.h>
 
 namespace oxygen
 {
 class Collider;
 
-class OXYGEN_API ODECollider : public ColliderInt, public ODEPhysicsObject
+class OXYGEN_API ODECollider : public ColliderInt, public PhysicsObject
 {
 
 public:    

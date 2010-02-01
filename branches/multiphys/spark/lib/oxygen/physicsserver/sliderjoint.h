@@ -53,7 +53,7 @@ protected:
     virtual void OnLink();
     
 private:
-    boost::shared_ptr<SliderJointInt> mSliderJointImp;
+    static boost::shared_ptr<SliderJointInt> mSliderJointImp;
 };
 
 DECLARE_CLASS(SliderJoint);

@@ -22,13 +22,13 @@
 #ifndef OXYGEN_ODESOFTBODY_H
 #define OXYGEN_ODESOFTBODY_H
 
-#include <oxygen/physicsserver/ode/odebody.h>
+#include <oxygen/physicsserver/body.h>
 #include <oxygen/physicsserver/int/softbodyint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODESoftBody : public SoftBodyInt, public ODEBody
+class OXYGEN_API ODESoftBody : public SoftBodyInt, public Body
 {
 public:
     ODESoftBody();

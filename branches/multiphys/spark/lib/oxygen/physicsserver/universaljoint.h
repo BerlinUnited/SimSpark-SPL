@@ -78,7 +78,7 @@ protected:
     virtual void OnLink();
     
 private:
-    boost::shared_ptr<UniversalJointInt> mUniversalJointImp;
+    static boost::shared_ptr<UniversalJointInt> mUniversalJointImp;
 };
 
 DECLARE_CLASS(UniversalJoint);

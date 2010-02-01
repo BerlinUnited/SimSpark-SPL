@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<BodyInt> Body::mBodyImp;
+
 Body::Body() : PhysicsObject(), mBodyID(0), mMassTransformed(false),
                                             mMassTrans(0,0,0)
 {

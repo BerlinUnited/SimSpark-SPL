@@ -125,7 +125,7 @@ protected:
     virtual float GetParameter(int parameter) const;
     
 private:
-    boost::shared_ptr<AngularMotorInt> mAngularMotorImp;
+    static boost::shared_ptr<AngularMotorInt> mAngularMotorImp;
 };
 
 DECLARE_CLASS(AngularMotor);

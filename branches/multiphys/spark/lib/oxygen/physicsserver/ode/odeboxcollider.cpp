@@ -20,13 +20,14 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/ode/odeboxcollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
-ODEBoxCollider::ODEBoxCollider() : ODEConvexCollider()
+ODEBoxCollider::ODEBoxCollider() : ConvexCollider()
 {
 }
 

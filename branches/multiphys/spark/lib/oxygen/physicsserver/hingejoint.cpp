@@ -27,6 +27,8 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
+boost::shared_ptr<HingeJointInt> HingeJoint::mHingeJointImp;
+
 HingeJoint::HingeJoint() : Generic6DOFJoint()
 {
     mHingeJointImp = ImpFactory::GetInstance()->GetHingeJointImp();

@@ -22,14 +22,15 @@
 #ifndef OXYGEN_ODERIGIDBODY_H
 #define OXYGEN_ODERIGIDBODY_H
 
-#include <oxygen/physicsserver/ode/odebody.h>
+#include <oxygen/physicsserver/ode/odewrapper.h>
+#include <oxygen/physicsserver/body.h>
 #include <oxygen/physicsserver/int/rigidbodyint.h>
 
 namespace oxygen
 {
 class RigidBody;
 
-class OXYGEN_API ODERigidBody : public RigidBodyInt, public ODEBody
+class OXYGEN_API ODERigidBody : public RigidBodyInt, public Body
 {
 public:
     ODERigidBody();

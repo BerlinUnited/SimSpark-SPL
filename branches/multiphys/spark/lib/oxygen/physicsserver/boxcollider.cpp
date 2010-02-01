@@ -27,6 +27,8 @@
 using namespace oxygen;
 using namespace salt;
 
+boost::shared_ptr<BoxColliderInt> BoxCollider::mBoxColliderImp;
+
 BoxCollider::BoxCollider() : ConvexCollider()
 {
     mBoxColliderImp = ImpFactory::GetInstance()->GetBoxColliderImp();

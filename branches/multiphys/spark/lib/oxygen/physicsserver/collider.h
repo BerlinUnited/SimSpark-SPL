@@ -164,7 +164,7 @@ protected:
     long mGeomID;
     
 private:
-    boost::shared_ptr<ColliderInt> mColliderImp;
+    static boost::shared_ptr<ColliderInt> mColliderImp;
 
 protected:
     /** a set that store the colliders that I never collide with

@@ -24,12 +24,12 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/int/spherecolliderint.h>
-#include <oxygen/physicsserver/ode/odeconvexcollider.h>
+#include <oxygen/physicsserver/convexcollider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODESphereCollider : public SphereColliderInt, public ODEConvexCollider
+class OXYGEN_API ODESphereCollider : public SphereColliderInt, public ConvexCollider
 {
 public:
     ODESphereCollider();

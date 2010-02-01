@@ -23,13 +23,13 @@
 #ifndef OXYGEN_ODETRANSFORMCOLLIDER_H
 #define OXYGEN_ODETRANSFORMCOLLIDER_H
 
-#include <oxygen/physicsserver/ode/odecollider.h>
+#include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/int/transformcolliderint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODETransformCollider : public TransformColliderInt, public ODECollider
+class OXYGEN_API ODETransformCollider : public TransformColliderInt, public Collider
 {
 
 public:    

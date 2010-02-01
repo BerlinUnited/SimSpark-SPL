@@ -41,7 +41,8 @@ public:
     DynamicBody();
     virtual ~DynamicBody();
     
-    boost::shared_ptr<DynamicBodyInt> mDynamicBodyImp;
+private:
+    static boost::shared_ptr<DynamicBodyInt> mDynamicBodyImp;
 };
 
 DECLARE_CLASS(DynamicBody);

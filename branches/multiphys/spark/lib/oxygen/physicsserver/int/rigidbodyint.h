@@ -28,6 +28,7 @@
 
 namespace oxygen
 {
+class RigidBody;
 
 class OXYGEN_API RigidBodyInt
 {

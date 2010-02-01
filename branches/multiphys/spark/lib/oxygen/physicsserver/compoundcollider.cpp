@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<CompoundColliderInt> CompoundCollider::mCompoundColliderImp;
+
 CompoundCollider::CompoundCollider() : Collider(){
     mCompoundColliderImp = ImpFactory::GetInstance()->GetCompoundColliderImp();
 }
