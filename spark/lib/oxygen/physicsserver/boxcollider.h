@@ -63,7 +63,7 @@ protected:
     virtual bool ConstructInternal();
     
 private:
-    boost::shared_ptr<BoxColliderInt> mBoxColliderImp;
+    static boost::shared_ptr<BoxColliderInt> mBoxColliderImp;
 };
 
 DECLARE_CLASS(BoxCollider);

@@ -23,12 +23,12 @@
 #define OXYGEN_ODECONTACTJOINTHANDLER_H
 
 #include <oxygen/physicsserver/int/contactjointhandlerint.h>
-#include <oxygen/physicsserver/ode/odecollider.h>
+#include <oxygen/physicsserver/collider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEContactJointHandler : public ContactJointHandlerInt, public ODECollider
+class OXYGEN_API ODEContactJointHandler : public ContactJointHandlerInt, public Collider
 {
 public:
     ODEContactJointHandler();

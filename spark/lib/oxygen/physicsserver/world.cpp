@@ -29,6 +29,8 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
+boost::shared_ptr<WorldInt> World::mWorldImp;
+
 World::World() : PhysicsObject()
 {
     mWorldImp = ImpFactory::GetInstance()->GetWorldImp();

@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<RayColliderInt> RayCollider::mRayColliderImp;
+
 RayCollider::RayCollider() : Collider()
 {
     mRayColliderImp = ImpFactory::GetInstance()->GetRayColliderImp();

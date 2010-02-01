@@ -17,14 +17,14 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
+#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/physicsserver/ode/odehinge2joint.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-ODEHinge2Joint::ODEHinge2Joint() : ODEGeneric6DOFJoint()
+ODEHinge2Joint::ODEHinge2Joint() : Generic6DOFJoint()
 {
 }
 

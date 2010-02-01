@@ -25,7 +25,6 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/int/physicsobjectint.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
 
 namespace oxygen
 {

@@ -42,7 +42,7 @@ public:
     virtual ~Generic6DOFJoint();
     
 private:
-    boost::shared_ptr<Generic6DOFJointInt> mGeneric6DOFJointImp;
+    static boost::shared_ptr<Generic6DOFJointInt> mGeneric6DOFJointImp;
 };
 
 DECLARE_ABSTRACTCLASS(Generic6DOFJoint);

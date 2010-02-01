@@ -32,6 +32,8 @@ using namespace oxygen;
 using namespace salt;
 using namespace std;
 
+boost::shared_ptr<RigidBodyInt> RigidBody::mRigidBodyImp;
+
 RigidBody::RigidBody() : Body()
 {
     mRigidBodyImp = ImpFactory::GetInstance()->GetRigidBodyImp();

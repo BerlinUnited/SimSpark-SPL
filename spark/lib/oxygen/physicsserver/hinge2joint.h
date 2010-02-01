@@ -59,7 +59,7 @@ protected:
     virtual void OnLink();
     
 private:
-    boost::shared_ptr<Hinge2JointInt> mHinge2JointImp;
+    static boost::shared_ptr<Hinge2JointInt> mHinge2JointImp;
 };
 
 DECLARE_CLASS(Hinge2Joint);

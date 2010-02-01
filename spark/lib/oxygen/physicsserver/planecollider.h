@@ -77,7 +77,7 @@ protected:
     virtual bool ConstructInternal();
     
 private:
-    boost::shared_ptr<PlaneColliderInt> mPlaneColliderImp;
+    static boost::shared_ptr<PlaneColliderInt> mPlaneColliderImp;
 };
 
 DECLARE_CLASS(PlaneCollider);

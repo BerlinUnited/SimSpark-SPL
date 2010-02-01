@@ -43,7 +43,7 @@ public:
     virtual long GetParentSpaceID(long spaceID) = 0;
     virtual void Collide(long space, Space* callee) = 0;
     virtual void Collide2(long obj1, long obj2, Space* callee) = 0; 
-    virtual long ConstructInternal() = 0;
+    virtual long CreateContactGroup() = 0;
     virtual void PostPhysicsUpdateInternal(long contactGroup) = 0;
     virtual bool ObjectIsSpace(long objectID) = 0;
     virtual long FetchBody(long geomID) = 0;

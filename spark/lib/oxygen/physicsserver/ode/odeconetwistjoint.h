@@ -22,13 +22,13 @@
 #ifndef OXYGEN_ODECONETWISTJOINT_H
 #define OXYGEN_ODECONETWISTJOINT_H
 
-#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
+#include <oxygen/physicsserver/generic6dofjoint.h>
 #include <oxygen/physicsserver/int/conetwistjointint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEConeTwistJoint : public ConeTwistJointInt, public ODEGeneric6DOFJoint
+class OXYGEN_API ODEConeTwistJoint : public ConeTwistJointInt, public Generic6DOFJoint
 {
 
 public:

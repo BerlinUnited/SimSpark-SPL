@@ -138,7 +138,7 @@ public:
     float GetContactMu() const;
     
 protected:
-    boost::shared_ptr<ContactJointHandlerInt> mContactJointHandlerImp;
+    static boost::shared_ptr<ContactJointHandlerInt> mContactJointHandlerImp;
     
     GenericSurfaceParameter* mSurfaceParameter;
 };

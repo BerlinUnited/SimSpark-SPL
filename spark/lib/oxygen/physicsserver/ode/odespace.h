@@ -23,14 +23,14 @@
 #define OXYGEN_ODESPACE_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/int/spaceint.h>
 
 namespace oxygen
 {
 class Space;
 
-class OXYGEN_API ODESpace : public SpaceInt, public ODEPhysicsObject
+class OXYGEN_API ODESpace : public SpaceInt, public PhysicsObject
 {
 
 public:
@@ -39,7 +39,7 @@ public:
     long CreateSpace(long spaceID);
     void DestroySpace(long contactGroup, long spaceID);
     long GetParentSpaceID(long spaceID);
-    long ConstructInternal();
+    long CreateContactGroup();
     void PostPhysicsUpdateInternal(long contactGroup);
     void Collide(long spaceID, Space* callee);
     void Collide2(long obj1, long obj2, Space* callee);

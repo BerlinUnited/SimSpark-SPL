@@ -27,6 +27,8 @@
 using namespace oxygen;
 using namespace salt;
 
+boost::shared_ptr<TransformColliderInt> TransformCollider::mTransformColliderImp;
+
 TransformCollider::TransformCollider() : Collider()
 {
     mTransformColliderImp = ImpFactory::GetInstance()->GetTransformColliderImp();

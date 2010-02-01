@@ -57,7 +57,7 @@ protected:
     virtual bool ConstructInternal();
     
 private:
-    boost::shared_ptr<SphereColliderInt> mSphereColliderImp;
+    static boost::shared_ptr<SphereColliderInt> mSphereColliderImp;
 };
 
 DECLARE_CLASS(SphereCollider);

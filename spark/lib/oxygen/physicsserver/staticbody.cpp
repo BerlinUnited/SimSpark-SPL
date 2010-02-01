@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<StaticBodyInt> StaticBody::mStaticBodyImp;
+
 StaticBody::StaticBody() : Body(){
     mStaticBodyImp = ImpFactory::GetInstance()->GetStaticBodyImp();
 }

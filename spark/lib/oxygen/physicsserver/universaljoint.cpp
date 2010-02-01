@@ -27,6 +27,8 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
+boost::shared_ptr<UniversalJointInt> UniversalJoint::mUniversalJointImp;
+
 UniversalJoint::UniversalJoint() : Generic6DOFJoint()
 {
     mUniversalJointImp = ImpFactory::GetInstance()->GetUniversalJointImp();

@@ -46,7 +46,7 @@ protected:
     salt::Vector3f mMassTrans;
 
 private:
-    boost::shared_ptr<BodyInt> mBodyImp;
+    static boost::shared_ptr<BodyInt> mBodyImp;
 };
 
 DECLARE_CLASS(Body);

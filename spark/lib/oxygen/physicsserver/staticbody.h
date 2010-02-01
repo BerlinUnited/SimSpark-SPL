@@ -41,7 +41,7 @@ public:
     StaticBody();
     virtual ~StaticBody();
     
-    boost::shared_ptr<StaticBodyInt> mStaticBodyImp;
+    static boost::shared_ptr<StaticBodyInt> mStaticBodyImp;
 };
 
 DECLARE_CLASS(StaticBody);

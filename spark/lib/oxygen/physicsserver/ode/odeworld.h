@@ -23,13 +23,13 @@
 #define OXYGEN_ODEWORLD_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/int/worldint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEWorld : public WorldInt, public ODEPhysicsObject
+class OXYGEN_API ODEWorld : public WorldInt, public PhysicsObject
 {
 
 public:

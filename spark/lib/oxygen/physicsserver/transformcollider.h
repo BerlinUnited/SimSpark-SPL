@@ -57,7 +57,7 @@ protected:
     virtual bool ConstructInternal();
     
 private:
-    boost::shared_ptr<TransformColliderInt> mTransformColliderImp;
+    static boost::shared_ptr<TransformColliderInt> mTransformColliderImp;
 };
 
 DECLARE_CLASS(TransformCollider);

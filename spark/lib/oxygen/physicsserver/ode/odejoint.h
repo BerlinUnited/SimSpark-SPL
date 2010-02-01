@@ -23,13 +23,13 @@
 #define OXYGEN_ODEJOINT_H
 
 #include <oxygen/physicsserver/genericphysicsobjects.h>
-#include <oxygen/physicsserver/ode/odephysicsobject.h>
+#include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/int/jointint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEJoint : public JointInt, public ODEPhysicsObject
+class OXYGEN_API ODEJoint : public JointInt, public PhysicsObject
 {
 public:
     ODEJoint();

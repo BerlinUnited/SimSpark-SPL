@@ -40,7 +40,7 @@ public:
     virtual ~PhysicsServer(){};
     
 private:
-    boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;
+    static boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;
 };
 
 DECLARE_CLASS(PhysicsServer);

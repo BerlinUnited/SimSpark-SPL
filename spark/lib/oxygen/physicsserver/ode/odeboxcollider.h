@@ -25,12 +25,12 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/int/boxcolliderint.h>
-#include <oxygen/physicsserver/ode/odeconvexcollider.h>
+#include <oxygen/physicsserver/convexcollider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEBoxCollider : public BoxColliderInt, public ODEConvexCollider
+class OXYGEN_API ODEBoxCollider : public BoxColliderInt, public ConvexCollider
 {
 public:
     ODEBoxCollider();

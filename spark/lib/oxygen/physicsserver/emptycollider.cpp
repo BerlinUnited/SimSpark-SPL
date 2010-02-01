@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<EmptyColliderInt> EmptyCollider::mEmptyColliderImp;
+
 EmptyCollider::EmptyCollider() : Collider(){
     mEmptyColliderImp = ImpFactory::GetInstance()->GetEmptyColliderImp();
 }

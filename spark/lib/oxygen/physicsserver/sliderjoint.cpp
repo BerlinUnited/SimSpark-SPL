@@ -26,6 +26,8 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
+boost::shared_ptr<SliderJointInt> SliderJoint::mSliderJointImp;
+
 SliderJoint::SliderJoint() : Generic6DOFJoint()
 {
     mSliderJointImp = ImpFactory::GetInstance()->GetSliderJointImp();

@@ -30,6 +30,8 @@
 using namespace oxygen;
 using namespace boost;
 
+boost::shared_ptr<ContactJointHandlerInt> ContactJointHandler::mContactJointHandlerImp;
+
 ContactJointHandler::ContactJointHandler() : CollisionHandler()
 {
     mContactJointHandlerImp = ImpFactory::GetInstance()->GetContactJointHandlerImp();

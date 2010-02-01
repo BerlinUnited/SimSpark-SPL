@@ -19,10 +19,11 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include <oxygen/physicsserver/ode/odewrapper.h>
+#include <oxygen/physicsserver/ode/oderigidbody.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/world.h>
-#include <oxygen/physicsserver/ode/oderigidbody.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <zeitgeist/logserver/logserver.h>
@@ -32,7 +33,7 @@ using namespace boost;
 using namespace salt;
 using namespace std;
 
-ODERigidBody::ODERigidBody() : ODEBody(){
+ODERigidBody::ODERigidBody() : Body(){
 }
 
 void ODERigidBody::Enable(long bodyID)

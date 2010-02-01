@@ -24,11 +24,11 @@
 #define OXYGEN_ODEANGULARMOTOR_H
 
 #include <oxygen/physicsserver/int/angularmotorint.h>
-#include <oxygen/physicsserver/ode/odejoint.h>
+#include <oxygen/physicsserver/joint.h>
 
 namespace oxygen{
 
-class OXYGEN_API ODEAngularMotor : public AngularMotorInt, public ODEJoint{
+class OXYGEN_API ODEAngularMotor : public AngularMotorInt, public Joint{
 
 public:
     ODEAngularMotor();

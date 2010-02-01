@@ -22,13 +22,13 @@
 #ifndef OXYGEN_ODEDYNAMICBODY_H
 #define OXYGEN_ODEDYNAMICBODY_H
 
-#include <oxygen/physicsserver/ode/odebody.h>
+#include <oxygen/physicsserver/body.h>
 #include <oxygen/physicsserver/int/dynamicbodyint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEDynamicBody : public DynamicBodyInt, public ODEBody
+class OXYGEN_API ODEDynamicBody : public DynamicBodyInt, public Body
 {
 public:
     ODEDynamicBody();

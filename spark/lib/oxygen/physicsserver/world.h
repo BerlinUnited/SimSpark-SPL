@@ -121,7 +121,7 @@ private:
         carried out in a subclass of WorldInt that has the right calls for 
         the desired physics engine.
     */
-    boost::shared_ptr<WorldInt> mWorldImp;
+    static boost::shared_ptr<WorldInt> mWorldImp;
     
     /** The ID of the managed physics world */
     long mWorldID;

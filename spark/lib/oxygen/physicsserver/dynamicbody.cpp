@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<DynamicBodyInt> DynamicBody::mDynamicBodyImp;
+
 DynamicBody::DynamicBody() : Body(){
     mDynamicBodyImp = ImpFactory::GetInstance()->GetDynamicBodyImp();
 }

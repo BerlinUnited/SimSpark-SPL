@@ -29,6 +29,8 @@
 using namespace boost;
 using namespace oxygen;
 
+boost::shared_ptr<SpaceInt> Space::mSpaceImp;
+
 /** set of spaces with disabled inner collision */
 Space::TSpaceIdSet Space::gDisabledInnerCollisionSet;
 
@@ -178,7 +180,7 @@ bool Space::IsGlobalSpace()
 
 bool Space::ConstructInternal()
 {
-    mContactGroupID = mSpaceImp->ConstructInternal();
+    mContactGroupID = mSpaceImp->CreateContactGroup();
     
     return (mContactGroupID != 0);
 }

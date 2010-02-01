@@ -41,7 +41,7 @@ public:
     SoftBody();
     virtual ~SoftBody();
     
-    boost::shared_ptr<SoftBodyInt> mSoftBodyImp;
+    static boost::shared_ptr<SoftBodyInt> mSoftBodyImp;
 };
 
 DECLARE_CLASS(SoftBody);

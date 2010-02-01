@@ -22,13 +22,13 @@
 #ifndef OXYGEN_ODESTATICBODY_H
 #define OXYGEN_ODESTATICBODY_H
 
-#include <oxygen/physicsserver/ode/odebody.h>
+#include <oxygen/physicsserver/body.h>
 #include <oxygen/physicsserver/int/staticbodyint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEStaticBody : public StaticBodyInt, public ODEBody
+class OXYGEN_API ODEStaticBody : public StaticBodyInt, public Body
 {
 public:
     ODEStaticBody();

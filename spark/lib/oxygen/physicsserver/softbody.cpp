@@ -25,6 +25,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<SoftBodyInt> SoftBody::mSoftBodyImp;
+
 SoftBody::SoftBody() : Body(){
     mSoftBodyImp = ImpFactory::GetInstance()->GetSoftBodyImp();
 }

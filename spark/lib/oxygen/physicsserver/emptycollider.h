@@ -42,7 +42,7 @@ public:
     virtual ~EmptyCollider();
     
 private:
-    boost::shared_ptr<EmptyColliderInt> mEmptyColliderImp;
+    static boost::shared_ptr<EmptyColliderInt> mEmptyColliderImp;
 };
 
 DECLARE_CLASS(EmptyCollider);

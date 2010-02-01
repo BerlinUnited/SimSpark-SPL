@@ -26,6 +26,8 @@
 using namespace oxygen;
 using namespace salt;
 
+boost::shared_ptr<SphereColliderInt> SphereCollider::mSphereColliderImp;
+
 SphereCollider::SphereCollider() : ConvexCollider()
 {
     mSphereColliderImp = ImpFactory::GetInstance()->GetSphereColliderImp();

@@ -56,7 +56,7 @@ protected:
     virtual void OnLink();
     
 private:
-    boost::shared_ptr<BallJointInt> mBallJointImp;
+    static boost::shared_ptr<BallJointInt> mBallJointImp;
 };
 
 DECLARE_CLASS(BallJoint);

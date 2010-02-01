@@ -262,7 +262,7 @@ private:
     // Members
     //
 protected:
-    boost::shared_ptr<RigidBodyInt> mRigidBodyImp;
+    static boost::shared_ptr<RigidBodyInt> mRigidBodyImp;
 };
 
 DECLARE_CLASS(RigidBody);

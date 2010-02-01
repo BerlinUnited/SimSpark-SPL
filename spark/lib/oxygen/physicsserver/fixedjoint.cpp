@@ -24,6 +24,8 @@
 
 using namespace oxygen;
 
+boost::shared_ptr<FixedJointInt> FixedJoint::mFixedJointImp;
+
 FixedJoint::FixedJoint() : Generic6DOFJoint()
 {
     mFixedJointImp = ImpFactory::GetInstance()->GetFixedJointImp();
