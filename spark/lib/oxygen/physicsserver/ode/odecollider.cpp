@@ -44,6 +44,11 @@ ODECollider::~ODECollider()
 {
 }
 
+Collider* ODECollider::GetColliderPointer(long geomID){
+    dGeomID ODEGeom = (dGeomID) geomID;
+    return static_cast<Collider*>(dGeomGetData(ODEGeom));
+}
+
 void ODECollider::SetRotation(const Matrix& rot, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;

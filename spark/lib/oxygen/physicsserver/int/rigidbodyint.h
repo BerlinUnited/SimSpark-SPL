@@ -34,6 +34,8 @@ class OXYGEN_API RigidBodyInt
 {
 
 public:
+    virtual RigidBody* GetBodyPointer(long bodyID) = 0;
+    
     virtual void Enable(long bodyID) = 0;
     virtual void Disable(long bodyID) = 0;
     virtual bool IsEnabled(long bodyID) const = 0;

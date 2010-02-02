@@ -33,6 +33,10 @@ class OXYGEN_API ODEJoint : public JointInt, public PhysicsObject
 {
 public:
     ODEJoint();
+
+    Joint* GetJoint(long jointID);
+    bool AreConnected(long bodyID1, long bodyID2);
+    bool AreConnectedExcluding(long bodyID1, long bodyID2, int joint_type);
     
     virtual void DestroyJoint(long jointID,
                               boost::shared_ptr<GenericJointFeedback> feedback);

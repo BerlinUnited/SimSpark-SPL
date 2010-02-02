@@ -327,7 +327,7 @@ shared_ptr<RigidBody> RigidBody::GetBody(long id)
             return shared_ptr<RigidBody>();
         }
 
-    RigidBody* bodyPtr = StaticPhysicsMethods::GetBodyPointer(bodyID);
+    RigidBody* bodyPtr = mRigidBodyImp->GetBodyPointer(bodyID);
 
     if (bodyPtr == 0)
         {

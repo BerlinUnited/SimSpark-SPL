@@ -37,6 +37,10 @@ class OXYGEN_API ColliderInt
 {
 
 public:
+    /** Gets the pointer to the Collider object that manages the geom
+        specified by geomID.
+    */
+    virtual Collider* GetColliderPointer(long geomID) = 0;
     
     virtual void SetPosition(const salt::Vector3f& globalPos, long geomID) = 0;
     virtual void SetLocalPosition(const salt::Vector3f& pos, long geomID) = 0;

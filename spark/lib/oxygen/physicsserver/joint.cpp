@@ -60,7 +60,7 @@ shared_ptr<Joint> Joint::GetJoint(long jointID)
             return shared_ptr<Joint>();
         }
 
-    Joint* jointPtr = StaticPhysicsMethods::GetJoint(jointID);
+    Joint* jointPtr = mJointImp->GetJoint(jointID);
 
     if (jointPtr == 0)
         {
@@ -184,7 +184,7 @@ bool Joint::AreConnected(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body
             return false;
         }
 
-    const bool connected = StaticPhysicsMethods::AreConnected(body1->GetBodyID(), body2->GetBodyID());
+    const bool connected = mJointImp->AreConnected(body1->GetBodyID(), body2->GetBodyID());
 
     return connected;
 }
@@ -201,10 +201,9 @@ bool Joint::AreConnectedExcluding (shared_ptr<RigidBody> body1,
             return false;
         }
 
-    const bool connected = 
-    StaticPhysicsMethods::AreConnectedExcluding(body1->GetBodyID(),
-                                                body2->GetBodyID(),
-                                                joint_type);
+    const bool connected = mJointImp->AreConnectedExcluding(body1->GetBodyID(),
+                                                            body2->GetBodyID(),
+                                                            joint_type);
 
     return connected;
 }
