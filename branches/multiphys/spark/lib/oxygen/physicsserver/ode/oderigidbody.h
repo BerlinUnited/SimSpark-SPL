@@ -35,6 +35,8 @@ class OXYGEN_API ODERigidBody : public RigidBodyInt, public Body
 public:
     ODERigidBody();
     
+    RigidBody* GetBodyPointer(long bodyID);
+
     void Enable(long bodyID);
     void Disable(long bodyID);
     bool IsEnabled(long bodyID) const;

@@ -31,6 +31,23 @@ ODEJoint::ODEJoint() : PhysicsObject()
 {
 }
 
+Joint* ODEJoint::GetJoint(long jointID){
+    dJointID ODEJoint = (dJointID) jointID;
+    return static_cast<Joint*>(dJointGetData(ODEJoint));
+}
+
+bool ODEJoint::AreConnected(long bodyID1, long bodyID2){
+    dBodyID ODEBody1 = (dBodyID) bodyID1;
+    dBodyID ODEBody2 = (dBodyID) bodyID2;
+    return dAreConnected(ODEBody1, ODEBody2) == 1;
+}
+
+bool ODEJoint::AreConnectedExcluding(long bodyID1, long bodyID2, int joint_type){
+    dBodyID ODEBody1 = (dBodyID) bodyID1;
+    dBodyID ODEBody2 = (dBodyID) bodyID2;
+    return dAreConnectedExcluding(ODEBody1, ODEBody2, joint_type) == 1;
+}
+
 void ODEJoint::OnLink(long jointID, Joint* joint)
 {
     dJointID ODEJoint = (dJointID) jointID;

@@ -37,6 +37,11 @@ public:
     ODECollider();
     virtual ~ODECollider();
 
+    /** Gets the pointer to the Collider object that manages the geom
+        specified by geomID.
+    */
+    Collider* GetColliderPointer(long geomID);
+
     void SetPosition(const salt::Vector3f& globalPos, long geomID);
     void SetLocalPosition(const salt::Vector3f& pos, long GeomID);
     salt::Vector3f GetPosition(long geomID) const;

@@ -36,6 +36,11 @@ using namespace std;
 ODERigidBody::ODERigidBody() : Body(){
 }
 
+RigidBody* ODERigidBody::GetBodyPointer(long bodyID){
+    dBodyID ODEBody = (dBodyID) bodyID;
+    return static_cast<RigidBody*>(dBodyGetData(ODEBody));
+}
+
 void ODERigidBody::Enable(long bodyID)
 {
     dBodyID ODEBody = (dBodyID) bodyID;

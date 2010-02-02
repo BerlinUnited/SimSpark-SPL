@@ -38,6 +38,21 @@ class Joint;
 class OXYGEN_API JointInt
 {
 public:        
+
+    /** Gets the pointer to the Joint object that manages the joint
+        specified by jointID.
+    */
+    virtual Joint* GetJoint(long jointID) = 0;
+    
+    /** Checks if two bodies, specified by bodyID1 and bodyID2, are
+        connected by a joint.
+    */
+    virtual bool AreConnected(long bodyID1, long bodyID2) = 0;
+    
+    /** Checks if two bodies, specified by bodyID1 and bodyID2, are
+        connected by a joint that is not of the type specified by joint_type.
+    */
+    virtual bool AreConnectedExcluding(long bodyID1, long bodyID2, int joint_type) = 0;
     
     virtual void DestroyJoint(long jointID,
                               boost::shared_ptr<GenericJointFeedback> feedback) = 0;

@@ -167,7 +167,7 @@ shared_ptr<Collider> Collider::GetCollider(long geomID)
         }
 
     Collider* collPtr =
-        StaticPhysicsMethods::GetColliderPointer(geomID);
+        mColliderImp->GetColliderPointer(geomID);
 
     if (collPtr == 0)
         {
