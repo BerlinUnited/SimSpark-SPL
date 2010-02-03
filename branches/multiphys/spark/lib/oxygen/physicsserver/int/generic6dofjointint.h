@@ -30,7 +30,7 @@ namespace oxygen
 
 class OXYGEN_API Generic6DOFJointInt
 {
-
+    /** This class is currently not implemented. */
 };
 
 } //namespace oxygen

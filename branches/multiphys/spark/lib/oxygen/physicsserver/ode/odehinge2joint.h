@@ -21,16 +21,18 @@
 #define OXYGEN_ODEHINGE2JOINT_H
 
 #include <oxygen/physicsserver/int/hinge2jointint.h>
-#include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen{
 
-class OXYGEN_API ODEHinge2Joint : public Hinge2JointInt, public Generic6DOFJoint{
-
+class OXYGEN_API ODEHinge2Joint : public Hinge2JointInt, public ODEGeneric6DOFJoint
+{
+    /** See physicsserver/int/hinge2jointint.h for documentation. */
+    
 public:
     ODEHinge2Joint();
-    long CreateHinge2Joint(long world);
+    long CreateHinge2Joint(long worldID);
     void SetAnchor(const salt::Vector3f& gAnchor, 
                    const salt::Vector3f& up, 
                    const salt::Vector3f& right,

@@ -17,20 +17,20 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odewrapper.h>
+
 #include <oxygen/physicsserver/ode/odehingejoint.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-ODEHingeJoint::ODEHingeJoint() : Generic6DOFJoint()
+ODEHingeJoint::ODEHingeJoint() : ODEGeneric6DOFJoint()
 {
 }
 
-long ODEHingeJoint::CreateHingeJoint(long world)
+long ODEHingeJoint::CreateHingeJoint(long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) world;
+    dWorldID ODEWorld = (dWorldID) worldID;
     dJointID ODEJoint = dJointCreateHinge(ODEWorld, 0);
     return (long) ODEJoint;
 }

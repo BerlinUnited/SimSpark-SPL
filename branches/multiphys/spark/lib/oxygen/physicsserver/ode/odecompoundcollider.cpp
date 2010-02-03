@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODECompoundCollider::ODECompoundCollider() : Collider(){
+ODECompoundCollider::ODECompoundCollider() : ODECollider(){
 
 }

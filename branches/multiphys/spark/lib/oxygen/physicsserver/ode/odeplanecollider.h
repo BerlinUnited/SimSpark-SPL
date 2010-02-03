@@ -23,15 +23,24 @@
 #ifndef OXYGEN_ODEPLANECOLLIDER_H
 #define OXYGEN_ODEPLANECOLLIDER_H
 
-#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
 #include <oxygen/physicsserver/int/planecolliderint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEPlaneCollider : public PlaneColliderInt, public Collider
+class OXYGEN_API ODEPlaneCollider : public PlaneColliderInt, public ODECollider
 {
+/** PlaneCollider encapsulates an ODE plane geometry object. Planes
+    are non-placeable geoms, i.e.  unlike placeable geoms, planes do
+    not have an assigned position and rotation. This means that the
+    parameters (a,b,c,d) are always in global coordinates. In other
+    words it is assumed that the plane is always part of the static
+    environment and not tied to any movable object.
+    
+    See physicsserver/int/planecolliderint.h for documentation
+*/
 public:
     ODEPlaneCollider();
     void SetPlaneParams(float a, float b, float c, float d, long geomID);

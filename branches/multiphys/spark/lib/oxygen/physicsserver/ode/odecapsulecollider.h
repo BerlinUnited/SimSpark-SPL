@@ -24,15 +24,23 @@
 #define OXYGEN_ODECAPSULECOLLIDER_H
 
 #include <oxygen/physicsserver/int/capsulecolliderint.h>
-#include <oxygen/physicsserver/convexcollider.h>
+#include <oxygen/physicsserver/ode/odeconvexcollider.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODECapsuleCollider : public CapsuleColliderInt, public ConvexCollider
+class OXYGEN_API ODECapsuleCollider : public CapsuleColliderInt, public ODEConvexCollider
 {
 public:
+    /** CapsuleCollider encapsulates a capsule geometry
+        object. A capsule is like a cylinder except it has
+        half-sphere caps at its ends. This feature makes the internal
+        collision detection code particularly fast and accurate.
+    
+        See physicsserver/int/capsulecolliderint.h for documentation 
+    */
+
     ODECapsuleCollider();
 
     void SetParams(float radius, float length, long geomID);

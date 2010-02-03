@@ -24,14 +24,15 @@
 #define OXYGEN_ODEUNIVERSALJOINT_H
 
 #include <oxygen/physicsserver/int/universaljointint.h>
-#include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEUniversalJoint : public UniversalJointInt, public Generic6DOFJoint
+class OXYGEN_API ODEUniversalJoint : public UniversalJointInt, public ODEGeneric6DOFJoint
 {
-
+    /** See physicsserver/int/universaljointint.h for documentation */
+    
 public:
     ODEUniversalJoint();
     long CreateUniversalJoint(long world);

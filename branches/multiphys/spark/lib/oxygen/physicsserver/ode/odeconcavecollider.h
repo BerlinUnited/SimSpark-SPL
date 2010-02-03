@@ -22,13 +22,13 @@
 #ifndef OXYGEN_ODECONCAVECOLLIDER_H
 #define OXYGEN_ODECONCAVECOLLIDER_H
 
-#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
 #include <oxygen/physicsserver/int/concavecolliderint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEConcaveCollider : public ConcaveColliderInt, public Collider
+class OXYGEN_API ODEConcaveCollider : public ConcaveColliderInt, public ODECollider
 {
 public:
     ODEConcaveCollider();

@@ -30,8 +30,8 @@ namespace oxygen
 {
 class ContactJointHandlerInt;
 
-/** \class ContactJointHandler is a CollisionHandler that creates an
-    ODE contact joint between the two bodies associated with the two
+/** \class ContactJointHandler is a CollisionHandler that creates a
+    contact joint between the two bodies associated with the two
     affected collision geoms.
  */
 class OXYGEN_API ContactJointHandler : public CollisionHandler
@@ -75,7 +75,7 @@ public:
      */
     int GetContactMode() const;
 
-    /** sets or resets the dContactBounce mode flag */
+    /** sets or resets Bounce mode flag */
     void SetContactBounceMode(bool set);
 
     /** sets the bounce value */
@@ -112,8 +112,7 @@ public:
     /** returns the constraint force mixing parameter (CFM) */
     float GetContactSoftCFM() const;
 
-    /** sets or resets the force dependent contact slip mode (FDS)
-     */
+    /** sets or resets the force dependent contact slip mode (FDS) */
     void SetContactSlipMode (bool set);
 
     /** sets the force dependent slip (FDS) in both friction

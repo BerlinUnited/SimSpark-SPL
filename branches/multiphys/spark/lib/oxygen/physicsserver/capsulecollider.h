@@ -73,7 +73,8 @@ public:
 
 protected:
     /** constructs a default capsule with an radius of 1 and a
-        length of 1 */
+        length of 1 
+    */
     virtual bool ConstructInternal();
     
 private:

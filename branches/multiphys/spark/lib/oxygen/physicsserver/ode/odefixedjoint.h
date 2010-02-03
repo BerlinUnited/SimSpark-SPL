@@ -20,15 +20,16 @@
 #ifndef OXYGEN_ODEFIXEDJOINT_H
 #define OXYGEN_ODEFIXEDJOINT_H
 
-#include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
 #include <oxygen/physicsserver/int/fixedjointint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen{
 
-class OXYGEN_API ODEFixedJoint : public FixedJointInt, public Generic6DOFJoint{
-
-public:
+class OXYGEN_API ODEFixedJoint : public FixedJointInt, public ODEGeneric6DOFJoint{
+    
+    /* See physicsserver/int/fixedjointint.h for documentation */
+public:    
     ODEFixedJoint();
     long CreateFixedJoint(long world);
     void SetFixed(long jointID);

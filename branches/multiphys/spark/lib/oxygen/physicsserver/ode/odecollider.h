@@ -23,25 +23,34 @@
 #ifndef OXYGEN_ODECOLLIDER_H
 #define OXYGEN_ODECOLLIDER_H
 
-#include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <oxygen/physicsserver/int/colliderint.h>
 
 namespace oxygen
 {
 class Collider;
 
-class OXYGEN_API ODECollider : public ColliderInt, public PhysicsObject
+class OXYGEN_API ODECollider : public ColliderInt, public ODEPhysicsObject
 {
 
 public:    
     ODECollider();
     virtual ~ODECollider();
-
-    /** Gets the pointer to the Collider object that manages the geom
-        specified by geomID.
+    
+    /** \class Collider encapsulates a geometry object- geom for
+        short. Geoms are the fundamental objects in the collision
+        system. They represent a single rigid shape as for example a
+        sphere or a box. A special kind of geom called 'space' can
+        represent a group of other geoms. A placeable geom can be
+        associated with rigid body objects. This allows the collision
+        engine to get the position and orientation of the geoms from the
+        bodies. A body and a geom together represent all the properties of
+        the simulated object.
+    
+        See physicsserver/int/colliderint.h for documentation.
     */
+    
     Collider* GetColliderPointer(long geomID);
-
     void SetPosition(const salt::Vector3f& globalPos, long geomID);
     void SetLocalPosition(const salt::Vector3f& pos, long GeomID);
     salt::Vector3f GetPosition(long geomID) const;

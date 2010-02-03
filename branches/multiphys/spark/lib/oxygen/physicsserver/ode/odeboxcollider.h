@@ -25,13 +25,15 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/int/boxcolliderint.h>
-#include <oxygen/physicsserver/convexcollider.h>
+#include <oxygen/physicsserver/ode/odeconvexcollider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEBoxCollider : public BoxColliderInt, public ConvexCollider
+class OXYGEN_API ODEBoxCollider : public BoxColliderInt, public ODEConvexCollider
 {
+    /** See physicsserver/int/boxcolliderint.h for documentation */
+
 public:
     ODEBoxCollider();
     void SetBoxLengths(const salt::Vector3f& extents, long geomID);

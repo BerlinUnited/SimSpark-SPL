@@ -23,7 +23,7 @@
 using namespace oxygen;
 using namespace salt;
 
-ODEUniversalJoint::ODEUniversalJoint() : Generic6DOFJoint()
+ODEUniversalJoint::ODEUniversalJoint() : ODEGeneric6DOFJoint()
 {
 }
 

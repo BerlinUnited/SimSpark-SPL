@@ -30,7 +30,7 @@ namespace oxygen
 
 class OXYGEN_API ConvexColliderInt
 {
-
+    /** This class is currently not implemented. */
 };
 
 } //namespace oxygen

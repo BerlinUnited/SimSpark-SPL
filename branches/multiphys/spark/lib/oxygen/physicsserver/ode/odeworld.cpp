@@ -26,7 +26,7 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-ODEWorld::ODEWorld() : PhysicsObject(){
+ODEWorld::ODEWorld() : ODEPhysicsObject(){
 }
 
 void ODEWorld::SetGravity(const Vector3f& gravity, long worldID)

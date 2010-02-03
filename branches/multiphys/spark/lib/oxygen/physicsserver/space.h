@@ -54,7 +54,7 @@ public:
     /** retuns the ID of joint group for all created contact joints */
     long GetODEJointGroup() const;
 
-    /** starts ODE's collision culling system. ODE will quickly
+    /** starts the collision culling system. The engine will quickly
         identify which pairs of geoms are potentially
         intersecting. Those pairs will be passed to the callback
         function HandleCollide, which in turn will notify the
@@ -62,10 +62,10 @@ public:
     */
     void Collide();
 
-    /** destroy the managed ODE object */
+    /** destroy the managed space object */
     virtual void DestroyPhysicsObject();
 
-    /** returns the ODE handle ID of the containing parent space */
+    /** returns the ID of the containing parent space */
     virtual long GetParentSpaceID();
 
     /** returns true if this is the top global, i.e. top level space object */
@@ -90,7 +90,7 @@ protected:
     /** registers the managed space to the containing parent space */
     virtual void OnLink();
 
-    /** calls ODE's collision detection for this space if internal collision
+    /** calls collision detection for this space if internal collision
      * detection is enabled for this space.
      */
     void Collide(long space);
@@ -100,13 +100,13 @@ protected:
     */
     void HandleSpaceCollide(long obj1, long obj2);
 
-    /** creates them managed ODE space and a contact joint group */
+    /** creates the managed space and a contact joint group */
     virtual bool ConstructInternal();
 
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal();
 
-    /** destroys the ODE bodies managed by all Body objects that are
+    /** destroys the bodies managed by all Body objects that are
         registered to this Space
     */
     void DestroySpaceObjects();

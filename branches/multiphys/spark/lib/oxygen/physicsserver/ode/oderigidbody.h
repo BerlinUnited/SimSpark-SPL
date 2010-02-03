@@ -22,21 +22,28 @@
 #ifndef OXYGEN_ODERIGIDBODY_H
 #define OXYGEN_ODERIGIDBODY_H
 
-#include <oxygen/physicsserver/ode/odewrapper.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/ode/odebody.h>
 #include <oxygen/physicsserver/int/rigidbodyint.h>
 
 namespace oxygen
 {
 class RigidBody;
 
-class OXYGEN_API ODERigidBody : public RigidBodyInt, public Body
+class OXYGEN_API ODERigidBody : public RigidBodyInt, public ODEBody
 {
+/** RigidBody encapsulates a rigid body object. A rigid body has
+    various properties from the point of view of the simulation. Some
+    properties change over time: position, linear velocity,
+    orientation and angular velocity. Other body properties are
+    usually constant over time: Mass, Center of mass and Inertia
+    matrix (mass distribution matrix)
+    
+    See physicsserver/int/rigidbodyint.h for documentation.
+*/
 public:
     ODERigidBody();
     
     RigidBody* GetBodyPointer(long bodyID);
-
     void Enable(long bodyID);
     void Disable(long bodyID);
     bool IsEnabled(long bodyID) const;
@@ -82,11 +89,11 @@ public:
     void AddTorque(const salt::Vector3f& torque, long bodyID);
     void SetPosition(const salt::Vector3f& pos, long bodyID);
     salt::Vector3f GetPosition(long bodyID) const;
-    void DestroyPhysicsObject(long bodyID);
+    void DestroyRigidBody(long bodyID);
     salt::Matrix GetSynchronisationMatrix(long bodyID);
     void BodySetData(RigidBody* rb, long bodyID);
     RigidBody* BodyGetData(long bodyID);    
-    long CreateBody(long world);
+    long CreateBody(long worldID);
     
 protected:
     //These methods are only called internally and are not declared in the interface.

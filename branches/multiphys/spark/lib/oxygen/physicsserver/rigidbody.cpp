@@ -19,7 +19,6 @@
 */
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/transformcollider.h>
-#include <oxygen/physicsserver/staticphysicsmethods.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/int/rigidbodyint.h>
 #include <oxygen/physicsserver/impfactory.h>
@@ -102,7 +101,7 @@ void RigidBody::DestroyPhysicsObject()
 {
     if (mBodyID == 0) return;
     
-    mRigidBodyImp->DestroyPhysicsObject(mBodyID);
+    mRigidBodyImp->DestroyRigidBody(mBodyID);
     mBodyID = 0;
 }
 

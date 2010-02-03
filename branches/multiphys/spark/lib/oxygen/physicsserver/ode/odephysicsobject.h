@@ -23,6 +23,7 @@
 #ifndef OXYGEN_ODEOBJECT_H
 #define OXYGEN_ODEOBJECT_H
 
+#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/int/physicsobjectint.h>
 
@@ -31,6 +32,7 @@ namespace oxygen
 
 class OXYGEN_API ODEPhysicsObject : public PhysicsObjectInt
 {
+    /** See physicsserver/int/physicsobjectint.h for documentation */
 
 public:
     ODEPhysicsObject();

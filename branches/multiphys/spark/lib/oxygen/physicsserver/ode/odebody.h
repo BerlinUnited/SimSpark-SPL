@@ -23,12 +23,12 @@
 #define OXYGEN_ODEBODY_H
 
 #include <oxygen/physicsserver/int/bodyint.h>
-#include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/ode/odephysicsobject.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEBody : public BodyInt, public PhysicsObject
+class OXYGEN_API ODEBody : public BodyInt, public ODEPhysicsObject
 {
 public:
     ODEBody();

@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odewrapper.h>
+
 #include <oxygen/physicsserver/ode/oderigidbody.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/transformcollider.h>
@@ -33,7 +33,7 @@ using namespace boost;
 using namespace salt;
 using namespace std;
 
-ODERigidBody::ODERigidBody() : Body(){
+ODERigidBody::ODERigidBody() : ODEBody(){
 }
 
 RigidBody* ODERigidBody::GetBodyPointer(long bodyID){
@@ -79,14 +79,14 @@ bool ODERigidBody::UsesGravity(long bodyID) const{
     return (dBodyGetGravityMode(ODEBody) != 0);
 }
 
-long ODERigidBody::CreateBody(long world)
+long ODERigidBody::CreateBody(long worldID)
 {
     // create the managed body
-   dBodyID ODEBody = dBodyCreate((dWorldID) world);
+   dBodyID ODEBody = dBodyCreate((dWorldID) worldID);
    return (long) ODEBody; 
 }
 
-void ODERigidBody::DestroyPhysicsObject(long bodyID)
+void ODERigidBody::DestroyRigidBody(long bodyID)
 {
     dBodyID ODEBody = (dBodyID) bodyID;
     dBodyDestroy(ODEBody);
