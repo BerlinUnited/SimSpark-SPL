@@ -33,9 +33,20 @@ class RigidBody;
 class OXYGEN_API SliderJointInt
 {
 public:
+    /** Creates a Slider Joint within the given world */
     virtual long CreateSliderJoint(long world) = 0;
+    
+    /** returns the slider linear position, i.e. the slider's
+        `extension'. When the axis is set, the current position of the
+        attached bodies is examined and that position will be the zero
+        position.
+    */
     virtual float GetPosition(long jointID) = 0;
+    
+    /** returns the time derivative of the sliders linear position */
     virtual float GetPositionRate(long jointID) = 0;
+    
+    /** Sets the direction of the slider joint's axis */
     virtual void SetSliderAxis(salt::Vector3f& up, long jointID) = 0;
 };
 

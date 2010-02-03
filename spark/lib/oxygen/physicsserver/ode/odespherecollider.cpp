@@ -18,13 +18,13 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odewrapper.h>
+
 #include <oxygen/physicsserver/ode/odespherecollider.h>
 
 using namespace oxygen;
 using namespace salt;
 
-ODESphereCollider::ODESphereCollider() : ConvexCollider()
+ODESphereCollider::ODESphereCollider() : ODEConvexCollider()
 {
 }
 

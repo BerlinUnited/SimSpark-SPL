@@ -23,14 +23,23 @@
 #ifndef OXYGEN_ODERAYCOLLIDER_H
 #define OXYGEN_ODERAYCOLLIDER_H
 
-#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
 #include <oxygen/physicsserver/int/raycolliderint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
+/** RayCollider encapsulates an ODE ray geometry "object".
+ 
+    A ray is different from all the other geom classes in that it does not
+    represent a solid object. It is an infinitely thin line that starts
+    from the geom's position and extends in the direction of the geom's
+    local Z-axis.
+    
+    See physicsserver/int/raycolliderint.h for documentation.
+*/
 
-class OXYGEN_API ODERayCollider : public RayColliderInt, public Collider
+class OXYGEN_API ODERayCollider : public RayColliderInt, public ODECollider
 {
 public:
     ODERayCollider();

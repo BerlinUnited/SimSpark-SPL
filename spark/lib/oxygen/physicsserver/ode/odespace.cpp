@@ -18,7 +18,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odewrapper.h>
+
 #include <oxygen/physicsserver/ode/odespace.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/collider.h>
@@ -34,7 +34,7 @@ void ODESpace::collisionNearCallback(void* data, dGeomID obj1, dGeomID obj2)
     space->HandleCollide((long) obj1, (long) obj2);
 }
 
-ODESpace::ODESpace() : PhysicsObject()
+ODESpace::ODESpace() : ODEPhysicsObject()
 {
 }
 

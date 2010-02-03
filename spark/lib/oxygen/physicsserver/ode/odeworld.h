@@ -23,14 +23,23 @@
 #define OXYGEN_ODEWORLD_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <oxygen/physicsserver/int/worldint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEWorld : public WorldInt, public PhysicsObject
+class OXYGEN_API ODEWorld : public WorldInt, public ODEPhysicsObject
 {
+/** World encapsulates a world object. It is a container for
+    rigid bodies and joints. Objects in different worlds can not
+    interact, for example rigid bodies from two different worlds can
+    not collide. All the objects in a world exist at the same point in
+    time, thus one reason to use separate worlds is to simulate
+    systems at different rates.
+    
+    See physicsserver/int/worldint.h for documentation.
+*/
 
 public:
     ODEWorld();

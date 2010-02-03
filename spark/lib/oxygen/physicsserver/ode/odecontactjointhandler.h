@@ -23,13 +23,20 @@
 #define OXYGEN_ODECONTACTJOINTHANDLER_H
 
 #include <oxygen/physicsserver/int/contactjointhandlerint.h>
-#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEContactJointHandler : public ContactJointHandlerInt, public Collider
+class OXYGEN_API ODEContactJointHandler : public ContactJointHandlerInt, public ODECollider
 {
+    /** \class ContactJointHandler is a CollisionHandler that creates a
+        contact joint between the two bodies associated with the two
+        affected collision geoms.
+        
+        See physicsserver/int/contactjointhandlerint.h for documentation. 
+    */
+    
 public:
     ODEContactJointHandler();
     GenericSurfaceParameter* Initialize();

@@ -71,7 +71,8 @@ public:
     void SetNumAxes(int num);
 
     /** returns the number of angular axes that are controlled by the
-        angular motor */
+        angular motor 
+    */
     int GetNumAxes();
 
     /** sets one of the motor axis. \param idx gives the motor axis to
@@ -83,15 +84,14 @@ public:
         be determined automatically at each time step.  Axes 0 and 2
         must be perpendicular to each other.  Axis 0 must be anchored
         to the first body, axis 2 must be anchored to the second body.
-     */
+    */
     void SetMotorAxis(EAxisIndex idx, EAxisAnchor anchor,
                       const salt::Vector3f& axis);
 
     /** returns the motor axis \param idx */
     salt::Vector3f GetMotorAxis(EAxisIndex idx);
 
-    /** returns the relative anchor mode of the motor axis \param idx
-     */
+    /** returns the relative anchor mode of the motor axis \param idx */
     EAxisAnchor GetAxisAnchor(EAxisIndex idx);
 
     /** sets the current angle along axis \param idx. This function
@@ -104,14 +104,14 @@ public:
        'user' mode this is simply the value that was previoulsy set
        with SetAxisAngle(). In 'euler' mode this is the corresponding
        euler angle.
-     */
+    */
     float GetAxisAngle(EAxisIndex idx);
 
     /** Return the current angle rate for axis anum. In dAMotorUser
         mode this is always zero, as not enough information is
         available. In dAMotorEuler mode this is the corresponding
         euler angle rate.
-     */
+    */
     float GetAxisAngleRate(EAxisIndex idx);
 
 protected:

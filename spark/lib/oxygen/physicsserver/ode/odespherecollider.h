@@ -24,13 +24,17 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/int/spherecolliderint.h>
-#include <oxygen/physicsserver/convexcollider.h>
+#include <oxygen/physicsserver/ode/odeconvexcollider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODESphereCollider : public SphereColliderInt, public ConvexCollider
+class OXYGEN_API ODESphereCollider : public SphereColliderInt, public ODEConvexCollider
 {
+/** SphereCollider encapsulates a sphere geometry object.
+
+    See physicsserver/int/spherecolliderint.h for documentation.
+ */
 public:
     ODESphereCollider();
     void SetRadius(float r, long geomID);

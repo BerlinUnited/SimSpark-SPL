@@ -33,9 +33,24 @@ namespace oxygen
 class OXYGEN_API PlaneColliderInt
 {
 public:
+    /** sets the parameters of the plane equation a*x+b*y+c*z = d ,
+        all parameters are given in global coordinates
+     */
     virtual void SetPlaneParams(float a, float b, float c, float d, long geomID) = 0;
+    
+    /** set the parameters of the plane given a position and a normal
+        vector; all parameters are given in global coordinates
+    */
     virtual void SetParams(const salt::Vector3f& pos, salt::Vector3f normal, long geomID) = 0;
+    
+    /** returns the depth of the given relative position in the
+        managed plane. Points inside the geom will have positive
+        depth, points outside it will have negative depth, and points
+        on the surface will have zero depth.
+    */
     virtual float GetPointDepth(const salt::Vector3f& pos, long geomID) = 0;
+    
+    /** Creates a plane collider and returns the ID of the newly created plane */
     virtual long CreatePlane() = 0;
 };
 

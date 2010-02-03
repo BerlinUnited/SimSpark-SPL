@@ -42,16 +42,56 @@ public:
     */
     virtual Collider* GetColliderPointer(long geomID) = 0;
     
+    /** sets the relative position of the managed geom directly. If
+        the geom is connected to a body, the position of the body will
+        also be changed
+    */
     virtual void SetPosition(const salt::Vector3f& globalPos, long geomID) = 0;
+    
+    /** sets the relative position of the managed geom to the body's center.
+        Only use for colliders encapsulated in a TransformCollider!
+    */
     virtual void SetLocalPosition(const salt::Vector3f& pos, long geomID) = 0;
+    
+    /** returns the absolute position of the managed geom */
     virtual salt::Vector3f GetPosition(long geomID) const = 0;
+    
+    /** sets the relative orientation of the managed geom directly. If
+        the geom is connected to a body, the orientation of the body
+        will also be changed
+     */
     virtual void SetRotation(const salt::Matrix& rot, long geomID) = 0;
+    
+    /** returns true if the geom managed by this
+        Collider intersects with the geom managed by the given collider
+     */
     virtual bool Intersect(boost::shared_ptr<Collider> collider, long geomID) = 0;
+    
+    /** returns the handle ID of the containing parent space */
     virtual long GetParentSpaceID(long geomID) = 0;
+    
+    /** Destroys the collider specified by \param geomID */
     virtual void DestroyGeom(long geomID) = 0;
+    
+    /** Registers the collider specified by \param geomID to the transform 
+        collider specified by \param parentGeomID
+    */
     virtual void TransformSetGeom(long parentGeomID, long geomID) = 0;
+    
+    /** Puts the collider specified by \param geomID into the space 
+        specified by spaceID. It also registers \param collider as the
+        abstract collider object managing this collider.
+    */
     virtual void SetSpace(long spaceID, long geomID, Collider* collider) = 0;
+    
+    /** Registers the collider specified by \param geomID to the body
+        specified by \param bodyID
+    */
     virtual void SetBody(long bodyID, long geomID) = 0;
+    
+    /** Removes the collider specified by \param geomID from the space
+        specified by \param spaceID
+    */
     virtual void RemoveFromSpace(long geomID, long spaceID) = 0;
 };
 

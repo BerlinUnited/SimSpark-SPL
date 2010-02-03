@@ -23,15 +23,17 @@
 #ifndef OXYGEN_ODESLIDERJOINT_H
 #define OXYGEN_ODESLIDERJOINT_H
 
-#include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
 #include <oxygen/physicsserver/int/sliderjointint.h>
 
 namespace oxygen
 {
 class RigidBody;
 
-class OXYGEN_API ODESliderJoint : public SliderJointInt, public Generic6DOFJoint{ 
-
+class OXYGEN_API ODESliderJoint : public SliderJointInt, public ODEGeneric6DOFJoint
+{ 
+    /** See physicsserver/int/sliderjointint.h for documentation. */
+    
 public:
     ODESliderJoint();
     long CreateSliderJoint(long world);

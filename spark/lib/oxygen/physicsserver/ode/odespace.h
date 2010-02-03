@@ -23,19 +23,26 @@
 #define OXYGEN_ODESPACE_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <oxygen/physicsserver/int/spaceint.h>
 
 namespace oxygen
 {
 class Space;
 
-class OXYGEN_API ODESpace : public SpaceInt, public PhysicsObject
+class OXYGEN_API ODESpace : public SpaceInt, public ODEPhysicsObject
 {
+
+/** Space encapsulates an ODE space object. A space is a non-placeable
+    geometry object ('geom') that can contain other geoms. It is
+    similar to the rigid body concept of the `world', except that it
+    applies to collision instead of dynamics.
+    
+    See physicsserver/int/spaceint.h for documentation.
+*/
 
 public:
     ODESpace();
-    
     long CreateSpace(long spaceID);
     void DestroySpace(long contactGroup, long spaceID);
     long GetParentSpaceID(long spaceID);

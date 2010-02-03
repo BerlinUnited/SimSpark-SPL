@@ -31,7 +31,7 @@ namespace oxygen
 class World;
 class RigidBodyInt;
 
-/** Body encapsulates an ODE rigid body object. A rigid body has
+/** RigidBody encapsulates a rigid body object. A rigid body has
     various properties from the point of view of the simulation. Some
     properties change over time: position, linear velocity,
     orientation and angular velocity. Other body properties are
@@ -72,7 +72,8 @@ public:
     void UseGravity(bool f);
 
     /** returns true, if this body is influenced by the world's
-        gravity */
+        gravity 
+    */
     bool UsesGravity() const;
 
     /** sets the mass of this body */
@@ -159,7 +160,7 @@ public:
      */
     void AddCylinderTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
 
-    /* Set the mass parameters to represent a capsule of the
+    /** Set the mass parameters to represent a capsule of the
        given parameters and density, with the center of mass at
        (0,0,0) relative to the body. The radius of the cylinder (and
        the spherical cap) is radius. The length of the cylinder (not
@@ -174,18 +175,18 @@ public:
     */
     void AddCapsule (float density, float radius, float length, const salt::Matrix& matrix);
 
-    /* Set the mass parameters to represent a capsule of the
-       given parameters and total mass, with the center of mass at
-       (0,0,0) relative to the body. The radius of the cylinder (and
-       the spherical cap) is radius. The length of the cylinder (not
-       counting the spherical cap) is length. The cylinder's long axis
-       is oriented along the body's z axis.
+    /** Set the mass parameters to represent a capsule of the
+        given parameters and total mass, with the center of mass at
+        (0,0,0) relative to the body. The radius of the cylinder (and
+        the spherical cap) is radius. The length of the cylinder (not
+        counting the spherical cap) is length. The cylinder's long axis
+        is oriented along the body's z axis.
     */
     void SetCapsuleTotal(float total_mass, float radius, float length);
 
-    /* Add a mass representing a capsule of the given
-       parameters and total mass, with the matrix determining its
-       center and orientation
+    /** Add a mass representing a capsule of the given
+        parameters and total mass, with the matrix determining its
+        center and orientation
     */
     void AddCapsuleTotal(float total_mass, float radius, float length, const salt::Matrix& matrix);
 

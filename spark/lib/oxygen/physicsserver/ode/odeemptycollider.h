@@ -22,13 +22,13 @@
 #ifndef OXYGEN_ODEEMPTYCOLLIDER_H
 #define OXYGEN_ODEEMPTYCOLLIDER_H
 
-#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
 #include <oxygen/physicsserver/int/emptycolliderint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEEmptyCollider : public EmptyColliderInt, public Collider
+class OXYGEN_API ODEEmptyCollider : public EmptyColliderInt, public ODECollider
 {
 public:
     ODEEmptyCollider();

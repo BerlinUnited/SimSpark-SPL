@@ -35,7 +35,12 @@ class OXYGEN_API PhysicsObjectInt
 {
 
 public:    
+    /** converts the rotation part of a salt::Matrix to an
+        engine-specific matrix that arranges the values in a different way
+    */
     virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsMatrix& matrix) = 0;
+    
+    /** coverts an engine-specific matrix to the rotation part of a salt::Matrix */
     virtual void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const = 0;
 };
 

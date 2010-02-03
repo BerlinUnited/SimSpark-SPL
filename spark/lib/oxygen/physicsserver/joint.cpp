@@ -19,7 +19,6 @@
 */
 #include <oxygen/physicsserver/joint.h>
 #include <oxygen/physicsserver/rigidbody.h>
-#include <oxygen/physicsserver/staticphysicsmethods.h>
 #include <oxygen/physicsserver/impfactory.h>
 #include <oxygen/physicsserver/int/jointint.h>
 #include <zeitgeist/logserver/logserver.h>

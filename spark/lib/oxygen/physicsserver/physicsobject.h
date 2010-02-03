@@ -74,13 +74,11 @@ protected:
     boost::shared_ptr<Space> GetSpace();
 
     /** converts the rotation part of a salt::Matrix to an
-        engine-specific matrix, currently used for ODE's dMatrix3
+        engine-specific matrix that arranges the values in a different way
     */
     void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsMatrix& matrix);
 
-    /** coverts an engine-specific to the rotation part of a salt::Matrix, 
-        currently used for ODE's dMatrix3
-    */
+    /** coverts an engine-specific matrix to the rotation part of a salt::Matrix */
     void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const;
     
 private:

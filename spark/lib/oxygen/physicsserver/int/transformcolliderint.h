@@ -33,9 +33,29 @@ namespace oxygen
 
 class OXYGEN_API TransformColliderInt
 {
+/** TransformCollider encapsulates a transform geometry object
+    that encapsulates another geom. It allows the encapsulated geom to
+    be positioned and rotated arbitrarily with respect to its point of
+    reference.
+
+    Most geoms (like the sphere and box) have their point of
+    reference corresponding to their center of mass, allowing them to
+    be easily connected to dynamics objects. Transform objects give
+    you more flexibility - for example, you can offset the center of a
+    sphere, or rotate a cylinder so that its axis is something other
+    than the default.
+
+    Transform geoms are further used to create composite objects. As
+    they allow multiple displaced geoms to be connected to one body.
+*/
 
 public:    
+    /** Creates a new TransformCollider and returns its ID */
     virtual long CreateTransformCollider() = 0;
+    
+    /** Set the parameters /param cleanup and /param info of the 
+        transformcollider specified by \param geomID
+    */
     virtual void SetColliderParameters(int cleanup, int info, long geomID) = 0;
 };
 

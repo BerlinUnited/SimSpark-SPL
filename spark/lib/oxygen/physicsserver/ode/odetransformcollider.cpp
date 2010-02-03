@@ -24,7 +24,7 @@
 
 using namespace oxygen;
 
-ODETransformCollider::ODETransformCollider() : Collider()
+ODETransformCollider::ODETransformCollider() : ODECollider()
 {
 }
 

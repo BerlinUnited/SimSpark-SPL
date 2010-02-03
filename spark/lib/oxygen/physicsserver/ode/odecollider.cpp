@@ -18,7 +18,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <oxygen/physicsserver/ode/odewrapper.h>
+
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/ode/odecollider.h>
 #include <oxygen/physicsserver/collisionhandler.h>
@@ -36,7 +36,7 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-ODECollider::ODECollider() : PhysicsObject()
+ODECollider::ODECollider() : ODEPhysicsObject()
 {
 }
 

@@ -23,7 +23,7 @@
 using namespace oxygen;
 using namespace boost;
 
-ODEFixedJoint::ODEFixedJoint() : Generic6DOFJoint()
+ODEFixedJoint::ODEFixedJoint() : ODEGeneric6DOFJoint()
 {
 }
 

@@ -21,16 +21,18 @@
 #define OXYGEN_ODEHINGEJOINT_H
 
 #include <oxygen/physicsserver/int/hingejointint.h>
-#include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen{
 
-class OXYGEN_API ODEHingeJoint : public HingeJointInt, public Generic6DOFJoint{
-
+class OXYGEN_API ODEHingeJoint : public HingeJointInt, public ODEGeneric6DOFJoint
+{
+    /** See physicsserver/int/hingejointint.h for documentation */
+    
 public:
     ODEHingeJoint();
-    long CreateHingeJoint(long world);
+    long CreateHingeJoint(long worldID);
     void SetAnchor(const salt::Vector3f& anchor, long jointID);
     salt::Vector3f GetAnchor1(long jointID);
     salt::Vector3f GetAnchor2(long jointID);

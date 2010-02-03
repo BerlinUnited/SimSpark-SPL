@@ -30,7 +30,7 @@ namespace oxygen
 
 class OXYGEN_API CompoundColliderInt
 {
-
+    /** This class is currently not implemented. */
 };
 
 } //namespace oxygen

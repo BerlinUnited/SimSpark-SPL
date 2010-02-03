@@ -22,13 +22,13 @@
 #ifndef OXYGEN_ODEGENERIC6DOFJOINT_H
 #define OXYGEN_ODEGENERIC6DOFJOINT_H
 
-#include <oxygen/physicsserver/joint.h>
+#include <oxygen/physicsserver/ode/odejoint.h>
 #include <oxygen/physicsserver/int/generic6dofjointint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEGeneric6DOFJoint : public Generic6DOFJointInt, public Joint
+class OXYGEN_API ODEGeneric6DOFJoint : public Generic6DOFJointInt, public ODEJoint
 {
 public:
     ODEGeneric6DOFJoint();

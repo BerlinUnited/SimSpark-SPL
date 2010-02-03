@@ -24,20 +24,22 @@
 #define OXYGEN_ODEBALLJOINT_H
 
 #include <oxygen/physicsserver/int/balljointint.h>
-#include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/ode/odegeneric6dofjoint.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEBallJoint : public BallJointInt, public Generic6DOFJoint
+class OXYGEN_API ODEBallJoint : public BallJointInt, public ODEGeneric6DOFJoint
 {
+    /** See physicsserver/int/balljointint.h for documentation */
+
 public:    
     ODEBallJoint();
     void SetAnchor(const salt::Vector3f& anchor, long jointID);
     salt::Vector3f GetAnchor1(long jointID);
     salt::Vector3f GetAnchor2(long jointID);
-    long CreateBallJoint(long world);
+    long CreateBallJoint(long worldID);
 };
 
 } //namespace oxygen

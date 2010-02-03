@@ -23,21 +23,22 @@
 #define OXYGEN_ODEJOINT_H
 
 #include <oxygen/physicsserver/genericphysicsobjects.h>
-#include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/ode/odephysicsobject.h>
 #include <oxygen/physicsserver/int/jointint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODEJoint : public JointInt, public PhysicsObject
+class OXYGEN_API ODEJoint : public JointInt, public ODEPhysicsObject
 {
+    /** See physicsserver/int/jointint.h for documentation */
+
 public:
     ODEJoint();
 
     Joint* GetJoint(long jointID);
     bool AreConnected(long bodyID1, long bodyID2);
     bool AreConnectedExcluding(long bodyID1, long bodyID2, int joint_type);
-    
     virtual void DestroyJoint(long jointID,
                               boost::shared_ptr<GenericJointFeedback> feedback);
     virtual void Attach(long bodyID1, long bodyID2, long jointID);

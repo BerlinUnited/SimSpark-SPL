@@ -24,11 +24,19 @@
 #define OXYGEN_ODEANGULARMOTOR_H
 
 #include <oxygen/physicsserver/int/angularmotorint.h>
-#include <oxygen/physicsserver/joint.h>
+#include <oxygen/physicsserver/ode/odejoint.h>
 
 namespace oxygen{
 
-class OXYGEN_API ODEAngularMotor : public AngularMotorInt, public Joint{
+class OXYGEN_API ODEAngularMotor : public AngularMotorInt, public ODEJoint{
+
+/** An angular motor allows the relative angular velocities of two
+    bodies to be controlled. The angular velocity can be controlled on
+    up to three axes, allowing torque motors and stops to be set for
+    rotation about those axes.
+    
+    See physicsserver/int/angularmotorint for a documentation.
+*/
 
 public:
     ODEAngularMotor();

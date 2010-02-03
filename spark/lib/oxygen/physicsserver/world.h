@@ -69,8 +69,7 @@ public:
     */
     void SetERP(float erp);
 
-    /** returns the Error Reduction Parameter of this World.
-     */
+    /** returns the Error Reduction Parameter of this World. */
     float GetERP() const;
 
     /** sets the Constraint Force mixing (CFM) value. If CFM is set to

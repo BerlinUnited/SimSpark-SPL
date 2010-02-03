@@ -42,7 +42,7 @@ public:
     /** sets the radius of the managed sphere geom */
     void SetRadius(float r);
 
-    /** get the radius back from */
+    /** get the radius of the managed sphere */
     float GetRadius() const;
 
     /** returns the depth of the given relative position in the

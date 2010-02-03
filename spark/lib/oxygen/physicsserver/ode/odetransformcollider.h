@@ -23,14 +23,31 @@
 #ifndef OXYGEN_ODETRANSFORMCOLLIDER_H
 #define OXYGEN_ODETRANSFORMCOLLIDER_H
 
-#include <oxygen/physicsserver/collider.h>
+#include <oxygen/physicsserver/ode/odecollider.h>
 #include <oxygen/physicsserver/int/transformcolliderint.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ODETransformCollider : public TransformColliderInt, public Collider
+class OXYGEN_API ODETransformCollider : public TransformColliderInt, public ODECollider
 {
+    /** TransformCollider encapsulates a transform geometry object
+    that encapsulates another geom. It allows the encapsulated geom to
+    be positioned and rotated arbitrarily with respect to its point of
+    reference.
+
+    Most geoms (like the sphere and box) have their point of
+    reference corresponding to their center of mass, allowing them to
+    be easily connected to dynamics objects. Transform objects give
+    you more flexibility - for example, you can offset the center of a
+    sphere, or rotate a cylinder so that its axis is something other
+    than the default.
+
+    Transform geoms are further used to create composite objects. As
+    they allow multiple displaced geoms to be connected to one body.
+    
+    See physicsserver/int/transformcolliderint.h for documentation.
+*/
 
 public:    
     ODETransformCollider();
