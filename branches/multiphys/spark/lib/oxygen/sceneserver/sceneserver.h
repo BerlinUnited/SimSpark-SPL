@@ -47,8 +47,6 @@ namespace oxygen
 #endif
 
 class Scene;
-class Space;
-class World;
 class BaseNode;
 class Transform;
 
@@ -127,12 +125,6 @@ protected:
 private:
     /** the current active scene */
     CachedPath<Scene> mActiveScene;
-
-    /** cached reference to the Space node below the active scene */
-    boost::shared_ptr<Space> mActiveSpace;
-
-    /** cached reference to the World node below the active scene */
-    boost::shared_ptr<World> mActiveWorld;
 
     /** modified transform nodes are labeled with this value, the
         value is incremented each cycle to avoid a resetting

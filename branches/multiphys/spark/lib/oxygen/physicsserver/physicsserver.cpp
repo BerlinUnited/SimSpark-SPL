@@ -22,12 +22,59 @@
 #include <oxygen/physicsserver/physicsserver.h>
 #include <oxygen/physicsserver/int/physicsserverint.h>
 #include <oxygen/physicsserver/impfactory.h>
+#include <oxygen/physicsserver/world.h>
+#include <oxygen/physicsserver/space.h>
+#include <oxygen/sceneserver/scene.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
 
-boost::shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
+shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
+shared_ptr<PhysicsServer> PhysicsServer::mInstance;
 
 PhysicsServer::PhysicsServer() : Leaf()
 {
     mPhysicsServerImp = ImpFactory::GetInstance()->GetPhysicsServerImp();
+}
+
+shared_ptr<PhysicsServer> PhysicsServer::GetInstance(){
+    if (mInstance.get() == 0)
+        mInstance = shared_ptr<PhysicsServer>(new PhysicsServer());
+    return mInstance;
+}
+
+void PhysicsServer::ResetCache(){
+    mActiveSpace.reset();
+    mActiveWorld.reset();
+}
+
+void PhysicsServer::UpdateCache(shared_ptr<Scene> activeScene){
+    if (mActiveSpace.get() == 0)
+        {
+            // cache the space reference
+            mActiveSpace = shared_dynamic_cast<Space>
+                (activeScene->GetChildOfClass("Space"));
+        }
+
+    if (mActiveWorld.get() == 0)
+        {
+            // cache the world reference
+            mActiveWorld = shared_dynamic_cast<World>
+                (activeScene->GetChildOfClass("World"));
+        }
+}
+
+void PhysicsServer::DoCollisions(){
+    if (mActiveSpace.get() != 0)
+        {
+            mActiveSpace->Collide();
+        }
+}
+
+void PhysicsServer::StepSimulation(float deltaTime){
+    if (mActiveWorld.get() != 0)
+        {
+            mActiveWorld->Step(deltaTime);
+        }
 }

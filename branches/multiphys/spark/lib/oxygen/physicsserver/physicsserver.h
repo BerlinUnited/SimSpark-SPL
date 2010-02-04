@@ -25,10 +25,14 @@
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 #include <oxygen/oxygen_defines.h>
+#include <boost/shared_ptr.hpp>
 
 namespace oxygen
 {
 class PhysicsServerInt;
+class Scene;
+class World;
+class Space;
 
 class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
 {
@@ -39,8 +43,31 @@ public:
     PhysicsServer();
     virtual ~PhysicsServer(){};
     
+    /** Returns the instance of the PhysicsServer. */
+    static boost::shared_ptr<PhysicsServer> GetInstance();
+    
+    /** Resets the active space and active world */
+    void ResetCache();
+    
+    /** Updates the active world and active space */
+    void UpdateCache(boost::shared_ptr<Scene> acticeScene);
+    
+    /** Collides all objects in the active space */
+    void DoCollisions();
+    
+    /** Advance the simulation by \param deltatime */
+    void StepSimulation(float deltaTime); 
+    
 private:
+    static boost::shared_ptr<PhysicsServer> mInstance;
+
     static boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;
+    
+    /** cached reference to the Space node below the active scene */
+    boost::shared_ptr<Space> mActiveSpace;
+
+    /** cached reference to the World node below the active scene */
+    boost::shared_ptr<World> mActiveWorld;
 };
 
 DECLARE_CLASS(PhysicsServer);
