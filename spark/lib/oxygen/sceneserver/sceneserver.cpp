@@ -30,8 +30,7 @@
 #include "scene.h"
 #include "sceneimporter.h"
 #include "scenedict.h"
-#include <oxygen/physicsserver/world.h>
-#include <oxygen/physicsserver/space.h>
+#include <oxygen/physicsserver/physicsserver.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -70,8 +69,7 @@ bool SceneServer::SetActiveScene(const std::string &location)
 
 void SceneServer::ResetCache()
 {
-    mActiveSpace.reset();
-    mActiveWorld.reset();
+    PhysicsServer::GetInstance()->ResetCache();
 }
 
 void SceneServer::UpdateCache()
@@ -81,20 +79,15 @@ void SceneServer::UpdateCache()
             ResetCache();
             return;
         }
-
-    if (mActiveSpace.get() == 0)
-        {
-            // cache the space reference
-            mActiveSpace = shared_dynamic_cast<Space>
-                (mActiveScene->GetChildOfClass("Space"));
-        }
-
-    if (mActiveWorld.get() == 0)
-        {
-            // cache the world reference
-            mActiveWorld = shared_dynamic_cast<World>
-                (mActiveScene->GetChildOfClass("World"));
-        }
+        
+    /*shared_ptr<PhysicsServer> phServer = shared_static_cast<PhysicsServer>
+        (GetChildOfClass("oxygen/PhysicsServer"));
+        
+    if (phServer.get() == 0){
+        GetLog()->Error() << "(SceneServer) No PhysicsServer found!";
+    }*/
+        
+    PhysicsServer::GetInstance()->UpdateCache(mActiveScene.get());
 }
 
 void SceneServer::OnUnlink()
@@ -161,16 +154,10 @@ void SceneServer::Update(float deltaTime)
     mActiveScene->PrePhysicsUpdate(deltaTime);
 
     // determine collisions
-    if (mActiveSpace.get() != 0)
-        {
-            mActiveSpace->Collide();
-        }
+    PhysicsServer::GetInstance()->DoCollisions();
 
     // do physics
-    if (mActiveWorld.get() != 0)
-        {
-            mActiveWorld->Step(deltaTime);
-        }
+    PhysicsServer::GetInstance()->StepSimulation(deltaTime);
 
     mActiveScene->PostPhysicsUpdate();
     mActiveScene->UpdateHierarchy();
@@ -196,16 +183,10 @@ void SceneServer::PhysicsUpdate(float deltaTime)
 {
     boost::recursive_mutex::scoped_lock lock(mMutex);
     // determine collisions
-    if (mActiveSpace.get() != 0)
-        {
-            mActiveSpace->Collide();
-        }
+    PhysicsServer::GetInstance()->DoCollisions();
 
     // do physics
-    if (mActiveWorld.get() != 0)
-        {
-            mActiveWorld->Step(deltaTime);
-        }
+    PhysicsServer::GetInstance()->StepSimulation(deltaTime);
 }
 
 void SceneServer::PostPhysicsUpdate()
