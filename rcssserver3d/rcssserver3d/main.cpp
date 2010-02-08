@@ -31,7 +31,7 @@
 #endif
 
 #if __APPLE__
-#include <SDL.h>
+#include <SDL/SDL.h>
 #endif
 
 using namespace spark;
