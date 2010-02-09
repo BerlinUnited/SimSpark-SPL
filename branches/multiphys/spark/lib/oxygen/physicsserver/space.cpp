@@ -245,7 +245,7 @@ void Space::DestroyPhysicsObject()
     // before this space. Any other order provokes a segfault in ODE.
     DestroySpaceObjects();
 
-    mSpaceImp->DestroySpace(mSpaceID, mContactGroupID);
+    mSpaceImp->DestroySpace(mContactGroupID, mSpaceID);
     
     mSpaceID = 0;
     mContactGroupID = 0;
