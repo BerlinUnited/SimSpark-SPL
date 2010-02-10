@@ -41,11 +41,32 @@ using namespace std;
 int SceneServer::mTransformMark = 0;
 
 SceneServer::SceneServer() : Node()
-{
+{   
 }
 
 SceneServer::~SceneServer()
 {
+}
+
+void SceneServer::OnLink()
+{
+    shared_ptr<CoreContext> context = GetCore()->CreateContext();
+
+    mPhysicsServer = shared_static_cast<PhysicsServer>
+        (context->Get("/sys/server/physics"));
+        
+    if (mPhysicsServer.get() == 0)
+        {
+            GetLog()->Error() << 
+                "(SceneServer) ERROR: PhysicsServer not found at /sys/server/physics\n";
+        }
+    else
+        {
+            GetLog()->Normal() <<
+                "(SceneServer) Found PhysicsServer\n";
+                
+            mPhysicsServer->ConfirmExistence();
+        }
 }
 
 bool SceneServer::CreateScene(const std::string &location)
@@ -69,7 +90,7 @@ bool SceneServer::SetActiveScene(const std::string &location)
 
 void SceneServer::ResetCache()
 {
-    PhysicsServer::GetInstance()->ResetCache();
+    mPhysicsServer->ResetCache();
 }
 
 void SceneServer::UpdateCache()
@@ -80,14 +101,7 @@ void SceneServer::UpdateCache()
             return;
         }
         
-    /*shared_ptr<PhysicsServer> phServer = shared_static_cast<PhysicsServer>
-        (GetChildOfClass("oxygen/PhysicsServer"));
-        
-    if (phServer.get() == 0){
-        GetLog()->Error() << "(SceneServer) No PhysicsServer found!";
-    }*/
-        
-    PhysicsServer::GetInstance()->UpdateCache(mActiveScene.get());
+    mPhysicsServer->UpdateCache(mActiveScene.get());
 }
 
 void SceneServer::OnUnlink()
@@ -154,10 +168,10 @@ void SceneServer::Update(float deltaTime)
     mActiveScene->PrePhysicsUpdate(deltaTime);
 
     // determine collisions
-    PhysicsServer::GetInstance()->DoCollisions();
+    mPhysicsServer->DoCollisions();
 
     // do physics
-    PhysicsServer::GetInstance()->StepSimulation(deltaTime);
+    mPhysicsServer->StepSimulation(deltaTime);
 
     mActiveScene->PostPhysicsUpdate();
     mActiveScene->UpdateHierarchy();
@@ -183,10 +197,10 @@ void SceneServer::PhysicsUpdate(float deltaTime)
 {
     boost::recursive_mutex::scoped_lock lock(mMutex);
     // determine collisions
-    PhysicsServer::GetInstance()->DoCollisions();
+    mPhysicsServer->DoCollisions();
 
     // do physics
-    PhysicsServer::GetInstance()->StepSimulation(deltaTime);
+    mPhysicsServer->StepSimulation(deltaTime);
 }
 
 void SceneServer::PostPhysicsUpdate()
@@ -376,5 +390,3 @@ bool SceneServer::InitSceneImporter(const std::string& importerName)
 
     return true;
 }
-
-

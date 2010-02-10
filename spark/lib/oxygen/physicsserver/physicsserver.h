@@ -26,11 +26,13 @@
 #include <zeitgeist/leaf.h>
 #include <oxygen/oxygen_defines.h>
 #include <boost/shared_ptr.hpp>
+#include <string>
 
 namespace oxygen
 {
 class PhysicsServerInt;
 class Scene;
+class RigidBody;
 class World;
 class Space;
 
@@ -42,9 +44,6 @@ class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
 public:
     PhysicsServer();
     virtual ~PhysicsServer(){};
-    
-    /** Returns the instance of the PhysicsServer. */
-    static boost::shared_ptr<PhysicsServer> GetInstance();
     
     /** Resets the active space and active world */
     void ResetCache();
@@ -58,9 +57,13 @@ public:
     /** Advance the simulation by \param deltatime */
     void StepSimulation(float deltaTime); 
     
+    /** Creates a new Box and adds it to the SceneGraph */
+    void SetUpBox(boost::shared_ptr<RigidBody> body, std::string name);
+    
+    /** Used for debugging */
+    void ConfirmExistence(); 
+    
 private:
-    static boost::shared_ptr<PhysicsServer> mInstance;
-
     static boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;
     
     /** cached reference to the Space node below the active scene */

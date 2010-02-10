@@ -22,26 +22,23 @@
 #include <oxygen/physicsserver/physicsserver.h>
 #include <oxygen/physicsserver/int/physicsserverint.h>
 #include <oxygen/physicsserver/impfactory.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/sceneserver/scene.h>
+#include <oxygen/sceneserver/transform.h>
+#include <zeitgeist/logserver/logserver.h>
 #include <iostream>
 
 using namespace oxygen;
 using namespace boost;
+using namespace std;
 
 shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
-shared_ptr<PhysicsServer> PhysicsServer::mInstance;
 
 PhysicsServer::PhysicsServer() : Leaf()
 {
     mPhysicsServerImp = ImpFactory::GetInstance()->GetPhysicsServerImp();
-}
-
-shared_ptr<PhysicsServer> PhysicsServer::GetInstance(){
-    if (mInstance.get() == 0)
-        mInstance = shared_ptr<PhysicsServer>(new PhysicsServer());
-    return mInstance;
 }
 
 void PhysicsServer::ResetCache(){
@@ -49,7 +46,8 @@ void PhysicsServer::ResetCache(){
     mActiveWorld.reset();
 }
 
-void PhysicsServer::UpdateCache(shared_ptr<Scene> activeScene){
+void PhysicsServer::UpdateCache(shared_ptr<Scene> activeScene)
+{
     if (mActiveSpace.get() == 0)
         {
             // cache the space reference
@@ -72,9 +70,24 @@ void PhysicsServer::DoCollisions(){
         }
 }
 
-void PhysicsServer::StepSimulation(float deltaTime){
+void PhysicsServer::StepSimulation(float deltaTime)
+{
     if (mActiveWorld.get() != 0)
         {
             mActiveWorld->Step(deltaTime);
         }
+}
+
+void PhysicsServer::SetUpBox(shared_ptr<RigidBody> body, string name)
+{
+    if (body.get() != 0)
+        {
+            body->SetName(name);
+        }   
+}
+
+void PhysicsServer::ConfirmExistence()
+{
+    GetLog()->Normal() <<
+        "(PhysicsServer) I print, therefore I am\n";
 }
