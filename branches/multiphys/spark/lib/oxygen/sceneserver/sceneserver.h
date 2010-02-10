@@ -49,6 +49,7 @@ namespace oxygen
 class Scene;
 class BaseNode;
 class Transform;
+class PhysicsServer;
 
 /** The scene server manages displayable subtrees within the object
    hierarchy. Each subtree begins with a Scene node. The scene server knows
@@ -107,6 +108,9 @@ protected:
 
     /** resets all cached references */
     void ResetCache();
+    
+    /** Retrieves the PhysicsServer from the SceneGraph */
+    virtual void OnLink();
 
     /** resets all cached references */
     virtual void OnUnlink();
@@ -121,6 +125,10 @@ protected:
         are also transform node
      */
     void RemoveTransformPaths(boost::shared_ptr<zeitgeist::Leaf> root);
+
+    /** Pointer to the instance of the physicsserver */
+    //causes crash at runtime if declared
+    boost::shared_ptr<PhysicsServer> mPhysicsServer;
 
 private:
     /** the current active scene */
