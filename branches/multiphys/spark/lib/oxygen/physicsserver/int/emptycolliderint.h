@@ -24,14 +24,17 @@
 #define OXYGEN_EMPTYCOLLIDERINT_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API EmptyColliderInt
+class OXYGEN_API EmptyColliderInt : public BaseNode
 {
     /** This class is currently not implemented. */
 };
+
+DECLARE_ABSTRACTCLASS(EmptyColliderInt);
 
 } //namespace oxygen
 

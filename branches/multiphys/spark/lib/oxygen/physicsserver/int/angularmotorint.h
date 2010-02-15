@@ -25,6 +25,7 @@
 
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
@@ -37,7 +38,7 @@ class Joint;
     rotation about those axes.
 */
 
-class OXYGEN_API AngularMotorInt
+class OXYGEN_API AngularMotorInt : public BaseNode
 {
 public:
     /** Creates a new angular motor within the physics world specified
@@ -105,6 +106,8 @@ public:
     */
     virtual float GetAxisAngleRate(int idx, long jointID) = 0;
 };
+
+DECLARE_ABSTRACTCLASS(AngularMotorInt);
 
 } //namespace oxygen
 

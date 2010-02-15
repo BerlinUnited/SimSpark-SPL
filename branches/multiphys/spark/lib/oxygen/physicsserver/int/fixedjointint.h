@@ -21,10 +21,12 @@
 #define OXYGEN_FIXEDJOINTINT_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen{
 
-class OXYGEN_API FixedJointInt{
+class OXYGEN_API FixedJointInt : public BaseNode
+{
 
 public:
     /** Creates a fixed joint within the physics world specified 
@@ -37,6 +39,8 @@ public:
     */
     virtual void SetFixed(long jointID) = 0;
 };
+
+DECLARE_ABSTRACTCLASS(FixedJointInt);
 
 } //namespace oxygen
 

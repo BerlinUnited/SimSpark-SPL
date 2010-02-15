@@ -24,14 +24,17 @@
 #define OXYGEN_SOFTBODYINT_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API SoftBodyInt
+class OXYGEN_API SoftBodyInt : public BaseNode
 {
     /** This class is currently not implemented. */
 };
+
+DECLARE_ABSTRACTCLASS(SoftBodyInt);
 
 } //namespace oxygen
 

@@ -24,14 +24,17 @@
 #define OXYGEN_GENERIC6DOFJOINTINT_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API Generic6DOFJointInt
+class OXYGEN_API Generic6DOFJointInt : public BaseNode
 {
     /** This class is currently not implemented. */
 };
+
+DECLARE_ABSTRACTCLASS(Generic6DOFJointInt);
 
 } //namespace oxygen
 

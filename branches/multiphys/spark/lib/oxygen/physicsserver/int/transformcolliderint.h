@@ -24,6 +24,7 @@
 #define OXYGEN_TRANSFORMCOLLIDERINT_H
 
 #include <oxygen/physicsserver/ode/odewrapper.h>
+#include <oxygen/sceneserver/basenode.h>
 #include <oxygen/oxygen_defines.h>
 #include <set>
 #include <string>
@@ -31,7 +32,7 @@
 namespace oxygen
 {
 
-class OXYGEN_API TransformColliderInt
+class OXYGEN_API TransformColliderInt : public BaseNode
 {
 /** TransformCollider encapsulates a transform geometry object
     that encapsulates another geom. It allows the encapsulated geom to
@@ -58,6 +59,8 @@ public:
     */
     virtual void SetColliderParameters(int cleanup, int info, long geomID) = 0;
 };
+
+DECLARE_ABSTRACTCLASS(TransformColliderInt);
 
 } //namespace oxygen
 

@@ -24,11 +24,12 @@
 
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API WorldInt
+class OXYGEN_API WorldInt : public BaseNode
 {
 /** World encapsulates a world object. It is a container for
     rigid bodies and joints. Objects in different worlds can not
@@ -99,6 +100,8 @@ public:
     /** destroys the world */
     virtual void DestroyWorld(long worldID) = 0;
 };
+
+DECLARE_ABSTRACTCLASS(WorldInt);
 
 }
 
