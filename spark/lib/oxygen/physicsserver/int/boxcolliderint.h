@@ -25,11 +25,12 @@
 
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API BoxColliderInt
+class OXYGEN_API BoxColliderInt : public BaseNode
 {
 
 public:    
@@ -49,6 +50,8 @@ public:
     /** Creates a new box geom and returns the ID of the newly created box */
     virtual long CreateBox() = 0;
 };
+
+DECLARE_ABSTRACTCLASS(BoxColliderInt);
 
 } //namespace oxygen
 

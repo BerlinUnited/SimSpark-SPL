@@ -23,7 +23,6 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/camera.h>
-#include <oxygen/physicsserver/spherecollider.h>
 #include <kerosin/openglserver/openglwrapper.h>
 #include <kerosin/sceneserver/staticmesh.h>
 #include <kerosin/sceneserver/light.h>
@@ -250,13 +249,6 @@ RenderServer::ProcessPicks()
 void
 RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
 {
-#if 0
-    shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>(node);
-    if (collider != 0)
-    {
-        std::cerr << "RenderScene (spherecollider radius: " << collider->GetRadius() << ")\n";
-    }
-#endif
     shared_ptr<RenderNode> renderNode = shared_dynamic_cast<RenderNode>(node);
     if (renderNode.get() != 0 &&
         ((pass == 0 && !renderNode->IsTransparent()) || (pass == 1 && renderNode->IsTransparent()))

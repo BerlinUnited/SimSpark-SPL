@@ -25,11 +25,12 @@
 
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API RayColliderInt
+class OXYGEN_API RayColliderInt : public BaseNode
 {
 /** RayCollider encapsulates an ODE ray geometry "object".
  
@@ -51,6 +52,8 @@ public:
     /* Creates a ray and returns the ID of the newly created ray */
     virtual long CreateRay() = 0;
 };
+
+DECLARE_ABSTRACTCLASS(RayColliderInt);
 
 } //namespace oxygen
 

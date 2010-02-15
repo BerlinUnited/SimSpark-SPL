@@ -21,11 +21,13 @@
 #define OXYGEN_HINGE2JOINTINT_H
 
 #include <salt/vector.h>
+#include <oxygen/sceneserver/basenode.h>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen{
 
-class OXYGEN_API Hinge2JointInt{
+class OXYGEN_API Hinge2JointInt : public BaseNode
+{
 
 public:
     /** Creates a hinge2joint within the physics world specified 
@@ -66,6 +68,8 @@ public:
     /** returns the time derivate of the second of the hinge2 angles */
     virtual float GetAngleRate2(long jointID) = 0;
 };
+
+DECLARE_ABSTRACTCLASS(Hinge2JointInt);
 
 } //namespace oxygen
 

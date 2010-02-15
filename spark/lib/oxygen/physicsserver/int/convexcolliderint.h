@@ -24,14 +24,17 @@
 #define OXYGEN_CONVEXCOLLIDERINT_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ConvexColliderInt
+class OXYGEN_API ConvexColliderInt : public BaseNode
 {
     /** This class is currently not implemented. */
 };
+
+DECLARE_CLASS(ConvexColliderInt);
 
 } //namespace oxygen
 

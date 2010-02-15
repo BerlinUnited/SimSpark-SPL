@@ -26,11 +26,12 @@
 #include <salt/matrix.h>
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API PlaneColliderInt
+class OXYGEN_API PlaneColliderInt : public BaseNode
 {
 public:
     /** sets the parameters of the plane equation a*x+b*y+c*z = d ,
@@ -53,6 +54,8 @@ public:
     /** Creates a plane collider and returns the ID of the newly created plane */
     virtual long CreatePlane() = 0;
 };
+
+DECLARE_ABSTRACTCLASS(PlaneColliderInt);
 
 } //namespace oxygen
 

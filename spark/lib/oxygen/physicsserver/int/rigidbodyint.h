@@ -25,12 +25,13 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
+#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 class RigidBody;
 
-class OXYGEN_API RigidBodyInt
+class OXYGEN_API RigidBodyInt : public BaseNode
 {
 
 public:
@@ -248,6 +249,8 @@ public:
     */    
     virtual long CreateBody(long worldID) = 0;
 };
+
+DECLARE_ABSTRACTCLASS(RigidBodyInt);
 
 } //namespace oxygen
 
