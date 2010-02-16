@@ -65,6 +65,7 @@
 #include <oxygen/physicsserver/recorderhandler.h>
 #include <oxygen/physicsserver/joint.h>
 #include <oxygen/physicsserver/generic6dofjoint.h>
+#include <oxygen/physicsserver/angularmotor.h>
 #include <oxygen/physicsserver/balljoint.h>
 #include <oxygen/physicsserver/conetwistjoint.h>
 #include <oxygen/physicsserver/hingejoint.h>
@@ -72,6 +73,42 @@
 #include <oxygen/physicsserver/sliderjoint.h>
 #include <oxygen/physicsserver/universaljoint.h>
 #include <oxygen/physicsserver/hinge2joint.h>
+
+//implementations
+#include <oxygen/physicsserver/int/angularmotorint.h>
+#include <oxygen/physicsserver/int/balljointint.h>
+#include <oxygen/physicsserver/int/bodyint.h>
+#include <oxygen/physicsserver/int/boxcolliderint.h>
+#include <oxygen/physicsserver/int/capsulecolliderint.h>
+#include <oxygen/physicsserver/int/colliderint.h>
+#include <oxygen/physicsserver/int/compoundcolliderint.h>
+#include <oxygen/physicsserver/int/concavecolliderint.h>
+#include <oxygen/physicsserver/int/conecolliderint.h>
+#include <oxygen/physicsserver/int/conetwistjointint.h>
+#include <oxygen/physicsserver/int/contactjointhandlerint.h>
+#include <oxygen/physicsserver/int/convexcolliderint.h>
+#include <oxygen/physicsserver/int/cylindercolliderint.h>
+#include <oxygen/physicsserver/int/dynamicbodyint.h>
+#include <oxygen/physicsserver/int/emptycolliderint.h>
+#include <oxygen/physicsserver/int/fixedjointint.h>
+#include <oxygen/physicsserver/int/generic6dofjointint.h>
+#include <oxygen/physicsserver/int/hinge2jointint.h>
+#include <oxygen/physicsserver/int/hingejointint.h>
+#include <oxygen/physicsserver/int/jointint.h>
+#include <oxygen/physicsserver/int/physicsobjectint.h>
+#include <oxygen/physicsserver/int/physicsserverint.h>
+#include <oxygen/physicsserver/int/planecolliderint.h>
+#include <oxygen/physicsserver/int/raycolliderint.h>
+#include <oxygen/physicsserver/int/rigidbodyint.h>
+#include <oxygen/physicsserver/int/sliderjointint.h>
+#include <oxygen/physicsserver/int/softbodyint.h>
+#include <oxygen/physicsserver/int/spaceint.h>
+#include <oxygen/physicsserver/int/spherecolliderint.h>
+#include <oxygen/physicsserver/int/staticbodyint.h>
+#include <oxygen/physicsserver/int/transformcolliderint.h>
+#include <oxygen/physicsserver/int/universaljointint.h>
+#include <oxygen/physicsserver/int/worldint.h>
+
 
 #include <oxygen/sceneserver/basenode.h>
 #include <oxygen/sceneserver/camera.h>
