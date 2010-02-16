@@ -267,6 +267,42 @@ set(oxygen_LIB_SRCS
     physicsserver/angularmotor.cpp
     physicsserver/angularmotor_c.cpp
     
+    #interfaces
+    physicsserver/int/angularmotorint_c.cpp
+    physicsserver/int/balljointint_c.cpp
+    physicsserver/int/bodyint_c.cpp
+    physicsserver/int/boxcolliderint_c.cpp
+    physicsserver/int/capsulecolliderint_c.cpp
+    physicsserver/int/colliderint_c.cpp
+    physicsserver/int/compoundcolliderint_c.cpp
+    physicsserver/int/concavecolliderint_c.cpp
+    physicsserver/int/conecolliderint_c.cpp
+    physicsserver/int/conetwistjointint_c.cpp
+    physicsserver/int/contactjointhandlerint_c.cpp
+    physicsserver/int/convexcolliderint_c.cpp
+    physicsserver/int/cylindercolliderint_c.cpp
+    physicsserver/int/dynamicbodyint_c.cpp
+    physicsserver/int/emptycolliderint_c.cpp
+    physicsserver/int/fixedjointint_c.cpp
+    physicsserver/int/generic6dofjointint_c.cpp
+    physicsserver/int/hinge2jointint_c.cpp
+    physicsserver/int/hingejointint_c.cpp
+    physicsserver/int/jointint_c.cpp
+    physicsserver/int/physicsobjectint_c.cpp
+    physicsserver/int/physicsserverint_c.cpp
+    physicsserver/int/planecolliderint_c.cpp
+    physicsserver/int/raycolliderint_c.cpp
+    physicsserver/int/rigidbodyint_c.cpp
+    physicsserver/int/sliderjointint_c.cpp
+    physicsserver/int/softbodyint_c.cpp
+    physicsserver/int/spaceint_c.cpp
+    physicsserver/int/spherecolliderint_c.cpp
+    physicsserver/int/staticbodyint_c.cpp
+    physicsserver/int/transformcolliderint_c.cpp
+    physicsserver/int/universaljointint_c.cpp
+    physicsserver/int/worldint_c.cpp
+    
+    
     #ODE-specific files
     physicsserver/ode/odeangularmotor.cpp
     physicsserver/ode/odeballjoint.cpp
