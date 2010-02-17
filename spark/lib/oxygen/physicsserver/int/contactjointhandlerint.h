@@ -24,14 +24,14 @@
 #define OXYGEN_CONTACTJOINTHANDLERINT_H
 
 #include <oxygen/physicsserver/ode/odewrapper.h>
-#include <oxygen/sceneserver/basenode.h>
+
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ContactJointHandlerInt : public BaseNode
+class OXYGEN_API ContactJointHandlerInt
 {
 public:    
     /** Returns a pointer to a SurfaceParameter class whose values were initialized
@@ -134,8 +134,6 @@ protected:
     */
     virtual float MixValues(const float v1, const float v2, const int n) const = 0;
 };
-
-DECLARE_ABSTRACTCLASS(ContactJointHandlerInt);
 
 } //namespace oxygen
 

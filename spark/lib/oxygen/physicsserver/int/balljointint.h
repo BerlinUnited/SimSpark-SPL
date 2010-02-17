@@ -25,14 +25,13 @@
 
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 class RigidBody;
 class Joint;
 
-class OXYGEN_API BallJointInt : public BaseNode
+class OXYGEN_API BallJointInt
 {
 public:    
 
@@ -59,8 +58,6 @@ public:
     */
     virtual long CreateBallJoint(long worldID) =  0;
 };
-
-DECLARE_ABSTRACTCLASS(BallJointInt);
 
 } //namespace oxygen
 

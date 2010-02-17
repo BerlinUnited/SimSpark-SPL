@@ -24,17 +24,14 @@
 #define OXYGEN_PHYSICSSERVERINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API PhysicsServerInt : public BaseNode
+class OXYGEN_API PhysicsServerInt
 {
 
 };
-
-DECLARE_ABSTRACTCLASS(PhysicsServerInt);
 
 } //namespace oxygen
 

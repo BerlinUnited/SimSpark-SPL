@@ -24,7 +24,6 @@
 #define OXYGEN_COLLIDERINT_H
 
 #include <oxygen/physicsserver/ode/odewrapper.h>
-#include <oxygen/sceneserver/basenode.h>
 #include <oxygen/oxygen_defines.h>
 #include <salt/matrix.h>
 #include <set>
@@ -34,7 +33,7 @@ namespace oxygen
 {
 class Collider;
 
-class OXYGEN_API ColliderInt : public BaseNode
+class OXYGEN_API ColliderInt
 {
 
 public:
@@ -95,8 +94,6 @@ public:
     */
     virtual void RemoveFromSpace(long geomID, long spaceID) = 0;
 };
-
-DECLARE_ABSTRACTCLASS(ColliderInt);
 
 } //namespace oxygen
 

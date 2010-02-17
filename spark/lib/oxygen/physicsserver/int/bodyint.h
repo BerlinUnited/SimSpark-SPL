@@ -24,17 +24,14 @@
 #define OXYGEN_BODYINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API BodyInt : public BaseNode
+class OXYGEN_API BodyInt
 {
     /** This class is currently not implemented. */
 };
-
-DECLARE_ABSTRACTCLASS(BodyInt);
 
 } //namespace oxygen
 

@@ -24,17 +24,14 @@
 #define OXYGEN_CONECOLLIDERINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ConeColliderInt : public BaseNode
+class OXYGEN_API ConeColliderInt
 {
     /** This class is currently not implemented. */
 };
-
-DECLARE_CLASS(ConeColliderInt);
 
 } //namespace oxygen
 

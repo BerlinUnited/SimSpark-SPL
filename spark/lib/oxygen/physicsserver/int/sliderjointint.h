@@ -25,13 +25,12 @@
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 class RigidBody;
 
-class OXYGEN_API SliderJointInt : public BaseNode
+class OXYGEN_API SliderJointInt
 {
 public:
     /** Creates a Slider Joint within the given world */
@@ -50,8 +49,6 @@ public:
     /** Sets the direction of the slider joint's axis */
     virtual void SetSliderAxis(salt::Vector3f& up, long jointID) = 0;
 };
-
-DECLARE_ABSTRACTCLASS(SliderJointInt);
 
 } //namespace oxygen
 
