@@ -27,12 +27,11 @@
 #include <salt/matrix.h>
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API PhysicsObjectInt : public BaseNode
+class OXYGEN_API PhysicsObjectInt
 {
 
 public:    
@@ -44,8 +43,6 @@ public:
     /** coverts an engine-specific matrix to the rotation part of a salt::Matrix */
     virtual void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const = 0;
 };
-
-DECLARE_ABSTRACTCLASS(PhysicsObjectInt);
 
 } //namespace oxygen
 

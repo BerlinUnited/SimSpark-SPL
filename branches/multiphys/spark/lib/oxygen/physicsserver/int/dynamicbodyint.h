@@ -24,17 +24,14 @@
 #define OXYGEN_DYNAMICBODYINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API DynamicBodyInt : public BaseNode
+class OXYGEN_API DynamicBodyInt
 {
     /** This class is currently not implemented. */
 };
-
-DECLARE_CLASS(DynamicBodyInt);
 
 } //namespace oxygen
 

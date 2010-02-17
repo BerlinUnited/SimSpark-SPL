@@ -24,17 +24,14 @@
 #define OXYGEN_CONETWISTJOINTINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API ConeTwistJointInt : public BaseNode
+class OXYGEN_API ConeTwistJointInt
 {
     /** This class is currently not implemented. */
 };
-
-DECLARE_ABSTRACTCLASS(ConeTwistJointInt);
 
 } //namespace oxygen
 

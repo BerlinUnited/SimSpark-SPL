@@ -24,13 +24,12 @@
 #define OXYGEN_CAPSULECOLLIDERINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 #include <salt/vector.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API CapsuleColliderInt : public BaseNode
+class OXYGEN_API CapsuleColliderInt
 {
 public:
 
@@ -66,8 +65,6 @@ public:
     /** Creates a new Capsule and returns the ID of the newly created capsule */
     virtual long CreateCapsule() = 0;
 };
-
-DECLARE_ABSTRACTCLASS(CapsuleColliderInt);
 
 } //namespace oxygen
 

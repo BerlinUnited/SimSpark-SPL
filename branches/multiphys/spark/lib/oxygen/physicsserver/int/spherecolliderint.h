@@ -25,12 +25,11 @@
 
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/physicsserver/spherecollider.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API SphereColliderInt : public BaseNode
+class OXYGEN_API SphereColliderInt
 {
 
 public:    
@@ -50,8 +49,6 @@ public:
     /** Creates a new sphere and returns its ID */
     virtual long CreateSphere() = 0; 
 };
-
-DECLARE_ABSTRACTCLASS(SphereColliderInt);
 
 } //namespace oxygen
 

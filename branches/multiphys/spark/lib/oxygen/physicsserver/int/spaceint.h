@@ -26,7 +26,6 @@
 #include <set>
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
@@ -35,7 +34,7 @@ class RigidBody;
 class Collider;
 class Space;
 
-class OXYGEN_API SpaceInt : public BaseNode
+class OXYGEN_API SpaceInt
 {
 
 public:
@@ -89,8 +88,6 @@ public:
                                 boost::shared_ptr<Collider> collidee,
                                 long geomID1, long geomID2) = 0;
 };
-
-DECLARE_ABSTRACTCLASS(SpaceInt);
 
 } //namespace oxygen
 

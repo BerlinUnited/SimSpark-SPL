@@ -24,17 +24,14 @@
 #define OXYGEN_CYLINDERCOLLIDERINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API CylinderColliderInt : public BaseNode
+class OXYGEN_API CylinderColliderInt
 {
     /** This class is currently not implemented. */
 };
-
-DECLARE_CLASS(CylinderColliderInt);
 
 } //namespace oxygen
 

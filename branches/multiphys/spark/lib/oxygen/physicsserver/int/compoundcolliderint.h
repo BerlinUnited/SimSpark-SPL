@@ -24,17 +24,14 @@
 #define OXYGEN_COMPOUNDCOLLIDERINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API CompoundColliderInt : public BaseNode
+class OXYGEN_API CompoundColliderInt
 {
     /** This class is currently not implemented. */
 };
-
-DECLARE_ABSTRACTCLASS(CompoundColliderInt);
 
 } //namespace oxygen
 

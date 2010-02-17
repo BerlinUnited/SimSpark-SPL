@@ -25,12 +25,11 @@
 
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
-#include <oxygen/sceneserver/basenode.h>
 
 namespace oxygen
 {
 
-class OXYGEN_API UniversalJointInt : public BaseNode
+class OXYGEN_API UniversalJointInt
 {
 
 public: 
@@ -95,8 +94,6 @@ public:
     /** returns the time derivate of the second of the hinge angles */
     virtual float GetAngleRate2(long jointID) const = 0;
 };
-
-DECLARE_ABSTRACTCLASS(UniversalJointInt);
 
 } //namespace oxygen
 

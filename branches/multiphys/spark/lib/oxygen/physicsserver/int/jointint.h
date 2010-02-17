@@ -25,7 +25,6 @@
 
 #include <oxygen/physicsserver/genericphysicsobjects.h>
 #include <oxygen/physicsserver/ode/odewrapper.h>
-#include <oxygen/sceneserver/basenode.h>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>
@@ -36,9 +35,8 @@ namespace oxygen
 class RigidBody;
 class Joint;
 
-class OXYGEN_API JointInt : public BaseNode
+class OXYGEN_API JointInt
 {
-
 public:
     /** Returns a pointer to the Joint object that manages the joint
         specified by \param jointID.
@@ -244,8 +242,6 @@ public:
     */
     virtual void OnLink(long jointID, Joint* joint) = 0;
 };
-
-DECLARE_ABSTRACTCLASS(JointInt);
 
 } //namespace oxygen
 

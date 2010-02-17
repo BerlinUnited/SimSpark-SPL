@@ -94,41 +94,6 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(CollisionHandler), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(ContactJointHandler), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(RecorderHandler), "oxygen/");
-    
-    // implementations
-    zg.GetCore()->RegisterClassObject(new CLASS(AngularMotorInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(BallJointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(BodyInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(BoxColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(CapsuleColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(CompoundColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ConcaveColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ConeColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ConeTwistJointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ContactJointHandlerInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(ConvexColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(CylinderColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(DynamicBodyInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(EmptyColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(FixedJointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Generic6DOFJointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(Hinge2JointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(HingeJointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(JointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsObjectInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(PhysicsServerInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(PlaneColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(RayColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(RigidBodyInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(SliderJointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(SoftBodyInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(SpaceInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(SphereColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(StaticBodyInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(TransformColliderInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(UniversalJointInt), "oxygen/");
-    zg.GetCore()->RegisterClassObject(new CLASS(WorldInt), "oxygen/");
 
     // agentaspect
     zg.GetCore()->RegisterClassObject(new CLASS(AgentAspect), "oxygen/");
