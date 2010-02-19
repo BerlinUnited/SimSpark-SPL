@@ -1,0 +1,44 @@
+/* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
+   this file is part of rcssserver3D
+   Fri May 9 2003
+   Copyright (C) 2003 Koblenz University
+   $Id: hingejoint.h 108 2009-11-25 10:20:10Z a-held $
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 of the License.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+#ifndef ODEHINGE2JOINT_H
+#define ODEHINGE2JOINT_H
+
+#include "odegeneric6dofjoint.h"
+#include <oxygen/physicsserver/int/hinge2jointint.h>
+
+class ODEHinge2Joint : public oxygen::Hinge2JointInt, public ODEGeneric6DOFJoint
+{
+    /** See physicsserver/int/hinge2jointint.h for documentation. */
+    
+public:
+    ODEHinge2Joint();
+    long CreateHinge2Joint(long worldID);
+    void SetAnchor(const salt::Vector3f& gAnchor, 
+                   const salt::Vector3f& up, 
+                   const salt::Vector3f& right,
+                   long jointID);
+    salt::Vector3f GetAnchor1(long jointID);
+    salt::Vector3f GetAnchor2(long jointID);
+    float GetAngle(long jointID);
+    float GetAngleRate1(long jointID);
+    float GetAngleRate2(long jointID);
+};
+
+#endif //ODEHINGE2JOINT_H

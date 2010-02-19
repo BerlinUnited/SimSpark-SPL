@@ -24,7 +24,6 @@
 #define OXYGEN_JOINTINT_H
 
 #include <oxygen/physicsserver/genericphysicsobjects.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <salt/vector.h>
 #include <oxygen/oxygen_defines.h>

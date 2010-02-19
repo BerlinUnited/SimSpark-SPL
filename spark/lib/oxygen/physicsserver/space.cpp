@@ -20,8 +20,7 @@
 */
 
 #include <oxygen/physicsserver/space.h>
-#include <oxygen/physicsserver/int/spaceint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odespace.h>
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/sceneserver/scene.h>
@@ -36,7 +35,7 @@ Space::TSpaceIdSet Space::gDisabledInnerCollisionSet;
 
 Space::Space() : PhysicsObject(), mSpaceID(0)
 {
-    mSpaceImp = ImpFactory::GetInstance()->GetSpaceImp();
+    mSpaceImp = boost::shared_ptr<ODESpace>(new ODESpace());
 }
 
 Space::~Space()

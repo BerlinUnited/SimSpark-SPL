@@ -18,8 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/sliderjoint.h>
-#include <oxygen/physicsserver/int/sliderjointint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odesliderjoint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -30,7 +29,7 @@ boost::shared_ptr<SliderJointInt> SliderJoint::mSliderJointImp;
 
 SliderJoint::SliderJoint() : Generic6DOFJoint()
 {
-    mSliderJointImp = ImpFactory::GetInstance()->GetSliderJointImp();
+    mSliderJointImp = boost::shared_ptr<ODESliderJoint>(new ODESliderJoint());
 }
 
 SliderJoint::~SliderJoint()

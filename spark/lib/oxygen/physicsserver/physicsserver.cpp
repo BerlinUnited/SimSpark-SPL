@@ -20,8 +20,7 @@
 */
 
 #include <oxygen/physicsserver/physicsserver.h>
-#include <oxygen/physicsserver/int/physicsserverint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odephysicsserver.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
@@ -38,7 +37,7 @@ shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
 
 PhysicsServer::PhysicsServer() : Leaf()
 {
-    mPhysicsServerImp = ImpFactory::GetInstance()->GetPhysicsServerImp();
+    mPhysicsServerImp = boost::shared_ptr<ODEPhysicsServer>(new ODEPhysicsServer());
 }
 
 void PhysicsServer::ResetCache(){

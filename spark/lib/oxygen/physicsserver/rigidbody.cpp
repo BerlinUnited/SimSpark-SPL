@@ -20,8 +20,7 @@
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/world.h>
-#include <oxygen/physicsserver/int/rigidbodyint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/oderigidbody.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <zeitgeist/logserver/logserver.h>
@@ -35,7 +34,7 @@ boost::shared_ptr<RigidBodyInt> RigidBody::mRigidBodyImp;
 
 RigidBody::RigidBody() : Body()
 {
-    mRigidBodyImp = ImpFactory::GetInstance()->GetRigidBodyImp();
+    mRigidBodyImp = boost::shared_ptr<ODERigidBody>(new ODERigidBody());
 }
 
 RigidBody::~RigidBody()

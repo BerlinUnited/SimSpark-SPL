@@ -23,7 +23,6 @@
 #define OXYGEN_SPACE_H
 
 #include <oxygen/physicsserver/physicsobject.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <set>
 #include <oxygen/oxygen_defines.h>
 

@@ -20,8 +20,7 @@
 */
 #include <oxygen/physicsserver/genericphysicsobjects.h>
 #include <oxygen/physicsserver/collider.h>
-#include <oxygen/physicsserver/int/colliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odecollider.h>
 #include <oxygen/physicsserver/collisionhandler.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/transformcollider.h>
@@ -39,7 +38,7 @@ boost::shared_ptr<ColliderInt> Collider::mColliderImp;
 
 Collider::Collider() : PhysicsObject(), mGeomID(0)
 {
-    mColliderImp = ImpFactory::GetInstance()->GetColliderImp();
+    mColliderImp = boost::shared_ptr<ODECollider>(new ODECollider());
 }
 
 Collider::~Collider()

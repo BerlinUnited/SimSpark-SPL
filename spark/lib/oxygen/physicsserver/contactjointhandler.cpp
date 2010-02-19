@@ -20,8 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/contactjointhandler.h>
-#include <oxygen/physicsserver/int/contactjointhandlerint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odecontactjointhandler.h>
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
@@ -34,7 +33,7 @@ boost::shared_ptr<ContactJointHandlerInt> ContactJointHandler::mContactJointHand
 
 ContactJointHandler::ContactJointHandler() : CollisionHandler()
 {
-    mContactJointHandlerImp = ImpFactory::GetInstance()->GetContactJointHandlerImp();
+    mContactJointHandlerImp = boost::shared_ptr<ODEContactJointHandler>(new ODEContactJointHandler());
     mSurfaceParameter = mContactJointHandlerImp->Initialize();
 }
 

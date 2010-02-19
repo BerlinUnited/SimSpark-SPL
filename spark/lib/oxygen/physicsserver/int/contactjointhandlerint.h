@@ -23,8 +23,6 @@
 #ifndef OXYGEN_CONTACTJOINTHANDLERINT_H
 #define OXYGEN_CONTACTJOINTHANDLERINT_H
 
-#include <oxygen/physicsserver/ode/odewrapper.h>
-
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
 
