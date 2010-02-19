@@ -19,8 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/int/worldint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odeworld.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/sceneserver/scene.h>
@@ -33,7 +32,7 @@ boost::shared_ptr<WorldInt> World::mWorldImp;
 
 World::World() : PhysicsObject()
 {
-    mWorldImp = ImpFactory::GetInstance()->GetWorldImp();
+    mWorldImp = boost::shared_ptr<ODEWorld>(new ODEWorld());
 }
 
 World::~World()

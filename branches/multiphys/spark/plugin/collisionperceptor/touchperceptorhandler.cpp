@@ -22,7 +22,7 @@
 
 #include "touchperceptorhandler.h"
 #include <oxygen/physicsserver/collider.h>
-#include <oxygen/physicsserver/ode/odecontactjointhandler.h>
+#include <oxygen/physicsserver/int/contactjointhandlerint.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>

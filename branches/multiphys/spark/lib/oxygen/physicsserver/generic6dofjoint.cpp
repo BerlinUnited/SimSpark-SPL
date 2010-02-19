@@ -21,15 +21,14 @@
 */
 
 #include <oxygen/physicsserver/generic6dofjoint.h>
-#include <oxygen/physicsserver/int/generic6dofjointint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odegeneric6dofjoint.h>
 
 using namespace oxygen;
 
 boost::shared_ptr<Generic6DOFJointInt> Generic6DOFJoint::mGeneric6DOFJointImp;
 
 Generic6DOFJoint::Generic6DOFJoint() : Joint(){
-    mGeneric6DOFJointImp = ImpFactory::GetInstance()->GetGeneric6DOFJointImp();
+    mGeneric6DOFJointImp = boost::shared_ptr<ODEGeneric6DOFJoint>(new ODEGeneric6DOFJoint());
 }
 
 Generic6DOFJoint::~Generic6DOFJoint(){

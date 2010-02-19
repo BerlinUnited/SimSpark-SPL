@@ -21,8 +21,7 @@
 */
 
 #include <oxygen/physicsserver/boxcollider.h>
-#include <oxygen/physicsserver/int/boxcolliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odeboxcollider.h>
 
 using namespace oxygen;
 using namespace salt;
@@ -31,7 +30,7 @@ boost::shared_ptr<BoxColliderInt> BoxCollider::mBoxColliderImp;
 
 BoxCollider::BoxCollider() : ConvexCollider()
 {
-    mBoxColliderImp = ImpFactory::GetInstance()->GetBoxColliderImp();
+    mBoxColliderImp = boost::shared_ptr<ODEBoxCollider>(new ODEBoxCollider());
 }
 
 void BoxCollider::SetBoxLengths(const Vector3f& extents)

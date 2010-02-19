@@ -25,7 +25,7 @@
 
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
+#include <../plugin/odeimps/odewrapper.h>
 #include <oxygen/sceneserver/transform.h>
 #include <salt/vector.h>
 #include <list>

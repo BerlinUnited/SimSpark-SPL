@@ -15,7 +15,6 @@ set(oxygen_LIB_HDRS
     oxygen.h
     oxygen_defines.h
     physicsserver/genericphysicsobjects.h
-    physicsserver/impfactory.h
     physicsserver/physicsobject.h
     physicsserver/body.h
     physicsserver/rigidbody.h
@@ -75,7 +74,6 @@ set(oxygen_LIB_HDRS
     physicsserver/int/generic6dofjointint.h
     physicsserver/int/hingejointint.h
     physicsserver/int/hinge2jointint.h
-    physicsserver/int/impfactoryint.h
     physicsserver/int/jointint.h
     physicsserver/int/physicsobjectint.h
     physicsserver/int/physicsserverint.h
@@ -90,43 +88,6 @@ set(oxygen_LIB_HDRS
     physicsserver/int/transformcolliderint.h
     physicsserver/int/universaljointint.h
     physicsserver/int/worldint.h
-    
-    #ode-specific files
-    physicsserver/ode/odeangularmotor.h
-    physicsserver/ode/odeballjoint.h
-    physicsserver/ode/odebody.h
-    physicsserver/ode/odeboxcollider.h
-    physicsserver/ode/odedynamicbody.h
-    physicsserver/ode/odecapsulecollider.h
-    physicsserver/ode/odecollider.h
-    physicsserver/ode/odecompoundcollider.h
-    physicsserver/ode/odeconcavecollider.h
-    physicsserver/ode/odeconecollider.h
-    physicsserver/ode/odeconetwistjoint.h
-    physicsserver/ode/odecontactjointhandler.h
-    physicsserver/ode/odeconvexcollider.h
-    physicsserver/ode/odecylindercollider.h
-    physicsserver/ode/odeemptycollider.h
-    physicsserver/ode/odefixedjoint.h
-    physicsserver/ode/odegeneric6dofjoint.h
-    physicsserver/ode/odehingejoint.h
-    physicsserver/ode/odehinge2joint.h
-    physicsserver/ode/odeimpfactory.h
-    physicsserver/ode/odejoint.h
-    physicsserver/ode/odephysicsobject.h
-    physicsserver/ode/odephysicsserver.h
-    physicsserver/ode/odeplanecollider.h
-    physicsserver/ode/oderaycollider.h
-    physicsserver/ode/oderigidbody.h
-    physicsserver/ode/odesliderjoint.h
-    physicsserver/ode/odesoftbody.h
-    physicsserver/ode/odespace.h
-    physicsserver/ode/odespherecollider.h
-    physicsserver/ode/odestaticbody.h
-    physicsserver/ode/odetransformcollider.h
-    physicsserver/ode/odeuniversaljoint.h
-    physicsserver/ode/odeworld.h
-    physicsserver/ode/odewrapper.h
     
     #proxyserver/agentproxy.h
     #proxyserver/proxyserver.h
@@ -191,7 +152,6 @@ set(oxygen_LIB_SRCS
     oxygen.cpp
     physicsserver/physicsobject.cpp
     physicsserver/physicsobject_c.cpp
-    physicsserver/impfactory.cpp
     physicsserver/body.cpp
     physicsserver/body_c.cpp
     physicsserver/rigidbody.cpp
@@ -265,43 +225,7 @@ set(oxygen_LIB_SRCS
     physicsserver/hinge2joint.cpp
     physicsserver/hinge2joint_c.cpp
     physicsserver/angularmotor.cpp
-    physicsserver/angularmotor_c.cpp    
-    
-    #ODE-specific files
-    physicsserver/ode/odeangularmotor.cpp
-    physicsserver/ode/odeballjoint.cpp
-    physicsserver/ode/odebody.cpp
-    physicsserver/ode/odeboxcollider.cpp
-    physicsserver/ode/odecapsulecollider.cpp
-    physicsserver/ode/odecollider.cpp
-    physicsserver/ode/odecompoundcollider.cpp
-    physicsserver/ode/odeconcavecollider.cpp
-    physicsserver/ode/odeconecollider.cpp
-    physicsserver/ode/odeconetwistjoint.cpp
-    physicsserver/ode/odecontactjointhandler.cpp
-    physicsserver/ode/odeconvexcollider.cpp
-    physicsserver/ode/odecylindercollider.cpp
-    physicsserver/ode/odedynamicbody.cpp
-    physicsserver/ode/odeemptycollider.cpp
-    physicsserver/ode/odefixedjoint.cpp
-    physicsserver/ode/odegeneric6dofjoint.cpp
-    physicsserver/ode/odehingejoint.cpp
-    physicsserver/ode/odehinge2joint.cpp
-    physicsserver/ode/odeimpfactory.cpp
-    physicsserver/ode/odejoint.cpp
-    physicsserver/ode/odephysicsobject.cpp
-    physicsserver/ode/odephysicsserver.cpp
-    physicsserver/ode/odeplanecollider.cpp
-    physicsserver/ode/oderaycollider.cpp
-    physicsserver/ode/oderigidbody.cpp
-    physicsserver/ode/odesliderjoint.cpp
-    physicsserver/ode/odesoftbody.cpp
-    physicsserver/ode/odespace.cpp
-    physicsserver/ode/odespherecollider.cpp
-    physicsserver/ode/odestaticbody.cpp
-    physicsserver/ode/odetransformcollider.cpp
-    physicsserver/ode/odeuniversaljoint.cpp
-    physicsserver/ode/odeworld.cpp
+    physicsserver/angularmotor_c.cpp
     
     #proxyserver/agentproxy.cpp
     #proxyserver/proxyserver.cpp
@@ -378,7 +302,7 @@ include_directories(${CMAKE_SOURCE_DIR}/lib)
 add_library(oxygen ${oxygen_LIB_SRCS} ${oxygen_LIB_HDRS})
 
 target_link_libraries(oxygen rcssnet3D ${Boost_LIBRARIES}
-    ${ODE_LIBRARY} ${oxygen_require_libs})
+    ${ODE_LIBRARY} ${oxygen_require_libs} odeimps)
 
 set_target_properties(oxygen PROPERTIES VERSION ${OXYGEN_VERSION}
     SOVERSION ${OXYGEN_SO_VERSION} DEBUG_POSTFIX _debug)

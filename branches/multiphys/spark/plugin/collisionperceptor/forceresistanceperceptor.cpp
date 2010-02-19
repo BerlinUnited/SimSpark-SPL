@@ -21,7 +21,7 @@
  */
 
 #include "forceresistanceperceptor.h"
-#include <oxygen/physicsserver/ode/odewrapper.h>
+#include <../plugin/odeimps/odewrapper.h>
 #include <oxygen/sceneserver/transform.h>
 
 using namespace std;

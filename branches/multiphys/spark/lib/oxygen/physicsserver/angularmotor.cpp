@@ -17,10 +17,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
+#include <../plugin/odeimps/odeangularmotor.h>
 #include <oxygen/physicsserver/angularmotor.h>
-#include <oxygen/physicsserver/int/angularmotorint.h>
 #include <oxygen/physicsserver/int/jointint.h>
-#include <oxygen/physicsserver/impfactory.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -31,7 +31,7 @@ boost::shared_ptr<AngularMotorInt> AngularMotor::mAngularMotorImp;
 
 AngularMotor::AngularMotor() : Joint()
 {
-    mAngularMotorImp = ImpFactory::GetInstance()->GetAngularMotorImp();
+    mAngularMotorImp = boost::shared_ptr<ODEAngularMotor>(new ODEAngularMotor());
 }
 
 AngularMotor::~AngularMotor()
@@ -40,6 +40,10 @@ AngularMotor::~AngularMotor()
 
 void AngularMotor::OnLink()
 {
+    //pseudocode
+    //CoreContext core;
+    //mAngularMotorImp = core.get("???/odeangularmotor")
+
     long world = GetWorldID();
     if (world == 0)
         {

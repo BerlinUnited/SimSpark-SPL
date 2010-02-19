@@ -18,9 +18,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/hingejoint.h>
-#include <oxygen/physicsserver/int/hingejointint.h>
+#include <../plugin/odeimps/odehingejoint.h>
 #include <oxygen/physicsserver/int/jointint.h>
-#include <oxygen/physicsserver/impfactory.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -31,7 +30,7 @@ boost::shared_ptr<HingeJointInt> HingeJoint::mHingeJointImp;
 
 HingeJoint::HingeJoint() : Generic6DOFJoint()
 {
-    mHingeJointImp = ImpFactory::GetInstance()->GetHingeJointImp();
+    mHingeJointImp = boost::shared_ptr<ODEHingeJoint>(new ODEHingeJoint());
 }
 
 HingeJoint::~HingeJoint()

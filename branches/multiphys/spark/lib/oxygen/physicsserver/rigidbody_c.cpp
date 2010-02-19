@@ -20,7 +20,8 @@
 */
 
 #include <oxygen/physicsserver/rigidbody.h>
-#include <oxygen/physicsserver/ode/odewrapper.h>
+//TODO: Do not include odewrapper in this file!
+#include <../plugin/odeimps/odewrapper.h>
 
 using namespace boost;
 using namespace oxygen;

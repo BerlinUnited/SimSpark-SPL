@@ -19,16 +19,16 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
+#include <../plugin/odeimps/odeemptycollider.h>
 #include <oxygen/physicsserver/emptycollider.h>
-#include <oxygen/physicsserver/int/emptycolliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
 
 using namespace oxygen;
 
 boost::shared_ptr<EmptyColliderInt> EmptyCollider::mEmptyColliderImp;
 
 EmptyCollider::EmptyCollider() : Collider(){
-    mEmptyColliderImp = ImpFactory::GetInstance()->GetEmptyColliderImp();
+    mEmptyColliderImp = boost::shared_ptr<ODEEmptyCollider>(new ODEEmptyCollider());
 }
 
 EmptyCollider::~EmptyCollider(){

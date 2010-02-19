@@ -20,15 +20,14 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/convexcollider.h>
-#include <oxygen/physicsserver/int/convexcolliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odeconvexcollider.h>
 
 using namespace oxygen;
 
 boost::shared_ptr<ConvexColliderInt> ConvexCollider::mConvexColliderImp;
 
 ConvexCollider::ConvexCollider() : Collider(){
-    mConvexColliderImp = ImpFactory::GetInstance()->GetConvexColliderImp();
+    mConvexColliderImp = boost::shared_ptr<ODEConvexCollider>(new ODEConvexCollider());
 }
 
 ConvexCollider::~ConvexCollider(){

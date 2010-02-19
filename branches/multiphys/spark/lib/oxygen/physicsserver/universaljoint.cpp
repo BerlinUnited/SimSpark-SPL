@@ -18,9 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/universaljoint.h>
-#include <oxygen/physicsserver/int/universaljointint.h>
-#include <oxygen/physicsserver/int/jointint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odeuniversaljoint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -31,7 +29,7 @@ boost::shared_ptr<UniversalJointInt> UniversalJoint::mUniversalJointImp;
 
 UniversalJoint::UniversalJoint() : Generic6DOFJoint()
 {
-    mUniversalJointImp = ImpFactory::GetInstance()->GetUniversalJointImp();
+    mUniversalJointImp = boost::shared_ptr<ODEUniversalJoint>(new ODEUniversalJoint());
 }
 
 UniversalJoint::~UniversalJoint()

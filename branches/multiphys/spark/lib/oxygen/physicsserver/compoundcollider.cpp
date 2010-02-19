@@ -20,15 +20,14 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/compoundcollider.h>
-#include <oxygen/physicsserver/int/compoundcolliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odecompoundcollider.h>
 
 using namespace oxygen;
 
 boost::shared_ptr<CompoundColliderInt> CompoundCollider::mCompoundColliderImp;
 
 CompoundCollider::CompoundCollider() : Collider(){
-    mCompoundColliderImp = ImpFactory::GetInstance()->GetCompoundColliderImp();
+    mCompoundColliderImp = boost::shared_ptr<ODECompoundCollider>(new ODECompoundCollider());;
 }
 
 CompoundCollider::~CompoundCollider(){

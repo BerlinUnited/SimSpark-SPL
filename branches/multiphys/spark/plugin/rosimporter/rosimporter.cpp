@@ -2072,9 +2072,10 @@ void RosImporter::AttachJoint(const JointAttach& ja)
 
             if (ja.axis1.setDeflection)
                 {
-                    hinge->SetParameter(dParamLoStop, ja.axis1.loStop);
-                    hinge->SetParameter(dParamHiStop, ja.axis1.hiStop);
-                    hinge->SetParameter(dParamLoStop, ja.axis1.loStop);
+                    //replaced ODE-specific contants with their numeric values to make this engine-unspecific
+                    hinge->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
+                    hinge->SetParameter(1 /*formerly dParamHiStop*/, ja.axis1.hiStop);
+                    hinge->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
                 }
 
             return;
@@ -2089,16 +2090,18 @@ void RosImporter::AttachJoint(const JointAttach& ja)
 
             if (ja.axis1.setDeflection)
                 {
-                    universal->SetParameter(dParamLoStop, ja.axis1.loStop);
-                    universal->SetParameter(dParamHiStop, ja.axis1.hiStop);
-                    universal->SetParameter(dParamLoStop, ja.axis1.loStop);
+                    //replaced ODE-specific contants with their numeric values to make this engine-unspecific
+                    universal->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
+                    universal->SetParameter(1 /*formerly dParamHiStop*/, ja.axis1.hiStop);
+                    universal->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
                 }
 
             if (ja.axis2.setDeflection)
                 {
-                    universal->SetParameter(dParamLoStop2, ja.axis2.loStop);
-                    universal->SetParameter(dParamHiStop2, ja.axis2.hiStop);
-                    universal->SetParameter(dParamLoStop2, ja.axis2.loStop);
+                    //replaced ODE-specific contants with their numeric values to make this engine-unspecific
+                    universal->SetParameter(256 /*formerly dParamLoStop2*/, ja.axis2.loStop);
+                    universal->SetParameter(257 /*formerly dParamHiStop2*/, ja.axis2.hiStop);
+                    universal->SetParameter(256 /*formerly dParamLoStop2*/, ja.axis2.loStop);
                 }
 
             return;

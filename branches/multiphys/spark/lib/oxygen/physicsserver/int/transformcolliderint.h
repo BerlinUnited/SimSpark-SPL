@@ -23,7 +23,6 @@
 #ifndef OXYGEN_TRANSFORMCOLLIDERINT_H
 #define OXYGEN_TRANSFORMCOLLIDERINT_H
 
-#include <oxygen/physicsserver/ode/odewrapper.h>
 #include <oxygen/oxygen_defines.h>
 #include <set>
 #include <string>

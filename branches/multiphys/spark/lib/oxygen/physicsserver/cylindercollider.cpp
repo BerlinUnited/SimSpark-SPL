@@ -20,15 +20,14 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/cylindercollider.h>
-#include <oxygen/physicsserver/int/cylindercolliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odecylindercollider.h>
 
 using namespace oxygen;
 
 boost::shared_ptr<CylinderColliderInt> CylinderCollider::mCylinderColliderImp;
 
 CylinderCollider::CylinderCollider() : ConvexCollider(){
-    mCylinderColliderImp = ImpFactory::GetInstance()->GetCylinderColliderImp();
+    mCylinderColliderImp = boost::shared_ptr<ODECylinderCollider>(new ODECylinderCollider());
 }
 
 CylinderCollider::~CylinderCollider(){

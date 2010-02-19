@@ -20,15 +20,14 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/softbody.h>
-#include <oxygen/physicsserver/int/softbodyint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odesoftbody.h>
 
 using namespace oxygen;
 
 boost::shared_ptr<SoftBodyInt> SoftBody::mSoftBodyImp;
 
 SoftBody::SoftBody() : Body(){
-    mSoftBodyImp = ImpFactory::GetInstance()->GetSoftBodyImp();
+    mSoftBodyImp = boost::shared_ptr<ODESoftBody>(new ODESoftBody());
 }
 
 SoftBody::~SoftBody(){

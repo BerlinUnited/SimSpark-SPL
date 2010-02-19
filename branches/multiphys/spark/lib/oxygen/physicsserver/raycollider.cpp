@@ -19,8 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/int/raycolliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/oderaycollider.h>
 #include <oxygen/physicsserver/raycollider.h>
 
 using namespace oxygen;
@@ -29,7 +28,7 @@ boost::shared_ptr<RayColliderInt> RayCollider::mRayColliderImp;
 
 RayCollider::RayCollider() : Collider()
 {
-    mRayColliderImp = ImpFactory::GetInstance()->GetRayColliderImp();
+    mRayColliderImp = boost::shared_ptr<ODERayCollider>(new ODERayCollider());
 }
 
 void RayCollider::SetParams(salt::Vector3f pos,

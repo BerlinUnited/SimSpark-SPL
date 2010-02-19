@@ -20,8 +20,7 @@
 */
 
 #include <oxygen/physicsserver/capsulecollider.h>
-#include <oxygen/physicsserver/int/capsulecolliderint.h>
-#include <oxygen/physicsserver/impfactory.h>
+#include <../plugin/odeimps/odecapsulecollider.h>
 
 using namespace oxygen;
 using namespace salt;
@@ -30,7 +29,7 @@ boost::shared_ptr<CapsuleColliderInt> CapsuleCollider::mCapsuleColliderImp;
 
 CapsuleCollider::CapsuleCollider() : ConvexCollider()
 {
-    mCapsuleColliderImp = ImpFactory::GetInstance()->GetCapsuleColliderImp();
+    mCapsuleColliderImp = boost::shared_ptr<ODECapsuleCollider>(new ODECapsuleCollider());
 }
 
 void CapsuleCollider::SetParams(float radius, float length)
