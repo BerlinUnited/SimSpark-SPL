@@ -25,10 +25,12 @@
 #include "odebody.h"
 #include <oxygen/physicsserver/int/dynamicbodyint.h>
 
-class ODEDynamicBody : public oxygen::DynamicBodyInt, public ODEBody
+class DynamicBodyImp : public oxygen::DynamicBodyInt, public BodyImp
 {
 public:
-    ODEDynamicBody();
+    DynamicBodyImp();
 };
+
+DECLARE_CLASS(DynamicBodyImp);
 
 #endif //ODEDYNAMICBODY_H

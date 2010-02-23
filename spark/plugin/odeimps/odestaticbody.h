@@ -25,10 +25,12 @@
 #include "odebody.h"
 #include <oxygen/physicsserver/int/staticbodyint.h>
 
-class ODEStaticBody : public oxygen::StaticBodyInt, public ODEBody
+class StaticBodyImp : public oxygen::StaticBodyInt, public BodyImp
 {
 public:
-    ODEStaticBody();
+    StaticBodyImp();
 };
+
+DECLARE_CLASS(StaticBodyImp);
 
 #endif //ODESTATICBODY_H

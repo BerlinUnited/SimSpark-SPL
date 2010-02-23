@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODEDynamicBody::ODEDynamicBody() : ODEBody(){
+DynamicBodyImp::DynamicBodyImp() : BodyImp(){
 
 }

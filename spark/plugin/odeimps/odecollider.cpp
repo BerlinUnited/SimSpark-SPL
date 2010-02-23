@@ -27,20 +27,20 @@ using namespace salt;
 using namespace boost;
 using namespace std;
 
-ODECollider::ODECollider() : ODEPhysicsObject()
+ColliderImp::ColliderImp() : PhysicsObjectImp()
 {
 }
 
-ODECollider::~ODECollider()
+ColliderImp::~ColliderImp()
 {
 }
 
-Collider* ODECollider::GetColliderPointer(long geomID){
+Collider* ColliderImp::GetColliderPointer(long geomID){
     dGeomID ODEGeom = (dGeomID) geomID;
     return static_cast<Collider*>(dGeomGetData(ODEGeom));
 }
 
-void ODECollider::SetRotation(const Matrix& rot, long geomID)
+void ColliderImp::SetRotation(const Matrix& rot, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dMatrix3 ODEMatrix;
@@ -49,32 +49,32 @@ void ODECollider::SetRotation(const Matrix& rot, long geomID)
     dGeomSetRotation(ODEGeom, ODEMatrix);
 }
 
-void ODECollider::SetPosition(const Vector3f& globalPos, long geomID)
+void ColliderImp::SetPosition(const Vector3f& globalPos, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomSetPosition (ODEGeom, globalPos[0], globalPos[1], globalPos[2]);
 }
 
-void ODECollider::SetLocalPosition(const Vector3f& pos, long geomID)
+void ColliderImp::SetLocalPosition(const Vector3f& pos, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomSetPosition (ODEGeom, pos[0], pos[1], pos[2]);
 }
 
-Vector3f ODECollider::GetPosition(long geomID) const
+Vector3f ColliderImp::GetPosition(long geomID) const
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     const dReal* pos = dGeomGetPosition(ODEGeom);
     return Vector3f(pos[0],pos[1],pos[2]);
 }
 
-long ODECollider::GetParentSpaceID(long geomID)
+long ColliderImp::GetParentSpaceID(long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     return (long) dGeomGetSpace(ODEGeom);
 }
 
-bool ODECollider::Intersect(boost::shared_ptr<Collider> collider, long geomID)
+bool ColliderImp::Intersect(boost::shared_ptr<Collider> collider, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dContactGeom contact;
@@ -88,19 +88,19 @@ bool ODECollider::Intersect(boost::shared_ptr<Collider> collider, long geomID)
          ) > 0;
 }
 
-void ODECollider::DestroyGeom(long geomID)
+void ColliderImp::DestroyGeom(long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomDestroy(ODEGeom);
 }
 
-void ODECollider::TransformSetGeom(long parentGeomID, long geomID){
+void ColliderImp::TransformSetGeom(long parentGeomID, long geomID){
     dGeomID parentODEGeom = (dGeomID) parentGeomID;
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomTransformSetGeom(parentODEGeom, ODEGeom);
 }
 
-void ODECollider::SetSpace(long spaceID, long geomID, Collider* collider){
+void ColliderImp::SetSpace(long spaceID, long geomID, Collider* collider){
     dSpaceID ODESpace = (dSpaceID) spaceID;
     dGeomID ODEGeom = (dGeomID) geomID;
     
@@ -111,13 +111,13 @@ void ODECollider::SetSpace(long spaceID, long geomID, Collider* collider){
     dSpaceAdd(ODESpace, ODEGeom);
 }
 
-void ODECollider::SetBody(long bodyID, long geomID){
+void ColliderImp::SetBody(long bodyID, long geomID){
     dBodyID ODEBody = (dBodyID) bodyID;
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomSetBody(ODEGeom, ODEBody);
 }
 
-void ODECollider::RemoveFromSpace(long geomID, long spaceID){
+void ColliderImp::RemoveFromSpace(long geomID, long spaceID){
     dGeomID ODEGeom = (dGeomID) geomID;
     dSpaceID ODESpace = (dSpaceID) spaceID;
     dSpaceRemove(ODESpace, ODEGeom);

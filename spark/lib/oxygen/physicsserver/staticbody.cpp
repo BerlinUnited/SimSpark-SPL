@@ -27,7 +27,7 @@ using namespace oxygen;
 boost::shared_ptr<StaticBodyInt> StaticBody::mStaticBodyImp;
 
 StaticBody::StaticBody() : Body(){
-    mStaticBodyImp = boost::shared_ptr<ODEStaticBody>(new ODEStaticBody());
+    mStaticBodyImp = boost::shared_ptr<StaticBodyImp>(new StaticBodyImp());
 }
 
 StaticBody::~StaticBody(){

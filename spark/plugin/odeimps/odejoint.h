@@ -26,12 +26,12 @@
 #include <oxygen/physicsserver/genericphysicsobjects.h>
 #include <oxygen/physicsserver/int/jointint.h>
 
-class ODEJoint : public oxygen::JointInt, public ODEPhysicsObject
+class JointImp : public oxygen::JointInt, public PhysicsObjectImp
 {
     /** See physicsserver/int/jointint.h for documentation */
 
 public:
-    ODEJoint();
+    JointImp();
 
     oxygen::Joint* GetJoint(long jointID);
     bool AreConnected(long bodyID1, long bodyID2);
@@ -80,5 +80,7 @@ public:
     float GetParameter(int parameter, long jointID) const;
     void OnLink(long jointID, oxygen::Joint* joint);
 };
+
+DECLARE_CLASS(JointImp);
 
 #endif //ODEJOINT_H

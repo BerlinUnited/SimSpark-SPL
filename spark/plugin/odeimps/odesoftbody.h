@@ -25,10 +25,12 @@
 #include "odebody.h"
 #include <oxygen/physicsserver/int/softbodyint.h>
 
-class ODESoftBody : public oxygen::SoftBodyInt, public ODEBody
+class SoftBodyImp : public oxygen::SoftBodyInt, public BodyImp
 {
 public:
-    ODESoftBody();
+    SoftBodyImp();
 };
+
+DECLARE_CLASS(SoftBodyImp);
 
 #endif //ODESOFTBODY_H

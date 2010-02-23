@@ -21,12 +21,15 @@
 
 #include "odephysicsserver.h"
 
-using namespace oxygen;
+PhysicsServerImp::PhysicsServerImp(){
 
-ODEPhysicsServer::ODEPhysicsServer(){
-    dInitODE();
 }
 
-ODEPhysicsServer::~ODEPhysicsServer(){
+PhysicsServerImp::~PhysicsServerImp(){
     dCloseODE();
+}
+
+void PhysicsServerImp::InitEngine()
+{
+    dInitODE();    
 }

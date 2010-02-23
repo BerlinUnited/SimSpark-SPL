@@ -45,6 +45,8 @@ public:
     PhysicsServer();
     virtual ~PhysicsServer(){};
     
+    virtual void OnLink();
+    
     /** Resets the active space and active world */
     void ResetCache();
     
@@ -59,9 +61,6 @@ public:
     
     /** Creates a new Box and adds it to the SceneGraph */
     void SetUpBox(boost::shared_ptr<RigidBody> body, std::string name);
-    
-    /** Used for debugging */
-    void ConfirmExistence(); 
     
 private:
     static boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;

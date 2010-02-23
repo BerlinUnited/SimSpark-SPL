@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODEConcaveCollider::ODEConcaveCollider() : ODECollider(){
+ConcaveColliderImp::ConcaveColliderImp() : ColliderImp(){
 
 }

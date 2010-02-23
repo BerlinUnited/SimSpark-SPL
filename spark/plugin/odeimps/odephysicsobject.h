@@ -26,15 +26,18 @@
 #include "odewrapper.h"
 #include <oxygen/physicsserver/int/physicsobjectint.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
+#include <oxygen/sceneserver/basenode.h>
 
-class ODEPhysicsObject : public oxygen::PhysicsObjectInt
+class PhysicsObjectImp : public oxygen::PhysicsObjectInt, public oxygen::BaseNode
 {
     /** See physicsserver/int/physicsobjectint.h for documentation */
 
 public:
-    ODEPhysicsObject();
+    PhysicsObjectImp();
     void ConvertRotationMatrix(const salt::Matrix& rot, oxygen::GenericPhysicsMatrix& matrix);
     void ConvertRotationMatrix(const oxygen::GenericPhysicsMatrix* matrix, salt::Matrix& rot) const;
 };
+
+DECLARE_CLASS(PhysicsObjectImp);
 
 #endif //ODEPHYSICSOBJECT_H

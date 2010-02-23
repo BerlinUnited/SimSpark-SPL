@@ -22,28 +22,28 @@
 using namespace oxygen;
 using namespace salt;
 
-ODEAngularMotor::ODEAngularMotor() : ODEJoint()
+AngularMotorImp::AngularMotorImp() : JointImp()
 {
 
 }
 
-long ODEAngularMotor::CreateAngularMotor(long worldID){
+long AngularMotorImp::CreateAngularMotor(long worldID){
     dWorldID ODEWorld = (dWorldID) worldID;
     dJointID ODEJoint = dJointCreateAMotor(ODEWorld, 0);
     return (long) ODEJoint;
 }
 
-void ODEAngularMotor::SetModeUserMode(long jointID){
+void AngularMotorImp::SetModeUserMode(long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetAMotorMode(ODEJoint, dAMotorUser);
 }
 
-void ODEAngularMotor::SetModeEulerMode(long jointID){
+void AngularMotorImp::SetModeEulerMode(long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetAMotorMode(ODEJoint, dAMotorEuler);
 }
 
-int ODEAngularMotor::GetMode(long jointID){
+int AngularMotorImp::GetMode(long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     int motorMode = dJointGetAMotorMode(ODEJoint);
     if (motorMode = dAMotorUser) 
@@ -52,48 +52,48 @@ int ODEAngularMotor::GetMode(long jointID){
     return 1; 
 }
 
-void ODEAngularMotor::SetNumAxes(int num, long jointID){
+void AngularMotorImp::SetNumAxes(int num, long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetAMotorNumAxes(ODEJoint, num);
 }
 
-int ODEAngularMotor::GetNumAxes(long jointID){
+int AngularMotorImp::GetNumAxes(long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     return dJointGetAMotorNumAxes(ODEJoint);
 }
 
-void ODEAngularMotor::SetMotorAxis(int idx, int anchor, Vector3f axis, long jointID){
+void AngularMotorImp::SetMotorAxis(int idx, int anchor, Vector3f axis, long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     
     dJointSetAMotorAxis (ODEJoint, idx, anchor,
                         axis[0], axis[1], axis[2]);
 }
 
-int ODEAngularMotor::GetAxisAnchor(int idx, long jointID){
+int AngularMotorImp::GetAxisAnchor(int idx, long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     return dJointGetAMotorAxisRel(ODEJoint, idx);
 }
 
-Vector3f ODEAngularMotor::GetMotorAxis(int idx, long jointID){
+Vector3f AngularMotorImp::GetMotorAxis(int idx, long jointID){
     dJointID ODEJoint = (dJointID) jointID;
     dVector3 dAxis;
     dJointGetAMotorAxis(ODEJoint,idx,dAxis);
     return Vector3f(dAxis[0],dAxis[1],dAxis[2]);
 }
 
-void ODEAngularMotor::SetAxisAngle(int idx, float degAngle, long jointID)
+void AngularMotorImp::SetAxisAngle(int idx, float degAngle, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetAMotorAngle(ODEJoint, idx, gDegToRad(degAngle));
 }
 
-float ODEAngularMotor::GetAxisAngle(int idx, long jointID)
+float AngularMotorImp::GetAxisAngle(int idx, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetAMotorAngle(ODEJoint, idx));
 }
 
-float ODEAngularMotor::GetAxisAngleRate(int idx, long jointID)
+float AngularMotorImp::GetAxisAngleRate(int idx, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetAMotorAngleRate(ODEJoint,idx));

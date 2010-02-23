@@ -27,7 +27,7 @@ using namespace oxygen;
 boost::shared_ptr<SoftBodyInt> SoftBody::mSoftBodyImp;
 
 SoftBody::SoftBody() : Body(){
-    mSoftBodyImp = boost::shared_ptr<ODESoftBody>(new ODESoftBody());
+    mSoftBodyImp = boost::shared_ptr<SoftBodyImp>(new SoftBodyImp());
 }
 
 SoftBody::~SoftBody(){

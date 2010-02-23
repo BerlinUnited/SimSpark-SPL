@@ -25,10 +25,12 @@
 #include "odecollider.h"
 #include <oxygen/physicsserver/int/convexcolliderint.h>
 
-class ODEConvexCollider : public oxygen::ConvexColliderInt, public ODECollider
+class ConvexColliderImp : public oxygen::ConvexColliderInt, public ColliderImp
 {
 public:
-    ODEConvexCollider();
+    ConvexColliderImp();
 };
+
+DECLARE_CLASS(ConvexColliderImp);
 
 #endif //ODECONVEXCOLLIDER_H

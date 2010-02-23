@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODEEmptyCollider::ODEEmptyCollider() : ODECollider(){
+EmptyColliderImp::EmptyColliderImp() : ColliderImp(){
 
 }

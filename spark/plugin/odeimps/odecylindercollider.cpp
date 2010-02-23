@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODECylinderCollider::ODECylinderCollider() : ODEConvexCollider(){
+CylinderColliderImp::CylinderColliderImp() : ConvexColliderImp(){
 
 }

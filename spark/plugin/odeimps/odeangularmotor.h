@@ -26,7 +26,7 @@
 #include <oxygen/physicsserver/int/angularmotorint.h>
 #include "odejoint.h"
 
-class ODEAngularMotor : public oxygen::AngularMotorInt, public ODEJoint{
+class AngularMotorImp : public oxygen::AngularMotorInt, public JointImp{
 
 /** An angular motor allows the relative angular velocities of two
     bodies to be controlled. The angular velocity can be controlled on
@@ -37,7 +37,7 @@ class ODEAngularMotor : public oxygen::AngularMotorInt, public ODEJoint{
 */
 
 public:
-    ODEAngularMotor();
+    AngularMotorImp();
     long CreateAngularMotor(long worldID);
     void SetModeUserMode(long jointID);
     void SetModeEulerMode(long jointID);
@@ -51,5 +51,7 @@ public:
     float GetAxisAngle(int idx, long jointID);
     float GetAxisAngleRate(int idx, long jointID);
 };
+
+DECLARE_CLASS(AngularMotorImp);
 
 #endif //ODEANGULARMOTOR_H

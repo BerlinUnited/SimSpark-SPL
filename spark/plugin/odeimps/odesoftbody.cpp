@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODESoftBody::ODESoftBody() : ODEBody(){
+SoftBodyImp::SoftBodyImp() : BodyImp(){
 
 }

@@ -26,7 +26,7 @@
 #include "odecollider.h"
 #include <oxygen/physicsserver/int/transformcolliderint.h>
 
-class ODETransformCollider : public oxygen::TransformColliderInt, public ODECollider
+class TransformColliderImp : public oxygen::TransformColliderInt, public ColliderImp
 {
     /** TransformCollider encapsulates a transform geometry object
     that encapsulates another geom. It allows the encapsulated geom to
@@ -47,9 +47,11 @@ class ODETransformCollider : public oxygen::TransformColliderInt, public ODEColl
 */
 
 public:    
-    ODETransformCollider();
+    TransformColliderImp();
     void SetColliderParameters(int cleanup, int info, long geomID);
     long CreateTransformCollider();
 };
+
+DECLARE_CLASS(TransformColliderImp);
 
 #endif //ODECOLLIDER_H

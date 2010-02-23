@@ -20,7 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/odebody.h>
+#include <oxygen/physicsserver/int/bodyint.h>
 #include <oxygen/physicsserver/body.h>
 
 using namespace oxygen;
@@ -28,12 +28,21 @@ using namespace boost;
 
 boost::shared_ptr<BodyInt> Body::mBodyImp;
 
-Body::Body() : PhysicsObject(), mBodyID(0), mMassTransformed(false),
-                                            mMassTrans(0,0,0)
+Body::Body() : PhysicsObject(), mBodyID(0), 
+                                mMassTransformed(false),
+                                mMassTrans(0,0,0)
 {
-    mBodyImp = shared_ptr<ODEBody>(new ODEBody());
+
 }
 
-Body::~Body(){
+Body::~Body()
+{
 
+}
+
+void Body::OnLink()
+{
+    if (mBodyImp.get() == 0)
+        mBodyImp = shared_dynamic_cast<BodyInt>
+            (GetCore()->New("BodyImp"));
 }

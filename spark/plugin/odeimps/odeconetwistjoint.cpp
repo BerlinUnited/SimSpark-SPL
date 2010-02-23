@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODEConeTwistJoint::ODEConeTwistJoint() : ODEGeneric6DOFJoint(){
+ConeTwistJointImp::ConeTwistJointImp() : Generic6DOFJointImp(){
 
 }

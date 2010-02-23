@@ -26,7 +26,7 @@
 #include "odeconvexcollider.h"
 #include <oxygen/physicsserver/int/capsulecolliderint.h>
 
-class ODECapsuleCollider : public oxygen::CapsuleColliderInt, public ODEConvexCollider
+class CapsuleColliderImp : public oxygen::CapsuleColliderInt, public ConvexColliderImp
 {
 public:
     /** CapsuleCollider encapsulates a capsule geometry
@@ -37,7 +37,7 @@ public:
         See physicsserver/int/capsulecolliderint.h for documentation 
     */
 
-    ODECapsuleCollider();
+    CapsuleColliderImp();
 
     void SetParams(float radius, float length, long geomID);
     void SetRadius(float radius, long geomID);
@@ -48,5 +48,7 @@ public:
     float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreateCapsule();
 };
+
+DECLARE_CLASS(CapsuleColliderImp);
 
 #endif //ODECAPSULECOLLIDER_H

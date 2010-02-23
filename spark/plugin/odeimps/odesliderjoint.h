@@ -28,16 +28,18 @@
 
 class RigidBody;
 
-class ODESliderJoint : public oxygen::SliderJointInt, public ODEGeneric6DOFJoint
+class SliderJointImp : public oxygen::SliderJointInt, public Generic6DOFJointImp
 { 
     /** See physicsserver/int/sliderjointint.h for documentation. */
     
 public:
-    ODESliderJoint();
+    SliderJointImp();
     long CreateSliderJoint(long world);
     float GetPosition(long jointID);
     float GetPositionRate(long jointID);
     void SetSliderAxis(salt::Vector3f& up, long jointID);
 };
+
+DECLARE_CLASS(SliderJointImp);
 
 #endif //SLIDERJOINTINT_H

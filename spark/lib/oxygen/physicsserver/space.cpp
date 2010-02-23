@@ -35,7 +35,7 @@ Space::TSpaceIdSet Space::gDisabledInnerCollisionSet;
 
 Space::Space() : PhysicsObject(), mSpaceID(0)
 {
-    mSpaceImp = boost::shared_ptr<ODESpace>(new ODESpace());
+    mSpaceImp = boost::shared_ptr<SpaceInt>(new SpaceImp());
 }
 
 Space::~Space()

@@ -36,12 +36,14 @@
     See physicsserver/int/raycolliderint.h for documentation.
 */
 
-class ODERayCollider : public oxygen::RayColliderInt, public ODECollider
+class RayColliderImp : public oxygen::RayColliderInt, public ColliderImp
 {
 public:
-    ODERayCollider();
+    RayColliderImp();
     void SetParams(salt::Vector3f pos, salt::Vector3f dir, float length, long geomID);
     long CreateRay();
 };
+
+DECLARE_CLASS(RayColliderImp);
 
 #endif //ODERAYCOLLIDER_H

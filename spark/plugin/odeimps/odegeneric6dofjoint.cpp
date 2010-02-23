@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODEGeneric6DOFJoint::ODEGeneric6DOFJoint() : ODEJoint(){
+Generic6DOFJointImp::Generic6DOFJointImp() : JointImp(){
 
 }

@@ -24,18 +24,18 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-ODEHinge2Joint::ODEHinge2Joint() : ODEGeneric6DOFJoint()
+Hinge2JointImp::Hinge2JointImp() : Generic6DOFJointImp()
 {
 }
 
-long ODEHinge2Joint::CreateHinge2Joint(long worldID)
+long Hinge2JointImp::CreateHinge2Joint(long worldID)
 {
     dWorldID ODEWorld = (dWorldID) worldID;
     dJointID ODEJoint = dJointCreateHinge2(ODEWorld, 0);
     return (long) ODEJoint;
 }
 
-void ODEHinge2Joint::SetAnchor(const Vector3f& gAnchor,
+void Hinge2JointImp::SetAnchor(const Vector3f& gAnchor,
                             const Vector3f& up,
                             const Vector3f& right,
                             long jointID)
@@ -46,7 +46,7 @@ void ODEHinge2Joint::SetAnchor(const Vector3f& gAnchor,
     dJointSetHinge2Axis2(ODEJoint,right[0],right[1],right[2]);
 }
 
-Vector3f ODEHinge2Joint::GetAnchor1(long jointID)
+Vector3f Hinge2JointImp::GetAnchor1(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
@@ -55,7 +55,7 @@ Vector3f ODEHinge2Joint::GetAnchor1(long jointID)
     return pos;
 }
 
-Vector3f ODEHinge2Joint::GetAnchor2(long jointID)
+Vector3f Hinge2JointImp::GetAnchor2(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
@@ -64,19 +64,19 @@ Vector3f ODEHinge2Joint::GetAnchor2(long jointID)
     return pos;
 }
 
-float ODEHinge2Joint::GetAngle(long jointID)
+float Hinge2JointImp::GetAngle(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHinge2Angle1(ODEJoint));
 }
 
-float ODEHinge2Joint::GetAngleRate1(long jointID)
+float Hinge2JointImp::GetAngleRate1(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHinge2Angle1Rate(ODEJoint));
 }
 
-float ODEHinge2Joint::GetAngleRate2(long jointID)
+float Hinge2JointImp::GetAngleRate2(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHinge2Angle2Rate(ODEJoint));

@@ -27,7 +27,7 @@ using namespace oxygen;
 boost::shared_ptr<ConcaveColliderInt> ConcaveCollider::mConcaveColliderImp;
 
 ConcaveCollider::ConcaveCollider() : Collider(){
-    mConcaveColliderImp = boost::shared_ptr<ODEConcaveCollider>(new ODEConcaveCollider());
+    mConcaveColliderImp = boost::shared_ptr<ConcaveColliderImp>(new ConcaveColliderImp());
 }
 
 ConcaveCollider::~ConcaveCollider(){

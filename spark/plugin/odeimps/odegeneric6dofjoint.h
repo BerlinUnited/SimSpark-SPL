@@ -25,10 +25,12 @@
 #include "odejoint.h"
 #include <oxygen/physicsserver/int/generic6dofjointint.h>
 
-class ODEGeneric6DOFJoint : public oxygen::Generic6DOFJointInt, public ODEJoint
+class Generic6DOFJointImp : public oxygen::Generic6DOFJointInt, public JointImp
 {
 public:
-    ODEGeneric6DOFJoint();
+    Generic6DOFJointImp();
 };
+
+DECLARE_CLASS(Generic6DOFJointImp);
 
 #endif //ODEGENERIC6DOFJOINT_H

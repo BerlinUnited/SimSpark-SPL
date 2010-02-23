@@ -554,6 +554,11 @@ end
 
 print "(spark.rb) setup\n"
 
+#import the implementations of the desired physics engine
+#currently supported: odeimps (uses Open Dynamics Engine)
+importBundle 'odeimps'
+print "(spark.rb) using ODE, to change the physics engine go to line 559 in spark.rb\n"
+
 #
 # set up logging
 logServer = get($serverPath+'log')
@@ -628,4 +633,5 @@ importBundle "collisionperceptor"
 #
 importBundle "accelerometer"
 
+#
 importBundle "agentsynceffector"

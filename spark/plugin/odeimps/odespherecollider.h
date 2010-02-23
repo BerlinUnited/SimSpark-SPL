@@ -25,18 +25,20 @@
 #include "odeconvexcollider.h"
 #include <oxygen/physicsserver/int/spherecolliderint.h>
 
-class ODESphereCollider : public oxygen::SphereColliderInt, public ODEConvexCollider
+class SphereColliderImp : public oxygen::SphereColliderInt, public ConvexColliderImp
 {
 /** SphereCollider encapsulates a sphere geometry object.
 
     See physicsserver/int/spherecolliderint.h for documentation.
  */
 public:
-    ODESphereCollider();
+    SphereColliderImp();
     void SetRadius(float r, long geomID);
     float GetRadius(long geomID) const;
     float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreateSphere();
 };
+
+DECLARE_CLASS(SphereColliderImp);
 
 #endif //ODESPHERECOLLIDER_H

@@ -25,7 +25,7 @@
 #include "odephysicsobject.h"
 #include <oxygen/physicsserver/int/spaceint.h>
 
-class ODESpace : public oxygen::SpaceInt, public ODEPhysicsObject
+class SpaceImp : public oxygen::SpaceInt, public PhysicsObjectImp
 {
 
 /** Space encapsulates an ODE space object. A space is a non-placeable
@@ -37,7 +37,7 @@ class ODESpace : public oxygen::SpaceInt, public ODEPhysicsObject
 */
 
 public:
-    ODESpace();
+    SpaceImp();
     long CreateSpace(long spaceID);
     void DestroySpace(long contactGroup, long spaceID);
     long GetParentSpaceID(long spaceID);
@@ -56,5 +56,7 @@ public:
 private:
     static void collisionNearCallback(void* data, dGeomID obj1, dGeomID obj2);
 };
+
+DECLARE_CLASS(SpaceImp);
 
 #endif //ODESPACE_H

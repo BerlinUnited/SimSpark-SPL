@@ -24,24 +24,24 @@
 using namespace oxygen;
 using namespace salt;
 
-ODEPlaneCollider::ODEPlaneCollider() : ODECollider()
+PlaneColliderImp::PlaneColliderImp() : ColliderImp()
 {
 }
 
-void ODEPlaneCollider::SetPlaneParams(float a, float b, float c, float d, long geomID)
+void PlaneColliderImp::SetPlaneParams(float a, float b, float c, float d, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomPlaneSetParams(ODEGeom, a, b, c, d);
 }
 
-long ODEPlaneCollider::CreatePlane()
+long PlaneColliderImp::CreatePlane()
 {
     // a plane with normal pointing up, going through the origin
    dGeomID ODEGeom = dCreatePlane(0, 0, 1, 0, 0);
    return (long) ODEGeom;
 }
 
-void ODEPlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal, long geomID)
+void PlaneColliderImp::SetParams(const salt::Vector3f& pos, salt::Vector3f normal, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     normal.Normalize();
@@ -49,7 +49,7 @@ void ODEPlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f norma
     dGeomPlaneSetParams(ODEGeom, normal.x(), normal.y(), normal.z(), d);
 }
 
-float ODEPlaneCollider::GetPointDepth(const Vector3f& pos, long geomID)
+float PlaneColliderImp::GetPointDepth(const Vector3f& pos, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     return dGeomPlanePointDepth

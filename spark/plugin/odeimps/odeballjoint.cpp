@@ -23,24 +23,24 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-ODEBallJoint::ODEBallJoint() : ODEGeneric6DOFJoint()
+BallJointImp::BallJointImp() : Generic6DOFJointImp()
 {
 }
 
-long ODEBallJoint::CreateBallJoint(long worldID)
+long BallJointImp::CreateBallJoint(long worldID)
 {
     dWorldID ODEWorld = (dWorldID) worldID;
     dJointID ODEJoint = dJointCreateBall(ODEWorld, 0);
     return (long) ODEJoint;
 }
 
-void ODEBallJoint::SetAnchor(const Vector3f& gAnchor, long jointID)
+void BallJointImp::SetAnchor(const Vector3f& gAnchor, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetBallAnchor (ODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 }
 
-Vector3f ODEBallJoint::GetAnchor1(long jointID)
+Vector3f BallJointImp::GetAnchor1(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
@@ -50,7 +50,7 @@ Vector3f ODEBallJoint::GetAnchor1(long jointID)
     return pos;
 }
 
-Vector3f ODEBallJoint::GetAnchor2(long jointID)
+Vector3f BallJointImp::GetAnchor2(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];

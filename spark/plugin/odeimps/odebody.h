@@ -25,10 +25,12 @@
 #include "odephysicsobject.h"
 #include <oxygen/physicsserver/int/bodyint.h>
 
-class ODEBody : public oxygen::BodyInt, public ODEPhysicsObject
+class BodyImp : public oxygen::BodyInt, public PhysicsObjectImp
 {
 public:
-    ODEBody();
+    BodyImp();
 };
+
+DECLARE_CLASS(BodyImp);
 
 #endif //ODEBODY_H

@@ -25,11 +25,13 @@
 #include "odegeneric6dofjoint.h"
 #include <oxygen/physicsserver/int/conetwistjointint.h>
 
-class ODEConeTwistJoint : public oxygen::ConeTwistJointInt, public ODEGeneric6DOFJoint
+class ConeTwistJointImp : public oxygen::ConeTwistJointInt, public Generic6DOFJointImp
 {
 
 public:
-    ODEConeTwistJoint();
+    ConeTwistJointImp();
 };
+
+DECLARE_CLASS(ConeTwistJointImp);
 
 #endif //ODECONETWISTJOINT_H

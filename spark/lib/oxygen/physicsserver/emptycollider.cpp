@@ -28,7 +28,7 @@ using namespace oxygen;
 boost::shared_ptr<EmptyColliderInt> EmptyCollider::mEmptyColliderImp;
 
 EmptyCollider::EmptyCollider() : Collider(){
-    mEmptyColliderImp = boost::shared_ptr<ODEEmptyCollider>(new ODEEmptyCollider());
+    mEmptyColliderImp = boost::shared_ptr<EmptyColliderImp>(new EmptyColliderImp());
 }
 
 EmptyCollider::~EmptyCollider(){

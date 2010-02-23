@@ -25,12 +25,17 @@
 
 #include "odewrapper.h"
 #include <oxygen/physicsserver/int/physicsserverint.h>
+#include <oxygen/sceneserver/basenode.h>
 
-class ODEPhysicsServer : public oxygen::PhysicsServerInt
+class PhysicsServerImp : public oxygen::PhysicsServerInt, public oxygen::BaseNode
 {
 public:
-    ODEPhysicsServer();
-    virtual ~ODEPhysicsServer();
+    PhysicsServerImp();
+    virtual ~PhysicsServerImp();
+    
+    void InitEngine();
 };
+
+DECLARE_CLASS(PhysicsServerImp);
 
 #endif //ODEPHYSICSSERVER_H

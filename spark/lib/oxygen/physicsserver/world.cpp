@@ -32,7 +32,7 @@ boost::shared_ptr<WorldInt> World::mWorldImp;
 
 World::World() : PhysicsObject()
 {
-    mWorldImp = boost::shared_ptr<ODEWorld>(new ODEWorld());
+    mWorldImp = boost::shared_ptr<WorldInt>(new WorldImp());
 }
 
 World::~World()

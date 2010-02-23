@@ -30,7 +30,7 @@ boost::shared_ptr<TransformColliderInt> TransformCollider::mTransformColliderImp
 
 TransformCollider::TransformCollider() : Collider()
 {
-    mTransformColliderImp = boost::shared_ptr<ODETransformCollider>(new ODETransformCollider());
+    mTransformColliderImp = boost::shared_ptr<TransformColliderImp>(new TransformColliderImp());
 }
 
 bool TransformCollider::ConstructInternal()

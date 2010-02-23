@@ -23,13 +23,15 @@
 #include "odegeneric6dofjoint.h"
 #include <oxygen/physicsserver/int/fixedjointint.h>
 
-class ODEFixedJoint : public oxygen::FixedJointInt, public ODEGeneric6DOFJoint{
+class FixedJointImp : public oxygen::FixedJointInt, public Generic6DOFJointImp{
     
     /* See physicsserver/int/fixedjointint.h for documentation */
 public:    
-    ODEFixedJoint();
+    FixedJointImp();
     long CreateFixedJoint(long world);
     void SetFixed(long jointID);
 };
+
+DECLARE_CLASS(FixedJointImp);
 
 #endif //ODEFIXEDJOINT_H

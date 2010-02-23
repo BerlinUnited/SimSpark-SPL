@@ -24,12 +24,12 @@
 #include "odegeneric6dofjoint.h"
 #include <oxygen/physicsserver/int/hingejointint.h>
 
-class ODEHingeJoint : public oxygen::HingeJointInt, public ODEGeneric6DOFJoint
+class HingeJointImp : public oxygen::HingeJointInt, public Generic6DOFJointImp
 {
     /** See physicsserver/int/hingejointint.h for documentation */
     
 public:
-    ODEHingeJoint();
+    HingeJointImp();
     long CreateHingeJoint(long worldID);
     void SetAnchor(const salt::Vector3f& anchor, long jointID);
     salt::Vector3f GetAnchor1(long jointID);
@@ -39,5 +39,7 @@ public:
     float GetAngle(long jointID) const;
     float GetAngleRate(long jointID) const;
 };
+
+DECLARE_CLASS(HingeJointImp);
 
 #endif //ODEHINGEJOINT_H

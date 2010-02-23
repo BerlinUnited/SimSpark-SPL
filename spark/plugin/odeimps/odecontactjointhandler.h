@@ -25,7 +25,7 @@
 #include "odecollider.h"
 #include <oxygen/physicsserver/int/contactjointhandlerint.h>
 
-class ODEContactJointHandler : public oxygen::ContactJointHandlerInt, public ODECollider
+class ContactJointHandlerImp : public oxygen::ContactJointHandlerInt, public ColliderImp
 {
     /** \class ContactJointHandler is a CollisionHandler that creates a
         contact joint between the two bodies associated with the two
@@ -35,7 +35,7 @@ class ODEContactJointHandler : public oxygen::ContactJointHandlerInt, public ODE
     */
     
 public:
-    ODEContactJointHandler();
+    ContactJointHandlerImp();
     oxygen::GenericSurfaceParameter* Initialize();
     long RetrieveBody(long geomID);
     long CreateContactJoint(long worldID, long jointGroupID, oxygen::GenericContact& contact);
@@ -69,5 +69,7 @@ protected:
                                   const dSurfaceParameters* ODESurface);
     void SetContactMode(int mode, bool set, dSurfaceParameters* ODESurface);
 };
+
+DECLARE_CLASS(ContactJointHandlerImp);
 
 #endif //ODECONTACTJOINTHANDLER_H

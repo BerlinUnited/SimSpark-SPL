@@ -30,7 +30,7 @@ boost::shared_ptr<PlaneColliderInt> PlaneCollider::mPlaneColliderImp;
 
 PlaneCollider::PlaneCollider() : Collider()
 {
-    mPlaneColliderImp = boost::shared_ptr<ODEPlaneCollider>(new ODEPlaneCollider());
+    mPlaneColliderImp = boost::shared_ptr<PlaneColliderImp>(new PlaneColliderImp());
 }
 
 void PlaneCollider::SetParams(float a, float b, float c, float d)

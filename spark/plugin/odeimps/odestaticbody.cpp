@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODEStaticBody::ODEStaticBody() : ODEBody(){
+StaticBodyImp::StaticBodyImp() : BodyImp(){
 
 }

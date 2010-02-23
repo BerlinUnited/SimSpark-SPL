@@ -24,27 +24,27 @@
 using namespace oxygen;
 using namespace salt;
 
-ODECapsuleCollider::ODECapsuleCollider() : ODEConvexCollider()
+CapsuleColliderImp::CapsuleColliderImp() : ConvexColliderImp()
 {
 }
 
-void ODECapsuleCollider::SetParams(float radius, float length, long geomID)
+void CapsuleColliderImp::SetParams(float radius, float length, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomCapsuleSetParams (ODEGeom, radius, length);
 }
 
-void ODECapsuleCollider::SetRadius(float radius, long geomID)
+void CapsuleColliderImp::SetRadius(float radius, long geomID)
 {
     SetParams(radius, GetLength(geomID), geomID);
 }
 
-void ODECapsuleCollider::SetLength(float length, long geomID)
+void CapsuleColliderImp::SetLength(float length, long geomID)
 {
     SetParams(GetRadius(geomID), length, geomID);
 }
 
-void ODECapsuleCollider::GetParams(float& radius, float& length, long geomID)
+void CapsuleColliderImp::GetParams(float& radius, float& length, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dReal r,l;
@@ -53,7 +53,7 @@ void ODECapsuleCollider::GetParams(float& radius, float& length, long geomID)
     length = l;
 }
 
-float ODECapsuleCollider::GetRadius(long geomID)
+float CapsuleColliderImp::GetRadius(long geomID)
 {
     float length;
     float radius;
@@ -61,7 +61,7 @@ float ODECapsuleCollider::GetRadius(long geomID)
     return radius;
 }
 
-float ODECapsuleCollider::GetLength(long geomID)
+float CapsuleColliderImp::GetLength(long geomID)
 {
     float radius;
     float length;
@@ -69,13 +69,13 @@ float ODECapsuleCollider::GetLength(long geomID)
     return length;
 }
 
-long ODECapsuleCollider::CreateCapsule()
+long CapsuleColliderImp::CreateCapsule()
 {
     dGeomID ODEGeom = dCreateCapsule(0, 1.0f, 1.0f);
     return (long) ODEGeom;
 }
 
-float ODECapsuleCollider::GetPointDepth(const Vector3f& pos, long geomID)
+float CapsuleColliderImp::GetPointDepth(const Vector3f& pos, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     return dGeomCapsulePointDepth

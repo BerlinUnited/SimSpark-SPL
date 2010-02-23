@@ -26,12 +26,12 @@
 #include "odegeneric6dofjoint.h"
 #include <oxygen/physicsserver/int/universaljointint.h>
 
-class ODEUniversalJoint : public oxygen::UniversalJointInt, public ODEGeneric6DOFJoint
+class UniversalJointImp : public oxygen::UniversalJointInt, public Generic6DOFJointImp
 {
     /** See physicsserver/int/universaljointint.h for documentation */
     
 public:
-    ODEUniversalJoint();
+    UniversalJointImp();
     long CreateUniversalJoint(long world);
     void SetAnchor(const salt::Vector3f& anchor, long jointID);
     salt::Vector3f GetAnchor1(long jointID);
@@ -45,5 +45,7 @@ public:
     float GetAngleRate1(long jointID) const;
     float GetAngleRate2(long jointID) const;
 };
+
+DECLARE_CLASS(UniversalJointImp);
 
 #endif //ODEUNIVERSALJOINT_H

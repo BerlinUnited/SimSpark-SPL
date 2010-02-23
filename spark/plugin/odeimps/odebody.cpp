@@ -24,6 +24,6 @@
 
 using namespace oxygen;
 
-ODEBody::ODEBody() : ODEPhysicsObject(){
+BodyImp::BodyImp() : PhysicsObjectImp(){
 
 }

@@ -29,7 +29,7 @@ boost::shared_ptr<SliderJointInt> SliderJoint::mSliderJointImp;
 
 SliderJoint::SliderJoint() : Generic6DOFJoint()
 {
-    mSliderJointImp = boost::shared_ptr<ODESliderJoint>(new ODESliderJoint());
+    mSliderJointImp = boost::shared_ptr<SliderJointImp>(new SliderJointImp());
 }
 
 SliderJoint::~SliderJoint()

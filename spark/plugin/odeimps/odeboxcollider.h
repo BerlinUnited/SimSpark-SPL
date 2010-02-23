@@ -26,16 +26,18 @@
 #include "odeconvexcollider.h"
 #include <oxygen/physicsserver/int/boxcolliderint.h>
 
-class ODEBoxCollider : public oxygen::BoxColliderInt, public ODEConvexCollider
+class BoxColliderImp : public oxygen::BoxColliderInt, public ConvexColliderImp
 {
     /** See physicsserver/int/boxcolliderint.h for documentation */
 
 public:
-    ODEBoxCollider();
+    BoxColliderImp();
     void SetBoxLengths(const salt::Vector3f& extents, long geomID);
     void GetBoxLengths(salt::Vector3f& extents, long geomID);
     float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreateBox();
 };
+
+DECLARE_CLASS(BoxColliderImp);
 
 #endif //ODEBOXCOLLIDER_H

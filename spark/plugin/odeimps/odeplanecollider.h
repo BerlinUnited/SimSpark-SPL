@@ -26,7 +26,7 @@
 #include "odecollider.h"
 #include <oxygen/physicsserver/int/planecolliderint.h>
 
-class ODEPlaneCollider : public oxygen::PlaneColliderInt, public ODECollider
+class PlaneColliderImp : public oxygen::PlaneColliderInt, public ColliderImp
 {
 /** PlaneCollider encapsulates an ODE plane geometry object. Planes
     are non-placeable geoms, i.e.  unlike placeable geoms, planes do
@@ -38,11 +38,13 @@ class ODEPlaneCollider : public oxygen::PlaneColliderInt, public ODECollider
     See physicsserver/int/planecolliderint.h for documentation
 */
 public:
-    ODEPlaneCollider();
+    PlaneColliderImp();
     void SetPlaneParams(float a, float b, float c, float d, long geomID);
     void SetParams(const salt::Vector3f& pos, salt::Vector3f normal, long geomID);
     float GetPointDepth(const salt::Vector3f& pos, long geomID);
     long CreatePlane();
 };
+
+DECLARE_CLASS(PlaneColliderImp);
 
 #endif //ODEPLANECOLLIDER_H
