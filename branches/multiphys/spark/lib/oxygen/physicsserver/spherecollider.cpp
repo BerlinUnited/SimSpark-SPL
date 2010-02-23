@@ -29,7 +29,7 @@ boost::shared_ptr<SphereColliderInt> SphereCollider::mSphereColliderImp;
 
 SphereCollider::SphereCollider() : ConvexCollider()
 {
-    mSphereColliderImp = boost::shared_ptr<ODESphereCollider>(new ODESphereCollider());
+    mSphereColliderImp = boost::shared_ptr<SphereColliderImp>(new SphereColliderImp());
 }
 
 void SphereCollider::SetRadius(float r)

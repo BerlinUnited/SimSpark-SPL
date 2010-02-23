@@ -26,12 +26,12 @@
 #include "odephysicsobject.h"
 #include <oxygen/physicsserver/int/colliderint.h>
 
-class ODECollider : public oxygen::ColliderInt, public ODEPhysicsObject
+class ColliderImp : public oxygen::ColliderInt, public PhysicsObjectImp
 {
 
 public:    
-    ODECollider();
-    virtual ~ODECollider();
+    ColliderImp();
+    virtual ~ColliderImp();
     
     /** \class Collider encapsulates a geometry object- geom for
         short. Geoms are the fundamental objects in the collision
@@ -59,5 +59,7 @@ public:
     void SetBody(long bodyID, long geomID);
     void RemoveFromSpace(long geomID, long spaceID);
 };
+
+DECLARE_CLASS(ColliderImp);
 
 #endif //ODECOLLIDER_H

@@ -29,8 +29,11 @@ namespace oxygen
 {
 
 class OXYGEN_API PhysicsServerInt
-{
+{   
+public:
 
+    /** Initialises the physics engine */
+    virtual void InitEngine() = 0;
 };
 
 } //namespace oxygen

@@ -28,7 +28,7 @@ boost::shared_ptr<RayColliderInt> RayCollider::mRayColliderImp;
 
 RayCollider::RayCollider() : Collider()
 {
-    mRayColliderImp = boost::shared_ptr<ODERayCollider>(new ODERayCollider());
+    mRayColliderImp = boost::shared_ptr<RayColliderImp>(new RayColliderImp());
 }
 
 void RayCollider::SetParams(salt::Vector3f pos,

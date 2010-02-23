@@ -20,8 +20,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <oxygen/physicsserver/boxcollider.h>
 #include <../plugin/odeimps/odeboxcollider.h>
+#include <oxygen/physicsserver/boxcollider.h>
+#include <oxygen/physicsserver/int/boxcolliderint.h>
 
 using namespace oxygen;
 using namespace salt;
@@ -30,8 +31,13 @@ boost::shared_ptr<BoxColliderInt> BoxCollider::mBoxColliderImp;
 
 BoxCollider::BoxCollider() : ConvexCollider()
 {
-    mBoxColliderImp = boost::shared_ptr<ODEBoxCollider>(new ODEBoxCollider());
+    mBoxColliderImp = boost::shared_ptr<BoxColliderImp>(new BoxColliderImp());
 }
+
+void BoxCollider::OnLink()
+{
+    Collider::OnLink();
+}       
 
 void BoxCollider::SetBoxLengths(const Vector3f& extents)
 {

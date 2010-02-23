@@ -35,7 +35,7 @@ boost::shared_ptr<PhysicsObjectInt> PhysicsObject::mPhysicsObjectImp;
 
 PhysicsObject::PhysicsObject() : BaseNode()
 {
-    mPhysicsObjectImp = boost::shared_ptr<ODEPhysicsObject>(new ODEPhysicsObject());
+    mPhysicsObjectImp = boost::shared_ptr<PhysicsObjectInt>(new PhysicsObjectImp());
 }
 
 PhysicsObject::~PhysicsObject()

@@ -27,7 +27,7 @@ using namespace oxygen;
 boost::shared_ptr<DynamicBodyInt> DynamicBody::mDynamicBodyImp;
 
 DynamicBody::DynamicBody() : Body(){
-    mDynamicBodyImp = boost::shared_ptr<ODEDynamicBody>(new ODEDynamicBody());
+    mDynamicBodyImp = boost::shared_ptr<DynamicBodyImp>(new DynamicBodyImp());
 }
 
 DynamicBody::~DynamicBody(){

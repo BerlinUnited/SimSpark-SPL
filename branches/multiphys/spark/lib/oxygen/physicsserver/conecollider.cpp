@@ -27,7 +27,7 @@ using namespace oxygen;
 boost::shared_ptr<ConeColliderInt> ConeCollider::mConeColliderImp;
 
 ConeCollider::ConeCollider() : ConvexCollider(){
-    mConeColliderImp = boost::shared_ptr<ODEConeCollider>(new ODEConeCollider());
+    mConeColliderImp = boost::shared_ptr<ConeColliderImp>(new ConeColliderImp());
 }
 
 ConeCollider::~ConeCollider(){

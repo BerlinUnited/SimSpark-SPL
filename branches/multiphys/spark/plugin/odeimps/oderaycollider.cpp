@@ -23,11 +23,11 @@
 
 using namespace oxygen;
 
-ODERayCollider::ODERayCollider() : ODECollider()
+RayColliderImp::RayColliderImp() : ColliderImp()
 {
 }
 
-void ODERayCollider::SetParams(salt::Vector3f pos,
+void RayColliderImp::SetParams(salt::Vector3f pos,
                             salt::Vector3f dir, float length, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
@@ -35,7 +35,7 @@ void ODERayCollider::SetParams(salt::Vector3f pos,
     dGeomRaySetLength(ODEGeom, length);
 }
 
-long ODERayCollider::CreateRay()
+long RayColliderImp::CreateRay()
 {
     dGeomID ODEGeom = dCreateRay(0, 1.0f);
     return (long) ODEGeom;

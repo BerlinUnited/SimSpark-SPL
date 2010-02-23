@@ -25,7 +25,7 @@
 #include "odebody.h"
 #include <oxygen/physicsserver/int/rigidbodyint.h>
 
-class ODERigidBody : public oxygen::RigidBodyInt, public ODEBody
+class RigidBodyImp : public oxygen::RigidBodyInt, public BodyImp
 {
 /** RigidBody encapsulates a rigid body object. A rigid body has
     various properties from the point of view of the simulation. Some
@@ -37,7 +37,7 @@ class ODERigidBody : public oxygen::RigidBodyInt, public ODEBody
     See physicsserver/int/rigidbodyint.h for documentation.
 */
 public:
-    ODERigidBody();
+    RigidBodyImp();
     
     oxygen::RigidBody* GetBodyPointer(long bodyID);
     void Enable(long bodyID);
@@ -149,5 +149,7 @@ protected:
     */
     void PrepareCapsuleTotal(dMass& mass, float total_mass, float radius, float length) const;
 };
+
+DECLARE_CLASS(RigidBodyImp);
 
 #endif //ODERIGIDBODY_H

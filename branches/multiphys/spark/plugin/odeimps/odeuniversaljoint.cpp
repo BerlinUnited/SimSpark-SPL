@@ -23,24 +23,24 @@
 using namespace oxygen;
 using namespace salt;
 
-ODEUniversalJoint::ODEUniversalJoint() : ODEGeneric6DOFJoint()
+UniversalJointImp::UniversalJointImp() : Generic6DOFJointImp()
 {
 }
 
-long ODEUniversalJoint::CreateUniversalJoint(long world)
+long UniversalJointImp::CreateUniversalJoint(long world)
 {
     dWorldID ODEWorld = (dWorldID) world;
     dJointID ODEJoint = dJointCreateUniversal(ODEWorld, 0);
     return (long) ODEJoint;
 }
 
-void ODEUniversalJoint::SetAnchor(const Vector3f& anchor, long jointID)
+void UniversalJointImp::SetAnchor(const Vector3f& anchor, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetUniversalAnchor (ODEJoint, anchor[0], anchor[1], anchor[2]);
 }
 
-Vector3f ODEUniversalJoint::GetAnchor1(long jointID)
+Vector3f UniversalJointImp::GetAnchor1(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
@@ -49,7 +49,7 @@ Vector3f ODEUniversalJoint::GetAnchor1(long jointID)
     return pos;
 }
 
-Vector3f ODEUniversalJoint::GetAnchor2(long jointID)
+Vector3f UniversalJointImp::GetAnchor2(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
@@ -58,19 +58,19 @@ Vector3f ODEUniversalJoint::GetAnchor2(long jointID)
     return pos;
 }
 
-void ODEUniversalJoint::SetAxis1(const Vector3f & axis, long jointID)
+void UniversalJointImp::SetAxis1(const Vector3f & axis, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetUniversalAxis1(ODEJoint,axis[0],axis[1],axis[2]);
 }
 
-void ODEUniversalJoint::SetAxis2(const Vector3f & axis, long jointID)
+void UniversalJointImp::SetAxis2(const Vector3f & axis, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetUniversalAxis2(ODEJoint,axis[0],axis[1],axis[2]);
 }
 
-Vector3f ODEUniversalJoint::GetAxis1(long jointID) const
+Vector3f UniversalJointImp::GetAxis1(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal axis[3];
@@ -79,7 +79,7 @@ Vector3f ODEUniversalJoint::GetAxis1(long jointID) const
     return vec;
 }
 
-Vector3f ODEUniversalJoint::GetAxis2(long jointID) const
+Vector3f UniversalJointImp::GetAxis2(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal axis[3];
@@ -88,25 +88,25 @@ Vector3f ODEUniversalJoint::GetAxis2(long jointID) const
     return vec;
 }
 
-float ODEUniversalJoint::GetAngle1(long jointID) const
+float UniversalJointImp::GetAngle1(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetUniversalAngle1(ODEJoint));
 }
 
-float ODEUniversalJoint::GetAngle2(long jointID) const
+float UniversalJointImp::GetAngle2(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetUniversalAngle2(ODEJoint));
 }
 
-float ODEUniversalJoint::GetAngleRate1(long jointID) const
+float UniversalJointImp::GetAngleRate1(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetUniversalAngle1Rate(ODEJoint));
 }
 
-float ODEUniversalJoint::GetAngleRate2(long jointID) const
+float UniversalJointImp::GetAngleRate2(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetUniversalAngle2Rate(ODEJoint));

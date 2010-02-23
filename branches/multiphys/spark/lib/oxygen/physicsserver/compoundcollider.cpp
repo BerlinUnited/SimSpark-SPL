@@ -27,7 +27,7 @@ using namespace oxygen;
 boost::shared_ptr<CompoundColliderInt> CompoundCollider::mCompoundColliderImp;
 
 CompoundCollider::CompoundCollider() : Collider(){
-    mCompoundColliderImp = boost::shared_ptr<ODECompoundCollider>(new ODECompoundCollider());;
+    mCompoundColliderImp = boost::shared_ptr<CompoundColliderImp>(new CompoundColliderImp());;
 }
 
 CompoundCollider::~CompoundCollider(){

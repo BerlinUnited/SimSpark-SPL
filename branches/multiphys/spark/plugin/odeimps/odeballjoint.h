@@ -26,16 +26,18 @@
 #include "odegeneric6dofjoint.h"
 #include <oxygen/physicsserver/int/balljointint.h>
 
-class ODEBallJoint : public oxygen::BallJointInt, public ODEGeneric6DOFJoint
+class BallJointImp : public oxygen::BallJointInt, public Generic6DOFJointImp
 {
     /** See physicsserver/int/balljointint.h for documentation */
 
 public:    
-    ODEBallJoint();
+    BallJointImp();
     void SetAnchor(const salt::Vector3f& anchor, long jointID);
     salt::Vector3f GetAnchor1(long jointID);
     salt::Vector3f GetAnchor2(long jointID);
     long CreateBallJoint(long worldID);
 };
+
+DECLARE_CLASS(BallJointImp);
 
 #endif //ODEBALLJOINT_H

@@ -34,7 +34,7 @@ boost::shared_ptr<RigidBodyInt> RigidBody::mRigidBodyImp;
 
 RigidBody::RigidBody() : Body()
 {
-    mRigidBodyImp = boost::shared_ptr<ODERigidBody>(new ODERigidBody());
+    mRigidBodyImp = boost::shared_ptr<RigidBodyImp>(new RigidBodyImp());
 }
 
 RigidBody::~RigidBody()

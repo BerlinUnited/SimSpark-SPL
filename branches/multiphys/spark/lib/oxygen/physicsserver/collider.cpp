@@ -38,7 +38,7 @@ boost::shared_ptr<ColliderInt> Collider::mColliderImp;
 
 Collider::Collider() : PhysicsObject(), mGeomID(0)
 {
-    mColliderImp = boost::shared_ptr<ODECollider>(new ODECollider());
+    mColliderImp = boost::shared_ptr<ColliderImp>(new ColliderImp());
 }
 
 Collider::~Collider()

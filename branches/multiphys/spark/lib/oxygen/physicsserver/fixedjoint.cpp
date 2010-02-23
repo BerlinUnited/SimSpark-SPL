@@ -27,7 +27,7 @@ boost::shared_ptr<FixedJointInt> FixedJoint::mFixedJointImp;
 
 FixedJoint::FixedJoint() : Generic6DOFJoint()
 {
-    mFixedJointImp = boost::shared_ptr<ODEFixedJoint>(new ODEFixedJoint());
+    mFixedJointImp = boost::shared_ptr<FixedJointImp>(new FixedJointImp());
 }
 
 FixedJoint::~FixedJoint()

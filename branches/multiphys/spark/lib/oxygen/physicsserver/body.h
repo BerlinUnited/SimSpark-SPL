@@ -39,6 +39,7 @@ class OXYGEN_API Body : public PhysicsObject
 public:
     Body();
     virtual ~Body();
+    virtual void OnLink();
 
 protected:
     long mBodyID;

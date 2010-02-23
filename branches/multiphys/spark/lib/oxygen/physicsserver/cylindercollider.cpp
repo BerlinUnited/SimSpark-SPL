@@ -27,7 +27,7 @@ using namespace oxygen;
 boost::shared_ptr<CylinderColliderInt> CylinderCollider::mCylinderColliderImp;
 
 CylinderCollider::CylinderCollider() : ConvexCollider(){
-    mCylinderColliderImp = boost::shared_ptr<ODECylinderCollider>(new ODECylinderCollider());
+    mCylinderColliderImp = boost::shared_ptr<CylinderColliderImp>(new CylinderColliderImp());
 }
 
 CylinderCollider::~CylinderCollider(){

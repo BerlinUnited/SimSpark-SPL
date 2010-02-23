@@ -29,7 +29,7 @@ boost::shared_ptr<UniversalJointInt> UniversalJoint::mUniversalJointImp;
 
 UniversalJoint::UniversalJoint() : Generic6DOFJoint()
 {
-    mUniversalJointImp = boost::shared_ptr<ODEUniversalJoint>(new ODEUniversalJoint());
+    mUniversalJointImp = boost::shared_ptr<UniversalJointImp>(new UniversalJointImp());
 }
 
 UniversalJoint::~UniversalJoint()

@@ -60,13 +60,6 @@ void SceneServer::OnLink()
             GetLog()->Error() << 
                 "(SceneServer) ERROR: PhysicsServer not found at /sys/server/physics\n";
         }
-    else
-        {
-            GetLog()->Normal() <<
-                "(SceneServer) Found PhysicsServer\n";
-                
-            mPhysicsServer->ConfirmExistence();
-        }
 }
 
 bool SceneServer::CreateScene(const std::string &location)

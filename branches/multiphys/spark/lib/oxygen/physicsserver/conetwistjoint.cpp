@@ -28,7 +28,7 @@ using namespace oxygen;
 boost::shared_ptr<ConeTwistJointInt> ConeTwistJoint::mConeTwistJointImp;
 
 ConeTwistJoint::ConeTwistJoint() : Generic6DOFJoint(){
-    mConeTwistJointImp = boost::shared_ptr<ODEConeTwistJoint>(new ODEConeTwistJoint());
+    mConeTwistJointImp = boost::shared_ptr<ConeTwistJointImp>(new ConeTwistJointImp());
 }
 
 ConeTwistJoint::~ConeTwistJoint(){

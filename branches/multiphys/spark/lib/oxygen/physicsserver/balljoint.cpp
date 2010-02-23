@@ -18,7 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/odeballjoint.h>
+#include <oxygen/physicsserver/int/balljointint.h>
 #include <oxygen/physicsserver/balljoint.h>
 #include <zeitgeist/logserver/logserver.h>
 
@@ -30,7 +30,7 @@ boost::shared_ptr<BallJointInt> BallJoint::mBallJointImp;
 
 BallJoint::BallJoint() : Generic6DOFJoint()
 {
-    mBallJointImp = shared_ptr<ODEBallJoint>(new ODEBallJoint());
+
 }
 
 BallJoint::~BallJoint()
@@ -39,6 +39,12 @@ BallJoint::~BallJoint()
 
 void BallJoint::OnLink()
 {
+    Joint::OnLink();
+    
+    if (mBallJointImp.get() == 0)
+        mBallJointImp = shared_dynamic_cast<BallJointInt>
+            (GetCore()->New("BallJointImp"));
+
     long world = GetWorldID();
     if (world == 0)
         {

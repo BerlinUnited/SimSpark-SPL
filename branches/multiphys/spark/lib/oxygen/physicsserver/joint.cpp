@@ -34,7 +34,7 @@ PhysicsObject(), mJointID(0),
 mJointMaxSpeed1(0), mJointMaxSpeed2(0), 
 mIsLimitJointMaxSpeed1(false), mIsLimitJointMaxSpeed2(false)
 {
-    mJointImp = boost::shared_ptr<ODEJoint>(new ODEJoint());
+    mJointImp = boost::shared_ptr<JointInt>(new JointImp());
 }
 
 Joint::~Joint()

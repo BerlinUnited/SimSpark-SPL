@@ -29,7 +29,7 @@ boost::shared_ptr<CapsuleColliderInt> CapsuleCollider::mCapsuleColliderImp;
 
 CapsuleCollider::CapsuleCollider() : ConvexCollider()
 {
-    mCapsuleColliderImp = boost::shared_ptr<ODECapsuleCollider>(new ODECapsuleCollider());
+    mCapsuleColliderImp = boost::shared_ptr<CapsuleColliderImp>(new CapsuleColliderImp());
 }
 
 void CapsuleCollider::SetParams(float radius, float length)

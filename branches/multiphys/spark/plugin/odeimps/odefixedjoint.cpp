@@ -23,18 +23,18 @@
 using namespace oxygen;
 using namespace boost;
 
-ODEFixedJoint::ODEFixedJoint() : ODEGeneric6DOFJoint()
+FixedJointImp::FixedJointImp() : Generic6DOFJointImp()
 {
 }
 
-long ODEFixedJoint::CreateFixedJoint(long world)
+long FixedJointImp::CreateFixedJoint(long world)
 {
     dWorldID ODEworld = (dWorldID) world;
     dJointID ODEJoint = dJointCreateFixed(ODEworld, 0);
     return (long) ODEJoint;
 }
 
-void ODEFixedJoint::SetFixed(long jointID)
+void FixedJointImp::SetFixed(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetFixed(ODEJoint);

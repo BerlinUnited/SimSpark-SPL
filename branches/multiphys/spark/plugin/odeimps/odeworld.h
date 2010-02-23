@@ -25,7 +25,7 @@
 #include "odephysicsobject.h"
 #include <oxygen/physicsserver/int/worldint.h>
 
-class ODEWorld : public oxygen::WorldInt, public ODEPhysicsObject
+class WorldImp : public oxygen::WorldInt, public PhysicsObjectImp
 {
 /** World encapsulates a world object. It is a container for
     rigid bodies and joints. Objects in different worlds can not
@@ -38,7 +38,7 @@ class ODEWorld : public oxygen::WorldInt, public ODEPhysicsObject
 */
 
 public:
-    ODEWorld();
+    WorldImp();
 
     void SetGravity(const salt::Vector3f& gravity, long worldID);
     salt::Vector3f GetGravity(long worldID) const;
@@ -54,5 +54,7 @@ public:
     long CreateWorld();
     void DestroyWorld(long worldID);
 };
+
+DECLARE_CLASS(WorldImp);
 
 #endif //ODEWORLD_H

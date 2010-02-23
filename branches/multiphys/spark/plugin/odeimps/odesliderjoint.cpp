@@ -24,30 +24,30 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-ODESliderJoint::ODESliderJoint() : ODEGeneric6DOFJoint()
+SliderJointImp::SliderJointImp() : Generic6DOFJointImp()
 {
 }
 
-long ODESliderJoint::CreateSliderJoint(long world)
+long SliderJointImp::CreateSliderJoint(long world)
 {
     dWorldID ODEWorld = (dWorldID) world;
     dJointID ODEJoint = dJointCreateSlider(ODEWorld, 0);
     return (long) ODEJoint;
 }
 
-void ODESliderJoint::SetSliderAxis(Vector3f& up, long jointID)
+void SliderJointImp::SetSliderAxis(Vector3f& up, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetSliderAxis(ODEJoint,up[0],up[1],up[2]);
 }
 
-float ODESliderJoint::GetPosition(long jointID)
+float SliderJointImp::GetPosition(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     return dJointGetSliderPosition(ODEJoint);
 }
 
-float ODESliderJoint::GetPositionRate(long jointID)
+float SliderJointImp::GetPositionRate(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     return dJointGetSliderPositionRate(ODEJoint);

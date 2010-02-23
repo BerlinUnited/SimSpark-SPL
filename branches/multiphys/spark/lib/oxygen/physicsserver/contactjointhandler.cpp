@@ -33,7 +33,7 @@ boost::shared_ptr<ContactJointHandlerInt> ContactJointHandler::mContactJointHand
 
 ContactJointHandler::ContactJointHandler() : CollisionHandler()
 {
-    mContactJointHandlerImp = boost::shared_ptr<ODEContactJointHandler>(new ODEContactJointHandler());
+    mContactJointHandlerImp = boost::shared_ptr<ContactJointHandlerImp>(new ContactJointHandlerImp());
     mSurfaceParameter = mContactJointHandlerImp->Initialize();
 }
 

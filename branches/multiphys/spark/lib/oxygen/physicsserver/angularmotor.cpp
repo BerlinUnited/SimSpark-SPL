@@ -18,8 +18,8 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/odeangularmotor.h>
 #include <oxygen/physicsserver/angularmotor.h>
+#include <oxygen/physicsserver/int/angularmotorint.h>
 #include <oxygen/physicsserver/int/jointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
@@ -31,7 +31,7 @@ boost::shared_ptr<AngularMotorInt> AngularMotor::mAngularMotorImp;
 
 AngularMotor::AngularMotor() : Joint()
 {
-    mAngularMotorImp = boost::shared_ptr<ODEAngularMotor>(new ODEAngularMotor());
+
 }
 
 AngularMotor::~AngularMotor()
@@ -40,9 +40,11 @@ AngularMotor::~AngularMotor()
 
 void AngularMotor::OnLink()
 {
-    //pseudocode
-    //CoreContext core;
-    //mAngularMotorImp = core.get("???/odeangularmotor")
+    Joint::OnLink();
+
+    if (mAngularMotorImp.get() == 0)
+        mAngularMotorImp = shared_dynamic_cast<AngularMotorInt>
+            (GetCore()->New("AngularMotorImp"));
 
     long world = GetWorldID();
     if (world == 0)

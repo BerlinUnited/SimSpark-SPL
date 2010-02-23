@@ -24,24 +24,24 @@ using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-ODEHingeJoint::ODEHingeJoint() : ODEGeneric6DOFJoint()
+HingeJointImp::HingeJointImp() : Generic6DOFJointImp()
 {
 }
 
-long ODEHingeJoint::CreateHingeJoint(long worldID)
+long HingeJointImp::CreateHingeJoint(long worldID)
 {
     dWorldID ODEWorld = (dWorldID) worldID;
     dJointID ODEJoint = dJointCreateHinge(ODEWorld, 0);
     return (long) ODEJoint;
 }
 
-void ODEHingeJoint::SetAnchor(const Vector3f& anchor, long jointID)
+void HingeJointImp::SetAnchor(const Vector3f& anchor, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetHingeAnchor (ODEJoint, anchor[0], anchor[1], anchor[2]);
 }
 
-Vector3f ODEHingeJoint::GetAnchor1(long jointID)
+Vector3f HingeJointImp::GetAnchor1(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
@@ -51,7 +51,7 @@ Vector3f ODEHingeJoint::GetAnchor1(long jointID)
     return pos;
 }
 
-Vector3f ODEHingeJoint::GetAnchor2(long jointID)
+Vector3f HingeJointImp::GetAnchor2(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal anchor[3];
@@ -61,13 +61,13 @@ Vector3f ODEHingeJoint::GetAnchor2(long jointID)
     return pos;
 }
 
-void ODEHingeJoint::SetAxis(const Vector3f& axis, long jointID)
+void HingeJointImp::SetAxis(const Vector3f& axis, long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointSetHingeAxis(ODEJoint, axis[0], axis[1], axis[2]);
 }
 
-Vector3f ODEHingeJoint::GetAxis(long jointID)
+Vector3f HingeJointImp::GetAxis(long jointID)
 {
     dJointID ODEJoint = (dJointID) jointID;
     dReal axis[3];
@@ -75,13 +75,13 @@ Vector3f ODEHingeJoint::GetAxis(long jointID)
     return Vector3f (axis[0], axis[1], axis[2]);
 }
 
-float ODEHingeJoint::GetAngle(long jointID) const
+float HingeJointImp::GetAngle(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHingeAngle(ODEJoint));
 }
 
-float ODEHingeJoint::GetAngleRate(long jointID) const
+float HingeJointImp::GetAngleRate(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHingeAngleRate(ODEJoint));

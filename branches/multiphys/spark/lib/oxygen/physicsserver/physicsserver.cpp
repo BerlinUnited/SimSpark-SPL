@@ -20,7 +20,7 @@
 */
 
 #include <oxygen/physicsserver/physicsserver.h>
-#include <../plugin/odeimps/odephysicsserver.h>
+#include <oxygen/physicsserver/int/physicsserverint.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/physicsserver/space.h>
@@ -37,12 +37,22 @@ shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
 
 PhysicsServer::PhysicsServer() : Leaf()
 {
-    mPhysicsServerImp = boost::shared_ptr<ODEPhysicsServer>(new ODEPhysicsServer());
+
 }
 
-void PhysicsServer::ResetCache(){
+void PhysicsServer::ResetCache()
+{
     mActiveSpace.reset();
     mActiveWorld.reset();
+}
+
+void PhysicsServer::OnLink()
+{ 
+    if (mPhysicsServerImp.get() == 0)
+        mPhysicsServerImp = shared_dynamic_cast<PhysicsServerInt>
+            (GetCore()->New("PhysicsServerImp"));
+        
+    mPhysicsServerImp->InitEngine();  
 }
 
 void PhysicsServer::UpdateCache(shared_ptr<Scene> activeScene)
@@ -62,7 +72,8 @@ void PhysicsServer::UpdateCache(shared_ptr<Scene> activeScene)
         }
 }
 
-void PhysicsServer::DoCollisions(){
+void PhysicsServer::DoCollisions()
+{
     if (mActiveSpace.get() != 0)
         {
             mActiveSpace->Collide();
@@ -83,10 +94,4 @@ void PhysicsServer::SetUpBox(shared_ptr<RigidBody> body, string name)
         {
             body->SetName(name);
         }   
-}
-
-void PhysicsServer::ConfirmExistence()
-{
-    GetLog()->Normal() <<
-        "(PhysicsServer) I print, therefore I am\n";
 }

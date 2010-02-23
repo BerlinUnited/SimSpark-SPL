@@ -24,11 +24,11 @@
 using namespace oxygen;
 using namespace salt;
 
-ODEBoxCollider::ODEBoxCollider() : ODEConvexCollider()
+BoxColliderImp::BoxColliderImp() : ConvexColliderImp()
 {
 }
 
-void ODEBoxCollider::SetBoxLengths(const Vector3f& extents, long geomID)
+void BoxColliderImp::SetBoxLengths(const Vector3f& extents, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     dGeomBoxSetLengths(
@@ -39,13 +39,13 @@ void ODEBoxCollider::SetBoxLengths(const Vector3f& extents, long geomID)
                        );
 }
 
-long ODEBoxCollider::CreateBox()
+long BoxColliderImp::CreateBox()
 {
     dGeomID ODEGeom = dCreateBox (0, 1.0f, 1.0f, 1.0f);
     return (long) ODEGeom;
 }
 
-void ODEBoxCollider::GetBoxLengths(Vector3f& extents, long geomID)
+void BoxColliderImp::GetBoxLengths(Vector3f& extents, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID; 
     dVector3 lengths;
@@ -55,7 +55,7 @@ void ODEBoxCollider::GetBoxLengths(Vector3f& extents, long geomID)
     extents[2] = lengths[2];
 }
 
-float ODEBoxCollider::GetPointDepth(const Vector3f& pos, long geomID)
+float BoxColliderImp::GetPointDepth(const Vector3f& pos, long geomID)
 {
     dGeomID ODEGeom = (dGeomID) geomID;
     return dGeomBoxPointDepth

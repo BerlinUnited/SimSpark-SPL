@@ -28,7 +28,7 @@ using namespace oxygen;
 boost::shared_ptr<Generic6DOFJointInt> Generic6DOFJoint::mGeneric6DOFJointImp;
 
 Generic6DOFJoint::Generic6DOFJoint() : Joint(){
-    mGeneric6DOFJointImp = boost::shared_ptr<ODEGeneric6DOFJoint>(new ODEGeneric6DOFJoint());
+    mGeneric6DOFJointImp = boost::shared_ptr<Generic6DOFJointInt>(new Generic6DOFJointImp());
 }
 
 Generic6DOFJoint::~Generic6DOFJoint(){

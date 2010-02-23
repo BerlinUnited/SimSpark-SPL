@@ -38,6 +38,7 @@ class OXYGEN_API BoxCollider : public ConvexCollider
     //
 public:
     BoxCollider();
+    virtual void OnLink();
 
     /** sets the side lengths of the box geom */
     void SetBoxLengths(const salt::Vector3f& extents);

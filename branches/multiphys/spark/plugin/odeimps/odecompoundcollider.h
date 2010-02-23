@@ -25,10 +25,12 @@
 #include "odecollider.h"
 #include <oxygen/physicsserver/int/compoundcolliderint.h>
 
-class ODECompoundCollider : public oxygen::CompoundColliderInt, public ODECollider
+class CompoundColliderImp : public oxygen::CompoundColliderInt, public ColliderImp
 {
 public:
-    ODECompoundCollider();
+    CompoundColliderImp();
 };
+
+DECLARE_CLASS(CompoundColliderImp);
 
 #endif //ODECOMPOUNDCOLLIDER_H

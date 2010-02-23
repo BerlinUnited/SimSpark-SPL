@@ -26,37 +26,37 @@
 using namespace boost;
 using namespace oxygen;
 
-void ODESpace::collisionNearCallback(void* data, dGeomID obj1, dGeomID obj2)
+void SpaceImp::collisionNearCallback(void* data, dGeomID obj1, dGeomID obj2)
 {
     Space* space = (Space*) data;
     space->HandleCollide((long) obj1, (long) obj2);
 }
 
-ODESpace::ODESpace() : ODEPhysicsObject()
+SpaceImp::SpaceImp() : PhysicsObjectImp()
 {
 }
 
-void ODESpace::Collide(long space, Space* callee)
+void SpaceImp::Collide(long space, Space* callee)
 {
-    dSpaceID ODESpace = (dSpaceID) space;
-    dSpaceCollide(ODESpace, callee, collisionNearCallback);
+    dSpaceID SpaceImp = (dSpaceID) space;
+    dSpaceCollide(SpaceImp, callee, collisionNearCallback);
 }
 
-void ODESpace::Collide2(long obj1, long obj2, Space* callee)
+void SpaceImp::Collide2(long obj1, long obj2, Space* callee)
 {
     dGeomID ODEObj1 = (dGeomID) obj1;
     dGeomID ODEObj2 = (dGeomID) obj2;
     dSpaceCollide2(ODEObj1, ODEObj2, callee, &collisionNearCallback);
 }
 
-long ODESpace::GetParentSpaceID(long spaceID)
+long SpaceImp::GetParentSpaceID(long spaceID)
 {
-    dGeomID ODESpace = (dGeomID) spaceID;
-    dSpaceID parentSpace = dGeomGetSpace(ODESpace);
+    dGeomID SpaceImp = (dGeomID) spaceID;
+    dSpaceID parentSpace = dGeomGetSpace(SpaceImp);
     return (long) parentSpace;
 }
 
-long ODESpace::CreateContactGroup()
+long SpaceImp::CreateContactGroup()
 {
     // create a joint group for the contacts
     dJointGroupID ODEContactGroup = dJointGroupCreate(0);
@@ -64,23 +64,23 @@ long ODESpace::CreateContactGroup()
     return (long) ODEContactGroup;
 }
 
-void ODESpace::PostPhysicsUpdateInternal(long contactGroup)
+void SpaceImp::PostPhysicsUpdateInternal(long contactGroup)
 {
     dJointGroupID ODEContactGroup = (dJointGroupID) contactGroup;
     // remove all contact joints
     dJointGroupEmpty(ODEContactGroup);
 }
 
-long ODESpace::CreateSpace(long spaceID){
-    dSpaceID ODESpace = (dSpaceID) spaceID;
-    dSpaceID CreatedSpace = dHashSpaceCreate(ODESpace);
+long SpaceImp::CreateSpace(long spaceID){
+    dSpaceID SpaceImp = (dSpaceID) spaceID;
+    dSpaceID CreatedSpace = dHashSpaceCreate(SpaceImp);
     return (long) CreatedSpace;
 }
 
-void ODESpace::DestroySpace(long contactGroup, long spaceID)
+void SpaceImp::DestroySpace(long contactGroup, long spaceID)
 {
     dJointGroupID ODEContactGroup = (dJointGroupID) contactGroup;
-    dSpaceID ODESpace = (dSpaceID) spaceID;
+    dSpaceID SpaceImp = (dSpaceID) spaceID;
 
     if (ODEContactGroup)
         {
@@ -88,27 +88,27 @@ void ODESpace::DestroySpace(long contactGroup, long spaceID)
         }
 
     // release the ODE space
-    dSpaceDestroy(ODESpace);
+    dSpaceDestroy(SpaceImp);
 }
 
-bool ODESpace::ObjectIsSpace(long objectID){
+bool SpaceImp::ObjectIsSpace(long objectID){
     dGeomID ODEGeom = (dGeomID) objectID;
     return dGeomIsSpace(ODEGeom);
 }
 
-long ODESpace::FetchBody(long geomID){
+long SpaceImp::FetchBody(long geomID){
     dGeomID ODEGeom = (dGeomID) geomID;
     dBodyID ODEBody = dGeomGetBody(ODEGeom);
     return (long) ODEBody;
 }
 
-long ODESpace::FetchSpace(long geomID){
+long SpaceImp::FetchSpace(long geomID){
     dGeomID ODEGeom = (dGeomID) geomID;
-    dSpaceID ODESpace = dGeomGetSpace(ODEGeom);
-    return (long) ODESpace;
+    dSpaceID SpaceImp = dGeomGetSpace(ODEGeom);
+    return (long) SpaceImp;
 }
 
-bool ODESpace::AreConnectedWithJoint(long bodyID1, long bodyID2){
+bool SpaceImp::AreConnectedWithJoint(long bodyID1, long bodyID2){
     if ((!bodyID1) || (!bodyID2))
         return false;
 
@@ -117,7 +117,7 @@ bool ODESpace::AreConnectedWithJoint(long bodyID1, long bodyID2){
     return dAreConnectedExcluding(ODEBody1, ODEBody2, dJointTypeContact);
 }
 
-void ODESpace::CollideInternal(boost::shared_ptr<Collider> collider, 
+void SpaceImp::CollideInternal(boost::shared_ptr<Collider> collider, 
                               boost::shared_ptr<Collider> collidee,
                               long geomID1, long geomID2)
 {

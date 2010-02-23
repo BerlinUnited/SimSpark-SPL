@@ -25,89 +25,89 @@ using namespace boost;
 using namespace oxygen;
 using namespace salt;
 
-ODEWorld::ODEWorld() : ODEPhysicsObject(){
+WorldImp::WorldImp() : PhysicsObjectImp(){
 }
 
-void ODEWorld::SetGravity(const Vector3f& gravity, long worldID)
+void WorldImp::SetGravity(const Vector3f& gravity, long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    dWorldSetGravity(ODEWorld,
+    dWorldID WorldImp = (dWorldID) worldID;
+    dWorldSetGravity(WorldImp,
                      gravity.x(),
                      gravity.y(),
                      gravity.z()
                      );
 }
 
-salt::Vector3f ODEWorld::GetGravity(long worldID) const
+salt::Vector3f WorldImp::GetGravity(long worldID) const
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
+    dWorldID WorldImp = (dWorldID) worldID;
     dVector3 dGravity;
-    dWorldGetGravity(ODEWorld,dGravity);
+    dWorldGetGravity(WorldImp,dGravity);
     return Vector3f(dGravity[0],dGravity[1],dGravity[2]);
 }
 
-void ODEWorld::SetERP(float erp, long worldID)
+void WorldImp::SetERP(float erp, long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    dWorldSetERP(ODEWorld, erp);
+    dWorldID WorldImp = (dWorldID) worldID;
+    dWorldSetERP(WorldImp, erp);
 }
 
-float ODEWorld::GetERP(long worldID) const
+float WorldImp::GetERP(long worldID) const
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    return dWorldGetERP(ODEWorld);
+    dWorldID WorldImp = (dWorldID) worldID;
+    return dWorldGetERP(WorldImp);
 }
 
-void ODEWorld::SetCFM(float cfm, long worldID)
+void WorldImp::SetCFM(float cfm, long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    dWorldSetCFM(ODEWorld, cfm);
+    dWorldID WorldImp = (dWorldID) worldID;
+    dWorldSetCFM(WorldImp, cfm);
 }
 
-float ODEWorld::GetCFM(long worldID) const
+float WorldImp::GetCFM(long worldID) const
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    return dWorldGetCFM(ODEWorld);
+    dWorldID WorldImp = (dWorldID) worldID;
+    return dWorldGetCFM(WorldImp);
 }
 
-void ODEWorld::Step(float deltaTime, long worldID)
+void WorldImp::Step(float deltaTime, long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    dWorldStep(ODEWorld, deltaTime);
+    dWorldID WorldImp = (dWorldID) worldID;
+    dWorldStep(WorldImp, deltaTime);
 }
 
-bool ODEWorld::GetAutoDisableFlag(long worldID) const
+bool WorldImp::GetAutoDisableFlag(long worldID) const
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    return (dWorldGetAutoDisableFlag(ODEWorld) == 1);
+    dWorldID WorldImp = (dWorldID) worldID;
+    return (dWorldGetAutoDisableFlag(WorldImp) == 1);
 }
 
-void ODEWorld::SetAutoDisableFlag(bool flag, long worldID)
+void WorldImp::SetAutoDisableFlag(bool flag, long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    dWorldSetAutoDisableFlag(ODEWorld, static_cast<int>(flag));
+    dWorldID WorldImp = (dWorldID) worldID;
+    dWorldSetAutoDisableFlag(WorldImp, static_cast<int>(flag));
 }
 
-void ODEWorld::SetContactSurfaceLayer(float depth, long worldID)
+void WorldImp::SetContactSurfaceLayer(float depth, long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    dWorldSetContactSurfaceLayer(ODEWorld, depth);
+    dWorldID WorldImp = (dWorldID) worldID;
+    dWorldSetContactSurfaceLayer(WorldImp, depth);
 }
 
-float ODEWorld::GetContactSurfaceLayer(long worldID) const
+float WorldImp::GetContactSurfaceLayer(long worldID) const
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    return dWorldGetContactSurfaceLayer(ODEWorld);
+    dWorldID WorldImp = (dWorldID) worldID;
+    return dWorldGetContactSurfaceLayer(WorldImp);
 }
 
-long ODEWorld::CreateWorld()
+long WorldImp::CreateWorld()
 {
-    dWorldID ODEWorld = dWorldCreate();
-    return (long) ODEWorld;
+    dWorldID WorldImp = dWorldCreate();
+    return (long) WorldImp;
 }
 
-void ODEWorld::DestroyWorld(long worldID)
+void WorldImp::DestroyWorld(long worldID)
 {
-    dWorldID ODEWorld = (dWorldID) worldID;
-    dWorldDestroy(ODEWorld);
+    dWorldID WorldImp = (dWorldID) worldID;
+    dWorldDestroy(WorldImp);
 }

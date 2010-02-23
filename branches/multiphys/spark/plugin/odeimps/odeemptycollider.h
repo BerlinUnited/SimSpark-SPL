@@ -25,10 +25,12 @@
 #include "odecollider.h"
 #include <oxygen/physicsserver/int/emptycolliderint.h>
 
-class ODEEmptyCollider : public oxygen::EmptyColliderInt, public ODECollider
+class EmptyColliderImp : public oxygen::EmptyColliderInt, public ColliderImp
 {
 public:
-    ODEEmptyCollider();
+    EmptyColliderImp();
 };
+
+DECLARE_CLASS(EmptyColliderImp);
 
 #endif //ODEEMPTYCOLLIDER_H

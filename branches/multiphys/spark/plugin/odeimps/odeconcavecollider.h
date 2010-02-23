@@ -25,10 +25,12 @@
 #include "odecollider.h"
 #include <oxygen/physicsserver/int/concavecolliderint.h>
 
-class ODEConcaveCollider : public oxygen::ConcaveColliderInt, public ODECollider
+class ConcaveColliderImp : public oxygen::ConcaveColliderInt, public ColliderImp
 {
 public:
-    ODEConcaveCollider();
+    ConcaveColliderImp();
 };
+
+DECLARE_CLASS(ConcaveColliderImp);
 
 #endif //ODECONCAVECOLLIDER_H
