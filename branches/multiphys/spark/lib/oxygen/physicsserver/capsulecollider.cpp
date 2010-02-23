@@ -20,16 +20,18 @@
 */
 
 #include <oxygen/physicsserver/capsulecollider.h>
-#include <../plugin/odeimps/odecapsulecollider.h>
+#include <oxygen/physicsserver/int/capsulecolliderint.h>
+#include <iostream>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
 
 boost::shared_ptr<CapsuleColliderInt> CapsuleCollider::mCapsuleColliderImp;
 
 CapsuleCollider::CapsuleCollider() : ConvexCollider()
 {
-    mCapsuleColliderImp = boost::shared_ptr<CapsuleColliderImp>(new CapsuleColliderImp());
+
 }
 
 void CapsuleCollider::SetParams(float radius, float length)
@@ -64,6 +66,17 @@ float CapsuleCollider::GetLength()
 
 bool CapsuleCollider::ConstructInternal()
 {
+    if (mCapsuleColliderImp.get() == 0)
+        mCapsuleColliderImp = shared_dynamic_cast<CapsuleColliderInt>
+            (GetCore()->New("CapsuleColliderImp"));
+            
+    if (mCapsuleColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(CapsuleCollider) ERROR: Found no implementation at '/classes/CapsuleColliderImp'";
+            return false;
+        }
+
     if (! Collider::ConstructInternal())
     {
         return false;

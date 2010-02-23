@@ -20,24 +20,20 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/odeboxcollider.h>
 #include <oxygen/physicsserver/boxcollider.h>
 #include <oxygen/physicsserver/int/boxcolliderint.h>
+#include <iostream>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
 
 boost::shared_ptr<BoxColliderInt> BoxCollider::mBoxColliderImp;
 
 BoxCollider::BoxCollider() : ConvexCollider()
 {
-    mBoxColliderImp = boost::shared_ptr<BoxColliderImp>(new BoxColliderImp());
-}
-
-void BoxCollider::OnLink()
-{
-    Collider::OnLink();
-}       
+ 
+}      
 
 void BoxCollider::SetBoxLengths(const Vector3f& extents)
 {
@@ -46,6 +42,17 @@ void BoxCollider::SetBoxLengths(const Vector3f& extents)
 
 bool BoxCollider::ConstructInternal()
 {
+    if (mBoxColliderImp.get() == 0)
+        mBoxColliderImp = shared_dynamic_cast<BoxColliderInt>
+            (GetCore()->New("BoxColliderImp"));
+            
+    if (mBoxColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(BoxCollider) ERROR: Found no implementation at '/classes/BoxColliderImp'";
+            return false;
+        }
+
     if (! Collider::ConstructInternal())
         {
             return false;

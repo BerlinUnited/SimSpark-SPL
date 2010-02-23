@@ -20,7 +20,7 @@
 */
 
 #include <oxygen/physicsserver/space.h>
-#include <../plugin/odeimps/odespace.h>
+#include <oxygen/physicsserver/int/spaceint.h>
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/sceneserver/scene.h>
@@ -35,7 +35,7 @@ Space::TSpaceIdSet Space::gDisabledInnerCollisionSet;
 
 Space::Space() : PhysicsObject(), mSpaceID(0)
 {
-    mSpaceImp = boost::shared_ptr<SpaceInt>(new SpaceImp());
+
 }
 
 Space::~Space()
@@ -179,6 +179,10 @@ bool Space::IsGlobalSpace()
 
 bool Space::ConstructInternal()
 {
+    if (mSpaceImp.get() == 0)
+        mSpaceImp = shared_dynamic_cast<SpaceInt>
+            (GetCore()->New("SpaceImp"));
+
     mContactGroupID = mSpaceImp->CreateContactGroup();
     
     return (mContactGroupID != 0);

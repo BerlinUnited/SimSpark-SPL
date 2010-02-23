@@ -42,6 +42,8 @@ public:
     CylinderCollider();
     virtual ~CylinderCollider();
     
+    virtual bool ConstructInternal();
+    
 private:
     static boost::shared_ptr<CylinderColliderInt> mCylinderColliderImp;
 };

@@ -20,21 +20,27 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/odetransformcollider.h>
+#include <oxygen/physicsserver/int/transformcolliderint.h>
 #include <oxygen/physicsserver/transformcollider.h>
+#include <iostream>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
 
 boost::shared_ptr<TransformColliderInt> TransformCollider::mTransformColliderImp;
 
 TransformCollider::TransformCollider() : Collider()
 {
-    mTransformColliderImp = boost::shared_ptr<TransformColliderImp>(new TransformColliderImp());
+
 }
 
 bool TransformCollider::ConstructInternal()
-{
+{    
+    if (mTransformColliderImp.get() == 0)
+        mTransformColliderImp = shared_dynamic_cast<TransformColliderInt>
+            (GetCore()->New("TransformColliderImp"));
+
     if (! Collider::ConstructInternal())
         {
             return false;

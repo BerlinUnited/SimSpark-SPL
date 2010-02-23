@@ -41,6 +41,8 @@ public:
     EmptyCollider();
     virtual ~EmptyCollider();
     
+    virtual bool ConstructInternal();
+    
 private:
     static boost::shared_ptr<EmptyColliderInt> mEmptyColliderImp;
 };

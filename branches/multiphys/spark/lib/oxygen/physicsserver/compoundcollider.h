@@ -41,6 +41,8 @@ public:
     CompoundCollider();
     virtual ~CompoundCollider();
     
+    virtual bool ConstructInternal();
+    
 private:
     static boost::shared_ptr<CompoundColliderInt> mCompoundColliderImp;
 };

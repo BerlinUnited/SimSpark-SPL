@@ -39,6 +39,8 @@ class OXYGEN_API ContactJointHandler : public CollisionHandler
 public:
     ContactJointHandler();
     virtual ~ContactJointHandler();
+    
+    virtual void OnLink();
 
     /** Check if the collidee also has a ContactJoint handler
         registered to it. If yes, create a contact joint between the

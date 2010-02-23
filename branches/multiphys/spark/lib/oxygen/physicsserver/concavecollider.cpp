@@ -20,16 +20,41 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/concavecollider.h>
-#include <../plugin/odeimps/odeconcavecollider.h>
+#include <oxygen/physicsserver/int/concavecolliderint.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<ConcaveColliderInt> ConcaveCollider::mConcaveColliderImp;
 
-ConcaveCollider::ConcaveCollider() : Collider(){
-    mConcaveColliderImp = boost::shared_ptr<ConcaveColliderImp>(new ConcaveColliderImp());
+ConcaveCollider::ConcaveCollider() : Collider()
+{
+
 }
 
-ConcaveCollider::~ConcaveCollider(){
+ConcaveCollider::~ConcaveCollider()
+{
 
+}
+
+bool ConcaveCollider::ConstructInternal()
+{
+    if (mConcaveColliderImp.get() == 0)
+        mConcaveColliderImp = shared_dynamic_cast<ConcaveColliderInt>
+            (GetCore()->New("ConcaveColliderImp"));
+            
+    if (mConcaveColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(ConcaveCollider) ERROR: No implementation found at '/classes/ConcaveColliderImp'";
+            return false;
+        }
+    
+    if (!Collider::ConstructInternal()) return false;
+    
+    //we can't use the logserver here
+    std::cerr << "(ConcaveCollider) ERROR: ConcaveCollider is not implemented yet. Did nothing";
+    
+    return true;
 }

@@ -20,16 +20,39 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/convexcollider.h>
-#include <../plugin/odeimps/odeconvexcollider.h>
+#include <oxygen/physicsserver/int/convexcolliderint.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<ConvexColliderInt> ConvexCollider::mConvexColliderImp;
 
 ConvexCollider::ConvexCollider() : Collider(){
-    mConvexColliderImp = boost::shared_ptr<ConvexColliderImp>(new ConvexColliderImp());
+
 }
 
 ConvexCollider::~ConvexCollider(){
 
+}
+
+bool ConvexCollider::ConstructInternal()
+{
+    if (mConvexColliderImp.get() == 0)
+        mConvexColliderImp = shared_dynamic_cast<ConvexColliderInt>
+            (GetCore()->New("ConvexColliderImp"));
+            
+    if (mConvexColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(ConvexCollider) ERROR: No implementation found at '/classes/ConvexColliderImp'";
+            return false;
+        }
+    
+    if (!Collider::ConstructInternal()) return false;
+    
+    //we can't use the logserver here
+    std::cerr << "(ConvexCollider) ERROR: ConvexCollider is not implemented yet. Did nothing";
+    
+    return true;
 }

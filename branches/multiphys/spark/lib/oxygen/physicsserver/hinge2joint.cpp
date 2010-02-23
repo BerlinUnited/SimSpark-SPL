@@ -18,7 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/hinge2joint.h>
-#include <../plugin/odeimps/odehinge2joint.h>
+#include <oxygen/physicsserver/int/hinge2jointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -29,7 +29,7 @@ boost::shared_ptr<Hinge2JointInt> Hinge2Joint::mHinge2JointImp;
 
 Hinge2Joint::Hinge2Joint() : Generic6DOFJoint()
 {
-    mHinge2JointImp = boost::shared_ptr<Hinge2JointImp>(new Hinge2JointImp());
+
 }
 
 Hinge2Joint::~Hinge2Joint()
@@ -38,6 +38,12 @@ Hinge2Joint::~Hinge2Joint()
 
 void Hinge2Joint::OnLink()
 {
+    Joint::OnLink();
+    
+    if (mHinge2JointImp.get() == 0)
+        mHinge2JointImp = shared_dynamic_cast<Hinge2JointInt>
+            (GetCore()->New("Hinge2JointImp"));
+            
     long world = GetWorldID();
     if (world == 0)
         {

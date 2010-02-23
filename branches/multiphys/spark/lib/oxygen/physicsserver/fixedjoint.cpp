@@ -18,16 +18,17 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/fixedjoint.h>
-#include <../plugin/odeimps/odefixedjoint.h>
+#include <oxygen/physicsserver/int/fixedjointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<FixedJointInt> FixedJoint::mFixedJointImp;
 
 FixedJoint::FixedJoint() : Generic6DOFJoint()
 {
-    mFixedJointImp = boost::shared_ptr<FixedJointImp>(new FixedJointImp());
+
 }
 
 FixedJoint::~FixedJoint()
@@ -36,6 +37,12 @@ FixedJoint::~FixedJoint()
 
 void FixedJoint::OnLink()
 {
+    Joint::OnLink();
+    
+    if (mFixedJointImp.get() == 0)
+        mFixedJointImp = shared_dynamic_cast<FixedJointInt>
+            (GetCore()->New("FixedJointImp"));
+
     long world = GetWorldID();
     if (world == 0)
         {

@@ -41,6 +41,8 @@ public:
     Generic6DOFJoint();
     virtual ~Generic6DOFJoint();
     
+    virtual void OnLink();
+    
 private:
     static boost::shared_ptr<Generic6DOFJointInt> mGeneric6DOFJointImp;
 };

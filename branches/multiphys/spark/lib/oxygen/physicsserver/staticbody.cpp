@@ -20,16 +20,24 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/staticbody.h>
-#include <../plugin/odeimps/odestaticbody.h>
+#include <oxygen/physicsserver/int/staticbodyint.h>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<StaticBodyInt> StaticBody::mStaticBodyImp;
 
 StaticBody::StaticBody() : Body(){
-    mStaticBodyImp = boost::shared_ptr<StaticBodyImp>(new StaticBodyImp());
+
 }
 
 StaticBody::~StaticBody(){
 
+}
+
+void StaticBody::OnLink()
+{
+    if (mStaticBodyImp.get() == 0)
+        mStaticBodyImp = shared_dynamic_cast<StaticBodyInt>
+            (GetCore()->New("StaticBodyImp"));
 }
