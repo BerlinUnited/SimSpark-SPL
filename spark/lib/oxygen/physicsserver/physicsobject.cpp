@@ -24,7 +24,7 @@
 #include <oxygen/physicsserver/physicsobject.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
-#include <../plugin/odeimps/odephysicsobject.h>
+#include <oxygen/physicsserver/int/physicsobjectint.h>
 #include <oxygen/sceneserver/scene.h>
 #include <zeitgeist/logserver/logserver.h>
 
@@ -35,11 +35,18 @@ boost::shared_ptr<PhysicsObjectInt> PhysicsObject::mPhysicsObjectImp;
 
 PhysicsObject::PhysicsObject() : BaseNode()
 {
-    mPhysicsObjectImp = boost::shared_ptr<PhysicsObjectInt>(new PhysicsObjectImp());
+
 }
 
 PhysicsObject::~PhysicsObject()
 {
+}
+
+void PhysicsObject::OnLink()
+{
+    if (mPhysicsObjectImp.get() == 0)
+        mPhysicsObjectImp = shared_dynamic_cast<PhysicsObjectInt>
+            (GetCore()->New("PhysicsObjectImp"));
 }
 
 void PhysicsObject::OnUnlink()

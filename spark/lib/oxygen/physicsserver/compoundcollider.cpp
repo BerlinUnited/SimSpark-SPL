@@ -20,16 +20,40 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/compoundcollider.h>
-#include <../plugin/odeimps/odecompoundcollider.h>
+#include <oxygen/physicsserver/int/compoundcolliderint.h>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<CompoundColliderInt> CompoundCollider::mCompoundColliderImp;
 
-CompoundCollider::CompoundCollider() : Collider(){
-    mCompoundColliderImp = boost::shared_ptr<CompoundColliderImp>(new CompoundColliderImp());;
+CompoundCollider::CompoundCollider() : Collider()
+{
+
 }
 
-CompoundCollider::~CompoundCollider(){
+CompoundCollider::~CompoundCollider()
+{
 
+}
+
+bool CompoundCollider::ConstructInternal()
+{
+    if (mCompoundColliderImp.get() == 0)
+        mCompoundColliderImp = shared_dynamic_cast<CompoundColliderInt>
+            (GetCore()->New("CompoundColliderImp"));
+            
+    if (mCompoundColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(CompoundCollider) ERROR: No implementation found at '/classes/CompoundColliderImp'";
+            return false;
+        }
+    
+    if (!Collider::ConstructInternal()) return false;
+    
+    //we can't use the logserver here
+    std::cerr << "(CompoundCollider) ERROR: CompoundCollider is not implemented yet. Did nothing";
+    
+    return true;
 }

@@ -19,16 +19,18 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/oderaycollider.h>
+#include <oxygen/physicsserver/int/raycolliderint.h>
 #include <oxygen/physicsserver/raycollider.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<RayColliderInt> RayCollider::mRayColliderImp;
 
 RayCollider::RayCollider() : Collider()
 {
-    mRayColliderImp = boost::shared_ptr<RayColliderImp>(new RayColliderImp());
+
 }
 
 void RayCollider::SetParams(salt::Vector3f pos,
@@ -39,6 +41,17 @@ void RayCollider::SetParams(salt::Vector3f pos,
 
 bool RayCollider::ConstructInternal()
 {
+    if (mRayColliderImp.get() == 0)
+        mRayColliderImp = shared_dynamic_cast<RayColliderInt>
+            (GetCore()->New("RayColliderImp"));
+            
+    if (mRayColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(RayCollider) ERROR: No implementation found at '/classes/RayColliderImp'";
+            return false;
+        }
+    
     if (! Collider::ConstructInternal())
     {
         return false;

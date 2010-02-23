@@ -20,16 +20,39 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/cylindercollider.h>
-#include <../plugin/odeimps/odecylindercollider.h>
+#include <oxygen/physicsserver/int/cylindercolliderint.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<CylinderColliderInt> CylinderCollider::mCylinderColliderImp;
 
 CylinderCollider::CylinderCollider() : ConvexCollider(){
-    mCylinderColliderImp = boost::shared_ptr<CylinderColliderImp>(new CylinderColliderImp());
+
 }
 
 CylinderCollider::~CylinderCollider(){
 
+}
+
+bool CylinderCollider::ConstructInternal()
+{
+    if (mCylinderColliderImp.get() == 0)
+        mCylinderColliderImp = shared_dynamic_cast<CylinderColliderInt>
+            (GetCore()->New("CylinderColliderImp"));
+            
+    if (mCylinderColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(CylinderCollider) ERROR: No implementation found at '/classes/CylinderColliderImp'";
+            return false;
+        }
+    
+    if (!Collider::ConstructInternal()) return false;
+    
+    //we can't use the logserver here
+    std::cerr << "(CylinderCollider) ERROR: CylinderCollider is not implemented yet. Did nothing";
+    
+    return true;
 }

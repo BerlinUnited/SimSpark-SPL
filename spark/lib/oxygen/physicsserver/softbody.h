@@ -41,6 +41,8 @@ public:
     SoftBody();
     virtual ~SoftBody();
     
+    virtual void OnLink();
+    
     static boost::shared_ptr<SoftBodyInt> mSoftBodyImp;
 };
 

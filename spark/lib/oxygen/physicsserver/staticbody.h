@@ -41,6 +41,8 @@ public:
     StaticBody();
     virtual ~StaticBody();
     
+    virtual void OnLink();
+    
     static boost::shared_ptr<StaticBodyInt> mStaticBodyImp;
 };
 

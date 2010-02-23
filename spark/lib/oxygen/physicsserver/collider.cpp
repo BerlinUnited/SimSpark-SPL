@@ -20,7 +20,7 @@
 */
 #include <oxygen/physicsserver/genericphysicsobjects.h>
 #include <oxygen/physicsserver/collider.h>
-#include <../plugin/odeimps/odecollider.h>
+#include <oxygen/physicsserver/int/colliderint.h>
 #include <oxygen/physicsserver/collisionhandler.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/transformcollider.h>
@@ -38,7 +38,7 @@ boost::shared_ptr<ColliderInt> Collider::mColliderImp;
 
 Collider::Collider() : PhysicsObject(), mGeomID(0)
 {
-    mColliderImp = boost::shared_ptr<ColliderImp>(new ColliderImp());
+
 }
 
 Collider::~Collider()
@@ -48,6 +48,11 @@ Collider::~Collider()
 void Collider::OnLink()
 {
     PhysicsObject::OnLink();
+    
+    if (mColliderImp.get() == 0)
+        mColliderImp = shared_dynamic_cast<ColliderInt>
+            (GetCore()->New("ColliderImp"));
+    
     if (mGeomID == 0) return;
     
     weak_ptr<Node> parent = GetParent();

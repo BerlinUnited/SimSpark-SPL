@@ -20,7 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/contactjointhandler.h>
-#include <../plugin/odeimps/odecontactjointhandler.h>
+#include <oxygen/physicsserver/int/contactjointhandlerint.h>
 #include <oxygen/physicsserver/collider.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
@@ -33,13 +33,25 @@ boost::shared_ptr<ContactJointHandlerInt> ContactJointHandler::mContactJointHand
 
 ContactJointHandler::ContactJointHandler() : CollisionHandler()
 {
-    mContactJointHandlerImp = boost::shared_ptr<ContactJointHandlerImp>(new ContactJointHandlerImp());
-    mSurfaceParameter = mContactJointHandlerImp->Initialize();
+
 }
 
 ContactJointHandler::~ContactJointHandler()
 {
     delete mSurfaceParameter;
+}
+
+void ContactJointHandler::OnLink()
+{
+    CollisionHandler::OnLink();
+
+    if (mContactJointHandlerImp.get() == 0)
+        mContactJointHandlerImp = shared_dynamic_cast<ContactJointHandlerInt>
+            (GetCore()->New("ContactJointHandlerImp"));
+            
+    //no failsaving here
+    //if mCJHImp is a nullpointer at this point it will just crash later, anyway
+    mSurfaceParameter = mContactJointHandlerImp->Initialize();
 }
 
 void

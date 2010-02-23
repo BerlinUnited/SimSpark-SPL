@@ -41,6 +41,8 @@ public:
     ConeCollider();
     virtual ~ConeCollider();
     
+    virtual bool ConstructInternal();
+    
 private:
     static boost::shared_ptr<ConeColliderInt> mConeColliderImp;
 };

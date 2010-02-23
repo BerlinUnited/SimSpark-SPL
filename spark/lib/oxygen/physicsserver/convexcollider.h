@@ -40,6 +40,8 @@ public:
     ConvexCollider();
     virtual ~ConvexCollider();
     
+    virtual bool ConstructInternal();
+    
 private:
     static boost::shared_ptr<ConvexColliderInt> mConvexColliderImp;
 };

@@ -20,17 +20,19 @@
 */
 
 #include <oxygen/physicsserver/planecollider.h>
-#include <../plugin/odeimps/odeplanecollider.h>
+#include <oxygen/physicsserver/int/planecolliderint.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <iostream>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
 
 boost::shared_ptr<PlaneColliderInt> PlaneCollider::mPlaneColliderImp;
 
 PlaneCollider::PlaneCollider() : Collider()
 {
-    mPlaneColliderImp = boost::shared_ptr<PlaneColliderImp>(new PlaneColliderImp());
+
 }
 
 void PlaneCollider::SetParams(float a, float b, float c, float d)
@@ -50,6 +52,17 @@ void PlaneCollider::SetParams(float a, float b, float c, float d)
 
 bool PlaneCollider::ConstructInternal()
 {
+    if (mPlaneColliderImp.get() == 0)
+        mPlaneColliderImp = shared_dynamic_cast<PlaneColliderInt>
+            (GetCore()->New("PlaneColliderImp"));
+            
+    if (mPlaneColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(PlaneCollider) ERROR: No implementation found at '/classes/PlaneColliderImp'";
+            return false;
+        }
+
     if (! Collider::ConstructInternal())
         {
             return false;

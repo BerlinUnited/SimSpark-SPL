@@ -20,17 +20,40 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/odeemptycollider.h>
+#include <oxygen/physicsserver/int/emptycolliderint.h>
 #include <oxygen/physicsserver/emptycollider.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<EmptyColliderInt> EmptyCollider::mEmptyColliderImp;
 
 EmptyCollider::EmptyCollider() : Collider(){
-    mEmptyColliderImp = boost::shared_ptr<EmptyColliderImp>(new EmptyColliderImp());
+
 }
 
 EmptyCollider::~EmptyCollider(){
 
+}
+
+bool EmptyCollider::ConstructInternal()
+{
+    if (mEmptyColliderImp.get() == 0)
+        mEmptyColliderImp = shared_dynamic_cast<EmptyColliderInt>
+            (GetCore()->New("EmptyColliderImp"));
+            
+    if (mEmptyColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(EmptyCollider) ERROR: No implementation found at '/classes/EmptyColliderImp'";
+            return false;
+        }
+    
+    if (!Collider::ConstructInternal()) return false;
+    
+    //we can't use the logserver here
+    std::cerr << "(EmptyCollider) ERROR: EmptyCollider is not implemented yet. Did nothing";
+    
+    return true;
 }

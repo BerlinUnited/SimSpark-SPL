@@ -21,24 +21,38 @@
 */
 
 #include <oxygen/physicsserver/conetwistjoint.h>
-#include <../plugin/odeimps/odeconetwistjoint.h>
+#include <oxygen/physicsserver/int/conetwistjointint.h>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<ConeTwistJointInt> ConeTwistJoint::mConeTwistJointImp;
 
-ConeTwistJoint::ConeTwistJoint() : Generic6DOFJoint(){
-    mConeTwistJointImp = boost::shared_ptr<ConeTwistJointImp>(new ConeTwistJointImp());
-}
-
-ConeTwistJoint::~ConeTwistJoint(){
+ConeTwistJoint::ConeTwistJoint() : Generic6DOFJoint()
+{
 
 }
 
-void ConeTwistJoint::SetParameter(int parameter, float value){
+ConeTwistJoint::~ConeTwistJoint()
+{
 
 }
 
-float ConeTwistJoint::GetParameter(int parameter) const{
+void ConeTwistJoint::OnLink()
+{
+    Joint::OnLink();
+
+    if (mConeTwistJointImp.get() == 0)
+        mConeTwistJointImp = shared_dynamic_cast<ConeTwistJointInt>
+            (GetCore()->New("ConeTwistJointImp"));
+}
+
+void ConeTwistJoint::SetParameter(int parameter, float value)
+{
+
+}
+
+float ConeTwistJoint::GetParameter(int parameter) const
+{
     return 0.0;
 }

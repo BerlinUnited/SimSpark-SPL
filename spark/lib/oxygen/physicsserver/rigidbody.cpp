@@ -20,10 +20,11 @@
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/world.h>
-#include <../plugin/odeimps/oderigidbody.h>
+#include <oxygen/physicsserver/int/rigidbodyint.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/sceneserver/transform.h>
 #include <zeitgeist/logserver/logserver.h>
+#include <iostream>
 
 using namespace boost;
 using namespace oxygen;
@@ -34,7 +35,7 @@ boost::shared_ptr<RigidBodyInt> RigidBody::mRigidBodyImp;
 
 RigidBody::RigidBody() : Body()
 {
-    mRigidBodyImp = boost::shared_ptr<RigidBodyImp>(new RigidBodyImp());
+
 }
 
 RigidBody::~RigidBody()
@@ -76,6 +77,17 @@ bool RigidBody::CreateBody()
     if (mBodyID != 0)
         {
             return true;
+        }
+
+    if (mRigidBodyImp.get() == 0)
+        mRigidBodyImp = shared_dynamic_cast<RigidBodyInt>
+            (GetCore()->New("RigidBodyImp"));
+            
+    if (mRigidBodyImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(RigidBody) ERROR: No implementation found at '/classes/RigidBodyImp'";
+            return false;
         }
 
     long world = (long) GetWorldID();

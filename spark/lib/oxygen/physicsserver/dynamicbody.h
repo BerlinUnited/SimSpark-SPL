@@ -41,6 +41,8 @@ public:
     DynamicBody();
     virtual ~DynamicBody();
     
+    virtual void OnLink();
+    
 private:
     static boost::shared_ptr<DynamicBodyInt> mDynamicBodyImp;
 };

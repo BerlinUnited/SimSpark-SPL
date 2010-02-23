@@ -20,16 +20,17 @@
 */
 
 #include <oxygen/physicsserver/spherecollider.h>
-#include <../plugin/odeimps/odespherecollider.h>
+#include <oxygen/physicsserver/int/spherecolliderint.h>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
 
 boost::shared_ptr<SphereColliderInt> SphereCollider::mSphereColliderImp;
 
 SphereCollider::SphereCollider() : ConvexCollider()
 {
-    mSphereColliderImp = boost::shared_ptr<SphereColliderImp>(new SphereColliderImp());
+
 }
 
 void SphereCollider::SetRadius(float r)
@@ -43,7 +44,11 @@ float SphereCollider::GetRadius() const
 }
 
 bool SphereCollider::ConstructInternal()
-{
+{        
+    if (mSphereColliderImp.get() == 0)
+        mSphereColliderImp = shared_dynamic_cast<SphereColliderInt>
+            (GetCore()->New("SphereColliderImp"));
+
     if (!Collider::ConstructInternal())
     {
         return false;

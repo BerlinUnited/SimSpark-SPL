@@ -20,16 +20,41 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <oxygen/physicsserver/conecollider.h>
-#include <../plugin/odeimps/odeconecollider.h>
+#include <oxygen/physicsserver/int/conecolliderint.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
 
 boost::shared_ptr<ConeColliderInt> ConeCollider::mConeColliderImp;
 
-ConeCollider::ConeCollider() : ConvexCollider(){
-    mConeColliderImp = boost::shared_ptr<ConeColliderImp>(new ConeColliderImp());
+ConeCollider::ConeCollider() : ConvexCollider()
+{
+
 }
 
-ConeCollider::~ConeCollider(){
+ConeCollider::~ConeCollider()
+{
 
+}
+
+bool ConeCollider::ConstructInternal()
+{
+    if (mConeColliderImp.get() == 0)
+        mConeColliderImp = shared_dynamic_cast<ConeColliderInt>
+            (GetCore()->New("ConeColliderImp"));
+            
+    if (mConeColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(ConeCollider) ERROR: No implementation found at '/classes/ConeColliderImp'";
+            return false;
+        }
+    
+    if (!Collider::ConstructInternal()) return false;
+    
+    //we can't use the logserver here
+    std::cerr << "(ConeCollider) ERROR: ConeCollider is not implemented yet. Did nothing";
+    
+    return true;
 }

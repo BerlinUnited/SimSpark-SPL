@@ -43,6 +43,8 @@ public:
     //
     PhysicsObject();
     virtual ~PhysicsObject();
+    
+    virtual void OnLink();
 
     /** This rountine is called, before the hierarchy object is
         removed from the parent. It can be overridden to support

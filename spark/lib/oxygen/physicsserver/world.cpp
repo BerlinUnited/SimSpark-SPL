@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <../plugin/odeimps/odeworld.h>
+#include <oxygen/physicsserver/int/worldint.h>
 #include <oxygen/physicsserver/space.h>
 #include <oxygen/physicsserver/world.h>
 #include <oxygen/sceneserver/scene.h>
@@ -32,7 +32,7 @@ boost::shared_ptr<WorldInt> World::mWorldImp;
 
 World::World() : PhysicsObject()
 {
-    mWorldImp = boost::shared_ptr<WorldInt>(new WorldImp());
+
 }
 
 World::~World()
@@ -101,6 +101,10 @@ float World::GetContactSurfaceLayer() const
 
 bool World::ConstructInternal()
 {
+    if (mWorldImp.get() == 0)
+        mWorldImp = shared_dynamic_cast<WorldInt>
+            (GetCore()->New("WorldImp"));
+
     mWorldID = mWorldImp->CreateWorld();
 
     return (mWorldID != 0);
@@ -116,7 +120,7 @@ void World::DestroyPhysicsObject()
 
     recurseLock = true;
 
-    shared_ptr<Space> space = GetSpace();
+    shared_ptr<World> space = GetWorld();
     if (space.get() != 0)
         {
             space->DestroyPhysicsObject();

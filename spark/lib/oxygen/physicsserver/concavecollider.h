@@ -41,6 +41,8 @@ public:
     ConcaveCollider();
     virtual ~ConcaveCollider();
     
+    virtual bool ConstructInternal();
+    
 private:
     static boost::shared_ptr<ConcaveColliderInt> mConcaveColliderImp;
 };

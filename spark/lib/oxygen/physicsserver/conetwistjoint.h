@@ -40,6 +40,8 @@ public:
     ConeTwistJoint();
     virtual ~ConeTwistJoint();
     
+    virtual void OnLink();
+    
     //overwrite pure virtual methods inherited from Joint 
     //to shut the compiler up
     void SetParameter(int parameter, float value);
