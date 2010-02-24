@@ -67,6 +67,6 @@ kill_server()
 
 sleep 2
 
-$MON & $AGT
+$MON
 
 kill_server
