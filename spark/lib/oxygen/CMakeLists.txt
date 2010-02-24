@@ -227,10 +227,10 @@ set(oxygen_LIB_SRCS
     physicsserver/angularmotor.cpp
     physicsserver/angularmotor_c.cpp
     
-    #proxyserver/agentproxy.cpp
-    #proxyserver/proxyserver.cpp
-    #proxyserver/agentproxy_c.cpp
-    #proxyserver/proxyserver_c.cpp
+    proxyserver/agentproxy.cpp
+    proxyserver/proxyserver.cpp
+    proxyserver/agentproxy_c.cpp
+    proxyserver/proxyserver_c.cpp
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp
     sceneserver/fpscontroller.cpp
