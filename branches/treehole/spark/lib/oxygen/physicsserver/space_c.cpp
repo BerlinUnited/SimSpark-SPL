@@ -38,6 +38,6 @@ FUNCTION(Space,disableInnerCollision)
 
 void CLASS(Space)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_BASECLASS(oxygen/PhysicsObject);
     DEFINE_FUNCTION(disableInnerCollision);
 }

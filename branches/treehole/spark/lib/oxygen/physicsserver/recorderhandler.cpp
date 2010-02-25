@@ -19,14 +19,14 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "recorderhandler.h"
+#include <oxygen/physicsserver/recorderhandler.h>
 
 using namespace oxygen;
 using namespace boost;
 
 void
 RecorderHandler::HandleCollision
-(boost::shared_ptr<Collider> collidee, dContact& /*contact*/)
+(boost::shared_ptr<Collider> collidee, GenericContact& /*contact*/)
 {
     mCollisionSet.insert(weak_ptr<Collider>(collidee));
 }

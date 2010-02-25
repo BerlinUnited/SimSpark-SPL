@@ -38,7 +38,7 @@
      (nd Transform
 	 (setLocalPos $anchorX $anchorY $anchorZ)
 	 (setLocalRotation 0 90 0)
-	 (nd CCylinder
+	 (nd Capsule
 	     (setMaterial matGrey)
 	     (setParams $ElbowRadius $ElbowLen)
 	     )

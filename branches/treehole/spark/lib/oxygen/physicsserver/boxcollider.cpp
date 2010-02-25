@@ -20,52 +20,56 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "boxcollider.h"
+#include <oxygen/physicsserver/boxcollider.h>
+#include <oxygen/physicsserver/int/boxcolliderint.h>
+#include <iostream>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
 
-BoxCollider::BoxCollider() : Collider()
+boost::shared_ptr<BoxColliderInt> BoxCollider::mBoxColliderImp;
+
+BoxCollider::BoxCollider() : ConvexCollider()
 {
+ 
+}      
+
+void BoxCollider::SetBoxLengths(const Vector3f& extents)
+{
+    mBoxColliderImp->SetBoxLengths(extents, mGeomID);
 }
 
-void
-BoxCollider::SetBoxLengths(const Vector3f& extents)
+bool BoxCollider::ConstructInternal()
 {
-    dGeomBoxSetLengths(
-                       mODEGeom,
-                       extents[0],
-                       extents[1],
-                       extents[2]
-                       );
-}
+    if (mBoxColliderImp.get() == 0)
+        mBoxColliderImp = shared_dynamic_cast<BoxColliderInt>
+            (GetCore()->New("BoxColliderImp"));
+            
+    if (mBoxColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(BoxCollider) ERROR: Found no implementation at '/classes/BoxColliderImp'";
+            return false;
+        }
 
-bool
-BoxCollider::ConstructInternal()
-{
     if (! Collider::ConstructInternal())
         {
             return false;
         }
 
     // create a unit box
-    mODEGeom = dCreateBox (0, 1.0f, 1.0f, 1.0f);
+    mGeomID = mBoxColliderImp->CreateBox();
 
-    return (mODEGeom != 0);
+    return (mGeomID != 0);
 }
 
-void
-BoxCollider::GetBoxLengths(Vector3f& extents)
+void BoxCollider::GetBoxLengths(Vector3f& extents)
 {
-    dVector3 lengths;
-    dGeomBoxGetLengths(mODEGeom,lengths);
-    extents[0] = lengths[0];
-    extents[1] = lengths[1];
-    extents[2] = lengths[2];
+    mBoxColliderImp->GetBoxLengths(extents, mGeomID);
 }
 
-float
-BoxCollider::GetBoxLength(int axis)
+float BoxCollider::GetBoxLength(int axis)
 {
     if (
         (axis<0) ||
@@ -80,12 +84,8 @@ BoxCollider::GetBoxLength(int axis)
     return extents[axis];
 }
 
-float
-BoxCollider::GetPointDepth(const Vector3f& pos)
+float BoxCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
-    return dGeomBoxPointDepth
-        (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+    return mBoxColliderImp->GetPointDepth(worldPos, mGeomID);
 }
-
-

@@ -21,13 +21,13 @@
 #define OXYGEN_UNIVERSALJOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
-class Body;
+class UniversalJointInt;
 
-class OXYGEN_API UniversalJoint : public Joint
+class OXYGEN_API UniversalJoint : public Generic6DOFJoint
 {
 public:
     UniversalJoint();
@@ -69,16 +69,16 @@ public:
 
     /** returns the time derivate of one of the hinge angles */
     float GetAngleRate(EAxisIndex idx) const;
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value);
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    
+    /** Sets a parameter value of this joint*/
+    void SetParameter(int parameter, float value);
 
 protected:
     /** creates a new universal joint */
     virtual void OnLink();
+    
+private:
+    static boost::shared_ptr<UniversalJointInt> mUniversalJointImp;
 };
 
 DECLARE_CLASS(UniversalJoint);

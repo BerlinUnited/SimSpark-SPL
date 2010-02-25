@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "hinge2joint.h"
+#include <oxygen/physicsserver/hinge2joint.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -75,7 +75,7 @@ FUNCTION(Hinge2Joint,getAngleRate)
 
 void CLASS(Hinge2Joint)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/Joint);
+    DEFINE_BASECLASS(oxygen/Generic6DOFJoint);
     DEFINE_FUNCTION(setAnchor);
     DEFINE_FUNCTION(getAngle);
     DEFINE_FUNCTION(getAngleRate);

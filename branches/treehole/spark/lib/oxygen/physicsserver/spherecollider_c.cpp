@@ -63,7 +63,7 @@ FUNCTION(SphereCollider,getPointDepth)
 
 void CLASS(SphereCollider)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/Collider);
+    DEFINE_BASECLASS(oxygen/ConvexCollider);
     DEFINE_FUNCTION(setRadius);
     DEFINE_FUNCTION(getRadius);
     DEFINE_FUNCTION(getPointDepth);

@@ -249,7 +249,7 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
         ...
         )
         (RubySceneGraph Header)
-        (RubySceneGraph Body)
+        (RubySceneGraph RigidBody)
         )
     **/
 

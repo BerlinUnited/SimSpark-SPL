@@ -8,13 +8,13 @@
      (setMaterial $material)
      )
 
- (nd Body
+ (nd RigidBody
      (setName boxBody)
      (setBoxTotal $totalMass $lenX $lenY $lenZ)
-     (nd DragController
-	 (setAngularDrag 0.01)
-	 (setLinearDrag 0.01)
-	 )
+        (nd DragController
+	     (setAngularDrag 0.01)
+	     (setLinearDrag 0.01)
+	    )
      )
 
  (nd BoxCollider

@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "joint.h"
+#include <oxygen/physicsserver/joint.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -547,7 +547,7 @@ FUNCTION(Joint, setJointMaxSpeed2)
 
 void CLASS(Joint)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_BASECLASS(oxygen/PhysicsObject);
     DEFINE_FUNCTION(attach);
     DEFINE_FUNCTION(setHighStopDeg);
     DEFINE_FUNCTION(getHighStopDeg);

@@ -85,7 +85,7 @@ new ('kerosin/Camera', 'camera');
 light = new ('kerosin/Light', '../_light');
 light.setRadius(30.0);
 light.setDiffuseColor(1.0, 1.0, 1.0);
-body = new ('kerosin/Body', '../_body');
+body = new ('kerosin/RigidBody', '../_body');
 body.useGravity(false);
 new ('kerosin/FPSController', 'fps');
 #collider = new ('kerosin/SphereCollider', '../../_collider');

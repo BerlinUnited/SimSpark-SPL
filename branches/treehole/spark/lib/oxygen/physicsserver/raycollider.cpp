@@ -19,32 +19,46 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "raycollider.h"
+#include <oxygen/physicsserver/int/raycolliderint.h>
+#include <oxygen/physicsserver/raycollider.h>
+#include <iostream>
 
 using namespace oxygen;
+using namespace boost;
+
+boost::shared_ptr<RayColliderInt> RayCollider::mRayColliderImp;
 
 RayCollider::RayCollider() : Collider()
 {
+
 }
 
-void
-RayCollider::SetParams(salt::Vector3f pos,
+void RayCollider::SetParams(salt::Vector3f pos,
                             salt::Vector3f dir, float length)
 {
-    dGeomRaySet(mODEGeom, pos[0], pos[1], pos[2], dir[0], dir[1], dir[2]);
-    dGeomRaySetLength(mODEGeom, length);
+    mRayColliderImp->SetParams(pos, dir, length, mGeomID);
 }
 
-bool
-RayCollider::ConstructInternal()
+bool RayCollider::ConstructInternal()
 {
+    if (mRayColliderImp.get() == 0)
+        mRayColliderImp = shared_dynamic_cast<RayColliderInt>
+            (GetCore()->New("RayColliderImp"));
+            
+    if (mRayColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(RayCollider) ERROR: No implementation found at '/classes/RayColliderImp'";
+            return false;
+        }
+    
     if (! Collider::ConstructInternal())
     {
         return false;
     }
 
     // create a unit ray
-    mODEGeom = dCreateRay(0, 1.0f);
+    mGeomID = mRayColliderImp->CreateRay();
 
-    return (mODEGeom != 0);
+    return (mGeomID != 0);
 }

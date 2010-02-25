@@ -16,7 +16,7 @@
 ;			    + (eval 0.1 * $scale))
 ;		      + (eval $headRadius / 2.0)))
 
- (nd Body
+ (nd RigidBody
        (setName boxBody)
        ; Upper torso mass
        (setBoxTotal $upperMass $upperLenX $upperLenY $upperLenZ)

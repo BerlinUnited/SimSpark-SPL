@@ -19,45 +19,51 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "spherecollider.h"
+#include <oxygen/physicsserver/spherecollider.h>
+#include <oxygen/physicsserver/int/spherecolliderint.h>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
 
-SphereCollider::SphereCollider() : Collider()
+boost::shared_ptr<SphereColliderInt> SphereCollider::mSphereColliderImp;
+
+SphereCollider::SphereCollider() : ConvexCollider()
 {
+
 }
 
-void
-SphereCollider::SetRadius(float r)
+void SphereCollider::SetRadius(float r)
 {
-    dGeomSphereSetRadius(mODEGeom, r);
+    mSphereColliderImp->SetRadius(r, mGeomID);
 }
 
-float
-SphereCollider::GetRadius() const
+float SphereCollider::GetRadius() const
 {
-    return dGeomSphereGetRadius(mODEGeom);
+    return mSphereColliderImp->GetRadius(mGeomID);
 }
 
-bool
-SphereCollider::ConstructInternal()
-{
-    if (! Collider::ConstructInternal())
+bool SphereCollider::ConstructInternal()
+{        
+    if (mSphereColliderImp.get() == 0)
+        mSphereColliderImp = shared_dynamic_cast<SphereColliderInt>
+            (GetCore()->New("SphereColliderImp"));
+
+    if (!Collider::ConstructInternal())
     {
         return false;
     }
+    
+   // mODEGeom = dCreateSphere(0, 1.0f);
 
     // create a unit sphere
-    mODEGeom = dCreateSphere(0, 1.0f);
+    mGeomID = mSphereColliderImp->CreateSphere();
 
-    return (mODEGeom != 0);
+    return (mGeomID != 0);
 }
 
-float
-SphereCollider::GetPointDepth(const Vector3f& pos)
+float SphereCollider::GetPointDepth(const Vector3f& pos)
 {
   Vector3f worldPos(GetWorldTransform() * pos);
-  return dGeomSpherePointDepth
-    (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+  return mSphereColliderImp->GetPointDepth(worldPos, mGeomID);
 }

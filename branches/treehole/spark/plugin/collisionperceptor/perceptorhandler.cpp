@@ -61,7 +61,7 @@ PerceptorHandler::OnUnlink()
 
 void
 PerceptorHandler::HandleCollision
-(boost::shared_ptr<Collider> collidee, dContact& /*contact*/)
+(boost::shared_ptr<Collider> collidee, GenericContact& /*contact*/)
 {
     if (mColPercept.get() == 0)
         return;

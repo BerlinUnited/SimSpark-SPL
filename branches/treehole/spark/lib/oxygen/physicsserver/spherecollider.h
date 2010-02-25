@@ -23,14 +23,15 @@
 #define OXYGEN_SPHERECOLLIDER_H
 
 #include <oxygen/oxygen_defines.h>
-#include "collider.h"
+#include <oxygen/physicsserver/convexcollider.h>
 
 namespace oxygen
 {
+class SphereColliderInt;
 
-/** SphereCollider encapsulates an ODE sphere geometry object.
+/** SphereCollider encapsulates a sphere geometry object.
  */
-class OXYGEN_API SphereCollider : public Collider
+class OXYGEN_API SphereCollider : public ConvexCollider
 {
     //
     // Functions
@@ -38,10 +39,10 @@ class OXYGEN_API SphereCollider : public Collider
 public:
     SphereCollider();
 
-    /** sets the radius of the managed ODE sphere geom */
+    /** sets the radius of the managed sphere geom */
     void SetRadius(float r);
 
-    /** get the radius back from ODE */
+    /** get the radius of the managed sphere */
     float GetRadius() const;
 
     /** returns the depth of the given relative position in the
@@ -54,6 +55,9 @@ public:
 protected:
     /** constructs a default sphere with a radius of 1 */
     virtual bool ConstructInternal();
+    
+private:
+    static boost::shared_ptr<SphereColliderInt> mSphereColliderImp;
 };
 
 DECLARE_CLASS(SphereCollider);

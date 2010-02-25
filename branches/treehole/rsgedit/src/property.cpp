@@ -33,7 +33,7 @@
 #include <oxygen/sceneserver/basenode.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/sceneserver/scenedict.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/joint.h>
 #include <oxygen/physicsserver/hingejoint.h>
 #include <oxygen/physicsserver/universaljoint.h>
@@ -107,7 +107,7 @@ void Property::Init()
     mClassMap[wxT("ClassClass")] = CL_CLASS;
     mClassMap[wxT("/classes/oxygen/BaseNode")] = CL_BASENODE;
     mClassMap[wxT("/classes/oxygen/Transform")] = CL_TRANSFORM;
-    mClassMap[wxT("/classes/oxygen/Body")] = CL_BODY;
+    mClassMap[wxT("/classes/oxygen/RigidBody")] = CL_RIGIDBODY;
     mClassMap[wxT("/classes/oxygen/Joint")] = CL_JOINT;
     mClassMap[wxT("/classes/oxygen/HingeJoint")] = CL_HINGEJOINT;
     mClassMap[wxT("/classes/oxygen/UniversalJoint")] = CL_UNIVERSALJOINT;
@@ -189,7 +189,7 @@ void Property::GenTransformEntries(shared_ptr<Leaf> leaf, TEntryList& entries) c
 
 void Property::GenBodyEntries(shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const Body& body = *shared_static_cast<Body>(leaf);
+    const RigidBody& body = *shared_static_cast<RigidBody>(leaf);
     entries.push_back(Entry(wxT("GetMass"),FormatFloat(body.GetMass())));
     entries.push_back(Entry(wxT("GetVelocity"),FormatVector3(body.GetVelocity())));
     entries.push_back(Entry(wxT("GetAngularVelocity"),FormatVector3(body.GetAngularVelocity())));
@@ -398,7 +398,7 @@ void Property::GenEntries(shared_ptr<zeitgeist::Leaf> leaf,
                     GenTransformEntries(leaf, entries);
                     break;
 
-                case CL_BODY:
+                case CL_RIGIDBODY:
                     GenBodyEntries(leaf, entries);
                     break;
 

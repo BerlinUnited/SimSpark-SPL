@@ -23,13 +23,15 @@
 #define OXYGEN_JOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "odeobject.h"
+#include <oxygen/physicsserver/physicsobject.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
-class Body;
+class RigidBody;
+class JointInt;
 
-/** \class Joint encapsulates an ODE joint object. A joint is a
+/** \class Joint encapsulates a joint object. A joint is a
     relationship (a constraint) that is enforced between two bodies so
     that they can only have certain positions and orientations
     relative to each other.
@@ -47,7 +49,7 @@ class Body;
     rates) directly, instead you must set the corresponding body
     positions and velocities.
  */
-class OXYGEN_API Joint : public ODEObject
+class OXYGEN_API Joint : public PhysicsObject
 {
 public:
     enum EBodyIndex
@@ -66,8 +68,8 @@ public:
     Joint();
     virtual ~Joint();
 
-    /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    /** destroy the managed physics object */
+    virtual void DestroyPhysicsObject();
 
     /** attaches the joint to some new bodies. If the joint is already
         attached, it will be detached from the old bodies first. To
@@ -76,8 +78,8 @@ public:
         both bodies to zero puts the joint into "limbo", i.e. it will
         have no effect on the simulation.
     */
-    virtual void Attach(boost::shared_ptr<Body> body1,
-                        boost::shared_ptr<Body> body2);
+    virtual void Attach(boost::shared_ptr<RigidBody> body1,
+                        boost::shared_ptr<RigidBody> body2);
 
     /** attaches the joint to some new bodies, that are given as path
         expressions. These path expressions are allowed to be relative
@@ -88,13 +90,13 @@ public:
     /** returns one of the bodies that this joint connects, according
         to the given EBodyIndex
     */
-    boost::shared_ptr<Body> GetBody(EBodyIndex idx);
+    boost::shared_ptr<RigidBody> GetBody(EBodyIndex idx);
 
-    /** returns the Joint node corresponding to the given ODE joint */
-    static boost::shared_ptr<Joint> GetJoint(dJointID id);
+    /** returns the Joint node corresponding to the given joint */
+    static boost::shared_ptr<Joint> GetJoint(long jointID);
 
-    /** returns the type of the managed ODE joint, possible return
-        values are dJointTypeNone, dJointTypeBall, dJointTypeHinge,
+    /** returns the type of the managed joint, possible return
+        values from ODE are dJointTypeNone, dJointTypeBall, dJointTypeHinge,
         dJointTypeSlider, dJointTypeContact, dJointTypeUniversal,
         dJointTypeHinge2, dJointTypeFixed or dJointTypeAMotor.
      */
@@ -102,15 +104,15 @@ public:
 
     /** returns true if the two given bodies are connected by a
         joint */
-    static bool AreConnected (boost::shared_ptr<Body> body1,
-                              boost::shared_ptr<Body> body2);
+    static bool AreConnected (boost::shared_ptr<RigidBody> body1,
+                              boost::shared_ptr<RigidBody> body2);
 
     /** returns true if the two given bodies are connected together by
         a joint that does not have the given joint type. For possible
         joint type constants see GetType()
      */
-    static bool AreConnectedExcluding (boost::shared_ptr<Body> body1,
-                                       boost::shared_ptr<Body> body2,
+    static bool AreConnectedExcluding (boost::shared_ptr<RigidBody> body1,
+                                       boost::shared_ptr<RigidBody> body2,
                                        int joint_type);
 
     /** during the world time step, the forces that are applied by
@@ -242,7 +244,7 @@ public:
     /** sets the maximum force or torque that the motor will use to
         achieve the desired velocity. This must always be greater than
         or equal to zero. Setting this to zero (the default value)
-        turns off the motor
+        turns off the motor.
     */
     void SetMaxMotorForce(EAxisIndex idx, float f);
 
@@ -250,12 +252,6 @@ public:
         achieve the desired velocity.
     */
     float GetMaxMotorForce(EAxisIndex idx) const;
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value) = 0;
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const = 0;
 
     /** Set the maximum joint speed1, valid for both hingejoint and universaljoint */
     virtual void SetJointMaxSpeed1(float rad);
@@ -276,20 +272,21 @@ public:
     bool IsLimitJointMaxSpeed2() const;
 
 protected:
-    /** associated the created ODE joint with this node */
+    /** associates the created joint with this node */
     virtual void OnLink();
 
-    /** get the node at 'path' and tries a cast to Body */
-    boost::shared_ptr<Body> GetBody(const std::string& path);
+    /** gets the node at 'path' and tries a cast to Body */
+    boost::shared_ptr<RigidBody> GetBody(const std::string& path);
 
-protected:
-    /** the managed ODE joint */
-    dJointID mODEJoint;
+    //
+    // Members
+    //
+    
+    /** the ID of the managed joint */
+    long mJointID;
+    
+    boost::shared_ptr<GenericJointFeedback> mFeedback;
 
-    /** the allocated joint feedback structure */
-    boost::shared_ptr<dJointFeedback> mFeedback;
-
-protected:
     /** The maximum joint speed in rad, valid for both hingejoint and universaljoint */
     float mJointMaxSpeed1;
     bool mIsLimitJointMaxSpeed1;
@@ -297,6 +294,8 @@ protected:
     /** The maximum joint speed in rad, valid only for universaljoint */
     float mJointMaxSpeed2;
     bool mIsLimitJointMaxSpeed2;
+ 
+    static boost::shared_ptr<JointInt> mJointImp;
 };
 
 DECLARE_ABSTRACTCLASS(Joint);

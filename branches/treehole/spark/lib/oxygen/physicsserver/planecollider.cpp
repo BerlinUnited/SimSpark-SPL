@@ -19,13 +19,20 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "planecollider.h"
+#include <oxygen/physicsserver/planecollider.h>
+#include <oxygen/physicsserver/int/planecolliderint.h>
+#include <zeitgeist/logserver/logserver.h>
+#include <iostream>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
+
+boost::shared_ptr<PlaneColliderInt> PlaneCollider::mPlaneColliderImp;
 
 PlaneCollider::PlaneCollider() : Collider()
 {
+
 }
 
 void PlaneCollider::SetParams(float a, float b, float c, float d)
@@ -40,49 +47,55 @@ void PlaneCollider::SetParams(float a, float b, float c, float d)
             d /= l;
         }
 
-    dGeomPlaneSetParams(mODEGeom, a, b, c, d);
+    mPlaneColliderImp->SetPlaneParams(a, b, c, d, mGeomID);
 }
 
 bool PlaneCollider::ConstructInternal()
 {
+    if (mPlaneColliderImp.get() == 0)
+        mPlaneColliderImp = shared_dynamic_cast<PlaneColliderInt>
+            (GetCore()->New("PlaneColliderImp"));
+            
+    if (mPlaneColliderImp.get() == 0)
+        {
+            //we can't use the logserver here
+            std::cerr << "(PlaneCollider) ERROR: No implementation found at '/classes/PlaneColliderImp'";
+            return false;
+        }
+
     if (! Collider::ConstructInternal())
         {
             return false;
         }
 
-    // a plane with normal pointing up, going through the origin
-    mODEGeom = dCreatePlane(0, 0, 1, 0, 0);
+    //create default plane
+    mGeomID = mPlaneColliderImp->CreatePlane();
 
-    return (mODEGeom != 0);
+    return (mGeomID != 0);
 }
 
-void
-PlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal)
+void PlaneCollider::SetParams(const salt::Vector3f& pos, salt::Vector3f normal)
 {
     normal.Normalize();
     float d = pos.Dot(normal);
-    dGeomPlaneSetParams(mODEGeom, normal.x(), normal.y(), normal.z(), d);
+    mPlaneColliderImp->SetPlaneParams(normal.x(), normal.y(), normal.z(), d, mGeomID); 
+    //dGeomPlaneSetParams(mODEGeom, normal.x(), normal.y(), normal.z(), d);
 }
 
-void
-PlaneCollider::SetPosition(const salt::Vector3f& /*pos*/)
+void PlaneCollider::SetPosition(const salt::Vector3f& /*pos*/)
 {
-    // planes are non placeable geoms
+    GetLog()->Warning()
+      << "(PlaneCollider) WARNING: tried to set the position of a non-placeable geom, ignored\n";
 }
 
-void
-PlaneCollider::SetRotation(const Matrix& /*rot*/)
+void PlaneCollider::SetRotation(const Matrix& /*rot*/)
 {
-    // planes are non placeable geoms
+    GetLog()->Warning()
+      << "(PlaneCollider) WARNING: tried to set the rotation of a non-placeable geom, ignored\n";
 }
 
-float
-PlaneCollider::GetPointDepth(const Vector3f& pos)
+float PlaneCollider::GetPointDepth(const Vector3f& pos)
 {
     Vector3f worldPos(GetWorldTransform() * pos);
-    return dGeomPlanePointDepth
-        (mODEGeom,worldPos[0],worldPos[1],worldPos[2]);
+    return mPlaneColliderImp->GetPointDepth(worldPos, mGeomID);
 }
-
-
-

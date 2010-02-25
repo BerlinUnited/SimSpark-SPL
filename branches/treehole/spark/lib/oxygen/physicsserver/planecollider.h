@@ -23,10 +23,11 @@
 #define OXYGEN_PLANECOLLIDER_H
 
 #include <oxygen/oxygen_defines.h>
-#include "collider.h"
+#include <oxygen/physicsserver/collider.h>
 
 namespace oxygen
 {
+class PlaneColliderInt;
 
 /** PlaneCollider encapsulates an ODE plane geometry object. Planes
     are non-placeable geoms, i.e.  unlike placeable geoms, planes do
@@ -74,6 +75,9 @@ protected:
     /** constructs a default plane with normal pointing up, going
         through the origin */
     virtual bool ConstructInternal();
+    
+private:
+    static boost::shared_ptr<PlaneColliderInt> mPlaneColliderImp;
 };
 
 DECLARE_CLASS(PlaneCollider);

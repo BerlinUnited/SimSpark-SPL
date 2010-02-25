@@ -21,16 +21,19 @@
 #define OXYGEN_FIXEDJOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
+class FixedJointInt;
+
 /** The fixed joint maintains a fixed relative position and
     orientation between two bodies, or between a body and the static
     environment.
 */
-class OXYGEN_API FixedJoint : public Joint
+class OXYGEN_API FixedJoint : public Generic6DOFJoint
 {
+
 public:
     FixedJoint();
     virtual ~FixedJoint();
@@ -49,6 +52,9 @@ protected:
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+    
+private:
+    static boost::shared_ptr<FixedJointInt> mFixedJointImp;
 };
 
 DECLARE_CLASS(FixedJoint);

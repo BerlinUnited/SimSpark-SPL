@@ -2,7 +2,7 @@
 
    this file is part of rcssserver3D
    Copyright (C) 2008 RoboCup Soccer Server 3D Maintenance Group
-   $Id:$
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #define ACCELEROMETER_H
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 class Accelerometer : public oxygen::Perceptor {
 public:
@@ -38,7 +38,7 @@ protected:
     virtual void PrePhysicsUpdateInternal(float deltaTime);
 
 private:
-    boost::shared_ptr<const oxygen::Body> mBody;
+    boost::shared_ptr<const oxygen::RigidBody> mBody;
     salt::Vector3f mAcc;
     salt::Vector3f mGravity;
     salt::Vector3f mLastVel;

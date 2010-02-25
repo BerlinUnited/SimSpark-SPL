@@ -24,7 +24,8 @@
 #define FORCERESISTANCEPERCEPTOR_H_
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <oxygen/physicsserver/odewrapper.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
+#include <../plugin/odeimps/odewrapper.h>
 #include <oxygen/sceneserver/transform.h>
 #include <salt/vector.h>
 #include <list>
@@ -42,7 +43,7 @@ public:
      * feedback information.
      * \return the address of allocated memory
      */
-    dJointFeedback *AddTouchInfo(dContact &contact);
+    oxygen::GenericJointFeedback* AddTouchInfo(oxygen::GenericContact& contact);
 
     /** adds touch information to predList
         \return true if data is available

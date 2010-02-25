@@ -61,7 +61,7 @@
 #include "sceneserver/axis.h"
 #include "sceneserver/light.h"
 #include "sceneserver/sphere.h"
-#include "sceneserver/ccylinder.h"
+#include "sceneserver/capsule.h"
 #include "sceneserver/cylinder.h"
 #include "sceneserver/staticmesh.h"
 

@@ -46,7 +46,7 @@ Ball::SetAcceleration(int steps, const salt::Vector3f& force,
 
     if (mBody.get() == 0)
     {
-        mBody = shared_dynamic_cast<Body>(GetChildOfClass("Body"));
+        mBody = shared_dynamic_cast<RigidBody>(GetChildOfClass("RigidBody"));
     }
 }
 

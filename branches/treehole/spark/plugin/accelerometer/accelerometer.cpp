@@ -19,11 +19,7 @@
 */
 
 #include "oxygen/physicsserver/world.h"
-
-
-#include "oxygen/physicsserver/body.h"
-
-
+#include "oxygen/physicsserver/rigidbody.h"
 #include "accelerometer.h"
 #include <oxygen/sceneserver/transform.h>
 
@@ -47,8 +43,8 @@ void Accelerometer::OnLink()
     shared_ptr<Transform> transformParent = shared_static_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());
 
-    mBody = shared_static_cast<const Body>
-        (transformParent->GetChildOfClass("Body"));
+    mBody = shared_static_cast<const RigidBody>
+        (transformParent->GetChildOfClass("RigidBody"));
 
     mGravity = mBody->GetWorld()->GetGravity();
     mLastVel = mBody->GetVelocity();

@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "universaljoint.h"
+#include <oxygen/physicsserver/universaljoint.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -108,7 +108,7 @@ FUNCTION(UniversalJoint,getAngleRate)
 
 void CLASS(UniversalJoint)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/Joint);
+    DEFINE_BASECLASS(oxygen/Generic6DOFJoint);
     DEFINE_FUNCTION(setAnchor);
     DEFINE_FUNCTION(setAxis1);
     DEFINE_FUNCTION(setAxis2);

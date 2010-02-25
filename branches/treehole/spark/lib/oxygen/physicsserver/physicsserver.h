@@ -25,12 +25,16 @@
 #include <zeitgeist/class.h>
 #include <zeitgeist/leaf.h>
 #include <oxygen/oxygen_defines.h>
-#include "odewrapper.h"
+#include <boost/shared_ptr.hpp>
+#include <string>
 
 namespace oxygen
 {
-class Body;
-class Collider;
+class PhysicsServerInt;
+class Scene;
+class RigidBody;
+class World;
+class Space;
 
 class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
 {
@@ -39,7 +43,33 @@ class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
     //
 public:
     PhysicsServer();
-    ~PhysicsServer();
+    virtual ~PhysicsServer(){};
+    
+    virtual void OnLink();
+    
+    /** Resets the active space and active world */
+    void ResetCache();
+    
+    /** Updates the active world and active space */
+    void UpdateCache(boost::shared_ptr<Scene> acticeScene);
+    
+    /** Collides all objects in the active space */
+    void DoCollisions();
+    
+    /** Advance the simulation by \param deltatime */
+    void StepSimulation(float deltaTime); 
+    
+    /** Creates a new Box and adds it to the SceneGraph */
+    void SetUpBox(boost::shared_ptr<RigidBody> body, std::string name);
+    
+private:
+    static boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;
+    
+    /** cached reference to the Space node below the active scene */
+    boost::shared_ptr<Space> mActiveSpace;
+
+    /** cached reference to the World node below the active scene */
+    boost::shared_ptr<World> mActiveWorld;
 };
 
 DECLARE_CLASS(PhysicsServer);

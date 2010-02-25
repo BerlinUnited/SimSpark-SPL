@@ -28,9 +28,9 @@
 #include <oxygen/physicsserver/transformcollider.h>
 #include <oxygen/physicsserver/boxcollider.h>
 #include <oxygen/physicsserver/spherecollider.h>
-#include <oxygen/physicsserver/ccylindercollider.h>
+#include <oxygen/physicsserver/capsulecollider.h>
 #include <oxygen/physicsserver/contactjointhandler.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/hingejoint.h>
 #include <oxygen/physicsserver/sliderjoint.h>
 #include <oxygen/physicsserver/universaljoint.h>
@@ -41,7 +41,7 @@
 #include <kerosin/materialserver/materialsolid.h>
 #include <kerosin/sceneserver/box.h>
 #include <kerosin/sceneserver/sphere.h>
-#include <kerosin/sceneserver/ccylinder.h>
+#include <kerosin/sceneserver/capsule.h>
 #include <kerosin/sceneserver/staticmesh.h>
 #include <kerosin/renderserver/renderserver.h>
 #include <boost/scoped_array.hpp>
@@ -335,7 +335,7 @@ shared_ptr<Transform> RosImporter::GetContextTransform(shared_ptr<BaseNode> pare
     return context.transform;
 }
 
-void RosImporter::SetJointBody(shared_ptr<Body> body)
+void RosImporter::SetJointBody(shared_ptr<RigidBody> body)
 {
     if (mJointStack.empty())
         {
@@ -349,7 +349,7 @@ void RosImporter::SetJointBody(shared_ptr<Body> body)
         }
 }
 
-shared_ptr<Body> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
+shared_ptr<RigidBody> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
 {
     RosContext& context = GetContext();
     if (
@@ -357,7 +357,7 @@ shared_ptr<Body> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
         (parent.get() == 0)
         )
         {
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
     if (context.body.get() != 0)
@@ -368,11 +368,11 @@ shared_ptr<Body> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
     if (context.transform.get() == 0)
         {
             assert(false);
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
-    context.body = shared_dynamic_cast<Body>
-        (GetCore()->New("/oxygen/Body"));
+    context.body = shared_dynamic_cast<RigidBody>
+        (GetCore()->New("/oxygen/RigidBody"));
 
 
     SetJointBody(context.body);
@@ -754,8 +754,8 @@ bool RosImporter::ReadElements(shared_ptr<BaseNode> parent, TiXmlElement* elemen
                     ok = ReadCylinder(parent,element);
                     break;
 
-                case RosElements::RE_CAPPEDCYLINDER:
-                    ok = ReadCappedCylinder(parent,element);
+                case RosElements::RE_CAPSULE:
+                    ok = ReadCapsule(parent,element);
                     break;
 
                 case RosElements::RE_UNIVERSAL:
@@ -992,11 +992,11 @@ bool RosImporter::ReadPhysical(TiXmlElement* element, Physical& physical)
 
 bool RosImporter::ReadCylinder(shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
-    GetLog()->Debug() << "(RosImporter) cylinder geom unsupported yet. Created a capped cylinder geom\n";
-    return ReadCappedCylinder(parent, element);
+    GetLog()->Debug() << "(RosImporter) cylinder geom unsupported yet. Created a capsule geom\n";
+    return ReadCapsule(parent, element);
 }
 
-bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -1023,28 +1023,28 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
     transform->SetName(name);
 
     // visual
-    shared_ptr<CCylinder> ccylinder = shared_dynamic_cast<CCylinder>
-        (GetCore()->New("/kerosin/CCylinder"));
-    transform->AddChildReference(ccylinder);
+    shared_ptr<Capsule> capsule = shared_dynamic_cast<Capsule>
+        (GetCore()->New("/kerosin/Capsule"));
+    transform->AddChildReference(capsule);
 
-    ccylinder->SetName(S_VISUAL+name);
-    ccylinder->SetParams(radius, height);
-    ccylinder->SetMaterial(appear.ref);
+    capsule->SetName(S_VISUAL+name);
+    capsule->SetParams(radius, height);
+    capsule->SetMaterial(appear.ref);
 
     // physical
-    shared_ptr<Body> body = GetContextBody(transform);
+    shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
-            body->SetCappedCylinderTotal(physical.mass, radius, height);
+            body->SetCapsuleTotal(physical.mass, radius, height);
             GetContext().AddMass(physical.mass, Trans());
         }
 
     if (physical.canCollide)
         {
             // geometry
-            shared_ptr<CCylinderCollider> collider = shared_dynamic_cast<CCylinderCollider>
-                (GetCore()->New("/oxygen/CCylinderCollider"));
+            shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
+                (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transform->AddChildReference(collider);
             collider->SetName(S_GEOM+name);
@@ -1055,7 +1055,7 @@ bool RosImporter::ReadCappedCylinder(shared_ptr<BaseNode> parent, TiXmlElement* 
             collider->AddChildReference(handler);
         }
 
-    GetLog()->Debug() << "(RosImporter) created capped cylinder " << name << "\n";
+    GetLog()->Debug() << "(RosImporter) created capsule " << name << "\n";
     return ReadChildElements(transform, element);
 }
 
@@ -1092,7 +1092,7 @@ bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
     sphere->SetRadius(radius);
     sphere->SetMaterial(appear.ref);
 
-    shared_ptr<Body> body = GetContextBody(transform);
+    shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1156,7 +1156,7 @@ bool RosImporter::ReadBox(shared_ptr<BaseNode> parent, TiXmlElement* element)
     box->SetExtents(boxDim);
     box->SetMaterial(appear.ref);
 
-    shared_ptr<Body> body = GetContextBody(transform);
+    shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1235,13 +1235,13 @@ bool RosImporter::ReadAxis(TiXmlElement* element, RosElements::ERosElement type,
     return true;
 }
 
-shared_ptr<Body> RosImporter::GetJointParentBody()
+shared_ptr<RigidBody> RosImporter::GetJointParentBody()
 {
     if (mStack.size() < 2)
         {
             GetLog()->Debug() << "RosImporter::GetJointParentBody cannot get joint parent body with stack size of "
                               << mStack.size() << "\n";
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
     TRosStack::reverse_iterator iter = mStack.rbegin();
@@ -1253,7 +1253,7 @@ shared_ptr<Body> RosImporter::GetJointParentBody()
          )
         {
             RosContext& context = (*iter);
-            shared_ptr<Body> body = context.body;
+            shared_ptr<RigidBody> body = context.body;
 
             if (body.get() != 0)
                 {
@@ -1264,19 +1264,19 @@ shared_ptr<Body> RosImporter::GetJointParentBody()
 
 
     GetLog()->Debug() << "RosImporter::GetJointParentBody not found\n";
-    return shared_ptr<Body>();
+    return shared_ptr<RigidBody>();
 }
 
-shared_ptr<Body> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent)
+shared_ptr<RigidBody> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent)
 {
     if (parent.get() == 0)
         {
-            return shared_ptr<Body>();
+            return shared_ptr<RigidBody>();
         }
 
     for (Leaf::TLeafList::iterator iter = parent->begin();iter != parent->end();++iter)
         {
-            shared_ptr<Body> body = shared_dynamic_cast<Body>(*iter);
+            shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(*iter);
             if (body.get() == 0)
                 {
                     continue;
@@ -1294,14 +1294,14 @@ shared_ptr<Body> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent)
                     continue;
                 }
 
-            shared_ptr<Body> body = GetJointChildBody(node);
+            shared_ptr<RigidBody> body = GetJointChildBody(node);
             if (body.get() != 0)
                 {
                     return body;
                 }
         }
 
-    return shared_ptr<Body>();
+    return shared_ptr<RigidBody>();
 }
 
 bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* element)
@@ -1340,8 +1340,8 @@ bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* eleme
             return false;
         }
 
-    shared_ptr<Body> body1 = GetJointParentBody();
-    shared_ptr<Body> body2 = GetJointContext().body;
+    shared_ptr<RigidBody> body1 = GetJointParentBody();
+    shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) ||
@@ -1392,8 +1392,8 @@ bool RosImporter::ReadHinge(shared_ptr<BaseNode> parent, TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<Body> body1 = GetJointParentBody();
-    shared_ptr<Body> body2 = GetJointContext().body;
+    shared_ptr<RigidBody> body1 = GetJointParentBody();
+    shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) ||
@@ -1439,8 +1439,8 @@ bool RosImporter::ReadSlider(shared_ptr<BaseNode> parent, TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<Body> body1 = GetJointParentBody();
-    shared_ptr<Body> body2 = GetJointContext().body;
+    shared_ptr<RigidBody> body1 = GetJointParentBody();
+    shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) &&
@@ -1871,9 +1871,9 @@ bool RosImporter::ReadPhysicalRep(shared_ptr<BaseNode> parent, TiXmlElement* ele
                     break;
 
                 case RosElements::RE_SIMPLECYLINDER:
-                    //! simulate cylinder with a capped cylinder
-                case RosElements::RE_SIMPLECAPPEDCYLINDER:
-                    if (! ReadSimpleCappedCylinder(parent, element))
+                    //! simulate cylinder with a capsule
+                case RosElements::RE_SIMPLECAPSULE:
+                    if (! ReadSimpleCapsule(parent, element))
                         {
                             return false;
                         }
@@ -1910,7 +1910,7 @@ bool RosImporter::ReadSimpleBox(shared_ptr<oxygen::BaseNode> parent, TiXmlElemen
     shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
     Vector3f boxDim = Vector3f(length, width, height);
 
-    shared_ptr<Body> body = GetContextBody(contextTransform);
+    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddBoxTotal(physical.mass, boxDim, trans.matrix);
@@ -1960,7 +1960,7 @@ bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlEle
     // transform
     shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
 
-    shared_ptr<Body> body = GetContextBody(contextTransform);
+    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddSphereTotal(physical.mass, radius, trans.matrix);
@@ -1989,7 +1989,7 @@ bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlEle
     return true;
 }
 
-bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadSimpleCapsule(shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -2011,10 +2011,10 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
     // transform
     shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
 
-    shared_ptr<Body> body = GetContextBody(contextTransform);
+    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
-            body->AddCappedCylinderTotal(physical.mass, radius, height, trans.matrix);
+            body->AddCapsuleTotal(physical.mass, radius, height, trans.matrix);
             GetContext().AddMass(physical.mass, trans);
         }
 
@@ -2025,8 +2025,8 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
                 = CreateTransformCollider(body,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            shared_ptr<CCylinderCollider> collider = shared_dynamic_cast<CCylinderCollider>
-                (GetCore()->New("/oxygen/CCylinderCollider"));
+            shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
+                (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transCollider->AddChildReference(collider);
             collider->SetName(S_GEOM+name);
@@ -2037,11 +2037,11 @@ bool RosImporter::ReadSimpleCappedCylinder(shared_ptr<oxygen::BaseNode> parent, 
             collider->AddChildReference(handler);
         }
 
-    GetLog()->Debug() << "(RosImporter) created simple capped cylinder " << name << "\n";
+    GetLog()->Debug() << "(RosImporter) created simple capsule " << name << "\n";
     return true;
 }
 
-void RosImporter::Attach(shared_ptr<Joint> joint, shared_ptr<Body> body1, shared_ptr<Body> body2,
+void RosImporter::Attach(shared_ptr<Joint> joint, shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2,
                          const JointAxis& axis1, const JointAxis& axis2)
 {
     if (joint.get() == 0)
@@ -2072,9 +2072,10 @@ void RosImporter::AttachJoint(const JointAttach& ja)
 
             if (ja.axis1.setDeflection)
                 {
-                    hinge->SetParameter(dParamLoStop, ja.axis1.loStop);
-                    hinge->SetParameter(dParamHiStop, ja.axis1.hiStop);
-                    hinge->SetParameter(dParamLoStop, ja.axis1.loStop);
+                    //replaced ODE-specific contants with their numeric values to make this engine-unspecific
+                    hinge->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
+                    hinge->SetParameter(1 /*formerly dParamHiStop*/, ja.axis1.hiStop);
+                    hinge->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
                 }
 
             return;
@@ -2089,16 +2090,18 @@ void RosImporter::AttachJoint(const JointAttach& ja)
 
             if (ja.axis1.setDeflection)
                 {
-                    universal->SetParameter(dParamLoStop, ja.axis1.loStop);
-                    universal->SetParameter(dParamHiStop, ja.axis1.hiStop);
-                    universal->SetParameter(dParamLoStop, ja.axis1.loStop);
+                    //replaced ODE-specific contants with their numeric values to make this engine-unspecific
+                    universal->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
+                    universal->SetParameter(1 /*formerly dParamHiStop*/, ja.axis1.hiStop);
+                    universal->SetParameter(0 /*formerly dParamLoStop*/, ja.axis1.loStop);
                 }
 
             if (ja.axis2.setDeflection)
                 {
-                    universal->SetParameter(dParamLoStop2, ja.axis2.loStop);
-                    universal->SetParameter(dParamHiStop2, ja.axis2.hiStop);
-                    universal->SetParameter(dParamLoStop2, ja.axis2.loStop);
+                    //replaced ODE-specific contants with their numeric values to make this engine-unspecific
+                    universal->SetParameter(256 /*formerly dParamLoStop2*/, ja.axis2.loStop);
+                    universal->SetParameter(257 /*formerly dParamHiStop2*/, ja.axis2.hiStop);
+                    universal->SetParameter(256 /*formerly dParamLoStop2*/, ja.axis2.loStop);
                 }
 
             return;
