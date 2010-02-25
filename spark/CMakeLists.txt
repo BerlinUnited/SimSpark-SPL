@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(simspark CXX C)
-set(PACKAGE_VERSION "0.1.2")
+set(PACKAGE_VERSION "0.2")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -143,15 +143,15 @@ endif(WIN32)
 set(SALT_SO_VERSION 0)
 set(SALT_VERSION ${SALT_SO_VERSION}.3.2)
 set(ZEITGEIST_SO_VERSION 3)
-set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.0.2)
+set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.1.0)
 set(OXYGEN_SO_VERSION 3)
-set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.2.4)
+set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.3.0)
 set(KEROSIN_SO_VERSION 1)
-set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.0.2)
+set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.1.0)
 set(SPARK_SO_VERSION 0)
 set(SPARK_VERSION ${SPARK_SO_VERSION}.0.0)
 set(RCSSNET_SO_VERSION 0)
-set(RCSSNET_VERSION ${RCSSNET_SO_VERSION}.0.0)
+set(RCSSNET_VERSION ${RCSSNET_SO_VERSION}.1.0)
 
 ########## additional variables for -config scripts  ##########
 set(prefix ${CMAKE_INSTALL_PREFIX})
@@ -189,6 +189,35 @@ install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS DESTINATION
     ${DATADIR}/doc/${CMAKE_PROJECT_NAME})
 install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h DESTINATION
     ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
+
+if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directory
+       set(THLIBDIR ${LIBDIR}/thirdparty)
+	   
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
+       if (EXISTS ${ODEDLL})
+              install(PROGRAMS ${ODEDLL} DESTINATION ${THLIBDIR})
+       endif (EXISTS ${ODEDLL})
+
+       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${THLIBDIR}
+             FILES_MATCHING PATTERN "*.dll")
+
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
+       if (EXISTS ${DevIL_DLL})
+              install(PROGRAMS ${DevIL_DLL} DESTINATION ${THLIBDIR})
+       endif (EXISTS ${DevIL_DLL})
+
+       string(REGEX REPLACE "(.*)/ruby.exe" "\\1/" RUBY_BINDIR "${RUBY_EXECUTABLE}")
+       install(DIRECTORY "${RUBY_BINDIR}"
+        	 DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
+
+       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/"
+        	 DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
+
+       set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
+       if (EXISTS ${SDL_DLL})
+              install(PROGRAMS ${SDL_DLL} DESTINATION ${THLIBDIR})
+       endif (EXISTS ${SDL_DLL})
+endif (WIN32)
 
 ########### uninstall support ############
 CONFIGURE_FILE(

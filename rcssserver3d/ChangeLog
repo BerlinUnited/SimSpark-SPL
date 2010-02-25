@@ -1,3 +1,31 @@
+2010-01-18  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* windows/uninstall_extra.nsi: 
+	- rename: simspark -> rcssserver3d 
+
+2010-01-17  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* doc/users/gettingstarted.tex: 
+	* doc/users/simulations.tex: 
+	* doc/users/user-manual.tex: 
+	- updated to reflect some new changes
+	
+	* RELEASE: 
+	* NEWS: 
+	- preparing for a new release
+	
+	* CMakeLists.txt: 
+	- removed installation of third party libraries. these are now included
+	  in simspark package.
+	- bumped package version to 0.6.3
+	
+	* windows/install_extra.nsi: 
+	- use rcssserver3d instead of simspark.
+	- added thirdparty library path to the path
+	
+	* rcssserver3d/CMakeLists.txt: 
+	- do not install shell scripts and symbolic links on Windows
+
 2010-01-11  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* RELEASE: 

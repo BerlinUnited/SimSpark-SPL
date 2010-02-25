@@ -127,6 +127,6 @@ private:
 
 DECLARE_CLASS(World);
 
-}
+};
 
 #endif //OXYGEN_WORLD_H

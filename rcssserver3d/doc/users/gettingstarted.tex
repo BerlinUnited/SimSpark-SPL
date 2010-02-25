@@ -5,8 +5,6 @@
 \section{Download and Installation Instructions}
 \label{section:install}
 
-%Currently the simspark SVN builds only for Linux (the Win32 build system is not yet ported/tested, so we should focus on *nix systems.
-
 This chapter explains how to install SimSpark on an Ubuntu Linux. It should work with
 slight modifications on other distributions like Fedora, Suse and
 especially Debian system\footnote{For more guides please visit Simspark Wiki:
@@ -50,18 +48,21 @@ Further required packages are:
 \begin{enumerate}
 \item Ruby
 \item The Open Dynamics Engine (ODE)
-\item The boost C++ libraries
+\item The Boost C++ Libraries
+\item Freetype
+\item Developer Image Library (DevIL)
+\item OpenGL
+\item SDL
 \end{enumerate}
 
-The rendering of SimSpark can be omitted from the build process
+Some parts of SimSpark can be omitted from the build process
 therefore these packages are optional:
 
 \begin{enumerate}
-\item OpenGL
-\item SDL
-\item Freetype
-\item Developer Image Library (DevIL)
-\item Tiff library (libtiff)
+\item wxWidgets Library
+\item FMOD Sound Library
+\item Latex (pdflatex): to generate developers manual
+\item Doxygen: to generate API documentation
 \end{enumerate}
 
 \texttt{\$ sudo apt-get install g++ subversion cmake libfreetype6-dev libode0-dev libsdl-dev ruby1.8 ruby1.8-dev libdevil-dev libboost-dev libboost-thread-dev libboost-regex-dev}
@@ -145,7 +146,7 @@ Add your install prefix if it isn't already there, save and close.
 
 \item Run the simulation
 
-\texttt{\$ simspark}
+\texttt{\$ rcsoccersim3d}
 
 \item Optionally
 
@@ -197,7 +198,7 @@ agent separately.
 \item{Start the Server}
 
 The first step is to start the simulation server. To do this type
-\texttt{simspark} on the console. The server is by default configured
+\texttt{rcssserver3d} on the console. The server is by default configured
 to run without internal monitor support and to start the soccer
 simulation. 
 
@@ -206,7 +207,7 @@ the following greeting:
 
 \begin{verbatim}
 
-simspark, a monolithic simulator 0.1
+rcssserver3d, a monolithic simulator 0.6.x
 Copyright (C) 2004 Markus Rollmann,
 Universit�t Koblenz.
 Copyright (C) 2004, The RoboCup Soccer Server Maintenance Group.
