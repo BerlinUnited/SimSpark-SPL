@@ -264,7 +264,7 @@ void HMDPEffector::controlPosServo() // for controlling servos
         double tpos = servo_target_pos[i];
         float err = servo_gain[i] * (tpos - servo_angle[i]);
 
-        joint->SetParameter(dParamVel, err);
+        joint->SetParameter(2 /*dParamVel*/, err);
 
         if (abs(err) > 0.00001)
         {
