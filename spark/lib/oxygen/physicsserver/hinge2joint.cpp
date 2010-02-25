@@ -17,15 +17,19 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "hinge2joint.h"
+#include <oxygen/physicsserver/hinge2joint.h>
+#include <oxygen/physicsserver/int/hinge2jointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-Hinge2Joint::Hinge2Joint() : Joint()
+boost::shared_ptr<Hinge2JointInt> Hinge2Joint::mHinge2JointImp;
+
+Hinge2Joint::Hinge2Joint() : Generic6DOFJoint()
 {
+
 }
 
 Hinge2Joint::~Hinge2Joint()
@@ -34,28 +38,33 @@ Hinge2Joint::~Hinge2Joint()
 
 void Hinge2Joint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    Joint::OnLink();
+    
+    if (mHinge2JointImp.get() == 0)
+        mHinge2JointImp = shared_dynamic_cast<Hinge2JointInt>
+            (GetCore()->New("Hinge2JointImp"));
+            
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
-
-    mODEJoint = dJointCreateHinge2(world, 0);
+    
+    mJointID = mHinge2JointImp->CreateHinge2Joint(world);
 }
 
 void Hinge2Joint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    dJointSetHinge2Anchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
 
     // relative universal hinge2 axis 1 points up
     Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-    dJointSetHinge2Axis1(mODEJoint,up[0],up[1],up[2]);
 
     // relative universal hinge2 axis 2 points right
     Vector3f right(GetWorldTransform().Rotate(Vector3f(1,0,0)));
-    dJointSetHinge2Axis2(mODEJoint,right[0],right[1],right[2]);
+    
+    mHinge2JointImp->SetAnchor(gAnchor, up, right, mJointID);
 }
 
 Vector3f Hinge2Joint::GetAnchor(EBodyIndex idx)
@@ -66,18 +75,12 @@ Vector3f Hinge2Joint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                dReal anchor[3];
-                dJointGetHinge2Anchor (mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
-                break;
+                pos = mHinge2JointImp->GetAnchor1(mJointID);
             }
 
         case BI_SECOND:
             {
-                dReal anchor[3];
-                dJointGetHinge2Anchor2(mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
-                break;
+                pos = mHinge2JointImp->GetAnchor2(mJointID);
             }
 
         default:
@@ -92,11 +95,11 @@ float Hinge2Joint::GetAngle(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return gRadToDeg(dJointGetHinge2Angle1(mODEJoint));
+            return mHinge2JointImp->GetAngle(mJointID);
 
         case AI_SECOND:
-            // dJointGetHinge2Angle2 is undeclared in ODE 0.039
-            // return dJointGetHinge2Angle2(mODEJoint);
+            GetLog()->Warning() <<
+                "(Hinge2Joint) WARNING: GetAngle is undefined for EAxisIndex::AI_SECOND, returned zero\n";
             return 0;
 
         default:
@@ -109,27 +112,12 @@ float Hinge2Joint::GetAngleRate(EAxisIndex idx)
     switch (idx)
         {
         case AI_FIRST:
-            return gRadToDeg(dJointGetHinge2Angle1Rate(mODEJoint));
+            return mHinge2JointImp->GetAngleRate1(mJointID);
 
         case AI_SECOND:
-            return gRadToDeg(dJointGetHinge2Angle2Rate(mODEJoint));
+            return mHinge2JointImp->GetAngleRate2(mJointID);
 
         default:
             return 0;
         }
 }
-
-void Hinge2Joint::SetParameter(int parameter, float value)
-{
-    dJointSetHinge2Param(mODEJoint, parameter, value);
-}
-
-float Hinge2Joint::GetParameter(int parameter) const
-{
-    return dJointGetHinge2Param(mODEJoint, parameter);
-}
-
-
-
-
-

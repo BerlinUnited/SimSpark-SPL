@@ -22,10 +22,10 @@
 #ifndef OXYGEN_RECORDERHANDLER_H
 #define OXYGEN_COLLISIONRECORDER_H
 
-#include "collisionhandler.h"
-#include "collider.h"
-#include <set>
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/collisionhandler.h>
+#include <oxygen/physicsserver/collider.h>
+#include <set>
 
 namespace oxygen
 {
@@ -52,7 +52,7 @@ public:
     as returned from the ODE dCollide function
     */
     virtual void HandleCollision
-    (boost::shared_ptr<Collider> collidee, dContact& contact);
+    (boost::shared_ptr<Collider> collidee, GenericContact& contact);
 
     /** removes all stored collisions from the recorder */
     void Clear();

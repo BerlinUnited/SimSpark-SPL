@@ -21,13 +21,13 @@
 #define OXYGEN_HINGE2JOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
-class Body;
+class Hinge2JointInt;
 
-class OXYGEN_API Hinge2Joint : public Joint
+class OXYGEN_API Hinge2Joint : public Generic6DOFJoint
 {
 public:
     Hinge2Joint();
@@ -57,12 +57,9 @@ public:
 protected:
     /** creates a new hinge2 joint */
     virtual void OnLink();
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value);
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    
+private:
+    static boost::shared_ptr<Hinge2JointInt> mHinge2JointImp;
 };
 
 DECLARE_CLASS(Hinge2Joint);

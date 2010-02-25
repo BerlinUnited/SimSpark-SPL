@@ -30,8 +30,7 @@
 #include "scene.h"
 #include "sceneimporter.h"
 #include "scenedict.h"
-#include <oxygen/physicsserver/world.h>
-#include <oxygen/physicsserver/space.h>
+#include <oxygen/physicsserver/physicsserver.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -42,11 +41,25 @@ using namespace std;
 int SceneServer::mTransformMark = 0;
 
 SceneServer::SceneServer() : Node()
-{
+{   
 }
 
 SceneServer::~SceneServer()
 {
+}
+
+void SceneServer::OnLink()
+{
+    shared_ptr<CoreContext> context = GetCore()->CreateContext();
+
+    mPhysicsServer = shared_static_cast<PhysicsServer>
+        (context->Get("/sys/server/physics"));
+        
+    if (mPhysicsServer.get() == 0)
+        {
+            GetLog()->Error() << 
+                "(SceneServer) ERROR: PhysicsServer not found at /sys/server/physics\n";
+        }
 }
 
 bool SceneServer::CreateScene(const std::string &location)
@@ -70,8 +83,7 @@ bool SceneServer::SetActiveScene(const std::string &location)
 
 void SceneServer::ResetCache()
 {
-    mActiveSpace.reset();
-    mActiveWorld.reset();
+    mPhysicsServer->ResetCache();
 }
 
 void SceneServer::UpdateCache()
@@ -81,20 +93,8 @@ void SceneServer::UpdateCache()
             ResetCache();
             return;
         }
-
-    if (mActiveSpace.get() == 0)
-        {
-            // cache the space reference
-            mActiveSpace = shared_dynamic_cast<Space>
-                (mActiveScene->GetChildOfClass("Space"));
-        }
-
-    if (mActiveWorld.get() == 0)
-        {
-            // cache the world reference
-            mActiveWorld = shared_dynamic_cast<World>
-                (mActiveScene->GetChildOfClass("World"));
-        }
+        
+    mPhysicsServer->UpdateCache(mActiveScene.get());
 }
 
 void SceneServer::OnUnlink()
@@ -161,16 +161,10 @@ void SceneServer::Update(float deltaTime)
     mActiveScene->PrePhysicsUpdate(deltaTime);
 
     // determine collisions
-    if (mActiveSpace.get() != 0)
-        {
-            mActiveSpace->Collide();
-        }
+    mPhysicsServer->DoCollisions();
 
     // do physics
-    if (mActiveWorld.get() != 0)
-        {
-            mActiveWorld->Step(deltaTime);
-        }
+    mPhysicsServer->StepSimulation(deltaTime);
 
     mActiveScene->PostPhysicsUpdate();
     mActiveScene->UpdateHierarchy();
@@ -196,16 +190,10 @@ void SceneServer::PhysicsUpdate(float deltaTime)
 {
     boost::recursive_mutex::scoped_lock lock(mMutex);
     // determine collisions
-    if (mActiveSpace.get() != 0)
-        {
-            mActiveSpace->Collide();
-        }
+    mPhysicsServer->DoCollisions();
 
     // do physics
-    if (mActiveWorld.get() != 0)
-        {
-            mActiveWorld->Step(deltaTime);
-        }
+    mPhysicsServer->StepSimulation(deltaTime);
 }
 
 void SceneServer::PostPhysicsUpdate()
@@ -395,5 +383,3 @@ bool SceneServer::InitSceneImporter(const std::string& importerName)
 
     return true;
 }
-
-

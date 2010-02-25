@@ -17,15 +17,19 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "sliderjoint.h"
+#include <oxygen/physicsserver/sliderjoint.h>
+#include <oxygen/physicsserver/int/sliderjointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-SliderJoint::SliderJoint() : Joint()
+boost::shared_ptr<SliderJointInt> SliderJoint::mSliderJointImp;
+
+SliderJoint::SliderJoint() : Generic6DOFJoint()
 {
+
 }
 
 SliderJoint::~SliderJoint()
@@ -34,45 +38,33 @@ SliderJoint::~SliderJoint()
 
 void SliderJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    if (mSliderJointImp.get() == 0)
+        mSliderJointImp = shared_dynamic_cast<SliderJointInt>
+            (GetCore()->New("SliderJointImp"));
+
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
-
-    mODEJoint = dJointCreateSlider(world, 0);
+ 
+    mJointID = mSliderJointImp->CreateSliderJoint(world);
 }
 
-void SliderJoint::Attach(shared_ptr<Body> body1, shared_ptr<Body> body2)
+void SliderJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
 {
     Joint::Attach(body1,body2);
 
-    // relative slider axis points up
     Vector3f up(GetWorldTransform().Rotate(Vector3f(0,0,1)));
-    dJointSetSliderAxis(mODEJoint,up[0],up[1],up[2]);
+    mSliderJointImp->SetSliderAxis(up, mJointID);
 }
 
 float SliderJoint::GetPosition()
 {
-    return dJointGetSliderPosition(mODEJoint);
+    return mSliderJointImp->GetPosition(mJointID);
 }
 
 float SliderJoint::GetPositionRate()
 {
-    return dJointGetSliderPositionRate(mODEJoint);
+    return mSliderJointImp->GetPositionRate(mJointID);
 }
-
-void SliderJoint::SetParameter(int parameter, float value)
-{
-    dJointSetSliderParam(mODEJoint, parameter, value);
-}
-
-float SliderJoint::GetParameter(int parameter) const
-{
-    return dJointGetSliderParam(mODEJoint, parameter);
-}
-
-
-
-
-

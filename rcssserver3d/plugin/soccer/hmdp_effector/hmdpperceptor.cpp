@@ -23,7 +23,7 @@
 #include "hmdpperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/transform.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <salt/vector.h>
 
 using namespace oxygen;
@@ -51,7 +51,7 @@ void HMDPPerceptor::OnLink()
     shared_ptr<Transform> transformParent = shared_static_cast<Transform> (
         FindParentSupportingClass<Transform> ().lock());
 
-    mBody = shared_static_cast<Body> (transformParent->GetChildOfClass("Body"));
+    mBody = shared_static_cast<RigidBody> (transformParent->GetChildOfClass("RigidBody"));
 }
 
 void HMDPPerceptor::OnUnlink()

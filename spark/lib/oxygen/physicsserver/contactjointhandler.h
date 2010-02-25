@@ -23,13 +23,15 @@
 #define OXYGEN_CONTACTJOINTHANDLER_H
 
 #include <oxygen/oxygen_defines.h>
-#include "collisionhandler.h"
+#include <oxygen/physicsserver/collisionhandler.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 namespace oxygen
 {
+class ContactJointHandlerInt;
 
-/** \class ContactJointHandler is a CollisionHandler that creates an
-    ODE contact joint between the two bodies associated with the two
+/** \class ContactJointHandler is a CollisionHandler that creates a
+    contact joint between the two bodies associated with the two
     affected collision geoms.
  */
 class OXYGEN_API ContactJointHandler : public CollisionHandler
@@ -37,6 +39,8 @@ class OXYGEN_API ContactJointHandler : public CollisionHandler
 public:
     ContactJointHandler();
     virtual ~ContactJointHandler();
+    
+    virtual void OnLink();
 
     /** Check if the collidee also has a ContactJoint handler
         registered to it. If yes, create a contact joint between the
@@ -51,7 +55,7 @@ public:
         as returned from the ODE dCollide function
     */
     virtual void HandleCollision
-    (boost::shared_ptr<Collider> collidee, dContact& contact);
+    (boost::shared_ptr<Collider> collidee, GenericContact& contact);
 
     /** the ContactJointHandler is not a symmetric handler. See
         CollisionHandler::IsSymmetricHandler for an explanation
@@ -61,22 +65,19 @@ public:
     /** sets the surface parameters for the contact joints that the
         CollisionHandler creates
     */
-    void SetSurfaceParameter(const dSurfaceParameters& surface);
+    void SetSurfaceParameter(const GenericSurfaceParameter& surface);
 
-    /** returns the surface parameters for the contact joints taht the
+    /** returns the surface parameters for the contact joints that the
         CollisionHandler creates
     */
-    const dSurfaceParameters& GetSurfaceParameter() const;
-
-    /** sets or resets a contact mode flag in the surface parameter*/
-    void SetContactMode(int mode, bool set);
+    GenericSurfaceParameter& GetSurfaceParameter() const;
 
     /** returns the current set of contact mode flags in the surface
         parameter
      */
     int GetContactMode() const;
 
-    /** sets or resets the dContactBounce mode flag */
+    /** sets or resets Bounce mode flag */
     void SetContactBounceMode(bool set);
 
     /** sets the bounce value */
@@ -113,8 +114,7 @@ public:
     /** returns the constraint force mixing parameter (CFM) */
     float GetContactSoftCFM() const;
 
-    /** sets or resets the force dependent contact slip mode (FDS)
-     */
+    /** sets or resets the force dependent contact slip mode (FDS) */
     void SetContactSlipMode (bool set);
 
     /** sets the force dependent slip (FDS) in both friction
@@ -137,21 +137,15 @@ public:
 
     /** returns the Coulomb friction coefficient */
     float GetContactMu() const;
-
+    
 protected:
-    f_inline float MixValues(const float v1, const float v2, const int n) const;
-
-    void CalcSurfaceParam(dSurfaceParameters& surface,
-                          const dSurfaceParameters& collideeParam);
-
-protected:
-    /** the ODE surface parameters of the created contact joint */
-    dSurfaceParameters mSurfaceParameter;
+    static boost::shared_ptr<ContactJointHandlerInt> mContactJointHandlerImp;
+    
+    GenericSurfaceParameter* mSurfaceParameter;
 };
 
 DECLARE_CLASS(ContactJointHandler);
 
 } //namespace oxygen
-
 
 #endif // OXYGEN_CONTACTJOINTHANDLER_H

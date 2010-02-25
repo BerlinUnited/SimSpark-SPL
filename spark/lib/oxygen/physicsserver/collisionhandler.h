@@ -24,13 +24,13 @@
 
 #include <oxygen/sceneserver/basenode.h>
 #include <oxygen/oxygen_defines.h>
-#include "odewrapper.h"
 
 namespace oxygen
 {
 class Collider;
 class World;
 class Space;
+class GenericContact;
 
 /** \class CollisionHandler defines an interface for handlers that
     take action in response to a collision. To each Collider instance
@@ -64,7 +64,7 @@ public:
         as returned from the ODE dCollide function
     */
     virtual void HandleCollision
-    (boost::shared_ptr<Collider> collidee, dContact& contact) = 0;
+    (boost::shared_ptr<Collider> collidee, GenericContact& contact) = 0;
 
     /** returns true if a class of CollisionHandlers wants to handle
         both- a collision and it's symmetric counterpart.

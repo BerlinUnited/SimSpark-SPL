@@ -32,7 +32,7 @@
 		       - (eval 0.04 * $scale)))
 
 
- (nd Body
+ (nd RigidBody
      (setName boxBody)
      ;; Lower arm
      (setBox $LowerarmMass $LowerarmLength $LowerarmWidth $LowerarmHeight)

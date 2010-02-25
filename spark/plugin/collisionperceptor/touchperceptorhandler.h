@@ -24,6 +24,7 @@
 #define TOUCHPERCEPTORHANDLER_H_
 
 #include <oxygen/physicsserver/contactjointhandler.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 class ForceResistancePerceptor;
 
@@ -34,7 +35,7 @@ class TouchPerceptorHandler : public oxygen::ContactJointHandler
 {
 public:
     virtual void HandleCollision(boost::shared_ptr<oxygen::Collider> collidee,
-            dContact& contact);
+            oxygen::GenericContact& contact);
 
 protected:
     virtual void OnLink();

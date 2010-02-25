@@ -23,7 +23,7 @@
 #define HMDPEFFECTOR_H
 
 #include <oxygen/agentaspect/effector.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include "naospecific.h"
 
 //! make it possible to have a pointer to the perceptor
@@ -112,7 +112,7 @@ protected:
 
 protected:
     /** the reference to the parents body node */
-    boost::shared_ptr<oxygen::Body> mBody;
+    boost::shared_ptr<oxygen::RigidBody> mBody;
 };
 
 DECLARE_CLASS(HMDPEffector)

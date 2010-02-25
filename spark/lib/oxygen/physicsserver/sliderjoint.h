@@ -21,13 +21,14 @@
 #define OXYGEN_SLIDERJOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
-class Body;
+class RigidBody;
+class SliderJointInt;
 
-class OXYGEN_API SliderJoint : public Joint
+class OXYGEN_API SliderJoint : public Generic6DOFJoint
 {
 public:
     SliderJoint();
@@ -45,17 +46,14 @@ public:
 
 protected:
     /** attaches the joint to some new bodies */
-    virtual void Attach(boost::shared_ptr<Body> body1,
-                        boost::shared_ptr<Body> body2);
+    virtual void Attach(boost::shared_ptr<RigidBody> body1,
+                        boost::shared_ptr<RigidBody> body2);
 
     /** creates a new slider joint */
     virtual void OnLink();
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value);
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    
+private:
+    static boost::shared_ptr<SliderJointInt> mSliderJointImp;
 };
 
 DECLARE_CLASS(SliderJoint);

@@ -21,7 +21,7 @@
  */
 
 #include "forceresistanceperceptor.h"
-#include <oxygen/physicsserver/odewrapper.h>
+#include <../plugin/odeimps/odewrapper.h>
 #include <oxygen/sceneserver/transform.h>
 
 using namespace std;
@@ -52,10 +52,11 @@ void ForceResistancePerceptor::OnUnlink()
     mBody.reset();
 }
 
-dJointFeedback *ForceResistancePerceptor::AddTouchInfo(dContact &contact)
+GenericJointFeedback* ForceResistancePerceptor::AddTouchInfo(oxygen::GenericContact& contact)
 {
-    mContactList.push_front(make_pair(contact.geom, dJointFeedback()));
-    return &mContactList.front().second;
+    dContact& ODEContact = (dContact&) contact;
+    mContactList.push_front(make_pair(ODEContact.geom, dJointFeedback()));
+    return (GenericJointFeedback*) &mContactList.front().second;
 }
 
 bool ForceResistancePerceptor::Percept(

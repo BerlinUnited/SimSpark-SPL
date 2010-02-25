@@ -24,7 +24,7 @@
 #define HMDPPERCEPTOR_H
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 class HMDPPerceptor: public oxygen::Perceptor
 {
@@ -45,7 +45,7 @@ protected:
 private:
 
     //! reference to the body of which the perceptor is measuring the angle change rate
-    boost::shared_ptr<oxygen::Body> mBody;
+    boost::shared_ptr<oxygen::RigidBody> mBody;
 };
 
 DECLARE_CLASS(HMDPPerceptor)

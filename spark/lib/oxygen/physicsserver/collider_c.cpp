@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "collider.h"
+#include <oxygen/physicsserver/collider.h>
 
 using namespace oxygen;
 using namespace boost;
@@ -104,10 +104,10 @@ FUNCTION(Collider,addNotCollideWithColliderName)
 
 void CLASS(Collider)::DefineClass()
 {
+    DEFINE_BASECLASS(oxygen/PhysicsObject);
     DEFINE_FUNCTION(setPosition);
     DEFINE_FUNCTION(setLocalPosition);
     DEFINE_FUNCTION(setRotation);
     DEFINE_FUNCTION(addCollisionHandler);
     DEFINE_FUNCTION(addNotCollideWithColliderName);
-    DEFINE_BASECLASS(oxygen/ODEObject);
 }

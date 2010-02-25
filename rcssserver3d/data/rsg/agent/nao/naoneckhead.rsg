@@ -43,12 +43,12 @@
         (setName neck)
         (setLocalPos $Neck_X $Neck_Y $Neck_Z)
         
-        (importScene rsg/agent/nao/ccylinder_appearance.rsg $Neck_Radius $Neck_Length matDarkGrey)
-        (importScene rsg/agent/nao/ccylinder_physics.rsg    $Neck_Radius $Neck_Length $Neck_Mass)
+        (importScene rsg/agent/nao/capsule_appearance.rsg $Neck_Radius $Neck_Length matDarkGrey)
+        (importScene rsg/agent/nao/capsule_physics.rsg    $Neck_Radius $Neck_Length $Neck_Mass)
         
         (importScene rsg/agent/nao/hingejoint.rsg 
                             hj1 he1
-                            ../ccylinderBody ../../body/boxBody
+                            ../capsuleBody ../../body/boxBody
                             0 0 0
                             0 0 1
                             $he1_min $he1_max)
@@ -80,7 +80,7 @@
         
         (importScene rsg/agent/nao/hingejoint.rsg
                               hj2 he2
-                              ../sphereBody ../../neck/ccylinderBody 
+                              ../sphereBody ../../neck/capsuleBody 
                               ;../boxBody ../../body/boxBody
                               0 0 -0.005
                               1 0 0

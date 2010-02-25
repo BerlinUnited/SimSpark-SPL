@@ -21,13 +21,14 @@
 #define OXYGEN_HINGEJOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
-class Body;
+class RigidBody;
+class HingeJointInt;
 
-class OXYGEN_API HingeJoint : public Joint
+class OXYGEN_API HingeJoint : public Generic6DOFJoint
 {
 public:
     HingeJoint();
@@ -67,16 +68,16 @@ public:
 
     /** returns the time derivate of the hinge angle */
     float GetAngleRate() const;
-
-    /** sets a joint parameter value */
-    virtual void SetParameter(int parameter, float value);
-
-    /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    
+    /** Sets a parameter value of this joint*/
+    void SetParameter(int parameter, float value);
 
 protected:
     /** creates a new hingejoint joint */
     virtual void OnLink();
+    
+private:
+    static boost::shared_ptr<HingeJointInt> mHingeJointImp;
 };
 
 DECLARE_CLASS(HingeJoint);

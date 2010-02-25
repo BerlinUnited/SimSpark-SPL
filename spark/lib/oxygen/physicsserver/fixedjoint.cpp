@@ -17,15 +17,18 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "fixedjoint.h"
+#include <oxygen/physicsserver/fixedjoint.h>
+#include <oxygen/physicsserver/int/fixedjointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
-using namespace salt;
 
-FixedJoint::FixedJoint() : Joint()
+boost::shared_ptr<FixedJointInt> FixedJoint::mFixedJointImp;
+
+FixedJoint::FixedJoint() : Generic6DOFJoint()
 {
+
 }
 
 FixedJoint::~FixedJoint()
@@ -34,28 +37,35 @@ FixedJoint::~FixedJoint()
 
 void FixedJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    Joint::OnLink();
+    
+    if (mFixedJointImp.get() == 0)
+        mFixedJointImp = shared_dynamic_cast<FixedJointInt>
+            (GetCore()->New("FixedJointImp"));
+
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateFixed(world, 0);
+    mJointID = mFixedJointImp->CreateFixedJoint(world);
 }
 
 void FixedJoint::SetParameter(int /*parameter*/, float /*value*/)
 {
-    // no ode set param fkt. defined
+    GetLog()->Warning() <<
+        "(FixedJoint) WARNING: SetParameter function undefined for FixedJoint, ignored\n";
 }
 
 float FixedJoint::GetParameter(int /*parameter*/) const
 {
-    // no ode get param fkt. defined
+    GetLog()->Warning() <<
+        "(FixedJoint) WARNING: GetParameter function undefined for FixedJoint, returned zero\n";
     return 0;
 }
 
 void FixedJoint::SetFixed()
 {
-    dJointSetFixed(mODEJoint);
+    mFixedJointImp->SetFixed(mJointID);
 }
-

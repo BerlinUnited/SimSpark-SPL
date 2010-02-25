@@ -19,8 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "bodycontroller.h"
-#include "body.h"
+#include <oxygen/physicsserver/bodycontroller.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
@@ -42,12 +42,12 @@ void BodyController::UpdateCached()
 {
     mBody.reset();
 
-    mBody = shared_dynamic_cast<Body>
-        (GetParentSupportingClass("Body").lock());
+    mBody = shared_dynamic_cast<RigidBody>
+        (GetParentSupportingClass("RigidBody").lock());
 
     if (mBody.get() == 0)
     {
-        GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
-        return;
+       GetLog()->Error() << "(BodyController) ERROR: found no parent body.\n";
+       return;
     }
 }

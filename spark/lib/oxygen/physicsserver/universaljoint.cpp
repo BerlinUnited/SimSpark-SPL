@@ -17,15 +17,20 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "universaljoint.h"
+#include <oxygen/physicsserver/universaljoint.h>
+#include <oxygen/physicsserver/int/universaljointint.h>
+#include <oxygen/physicsserver/int/jointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-UniversalJoint::UniversalJoint() : Joint()
+boost::shared_ptr<UniversalJointInt> UniversalJoint::mUniversalJointImp;
+
+UniversalJoint::UniversalJoint() : Generic6DOFJoint()
 {
+
 }
 
 UniversalJoint::~UniversalJoint()
@@ -33,22 +38,28 @@ UniversalJoint::~UniversalJoint()
 }
 
 void UniversalJoint::OnLink()
-{
-    dWorldID world = GetWorldID();
+{    
+    Joint::OnLink();
+
+    if (mUniversalJointImp.get() == 0)
+        mUniversalJointImp = shared_dynamic_cast<UniversalJointInt>
+            (GetCore()->New("UniversalJointImp"));
+            
+    long world = GetWorldID();
 
     if (world == 0)
     {
         return;
     }
 
-    mODEJoint = dJointCreateUniversal(world, 0);
+    mJointID = mUniversalJointImp->CreateUniversalJoint(world);
 }
 
 void UniversalJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    dJointSetUniversalAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    mUniversalJointImp->SetAnchor(gAnchor, mJointID);
 }
 
 Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
@@ -59,17 +70,13 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
     {
     case BI_FIRST:
     {
-        dReal anchor[3];
-        dJointGetUniversalAnchor (mODEJoint, anchor);
-        pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+        pos = mUniversalJointImp->GetAnchor1(mJointID);
         break;
     }
 
     case BI_SECOND:
     {
-        dReal anchor[3];
-        dJointGetUniversalAnchor2(mODEJoint, anchor);
-        pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+        pos = mUniversalJointImp->GetAnchor2(mJointID);
         break;
     }
 
@@ -83,13 +90,13 @@ Vector3f UniversalJoint::GetAnchor(EBodyIndex idx)
 void UniversalJoint::SetAxis1(const Vector3f & axis)
 {
     Vector3f first(GetWorldTransform().Rotate(axis));
-    dJointSetUniversalAxis1(mODEJoint,first[0],first[1],first[2]);
+    mUniversalJointImp->SetAxis1(first, mJointID);
 }
 
 void UniversalJoint::SetAxis2(const Vector3f & axis)
 {
     Vector3f second(GetWorldTransform().Rotate(axis));
-    dJointSetUniversalAxis2(mODEJoint,second[0],second[1],second[2]);
+    mUniversalJointImp->SetAxis2(second, mJointID);
 }
 
 Vector3f UniversalJoint::GetAxis(EAxisIndex idx) const
@@ -100,17 +107,13 @@ Vector3f UniversalJoint::GetAxis(EAxisIndex idx) const
     {
     case AI_FIRST:
     {
-        dReal axis[3];
-        dJointGetUniversalAxis1(mODEJoint, axis);
-        vec = Vector3f(axis[0],axis[1],axis[2]);
+        vec = mUniversalJointImp->GetAxis1(mJointID);
         break;
     }
 
     case AI_SECOND:
     {
-        dReal axis[3];
-        dJointGetUniversalAxis2(mODEJoint, axis);
-        vec = Vector3f(axis[0],axis[1],axis[2]);
+        vec = mUniversalJointImp->GetAxis2(mJointID);
         break;
     }
 
@@ -126,10 +129,10 @@ float UniversalJoint::GetAngle(EAxisIndex idx) const
     switch (idx)
     {
     case AI_FIRST:
-        return gRadToDeg(dJointGetUniversalAngle1(mODEJoint));
+        return mUniversalJointImp->GetAngle1(mJointID);
 
     case AI_SECOND:
-        return gRadToDeg(dJointGetUniversalAngle2(mODEJoint));
+        return mUniversalJointImp->GetAngle2(mJointID);
 
     default:
         return 0;
@@ -141,22 +144,16 @@ float UniversalJoint::GetAngleRate(EAxisIndex idx) const
     switch (idx)
         {
         case AI_FIRST:
-            return gRadToDeg(dJointGetUniversalAngle1Rate(mODEJoint));
+            return mUniversalJointImp->GetAngleRate1(mJointID);
 
         case AI_SECOND:
-            return gRadToDeg(dJointGetUniversalAngle2Rate(mODEJoint));
+            return mUniversalJointImp->GetAngleRate2(mJointID);
 
         default:
             return 0;
         }
 }
 
-void UniversalJoint::SetParameter(int parameter, float value)
-{
-    dJointSetUniversalParam(mODEJoint, parameter, value);
-}
-
-float UniversalJoint::GetParameter(int parameter) const
-{
-    return dJointGetUniversalParam(mODEJoint, parameter);
+void UniversalJoint::SetParameter(int parameter, float value){
+    mJointImp->SetParameter(parameter, value, mJointID);
 }

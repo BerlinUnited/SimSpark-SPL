@@ -28,12 +28,6 @@
 #include <sys/socket.h>
 #endif
 
-#ifndef EAGAIN
-// FIXME: This is only a workaround, and doesn't work fine.
-#define EAGAIN 0
-#define MSG_DONTWAIT 0
-#endif
-
 using namespace oxygen;
 using namespace zeitgeist;
 using namespace std;

@@ -58,7 +58,7 @@ Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
     zg.GetCore()->RegisterClassObject(new CLASS(Light), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(StaticMesh), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(Box), "kerosin/");
-    zg.GetCore()->RegisterClassObject(new CLASS(CCylinder), "kerosin/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Capsule), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(Cylinder), "kerosin/");
     zg.GetCore()->RegisterClassObject(new CLASS(Sphere), "kerosin/");
 

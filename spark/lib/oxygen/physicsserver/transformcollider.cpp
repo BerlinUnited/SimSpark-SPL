@@ -20,36 +20,48 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "transformcollider.h"
+#include <oxygen/physicsserver/int/transformcolliderint.h>
+#include <oxygen/physicsserver/transformcollider.h>
+#include <iostream>
 
 using namespace oxygen;
 using namespace salt;
+using namespace boost;
+
+boost::shared_ptr<TransformColliderInt> TransformCollider::mTransformColliderImp;
 
 TransformCollider::TransformCollider() : Collider()
 {
+
 }
 
 bool TransformCollider::ConstructInternal()
-{
+{    
+    if (mTransformColliderImp.get() == 0)
+        mTransformColliderImp = shared_dynamic_cast<TransformColliderInt>
+            (GetCore()->New("TransformColliderImp"));
+
     if (! Collider::ConstructInternal())
         {
             return false;
         }
 
-    mODEGeom = dCreateGeomTransform(0);
+    mGeomID = mTransformColliderImp->CreateTransformCollider();
 
-    if (mODEGeom == 0)
+    if (mGeomID == 0)
         {
             return false;
         }
 
     //! do not automatically destroy encapsulated geoms
-    dGeomTransformSetCleanup(mODEGeom, 0);
+    int cleanupSetting = 0;
 
     /** report the transform geom in collisions instead of the
         encapsulated geoms
     */
-    dGeomTransformSetInfo(mODEGeom, 1);
+    int infoSetting = 1;
+    
+    mTransformColliderImp->SetColliderParameters(cleanupSetting, infoSetting, mGeomID);
 
     return true;
 }

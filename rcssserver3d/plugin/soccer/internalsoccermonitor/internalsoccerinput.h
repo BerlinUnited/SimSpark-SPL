@@ -28,7 +28,7 @@
 namespace oxygen
 {
     class FPSController;
-    class Body;
+    class RigidBody;
     class GameControlServer;
 }
 
@@ -88,7 +88,7 @@ protected:
     boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
 
     /** cached reference to the camera body */
-    boost::shared_ptr<oxygen::Body> mCameraBody;
+    boost::shared_ptr<oxygen::RigidBody> mCameraBody;
 
     /** cached reference to the camera body */
     boost::shared_ptr<oxygen::FPSController> mFPS;

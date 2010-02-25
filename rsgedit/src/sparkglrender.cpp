@@ -19,7 +19,7 @@
 */
 #include "sparkglrender.h"
 #include <zeitgeist/logserver/logserver.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/joint.h>
 #include <oxygen/sceneserver/camera.h>
 #include <oxygen/sceneserver/sceneserver.h>
@@ -163,7 +163,7 @@ void SparkGLRender::RenderNodeSelection(shared_ptr<BaseNode> node)
              ++i
              )
         {
-            shared_ptr<Body> body =
+            shared_ptr<RigidBody> body =
                 jointNode->GetBody(static_cast<Joint::EBodyIndex>(i));
 
             if (body.get() == 0)

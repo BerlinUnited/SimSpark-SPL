@@ -12184,13 +12184,13 @@
               </PhysicalAttributes>
             </SimpleBox>
             <!--
-            <SimpleCappedCylinder name="larm3Capped" radius="0.016" height="0.03">
+            <SimpleCapsule name="larm3Capped" radius="0.016" height="0.03">
               <Translation x="-0.003" y="-0.028" z="0.0"/>
               <Rotation x="-90.0" y="0.0" z="-25.0"/>
               <PhysicalAttributes>
                 <Mass value="0.05"/>
               </PhysicalAttributes>
-            </SimpleCappedCylinder>
+            </SimpleCapsule>
             -->
           </PhysicalRepresentation>
         </ComplexShape>
@@ -15442,13 +15442,13 @@
               </PhysicalAttributes>
             </SimpleBox>
             <!--
-            <SimpleCappedCylinder name="rarm3Capped" radius="0.016" height="0.03">
+            <SimpleCapsule name="rarm3Capped" radius="0.016" height="0.03">
               <Translation x="-0.003" y="-0.028" z="0.0"/>
               <Rotation x="-90.0" y="0.0" z="-25.0"/>
               <PhysicalAttributes>
                 <Mass value="0.05"/>
               </PhysicalAttributes>
-            </SimpleCappedCylinder>
+            </SimpleCapsule>
             -->
           </PhysicalRepresentation>
         </ComplexShape>
@@ -24870,13 +24870,13 @@
         </Polygon>
       </GraphicalRepresentation>
       <PhysicalRepresentation>
-        <SimpleCappedCylinder name="headCCylinder" radius="0.026" height="0.075">
+        <SimpleCapsule name="headCapsule" radius="0.026" height="0.075">
           <Translation x="-0.023" y="0.005" z="0.0"/>
           <Rotation x="0.0" y="90.0" z="20.0"/>
           <PhysicalAttributes>
             <Mass value="0.25"/>
           </PhysicalAttributes>
-        </SimpleCappedCylinder>
+        </SimpleCapsule>
         <SimpleSphere name="headSphere" radius="0.032">
           <Translation x="0.012" y="0.012" z="0.0"/>
           <PhysicalAttributes>
@@ -25191,13 +25191,13 @@
         </Polygon>
       </GraphicalRepresentation>
       <PhysicalRepresentation>
-        <SimpleCappedCylinder name="neckCCylinder" radius="0.013" height="0.034">
+        <SimpleCapsule name="neckCapsule" radius="0.013" height="0.034">
           <Translation x="0.0" y="0.038" z="0.0"/>
           <Rotation x="90.0" y="0.0" z="0.0"/>
           <PhysicalAttributes>
             <Mass value="0.05"/>
           </PhysicalAttributes>
-        </SimpleCappedCylinder>
+        </SimpleCapsule>
         <SimpleSphere name="neckSphere" radius="0.032">
           <Translation x="0.0" y="0.08" z="0.0"/>
           <PhysicalAttributes>
@@ -27630,13 +27630,13 @@
             <Mass value="1.0"/>
           </PhysicalAttributes>
         </SimpleSphere>
-        <SimpleCappedCylinder name="bodyCCylinder" radius="0.04" height="0.05">
+        <SimpleCapsule name="bodyCapsule" radius="0.04" height="0.05">
           <Translation x="0.0" y="-0.005" z="0.0"/>
           <Rotation x="0.0" y="90.0" z="0.0"/>
           <PhysicalAttributes>
             <Mass value="2.5"/>
           </PhysicalAttributes>
-        </SimpleCappedCylinder>
+        </SimpleCapsule>
         <SimpleSphere name="bodySphere2" radius="0.055">
           <Translation x="0.06" y="0.004" z="0.0"/>
           <PhysicalAttributes>

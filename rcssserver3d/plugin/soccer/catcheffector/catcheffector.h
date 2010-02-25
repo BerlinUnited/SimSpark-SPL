@@ -22,7 +22,7 @@
 #define CATCHEFFECTOR_H
 
 #include <oxygen/agentaspect/effector.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <ball/ball.h>
 #include <ballstateaspect/ballstateaspect.h>
 
@@ -33,7 +33,7 @@ namespace salt
 
 namespace oxygen
 {
-    class Body;
+    class RigidBody;
     class AgentAspect;
 }
 
@@ -74,7 +74,7 @@ protected:
 
 protected:
     /** reference to the body node of the ball */
-    boost::shared_ptr<oxygen::Body> mBallBody;
+    boost::shared_ptr<oxygen::RigidBody> mBallBody;
     /** reference to the agent aspect */
     boost::shared_ptr<oxygen::AgentAspect> mAgent;
     /** reference to the agentstate */

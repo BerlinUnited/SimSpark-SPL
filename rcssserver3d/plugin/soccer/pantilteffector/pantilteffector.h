@@ -24,7 +24,7 @@
 
 #include <salt/random.h>
 #include <oxygen/agentaspect/effector.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <agentstate/agentstate.h>
 
 class PanTiltEffector : public oxygen::Effector
@@ -77,7 +77,7 @@ protected:
     /** the reference to the parent transform node */
     boost::shared_ptr<oxygen::Transform> mTransformParent;
     /** the reference to the parents body node */
-    boost::shared_ptr<oxygen::Body> mBody;
+    boost::shared_ptr<oxygen::RigidBody> mBody;
     //! a reference to the agent state
     boost::shared_ptr<AgentState> mAgentState;
 

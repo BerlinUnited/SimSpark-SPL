@@ -35,15 +35,15 @@
 	     )
        )
 
-; add capped cylinder
+; add capsule
  (nd Transform
        (setLocalPos -4 0 20)
-       (importScene rsg/boxspheres/ccylinder.rsg 1 3 2 matBlue)
+       (importScene rsg/boxspheres/capsule.rsg 1 3 2 matBlue)
        )
 
  (nd Transform
        (setLocalPos -6 3 20)
-       (importScene rsg/boxspheres/ccylinder.rsg 1 10 2 matWhite)
+       (importScene rsg/boxspheres/capsule.rsg 1 10 2 matWhite)
        )
 
 ; add two layer of spheres

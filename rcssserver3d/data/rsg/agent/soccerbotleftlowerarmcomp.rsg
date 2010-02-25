@@ -44,7 +44,7 @@
                         - (eval $HandBox3Height / 2.0) ) - 0.04 ) )
 
 
- (nd Body
+ (nd RigidBody
        (setName boxBody)
        ; Lower arm mass
        (setBox $LowerarmMass $LowerarmLength $LowerarmWidth $LowerarmHeight)

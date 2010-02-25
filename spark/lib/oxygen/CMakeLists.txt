@@ -14,15 +14,25 @@ set(oxygen_LIB_HDRS
     gamecontrolserver/behavior.h
     oxygen.h
     oxygen_defines.h
+    physicsserver/genericphysicsobjects.h
+    physicsserver/physicsobject.h
     physicsserver/body.h
+    physicsserver/rigidbody.h
+    physicsserver/staticbody.h
+    physicsserver/dynamicbody.h
+    physicsserver/softbody.h
     physicsserver/bodycontroller.h
     physicsserver/boxcollider.h
-    physicsserver/ccylindercollider.h
+    physicsserver/capsulecollider.h
+    physicsserver/cylindercollider.h
     physicsserver/collider.h
+    physicsserver/compoundcollider.h
+    physicsserver/concavecollider.h
+    physicsserver/conecollider.h
+    physicsserver/convexcollider.h
     physicsserver/collisionhandler.h
     physicsserver/contactjointhandler.h
-    physicsserver/odeobject.h
-    physicsserver/odewrapper.h
+    physicsserver/emptycollider.h
     physicsserver/physicsserver.h
     physicsserver/planecollider.h
     physicsserver/raycollider.h
@@ -34,13 +44,53 @@ set(oxygen_LIB_HDRS
     physicsserver/dragcontroller.h
     physicsserver/velocitycontroller.h
     physicsserver/joint.h
+    physicsserver/generic6dofjoint.h
     physicsserver/balljoint.h
+    physicsserver/conetwistjoint.h
     physicsserver/hingejoint.h
     physicsserver/fixedjoint.h
     physicsserver/sliderjoint.h
     physicsserver/universaljoint.h
     physicsserver/hinge2joint.h
     physicsserver/angularmotor.h
+    
+    #interfaces
+    physicsserver/int/angularmotorint.h
+    physicsserver/int/balljointint.h
+    physicsserver/int/bodyint.h
+    physicsserver/int/boxcolliderint.h
+    physicsserver/int/capsulecolliderint.h
+    physicsserver/int/colliderint.h
+    physicsserver/int/compoundcolliderint.h
+    physicsserver/int/concavecolliderint.h
+    physicsserver/int/conecolliderint.h
+    physicsserver/int/conetwistjointint.h
+    physicsserver/int/contactjointhandlerint.h
+    physicsserver/int/convexcolliderint.h
+    physicsserver/int/cylindercolliderint.h
+    physicsserver/int/dynamicbodyint.h
+    physicsserver/int/emptycolliderint.h
+    physicsserver/int/fixedjointint.h
+    physicsserver/int/generic6dofjointint.h
+    physicsserver/int/hingejointint.h
+    physicsserver/int/hinge2jointint.h
+    physicsserver/int/jointint.h
+    physicsserver/int/physicsobjectint.h
+    physicsserver/int/physicsserverint.h
+    physicsserver/int/planecolliderint.h
+    physicsserver/int/raycolliderint.h
+    physicsserver/int/rigidbodyint.h
+    physicsserver/int/sliderjointint.h
+    physicsserver/int/softbodyint.h
+    physicsserver/int/spaceint.h
+    physicsserver/int/spherecolliderint.h
+    physicsserver/int/staticbodyint.h
+    physicsserver/int/transformcolliderint.h
+    physicsserver/int/universaljointint.h
+    physicsserver/int/worldint.h
+    
+    #proxyserver/agentproxy.h
+    #proxyserver/proxyserver.h
     sceneserver/sceneimporter.h
     sceneserver/basenode.h
     sceneserver/fpscontroller.h
@@ -71,8 +121,6 @@ set(oxygen_LIB_HDRS
     monitorserver/monitoritem.h
     monitorserver/custommonitor.h
     monitorserver/monitorcmdparser.h
-    proxyserver/agentproxy.h
-    proxyserver/proxyserver.h
 )
 if(SPADES_FOUND)
    set(oxygen_LIB_HDRS
@@ -102,24 +150,44 @@ set(oxygen_LIB_SRCS
     gamecontrolserver/behavior.cpp
     gamecontrolserver/behavior_c.cpp
     oxygen.cpp
+    physicsserver/physicsobject.cpp
+    physicsserver/physicsobject_c.cpp
     physicsserver/body.cpp
     physicsserver/body_c.cpp
+    physicsserver/rigidbody.cpp
+    physicsserver/rigidbody_c.cpp
+    physicsserver/staticbody.cpp
+    physicsserver/staticbody_c.cpp
+    physicsserver/dynamicbody.cpp
+    physicsserver/dynamicbody_c.cpp
+    physicsserver/softbody.cpp
+    physicsserver/softbody_c.cpp
     physicsserver/bodycontroller.cpp
     physicsserver/bodycontroller_c.cpp
     physicsserver/transformcollider.cpp
     physicsserver/transformcollider_c.cpp
     physicsserver/boxcollider.cpp
     physicsserver/boxcollider_c.cpp
-    physicsserver/ccylindercollider.cpp
-    physicsserver/ccylindercollider_c.cpp
+    physicsserver/capsulecollider.cpp
+    physicsserver/capsulecollider_c.cpp
     physicsserver/collider.cpp
     physicsserver/collider_c.cpp
+    physicsserver/compoundcollider.cpp
+    physicsserver/compoundcollider_c.cpp
+    physicsserver/concavecollider.cpp
+    physicsserver/concavecollider_c.cpp
+    physicsserver/conecollider.cpp
+    physicsserver/conecollider_c.cpp
+    physicsserver/convexcollider.cpp
+    physicsserver/convexcollider_c.cpp
     physicsserver/collisionhandler.cpp
     physicsserver/collisionhandler_c.cpp
     physicsserver/contactjointhandler.cpp
     physicsserver/contactjointhandler_c.cpp
-    physicsserver/odeobject.cpp
-    physicsserver/odeobject_c.cpp
+    physicsserver/cylindercollider.cpp
+    physicsserver/cylindercollider_c.cpp
+    physicsserver/emptycollider.cpp
+    physicsserver/emptycollider_c.cpp
     physicsserver/physicsserver.cpp
     physicsserver/physicsserver_c.cpp
     physicsserver/planecollider.cpp
@@ -140,8 +208,12 @@ set(oxygen_LIB_SRCS
     physicsserver/velocitycontroller_c.cpp
     physicsserver/joint.cpp
     physicsserver/joint_c.cpp
+    physicsserver/generic6dofjoint.cpp
+    physicsserver/generic6dofjoint_c.cpp
     physicsserver/balljoint.cpp
     physicsserver/balljoint_c.cpp
+    physicsserver/conetwistjoint.cpp
+    physicsserver/conetwistjoint_c.cpp
     physicsserver/hingejoint.cpp
     physicsserver/hingejoint_c.cpp
     physicsserver/fixedjoint.cpp
@@ -154,6 +226,7 @@ set(oxygen_LIB_SRCS
     physicsserver/hinge2joint_c.cpp
     physicsserver/angularmotor.cpp
     physicsserver/angularmotor_c.cpp
+    
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp
     sceneserver/fpscontroller.cpp
@@ -206,10 +279,10 @@ set(oxygen_LIB_SRCS
     monitorserver/custommonitor_c.cpp
     monitorserver/monitorcmdparser.cpp
     monitorserver/monitorcmdparser_c.cpp
-    proxyserver/agentproxy.cpp
-    proxyserver/agentproxy_c.cpp
-    proxyserver/proxyserver.cpp
-    proxyserver/proxyserver_c.cpp
+    #proxyserver/agentproxy.cpp
+    #proxyserver/agentproxy_c.cpp
+    #proxyserver/proxyserver.cpp
+    #proxyserver/proxyserver_c.cpp
 )
 if(SPADES_FOUND)
    set(oxygen_LIB_SRCS
