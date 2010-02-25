@@ -92,7 +92,7 @@ public:
             RE_BOX,
             RE_SPHERE,
             RE_CYLINDER,
-            RE_CAPPEDCYLINDER,
+            RE_CAPSULE,
 
             RE_COMPOUND,
 
@@ -106,7 +106,7 @@ public:
             RE_SIMPLEBOX,
             RE_SIMPLESPHERE,
             RE_SIMPLECYLINDER,
-            RE_SIMPLECAPPEDCYLINDER,
+            RE_SIMPLECAPSULE,
 
             RE_MACRO,
             RE_USE,

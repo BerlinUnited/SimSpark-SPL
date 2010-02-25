@@ -8,7 +8,7 @@
        (setMaterial $material)
        )
 
- (nd Body
+ (nd RigidBody
        (setName boxBody)
        ;(setBoxTotal $totalMass $lenX $lenY $lenZ)
        (setBox $totalMass $lenX $lenY $lenZ)

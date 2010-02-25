@@ -36,7 +36,7 @@ namespace salt
 
 namespace oxygen
 {
-    class Body;
+    class RigidBody;
     class AgentAspect;
     class Transform;
 }
@@ -193,7 +193,7 @@ protected:
 
 protected:
     /** reference to the body node of the Ball */
-    boost::shared_ptr<oxygen::Body> mBallBody;
+    boost::shared_ptr<oxygen::RigidBody> mBallBody;
 
     /** reference to the GameStateAspect */
     CachedPath<GameStateAspect> mGameState;

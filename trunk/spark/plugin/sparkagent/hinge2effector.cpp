@@ -21,7 +21,7 @@
 */
 #include "hinge2effector.h"
 #include "hinge2action.h"
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -60,7 +60,7 @@ bool Hinge2Effector::Realize(boost::shared_ptr<ActionObject> action)
 
     if (hinge2Action->GetMotorVelocity() != 0)
         {
-            shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
+            shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
                 {
                     body->Enable();

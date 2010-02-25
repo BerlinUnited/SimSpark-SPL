@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "physicsserver.h"
+#include <oxygen/physicsserver/physicsserver.h>
 
 using namespace boost;
 using namespace oxygen;

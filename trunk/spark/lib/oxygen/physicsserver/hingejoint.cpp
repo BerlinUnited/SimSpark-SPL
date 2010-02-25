@@ -17,15 +17,20 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "hingejoint.h"
+#include <oxygen/physicsserver/hingejoint.h>
+#include <oxygen/physicsserver/int/hingejointint.h>
+#include <oxygen/physicsserver/int/jointint.h>
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-HingeJoint::HingeJoint() : Joint()
+boost::shared_ptr<HingeJointInt> HingeJoint::mHingeJointImp;
+
+HingeJoint::HingeJoint() : Generic6DOFJoint()
 {
+
 }
 
 HingeJoint::~HingeJoint()
@@ -34,20 +39,26 @@ HingeJoint::~HingeJoint()
 
 void HingeJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    Joint::OnLink();
+    
+    if (mHingeJointImp.get() == 0)
+        mHingeJointImp = shared_dynamic_cast<HingeJointInt>
+            (GetCore()->New("HingeJointImp"));
+
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateHinge(world, 0);
+    mJointID = mHingeJointImp->CreateHingeJoint(world);
 }
 
 void HingeJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor(GetWorldTransform() * anchor);
-    dJointSetHingeAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    mHingeJointImp->SetAnchor(gAnchor, mJointID);
 }
 
 Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
@@ -58,17 +69,13 @@ Vector3f HingeJoint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                dReal anchor[3];
-                dJointGetHingeAnchor (mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mHingeJointImp->GetAnchor1(mJointID);
                 break;
             }
 
         case BI_SECOND:
             {
-                dReal anchor[3];
-                dJointGetHingeAnchor2(mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mHingeJointImp->GetAnchor2(mJointID);
                 break;
             }
 
@@ -109,38 +116,24 @@ void HingeJoint::SetAxis(EAxisIndex idx)
 void HingeJoint::SetAxis(const Vector3f& axis)
 {
     Vector3f absAxis(GetWorldTransform().Rotate(axis));
-    dJointSetHingeAxis(mODEJoint, absAxis[0], absAxis[1], absAxis[2]);
+    mHingeJointImp->SetAxis(absAxis, mJointID);
 }
 
 Vector3f HingeJoint::GetAxis()
 {
-    dReal axis[3];
-    dJointGetHingeAxis(mODEJoint, axis);
-    return Vector3f (axis[0], axis[1], axis[2]);
+    return mHingeJointImp->GetAxis(mJointID);
 }
 
 float HingeJoint::GetAngle() const
 {
-    return gRadToDeg(dJointGetHingeAngle(mODEJoint));
+    return mHingeJointImp->GetAngle(mJointID);
 }
 
 float HingeJoint::GetAngleRate() const
 {
-    return gRadToDeg(dJointGetHingeAngleRate(mODEJoint));
+    return mHingeJointImp->GetAngleRate(mJointID);
 }
 
-void HingeJoint::SetParameter(int parameter, float value)
-{
-    dJointSetHingeParam(mODEJoint, parameter, value);
+void HingeJoint::SetParameter(int parameter, float value){
+    mJointImp->SetParameter(parameter, value, mJointID);
 }
-
-float HingeJoint::GetParameter(int parameter) const
-{
-    return dJointGetHingeParam(mODEJoint, parameter);
-}
-
-
-
-
-
-

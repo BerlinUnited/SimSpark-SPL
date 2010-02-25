@@ -21,13 +21,13 @@
 #define OXYGEN_BALLJOINT_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/generic6dofjoint.h>
 
 namespace oxygen
 {
-class Body;
+class BallJointInt;
 
-class OXYGEN_API BallJoint : public Joint
+class OXYGEN_API BallJoint : public Generic6DOFJoint
 {
 public:
     BallJoint();
@@ -43,17 +43,20 @@ public:
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
-    salt::Vector3f GetAnchor (EBodyIndex idx);
-
-protected:
-    /** creates a new contact joint */
-    virtual void OnLink();
-
+    salt::Vector3f GetAnchor(EBodyIndex idx);
+    
     /** sets a joint parameter value */
     virtual void SetParameter(int parameter, float value);
 
     /** returns a joint parameter value */
-    virtual float GetParameter(int parameter) const;
+    virtual float GetParameter(int parameter) const;    
+
+protected:
+    /** creates a new contact joint */
+    virtual void OnLink();
+    
+private:
+    static boost::shared_ptr<BallJointInt> mBallJointImp;
 };
 
 DECLARE_CLASS(BallJoint);

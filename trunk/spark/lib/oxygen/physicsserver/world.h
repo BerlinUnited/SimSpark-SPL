@@ -23,19 +23,21 @@
 #define OXYGEN_WORLD_H
 
 #include <oxygen/oxygen_defines.h>
-#include "odeobject.h"
+#include <oxygen/physicsserver/physicsobject.h>
 
 namespace oxygen
 {
 
-/** World encapsulates an ODE world object. It is a container for
+class WorldInt;
+
+/** World encapsulates a world object. It is a container for
     rigid bodies and joints. Objects in different worlds can not
     interact, for example rigid bodies from two different worlds can
     not collide. All the objects in a world exist at the same point in
     time, thus one reason to use separate worlds is to simulate
     systems at different rates.
 */
-class OXYGEN_API World : public ODEObject
+class OXYGEN_API World : public PhysicsObject
 {
     //
     // Functions
@@ -44,10 +46,10 @@ public:
     World();
     virtual ~World();
 
-    /** returns the ID of the managed ODE world */
-    dWorldID GetODEWorld() const;
+    /** returns the ID of the managed world */
+    long GetWorldID() const;
 
-    /** sets the gravity vector of this vorld */
+    /** sets the gravity vector of this world */
     void SetGravity(const salt::Vector3f& gravity);
 
     /** gets the gravity vector of this world */
@@ -66,8 +68,7 @@ public:
     */
     void SetERP(float erp);
 
-    /** returns the Error Reduction Parameter of this World.
-     */
+    /** returns the Error Reduction Parameter of this World. */
     float GetERP() const;
 
     /** sets the Constraint Force mixing (CFM) value. If CFM is set to
@@ -102,19 +103,26 @@ public:
     void SetContactSurfaceLayer(float depth);
     float GetContactSurfaceLayer() const;
 
-    /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    /** destroy the managed world and all objects in it */
+    virtual void DestroyPhysicsObject();
 
 protected:
-    /** creates them managed ODE world */
+    /** creates a new physics world */
     virtual bool ConstructInternal();
 
     //
     // Members
     //
 private:
-    /** the dynamics world represented by this object */
-    dWorldID mODEWorld;
+    /** Pointer to the implementation of this class.
+        If a method contains engine-specific commands, these commands are 
+        carried out in a subclass of WorldInt that has the right calls for 
+        the desired physics engine.
+    */
+    static boost::shared_ptr<WorldInt> mWorldImp;
+    
+    /** The ID of the managed physics world */
+    long mWorldID;
 };
 
 DECLARE_CLASS(World);

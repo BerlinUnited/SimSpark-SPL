@@ -19,7 +19,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "angularmotor.h"
+#include <oxygen/physicsserver/angularmotor.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -27,13 +27,13 @@ using namespace salt;
 
 FUNCTION(AngularMotor,setUserMode)
 {
-    obj->SetMode(AngularMotor::MM_USER);
+    obj->SetMode(0);
     return true;
 }
 
 FUNCTION(AngularMotor,setEulerMode)
 {
-    obj->SetMode(AngularMotor::MM_EULER);
+    obj->SetMode(1);
     return true;
 }
 

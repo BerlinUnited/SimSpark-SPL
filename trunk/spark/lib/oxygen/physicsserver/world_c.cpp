@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "world.h"
+#include <oxygen/physicsserver/world.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -127,7 +127,7 @@ FUNCTION(World,getContactSurfaceLayer)
 
 void CLASS(World)::DefineClass()
 {
-    DEFINE_BASECLASS(oxygen/ODEObject);
+    DEFINE_BASECLASS(oxygen/PhysicsObject);
     DEFINE_FUNCTION(setGravity);
     DEFINE_FUNCTION(setERP);
     DEFINE_FUNCTION(getERP);

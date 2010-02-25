@@ -19,7 +19,7 @@
 */
 #include "universaljointeffector.h"
 #include "universaljointaction.h"
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -73,13 +73,13 @@ bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
                         gMax(finalMotorVel2, - mJoint->GetJointMaxSpeed2());
     }
 
-    mJoint->SetParameter(dParamVel, finalMotorVel1);
-    mJoint->SetParameter(dParamVel2, finalMotorVel2);
+    mJoint->SetParameter(2 /*value of ODE's dParamVel*/, finalMotorVel1);
+    mJoint->SetParameter(258 /*value of ODE's dParamVel2*/, finalMotorVel2);
 
     if (universalAction->GetMotorVelocity(Joint::AI_FIRST) != 0
             || universalAction->GetMotorVelocity(Joint::AI_SECOND) != 0)
         {
-            shared_ptr<Body> body = mJoint->GetBody(Joint::BI_FIRST);
+            shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
                 {
                     body->Enable();

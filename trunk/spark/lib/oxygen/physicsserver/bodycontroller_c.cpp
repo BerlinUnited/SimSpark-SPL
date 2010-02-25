@@ -19,7 +19,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "bodycontroller.h"
+#include <oxygen/physicsserver/bodycontroller.h>
 
 using namespace boost;
 using namespace oxygen;

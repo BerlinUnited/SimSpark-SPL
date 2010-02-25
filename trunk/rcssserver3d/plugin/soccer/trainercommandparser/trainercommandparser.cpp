@@ -23,7 +23,7 @@
 
 */
 
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <soccerbase/soccerbase.h>
 #include <agentstate/agentstate.h>
@@ -365,7 +365,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
             return;
         }         
 
-        shared_ptr<Body> body;
+        shared_ptr<RigidBody> body;
 
         if (SoccerBase::GetBallBody(*this, body))
         {
@@ -394,7 +394,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
             return;
         }
 
-        shared_ptr<Body> body;
+        shared_ptr<RigidBody> body;
 
         if (SoccerBase::GetBallBody(*this, body))
         {

@@ -21,11 +21,11 @@
 #define OXYGEN_ANGULARMOTOR_H
 
 #include <oxygen/oxygen_defines.h>
-#include "joint.h"
+#include <oxygen/physicsserver/joint.h>
 
 namespace oxygen
 {
-class Body;
+class AngularMotorInt;
 
 /** An angular motor allows the relative angular velocities of two
     bodies to be controlled. The angular velocity can be controlled on
@@ -35,11 +35,6 @@ class Body;
 class OXYGEN_API AngularMotor : public Joint
 {
 public:
-    enum EMotorMode
-        {
-            MM_USER = dAMotorUser,
-            MM_EULER = dAMotorEuler
-        };
 
     enum EAxisAnchor
         {
@@ -58,11 +53,15 @@ public:
         'euler' mode, it computes the euler angles corresponding to
         the relative rotation, allowing euler angle torque motors and
         stops to be set.
+        Pass zero to this function to set the mode to user mode, or
+        a value not equal to zero to set it to Euler mode.
     */
-    void SetMode(EMotorMode mode);
+    void SetMode(int mode);
 
-    /** returns the current motor mode */
-    EMotorMode GetMode();
+    /** returns the current motor mode - zero if motor is in user mode,
+        or one if motor is in euler mode.
+    */
+    int GetMode();
 
     /** sets the number of angular axes that will be controlled by the
         angular motor. \param num can range from 0 which effectively
@@ -72,7 +71,8 @@ public:
     void SetNumAxes(int num);
 
     /** returns the number of angular axes that are controlled by the
-        angular motor */
+        angular motor 
+    */
     int GetNumAxes();
 
     /** sets one of the motor axis. \param idx gives the motor axis to
@@ -84,15 +84,14 @@ public:
         be determined automatically at each time step.  Axes 0 and 2
         must be perpendicular to each other.  Axis 0 must be anchored
         to the first body, axis 2 must be anchored to the second body.
-     */
+    */
     void SetMotorAxis(EAxisIndex idx, EAxisAnchor anchor,
                       const salt::Vector3f& axis);
 
     /** returns the motor axis \param idx */
     salt::Vector3f GetMotorAxis(EAxisIndex idx);
 
-    /** returns the relative anchor mode of the motor axis \param idx
-     */
+    /** returns the relative anchor mode of the motor axis \param idx */
     EAxisAnchor GetAxisAnchor(EAxisIndex idx);
 
     /** sets the current angle along axis \param idx. This function
@@ -105,14 +104,14 @@ public:
        'user' mode this is simply the value that was previoulsy set
        with SetAxisAngle(). In 'euler' mode this is the corresponding
        euler angle.
-     */
+    */
     float GetAxisAngle(EAxisIndex idx);
 
     /** Return the current angle rate for axis anum. In dAMotorUser
         mode this is always zero, as not enough information is
         available. In dAMotorEuler mode this is the corresponding
         euler angle rate.
-     */
+    */
     float GetAxisAngleRate(EAxisIndex idx);
 
 protected:
@@ -124,6 +123,9 @@ protected:
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+    
+private:
+    static boost::shared_ptr<AngularMotorInt> mAngularMotorImp;
 };
 
 DECLARE_CLASS(AngularMotor);

@@ -204,7 +204,7 @@
 	(nd Transform
 	    (setLocalPos $offsetLeftShoulderCylX $offsetLeftShoulderCylY $offsetLeftShoulderCylZ)
 	    (setLocalRotation 0 90 0)
-	    (nd CCylinder
+	    (nd Capsule
 		(setName leftshoulderpin)
 		(setMaterial matDarkGrey)
 		(setParams $TorsoCylinderRadius $TorsoCylinderLength)
@@ -214,7 +214,7 @@
 	(nd Transform
 	    (setLocalPos $offsetRightShoulderCylX $offsetRightShoulderCylY $offsetRightShoulderCylZ)
 	    (setLocalRotation 0 90 0)
-	    (nd CCylinder
+	    (nd Capsule
 		(setName rightshoulderpin)
 		(setMaterial matDarkGrey)
 		(setParams $TorsoCylinderRadius $TorsoCylinderLength)
@@ -409,7 +409,7 @@
 	(nd Transform
 	    (setLocalPos 0 0 (eval -1 * (eval (eval $UpperarmHeight / 2.0) + (eval $ElbowRadius / 2.0))))
 	    (setLocalRotation 0 90 0)
-	    (nd CCylinder	
+	    (nd Capsule	
 		(setMaterial matGrey)
 		(setParams $ElbowRadius $ElbowLength)
 		)
@@ -455,7 +455,7 @@
 	(nd Transform
 	    (setLocalPos 0 0 (eval -1 * (eval (eval $UpperarmHeight / 2.0) + (eval $ElbowRadius / 2.0))))
 	    (setLocalRotation 0 90 0)
-	    (nd CCylinder
+	    (nd Capsule
 		(setMaterial matGrey)
 		(setParams $ElbowRadius $ElbowLength)
 		)
@@ -771,7 +771,7 @@
 	(nd Transform
 	      (setLocalPos 0 0 (eval (eval $ThighHeight * -0.5) - 0.025))
 	      (setLocalRotation 0 90 0)
-	      (nd CCylinder
+	      (nd Capsule
 		    (setMaterial matRed)
 		    (setParams 0.1 (eval $ThighLength - 0.2))
 		    )
@@ -812,7 +812,7 @@
 	(nd Transform
 	      (setLocalPos 0 0 (eval (eval $ThighHeight * -0.5) - 0.025))
 	      (setLocalRotation 0 90 0)
-	      (nd CCylinder
+	      (nd Capsule
 		    (setMaterial matRed)
 		    (setParams 0.1 (eval $ThighLength - 0.2))
 		    )

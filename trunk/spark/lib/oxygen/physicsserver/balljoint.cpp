@@ -17,14 +17,20 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "balljoint.h"
+
+#include <oxygen/physicsserver/int/balljointint.h>
+#include <oxygen/physicsserver/balljoint.h>
+#include <zeitgeist/logserver/logserver.h>
 
 using namespace oxygen;
 using namespace boost;
 using namespace salt;
 
-BallJoint::BallJoint() : Joint()
+boost::shared_ptr<BallJointInt> BallJoint::mBallJointImp;
+
+BallJoint::BallJoint() : Generic6DOFJoint()
 {
+
 }
 
 BallJoint::~BallJoint()
@@ -33,20 +39,26 @@ BallJoint::~BallJoint()
 
 void BallJoint::OnLink()
 {
-    dWorldID world = GetWorldID();
+    Joint::OnLink();
+    
+    if (mBallJointImp.get() == 0)
+        mBallJointImp = shared_dynamic_cast<BallJointInt>
+            (GetCore()->New("BallJointImp"));
+
+    long world = GetWorldID();
     if (world == 0)
         {
             return;
         }
 
-    mODEJoint = dJointCreateBall(world, 0);
+    mJointID = mBallJointImp->CreateBallJoint(world);
 }
 
 void BallJoint::SetAnchor(const Vector3f& anchor)
 {
     // calculate anchor position in world coordinates
     Vector3f gAnchor = GetWorldTransform() * anchor;
-    dJointSetBallAnchor (mODEJoint, gAnchor[0], gAnchor[1], gAnchor[2]);
+    mBallJointImp->SetAnchor(gAnchor, mJointID);
 }
 
 Vector3f BallJoint::GetAnchor(EBodyIndex idx)
@@ -57,17 +69,13 @@ Vector3f BallJoint::GetAnchor(EBodyIndex idx)
         {
         case BI_FIRST:
             {
-                dReal anchor[3];
-                dJointGetBallAnchor (mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mBallJointImp->GetAnchor1(mJointID);
                 break;
             }
 
         case BI_SECOND:
             {
-                dReal anchor[3];
-                dJointGetBallAnchor2(mODEJoint, anchor);
-                pos = Vector3f(anchor[0],anchor[1],anchor[2]);
+                pos = mBallJointImp->GetAnchor2(mJointID);
                 break;
             }
 
@@ -78,16 +86,12 @@ Vector3f BallJoint::GetAnchor(EBodyIndex idx)
     return GetLocalPos(pos);
 }
 
-void BallJoint::SetParameter(int /*parameter*/, float /*value*/)
-{
-    // no ode set param fkt. defined
+void BallJoint::SetParameter(int parameter, float value){
+    GetLog()->Warning()
+        << "(BallJoint) WARNING: SetParameter undefined for BallJoint, call ignored";
 }
 
-float BallJoint::GetParameter(int /*parameter*/) const
-{
-    // no ode get param fkt. defined
-    return 0;
+float BallJoint::GetParameter(int parameter) const{
+    GetLog()->Warning()
+        << "(BallJoint) WARNING: SetParameter undefined for BallJoint, call ignored";
 }
-
-
-

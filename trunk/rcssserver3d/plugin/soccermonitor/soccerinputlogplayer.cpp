@@ -20,7 +20,7 @@
 #include "soccerinputlogplayer.h"
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <zeitgeist/logserver/logserver.h>
-#include <oxygen/physicsserver/body.h>
+#include <oxygen/physicsserver/rigidbody.h>
 
 using namespace boost;
 using namespace zeitgeist;
@@ -71,7 +71,7 @@ void SoccerInputLogPlayer::OnLink()
     }
 
     // get camera body
-    mCameraBody = shared_dynamic_cast<Body>
+    mCameraBody = shared_dynamic_cast<RigidBody>
         (GetCore()->Get("/usr/scene/camera/physics"));
 
     if (mCameraBody.get() == 0)

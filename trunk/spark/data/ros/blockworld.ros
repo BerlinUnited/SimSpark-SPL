@@ -273,16 +273,16 @@
                 </Box>
             </Elements>
             </Movable>
-            <Movable name="cappedcylinder">
+            <Movable name="capsule">
             <Elements>
-                <CappedCylinder name="CappedCylinder" radius="0.05" height="0.15">
+                <Capsule name="Capsule" radius="0.05" height="0.15">
                     <Translation x="0.3" y="-0.5" z="0.5"/>
                     <Rotation x="0" y="80" z="0"/>
                     <Appearance ref="green"/>
                     <PhysicalAttributes>
                         <Mass value="1"/>
                     </PhysicalAttributes>
-                </CappedCylinder>
+                </Capsule>
             </Elements>
             </Movable>
     </Elements>

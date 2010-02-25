@@ -23,10 +23,11 @@
 #define OXYGEN_RAYCOLLIDER_H
 
 #include <oxygen/oxygen_defines.h>
-#include "collider.h"
+#include <oxygen/physicsserver/collider.h>
 
 namespace oxygen
 {
+class RayColliderInt;
 
 /** RayCollider encapsulates an ODE ray geometry "object".
  *
@@ -54,6 +55,9 @@ public:
 protected:
     /** constructs a default ray with a length of 1 */
     virtual bool ConstructInternal();
+    
+private:
+    static boost::shared_ptr<RayColliderInt> mRayColliderImp;
 };
 
 DECLARE_CLASS(RayCollider);

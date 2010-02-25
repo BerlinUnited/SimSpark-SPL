@@ -23,6 +23,7 @@
 #define PERCEPTORHANDLER_H
 
 #include <oxygen/physicsserver/collisionhandler.h>
+#include <oxygen/physicsserver/genericphysicsobjects.h>
 
 class CollisionPerceptor;
 
@@ -46,7 +47,7 @@ class PerceptorHandler : public oxygen::CollisionHandler
        as returned from the ODE dCollide function
   */
   virtual void HandleCollision
-  (boost::shared_ptr<oxygen::Collider> collidee, dContact& contact);
+  (boost::shared_ptr<oxygen::Collider> collidee, oxygen::GenericContact& contact);
 
 protected:
 

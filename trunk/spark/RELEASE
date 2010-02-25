@@ -20,6 +20,18 @@ for agents which should make them more reliable.
    after receiving new sense data will be executed in the next cycle, not the 
    current one. This results in a more deterministic behavior, and agents' 
    efficiency should not change between remote and local runs considerably.
+ - An Accelerometer sensor
+ - Fixed some rendering bugs (agents not visible through goals)
+ - A "Sync Mode" operation is introduced. In this mode, the server will not
+   advance to the next cycle untill all connected agents send a "(syn)" command
+   to the server. You can use this mode by setting "agentSyncMode" to true in
+   simspark.rb (or spark.rb)
+ - Simulator will run in simulation time mode instead of real time
+   if "useRealTime" variable is set to false in simspark.rb (or spark.rb)
+ - To make changes to most of the resource files (e.g. simspark.rb), you can
+   create a copy in ~/.simspark directory and make desired changes there. The 
+   directory structure of the original files should be preserved (e.g.
+   rsg/agent/nao/nao.rgs)
 
 * More convenience:
  - Simspark should always accept connections. No more "Connection refused"

@@ -15,7 +15,7 @@
 	 (setScale $Radius $Radius $Radius)
      )
 					 
-     (nd Body
+     (nd RigidBody
 	 (setName physics)
 	 
 	 (setSphereTotal $Mass $Radius)

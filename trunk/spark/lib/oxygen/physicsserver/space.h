@@ -22,37 +22,38 @@
 #ifndef OXYGEN_SPACE_H
 #define OXYGEN_SPACE_H
 
-#include "odeobject.h"
+#include <oxygen/physicsserver/physicsobject.h>
 #include <set>
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen
 {
 class Transform;
-class Body;
+class RigidBody;
 class Collider;
+class SpaceInt;
 
 /** Space encapsulates an ODE space object. A space is a non-placeable
     geometry object ('geom') that can contain other geoms. It is
     similar to the rigid body concept of the `world', except that it
     applies to collision instead of dynamics.
 */
-class OXYGEN_API Space : public ODEObject
+class OXYGEN_API Space : public PhysicsObject
 {
 public:
-    typedef std::set<dSpaceID> TSpaceIdSet;
+    typedef std::set<long> TSpaceIdSet;
 
 public:
     Space();
     virtual ~Space();
 
-    /** returns the ID of the managed ODE space */
-    dSpaceID GetODESpace() const;
+    /** returns the ID of the managed space */
+    long GetSpaceID() const;
 
     /** retuns the ID of joint group for all created contact joints */
-    dJointGroupID GetODEJointGroup() const;
+    long GetODEJointGroup() const;
 
-    /** starts ODE's collision culling system. ODE will quickly
+    /** starts the collision culling system. The engine will quickly
         identify which pairs of geoms are potentially
         intersecting. Those pairs will be passed to the callback
         function HandleCollide, which in turn will notify the
@@ -60,11 +61,11 @@ public:
     */
     void Collide();
 
-    /** destroy the managed ODE object */
-    virtual void DestroyODEObject();
+    /** destroy the managed space object */
+    virtual void DestroyPhysicsObject();
 
-    /** returns the ODE handle ID of the containing parent space */
-    virtual dSpaceID GetParentSpaceID();
+    /** returns the ID of the containing parent space */
+    virtual long GetParentSpaceID();
 
     /** returns true if this is the top global, i.e. top level space object */
     bool IsGlobalSpace();
@@ -74,39 +75,37 @@ public:
 
     /** query disabled inner collision flag */
     bool GetDisableInnerCollision() const;
+    
+    /** callback to handle a potential collision between two contained
+        geoms. It will look up and notify the corresponding colliders
+        for a potential collision.
+    */
+    void HandleCollide(long obj1, long obj2);
 
 protected:
-    static void collisionNearCallback (void *data, dGeomID obj1, dGeomID obj2);
-
     /** unregisters the managed Space of the Scene. */
     virtual void OnUnlink();
 
     /** registers the managed space to the containing parent space */
     virtual void OnLink();
 
-    /** calls ODE's collision detection for this space if internal collision
+    /** calls collision detection for this space if internal collision
      * detection is enabled for this space.
      */
-    void Collide(dSpaceID space);
-
-    /** callback to handle a potential collision between two contained
-        geoms. It will look up and notify the corresponding colliders
-        for a potential collision.
-    */
-    void HandleCollide(dGeomID obj1, dGeomID obj2);
+    void Collide(long space);
 
     /** handle the collision between two geoms from which at least one
         is a space geom
     */
-    void HandleSpaceCollide(dGeomID obj1, dGeomID obj2);
+    void HandleSpaceCollide(long obj1, long obj2);
 
-    /** creates them managed ODE space and a contact joint group */
+    /** creates the managed space and a contact joint group */
     virtual bool ConstructInternal();
 
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal();
 
-    /** destroys the ODE bodies managed by all Body objects that are
+    /** destroys the bodies managed by all Body objects that are
         registered to this Space
     */
     void DestroySpaceObjects();
@@ -114,12 +113,13 @@ protected:
     //
     // Members
     //
-private:
-    /** the managed ODE space */
-    dSpaceID mODESpace;
+private:    
+    static boost::shared_ptr<SpaceInt> mSpaceImp;
 
-    /** the ODE group for all created contact joints */
-    dJointGroupID mODEContactGroup;
+    long mContactGroupID;
+    
+    /** the managed space */
+    long mSpaceID;
 
 private:
     /** set of spaces with disabled inner collision */
