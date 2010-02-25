@@ -1,3 +1,33 @@
+[0.6.3]
+In this release, we are preparing for a simulation with more robots than before.
+The current target is to have 6 vs 6 games, so we have made some changes to
+make the simulator more suitable for it. The most notable changes made in
+rcssserver3d package in this direction are:
+1. Disabling the internal monitor by default: starting from this version, the
+simulation server (simspark binary, now called rcssserver3d) no longer brings
+up a monitor when run. To actually view the simulation, a monitor (e.g.
+rcsmonitor3d which is included in this package) should be run separately. This
+separation noticeably improves the performance of the server. A new executable
+called "rcsoccersim3d" is provided which runs both the simulation server and a 
+monitor on the local machine. 
+2. Bigger field: in this version, field dimensions and goal width are 1.5 times
+larger than before to provide enough area for 6 vs 6 games.
+
+* New names:
+  - rcssserver3d: the old simspark binary has been renamed to rcssserver3d, as
+    it more clearly shows the functionality of the simulator. A symbolic link
+    called simspark is provided for compatibility.
+  - rcsoccersim3d: as stated above, running rcssserver3d (formerly simspark)
+    no longer starts a monitor to view the simulation, and a monitor should be
+    run separately. For users' convenience a new executable called rcsoccersim3d
+    is provided which runs both rcssserver3d and rcssmonitor3 to connect to
+    the running simulator. 
+
+* Other notable changes:
+ - Added HMDP effector/perceptor
+ - Some compilation fixes
+ - Improved Windows support 
+
 [0.6.2]
 This release is mainly a bug-fix release, and is the last release before
 RoboCup 2009 competitions.
