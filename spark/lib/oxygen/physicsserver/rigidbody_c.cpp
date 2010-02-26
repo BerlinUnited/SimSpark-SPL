@@ -20,8 +20,6 @@
 */
 
 #include <oxygen/physicsserver/rigidbody.h>
-//TODO: Do not include odewrapper in this file!
-#include <../plugin/odeimps/odewrapper.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -88,22 +86,33 @@ FUNCTION(RigidBody,setMassParameters)
             return false;
         }
 
-    dMass mass;
-    mass.mass = inMass;
-    mass.c[0] = inCenter[0];
-    mass.c[1] = inCenter[1];
-    mass.c[2] = inCenter[2];
-
+    GenericMass& mass = obj->CreateMass(inMass, inCenter);
+    //mass.mass = inMass;
+    //mass.c[0] = inCenter[0];
+    //mass.c[1] = inCenter[1];
+    //mass.c[2] = inCenter[2];
+    
+    float currentValue;
+    
+    //try to emulate the loop commented out below without understanding it
     for (int i=0;i<9;++i)
         {
-            if (! in.AdvanceValue(iter,mass.I[i]))
+            if (in.AdvanceValue(iter,currentValue))
                 {
-                    return false;
+                    obj->SetInertiaTensorAt(i, currentValue, mass);
                 }
-        }
+            else return false;
+        }    
+    
+    //for (int i=0;i<9;++i)
+    //    {
+    //        if (! in.AdvanceValue(iter,mass.I[i]))
+    //            {
+    //                return false;
+    //            }
+    //    }
 
-    GenericMass& massRef = (GenericMass&) mass;
-    obj->SetMassParameters(massRef);
+    obj->SetMassParameters(mass);
     return true;
 }
 

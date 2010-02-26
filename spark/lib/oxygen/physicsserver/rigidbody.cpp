@@ -389,3 +389,13 @@ void RigidBody::TranslateMass(const Vector3f& v)
 {
     mRigidBodyImp->TranslateMass(v, mBodyID);
 }
+
+GenericMass& RigidBody::CreateMass(float mass, salt::Vector3f cVector)
+{
+    mRigidBodyImp->CreateMass(mass, cVector);
+}
+
+void RigidBody::SetInertiaTensorAt(int i, float value, GenericMass& mass)
+{
+    mRigidBodyImp->SetInertiaTensorAt(i, value, mass);
+}

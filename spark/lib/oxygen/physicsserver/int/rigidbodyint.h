@@ -247,6 +247,17 @@ public:
         by \param worldID
     */    
     virtual long CreateBody(long worldID) = 0;
+    
+    /** Creates a new mass object with the information passed on to this
+        method via \param mass and \param cVector
+    */
+    virtual GenericMass& CreateMass(float mass, salt::Vector3f cVector) = 0;
+    
+    /** Sets the value of the inertia tensor of this body. \param i is the
+        index of the \param value 's position in the inertia tensor.
+        (It's a 3x3 matrix)
+    */
+    virtual void SetInertiaTensorAt(int i, float value, GenericMass& mass) = 0; 
 };
 
 } //namespace oxygen
