@@ -90,6 +90,8 @@ public:
     void BodySetData(oxygen::RigidBody* rb, long bodyID);
     oxygen::RigidBody* BodyGetData(long bodyID);    
     long CreateBody(long worldID);
+    oxygen::GenericMass& CreateMass(float mass, salt::Vector3f cVector);
+    void SetInertiaTensorAt(int i, float value, oxygen::GenericMass& mass);
     
 protected:
     //These methods are only called internally and are not declared in the interface.

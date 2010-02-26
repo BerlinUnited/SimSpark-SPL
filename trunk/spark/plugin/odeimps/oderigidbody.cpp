@@ -455,3 +455,21 @@ void RigidBodyImp::TranslateMass(const Vector3f& v, long bodyID)
     dBodyGetMass(ODEBody, &m);
     dMassTranslate(&m,v[0],v[1],v[2]);
 }
+
+GenericMass& RigidBodyImp::CreateMass(float mass, salt::Vector3f cVector)
+{
+    dMass ODEMass;
+    ODEMass.mass = mass;
+    ODEMass.c[0] = cVector[0];
+    ODEMass.c[1] = cVector[1];
+    ODEMass.c[2] = cVector[2];
+    
+    GenericMass& massRef = (GenericMass&) ODEMass;
+    return massRef;
+}
+
+void RigidBodyImp::SetInertiaTensorAt(int i, float value, GenericMass& mass)
+{
+    dMass& ODEMass = (dMass&) mass;
+    ODEMass.I[i] = value;
+}

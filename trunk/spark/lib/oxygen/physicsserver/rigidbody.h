@@ -239,6 +239,17 @@ public:
         orientation
     */
     void SynchronizeParent() const;
+    
+    /** Creates a new mass object with the information passed on to this
+        method via \param mass and \param cVector
+    */
+    GenericMass& CreateMass(float mass, salt::Vector3f cVector);
+    
+    /** Sets the value of the inertia tensor of this body. \param i is the
+        index of the \param value 's position in the inertia tensor.
+        (It's a 3x3 matrix)
+    */
+    void SetInertiaTensorAt(int i, float value, GenericMass& mass); 
 
 protected:
     /** creates the managed body and moves it to the position of
