@@ -83,10 +83,10 @@ float SoundServer::GetCPU()
 
 boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const string& inName)
 {
-        shared_ptr<SoundObject> soundObject;
+        boost::shared_ptr<SoundObject> soundObject;
 
         if (LoadSoundObject(inName, mEffects, soundObject) == false)
-                return shared_ptr<SoundEffect>();
+                return boost::shared_ptr<SoundEffect>();
 
         if (soundObject)
         {
@@ -95,20 +95,20 @@ boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const string& inName)
         }
 
         // we don't have the sound in the cache, so create it
-        shared_ptr<SoundEffect> effect(mSoundSystem->CreateEffect(*this));
+        boost::shared_ptr<SoundEffect> effect(mSoundSystem->CreateEffect(*this));
 
         // now, we want to load the file from our fileserver
-        shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
+        boost::shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
+        boost::shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
 
         if(file.get() == NULL)
         {
                 GetLog()->Error() << "ERROR: Could not open file" << endl;
                 // could not open file for some strange reason
-                return shared_ptr<SoundEffect>();
+                return boost::shared_ptr<SoundEffect>();
         }
 
-        shared_ptr<char> buffer(new char[file->Size()]);
+        boost::shared_ptr<char> buffer(new char[file->Size()]);
         file->Read(buffer.get(), file->Size());
 
         effect->Load(buffer.get(), file->Size());
@@ -123,10 +123,10 @@ boost::shared_ptr<SoundEffect> SoundServer::LoadEffect(const string& inName)
 boost::shared_ptr<SoundStream> SoundServer::LoadStream(const string& inName)
 {
         GetLog()->Debug() << "SoundServer::LoadStream " << inName << endl;
-        shared_ptr<SoundObject> soundObject;
+        boost::shared_ptr<SoundObject> soundObject;
 
         if (LoadSoundObject(inName, mStreams, soundObject) == false)
-                return shared_ptr<SoundStream>();
+                return boost::shared_ptr<SoundStream>();
 
         if (soundObject)
         {
@@ -135,17 +135,17 @@ boost::shared_ptr<SoundStream> SoundServer::LoadStream(const string& inName)
         }
 
         // we don't have the sound in the cache, so create it
-        shared_ptr<SoundStream> stream(mSoundSystem->CreateStream(*this));
+        boost::shared_ptr<SoundStream> stream(mSoundSystem->CreateStream(*this));
 
         // now, we want to load the file from our fileserver
-        shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
+        boost::shared_ptr<FileServer>  fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
+        boost::shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
 
         if(file.get() == NULL)
         {
                 GetLog()->Error() << "ERROR: Could not open file" << endl;
                 // could not open file for some strange reason
-                return shared_ptr<SoundStream>();
+                return boost::shared_ptr<SoundStream>();
         }
 
         char* buffer = new char[file->Size()];
@@ -162,10 +162,10 @@ boost::shared_ptr<SoundStream> SoundServer::LoadStream(const string& inName)
 
 boost::shared_ptr<SoundModule> SoundServer::LoadModule(const string& inName)
 {
-        shared_ptr<SoundObject> soundObject;
+        boost::shared_ptr<SoundObject> soundObject;
 
         if (LoadSoundObject(inName, mModules, soundObject) == false)
-                return shared_ptr<SoundModule>();
+                return boost::shared_ptr<SoundModule>();
 
         if (soundObject)
         {
@@ -174,20 +174,20 @@ boost::shared_ptr<SoundModule> SoundServer::LoadModule(const string& inName)
         }
 
         // we don't have the sound in the cache, so create it
-        shared_ptr<SoundModule> module(mSoundSystem->CreateModule(*this));
+        boost::shared_ptr<SoundModule> module(mSoundSystem->CreateModule(*this));
 
         // now, we want to load the file from our fileserver
-        shared_ptr<FileServer> fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
-        shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
+        boost::shared_ptr<FileServer> fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
+        boost::shared_ptr<salt::RFile> file = fileServer->Open(inName.c_str());
 
         if(file.get() == NULL)
         {
                 GetLog()->Error() << "ERROR: Could not open file" << endl;
                 // could not open file for some strange reason
-                return shared_ptr<SoundModule>();
+                return boost::shared_ptr<SoundModule>();
         }
 
-        shared_ptr<char> buffer(new char[file->Size()]);
+        boost::shared_ptr<char> buffer(new char[file->Size()]);
         file->Read(buffer.get(), file->Size());
 
         module->Load(buffer.get(), file->Size());
@@ -218,7 +218,7 @@ bool SoundServer::LoadSoundObject(const std::string& inName, const TSoundHashMap
         if (mSoundSystem.get() == NULL)
         {
                 GetLog()->Error() << "ERROR: No SoundSystem loaded!" << endl;
-                soundObject = shared_ptr<SoundObject>();
+                soundObject = boost::shared_ptr<SoundObject>();
                 return false;
         }
 
@@ -231,7 +231,7 @@ bool SoundServer::LoadSoundObject(const std::string& inName, const TSoundHashMap
         }
         else
         {
-                soundObject = shared_ptr<SoundObject>();
+                soundObject = boost::shared_ptr<SoundObject>();
         }
 
         return true;

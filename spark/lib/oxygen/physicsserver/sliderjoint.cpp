@@ -51,7 +51,7 @@ void SliderJoint::OnLink()
     mJointID = mSliderJointImp->CreateSliderJoint(world);
 }
 
-void SliderJoint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
+void SliderJoint::Attach(boost::shared_ptr<RigidBody> body1, boost::shared_ptr<RigidBody> body2)
 {
     Joint::Attach(body1,body2);
 

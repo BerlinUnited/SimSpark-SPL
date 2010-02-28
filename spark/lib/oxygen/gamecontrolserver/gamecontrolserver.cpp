@@ -68,7 +68,7 @@ GameControlServer::InitEffector(const std::string& effectorName)
 bool
 GameControlServer::InitControlAspect(const string& aspectName)
 {
-    shared_ptr<ControlAspect> aspect
+    boost::shared_ptr<ControlAspect> aspect
         = shared_dynamic_cast<ControlAspect>(GetCore()->New(aspectName));
 
     if (aspect.get() == 0)
@@ -84,26 +84,26 @@ GameControlServer::InitControlAspect(const string& aspectName)
     return true;
 }
 
-shared_ptr<BaseParser>
+boost::shared_ptr<BaseParser>
 GameControlServer::GetParser()
 {
     return mParser;
 }
 
-shared_ptr<Scene>
+boost::shared_ptr<Scene>
 GameControlServer::GetActiveScene()
 {
-    shared_ptr<SceneServer> sceneServer =
+    boost::shared_ptr<SceneServer> sceneServer =
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (GameControlServer) SceneServer not found.\n";
-        return shared_ptr<Scene>();
+        return boost::shared_ptr<Scene>();
     }
 
-    shared_ptr<Scene> scene = sceneServer->GetActiveScene();
+    boost::shared_ptr<Scene> scene = sceneServer->GetActiveScene();
 
     if (scene.get() == 0)
     {
@@ -129,7 +129,7 @@ GameControlServer::AgentConnect(int id)
     GetLog()->Normal()
         << "(GameControlServer) a new agent connected (id: " << id << ")\n";
 
-    shared_ptr<Scene> scene = GetActiveScene();
+    boost::shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() == 0)
     {
         GetLog()->Error()
@@ -140,7 +140,7 @@ GameControlServer::AgentConnect(int id)
 
     // create a new AgentAspect for the ID in the scene and add it to
     // our map of AgentAspects
-    shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
+    boost::shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
         (GetCore()->New("oxygen/AgentAspect"));
 
     if (aspect.get() == 0)
@@ -177,7 +177,7 @@ bool GameControlServer::AgentDisappear(int id)
 
     // remove the AgentAspect from the Scene and our map. The
     // AgentAspect does all the necessary cleanup
-    shared_ptr<Scene> scene = GetActiveScene();
+    boost::shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() != 0)
     {
         (*iter).second->UnlinkChildren();
@@ -230,7 +230,7 @@ GameControlServer::GetAgentCount() const
     return mAgentMap.size();
 }
 
-shared_ptr<ActionObject::TList>
+boost::shared_ptr<ActionObject::TList>
 GameControlServer::Parse(int id, const string& str) const
 {
     TAgentMap::const_iterator iter = mAgentMap.find(id);
@@ -241,24 +241,24 @@ GameControlServer::Parse(int id, const string& str) const
             << "ERROR: (GameControlServer::Parse) Parse "
             << "called with unknown agent id "
             << id << "\n";
-        return shared_ptr<ActionObject::TList>();
+        return boost::shared_ptr<ActionObject::TList>();
     }
 
     if (mParser.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (GameControlServer::Parse) No parser registered.\n";
-        return shared_ptr<ActionObject::TList>();
+        return boost::shared_ptr<ActionObject::TList>();
     }
 
     // use the parser to create a PredicateList
-    shared_ptr<PredicateList> predicates(mParser->Parse(str));
+    boost::shared_ptr<PredicateList> predicates(mParser->Parse(str));
 
     // construct an ActionList using the registered effectors
-    shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
+    boost::shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
 
     // update the map of effectors below the agentaspect
-    shared_ptr<AgentAspect> aspect = (*iter).second;
+    boost::shared_ptr<AgentAspect> aspect = (*iter).second;
     aspect->UpdateEffectorMap();
 
     for
@@ -270,7 +270,7 @@ GameControlServer::Parse(int id, const string& str) const
     {
         const Predicate& predicate = (*iter);
 
-        shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
+        boost::shared_ptr<Effector> effector = aspect->GetEffector(predicate.name);
         if (effector.get() == 0)
         {
             GetLog()->Warning()
@@ -280,7 +280,7 @@ GameControlServer::Parse(int id, const string& str) const
             continue;
         }
 
-        shared_ptr<ActionObject> action(effector->GetActionObject(predicate));
+        boost::shared_ptr<ActionObject> action(effector->GetActionObject(predicate));
 
         if (action.get() == 0)
         {
@@ -293,13 +293,13 @@ GameControlServer::Parse(int id, const string& str) const
     return actionList;
 }
 
-shared_ptr<AgentAspect>
+boost::shared_ptr<AgentAspect>
 GameControlServer::GetAgentAspect(int id)
 {
     TAgentMap::iterator iter = mAgentMap.find(id);
     if (iter == mAgentMap.end())
     {
-        return shared_ptr<AgentAspect>();
+        return boost::shared_ptr<AgentAspect>();
     }
 
     return (*iter).second;
@@ -344,7 +344,7 @@ GameControlServer::Update(float deltaTime)
         ++iter
         )
     {
-        shared_ptr<ControlAspect> aspect =
+        boost::shared_ptr<ControlAspect> aspect =
             shared_static_cast<ControlAspect>(*iter);
 
         aspect->Update(deltaTime);

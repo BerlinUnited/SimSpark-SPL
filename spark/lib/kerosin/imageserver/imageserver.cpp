@@ -33,7 +33,7 @@ using namespace salt;
 using namespace zeitgeist;
 using namespace std;
 
-shared_ptr<FileServer> gFileServer;
+boost::shared_ptr<FileServer> gFileServer;
 
 //------------------------------------------------------------------------------------------------
 // ImageServer implementation
@@ -68,12 +68,12 @@ boost::shared_ptr<Image>
 ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
 {
     // lookup the file server
-    shared_ptr<FileServer> fileServer
+    boost::shared_ptr<FileServer> fileServer
         = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
 
     if (fileServer.get() == 0)
     {
-        return shared_ptr<Image>();
+        return boost::shared_ptr<Image>();
     }
 
     // create a new image
@@ -82,7 +82,7 @@ ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
     // make it active with DevIL
     image->Bind();
 
-    shared_ptr<RFile> rfile = fileServer->OpenResource(inName);
+    boost::shared_ptr<RFile> rfile = fileServer->OpenResource(inName);
 
     scoped_array<unsigned char> buffer(new unsigned char[rfile->Size()]);
     rfile->Read(buffer.get(), rfile->Size());

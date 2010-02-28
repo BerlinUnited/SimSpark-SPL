@@ -42,9 +42,9 @@ FontServer::~FontServer()
     mFonts.clear();
 }
 
-shared_ptr<kerosin::Font> FontServer::GetFont(const string &name, unsigned int size)
+boost::shared_ptr<kerosin::Font> FontServer::GetFont(const string &name, unsigned int size)
 {
-    shared_ptr<kerosin::Font> theFont = FindFont(name, size);
+    boost::shared_ptr<kerosin::Font> theFont = FindFont(name, size);
 
     if(theFont.get() != 0)
         {
@@ -57,7 +57,7 @@ shared_ptr<kerosin::Font> FontServer::GetFont(const string &name, unsigned int s
 
     if(! LoadFont(name, size, theFont))
         {
-            return shared_ptr<kerosin::Font>();
+            return boost::shared_ptr<kerosin::Font>();
         }
 
     // insert the value in our registry
@@ -65,7 +65,7 @@ shared_ptr<kerosin::Font> FontServer::GetFont(const string &name, unsigned int s
     return theFont;
 }
 
-shared_ptr<kerosin::Font> FontServer::FindFont(const string &name,
+boost::shared_ptr<kerosin::Font> FontServer::FindFont(const string &name,
                                                unsigned int size) const
 {
     for (TFontList::const_iterator i = mFonts.begin(); i != mFonts.end(); ++i)
@@ -79,13 +79,13 @@ shared_ptr<kerosin::Font> FontServer::FindFont(const string &name,
                 }
         }
 
-    return shared_ptr<kerosin::Font>();
+    return boost::shared_ptr<kerosin::Font>();
 }
 
 bool FontServer::LoadFont(const string &name, unsigned int size,
-                          shared_ptr<kerosin::Font> &font)
+                          boost::shared_ptr<kerosin::Font> &font)
 {
-    shared_ptr<salt::RFile> file = GetFile()->OpenResource(name);
+    boost::shared_ptr<salt::RFile> file = GetFile()->OpenResource(name);
 
     if (file.get() == 0)
         {

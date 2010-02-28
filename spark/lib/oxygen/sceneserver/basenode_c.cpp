@@ -40,7 +40,7 @@ FUNCTION(BaseNode,importScene)
             return false;
         }
 
-    shared_ptr<ParameterList> parameter(new ParameterList(in));
+    boost::shared_ptr<ParameterList> parameter(new ParameterList(in));
 
     // remove filename argument
     parameter->Pop_Front();

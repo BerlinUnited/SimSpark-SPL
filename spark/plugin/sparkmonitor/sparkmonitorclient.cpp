@@ -232,7 +232,7 @@ void SparkMonitorClient::ParseMessage(const string& msg)
 
     mSceneImporter->ParseScene(string(pcont->lastPos),
                                mManagedScene,
-                               shared_ptr<ParameterList>());
+                               boost::shared_ptr<ParameterList>());
 
     destroy_sexp(sexp_custom);
     destroy_continuation(pcont);

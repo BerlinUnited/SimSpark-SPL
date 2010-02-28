@@ -44,7 +44,7 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     if ( mAction.get() == 0 )
         return;
 
-    shared_ptr<SceneAction> sceneAction =
+    boost::shared_ptr<SceneAction> sceneAction =
         shared_dynamic_cast<SceneAction>(mAction);
     mAction.reset();
 
@@ -56,7 +56,7 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             return;
         }
 
-    shared_ptr<AgentAspect> aspect =GetAgentAspect();
+    boost::shared_ptr<AgentAspect> aspect =GetAgentAspect();
 
     if (aspect.get() == 0)
         {
@@ -65,20 +65,20 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             return;
         }
 
-    shared_ptr<ParameterList> parameter(new ParameterList());
+    boost::shared_ptr<ParameterList> parameter(new ParameterList());
 
     aspect->ImportScene(sceneAction->GetScene(), parameter);
 
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 SceneEffector::GetActionObject(const Predicate& predicate)
 {
     if (predicate.name != GetPredicate())
         {
             GetLog()->Error() << "(SceneEffector) ERROR: invalid predicate"
                               << predicate.name << "\n";
-            return shared_ptr<ActionObject>();
+            return boost::shared_ptr<ActionObject>();
         }
 
     string scene;
@@ -86,8 +86,8 @@ SceneEffector::GetActionObject(const Predicate& predicate)
         {
             GetLog()->Error()
                 << "ERROR: (SceneEffector) scene filename expected\n";
-            return shared_ptr<ActionObject>();
+            return boost::shared_ptr<ActionObject>();
         };
 
-    return shared_ptr<ActionObject>(new SceneAction(GetPredicate(),scene));
+    return boost::shared_ptr<ActionObject>(new SceneAction(GetPredicate(),scene));
 }

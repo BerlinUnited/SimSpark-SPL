@@ -45,7 +45,7 @@ ObjImporter::~ObjImporter()
 {
 }
 
-shared_ptr<TriMesh> ObjImporter::ImportMesh
+boost::shared_ptr<TriMesh> ObjImporter::ImportMesh
 (const string& name, const ParameterList& parameter)
 {
     // open file
@@ -55,7 +55,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
         {
             GetLog()->Error()
                 << "(ObjImporter) ERROR: cannot locate file '" << name << "'\n";
-            return shared_ptr<TriMesh>();
+            return boost::shared_ptr<TriMesh>();
         }
 
     ifstream ifs;
@@ -65,7 +65,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
         {
             GetLog()->Error()
                 << "(ObjImporter) ERROR: cannot open file '" << name << "'\n";
-            return shared_ptr<TriMesh>();
+            return boost::shared_ptr<TriMesh>();
         }
 
     // buffers to hold lines from the file
@@ -161,7 +161,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
                         {
                             GetLog()->Error()
                                 << "(ObjImporter) ERROR: normals are missing in the OBJ file, exiting.\n";
-                            return shared_ptr<TriMesh>();
+                            return boost::shared_ptr<TriMesh>();
                         }
 
                     // three indeces for each face:
@@ -240,7 +240,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
     // for one face: 3 x <x,y,z>
     shared_array<float> normArray(new float[totalFaceCount * 9]);
 
-    shared_ptr<TriMesh> triMesh(new TriMesh());
+    boost::shared_ptr<TriMesh> triMesh(new TriMesh());
 
     unsigned int faceCount = 0;
 
@@ -251,7 +251,7 @@ shared_ptr<TriMesh> ObjImporter::ImportMesh
          )
         {
             // store the vertex indices in an IndexBuffer
-            shared_ptr<IndexBuffer> indeces(new IndexBuffer());
+            boost::shared_ptr<IndexBuffer> indeces(new IndexBuffer());
             // 3 indices per face
             indeces->EnsureFit((matIter->second).size() * 3);
 
@@ -445,7 +445,7 @@ bool ObjImporter::SetupMaterials(string & matLibName, TObjMatValueVector & matVe
     // register them.
 
     // get reference to the MaterialServer
-    shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -456,7 +456,7 @@ bool ObjImporter::SetupMaterials(string & matLibName, TObjMatValueVector & matVe
         }
 
     RGBA rgba;
-    shared_ptr<MaterialSolid> material;
+    boost::shared_ptr<MaterialSolid> material;
 
     for (
          TObjMatValueVector::iterator iter = matVector.begin();

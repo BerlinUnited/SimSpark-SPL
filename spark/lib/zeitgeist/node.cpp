@@ -61,7 +61,7 @@ Node::~Node()
 boost::shared_ptr<Leaf>
 Node::GetChild(const std::string& name, bool recursive)
 {
-    shared_ptr<Leaf> leaf   = Leaf::GetChild(name, recursive);
+    boost::shared_ptr<Leaf> leaf   = Leaf::GetChild(name, recursive);
 
     if (leaf.get() != NULL) return leaf;
 
@@ -73,7 +73,7 @@ Node::GetChild(const std::string& name, bool recursive)
 
         if (recursive)
         {
-            shared_ptr<Leaf> ret = (*i)->GetChild(name, recursive);
+            boost::shared_ptr<Leaf> ret = (*i)->GetChild(name, recursive);
             if (ret.get() != NULL) return ret;
         }
     }
@@ -87,7 +87,7 @@ Node::GetChildOfClass(const std::string& name, bool recursive)
     for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
     {
         // check if we have found a match and add it
-        shared_ptr<Class> theClass = (*i)->GetClass();
+        boost::shared_ptr<Class> theClass = (*i)->GetClass();
         if (theClass.get() != NULL && theClass->GetName().compare(name) == 0)
         {
             return (*i);
@@ -95,12 +95,12 @@ Node::GetChildOfClass(const std::string& name, bool recursive)
 
         if (recursive)
         {
-            shared_ptr<Leaf> ret = (*i)->GetChildOfClass(name, recursive);
+            boost::shared_ptr<Leaf> ret = (*i)->GetChildOfClass(name, recursive);
             if (ret.get() != NULL) return ret;
         }
     }
 
-    return shared_ptr<Leaf>();
+    return boost::shared_ptr<Leaf>();
 }
 
 boost::shared_ptr<Leaf>
@@ -109,7 +109,7 @@ Node::GetChildSupportingClass(const std::string& name, bool recursive)
     for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
     {
         // check if we have found a match and add it
-        shared_ptr<Class> theClass = (*i)->GetClass();
+        boost::shared_ptr<Class> theClass = (*i)->GetClass();
         if (theClass.get() != NULL && theClass->SupportsClass(name))
         {
             return (*i);
@@ -117,12 +117,12 @@ Node::GetChildSupportingClass(const std::string& name, bool recursive)
 
         if (recursive)
         {
-            shared_ptr<Leaf> ret = (*i)->GetChildSupportingClass(name, recursive);
+            boost::shared_ptr<Leaf> ret = (*i)->GetChildSupportingClass(name, recursive);
             if (ret.get() != NULL) return ret;
         }
     }
 
-    return shared_ptr<Leaf>();
+    return boost::shared_ptr<Leaf>();
 }
 
 void
@@ -151,7 +151,7 @@ Node::GetChildrenOfClass(const std::string& name, TLeafList& baseList, bool recu
     for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
     {
         // check if we have found a match and add it
-        shared_ptr<Class> theClass = (*i)->GetClass();
+        boost::shared_ptr<Class> theClass = (*i)->GetClass();
         if (theClass.get() != NULL && theClass->GetName().compare(name) == 0)
         {
             baseList.push_back(*i);
@@ -170,7 +170,7 @@ Node::GetChildrenSupportingClass(const std::string& name, TLeafList& baseList, b
     for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
     {
         // check if we have found a match and add it
-        shared_ptr<Class> theClass = (*i)->GetClass();
+        boost::shared_ptr<Class> theClass = (*i)->GetClass();
         if (theClass.get() != NULL && theClass->SupportsClass(name))
         {
             baseList.push_back(*i);
@@ -206,7 +206,7 @@ Node::UnlinkChildren()
 {
     while (! mChildren.empty())
     {
-        shared_ptr<Leaf> node = mChildren.front();
+        boost::shared_ptr<Leaf> node = mChildren.front();
         node->UnlinkChildren();
         node->Unlink();
     }

@@ -55,11 +55,11 @@ void Joint::OnLink()
     mJointImp->OnLink(mJointID, this);
 }
 
-shared_ptr<Joint> Joint::GetJoint(long jointID)
+boost::shared_ptr<Joint> Joint::GetJoint(long jointID)
 {
     if (jointID == 0)
         {
-            return shared_ptr<Joint>();
+            return boost::shared_ptr<Joint>();
         }
 
     Joint* jointPtr = mJointImp->GetJoint(jointID);
@@ -69,23 +69,23 @@ shared_ptr<Joint> Joint::GetJoint(long jointID)
             // we cannot use the logserver here
             cerr << "ERROR: (Joint) no joint found for dJointID "
                  << jointID << "\n";
-            return shared_ptr<Joint>();
+            return boost::shared_ptr<Joint>();
         }
 
-    shared_ptr<Joint> joint = shared_static_cast<Joint>
+    boost::shared_ptr<Joint> joint = shared_static_cast<Joint>
         (jointPtr->GetSelf().lock());
 
     if (joint.get() == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (Joint) got no shared_ptr for dJointID "
+            cerr << "ERROR: (Joint) got no boost::shared_ptr for dJointID "
                  << jointID << "\n";
         }
 
     return joint;
 }
 
-void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
+void Joint::Attach(boost::shared_ptr<RigidBody> body1, boost::shared_ptr<RigidBody> body2)
 {
     if (mJointID == 0)
         {
@@ -125,27 +125,27 @@ void Joint::Attach(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
     mJointImp->Attach(id1, id2, mJointID);
 }
 
-shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
+boost::shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
 {
     if (path.empty())
         {
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
-    shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
+    boost::shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
         (GetSelf().lock());
 
-    shared_ptr<Leaf> leaf = GetCore()->Get(path,mySelf);
+    boost::shared_ptr<Leaf> leaf = GetCore()->Get(path,mySelf);
 
     if (leaf.get() == 0)
         {
             GetLog()->Error()
                 << "(Joint) ERROR: cannot find node '"
                 << path << "'\n";
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
-    shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(leaf);
+    boost::shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(leaf);
 
     if (body.get() == 0)
         {
@@ -159,8 +159,8 @@ shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
 
 void Joint::Attach(const std::string& path1, const std::string& path2)
 {
-    shared_ptr<RigidBody> body1 = GetBody(path1);
-    shared_ptr<RigidBody> body2 = GetBody(path2);
+    boost::shared_ptr<RigidBody> body1 = GetBody(path1);
+    boost::shared_ptr<RigidBody> body2 = GetBody(path2);
 
     Attach(body1,body2);
 }
@@ -176,7 +176,7 @@ boost::shared_ptr<RigidBody> Joint::GetBody(EBodyIndex idx)
     return RigidBody::GetBody(bodyID);
 }
 
-bool Joint::AreConnected(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2)
+bool Joint::AreConnected(boost::shared_ptr<RigidBody> body1, boost::shared_ptr<RigidBody> body2)
 {
     if (
         (body1.get() == 0) ||
@@ -191,8 +191,8 @@ bool Joint::AreConnected(shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body
     return connected;
 }
 
-bool Joint::AreConnectedExcluding (shared_ptr<RigidBody> body1,
-                                   shared_ptr<RigidBody> body2,
+bool Joint::AreConnectedExcluding (boost::shared_ptr<RigidBody> body1,
+                                   boost::shared_ptr<RigidBody> body2,
                                    int joint_type)
 {
     if (

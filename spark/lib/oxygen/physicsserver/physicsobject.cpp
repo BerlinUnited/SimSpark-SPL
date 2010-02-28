@@ -55,16 +55,16 @@ void PhysicsObject::OnUnlink()
 }
 
 /** returns the world node */
-shared_ptr<World> PhysicsObject::GetWorld() const
+boost::shared_ptr<World> PhysicsObject::GetWorld() const
 {
-    shared_ptr<Scene> scene = GetScene();
+    boost::shared_ptr<Scene> scene = GetScene();
     if (scene.get() == 0)
         {
             GetLog()->Error() << "(ODEObject) ERROR: found no Scene node\n";
-            return shared_ptr<World>();
+            return boost::shared_ptr<World>();
         }
 
-    shared_ptr<World> worldNode = shared_dynamic_cast<World>
+    boost::shared_ptr<World> worldNode = shared_dynamic_cast<World>
         (scene->GetChildOfClass("World"));
     if (worldNode.get() == 0)
         {
@@ -74,24 +74,24 @@ shared_ptr<World> PhysicsObject::GetWorld() const
     return worldNode;
 }
 
-shared_ptr<Space> PhysicsObject::GetSpace()
+boost::shared_ptr<Space> PhysicsObject::GetSpace()
 {
     // try to find the nearest parent space object
-    weak_ptr<Space> parentSpace = FindParentSupportingClass<Space>();
+    boost::weak_ptr<Space> parentSpace = FindParentSupportingClass<Space>();
     if (! parentSpace.expired())
         {
             return parentSpace.lock();
         }
 
     // return the global space instance
-    shared_ptr<Scene> scene = GetScene();
+    boost::shared_ptr<Scene> scene = GetScene();
     if (scene.get() == 0)
         {
             GetLog()->Error() << "(ODEObject) ERROR: found no Scene node\n";
-            return shared_ptr<Space>();
+            return boost::shared_ptr<Space>();
         }
 
-    shared_ptr<Space> spaceNode = shared_dynamic_cast<Space>
+    boost::shared_ptr<Space> spaceNode = shared_dynamic_cast<Space>
         (scene->GetChildOfClass("Space"));
     if (spaceNode.get() == 0)
         {
@@ -103,7 +103,7 @@ shared_ptr<Space> PhysicsObject::GetSpace()
 
 long PhysicsObject::GetWorldID()
 {    
-    shared_ptr<World> world = GetWorld();
+    boost::shared_ptr<World> world = GetWorld();
     
     if (world.get() == 0)
         {
@@ -123,7 +123,7 @@ long PhysicsObject::GetWorldID()
 
 long PhysicsObject::FindSpaceID()
 {
-    shared_ptr<Space> space = GetSpace();
+    boost::shared_ptr<Space> space = GetSpace();
     if (space.get() == 0)
         {
             return 0;

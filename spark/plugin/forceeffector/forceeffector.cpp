@@ -44,7 +44,7 @@ void ForceEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
       return;
     }
 
-  shared_ptr<ForceAction> forceAction =
+  boost::shared_ptr<ForceAction> forceAction =
     shared_dynamic_cast<ForceAction>(mAction);
     mAction.reset();
   if (forceAction.get() == 0)
@@ -59,14 +59,14 @@ void ForceEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 ForceEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {
       GetLog()->Error() << "ERROR: (ForceEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>();
+      return boost::shared_ptr<ActionObject>();
     }
 
   Vector3f force;
@@ -74,15 +74,15 @@ ForceEffector::GetActionObject(const Predicate& predicate)
   {
       GetLog()->Error()
         << "ERROR: (ForceEffector) Vector3f parameter expected\n";
-      return shared_ptr<ActionObject>();
+      return boost::shared_ptr<ActionObject>();
   };
 
-  return shared_ptr<ActionObject>(new ForceAction(GetPredicate(),force));
+  return boost::shared_ptr<ActionObject>(new ForceAction(GetPredicate(),force));
 }
 
 void ForceEffector::OnLink()
 {
-  shared_ptr<BaseNode> parent =
+  boost::shared_ptr<BaseNode> parent =
     shared_dynamic_cast<BaseNode>(GetParent().lock());
 
   if (parent.get() == 0)

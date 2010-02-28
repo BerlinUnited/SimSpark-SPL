@@ -81,8 +81,8 @@ bool Core::CacheKey::operator < (const CacheKey& key) const
 
         }
 
-    shared_ptr<Leaf> myRoot = root.lock();
-    shared_ptr<Leaf> keyRoot = key.root.lock();
+    boost::shared_ptr<Leaf> myRoot = root.lock();
+    boost::shared_ptr<Leaf> keyRoot = key.root.lock();
 
     if (myRoot != keyRoot)
         {
@@ -98,8 +98,8 @@ bool Core::CacheKey::operator < (const CacheKey& key) const
  */
 Core::Core()
 {
-    mClassClass = shared_ptr<Class>(new CLASS(Class));
-    mClassClass->Construct(mClassClass, shared_ptr<Class>());
+    mClassClass = boost::shared_ptr<Class>(new CLASS(Class));
+    mClassClass->Construct(mClassClass, boost::shared_ptr<Class>());
 }
 
 Core::~Core()
@@ -119,7 +119,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
     mRoot = shared_static_cast<Leaf>(mNodeClass->Create());
     mRoot->SetName("");
 
-    shared_ptr<CoreContext> context = CreateContext();
+    boost::shared_ptr<CoreContext> context = CreateContext();
 
     // register the internal zeitgeist classes
     RegisterClassObject(mNodeClass, "zeitgeist/");
@@ -232,19 +232,19 @@ void Core::Desctruct()
 
 boost::shared_ptr<CoreContext> Core::CreateContext()
 {
-    return shared_ptr<CoreContext>(new CoreContext(mSelf.lock(), GetRoot()));
+    return boost::shared_ptr<CoreContext>(new CoreContext(mSelf.lock(), GetRoot()));
 }
 
 boost::shared_ptr<Object>
 Core::New(const std::string& className)
 {
     // select the correct class to create our instance
-    shared_ptr<CoreContext> context = CreateContext();
-    shared_ptr<Class> theClass = shared_dynamic_cast<Class>
+    boost::shared_ptr<CoreContext> context = CreateContext();
+    boost::shared_ptr<Class> theClass = shared_dynamic_cast<Class>
         (context->Get("/classes/"+className));
 
     // here we will store our created instance
-    shared_ptr<Object> instance;
+    boost::shared_ptr<Object> instance;
 
     if (theClass.get() == 0)
         {
@@ -267,7 +267,7 @@ Core::ExistsClass(const std::string& className)
 bool Core::RegisterClassObject(const boost::shared_ptr<Class> &classObject,
                                const std::string &subDir)
 {
-    shared_ptr<CoreContext> context = CreateContext();
+    boost::shared_ptr<CoreContext> context = CreateContext();
     BindClass(classObject);
 
     return context->Install(classObject, "/classes/" + subDir, true);
@@ -275,7 +275,7 @@ bool Core::RegisterClassObject(const boost::shared_ptr<Class> &classObject,
 
 bool Core::RegisterClassObject(Class *classObject, const std::string &subDir)
 {
-    return RegisterClassObject(shared_ptr<Class>(classObject), subDir);
+    return RegisterClassObject(boost::shared_ptr<Class>(classObject), subDir);
 }
 
 bool Core::ImportBundle(const std::string& bundleName)
@@ -287,7 +287,7 @@ bool Core::ImportBundle(const std::string& bundleName)
             return true;
         }
 
-    shared_ptr<SharedLibrary> bundle(new SharedLibrary());
+    boost::shared_ptr<SharedLibrary> bundle(new SharedLibrary());
     if (!bundle->Open(bundleName))
         {
             mLogServer->Error() << "(Core) ERROR: Could not open '"
@@ -295,10 +295,10 @@ bool Core::ImportBundle(const std::string& bundleName)
             return false;
         }
 
-    std::list <shared_ptr<Class> > classes;
-    void(*Zeitgeist_RegisterBundle)(std::list <shared_ptr<Class> > &) = NULL;
+    std::list <boost::shared_ptr<Class> > classes;
+    void(*Zeitgeist_RegisterBundle)(std::list <boost::shared_ptr<Class> > &) = NULL;
 
-    Zeitgeist_RegisterBundle = (void(*)(std::list <shared_ptr<Class> > &))
+    Zeitgeist_RegisterBundle = (void(*)(std::list <boost::shared_ptr<Class> > &))
         bundle->GetProcAddress("Zeitgeist_RegisterBundle");
 
     if (Zeitgeist_RegisterBundle == NULL)
@@ -360,7 +360,7 @@ boost::weak_ptr<Leaf> Core::GetCachedInternal(const CacheKey& key)
             mPathCache.erase(key);
         }
 
-    return shared_ptr<Leaf>();
+    return boost::shared_ptr<Leaf>();
 }
 
 void Core::PutCachedInternal(const CacheKey& key, const boost::weak_ptr<Leaf>& leaf)
@@ -379,7 +379,7 @@ void Core::PutCachedInternal(const CacheKey& key, const boost::weak_ptr<Leaf>& l
 boost::shared_ptr<Leaf> Core::GetUncachedInternal(const CacheKey& key)
 {
     // walk the hierarchy
-    shared_ptr<Leaf> current;
+    boost::shared_ptr<Leaf> current;
     Path path(key.path);
 
     if (
@@ -459,7 +459,7 @@ boost::shared_ptr<Leaf> Core::GetChild(const boost::shared_ptr<Leaf> &parent,
                                        const std::string &childName)
 {
     // if we have a leaf, then we can't get a child ... ever!!
-    if (parent->IsLeaf()) return shared_ptr<Leaf>();
+    if (parent->IsLeaf()) return boost::shared_ptr<Leaf>();
 
     // ok, no leaf, so let's try to get an existing child
     boost::shared_ptr<Leaf> child = parent->GetChild(childName);
@@ -473,7 +473,7 @@ boost::shared_ptr<Leaf> Core::GetChild(const boost::shared_ptr<Leaf> &parent,
 
             if (parent->AddChildReference(child) == false)
                 {
-                    return shared_ptr<Leaf>();
+                    return boost::shared_ptr<Leaf>();
                 }
         }
 

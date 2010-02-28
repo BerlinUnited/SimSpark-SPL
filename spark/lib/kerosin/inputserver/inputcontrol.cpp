@@ -57,14 +57,14 @@ bool InputControl::SetFPSController(const std::string& path)
     return true;
 }
 
-shared_ptr<FPSController> InputControl::GetFPSController()
+boost::shared_ptr<FPSController> InputControl::GetFPSController()
 {
     return mFPSController.get();
 }
 
 void InputControl::OnLink()
 {
-    shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
+    boost::shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
 
     // publish common command constants to the scripts
     scriptServer->CreateVariable("Command.Quit",     CmdQuit);
@@ -258,7 +258,7 @@ bool
 InputControl::RegisterInputItem(const string& inputItemName, const string& name)
 {
     // check if a input item of the requested type was already created
-    shared_ptr<InputItem> inputItem =
+    boost::shared_ptr<InputItem> inputItem =
         shared_dynamic_cast<InputItem>(GetChildOfClass(inputItemName));
 
     if (inputItem.get() != 0)

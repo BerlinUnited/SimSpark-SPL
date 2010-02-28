@@ -26,7 +26,7 @@ using namespace boost;
 using namespace oxygen;
 
 bool
-CollisionPerceptor::Percept(shared_ptr<PredicateList> predList)
+CollisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
     if (mCollidees.empty())
     {

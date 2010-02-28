@@ -57,7 +57,7 @@ PerfectVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         return false;
     }
 
-    shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
+    boost::shared_ptr<Scene> activeScene = mSceneServer->GetActiveScene();
     if (activeScene.get() == 0)
     {
         GetLog()->Error()
@@ -70,7 +70,7 @@ PerfectVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     predicate.parameter.Clear();
 
     // we want positions relative to the closest parent transform node
-    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());
 
     salt::Vector3f myPos(0,0,0);
@@ -90,7 +90,7 @@ PerfectVisionPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     for (TLeafList::iterator i = transformList.begin();
          i != transformList.end(); ++i)
     {
-        shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
+        boost::shared_ptr<Transform> j = shared_static_cast<Transform>(*i);
         const salt::Vector3f& pos = j->GetWorldTransform().Pos() - myPos;
 
         ParameterList& element = predicate.parameter.AddList();

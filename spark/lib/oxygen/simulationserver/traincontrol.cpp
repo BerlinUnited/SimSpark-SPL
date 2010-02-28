@@ -85,8 +85,8 @@ void TrainControl::StartCycle()
          ++iter
         )
     {
-        shared_ptr<Client> client = (*iter);
-        shared_ptr<AgentAspect> agent =
+        boost::shared_ptr<Client> client = (*iter);
+        boost::shared_ptr<AgentAspect> agent =
             mGameControlServer->GetAgentAspect(client->id);
         if (agent.get() == 0)
         {
@@ -111,7 +111,7 @@ void TrainControl::EndCycle()
         return ;
     }
 
-    shared_ptr<BaseParser> parser = mGameControlServer->GetParser();
+    boost::shared_ptr<BaseParser> parser = mGameControlServer->GetParser();
     if (parser.get() == 0)
     {
         GetLog()->Error()
@@ -128,8 +128,8 @@ void TrainControl::EndCycle()
          ++iter
         )
     {
-        shared_ptr<Client> client = (*iter);
-        shared_ptr<AgentAspect> agent =
+        boost::shared_ptr<Client> client = (*iter);
+        boost::shared_ptr<AgentAspect> agent =
             mGameControlServer->GetAgentAspect(client->id);
         if (agent.get() == 0)
         {
@@ -157,11 +157,11 @@ void TrainControl::ActAgent()
          ++iter
         )
     {
-        shared_ptr<Client> client = (*iter);
+        boost::shared_ptr<Client> client = (*iter);
 
         /** default command is null */
         string cmd("");
-        shared_ptr<Behavior> behavior = client->behavior;
+        boost::shared_ptr<Behavior> behavior = client->behavior;
         if (behavior.get() != 0)
         {
             behavior->Think(client->senselist);
@@ -180,7 +180,7 @@ void TrainControl::ClientConnect(boost::shared_ptr<Behavior> behavior)
         return ;
     }
 
-    shared_ptr<Client> client(new Client);
+    boost::shared_ptr<Client> client(new Client);
     client->id = ++mNextClientId;
     client->behavior = behavior;
 
@@ -205,7 +205,7 @@ void TrainControl::ClientDisconnect(boost::shared_ptr<Behavior> behavior)
          ++iter
         )
     {
-        shared_ptr<Client> client = (*iter);
+        boost::shared_ptr<Client> client = (*iter);
 
         if (behavior.get() == (client->behavior).get())
         {

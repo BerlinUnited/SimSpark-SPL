@@ -73,7 +73,7 @@ public:
     void ParseMonitorMessage(const std::string& data);
 
 protected:
-    /** returns a shared_ptr to the first registered MonitorSystem */
+    /** returns a boost::shared_ptr to the first registered MonitorSystem */
     boost::shared_ptr<MonitorSystem> GetMonitorSystem();
 
     /** collects a list of predicates from all registered MonitorItems */

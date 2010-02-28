@@ -1,3 +1,97 @@
+2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
+
+    * lib/kerosin/fontserver/fontserver.cpp:
+    * lib/kerosin/imageserver/imageserver.cpp:
+    * lib/kerosin/imageserver/imageserver.h:
+    * lib/kerosin/inputserver/inputcontrol.cpp:
+    * lib/kerosin/inputserver/inputserver.cpp:
+    * lib/kerosin/materialserver/material2dtexture.cpp:
+    * lib/kerosin/materialserver/materialserver.cpp:
+    * lib/kerosin/renderserver/renderserver.cpp:
+    * lib/kerosin/sceneserver/singlematnode.cpp:
+    * lib/kerosin/sceneserver/staticmesh.cpp:
+    * lib/kerosin/soundserver/soundserver.cpp:
+    * lib/kerosin/soundserver/soundserver_c.cpp:
+    * lib/kerosin/textureserver/textureserver.cpp:
+    * lib/oxygen/agentaspect/agentaspect.cpp:
+    * lib/oxygen/agentaspect/effector.cpp:
+    * lib/oxygen/controlaspect/controlaspect.cpp:
+    * lib/oxygen/gamecontrolserver/behavior.cpp:
+    * lib/oxygen/gamecontrolserver/gamecontrolserver.cpp:
+    * lib/oxygen/geometryserver/geometryserver.cpp:
+    * lib/oxygen/geometryserver/stdmeshimporter.cpp:
+    * lib/oxygen/monitorserver/monitorserver.cpp:
+    * lib/oxygen/monitorserver/monitorserver.h:
+    * lib/oxygen/physicsserver/collider.cpp:
+    * lib/oxygen/physicsserver/collisionhandler.cpp:
+    * lib/oxygen/physicsserver/contactjointhandler.cpp:
+    * lib/oxygen/physicsserver/joint.cpp:
+    * lib/oxygen/physicsserver/physicsobject.cpp:
+    * lib/oxygen/physicsserver/physicsserver.cpp:
+    * lib/oxygen/physicsserver/recorderhandler.cpp:
+    * lib/oxygen/physicsserver/rigidbody.cpp:
+    * lib/oxygen/physicsserver/sliderjoint.cpp:
+    * lib/oxygen/physicsserver/space.cpp:
+    * lib/oxygen/physicsserver/world.cpp:
+    * lib/oxygen/sceneserver/basenode.cpp:
+    * lib/oxygen/sceneserver/basenode_c.cpp:
+    * lib/oxygen/sceneserver/fpscontroller.cpp:
+    * lib/oxygen/sceneserver/sceneserver.cpp:
+	* lib/oxygen/sceneserver/transform.cpp:
+    * lib/oxygen/simulationserver/agentcontrol.cpp:
+    * lib/oxygen/simulationserver/monitorcontrol.cpp:
+    * lib/oxygen/simulationserver/monitorlogger.cpp:
+    * lib/oxygen/simulationserver/netclient.cpp:
+    * lib/oxygen/simulationserver/netcontrol.cpp:
+    * lib/oxygen/simulationserver/netmessage.cpp:
+    * lib/oxygen/simulationserver/simcontrolnode.cpp:
+    * lib/oxygen/simulationserver/simulationserver.cpp:
+    * lib/oxygen/simulationserver/traincontrol.cpp:
+    * lib/zeitgeist/class.cpp:
+    * lib/zeitgeist/class.h:
+    * lib/zeitgeist/core.cpp:
+    * lib/zeitgeist/corecontext.cpp:
+    * lib/zeitgeist/fileserver/fileserver.cpp:
+    * lib/zeitgeist/leaf.cpp:
+    * lib/zeitgeist/node.cpp:
+    * lib/zeitgeist/object.cpp:
+    * lib/zeitgeist/object.h:
+    * lib/zeitgeist/scriptserver/scriptserver.cpp:
+    * lib/zeitgeist/zeitgeist.cpp:
+    * plugin/accelerometer/accelerometer.cpp:
+    * plugin/agentsynceffector/agentsynceffector.cpp:
+    * plugin/collisionperceptor/collisionperceptor.cpp:
+    * plugin/collisionperceptor/perceptorhandler.cpp:
+    * plugin/collisionperceptor/touchperceptor.cpp:
+    * plugin/collisionperceptor/touchperceptorhandler.cpp:
+    * plugin/filesystemstd/filesystemstd.cpp:
+    * plugin/forceeffector/forceeffector.cpp:
+    * plugin/gyrorateperceptor/gyrorateperceptor.cpp:
+    * plugin/imageperceptor/imageperceptor.h:
+    * plugin/inputsdl/inputsystemsdl.cpp:
+    * plugin/objimporter/objimporter.cpp:
+    * plugin/odeimps/odejoint.cpp:
+    * plugin/perfectvisionperceptor/perfectvisionperceptor.cpp:
+    * plugin/rosimporter/rosimporter.cpp:
+    * plugin/rubysceneimporter/rubysceneimporter.cpp:
+    * plugin/sceneeffector/sceneeffector.cpp:
+    * plugin/sexpparser/sexpparser.cpp:
+    * plugin/sparkagent/hinge2effector.cpp:
+    * plugin/sparkagent/hingeeffector.cpp:
+    * plugin/sparkagent/universaljointeffector.cpp:
+    * plugin/sparkmonitor/sparkmonitor.cpp:
+    * plugin/sparkmonitor/sparkmonitorclient.cpp:
+    * plugin/sparkmonitor/sparkmonitorlogfileserver.cpp:
+    * spark/spark.cpp:
+    * test/coretest/main.cpp:
+    * test/fonttest/main.cpp:
+    * test/inputtest/main.cpp:
+	- change shared_ptr -> boost::shared_ptr and weak_ptr -> boost::weak_ptr 
+	  because of Visual Studio 2010 compatibility. Issue between boost::shared_ptr and std::tr1::shared_ptr
+	
+	* cmake/FindBoost.cmake:
+	- added new version of FindBoost.cmake: finding boost libraries created by Visual C++ 2010 compiler.
+	
 2010-01-17  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* NEWS: 

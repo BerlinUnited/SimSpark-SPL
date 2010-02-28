@@ -127,14 +127,14 @@ void StaticMesh::RenderInternal()
            (miter != mMaterials.end())
            )
         {
-            const shared_ptr<Material> material = (*miter);
+            const boost::shared_ptr<Material> material = (*miter);
 
             if (material.get() != 0)
                 {
                     material->Bind();
 
                     const TriMesh::Face& face = (*iter);
-                    const shared_ptr<IndexBuffer>& idx = face.indeces;
+                    const boost::shared_ptr<IndexBuffer>& idx = face.indeces;
 
                     glDrawElements(GL_TRIANGLES, idx->GetNumIndex(),
                                    GL_UNSIGNED_INT, idx->GetIndex().get());
@@ -176,7 +176,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
     mMaterials.clear();
     CalcBoundingBox();
 
-    shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
+    boost::shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
         (GetCore()->Get("/sys/server/geometry"));
 
     if (geometryServer.get() == 0)
@@ -186,7 +186,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
             return false;
         }
 
-    shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -214,7 +214,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
         {
             const TriMesh::Face& face = (*iter);
 
-            shared_ptr<Material> material =
+            boost::shared_ptr<Material> material =
                 materialServer->GetMaterial(face.material);
 
             if (material.get() == 0)
@@ -228,7 +228,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
     return true;
 }
 
-const shared_ptr<TriMesh> StaticMesh::GetMesh()
+const boost::shared_ptr<TriMesh> StaticMesh::GetMesh()
 {
     return mMesh;
 }
@@ -302,7 +302,7 @@ StaticMesh::ExternalMeshScale() const
 void StaticMesh::ChangeMaterial(const std::string& oldMat,
                                 const std::string& newMat)
 {
-    shared_ptr<MaterialServer> materialServer =
+    boost::shared_ptr<MaterialServer> materialServer =
         shared_dynamic_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -312,7 +312,7 @@ void StaticMesh::ChangeMaterial(const std::string& oldMat,
         return;
     }
 
-    shared_ptr<Material> material = materialServer->GetMaterial(newMat);
+    boost::shared_ptr<Material> material = materialServer->GetMaterial(newMat);
 
     if (material.get() == 0)
     {
@@ -344,7 +344,7 @@ std::vector<std::string> StaticMesh::GetMaterialNames() const
 
 void StaticMesh::ResetMaterials(const std::vector<std::string>& names)
 {
-    shared_ptr<MaterialServer> materialServer =
+    boost::shared_ptr<MaterialServer> materialServer =
         shared_dynamic_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
     if (materialServer.get() == 0)
     {
@@ -358,7 +358,7 @@ void StaticMesh::ResetMaterials(const std::vector<std::string>& names)
     for (std::vector<std::string>::const_iterator iter = names.begin();
          names.end() != iter; ++iter){
 
-        shared_ptr<Material> material = materialServer->GetMaterial(*iter);
+        boost::shared_ptr<Material> material = materialServer->GetMaterial(*iter);
 
         if (material.get() == 0)
         {

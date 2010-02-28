@@ -112,7 +112,7 @@ ScriptServer::GetZeitgeistObject(boost::shared_ptr<Leaf> leaf)
 VALUE
 selectObject(VALUE /*self*/, VALUE path)
 {
-    shared_ptr<Leaf> leaf = gMyPrivateContext->Select(STR2CSTR(path));
+    boost::shared_ptr<Leaf> leaf = gMyPrivateContext->Select(STR2CSTR(path));
     return ScriptServer::GetZeitgeistObject(leaf).Get();
 }
 
@@ -183,7 +183,7 @@ run (VALUE /*self*/, VALUE file)
 VALUE
 newObject(VALUE /*self*/, VALUE className, VALUE pathStr)
 {
-    shared_ptr<Leaf> leaf =
+    boost::shared_ptr<Leaf> leaf =
         gMyPrivateContext->New(STR2CSTR(className), STR2CSTR(pathStr));
     return ScriptServer::GetZeitgeistObject(leaf).Get();
 }
@@ -198,7 +198,7 @@ deleteObject(VALUE /*self*/, VALUE name)
 VALUE
 getObject(VALUE /*self*/, VALUE path)
 {
-    shared_ptr<Leaf> leaf = gMyPrivateContext->Get(STR2CSTR(path));
+    boost::shared_ptr<Leaf> leaf = gMyPrivateContext->Get(STR2CSTR(path));
     return ScriptServer::GetZeitgeistObject(leaf).Get();
 }
 
@@ -263,7 +263,7 @@ ScriptServer::UpdateCachedAllNodes()
 }
 
 bool
-ScriptServer::Run(shared_ptr<salt::RFile> file)
+ScriptServer::Run(boost::shared_ptr<salt::RFile> file)
 {
     if (file.get() == 0)
     {
@@ -482,7 +482,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
     string sourcePath = sourceDir + salt::RFile::Sep() + name;
     GetLog()->Normal() << "(ScriptServer) Running " << sourcePath << "... " << endl;
 
-    shared_ptr<salt::StdFile> file(new(salt::StdFile));
+    boost::shared_ptr<salt::StdFile> file(new(salt::StdFile));
     if (! file->Open(sourcePath.c_str()))
     {
         GetLog()->Error() << "(ScriptServer) Script not found " << sourcePath << endl;

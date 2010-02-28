@@ -33,7 +33,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 
-shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
+boost::shared_ptr<PhysicsServerInt> PhysicsServer::mPhysicsServerImp;
 
 PhysicsServer::PhysicsServer() : Leaf()
 {
@@ -55,7 +55,7 @@ void PhysicsServer::OnLink()
     mPhysicsServerImp->InitEngine();  
 }
 
-void PhysicsServer::UpdateCache(shared_ptr<Scene> activeScene)
+void PhysicsServer::UpdateCache(boost::shared_ptr<Scene> activeScene)
 {
     if (mActiveSpace.get() == 0)
         {
@@ -88,7 +88,7 @@ void PhysicsServer::StepSimulation(float deltaTime)
         }
 }
 
-void PhysicsServer::SetUpBox(shared_ptr<RigidBody> body, string name)
+void PhysicsServer::SetUpBox(boost::shared_ptr<RigidBody> body, string name)
 {
     if (body.get() != 0)
         {

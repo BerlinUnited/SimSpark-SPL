@@ -148,11 +148,11 @@ TiXmlElement* RosImporter::IterateChildren(TiXmlNode* node, RosElements::ERosEle
 }
 
 bool RosImporter::ImportScene(const string& fileName,
-                              shared_ptr<BaseNode> parent,
-                              shared_ptr<ParameterList> parameter)
+                              boost::shared_ptr<BaseNode> parent,
+                              boost::shared_ptr<ParameterList> parameter)
 {
     // try to open the file
-    shared_ptr<salt::RFile> file = GetFile()->OpenResource(fileName);
+    boost::shared_ptr<salt::RFile> file = GetFile()->OpenResource(fileName);
 
     if (file.get() == 0)
         {
@@ -173,8 +173,8 @@ bool RosImporter::ImportScene(const string& fileName,
 }
 
 bool RosImporter::ParseScene(const string& scene,
-                             shared_ptr<BaseNode> parent,
-                             shared_ptr<ParameterList> parameter)
+                             boost::shared_ptr<BaseNode> parent,
+                             boost::shared_ptr<ParameterList> parameter)
 {
     mFileName = S_FROMSTRING;
     return ParseScene(scene.c_str(),static_cast<int>(scene.size()),parent,parameter);
@@ -240,7 +240,7 @@ void RosImporter::RosContext::AdjustPos()
         }
 
     // adjust for the mass center
-    shared_ptr<Transform> transform = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> transform = shared_dynamic_cast<Transform>
         (body->GetParent().lock());
 
     if (transform.get() == 0)
@@ -270,14 +270,14 @@ RosImporter::RosJointContext& RosImporter::GetJointContext()
     return mJointStack.back();
 }
 
-void RosImporter::ApplyTransform(shared_ptr<Transform> transform, const Trans& trans)
+void RosImporter::ApplyTransform(boost::shared_ptr<Transform> transform, const Trans& trans)
 {
     transform->SetLocalTransform(trans.matrix);
 }
 
-shared_ptr<Transform> RosImporter::CreateTransform(shared_ptr<BaseNode> parent, const Trans& trans)
+boost::shared_ptr<Transform> RosImporter::CreateTransform(boost::shared_ptr<BaseNode> parent, const Trans& trans)
 {
-    shared_ptr<Transform> transform = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> transform = shared_dynamic_cast<Transform>
         (GetCore()->New("/oxygen/Transform"));
 
     ApplyTransform(transform, trans);
@@ -288,7 +288,7 @@ shared_ptr<Transform> RosImporter::CreateTransform(shared_ptr<BaseNode> parent, 
     return transform;
 }
 
-shared_ptr<Transform> RosImporter::GetContextTransform(shared_ptr<BaseNode> parent, const Trans& trans)
+boost::shared_ptr<Transform> RosImporter::GetContextTransform(boost::shared_ptr<BaseNode> parent, const Trans& trans)
 {
     RosContext& context = GetContext();
     if (context.transform.get() != 0)
@@ -299,14 +299,14 @@ shared_ptr<Transform> RosImporter::GetContextTransform(shared_ptr<BaseNode> pare
     assert(parent.get() != 0);
 
     Leaf::TLeafList parentList;
-    shared_ptr<Leaf> current(parent);
+    boost::shared_ptr<Leaf> current(parent);
     while (current.get() != 0)
         {
             if (current.get() == mSceneParent.get())
                 {
                     break;
                 }
-            shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(current);
+            boost::shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(current);
             if (transform.get() != 0)
                 {
                     parentList.push_back(transform);
@@ -323,7 +323,7 @@ shared_ptr<Transform> RosImporter::GetContextTransform(shared_ptr<BaseNode> pare
          ++iter
          )
         {
-            shared_ptr<Transform> transform
+            boost::shared_ptr<Transform> transform
                 = shared_static_cast<Transform>(*iter);
 
             globalTrans.matrix = globalTrans.matrix * transform->GetLocalTransform();
@@ -335,7 +335,7 @@ shared_ptr<Transform> RosImporter::GetContextTransform(shared_ptr<BaseNode> pare
     return context.transform;
 }
 
-void RosImporter::SetJointBody(shared_ptr<RigidBody> body)
+void RosImporter::SetJointBody(boost::shared_ptr<RigidBody> body)
 {
     if (mJointStack.empty())
         {
@@ -349,7 +349,7 @@ void RosImporter::SetJointBody(shared_ptr<RigidBody> body)
         }
 }
 
-shared_ptr<RigidBody> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
+boost::shared_ptr<RigidBody> RosImporter::GetContextBody(boost::shared_ptr<BaseNode> parent)
 {
     RosContext& context = GetContext();
     if (
@@ -357,7 +357,7 @@ shared_ptr<RigidBody> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
         (parent.get() == 0)
         )
         {
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
     if (context.body.get() != 0)
@@ -368,7 +368,7 @@ shared_ptr<RigidBody> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
     if (context.transform.get() == 0)
         {
             assert(false);
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
     context.body = shared_dynamic_cast<RigidBody>
@@ -383,8 +383,8 @@ shared_ptr<RigidBody> RosImporter::GetContextBody(shared_ptr<BaseNode> parent)
 }
 
 bool RosImporter::ParseScene(const char* scene, int size,
-                             shared_ptr<BaseNode> parent,
-                             shared_ptr<zeitgeist::ParameterList> parameter)
+                             boost::shared_ptr<BaseNode> parent,
+                             boost::shared_ptr<zeitgeist::ParameterList> parameter)
 {
     TiXmlDocument document;
     document.Parse(scene);
@@ -562,7 +562,7 @@ bool RosImporter::ReadVector(TiXmlElement* element, Vector3f& vec, bool succeedI
 
 bool RosImporter::ReadAppearenceDef(TiXmlElement* element)
 {
-    shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -593,7 +593,7 @@ bool RosImporter::ReadAppearenceDef(TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<MaterialSolid> material = shared_dynamic_cast<MaterialSolid>
+    boost::shared_ptr<MaterialSolid> material = shared_dynamic_cast<MaterialSolid>
         (GetCore()->New("/kerosin/MaterialSolid"));
 
     if (material.get() == 0)
@@ -622,7 +622,7 @@ bool RosImporter::ReadAmbientLight(TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<RenderServer> renderServer = shared_dynamic_cast<RenderServer>
+    boost::shared_ptr<RenderServer> renderServer = shared_dynamic_cast<RenderServer>
         (GetCore()->Get("/sys/server/render"));
 
     if (renderServer.get() == 0)
@@ -635,7 +635,7 @@ bool RosImporter::ReadAmbientLight(TiXmlElement* element)
     return true;
 }
 
-bool RosImporter::ReadScene(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadScene(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     RosContextScope scope(this);
     if (parent.get() == 0)
@@ -657,7 +657,7 @@ bool RosImporter::ReadScene(shared_ptr<BaseNode> parent, TiXmlElement* element)
     return ReadChildElements(parent, element);
 }
 
-bool RosImporter::ReadChildElements(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadChildElements(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     for (
          TiXmlNode* node = GetFirstChild(element, RosElements::RE_ELEMENTS);
@@ -680,7 +680,7 @@ bool RosImporter::ReadChildElements(shared_ptr<BaseNode> parent, TiXmlElement* e
     return true;
 }
 
-bool RosImporter::ReadCompound(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadCompound(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     Trans trans;
@@ -694,14 +694,14 @@ bool RosImporter::ReadCompound(shared_ptr<BaseNode> parent, TiXmlElement* elemen
         }
 
     // transform
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent,trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent,trans);
     contextTransform->SetName(name);
 
     GetLog()->Debug() << "(RosImporter) read compound node " << name << "\n";
     return ReadChildElements(contextTransform, element);
 }
 
-bool RosImporter::ReadElements(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadElements(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     GetLog()->Debug() << "(RosImporter) reading elements node\n";
 
@@ -788,7 +788,7 @@ bool RosImporter::ReadElements(shared_ptr<BaseNode> parent, TiXmlElement* elemen
     return true;
 }
 
-bool RosImporter::ReadMovable(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadMovable(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     RosContextScope scope(this);
     GetContext().movable = true;
@@ -869,9 +869,9 @@ bool RosImporter::ReadTrans(TiXmlElement* element, Trans& trans)
     return true;
 }
 
-shared_ptr<TransformCollider> RosImporter::CreateTransformCollider(shared_ptr<BaseNode> parent, const Trans& trans)
+boost::shared_ptr<TransformCollider> RosImporter::CreateTransformCollider(boost::shared_ptr<BaseNode> parent, const Trans& trans)
 {
-    shared_ptr<TransformCollider> transCollider = shared_dynamic_cast<TransformCollider>
+    boost::shared_ptr<TransformCollider> transCollider = shared_dynamic_cast<TransformCollider>
         (GetCore()->New("/oxygen/TransformCollider"));
 
     parent->AddChildReference(transCollider);
@@ -882,9 +882,9 @@ shared_ptr<TransformCollider> RosImporter::CreateTransformCollider(shared_ptr<Ba
     return transCollider;
 }
 
-shared_ptr<ContactJointHandler> RosImporter::CreateContactJointHandler()
+boost::shared_ptr<ContactJointHandler> RosImporter::CreateContactJointHandler()
 {
-    shared_ptr<ContactJointHandler> handler = shared_dynamic_cast<ContactJointHandler>
+    boost::shared_ptr<ContactJointHandler> handler = shared_dynamic_cast<ContactJointHandler>
         (GetCore()->New("/oxygen/ContactJointHandler"));
 
     handler->SetContactSoftERPMode(true);
@@ -990,13 +990,13 @@ bool RosImporter::ReadPhysical(TiXmlElement* element, Physical& physical)
     return true;
 }
 
-bool RosImporter::ReadCylinder(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadCylinder(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     GetLog()->Debug() << "(RosImporter) cylinder geom unsupported yet. Created a capsule geom\n";
     return ReadCapsule(parent, element);
 }
 
-bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadCapsule(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -1018,12 +1018,12 @@ bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element
         }
 
     // transform
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
-    shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
+    boost::shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
     transform->SetName(name);
 
     // visual
-    shared_ptr<Capsule> capsule = shared_dynamic_cast<Capsule>
+    boost::shared_ptr<Capsule> capsule = shared_dynamic_cast<Capsule>
         (GetCore()->New("/kerosin/Capsule"));
     transform->AddChildReference(capsule);
 
@@ -1032,7 +1032,7 @@ bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element
     capsule->SetMaterial(appear.ref);
 
     // physical
-    shared_ptr<RigidBody> body = GetContextBody(transform);
+    boost::shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1043,7 +1043,7 @@ bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element
     if (physical.canCollide)
         {
             // geometry
-            shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
+            boost::shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
                 (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transform->AddChildReference(collider);
@@ -1051,7 +1051,7 @@ bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element
             collider->SetParams(radius, height);
 
             // collision handler
-            shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
+            boost::shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
             collider->AddChildReference(handler);
         }
 
@@ -1059,7 +1059,7 @@ bool RosImporter::ReadCapsule(shared_ptr<BaseNode> parent, TiXmlElement* element
     return ReadChildElements(transform, element);
 }
 
-bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadSphere(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -1079,12 +1079,12 @@ bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
         }
 
     // transform
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
-    shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
+    boost::shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
     transform->SetName(name);
 
     // visual
-    shared_ptr<Sphere> sphere = shared_dynamic_cast<Sphere>
+    boost::shared_ptr<Sphere> sphere = shared_dynamic_cast<Sphere>
         (GetCore()->New("/kerosin/Sphere"));
     transform->AddChildReference(sphere);
 
@@ -1092,7 +1092,7 @@ bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
     sphere->SetRadius(radius);
     sphere->SetMaterial(appear.ref);
 
-    shared_ptr<RigidBody> body = GetContextBody(transform);
+    boost::shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1101,7 +1101,7 @@ bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
         }
 
     // geometry
-    shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>
+    boost::shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>
         (GetCore()->New("/oxygen/SphereCollider"));
 
     transform->AddChildReference(collider);
@@ -1110,7 +1110,7 @@ bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
     if (physical.canCollide)
         {
             // collision handler
-            shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
+            boost::shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
             collider->AddChildReference(handler);
         }
 
@@ -1118,7 +1118,7 @@ bool RosImporter::ReadSphere(shared_ptr<BaseNode> parent, TiXmlElement* element)
     return ReadChildElements(transform, element);
 }
 
-bool RosImporter::ReadBox(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadBox(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double length;
@@ -1142,12 +1142,12 @@ bool RosImporter::ReadBox(shared_ptr<BaseNode> parent, TiXmlElement* element)
         }
 
     // transform
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
-    shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
+    boost::shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
     transform->SetName(name);
 
     // visual
-    shared_ptr<Box> box = shared_dynamic_cast<Box>
+    boost::shared_ptr<Box> box = shared_dynamic_cast<Box>
         (GetCore()->New("/kerosin/Box"));
     transform->AddChildReference(box);
 
@@ -1156,7 +1156,7 @@ bool RosImporter::ReadBox(shared_ptr<BaseNode> parent, TiXmlElement* element)
     box->SetExtents(boxDim);
     box->SetMaterial(appear.ref);
 
-    shared_ptr<RigidBody> body = GetContextBody(transform);
+    boost::shared_ptr<RigidBody> body = GetContextBody(transform);
     if (body.get() != 0)
         {
             body->SetName(S_BODY+name);
@@ -1167,7 +1167,7 @@ bool RosImporter::ReadBox(shared_ptr<BaseNode> parent, TiXmlElement* element)
     if (physical.canCollide)
         {
             // geometry
-            shared_ptr<BoxCollider> collider = shared_dynamic_cast<BoxCollider>
+            boost::shared_ptr<BoxCollider> collider = shared_dynamic_cast<BoxCollider>
                 (GetCore()->New("/oxygen/BoxCollider"));
 
             transform->AddChildReference(collider);
@@ -1175,7 +1175,7 @@ bool RosImporter::ReadBox(shared_ptr<BaseNode> parent, TiXmlElement* element)
             collider->SetBoxLengths(boxDim);
 
             // collision handler
-            shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
+            boost::shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
             collider->AddChildReference(handler);
         }
 
@@ -1235,13 +1235,13 @@ bool RosImporter::ReadAxis(TiXmlElement* element, RosElements::ERosElement type,
     return true;
 }
 
-shared_ptr<RigidBody> RosImporter::GetJointParentBody()
+boost::shared_ptr<RigidBody> RosImporter::GetJointParentBody()
 {
     if (mStack.size() < 2)
         {
             GetLog()->Debug() << "RosImporter::GetJointParentBody cannot get joint parent body with stack size of "
                               << mStack.size() << "\n";
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
     TRosStack::reverse_iterator iter = mStack.rbegin();
@@ -1253,7 +1253,7 @@ shared_ptr<RigidBody> RosImporter::GetJointParentBody()
          )
         {
             RosContext& context = (*iter);
-            shared_ptr<RigidBody> body = context.body;
+            boost::shared_ptr<RigidBody> body = context.body;
 
             if (body.get() != 0)
                 {
@@ -1264,19 +1264,19 @@ shared_ptr<RigidBody> RosImporter::GetJointParentBody()
 
 
     GetLog()->Debug() << "RosImporter::GetJointParentBody not found\n";
-    return shared_ptr<RigidBody>();
+    return boost::shared_ptr<RigidBody>();
 }
 
-shared_ptr<RigidBody> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent)
+boost::shared_ptr<RigidBody> RosImporter::GetJointChildBody(boost::shared_ptr<BaseNode> parent)
 {
     if (parent.get() == 0)
         {
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
     for (Leaf::TLeafList::iterator iter = parent->begin();iter != parent->end();++iter)
         {
-            shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(*iter);
+            boost::shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(*iter);
             if (body.get() == 0)
                 {
                     continue;
@@ -1288,23 +1288,23 @@ shared_ptr<RigidBody> RosImporter::GetJointChildBody(shared_ptr<BaseNode> parent
 
     for (Leaf::TLeafList::iterator iter = parent->begin();iter != parent->end();++iter)
         {
-            shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(*iter);
+            boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(*iter);
             if (node.get() == 0)
                 {
                     continue;
                 }
 
-            shared_ptr<RigidBody> body = GetJointChildBody(node);
+            boost::shared_ptr<RigidBody> body = GetJointChildBody(node);
             if (body.get() != 0)
                 {
                     return body;
                 }
         }
 
-    return shared_ptr<RigidBody>();
+    return boost::shared_ptr<RigidBody>();
 }
 
-bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadUniversal(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     RosContextScope scope(this);
     GetContext().movable = true;
@@ -1328,10 +1328,10 @@ bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* eleme
     // transform
     Trans anchorTrans;
     anchorTrans.matrix.Translate(anchor);
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, anchorTrans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, anchorTrans);
 
     // joint
-    shared_ptr<UniversalJoint> universal = shared_dynamic_cast<UniversalJoint>
+    boost::shared_ptr<UniversalJoint> universal = shared_dynamic_cast<UniversalJoint>
         (GetCore()->New("/oxygen/UniversalJoint"));
     contextTransform->AddChildReference(universal);
 
@@ -1340,8 +1340,8 @@ bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* eleme
             return false;
         }
 
-    shared_ptr<RigidBody> body1 = GetJointParentBody();
-    shared_ptr<RigidBody> body2 = GetJointContext().body;
+    boost::shared_ptr<RigidBody> body1 = GetJointParentBody();
+    boost::shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) ||
@@ -1358,7 +1358,7 @@ bool RosImporter::ReadUniversal(shared_ptr<BaseNode> parent, TiXmlElement* eleme
     return true;
 }
 
-bool RosImporter::ReadHinge(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadHinge(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     RosContextScope scope(this);
     GetContext().movable = true;
@@ -1380,10 +1380,10 @@ bool RosImporter::ReadHinge(shared_ptr<BaseNode> parent, TiXmlElement* element)
     // transform
     Trans anchorTrans;
     anchorTrans.matrix.Translate(anchor);
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, anchorTrans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, anchorTrans);
 
     // joint
-    shared_ptr<HingeJoint> hinge = shared_dynamic_cast<HingeJoint>
+    boost::shared_ptr<HingeJoint> hinge = shared_dynamic_cast<HingeJoint>
         (GetCore()->New("/oxygen/HingeJoint"));
     contextTransform->AddChildReference(hinge);
 
@@ -1392,8 +1392,8 @@ bool RosImporter::ReadHinge(shared_ptr<BaseNode> parent, TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<RigidBody> body1 = GetJointParentBody();
-    shared_ptr<RigidBody> body2 = GetJointContext().body;
+    boost::shared_ptr<RigidBody> body1 = GetJointParentBody();
+    boost::shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) ||
@@ -1412,7 +1412,7 @@ bool RosImporter::ReadHinge(shared_ptr<BaseNode> parent, TiXmlElement* element)
     return true;
 }
 
-bool RosImporter::ReadSlider(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadSlider(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     RosContextScope scope(this);
     GetContext().movable = true;
@@ -1430,7 +1430,7 @@ bool RosImporter::ReadSlider(shared_ptr<BaseNode> parent, TiXmlElement* element)
         }
 
     // joint
-    shared_ptr<SliderJoint> slider = shared_dynamic_cast<SliderJoint>
+    boost::shared_ptr<SliderJoint> slider = shared_dynamic_cast<SliderJoint>
         (GetCore()->New("/oxygen/SliderJoint"));
     parent->AddChildReference(slider);
 
@@ -1439,8 +1439,8 @@ bool RosImporter::ReadSlider(shared_ptr<BaseNode> parent, TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<RigidBody> body1 = GetJointParentBody();
-    shared_ptr<RigidBody> body2 = GetJointContext().body;
+    boost::shared_ptr<RigidBody> body1 = GetJointParentBody();
+    boost::shared_ptr<RigidBody> body2 = GetJointContext().body;
 
     if (
         (body1.get() == 0) &&
@@ -1459,7 +1459,7 @@ bool RosImporter::ReadSlider(shared_ptr<BaseNode> parent, TiXmlElement* element)
     return true;
 }
 
-bool RosImporter::ReadMacro(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadMacro(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     if (! ReadAttribute(element, RA_NAME, name))
@@ -1467,14 +1467,14 @@ bool RosImporter::ReadMacro(shared_ptr<BaseNode> parent, TiXmlElement* element)
             return false;
         }
 
-    shared_ptr<TiXmlElement> macro(new TiXmlElement(*element));
+    boost::shared_ptr<TiXmlElement> macro(new TiXmlElement(*element));
     mMacroMap[name] = macro;
 
     GetLog()->Debug() << "(RosImporter) defined macro " << name << "\n";
     return true;
 }
 
-bool RosImporter::ReadUse(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadUse(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name;
     string instance;
@@ -1509,7 +1509,7 @@ bool RosImporter::ReadUse(shared_ptr<BaseNode> parent, TiXmlElement* element)
     GetLog()->Debug() << "(RosImporter) START instancing macro " << name
                       << " as instance " << instance << "\n";
 
-    shared_ptr<TiXmlElement> tree = (*iter).second;
+    boost::shared_ptr<TiXmlElement> tree = (*iter).second;
     bool ok = ReadElements(parent, tree.get());
 
     GetLog()->Debug() << "(RosImporter) END instancing macro " << name << "\n";
@@ -1573,9 +1573,9 @@ bool RosImporter::ReadVertexList(TiXmlElement* element)
     return true;
 }
 
-bool RosImporter::ReadComplexShape(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadComplexShape(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
-    shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
+    boost::shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
         (GetCore()->Get("/sys/server/geometry"));
 
     if (geometryServer.get() == 0)
@@ -1611,8 +1611,8 @@ bool RosImporter::ReadComplexShape(shared_ptr<BaseNode> parent, TiXmlElement* el
             return false;
         }
 
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
-    shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, Trans());
+    boost::shared_ptr<Transform> transform = CreateTransform(contextTransform, trans);
     transform->SetName(name);
 
     if (! ReadPhysicalRep(parent,element))
@@ -1620,7 +1620,7 @@ bool RosImporter::ReadComplexShape(shared_ptr<BaseNode> parent, TiXmlElement* el
             return false;
         }
 
-    shared_ptr<TriMesh> mesh(new TriMesh);
+    boost::shared_ptr<TriMesh> mesh(new TriMesh);
     mesh->SetName(name);
 
     if (! ReadGraphicalRep(element, mesh, appear))
@@ -1629,7 +1629,7 @@ bool RosImporter::ReadComplexShape(shared_ptr<BaseNode> parent, TiXmlElement* el
         }
 
     geometryServer->RegisterMesh(mesh);
-    shared_ptr<StaticMesh> staticMesh = shared_dynamic_cast<StaticMesh>
+    boost::shared_ptr<StaticMesh> staticMesh = shared_dynamic_cast<StaticMesh>
         (GetCore()->New("/kerosin/StaticMesh"));
 
     transform->AddChildReference(staticMesh);
@@ -1639,7 +1639,7 @@ bool RosImporter::ReadComplexShape(shared_ptr<BaseNode> parent, TiXmlElement* el
     return ReadChildElements(transform, element);
 }
 
-bool RosImporter::ReadGraphicalRep(TiXmlElement* element, shared_ptr<TriMesh> mesh, const Appearance& appear)
+bool RosImporter::ReadGraphicalRep(TiXmlElement* element, boost::shared_ptr<TriMesh> mesh, const Appearance& appear)
 {
     TiXmlElement* graphRepElem = GetFirstChild(element, RosElements::RE_GRAPHICALREPRESENTATION);
     if (graphRepElem == 0)
@@ -1774,13 +1774,13 @@ bool RosImporter::ReadComplexGeom(TiXmlElement* element, ComplexGeom& geom)
     return true;
 }
 
-void RosImporter::BuildTriMesh(shared_ptr<TriMesh> mesh, TVertexList& vertexList,
+void RosImporter::BuildTriMesh(boost::shared_ptr<TriMesh> mesh, TVertexList& vertexList,
                                const TComplexGeomList& geomList, const Appearance& appear)
 {
     GetLog()->Debug() << "(RosImporter) building trimesh for " << mesh->GetName() << "\n";
     mesh->SetPos(vertexList.GetPos(), vertexList.GetPosCount());
 
-    shared_ptr<IndexBuffer> ibuffer(new IndexBuffer);
+    boost::shared_ptr<IndexBuffer> ibuffer(new IndexBuffer);
     IndexBuffer& ibufferRef = (*ibuffer);
 
     // build triangles
@@ -1819,7 +1819,7 @@ void RosImporter::BuildPolygon(IndexBuffer& ibuffer, TVertexList& vertexList, co
         }
 }
 
-bool RosImporter::ReadPhysicalRep(shared_ptr<BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadPhysicalRep(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
     string name = S_UNNAMED;
     ReadAttribute(element, RA_NAME, name, true);
@@ -1885,7 +1885,7 @@ bool RosImporter::ReadPhysicalRep(shared_ptr<BaseNode> parent, TiXmlElement* ele
     return true;
 }
 
-bool RosImporter::ReadSimpleBox(shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadSimpleBox(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double length;
@@ -1907,10 +1907,10 @@ bool RosImporter::ReadSimpleBox(shared_ptr<oxygen::BaseNode> parent, TiXmlElemen
         }
 
     // transform
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
     Vector3f boxDim = Vector3f(length, width, height);
 
-    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
+    boost::shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddBoxTotal(physical.mass, boxDim, trans.matrix);
@@ -1920,11 +1920,11 @@ bool RosImporter::ReadSimpleBox(shared_ptr<oxygen::BaseNode> parent, TiXmlElemen
     if (physical.canCollide)
         {
             // geometry
-            shared_ptr<TransformCollider> transCollider
+            boost::shared_ptr<TransformCollider> transCollider
                 = CreateTransformCollider(contextTransform,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            shared_ptr<BoxCollider> collider = shared_dynamic_cast<BoxCollider>
+            boost::shared_ptr<BoxCollider> collider = shared_dynamic_cast<BoxCollider>
                 (GetCore()->New("/oxygen/BoxCollider"));
 
             transCollider->AddChildReference(collider);
@@ -1932,7 +1932,7 @@ bool RosImporter::ReadSimpleBox(shared_ptr<oxygen::BaseNode> parent, TiXmlElemen
             collider->SetBoxLengths(boxDim);
 
             // collision handler
-            shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
+            boost::shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
             collider->AddChildReference(handler);
         }
 
@@ -1940,7 +1940,7 @@ bool RosImporter::ReadSimpleBox(shared_ptr<oxygen::BaseNode> parent, TiXmlElemen
     return true;
 }
 
-bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadSimpleSphere(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -1958,9 +1958,9 @@ bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlEle
         }
 
     // transform
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
 
-    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
+    boost::shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddSphereTotal(physical.mass, radius, trans.matrix);
@@ -1970,18 +1970,18 @@ bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlEle
     if (physical.canCollide)
         {
             // geometry
-            shared_ptr<TransformCollider> transCollider
+            boost::shared_ptr<TransformCollider> transCollider
                 = CreateTransformCollider(body,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>
+            boost::shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>
                 (GetCore()->New("/oxygen/SphereCollider"));
 
             transCollider->AddChildReference(collider);
             collider->SetRadius(radius);
 
             // collision handler
-            shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
+            boost::shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
             collider->AddChildReference(handler);
         }
 
@@ -1989,7 +1989,7 @@ bool RosImporter::ReadSimpleSphere(shared_ptr<oxygen::BaseNode> parent, TiXmlEle
     return true;
 }
 
-bool RosImporter::ReadSimpleCapsule(shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
+bool RosImporter::ReadSimpleCapsule(boost::shared_ptr<oxygen::BaseNode> parent, TiXmlElement* element)
 {
     string name;
     double radius;
@@ -2009,9 +2009,9 @@ bool RosImporter::ReadSimpleCapsule(shared_ptr<oxygen::BaseNode> parent, TiXmlEl
         }
 
     // transform
-    shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
+    boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, trans);
 
-    shared_ptr<RigidBody> body = GetContextBody(contextTransform);
+    boost::shared_ptr<RigidBody> body = GetContextBody(contextTransform);
     if (body.get() != 0)
         {
             body->AddCapsuleTotal(physical.mass, radius, height, trans.matrix);
@@ -2021,11 +2021,11 @@ bool RosImporter::ReadSimpleCapsule(shared_ptr<oxygen::BaseNode> parent, TiXmlEl
     if (physical.canCollide)
         {
             // geometry
-            shared_ptr<TransformCollider> transCollider
+            boost::shared_ptr<TransformCollider> transCollider
                 = CreateTransformCollider(body,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
+            boost::shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
                 (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transCollider->AddChildReference(collider);
@@ -2033,7 +2033,7 @@ bool RosImporter::ReadSimpleCapsule(shared_ptr<oxygen::BaseNode> parent, TiXmlEl
             collider->SetParams(radius, height);
 
             // collision handler
-            shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
+            boost::shared_ptr<ContactJointHandler> handler = CreateContactJointHandler();
             collider->AddChildReference(handler);
         }
 
@@ -2041,7 +2041,7 @@ bool RosImporter::ReadSimpleCapsule(shared_ptr<oxygen::BaseNode> parent, TiXmlEl
     return true;
 }
 
-void RosImporter::Attach(shared_ptr<Joint> joint, shared_ptr<RigidBody> body1, shared_ptr<RigidBody> body2,
+void RosImporter::Attach(boost::shared_ptr<Joint> joint, boost::shared_ptr<RigidBody> body1, boost::shared_ptr<RigidBody> body2,
                          const JointAxis& axis1, const JointAxis& axis2)
 {
     if (joint.get() == 0)
@@ -2064,7 +2064,7 @@ void RosImporter::AttachJoint(const JointAttach& ja)
 {
     ja.joint->Attach(ja.body1, ja.body2);
 
-    shared_ptr<HingeJoint> hinge = shared_dynamic_cast<HingeJoint>(ja.joint);
+    boost::shared_ptr<HingeJoint> hinge = shared_dynamic_cast<HingeJoint>(ja.joint);
     if (hinge.get() != 0)
         {
             hinge->SetAxis(ja.axis1.dir);
@@ -2081,7 +2081,7 @@ void RosImporter::AttachJoint(const JointAttach& ja)
             return;
         }
 
-    shared_ptr<UniversalJoint> universal = shared_dynamic_cast<UniversalJoint>(ja.joint);
+    boost::shared_ptr<UniversalJoint> universal = shared_dynamic_cast<UniversalJoint>(ja.joint);
     if (universal.get() != 0)
         {
             universal->SetAxis1(ja.axis1.dir);
@@ -2107,7 +2107,7 @@ void RosImporter::AttachJoint(const JointAttach& ja)
             return;
         }
 
-    shared_ptr<SliderJoint> slider = shared_dynamic_cast<SliderJoint>(ja.joint);
+    boost::shared_ptr<SliderJoint> slider = shared_dynamic_cast<SliderJoint>(ja.joint);
     if (slider.get() != 0)
         {
             // slider axis is set via parent transform node

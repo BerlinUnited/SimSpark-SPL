@@ -50,7 +50,7 @@ SceneServer::~SceneServer()
 
 void SceneServer::OnLink()
 {
-    shared_ptr<CoreContext> context = GetCore()->CreateContext();
+    boost::shared_ptr<CoreContext> context = GetCore()->CreateContext();
 
     mPhysicsServer = shared_static_cast<PhysicsServer>
         (context->Get("/sys/server/physics"));
@@ -64,9 +64,9 @@ void SceneServer::OnLink()
 
 bool SceneServer::CreateScene(const std::string &location)
 {
-    shared_ptr<CoreContext> context = GetCore()->CreateContext();
+    boost::shared_ptr<CoreContext> context = GetCore()->CreateContext();
 
-    shared_ptr<Scene> scene = shared_static_cast<Scene>
+    boost::shared_ptr<Scene> scene = shared_static_cast<Scene>
         (context->New("oxygen/Scene", location));
 
     ResetCache();
@@ -206,8 +206,8 @@ void SceneServer::PostPhysicsUpdate()
     mActiveScene->UpdateHierarchy();
 }
 
-bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
-                              shared_ptr<ParameterList> parameter)
+bool SceneServer::ImportScene(const string& fileName, boost::shared_ptr<BaseNode> root,
+                              boost::shared_ptr<ParameterList> parameter)
 {
     string file;
     if (! GetFile()->LocateResource(fileName, file))
@@ -247,7 +247,7 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
          ++iter
          )
         {
-            shared_ptr<SceneImporter> importer =
+            boost::shared_ptr<SceneImporter> importer =
                 shared_static_cast<SceneImporter>(*iter);
 
             importer->SetSceneDict(&SceneDict::GetInstance());
@@ -266,7 +266,7 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
                     RemoveTransformPaths(root);
 
                     // mark the corresponding scene as modified
-                    shared_ptr<Scene> scene = root->GetScene();
+                    boost::shared_ptr<Scene> scene = root->GetScene();
                     if (scene.get() != 0)
                         {
                             scene->SetModified(true);
@@ -282,17 +282,17 @@ bool SceneServer::ImportScene(const string& fileName, shared_ptr<BaseNode> root,
     return false;
 }
 
-void SceneServer::ReparentTransformChildren(shared_ptr<Transform> node)
+void SceneServer::ReparentTransformChildren(boost::shared_ptr<Transform> node)
 {
-    shared_ptr<BaseNode> parent =
+    boost::shared_ptr<BaseNode> parent =
         shared_dynamic_cast<BaseNode>(node->GetParent().lock());
 
     // while not empty
     while (node->begin() != node->end())
         {
-            shared_ptr<Leaf> child = (*node->begin());
+            boost::shared_ptr<Leaf> child = (*node->begin());
 
-            shared_ptr<Transform> tChild
+            boost::shared_ptr<Transform> tChild
                 = shared_dynamic_cast<Transform>(child);
 
             if (tChild.get() != 0)
@@ -306,7 +306,7 @@ void SceneServer::ReparentTransformChildren(shared_ptr<Transform> node)
         }
 }
 
-void SceneServer::RemoveTransformPaths(shared_ptr<Leaf> root)
+void SceneServer::RemoveTransformPaths(boost::shared_ptr<Leaf> root)
 {
     if (root.get() == 0)
         {
@@ -329,14 +329,14 @@ void SceneServer::RemoveTransformPaths(shared_ptr<Leaf> root)
             RemoveTransformPaths(*iter);
         }
 
-    shared_ptr<Transform> trans = shared_dynamic_cast<Transform>(root);
+    boost::shared_ptr<Transform> trans = shared_dynamic_cast<Transform>(root);
     bool tRoot = (trans.get() != 0);
     bool tChildOnly = true;
 
     TLeafList::iterator iter = root->begin();
     while (iter != root->end())
         {
-            shared_ptr<Transform> tChild = shared_dynamic_cast<Transform>(*iter);
+            boost::shared_ptr<Transform> tChild = shared_dynamic_cast<Transform>(*iter);
             if (tChild.get() == 0)
                 {
                     tChildOnly = false;
@@ -365,7 +365,7 @@ void SceneServer::RemoveTransformPaths(shared_ptr<Leaf> root)
 
 bool SceneServer::InitSceneImporter(const std::string& importerName)
 {
-    shared_ptr<SceneImporter> importer
+    boost::shared_ptr<SceneImporter> importer
         = shared_dynamic_cast<SceneImporter>(GetCore()->New(importerName));
 
     if (importer.get() == 0)

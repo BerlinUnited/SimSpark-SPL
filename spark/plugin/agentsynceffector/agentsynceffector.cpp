@@ -47,17 +47,17 @@ bool AgentSyncEffector::Realize(boost::shared_ptr<ActionObject> action)
     return res;
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 AgentSyncEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {
       GetLog()->Error() << "ERROR: (AgentSyncEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>();
+      return boost::shared_ptr<ActionObject>();
     }
 
-  return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+  return boost::shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
 }
 
 void AgentSyncEffector::OnLink()

@@ -128,7 +128,7 @@ void RigidBody::OnLink()
     // let the body, take on the world space position of the parent
     mRigidBodyImp->BodySetData(this, mBodyID);
 
-    shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
+    boost::shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (GetParent().lock());
 
     const Matrix& mat = baseNode->GetWorldTransform();
@@ -276,7 +276,7 @@ void RigidBody::SetAngularVelocity(const Vector3f& vel)
 
 void RigidBody::SynchronizeParent() const
 {
-    shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
+    boost::shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>
         (GetParent().lock());
     
     Matrix mat = mRigidBodyImp->GetSynchronisationMatrix(mBodyID);
@@ -289,7 +289,7 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
     // Check whether mass/body has been translated
     if (mMassTransformed)
     {
-        weak_ptr<Node> parent = GetParent();
+        boost::weak_ptr<Node> parent = GetParent();
 
         // Update colliders (only those encapsulated in transform colliders)
         TLeafList transformColliders;
@@ -298,7 +298,7 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
         for (TLeafList::iterator iter = transformColliders.begin(); iter != transformColliders.end(); ++iter)
         {
             // Only move non-transform colliders
-            shared_ptr<Collider> collider = shared_static_cast<TransformCollider>(*iter)->FindChildSupportingClass<Collider>();
+            boost::shared_ptr<Collider> collider = shared_static_cast<TransformCollider>(*iter)->FindChildSupportingClass<Collider>();
             if (collider.get())
             {
                 Vector3f pos = collider->GetPosition();
@@ -312,7 +312,7 @@ void RigidBody::PrePhysicsUpdateInternal(float /*deltaTime*/)
         parent.lock()->ListShallowChildrenSupportingClass<Transform>(transforms);
         for (TLeafList::iterator iter = transforms.begin(); iter != transforms.end(); ++iter)
         {
-            shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
+            boost::shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(*iter);
             Matrix worldTransform = transform->GetWorldTransform();
             worldTransform.Pos() = worldTransform.Pos() + mMassTrans;
             transform->SetWorldTransform(worldTransform);
@@ -329,12 +329,12 @@ void RigidBody::PostPhysicsUpdateInternal()
     SynchronizeParent();
 }
 
-shared_ptr<RigidBody> RigidBody::GetBody(long id)
+boost::shared_ptr<RigidBody> RigidBody::GetBody(long id)
 {
     long bodyID = (long) id;
     if (bodyID == 0)
         {
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
     RigidBody* bodyPtr = mRigidBodyImp->GetBodyPointer(bodyID);
@@ -344,16 +344,16 @@ shared_ptr<RigidBody> RigidBody::GetBody(long id)
             // we cannot use the logserver here
             cerr << "ERROR: (RigidBody) no body found for BodyID "
                  << id << "\n";
-            return shared_ptr<RigidBody>();
+            return boost::shared_ptr<RigidBody>();
         }
 
-    shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
+    boost::shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
         (bodyPtr->GetSelf().lock());
 
     if (body.get() == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (RigidBody) got no shared_ptr for dBodyID "
+            cerr << "ERROR: (RigidBody) got no boost::shared_ptr for dBodyID "
                  << id << "\n";
         }
 

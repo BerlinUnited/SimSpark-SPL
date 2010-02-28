@@ -43,7 +43,7 @@ static const string gBoxStr = "StdUnitBox";
 static const string gCapsuleStr = "StdCapsule";
 static const string gCylinderStr = "StdUnitCylinder";
 
-shared_ptr<TriMesh>
+boost::shared_ptr<TriMesh>
 StdMeshImporter::ImportMesh(const std::string& name,const ParameterList& parameter)
 {
     if (name == gSphereStr)
@@ -66,7 +66,7 @@ StdMeshImporter::ImportMesh(const std::string& name,const ParameterList& paramet
             return UnitCylinder();
         }
 
-    return shared_ptr<TriMesh>();
+    return boost::shared_ptr<TriMesh>();
 }
 
 //
@@ -148,9 +148,9 @@ static unsigned int gSphereFaces[gNumSphereFaces*3] =
         113,106,105, 113,107,106, 113,108,107, 113,109,108, 113,110,109, 113,111,110, 113,112,111, 113,97,112
     };
 
-shared_ptr<TriMesh> StdMeshImporter::UnitSphereMesh()
+boost::shared_ptr<TriMesh> StdMeshImporter::UnitSphereMesh()
 {
-    shared_ptr<TriMesh> mesh(new TriMesh());
+    boost::shared_ptr<TriMesh> mesh(new TriMesh());
 
     shared_array<float> pos(new float[gNumSphereVertices*3]);
     memcpy(pos.get(),gSphereVertices,gNumSphereVertices*3*sizeof(float));
@@ -160,7 +160,7 @@ shared_ptr<TriMesh> StdMeshImporter::UnitSphereMesh()
     // normal
     mesh->SetNormals(pos);
 
-    shared_ptr<IndexBuffer> idx(new IndexBuffer());
+    boost::shared_ptr<IndexBuffer> idx(new IndexBuffer());
     idx->Cache(gNumSphereFaces*3,gSphereFaces);
     mesh->AddFace(idx);
 
@@ -229,9 +229,9 @@ static unsigned int gBoxFaces[gNumSphereFaces*3] =
         20,21,22, 20,22,23
     };
 
-shared_ptr<TriMesh> StdMeshImporter::UnitBoxMesh()
+boost::shared_ptr<TriMesh> StdMeshImporter::UnitBoxMesh()
 {
-    shared_ptr<TriMesh> mesh(new TriMesh());
+    boost::shared_ptr<TriMesh> mesh(new TriMesh());
 
     shared_array<float> pos(new float[gNumBoxVertices*3]);
     memcpy(pos.get(),gBoxVertices,gNumBoxVertices*3*sizeof(float));
@@ -245,7 +245,7 @@ shared_ptr<TriMesh> StdMeshImporter::UnitBoxMesh()
     memcpy(tex.get(), gBoxTexCoords,gNumBoxVertices*3*sizeof(float));
     mesh->SetTexCoords(tex);
 
-    shared_ptr<IndexBuffer> idx(new IndexBuffer());
+    boost::shared_ptr<IndexBuffer> idx(new IndexBuffer());
     idx->Cache(gNumBoxFaces*3,gBoxFaces);
     mesh->AddFace(idx);
 
@@ -290,7 +290,7 @@ std::string StdMeshImporter::MangleName (const string& name, const ParameterList
     return ss.str();
 }
 
-shared_ptr<TriMesh> StdMeshImporter::UnitCapsule(const ParameterList& parameter)
+boost::shared_ptr<TriMesh> StdMeshImporter::UnitCapsule(const ParameterList& parameter)
 {
     //
     // code adapted from ODE's drawstuff lib
@@ -423,7 +423,7 @@ shared_ptr<TriMesh> StdMeshImporter::UnitCapsule(const ParameterList& parameter)
             start_ny = start_ny2;
         }
 
-    shared_ptr<IndexBuffer> idx(new IndexBuffer());
+    boost::shared_ptr<IndexBuffer> idx(new IndexBuffer());
     // triangle strip -> triangles
     int numFaces = (numVertices - 2);
     idx->EnsureFit(numFaces*3);
@@ -443,7 +443,7 @@ shared_ptr<TriMesh> StdMeshImporter::UnitCapsule(const ParameterList& parameter)
                     }
         }
 
-    shared_ptr<TriMesh> mesh(new TriMesh());
+    boost::shared_ptr<TriMesh> mesh(new TriMesh());
     mesh->SetPos(pos,numVertices);
     mesh->SetNormals(normals);
     mesh->AddFace(idx);
@@ -731,9 +731,9 @@ static unsigned int gCylinderFaces[gNumCylinderFaces*3] =
         31,63,32
     };
 
-shared_ptr<TriMesh> StdMeshImporter::UnitCylinder()
+boost::shared_ptr<TriMesh> StdMeshImporter::UnitCylinder()
 {
-    shared_ptr<TriMesh> mesh(new TriMesh());
+    boost::shared_ptr<TriMesh> mesh(new TriMesh());
 
     shared_array<float> pos(new float[gNumCylinderVertices*3]);
     memcpy(pos.get(),gCylinderVertices,gNumCylinderVertices*3*sizeof(float));
@@ -743,7 +743,7 @@ shared_ptr<TriMesh> StdMeshImporter::UnitCylinder()
     memcpy(normals.get(),gCylinderNormals,gNumCylinderVertices*3*sizeof(float));
     mesh->SetNormals(normals);
 
-    shared_ptr<IndexBuffer> idx(new IndexBuffer());
+    boost::shared_ptr<IndexBuffer> idx(new IndexBuffer());
     idx->Cache(gNumCylinderFaces*3,gCylinderFaces);
     mesh->AddFace(idx);
 

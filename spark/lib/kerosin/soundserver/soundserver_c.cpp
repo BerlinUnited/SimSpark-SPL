@@ -57,7 +57,7 @@ FUNCTION(SoundServer,playStream)
             return false;
         }
 
-    shared_ptr<SoundStream> stream = obj->LoadStream(inName);
+    boost::shared_ptr<SoundStream> stream = obj->LoadStream(inName);
 
     if (stream.get() == 0)
         {
@@ -80,7 +80,7 @@ FUNCTION(SoundServer,playModule)
             return false;
         }
 
-    shared_ptr<SoundModule> module = obj->LoadModule(inName);
+    boost::shared_ptr<SoundModule> module = obj->LoadModule(inName);
 
     if (module.get() == 0)
         {
@@ -103,7 +103,7 @@ FUNCTION(SoundServer,playEffect)
             return false;
         }
 
-    shared_ptr<SoundEffect> effect = obj->LoadEffect(inName);
+    boost::shared_ptr<SoundEffect> effect = obj->LoadEffect(inName);
 
     if (effect.get() == 0)
         {

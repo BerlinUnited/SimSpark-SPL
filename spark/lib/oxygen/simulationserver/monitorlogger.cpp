@@ -40,7 +40,7 @@ MonitorLogger::~MonitorLogger()
 void MonitorLogger::OnLink()
 {
     SimControlNode::OnLink();
-    shared_ptr<SimulationServer> sim = GetSimulationServer();
+    boost::shared_ptr<SimulationServer> sim = GetSimulationServer();
     if (sim.get() == 0)
         {
             GetLog()->Error()
@@ -69,7 +69,7 @@ void MonitorLogger::EndCycle()
     SimControlNode::EndCycle();
 
     string info;
-    shared_ptr<Scene> scene = GetActiveScene();
+    boost::shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() != 0
         && scene->GetModifiedNum() > mFullStateLogged )
     {

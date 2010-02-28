@@ -50,7 +50,7 @@ void AgentControl::OnLink()
     }
 }
 
-void AgentControl::ClientConnect(shared_ptr<Client> client)
+void AgentControl::ClientConnect(boost::shared_ptr<Client> client)
 {
     // Make sure that there is enough space in sense message cache vector
     if (client->id >= mClientSenses.size())
@@ -64,7 +64,7 @@ void AgentControl::ClientConnect(shared_ptr<Client> client)
     mGameControlServer->AgentConnect(client->id);
 }
 
-void AgentControl::ClientDisconnect(shared_ptr<Client> client)
+void AgentControl::ClientDisconnect(boost::shared_ptr<Client> client)
 {
     mClientSenses[client->id].clear();
 
@@ -97,7 +97,7 @@ void AgentControl::StartCycle()
              ++iter
              )
             {
-                shared_ptr<NetBuffer>& netBuff = (*iter).second;
+                boost::shared_ptr<NetBuffer>& netBuff = (*iter).second;
                 if (
                     (netBuff.get() == 0) ||
                     (netBuff->IsEmpty())
@@ -113,10 +113,10 @@ void AgentControl::StartCycle()
                     {
                         continue;
                     }
-                shared_ptr<Client>& client = (*clientIter).second;
+                boost::shared_ptr<Client>& client = (*clientIter).second;
 
                 // lookup the AgentAspect node correspoding to the client
-                shared_ptr<AgentAspect> agent =
+                boost::shared_ptr<AgentAspect> agent =
                     mGameControlServer->GetAgentAspect(client->id);
                 if (agent.get() == 0)
                     {
@@ -164,7 +164,7 @@ void AgentControl::EndCycle()
             return;
         }
 
-    shared_ptr<BaseParser> parser = mGameControlServer->GetParser();
+    boost::shared_ptr<BaseParser> parser = mGameControlServer->GetParser();
     if (parser.get() == 0)
         {
             GetLog()->Error()
@@ -180,9 +180,9 @@ void AgentControl::EndCycle()
          ++iter
          )
         {
-            const shared_ptr<Client> &client = (*iter).second;
+            const boost::shared_ptr<Client> &client = (*iter).second;
 
-            shared_ptr<AgentAspect> agent =
+            boost::shared_ptr<AgentAspect> agent =
                 mGameControlServer->GetAgentAspect(client->id);
             if (agent.get() == 0)
                 {
@@ -193,7 +193,7 @@ void AgentControl::EndCycle()
                     agent->SetSynced(false);
                 }
 
-            shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
+            boost::shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
             mClientSenses[client->id] = parser->Generate(senseList);
             if (mClientSenses[client->id].empty())
                 {
@@ -237,7 +237,7 @@ bool AgentControl::AgentsAreSynced()
                     if (closedClients.find(iter->first) != closedClients.end())
                         continue;
 
-                    shared_ptr<AgentAspect> agent =
+                    boost::shared_ptr<AgentAspect> agent =
                         mGameControlServer->GetAgentAspect(iter->second->id);
                     if (agent && !agent->IsSynced())
                     {

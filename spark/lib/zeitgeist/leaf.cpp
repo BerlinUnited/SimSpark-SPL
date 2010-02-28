@@ -97,7 +97,7 @@ void Leaf::GetChildrenSupportingClass(const std::string &/*name*/, TLeafList &/*
 boost::weak_ptr<Node>
 Leaf::GetParentSupportingClass(const std::string &name) const
 {
-  shared_ptr<Node> node
+  boost::shared_ptr<Node> node
     = shared_static_cast<Node>(GetParent().lock());
 
   while
@@ -110,7 +110,7 @@ Leaf::GetParentSupportingClass(const std::string &name) const
       node = node->GetParent().lock();
     }
 
-  return weak_ptr<Node>(node);
+  return boost::weak_ptr<Node>(node);
 }
 
 int
@@ -156,11 +156,11 @@ const std::string& Leaf::GetFullPath() const
     {
         std::string parentPath;
 
-        if (shared_ptr<Leaf> p = GetParent().lock())
+        if (boost::shared_ptr<Leaf> p = GetParent().lock())
         {
             if (p)
             {
-                shared_ptr<Leaf> blah = GetParent().lock();
+                boost::shared_ptr<Leaf> blah = GetParent().lock();
                 parentPath = blah->GetFullPath();
             }
         }
@@ -206,8 +206,8 @@ Leaf::TLeafList::const_iterator Leaf::end() const
 
 void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
 {
-    shared_ptr<Node> oldParent = GetParent().lock();
-    shared_ptr<Leaf> self = shared_static_cast<Leaf>(GetSelf().lock());
+    boost::shared_ptr<Node> oldParent = GetParent().lock();
+    boost::shared_ptr<Leaf> self = shared_static_cast<Leaf>(GetSelf().lock());
 
     if (oldParent.get() != 0)
         {
@@ -241,7 +241,7 @@ void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
         }
 
     // assure a unique name among our siblings
-    shared_ptr<Leaf> sibling = newParent->GetChild(mName);
+    boost::shared_ptr<Leaf> sibling = newParent->GetChild(mName);
 
     if (sibling != self)
         {
@@ -264,7 +264,7 @@ void Leaf::OnUnlink()
 
 void Leaf::UpdateCached()
 {
-    shared_ptr<Core> core(GetCore());
+    boost::shared_ptr<Core> core(GetCore());
 
     for (
          TCachedPathSet::iterator iter = mCachedPaths.begin();

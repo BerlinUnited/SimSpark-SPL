@@ -157,7 +157,7 @@ void SparkMonitor::DescribeBaseNode(stringstream& ss)
             }
 }
 
-void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)
+void SparkMonitor::DescribeLight(stringstream& ss, boost::shared_ptr<Light> light)
 {
     if (! mFullState)
         {
@@ -179,7 +179,7 @@ void SparkMonitor::DescribeLight(stringstream& ss, shared_ptr<Light> light)
        << spec.b() << " " << spec.a() << ")";
 }
 
-void SparkMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, shared_ptr<Transform> transform)
+void SparkMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, boost::shared_ptr<Transform> transform)
 {
     if (mFullState)
         {
@@ -238,7 +238,7 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
             return DescribeBaseNode(ss);
         }
 
-    shared_ptr<SingleMatNode> singleMat =
+    boost::shared_ptr<SingleMatNode> singleMat =
         shared_dynamic_cast<SingleMatNode>(mesh);
 
     if (singleMat.get() != 0)
@@ -279,7 +279,7 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
     
     if (singleMat.get() != 0)
         {
-            shared_ptr<Material> mat = singleMat->GetMaterial();
+            boost::shared_ptr<Material> mat = singleMat->GetMaterial();
             if (mat.get() != 0)
                 {
                     ss << " (sMat " << mat->GetName() << ")";
@@ -298,7 +298,7 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
     }
 }
 
-SparkMonitor::NodeCache* SparkMonitor::LookupNode(shared_ptr<BaseNode> node)
+SparkMonitor::NodeCache* SparkMonitor::LookupNode(boost::shared_ptr<BaseNode> node)
 {
     if (node.get() == 0)
         {
@@ -312,7 +312,7 @@ SparkMonitor::NodeCache* SparkMonitor::LookupNode(shared_ptr<BaseNode> node)
             return &((*iter).second);
         }
 
-    shared_ptr<Transform> transform
+    boost::shared_ptr<Transform> transform
         = shared_dynamic_cast<Transform>(node);
 
     if (transform.get() != 0)
@@ -323,7 +323,7 @@ SparkMonitor::NodeCache* SparkMonitor::LookupNode(shared_ptr<BaseNode> node)
             return &(mNodeCache[node]);
         }
 
-    shared_ptr<StaticMesh> mesh
+    boost::shared_ptr<StaticMesh> mesh
         = shared_dynamic_cast<StaticMesh>(node);
     if (mesh.get() != 0)
         {
@@ -331,7 +331,7 @@ SparkMonitor::NodeCache* SparkMonitor::LookupNode(shared_ptr<BaseNode> node)
             return &(mNodeCache[node]);
         }
 
-    shared_ptr<Light> light
+    boost::shared_ptr<Light> light
         = shared_dynamic_cast<Light>(node);
     if (light.get() != 0)
         {
@@ -345,7 +345,7 @@ SparkMonitor::NodeCache* SparkMonitor::LookupNode(shared_ptr<BaseNode> node)
     return &(mNodeCache[node]);
 }
 
-bool SparkMonitor::DescribeNode(stringstream& ss, shared_ptr<BaseNode> node)
+bool SparkMonitor::DescribeNode(stringstream& ss, boost::shared_ptr<BaseNode> node)
 {
     NodeCache* entry = LookupNode(node);
     if (entry == 0)
@@ -407,13 +407,13 @@ void SparkMonitor::DescribeActiveScene(stringstream& ss)
         }
 }
 
-void SparkMonitor::DescribeScene(stringstream& ss, shared_ptr<BaseNode> node)
+void SparkMonitor::DescribeScene(stringstream& ss, boost::shared_ptr<BaseNode> node)
 {
     bool closeParen = DescribeNode(ss, node);
 
     for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
         {
-            shared_ptr<BaseNode> baseNode = shared_dynamic_cast<BaseNode>(*i);
+            boost::shared_ptr<BaseNode> baseNode = shared_dynamic_cast<BaseNode>(*i);
             if (baseNode.get() == 0)
                 {
                     continue;

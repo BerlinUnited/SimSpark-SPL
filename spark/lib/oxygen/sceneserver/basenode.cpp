@@ -132,7 +132,7 @@ void BaseNode::UpdateHierarchy()
     ListChildrenSupportingClass<BaseNode>(baseNodes);
     for (TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
         {
-            shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
+            boost::shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
             node->UpdateHierarchy();
 
             // here we merge our world bounding volume with the child
@@ -141,10 +141,10 @@ void BaseNode::UpdateHierarchy()
         }
 }
 
-shared_ptr<Scene> BaseNode::GetScene() const
+boost::shared_ptr<Scene> BaseNode::GetScene() const
 {
     // is this node the scene node ?
-    shared_ptr<Scene> self =
+    boost::shared_ptr<Scene> self =
         shared_dynamic_cast<Scene>(GetSelf().lock());
 
     if (self.get() != 0)
@@ -183,9 +183,9 @@ const salt::AABB3& BaseNode::GetWorldBoundingBox() const
     return mWorldBoundingBox;
 }
 
-bool BaseNode::ImportScene(const string& fileName, shared_ptr<ParameterList> parameter)
+bool BaseNode::ImportScene(const string& fileName, boost::shared_ptr<ParameterList> parameter)
 {
-    shared_ptr<SceneServer> sceneServer = shared_dynamic_cast<SceneServer>
+    boost::shared_ptr<SceneServer> sceneServer = shared_dynamic_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
@@ -194,7 +194,7 @@ bool BaseNode::ImportScene(const string& fileName, shared_ptr<ParameterList> par
             return false;
         }
 
-    shared_ptr<BaseNode> node =
+    boost::shared_ptr<BaseNode> node =
         shared_dynamic_cast<BaseNode>(GetSelf().lock());
 
     return sceneServer->ImportScene(fileName,node,parameter);

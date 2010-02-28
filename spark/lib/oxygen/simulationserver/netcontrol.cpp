@@ -72,18 +72,18 @@ NetControl::ESocketType NetControl::GetServerType()
 
 boost::shared_ptr<Socket> NetControl::CreateSocket(ESocketType type)
 {
-    shared_ptr<Socket> socket;
+    boost::shared_ptr<Socket> socket;
 
     try
         {
             switch (type)
                 {
                 case ST_UDP:
-                    socket = shared_ptr<Socket>(new UDPSocket());
+                    socket = boost::shared_ptr<Socket>(new UDPSocket());
                     break;
 
                 case ST_TCP:
-                    socket = shared_ptr<Socket>(new TCPSocket());
+                    socket = boost::shared_ptr<Socket>(new TCPSocket());
                     break;
 
                 default:
@@ -211,7 +211,7 @@ void NetControl::InitSimulation()
 
   if (mNetMessage.get() == 0)
       {
-          mNetMessage = shared_ptr<NetMessage>(new NetMessage());
+          mNetMessage = boost::shared_ptr<NetMessage>(new NetMessage());
       }
 }
 
@@ -239,9 +239,9 @@ void NetControl::DoneSimulation()
     mClients.clear();
 }
 
-void NetControl::AddClient(const Addr& from, shared_ptr<Socket> socket)
+void NetControl::AddClient(const Addr& from, boost::shared_ptr<Socket> socket)
 {
-    shared_ptr<Client> client(new Client(mClientId,from,socket));
+    boost::shared_ptr<Client> client(new Client(mClientId,from,socket));
     mClients[from] = client;
 
     GetLog()->Normal()
@@ -258,10 +258,10 @@ void NetControl::AddClient(const Addr& from, shared_ptr<Socket> socket)
 
 void NetControl::RemoveClient(TAddrMap::iterator iter)
 {
-    shared_ptr<Client> client = (*iter).second;
+    boost::shared_ptr<Client> client = (*iter).second;
     ClientDisconnect(client);
 
-    shared_ptr<Socket> socket = client->socket;
+    boost::shared_ptr<Socket> socket = client->socket;
 
     GetLog()->Normal()
         << "(NetControl) '" << GetName() << "' closing a "
@@ -293,17 +293,17 @@ void NetControl::RemoveClient(const Addr& from)
     RemoveClient(mapIter);
 }
 
-void NetControl::ClientConnect(shared_ptr<Client> /*client*/)
+void NetControl::ClientConnect(boost::shared_ptr<Client> /*client*/)
 {
     // empty callback, implemented in derived classes
 }
 
-void NetControl::ClientDisconnect(shared_ptr<Client> /*client*/)
+void NetControl::ClientDisconnect(boost::shared_ptr<Client> /*client*/)
 {
     // empty callback, implemented in derived classes
 }
 
-void NetControl::SendClientMessage(shared_ptr<Client> client, const string& msg)
+void NetControl::SendClientMessage(boost::shared_ptr<Client> client, const string& msg)
 {
     if (client.get() == 0)
         {
@@ -311,7 +311,7 @@ void NetControl::SendClientMessage(shared_ptr<Client> client, const string& msg)
         }
 
     int rval = 0;
-    shared_ptr<Socket> socket = client->socket;
+    boost::shared_ptr<Socket> socket = client->socket;
 
     if (socket.get() == 0)
         {
@@ -405,7 +405,7 @@ void NetControl::AcceptTCPConnections()
             try
                 {
                     Addr addr;
-                    shared_ptr<Socket> socket(mSocket->accept(addr));
+                    boost::shared_ptr<Socket> socket(mSocket->accept(addr));
 
                     if (socket.get() == 0)
                     {
@@ -489,7 +489,7 @@ void NetControl::StoreFragment(const Addr& addr, int size)
         {
             // allocate a new NetBuffer for the client
             mBuffers[addr] =
-                (shared_ptr<NetBuffer>
+                (boost::shared_ptr<NetBuffer>
                  (new NetBuffer(addr,string(mBuffer.get(),size)))
                  );
         } else
@@ -639,7 +639,7 @@ void NetControl::ReadTCPMessages()
                         }
 
                     // read a fragment
-                    shared_ptr<Client>& client = (*iter).second;
+                    boost::shared_ptr<Client>& client = (*iter).second;
                     int rval = client->socket->recv(mBuffer.get(), mBufferSize);
 
                     if (rval > 0)

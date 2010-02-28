@@ -50,7 +50,7 @@ GeometryServer::OnLink()
 bool
 GeometryServer::InitMeshImporter(const string& importerName)
 {
-    shared_ptr<MeshImporter> importer
+    boost::shared_ptr<MeshImporter> importer
         = shared_dynamic_cast<MeshImporter>(GetCore()->New(importerName));
 
     if (importer.get() == 0)
@@ -69,7 +69,7 @@ GeometryServer::InitMeshImporter(const string& importerName)
     return true;
 }
 
-shared_ptr<TriMesh>
+boost::shared_ptr<TriMesh>
 GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
 {
     // try a direct match
@@ -89,7 +89,7 @@ GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
         GetLog()->Error()
             << "(GeometryServer) Warning: no MeshImporter registered\n";
 
-        return shared_ptr<TriMesh>();
+        return boost::shared_ptr<TriMesh>();
     }
 
     // try to mangle the name
@@ -99,7 +99,7 @@ GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
          ++iter
          )
     {
-        shared_ptr<MeshImporter> importer =
+        boost::shared_ptr<MeshImporter> importer =
             shared_static_cast<MeshImporter>(*iter);
 
         string str = importer->MangleName(name, parameter);
@@ -122,10 +122,10 @@ GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
          ++iter
          )
     {
-        shared_ptr<MeshImporter> importer =
+        boost::shared_ptr<MeshImporter> importer =
             shared_static_cast<MeshImporter>(*iter);
 
-        shared_ptr<TriMesh> mesh = importer->ImportMesh(name,parameter);
+        boost::shared_ptr<TriMesh> mesh = importer->ImportMesh(name,parameter);
 
         if (mesh.get() == 0)
         {
@@ -155,11 +155,11 @@ GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
     GetLog()->Error() << "(GeometryServer) ERROR: cannot import mesh '"
                       << name << "'\n";
 
-    return shared_ptr<TriMesh>();
+    return boost::shared_ptr<TriMesh>();
 }
 
 void
-GeometryServer::RegisterMesh(shared_ptr<TriMesh> mesh)
+GeometryServer::RegisterMesh(boost::shared_ptr<TriMesh> mesh)
 {
     if (mesh.get() == 0)
     {
@@ -192,7 +192,7 @@ GeometryServer::RegisterMesh(shared_ptr<TriMesh> mesh)
     {
         GetLog()->Normal() << "(GeometryServer) additionally registered mesh "
                            << name << " via MeshExporter '" << (*bi)->GetName() << "'\n";
-        shared_ptr<MeshExporter> mb = shared_static_cast<MeshExporter>(*bi);
+        boost::shared_ptr<MeshExporter> mb = shared_static_cast<MeshExporter>(*bi);
         mb->RegisterMesh(mesh);
     }
 }
@@ -200,7 +200,7 @@ GeometryServer::RegisterMesh(shared_ptr<TriMesh> mesh)
 bool
 GeometryServer::InitMeshExporter(const string& name)
 {
-    shared_ptr<MeshExporter> exporter
+    boost::shared_ptr<MeshExporter> exporter
         = shared_dynamic_cast<MeshExporter>(GetCore()->New(name));
 
     if (exporter.get() == 0)

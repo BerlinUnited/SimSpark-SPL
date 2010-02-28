@@ -39,7 +39,7 @@ bool SingleMatNode::SetMaterial(const std::string& name)
 {
     mMaterials.clear();
 
-    shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -49,7 +49,7 @@ bool SingleMatNode::SetMaterial(const std::string& name)
             return false;
         }
 
-    shared_ptr<Material> material = materialServer->GetMaterial(name);
+    boost::shared_ptr<Material> material = materialServer->GetMaterial(name);
 
     if (material.get() == 0)
         {
@@ -63,11 +63,11 @@ bool SingleMatNode::SetMaterial(const std::string& name)
     return true;
 }
 
-shared_ptr<Material> SingleMatNode::GetMaterial()
+boost::shared_ptr<Material> SingleMatNode::GetMaterial()
 {
     if (mMaterials.empty())
         {
-            return shared_ptr<Material>();
+            return boost::shared_ptr<Material>();
         }
 
     return mMaterials.front();
