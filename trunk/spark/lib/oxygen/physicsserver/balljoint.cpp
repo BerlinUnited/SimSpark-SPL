@@ -94,4 +94,6 @@ void BallJoint::SetParameter(int parameter, float value){
 float BallJoint::GetParameter(int parameter) const{
     GetLog()->Warning()
         << "(BallJoint) WARNING: SetParameter undefined for BallJoint, call ignored";
+        
+    return 0.0f;
 }
