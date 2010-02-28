@@ -89,8 +89,8 @@ set(oxygen_LIB_HDRS
     physicsserver/int/universaljointint.h
     physicsserver/int/worldint.h
     
-    #proxyserver/agentproxy.h
-    #proxyserver/proxyserver.h
+    proxyserver/agentproxy.h
+    proxyserver/proxyserver.h
     sceneserver/sceneimporter.h
     sceneserver/basenode.h
     sceneserver/fpscontroller.h
@@ -279,10 +279,10 @@ set(oxygen_LIB_SRCS
     monitorserver/custommonitor_c.cpp
     monitorserver/monitorcmdparser.cpp
     monitorserver/monitorcmdparser_c.cpp
-    #proxyserver/agentproxy.cpp
-    #proxyserver/agentproxy_c.cpp
-    #proxyserver/proxyserver.cpp
-    #proxyserver/proxyserver_c.cpp
+    proxyserver/agentproxy.cpp
+    proxyserver/agentproxy_c.cpp
+    proxyserver/proxyserver.cpp
+    proxyserver/proxyserver_c.cpp
 )
 if(SPADES_FOUND)
    set(oxygen_LIB_SRCS
