@@ -249,7 +249,7 @@ RenderServer::ProcessPicks()
 void
 RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
 {
-    shared_ptr<RenderNode> renderNode = shared_dynamic_cast<RenderNode>(node);
+    boost::shared_ptr<RenderNode> renderNode = shared_dynamic_cast<RenderNode>(node);
     if (renderNode.get() != 0 &&
         ((pass == 0 && !renderNode->IsTransparent()) || (pass == 1 && renderNode->IsTransparent()))
        )
@@ -286,7 +286,7 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
     // traverse the the hierarchy
     for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
     {
-        shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(*i);
+        boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(*i);
         if (node.get() == 0)
         {
             continue;
@@ -367,7 +367,7 @@ void RenderServer::EnablePicking(bool enable, const Vector2f& pickAt, const doub
     mPickRange = pickRange;
 }
 
-weak_ptr<RenderNode> RenderServer::GetPickedNode() const
+boost::weak_ptr<RenderNode> RenderServer::GetPickedNode() const
 {
     return mPickedNode;
 }

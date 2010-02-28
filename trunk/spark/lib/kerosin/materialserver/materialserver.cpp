@@ -38,7 +38,7 @@ MaterialServer::~MaterialServer()
 {
 }
 
-void MaterialServer::RegisterMaterial(shared_ptr<Material> material)
+void MaterialServer::RegisterMaterial(boost::shared_ptr<Material> material)
 {
     if (material.get() == 0)
     {
@@ -46,7 +46,7 @@ void MaterialServer::RegisterMaterial(shared_ptr<Material> material)
     }
 
     // remove any previous material with the same name
-    shared_ptr<Material> previous =
+    boost::shared_ptr<Material> previous =
         shared_dynamic_cast<Material>(GetChild(material->GetName()));
 
     if (previous.get() != 0)
@@ -64,9 +64,9 @@ void MaterialServer::RegisterMaterial(shared_ptr<Material> material)
 
 }
 
-shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
+boost::shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
 {
-    shared_ptr<Material> material =
+    boost::shared_ptr<Material> material =
         shared_dynamic_cast<Material>(GetChild(name));
 
     if (material.get() == 0)
@@ -85,7 +85,7 @@ MaterialServer::ResetMaterials()
     UnlinkChildren();
 
     // (re)create the default material
-    shared_ptr<MaterialSolid> defMat = shared_dynamic_cast<MaterialSolid>
+    boost::shared_ptr<MaterialSolid> defMat = shared_dynamic_cast<MaterialSolid>
         (GetCore()->New("kerosin/MaterialSolid"));
 
     defMat->SetName("default");
@@ -102,7 +102,7 @@ MaterialServer::OnLink()
 bool
 MaterialServer::InitMaterialExporter(const std::string& name)
 {
-    shared_ptr<MaterialExporter> exporter
+    boost::shared_ptr<MaterialExporter> exporter
         = shared_dynamic_cast<MaterialExporter>(GetCore()->New(name));
 
     if (exporter.get() == 0)
@@ -129,21 +129,21 @@ MaterialServer::ExportAllMaterial()
 
     for (TLeafList::const_iterator mi = materials.begin(); mi != materials.end(); ++mi)
     {
-        shared_ptr<Material> m = shared_static_cast<Material>(*mi);
+        boost::shared_ptr<Material> m = shared_static_cast<Material>(*mi);
         ExportMaterial(m);
     }
     GetLog()->Debug() << "(MaterialServer) ExportAllMaterial done\n";
 }
 
 void
-MaterialServer::ExportMaterial(shared_ptr<Material> material)
+MaterialServer::ExportMaterial(boost::shared_ptr<Material> material)
 {
     TLeafList exporters;
     ListChildrenSupportingClass<MaterialExporter>(exporters);
 
     for (TLeafList::const_iterator bi = exporters.begin(); bi != exporters.end(); ++bi)
     {
-        shared_ptr<MaterialExporter> mb = shared_static_cast<MaterialExporter>(*bi);
+        boost::shared_ptr<MaterialExporter> mb = shared_static_cast<MaterialExporter>(*bi);
         mb->RegisterMaterial(material);
     }
 }

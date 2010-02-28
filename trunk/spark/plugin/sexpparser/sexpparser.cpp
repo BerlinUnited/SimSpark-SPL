@@ -36,12 +36,12 @@ SexpParser::~SexpParser()
 {
 }
 
-shared_ptr<PredicateList>
+boost::shared_ptr<PredicateList>
 SexpParser::Parse(const std::string& input)
 {
     size_t len = input.length();
 
-    shared_ptr<PredicateList> predList(new PredicateList);
+    boost::shared_ptr<PredicateList> predList(new PredicateList);
     if (len == 0)
     {
             return predList;
@@ -102,7 +102,7 @@ SexpParser::SexpToList(ParameterList& arguments, const sexp_t* const sexp)
 
 void
 SexpParser::SexpToPredicate
-(shared_ptr<PredicateList>& predList, const sexp_t* const sexp)
+(boost::shared_ptr<PredicateList>& predList, const sexp_t* const sexp)
 {
     // throw away outer brackets (i.e. we have a list at the top
     // level)

@@ -17,13 +17,13 @@ int main()
 {
     Zeitgeist zg("." PACKAGE_NAME);
 
-    shared_ptr<CoreContext> context = zg.CreateContext();
+    boost::shared_ptr<CoreContext> context = zg.CreateContext();
 #if HAVE_KEROSIN_H
     kerosin::Kerosin kKerosin(zg);
 #endif
     oxygen::Oxygen kOxygen(zg);
 
-    shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
+    boost::shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
 
     scriptServer->Run("coretest.rb");
 

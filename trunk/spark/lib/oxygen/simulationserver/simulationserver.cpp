@@ -153,7 +153,7 @@ int SimulationServer::GetCycle()
 
 bool SimulationServer::InitControlNode(const std::string& className, const std::string& name)
 {
-    shared_ptr<Leaf> prevCtrNode = GetChild(name);
+    boost::shared_ptr<Leaf> prevCtrNode = GetChild(name);
     if (prevCtrNode.get() != 0)
         {
             RemoveChildReference(prevCtrNode);
@@ -163,7 +163,7 @@ bool SimulationServer::InitControlNode(const std::string& className, const std::
                 << name << "'\n";
         }
 
-    shared_ptr<SimControlNode> control
+    boost::shared_ptr<SimControlNode> control
         = shared_dynamic_cast<SimControlNode>(GetCore()->New(className));
 
     if (control.get() == 0)
@@ -183,10 +183,10 @@ bool SimulationServer::InitControlNode(const std::string& className, const std::
     return true;
 }
 
-shared_ptr<SimControlNode>
+boost::shared_ptr<SimControlNode>
 SimulationServer::GetControlNode(const string& controlName)
 {
-    shared_ptr<SimControlNode> ctrNode =
+    boost::shared_ptr<SimControlNode> ctrNode =
         shared_dynamic_cast<SimControlNode>(GetChild(controlName));
 
     if (ctrNode.get() == 0)
@@ -247,7 +247,7 @@ void SimulationServer::ControlEvent(EControlEvent event)
          ++iter
          )
         {
-            shared_ptr<SimControlNode> ctrNode =
+            boost::shared_ptr<SimControlNode> ctrNode =
                 shared_dynamic_cast<SimControlNode>(*iter);
 
             if (ctrNode.get() == 0)
@@ -319,7 +319,7 @@ void SimulationServer::Run(int argc, char** argv)
     else
         {
             GetLog()->Normal()<< "(SimulationServer) running in single thread\n";
-            shared_ptr<SimControlNode> inputCtr = GetControlNode("InputControl");
+            boost::shared_ptr<SimControlNode> inputCtr = GetControlNode("InputControl");
             if ( !mAutoTime && inputCtr.get() == 0 )
                 {
                     GetLog()->Error()<< "(SimulationServer) ERROR: can not get InputControl\n";
@@ -336,7 +336,7 @@ void SimulationServer::Run(int argc, char** argv)
     Done();
 }
 
-void SimulationServer::Cycle(shared_ptr<SimControlNode> &inputCtr)
+void SimulationServer::Cycle(boost::shared_ptr<SimControlNode> &inputCtr)
 {
     ++mCycle;
 
@@ -375,17 +375,17 @@ void SimulationServer::Done()
         << mSimTime << "\n";
 }
 
-shared_ptr<GameControlServer> SimulationServer::GetGameControlServer()
+boost::shared_ptr<GameControlServer> SimulationServer::GetGameControlServer()
 {
     return mGameControlServer.get();
 }
 
-shared_ptr<MonitorServer> SimulationServer::GetMonitorServer()
+boost::shared_ptr<MonitorServer> SimulationServer::GetMonitorServer()
 {
     return mMonitorServer.get();
 }
 
-shared_ptr<SceneServer> SimulationServer::GetSceneServer()
+boost::shared_ptr<SceneServer> SimulationServer::GetSceneServer()
 {
     return mSceneServer.get();
 }
@@ -413,14 +413,14 @@ void SimulationServer::RunMultiThreaded()
     // create new threads for each SimControlNode
     for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
         {
-            shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+            boost::shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
             if (ctrNode.get() == 0) continue;
 
             ctrThrdGroup.create_thread(boost::bind(&SimulationServer::SimControlThread,
                                                    this, ctrNode));
         }
 
-    shared_ptr<SimControlNode> renderControl = GetControlNode("RenderControl");
+    boost::shared_ptr<SimControlNode> renderControl = GetControlNode("RenderControl");
 
     float initDelta, finalDelta;
     while (!mExitThreads)
@@ -463,7 +463,7 @@ void SimulationServer::RunMultiThreaded()
     ctrThrdGroup.join_all();
 }
 
-void SimulationServer::SimControlThread(shared_ptr<SimControlNode> controlNode)
+void SimulationServer::SimControlThread(boost::shared_ptr<SimControlNode> controlNode)
 {
     if (!mThreadBarrier)
         {

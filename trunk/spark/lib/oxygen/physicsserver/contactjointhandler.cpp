@@ -55,7 +55,7 @@ void ContactJointHandler::OnLink()
 }
 
 void
-ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, GenericContact& contact)
+ContactJointHandler::HandleCollision(boost::shared_ptr<Collider> collidee, GenericContact& contact)
 {
     if (
         (mCollider.get() == 0) ||
@@ -80,7 +80,7 @@ ContactJointHandler::HandleCollision(shared_ptr<Collider> collidee, GenericConta
         }
 
     // check if the collidee has a ContactJointHandler registered to it
-    shared_ptr<ContactJointHandler> handler =
+    boost::shared_ptr<ContactJointHandler> handler =
         collidee->FindChildSupportingClass<ContactJointHandler>();
 
     if (handler.get() == 0)

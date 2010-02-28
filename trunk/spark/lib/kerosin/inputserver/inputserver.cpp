@@ -184,7 +184,7 @@ bool InputServer::Init(const std::string &inputSysName)
     GetScript()->CreateVariable("Input.IC_AXIST", Input::IC_AXIST);
 
     // create the inputsystem
-    shared_ptr<InputSystem> inputSystem =
+    boost::shared_ptr<InputSystem> inputSystem =
         shared_dynamic_cast<InputSystem>(GetCore()->New(inputSysName));
 
     if(inputSystem.get() == 0)
@@ -218,9 +218,9 @@ bool InputServer::Init(const std::string &inputSysName)
     return true;
 }
 
-shared_ptr<InputSystem> InputServer::GetInputSystem()
+boost::shared_ptr<InputSystem> InputServer::GetInputSystem()
 {
-    shared_ptr<InputSystem> inputSystem = shared_dynamic_cast<InputSystem>
+    boost::shared_ptr<InputSystem> inputSystem = shared_dynamic_cast<InputSystem>
         (GetChild("inputsystem"));
 
     return inputSystem;
@@ -231,7 +231,7 @@ bool InputServer::CreateDevice(const std::string &deviceName)
 {
     GetLog()->Normal() << "(InputServer) CreateDevice " << deviceName << "\n";
 
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+    boost::shared_ptr<InputSystem> inputSystem = GetInputSystem();
 
     if (inputSystem.get() == 0)
         {
@@ -250,7 +250,7 @@ bool InputServer::CreateDevice(const std::string &deviceName)
 
 void InputServer::Reset()
 {
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+    boost::shared_ptr<InputSystem> inputSystem = GetInputSystem();
 
     if (inputSystem.get() != 0)
         {
@@ -264,7 +264,7 @@ void InputServer::Reset()
 bool
 InputServer::GetInput(Input &input, bool raw)
 {
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+    boost::shared_ptr<InputSystem> inputSystem = GetInputSystem();
 
     if (inputSystem.get() == 0)
     {
@@ -471,7 +471,7 @@ void InputServer::Invoke(int cmd)
     input.mId   = cmd;
     input.mData.l = 0;
 
-    shared_ptr<InputSystem> inputSystem = GetInputSystem();
+    boost::shared_ptr<InputSystem> inputSystem = GetInputSystem();
     if (inputSystem.get() == 0)
         {
             GetLog()->Error()

@@ -40,7 +40,7 @@ Accelerometer::~Accelerometer()
 
 void Accelerometer::OnLink()
 {
-    shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+    boost::shared_ptr<Transform> transformParent = shared_static_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());
 
     mBody = shared_static_cast<const RigidBody>

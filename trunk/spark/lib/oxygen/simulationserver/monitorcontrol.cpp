@@ -51,7 +51,7 @@ void MonitorControl::OnLink()
         }
 }
 
-void MonitorControl::ClientConnect(shared_ptr<Client> client)
+void MonitorControl::ClientConnect(boost::shared_ptr<Client> client)
 {
     if (
         (mMonitorServer.get() == 0) ||
@@ -65,7 +65,7 @@ void MonitorControl::ClientConnect(shared_ptr<Client> client)
     mNetMessage->PrepareToSend(header);
     SendClientMessage(client->addr,header);
 
-    shared_ptr<Scene> scene = GetActiveScene();
+    boost::shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() != 0)
     {
         mFullStateLogged = scene->GetModifiedNum();
@@ -88,7 +88,7 @@ void MonitorControl::EndCycle()
     if ( !mClients.empty() )
     {
         string info;
-        shared_ptr<Scene> scene = GetActiveScene();
+        boost::shared_ptr<Scene> scene = GetActiveScene();
         if (scene.get() != 0
             && scene->GetModifiedNum() > mFullStateLogged )
         {
@@ -132,7 +132,7 @@ void MonitorControl::StartCycle()
          ++iter
          )
         {
-            shared_ptr<NetBuffer>& netBuff = (*iter).second;
+            boost::shared_ptr<NetBuffer>& netBuff = (*iter).second;
             if (
                 (netBuff.get() == 0) ||
                 (netBuff->IsEmpty())

@@ -37,7 +37,7 @@ void Behavior::OnLink()
         return ;
     }
 
-    mTrainControl->ClientConnect(shared_ptr<Behavior>(this));
+    mTrainControl->ClientConnect(boost::shared_ptr<Behavior>(this));
 }
 
 void Behavior::OnUnlink()
@@ -50,7 +50,7 @@ void Behavior::OnUnlink()
         return ;
     }
 
-    mTrainControl->ClientDisconnect(shared_ptr<Behavior>(this));
+    mTrainControl->ClientDisconnect(boost::shared_ptr<Behavior>(this));
     mTrainControl.reset();
 }
 

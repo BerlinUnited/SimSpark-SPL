@@ -44,7 +44,7 @@ bool Hinge2Effector::Realize(boost::shared_ptr<ActionObject> action)
             return false;
         }
 
-    shared_ptr<Hinge2Action> hinge2Action =
+    boost::shared_ptr<Hinge2Action> hinge2Action =
         shared_dynamic_cast<Hinge2Action>(action);
 
     if (hinge2Action.get() == 0)
@@ -60,7 +60,7 @@ bool Hinge2Effector::Realize(boost::shared_ptr<ActionObject> action)
 
     if (hinge2Action->GetMotorVelocity() != 0)
         {
-            shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
+            boost::shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
                 {
                     body->Enable();
@@ -70,7 +70,7 @@ bool Hinge2Effector::Realize(boost::shared_ptr<ActionObject> action)
     return true;
 }
 
-shared_ptr<ActionObject> Hinge2Effector::GetActionObject(const Predicate& predicate)
+boost::shared_ptr<ActionObject> Hinge2Effector::GetActionObject(const Predicate& predicate)
 {
     for(;;)
         {
@@ -97,8 +97,8 @@ shared_ptr<ActionObject> Hinge2Effector::GetActionObject(const Predicate& predic
                     break;
                 }
 
-            return shared_ptr<Hinge2Action>(new Hinge2Action(GetPredicate(),velocity));
+            return boost::shared_ptr<Hinge2Action>(new Hinge2Action(GetPredicate(),velocity));
         }
 
-    return shared_ptr<ActionObject>();
+    return boost::shared_ptr<ActionObject>();
 }

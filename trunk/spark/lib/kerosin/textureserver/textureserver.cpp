@@ -65,15 +65,15 @@ boost::shared_ptr<Texture> TextureServer::GetTexture(const std::string &name)
 
     if (mImageServer.expired())
     {
-        return shared_ptr<Texture>();
+        return boost::shared_ptr<Texture>();
     }
 
     // no match for that name, so we have to load it
-    shared_ptr<Image> image = mImageServer->Load(name.c_str());
+    boost::shared_ptr<Image> image = mImageServer->Load(name.c_str());
 
     if (! image.get())
     {
-        return shared_ptr<Texture>();
+        return boost::shared_ptr<Texture>();
     }
 
     bool use_gl = false;
@@ -84,7 +84,7 @@ boost::shared_ptr<Texture> TextureServer::GetTexture(const std::string &name)
 
     Texture2D *tex2D = new Texture2D(use_gl);
     tex2D->Create(image);
-    shared_ptr<Texture> texture(tex2D);
+    boost::shared_ptr<Texture> texture(tex2D);
 
     // register the texture, so we will find it later
     mTextureCache[name] = texture;

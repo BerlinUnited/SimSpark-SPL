@@ -133,7 +133,7 @@ bool InputSystemSDL::CreateDevice(const std::string &deviceName)
     // first, we mangle the deviceName to avoid nameclashes
     std::string mangledName = deviceName + "SDL";
 
-    shared_ptr<InputDevice> device =
+    boost::shared_ptr<InputDevice> device =
         shared_static_cast<InputDevice>(GetCore()->New(mangledName));
 
     if (device.get() == NULL)
@@ -183,7 +183,7 @@ int InputSystemSDL::EventFilter(const SDL_Event *event)
     // loop through all children
     for (TLeafList::iterator i = mChildren.begin(); i!=mChildren.end(); ++i)
         {
-            shared_ptr<InputDeviceSDL> device = shared_static_cast<InputDeviceSDL>(*i);
+            boost::shared_ptr<InputDeviceSDL> device = shared_static_cast<InputDeviceSDL>(*i);
             // every device gets a chance to filter the event, the first one
             // who claims it, gets it
             if (device->EventFilter(event) == 0)

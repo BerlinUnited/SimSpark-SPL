@@ -42,7 +42,7 @@ NetClient::NetClient() : SimControlNode()
     mBufferSize = 64 * 1024;
     mBuffer = shared_array<char>(new char[mBufferSize]);
     mType = NetControl::ST_TCP;
-    mNetBuffer = shared_ptr<NetBuffer>(new NetBuffer());
+    mNetBuffer = boost::shared_ptr<NetBuffer>(new NetBuffer());
 }
 
 NetClient::~NetClient()
@@ -138,7 +138,7 @@ bool NetClient::Connect()
 
   if (mNetMessage.get() == 0)
       {
-          mNetMessage = shared_ptr<NetMessage>(new NetMessage());
+          mNetMessage = boost::shared_ptr<NetMessage>(new NetMessage());
       }
 
   return true;

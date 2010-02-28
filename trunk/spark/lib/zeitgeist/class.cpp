@@ -44,7 +44,7 @@ Class::~Class()
              i != mInstances.end(); ++i
              )
         {
-            if (shared_ptr<Object> j = i->lock())
+            if (boost::shared_ptr<Object> j = i->lock())
             {
                 cout << "    " << j.get() << endl;
             } else
@@ -57,7 +57,7 @@ Class::~Class()
 
 boost::shared_ptr<Object> Class::Create()
 {
-    shared_ptr<Object> obj(CreateInstance());
+    boost::shared_ptr<Object> obj(CreateInstance());
 
     if (obj.get())
     {
@@ -96,7 +96,7 @@ void Class::AttachInstance(const boost::weak_ptr<Object> &instance)
 void Class::DetachInstance(const boost::weak_ptr<Object> &instance)
 {
     // mInstances.remove() doesn't work in this case because
-    // operator== is not implemented for weak_ptr
+    // operator== is not implemented for boost::weak_ptr
     TObjectList::iterator first = mInstances.begin();
     TObjectList::iterator last = mInstances.end();
 
@@ -147,7 +147,7 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName) const
 
     // ok, we don't have the requested function, so we'll try the base
     // class objects
-    shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
+    boost::shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
 
     for (
          TStringList::const_iterator baseClass = mBaseClasses.begin();
@@ -157,7 +157,7 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName) const
     {
         // this should get the base class object (it has to live on
         // the same level of the hierarchy as this class object)
-        shared_ptr<Class> theClass = shared_static_cast<Class>
+        boost::shared_ptr<Class> theClass = shared_static_cast<Class>
             (GetCore()->Get(*baseClass, classDir));
 
         if (theClass)
@@ -196,7 +196,7 @@ bool Class::SupportsClass(const std::string &name) const
     }
 
     // check base-classes
-    shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
+    boost::shared_ptr<Leaf> classDir = GetCore()->Get("/classes");
 
     for (
          TStringList::const_iterator i = mBaseClasses.begin();
@@ -204,7 +204,7 @@ bool Class::SupportsClass(const std::string &name) const
          ++i
          )
     {
-        shared_ptr<Class> theClass = shared_static_cast<Class>
+        boost::shared_ptr<Class> theClass = shared_static_cast<Class>
             (GetCore()->Get(*i, classDir));
 
         if (theClass)

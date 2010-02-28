@@ -26,7 +26,7 @@
 using namespace oxygen;
 using namespace boost;
 
-shared_ptr<AgentAspect>
+boost::shared_ptr<AgentAspect>
 Effector::GetAgentAspect()
 {
   return shared_static_cast<AgentAspect>

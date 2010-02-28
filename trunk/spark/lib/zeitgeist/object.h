@@ -43,7 +43,7 @@ class ScriptServer;
 /** Object is the base class of all objects in the Zeitgeist
  *  framework. An object is characterized by a single thing, the class
  *  which created it. The core it belongs to can be reached via the
- *  class object. Every object holds a shared_ptr to the class object,
+ *  class object. Every object holds a boost::shared_ptr to the class object,
  *  which created it.
 */
 

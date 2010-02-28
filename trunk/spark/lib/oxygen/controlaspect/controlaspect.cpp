@@ -38,24 +38,24 @@ ControlAspect::~ControlAspect()
 {
 }
 
-shared_ptr<Scene>
+boost::shared_ptr<Scene>
 ControlAspect::GetActiveScene()
 {
-    shared_ptr<SceneServer> sceneServer =
+    boost::shared_ptr<SceneServer> sceneServer =
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
     {
         GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
-        return shared_ptr<Scene>();
+        return boost::shared_ptr<Scene>();
     }
 
-    shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
+    boost::shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
 
     if (activeScene.get() == 0)
     {
         GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
-        return shared_ptr<Scene>();
+        return boost::shared_ptr<Scene>();
     }
 
     return activeScene;

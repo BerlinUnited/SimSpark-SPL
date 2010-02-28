@@ -55,10 +55,10 @@ void Collider::OnLink()
     
     if (mGeomID == 0) return;
     
-    weak_ptr<Node> parent = GetParent();
+    boost::weak_ptr<Node> parent = GetParent();
     if (parent.expired()) return; 
 
-    shared_ptr<TransformCollider> tcParent =
+    boost::shared_ptr<TransformCollider> tcParent =
         shared_dynamic_cast<TransformCollider>(parent.lock());
 
     if (tcParent.get() != 0)
@@ -77,7 +77,7 @@ void Collider::OnLink()
     mColliderImp->SetSpace(spaceID, mGeomID, this);
     
     // if there is a Body below our parent, link to it
-    shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
+    boost::shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
         (parent.lock()->GetChildOfClass("RigidBody"));
 
     if (body.get() != 0) 
@@ -121,7 +121,7 @@ long Collider::GetGeomID()
 
 bool Collider::AddCollisionHandler(const std::string& handlerName)
 {
-    shared_ptr<CollisionHandler> handler =
+    boost::shared_ptr<CollisionHandler> handler =
         shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
 
     if (handler.get() == 0)
@@ -147,7 +147,7 @@ void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
          ++iter
          )
         {
-            shared_ptr<CollisionHandler> handler =
+            boost::shared_ptr<CollisionHandler> handler =
                 shared_static_cast<CollisionHandler>(*iter);
 
             if (
@@ -162,11 +162,11 @@ void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
         }
 }
 
-shared_ptr<Collider> Collider::GetCollider(long geomID)
+boost::shared_ptr<Collider> Collider::GetCollider(long geomID)
 {
     if (geomID == 0)
         {
-            return shared_ptr<Collider>();
+            return boost::shared_ptr<Collider>();
         }
 
     Collider* collPtr =
@@ -177,16 +177,16 @@ shared_ptr<Collider> Collider::GetCollider(long geomID)
             // we cannot use the logserver here
             cerr << "ERROR: (Collider) no Collider found for GeomID "
                  << geomID << "\n";
-            return shared_ptr<Collider>();
+            return boost::shared_ptr<Collider>();
         }
 
-    shared_ptr<Collider> collider = shared_static_cast<Collider>
+    boost::shared_ptr<Collider> collider = shared_static_cast<Collider>
         (collPtr->GetSelf().lock());
 
     if (collider.get() == 0)
         {
             // we cannot use the logserver here
-            cerr << "ERROR: (Collider) got no shared_ptr for GeomID "
+            cerr << "ERROR: (Collider) got no boost::shared_ptr for GeomID "
                  << geomID << "\n";
         }
 

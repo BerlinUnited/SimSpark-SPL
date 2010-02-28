@@ -43,12 +43,12 @@ CoreContext::~CoreContext()
 boost::shared_ptr<Leaf> CoreContext::New(const std::string& className, const std::string& pathStr)
 {
     // first, we try to create the class with the core
-    shared_ptr<Object> instance = mCore->New(className);
+    boost::shared_ptr<Object> instance = mCore->New(className);
 
     if (instance.get())
         {
             // now, we check the type by dynamic casting to leaf
-            shared_ptr<Leaf> leaf = shared_static_cast<Leaf>(instance);
+            boost::shared_ptr<Leaf> leaf = shared_static_cast<Leaf>(instance);
 
             if (leaf.get() != NULL)
                 {
@@ -63,12 +63,12 @@ boost::shared_ptr<Leaf> CoreContext::New(const std::string& className, const std
         }
 
     // return default constructed 'NULL' object
-    return shared_ptr<Leaf>();
+    return boost::shared_ptr<Leaf>();
 }
 
 bool CoreContext::Delete (const std::string &name)
 {
-    shared_ptr<Leaf> leaf = Get(name);
+    boost::shared_ptr<Leaf> leaf = Get(name);
 
     if (leaf.get())
         {
@@ -82,7 +82,7 @@ bool CoreContext::Delete (const std::string &name)
 
 boost::shared_ptr<Leaf> CoreContext::Select(const std::string &pathStr)
 {
-    shared_ptr<Leaf> leaf = Get(pathStr);
+    boost::shared_ptr<Leaf> leaf = Get(pathStr);
 
     if (leaf.get())
         {
@@ -110,7 +110,7 @@ bool CoreContext::Install(const boost::shared_ptr<Leaf> &leaf, const std::string
             // now, we have named the leaf object, so we can install it
         }
 
-    shared_ptr<Leaf> current;
+    boost::shared_ptr<Leaf> current;
 
     // check if we have a relative or absolute path
     if (path.IsAbsolute())

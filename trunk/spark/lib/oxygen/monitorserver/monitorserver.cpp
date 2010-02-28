@@ -52,7 +52,7 @@ bool
 MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
 {
     // check if a monitor system of the requested type was already created
-    shared_ptr<MonitorSystem> monitorSys =
+    boost::shared_ptr<MonitorSystem> monitorSys =
         shared_dynamic_cast<MonitorSystem>(GetChildOfClass(monitorSysName));
 
     if (monitorSys.get() != 0)
@@ -90,7 +90,7 @@ bool
 MonitorServer::RegisterMonitorItem(const std::string& monitorItemName)
 {
     // check if a monitor item of the requested type was already created
-    shared_ptr<MonitorItem> monitorItem =
+    boost::shared_ptr<MonitorItem> monitorItem =
         shared_dynamic_cast<MonitorItem>(GetChildOfClass(monitorItemName));
 
     if (monitorItem.get() != 0)
@@ -144,7 +144,7 @@ MonitorServer::CollectItemPredicates(bool initial, PredicateList& pList)
         ++iter
         )
     {
-        shared_ptr<MonitorItem> item =
+        boost::shared_ptr<MonitorItem> item =
             shared_static_cast<MonitorItem>(*iter);
 
         if (initial)
@@ -159,7 +159,7 @@ MonitorServer::CollectItemPredicates(bool initial, PredicateList& pList)
 
 string MonitorServer::GetMonitorHeaderInfo()
 {
-    shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
+    boost::shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
     if (monitorSystem.get() == 0)
     {
@@ -180,7 +180,7 @@ string MonitorServer::GetMonitorData()
         return mData;
     }
     
-    shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
+    boost::shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
     if (monitorSystem.get() == 0)
         {
@@ -196,7 +196,7 @@ string MonitorServer::GetMonitorData()
 
 void MonitorServer::ParseMonitorMessage(const string& data)
 {
-    shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
+    boost::shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
     if (monitorSystem.get() != 0)
         {

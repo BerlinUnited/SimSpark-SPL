@@ -27,7 +27,7 @@ using namespace oxygen;
 using namespace zeitgeist;
 
 bool
-TouchPerceptor::Percept(shared_ptr<PredicateList> predList)
+TouchPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
     Predicate& predicate = predList->AddPredicate();
     predicate.name = "TCH";

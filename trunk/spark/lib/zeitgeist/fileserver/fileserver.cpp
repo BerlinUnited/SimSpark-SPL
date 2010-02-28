@@ -71,26 +71,26 @@ bool FileServer::LocateResource(const std::string& inName, std::string& outName)
     return false;
 }
 
-shared_ptr<salt::RFile> FileServer::OpenResource(const std::string& inName)
+boost::shared_ptr<salt::RFile> FileServer::OpenResource(const std::string& inName)
 {
     string fname;
     if (! LocateResource(inName, fname))
         {
             GetLog()->Error() << "(FileServer::OpenResource) Cannot locate file '"
                               << inName << "'\n";
-            return shared_ptr<salt::RFile>();
+            return boost::shared_ptr<salt::RFile>();
         }
 
     return Open(fname);
 }
 
-shared_ptr<salt::RFile> FileServer::Open(const string& inName)
+boost::shared_ptr<salt::RFile> FileServer::Open(const string& inName)
 {
     for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
         {
-            shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(*i);
+            boost::shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(*i);
 
-            shared_ptr<salt::RFile> file(fileSys->Open(inName));
+            boost::shared_ptr<salt::RFile> file(fileSys->Open(inName));
 
             //first successful is returned
             if(file.get() != 0)
@@ -100,7 +100,7 @@ shared_ptr<salt::RFile> FileServer::Open(const string& inName)
         }
 
     // try to open it via the regular file system
-    shared_ptr<salt::RFile> file(new StdFile());
+    boost::shared_ptr<salt::RFile> file(new StdFile());
     if (! file->Open(inName.c_str()))
         {
             file.reset();
@@ -111,7 +111,7 @@ shared_ptr<salt::RFile> FileServer::Open(const string& inName)
 
 FileServer::THandle FileServer::Register(const string& inName)
 {
-    shared_ptr<salt::RFile> file = Open(inName);
+    boost::shared_ptr<salt::RFile> file = Open(inName);
 
     if (file.get() == 0)
         {
@@ -125,7 +125,7 @@ FileServer::THandle FileServer::Register(const string& inName)
     return h;
 }
 
-shared_ptr<salt::RFile> FileServer::Get(THandle handle) const
+boost::shared_ptr<salt::RFile> FileServer::Get(THandle handle) const
 {
     TFileMap::const_iterator iter = mFileMap.find(handle);
 
@@ -134,7 +134,7 @@ shared_ptr<salt::RFile> FileServer::Get(THandle handle) const
             GetLog()->Warning()
                 << "(FileServer::Get) Warning: Unknown file handle "
                 << handle << "\n";
-            return shared_ptr<salt::RFile>();
+            return boost::shared_ptr<salt::RFile>();
         }
 
     return (*iter).second;
@@ -179,7 +179,7 @@ bool FileServer::Exist(const string& inName)
 // this routine registers a new file system instance with the server
 bool FileServer::Mount(const string& inFileSysName, const string& inPath)
 {
-    shared_ptr<FileSystem> fileSys =
+    boost::shared_ptr<FileSystem> fileSys =
         shared_static_cast<FileSystem>(GetChild(inPath));
 
     if (fileSys)
@@ -229,7 +229,7 @@ bool FileServer::Unmount(const string& inPath)
             return true;
         }
 
-    shared_ptr<Leaf> leaf = GetChild(inPath);
+    boost::shared_ptr<Leaf> leaf = GetChild(inPath);
 
     if(leaf)
     {
@@ -242,7 +242,7 @@ bool FileServer::Unmount(const string& inPath)
 
 bool FileServer::Unmount(const string& inFileSysName, const string& inPath)
 {
-  shared_ptr<FileSystem> fileSystem = shared_static_cast<FileSystem>(GetChild(inPath));
+  boost::shared_ptr<FileSystem> fileSystem = shared_static_cast<FileSystem>(GetChild(inPath));
 
   if(fileSystem)
     {

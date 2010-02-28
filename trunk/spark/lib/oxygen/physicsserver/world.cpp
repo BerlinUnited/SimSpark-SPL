@@ -120,7 +120,7 @@ void World::DestroyPhysicsObject()
 
     recurseLock = true;
 
-    shared_ptr<World> space = GetWorld();
+    boost::shared_ptr<World> space = GetWorld();
     if (space.get() != 0)
         {
             space->DestroyPhysicsObject();

@@ -110,8 +110,8 @@ void Space::HandleCollide(long obj1, long obj2)
     const long s2 = mSpaceImp->FetchSpace(obj2);
 
     // get shared pointers to the two corresponding Collider nodes first
-    shared_ptr<Collider> collider = Collider::GetCollider(obj1);
-    shared_ptr<Collider> collidee = Collider::GetCollider(obj2);
+    boost::shared_ptr<Collider> collider = Collider::GetCollider(obj1);
+    boost::shared_ptr<Collider> collidee = Collider::GetCollider(obj2);
 
     if (
         (collider.get() == 0) ||
@@ -147,7 +147,7 @@ void Space::OnLink()
 {
     PhysicsObject::OnLink();
 
-    shared_ptr<Space> space = GetSpace();
+    boost::shared_ptr<Space> space = GetSpace();
     long spaceID = 0;
 
     if (space.get() != 0)
@@ -207,7 +207,7 @@ void Space::DestroySpaceObjects()
     scene->ListChildrenSupportingClass<PhysicsObject>(objects, recursive);
 
     bool globalSpace = IsGlobalSpace();
-    shared_ptr<Space> self = shared_static_cast<Space>(GetSelf().lock());
+    boost::shared_ptr<Space> self = shared_static_cast<Space>(GetSelf().lock());
 
     for (
          TLeafList::iterator iter = objects.begin();
@@ -215,7 +215,7 @@ void Space::DestroySpaceObjects()
          ++iter
          )
         {
-            shared_ptr<PhysicsObject> object = shared_static_cast<PhysicsObject>(*iter);
+            boost::shared_ptr<PhysicsObject> object = shared_static_cast<PhysicsObject>(*iter);
             if (object == self)
             {
                 continue;

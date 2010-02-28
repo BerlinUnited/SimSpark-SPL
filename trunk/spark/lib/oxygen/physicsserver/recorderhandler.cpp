@@ -28,7 +28,7 @@ void
 RecorderHandler::HandleCollision
 (boost::shared_ptr<Collider> collidee, GenericContact& /*contact*/)
 {
-    mCollisionSet.insert(weak_ptr<Collider>(collidee));
+    mCollisionSet.insert(boost::weak_ptr<Collider>(collidee));
 }
 
 void
@@ -47,13 +47,13 @@ RecorderHandler::GetParentsSupportingClass
          ++iter
          )
         {
-            shared_ptr<Collider> collidee = (*iter).lock();
+            boost::shared_ptr<Collider> collidee = (*iter).lock();
             if (collidee.get() == 0)
                 {
                     continue;
                 }
 
-            weak_ptr<Node> parent =
+            boost::weak_ptr<Node> parent =
                 collidee->GetParentSupportingClass(name);
 
             if (! parent.expired())

@@ -36,14 +36,14 @@ UniversalJointEffector::~UniversalJointEffector()
 {
 }
 
-bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
+bool UniversalJointEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
     if (mJoint.get() == 0)
         {
             return false;
         }
 
-    shared_ptr<UniversalJointAction> universalAction =
+    boost::shared_ptr<UniversalJointAction> universalAction =
         shared_dynamic_cast<UniversalJointAction>(action);
 
     if (universalAction.get() == 0)
@@ -79,7 +79,7 @@ bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
     if (universalAction->GetMotorVelocity(Joint::AI_FIRST) != 0
             || universalAction->GetMotorVelocity(Joint::AI_SECOND) != 0)
         {
-            shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
+            boost::shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
                 {
                     body->Enable();
@@ -89,7 +89,7 @@ bool UniversalJointEffector::Realize(shared_ptr<ActionObject> action)
     return true;
 }
 
-shared_ptr<ActionObject> UniversalJointEffector::GetActionObject(const Predicate& predicate)
+boost::shared_ptr<ActionObject> UniversalJointEffector::GetActionObject(const Predicate& predicate)
 {
     for(;;)
         {
@@ -124,8 +124,8 @@ shared_ptr<ActionObject> UniversalJointEffector::GetActionObject(const Predicate
                     break;
                 }
 
-            return shared_ptr<UniversalJointAction>(new  UniversalJointAction(GetPredicate(),velocity1,velocity2));
+            return boost::shared_ptr<UniversalJointAction>(new  UniversalJointAction(GetPredicate(),velocity1,velocity2));
         }
 
-    return shared_ptr<ActionObject>();
+    return boost::shared_ptr<ActionObject>();
 }

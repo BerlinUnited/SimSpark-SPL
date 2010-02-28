@@ -110,7 +110,7 @@ boost::shared_ptr<Core> Object::GetCore() const
 void Object::Dump() const
 {
     cout << "Object: " << (void*) this;
-    if (shared_ptr<Object> self = mSelf.lock())
+    if (boost::shared_ptr<Object> self = mSelf.lock())
     {
         cout << " " << (void*) self.get();
     } else {
@@ -124,7 +124,7 @@ void Object::Invoke(const std::string &functionName, const ParameterList& parame
     Class::TCmdProc cmd = mClass->GetCmdProc(functionName);
     if (cmd != NULL)
       {
-        if (shared_ptr<Object> self = GetSelf().lock())
+        if (boost::shared_ptr<Object> self = GetSelf().lock())
           {
             GCValue out = cmd(self.get(), parameter);
           }

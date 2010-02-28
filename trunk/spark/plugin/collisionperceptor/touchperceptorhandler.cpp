@@ -36,7 +36,7 @@ void TouchPerceptorHandler::OnLink()
 	ContactJointHandler::OnLink();
 
     // find the first CollisionPerceptor below our closest Transform node
-    shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+    boost::shared_ptr<Transform> transformParent = shared_static_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());
 
     if (transformParent.get() == 0)
@@ -72,7 +72,7 @@ void TouchPerceptorHandler::HandleCollision(
     if (myBody == 0 && collideeBody == 0)
         return;
 
-    shared_ptr<ContactJointHandler> handler =
+    boost::shared_ptr<ContactJointHandler> handler =
         collidee->FindChildSupportingClass<ContactJointHandler>();
 
     if (handler.get() == 0)

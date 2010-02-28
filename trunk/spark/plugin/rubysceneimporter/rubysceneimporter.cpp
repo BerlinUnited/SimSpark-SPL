@@ -139,11 +139,11 @@ RubySceneImporter::EnableSceneDictionary(bool enable)
 }
 
 bool RubySceneImporter::ImportScene(const std::string& fileName,
-                                    shared_ptr<BaseNode> root,
-                                    shared_ptr<ParameterList> parameter)
+                                    boost::shared_ptr<BaseNode> root,
+                                    boost::shared_ptr<ParameterList> parameter)
 {
     // try to open the file
-    shared_ptr<salt::RFile> file = GetFile()->OpenResource(fileName);
+    boost::shared_ptr<salt::RFile> file = GetFile()->OpenResource(fileName);
 
     if (file.get() == 0)
         {
@@ -167,8 +167,8 @@ bool RubySceneImporter::ImportScene(const std::string& fileName,
 }
 
 bool RubySceneImporter::ParseScene(const std::string& scene,
-                                   shared_ptr<BaseNode> root,
-                                   shared_ptr<ParameterList> parameter)
+                                   boost::shared_ptr<BaseNode> root,
+                                   boost::shared_ptr<ParameterList> parameter)
 {
     mFileName = S_FROMSTRING;
     return ParseScene(scene.c_str(),static_cast<int>(scene.size()),root,parameter);
@@ -231,7 +231,7 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
     return ok;
 }
 
-void RubySceneImporter::PushParameter(shared_ptr<ParameterList> parameter)
+void RubySceneImporter::PushParameter(boost::shared_ptr<ParameterList> parameter)
 {
     mParameterStack.push_back(ParamEnv(parameter));
 }
@@ -335,7 +335,7 @@ bool RubySceneImporter::ReadHeader(sexp_t* sexp)
     return true;
 }
 
-shared_ptr<Object> RubySceneImporter::CreateInstance(const string& className)
+boost::shared_ptr<Object> RubySceneImporter::CreateInstance(const string& className)
 {
     static const string prefixes[] =
         {
@@ -354,21 +354,21 @@ shared_ptr<Object> RubySceneImporter::CreateInstance(const string& className)
                 }
         }
 
-    return shared_ptr<Object>();
+    return boost::shared_ptr<Object>();
 }
 
-shared_ptr<BaseNode>
+boost::shared_ptr<BaseNode>
 RubySceneImporter::CreateNode(sexp_t* sexp)
 {
     if (sexp == 0)
     {
-        return shared_ptr<BaseNode>();
+        return boost::shared_ptr<BaseNode>();
     }
 
     string className(Lookup(sexp->val));
 
     // create a class instance
-    shared_ptr<Object> obj = CreateInstance(className);
+    boost::shared_ptr<Object> obj = CreateInstance(className);
 
     if (obj.get() == 0)
     {
@@ -376,17 +376,17 @@ RubySceneImporter::CreateNode(sexp_t* sexp)
             << "(RubySceneImporter) ERROR: in file '" << mFileName
             << "': unknown class '"
             << className << "'\n";
-        return shared_ptr<BaseNode>();
+        return boost::shared_ptr<BaseNode>();
     }
 
-    shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(obj);
+    boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(obj);
 
     if (node.get() == 0)
     {
         GetLog()->Error()
             << "(RubySceneImporter) ERROR: in file '" << mFileName
             << className << "': is not derived from BaseNode'\n";
-        return shared_ptr<BaseNode>();
+        return boost::shared_ptr<BaseNode>();
     }
 
     if (
@@ -586,7 +586,7 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
 
 void RubySceneImporter::PushInvocation(const MethodInvocation& invoc)
 {
-    shared_ptr<Class> baseNodeClass =
+    boost::shared_ptr<Class> baseNodeClass =
         shared_dynamic_cast<Class>(GetCore()->Get("/classes/oxygen/Transform"));
 
     if (baseNodeClass.get() == 0)
@@ -621,8 +621,8 @@ bool RubySceneImporter::Invoke(const MethodInvocation& invoc)
         }
 
     // invoke the method on the object
-    shared_ptr<Node> node = invoc.node.lock();
-    shared_ptr<Class> theClass = node->GetClass();
+    boost::shared_ptr<Node> node = invoc.node.lock();
+    boost::shared_ptr<Class> theClass = node->GetClass();
 
     if (theClass.get() == 0)
         {
@@ -663,7 +663,7 @@ bool RubySceneImporter::InvokeMethods()
     return true;
 }
 
-bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, shared_ptr<BaseNode> node)
+bool RubySceneImporter::ReadMethodCall(sexp_t* sexp, boost::shared_ptr<BaseNode> node)
 {
     if (sexp == 0)
         {
@@ -960,7 +960,7 @@ bool RubySceneImporter::ParseSwitch(sexp_t* sexp, boost::shared_ptr<oxygen::Base
 }
 
 bool
-RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
+RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, boost::shared_ptr<BaseNode> root)
 {
     if ( root.get() == 0 ) return false;
     TLeafList::const_iterator iter = root->begin();
@@ -994,7 +994,7 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                 sexp_t* sub = sexp->list;
                 if (sub != 0)
                 {
-                    shared_ptr<BaseNode> node;
+                    boost::shared_ptr<BaseNode> node;
 
                     if (
                         (sub->ty == SEXP_VALUE) &&
@@ -1027,7 +1027,7 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
 }
 
 bool
-RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
+RubySceneImporter::ReadGraph(sexp_t* sexp, boost::shared_ptr<BaseNode> root)
 {
     while (sexp != 0)
     {
@@ -1041,7 +1041,7 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                 if (name == S_NODE)
                 {
                     sexp = sexp->next;
-                    shared_ptr<BaseNode> node = CreateNode(sexp);
+                    boost::shared_ptr<BaseNode> node = CreateNode(sexp);
 
                     if (node.get() == 0)
                     {
@@ -1056,7 +1056,7 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, shared_ptr<BaseNode> root)
                     sexp = sexp->next;
                     string name(sexp->val); //todo: use abbrevTable here?
 
-                    shared_ptr<BaseNode> node =
+                    boost::shared_ptr<BaseNode> node =
                         shared_dynamic_cast<BaseNode>(root->GetChild(name));
 
                     if (node.get() == 0)

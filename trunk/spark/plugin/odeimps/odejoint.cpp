@@ -74,7 +74,7 @@ long JointImp::GetBodyID(int idx, long jointID)
 }
 
 void JointImp::EnableFeedback(bool enable, long jointID, 
-                              shared_ptr<GenericJointFeedback> feedback)
+                              boost::shared_ptr<GenericJointFeedback> feedback)
 {
     dJointID JointImp = (dJointID) jointID;
     
@@ -82,7 +82,7 @@ void JointImp::EnableFeedback(bool enable, long jointID,
         {
             if (feedback.get() == 0)
                 {
-                    feedback = shared_ptr<GenericJointFeedback>(
+                    feedback = boost::shared_ptr<GenericJointFeedback>(
                         (GenericJointFeedback*) new dJointFeedback());
                     memset(feedback.get(),0,sizeof(dJointFeedback));
                 }
@@ -108,7 +108,7 @@ bool JointImp::FeedbackEnabled(long jointID) const
 }
 
 Vector3f JointImp::GetFeedbackForce(int idx, 
-                                    shared_ptr<GenericJointFeedback> feedback) const
+                                    boost::shared_ptr<GenericJointFeedback> feedback) const
 {
     dJointFeedback* fb = (dJointFeedback*) feedback.get();
     if (fb == 0)
@@ -138,7 +138,7 @@ Vector3f JointImp::GetFeedbackForce(int idx,
 }
 
 Vector3f JointImp::GetFeedbackTorque(int idx,
-                                     shared_ptr<GenericJointFeedback> feedback) const
+                                     boost::shared_ptr<GenericJointFeedback> feedback) const
 {
     dJointFeedback* fb = (dJointFeedback*) feedback.get();
     if (fb == 0)
@@ -308,7 +308,7 @@ float JointImp::GetMaxMotorForce(int idx, long jointID) const
 }
 
 void JointImp::DestroyJoint(long jointID, 
-                            shared_ptr<GenericJointFeedback> feedback)
+                            boost::shared_ptr<GenericJointFeedback> feedback)
 {
     dJointID JointImp = (dJointID) jointID;
     EnableFeedback(false, jointID, feedback);

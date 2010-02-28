@@ -124,7 +124,7 @@ public:
         is disabled at the moment).
        @param inName the file name of the image
        @param inType hint for the file type
-       @return a shared_ptr to the Image (handle)
+       @return a boost::shared_ptr to the Image (handle)
     */
     boost::shared_ptr<Image> Load(const std::string& inName,
                                   EImgType inType = eTYPE_UNKNOWN) const;

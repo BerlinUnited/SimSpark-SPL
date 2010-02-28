@@ -37,7 +37,7 @@ SimControlNode::~SimControlNode()
 {
 }
 
-shared_ptr<SimulationServer> SimControlNode::GetSimulationServer()
+boost::shared_ptr<SimulationServer> SimControlNode::GetSimulationServer()
 {
     return shared_static_cast<SimulationServer>
         (GetParent().lock());
@@ -48,16 +48,16 @@ void SimControlNode::SetSimTime( float now )
     mTime = now + mStep;
 }
 
-shared_ptr<Scene> SimControlNode::GetActiveScene()
+boost::shared_ptr<Scene> SimControlNode::GetActiveScene()
 {
-    shared_ptr<SceneServer> sceneServer =
+    boost::shared_ptr<SceneServer> sceneServer =
         GetSimulationServer()->GetSceneServer();
 
     if (sceneServer.get() ==0)
     {
         GetLog()->Error()
             << "(SimControlNode) ERROR: SceneServer not found\n";
-        return shared_ptr<Scene>();
+        return boost::shared_ptr<Scene>();
     }
 
     return sceneServer->GetActiveScene();

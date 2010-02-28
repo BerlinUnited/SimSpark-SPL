@@ -48,7 +48,7 @@ void
 CollisionHandler::UpdateCached()
 {
     // setup the scene, world, space and collider references
-    shared_ptr<Scene> scene = GetScene();
+    boost::shared_ptr<Scene> scene = GetScene();
 
     ResetCache();
     if (scene.get() == 0)

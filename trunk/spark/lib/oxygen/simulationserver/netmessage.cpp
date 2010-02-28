@@ -50,7 +50,7 @@ void NetMessage::PrepareToSend(std::string& msg)
     msg = prefix + msg;
 }
 
-bool NetMessage::Extract(shared_ptr<NetBuffer> buffer, std::string& msg)
+bool NetMessage::Extract(boost::shared_ptr<NetBuffer> buffer, std::string& msg)
 {
     if (buffer.get() == 0)
     {

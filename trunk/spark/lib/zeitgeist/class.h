@@ -93,10 +93,10 @@ namespace zeitgeist
     using namespace salt;\
     using namespace zeitgeist;\
     extern "C"{\
-    SHARED_LIB_EXPORT void Zeitgeist_RegisterBundle(std::list <shared_ptr<Class> > &classes){
+    SHARED_LIB_EXPORT void Zeitgeist_RegisterBundle(std::list <boost::shared_ptr<Class> > &classes){
 
 #define ZEITGEIST_EXPORT_EX(className, path)\
-    classes.push_back(shared_ptr<Class>(new CLASS(className)));
+    classes.push_back(boost::shared_ptr<Class>(new CLASS(className)));
 
 #define ZEITGEIST_EXPORT(className) ZEITGEIST_EXPORT_EX(className, "")
 

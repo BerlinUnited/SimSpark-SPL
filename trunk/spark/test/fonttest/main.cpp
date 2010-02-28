@@ -48,22 +48,22 @@ int main(int argc, char **argv)
 {
         Zeitgeist       zg("." PACKAGE_NAME);
 
-        shared_ptr<CoreContext> context = zg.CreateContext();
+        boost::shared_ptr<CoreContext> context = zg.CreateContext();
         Kerosin                                 kCore(zg);
 
-        shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
+        boost::shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
         scriptServer->Run("script/init.rb");
 
         scriptServer->Run("script/fonttest.rb");
 
-        shared_ptr<FontServer> fontServer = shared_static_cast<FontServer>(context->Get("/sys/server/font"));
+        boost::shared_ptr<FontServer> fontServer = shared_static_cast<FontServer>(context->Get("/sys/server/font"));
         if (fontServer.get() == NULL) return 1;
 
-        shared_ptr<kerosin::Font> font = fontServer->GetFont("fonts/VeraMono.ttf", 24);
+        boost::shared_ptr<kerosin::Font> font = fontServer->GetFont("fonts/VeraMono.ttf", 24);
         if (font.get() == NULL) return 1;
 
-        shared_ptr<ImageServer> imageServer = shared_static_cast<ImageServer>(context->New("kerosin/ImageServer", "/sys/server/image"));
-        shared_ptr<TextureServer> textureServer = shared_static_cast<TextureServer>(context->New("kerosin/TextureServer", "/sys/server/texture"));
+        boost::shared_ptr<ImageServer> imageServer = shared_static_cast<ImageServer>(context->New("kerosin/ImageServer", "/sys/server/image"));
+        boost::shared_ptr<TextureServer> textureServer = shared_static_cast<TextureServer>(context->New("kerosin/TextureServer", "/sys/server/texture"));
 
         imageServer->Load("data/image/jpg.jpg");
         /* imageServer->Save(image, "jpg.tga");
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
         imageServer->Save(image, "png-gray.tga");
         image = imageServer->Load("image/tga-gray.tga");
         imageServer->Save(image, "tga-gray.tga");*/
-        shared_ptr<Texture> tex = textureServer->GetTexture("data/image/jpg.jpg");
+        boost::shared_ptr<Texture> tex = textureServer->GetTexture("data/image/jpg.jpg");
 
         while(!gWantsToQuit)
         {

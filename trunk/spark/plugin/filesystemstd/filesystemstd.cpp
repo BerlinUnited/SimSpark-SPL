@@ -49,9 +49,9 @@ bool FileSystemSTD::SetPath(const string& inPath)
 // This function is really simple. It appends inName to mPath and
 // tries to open the combined name as a readonly file.
 //
-shared_ptr<salt::RFile> FileSystemSTD::Open(const string& inName)
+boost::shared_ptr<salt::RFile> FileSystemSTD::Open(const string& inName)
 {
-    shared_ptr<salt::RFile> file(new StdFile());
+    boost::shared_ptr<salt::RFile> file(new StdFile());
     std::string fileName = mPath + inName;
 
     if(! file->Open(fileName.c_str()))
