@@ -112,7 +112,7 @@ main(int argc, char* argv[])
     // require any additional classes in the gendot.rb
     zg.GetCore()->GetScriptServer()->Run("gendot.rb");
 
-    shared_ptr<Leaf> classRoot = zg.GetCore()->Get("/classes");
+	boost::shared_ptr<Leaf> classRoot = zg.GetCore()->Get("/classes");
     if (classRoot.get() == 0)
     {
         cout << "ERROR: unable to get the class root node" << endl;
@@ -151,7 +151,7 @@ main(int argc, char* argv[])
 
         cout << "class " << name << endl;
 
-        shared_ptr<Class> theClass = shared_dynamic_cast<Class>(*iter);
+		boost::shared_ptr<Class> theClass = shared_dynamic_cast<Class>(*iter);
         if (theClass.get() == 0)
         {
             continue;
