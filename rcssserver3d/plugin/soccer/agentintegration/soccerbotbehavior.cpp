@@ -213,7 +213,7 @@ void SoccerbotBehavior::Think(boost::shared_ptr<oxygen::PredicateList> senselist
         return;
     }
 
-    shared_ptr<PredicateList> predList = senselist;
+    boost::shared_ptr<PredicateList> predList = senselist;
 
     if (predList.get() != 0)
     {

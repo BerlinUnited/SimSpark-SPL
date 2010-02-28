@@ -121,7 +121,7 @@ void TrainerCommandParser::ParseMonitorMessage(const std::string& data)
         return;
     }
 
-    shared_ptr<PredicateList> predList = mSexpParser->Parse(data);
+    boost::shared_ptr<PredicateList> predList = mSexpParser->Parse(data);
     ParsePredicates(*predList);
 }
 
@@ -262,7 +262,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
             return;
         }
 
-        shared_ptr<Transform> agent_aspect;
+        boost::shared_ptr<Transform> agent_aspect;
 
         if (SoccerBase::GetTransformParent(*(*iter), agent_aspect))
         {
@@ -295,7 +295,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
             return;
         }
 
-        shared_ptr<Transform> agent_aspect;
+        boost::shared_ptr<Transform> agent_aspect;
 
         if (SoccerBase::GetTransformParent(*(*iter), agent_aspect))
         {
@@ -365,7 +365,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
             return;
         }         
 
-        shared_ptr<RigidBody> body;
+        boost::shared_ptr<RigidBody> body;
 
         if (SoccerBase::GetBallBody(*this, body))
         {
@@ -394,7 +394,7 @@ TrainerCommandParser::ParseBallCommand(const oxygen::Predicate& predicate)
             return;
         }
 
-        shared_ptr<RigidBody> body;
+        boost::shared_ptr<RigidBody> body;
 
         if (SoccerBase::GetBallBody(*this, body))
         {

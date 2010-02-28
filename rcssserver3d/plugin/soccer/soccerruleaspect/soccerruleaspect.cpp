@@ -258,7 +258,7 @@ void
 SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // get game control server to check agent count
-    static shared_ptr<GameControlServer> game_control;
+    static boost::shared_ptr<GameControlServer> game_control;
 
     if  (game_control.get() == 0)
     {
@@ -314,7 +314,7 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     }
 
     // after the first agent touches the ball move to PM_PLAYON
-    shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentAspect> agent;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
@@ -350,7 +350,7 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
     // after the first agent touches the ball move to PM_PLAY_ON. the
     // time when the agent last touches the ball must be after the
     // change to the KickIn mode
-    shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentAspect> agent;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
@@ -420,7 +420,7 @@ SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
     // after the first agent touches the ball move to PM_PLAY_ON. the
     // time when the agent last touches the ball must be after the
     // change to the KickIn mode
-    shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentAspect> agent;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
@@ -468,7 +468,7 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
 
     // after the first agent touches the ball, we do nothing until
     // the ball leaves the penalty area.
-    shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentAspect> agent;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
@@ -525,7 +525,7 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
     // after the first agent touches the ball move to PM_PLAY_ON. the
     // time when the agent last touches the ball must be after the
     // change to the KickIn mode
-    shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentAspect> agent;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
@@ -558,8 +558,8 @@ SoccerRuleAspect::CheckBallLeftField()
 
     // get the team of the last agent touching the ball and set the
     // correct kick in playmode
-    shared_ptr<AgentAspect> agent;
-    shared_ptr<AgentState> agentState;
+    boost::shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentState> agentState;
     TTime time;
 
     if (mBallState->GetLastCollidingAgent(agent,time) &&
@@ -957,8 +957,8 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
 
     salt::BoundingSphere sphere(pos, mAudioCutDist);
 
-    shared_ptr<Transform> transform_parent;
-    shared_ptr<RigidBody> agent_body;
+    boost::shared_ptr<Transform> transform_parent;
+    boost::shared_ptr<RigidBody> agent_body;
 
     for (
         TAgentStateList::const_iterator it = agent_states.begin();
@@ -1016,10 +1016,10 @@ SoccerRuleAspect::CheckOffside()
     return true;
 
 #if 0
-    shared_ptr<AgentAspect> collidingAgent;
-    shared_ptr<AgentAspect> kickingAgent;
-    shared_ptr<AgentAspect> agent;
-    shared_ptr<AgentState> agentState;
+    boost::shared_ptr<AgentAspect> collidingAgent;
+    boost::shared_ptr<AgentAspect> kickingAgent;
+    boost::shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentState> agentState;
     TTime collidingTime;
     TTime kickingTime;
     TTime time;
@@ -1090,7 +1090,7 @@ SoccerRuleAspect::CheckOffside()
 
     TTeamIndex idx = agentState->GetTeamIndex();
 
-    list<shared_ptr<AgentState> > opp_agent_states;
+    list<boost::shared_ptr<AgentState> > opp_agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, opp_agent_states,
           SoccerBase::OpponentTeam(idx)))
     {
@@ -1103,10 +1103,10 @@ SoccerRuleAspect::CheckOffside()
     opp_goalkeeper_pos = 0.0;
     opp_defender_pos   = 0.0;
 
-    shared_ptr<Transform> transform_parent;
-    shared_ptr<RigidBody> agent_body;
+    boost::shared_ptr<Transform> transform_parent;
+    boost::shared_ptr<RigidBody> agent_body;
 
-    list<shared_ptr<AgentState> >::const_iterator it;
+    list<boost::shared_ptr<AgentState> >::const_iterator it;
     for (it = opp_agent_states.begin(); it != opp_agent_states.end(); it++)
     {
         SoccerBase::GetTransformParent(*(*it), transform_parent);
@@ -1208,7 +1208,7 @@ SoccerRuleAspect::CheckOffside()
     mFreeKickPos = mBallState->GetLastValidBallPosition();
     mFreeKickPos[2] = mBallRadius;
 
-    list<shared_ptr<AgentState> > agent_states;
+    list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState, agent_states, idx))
     {
         return false;
@@ -1270,8 +1270,8 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
     // after the first agent touches the ball move to PM_PLAY_ON. the
     // time when the agent last touches the ball must be after the
     // change to the OffsideKick mode
-    shared_ptr<AgentAspect> agent;
-    shared_ptr<AgentState> agentState;
+    boost::shared_ptr<AgentAspect> agent;
+    boost::shared_ptr<AgentState> agentState;
     TTime time;
     if (! mBallState->GetLastCollidingAgent(agent,time))
     {
@@ -1303,7 +1303,7 @@ SoccerRuleAspect::UpdateOffside(TTeamIndex idx)
 void
 SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                                float radius, float min_dist, TTeamIndex idx,
-                               shared_ptr<AgentState> agentState)
+                               boost::shared_ptr<AgentState> agentState)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
     std::list<boost::shared_ptr<AgentState> > agent_states;

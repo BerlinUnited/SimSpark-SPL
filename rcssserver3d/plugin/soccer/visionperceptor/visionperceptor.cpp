@@ -76,7 +76,7 @@ VisionPerceptor::OnLink()
 //     SoccerBase::GetAgentState(*this, mAgentState);
     SoccerBase::GetActiveScene(*this,mActiveScene);
     
-    shared_ptr<AgentAspect> agent_aspect =
+    boost::shared_ptr<AgentAspect> agent_aspect =
         FindParentSupportingClass<AgentAspect>().lock();
     if (agent_aspect == 0)
     {
@@ -168,7 +168,7 @@ VisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
                     continue; // this should never happen
                 }
 
-            shared_ptr<Transform> j = od.mObj->GetTransformParent();
+            boost::shared_ptr<Transform> j = od.mObj->GetTransformParent();
 
             if (j.get() == 0)
                 {
@@ -411,7 +411,7 @@ bool VisionPerceptor::CheckOcclusion(const Vector3f& my_pos, const ObjectData& o
 
 //             dContactGeom contact;
 
-//             shared_ptr<Collider> collider = shared_static_cast<Collider>
+//             boost::shared_ptr<Collider> collider = shared_static_cast<Collider>
 //                 (i->mObj->GetChildSupportingClass("Collider"));
 
 //             if (mRay->Intersects(collider))

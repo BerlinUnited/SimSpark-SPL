@@ -41,7 +41,7 @@ void CreateEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     if ( mAction.get() == 0 )
         return;
 
-  shared_ptr<CreateAction> createAction =
+  boost::shared_ptr<CreateAction> createAction =
     shared_dynamic_cast<CreateAction>(mAction);
     mAction.reset();
   if (createAction.get() == 0)
@@ -51,7 +51,7 @@ void CreateEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
       return;
     }
 
-  shared_ptr<AgentAspect> aspect = GetAgentAspect();
+  boost::shared_ptr<AgentAspect> aspect = GetAgentAspect();
   if (aspect.get() == 0)
     {
       GetLog()->Error()
@@ -68,14 +68,14 @@ void CreateEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 CreateEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {
       GetLog()->Error() << "ERROR: (CreateEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>();
+      return boost::shared_ptr<ActionObject>();
     }
 
   //
@@ -83,6 +83,6 @@ CreateEffector::GetActionObject(const Predicate& predicate)
   // type should be passed later on and stored in the CreateAction object
   //
 
-  return shared_ptr<CreateAction>(new CreateAction(GetPredicate()));
+  return boost::shared_ptr<CreateAction>(new CreateAction(GetPredicate()));
 }
 

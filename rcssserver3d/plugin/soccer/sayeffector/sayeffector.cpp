@@ -41,7 +41,7 @@ SayEffector::~SayEffector()
 }
 
 bool
-SayEffector::Realize(shared_ptr<ActionObject> action)
+SayEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
     if (mSoccerRule.get() == 0)
     {
@@ -63,7 +63,7 @@ SayEffector::Realize(shared_ptr<ActionObject> action)
         return false;
     }
 
-    shared_ptr<SayAction> sayAction =
+    boost::shared_ptr<SayAction> sayAction =
         shared_dynamic_cast<SayAction>(action);
 
     if (sayAction.get() == 0)
@@ -107,7 +107,7 @@ SayEffector::IfText()const
     return ifText;
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 SayEffector::GetActionObject(const Predicate& predicate)
 {
     if (predicate.name != GetPredicate())
@@ -116,7 +116,7 @@ SayEffector::GetActionObject(const Predicate& predicate)
                           << predicate.name << "\n";
 
         // some error happened
-        return shared_ptr<ActionObject>();
+        return boost::shared_ptr<ActionObject>();
     }
 
     Predicate::Iterator iter = predicate.begin();
@@ -128,11 +128,11 @@ SayEffector::GetActionObject(const Predicate& predicate)
             << "ERROR: (SayEffector) said message expected\n";
 
         // some error happened
-        return shared_ptr<ActionObject>();
+        return boost::shared_ptr<ActionObject>();
     }
 
     // construct the SayAction object
-    return shared_ptr<SayAction>(new SayAction(GetPredicate(), message));
+    return boost::shared_ptr<SayAction>(new SayAction(GetPredicate(), message));
 
 }
 

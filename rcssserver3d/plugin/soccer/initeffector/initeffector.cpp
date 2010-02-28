@@ -54,7 +54,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             return;
         }
 
-    shared_ptr<InitAction> initAction =
+    boost::shared_ptr<InitAction> initAction =
         shared_dynamic_cast<InitAction>(mAction);
     mAction.reset();
 
@@ -66,7 +66,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     // search for the AgentState
-    shared_ptr<AgentState> state = shared_static_cast<AgentState>
+    boost::shared_ptr<AgentState> state = shared_static_cast<AgentState>
         (mAgentAspect->GetChildOfClass("AgentState", true));
 
     if (state.get() == 0)
@@ -95,7 +95,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
     // agents may be encapsulated in their own collision spaces, so we need
     // to get the parent of the parent of the agent aspect in this case
-    shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
         (mAgentAspect->GetParentSupportingClass("Transform").lock());
     
     
@@ -132,7 +132,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
          ++iter
          )
         {    
-            shared_ptr<Body> childBody =
+            boost::shared_ptr<Body> childBody =
                 shared_dynamic_cast<Body>(*iter);
                 
             Vector3f childPos = childBody->GetPosition();
@@ -148,14 +148,14 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 #endif
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 InitEffector::GetActionObject(const Predicate& predicate)
 {
     if (predicate.name != GetPredicate())
     {
         GetLog()->Error() << "ERROR: (InitEffector) invalid predicate"
                           << predicate.name << "\n";
-        return shared_ptr<ActionObject>();
+        return boost::shared_ptr<ActionObject>();
     }
 
     std::string name;
@@ -164,7 +164,7 @@ InitEffector::GetActionObject(const Predicate& predicate)
     int unum = 0;
     predicate.GetValue(predicate.begin(),"unum",unum);
 
-    return shared_ptr<ActionObject>(new InitAction(GetPredicate(),name,unum));
+    return boost::shared_ptr<ActionObject>(new InitAction(GetPredicate(),name,unum));
 }
 
 void InitEffector::OnLink()

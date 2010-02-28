@@ -236,7 +236,7 @@ string SoccerBehavior::SeekBall() const
 
 string SoccerBehavior::Think(const std::string& message)
 {
-    shared_ptr<PredicateList> predList =
+    boost::shared_ptr<PredicateList> predList =
         mParser->Parse(message);
 
     if (predList.get() != 0)

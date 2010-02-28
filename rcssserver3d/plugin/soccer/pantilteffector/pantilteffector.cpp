@@ -49,7 +49,7 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
     }
 
-    shared_ptr<BaseNode> parent =
+    boost::shared_ptr<BaseNode> parent =
         shared_dynamic_cast<BaseNode>(GetParent().lock());
 
     if (parent.get() == 0)
@@ -59,7 +59,7 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
     }
 
-    shared_ptr<PanTiltAction> panTiltAction =
+    boost::shared_ptr<PanTiltAction> panTiltAction =
         shared_dynamic_cast<PanTiltAction>(mAction);
     mAction.reset();
 
@@ -106,7 +106,7 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     // look for vision perceptor and apply change
-    shared_ptr<RestrictedVisionPerceptor> rvp =
+    boost::shared_ptr<RestrictedVisionPerceptor> rvp =
         parent->FindChildSupportingClass<RestrictedVisionPerceptor>(false);
     if (rvp.get() == 0)
     {
@@ -119,14 +119,14 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 PanTiltEffector::GetActionObject(const Predicate& predicate)
 {
     if (predicate.name != GetPredicate())
     {
         GetLog()->Error() << "ERROR: (PanTiltEffector) invalid predicate"
                           << predicate.name << "\n";
-        return shared_ptr<ActionObject>();
+        return boost::shared_ptr<ActionObject>();
     }
 
     Predicate::Iterator iter = predicate.begin();
@@ -135,15 +135,15 @@ PanTiltEffector::GetActionObject(const Predicate& predicate)
     if (! predicate.AdvanceValue(iter, pan))
     {
         GetLog()->Error() << "ERROR: (PanTiltEffector) 2 float parameters expected\n";
-        return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+        return boost::shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
     }
     float tilt;
     if (! predicate.AdvanceValue(iter, tilt))
     {
         GetLog()->Error() << "ERROR: (PanTiltEffector) float parameter expected\n";
-        return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+        return boost::shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
     }
-    return shared_ptr<ActionObject>(new PanTiltAction(GetPredicate(),pan,tilt));
+    return boost::shared_ptr<ActionObject>(new PanTiltAction(GetPredicate(),pan,tilt));
 }
 
 void

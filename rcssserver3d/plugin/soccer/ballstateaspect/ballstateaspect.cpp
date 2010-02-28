@@ -46,7 +46,7 @@ BallStateAspect::~BallStateAspect()
 {
 }
 
-bool BallStateAspect::GetLastCollidingAgent(shared_ptr<AgentAspect>& agent,
+bool BallStateAspect::GetLastCollidingAgent(boost::shared_ptr<AgentAspect>& agent,
                                             TTime& time)
 {
     agent = mLastCollidingAgent;
@@ -55,7 +55,7 @@ bool BallStateAspect::GetLastCollidingAgent(shared_ptr<AgentAspect>& agent,
     return (agent.get() != 0);
 }
 
-bool BallStateAspect::GetLastKickingAgent(shared_ptr<AgentAspect>& agent,
+bool BallStateAspect::GetLastKickingAgent(boost::shared_ptr<AgentAspect>& agent,
                                             TTime& time)
 {
     agent = mLastKickingAgent;

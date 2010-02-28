@@ -142,7 +142,7 @@ bool MonitorSpark::InitApp(int argc, char** argv)
     GetScriptServer()->Run("rcssmonitor3d.rb");
 
     // tell the inputControl node the loaction of our camera
-    shared_ptr<InputControl> inputCtr = GetInputControl();
+    boost::shared_ptr<InputControl> inputCtr = GetInputControl();
     if (inputCtr.get() != 0)
         {
             inputCtr->SetFPSController("/usr/scene/camera/physics/controller");
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 
     spark.GetSimulationServer()->Run(argc,argv);
 
-    shared_ptr<RenderControl> renderCtr = spark.GetRenderControl();
+    boost::shared_ptr<RenderControl> renderCtr = spark.GetRenderControl();
     if (renderCtr.get() != 0)
         {
             spark.GetLog()->Normal()

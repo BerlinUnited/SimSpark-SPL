@@ -63,7 +63,7 @@ KickEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
     }
 
-    shared_ptr<KickAction> kickAction =
+    boost::shared_ptr<KickAction> kickAction =
         shared_dynamic_cast<KickAction>(mAction);
     mAction.reset();
 
@@ -136,7 +136,7 @@ KickEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 KickEffector::GetActionObject(const Predicate& predicate)
 {
   do
@@ -167,12 +167,12 @@ KickEffector::GetActionObject(const Predicate& predicate)
           }
 
       // construct the KickAction object
-      return shared_ptr<KickAction>(new KickAction(GetPredicate(),angle,power));
+      return boost::shared_ptr<KickAction>(new KickAction(GetPredicate(),angle,power));
 
   } while (0);
 
   // some error happened
-  return shared_ptr<ActionObject>();
+  return boost::shared_ptr<ActionObject>();
 }
 
 void
@@ -190,7 +190,7 @@ KickEffector::OnLink()
         return;
     }
 
-    shared_ptr<SphereCollider> geom =
+    boost::shared_ptr<SphereCollider> geom =
         shared_dynamic_cast<SphereCollider>(mAgent->GetChild("geometry"));
     if (geom.get() == 0)
     {

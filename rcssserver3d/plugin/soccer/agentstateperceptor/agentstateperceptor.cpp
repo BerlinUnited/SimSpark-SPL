@@ -60,7 +60,7 @@ AgentStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     predicate.name = "AgentState";
     predicate.parameter.Clear();
 
-    shared_ptr<BaseNode> parent =
+    boost::shared_ptr<BaseNode> parent =
         shared_dynamic_cast<BaseNode>(GetParent().lock());
 
     if (parent.get() == 0)
@@ -68,7 +68,7 @@ AgentStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         GetLog()->Warning() << "WARNING: (AgentStatePerceptor) "
                             << "parent node is not derived from BaseNode\n";
     } else {
-        shared_ptr<RestrictedVisionPerceptor> rvp =
+        boost::shared_ptr<RestrictedVisionPerceptor> rvp =
             parent->FindChildSupportingClass<RestrictedVisionPerceptor>(false);
         if (rvp.get() == 0)
         {

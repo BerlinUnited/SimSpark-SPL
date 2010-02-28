@@ -1,3 +1,44 @@
+2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake:
+	- added new version of FindBoost.cmake: finding boost libraries created by Visual C++ 2010 compiler.
+
+	* plugin/soccer/agentintegration/soccerbotbehavior.cpp:
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp:
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	* plugin/soccer/beameffector/beameffector.cpp:
+	* plugin/soccer/catcheffector/catcheffector.cpp:
+	* plugin/soccer/createeffector/createeffector.cpp:
+	* plugin/soccer/driveeffector/driveeffector.cpp:
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	* plugin/soccer/hmdp_effector/hmdpeffector.cpp:
+	* plugin/soccer/hmdp_effector/hmdpperceptor.cpp:
+	* plugin/soccer/initeffector/initeffector.cpp:
+	* plugin/soccer/initeffector/singlematiniteffector.cpp:
+	* plugin/soccer/initeffector/staticmeshiniteffector.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
+	* plugin/soccer/kickeffector/kickeffector.cpp:
+	* plugin/soccer/pantilteffector/pantilteffector.cpp:
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	* plugin/soccer/sayeffector/sayeffector.cpp:
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp:
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	* plugin/soccermonitor/soccerinput.cpp:
+	* rcssagent3d/hoap2behavior.cpp:
+	* rcssagent3d/naobehavior.cpp:
+	* rcssagent3d/soccerbehavior.cpp:
+	* rcssagent3d/soccerbotbehavior.cpp:
+	* rcssmonitor3d/main.cpp:
+	* rcssserver3d/main.cpp:
+
+	- change shared_ptr -> boost::shared_ptr because of Visual Studio 2010 compatibility. Issue between boost::shared_ptr and std::tr1::shared_ptr
+
+
 2010-01-18  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* windows/uninstall_extra.nsi: 
