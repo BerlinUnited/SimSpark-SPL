@@ -71,16 +71,6 @@ install(FILES  doc/rsgedit.txt AUTHORS ChangeLog COPYING NEWS README TODO
 install(FILES  ${CMAKE_BINARY_DIR}/rsgedit_config.h
         DESTINATION  ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
-if (WIN32) # try to find and install third-party .dlls to bin/ directory
-       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
-       if (EXISTS ${ODEDLL})
-              install(PROGRAMS ${ODEDLL} DESTINATION ${BINDIR})
-       endif (EXISTS ${ODEDLL})
-
-       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${BINDIR}
-             FILES_MATCHING PATTERN "*.dll")
-endif (WIN32)
-
 ########### uninstall support ############
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
