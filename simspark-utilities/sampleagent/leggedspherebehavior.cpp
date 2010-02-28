@@ -165,7 +165,7 @@ string LeggedSphereBehavior::Think(const std::string& message)
     // parse message and extract joint angles
     //cout << "(LeggedSphereBehavior) received message " << message << endl;
 
-    shared_ptr<PredicateList> predList =
+	boost::shared_ptr<PredicateList> predList =
         mParser->Parse(message);
 
     if (predList.get() != 0)
