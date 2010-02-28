@@ -44,7 +44,7 @@ public:
             CL_CLASS,
             CL_BASENODE,
             CL_TRANSFORM,
-            CL_BODY,
+            CL_RIGIDBODY,
             CL_JOINT,
             CL_HINGEJOINT,
             CL_UNIVERSALJOINT,
