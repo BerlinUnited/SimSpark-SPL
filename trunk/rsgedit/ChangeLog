@@ -1,3 +1,14 @@
+2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake:
+	- added new version of FindBoost.cmake: finding boost libraries created by Visual C++ 2010 compiler.
+	
+	* CMakeLists.txt:
+	- Removed installation of third party libraries under Windows (now done by simspark)
+
+	* rsgedit/src/property.cpp
+	- change shared_ptr -> boost::shared_ptr because of Visual Studio 2010 compatibility. Issue between boost::shared_ptr and std::tr1::shared_ptr.
+	
 2009-08-25  Marian Buchta  <marian.buchta@gmail.com>
 
 	* CMakeLists.txt:
