@@ -85,7 +85,7 @@ void HMDPEffector::PrePhysicsUpdateInternal(float deltaTime)
         return;
     }
 
-    shared_ptr<HMDPAction> hMDPAction = shared_dynamic_cast<HMDPAction>(mAction);
+    boost::shared_ptr<HMDPAction> hMDPAction = shared_dynamic_cast<HMDPAction>(mAction);
     mAction.reset();
     if (hMDPAction.get() == 0)
     {
@@ -96,14 +96,14 @@ void HMDPEffector::PrePhysicsUpdateInternal(float deltaTime)
 
 }
 
-shared_ptr<ActionObject> HMDPEffector::GetActionObject(const Predicate& predicate)
+boost::shared_ptr<ActionObject> HMDPEffector::GetActionObject(const Predicate& predicate)
 {
          //std::cout << " GetActionObject called " << std::endl;
     if (predicate.name != GetPredicate())
     {
         GetLog()->Error() << "ERROR: (HMDPEffector) invalid predicate"
                 << predicate.name << "\n";
-        return shared_ptr<ActionObject>();
+        return boost::shared_ptr<ActionObject>();
     }
 
     std::string message;
@@ -112,13 +112,13 @@ shared_ptr<ActionObject> HMDPEffector::GetActionObject(const Predicate& predicat
     {
         GetLog()->Error()
                 << "ERROR: (HMDPEffector) Some Problem while receiving the HMDP Message\n";
-        return shared_ptr<ActionObject>();
+        return boost::shared_ptr<ActionObject>();
     };
 
     inMessage = inMessage + message + "\r\n";
 
     //std::cout << inMessage << std::endl;
-    return shared_ptr<ActionObject>(new HMDPAction(GetPredicate(), inMessage));
+    return boost::shared_ptr<ActionObject>(new HMDPAction(GetPredicate(), inMessage));
 }
 
 void HMDPEffector::OnLink()
@@ -130,7 +130,7 @@ void HMDPEffector::OnLink()
     ifActive = true;
 
     iter = 0; // just to do the right things on iter = 0 in pre physics routine
-    shared_ptr<Node> parent = GetParent().lock();
+    boost::shared_ptr<Node> parent = GetParent().lock();
 
     if (parent.get() == 0)
     {
@@ -196,8 +196,8 @@ void HMDPEffector::sendMessage(std::string message)
 void HMDPEffector::ReadOutJointList()
 {
 
-    shared_ptr<Node> parent = GetParent().lock();
-    shared_ptr<Node> grandparent = parent->GetParent().lock();
+    boost::shared_ptr<Node> parent = GetParent().lock();
+    boost::shared_ptr<Node> grandparent = parent->GetParent().lock();
 
     grandparent->ListChildrenSupportingClass<HingeJoint>(jointList, true);
 
@@ -214,8 +214,8 @@ void HMDPEffector::ReadOutJointList()
         servo_gain[i] = 0.05;
         servo_angle[i] = 0;
 
-        shared_ptr<Leaf> join = *j_it;
-        shared_ptr<BaseNode> jparent =
+        boost::shared_ptr<Leaf> join = *j_it;
+        boost::shared_ptr<BaseNode> jparent =
             shared_dynamic_cast<BaseNode>(join->GetParent().lock());
         std::cout << i << "    " << jparent->GetName() << std::endl;
         i++;
@@ -259,7 +259,7 @@ void HMDPEffector::controlPosServo() // for controlling servos
     for (TLeafList::iterator j_it = jointList.begin(); j_it != jointList.end(); j_it++)
     {
 
-        shared_ptr<HingeJoint> joint = shared_static_cast<HingeJoint> (*j_it);
+        boost::shared_ptr<HingeJoint> joint = shared_static_cast<HingeJoint> (*j_it);
         servo_angle[i] = joint->GetAngle() - zeroPosServo(i);
         double tpos = servo_target_pos[i];
         float err = servo_gain[i] * (tpos - servo_angle[i]);
@@ -268,7 +268,7 @@ void HMDPEffector::controlPosServo() // for controlling servos
 
         if (abs(err) > 0.00001)
         {
-            shared_ptr<RigidBody> body = joint->GetBody(Joint::BI_FIRST);
+            boost::shared_ptr<RigidBody> body = joint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
             {
                 body->Enable();

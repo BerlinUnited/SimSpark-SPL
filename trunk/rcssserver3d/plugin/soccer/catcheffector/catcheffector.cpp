@@ -82,7 +82,7 @@ CatchEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
     }
 
-    shared_ptr<CatchAction> catchAction =
+    boost::shared_ptr<CatchAction> catchAction =
         shared_dynamic_cast<CatchAction>(mAction);
     mAction.reset();
     if (catchAction.get() == 0)
@@ -148,7 +148,7 @@ CatchEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     MoveBall(ballPos);
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 CatchEffector::GetActionObject(const Predicate& predicate)
 {
   do
@@ -161,12 +161,12 @@ CatchEffector::GetActionObject(const Predicate& predicate)
           }
 
       // construct the CatchAction object
-      return shared_ptr<CatchAction>(new CatchAction(GetPredicate()));
+      return boost::shared_ptr<CatchAction>(new CatchAction(GetPredicate()));
 
   } while (0);
 
   // some error happened
-  return shared_ptr<ActionObject>();
+  return boost::shared_ptr<ActionObject>();
 }
 
 void
@@ -187,7 +187,7 @@ CatchEffector::OnLink()
         return;
     }
 
-    shared_ptr<SphereCollider> geom =
+    boost::shared_ptr<SphereCollider> geom =
         shared_dynamic_cast<SphereCollider>(mAgent->GetChild("geometry"));
     if (geom.get() == 0)
     {

@@ -43,7 +43,7 @@ SoccerControlAspect::~SoccerControlAspect()
 
 void SoccerControlAspect::OnLink()
 {
-    shared_ptr<Scene> scene = GetActiveScene();
+    boost::shared_ptr<Scene> scene = GetActiveScene();
     if (scene.get() == 0)
         {
             GetLog()->Error()
@@ -54,11 +54,11 @@ void SoccerControlAspect::OnLink()
     mScenePath = scene->GetFullPath();
 }
 
-shared_ptr<RecorderHandler> SoccerControlAspect::GetBallRecorder()
+boost::shared_ptr<RecorderHandler> SoccerControlAspect::GetBallRecorder()
 {
     string ballRecorder;
     SoccerBase::GetSoccerVar(*this,"BallRecorder",ballRecorder);
-    shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
+    boost::shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
         (GetCore()->Get(mScenePath + ballRecorder));
 
     if (node.get() == 0)
@@ -70,11 +70,11 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetBallRecorder()
     return node;
 }
 
-shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
+boost::shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
 {
     string goalRecorder;
     SoccerBase::GetSoccerVar(*this,"LeftGoalRecorder",goalRecorder);
-    shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
+    boost::shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
         (GetCore()->Get(mScenePath + goalRecorder));
 
     if (node.get() == 0)
@@ -86,11 +86,11 @@ shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
     return node;
 }
 
-shared_ptr<RecorderHandler> SoccerControlAspect::GetRightGoalRecorder()
+boost::shared_ptr<RecorderHandler> SoccerControlAspect::GetRightGoalRecorder()
 {
     string goalRecorder;
     SoccerBase::GetSoccerVar(*this,"RightGoalRecorder",goalRecorder);
-    shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
+    boost::shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
         (GetCore()->Get(mScenePath + goalRecorder));
 
     if (node.get() == 0)

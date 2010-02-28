@@ -154,7 +154,7 @@ RestrictedVisionPerceptor::OnLink()
 //     SoccerBase::GetAgentState(*this, mAgentState);
     SoccerBase::GetActiveScene(*this,mActiveScene);
     
-    shared_ptr<AgentAspect> agent_aspect =
+    boost::shared_ptr<AgentAspect> agent_aspect =
         FindParentSupportingClass<AgentAspect>().lock();
     if (agent_aspect == 0)
     {
@@ -235,12 +235,12 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 
         od.mObj = shared_static_cast<ObjectState>(*i);
 
-        shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(mActiveScene);
-        shared_ptr<AgentAspect> agent_aspect =
+        boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(mActiveScene);
+        boost::shared_ptr<AgentAspect> agent_aspect =
                 od.mObj->FindParentSupportingClass<AgentAspect>().lock();
         if (agent_aspect != 0)
         {
-            shared_ptr<AgentAspect> aspect =
+            boost::shared_ptr<AgentAspect> aspect =
                 agent_aspect->FindParentSupportingClass<AgentAspect>().lock();
             if (aspect != 0)
             {
@@ -264,7 +264,7 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
             continue; // this should never happen
         }
 
-        shared_ptr<Transform> j = od.mObj->GetTransformParent();
+        boost::shared_ptr<Transform> j = od.mObj->GetTransformParent();
         
         if (j.get() == 0)
         {
@@ -280,7 +280,7 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 
 void
 RestrictedVisionPerceptor::AddSense(Predicate& predicate,
-                                    shared_ptr<BaseNode> node,
+                                    boost::shared_ptr<BaseNode> node,
                                     TObjectList& objectList) const
 {
     if (objectList.empty())
@@ -288,18 +288,18 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
         return;
     }
 
-    shared_ptr<AgentAspect> agent_aspect =
+    boost::shared_ptr<AgentAspect> agent_aspect =
         shared_dynamic_cast<AgentAspect>(node);
     if (agent_aspect != 0)
     {        
-        shared_ptr<AgentAspect> aspect =
+        boost::shared_ptr<AgentAspect> aspect =
             agent_aspect->FindParentSupportingClass<AgentAspect>().lock();
         if (aspect != 0)
         {
             agent_aspect = aspect;
         }
         
-        shared_ptr<AgentState> agent_state = shared_static_cast<AgentState>
+        boost::shared_ptr<AgentState> agent_state = shared_static_cast<AgentState>
             (agent_aspect->GetChildOfClass("AgentState",true));
         if (agent_state.get() == 0 ||
             (agent_state->GetPerceptName(ObjectState::PT_Player).empty())
@@ -394,7 +394,7 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
     for (TNodeObjectsMap::iterator i = visibleNodes.begin();
         i != visibleNodes.end(); ++i)
     {
-        shared_ptr<BaseNode> node   = (*i).first;
+        boost::shared_ptr<BaseNode> node   = (*i).first;
         TObjectList& visibleObjects = (*i).second;
 
         for (TObjectList::iterator j = visibleObjects.begin();
@@ -476,7 +476,7 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
     for (TNodeObjectsMap::iterator i = visibleNodes.begin();
         i != visibleNodes.end(); ++i)
     {
-        shared_ptr<BaseNode> node   = (*i).first;
+        boost::shared_ptr<BaseNode> node   = (*i).first;
         TObjectList& visibleObjects = (*i).second;
 
         for (TObjectList::iterator j = visibleObjects.begin();
@@ -599,7 +599,7 @@ bool RestrictedVisionPerceptor::CheckOcclusion(const Vector3f& my_pos, const Obj
 
 //             dContactGeom contact;
 
-//             shared_ptr<Collider> collider = shared_static_cast<Collider>
+//             boost::shared_ptr<Collider> collider = shared_static_cast<Collider>
 //                 (i->mObj->GetChildSupportingClass("Collider"));
 
 //             if (mRay->Intersects(collider))

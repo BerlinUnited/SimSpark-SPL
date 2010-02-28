@@ -112,22 +112,22 @@ SexpMonitor::AddPredicates(std::ostringstream& ss, const PredicateList& pList)
 }
 
 void
-SexpMonitor::AddAgents(shared_ptr<Scene> activeScene, std::ostringstream& ss) const
+SexpMonitor::AddAgents(boost::shared_ptr<Scene> activeScene, std::ostringstream& ss) const
 {
     TLeafList nodes;
     activeScene->ListChildrenSupportingClass<AgentAspect>(nodes, true);
 
     for (TLeafList::iterator i = nodes.begin(); i != nodes.end(); ++i)
     {
-        shared_ptr<AgentAspect> aspect = shared_static_cast<AgentAspect>(*i);
+        boost::shared_ptr<AgentAspect> aspect = shared_static_cast<AgentAspect>(*i);
         const salt::Vector3f& pos = aspect->GetWorldTransform().Pos();
 
         ss << "(P ";
 
-        shared_ptr<AgentState> state = shared_static_cast<AgentState>
+        boost::shared_ptr<AgentState> state = shared_static_cast<AgentState>
             (aspect->GetChildOfClass("AgentState"));
 
-        shared_ptr<SayEffector> sayEff = shared_static_cast<SayEffector>
+        boost::shared_ptr<SayEffector> sayEff = shared_static_cast<SayEffector>
             (aspect->GetChildOfClass("SayEffector"));
 
         if (state.get() != 0)
@@ -154,7 +154,7 @@ SexpMonitor::AddAgents(shared_ptr<Scene> activeScene, std::ostringstream& ss) co
         }
 
         // extra field if the agent was the last colliding with the ball
-        shared_ptr<AgentAspect> agent;
+        boost::shared_ptr<AgentAspect> agent;
         TTime time;
         mBallState->GetLastCollidingAgent(agent,time);
         if (agent == aspect)
@@ -170,7 +170,7 @@ SexpMonitor::AddAgents(shared_ptr<Scene> activeScene, std::ostringstream& ss) co
 }
 
 void
-SexpMonitor::AddFlags(shared_ptr<Scene> activeScene, std::ostringstream& ss)
+SexpMonitor::AddFlags(boost::shared_ptr<Scene> activeScene, std::ostringstream& ss)
 {
     // the flags don't change, so we need to send them only once
     if (mSentFlags)
@@ -184,9 +184,9 @@ SexpMonitor::AddFlags(shared_ptr<Scene> activeScene, std::ostringstream& ss)
 
     for (TLeafList::iterator i = nodes.begin(); i != nodes.end(); ++i)
     {
-        shared_ptr<FieldFlag> flag = shared_static_cast<FieldFlag>(*i);
+        boost::shared_ptr<FieldFlag> flag = shared_static_cast<FieldFlag>(*i);
         const salt::Vector3f& pos = flag->GetWorldTransform().Pos();
-        shared_ptr<ObjectState> state = shared_dynamic_cast<ObjectState>
+        boost::shared_ptr<ObjectState> state = shared_dynamic_cast<ObjectState>
             (flag->GetChildOfClass("ObjectState"));
 
         if (state.get() == 0) continue;
@@ -202,9 +202,9 @@ SexpMonitor::AddFlags(shared_ptr<Scene> activeScene, std::ostringstream& ss)
 }
 
 void
-SexpMonitor::AddBall(shared_ptr<Scene> activeScene, std::ostringstream& ss) const
+SexpMonitor::AddBall(boost::shared_ptr<Scene> activeScene, std::ostringstream& ss) const
 {
-    shared_ptr<Ball> ball = shared_static_cast<Ball>(activeScene->GetChild("Ball"));
+    boost::shared_ptr<Ball> ball = shared_static_cast<Ball>(activeScene->GetChild("Ball"));
     const salt::Vector3f& pos = ball->GetWorldTransform().Pos();
     ss << "(B ";
     // pos
@@ -220,7 +220,7 @@ SexpMonitor::GetMonitorInfo(const oxygen::PredicateList& pList)
         return "(Die)\n";
     }
 
-    shared_ptr<SceneServer> sceneServer =
+    boost::shared_ptr<SceneServer> sceneServer =
         shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
@@ -228,7 +228,7 @@ SexpMonitor::GetMonitorInfo(const oxygen::PredicateList& pList)
         GetLog()->Error() << "(SexpMonitor) cannot get SceneServer\n";
         return "";
     }
-    shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
+    boost::shared_ptr<Scene> activeScene = sceneServer->GetActiveScene();
     ostringstream expression;
 
     expression << "(Info ";

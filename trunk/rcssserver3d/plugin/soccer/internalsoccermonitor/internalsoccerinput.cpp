@@ -44,7 +44,7 @@ InternalSoccerInput::~InternalSoccerInput()
 
 void InternalSoccerInput::OnLink()
 {
-    shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
+    boost::shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
     scriptServer->CreateVariable("Command.KickOff", CmdKickOff);
     scriptServer->CreateVariable("Command.KillAgentLeft", CmdKillAgentLeft);
     scriptServer->CreateVariable("Command.KillAgentRight", CmdKillAgentRight);
@@ -270,7 +270,7 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                         )
                     {
                         // search for the first agent of the left/right side
-                        shared_ptr<AgentState> agentState =
+                        boost::shared_ptr<AgentState> agentState =
                             shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
 
                         if (agentState.get() == 0)
@@ -305,7 +305,7 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                         )
                     {
                         // search for the first agent of the left/right side
-                        shared_ptr<AgentState> agentState =
+                        boost::shared_ptr<AgentState> agentState =
                             shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
 
                         if (agentState.get() == 0)

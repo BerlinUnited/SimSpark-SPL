@@ -60,7 +60,7 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
     }
 
-    shared_ptr<BeamAction> beamAction =
+    boost::shared_ptr<BeamAction> beamAction =
         shared_dynamic_cast<BeamAction>(mAction);
 
    mAction.reset();
@@ -110,7 +110,7 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         // on the team
         pos = SoccerBase::FlipView(pos, mAgentState->GetTeamIndex());     
 
-        shared_ptr<Transform> agentAspect;
+        boost::shared_ptr<Transform> agentAspect;
         SoccerBase::GetTransformParent(*this, agentAspect);
         if (agentAspect.get() == 0)
         {
@@ -127,14 +127,14 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 BeamEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {
       GetLog()->Error() << "ERROR: (BeamEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>();
+      return boost::shared_ptr<ActionObject>();
     }
 
   Predicate::Iterator iter = predicate.begin();
@@ -144,7 +144,7 @@ BeamEffector::GetActionObject(const Predicate& predicate)
   {
       GetLog()->Error()
           << "ERROR: (BeamEffector) float expected for parameter1\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+      return boost::shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
   }
 
   float posY;
@@ -152,7 +152,7 @@ BeamEffector::GetActionObject(const Predicate& predicate)
   {
       GetLog()->Error()
           << "ERROR: (BeamEffector) float expected for parameter2\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+      return boost::shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
   }
 
   float angle;
@@ -160,10 +160,10 @@ BeamEffector::GetActionObject(const Predicate& predicate)
   {
       GetLog()->Error()
           << "ERROR: (BeamEffector) float expected for parameter3\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+      return boost::shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
   }
 
-  return shared_ptr<ActionObject>(new BeamAction(GetPredicate(), posX, posY, angle));
+  return boost::shared_ptr<ActionObject>(new BeamAction(GetPredicate(), posX, posY, angle));
 }
 
 void

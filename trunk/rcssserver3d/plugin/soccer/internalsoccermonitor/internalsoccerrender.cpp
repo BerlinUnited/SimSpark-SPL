@@ -199,7 +199,7 @@ void InternalSoccerRender::Render()
 
 #if 0
     // get texture -- has to be square and power of 2 in size!!!
-    shared_ptr<Texture2D> tex = shared_static_cast<Texture2D>
+    boost::shared_ptr<Texture2D> tex = shared_static_cast<Texture2D>
                                     (mTextureServer->GetTexture("test.tga"));
 
     glEnable2D();

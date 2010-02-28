@@ -307,7 +307,7 @@ GameStateAspect::EraseUnum(TTeamIndex idx, int unum)
 }
 
 bool
-GameStateAspect::RequestUniform(shared_ptr<AgentState> agentState,
+GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
                                 std::string teamName, unsigned int unum)
 {
     if (agentState.get() == 0)

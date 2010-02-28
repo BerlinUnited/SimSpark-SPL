@@ -251,7 +251,7 @@ string NaoBehavior::Think(const std::string& message)
     }
 
     // parse message and extract joint angles
-    shared_ptr<PredicateList> predList = mParser->Parse(message);
+    boost::shared_ptr<PredicateList> predList = mParser->Parse(message);
 
     if (predList.get() != 0)
     {

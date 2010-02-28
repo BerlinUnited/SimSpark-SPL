@@ -49,7 +49,7 @@ DriveEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    shared_ptr<BaseNode> parent =
+    boost::shared_ptr<BaseNode> parent =
         shared_dynamic_cast<BaseNode>(GetParent().lock());
 
     if (parent.get() == 0)
@@ -59,7 +59,7 @@ DriveEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    shared_ptr<DriveAction> driveAction = shared_dynamic_cast<DriveAction>(action);
+    boost::shared_ptr<DriveAction> driveAction = shared_dynamic_cast<DriveAction>(action);
 
     if (driveAction.get() == 0)
     {
@@ -88,14 +88,14 @@ DriveEffector::Realize(boost::shared_ptr<ActionObject> action)
     return true;
 }
 
-shared_ptr<ActionObject>
+boost::shared_ptr<ActionObject>
 DriveEffector::GetActionObject(const Predicate& predicate)
 {
   if (predicate.name != GetPredicate())
     {
       GetLog()->Error() << "ERROR: (DriveEffector) invalid predicate"
                         << predicate.name << "\n";
-      return shared_ptr<ActionObject>();
+      return boost::shared_ptr<ActionObject>();
     }
 
   Vector3f force;
@@ -103,10 +103,10 @@ DriveEffector::GetActionObject(const Predicate& predicate)
   {
       GetLog()->Error()
           << "ERROR: (DriveEffector) Vector3f parameter expected\n";
-      return shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
+      return boost::shared_ptr<ActionObject>(new ActionObject(GetPredicate()));
   }
 
-  return shared_ptr<ActionObject>(new DriveAction(GetPredicate(),force));
+  return boost::shared_ptr<ActionObject>(new DriveAction(GetPredicate(),force));
 }
 
 void
@@ -116,7 +116,7 @@ DriveEffector::OnLink()
     SoccerBase::GetBody(*this,mBody);
     SoccerBase::GetAgentState(*this,mAgentState);
 
-    shared_ptr<SphereCollider> geom =
+    boost::shared_ptr<SphereCollider> geom =
         shared_dynamic_cast<SphereCollider>(mTransformParent->GetChild("geometry"));
 
     mMaxDistance = 0.001;

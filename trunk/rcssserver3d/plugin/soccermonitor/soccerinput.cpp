@@ -40,7 +40,7 @@ SoccerInput::~SoccerInput()
 
 void SoccerInput::OnLink()
 {
-    shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
+    boost::shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
     scriptServer->CreateVariable("Command.KickOff", CmdKickOff);
     scriptServer->CreateVariable("Command.KickOffRight", CmdKickOffRight);
     scriptServer->CreateVariable("Command.MoveAgent", CmdMoveAgent);
@@ -118,7 +118,7 @@ void SoccerInput::ProcessInput(const Input& input)
         return;
     }
 
-    shared_ptr<SoccerMonitor> soccerMonitor =
+    boost::shared_ptr<SoccerMonitor> soccerMonitor =
         shared_static_cast<SoccerMonitor>(soccerMonitorList.front());
     
     switch (input.mId)
