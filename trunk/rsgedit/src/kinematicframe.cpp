@@ -101,17 +101,17 @@ void kinematicFrame::AddJointDescription(shared_ptr<Joint> joint)
             strType = wxT("?");
             break;
 
-        case dJointTypeUniversal:
+        case /*dJointTypeUniversal*/ 5:
             bmp = new wxStaticBitmap(mCtrScrollWnd, wxID_ANY, mBmpUniversal);
             strType = wxT("Universal");
             break;
 
-        case dJointTypeHinge:
+        case /*dJointTypeHinge*/ 2:
             bmp = new wxStaticBitmap(mCtrScrollWnd, wxID_ANY, mBmpHinge);
             strType = wxT("Hinge");
             break;
 
-        case dJointTypeSlider:
+        case /*dJointTypeSlider*/ 3:
             bmp = new wxStaticBitmap(mCtrScrollWnd, wxID_ANY, mBmpSlider);
             strType = wxT("Slider");
             break;
@@ -209,10 +209,10 @@ void kinematicFrame::UpdateCached()
 
             switch (jt)
                 {
-                case dJointTypeFixed:
+                case 7 /*dJointTypeFixed*/:
                     break;
 
-                case dJointTypeUniversal:
+                case 5 /*dJointTypeUniversal*/:
                     AddJointDescription(joint);
                     AddJointControl(joint, 0);
                     AddJointControl(joint, 1);
@@ -280,7 +280,7 @@ void kinematicFrame::RefreshProperties()
                 default:
                     break;
 
-                case dJointTypeSlider:
+                case 3: //dJointTypeSlider:
                     {
                         shared_ptr<SliderJoint> sliderJoint
                             = shared_static_cast<SliderJoint>(entry.joint.lock());
@@ -288,7 +288,7 @@ void kinematicFrame::RefreshProperties()
                         break;
                     }
 
-                case dJointTypeUniversal:
+                case 5: //dJointTypeUniversal:
                     {
                         shared_ptr<UniversalJoint> universal
                             = shared_static_cast<UniversalJoint>(entry.joint.lock());
@@ -296,7 +296,7 @@ void kinematicFrame::RefreshProperties()
                         break;
                     }
 
-                case dJointTypeHinge:
+                case 2: //dJointTypeHinge:
                     {
                         shared_ptr<HingeJoint> hinge
                             = shared_static_cast<HingeJoint>(entry.joint.lock());
@@ -323,7 +323,7 @@ void kinematicFrame::OnScrollChanged(wxScrollEvent& event)
 
     JointControl& entry = (*iter).second;
     shared_ptr<Joint> joint(shared_static_cast<Joint>(entry.joint.lock()));
-    joint->SetParameter(dParamVel, 0);
+    joint->SetParameter(2 /*dParamVel*/, 0);
 }
 
 float kinematicFrame::GetJointVel(float diff)
@@ -334,7 +334,7 @@ float kinematicFrame::GetJointVel(float diff)
 
 int kinematicFrame::GetParamVel(int axis) const
 {
-    return (axis == 0) ? dParamVel : dParamVel2;
+    return (axis == 0) ? 2 /*dParamVel*/ : 258 /*dParamVel2*/;
 }
 
 void kinematicFrame::MoveJoint(JointControl& entry)
@@ -346,7 +346,7 @@ void kinematicFrame::MoveJoint(JointControl& entry)
         default:
             break;
 
-        case dJointTypeHinge:
+        case 2: //dJointTypeHinge:
             {
                 shared_ptr<HingeJoint> hinge
                     = shared_static_cast<HingeJoint>(entry.joint.lock());
@@ -363,7 +363,7 @@ void kinematicFrame::MoveJoint(JointControl& entry)
                 break;
             }
 
-        case dJointTypeUniversal:
+        case 5: //dJointTypeUniversal:
             {
                 shared_ptr<UniversalJoint> universal
                     = shared_static_cast<UniversalJoint>(entry.joint.lock());

@@ -274,20 +274,20 @@ void Property::GenContactJointEntries(boost::shared_ptr<Leaf> leaf, TEntryList& 
     const ContactJointHandler& cjh = *shared_static_cast<ContactJointHandler>(leaf);
 
     int mode = cjh.GetContactMode();
-    wxString strMode =
-        FORMAT_FLAG(mode, dContactMu2) +
-        FORMAT_FLAG(mode, dContactFDir1) +
-        FORMAT_FLAG(mode, dContactBounce) +
-        FORMAT_FLAG(mode, dContactSoftERP) +
-        FORMAT_FLAG(mode, dContactSoftCFM) +
-        FORMAT_FLAG(mode, dContactMotion1) +
-        FORMAT_FLAG(mode, dContactMotion2) +
-        FORMAT_FLAG(mode, dContactSlip1) +
-        FORMAT_FLAG(mode, dContactSlip2) +
-        FORMAT_FLAG(mode, dContactApprox0) +
-        FORMAT_FLAG(mode, dContactApprox1_1) +
-        FORMAT_FLAG(mode, dContactApprox1_2) +
-        FORMAT_FLAG(mode, dContactApprox1);
+    wxString strMode = //replace ODE constants with their actual values
+        FORMAT_FLAG(mode, 1 /*dContactMu2*/) +
+        FORMAT_FLAG(mode, 2 /*dContactFDir1*/) +
+        FORMAT_FLAG(mode, 4 /*dContactBounce*/) +
+        FORMAT_FLAG(mode, 8 /*dContactSoftERP*/) +
+        FORMAT_FLAG(mode, 16 /*dContactSoftCFM*/) +
+        FORMAT_FLAG(mode, 32 /*dContactMotion1*/) +
+        FORMAT_FLAG(mode, 64 /*dContactMotion2*/) +
+        FORMAT_FLAG(mode, 256 /*dContactSlip1*/) +
+        FORMAT_FLAG(mode, 512 /*dContactSlip2*/) +
+        FORMAT_FLAG(mode, 0 /*dContactApprox0*/) +
+        FORMAT_FLAG(mode, 4096 /*dContactApprox1_1*/) +
+        FORMAT_FLAG(mode, 8192 /*dContactApprox1_2*/) +
+        FORMAT_FLAG(mode, 12288 /*dContactApprox1*/);
 
     entries.push_back(Entry(wxT("GetContactMode"),strMode));
     entries.push_back(Entry(wxT("GetBounceValue"),FormatFloat(cjh.GetBounceValue())));

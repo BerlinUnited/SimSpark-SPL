@@ -270,6 +270,11 @@ public:
 
     /** Whether limit jointMaxSpeed2 */
     bool IsLimitJointMaxSpeed2() const;
+    
+    /** This has to be declared here because rsgedit upcasts to Joint 
+        at one point and then calls this.  
+    */
+    virtual void SetParameter(int parameter, float value){};
 
 protected:
     /** associates the created joint with this node */
