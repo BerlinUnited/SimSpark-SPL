@@ -22,7 +22,7 @@ set(collisionperceptor_LIB_SRCS
 
 add_library(collisionperceptor MODULE ${collisionperceptor_LIB_SRCS})
 
-target_link_libraries(collisionperceptor ${spark_libs})
+target_link_libraries(collisionperceptor ${ODE_LIBRARY} ${spark_libs})
 
 if (NOT APPLE)
    set_target_properties(collisionperceptor PROPERTIES VERSION 0.0.0 SOVERSION 0)
