@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <boost/thread/locks.hpp>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/simulationserver/simulationserver.h>
 #include "monitorserver.h"
@@ -176,10 +177,12 @@ string MonitorServer::GetMonitorHeaderInfo()
 string MonitorServer::GetMonitorData()
 {
     int cycle = mSimulationServer->GetCycle();
+    boost::mutex::scoped_lock dataLock(mDataMutex);
+
     if ( cycle == mDataCycle ){
         return mData;
     }
-    
+
     boost::shared_ptr<MonitorSystem> monitorSystem = GetMonitorSystem();
 
     if (monitorSystem.get() == 0)

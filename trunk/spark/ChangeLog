@@ -1,3 +1,17 @@
+2010-03-28  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/monitorserver/monitorserver.h (MonitorServer): 
+	* lib/oxygen/monitorserver/monitorserver.cpp (MonitorServer::GetMonitorData):
+	- protect GetMonitorData() on simultaneous access
+	 
+	* lib/oxygen/physicsserver/int/sliderjointint.h: 
+	* lib/oxygen/physicsserver/int/jointint.h: 
+	* lib/oxygen/physicsserver/int/physicsobjectint.h:
+	- fixed the shared_ptr.hpp include path
+	 
+	* plugin/odeimps/odejoint.cpp (JointImp::EnableFeedback):
+	- removed extra cin/cout commands 
+
 2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
 
     * lib/kerosin/fontserver/fontserver.cpp:

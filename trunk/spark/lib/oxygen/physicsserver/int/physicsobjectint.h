@@ -23,7 +23,7 @@
 #ifndef OXYGEN_PHYSICSOBJECTINT_H
 #define OXYGEN_PHYSICSOBJECTINT_H
 
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <salt/matrix.h>
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>
@@ -34,12 +34,12 @@ namespace oxygen
 class OXYGEN_API PhysicsObjectInt
 {
 
-public:    
+public:
     /** converts the rotation part of a salt::Matrix to an
         engine-specific matrix that arranges the values in a different way
     */
     virtual void ConvertRotationMatrix(const salt::Matrix& rot, GenericPhysicsMatrix& matrix) = 0;
-    
+
     /** coverts an engine-specific matrix to the rotation part of a salt::Matrix */
     virtual void ConvertRotationMatrix(const GenericPhysicsMatrix* matrix, salt::Matrix& rot) const = 0;
 };
