@@ -25,7 +25,7 @@ using namespace boost;
 using namespace std;
 using namespace salt;
 
-JointImp::JointImp() : PhysicsObjectImp() 
+JointImp::JointImp() : PhysicsObjectImp()
 {
 }
 
@@ -73,11 +73,11 @@ long JointImp::GetBodyID(int idx, long jointID)
     return (long) ODEBodyID;
 }
 
-void JointImp::EnableFeedback(bool enable, long jointID, 
+void JointImp::EnableFeedback(bool enable, long jointID,
                               boost::shared_ptr<GenericJointFeedback> feedback)
 {
     dJointID JointImp = (dJointID) jointID;
-    
+
     if (enable)
         {
             if (feedback.get() == 0)
@@ -94,8 +94,6 @@ void JointImp::EnableFeedback(bool enable, long jointID,
                     }
             }
 
-    cout << "bla";
-    std::cin;
     dJointFeedback* ODEFeedback = (dJointFeedback*) feedback.get();
 
     dJointSetFeedback(JointImp,ODEFeedback);
@@ -107,7 +105,7 @@ bool JointImp::FeedbackEnabled(long jointID) const
     return (dJointGetFeedback(JointImp) != 0);
 }
 
-Vector3f JointImp::GetFeedbackForce(int idx, 
+Vector3f JointImp::GetFeedbackForce(int idx,
                                     boost::shared_ptr<GenericJointFeedback> feedback) const
 {
     dJointFeedback* fb = (dJointFeedback*) feedback.get();
@@ -166,7 +164,7 @@ Vector3f JointImp::GetFeedbackTorque(int idx,
             return Vector3f(0,0,0);
         }
 }
-    
+
 void JointImp::SetFudgeFactor(int idx, float fudge_factor, long jointID)
 {
     SetParameter(dParamFudgeFactor + (idx * dParamGroup), fudge_factor, jointID);
@@ -307,7 +305,7 @@ float JointImp::GetMaxMotorForce(int idx, long jointID) const
     return GetParameter(dParamFMax + (idx * dParamGroup), jointID);
 }
 
-void JointImp::DestroyJoint(long jointID, 
+void JointImp::DestroyJoint(long jointID,
                             boost::shared_ptr<GenericJointFeedback> feedback)
 {
     dJointID JointImp = (dJointID) jointID;
@@ -328,7 +326,7 @@ void JointImp::SetParameter(int parameter, float value, long jointID){
         case dJointTypeUniversal: dJointSetUniversalParam(JointImp, parameter, value);
                                   break;
         case dJointTypeAMotor: dJointSetAMotorParam(JointImp, parameter, value);
-                               break; 
+                               break;
         default: return;
     }
 }

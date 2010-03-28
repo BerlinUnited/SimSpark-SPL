@@ -22,6 +22,7 @@
 #ifndef OXYGEN_MONITORSERVER_H
 #define OXYGEN_MONITORSERVER_H
 
+#include <boost/thread/mutex.hpp>
 #include <oxygen/oxygen_defines.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
@@ -90,6 +91,9 @@ private:
 
     /** the cycle of cacahed data */
     int mDataCycle;
+
+    /** a mutex to protect mData and mDataCycle variables */
+    boost::mutex mDataMutex;
 };
 
 DECLARE_CLASS(MonitorServer);
