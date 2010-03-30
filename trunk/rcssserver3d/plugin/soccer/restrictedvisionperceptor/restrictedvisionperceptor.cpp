@@ -41,7 +41,7 @@ RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mSenseMyPos(false),
                                      mAddNoise(true),
                                      mStaticSenseAxis(true),
-                                     mLinePercept(true)
+                                     mLinePercept(false)
 {
     // set predicate name
     SetPredicateName("See");
@@ -693,12 +693,6 @@ void RestrictedVisionPerceptor::LinePercept(Predicate& predicate)
   {
     LineData& ld = (*i);
 
-//    if (mAddNoise)
-//    {
-//      ld.mBeginPoint.mRelPos += mError;
-//      ld.mEndPoint.mRelPos += mError;
-//    }
-
     bool seeBeginPoint = checkVisuable(ld.mBeginPoint);
     bool seeEndPoint = checkVisuable(ld.mEndPoint);
 
@@ -780,8 +774,8 @@ void RestrictedVisionPerceptor::LinePercept(Predicate& predicate)
     if (seeBeginPoint && seeEndPoint)
     {
       // make some noise
-//      ApplyNoise(ld.mBeginPoint);
-//      ApplyNoise(ld.mEndPoint);
+      ApplyNoise(ld.mBeginPoint);
+      ApplyNoise(ld.mEndPoint);
 
       ++i;
     }
@@ -790,17 +784,6 @@ void RestrictedVisionPerceptor::LinePercept(Predicate& predicate)
       i = visibleLines.erase(i);
     }
   }
-
-  LineData vl;
-  vl.mBeginPoint.mDist = 0;
-  vl.mBeginPoint.mTheta = 0;
-  vl.mBeginPoint.mPhi = 0;
-  vl.mEndPoint.mDist = 13;
-  vl.mEndPoint.mTheta = mHViewCone*0.5;
-  vl.mEndPoint.mPhi = 0;
-  visibleLines.push_back(vl);
-  vl.mEndPoint.mTheta *= -1;
-  visibleLines.push_back(vl);
 
   // generate a sense entry
   AddSense(predicate, visibleLines);
@@ -816,7 +799,11 @@ RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
   const Matrix& mat = mTransformParent->GetWorldTransform();
 
   // get the transformation matrix describing the current orientation
-  const salt::Vector3f myPos = mat.Pos();
+  Vector3f myPos = mat.Pos();
+  if (mAddNoise)
+  {
+    myPos -= mError;
+  }
 
 
   for (TLeafList::iterator i = lineList.begin(); i != lineList.end(); ++i)
