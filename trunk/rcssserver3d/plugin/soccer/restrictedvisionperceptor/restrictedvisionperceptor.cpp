@@ -41,7 +41,7 @@ RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mSenseMyPos(false),
                                      mAddNoise(true),
                                      mStaticSenseAxis(true),
-                                     mLinePercept(false)
+                                     mSenseLine(false)
 {
     // set predicate name
     SetPredicateName("See");
@@ -461,9 +461,9 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
         element.AddValue(sensedMyPos[2]);
     }
 
-    if (mLinePercept)
+    if (mSenseLine)
     {
-        LinePercept(predicate);
+        SenseLine(predicate);
     }
 
     return true;
@@ -563,9 +563,9 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         element.AddValue(sensedMyPos[2]);
     }
 
-    if (mLinePercept)
+    if (mSenseLine)
     {
-      LinePercept(predicate);
+      SenseLine(predicate);
     }
 
     return true;
@@ -672,12 +672,13 @@ bool RestrictedVisionPerceptor::checkVisuable(RestrictedVisionPerceptor::ObjectD
   return true;
 }
 
-void RestrictedVisionPerceptor::LinePercept(Predicate& predicate)
+void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
 {
   const float focalLength = 0.1f;
   TLineList visibleLines;
   SetupLines(visibleLines);
 
+  // TODO: precalculate it
   // visual range
   Vector2f ru(tan(gDegToRad<double>(mHViewCone*0.5))*focalLength, tan(gDegToRad<double>(mVViewCone*0.5))*focalLength);
   Vector2f rb(ru.x(), -ru.y());
@@ -839,21 +840,26 @@ RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
 void RestrictedVisionPerceptor::AddSense(Predicate& predicate, const TLineList& lineList) const
 {
   for (TLineList::const_iterator i = lineList.begin(); i != lineList.end(); ++i)
-        {
-            const LineData& ld = (*i);
-            ParameterList& element = predicate.parameter.AddList();
-            element.AddValue(std::string("L"));
+  {
+    const LineData& ld = (*i);
+    ParameterList& element = predicate.parameter.AddList();
+    element.AddValue(std::string("L"));
 
-            ParameterList& begPos = element.AddList();
-            begPos.AddValue(std::string("pol"));
-            begPos.AddValue(ld.mBeginPoint.mDist);
-            begPos.AddValue(ld.mBeginPoint.mTheta);
-            begPos.AddValue(ld.mBeginPoint.mPhi);
+    ParameterList& begPos = element.AddList();
+    begPos.AddValue(std::string("pol"));
+    begPos.AddValue(ld.mBeginPoint.mDist);
+    begPos.AddValue(ld.mBeginPoint.mTheta);
+    begPos.AddValue(ld.mBeginPoint.mPhi);
 
-            ParameterList& endPos = element.AddList();
-            endPos.AddValue(std::string("pol"));
-            endPos.AddValue(ld.mEndPoint.mDist);
-            endPos.AddValue(ld.mEndPoint.mTheta);
-            endPos.AddValue(ld.mEndPoint.mPhi);
-        }
+    ParameterList& endPos = element.AddList();
+    endPos.AddValue(std::string("pol"));
+    endPos.AddValue(ld.mEndPoint.mDist);
+    endPos.AddValue(ld.mEndPoint.mTheta);
+    endPos.AddValue(ld.mEndPoint.mPhi);
+  }
+}
+
+void RestrictedVisionPerceptor::SetSenseLine(bool sense)
+{
+  mSenseLine = sense;
 }
