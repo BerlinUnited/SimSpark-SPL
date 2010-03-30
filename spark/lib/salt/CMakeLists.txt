@@ -15,6 +15,8 @@ set(salt_LIB_HDRS
     sharedlibrary.h
     vector.h
     salt_defines.h
+    line2.h
+    linesegment2.h
 )
 
 set(salt_LIB_SRCS

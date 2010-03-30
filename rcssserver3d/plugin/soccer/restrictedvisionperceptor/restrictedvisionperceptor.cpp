@@ -25,6 +25,12 @@
 #include <oxygen/sceneserver/transform.h>
 #include <soccerbase/soccerbase.h>
 #include <salt/gmath.h>
+#include <list>
+#include <X11/X.h>
+#include <math.h>
+#include <salt/linesegment2.h>
+#include <limits>
+#include <iostream>
 
 using namespace zeitgeist;
 using namespace oxygen;
@@ -34,7 +40,8 @@ using namespace salt;
 RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mSenseMyPos(false),
                                      mAddNoise(true),
-                                     mStaticSenseAxis(true)
+                                     mStaticSenseAxis(true),
+                                     mSenseLine(false)
 {
     // set predicate name
     SetPredicateName("See");
@@ -454,6 +461,11 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
         element.AddValue(sensedMyPos[2]);
     }
 
+    if (mSenseLine)
+    {
+        SenseLine(predicate);
+    }
+
     return true;
 }
 
@@ -551,6 +563,11 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         element.AddValue(sensedMyPos[2]);
     }
 
+    if (mSenseLine)
+    {
+      SenseLine(predicate);
+    }
+
     return true;
 }
 
@@ -615,4 +632,234 @@ void
 RestrictedVisionPerceptor::SetSenseMyPos(bool sense)
 {
     mSenseMyPos = sense;
+}
+
+bool RestrictedVisionPerceptor::checkVisuable(RestrictedVisionPerceptor::ObjectData& od) const
+{
+  // theta is the angle in horizontal plane, with fwAngle as 0 degree
+  od.mTheta = gNormalizeDeg(gRadToDeg(gNormalizeRad(
+    gArcTan2(od.mRelPos[1], od.mRelPos[0])
+    )) - 90);
+
+  // latitude with fwPhi as 0 degreee
+  od.mPhi = gRadToDeg(gNormalizeRad(
+    gArcTan2(od.mRelPos[2],
+    Vector2f(od.mRelPos[0], od.mRelPos[1]).Length()
+    )
+    )
+    );
+
+  od.mDist = od.mRelPos.Length();
+  if (od.mDist <= 0.1)
+  {
+    // object is too close
+    return false;
+  }
+  
+  const int hAngle_2 = mHViewCone >> 1;
+  if (gAbs(od.mTheta) > hAngle_2)
+  {
+    // object is out of view range
+    return false;
+  }
+
+  const int vAngle_2 = mVViewCone >> 1;
+  if (gAbs(od.mPhi) > vAngle_2)
+  {
+    return false;
+  }
+
+  return true;
+}
+
+void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
+{
+  const float focalLength = 0.1f;
+  TLineList visibleLines;
+  SetupLines(visibleLines);
+
+  // TODO: precalculate it
+  // visual range
+  Vector2f ru(tan(gDegToRad<double>(mHViewCone*0.5))*focalLength, tan(gDegToRad<double>(mVViewCone*0.5))*focalLength);
+  Vector2f rb(ru.x(), -ru.y());
+  Vector2f lu(-ru.x(), ru.y());
+  Vector2f lb(-ru.x(), -ru.y());
+  LineSegment2f viewRangeLine[4];
+  viewRangeLine[0] = LineSegment2f(lu, ru);
+  viewRangeLine[1] = LineSegment2f(lb, rb);
+  viewRangeLine[2] = LineSegment2f(lu, lb);
+  viewRangeLine[3] = LineSegment2f(ru, rb);
+
+  for (TLineList::iterator i = visibleLines.begin(); i != visibleLines.end(); )
+  {
+    LineData& ld = (*i);
+
+    bool seeBeginPoint = checkVisuable(ld.mBeginPoint);
+    bool seeEndPoint = checkVisuable(ld.mEndPoint);
+
+    if (!(seeBeginPoint && seeEndPoint))
+    {
+      Vector3f bp3 = ld.mBeginPoint.mRelPos;
+      Vector3f ep3 = ld.mEndPoint.mRelPos;
+      
+      if ( bp3.y() < focalLength && ep3.y() >= focalLength )
+      {
+        float t = ( focalLength - ep3.y() ) / ( bp3.y() - ep3.y() );
+        bp3 = ep3 + ( bp3 - ep3 ) * t;
+      }
+      else if ( ep3.y() < focalLength && bp3.y() >= focalLength )
+      {
+        float t = ( focalLength - bp3.y() ) / ( ep3.y() - bp3.y() );
+        ep3 = bp3 + ( ep3 - bp3 ) * t;
+      }
+
+      if ( bp3.y() > 0 && ep3.y() > 0 )
+      {
+        Vector2f bp = Vector2f(bp3.x(), bp3.z()) * focalLength / bp3.y();
+        Vector2f ep = Vector2f(ep3.x(), ep3.z()) * focalLength / ep3.y();
+        LineSegment2f l(bp, ep);
+
+        float CB = bp3.Length();
+        float CE = ep3.Length();
+        float BE = (bp3 - ep3).Length();
+        float CEB = acos((BE * BE + CE * CE - CB * CB) / (2 * BE * CE));
+        Vector3f Ef(ep.x(), focalLength, ep.y());
+        float CEf = Ef.Length();
+
+        Vector3f X[2];
+        int inum = 0;
+        for ( int i=0; i<4 && inum < 2; i++)
+        {
+          Vector2f ip;
+          if ( l.Intersection(viewRangeLine[i], ip) )
+          {
+            Vector3f Xf(ip.x(), focalLength, ip.y());
+            float CXf = Xf.Length();
+            float XfEf = (Xf - Ef).Length();
+            float XfCEf = acos((CXf * CXf + CEf * CEf - XfEf * XfEf) / (2 * CXf * CEf));
+            float CXE = gPI - CEB - XfCEf;
+            float EX = CE / sin(CXE) * sin(XfCEf);
+            X[inum] = ep3 + (bp3 - ep3) * (EX / BE);
+            inum++;
+          }
+        }
+
+        if ( inum == 2 )
+        {
+          ld.mBeginPoint.mRelPos = X[0];
+          checkVisuable(ld.mBeginPoint);
+          seeBeginPoint = true;
+
+          ld.mEndPoint.mRelPos = X[1];
+          checkVisuable(ld.mEndPoint);
+          seeEndPoint = true;
+        }
+        else if ( inum == 1 )
+        {
+          if ( !seeBeginPoint )
+          {
+            ld.mBeginPoint.mRelPos = X[0];
+            checkVisuable(ld.mBeginPoint);
+            seeBeginPoint = true;
+          }
+          else
+          {
+            ld.mEndPoint.mRelPos = X[0];
+            checkVisuable(ld.mEndPoint);
+            seeEndPoint = true;
+          }
+        }
+      }
+    }
+    
+    if (seeBeginPoint && seeEndPoint)
+    {
+      // make some noise
+      ApplyNoise(ld.mBeginPoint);
+      ApplyNoise(ld.mEndPoint);
+
+      ++i;
+    }
+    else
+    {
+      i = visibleLines.erase(i);
+    }
+  }
+
+  // generate a sense entry
+  AddSense(predicate, visibleLines);
+}
+
+void
+RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
+{
+  TLeafList lineList;
+  mActiveScene->GetChildrenOfClass("Line", lineList, true);
+
+  // determine position relative to the local reference frame
+  const Matrix& mat = mTransformParent->GetWorldTransform();
+
+  // get the transformation matrix describing the current orientation
+  Vector3f myPos = mat.Pos();
+  if (mAddNoise)
+  {
+    myPos -= mError;
+  }
+
+
+  for (TLeafList::iterator i = lineList.begin(); i != lineList.end(); ++i)
+  {
+    LineData ld;
+
+    ld.mLine = shared_static_cast<Line > (*i);
+
+    if (ld.mLine.get() == 0)
+    {
+      GetLog()->Error() << "Error: (RestrictedVisionPerceptor) skipped line: "
+        << (*i)->GetName() << "\n";
+      continue; // this should never happen
+    }
+
+    boost::shared_ptr<Transform> j = ld.mLine->GetTransformParent();
+
+    if (j.get() == 0)
+    {
+      GetLog()->Error() << "Error: (RestrictedVisionPerceptor) skipped line (2): "
+        << (*i)->GetName() << "\n";
+      continue; // this should never happen
+    }
+
+    const salt::Matrix& t = j->GetWorldTransform();
+    ld.mBeginPoint.mRelPos =   mat.InverseRotate( t * ld.mLine->BeginPoint() - myPos );
+    ld.mEndPoint.mRelPos = mat.InverseRotate( t * ld.mLine->EndPoint() - myPos );
+
+    visibleLines.push_back(ld);
+  }
+}
+
+void RestrictedVisionPerceptor::AddSense(Predicate& predicate, const TLineList& lineList) const
+{
+  for (TLineList::const_iterator i = lineList.begin(); i != lineList.end(); ++i)
+  {
+    const LineData& ld = (*i);
+    ParameterList& element = predicate.parameter.AddList();
+    element.AddValue(std::string("L"));
+
+    ParameterList& begPos = element.AddList();
+    begPos.AddValue(std::string("pol"));
+    begPos.AddValue(ld.mBeginPoint.mDist);
+    begPos.AddValue(ld.mBeginPoint.mTheta);
+    begPos.AddValue(ld.mBeginPoint.mPhi);
+
+    ParameterList& endPos = element.AddList();
+    endPos.AddValue(std::string("pol"));
+    endPos.AddValue(ld.mEndPoint.mDist);
+    endPos.AddValue(ld.mEndPoint.mTheta);
+    endPos.AddValue(ld.mEndPoint.mPhi);
+  }
+}
+
+void RestrictedVisionPerceptor::SetSenseLine(bool sense)
+{
+  mSenseLine = sense;
 }

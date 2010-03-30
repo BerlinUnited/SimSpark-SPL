@@ -53,6 +53,7 @@
 #include "agentintegration/soccerbotbehavior.h"
 #include "hmdp_effector/hmdpeffector.h"
 #include "hmdp_effector/hmdpperceptor.h"
+#include "line/line.h"
 
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerControlAspect);
@@ -88,5 +89,6 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerbotBehavior);
         ZEITGEIST_EXPORT(HMDPPerceptor);
         ZEITGEIST_EXPORT(HMDPEffector);
+        ZEITGEIST_EXPORT(Line);
 ZEITGEIST_EXPORT_END()
 

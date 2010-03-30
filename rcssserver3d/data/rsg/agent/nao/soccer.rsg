@@ -10,6 +10,8 @@
  (def $FieldWidth  (eval Soccer.FieldWidth))
  (def $FieldHeight (eval Soccer.FieldHeight))
  (def $GoalDepth   (eval Soccer.GoalDepth))
+ (def $PenaltyLength (eval Soccer.PenaltyLength))
+ (def $PenaltyWidth (eval Soccer.PenaltyWidth))
 
  ;; height of the field ground plane
  (def $FieldMaterial matGrass)
@@ -22,6 +24,8 @@
  (def $GoalHalfDepth   (eval $GoalDepth / 2.0))
  (def $FieldLengthTextureSize (eval $FieldLength / 12.0 ))
  (def $FieldWidthTextureSize (eval $FieldWidth / 8.0 ))
+ (def $PenaltyX (eval $FieldHalfLength - $PenaltyLength ))
+ (def $PenaltyHalfWidth (eval $PenaltyWidth * 0.5 ))
 
  (def $BorderLength (eval $FieldLength * 0.333))
  (def $BorderWidth   (eval $FieldWidth * 0.75))
@@ -193,6 +197,71 @@
 	      0 
 	      F2R
 	      )
+;;
+;; add field lines
+;;
+;; middle line
+(importScene rsg/agent/fieldline.rsg
+	     0 (eval -1 * $FieldHalfWidth)
+	     0 $FieldHalfWidth
+	     )
+
+;; ground lines
+(importScene rsg/agent/fieldline.rsg
+	     $FieldHalfLength (eval -1 * $FieldHalfWidth)
+	     $FieldHalfLength $FieldHalfWidth
+	     )
+
+(importScene rsg/agent/fieldline.rsg
+	     (eval -1 * $FieldHalfLength) (eval -1 * $FieldHalfWidth)
+	     (eval -1 * $FieldHalfLength) $FieldHalfWidth
+	     )
+
+;; side lines
+(importScene rsg/agent/fieldline.rsg
+	     $FieldHalfLength $FieldHalfWidth
+	     (eval -1 * $FieldHalfLength) $FieldHalfWidth
+	     )
+
+(importScene rsg/agent/fieldline.rsg
+	     $FieldHalfLength (eval -1 * $FieldHalfWidth)
+	     (eval -1 * $FieldHalfLength) (eval -1 * $FieldHalfWidth)
+	     )
+
+;; penalty lines
+(importScene rsg/agent/fieldline.rsg
+	     $PenaltyX $PenaltyHalfWidth
+	     $PenaltyX (eval -1 * $PenaltyHalfWidth)
+	     )
+
+(importScene rsg/agent/fieldline.rsg
+	     $PenaltyX $PenaltyHalfWidth
+	     $FieldHalfLength $PenaltyHalfWidth
+	     )
+
+(importScene rsg/agent/fieldline.rsg
+	     $PenaltyX (eval -1 * $PenaltyHalfWidth)
+	     $FieldHalfLength (eval -1 * $PenaltyHalfWidth)
+	     )
+
+(importScene rsg/agent/fieldline.rsg
+	     (eval -1 * $PenaltyX) $PenaltyHalfWidth
+	     (eval -1 * $PenaltyX) (eval -1 * $PenaltyHalfWidth)
+	     )
+
+(importScene rsg/agent/fieldline.rsg
+	     (eval -1 * $PenaltyX) $PenaltyHalfWidth
+	     (eval -1 * $FieldHalfLength) $PenaltyHalfWidth
+	     )
+
+(importScene rsg/agent/fieldline.rsg
+	     (eval -1 * $PenaltyX) (eval -1 * $PenaltyHalfWidth)
+	     (eval -1 * $FieldHalfLength) (eval -1 * $PenaltyHalfWidth)
+	     )
+
+;; ring
+(importScene rsg/agent/fieldring.rsg
+	     1.8)
 
 ;;
 ;; add the ball
