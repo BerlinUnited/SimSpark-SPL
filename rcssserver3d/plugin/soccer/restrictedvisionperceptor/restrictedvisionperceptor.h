@@ -104,6 +104,9 @@ public:
     //! Turn sensing of agent position on/off
     void SetSenseMyPos(bool sense);
 
+    // turn sensing of lines on/off
+    void SetSenseLine(bool sense);
+
     /** Turn noise off/on.
         \param add_noise flag if noise should be used at all.
     */
@@ -173,7 +176,7 @@ protected:
     bool DynamicAxisPercept(boost::shared_ptr<oxygen::PredicateList> predList);
 
     /** Percept lines in the world */
-    void LinePercept(oxygen::Predicate& predicate);
+    void SenseLine(oxygen::Predicate& predicate);
 
     void SetupLines(TLineList& visibleLines);
 
@@ -222,7 +225,7 @@ protected:
     bool mStaticSenseAxis;
 
     /** flag if the lines can be sensed */
-    bool mLinePercept;
+    bool mSenseLine;
 
     //! horizontal opening of the vision cone
     unsigned int mHViewCone;
