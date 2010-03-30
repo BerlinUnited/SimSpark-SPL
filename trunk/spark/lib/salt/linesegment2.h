@@ -81,7 +81,7 @@ public:
    *
    * @return if the segment and line have intersection
    */
-  bool IntersectionWithLine(const TLine2<DATATYPE>& line,
+  bool Intersection(const TLine2<DATATYPE>& line,
     P_T & intersection)const
   {
     if ( TLine2<DATATYPE>::Intersection(line, intersection) )
@@ -102,8 +102,8 @@ public:
   bool Intersection(const TLineSegment2& seg2,
     P_T & intersection)const
   {
-    if (IntersectionWithLine(seg2, intersection)) {
-      return seg2.IsBetween(intersection);
+    if (TLine2<DATATYPE>::Intersection(seg2, intersection)) {
+      return IsBetween(intersection) && seg2.IsBetween(intersection);
     }
     return false;
   }
