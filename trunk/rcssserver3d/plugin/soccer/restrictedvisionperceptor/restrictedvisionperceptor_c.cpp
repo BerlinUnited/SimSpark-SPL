@@ -150,6 +150,22 @@ FUNCTION(RestrictedVisionPerceptor,setTiltRange)
     return true;
 }
 
+FUNCTION(RestrictedVisionPerceptor,setSenseLine)
+{
+    bool inSenseLine;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inSenseLine))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSenseLine(inSenseLine);
+    return true;
+}
+
 void CLASS(RestrictedVisionPerceptor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Perceptor);
@@ -160,4 +176,5 @@ void CLASS(RestrictedVisionPerceptor)::DefineClass()
     DEFINE_FUNCTION(setViewCones);
     DEFINE_FUNCTION(setPanRange);
     DEFINE_FUNCTION(setTiltRange);
+    DEFINE_FUNCTION(setSenseLine);
 }

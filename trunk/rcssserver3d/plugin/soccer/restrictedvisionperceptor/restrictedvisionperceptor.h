@@ -29,6 +29,7 @@
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/agentaspect/agentaspect.h>
 #include <agentstate/agentstate.h>
+#include "../line/line.h"
 
 class RestrictedVisionPerceptor : public oxygen::Perceptor
 {
@@ -67,6 +68,15 @@ protected:
 
     typedef std::map<boost::shared_ptr<oxygen::BaseNode>, TObjectList> TNodeObjectsMap;
 
+    struct LineData
+    {
+      boost::shared_ptr<Line> mLine;
+      ObjectData mBeginPoint;
+      ObjectData mEndPoint;
+    };
+
+    typedef std::list<LineData> TLineList;
+
 public:
     RestrictedVisionPerceptor();
     virtual ~RestrictedVisionPerceptor();
@@ -93,6 +103,9 @@ public:
 
     //! Turn sensing of agent position on/off
     void SetSenseMyPos(bool sense);
+
+    // turn sensing of lines on/off
+    void SetSenseLine(bool sense);
 
     /** Turn noise off/on.
         \param add_noise flag if noise should be used at all.
@@ -162,6 +175,13 @@ protected:
     */
     bool DynamicAxisPercept(boost::shared_ptr<oxygen::PredicateList> predList);
 
+    /** Percept lines in the world */
+    void SenseLine(oxygen::Predicate& predicate);
+
+    void SetupLines(TLineList& visibleLines);
+
+    bool checkVisuable(ObjectData& od) const;
+
     /** Checks if the given object is occluded, seen from from my_pos */
     bool CheckOcclusion(const salt::Vector3f& my_pos, const ObjectData& od) const;
 
@@ -171,6 +191,9 @@ protected:
     void AddSense(oxygen::Predicate& predicate,
                   boost::shared_ptr<BaseNode> node,
                   TObjectList& objectList) const;
+
+    void AddSense(oxygen::Predicate& predicate,
+                  const TLineList& lineList) const;
 
     /** applies noise to the setup ObjectData */
     void ApplyNoise(ObjectData& od) const;
@@ -200,6 +223,9 @@ protected:
         team, default true
     */
     bool mStaticSenseAxis;
+
+    /** flag if the lines can be sensed */
+    bool mSenseLine;
 
     //! horizontal opening of the vision cone
     unsigned int mHViewCone;
