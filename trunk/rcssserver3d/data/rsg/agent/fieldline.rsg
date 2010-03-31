@@ -16,12 +16,13 @@
 
  ;; (def $centerX (eval (eval $BegX + $EndX) / 2.0))
  ;; (def $centerY (eval (eval $BegY + $EndY) / 2.0))
- ;; (def $lengthY (eval (eval $EndY - $BegY) / 2.0))
+ ;; (def $lengthX (eval $EndX - $BegX))
+ ;; (def $lengthY (eval $EndY - $BegY))
 
  ;; (nd Transform
  ;;     (setLocalPos $centerX $centerY 0)
  ;;     (nd Box
- ;; 	 (setExtents 0.1 $lengthY 0.1)
+ ;; 	 (setExtents $lengthX $lengthY 0.1)
  ;; 	 )
  ;;     )
  )

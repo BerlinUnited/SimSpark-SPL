@@ -7,23 +7,23 @@
 (
  (templ $Radius)
 
- (def $px0 1.0)
+ (def $px0 (eval 1.0 * $Radius))
  (def $py0 0.0)
 
- (def $px36 0.80901699437494745)
- (def $py36 0.58778525229247314)
+ (def $px36 (eval 0.80901699437494745 * $Radius))
+ (def $py36 (eval 0.58778525229247314 * $Radius))
 
- (def $px72 0.30901699437494745)
- (def $py72 0.95105651629515353)
+ (def $px72 (eval 0.30901699437494745 * $Radius))
+ (def $py72 (eval 0.95105651629515353 * $Radius))
 
- (def $px108 -0.30901699437494734)
- (def $py108 0.95105651629515364)
+ (def $px108 (eval -0.30901699437494734 * $Radius))
+ (def $py108 (eval 0.95105651629515364 * $Radius))
 
- (def $px144 -0.80901699437494734)
- (def $py144 0.58778525229247325)
+ (def $px144 (eval -0.80901699437494734 * $Radius))
+ (def $py144 (eval 0.58778525229247325 * $Radius))
 
- (def $px180 -1.0)
- (def $py180 0.0)
+ (def $px180 (eval -1.0 * $Radius))
+ (def $py180 (eval 0.0))
 
  (def $px216 $px144)
  (def $py216 (eval -1 * $py144))
