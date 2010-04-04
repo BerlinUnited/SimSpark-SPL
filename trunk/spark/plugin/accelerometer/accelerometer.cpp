@@ -48,6 +48,7 @@ void Accelerometer::OnLink()
 
     mGravity = mBody->GetWorld()->GetGravity();
     mLastVel = mBody->GetVelocity();
+    mAcc.Zero();
 }
 
 bool Accelerometer::Percept(boost::shared_ptr<PredicateList> predList)
@@ -75,15 +76,12 @@ void Accelerometer::PrePhysicsUpdateInternal(float deltaTime)
 //    float mass = mBody->GetMass();
 //    mAcc = F / mass - mGravity;
 
+    // calculate the acceleration according to velocity, it is a bit noise
     Vector3f vel = mBody->GetVelocity();
     Vector3f acc = (vel - mLastVel) / deltaTime;
     acc -= mGravity;
 
     Matrix invRot = mBody->GetRotation();
     invRot.InvertRotationMatrix();
-    acc = invRot * acc;
-
-    float k = 0.9;
-    mAcc = k*mAcc + (1-k)*acc;
-    mLastVel = vel;
+    mAcc = invRot * acc;
 }
