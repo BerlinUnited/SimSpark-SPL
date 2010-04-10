@@ -227,7 +227,7 @@ def sparkSetupMonitorLogPlayer
     monitorClient = sparkCreate('SparkMonitorLogFileServer', $serverPath+'simulation/SparkMonitorLogFileServer')
 
     monitorClient.setFileName($logPlayerFile)
-    monitorClient.setStepDelay(33000)
+    monitorClient.setStep($monitorLoggerStep)
   end
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
