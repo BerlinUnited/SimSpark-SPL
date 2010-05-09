@@ -1,3 +1,8 @@
+2010-05-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp (thisCall): 
+	- Fixed a bug in number to pointer conversion in 64bit systems
+
 2010-03-28  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/monitorserver/monitorserver.h (MonitorServer): 
