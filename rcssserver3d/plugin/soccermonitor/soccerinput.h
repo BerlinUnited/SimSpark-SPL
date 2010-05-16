@@ -51,7 +51,16 @@ public:
             CmdCameraRightGoal   = CmdCameraRightCorner + 1,
             //JAN
             CmdFreeKickLeft      = CmdCameraRightGoal + 1,
-            CmdFreeKickRight   = CmdFreeKickLeft + 1
+            CmdFreeKickRight   = CmdFreeKickLeft + 1,
+            
+            CmdNextMode = CmdFreeKickRight + 1
+        };
+        
+    enum ECmdMode
+        {
+            CmdModeDefault = 1,
+            CmdModePlayerSelect,
+            CmdModeNone
         };
 
 public:
@@ -71,6 +80,8 @@ public:
     /** reset SparkMonitorClient reference */
     virtual void OnUnlink();
 
+    ECmdMode GetCmdMode() const { return mCmdMode; }
+    
 protected:
     void SendCommand(const std::string& cmd);
 
@@ -82,6 +93,8 @@ protected:
     boost::shared_ptr<oxygen::RigidBody> mCameraBody;
 
     boost::shared_ptr<oxygen::FPSController> mFPS;
+    
+    ECmdMode mCmdMode;
 };
 
 DECLARE_CLASS(SoccerInput);

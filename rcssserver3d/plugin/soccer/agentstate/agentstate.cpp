@@ -23,9 +23,11 @@
 #include <soccertypes.h>
 #include <soccerbase/soccerbase.h>
 #include <gamestateaspect/gamestateaspect.h>
+#include <kerosin/renderserver/rendernode.h>
 #include <sstream>
 
 using namespace oxygen;
+using namespace kerosin;
 using namespace std;
 
 AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
@@ -33,7 +35,8 @@ AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
                            mHearMax(2), mHearInc(1),
                            mHearDecay(2), mHearMateCap(2),
                            mHearOppCap(2), mIfSelfMsg(false),
-                           mIfMateMsg(false), mIfOppMsg(false)
+                           mIfMateMsg(false), mIfOppMsg(false),
+                           mSelected(false)
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
@@ -208,6 +211,18 @@ AgentState::GetSelfMessage(string& msg)
     mIfSelfMsg = false;
 
     return true;
+}
+
+void
+AgentState::UpdateHierarchyInternal()
+{
+    boost::shared_ptr<RenderNode> node = boost::shared_dynamic_cast<RenderNode>(GetChild("SelectionMarker", true));
+    if (!node)
+    {
+      GetLog()->Error() << "ERROR: (AgentState::UpdateHierarchyInternal) could not find selection marker\n";
+      return;
+    }
+    node->SetVisible(mSelected);
 }
 
 void

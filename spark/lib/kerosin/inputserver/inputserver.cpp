@@ -305,11 +305,13 @@ InputServer::GetInput(Input &input, bool raw)
          ++bindIter
          )
     {
+        /*
         const Bind& bind = (*bindIter);
 
         //printf("Looking at: %d %d %d", (*bind).mCode, (*bind).cmd, (*bind).modifier);
-        if (bind.modifier == mModifierState)
+        if (bind.modifier == input.mModState)
         {
+        */
 #if 0
             if (input.mType == Input::eButton)
             {
@@ -322,8 +324,8 @@ InputServer::GetInput(Input &input, bool raw)
 
             //printf("Looking at: %d %d %d", (*bind).mCode, (*bind).cmd, (*bind).modifier);
             if (
-                (bind.modifier == 0 && mModifierState == 0) ||
-                (bind.modifier & mModifierState)
+                (bind.modifier == 0 && input.mModState == 0) ||
+                (bind.modifier & input.mModState)
                 )
 #endif
             {
@@ -335,7 +337,7 @@ InputServer::GetInput(Input &input, bool raw)
                 input.mId = bind.cmd;
                 return true;
             }
-        }
+        //}
     }
 
     input.mId = -1;
@@ -404,6 +406,7 @@ bool InputServer::ParseBindDescription(Bind &bind, const std::string &desc)
         {
             current = tokens.front();
             tokens.pop_front();
+            
             bind.modifier |= ParseModifier(current);
         }
 

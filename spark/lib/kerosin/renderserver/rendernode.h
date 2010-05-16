@@ -45,8 +45,13 @@ public:
 
     bool IsTransparent() { return mTransparent; }
     void SetTransparent();
+    
+    void SetVisible(bool visible);
+    bool IsVisible() { return mVisible; }
+    
 private:
     bool mTransparent;
+    bool mVisible;
 };
 
 DECLARE_ABSTRACTCLASS(RenderNode);

@@ -91,6 +91,10 @@ public:
     bool GetMessage(std::string& msg, float& direction, bool teamMate);
     bool GetSelfMessage(std::string& msg);
 
+    bool IsSelected() const { return mSelected; }
+    void Select(bool s = true) { mSelected = s; }
+    void UnSelect() { mSelected = false; }
+    
 protected:
     /** team index */
     TTeamIndex mTeamIndex;
@@ -134,7 +138,9 @@ protected:
     /** is there any message from oponnent */
     bool mIfOppMsg;
 
+    bool mSelected;
 protected:
+    virtual void UpdateHierarchyInternal();
     virtual void OnUnlink();
 
 };
