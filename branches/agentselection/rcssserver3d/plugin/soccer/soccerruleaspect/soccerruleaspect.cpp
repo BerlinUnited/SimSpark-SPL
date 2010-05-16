@@ -212,6 +212,47 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
 }
 
 void
+SoccerRuleAspect::ClearSelectedPlayers(float min_dist)
+{
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE))
+        return;
+
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    for (i = agent_states.begin(); i != agent_states.end(); ++i)
+    {
+        SoccerBase::GetTransformParent(**i, agent_aspect);
+
+        // if agent is selected, move it away
+        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+
+        if ((*i)->IsSelected())
+        {
+            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+
+            if ((*i)->GetTeamIndex() == TI_LEFT)
+            {
+                if (new_pos[0] - dist < -mFieldLength/2.0)
+                {
+                    new_pos[1] = new_pos[1] < 0 ? new_pos[1] + dist : new_pos[1] - dist;
+                } else {
+                    new_pos[0] = new_pos[0] - dist;
+                }
+            } else {
+                if (new_pos[0] + dist > mFieldLength/2.0)
+                {
+                    new_pos[1] = new_pos[1] < 0 ? new_pos[1] + dist : new_pos[1] - dist;
+                } else {
+                    new_pos[0] = new_pos[0] + dist;
+                }
+            }
+            SoccerBase::MoveAgent(agent_aspect, new_pos);
+        }
+    }
+}
+
+void
 SoccerRuleAspect::DropBall()
 {
     DropBall(mBallBody->GetPosition());
@@ -1348,7 +1389,51 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
     }
 }
 
-Vector2f SoccerRuleAspect::GetFieldSize() const
+Vector2f
+SoccerRuleAspect::GetFieldSize() const
 {
     return Vector2f(mFieldLength,mFieldWidth);
+}
+
+void
+SoccerRuleAspect::ResetAgentSelection()
+{
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE))
+    {
+        
+        std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+        for (i = agent_states.begin(); i != agent_states.end(); ++i)
+          (*i)->UnSelect();
+    }
+}
+
+void
+SoccerRuleAspect::SelectNextAgent()
+{
+    std::list<boost::shared_ptr<AgentState> > agent_states;
+    boost::shared_ptr<AgentState> first = agent_states.front();
+    bool found = false;
+    if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE))
+    {
+        
+        std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+        for (i = agent_states.begin(); i != agent_states.end(); ++i)
+        {
+            if ((*i)->IsSelected())
+            {
+                (*i)->UnSelect();
+                found = true;
+                continue;
+            }
+            if (found)
+            {
+              (*i)->Select();
+              found = false;
+              break;
+            }
+        }
+        if (found)
+          first->Select();
+    }
 }

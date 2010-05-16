@@ -24,10 +24,12 @@
 #include "rendernode.h"
 
 using namespace kerosin;
+using namespace std;
 
 RenderNode::RenderNode()
     : BaseNode(),
-      mTransparent(false)
+      mTransparent(false),
+      mVisible(true)
 {
 }
 
@@ -37,5 +39,10 @@ RenderNode::~RenderNode()
 
 void RenderNode::SetTransparent()
 {
-  mTransparent = true;
+    mTransparent = true;
+}
+
+void RenderNode::SetVisible(bool visible)
+{
+   mVisible = visible;
 }

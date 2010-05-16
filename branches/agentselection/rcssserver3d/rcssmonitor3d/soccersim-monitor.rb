@@ -13,10 +13,6 @@ fontServer.getFont('fonts/VeraMono.ttf')
 # state
 sparkRegisterCustomMonitor 'SoccerMonitor'
 
-# register the soccer render plugin to draw the game state on the
-# screen
-sparkRegisterCustomRender  'SoccerRender'
-
 if ($logPlayerMode == true)
   # register the soccer input logplayer plugin for playback
   # specific keys
@@ -28,4 +24,8 @@ else
 end
   # bind keys to soccer commands
   run "soccerbindings.rb"
+
+# register the soccer render plugin to draw the game state on the
+# screen
+sparkRegisterCustomRender  'SoccerRender'
 

@@ -28,9 +28,11 @@ using namespace boost;
 using namespace zeitgeist;
 using namespace oxygen;
 using namespace kerosin;
+using namespace std;
 
 SoccerInput::SoccerInput()
-    : InputItem()
+    : InputItem(),
+      mCmdMode(CmdModeDefault)
 {
 }
 
@@ -57,7 +59,10 @@ void SoccerInput::OnLink()
     //JAN
     scriptServer->CreateVariable("Command.FreeKickLeft", CmdFreeKickLeft);
     scriptServer->CreateVariable("Command.FreeKickRight", CmdFreeKickRight);
+    
+    scriptServer->CreateVariable("Command.NextMode", CmdNextMode);
 
+    
     mMonitorClient = shared_dynamic_cast<NetClient>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient"));
 
@@ -126,6 +131,15 @@ void SoccerInput::ProcessInput(const Input& input)
         default:
             return;
 
+        case CmdNextMode:
+            if (input.GetKeyPress())
+            {
+                mCmdMode = (ECmdMode)(mCmdMode + 1);
+                if (mCmdMode == CmdModeNone)
+                  mCmdMode = CmdModeDefault;
+            }
+            break;
+            
         case CmdKickOff:
             if (input.GetKeyPress())
                 {

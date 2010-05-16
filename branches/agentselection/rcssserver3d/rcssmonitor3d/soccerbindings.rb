@@ -27,7 +27,7 @@ else
     inputServer.bindCommand('k',      Command.KickOff);
     inputServer.bindCommand('j',      Command.KickOffRight);
     inputServer.bindCommand('b',      Command.DropBall);
-    inputServer.bindCommand('m',      Command.MoveAgent);
+    #inputServer.bindCommand('m',      Command.MoveAgent);
     inputServer.bindCommand('n',      Command.ShootBall);
     inputServer.bindCommand('x',      Command.MoveBall);
     inputServer.bindCommand('1',      Command.CameraLeftGoal);
@@ -39,5 +39,6 @@ else
     inputServer.bindCommand('7',      Command.CameraRightGoal);
     inputServer.bindCommand('l',      Command.FreeKickLeft);
     inputServer.bindCommand('r',      Command.FreeKickRight);
+    inputServer.bindCommand('lctrl y',      Command.NextMode);
   end
 end

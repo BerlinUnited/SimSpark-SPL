@@ -101,6 +101,7 @@ public:
         float f;
     } mData;
 
+    unsigned int mModState;
 public:
 
     // numbers
