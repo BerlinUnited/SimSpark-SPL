@@ -61,6 +61,7 @@ void SoccerInput::OnLink()
     scriptServer->CreateVariable("Command.FreeKickRight", CmdFreeKickRight);
     
     scriptServer->CreateVariable("Command.NextMode", CmdNextMode);
+    scriptServer->CreateVariable("Command.SelectNextAgent", CmdSelectNextAgent);
 
     
     mMonitorClient = shared_dynamic_cast<NetClient>
@@ -138,6 +139,13 @@ void SoccerInput::ProcessInput(const Input& input)
                 if (mCmdMode == CmdModeNone)
                   mCmdMode = CmdModeDefault;
             }
+            break;
+        
+        case CmdSelectNextAgent:
+            if (input.GetKeyPress())
+                {
+                    SendCommand("(select)");
+                }
             break;
             
         case CmdKickOff:

@@ -48,7 +48,7 @@ sparkResetLogging()
 sparkLogErrorToCerr()
 #sparkLogAllToCerr()
 #sparkLogAllToFile('spark.txt')
-#sparkLogDebugToCerr()
+sparkLogDebugToCerr()
 
 #
 # uncomment any of the following to run a simulation

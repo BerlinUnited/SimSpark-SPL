@@ -13,8 +13,8 @@ material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matOrange'
 material.setDiffuse(1.0,0.3,0.0,1.0)
 
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matRed');
-material.setDiffuse(1.0,0.0,0.0,0.5)
-material.setAmbient(1.0,0.0,0.0,0.5)
+material.setDiffuse(1.0,0.0,0.0,1.0)
+material.setAmbient(1.0,0.0,0.0,1.0)
 
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matRedGlow');
 material.setDiffuse(1.0,0.0,0.0,1.0)
@@ -33,6 +33,11 @@ material.setDiffuse(0.0,0.75,1.0,1.0)
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matGreen');
 material.setDiffuse(0.1,0.6,0.1,1.0)
 material.setAmbient(0.1,0.3,0.1,1.0)
+
+# selection marker
+material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matSelect');
+material.setDiffuse(1.0,0.0,0.0,0.2)
+material.setAmbient(1.0,0.0,0.0,0.2)
 
 # shades of grey
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matWhite');

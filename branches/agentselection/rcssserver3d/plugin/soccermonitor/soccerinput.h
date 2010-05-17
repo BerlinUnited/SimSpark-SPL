@@ -53,7 +53,8 @@ public:
             CmdFreeKickLeft      = CmdCameraRightGoal + 1,
             CmdFreeKickRight   = CmdFreeKickLeft + 1,
             
-            CmdNextMode = CmdFreeKickRight + 1
+            CmdNextMode = CmdFreeKickRight + 1,
+            CmdSelectNextAgent = CmdNextMode + 1
         };
         
     enum ECmdMode

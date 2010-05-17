@@ -44,7 +44,8 @@ public:
         CT_PLAYMODE,
         CT_DROP_BALL,
         CT_KICK_OFF,
-        CT_ACK
+        CT_ACK,
+        CT_SELECT
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
@@ -100,6 +101,11 @@ protected:
         predicate
     */
     void ParseKickOffCommand(const oxygen::Predicate & predicate);
+    
+    /** parses and executes the select command contained in the given
+        predicate
+    */
+    void ParseSelectCommand(const oxygen::Predicate & predicate);
 
 protected:
     TCommandMap    mCommandMap;

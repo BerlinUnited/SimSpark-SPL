@@ -45,7 +45,8 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mCommandMap["dropBall"] = CT_DROP_BALL;
     mCommandMap["kickOff"] = CT_KICK_OFF;
     mCommandMap["getAck"] = CT_ACK;
-
+    mCommandMap["select"] = CT_SELECT;
+    
     // setup team index map
     // Originally  team sides were "L","R" and "N"
     // But this seems to be unused
@@ -151,6 +152,8 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
     // lookup the command type corresponding to the predicate name
     TCommandMap::iterator iter = mCommandMap.find(predicate.name);
 
+    cerr << "Trainer command: " << predicate.name << endl;
+    
     if (iter == mCommandMap.end())
     {
         return false;
@@ -189,6 +192,9 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
 
         break;
     }
+    case CT_SELECT:
+        ParseSelectCommand(predicate);
+        break;
     default:
         return false;
     }
@@ -477,3 +483,72 @@ TrainerCommandParser::ParseKickOffCommand(const oxygen::Predicate& predicate)
     }
 }
 
+void TrainerCommandParser::ParseSelectCommand(const oxygen::Predicate & predicate)
+{    
+    Predicate::Iterator unumParam(predicate);
+    int                 unum;
+    bool specified = true;
+    
+    cerr << "Parsing Select Command..." << endl;
+    
+    shared_ptr<SoccerRuleAspect> soccerRuleAspect;
+    if (!SoccerBase::GetSoccerRuleAspect(*this, soccerRuleAspect))
+    {
+        cerr << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n" << endl;
+        GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n";
+        return;
+    }
+
+    // extract unum
+    if (predicate.FindParameter(unumParam, "unum"))
+    {
+        if (! predicate.GetValue(unumParam, unum))
+          specified = false;
+    }
+    else
+      specified = false;
+    
+    string team;
+    TTeamIndex idx;
+    Predicate::Iterator teamParam(predicate);
+
+    // extract side
+    if (predicate.FindParameter(teamParam, "team"))
+    {
+        if (! predicate.GetValue(teamParam, team))
+          specified = false;
+        else
+            idx = mTeamIndexMap[team];
+    }    
+    else
+      specified = false;
+      
+    if (!specified)
+    {
+        soccerRuleAspect->SelectNextAgent();
+        return;
+    }
+    
+    SoccerBase::TAgentStateList agentStates;
+    SoccerBase::GetAgentStates(*this, agentStates, idx); 
+    SoccerBase::TAgentStateList::iterator iter = agentStates.begin();
+    bool found = false;
+
+    while (iter != agentStates.end() && !found)
+        {   
+            if ((*iter)->GetUniformNumber() == unum)                
+                {
+                    found = true;                     
+                }
+            else
+                ++iter;
+        }
+
+    if (!found)
+        {
+           GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get correct AgentState\n";
+           return; 
+        }
+
+    (*iter)->Select();
+}

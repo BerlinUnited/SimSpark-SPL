@@ -91,9 +91,9 @@ public:
     bool GetMessage(std::string& msg, float& direction, bool teamMate);
     bool GetSelfMessage(std::string& msg);
 
-    bool IsSelected() const { return mSelected; }
-    void Select(bool s = true) { mSelected = s; }
-    void UnSelect() { mSelected = false; }
+    bool IsSelected() const;
+    void Select(bool s = true);
+    void UnSelect();
     
 protected:
     /** team index */

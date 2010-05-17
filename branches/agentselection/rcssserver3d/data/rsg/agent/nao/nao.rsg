@@ -71,8 +71,8 @@
             (nd Transform
               (nd Sphere
                 (setName SelectionMarker)
-                (setRadius 0.2)
-                (setMaterial matRed)
+                (setRadius 0.4)
+                (setMaterial matSelect)
                 (setTransparent)
               )
             )

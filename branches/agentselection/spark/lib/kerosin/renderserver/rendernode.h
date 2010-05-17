@@ -47,11 +47,13 @@ public:
     void SetTransparent();
     
     void SetVisible(bool visible);
-    bool IsVisible() { return mVisible; }
+    bool IsVisible() const { return mVisible; }
+    bool VisibleToggled();
     
 private:
     bool mTransparent;
     bool mVisible;
+    bool mVisibleToggled;
 };
 
 DECLARE_ABSTRACTCLASS(RenderNode);
