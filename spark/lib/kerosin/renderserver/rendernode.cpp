@@ -29,7 +29,8 @@ using namespace std;
 RenderNode::RenderNode()
     : BaseNode(),
       mTransparent(false),
-      mVisible(true)
+      mVisible(true),
+      mVisibleToggled(true)
 {
 }
 
@@ -44,5 +45,14 @@ void RenderNode::SetTransparent()
 
 void RenderNode::SetVisible(bool visible)
 {
-   mVisible = visible;
+    if (!mVisibleToggled && mVisible != visible)
+      mVisibleToggled = true;
+    mVisible = visible;
+}
+
+bool RenderNode::VisibleToggled()
+{
+    bool tmp = mVisibleToggled;
+    mVisibleToggled = false;
+    return tmp;
 }

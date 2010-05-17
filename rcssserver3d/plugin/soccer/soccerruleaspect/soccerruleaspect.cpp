@@ -1411,11 +1411,13 @@ SoccerRuleAspect::ResetAgentSelection()
 void
 SoccerRuleAspect::SelectNextAgent()
 {
+    cerr << "Selecting Next Agent..." << endl;
+    
     std::list<boost::shared_ptr<AgentState> > agent_states;
-    boost::shared_ptr<AgentState> first = agent_states.front();
-    bool found = false;
-    if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE))
+    bool selectNext = false;
+    if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE) && agent_states.size() > 0)
     {
+        boost::shared_ptr<AgentState> first = agent_states.front();
         
         std::list<boost::shared_ptr<AgentState> >::const_iterator i;
         for (i = agent_states.begin(); i != agent_states.end(); ++i)
@@ -1423,17 +1425,17 @@ SoccerRuleAspect::SelectNextAgent()
             if ((*i)->IsSelected())
             {
                 (*i)->UnSelect();
-                found = true;
+                selectNext = true;
                 continue;
             }
-            if (found)
+            else if (selectNext)
             {
               (*i)->Select();
-              found = false;
-              break;
+              return;
             }
         }
-        if (found)
-          first->Select();
+        
+        // No agent selected, select first
+        first->Select();
     }
 }

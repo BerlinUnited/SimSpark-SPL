@@ -241,3 +241,21 @@ AgentState::OnUnlink()
     game_state->ReturnUniform(GetTeamIndex(), GetUniformNumber());
 }
 
+bool
+AgentState::IsSelected() const
+{
+    return mSelected;
+}
+
+void
+AgentState::Select(bool s)
+{
+    cerr << "Selecting " << mUniformNumber << endl;
+    mSelected = s;
+}
+
+void
+AgentState::UnSelect()
+{
+    mSelected = false;
+}
