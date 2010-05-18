@@ -265,7 +265,7 @@ KeyboardSDL::EventFilter(const SDL_Event* event)
     Input input(Input::eButton, sym);
     input.mData.l = (event->type == SDL_KEYDOWN);
     input.mModState = modState;
-    mInputSystem->AddInput(input);
+    mInputSystem->AddInputInternal(input);
 
     return 0;
 }

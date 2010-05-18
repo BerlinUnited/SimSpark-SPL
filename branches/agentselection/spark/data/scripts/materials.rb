@@ -36,8 +36,9 @@ material.setAmbient(0.1,0.3,0.1,1.0)
 
 # selection marker
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matSelect');
-material.setDiffuse(1.0,0.0,0.0,0.2)
-material.setAmbient(1.0,0.0,0.0,0.2)
+material.setDiffuse(1.0,0.0,0.0,0.4)
+material.setAmbient(1.0,0.0,0.0,1.0)
+material.setSpecular(1.0,0.5,0.5,1.0);
 
 # shades of grey
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matWhite');

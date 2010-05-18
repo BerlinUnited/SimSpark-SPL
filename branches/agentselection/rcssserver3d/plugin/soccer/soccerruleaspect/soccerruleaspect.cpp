@@ -1411,8 +1411,6 @@ SoccerRuleAspect::ResetAgentSelection()
 void
 SoccerRuleAspect::SelectNextAgent()
 {
-    cerr << "Selecting Next Agent..." << endl;
-    
     std::list<boost::shared_ptr<AgentState> > agent_states;
     bool selectNext = false;
     if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE) && agent_states.size() > 0)

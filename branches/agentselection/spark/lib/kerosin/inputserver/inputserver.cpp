@@ -288,6 +288,7 @@ InputServer::GetInput(Input &input, bool raw)
         // return Input::eUser input
         return true;
     }
+    
     // translate raw input to binding
     TBindMap::iterator bindListIter = mBindings.find(input.mCode);
     if (bindListIter == mBindings.end())
@@ -322,13 +323,13 @@ InputServer::GetInput(Input &input, bool raw)
 #else
             const Bind& bind = (*bindIter);
 
-            //printf("Looking at: %d %d %d", (*bind).mCode, (*bind).cmd, (*bind).modifier);
             if (
                 (bind.modifier == 0 && input.mModState == 0) ||
                 (bind.modifier & input.mModState)
                 )
 #endif
             {
+                  
                 input.mId = bind.cmd;
                 return true;
             }

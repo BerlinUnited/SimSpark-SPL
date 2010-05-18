@@ -33,6 +33,11 @@
 #include <soccertypes.h>
 #include <soccerruleaspect/soccerruleaspect.h>
 
+namespace oxygen
+{
+  class GameControlServer;
+}
+
 class TrainerCommandParser : public oxygen::MonitorCmdParser
 {
 public:
@@ -120,6 +125,8 @@ protected:
     boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
     //! the parser used to create the PredicateList
     boost::shared_ptr<oxygen::BaseParser> mSexpParser;
+    //! cached reference to the game control server
+    boost::shared_ptr<oxygen::GameControlServer> mGameControl;
 
     bool mGetAck;
     std::string mAckString;
