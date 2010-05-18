@@ -29,6 +29,7 @@
 #include <agentstate/agentstate.h>
 #include <soccertypes.h>
 #include <gamestateaspect/gamestateaspect.h>
+#include <oxygen/agentaspect/agentaspect.h>
 #include "trainercommandparser.h"
 
 using namespace std;
@@ -107,6 +108,15 @@ TrainerCommandParser::OnLink()
             GetLog()->Error() << "ERROR: (TrainerCommnadParser) failed to create SexpParser\n";
             return;
         }
+
+    mGameControl = shared_dynamic_cast<GameControlServer>
+        (GetCore()->Get("/sys/server/gamecontrol"));
+
+    if (mGameControl.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get GameControlServer\n";
+        }
+
 }
 
 void TrainerCommandParser::OnUnlink()
@@ -152,8 +162,6 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
     // lookup the command type corresponding to the predicate name
     TCommandMap::iterator iter = mCommandMap.find(predicate.name);
 
-    cerr << "Trainer command: " << predicate.name << endl;
-    
     if (iter == mCommandMap.end())
     {
         return false;
@@ -206,17 +214,17 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
 {    
     Predicate::Iterator unumParam(predicate);
     int                 unum;
+    bool specified = true;
 
     // extract unum
     if (predicate.FindParameter(unumParam, "unum"))
     {
         if (! predicate.GetValue(unumParam, unum))
-        {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get unum\n";
-            return;
-        }
+          specified = false;
     }
-
+    else
+      specified = false;
+    
     string team;
     TTeamIndex idx;
     Predicate::Iterator teamParam(predicate);
@@ -225,26 +233,23 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
     if (predicate.FindParameter(teamParam, "team"))
     {
         if (! predicate.GetValue(teamParam, team))
-        {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get team name\n";
-            return;
-        }
-
-        idx = mTeamIndexMap[team];
+          specified = false;
+        else
+            idx = mTeamIndexMap[team];
     }    
+    else
+      specified = false;
 
-    
     SoccerBase::TAgentStateList agentStates;
-    SoccerBase::GetAgentStates(*this, agentStates, idx); 
+    SoccerBase::GetAgentStates(*this, agentStates, (specified ? idx : TI_NONE)); 
     SoccerBase::TAgentStateList::iterator iter = agentStates.begin();
     bool found = false;
 
     while (iter != agentStates.end() && !found)
         {   
-            if ((*iter)->GetUniformNumber() == unum)                
-                {
-                    found = true;                     
-                }
+            if ((specified && (*iter)->GetUniformNumber() == unum) ||
+                (!specified && (*iter)->IsSelected()))
+                found = true;                     
             else
                 ++iter;
         }
@@ -256,7 +261,6 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
 
     Predicate::Iterator posParam(predicate);
-
     if (predicate.FindParameter(posParam, "pos"))
     {
         salt::Vector3f pos;
@@ -315,6 +319,31 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
     }
 
+    Predicate::Iterator killParam(predicate);
+    if (predicate.FindParameter(killParam, "kill"))
+    {
+        GameControlServer::TAgentAspectList agentAspects;
+        mGameControl->GetAgentAspectList(agentAspects);
+
+        GameControlServer::TAgentAspectList::iterator aaiter;
+        for (
+              aaiter = agentAspects.begin();
+              aaiter != agentAspects.end();
+              ++aaiter
+            )
+        {
+            // search for the first agent of the left/right side
+            boost::shared_ptr<AgentState> agentState =
+                shared_dynamic_cast<AgentState>((*aaiter)->GetChild("AgentState", true));
+
+            if (agentState == *iter)
+            {
+                mGameControl->pushDisappearedAgent((*aaiter)->ID());
+                break;
+            }
+        }
+    }
+    
     // Joschka: I removed the part to set a velocity because it doesn't really  
     // seem to have a meaning for agents that have more than just a single body
 
@@ -489,12 +518,9 @@ void TrainerCommandParser::ParseSelectCommand(const oxygen::Predicate & predicat
     int                 unum;
     bool specified = true;
     
-    cerr << "Parsing Select Command..." << endl;
-    
     shared_ptr<SoccerRuleAspect> soccerRuleAspect;
     if (!SoccerBase::GetSoccerRuleAspect(*this, soccerRuleAspect))
     {
-        cerr << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n" << endl;
         GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n";
         return;
     }

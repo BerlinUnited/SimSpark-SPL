@@ -41,5 +41,6 @@ else
     inputServer.bindCommand('r',      Command.FreeKickRight);
     inputServer.bindCommand('lctrl y',      Command.NextMode);
     inputServer.bindCommand('n',      Command.SelectNextAgent);
+    inputServer.bindCommand('x',      Command.KillSelection);
   end
 end

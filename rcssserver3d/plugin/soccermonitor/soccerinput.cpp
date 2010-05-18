@@ -62,7 +62,7 @@ void SoccerInput::OnLink()
     
     scriptServer->CreateVariable("Command.NextMode", CmdNextMode);
     scriptServer->CreateVariable("Command.SelectNextAgent", CmdSelectNextAgent);
-
+    scriptServer->CreateVariable("Command.KillSelection", CmdKillSelection);
     
     mMonitorClient = shared_dynamic_cast<NetClient>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient"));
@@ -145,6 +145,13 @@ void SoccerInput::ProcessInput(const Input& input)
             if (input.GetKeyPress())
                 {
                     SendCommand("(select)");
+                }
+            break;
+        
+        case CmdKillSelection:
+            if (input.GetKeyPress())
+                {
+                    SendCommand("(agent (kill 1))");
                 }
             break;
             

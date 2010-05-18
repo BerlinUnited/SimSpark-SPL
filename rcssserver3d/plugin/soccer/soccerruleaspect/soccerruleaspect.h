@@ -45,7 +45,6 @@ class SoccerRuleAspect : public SoccerControlAspect
 {
 public:
     typedef std::list<boost::shared_ptr<AgentState> > TAgentStateList;
-    typedef std::pair<TTeamIndex, int> TAgentSelection;
     
 public:
     SoccerRuleAspect();

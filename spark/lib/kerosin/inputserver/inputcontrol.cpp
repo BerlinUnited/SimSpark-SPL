@@ -212,20 +212,20 @@ void InputControl::StartCycle()
                     break;
 
                 default:
-                    break;
-                }
-            // pass unknown events on to the registered InputItems
-            TLeafList items;
-            ListChildrenSupportingClass<InputItem>(items);
+                    // pass unknown events on to the registered InputItems
+                    TLeafList items;
+                    ListChildrenSupportingClass<InputItem>(items);
 
-            for (
-                  TLeafList::iterator iter = items.begin();
-                  iter != items.end();
-                  ++iter
-                  )
-                {
-                    shared_static_cast<InputItem>(*iter)
-                        ->ProcessInput(input);
+                    for (
+                          TLeafList::iterator iter = items.begin();
+                          iter != items.end();
+                          ++iter
+                          )
+                        {
+                            shared_static_cast<InputItem>(*iter)
+                                ->ProcessInput(input);
+                        }
+                    break;
                 }
         }
 

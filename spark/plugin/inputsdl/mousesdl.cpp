@@ -69,6 +69,7 @@ MouseSDL::EventFilter(const SDL_Event* event)
         }
 
         input.mData.l = (event->type == SDL_MOUSEBUTTONDOWN);
+        input.mModState = 0;
         mInputSystem->AddInputInternal(input);
         return 0;
     }
