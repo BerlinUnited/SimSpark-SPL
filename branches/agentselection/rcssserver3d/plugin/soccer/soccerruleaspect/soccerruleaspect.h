@@ -100,6 +100,8 @@ public:
     
     void SelectNextAgent();
     
+    void ClearSelectedPlayers();
+
 protected:
     /** rereads the current soccer script values */
     virtual void UpdateCachedInternal();
@@ -194,8 +196,6 @@ protected:
      * @param idx the team which kick off
      */
     void ClearPlayersBeforeKickOff(TTeamIndex idx);
-
-    void ClearSelectedPlayers(float min_dist);
                       
 protected:
     /** reference to the body node of the Ball */

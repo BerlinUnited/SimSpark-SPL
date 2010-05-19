@@ -250,7 +250,6 @@ AgentState::IsSelected() const
 void
 AgentState::Select(bool s)
 {
-    cerr << "Selecting " << mUniformNumber << endl;
     mSelected = s;
 }
 

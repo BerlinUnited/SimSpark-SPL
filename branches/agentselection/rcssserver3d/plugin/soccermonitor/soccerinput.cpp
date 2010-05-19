@@ -62,6 +62,7 @@ void SoccerInput::OnLink()
     
     scriptServer->CreateVariable("Command.NextMode", CmdNextMode);
     scriptServer->CreateVariable("Command.SelectNextAgent", CmdSelectNextAgent);
+    scriptServer->CreateVariable("Command.ResetSelection", CmdResetSelection);
     scriptServer->CreateVariable("Command.KillSelection", CmdKillSelection);
     
     mMonitorClient = shared_dynamic_cast<NetClient>
@@ -148,10 +149,17 @@ void SoccerInput::ProcessInput(const Input& input)
                 }
             break;
         
+        case CmdResetSelection:
+            if (input.GetKeyPress())
+                {
+                    SendCommand("(select (unum -1))");
+                }
+            break;
+            
         case CmdKillSelection:
             if (input.GetKeyPress())
                 {
-                    SendCommand("(agent (kill 1))");
+                    SendCommand("(kill)");
                 }
             break;
             
@@ -171,7 +179,7 @@ void SoccerInput::ProcessInput(const Input& input)
         case CmdMoveAgent:
             if (input.GetKeyPress())
                 {
-                    //SendCommand("(agent (team Left)(unum 1)(pos -2.0 1.0 3.5))");
+                    SendCommand("(agent)");
                 }
             break;
         case CmdDropBall:
