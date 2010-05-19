@@ -212,8 +212,9 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
 }
 
 void
-SoccerRuleAspect::ClearSelectedPlayers(float min_dist)
+SoccerRuleAspect::ClearSelectedPlayers()
 {
+    float min_dist = mFreeKickMoveDist;
     std::list<boost::shared_ptr<AgentState> > agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE))
         return;

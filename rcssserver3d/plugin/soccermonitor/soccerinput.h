@@ -55,7 +55,8 @@ public:
             
             CmdNextMode = CmdFreeKickRight + 1,
             CmdSelectNextAgent = CmdNextMode + 1,
-            CmdKillSelection = CmdSelectNextAgent + 1
+            CmdResetSelection = CmdSelectNextAgent + 1,
+            CmdKillSelection = CmdResetSelection + 1
         };
         
     enum ECmdMode

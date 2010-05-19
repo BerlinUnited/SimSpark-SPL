@@ -50,7 +50,8 @@ public:
         CT_DROP_BALL,
         CT_KICK_OFF,
         CT_ACK,
-        CT_SELECT
+        CT_SELECT,
+        CT_KILL
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
@@ -112,6 +113,10 @@ protected:
     */
     void ParseSelectCommand(const oxygen::Predicate & predicate);
 
+    /** parses and executes the kill command contained in the given
+        predicate
+    */
+    void ParseKillCommand(const oxygen::Predicate & predicate);
 protected:
     TCommandMap    mCommandMap;
 

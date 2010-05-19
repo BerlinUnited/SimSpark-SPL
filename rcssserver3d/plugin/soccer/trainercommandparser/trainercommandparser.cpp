@@ -47,6 +47,7 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mCommandMap["kickOff"] = CT_KICK_OFF;
     mCommandMap["getAck"] = CT_ACK;
     mCommandMap["select"] = CT_SELECT;
+    mCommandMap["kill"] = CT_KILL;
     
     // setup team index map
     // Originally  team sides were "L","R" and "N"
@@ -203,6 +204,9 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
     case CT_SELECT:
         ParseSelectCommand(predicate);
         break;
+    case CT_KILL:
+        ParseKillCommand(predicate);
+        break;
     default:
         return false;
     }
@@ -240,6 +244,12 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
     else
       specified = false;
 
+    if (!specified)
+    {
+      mSoccerRule->ClearSelectedPlayers();
+      return;
+    }
+    
     SoccerBase::TAgentStateList agentStates;
     SoccerBase::GetAgentStates(*this, agentStates, (specified ? idx : TI_NONE)); 
     SoccerBase::TAgentStateList::iterator iter = agentStates.begin();
@@ -247,7 +257,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
 
     while (iter != agentStates.end() && !found)
         {   
-            if ((specified && (*iter)->GetUniformNumber() == unum) ||
+            if ((specified && (*iter)->GetUniformNumber() == unum && (*iter)->GetTeamIndex() == idx) ||
                 (!specified && (*iter)->IsSelected()))
                 found = true;                     
             else
@@ -319,31 +329,6 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
     }
 
-    Predicate::Iterator killParam(predicate);
-    if (predicate.FindParameter(killParam, "kill"))
-    {
-        GameControlServer::TAgentAspectList agentAspects;
-        mGameControl->GetAgentAspectList(agentAspects);
-
-        GameControlServer::TAgentAspectList::iterator aaiter;
-        for (
-              aaiter = agentAspects.begin();
-              aaiter != agentAspects.end();
-              ++aaiter
-            )
-        {
-            // search for the first agent of the left/right side
-            boost::shared_ptr<AgentState> agentState =
-                shared_dynamic_cast<AgentState>((*aaiter)->GetChild("AgentState", true));
-
-            if (agentState == *iter)
-            {
-                mGameControl->pushDisappearedAgent((*aaiter)->ID());
-                break;
-            }
-        }
-    }
-    
     // Joschka: I removed the part to set a velocity because it doesn't really  
     // seem to have a meaning for agents that have more than just a single body
 
@@ -534,6 +519,12 @@ void TrainerCommandParser::ParseSelectCommand(const oxygen::Predicate & predicat
     else
       specified = false;
     
+    if (specified && unum == -1)
+    {
+        soccerRuleAspect->ResetAgentSelection();
+        return;
+    }
+      
     string team;
     TTeamIndex idx;
     Predicate::Iterator teamParam(predicate);
@@ -578,3 +569,64 @@ void TrainerCommandParser::ParseSelectCommand(const oxygen::Predicate & predicat
 
     (*iter)->Select();
 }
+
+void TrainerCommandParser::ParseKillCommand(const oxygen::Predicate & predicate)
+{    
+    Predicate::Iterator unumParam(predicate);
+    int                 unum;
+    bool specified = true;
+    
+    shared_ptr<SoccerRuleAspect> soccerRuleAspect;
+    if (!SoccerBase::GetSoccerRuleAspect(*this, soccerRuleAspect))
+    {
+        GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n";
+        return;
+    }
+
+    // extract unum
+    if (predicate.FindParameter(unumParam, "unum"))
+    {
+        if (! predicate.GetValue(unumParam, unum))
+          specified = false;
+    }
+    else
+      specified = false;
+    
+    string team;
+    TTeamIndex idx;
+    Predicate::Iterator teamParam(predicate);
+
+    // extract side
+    if (predicate.FindParameter(teamParam, "team"))
+    {
+        if (! predicate.GetValue(teamParam, team))
+          specified = false;
+        else
+            idx = mTeamIndexMap[team];
+    }    
+    else
+      specified = false;
+    
+    GameControlServer::TAgentAspectList agentAspects;
+    mGameControl->GetAgentAspectList(agentAspects);
+    GameControlServer::TAgentAspectList::iterator aaiter;
+    for (
+          aaiter = agentAspects.begin();
+          aaiter != agentAspects.end();
+          ++aaiter
+        )
+    {
+        // search for the first agent of the left/right side
+        boost::shared_ptr<AgentState> agentState =
+            shared_dynamic_cast<AgentState>((*aaiter)->GetChild("AgentState", true));
+
+        if ((specified && agentState->GetUniformNumber() == unum && agentState->GetTeamIndex() == idx) ||
+            (!specified && agentState->IsSelected()))
+        {
+            mGameControl->pushDisappearedAgent((*aaiter)->ID());
+            break;
+        }
+    }
+}
+
+    

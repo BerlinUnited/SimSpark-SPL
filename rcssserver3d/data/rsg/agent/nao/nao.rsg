@@ -69,9 +69,10 @@
             (nd GameStatePerceptor)
             (nd HearPerceptor)
             (nd Transform
-              (nd Sphere
+              (nd Cylinder
                 (setName SelectionMarker)
-                (setRadius 0.4)
+                (setParams 1.0 1.0)
+                (setScale 0.2 0.2 0.02)
                 (setMaterial matSelect)
                 (setTransparent)
               )
