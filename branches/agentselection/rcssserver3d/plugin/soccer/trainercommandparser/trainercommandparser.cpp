@@ -567,6 +567,7 @@ void TrainerCommandParser::ParseSelectCommand(const oxygen::Predicate & predicat
            return; 
         }
 
+    soccerRuleAspect->ResetAgentSelection();
     (*iter)->Select();
 }
 
