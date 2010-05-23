@@ -1,3 +1,11 @@
+2010-05-23  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssserver3d/naosoccersim.rb: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- Added the simple referee patch from FCPortugal team (thanks to
+	  Luis Paulo Reis) 
+
 2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
 
 	* cmake/FindBoost.cmake:

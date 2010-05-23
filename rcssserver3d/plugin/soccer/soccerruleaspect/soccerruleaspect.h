@@ -64,6 +64,48 @@ public:
         \param pos position where the ball should be dropped-
     */
     void DropBall(salt::Vector3f pos);
+    
+    /** Calculates the out of the field reposition pos for a given agent with unum and team idx
+        Agents are repositioned outside of the field near the mid field line on the opposite yy side
+        regarding the ball position
+    */
+    salt::Vector3f RepositionOutsidePos(salt::Vector3f initPos, int unum, TTeamIndex idx);
+    
+    /** Calculates the inside field reposition pos for a given agent with unum and team idx
+        Agents are repositioned at distance from the ball, that is, at: plpos + (plpos-ballpos).normalize()*dist
+    */
+    //salt::Vector3f RepositionInsidePos(salt::Vector3f initPos, int unum, TTeamIndex idx, float distance);
+
+   /** New rules for repositioning players that commit faults
+   */
+   void ClearPlayersAutomatic(TTeamIndex idx);
+
+   /** Calculates distance arrays needed for repositioning players 
+   */
+   void CalculateDistanceArrays(TTeamIndex idx);
+
+   /** Calculates ordering on a distance vector */
+   void SimpleOrder(float dArr[][3], int oArr[][3], TTeamIndex idx);
+
+   /** Agent state concerining standing, laying down on the ground are processed
+   */
+   void processAgentState(salt::Vector3f pos, int unum, TTeamIndex idx);
+
+   /** Reset the fault time counter for all players and also other counters
+   */
+   void ResetFaultCounter(TTeamIndex idx);
+
+   /** Reset the fault time counter for a given player
+   */
+   void ResetFaultCounterPlayer(int unum, TTeamIndex idx);
+
+   /**Analyse Faults from players and increase fault counter of offending players 
+   */
+   void AnalyseFaults(TTeamIndex idx);
+
+   /** Automatic Referee that clears players that violate the rules
+   */
+   void AutomaticSimpleReferee(TPlayMode playMode);
 
     /** broadcast a said message to all players
         \param message said message-
@@ -95,6 +137,7 @@ public:
      * @return the length and width
      */
     salt::Vector2f GetFieldSize() const;
+ 
     
 protected:
     /** rereads the current soccer script values */
@@ -203,21 +246,15 @@ protected:
 
     /** the radius of the Ball */
     float mBallRadius;
-
     /** the length of the pause after a goal */
     float mGoalPauseTime;
-
     /** the length of the pause after the ball left the field */
     float mKickInPauseTime;
-
     /** the length of one game half */
     float mHalfTime;
-
     /** the time we wait before dropping the ball in play modes where only
-        one team can touch the ball
-    */
+        one team can touch the ball */
     float mDropBallTime;
-
     /** the point above the ground, where the ball left the field */
     salt::Vector3f mLastValidBallPos;
     /** the field length (in meters) */
@@ -241,6 +278,43 @@ protected:
     float mWaitBeforeKickOff;
     /** flag if we want to play only one half of the match */
     bool mSingleHalfTime;
+
+    //FCP 2010 - New Parameters (added by FCPortugal for Singapure 2010)
+    /** max time player may be sitted or laying down before being repositioned */
+    int mNotStandingMaxTime;  
+    /** max time player may be on the ground before being repositioned */
+    int mGroundMaxTime;  
+    /** max time goalie may be sitted or laying down before being repositioned */
+    int mGoalieNotStandingMaxTime;  
+    /** max time goalie (player number 1) may be on the ground before being repositioned */
+    int mGoalieGroundMaxTime;
+    /** min dist for second closest of team before being repositioned */
+    float mMin2PlDistance;  
+    /** min dist for third closest of team before being repositioned */
+    float mMin3PlDistance; 
+    /** min dist for closest Opponent to ball in order to use repositions for the second and third player*/
+    float mMinOppDistance; 
+    /** maximum number of players of the defending team that may be inside own penalty area */
+    int mMaxPlayersInsideOwnArea; 
+    /** maximum time allowed for a player to commit a positional fault before being repositioned */
+    int mMaxFaultTime; 
+    /* Useful arrays for dealing with agent state an faults */
+    salt::Vector3f playerPos[12][3];		//Players Positions - not used
+    int playerGround[12][3];  		//Time Players are on the ground  
+    int playerNotStanding[12][3];  	//Time Players are not standing (head up for more than 0.5s)
+    int playerInsideOwnArea[12][3];  	//Player is inside own area
+    int prevPlayerInsideOwnArea[12][3]; //Player was inside own area last cycle
+    int playerStanding[12][3];  	//Time Players are standing
+    float distArr[12][3];		//Distance array to ball (left/right team)
+    int ordArr[12][3];	  		//Distance order of players (left/right team)
+    float distGArr[12][3];		//Distance array to own goal (left/right team)
+    int ordGArr[12][3];			//Distance order of players to own goal (left/right team)
+    int playerFaultTime[12][3];		//Time player is commiting a positional fault
+    int numPlInsideOwnArea[3]; 		//Number of players inside own area
+    int closestPlayer[3]; 		//Closest Player from each team
+    float closestPlayerDist[3]; 	//Closest Player distance to ball from each team
+    /* FCP 2010 - New Parameters */   
+
     // areas where opponents are not allowed in certain play modes
     /** bounding box for the right half of the field */
     salt::AABB2 mRightHalf;
