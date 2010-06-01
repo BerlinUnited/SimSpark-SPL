@@ -29,8 +29,26 @@ FUNCTION(RenderNode,setTransparent)
     return true;
 }
 
+FUNCTION(RenderNode,setVisible)
+{
+    int visible;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), visible))
+        )
+        {
+            return false;
+        }
+
+
+    obj->SetVisible(visible);
+    return true;
+}
+
 void CLASS(RenderNode)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/BaseNode);
     DEFINE_FUNCTION(setTransparent);
+    DEFINE_FUNCTION(setVisible);
 }

@@ -33,6 +33,11 @@
 #include <soccertypes.h>
 #include <soccerruleaspect/soccerruleaspect.h>
 
+namespace oxygen
+{
+  class GameControlServer;
+}
+
 class TrainerCommandParser : public oxygen::MonitorCmdParser
 {
 public:
@@ -44,7 +49,10 @@ public:
         CT_PLAYMODE,
         CT_DROP_BALL,
         CT_KICK_OFF,
-        CT_ACK
+        CT_ACK,
+        CT_SELECT,
+        CT_KILL,
+        CT_REPOS
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
@@ -100,7 +108,21 @@ protected:
         predicate
     */
     void ParseKickOffCommand(const oxygen::Predicate & predicate);
+    
+    /** parses and executes the select command contained in the given
+        predicate
+    */
+    void ParseSelectCommand(const oxygen::Predicate & predicate);
 
+    /** parses and executes the kill command contained in the given
+        predicate
+    */
+    void ParseKillCommand(const oxygen::Predicate & predicate);
+
+    /** parses and executes the reposition command contained in the given
+        predicate
+    */
+    void ParseReposCommand(const oxygen::Predicate & predicate);
 protected:
     TCommandMap    mCommandMap;
 
@@ -114,6 +136,8 @@ protected:
     boost::shared_ptr<SoccerRuleAspect> mSoccerRule;
     //! the parser used to create the PredicateList
     boost::shared_ptr<oxygen::BaseParser> mSexpParser;
+    //! cached reference to the game control server
+    boost::shared_ptr<oxygen::GameControlServer> mGameControl;
 
     bool mGetAck;
     std::string mAckString;

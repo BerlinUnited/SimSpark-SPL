@@ -32,6 +32,7 @@ namespace kerosin
 }
 
 class SoccerMonitor;
+class SoccerInput;
 
 class SoccerRender : public kerosin::CustomRender
 {
@@ -51,6 +52,7 @@ protected:
     boost::shared_ptr<SoccerMonitor> mMonitor;
     boost::shared_ptr<kerosin::FontServer> mFontServer;
     boost::shared_ptr<kerosin::Font> mFont;
+    boost::shared_ptr<SoccerInput> mInput;
 };
 
 DECLARE_CLASS(SoccerRender);

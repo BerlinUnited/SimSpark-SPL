@@ -288,6 +288,7 @@ InputServer::GetInput(Input &input, bool raw)
         // return Input::eUser input
         return true;
     }
+    
     // translate raw input to binding
     TBindMap::iterator bindListIter = mBindings.find(input.mCode);
     if (bindListIter == mBindings.end())
@@ -305,11 +306,13 @@ InputServer::GetInput(Input &input, bool raw)
          ++bindIter
          )
     {
+        /*
         const Bind& bind = (*bindIter);
 
         //printf("Looking at: %d %d %d", (*bind).mCode, (*bind).cmd, (*bind).modifier);
-        if (bind.modifier == mModifierState)
+        if (bind.modifier == input.mModState)
         {
+        */
 #if 0
             if (input.mType == Input::eButton)
             {
@@ -320,13 +323,13 @@ InputServer::GetInput(Input &input, bool raw)
 #else
             const Bind& bind = (*bindIter);
 
-            //printf("Looking at: %d %d %d", (*bind).mCode, (*bind).cmd, (*bind).modifier);
             if (
-                (bind.modifier == 0 && mModifierState == 0) ||
-                (bind.modifier & mModifierState)
+                (bind.modifier == 0 && input.mModState == 0) ||
+                (bind.modifier & input.mModState)
                 )
 #endif
             {
+                  
                 input.mId = bind.cmd;
                 return true;
             }
@@ -335,7 +338,7 @@ InputServer::GetInput(Input &input, bool raw)
                 input.mId = bind.cmd;
                 return true;
             }
-        }
+        //}
     }
 
     input.mId = -1;
@@ -404,6 +407,7 @@ bool InputServer::ParseBindDescription(Bind &bind, const std::string &desc)
         {
             current = tokens.front();
             tokens.pop_front();
+            
             bind.modifier |= ParseModifier(current);
         }
 

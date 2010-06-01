@@ -49,9 +49,36 @@ public:
             CmdCameraMiddle      = CmdCameraMiddleRight + 1,
             CmdCameraRightCorner = CmdCameraMiddle + 1,
             CmdCameraRightGoal   = CmdCameraRightCorner + 1,
+            
+            CmdOne = CmdCameraRightGoal + 1,
+            CmdTwo = CmdOne + 1,
+            CmdThree = CmdTwo + 1,
+            CmdFour = CmdThree + 1,
+            CmdFive = CmdFour + 1,
+            CmdSix = CmdFive + 1,
+            CmdSeven = CmdSix + 1,
+            CmdEight = CmdSeven + 1,
+            CmdNine = CmdEight + 1,
+            CmdZero = CmdNine + 1,
+
             //JAN
-            CmdFreeKickLeft      = CmdCameraRightGoal + 1,
-            CmdFreeKickRight   = CmdFreeKickLeft + 1
+            CmdLeft      = CmdZero + 1,
+            CmdRight   = CmdLeft + 1,
+            
+            CmdPlayerSelectMode = CmdRight + 1,
+            CmdSelectNextAgent = CmdPlayerSelectMode + 1,
+            CmdResetSelection = CmdSelectNextAgent + 1,
+            CmdKillSelection = CmdResetSelection + 1,
+            CmdReposSelection = CmdKillSelection + 1
+        };
+        
+    enum ECmdMode
+        {
+            CmdModeDefault = 1,
+            CmdModePlayerSelect,
+            CmdModeLeftPlayerSelect,
+            CmdModeRightPlayerSelect,
+            CmdModeNone
         };
 
 public:
@@ -71,9 +98,12 @@ public:
     /** reset SparkMonitorClient reference */
     virtual void OnUnlink();
 
+    ECmdMode GetCmdMode() const { return mCmdMode; }
+    
 protected:
     void SendCommand(const std::string& cmd);
 
+    void SelectCamera(int idx);
 protected:
     /** cached reference to the monitor client */
     boost::shared_ptr<oxygen::NetClient> mMonitorClient;
@@ -82,6 +112,8 @@ protected:
     boost::shared_ptr<oxygen::RigidBody> mCameraBody;
 
     boost::shared_ptr<oxygen::FPSController> mFPS;
+    
+    ECmdMode mCmdMode;
 };
 
 DECLARE_CLASS(SoccerInput);

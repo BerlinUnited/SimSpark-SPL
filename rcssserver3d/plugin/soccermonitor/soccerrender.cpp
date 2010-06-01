@@ -23,6 +23,7 @@
 #include <sstream>
 #include "soccerrender.h"
 #include "soccermonitor.h"
+#include "soccerinput.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <kerosin/openglserver/openglserver.h>
 #include <kerosin/fontserver/fontserver.h>
@@ -69,6 +70,13 @@ void SoccerRender::OnLink()
         {
             GetLog()->Error() << "ERROR: (SoccerRender) Unable to get SoccerMonitor\n";
         }
+    mInput = shared_static_cast<SoccerInput>
+        (GetCore()->Get("/sys/server/simulation/InputControl/SoccerInput"));
+
+    if (mInput.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (SoccerRender) Unable to get SoccerInput\n";
+        }
 }
 
 void SoccerRender::OnUnlink()
@@ -90,7 +98,7 @@ void SoccerRender::Render()
             return;
         }
 
-    stringstream ss_l, ss_c, ss_r;
+    stringstream ss_l, ss_c, ss_r, ss_m;
     
     ss_c.setf(ios_base::fixed,ios_base::floatfield);
     ss_c.precision(2);
@@ -140,6 +148,9 @@ void SoccerRender::Render()
     // FIXME: remove the magic number.
     xPos = int((1024-(mFont->GetStringWidth(ss_c.str().c_str())))/2);
     mFont->DrawString(xPos, 0, ss_c.str().c_str());
+    
+    //ss_m << mInput->GetCmdMode();
+    //mFont->DrawString(10, 30, ss_m.str().c_str());
     
     mFontServer->End();
 }

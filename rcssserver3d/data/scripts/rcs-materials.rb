@@ -22,7 +22,6 @@ material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matGrass')
 material.setDiffuse(0.1,0.6,0.1,1.0)
 material.setAmbient(0.1,0.3,0.1,1.0)
 
-
 #----------------------------------------------------------------
 # left team
 #----------------------------------------------------------------
