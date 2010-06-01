@@ -68,7 +68,8 @@ public:
             CmdPlayerSelectMode = CmdRight + 1,
             CmdSelectNextAgent = CmdPlayerSelectMode + 1,
             CmdResetSelection = CmdSelectNextAgent + 1,
-            CmdKillSelection = CmdResetSelection + 1
+            CmdKillSelection = CmdResetSelection + 1,
+            CmdReposSelection = CmdKillSelection + 1
         };
         
     enum ECmdMode

@@ -51,7 +51,8 @@ public:
         CT_KICK_OFF,
         CT_ACK,
         CT_SELECT,
-        CT_KILL
+        CT_KILL,
+        CT_REPOS
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
@@ -117,6 +118,11 @@ protected:
         predicate
     */
     void ParseKillCommand(const oxygen::Predicate & predicate);
+
+    /** parses and executes the reposition command contained in the given
+        predicate
+    */
+    void ParseReposCommand(const oxygen::Predicate & predicate);
 protected:
     TCommandMap    mCommandMap;
 

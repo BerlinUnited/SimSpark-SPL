@@ -149,8 +149,8 @@ void SoccerRender::Render()
     xPos = int((1024-(mFont->GetStringWidth(ss_c.str().c_str())))/2);
     mFont->DrawString(xPos, 0, ss_c.str().c_str());
     
-    ss_m << mInput->GetCmdMode();
-    mFont->DrawString(10, 30, ss_m.str().c_str());
+    //ss_m << mInput->GetCmdMode();
+    //mFont->DrawString(10, 30, ss_m.str().c_str());
     
     mFontServer->End();
 }
