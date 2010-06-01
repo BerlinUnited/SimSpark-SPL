@@ -251,6 +251,10 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
 {
     boost::shared_ptr<RenderNode> renderNode = shared_dynamic_cast<RenderNode>(node);
     if (renderNode.get() != 0 &&
+        !renderNode->IsVisible())
+      return;
+    
+    if (renderNode.get() != 0 &&
         ((pass == 0 && !renderNode->IsTransparent()) || (pass == 1 && renderNode->IsTransparent()))
        )
         {

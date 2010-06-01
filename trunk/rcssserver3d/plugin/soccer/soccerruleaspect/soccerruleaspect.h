@@ -45,7 +45,7 @@ class SoccerRuleAspect : public SoccerControlAspect
 {
 public:
     typedef std::list<boost::shared_ptr<AgentState> > TAgentStateList;
-
+    
 public:
     SoccerRuleAspect();
     virtual ~SoccerRuleAspect();
@@ -139,6 +139,12 @@ public:
     salt::Vector2f GetFieldSize() const;
  
     
+    void ResetAgentSelection();
+    
+    void SelectNextAgent();
+    
+    void ClearSelectedPlayers();
+
 protected:
     /** rereads the current soccer script values */
     virtual void UpdateCachedInternal();
@@ -233,7 +239,7 @@ protected:
      * @param idx the team which kick off
      */
     void ClearPlayersBeforeKickOff(TTeamIndex idx);
-
+                      
 protected:
     /** reference to the body node of the Ball */
     boost::shared_ptr<oxygen::RigidBody> mBallBody;

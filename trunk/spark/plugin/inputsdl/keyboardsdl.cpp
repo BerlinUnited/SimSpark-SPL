@@ -24,6 +24,7 @@
 #include <zeitgeist/logserver/logserver.h>
 
 using namespace kerosin;
+using namespace std;
 
 KeyboardSDL::KeyboardSDL()
     : InputDeviceSDL()
@@ -213,8 +214,7 @@ KeyboardSDL::EventFilter(const SDL_Event* event)
         return 1;
     }
 
-    unsigned int& modState =
-        mInputSystem->GetInputServer()->GetModifierState();
+    unsigned int modState;
 
     modState = Input::eNone;
 
@@ -238,6 +238,16 @@ KeyboardSDL::EventFilter(const SDL_Event* event)
         modState |= Input::eRAlt;
     }
 
+    if (event->key.keysym.mod & KMOD_LCTRL)
+    {
+        modState |= Input::eLCtrl;
+    }
+
+    if (event->key.keysym.mod & KMOD_RCTRL)
+    {
+        modState |= Input::eRCtrl;
+    }
+
     if (event->key.keysym.sym == 0)
     {
         return 1;
@@ -254,6 +264,7 @@ KeyboardSDL::EventFilter(const SDL_Event* event)
 
     Input input(Input::eButton, sym);
     input.mData.l = (event->type == SDL_KEYDOWN);
+    input.mModState = modState;
     mInputSystem->AddInputInternal(input);
 
     return 0;

@@ -68,6 +68,15 @@
             (setName AgentState)
             (nd GameStatePerceptor)
             (nd HearPerceptor)
+            (nd Transform
+              (nd Cylinder
+                (setName SelectionMarker)
+                (setParams 1.0 1.0)
+                (setScale 0.2 0.2 0.02)
+                (setMaterial matSelect)
+                (setTransparent)
+              )
+            )
         )
 
         (nd GyroRatePerceptor (setName torso))

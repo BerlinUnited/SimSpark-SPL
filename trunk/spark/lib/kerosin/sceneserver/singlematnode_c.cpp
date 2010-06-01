@@ -40,10 +40,28 @@ FUNCTION(SingleMatNode,setMaterial)
     return obj->SetMaterial(inName);
 }
 
+FUNCTION(SingleMatNode,setVisible)
+{
+    int visible;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), visible))
+        )
+        {
+            return false;
+        }
+
+
+    obj->SetVisible(visible);
+    return true;
+}
+
 void CLASS(SingleMatNode)::DefineClass()
 {
     DEFINE_BASECLASS(kerosin/StaticMesh);
     DEFINE_FUNCTION(setMaterial);
+    DEFINE_FUNCTION(setVisible);
 }
 
 

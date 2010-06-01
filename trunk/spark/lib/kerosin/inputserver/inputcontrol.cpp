@@ -217,10 +217,10 @@ void InputControl::StartCycle()
                     ListChildrenSupportingClass<InputItem>(items);
 
                     for (
-                         TLeafList::iterator iter = items.begin();
-                         iter != items.end();
-                         ++iter
-                         )
+                          TLeafList::iterator iter = items.begin();
+                          iter != items.end();
+                          ++iter
+                          )
                         {
                             shared_static_cast<InputItem>(*iter)
                                 ->ProcessInput(input);

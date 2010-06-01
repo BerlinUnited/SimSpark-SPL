@@ -233,11 +233,6 @@ void SparkMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, boost::
 
 void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> mesh)
 {
-    if (! mFullState)
-        {
-            return DescribeBaseNode(ss);
-        }
-
     boost::shared_ptr<SingleMatNode> singleMat =
         shared_dynamic_cast<SingleMatNode>(mesh);
 
@@ -248,6 +243,15 @@ void SparkMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
             {
                 ss << "(nd StaticMesh";
             }
+
+    if (mFullState || mesh->VisibleToggled())
+        if (mesh->IsVisible())
+            ss << " (setVisible 1)";
+        else
+            ss << " (setVisible 0)";
+        
+    if (! mFullState)
+      return;
 
     if (mesh->IsTransparent())
         {
