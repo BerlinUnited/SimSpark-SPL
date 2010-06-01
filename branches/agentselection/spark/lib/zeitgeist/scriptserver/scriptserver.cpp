@@ -147,7 +147,7 @@ thisCall(VALUE /*self*/, VALUE objPointer, VALUE functionName, VALUE args)
     ParameterList in;
     getParameterList(args, in);
 
-    Object *obj = (Object*)NUM2INT(objPointer);
+    Object *obj = (Object*)NUM2ULONG(objPointer);
     Class::TCmdProc cmd =
         obj->GetClass()->GetCmdProc(STR2CSTR(functionName));
 

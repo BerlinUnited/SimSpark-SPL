@@ -27,6 +27,7 @@
 
 using namespace boost;
 using namespace oxygen;
+using namespace std;
 
 AgentSyncEffector::AgentSyncEffector() : oxygen::Effector()
 {
