@@ -55,5 +55,6 @@ else
     inputServer.bindCommand('n',      Command.SelectNextAgent);
     inputServer.bindCommand('e',      Command.ResetSelection);
     inputServer.bindCommand('x',      Command.KillSelection);
+    inputServer.bindCommand('p',      Command.ReposSelection);
   end
 end

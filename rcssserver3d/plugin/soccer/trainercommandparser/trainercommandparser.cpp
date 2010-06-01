@@ -34,6 +34,7 @@
 
 using namespace std;
 using namespace boost;
+using namespace salt;
 using namespace zeitgeist;
 using namespace oxygen;
 
@@ -48,6 +49,7 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mCommandMap["getAck"] = CT_ACK;
     mCommandMap["select"] = CT_SELECT;
     mCommandMap["kill"] = CT_KILL;
+    mCommandMap["repos"] = CT_REPOS;
     
     // setup team index map
     // Originally  team sides were "L","R" and "N"
@@ -157,6 +159,8 @@ void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
 bool
 TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
 {
+        cerr << "repos 1" << endl;
+
     SoccerBase::GetGameState(*this,mGameState);
     SoccerBase::GetSoccerRuleAspect(*this,mSoccerRule);
 
@@ -206,6 +210,9 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         break;
     case CT_KILL:
         ParseKillCommand(predicate);
+        break;
+    case CT_REPOS:
+        ParseReposCommand(predicate);
         break;
     default:
         return false;
@@ -630,4 +637,67 @@ void TrainerCommandParser::ParseKillCommand(const oxygen::Predicate & predicate)
     }
 }
 
+void TrainerCommandParser::ParseReposCommand(const oxygen::Predicate & predicate)
+{    
+        cerr << "repos 2" << endl;
+
+    Predicate::Iterator unumParam(predicate);
+    int                 unum;
+    bool specified = true;
+    
+    shared_ptr<SoccerRuleAspect> soccerRuleAspect;
+    if (!SoccerBase::GetSoccerRuleAspect(*this, soccerRuleAspect))
+    {
+        GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n";
+        return;
+    }
+
+    // extract unum
+    if (predicate.FindParameter(unumParam, "unum"))
+    {
+        if (! predicate.GetValue(unumParam, unum))
+          specified = false;
+    }
+    else
+      specified = false;
+    
+    string team;
+    TTeamIndex idx;
+    Predicate::Iterator teamParam(predicate);
+
+    // extract side
+    if (predicate.FindParameter(teamParam, "team"))
+    {
+        if (! predicate.GetValue(teamParam, team))
+          specified = false;
+        else
+            idx = mTeamIndexMap[team];
+    }    
+    else
+      specified = false;
+
+    SoccerBase::TAgentStateList agentStates;
+    SoccerBase::GetAgentStates(*this, agentStates, TI_NONE); 
+    SoccerBase::TAgentStateList::iterator iter = agentStates.begin();
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    for (;iter != agentStates.end(); ++iter)
+    {
+        if ((specified && (*iter)->GetUniformNumber() == unum && (*iter)->GetTeamIndex() == idx) ||
+            (!specified && (*iter)->IsSelected()))
+        {
+            Vector3f ballPos(0,0,0);
+            boost::shared_ptr<RigidBody> ballBody;
+
+            if (SoccerBase::GetBallBody(*this, ballBody))
+                ballPos = ballBody->GetPosition();
+
+            SoccerBase::GetTransformParent(**iter, agent_aspect);
+        cerr << "repos 3" << endl;
+            Vector3f new_pos = mSoccerRule->RepositionOutsidePos(ballPos, (*iter)->GetUniformNumber(), (*iter)->GetTeamIndex()); 
+            SoccerBase::MoveAgent(agent_aspect, new_pos);     
+
+            break;
+        }
+    }
+}
     
