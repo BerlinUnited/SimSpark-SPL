@@ -79,6 +79,7 @@ void Accelerometer::PrePhysicsUpdateInternal(float deltaTime)
     // calculate the acceleration according to velocity, it is a bit noise
     Vector3f vel = mBody->GetVelocity();
     Vector3f acc = (vel - mLastVel) / deltaTime;
+    mLastVel = vel;
     acc -= mGravity;
 
     Matrix invRot = mBody->GetRotation();

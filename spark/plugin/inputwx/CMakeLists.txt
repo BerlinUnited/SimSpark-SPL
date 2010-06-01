@@ -12,7 +12,13 @@ if (wxWidgets_FOUND)
   )
 
   include_directories(${wxWidgets_INCLUDE_DIRS})
-  add_definitions(${wxWidgets_DEFINITIONS})
+  if (CMAKE_MAJOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION LESS 8)
+    add_definitions(${wxWidgets_DEFINITIONS})
+  else (CMAKE_MAJOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION LESS 8)
+    set_property(DIRECTORY APPEND
+      PROPERTY COMPILE_DEFINITIONS ${wxWidgets_DEFINITIONS})
+  endif (CMAKE_MAJOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION LESS 8)
+  
   add_library(inputwx MODULE ${inputwx_LIB_SRCS})
 
   target_link_libraries(inputwx ${wxWidgets_LIBRARIES} ${spark_libs})
