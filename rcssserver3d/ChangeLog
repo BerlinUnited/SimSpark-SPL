@@ -1,3 +1,9 @@
+2010-06-05  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* RELEASE: 
+	* CMakeLists.txt: 
+	- preparing for 0.6.4 release
+
 2010-05-23  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* rcssserver3d/naosoccersim.rb: 

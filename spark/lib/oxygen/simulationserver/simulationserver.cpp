@@ -237,7 +237,7 @@ void SimulationServer::Step()
             mSimTime += mSumDeltaTime;
             mSumDeltaTime = 0;
         }
-        usleep(10000);
+//        usleep(10000);
 }
 
 void SimulationServer::ControlEvent(EControlEvent event)
