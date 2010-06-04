@@ -1,3 +1,15 @@
+2010-06-05  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::Step): 
+	- disabling the usleep call to retain full compatibility with the previous
+	  versions
+	  
+	* RELEASE:
+	- release notes for the next version (0.2.1)
+	 
+	* CMakeLists.txt: 
+	- bumped library versions and package version for the next release
+
 2010-05-09  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/zeitgeist/scriptserver/scriptserver.cpp (thisCall): 

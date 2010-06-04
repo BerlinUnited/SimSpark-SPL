@@ -1,33 +1,16 @@
-RELEASE News of rcssserver3d-0.6.3
+RELEASE News of rcssserver3d-0.6.4
 
-In this release, we are preparing for a simulation with more robots than before.
-The current target is to have 6 vs 6 games, so we have made some changes to
-make the simulator more suitable for it. The most notable changes made in
-rcssserver3d package in this direction are:
-1. Disabling the internal monitor by default: starting from this version, the
-simulation server (simspark binary, now called rcssserver3d) no longer brings
-up a monitor when run. To actually view the simulation, a monitor (e.g.
-rcsmonitor3d which is included in this package) should be run separately. This
-separation noticeably improves the performance of the server. A new executable
-called "rcsoccersim3d" is provided which runs both the simulation server and a 
-monitor on the local machine. 
-2. Bigger field: in this version, field dimensions and goal width are 1.5 times
-larger than before to provide enough area for 6 vs 6 games.
+This release is supposed to be the final version of rcssserver3d for
+RoboCup 2010 in Singapore. The release includes a referee patch contributed
+by FCPortugal team which enforces some rules to avoid crowding of many players
+in a small area and to penalize ill-behaved players. Additionally, this 
+release comes with some more facilities for a human referee to control the game
+and individual players in the field.
 
-* New names:
-  - rcssserver3d: the old simspark binary has been renamed to rcssserver3d, as
-    it more clearly shows the functionality of the simulator. A symbolic link
-    called simspark is provided for compatibility.
-  - rcsoccersim3d: as stated above, running rcssserver3d (formerly simspark)
-    no longer starts a monitor to view the simulation, and a monitor should be
-    run separately. For users' convenience a new executable called rcsoccersim3d
-    is provided which runs both rcssserver3d and rcssmonitor3 to connect to
-    the running simulator. 
-
-* Other notable changes:
- - Added HMDP effector/perceptor
- - Some compilation fixes
- - Improved Windows support 
+* Summary:
+- Improved referee to enforce more fair games
+- Improved monitor which provides more power to the human referee
+- Visual Studio 2010 compilation fixes
  
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/
