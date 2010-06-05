@@ -170,6 +170,7 @@ string MonitorServer::GetMonitorHeaderInfo()
     }
 
     PredicateList pList;
+    boost::mutex::scoped_lock dataLock(mMonitorMutex);
     CollectItemPredicates(true,pList);
     return monitorSystem->GetMonitorHeaderInfo(pList);
 }
@@ -177,7 +178,7 @@ string MonitorServer::GetMonitorHeaderInfo()
 string MonitorServer::GetMonitorData()
 {
     int cycle = mSimulationServer->GetCycle();
-    boost::mutex::scoped_lock dataLock(mDataMutex);
+    boost::mutex::scoped_lock dataLock(mMonitorMutex);
 
     if ( cycle == mDataCycle ){
         return mData;
@@ -203,7 +204,7 @@ void MonitorServer::ParseMonitorMessage(const string& data)
 
     if (monitorSystem.get() != 0)
         {
+            boost::mutex::scoped_lock dataLock(mMonitorMutex);
             monitorSystem->ParseMonitorMessage(data);
         }
 }
-

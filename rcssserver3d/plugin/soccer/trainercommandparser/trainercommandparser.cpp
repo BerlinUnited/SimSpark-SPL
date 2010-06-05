@@ -159,8 +159,6 @@ void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
 bool
 TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
 {
-        cerr << "repos 1" << endl;
-
     SoccerBase::GetGameState(*this,mGameState);
     SoccerBase::GetSoccerRuleAspect(*this,mSoccerRule);
 
