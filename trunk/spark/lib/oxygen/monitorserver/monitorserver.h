@@ -92,8 +92,8 @@ private:
     /** the cycle of cacahed data */
     int mDataCycle;
 
-    /** a mutex to protect mData and mDataCycle variables */
-    boost::mutex mDataMutex;
+    /** a mutex to protect monitor related internal data */
+    boost::mutex mMonitorMutex;
 };
 
 DECLARE_CLASS(MonitorServer);

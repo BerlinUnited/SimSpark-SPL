@@ -1,3 +1,9 @@
+2010-06-06  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* lib/oxygen/monitorserver/monitorserver.h: 
+	* lib/oxygen/monitorserver/monitorserver.cpp (MonitorServer::GetMonitorData):
+	- more protection against simultaneous access (by monitor(s) and the logger)  
+
 2010-06-05  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::Step): 
