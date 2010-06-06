@@ -1,3 +1,14 @@
+2010-06-07  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* NEWS: 
+	* RELEASE:
+	- prepared for 0.2.1 release 
+	
+	* lib/oxygen/simulationserver/monitorlogger.h: 
+	* lib/oxygen/simulationserver/monitorlogger.cpp:
+	- request complete game information every 10 seconds so that it'll receive
+	  new game state information 
+
 2010-06-06  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* lib/oxygen/monitorserver/monitorserver.h: 

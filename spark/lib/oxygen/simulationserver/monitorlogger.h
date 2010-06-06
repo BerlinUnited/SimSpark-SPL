@@ -61,6 +61,9 @@ protected:
 
     /** number of full state logged */
     int mFullStateLogged;
+
+    /** the time of the last full state logging */
+    float mFullStateLoggedTime;
 };
 
 DECLARE_CLASS(MonitorLogger);
