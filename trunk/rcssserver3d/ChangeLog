@@ -1,3 +1,22 @@
+2010-06-07  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* NEWS: 
+	- prepared for 0.6.4 release
+	
+	* RELEASE: 
+	- add some documentation about new monitor controls
+	
+	* plugin/soccer/gamestateaspect/gamestateitem.cpp:
+	- send game state with initial predicates, so that the logger will not 
+	  miss them in the next cycle 
+
+	* rcssserver3d/rcsoccersim3d.in:
+	- removed some extra lines checking for rcssagent3d
+	 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	- make the first letter of CheckVisuable() capital
+	 
 2010-06-05  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* RELEASE: 
