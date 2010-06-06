@@ -7,10 +7,20 @@ in a small area and to penalize ill-behaved players. Additionally, this
 release comes with some more facilities for a human referee to control the game
 and individual players in the field.
 
-* Summary:
+* New keys in rcssmonitor3d:
+- n: Cycle through agents. A red marker disc shows which agent is currently
+  selected
+- e: Clear selection
+- lctrl+s: Go into specific-agent-selection-mode. A specific agent can now be
+  selected by pressing l or r and then a number. So the sequence 'lctrl+s, l, 4'
+  selects the agent with uniform number 4 of the left team
+- m: Move selected agent FreeKickDist meters back
+- x: Kill selected agent
+
+* Other changes:
 - Improved referee to enforce more fair games
-- Improved monitor which provides more power to the human referee
 - Visual Studio 2010 compilation fixes
+- Agents can sense field lines if enabled (currently disabled)
  
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/

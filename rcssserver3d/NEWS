@@ -1,3 +1,26 @@
+[0.6.4]
+This release is supposed to be the final version of rcssserver3d for
+RoboCup 2010 in Singapore. The release includes a referee patch contributed
+by FCPortugal team which enforces some rules to avoid crowding of many players
+in a small area and to penalize ill-behaved players. Additionally, this 
+release comes with some more facilities for a human referee to control the game
+and individual players in the field.
+
+* New keys in rcssmonitor3d:
+- n: Cycle through agents. A red marker disc shows which agent is currently
+  selected
+- e: Clear selection
+- lctrl+s: Go into specific-agent-selection-mode. A specific agent can now be
+  selected by pressing l or r and then a number. So the sequence 'lctrl+s, l, 4'
+  selects the agent with uniform number 4 of the left team
+- m: Move selected agent FreeKickDist meters back
+- x: Kill selected agent
+
+* Other changes:
+- Improved referee to enforce more fair games
+- Visual Studio 2010 compilation fixes
+- Agents can sense field lines if enabled (currently disabled)
+
 [0.6.3]
 In this release, we are preparing for a simulation with more robots than before.
 The current target is to have 6 vs 6 games, so we have made some changes to

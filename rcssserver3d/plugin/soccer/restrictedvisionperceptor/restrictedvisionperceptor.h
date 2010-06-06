@@ -180,7 +180,7 @@ protected:
 
     void SetupLines(TLineList& visibleLines);
 
-    bool checkVisuable(ObjectData& od) const;
+    bool CheckVisuable(ObjectData& od) const;
 
     /** Checks if the given object is occluded, seen from from my_pos */
     bool CheckOcclusion(const salt::Vector3f& my_pos, const ObjectData& od) const;

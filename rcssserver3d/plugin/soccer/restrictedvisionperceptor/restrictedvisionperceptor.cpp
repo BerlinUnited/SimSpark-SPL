@@ -634,7 +634,7 @@ RestrictedVisionPerceptor::SetSenseMyPos(bool sense)
     mSenseMyPos = sense;
 }
 
-bool RestrictedVisionPerceptor::checkVisuable(RestrictedVisionPerceptor::ObjectData& od) const
+bool RestrictedVisionPerceptor::CheckVisuable(RestrictedVisionPerceptor::ObjectData& od) const
 {
   // theta is the angle in horizontal plane, with fwAngle as 0 degree
   od.mTheta = gNormalizeDeg(gRadToDeg(gNormalizeRad(
@@ -694,8 +694,8 @@ void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
   {
     LineData& ld = (*i);
 
-    bool seeBeginPoint = checkVisuable(ld.mBeginPoint);
-    bool seeEndPoint = checkVisuable(ld.mEndPoint);
+    bool seeBeginPoint = CheckVisuable(ld.mBeginPoint);
+    bool seeEndPoint = CheckVisuable(ld.mEndPoint);
 
     if (!(seeBeginPoint && seeEndPoint))
     {
@@ -747,11 +747,11 @@ void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
         if ( inum == 2 )
         {
           ld.mBeginPoint.mRelPos = X[0];
-          checkVisuable(ld.mBeginPoint);
+          CheckVisuable(ld.mBeginPoint);
           seeBeginPoint = true;
 
           ld.mEndPoint.mRelPos = X[1];
-          checkVisuable(ld.mEndPoint);
+          CheckVisuable(ld.mEndPoint);
           seeEndPoint = true;
         }
         else if ( inum == 1 )
@@ -759,13 +759,13 @@ void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
           if ( !seeBeginPoint )
           {
             ld.mBeginPoint.mRelPos = X[0];
-            checkVisuable(ld.mBeginPoint);
+            CheckVisuable(ld.mBeginPoint);
             seeBeginPoint = true;
           }
           else
           {
             ld.mEndPoint.mRelPos = X[0];
-            checkVisuable(ld.mEndPoint);
+            CheckVisuable(ld.mEndPoint);
             seeEndPoint = true;
           }
         }
