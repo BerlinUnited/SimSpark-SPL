@@ -97,6 +97,8 @@ void GameStateItem::GetInitialPredicates(PredicateList& pList)
         pred.parameter.AddValue
             (SoccerBase::PlayMode2Str(static_cast<TPlayMode>(i)));
     }
+
+    GetPredicates(pList);
 }
 
 void GameStateItem::GetPredicates(PredicateList& pList)
