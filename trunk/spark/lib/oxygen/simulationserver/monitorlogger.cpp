@@ -29,7 +29,8 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-MonitorLogger::MonitorLogger() : SimControlNode(), mFullStateLogged(0)
+MonitorLogger::MonitorLogger() : SimControlNode(), mFullStateLogged(0),
+        mFullStateLoggedTime(0)
 {
 }
 
@@ -70,9 +71,12 @@ void MonitorLogger::EndCycle()
 
     string info;
     boost::shared_ptr<Scene> scene = GetActiveScene();
-    if (scene.get() != 0
-        && scene->GetModifiedNum() > mFullStateLogged )
+    // The logger might miss some information as it runs at a lower rate
+    if (mTime - mFullStateLoggedTime > 3.0 ||
+        (scene.get() != 0 && scene->GetModifiedNum() > mFullStateLogged)
+        )
     {
+        mFullStateLoggedTime = mTime;
         mFullStateLogged = scene->GetModifiedNum();
         info = mMonitorServer->GetMonitorHeaderInfo();
     }
