@@ -46,7 +46,7 @@ IF (NOT ODE_FOUND)
   FIND_PATH(ODE_INCLUDE_DIR ode/ode.h
     /usr/include
     /usr/local/include
-    $ENV{OGRE_HOME}/include # OGRE SDK on WIN32
+    $ENV{ODE_HOME}/include
     $ENV{INCLUDE}
     C:/library/ode/include
     "C:/Program Files/ode/include"
@@ -59,7 +59,7 @@ IF (NOT ODE_FOUND)
     /usr/lib
     /usr/lib64
     /usr/local/lib
-    $ENV{OGRE_HOME}/lib # OGRE SDK on WIN32
+    $ENV{ODE_HOME}/lib
     C:/library/ode/lib/
     "C:/Program Files/ode/lib/"
     "C:/Program Files (x86)/ode/lib/"
