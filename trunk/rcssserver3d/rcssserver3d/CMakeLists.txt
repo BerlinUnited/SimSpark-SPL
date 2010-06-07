@@ -23,8 +23,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rcsoccersim3d.in
     ${CMAKE_CURRENT_BINARY_DIR}/rcsoccersim3d)
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink 
-    ${CMAKE_INSTALL_PREFIX}/${BINDIR}/rcssserver3d 
-    ${CMAKE_CURRENT_BINARY_DIR}/simspark)
+    rcssserver3d ${CMAKE_CURRENT_BINARY_DIR}/simspark)
 
 ########### install files ###############
 

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=RoboCup Soccer Server 3D
 Comment=RoboCup Soccer Simulation Server 3D
-Exec=simspark
+Exec=rcsoccersim3d
 Icon=simspark
 Terminal=false
 Type=Application
