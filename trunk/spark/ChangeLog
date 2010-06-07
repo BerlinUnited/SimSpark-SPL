@@ -4,6 +4,16 @@
 	* RELEASE:
 	- prepared for 0.2.1 release 
 	
+	* plugin/accelerometer/accelerometer.cpp:
+	- reapply the filter to remain compatible with simspark-0.2 for RoboCup 2010
+	 
+	* cmake/FindODE.cmake: 
+	- lookup in the directory specified in ODE_HOME env. variable instead of 
+	  OGRE_HOME
+	
+	* plugin/accelerometer/CMakeLists.txt: 
+	- fixed accelerometer installation on MacOSX
+	
 	* lib/oxygen/simulationserver/monitorlogger.h: 
 	* lib/oxygen/simulationserver/monitorlogger.cpp:
 	- request complete game information every 10 seconds so that it'll receive
