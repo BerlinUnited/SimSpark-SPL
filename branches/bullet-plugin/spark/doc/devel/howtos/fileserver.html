@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>FileServer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<p><font size="6"><i><b>FileServer</b></i></font></p>
+<p align="left">&nbsp;</p>
+<p align="left"><font size="4">The FileServer manages a series of FileSystems. 
+  When a file is opened through the FileServer it searches its internal list of 
+  FileSystems and returns the first(!) successful fileopen attempt. A virtually 
+  unlimited amount of file systems can be added. FileSystems are created through 
+  the class object mechanism. In order to mount a file system, one must specify 
+  the FileSystem class and an associated path string. How this path string is 
+  interpreted is up to the implementation of the FileSystem. For example, the 
+  FileSystemSTD implementation (see Plugins workspace) interprets the path as 
+  a regular directory path, whereas the FileSystemZIP implementation interprets 
+  it as the location of a ZIP file.</font></p>
+</body>
+</html>
+

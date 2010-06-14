@@ -1,0 +1,18 @@
+RELEASE News of simspark-0.2.1
+
+This release of simspark is prepared for RoboCup 2010 competitions in Singapore.
+In this release you can find some bug and compilation fixes, improved Windows
+support and some new features such as the potential of using different 
+physical simulation engines.
+
+* New features:
+ - The core physics system does no longer depend on ODE (Thanks to Andreas). 
+ ODE implementation is now provided as a plugin.
+   
+* Fixes:
+ - Compilation fixes on newer compilers (VS 2010)
+ - Fixed some bugs on 64 bit systems and in multi-threaded mode. It is (hopefully)
+   possible to run multi-threaded games while logging is enabled
+
+You can get the package on the Simspark page on SourceForge
+at http://sourceforge.net/projects/simspark/
