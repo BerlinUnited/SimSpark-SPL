@@ -11,6 +11,7 @@ endif (APPLE AND USE_COREFOUNDATION)
 
 add_subdirectory(accelerometer)
 add_subdirectory(agentsynceffector)
+add_subdirectory(bulletimps)
 add_subdirectory(filesystemstd)
 add_subdirectory(filesystemzip)
 add_subdirectory(forceeffector)
