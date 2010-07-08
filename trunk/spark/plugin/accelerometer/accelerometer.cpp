@@ -84,10 +84,5 @@ void Accelerometer::PrePhysicsUpdateInternal(float deltaTime)
 
     Matrix invRot = mBody->GetRotation();
     invRot.InvertRotationMatrix();
-//    mAcc = invRot * acc;
-    acc = invRot * acc;
-
-    float k = 0.9;
-    mAcc = k*mAcc + (1-k)*acc;
-    mLastVel = vel;
+    mAcc = invRot * acc;
 }
