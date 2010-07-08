@@ -1,3 +1,8 @@
+2010-06-08  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/accelerometer/accelerometer.cpp:
+	- remove the filter again (after 0.2.1 release) 
+
 2010-06-07  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* NEWS: 
