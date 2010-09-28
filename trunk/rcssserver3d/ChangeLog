@@ -1,3 +1,8 @@
+2010-09-28  Sander van Dijk <sgvandijk@gmail.com>
+
+	* plugin/soccermonitor/soccerrender.cpp
+	- render team names and scores in appropriate colors
+  
 2010-06-08  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* linux/rcssserver3d.desktop: 
