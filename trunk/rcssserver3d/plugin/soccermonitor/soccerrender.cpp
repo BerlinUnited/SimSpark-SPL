@@ -129,23 +129,36 @@ void SoccerRender::Render()
     ss_r << " " << mMonitor->GetScoreRight();
 
     int xPos;
-     
+    
     mFontServer->Begin();
     mFont->Bind();
+
+    glDisable(GL_TEXTURE_2D);
+    glColor4f(1,1,1,0.3);
+    glBegin(GL_QUADS);
+    glVertex2f(0,0);
+    glVertex2f(1024, 0);
+    glVertex2f(1024, 40);
+    glVertex2f(0, 40);
+    glEnd();
+    glEnable(GL_TEXTURE_2D);
     
     // draw left team info left justified
+    glColor3f(0,0,0.8);
     mFont->DrawString(10, 0, ss_l.str().c_str());
 
     // draw right team info right justified
     // Window Width is mapped to 1024
     // use 1014 as base to keep a small right margin
     // FIXME: remove the magic numbers.
+    glColor3f(0.8,0,0);
     xPos = int(1014-(mFont->GetStringWidth(ss_r.str().c_str())));
     mFont->DrawString(xPos, 0, ss_r.str().c_str());
 
     // draw game state info centered
     // Window Width is mapped to 1024
     // FIXME: remove the magic number.
+    glColor3f(1,1,1);
     xPos = int((1024-(mFont->GetStringWidth(ss_c.str().c_str())))/2);
     mFont->DrawString(xPos, 0, ss_c.str().c_str());
     
