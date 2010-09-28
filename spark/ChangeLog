@@ -1,3 +1,8 @@
+2010-09-28  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* plugin/inputsdl/inputsystemsdl.cpp
+	- do not init SDL video in inputsystem
+
 2010-06-08  Hedayat Vatankhah  <hedayat@grad.com>
 
 	* plugin/accelerometer/accelerometer.cpp:

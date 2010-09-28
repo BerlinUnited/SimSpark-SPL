@@ -87,11 +87,13 @@ bool InputSystemSDL::Init(InputServer *inputServer)
     // input is part of the video subsystem (because of event loops, etc..)
     if (!SDL_WasInit(SDL_INIT_VIDEO))
     {
+      /*
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) < 0)
         {
             GetLog()->Error() << "ERROR: (InputSystemSDL) SDL not initialized!\n";
             return false;
         }
+        */
 //        SDL_SetVideoMode(0,0,0,0);
 //        static SDL_SysWMinfo pInfo;
 //        SDL_VERSION(&pInfo.version);
