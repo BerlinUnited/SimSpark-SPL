@@ -122,6 +122,7 @@ void AgentProxy::ServerConnectionHandler()
             while (!mAgentBuffer->IsEmpty() &&
                     mNetMessage->Extract(mAgentBuffer, agentmsg))
             {
+                mNetMessage->PrepareToSend(agentmsg);
                 mServerSocket->send(agentmsg.data(), agentmsg.size());
             }
             agentBufLock.unlock();
@@ -129,12 +130,9 @@ void AgentProxy::ServerConnectionHandler()
             mServerSocket->send(syncMsg.data(), syncMsg.size());
             do
             {
-                int retval = mServerSocket->recv(mCycleMillisecs,
-                    recvbuf.data(), recvbuf.size());
+                int retval = mServerSocket->recv(recvbuf.data(), recvbuf.size());
                 if (retval > 0)
                     netbuf->AddFragment(string(recvbuf.data(), recvbuf.size()));
-                else if (retval < 0 && errno == EAGAIN)
-                    break;
                 else
                 {
                     GetLog()->Error()
@@ -148,12 +146,12 @@ void AgentProxy::ServerConnectionHandler()
 
             if (!servermsg.empty())
             {
-                mNetMessage->PrepareToSend(servermsg);
-                mAgentSocket->send(servermsg.data(), servermsg.size(),
-                    MSG_DONTWAIT, Socket::DONT_CHECK);
-
                 cycleFinishTime = boost::get_system_time()
                         + boost::posix_time::milliseconds(mCycleMillisecs);
+
+                mNetMessage->PrepareToSend(servermsg);
+                mAgentSocket->send(servermsg.data(), servermsg.size(),
+                    Socket::DONT_CHECK);
             }
         }
         catch (boost::thread_interrupted e)
@@ -171,8 +169,7 @@ void AgentProxy::AgentConnectionHandler()
 
     while (!mFinished)
     {
-        int retval = mAgentSocket->recv(mCycleMillisecs * 4,
-            recvbuf.data(), recvbuf.size());
+        int retval = mAgentSocket->recv(recvbuf.data(), recvbuf.size());
         if (retval > 0)
         {
             boost::mutex::scoped_lock agentBufLock(mAgentBufferMutex);
