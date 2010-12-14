@@ -1,3 +1,16 @@
+2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
+
+	* spark/plugin/imageperceptor
+	* spark/spark.rb
+	- use base64 encoding image
+	
+	* utility/libb64/
+	- add libb64 for encoding/decoding base64
+	
+	* lib/zeitgeist/scriptserver/gcvalue.h
+	* FindRuby.cmake
+	- support ruby 1.9.1
+	
 2010-09-28  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* plugin/inputsdl/inputsystemsdl.cpp
