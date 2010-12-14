@@ -8,8 +8,6 @@ For details, see http://sourceforge.net/projects/libb64
 #ifndef BASE64_CENCODE_H
 #define BASE64_CENCODE_H
 
-#define BUFFERSIZE 64
-
 typedef enum
 {
 	step_A, step_B, step_C
