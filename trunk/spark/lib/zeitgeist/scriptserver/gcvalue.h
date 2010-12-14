@@ -29,6 +29,10 @@ typedef unsigned long ID;
 #include <string>
 #include <zeitgeist/zeitgeist_defines.h>
 
+#ifndef STR2CSTR
+#define STR2CSTR StringValueCStr
+#endif
+
 namespace zeitgeist
 {
 /** \class GCValue is a ruby VALUE wrapper. It is responsible to
