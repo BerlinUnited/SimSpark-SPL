@@ -35,6 +35,7 @@
 
 #include "imageperceptor.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <boost/smart_ptr/shared_array.hpp>
 
 #define USE_FBO
 
@@ -45,7 +46,8 @@ using namespace zeitgeist;
 using namespace salt;
 using namespace std;
 
-ImagePerceptor::ImagePerceptor() : oxygen::Perceptor()
+ImagePerceptor::ImagePerceptor() : oxygen::Perceptor(),
+  mDataSize(0)
 {
     mFramesRendered = 0;
 }
@@ -113,16 +115,19 @@ bool ImagePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         return false;
     
     Predicate &predicate = predList->AddPredicate();
-    predicate.name = "Image";
+    predicate.name = "IMG";
     predicate.parameter.Clear();
     
-    // ParameterList &sizeElement = predicate.parameter.AddList();
-    // sizeElement.AddValue(std::string("s"));
-    // sizeElement.AddValue(mCamera->GetViewportWidth());
-    // sizeElement.AddValue(mCamera->GetViewportHeight());
+     ParameterList &sizeElement = predicate.parameter.AddList();
+     sizeElement.AddValue(std::string("s"));
+     sizeElement.AddValue(mCamera->GetViewportWidth());
+     sizeElement.AddValue(mCamera->GetViewportHeight());
 
-    predicate.parameter.AddValue(mData);
-    return true;
+     ParameterList &dataElement = predicate.parameter.AddList();
+     dataElement.AddValue(std::string("d"));
+     string datacode = mB64Encoder.encode(mData.get(), mDataSize);
+     dataElement.AddValue(datacode);
+     return true;
 }
 
 bool ImagePerceptor::Render()
@@ -173,14 +178,12 @@ bool ImagePerceptor::Render()
 #else
     glReadBuffer(GL_BACK);
 #endif
-    int size = 3*w*h;
-    if ( mData.size() != size )
-        mData.resize(size);
+
     glReadPixels(0, 0,
                  w, h,
                  GL_RGB,
                  GL_UNSIGNED_BYTE,
-                 const_cast<char*>(mData.data()));
+                 mData.get());
     
     ++mFramesRendered;
 #ifdef USE_FBO
@@ -196,6 +199,8 @@ void ImagePerceptor::SetViewport(unsigned int x, unsigned int y, unsigned int w,
 {
     if ( 0!= mCamera ){
         mCamera->SetViewport(x,y,w,h);
+        mDataSize = 3*w*h;
+        mData = boost::shared_array<char>(new char[mDataSize]);
     }
 }
 

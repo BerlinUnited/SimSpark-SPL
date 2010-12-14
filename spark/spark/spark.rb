@@ -283,7 +283,7 @@ def sparkSetupServer
   simulationServer = sparkGetSimulationServer()
 
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(true);
+    simulationServer.setMultiThreads(false);
     simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
     # set auto speed adjust mode.
@@ -635,3 +635,6 @@ importBundle "accelerometer"
 
 #
 importBundle "agentsynceffector"
+
+#
+importBundle "imageperceptor"

@@ -59,7 +59,7 @@ public:
         codelength = len;
       }
 
-      plainlength = decode(code, codelength, out+totalLen);
+      plainlength = base64_decode_block(code, codelength, out+totalLen, &_state);
 
       code += codelength;
       len -= codelength;
@@ -71,15 +71,16 @@ public:
     return totalLen;
   }
 
+  int decode(const char* code_in, const int length_in, char* plaintext_out)
+  {
+    base64_init_decodestate(&_state);
+    return base64_decode_block(code_in, length_in, plaintext_out, &_state);
+  }
+
 protected:
   int decode(char value_in)
   {
     return base64_decode_value(value_in);
-  }
-
-  int decode(const char* code_in, const int length_in, char* plaintext_out)
-  {
-    return base64_decode_block(code_in, length_in, plaintext_out, &_state);
   }
 
 private:

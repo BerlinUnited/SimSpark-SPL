@@ -22,7 +22,7 @@ class Encoder
 {
 public:
 
-  Encoder(int buffersize_in = BUFFERSIZE)
+  Encoder(int buffersize_in = 128)
   : _buffersize(buffersize_in)
   {
     _code = new char[2 * _buffersize];

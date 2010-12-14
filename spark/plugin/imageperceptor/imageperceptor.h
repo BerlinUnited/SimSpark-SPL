@@ -26,6 +26,8 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <kerosin/renderserver/baserenderserver.h>
 #include <kerosin/openglserver/openglserver.h>
+#include <boost/shared_array.hpp>
+#include <libb64/encode.h>
 
 class ImagePerceptor : public oxygen::Perceptor
 {
@@ -61,11 +63,14 @@ private:
     /** total frames rendered */
     int mFramesRendered;
 
-    std::string mData;
+    boost::shared_array<char> mData;
+    unsigned int mDataSize;
 
     unsigned int mFBOId;
     unsigned int mRBOId;
     unsigned int mDepthBuffer;
+
+    base64::Encoder mB64Encoder;
 };
 
 DECLARE_CLASS(ImagePerceptor);

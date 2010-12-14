@@ -85,8 +85,6 @@
                               0 0 -0.005
                               1 0 0
                               $he2_min $he2_max)
- 
-        ;(nd Camera)
 
         (nd RestrictedVisionPerceptor
             (setViewCones 120 120)
@@ -95,6 +93,18 @@
             (addNoise true)
             (setInterval 3)
         )
+
+	;; (nd Transform
+	;;     (setLocalPos 0 $Head_Radius 0)
+	;;     (setLocalRotation 0 0 0)
+	;;     (nd ImagePerceptor
+	;; 	(setInterval 3)
+	;; 	(setViewport 0 0 320 240)
+	;; 	(setFOV 58)
+	;; 	(setZNear 0.003)
+	;; 	(setZFar 50)
+	;; 	)
+	;;     )
 
         (nd ObjectState
             (setID head)
