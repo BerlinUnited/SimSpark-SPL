@@ -1,4 +1,13 @@
 2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
+	* rcssserver3d/plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp
+	* rcssserver3d/plugin/soccer/trainercommandparser/trainercommandparser.cpp
+	* spark/lib/oxygen/proxyserver/agentproxy.cpp
+	- compile by VC10
+	
+	* rsgedit/CMakeLists.txt
+	- use UseWxWidgets.cmake
+	
+2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
 
 	* spark/plugin/imageperceptor
 	* spark/spark.rb
