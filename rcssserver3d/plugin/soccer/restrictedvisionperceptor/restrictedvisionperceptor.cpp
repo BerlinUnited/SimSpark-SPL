@@ -26,7 +26,6 @@
 #include <soccerbase/soccerbase.h>
 #include <salt/gmath.h>
 #include <list>
-#include <X11/X.h>
 #include <math.h>
 #include <salt/linesegment2.h>
 #include <limits>
