@@ -508,7 +508,7 @@ void TrainerCommandParser::ParseSelectCommand(const oxygen::Predicate & predicat
     int                 unum;
     bool specified = true;
     
-    shared_ptr<SoccerRuleAspect> soccerRuleAspect;
+    boost::shared_ptr<SoccerRuleAspect> soccerRuleAspect;
     if (!SoccerBase::GetSoccerRuleAspect(*this, soccerRuleAspect))
     {
         GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n";
@@ -582,7 +582,7 @@ void TrainerCommandParser::ParseKillCommand(const oxygen::Predicate & predicate)
     int                 unum;
     bool specified = true;
     
-    shared_ptr<SoccerRuleAspect> soccerRuleAspect;
+    boost::shared_ptr<SoccerRuleAspect> soccerRuleAspect;
     if (!SoccerBase::GetSoccerRuleAspect(*this, soccerRuleAspect))
     {
         GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n";
@@ -643,7 +643,7 @@ void TrainerCommandParser::ParseReposCommand(const oxygen::Predicate & predicate
     int                 unum;
     bool specified = true;
     
-    shared_ptr<SoccerRuleAspect> soccerRuleAspect;
+    boost::shared_ptr<SoccerRuleAspect> soccerRuleAspect;
     if (!SoccerBase::GetSoccerRuleAspect(*this, soccerRuleAspect))
     {
         GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get soccer rule aspect\n";

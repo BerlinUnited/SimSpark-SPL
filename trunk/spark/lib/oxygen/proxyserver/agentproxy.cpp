@@ -23,7 +23,7 @@
 #include <rcssnet/exception.hpp>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/simulationserver/netcontrol.h>
-
+#include <errno.h>
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
@@ -32,7 +32,6 @@ using namespace oxygen;
 using namespace zeitgeist;
 using namespace std;
 using namespace rcss::net;
-using boost::shared_ptr;
 
 AgentProxy::AgentProxy(int cycleMillisecs) : Node(),
     mCycleMillisecs(cycleMillisecs), mFinished(false),
@@ -69,7 +68,7 @@ void AgentProxy::Start(boost::shared_ptr<rcss::net::Socket> agentSocket,
         mNetMessage = FindChildSupportingClass<NetMessage>();
         if (mNetMessage.get() == 0)
         {
-            mNetMessage = shared_ptr<NetMessage>(new NetMessage());
+            mNetMessage = boost::shared_ptr<NetMessage>(new NetMessage());
         }
 
         mAgentConnectionThread = boost::thread(
@@ -107,7 +106,7 @@ void AgentProxy::ServerConnectionHandler()
     string servermsg, agentmsg;
     boost::system_time cycleFinishTime = boost::get_system_time()
             + boost::posix_time::milliseconds(mCycleMillisecs);
-    shared_ptr<NetBuffer> netbuf(new NetBuffer);
+    boost::shared_ptr<NetBuffer> netbuf(new NetBuffer);
     TRawBuffer recvbuf;
 
     mNetMessage->PrepareToSend(syncMsg);
