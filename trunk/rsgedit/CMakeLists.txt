@@ -9,14 +9,16 @@ find_package(Spark REQUIRED)
 find_package(Boost REQUIRED thread COMPONENTS date_time)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(wxWidgets REQUIRED gl base core adv)
+set(wxWidgets_USE_LIBS  gl adv)
+find_package(wxWidgets REQUIRED)
+include( ${wxWidgets_USE_FILE} )
 
 ########## add extra flags ########## 
 if(NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
 
-add_definitions(-DHAVE_CONFIG_H ${wxWidgets_DEFINITIONS})
+add_definitions(-DHAVE_CONFIG_H )
 include_directories(${CMAKE_BINARY_DIR})
 if (UNIX)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated" CACHE
