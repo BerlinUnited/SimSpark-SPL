@@ -42,8 +42,8 @@ using namespace zeitgeist;
 using namespace salt;
 using namespace std;
 
-ImageRender::ImageRender(): // kerosin::CustomRender(),
-  mDataSize(0), mWidth(0), mHeight(0)
+ImageRender::ImageRender(): kerosin::CustomRender(),
+  mDataSize(0), mWidth(0), mHeight(0), mRequested(false)
 {
 }
 
@@ -98,7 +98,7 @@ void ImageRender::OnUnlink()
 
 void ImageRender::Render()
 {
-    if (
+    if ( (!mRequested) ||
         (mOpenGLServer.expired()) ||
         (mRenderServer.expired())
         )
@@ -166,4 +166,5 @@ void ImageRender::Render()
 #endif
     mRenderServer->SetCamera(oldCamera);
 
+    mRequested = false;
 }
