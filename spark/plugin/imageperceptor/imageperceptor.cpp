@@ -64,22 +64,29 @@ void ImagePerceptor::OnLink()
 }
 
 bool ImagePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
-{  
-    Predicate &predicate = predList->AddPredicate();
-    predicate.name = "IMG";
-    predicate.parameter.Clear();
-    
-     ParameterList &sizeElement = predicate.parameter.AddList();
-     sizeElement.AddValue(std::string("s"));
-     sizeElement.AddValue(mRender->GetWidth());
-     sizeElement.AddValue(mRender->GetHeight());
+{
+  mRender->RequestRender();
 
-     ParameterList &dataElement = predicate.parameter.AddList();
-     dataElement.AddValue(std::string("d"));
-     const char* data = mRender->GetData();
-     string datacode = mB64Encoder.encode(data, mRender->GetDataSize());
-     dataElement.AddValue(datacode);
-     return true;
+  int size = mRender->GetDataSize();
+  if (size == 0)
+    return false;
+
+  Predicate &predicate = predList->AddPredicate();
+  predicate.name = "IMG";
+  predicate.parameter.Clear();
+
+  ParameterList &sizeElement = predicate.parameter.AddList();
+  sizeElement.AddValue(std::string("s"));
+  sizeElement.AddValue(mRender->GetWidth());
+  sizeElement.AddValue(mRender->GetHeight());
+
+  ParameterList &dataElement = predicate.parameter.AddList();
+  dataElement.AddValue(std::string("d"));
+  const char* data = mRender->GetData();
+  string datacode = mB64Encoder.encode(data, size);
+  dataElement.AddValue(datacode);
+
+  return true;
 }
 
 void ImagePerceptor::SetViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h)

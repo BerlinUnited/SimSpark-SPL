@@ -51,6 +51,8 @@ public:
   
   int GetHeight() const { return mHeight; }
 
+  void RequestRender() { mRequested = true; }
+
 private:
   boost::shared_ptr<oxygen::Camera> mCamera;
 
@@ -64,6 +66,7 @@ private:
   int mDataSize;
   int mWidth;
   int mHeight;
+  bool mRequested;
 
   unsigned int mFBOId;
   unsigned int mRBOId;
