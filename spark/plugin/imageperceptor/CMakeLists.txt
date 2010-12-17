@@ -6,6 +6,9 @@ set(imageperceptor_LIB_SRCS
    imageperceptor.h
    imageperceptor.cpp
    imageperceptor_c.cpp
+   imagerender.h
+   imagerender.cpp
+   imagerender_c.cpp
 )
 
 add_library(imageperceptor MODULE ${imageperceptor_LIB_SRCS})

@@ -23,11 +23,8 @@
 
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/sceneserver/camera.h>
-#include <oxygen/sceneserver/sceneserver.h>
-#include <kerosin/renderserver/baserenderserver.h>
-#include <kerosin/openglserver/openglserver.h>
-#include <boost/shared_array.hpp>
 #include <libb64/encode.h>
+#include "imagerender.h"
 
 class ImagePerceptor : public oxygen::Perceptor
 {
@@ -37,11 +34,8 @@ public:
 
     //! \return true, if valid data is available and false otherwise.
     bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
-
-    bool Render();
     
     virtual void OnLink();
-    virtual void OnUnlink();
 
     void SetViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
 
@@ -54,21 +48,7 @@ public:
 private:
     boost::shared_ptr<oxygen::Camera> mCamera;
 
-    /** cached reference to the RenderServer */
-    CachedPath<kerosin::BaseRenderServer> mRenderServer;
-
-    /** cached reference to the OpenGLServer */
-    CachedPath<kerosin::OpenGLServer> mOpenGLServer;
-
-    /** total frames rendered */
-    int mFramesRendered;
-
-    boost::shared_array<char> mData;
-    unsigned int mDataSize;
-
-    unsigned int mFBOId;
-    unsigned int mRBOId;
-    unsigned int mDepthBuffer;
+    boost::shared_ptr<ImageRender> mRender;
 
     base64::Encoder mB64Encoder;
 };

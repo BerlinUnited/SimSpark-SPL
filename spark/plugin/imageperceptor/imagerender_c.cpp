@@ -18,10 +18,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "imageperceptor.h"
 #include "imagerender.h"
 
-ZEITGEIST_EXPORT_BEGIN()
-        ZEITGEIST_EXPORT(ImagePerceptor);
-        ZEITGEIST_EXPORT(ImageRender);
-ZEITGEIST_EXPORT_END()
+void CLASS(ImageRender)::DefineClass()
+{
+    DEFINE_BASECLASS(kerosin/CustomRender);
+}
