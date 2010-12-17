@@ -21,9 +21,10 @@
 #ifndef IMAGEPERCEPTOR_H
 #define IMAGEPERCEPTOR_H
 
+#include <libb64/encode.h>
 #include <oxygen/agentaspect/perceptor.h>
 #include <oxygen/sceneserver/camera.h>
-#include <libb64/encode.h>
+#include <kerosin/renderserver/rendercontrol.h>
 #include "imagerender.h"
 
 class ImagePerceptor : public oxygen::Perceptor
@@ -49,6 +50,8 @@ private:
     boost::shared_ptr<oxygen::Camera> mCamera;
 
     boost::shared_ptr<ImageRender> mRender;
+
+    zeitgeist::Leaf::CachedPath<kerosin::RenderControl> mRenderControl;
 
     base64::Encoder mB64Encoder;
 };
