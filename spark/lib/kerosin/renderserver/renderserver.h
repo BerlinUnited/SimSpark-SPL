@@ -65,7 +65,7 @@ public:
     virtual ~RenderServer() {}
 
     //! display the current active scene
-    virtual void Render();
+    virtual void Render(bool clean);
 
     //! @return the width of the current view
     virtual int Width() const;

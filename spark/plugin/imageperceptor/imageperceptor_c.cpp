@@ -23,22 +23,20 @@
 using namespace boost;
 using namespace oxygen;
 
-FUNCTION(ImagePerceptor, setViewport)
+FUNCTION(ImagePerceptor, setResolution)
 {
-    unsigned int x,y,w,h;
+    unsigned int w,h;
 
     if (
-        (in.GetSize() != 4) ||
-        (! in.GetValue(in[0], x) ) ||
-        (! in.GetValue(in[1], y) ) ||
-        (! in.GetValue(in[2], w) ) ||
-        (! in.GetValue(in[3], h) )
+        (in.GetSize() != 2) ||
+        (! in.GetValue(in[0], w) ) ||
+        (! in.GetValue(in[1], h) )
          )
     {
         return false;
     }
 
-    obj->SetViewport(x, y, w, h);
+    obj->SetResolution(w, h);
     return true;
 }
 
@@ -90,11 +88,28 @@ FUNCTION(ImagePerceptor, setZFar)
     return true;
 }
 
+FUNCTION(ImagePerceptor, setOffScreen)
+{
+    bool offScreen;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0], offScreen) )
+         )
+    {
+        return false;
+    }
+
+    obj->SetOffScreen(offScreen);
+    return true;
+}
+
 void CLASS(ImagePerceptor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Perceptor);
-    DEFINE_FUNCTION(setViewport);
+    DEFINE_FUNCTION(setResolution);
     DEFINE_FUNCTION(setFOV);
     DEFINE_FUNCTION(setZNear);
     DEFINE_FUNCTION(setZFar);
+    DEFINE_FUNCTION(setOffScreen);
 }
