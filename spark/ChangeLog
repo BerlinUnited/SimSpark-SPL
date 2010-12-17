@@ -1,15 +1,32 @@
-2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
-	* rcssserver3d/plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp
-	* rcssserver3d/plugin/soccer/trainercommandparser/trainercommandparser.cpp
-	* spark/lib/oxygen/proxyserver/agentproxy.cpp
-	- compile by VC10
-	
-	* rsgedit/CMakeLists.txt
-	- use UseWxWidgets.cmake
+2010-12-15 Yuan Xu <xu@informatik.hu-berlin.de>
+	* plugin/imageperceptor/CMakeLists.txt
+	* plugin/imageperceptor/export.cpp
+	* plugin/imageperceptor/imageperceptor.cpp
+	* plugin/imageperceptor/imageperceptor.h
+	* plugin/imageperceptor/imagerender.cpp
+	* plugin/imageperceptor/imagerender.h
+	* plugin/imageperceptor/imagerender_c.cpp
+	- separate the render code
+	- render the image of camera in RenderControl
+
+	* spark/spark.rb
+	- multi-threads works!
+
+	* lib/kerosin/renderserver/baserenderserver.h
+	* lib/kerosin/renderserver/rendercontrol.cpp
+	* lib/kerosin/renderserver/renderserver.cpp
+	* lib/kerosin/renderserver/renderserver.h
+	* plugin/imageperceptor/imageperceptor.cpp
+	* plugin/imageperceptor/imageperceptor.h
+	* plugin/imageperceptor/imageperceptor_c.cpp
+	* plugin/imageperceptor/imagerender.cpp
+	* plugin/imageperceptor/imagerender.h
+	* test/scenetest/main.cpp
+	- be able to render camera image on and off screen
 	
 2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
 
-	* spark/plugin/imageperceptor
+	* plugin/imageperceptor
 	* spark/spark.rb
 	- use base64 encoding image
 	
