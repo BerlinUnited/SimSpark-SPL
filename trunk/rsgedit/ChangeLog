@@ -1,3 +1,7 @@
+2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>	
+	* CMakeLists.txt
+	- use UseWxWidgets.cmake
+
 2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
 
 	* cmake/FindBoost.cmake:

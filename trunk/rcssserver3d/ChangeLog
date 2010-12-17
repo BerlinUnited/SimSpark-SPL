@@ -1,3 +1,9 @@
+2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
+	* rcssserver3d/plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp
+	* rcssserver3d/plugin/soccer/trainercommandparser/trainercommandparser.cpp
+	* spark/lib/oxygen/proxyserver/agentproxy.cpp
+	- compile by VC10
+	
 2010-09-28  Sander van Dijk <sgvandijk@gmail.com>
 
 	* plugin/soccermonitor/soccerrender.cpp
