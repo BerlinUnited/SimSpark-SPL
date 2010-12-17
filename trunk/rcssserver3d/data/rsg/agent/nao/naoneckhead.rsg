@@ -99,7 +99,8 @@
 	;;     (setLocalRotation 0 0 0)
 	;;     (nd ImagePerceptor
 	;; 	(setInterval 3)
-	;; 	(setViewport 0 0 320 240)
+	;; 	(setOffScreen false)
+	;; 	(setResolution 320 240)
 	;; 	(setFOV 58)
 	;; 	(setZNear 0.003)
 	;; 	(setZFar 50)

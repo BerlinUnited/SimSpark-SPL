@@ -51,7 +51,7 @@ public:
     virtual ~BaseRenderServer() {}
 
     //! display the current active scene
-    virtual void Render() = 0;
+    virtual void Render(bool clean) = 0;
 
     //! width of the render target
     virtual int Width() const { return 0; }

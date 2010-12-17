@@ -33,7 +33,6 @@
 #include "imagerender.h"
 #include <zeitgeist/logserver/logserver.h>
 
-#define USE_FBO
 
 // using namespace kerosin;
 using namespace oxygen;
@@ -42,8 +41,12 @@ using namespace zeitgeist;
 using namespace salt;
 using namespace std;
 
+unsigned int ImageRender::autoScreenPosX = 0;
+unsigned int ImageRender::autoScreenPosY = 0;
+
 ImageRender::ImageRender(): kerosin::CustomRender(),
-  mDataSize(0), mWidth(0), mHeight(0), mRequested(false)
+  mDataSize(0), mWidth(0), mHeight(0), mRequested(false),mOffScreen(false),
+  mScreenPosX(0), mScreenPosY(0)
 {
 }
 
@@ -53,7 +56,7 @@ ImageRender::~ImageRender()
 #define REG_GL_EXT_FUN(_ptr, _function)                     \
     static _ptr _function = (_ptr) mOpenGLServer->GetExtension(#_function);\
     if ( !_function ){                                                  \
-        GetLog()->Error()<<"(Image Perceptor) ERROR: can not get "#_function"\n"; \
+        GetLog()->Error()<<"(ImageRender) ERROR: can not get "#_function"\n"; \
     }
 
 void ImageRender::SetCamera(boost::shared_ptr<oxygen::Camera> camera)
@@ -68,7 +71,7 @@ void ImageRender::OnLink()
     if (mRenderServer.expired())
         {
             GetLog()->Error()
-                << "(ImagePerceptor) ERROR: RenderServer not found\n";
+                << "(ImageRender) ERROR: RenderServer not found\n";
         }
 
     RegisterCachedPath(mOpenGLServer,"/sys/server/opengl");
@@ -76,7 +79,7 @@ void ImageRender::OnLink()
     if (mOpenGLServer.expired())
         {
             GetLog()->Error()
-                << "(ImagePerceptor) ERROR: OpenGLServer not found\n";
+                << "(ImageRender) ERROR: OpenGLServer not found\n";
         }
 
     // create a framebuffer object
@@ -98,6 +101,7 @@ void ImageRender::OnUnlink()
 
 void ImageRender::Render()
 {
+  mRequested = true;
     if ( (!mRequested) ||
         (mOpenGLServer.expired()) ||
         (mRenderServer.expired())
@@ -109,19 +113,20 @@ void ImageRender::Render()
     int w = mCamera->GetViewportWidth();
     int h = mCamera->GetViewportHeight();
 
-#ifdef USE_FBO
-    REG_GL_EXT_FUN( PFNGLBINDFRAMEBUFFEREXTPROC, glBindFramebufferEXT );
-    REG_GL_EXT_FUN( PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC, glFramebufferRenderbufferEXT );
-    REG_GL_EXT_FUN( PFNGLRENDERBUFFERSTORAGEEXTPROC, glRenderbufferStorageEXT );
-    REG_GL_EXT_FUN( PFNGLBINDRENDERBUFFEREXTPROC, glBindRenderbufferEXT);
-    REG_GL_EXT_FUN( PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC, glCheckFramebufferStatusEXT );
+  if (mOffScreen)
+  {
+    REG_GL_EXT_FUN(PFNGLBINDFRAMEBUFFEREXTPROC, glBindFramebufferEXT);
+    REG_GL_EXT_FUN(PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC, glFramebufferRenderbufferEXT);
+    REG_GL_EXT_FUN(PFNGLRENDERBUFFERSTORAGEEXTPROC, glRenderbufferStorageEXT);
+    REG_GL_EXT_FUN(PFNGLBINDRENDERBUFFEREXTPROC, glBindRenderbufferEXT);
+    REG_GL_EXT_FUN(PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC, glCheckFramebufferStatusEXT);
 
 
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFBOId);
     glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, mRBOId);
     glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_RGB, w, h);
     glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                 GL_RENDERBUFFER_EXT, mRBOId);
+      GL_RENDERBUFFER_EXT, mRBOId);
 
     glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, mDepthBuffer);
     glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, w, h);
@@ -130,20 +135,22 @@ void ImageRender::Render()
 
     // check FBO status
     GLenum status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-    if(status != GL_FRAMEBUFFER_COMPLETE_EXT){
-//        GetLog()->Error()<<"fbo error!\n";
+    if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
+    {
+      GetLog()->Error() << "(ImageRender) fbo error!\n";
     }
-#endif
+
+  }
 
     // setup the camera
     boost::shared_ptr<Camera> oldCamera = mRenderServer->GetCamera();
     mRenderServer->SetCamera(mCamera);
-    mRenderServer->Render();
+    mRenderServer->Render(false);
 
-#ifdef USE_FBO
-#else
+  if (!mOffScreen)
+  {
     glReadBuffer(GL_BACK);
-#endif
+  }
 
     int size = w*h*3;
     if ( size != mDataSize )
@@ -152,7 +159,7 @@ void ImageRender::Render()
       mDataSize = size;
     }
     
-    glReadPixels(0, 0,
+    glReadPixels(, mScreenPosY,
                  w, h,
                  GL_RGB,
                  GL_UNSIGNED_BYTE,
@@ -160,11 +167,35 @@ void ImageRender::Render()
     mWidth = w;
     mHeight = h;
 
-#ifdef USE_FBO
+  if (mOffScreen)
+  {
     // unbind FBO
+    REG_GL_EXT_FUN(PFNGLBINDFRAMEBUFFEREXTPROC, glBindFramebufferEXT);
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-#endif
+  }
+
     mRenderServer->SetCamera(oldCamera);
 
     mRequested = false;
+}
+
+void ImageRender::SetResolution(int w, int h)
+{
+  if (!mOffScreen) // HACK!
+  {
+    // asssert this function is called only once per instance
+    // auto position on screen (simple)
+    mScreenPosX = autoScreenPosX;
+    int screenWidth = mRenderServer->GetCamera()->GetViewportWidth();
+    if (mScreenPosX + w > screenWidth)
+    {
+      mScreenPosX = 0;
+      autoScreenPosY += h;
+    }
+    autoScreenPosX = mScreenPosX + w;
+    mScreenPosY = autoScreenPosY;
+    //
+  }
+
+  mCamera->SetViewport(mScreenPosX, mScreenPosY, w, h);
 }

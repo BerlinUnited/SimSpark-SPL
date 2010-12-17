@@ -87,7 +87,7 @@ void RenderControl::EndCycle()
     // update the window (pumps event loop, etc..) and render the
     // current frame
     mOpenGLServer->Update();
-    mRenderServer->Render();
+    mRenderServer->Render(true);
     RenderCustom();
     mOpenGLServer->SwapBuffers();
     ++mFramesRendered;

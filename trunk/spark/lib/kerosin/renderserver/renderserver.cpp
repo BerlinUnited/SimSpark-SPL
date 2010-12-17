@@ -56,7 +56,7 @@ RenderServer::PreparePicking()
 }
 
 void
-RenderServer::Render()
+RenderServer::Render(bool clean)
 {
     PreparePicking();
 
@@ -74,20 +74,28 @@ RenderServer::Render()
         GetLog()->Error()
             << "(RenderServer) ERROR: found no camera node in the active scene\n";
         return;
-    }
-
-    glClearColor(
-                 mAmbientColor.r(),
-                 mAmbientColor.g(),
-                 mAmbientColor.b(),
-                 mAmbientColor.a()
-                 );
-
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glColor3f(1,1,1);
+  }
 
     // set the view transformation
     BindCamera(mCamera);
+
+    glClearColor(
+      mAmbientColor.r(),
+      mAmbientColor.g(),
+      mAmbientColor.b(),
+      mAmbientColor.a()
+      );
+
+  if (clean)
+  {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  }
+  else
+  {
+    glClear(GL_DEPTH_BUFFER_BIT);
+  }
+    glColor3f(1, 1, 1);
+    
 
     // actual rendering
 

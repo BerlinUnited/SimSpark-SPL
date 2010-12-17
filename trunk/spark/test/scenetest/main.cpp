@@ -163,7 +163,7 @@ static void renderFrame(float deltaTime)
         shared_static_cast<RenderServer>(gContext->Get("/sys/server/scene"));
     if (renderServer)
     {
-        renderServer->Render();
+        renderServer->Render(true);
     }
 #endif
 }

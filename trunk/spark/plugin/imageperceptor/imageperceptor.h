@@ -38,13 +38,15 @@ public:
     
     virtual void OnLink();
 
-    void SetViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
+    void SetResolution(unsigned int w, unsigned int h);
 
     void SetFOV(float fov);
 
     void SetZNear(float zNear);
 
     void SetZFar(float zFar);
+
+    void SetOffScreen(bool offScreen);
     
 private:
     boost::shared_ptr<oxygen::Camera> mCamera;

@@ -53,7 +53,14 @@ public:
 
   void RequestRender() { mRequested = true; }
 
+  void SetResolution(int w, int h);
+
+  void SetOffScreen(bool offScreen) { mOffScreen = offScreen; }
+
+  void SetScreenPos(int x, int y) { mScreenPosX = x; mScreenPosY = y; }
+
 private:
+
   boost::shared_ptr<oxygen::Camera> mCamera;
 
   /** cached reference to the RenderServer */
@@ -67,10 +74,15 @@ private:
   int mWidth;
   int mHeight;
   bool mRequested;
+  bool mOffScreen;
+  int mScreenPosX, mScreenPosY;
 
   unsigned int mFBOId;
   unsigned int mRBOId;
   unsigned int mDepthBuffer;
+
+  static unsigned int autoScreenPosX;
+  static unsigned int autoScreenPosY;
 };
 
 DECLARE_CLASS(ImageRender);

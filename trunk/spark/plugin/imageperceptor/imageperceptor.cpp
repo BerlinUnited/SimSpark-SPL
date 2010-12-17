@@ -89,9 +89,9 @@ bool ImagePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
   return true;
 }
 
-void ImagePerceptor::SetViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+void ImagePerceptor::SetResolution(unsigned int w, unsigned int h)
 {
-  mCamera->SetViewport(x, y, w, h);
+  mRender->SetResolution(w,h);
 }
 
 void ImagePerceptor::SetFOV(float fov)
@@ -107,4 +107,9 @@ void ImagePerceptor::SetZNear(float zNear)
 void ImagePerceptor::SetZFar(float zFar)
 {
     mCamera->SetZFar(zFar);
+}
+
+void ImagePerceptor::SetOffScreen(bool offScreen)
+{
+  mRender->SetOffScreen(offScreen);
 }
