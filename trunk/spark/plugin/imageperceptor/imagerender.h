@@ -43,13 +43,13 @@ public:
   
   void OnUnlink();
 
-  const char* getData() const { return mData.get(); }
+  const char* GetData() const { return mData.get(); }
 
-  int getDataSize() const { return mDataSize; }
+  int GetDataSize() const { return mDataSize; }
 
-  int getWidth() const { return mWidth; }
+  int GetWidth() const { return mWidth; }
   
-  int getHeight() const { return mHeight; }
+  int GetHeight() const { return mHeight; }
 
 private:
   boost::shared_ptr<oxygen::Camera> mCamera;

@@ -71,13 +71,13 @@ bool ImagePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     
      ParameterList &sizeElement = predicate.parameter.AddList();
      sizeElement.AddValue(std::string("s"));
-     sizeElement.AddValue(mRender->getWidth());
-     sizeElement.AddValue(mRender->getHeight());
+     sizeElement.AddValue(mRender->GetWidth());
+     sizeElement.AddValue(mRender->GetHeight());
 
      ParameterList &dataElement = predicate.parameter.AddList();
      dataElement.AddValue(std::string("d"));
-     const char* data = mRender->getData();
-     string datacode = mB64Encoder.encode(data, mRender->getDataSize());
+     const char* data = mRender->GetData();
+     string datacode = mB64Encoder.encode(data, mRender->GetDataSize());
      dataElement.AddValue(datacode);
      return true;
 }
