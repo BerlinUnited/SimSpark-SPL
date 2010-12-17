@@ -101,8 +101,7 @@ void ImageRender::OnUnlink()
 
 void ImageRender::Render()
 {
-  mRequested = true;
-    if ( (!mRequested) ||
+    if ( (!(mRequested || !mOffScreen )) ||
         (mOpenGLServer.expired()) ||
         (mRenderServer.expired())
         )
@@ -159,7 +158,7 @@ void ImageRender::Render()
       mDataSize = size;
     }
     
-    glReadPixels(, mScreenPosY,
+    glReadPixels(mScreenPosX, mScreenPosY,
                  w, h,
                  GL_RGB,
                  GL_UNSIGNED_BYTE,
