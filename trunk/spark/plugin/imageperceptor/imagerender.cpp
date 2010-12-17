@@ -164,6 +164,6 @@ void ImageRender::Render()
     // unbind FBO
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 #endif
-//    mRenderServer->SetCamera(oldCamera);
+    mRenderServer->SetCamera(oldCamera);
 
 }
