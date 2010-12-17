@@ -50,13 +50,21 @@ void ImagePerceptor::OnLink()
   }
 
   mRender->SetCamera(mCamera);
-  AddChildReference(mRender);
+
+  RegisterCachedPath(mRenderControl, "/sys/server/simulation/RenderControl");
+
+  if (mRenderControl.expired())
+  {
+    GetLog()->Error()
+      << "(ImagePerceptor) ERROR: RenderControl not found\n";
+  } else
+  {
+    mRenderControl->AddChildReference(mRender);
+  }
 }
 
 bool ImagePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
-{
-    mRender->Render();
-    
+{  
     Predicate &predicate = predList->AddPredicate();
     predicate.name = "IMG";
     predicate.parameter.Clear();
