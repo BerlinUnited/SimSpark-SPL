@@ -24,6 +24,11 @@
 	* test/scenetest/main.cpp
 	- be able to render camera image on and off screen
 	
+2010-12-14  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- added boost date_time library to the required libs
+
 2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
 
 	* plugin/imageperceptor
