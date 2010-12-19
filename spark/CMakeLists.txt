@@ -41,7 +41,7 @@ set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" "C:/Program
 find_package(Ruby REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(DevIL REQUIRED)
-find_package(Boost REQUIRED thread COMPONENTS regex)
+find_package(Boost REQUIRED thread COMPONENTS regex date_time)
 find_package(wxWidgets COMPONENTS gl base core)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
