@@ -38,6 +38,8 @@ public:
     
     virtual void OnLink();
 
+    virtual void OnUnlink();
+
     void SetResolution(unsigned int w, unsigned int h);
 
     void SetFOV(float fov);

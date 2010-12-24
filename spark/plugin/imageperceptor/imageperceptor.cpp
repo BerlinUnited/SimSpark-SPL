@@ -63,6 +63,14 @@ void ImagePerceptor::OnLink()
   }
 }
 
+void ImagePerceptor::OnUnlink()
+{
+  if (!mRenderControl.expired())
+  {
+    mRenderControl->RemoveChildReference(mRender);
+  }
+}
+
 bool ImagePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 {
   mRender->RequestRender();
