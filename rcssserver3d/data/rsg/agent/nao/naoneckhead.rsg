@@ -94,18 +94,18 @@
             (setInterval 3)
         )
 
-	;; (nd Transform
-	;;     (setLocalPos 0 $Head_Radius 0)
-	;;     (setLocalRotation 0 0 0)
-	;;     (nd ImagePerceptor
-	;; 	(setInterval 3)
-	;; 	(setOffScreen false)
-	;; 	(setResolution 320 240)
-	;; 	(setFOV 58)
-	;; 	(setZNear 0.003)
-	;; 	(setZFar 50)
-	;; 	)
-	;;     )
+	(nd Transform
+	    (setLocalPos 0 $Head_Radius 0)
+	    (setLocalRotation 0 0 0)
+	    (nd ImagePerceptor
+		(setInterval 3)
+		(setOffScreen false)
+		(setResolution 320 240)
+		(setFOV 58)
+		(setZNear 0.003)
+		(setZFar 50)
+		)
+	    )
 
         (nd ObjectState
             (setID head)

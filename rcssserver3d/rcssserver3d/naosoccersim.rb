@@ -37,17 +37,17 @@ if (randomServer != nil)
 end
 
 # the soccer field dimensions in meters
-addSoccerVar('FieldLength', 18.0)
-addSoccerVar('FieldWidth', 12.0)
-addSoccerVar('FieldHeight', 40.0)
-addSoccerVar('GoalWidth', 2.1)
-addSoccerVar('GoalDepth', 0.6)
+addSoccerVar('FieldLength', 6.0)
+addSoccerVar('FieldWidth', 4.0)
+addSoccerVar('FieldHeight', 3.0)
+addSoccerVar('GoalWidth', 1.4)
+addSoccerVar('GoalDepth', 0.4)
 addSoccerVar('GoalHeight', 0.8)
-addSoccerVar('PenaltyLength',1.8)
-addSoccerVar('PenaltyWidth',3.9)
-addSoccerVar('FreeKickDistance', 1.3)
-addSoccerVar('FreeKickMoveDist', 1.5)
-addSoccerVar('GoalKickDist', 1.0)
+addSoccerVar('PenaltyLength',0.6)
+addSoccerVar('PenaltyWidth',2.2)
+addSoccerVar('FreeKickDistance', 0.6)
+addSoccerVar('FreeKickMoveDist', 1.0)
+addSoccerVar('GoalKickDist', 0.6)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
 
@@ -55,8 +55,8 @@ addSoccerVar('WaitBeforeKickOff', 2.0)
 addSoccerVar('AgentRadius',  0.4)
 
 # ball parameters
-addSoccerVar('BallRadius', 0.042)
-addSoccerVar('BallMass',0.026)
+addSoccerVar('BallRadius', 0.0325)
+addSoccerVar('BallMass',0.055)
 
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
