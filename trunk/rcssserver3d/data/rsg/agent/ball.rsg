@@ -10,10 +10,14 @@
      (setLocalPos 0.0 0.0 $Radius)
      (setName Ball)
      
-     (nd StaticMesh
-	 (load 'models/soccerball.obj')
-	 (setScale $Radius $Radius $Radius)
-     )
+     (nd Sphere
+	 (setRadius $Radius)
+	 (setMaterial $Material)
+	 )
+     ;; (nd StaticMesh
+     ;; 	 (load 'models/soccerball.obj')
+     ;; 	 (setScale $Radius $Radius $Radius)
+     ;; )
 					 
      (nd RigidBody
 	 (setName physics)
