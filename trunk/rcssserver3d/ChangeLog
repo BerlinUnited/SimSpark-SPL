@@ -1,3 +1,11 @@
+2011-01-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* cmake/UseLATEX.cmake: 
+	- Updated to version 1.7.2
+	
+	* plugin/soccermonitor/CMakeLists.txt: 
+	- Link OpenGL libraries to fix MacOSX compile issue(Thanks to Giuliani)
+
 2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
 	* rcssserver3d/plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp
 	* rcssserver3d/plugin/soccer/trainercommandparser/trainercommandparser.cpp
