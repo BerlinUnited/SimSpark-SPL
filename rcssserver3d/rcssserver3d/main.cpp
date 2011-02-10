@@ -84,6 +84,8 @@ void SimSpark::PrintHelp()
         << "\noptions:\n"
         << " --help\t\t\t print this message.\n"
         << " --script-path PATH\t set the script path (simspark.rb path).\n"
+        << "--agent-port PORTNUM\t port for agents to connect to.\n"
+        << "--server-port PORTNUM\t port for monitors to connect to.\n"
         << "\n";
 }
 
@@ -91,7 +93,7 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 {
     for( int i = 1; i < argc; i++)
       {
-        if(strcmp( argv[1], "--help" ) == 0)
+        if(strcmp( argv[i], "--help" ) == 0)
         {
           PrintHelp();
           return false;
@@ -107,6 +109,29 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
                return false;
             }
         }
+        else if (strcmp(argv[i], "--agent-port") == 0)
+        {
+          i++;
+          if (i < argc)
+            GetScriptServer()->Eval(string("$agentPort = ") + argv[i]);
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
+        else if (strcmp(argv[i], "--server-port") == 0)
+        {
+          i++;
+          if (i < argc)
+            GetScriptServer()->Eval(string("$serverPort = ") + argv[i]);
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
+        
       }
 
     return true;
