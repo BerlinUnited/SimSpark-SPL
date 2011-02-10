@@ -1,3 +1,11 @@
+2011-02-10  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* rcssserver3d/rcssserver3d/main.cpp
+	- Set different agent and monitor ports with --agent-posrt and --server-port
+
+	* /trunk/rcssserver3d/data/textures/rcs-naofield.png
+	- New field texture
+
 2011-01-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* cmake/UseLATEX.cmake: 
