@@ -18,9 +18,19 @@ IF (NOT ODE_FOUND)
           OUTPUT_STRIP_TRAILING_WHITESPACE
           RESULT_VARIABLE ODE_CONFIG_RESULT
           )
+        EXECUTE_PROCESS(
+          COMMAND ${ODE_CONFIG} --prefix
+          OUTPUT_VARIABLE ODE_CONFIG_PREFIX
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          RESULT_VARIABLE ODE_CONFIG_RESULT
+          )
       ELSE(COMMAND EXECUTE_PROCESS)
         EXEC_PROGRAM(${ODE_CONFIG} ARGS "--cflags"
           OUTPUT_VARIABLE ODE_CONFIG_CFLAGS
+          RETURN_VALUE ODE_CONFIG_RESULT
+          )
+        EXEC_PROGRAM(${ODE_CONFIG} ARGS "--prefix"
+          OUTPUT_VARIABLE ODE_CONFIG_PREFIX
           RETURN_VALUE ODE_CONFIG_RESULT
           )
       ENDIF(COMMAND EXECUTE_PROCESS)
@@ -44,22 +54,25 @@ IF (NOT ODE_FOUND)
   ENDIF(ODE_CONFIG)
   
   FIND_PATH(ODE_INCLUDE_DIR ode/ode.h
+    ${ODE_CONFIG_PREFIX}/include
     /usr/include
     /usr/local/include
-    $ENV{OGRE_HOME}/include # OGRE SDK on WIN32
+    $ENV{ODE_HOME}/include
     $ENV{INCLUDE}
     C:/library/ode/include
     "C:/Program Files/ode/include"
     "C:/Program Files (x86)/ode/include"
     C:/ode/include
+    NO_DEFAULT_PATH
   )
   FIND_LIBRARY(ODE_LIBRARY
     NAMES ode ode_double ode_single
     PATHS
+    ${ODE_CONFIG_PREFIX}/lib
     /usr/lib
     /usr/lib64
     /usr/local/lib
-    $ENV{OGRE_HOME}/lib # OGRE SDK on WIN32
+    $ENV{ODE_HOME}/lib
     C:/library/ode/lib/
     "C:/Program Files/ode/lib/"
     "C:/Program Files (x86)/ode/lib/"
@@ -68,6 +81,7 @@ IF (NOT ODE_FOUND)
       releaselib
       ReleaseDoubleDLL ReleaseDoubleLib 
       ReleaseSingleDLL ReleaseSingleLib
+    NO_DEFAULT_PATH
   )
 
   IF (WIN32)
