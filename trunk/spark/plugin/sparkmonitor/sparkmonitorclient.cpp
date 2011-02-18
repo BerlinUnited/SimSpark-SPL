@@ -191,7 +191,8 @@ void SparkMonitorClient::ParseMessage(const string& msg)
         }
 
     mActiveScene = mSceneServer->GetActiveScene();
-
+    mActiveScene->UpdateCache();
+    
     if (mActiveScene.get() == 0)
         {
             return;
@@ -233,6 +234,8 @@ void SparkMonitorClient::ParseMessage(const string& msg)
     mSceneImporter->ParseScene(string(pcont->lastPos),
                                mManagedScene,
                                boost::shared_ptr<ParameterList>());
+    
+    mActiveScene->SetModified(true);
 
     destroy_sexp(sexp_custom);
     destroy_continuation(pcont);

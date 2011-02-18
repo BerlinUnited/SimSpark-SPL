@@ -258,7 +258,7 @@ ScriptServer::~ScriptServer()
 void
 ScriptServer::UpdateCachedAllNodes()
 {
-    GetLog()->Normal() << "(ScriptServer) updating cached script variables\n";
+    GetLog()->Debug() << "(ScriptServer) updating cached script variables\n";
     GetCore()->GetRoot()->UpdateCached();
 }
 
@@ -480,7 +480,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
 {
     // run the init script in the sourceDir
     string sourcePath = sourceDir + salt::RFile::Sep() + name;
-    GetLog()->Normal() << "(ScriptServer) Running " << sourcePath << "... " << endl;
+    GetLog()->Debug() << "(ScriptServer) Running " << sourcePath << "... " << endl;
 
     boost::shared_ptr<salt::StdFile> file(new(salt::StdFile));
     if (! file->Open(sourcePath.c_str()))
@@ -493,7 +493,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
         return eError;
     } else
     {
-        GetLog()->Normal() << "(ScriptServer) Script ended OK " << sourcePath << endl;
+        GetLog()->Debug() << "(ScriptServer) Script ended OK " << sourcePath << endl;
     }
 
     // copy it to the destDir
@@ -504,7 +504,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
 
     string destPath = destDir + salt::RFile::Sep() + name;
 
-    GetLog()->Normal() << "Copying " << sourcePath
+    GetLog()->Debug() << "Copying " << sourcePath
                        << " to " << destPath << endl;
 
     stringstream s;
@@ -579,7 +579,7 @@ ScriptServer::CreateDotDir(const string& dotDir)
         return false;
     }
 
-    GetLog()->Normal() << "(ScriptServer) Created Directory '"
+    GetLog()->Debug() << "(ScriptServer) Created Directory '"
                        << dotDir << "'\n";
 
     return true;
@@ -589,6 +589,9 @@ bool
 ScriptServer::RunInitScript(const string &fileName, const string &relPath,
                             EInitScriptType type)
 {
+    GetLog()->Debug() << "(ScriptServer) Attempting to run init script '"
+                       << fileName << "'\n";
+                       
     string dotDir;
     bool validDotDir =
         (type == IS_USERLOCAL) &&
@@ -607,56 +610,52 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
 
     if (validDotDir)
     {
+        // Trying dot-dir in home directory
         result = RunInitScriptInternal(dotDir, fileName, false);
+        if (result == eOK)
+        {
+            GetLog()->Debug() << "(ScriptServer) : Ran init script '"
+                              << dotDir << salt::RFile::Sep() << fileName << "'\n";
+            return true;
+        }
+        else if (result == eError)
+        {
+            GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+                              << dotDir << salt::RFile::Sep() << fileName << "'\n";
+            return false;
+        }
+
+        GetLog()->Debug() << "(ScriptServer) : Did not find init script '"
+                           << dotDir << salt::RFile::Sep() << fileName << "'\n";
     }
 
+
+
+    // Trying package data directory
+    result = RunInitScriptInternal(pkgdatadir,  fileName, validDotDir, dotDir);
     if (result == eOK)
     {
         GetLog()->Debug() << "(ScriptServer) : Ran init script '"
-                          << dotDir << salt::RFile::Sep() << fileName << "'\n";
+                          << pkgdatadir << salt::RFile::Sep() << fileName << "'\n";
         return true;
-    }
-
-    if (result == eNotFound)
-    {
-        GetLog()->Debug() << "(ScriptServer) : Did not find init script '"
-                          << dotDir << salt::RFile::Sep() << fileName << "'\n";
     }
     else if (result == eError)
     {
         GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
-                          << dotDir << salt::RFile::Sep() << fileName << "'\n";
+                          << pkgdatadir << salt::RFile::Sep() << fileName << "'\n";
         return false;
     }
+    GetLog()->Debug() << "(ScriptServer) : Did not find init script '"
+                      << pkgdatadir << salt::RFile::Sep() << fileName << "'\n";
 
 
-    //
-    result = RunInitScriptInternal(pkgdatadir,  fileName, validDotDir, dotDir);
-
+    // Trying relative path to cwd
+    result = RunInitScriptInternal(mRelPathPrefix+relPath, fileName, validDotDir, dotDir);
     if (result == eOK)
     {
         GetLog()->Debug() << "(ScriptServer) : Ran init script '"
-                          << pkgdatadir << salt::RFile::Sep() << fileName << "'\n";
+                          <<  mRelPathPrefix+relPath << salt::RFile::Sep() << fileName << "'\n";
         return true;
-    }
-
-    if (result == eNotFound)
-    {
-        GetLog()->Debug() << "(ScriptServer) : Did not find init script '"
-                          << pkgdatadir << salt::RFile::Sep() << fileName << "'\n";
-    }
-    else if (result == eError)
-    {
-        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
-                          << pkgdatadir << salt::RFile::Sep() << fileName << "'\n";
-    }
-
-
-    result = RunInitScriptInternal(mRelPathPrefix+relPath, fileName, validDotDir, dotDir);
-    if (result == eNotFound)
-    {
-        GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate init script '"
-                          << fileName << "'\n";
     }
     else if (result == eError)
     {
@@ -664,5 +663,7 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
                           << mRelPathPrefix+relPath << salt::RFile::Sep() << fileName << "'\n";
     }
 
+    GetLog()->Error() << "(ScriptServer) ERROR: Cannot locate init script '"
+                          << fileName << "'\n";
     return (result == eOK);
 }

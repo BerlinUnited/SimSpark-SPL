@@ -83,8 +83,14 @@ public:
     /** returns the world bounding box of this node */
     const salt::AABB3& GetWorldBoundingBox() const;
 
-    // scene graph update passes
+    /** get the cached BaseNode children of this node */
+    TLeafList GetBaseNodeChildren();
 
+    // scene graph update passes
+    /** updates internal cache */
+    virtual void UpdateCache(bool recursive = true);
+
+    
     /** updates internal state before physics calculation */
     void PrePhysicsUpdate(float deltaTime);
 
@@ -123,6 +129,9 @@ protected:
         etc..) */
     virtual void UpdateHierarchyInternal();
 
+    virtual void UpdateCacheInternal() {}
+    
+    void UpdateBaseNodeChildren();
     //
     // Members
     //
@@ -138,6 +147,8 @@ protected:
 
     /** world bounding box */
     salt::AABB3 mWorldBoundingBox;
+    
+    TLeafList mBaseNodeChildren;
 };
 
 DECLARE_CLASS(BaseNode);

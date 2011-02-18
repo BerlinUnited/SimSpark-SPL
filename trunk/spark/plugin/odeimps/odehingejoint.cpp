@@ -32,6 +32,7 @@ long HingeJointImp::CreateHingeJoint(long worldID)
 {
     dWorldID ODEWorld = (dWorldID) worldID;
     dJointID ODEJoint = dJointCreateHinge(ODEWorld, 0);
+    dJointSetFeedback( ODEJoint, &mFeedback );
     return (long) ODEJoint;
 }
 
@@ -85,4 +86,11 @@ float HingeJointImp::GetAngleRate(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHingeAngleRate(ODEJoint));
+}
+
+float HingeJointImp::GetTorque(long jointID) const
+{
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointFeedback* fb = dJointGetFeedback(ODEJoint);
+    return dLENGTH(fb->t1) + dLENGTH(fb->t2);
 }

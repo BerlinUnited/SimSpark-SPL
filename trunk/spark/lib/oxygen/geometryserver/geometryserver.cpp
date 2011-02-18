@@ -63,7 +63,7 @@ GeometryServer::InitMeshImporter(const string& importerName)
     importer->SetName(importerName);
     AddChildReference(importer);
 
-    GetLog()->Normal()
+    GetLog()->Debug()
         << "(GeometryServer) MeshImporter '" << importerName << "' registered\n";
 
     return true;
@@ -139,7 +139,7 @@ GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
             mesh->SetName(name);
         }
 
-        GetLog()->Normal() << "(GeometryServer) imported mesh '" << meshName
+        GetLog()->Debug() << "(GeometryServer) imported mesh '" << meshName
                            << " with '" << importer->GetName() << "'\n";
 
         if (mesh.get() == 0 || mesh->GetVertexCount() == 0)
@@ -183,14 +183,14 @@ GeometryServer::RegisterMesh(boost::shared_ptr<TriMesh> mesh)
     }
 
     mMeshMap[name] = mesh;
-    GetLog()->Normal() << "(GeometryServer) mesh " << name << " registered\n";
+    GetLog()->Debug() << "(GeometryServer) mesh " << name << " registered\n";
 
     TLeafList exporters;
     ListChildrenSupportingClass<MeshExporter>(exporters);
 
     for (TLeafList::const_iterator bi = exporters.begin(); bi != exporters.end(); ++bi)
     {
-        GetLog()->Normal() << "(GeometryServer) additionally registered mesh "
+        GetLog()->Debug() << "(GeometryServer) additionally registered mesh "
                            << name << " via MeshExporter '" << (*bi)->GetName() << "'\n";
         boost::shared_ptr<MeshExporter> mb = shared_static_cast<MeshExporter>(*bi);
         mb->RegisterMesh(mesh);
@@ -213,7 +213,7 @@ GeometryServer::InitMeshExporter(const string& name)
     exporter->SetName(name);
     AddChildReference(exporter);
 
-    GetLog()->Normal() << "(GeometryServer) MeshExporter '" << name << "' registered\n";
+    GetLog()->Debug() << "(GeometryServer) MeshExporter '" << name << "' registered\n";
 
     return true;
 }

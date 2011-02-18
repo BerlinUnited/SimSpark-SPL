@@ -69,12 +69,19 @@ public:
     /** return how many times the scene was modified */
     int GetModifiedNum();
 
+    /** return he modification count at the last update */
+    int GetLastCacheUpdate();
 protected:
+    void UpdateCacheInternal();
+
     /** true, if the scene is modified */
     bool mModified;
 
     /** how many times the scene was modified */
     int mModifiedNum;
+    
+    /** the modification count at the last update */
+    int mLastCacheUpdate;
 };
 
 DECLARE_CLASS(Scene);

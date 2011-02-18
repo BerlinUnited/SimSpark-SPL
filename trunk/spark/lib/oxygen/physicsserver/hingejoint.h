@@ -69,6 +69,9 @@ public:
     /** returns the time derivate of the hinge angle */
     float GetAngleRate() const;
     
+    /** returns the torque on the joint */
+    float GetTorque() const;
+    
     /** Sets a parameter value of this joint*/
     void SetParameter(int parameter, float value);
 

@@ -34,6 +34,16 @@ Scene::~Scene()
 {
 }
 
+void Scene::UpdateCacheInternal()
+{
+    mLastCacheUpdate = mModifiedNum;
+}
+
+int Scene::GetLastCacheUpdate()
+{
+    return mLastCacheUpdate;
+}
+
 const salt::Matrix& Scene::GetWorldTransform() const
 {
     return mIdentityMatrix;
@@ -58,4 +68,3 @@ int Scene::GetModifiedNum()
 {
     return mModifiedNum;
 }
-
