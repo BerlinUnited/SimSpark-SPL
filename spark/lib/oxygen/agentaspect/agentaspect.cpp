@@ -21,6 +21,7 @@
 */
 #include "agentaspect.h"
 #include <zeitgeist/logserver/logserver.h>
+#include <oxygen/sceneserver/scene.h>
 
 using namespace boost;
 using namespace oxygen;
@@ -38,11 +39,20 @@ AgentAspect::~AgentAspect()
 {
 }
 
+void
+AgentAspect::UpdateCacheInternal()
+{
+    GetLog()->Debug() << "(AgentAspect) Updating cache\n";
+    
+    UpdateEffectorMap();
+    
+    mPerceptors.clear();
+    ListChildrenSupportingClass<Perceptor>(mPerceptors,true);
+}
+
 bool
 AgentAspect::RealizeActions(boost::shared_ptr<ActionObject::TList> actions)
 {
-    UpdateEffectorMap();
-
     for (
          ActionObject::TList::iterator iter = actions->begin();
          iter != actions->end();
@@ -79,15 +89,13 @@ AgentAspect::QueryPerceptors()
 {
     mPerceptorCycle++;
     // build list of perceptors, searching recursively
-    TLeafList perceptors;
-    ListChildrenSupportingClass<Perceptor>(perceptors,true);
 
     boost::shared_ptr<PredicateList> predList(new PredicateList());
 
     // query the perceptors for new data
     for (
-         TLeafList::iterator iter = perceptors.begin();
-         iter != perceptors.end();
+         TLeafList::iterator iter = mPerceptors.begin();
+         iter != mPerceptors.end();
          ++iter
          )
         {
@@ -167,6 +175,7 @@ AgentAspect::Init(const string& createEffector, int id)
             }
 
     return added;
+
 }
 
 bool AgentAspect::IsSynced() const

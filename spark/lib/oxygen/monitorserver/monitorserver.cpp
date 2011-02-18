@@ -44,8 +44,8 @@ void MonitorServer::OnLink()
 
     if (mSimulationServer.expired())
     {
-        GetLog()->Error()
-            << "(MonitorServer) ERROR: SimulationServer not found.\n";
+        GetLog()->Warning()
+            << "(MonitorServer) WARNING: SimulationServer not found.\n";
     }
 }
 

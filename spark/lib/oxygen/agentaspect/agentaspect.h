@@ -65,6 +65,8 @@ public:
     /** looks up the effector corresponding to a predicate */
     virtual boost::shared_ptr<Effector> GetEffector(const std::string predicate) const;
 
+    void UpdateCacheInternal();
+    
     //! @return the unique ID for the agent aspect
     inline int ID() const { return mID; }
 
@@ -83,6 +85,9 @@ protected:
 private:
     int mID;
 
+    /** cache of the agent's effectors */
+    TLeafList mPerceptors;
+    
     /** indicates how many times the QueryPerceptors be called */
     unsigned int mPerceptorCycle;
 

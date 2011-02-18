@@ -67,6 +67,9 @@ public:
     
     /** returns the time derivate of the hinge angle */
     virtual float GetAngleRate(long jointID) const = 0;
+
+    /** returns the torque on the joint */
+    virtual float GetTorque(long jointID) const = 0;
 };
 
 } //namespace oxygen

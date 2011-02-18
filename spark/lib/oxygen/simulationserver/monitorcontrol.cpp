@@ -62,6 +62,7 @@ void MonitorControl::ClientConnect(boost::shared_ptr<Client> client)
         }
 
     string header = mMonitorServer->GetMonitorHeaderInfo();
+
     mNetMessage->PrepareToSend(header);
     SendClientMessage(client->addr,header);
 
@@ -90,10 +91,19 @@ void MonitorControl::EndCycle()
         string info;
         boost::shared_ptr<Scene> scene = GetActiveScene();
         if (scene.get() != 0
-            && scene->GetModifiedNum() > mFullStateLogged )
+            && scene->GetModifiedNum() > mFullStateLogged)
         {
-            mFullStateLogged = scene->GetModifiedNum();
-            info = mMonitorServer->GetMonitorHeaderInfo();
+            if (scene->GetLastCacheUpdate() == scene->GetModifiedNum())
+            {
+                mFullStateLogged = scene->GetModifiedNum();
+                info = mMonitorServer->GetMonitorHeaderInfo();
+            }
+            else
+            {
+                GetLog()->Debug()
+                    << "(MonitorControl) Scene is modified, but hasn't updated cache yet. Doing nothing.\n";
+                return;
+            }
         }
         else
         {

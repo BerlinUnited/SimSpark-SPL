@@ -427,10 +427,12 @@ void SimulationServer::RunMultiThreaded()
     while (!mExitThreads)
         {
             ++mCycle;
+
             mThreadBarrier->wait();
             if (mExit)
                 mExitThreads = true;
             // Wait for SimControlNodes' acts at the begining of a cycle
+
             mThreadBarrier->wait();
 
             finalDelta = initDelta = mSumDeltaTime;
@@ -480,6 +482,7 @@ void SimulationServer::SimControlThread(boost::shared_ptr<SimControlNode> contro
     while (!mExitThreads)
         {
             mThreadBarrier->wait();
+                
             newCycle = false;
             if ( controlNode->GetTime() - mSimTime <= 0.005f )
                 {
@@ -489,13 +492,8 @@ void SimulationServer::SimControlThread(boost::shared_ptr<SimControlNode> contro
                     controlNode->ActAgent();
                     controlNode->SetSimTime(mSimTime);
                 }
-            mThreadBarrier->wait();
 
-            if (isInputControl)
-                {
-                    while (int(mSumDeltaTime*100) < int(mSimStep*100))
-                        controlNode->StartCycle(); // advance the time
-                }
+            mThreadBarrier->wait();
 
             // wait for physics update
             mThreadBarrier->wait();

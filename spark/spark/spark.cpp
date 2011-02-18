@@ -109,7 +109,7 @@ Spark::Init(int argc, char** argv)
         (
          "spark.rb",
          "lib/spark",
-         ScriptServer::IS_COMMON
+         ScriptServer::IS_USERLOCAL
          );
 
     UpdateCached();
