@@ -1,0 +1,19 @@
+To compile rcssserver3D from source on Mac OS X, you need:
+
+- SDL installed unix style (not as framework).  (many thanks to snow <snow@sylph.white-void.net> for the hint)
+  Simply get the sources from libsdl.org, then configure, make, make install.
+  It's no problem if you have the SDL already installed as framework somewhere,
+  just install the unix style libs additionally.
+
+- Devil installed as framework (IL.framework, tested) or unix style (untested)
+  Devil is available from http://openil.sourceforge.net/download.php
+
+- the OpenGL and GLUT frameworks 
+
+Known problems:
+
+- loading modules from the simspark libraries causes the program to crash on exit
+
+
+To create own programs using the simspark libraries:
+- the main program must include SDL.h, and the main method must have the usual signature.
