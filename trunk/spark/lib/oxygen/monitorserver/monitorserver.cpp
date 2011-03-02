@@ -30,7 +30,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 
-MonitorServer::MonitorServer() : Node()
+MonitorServer::MonitorServer() : Node(), mDataCycle(0)
 {
 }
 

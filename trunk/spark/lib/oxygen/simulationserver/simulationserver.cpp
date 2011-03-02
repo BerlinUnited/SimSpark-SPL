@@ -312,15 +312,16 @@ void SimulationServer::Run(int argc, char** argv)
     Init(argc, argv);
     GetLog()->Normal() << "(SimulationServer) entering runloop\n";
 
+    boost::shared_ptr<SimControlNode> inputCtr = GetControlNode("InputControl");
+
     if ( mMultiThreads )
         {
             GetLog()->Normal()<< "(SimulationServer) running in multi-threads\n";
-            RunMultiThreaded();
+            RunMultiThreaded(inputCtr);
         }
     else
         {
             GetLog()->Normal()<< "(SimulationServer) running in single thread\n";
-            boost::shared_ptr<SimControlNode> inputCtr = GetControlNode("InputControl");
             if ( !mAutoTime && inputCtr.get() == 0 )
                 {
                     GetLog()->Error()<< "(SimulationServer) ERROR: can not get InputControl\n";
@@ -391,7 +392,7 @@ boost::shared_ptr<SceneServer> SimulationServer::GetSceneServer()
     return mSceneServer.get();
 }
 
-void SimulationServer::RunMultiThreaded()
+void SimulationServer::RunMultiThreaded(boost::shared_ptr<SimControlNode> &inputCtr)
 {
     if (mSimStep == 0)
         {
@@ -428,19 +429,34 @@ void SimulationServer::RunMultiThreaded()
         {
             ++mCycle;
 
+            // Signal start of cycle
             mThreadBarrier->wait();
             if (mExit)
                 mExitThreads = true;
+            
             // Wait for SimControlNodes' acts at the begining of a cycle
-
             mThreadBarrier->wait();
 
             finalDelta = initDelta = mSumDeltaTime;
 
             mSceneServer->PrePhysicsUpdate(mSimStep);
             mSceneServer->PhysicsUpdate(mSimStep);
+
             if (mAutoTime)
-                AdvanceTime(mSimStep);
+                {
+                    AdvanceTime(mSimStep);
+                }
+                
+            else
+                {
+                    if (inputCtr.get() != 0)
+                        {
+                            while (int(mSumDeltaTime*100) < int(mSimStep*100))
+                                {
+                                    inputCtr->StartCycle();// advance the time
+                                }
+                        }
+                }
 
             UpdateDeltaTimeAfterStep(finalDelta);
 
@@ -454,11 +470,13 @@ void SimulationServer::RunMultiThreaded()
             mSceneServer->PostPhysicsUpdate();
             mGameControlServer->Update(finalStep);
             mSimTime += finalStep;
+            
             if (renderControl
                 && renderControl->GetTime() - mSimTime < 0.005f )
                 renderControl->EndCycle();
 
-            mThreadBarrier->wait();
+            // End Cycle
+            mThreadBarrier->wait();            
             mSumDeltaTime -= initDelta - finalDelta;
         }
 
@@ -484,7 +502,7 @@ void SimulationServer::SimControlThread(boost::shared_ptr<SimControlNode> contro
             mThreadBarrier->wait();
                 
             newCycle = false;
-            if ( controlNode->GetTime() - mSimTime <= 0.005f )
+            if ( controlNode->GetTime() - mSimTime <= 0.005f && !isInputControl)
                 {
                     newCycle = true;
                     controlNode->StartCycle();

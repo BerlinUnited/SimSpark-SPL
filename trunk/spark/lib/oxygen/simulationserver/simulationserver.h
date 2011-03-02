@@ -167,7 +167,7 @@ protected:
     static void CatchSignal(int sig_num);
 
     /** the multi-threaded runloop of the simulation */
-    void RunMultiThreaded();
+    void RunMultiThreaded(boost::shared_ptr<SimControlNode> &inputCtr);
 
     /** the thread function which controls a single SimControlNode in
      *  multi-threaded mode. */

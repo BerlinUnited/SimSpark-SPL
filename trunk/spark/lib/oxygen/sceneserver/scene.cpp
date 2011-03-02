@@ -26,7 +26,7 @@ using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 
-Scene::Scene() : BaseNode(), mModified(false), mModifiedNum(0)
+Scene::Scene() : BaseNode(), mModified(false), mModifiedNum(0), mLastCacheUpdate(0)
 {
 }
 
