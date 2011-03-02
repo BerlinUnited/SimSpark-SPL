@@ -50,7 +50,7 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mCommandMap["select"] = CT_SELECT;
     mCommandMap["kill"] = CT_KILL;
     mCommandMap["repos"] = CT_REPOS;
-    
+    mCommandMap["killsim"] = CT_KILLSIM;
     // setup team index map
     // Originally  team sides were "L","R" and "N"
     // But this seems to be unused
@@ -120,6 +120,15 @@ TrainerCommandParser::OnLink()
             GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get GameControlServer\n";
         }
 
+    mSimServer = shared_dynamic_cast<SimulationServer>
+        (GetCore()->Get("/sys/server/simulation"));
+        
+    if (mGameControl.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get SimulationServer\n";
+        }
+
+    
 }
 
 void TrainerCommandParser::OnUnlink()
@@ -211,6 +220,9 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         break;
     case CT_REPOS:
         ParseReposCommand(predicate);
+        break;
+    case CT_KILLSIM:
+        ParseKillSimCommand(predicate);
         break;
     default:
         return false;
@@ -699,3 +711,7 @@ void TrainerCommandParser::ParseReposCommand(const oxygen::Predicate & predicate
     }
 }
     
+void TrainerCommandParser::ParseKillSimCommand(const oxygen::Predicate & predicate)
+{
+    mSimServer->Quit();
+}
