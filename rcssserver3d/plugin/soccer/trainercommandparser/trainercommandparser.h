@@ -32,6 +32,7 @@
 #include <salt/vector.h>
 #include <soccertypes.h>
 #include <soccerruleaspect/soccerruleaspect.h>
+#include <oxygen/simulationserver/simulationserver.h>
 
 namespace oxygen
 {
@@ -52,7 +53,8 @@ public:
         CT_ACK,
         CT_SELECT,
         CT_KILL,
-        CT_REPOS
+        CT_REPOS,
+        CT_KILLSIM
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
@@ -123,6 +125,12 @@ protected:
         predicate
     */
     void ParseReposCommand(const oxygen::Predicate & predicate);
+    
+    /** parses and executes the killsim command  contained in the given
+        predicate
+    */
+    void ParseKillSimCommand(const oxygen::Predicate & predicate);
+    
 protected:
     TCommandMap    mCommandMap;
 
@@ -138,7 +146,9 @@ protected:
     boost::shared_ptr<oxygen::BaseParser> mSexpParser;
     //! cached reference to the game control server
     boost::shared_ptr<oxygen::GameControlServer> mGameControl;
-
+    //! cached reference to the simulation server
+    boost::shared_ptr<oxygen::SimulationServer> mSimServer;
+    
     bool mGetAck;
     std::string mAckString;
 };
