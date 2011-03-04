@@ -85,12 +85,13 @@ public:
 
     /** Add a new message to the list */
     void AddMessage(const std::string& msg, float direction, bool teamMate);
-    void AddSelfMessage(const std::string& msg);
+    void AddSelfMessage(const std::string& msg, float timeStamp);
 
     /** Get the first message from the list */
     bool GetMessage(std::string& msg, float& direction, bool teamMate);
-    bool GetSelfMessage(std::string& msg);
-
+    bool GetSelfMessage(std::string& msg, bool check = true);
+    float GetSelfMessageTimeStamp();
+    
     bool IsSelected() const;
     void Select(bool s = true);
     void UnSelect();
@@ -111,6 +112,9 @@ protected:
     /** self message */
     std::string mSelfMsg;
 
+    /** time stamp of self message */
+    float mSelfMsgTimeStamp;
+    
     /** team-mate's message */
     std::string mMateMsg;
     float mMateMsgDir;

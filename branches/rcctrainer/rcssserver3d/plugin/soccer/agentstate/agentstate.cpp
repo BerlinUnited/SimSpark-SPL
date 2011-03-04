@@ -154,9 +154,10 @@ AgentState::AddMessage(const string& msg, float direction, bool teamMate)
 }
 
 void
-AgentState::AddSelfMessage(const string& msg)
+AgentState::AddSelfMessage(const string& msg, float timeStamp)
 {
     mSelfMsg = msg;
+    mSelfMsgTimeStamp = timeStamp;
     mIfSelfMsg = true;
 }
 
@@ -200,9 +201,9 @@ AgentState::GetMessage(string& msg, float& direction, bool teamMate)
 }
 
 bool
-AgentState::GetSelfMessage(string& msg)
+AgentState::GetSelfMessage(string& msg, bool check)
 {
-    if (! mIfSelfMsg)
+    if (check && ! mIfSelfMsg)
     {
         return false;
     }
@@ -211,6 +212,12 @@ AgentState::GetSelfMessage(string& msg)
     mIfSelfMsg = false;
 
     return true;
+}
+
+float
+AgentState::GetSelfMessageTimeStamp()
+{
+    return mSelfMsgTimeStamp;
 }
 
 void

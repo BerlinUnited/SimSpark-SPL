@@ -1300,7 +1300,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     {
         if ( (*it)->GetUniformNumber() == number)
         {
-            (*it)->AddSelfMessage(message);
+            (*it)->AddSelfMessage(message, mGameState->GetTime());
             continue;
         }
         SoccerBase::GetTransformParent(*(*it), transform_parent);

@@ -46,6 +46,7 @@ set(soccer_LIB_HDRS
    hmdp_effector/hmdpperceptor.h
    hmdp_effector/naospecific.h
    line/line.h
+   rccmonitor/rccmonitor.h
 )
 
 set(soccer_LIB_SRCS
@@ -120,6 +121,8 @@ set(soccer_LIB_SRCS
    hmdp_effector/naospecific.cpp
    line/line.cpp
    line/line_c.cpp
+   rccmonitor/rccmonitor.cpp
+   rccmonitor/rccmonitor_c.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${FREETYPE_INCLUDE_DIRS}
