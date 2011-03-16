@@ -37,22 +37,22 @@
 
  ;; add lights
  (nd Transform
-       (setLocalPos -3 3 2)
+       (setLocalPos 0 -3 2)
        (nd Light
-	     (setDiffuse 0.6 0.6 0.6 1.0)
-	     (setSpecular 0.1 0.1 0.1 1.0)
-	     (setAmbient 0.3 0.3 0.3 1.0)
-	     )
-
+ 	     (setDiffuse 0.6 0.6 0.6 1.0)
+ 	     (setSpecular 0.33 0.33 0.33 1.0)
+ 	     (setAmbient 0.33 0.33 0.33 1.0)
+ 	     )
        )
+
 
  ;; add lights
  (nd Transform
-       (setLocalPos 3 -3 2)
+       (setLocalPos 0 3 2)
        (nd Light
  	     (setDiffuse 0.6 0.6 0.6 1.0)
- 	     (setSpecular 0.1 0.1 0.1 1.0)
- 	     (setAmbient 0.3 0.3 0.3 1.0)
+ 	     (setSpecular 0.33 0.33 0.33 1.0)
+ 	     (setAmbient 0.33 0.33 0.33 1.0)
  	     )
        )
 

@@ -10,7 +10,10 @@ material.setDiffuse(1.0,1.0,0.0,1.0)
 material.setAmbient(0.2,0.2,0.0,1.0)
 
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matOrange');
-material.setDiffuse(1.0,0.75,0.0,1.0)
+material.setDiffuse(1.0,0.03,0.0,1.0)
+material.setAmbient(0.0,0.0,0.0,0.0)
+material.setEmission(0.0,0.0,0.0,0.0)
+material.setSpecular(0.0,0.0,0.0,0.0)
 
 material = sparkCreate('kerosin/MaterialSolid', $serverPath+'material/matRed');
 material.setDiffuse(1.0,0.0,0.0,1.0)
