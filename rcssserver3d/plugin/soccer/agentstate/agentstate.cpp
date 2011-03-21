@@ -36,7 +36,8 @@ AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
                            mHearDecay(2), mHearMateCap(2),
                            mHearOppCap(2), mIfSelfMsg(false),
                            mIfMateMsg(false), mIfOppMsg(false),
-                           mSelected(false)
+                           mSelected(false),
+                           mOldTouchGroup(new TouchGroup), mTouchGroup(new TouchGroup)
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
@@ -257,4 +258,29 @@ void
 AgentState::UnSelect()
 {
     mSelected = false;
+}
+
+void
+AgentState::NewTouchGroup()
+{
+    mOldTouchGroup = mTouchGroup;
+    mTouchGroup = boost::shared_ptr<TouchGroup>(new TouchGroup());
+}
+
+boost::shared_ptr<TouchGroup>
+AgentState::GetOldTouchGroup()
+{
+    return mOldTouchGroup;
+}
+
+void
+AgentState::SetTouchGroup(boost::shared_ptr<TouchGroup> group)
+{
+    mTouchGroup = group;
+}
+
+boost::shared_ptr<TouchGroup>
+AgentState::GetTouchGroup()
+{
+    return mTouchGroup;
 }

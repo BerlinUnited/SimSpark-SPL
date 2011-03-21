@@ -30,6 +30,7 @@
 #include <gamestateaspect/gamestateaspect.h>
 #include <ballstateaspect/ballstateaspect.h>
 #include <agentstate/agentstate.h>
+#include <algorithm>
 
 using namespace oxygen;
 using namespace boost;
@@ -63,6 +64,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mMinOppDistance(0),          // min dist for closest Opponent to ball in order to use repositions for 2nd, 3rd player
     mMin2PlDistance(0),            // min dist for second closest of team before being repositioned
     mMin3PlDistance(0),            // min dist for third closest of team before being repositioned 
+    mMaxTouchGroupSize(1000),
     mMaxFaultTime(0.0)               // maximum time allowed for a player to commit a positional fault before being repositioned
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
@@ -98,12 +100,18 @@ SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
         CalculateDistanceArrays(TI_RIGHT);   	// Calculates distance arrays for right team 
         AnalyseFaults(TI_LEFT);   		// Analyses simple faults for the left team 
         AnalyseFaults(TI_RIGHT);   		// Analyses simple faults for the right team 
+        AnalyseTouchGroups(TI_LEFT);
+        AnalyseTouchGroups(TI_RIGHT);
         // Only apply rules during play-on
         if (playMode == PM_PlayOn)
         {
           ClearPlayersAutomatic(TI_LEFT);   	// enforce standing and not overcrowding rules for left team
           ClearPlayersAutomatic(TI_RIGHT);  	// enforce standing and not overcrowding rules for right team
         }
+        
+        // Reset touch groups
+        ResetTouchGroups(TI_LEFT);
+        ResetTouchGroups(TI_RIGHT);
     }
 }
 
@@ -129,7 +137,7 @@ SoccerRuleAspect::ResetFaultCounter(TTeamIndex idx)
 
 // Process agent state: standing, sitted, laying down, ...
 void 
-SoccerRuleAspect::processAgentState(salt::Vector3f pos, int unum, TTeamIndex idx)
+SoccerRuleAspect::ProcessAgentState(salt::Vector3f pos, int unum, TTeamIndex idx)
 {
     float groundZVal = 0.15;  //bellow this player is on the ground
     float middleZVal = 0.25;  //abovce this player is standing (or trying...)
@@ -184,7 +192,7 @@ void SoccerRuleAspect::CalculateDistanceArrays(TTeamIndex idx)
 {
     if (idx == TI_NONE || mBallState.get() == 0)
         return;
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
@@ -196,7 +204,7 @@ void SoccerRuleAspect::CalculateDistanceArrays(TTeamIndex idx)
         ownGoalPos = Vector3f(mFieldLength/2.0, 0.0, 0.0);
         
     boost::shared_ptr<oxygen::Transform> agent_aspect;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    SoccerBase::TAgentStateList::const_iterator i;
 
     numPlInsideOwnArea[idx] = 0;
     closestPlayer[idx] = 1;
@@ -246,13 +254,49 @@ void SoccerRuleAspect::CalculateDistanceArrays(TTeamIndex idx)
           playerInsideOwnArea[unum][idx] = 0;
 
         // Process agent state: standing, sitted, laying down, ...
-        processAgentState(agentPos, unum, idx);
+        ProcessAgentState(agentPos, unum, idx);
    }
  
    // compute rank of distance to ball
    SimpleOrder(distArr, ordArr, idx);
    // compute rank of distance to own goal
    SimpleOrder(distGArr, ordGArr, idx);
+}
+
+void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
+{
+    if (idx == TI_NONE || mBallState.get() == 0)
+        return;
+    SoccerBase::TAgentStateList agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
+        return;
+
+    random_shuffle(agent_states.begin(), agent_states.end());
+    SoccerBase::TAgentStateList::iterator i = agent_states.begin();
+    for (; i != agent_states.end(); ++i)
+    {
+        // Wasn't touching before, joined group making group too large
+        if ((*i)->GetOldTouchGroup()->size() == 1 && (*i)->GetTouchGroup()->size() > mMaxTouchGroupSize)
+        {
+            playerFaultTime[(*i)->GetUniformNumber()][idx]++;
+            // Remove player from touch group so no more agents are replaced
+            (*i)->GetTouchGroup()->erase(*i);
+        }
+    }
+}
+
+void SoccerRuleAspect::ResetTouchGroups(TTeamIndex idx)
+{
+    SoccerBase::TAgentStateList agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
+        return;
+    
+    SoccerBase::TAgentStateList::const_iterator i;
+    for (i = agent_states.begin(); i != agent_states.end(); i++)
+    {
+        (*i)->NewTouchGroup();
+        (*i)->GetTouchGroup()->insert(*i);
+    }
 }
 
 // Analyse Faults and Creates Fault Time Array
@@ -316,14 +360,15 @@ void SoccerRuleAspect::AnalyseFaults(TTeamIndex idx)
 
 salt::Vector3f SoccerRuleAspect::RepositionOutsidePos(salt::Vector3f posIni, int unum, TTeamIndex idx) 
 {
-   salt::Vector3f pos;
-   float fac=1.0;
-   if (unum > 6) unum = 7 -unum;		      //because of teams that use numbers 7-11
-   if (posIni.y()<1.5) fac = 1.0; else fac = -1.0;    //for visualization purposes
-   if (idx==TI_LEFT) pos = Vector3f(-(7-unum)*0.6, 6.5*fac, 1.0); 
-   else pos = Vector3f((7-unum)*0.6, 6.5*fac, 1.0);
-   //cout << "*********Player Repos Num: " << unum << "  Team: " << idx << "  Pos: " << pos << endl; 
-   return pos;
+    salt::Vector3f pos;
+    // Choose x side based on team
+    float xFac = idx == TI_LEFT ? -0.6 : 0.6;
+    // Choose side on oppisite side of field
+    float yFac = posIni.y() < 0 ? 1.0 : -1.0;
+
+    pos = Vector3f(xFac * (7 - unum), (mFieldWidth / 2 + 0.5) * yFac, 1.0);
+
+    return pos;
 }
 
 
@@ -334,20 +379,20 @@ SoccerRuleAspect::ClearPlayersAutomatic(TTeamIndex idx)
     if (idx == TI_NONE || mBallState.get() == 0)
         return;
 
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
     salt::Vector3f ballPos = mBallBody->GetPosition();
 
     boost::shared_ptr<oxygen::Transform> agent_aspect;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    SoccerBase::TAgentStateList::const_iterator i;
 
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
         Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
-        int unum = (*i)->GetUniformNumber(); 
+        int unum = (*i)->GetUniformNumber();
         if (playerFaultTime[unum][idx] > mMaxFaultTime / 0.02)
         {
             // I am not a very good soccer player... I am violating the rules...
@@ -367,13 +412,13 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
 
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
     salt::BoundingSphere sphere(pos, radius);
     boost::shared_ptr<oxygen::Transform> agent_aspect;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    SoccerBase::TAgentStateList::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
@@ -412,12 +457,12 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
                                float min_dist, TTeamIndex idx)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
     boost::shared_ptr<oxygen::Transform> agent_aspect;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    SoccerBase::TAgentStateList::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
@@ -457,7 +502,7 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
     ClearPlayers(Vector3f(0,0,0), mFreeKickDist, mFreeKickMoveDist,opp);
 
     // move the kick off team to own half field and the center circle
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
@@ -470,7 +515,7 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
     }
 
     boost::shared_ptr<oxygen::Transform> agent_aspect;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    SoccerBase::TAgentStateList::const_iterator i;
     float freeKickDist2 = mFreeKickDist*mFreeKickDist;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
@@ -504,12 +549,12 @@ void
 SoccerRuleAspect::ClearSelectedPlayers()
 {
     float min_dist = mFreeKickMoveDist;
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE))
         return;
 
     boost::shared_ptr<oxygen::Transform> agent_aspect;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    SoccerBase::TAgentStateList::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
@@ -1256,6 +1301,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"MinOppDistance",mMinOppDistance);
     SoccerBase::GetSoccerVar(*this,"Min2PlDistance",mMin2PlDistance);
     SoccerBase::GetSoccerVar(*this,"Min3PlDistance",mMin3PlDistance);
+    SoccerBase::GetSoccerVar(*this,"MaxTouchGroupSize",mMaxTouchGroupSize);
     //SoccerBase::GetSoccerVar(*this,"MaxFaultTime",mMaxFaultTime);
 
 
@@ -1284,13 +1330,13 @@ void
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
-    TAgentStateList agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
     {
         return;
     }
 
-    TAgentStateList opponent_agent_states;
+    SoccerBase::TAgentStateList opponent_agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), opponent_agent_states,
                                      SoccerBase::OpponentTeam(idx)))
     {
@@ -1308,7 +1354,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     boost::shared_ptr<RigidBody> agent_body;
 
     for (
-        TAgentStateList::const_iterator it = agent_states.begin();
+        SoccerBase::TAgentStateList::const_iterator it = agent_states.begin();
         it != agent_states.end();
         it++
         )
@@ -1653,13 +1699,13 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
                                boost::shared_ptr<AgentState> agentState)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
         return;
 
     salt::BoundingSphere sphere(pos, radius);
     boost::shared_ptr<oxygen::Transform> agent_aspect;
-    std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+    SoccerBase::TAgentStateList::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         if (agentState == (*i))
@@ -1704,11 +1750,11 @@ SoccerRuleAspect::GetFieldSize() const
 void
 SoccerRuleAspect::ResetAgentSelection()
 {
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE))
     {
         
-        std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+        SoccerBase::TAgentStateList::const_iterator i;
         for (i = agent_states.begin(); i != agent_states.end(); ++i)
           (*i)->UnSelect();
     }
@@ -1717,13 +1763,13 @@ SoccerRuleAspect::ResetAgentSelection()
 void
 SoccerRuleAspect::SelectNextAgent()
 {
-    std::list<boost::shared_ptr<AgentState> > agent_states;
+    SoccerBase::TAgentStateList agent_states;
     bool selectNext = false;
     if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_NONE) && agent_states.size() > 0)
     {
         boost::shared_ptr<AgentState> first = agent_states.front();
         
-        std::list<boost::shared_ptr<AgentState> >::const_iterator i;
+        SoccerBase::TAgentStateList::const_iterator i;
         for (i = agent_states.begin(); i != agent_states.end(); ++i)
         {
             if ((*i)->IsSelected())

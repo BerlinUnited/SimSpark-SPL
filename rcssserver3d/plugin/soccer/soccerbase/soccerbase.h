@@ -62,7 +62,7 @@ class Ball;
 class SoccerBase
 {
 public:
-    typedef std::list<boost::shared_ptr<AgentState> > TAgentStateList;
+    typedef std::vector<boost::shared_ptr<AgentState> > TAgentStateList;
     typedef std::map<int, boost::shared_ptr<AgentState> > TAgentStateMap;
 
 public:
