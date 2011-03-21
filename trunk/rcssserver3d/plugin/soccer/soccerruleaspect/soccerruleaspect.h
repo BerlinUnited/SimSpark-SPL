@@ -76,36 +76,44 @@ public:
     */
     //salt::Vector3f RepositionInsidePos(salt::Vector3f initPos, int unum, TTeamIndex idx, float distance);
 
-   /** New rules for repositioning players that commit faults
-   */
-   void ClearPlayersAutomatic(TTeamIndex idx);
+    /** New rules for repositioning players that commit faults
+    */
+    void ClearPlayersAutomatic(TTeamIndex idx);
 
-   /** Calculates distance arrays needed for repositioning players 
-   */
-   void CalculateDistanceArrays(TTeamIndex idx);
+    /** Calculates distance arrays needed for repositioning players 
+    */
+    void CalculateDistanceArrays(TTeamIndex idx);
 
-   /** Calculates ordering on a distance vector */
-   void SimpleOrder(float dArr[][3], int oArr[][3], TTeamIndex idx);
+    /** Calculates ordering on a distance vector */
+    void SimpleOrder(float dArr[][3], int oArr[][3], TTeamIndex idx);
 
-   /** Agent state concerining standing, laying down on the ground are processed
-   */
-   void processAgentState(salt::Vector3f pos, int unum, TTeamIndex idx);
+    /** Agent state concerining standing, laying down on the ground are processed
+    */
+    void ProcessAgentState(salt::Vector3f pos, int unum, TTeamIndex idx);
 
-   /** Reset the fault time counter for all players and also other counters
-   */
-   void ResetFaultCounter(TTeamIndex idx);
+    /** Reset the fault time counter for all players and also other counters
+    */
+    void ResetFaultCounter(TTeamIndex idx);
 
-   /** Reset the fault time counter for a given player
-   */
-   void ResetFaultCounterPlayer(int unum, TTeamIndex idx);
+    /** Reset the fault time counter for a given player
+    */
+    void ResetFaultCounterPlayer(int unum, TTeamIndex idx);
 
-   /**Analyse Faults from players and increase fault counter of offending players 
-   */
-   void AnalyseFaults(TTeamIndex idx);
+    /**Analyse Faults from players and increase fault counter of offending players 
+    */
+    void AnalyseFaults(TTeamIndex idx);
 
-   /** Automatic Referee that clears players that violate the rules
-   */
-   void AutomaticSimpleReferee(TPlayMode playMode);
+    /** Check whether too many agents are touching
+     */
+    void AnalyseTouchGroups(TTeamIndex idx);
+    
+    /** Reset the touch groups
+    */
+    void ResetTouchGroups(TTeamIndex idx);
+    
+    /** Automatic Referee that clears players that violate the rules
+    */
+    void AutomaticSimpleReferee(TPlayMode playMode);
 
     /** broadcast a said message to all players
         \param message said message-
@@ -302,6 +310,8 @@ protected:
     float mMinOppDistance; 
     /** maximum number of players of the defending team that may be inside own penalty area */
     int mMaxPlayersInsideOwnArea; 
+    /** maximum number of players that may be in a single touch group */
+    int mMaxTouchGroupSize;
     /** maximum time allowed for a player to commit a positional fault before being repositioned */
     int mMaxFaultTime; 
     /* Useful arrays for dealing with agent state an faults */
