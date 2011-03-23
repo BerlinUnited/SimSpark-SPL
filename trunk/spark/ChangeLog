@@ -1,3 +1,8 @@
+2011-03-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE: 
+	- Updated release information for the next release
+
 2010-12-15 Yuan Xu <xu@informatik.hu-berlin.de>
 	* plugin/imageperceptor/CMakeLists.txt
 	* plugin/imageperceptor/export.cpp
