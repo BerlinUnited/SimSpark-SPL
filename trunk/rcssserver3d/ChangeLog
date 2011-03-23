@@ -1,3 +1,11 @@
+2011-03-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE: 
+	- Updated release information for the next release
+	
+	* data/rsg/agent/nao/naoneckhead.rsg: 
+	- Enable sensing field lines by default
+
 2011-02-10  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* rcssserver3d/rcssserver3d/main.cpp

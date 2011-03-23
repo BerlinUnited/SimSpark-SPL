@@ -1,26 +1,32 @@
-RELEASE News of rcssserver3d-0.6.4
+RELEASE News of rcssserver3d-0.6.5
 
-This release is supposed to be the final version of rcssserver3d for
-RoboCup 2010 in Singapore. The release includes a referee patch contributed
-by FCPortugal team which enforces some rules to avoid crowding of many players
-in a small area and to penalize ill-behaved players. Additionally, this 
-release comes with some more facilities for a human referee to control the game
-and individual players in the field.
+This release comes with a number of enhancements and some bug fixes. Most 
+notably, the automated referee is improved to prevent many agents to collide
+with each other which is required for running games with more players. Also, to
+better suite the field for running 9 vs 9 games, the field size is increased
+and it is 21x14 now. There are some visual improvements and minor enhancements 
+to improve the general experience with the simulator. 
 
-* New keys in rcssmonitor3d:
-- n: Cycle through agents. A red marker disc shows which agent is currently
-  selected
-- e: Clear selection
-- lctrl+s: Go into specific-agent-selection-mode. A specific agent can now be
-  selected by pressing l or r and then a number. So the sequence 'lctrl+s, l, 4'
-  selects the agent with uniform number 4 of the left team
-- m: Move selected agent FreeKickDist meters back
-- x: Kill selected agent
+* New touch rules:
+The automated referee now enforces two new rules to better prevent crowding and
+a high number of collisions in 9 vs 9 games:
+- If an agent is in touch with more than 2 agents (including himself), and he
+  wasn't in such a situation in the previous time step - which means he is the
+  last to join the group - he is relocated outside of the field.
+- If it is not clear which agent joined the group last, e.g. when 3 players
+  were all separate at time t, but were all touching each other in time t + 1,
+  an agent is chosen at random for relocation.
 
-* Other changes:
-- Improved referee to enforce more fair games
-- Visual Studio 2010 compilation fixes
-- Agents can sense field lines if enabled (currently disabled)
- 
+* Other Enhancements:
+- Visual improvements in rcssmonitor3d: new field texture, colored team names
+  and scores
+- Set different agent and monitor ports with --agent-port and --server-port
+- Bigger field size: 21x14
+- Updated PDF documentation
+- Bug fixes, specially in the automated referee
+- New Trainer command (killsim) to terminate the simulator
+- Compilation fixes
+- Nao robots now sense visual information about field lines by default
+
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/
