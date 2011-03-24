@@ -50,6 +50,7 @@ addSoccerVar('FreeKickMoveDist', 1.5)
 addSoccerVar('GoalKickDist', 1.0)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
+addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
@@ -59,12 +60,13 @@ addSoccerVar('BallRadius', 0.042)
 addSoccerVar('BallMass',0.026)
 
 # soccer rule parameters
-addSoccerVar('RuleGoalPauseTime',3.0)
-addSoccerVar('RuleKickInPauseTime',1.0)
-addSoccerVar('RuleHalfTime',5.0 * 60)
-addSoccerVar('RuleDropBallTime',15)   
+addSoccerVar('RuleGoalPauseTime', 3.0)
+addSoccerVar('RuleKickInPauseTime', 1.0)
+addSoccerVar('RuleHalfTime', 5.0 * 60)
+addSoccerVar('RuleDropBallTime', 15)   
 addSoccerVar('SingleHalfTime', false)
-addSoccerVar('UseOffside',false)
+addSoccerVar('UseOffside', false)
+addSoccerVar('MaxTouchGroupSize', 2)
 
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       

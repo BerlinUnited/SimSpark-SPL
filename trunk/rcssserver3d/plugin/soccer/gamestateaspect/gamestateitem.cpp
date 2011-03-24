@@ -75,9 +75,9 @@ void GameStateItem::GetInitialPredicates(PredicateList& pList)
     PutFloatParam("WaitBeforeKickOff",pList);
 
     // agent parameter
-    PutFloatParam("AgentMass",pList);
+//    PutFloatParam("AgentMass",pList);
     PutFloatParam("AgentRadius",pList);
-    PutFloatParam("AgentMaxSpeed",pList);
+//    PutFloatParam("AgentMaxSpeed",pList);
 
     // ball parameter
     PutFloatParam("BallRadius",pList);
