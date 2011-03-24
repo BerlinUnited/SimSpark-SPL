@@ -69,7 +69,8 @@ private:
 void SimSpark::PrintGreeting()
 {
     GetLog()->Normal()
-        << "rcssserver3d (formerly simspark), a monolithic simulator 0.6.1\n"
+        << "rcssserver3d (formerly simspark), a monolithic simulator "
+            RCSS_VERSION"\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
         << "Universität Koblenz.\n"
         << "Copyright (C) 2004-2009, "
@@ -131,7 +132,7 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
                return false;
             }
         }
-        
+
       }
 
     return true;

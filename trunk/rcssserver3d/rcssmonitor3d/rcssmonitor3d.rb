@@ -4,6 +4,7 @@
 
 sparkSetupRendering()
 sparkSetupInput()
+sparkSetupTimer()
 
 if ($logPlayerMode == true)
   sparkSetupMonitorLogPlayer()

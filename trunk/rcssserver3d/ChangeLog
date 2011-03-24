@@ -1,26 +1,41 @@
+2011-03-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- updated PACKAGE_VERSION to 0.6.5 for the next release
+	
+	* rcssserver3d_config.h.cmake: 
+	- added a RCSS_VERSION constant to store rcssserver3d version
+	
+	* rcssserver3d/main.cpp (SimSpark::PrintGreeting): 
+	- use RCSS_VERSION instead of the hard coded version number
+	
+	* rcssserver3d/simspark.rb: 
+	* rcssmonitor3d/rcssmonitor3d.rb:
+	- use the new sparkSetupTimer()  
+
 2011-03-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* RELEASE: 
-	- Updated release information for the next release
+	- updated release information for the next release
 	
 	* data/rsg/agent/nao/naoneckhead.rsg: 
-	- Enable sensing field lines by default
+	- enable sensing field lines by default
 
 2011-02-10  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* rcssserver3d/rcssserver3d/main.cpp
-	- Set different agent and monitor ports with --agent-posrt and --server-port
+	- set different agent and monitor ports with --agent-posrt and --server-port
 
 	* /trunk/rcssserver3d/data/textures/rcs-naofield.png
-	- New field texture
+	- new field texture
 
 2011-01-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* cmake/UseLATEX.cmake: 
-	- Updated to version 1.7.2
+	- updated to version 1.7.2
 	
 	* plugin/soccermonitor/CMakeLists.txt: 
-	- Link OpenGL libraries to fix MacOSX compile issue(Thanks to Giuliani)
+	- link OpenGL libraries to fix MacOSX compile issue(Thanks to Giuliani)
 
 2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
 	* rcssserver3d/plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp
@@ -72,7 +87,7 @@
 	* rcssserver3d/naosoccersim.rb: 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
-	- Added the simple referee patch from FCPortugal team (thanks to
+	- added the simple referee patch from FCPortugal team (thanks to
 	  Luis Paulo Reis) 
 
 2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
@@ -446,5 +461,5 @@
 	* plugin/soccer/pantilteffector/pantilteffector.cpp: 
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
 	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
-	- Replaced make_shared() with .lock() function call.(fixed compilation
+	- replaced make_shared() with .lock() function call.(fixed compilation
 	error with recent boost versions.) 

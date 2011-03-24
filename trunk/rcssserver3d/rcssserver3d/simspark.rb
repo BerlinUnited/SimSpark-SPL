@@ -8,11 +8,18 @@ $recordLogfile = false
 # toggle the internal monitor
 $enableInternalMonitor = false
 
+# toggle the real time mode
+$enableRealTimeMode = true
+
 sparkSetupServer()
 if ($enableInternalMonitor)
   sparkSetupRendering()
 end
 sparkSetupInput()
+
+if ($enableRealTimeMode)
+  sparkSetupTimer()
+end
 
 # sparkAddFPSCamera($scenePath+'camera',
 #                   -10,-10,5,15,248,4,false,2,10,10)
