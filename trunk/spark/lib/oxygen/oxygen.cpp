@@ -44,6 +44,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(MonitorControl), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(MonitorLogger), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(TrainControl), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(TimerSystem), "oxygen/");
 
     // geometry
     zg.GetCore()->RegisterClassObject(new CLASS(GeometryServer), "oxygen/");

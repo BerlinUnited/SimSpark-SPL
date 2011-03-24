@@ -1,3 +1,42 @@
+2011-03-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/timersystemboost/timersystemboost.h: 
+	* plugin/timersystemboost/timersystemboost.cpp: 
+	* plugin/timersystemboost/timersystemboost_c.cpp: 
+	* plugin/timersystemboost/export.cpp: 
+	* plugin/timersystemboost/CMakeLists.txt:
+	- Added TimerSystemBoost which uses Boost facilities for timing
+	 
+	* plugin/CMakeLists.txt: 
+	- Added timersystemboost to the list of plugins
+	- Reordering the list of plugins to make it sorted again
+	
+	* CMakeLists.txt: 
+	- Prepare for 0.2.2 release: changed the version number and update library
+	  versions
+	
+	* spark/spark.rb: 
+	- Disable old style timer and add sparkSetupTimer() function for 
+	  setting up a timer system
+	
+	* lib/oxygen/simulationserver/simulationserver.h: 
+	* lib/oxygen/simulationserver/simulationserver.cpp: 
+	* lib/oxygen/simulationserver/simulationserver_c.cpp: 
+	- Use TimerSystem for timing
+	- Added InitTimerSystem() to setup a timer system for simulation server
+	- Fixed a few spelling errors
+	- Added SyncTime() method which is responsible for updating mSumDeltaTime
+	  using a TimerSystem or simulator's internal clock.
+	- Using Step() in multi-threaded mode in addition to the single threaded 
+	  mode. Looks like that there is no need to differentiate any more.
+	
+	* lib/oxygen/oxygen.cpp: 
+	* lib/oxygen/oxygen.h: 
+	* lib/oxygen/CMakeLists.txt:
+	* lib/oxygen/simulationserver/timersystem.h: 
+	* lib/oxygen/simulationserver/timersystem_c.cpp: 
+	- Added a new TimerSystem mechanism to control simulator timing 
+
 2011-03-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* RELEASE: 

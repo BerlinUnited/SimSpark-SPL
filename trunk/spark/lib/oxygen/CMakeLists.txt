@@ -110,6 +110,7 @@ set(oxygen_LIB_HDRS
     simulationserver/netmessage.h
     simulationserver/netbuffer.h
     simulationserver/traincontrol.h
+    simulationserver/timersystem.h
     geometryserver/geometryserver.h
     geometryserver/meshexporter.h
     geometryserver/meshimporter.h
@@ -260,6 +261,7 @@ set(oxygen_LIB_SRCS
     simulationserver/netbuffer.cpp
     simulationserver/traincontrol.cpp
     simulationserver/traincontrol_c.cpp
+    simulationserver/timersystem_c.cpp
     geometryserver/geometryserver.h
     geometryserver/geometryserver.cpp
     geometryserver/geometryserver_c.cpp

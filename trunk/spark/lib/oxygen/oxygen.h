@@ -90,6 +90,7 @@
 #include <oxygen/simulationserver/monitorcontrol.h>
 #include <oxygen/simulationserver/monitorlogger.h>
 #include <oxygen/simulationserver/traincontrol.h>
+#include <oxygen/simulationserver/timersystem.h>
 
 #include <oxygen/geometryserver/geometryserver.h>
 #include <oxygen/geometryserver/meshexporter.h>

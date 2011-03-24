@@ -32,6 +32,7 @@
 namespace oxygen
 {
 class SimControlNode;
+class TimerSystem;
 
 class OXYGEN_API SimulationServer : public zeitgeist::Node
 {
@@ -90,6 +91,10 @@ public:
         SimulationServer */
     bool InitControlNode(const std::string& className, const std::string& name);
 
+    /** creates a new TimerSystem of type \param className to be used as
+     * the simulator's internal timer */
+    bool InitTimerSystem(const std::string& className);
+
     /** sets the auto time mode of the SimulationServer. if set to
         true the SimulationServer automatically advances the
         simulation mSimStep time every cycle, this is the default
@@ -114,8 +119,9 @@ public:
     /** init the runloop and all registered control nodes */
     virtual void Init(int argc = 0, char** argv = 0);
 
-    /** go through on cycle of the runloop, i.e. sense, act, step */
-    virtual void Cycle(boost::shared_ptr<SimControlNode> &inputCtr);
+    /** go through on cycle of the runloop (single threaded mode), i.e. sense,
+     * act, step */
+    virtual void Cycle();
 
     /** shutdown server and all registered control nodes */
     virtual void Done();
@@ -131,7 +137,7 @@ public:
     /** returns the cached GameControlServer reference */
     boost::shared_ptr<GameControlServer> GetGameControlServer();
 
-    /** returns thr cached SceneServer reference */
+    /** returns the cached SceneServer reference */
     boost::shared_ptr<SceneServer> GetSceneServer();
 
     /** returns the current simulation cycle */
@@ -167,14 +173,19 @@ protected:
     static void CatchSignal(int sig_num);
 
     /** the multi-threaded runloop of the simulation */
-    void RunMultiThreaded(boost::shared_ptr<SimControlNode> &inputCtr);
+    void RunMultiThreaded();
 
     /** the thread function which controls a single SimControlNode in
      *  multi-threaded mode. */
     void SimControlThread(boost::shared_ptr<SimControlNode> controlNode);
 
-    /** updates mSumDeltaTime after a step in descreet simulations */
+    /** updates mSumDeltaTime after a step in discreet simulations */
     void UpdateDeltaTimeAfterStep(float &deltaTime);
+
+    /** updates the accumulated time since last simulation step using the
+     * specified timing method: it might use simulator's own clock (if mAutoTime
+     * is true) or a TimerSystem provided using InitTimerSystem() */
+    void SyncTime();
 
 protected:
     /** the argc parameter passed to Run() */
@@ -230,6 +241,9 @@ protected:
 
     /** barrier object for synchronizing threads in multi-threaded mode */
     boost::barrier *mThreadBarrier;
+
+    /** the timer system to control the simulation */
+    boost::shared_ptr<TimerSystem> mTimerSystem;
 };
 
 DECLARE_CLASS(SimulationServer);

@@ -10,7 +10,7 @@
 $scenePath = '/usr/scene/'
 $serverPath = '/sys/server/'
 
-# (Inputsystem)
+# (Input system)
 #
 
 # the default InputSystem used to read keyboard, mouse and timer input
@@ -19,8 +19,14 @@ $defaultInputSystem = 'InputSystemSDL'
 # the name of the default bundle that contains the default InputSystem
 $defaultInputSystemBundle = 'inputsdl'
 
-# if simulator should run in real time rather than simulation time
-$useRealTime = true
+# (Timer system)
+#
+
+# the default TimerSystem used to control the simulation timing
+$defaultTimerSystem = 'TimerSystemBoost'
+
+# the name of the default bundle that contains the default TimerSystem
+$defaultTimerSystemBundle = 'timersystemboost'
 
 # (OpenGL rendering)
 #
@@ -394,7 +400,7 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
     inputServer.init(inputSystem)
 
     # add devices
-    inputServer.createDevice('Timer')
+    #inputServer.createDevice('Timer')
     inputServer.createDevice('Keyboard')
     inputServer.createDevice('Mouse')
   end
@@ -411,7 +417,24 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
   # set timing mode (real time vs simulation time)
   inputControl = get($serverPath+'simulation/InputControl')
   if (inputControl != nil)
-    inputControl.setAdvanceTime($useRealTime)
+    inputControl.setAdvanceTime(false)
+  end
+end
+
+def sparkSetupTimer(timerSystem = $defaultTimerSystem)
+  print "(spark.rb) sparkSetupTimer\n"
+  print "(spark.rb) using TimerSystem '" + timerSystem + "'\n"
+
+  # setup the Boost timer system
+  if (timerSystem == $defaultTimerSystem)
+    importBundle($defaultTimerSystemBundle)
+  end
+
+  #
+  # register timer system to the simulation server
+  simulationServer = sparkGetSimulationServer()
+  if (simulationServer != nil)
+    simulationServer.initTimerSystem(timerSystem)
   end
 end
 
