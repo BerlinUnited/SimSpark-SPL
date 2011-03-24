@@ -45,9 +45,23 @@ FUNCTION(SimulationServer,initControlNode)
             return false;
         }
 
-    return obj->InitControlNode(inClassName,inName);
+    return obj->InitControlNode(inClassName, inName);
 }
 
+FUNCTION(SimulationServer,initTimerSystem)
+{
+    string inClassName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inClassName))
+        )
+        {
+            return false;
+        }
+
+    return obj->InitTimerSystem(inClassName);
+}
 
 FUNCTION(SimulationServer, getTime)
 {
@@ -156,6 +170,7 @@ void CLASS(SimulationServer)::DefineClass()
     DEFINE_BASECLASS(zeitgeist/Node);
     DEFINE_FUNCTION(quit);
     DEFINE_FUNCTION(initControlNode);
+    DEFINE_FUNCTION(initTimerSystem);
     DEFINE_FUNCTION(getTime);
     DEFINE_FUNCTION(resetTime);
     DEFINE_FUNCTION(setSimStep);
