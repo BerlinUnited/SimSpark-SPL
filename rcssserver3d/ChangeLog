@@ -1,5 +1,18 @@
 2011-03-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* plugin/soccer/CMakeLists.txt: 
+	* plugin/soccermonitor/CMakeLists.txt: 
+	- fixed to use CMake's own FindDevIL module
+	
+	* plugin/soccer/gamestateaspect/gamestateitem.cpp
+	  (GameStateItem::GetInitialPredicates): 
+	- do not try to send obsolete variables: AgentMass and AgentMaxSpeed 
+	
+	* rcssserver3d/naosoccersim.rb: 
+	- added MaxTouchGroupSize variable
+	- added a BorderSize variable to stop simulator from complaining for 
+	  missing variable
+	
 	* CMakeLists.txt: 
 	- updated PACKAGE_VERSION to 0.6.5 for the next release
 	

@@ -19,7 +19,7 @@ set(soccermonitor_LIB_SRCS
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/plugin ${FREETYPE_INCLUDE_DIRS}
-  ${DevIL_INCLUDE_DIR})
+  ${IL_INCLUDE_DIR})
 
 add_library(soccermonitor MODULE ${soccermonitor_LIB_SRCS}
    ${soccermonitor_LIB_HDRS})

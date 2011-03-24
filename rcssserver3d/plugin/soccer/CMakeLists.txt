@@ -126,7 +126,7 @@ set(soccer_LIB_SRCS
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${FREETYPE_INCLUDE_DIRS}
-  ${DevIL_INCLUDE_DIR})
+  ${IL_INCLUDE_DIR})
 
 add_library(soccer MODULE ${soccer_LIB_SRCS} ${soccer_LIB_HDRS})
 
