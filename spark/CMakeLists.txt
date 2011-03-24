@@ -201,7 +201,7 @@ if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directo
        install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${THLIBDIR}
              FILES_MATCHING PATTERN "*.dll")
 
-       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${DevIL_LIBRARY_IL}")
+       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${IL_LIBRARIES}")
        if (EXISTS ${DevIL_DLL})
               install(PROGRAMS ${DevIL_DLL} DESTINATION ${THLIBDIR})
        endif (EXISTS ${DevIL_DLL})

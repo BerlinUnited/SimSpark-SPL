@@ -6,7 +6,7 @@ set(spark_LIB_SRCS
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility ${FREETYPE_INCLUDE_DIRS}
-  ${DevIL_INCLUDE_DIR})
+  ${IL_INCLUDE_DIR})
 
 add_library(spark ${spark_LIB_SRCS})
 

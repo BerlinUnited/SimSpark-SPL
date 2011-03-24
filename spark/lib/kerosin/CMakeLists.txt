@@ -118,11 +118,11 @@ set(kerosin_LIB_SRCS
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/lib ${FREETYPE_INCLUDE_DIRS}
-  ${DevIL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+  ${IL_INCLUDE_DIR} ${SDL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
 add_library(kerosin ${kerosin_LIB_SRCS} ${kerosin_LIB_HDRS})
 
-target_link_libraries(kerosin ${FREETYPE_LIBRARIES} ${DevIL_LIBRARIES}
+target_link_libraries(kerosin ${FREETYPE_LIBRARIES} ${IL_LIBRARIES}
     ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${kerosin_require_libs})
 
 set_target_properties(kerosin PROPERTIES VERSION ${KEROSIN_VERSION}

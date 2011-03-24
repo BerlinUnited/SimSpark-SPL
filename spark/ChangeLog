@@ -1,5 +1,12 @@
 2011-03-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* spark/CMakeLists.txt: 
+	* lib/kerosin/CMakeLists.txt: 
+	* test/fonttest/CMakeLists.txt: 
+	* test/inputtest/CMakeLists.txt: 
+	* test/scenetest/CMakeLists.txt: 
+	- fixed to use CMake's own FindDevIL module
+	
 	* plugin/timersystemboost/timersystemboost.h: 
 	* plugin/timersystemboost/timersystemboost.cpp: 
 	* plugin/timersystemboost/timersystemboost_c.cpp: 

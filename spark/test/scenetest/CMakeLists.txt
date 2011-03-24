@@ -9,7 +9,7 @@ set(scenetest_SRCS
 )
 
 include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS}
-    ${DevIL_INCLUDE_DIR})
+    ${IL_INCLUDE_DIR})
 
 if (NOT WIN32)
   add_executable(scenetest ${scenetest_SRCS})
