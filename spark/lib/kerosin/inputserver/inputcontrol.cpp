@@ -35,7 +35,7 @@ InputControl::InputControl()
     mDeltaTime = 0;
     mHorSens = 0.3f;
     mVertSens = 0.3f;
-    mAdvanceTime = true;
+    mAdvanceTime = false;
     mMouseLook = false;
 }
 
@@ -229,11 +229,12 @@ void InputControl::StartCycle()
                 }
         }
 
-    if (mAdvanceTime)
-    {
-        // pass the delta time on to the SimulationServer
-        GetSimulationServer()->AdvanceTime(mDeltaTime);
-    }
+    // No longer works
+//    if (mAdvanceTime)
+//    {
+//        // pass the delta time on to the SimulationServer
+//        GetSimulationServer()->AdvanceTime(mDeltaTime);
+//    }
 }
 
 float

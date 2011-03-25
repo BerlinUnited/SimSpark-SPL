@@ -58,7 +58,7 @@ public:
 
 public:
     SimulationServer();
-    ~SimulationServer();
+    virtual ~SimulationServer();
 
     /** exits the simulation on the next simulation step */
     static void Quit();
@@ -77,11 +77,6 @@ public:
 
     /** returns the simulation time step */
     virtual float GetSimStep();
-
-    /** increases the accumulated time since the last simulation step,
-        but does not step the simulation
-     */
-    virtual void AdvanceTime(float deltaTime);
 
     /** returns the accumulated time since the last simulation step
      */
@@ -157,6 +152,11 @@ public:
 
 protected:
     virtual void OnLink();
+
+    /** increases the accumulated time since the last simulation step,
+        but does not step the simulation
+     */
+    virtual void AdvanceTime(float deltaTime);
 
     /** advances the simulation mSumDeltaTime seconds. If mSimStep is
         nonzero this is done in discrete steps */

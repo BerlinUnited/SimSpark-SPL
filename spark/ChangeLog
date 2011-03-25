@@ -1,3 +1,22 @@
+2011-03-26  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.2.2 release 
+
+	* lib/kerosin/inputserver/inputcontrol.cpp (InputControl::InputControl): 
+	- turn off advancing the time by InputControl(since it no longer works in
+	  the new timing system). In fact, all timing code should be removed from
+	  InputControl/InputSystem/InputServer and InputSystemSDL.
+	
+	* spark/spark.rb:
+	- removed the code to turn off InputControl's timing functionality as it 
+	  is off be default now
+
+	* lib/oxygen/simulationserver/simulationserver.h (SimulationServer): 
+	- made AdvanceTime() method protected: it is not expected to be called 
+	  externally anymore
+	
 2011-03-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* lib/oxygen/simulationserver/simulationserver.h (SimulationServer): 
