@@ -47,7 +47,7 @@ class SimSpark : public Spark
 public:
     SimSpark(const std::string& relPathPrefix) :
         Spark(relPathPrefix),
-        mScriptPath("simspark.rb")
+        mScriptPath("rcssserver3d.rb")
     {};
 
     /** called once after Spark finished it's init */
@@ -84,7 +84,7 @@ void SimSpark::PrintHelp()
         << "\nusage: rcssserver3d [options] [script]\n"
         << "\noptions:\n"
         << " --help\t\t\t print this message.\n"
-        << " --script-path PATH\t set the script path (simspark.rb path).\n"
+        << " --script-path PATH\t set the script path (rcssserver3d.rb path).\n"
         << "--agent-port PORTNUM\t port for agents to connect to.\n"
         << "--server-port PORTNUM\t port for monitors to connect to.\n"
         << "\n";

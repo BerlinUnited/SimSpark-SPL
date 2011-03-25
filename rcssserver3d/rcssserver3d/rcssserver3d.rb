@@ -1,5 +1,5 @@
 #
-# simspark.rb
+# rcssserver3d.rb
 #
 
 # toggle log file recording
