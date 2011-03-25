@@ -1,3 +1,9 @@
+2011-03-26  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.5 release
+
 2011-03-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* rcssserver3d/CMakeLists.txt: 
