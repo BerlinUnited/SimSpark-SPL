@@ -413,12 +413,6 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
     # add the input control node
     simulationServer.initControlNode('kerosin/InputControl','InputControl')
   end
-
-  # set timing mode (real time vs simulation time)
-  inputControl = get($serverPath+'simulation/InputControl')
-  if (inputControl != nil)
-    inputControl.setAdvanceTime(false)
-  end
 end
 
 def sparkSetupTimer(timerSystem = $defaultTimerSystem)
