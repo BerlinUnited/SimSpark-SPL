@@ -5,7 +5,8 @@ notably, the automated referee is improved to prevent many agents to collide
 with each other which is required for running games with more players. Also, to
 better suite the field for running 9 vs 9 games, the field size is increased
 and it is 21x14 now. There are some visual improvements and minor enhancements 
-to improve the general experience with the simulator. 
+to improve the general experience with the simulator. Finally, simspark.rb is
+renamed to rcssserver3d.rb for more consistency.  
 
 * New touch rules:
 The automated referee now enforces two new rules to better prevent crowding and
@@ -27,6 +28,8 @@ a high number of collisions in 9 vs 9 games:
 - New Trainer command (killsim) to terminate the simulator
 - Compilation fixes
 - Nao robots now sense visual information about field lines by default
+- Now you should change the value of enableRealTimeMode variable in 
+  rcssserver3d.rb if you want to turn off using real time mode
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/
