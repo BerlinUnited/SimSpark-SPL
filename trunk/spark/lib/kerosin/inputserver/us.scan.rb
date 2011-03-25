@@ -65,7 +65,7 @@ if (theInputSystem != nil)
 	theInputSystem.addCode (Input.IC_KP8, 'kp8', '8'[0], '8'[0], 0);
 	theInputSystem.addCode (Input.IC_KP9, 'kp9', '9'[0], '9'[0], 0);
 	theInputSystem.addCode (Input.IC_KP_DECIMAL, 'kp_decimal',	'.'[0], '.'[0], 0);
-	theInputSystem.addCode (Input.IC_KP_DIVIDE,   'kp_divide'	'/'[0], '/'[0], 0);
+	theInputSystem.addCode (Input.IC_KP_DIVIDE,   'kp_divide',	'/'[0], '/'[0], 0);
 	theInputSystem.addCode (Input.IC_KP_MULTIPLY,'kp_multiply',	'*'[0], '*'[0], 0);
 	theInputSystem.addCode (Input.IC_KP_MINUS,	'kp_minus',	'-'[0], '-'[0], 0);
 	theInputSystem.addCode (Input.IC_KP_PLUS,	'kp_plus',	'+'[0], '+'[0], 0);

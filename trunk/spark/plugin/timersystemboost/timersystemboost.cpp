@@ -40,10 +40,11 @@ float TimerSystemBoost::GetTimeSinceLastQuery()
 void TimerSystemBoost::WaitFromLastQueryUntil(float deadline)
 {
     int milliseconds = round(deadline * 1000);
-//    GetLog()->Debug() << "(TimerSystemBoost) Waiting for " << deadline
-//            << " seconds or " << milliseconds << " millisecs\n";
     boost::thread::sleep(mLastQueryTime +
         boost::posix_time::milliseconds(milliseconds));
+
+//    GetLog()->Debug() << "(TimerSystemBoost) Waiting for " << deadline
+//            << " seconds or " << milliseconds << " millisecs\n";
 //    GetLog()->Debug() << "CURRENT TIME: " << boost::get_system_time() << '\n';
 }
 

@@ -98,8 +98,8 @@ public:
     /** sets the auto time mode of the SimulationServer. if set to
         true the SimulationServer automatically advances the
         simulation mSimStep time every cycle, this is the default
-        mode. Otherwise a registered ControlNode takes the
-        responsibility to do so (by calling AdvanceTime regularly)
+        mode. Otherwise a TimerSystem must provide SimulationServer with
+        timing features.
      */
     void SetAutoTimeMode(bool set);
 
