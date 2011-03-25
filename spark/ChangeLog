@@ -1,3 +1,22 @@
+2011-03-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/oxygen/simulationserver/simulationserver.h (SimulationServer): 
+	- modify SetAutoTimeMode() documents to reflect new changes
+	
+	* plugin/timersystemboost/timersystemboost.cpp: 
+	- small cleanups
+	
+	* plugin/timersystemsdl/timersystemsdl.h: 
+	* plugin/timersystemsdl/timersystemsdl.cpp: 
+	* plugin/timersystemsdl/timersystemsdl_c.cpp: 
+	* plugin/timersystemsdl/export.cpp: 
+	* plugin/timersystemsdl/CMakeLists.txt:
+	- added TimerSystemSDL based on inputsdl/timersdl implementation to replace
+	  it.
+	
+	* lib/kerosin/inputserver/us.scan.rb: 
+	- added a missing comma!
+
 2011-03-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* spark/CMakeLists.txt: 
