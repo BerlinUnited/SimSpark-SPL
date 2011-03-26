@@ -140,6 +140,9 @@ protected:
 
     /** the abbreviaton table */
     TTranslationTable mTranslationTable;
+
+    /** the s-expression library memory management object */
+    sexp_mem_t *mSexpMemory;
 };
 
 DECLARE_CLASS(RubySceneImporter);

@@ -86,10 +86,12 @@ RubySceneImporter::RubySceneImporter() : SceneImporter()
     mUpdateSceneDict = false;
 
     InitTranslationTable();
+    mSexpMemory = init_sexp_memory();
 }
 
 RubySceneImporter::~RubySceneImporter()
 {
+    destroy_sexp_memory(mSexpMemory);
 }
 
 void RubySceneImporter::SetUnlinkOnCompleteScenes(bool unlink)
@@ -180,7 +182,8 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
 {
     // parse s-expressions
     pcont_t* pcont = init_continuation(const_cast<char*>(scene));
-    sexp_t* sexp = iparse_sexp(const_cast<char*>(scene),size,pcont);
+    sexp_t* sexp = iparse_sexp(mSexpMemory,
+        const_cast<char*>(scene), size, pcont);
 
     // read scene magic and version
     if (
@@ -190,16 +193,16 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
         (mVersionMinor != 1)
         )
         {
-            destroy_sexp(sexp);
-            destroy_continuation(pcont);
+            destroy_sexp(mSexpMemory, sexp);
+            destroy_continuation(mSexpMemory, pcont);
             return false;
         }
 
     // advance to next sexpression- the scene graph
     PushParameter(parameter);
 
-    destroy_sexp(sexp);
-    sexp = iparse_sexp(const_cast<char*>(scene),size,pcont);
+    destroy_sexp(mSexpMemory, sexp);
+    sexp = iparse_sexp(mSexpMemory, const_cast<char*>(scene), size, pcont);
 
     if (sexp == 0)
     {
@@ -223,8 +226,8 @@ bool RubySceneImporter::ParseScene(const char* scene, int size,
         ReadDeltaGraph(sexp,root) :
         ReadGraph(sexp,root);
 
-    destroy_sexp(sexp);
-    destroy_continuation(pcont);
+    destroy_sexp(mSexpMemory, sexp);
+    destroy_continuation(mSexpMemory, pcont);
 
     InvokeMethods();
     PopParameter();
@@ -489,7 +492,7 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
                     {
                         return false;
                     }
-                } 
+                }
                 else
                 {
                     if (! EvalParameter(sexp->list, atom))

@@ -70,48 +70,33 @@ typedef struct parse_stack_data
 parse_data_t;
 
 /**
- * parse_data_t stack - similar malloc prevention to sexp_t_cache.
- */
-faststack_t *pd_cache;
-
-/**
- * The global <I>sexp_t_cache</I> is a faststack implementing a cache of
- * pre-alloced s-expression element entities.  Odds are a user should never
- * touch this.  If you do, you're on your own.  This is used internally by
- * the parser and related code to store unused but allocated sexp_t elements.
- * This should be left alone and manipulated only by the sexp_t_allocate and
- * sexp_t_deallocate functions.  Touching the stack is bad.
- */
-faststack_t *sexp_t_cache;
-
-/**
  * sexp_t allocation
  */
 #ifdef _NO_MEMORY_MANAGEMENT_
 sexp_t *
-sexp_t_allocate() {
+sexp_t_allocate(smem) {
   sexp_t *sx = (sexp_t *) calloc(1, sizeof(sexp_t));
   assert(sx != NULL);
   return(sx);
 }
 #else
 sexp_t *
-sexp_t_allocate() {
+sexp_t_allocate(sexp_mem_t *smem) {
   sexp_t *sx;
   stack_lvl_t *l;
 
-  if (sexp_t_cache == NULL) {
-    sexp_t_cache = make_stack();
+  if (smem->sexp_t_cache == NULL) {
+    smem->sexp_t_cache = make_stack();
     sx = (sexp_t *)malloc(sizeof(sexp_t));
     assert(sx != NULL);
     sx->next = sx->list = NULL;
   } else {
-    if (empty_stack(sexp_t_cache)) {
+    if (empty_stack(smem->sexp_t_cache)) {
       sx = (sexp_t *)malloc(sizeof(sexp_t));
       assert(sx != NULL);
       sx->next = sx->list = NULL;
     } else {
-      l = pop(sexp_t_cache);
+      l = pop(smem->sexp_t_cache);
       sx = (sexp_t *)l->data;
     }
   }
@@ -130,8 +115,8 @@ sexp_t_deallocate(sexp_t *s) {
 }
 #else
 void
-sexp_t_deallocate(sexp_t *s) {
-  if (sexp_t_cache == NULL) sexp_t_cache = make_stack();
+sexp_t_deallocate(sexp_mem_t *smem, sexp_t *s) {
+  if (smem->sexp_t_cache == NULL) smem->sexp_t_cache = make_stack();
 
   if (s == NULL) return;
 
@@ -142,39 +127,39 @@ sexp_t_deallocate(sexp_t *s) {
 
   s->val = NULL;
 
-  sexp_t_cache = push(sexp_t_cache, s);
+  smem->sexp_t_cache = push(smem->sexp_t_cache, s);
 }
 #endif
 
 /**
  * cleanup the sexp library.  Note this is implemented HERE since we need
- * to know about pd_cache, which is local to this file.
+ * to know about smem->pd_cache, which is local to this file.
  */
 #ifdef _NO_MEMORY_MANAGEMENT_
 void sexp_cleanup() {
 }
 #else
-void sexp_cleanup() {
+void sexp_cleanup(sexp_mem_t *smem) {
   stack_lvl_t *l;
 
-  if (pd_cache != NULL) {
-    l = pd_cache->top;
+  if (smem->pd_cache != NULL) {
+    l = smem->pd_cache->top;
     while (l != NULL) {
       free(l->data);
       l = l->below;
     }
-    destroy_stack(pd_cache);
-    pd_cache = NULL;
+    destroy_stack(smem->pd_cache);
+    smem->pd_cache = NULL;
   }
 
-  if (sexp_t_cache != NULL) {
-    l = sexp_t_cache->top;
+  if (smem->sexp_t_cache != NULL) {
+    l = smem->sexp_t_cache->top;
     while (l != NULL) {
       free(l->data);
       l = l->below;
     }
-    destroy_stack(sexp_t_cache);
-    sexp_t_cache = NULL;
+    destroy_stack(smem->sexp_t_cache);
+    smem->sexp_t_cache = NULL;
   }
 }
 #endif
@@ -183,20 +168,20 @@ void sexp_cleanup() {
  * allocation
  */
 parse_data_t *
-pd_allocate() {
+pd_allocate(sexp_mem_t *smem) {
   parse_data_t *p;
   stack_lvl_t *l;
 
-  if (pd_cache == NULL) {
-    pd_cache = make_stack();
+  if (smem->pd_cache == NULL) {
+    smem->pd_cache = make_stack();
     p = (parse_data_t *)malloc(sizeof(parse_data_t));
     assert(p!=NULL);
   } else {
-    if (empty_stack(pd_cache)) {
+    if (empty_stack(smem->pd_cache)) {
       p = (parse_data_t *)malloc(sizeof(parse_data_t));
       assert(p!=NULL);
     } else {
-      l = pop(pd_cache);
+      l = pop(smem->pd_cache);
       p = (parse_data_t *)l->data;
     }
   }
@@ -208,10 +193,10 @@ pd_allocate() {
  * de-allocation
  */
 void
-pd_deallocate(parse_data_t *p) {
-  if (pd_cache == NULL) pd_cache = make_stack();
+pd_deallocate(sexp_mem_t *smem, parse_data_t *p) {
+  if (smem->pd_cache == NULL) smem->pd_cache = make_stack();
 
-  pd_cache = push(pd_cache, p);
+  smem->pd_cache = push(smem->pd_cache, p);
 }
 
 /**
@@ -220,7 +205,7 @@ pd_deallocate(parse_data_t *p) {
  * buffers, stacks, etc..
  */
 void
-destroy_continuation (pcont_t * pc)
+destroy_continuation (sexp_mem_t *smem, pcont_t * pc)
 {
   stack_lvl_t *lvl;
   parse_data_t *lvl_data;
@@ -244,11 +229,11 @@ destroy_continuation (pcont_t * pc)
        */
       if (lvl_data != NULL) {
         lvl_data->lst = NULL;
-        destroy_sexp(lvl_data->fst);
+        destroy_sexp(smem, lvl_data->fst);
         lvl_data->fst = NULL;
 
         /* free(lvl_data); */
-        pd_deallocate(lvl_data);
+        pd_deallocate(smem, lvl_data);
         lvl->data = lvl_data = NULL;
       }
 
@@ -283,17 +268,17 @@ destroy_continuation (pcont_t * pc)
  * than one will act up.
  */
 sexp_t *
-parse_sexp (char *s, int len)
+parse_sexp (sexp_mem_t *smem, char *s, int len)
 {
   pcont_t *pc = NULL;
   sexp_t *sx = NULL;
 
   if (len < 1 || s == NULL) return NULL; /* empty string - return */
 
-  pc = cparse_sexp (s, len, pc);
+  pc = cparse_sexp (smem, s, len, pc);
   sx = pc->last_sexp;
 
-  destroy_continuation(pc);
+  destroy_continuation(smem, pc);
 
   return sx;
 }
@@ -343,7 +328,7 @@ init_continuation(char *str)
  * repeated calls.
  */
 sexp_t *
-iparse_sexp (char *s, int len, pcont_t *cc) {
+iparse_sexp (sexp_mem_t *smem, char *s, int len, pcont_t *cc) {
   pcont_t *pc;
   sexp_t *sx = NULL;
 
@@ -356,7 +341,7 @@ iparse_sexp (char *s, int len, pcont_t *cc) {
   }
 
   /* call the parser */
-  pc = cparse_sexp(s,len,cc);
+  pc = cparse_sexp(smem, s,len,cc);
 
   if (cc->last_sexp != NULL) {
     sx = cc->last_sexp;
@@ -376,7 +361,7 @@ iparse_sexp (char *s, int len, pcont_t *cc) {
  * Continuation based parser - the guts of the package.
  */
 pcont_t *
-cparse_sexp (char *str, int len, pcont_t *lc)
+cparse_sexp (sexp_mem_t *smem, char *str, int len, pcont_t *lc)
 {
   char *t, *s;
   register unsigned int binexpected = 0;
@@ -567,7 +552,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
       /* open paren */
       depth++;
 
-          sx = sexp_t_allocate();
+          sx = sexp_t_allocate(smem);
       assert(sx!=NULL);
       elts++;
       sx->ty = SEXP_LIST;
@@ -577,7 +562,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
 
       if (stack->height < 1)
         {
-              data = pd_allocate();
+              data = pd_allocate(smem);
           assert(data!=NULL);
           data->fst = data->lst = sx;
           push (stack, data);
@@ -592,7 +577,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
           data->lst = sx;
         }
 
-          data = pd_allocate();
+          data = pd_allocate(smem);
       assert(data!=NULL);
       data->fst = data->lst = NULL;
       push (stack, data);
@@ -637,7 +622,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
       data = (parse_data_t *) lvl->data;
       sx = data->fst;
       /* free (data); */
-          pd_deallocate(data);
+          pd_deallocate(smem, data);
           lvl->data = NULL;
 
       if (stack->top != NULL)
@@ -672,7 +657,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
         data = (parse_data_t *) lvl->data;
         sx = data->fst;
         /* free (data); */
-                pd_deallocate(data);
+                pd_deallocate(smem, data);
                 lvl->data = NULL;
           }
         cc->last_sexp = sx;
@@ -707,7 +692,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
           vcur[0] = '\0';
               val_used++;
 
-              sx = sexp_t_allocate();
+              sx = sexp_t_allocate(smem);
           assert(sx!=NULL);
           elts++;
           sx->ty = SEXP_VALUE;
@@ -839,7 +824,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
               vcur[0] = '\0';
 
               val_used++;
-              sx = sexp_t_allocate();
+              sx = sexp_t_allocate(smem);
           assert(sx!=NULL);
           elts++;
           sx->ty = SEXP_VALUE;
@@ -994,7 +979,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
         {
           state = 1;
           vcur[0] = '\0';
-              sx = sexp_t_allocate();
+              sx = sexp_t_allocate(smem);
           assert(sx!=NULL);
           elts++;
           sx->ty = SEXP_VALUE;
@@ -1165,7 +1150,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
 
           if (binread == binexpected) {
             /* state = 1 -- create a sexp_t and head back */
-            sx = sexp_t_allocate();
+            sx = sexp_t_allocate(smem);
             assert(sx!=NULL);
             elts++;
             sx->ty = SEXP_VALUE;
@@ -1239,7 +1224,7 @@ cparse_sexp (char *str, int len, pcont_t *lc)
       data = (parse_data_t *) lvl->data;
       sx = data->fst;
       /* free (data); */
-      pd_deallocate(data);
+      pd_deallocate(smem, data);
       lvl->data = NULL;
     }
     cc->last_sexp = sx;
