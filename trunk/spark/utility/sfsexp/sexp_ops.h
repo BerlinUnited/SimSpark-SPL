@@ -47,22 +47,22 @@ extern "C" {
   /*========*/
   /* MACROS */
   /*========*/
-  
+
   /**
    * Return the head of a list \a s by reference, not copy.
    */
 #define hd_sexp(s) ((s)->list)
-  
+
   /**
    * Return the tail of a list \a s by reference, not copy.
    */
-#define tl_sexp(s) ((s)->list->next) 
-  
+#define tl_sexp(s) ((s)->list->next)
+
   /**
    * Return the element following the argument \a s.
    */
 #define next_sexp(s) ((s)->next)
-  
+
   /**
    * Reset the continuation \a c by setting the \c lastPos pointer to
    * \c NULL.
@@ -71,11 +71,11 @@ extern "C" {
 
   /**
    * Find an atom in a sexpression data structure and return a pointer to
-   * it.  Return NULL if the string doesn't occur anywhere as an atom. 
+   * it.  Return NULL if the string doesn't occur anywhere as an atom.
    * This is a depth-first search algorithm.
    */
   sexp_t *find_sexp(char *name, sexp_t *start);
-    
+
   /**
    * Breadth first search for s-expressions.  Depth first search will find
    * the first occurance of a string in an s-expression by basically finding
@@ -93,30 +93,30 @@ extern "C" {
    * to the end of the ->next linked list from that point.
    */
   int sexp_list_length(sexp_t *sx);
-  
+
   /**
    * Copy an s-expression.  This is a deep copy - so the resulting s-expression
    * shares no pointers with the original.  The new one can be changed without
    * damaging the contents of the original.
    */
-  sexp_t *copy_sexp(sexp_t *s);
-  
+  sexp_t *copy_sexp(sexp_mem_t *smem, sexp_t *s);
+
   /**
    * Cons: Concatenate two s-expressions together, without references to the
    * originals.
    */
-  sexp_t *cons_sexp(sexp_t *r, sexp_t *l);
-  
+  sexp_t *cons_sexp(sexp_mem_t *smem, sexp_t *r, sexp_t *l);
+
   /**
    * car: Like hd(), but returning a copy of the head, not a reference to it.
    */
-  sexp_t *car_sexp(sexp_t *s);
-  
+  sexp_t *car_sexp(sexp_mem_t *smem, sexp_t *s);
+
   /**
    * cdr: Like tl(), but returning a copy of the tail, not a reference to it.
    */
-  sexp_t *cdr_sexp(sexp_t *s);
-  
+  sexp_t *cdr_sexp(sexp_mem_t *smem, sexp_t *s);
+
 #ifdef __cplusplus
 }
 #endif

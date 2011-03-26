@@ -44,10 +44,12 @@ SparkMonitorLogFileServer::SparkMonitorLogFileServer() : SimControlNode()
     mForwardStep = false;
     mStepDelay = 0;
     mBackwardPlayback = false;
+    mSexpMemory = init_sexp_memory();
 }
 
 SparkMonitorLogFileServer::~SparkMonitorLogFileServer()
 {
+    destroy_sexp_memory(mSexpMemory);
 }
 
 void SparkMonitorLogFileServer::OnLink()
@@ -136,7 +138,7 @@ void SparkMonitorLogFileServer::StartCycle()
         {
             ParseMessage(msg);
         }
-    
+
 #ifdef WIN32
     Sleep(mStepDelay / 1000);
 #else
@@ -225,7 +227,7 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
         {
             return;
         }
- 
+
     mActiveScene = mSceneServer->GetActiveScene();
 
     if (mActiveScene.get() == 0)
@@ -255,12 +257,12 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
 
     char* msgBuf        = const_cast<char*>(msg.c_str());
     pcont_t* pcont      = init_continuation(msgBuf);
-    sexp_t* sexp_custom = iparse_sexp(msgBuf,msg.size(),pcont);
+    sexp_t* sexp_custom = iparse_sexp(mSexpMemory, msgBuf, msg.size(), pcont);
 
     if (sexp_custom == 0)
         {
-            destroy_sexp(sexp_custom);
-            destroy_continuation(pcont);
+            destroy_sexp(mSexpMemory, sexp_custom);
+            destroy_continuation(mSexpMemory, pcont);
             return;
         }
 
@@ -270,8 +272,8 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
                                mManagedScene,
                                boost::shared_ptr<ParameterList>());
 
-    destroy_sexp(sexp_custom);
-    destroy_continuation(pcont);
+    destroy_sexp(mSexpMemory, sexp_custom);
+    destroy_continuation(mSexpMemory, pcont);
 }
 
 void

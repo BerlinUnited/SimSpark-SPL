@@ -38,10 +38,12 @@ using namespace std;
 
 SparkMonitorClient::SparkMonitorClient() : NetClient()
 {
+    mSexpMemory = init_sexp_memory();
 }
 
 SparkMonitorClient::~SparkMonitorClient()
 {
+    destroy_sexp_memory(mSexpMemory);
 }
 
 void SparkMonitorClient::OnLink()
@@ -192,7 +194,7 @@ void SparkMonitorClient::ParseMessage(const string& msg)
 
     mActiveScene = mSceneServer->GetActiveScene();
     mActiveScene->UpdateCache();
-    
+
     if (mActiveScene.get() == 0)
         {
             return;
@@ -220,12 +222,12 @@ void SparkMonitorClient::ParseMessage(const string& msg)
 
     char* msgBuf        = const_cast<char*>(msg.c_str());
     pcont_t* pcont      = init_continuation(msgBuf);
-    sexp_t* sexp_custom = iparse_sexp(msgBuf,msg.size(),pcont);
+    sexp_t* sexp_custom = iparse_sexp(mSexpMemory, msgBuf, msg.size(), pcont);
 
     if (sexp_custom == 0)
         {
-            destroy_sexp(sexp_custom);
-            destroy_continuation(pcont);
+            destroy_sexp(mSexpMemory, sexp_custom);
+            destroy_continuation(mSexpMemory, pcont);
             return;
         }
 
@@ -234,9 +236,9 @@ void SparkMonitorClient::ParseMessage(const string& msg)
     mSceneImporter->ParseScene(string(pcont->lastPos),
                                mManagedScene,
                                boost::shared_ptr<ParameterList>());
-    
+
     mActiveScene->SetModified(true);
 
-    destroy_sexp(sexp_custom);
-    destroy_continuation(pcont);
+    destroy_sexp(mSexpMemory, sexp_custom);
+    destroy_continuation(mSexpMemory, pcont);
 }

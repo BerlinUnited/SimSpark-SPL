@@ -30,10 +30,12 @@ using namespace boost;
 SexpParser::SexpParser()
     : BaseParser()
 {
+    mSexpMemory = init_sexp_memory();
 }
 
 SexpParser::~SexpParser()
 {
+    destroy_sexp_memory(mSexpMemory);
 }
 
 boost::shared_ptr<PredicateList>
@@ -49,16 +51,18 @@ SexpParser::Parse(const std::string& input)
 
     char* c = const_cast<char*>(input.c_str());
     pcont_t* pcont = init_continuation(c);
-    sexp_t* sexp = iparse_sexp(c,static_cast<int>(input.size()),pcont);
+    sexp_t* sexp = iparse_sexp(mSexpMemory, c, static_cast<int>(input.size()),
+        pcont);
 
     while (sexp != 0)
     {
         SexpToPredicate(predList,sexp);
-        destroy_sexp(sexp);
-        sexp = iparse_sexp(c,static_cast<int>(input.size()),pcont);
+        destroy_sexp(mSexpMemory, sexp);
+        sexp = iparse_sexp(mSexpMemory, c, static_cast<int>(input.size()),
+            pcont);
     }
 
-    destroy_continuation(pcont);
+    destroy_continuation(mSexpMemory, pcont);
     return predList;
 }
 

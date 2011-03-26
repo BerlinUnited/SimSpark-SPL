@@ -66,17 +66,17 @@ sexp_iowrap_t *init_iowrap(int fd) {
 /**
  *
  */
-void destroy_iowrap(sexp_iowrap_t *iow) {
+void destroy_iowrap(sexp_mem_t *smem, sexp_iowrap_t *iow) {
   if (iow == NULL) return; /* idiot */
 
-  destroy_continuation(iow->cc);
+  destroy_continuation(smem, iow->cc);
   free(iow);
 }
 
 /**
  *
  */
-sexp_t *read_one_sexp(sexp_iowrap_t *iow) {
+sexp_t *read_one_sexp(sexp_mem_t *smem, sexp_iowrap_t *iow) {
   sexp_t  *sx = NULL;
 
   if (iow->cnt == 0) {
@@ -84,7 +84,7 @@ sexp_t *read_one_sexp(sexp_iowrap_t *iow) {
     if (iow->cnt == 0) return NULL;
   }
 
-  iow->cc = cparse_sexp(iow->buf,iow->cnt,iow->cc);
+  iow->cc = cparse_sexp(smem, iow->buf,iow->cnt,iow->cc);
 
   while (iow->cc->last_sexp == NULL) {
     if (iow->cc->error != 0) {
@@ -97,7 +97,7 @@ sexp_t *read_one_sexp(sexp_iowrap_t *iow) {
     if (iow->cnt == 0)
       return NULL;
 
-    iow->cc = cparse_sexp(iow->buf,iow->cnt,iow->cc);
+    iow->cc = cparse_sexp(smem, iow->buf,iow->cnt,iow->cc);
   }
 
   sx = iow->cc->last_sexp;

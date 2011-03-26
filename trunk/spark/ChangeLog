@@ -1,5 +1,24 @@
 2011-03-26  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* plugin/sexpparser/sexpparser.h: 
+	* plugin/sexpparser/sexpparser.cpp: 
+	* plugin/rubysceneimporter/rubysceneimporter.h: 
+	* plugin/rubysceneimporter/rubysceneimporter.cpp: 
+	* plugin/sparkmonitor/sparkmonitorclient.h: 
+	* plugin/sparkmonitor/sparkmonitorclient.cpp: 
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.h: 
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp: 
+	- updated to be compatible with the reentrant s-expression library	
+	
+	* utility/sfsexp/sexp.h:
+	* utility/sfsexp/sexp.c: 
+	* utility/sfsexp/parser.c: 
+	* utility/sfsexp/io.c: 
+	* utility/sfsexp/sexp_ops.c: 
+	* utility/sfsexp/sexp_ops.h: 
+	- s-expression library is now reentrant and thread-safe. solves many 
+	  crashes in multi-threaded mode
+	 
 	* NEWS: 
 	* RELEASE:
 	- updated for 0.2.2 release 

@@ -48,6 +48,10 @@ private:
 
     void PredicateToString(std::stringstream& ss,
                            const oxygen::Predicate& predicate);
+
+private:
+    /** the s-expression library memory management object */
+    sexp_mem_t *mSexpMemory;
 };
 
 DECLARE_CLASS(SexpParser);

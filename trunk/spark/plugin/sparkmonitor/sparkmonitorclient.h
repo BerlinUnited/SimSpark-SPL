@@ -72,6 +72,9 @@ protected:
 
     /** the root node of the managed scene */
     boost::shared_ptr<oxygen::BaseNode> mManagedScene;
+
+    /** the s-expression library memory management object */
+    sexp_mem_t *mSexpMemory;
 };
 
 DECLARE_CLASS(SparkMonitorClient);

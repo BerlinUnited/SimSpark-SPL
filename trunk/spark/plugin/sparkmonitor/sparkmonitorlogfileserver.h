@@ -114,6 +114,9 @@ protected:
 
     /** cached reference to the script server */
     boost::shared_ptr<zeitgeist::ScriptServer> mScriptServer;
+
+    /** the s-expression library memory management object */
+    sexp_mem_t *mSexpMemory;
 };
 
 DECLARE_CLASS(SparkMonitorLogFileServer);
