@@ -62,9 +62,6 @@ public:
     /** backward play the log file back */
     void BackwardPlayback();
 
-    /** set the length of delay between steps */
-    void SetStepDelay(int delay){ mStepDelay = delay; }
-
 protected:
     /** parses a received message */
     void ParseMessage(const std::string& msg);
@@ -106,9 +103,6 @@ protected:
 
     /** line numbers storage */
     std::stack<unsigned> linePositions;
-
-    /** the length of delay between seteps */
-    int mStepDelay;
 
     bool mBackwardPlayback;
 
