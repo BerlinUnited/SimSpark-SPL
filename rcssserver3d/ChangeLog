@@ -1,3 +1,8 @@
+2011-03-28  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* rcssmonitor3d/rcssmonitor3d.rb: 
+	- only log error messages to output (a small cleanup for 0.6.5 release)
+
 2011-03-26  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 

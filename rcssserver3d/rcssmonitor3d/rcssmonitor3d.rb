@@ -41,7 +41,7 @@ run "soccersim-monitor.rb"
 #
 
 sparkResetLogging()
-sparkLogAllToCerr()
+sparkLogErrorToCerr()
 # sparkLogAllToFile('./spark.txt')
 # sparkLogDebugToCerr()
 
