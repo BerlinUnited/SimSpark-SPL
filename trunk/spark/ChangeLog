@@ -1,3 +1,25 @@
+2011-03-28  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp
+	  (SparkMonitorLogFileServer::StartCycle): 
+	- don't do anything in StartCycle() before time 0.1. it is a workaround a
+	  random crash which might be because of some kind of initialization delay
+	
+	* spark/spark.rb: 
+	- set adjust speed mode for both monitor and log player to prevent 
+	  waisting any time trying to catch up in physics update (which they don't
+	  have at all)!
+
+2011-03-27  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.h: 
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp: 
+	* plugin/sparkmonitor/sparkmonitorlogfileserver_c.cpp: 
+	- call mActiveScene's SetModified() and UpdateCache() so that it shows the
+	  field again
+	- remove mStepDelay, it is not needed as the timing is controlled by the 
+	  simulation server
+
 2011-03-26  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/sexpparser/sexpparser.h: 

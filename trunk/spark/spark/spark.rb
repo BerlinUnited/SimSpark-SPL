@@ -198,6 +198,10 @@ def sparkSetupMonitor
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
     simulationServer.setMultiThreads(false)
+
+    # set auto speed adjust mode.
+    simulationServer.setAdjustSpeed(true)
+    simulationServer.setMaxStepsPerCyle(1)
   end
 
   monitorClient = sparkCreate('SparkMonitorClient', $serverPath+'simulation/SparkMonitorClient')
@@ -228,6 +232,10 @@ def sparkSetupMonitorLogPlayer
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
     simulationServer.setMultiThreads(false)
+
+    # set auto speed adjust mode.
+    simulationServer.setAdjustSpeed(true)
+    simulationServer.setMaxStepsPerCyle(1)
 
     monitorClient = sparkCreate('SparkMonitorLogFileServer', $serverPath+'simulation/SparkMonitorLogFileServer')
 
