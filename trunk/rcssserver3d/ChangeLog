@@ -1,3 +1,12 @@
+2011-04-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::CheckGoal):
+	- if goal recorder's cannot detect any goals, geometrically check to 
+	  make sure that no goal is actually happened. Thanks to Luis for starting
+	  the effort and Mahdi for the initial code for calculating where the ball
+	  crosses the goal geometrically. 
+
 2011-03-28  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* rcssmonitor3d/rcssmonitor3d.rb: 
