@@ -1,3 +1,9 @@
+2011-04-20  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* cmake/FindODE.cmake: 
+	- ODE_CONFIG_EXEC variable can be used to specify alternative ode-config 
+	  executable
+
 2011-03-28  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp
