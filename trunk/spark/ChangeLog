@@ -1,3 +1,13 @@
+2011-04-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- Added info about the network change for 0.2.2 release
+	 
+	* lib/oxygen/simulationserver/netcontrol.cpp (NetControl::SendClientMessage): 
+	- don't block on sending data to agents. if a receiver cannot receive data,
+	  it'll lose future messages until it can receive furthur messages  
+
 2011-04-20  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* cmake/FindODE.cmake: 
