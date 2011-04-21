@@ -84,7 +84,7 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
 }
 
 /* Uses only Ball and Players positions and detects overcrowind near ball and areas and
-players innappropriate behavior (laying on the ground or not walking for too much time) */
+players inappropriate behavior (laying on the ground or not walking for too much time) */
 void
 SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
 {
@@ -98,11 +98,13 @@ SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
     {
         CalculateDistanceArrays(TI_LEFT);    	// Calculates distance arrays for left team
         CalculateDistanceArrays(TI_RIGHT);   	// Calculates distance arrays for right team
-        AnalyseFaults(TI_LEFT);   		// Analyses simple faults for the left team
-        AnalyseFaults(TI_RIGHT);   		// Analyses simple faults for the right team
+        AnalyseFaults(TI_LEFT);   		// Analyzes simple faults for the left team
+        AnalyseFaults(TI_RIGHT);   		// Analyzes simple faults for the right team
         AnalyseTouchGroups(TI_LEFT);
         AnalyseTouchGroups(TI_RIGHT);
-        // Only apply rules during play-on
+
+        // Only apply rules during play-on, leaves some time for agents to
+        // solve it themselves
         if (playMode == PM_PlayOn)
         {
           ClearPlayersAutomatic(TI_LEFT);   	// enforce standing and not overcrowding rules for left team
@@ -275,12 +277,39 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
     SoccerBase::TAgentStateList::iterator i = agent_states.begin();
     for (; i != agent_states.end(); ++i)
     {
+        boost::shared_ptr<TouchGroup> touchGroup = (*i)->GetOldTouchGroup();
+
         // Wasn't touching before, joined group making group too large
-        if ((*i)->GetOldTouchGroup()->size() == 1 && (*i)->GetTouchGroup()->size() > mMaxTouchGroupSize)
+        if (touchGroup->size() == 1 && touchGroup->size() > mMaxTouchGroupSize)
         {
-            playerFaultTime[(*i)->GetUniformNumber()][idx]++;
-            // Remove player from touch group so no more agents are replaced
-            (*i)->GetTouchGroup()->erase(*i);
+            // determine the team that has more players in the touch group
+            int pl[3] = { 0 };
+            TTeamIndex oppIdx;
+            TouchGroup::iterator oppIt; // stores the last opponent in touch group
+            for (TouchGroup::iterator agentIt = touchGroup->begin();
+                    agentIt != touchGroup->end(); ++agentIt)
+            {
+                pl[(*agentIt)->GetTeamIndex()]++;
+                if ((*agentIt)->GetTeamIndex() != idx)
+                {
+                    oppIdx = (*agentIt)->GetTeamIndex();
+                    oppIt = agentIt;
+                }
+            }
+
+            if (pl[idx] >= touchGroup->size() - pl[idx])
+            {
+                playerFaultTime[(*i)->GetUniformNumber()][idx]++;
+                // Remove player from touch group so no more agents are replaced
+                touchGroup->erase(*i);
+            }
+            else
+            {
+                // I am the last one to enter the group, but the number of
+                // opponents in the group are more than us
+                playerFaultTime[(*oppIt)->GetUniformNumber()][oppIdx]++;
+                touchGroup->erase(*oppIt);
+            }
         }
     }
 }
@@ -1042,8 +1071,8 @@ SoccerRuleAspect::CheckGoal()
             return false;
 
         normBVel.Normalize();
-        double velCos = normBVel.x();
-        double dist = xDist2Goal / velCos;
+        float velCos = normBVel.x();
+        float dist = xDist2Goal / velCos;
         salt::Vector3f crossPoint = ballPos - normBVel * dist;
 
         if (fabs(crossPoint.y()) < mGoalWidth / 2.0 &&

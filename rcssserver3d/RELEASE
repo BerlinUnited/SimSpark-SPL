@@ -13,7 +13,9 @@ The automated referee now enforces two new rules to better prevent crowding and
 a high number of collisions in 9 vs 9 games:
 - If an agent is in touch with more than 2 agents (including himself), and he
   wasn't in such a situation in the previous time step - which means he is the
-  last to join the group - he is relocated outside of the field.
+  last to join the group - he is relocated outside of the field. However, if
+  the number of opponents in the group are more than teammates, an unspecified
+  opponent will be relocated instead.
 - If it is not clear which agent joined the group last, e.g. when 3 players
   were all separate at time t, but were all touching each other in time t + 1,
   an agent is chosen at random for relocation.
