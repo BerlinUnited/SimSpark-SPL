@@ -22,6 +22,7 @@
 
 #include "simcontrolnode.h"
 #include "netbuffer.h"
+#include <vector>
 #include <rcssnet/socket.hpp>
 #include <boost/shared_array.hpp>
 #include <oxygen/oxygen_defines.h>
@@ -197,6 +198,9 @@ protected:
 
     /** the size of the allocated receive buffer */
     int mBufferSize;
+
+    /** a buffer to store partial messages to be sent */
+    std::vector<std::string> mSendBuffers;
 
     /** the receive buffer */
     boost::shared_array<char> mBuffer;
