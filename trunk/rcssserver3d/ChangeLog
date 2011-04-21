@@ -1,11 +1,23 @@
 2011-04-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.5 to reflect removing an opponent from a touch group when 
+	  there are more opponents in the group than teammates
+	 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
-	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::CheckGoal):
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	(SoccerRuleAspect::CheckGoal):
 	- if goal recorder's cannot detect any goals, geometrically check to 
 	  make sure that no goal is actually happened. Thanks to Luis for starting
 	  the effort and Mahdi for the initial code for calculating where the ball
 	  crosses the goal geometrically. 
+	(SoccerRuleAspect::AnalyseTouchGroups): 
+	- reposition a player from a team with more players in a touch group. Thanks
+	  to Nexus3D (Mehdi?) for the initial patch. It intended to reposition the
+	  player who joined last even from the opponent team, but we don't have
+	  this info now so remove an unspecified player from the opponent if the
+	  last player is not going to be removed. 
 
 2011-03-28  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
