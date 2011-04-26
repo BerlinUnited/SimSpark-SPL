@@ -1,0 +1,36 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+ (nd Transform
+       (setName mid)
+       (setLocalPos 0 0 0)
+       (importScene rsg/boxspheres/box.rsg 8 1 2 2 matYellow)
+       )
+
+ (nd Transform
+       (setName right)
+       (setLocalPos 4.6 0 0)
+       (importScene rsg/boxspheres/box.rsg 1 3 5.5 2 matBlue)
+       )
+
+ (nd Transform
+       (setName left)
+       (setLocalPos -4.6 0 0)
+       (importScene rsg/boxspheres/box.rsg 1 3 5 2 matRed)
+       )
+
+ (nd HingeJoint
+       (attach ../mid/boxBody ../right/boxBody)
+       (setAnchor 3 0 0)
+       (setLowStopDeg 0 -40)
+       (setHighStopDeg 0 +40)
+       )
+
+ (nd HingeJoint
+       (attach ../mid/boxBody ../left/boxBody)
+       (setAnchor -3 0 0)
+       (setLowStopDeg 0 -40)
+       (setHighStopDeg 0 +40)
+       )
+ )
