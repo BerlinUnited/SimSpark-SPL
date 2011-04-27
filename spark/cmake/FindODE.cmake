@@ -60,7 +60,20 @@ IF (NOT ODE_FOUND)
         ENDFOREACH(flag)
         
         SET(ODE_EXTRA_LDFLAGS ${ODE_CONFIG_LIBS})
-      ELSE("${ODE_CONFIG_RESULT}" MATCHES "^0$")
+
+        # Convert the linker flags to a CMake list.
+        STRING(REGEX REPLACE " +" ";"
+          ODE_CONFIG_LIBS "${ODE_CONFIG_LIBS}")
+    
+        # Look for -l options.
+        FOREACH(flag ${ODE_CONFIG_LIBS})
+          IF("${flag}" MATCHES "^-l.*ode.*")
+            STRING(REGEX REPLACE "^-l" ""
+               ODE_LIB_NAME "${flag}")
+           ENDIF("${flag}" MATCHES "^-l.*ode.*")
+        ENDFOREACH(flag)
+
+       ELSE("${ODE_CONFIG_RESULT}" MATCHES "^0$")
         MESSAGE("Error running ${ODE_CONFIG}: [${ODE_CONFIG_RESULT}]")
       ENDIF("${ODE_CONFIG_RESULT}" MATCHES "^0$")
 
@@ -79,7 +92,7 @@ IF (NOT ODE_FOUND)
     NO_DEFAULT_PATH
   )
   FIND_LIBRARY(ODE_LIBRARY
-    NAMES ode ode_double ode_single
+    NAMES ${ODE_LIB_NAME} ode ode_double ode_single
     PATHS
     ${ODE_CONFIG_PREFIX}/lib
     /usr/lib
