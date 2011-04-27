@@ -8,7 +8,7 @@
 
 IF (NOT ODE_FOUND)
 
-  FIND_PROGRAM(ODE_CONFIG ode-config)
+  FIND_PROGRAM(ODE_CONFIG NAMES ${ODE_CONFIG_EXEC} ode-config)
   IF(ODE_CONFIG)
       # Use the newer EXECUTE_PROCESS command if it is available.
       IF(COMMAND EXECUTE_PROCESS)
