@@ -31,7 +31,9 @@ install(FILES  rcssserver3d.rb soccersim.rb naosoccersim.rb
         internalsoccermonitor.rb internalsoccerbindings.rb
         DESTINATION ${DATADIR}/${CMAKE_PROJECT_NAME})
 
-install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/rcsoccersim3d 
-          ${CMAKE_CURRENT_BINARY_DIR}/simspark DESTINATION ${BINDIR}
-          PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
-          GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
+if (NOT WIN32)
+    install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/rcsoccersim3d 
+              ${CMAKE_CURRENT_BINARY_DIR}/simspark DESTINATION ${BINDIR}
+              PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+              GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE)
+endif (NOT WIN32)

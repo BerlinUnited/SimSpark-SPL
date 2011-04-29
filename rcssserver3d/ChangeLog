@@ -1,3 +1,17 @@
+2011-04-29  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- use static boost libraries under Windows
+	
+	* windows/install_extra.nsi: 
+	- adopt the script for the latest version of CMake and NSIS
+	
+	* rcssserver3d/CMakeLists.txt: 
+	- don't install Linux only files in Windows
+	
+	* cmake/FindBoost.cmake: 
+	- removed in favor of CMake's own version
+
 2011-04-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 
