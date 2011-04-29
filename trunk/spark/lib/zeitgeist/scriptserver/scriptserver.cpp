@@ -23,8 +23,8 @@
 #include <boost/scoped_array.hpp>
 #include <sstream>
 #include <salt/fileclasses.h>
-#include "scriptserver.h"
 #include "rubywrapper.h"
+#include "scriptserver.h"
 #include <zeitgeist/corecontext.h>
 #include <zeitgeist/core.h>
 #include <zeitgeist/logserver/logserver.h>
