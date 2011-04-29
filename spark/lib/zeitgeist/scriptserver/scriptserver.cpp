@@ -508,7 +508,11 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
                        << " to " << destPath << endl;
 
     stringstream s;
+#ifdef WIN32
+    s << "copy " << sourcePath << " " << destPath;
+#else
     s << "cp " << sourcePath << " " << destPath;
+#endif
     system(s.str().c_str());
 
     return eOK;
@@ -591,7 +595,7 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
 {
     GetLog()->Debug() << "(ScriptServer) Attempting to run init script '"
                        << fileName << "'\n";
-                       
+
     string dotDir;
     bool validDotDir =
         (type == IS_USERLOCAL) &&

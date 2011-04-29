@@ -26,7 +26,7 @@
 #include <sparkconfig.h>
 #endif
 #ifdef HAVE_IL_IL_H
-#include <IL/il.h>
+#include <il.h>
 #ifndef IL_ILBM
 #define IL_ILBM IL_LBM
 #endif

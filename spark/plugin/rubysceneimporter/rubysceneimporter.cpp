@@ -1004,9 +1004,9 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, boost::shared_ptr<BaseNode> root
                         (Lookup(string(sub->val)) == S_NODE)
                         )
                     {
-                        node = shared_dynamic_cast<BaseNode>(*iter);
                         if (iter != root->end())
                         {
+                            node = shared_dynamic_cast<BaseNode>(*iter);
                             ++iter;
                         }
                     } else {

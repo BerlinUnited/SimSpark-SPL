@@ -22,6 +22,11 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <zeitgeist/logserver/logserver.h>
 
+#ifdef _MSC_VER
+#include <boost/math/special_functions/round.hpp>
+using boost::math::round;
+#endif
+
 using namespace oxygen;
 
 void TimerSystemBoost::Initialize()
