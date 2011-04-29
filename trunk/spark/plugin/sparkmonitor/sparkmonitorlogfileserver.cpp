@@ -111,10 +111,6 @@ void SparkMonitorLogFileServer::DoneSimulation()
 
 void SparkMonitorLogFileServer::StartCycle()
 {
-    // work around a random crash!
-    if (GetTime() < 0.1)
-        return;
-
     if (mPause && !mForwardStep)
         {
             return;

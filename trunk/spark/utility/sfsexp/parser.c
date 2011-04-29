@@ -769,6 +769,9 @@ cparse_sexp (sexp_mem_t *smem, char *str, int len, pcont_t *lc)
                 squoted = 0;
                 state = 3;
                 break;
+              case '\'':
+                  if (squoted)
+                      t++;
               default:
                 squoted = 0;
                 state = 1;

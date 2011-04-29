@@ -1,8 +1,45 @@
+2011-04-29  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/zeitgeist/scriptserver/gcvalue.cpp: 
+	- include ruby header before gcvalue.h, so that it can define STR2CSTR
+	
+	* utility/sfsexp/parser.c (cparse_sexp): 
+	- correctly handle final single quotes
+	
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	- use copy command on Windows
+	
+	* CMakeLists.txt: 
+	- use boost static libraries on Windows
+	
+	* cmake/FindBoost.cmake:
+	* cmake/FindRuby.cmake:
+	- removed in favor of CMake's own one
+	 
+	* plugin/timersystemsdl/timersystemsdl.cpp: 
+	* plugin/timersystemboost/timersystemboost.cpp:
+	- using boost round function for MSVC which doesn't have C99's round function
+	 
+	* lib/kerosin/imageserver/image.h: 
+	* lib/kerosin/imageserver/imageserver.h:
+	- including IL directory from include directives
+	 
+	* windows/install_extra.nsi: 
+	- removed the hack for excluding the command from start menu page as it is 
+	  fixed in cpack
+	
+	* plugin/rubysceneimporter/rubysceneimporter.cpp (RubySceneImporter::ReadDeltaGraph): 
+	- don't try to use iter when it's at the end
+	
+	* plugin/sparkmonitor/sparkmonitorlogfileserver.cpp
+	 (SparkMonitorLogFileServer::StartCycle):
+	 - removed the workaround in favor of a real fix
+
 2011-04-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 
 	* RELEASE:
-	- Added info about the network change for 0.2.2 release
+	- added info about the network change for 0.2.2 release
 	 
 	* lib/oxygen/simulationserver/netcontrol.cpp (NetControl::SendClientMessage): 
 	- don't block on sending data to agents. if a receiver cannot receive data,
@@ -107,29 +144,29 @@
 	* plugin/timersystemboost/timersystemboost_c.cpp: 
 	* plugin/timersystemboost/export.cpp: 
 	* plugin/timersystemboost/CMakeLists.txt:
-	- Added TimerSystemBoost which uses Boost facilities for timing
+	- added TimerSystemBoost which uses Boost facilities for timing
 	 
 	* plugin/CMakeLists.txt: 
-	- Added timersystemboost to the list of plugins
-	- Reordering the list of plugins to make it sorted again
+	- added timersystemboost to the list of plugins
+	- reordering the list of plugins to make it sorted again
 	
 	* CMakeLists.txt: 
-	- Prepare for 0.2.2 release: changed the version number and update library
+	- prepare for 0.2.2 release: changed the version number and update library
 	  versions
 	
 	* spark/spark.rb: 
-	- Disable old style timer and add sparkSetupTimer() function for 
+	- disable old style timer and add sparkSetupTimer() function for 
 	  setting up a timer system
 	
 	* lib/oxygen/simulationserver/simulationserver.h: 
 	* lib/oxygen/simulationserver/simulationserver.cpp: 
 	* lib/oxygen/simulationserver/simulationserver_c.cpp: 
-	- Use TimerSystem for timing
-	- Added InitTimerSystem() to setup a timer system for simulation server
-	- Fixed a few spelling errors
-	- Added SyncTime() method which is responsible for updating mSumDeltaTime
+	- use TimerSystem for timing
+	- added InitTimerSystem() to setup a timer system for simulation server
+	- fixed a few spelling errors
+	- added SyncTime() method which is responsible for updating mSumDeltaTime
 	  using a TimerSystem or simulator's internal clock.
-	- Using Step() in multi-threaded mode in addition to the single threaded 
+	- using Step() in multi-threaded mode in addition to the single threaded 
 	  mode. Looks like that there is no need to differentiate any more.
 	
 	* lib/oxygen/oxygen.cpp: 
@@ -137,12 +174,12 @@
 	* lib/oxygen/CMakeLists.txt:
 	* lib/oxygen/simulationserver/timersystem.h: 
 	* lib/oxygen/simulationserver/timersystem_c.cpp: 
-	- Added a new TimerSystem mechanism to control simulator timing 
+	- added a new TimerSystem mechanism to control simulator timing 
 
 2011-03-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* RELEASE: 
-	- Updated release information for the next release
+	- updated release information for the next release
 
 2010-12-15 Yuan Xu <xu@informatik.hu-berlin.de>
 	* plugin/imageperceptor/CMakeLists.txt

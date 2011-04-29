@@ -22,6 +22,11 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <SDL.h>
 
+#ifdef _MSC_VER
+#include <boost/math/special_functions/round.hpp>
+using boost::math::round;
+#endif
+
 using namespace oxygen;
 
 void TimerSystemSDL::Initialize()
