@@ -10,13 +10,14 @@ check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
 check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
-set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" "C:/Program Files (x86)/SDL/" C:/SDL/)
 
 if (WIN32)
   set(Boost_USE_STATIC_LIBS        ON)
   set(Boost_USE_MULTITHREADED      ON)
   set(Boost_USE_STATIC_RUNTIME    OFF)
 endif (WIN32)
+
+include(AdditionalSearchPaths)
 
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)

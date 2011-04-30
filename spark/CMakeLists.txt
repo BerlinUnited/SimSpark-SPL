@@ -36,13 +36,14 @@ if (NOT USE_COREFOUNDATION STREQUAL "OFF")
 endif (NOT USE_COREFOUNDATION STREQUAL "OFF")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
-set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" "C:/Program Files (x86)/SDL/" C:/SDL/)
 
 if (WIN32)
   set(Boost_USE_STATIC_LIBS        ON)
   set(Boost_USE_MULTITHREADED      ON)
   set(Boost_USE_STATIC_RUNTIME    OFF)
 endif (WIN32)
+
+include(AdditionalSearchPaths)
 
 find_package(Ruby REQUIRED)
 find_package(Freetype REQUIRED)
