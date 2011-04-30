@@ -8,6 +8,7 @@ ${if} $MyTemp != ">"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\RCSSMonitor3D.lnk" "$INSTDIR\bin\rcssmonitor3d.cmd"
 ${endif}
 
+
 WriteRegExpandStr HKLM 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment\' 'RCSSSERVER3D_DIR' '$INSTDIR'
 ClearErrors
 FileOpen $0 $INSTDIR\bin\rcssserver3d.cmd w

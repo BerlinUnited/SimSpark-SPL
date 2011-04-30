@@ -1,3 +1,17 @@
+2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- include AdditionalSearchPaths.cmake
+	
+	* cmake/AdditionalSearchPaths.cmake: 
+	- sets up additional search paths under Windows to find dependencies in
+	  common directories and the ones documented on the wiki
+	
+	* cmake/FindZLIB.cmake: 
+	* cmake/FindFreetype.cmake: 
+	- removed; and additional search paths have been added to 
+	  AdditionalSearchPaths.cmake file
+
 2011-04-29  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* lib/zeitgeist/scriptserver/gcvalue.cpp: 
