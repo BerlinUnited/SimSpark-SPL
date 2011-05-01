@@ -511,9 +511,9 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
 
     stringstream s;
 #ifdef WIN32
-    s << "copy " << sourcePath << " " << destPath;
+    s << "copy \"" << sourcePath << "\" \"" << destPath << '"';
 #else
-    s << "cp " << sourcePath << " " << destPath;
+    s << "cp \"" << sourcePath << "\" \"" << destPath << '"';
 #endif
     system(s.str().c_str());
 

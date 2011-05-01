@@ -8,6 +8,8 @@
 	* lib/salt/sharedlibrary.cpp: 
 	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
 	- compilation fix under mingw32
+	(ScriptServer::RunInitScriptInternal): 
+	- enclose source and dest paths for copy command in double quotes
 	
 	* utility/rcssnet/socket.hpp: 
 	* utility/rcssnet/tcpsocket.cpp: 
