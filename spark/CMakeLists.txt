@@ -43,9 +43,9 @@ if (WIN32)
   set(Boost_USE_STATIC_RUNTIME    OFF)
 
   # this must be added by cmake itself, but it is not
-  if ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
+  if (${CMAKE_CXX_COMPILER} MATCHES "mingw")
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared")
-  endif ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
+  endif (${CMAKE_CXX_COMPILER} MATCHES "mingw")
 endif (WIN32)
 
 include(AdditionalSearchPaths)
@@ -203,32 +203,59 @@ install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h DESTINATION
     ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
 if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directory
-       set(THLIBDIR ${LIBDIR}/thirdparty)
+        set(THLIBDIR ${LIBDIR}/thirdparty)
 	   
-       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
-       if (EXISTS ${ODEDLL})
-              install(PROGRAMS ${ODEDLL} DESTINATION ${THLIBDIR})
-       endif (EXISTS ${ODEDLL})
+	    # MinGW dll installation on a single root system
+        if (${CMAKE_CXX_COMPILER} MATCHES "mingw")
+            set(MINGW_BIN_DIR "${Boost_LIBRARY_DIRS}/../bin/")
+            install(DIRECTORY ${MINGW_BIN_DIR} DESTINATION ${THLIBDIR}
+                FILES_MATCHING
+                PATTERN "libstdc++*.dll"
+                PATTERN "libgcc_s_sjlj*.dll"
+                PATTERN "libode*.dll"
+                PATTERN "tbb*.dll"
+                PATTERN "*boost*regex*mt*.dll"
+                PATTERN "*boost*date_time*mt*.dll"
+                PATTERN "*boost*thread*mt*.dll"
+                PATTERN "libIL*.dll"
+                PATTERN "libjpeg*.dll"
+                PATTERN "libpng*.dll"
+                PATTERN "*freetype*.dll"
+                PATTERN "*SDL*.dll")
+        endif (${CMAKE_CXX_COMPILER} MATCHES "mingw")
+        
+        string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
+        if (EXISTS ${ODEDLL} AND ${ODEDLL} MATCHES ".dll$")
+            install(PROGRAMS ${ODEDLL} DESTINATION ${THLIBDIR})
+        endif (EXISTS ${ODEDLL} AND ${ODEDLL} MATCHES ".dll$")
+        
+        install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${THLIBDIR}
+            FILES_MATCHING PATTERN "*boost*regex*mt*.dll"
+                PATTERN "*boost*date_time*mt*.dll"
+                PATTERN "*boost*thread*mt*.dll")
+        
+        string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${IL_LIBRARIES}")
+        if (EXISTS ${DevIL_DLL} AND ${DevIL_DLL} MATCHES ".dll$")
+            install(PROGRAMS ${DevIL_DLL} DESTINATION ${THLIBDIR})
+        endif (EXISTS ${DevIL_DLL} AND ${DevIL_DLL} MATCHES ".dll$")
+        
+        string(REGEX REPLACE "(.*)/ruby(.exe)?" "\\1/" RUBY_BINDIR "${RUBY_EXECUTABLE}")
+        install(DIRECTORY "${RUBY_BINDIR}"
+            DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
+        
+        install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/"
+            DESTINATION ${THLIBDIR} FILES_MATCHING 
+            PATTERN "*freetype*.dll" PATTERN "*zlib*.dll")
 
-       install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${THLIBDIR}
-             FILES_MATCHING PATTERN "*.dll")
+        set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
+        if (EXISTS ${SDL_DLL})
+            install(PROGRAMS ${SDL_DLL} DESTINATION ${THLIBDIR})
+        endif (EXISTS ${SDL_DLL})
 
-       string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${IL_LIBRARIES}")
-       if (EXISTS ${DevIL_DLL})
-              install(PROGRAMS ${DevIL_DLL} DESTINATION ${THLIBDIR})
-       endif (EXISTS ${DevIL_DLL})
-
-       string(REGEX REPLACE "(.*)/ruby(.exe)?" "\\1/" RUBY_BINDIR "${RUBY_EXECUTABLE}")
-       install(DIRECTORY "${RUBY_BINDIR}"
-        	 DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
-
-       install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/"
-        	 DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
-
-       set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
-       if (EXISTS ${SDL_DLL})
-              install(PROGRAMS ${SDL_DLL} DESTINATION ${THLIBDIR})
-       endif (EXISTS ${SDL_DLL})
+        if (CMAKE_STRIP)
+            set(STRIP_FILES_GLOB "'\${CMAKE_INSTALL_PREFIX}/${THLIBDIR}/'*.dll")
+            install(CODE "EXECUTE_PROCESS(COMMAND sh -c \"${CMAKE_STRIP} ${STRIP_FILES_GLOB}\")")
+        endif (CMAKE_STRIP)
 endif (WIN32)
 
 ########### uninstall support ############
@@ -248,7 +275,8 @@ set(CPACK_SOURCE_IGNORE_FILES
 set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
-	
+
+set(CPACK_STRIP_FILES TRUE)	
 set(CPACK_PACKAGE_VENDOR "RoboCup Soccer Server 3D Maintenance Group")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A generic physical simulation system")
