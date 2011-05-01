@@ -1,5 +1,10 @@
 2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* windows/uninstall_extra.nsi: 
+	* windows/install_extra.nsi: 
+	- install an rcsoccersim3d script under Windows
+	- fixed path commands to not include = sign
+	
 	* cmake/FindODE.cmake: 
 	- don't overwrite config options obtained from ode-config if available 
 	
