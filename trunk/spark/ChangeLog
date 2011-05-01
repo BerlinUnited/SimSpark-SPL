@@ -1,3 +1,13 @@
+2011-05-02  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- strip files when creating binary packages
+	- installer enhancements for mingw32 based setup
+	
+	* plugin/odeimps/CMakeLists.txt: 
+	* plugin/collisionperceptor/CMakeLists.txt: 
+	- added complete ode dependencies
+
 2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* cmake/FindODE.cmake: 

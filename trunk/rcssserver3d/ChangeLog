@@ -1,3 +1,8 @@
+2011-05-02  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- strip files when creating a binary package
+
 2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* windows/uninstall_extra.nsi: 
