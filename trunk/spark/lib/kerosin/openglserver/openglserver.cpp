@@ -183,7 +183,7 @@ OpenGLServer::PutLight(int l)
 void* OpenGLServer::GetExtension(const char* name)
 {
 #ifdef WIN32
-    return wglGetProcAddress(name);
+    return reinterpret_cast<void*>(wglGetProcAddress(name));
 #elif defined(__APPLE__)
     return NSGLGetProcAddress(name);
 #else

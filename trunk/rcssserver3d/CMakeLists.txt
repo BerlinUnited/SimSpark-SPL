@@ -15,6 +15,11 @@ if (WIN32)
   set(Boost_USE_STATIC_LIBS        ON)
   set(Boost_USE_MULTITHREADED      ON)
   set(Boost_USE_STATIC_RUNTIME    OFF)
+
+  # this must be added by cmake itself, but it is not
+  if ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared")
+  endif ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
 endif (WIN32)
 
 include(AdditionalSearchPaths)

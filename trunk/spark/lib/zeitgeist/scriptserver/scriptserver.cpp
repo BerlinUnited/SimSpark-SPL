@@ -23,13 +23,15 @@
 #include <boost/scoped_array.hpp>
 #include <sstream>
 #include <salt/fileclasses.h>
-#include "rubywrapper.h"
-#include "scriptserver.h"
-#include <zeitgeist/corecontext.h>
 #include <zeitgeist/core.h>
+#include <zeitgeist/corecontext.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/fileserver/fileserver.h>
 #include <sys/stat.h>
+// rubywrapper.h should be before scriptserver.h (gcvalue.h). also, they were
+// moved down to prevent a compilation error with mingw32
+#include "rubywrapper.h"
+#include "scriptserver.h"
 
 #ifdef HAVE_CONFIG_H
 #include <sparkconfig.h>
