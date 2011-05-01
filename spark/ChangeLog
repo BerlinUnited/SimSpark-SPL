@@ -1,7 +1,27 @@
 2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* cmake/FindODE.cmake: 
+	- don't overwrite ode-config settings under windows platform (if available)
+	
+	* lib/kerosin/openglserver/openglserver.cpp (OpenGLServer::GetExtension): 
+	* lib/salt/gmath.h: 
+	* lib/salt/sharedlibrary.cpp: 
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	- compilation fix under mingw32
+	
+	* utility/rcssnet/socket.hpp: 
+	* utility/rcssnet/tcpsocket.cpp: 
+	* utility/rcssnet/udpsocket.cpp: 
+	* utility/rcssnet/socket.cpp: 
+	* utility/rcssnet/handler.hpp: 
+	* utility/rcssnet/addr.cpp:
+	- convert Winsock2.h to lowercase
+	 
 	* CMakeLists.txt: 
 	- include AdditionalSearchPaths.cmake
+	- use lower case name for Windows winsock header and library (for use with
+	  mingw32 under Linux)
+	- added a missing flag for linking modules with mingw32
 	
 	* cmake/AdditionalSearchPaths.cmake: 
 	- sets up additional search paths under Windows to find dependencies in

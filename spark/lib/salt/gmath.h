@@ -221,7 +221,7 @@ f_inline bool gIsNan(TYPE f)
 template <class TYPE>
 f_inline bool gIsFinite(TYPE f)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
     // isfinite is part of C99 but not available in Visual C++
     assert(std::numeric_limits<TYPE>::has_infinity);
     return (std::numeric_limits<double>::infinity() != f);
@@ -232,7 +232,7 @@ f_inline bool gIsFinite(TYPE f)
 
 f_inline int gRound(float f)
 {
-#ifdef WIN32
+#ifdef _MSC_VER
     // Uses the FloatToInt functionality
     int a;
     int *int_pointer = &a;

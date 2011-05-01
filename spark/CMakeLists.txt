@@ -9,7 +9,7 @@ check_include_file("netdb.h" HAVE_NETDB_H)
 check_include_file("resolv.h" HAVE_RESOLV_H)
 check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
 check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
-check_include_file("Winsock2.h" HAVE_WINSOCK2_H)
+check_include_file("winsock2.h" HAVE_WINSOCK2_H)
 check_include_file("arpa/nameser.h" HAVE_ARPA_NAMESER_H)
 check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 check_include_file("string.h" HAVE_STRING_H)
@@ -41,6 +41,11 @@ if (WIN32)
   set(Boost_USE_STATIC_LIBS        ON)
   set(Boost_USE_MULTITHREADED      ON)
   set(Boost_USE_STATIC_RUNTIME    OFF)
+
+  # this must be added by cmake itself, but it is not
+  if ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared")
+  endif ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
 endif (WIN32)
 
 include(AdditionalSearchPaths)
@@ -93,7 +98,7 @@ if (NOT FUNC_HSTRERROR_EXISTS)
 endif (NOT FUNC_HSTRERROR_EXISTS)
 
 if (WIN32)
- set(NET_LIBS ${NET_LIBS} WS2_32.lib)
+ set(NET_LIBS ${NET_LIBS} ws2_32.lib)
 endif (WIN32)
  
 ########## add extra flags ########## 
@@ -213,7 +218,7 @@ if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directo
               install(PROGRAMS ${DevIL_DLL} DESTINATION ${THLIBDIR})
        endif (EXISTS ${DevIL_DLL})
 
-       string(REGEX REPLACE "(.*)/ruby.exe" "\\1/" RUBY_BINDIR "${RUBY_EXECUTABLE}")
+       string(REGEX REPLACE "(.*)/ruby(.exe)?" "\\1/" RUBY_BINDIR "${RUBY_EXECUTABLE}")
        install(DIRECTORY "${RUBY_BINDIR}"
         	 DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
 

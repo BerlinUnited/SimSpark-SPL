@@ -52,7 +52,7 @@ void* SharedLibrary::GetProcAddress(const std::string &procName)
 {
         if (mLibHandle)
         {
-                return ::GetProcAddress((HMODULE)mLibHandle, procName.c_str());
+                return reinterpret_cast<void*>(::GetProcAddress((HMODULE)mLibHandle, procName.c_str()));
         }
         return NULL;
 }

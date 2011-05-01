@@ -22,7 +22,7 @@
 #define RCSS_NET_HANDLER_HPP
 
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(CYGWIN)
-#include "Winsock2.h"
+#include "winsock2.h"
 #endif
 #include "rcssnet3D_defines.h"
 

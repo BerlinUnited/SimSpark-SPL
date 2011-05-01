@@ -1,7 +1,14 @@
 2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* cmake/FindODE.cmake: 
+	- don't overwrite config options obtained from ode-config if available 
+	
+	* rcssagent3d/CMakeLists.txt: 
+	- use lowercase ws2_32 to be compatible with mingw32
+	
 	* CMakeLists.txt: 
 	- include AdditionalSearchPaths.cmake
+	- added -shared flag for mingw when linking modules
 	
 	* cmake/AdditionalSearchPaths.cmake: 
 	- sets up additional search paths under Windows to find dependencies in
