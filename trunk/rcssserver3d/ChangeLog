@@ -1,3 +1,10 @@
+2011-05-14  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp 
+	(SoccerRuleAspect::CheckGoal):
+	- fixed a small bug in goal counting which cause this function to always
+	  count a goal when ball moved out of the field 
+
 2011-05-02  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* CMakeLists.txt: 
