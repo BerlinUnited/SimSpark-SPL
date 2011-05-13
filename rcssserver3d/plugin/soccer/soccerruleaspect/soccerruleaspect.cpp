@@ -1067,7 +1067,7 @@ SoccerRuleAspect::CheckGoal()
         salt::Vector3f normBVel = mBallBody->GetVelocity();
         // ball should be inside the field recently (assumes that the simulation
         // step size is smaller than 1 second)
-        if (ballPos.x() - normBVel.x() > mGoalBallLineX)
+        if (fabs(ballPos.x() - normBVel.x()) > mGoalBallLineX)
             return false;
 
         normBVel.Normalize();
@@ -1083,6 +1083,8 @@ SoccerRuleAspect::CheckGoal()
             else
                 idx = TI_RIGHT;
         }
+        else
+            return false;
     }
 
     // score the lucky team
