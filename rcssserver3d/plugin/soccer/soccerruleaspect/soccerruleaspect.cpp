@@ -277,10 +277,11 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
     SoccerBase::TAgentStateList::iterator i = agent_states.begin();
     for (; i != agent_states.end(); ++i)
     {
-        boost::shared_ptr<TouchGroup> touchGroup = (*i)->GetOldTouchGroup();
+        boost::shared_ptr<TouchGroup> touchGroup = (*i)->GetTouchGroup();
 
         // Wasn't touching before, joined group making group too large
-        if (touchGroup->size() == 1 && touchGroup->size() > mMaxTouchGroupSize)
+        if ((*i)->GetOldTouchGroup()->size() == 1 &&
+                touchGroup->size() > mMaxTouchGroupSize)
         {
             // determine the team that has more players in the touch group
             int pl[3] = { 0 };
