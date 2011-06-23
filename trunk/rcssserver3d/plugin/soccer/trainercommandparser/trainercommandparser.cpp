@@ -51,6 +51,8 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mCommandMap["kill"] = CT_KILL;
     mCommandMap["repos"] = CT_REPOS;
     mCommandMap["killsim"] = CT_KILLSIM;
+    mCommandMap["reqfullstate"] = CT_REQFULLSTATE;
+    
     // setup team index map
     // Originally  team sides were "L","R" and "N"
     // But this seems to be unused
@@ -128,7 +130,13 @@ TrainerCommandParser::OnLink()
             GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get SimulationServer\n";
         }
 
-    
+    mMonitorControl = shared_dynamic_cast<MonitorControl>
+        (mSimServer->GetControlNode("MonitorControl"));
+        
+    if (mMonitorControl.get() == 0)
+        {
+            GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get MonitorControl\n";
+        }
 }
 
 void TrainerCommandParser::OnUnlink()
@@ -224,6 +232,10 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
     case CT_KILLSIM:
         ParseKillSimCommand(predicate);
         break;
+    case CT_REQFULLSTATE:
+        mMonitorControl->RequestFullState();
+        break;
+        
     default:
         return false;
     }

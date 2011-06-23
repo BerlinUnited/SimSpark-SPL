@@ -47,6 +47,7 @@ set(soccer_LIB_HDRS
    hmdp_effector/naospecific.h
    line/line.h
    agentcollisionhandler/agentcollisionhandler.h
+   rcs3dmonitor/rcs3dmonitor.h
 )
 
 set(soccer_LIB_SRCS
@@ -123,6 +124,8 @@ set(soccer_LIB_SRCS
    line/line_c.cpp
    agentcollisionhandler/agentcollisionhandler.cpp
    agentcollisionhandler/agentcollisionhandler_c.cpp
+   rcs3dmonitor/rcs3dmonitor.cpp
+   rcs3dmonitor/rcs3dmonitor_c.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${FREETYPE_INCLUDE_DIRS}

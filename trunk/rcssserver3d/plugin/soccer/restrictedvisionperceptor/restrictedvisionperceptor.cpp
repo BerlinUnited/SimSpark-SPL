@@ -38,6 +38,7 @@ using namespace salt;
 
 RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mSenseMyPos(false),
+                                     mSenseBallPos(false),
                                      mAddNoise(true),
                                      mStaticSenseAxis(true),
                                      mSenseLine(false)
@@ -460,6 +461,21 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
         element.AddValue(sensedMyPos[2]);
     }
 
+    if (mSenseBallPos)
+    {
+      TTeamIndex  ti       = mAgentState->GetTeamIndex();
+      boost::shared_ptr<Ball> ball;
+      SoccerBase::GetBall(*this, ball);
+      Vector3f sensedBallPos = SoccerBase::FlipView(ball->GetWorldTransform().Pos(), ti);
+      
+      ParameterList& element = predicate.parameter.AddList();
+      element.AddValue(std::string("ballpos"));
+      element.AddValue(sensedBallPos[0]);
+      element.AddValue(sensedBallPos[1]);
+      element.AddValue(sensedBallPos[2]);
+      
+    }
+    
     if (mSenseLine)
     {
         SenseLine(predicate);
@@ -562,6 +578,21 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         element.AddValue(sensedMyPos[2]);
     }
 
+    if (mSenseBallPos)
+    {
+      TTeamIndex  ti       = mAgentState->GetTeamIndex();
+      boost::shared_ptr<Ball> ball;
+      SoccerBase::GetBall(*this, ball);
+      Vector3f sensedBallPos = SoccerBase::FlipView(ball->GetWorldTransform().Pos(), ti);
+      
+      ParameterList& element = predicate.parameter.AddList();
+      element.AddValue(std::string("ballpos"));
+      element.AddValue(sensedBallPos[0]);
+      element.AddValue(sensedBallPos[1]);
+      element.AddValue(sensedBallPos[2]);
+      
+    }
+    
     if (mSenseLine)
     {
       SenseLine(predicate);
@@ -631,6 +662,12 @@ void
 RestrictedVisionPerceptor::SetSenseMyPos(bool sense)
 {
     mSenseMyPos = sense;
+}
+
+void
+RestrictedVisionPerceptor::SetSenseBallPos(bool sense)
+{
+    mSenseBallPos = sense;
 }
 
 bool RestrictedVisionPerceptor::CheckVisuable(RestrictedVisionPerceptor::ObjectData& od) const

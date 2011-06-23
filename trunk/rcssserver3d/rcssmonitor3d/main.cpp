@@ -121,6 +121,17 @@ bool MonitorSpark::ProcessCmdLine(int argc, char* argv[])
                 GetScriptServer()->Eval(serverIPStr);
             }
         }
+        else if (strcmp(argv[i], "--server-port") == 0)
+        {
+          i++;
+          if (i < argc)
+            GetScriptServer()->Eval(string("$monitorPort = ") + argv[i]);
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
     }
 
     return true;

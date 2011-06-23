@@ -89,6 +89,7 @@
         (nd RestrictedVisionPerceptor
             (setViewCones 120 120)
             (setSenseMyPos false)
+            (setSenseBallPos false)
             (setStaticSenseAxis false)
             (addNoise true)
             (setInterval 3)
