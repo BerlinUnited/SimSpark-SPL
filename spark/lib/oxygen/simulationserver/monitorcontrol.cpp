@@ -158,3 +158,8 @@ void MonitorControl::StartCycle()
                 }
         }
 }
+
+void MonitorControl::RequestFullState()
+{
+  mFullStateLogged--;
+}

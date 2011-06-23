@@ -30,6 +30,7 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <agentstate/agentstate.h>
 #include "../line/line.h"
+#include "../ball/ball.h"
 
 class RestrictedVisionPerceptor : public oxygen::Perceptor
 {
@@ -103,6 +104,9 @@ public:
 
     //! Turn sensing of agent position on/off
     void SetSenseMyPos(bool sense);
+
+    //! Turn sensing of agent position on/off
+    void SetSenseBallPos(bool sense);
 
     // turn sensing of lines on/off
     void SetSenseLine(bool sense);
@@ -207,6 +211,9 @@ protected:
 
     //! true, if the absolute position of the agent is sensed.
     bool mSenseMyPos;
+    
+    //! true, if the absolute position of the ball is sensed.
+    bool mSenseBallPos;
 
     //! sigma for random measurement error (distance)
     float mSigmaDist;
