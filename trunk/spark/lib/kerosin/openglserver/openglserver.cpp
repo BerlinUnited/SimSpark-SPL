@@ -96,6 +96,10 @@ OpenGLServer::Update()
     }
 
     mGLSystem->Update();
+    if (mGLSystem->WantsToQuit())
+    {
+        mWantsToQuit = true;
+    }
 }
 
 void

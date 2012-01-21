@@ -55,6 +55,9 @@ public:
     //! return if the GL subsystem locks using OpenGL to get exclusive access.
     virtual bool IsGLLocked() const { return false; }
 
+    //! return if the GL subsystem have received a quit event.
+    virtual bool WantsToQuit() const { return false; }
+
 protected:
     //
     // members

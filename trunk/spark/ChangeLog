@@ -1,3 +1,16 @@
+2012-01-22  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/kerosin/renderserver/rendercontrol.cpp (RenderControl::EndCycle): 
+	* lib/kerosin/openglserver/openglserver.cpp (OpenGLServer::Init): 
+	- check if opengl system wants to quit
+	
+	* plugin/openglsyssdl/openglsystemsdl.h (OpenGLSystemSDL.mWantsToQuit): 
+	* plugin/openglsyssdl/openglsystemsdl.cpp (OpenGLSystemSDL::Update): 
+	- handle SDL_QUIT event and add WantsToQuit function
+	
+	* lib/kerosin/openglserver/openglsystem.h (OpenGLSystem):
+	- add WantsToQuit() function
+
 2011-05-02  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* CMakeLists.txt: 
