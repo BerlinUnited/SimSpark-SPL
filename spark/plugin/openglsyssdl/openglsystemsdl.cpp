@@ -37,7 +37,7 @@ using namespace zeitgeist;
 
 OpenGLSystemSDL *gInputSystem;
 
-OpenGLSystemSDL::OpenGLSystemSDL() : OpenGLSystem()
+OpenGLSystemSDL::OpenGLSystemSDL() : OpenGLSystem(), mWantsToQuit(false)
 {
 }
 
@@ -54,6 +54,8 @@ void OpenGLSystemSDL::Update()
     // Grab all the events off the queue.
     while( SDL_PollEvent( &event ) )
         {
+            if (event.type == SDL_QUIT)
+                mWantsToQuit = true;
         }
 }
 
@@ -171,4 +173,9 @@ bool OpenGLSystemSDL::Init()
     GetLog()->Debug() << "(OpenGLSystemSDL) GL_MAX_LIGHTS: " << GL_MAX_LIGHTS << "\n";
 
     return true;
+}
+
+bool OpenGLSystemSDL::WantsToQuit() const
+{
+    return mWantsToQuit;
 }
