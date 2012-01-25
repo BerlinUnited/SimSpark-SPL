@@ -32,7 +32,6 @@ long HingeJointImp::CreateHingeJoint(long worldID)
 {
     dWorldID ODEWorld = (dWorldID) worldID;
     dJointID ODEJoint = dJointCreateHinge(ODEWorld, 0);
-    dJointSetFeedback( ODEJoint, &mFeedback );
     return (long) ODEJoint;
 }
 

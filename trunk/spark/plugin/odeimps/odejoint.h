@@ -42,7 +42,7 @@ public:
     int GetType(long jointID) const;
     long GetBodyID(int idx, long jointID);
     void EnableFeedback(bool enable, long jointID, 
-                        boost::shared_ptr<oxygen::GenericJointFeedback> feedback);
+                        boost::shared_ptr<oxygen::GenericJointFeedback>& feedback);
     bool FeedbackEnabled(long jointID) const;
     salt::Vector3f GetFeedbackForce(int idx,
                                     boost::shared_ptr<oxygen::GenericJointFeedback> feedback) const;

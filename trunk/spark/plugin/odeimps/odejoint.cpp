@@ -74,7 +74,7 @@ long JointImp::GetBodyID(int idx, long jointID)
 }
 
 void JointImp::EnableFeedback(bool enable, long jointID,
-                              boost::shared_ptr<GenericJointFeedback> feedback)
+                              boost::shared_ptr<GenericJointFeedback>& feedback)
 {
     dJointID JointImp = (dJointID) jointID;
 
