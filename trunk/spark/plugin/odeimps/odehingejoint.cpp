@@ -91,5 +91,8 @@ float HingeJointImp::GetTorque(long jointID) const
 {
     dJointID ODEJoint = (dJointID) jointID;
     dJointFeedback* fb = dJointGetFeedback(ODEJoint);
-    return dLENGTH(fb->t1) + dLENGTH(fb->t2);
+    if(fb)
+      return dLENGTH(fb->t1) + dLENGTH(fb->t2);
+    else
+      return 0;
 }
