@@ -1,3 +1,10 @@
+2012-02-14  Sander van Dijk  <sgvandik@gmail.com>
+
+	* rcssserver3d/main.cpp (Spark): 
+	* rcssmonitor3d/main.cpp (Spark):
+	- add --init-script-prefix option to specify location of spark.rb,
+	  zeitgeist.rb, etc
+
 2011-06-06  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp

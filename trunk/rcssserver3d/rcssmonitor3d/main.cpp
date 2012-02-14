@@ -45,8 +45,8 @@ using namespace boost;
 class MonitorSpark : public Spark
 {
 public:
-    MonitorSpark(const std::string& relPathPrefix) :
-        Spark(relPathPrefix)
+    MonitorSpark() :
+        Spark()
     {};
 
     /** called once after Spark finished it's init */
@@ -165,7 +165,7 @@ bool MonitorSpark::InitApp(int argc, char** argv)
 int main(int argc, char** argv)
 {
     // the spark app framework instance
-    MonitorSpark spark("../../");
+    MonitorSpark spark;
 
     if (! spark.Init(argc, argv))
         {

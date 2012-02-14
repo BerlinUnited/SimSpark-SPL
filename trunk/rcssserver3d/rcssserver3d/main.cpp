@@ -45,8 +45,8 @@ using namespace boost;
 class SimSpark : public Spark
 {
 public:
-    SimSpark(const std::string& relPathPrefix) :
-        Spark(relPathPrefix),
+    SimSpark() :
+        Spark(),
         mScriptPath("rcssserver3d.rb")
     {};
 
@@ -83,10 +83,11 @@ void SimSpark::PrintHelp()
     GetLog()->Normal()
         << "\nusage: rcssserver3d [options] [script]\n"
         << "\noptions:\n"
-        << " --help\t\t\t print this message.\n"
-        << " --script-path PATH\t set the script path (rcssserver3d.rb path).\n"
-        << "--agent-port PORTNUM\t port for agents to connect to.\n"
-        << "--server-port PORTNUM\t port for monitors to connect to.\n"
+        << " --help\t\t\t\t print this message.\n"
+        << " --script-path PATH\t\t set the script path (rcssserver3d.rb path).\n"
+        << " --init-script-prefix PATH\t path prefix for init scripts (spark.rb, oxygen.rb, etc.).\n"
+        << " --agent-port PORTNUM\t\t port for agents to connect to.\n"
+        << " --server-port PORTNUM\t\t port for monitors to connect to.\n"
         << "\n";
 }
 
@@ -166,7 +167,7 @@ bool SimSpark::InitApp(int argc, char** argv)
 int main(int argc, char** argv)
 {
     // the spark app framework instance
-    SimSpark spark("../../");
+    SimSpark spark;
 
     if (! spark.Init(argc, argv))
     {
