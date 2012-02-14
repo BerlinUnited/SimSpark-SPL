@@ -38,12 +38,7 @@ using namespace salt;
 using namespace std;
 using namespace boost;
 
-Spark::Spark(const string& relPathPrefix) :
-    mZeitgeist(new Zeitgeist("." PACKAGE_NAME, relPathPrefix)),
-    mOxygen(new Oxygen(*mZeitgeist))
-#if HAVE_KEROSIN_KEROSIN_H
-    , mKerosin(new Kerosin(*mZeitgeist))
-#endif
+Spark::Spark()
 {
 }
 
@@ -104,12 +99,28 @@ bool Spark::UpdateCached()
 bool
 Spark::Init(int argc, char** argv)
 {
+    // See if user gave path prefix for init scripts
+    string relPathPrefix = "../..";
+    for (int i = 1; i < argc; ++i)
+    {
+        if (strcmp(argv[i], "--init-script-prefix") == 0)
+        {
+            relPathPrefix = argv[i + 1];
+        }
+    }
+
+    mZeitgeist = shared_ptr<Zeitgeist>(new Zeitgeist("." PACKAGE_NAME, relPathPrefix));
+    mOxygen = shared_ptr<Oxygen>(new Oxygen(*mZeitgeist));
+#if HAVE_KEROSIN_KEROSIN_H
+    mKerosin = shared_ptr<Kerosin>(new Kerosin(*mZeitgeist));
+#endif
+
     // run the spark init script
     mZeitgeist->GetCore()->GetScriptServer()->RunInitScript
         (
          "spark.rb",
          "lib/spark",
-         ScriptServer::IS_USERLOCAL
+         ScriptServer::IS_COMMON
          );
 
     UpdateCached();

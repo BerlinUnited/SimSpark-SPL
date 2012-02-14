@@ -72,7 +72,7 @@ namespace spark
 class SPARK_API Spark
 {
 public:
-    Spark(const std::string& relPathPrefix);
+    Spark();
     virtual ~Spark();
 
     /** inits the Spark lib, returns true on success, has to be called once

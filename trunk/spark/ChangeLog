@@ -1,3 +1,10 @@
+2012-02-14  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp (RunInitScript): 
+	* spark/spark.h (Spark): 
+	* spark/spark.cpp (Spark): 
+	- add --init-script-prefix option to specify location of spark.rb, zeitgeist.rb, etc
+
 2012-01-22  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* lib/kerosin/renderserver/rendercontrol.cpp (RenderControl::EndCycle): 
