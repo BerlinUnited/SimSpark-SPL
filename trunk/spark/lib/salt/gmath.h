@@ -44,7 +44,7 @@ namespace salt
     #define M_PI 3.1415926535897932384626433832795
 #endif
 
-#ifndef M_PI_2 
+#ifndef M_PI_2
     #define M_PI_2 1.57079632679489661923132169164 /* pi/2 */
 #endif
 
@@ -226,7 +226,7 @@ f_inline bool gIsFinite(TYPE f)
     assert(std::numeric_limits<TYPE>::has_infinity);
     return (std::numeric_limits<double>::infinity() != f);
 #else
-    return isfinite(f);
+    return std::isfinite(f);
 #endif
 }
 

@@ -1,3 +1,8 @@
+2012-02-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/salt/gmath.h: 
+	- add missing std:: prefix for isfinite (fix gcc 4.7 compile error)
+
 2012-02-14  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* lib/zeitgeist/scriptserver/scriptserver.cpp (RunInitScript): 
