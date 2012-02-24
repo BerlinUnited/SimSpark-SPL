@@ -193,49 +193,6 @@ void Space::PostPhysicsUpdateInternal()
     mSpaceImp->PostPhysicsUpdateInternal(mContactGroupID);
 }
 
-void Space::DestroySpaceObjects()
-{
-    boost::shared_ptr<Scene> scene = GetScene(); 
-
-    if (scene.get() == 0)
-        {
-            return;
-        }
-
-    TLeafList objects;
-    const bool recursive = true;
-    scene->ListChildrenSupportingClass<PhysicsObject>(objects, recursive);
-
-    bool globalSpace = IsGlobalSpace();
-    boost::shared_ptr<Space> self = shared_static_cast<Space>(GetSelf().lock());
-
-    for (
-         TLeafList::iterator iter = objects.begin();
-         iter != objects.end();
-         ++iter
-         )
-        {
-            boost::shared_ptr<PhysicsObject> object = shared_static_cast<PhysicsObject>(*iter);
-            if (object == self)
-            {
-                continue;
-            }
-
-            // destroy objects registered to this space; the top level
-            // space object also destroy any other ODE object
-            const long parentSpace = object->GetParentSpaceID();
-            if (
-                (
-                 (globalSpace) &&
-                 (parentSpace == 0)
-                 ) ||
-                (parentSpace == mSpaceID)
-                )
-                {
-                    object->DestroyPhysicsObject();
-                }
-        }
-}
 
 void Space::DestroyPhysicsObject()
 {
@@ -243,10 +200,6 @@ void Space::DestroyPhysicsObject()
         {
             return;
         }
-
-    // make sure that all objects registered to this space are destroyed
-    // before this space. Any other order provokes a segfault in ODE.
-    DestroySpaceObjects();
 
     mSpaceImp->DestroySpace(mContactGroupID, mSpaceID);
     
