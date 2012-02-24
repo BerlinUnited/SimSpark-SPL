@@ -110,6 +110,11 @@ protected:
     /** creates a new physics world */
     virtual bool ConstructInternal();
 
+    /** destroys the bodies managed by all objects that are
+        in Wthis World
+    */
+    void DestroyWorldObjects();
+
     //
     // Members
     //
