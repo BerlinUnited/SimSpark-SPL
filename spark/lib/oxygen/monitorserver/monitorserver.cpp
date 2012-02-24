@@ -193,7 +193,7 @@ string MonitorServer::GetMonitorData()
 
     PredicateList pList;
     CollectItemPredicates(false,pList);
-    mData = monitorSystem->GetMonitorInfo(pList);
+    mData = monitorSystem->GetMonitorInfomation(pList);
     mDataCycle = cycle;
     return mData;
 }

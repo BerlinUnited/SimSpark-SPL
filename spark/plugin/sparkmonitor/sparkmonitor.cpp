@@ -91,7 +91,7 @@ void SparkMonitor::ParseMonitorMessage(const std::string& data)
         }
 }
 
-string SparkMonitor::GetMonitorInfo(const PredicateList& pList)
+string SparkMonitor::GetMonitorInfomation(const PredicateList& pList)
 {
     stringstream ss;
     mFullState = false;
