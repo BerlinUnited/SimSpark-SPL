@@ -37,8 +37,8 @@ using namespace spark;
 
 std::ostringstream* SimSpark::mLogStream = 0;
 
-SimSpark::SimSpark(const string& relPathPrefix) :
-    Spark(relPathPrefix)
+SimSpark::SimSpark() :
+    Spark()
 {
     mState = S_PAUSED;
 }

@@ -9,7 +9,7 @@ find_package(Spark REQUIRED)
 find_package(Boost REQUIRED thread COMPONENTS date_time)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
-set(wxWidgets_USE_LIBS  gl adv)
+set(wxWidgets_USE_LIBS  core gl adv)
 find_package(wxWidgets REQUIRED)
 include( ${wxWidgets_USE_FILE} )
 

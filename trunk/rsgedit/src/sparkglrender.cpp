@@ -111,7 +111,7 @@ void SparkGLRender::Render(int width, int height)
         }
 
     mCamera->SetViewport(0,0,width,height);
-    mRenderServer->Render();
+    mRenderServer->Render(true);
     RenderSelection();
 }
 
