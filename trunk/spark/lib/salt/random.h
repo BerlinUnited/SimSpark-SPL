@@ -50,24 +50,9 @@ public:
 
     static RandomEngine& instance()
     { static RandomEngine the_instance; return the_instance; }
-
-    static RandomEngine&
-#if defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x520)
-    // Work around overload resolution problem (Gennadiy E. Rozental)
-    instance(const result_type& value)
-#else
-    instance(result_type value)
-#endif
-    { instance().seed( value ); return instance(); }
-
-    // For GCC, moving this function out-of-line prevents inlining, which may
-    // reduce overall object code size.  However, MSVC does not grok
-    // out-of-line definitions of member function templates.
-    template<class Generator>
-    static RandomEngine& instance(Generator& gen)
-    { instance().seed( gen ); return instance(); }
 private:
-    RandomEngine() : boost::mt19937() { }
+    RandomEngine() : boost::mt19937() {}
+    RandomEngine(const RandomEngine&) { assert(false); }
 };
 
 #if (defined(BOOST_VERSION) && (BOOST_VERSION >= 103100))
@@ -77,12 +62,12 @@ private:
  *  uniformly distributed random numbers.
  */
 template<class RealType = double>
-class UniformRNG : public boost::variate_generator<salt::RandomEngine,
+class UniformRNG : public boost::variate_generator<salt::RandomEngine&,
                                                    boost::uniform_real<RealType> >
 {
 public:
     UniformRNG(RealType min = RealType(0), RealType max = RealType(1))
-        : boost::variate_generator<RandomEngine, boost::uniform_real<RealType> >
+        : boost::variate_generator<RandomEngine&, boost::uniform_real<RealType> >
     (salt::RandomEngine::instance(), boost::uniform_real<RealType>(min,max))
     {}
 };
@@ -90,12 +75,12 @@ public:
 /** A random number generator producing normally distributed numbers.
  */
 template<class RealType = double>
-class NormalRNG : public boost::variate_generator<salt::RandomEngine,
+class NormalRNG : public boost::variate_generator<salt::RandomEngine&,
                                                   boost::normal_distribution<RealType> >
 {
 public:
     NormalRNG(double mean, double sigma = (1))
-        : boost::variate_generator<RandomEngine,
+        : boost::variate_generator<RandomEngine&,
                                    boost::normal_distribution<RealType> >
     (salt::RandomEngine::instance(), boost::normal_distribution<RealType>(mean,sigma))
     {}
@@ -106,12 +91,12 @@ public:
  * exponential distribution: p(x) = lambda * exp(-lambda * x)
  */
 template<class RealType = double>
-class ExponentialRNG : public boost::variate_generator<salt::RandomEngine,
+class ExponentialRNG : public boost::variate_generator<salt::RandomEngine&,
                                                        boost::exponential_distribution<RealType> >
 {
 public:
     ExponentialRNG(double lambda = RealType(1))
-        : boost::variate_generator<RandomEngine,
+        : boost::variate_generator<RandomEngine&,
                                    boost::exponential_distribution<RealType> >
     (salt::RandomEngine::instance(),
      boost::exponential_distribution<RealType>(lambda))
