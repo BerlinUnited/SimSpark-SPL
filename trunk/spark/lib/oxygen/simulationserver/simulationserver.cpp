@@ -265,6 +265,13 @@ void SimulationServer::Step()
             mSimTime += mSumDeltaTime;
             mSumDeltaTime = 0;
         }
+
+    if (mGameControlServer->IsFinished() && !mExit)
+    {
+        GetLog()->Normal() << "(SimulationServer) GameControlServer finished,"
+                " exiting.\n";
+        Quit();
+    }
 }
 
 void SimulationServer::ControlEvent(EControlEvent event)
