@@ -1,3 +1,8 @@
+2012-04-07  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::Step): 
+	- quit if GameControlServer is finished (e.g. the end of a game)
+
 2012-02-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* lib/salt/gmath.h: 

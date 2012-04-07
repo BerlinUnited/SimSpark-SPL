@@ -49,6 +49,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mAutomaticKickOff(false),
     mWaitBeforeKickOff(1.0),
     mSingleHalfTime(false),
+    mAutomaticQuit(true),
     mSayMsgSize(20),
     mAudioCutDist(50.0),
     mFirstCollidingAgent(true),
@@ -1152,7 +1153,7 @@ void
 SoccerRuleAspect::UpdateGameOver()
 {
     // wait for 10 seconds to finish
-    if (mGameState->GetModeTime() < 9)
+    if (mGameState->GetModeTime() < 9 || !mAutomaticQuit)
     {
         return;
     }
@@ -1346,6 +1347,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
+    SoccerBase::GetSoccerVar(*this,"AutomaticQuit",mAutomaticQuit);
     SoccerBase::GetSoccerVar(*this,"UseOffside",mUseOffside);
     float penaltyLength, penaltyWidth;
     SoccerBase::GetSoccerVar(*this,"PenaltyLength",penaltyLength);

@@ -296,6 +296,8 @@ protected:
     float mWaitBeforeKickOff;
     /** flag if we want to play only one half of the match */
     bool mSingleHalfTime;
+    /** flag if the simulator should quit automatically when the game is over */
+    bool mAutomaticQuit;
 
     //FCP 2010 - New Parameters (added by FCPortugal for Singapure 2010)
     /** max time player may be sitted or laying down before being repositioned */
