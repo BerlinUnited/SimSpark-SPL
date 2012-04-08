@@ -1,3 +1,10 @@
+2012-04-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::SwapTeamSides): 
+	* rcssserver3d/naosoccersim.rb: 
+	- change teams' sides in the second half if enabled (enabled by default)
+
 2012-04-07  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::UpdateGameOver): 
