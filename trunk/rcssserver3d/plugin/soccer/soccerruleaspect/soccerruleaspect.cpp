@@ -50,6 +50,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mWaitBeforeKickOff(1.0),
     mSingleHalfTime(false),
     mAutomaticQuit(true),
+    mChangeSidesInSecondHalf(true),
     mSayMsgSize(20),
     mAudioCutDist(50.0),
     mFirstCollidingAgent(true),
@@ -573,6 +574,20 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
             }
             SoccerBase::MoveAgent(agent_aspect, new_pos);
         }
+    }
+}
+
+void
+SoccerRuleAspect::SwapTeamSides()
+{
+    SoccerBase::TAgentStateList agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states))
+        return;
+
+    SoccerBase::TAgentStateList::iterator it;
+    for (it = agent_states.begin(); it != agent_states.end(); ++it)
+    {
+        (*it)->SetTeamIndex(SoccerBase::OpponentTeam((*it)->GetTeamIndex()));
     }
 }
 
@@ -1183,6 +1198,8 @@ SoccerRuleAspect::CheckTime()
             // the first game half is over
             mGameState->SetPlayMode(PM_BeforeKickOff);
             mGameState->SetGameHalf(GH_SECOND);
+            if (mChangeSidesInSecondHalf)
+                SwapTeamSides();
         }
     }
     else if ((half == GH_SECOND) && (now >= 2 * mHalfTime))
@@ -1348,6 +1365,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
     SoccerBase::GetSoccerVar(*this,"AutomaticQuit",mAutomaticQuit);
+    SoccerBase::GetSoccerVar(*this,"ChangeSidesInSecondHalf",mChangeSidesInSecondHalf);
     SoccerBase::GetSoccerVar(*this,"UseOffside",mUseOffside);
     float penaltyLength, penaltyWidth;
     SoccerBase::GetSoccerVar(*this,"PenaltyLength",penaltyLength);

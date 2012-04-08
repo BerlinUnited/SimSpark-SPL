@@ -51,6 +51,7 @@ addSoccerVar('GoalKickDist', 1.0)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 2.0)
 addSoccerVar('AutomaticQuit', true)
+addSoccerVar('ChangeSidesInSecondHalf', true)
 addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
 # agent parameters

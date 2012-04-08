@@ -248,6 +248,11 @@ protected:
      */
     void ClearPlayersBeforeKickOff(TTeamIndex idx);
 
+    /**
+     * swaps the side of the teams
+     */
+    void SwapTeamSides();
+
 protected:
     /** reference to the body node of the Ball */
     boost::shared_ptr<oxygen::RigidBody> mBallBody;
@@ -298,6 +303,8 @@ protected:
     bool mSingleHalfTime;
     /** flag if the simulator should quit automatically when the game is over */
     bool mAutomaticQuit;
+    /** flag if the side of the teams should be changed in the second half*/
+    bool mChangeSidesInSecondHalf;
 
     //FCP 2010 - New Parameters (added by FCPortugal for Singapure 2010)
     /** max time player may be sitted or laying down before being repositioned */
