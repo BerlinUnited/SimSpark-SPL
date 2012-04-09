@@ -153,10 +153,10 @@ protected:
     TGameHalf mGameHalf;
 
     /** the team that had the last KickOff */
-    TTeamIndex mLastKickOff;
+    TGameHalf mLastKickOffGameHalf;
 
-//     /** the team that has to start the second half */
-//     TTeamIndex mSecondHalfKickOff;
+    /** the team that has to start the next half */
+    TTeamIndex mNextHalfKickOff;
 
     /** the names of the two teams */
     std::string mTeamName[2];

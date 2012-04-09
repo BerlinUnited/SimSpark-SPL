@@ -40,8 +40,8 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mGameHalf = GH_FIRST;
     mScore[0] = 0;
     mScore[1] = 0;
-    mLastKickOff = TI_NONE;
-    //mSecondHalfKickOff = TI_NONE;
+    mLastKickOffGameHalf = GH_NONE;
+    mNextHalfKickOff = TI_NONE;
     mLeftInit = Vector3f(0,0,0);
     mRightInit = Vector3f(0,0,0);
     mFinished = false;
@@ -97,77 +97,35 @@ GameStateAspect::SetPlayMode(TPlayMode mode)
 }
 
 
-// let the monitor handle who kicks off in 2nd half.
 void
 GameStateAspect::KickOff(TTeamIndex ti)
 {
-    // throw a coin to determine which team kicks off
+    // throw a coin to determine which team kicks off, except if a new half
+    // is started in which the opposite team should kick off
     if (ti == TI_NONE)
     {
         ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
+
+        if (mGameHalf != mLastKickOffGameHalf)
+        {
+            if (mNextHalfKickOff != TI_NONE)
+                ti = mNextHalfKickOff;
+
+            bool changeSides;
+            SoccerBase::GetSoccerVar(*this, "ChangeSidesInSecondHalf",
+                changeSides);
+
+            if (changeSides)
+                mNextHalfKickOff = ti;
+            else
+                mNextHalfKickOff = (ti == TI_LEFT) ? TI_RIGHT : TI_LEFT;
+        }
     }
 
     SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
-
-    if (mLastKickOff == TI_NONE)
-        mLastKickOff = ti;
+    mLastKickOffGameHalf = mGameHalf;
 }
 
-
-
-// void
-// GameStateAspect::KickOff(TTeamIndex ti)
-// {
-//     if (mGameHalf == GH_FIRST)
-//     {
-//         // throw a coin to determine which team kicks off
-//         if (ti == TI_NONE)
-//         {
-//             ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
-//         }
-
-//         SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
-
-//         if (mLastKickOff == TI_NONE)
-//             mLastKickOff = ti;
-//     }
-//     else
-//     {
-//         // in the second half, let the opposite team kick off
-//         SetPlayMode((mLastKickOff == TI_LEFT) ? PM_KickOff_Right : PM_KickOff_Left);
-//     }
-// }
-//---------------------------------------------
-// void
-// GameStateAspect::KickOff(TTeamIndex ti)
-// {
-//     if (mGameHalf == GH_FIRST)
-//     {
-//         // throw a coin to determine which team kicks off
-//         if (ti == TI_NONE)
-//         {
-//             ti = (salt::UniformRNG<>(0,1)() <= 0.5) ? TI_LEFT : TI_RIGHT;
-//         }
-
-//         SetPlayMode((ti == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
-
-//         mLastKickOff = ti;
-//         if (mSecondHalfKickOff == TI_NONE)
-//         {
-//             //clog << "setting mSecondHalfKickOff\n";
-
-//             mSecondHalfKickOff =
-//                  (mLastKickOff == TI_LEFT) ? TI_RIGHT : TI_LEFT;
-//         }
-//     }
-//     else
-//     {
-//         // in the second half, let the opposite team kick off
-//         SetPlayMode((mSecondHalfKickOff == TI_LEFT) ? PM_KickOff_Left : PM_KickOff_Right);
-//     }
-// }
-
-//---------------------------------------------
 TTime
 GameStateAspect::GetTime() const
 {
@@ -481,6 +439,11 @@ GameStateAspect::OnLink()
             fieldWidth/2  - mAgentRadius*2,
             mAgentRadius
             );
+
+    bool coinTossKickOff = true;
+    SoccerBase::GetSoccerVar(*this, "CoinTossForKickOff", coinTossKickOff);
+    if (!coinTossKickOff)
+        mNextHalfKickOff = TI_LEFT;
 }
 
 int

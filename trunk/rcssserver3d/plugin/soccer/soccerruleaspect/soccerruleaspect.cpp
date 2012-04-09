@@ -51,6 +51,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mSingleHalfTime(false),
     mAutomaticQuit(true),
     mChangeSidesInSecondHalf(true),
+    mAutoKickOffTimeOrigin(1000000.0),
     mSayMsgSize(20),
     mAudioCutDist(50.0),
     mFirstCollidingAgent(true),
@@ -713,7 +714,13 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     mInOffsideRightPlayers.clear();
 #endif
 
-    if (mAutomaticKickOff && mGameState->GetModeTime() > mWaitBeforeKickOff)
+    float kickOffWaitTime = 0;
+    if (mAutoKickOffTimeOrigin > mGameState->GetModeTime())
+        mAutoKickOffTimeOrigin = mGameState->GetModeTime();
+    else
+        kickOffWaitTime = mGameState->GetModeTime() - mAutoKickOffTimeOrigin;
+
+    if (mAutomaticKickOff && kickOffWaitTime > mWaitBeforeKickOff)
     {
         mGameState->KickOff();
     }

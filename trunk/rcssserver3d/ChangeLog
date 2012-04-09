@@ -1,9 +1,29 @@
+2012-04-10  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	 (SoccerRuleAspect::UpdateBeforeKickOff):
+	 - WaitBeforeKickOff is now calculated from when the first agent connects
+	   rather than from the beginning of the before kickoff playmode (when the
+	   simulator is started) 
+
 2012-04-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* plugin/soccer/gamestateaspect/gamestateaspect.h (GameStateAspect): 
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp (GameStateAspect::KickOff): 
+    - Fix KickOff for the second half: give the ball to the other team in all
+      cases (both when the teams change their sides in the second half and when
+      they don't). 
+	
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::SwapTeamSides): 
-	* rcssserver3d/naosoccersim.rb: 
 	- change teams' sides in the second half if enabled (enabled by default)
+	
+	* rcssserver3d/naosoccersim.rb:
+	- add new variables for the above changes: CoinTossForKickOff and 
+	  ChangeSidesInSecondHalf. The former specifies if in the automatic kickoff
+	  mode, the first half kick off is always given to the left team or is
+	  determined randomly. The latter specifies if the teams should change 
+	  their sides in the second half. 
 
 2012-04-07  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 

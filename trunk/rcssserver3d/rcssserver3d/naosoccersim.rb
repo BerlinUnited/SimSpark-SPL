@@ -48,11 +48,15 @@ addSoccerVar('PenaltyWidth',3.9)
 addSoccerVar('FreeKickDistance', 1.3)
 addSoccerVar('FreeKickMoveDist', 1.5)
 addSoccerVar('GoalKickDist', 1.0)
+addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
+
+# soccer game settings
 addSoccerVar('AutomaticKickOff', false)
-addSoccerVar('WaitBeforeKickOff', 2.0)
+addSoccerVar('WaitBeforeKickOff', 5.0)
+addSoccerVar('CoinTossForKickOff', false)
+
 addSoccerVar('AutomaticQuit', true)
 addSoccerVar('ChangeSidesInSecondHalf', true)
-addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
