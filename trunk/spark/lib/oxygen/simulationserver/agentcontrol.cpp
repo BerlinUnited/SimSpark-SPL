@@ -29,13 +29,16 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-AgentControl::AgentControl() : NetControl(), mSyncMode(false)
+AgentControl::AgentControl() : NetControl(), mSyncMode(false),
+            mMultiThreads(true), mThreadBarrierNew(NULL), nThreads(0)
 {
+    mThreadBarrier = new boost::barrier(1);
     mLocalAddr.setPort(3100);
 }
 
 AgentControl::~AgentControl()
 {
+  delete mThreadBarrier;
 }
 
 void AgentControl::OnLink()
@@ -62,7 +65,23 @@ void AgentControl::ClientConnect(boost::shared_ptr<Client> client)
         }
 
     mGameControlServer->AgentConnect(client->id);
+
+    //Create a new thread and new barrier
+    if(mMultiThreads)
+    {
+      /**@todo Make this safe! */
+      if(mThreadBarrierNew != NULL)
+        GetLog()->Error()
+            << "(AgentControl) ERROR mThreadBarrierNew!=NULL!"
+            << " Agents connecting/disconnecting in same frame !\n";
+      nThreads++;
+      mThreadBarrierNew = new boost::barrier(nThreads+1);
+      boost::thread* newThread =
+         mThreadGroup.create_thread(boost::bind(&AgentControl::AgentThread,
+                                               this, client));
+    }
 }
+
 
 void AgentControl::ClientDisconnect(boost::shared_ptr<Client> client)
 {
@@ -90,52 +109,69 @@ void AgentControl::StartCycle()
                 return;
             }
 
-        // pass all received messages on to the GameControlServer
-        for (
-             TBufferMap::iterator iter = mBuffers.begin();
-             iter != mBuffers.end();
-             ++iter
-             )
-            {
-                boost::shared_ptr<NetBuffer>& netBuff = (*iter).second;
-                if (
-                    (netBuff.get() == 0) ||
-                    (netBuff->IsEmpty())
-                    )
-                    {
-                        continue;
-                    }
+        //if(!mMultiThreads)
+        //{
+          // pass all received messages on to the GameControlServer
+          for (
+               TBufferMap::iterator iter = mBuffers.begin();
+               iter != mBuffers.end();
+               ++iter
+               )
+              {
+                  boost::shared_ptr<NetBuffer>& netBuff = (*iter).second;
+                  if (
+                      (netBuff.get() == 0) ||
+                      (netBuff->IsEmpty())
+                      )
+                      {
+                          continue;
+                      }
 
-                // lookup the client entry corresponding for the buffer
-                // entry
-                TAddrMap::iterator clientIter = mClients.find(netBuff->GetAddr());
-                if (clientIter == mClients.end())
-                    {
-                        continue;
-                    }
-                boost::shared_ptr<Client>& client = (*clientIter).second;
+                  // lookup the client entry corresponding for the buffer
+                  // entry
+                  TAddrMap::iterator clientIter = mClients.find(netBuff->GetAddr());
+                  if (clientIter == mClients.end())
+                      {
+                          continue;
+                      }
+                  boost::shared_ptr<Client>& client = (*clientIter).second;
 
-                // lookup the AgentAspect node correspoding to the client
-                boost::shared_ptr<AgentAspect> agent =
-                    mGameControlServer->GetAgentAspect(client->id);
-                if (agent.get() == 0)
-                    {
-                        continue;
-                    }
-
-                // parse and immediately realize the action
-                string message;
-                while (mNetMessage->Extract(netBuff,message))
-                    {
-                        agent->RealizeActions
-                            (mGameControlServer->Parse(client->id,message));
-                    }
-            }
+                  // start cycle for this client
+                  StartCycle(client, netBuff);
+              }
+        /*}
+        else
+        {
+          mThreadAction = STARTCYCLE;
+          WaitMaster(); //let threads start
+          WaitMaster(); //wait for threads to finish
+        }*/
     } while (!AgentsAreSynced());
+}
+
+void AgentControl::StartCycle(const boost::shared_ptr<Client> &client,
+                              boost::shared_ptr<NetBuffer> &netBuff)
+{
+  // lookup the AgentAspect node corresponding to the client
+  boost::shared_ptr<AgentAspect> agent =
+      mGameControlServer->GetAgentAspect(client->id);
+  if (agent.get() == 0)
+  {
+      return;
+  }
+  // parse and immediately realize the action
+  string message;
+  while (mNetMessage->Extract(netBuff,message))
+  {
+      agent->RealizeActions
+          (mGameControlServer->Parse(client->id,message));
+  }
 }
 
 void AgentControl::SenseAgent()
 {
+  //if(!mMultiThreads)
+  //{
     int clientID;
     for (
          TAddrMap::iterator iter = mClients.begin();
@@ -149,6 +185,13 @@ void AgentControl::SenseAgent()
                     SendClientMessage(iter->second, mClientSenses[clientID]);
                 }
         }
+  /*}
+  else
+  {
+    mThreadAction = SENSEAGENT;
+    WaitMaster(); //let threads start
+    WaitMaster(); //wait for threads to finish
+  }*/
 }
 
 void AgentControl::EndCycle()
@@ -164,44 +207,57 @@ void AgentControl::EndCycle()
             return;
         }
 
+    if(!mMultiThreads)
+    {
+      // generate senses for all agents
+      for (
+           TAddrMap::iterator iter = mClients.begin();
+           iter != mClients.end();
+           ++iter
+           )
+          {
+              const boost::shared_ptr<Client> &client = (*iter).second;
+              EndCycle(client);
+          }
+    }
+    else
+    {
+      mThreadAction = ENDCYCLE;
+      WaitMaster(); //let threads start
+      WaitMaster(); //wait for threads to finish
+    }
+}
+
+void AgentControl::EndCycle(const boost::shared_ptr<Client> &client)
+{
     boost::shared_ptr<BaseParser> parser = mGameControlServer->GetParser();
     if (parser.get() == 0)
-        {
-            GetLog()->Error()
-                << "(AgentControl) ERROR:  got no parser from "
-                << " the GameControlServer" << endl;
-            return;
-        }
+    {
+        GetLog()->Error()
+            << "(AgentControl) ERROR:  got no parser from "
+            << " the GameControlServer" << endl;
+        return;
+    }
 
-    // generate senses for all agents
-    for (
-         TAddrMap::iterator iter = mClients.begin();
-         iter != mClients.end();
-         ++iter
-         )
-        {
-            const boost::shared_ptr<Client> &client = (*iter).second;
+    boost::shared_ptr<AgentAspect> agent =
+      mGameControlServer->GetAgentAspect(client->id);
+    if (agent.get() == 0)
+    {
+        return;
+    }
+    if (mSyncMode)
+    {
+        agent->SetSynced(false);
+    }
 
-            boost::shared_ptr<AgentAspect> agent =
-                mGameControlServer->GetAgentAspect(client->id);
-            if (agent.get() == 0)
-                {
-                    continue;
-                }
-            if (mSyncMode)
-                {
-                    agent->SetSynced(false);
-                }
+    boost::shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
+    mClientSenses[client->id] = parser->Generate(senseList);
+    if (mClientSenses[client->id].empty())
+    {
+        return;
+    }
 
-            boost::shared_ptr<PredicateList> senseList = agent->QueryPerceptors();
-            mClientSenses[client->id] = parser->Generate(senseList);
-            if (mClientSenses[client->id].empty())
-                {
-                    continue;
-                }
-
-            mNetMessage->PrepareToSend(mClientSenses[client->id]);
-        }
+    mNetMessage->PrepareToSend(mClientSenses[client->id]);
 }
 
 void AgentControl::SetSyncMode(bool syncMode)
@@ -219,6 +275,11 @@ void AgentControl::SetSyncMode(bool syncMode)
         GetLog()->Normal()
             << "(AgentControl) Running in normal mode.\n";
     }
+}
+
+void AgentControl::SetMultiThreaded(bool multiThreaded)
+{
+    mMultiThreads = multiThreaded;
 }
 
 bool AgentControl::AgentsAreSynced()
@@ -246,4 +307,85 @@ bool AgentControl::AgentsAreSynced()
                 }
         }
     return true;
+}
+
+
+void AgentControl::AgentThread(const boost::shared_ptr<Client> &client)
+{
+  boost::barrier *currentBarrier = mThreadBarrierNew;
+
+  while(client->socket->isOpen())
+  {
+    WaitSlave(currentBarrier);
+
+    //StartCycle not parallel:
+    //  parser and agentState::addMessage not thread safe.
+    //  additional synchronization required -> no speed-up !
+    if(mThreadAction == STARTCYCLE)
+    {
+
+      TBufferMap::iterator buf = mBuffers.find(client->addr);
+      if(buf != mBuffers.end())
+      {
+        boost::shared_ptr<NetBuffer>& netBuff = buf->second;
+        if (netBuff.get() != 0 && !netBuff->IsEmpty())
+          StartCycle(client, netBuff);
+      }
+
+    }
+
+    // SenseAgent not parallel:  not enough computation, no speed-up !
+    else if(mThreadAction == SENSEAGENT)
+    {
+
+
+      std::string& senses = mClientSenses[client->id];
+      if (!senses.empty())
+          SendClientMessage(client, senses);
+
+    }
+
+    // Here we get a speed-up !
+    else if(mThreadAction == ENDCYCLE)
+    {
+
+      EndCycle(client);
+
+    }
+
+    WaitSlave(currentBarrier);
+  }
+
+  nThreads--;
+  if(mThreadBarrierNew != NULL)
+    GetLog()->Error()
+        << "(AgentControl) ERROR mThreadBarrierNew!=NULL!"
+        << " Agents connecting/disconnecting in same frame !\n";
+  mThreadBarrierNew = new boost::barrier(nThreads+1);
+  currentBarrier->wait();
+}
+
+void AgentControl::WaitMaster()
+{
+    if(mThreadBarrierNew != NULL)
+    {
+      boost::barrier *oldBarrier = mThreadBarrier;
+      mThreadBarrier = mThreadBarrierNew;
+      oldBarrier->wait();
+      mThreadBarrier->wait();
+      delete oldBarrier;
+      mThreadBarrierNew = NULL;
+    }
+    else
+      mThreadBarrier->wait();
+}
+
+void AgentControl::WaitSlave(boost::barrier* &currentBarrier)
+{
+    currentBarrier->wait();
+    if(currentBarrier != mThreadBarrier)
+    {
+      currentBarrier = mThreadBarrier;
+      currentBarrier->wait();
+    }
 }

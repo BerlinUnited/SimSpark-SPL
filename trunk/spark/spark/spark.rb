@@ -44,6 +44,7 @@ $agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
 $agentSyncMode = false
+$threadedAgentControl = true
 
 # (MonitorControl) constants
 #
@@ -311,6 +312,7 @@ def sparkSetupServer
     agentControl.setServerPort($agentPort)
     agentControl.setStep($agentStep)
     agentControl.setSyncMode($agentSyncMode)
+    agentControl.setMultiThreaded($threadedAgentControl)
   end
 
   if ($agentType == 'udp')
