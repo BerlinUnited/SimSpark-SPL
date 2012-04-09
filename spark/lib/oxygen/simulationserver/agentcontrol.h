@@ -23,6 +23,7 @@
 #include "netcontrol.h"
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <boost/thread/barrier.hpp>
 
 namespace oxygen
 {
@@ -56,11 +57,33 @@ public:
     /** sets the AgentControl's sync mode */
     void SetSyncMode(bool syncMode);
 
+    /** sets the AgentControl's sync mode */
+    void SetMultiThreaded(bool multiThreaded);
+
 protected:
     virtual void OnLink();
 
     /** returns if the agents are synced with the srever */
     bool AgentsAreSynced();
+
+    /** the thread function which does EndCycle for one agent in
+     *  multi-threaded mode. */
+    void AgentThread(const boost::shared_ptr<Client> &client);
+
+    /** forwards all pending messages from a specific agent to the
+        GameControlServer */
+    void StartCycle(const boost::shared_ptr<Client> &client,
+                    boost::shared_ptr<NetBuffer> &netBuff);
+
+    /** generates sense updates for a specific agent */
+    void EndCycle(const boost::shared_ptr<Client> &client);
+
+    /** waits for all agent threads to catch up */
+    void WaitMaster();
+
+    /** called in an agent thread to wait for the master thread to signal
+     * a new task */
+    void WaitSlave(boost::barrier* &currentBarrier);
 
 protected:
     /** cached reference to the GameControlServer */
@@ -75,6 +98,20 @@ protected:
      * proceed to the next cycle
      */
     bool mSyncMode;
+
+    /** indicates if the AgentControl runs in multi-threads */
+    bool mMultiThreads;
+
+    /** barrier object for synchronizing threads in multi-threaded mode */
+    boost::barrier *mThreadBarrier;
+    boost::barrier *mThreadBarrierNew;
+
+    /** boost thread group to create a new thread when an agent connects  */
+    boost::thread_group mThreadGroup;
+    int nThreads;
+
+    /** indicates what should happen in the agent thread right now */
+    enum { STARTCYCLE, SENSEAGENT, ENDCYCLE } mThreadAction;
 };
 
 DECLARE_CLASS(AgentControl);
