@@ -305,6 +305,8 @@ protected:
     bool mAutomaticQuit;
     /** flag if the side of the teams should be changed in the second half*/
     bool mChangeSidesInSecondHalf;
+    /** time to wait until we kick off automatically */
+    float mAutoKickOffTimeOrigin;
 
     //FCP 2010 - New Parameters (added by FCPortugal for Singapure 2010)
     /** max time player may be sitted or laying down before being repositioned */
