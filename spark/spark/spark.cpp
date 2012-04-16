@@ -100,7 +100,7 @@ bool
 Spark::Init(int argc, char** argv)
 {
     // See if user gave path prefix for init scripts
-    string relPathPrefix = "../..";
+    string relPathPrefix = "";
     for (int i = 1; i < argc; ++i)
     {
         if (strcmp(argv[i], "--init-script-prefix") == 0)
@@ -120,7 +120,7 @@ Spark::Init(int argc, char** argv)
         (
          "spark.rb",
          "lib/spark",
-         ScriptServer::IS_COMMON
+         ScriptServer::IS_USERLOCAL
          );
 
     UpdateCached();

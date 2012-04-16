@@ -1,3 +1,13 @@
+2012-04-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* spark/spark.cpp (Spark::Init): 
+	- set default relpath to empty string, since "../../" is not a usable 
+	  default value (doesn't work in the current project's directory structure)
+	  and also to prevent "script not found" error messages
+	
+	* lib/zeitgeist/scriptserver/scriptserver.cpp (ScriptServer::RunInitScript): 
+	- only check mRelPathPrefix if not empty
+
 2012-04-10  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* lib/oxygen/simulationserver/agentcontrol.h: 
