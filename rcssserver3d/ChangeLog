@@ -1,3 +1,9 @@
+2012-04-15  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp 
+	(TrainerCommandParser::ParsePlayerCommand):
+	- fixed a small bug in parsing move paramter (Thanks to Andreas Seekircher)  
+
 2012-04-10  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
