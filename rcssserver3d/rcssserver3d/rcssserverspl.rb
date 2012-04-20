@@ -71,7 +71,7 @@ sparkLogErrorToCerr()
 
 # source soccersim.rb to run the soccer simulation
 #run "soccersim.rb"
-run "naosoccersim.rb"
+run "naosoccerspl.rb"
 
 # setup the integrated agent
 #sparkSetupTrain()

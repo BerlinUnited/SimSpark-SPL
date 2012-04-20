@@ -28,6 +28,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
 ########### install files ###############
 
 install(FILES  rcssserver3d.rb soccersim.rb naosoccersim.rb 
+  rcssserverspl.rb naosoccerspl.rb
         internalsoccermonitor.rb internalsoccerbindings.rb
         DESTINATION ${DATADIR}/${CMAKE_PROJECT_NAME})
 
