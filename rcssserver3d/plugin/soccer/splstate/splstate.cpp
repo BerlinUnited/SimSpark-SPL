@@ -18,49 +18,40 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef SPLRULE_H
-#define SPLRULE_H
+#include "splstate.h"
+#include <zeitgeist/logserver/logserver.h>
+#include <soccerbase/soccerbase.h>
+#include <agentstate/agentstate.h>
+#include <salt/random.h>
 
-#include <soccerruleaspect/soccerruleaspect.h>
-#include <soccertypes.h>
-#include <ballstateaspect/ballstateaspect.h>
-#include <splstate/splstate.h>
+using namespace oxygen;
+using namespace boost;
+using namespace std;
+using namespace salt;
 
-class AgentState;
-
-namespace salt
+SPLState::SPLState() : GameStateAspect()
 {
-    class AABB2;
+    mSPLState = Unknown;
 }
 
-namespace oxygen
+SPLState::~SPLState()
 {
-    class RigidBody;
-    class AgentAspect;
-    class Transform;
 }
 
-class SPLRule : public SoccerRuleAspect
+void SPLState::Update(float deltaTime)
 {
-public:
-    SPLRule();
-    virtual ~SPLRule();
+    UpdateTime(deltaTime);
+}
 
-    /** called during the update of the GameControlServer to allow the
-        ControlAspect to perform any necessary checks.
-    */
-    virtual void Update(float deltaTime);
+void SPLState::KickOff(TTeamIndex ti)
+{
+  if (mSPLState == Initial)
+  {
+    mSPLState = Ready;
+  }
+}
 
-    virtual void OnLink();
-
-    virtual void OnUnlink();
-
-protected:
-    /** reference to the GameStateAspect */
-    CachedPath<SPLState> mSPLState;
-};
-
-DECLARE_CLASS(SPLRule);
-
-
-#endif // SPLRULE_H
+string SPLState::GetPlayModeStr() const
+{
+  return SoccerBase::SPLState2Str(mSPLState);
+}

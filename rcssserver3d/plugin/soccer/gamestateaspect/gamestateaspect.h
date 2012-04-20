@@ -52,13 +52,15 @@ public:
     /** returns the current play mode */
     TPlayMode GetPlayMode() const;
 
+    virtual std::string GetPlayModeStr() const;
+
     /** sets the current play mode */
     void SetPlayMode(TPlayMode mode);
 
     /** set the current play mode randomly to PM_KickOff_Left or PM_KickOff_Right.
         \param ti Team which should do the kick off (if TI_NONE, then do a coin toss)
     */
-    void KickOff(TTeamIndex ti = TI_NONE);
+    virtual void KickOff(TTeamIndex ti = TI_NONE);
 
     /** returns the current game time */
     TTime GetTime() const;

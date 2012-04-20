@@ -613,6 +613,27 @@ SoccerBase::PlayMode2Str(const TPlayMode mode)
     };
 }
 
+std::string SoccerBase::SPLState2Str(const TSPLState state)
+{
+  switch (state)
+  {
+  case Initial:
+    return STR_SPL_STATE_INITIAL;
+  case Ready:
+    return STR_SPL_STATE_READY;
+  case Set:
+    return STR_SPL_STATE_SET;
+  case Playing:
+    return STR_SPL_STATE_PLAYING;
+  case Finished:
+    return STR_SPL_STATE_FINISHED;
+  case Penalized:
+    return STR_SPL_STATE_PENALIZED;
+  default:
+    return STR_SPL_STATE_UNKNOWN;
+  }
+}
+
 boost::shared_ptr<ControlAspect>
 SoccerBase::GetControlAspect(const zeitgeist::Leaf& base,const string& name)
 {

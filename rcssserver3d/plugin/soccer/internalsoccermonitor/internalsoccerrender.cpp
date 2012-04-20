@@ -161,7 +161,7 @@ void InternalSoccerRender::Render()
         ss_c << " (2nd half) ";
     }
 
-    ss_c << SoccerBase::PlayMode2Str(mGameState->GetPlayMode());
+    ss_c << mGameState->GetPlayModeStr();
     ss_c << " t=" << mGameState->GetTime() << " ";
 
     string nameright = mGameState->GetTeamName(TI_RIGHT);

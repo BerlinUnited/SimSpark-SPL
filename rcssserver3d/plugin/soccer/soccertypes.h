@@ -87,4 +87,23 @@ enum TGameHalf
     GH_SECOND = 2
 };
 
+enum TSPLState
+{
+  Initial,
+  Ready,
+  Set,
+  Playing,
+  Finished,
+  Penalized,
+  Unknown
+};
+
+#define STR_SPL_STATE_INITIAL "Initial"
+#define STR_SPL_STATE_READY "Ready"
+#define STR_SPL_STATE_SET "Set"
+#define STR_SPL_STATE_PLAYING "Playing"
+#define STR_SPL_STATE_FINISHED "Finished"
+#define STR_SPL_STATE_PENALIZED "Penalized"
+#define STR_SPL_STATE_UNKNOWN "Unknown"
+
 #endif // SOCCERTYPES_H

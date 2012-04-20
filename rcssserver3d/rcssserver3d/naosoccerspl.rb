@@ -104,9 +104,14 @@ end
 # setup the GameControlServer
 gameControlServer = get($serverPath+'gamecontrol')
 if (gameControlServer != nil)
-  gameControlServer.initControlAspect('GameStateAspect')
+  gameControlServer.initControlAspect('SPLState')
+  o = get('/sys/server/gamecontrol/SPLState') # hack the name
+  o.setName('GameStateAspect')
   gameControlServer.initControlAspect('BallStateAspect')
   gameControlServer.initControlAspect('SPLRule')
+  o = get('/sys/server/gamecontrol/SPLRule') # hack the name
+  o.setName('SoccerRuleAspect')
+
   obj = get('/sys/server/gamecontrol/GameStateAspect')
   if (obj != nil)
 	  obj.setTime(0)
