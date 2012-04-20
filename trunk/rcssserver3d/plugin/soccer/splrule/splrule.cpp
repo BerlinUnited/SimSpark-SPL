@@ -44,10 +44,29 @@ SPLRule::~SPLRule()
 {
 }
 
+void SPLRule::OnLink()
+{
+  SoccerRuleAspect::OnLink();
+
+  GetControlAspect(mSPLState, "GameStateAspect");
+
+  if (mSPLState.expired())
+      {
+          GetLog()->Error()
+                  << "(SoccerRuleAspect) ERROR: could not get SPLState\n";
+      }
+}
+
+void SPLRule::OnUnlink()
+{
+  SoccerRuleAspect::OnUnlink();
+  mSPLState.reset();
+}
+
 void SPLRule::Update(float /*deltaTime*/)
 {
     if (
-        (mGameState.get() == 0) ||
+        (mSPLState.get() == 0) ||
         (mBallState.get() == 0) ||
         (mBallBody.get() == 0)
         )
@@ -55,93 +74,25 @@ void SPLRule::Update(float /*deltaTime*/)
         return;
     }
 
-    CheckTime();
-
-    TPlayMode playMode = mGameState->GetPlayMode();
-
-    static bool updated = false;
-
-    mLastModeWasPlayOn = false;
-
-    switch (playMode)
+    TSPLState state = mSPLState->GetSPLState();
+    switch (state)
     {
-    case PM_BeforeKickOff:
-        // At the beginning of the match, we update the member variables
-        // with the values from the ruby script (once). At this point in time,
-        // the ruby script has definitely been processed.
-        if (! updated)
-        {
-            UpdateCachedInternal();
-            updated = true;
-        }
-        // Below is the check we do during before kick off mode.
-        UpdateBeforeKickOff();
-        break;
-
-    case PM_PlayOn:
-        UpdatePlayOn();
-        mLastModeWasPlayOn = true;
-        break;
-
-    case PM_KickOff_Left:
-        UpdateKickOff(TI_LEFT);
-        break;
-    case PM_KickOff_Right:
-        UpdateKickOff(TI_RIGHT);
-        break;
-
-    case PM_FREE_KICK_LEFT:
-        UpdateFreeKick(TI_LEFT);
-        break;
-    case PM_FREE_KICK_RIGHT:
-        UpdateFreeKick(TI_RIGHT);
-        break;
-
-    case PM_KickIn_Left:
-        UpdateKickIn(TI_LEFT);
-        break;
-    case PM_KickIn_Right:
-        UpdateKickIn(TI_RIGHT);
-        break;
-
-    case PM_GOAL_KICK_LEFT:
-        UpdateGoalKick(TI_LEFT);
-        break;
-    case PM_GOAL_KICK_RIGHT:
-        UpdateGoalKick(TI_RIGHT);
-        break;
-
-    case PM_CORNER_KICK_LEFT:
-        UpdateCornerKick(TI_LEFT);
-        break;
-
-    case PM_CORNER_KICK_RIGHT:
-        UpdateCornerKick(TI_RIGHT);
-        break;
-
-    case PM_Goal_Left:
-    case PM_Goal_Right:
-        UpdateGoal();
-        break;
-
-    case PM_OFFSIDE_LEFT:
-        UpdateOffside(TI_LEFT);
-        break;
-    case PM_OFFSIDE_RIGHT:
-        UpdateOffside(TI_RIGHT);
-        break;
-
-    case PM_GameOver:
-        UpdateGameOver();
-        break;
-
-    default:
-        GetLog()->Error()
-            << "ERROR: (SoccerRuleAspect) unknown play mode "
-            << playMode << "\n";
-        break;
+    case Unknown:
+      UpdateCachedInternal();
+      mSPLState->SetSPLState(Initial);
+      break;
+    case Initial:
+      // do nothing, until game starts
+      break;
+    case Ready:
+      break;
+    case Set:
+      break;
+    case Playing:
+      break;
+    case Finished:
+      break;
     }
 
-    // Simple Referee
-    AutomaticSimpleReferee(playMode);
+    //CheckTime();
 }

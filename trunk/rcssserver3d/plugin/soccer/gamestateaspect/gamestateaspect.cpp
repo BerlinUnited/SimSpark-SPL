@@ -79,6 +79,11 @@ GameStateAspect::GetPlayMode() const
     return mPlayMode;
 }
 
+string GameStateAspect::GetPlayModeStr() const
+{
+  return SoccerBase::PlayMode2Str(GetPlayMode());
+}
+
 void
 GameStateAspect::SetPlayMode(TPlayMode mode)
 {
@@ -95,7 +100,6 @@ GameStateAspect::SetPlayMode(TPlayMode mode)
     mLeadTime = 0.0;
     mFupTime = 0.0;
 }
-
 
 // let the monitor handle who kicks off in 2nd half.
 void

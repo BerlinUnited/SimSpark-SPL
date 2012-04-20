@@ -57,6 +57,8 @@
 #include "agentcollisionhandler/agentcollisionhandler.h"
 #include "rcs3dmonitor/rcs3dmonitor.h"
 #include "splrule/splrule.h"
+#include "splstate/splstate.h"
+#include "splstate/splstateitem.h"
 
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerControlAspect);
@@ -96,5 +98,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(AgentCollisionHandler);
         ZEITGEIST_EXPORT(RCS3DMonitor);
         ZEITGEIST_EXPORT(SPLRule);
+        ZEITGEIST_EXPORT(SPLState);
+        ZEITGEIST_EXPORT(SPLStateItem);
 ZEITGEIST_EXPORT_END()
 

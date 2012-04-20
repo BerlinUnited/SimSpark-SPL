@@ -49,6 +49,8 @@ set(soccer_LIB_HDRS
    agentcollisionhandler/agentcollisionhandler.h
    rcs3dmonitor/rcs3dmonitor.h
    splrule/splrule.h
+   splstate/splstateitem.h
+   splstate/splstate.h
 )
 
 set(soccer_LIB_SRCS
@@ -129,6 +131,10 @@ set(soccer_LIB_SRCS
    rcs3dmonitor/rcs3dmonitor_c.cpp
    splrule/splrule.cpp
    splrule/splrule_c.cpp
+   splstate/splstateitem.cpp
+   splstate/splstateitem_c.cpp
+   splstate/splstate.cpp
+   splstate/splstate_c.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${FREETYPE_INCLUDE_DIRS}

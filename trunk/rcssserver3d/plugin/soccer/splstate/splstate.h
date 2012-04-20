@@ -18,49 +18,37 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef SPLRULE_H
-#define SPLRULE_H
+#ifndef SPL_STATE_H
+#define SPL_STATE_H
 
-#include <soccerruleaspect/soccerruleaspect.h>
-#include <soccertypes.h>
-#include <ballstateaspect/ballstateaspect.h>
-#include <splstate/splstate.h>
+#include <gamestateaspect/gamestateaspect.h>
 
-class AgentState;
-
-namespace salt
-{
-    class AABB2;
-}
-
-namespace oxygen
-{
-    class RigidBody;
-    class AgentAspect;
-    class Transform;
-}
-
-class SPLRule : public SoccerRuleAspect
+class SPLState : public GameStateAspect
 {
 public:
-    SPLRule();
-    virtual ~SPLRule();
+    SPLState();
+    virtual ~SPLState();
 
     /** called during the update of the GameControlServer to allow the
         ControlAspect to perform any necessary checks.
     */
     virtual void Update(float deltaTime);
 
-    virtual void OnLink();
+    /** sets the current SPL state */
+    void SetSPLState(TSPLState state) { mSPLState = state; }
 
-    virtual void OnUnlink();
+    /** returns the current spl state */
+    TSPLState GetSPLState() const { return mSPLState; }
+
+    virtual void KickOff(TTeamIndex ti = TI_NONE);
+
+    virtual std::string GetPlayModeStr() const;
 
 protected:
-    /** reference to the GameStateAspect */
-    CachedPath<SPLState> mSPLState;
+    /** state of SPL game */
+    TSPLState mSPLState;
 };
 
-DECLARE_CLASS(SPLRule);
+DECLARE_CLASS(SPLState);
 
-
-#endif // SPLRULE_H
+#endif // SPL_STATE_H
