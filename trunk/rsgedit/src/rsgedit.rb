@@ -2,11 +2,18 @@
 # rsgedit.rb
 #
 
+# toggle the real time mode
+$enableRealTimeMode = false
+
 def rsgeditResetScene
   sparkSetupServer()
   sparkSetupInput('InputSystemWX')
   sparkSetupRendering('OpenGLSystemWX')
   sparkResetScene()
+
+  if ($enableRealTimeMode)
+    sparkSetupTimer()
+  end
 
   # setup common materials
   run "scripts/materials.rb"
@@ -21,11 +28,11 @@ def rsgeditResetScene
   # let spark create a default camera
   sparkAddFPSCamera(
 		    $scenePath+'camera', 
-		    x = -5, 
-		    y = -40, 
-		    z = 15,
+		    x = 0, 
+		    y = -4, 
+		    z = 0.6,
 		    maxSpeed = 15.0,
-		    accel = 400.0,
+		    accel = 40.0,
 		    drag = 4,
 		    addCollider = false
 		    )

@@ -46,5 +46,5 @@ RandomServer::Seed(salt::RandomEngine::result_type seed)
 #endif
         }
 
-    salt::RandomEngine::instance(seed);
+    salt::RandomEngine::instance().seed(seed);
 }

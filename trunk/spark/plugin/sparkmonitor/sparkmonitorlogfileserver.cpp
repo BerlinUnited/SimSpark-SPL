@@ -42,12 +42,13 @@ SparkMonitorLogFileServer::SparkMonitorLogFileServer() : SimControlNode()
 {
     mPause = false;
     mForwardStep = false;
-    mStepDelay = 0;
     mBackwardPlayback = false;
+    mSexpMemory = init_sexp_memory();
 }
 
 SparkMonitorLogFileServer::~SparkMonitorLogFileServer()
 {
+    destroy_sexp_memory(mSexpMemory);
 }
 
 void SparkMonitorLogFileServer::OnLink()
@@ -110,7 +111,6 @@ void SparkMonitorLogFileServer::DoneSimulation()
 
 void SparkMonitorLogFileServer::StartCycle()
 {
-
     if (mPause && !mForwardStep)
         {
             return;
@@ -136,12 +136,6 @@ void SparkMonitorLogFileServer::StartCycle()
         {
             ParseMessage(msg);
         }
-    
-#ifdef WIN32
-    Sleep(mStepDelay / 1000);
-#else
-    usleep(mStepDelay);
-#endif
 
     mForwardStep = false;
 }
@@ -225,8 +219,9 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
         {
             return;
         }
- 
+
     mActiveScene = mSceneServer->GetActiveScene();
+    mActiveScene->UpdateCache();
 
     if (mActiveScene.get() == 0)
         {
@@ -255,12 +250,12 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
 
     char* msgBuf        = const_cast<char*>(msg.c_str());
     pcont_t* pcont      = init_continuation(msgBuf);
-    sexp_t* sexp_custom = iparse_sexp(msgBuf,msg.size(),pcont);
+    sexp_t* sexp_custom = iparse_sexp(mSexpMemory, msgBuf, msg.size(), pcont);
 
     if (sexp_custom == 0)
         {
-            destroy_sexp(sexp_custom);
-            destroy_continuation(pcont);
+            destroy_sexp(mSexpMemory, sexp_custom);
+            destroy_continuation(mSexpMemory, pcont);
             return;
         }
 
@@ -269,9 +264,10 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
     mSceneImporter->ParseScene(string(pcont->lastPos),
                                mManagedScene,
                                boost::shared_ptr<ParameterList>());
+    mActiveScene->SetModified(true);
 
-    destroy_sexp(sexp_custom);
-    destroy_continuation(pcont);
+    destroy_sexp(mSexpMemory, sexp_custom);
+    destroy_continuation(mSexpMemory, pcont);
 }
 
 void

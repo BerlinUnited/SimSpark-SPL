@@ -28,7 +28,7 @@
 class SimSpark : public spark::Spark
 {
 public:
-    SimSpark(const std::string& relPathPrefix);
+    SimSpark();
     ~SimSpark();
 
     /** called once after Spark finished it's init */

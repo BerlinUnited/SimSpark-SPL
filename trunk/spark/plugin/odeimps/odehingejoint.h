@@ -38,6 +38,7 @@ public:
     salt::Vector3f GetAxis(long jointID);
     float GetAngle(long jointID) const;
     float GetAngleRate(long jointID) const;
+    float GetTorque(long jointID) const;
 };
 
 DECLARE_CLASS(HingeJointImp);

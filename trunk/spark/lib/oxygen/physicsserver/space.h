@@ -105,11 +105,6 @@ protected:
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal();
 
-    /** destroys the bodies managed by all Body objects that are
-        registered to this Space
-    */
-    void DestroySpaceObjects();
-
     //
     // Members
     //

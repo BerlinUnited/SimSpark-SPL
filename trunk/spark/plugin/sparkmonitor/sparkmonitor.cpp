@@ -91,7 +91,7 @@ void SparkMonitor::ParseMonitorMessage(const std::string& data)
         }
 }
 
-string SparkMonitor::GetMonitorInfo(const PredicateList& pList)
+string SparkMonitor::GetMonitorInfomation(const PredicateList& pList)
 {
     stringstream ss;
     mFullState = false;
@@ -415,17 +415,13 @@ void SparkMonitor::DescribeScene(stringstream& ss, boost::shared_ptr<BaseNode> n
 {
     bool closeParen = DescribeNode(ss, node);
 
-    for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
+    TLeafList baseNodes = node->GetBaseNodeChildren();
+    for (TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
         {
             boost::shared_ptr<BaseNode> baseNode = shared_dynamic_cast<BaseNode>(*i);
-            if (baseNode.get() == 0)
-                {
-                    continue;
-                }
-
             DescribeScene(ss,baseNode);
         }
-
+        
     if (closeParen)
         {
             ss << ")";

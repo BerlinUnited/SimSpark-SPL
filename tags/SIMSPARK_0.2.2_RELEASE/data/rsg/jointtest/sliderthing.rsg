@@ -1,0 +1,36 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+ 
+ (nd Transform
+       (setName top)
+       (setLocalPos 0 0 6)
+       (importScene rsg/boxspheres/sphere.rsg 1 1 matRed)
+       )
+
+ (nd Transform
+       (setName mid)
+       (setLocalPos 0 0 4)
+       (importScene rsg/boxspheres/box.rsg 2 1 2 2 matYellow)
+       )
+
+ (nd Transform
+       (setName bottom)
+       (setLocalPos 0 0 0)
+       (importScene rsg/boxspheres/sphere.rsg 1 1 matGreen)
+       )
+
+ (nd SliderJoint
+       (attach ../top/sphereBody ../mid/boxBody)
+       (setLowStopPos 0 1)
+       (setHighStopPos 0 1.5)
+       )
+
+ (nd SliderJoint
+       (attach ../bottom/sphereBody ../mid/boxBody)
+       (setLowStopPos 0 1)
+       (setHighStopPos 0 1.5)
+       )
+
+)

@@ -8,7 +8,7 @@
 
 IF (NOT ODE_FOUND)
 
-  FIND_PROGRAM(ODE_CONFIG ode-config)
+  FIND_PROGRAM(ODE_CONFIG NAMES ${ODE_CONFIG_EXEC} ode-config)
   IF(ODE_CONFIG)
       # Use the newer EXECUTE_PROCESS command if it is available.
       IF(COMMAND EXECUTE_PROCESS)
@@ -18,9 +18,29 @@ IF (NOT ODE_FOUND)
           OUTPUT_STRIP_TRAILING_WHITESPACE
           RESULT_VARIABLE ODE_CONFIG_RESULT
           )
+        EXECUTE_PROCESS(
+          COMMAND ${ODE_CONFIG} --prefix
+          OUTPUT_VARIABLE ODE_CONFIG_PREFIX
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          RESULT_VARIABLE ODE_CONFIG_RESULT
+          )
+        EXECUTE_PROCESS(
+          COMMAND ${ODE_CONFIG} --libs
+          OUTPUT_VARIABLE ODE_CONFIG_LIBS
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          RESULT_VARIABLE ODE_CONFIG_RESULT
+          )
       ELSE(COMMAND EXECUTE_PROCESS)
         EXEC_PROGRAM(${ODE_CONFIG} ARGS "--cflags"
           OUTPUT_VARIABLE ODE_CONFIG_CFLAGS
+          RETURN_VALUE ODE_CONFIG_RESULT
+          )
+        EXEC_PROGRAM(${ODE_CONFIG} ARGS "--prefix"
+          OUTPUT_VARIABLE ODE_CONFIG_PREFIX
+          RETURN_VALUE ODE_CONFIG_RESULT
+          )
+        EXEC_PROGRAM(${ODE_CONFIG} ARGS "--libs"
+          OUTPUT_VARIABLE ODE_CONFIG_LIBS
           RETURN_VALUE ODE_CONFIG_RESULT
           )
       ENDIF(COMMAND EXECUTE_PROCESS)
@@ -38,12 +58,29 @@ IF (NOT ODE_FOUND)
             SET(ODE_EXTRA_CFLAGS ${ODE_EXTRA_CFLAGS} "${flag}")
           ENDIF("${flag}" MATCHES "^-D")
         ENDFOREACH(flag)
-      ELSE("${ODE_CONFIG_RESULT}" MATCHES "^0$")
+        
+        SET(ODE_EXTRA_LDFLAGS ${ODE_CONFIG_LIBS})
+
+        # Convert the linker flags to a CMake list.
+        STRING(REGEX REPLACE " +" ";"
+          ODE_CONFIG_LIBS "${ODE_CONFIG_LIBS}")
+    
+        # Look for -l options.
+        FOREACH(flag ${ODE_CONFIG_LIBS})
+          IF("${flag}" MATCHES "^-l.*ode.*")
+            STRING(REGEX REPLACE "^-l" ""
+               ODE_LIB_NAME "${flag}")
+           ENDIF("${flag}" MATCHES "^-l.*ode.*")
+        ENDFOREACH(flag)
+
+       ELSE("${ODE_CONFIG_RESULT}" MATCHES "^0$")
         MESSAGE("Error running ${ODE_CONFIG}: [${ODE_CONFIG_RESULT}]")
       ENDIF("${ODE_CONFIG_RESULT}" MATCHES "^0$")
+
   ENDIF(ODE_CONFIG)
   
   FIND_PATH(ODE_INCLUDE_DIR ode/ode.h
+    ${ODE_CONFIG_PREFIX}/include
     /usr/include
     /usr/local/include
     $ENV{ODE_HOME}/include
@@ -52,10 +89,12 @@ IF (NOT ODE_FOUND)
     "C:/Program Files/ode/include"
     "C:/Program Files (x86)/ode/include"
     C:/ode/include
+    NO_DEFAULT_PATH
   )
   FIND_LIBRARY(ODE_LIBRARY
-    NAMES ode ode_double ode_single
+    NAMES ${ODE_LIB_NAME} ode ode_double ode_single
     PATHS
+    ${ODE_CONFIG_PREFIX}/lib
     /usr/lib
     /usr/lib64
     /usr/local/lib
@@ -68,15 +107,16 @@ IF (NOT ODE_FOUND)
       releaselib
       ReleaseDoubleDLL ReleaseDoubleLib 
       ReleaseSingleDLL ReleaseSingleLib
+    NO_DEFAULT_PATH
   )
 
-  IF (WIN32)
+  IF (WIN32 AND NOT ODE_CONFIG)
     IF("${ODE_LIBRARY}" MATCHES ".*double.*")
       SET(ODE_EXTRA_CFLAGS "-DdDOUBLE")
     ELSE("${ODE_LIBRARY}" MATCHES ".*double.*")
       SET(ODE_EXTRA_CFLAGS "-DdSINGLE")
     ENDIF("${ODE_LIBRARY}" MATCHES ".*double.*")
-  ENDIF (WIN32)
+  ENDIF (WIN32 AND NOT ODE_CONFIG)
 
   IF (ODE_EXTRA_CFLAGS)
     SET(ODE_CFLAGS ${ODE_EXTRA_CFLAGS} CACHE STRING "Additional ODE flags")
@@ -84,6 +124,13 @@ IF (NOT ODE_FOUND)
   ELSE (ODE_EXTRA_CFLAGS)
     SET(ODE_CFLAGS CACHE STRING "Additional ODE flags")
   ENDIF (ODE_EXTRA_CFLAGS)
+
+  IF (ODE_EXTRA_LDFLAGS)
+    SET(ODE_LDFLAGS ${ODE_EXTRA_LDFLAGS} CACHE STRING "Additional ODE linker flags")
+    MESSAGE(STATUS "Found additional linker flags for ODE: ${ODE_LDFLAGS}")
+  ELSE (ODE_EXTRA_LDFLAGS)
+    SET(ODE_CFLAGS CACHE STRING "Additional ODE linker flags")
+  ENDIF (ODE_EXTRA_LDFLAGS)
 
   IF(ODE_INCLUDE_DIR)
     MESSAGE(STATUS "Found ODE include dir: ${ODE_INCLUDE_DIR}")

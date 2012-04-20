@@ -1,0 +1,1 @@
+#define RSGEDIT_BUNDLE_PATH "${BUNDLE_PATH}"

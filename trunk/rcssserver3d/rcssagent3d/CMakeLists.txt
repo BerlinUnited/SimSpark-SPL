@@ -16,7 +16,7 @@ set(rcssagent3d_SRCS
 add_executable(rcssagent3d ${rcssagent3d_SRCS})
 
 if (WIN32)
- set(NET_LIBS WS2_32.lib)
+ set(NET_LIBS ws2_32.lib)
 endif (WIN32)
 
 target_link_libraries(rcssagent3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}

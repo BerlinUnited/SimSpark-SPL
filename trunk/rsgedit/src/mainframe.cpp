@@ -610,10 +610,8 @@ void mainframe::AdvanceSimulation(shared_ptr<SimulationServer>& sim, float tDelt
         }
 
     // go through the next simulation cycle
-    sim->AdvanceTime(tDeltaSec);
-
-    shared_ptr<SimControlNode> inputCtr;
-    sim->Cycle(inputCtr);
+	sim->SetSimStep(tDeltaSec);
+    sim->Cycle();
 
     // refresh the display
     RefreshProperties();
@@ -646,7 +644,6 @@ void mainframe::InitSimulation(shared_ptr<SimulationServer>& sim)
 
     sim->SetSimStep(SIM_SIMSTEP);
     sim->Init(0,0);
-    sim->SetAutoTimeMode(false);
 
     mLastFPSUpdate = 0.0;
 }

@@ -54,6 +54,9 @@ public:
     /** sets the monitor update interval in cycles */
     void SetMonitorInterval(int i);
 
+    /** Request that next update gives the full state */
+    void RequestFullState();
+    
 protected:
     virtual void OnLink();
 

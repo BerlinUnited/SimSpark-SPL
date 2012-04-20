@@ -45,9 +45,9 @@ using namespace boost;
 class SimSpark : public Spark
 {
 public:
-    SimSpark(const std::string& relPathPrefix) :
-        Spark(relPathPrefix),
-        mScriptPath("simspark.rb")
+    SimSpark() :
+        Spark(),
+        mScriptPath("rcssserver3d.rb")
     {};
 
     /** called once after Spark finished it's init */
@@ -69,7 +69,8 @@ private:
 void SimSpark::PrintGreeting()
 {
     GetLog()->Normal()
-        << "rcssserver3d (formerly simspark), a monolithic simulator 0.6.1\n"
+        << "rcssserver3d (formerly simspark), a monolithic simulator "
+            RCSS_VERSION"\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
         << "Universität Koblenz.\n"
         << "Copyright (C) 2004-2009, "
@@ -82,8 +83,11 @@ void SimSpark::PrintHelp()
     GetLog()->Normal()
         << "\nusage: rcssserver3d [options] [script]\n"
         << "\noptions:\n"
-        << " --help\t\t\t print this message.\n"
-        << " --script-path PATH\t set the script path (simspark.rb path).\n"
+        << " --help\t\t\t\t print this message.\n"
+        << " --script-path PATH\t\t set the script path (rcssserver3d.rb path).\n"
+        << " --init-script-prefix PATH\t path prefix for init scripts (spark.rb, oxygen.rb, etc.).\n"
+        << " --agent-port PORTNUM\t\t port for agents to connect to.\n"
+        << " --server-port PORTNUM\t\t port for monitors to connect to.\n"
         << "\n";
 }
 
@@ -91,7 +95,7 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 {
     for( int i = 1; i < argc; i++)
       {
-        if(strcmp( argv[1], "--help" ) == 0)
+        if(strcmp( argv[i], "--help" ) == 0)
         {
           PrintHelp();
           return false;
@@ -107,6 +111,29 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
                return false;
             }
         }
+        else if (strcmp(argv[i], "--agent-port") == 0)
+        {
+          i++;
+          if (i < argc)
+            GetScriptServer()->Eval(string("$agentPort = ") + argv[i]);
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
+        else if (strcmp(argv[i], "--server-port") == 0)
+        {
+          i++;
+          if (i < argc)
+            GetScriptServer()->Eval(string("$serverPort = ") + argv[i]);
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
+
       }
 
     return true;
@@ -140,7 +167,7 @@ bool SimSpark::InitApp(int argc, char** argv)
 int main(int argc, char** argv)
 {
     // the spark app framework instance
-    SimSpark spark("../../");
+    SimSpark spark;
 
     if (! spark.Init(argc, argv))
     {

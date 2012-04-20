@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
-set(PACKAGE_VERSION "0.6.4")
+set(PACKAGE_VERSION "0.6.5")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -10,7 +10,19 @@ check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
 check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
-set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ "C:/Program Files/SDL/" "C:/Program Files (x86)/SDL/" C:/SDL/)
+
+if (WIN32)
+  set(Boost_USE_STATIC_LIBS        ON)
+  set(Boost_USE_MULTITHREADED      ON)
+  set(Boost_USE_STATIC_RUNTIME    OFF)
+
+  # this must be added by cmake itself, but it is not
+  if ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared")
+  endif ("${CMAKE_CXX_COMPILER}" MATCHES "mingw")
+endif (WIN32)
+
+include(AdditionalSearchPaths)
 
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)
@@ -41,7 +53,7 @@ if (UNIX)
 endif (UNIX)
 
 if(WIN32)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS -DBOOST_ALL_DYN_LINK)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   include_directories(${CMAKE_SOURCE_DIR}/windows/include)
     if(MSVC)
       add_definitions(/Gm /Zi /GL)
@@ -105,6 +117,7 @@ set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
 
+set(CPACK_STRIP_FILES TRUE)	
 set(CPACK_PACKAGE_VENDOR "RoboCup Soccer Server 3D Maintenance Group")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "RoboCup Soccer Simulation Server 3D")

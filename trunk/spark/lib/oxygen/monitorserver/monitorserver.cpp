@@ -30,7 +30,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 
-MonitorServer::MonitorServer() : Node()
+MonitorServer::MonitorServer() : Node(), mDataCycle(0)
 {
 }
 
@@ -44,8 +44,8 @@ void MonitorServer::OnLink()
 
     if (mSimulationServer.expired())
     {
-        GetLog()->Error()
-            << "(MonitorServer) ERROR: SimulationServer not found.\n";
+        GetLog()->Warning()
+            << "(MonitorServer) WARNING: SimulationServer not found.\n";
     }
 }
 
@@ -193,7 +193,7 @@ string MonitorServer::GetMonitorData()
 
     PredicateList pList;
     CollectItemPredicates(false,pList);
-    mData = monitorSystem->GetMonitorInfo(pList);
+    mData = monitorSystem->GetMonitorInfomation(pList);
     mDataCycle = cycle;
     return mData;
 }

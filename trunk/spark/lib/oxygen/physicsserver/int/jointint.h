@@ -88,7 +88,7 @@ public:
         does not collect any feedback information.
      */
     virtual void EnableFeedback(bool enable, long jointID,
-                                boost::shared_ptr<GenericJointFeedback> feedback) = 0;
+                                boost::shared_ptr<GenericJointFeedback>& feedback) = 0;
 
     /** returns true if the joint is set to collect feedback
         information

@@ -87,6 +87,9 @@ void SpaceImp::DestroySpace(long contactGroup, long spaceID)
             dJointGroupDestroy(ODEContactGroup);
         }
 
+    // do not destroy geoms
+    dSpaceSetCleanup(SpaceImp, 0);
+
     // release the ODE space
     dSpaceDestroy(SpaceImp);
 }

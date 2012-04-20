@@ -60,7 +60,7 @@ public:
      * the MonitorServer. The monitor should transfer them to the
      * client if possible.
      */
-    virtual std::string GetMonitorInfo(const PredicateList& pList) = 0;
+    virtual std::string GetMonitorInfomation(const PredicateList& pList) = 0;
 
     /** If a monitor sends information to the world model, this
      * function is called to process it.

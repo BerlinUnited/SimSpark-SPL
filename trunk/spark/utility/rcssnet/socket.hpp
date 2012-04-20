@@ -31,7 +31,7 @@
 #include "addr.hpp"
 
 #ifdef HAVE_WINSOCK2_H
-#include "Winsock2.h"
+#include "winsock2.h"
 #endif
 
 namespace rcss

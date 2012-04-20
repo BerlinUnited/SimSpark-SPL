@@ -545,6 +545,21 @@ FUNCTION(Joint, setJointMaxSpeed2)
     return true;
 }
 
+FUNCTION(Joint,enableFeedback)
+{
+    bool inSet;
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in[0],inSet))
+        )
+        {
+            return false;
+        }
+
+    obj->EnableFeedback(inSet);
+    return true;
+}
+
 void CLASS(Joint)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/PhysicsObject);
@@ -579,5 +594,6 @@ void CLASS(Joint)::DefineClass()
     DEFINE_FUNCTION(getMaxMotorForce);
     DEFINE_FUNCTION(setJointMaxSpeed1);
     DEFINE_FUNCTION(setJointMaxSpeed2);
+    DEFINE_FUNCTION(enableFeedback);
 }
 
