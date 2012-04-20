@@ -80,6 +80,22 @@ FUNCTION(RestrictedVisionPerceptor,setSenseMyPos)
     return true;
 }
 
+FUNCTION(RestrictedVisionPerceptor,setSenseBallPos)
+{
+    bool inSenseBallPos;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inSenseBallPos))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSenseBallPos(inSenseBallPos);
+    return true;
+}
+
 FUNCTION(RestrictedVisionPerceptor,setStaticSenseAxis)
 {
     bool inStaticAxis;
@@ -172,6 +188,7 @@ void CLASS(RestrictedVisionPerceptor)::DefineClass()
     DEFINE_FUNCTION(setNoiseParams);
     DEFINE_FUNCTION(addNoise);
     DEFINE_FUNCTION(setSenseMyPos);
+    DEFINE_FUNCTION(setSenseBallPos);
     DEFINE_FUNCTION(setStaticSenseAxis);
     DEFINE_FUNCTION(setViewCones);
     DEFINE_FUNCTION(setPanRange);

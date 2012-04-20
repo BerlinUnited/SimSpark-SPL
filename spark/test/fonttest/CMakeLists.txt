@@ -6,7 +6,7 @@ set(fonttest_SRCS
 )
 
 include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS}
-    ${DevIL_INCLUDE_DIR})
+    ${IL_INCLUDE_DIR})
 
 add_executable(fonttest ${fonttest_SRCS})
 

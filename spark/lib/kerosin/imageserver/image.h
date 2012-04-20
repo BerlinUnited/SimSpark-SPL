@@ -35,7 +35,7 @@
 #include <sparkconfig.h>
 #endif
 #ifdef HAVE_IL_IL_H
-#include <IL/il.h>
+#include <il.h>
 #endif
 #include <kerosin/kerosin_defines.h>
 

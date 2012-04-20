@@ -253,6 +253,7 @@ void NetControl::AddClient(const Addr& from, boost::shared_ptr<Socket> socket)
         << endl;
 
     mClientId++;
+    mSendBuffers.resize(mClientId);
     ClientConnect(client);
 }
 
@@ -318,12 +319,33 @@ void NetControl::SendClientMessage(boost::shared_ptr<Client> client, const strin
             // udp client
             if (mSocket.get() != 0)
                 {
-                    rval = mSocket->send(msg.data(), msg.size(), client->addr);
+                    do
+                    {
+                        rval = mSocket->send(msg.data(), msg.size(),
+                            client->addr, rcss::net::Socket::DONT_CHECK);
+                    }
+                    while (rval == -1 && errno == EINTR);
+                    // don't retry unless an interrupt is received
                 }
         } else
             {
                 // tcp client
-                rval = socket->send(msg.data(), msg.size());
+                const string &sendMsg = mSendBuffers[client->id].empty() ? msg
+                        : mSendBuffers[client->id];
+                unsigned sent = 0;
+                do
+                {
+                    rval = socket->send(sendMsg.data() + sent,
+                        sendMsg.size() - sent, 0,
+                        rcss::net::Socket::DONT_CHECK);
+                    if ( rval > 0 )
+                        sent += rval;
+                }
+                while (sent < sendMsg.size() && (rval != -1 || errno == EINTR));
+                // try to send unless an EINTR error happens
+
+                mSendBuffers[client->id].assign(sendMsg.data() + sent,
+                    sendMsg.size() - sent);
             }
 
     if (rval < 0)

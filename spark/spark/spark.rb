@@ -10,7 +10,7 @@
 $scenePath = '/usr/scene/'
 $serverPath = '/sys/server/'
 
-# (Inputsystem)
+# (Input system)
 #
 
 # the default InputSystem used to read keyboard, mouse and timer input
@@ -19,8 +19,14 @@ $defaultInputSystem = 'InputSystemSDL'
 # the name of the default bundle that contains the default InputSystem
 $defaultInputSystemBundle = 'inputsdl'
 
-# if simulator should run in real time rather than simulation time
-$useRealTime = true
+# (Timer system)
+#
+
+# the default TimerSystem used to control the simulation timing
+$defaultTimerSystem = 'TimerSystemBoost'
+
+# the name of the default bundle that contains the default TimerSystem
+$defaultTimerSystemBundle = 'timersystemboost'
 
 # (OpenGL rendering)
 #
@@ -188,12 +194,14 @@ def sparkResetScene
 end
 
 def sparkSetupMonitor
-  print "(spark.rb) sparkSetupMonitor\n"
-
   # add the agent control node
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
     simulationServer.setMultiThreads(false)
+
+    # set auto speed adjust mode.
+    simulationServer.setAdjustSpeed(true)
+    simulationServer.setMaxStepsPerCyle(1)
   end
 
   monitorClient = sparkCreate('SparkMonitorClient', $serverPath+'simulation/SparkMonitorClient')
@@ -205,7 +213,8 @@ def sparkSetupMonitor
   else if ($monitorType == 'tcp')
 	 monitorClient.setClientTypeTCP()
        else
-	 print "(spark.rb) unknown monitor socket type "
+   print "(spark.rb) sparkSetupMonitor\n"
+	 print "(spark.rb) ERROR: unknown monitor socket type "
 	 print $monitorType
 	 print "\n"
        end
@@ -218,11 +227,15 @@ def sparkSetupMonitor
 end
 
 def sparkSetupMonitorLogPlayer
-  print "(spark.rb) sparkSetupMonitorLogPlayer\n"
+  #print "(spark.rb) sparkSetupMonitorLogPlayer\n"
 
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
     simulationServer.setMultiThreads(false)
+
+    # set auto speed adjust mode.
+    simulationServer.setAdjustSpeed(true)
+    simulationServer.setMaxStepsPerCyle(1)
 
     monitorClient = sparkCreate('SparkMonitorLogFileServer', $serverPath+'simulation/SparkMonitorLogFileServer')
 
@@ -241,7 +254,7 @@ end
 # simulation specific monitor processing
 #
 def sparkRegisterCustomMonitor(className)
-  print "(spark.rb) sparkRegisterCustomMonitor " + className + "\n"
+  #print "(spark.rb) sparkRegisterCustomMonitor " + className + "\n"
   sparkGetSimulationServer()
   sparkCreate(className, $serverPath+'simulation/SparkMonitorClient/'+className)
 end
@@ -251,7 +264,7 @@ end
 # application specific render logic
 #
 def sparkRegisterCustomRender(className)
-  print "(spark.rb) sparkRegisterCustomRender " + className + "\n"
+  #print "(spark.rb) sparkRegisterCustomRender " + className + "\n"
   sparkGetSimulationServer()
   sparkCreate(className, $serverPath+'simulation/RenderControl/'+className)
 end
@@ -261,7 +274,7 @@ end
 # application specific input processing
 #
 def sparkRegisterCustomInput(className)
-  print "(spark.rb) sparkRegisterCustomInput " + className + "\n"
+  #print "(spark.rb) sparkRegisterCustomInput " + className + "\n"
   sparkGetSimulationServer()
   sparkCreate(className, $serverPath+'simulation/InputControl/'+className)
 end
@@ -271,13 +284,12 @@ end
 # commands received from a monitor client
 #
 def sparkRegisterMonitorCmdParser(className)
-  print "(spark.rb) sparkRegisterMonitorCmdParser " + className + "\n"
+  #print "(spark.rb) sparkRegisterMonitorCmdParser " + className + "\n"
   sparkGetMonitorServer()
   sparkCreate(className, $serverPath+'monitor/SparkMonitor/'+className)
 end
 
 def sparkSetupServer
-  print "(spark.rb) sparkSetupServer\n"
 
   # add the agent control node
   simulationServer = sparkGetSimulationServer()
@@ -306,7 +318,8 @@ def sparkSetupServer
   else if ($agentType == 'tcp')
 	agentControl.setServerTypeTCP()
        else
-	 print "(spark.rb) unknown agent socket type "
+	 print "(spark.rb) sparkSetupServer\n"
+	 print "(spark.rb) ERROR: unknown agent socket type "
 	 print $agentType
 	 print "\n"
        end
@@ -321,7 +334,8 @@ def sparkSetupServer
   else if ($serverType == 'tcp')
 	 monitorControl.setServerTypeTCP()
        else
-	 print "(spark.rb) unknown monitor socket type "
+	 print "(spark.rb) sparkSetupServer\n"
+	 print "(spark.rb) ERROR: unknown monitor socket type "
 	 print $serverType
 	 print "\n"
        end
@@ -394,7 +408,7 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
     inputServer.init(inputSystem)
 
     # add devices
-    inputServer.createDevice('Timer')
+    #inputServer.createDevice('Timer')
     inputServer.createDevice('Keyboard')
     inputServer.createDevice('Mouse')
   end
@@ -407,16 +421,27 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
     # add the input control node
     simulationServer.initControlNode('kerosin/InputControl','InputControl')
   end
+end
 
-  # set timing mode (real time vs simulation time)
-  inputControl = get($serverPath+'simulation/InputControl')
-  if (inputControl != nil)
-    inputControl.setAdvanceTime($useRealTime)
+def sparkSetupTimer(timerSystem = $defaultTimerSystem)
+  print "(spark.rb) sparkSetupTimer\n"
+  print "(spark.rb) using TimerSystem '" + timerSystem + "'\n"
+
+  # setup the Boost timer system
+  if (timerSystem == $defaultTimerSystem)
+    importBundle($defaultTimerSystemBundle)
+  end
+
+  #
+  # register timer system to the simulation server
+  simulationServer = sparkGetSimulationServer()
+  if (simulationServer != nil)
+    simulationServer.initTimerSystem(timerSystem)
   end
 end
 
 def sparkSetupTrain()
-  print "(spark.rb) sparkSetupTrain\n"
+  #print "(spark.rb) sparkSetupTrain\n"
   #
   # register train control node to the simulation server
 
@@ -504,7 +529,7 @@ end
 
 # deregisters all output stream
 def sparkResetLogging()
-  print "(spark.rb) sparkResetLogging removing all log targets\n";
+  #print "(spark.rb) sparkResetLogging removing all log targets\n";
 
   logServer = get($serverPath+'log')
   if (logServer != nil)
@@ -513,9 +538,19 @@ def sparkResetLogging()
 end
 
 
+# logs all normal output to cout
+def sparkLogNormalToCout()
+  sparkEnableLog(':cout', 'eNormal')
+end
+
 # logs all error output to cerr
 def sparkLogErrorToCerr()
   sparkEnableLog(':cerr', 'eError')
+end
+
+# logs all warning output to cerr
+def sparkLogWarningToCerr()
+  sparkEnableLog(':cerr', 'eWarning')
 end
 
 # logs all debug output to cerr
@@ -552,12 +587,12 @@ end
 # setup spark
 #
 
-print "(spark.rb) setup\n"
+#print "(spark.rb) setup\n"
 
 #import the implementations of the desired physics engine
 #currently supported: odeimps (uses Open Dynamics Engine)
 importBundle 'odeimps'
-print "(spark.rb) using ODE, to change the physics engine go to line 559 in spark.rb\n"
+#print "(spark.rb) using ODE, to change the physics engine go to line 559 in spark.rb\n"
 
 #
 # set up logging

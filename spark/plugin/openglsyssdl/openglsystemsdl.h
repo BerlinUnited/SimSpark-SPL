@@ -47,6 +47,12 @@ public:
         OpenGLSystems that support double buffering
     */
     virtual void SwapBuffers();
+
+    //! return if the GL subsystem have received a quit event.
+    virtual bool WantsToQuit() const;
+
+private:
+    bool mWantsToQuit;
 };
 
 DECLARE_CLASS(OpenGLSystemSDL);

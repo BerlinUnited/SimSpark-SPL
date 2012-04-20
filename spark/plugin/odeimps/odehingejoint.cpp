@@ -86,3 +86,13 @@ float HingeJointImp::GetAngleRate(long jointID) const
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetHingeAngleRate(ODEJoint));
 }
+
+float HingeJointImp::GetTorque(long jointID) const
+{
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointFeedback* fb = dJointGetFeedback(ODEJoint);
+    if(fb)
+      return dLENGTH(fb->t1) + dLENGTH(fb->t2);
+    else
+      return 0;
+}

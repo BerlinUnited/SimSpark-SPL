@@ -19,8 +19,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include "rubywrapper.h" // might define STR2CSTR
 #include "gcvalue.h"
-#include "rubywrapper.h"
 #include <sstream>
 
 using namespace zeitgeist;

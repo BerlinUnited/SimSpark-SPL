@@ -47,7 +47,7 @@ typedef int socklen_t;
 #endif
 
 #ifdef HAVE_WINSOCK2_H
-#include "Winsock2.h"
+#include "winsock2.h"
 #endif
 
 #include "handler.hpp"

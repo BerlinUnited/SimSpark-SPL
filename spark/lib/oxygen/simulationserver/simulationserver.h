@@ -32,6 +32,7 @@
 namespace oxygen
 {
 class SimControlNode;
+class TimerSystem;
 
 class OXYGEN_API SimulationServer : public zeitgeist::Node
 {
@@ -57,7 +58,7 @@ public:
 
 public:
     SimulationServer();
-    ~SimulationServer();
+    virtual ~SimulationServer();
 
     /** exits the simulation on the next simulation step */
     static void Quit();
@@ -77,11 +78,6 @@ public:
     /** returns the simulation time step */
     virtual float GetSimStep();
 
-    /** increases the accumulated time since the last simulation step,
-        but does not step the simulation
-     */
-    virtual void AdvanceTime(float deltaTime);
-
     /** returns the accumulated time since the last simulation step
      */
     virtual float GetSumDeltaTime();
@@ -90,11 +86,15 @@ public:
         SimulationServer */
     bool InitControlNode(const std::string& className, const std::string& name);
 
+    /** creates a new TimerSystem of type \param className to be used as
+     * the simulator's internal timer */
+    bool InitTimerSystem(const std::string& className);
+
     /** sets the auto time mode of the SimulationServer. if set to
         true the SimulationServer automatically advances the
         simulation mSimStep time every cycle, this is the default
-        mode. Otherwise a registered ControlNode takes the
-        responsibility to do so (by calling AdvanceTime regularly)
+        mode. Otherwise a TimerSystem must provide SimulationServer with
+        timing features.
      */
     void SetAutoTimeMode(bool set);
 
@@ -114,8 +114,9 @@ public:
     /** init the runloop and all registered control nodes */
     virtual void Init(int argc = 0, char** argv = 0);
 
-    /** go through on cycle of the runloop, i.e. sense, act, step */
-    virtual void Cycle(boost::shared_ptr<SimControlNode> &inputCtr);
+    /** go through on cycle of the runloop (single threaded mode), i.e. sense,
+     * act, step */
+    virtual void Cycle();
 
     /** shutdown server and all registered control nodes */
     virtual void Done();
@@ -131,7 +132,7 @@ public:
     /** returns the cached GameControlServer reference */
     boost::shared_ptr<GameControlServer> GetGameControlServer();
 
-    /** returns thr cached SceneServer reference */
+    /** returns the cached SceneServer reference */
     boost::shared_ptr<SceneServer> GetSceneServer();
 
     /** returns the current simulation cycle */
@@ -151,6 +152,11 @@ public:
 
 protected:
     virtual void OnLink();
+
+    /** increases the accumulated time since the last simulation step,
+        but does not step the simulation
+     */
+    virtual void AdvanceTime(float deltaTime);
 
     /** advances the simulation mSumDeltaTime seconds. If mSimStep is
         nonzero this is done in discrete steps */
@@ -173,8 +179,13 @@ protected:
      *  multi-threaded mode. */
     void SimControlThread(boost::shared_ptr<SimControlNode> controlNode);
 
-    /** updates mSumDeltaTime after a step in descreet simulations */
+    /** updates mSumDeltaTime after a step in discreet simulations */
     void UpdateDeltaTimeAfterStep(float &deltaTime);
+
+    /** updates the accumulated time since last simulation step using the
+     * specified timing method: it might use simulator's own clock (if mAutoTime
+     * is true) or a TimerSystem provided using InitTimerSystem() */
+    void SyncTime();
 
 protected:
     /** the argc parameter passed to Run() */
@@ -230,6 +241,9 @@ protected:
 
     /** barrier object for synchronizing threads in multi-threaded mode */
     boost::barrier *mThreadBarrier;
+
+    /** the timer system to control the simulation */
+    boost::shared_ptr<TimerSystem> mTimerSystem;
 };
 
 DECLARE_CLASS(SimulationServer);

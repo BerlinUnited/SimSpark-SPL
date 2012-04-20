@@ -35,6 +35,7 @@ public:
 protected:
     void InsertAxisAngle(oxygen::Predicate& predicate);
     void InsertAxisRate(oxygen::Predicate& predicate);
+    void InsertAxisTorque(oxygen::Predicate& predicate);
 };
 
 DECLARE_CLASS(HingePerceptor);

@@ -52,7 +52,7 @@ public:
      * function is called to process it.
      * @param data data sent from monitor to monitorsystem via SPADES.
      */
-    void ParseMonitorMessage(const std::string& data);
+    virtual void ParseMonitorMessage(const std::string& data);
 
     /** This function will be called periodically to get information
      * about the current state of the world.
@@ -61,7 +61,7 @@ public:
      * the MonitorServer. The monitor should transfer them to the
      * client if possible.
      */
-    virtual std::string GetMonitorInfo(const oxygen::PredicateList& pList);
+    virtual std::string GetMonitorInfomation(const oxygen::PredicateList& pList);
 
     /** This function is called once for every MonitorSystem each time
      *  a new client connects. It should return any header/setup

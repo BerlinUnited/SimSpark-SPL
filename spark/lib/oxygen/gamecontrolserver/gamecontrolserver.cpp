@@ -155,12 +155,20 @@ GameControlServer::AgentConnect(int id)
     aspect->SetName(name.str());
 
     scene->AddChildReference(aspect);
+
     mAgentMap[id] = aspect;
 
+    bool ok = aspect->Init(mCreateEffector,id);
+    if (ok)
+    {
+      aspect->UpdateCache();
+      scene->UpdateCache(false);
+    }
+    
     // mark the scene as modified
     scene->SetModified(true);
 
-    return aspect->Init(mCreateEffector,id);
+    return ok;
 }
 
 bool GameControlServer::AgentDisappear(int id)
@@ -178,13 +186,12 @@ bool GameControlServer::AgentDisappear(int id)
     // remove the AgentAspect from the Scene and our map. The
     // AgentAspect does all the necessary cleanup
     boost::shared_ptr<Scene> scene = GetActiveScene();
+
     if (scene.get() != 0)
     {
         (*iter).second->UnlinkChildren();
         (*iter).second->Unlink();
 
-        // mark the scene as modified
-        scene->SetModified(true);
     } else
         {
             GetLog()->Error()
@@ -193,6 +200,9 @@ bool GameControlServer::AgentDisappear(int id)
         }
 
     mAgentMap.erase(id);
+
+    // mark the scene as modified
+    scene->SetModified(true);
 
     GetLog()->Debug() << "(GameControlServer) An agent disconnected (id: "
                       << id << ")\n";
@@ -257,9 +267,7 @@ GameControlServer::Parse(int id, const string& str) const
     // construct an ActionList using the registered effectors
     boost::shared_ptr<ActionObject::TList> actionList(new ActionObject::TList());
 
-    // update the map of effectors below the agentaspect
     boost::shared_ptr<AgentAspect> aspect = (*iter).second;
-    aspect->UpdateEffectorMap();
 
     for
         (

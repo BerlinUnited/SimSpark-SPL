@@ -1,6 +1,6 @@
 # File: UseLATEX.cmake
 # CMAKE commands to actually use the LaTeX compiler
-# Version: 1.7.0
+# Version: 1.7.2
 # Author: Kenneth Moreland (kmorel at sandia dot gov)
 #
 # Copyright 2004 Sandia Corporation.
@@ -49,6 +49,10 @@
 #               auxclean: Deletes <name>.aux.  This is sometimes necessary
 #                       if a LaTeX error occurs and writes a bad aux file.
 #
+#       The dvi target is added to the ALL.  That is, it will be the target
+#       built by default.  If the DEFAULT_PDF argument is given, then the
+#       pdf target will be the default instead of dvi.
+#
 #       If the argument MANGLE_TARGET_NAMES is given, then each of the
 #       target names above will be mangled with the <tex_file> name.  This
 #       is to make the targets unique if ADD_LATEX_DOCUMENT is called for
@@ -58,7 +62,14 @@
 #
 # History:
 #
-# 1.7.0 Added DEPENDS options (thanks to Theodore Papadopoulp).
+# 1.7.2.1 (By Hedayat) Do not add anything to default ALL target
+#
+# 1.7.2 Use ps2pdf to convert eps to pdf to get around the problem with
+#       ImageMagick dropping the bounding box (thanks to Lukasz Lis).
+#
+# 1.7.1 Fixed some dependency issues.
+#
+# 1.7.0 Added DEPENDS options (thanks to Theodore Papadopoulo).
 #
 # 1.6.1 Ported the makeglossaries command to CMake and embedded the port
 #       into UseLATEX.cmake.
@@ -71,16 +82,16 @@
 #       specify tex files without the .tex extension is removed.  The removed
 #       function is of dubious value anyway.
 #
-#	When copying input files, skip over any file that exists in the
-#	binary directory but does not exist in the source directory with the
-#	assumption that these files were added by some other mechanism.  I
-#	find this useful when creating large documents with multiple
-#	chapters that I want to build separately (for speed) as I work on
-#	them.  I use the same boilerplate as the starting point for all
-#	and just copy it with different configurations.  This was what the
-#	separate ADD_LATEX_DOCUMENT method was supposed to originally be for.
-#	Since its external use is pretty much deprecated, I removed that
-#	documentation.
+#       When copying input files, skip over any file that exists in the
+#       binary directory but does not exist in the source directory with the
+#       assumption that these files were added by some other mechanism.  I
+#       find this useful when creating large documents with multiple
+#       chapters that I want to build separately (for speed) as I work on
+#       them.  I use the same boilerplate as the starting point for all
+#       and just copy it with different configurations.  This was what the
+#       separate ADD_LATEX_DOCUMENT method was supposed to originally be for.
+#       Since its external use is pretty much deprecated, I removed that
+#       documentation.
 #
 # 1.4.1 Copy .sty files along with the other class and package files.
 #
@@ -375,6 +386,30 @@ MACRO(LATEX_GET_OUTPUT_PATH var)
   ENDIF (LATEX_OUTPUT_PATH)
 ENDMACRO(LATEX_GET_OUTPUT_PATH)
 
+MACRO(LATEX_ADD_CONVERT_COMMAND output_path input_path output_extension
+        input_extension flags)
+  SET (converter ${IMAGEMAGICK_CONVERT})
+  SET (convert_flags "")
+  # ImageMagick has broken eps to pdf conversion
+  # use ps2pdf instead
+  IF (${input_extension} STREQUAL ".eps" AND ${output_extension} STREQUAL ".pdf")
+    IF (PS2PDF_CONVERTER)
+      SET (converter ${PS2PDF_CONVERTER})
+      SET (convert_flags "-dEPSCrop ${flags}")
+    ELSE (PS2PDF_CONVERTER)
+      MESSAGE(SEND_ERROR "Using postscript files with pdflatex requires ps2pdf for conversion.")
+    ENDIF (PS2PDF_CONVERTER)
+  ELSE (${input_extension} STREQUAL ".eps" AND ${output_extension} STREQUAL ".pdf")
+    SET (convert_flags ${flags})
+  ENDIF (${input_extension} STREQUAL ".eps" AND ${output_extension} STREQUAL ".pdf")
+
+  ADD_CUSTOM_COMMAND(OUTPUT ${output_path}
+    COMMAND ${converter}
+      ARGS ${convert_flags} ${input_path} ${output_path}
+    DEPENDS ${input_path}
+    )
+ENDMACRO(LATEX_ADD_CONVERT_COMMAND)
+
 # Makes custom commands to convert a file to a particular type.
 MACRO(LATEX_CONVERT_IMAGE output_files input_file output_extension convert_flags
     output_extensions other_files)
@@ -389,12 +424,9 @@ MACRO(LATEX_CONVERT_IMAGE output_files input_file output_extension convert_flags
   LATEX_LIST_CONTAINS(is_type ${extension} ${output_extensions})
   IF (is_type)
     IF (convert_flags)
-      ADD_CUSTOM_COMMAND(OUTPUT ${output_dir}/${output_file}
-        COMMAND ${IMAGEMAGICK_CONVERT}
-        ARGS ${input_dir}/${input_file} ${convert_flags}
-          ${output_dir}/${output_file}
-        DEPENDS ${input_dir}/${input_file}
-        )
+      LATEX_ADD_CONVERT_COMMAND(${output_dir}/${output_file}
+        ${input_dir}/${input_file} ${output_extension} ${extension}
+        "${convert_flags}")
       SET(${output_files} ${${output_files}} ${output_dir}/${output_file})
     ELSE (convert_flags)
       # As a shortcut, we can just copy the file.
@@ -419,12 +451,9 @@ MACRO(LATEX_CONVERT_IMAGE output_files input_file output_extension convert_flags
 
     # If we still need to convert, do it.
     IF (do_convert)
-      ADD_CUSTOM_COMMAND(OUTPUT ${output_dir}/${output_file}
-        COMMAND ${IMAGEMAGICK_CONVERT}
-        ARGS ${input_dir}/${input_file} ${convert_flags}
-          ${output_dir}/${output_file}
-        DEPENDS ${input_dir}/${input_file}
-        )
+      LATEX_ADD_CONVERT_COMMAND(${output_dir}/${output_file}
+        ${input_dir}/${input_file} ${output_extension} ${extension}
+        "${convert_flags}")
       SET(${output_files} ${${output_files}} ${output_dir}/${output_file})
     ENDIF (do_convert)
   ENDIF (is_type)
@@ -493,20 +522,20 @@ MACRO(LATEX_COPY_INPUT_FILE file)
     LATEX_LIST_CONTAINS(use_config ${file} ${LATEX_CONFIGURE})
     IF (use_config)
       CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${file}
-	${output_dir}/${file}
-	@ONLY
-	)
+        ${output_dir}/${file}
+        @ONLY
+        )
       ADD_CUSTOM_COMMAND(OUTPUT ${output_dir}/${file}
-	COMMAND ${CMAKE_COMMAND}
-	ARGS ${CMAKE_BINARY_DIR}
-	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
-	)
+        COMMAND ${CMAKE_COMMAND}
+        ARGS ${CMAKE_BINARY_DIR}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
+        )
     ELSE (use_config)
       ADD_CUSTOM_COMMAND(OUTPUT ${output_dir}/${file}
-	COMMAND ${CMAKE_COMMAND}
-	ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${output_dir}/${file}
-	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
-	)
+        COMMAND ${CMAKE_COMMAND}
+        ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${output_dir}/${file}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
+        )
     ENDIF (use_config)
   ELSE (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${file})
     IF (EXISTS ${output_dir}/${file})
@@ -671,31 +700,45 @@ MACRO(ADD_LATEX_TARGETS)
     COMMAND ${CMAKE_COMMAND} -E chdir ${output_dir}
     ${PDFLATEX_COMPILER} ${PDFLATEX_COMPILER_FLAGS} ${LATEX_MAIN_INPUT})
 
+  # Add commands and targets for building dvi outputs.
+  ADD_CUSTOM_COMMAND(OUTPUT ${output_dir}/${LATEX_TARGET}.dvi
+    COMMAND ${make_dvi_command}
+    DEPENDS ${make_dvi_depends}
+    )
   IF (LATEX_DEFAULT_PDF)
-    ADD_CUSTOM_TARGET(${dvi_target} ${make_dvi_command}
-      DEPENDS ${make_dvi_depends})
+    ADD_CUSTOM_TARGET(${dvi_target}
+      DEPENDS ${output_dir}/${LATEX_TARGET}.dvi)
   ELSE (LATEX_DEFAULT_PDF)
-    ADD_CUSTOM_TARGET(${dvi_target} ALL ${make_dvi_command}
-      DEPENDS ${make_dvi_depends})
+    ADD_CUSTOM_TARGET(${dvi_target} 
+      DEPENDS ${output_dir}/${LATEX_TARGET}.dvi)
   ENDIF (LATEX_DEFAULT_PDF)
 
+  # Add commands and targets for building pdf outputs (with pdflatex).
   IF (PDFLATEX_COMPILER)
+    ADD_CUSTOM_COMMAND(OUTPUT ${output_dir}/${LATEX_TARGET}.pdf
+      COMMAND ${make_pdf_command}
+      DEPENDS ${make_pdf_depends}
+      )
     IF (LATEX_DEFAULT_PDF)
-      ADD_CUSTOM_TARGET(${pdf_target} ${make_pdf_command}
-        DEPENDS ${make_pdf_depends})
+      ADD_CUSTOM_TARGET(${pdf_target} 
+        DEPENDS ${output_dir}/${LATEX_TARGET}.pdf)
     ELSE (LATEX_DEFAULT_PDF)
-      ADD_CUSTOM_TARGET(${pdf_target} ${make_pdf_command}
-        DEPENDS ${make_pdf_depends})
+      ADD_CUSTOM_TARGET(${pdf_target}
+        DEPENDS ${output_dir}/${LATEX_TARGET}.pdf)
     ENDIF (LATEX_DEFAULT_PDF)
   ENDIF (PDFLATEX_COMPILER)
 
   IF (DVIPS_CONVERTER)
+    ADD_CUSTOM_COMMAND(OUTPUT ${output_dir}/${LATEX_TARGET}.ps
+      COMMAND ${CMAKE_COMMAND} -E chdir ${output_dir}
+        ${DVIPS_CONVERTER} ${DVIPS_CONVERTER_FLAGS} -o ${LATEX_TARGET}.ps ${LATEX_TARGET}.dvi
+      DEPENDS ${output_dir}/${LATEX_TARGET}.dvi)
     ADD_CUSTOM_TARGET(${ps_target}
-      ${CMAKE_COMMAND} -E chdir ${output_dir}
-      ${DVIPS_CONVERTER} ${DVIPS_CONVERTER_FLAGS} -o ${LATEX_TARGET}.ps ${LATEX_TARGET}.dvi
-      )
-    ADD_DEPENDENCIES(${ps_target} ${dvi_target})
+      DEPENDS ${output_dir}/${LATEX_TARGET}.ps)
     IF (PS2PDF_CONVERTER)
+      # Since both the pdf and safepdf targets have the same output, we
+      # cannot properly do the dependencies for both.  When selecting safepdf,
+      # simply force a recompile every time.
       ADD_CUSTOM_TARGET(${safepdf_target}
         ${CMAKE_COMMAND} -E chdir ${output_dir}
         ${PS2PDF_CONVERTER} ${PS2PDF_CONVERTER_FLAGS} ${LATEX_TARGET}.ps ${LATEX_TARGET}.pdf

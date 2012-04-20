@@ -5,3 +5,5 @@
 #cmakedefine HAVE_ARPA_INET_H 1
 
 #define RCSS_BUNDLE_PATH "${BUNDLE_PATH}"
+
+#define RCSS_VERSION "${PACKAGE_VERSION}"

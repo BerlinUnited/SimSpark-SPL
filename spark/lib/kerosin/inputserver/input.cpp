@@ -24,7 +24,7 @@
 using namespace kerosin;
 
 Input::Input(EType t, TInputCode c, int i)
-    : mType(t),mCode(c),mId(i)
+    : mType(t),mCode(c),mId(i),mModState(0)
 {
 }
 

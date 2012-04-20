@@ -120,19 +120,48 @@ void World::DestroyPhysicsObject()
 
     recurseLock = true;
 
-    boost::shared_ptr<World> space = GetWorld();
-    if (space.get() != 0)
-        {
-            space->DestroyPhysicsObject();
-        }
-
     if (mWorldID == 0)
         {
             return;
         }
 
+    // first destory everthing in the world
+    DestroyWorldObjects();
+
+    // then destory the world
+    // otherwise, things in the world will destroied without notifying us
     mWorldImp->DestroyWorld(mWorldID);
 
     mWorldID = 0;
     recurseLock = false;
+}
+
+
+void World::DestroyWorldObjects()
+{
+  boost::shared_ptr<Scene> scene = GetScene();
+
+  if (scene.get() == 0)
+  {
+    return;
+  }
+
+  TLeafList objects;
+  const bool recursive = true;
+  scene->ListChildrenSupportingClass<PhysicsObject>(objects, recursive);
+
+  boost::shared_ptr<World> self = shared_static_cast<World>(GetSelf().lock());
+
+  for (TLeafList::iterator iter = objects.begin(); iter != objects.end(); ++iter)
+  {
+    boost::shared_ptr<PhysicsObject> object = shared_static_cast<PhysicsObject>(*iter);
+    if (object == self)
+    {
+      continue;
+    }
+
+    // destroy everthing in the world
+    // assume there is only ONE world
+    object->DestroyPhysicsObject();
+  }
 }

@@ -41,7 +41,7 @@ using namespace std;
 int SceneServer::mTransformMark = 0;
 
 SceneServer::SceneServer() : Node()
-{   
+{
 }
 
 SceneServer::~SceneServer()
@@ -95,6 +95,9 @@ void SceneServer::UpdateCache()
         }
         
     mPhysicsServer->UpdateCache(mActiveScene.get());
+    
+    if (mActiveScene->GetLastCacheUpdate() != mActiveScene->GetModifiedNum())
+      mActiveScene->UpdateCache();
 }
 
 void SceneServer::OnUnlink()
@@ -181,6 +184,7 @@ void SceneServer::PrePhysicsUpdate(float deltaTime)
         }
 
     UpdateCache();
+
     ++mTransformMark;
 
     mActiveScene->PrePhysicsUpdate(deltaTime);
@@ -257,7 +261,7 @@ bool SceneServer::ImportScene(const string& fileName, boost::shared_ptr<BaseNode
 
             if (importer->ImportScene(file,root,parameter))
                 {
-                    GetLog()->Normal()
+                    GetLog()->Debug()
                         << "(SceneServer) imported scene file '"
                         << file << " with '"
                         << importer->GetName()
@@ -378,7 +382,7 @@ bool SceneServer::InitSceneImporter(const std::string& importerName)
     importer->SetName(importerName);
     AddChildReference(importer);
 
-    GetLog()->Normal()
+    GetLog()->Debug()
         << "(SceneServer) SceneImporter '" << importerName << "' registered\n";
 
     return true;

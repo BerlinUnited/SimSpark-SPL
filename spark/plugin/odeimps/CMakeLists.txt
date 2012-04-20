@@ -106,7 +106,7 @@ set(odeimps_LIB_SRCS
 
 add_library(odeimps MODULE ${odeimps_LIB_SRCS})
 
-target_link_libraries(odeimps ${ODE_LIBRARY} ${spark_libs})
+target_link_libraries(odeimps ${ODE_LIBRARY} ${ODE_LDFLAGS} ${spark_libs})
 
 if (NOT APPLE)
    set_target_properties(odeimps PROPERTIES VERSION 0.0.0 SOVERSION 0)

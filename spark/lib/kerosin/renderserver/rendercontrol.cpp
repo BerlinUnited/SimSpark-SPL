@@ -21,6 +21,7 @@
 #include "customrender.h"
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
+#include <oxygen/simulationserver/simulationserver.h>
 
 using namespace kerosin;
 using namespace oxygen;
@@ -87,6 +88,8 @@ void RenderControl::EndCycle()
     // update the window (pumps event loop, etc..) and render the
     // current frame
     mOpenGLServer->Update();
+    if (mOpenGLServer->WantsToQuit())
+        GetSimulationServer()->Quit();
     mRenderServer->Render(true);
     RenderCustom();
     mOpenGLServer->SwapBuffers();

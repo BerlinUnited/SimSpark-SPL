@@ -121,12 +121,12 @@ int sexp_list_length(sexp_t *sx) {
 /**
  * Copy an s-expression.
  */
-sexp_t *copy_sexp(sexp_t *s) {
+sexp_t *copy_sexp(sexp_mem_t *smem, sexp_t *s) {
   sexp_t *snew;
 
   if (s == NULL) return NULL;
 
-  snew = sexp_t_allocate();
+  snew = sexp_t_allocate(smem);
   assert(snew != NULL);
 
   snew->ty = s->ty;
@@ -143,11 +143,11 @@ sexp_t *copy_sexp(sexp_t *s) {
     strcpy(snew->val,s->val);
     snew->list = NULL;
   } else {
-    snew->list = copy_sexp(s->list);
+    snew->list = copy_sexp(smem, s->list);
   }
 
   snew->line = s->line;
-  snew->next = copy_sexp(s->next);
+  snew->next = copy_sexp(smem, s->next);
 
   return snew;
 }
@@ -156,31 +156,31 @@ sexp_t *copy_sexp(sexp_t *s) {
  * Cons: Concatenate two s-expressions together, without references to the
  * originals.
  */
-sexp_t *cons_sexp(sexp_t *r, sexp_t *l) {
+sexp_t *cons_sexp(sexp_mem_t *smem, sexp_t *r, sexp_t *l) {
   sexp_t *cr, *cl, *t;
 
-  cr = copy_sexp(r);
+  cr = copy_sexp(smem, r);
   if (cr->ty == SEXP_VALUE) {
     fprintf(stderr,"Cannot cons non-lists.\n");
-    destroy_sexp(cr);
+    destroy_sexp(smem, cr);
     return NULL;
   } else {
     t = cr->list;
     while (t != NULL && t->next != NULL) t = t->next;
   }
 
-  cl = copy_sexp(l);
+  cl = copy_sexp(smem, l);
 
   if (cl->ty == SEXP_LIST) {
     if (t != NULL && cl != NULL) {
       t->next = cl->list;
       /* free(cl); */ /* memory leak fix: SMJ, 4/24/2002 */
-      sexp_t_deallocate(cl);
+      sexp_t_deallocate(smem, cl);
     }
   } else {
     fprintf(stderr,"Cannot cons non-lists.\n");
-    destroy_sexp(cr);
-    destroy_sexp(cl);
+    destroy_sexp(smem, cr);
+    destroy_sexp(smem, cl);
     return NULL;
   }
 
@@ -190,7 +190,7 @@ sexp_t *cons_sexp(sexp_t *r, sexp_t *l) {
 /**
  * car: similar to head, except this is a copy and not just a reference.
  */
-sexp_t *car_sexp(sexp_t *s) {
+sexp_t *car_sexp(sexp_mem_t *smem, sexp_t *s) {
     sexp_t *cr, *ocr;
 
     /* really dumb - calling on null */
@@ -206,14 +206,14 @@ sexp_t *car_sexp(sexp_t *s) {
     }
 
         /*  ocr = (sexp_t *)malloc(sizeof(sexp_t));*/
-        ocr = sexp_t_allocate();
+        ocr = sexp_t_allocate(smem);
     assert(ocr != NULL);
     ocr->ty = SEXP_LIST;
     ocr->next = NULL;
 
     /* allocate the new sexp_t */
     /* cr = (sexp_t *)malloc(sizeof(sexp_t)); */
-        cr = sexp_t_allocate();
+        cr = sexp_t_allocate(smem);
     assert(cr != NULL);
     ocr->list = cr;
 
@@ -226,7 +226,7 @@ sexp_t *car_sexp(sexp_t *s) {
     } else {
         cr->ty = SEXP_LIST;
         cr->next = NULL;
-        cr->list = copy_sexp(s->list->list);
+        cr->list = copy_sexp(smem, s->list->list);
     }
 
     return ocr;
@@ -235,7 +235,7 @@ sexp_t *car_sexp(sexp_t *s) {
 /**
  * cdr: similar to tail, except this is a copy and not just a reference.
  */
-sexp_t *cdr_sexp(sexp_t *s) {
+sexp_t *cdr_sexp(sexp_mem_t *smem, sexp_t *s) {
     sexp_t *cd;
 
     /* really dumb */
@@ -251,12 +251,12 @@ sexp_t *cdr_sexp(sexp_t *s) {
     }
 
     /* cd = (sexp_t *)malloc(sizeof(sexp_t)); */
-        cd = sexp_t_allocate();
+        cd = sexp_t_allocate(smem);
     assert(cd != NULL);
 
     cd->ty = SEXP_LIST;
     cd->next = NULL;
-    cd->list = copy_sexp(s->list->next);
+    cd->list = copy_sexp(smem, s->list->next);
     cd->line = s->line;
     return cd;
 }

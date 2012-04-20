@@ -1,3 +1,160 @@
+2012-02-14  Sander van Dijk  <sgvandik@gmail.com>
+
+	* rcssserver3d/main.cpp (Spark): 
+	* rcssmonitor3d/main.cpp (Spark):
+	- add --init-script-prefix option to specify location of spark.rb,
+	  zeitgeist.rb, etc
+
+2011-06-06  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	 (SoccerRuleAspect::AnalyseTouchGroups):
+	- fixed a horrible mistake of mine which prevented from touch group rules
+	  to be applied at all 
+
+2011-05-14  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp 
+	(SoccerRuleAspect::CheckGoal):
+	- fixed a small bug in goal counting which cause this function to always
+	  count a goal when ball moved out of the field 
+
+2011-05-02  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- strip files when creating a binary package
+
+2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* windows/uninstall_extra.nsi: 
+	* windows/install_extra.nsi: 
+	- install an rcsoccersim3d script under Windows
+	- fixed path commands to not include = sign
+	
+	* cmake/FindODE.cmake: 
+	- don't overwrite config options obtained from ode-config if available 
+	
+	* rcssagent3d/CMakeLists.txt: 
+	- use lowercase ws2_32 to be compatible with mingw32
+	
+	* CMakeLists.txt: 
+	- include AdditionalSearchPaths.cmake
+	- added -shared flag for mingw when linking modules
+	
+	* cmake/AdditionalSearchPaths.cmake: 
+	- sets up additional search paths under Windows to find dependencies in
+	  common directories and the ones documented on the wiki
+	
+	* cmake/FindFreetype.cmake: 
+	- removed; and additional search paths have been added to 
+	  AdditionalSearchPaths.cmake file
+
+2011-04-29  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- use static boost libraries under Windows
+	
+	* windows/install_extra.nsi: 
+	- adopt the script for the latest version of CMake and NSIS
+	
+	* rcssserver3d/CMakeLists.txt: 
+	- don't install Linux only files in Windows
+	
+	* cmake/FindBoost.cmake: 
+	- removed in favor of CMake's own version
+
+2011-04-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.5 to reflect removing an opponent from a touch group when 
+	  there are more opponents in the group than teammates
+	 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	(SoccerRuleAspect::CheckGoal):
+	- if goal recorder's cannot detect any goals, geometrically check to 
+	  make sure that no goal is actually happened. Thanks to Luis for starting
+	  the effort and Mahdi for the initial code for calculating where the ball
+	  crosses the goal geometrically. 
+	(SoccerRuleAspect::AnalyseTouchGroups): 
+	- reposition a player from a team with more players in a touch group. Thanks
+	  to Nexus3D (Mehdi?) for the initial patch. It intended to reposition the
+	  player who joined last even from the opponent team, but we don't have
+	  this info now so remove an unspecified player from the opponent if the
+	  last player is not going to be removed. 
+
+2011-03-28  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* rcssmonitor3d/rcssmonitor3d.rb: 
+	- only log error messages to output (a small cleanup for 0.6.5 release)
+
+2011-03-26  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.5 release
+
+2011-03-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* rcssserver3d/CMakeLists.txt: 
+	* rcssserver3d/main.cpp: 
+	* rcssserver3d/rcssserver3d.rb:
+	* doc/users/rcssmonitor3d.tex: 
+	- rename: simspark.rb -> rcssserver3d.rb 
+
+2011-03-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/CMakeLists.txt: 
+	* plugin/soccermonitor/CMakeLists.txt: 
+	- fixed to use CMake's own FindDevIL module
+	
+	* plugin/soccer/gamestateaspect/gamestateitem.cpp
+	  (GameStateItem::GetInitialPredicates): 
+	- do not try to send obsolete variables: AgentMass and AgentMaxSpeed 
+	
+	* rcssserver3d/naosoccersim.rb: 
+	- added MaxTouchGroupSize variable
+	- added a BorderSize variable to stop simulator from complaining for 
+	  missing variable
+	
+	* CMakeLists.txt: 
+	- updated PACKAGE_VERSION to 0.6.5 for the next release
+	
+	* rcssserver3d_config.h.cmake: 
+	- added a RCSS_VERSION constant to store rcssserver3d version
+	
+	* rcssserver3d/main.cpp (SimSpark::PrintGreeting): 
+	- use RCSS_VERSION instead of the hard coded version number
+	
+	* rcssserver3d/simspark.rb: 
+	* rcssmonitor3d/rcssmonitor3d.rb:
+	- use the new sparkSetupTimer()  
+
+2011-03-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE: 
+	- updated release information for the next release
+	
+	* data/rsg/agent/nao/naoneckhead.rsg: 
+	- enable sensing field lines by default
+
+2011-02-10  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* rcssserver3d/rcssserver3d/main.cpp
+	- set different agent and monitor ports with --agent-posrt and --server-port
+
+	* /trunk/rcssserver3d/data/textures/rcs-naofield.png
+	- new field texture
+
+2011-01-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* cmake/UseLATEX.cmake: 
+	- updated to version 1.7.2
+	
+	* plugin/soccermonitor/CMakeLists.txt: 
+	- link OpenGL libraries to fix MacOSX compile issue(Thanks to Giuliani)
+
 2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
 	* rcssserver3d/plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp
 	* rcssserver3d/plugin/soccer/trainercommandparser/trainercommandparser.cpp
@@ -48,7 +205,7 @@
 	* rcssserver3d/naosoccersim.rb: 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
-	- Added the simple referee patch from FCPortugal team (thanks to
+	- added the simple referee patch from FCPortugal team (thanks to
 	  Luis Paulo Reis) 
 
 2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
@@ -422,5 +579,5 @@
 	* plugin/soccer/pantilteffector/pantilteffector.cpp: 
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
 	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
-	- Replaced make_shared() with .lock() function call.(fixed compilation
+	- replaced make_shared() with .lock() function call.(fixed compilation
 	error with recent boost versions.) 

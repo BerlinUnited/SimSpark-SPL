@@ -16,4 +16,8 @@
         (setContactSlipMode true)
         (setContactSlip 5e-3)
     )
+    (nd AgentCollisionHandler
+        (setName handler)
+    )
+
 )

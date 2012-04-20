@@ -45,8 +45,8 @@ using namespace boost;
 class MonitorSpark : public Spark
 {
 public:
-    MonitorSpark(const std::string& relPathPrefix) :
-        Spark(relPathPrefix)
+    MonitorSpark() :
+        Spark()
     {};
 
     /** called once after Spark finished it's init */
@@ -121,6 +121,17 @@ bool MonitorSpark::ProcessCmdLine(int argc, char* argv[])
                 GetScriptServer()->Eval(serverIPStr);
             }
         }
+        else if (strcmp(argv[i], "--server-port") == 0)
+        {
+          i++;
+          if (i < argc)
+            GetScriptServer()->Eval(string("$monitorPort = ") + argv[i]);
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
     }
 
     return true;
@@ -154,7 +165,7 @@ bool MonitorSpark::InitApp(int argc, char** argv)
 int main(int argc, char** argv)
 {
     // the spark app framework instance
-    MonitorSpark spark("../../");
+    MonitorSpark spark;
 
     if (! spark.Init(argc, argv))
         {

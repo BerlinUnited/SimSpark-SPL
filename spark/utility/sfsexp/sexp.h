@@ -200,6 +200,24 @@ typedef enum {
 /* STRUCTURES */
 /*============*/
 
+typedef struct sexp_mem
+{
+    /**
+     * parse_data_t stack - similar malloc prevention to sexp_t_cache.
+     */
+    faststack_t *pd_cache;
+
+    /**
+     * The global <I>sexp_t_cache</I> is a faststack implementing a cache of
+     * pre-alloced s-expression element entities.  Odds are a user should never
+     * touch this.  If you do, you're on your own.  This is used internally by
+     * the parser and related code to store unused but allocated sexp_t elements.
+     * This should be left alone and manipulated only by the sexp_t_allocate and
+     * sexp_t_deallocate functions.  Touching the stack is bad.
+     */
+    faststack_t *sexp_t_cache;
+} sexp_mem_t;
+
 /**
  * An s-expression is represented as a linked structure of elements,
  * where each element is either an <I>atom</I> or <I>list</I>.  An
@@ -550,14 +568,14 @@ extern "C" {
    * sexp_t_deallocate to deallocate them and put them in the pool.</I>
    * Also, if the stack has not been initialized yet, this does so.
    */
-  sexp_t *sexp_t_allocate();
+  sexp_t *sexp_t_allocate(sexp_mem_t *smem);
 
   /**
    * given a malloc'd sexp_t element, put it back into the already-allocated
    * element stack.  This method will allocate a stack if one has not been
    * allocated already.
    */
-  void sexp_t_deallocate(sexp_t *s);
+  void sexp_t_deallocate(sexp_mem_t *smem, sexp_t *s);
 
   /**
    * In the event that someone wants us to release ALL of the memory used
@@ -565,7 +583,7 @@ extern "C" {
    * this, the caches will be persistent for the lifetime of the library
    * user.
    */
-  void sexp_cleanup();
+  void sexp_cleanup(sexp_mem_t *smem);
 
   /**
    * print a sexp_t struct as a string in the LISP style.  If the buffer
@@ -575,7 +593,7 @@ extern "C" {
    * value is -1 and the contents of the buffer should not be assumed to
    * contain any useful information.
    */
-  int print_sexp(char *loc, int size, sexp_t *e);
+  int print_sexp(sexp_mem_t *smem, char *loc, int size, sexp_t *e);
 
   /**
    * print a sexp_t structure to a buffer, growing it as necessary instead
@@ -583,17 +601,17 @@ extern "C" {
    * to tune for performance reasons are <tt>ss</tt> and <tt>gs</tt> - the
    * buffer start size and growth size.
    */
-  int print_sexp_cstr(CSTRING **s, sexp_t *e, int ss, int gs);
+  int print_sexp_cstr(sexp_mem_t *smem, CSTRING **s, sexp_t *e, int ss, int gs);
 
   /**
    * Allocate a new sexp_t element representing a list.
    */
-  sexp_t *new_sexp_list(sexp_t *l);
+  sexp_t *new_sexp_list(sexp_mem_t *smem, sexp_t *l);
 
   /**
    * allocate a new sexp_t element representing a value
    */
-  sexp_t *new_sexp_atom(char *buf, int bs);
+  sexp_t *new_sexp_atom(sexp_mem_t *smem, char *buf, int bs);
 
   /**
    * create an initial continuation for parsing the given string
@@ -604,7 +622,7 @@ extern "C" {
    * destroy a continuation.  This involves cleaning up what it contains,
    * and cleaning up the continuation itself.
    */
-  void destroy_continuation (pcont_t * pc);
+  void destroy_continuation (sexp_mem_t *smem, pcont_t * pc);
 
   /**
    * create an IO wrapper structure around a file descriptor.
@@ -614,7 +632,7 @@ extern "C" {
   /**
    * destroy an IO wrapper structure
    */
-  void destroy_iowrap(sexp_iowrap_t *iow);
+  void destroy_iowrap(sexp_mem_t *smem, sexp_iowrap_t *iow);
 
   /**
    * given and IO wrapper handle, read one s-expression off of it.  this
@@ -622,24 +640,24 @@ extern "C" {
    * guarantee that under the covers an IO read actually is occuring.
    * returning null implies no s-expression was able to be read.
    */
-  sexp_t *read_one_sexp(sexp_iowrap_t *iow);
+  sexp_t *read_one_sexp(sexp_mem_t *smem, sexp_iowrap_t *iow);
 
   /**
    * wrapper around parser for compatibility.
    */
-  sexp_t *parse_sexp(char *s, int len);
+  sexp_t *parse_sexp(sexp_mem_t *smem, char *s, int len);
 
   /**
    * wrapper around parser for friendlier continuation use
    * pre-condition : continuation (cc) is NON-NULL!
    */
-  sexp_t *iparse_sexp(char *s, int len, pcont_t *cc);
+  sexp_t *iparse_sexp(sexp_mem_t *smem, char *s, int len, pcont_t *cc);
 
   /**
    * given a LISP style s-expression string, parse it into a set of
    * connected sexp_t structures.
    */
-  pcont_t *cparse_sexp(char *s, int len, pcont_t *pc);
+  pcont_t *cparse_sexp(sexp_mem_t *smem, char *s, int len, pcont_t *pc);
 
   /**
    * given a sexp_t structure, free the memory it uses (and recursively free
@@ -649,7 +667,10 @@ extern "C" {
    * pre-allocated elements.  This is an optimization to speed up the
    * parser to eliminate wasteful free and re-malloc calls.
    */
-  void destroy_sexp(sexp_t *s);
+  void destroy_sexp(sexp_mem_t *smem, sexp_t *s);
+
+  sexp_mem_t *init_sexp_memory();
+  void destroy_sexp_memory(sexp_mem_t *smem);
 
 /* this is for C++ users */
 #ifdef __cplusplus

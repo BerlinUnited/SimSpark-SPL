@@ -1,18 +1,25 @@
 #
-# simspark.rb
+# rcssserver3d.rb
 #
 
 # toggle log file recording
 $recordLogfile = false
 
 # toggle the internal monitor
-$enableInternalMonitor = true
+$enableInternalMonitor = false
+
+# toggle the real time mode
+$enableRealTimeMode = true
 
 sparkSetupServer()
 if ($enableInternalMonitor)
   sparkSetupRendering()
 end
 sparkSetupInput()
+
+if ($enableRealTimeMode)
+  sparkSetupTimer()
+end
 
 # sparkAddFPSCamera($scenePath+'camera',
 #                   -10,-10,5,15,248,4,false,2,10,10)

@@ -26,12 +26,22 @@ using namespace oxygen;
 using namespace salt;
 using namespace zeitgeist;
 
-Scene::Scene() : BaseNode(), mModified(false), mModifiedNum(0)
+Scene::Scene() : BaseNode(), mModified(false), mModifiedNum(0), mLastCacheUpdate(0)
 {
 }
 
 Scene::~Scene()
 {
+}
+
+void Scene::UpdateCacheInternal()
+{
+    mLastCacheUpdate = mModifiedNum;
+}
+
+int Scene::GetLastCacheUpdate()
+{
+    return mLastCacheUpdate;
 }
 
 const salt::Matrix& Scene::GetWorldTransform() const
@@ -58,4 +68,3 @@ int Scene::GetModifiedNum()
 {
     return mModifiedNum;
 }
-

@@ -48,6 +48,13 @@ void HingePerceptor::InsertAxisRate(Predicate& predicate)
     axisElement.AddValue(mJoint->GetAngleRate());
 }
 
+void HingePerceptor::InsertAxisTorque(Predicate& predicate)
+{
+    ParameterList& axisElement = predicate.parameter.AddList();
+    axisElement.AddValue(string("tq"));
+    axisElement.AddValue(mJoint->GetTorque());
+}
+
 bool HingePerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
 {
     if (mJoint.get() == 0)
@@ -65,6 +72,7 @@ bool HingePerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
 
     InsertAxisAngle(predicate);
     //InsertAxisRate(predicate);
-
+    //InsertAxisTorque(predicate);
+    
     return true;
 }

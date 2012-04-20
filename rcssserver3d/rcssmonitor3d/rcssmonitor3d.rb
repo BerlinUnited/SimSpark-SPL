@@ -4,6 +4,7 @@
 
 sparkSetupRendering()
 sparkSetupInput()
+sparkSetupTimer()
 
 if ($logPlayerMode == true)
   sparkSetupMonitorLogPlayer()
@@ -40,7 +41,7 @@ run "soccersim-monitor.rb"
 #
 
 sparkResetLogging()
-sparkLogAllToCerr()
+sparkLogErrorToCerr()
 # sparkLogAllToFile('./spark.txt')
 # sparkLogDebugToCerr()
 

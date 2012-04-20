@@ -40,25 +40,9 @@ FUNCTION(SparkMonitorLogFileServer, setFileName)
     return true;
 }
 
-FUNCTION(SparkMonitorLogFileServer, setStepDelay)
-{
-    int inDelay;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in[0], inDelay))
-        )
-        {
-            return false;
-        }
-
-    obj->SetStepDelay(inDelay);
-    return true;
-}
-
 FUNCTION(SparkMonitorLogFileServer, pauseMode)
 {
-    if (in.GetSize() != 0) 
+    if (in.GetSize() != 0)
         {
             return false;
         }
@@ -69,7 +53,7 @@ FUNCTION(SparkMonitorLogFileServer, pauseMode)
 
 FUNCTION(SparkMonitorLogFileServer, stepForward)
 {
-    if (in.GetSize() != 0) 
+    if (in.GetSize() != 0)
         {
             return false;
         }
@@ -80,7 +64,7 @@ FUNCTION(SparkMonitorLogFileServer, stepForward)
 
 FUNCTION(SparkMonitorLogFileServer, stepBackward)
 {
-    if (in.GetSize() != 0) 
+    if (in.GetSize() != 0)
         {
             return false;
         }
@@ -91,7 +75,7 @@ FUNCTION(SparkMonitorLogFileServer, stepBackward)
 
 FUNCTION(SparkMonitorLogFileServer, playBackward)
 {
-    if (in.GetSize() != 0) 
+    if (in.GetSize() != 0)
         {
             return false;
         }
@@ -109,5 +93,4 @@ CLASS(SparkMonitorLogFileServer)::DefineClass()
     DEFINE_FUNCTION(stepForward);
     DEFINE_FUNCTION(stepBackward);
     DEFINE_FUNCTION(playBackward);
-    DEFINE_FUNCTION(setStepDelay);
 }

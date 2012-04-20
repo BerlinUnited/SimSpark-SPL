@@ -30,6 +30,10 @@ namespace oxygen
     class RigidBody;
 }
 
+class AgentState;
+
+typedef std::set<boost::shared_ptr<AgentState> > TouchGroup;
+
 class AgentState : public ObjectState
 {
     //
@@ -91,9 +95,26 @@ public:
     bool GetMessage(std::string& msg, float& direction, bool teamMate);
     bool GetSelfMessage(std::string& msg);
 
+    /** Whether agent is selected */
     bool IsSelected() const;
+    
+    /** Select agent */
     void Select(bool s = true);
+    
+    /** Unselect agent */
     void UnSelect();
+    
+    /** Backup old touch group and create new empty one */
+    void NewTouchGroup();
+    
+    /** Get the touch group of the previous step */
+    boost::shared_ptr<TouchGroup> GetOldTouchGroup();
+    
+    /** Get the current touch group */
+    boost::shared_ptr<TouchGroup> GetTouchGroup();
+    
+    /** Set the current touch group */
+    void SetTouchGroup(boost::shared_ptr<TouchGroup> group);
     
 protected:
     /** team index */
@@ -138,7 +159,12 @@ protected:
     /** is there any message from oponnent */
     bool mIfOppMsg;
 
+    /** is this agent selected */
     bool mSelected;
+    
+    boost::shared_ptr<TouchGroup> mOldTouchGroup;
+    boost::shared_ptr<TouchGroup> mTouchGroup;
+
 protected:
     virtual void UpdateHierarchyInternal();
     virtual void OnUnlink();

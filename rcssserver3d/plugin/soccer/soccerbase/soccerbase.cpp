@@ -679,8 +679,6 @@ SoccerBase::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f&
 bool
 SoccerBase::MoveAndRotateAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f& pos, float angle)
 {
-    Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
-
     boost::shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
             (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
@@ -705,7 +703,7 @@ SoccerBase::MoveAndRotateAgent(boost::shared_ptr<Transform> agent_aspect, const 
 
     boost::shared_ptr<RigidBody> body;
     GetAgentBody(agent_aspect, body);
-
+    const Vector3f& agentPos = body->GetPosition();
     Matrix bodyR = body->GetRotation();
     bodyR.InvertRotationMatrix();
     Matrix mat;

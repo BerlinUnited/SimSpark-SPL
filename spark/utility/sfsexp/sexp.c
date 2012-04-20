@@ -41,27 +41,41 @@ version available from LANL.
 #define snprintf _snprintf
 #endif
 
+sexp_mem_t *init_sexp_memory()
+{
+    sexp_mem_t *smem = malloc(sizeof(sexp_mem_t));
+    smem->pd_cache = NULL;
+    smem->sexp_t_cache = NULL;
+    return smem;
+}
+
+void destroy_sexp_memory(sexp_mem_t *smem)
+{
+    if (smem)
+        free(smem);
+}
+
 /**
  * Recursively walk an s-expression and free it.
  */
 void
-destroy_sexp (sexp_t * s)
+destroy_sexp (sexp_mem_t *smem, sexp_t * s)
 {
   if (s == NULL)
     return;
 
   if (s->ty == SEXP_LIST)
-    destroy_sexp (s->list);
+    destroy_sexp (smem, s->list);
 
   if (s->ty == SEXP_VALUE && s->val != NULL)
     free(s->val);
   s->val = NULL;
 
-  destroy_sexp (s->next);
+  destroy_sexp (smem, s->next);
 
   s->next = s->list = NULL;
 
-  sexp_t_deallocate(s);
+  sexp_t_deallocate(smem, s);
 }
 
 /**
@@ -69,7 +83,7 @@ destroy_sexp (sexp_t * s)
  * representation of the s-expression.  Fills the buffer.
  */
 int
-print_sexp (char *buf, int size, sexp_t * sx)
+print_sexp (sexp_mem_t *smem, char *buf, int size, sexp_t * sx)
 {
   int retval;
   int sz;
@@ -86,7 +100,7 @@ print_sexp (char *buf, int size, sexp_t * sx)
     return -1;
   }
 
-  fakehead = sexp_t_allocate();
+  fakehead = sexp_t_allocate(smem);
   assert(fakehead!=NULL);
 
   /* duplicate the head to prevent going down a sx->next path
@@ -302,7 +316,7 @@ print_sexp (char *buf, int size, sexp_t * sx)
   }
 
   destroy_stack (stack);
-  sexp_t_deallocate(fakehead);
+  sexp_t_deallocate(smem, fakehead);
 
   return retval;
 }
@@ -312,7 +326,7 @@ print_sexp (char *buf, int size, sexp_t * sx)
  * representation of the s-expression.  Fills the buffer.
  */
 int
-print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
+print_sexp_cstr (sexp_mem_t *smem, CSTRING **s, sexp_t *sx, int ss, int gs)
 {
   int retval;
   char *tc;
@@ -333,7 +347,7 @@ print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
   _s = snew(ss);
   sgrowsize(gs);
 
-  fakehead = sexp_t_allocate();
+  fakehead = sexp_t_allocate(smem);
   assert(fakehead!=NULL);
 
   /* duplicate the head to prevent going down a sx->next path
@@ -457,7 +471,7 @@ print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
   retval = _s->curlen;
 
   destroy_stack (stack);
-  sexp_t_deallocate(fakehead);
+  sexp_t_deallocate(smem, fakehead);
 
   return retval;
 }
@@ -465,8 +479,8 @@ print_sexp_cstr (CSTRING **s, sexp_t *sx, int ss, int gs)
 /**
  * Allocate a new sexp_t element representing a list.
  */
-sexp_t *new_sexp_list(sexp_t *l) {
-  sexp_t *sx = sexp_t_allocate();
+sexp_t *new_sexp_list(sexp_mem_t *smem, sexp_t *l) {
+  sexp_t *sx = sexp_t_allocate(smem);
 
   sx->ty = SEXP_LIST;
 
@@ -482,8 +496,8 @@ sexp_t *new_sexp_list(sexp_t *l) {
 /**
  * allocate a new sexp_t element representing a value
  */
-sexp_t *new_sexp_atom(char *buf, int bs) {
-  sexp_t *sx = sexp_t_allocate();
+sexp_t *new_sexp_atom(sexp_mem_t *smem, char *buf, int bs) {
+  sexp_t *sx = sexp_t_allocate(smem);
 
   sx->ty = SEXP_VALUE;
 

@@ -19,12 +19,12 @@ set(soccermonitor_LIB_SRCS
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/plugin ${FREETYPE_INCLUDE_DIRS}
-  ${DevIL_INCLUDE_DIR})
+  ${IL_INCLUDE_DIR})
 
 add_library(soccermonitor MODULE ${soccermonitor_LIB_SRCS}
    ${soccermonitor_LIB_HDRS})
 
-target_link_libraries(soccermonitor ${spark_libs})
+target_link_libraries(soccermonitor ${spark_libs} ${OPENGL_LIBRARIES})
 
 if (NOT APPLE)
    set_target_properties(soccermonitor PROPERTIES VERSION 1.0.0 SOVERSION 1)

@@ -62,9 +62,6 @@ public:
     /** backward play the log file back */
     void BackwardPlayback();
 
-    /** set the length of delay between steps */
-    void SetStepDelay(int delay){ mStepDelay = delay; }
-
 protected:
     /** parses a received message */
     void ParseMessage(const std::string& msg);
@@ -107,13 +104,13 @@ protected:
     /** line numbers storage */
     std::stack<unsigned> linePositions;
 
-    /** the length of delay between seteps */
-    int mStepDelay;
-
     bool mBackwardPlayback;
 
     /** cached reference to the script server */
     boost::shared_ptr<zeitgeist::ScriptServer> mScriptServer;
+
+    /** the s-expression library memory management object */
+    sexp_mem_t *mSexpMemory;
 };
 
 DECLARE_CLASS(SparkMonitorLogFileServer);

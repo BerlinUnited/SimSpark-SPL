@@ -84,12 +84,30 @@ void BaseNode::ComputeBoundingBox()
 {
 }
 
+Leaf::TLeafList BaseNode::GetBaseNodeChildren()
+{
+    return mBaseNodeChildren;
+}
+
+void BaseNode::UpdateCache(bool recursive)
+{
+    UpdateBaseNodeChildren();
+    UpdateCacheInternal();
+
+    if (recursive)
+    {
+        // perform update on hierarchy
+        for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
+            {
+                shared_static_cast<BaseNode>(*i)->UpdateCache();
+            }
+    }
+}
+
 void BaseNode::PrePhysicsUpdate(float deltaTime)
 {
     // perform update on hierarchy
-    TLeafList baseNodes;
-    ListChildrenSupportingClass<BaseNode>(baseNodes);
-    for (TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
+    for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
         {
             shared_static_cast<BaseNode>(*i)->PrePhysicsUpdate(deltaTime);
         }
@@ -104,9 +122,7 @@ void BaseNode::PrePhysicsUpdate(float deltaTime)
 void BaseNode::PostPhysicsUpdate()
 {
     // perform update on hierarchy
-    TLeafList baseNodes;
-    ListChildrenSupportingClass<BaseNode>(baseNodes);
-    for (TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
+    for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
         {
             shared_static_cast<BaseNode>(*i)->PostPhysicsUpdate();
         }
@@ -128,9 +144,7 @@ void BaseNode::UpdateHierarchy()
     mWorldBoundingBox.TransformBy(worldTransform);
 
     // perform update on hierarchy
-    TLeafList baseNodes;
-    ListChildrenSupportingClass<BaseNode>(baseNodes);
-    for (TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
+    for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
         {
             boost::shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
             node->UpdateHierarchy();
@@ -176,6 +190,12 @@ void BaseNode::PostPhysicsUpdateInternal()
 
 void BaseNode::UpdateHierarchyInternal()
 {
+}
+
+void BaseNode::UpdateBaseNodeChildren()
+{
+  mBaseNodeChildren.clear();
+  ListChildrenSupportingClass<BaseNode>(mBaseNodeChildren);
 }
 
 const salt::AABB3& BaseNode::GetWorldBoundingBox() const
