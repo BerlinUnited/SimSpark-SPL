@@ -6,7 +6,7 @@
 $recordLogfile = false
 
 # toggle the internal monitor
-$enableInternalMonitor = false
+$enableInternalMonitor = true
 
 sparkSetupServer()
 if ($enableInternalMonitor)
