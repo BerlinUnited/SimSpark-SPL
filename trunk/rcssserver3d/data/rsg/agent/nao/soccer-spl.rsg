@@ -101,7 +101,7 @@
 	      leftgoal
 	      $LeftGoalX 0 0
 	      G1L G2L
-	      matBlue)
+	      matYellow)
 
  ;; create the right goal
  (def $RightGoalX (eval -1 * $LeftGoalX))
