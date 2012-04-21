@@ -35,14 +35,18 @@ public:
     virtual void Update(float deltaTime);
 
     /** sets the current SPL state */
-    void SetSPLState(TSPLState state) { mSPLState = state; }
+    void SetState(TSPLState state);
 
     /** returns the current spl state */
-    TSPLState GetSPLState() const { return mSPLState; }
+    TSPLState GetState() const { return mSPLState; }
 
     virtual void KickOff(TTeamIndex ti = TI_NONE);
 
     virtual std::string GetPlayModeStr() const;
+
+    void UpdateTime(float deltaTime);
+
+    TTime GetStateTime() const;
 
 protected:
     /** state of SPL game */

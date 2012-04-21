@@ -47,11 +47,49 @@ void SPLState::KickOff(TTeamIndex ti)
 {
   if (mSPLState == Initial)
   {
-    mSPLState = Ready;
+    SetState(Ready);
   }
+}
+
+void SPLState::SetState(TSPLState state)
+{
+  if (mSPLState == state)
+  {
+    return;
+  }
+  mSPLState = state;
+  mLastModeChange = mTime;
 }
 
 string SPLState::GetPlayModeStr() const
 {
   return SoccerBase::SPLState2Str(mSPLState);
+}
+
+void SPLState::UpdateTime(float deltaTime)
+{
+    switch (mSPLState)
+    {
+    case Initial:
+        mLeadTime += deltaTime;
+        break;
+    case Finished:
+        mFupTime += deltaTime;
+        break;
+    default:
+        mTime += deltaTime;
+    }
+}
+
+TTime SPLState::GetStateTime() const
+{
+    switch (mSPLState)
+    {
+    case Initial:
+        return mLeadTime;
+    case Finished:
+        return mFupTime;
+    default:
+        return mTime - mLastModeChange;
+    }
 }

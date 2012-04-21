@@ -59,10 +59,12 @@ addSoccerVar('AgentRadius',  0.4)
 addSoccerVar('BallRadius', 0.0325)
 addSoccerVar('BallMass',0.055)
 
+# SPL rule parameters
+addSoccerVar('RuleHalfTime', 10.0 * 60)
+
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
 addSoccerVar('RuleKickInPauseTime',1.0)
-addSoccerVar('RuleHalfTime',5.0 * 60)
 addSoccerVar('RuleDropBallTime',15)   
 addSoccerVar('SingleHalfTime', false)
 addSoccerVar('UseOffside',false)
