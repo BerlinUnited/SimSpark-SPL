@@ -36,7 +36,9 @@ using namespace boost;
 using namespace std;
 using namespace salt;
 
-SPLRule::SPLRule() : SoccerRuleAspect()
+SPLRule::SPLRule() : SoccerRuleAspect(),
+  mReadyDuration(45),
+  mSetDuration(10)
 {
 }
 
@@ -48,9 +50,9 @@ void SPLRule::OnLink()
 {
   SoccerRuleAspect::OnLink();
 
-  GetControlAspect(mSPLState, "GameStateAspect");
+  GetControlAspect(mState, "GameStateAspect");
 
-  if (mSPLState.expired())
+  if (mState.expired())
       {
           GetLog()->Error()
                   << "(SoccerRuleAspect) ERROR: could not get SPLState\n";
@@ -60,13 +62,13 @@ void SPLRule::OnLink()
 void SPLRule::OnUnlink()
 {
   SoccerRuleAspect::OnUnlink();
-  mSPLState.reset();
+  mState.reset();
 }
 
 void SPLRule::Update(float /*deltaTime*/)
 {
     if (
-        (mSPLState.get() == 0) ||
+        (mState.get() == 0) ||
         (mBallState.get() == 0) ||
         (mBallBody.get() == 0)
         )
@@ -74,25 +76,91 @@ void SPLRule::Update(float /*deltaTime*/)
         return;
     }
 
-    TSPLState state = mSPLState->GetSPLState();
+    TSPLState state = mState->GetState();
     switch (state)
     {
     case Unknown:
+    {
       UpdateCachedInternal();
-      mSPLState->SetSPLState(Initial);
+      mState->SetState(Initial);
+
+      // debug ----
+      float factor = 0.1;
+      mReadyDuration *= factor;
+      mSetDuration *= factor;
+      mHalfTime *= factor;
+      // ----------
+    }
       break;
     case Initial:
-      // do nothing, until game starts
+      UpdateInitialKickOff();
       break;
     case Ready:
+      UpdateReady();
       break;
     case Set:
+      UpdateSet();
       break;
     case Playing:
+      UpdatePlaying();
       break;
     case Finished:
       break;
     }
 
-    //CheckTime();
+    CheckTime();
 }
+
+void SPLRule::UpdateInitialKickOff()
+{
+  //all robots must be in the initial state and must be placed on the
+  //sidelines in their own half of the field
+
+  // TODO
+}
+
+void SPLRule::UpdateReady()
+{
+  if (mState->GetStateTime() > mReadyDuration)
+  {
+    mState->SetState(Set);
+  }
+}
+
+void SPLRule::UpdateSet()
+{
+  if (mState->GetStateTime() > mSetDuration)
+  {
+    mState->SetState(Playing);
+  }
+}
+
+void SPLRule::UpdatePlaying()
+{
+
+}
+
+void SPLRule::CheckTime()
+{
+    TTime now = mState->GetTime();
+    TGameHalf half = mState->GetGameHalf();
+
+    if ((half == GH_FIRST) && (now >= mHalfTime))
+    {
+        if (mSingleHalfTime)
+        {
+            // we want to play only one half of the match
+            mState->SetState(Finished);
+        } else {
+            // the first game half is over
+            mState->SetState(Initial);
+            mState->SetGameHalf(GH_SECOND);
+        }
+    }
+    else if ((half == GH_SECOND) && (now >= 2 * mHalfTime))
+    {
+        // the game is over
+        mState->SetState(Finished);
+    }
+}
+

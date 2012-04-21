@@ -55,9 +55,22 @@ public:
 
     virtual void OnUnlink();
 
+    void UpdateInitialKickOff();
+
+    void UpdateReady();
+
+    void UpdateSet();
+
+    void UpdatePlaying();
+
+    void CheckTime();
+
 protected:
     /** reference to the GameStateAspect */
-    CachedPath<SPLState> mSPLState;
+    CachedPath<SPLState> mState;
+
+    float mReadyDuration;
+    float mSetDuration;
 };
 
 DECLARE_CLASS(SPLRule);
