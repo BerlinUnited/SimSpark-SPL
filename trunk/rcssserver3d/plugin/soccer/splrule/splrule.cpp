@@ -117,7 +117,7 @@ void SPLRule::UpdateInitialKickOff()
   //sidelines in their own half of the field
 
   // TODO
-  Test(TI_LEFT);
+  //Test(TI_LEFT);
 }
 
 // for testing
