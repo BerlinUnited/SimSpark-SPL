@@ -65,6 +65,10 @@ public:
 
     void CheckTime();
 
+    void RemoveRobot(boost::shared_ptr<AgentState> robot) const;
+
+    void Test(TTeamIndex idx);
+
 protected:
     /** reference to the GameStateAspect */
     CachedPath<SPLState> mState;

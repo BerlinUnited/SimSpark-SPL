@@ -117,6 +117,38 @@ void SPLRule::UpdateInitialKickOff()
   //sidelines in their own half of the field
 
   // TODO
+  Test(TI_LEFT);
+}
+
+// for testing
+void SPLRule::Test(TTeamIndex idx)
+{
+    if (idx == TI_NONE || mBallState.get() == 0)
+        return;
+
+    SoccerBase::TAgentStateList robots;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), robots, idx))
+        return;
+
+    for (SoccerBase::TAgentStateList::const_iterator i = robots.begin();
+         i != robots.end(); ++i)
+    {
+      RemoveRobot(*i);
+    }
+}
+
+void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot) const
+{
+  // move the robot to outside of the field
+  // for penalized robots
+
+  // Choose x side based on team
+  float xFac = (robot->GetTeamIndex() == TI_LEFT ? -1 : 1) * 0.5;
+  salt::Vector3f pos = Vector3f(xFac * robot->GetUniformNumber(), (mFieldWidth / 2 + 1) *-1, 0.4);
+
+  boost::shared_ptr<oxygen::Transform> agent_aspect;
+  SoccerBase::GetTransformParent(*robot, agent_aspect);
+  SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
 }
 
 void SPLRule::UpdateReady()
