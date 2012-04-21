@@ -97,10 +97,10 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         pos[0] = std::max<float>(pos[0],minX);
         pos[0] = std::min<float>(pos[0],0.0f);
 
-        float minY = -mFieldWidth/2;
-        float maxY = mFieldWidth/2;
-        pos[1] = std::max<float>(minY,pos[1]);
-        pos[1] = std::min<float>(maxY,pos[1]);
+        //float minY = -mFieldWidth/2;
+        //float maxY = mFieldWidth/2;
+        //pos[1] = std::max<float>(minY,pos[1]);
+        //pos[1] = std::min<float>(maxY,pos[1]);
 
         // fix z coordinate
         pos[2] = mAgentRadius;
