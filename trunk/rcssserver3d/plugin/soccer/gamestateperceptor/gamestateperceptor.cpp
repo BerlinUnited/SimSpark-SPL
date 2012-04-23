@@ -135,7 +135,7 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     // playmode
     ParameterList& pmElement = predicate.parameter.AddList();
     pmElement.AddValue(string("pm"));
-    pmElement.AddValue(SoccerBase::PlayMode2Str(mGameState->GetPlayMode()));
+    pmElement.AddValue(mGameState->GetPlayModeStr());
 
     return true;
 }

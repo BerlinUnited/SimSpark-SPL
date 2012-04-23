@@ -98,12 +98,12 @@ enum TSPLState
   Unknown
 };
 
-#define STR_SPL_STATE_INITIAL "Initial"
-#define STR_SPL_STATE_READY "Ready"
-#define STR_SPL_STATE_SET "Set"
-#define STR_SPL_STATE_PLAYING "Playing"
-#define STR_SPL_STATE_FINISHED "Finished"
-#define STR_SPL_STATE_PENALIZED "Penalized"
-#define STR_SPL_STATE_UNKNOWN "Unknown"
+#define STR_SPL_STATE_INITIAL "initial"
+#define STR_SPL_STATE_READY "ready"
+#define STR_SPL_STATE_SET "set"
+#define STR_SPL_STATE_PLAYING "playing"
+#define STR_SPL_STATE_FINISHED "finished"
+#define STR_SPL_STATE_PENALIZED "penalized"
+#define STR_SPL_STATE_UNKNOWN "unknown"
 
 #endif // SOCCERTYPES_H
