@@ -85,10 +85,10 @@ void SPLRule::Update(float /*deltaTime*/)
       mState->SetState(Initial);
 
       // debug ----
-      float factor = 0.1;
+      /*float factor = 0.1;
       mReadyDuration *= factor;
       mSetDuration *= factor;
-      mHalfTime *= factor;
+      mHalfTime *= factor;*/
       // ----------
     }
       break;
