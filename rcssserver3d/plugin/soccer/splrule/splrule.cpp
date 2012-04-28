@@ -113,11 +113,8 @@ void SPLRule::Update(float /*deltaTime*/)
 
 void SPLRule::UpdateInitialKickOff()
 {
-  //HACK: making the Ball invisible
-  mBallBody->SetPosition(Vector3f(0,0,500));
-  mBallBody->SetVelocity(Vector3f(0,0,0));
-  mBallBody->SetAngularVelocity(Vector3f(0,0,0));
-  mBallBody->Disable();
+
+  HideBall();
   //all robots must be in the initial state and must be placed on the
   //sidelines in their own half of the field
 
@@ -181,17 +178,36 @@ void SPLRule::UpdatePlaying()
 
   //ballInsideGoal
 
-  //ball outside the flaying ield
+  //ball outside the field
+  static TTime lastTimeBallOnField = mGameState->GetTime();
+  static float range = salt::NormalRNG<>(2.0, 1.8)();
+
   if (!mBallState->GetBallOnField()) {
 
-    Vector3f ballPos = getBallPositionAfterOutsideField(6.0);
-    MoveBall(ballPos);
 
+    TTime timeNow = mGameState->GetTime();
+    float crange = clamp(range, 0.5, 5.0);
+
+    if (timeNow - lastTimeBallOnField > crange) {
+
+        Vector3f ballPos = getBallPositionAfterOutsideField();
+        std::cout << "(SPLRule) Put back after " << crange << " seconds" << std::endl;
+        MoveBall(ballPos);
+
+    } else {
+        HideBall();
+    }
+
+
+  } else {
+    lastTimeBallOnField = mGameState->GetTime();
+        //N(mean, sigma) - randomly put the ball back
+    range = salt::NormalRNG<>(2.0, 1.8)();
   }
 
 }
 
-Vector3f SPLRule::getBallPositionAfterOutsideField(float timeOffset) {
+Vector3f SPLRule::getBallPositionAfterOutsideField() {
 
     boost::shared_ptr<AgentAspect> agentAspect;
     boost::shared_ptr<oxygen::Transform> agentAspectTrans;
@@ -203,7 +219,9 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(float timeOffset) {
         SoccerBase::GetAgentState(agentAspect,agentState))
     {
         //Get ball infos
-        Vector3f ballPos = mBallBody->GetPosition();
+        Vector3f ballPos = mBallState->GetLastValidBallPosition(); //TODO: check if coords
+        std::cout << "Position x:" << ballPos.x() << " y:" << ballPos.y() << std::endl;
+        //Vector3f ballPos = mBallBody->GetPosition();
 
         //Player infos
         SoccerBase::GetTransformParent(*agentState, agentAspectTrans);
@@ -254,7 +272,7 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(float timeOffset) {
 
     }
 
-}
+} //getBallPositionAfterOutsideField()
 
 void SPLRule::CheckTime()
 {
@@ -280,6 +298,8 @@ void SPLRule::CheckTime()
     }
 }
 
+//TOOLS
+
 void SPLRule::MoveBall(Vector3f toPosition) {
 
     mBallBody->SetPosition(toPosition);
@@ -289,3 +309,27 @@ void SPLRule::MoveBall(Vector3f toPosition) {
 
 }
 
+void SPLRule::HideBall() {
+
+    //HACK: making the Ball invisible
+    //must outside the field, "check if outside and wait till put back" using it
+    mBallBody->SetPosition(Vector3f(0,-500,500));
+    mBallBody->SetVelocity(Vector3f(0,0,0));
+    mBallBody->SetAngularVelocity(Vector3f(0,0,0));
+    mBallBody->Disable();
+}
+
+
+float SPLRule::clamp(float val, const float min, const float max) {
+
+    if (min <= max)
+    {
+        if (val<min) val=min;
+        if (val>max) val=max;
+    } else {
+        if (val>=min || val<=max) return val;
+        if (val>=(min+max)/2.0) val = min; else val = max;
+    }
+    return val;
+
+}
