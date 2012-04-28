@@ -63,7 +63,7 @@ public:
 
     void UpdatePlaying();
 
-    salt::Vector3f getBallPositionAfterOutsideField(float timeOffset);
+    salt::Vector3f getBallPositionAfterOutsideField();
 
     void CheckTime();
 
@@ -73,10 +73,13 @@ public:
 
     void MoveBall(salt::Vector3f toPosition);
 
-protected:
+    void HideBall();
 
-    /** reference to the body node of the Ball */
-    //boost::shared_ptr<oxygen::RigidBody> mBallBody;
+    //TOOLS
+
+    float clamp(float val, const float min, const float max);
+
+protected:
 
 
     /** reference to the GameStateAspect */
