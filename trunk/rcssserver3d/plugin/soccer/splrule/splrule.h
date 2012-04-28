@@ -63,13 +63,22 @@ public:
 
     void UpdatePlaying();
 
+    salt::Vector3f getBallPositionAfterOutsideField(float timeOffset);
+
     void CheckTime();
 
     void RemoveRobot(boost::shared_ptr<AgentState> robot) const;
 
     void Test(TTeamIndex idx);
 
+    void MoveBall(salt::Vector3f toPosition);
+
 protected:
+
+    /** reference to the body node of the Ball */
+    //boost::shared_ptr<oxygen::RigidBody> mBallBody;
+
+
     /** reference to the GameStateAspect */
     CachedPath<SPLState> mState;
 
