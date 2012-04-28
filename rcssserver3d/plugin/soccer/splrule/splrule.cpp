@@ -55,7 +55,7 @@ void SPLRule::OnLink()
   if (mState.expired())
       {
           GetLog()->Error()
-                  << "(SoccerRuleAspect) ERROR: could not get SPLState\n";
+                  << "(SPLRule) ERROR: could not get SPLState\n";
       }
 }
 
@@ -113,6 +113,11 @@ void SPLRule::Update(float /*deltaTime*/)
 
 void SPLRule::UpdateInitialKickOff()
 {
+  //HACK: making the Ball invisible
+  mBallBody->SetPosition(Vector3f(0,0,500));
+  mBallBody->SetVelocity(Vector3f(0,0,0));
+  mBallBody->SetAngularVelocity(Vector3f(0,0,0));
+  mBallBody->Disable();
   //all robots must be in the initial state and must be placed on the
   //sidelines in their own half of the field
 
@@ -153,6 +158,7 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot) const
 
 void SPLRule::UpdateReady()
 {
+
   if (mState->GetStateTime() > mReadyDuration)
   {
     mState->SetState(Set);
@@ -161,6 +167,9 @@ void SPLRule::UpdateReady()
 
 void SPLRule::UpdateSet()
 {
+
+  MoveBall(Vector3f(0,1.9,0));
+
   if (mState->GetStateTime() > mSetDuration)
   {
     mState->SetState(Playing);
@@ -169,6 +178,81 @@ void SPLRule::UpdateSet()
 
 void SPLRule::UpdatePlaying()
 {
+
+  //ballInsideGoal
+
+  //ball outside the flaying ield
+  if (!mBallState->GetBallOnField()) {
+
+    Vector3f ballPos = getBallPositionAfterOutsideField(6.0);
+    MoveBall(ballPos);
+
+  }
+
+}
+
+Vector3f SPLRule::getBallPositionAfterOutsideField(float timeOffset) {
+
+    boost::shared_ptr<AgentAspect> agentAspect;
+    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
+    boost::shared_ptr<AgentState> agentState;
+    Vector3f agentPos;
+    TTime time;
+
+    if (mBallState->GetLastCollidingAgent(agentAspect,time) &&
+        SoccerBase::GetAgentState(agentAspect,agentState))
+    {
+        //Get ball infos
+        Vector3f ballPos = mBallBody->GetPosition();
+
+        //Player infos
+        SoccerBase::GetTransformParent(*agentState, agentAspectTrans);
+        agentPos = agentAspectTrans->GetWorldTransform().Pos();
+
+        //calculate constraints
+        bool lastTouchRed = (agentState->GetTeamIndex() == TI_LEFT);
+        bool ballOutBottom = (ballPos.y() < 0);
+        //bool ballLeft = (ballPos.x() < 0);
+
+        //calculate x, y
+        float newX, newY;
+
+        //out right by red
+        if (ballPos.x() > 3.0 && lastTouchRed) {
+
+            newX = (0 < agentPos.x()-1.0) ? 0 : agentPos.x()-1.0;
+        //out left by blue
+        } else if (ballPos.x() < 3.0 && !lastTouchRed) {
+
+            newX = (0 > agentPos.x()+1.0) ? 0 : agentPos.x()+1.0;
+
+        //out top/bottom
+        } else {
+
+
+            if(lastTouchRed) {
+                std::cout << "(SPLRule) Ball out by blue team" << std::endl;
+                    //calculate new position
+                newX = (ballPos.x()-1.0 < agentPos.x()-1.0) ? ballPos.x()-1.0 : agentPos.x()-1.0;
+                if (newX < -2.0) newX = -2.0;
+            } else {
+                std::cout << "(SPLRule) Ball out by red team" << std::endl;
+                    //calculate new position
+                newX = (ballPos.x()+1.0 > agentPos.x()+1.0) ? ballPos.x()+1.0 : agentPos.x()+1.0;
+                if (newY > 2.0) newY = 2.0;
+            } //lastTouchRed
+
+        }// out top/bottom
+
+        if (ballOutBottom)
+            newY = -1.80;
+        else
+            newY = 1.80;
+
+        return Vector3f(newX, newY, 0);
+
+
+    }
 
 }
 
@@ -194,5 +278,14 @@ void SPLRule::CheckTime()
         // the game is over
         mState->SetState(Finished);
     }
+}
+
+void SPLRule::MoveBall(Vector3f toPosition) {
+
+    mBallBody->SetPosition(toPosition);
+    mBallBody->SetVelocity(Vector3f(0,0,0));
+    mBallBody->SetAngularVelocity(Vector3f(0,0,0));
+    mBallBody->Enable();
+
 }
 
