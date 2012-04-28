@@ -165,7 +165,7 @@ void SPLRule::UpdateReady()
 void SPLRule::UpdateSet()
 {
 
-  MoveBall(Vector3f(0,1.9,0));
+  MoveBall(Vector3f(3.0,0,0));
 
   if (mState->GetStateTime() > mSetDuration)
   {
@@ -176,21 +176,26 @@ void SPLRule::UpdateSet()
 void SPLRule::UpdatePlaying()
 {
 
-  //ballInsideGoal
-
   //ball outside the field
   static TTime lastTimeBallOnField = mGameState->GetTime();
   static float range = salt::NormalRNG<>(2.0, 1.8)();
 
   if (!mBallState->GetBallOnField()) {
 
+    //ball infos
+    Vector3f ballPos = mBallState->GetLastValidBallPosition();
+
+    if(checkIfGoal(ballPos)) {
+        mState->SetState(Ready);
+        return;
+    }
 
     TTime timeNow = mGameState->GetTime();
     float crange = clamp(range, 0.5, 5.0);
 
     if (timeNow - lastTimeBallOnField > crange) {
 
-        Vector3f ballPos = getBallPositionAfterOutsideField();
+        Vector3f ballPos = getBallPositionAfterOutsideField(ballPos);
         std::cout << "(SPLRule) Put back after " << crange << " seconds" << std::endl;
         MoveBall(ballPos);
 
@@ -207,7 +212,25 @@ void SPLRule::UpdatePlaying()
 
 }
 
-Vector3f SPLRule::getBallPositionAfterOutsideField() {
+bool SPLRule::checkIfGoal(Vector3f ballPos) {
+
+    if (ballPos.y() > -650 &&  ballPos.y() < 650 ) {
+        if (ballPos.x() > 0) {
+            mGameState->ScoreTeam(TI_LEFT);
+            std::cout << "(SPLRule) Goal by blue" << std::endl;
+        } else {
+            mGameState->ScoreTeam(TI_RIGHT);
+            std::cout << "(SPLRule) Goal by red" << std::endl;
+        }
+
+        return true;
+    }
+
+    return false;
+
+}
+
+Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
 
     boost::shared_ptr<AgentAspect> agentAspect;
     boost::shared_ptr<oxygen::Transform> agentAspectTrans;
@@ -218,10 +241,6 @@ Vector3f SPLRule::getBallPositionAfterOutsideField() {
     if (mBallState->GetLastCollidingAgent(agentAspect,time) &&
         SoccerBase::GetAgentState(agentAspect,agentState))
     {
-        //Get ball infos
-        Vector3f ballPos = mBallState->GetLastValidBallPosition(); //TODO: check if coords
-        std::cout << "Position x:" << ballPos.x() << " y:" << ballPos.y() << std::endl;
-        //Vector3f ballPos = mBallBody->GetPosition();
 
         //Player infos
         SoccerBase::GetTransformParent(*agentState, agentAspectTrans);
@@ -249,12 +268,12 @@ Vector3f SPLRule::getBallPositionAfterOutsideField() {
 
 
             if(lastTouchRed) {
-                std::cout << "(SPLRule) Ball out by blue team" << std::endl;
+                std::cout << "(SPLRule) Out by blue team" << std::endl;
                     //calculate new position
                 newX = (ballPos.x()-1.0 < agentPos.x()-1.0) ? ballPos.x()-1.0 : agentPos.x()-1.0;
                 if (newX < -2.0) newX = -2.0;
             } else {
-                std::cout << "(SPLRule) Ball out by red team" << std::endl;
+                std::cout << "(SPLRule) Out by red team" << std::endl;
                     //calculate new position
                 newX = (ballPos.x()+1.0 > agentPos.x()+1.0) ? ballPos.x()+1.0 : agentPos.x()+1.0;
                 if (newY > 2.0) newY = 2.0;
@@ -269,7 +288,10 @@ Vector3f SPLRule::getBallPositionAfterOutsideField() {
 
         return Vector3f(newX, newY, 0);
 
-
+    //if outside without any collision by a robot??
+    } else {
+        //TODO: does it make sense?
+        return Vector3f(0, 0, 0);
     }
 
 } //getBallPositionAfterOutsideField()
