@@ -156,6 +156,8 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot) const
 void SPLRule::UpdateReady()
 {
 
+    HideBall();
+
   if (mState->GetStateTime() > mReadyDuration)
   {
     mState->SetState(Set);
