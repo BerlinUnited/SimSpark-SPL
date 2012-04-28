@@ -63,7 +63,9 @@ public:
 
     void UpdatePlaying();
 
-    salt::Vector3f getBallPositionAfterOutsideField();
+    salt::Vector3f getBallPositionAfterOutsideField(salt::Vector3f ballPos);
+
+    bool checkIfGoal(salt::Vector3f ballPos);
 
     void CheckTime();
 
