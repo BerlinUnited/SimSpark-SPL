@@ -67,9 +67,11 @@ public:
 
     bool checkIfGoal(salt::Vector3f ballPos);
 
-    bool CheckIllegalPosition();
+    void CheckIllegalPosition(TTeamIndex idx);
 
     void CheckIllegalDefender(TTeamIndex idx);
+
+    void manualPlacement(TTeamIndex idx);
 
     void CheckTime();
 
