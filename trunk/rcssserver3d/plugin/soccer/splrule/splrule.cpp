@@ -37,7 +37,7 @@ using namespace std;
 using namespace salt;
 
 SPLRule::SPLRule() : SoccerRuleAspect(),
-  mReadyDuration(45),
+  mReadyDuration(15),
   mSetDuration(10)
 {
 }
@@ -177,9 +177,11 @@ void SPLRule::UpdateSet()
 {
 
     //TODO
-    if(CheckIllegalPosition()) {
+manualPlacement(TI_LEFT);
+   // CheckIllegalPosition(TI_LEFT);
+    //CheckIllegalPosition(TI_RIGHT);
     //otherwise manual
-    }
+
 
   MoveBall(Vector3f(-3.0,0,0));
 
@@ -189,8 +191,108 @@ void SPLRule::UpdateSet()
   }
 }
 
-bool SPLRule::CheckIllegalPosition() {
-    return true;
+void SPLRule::CheckIllegalPosition(TTeamIndex idx) {
+    //boost::shared_ptr<AgentAspect> agentAspect;
+    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
+    SoccerBase::TAgentStateList agentStates;
+
+    Vector3f agentPos;
+
+    if (idx == TI_NONE || mBallState.get() == 0)
+        return;
+
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, idx))
+        return;
+
+    for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
+    {
+        //Player infos
+        SoccerBase::GetTransformParent(**i, agentAspectTrans);
+        agentPos = agentAspectTrans->GetWorldTransform().Pos();
+
+        //boost::shared_ptr<AgentState> agentState;
+
+        if (idx == TI_LEFT) {
+                    //check if agent inside penalty area and move
+                    if (mRightHalf.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
+                        manualPlacement(idx);
+                    }
+                }
+        if (idx == TI_RIGHT) {
+                    //check if agent inside penalty area and move
+                    if (mLeftHalf.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
+                        manualPlacement(idx);
+                    }
+        }
+     }
+}
+
+void SPLRule::manualPlacement(TTeamIndex idx) {
+
+    //boost::shared_ptr<AgentAspect> agentAspect;
+    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
+    SoccerBase::TAgentStateList agentStates;
+
+    Vector3f agentPos;
+
+    if (idx == TI_NONE || mBallState.get() == 0)
+        return;
+
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, idx))
+        return;
+
+    for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
+    {
+        //Player infos
+        SoccerBase::GetTransformParent(**i, agentAspectTrans);
+        agentPos = agentAspectTrans->GetWorldTransform().Pos();
+
+        if (idx == TI_LEFT) {
+            if (mGameState->GetPlayMode() == PM_KickOff_Right) {
+
+                if((*i)->GetUniformNumber() == 1)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-2.9, 0.0, 0.3), -90);
+                if((*i)->GetUniformNumber() == 2)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-2.4, 1.6, 0.3), -90);
+                if((*i)->GetUniformNumber() == 3)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-2.4, 0.3, 0.3), -90);
+                if((*i)->GetUniformNumber() == 4)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-2.4, -1.6, 0.3), -90);
+            } else {
+                if((*i)->GetUniformNumber() == 1)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-2.9, 0.0, 0.3), -90);
+                if((*i)->GetUniformNumber() == 2)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-2.4, 1.1, 0.3), -90);
+                if((*i)->GetUniformNumber() == 3)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-0.7, 0.0, 0.3), -90);
+                if((*i)->GetUniformNumber() == 4)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(-1.2, -1.1, 0.3), -90);
+            }
+        }
+
+        if (idx == TI_RIGHT) {
+            if (mGameState->GetPlayMode() == PM_KickOff_Left) {
+                if((*i)->GetUniformNumber() == 1)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(2.9, 0.0, 0.3), 90);
+                if((*i)->GetUniformNumber() == 2)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(2.4, 1.6, 0.3), 90);
+                if((*i)->GetUniformNumber() == 3)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(2.4, 0.3, 0.3), 90);
+                if((*i)->GetUniformNumber() == 4)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(2.4, -1.6, 0.3), 90);
+            } else {
+                if((*i)->GetUniformNumber() == 1)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(2.9, 0.0, 0.3), 90);
+                if((*i)->GetUniformNumber() == 2)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(2.4, 1.1, 0.3), 90);
+                if((*i)->GetUniformNumber() == 3)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(0.7, 0.0, 0.3), 90);
+                if((*i)->GetUniformNumber() == 4)
+                    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(1.2, -1.1, 0.3), 90);
+            }
+        }
+
+     }
 }
 
 void SPLRule::UpdatePlaying()
@@ -238,7 +340,6 @@ void SPLRule::UpdatePlaying()
 }
 
 void SPLRule::CheckIllegalDefender(TTeamIndex idx) {
-
 
     //boost::shared_ptr<AgentAspect> agentAspect;
     boost::shared_ptr<oxygen::Transform> agentAspectTrans;
