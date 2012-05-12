@@ -67,6 +67,10 @@ public:
 
     bool checkIfGoal(salt::Vector3f ballPos);
 
+    bool CheckIllegalPosition();
+
+    void CheckIllegalDefender(TTeamIndex idx);
+
     void CheckTime();
 
     void RemoveRobot(boost::shared_ptr<AgentState> robot) const;
