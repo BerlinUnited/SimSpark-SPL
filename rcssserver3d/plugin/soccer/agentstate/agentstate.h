@@ -49,6 +49,10 @@ public:
     /** returns the team index */
     TTeamIndex GetTeamIndex() const;
 
+    /** for SPL */
+    /*FIXME .. outsource for SPL*/
+    bool isPenelized;
+
     /** Set the uniform number.
      *
      * This sets both the uniform number as well as the object id

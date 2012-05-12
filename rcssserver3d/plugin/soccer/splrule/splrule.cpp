@@ -158,6 +158,8 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot) const
   SoccerBase::GetTransformParent(*robot, agent_aspect);
   SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
 
+  robot->isPenelized = true;
+
 }
 
 void SPLRule::UpdateReady()
