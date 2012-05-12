@@ -1376,13 +1376,13 @@ SoccerRuleAspect::UpdateCachedInternal()
 
     // the penalty areas (exact sizes)
     mRightPenaltyArea = salt::AABB2(Vector2f(mFieldLength/2.0 - penaltyLength,
-                                             -(penaltyWidth + mGoalWidth)/2.0),
+                                             -penaltyWidth/2.0),
                                     Vector2f(mFieldLength/2.0,
-                                             (penaltyWidth + mGoalWidth)/2.0));
+                                             penaltyWidth/2.0));
     mLeftPenaltyArea = salt::AABB2(Vector2f(-mFieldLength/2.0 + penaltyLength,
-                                            -(penaltyWidth + mGoalWidth)/2.0),
+                                            -penaltyWidth/2.0),
                                    Vector2f(-mFieldLength/2.0,
-                                            (penaltyWidth + mGoalWidth)/2.0));
+                                            penaltyWidth/2.0));
 
     mGoalBallLineX = mFieldLength / 2.0 + mBallRadius;
 }
