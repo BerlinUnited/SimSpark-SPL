@@ -224,6 +224,21 @@ void SPLRule::CheckIllegalPosition(TTeamIndex idx) {
                         manualPlacement(idx);
                     }
         }
+
+        //check goalie in box
+        if (idx == TI_LEFT && (*i)->GetUniformNumber() == 1) {
+                    //check if agent inside penalty area and move
+                    if (!mLeftPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
+                        manualPlacement(idx);
+                    }
+                }
+        if (idx == TI_RIGHT && (*i)->GetUniformNumber() == 1) {
+                    //check if agent inside penalty area and move
+                    if (!mRightPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
+                        manualPlacement(idx);
+                    }
+        }
+
      }
 }
 
