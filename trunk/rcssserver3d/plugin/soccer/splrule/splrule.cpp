@@ -177,9 +177,9 @@ void SPLRule::UpdateSet()
 {
 
     //TODO
-manualPlacement(TI_LEFT);
-   // CheckIllegalPosition(TI_LEFT);
-    //CheckIllegalPosition(TI_RIGHT);
+
+    CheckIllegalPosition(TI_LEFT);
+    CheckIllegalPosition(TI_RIGHT);
     //otherwise manual
 
 
@@ -361,32 +361,20 @@ void SPLRule::CheckIllegalDefender(TTeamIndex idx) {
 
         //boost::shared_ptr<AgentState> agentState;
 
-        if (idx == TI_LEFT) {
+        if (idx == TI_LEFT && (*i)->GetUniformNumber() != 1) { //not goali
                     //check if agent inside penalty area and move
                     if (mLeftPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
                         RemoveRobot(*i);
                     }
                 }
-        if (idx == TI_RIGHT) {
+        if (idx == TI_RIGHT && (*i)->GetUniformNumber() != 1) {
                     //check if agent inside penalty area and move
                     if (mRightPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
                         RemoveRobot(*i);
                     }
         }
 
-       /*if ((*i)->GetTeamIndex() == TI_LEFT) {
-            //check if agent inside penalty area and move
-            if (mLeftHalf.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                RemoveRobot(*i);
-            }
-        }
-        if ((*i)->GetTeamIndex() == TI_RIGHT) {
-            //check if agent inside penalty area and move
-            if (mRightHalf.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                RemoveRobot(*i);
-            }
-        }*/
-        //mRightPenaltyArea;
+
     }
 
 
