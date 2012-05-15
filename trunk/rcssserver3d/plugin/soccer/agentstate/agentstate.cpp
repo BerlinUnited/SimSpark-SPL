@@ -38,7 +38,7 @@ AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
                            mIfMateMsg(false), mIfOppMsg(false),
                            mSelected(false),
                            mOldTouchGroup(new TouchGroup), mTouchGroup(new TouchGroup),
-                            isPenelized(false)
+                           isPenelized(false), whenPenalized(0)
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
@@ -284,4 +284,23 @@ boost::shared_ptr<TouchGroup>
 AgentState::GetTouchGroup()
 {
     return mTouchGroup;
+}
+
+void AgentState::Penalize(const TTime gameTime) {
+    whenPenalized = gameTime;
+    isPenelized = true;
+}
+
+void AgentState::unPenalize() {
+    isPenelized = false;
+}
+
+bool AgentState:: IsPenalized() {
+
+    if (isPenelized) {
+        return true;
+    } else {
+        return false;
+    }
+
 }

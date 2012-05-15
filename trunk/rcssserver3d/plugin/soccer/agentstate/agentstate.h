@@ -49,10 +49,6 @@ public:
     /** returns the team index */
     TTeamIndex GetTeamIndex() const;
 
-    /** for SPL */
-    /*FIXME .. outsource for SPL*/
-    bool isPenelized;
-
     /** Set the uniform number.
      *
      * This sets both the uniform number as well as the object id
@@ -120,6 +116,14 @@ public:
     /** Set the current touch group */
     void SetTouchGroup(boost::shared_ptr<TouchGroup> group);
     
+    void Penalize(const TTime gameTime);
+
+    void unPenalize();
+
+    bool IsPenalized();
+
+    TTime getWhenPenalized() const {return whenPenalized;}
+
 protected:
     /** team index */
     TTeamIndex mTeamIndex;
@@ -166,6 +170,11 @@ protected:
     /** is this agent selected */
     bool mSelected;
     
+    /** for SPL */
+    /*FIXME .. outsource for SPL*/
+    bool isPenelized;
+    TTime whenPenalized;
+
     boost::shared_ptr<TouchGroup> mOldTouchGroup;
     boost::shared_ptr<TouchGroup> mTouchGroup;
 

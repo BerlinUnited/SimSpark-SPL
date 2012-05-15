@@ -67,15 +67,21 @@ public:
 
     bool checkIfGoal(salt::Vector3f ballPos);
 
-    void CheckIllegalPosition(TTeamIndex idx);
+    bool CheckIllegalPosition(TTeamIndex idx);
 
-    void CheckIllegalDefender(TTeamIndex idx);
+    //void CheckRobotsIfUnpenalized(boost::shared_ptr<AgentState> agentState, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx);
 
-    void manualPlacement(TTeamIndex idx);
+    void ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff);
+
+    void CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
+
+    void CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
+
+    void ManualPlacement(TTeamIndex idx);
 
     void CheckTime();
 
-    void RemoveRobot(boost::shared_ptr<AgentState> robot) const;
+    void RemoveRobot(boost::shared_ptr<AgentState> robot);
 
     void Test(TTeamIndex idx);
 

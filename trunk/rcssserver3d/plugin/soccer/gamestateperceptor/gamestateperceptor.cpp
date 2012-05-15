@@ -135,7 +135,7 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     // playmode
     ParameterList& pmElement = predicate.parameter.AddList();
     pmElement.AddValue(string("pm"));
-    if (mAgentState->isPenelized)
+    if (mAgentState->IsPenalized())
         pmElement.AddValue(string("penalized"));
     else
         pmElement.AddValue(mGameState->GetPlayModeStr());
