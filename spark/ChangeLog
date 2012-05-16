@@ -1,3 +1,8 @@
+2012-05-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE: 
+	- initial version for 0.2.3 release
+
 2012-04-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* spark/spark.cpp (Spark::Init): 
