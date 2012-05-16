@@ -1,37 +1,47 @@
-RELEASE News of rcssserver3d-0.6.5
+RELEASE News of rcssserver3d-0.6.6
 
-This release comes with a number of enhancements and some bug fixes. Most 
-notably, the automated referee is improved to prevent many agents to collide
-with each other which is required for running games with more players. Also, to
-better suite the field for running 9 vs 9 games, the field size is increased
-and it is 21x14 now. There are some visual improvements and minor enhancements 
-to improve the general experience with the simulator. Finally, simspark.rb is
-renamed to rcssserver3d.rb for more consistency.  
+It's time for a new release! This release comes with a number of bug fixes and
+several minor enhancements here and there. Now, you can run the server for 
+two complete halves. Teams now change their sides in the second half. Also, 
+automatic kick off and automatic quit modes are added. More detailed information
+about this release follows:
 
-* New touch rules:
-The automated referee now enforces two new rules to better prevent crowding and
-a high number of collisions in 9 vs 9 games:
-- If an agent is in touch with more than 2 agents (including himself), and he
-  wasn't in such a situation in the previous time step - which means he is the
-  last to join the group - he is relocated outside of the field. However, if
-  the number of opponents in the group are more than teammates, an unspecified
-  opponent will be relocated instead.
-- If it is not clear which agent joined the group last, e.g. when 3 players
-  were all separate at time t, but were all touching each other in time t + 1,
-  an agent is chosen at random for relocation.
+* Several Bug fixes. Some notable ones are:
+ - Penalty lines are now visible at their actual position (Thanks to Marcus for 
+   his bug report)
+ - Fixed a small bug in parsing move paramter (Thanks to Andreas Seekircher)  
+ - Fixed a mistake which prevented from touch group rules to be applied at all 
+ - Fixed a small bug in goal counting which cause this function to always
+   count a goal when ball moved out of the field 
+
+* Enhance Automatic Kickoff Support:    
+ - Changed default value of 'WaitBeforeKickOff' to 30, since 5 seconds
+   is too small for any team to start.
+ - WaitBeforeKickOff is now calculated from when the first agent connects
+   rather than from the beginning of the before kickoff playmode (when the
+   simulator is started)
+ - A game can be started with kick off for the left team, or using 'coin toss'
+   to determine which team should start the game. CoinTossForKickOff variable
+   in naosoccersim.rb can be used to change the behavior. It is disabled
+   by default. 
+
+* Enhance Support for 'Second Half':
+ - Automatic Kick Off mode assigns Kick off to the correct team in the second
+    half
+ - Change teams' sides in the second half if enabled (enabled by default). It
+    can be disabled using ChangeSidesInSecondHalf variable in naosoccersim.rb.
+
+* Automatic Quit:
+ - In Automatic Quit mode rcsssever3d shuts down automatically when the game
+   is over. It is disabled by default but can be enabled using 'AutomaticQuit'
+   variable in naosoccersim.rb
 
 * Other Enhancements:
-- Visual improvements in rcssmonitor3d: new field texture, colored team names
-  and scores
-- Set different agent and monitor ports with --agent-port and --server-port
-- Bigger field size: 21x14
-- Updated PDF documentation
-- Bug fixes, specially in the automated referee
-- New Trainer command (killsim) to terminate the simulator
-- Compilation fixes
-- Nao robots now sense visual information about field lines by default
-- Now you should change the value of enableRealTimeMode variable in 
-  rcssserver3d.rb if you want to turn off using real time mode
+- The location of init scripts (e.g. zeitgeist.rb) can now be specified using
+  --init-script-prefix (you still can put most of the scripts and data files
+  like rsg/ directory inside your ~/.simspark/ instead).
+- Better Windows support
+- Support creating Windows binaries under Linux using MinGW
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/
