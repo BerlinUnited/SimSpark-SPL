@@ -125,7 +125,7 @@ TrainerCommandParser::OnLink()
     mSimServer = shared_dynamic_cast<SimulationServer>
         (GetCore()->Get("/sys/server/simulation"));
 
-    if (mGameControl.get() == 0)
+    if (mSimServer.get() == 0)
         {
             GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get SimulationServer\n";
         }
