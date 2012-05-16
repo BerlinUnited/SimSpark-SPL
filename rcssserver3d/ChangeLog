@@ -1,3 +1,12 @@
+2012-05-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* data/rsg/agent/nao/soccer.rsg: 
+	- use correct penalty width which is equal to PenaltyWidth + GoalWidth
+	
+	* rcssserver3d/naosoccersim.rb: 
+	- changed default value of 'WaitBeforeKickOff' to 30, since 5 seconds
+	  is too small for any team to start.
+
 2012-04-15  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/trainercommandparser/trainercommandparser.cpp 

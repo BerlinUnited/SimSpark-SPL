@@ -11,7 +11,7 @@
  (def $FieldHeight (eval Soccer.FieldHeight))
  (def $GoalDepth   (eval Soccer.GoalDepth))
  (def $PenaltyLength (eval Soccer.PenaltyLength))
- (def $PenaltyWidth (eval Soccer.PenaltyWidth))
+ (def $PenaltyWidth (eval Soccer.PenaltyWidth + Soccer.GoalWidth))
 
  ;; height of the field ground plane
  (def $FieldMaterial matGrass)

@@ -52,7 +52,7 @@ addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
 # soccer game settings
 addSoccerVar('AutomaticKickOff', false)
-addSoccerVar('WaitBeforeKickOff', 5.0)
+addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
 
 addSoccerVar('AutomaticQuit', true)
