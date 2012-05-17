@@ -12,6 +12,7 @@
  (def $GoalDepth   (eval Soccer.GoalDepth))
  (def $PenaltyLength (eval Soccer.PenaltyLength))
  (def $PenaltyWidth (eval Soccer.PenaltyWidth + Soccer.GoalWidth))
+ (def $FreeKickDistance (eval Soccer.FreeKickDistance))
 
  ;; height of the field ground plane
  (def $FieldMaterial matGrass)
@@ -261,7 +262,7 @@
 
 ;; ring
 (importScene rsg/agent/fieldring.rsg
-	     1.8)
+	     $FreeKickDistance)
 
 ;;
 ;; add the ball

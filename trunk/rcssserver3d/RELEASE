@@ -7,8 +7,8 @@ automatic kick off and automatic quit modes are added. More detailed information
 about this release follows:
 
 * Several Bug fixes. Some notable ones are:
- - Penalty lines are now visible at their actual position (Thanks to Marcus for 
-   his bug report)
+ - Penalty lines and middle circle are now visible at their actual position
+   (Thanks to Marcus for his bug report, and Sander).
  - Fixed a small bug in parsing move paramter (Thanks to Andreas Seekircher)  
  - Fixed a mistake which prevented from touch group rules to be applied at all 
  - Fixed a small bug in goal counting which cause this function to always
