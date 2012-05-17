@@ -1,3 +1,11 @@
+2012-05-17  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* rcssserver3d/naosoccersim.rb: 
+	- use new field dimensions: 20x30
+	
+	* data/rsg/agent/nao/soccer.rsg: 
+	- The radius of center circle (field ring) should be equal to 
+	  FreeKickDistance (they are equal in FIFA rules too) 
 2012-05-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* RELEASE: 
