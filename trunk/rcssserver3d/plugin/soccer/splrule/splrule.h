@@ -68,7 +68,9 @@ public:
 
     bool checkIfGoal(salt::Vector3f ballPos);
 
-    bool CheckIllegalPosition(TTeamIndex idx);
+    bool IsIllegalPosition(boost::shared_ptr<AgentState> robot);
+
+    bool IsIllegalDefender(boost::shared_ptr<AgentState> robot);
 
     //void CheckRobotsIfUnpenalized(boost::shared_ptr<AgentState> agentState, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx);
 
@@ -100,13 +102,20 @@ public:
     salt::Vector3f GetRobotBodyPos(boost::shared_ptr<AgentState> robot);
 
 protected:
-
+    virtual void UpdateCachedInternal();
 
     /** reference to the GameStateAspect */
     CachedPath<SPLState> mState;
 
     float mReadyDuration;
     float mSetDuration;
+
+    /** bounding box for the right half of the field */
+    salt::AABB2 mFieldRightHalf;
+    /** bounding box for the left half of the field */
+    salt::AABB2 mFieldLeftHalf;
+    salt::AABB2 mFieldRightHalfDefense;
+    salt::AABB2 mFieldLeftHalfDefense;
 };
 
 DECLARE_CLASS(SPLRule);
