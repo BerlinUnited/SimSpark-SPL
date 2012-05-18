@@ -655,8 +655,6 @@ SoccerBase::GetControlAspect(const zeitgeist::Leaf& base,const string& name)
 bool
 SoccerBase::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f& pos)
 {
-    Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
-
     boost::shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
             (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
@@ -679,6 +677,9 @@ SoccerBase::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f&
         return false;
     }
 
+    boost::shared_ptr<RigidBody> body;
+    GetAgentBody(agent_aspect, body);
+    const Vector3f& agentPos = body->GetPosition();
     Leaf::TLeafList::iterator iter = leafList.begin();
 
     // move all child bodies
