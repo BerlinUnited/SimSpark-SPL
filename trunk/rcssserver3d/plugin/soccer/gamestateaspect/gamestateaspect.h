@@ -114,6 +114,8 @@ public:
     /** sets the current game scores. useful if you start a game in the middle */
     void SetScores(int scoreLeft, int scoreRight);
 
+    TTeamIndex GetLastKickOff() const { return mLastKickOff; }
+
 protected:
     /** setup the init positions for the agents */
     virtual void OnLink();
