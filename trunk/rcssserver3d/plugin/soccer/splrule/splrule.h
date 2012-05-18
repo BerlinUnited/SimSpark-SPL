@@ -66,15 +66,11 @@ public:
 
     salt::Vector3f getBallPositionAfterOutsideField(salt::Vector3f ballPos);
 
-    bool checkIfGoal(salt::Vector3f ballPos);
-
     bool IsIllegalPosition(boost::shared_ptr<AgentState> robot);
 
     bool IsIllegalDefender(boost::shared_ptr<AgentState> robot);
 
     //void CheckRobotsIfUnpenalized(boost::shared_ptr<AgentState> agentState, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx);
-
-    void CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
 
     void ManualPlacement(TTeamIndex idx);
 
@@ -84,17 +80,11 @@ public:
 
     void Test(TTeamIndex idx);
 
-    void MoveBall(salt::Vector3f toPosition);
-
     void HideBall();
 
     void ManualPlaceRobot(boost::shared_ptr<AgentState> robot);
 
     SoccerBase::TAgentStateList FindRobotsIn(const salt::AABB2& box, TTeamIndex idx=TI_NONE);
-
-    //TOOLS
-
-    float clamp(float val, const float min, const float max);
 
     // this function return position in ODE ( not the RSG tree )
     salt::Vector3f GetRobotBodyPos(boost::shared_ptr<AgentState> robot);
