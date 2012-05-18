@@ -37,8 +37,8 @@ using namespace std;
 using namespace salt;
 
 SPLRule::SPLRule() : SoccerRuleAspect(),
-  mReadyDuration(45), //old 45
-  mSetDuration(10) //old 10
+  mReadyDuration(45),
+  mSetDuration(10)
 {
 }
 
@@ -85,10 +85,10 @@ void SPLRule::Update(float /*deltaTime*/)
       mState->SetState(Initial);
 
       // debug ----
-      /*float factor = 0.1;
+      float factor = 0.1;
       mReadyDuration *= factor;
       mSetDuration *= factor;
-      mHalfTime *= factor;*/
+      mHalfTime *= factor;
       // ----------
     }
       break;
@@ -144,10 +144,12 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
 
   // Choose x side based on team
   float xFac = (robot->GetTeamIndex() == TI_LEFT ? -1 : 1) * 0.5;
-  salt::Vector3f pos = Vector3f(xFac * robot->GetUniformNumber(), (mFieldWidth / 2 + 1) *-1, 0.4);
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
+  float height = agent_aspect->GetWorldTransform().Pos().z();
+
+  salt::Vector3f pos = Vector3f(xFac * robot->GetUniformNumber(), (mFieldWidth / 2 + 1) *-1, height);
   SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
 
   robot->Penalize(mGameState->GetTime());
@@ -163,6 +165,109 @@ void SPLRule::UpdateReady()
   {
     mState->SetState(Set);
   }
+}
+
+float findFreePosition(float minPos, float maxPos, const vector<float>& others)
+{
+    set<float> sorted;
+    sorted.insert(minPos);
+    sorted.insert(maxPos);
+    for(vector<float>::const_iterator iter=others.begin(); iter!=others.end(); ++iter)
+    {
+        sorted.insert(*iter);
+    }
+
+    float maxDist = 0;
+    float freePos = (minPos + maxPos) * 0.5;
+    set<float>::const_iterator iterA = sorted.begin();
+    set<float>::const_iterator iterB = sorted.begin();
+    ++iterB;
+    for(; iterB!=sorted.end(); ++iterA, ++iterB)
+    {
+        float d = *iterB - *iterA;
+        if (d > maxDist)
+        {
+            freePos = (*iterB + *iterA) * 0.5;
+            maxDist = d;
+        }
+    }
+    return freePos;
+}
+
+Vector3f SPLRule::GetRobotBodyPos(boost::shared_ptr<AgentState> robot)
+{
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    SoccerBase::GetTransformParent(*robot, agent_aspect);
+    boost::shared_ptr<RigidBody> body;
+    SoccerBase::GetAgentBody(agent_aspect, body);
+    return body->GetPosition();
+}
+
+void SPLRule::ManuallyPlacement(TTeamIndex idx, boost::shared_ptr<AgentState> robot)
+{
+    float angle = -90 * (idx==TI_RIGHT?-1:1);
+    float z = GetRobotBodyPos(robot).z();
+
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    SoccerBase::GetTransformParent(*robot, agent_aspect);
+
+    if (robot->GetUniformNumber() == 1) // goalie
+    {
+        float xLine = (-mFieldLength/2) * (idx==TI_RIGHT?-1:1);
+        Vector3f pos(xLine, 0, z);
+        SoccerBase::MoveAndRotateAgent(agent_aspect, pos, angle);
+        return;
+    }
+
+    float xMin = -mFieldLength/2;
+    float xLine = mLeftPenaltyArea.maxVec.x() + 0.3;
+    float xMax = xLine + (xLine - xMin);
+    if (TI_RIGHT==idx)
+    {
+        xMin = -xMax;
+        xLine *= -1;
+        xMax = mFieldLength/2;
+    }
+
+    // find y position of other robots inside placement area
+    Vector2f mn(xMin, -mFieldWidth/2);
+    Vector2f mx(xMax, mFieldWidth/2);
+    salt::AABB2 placementArea(mn, mx);
+    SoccerBase::TAgentStateList robots = FindRobotsIn(placementArea);
+    vector<float> yRobots;
+    for(SoccerBase::TAgentStateList::const_iterator iter=robots.begin(); iter!=robots.end(); ++iter)
+    {
+        if (robot.get() != iter->get())
+        {
+            float y = GetRobotBodyPos(*iter).y();
+            yRobots.push_back(y);
+        }
+    }
+
+    float y = findFreePosition(-mFieldWidth/2, mFieldWidth/2, yRobots);
+
+    Vector3f pos(xLine, y, z);
+    SoccerBase::MoveAndRotateAgent(agent_aspect, pos, angle);
+}
+
+SoccerBase::TAgentStateList SPLRule::FindRobotsIn(const salt::AABB2& box, TTeamIndex idx)
+{
+    SoccerBase::TAgentStateList robots; // TODO: cache it?
+    SoccerBase::TAgentStateList robotsIn;
+    if ( mBallState.get() == 0 )
+        return robotsIn;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), robots, idx))
+        return robotsIn;
+
+    for (SoccerBase::TAgentStateList::const_iterator i = robots.begin(); i != robots.end(); ++i)
+    {
+        Vector3f pos = GetRobotBodyPos(*i); // using bounding box?
+        if (box.Contains(Vector2f(pos.x(),pos.y())))
+        {
+            robotsIn.push_back(*i);
+        }
+    }
+    return robotsIn;
 }
 
 void SPLRule::UpdateSet()
@@ -292,9 +397,11 @@ void SPLRule::ManualPlacement(TTeamIndex idx) {
         agentPos = agentAspectTrans->GetWorldTransform().Pos();
 
         if (idx == TI_LEFT) {
-            ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), true, mGameState->GetPlayMode() == PM_KickOff_Left);
+            ManuallyPlacement(idx, *i);
+            //ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), true, mGameState->GetPlayMode() == PM_KickOff_Left);
         } else {
-            ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), false, mGameState->GetPlayMode() == PM_KickOff_Right);
+            ManuallyPlacement(idx, *i);
+            //ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), false, mGameState->GetPlayMode() == PM_KickOff_Right);
         }
 
      }

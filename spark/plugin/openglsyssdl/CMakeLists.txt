@@ -12,7 +12,8 @@ include_directories(${SDL_INCLUDE_DIR})
 
 add_library(openglsyssdl MODULE ${openglsyssdl_LIB_SRCS})
 
-target_link_libraries(openglsyssdl ${spark_libs})
+target_link_libraries(openglsyssdl ${spark_libs} SDL)
+
 
 if (NOT APPLE)
    set_target_properties(openglsyssdl PROPERTIES VERSION 0.0.0 SOVERSION 0)
