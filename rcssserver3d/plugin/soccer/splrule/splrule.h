@@ -72,8 +72,6 @@ public:
 
     //void CheckRobotsIfUnpenalized(boost::shared_ptr<AgentState> agentState, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx);
 
-    void ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff);
-
     void CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
 
     void CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
@@ -90,7 +88,7 @@ public:
 
     void HideBall();
 
-    void ManuallyPlacement(TTeamIndex idx, boost::shared_ptr<AgentState> robot);
+    void ManualPlaceRobot(boost::shared_ptr<AgentState> robot);
 
     SoccerBase::TAgentStateList FindRobotsIn(const salt::AABB2& box, TTeamIndex idx=TI_NONE);
 

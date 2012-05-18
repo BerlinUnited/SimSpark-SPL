@@ -203,8 +203,9 @@ Vector3f SPLRule::GetRobotBodyPos(boost::shared_ptr<AgentState> robot)
     return body->GetPosition();
 }
 
-void SPLRule::ManuallyPlacement(TTeamIndex idx, boost::shared_ptr<AgentState> robot)
+void SPLRule::ManualPlaceRobot(boost::shared_ptr<AgentState> robot)
 {
+    TTeamIndex idx = robot->GetTeamIndex();
     float angle = -90 * (idx==TI_RIGHT?-1:1);
     float z = GetRobotBodyPos(robot).z();
 
@@ -358,33 +359,10 @@ bool SPLRule::CheckIllegalPosition(TTeamIndex idx) {
 
 }
 
-void SPLRule::ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff) {
-
-    number--;
-    assert(number<0);
-
-    if (haveKickOff) {
-        float xPos [4] = {2.9, 2.4, 0.7, 1.2};
-        float yPos [4] = {0.0, 1.1, 0.0, -1.1};
-        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*(-1)*left,  yPos[number], 0.3), 90*(-1)*left);
-
-    } else {
-        float xPos [4] = {2.9, 2.4, 2.4, 2.4};
-        float yPos [4] = {0.0, 1.6, 0.3, -1.6};
-        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*(-1)*left,  yPos[number], 0.3), 90*(-1)*left);
-    }
-
-
-}
-
 void SPLRule::ManualPlacement(TTeamIndex idx) {
-
-    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
     SoccerBase::TAgentStateList agentStates;
 
-    Vector3f agentPos;
-
-    if (idx == TI_NONE || mBallState.get() == 0)
+    if (mBallState.get() == 0)
         return;
 
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, idx))
@@ -392,19 +370,8 @@ void SPLRule::ManualPlacement(TTeamIndex idx) {
 
     for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
     {
-        //Player infos
-        SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        agentPos = agentAspectTrans->GetWorldTransform().Pos();
-
-        if (idx == TI_LEFT) {
-            ManuallyPlacement(idx, *i);
-            //ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), true, mGameState->GetPlayMode() == PM_KickOff_Left);
-        } else {
-            ManuallyPlacement(idx, *i);
-            //ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), false, mGameState->GetPlayMode() == PM_KickOff_Right);
-        }
-
-     }
+        ManualPlaceRobot(*i);
+    }
 }
 
 //void SPLRule:.checkRobotsIfUnpenalized(boost::shared_ptr<AgentState>, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx) {
