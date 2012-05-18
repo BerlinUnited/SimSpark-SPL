@@ -417,6 +417,34 @@ void SPLRule::ManualPlacement(TTeamIndex idx) {
 
 void SPLRule::UpdatePlaying()
 {
+
+    if(CheckGoal()) {
+        mState->SetState(Ready);
+        return;
+    }
+
+    //
+    //ball outside the field
+    //
+    static TTime lastTimeBallOnField = mGameState->GetTime();
+    static salt::NormalRNG<> rangeRNG = salt::NormalRNG<>(2.0, 1.8);
+
+    if (!mBallState->GetBallOnField()) {
+      TTime timeNow = mGameState->GetTime();
+      float crange = rangeRNG();
+      crange = salt::gClamp(crange, 0.5f, 5.0f);
+
+      if (timeNow - lastTimeBallOnField > crange) {
+          Vector3f ballPos = getBallPositionAfterOutsideField(ballPos);
+          std::cout << "(SPLRule) Put back after " << crange << " seconds" << std::endl;
+          MoveBall(ballPos);
+      }
+    }
+    else
+    {
+        lastTimeBallOnField = mGameState->GetTime();
+    }
+
   //
   //check the robots
   //
@@ -451,83 +479,6 @@ void SPLRule::UpdatePlaying()
             }
         }
     }
-
-  //
-  //ball outside the field
-  //
-
-
-  static TTime lastTimeBallOnField = mGameState->GetTime();
-  static float range = salt::NormalRNG<>(2.0, 1.8)();
-
-  if (!mBallState->GetBallOnField()) {
-
-    //ball infos
-    Vector3f ballPos = mBallState->GetLastValidBallPosition();
-
-    if(checkIfGoal(ballPos)) {
-        std::cout << "ValidPose:" << mBallState->GetLastValidBallPosition() << std::endl;
-        mState->SetState(Ready);
-        return;
-    }
-
-    TTime timeNow = mGameState->GetTime();
-    float crange = clamp(range, 0.5, 5.0);
-
-    if (timeNow - lastTimeBallOnField > crange) {
-
-        Vector3f ballPos = getBallPositionAfterOutsideField(ballPos);
-        std::cout << "(SPLRule) Put back after " << crange << " seconds" << std::endl;
-        MoveBall(ballPos);
-
-    } else {
-        HideBall();
-    }
-
-
-  } else {
-    lastTimeBallOnField = mGameState->GetTime();
-        //N(mean, sigma) - randomly put the ball back
-    range = salt::NormalRNG<>(2.0, 1.8)();
-  }
-
-}
-
-void SPLRule::CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx) {
-
-    Vector3f agentPos;
-
-    agentPos = agentAspectTrans->GetWorldTransform().Pos();
-
-    if (agentPos.x() < 0) agentPos.x() = -1 * agentPos.x();
-    if (agentPos.y() < 0) agentPos.y() = -1 * agentPos.y();
-
-    if (agentPos.y() > mFieldWidth/2+0.5 || agentPos.x() > mFieldLength/2+0.3) {
-        RemoveRobot(agentState);
-        if(idx == TI_LEFT) {
-            std::cout << "(SPLRule) Blue player No. " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-        } else {
-            std::cout << "(SPLRule) Red player No.  " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-        }
-    }
-
-}
-
-bool SPLRule::checkIfGoal(Vector3f ballPos) {
-
-    if (ballPos.x() > -mGoalWidth/2 &&  ballPos.y() < mGoalWidth/2 ) {
-        if (ballPos.y() > mFieldLength/2) {
-            mGameState->ScoreTeam(TI_LEFT);
-            std::cout << "(SPLRule) Goal by blue" << std::endl;
-            return true;
-        } else if (ballPos.y() < -mFieldLength/2) {
-            mGameState->ScoreTeam(TI_RIGHT);
-            std::cout << "(SPLRule) Goal by red " << std::endl;
-            return true;
-        }
-    }
-
-    return false;
 
 }
 
@@ -623,36 +574,10 @@ void SPLRule::CheckTime()
 
 //TOOLS
 
-void SPLRule::MoveBall(Vector3f toPosition) {
-
-    mBallBody->SetPosition(toPosition);
-    mBallBody->SetVelocity(Vector3f(0,0,0));
-    mBallBody->SetAngularVelocity(Vector3f(0,0,0));
-    mBallBody->Enable();
-
-}
-
 void SPLRule::HideBall() {
 
     //HACK: making the Ball invisible
     //must outside the field, "check if outside and wait till put back" using it
-    mBallBody->SetPosition(Vector3f(0,-500,500));
-    mBallBody->SetVelocity(Vector3f(0,0,0));
-    mBallBody->SetAngularVelocity(Vector3f(0,0,0));
-    mBallBody->Disable();
+    MoveBall(Vector3f(0,-500,500));
 }
 
-
-float SPLRule::clamp(float val, const float min, const float max) {
-
-    if (min <= max)
-    {
-        if (val<min) val=min;
-        if (val>max) val=max;
-    } else {
-        if (val>=min || val<=max) return val;
-        if (val>=(min+max)/2.0) val = min; else val = max;
-    }
-    return val;
-
-}
