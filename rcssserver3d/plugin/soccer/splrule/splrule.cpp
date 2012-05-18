@@ -77,6 +77,8 @@ void SPLRule::UpdateCachedInternal()
                              Vector2f(mFieldLength/2.0, mFieldWidth/2.0));
     mFieldLeftHalfDefense = salt::AABB2(Vector2f(-1.2, -mFieldWidth/2.0),
                                         Vector2f(-mFieldLength/2.0, mFieldWidth/2.0));
+    mWholeField = salt::AABB2(Vector2f(mFieldLength/2.0+0.7, -mFieldWidth/2.0-0.7),
+                              Vector2f(-mFieldLength/2.0-0.7, mFieldWidth/2.0+0.7));
 }
 
 void SPLRule::Update(float /*deltaTime*/)
@@ -418,32 +420,37 @@ void SPLRule::UpdatePlaying()
   //
   //check the robots
   //
-    //boost::shared_ptr<AgentAspect> agentAspect;
-    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
-    SoccerBase::TAgentStateList agentStatesLeft;
-    SoccerBase::TAgentStateList agentStatesRight;
+    SoccerBase::TAgentStateList agentStates;
 
     if (mBallState.get() == 0)
         return;
 
-    if (! (SoccerBase::GetAgentStates(*mBallState.get(), agentStatesLeft, TI_LEFT) ||
-          SoccerBase::GetAgentStates(*mBallState.get(), agentStatesRight, TI_RIGHT)))
+    if (! (SoccerBase::GetAgentStates(*mBallState.get(), agentStates, TI_NONE)))
         return;
 
-    for (SoccerBase::TAgentStateList::const_iterator i = agentStatesLeft.begin(); i != agentStatesLeft.end(); ++i)
+    // check illegal defender
+    for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
     {
-        SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        CheckIllegalDefender(agentAspectTrans, (*i), TI_LEFT);
-        CheckOutsideField(agentAspectTrans, (*i), TI_LEFT);
+        if (IsIllegalDefender(*i))
+        {
+            RemoveRobot(*i);
+            std::cout << "(SPLRule) team "<<(*i)->GetTeamIndex()<<" player No.  " << (*i)->GetUniformNumber() << " illegal defender" << std::endl;
+        }
     }
 
-    for (SoccerBase::TAgentStateList::const_iterator i = agentStatesRight.begin(); i != agentStatesRight.end(); ++i)
+    // check player leave the field
+    for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
     {
-        SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        CheckIllegalDefender(agentAspectTrans,(*i), TI_RIGHT);
-        CheckOutsideField(agentAspectTrans, (*i), TI_RIGHT);
+        if ( !(*i)->IsPenalized() )
+        {
+            Vector3f pos = GetRobotBodyPos(*i);
+            if (!mWholeField.Contains(Vector2f(pos.x(), pos.y())))
+            {
+                RemoveRobot(*i);
+                std::cout << "(SPLRule) team "<<(*i)->GetTeamIndex()<<" player No.  " << (*i)->GetUniformNumber() << " leaving the field" << std::endl;
+            }
+        }
     }
-
 
   //
   //ball outside the field
@@ -483,32 +490,6 @@ void SPLRule::UpdatePlaying()
         //N(mean, sigma) - randomly put the ball back
     range = salt::NormalRNG<>(2.0, 1.8)();
   }
-
-}
-
-
-void SPLRule::CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx) {
-        Vector3f agentPos;
-
-        agentPos = agentAspectTrans->GetWorldTransform().Pos();
-
-        //boost::shared_ptr<AgentState> agentState;
-
-        if (idx == TI_LEFT && agentState->GetUniformNumber() != 1) { //not goali
-                    //check if agent inside penalty area and move
-                    if (mLeftPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                        RemoveRobot(agentState);
-                        std::cout << "(SPLRule) Blue player No.  " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-                    }
-                }
-        if (idx == TI_RIGHT && agentState->GetUniformNumber() != 1) {
-                    //check if agent inside penalty area and move
-                    if (mRightPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                        RemoveRobot(agentState);
-                        std::cout << "(SPLRule) Red player No.  " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-                    }
-        }
-
 
 }
 

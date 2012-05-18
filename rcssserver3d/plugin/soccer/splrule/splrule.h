@@ -74,8 +74,6 @@ public:
 
     //void CheckRobotsIfUnpenalized(boost::shared_ptr<AgentState> agentState, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx);
 
-    void CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
-
     void CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
 
     void ManualPlacement(TTeamIndex idx);
@@ -116,6 +114,7 @@ protected:
     salt::AABB2 mFieldLeftHalf;
     salt::AABB2 mFieldRightHalfDefense;
     salt::AABB2 mFieldLeftHalfDefense;
+    salt::AABB2 mWholeField;
 };
 
 DECLARE_CLASS(SPLRule);
