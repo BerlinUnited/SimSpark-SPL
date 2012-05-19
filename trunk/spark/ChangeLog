@@ -1,5 +1,28 @@
 2012-05-19  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
+	* lib/oxygen/physicsserver/int/angularmotorint.h: 
+	* lib/oxygen/physicsserver/int/balljointint.h: 
+	* lib/oxygen/physicsserver/int/boxcolliderint.h: 
+	* lib/oxygen/physicsserver/int/capsulecolliderint.h: 
+	* lib/oxygen/physicsserver/int/colliderint.h: 
+	* lib/oxygen/physicsserver/int/contactjointhandlerint.h: 
+	* lib/oxygen/physicsserver/int/fixedjointint.h: 
+	* lib/oxygen/physicsserver/int/hinge2jointint.h: 
+	* lib/oxygen/physicsserver/int/hingejointint.h: 
+	* lib/oxygen/physicsserver/int/jointint.h: 
+	* lib/oxygen/physicsserver/int/physicsobjectint.h: 
+	* lib/oxygen/physicsserver/int/physicsserverint.h: 
+	* lib/oxygen/physicsserver/int/planecolliderint.h: 
+	* lib/oxygen/physicsserver/int/raycolliderint.h: 
+	* lib/oxygen/physicsserver/int/rigidbodyint.h: 
+	* lib/oxygen/physicsserver/int/sliderjointint.h: 
+	* lib/oxygen/physicsserver/int/spaceint.h: 
+	* lib/oxygen/physicsserver/int/spherecolliderint.h: 
+	* lib/oxygen/physicsserver/int/transformcolliderint.h: 
+	* lib/oxygen/physicsserver/int/universaljointint.h: 
+	* lib/oxygen/physicsserver/int/worldint.h: 
+	- added virtual distructor
+	
 	* NEWS: 
 	* CMakeLists.txt:
 	- updated for 0.2.3 release

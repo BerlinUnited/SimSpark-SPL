@@ -32,22 +32,24 @@ namespace oxygen
 class OXYGEN_API SphereColliderInt
 {
 
-public:    
+public:
+    virtual ~SphereColliderInt() {}
+
     /** sets the radius of the managed sphere geom */
     virtual void SetRadius(float r, long geomID) = 0;
-    
+
     /** get the radius of this sphere */
     virtual float GetRadius(long geomID) const = 0;
-    
+
     /** returns the depth of the given relative position in the
         managed sphere. Points inside the geom will have positive
         depth, points outside it will have negative depth, and points
         on the surface will have zero depth.
      */
     virtual float GetPointDepth(const salt::Vector3f& pos, long geomID) = 0;
-    
+
     /** Creates a new sphere and returns its ID */
-    virtual long CreateSphere() = 0; 
+    virtual long CreateSphere() = 0;
 };
 
 } //namespace oxygen

@@ -32,20 +32,22 @@ namespace oxygen
 class OXYGEN_API BoxColliderInt
 {
 
-public:    
+public:
+    virtual ~BoxColliderInt() {}
+
     /** sets the side lengths of the box geom */
     virtual void SetBoxLengths(const salt::Vector3f& extents, long geomID) = 0;
-    
+
     /** gets the side lengths of the box geom */
     virtual void GetBoxLengths(salt::Vector3f& extents, long geomID) = 0;
-    
+
     /** returns the depth of the given relative position in the
        managed box geom. Points inside the geom will have positive
        depth, points outside it will have negative depth, and points
        on the surface will have zero depth.
      */
     virtual float GetPointDepth(const salt::Vector3f& pos, long geomID) = 0;
-    
+
     /** Creates a new box geom and returns the ID of the newly created box */
     virtual long CreateBox() = 0;
 };
