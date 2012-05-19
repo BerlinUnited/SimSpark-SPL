@@ -213,7 +213,7 @@ SexpMonitor::AddBall(boost::shared_ptr<Scene> activeScene, std::ostringstream& s
 }
 
 string
-SexpMonitor::GetMonitorInfomation(const oxygen::PredicateList& pList)
+SexpMonitor::GetMonitorInformation(const oxygen::PredicateList& pList)
 {
     if (mGameState->IsFinished())
     {

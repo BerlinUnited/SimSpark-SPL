@@ -91,7 +91,7 @@ void RCS3DMonitor::ParseMonitorMessage(const std::string& data)
         }
 }
 
-string RCS3DMonitor::GetMonitorInfomation(const PredicateList& pList)
+string RCS3DMonitor::GetMonitorInformation(const PredicateList& pList)
 {
     stringstream ss;
     mFullState = false;

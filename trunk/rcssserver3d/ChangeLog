@@ -1,3 +1,30 @@
+2012-05-19  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	  (SoccerRuleAspect::CheckBallLeftField):
+	  - fix the position of right corner kick to use mBallRadius rather than 
+	    a hard coded value
+	  - use new value for corner kick position for RoboCup 2012, to be between
+	    the goal and field's corner position
+	   
+	* NEWS: 
+	* RELEASE: 
+	- added information about the new dimensions in this release
+	
+	* CMakeLists.txt:
+	- updated version to 0.6.6
+
+	* rcssserver3d/naosoccersim.rb: 
+	- increased free kick distance to 2.0. actually it should be 2.75, but
+	  since we are going to have an artificial corner point it should be 
+	  probably smaller too.
+	
+	* plugin/soccer/rcs3dmonitor/rcs3dmonitor.h: 
+	* plugin/soccer/rcs3dmonitor/rcs3dmonitor.cpp: 
+	* plugin/soccer/sexpmonitor/sexpmonitor.h: 
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	- fixed spelling error in GetMonitorInformation()
+
 2012-05-17  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* rcssserver3d/naosoccersim.rb: 

@@ -3,8 +3,15 @@ RELEASE News of rcssserver3d-0.6.6
 It's time for a new release! This release comes with a number of bug fixes and
 several minor enhancements here and there. Now, you can run the server for 
 two complete halves. Teams now change their sides in the second half. Also, 
-automatic kick off and automatic quit modes are added. More detailed information
-about this release follows:
+automatic kick off and automatic quit modes are added. Field dimensions are
+also increased to 20x30 meters, and free kick distance is 2.0 meters now.
+More detailed information about this release follows:
+
+* Field Changes:
+ - New dimensions: 20x30
+ - Free kick distance: 2.0
+ - Corner kick position: in the middle point between goal and corner of the 
+   field, to facilitate faster corner kicks.
 
 * Several Bug fixes. Some notable ones are:
  - Penalty lines and middle circle are now visible at their actual position
@@ -37,11 +44,11 @@ about this release follows:
    variable in naosoccersim.rb
 
 * Other Enhancements:
-- The location of init scripts (e.g. zeitgeist.rb) can now be specified using
+ - The location of init scripts (e.g. zeitgeist.rb) can now be specified using
   --init-script-prefix (you still can put most of the scripts and data files
   like rsg/ directory inside your ~/.simspark/ instead).
-- Better Windows support
-- Support creating Windows binaries under Linux using MinGW
+ - Better Windows support
+ - Support creating Windows binaries under Linux using MinGW
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/
