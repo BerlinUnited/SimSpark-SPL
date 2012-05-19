@@ -61,7 +61,7 @@ public:
      * the MonitorServer. The monitor should transfer them to the
      * client if possible.
      */
-    virtual std::string GetMonitorInfomation(const oxygen::PredicateList& pList);
+    virtual std::string GetMonitorInformation(const oxygen::PredicateList& pList);
 
     /** This function is called once for every MonitorSystem each time
      *  a new client connects. It should return any header/setup

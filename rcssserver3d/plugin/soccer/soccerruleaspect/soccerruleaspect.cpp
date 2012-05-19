@@ -1034,18 +1034,26 @@ SoccerRuleAspect::CheckBallLeftField()
             // check corner kick right team
             else if (last_touch_left && ball_left)
             {
+                // temp value for RoboCup 2012
+                // correct value: mFieldWidth / 2 - mBallRadius
+                const float cornerKickY = (mFieldWidth + mGoalWidth) / 4.0
+                        - mBallRadius;
                 mFreeKickPos[0] = -mFieldLength / 2 + mBallRadius;
                 mFreeKickPos[1] = ball_pos[1] > 0 ?
-                    mFieldWidth / 2 - 0.05 : -mFieldWidth / 2 + 0.05;
+                        cornerKickY : -cornerKickY;
                 mFreeKickPos[2] = mBallRadius;
                 mGameState->SetPlayMode(PM_CORNER_KICK_RIGHT);
             }
             // check corner kick left team
             else
             {
+                // temp value for RoboCup 2012
+                // correct value: mFieldWidth / 2 - mBallRadius
+                const float cornerKickY = (mFieldWidth + mGoalWidth) / 4.0
+                        - mBallRadius;
                 mFreeKickPos[0] = mFieldLength / 2 - mBallRadius;
                 mFreeKickPos[1] = ball_pos[1] > 0 ?
-                    mFieldWidth / 2 - mBallRadius : -mFieldWidth / 2 + mBallRadius;
+                        cornerKickY : -cornerKickY;
                 mFreeKickPos[2] = mBallRadius;
                 mGameState->SetPlayMode(PM_CORNER_KICK_LEFT);
             }

@@ -45,8 +45,8 @@ addSoccerVar('GoalDepth', 0.6)
 addSoccerVar('GoalHeight', 0.8)
 addSoccerVar('PenaltyLength',1.8)
 addSoccerVar('PenaltyWidth',3.9)
-addSoccerVar('FreeKickDistance', 1.3)
-addSoccerVar('FreeKickMoveDist', 1.5)
+addSoccerVar('FreeKickDistance', 2.0)
+addSoccerVar('FreeKickMoveDist', 2.2)
 addSoccerVar('GoalKickDist', 1.0)
 addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
