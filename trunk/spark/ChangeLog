@@ -1,3 +1,15 @@
+2012-05-19  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* CMakeLists.txt:
+	- updated for 0.2.3 release
+
+	* plugin/sparkmonitor/sparkmonitor.cpp: 
+	* plugin/sparkmonitor/sparkmonitor.h: 
+	* lib/oxygen/monitorserver/monitorsystem.h: 
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	- fixed a small spelling error
+
 2012-05-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* RELEASE: 

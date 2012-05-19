@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(simspark CXX C)
-set(PACKAGE_VERSION "0.2.2")
+set(PACKAGE_VERSION "0.2.3")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -152,16 +152,16 @@ endif(WIN32)
 # 3. Minor version: library changed but without any new interfaces or breaking 
 #    compatibility
 
-set(SALT_SO_VERSION 0)
-set(SALT_VERSION ${SALT_SO_VERSION}.3.2)
+set(SALT_SO_VERSION 1)
+set(SALT_VERSION ${SALT_SO_VERSION}.0.0)
 set(ZEITGEIST_SO_VERSION 3)
-set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.1.2)
-set(OXYGEN_SO_VERSION 5)
+set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.1.3)
+set(OXYGEN_SO_VERSION 6)
 set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.0.0)
 set(KEROSIN_SO_VERSION 2)
-set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.0.0)
-set(SPARK_SO_VERSION 0)
-set(SPARK_VERSION ${SPARK_SO_VERSION}.0.1)
+set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.1.0)
+set(SPARK_SO_VERSION 1)
+set(SPARK_VERSION ${SPARK_SO_VERSION}.0.0)
 set(RCSSNET_SO_VERSION 0)
 set(RCSSNET_VERSION ${RCSSNET_SO_VERSION}.1.0)
 
