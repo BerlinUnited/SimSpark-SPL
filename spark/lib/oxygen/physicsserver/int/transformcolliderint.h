@@ -48,11 +48,13 @@ class OXYGEN_API TransformColliderInt
     they allow multiple displaced geoms to be connected to one body.
 */
 
-public:    
+public:
+    virtual ~TransformColliderInt() {}
+
     /** Creates a new TransformCollider and returns its ID */
     virtual long CreateTransformCollider() = 0;
-    
-    /** Set the parameters /param cleanup and /param info of the 
+
+    /** Set the parameters /param cleanup and /param info of the
         transformcollider specified by \param geomID
     */
     virtual void SetColliderParameters(int cleanup, int info, long geomID) = 0;

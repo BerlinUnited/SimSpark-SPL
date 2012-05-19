@@ -32,14 +32,16 @@ namespace oxygen
 class OXYGEN_API RayColliderInt
 {
 /** RayCollider encapsulates an ODE ray geometry "object".
- 
+
     A ray is different from all the other geom classes in that it does not
     represent a solid object. It is an infinitely thin line that starts
     from the geom's position and extends in the direction of the geom's
     local Z-axis.
 */
-    
+
 public:
+    virtual ~RayColliderInt() {}
+
     /** Sets the parameters of the ray.
      *
      * \param pos starting position of the ray
@@ -47,7 +49,7 @@ public:
      * \param length length of the ray starting at its position
     */
     virtual void SetParams(salt::Vector3f pos, salt::Vector3f dir, float length, long geomID) = 0;
-    
+
     /* Creates a ray and returns the ID of the newly created ray */
     virtual long CreateRay() = 0;
 };

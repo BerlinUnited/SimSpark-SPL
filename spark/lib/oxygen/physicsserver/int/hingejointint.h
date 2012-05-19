@@ -28,43 +28,45 @@ namespace oxygen{
 class OXYGEN_API HingeJointInt{
 
 public:
+    virtual ~HingeJointInt() {}
+
     /** Creates a new hingejoint within the physics world specified
         by \param worldID
     */
     virtual long CreateHingeJoint(long worldID) = 0;
-    
+
     /** sets the joint anchor point. The joint will try to keep this
         point on each body together. The input is specified in local
         coordinates.
     */
     virtual void SetAnchor(const salt::Vector3f& anchor, long jointID) = 0;
-    
+
     /** returns the joint anchor point in local coordinates on the first of
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
     virtual salt::Vector3f GetAnchor1(long jointID) = 0;
-    
+
     /** returns the joint anchor point in local coordinates on the second of
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
     virtual salt::Vector3f GetAnchor2(long jointID) = 0;
-    
+
     /** Sets the joint axis in the local coordinate system. The
        connected bodies movements will be constrained to move around
        this axis.
     */
     virtual void SetAxis(const salt::Vector3f& axis, long jointID) = 0;
-    
+
     /** Returns the hinge axis in the local coordinate system */
     virtual salt::Vector3f GetAxis(long jointID) = 0;
-    
+
     /** returns the hinge angle in degrees, measured between the two
         bodies, or between the body and the static environment.
     */
     virtual float GetAngle(long jointID) const = 0;
-    
+
     /** returns the time derivate of the hinge angle */
     virtual float GetAngleRate(long jointID) const = 0;
 

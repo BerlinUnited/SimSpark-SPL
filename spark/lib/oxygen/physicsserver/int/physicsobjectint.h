@@ -35,6 +35,8 @@ class OXYGEN_API PhysicsObjectInt
 {
 
 public:
+    virtual ~PhysicsObjectInt() {}
+
     /** converts the rotation part of a salt::Matrix to an
         engine-specific matrix that arranges the values in a different way
     */

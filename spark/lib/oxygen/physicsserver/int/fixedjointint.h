@@ -27,11 +27,13 @@ namespace oxygen{
 class OXYGEN_API FixedJointInt{
 
 public:
-    /** Creates a fixed joint within the physics world specified 
+    virtual ~FixedJointInt() {}
+
+    /** Creates a fixed joint within the physics world specified
         by \param worldID
     */
     virtual long CreateFixedJoint(long world) = 0;
-    
+
     /** Declares that the joint specified by \param jointID is a
         fixed joint
     */
