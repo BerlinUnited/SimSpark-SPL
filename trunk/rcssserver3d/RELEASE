@@ -7,11 +7,13 @@ automatic kick off and automatic quit modes are added. Field dimensions are
 also increased to 20x30 meters, and free kick distance is 2.0 meters now.
 More detailed information about this release follows:
 
-* Field Changes:
+* Field/Dimension Changes:
  - New dimensions: 20x30
  - Free kick distance: 2.0
  - Corner kick position: in the middle point between goal and corner of the 
    field, to facilitate faster corner kicks.
+ - Nao's foot height is now 0.02 rather than 0.03. Ankle's position changed 
+   accordingly
 
 * Several Bug fixes. Some notable ones are:
  - Penalty lines and middle circle are now visible at their actual position

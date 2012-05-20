@@ -68,7 +68,7 @@
     
     (def $FootRelAnkle_X 0)
     (def $FootRelAnkle_Y 0.03)
-    (def $FootRelAnkle_Z -0.035)
+    (def $FootRelAnkle_Z -0.04)
     
     (def $Hip1_X (eval $Torso_X + $Hip1RelTorso_X))
     (def $Hip1_Y (eval $Torso_Y + $Hip1RelTorso_Y))
@@ -118,7 +118,7 @@
     
     (def $FootSizeX   0.08)
     (def $FootSizeY   0.16)
-    (def $FootSizeZ   0.03)
+    (def $FootSizeZ   0.02)
     (def $FootMass    0.2)
     
     

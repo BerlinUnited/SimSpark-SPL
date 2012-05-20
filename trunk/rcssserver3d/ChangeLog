@@ -1,3 +1,13 @@
+2012-05-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.6 release
+	 
+	* data/rsg/agent/nao/naoleg.rsg: 
+	- reduce Nao's foot height (patch by Sander) and modify the position of
+	  ankle accordingly
+
 2012-05-19  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
