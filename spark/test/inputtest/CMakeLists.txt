@@ -10,7 +10,7 @@ include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS}
 
 add_executable(inputtest ${inputtest_SRCS})
 
-target_link_libraries(inputtest salt zeitgeist oxygen kerosin)
+target_link_libraries(inputtest salt zeitgeist oxygen kerosin ${SDL_LIBRARY})
 
 
 ########### install files ###############

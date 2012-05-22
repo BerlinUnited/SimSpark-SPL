@@ -1,11 +1,6 @@
 #include <zeitgeist/zeitgeist.h>
 #include <kerosin/kerosin.h>
 #include <oxygen/oxygen.h>
-#ifndef WIN32
-#include <SDL/SDL.h>
-#else
-#include <SDL.h>
-#endif
 #include <zeitgeist/fileserver/fileserver.h>
 
 using namespace boost;

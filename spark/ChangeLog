@@ -1,3 +1,19 @@
+2012-05-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+	
+	* lib/kerosin/CMakeLists.txt: 
+	- latest cleanups for 0.2.3: don't link SDL to kerosin
+
+	* test/fonttest/CMakeLists.txt: 
+	* test/inputtest/CMakeLists.txt: 
+	* plugin/inputsdl/CMakeLists.txt: 
+	* plugin/openglsyssdl/CMakeLists.txt: 
+	* plugin/timersystemsdl/CMakeLists.txt: 
+	- link against SDL
+	
+	* test/scenetest/main.cpp: 
+	* test/scenetest/CMakeLists.txt: 
+	- scenetest doesn't need SDL
+
 2012-05-19  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* lib/oxygen/physicsserver/int/angularmotorint.h: 

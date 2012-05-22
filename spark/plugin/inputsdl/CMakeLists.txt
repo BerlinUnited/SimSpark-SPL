@@ -23,7 +23,7 @@ include_directories(${SDL_INCLUDE_DIR})
 
 add_library(inputsdl MODULE ${inputsdl_LIB_SRCS})
 
-target_link_libraries(inputsdl ${spark_libs})
+target_link_libraries(inputsdl ${spark_libs} ${SDL_LIBRARY})
 
 if (NOT APPLE)
    set_target_properties(inputsdl PROPERTIES VERSION 0.0.0 SOVERSION 0)
