@@ -91,8 +91,9 @@ players inappropriate behavior (laying on the ground or not walking for too much
 void
 SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
 {
-    // Reset counters before kickoff
-    if (playMode == PM_BeforeKickOff)
+    // Reset counters and do not consider players' faults when game is not
+    // running
+    if (mGameState->IsPaused())
     {
         ResetFaultCounter(TI_LEFT);
         ResetFaultCounter(TI_RIGHT);
@@ -106,13 +107,8 @@ SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
         AnalyseTouchGroups(TI_LEFT);
         AnalyseTouchGroups(TI_RIGHT);
 
-        // Only apply rules during play-on, leaves some time for agents to
-        // solve it themselves
-        if (playMode == PM_PlayOn)
-        {
-          ClearPlayersAutomatic(TI_LEFT);   	// enforce standing and not overcrowding rules for left team
-          ClearPlayersAutomatic(TI_RIGHT);  	// enforce standing and not overcrowding rules for right team
-        }
+        ClearPlayersAutomatic(TI_LEFT);   	// enforce standing and not overcrowding rules for left team
+        ClearPlayersAutomatic(TI_RIGHT);  	// enforce standing and not overcrowding rules for right team
 
         // Reset touch groups
         ResetTouchGroups(TI_LEFT);
@@ -704,6 +700,7 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
 
+    mGameState->SetPaused(true);
     ClearPlayers(mRightHalf, mFreeKickMoveDist, TI_LEFT);
     ClearPlayers(mLeftHalf, mFreeKickMoveDist, TI_RIGHT);
 
@@ -729,6 +726,8 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
+    mGameState->SetPaused(false);
+
     ClearPlayersBeforeKickOff(idx);
 
     // if no player touched the ball for mDropBallTime, we move away
@@ -761,8 +760,11 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
+
     // move away opponent team
     ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
                  SoccerBase::OpponentTeam(idx));
@@ -810,8 +812,10 @@ SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
 //---------------
 
     salt::Vector2f ball_pos(mFreeKickPos.x(), mFreeKickPos.y());
@@ -880,8 +884,11 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
+
     // move away opponent team
     ClearPlayers(idx == TI_LEFT ? mLeftPenaltyArea : mRightPenaltyArea,
                  mFreeKickMoveDist, SoccerBase::OpponentTeam(idx));
@@ -936,8 +943,11 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
+
     // move away opponent team
     ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
                  SoccerBase::OpponentTeam(idx));
@@ -1129,6 +1139,8 @@ SoccerRuleAspect::CheckGoal()
 void
 SoccerRuleAspect::UpdatePlayOn()
 {
+    mGameState->SetPaused(false);
+
     // check if the ball is in one of the goals
     if (CheckGoal())
     {
@@ -1155,6 +1167,8 @@ SoccerRuleAspect::UpdatePlayOn()
 void
 SoccerRuleAspect::UpdateGoal()
 {
+    mGameState->SetPaused(true);
+
     // check if the pause time after the goal has elapsed
     if (mGameState->GetModeTime() < mGoalPauseTime)
     {
@@ -1182,6 +1196,8 @@ SoccerRuleAspect::UpdateGoal()
 void
 SoccerRuleAspect::UpdateGameOver()
 {
+    mGameState->SetPaused(true);
+
     // wait for 10 seconds to finish
     if (mGameState->GetModeTime() < 9 || !mAutomaticQuit)
     {
