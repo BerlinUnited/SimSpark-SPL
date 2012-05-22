@@ -68,7 +68,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mMin2PlDistance(0),            // min dist for second closest of team before being repositioned
     mMin3PlDistance(0),            // min dist for third closest of team before being repositioned
     mMaxTouchGroupSize(1000),
-    mMaxFaultTime(0.0)               // maximum time allowed for a player to commit a positional fault before being repositioned
+    mMaxFaultTime(0.0),              // maximum time allowed for a player to commit a positional fault before being repositioned
+    mLastKickOffKickTime(0),
+    mCheckKickOffKickerFault(false)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
 }
@@ -589,6 +591,40 @@ SoccerRuleAspect::SwapTeamSides()
 }
 
 void
+SoccerRuleAspect::PunishKickOffFault(
+    boost::shared_ptr<oxygen::AgentAspect> agent)
+{
+    boost::shared_ptr<AgentState> agentState;
+    if (!SoccerBase::GetAgentState(agent, agentState))
+    {
+        GetLog()->Error() << "ERROR: (SoccerRuleAspect) Cannot get "
+                "AgentState from an AgentAspect\n";
+    }
+    else
+    {
+        TTeamIndex opp = SoccerBase::OpponentTeam(agentState->GetTeamIndex());
+        ClearPlayersBeforeKickOff(opp);
+
+        // put the ball back in the middle of the playing field
+        Vector3f pos(0, 0, mBallRadius);
+        MoveBall(pos);
+
+        mGameState->KickOff(opp);
+    }
+}
+
+inline bool SoccerRuleAspect::WasLastKickFromKickOff(
+    boost::shared_ptr<oxygen::AgentAspect> &lastKicker)
+{
+    TTime kickTime;
+    // notice that a kick is not necessarily an immediate action, it can
+    // take some time...
+    return mBallState->GetLastCollidingAgent(lastKicker, kickTime)
+            && kickTime - mLastKickOffKickTime < 0.1 // kick duration = 0.1
+            && lastKicker == mLastKickOffTaker;
+}
+
+void
 SoccerRuleAspect::ClearSelectedPlayers()
 {
     float min_dist = mFreeKickMoveDist;
@@ -750,6 +786,9 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     }
     if (time > mGameState->GetLastModeChange())
     {
+        mLastKickOffKickTime = time;
+        mCheckKickOffKickerFault = true;
+        mLastKickOffTaker = agent;
         mGameState->SetPlayMode(PM_PlayOn);
     }
 }
@@ -1099,6 +1138,8 @@ SoccerRuleAspect::CheckGoal()
 
     if (idx == TI_NONE)
     {
+        // sometimes, ball can't record goals due to approximation errors,
+        // so we check for goals analytically
         const salt::Vector3f ballPos = mBallBody->GetPosition();
         const float xDist2Goal = fabs(ballPos.x()) - mGoalBallLineX;
 
@@ -1129,11 +1170,43 @@ SoccerRuleAspect::CheckGoal()
             return false;
     }
 
+    /* don't allow goals directly from kickoff
+     *
+     * todo it is allowed in FIFA rules, so we should get rid of it e.g. by
+     * adding noise to the beam effector so that kickoff kicks cannot be
+     * precisely planned
+     */
+    boost::shared_ptr<AgentAspect> agent;
+    if (WasLastKickFromKickOff(agent))
+    {
+        PunishKickOffFault(agent);
+        return false;
+    }
+
     // score the lucky team
     mGameState->ScoreTeam((idx == TI_LEFT) ? TI_RIGHT : TI_LEFT);
     mGameState->SetPlayMode((idx == TI_LEFT) ? PM_Goal_Right : PM_Goal_Left);
 
     return true;
+}
+
+bool
+SoccerRuleAspect::CheckKickOffTakerFault()
+{
+    if (!mCheckKickOffKickerFault)
+        return false;
+
+    boost::shared_ptr<AgentAspect> agent;
+    if (!WasLastKickFromKickOff(agent)) // second kick
+    {
+        mCheckKickOffKickerFault = false;
+        if (agent == mLastKickOffTaker)
+        {
+            PunishKickOffFault(mLastKickOffTaker);
+            return true;
+        }
+    }
+    return false;
 }
 
 void
@@ -1161,6 +1234,11 @@ SoccerRuleAspect::UpdatePlayOn()
     }
 #endif
 
+    if (CheckKickOffTakerFault())
+    {
+        return;
+    }
+
     // other checks go here...
 }
 
@@ -1176,7 +1254,7 @@ SoccerRuleAspect::UpdateGoal()
     }
 
     // put the ball back in the middle of the playing field
-    Vector3f pos(0,0,mBallRadius);
+    Vector3f pos(0, 0, mBallRadius);
     MoveBall(pos);
 
     // kick off for the opposite team

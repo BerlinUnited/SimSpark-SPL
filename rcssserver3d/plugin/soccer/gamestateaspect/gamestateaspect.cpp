@@ -119,7 +119,7 @@ GameStateAspect::KickOff(TTeamIndex ti)
             if (changeSides)
                 mNextHalfKickOff = ti;
             else
-                mNextHalfKickOff = (ti == TI_LEFT) ? TI_RIGHT : TI_LEFT;
+                mNextHalfKickOff = SoccerBase::OpponentTeam(ti);
         }
     }
 

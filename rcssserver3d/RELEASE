@@ -7,6 +7,14 @@ automatic kick off and automatic quit modes are added. Field dimensions are
 also increased to 20x30 meters, and free kick distance is 2.0 meters now.
 More detailed information about this release follows:
 
+* Rule Changes:
+ - automatic referee now enforces rules whenever players are permitted to 
+   play, rather than only in playon play mode.
+ - it is no longer possible to score directly from kick off, the ball should 
+   at least touch another player before going into the goal
+ - in kickoff playmode, the kicker cannot touch the ball again until another
+   player touches it.
+
 * Field/Dimension Changes:
  - New dimensions: 20x30
  - Free kick distance: 2.0
