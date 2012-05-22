@@ -265,6 +265,7 @@ protected:
 
     /** the radius of the Ball */
     float mBallRadius;
+
     /** the length of the pause after a goal */
     float mGoalPauseTime;
     /** the length of the pause after the ball left the field */
@@ -274,8 +275,10 @@ protected:
     /** the time we wait before dropping the ball in play modes where only
         one team can touch the ball */
     float mDropBallTime;
+
     /** the point above the ground, where the ball left the field */
     salt::Vector3f mLastValidBallPos;
+
     /** the field length (in meters) */
     float mFieldLength;
     /** the field width (in meters) */
@@ -286,8 +289,10 @@ protected:
     float mGoalHeight;
     /** the absolute x coordinate of the goal which ball should pass (in meters) */
     float mGoalBallLineX;
+
     /** the point on the field where we do the kick in, free kick etc. */
     salt::Vector3f mFreeKickPos;
+
     /** the distance opponents have to keep during free kicks, kick ins etc. */
     float mFreeKickDist;
     /** the (least) distance opponents will be moved away if they are to close
@@ -295,6 +300,7 @@ protected:
     float mFreeKickMoveDist;
     /** the distance from the back line the ball should be placed at for a goal kick */
     float mGoalKickDist;
+
     /** flag if the simulator should do the kick off automatically after the agent */
     bool mAutomaticKickOff;
     /** time to wait until we kick off automatically */
@@ -305,7 +311,7 @@ protected:
     bool mAutomaticQuit;
     /** flag if the side of the teams should be changed in the second half*/
     bool mChangeSidesInSecondHalf;
-    /** time to wait until we kick off automatically */
+    /** the time origin from which mWaitBeforeKickOff is calculated */
     float mAutoKickOffTimeOrigin;
 
     //FCP 2010 - New Parameters (added by FCPortugal for Singapure 2010)
@@ -329,6 +335,7 @@ protected:
     int mMaxTouchGroupSize;
     /** maximum time allowed for a player to commit a positional fault before being repositioned */
     int mMaxFaultTime;
+
     /* Useful arrays for dealing with agent state an faults */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
     int playerGround[12][3];  		//Time Players are on the ground

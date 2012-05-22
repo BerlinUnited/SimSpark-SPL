@@ -1,3 +1,19 @@
+2012-05-22  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	- added knowledge about a 'paused' state, in which game is not really 
+	  running (waiting for the referee to allow the game to continue, e.g. in
+	  goal left/right state or at the beginning of a kick in state)
+	
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- a little cleanup, and fixed comment for mAutoKickOffTimeOrigin
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- update game's paused state 
+	- consider the referee rules always while the game is running (not paused),
+	  and reset all counters otherwise. 
+	 
 2012-05-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 

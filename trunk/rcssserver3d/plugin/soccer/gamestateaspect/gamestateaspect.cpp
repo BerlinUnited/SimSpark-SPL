@@ -45,6 +45,7 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mLeftInit = Vector3f(0,0,0);
     mRightInit = Vector3f(0,0,0);
     mFinished = false;
+    mGamePaused = true;
 }
 
 GameStateAspect::~GameStateAspect()
@@ -478,4 +479,14 @@ void GameStateAspect::SetScores(int scoreLeft, int scoreRight)
 {
     mScore[0] = scoreLeft;
     mScore[1] = scoreRight;
+}
+
+bool GameStateAspect::IsPaused() const
+{
+    return mGamePaused;
+}
+
+void GameStateAspect::SetPaused(bool paused)
+{
+    mGamePaused = paused;
 }
