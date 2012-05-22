@@ -211,6 +211,9 @@ protected:
     /** checks if the assistant referee should raise the flag for offside */
     bool CheckOffside();
 
+    /** checks if kickoff taker has kicked the ball again before other players */
+    bool CheckKickOffTakerFault();
+
     /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
 
@@ -253,6 +256,15 @@ protected:
      */
     void SwapTeamSides();
 
+    /**
+     * Punish agent's fault committed during kickoff
+     */
+    void PunishKickOffFault(boost::shared_ptr<oxygen::AgentAspect> agent);
+
+    /** returns true if last kick was happenned in kick off */
+    bool WasLastKickFromKickOff(
+        boost::shared_ptr<oxygen::AgentAspect> &lastKicker);
+
 protected:
     /** reference to the body node of the Ball */
     boost::shared_ptr<oxygen::RigidBody> mBallBody;
@@ -275,9 +287,6 @@ protected:
     /** the time we wait before dropping the ball in play modes where only
         one team can touch the ball */
     float mDropBallTime;
-
-    /** the point above the ground, where the ball left the field */
-    salt::Vector3f mLastValidBallPos;
 
     /** the field length (in meters) */
     float mFieldLength;
@@ -384,6 +393,13 @@ protected:
 
     /** use offside law */
     bool mUseOffside;
+
+    /** the time of the kick in the last kick off mode */
+    TTime mLastKickOffKickTime;
+    /** the player which kicked in the last kick off mode */
+    boost::shared_ptr<oxygen::AgentAspect> mLastKickOffTaker;
+    /** if kickoff taker should be checked for single kick rule */
+    bool mCheckKickOffKickerFault;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);
