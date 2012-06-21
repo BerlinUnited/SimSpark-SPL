@@ -713,18 +713,11 @@ void
 SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // get game control server to check agent count
-    static boost::shared_ptr<GameControlServer> game_control;
+    boost::shared_ptr<GameControlServer> game_control;
 
-    if  (game_control.get() == 0)
+    if (!SoccerBase::GetGameControlServer(*this, game_control))
     {
-        game_control = shared_dynamic_cast<GameControlServer>
-            (GetCore()->Get("/sys/server/gamecontrol"));
-
-        if (game_control.get() == 0)
-        {
-            GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer.\n";
-            return;
-        }
+        return;
     }
 
     // if no players are connected, just return
@@ -786,8 +779,13 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     }
     if (time > mGameState->GetLastModeChange())
     {
+        boost::shared_ptr<GameControlServer> game_control;
+        if (SoccerBase::GetGameControlServer(*this, game_control)
+                && game_control->GetAgentCount() > 2) // todo: remove this when there is a "penalty" playmode
+        {
+            mCheckKickOffKickerFault = true;
+        }
         mLastKickOffKickTime = time;
-        mCheckKickOffKickerFault = true;
         mLastKickOffTaker = agent;
         mGameState->SetPlayMode(PM_PlayOn);
     }
