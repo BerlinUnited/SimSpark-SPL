@@ -1,3 +1,12 @@
+2012-06-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- let a player kick the ball more than once in kickoff if there are not 
+	  more than 2 players inside the game. Should be removed when a proper 
+	  "Penalty mode" is added to the simulator
+	- small cleanup: call SoccerBase::GetGameControlServer() to access 
+	  game control server 
+
 2012-05-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 
