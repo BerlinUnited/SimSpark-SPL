@@ -124,6 +124,6 @@ protected:
     bool mSentFlags;
 };
 
-DECLARE_CLASS(SexpMonitor);
+DECLARE_ABSTRACTCLASS(SexpMonitor);
 
 #endif // SEXPMONITOR_H__

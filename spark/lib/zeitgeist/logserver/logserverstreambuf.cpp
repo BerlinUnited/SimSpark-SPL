@@ -48,16 +48,17 @@ LogServerStreamBuf::~LogServerStreamBuf()
 {
     // flush buffer
     sync();
+    SyncStreams();
 
     // delete streams
     while (! mStreams.empty())
     {
         if (
-            (mStreams.back().second != &std::cout) &&
-            (mStreams.back().second != &std::cerr)
+            (mStreams.back().mStream != &std::cout) &&
+            (mStreams.back().mStream != &std::cerr)
             )
             {
-                delete mStreams.back().second;
+                delete mStreams.back().mStream;
             }
 
         mStreams.pop_back();
@@ -67,19 +68,20 @@ LogServerStreamBuf::~LogServerStreamBuf()
     delete[] pbase();
 }
 
-void LogServerStreamBuf::AddStream(std::ostream *stream, unsigned int mask)
+void LogServerStreamBuf::AddStream(std::ostream *stream, unsigned int mask, bool syncStream)
 {
     TMaskStreams::iterator i;
     i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
 
     if (i == mStreams.end())
     {
-        TMaskStream pstream(mask, stream);
+        MaskStream pstream(mask, stream, syncStream);
         mStreams.push_back(pstream);
     }
     else
     {
-        i->first |= mask;
+        i->mMask |= mask;
+        i->mSync = syncStream; //overwrite
     }
 }
 
@@ -87,16 +89,17 @@ bool LogServerStreamBuf::RemoveStream(const std::ostream *stream)
 {
     // flush buffer
     sync();
+    SyncStreams();
 
-        TMaskStreams::iterator i;
-        i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
+    TMaskStreams::iterator i;
+    i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
 
-        if (i != mStreams.end())
+    if (i != mStreams.end())
         {
-                mStreams.erase(i);
-                return true;
+            mStreams.erase(i);
+            return true;
         }
-        return false;
+    return false;
 }
 
 void LogServerStreamBuf::RemoveAllStreams()
@@ -109,13 +112,14 @@ LogServerStreamBuf::SetPriorityMask(const std::ostream *stream, unsigned int mas
 {
         // flush buffer
         sync();
+        SyncStreams();
 
         TMaskStreams::iterator i;
         i = find_if(mStreams.begin(), mStreams.end(), MaskStreamEQ(stream));
 
         if (i != mStreams.end())
         {
-                i->first = mask;
+                i->mMask = mask;
                 return true;
         }
         return false;
@@ -128,7 +132,7 @@ unsigned int LogServerStreamBuf::GetPriorityMask(const std::ostream *stream) con
 
         if (i != mStreams.end())
         {
-                return i->first;
+                return i->mMask;
         }
         return 0;
 }
@@ -136,6 +140,8 @@ unsigned int LogServerStreamBuf::GetPriorityMask(const std::ostream *stream) con
 void LogServerStreamBuf::SetCurrentPriority(unsigned int priority)
 {
     sync();
+    SyncStreams();
+
     mCurrentPriority = priority;
 }
 
@@ -182,9 +188,9 @@ void LogServerStreamBuf::Forward(const char *buffer, unsigned int length)
         TMaskStreams::iterator i;
         for (i=mStreams.begin(); i!= mStreams.end(); ++i)
         {
-                if ((*i).first & mCurrentPriority)
+                if ((*i).mMask & mCurrentPriority)
                 {
-                        (*i).second->write(buffer, length);
+                        (*i).mStream->write(buffer, length);
                 }
         }
 }
@@ -210,4 +216,17 @@ LogServerStreamBuf::PutChar(TIntType chr)
         char a[1];
         a[0] = chr;
         Forward(a, 1);
+}
+
+void 
+LogServerStreamBuf::SyncStreams()
+{
+        TMaskStreams::iterator i;
+        for (i=mStreams.begin(); i!= mStreams.end(); ++i)
+        {
+                if ((*i).mSync)
+                {
+                        (*i).mStream->flush();
+                }
+        }
 }

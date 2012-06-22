@@ -1,0 +1,107 @@
+-----------------------------------------------
+Additions to Spark:
+
+#### carbon library ####
+The carbon library contains a gui-framework and a simulation-framework which wraps simspark using qt.
+Its main features are:
+- Offering a graphical user interface which can be extended by visual and functional plugins. The plugins can be used to write easy-to-use interfaces to simspark simulations.
+- Creating, managing and executing simspark-simulations alongside with any additional threads and processes.
+- The gui can be altered flexibly. Its main window with "attachment points" is loaded from a shared library, and its used plugins are loaded from shared libraries too. Plugins with visual representation can be attached to the Gui.
+
+#### carbon data ####
+Image resources for the carbon gui.
+
+#### inputsysqt plugin ####
+A new spark plugin which handles inputs to a spark simulation by converting from qt to spark defines.
+
+#### openglsystemqt plugin ####
+Empty placeholder openglsystem to be used in simspark when an external rendering by carbon is used.
+
+#### guilayout ####
+Layout projects for the Gui. They export main windows for the carbon gui from a shared library. You can easily and quickly create a new layout for the gui by creating a new layout project. A gui-layout (main window) may define attachment points for gui-plugins.
+
+Initial layout projects:
+- guigridlayout: Contains 4 attachment points (left, center, right, bottom)
+- guisimplelayout: Contains 2 attachment points (left, right)
+
+#### guiplugins ####
+Generic (not soccer related) plugins for the carbon gui. 
+Plugins can be anything to extend the gui with. There are three types: Simple Plugins (can be executed), Signal Plugins (can communicate), and AttachableFrame Plugins (can be embedded into the Gui). Examples which can be created really easily and quickly, are: executable plugins running in a new thread, function libraries, toolboxes or menu entries, or visual plugins made for user interaction.
+
+Initial plugins (all of them are plugins that can be attached to attachment points):
+- logframe: logs and displays messages
+- setupframe: creates simulation setups for the gui
+- simulationframe: displays and controls simulation tasks and processes in the gui
+- scenegraphframe: displays and controls the whole scene graph of a spark simulation. The user can freely change the values of several types of nodes.
+This interaction can be extended with additional plugins.
+- monitorframe: renders a spark simulation
+
+-----------------------------------------------
+Changes in Spark:
+
+#### spark/spark ####
+spark.cpp, spark.h: Relative path prefix can now be given in constructor as optional parameter. Needed by carbon.
+
+spark.rb: The spark script now contains logging functions and other functions 
+needed by the carbon gui.
+
+#### spark/plugin/odeimps ####
+odecollider.cpp: Fixed bug where body was deleted twice.
+
+#### spark/lib/zeitgeist #### 
+core.cpp, core.h: Added function to reset the self pointer. Needed by carbon.
+
+leaf_c.cpp: Added unlinkLeaf() function to ruby interface.
+
+#### spark/lib/zeitgeist/logserver #### 
+logserverstreambuf.h, logserverstreambuf.cpp: Replaced typedef TMaskStream with struct MaskStream. Now it not only contains the integer mask and stream pointer, but also a synchronization flag. If the flag is true, the stream will by sync()'ed every time the input stream flushes a message. This is needed for carbons message stream appenders, so it can receive the logservers messages immediately when the simulation thread sends them.
+
+logserver.h, logserver.cpp: Streams can now be added with an optional synchronization flag.
+
+logserver_c.cpp: Updated the script interface for AddStream too.
+
+#### spark/lib/zeitgeist/scriptserver #### 
+scriptserver.cpp: Ruby error messages are now sent to ->Error() instead of ->Debug().
+
+#### spark/lib/oxygen/simulationserver #### 
+simulationserver.h, simulationserver.cpp: The Simulation can now be paused. There is a flag in the simulation server and a pause/unpause function. When a simulation is paused, the next simulation cycle will not call StartCycle, SenseAgent, ActAgent and EndCycle, but a new control event CE_WaitCycle.
+When a simulation is paused, the simulation time does not advance and agents are not notified about changed time. The wait cycle lasts as long as a normal simulation cycle. Calling pause(false) will resume the normal simulation cycle after the current wait cycle and agents are notified again.
+
+The pausing function is meant to pause and observe the state of the simulation using the carbon library and the gui. It was tested with several agent implementations and seemed to work perfectly.
+
+simcontrolnode.h: The new control event CE_WaitCycle calls a new interface function WaitCycle() in simcontrolnodes. This way control nodes can be notified about running and paused simulation steps. This is used by carbon. WaitCycle() and EndCycle() are used for SimControlNodes which act as interface between carbon and spark.
+
+#### spark/lib/kerosin/inputsystem #### 
+inputsystem.h, inputsystem.cpp: AddInput() and GetInput() now use a  boost::shared_mutex to make the access thread safe. This is neccessary because there may be simulatneous access from different threads in a carbon simulation.
+
+#### spark/lib/kerosin/renderserver #### 
+renderserver.cpp: Added OpenGlError-code checking between rendering stages. Removed double picking-end-bracket glPopName() which caused picking to fail.
+
+rendercontrol.h, rendercontrol.cpp: RenderControlNodes can no be activated or deactivated. Carbon uses this feature to deactivate them in the spark simulation if the rendering is done in the gui thread or any other than the server thread.
+
+rendercontrol_c.cpp: Addes setActive() function to ruby interface.
+
+-----------------------------------------------
+Additions to rcssserver3d:
+
+#### gui ####
+Gui project which sets up a carbon gui.
+It takes the initial include directories for layouts, setups, plugins, scripts and executables from a cmake config file.
+It is contained in rcssserver3d because it contains soccer specific scripts and this way its easier to build.
+
+#### guiplugins ####
+Soccer related Plugins for the carbon gui. 
+
+- soccercontrolframe: displays and controls state of a spark soccer simulation
+
+-----------------------------------------------
+Changes in rcssserver3d:
+
+#### rcssserver3d scripts #### 
+The rcssserver3d script still exists and works as usual, but there are several new scripts which only do a part of the rcssserver3d script. These new scripts can be combined in a carbon-created simulation to alter the spark simulation without editing the script files.
+
+-----------------------------------------------
+Changes in cmake:
+
+- Added a carbon find script. It is optional to build the carbon library, and rcssserver3d will only build the gui plugins and executable if the library was found.
+- The rcssserver3d cmake build now in this branch distinguishes between debug and release librararies. So when building an rcssserver3d project (like the soccer plugin or the sparkgui project) it links to spark_debug, kerosin_debug, carbon_debug and so on, and in release it uses the release libraries. This prevents erroneous linking if one builds debug and release libs in the same directory.

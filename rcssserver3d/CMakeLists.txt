@@ -24,13 +24,15 @@ endif (WIN32)
 
 include(AdditionalSearchPaths)
 
-find_package(Spark REQUIRED)
+find_package(Spark REQUIRED) 
 find_package(Freetype REQUIRED)
 find_package(Boost REQUIRED)
 find_package(SDL REQUIRED)
 find_package(DevIL REQUIRED)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(Carbon) 
+find_package(Qt4 COMPONENTS QtXml QtOpenGl QtGui QtCore)
 
 ########## add extra flags ########## 
 if(NOT CMAKE_BUILD_TYPE)
@@ -40,7 +42,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 add_definitions(-DHAVE_CONFIG_H ${ODE_CFLAGS})
 include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
   ${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR} ${ZEITGEIST_INCLUDE_DIR}
-  ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR})
+  ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR} ${CARBON_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 
 if (UNIX)
@@ -69,8 +71,10 @@ set(RPATH_DIRECTORIES ${SPARK_LIB_DIR}
 set(CMAKE_SHARED_MODULE_PREFIX "")
 
 mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
+
+set(GUI_DATA_DIR ${DATADIR}/carbon)
  
-########## generate configuration file ##########
+########## generate configuration files ##########
 if (APPLE)
   set(BUNDLE_PATH ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME})
 elseif (UNIX)
@@ -81,15 +85,34 @@ endif (APPLE)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rcssserver3d_config.h.cmake
        ${CMAKE_CURRENT_BINARY_DIR}/rcssserver3d_config.h)
+	   
+	   
+########## Additional variables for config files ##########	   
+if (CARBON_FOUND)
+  set(carbondatadir ${CARBON_DATA_DIR})
+  set(carbonlayoutlibdir ${CARBON_ROOT_DIR}/lib/guilayout)
+  set(carbonpluginlibdir ${CARBON_ROOT_DIR}/lib/guiplugin)
+  set(guipluginlibdir ${CMAKE_INSTALL_PREFIX}/lib/guiplugin)
+  set(GUI_PLUGIN_INCLUDE_DIR include/guiplugin)
+  
+  set(carbonsetupdir ${carbondatadir}/setups)
+  set(carbonscriptdir ${carbondatadir}/scripts)
+  set(sparkscriptdir ${CARBON_ROOT_DIR}/${DATADIR}/simspark)
+endif (CARBON_FOUND)
 
 ########## add subdirectories ############
+set(PLUGIN_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/plugin)
+
 add_subdirectory(data)
 add_subdirectory(doc)
 add_subdirectory(plugin)
 add_subdirectory(rcssagent3d)
 add_subdirectory(rcssmonitor3d)
 add_subdirectory(rcssserver3d)
-
+if (CARBON_FOUND)
+  add_subdirectory(guiplugin)
+  add_subdirectory(sparkgui)
+endif (CARBON_FOUND)
 
 ########### install files ###############
 

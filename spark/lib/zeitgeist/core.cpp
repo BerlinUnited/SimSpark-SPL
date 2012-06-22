@@ -142,7 +142,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
     mLogServer->AddStream(&cerr, LogServer::eError);
 
     mLogServer->AddStream(&cout,
-                          LogServer::eNormal |
+                          LogServer::eNormal | LogServer::eAll |
                           LogServer::eWarning
                           );
 
@@ -228,6 +228,11 @@ void Core::Desctruct()
     mFileServer.reset();
     mLogServer.reset();
     mScriptServer.reset();
+}
+
+void Core::Remove()
+{
+    mSelf.reset();
 }
 
 boost::shared_ptr<CoreContext> Core::CreateContext()

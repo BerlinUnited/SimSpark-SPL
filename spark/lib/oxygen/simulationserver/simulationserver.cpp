@@ -33,15 +33,21 @@ using namespace salt;
 using namespace std;
 using namespace boost;
 
-bool SimulationServer::mExit = false;
+std::vector<SimulationServer*> SimulationServer::mServers = std::vector<SimulationServer*>();
 
 void SimulationServer::CatchSignal(int sig_num)
 {
+    static bool exiting = false;
+
     if (sig_num == SIGINT)
+        if (!exiting)
         {
             signal(SIGINT, CatchSignal);
-            SimulationServer::mExit = true;
+            for (auto it = mServers.begin(); it != mServers.end(); it++) 
+                (*it)->mExit = true;
             std::cout << "(SimulationServer) caught SIGINT. exiting.\n";
+
+            exiting = true;
         }
 }
 
@@ -53,10 +59,17 @@ SimulationServer::SimulationServer() :
     mSimStep      = 0.2f;
     mAutoTime     = true;
     mCycle        = 0;
+    mPausedCycle  = 0;
     mSumDeltaTime = 0;
-    mArgC = 0;
-    mArgV = 0;
+    mArgC         = 0;
+    mArgV         = 0;
     mMultiThreads = true;
+    mExit         = false;
+    mRunning      = false;
+    mCyclePaused  = false;
+    mContinueCycle= false;
+
+    mServers.push_back(this);
 
     signal(SIGINT, CatchSignal);
 }
@@ -94,12 +107,17 @@ void SimulationServer::OnLink()
 
 void SimulationServer::Quit()
 {
-    mExit = true;
+    for (auto it = mServers.begin(); it != mServers.end(); it++) 
+        (*it)->mExit = true;
 }
 
 bool SimulationServer::WantsToQuit()
 {
-    return mExit;
+    bool allQuit = true;
+    for (auto it = mServers.begin(); it != mServers.end(); it++) 
+        if ((*it)->mExit = false) allQuit = false;
+
+    return allQuit;
 }
 
 int SimulationServer::GetArgC()
@@ -150,6 +168,16 @@ bool SimulationServer::GetAutoTimeMode()
 int SimulationServer::GetCycle()
 {
     return mCycle;
+}
+
+bool SimulationServer::GetRunning()
+{
+    return mRunning;
+}
+
+bool SimulationServer::GetPaused()
+{
+    return mCyclePaused && mRunning;
 }
 
 bool SimulationServer::InitControlNode(const std::string& className, const std::string& name)
@@ -232,6 +260,13 @@ void SimulationServer::AdvanceTime(float deltaTime)
     mSumDeltaTime += deltaTime;
 }
 
+void SimulationServer::WaitStep()
+{
+    // do not update scene or game control server, do not advance total simulation time
+    // simply ignore the passed time since the last step 
+    mSumDeltaTime = 0;
+}
+
 void SimulationServer::Step()
 {
     if (
@@ -265,13 +300,6 @@ void SimulationServer::Step()
             mSimTime += mSumDeltaTime;
             mSumDeltaTime = 0;
         }
-
-    if (mGameControlServer->IsFinished() && !mExit)
-    {
-        GetLog()->Normal() << "(SimulationServer) GameControlServer finished,"
-                " exiting.\n";
-        Quit();
-    }
 }
 
 void SimulationServer::ControlEvent(EControlEvent event)
@@ -319,6 +347,10 @@ void SimulationServer::ControlEvent(EControlEvent event)
                     ctrNode->EndCycle();
                     break;
 
+                case CE_WaitCycle :
+                    ctrNode->WaitCycle();
+                    break;
+
                 default:
                     GetLog()->Error()
                         << "(SimulationServer) ERROR: unknown control event "
@@ -332,6 +364,8 @@ void SimulationServer::Init(int argc, char** argv)
 {
     GetLog()->Normal() << "(SimulationServer) init\n";
     mExit = false;
+    mRunning = false;
+    mCyclePaused = false;
 
     // cache argc and argv, to make it accessible for registerd
     // SimControlNodes
@@ -358,6 +392,11 @@ void SimulationServer::Run(int argc, char** argv)
         }
     else
         {
+            mRunning = true;
+            mCyclePaused = false;
+            mContinueCycle = false;
+            mPausedCycle = 0;
+
             if ( mMultiThreads )
                 {
                     GetLog()->Normal()<< "(SimulationServer) running in "
@@ -375,21 +414,55 @@ void SimulationServer::Run(int argc, char** argv)
                 }
         }
 
+    mRunning = false;
     Done();
+}
+
+void SimulationServer::PauseCycle(bool state)
+{
+    if (!mRunning)
+        return;
+    
+    if (state == true)
+        mCyclePaused = true;
+    else
+        mContinueCycle = true;
 }
 
 void SimulationServer::Cycle()
 {
-    ++mCycle;
+    if (mCyclePaused)
+    {
+        if (mPausedCycle == 0)
+            GetLog()->Normal()<< "(SimulationServer) Server paused." << std::endl;
 
-    ControlEvent(CE_StartCycle);
-    ControlEvent(CE_SenseAgent);
-    ControlEvent(CE_ActAgent);
+        ControlEvent(CE_WaitCycle);
 
-    Step();
-    SyncTime();
+        WaitStep();
+        SyncTime();
 
-    ControlEvent(CE_EndCycle);
+        ++mPausedCycle;
+
+        if (mContinueCycle)
+        {
+            mCyclePaused = false;
+            mContinueCycle = false;
+            mPausedCycle = 0;
+            GetLog()->Normal()<< "(SimulationServer) Server running." << std::endl;
+        }
+    }
+    else
+    {
+        ++mCycle;
+        ControlEvent(CE_StartCycle);
+        ControlEvent(CE_SenseAgent);
+        ControlEvent(CE_ActAgent);
+
+        Step();
+        SyncTime();
+
+        ControlEvent(CE_EndCycle);
+    }
 }
 
 void SimulationServer::Done()
@@ -448,28 +521,60 @@ void SimulationServer::RunMultiThreaded()
 
     boost::shared_ptr<SimControlNode> renderControl = GetControlNode("RenderControl");
 
-    float initDelta, finalDelta;
+    //float initDelta, finalDelta;      //unused variables
+    mExitThreads = false;
     while (!mExitThreads)
         {
-            ++mCycle;
+            if (mCyclePaused) //wait until simulation is started again
+                {
+                    if (mPausedCycle == 0)
+                        GetLog()->Normal()<< "(SimulationServer) Server paused." << std::endl;
+                    
+                    ++mPausedCycle;
 
-            // Signal start of cycle
-            mThreadBarrier->wait();
-            if (mExit)
-                mExitThreads = true;
+                    // Sync at start of wait-cycle (signals wait-cycle)
+                    mThreadBarrier->wait();
+                    if (mExit)
+                        mExitThreads = true;
 
-            // Wait for SimControlNodes' acts at the beginning of a cycle
-            mThreadBarrier->wait();
+                    // Advance time, but do not change the state of the simulation
+                    WaitStep();
+                    SyncTime(); 
 
-            Step();
-            SyncTime();
+                    //Continue running in next cycle 
+                    if (mContinueCycle)
+                    {
+                        mCyclePaused = false;
+                        mContinueCycle = false;
+                        mPausedCycle = 0;
+                        GetLog()->Normal()<< "(SimulationServer) Server running." << std::endl;
+                    }
 
-            if (renderControl
-                && renderControl->GetTime() - mSimTime < 0.005f )
-                renderControl->EndCycle();
+                    // End Cycle
+                    mThreadBarrier->wait();
+                }
+            else 
+                {
+                    ++mCycle;
 
-            // End Cycle
-            mThreadBarrier->wait();
+                    // Signal start of cycle
+                    mThreadBarrier->wait();
+                    if (mExit)
+                        mExitThreads = true;
+
+                    // Wait for SimControlNodes' acts at the beginning of a cycle
+                    mThreadBarrier->wait();
+
+                    Step();
+                    SyncTime();
+
+                    if (renderControl
+                        && renderControl->GetTime() - mSimTime < 0.005f )
+                        renderControl->EndCycle();
+
+                    // End Cycle
+                    mThreadBarrier->wait();
+                }
         }
 
     // wait for threads
@@ -490,24 +595,33 @@ void SimulationServer::SimControlThread(boost::shared_ptr<SimControlNode> contro
 
     while (!mExitThreads)
         {
-            mThreadBarrier->wait();
-
-            newCycle = false;
-            if ( controlNode->GetTime() - mSimTime <= 0.005f)
+            if (mCyclePaused)
                 {
-                    newCycle = true;
-                    controlNode->StartCycle();
-                    controlNode->SenseAgent();
-                    controlNode->ActAgent();
-                    controlNode->SetSimTime(mSimTime);
+                    mThreadBarrier->wait();
+                    controlNode->WaitCycle();
+                    mThreadBarrier->wait();
                 }
+            else
+                {
+                    mThreadBarrier->wait();
 
-            mThreadBarrier->wait();
+                    newCycle = false;
+                    if ( controlNode->GetTime() - mSimTime <= 0.005f)
+                        {
+                            newCycle = true;
+                            controlNode->StartCycle();
+                            controlNode->SenseAgent();
+                            controlNode->ActAgent();
+                            controlNode->SetSimTime(mSimTime);
+                        }
 
-            // wait for physics update
-            mThreadBarrier->wait();
-            if (!isRenderControl && newCycle)
-                controlNode->EndCycle();
+                    mThreadBarrier->wait();
+
+                    // wait for physics update
+                    mThreadBarrier->wait();
+                    if (!isRenderControl && newCycle)
+                        controlNode->EndCycle();
+                }
         }
 }
 

@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LogSettings</class>
+ <widget class="SettingsWidget" name="LogSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>757</width>
+    <height>471</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <widget class="QGroupBox" name="messagesGroupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Messages:</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="messagesMainLayout">
+        <item row="0" column="0">
+         <layout class="QFormLayout" name="messagesFormLayout">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Maximum Amount of Messages:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="messageAmountSpinBox">
+            <property name="whatsThis">
+             <string>The maximum amount of messages queued.
+The more messages are queued, the farther back messages can be re-formatted.
+When changing the message format or displayed log level the message queue is searched and the log message display is updated accordingly.
+The more messages are queued, the longer the reformatting takes.</string>
+            </property>
+            <property name="maximum">
+             <number>1000000</number>
+            </property>
+            <property name="value">
+             <number>1000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Custom Message Formats (Todo):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="customFormatEdit1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Format1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="customFormatEdit2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Format2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="customFormatEdit3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Format3</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="1">
+         <spacer name="messagesSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="textColorGroupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>130</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>130</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Text Color (Todo)</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="textColorLayout">
+        <item>
+         <layout class="QVBoxLayout" name="textColorListLayout">
+          <item>
+           <widget class="QListWidget" name="textColorList">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>120</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string notr="true">Debug</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">Info</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">Warning</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">Error</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">Fatal</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="textColorSettingsLayout">
+          <item>
+           <layout class="QGridLayout" name="textColorSettingsGridLayout">
+            <item row="0" column="0" colspan="3">
+             <widget class="QComboBox" name="textColorComboBox">
+              <item>
+               <property name="text">
+                <string>Custom</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>White</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Black</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Red</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Green</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Blue</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cyan</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Magenta</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Yellow</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Gray</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DarkRed</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DarkGreen</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DarkBlue</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DarkCyan</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DarkMagenta</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DarkYellow</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DarkGray</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LightGray</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QSpinBox" name="redSpinBox">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="greenSpinBox">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QSpinBox" name="blueSpinBox">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="textColorLabelLayout">
+            <item>
+             <widget class="QLabel" name="redLabel">
+              <property name="text">
+               <string>Red</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="greenLabel">
+              <property name="text">
+               <string>Green</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="blueLabel">
+              <property name="text">
+               <string>Blue</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>137</width>
+              <height>13</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="textColorExampleLayout">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Example Text:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="textColorExampleEdit">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SettingsWidget</class>
+   <extends>QWidget</extends>
+   <header>settingswidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

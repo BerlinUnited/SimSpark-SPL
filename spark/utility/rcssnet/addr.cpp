@@ -226,7 +226,7 @@ namespace rcss
             int m_errno;
         };
 
-        Addr::Addr( PortType port, HostType host )
+        Addr::Addr( unsigned short port, HostType host )
             : m_impl( new AddrImpl( port, host ) )
         {}
 

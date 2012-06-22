@@ -1,6 +1,8 @@
 #
-# spark.rb, setup kerosin application framework
+# sparkgui.rb, setup application framework, extended for gui-execution
 #
+$sparkFilename = "sparkgui.rb"
+$sparkPrefix = "("+$sparkFilename+") "
 
 #
 # define constants used to setup spark
@@ -24,9 +26,11 @@ $defaultInputSystemBundle = 'inputsdl'
 
 # the default TimerSystem used to control the simulation timing
 $defaultTimerSystem = 'TimerSystemBoost'
+#$defaultTimerSystem = 'TimerSystemSDL'
 
 # the name of the default bundle that contains the default TimerSystem
 $defaultTimerSystemBundle = 'timersystemboost'
+#$defaultTimerSystemBundle = 'timersystemsdl'
 
 # (OpenGL rendering)
 #
@@ -37,6 +41,13 @@ $defaultOpenGLSystem = 'OpenGLSystemSDL'
 # the name of the bundle that contains the default OpenGLSystem
 $defaultOpenGLBundle = 'openglsyssdl'
 
+# (Physics system)
+#
+
+if (!$defaultPhysicsBundle) 
+  $defaultPhysicsBundle = 'odeimps'
+end
+
 #
 # (AgentControl) constants
 #
@@ -44,7 +55,6 @@ $agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
 $agentSyncMode = false
-$threadedAgentControl = true
 
 # (MonitorControl) constants
 #
@@ -68,9 +78,76 @@ $monitorType = 'tcp'
 $physicsGlobalCFM = 0.00001
 $physicsGlobalGravity = -9.81
 
+# (Simulation) constants
+#
+$multiThreadedMode = false
+
 #
 # below is a set of utility functions for the user app
 #
+
+# log a debug message to the LogServer or cout
+def logDebug(message)
+  found = false
+  if ($logMessages)
+	logServer = get($serverPath+'log')
+	if (logServer != nil)
+		logServer.debug(message)
+		found = true
+	end
+  end
+  if (!found or !$logMessages or $printAllMessages)
+	print(message)
+  end
+
+end
+
+# log a normal message to the LogServer or cout
+def logNormal(message)
+  found = false
+  if ($logMessages)
+	logServer = get($serverPath+'log')
+	if (logServer != nil)
+		logServer.normal(message)
+		found = true
+	end
+  end
+  if (!found or !$logMessages or $printAllMessages)
+	print(message)
+  end
+
+end
+
+# log a warning message to the LogServer or cout
+def logWarning(message)
+  found = false
+  if ($logMessages)
+	logServer = get($serverPath+'log')
+	if (logServer != nil)
+		logServer.warning(message)
+		found = true
+	end
+  end
+  if (!found or !$logMessages or $printAllMessages)
+	print(message)
+  end
+
+end
+
+# log an error message to the LogServer or cout
+def logError(message)
+  found = false
+  if ($logMessages)
+	logServer = get($serverPath+'log')
+	if (logServer != nil)
+		logServer.error(message)
+		found = true
+	end
+  end
+  if (!found or !$logMessages or $printAllMessages)
+	print(message)
+  end
+end
 
 # return the existing instance or create a new one
 def sparkGetOrCreate(className, path)
@@ -80,11 +157,7 @@ def sparkGetOrCreate(className, path)
     return obj
   end
 
-  #print "(spark.rb) creating "
-  #print className
-  #print " instance at "
-  #print path
-  #print "\n"
+  #logNormal($sparkPrefix +" creating " + className + " instance at " + path + "\n")
 
   return new(className, path)
 end
@@ -93,12 +166,8 @@ end
 def sparkCreate(className, path)
   delete(path)
 
-  #print "(spark.rb) creating "
-  #print className
-  #print " instance at "
-  #print path
-  #print "\n"
-
+  #logNormal($sparkPrefix +" creating " + className + " instance at " + path + "\n")
+  
   return new(className, path)
 end
 
@@ -198,7 +267,7 @@ def sparkSetupMonitor
   # add the agent control node
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(false)
+    simulationServer.setMultiThreads($multiThreadedMode)
 
     # set auto speed adjust mode.
     simulationServer.setAdjustSpeed(true)
@@ -211,14 +280,13 @@ def sparkSetupMonitor
 
   if ($monitorType == 'udp')
     monitorClient.setClientTypeUDP()
-  else if ($monitorType == 'tcp')
-	 monitorClient.setClientTypeTCP()
-       else
-   print "(spark.rb) sparkSetupMonitor\n"
-	 print "(spark.rb) ERROR: unknown monitor socket type "
-	 print $monitorType
-	 print "\n"
-       end
+  else 
+	if ($monitorType == 'tcp')
+		monitorClient.setClientTypeTCP()
+	else
+		logNormal($sparkPrefix + " sparkSetupMonitor\n")
+		logNormal($sparkPrefix + " ERROR: unknown monitor socket type " + ($monitorType or "nil") +"\n")
+    end
   end
 
   rubySceneImporter = get($serverPath+'scene/RubySceneImporter')
@@ -228,11 +296,11 @@ def sparkSetupMonitor
 end
 
 def sparkSetupMonitorLogPlayer
-  #print "(spark.rb) sparkSetupMonitorLogPlayer\n"
+  #logNormal($sparkPrefix + " sparkSetupMonitorLogPlayer\n)
 
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(false)
+    simulationServer.setMultiThreads($multiThreadedMode)
 
     # set auto speed adjust mode.
     simulationServer.setAdjustSpeed(true)
@@ -255,7 +323,7 @@ end
 # simulation specific monitor processing
 #
 def sparkRegisterCustomMonitor(className)
-  #print "(spark.rb) sparkRegisterCustomMonitor " + className + "\n"
+  logNormal($sparkPrefix + " sparkRegisterCustomMonitor " + className + "\n")
   sparkGetSimulationServer()
   sparkCreate(className, $serverPath+'simulation/SparkMonitorClient/'+className)
 end
@@ -265,7 +333,7 @@ end
 # application specific render logic
 #
 def sparkRegisterCustomRender(className)
-  #print "(spark.rb) sparkRegisterCustomRender " + className + "\n"
+  logNormal($sparkPrefix + " sparkRegisterCustomRender " + className + "\n")
   sparkGetSimulationServer()
   sparkCreate(className, $serverPath+'simulation/RenderControl/'+className)
 end
@@ -275,7 +343,7 @@ end
 # application specific input processing
 #
 def sparkRegisterCustomInput(className)
-  #print "(spark.rb) sparkRegisterCustomInput " + className + "\n"
+  logNormal($sparkPrefix + " sparkRegisterCustomInput " + className + "\n")
   sparkGetSimulationServer()
   sparkCreate(className, $serverPath+'simulation/InputControl/'+className)
 end
@@ -285,9 +353,37 @@ end
 # commands received from a monitor client
 #
 def sparkRegisterMonitorCmdParser(className)
-  #print "(spark.rb) sparkRegisterMonitorCmdParser " + className + "\n"
+  logNormal($sparkPrefix + " sparkRegisterMonitorCmdParser " + className + "\n")
   sparkGetMonitorServer()
   sparkCreate(className, $serverPath+'monitor/SparkMonitor/'+className)
+end
+
+def sparkRemoveCustomMonitor(className)
+  logNormal($sparkPrefix + " sparkRemoveCustomMonitor " + className + "\n")
+  server = sparkGetSimulationServer()
+  monitor = get($serverPath + "simulation/SparkMonitorClient/"+className)
+  monitor.unlinkLeaf()
+end
+
+def sparkRemoveCustomRender(className)
+  logNormal($sparkPrefix + " sparkRemoveCustomRender " + className + "\n")
+  render = get($serverPath + "simulation/RenderControl/"+className)
+  render.unlinkLeaf()
+end
+
+def sparkRemoveCustomInput(className)
+  logNormal($sparkPrefix + " sparkRegmoveCustomInput " + className + "\n")
+  server = sparkGetSimulationServer()
+  input = get($serverPath + "simulation/InputControl/"+className)
+  input.unlinkLeaf()
+end
+
+def sparkRemoveMonitorCmdParser(className)
+  logNormal($sparkPrefix + " sparkRemoveMonitorCmdParser " + className + "\n")
+  server = sparkGetSimulationServer()
+  input = get($serverPath + "simulation/SparkMonitor/"+className)
+  logNormal("Unlink sparkMonitorCmdParser...\n")
+  input.unlinkLeaf()
 end
 
 def sparkSetupServer
@@ -296,7 +392,7 @@ def sparkSetupServer
   simulationServer = sparkGetSimulationServer()
 
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(true);
+    simulationServer.setMultiThreads($multiThreadedMode)
     simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
     # set auto speed adjust mode.
@@ -312,7 +408,6 @@ def sparkSetupServer
     agentControl.setServerPort($agentPort)
     agentControl.setStep($agentStep)
     agentControl.setSyncMode($agentSyncMode)
-    agentControl.setMultiThreaded($threadedAgentControl)
   end
 
   if ($agentType == 'udp')
@@ -320,10 +415,8 @@ def sparkSetupServer
   else if ($agentType == 'tcp')
 	agentControl.setServerTypeTCP()
        else
-	 print "(spark.rb) sparkSetupServer\n"
-	 print "(spark.rb) ERROR: unknown agent socket type "
-	 print $agentType
-	 print "\n"
+		logNormal($sparkPrefix + " sparkSetupServer\n")
+	 	logNormal($sparkPrefix + " ERROR: unknown agent socket type " + $agentType.to_s + "\n")
        end
   end
 
@@ -336,10 +429,8 @@ def sparkSetupServer
   else if ($serverType == 'tcp')
 	 monitorControl.setServerTypeTCP()
        else
-	 print "(spark.rb) sparkSetupServer\n"
-	 print "(spark.rb) ERROR: unknown monitor socket type "
-	 print $serverType
-	 print "\n"
+	 	logNormal($sparkPrefix + " sparkSetupServer\n")
+	 	logNormal($sparkPrefix + " ERROR: unknown monitor socket type " + $serverType.to_s + "\n")
        end
   end
 
@@ -347,15 +438,15 @@ def sparkSetupServer
   # log recording setup
 
   if ($recordLogfile == true)
-    print "(spark.rb) recording Logfile as 'sparkmonitor.log'\n"
+    logNormal($sparkPrefix + " recording Logfile as 'sparkmonitor.log'\n")
     monitorLogger = sparkCreate('oxygen/MonitorLogger', $serverPath+'simulation/MonitorLogger')
     monitorLogger.setStep($monitorLoggerStep)
   end
 end
 
-def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem)
-  print "(spark.rb) sparkSetupRendering\n"
-  print "(spark.rb) using OpenGLSystem '" + openGLSystem + "'\n"
+def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem, active = nil)
+  logNormal($sparkPrefix + " sparkSetupRendering\n")
+  logNormal($sparkPrefix + " using OpenGLSystem '" + openGLSystem + "'\n")
 
   #
   # setup the kerosin render framework
@@ -393,12 +484,19 @@ def sparkSetupRendering(openGLSystem = $defaultOpenGLSystem)
   renderControl = get($serverPath+'simulation/RenderControl')
   if (renderControl != nil)
     renderControl.setStep($renderStep)
+	
+	#activate/deactivate internal rendering
+	if (active != nil)
+		renderControl.setActive(active)
+	end
   end
+  
+  $renderingInitialized = true
 end
 
 def sparkSetupInput(inputSystem = $defaultInputSystem)
-  print "(spark.rb) sparkSetupInput\n"
-  print "(spark.rb) using InputSystem '" + inputSystem + "'\n"
+  logNormal($sparkPrefix + " sparkSetupInput\n")
+  logNormal($sparkPrefix + " using InputSystem '" + inputSystem + "'\n")
 
   # setup the SDL input system
   if (inputSystem == $defaultInputSystem)
@@ -426,8 +524,13 @@ def sparkSetupInput(inputSystem = $defaultInputSystem)
 end
 
 def sparkSetupTimer(timerSystem = $defaultTimerSystem)
-  print "(spark.rb) sparkSetupTimer\n"
-  print "(spark.rb) using TimerSystem '" + timerSystem + "'\n"
+  if ($currentTimerSystem != nil)
+	logNormal($sparkPrefix + " TimerSystem already initialized\n")
+	return
+  end
+
+  logNormal($sparkPrefix + " sparkSetupTimer\n")
+  logNormal($sparkPrefix + " using TimerSystem '" + timerSystem + "'\n")
 
   # setup the Boost timer system
   if (timerSystem == $defaultTimerSystem)
@@ -443,7 +546,7 @@ def sparkSetupTimer(timerSystem = $defaultTimerSystem)
 end
 
 def sparkSetupTrain()
-  #print "(spark.rb) sparkSetupTrain\n"
+  #logNormal($sparkPrefix + " sparkSetupTrain\n")
   #
   # register train control node to the simulation server
 
@@ -468,7 +571,7 @@ def sparkAddFPSCamera(
                       znear = 0.1
 		      )
 
-  print "(spark.rb) sparkAddFPSCamera at " + path + "\n"
+  logNormal($sparkPrefix + " sparkAddFPSCamera at " + path + "\n")
 
   # add a camera. The camera movement is controlled using an
   # FPSController.
@@ -486,7 +589,8 @@ def sparkAddFPSCamera(
 
   # add an FPSController to move the camera and set the applied
   # acceleration
-  fpsController = new('oxygen/FPSController',path+'/physics/controller')
+  $fpsControllerPath = path+'/physics/controller'
+  fpsController = new('oxygen/FPSController', $fpsControllerPath)
   fpsController.setAcceleration(accel)
   fpsController.setVAngle(vAngle)
   fpsController.setHAngle(hAngle)
@@ -520,18 +624,18 @@ end
 # logType denotes the debug to be attached to the
 # logtarget. Valid streams are 'eNone', 'eDebug' and 'eWarning'
 #
-def sparkEnableLog(logTarget, logType)
-  print "(spark.rb) sparkEnableLog logTarget="+logTarget+" logType="+logType+"\n"
+def sparkEnableLog(logTarget, logType, syncLog = false)
+  logNormal($sparkPrefix + " sparkEnableLog logTarget="+logTarget+" logType="+logType+" syncLog="+syncLog.to_s+"\n")
 
   logServer = get($serverPath+'log')
   if (logServer != nil)
-    logServer.addStream(logTarget, logType)
+    logServer.addStream(logTarget, logType, syncLog)
   end
 end
 
 # deregisters all output stream
 def sparkResetLogging()
-  #print "(spark.rb) sparkResetLogging removing all log targets\n";
+  #logNormal($sparkPrefix + " sparkResetLogging removing all log targets\n");
 
   logServer = get($serverPath+'log')
   if (logServer != nil)
@@ -541,43 +645,43 @@ end
 
 
 # logs all normal output to cout
-def sparkLogNormalToCout()
-  sparkEnableLog(':cout', 'eNormal')
+def sparkLogNormalToCout(sync = false)
+  sparkEnableLog(':cout', 'eNormal', sync)
 end
 
 # logs all error output to cerr
-def sparkLogErrorToCerr()
-  sparkEnableLog(':cerr', 'eError')
+def sparkLogErrorToCerr(sync = false)
+  sparkEnableLog(':cerr', 'eError', sync)
 end
 
 # logs all warning output to cerr
-def sparkLogWarningToCerr()
-  sparkEnableLog(':cerr', 'eWarning')
+def sparkLogWarningToCerr(sync = false)
+  sparkEnableLog(':cerr', 'eWarning', sync)
 end
 
 # logs all debug output to cerr
-def sparkLogDebugToCerr()
-  sparkEnableLog(':cerr', 'eDebug')
+def sparkLogDebugToCerr(sync = false)
+  sparkEnableLog(':cerr', 'eDebug', sync)
 end
 
 # logs all output to cerr
-def sparkLogAllToCerr()
-  sparkEnableLog(':cerr', 'eAll')
+def sparkLogAllToCerr(sync = false)
+  sparkEnableLog(':cerr', 'eAll', sync)
 end
 
 # logs all error output to 'fileName'
-def sparkLogErrorToFile(fileName)
-  sparkEnableLog(fileName, 'eError')
+def sparkLogErrorToFile(fileName, sync = false)
+  sparkEnableLog(fileName, 'eError', sync)
 end
 
 # logs all debug output to 'fileName'
-def sparkLogDebugToFile(fileName)
-  sparkEnableLog(fileName, 'eDebug')
+def sparkLogDebugToFile(fileName, sync = false)
+  sparkEnableLog(fileName, 'eDebug', sync)
 end
 
 # logs all output to 'fileName'
-def sparkLogAllToFile(fileName)
-  sparkEnableLog(fileName, 'eAll')
+def sparkLogAllToFile(fileName, sync = false)
+  sparkEnableLog(fileName, 'eAll', sync)
 end
 
 # register an integrated agent
@@ -586,15 +690,45 @@ def addIntegratedAgent(agentType, number)
 end
 
 #
+# Cleanup calls and functions to reset simulation elements
+#
+$cleanupCalls = []
+
+# add a new function (e.g. ":resetSoccer") to the list of functions to call
+def sparkAddCleanupCall(cleanCall)
+	$cleanupCalls[$cleanupCalls.size] = method cleanCall
+end
+
+# calls all cleanup functions in the list
+def sparkInvokeCleanupCalls()
+	for index in 0 ... $cleanupCalls.size
+		$cleanupCalls[index].call()
+	end
+end
+
+# resets the environment by calling all cleanup functions and clearing the list
+def sparkResetEnvironment()
+	if ($cleanupCalls.size > 0)
+		logNormal("resetEnvironment(): Calling " + $cleanupCalls.size.to_s + " cleanup functions.\n")	
+		sparkInvokeCleanupCalls()
+		$cleanupCalls.clear
+	else
+		logNormal("resetEnvironment(): No cleanup functions to call.\n")
+	end
+	sparkResetScene()
+end
+
+#
 # setup spark
 #
 
-#print "(spark.rb) setup\n"
+logNormal($sparkPrefix + " setup\n")
 
 #import the implementations of the desired physics engine
-#currently supported: odeimps (uses Open Dynamics Engine)
-importBundle 'odeimps'
-#print "(spark.rb) using ODE, to change the physics engine go to line 559 in spark.rb\n"
+#currently supported: odeimps (uses Open Dynamics Engine), bulletimps
+logNormal($sparkPrefix + " Loading physics implementation:" + $defaultPhysicsBundle +"\n")
+importBundle($defaultPhysicsBundle)
+#logNormal($sparkPrefix + " using ODE, to change the physics engine go to line 559 in spark.rb\n")
 
 #
 # set up logging
@@ -603,6 +737,11 @@ logServer = get($serverPath+'log')
 if (logServer != nil)
   logServer.addStream(':cerr', 'eError')
 end
+
+# log script messages to logServer
+$logMessages = true
+# print all script messages to std::out (even those sent to logserver)
+$printAllMessages = true
 
 #
 # setup the PhysicsServer
@@ -675,3 +814,5 @@ importBundle "agentsynceffector"
 
 #
 importBundle "imageperceptor"
+
+logNormal($sparkPrefix + " setup end\n")

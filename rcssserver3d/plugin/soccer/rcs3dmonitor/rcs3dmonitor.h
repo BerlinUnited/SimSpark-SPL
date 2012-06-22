@@ -144,7 +144,7 @@ protected:
     TNodeCacheMap mNodeCache;
 };
 
-DECLARE_CLASS(RCS3DMonitor);
+DECLARE_ABSTRACTCLASS(RCS3DMonitor);
 
 #endif // RCS3DMONITOR_H__
 

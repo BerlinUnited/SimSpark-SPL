@@ -30,8 +30,8 @@
 #include <cmath>
 
 #ifdef WIN32
-#include <float.h>
-#include <limits>
+#include <cfloat>
+#include <climits>
 #endif
 
 namespace salt

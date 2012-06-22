@@ -46,7 +46,8 @@ ControlAspect::GetActiveScene()
 
     if (sceneServer.get() == 0)
     {
-        GetLog()->Error() << "(ControlAspect) cannot get SceneServer\n";
+        GetLog()->Error() << "(ControlAspect) cannot get SceneServer"
+						  << std::endl;
         return boost::shared_ptr<Scene>();
     }
 
@@ -54,7 +55,8 @@ ControlAspect::GetActiveScene()
 
     if (activeScene.get() == 0)
     {
-        GetLog()->Error() << "(ControlAspect) SceneServer reported no active scene\n";
+        GetLog()->Error() << "(ControlAspect) SceneServer reported no"
+			              << "active scene" << std::endl;
         return boost::shared_ptr<Scene>();
     }
 
@@ -62,7 +64,9 @@ ControlAspect::GetActiveScene()
 }
 
 void
-ControlAspect::GetControlAspect(Core::CachedLeafPath& aspect, const string& name)
+ControlAspect::GetControlAspect(
+								Core::CachedLeafPath& aspect,
+								const string& name)
 {
     static const string gcsPath = "/sys/server/gamecontrol/";
 

@@ -12,9 +12,19 @@ include_directories(${SDL_INCLUDE_DIR})
 
 add_executable(rcssmonitor3d ${rcssmonitor3d_SRCS})
 
-target_link_libraries(rcssmonitor3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
-  ${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
-  ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY})
+target_link_libraries(rcssmonitor3d 
+  ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY}
+  debug ${SPARK_LIBRARY_DEBUG} 
+  debug ${SALT_LIBRARY_DEBUG}
+  debug ${ZEITGEIST_LIBRARY_DEBUG} 
+  debug ${OXYGEN_LIBRARY_DEBUG} 
+  debug ${KEROSIN_LIBRARY_DEBUG}
+  optimized ${SPARK_LIBRARY_RELEASE} 
+  optimized ${SALT_LIBRARY_RELEASE}
+  optimized ${ZEITGEIST_LIBRARY_RELEASE} 
+  optimized ${OXYGEN_LIBRARY_RELEASE} 
+  optimized ${KEROSIN_LIBRARY_RELEASE}
+)
 
 set_target_properties(rcssmonitor3d PROPERTIES 
     INSTALL_RPATH "${RPATH_DIRECTORIES}")
