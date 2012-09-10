@@ -1,0 +1,381 @@
+\chapter{Zeitgeist application framework}
+
+The Zeitgeist library provides two major features. It implements a
+mechanism to work with class objects in C++. A class object is just a
+factory of class instances. In addition to this mechanism, it also
+implements an object hierarchy. This hierarchy is essentially a
+virtual file system, where the 'directories' and 'files' are instances
+of C++ classes. These two concepts are quite intertwined with each
+other, as class objects can also live inside the object
+hierarchy. Objects within the hierarchy are identified with a unique
+name. On top of these two features, the Zeitgeist library also
+provides three very important 'built-in' services. Each basic service
+is usually represented by a 'server' class in our terminology. An
+instance of such a class provides the service to other parts of the
+system. The three services built into the Zeitgeist library are the
+LogServer, the FileServer, and the ScriptServer.
+
+\section{Writing a class object for a C++ class}
+\label{sec:classobj}
+
+This topic is fundamental in the understanding of how the class object
+and the object hierarchy framework interact with each other. Let's say
+we have a simple class:
+
+\begin{verbatim}
+
+class Simple
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+
+\end{verbatim}
+
+Now, in order to write a class object for this class we must do two
+things: First, the class must derive from the
+\texttt{zeitgeist::Object} class or one of its descendants,
+especially \texttt{Leaf} and \texttt{Node} if instances of this class
+are to live in the object hierarchy. In addition to this, a class
+object must be declared and defined, which serves as a factory for
+instances of this class.
+
+The first step is performed easily:
+
+\begin{verbatim}
+#include <zeitgeist/leaf.h>
+
+class Simple : public zeitgeist::Leaf
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+\end{verbatim}
+
+Now, we just have to write a class object for this class. As this is a
+pretty repetitive procedure, several helper-macros exist to make this
+as painless as possible. First, we declare the class object. This is
+done in the header file with the \texttt{DECLARE\_CLASS()}-macro:
+
+\begin{verbatim}
+#include <zeitgeist/leaf.h>
+
+class Simple : public zeitgeist::Leaf
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+
+DECLARE_CLASS(Simple);
+\end{verbatim}
+
+With this macro, we declare the class object. If \texttt{Simple} would
+have been an abstract base class (containing one or more pure virtual
+functions) we would have needed to use the
+\texttt{DECLARE\_ABSTRACTCLASS()}-macro instead. 
+
+Both of these macros create a new class with the mangled name
+\texttt{Class\_XXXX}, where \texttt{XXXX} is the name of the class. 
+In our case this would be \texttt{Class\_Simple}. This class is derived
+from \texttt{zeitgeist::Class}. In the case of
+\texttt{DECLARE\_CLASS()} the macro also provides a \texttt{CreateInstance()}
+function, which creates an instance of the Simple class. 
+
+The \texttt{DECLARE\_ABSTRACTCLASS()} macro does not do this, as it is
+impossible to create an instance of an abstract class. It inherits the
+base behavior from zeitgeist::Class, which just returns
+\texttt{NULL}. 
+
+In addition to this, both macros declare a \texttt{DefineClass()}
+member function, which needs to be implemented to define the class
+object fully. This is done in an additional \texttt{CPP} file. If the
+class above was implemented in the files \texttt{simple.h} and
+\texttt{simple.cpp}, the accompanying class object should be placed in
+the file \texttt{simple\_c.cpp}. This naming convention has been found
+useful during development and should be adopted. A minimal
+\texttt{simple\_c.cpp} should look like this:
+
+\begin{verbatim}
+#include "simple.h"
+
+using namespace zeitgeist;
+
+void CLASS(Simple)::DefineClass()
+{
+  DEFINE_BASECLASS(zeitgeist/Leaf);
+}
+\end{verbatim}
+
+
+The \texttt{CLASS()}-macro is used to identify the name of the class
+object. In the above example, it just resolves to
+\texttt{Class\_Simple}. The \texttt{DEFINE\_BASECLASS()} macro is used to 
+identify the base class of the class described by this class
+object. This can appear multiple times to allow for multiple
+inheritance. We now have a working class object. In order to use it it
+must be registered to the zeitgeist framework. This process is
+described in section \ref{sec:regobj}.
+
+\section{Registering a Class Object}
+\label{sec:regobj}
+
+In section \ref{sec:classobj} we created a class object for the C++
+class \texttt{Simple}. Before this class object can be used by the
+zeitgeist framework it must be registered with a
+\texttt{zeitgeist::Core} object. 
+
+The Core is the object hierarchy, which is basically a virtual file
+system where instances of classes represent the directories and
+'files'. Therefore, each class instance can be identified by a
+path. The Core has a function called \texttt{RegisterClassObject()}
+which inserts the class object into the object hierarchy. Class
+objects are located under the \texttt{'/classes/'} branch of the
+hierarchy. We have two major scenarios of how a class object can be
+registered: Directly or indirectly!
+
+\subsection{Direct Registration}
+
+This scenario is used in the case of static libraries and executables,
+which want to expose custom classes to the object hierarchy. An
+example of a library, which does this is Kerosin. This way of
+registering is pretty straight forward and involves an initialization
+function which has a means to access the \texttt{zeitgeist::Core}
+instance where the class objects are to be registered. Then it
+(directly) calls the \texttt{RegisterClassObject()}-method to
+successively add class objects. Here's a short snippet from the
+Kerosin library:
+
+\begin{verbatim}
+#include "kerosin.h"
+#include <zeitgeist/scriptserver/scriptserver.h>
+
+using namespace kerosin;
+using namespace zeitgeist;
+
+Kerosin::Kerosin(zeitgeist::Zeitgeist &zg)
+{
+  zg.GetCore()->RegisterClassObject(new CLASS(SoundServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(InputServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(ImageServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(FontServer), "kerosin/");
+
+  zg.GetCore()->RegisterClassObject(new CLASS(OpenGLServer), "kerosin/");
+\end{verbatim}
+
+The Kerosin library is initialized by creating an instance of the
+Kerosin class. The constructor needs a reference to the Zeitgeist
+object (which represents the Zeitgeist library), so it can get access
+to the Core. The class objects are all added to the object hierarchy
+under the \texttt{'/classes/'} branch. 
+
+The second parameter of \texttt{RegisterClassObject()} allows to
+specify an additional sub path. So, the class object for the
+SoundServer (for example) will be located at
+\texttt{'/classes/kerosin/SoundServer'}. In in a way, this allows to create a
+form of namespaces among the class objects. As we can see, it is
+possible to add a class object directly at any time during the
+execution of the program.
+
+\subsection{Indirect Registration}
+
+The second scenario involves packaging a bunch of class objects into a
+shared library. On Unix platform these files are called \texttt{.so}
+files. In the Windows world thees files are \texttt{.DLLs}. The shared
+library is used as a class library, containing a collection of classes
+to be added to the object hierarchy. This kind of library is referred
+to as a \texttt{Bundle}. 
+
+The Bundle contains a well defined entry point function, which
+registers its contents with the calling Core. This is simplified
+through the use of several macros. First, we have to create a shared
+library project, containing a bunch of classes and their corresponding
+class objects. This process is described in section
+\ref{sec:classobj}. Then, we create an additional \texttt{.CPP} file. By convention
+this file is called \texttt{export.cpp}. Let's say we have two classes
+in our bundle, \texttt{Simple} and \texttt{Complex}. The corresponding
+\texttt{export.cpp} would look like this:
+
+\begin{verbatim}
+#include "simple.h"
+#include "complex.h"
+#include <zeitgeist/zeitgeist.h>
+
+ZEITGEIST_EXPORT_BEGIN()
+  ZEITGEIST_EXPORT(Simple);
+  ZEITGEIST_EXPORT(Complex);
+ZEITGEIST_EXPORT_END()
+\end{verbatim}
+
+
+Thanks to the macros, this is again a quite compact notation. We just
+include the header files of all classes we want to expose. These
+should also incorporate the correct class object declarations. Then we
+include the zeitgeist framework. The following macros implement the
+entry point function. \texttt{ZEITGEIST\_EXPORT\_BEGIN()} implements
+the beginning of the function. Then we use
+\texttt{ZEITGEIST\_EXPORT()} for every class we want to export, and
+finally \texttt{ZEITGEIST\_EXPORT\_END()} to 'terminate' the
+function. The compiled library is then a Zeitgeist-capable Bundle. The
+\texttt{ZEITGEIST\_EXPORT\_EX()} macro can be used to specify a subpath as above
+with \texttt{RegisterClassObject()}.
+
+
+To indirectly register the classes contained in a Bundle, you just
+import the bundle into the Core. This is done with the
+\texttt{ImportBundle()}-member function. This function opens the shared
+library. Gets the entry point function and calls it with an STL
+list. The class objects are added to this list within the entry point
+function. After returning, all class objects contained in this list
+are added to the object hierarchy.
+
+\section{Exposing C++ functions to Ruby Scripts}
+
+As we want to expose much functionality to the script side, we also
+want to be able to call C++ functions from Ruby. In order to do this,
+we intercept unknown function calls on the Ruby side. The parameters
+are converted on the C++ side. There we know the name of the function
+to call, the object to call them on, and the parameters. 
+
+But, how do we actually call the correct C++ function. The answer lies
+in the class object. The class object will contain the necessary
+meta-data to reroute the function call to the correct C++
+function. The class object defines the interface of the class to the
+script side. This is done in the same file as the class definition was
+performed, i.e. the additional CPP file as described in section.
+\ref{sec:classobj}. Let's go back to the \texttt{Simple} class from earlier:
+
+\begin{verbatim}
+#include <zeitgeist/leaf.h>
+
+class Simple : public zeitgeist::Leaf
+{
+public:
+  Simple();
+  virtual ~Simple();
+  
+  void DoSomething();
+  void PrintString(const std::string& s);
+  void PrintInt(int i);
+  void PrintFloat(float f);
+  void PrintBool(bool b);
+};
+
+DECLARE_CLASS(Simple);
+\end{verbatim}
+
+In order to to expose the \texttt{DoSomething()} method the
+\texttt{simple\_c.cpp} would look like this:
+
+\begin{verbatim}
+#include "simple.h"
+
+using namespace zeitgeist;
+
+FUNCTION(doSomething)
+{
+  if (in.size() == 0)
+  {
+    Simple *simple = static_cast<Simple*>(obj);
+    simple->DoSomething();
+  }
+}
+
+void CLASS(Simple)::DefineClass()
+{
+  DEFINE_BASECLASS(zeitgeist/Leaf);
+  DEFINE_FUNCTION(doSomething);
+}
+\end{verbatim}
+
+
+Every function is declared using the \texttt{FUNCTION()}-macro. As a
+parameter it takes the name of the function. By convention Ruby-side
+functions start with a lower-case letter and C++-side functions with a
+capital letter. 
+
+The function macro just declares a function, which takes two
+parameters: \texttt{obj} and \texttt{in}. \texttt{obj} is the object
+we are calling the function on, i.e. basically, the \texttt{this} or
+\texttt{self} pointer. \texttt{in} a reference to a \texttt{ParameterList} 
+instance. Basically the \texttt{Parameterlist} class manages a list of
+\texttt{boost::any} values and provides helper to iterate the list and cast 
+values to the desired type.
+
+In \texttt{DefineClass()} we also have to define the function using
+the \texttt{DEFINE\_FUNCTION()} macro. After this has been done and
+after the class object is registered with the Core, we can execute the
+following script-code:
+
+\begin{verbatim}
+mySimpleObj = new ('Simple', 'test')
+mySimpleObj.doSomething
+\end{verbatim}
+
+This ruby code would then call the C++ member function
+\texttt{DoSomething()}. Now, how about passing some parameters. Let's marshall
+the PrintInt() function:
+
+\begin{verbatim}
+#include "simple.h"
+
+using namespace zeitgeist;
+using namespace boost;
+
+FUNCTION(printInt)
+{
+  if (in.GetSize() != 1)
+  {
+      return false;
+  }
+
+  int value;
+  in.GetValue(in[0]);
+
+  obj->PrintInt(value);
+  return true;
+}
+\end{verbatim}
+
+The above function obviously also would need to be defined in
+\texttt{DefineClass()}. Now we see that the first given value 
+is automatically cast to \texttt{int} using the \texttt{GetValue()}
+function on the \texttt{ParameterList}. The \texttt{obj} contains the
+reference to our \texttt{Simple} class instance. Using this reference
+we call the C++ \texttt{PrintInt()} function.
+
+The rest of the code is concerned with error checking as
+\texttt{GetSize()} is used to check the number of the given parameters. 
+In the current implementation every C++ function that is exposed to
+ruby needs to return a value, so we just return a boolean value
+here. The return type is not fixed but marshalled using a
+\texttt{boost::any} container. It is therefore possible to return
+different types.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "user-manual"
+%%% End: 

@@ -1,0 +1,23 @@
+RELEASE News of simspark-0.2.2
+
+This release features many small enhancements which will benefit users.
+It contains many bug fixes and performance improvements, in addition to
+fixing some compilation issues. The behavior of ACC perceptor has been slightly
+changed, and the multi-threaded mode should work without any known bugs. 
+Support for the camera sensor is improved too. More details are as follows:
+
+- ACC sensor provides raw data without any pre-processing
+ -- You can apply the following filter to 'RawACC' value received from the 
+    simulator to get ACC value as what you'd receive in previous versions:
+    ACC = 0.9 * ACC + (0.1) * RawACC
+- Using base64 encoding for camera perceptor
+- Fixed bugs in multi-threaded mode.
+- Compilation fixes
+- HingePerceptor can report torque
+- Better Performance
+- New timing system result in more cleaner code and prevent wasting CPU time
+- Do not block on sending data to clients. Previously, simulator would block on
+  send() until it can send all data to clients.
+
+You can get the package on the Simspark page on SourceForge
+at http://sourceforge.net/projects/simspark/

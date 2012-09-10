@@ -1,0 +1,29 @@
+/* XPM */
+static const char *xpm_open[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1",
+"  c #040404",
+". c #999900",
+"X c #CCCC66",
+"o c #FFCC99",
+"O c #FFFF99",
+"+ c gray100",
+"@ c None",
+/* pixels */
+"@@@@@@@@@@@@@@@@",
+"@@@.....@@@@@@@@",
+"@@.+++++.@@@@@@@",
+"@.+OOOOO+......@",
+"@.+OOOOOOO++++X ",
+"@.+OOOOOOOOOOOX ",
+"............XOX ",
+".+OOOOOOoOoX XX ",
+".+OOOOoOOoOX XX ",
+"@.+OOOOOoOoo. . ",
+"@.+OOoOoOoooX . ",
+"@@.+oOoOooooX.  ",
+"@@............  ",
+"@@@             ",
+"@@@@@@@@@@@@@@@@",
+"@@@@@@@@@@@@@@@@"
+};

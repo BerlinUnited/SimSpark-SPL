@@ -1,0 +1,210 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RoSi.xsd">
+  <AppearanceDefinition name="red">
+    <Color r="255" g="0" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="dark blue">
+    <Color r="0" g="0" b="128"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="green">
+    <Color r="0" g="200" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="yellow">
+    <Color r="220" g="220" b="0"/>
+  </AppearanceDefinition>
+    <AppearanceDefinition name="orange">
+        <Color r="250" g="150" b="0"/>
+    </AppearanceDefinition>
+  <AppearanceDefinition name="glass">
+    <Color r="200" g="200" b="200"/>
+    <Alpha a="0.0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="background">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+
+   <Macro name="SingleLaser">
+      <SingleDistanceSensor name="Dingens">
+               <Translation  x="0" y="0" z="0.1"/>
+    <Range near="0.05" far="1"></Range>
+    </SingleDistanceSensor>
+   </Macro>
+  <Scene name="SimpleVehicle" description="A simple vehicle with several distance sensors.">
+    <Background surface="background"/>
+    <AmbientLightColor r="150" g="150" b="150"/>
+    <DefaultAppearance ref="dark blue"/>
+    <GlobalPhysicalParameters gravity="-0.001" erp="0.2" cfm="0.0001"/>
+    <SimulationParameters stepLength="0.33" standardLength="0.1" applyDynamicsForceFactor="10.0"/>
+    <Elements>
+            <Box name="Ground" length="2.1" width="2.1" height="0.2">
+                <Translation x="0" y="0" z="-0.1"/>
+                <Appearance ref="dark blue"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side1" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side2" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="-1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side3" length="0.1" width="2" height="0.2">
+                <Translation x="1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side4" length="0.1" width="2" height="0.2">
+                <Translation x="-1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+        <Movable name="car">
+        <Elements>
+          <Box name="Vehicle" length="0.2" width="0.2" height="0.1">
+            <Translation x="0" y="0" z="0.2"/>
+            <Appearance ref="green"/>
+            <PhysicalAttributes>
+                <Mass value="2"/>
+            </PhysicalAttributes>
+            <Elements>
+            <PositionSensor name="GPS"/>
+                  <Use macroName="SingleLaser" instanceName="L5">
+                  </Use>
+               <Use macroName="SingleLaser" instanceName="L1">
+                     <Rotation x="0" y="0" z="10"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L2">
+                     <Rotation x="0" y="0" z="20"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L3">
+                     <Rotation x="0" y="0" z="-10"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L4">
+                     <Rotation x="0" y="0" z="-20"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L6">
+                     <Rotation x="0" y="0" z="30"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L7">
+                     <Rotation x="0" y="0" z="-30"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L11">
+                     <Rotation x="0" y="0" z="15"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L12">
+                     <Rotation x="0" y="0" z="25"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L13">
+                     <Rotation x="0" y="0" z="-15"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L14">
+                     <Rotation x="0" y="0" z="-25"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L16">
+                     <Rotation x="0" y="0" z="35"/>
+                  </Use>
+                  <Use macroName="SingleLaser" instanceName="L17">
+                     <Rotation x="0" y="0" z="-35"/>
+                  </Use>
+                <Hinge name="Joint1">
+                    <AnchorPoint x="0.13" y="0.13" z="-0.01" />
+                  <Axis x="1.0" y="0.0" z="0.0">
+                    <VelocityMotor name ="Motor1" maxVelocity="0.05" maxForce="10.0"/>
+                  </Axis>
+                    <Elements>
+                      <Sphere name="Wheel1" radius="0.05">
+                        <Translation x="0.05" y="0.0" z="0"/>
+                      <Appearance ref="yellow"/>
+                      <PhysicalAttributes>
+                        <Mass value="1"/>
+                        <CenterOfMass x="0" y="0" z="0"/>
+                      </PhysicalAttributes>
+                    </Sphere>
+                    </Elements>
+                </Hinge>
+                <Hinge name="Joint2">
+                    <AnchorPoint x="-0.13" y="0.13" z="-0.01" />
+                    <Axis x="1.0" y="0.0" z="0.0">
+                      <VelocityMotor name ="Motor2" maxVelocity="0.05" maxForce="10.0"/>
+                    </Axis>
+                  <Elements>
+                    <Sphere name="Wheel2" radius="0.05">
+                      <Translation x="-0.05" y="0.0" z="0"/>
+                      <Appearance ref="yellow"/>
+                      <PhysicalAttributes>
+                        <Mass value="1"/>
+                        <CenterOfMass x="0" y="0" z="0"/>
+                      </PhysicalAttributes>
+                    </Sphere>
+                  </Elements>
+                </Hinge>
+                <Hinge name="Joint3">
+                  <AnchorPoint x="0.13" y="-0.13" z="-0.01" />
+                    <Axis x="1.0" y="0.0" z="0.0">
+                      <VelocityMotor name ="Motor3" maxVelocity="0.05" maxForce="10.0"/>
+                    </Axis>
+                  <Elements>
+                    <Sphere name="Wheel3" radius="0.05">
+                      <Translation x="0.05" y="0.0" z="0"/>
+                      <Appearance ref="yellow"/>
+                      <PhysicalAttributes>
+                        <Mass value="1"/>
+                        <CenterOfMass x="0" y="0" z="0"/>
+                      </PhysicalAttributes>
+                    </Sphere>
+                  </Elements>
+                </Hinge>
+                <Hinge name="Joint4">
+                  <AnchorPoint x="-0.13" y="-0.13" z="-0.01" />
+                  <Axis x="1.0" y="0.0" z="0.0">
+                    <VelocityMotor name ="Motor4" maxVelocity="0.05" maxForce="10.0"/>
+                  </Axis>
+                  <Elements>
+                    <Sphere name="Wheel4" radius="0.05">
+                      <Translation x="-0.05" y="0.0" z="0"/>
+                      <Appearance ref="yellow"/>
+                      <PhysicalAttributes>
+                        <Mass value="1"/>
+                        <CenterOfMass x="0" y="0" z="0"/>
+                      </PhysicalAttributes>
+                    </Sphere>
+                  </Elements>
+                  </Hinge>
+                </Elements>
+            </Box>
+          </Elements>
+          </Movable>
+
+
+      <Movable name="ball">
+      <Elements>
+        <Sphere name="Ball1" radius="0.14">
+          <Translation x="0.3" y="0.0" z="0.5"/>
+          <Appearance ref="orange"/>
+          <PhysicalAttributes>
+              <Mass value="1"/>
+            <CenterOfMass x="0" y="0" z="0"/>
+          </PhysicalAttributes>
+        </Sphere>
+      </Elements>
+      </Movable>
+    </Elements>
+  </Scene>
+</Simulation>

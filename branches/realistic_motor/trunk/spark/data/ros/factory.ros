@@ -1,0 +1,342 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="simrobot.xsd">
+  <AppearanceDefinition name="red">
+    <Color r="255" g="0" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="dark blue">
+    <Color r="0" g="0" b="128"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="green">
+    <Color r="0" g="200" b="80"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="yellow">
+    <Color r="220" g="220" b="0"/>
+  </AppearanceDefinition>
+    <AppearanceDefinition name="orange">
+        <Color r="250" g="150" b="0"/>
+    </AppearanceDefinition>
+  <AppearanceDefinition name="glass">
+    <Color r="200" g="200" b="200"/>
+    <Alpha a="0.3"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="background">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+
+  <AppearanceDefinition name="metal">
+    <Color r="120" g="120" b="120"/>
+  </AppearanceDefinition>
+
+  <MaterialDefinition name="Stone">
+    <FrictionCoefficient otherMaterial="Wood" value="1.0"/>
+  </MaterialDefinition>
+  <MaterialDefinition name="Steel">
+    <FrictionCoefficient otherMaterial="Wood" value="0.1"/>
+  </MaterialDefinition>
+  <MaterialDefinition name="Wood"/>
+
+
+  <VertexList name="SomePoints">
+    <Vertex name="p1" x="1" y="1" z="1"/>
+    <Vertex name="p2" x="1" y="2" z="1"/>
+    <Vertex name="p3" x="2" y="2" z="1"/>
+    <Vertex name="p4" x="2" y="1" z="1"/>
+  </VertexList>
+
+  <Scene name="Factory" description="A simple factory demonstration with blocks being sensed and automatically pushed to the right place.">
+    <Background surface="background"/>
+    <AmbientLightColor r="150" g="150" b="150"/>
+    <DefaultAppearance ref="dark blue"/>
+    <GlobalPhysicalParameters gravity="-9.81" erp="0.2" cfm="0.0001" contactSoftnessERP="0.2" contactSoftnessCFM="0.005"/>
+    <SimulationParameters stepLength="0.005" standardLength="0.1" applyDynamicsForceFactor="10.0"/>
+    <Elements>
+      <Box name="Ground" length="2.1" width="2.1" height="0.2">
+        <Translation x="0" y="0" z="-0.1"/>
+        <Appearance ref="dark blue"/>
+        <PhysicalAttributes>
+          <Mass value="10"/>
+        </PhysicalAttributes>
+      </Box>
+
+            <Box name="Pole" length="0.1" width="0.1" height="1.0">
+                <Translation x="0.3" y="-0.6" z="0.5"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+                <Elements>
+                  <DistanceSensor name="distance1">
+                    <Translation x="-0.06" y="0.0" z="0.04"/>
+                    <Rotation x="0.0"  y="180.0" z="0.0"/>
+                    <Resolution x="1" y="1"/>
+                    <OpeningAngles x="1" y="1"/>
+                    <Range near="0.0" far="0.6"/>
+                    <SphericalProjection/>
+                  </DistanceSensor>
+                  <DistanceSensor name="distance2">
+                    <Translation x="-0.06" y="0.0" z="0.07"/>
+                    <Rotation x="0.0"  y="180.0" z="0.0"/>
+                    <Resolution x="1" y="1"/>
+                    <OpeningAngles x="1" y="1"/>
+                    <Range near="0.0" far="0.6"/>
+                    <SphericalProjection/>
+                  </DistanceSensor>
+                  <DistanceSensor name="distance3">
+                    <Translation x="-0.06" y="0.0" z="0.105"/>
+                    <Rotation x="0.0"  y="180.0" z="0.0"/>
+                    <Resolution x="1" y="1"/>
+                    <OpeningAngles x="1" y="1"/>
+                    <Range near="0.0" far="0.6"/>
+                    <SphericalProjection/>
+                  </DistanceSensor>
+
+                </Elements>
+            </Box>
+
+
+            <Box name="Side1" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side2" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="-1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side3" length="0.1" width="2" height="0.2">
+                <Translation x="1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side4" length="0.1" width="2" height="0.2">
+                <Translation x="-1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+
+            <Box name="Side4" length="0.1" width="2" height="0.2">
+                <Translation x="-1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+
+            <Box name="part1" length="0.1" width="1.6" height="0.05">
+                <Translation x="0.15" y="0.0" z="0.5"/>
+                <Appearance ref="metal"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="part2" length="0.1" width="1.6" height="0.05">
+                <Translation x="-0.15" y="0.0" z="0.5"/>
+                <Appearance ref="metal"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="part3" length="0.2" width="0.4" height="0.05">
+              <Translation x="0.0" y="-0.6" z="0.5"/>
+              <Appearance ref="metal"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+              <Elements>
+                <Hinge name="trapDoor1Hinge">
+                  <AnchorPoint x="0.0" y="0.2" z="0.0" />
+                  <Axis x="1.0" y="0.0" z="0.0">
+                    <Deflection min="-90.0" max="1.0"/>
+                    <AngularMotor name ="td1motor" maxVelocity="5.0" maxForce="1000.0">
+                      <PController pControlFactor="10" stopBias="0.0"/>
+                    </AngularMotor>
+                  </Axis>
+                  <Elements>
+                    <Bumper name="trapDoor1Sensor">
+                      <Elements>
+                        <Box name="trapDoor1" length="0.18" width="0.18" height="0.05">
+                          <Translation x="0.0" y="0.1" z="0.0"/>
+                          <Appearance ref="green"/>
+                            <Material name="Wood"/>
+                          <PhysicalAttributes>
+                            <Mass value="1.0"/>
+                          </PhysicalAttributes>
+                        </Box>
+                      </Elements>
+                    </Bumper>
+                  </Elements>
+                </Hinge>
+              </Elements>
+            </Box>
+            <Box name="part4" length="0.2" width="0.1" height="0.05">
+              <Translation x="0.0" y="-0.14" z="0.5"/>
+              <Appearance ref="metal"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+              <Elements>
+                <Hinge name="trapDoor2Hinge">
+                  <AnchorPoint x="0.0" y="0.05" z="0.0" />
+                  <Axis x="1.0" y="0.0" z="0.0">
+                    <Deflection min="-90.0" max="1.0"/>
+                    <AngularMotor name ="td2motor" maxVelocity="5.0" maxForce="1000.0">
+                      <PController pControlFactor="10" stopBias="0.0"/>
+                    </AngularMotor>
+                  </Axis>
+                  <Elements>
+                    <Bumper name="trapDoor2Sensor">
+                      <Elements>
+                        <Box name="trapDoor2" length="0.18" width="0.18" height="0.05">
+                          <Translation x="0.0" y="0.1" z="0.0"/>
+                          <Appearance ref="red"/>
+                          <Material name="Wood"/>
+                          <PhysicalAttributes>
+                            <Mass value="1.0"/>
+                          </PhysicalAttributes>
+                        </Box>
+                      </Elements>
+                    </Bumper>
+                  </Elements>
+                </Hinge>
+              </Elements>
+            </Box>
+            <Box name="part5" length="0.2" width="0.1" height="0.05">
+              <Translation x="0.0" y="0.17" z="0.5"/>
+              <Appearance ref="metal"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+              <Elements>
+                <Hinge name="trapDoor3Hinge">
+                  <AnchorPoint x="0.0" y="0.05" z="0.0" />
+                  <Axis x="1.0" y="0.0" z="0.0">
+                    <Deflection min="-90.0" max="1.0"/>
+                    <AngularMotor name ="td3motor" maxVelocity="5.0" maxForce="1000.0">
+                      <PController pControlFactor="10" stopBias="0.0"/>
+                    </AngularMotor>
+                  </Axis>
+                  <Elements>
+                    <Bumper name="trapDoor3Sensor">
+                      <Elements>
+                        <Box name="trapDoor3" length="0.18" width="0.18" height="0.05">
+                          <Translation x="0.0" y="0.1" z="0.0"/>
+                          <Appearance ref="yellow"/>
+                          <Material name="Wood"/>
+                          <PhysicalAttributes>
+                            <Mass value="1.0"/>
+                          </PhysicalAttributes>
+                        </Box>
+                      </Elements>
+                    </Bumper>
+                  </Elements>
+                </Hinge>
+              </Elements>
+            </Box>
+            <Box name="part6" length="0.2" width="0.36" height="0.05">
+              <Translation x="0.0" y="0.62" z="0.5"/>
+              <Appearance ref="metal"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+            </Box>
+            <Box name="part7" length="0.4" width="1.6" height="0.05">
+              <Translation x="0.0" y="0.0" z="0.15"/>
+              <Rotation x="0.0" y="-35.0" z="0.0"/>
+              <Appearance ref="metal"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+            </Box>
+
+            <Box name="part0" length="0.4" width="0.1" height="0.8">
+              <Translation x="0.0" y="-0.8" z="0.3"/>
+              <Appearance ref="metal"/>
+              <PhysicalAttributes>
+                <Mass value="10"/>
+              </PhysicalAttributes>
+              <Elements>
+                <Slider name="sliderJoint">
+                  <Axis x="0.0" y="1.0" z=".0">
+                    <Deflection min="0.01" max="1.4"/>
+                    <AngularMotor name ="MixMotor" maxVelocity="50.0" maxForce="1000.0">
+                      <PController pControlFactor="15.0" stopBias="0.01"/>
+                    </AngularMotor>
+                  </Axis>
+                  <Elements>
+                    <Box name="SlideBox" length="0.2" width="0.04" height="0.08">
+                      <Translation x="0.0" y="0.1" z="0.27"/>
+                      <Appearance ref="orange"/>
+                      <PhysicalAttributes>
+                        <Mass value="1"/>
+                      </PhysicalAttributes>
+                    </Box>
+                  </Elements>
+                </Slider>
+                <Box name="part10" length="0.4" width="0.4" height="0.1">
+                  <Translation x="0.0" y="-0.25" z="0.35"/>
+                  <Appearance ref="metal"/>
+                  <PhysicalAttributes>
+                    <Mass value="10"/>
+                  </PhysicalAttributes>
+                </Box>
+              </Elements>
+            </Box>
+
+<!--Blocks-->
+            <Movable name="Box1">
+            <Elements>
+              <Box name="box1" length="0.1" width="0.1" height="0.1">
+                <Translation x="0.0" y="-0.8" z="1.0"/>
+                <Appearance ref="yellow"/>
+                <Material name="Stone"/>
+                <PhysicalAttributes>
+                  <Mass value="0.5"/>
+                </PhysicalAttributes>
+              </Box>
+            </Elements>
+            </Movable>
+
+            <Movable name="Box2">
+            <Elements>
+              <Box name="box2" length="0.1" width="0.1" height="0.04">
+                <Translation x="0.0" y="-0.6" z="0.8"/>
+                <Appearance ref="green"/>
+                <Material name="Stone"/>
+                <PhysicalAttributes>
+                  <Mass value="0.5"/>
+                </PhysicalAttributes>
+              </Box>
+            </Elements>
+            </Movable>
+
+            <Movable name="Box3">
+            <Elements>
+              <Box name="box3" length="0.1" width="0.1" height="0.06">
+                <Translation x="0.0" y="-1.0" z="1.0"/>
+                <Appearance ref="red"/>
+                <Material name="Stone"/>
+                <PhysicalAttributes>
+                  <Mass value="0.5"/>
+                </PhysicalAttributes>
+              </Box>
+            </Elements>
+            </Movable>
+
+    </Elements>
+  </Scene>
+</Simulation>

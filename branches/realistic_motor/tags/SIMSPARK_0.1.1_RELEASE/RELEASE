@@ -1,0 +1,11 @@
+RELEASE News of simspark-0.1.1
+
+This release is mainly a bugfix release, and is the last release before
+RoboCup 2009 competitions. 
+Main changes are:
+ - improved MacOSX and Windows support
+ - compilation fixes for latest library versions
+ - more reliable and a bit more fair network communication with the agents
+
+You can get the package on the Simspark page on SourceForge
+at http://sourceforge.net/projects/simspark/

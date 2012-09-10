@@ -1,0 +1,51 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+
+ (nd Transform
+       (setName chassis)
+       (setLocalPos 0 0 0.5)
+       (importScene rsg/boxspheres/box.rsg 1 3 0.8 10 matRed)
+       )
+
+ (nd Transform
+       (setName leftBack)
+       (setLocalPos -0.5 -1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (nd Hinge2Joint
+	     (attach ../sphereBody ../../chassis/boxBody)
+	     (setAnchor 0 0 0)
+	     )
+       )
+
+ (nd Transform
+       (setName leftFront)
+       (setLocalPos -0.5 +1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (nd Hinge2Joint
+	     (attach ../sphereBody ../../chassis/boxBody)
+	     (setAnchor 0 0 0)
+	     )
+       )
+
+ (nd Transform
+       (setName rightBack)
+       (setLocalPos 0.5 -1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (nd Hinge2Joint
+	     (attach ../sphereBody ../../chassis/boxBody)
+	     (setAnchor 0 0 0)
+	     )
+       )
+
+ (nd Transform
+       (setName rightFront)
+       (setLocalPos 0.5 +1.5 0)
+       (importScene rsg/boxspheres/sphere.rsg 0.4 2 matWhite)
+       (nd Hinge2Joint
+	     (attach ../sphereBody ../../chassis/boxBody)
+	     (setAnchor 0 0 0)
+	     )
+       ) 
+)

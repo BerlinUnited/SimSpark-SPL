@@ -1,0 +1,12 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RoSi.xsd">
+<Scene>
+    <Background surface="background"/>
+    <AmbientLightColor r="150" g="150" b="150"/>
+    <DefaultAppearance ref="dark blue"/>
+    <GlobalPhysicalParameters gravity="-0.0005" erp="0.2" cfm="0.0001" defaultRollingFrictionCoefficient="0.0001"/>
+    <SimulationParameters stepLength="0.33" standardLength="0.1" applyDynamicsForceFactor="10.0"/>
+    <Elements>
+    <Use macroName="ERS-7"/>
+    </Elements>
+  </Scene>
+</Simulation>

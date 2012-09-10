@@ -1,0 +1,83 @@
+[0.2.1]
+This release of simspark is prepared for RoboCup 2010 competitions in Singapore.
+In this release you can find some bug and compilation fixes, improved Windows
+support and some new features such as the potential of using different 
+physical simulation engines.
+
+* New features:
+ - The core physics system does no longer depend on ODE (Thanks to Andreas). 
+ ODE implementation is now provided as a plugin.
+   
+* Fixes:
+ - Compilation fixes on newer compilers (VS 2010)
+ - Fixed some bugs on 64 bit systems and in multi-threaded mode. It is (hopefully)
+   possible to run multi-threaded games while logging is enabled
+
+[0.2]
+In this release you can find some bug and compilation fixes, improved Windows
+support and some new features including a new sensor and features to facilitate
+agent debugging and development. It also provides a more deterministic behavior 
+for agents which should make them more reliable.
+
+* New features:
+ - An Accelerometer sensor which reports the linear acceleration
+ - A "Sync Mode" operation is introduced. In this mode, the server will not
+   advance to the next cycle until all connected agents send a "(syn)" command
+   to the server. You can use this mode by setting "agentSyncMode" to true in
+   simspark.rb (or spark.rb)
+ - Simulator will run in simulation time mode instead of real time
+   if "useRealTime" variable is set to false in simspark.rb (or spark.rb)
+   
+* More deterministic agent-server communication
+ - Simspark will now collect received commands right before sending
+   sense data of the last cycle. So, any commands which is sent by agents
+   after receiving new sense data will be executed in the next cycle, not the 
+   current one. This results in a more deterministic behavior, and agents' 
+   efficiency should not change between remote and local runs considerably.
+
+* More convenience:
+ - Simspark should always accept connections. No more "Connection refused"
+   messages and the need to wait for simspark's network port to be freed!
+ - To make changes to most of the resource files (e.g. simspark.rb), you can
+   create a copy in ~/.simspark directory and make desired changes there. The 
+   directory structure of the original files should be preserved (e.g.
+   rsg/agent/nao/nao.rgs)
+
+* Fixes:
+ - Compilation fixes
+ - Fixed some rendering bugs (agents not visible through goals)
+
+[0.1.2]
+This release brings some bugfixes, better performance and also better Windows
+support. A Windows installer will be available too. This is the first version 
+which runs in multi-threaded mode by default. The multi-threaded mode is still
+in early stages, and it can be improved cosiderably in future.
+
+Main changes of this release are:
+ - improved Windows support, including Windows Installer. 
+ - Multi-threaded mode now works, and is the default mode when running simspark
+ - Performance improvements
+ - Fixed a bug in networking code, which were introduced in 0.1.1
+
+[0.1.1]
+This release is mainly a bug-fix release, and is the last release before
+RoboCup 2009 competitions. It is not much different from version 0.1.
+Main changes are:
+ - improved MacOSX and Windows support
+ - compilation fixes for latest library versions
+ - more reliable and a bit more fair network communication with the agents
+
+[0.1]
+This is the first release of the simulator after RoboCup 2008 competitions,
+and the first release of simspark core simulation package as a separate
+package.
+In this release, MaxStepsPerCycle have been reduced to 1, so the simulation
+time spent in each cycle is fixed. As a result, the performance of the agents
+should not depend on the simulator speed, and they should be able to sense/act
+in fixed simulation time steps.
+This package provides a generic simulation framework and does not contain any
+soccer features. To use the soccer simulator, you should install rcssserver3d
+package which depends on this package. 
+Also, we do not use autotools for our build system anymore. You should use
+CMake (version 2.6) to build the package. See INSTALL for further installation
+instructions.

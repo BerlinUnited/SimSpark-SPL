@@ -1,0 +1,63 @@
+!!ARBvp1.0
+
+PARAM mvp[4] = { state.matrix.mvp };
+#PARAM mvit[4] = { state.matrix.modelview.invtrans };
+PARAM lightPos = program.local[4];
+#PARAM light = { 0, 0, 1, 1 };  # Lighting is not used (see below).
+PARAM white = { 1, 1, 1, 1 };
+
+ATTRIB localPos = vertex.position;
+ATTRIB tex0 = vertex.texcoord[0];
+ATTRIB tanU = vertex.texcoord[1];
+ATTRIB tanV = vertex.texcoord[2];
+
+# Lerp between frame0 and frame1.
+# v = LERP(frame0, frame1, lerp)
+#   = frame0*(1-lerp) + frame1*lerp
+#   = frame0 - frame0*lerp + frame1*lerp
+#   = frame0 + lerp*(frame1 - frame0);
+#  ADD v, frame1, -frame0;
+#  MAD v, lerp, v, frame0;
+
+# Transform vertex to clip space.
+  DP4 result.position.x, mvp[0], localPos;
+  DP4 result.position.y, mvp[1], localPos;
+  DP4 result.position.z, mvp[2], localPos;
+  DP4 result.position.w, mvp[3], localPos;
+
+# Transform vertex to generate the world coordinate
+#  DP4 result.texcoord[1].x, program.local[0], localPos;
+#  DP4 result.texcoord[1].y, program.local[1], localPos;
+#  DP4 result.texcoord[1].z, program.local[2], localPos;
+#  DP4 result.texcoord[1].w, program.local[3], localPos;
+
+# Create vector from vertex to light position.  Light position here is in object space
+TEMP L;
+SUB L, lightPos, localPos;
+
+# Build tangent space transform (reconstruct N)
+TEMP N, temp;
+MOV temp, tanU;
+MUL N, temp.zxyw, tanV.yzxw;
+MAD N, temp.yzxw, tanU.zxyw,-N;
+
+# Transform the lightDir vector (L) to tangent space
+DP3 result.texcoord[1].x, L, tanU;
+DP3 result.texcoord[1].y, L, tanV;
+DP3 result.texcoord[1].z, L, N;
+
+# Output color.
+# Uncomment these lines to enable some simple lighting. I've seen quite a few
+# MD2 files with bad vertex normals, though, so use at your own risk.
+#  DP4 v.x, mvit[0], normal;
+#  DP4 v.y, mvit[1], normal;
+#  DP4 v.z, mvit[2], normal;
+#  DP4 v.w, mvit[3], normal;
+#  DP3 result.color, light, v;
+
+MOV result.color, vertex.color;
+
+# Output texcoords.
+MOV result.texcoord[0], tex0;
+
+END

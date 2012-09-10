@@ -1,0 +1,13 @@
+# import any additional plugins you want to include into the graph
+importBundle "soccer"
+importBundle "collisionperceptor"
+# importBundle "filesystemrar"
+importBundle "filesystemstd"
+# importBundle "filesystemzip"
+importBundle "forceeffector"
+importBundle "inputsdl"
+importBundle "monitortest"
+importBundle "perfectvisionperceptor"
+importBundle "sexpparser"
+# importBundle "soundsystembass"
+# importBundle "soundsystemfmod"

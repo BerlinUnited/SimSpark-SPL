@@ -1,0 +1,188 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="simrobot.xsd">
+  <AppearanceDefinition name="red">
+    <Color r="255" g="0" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="dark blue">
+    <Color r="0" g="0" b="128"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="green">
+    <Color r="0" g="200" b="80"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="yellow">
+    <Color r="220" g="220" b="0"/>
+  </AppearanceDefinition>
+    <AppearanceDefinition name="orange">
+        <Color r="250" g="150" b="0"/>
+    </AppearanceDefinition>
+  <AppearanceDefinition name="glass">
+    <Color r="200" g="200" b="200"/>
+    <Alpha a="0.3"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="background">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+
+  <MaterialDefinition name="Stone">
+    <FrictionCoefficient otherMaterial="Wood" value="5.3"/>
+  </MaterialDefinition>
+  <MaterialDefinition name="Steel">
+    <FrictionCoefficient otherMaterial="Wood" value="0.05"/>
+  </MaterialDefinition>
+  <MaterialDefinition name="Wood"/>
+
+
+  <VertexList name="SomePoints">
+    <Vertex name="p1" x="1" y="1" z="1"/>
+    <Vertex name="p2" x="1" y="2" z="1"/>
+    <Vertex name="p3" x="2" y="2" z="1"/>
+    <Vertex name="p4" x="2" y="1" z="1"/>
+  </VertexList>
+
+  <Scene name="Friction" description="Demonstration of friction.">
+    <Background surface="background"/>
+    <AmbientLightColor r="150" g="150" b="150"/>
+    <DefaultAppearance ref="dark blue"/>
+    <GlobalPhysicalParameters gravity="-9.81" erp="0.2" cfm="0.0001" contactSoftnessERP="0.5" contactSoftnessCFM="0.01"/>
+    <SimulationParameters stepLength="0.0033" standardLength="0.1" applyDynamicsForceFactor="10.0"/>
+    <Elements>
+<!--
+      <ComplexShape name="hallo-test">
+        <VertexList name="SomeOtherPoints">
+          <Vertex name="p1" x="1" y="1" z="1"/>
+          <Vertex name="p2" x="1" y="2" z="1"/>
+          <Vertex name="p3" x="2" y="2" z="1"/>
+          <Vertex name="p4" x="2" y="1" z="1"/>
+        </VertexList>
+        <GraphicalRepresentation vertexList="SomePoints">
+        </GraphicalRepresentation>
+        <PhysicalRepresentation></PhysicalRepresentation>
+      </ComplexShape>
+-->
+          <Box name="Ground" length="2.1" width="2.1" height="0.2">
+          <Translation x="0" y="0" z="-0.1"/>
+          <Appearance ref="dark blue"/>
+          <PhysicalAttributes>
+            <Mass value="10"/>
+        </PhysicalAttributes>
+      </Box>
+
+            <Box name="Side1" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+            <Cylinder name="Test-Zylinder" height="0.3" radius="0.1">
+                <Translation x="0.0" y="1.0" z="0.3"/>
+                <Appearance ref="orange"/>
+            </Cylinder>
+
+            <Box name="Side2" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="-1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side3" length="0.1" width="2" height="0.2">
+                <Translation x="1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side4" length="0.1" width="2" height="0.2">
+                <Translation x="-1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Corner1" length="0.1" width="0.6" height="0.2">
+                <Translation x="0.8" y="0.8" z="0.1"/>
+                <Rotation x="0.0" y="0.0" z="45.0" />
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+            <Box name="Corner2" length="0.1" width="0.6" height="0.2">
+                <Translation x="-0.8" y="-0.8" z="0.1"/>
+                <Rotation x="0.0" y="0.0" z="45.0" />
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+            <Box name="Corner3" length="0.1" width="0.6" height="0.2">
+                <Translation x="0.8" y="-0.8" z="0.1"/>
+                <Rotation x="0.0" y="0.0" z="135.0" />
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+            <Box name="Corner4" length="0.1" width="0.6" height="0.2">
+                <Translation x="-0.8" y="0.8" z="0.1"/>
+                <Rotation x="0.0" y="0.0" z="135.0" />
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Schraege" length="1.0" width="0.6" height="0.2">
+                <Translation x="-0.3" y="0.0" z="0.1"/>
+                <Rotation x="0.0" y="30.0" z="0.0" />
+                <Appearance ref="green"/>
+                <Material name="Wood"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Movable name="mboxx1">
+            <Elements>
+              <Box name="bocks1" length="0.1" width="0.1" height="0.05">
+                <Translation x="-0.4" y="-0.2" z="0.5"/>
+                <Appearance ref="yellow"/>
+                <Material name="Stone"/>
+                <PhysicalAttributes>
+                  <Mass value="1.0"/>
+                </PhysicalAttributes>
+              </Box>
+            </Elements>
+            </Movable>
+
+            <Movable name="mboxx2">
+            <Elements>
+              <Box name="bocks2" length="0.1" width="0.1" height="0.05">
+                <Translation x="-0.4" y="0.2" z="0.5"/>
+                <Appearance ref="orange"/>
+                <Material name="Steel"/>
+                <PhysicalAttributes>
+                  <Mass value="1.0"/>
+                </PhysicalAttributes>
+              </Box>
+            </Elements>
+            </Movable>
+<!--
+            <Movable name="ball8">
+            <Elements>
+                <Sphere name="Ball8" radius="0.1">
+                    <Translation x="-0.2" y="0.2" z="0.6"/>
+                    <Appearance ref="green"/>
+                    <PhysicalAttributes>
+                        <Mass value="2"/>
+                    </PhysicalAttributes>
+                </Sphere>
+            </Elements>
+            </Movable>
+-->
+    </Elements>
+  </Scene>
+</Simulation>

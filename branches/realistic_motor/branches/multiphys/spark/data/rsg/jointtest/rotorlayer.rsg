@@ -1,0 +1,49 @@
+; -*- mode: lisp; -*-
+(RSG 0 1)
+(
+ (templ $velocity $force)
+ (nd Transform
+       (setLocalPos 0 -15 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+ (nd Transform
+       (setLocalPos -11 -15 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+ (nd Transform
+       (setLocalPos +11 -15 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+ (nd Transform
+       (setLocalPos 0 -26 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+ (nd Transform
+       (setLocalPos -11 -26 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+ (nd Transform
+       (setLocalPos +11 -26 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+(nd Transform
+       (setLocalPos 0 -37 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+ (nd Transform
+       (setLocalPos -11 -37 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+
+ (nd Transform
+       (setLocalPos +11 -37 1)
+       (importScene rsg/jointtest/rotorthing.rsg 10 $force $force)
+       )
+)
