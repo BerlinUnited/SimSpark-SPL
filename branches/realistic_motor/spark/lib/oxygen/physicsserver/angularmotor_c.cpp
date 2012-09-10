@@ -149,6 +149,38 @@ FUNCTION(AngularMotor,getAxisAngleRate)
     return obj->GetAxisAngleRate(static_cast<Joint::EAxisIndex>(inAxisIdx));
 }
 
+FUNCTION(AngularMotor,setBattery)
+{
+    std::string inPath;
+
+    if (in.GetSize() != 1
+        || (!in.GetValue(in[0], inPath)))
+    {
+      return false;
+    }
+
+    obj->SetBattery(inPath);
+    return true;
+}
+
+#define SET_ANGULAR_MOTOR_CONSTANT(functionName) \
+  static zeitgeist::GCValue functionName(AngularMotor *obj, \
+       __attribute__((unused)) const zeitgeist::ParameterList &in)\
+{\
+  float inValue;\
+  if (in.GetSize() != 1 || (!in.GetValue(in[0], inValue))) { return false; }\
+  obj->functionName(inValue);\
+  return true;\
+}
+
+SET_ANGULAR_MOTOR_CONSTANT(setSpeedConstant)
+SET_ANGULAR_MOTOR_CONSTANT(setTorqueConstant)
+SET_ANGULAR_MOTOR_CONSTANT(setResistance)
+SET_ANGULAR_MOTOR_CONSTANT(setEnvironmentTempeature)
+SET_ANGULAR_MOTOR_CONSTANT(setThermalConductivity)
+SET_ANGULAR_MOTOR_CONSTANT(setHeatCapacity)
+SET_ANGULAR_MOTOR_CONSTANT(setProtectionTempeature)
+
 void CLASS(AngularMotor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Joint);
@@ -162,4 +194,12 @@ void CLASS(AngularMotor)::DefineClass()
     DEFINE_FUNCTION(setAxisAngle);
     DEFINE_FUNCTION(getAxisAngle);
     DEFINE_FUNCTION(getAxisAngleRate);
+    DEFINE_FUNCTION(setBattery);
+    DEFINE_FUNCTION(setSpeedConstant);
+    DEFINE_FUNCTION(setTorqueConstant);
+    DEFINE_FUNCTION(setResistance);
+    DEFINE_FUNCTION(setEnvironmentTempeature);
+    DEFINE_FUNCTION(setThermalConductivity);
+    DEFINE_FUNCTION(setHeatCapacity);
+    DEFINE_FUNCTION(setProtectionTempeature);
 }

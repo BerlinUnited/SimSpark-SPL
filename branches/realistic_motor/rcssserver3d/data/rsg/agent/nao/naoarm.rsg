@@ -147,7 +147,7 @@
         ;(importScene rsg/agent/nao/sphere_physics.rsg $ShoulderRadius $ShoulderMass)
         (importScene rsg/agent/nao/sphere_physics_nocollider.rsg $ShoulderRadius $ShoulderMass)
 
-        (importScene rsg/agent/nao/hingejoint.rsg
+        (importScene rsg/agent/nao/joint2.rsg
                               $Joint1PerName $Joint1EffName
                               ../sphereBody ../../body/boxBody 
                               0 0 0
@@ -174,7 +174,7 @@
 
         (importScene rsg/agent/nao/box_physics.rsg    $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ $UpperArmMass)
         
-        (importScene rsg/agent/nao/hingejoint.rsg
+        (importScene rsg/agent/nao/joint4.rsg
                                 $Joint2PerName $Joint2EffName
                                 ../boxBody $ShoulderBodyPath
                                 $aj2_Anchor_X $aj2_Anchor_Y $aj2_Anchor_Z
@@ -194,7 +194,7 @@
         ;(importScene rsg/agent/nao/sphere_physics.rsg $ElbowRadius $ElbowMass)
         (importScene rsg/agent/nao/sphere_physics_nocollider.rsg $ElbowRadius $ElbowMass)
         
-        (importScene rsg/agent/nao/hingejoint.rsg
+        (importScene rsg/agent/nao/joint2.rsg
                                 $Joint3PerName $Joint3EffName
                                 ../sphereBody $UpperarmBodyPath
                                 0 0 0
@@ -220,7 +220,7 @@
 
         (importScene rsg/agent/nao/box_physics.rsg    $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ $LowerArmMass)
         
-        (importScene rsg/agent/nao/hingejoint.rsg
+        (importScene rsg/agent/nao/joint4.rsg
                                 $Joint4PerName $Joint4EffName
                                 ../boxBody $ElbowBodyPath
                                 $aj4_Anchor_X $aj4_Anchor_Y $aj4_Anchor_Z

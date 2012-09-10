@@ -1,8 +1,8 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
-   Wed Nov 9 2005
-   Copyright (C) 2005 RoboCup Soccer Server 3D Maintenance Group
+
+   Copyright (C) 2012 RoboCup Soccer Server 3D Maintenance Group
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "hingeeffector.h"
-#include "hingeaction.h"
+#include "angularmotoreffector.h"
+#include "angularmotoraction.h"
 #include <oxygen/physicsserver/rigidbody.h>
 
 using namespace oxygen;
@@ -27,26 +27,42 @@ using namespace salt;
 using namespace boost;
 using namespace std;
 
-HingeEffector::HingeEffector()
-    : JointEffector<HingeJoint>::JointEffector("hinge")
+AngularMotorEffector::AngularMotorEffector()
+    : JointEffector<AngularMotor>::JointEffector("amotor"),
+  mUseBacklash(false),
+  mGearPosition(0),
+  mHalfDeadband(1),
+  mMaxForce(10)
 {
 }
 
-HingeEffector::~HingeEffector()
+AngularMotorEffector::~AngularMotorEffector()
 {
 }
 
-bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
+bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
     if (mJoint.get() == 0)
         {
             return false;
         }
 
-    boost::shared_ptr<HingeAction> hingeAction =
-        shared_dynamic_cast<HingeAction>(action);
+    // disabled joint?
+    if ( mJoint->Disabled() )
+    {
+      boost::shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
+      if (body && !body->IsEnabled() )
+      {
+        body->Enable();
+      }
+      mJoint->SetParameter(2 /*value of dParamVel in ODE*/, 0);
+      return false;
+    }
 
-    if (hingeAction.get() == 0)
+    boost::shared_ptr<AngularMotorAction> motorAction =
+        shared_dynamic_cast<AngularMotorAction>(action);
+
+    if (motorAction.get() == 0)
     {
         GetLog()->Error()
             << "ERROR: (HingeEffector) cannot realize an "
@@ -54,7 +70,10 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    float finalMotorVel = hingeAction->GetMotorVelocity();
+    float finalMotorVel = motorAction->GetMotorVelocity();
+    float stiffness = motorAction->GetStiffness();
+    stiffness = gClamp(stiffness, 0.0f, 1.0f);
+    float maxForce = stiffness * mMaxForce;
 
     if (mJoint->IsLimitJointMaxSpeed1())
     {
@@ -65,8 +84,31 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
     mJoint->SetParameter(2 /*value of dParamVel in ODE*/, finalMotorVel);
+    
+    if ( mUseBacklash )
+    {
+      bool dead = false;
+      float jointAngle = mJoint->GetAxisAngle(Joint::AI_FIRST);
+      
+      float maxDeadband = jointAngle + mHalfDeadband;
+      float minDeadband = jointAngle - mHalfDeadband;
+      if ( mGearPosition < maxDeadband
+        && mGearPosition > minDeadband )
+      {
+        dead = true;
+      }
 
-    if (hingeAction->GetMotorVelocity() != 0)
+      mGearPosition += finalMotorVel * 0.02;
+      mGearPosition = salt::gClamp(mGearPosition, minDeadband-0.1f, maxDeadband+0.1f);
+
+      mJoint->SetMaxMotorForce(Joint::AI_FIRST, dead?0.3:maxForce);
+    }
+    else
+    {
+      mJoint->SetMaxMotorForce(Joint::AI_FIRST, maxForce);
+    }
+
+    if (motorAction->GetMotorVelocity() != 0)
         {
             boost::shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
             if (body && !body->IsEnabled())
@@ -77,7 +119,7 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
     return true;
 }
 
-boost::shared_ptr<ActionObject> HingeEffector::GetActionObject(const Predicate& predicate)
+boost::shared_ptr<ActionObject> AngularMotorEffector::GetActionObject(const Predicate& predicate)
 {
     for(;;)
         {
@@ -104,7 +146,15 @@ boost::shared_ptr<ActionObject> HingeEffector::GetActionObject(const Predicate& 
                     break;
                 }
 
-            return boost::shared_ptr<HingeAction>(new HingeAction(GetPredicate(),velocity));
+            float stiffness;
+            if (! predicate.AdvanceValue(iter, stiffness))
+                {
+                    GetLog()->Error()
+                        << "ERROR: (HingeEffector) motor stiffness expected\n";
+                    break;
+                }
+
+            return boost::shared_ptr<AngularMotorAction>(new AngularMotorAction(GetPredicate(),velocity,stiffness));
         }
 
     return boost::shared_ptr<ActionObject>();

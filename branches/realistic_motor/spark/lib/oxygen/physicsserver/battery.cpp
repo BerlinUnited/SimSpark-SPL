@@ -1,8 +1,8 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
-   Thu Nov 9 2005
-   Copyright (C) 2005 RoboCup Soccer Server 3D Maintenance Group
+   Copyright (C) 2011 RoboCup Soccer Server 3D Maintenance Group
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,22 +17,38 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef HINGEACTION_H
-#define HINGEACTION_H
 
-#include <oxygen/gamecontrolserver/actionobject.h>
+#include <oxygen/physicsserver/battery.h>
 
-class HingeAction : public oxygen::ActionObject
+using namespace oxygen;
+using namespace boost;
+
+
+Battery::Battery() : PhysicsObject(),
+  mCapacity(0),
+  mPower(0)
 {
-public:
-    HingeAction(const std::string& predicate, float velocity)
-      : ActionObject(predicate), mVelocity(velocity) {}
+}
 
-    virtual ~HingeAction() {}
-    float GetMotorVelocity() { return mVelocity; }
+Battery::~Battery()
+{
+}
 
-protected:
-    float mVelocity;
-};
+void Battery::OnLink()
+{
+    PhysicsObject::OnLink();
+}
 
-#endif // HINGEACTION_H
+bool Battery::Consume(float v)
+{
+  if (mPower > v)
+  {
+    mPower -= v;
+    return true;
+  }
+  else
+  {
+    mPower = 0;
+    return false;
+  }
+}

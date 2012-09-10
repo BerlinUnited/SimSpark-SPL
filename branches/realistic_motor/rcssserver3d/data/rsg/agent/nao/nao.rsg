@@ -59,6 +59,15 @@
             (importScene rsg/agent/nao/contactjointhandler.rsg)
         )
 
+	(nd Battery
+	    (setName Battery)
+	    (setCapacity 167184)
+	    (setPower 167184)
+	    (nd BatteryPerceptor
+		(setName BAT)
+		)
+	    )
+
         ;Install effectors and perceptors
         (nd StaticMeshInitEffector)
 

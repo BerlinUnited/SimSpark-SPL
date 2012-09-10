@@ -46,7 +46,7 @@
         (importScene rsg/agent/nao/capsule_appearance.rsg $Neck_Radius $Neck_Length matDarkGrey)
         (importScene rsg/agent/nao/capsule_physics.rsg    $Neck_Radius $Neck_Length $Neck_Mass)
         
-        (importScene rsg/agent/nao/hingejoint.rsg 
+        (importScene rsg/agent/nao/joint2.rsg 
                             hj1 he1
                             ../capsuleBody ../../body/boxBody
                             0 0 0
@@ -78,7 +78,7 @@
         )
         (importScene rsg/agent/nao/sphere_physics.rsg $Head_Radius $Head_Mass)
         
-        (importScene rsg/agent/nao/hingejoint.rsg
+        (importScene rsg/agent/nao/joint4.rsg
                               hj2 he2
                               ../sphereBody ../../neck/capsuleBody 
                               ;../boxBody ../../body/boxBody

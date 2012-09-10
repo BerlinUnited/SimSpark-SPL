@@ -675,3 +675,6 @@ importBundle "agentsynceffector"
 
 #
 importBundle "imageperceptor"
+
+#
+importBundle "batteryperceptor"

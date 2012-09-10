@@ -1,8 +1,8 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
-   Thu Nov 9 2005
-   Copyright (C) 2005 RoboCup Soccer Server 3D Maintenance Group
+
+   Copyright (C) 2012 RoboCup Soccer Server 3D Maintenance Group
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,22 +17,25 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef HINGEACTION_H
-#define HINGEACTION_H
+#ifndef ANGULAR_MOTOR_ACTION_H
+#define ANGULAR_MOTOR_ACTION_H
 
 #include <oxygen/gamecontrolserver/actionobject.h>
 
-class HingeAction : public oxygen::ActionObject
+/* only one axis is supported at the moment */
+class AngularMotorAction : public oxygen::ActionObject
 {
 public:
-    HingeAction(const std::string& predicate, float velocity)
-      : ActionObject(predicate), mVelocity(velocity) {}
+    AngularMotorAction(const std::string& predicate, float velocity, float stiffness)
+      : ActionObject(predicate), mVelocity(velocity), mStiffness(stiffness) {}
 
-    virtual ~HingeAction() {}
+    virtual ~AngularMotorAction() {}
     float GetMotorVelocity() { return mVelocity; }
+    float GetStiffness() { return mStiffness; }
 
 protected:
     float mVelocity;
+    float mStiffness;
 };
 
-#endif // HINGEACTION_H
+#endif // ANGULAR_MOTOR_ACTION_H
