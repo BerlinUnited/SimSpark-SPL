@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<title>survivalcontrolaspect.cpp</title>
+	<link rel="stylesheet" type="text/css" href="../highlight.css">
+</head>
+<body>
+<pre>
+
+<span class="dir">#include </span><span class="dstr">&quot;survivalcontrolaspect.h&quot;</span><span class="dir"></span>
+<span class="dir">#include </span><span class="dstr">&quot;survivalagentaspect.h&quot;</span><span class="dir"></span>
+<span class="dir">#include &lt;zeitgeist/logserver/logserver.h&gt;
+</span><span class="dir">#include &lt;kerosin/fontserver/fontserver.h&gt;
+</span><span class="dir">#include &lt;kerosin/openglserver/openglserver.h&gt;
+</span>
+<span class="key">using namespace </span>boost;
+<span class="key">using namespace </span>kerosin;
+<span class="key">using namespace </span>salt;
+<span class="key">using namespace </span>std;
+<span class="key">using namespace </span>zeitgeist;
+
+shared_ptr&lt;Effector&gt; SurvivalControlAspect::RequestEffectorInternal(shared_ptr&lt;AgentAspect&gt;&amp; agent, <span class="typ">const </span>string&amp; effectorName)
+{
+  <span class="com">// always make sure, we know how to treat an agent class
+</span>  <span class="key">if </span>(agent-&gt;GetClass()-&gt;Supports(<span class="str">&quot;SurvivalAgentAspect&quot;</span>))
+  {
+    <span class="key">if </span>(effectorName == <span class="str">&quot;kerosin/ForceEffector&quot;</span>)
+      <span class="key">return </span>CreateEffector(effectorName);
+  }
+
+  <span class="com">// no valid agentaspect/effector combination
+</span>  <span class="key">return </span>shared_ptr&lt;Effector&gt;();
+}
+
+boost::shared_ptr&lt;Perceptor&gt; SurvivalControlAspect::RequestPerceptorInternal(boost::shared_ptr&lt;AgentAspect&gt;&amp; agent, <span class="typ">const </span>std::string&amp; perceptorName)
+{
+  <span class="com">// always make sure, we know how to treat an agent class
+</span>  <span class="key">if </span>(agent-&gt;GetClass()-&gt;Supports(<span class="str">&quot;SurvivalAgentAspect&quot;</span>))
+  {
+    <span class="key">if </span>(perceptorName ==<span class="str"> &quot;LineSegmentPerceptor&quot;</span>)
+      <span class="key">return </span>CreatePerceptor(perceptorName);
+    <span class="key">if </span>(perceptorName == <span class="str">&quot;kerosin/VisionPerceptor&quot;</span>)
+      <span class="key">return </span>CreatePerceptor(perceptorName);
+  }
+
+  <span class="com">// no valid agentaspect/effector combination
+</span>  <span class="key">return </span>shared_ptr&lt;Perceptor&gt;();
+}
+
+<span class="com">/*bool SurvivalControlAspect::ConstructInternal()
+{
+  GetLog()-&gt;Normal() &lt;&lt; &quot;Survival Control Aspect started...&quot; &lt;&lt; endl;
+  
+  return true;
+}*/</span>
+
+<span class="typ">void </span>SurvivalControlAspect::PrePhysicsUpdateInternal(<span class="typ">float </span>deltaTime)
+{
+  mHealthSlow -= mSickRate*deltaTime;
+  mHealthFast -= mSickRate*deltaTime;
+
+  <span class="key">if </span>(mHealthSlow &lt; <span class="num">0.0f</span>)
+  {
+    mHealthSlow = <span class="num">100.0f</span>;
+    mDeathSlow++;
+  }
+
+  <span class="key">if </span>(mHealthFast &lt; <span class="num">0.0f</span>)
+  {
+    mHealthFast = <span class="num">100.0f</span>;
+    mDeathFast++;
+  }
+
+  <span class="com">// check if an agent is close enough to eat the food
+</span>  shared_ptr&lt;BaseNode&gt; slow = shared_static_cast&lt;BaseNode&gt;(GetCore()-&gt;Get(<span class="str">&quot;/usr/scene/slow&quot;</span>));
+  shared_ptr&lt;BaseNode&gt; fast = shared_static_cast&lt;BaseNode&gt;(GetCore()-&gt;Get(<span class="str">&quot;/usr/scene/fast&quot;</span>));
+  shared_ptr&lt;BaseNode&gt; food = shared_static_cast&lt;BaseNode&gt;(GetCore()-&gt;Get(<span class="str">&quot;/usr/scene/food&quot;</span>));
+
+  Vector3f  dist;
+  <span class="typ">bool    </span>slowHasIt = <span class="key">false</span>;
+  <span class="typ">bool    </span>fastHasIt = <span class="key">false</span>;
+
+  dist = slow-&gt;GetWorldTransform().Pos() - food-&gt;GetWorldTransform().Pos();
+  <span class="key">if </span>(dist.Length() &lt; <span class="num">2.0f</span>)
+  {
+    slowHasIt = <span class="key">true</span>;
+  }
+
+  dist = fast-&gt;GetWorldTransform().Pos() - food-&gt;GetWorldTransform().Pos();
+  <span class="key">if </span>(dist.Length() &lt; <span class="num">2.0f</span>)
+  {
+    fastHasIt = <span class="key">true</span>;
+  }
+
+  <span class="key">if </span>(slowHasIt &amp;&amp; fastHasIt)
+  {
+    <span class="com">// only give both half the health
+</span>    mHealthSlow += <span class="num">50.0f</span>;
+    mHealthFast += <span class="num">50.0f</span>;
+  }
+  <span class="key">else
+  </span>{
+    <span class="key">if </span>(slowHasIt) mHealthSlow = <span class="num">100.0f</span>;
+    <span class="key">if </span>(fastHasIt) mHealthFast = <span class="num">100.0f</span>;
+  }
+
+  <span class="key">if </span>(mHealthSlow &gt; <span class="num">100.0f</span>) mHealthSlow = <span class="num">100.0f</span>;
+  <span class="key">if </span>(mHealthFast &gt; <span class="num">100.0f</span>) mHealthFast = <span class="num">100.0f</span>;
+
+  <span class="com">// if the food was eaten, we reposition it
+</span>  <span class="key">if </span>(slowHasIt || fastHasIt)
+  {
+    Vector3f newPos;
+    newPos.x() = <span class="num">20.0f</span>*(<span class="num">1.0f</span>-<span class="num">2.0f</span>*rand()/(<span class="typ">float</span>)RAND_MAX);
+    newPos.y() = <span class="num">1.0f</span>;
+    newPos.z() = <span class="num">20.0f</span>*(<span class="num">1.0f</span>-<span class="num">2.0f</span>*rand()/(<span class="typ">float</span>)RAND_MAX);
+    Matrix mat = food-&gt;GetWorldTransform();
+    mat.Pos() = newPos;
+    food-&gt;SetLocalTransform(mat);
+
+    <span class="com">// also set both agents to not seeking
+</span>    shared_static_cast&lt;SurvivalAgentAspect&gt;(GetCore()-&gt;Get(<span class="str">&quot;/usr/scene/slow/_agent&quot;</span>))-&gt;SetIsSeeking(<span class="key">false</span>);
+    shared_static_cast&lt;SurvivalAgentAspect&gt;(GetCore()-&gt;Get(<span class="str">&quot;/usr/scene/fast/_agent&quot;</span>))-&gt;SetIsSeeking(<span class="key">false</span>);
+  }
+}
+
+<span class="typ">void </span>SurvivalControlAspect::OnLink()
+{
+  <span class="com">// init variables
+</span>  mDeathSlow = <span class="num">0</span>;
+  mDeathFast = <span class="num">0</span>;
+
+  mHealthSlow = <span class="num">100</span>;
+  mHealthFast = <span class="num">100</span>;
+
+  mSickRate = <span class="num">6</span>;
+
+  shared_ptr&lt;FontServer&gt; fontServer = shared_static_cast&lt;FontServer&gt;(GetCore()-&gt;Get(<span class="str">&quot;/sys/server/font&quot;</span>));
+  mFont = fontServer-&gt;GetFont(<span class="str">&quot;font/andalemo.ttf&quot;</span>, <span class="num">14</span>);
+}
+
+<span class="typ">void </span>SurvivalControlAspect::RenderInternal()
+{
+  shared_ptr&lt;FontServer&gt; fontServer = shared_static_cast&lt;FontServer&gt;(GetCore()-&gt;Get(<span class="str">&quot;/sys/server/font&quot;</span>));
+
+  <span class="key">if </span>(fontServer.get() != NULL)
+  {
+    fontServer-&gt;Begin();
+    mFont-&gt;Bind();
+    glColor3f(<span class="num">1</span>,<span class="num">0</span>,<span class="num">0</span>);
+    mFont-&gt;Printf(<span class="num">0</span>, <span class="num">0</span>, <span class="str">&quot;Slow: %03.0f (%d)&quot;</span>, mHealthSlow, mDeathSlow);
+    mFont-&gt;Printf(<span class="num">0</span>, <span class="num">20</span>, <span class="str">&quot;Fast: %03.0f (%d)&quot;</span>, mHealthFast, mDeathFast);
+    glColor3f(<span class="num">1</span>,<span class="num">1</span>,<span class="num">1</span>);
+    fontServer-&gt;End();
+  }
+}
+</pre>
+</body>
+</html>
+<!--HTML generated by highlight 2.0, http://www.andre-simon.de/-->
+

@@ -1,0 +1,73 @@
+Quick start to RsgEdit
+---------------------
+
+1. Start rsgedit You should see a small splash screen and then the
+main application window.  On the left half are some diagnostic
+windows. They show the scene graph in the lower half and properties of
+current node in the top half. On the right half of the screen is the
+embedded OpenGL window that shows the simulation.
+
+2. Open a simulation- choose File|Open in the menu or use the folder
+icon. Rsgedit uses small ruby start up scripts to setup a
+simulation. To start the soccer simulation choose 'soccersim.rb'. The
+first script that you choose becomes the simulation start up script.
+
+3. Running a simulation. The simulation is in either one of two states
+'paused' or 'running'. Immediately after opening a simulation it is
+paused. You can start the simulation by choosing 'simulation|start' from
+the menu or clicking on the start icon ( |> ) You can later pause a
+simulation by choosing 'simulation|pause' from the menu or clicking the
+pause icon ( || ).
+
+4. Resetting a simulation. If the simulation is currently paused it is
+possible to reset it, i.e. put it back to the state it was immediately
+after opening the simulation. To to this choose File|Reload from the
+menu or press the reload icon. 
+
+Starting an agent
+-----------------
+
+1. Open and unpause the soccer simulation as described above.
+
+2. Start the soccer agent. Choose 'File|Start Agent' from the menu or
+press the agent icon. Choose the agent executable.
+
+4. The executable file is opened and immediately started. The output
+of the agent is shown in a separate window. You should now see the
+humanoid appearing on the field.
+
+5. Stopping/Restarting the agent. You can stop, i.e. kill the agent
+process by pressing the stop icon in the agent log window. You can
+restart the agent again with the play icon in the agent window.
+
+RsgEdit concepts
+----------------
+
+- Editor tab: You can open multiple files in rsgedit. Each file is put
+in a separate tab. 
+
+- Start script: Each simulation is associated with a single start up
+script that constructs the simulation. The current start scripts is
+marked with a 'play' icon (a small triangle '|>'). You can change the
+current start script by choosing 'Set as start script' in the context
+menu of the tab (right click on the tab label).
+
+- Scene/Object Tree: The internal object tree that is part of
+zeitgeist is shown at the lower left part. The visible scene is found
+at '/usr/scene'.
+
+- Property window: The properties of the currently selected node in
+the object tree are shown in a window above the tree. Show can show
+the properties of multiple nodes by selecting 'Properties' in the
+context menu of a node This will open the properties in a separate
+window.
+
+- Node picking: If you double click on an object in the OpenGL window
+rsgedit will select the corresponding node in the object tree and will
+highlight the selected object. If you right click on a selected object
+in the OpenGL window it will show the corresponding context menu from
+the object tree.
+
+- Source navigation: RsgEdit keeps track which script created an
+object. If you choose 'View Source File' in the context menu of any
+node it will open the corresponding script in an editor tab.

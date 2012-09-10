@@ -1,0 +1,58 @@
+2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>	
+	* CMakeLists.txt
+	- use UseWxWidgets.cmake
+
+2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake:
+	- added new version of FindBoost.cmake: finding boost libraries created by Visual C++ 2010 compiler.
+	
+	* CMakeLists.txt:
+	- Removed installation of third party libraries under Windows (now done by simspark)
+
+	* rsgedit/src/property.cpp
+	- change shared_ptr -> boost::shared_ptr because of Visual Studio 2010 compatibility. Issue between boost::shared_ptr and std::tr1::shared_ptr.
+	
+2009-08-25  Marian Buchta  <marian.buchta@gmail.com>
+
+	* CMakeLists.txt:
+	- forgot remove lines (from previous revision) to find Ruby,Freetype and DevIL libraries and add dlls into package via NSIS installer (Windows).
+
+2009-08-24  Marian Buchta  <marian.buchta@gmail.com>
+
+	* src/CMakeLists.txt:
+	- change from Console to Window subsystem in VS2008
+	
+	* windows/include/GL/glext.h:
+	* windows/include/GL/wglext.h:
+	- add header files because Rsgedit is independent project like rcssserver3d.
+	
+	* windows/install_extra.nsi:
+	* windows/uninstall_extra.nsi:
+	- add extra install/uninstall commands for NSIS installer
+	
+	* cmake/FindBoost.cmake:
+	* cmake/FindODE.cmake:
+	- add finding macros because Rsgedit is independent project like rcssserver3d.
+	
+	* wxutil/CMakeLists.txt:
+	- fixed CMake configuration error in Windows
+	
+	* CMakeLists.txt:
+	- add thread and date_time components in Boost
+	- try to find and copy all thirdparty dlls in the binary package's bin/ directory include system libraries.
+	- add definitions and include directory into VS2008
+
+2009-08-21  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindSpark.cmake:
+	- update file from rcssserver3d
+	- add search paths when using 32bit libraries in 64bit Windows
+	
+2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* src/CMakeLists.txt: 
+	* wxutil/CMakeLists.txt: 
+	* CMakeLists.txt: 
+	- add wxWidgets definitions to toplevel compiler flags and remove from 
+	  other files
