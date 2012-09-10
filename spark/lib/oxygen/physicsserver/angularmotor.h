@@ -22,6 +22,8 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/joint.h>
+#include <oxygen/physicsserver/battery.h>
+#include <oxygen/physicsserver/hingejoint.h>
 
 namespace oxygen
 {
@@ -114,18 +116,59 @@ public:
     */
     float GetAxisAngleRate(EAxisIndex idx);
 
-protected:
-    /** creates a new angularmotor joint */
-    virtual void OnLink();
-
     /** sets a joint parameter value */
     virtual void SetParameter(int parameter, float value);
 
     /** returns a joint parameter value */
     virtual float GetParameter(int parameter) const;
+
+    void SetBattery(const std::string& batteryPath);
+
+    bool Disabled();
+
+    /** get the current of joint */
+    float GetCurrent() const { return mI; }
+
+    /** get the tempeature of joint */
+    float GetTempeature() const { return mTempMotor; }
+
+    /** constant setters */
+    void setSpeedConstant(float v) { mKe = v; }
+    void setTorqueConstant(float v) { mKt = v; }
+    void setResistance(float v) { mR = v; }
+    void setEnvironmentTempeature(float v) { mTempEnvironment = v; mTempMotor = v;}
+    void setThermalConductivity(float v) { mThermalConductivity = v; }
+    void setHeatCapacity(float v) { mHeatCapacity = v; }
+    void setProtectionTempeature(float v) { mTempProtection = v; }
+
+    /** returns the torque on the joint */
+    float GetTorque() const;
+
+protected:
+    /** creates a new angularmotor joint */
+    virtual void OnLink();
+
+    /** update energe comsuption and tempeture */
+    virtual void PrePhysicsUpdateInternal(float deltaTime);
     
 private:
     static boost::shared_ptr<AngularMotorInt> mAngularMotorImp;
+
+    boost::shared_ptr<Battery> mBattery;
+
+    /** parameters of motor */
+    float mKe;
+    float mKt;
+    float mR;
+    float mI; // current
+    /** parameters of tempeature */
+    float mTempEnvironment;
+    float mTempMotor;
+    float mThermalConductivity;
+    float mHeatCapacity;
+    float mTempProtection;
+
+    boost::shared_ptr<HingeJoint> mHingeJoint; // HACK: assume connected with hinge joint
 };
 
 DECLARE_CLASS(AngularMotor);

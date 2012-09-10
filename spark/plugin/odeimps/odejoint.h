@@ -74,6 +74,7 @@ public:
     float GetLinearMotorVelocity(int idx, long jointID) const;
     void SetAngularMotorVelocity(int idx, float deg, long jointID);
     float GetAngularMotorVelocity(int idx, long jointID) const;
+    float GetAngularMotorAngle(int idx, long jointID) const;
     void SetMaxMotorForce(int idx, float f, long jointID);
     float GetMaxMotorForce(int idx, long jointID) const;
     void SetParameter(int parameter, float value, long jointID);

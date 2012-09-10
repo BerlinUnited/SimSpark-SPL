@@ -30,7 +30,6 @@ boost::shared_ptr<HingeJointInt> HingeJoint::mHingeJointImp;
 
 HingeJoint::HingeJoint() : Generic6DOFJoint()
 {
-
 }
 
 HingeJoint::~HingeJoint()

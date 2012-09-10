@@ -1,8 +1,8 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
-   Thu Nov 9 2005
-   Copyright (C) 2005 RoboCup Soccer Server 3D Maintenance Group
+   Copyright (C) 2008 RoboCup Soccer Server 3D Maintenance Group
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,22 +17,31 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef HINGEACTION_H
-#define HINGEACTION_H
 
-#include <oxygen/gamecontrolserver/actionobject.h>
+#ifndef BATTERY_PERCEPTOR_H
+#define BATTERY_PERCEPTOR_H
 
-class HingeAction : public oxygen::ActionObject
+#include <oxygen/agentaspect/perceptor.h>
+#include <oxygen/physicsserver/battery.h>
+
+class BatteryPerceptor : public oxygen::Perceptor
 {
 public:
-    HingeAction(const std::string& predicate, float velocity)
-      : ActionObject(predicate), mVelocity(velocity) {}
+    BatteryPerceptor();
+    virtual ~BatteryPerceptor();
 
-    virtual ~HingeAction() {}
-    float GetMotorVelocity() { return mVelocity; }
+    //! \return true, if valid data is available and false otherwise.
+    bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
+    
+    virtual void OnLink();
 
-protected:
-    float mVelocity;
+    virtual void OnUnLink();
+    
+private:
+
+    boost::shared_ptr<oxygen::Battery> mBattery;
 };
 
-#endif // HINGEACTION_H
+DECLARE_CLASS(BatteryPerceptor);
+
+#endif //BATTERY_PERCEPTOR_H

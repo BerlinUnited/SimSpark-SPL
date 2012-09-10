@@ -29,7 +29,16 @@ using namespace salt;
 
 boost::shared_ptr<AngularMotorInt> AngularMotor::mAngularMotorImp;
 
-AngularMotor::AngularMotor() : Joint()
+AngularMotor::AngularMotor() : Joint(),
+  mKe(4.3),
+  mKt(4.3),
+  mR(6.44),
+  mI(0),
+  mTempEnvironment(20),
+  mTempMotor(mTempEnvironment),
+  mThermalConductivity(0.025),
+  mHeatCapacity(26),
+  mTempProtection(80)
 {
 
 }
@@ -53,6 +62,17 @@ void AngularMotor::OnLink()
         }
 
     mJointID = mAngularMotorImp->CreateAngularMotor(world);
+
+    mHingeJoint = FindParentSupportingClass<HingeJoint>().lock();
+
+    if (mHingeJoint.get() == 0)
+    {
+        GetLog()->Error()
+            << "(" << GetClass()->GetName()
+            << ") ERROR: found no Joint parent\n";
+    }
+
+    mTempMotor = mTempEnvironment;
 }
 
 void AngularMotor::SetMode(int mode)
@@ -88,7 +108,7 @@ int AngularMotor::GetNumAxes()
 void AngularMotor::SetMotorAxis(EAxisIndex idx, EAxisAnchor anchor,
                                 const salt::Vector3f& axis)
 {
-    Vector3f globalAxis = GetWorldTransform() * axis;
+    Vector3f globalAxis = axis;//GetWorldTransform() * axis;
     mAngularMotorImp->SetMotorAxis(idx, anchor, globalAxis, mJointID);
 }
 
@@ -109,6 +129,7 @@ void AngularMotor::SetAxisAngle(EAxisIndex idx, float degAngle)
 
 float AngularMotor::GetAxisAngle(EAxisIndex idx)
 {
+  return mHingeJoint->GetAngle(); // HACK
     return mAngularMotorImp->GetAxisAngle(idx, mJointID);
 }
 
@@ -125,4 +146,79 @@ void AngularMotor::SetParameter(int parameter, float value)
 float AngularMotor::GetParameter(int parameter) const
 {
     return mJointImp->GetParameter(parameter, mJointID);
+}
+
+float AngularMotor::GetTorque() const
+{
+    return mAngularMotorImp->GetTorque(mJointID);
+}
+
+void AngularMotor::PrePhysicsUpdateInternal(float deltaTime)
+{
+  const float v = gAbs(gDegToRad(GetAngularMotorVelocity(Joint::AI_FIRST)));
+  const float t = GetTorque();
+
+  mI = t / mKt;
+  float Pr = mI * mI * mR;
+  float P = mKe * v * mI + Pr;
+  float E = P * deltaTime;
+
+  if ( mBattery.get() != 0 )
+  {
+    if (!mBattery->Consume(E))
+    {
+      SetMaxMotorForce(Joint::AI_FIRST, 0);
+    }
+  }
+
+  if (mTempMotor > mTempProtection)
+  {
+    SetMaxMotorForce(Joint::AI_FIRST, 0);
+  }
+
+  mTempMotor += (Pr - mThermalConductivity*(mTempMotor-mTempEnvironment)) * deltaTime / mHeatCapacity;
+}
+
+void AngularMotor::SetBattery(const std::string& batteryPath)
+{
+  mBattery.reset();
+  if (batteryPath.empty())
+  {
+    return;
+  }
+
+  boost::shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
+      (GetSelf().lock());
+
+  boost::shared_ptr<Leaf> leaf = GetCore()->Get(batteryPath,mySelf);
+
+  if (leaf.get() == 0)
+  {
+    GetLog()->Error()
+        << "(HingeJoint) ERROR: cannot find node '"
+        << batteryPath << "'\n";
+    return;
+  }
+
+  boost::shared_ptr<Battery> battery = shared_dynamic_cast<Battery>(leaf);
+
+  if (battery.get() == 0)
+  {
+    GetLog()->Error()
+        << "(HingeJoint) ERROR: node '"
+        << batteryPath << "' is not a Battery node \n";
+    return;
+  }
+
+  mBattery = battery;
+}
+
+bool AngularMotor::Disabled()
+{
+  if ( mBattery.get() != 0 && mBattery->IsEmpty() )
+  {
+    return true;
+  }
+
+  return (mTempMotor > mTempProtection);
 }

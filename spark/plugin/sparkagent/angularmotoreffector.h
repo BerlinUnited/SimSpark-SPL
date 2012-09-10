@@ -1,8 +1,8 @@
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
-   Wed Nov 9 2005
-   Copyright (C) 2005 RoboCup Soccer Server 3D Maintenance Group
+
+   Copyright (C) 2012 RoboCup Soccer Server 3D Maintenance Group
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,17 +17,17 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef HINGEEFFECTOR_H
-#define HINGEEFFECTOR_H
+#ifndef ANGULAR_MOTOR_EFFECTOR_H
+#define ANGULAR_MOTOR_EFFECTOR_H
 
 #include <oxygen/agentaspect/jointeffector.h>
-#include <oxygen/physicsserver/hingejoint.h>
+#include <oxygen/physicsserver/angularmotor.h>
 
-class HingeEffector : public oxygen::JointEffector<oxygen::HingeJoint>
+class AngularMotorEffector : public oxygen::JointEffector<oxygen::AngularMotor>
 {
 public:
-    HingeEffector();
-    virtual ~HingeEffector();
+    AngularMotorEffector();
+    virtual ~AngularMotorEffector();
 
     /** realizes the action described by the ActionObject */
     virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
@@ -39,12 +39,19 @@ public:
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
 
+    void SetUseBacklash(bool use) { mUseBacklash = use; }
+
+    void SetDeadband(float deadband) { mHalfDeadband = deadband / 2;}
+
     void SetMaxForce(float force) { mMaxForce = force; }
 
 private:
+  bool mUseBacklash;
+  float mGearPosition;
+  float mHalfDeadband;
   float mMaxForce;
 };
 
-DECLARE_CLASS(HingeEffector);
+DECLARE_CLASS(AngularMotorEffector);
 
-#endif // HINGEEFFECTOR_H
+#endif // ANGULAR_MOTOR_EFFECTOR_H

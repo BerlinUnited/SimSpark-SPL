@@ -80,6 +80,7 @@ SharedLibrary::Open(const std::string &libName)
 #endif
     mLibHandle = ::dlopen((libName + ".so").c_str(), RTLD_LAZY);
 
+#ifdef __APPLE__
     if (mLibHandle == 0)
     {   // we didn't find the plugin, so we try again...
         /* mainly to work with MacOS bundles, so that plugins can be located like this:
@@ -93,6 +94,7 @@ SharedLibrary::Open(const std::string &libName)
         */
         mLibHandle = ::dlopen((RFile::BundlePath() + "Contents/plugins/" + libName + ".so").c_str(), RTLD_LAZY);
     }
+#endif
     if (mLibHandle == 0)
     {
         std::cerr << "(SharedLibrary) ERROR: dlopen failed for " << libName
