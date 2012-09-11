@@ -39,16 +39,9 @@ public:
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
 
-    void SetUseBacklash(bool use) { mUseBacklash = use; }
-
-    void SetDeadband(float deadband) { mHalfDeadband = deadband / 2;}
-
     void SetMaxForce(float force) { mMaxForce = force; }
 
 private:
-  bool mUseBacklash;
-  float mGearPosition;
-  float mHalfDeadband;
   float mMaxForce;
 };
 
