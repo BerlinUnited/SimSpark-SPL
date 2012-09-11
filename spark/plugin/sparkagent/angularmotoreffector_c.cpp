@@ -20,40 +20,6 @@
 
 #include "angularmotoreffector.h"
 
-FUNCTION(AngularMotorEffector,setUseBacklash)
-{
-    bool use;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(), use))
-        )
-        {
-            return false;
-        }
-
-
-    obj->SetUseBacklash(use);
-    return true;
-}
-
-FUNCTION(AngularMotorEffector,setDeadband)
-{
-    float deadband;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(), deadband))
-        )
-        {
-            return false;
-        }
-
-
-    obj->SetDeadband(deadband);
-    return true;
-}
-
 FUNCTION(AngularMotorEffector,setMaxForce)
 {
     float force;
@@ -74,7 +40,5 @@ FUNCTION(AngularMotorEffector,setMaxForce)
 void CLASS(AngularMotorEffector)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Effector);
-    DEFINE_FUNCTION(setUseBacklash);
-    DEFINE_FUNCTION(setDeadband);
     DEFINE_FUNCTION(setMaxForce);
 }

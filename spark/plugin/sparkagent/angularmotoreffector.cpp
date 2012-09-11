@@ -29,9 +29,6 @@ using namespace std;
 
 AngularMotorEffector::AngularMotorEffector()
     : JointEffector<AngularMotor>::JointEffector("amotor"),
-  mUseBacklash(false),
-  mGearPosition(0),
-  mHalfDeadband(1),
   mMaxForce(10)
 {
 }
@@ -85,28 +82,7 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
 
     mJoint->SetParameter(2 /*value of dParamVel in ODE*/, finalMotorVel);
     
-    if ( mUseBacklash )
-    {
-      bool dead = false;
-      float jointAngle = mJoint->GetAxisAngle(Joint::AI_FIRST);
-      
-      float maxDeadband = jointAngle + mHalfDeadband;
-      float minDeadband = jointAngle - mHalfDeadband;
-      if ( mGearPosition < maxDeadband
-        && mGearPosition > minDeadband )
-      {
-        dead = true;
-      }
-
-      mGearPosition += finalMotorVel * 0.02;
-      mGearPosition = salt::gClamp(mGearPosition, minDeadband-0.1f, maxDeadband+0.1f);
-
-      mJoint->SetMaxMotorForce(Joint::AI_FIRST, dead?0.3:maxForce);
-    }
-    else
-    {
-      mJoint->SetMaxMotorForce(Joint::AI_FIRST, maxForce);
-    }
+    mJoint->SetMaxMotorForce(Joint::AI_FIRST, maxForce);
 
     if (motorAction->GetMotorVelocity() != 0)
         {
