@@ -17,25 +17,25 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef ANGULAR_MOTOR_ACTION_H
-#define ANGULAR_MOTOR_ACTION_H
+
+#ifndef STIFFNESSACTION_H
+#define STIFFNESSACTION_H
 
 #include <oxygen/gamecontrolserver/actionobject.h>
 
-/* only one axis is supported at the moment */
-class AngularMotorAction : public oxygen::ActionObject
+class StiffnessAction : public oxygen::ActionObject
 {
 public:
-    AngularMotorAction(const std::string& predicate, float velocity, float stiffness)
-      : ActionObject(predicate), mVelocity(velocity), mStiffness(stiffness) {}
+    StiffnessAction(const std::string& predicate, float stiffness)
+      : ActionObject(predicate), mStiffness(stiffness) {}
 
-    virtual ~AngularMotorAction() {}
-    float GetMotorVelocity() { return mVelocity; }
+    virtual ~StiffnessAction() {}
+
     float GetStiffness() { return mStiffness; }
 
 protected:
-    float mVelocity;
     float mStiffness;
 };
 
-#endif // ANGULAR_MOTOR_ACTION_H
+
+#endif // STIFFNESSACTION_H

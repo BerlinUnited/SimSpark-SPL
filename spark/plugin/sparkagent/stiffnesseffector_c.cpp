@@ -1,3 +1,4 @@
+
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
@@ -18,9 +19,44 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "angularmotoreffector.h"
+#include "stiffnesseffector.h"
 
-void CLASS(AngularMotorEffector)::DefineClass()
+FUNCTION(StiffnessEffector,setMaxForce)
+{
+    float force;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), force))
+        )
+        {
+            return false;
+        }
+
+
+    obj->SetMaxForce(force);
+    return true;
+}
+
+FUNCTION(StiffnessEffector,setStiffness)
+{
+    float stiffness;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), stiffness))
+        )
+        {
+            return false;
+        }
+
+    obj->SetStiffness(stiffness);
+    return true;
+}
+
+void CLASS(StiffnessEffector)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Effector);
+    DEFINE_FUNCTION(setMaxForce);
+    DEFINE_FUNCTION(setStiffness);
 }
