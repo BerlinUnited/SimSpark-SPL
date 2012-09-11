@@ -29,6 +29,7 @@
 #include "universaljointperceptor.h"
 #include "angularmotoreffector.h"
 #include "angularmotorperceptor.h"
+#include "stiffnesseffector.h"
 
 ZEITGEIST_EXPORT_BEGIN()
     ZEITGEIST_EXPORT(Hinge2Effector);
@@ -40,4 +41,5 @@ ZEITGEIST_EXPORT_BEGIN()
     ZEITGEIST_EXPORT(UniversalJointPerceptor);
     ZEITGEIST_EXPORT(AngularMotorEffector);
     ZEITGEIST_EXPORT(AngularMotorPerceptor);
+    ZEITGEIST_EXPORT(StiffnessEffector);
 ZEITGEIST_EXPORT_END()

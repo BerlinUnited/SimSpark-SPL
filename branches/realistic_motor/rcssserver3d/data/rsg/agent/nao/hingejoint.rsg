@@ -52,12 +52,13 @@
 	    (setProtectionTempeature  80)
 
 	    (enableFeedback true)
-	    (setBattery ../../../torso/Battery)
+	    (setBattery ../../../body/Battery)
 	    
 	    (nd AngularMotorPerceptor (setName $PerName))
-	    (nd AngularMotorEffector
-			(setName $EffName)
-			(setMaxForce $FMax)
+	    (nd AngularMotorEffector  (setName $EffName))
+	    (nd StiffnessEffector
+		(setName (join $EffName s))
+		(setMaxForce $FMax))
 		)
 	    )
 	)
