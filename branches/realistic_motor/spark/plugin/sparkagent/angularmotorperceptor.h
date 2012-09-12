@@ -33,16 +33,26 @@ public:
     //! \return true, if valid data is available and false otherwise.
     bool Percept(boost::shared_ptr<oxygen::PredicateList> predList);
 
+    void SetSenseAngle(bool v) { mSenseAngle = v; }
+    void SetSenseRate(bool v) { mSenseRate = v; }
+    void SetSenseTorque(bool v) { mSenseTorque = v; }
+    void SetSenseCurrent(bool v) { mSenseCurrent = v; }
+    void SetSenseTemperature(bool v) { mSenseTemperature = v; }
+
 protected:
     void InsertAxisAngle(oxygen::Predicate& predicate);
     void InsertAxisRate(oxygen::Predicate& predicate);
     void InsertAxisTorque(oxygen::Predicate& predicate);
     void InsertCurrent(oxygen::Predicate& predicate);
-    void InsertTempeature(oxygen::Predicate& predicate);
+    void InsertTemperature(oxygen::Predicate& predicate);
 
 private:
-    //! random number generator for distance errors
-    salt::UniformRNG<> mAngleRng;
+    bool mSenseAngle;
+    bool mSenseRate;
+    bool mSenseTorque;
+    bool mSenseCurrent;
+    bool mSenseTemperature;
+    float mLastTemperature;
 };
 
 DECLARE_CLASS(AngularMotorPerceptor);

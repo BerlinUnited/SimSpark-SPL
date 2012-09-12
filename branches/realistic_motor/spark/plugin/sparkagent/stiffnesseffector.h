@@ -39,20 +39,6 @@ public:
     /** constructs an Actionobject, describing a predicate */
     virtual boost::shared_ptr<oxygen::ActionObject>
     GetActionObject(const oxygen::Predicate& predicate);
-
-    void SetMaxForce(float force) { mMaxForce = force; }
-
-    void SetStiffness(float stiffness);
-
-protected:
-    /** setup the stiffness to 0 */
-    virtual void OnLink()
-    {
-        JointEffector::OnLink();
-        SetStiffness(1.0);
-    }
-private:
-    float mMaxForce;
 };
 
 DECLARE_CLASS(StiffnessEffector);

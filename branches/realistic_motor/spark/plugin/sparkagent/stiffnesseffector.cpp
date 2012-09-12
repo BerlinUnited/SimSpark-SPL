@@ -29,8 +29,7 @@ using namespace oxygen;
 
 
 StiffnessEffector::StiffnessEffector()
-    : JointEffector<AngularMotor>::JointEffector("amotorStiffness"),
-      mMaxForce(10)
+    : JointEffector<AngularMotor>::JointEffector("amotorStiffness")
 {
 }
 
@@ -40,6 +39,8 @@ StiffnessEffector::~StiffnessEffector()
 
 bool StiffnessEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
+    if (mJoint.get() == 0) return false;
+
     shared_ptr<StiffnessAction> stiffnessAction = shared_dynamic_cast<StiffnessAction>(action);
 
     if (stiffnessAction.get() == 0)
@@ -50,17 +51,10 @@ bool StiffnessEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    SetStiffness(stiffnessAction->GetStiffness());
-    return true;
-}
-
-void StiffnessEffector::SetStiffness(float stiffness)
-{
-    if (mJoint.get() == 0) return;
-
+    float stiffness = stiffnessAction->GetStiffness();
     stiffness = gClamp(stiffness, 0.0f, 1.0f);
-    float maxForce = stiffness * mMaxForce;
-    mJoint->SetMaxMotorForce(Joint::AI_FIRST, maxForce);
+    mJoint->SetStiffness(stiffness);
+    return true;
 }
 
 shared_ptr<ActionObject> StiffnessEffector::GetActionObject(const Predicate& predicate)
