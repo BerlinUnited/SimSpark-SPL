@@ -43,8 +43,8 @@ $defaultOpenGLBundle = 'openglsyssdl'
 $agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
-$agentSyncMode = false
-$threadedAgentControl = true
+$agentSyncMode = true
+$threadedAgentControl = false
 
 # (MonitorControl) constants
 #
@@ -296,7 +296,7 @@ def sparkSetupServer
   simulationServer = sparkGetSimulationServer()
 
   if (simulationServer != nil)
-    simulationServer.setMultiThreads(true);
+    simulationServer.setMultiThreads(false);
     simulationServer.initControlNode('oxygen/AgentControl','AgentControl')
 
     # set auto speed adjust mode.
