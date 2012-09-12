@@ -65,6 +65,7 @@
 	    (setPower 167184)
 	    (nd BatteryPerceptor
 		(setName BAT)
+		(setInterval 50)
 		)
 	    )
 
