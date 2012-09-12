@@ -44,6 +44,13 @@ public:
 
     void SetStiffness(float stiffness);
 
+protected:
+    /** setup the stiffness to 0 */
+    virtual void OnLink()
+    {
+        JointEffector::OnLink();
+        SetStiffness(1.0);
+    }
 private:
     float mMaxForce;
 };
