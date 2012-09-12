@@ -180,6 +180,8 @@ SET_ANGULAR_MOTOR_CONSTANT(setEnvironmentTempeature)
 SET_ANGULAR_MOTOR_CONSTANT(setThermalConductivity)
 SET_ANGULAR_MOTOR_CONSTANT(setHeatCapacity)
 SET_ANGULAR_MOTOR_CONSTANT(setProtectionTempeature)
+SET_ANGULAR_MOTOR_CONSTANT(setProtectionStiffness)
+SET_ANGULAR_MOTOR_CONSTANT(setMaxTorque)
 
 void CLASS(AngularMotor)::DefineClass()
 {
@@ -202,4 +204,6 @@ void CLASS(AngularMotor)::DefineClass()
     DEFINE_FUNCTION(setThermalConductivity);
     DEFINE_FUNCTION(setHeatCapacity);
     DEFINE_FUNCTION(setProtectionTempeature);
+    DEFINE_FUNCTION(setProtectionStiffness);
+    DEFINE_FUNCTION(setMaxTorque);
 }

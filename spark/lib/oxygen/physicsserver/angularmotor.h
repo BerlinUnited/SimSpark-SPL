@@ -130,7 +130,7 @@ public:
     float GetCurrent() const { return mI; }
 
     /** get the tempeature of joint */
-    float GetTempeature() const { return mTempMotor; }
+    float GetTemperature() const { return mTempMotor; }
 
     /** constant setters */
     void setSpeedConstant(float v) { mKe = v; }
@@ -140,9 +140,13 @@ public:
     void setThermalConductivity(float v) { mThermalConductivity = v; }
     void setHeatCapacity(float v) { mHeatCapacity = v; }
     void setProtectionTempeature(float v) { mTempProtection = v; }
+    void setProtectionStiffness(float v) { mProtectionStiffness = v; }
+    void setMaxTorque(float v) { mMaxTorque = v; }
 
     /** returns the torque on the joint */
     float GetTorque() const;
+
+    void SetStiffness(float v) { mStiffness = v; updateStiffnessControl(); }
 
 protected:
     /** creates a new angularmotor joint */
@@ -150,6 +154,8 @@ protected:
 
     /** update energe comsuption and tempeture */
     virtual void PrePhysicsUpdateInternal(float deltaTime);
+
+    void updateStiffnessControl();
     
 private:
     static boost::shared_ptr<AngularMotorInt> mAngularMotorImp;
@@ -167,6 +173,11 @@ private:
     float mThermalConductivity;
     float mHeatCapacity;
     float mTempProtection;
+    float mProtectionStiffness;
+    float mMaxTorque;
+
+    float mStiffness;
+    float mActualStiffness;
 
     boost::shared_ptr<HingeJoint> mHingeJoint; // HACK: assume connected with hinge joint
 };

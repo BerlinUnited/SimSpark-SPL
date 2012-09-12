@@ -38,9 +38,12 @@ AngularMotor::AngularMotor() : Joint(),
   mTempMotor(mTempEnvironment),
   mThermalConductivity(0.025),
   mHeatCapacity(26),
-  mTempProtection(80)
+  mTempProtection(80),
+  mProtectionStiffness(0.8),
+  mMaxTorque(0),
+  mStiffness(1),
+  mActualStiffness(1)
 {
-
 }
 
 AngularMotor::~AngularMotor()
@@ -163,17 +166,14 @@ void AngularMotor::PrePhysicsUpdateInternal(float deltaTime)
   float P = mKe * v * mI + Pr;
   float E = P * deltaTime;
 
+  updateStiffnessControl();
+
   if ( mBattery.get() != 0 )
   {
     if (!mBattery->Consume(E))
     {
       SetMaxMotorForce(Joint::AI_FIRST, 0);
     }
-  }
-
-  if (mTempMotor > mTempProtection)
-  {
-    SetMaxMotorForce(Joint::AI_FIRST, 0);
   }
 
   mTempMotor += (Pr - mThermalConductivity*(mTempMotor-mTempEnvironment)) * deltaTime / mHeatCapacity;
@@ -221,4 +221,10 @@ bool AngularMotor::Disabled()
   }
 
   return (mTempMotor > mTempProtection);
+}
+
+void AngularMotor::updateStiffnessControl()
+{
+    mActualStiffness = mTempMotor < mTempProtection ? mStiffness : std::min(mStiffness, mProtectionStiffness);
+    SetMaxMotorForce(Joint::AI_FIRST, mActualStiffness * mMaxTorque);
 }

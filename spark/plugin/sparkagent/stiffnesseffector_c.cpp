@@ -21,42 +21,7 @@
 
 #include "stiffnesseffector.h"
 
-FUNCTION(StiffnessEffector,setMaxForce)
-{
-    float force;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(), force))
-        )
-        {
-            return false;
-        }
-
-
-    obj->SetMaxForce(force);
-    return true;
-}
-
-FUNCTION(StiffnessEffector,setStiffness)
-{
-    float stiffness;
-
-    if (
-        (in.GetSize() != 1) ||
-        (! in.GetValue(in.begin(), stiffness))
-        )
-        {
-            return false;
-        }
-
-    obj->SetStiffness(stiffness);
-    return true;
-}
-
 void CLASS(StiffnessEffector)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Effector);
-    DEFINE_FUNCTION(setMaxForce);
-    DEFINE_FUNCTION(setStiffness);
 }
