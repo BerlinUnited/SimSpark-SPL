@@ -9,7 +9,7 @@ $recordLogfile = false
 $enableInternalMonitor = false
 
 # toggle the real time mode
-$enableRealTimeMode = true
+$enableRealTimeMode = false
 
 sparkSetupServer()
 if ($enableInternalMonitor)
