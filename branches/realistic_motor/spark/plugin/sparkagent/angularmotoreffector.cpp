@@ -18,21 +18,18 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "angularmotoreffector.h"
-#include "angularmotoraction.h"
+#include "hingeaction.h"
 #include <oxygen/physicsserver/rigidbody.h>
 
-using namespace oxygen;
-using namespace zeitgeist;
-using namespace salt;
-using namespace boost;
 using namespace std;
+using namespace boost;
+using namespace salt;
+using namespace zeitgeist;
+using namespace oxygen;
+
 
 AngularMotorEffector::AngularMotorEffector()
-    : JointEffector<AngularMotor>::JointEffector("amotor"),
-  mUseBacklash(false),
-  mGearPosition(0),
-  mHalfDeadband(1),
-  mMaxForce(10)
+    : JointEffector<AngularMotor>::JointEffector("amotor")
 {
 }
 
@@ -59,8 +56,7 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
       return false;
     }
 
-    boost::shared_ptr<AngularMotorAction> motorAction =
-        shared_dynamic_cast<AngularMotorAction>(action);
+    shared_ptr<HingeAction> motorAction = shared_dynamic_cast<HingeAction>(action);
 
     if (motorAction.get() == 0)
     {
@@ -71,9 +67,7 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
     float finalMotorVel = motorAction->GetMotorVelocity();
-    float stiffness = motorAction->GetStiffness();
-    stiffness = gClamp(stiffness, 0.0f, 1.0f);
-    float maxForce = stiffness * mMaxForce;
+
 
     if (mJoint->IsLimitJointMaxSpeed1())
     {
@@ -84,29 +78,6 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
     mJoint->SetParameter(2 /*value of dParamVel in ODE*/, finalMotorVel);
-    
-    if ( mUseBacklash )
-    {
-      bool dead = false;
-      float jointAngle = mJoint->GetAxisAngle(Joint::AI_FIRST);
-      
-      float maxDeadband = jointAngle + mHalfDeadband;
-      float minDeadband = jointAngle - mHalfDeadband;
-      if ( mGearPosition < maxDeadband
-        && mGearPosition > minDeadband )
-      {
-        dead = true;
-      }
-
-      mGearPosition += finalMotorVel * 0.02;
-      mGearPosition = salt::gClamp(mGearPosition, minDeadband-0.1f, maxDeadband+0.1f);
-
-      mJoint->SetMaxMotorForce(Joint::AI_FIRST, dead?0.3:maxForce);
-    }
-    else
-    {
-      mJoint->SetMaxMotorForce(Joint::AI_FIRST, maxForce);
-    }
 
     if (motorAction->GetMotorVelocity() != 0)
         {
@@ -119,7 +90,7 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
     return true;
 }
 
-boost::shared_ptr<ActionObject> AngularMotorEffector::GetActionObject(const Predicate& predicate)
+shared_ptr<ActionObject> AngularMotorEffector::GetActionObject(const Predicate& predicate)
 {
     for(;;)
         {
@@ -146,16 +117,17 @@ boost::shared_ptr<ActionObject> AngularMotorEffector::GetActionObject(const Pred
                     break;
                 }
 
+            /*
             float stiffness;
             if (! predicate.AdvanceValue(iter, stiffness))
                 {
                     GetLog()->Error()
                         << "ERROR: (HingeEffector) motor stiffness expected\n";
                     break;
-                }
+                }*/
 
-            return boost::shared_ptr<AngularMotorAction>(new AngularMotorAction(GetPredicate(),velocity,stiffness));
+            return shared_ptr<HingeAction>(new HingeAction(GetPredicate(),velocity));
         }
 
-    return boost::shared_ptr<ActionObject>();
+    return shared_ptr<ActionObject>();
 }

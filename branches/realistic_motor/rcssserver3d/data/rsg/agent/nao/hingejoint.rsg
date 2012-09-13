@@ -40,7 +40,7 @@
 	    (setNumAxes         1)
 	    (attach             $PathBody1  $PathBody2)
 	    (setMotorAxis       0  1  $Axis_X      $Axis_Y    $Axis_Z)
-	    (setMaxMotorForce   0  $FMax)
+	    (setMaxTorque       $FMax)
 	    (setJointMaxSpeed1  $MaxAbsSpeed)
 	    ;; constant of motor
 	    (setSpeedConstant         $Ke)
@@ -52,13 +52,14 @@
 	    (setProtectionTempeature  80)
 
 	    (enableFeedback true)
-	    (setBattery ../../../torso/Battery)
+	    (setBattery ../../../body/Battery)
 	    
-	    (nd AngularMotorPerceptor (setName $PerName))
-	    (nd AngularMotorEffector
-			(setName $EffName)
-			(setMaxForce $FMax)
-		)
+	    (nd AngularMotorPerceptor (setName $PerName)
+		(setSenseAngle true)
+		(setSenseTemperature true))
+	    (nd AngularMotorEffector  (setName $EffName))
+	    (nd StiffnessEffector (setName (join $EffName s)))
 	    )
 	)
+    )
 )

@@ -1,3 +1,4 @@
+
 /* -*- mode: c++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
    this file is part of rcssserver3D
@@ -17,25 +18,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef ANGULAR_MOTOR_ACTION_H
-#define ANGULAR_MOTOR_ACTION_H
 
-#include <oxygen/gamecontrolserver/actionobject.h>
+#include "stiffnesseffector.h"
 
-/* only one axis is supported at the moment */
-class AngularMotorAction : public oxygen::ActionObject
+void CLASS(StiffnessEffector)::DefineClass()
 {
-public:
-    AngularMotorAction(const std::string& predicate, float velocity, float stiffness)
-      : ActionObject(predicate), mVelocity(velocity), mStiffness(stiffness) {}
-
-    virtual ~AngularMotorAction() {}
-    float GetMotorVelocity() { return mVelocity; }
-    float GetStiffness() { return mStiffness; }
-
-protected:
-    float mVelocity;
-    float mStiffness;
-};
-
-#endif // ANGULAR_MOTOR_ACTION_H
+    DEFINE_BASECLASS(oxygen/Effector);
+}

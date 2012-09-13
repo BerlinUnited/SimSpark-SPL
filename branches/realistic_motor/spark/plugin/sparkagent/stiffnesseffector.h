@@ -17,17 +17,18 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef ANGULAR_MOTOR_EFFECTOR_H
-#define ANGULAR_MOTOR_EFFECTOR_H
+
+#ifndef STIFFNESSEFFECTOR_H
+#define STIFFNESSEFFECTOR_H
 
 #include <oxygen/agentaspect/jointeffector.h>
 #include <oxygen/physicsserver/angularmotor.h>
 
-class AngularMotorEffector : public oxygen::JointEffector<oxygen::AngularMotor>
+class StiffnessEffector: public oxygen::JointEffector<oxygen::AngularMotor>
 {
 public:
-    AngularMotorEffector();
-    virtual ~AngularMotorEffector();
+    StiffnessEffector();
+    virtual ~StiffnessEffector();
 
     /** realizes the action described by the ActionObject */
     virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
@@ -40,6 +41,6 @@ public:
     GetActionObject(const oxygen::Predicate& predicate);
 };
 
-DECLARE_CLASS(AngularMotorEffector);
+DECLARE_CLASS(StiffnessEffector);
 
-#endif // ANGULAR_MOTOR_EFFECTOR_H
+#endif // STIFFNESSEFFECTOR_H

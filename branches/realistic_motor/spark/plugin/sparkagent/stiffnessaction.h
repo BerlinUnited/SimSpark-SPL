@@ -17,29 +17,25 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef ANGULAR_MOTOR_EFFECTOR_H
-#define ANGULAR_MOTOR_EFFECTOR_H
 
-#include <oxygen/agentaspect/jointeffector.h>
-#include <oxygen/physicsserver/angularmotor.h>
+#ifndef STIFFNESSACTION_H
+#define STIFFNESSACTION_H
 
-class AngularMotorEffector : public oxygen::JointEffector<oxygen::AngularMotor>
+#include <oxygen/gamecontrolserver/actionobject.h>
+
+class StiffnessAction : public oxygen::ActionObject
 {
 public:
-    AngularMotorEffector();
-    virtual ~AngularMotorEffector();
+    StiffnessAction(const std::string& predicate, float stiffness)
+      : ActionObject(predicate), mStiffness(stiffness) {}
 
-    /** realizes the action described by the ActionObject */
-    virtual bool Realize(boost::shared_ptr<oxygen::ActionObject> action);
+    virtual ~StiffnessAction() {}
 
-    /** returns the name of the predicate this effector implements. */
-    virtual std::string GetPredicate() { return GetName(); }
+    float GetStiffness() { return mStiffness; }
 
-    /** constructs an Actionobject, describing a predicate */
-    virtual boost::shared_ptr<oxygen::ActionObject>
-    GetActionObject(const oxygen::Predicate& predicate);
+protected:
+    float mStiffness;
 };
 
-DECLARE_CLASS(AngularMotorEffector);
 
-#endif // ANGULAR_MOTOR_EFFECTOR_H
+#endif // STIFFNESSACTION_H

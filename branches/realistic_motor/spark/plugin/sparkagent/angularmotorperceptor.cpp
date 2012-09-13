@@ -27,7 +27,12 @@ using namespace std;
 
 AngularMotorPerceptor::AngularMotorPerceptor()
     : JointPerceptor<AngularMotor>::JointPerceptor(),
-      mAngleRng(-0.005, 0.005)//-0.04395
+      mSenseAngle(true),
+      mSenseRate(false),
+      mSenseTorque(false),
+      mSenseCurrent(false),
+      mSenseTemperature(false),
+      mLastTemperature(std::numeric_limits<float>::min())
 {
 }
 
@@ -39,8 +44,7 @@ void AngularMotorPerceptor::InsertAxisAngle(Predicate& predicate)
 {
     ParameterList& axisElement = predicate.parameter.AddList();
     axisElement.AddValue(string("ax"));
-    float noise = mAngleRng();
-    float ang = mJoint->GetAxisAngle(Joint::AI_FIRST);// + noise;
+    float ang = mJoint->GetAxisAngle(Joint::AI_FIRST);
     axisElement.AddValue(ang);
 }
 
@@ -65,11 +69,16 @@ void AngularMotorPerceptor::InsertCurrent(Predicate& predicate)
     axisElement.AddValue(mJoint->GetCurrent() * 1000);
 }
 
-void AngularMotorPerceptor::InsertTempeature(Predicate& predicate)
+void AngularMotorPerceptor::InsertTemperature(Predicate& predicate)
 {
-    ParameterList& axisElement = predicate.parameter.AddList();
-    axisElement.AddValue(string("tp"));
-    axisElement.AddValue(mJoint->GetTempeature());
+    float temp = mJoint->GetTemperature();
+    if (fabs(temp - mLastTemperature) > 1)
+    {
+        ParameterList& axisElement = predicate.parameter.AddList();
+        axisElement.AddValue(string("tp"));
+        axisElement.AddValue(temp);
+        mLastTemperature = temp;
+    }
 }
 
 bool AngularMotorPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
@@ -87,11 +96,10 @@ bool AngularMotorPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> pre
     nameElement.AddValue(string("n"));
     nameElement.AddValue(GetName());
 
-    InsertAxisAngle(predicate);
-    //InsertAxisRate(predicate);
-    //InsertAxisTorque(predicate);
-    InsertTempeature(predicate);
-    InsertCurrent(predicate);
-    
+    if (mSenseAngle) InsertAxisAngle(predicate);
+    if (mSenseRate) InsertAxisRate(predicate);
+    if (mSenseTorque) InsertAxisTorque(predicate);
+    if (mSenseTemperature) InsertTemperature(predicate);
+    if (mSenseCurrent) InsertCurrent(predicate);
     return true;
 }

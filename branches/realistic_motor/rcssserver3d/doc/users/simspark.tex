@@ -88,6 +88,7 @@ figure \ref{ode:hingejoint}.
 
 %klaus: What is the zero degree position, is the above correct?
 %Joschka: I don't think this is necessarily correct; to my knowledge, the zero position is determined by the orientation and position of the bodies at the time the joint is attached. Is this right?
+%Yuan: Yes, exactly
 
 \begin{itemize}
 	\item[Message format:] \texttt{(HJ (n <name>) (ax <ax>))}
@@ -100,7 +101,37 @@ figure \ref{ode:hingejoint}.
 	\item[Noise model:] None
 \end{itemize}
 
+%-SUB-SUB-SECTION---------------------------------------------------
+%-------------------- AngularMotor Perceptor -----------------------
+%-------------------------------------------------------------------
+\subsubsection{Angular Motor Perceptor}
+\label{sec:AMP}
+The \emph{angular motor} is a more realistic motor which simulates
+power comsuming and tempeature. A \emph{angular motor perceptor}
+recevies information of \emph{angular motor}, it may contains
+information about angle, rate, torque, current, and tempeature,
+depending on configuration.
 
+The format of message is pretty similar as \emph{Hinge Joint
+  Perceptor} in \ref{sec:HJP}:
+
+\begin{itemize}
+        \item[Message format:] \texttt{(HJ (n <name>)(ax <ax>)(rt <rt>)(tq <tq>)(ct <ct>)(tp <tp>))}
+                \begin{itemize}
+                  \item[\texttt{<name>} -] the name of the corresponding joint
+                  \item[\texttt{<ax>} -] the current position angle in degrees and an accuracy
+                  of two digits
+                  \item[\texttt{<rt>} -] the speed of motor in degrees per second
+                  \item[\texttt{<tq>} -] the output torque of motor in Nm
+                  \item[\texttt{<ct>} -] the currency of motor in A
+                  \item[\texttt{<tp>} -] internal temperature of motor, in $^\circ$C
+                \end{itemize}
+        \item[Example message:] \texttt{(HJ (n laj3) (ax -1.02)(tp 40.0))}
+        \item[Noise model:] None
+\end{itemize}
+
+All the information are updated every cycle, except temperature which
+included in message only when the change is bigger than 1 $^\circ$C.
 
 %-SUB-SUB-SECTION---------------------------------------------------
 %-------------------- UniversalJoint Perceptor ---------------------
@@ -254,7 +285,18 @@ collision detected or 1 meaning collision detected is given.
 \end{itemize}
 
 
+%-SUB-SUB-SECTION---------------------------------------------------
+%----------------------- Battery Perceptor ---------------------------
+%-------------------------------------------------------------------
+\subsubsection{Battery Perceptor}
+\label{sec:batteryperceptor}
+This perceptor gives information about battery of robot.
 
+\begin{itemize}
+	\item[Message format:] \texttt{(BAT <charge>)}
+        \item[\texttt{<charge>} -] the charge level of battery in range [0, 1], 1 means fully charged.
+	\item[Example message:] \texttt{(BAT 0.9)}
+\end{itemize}
 
 
 %-SUB-SECTION-------------------------------------------------------
@@ -423,7 +465,7 @@ the temperature of the agent.
 	\item[Example message:] \texttt{(AgentState (temp 48) (battery 75))}
 \end{itemize}
 
-
+Note: it is not used now.
 
 %-SUB-SUB-SECTION---------------------------------------------------
 %----------------------- GameState Perceptor -----------------------
@@ -613,7 +655,37 @@ joint, then the maximum force will be used instead.
 	\item[Example message:] \texttt{(lae3 5.3)}
 \end{itemize}
 
+%-SUB-SUB-SECTION---------------------------------------------------
+%----------------------- HingeJoint Effector -----------------------
+%-------------------------------------------------------------------
+\subsubsection{Angular Motor Effector}
+\label{sec:AME}
+The \emph{angular motor effector} is able to drive \emph{angular
+  motor}, and the message format is exactly the same as \emph{hinge
+  joint effector} in section \ref{sec:HJE}.
 
+%-SUB-SUB-SECTION---------------------------------------------------
+%----------------------- HingeJoint Effector -----------------------
+%-------------------------------------------------------------------
+\subsubsection{Stiffness Effector}
+\label{sec:AME}
+The \emph{stiffness effector} is able to change the stiffness of
+\emph{angular motor}, and the stiffness affects the maximum output
+torque of motor: the motor is off when stiffness equals 0, and motor
+has most power when stiffness is 1.
+
+\begin{itemize}
+	\item[Message format:] \texttt{(<name> <st>)}
+		\begin{itemize}
+		  \item[\texttt{<name>} -] the name of the corresponding effector
+		  \item[\texttt{<st>} -] the requested stiffness in range [0, 1]
+		\end{itemize}
+	\item[Example message:] \texttt{(lae3s 1.0)}
+\end{itemize}
+
+Note the \emph{angular motor} has temperature protection, it is
+enabled when the motor is too hot, and then the maximum stiffness is
+limited.
 
 %-SUB-SUB-SECTION---------------------------------------------------
 %--------------------- UniversalJoint Effector ---------------------
