@@ -65,9 +65,11 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             return;
         }
 
-    boost::shared_ptr<ParameterList> parameter(new ParameterList());
-
-    aspect->ImportScene(sceneAction->GetScene(), parameter);
+    string s;
+    sceneAction->GetSceneParameters()->GetValue(sceneAction->GetSceneParameters()->begin(), s);
+    GetLog()->Error() << "HHHHHH Params: " << s << endl;
+    aspect->ImportScene(sceneAction->GetScene(),
+        sceneAction->GetSceneParameters());
 
 }
 
@@ -89,5 +91,10 @@ SceneEffector::GetActionObject(const Predicate& predicate)
             return boost::shared_ptr<ActionObject>();
         };
 
-    return boost::shared_ptr<ActionObject>(new SceneAction(GetPredicate(),scene));
+    boost::shared_ptr<ParameterList> parameters(
+        new ParameterList(predicate.parameter));
+    parameters->Pop_Front();
+
+    return boost::shared_ptr<ActionObject>(
+        new SceneAction(GetPredicate(), scene, parameters));
 }
