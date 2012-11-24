@@ -65,9 +65,6 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             return;
         }
 
-    string s;
-    sceneAction->GetSceneParameters()->GetValue(sceneAction->GetSceneParameters()->begin(), s);
-    GetLog()->Error() << "HHHHHH Params: " << s << endl;
     aspect->ImportScene(sceneAction->GetScene(),
         sceneAction->GetSceneParameters());
 
