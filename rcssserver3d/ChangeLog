@@ -1,3 +1,14 @@
+2012-11-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* data/rsg/agent/nao/nao_hetero.rsg: 
+	- nao_hetero.rsg can be used to create different variants of Nao robot
+	- nao.rsg a compatbility scene to create default Nao type (type 0)
+	
+	* rcssserver3d/naorobottypes.rb: 
+	* rcssserver3d/naosoccersim.rb: 
+	* rcssserver3d/CMakeLists.txt: 
+	- added naorobottypes.rb to initialize Nao heterogeneous robot parameters
+
 2012-06-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
