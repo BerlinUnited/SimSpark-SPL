@@ -129,3 +129,6 @@ end
 # install the TrainerCommandParser to parse commands received from a
 # monitor client
 sparkRegisterMonitorCmdParser 'TrainerCommandParser'
+
+# Load parameters for heterogeneous Nao robots
+run "naorobottypes.rb"

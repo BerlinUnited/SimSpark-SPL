@@ -7,9 +7,13 @@
 (RSG 0 1)
 (
 
+(templ $type)
+
 ;
 ; The torso parameters
 ;
+
+;(def $TorsoLength (eval "NaoType["$type"]['tl']"))
 
 (def $TorsoLength  0.1)
 (def $TorsoWidth   0.1)
