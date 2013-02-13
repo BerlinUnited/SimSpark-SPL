@@ -41,7 +41,7 @@ ConcaveCollider::~ConcaveCollider()
 bool ConcaveCollider::ConstructInternal()
 {
     if (mConcaveColliderImp.get() == 0)
-        mConcaveColliderImp = shared_dynamic_cast<ConcaveColliderInt>
+        mConcaveColliderImp = dynamic_pointer_cast<ConcaveColliderInt>
             (GetCore()->New("ConcaveColliderImp"));
             
     if (mConcaveColliderImp.get() == 0)

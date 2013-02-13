@@ -217,7 +217,7 @@ AgentState::GetSelfMessage(string& msg)
 void
 AgentState::UpdateHierarchyInternal()
 {
-    boost::shared_ptr<RenderNode> node = boost::shared_dynamic_cast<RenderNode>(GetChild("SelectionMarker", true));
+    boost::shared_ptr<RenderNode> node = boost::dynamic_pointer_cast<RenderNode>(GetChild("SelectionMarker", true));
     if (!node)
     {
       GetLog()->Error() << "ERROR: (AgentState::UpdateHierarchyInternal) could not find selection marker\n";

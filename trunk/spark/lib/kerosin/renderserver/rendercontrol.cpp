@@ -71,7 +71,7 @@ RenderControl::RenderCustom()
          ++iter
          )
     {
-        shared_static_cast<CustomRender>((*iter))->Render();
+        static_pointer_cast<CustomRender>((*iter))->Render();
     }
 }
 

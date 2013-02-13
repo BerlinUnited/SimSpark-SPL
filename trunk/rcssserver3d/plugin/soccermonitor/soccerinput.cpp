@@ -76,7 +76,7 @@ void SoccerInput::OnLink()
     scriptServer->CreateVariable("Command.KillSelection", CmdKillSelection);
     scriptServer->CreateVariable("Command.ReposSelection", CmdReposSelection);
     
-    mMonitorClient = shared_dynamic_cast<NetClient>
+    mMonitorClient = dynamic_pointer_cast<NetClient>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient"));
 
     if (mMonitorClient.get() == 0)
@@ -86,7 +86,7 @@ void SoccerInput::OnLink()
     }
 
     // get camera body
-    mCameraBody = shared_dynamic_cast<RigidBody>
+    mCameraBody = dynamic_pointer_cast<RigidBody>
         (GetCore()->Get("/usr/scene/camera/physics"));
 
     if (mCameraBody.get() == 0)
@@ -96,7 +96,7 @@ void SoccerInput::OnLink()
     }
 
     // get fps controller
-    mFPS = shared_dynamic_cast<FPSController>
+    mFPS = dynamic_pointer_cast<FPSController>
         (GetCore()->Get("/usr/scene/camera/physics/controller"));
 
     if (mFPS.get() == 0)
@@ -271,7 +271,7 @@ void SoccerInput::SelectCamera(int idx)
     }
 
     boost::shared_ptr<SoccerMonitor> soccerMonitor =
-        shared_static_cast<SoccerMonitor>(soccerMonitorList.front());
+        static_pointer_cast<SoccerMonitor>(soccerMonitorList.front());
     
     salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
 

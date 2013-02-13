@@ -37,9 +37,9 @@ ImagePerceptor::~ImagePerceptor()
 
 void ImagePerceptor::OnLink()
 {
-  mRender = shared_dynamic_cast<ImageRender > (GetCore()->New("ImageRender"));
+  mRender = dynamic_pointer_cast<ImageRender > (GetCore()->New("ImageRender"));
 
-  mCamera = shared_dynamic_cast<Camera > (GetCore()->New("oxygen/Camera"));
+  mCamera = dynamic_pointer_cast<Camera > (GetCore()->New("oxygen/Camera"));
   if (0 != mCamera.get())
   {
     AddChildReference(mCamera);

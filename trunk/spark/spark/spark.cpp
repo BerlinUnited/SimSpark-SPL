@@ -75,7 +75,7 @@ bool Spark::UpdateCached()
         ok = false;
     }
 
-    mSceneServer = shared_dynamic_cast<SceneServer>
+    mSceneServer = dynamic_pointer_cast<SceneServer>
         (mZeitgeist->GetCore()->Get("/sys/server/scene"));
 
     if (mSceneServer.get() == 0)
@@ -84,7 +84,7 @@ bool Spark::UpdateCached()
         ok = false;
     }
 
-    mSimulationServer = shared_dynamic_cast<SimulationServer>
+    mSimulationServer = dynamic_pointer_cast<SimulationServer>
         (mZeitgeist->GetCore()->Get("/sys/server/simulation"));
 
     if (mSimulationServer.get() == 0)
@@ -174,14 +174,14 @@ Spark::GetInputControl()
         return boost::shared_ptr<InputControl>();
     }
 
-    return shared_dynamic_cast<InputControl>
+    return dynamic_pointer_cast<InputControl>
         (mSimulationServer->GetControlNode("InputControl"));
 }
 
 boost::shared_ptr<InputServer>
 Spark::GetInputServer()
 {
-    return shared_dynamic_cast<kerosin::InputServer>
+    return dynamic_pointer_cast<kerosin::InputServer>
         (mZeitgeist->GetCore()->Get("/sys/server/input"));
 }
 
@@ -193,7 +193,7 @@ Spark::GetRenderControl()
         return boost::shared_ptr<RenderControl>();
     }
 
-    return shared_dynamic_cast<RenderControl>
+    return dynamic_pointer_cast<RenderControl>
         (mSimulationServer->GetControlNode("RenderControl"));
 }
 #endif // HAVE_KEROSIN_KEROSIN_H

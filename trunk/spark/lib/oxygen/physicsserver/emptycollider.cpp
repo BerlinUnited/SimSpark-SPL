@@ -40,7 +40,7 @@ EmptyCollider::~EmptyCollider(){
 bool EmptyCollider::ConstructInternal()
 {
     if (mEmptyColliderImp.get() == 0)
-        mEmptyColliderImp = shared_dynamic_cast<EmptyColliderInt>
+        mEmptyColliderImp = dynamic_pointer_cast<EmptyColliderInt>
             (GetCore()->New("EmptyColliderImp"));
             
     if (mEmptyColliderImp.get() == 0)

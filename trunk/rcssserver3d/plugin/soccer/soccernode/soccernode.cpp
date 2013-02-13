@@ -45,7 +45,7 @@ SoccerNode::UpdateCached()
 {
     BaseNode::UpdateCached();
 
-    mTransformParent = shared_dynamic_cast<Transform>
+    mTransformParent = dynamic_pointer_cast<Transform>
         (GetParentSupportingClass("Transform").lock());
 
     if (mTransformParent.get() == 0)

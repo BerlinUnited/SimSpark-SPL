@@ -68,7 +68,7 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
     jersey.push_back("lowerTorso");
     
     // search for the AgentState
-    boost::shared_ptr<AgentState> state = shared_static_cast<AgentState>
+    boost::shared_ptr<AgentState> state = static_pointer_cast<AgentState>
         (mAgentAspect->GetChildOfClass("AgentState",true));
 
     if (state.get() == 0)
@@ -102,7 +102,7 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
 
 
     // get parent of the agent aspect
-    boost::shared_ptr<Node> parent = shared_dynamic_cast<Node>
+    boost::shared_ptr<Node> parent = dynamic_pointer_cast<Node>
         (mAgentAspect->GetParent().lock());
 
     if (parent.get() == 0)
@@ -123,7 +123,7 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
 
         if (child.get() != 0)
         {
-            matNode = shared_static_cast<SingleMatNode>
+            matNode = static_pointer_cast<SingleMatNode>
                 (child->FindChildSupportingClass<SingleMatNode>(true));
 
             if (matNode.get() == 0)
@@ -147,7 +147,7 @@ SingleMatInitEffector::PrePhysicsUpdateInternal(float deltaTime)
 
     // set the scene modified, the monitor will update
     boost::shared_ptr<SceneServer> sceneServer =
-        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+        dynamic_pointer_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() ==0)
     {

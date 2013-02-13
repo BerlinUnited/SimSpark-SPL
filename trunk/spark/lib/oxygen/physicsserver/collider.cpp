@@ -50,7 +50,7 @@ void Collider::OnLink()
     PhysicsObject::OnLink();
     
     if (mColliderImp.get() == 0)
-        mColliderImp = shared_dynamic_cast<ColliderInt>
+        mColliderImp = dynamic_pointer_cast<ColliderInt>
             (GetCore()->New("ColliderImp"));
     
     if (mGeomID == 0) return;
@@ -59,7 +59,7 @@ void Collider::OnLink()
     if (parent.expired()) return; 
 
     boost::shared_ptr<TransformCollider> tcParent =
-        shared_dynamic_cast<TransformCollider>(parent.lock());
+        dynamic_pointer_cast<TransformCollider>(parent.lock());
 
     if (tcParent.get() != 0)
         {
@@ -77,7 +77,7 @@ void Collider::OnLink()
     mColliderImp->SetSpace(spaceID, mGeomID, this);
     
     // if there is a Body below our parent, link to it
-    boost::shared_ptr<RigidBody> body = shared_static_cast<RigidBody>
+    boost::shared_ptr<RigidBody> body = static_pointer_cast<RigidBody>
         (parent.lock()->GetChildOfClass("RigidBody"));
 
     if (body.get() != 0) 
@@ -122,7 +122,7 @@ long Collider::GetGeomID()
 bool Collider::AddCollisionHandler(const std::string& handlerName)
 {
     boost::shared_ptr<CollisionHandler> handler =
-        shared_dynamic_cast<CollisionHandler>(GetCore()->New(handlerName));
+        dynamic_pointer_cast<CollisionHandler>(GetCore()->New(handlerName));
 
     if (handler.get() == 0)
         {
@@ -148,7 +148,7 @@ void Collider::OnCollision (boost::shared_ptr<Collider> collidee,
          )
         {
             boost::shared_ptr<CollisionHandler> handler =
-                shared_static_cast<CollisionHandler>(*iter);
+                static_pointer_cast<CollisionHandler>(*iter);
 
             if (
                 (type == CT_SYMMETRIC) &&
@@ -180,7 +180,7 @@ boost::shared_ptr<Collider> Collider::GetCollider(long geomID)
             return boost::shared_ptr<Collider>();
         }
 
-    boost::shared_ptr<Collider> collider = shared_static_cast<Collider>
+    boost::shared_ptr<Collider> collider = static_pointer_cast<Collider>
         (collPtr->GetSelf().lock());
 
     if (collider.get() == 0)

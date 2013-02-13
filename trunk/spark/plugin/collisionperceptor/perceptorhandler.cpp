@@ -31,7 +31,7 @@ void
 PerceptorHandler::OnLink()
 {
     // find the first CollisionPerceptor below our closest Transform node
-    boost::shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+    boost::shared_ptr<Transform> transformParent = static_pointer_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());    
 
   if (transformParent.get() == 0)
@@ -40,10 +40,10 @@ PerceptorHandler::OnLink()
     }
 
   //boost::shared_ptr<CollisionPerceptor> perceptor =
-  //  shared_static_cast<CollisionPerceptor>
+  //  static_pointer_cast<CollisionPerceptor>
   //  (transformParent->GetChildOfClass("CollisionPerceptor", true));
 
-  mColPercept = shared_dynamic_cast<CollisionPerceptor>
+  mColPercept = dynamic_pointer_cast<CollisionPerceptor>
       (transformParent->GetChildSupportingClass("CollisionPerceptor", true));
 
   if (mColPercept.get() == 0)
@@ -67,7 +67,7 @@ PerceptorHandler::HandleCollision
         return;
 
   // now find the closest Transform node above the collidee
-  boost::shared_ptr<Transform> colTransformParent = shared_static_cast<Transform>
+  boost::shared_ptr<Transform> colTransformParent = static_pointer_cast<Transform>
     (collidee->FindParentSupportingClass<Transform>().lock());
 
   if (colTransformParent.get() == 0)

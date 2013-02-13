@@ -45,7 +45,7 @@ void SoccerRender::OnLink()
 {
     // get the FontServer
     mFontServer =
-        shared_static_cast<FontServer>(GetCore()->Get("/sys/server/font"));
+        static_pointer_cast<FontServer>(GetCore()->Get("/sys/server/font"));
     if (mFontServer.get() == 0)
         {
             GetLog()->Error() << "ERROR: (SoccerRender) Unable to get FontServer\n";
@@ -63,14 +63,14 @@ void SoccerRender::OnLink()
         }
 
     // get the SoccerMonitor
-    mMonitor = shared_static_cast<SoccerMonitor>
+    mMonitor = static_pointer_cast<SoccerMonitor>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient/SoccerMonitor"));
 
     if (mMonitor.get() == 0)
         {
             GetLog()->Error() << "ERROR: (SoccerRender) Unable to get SoccerMonitor\n";
         }
-    mInput = shared_static_cast<SoccerInput>
+    mInput = static_pointer_cast<SoccerInput>
         (GetCore()->Get("/sys/server/simulation/InputControl/SoccerInput"));
 
     if (mInput.get() == 0)

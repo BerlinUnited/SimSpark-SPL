@@ -26,7 +26,7 @@ include(AdditionalSearchPaths)
 
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED system)
 find_package(SDL REQUIRED)
 find_package(DevIL REQUIRED)
 find_package(ODE REQUIRED)

@@ -51,7 +51,7 @@ MD5Mesh::~MD5Mesh()
 
 bool MD5Mesh::Load(const std::string &name)
 {
-        shared_ptr<FileServer> fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
+        shared_ptr<FileServer> fileServer = static_pointer_cast<FileServer>(GetCore()->Get("/sys/server/file"));
 
         if (fileServer.get() == NULL)
         {
@@ -260,7 +260,7 @@ bool MD5Mesh::Load(const std::string &name)
 
 bool MD5Mesh::LoadAnimation(const std::string &name)
 {
-        shared_ptr<FileServer> fileServer = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
+        shared_ptr<FileServer> fileServer = static_pointer_cast<FileServer>(GetCore()->Get("/sys/server/file"));
 
         if (fileServer.get() == NULL)
         {

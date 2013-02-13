@@ -45,7 +45,7 @@ void ForceEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
   boost::shared_ptr<ForceAction> forceAction =
-    shared_dynamic_cast<ForceAction>(mAction);
+    dynamic_pointer_cast<ForceAction>(mAction);
     mAction.reset();
   if (forceAction.get() == 0)
     {
@@ -83,7 +83,7 @@ ForceEffector::GetActionObject(const Predicate& predicate)
 void ForceEffector::OnLink()
 {
   boost::shared_ptr<BaseNode> parent =
-    shared_dynamic_cast<BaseNode>(GetParent().lock());
+    dynamic_pointer_cast<BaseNode>(GetParent().lock());
 
   if (parent.get() == 0)
     {
@@ -94,7 +94,7 @@ void ForceEffector::OnLink()
 
   // parent should be a transform, or some other node, which has a
   // Body-child
-  mBody = shared_dynamic_cast<RigidBody>(parent->GetChildOfClass("RigidBody"));
+  mBody = dynamic_pointer_cast<RigidBody>(parent->GetChildOfClass("RigidBody"));
 
   if (mBody.get() == 0)
     {
