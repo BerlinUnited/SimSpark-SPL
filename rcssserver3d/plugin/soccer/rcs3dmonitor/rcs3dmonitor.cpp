@@ -57,7 +57,7 @@ void RCS3DMonitor::UpdateCached()
 void RCS3DMonitor::OnLink()
 {
     // setup SceneServer reference
-    mSceneServer = shared_dynamic_cast<SceneServer>
+    mSceneServer = dynamic_pointer_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
 
     if (mSceneServer.get() == 0)
@@ -86,7 +86,7 @@ void RCS3DMonitor::ParseMonitorMessage(const std::string& data)
          ++iter
          )
         {
-            shared_static_cast<MonitorCmdParser>(*iter)
+            static_pointer_cast<MonitorCmdParser>(*iter)
                 ->ParseMonitorMessage(data);
         }
 }
@@ -156,7 +156,7 @@ void RCS3DMonitor::DescribeBall(stringstream& ss, NodeCache& entry, boost::share
                   ss << "(nd";
               }
 
-  DescribeTransform(ss, entry, boost::shared_static_cast<Transform>(ball), false);
+  DescribeTransform(ss, entry, boost::static_pointer_cast<Transform>(ball), false);
 }
 
 void RCS3DMonitor::DescribeBaseNode(stringstream& ss)
@@ -248,7 +248,7 @@ void RCS3DMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, boost::
 void RCS3DMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> mesh)
 {
     boost::shared_ptr<SingleMatNode> singleMat =
-        shared_dynamic_cast<SingleMatNode>(mesh);
+        dynamic_pointer_cast<SingleMatNode>(mesh);
 
     if (singleMat.get() != 0)
         {
@@ -333,7 +333,7 @@ RCS3DMonitor::NodeCache* RCS3DMonitor::LookupNode(boost::shared_ptr<BaseNode> no
 
     // Ball
     boost::shared_ptr<Ball> ball
-        = shared_dynamic_cast<Ball>(node);
+        = dynamic_pointer_cast<Ball>(node);
     if (ball.get() != 0)
         {
             mNodeCache[node]
@@ -344,7 +344,7 @@ RCS3DMonitor::NodeCache* RCS3DMonitor::LookupNode(boost::shared_ptr<BaseNode> no
     
     // Transform
     boost::shared_ptr<Transform> transform
-        = shared_dynamic_cast<Transform>(node);
+        = dynamic_pointer_cast<Transform>(node);
     if (transform.get() != 0)
         {
             mNodeCache[node]
@@ -354,7 +354,7 @@ RCS3DMonitor::NodeCache* RCS3DMonitor::LookupNode(boost::shared_ptr<BaseNode> no
         }
 
     boost::shared_ptr<StaticMesh> mesh
-        = shared_dynamic_cast<StaticMesh>(node);
+        = dynamic_pointer_cast<StaticMesh>(node);
     if (mesh.get() != 0)
         {
             mNodeCache[node] = NodeCache(NT_STATICMESH);
@@ -362,7 +362,7 @@ RCS3DMonitor::NodeCache* RCS3DMonitor::LookupNode(boost::shared_ptr<BaseNode> no
         }
 
     boost::shared_ptr<Light> light
-        = shared_dynamic_cast<Light>(node);
+        = dynamic_pointer_cast<Light>(node);
     if (light.get() != 0)
         {
             mNodeCache[node] = NodeCache(NT_LIGHT);
@@ -397,21 +397,21 @@ bool RCS3DMonitor::DescribeNode(stringstream& ss, boost::shared_ptr<BaseNode> no
 
         case NT_BALL:
             DescribeBall
-                (ss, (*entry), shared_static_cast<Ball>(node));
+                (ss, (*entry), static_pointer_cast<Ball>(node));
         
         case NT_TRANSFORM:
             DescribeTransform
-                (ss, (*entry), shared_static_cast<Transform>(node));
+                (ss, (*entry), static_pointer_cast<Transform>(node));
             return true;
 
         case NT_STATICMESH:
             DescribeMesh
-                (ss, shared_static_cast<StaticMesh>(node));
+                (ss, static_pointer_cast<StaticMesh>(node));
             return true;
 
         case NT_LIGHT:
             DescribeLight
-                (ss, shared_static_cast<Light>(node));
+                (ss, static_pointer_cast<Light>(node));
             return true;
         }
 }
@@ -448,7 +448,7 @@ void RCS3DMonitor::DescribeScene(stringstream& ss, boost::shared_ptr<BaseNode> n
     TLeafList baseNodes = node->GetBaseNodeChildren();
     for (TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
         {
-            boost::shared_ptr<BaseNode> baseNode = shared_dynamic_cast<BaseNode>(*i);
+            boost::shared_ptr<BaseNode> baseNode = dynamic_pointer_cast<BaseNode>(*i);
             DescribeScene(ss,baseNode);
         }
         

@@ -46,7 +46,7 @@ float SphereCollider::GetRadius() const
 bool SphereCollider::ConstructInternal()
 {        
     if (mSphereColliderImp.get() == 0)
-        mSphereColliderImp = shared_dynamic_cast<SphereColliderInt>
+        mSphereColliderImp = dynamic_pointer_cast<SphereColliderInt>
             (GetCore()->New("SphereColliderImp"));
 
     if (!Collider::ConstructInternal())

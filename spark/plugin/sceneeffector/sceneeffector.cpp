@@ -45,7 +45,7 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
 
     boost::shared_ptr<SceneAction> sceneAction =
-        shared_dynamic_cast<SceneAction>(mAction);
+        dynamic_pointer_cast<SceneAction>(mAction);
     mAction.reset();
 
     if (sceneAction.get() == 0)

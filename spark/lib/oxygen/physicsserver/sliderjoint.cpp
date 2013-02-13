@@ -39,7 +39,7 @@ SliderJoint::~SliderJoint()
 void SliderJoint::OnLink()
 {
     if (mSliderJointImp.get() == 0)
-        mSliderJointImp = shared_dynamic_cast<SliderJointInt>
+        mSliderJointImp = dynamic_pointer_cast<SliderJointInt>
             (GetCore()->New("SliderJointImp"));
 
     long world = GetWorldID();

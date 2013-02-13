@@ -1284,7 +1284,7 @@ SoccerRuleAspect::UpdateGameOver()
     if (mGameState->GetModeTime() >= 10)
     {
         boost::shared_ptr<GameControlServer> gameControlServer =
-            shared_dynamic_cast<GameControlServer>(GetCore()->Get("/sys/server/gamecontrol"));
+            dynamic_pointer_cast<GameControlServer>(GetCore()->Get("/sys/server/gamecontrol"));
         gameControlServer->Quit();
     }
 }

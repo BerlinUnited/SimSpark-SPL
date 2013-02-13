@@ -39,7 +39,7 @@ ConvexCollider::~ConvexCollider(){
 bool ConvexCollider::ConstructInternal()
 {
     if (mConvexColliderImp.get() == 0)
-        mConvexColliderImp = shared_dynamic_cast<ConvexColliderInt>
+        mConvexColliderImp = dynamic_pointer_cast<ConvexColliderInt>
             (GetCore()->New("ConvexColliderImp"));
             
     if (mConvexColliderImp.get() == 0)

@@ -48,7 +48,7 @@ boost::shared_ptr<Leaf> CoreContext::New(const std::string& className, const std
     if (instance.get())
         {
             // now, we check the type by dynamic casting to leaf
-            boost::shared_ptr<Leaf> leaf = shared_static_cast<Leaf>(instance);
+            boost::shared_ptr<Leaf> leaf = static_pointer_cast<Leaf>(instance);
 
             if (leaf.get() != NULL)
                 {

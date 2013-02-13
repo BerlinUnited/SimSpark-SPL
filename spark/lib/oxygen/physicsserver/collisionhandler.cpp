@@ -56,21 +56,21 @@ CollisionHandler::UpdateCached()
             return;
         }
 
-    mWorld = shared_static_cast<World>(scene->GetChildOfClass("World"));
+    mWorld = static_pointer_cast<World>(scene->GetChildOfClass("World"));
     if (mWorld.get() == 0)
         {
             GetLog()->Debug()
                 << "(CollisionHandler) found no World node\n";
         }
 
-    mSpace = shared_static_cast<Space>(scene->GetChildOfClass("Space"));
+    mSpace = static_pointer_cast<Space>(scene->GetChildOfClass("Space"));
     if (mSpace.get() == 0)
         {
             GetLog()->Debug()
                 << "(CollisionHandler) found no Space node\n";
         }
 
-    mCollider = shared_static_cast<Collider>(GetParent().lock());
+    mCollider = static_pointer_cast<Collider>(GetParent().lock());
     if (mCollider.get() == 0)
         {
             GetLog()->Debug()

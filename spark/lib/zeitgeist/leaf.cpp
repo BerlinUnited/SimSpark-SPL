@@ -57,7 +57,7 @@ boost::shared_ptr<Leaf> Leaf::GetChild(const std::string &name, bool /*recursive
     if (name.compare(".") == 0)
     {
 
-        return shared_static_cast<Leaf>(GetSelf().lock());
+        return static_pointer_cast<Leaf>(GetSelf().lock());
     }
 
     return boost::shared_ptr<Leaf>();
@@ -82,7 +82,7 @@ void Leaf::GetChildren(const std::string &name, TLeafList &baseList, bool /*recu
 
     if (name.compare(".") == 0)
     {
-        baseList.push_back(shared_static_cast<Leaf>(GetSelf().lock()));
+        baseList.push_back(static_pointer_cast<Leaf>(GetSelf().lock()));
     }
 }
 
@@ -98,7 +98,7 @@ boost::weak_ptr<Node>
 Leaf::GetParentSupportingClass(const std::string &name) const
 {
   boost::shared_ptr<Node> node
-    = shared_static_cast<Node>(GetParent().lock());
+    = static_pointer_cast<Node>(GetParent().lock());
 
   while
     (
@@ -207,7 +207,7 @@ Leaf::TLeafList::const_iterator Leaf::end() const
 void Leaf::SetParent(const boost::shared_ptr<Node> &newParent)
 {
     boost::shared_ptr<Node> oldParent = GetParent().lock();
-    boost::shared_ptr<Leaf> self = shared_static_cast<Leaf>(GetSelf().lock());
+    boost::shared_ptr<Leaf> self = static_pointer_cast<Leaf>(GetSelf().lock());
 
     if (oldParent.get() != 0)
         {

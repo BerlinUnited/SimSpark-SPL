@@ -382,7 +382,7 @@ RubySceneImporter::CreateNode(sexp_t* sexp)
         return boost::shared_ptr<BaseNode>();
     }
 
-    boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(obj);
+    boost::shared_ptr<BaseNode> node = dynamic_pointer_cast<BaseNode>(obj);
 
     if (node.get() == 0)
     {
@@ -590,7 +590,7 @@ bool RubySceneImporter::EvalParameter(sexp_t* sexp, string& value)
 void RubySceneImporter::PushInvocation(const MethodInvocation& invoc)
 {
     boost::shared_ptr<Class> baseNodeClass =
-        shared_dynamic_cast<Class>(GetCore()->Get("/classes/oxygen/Transform"));
+        dynamic_pointer_cast<Class>(GetCore()->Get("/classes/oxygen/Transform"));
 
     if (baseNodeClass.get() == 0)
         {
@@ -1006,7 +1006,7 @@ RubySceneImporter::ReadDeltaGraph(sexp_t* sexp, boost::shared_ptr<BaseNode> root
                     {
                         if (iter != root->end())
                         {
-                            node = shared_dynamic_cast<BaseNode>(*iter);
+                            node = dynamic_pointer_cast<BaseNode>(*iter);
                             ++iter;
                         }
                     } else {
@@ -1060,7 +1060,7 @@ RubySceneImporter::ReadGraph(sexp_t* sexp, boost::shared_ptr<BaseNode> root)
                     string name(sexp->val); //todo: use abbrevTable here?
 
                     boost::shared_ptr<BaseNode> node =
-                        shared_dynamic_cast<BaseNode>(root->GetChild(name));
+                        dynamic_pointer_cast<BaseNode>(root->GetChild(name));
 
                     if (node.get() == 0)
                     {

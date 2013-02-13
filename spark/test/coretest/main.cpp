@@ -23,7 +23,7 @@ int main()
 #endif
     oxygen::Oxygen kOxygen(zg);
 
-    boost::shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
+    boost::shared_ptr<ScriptServer> scriptServer = static_pointer_cast<ScriptServer>(context->Get("/sys/server/script"));
 
     scriptServer->Run("coretest.rb");
 

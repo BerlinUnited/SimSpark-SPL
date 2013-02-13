@@ -116,7 +116,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
     BindClass(mNodeClass);
 
     // create the root node
-    mRoot = shared_static_cast<Leaf>(mNodeClass->Create());
+    mRoot = static_pointer_cast<Leaf>(mNodeClass->Create());
     mRoot->SetName("");
 
     boost::shared_ptr<CoreContext> context = CreateContext();
@@ -134,7 +134,7 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
     RegisterClassObject(new CLASS(TelnetServer), "zeitgeist/");
 #endif
     // create the log server
-    mLogServer = shared_static_cast<LogServer>
+    mLogServer = static_pointer_cast<LogServer>
         (context->New("zeitgeist/LogServer", "/sys/server/log"));
 
     // create an initial useful loggin setup. This can be modified
@@ -152,15 +152,15 @@ void Core::Construct(const boost::weak_ptr<Core>& self)
                             );
 #endif
 
-    mFileServer = shared_static_cast<FileServer>
+    mFileServer = static_pointer_cast<FileServer>
         (context->New("zeitgeist/FileServer", "/sys/server/file"));
 
     // create the script server
-    mScriptServer = shared_static_cast<ScriptServer>
+    mScriptServer = static_pointer_cast<ScriptServer>
         (context->New("zeitgeist/ScriptServer", "/sys/server/script"));
 
     // create the random server
-    mRandomServer = shared_static_cast<RandomServer>
+    mRandomServer = static_pointer_cast<RandomServer>
         (context->New("zeitgeist/RandomServer", "/sys/server/random"));
 
     // install fault handler
@@ -240,7 +240,7 @@ Core::New(const std::string& className)
 {
     // select the correct class to create our instance
     boost::shared_ptr<CoreContext> context = CreateContext();
-    boost::shared_ptr<Class> theClass = shared_dynamic_cast<Class>
+    boost::shared_ptr<Class> theClass = dynamic_pointer_cast<Class>
         (context->Get("/classes/"+className));
 
     // here we will store our created instance
@@ -468,7 +468,7 @@ boost::shared_ptr<Leaf> Core::GetChild(const boost::shared_ptr<Leaf> &parent,
         {
             // if we hit this branch, then no child with the desired
             // name exists, but we will change this :)
-            child = shared_static_cast<Leaf>(mNodeClass->Create());
+            child = static_pointer_cast<Leaf>(mNodeClass->Create());
             child->SetName(childName);
 
             if (parent->AddChildReference(child) == false)

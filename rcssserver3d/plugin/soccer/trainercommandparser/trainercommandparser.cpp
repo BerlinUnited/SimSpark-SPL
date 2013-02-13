@@ -106,7 +106,7 @@ TrainerCommandParser::OnLink()
 {
     // we need the SexpParser to generate the predicates
     // from S-Expressions
-    mSexpParser = shared_dynamic_cast<oxygen::BaseParser>(GetCore()->New("SexpParser"));
+    mSexpParser = dynamic_pointer_cast<oxygen::BaseParser>(GetCore()->New("SexpParser"));
 
     if (mSexpParser.get() == 0)
         {
@@ -114,7 +114,7 @@ TrainerCommandParser::OnLink()
             return;
         }
 
-    mGameControl = shared_dynamic_cast<GameControlServer>
+    mGameControl = dynamic_pointer_cast<GameControlServer>
         (GetCore()->Get("/sys/server/gamecontrol"));
 
     if (mGameControl.get() == 0)
@@ -122,7 +122,7 @@ TrainerCommandParser::OnLink()
             GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get GameControlServer\n";
         }
 
-    mSimServer = shared_dynamic_cast<SimulationServer>
+    mSimServer = dynamic_pointer_cast<SimulationServer>
         (GetCore()->Get("/sys/server/simulation"));
 
     if (mSimServer.get() == 0)
@@ -130,7 +130,7 @@ TrainerCommandParser::OnLink()
             GetLog()->Error() << "ERROR: (TrainerCommandParser) Unable to get SimulationServer\n";
         }
 
-    mMonitorControl = shared_dynamic_cast<MonitorControl>
+    mMonitorControl = dynamic_pointer_cast<MonitorControl>
         (mSimServer->GetControlNode("MonitorControl"));
 
     if (mMonitorControl.get() == 0)
@@ -648,7 +648,7 @@ void TrainerCommandParser::ParseKillCommand(const oxygen::Predicate & predicate)
     {
         // search for the first agent of the left/right side
         boost::shared_ptr<AgentState> agentState =
-            shared_dynamic_cast<AgentState>((*aaiter)->GetChild("AgentState", true));
+            dynamic_pointer_cast<AgentState>((*aaiter)->GetChild("AgentState", true));
 
         if ((specified && agentState->GetUniformNumber() == unum && agentState->GetTeamIndex() == idx) ||
             (!specified && agentState->IsSelected()))
