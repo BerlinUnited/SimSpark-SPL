@@ -17,7 +17,7 @@ bool Glyph::LoadGlyph(FT_Face face, unsigned int charCode)
 	}
 
 	Reset();
-	
+
 	mByteWidth = face->glyph->bitmap.width;
 	mByteHeight = face->glyph->bitmap.rows;
 
@@ -48,5 +48,5 @@ void Glyph::Reset()
 	mXOffset	= 0;
 	mYOffset	= 0;
 	mAdvance	= 0;
-	mData.reset(NULL);
+	mData.reset();
 }
