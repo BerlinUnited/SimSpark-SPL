@@ -23,8 +23,10 @@
   \input{#1.tikz}
 }
 
-\begin{document}
+\graphicspath{{fig/}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
 
 \title{SimSpark: An Open Source Robot Simulator Developed by RoboCup Community}
 
@@ -229,6 +231,14 @@ respectively.
 - we (NaoTH) have shared common interface with NAO
 - FUmanoid
 - education
+
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.95\columnwidth]{simspark-spl}
+  \caption{Prototype of the extended SimSpark for Standard Platform League.
+    It simulates a game in our lab. The bottom of screen are images of robot cameras.}
+  \label{f:nao-models}
+\end{figure}
 
 \section{development plan/ current development}
 \begin{itemize}
