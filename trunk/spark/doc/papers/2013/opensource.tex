@@ -1,4 +1,5 @@
 \documentclass{llncs}
+\usepackage[utf8]{inputenc}
 \usepackage{todonotes}
 \usepackage{amsmath}
 \usepackage{textcomp} % for \textdegree
@@ -24,7 +25,6 @@
 }
 
 \graphicspath{{fig/}}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
@@ -33,11 +33,20 @@
 \author{Yuan Xu\inst{1} \and Hedayat Vatankhah\inst{2}}
 
 \institute{
-DAI-Labor, Technical University of Berlin, Germany\\
+\begin{minipage}[t]{0.4\textwidth}
+\centering
+DAI-Labor \\
+Technische Universität Berlin \\
+Ernst-Reuter-Platz 7, Berlin \\
+D-10587 Germany\\
 \email{yuan.xu@dai-labor.de}
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
 \and
+\centering
 Amirkabir University of Technology, Iran\\
 \email{hedayatv@gmail.com}
+\end{minipage}
 }
 
 \maketitle
