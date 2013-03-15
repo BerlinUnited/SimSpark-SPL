@@ -72,16 +72,13 @@ Because last paper about simspark was in 2008
 \section{Recent Development (Changes 2013)}
 
 
-\subsection{realistic motor modelling}
+\subsection{Realistic Motor}
 NAO robot has twenty-one motor joints as its actuators.
 The simple motor model is one reason for the unrealistic simulation results.
 The ODE provides a simple model of real life servos.
 It has two parameters: a desired speed and the maximum force that is available to reach that speed. The motor brings the body up to speed in one step; and provides force that is not more than is allowed.
 There is no motor that works like this in reality.
 Furthermore, some aspects like stiffness control, power consumption and temperature regulation, are missing but are also important for robotics.
-
-
-A PD controller was implemented for the simulated NAO. \todo{this is for angle position control like DCM of NAO}
 
 \paragraph{Stiffness}
 The stiffness determines how strong the motor is. The value is from 0.0
@@ -221,13 +218,10 @@ After determining the parameters in the \cref{eq:motor-temp}, we can use this mo
 \end{figure}
 
 The whole process of joint simulation is summarized in
-\Cref{fig:joint}: stiffness is simulated by setting the maximum torque of
-the motor; desired speed of motor is determined by a PD controller
-according to the target angle (see \cref{eva-joint-motor}), current angle and current speed; backlash\todo{update: no backlash and PD controller, add feed back of temperature and battery limits}
-is modeled by the dead band model; and the simulation engine computes
-the resulted angle and torque applied; in the end, the consumed power
-and temperature are computed by \cref{eq:motor-power,eq:motor-temp}
-respectively.
+\Cref{fig:joint}: stiffness $k_s$ is simulated by setting the maximum torque
+of the motor $\tau_{max}$; the final maximum torque $\tau_m$ used by simulation engine is calculated by temperature regulation; and the simulation engine computes the resulted angle
+and torque applied; in the end, the consumed power and temperature are
+computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery is empty, the maximum torque $\tau_{max}$ is set 0 to turn off the motor.
 \begin{figure}
   \centering
   \inputtikz{joint}
