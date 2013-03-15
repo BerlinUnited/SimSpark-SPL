@@ -62,14 +62,17 @@ Amirkabir University of Technology, Iran\\
 
 \todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
 
-\section{Current state / development sicen 2008}
+\section{Current state / development since 2008}
 Because last paper about simspark was in 2008
 \todo[inline]{sensors: ACC, FSR, restict vision, with line perceptions, image ...}
 \todo[inline]{robot model: NAO}
 \todo[inline]{soccer rules (referee)}
 \todo[inline]{bigger fields and more robots}
 
-\section{realistic motor modelling}
+\section{Recent Development (Changes 2013)}
+
+
+\subsection{realistic motor modelling}
 NAO robot has twenty-one motor joints as its actuators.
 The simple motor model is one reason for the unrealistic simulation results.
 The ODE provides a simple model of real life servos.
@@ -220,7 +223,7 @@ After determining the parameters in the \cref{eq:motor-temp}, we can use this mo
 The whole process of joint simulation is summarized in
 \Cref{fig:joint}: stiffness is simulated by setting the maximum torque of
 the motor; desired speed of motor is determined by a PD controller
-according to the target angle (see \cref{eva-joint-motor}), current angle and current speed; backlash
+according to the target angle (see \cref{eva-joint-motor}), current angle and current speed; backlash\todo{update: no backlash and PD controller, add feed back of temperature and battery limits}
 is modeled by the dead band model; and the simulation engine computes
 the resulted angle and torque applied; in the end, the consumed power
 and temperature are computed by \cref{eq:motor-power,eq:motor-temp}
@@ -232,7 +235,13 @@ respectively.
   \label{fig:joint}
 \end{figure}
 
-\section{applications}
+\subsection{Heterogeneous Robots}
+
+\subsection{Agent Proxies}
+
+\subsection{Player Integration??}
+
+\section{Applications}
 
 \paragraph{RoboCup simulation league (of course)}
 
@@ -248,13 +257,6 @@ respectively.
     It simulates a game in our lab. The bottom of screen are images of robot cameras.}
   \label{f:nao-models}
 \end{figure}
-
-\section{development plan/ current development}
-\begin{itemize}
-\item heterogeneous robots
-\item agent proxies
-\item Player integration
-\end{itemize}
 
 \section{Conclusion and Future Work}
 
