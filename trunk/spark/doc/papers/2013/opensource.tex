@@ -52,33 +52,40 @@ Amirkabir University of Technology, Iran\\
 \maketitle
 
 \begin{abstract}
-  this is abstract
+  - current state of simspark
+  - changes 2013
+  - evidence of impact of the released component to the RoboCup community.
+  - technical contribution
+  - benefit for the RoboCup community.
 \end{abstract}
 
 \section{Introduction}
+The development on robots may be severely limited by the constrained resources.
+This is especially true in the research of multi-robots systems in areas such as RoboCup.
+Using simulation for algorithm development and testing makes thing easier.
 
 \todo[inline]{Background/histsory}
 \cite{Boedecker2008,OR05}
 
 \todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
 
-\section{Current state / development sicen 2008}
+\section{Current state / development since 2008}
 Because last paper about simspark was in 2008
 \todo[inline]{sensors: ACC, FSR, restict vision, with line perceptions, image ...}
 \todo[inline]{robot model: NAO}
 \todo[inline]{soccer rules (referee)}
 \todo[inline]{bigger fields and more robots}
 
-\section{realistic motor modelling}
+\section{Recent Development (Changes 2013)}
+
+
+\subsection{Realistic Motor}
 NAO robot has twenty-one motor joints as its actuators.
 The simple motor model is one reason for the unrealistic simulation results.
 The ODE provides a simple model of real life servos.
 It has two parameters: a desired speed and the maximum force that is available to reach that speed. The motor brings the body up to speed in one step; and provides force that is not more than is allowed.
 There is no motor that works like this in reality.
 Furthermore, some aspects like stiffness control, power consumption and temperature regulation, are missing but are also important for robotics.
-
-
-A PD controller was implemented for the simulated NAO. \todo{this is for angle position control like DCM of NAO}
 
 \paragraph{Stiffness}
 The stiffness determines how strong the motor is. The value is from 0.0
@@ -218,13 +225,10 @@ After determining the parameters in the \cref{eq:motor-temp}, we can use this mo
 \end{figure}
 
 The whole process of joint simulation is summarized in
-\Cref{fig:joint}: stiffness is simulated by setting the maximum torque of
-the motor; desired speed of motor is determined by a PD controller
-according to the target angle (see \cref{eva-joint-motor}), current angle and current speed; backlash
-is modeled by the dead band model; and the simulation engine computes
-the resulted angle and torque applied; in the end, the consumed power
-and temperature are computed by \cref{eq:motor-power,eq:motor-temp}
-respectively.
+\Cref{fig:joint}: stiffness $k_s$ is simulated by setting the maximum torque
+of the motor $\tau_{max}$; the final maximum torque $\tau_m$ used by simulation engine is calculated by temperature regulation; and the simulation engine computes the resulted angle
+and torque applied; in the end, the consumed power and temperature are
+computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery is empty, the maximum torque $\tau_{max}$ is set 0 to turn off the motor.
 \begin{figure}
   \centering
   \inputtikz{joint}
@@ -232,11 +236,19 @@ respectively.
   \label{fig:joint}
 \end{figure}
 
-\section{applications}
+\subsection{Heterogeneous Robots}
+
+\subsection{Agent Proxies}
+
+\subsection{Player Integration??}
+
+\section{Applications}
 
 \paragraph{RoboCup simulation league (of course)}
+- some research?
+- roboviz
 
-\paragraph{research (used by teams have real robot)}
+\paragraph{Usage in real robot teams}
 - we (NaoTH) have shared common interface with NAO
 - FUmanoid
 - education
@@ -245,16 +257,9 @@ respectively.
   \centering
   \includegraphics[width = 0.95\columnwidth]{simspark-spl}
   \caption{Prototype of the extended SimSpark for Standard Platform League.
-    It simulates a game in our lab. The bottom of screen are images of robot cameras.}
+    The bottom of screen are images of robot cameras.}
   \label{f:nao-models}
 \end{figure}
-
-\section{development plan/ current development}
-\begin{itemize}
-\item heterogeneous robots
-\item agent proxies
-\item Player integration
-\end{itemize}
 
 \section{Conclusion and Future Work}
 
