@@ -67,6 +67,8 @@ Using simulation for algorithm development and testing makes thing easier.
 \todo[inline]{Background/histsory}
 \cite{Boedecker2008,OR05}
 
+\todo[inline]{documents, wiki}
+
 \todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
 
 \section{Current state / development since 2008}
@@ -75,6 +77,10 @@ Because last paper about simspark was in 2008
 \todo[inline]{robot model: NAO}
 \todo[inline]{soccer rules (referee)}
 \todo[inline]{bigger fields and more robots}
+
+Key Features
+\todo[inline]{multi-threads mode}
+\todo[inline]{logfiles}
 
 \section{Recent Development (Changes 2013)}
 
@@ -244,24 +250,37 @@ computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery i
 
 \section{Applications}
 
-\paragraph{RoboCup simulation league (of course)}
-- some research?
-- roboviz
+\paragraph{RoboCup Soccer Simulation League}
+In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed. By using it, simulation teams not only have designed and tested new algorithms, but also developed useful research tools based on SimSpark. Some of these tools are released as open source also. For example, roboviz\todo{brief description of roboviz}
 
-\paragraph{Usage in real robot teams}
-- we (NaoTH) have shared common interface with NAO
-- FUmanoid
-- education
+\paragraph{Usage for Real Robot}
+As one of the long term goals of the soccer simulation is to aim for realism the long term objective are realistic humanoid players in a physical environment.
+These players should one day challenge the champion of the most recent World Cup.
+The SimSpark is also used by teams in RoboCup Standard Platform League and Humanoid League.
+
+The special situation between Standard Platform League and 3D Simulation League is that both leagues use the same robot model — NAO from Aldebaran.
+So it appears to be natural to reuse the work which has already been done in Simulation League and make SimSpark usable in Standard Platform League.
+Nao Team Humboldt developed their software architecture\cite{SCPR2010} which enables their control software can run both in real NAO and simulated NAO with SimSpark. This helps them to achieve some good results in both Simulation League and Standard Platform League.
+Furthermore, Nao Team Humboldt also promotes the usage of SimSpark in the Standard Platform League by implementing its rules. \Cref{f:simspark-spl} is the snapshot of the extended SimSpark for Standard Platform League.
 
 \begin{figure}
   \centering
   \includegraphics[width = 0.95\columnwidth]{simspark-spl}
   \caption{Prototype of the extended SimSpark for Standard Platform League.
     The bottom of screen are images of robot cameras.}
-  \label{f:nao-models}
+  \label{f:simspark-spl}
 \end{figure}
 
+Of course the simulator can also be extended for other leagues by adding new robot models.
+For example, in RoboCup Humanoid Kid Size League, FUmanoid\cite{Donat2012} uses
+SimSpark to perform multi-level testing methods for archiving higher
+quality in each module of their robot control software and unlink the
+module test from the robotic hardware.
+
+
 \section{Conclusion and Future Work}
+
+\section*{Acknowledgments}
 
 \bibliographystyle{splncs03}
 \bibliography{reference}
