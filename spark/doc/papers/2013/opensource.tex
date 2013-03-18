@@ -71,10 +71,26 @@ Using simulation for algorithm development and testing makes thing easier.
 
 \section{Current state / development since 2008}
 Because last paper about simspark was in 2008
-\todo[inline]{sensors: ACC, FSR, restict vision, with line perceptions, image ...}
-\todo[inline]{robot model: NAO}
-\todo[inline]{soccer rules (referee)}
-\todo[inline]{bigger fields and more robots}
+\subsection{Architectural Changes (?)}
+\todo[inline]{separation of simspark and rcssserver3d}
+\todo[inline]{Cmake migration?}
+\todo[inline]{windows support (mingw32,VC)}
+
+\subsection{New Sensors}
+ - ACC
+ - FSR
+ - Gyroasdf
+ - Restrict Vision
+ -- Line perceptions
+ -- camera (image)
+
+\todo[inline]{robot model: NAO (rcssserver3d)}
+\todo[inline]{soccer rules (referee) (rcssserver3d)}
+\todo[inline]{bigger fields and more robots (rcssserver3d)}
+\todo[inline]{sync mode (simspark)}
+\todo[inline]{multi-threaded (simulation engine, agent controls) (simspark)}
+\todo[inline]{integrated agents (simspark)}
+\todo[inline]{physics simulation engine abstraction (simspark)}
 
 \section{Recent Development (Changes 2013)}
 
@@ -237,6 +253,32 @@ computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery i
 \end{figure}
 
 \subsection{Heterogeneous Robots}
+\todo[inline]{Draft, needs better English}
+Simulation is great for experimenting with robots without need to buy expensive 
+real robots. Also, the robots are never damaged and they can be used for long 
+running experiences without human intervention. 
+
+However, the possibilities which are provided by a simulation environment is 
+not limited to these. Not only you can experiment with different behaviors, but
+also you can modify the mechanical properties of the robot as you wish. Additionally,
+it is possible to create new challenges for robot AI developers since you can
+generate robots with different mechanical properties very easily at run time, 
+you can provide variations of a robot to teams and they can use them if they can
+adopt their developed behaviors to unseen robots; which is in contrast with 
+real robots because teams know the exact specification of the robots and
+can develop behaviors specifically tuned for a single robot. If heterogeneous 
+robots are available in a game, teams can use them only if they can adopt
+their behaviors to the robots they didn't know about.
+
+Simspark already provided the ability to define different robot models and 
+use them in its simulation environment. However, each model was fixed and if you
+wanted to have several variations of a robot, you should have defined several 
+separate robot models. To better support games with heterogeneous robots, we have
+added the support for parametric models to simspark. Therefore, it is possible to
+define models in which a number of parameters are variables and can have different
+values for different robot variations. When you want to load such a model, you shold 
+specify which type of that robot is needed and its parameters are replaced in the
+parametric model and the model is created. 
 
 \subsection{Agent Proxies}
 
