@@ -64,11 +64,9 @@ The development on robots may be severely limited by the constrained resources.
 This is especially true in the research of multi-robots systems in areas such as RoboCup.
 Using simulation for algorithm development and testing makes thing easier.
 
-\todo[inline]{Background/histsory}
-
-The SimSpark project started in 2003 and was based on the building blocks of the Spark project. It was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany.
-SimSpark was registered with SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004 and has an established code base with development increasing year-over-year.
-\cite{Boedecker2008,OR05}
+% \paragraph{History}
+SimSpark was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany\cite{OR05}.
+The project was registered as open source project in SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004, it has an established code base with development increasing year-over-year\cite{Boedecker2008,usermanual}.
 
 \todo[inline]{Plugin system, core part}
 Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.\todo{integrated agent as well}
@@ -79,7 +77,7 @@ SimSpark uses the Open Dynamics Engine (ODE) for detecting collisions and for si
 
 \todo[inline]{documents, wiki}
 
-\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo... A table compares different simulator}
+\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
 
 
 \section{Current state / development since 2008}
@@ -117,7 +115,7 @@ For each simulation cycle, \textit{SimControlNode}s are executed one by one in t
 Second, all data of simulation state is stored in a tree called \textit{active scene},
 the physics engine and \textit{SimControlNode}s interact through the \textit{active scene}.
 As we know, the physics computation is the most time-consuming, and the physics engine does not need to access the active scene during physics computation.
-So the physics computation and \textit{SimControlNode}s can run in parallel.\todo[color=green]{UML?}
+So the physics computation and \textit{SimControlNode}s can run in parallel.\todo[color=green]{UML?}\todo[color=yellow]{results of performance improvement, any benchmark?}
 
 \todo[inline]{ODE TBB, sander's paper}
 
@@ -129,6 +127,8 @@ So the physics computation and \textit{SimControlNode}s can run in parallel.\tod
 
 
 \subsection{Realistic Motor}
+\todo{motivation: my email...}
+\todo{shorter}
 NAO robot has twenty-one motor joints as its actuators.
 The simple motor model is one reason for the unrealistic simulation results.
 The ODE provides a simple model of real life servos.
