@@ -101,22 +101,23 @@ Because last paper about simspark was in 2008
 \todo[inline]{soccer rules (referee) (rcssserver3d)}
 \todo[inline]{bigger fields and more robots (rcssserver3d)}
 \todo[inline]{sync mode (simspark)}
-\todo[inline]{multi-threaded (simulation engine, agent controls) (simspark)}
 \todo[inline]{integrated agents (simspark)}
 \todo[inline]{physics simulation engine abstraction (simspark)}
 
-Key Features
-\paragraph{Multi-threads Supporting}
-In modern time, computers have more than one CPU or dual cores in one CPU.
-This improve the performance greatly, but only the multi-threaded program can benefit. SimSpark has an multi-threaded running loop.
-The implementation of multi-threaded loop is based on two conditions.
-First, every SimControlNode response for different parts of the simulation, they perform one by one in the singled-threaded mode, but they can run in parallel.
-Second, there is a active scene which stores the whole simulation data in a tree.
-The physics engine and SimControlNode interact through the active scene.
+\paragraph{Multi-threads Supporting\todo{agent controls}}
+In modern time, computers have a CUP with multi-cores or even multi-CPUs.
+This improves the performance greatly, but only the multi-threaded program can benefit.
+One great feature of SimSpark is switching between single thread mode and multi-threads
+mode. The multi-threads mode can improve the performance in computer with multi-cores CPU, but the single thread mode is also useful for developing the simulator. 
+
+The implementation of multi-threads loop is based on two conditions.
+First, different tasks are assigned to different \textit{SimControlNode}s in SimSpark.
+For example, \textit{AgentControl} is a node that manages the communication with agents.
+For each simulation cycle, \textit{SimControlNode}s are executed one by one in the single thread mode, but they can run in parallel.
+Second, all data of simulation state is stored in a tree called \textit{active scene},
+the physics engine and \textit{SimControlNode}s interact through the \textit{active scene}.
 As we know, the physics computation is the most time-consuming, and the physics engine does not need to access the active scene during physics computation.
-So the physics computation and SimControlNodes can run in parallel.
-At last, we get the multithreaded simulation loop as shown in the following UML diagram. Note that the agent’s action are also delayed one cycle in the multi-threaded loop.
-\todo[inline]{multi-thread UML}
+So the physics computation and \textit{SimControlNode}s can run in parallel.\todo[color=green]{UML?}
 
 \todo[inline]{ODE TBB, sander's paper}
 
