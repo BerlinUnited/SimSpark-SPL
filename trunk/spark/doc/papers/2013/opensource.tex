@@ -65,9 +65,22 @@ This is especially true in the research of multi-robots systems in areas such as
 Using simulation for algorithm development and testing makes thing easier.
 
 \todo[inline]{Background/histsory}
+
+The SimSpark project started in 2003 and was based on the building blocks of the Spark project. It was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany.
+SimSpark was registered with SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004 and has an established code base with development increasing year-over-year.
 \cite{Boedecker2008,OR05}
 
-\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
+\todo[inline]{Plugin system, core part}
+Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.\todo{integrated agent as well}
+Multiple software agents can participate in one simulation.
+
+Simulations are created within the server using the Ruby language and text-based RSG files.
+SimSpark uses the Open Dynamics Engine (ODE) for detecting collisions and for simulating rigid body dynamics. ODE allows accurate simulation of the physical properties of objects such as velocity, inertia and friction.
+
+\todo[inline]{documents, wiki}
+
+\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo... A table compares different simulator}
+
 
 \section{Current state / development since 2008}
 Because last paper about simspark was in 2008
@@ -91,6 +104,25 @@ Because last paper about simspark was in 2008
 \todo[inline]{multi-threaded (simulation engine, agent controls) (simspark)}
 \todo[inline]{integrated agents (simspark)}
 \todo[inline]{physics simulation engine abstraction (simspark)}
+
+Key Features
+\paragraph{Multi-threads Supporting}
+In modern time, computers have more than one CPU or dual cores in one CPU.
+This improve the performance greatly, but only the multi-threaded program can benefit. SimSpark has an multi-threaded running loop.
+The implementation of multi-threaded loop is based on two conditions.
+First, every SimControlNode response for different parts of the simulation, they perform one by one in the singled-threaded mode, but they can run in parallel.
+Second, there is a active scene which stores the whole simulation data in a tree.
+The physics engine and SimControlNode interact through the active scene.
+As we know, the physics computation is the most time-consuming, and the physics engine does not need to access the active scene during physics computation.
+So the physics computation and SimControlNodes can run in parallel.
+At last, we get the multithreaded simulation loop as shown in the following UML diagram. Note that the agent’s action are also delayed one cycle in the multi-threaded loop.
+\todo[inline]{multi-thread UML}
+
+\todo[inline]{ODE TBB, sander's paper}
+
+\todo[inline]{Internal/External Monitor}
+
+\todo[inline]{logfiles}
 
 \section{Recent Development (Changes 2013)}
 
@@ -286,24 +318,40 @@ parametric model and the model is created.
 
 \section{Applications}
 
-\paragraph{RoboCup simulation league (of course)}
-- some research?
-- roboviz
+\paragraph{RoboCup Soccer Simulation League}
+In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed. By using it, simulation teams not only have designed and tested new algorithms, but also developed useful research tools based on SimSpark. Some of these tools are released as open source also. For example, roboviz\todo{brief description of roboviz}
 
-\paragraph{Usage in real robot teams}
-- we (NaoTH) have shared common interface with NAO
-- FUmanoid
-- education
+\paragraph{Usage for Real Robot}
+As one of the long term goals of the soccer simulation is to aim for realism the long term objective are realistic humanoid players in a physical environment.
+These players should one day challenge the champion of the most recent World Cup.
+The SimSpark is also used by teams in RoboCup Standard Platform League and Humanoid League.
+
+The special situation between Standard Platform League and 3D Simulation League is that both leagues use the same robot model — NAO from Aldebaran.
+So it appears to be natural to reuse the work which has already been done in Simulation League and make SimSpark usable in Standard Platform League.
+Nao Team Humboldt developed their software architecture\cite{SCPR2010} which enables their control software can run both in real NAO and simulated NAO with SimSpark. This helps them to achieve some good results in both Simulation League and Standard Platform League.
+Furthermore, Nao Team Humboldt also promotes the usage of SimSpark in the Standard Platform League by implementing its rules. \Cref{f:simspark-spl} is the snapshot of the extended SimSpark for Standard Platform League.
 
 \begin{figure}
   \centering
   \includegraphics[width = 0.95\columnwidth]{simspark-spl}
   \caption{Prototype of the extended SimSpark for Standard Platform League.
     The bottom of screen are images of robot cameras.}
-  \label{f:nao-models}
+  \label{f:simspark-spl}
 \end{figure}
 
+Of course the simulator can also be extended for other leagues by adding new robot models.
+For example, in RoboCup Humanoid Kid Size League, FUmanoid\cite{Donat2012} uses
+SimSpark to perform multi-level testing methods for archiving higher
+quality in each module of their robot control software and unlink the
+module test from the robotic hardware.
+
+
 \section{Conclusion and Future Work}
+
+\todo[inline]{Other physic engine, Bullet}
+\todo[inline]{better GUI}
+
+\section*{Acknowledgments}
 
 \bibliographystyle{splncs03}
 \bibliography{reference}
