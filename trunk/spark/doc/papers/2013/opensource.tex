@@ -65,11 +65,22 @@ This is especially true in the research of multi-robots systems in areas such as
 Using simulation for algorithm development and testing makes thing easier.
 
 \todo[inline]{Background/histsory}
+
+The SimSpark project started in 2003 and was based on the building blocks of the Spark project. It was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany.
+SimSpark was registered with SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004 and has an established code base with development increasing year-over-year.
 \cite{Boedecker2008,OR05}
+
+\todo[inline]{Plugin system, core part}
+Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.\todo{integrated agent as well}
+Multiple software agents can participate in one simulation.
+
+Simulations are created within the server using the Ruby language and text-based RSG files.
+SimSpark uses the Open Dynamics Engine (ODE) for detecting collisions and for simulating rigid body dynamics. ODE allows accurate simulation of the physical properties of objects such as velocity, inertia and friction.
 
 \todo[inline]{documents, wiki}
 
-\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
+\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo... A table compares different simulator}
+
 
 \section{Current state / development since 2008}
 Because last paper about simspark was in 2008
@@ -79,7 +90,22 @@ Because last paper about simspark was in 2008
 \todo[inline]{bigger fields and more robots}
 
 Key Features
-\todo[inline]{multi-threads mode}
+\paragraph{Multi-threads Supporting}
+In modern time, computers have more than one CPU or dual cores in one CPU.
+This improve the performance greatly, but only the multi-threaded program can benefit. SimSpark has an multi-threaded running loop.
+The implementation of multi-threaded loop is based on two conditions.
+First, every SimControlNode response for different parts of the simulation, they perform one by one in the singled-threaded mode, but they can run in parallel.
+Second, there is a active scene which stores the whole simulation data in a tree.
+The physics engine and SimControlNode interact through the active scene.
+As we know, the physics computation is the most time-consuming, and the physics engine does not need to access the active scene during physics computation.
+So the physics computation and SimControlNodes can run in parallel.
+At last, we get the multithreaded simulation loop as shown in the following UML diagram. Note that the agent’s action are also delayed one cycle in the multi-threaded loop.
+\todo[inline]{multi-thread UML}
+
+\todo[inline]{ODE TBB, sander's paper}
+
+\todo[inline]{Internal/External Monitor}
+
 \todo[inline]{logfiles}
 
 \section{Recent Development (Changes 2013)}
@@ -279,6 +305,9 @@ module test from the robotic hardware.
 
 
 \section{Conclusion and Future Work}
+
+\todo[inline]{Other physic engine, Bullet}
+\todo[inline]{better GUI}
 
 \section*{Acknowledgments}
 
