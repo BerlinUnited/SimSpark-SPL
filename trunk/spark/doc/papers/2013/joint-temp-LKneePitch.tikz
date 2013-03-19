@@ -3745,7 +3745,7 @@ x y
 1335.885 77.0
 1336.552 77.0
 };
-\addlegendentry{temperature of real robot}
+\addlegendentry{real robot}
 \addplot[every mark/.append style={solid},
 red, dashed, mark=none, thick, line legend] table[x=x, y=y] {
 x y
@@ -5605,7 +5605,7 @@ x y
 1335.885 77.2528301182
 1336.552 77.2375827936
 };
-\addlegendentry{temperature of simulated robot}
+\addlegendentry{simulated robot}
 \addlegendimage{/pgfplots/refstyle=current, green!30!white, fill=green!30!white}\addlegendentry{electric current}
 \end{axis}
 \end{tikzpicture}
