@@ -5,6 +5,7 @@
 \usepackage{textcomp} % for \textdegree
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
+\crefname{figure}{Fig.}{Fig.}
 \usepackage{xstring}
 \usepackage{booktabs}
 \usepackage{tikz}
@@ -64,26 +65,31 @@ The development on robots may be severely limited by the constrained resources.
 This is especially true in the research of multi-robots systems in areas such as RoboCup.
 Using simulation for algorithm development and testing makes thing easier.
 
-\todo[inline]{Background/histsory}
+% \paragraph{History}
+SimSpark was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany\cite{OR05}.
+The project was registered as open source project in SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004, it has an established code base with development increasing year-over-year\cite{Boedecker2008,usermanual}.
 
-The SimSpark project started in 2003 and was based on the building blocks of the Spark project. It was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany.
-SimSpark was registered with SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004 and has an established code base with development increasing year-over-year.
-\cite{Boedecker2008,OR05}
+
 
 \todo[inline]{Plugin system, core part}
+In comparison to specialized simulators, users can create new simulations by using a scene description language.
+
+It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins.
+
 Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.\todo{integrated agent as well}
 Multiple software agents can participate in one simulation.
 
 Simulations are created within the server using the Ruby language and text-based RSG files.
 SimSpark uses the Open Dynamics Engine (ODE) for detecting collisions and for simulating rigid body dynamics. ODE allows accurate simulation of the physical properties of objects such as velocity, inertia and friction.
 
-\todo[inline]{documents, wiki}
-
-\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo... A table compares different simulator}
+\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
 
 
 \section{Current state / development since 2008}
 Because last paper about simspark was in 2008
+
+The soccer simulation for this tournament was developed in parallel with the SimSpark simulator. In its initial version players were modeled as spheres in a physical three dimensional world. Since then SimSpark grew considerably and now supports humanoid players with articulated bodies.
+
 \subsection{Architectural Changes (?)}
 \todo[inline]{separation of simspark and rcssserver3d}
 \todo[inline]{Cmake migration?}
@@ -101,22 +107,23 @@ Because last paper about simspark was in 2008
 \todo[inline]{soccer rules (referee) (rcssserver3d)}
 \todo[inline]{bigger fields and more robots (rcssserver3d)}
 \todo[inline]{sync mode (simspark)}
-\todo[inline]{multi-threaded (simulation engine, agent controls) (simspark)}
 \todo[inline]{integrated agents (simspark)}
 \todo[inline]{physics simulation engine abstraction (simspark)}
 
-Key Features
-\paragraph{Multi-threads Supporting}
-In modern time, computers have more than one CPU or dual cores in one CPU.
-This improve the performance greatly, but only the multi-threaded program can benefit. SimSpark has an multi-threaded running loop.
-The implementation of multi-threaded loop is based on two conditions.
-First, every SimControlNode response for different parts of the simulation, they perform one by one in the singled-threaded mode, but they can run in parallel.
-Second, there is a active scene which stores the whole simulation data in a tree.
-The physics engine and SimControlNode interact through the active scene.
+\paragraph{Multi-threads Supporting\todo{agent controls}}
+In modern time, computers have a CUP with multi-cores or even multi-CPUs.
+This improves the performance greatly, but only the multi-threaded program can benefit.
+One great feature of SimSpark is switching between single thread mode and multi-threads
+mode. The multi-threads mode can improve the performance in computer with multi-cores CPU, but the single thread mode is also useful for developing the simulator. 
+
+The implementation of multi-threads loop is based on two conditions.
+First, different tasks are assigned to different \textit{SimControlNode}s in SimSpark.
+For example, \textit{AgentControl} is a node that manages the communication with agents.
+For each simulation cycle, \textit{SimControlNode}s are executed one by one in the single thread mode, but they can run in parallel.
+Second, all data of simulation state is stored in a tree called \textit{active scene},
+the physics engine and \textit{SimControlNode}s interact through the \textit{active scene}.
 As we know, the physics computation is the most time-consuming, and the physics engine does not need to access the active scene during physics computation.
-So the physics computation and SimControlNodes can run in parallel.
-At last, we get the multithreaded simulation loop as shown in the following UML diagram. Note that the agent’s action are also delayed one cycle in the multi-threaded loop.
-\todo[inline]{multi-thread UML}
+So the physics computation and \textit{SimControlNode}s can run in parallel.\todo[color=green]{UML?}\todo[color=yellow]{results of performance improvement, any benchmark?}
 
 \todo[inline]{ODE TBB, sander's paper}
 
@@ -124,10 +131,12 @@ At last, we get the multithreaded simulation loop as shown in the following UML 
 
 \todo[inline]{logfiles}
 
-\section{Recent Development (Changes 2013)}
-
+\section{Experimental Features}
+These features are experimental, they (probably) will be used in RoboCup 2013 for the first time. (Some of them are still under the development)
 
 \subsection{Realistic Motor}
+\todo{motivation: my email...}
+\todo{shorter}
 NAO robot has twenty-one motor joints as its actuators.
 The simple motor model is one reason for the unrealistic simulation results.
 The ODE provides a simple model of real life servos.
@@ -204,12 +213,24 @@ stands for 1 minutes and then turns right for 5 minutes. This is shown by the ch
 power consumption, the energy consumed by devices other than motors,
 e.g. mainboard, CPU, camera, etc. has to be added. It is the power
 consumption of the robot in an idle state (all motors are off), and measured to be 33 W.
+
 \begin{figure}
   \centering
-  \inputtikz{battery}
-  \caption{Power consumption of the real and the simulated robot in action.
-    The electric current is the summary of all motors.}
-  \label{fig:battery}
+  \begin{minipage}{0.49\columnwidth}
+    \centering
+    \pgfplotsset{width=0.9\columnwidth,height=7cm}
+    \inputtikz{battery}
+    \caption{Power consumption of the real and the simulated robot in action.
+      The electric current is the summary of all motors.}
+    \label{fig:battery}
+  \end{minipage}\hfill{}
+  \begin{minipage}{0.49\columnwidth}
+    \centering
+    \pgfplotsset{width=0.9\columnwidth,height=7cm}
+    \inputtikz{joint-temp-LKneePitch}
+    \caption{The temperature of the (knee pitch) motor in the simulation and the real robot. The green background is the electric current in the real robot.}
+    \label{fig:joint-temperature}
+  \end{minipage}
 \end{figure}
 
 \paragraph{Temperature Regulation}
@@ -264,13 +285,6 @@ A sequence values of $\Delta{}t$, $T_t$, and $I^2R$ can be measured by experimen
 \end{table}
 
 After determining the parameters in the \cref{eq:motor-temp}, we can use this model to simulate motor temperature. In \Cref{fig:joint-temperature}, the simulated temperature is compared with data from the real robot.
-\begin{figure}
-  \centering
-  \pgfplotsset{width=0.88\columnwidth}
-  \inputtikz{joint-temp-LKneePitch}
-  \caption{The temperature of the (knee pitch) motor in the simulation and the real robot. The green background is the electric current in the real robot. The result shows the simulated temperature is very close to the values of the real robot.}
-  \label{fig:joint-temperature}
-\end{figure}
 
 The whole process of joint simulation is summarized in
 \Cref{fig:joint}: stiffness $k_s$ is simulated by setting the maximum torque
@@ -308,7 +322,7 @@ wanted to have several variations of a robot, you should have defined several
 separate robot models. To better support games with heterogeneous robots, we have
 added the support for parametric models to simspark. Therefore, it is possible to
 define models in which a number of parameters are variables and can have different
-values for different robot variations. When you want to load such a model, you shold 
+values for different robot variations.\todo[color=green]{which parameters? for example} When you want to load such a model, you shold 
 specify which type of that robot is needed and its parameters are replaced in the
 parametric model and the model is created. 
 
@@ -319,7 +333,7 @@ parametric model and the model is created.
 \section{Applications}
 
 \paragraph{RoboCup Soccer Simulation League}
-In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed. By using it, simulation teams not only have designed and tested new algorithms, but also developed useful research tools based on SimSpark. Some of these tools are released as open source also. For example, roboviz\todo{brief description of roboviz}
+In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed\todo{How many teams in last RoboCup?}. By using it, simulation teams not only have designed and tested new algorithms, but also developed useful research tools based on SimSpark. Some of these tools are released as open source also. For example, roboviz\todo{brief description of roboviz}
 
 \paragraph{Usage for Real Robot}
 As one of the long term goals of the soccer simulation is to aim for realism the long term objective are realistic humanoid players in a physical environment.
@@ -333,7 +347,7 @@ Furthermore, Nao Team Humboldt also promotes the usage of SimSpark in the Standa
 
 \begin{figure}
   \centering
-  \includegraphics[width = 0.95\columnwidth]{simspark-spl}
+  \includegraphics[width = 0.75\columnwidth]{simspark-spl}
   \caption{Prototype of the extended SimSpark for Standard Platform League.
     The bottom of screen are images of robot cameras.}
   \label{f:simspark-spl}
@@ -347,6 +361,8 @@ module test from the robotic hardware.
 
 
 \section{Conclusion and Future Work}
+
+SimSpark is a powerful tool to state different multi-agent research questions.
 
 \todo[inline]{Other physic engine, Bullet}
 \todo[inline]{better GUI}
