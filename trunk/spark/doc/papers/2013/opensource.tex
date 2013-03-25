@@ -69,12 +69,8 @@ Using simulation for algorithm development and testing makes thing easier.
 SimSpark was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany\cite{OR05}.
 The project was registered as open source project in SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004, it has an established code base with development increasing year-over-year\cite{Boedecker2008,usermanual}.
 
-
-
 \todo[inline]{Plugin system, core part}
 In comparison to specialized simulators, users can create new simulations by using a scene description language.
-
-It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins.
 
 Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.\todo{integrated agent as well}
 Multiple software agents can participate in one simulation.
@@ -91,7 +87,10 @@ Because last paper about simspark was in 2008
 The soccer simulation for this tournament was developed in parallel with the SimSpark simulator. In its initial version players were modeled as spheres in a physical three dimensional world. Since then SimSpark grew considerably and now supports humanoid players with articulated bodies.
 
 \subsection{Architectural Changes (?)}
-\todo[inline]{separation of simspark and rcssserver3d}
+\todo[inline]{separation of simspark and rcssserver3d}\todo{Hedayat Vatankhah:
+Architecture Enhancements Proposal for Soccer Simulation Server 3D}
+It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins.
+
 \todo[inline]{Cmake migration?}
 \todo[inline]{windows support (mingw32,VC)}
 
@@ -125,7 +124,12 @@ the physics engine and \textit{SimControlNode}s interact through the \textit{act
 As we know, the physics computation is the most time-consuming, and the physics engine does not need to access the active scene during physics computation.
 So the physics computation and \textit{SimControlNode}s can run in parallel.\todo[color=green]{UML?}\todo[color=yellow]{results of performance improvement, any benchmark?}
 
-\todo[inline]{ODE TBB, sander's paper}
+\todo[inline]{
+Sander van Dijk and Ubbo Visser
+Proposal: Boosting the 3D SSL Simulator
+Increase Research Possibilities in the RC SSL Community
+
+ODE TBB, ??sander's paper -- where??}\footnote{\url{http://www.robocup.org/2011/03/robocup-federation-call-for-project-proposals-2/}}
 
 \todo[inline]{Internal/External Monitor}
 
@@ -333,7 +337,10 @@ parametric model and the model is created.
 \section{Applications}
 
 \paragraph{RoboCup Soccer Simulation League}
-In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed\todo{How many teams in last RoboCup?}. By using it, simulation teams not only have designed and tested new algorithms, but also developed useful research tools based on SimSpark. Some of these tools are released as open source also. For example, roboviz\todo{brief description of roboviz}
+In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed\todo{How many teams in last RoboCup?}. By using it, simulation teams not only have designed and tested new algorithms, but also developed useful research tools based on SimSpark. Some of these tools are also released as open source.
+For example, RoboViz\cite{Stoecker2012} is designed to assess and develop agent behaviors in SimSpark,
+it facilitates the real-time visualization of agents running concurrently on the SimSpark simulator,
+and provides higher-level analysis and visualization of agent behaviors.
 
 \paragraph{Usage for Real Robot}
 As one of the long term goals of the soccer simulation is to aim for realism the long term objective are realistic humanoid players in a physical environment.
