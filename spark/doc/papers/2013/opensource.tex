@@ -66,10 +66,22 @@ This is especially true in the research of multi-robots systems in areas such as
 Using simulation for algorithm development and testing makes thing easier.
 
 % \paragraph{History}
-SimSpark was initially developed by Marco Kögler and Oliver Obst at the University of Koblenz-Landau in Koblenz, Germany\cite{OR05}.
-The project was registered as open source project in SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004, it has an established code base with development increasing year-over-year\cite{Boedecker2008,usermanual}.
+\textit{SimSpark}, a multi-robot simulator based on the generic components of the Spark\cite{OR05} physical multi-agent simulation system, has been used in the RoboCup Soccer Simulation League since 2004.
+The project was registered as open source project in SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004, it has an established code base with development increasing year-over-year.
+As the result, RoboCup soccer simulations have changed significantly over the years, going from rather abstract agent representations to more and more realistic humanoid robot games\cite{Boedecker2008,usermanual}.
+Thanks to the flexibility of the Spark system, these transitions were achieved with little changes to the simulator’s core architecture.
 
-\todo[inline]{Plugin system, core part}
+In this paper we describe the recent development of \textit{SimSpark} project, which make the \textit{SimSpark} possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup?}.
+In section \ref{s:overview}, we will give an overview of \textit{SimSpark} project since 2008. After that, we will describe the development in core module -- names \textit{Spark} in section \ref{s:spark}. In section \ref{s:rcssserver3d}, we will give the implementation of RoboCup 3D Soccer Simulator -- \textit{RCSSServer3D}. We will introduce some ongoing work for RoboCup 2013 in 
+section \ref{s:ongoing}. Furthermore, we will discuss the application of \textit{SimSpark} not only in simulation league but also other leagues with real robots in section \ref{s:application}. Finally, we will outline future development plans in section \ref{s:conclusion} .
+
+\todo[inline,color=gray]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
+
+
+\section{Project Overview}
+\label{s:overview}
+Because last paper about simspark was in 2008
+
 In comparison to specialized simulators, users can create new simulations by using a scene description language.
 
 Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.\todo{integrated agent as well}
@@ -78,15 +90,9 @@ Multiple software agents can participate in one simulation.
 Simulations are created within the server using the Ruby language and text-based RSG files.
 SimSpark uses the Open Dynamics Engine (ODE) for detecting collisions and for simulating rigid body dynamics. ODE allows accurate simulation of the physical properties of objects such as velocity, inertia and friction.
 
-\todo[inline]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
-
-
-\section{Current state / development since 2008}
-Because last paper about simspark was in 2008
-
 The soccer simulation for this tournament was developed in parallel with the SimSpark simulator. In its initial version players were modeled as spheres in a physical three dimensional world. Since then SimSpark grew considerably and now supports humanoid players with articulated bodies.
 
-\subsection{Architectural Changes (?)}
+% \subsection{Architectural Changes (?)}
 \todo[inline]{separation of simspark and rcssserver3d}\todo{Hedayat Vatankhah:
 Architecture Enhancements Proposal for Soccer Simulation Server 3D}
 It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins.
@@ -94,17 +100,16 @@ It served from the beginning as a test bed and a guide for essential new feature
 \todo[inline]{Cmake migration?}
 \todo[inline]{windows support (mingw32,VC)}
 
+\section{Spark}
+\label{s:spark}
 \subsection{New Sensors}
  - ACC
  - FSR
- - Gyroasdf
+ - Gyro
  - Restrict Vision
  -- Line perceptions
  -- camera (image)
 
-\todo[inline]{robot model: NAO (rcssserver3d)}
-\todo[inline]{soccer rules (referee) (rcssserver3d)}
-\todo[inline]{bigger fields and more robots (rcssserver3d)}
 \todo[inline]{sync mode (simspark)}
 \todo[inline]{integrated agents (simspark)}
 \todo[inline]{physics simulation engine abstraction (simspark)}
@@ -135,7 +140,14 @@ ODE TBB, ??sander's paper -- where??}\footnote{\url{http://www.robocup.org/2011/
 
 \todo[inline]{logfiles}
 
+\section{RCSSServer3D}
+\label{s:rcssserver3d}
+\todo[inline]{robot model: NAO (rcssserver3d)}
+\todo[inline]{soccer rules (referee) (rcssserver3d)}
+\todo[inline]{bigger fields and more robots (rcssserver3d)}
+
 \section{Experimental Features}
+\label{s:ongoing}
 These features are experimental, they (probably) will be used in RoboCup 2013 for the first time. (Some of them are still under the development)
 
 \subsection{Realistic Motor}
@@ -335,7 +347,7 @@ parametric model and the model is created.
 \subsection{Player Integration??}
 
 \section{Applications}
-
+\label{s:application}
 \paragraph{RoboCup Soccer Simulation League}
 In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed\todo{How many teams in last RoboCup?}. By using it, simulation teams not only have designed and tested new algorithms, but also developed useful research tools based on SimSpark. Some of these tools are also released as open source.
 For example, RoboViz\cite{Stoecker2012} is designed to assess and develop agent behaviors in SimSpark,
@@ -368,7 +380,7 @@ module test from the robotic hardware.
 
 
 \section{Conclusion and Future Work}
-
+\label{s:conclusion}
 SimSpark is a powerful tool to state different multi-agent research questions.
 
 \todo[inline]{Other physic engine, Bullet}
