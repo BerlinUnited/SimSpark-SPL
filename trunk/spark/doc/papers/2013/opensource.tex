@@ -84,7 +84,8 @@ Because last paper about simspark was in 2008
 
 In comparison to specialized simulators, users can create new simulations by using a scene description language.
 
-Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.\todo{integrated agent as well}
+Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.
+\todo{integrated agent as well}
 Multiple software agents can participate in one simulation.
 
 Simulations are created within the server using the Ruby language and text-based RSG files.
@@ -93,18 +94,25 @@ SimSpark uses the Open Dynamics Engine (ODE) for detecting collisions and for si
 The soccer simulation for this tournament was developed in parallel with the SimSpark simulator. In its initial version players were modeled as spheres in a physical three dimensional world. Since then SimSpark grew considerably and now supports humanoid players with articulated bodies.
 
 % \subsection{Architectural Changes (?)}
-\todo[inline]{separation of simspark and rcssserver3d}\todo{Hedayat Vatankhah:
-Architecture Enhancements Proposal for Soccer Simulation Server 3D}
-It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins.
+It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins and applications. Until 2008, soccer simulation and SimSpark simulator were developed and released as a single project called rcssserver3d, but it was already decided that they should be separated 
+to make the separation more visible for both users new developers. 
+In late 2008, the separation happened with the migration of sources from CVS repository
+at \url{http://sserver.sourceforge.net} to SimSpark's project Subversion repository at 
+\url{http://simspark.sourceforge.net}. As part of this process, the project was broken
+to two main projects (SimSpark simulator and RCSSServer3D soccer simulation software) 
+and two auxiliary projects (RSGEdit and simspark-utilities). Also, simspark binary was 
+renamed to rcssserver3d to make it clear that it runs soccer simulation rather than a 
+generic simulation environment.
 
-\todo[inline]{Cmake migration?}
-\todo[inline]{windows support (mingw32,VC)}
+SimSpark was never a single-platform project, but it practically didn't support 
+Windows. In recent years, Windows support was added after migration from Autotools
+to CMake, and windows installers are now released. 
 
 \section{Spark}
 \label{s:spark}
 \subsection{New Sensors}
  - ACC
- - FSR
+ - FRP (Force Resistance Perceptor)
  - Gyro
  - Restrict Vision
  -- Line perceptions
@@ -343,8 +351,37 @@ specify which type of that robot is needed and its parameters are replaced in th
 parametric model and the model is created. 
 
 \subsection{Agent Proxies}
+Initially, SimSpark used SPADES\cite{riley2003spades} for managing external agents. It
+managed the simulation time and the time spend in agents for thinking. Later it was
+dropped because of its complexities and agents communicated with the server directly.
+The cycle duration was managed by the server without considering agents and the network
+latency. Therefore, if agents were unable to deliver their commands to the server in a
+cycle because of network latency, their commands were executed by the simulator
+in the next simulation cycle. As the number of soccer players in soccer simulation 
+increased, this problem become more apparent.
 
-\subsection{Player Integration??}
+To solve this problem, the concept of agent proxies were proposed. Agent proxies
+run on the client machines were agents will be running, and they are responsible for
+communicating with the server. Agents communicate with the proxies instead of 
+communicating directly with the simulator. In this model, the cycle time is managed
+by the proxies on the client side, and they communicate with the simulator in Sync Mode.
+Therefore, the simulator waits for all proxies to signal the end of a cycle and 
+then proceeds with the next cycle. This model ensures that agents can use the allowed
+cycle time to think in a cycle when new information is delivered to them. 
+
+This model is not ideal because the agents can have some spare time if network latency
+occures, but it is better, more predictable and more fair than the current model. Also,
+no new information is arrived to agents in that spare time and they cannot send new 
+commands for that cycle. Hopefully, by using a new binary network protocol the network 
+traffic and therefore the latency will be reduced considerably.
+
+Currently, an initial version of agent proxies is under development outside simspark
+project using Java.
+
+\subsection{Integration With Existing Robotic Frameworks}
+\todo{Hedayat Vatankhah:Architecture Enhancements Proposal for Soccer 
+Simulation Server 3D}
+
 
 \section{Applications}
 \label{s:application}
