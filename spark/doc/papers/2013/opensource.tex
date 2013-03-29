@@ -2,7 +2,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{todonotes}
 \usepackage{amsmath}
-\usepackage{textcomp} % for \textdegree
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
 \crefname{figure}{Fig.}{Fig.}
@@ -24,6 +23,11 @@
   \tikzsetfigurename{\filename}
   \input{#1.tikz}
 }
+
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.65}
+\renewcommand{\floatpagefraction}{0.60}
 
 \graphicspath{{fig/}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,14 +167,12 @@ The soccer simulation for this tournament was developed in parallel with the Sim
 These features are experimental, they (probably) will be used in RoboCup 2013 for the first time. (Some of them are still under the development)
 
 \subsection{Realistic Motor}
-\todo{motivation: my email...}\todo{cite my thesis}
-\todo{shorter}
 NAO robot has twenty-one motor joints as its actuators.
+The simulation engine, e.g. ODE, provides a simple model of real life servos:
+the motor brings the body up to speed in one step; and provides force that is not more than is allowed.
 The simple motor model is one reason for the unrealistic simulation results.
-The ODE provides a simple model of real life servos.
-It has two parameters: a desired speed and the maximum force that is available to reach that speed. The motor brings the body up to speed in one step; and provides force that is not more than is allowed.
-There is no motor that works like this in reality.
 Furthermore, some aspects like stiffness control, power consumption and temperature regulation, are missing but are also important for robotics.
+In this section, we proposed and implemented a realistic motor model. More details and experimental results are given in \cite{Xu2012}.
 
 \paragraph{Stiffness}
 The stiffness determines how strong the motor is. The value is from 0.0
@@ -179,15 +181,11 @@ full power. In the real robot,
 this percentage is the maximum electric current applied to the motor. Setting the
 stiffness to 0.5 means that the electric current limitation is reduced
 to 50\%.
-
 For a DC motor, the electric current, $I$, determines the output torque,
-$\tau$:
-\begin{align}
-  \tau &= K_\tau I \label{eq:tau-i}
-\end{align}
-where $K_\tau$ is the torque constant of the motor. It can be found in the
-specifications from \cite{naoqi}. In
-the simulation, the maximum torque of the servo can be specified, therefore the
+$\tau = K_\tau I \label{eq:tau-i}$;
+where $K_\tau$ is the torque constant of the motor. $K_\tau$ can be found in the
+specifications of motor, e.g. \cite{naoqi}.
+The simulation engine can specified the maximum torque of the servo, therefore the
 stiffness control can be easily implemented by setting the maximum torque
 of the simulated servo:
 \begin{align}
@@ -201,46 +199,36 @@ denotes the maximum torque of the servo when stiffness is 1.
 Another important aspect besides the motor's performance is its
 power consumption: how much energy does it cost to run.
 The robot is powered by a battery with limited energy, and has to walk during the
-game: half a game is 10 minutes.
+game.
 An even more important factor in energy consumption is
 that the motor can overheat if it consumes too much energy and
-becomes too hot. In the real NAO, Aldebaran Robotics estimates the temperature
-of each motor by integrating electric current, and shuts down the motor
-when the temperature is too high. Therefore modeling power consuming
-is important for implementing energy effective motions.
+becomes too hot.
+In the real robot, the temperature of each motor is measured, and the motor shuts down 
+when the temperature is too high.
 
-DC motors are based on the following equations:
-\begin{align}
-  U &= U_e + IR \label{eq:u-ir}\\
-  U_e &= K_e \dot{\theta} \label{eq:u-ke}
-\end{align}
+DC motors are based on this equation:
+$U = U_e + IR \label{eq:u-ir} = K_e \dot{\theta} \label{eq:u-ke}$;
 where $U$ is the voltage of input, $U_e$ is the back electromotive
 force (EMF), $I$ is the electric current, $R$ is resistance,
 $\dot{\theta}$ is the speed, and $K_e$ is the speed constant of the motor.
-
-The value of $R$ and $K_e$ can be found in the specifications from \cite{naoqi};
+The value of $R$ and $K_e$ can be found in the specifications of motor again;
 and the simulation engine provides
 the value of $\tau$ and $\dot{\theta}$; therefore we can calculate the
 power consumption by putting \cref{eq:tau-i,eq:u-ir,eq:u-ke} together:
 \begin{align}
-  P &= UI \\
-  &= U_eI + I^2R \\
-  &= \frac{K_e}{K_\tau}\dot{\theta}\tau + \frac{R}{K_\tau^2}\tau^2
+  P = UI = U_eI + I^2R = \frac{K_e}{K_\tau}\dot{\theta}\tau + \frac{R}{K_\tau^2}\tau^2
 \end{align}
-
 And the total energy used by the motor is:
 \begin{equation}
   \label{eq:motor-power}
   E = \sum_t{P_t\Delta{}t}
 \end{equation}
-where $\Delta{}t$ is the time step of the simulation, and $P_t$ is the power consumed at time $t$. 
-
-\Cref{fig:battery} compares the simulation result of this model to
-reality. In this example, the robot turns left for 5 minutes, then
-stands for 1 minutes and then turns right for 5 minutes. This is shown by the change of electric current in the figure. For the overall
+where $\Delta{}t$ is the time step of the simulation, and $P_t$ is the power consumed at time $t$. For the overall
 power consumption, the energy consumed by devices other than motors,
 e.g. mainboard, CPU, camera, etc. has to be added. It is the power
-consumption of the robot in an idle state (all motors are off), and measured to be 33 W.
+consumption of the NAO robot in an idle state (all motors are off), and measured to be 33 W.
+\Cref{fig:battery} compares the simulation result of this model to
+reality. 
 
 \begin{figure}
   \centering
@@ -248,15 +236,17 @@ consumption of the robot in an idle state (all motors are off), and measured to 
     \centering
     \pgfplotsset{width=0.9\columnwidth,height=7cm}
     \inputtikz{battery}
-    \caption{Power consumption of the real and the simulated robot in action.
-      The electric current is the summary of all motors.}
+    \caption{Power consumption of the real and the simulated NAO robot in action.
+      The electric current is the summary of all motors.
+    In this example, the robot turns left for 5 minutes, then
+stands for 1 minutes and then turns right for 5 minutes. This is shown by the change of electric current.}
     \label{fig:battery}
   \end{minipage}\hfill{}
   \begin{minipage}{0.49\columnwidth}
     \centering
     \pgfplotsset{width=0.9\columnwidth,height=7cm}
     \inputtikz{joint-temp-LKneePitch}
-    \caption{The temperature of the (knee pitch) motor in the simulation and the real robot. The green background is the electric current in the real robot.}
+    \caption{The temperature of the (knee pitch) motor in the simulation and the real NAO robot. The green background is the electric current in the real robot. Note that the temperature of real NAO has accuracy of 1 $^{\circ}$C.}
     \label{fig:joint-temperature}
   \end{minipage}
 \end{figure}
@@ -264,10 +254,8 @@ consumption of the robot in an idle state (all motors are off), and measured to 
 \paragraph{Temperature Regulation}
 We model the temperature and heat of the motor with the following equations:
 \begin{align}
-  \Delta{}Q^+ &= I^2R\Delta{}t \\
-  \Delta{}Q^- &= -\lambda(T-T_e)\Delta{}t \\
-  \Delta{}Q &= \Delta{}Q^+ + \Delta{}Q^-\\
-  C &= \frac{\Delta{}Q}{\Delta{}T}
+  \Delta{}Q &= \Delta{}Q^+ + \Delta{}Q^- = I^2R\Delta{}t -\lambda(T-T_e)\Delta{}t \\
+  \Delta{}Q &= C\Delta{}T
 \end{align}
 where $T$ is the temperature of the motor, $T_e$
 is the temperature of the environment, but it is the internal temperature
@@ -282,36 +270,8 @@ the motor at time $t+\Delta{}t$ can be solved as:
   \label{eq:motor-temp}
   T_{t+\Delta{}t} = T_t + \Delta{}T = T_t + \frac{[I^2R-\lambda(T_t-T_e)]\Delta{}t}{C}
 \end{equation}
-
-In this model, we determined $T_e$, $\lambda$, and $C$ by experiments. It can be formulate as a classic linear regression problem. We rewrite \cref{eq:motor-temp} to:
-\begin{align}
-  \label{eq:motor-temp-ols}
-  \Delta{}tx_0 + T_t\Delta{}tx_1 - \Delta{}t x_2 &= I^2R \\
-  x_0 &= C \\
-  x_1 &= \lambda \\
-  x_2 &= \lambda Te
-\end{align}
-A sequence values of $\Delta{}t$, $T_t$, and $I^2R$ can be measured by experiment, therefore the optimum values for $x_0$, $x_1$, and $x_2$ can be obtained by linear least squares method, so the parameters of \cref{eq:motor-temp} is determined. \Cref{tab:motor-parameter} gives the results of the experiment.
-\begin{table}[h]
-  \centering
-  \caption{Parameters $T_e$, $\lambda$ and $C$ in the \cref{eq:motor-temp} for different joints of the NAO V3.}
-  \label{tab:motor-parameter}
-  \begin{tabular}{lccc}
-    \toprule
-    Joints      & $T_e$ (\textdegree{}C) & $\lambda$ (W/\textdegree{}C) & $C$ (J/\textdegree{}C)\\
-    \midrule
-    HipYawPitch & 33 & 0.0158 & 27.2 \\
-    \midrule
-    HipRoll     & & & \\
-    AnkleRoll   & 27 & 0.0158 & 27.2 \\
-    \midrule
-    HipPitch    & & & \\
-    KneePitch   & 27 & 0.0198 & 43.6 \\
-    AnklePitch  & & & \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
+In this model, we need to determine $T_e$, $\lambda$, and $C$ by experiments. It can be formulate as a classic linear regression problem.
+A sequence values of $\Delta{}t$, $T_t$, and $I^2R$ can be measured by experiment, therefore the optimum parameters of \cref{eq:motor-temp} is determined.
 After determining the parameters in the \cref{eq:motor-temp}, we can use this model to simulate motor temperature. In \Cref{fig:joint-temperature}, the simulated temperature is compared with data from the real robot.
 
 The whole process of joint simulation is summarized in
