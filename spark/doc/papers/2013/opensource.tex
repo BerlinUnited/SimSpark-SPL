@@ -76,8 +76,8 @@ As the result, RoboCup soccer simulations have changed significantly over the ye
 Thanks to the flexibility of the Spark system, these transitions were achieved with little changes to the simulator’s core architecture.
 
 In this paper we describe the recent development of \textit{SimSpark} project, which make the \textit{SimSpark} possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup 2012?}.
-In section \ref{s:overview}, we will give an overview of \textit{SimSpark} project since 2008. After that, we will describe the development of the \textit{Spark} core system in section \ref{s:spark}.
-In section \ref{s:rcssserver3d}, we will give the implementation of RoboCup 3D Soccer Simulator -- \textit{RCSSServer3D}.
+In section \ref{s:overview}, we will give an overview of \textit{SimSpark} project since 2008. After that, we will describe the development of the \textit{Spark} simulation platform in section \ref{s:spark}.
+In section \ref{s:rcssserver3d}, we will briefly describe the implementation of RoboCup 3D Soccer Simulator -- \textit{RCSSServer3D}.
 We will introduce some new features for RoboCup 2013 in section \ref{s:ongoing}.
 Furthermore, we will discuss the application of \textit{SimSpark} not only in simulation league but also other leagues with real robots in section \ref{s:application}.
 Finally, we will outline future development plans in section \ref{s:conclusion} .
@@ -91,11 +91,11 @@ Because last paper about simspark was in 2008
 
 % \subsection{Architectural Changes (?)}
 It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins and applications. Until 2008, soccer simulation and SimSpark simulator were developed and released as a single project called rcssserver3d, but it was already decided that they should be separated 
-to make the separation more visible for both users new developers. 
+to make the separation more visible for both users and developers. 
 In late 2008, the separation happened with the migration of sources from CVS repository
 at \url{http://sserver.sourceforge.net} to SimSpark's project Subversion repository at 
 \url{http://simspark.sourceforge.net}. As part of this process, the project was broken
-to two main projects (SimSpark simulator and RCSSServer3D soccer simulation software) 
+to two main projects (Spark simulation platform and RCSSServer3D soccer simulation server) 
 and two auxiliary projects (RSGEdit and simspark-utilities). Also, simspark binary was 
 renamed to rcssserver3d to make it clear that it runs soccer simulation rather than a 
 generic simulation environment.
@@ -106,33 +106,22 @@ to CMake, and windows installers are now released.
 
 \section{Spark}
 \label{s:spark}
+As a generic simulation environment, Spark provides a rich set of features to create, debug and modify multi-robot simulation.
+It has three main components, including the simulation engine, the object and memory management system, and the physics engine. More details about architecture and concepts of Spark have been described in \cite{Boedecker2008}. 
+In this section, we describe the necessary changes for simulating 11 vs. 11 humanoid robot soccer game.
+First, a set of sensors of humanoid robot are implemented as plugins. Second, multi-threads supporting takes advantage of multi-cores in modern CPU to be able to run in real time.
 
-In comparison to specialized simulators, users can create new simulations by using a scene description language.
+\paragraph{Sensor Plugins}
 
-Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.
-\todo{integrated agent as well}
-Multiple software agents can participate in one simulation.
-
-Simulations are created within the server using the Ruby language and text-based RSG files.
-SimSpark uses the Open Dynamics Engine (ODE) for detecting collisions and for simulating rigid body dynamics. ODE allows accurate simulation of the physical properties of objects such as velocity, inertia and friction.
-
-\todo{Internal/External Monitor}
-
-\todo{logfiles}
-
-\subsection{Robot Sensors}
  - ACC
  - FRP (Force Resistance Perceptor)
  - Gyro
  - Restrict Vision
  -- Line perceptions
- -- camera (image)
+ -- camera (image): more realistic camera perceptor has begun which will
+deliver images rendered via OpenGL hardware accelerated offscreen buffers
 
-\subsection{sync mode}
-
-\subsection{physics simulation engine abstraction}
-
-\subsection{Multi-threads Supporting}\todo{agent controls}
+\paragraph{Multi-threads Supporting}\todo{agent controls}
 In modern time, computers have a CUP with multi-cores or even multi-CPUs.
 This improves the performance greatly, but only the multi-threaded program can benefit.
 One great feature of SimSpark is switching between single thread mode and multi-threads
@@ -159,8 +148,8 @@ ODE TBB, ??sander's paper -- where??}
 
 The soccer simulation for this tournament was developed in parallel with the SimSpark simulator. In its initial version players were modeled as spheres in a physical three dimensional world. Since then SimSpark grew considerably and now supports humanoid players with articulated bodies.
 
-\subsection{NAO Robot}
-\subsection{Soccer Simulation}
+\paragraph{NAO Robot}
+\paragraph{Soccer Simulation}
 
 \section{Experimental Features}
 \label{s:ongoing}
@@ -214,7 +203,7 @@ $\dot{\theta}$ is the speed, and $K_e$ is the speed constant of the motor.
 The value of $R$ and $K_e$ can be found in the specifications of motor again;
 and the simulation engine provides
 the value of $\tau$ and $\dot{\theta}$; therefore we can calculate the
-power consumption by putting \cref{eq:tau-i,eq:u-ir,eq:u-ke} together:
+power consumption:
 \begin{align}
   P = UI = U_eI + I^2R = \frac{K_e}{K_\tau}\dot{\theta}\tau + \frac{R}{K_\tau^2}\tau^2
 \end{align}
@@ -246,7 +235,8 @@ stands for 1 minutes and then turns right for 5 minutes. This is shown by the ch
     \centering
     \pgfplotsset{width=0.9\columnwidth,height=7cm}
     \inputtikz{joint-temp-LKneePitch}
-    \caption{The temperature of the (knee pitch) motor in the simulation and the real NAO robot. The green background is the electric current in the real robot. Note that the temperature of real NAO has accuracy of 1 $^{\circ}$C.}
+    \caption{The temperature of the (knee pitch) motor in the simulation and the real NAO robot. The green background is the electric current in the real robot. Note that the temperature of real NAO has accuracy of 1 $^{\circ}$C.\newline
+    }
     \label{fig:joint-temperature}
   \end{minipage}
 \end{figure}
@@ -278,7 +268,7 @@ The whole process of joint simulation is summarized in
 \Cref{fig:joint}: stiffness $k_s$ is simulated by setting the maximum torque
 of the motor $\tau_{max}$; the final maximum torque $\tau_m$ used by simulation engine is calculated by temperature regulation; and the simulation engine computes the resulted angle
 and torque applied; in the end, the consumed power and temperature are
-computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery is empty, the maximum torque $\tau_{max}$ is set 0 to turn off the motor.
+computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery is empty, the maximum torque $\tau_{max}$ is set to 0 to turn off the motor.
 \begin{figure}
   \centering
   \inputtikz{joint}
@@ -388,7 +378,7 @@ module test from the robotic hardware.
 \label{s:conclusion}
 SimSpark is a powerful tool to state different multi-agent research questions.
 
-\todo[inline]{Other physic engine, Bullet}
+\todo[inline]{Other physic engine, Bullet /  physics simulation engine abstraction}
 \todo[inline]{better GUI}
 \todo[inline]{more robot models?}
 \section*{Acknowledgments}
