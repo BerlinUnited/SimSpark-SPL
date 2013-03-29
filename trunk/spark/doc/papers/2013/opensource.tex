@@ -59,11 +59,10 @@ Tehran, Iran\\
 \maketitle
 
 \begin{abstract}
-  - current state of simspark
-  - changes 2013
-  - evidence of impact of the released component to the RoboCup community.
-  - technical contribution
-  - benefit for the RoboCup community.
+  SimSpark is an open source robot simulator developed by RoboCup Community.
+  This paper briefly describes the development of SimSpark since 2008.
+  Furthermore, some new features are proposed and implemented for the next RoboCup, including realistic motor, heterogeneous robots, and agent proxies.
+  As a powerful tool to state different multi-robot researches, SimSpark has been successfully used in RoboCup simulation league, standard platform league and humanoid league.
 \end{abstract}
 
 \section{Introduction}
@@ -82,10 +81,7 @@ In section \ref{s:overview}, we will give an overview of \textit{SimSpark} proje
 In section \ref{s:rcssserver3d}, we will briefly describe the implementation of RoboCup 3D Soccer Simulator -- \textit{RCSSServer3D}.
 We will introduce some new features for RoboCup 2013 in section \ref{s:ongoing}.
 Furthermore, we will discuss the application of \textit{SimSpark} not only in simulation league but also other leagues with real robots in section \ref{s:application}.
-Finally, we will outline future development plans in section \ref{s:conclusion} .
-
-\todo[inline,color=gray]{Releated work: SimRobot, Webots, V-REP, Gazebo...}
-
+Finally, we will outline future development plans in section \ref{s:conclusion}.
 
 \section{Project Overview}
 \label{s:overview}
@@ -147,8 +143,8 @@ In its initial version players were modeled as spheres in a physical three dimen
 \paragraph{Soccer Simulation}
 Most rules of the soccer game are judged by an automatic rule set that enforces the basic soccer rule set.
 However more involved situations like detection unfair behavior still require a human referee.
-Noticeably, the size of soccer field is increasing every year, since the number of robots in each team is increasing. In RoboCup 2012, each team has 11 robots. This 
-
+Noticeably, the size of soccer field is increasing every year, since the number of robots in each team is increasing. In RoboCup 2012, each team has 11 robots.
+This makes coordination between multi-robots more important.
 
 \paragraph{Robot Model}
 The NAO robot is currently used in the competitions of the Soccer Simulation 3D League at RoboCup. Its height is about 57cm and its weight is around 4.5kg.
@@ -162,7 +158,9 @@ There are differences between simulated NAO and real NAO. For example, the left 
 
 \section{Experimental Features}
 \label{s:ongoing}
-These features are experimental, they (probably) will be used in RoboCup 2013 for the first time. (Some of them are still under the development)
+
+For getting more realistic simulation, some new features are proposed and implemented, including realistic motor, heterogeneous robots, and agent proxies. Furthermore, a new graphic user interface is implemented for better user experiences.
+These experimental features probably will be used in RoboCup 2013 for the first time.
 
 \subsection{Realistic Motor}
 NAO robot has twenty-one motor joints as its actuators.
@@ -343,7 +341,7 @@ Currently, an initial version of agent proxies is under development outside SimS
 project using Java.
 
 \subsection{SimSpark GUI}
-\todo{SimSpark GUI: http://simspark.sourceforge.net/wiki/index.php/Graphical_User_Interface}
+\todo{SimSpark GUI: \url{http://simspark.sourceforge.net/wiki/index.php/Graphical_User_Interface}}
 
 NOTE: It will be merged to trunk soon. So it is almost complete.
 
@@ -389,6 +387,10 @@ module test from the robotic hardware.
 \section{Conclusion and Future Work}
 \label{s:conclusion}
 SimSpark is a powerful tool to state different multi-robot researches.
+The introduction of a humanoid robot model to the simulation gave another perspective to the league.
+The interest in the 3D simulation competition is growing fast and research is slowly getting back to the design and implementation of multi-agent higher-level behaviors based on solid low level behavior architectures for realistic humanoid robot teams.
+
+SimSpark has undergone continuous development driven by the requirement of continues research in multi-robot system.
 
 \paragraph{Integration With Existing Robotic Frameworks}
 To enhance the usability of SimSpark for wider usage, and also to make it easier
@@ -415,11 +417,10 @@ supported by the framework. It will be also much easier to attract people
 who have developed programs for real robots using the framework to experiment
 with SimSpark.
 
-\todo[inline]{Other physic engine, Bullet /  physics simulation engine abstraction}
-\todo[inline]{better GUI}
-\todo[inline]{more robot models?}
+\paragraph{physics simulation engine abstraction / Bullet}
+\paragraph{more robot models, formate?}
 \section*{Acknowledgments}
-
+We wish to thank other members in in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for introducing us to the SimSpark project.\todo{other names here...}
 \bibliographystyle{splncs03}
 \bibliography{reference}
 \end{document}
