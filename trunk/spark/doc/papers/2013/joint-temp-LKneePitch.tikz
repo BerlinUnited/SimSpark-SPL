@@ -1884,7 +1884,7 @@ axis y line*=left,
 enlarge x limits=false,
 legend pos=north west,
 xlabel={time (s)},
-ylabel={temperature (\textdegree{}C)},
+ylabel={temperature ($^{\circ}$C)},
 ]
 \addplot[every mark/.append style={solid},
 black, solid, mark=none, line legend] table[x=x, y=y] {
