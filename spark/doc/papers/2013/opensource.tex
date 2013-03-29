@@ -45,7 +45,9 @@ D-10587 Germany\\
 \begin{minipage}[t]{0.4\textwidth}
 \and
 \centering
-Amirkabir University of Technology, Iran\\
+Department of Computer Engineering and IT \\
+Amirkabir University of Technology \\
+Tehran, Iran\\
 \email{hedayatv@gmail.com}
 \end{minipage}
 }
@@ -69,9 +71,9 @@ Using simulation for algorithm development and testing makes thing easier.
 \textit{SimSpark}, a multi-robot simulator based on the generic components of the Spark\cite{OR05} physical multi-agent simulation system, has been used in the RoboCup Soccer Simulation League since 2004.
 The project was registered as open source project in SourceForge\footnote{\url{http://simspark.sourceforge.net}} in 2004, it has an established code base with development increasing year-over-year.
 As the result, RoboCup soccer simulations have changed significantly over the years, going from rather abstract agent representations to more and more realistic humanoid robot games\cite{Boedecker2008,usermanual}.
-Thanks to the flexibility of the Spark system, these transitions were achieved with little changes to the simulator’s core architecture.
+Thanks to the flexibility of the Spark system, these transitions were achieved with little changes to the simulator's core architecture.
 
-In this paper we describe the recent development of \textit{SimSpark} project, which make the \textit{SimSpark} possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup?}.
+In this paper we describe the recent development of \textit{SimSpark} project, which make the \textit{SimSpark} possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup? ``Almost! It'll be slower if there are many collisions''}.
 In section \ref{s:overview}, we will give an overview of \textit{SimSpark} project since 2008. After that, we will describe the development in core module -- names \textit{Spark} in section \ref{s:spark}. In section \ref{s:rcssserver3d}, we will give the implementation of RoboCup 3D Soccer Simulator -- \textit{RCSSServer3D}. We will introduce some ongoing work for RoboCup 2013 in 
 section \ref{s:ongoing}. Furthermore, we will discuss the application of \textit{SimSpark} not only in simulation league but also other leagues with real robots in section \ref{s:application}. Finally, we will outline future development plans in section \ref{s:conclusion} .
 
@@ -85,7 +87,8 @@ Because last paper about simspark was in 2008
 In comparison to specialized simulators, users can create new simulations by using a scene description language.
 
 Agents communicate with the simulation server via UDP or TCP, and therefore can be implemented in any language that supports such sockets.
-\todo{integrated agent as well}
+It is also possible to use integrated agents, which are programmed as part of the 
+simulator; but it is mainly for debugging purposes.
 Multiple software agents can participate in one simulation.
 
 Simulations are created within the server using the Ruby language and text-based RSG files.
@@ -110,7 +113,7 @@ to CMake, and windows installers are now released.
 
 \section{Spark}
 \label{s:spark}
-\subsection{New Sensors}
+\paragraph{New Sensors}
  - ACC
  - FRP (Force Resistance Perceptor)
  - Gyro
@@ -118,12 +121,51 @@ to CMake, and windows installers are now released.
  -- Line perceptions
  -- camera (image)
 
-\todo[inline]{sync mode (simspark)}
-\todo[inline]{integrated agents (simspark)}
-\todo[inline]{physics simulation engine abstraction (simspark)}
+\paragraph{Integrated Agents}
+Since the agents run as separate processes than the simulator, it was not possible to
+use debugging tools to debug agents while the server was running because if the 
+agent process was paused, the simulator continued the simulation which would usually 
+lead to unwanted results. For example, if the agent was paused in the middle of walking
+in an unstable state, it would fall on the ground. Therefore, support for integrated
+agents have been added to the simulator so that it is possible to program and run an 
+agent as a part of the simulator process. It also makes development of simple agents
+easier since there is no need to bother about agent/server communication. 
+
+While support for integrated agents was mainly added to facilitate debugging, the
+addition of sync mode is a better solution for this purpose which is introduced below.
+
+\paragraph{Sync Mode}
+As the number of agents increase, the simulator puts a lot more load on CPU. As a
+result, it will be more difficult to run the agents on the same machine as the simulator
+since they will not get enough processing time in each cycle. This will make it 
+difficult or almost impossible to develop and run multi-agent systems on a single 
+machine or on older machines. To overcome this issue, a new running mode called 
+``Sync Mode'' has been added to the simulator. When it is running in the sync mode, 
+the cycles will not be advanced automatically. Instead, the simulator will proceed
+to the next cycle when all connected agents send a ``(sync)'' command indicating that
+they are finished with this cycle. Therefore, agents doesn't need to catch up with the
+simulator and it will wait for them as much as needed. 
+
+Not only this feature will make it possible to experiment with the simulator on
+slower systems, but also it will make debugging much easier even on multi-agent setups.
+For instance, if an agent is paused in a debugger tool, the simulator will not proceed
+to the next cycle and also all other agents have to wait for the next cycle.
+
+\paragraph{Support for Other Physics Engines}
+SimSpark was initially built around ODE physics engine. However, it turned out that 
+it has its own limitations and using other engines might provide extra benefits. 
+For example, some engines might provide better multi-threaded support or could 
+support hardware acceleration physics simulation. And some of them might be better
+suited to some types of simulation. 
+
+As a result, a physics abstraction layer was implemented by Andreas Held \todo{should we cite people?} and ODE
+implementation was moved out of the core and become a plugin. Now, it is possible
+to implement support for other physics engines as plugins, and use an appropriate
+plugin for a simulation on each hardware. A partial implementation of Bullet physics
+plugin is already available.
 
 \paragraph{Multi-threads Supporting\todo{agent controls}}
-In modern time, computers have a CUP with multi-cores or even multi-CPUs.
+In modern time, computers have a CPU with multi-cores or even multi-CPUs.
 This improves the performance greatly, but only the multi-threaded program can benefit.
 One great feature of SimSpark is switching between single thread mode and multi-threads
 mode. The multi-threads mode can improve the performance in computer with multi-cores CPU, but the single thread mode is also useful for developing the simulator. 
@@ -323,30 +365,31 @@ computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery i
 \end{figure}
 
 \subsection{Heterogeneous Robots}
-\todo[inline]{Draft, needs better English}
-Simulation is great for experimenting with robots without need to buy expensive 
-real robots. Also, the robots are never damaged and they can be used for long 
+Simulation is a great tool for experimenting with robots without buying expensive 
+real robots. Also, the simulated robots are never damaged and they can be used for long 
 running experiences without human intervention. 
 
-However, the possibilities which are provided by a simulation environment is 
+However, the possibilities provided by a simulation environment is 
 not limited to these. Not only you can experiment with different behaviors, but
 also you can modify the mechanical properties of the robot as you wish. Additionally,
-it is possible to create new challenges for robot AI developers since you can
+it is possible to create new challenges for robot AI developers. Since you can
 generate robots with different mechanical properties very easily at run time, 
 you can provide variations of a robot to teams and they can use them if they can
 adopt their developed behaviors to unseen robots; which is in contrast with 
 real robots because teams know the exact specification of the robots and
-can develop behaviors specifically tuned for a single robot. If heterogeneous 
+can develop behaviors specifically tuned for them. If heterogeneous 
 robots are available in a game, teams can use them only if they can adopt
 their behaviors to the robots they didn't know about.
 
-Simspark already provided the ability to define different robot models and 
+SimSpark already provided the ability to define different robot models and 
 use them in its simulation environment. However, each model was fixed and if you
 wanted to have several variations of a robot, you should have defined several 
 separate robot models. To better support games with heterogeneous robots, we have
-added the support for parametric models to simspark. Therefore, it is possible to
+added the support for parametric models to SimSpark. Therefore, it is possible to
 define models in which a number of parameters are variables and can have different
-values for different robot variations.\todo[color=green]{which parameters? for example} When you want to load such a model, you shold 
+values for different robot variations. For example, the length and the mass of the 
+legs of a robot can be different for different types of that robot model. 
+When you want to load such a model, you should 
 specify which type of that robot is needed and its parameters are replaced in the
 parametric model and the model is created. 
 
@@ -370,12 +413,12 @@ then proceeds with the next cycle. This model ensures that agents can use the al
 cycle time to think in a cycle when new information is delivered to them. 
 
 This model is not ideal because the agents can have some spare time if network latency
-occures, but it is better, more predictable and more fair than the current model. Also,
+occurs, but it is better, more predictable and more fair than the current model. Also,
 no new information is arrived to agents in that spare time and they cannot send new 
 commands for that cycle. Hopefully, by using a new binary network protocol the network 
 traffic and therefore the latency will be reduced considerably.
 
-Currently, an initial version of agent proxies is under development outside simspark
+Currently, an initial version of agent proxies is under development outside SimSpark
 project using Java.
 
 \subsection{Integration With Existing Robotic Frameworks}
