@@ -66,7 +66,7 @@ Amirkabir University of Technology, Iran\\
 
 \section{Introduction}
 The development on robots may be severely limited by the constrained resources.
-This is especially true in the research of multi-robots systems in areas such as RoboCup.
+This is especially true in the research of multi-robot systems in areas such as RoboCup.
 Using simulation for algorithm development and testing makes thing easier.
 
 % \paragraph{History}
@@ -87,11 +87,9 @@ Finally, we will outline future development plans in section \ref{s:conclusion} 
 
 \section{Project Overview}
 \label{s:overview}
-Because last paper about simspark was in 2008
 
-% \subsection{Architectural Changes (?)}
-It served from the beginning as a test bed and a guide for essential new features that were added to the simulator during development. However changes to the simulator core were never customized for the soccer simulation. Instead generic simulator services were implemented with all soccer specific details contained in a set of plugins and applications. Until 2008, soccer simulation and SimSpark simulator were developed and released as a single project called rcssserver3d, but it was already decided that they should be separated 
-to make the separation more visible for both users and developers. 
+Until 2008, soccer simulation and SimSpark simulator were developed and released as a single project called rcssserver3d, but it was already decided that they should be separated 
+to make the separation more visible for both users and developers.
 In late 2008, the separation happened with the migration of sources from CVS repository
 at \url{http://sserver.sourceforge.net} to SimSpark's project Subversion repository at 
 \url{http://simspark.sourceforge.net}. As part of this process, the project was broken
@@ -109,6 +107,7 @@ to CMake, and windows installers are now released.
 As a generic simulation environment, Spark provides a rich set of features to create, debug and modify multi-robot simulation.
 It has three main components, including the simulation engine, the object and memory management system, and the physics engine. Details about architecture and concepts of Spark have been described in \cite{Boedecker2008,OR05}.
 In this section, we describe the necessary changes for simulating 11 vs. 11 humanoid robot soccer game.
+However changes to the simulator core were never customized for the soccer simulation.
 First, a set of sensors of humanoid robot are implemented as plugins. Second, multi-threads supporting takes advantage of multi-cores in modern CPU to be able to run in real time.
 
 \paragraph{Sensor Plugins}
@@ -134,17 +133,30 @@ As we know, the physics computation is the most time-consuming, and the physics 
 So the physics computation and \textit{SimControlNode}s can run in parallel.
 Furthermore, the physics engine, e.g. Open Dynamic Engine\cite{Smith:ODE}, is modified to run in parallel by using Intel Threading Building Blocks\cite{tbb}.
 
-In RoboCup 2012, the computer (Intel Core i7-975 @3.33GHz, 4G DDR3) simulated 11 vs. 11 humanoid robot (22 degree of freedom) soccer games in real time. \todo[color=yellow]{results of performance improvement, any benchmark?}
+In RoboCup 2012, the 11 vs. 11 humanoid robot (22 degree of freedom) soccer games were simulated in real time by computer with Intel Core i7-975 @3.33GHz CPU and 4G DDR3 RAM. \todo[color=yellow]{results of performance improvement, any benchmark?}
 
 \section{RCSSServer3D}
 \label{s:rcssserver3d}
 
-RCSSServer3D, stands for RoboCup Soccer Simulation Server 3D, is developed a robot soccer simulator for the tournament in RoboCup Simulation League.
-In its initial version players were modeled as spheres in a physical three dimensional world. Now it supports humanoid players with articulated bodies.
+As the competition environment for the Soccer Simulation 3D League at RoboCup, 
+RCSSServer3D simulates the soccer field where two team of robots play soccer game.
+In its initial version players were modeled as spheres in a physical three dimensional world. Now it supports humanoid players with articulated bodies. In particular,  the soccer environment and rules are implemented in the simulation, and the NAO robot manufactured by Aldebaran Robotics is modeled.
 
-
-\paragraph{NAO Robot}
 \paragraph{Soccer Simulation}
+Most rules of the soccer game are judged by an automatic rule set that enforces the basic soccer rule set.
+However more involved situations like detection unfair behavior still require a human referee.
+Noticeably, the size of soccer field is increasing every year, since the number of robots in each team is increasing. In RoboCup 2012, each team has 11 robots. This 
+
+
+\paragraph{Robot Model}
+The NAO robot is currently used in the competitions of the Soccer Simulation 3D League at RoboCup. Its height is about 57cm and its weight is around 4.5kg.
+Its biped architecture with 22 degrees of freedom allows NAO to have great mobility.
+The NAO robot model is also equipped with a powerful selection of the
+sensors described in section \ref{s:spark}, to provide a widespread information base for
+agent development.
+
+There are differences between simulated NAO and real NAO. For example, the left hip and the right hip in the real NAO are physically connected by one motor so they cannot be controlled independently. The simulated robot has a motor for each joint. Furthermore, the simulated robot gets positions of objects via virtual vision sensor, while the real robot has to process images to understand the world. Never the less, this NAO model enables RCSSServer3D as a good humanoid robot research platform.
+
 
 \section{Experimental Features}
 \label{s:ongoing}
@@ -371,7 +383,7 @@ module test from the robotic hardware.
 
 \section{Conclusion and Future Work}
 \label{s:conclusion}
-SimSpark is a powerful tool to state different multi-agent research questions.
+SimSpark is a powerful tool to state different multi-robot researches.
 
 \todo[inline]{Other physic engine, Bullet /  physics simulation engine abstraction}
 \todo[inline]{better GUI}
