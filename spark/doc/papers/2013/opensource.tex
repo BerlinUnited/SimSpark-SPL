@@ -107,25 +107,22 @@ to CMake, and windows installers are now released.
 \section{Spark}
 \label{s:spark}
 As a generic simulation environment, Spark provides a rich set of features to create, debug and modify multi-robot simulation.
-It has three main components, including the simulation engine, the object and memory management system, and the physics engine. More details about architecture and concepts of Spark have been described in \cite{Boedecker2008}. 
+It has three main components, including the simulation engine, the object and memory management system, and the physics engine. Details about architecture and concepts of Spark have been described in \cite{Boedecker2008,OR05}.
 In this section, we describe the necessary changes for simulating 11 vs. 11 humanoid robot soccer game.
 First, a set of sensors of humanoid robot are implemented as plugins. Second, multi-threads supporting takes advantage of multi-cores in modern CPU to be able to run in real time.
 
 \paragraph{Sensor Plugins}
+Sensors of a robot allows awareness of the robot's state and the environment.
+Humanoid robots like the NAO usually have many different sensors installed.
+We have implemented new plugins to simulate sensors of humanoid robots.
+Some of the sensors delivers information from physics engine, such as joint position, gyro, accelerometer, and force resistance. Furthermore, lines can be sensed by virtual vision.
+Additionally, a more realistic camera which delivers images rendered via OpenGL hardware accelerated offscreen buffers is implemented. Details of these sensors can be found in \cite{usermanual}.
 
- - ACC
- - FRP (Force Resistance Perceptor)
- - Gyro
- - Restrict Vision
- -- Line perceptions
- -- camera (image): more realistic camera perceptor has begun which will
-deliver images rendered via OpenGL hardware accelerated offscreen buffers
-
-\paragraph{Multi-threads Supporting}\todo{agent controls}
-In modern time, computers have a CUP with multi-cores or even multi-CPUs.
+\paragraph{Multi-threads Supporting}
+In modern time, computers have a processor with multi-cores or even multi-CPUs.
 This improves the performance greatly, but only the multi-threaded program can benefit.
 One great feature of SimSpark is switching between single thread mode and multi-threads
-mode. The multi-threads mode can improve the performance in computer with multi-cores CPU, but the single thread mode is also useful for developing the simulator. 
+mode. The multi-threads mode can improve the performance in computer with multi-cores processor, but the single thread mode is also useful for developing the simulator. 
 
 The implementation of multi-threads loop is based on two conditions.
 First, different tasks are assigned to different \textit{SimControlNode}s in SimSpark.
@@ -134,19 +131,17 @@ For each simulation cycle, \textit{SimControlNode}s are executed one by one in t
 Second, all data of simulation state is stored in a tree called \textit{active scene},
 the physics engine and \textit{SimControlNode}s interact through the \textit{active scene}.
 As we know, the physics computation is the most time-consuming, and the physics engine does not need to access the active scene during physics computation.
-So the physics computation and \textit{SimControlNode}s can run in parallel.\todo[color=green]{UML?}\todo[color=yellow]{results of performance improvement, any benchmark?}
+So the physics computation and \textit{SimControlNode}s can run in parallel.
+Furthermore, the physics engine, e.g. Open Dynamic Engine\cite{Smith:ODE}, is modified to run in parallel by using Intel Threading Building Blocks\cite{tbb}.
 
-\todo{
-Sander van Dijk and Ubbo Visser
-Proposal: Boosting the 3D SSL Simulator
-Increase Research Possibilities in the RC SSL Community
-
-ODE TBB, ??sander's paper -- where??}
+In RoboCup 2012, the computer (Intel Core i7-975 @3.33GHz, 4G DDR3) simulated 11 vs. 11 humanoid robot (22 degree of freedom) soccer games in real time. \todo[color=yellow]{results of performance improvement, any benchmark?}
 
 \section{RCSSServer3D}
 \label{s:rcssserver3d}
 
-The soccer simulation for this tournament was developed in parallel with the SimSpark simulator. In its initial version players were modeled as spheres in a physical three dimensional world. Since then SimSpark grew considerably and now supports humanoid players with articulated bodies.
+RCSSServer3D, stands for RoboCup Soccer Simulation Server 3D, is developed a robot soccer simulator for the tournament in RoboCup Simulation League.
+In its initial version players were modeled as spheres in a physical three dimensional world. Now it supports humanoid players with articulated bodies.
+
 
 \paragraph{NAO Robot}
 \paragraph{Soccer Simulation}
