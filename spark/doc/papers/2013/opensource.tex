@@ -390,37 +390,45 @@ SimSpark is a powerful tool to state different multi-robot researches.
 The introduction of a humanoid robot model to the simulation gave another perspective to the league.
 The interest in the 3D simulation competition is growing fast and research is slowly getting back to the design and implementation of multi-agent higher-level behaviors based on solid low level behavior architectures for realistic humanoid robot teams.
 
-SimSpark has undergone continuous development driven by the requirement of continues research in multi-robot system.
-
-\paragraph{Integration With Existing Robotic Frameworks}
+SimSpark has undergone continuous development driven by the requirement of continuous research in multi-robot system. The following approches are planned:
+\begin{description}
+\item[Integration With Existing Robotic Frameworks] 
 To enhance the usability of SimSpark for wider usage, and also to make it easier
 for developers to develop and test their robotic software on SimSpark and to
 use the same code on real hardware, we aim to integrate SimSpark to an 
-existing robotic framework. Player is a well-known robotic framework which
-can be used to control both real and simulated robots. We planned to integrate
-SimSpark with Player so that people can develop agents for SimSpark using 
-Player interfaces. It has the additional benefit of using Player's network
-protocol which is much more efficient than the current network protocol used
-in SimSpark. It is also a good opportunity to enhance the multi-threaded 
-capabilities of SimSpark given the asynchronous nature of using Player with
-different robot sensors. 
+existing robotic framework, such as Player and ROS.
 
-Recently, another robotic framework called ROS is gaining popularity and is in
-active development. Therefore, we will reconsider our planning and might decide
-to integrate SimSpark with ROS instead. However, considering that Player itself
-is integrated into ROS, integrating with Player still might make sense. 
+% Player is a well-known robotic framework which
+% can be used to control both real and simulated robots. We planned to integrate
+% SimSpark with Player so that people can develop agents for SimSpark using 
+% Player interfaces. It has the additional benefit of using Player's network
+% protocol which is much more efficient than the current network protocol used
+% in SimSpark. It is also a good opportunity to enhance the multi-threaded 
+% capabilities of SimSpark given the asynchronous nature of using Player with
+% different robot sensors. 
 
-If SimSpark is integrated into an existing robotic framework, it is possible 
-for researchers to develop a single program to control both a simulated 
-robot inside and the same real robot given that the robot itself is also
-supported by the framework. It will be also much easier to attract people 
-who have developed programs for real robots using the framework to experiment
-with SimSpark.
+% Recently, another robotic framework called ROS is gaining popularity and is in
+% active development. Therefore, we will reconsider our planning and might decide
+% to integrate SimSpark with ROS instead. However, considering that Player itself
+% is integrated into ROS, integrating with Player still might make sense. 
 
-\paragraph{physics simulation engine abstraction / Bullet}
-\paragraph{more robot models, formate?}
+% If SimSpark is integrated into an existing robotic framework, it is possible 
+% for researchers to develop a single program to control both a simulated 
+% robot inside and the same real robot given that the robot itself is also
+% supported by the framework. It will be also much easier to attract people 
+% who have developed programs for real robots using the framework to experiment
+% with SimSpark.
+
+\item[Abstract Physics Layer]
+Relying on a single physics engine, i.e. ODE, hampers Simspark’s flexibility.
+Thus, an abstract physics layer was development\cite{Held2010}, ODE and Bullet can be used as plugins with the abstract physics layer. However, current implementation has many drawbacks and difficult to maintenance.
+
+\item[Robot Model Importers]
+The usage of SimSpark will be extended when it has more robot models, however creating robot models is a time consuming task. The idea is to create model importers for different model format, so SimSpark will be able to use the robot model which is available in other simulators.
+\end{description}
+
 \section*{Acknowledgments}
-We wish to thank other members in in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for introducing us to the SimSpark project.\todo{other names here...}
+We wish to thank other members in in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for supporting us to work in the SimSpark project.\todo{other names here...}
 \bibliographystyle{splncs03}
 \bibliography{reference}
 \end{document}
