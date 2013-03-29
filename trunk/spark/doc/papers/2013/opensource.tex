@@ -421,10 +421,12 @@ traffic and therefore the latency will be reduced considerably.
 Currently, an initial version of agent proxies is under development outside SimSpark
 project using Java.
 
-\subsection{Integration With Existing Robotic Frameworks}
-\todo{Hedayat Vatankhah:Architecture Enhancements Proposal for Soccer 
-Simulation Server 3D}
+\subsection{SimSpark GUI}
+\todo{SimSpark GUI: http://simspark.sourceforge.net/wiki/index.php/Graphical_User_Interface}
 
+NOTE: It will be merged to trunk soon. So it is almost complete.
+
+The main goal of this project is to provide a flexible and extensible User Interface and Simulation Development Environment, that can be used to start, control and monitor different simulations using the Simspark server, agent and monitor processes, as well as incorporate several additional tools like for example a visual editor for robot models (like RsgEdit) or a debugging monitor for agents (like RoboViz). 
 
 \section{Applications}
 \label{s:application}
@@ -462,6 +464,31 @@ module test from the robotic hardware.
 \section{Conclusion and Future Work}
 \label{s:conclusion}
 SimSpark is a powerful tool to state different multi-agent research questions.
+
+\paragraph{Integration With Existing Robotic Frameworks}
+To enhance the usability of SimSpark for wider usage, and also to make it easier
+for developers to develop and test their robotic software on SimSpark and to
+use the same code on real hardware, we aim to integrate SimSpark to an 
+existing robotic framework. Player is a well-known robotic framework which
+can be used to control both real and simulated robots. We planned to integrate
+SimSpark with Player so that people can develop agents for SimSpark using 
+Player interfaces. It has the additional benefit of using Player's network
+protocol which is much more efficient than the current network protocol used
+in SimSpark. It is also a good opportunity to enhance the multi-threaded 
+capabilities of SimSpark given the asynchronous nature of using Player with
+different robot sensors. 
+
+Recently, another robotic framework called ROS is gaining popularity and is in
+active development. Therefore, we will reconsider our planning and might decide
+to integrate SimSpark with ROS instead. However, considering that Player itself
+is integrated into ROS, integrating with Player still might make sense. 
+
+If SimSpark is integrated into an existing robotic framework, it is possible 
+for researchers to develop a single program to control both a simulated 
+robot inside and the same real robot given that the robot itself is also
+supported by the framework. It will be also much easier to attract people 
+who have developed programs for real robots using the framework to experiment
+with SimSpark.
 
 \todo[inline]{Other physic engine, Bullet}
 \todo[inline]{better GUI}
